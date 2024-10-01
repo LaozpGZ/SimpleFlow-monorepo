@@ -3,6 +3,8 @@ import { WalletConfigV2 } from '@pancakeswap/ui-wallets'
 import { WalletFilledIcon } from '@pancakeswap/uikit'
 import { getTrustWalletProvider } from '@pancakeswap/wagmi/connectors/trustWallet'
 import type { ExtendEthereum } from 'global'
+import { createStore } from 'mipd'
+import { isMobile } from 'react-device-detect'
 import { Config } from 'wagmi'
 import { ConnectMutateAsync } from 'wagmi/query'
 import { chains, createWagmiConfig, walletConnectNoQrCodeConnector } from '../utils/wagmi'
@@ -23,22 +25,36 @@ export enum ConnectorNames {
 }
 
 const createQrCode =
-  <config extends Config = Config, context = unknown>(chainId: number, connect: ConnectMutateAsync<config, context>) =>
+  <config extends Config = Config, context = unknown>(
+    chainId: number,
+    connect: ConnectMutateAsync<config, context>,
+    connectorId: ConnectorNames,
+  ) =>
   async () => {
     const wagmiConfig = createWagmiConfig()
-    const injectedConnector = wagmiConfig.connectors.find((connector) => connector.id === ConnectorNames.Injected)
-    if (!injectedConnector) {
+    const selectedConnector = wagmiConfig.connectors.find((connector) => connector.id === connectorId)
+    if (!selectedConnector) {
       return ''
     }
-    // HACK: utilizing event emitter from injected connector to notify wagmi of the connect events
-    const connector = {
-      ...walletConnectNoQrCodeConnector({
-        chains,
-        emitter: injectedConnector?.emitter,
-      }),
-      emitter: injectedConnector.emitter,
-      uid: injectedConnector.uid,
+
+    const isMetaMaskInstalled = isMobile ? false : isEIP6963ProviderExists('io.metamask')
+    if (connectorId === ConnectorNames.MetaMask && isMetaMaskInstalled) {
+      return ''
     }
+
+    // HACK: utilizing event emitter from connector to notify wagmi of the connect events
+    const connector =
+      selectedConnector.id === ConnectorNames.Injected
+        ? {
+            ...walletConnectNoQrCodeConnector({
+              chains,
+              emitter: selectedConnector?.emitter,
+            }),
+            emitter: selectedConnector.emitter,
+            uid: selectedConnector.uid,
+          }
+        : selectedConnector
+
     const provider = await connector.getProvider()
 
     return new Promise<string>((resolve) => {
@@ -49,26 +65,6 @@ const createQrCode =
     })
   }
 
-const isMetamaskInstalled = () => {
-  if (typeof window === 'undefined') {
-    return false
-  }
-
-  if (window.ethereum?.isMetaMask) {
-    return true
-  }
-
-  if (window.ethereum?.providers?.some((p) => p.isMetaMask)) {
-    return true
-  }
-
-  return false
-}
-
-function isBinanceWeb3WalletInstalled() {
-  return typeof window !== 'undefined' && Boolean((window.ethereum as ExtendEthereum)?.isBinance)
-}
-
 const walletsConfig = <config extends Config = Config, context = unknown>({
   chainId,
   connect,
@@ -76,20 +72,22 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
   chainId: number
   connect: ConnectMutateAsync<config, context>
 }): WalletConfigV2<ConnectorNames>[] => {
-  const qrCode = createQrCode(chainId, connect)
+  const walletConnectQrCode = createQrCode(chainId, connect, ConnectorNames.Injected)
   return [
     {
       id: 'metamask',
       title: 'Metamask',
       icon: `${ASSET_CDN}/web/wallets/metamask.png`,
-      get installed() {
-        return isMetamaskInstalled()
-        // && metaMaskConnector.ready
-      },
       connectorId: ConnectorNames.MetaMask,
-      deepLink: 'https://metamask.app.link/dapp/pancakeswap.finance/',
-      qrCode,
-      downloadLink: 'https://metamask.app.link/dapp/pancakeswap.finance/',
+      get installed() {
+        return isMobile ? undefined : isEIP6963ProviderExists('io.metamask')
+      },
+      downloadLink: 'https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn',
+      guide: {
+        desktop: 'https://metamask.io/download',
+        mobile: 'https://metamask.io/download',
+      },
+      qrCode: createQrCode(chainId, connect, ConnectorNames.MetaMask),
     },
     {
       id: 'trust',
@@ -105,7 +103,7 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
         desktop: 'https://trustwallet.com/browser-extension',
         mobile: 'https://trustwallet.com/',
       },
-      qrCode,
+      qrCode: walletConnectQrCode,
     },
     {
       id: 'okx',
@@ -113,7 +111,7 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
       icon: `${ASSET_CDN}/web/wallets/okx-wallet.png`,
       connectorId: ConnectorNames.Injected,
       get installed() {
-        return typeof window !== 'undefined' && Boolean(window.okxwallet)
+        return isEIP6963ProviderExists('com.okex.wallet')
       },
       downloadLink: 'https://www.okx.com/download',
       deepLink:
@@ -127,9 +125,9 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
       id: 'BinanceW3W',
       title: 'Binance Wallet',
       icon: `${ASSET_CDN}/web/wallets/binance-w3w.png`,
-      connectorId: isBinanceWeb3WalletInstalled() ? ConnectorNames.Injected : ConnectorNames.BinanceW3W,
+      connectorId: isEIP6963ProviderExists('com.binance.wallet') ? ConnectorNames.Injected : ConnectorNames.BinanceW3W,
       get installed() {
-        if (isBinanceWeb3WalletInstalled()) {
+        if (isEIP6963ProviderExists('com.binance.wallet')) {
           return true
         }
         // still showing the SDK if not installed
@@ -164,7 +162,7 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
       icon: `${ASSET_CDN}/web/wallets/brave.png`,
       connectorId: ConnectorNames.Injected,
       get installed() {
-        return typeof window !== 'undefined' && Boolean(window.ethereum?.isBraveWallet)
+        return isEIP6963ProviderExists('com.brave.wallet')
       },
       downloadLink: 'https://brave.com/wallet/',
     },
@@ -173,7 +171,7 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
       title: 'Rabby Wallet',
       icon: `${ASSET_CDN}/web/wallets/rabby.png`,
       get installed() {
-        return typeof window !== 'undefined' && Boolean(window.ethereum?.isRabby)
+        return isEIP6963ProviderExists('io.rabby')
       },
       connectorId: ConnectorNames.Injected,
       guide: {
@@ -191,7 +189,7 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
       get installed() {
         return typeof window !== 'undefined' && Boolean(window.ethereum?.isMathWallet)
       },
-      qrCode,
+      qrCode: walletConnectQrCode,
     },
     {
       id: 'tokenpocket',
@@ -199,9 +197,9 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
       icon: `${ASSET_CDN}/web/wallets/tokenpocket.png`,
       connectorId: ConnectorNames.Injected,
       get installed() {
-        return typeof window !== 'undefined' && Boolean(window.ethereum?.isTokenPocket)
+        return isEIP6963ProviderExists('pro.tokenpocket')
       },
-      qrCode,
+      qrCode: walletConnectQrCode,
     },
     {
       id: 'safepal',
@@ -212,7 +210,7 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
         return typeof window !== 'undefined' && Boolean((window.ethereum as ExtendEthereum)?.isSafePal)
       },
       downloadLink: 'https://safepal.com/en/extension',
-      qrCode,
+      qrCode: walletConnectQrCode,
     },
     {
       id: 'coin98',
@@ -220,12 +218,9 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
       icon: `${ASSET_CDN}/web/wallets/coin98.png`,
       connectorId: ConnectorNames.Injected,
       get installed() {
-        return (
-          typeof window !== 'undefined' &&
-          (Boolean((window.ethereum as ExtendEthereum)?.isCoin98) || Boolean(window.coin98))
-        )
+        return isEIP6963ProviderExists('coin98.provider')
       },
-      qrCode,
+      qrCode: walletConnectQrCode,
     },
     {
       id: 'blocto',
@@ -260,12 +255,31 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
   ]
 }
 
+const hasInjectedInstalled = () => {
+  if (typeof window === 'undefined') {
+    return false
+  }
+
+  // If injected but without specific wagmi connector
+  if (
+    window.ethereum !== undefined &&
+    !isInjectedMetaMaskExists(window.ethereum) &&
+    !window.ethereum?.isCoinbaseWallet
+  ) {
+    return true
+  }
+
+  return false
+}
+
 export const createWallets = <config extends Config = Config, context = unknown>(
   chainId: number,
   connect: ConnectMutateAsync<config, context>,
 ) => {
-  const hasInjected = typeof window !== 'undefined' && !window.ethereum
   const config = walletsConfig({ chainId, connect })
+
+  const hasInjected = hasInjectedInstalled()
+
   return hasInjected && config.some((c) => c.installed && c.connectorId === ConnectorNames.Injected)
     ? config // add injected icon if none of injected type wallets installed
     : [
@@ -275,7 +289,7 @@ export const createWallets = <config extends Config = Config, context = unknown>
           title: 'Injected',
           icon: WalletFilledIcon,
           connectorId: ConnectorNames.Injected,
-          installed: typeof window !== 'undefined' && Boolean(window.ethereum),
+          installed: hasInjected,
         },
       ]
 }
@@ -295,3 +309,50 @@ export const getDocLink = (code: string) =>
   docLangCodeMapping[code]
     ? `https://docs.pancakeswap.finance/v/${docLangCodeMapping[code]}/get-started/wallet-guide`
     : `https://docs.pancakeswap.finance/get-started/wallet-guide`
+
+// use EIP-6963 to detect injected wallets
+const providers = createStore().getProviders()
+const isEIP6963ProviderExists = (rdns: string) => providers.some((p) => p.info.rdns === rdns)
+
+// use old method to detect metamask
+const isInjectedMetaMaskExists = (provider: any) => {
+  if (!provider.isMetaMask) {
+    return false
+  }
+
+  // Brave tries to make itself look like MetaMask
+  // Could also try RPC `web3_clientVersion` if following is unreliable
+  if (provider.isBraveWallet && !provider._events && !provider._state) {
+    return false
+  }
+
+  // Other wallets that try to look like MetaMask
+  const flags: string[] = [
+    'isApexWallet',
+    'isAvalanche',
+    'isBitKeep',
+    'isBlockWallet',
+    'isKuCoinWallet',
+    'isMathWallet',
+    'isOkxWallet',
+    'isOKExWallet',
+    'isOneInchIOSWallet',
+    'isOneInchAndroidWallet',
+    'isOpera',
+    'isPortal',
+    'isPhantom',
+    'isRabby',
+    'isTokenPocket',
+    'isTokenary',
+    'isUniswapWallet',
+    'isZerion',
+  ]
+
+  for (const flag of flags) {
+    if (provider[flag]) {
+      return false
+    }
+  }
+
+  return true
+}
