@@ -13,7 +13,9 @@ export function getPriceImpact(
     const { inputAmount } = route
     // FIXME typing
     const midPrice: any = getMidPrice(route)
-    spotOutputAmount = spotOutputAmount.add(midPrice.quote(inputAmount))
+    spotOutputAmount = spotOutputAmount.add(
+      CurrencyAmount.fromRawAmount(trade.outputAmount.currency, midPrice.wrapped.quote(inputAmount.wrapped).quotient),
+    )
   }
   const priceImpact = spotOutputAmount.subtract(trade.outputAmount).divide(spotOutputAmount)
   return new Percent(priceImpact.numerator, priceImpact.denominator)

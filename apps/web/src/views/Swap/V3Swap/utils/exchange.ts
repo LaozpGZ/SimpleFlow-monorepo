@@ -83,7 +83,12 @@ export function computeTradePriceBreakdown(trade?: TradeEssentialForPriceBreakdo
     )
 
     const midPrice = SmartRouter.getMidPrice(route)
-    outputAmountWithoutPriceImpact = outputAmountWithoutPriceImpact.add(midPrice.quote(routeInputAmount))
+    outputAmountWithoutPriceImpact = outputAmountWithoutPriceImpact.add(
+      CurrencyAmount.fromRawAmount(
+        trade.outputAmount.currency,
+        midPrice.wrapped.quote(routeInputAmount.wrapped).quotient,
+      ),
+    )
   }
 
   if (outputAmountWithoutPriceImpact.quotient === ZERO) {
