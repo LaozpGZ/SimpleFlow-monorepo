@@ -4,14 +4,14 @@ import { Native } from '@pancakeswap/sdk'
 import { Address } from 'viem'
 
 import { getPairCombinations } from '../../v3-router/functions'
-import { PoolType, V4ClPool } from '../../v3-router/types'
+import { PoolType, V4BinPool } from '../../v3-router/types'
 import { PoolMeta } from '../../v3-router/providers/poolProviders/internalTypes'
 import { createOnChainPoolFactory } from '../../v3-router/providers'
-import { clPoolManagerAbi } from '../../abis/ICLPoolManager'
-import { CL_HOOKS, CL_PRESETS } from '../constants'
+import { binPoolManagerAbi } from '../../abis/IBinPoolManager'
+import { BIN_HOOKS, BIN_PRESETS } from '../constants'
 import { GetV4CandidatePoolsParams } from '../types'
 
-export async function getV4ClCandidatePools({
+export async function getV4BinCandidatePools({
   currencyA,
   currencyB,
   clientProvider,
@@ -32,32 +32,32 @@ export async function getV4ClCandidatePools({
       pairsWithNative.push(pairWithNative as [Currency, Currency])
     }
   }
-  return getV4ClPoolsWithoutTicks(pairsWithNative, clientProvider)
+  return getV4BinPoolsWithoutBins(pairsWithNative, clientProvider)
 }
 
-type V4ClPoolMeta = PoolMeta & {
+type V4BinPoolMeta = PoolMeta & {
   fee: number
   poolManager: Address
-  tickSpacing: number
+  binStep: number
   hooks: Address
 }
 
-export const getV4ClPoolsWithoutTicks = createOnChainPoolFactory<V4ClPool, V4ClPoolMeta>({
-  abi: clPoolManagerAbi,
+export const getV4BinPoolsWithoutBins = createOnChainPoolFactory<V4BinPool, V4BinPoolMeta>({
+  abi: binPoolManagerAbi,
   getPossiblePoolMetas: ([currencyA, currencyB]) => {
     const [currency0, currency1] = sortCurrencies([currencyA, currencyB])
-    const metas: V4ClPoolMeta[] = []
-    for (const { fee, tickSpacing } of CL_PRESETS) {
-      for (const hooks of CL_HOOKS) {
-        const poolKey: PoolKey<'CL'> = {
+    const metas: V4BinPoolMeta[] = []
+    for (const { fee, binStep } of BIN_PRESETS) {
+      for (const hooks of BIN_HOOKS) {
+        const poolKey: PoolKey<'Bin'> = {
           currency0: getCurrencyAddress(currency0),
           currency1: getCurrencyAddress(currency1),
           fee,
           parameters: {
-            tickSpacing,
+            binStep,
           },
           // TODO: use constant from v4 sdk
-          poolManager: '0x26Ca53c8C5CE90E22aA1FadDA68AB9a08f7BA06f' as const,
+          poolManager: '0x1DF0be383e9d17DA4448E57712849aBE5b3Fa33b' as const,
           hooks,
         }
         const id = getPoolId(poolKey)
@@ -65,7 +65,7 @@ export const getV4ClPoolsWithoutTicks = createOnChainPoolFactory<V4ClPool, V4ClP
           currencyA,
           currencyB,
           fee,
-          tickSpacing,
+          binStep,
           hooks,
           poolManager: poolKey.poolManager,
           id,
@@ -77,31 +77,24 @@ export const getV4ClPoolsWithoutTicks = createOnChainPoolFactory<V4ClPool, V4ClP
   buildPoolInfoCalls: ({ id, poolManager: address }) => [
     {
       address,
-      functionName: 'getLiquidity',
-      args: [id],
-    },
-    {
-      address,
       functionName: 'getSlot0',
       args: [id],
     },
   ],
-  buildPool: ({ currencyA, currencyB, fee, id, tickSpacing, poolManager, hooks }, [liquidity, slot0]) => {
+  buildPool: ({ currencyA, currencyB, fee, id, binStep, poolManager, hooks }, [slot0]) => {
     if (!slot0 || !slot0[0]) {
       return null
     }
-    const [sqrtPriceX96, tick] = slot0
+    const [activeId] = slot0
     const [currency0, currency1] = sortCurrencies([currencyA, currencyB])
     return {
       id,
-      type: PoolType.V4CL,
+      type: PoolType.V4BIN,
       currency0,
       currency1,
       fee,
-      liquidity: BigInt(liquidity.toString()),
-      sqrtRatioX96: BigInt(sqrtPriceX96.toString()),
-      tick: Number(tick),
-      tickSpacing,
+      activeId,
+      binStep,
       poolManager,
       hooks,
     }

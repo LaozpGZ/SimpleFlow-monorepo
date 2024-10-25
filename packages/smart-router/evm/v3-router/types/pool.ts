@@ -81,7 +81,7 @@ export type V4BinPool = BasePool & {
   currency0: Currency
   currency1: Currency
   fee: number
-  binStep: bigint
+  binStep: number
   activeId: ActiveId
 
   hooks?: Address
