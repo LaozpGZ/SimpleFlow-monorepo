@@ -16,11 +16,11 @@ import {
   useToast,
   VoteIcon,
 } from '@pancakeswap/uikit'
-import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
+import { BigNumber } from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { useVeCakeBalance } from 'hooks/useTokenBalance'
 import { useEffect, useMemo, useState } from 'react'
 import { Proposal, ProposalState, ProposalTypeName, Vote } from 'state/types'
+import useGetVotingPower from 'views/Voting/hooks/useGetVotingPower'
 import { SingleVote } from 'views/Voting/Proposal/VoteType/SingleVote'
 import { SingleVoteState, VoteState, WeightedVoteState } from 'views/Voting/Proposal/VoteType/types'
 import { WeightedVote } from 'views/Voting/Proposal/VoteType/WeightedVote'
@@ -48,7 +48,7 @@ const VoteComponent: React.FC<React.PropsWithChildren<VoteProps>> = ({
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
   const { address: account } = useAccount()
-  const { balance } = useVeCakeBalance()
+  const { total } = useGetVotingPower()
 
   useEffect(() => {
     const { type, choices } = proposal
@@ -92,7 +92,7 @@ const VoteComponent: React.FC<React.PropsWithChildren<VoteProps>> = ({
     />,
   )
 
-  const notEnoughVeCake = useMemo(() => balance.lte(0), [balance])
+  const notEnoughVeCake = useMemo(() => total === undefined || new BigNumber(total).lte(0), [total])
 
   const isAbleToVote = useMemo(() => {
     if (proposal.type === ProposalTypeName.SINGLE_CHOICE) {
@@ -121,7 +121,7 @@ const VoteComponent: React.FC<React.PropsWithChildren<VoteProps>> = ({
                 lineHeight="110%"
                 decimals={2}
                 color={notEnoughVeCake ? 'failure' : 'text'}
-                value={getBalanceNumber(balance)}
+                value={total}
               />
               <Image
                 width={32}
