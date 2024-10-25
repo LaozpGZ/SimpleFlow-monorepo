@@ -40,6 +40,7 @@ test('exports', () => {
       "SwapRouter",
       "PoolType",
       "RouteType",
+      "V4MixedQuoterActions",
       "V4Router",
     ]
   `)

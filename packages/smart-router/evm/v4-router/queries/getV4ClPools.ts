@@ -1,5 +1,5 @@
 import { Currency, getCurrencyAddress, sortCurrencies } from '@pancakeswap/swap-sdk-core'
-import { PoolKey, getPoolId } from '@pancakeswap/v4-sdk'
+import { PoolKey, getPoolId, CLPoolManager } from '@pancakeswap/v4-sdk'
 import { Native } from '@pancakeswap/sdk'
 import { Address } from 'viem'
 
@@ -7,7 +7,6 @@ import { getPairCombinations } from '../../v3-router/functions'
 import { PoolType, V4ClPool } from '../../v3-router/types'
 import { PoolMeta } from '../../v3-router/providers/poolProviders/internalTypes'
 import { createOnChainPoolFactory } from '../../v3-router/providers'
-import { clPoolManagerAbi } from '../../abis/ICLPoolManager'
 import { CL_HOOKS, CL_PRESETS } from '../constants'
 import { GetV4CandidatePoolsParams } from '../types'
 
@@ -43,7 +42,7 @@ type V4ClPoolMeta = PoolMeta & {
 }
 
 export const getV4ClPoolsWithoutTicks = createOnChainPoolFactory<V4ClPool, V4ClPoolMeta>({
-  abi: clPoolManagerAbi,
+  abi: CLPoolManager,
   getPossiblePoolMetas: ([currencyA, currencyB]) => {
     const [currency0, currency1] = sortCurrencies([currencyA, currencyB])
     const metas: V4ClPoolMeta[] = []
