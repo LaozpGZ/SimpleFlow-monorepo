@@ -1,18 +1,11 @@
-import {
-  ComputedFarmConfigV3,
-  createFarmFetcherV3,
-  defineFarmV3ConfigsFromUniversalFarm,
-  fetchTokenUSDValues,
-  fetchUniversalFarms,
-  Protocol,
-  UniversalFarmConfigV3,
-} from '@pancakeswap/farms'
+import { createFarmFetcherV3, fetchTokenUSDValues } from '@pancakeswap/farms'
 import { priceHelperTokens } from '@pancakeswap/farms/constants/common'
-import { Currency, ERC20Token } from '@pancakeswap/sdk'
+import { ChainId, Currency, ERC20Token } from '@pancakeswap/sdk'
 import { FeeAmount, Pool } from '@pancakeswap/v3-sdk'
 import { useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
-import { useEffect, useMemo, useState } from 'react'
+import { useV3FarmAPI } from 'hooks/useV3FarmAPI'
+import { useMemo } from 'react'
 import { getViemClients } from 'utils/viem'
 
 const farmFetcherV3 = createFarmFetcherV3(getViemClients)
@@ -25,18 +18,7 @@ interface FarmParams {
 
 export function useFarm({ currencyA, currencyB, feeAmount }: FarmParams) {
   const chainId = currencyA?.chainId
-  const [farms, setFarms] = useState<ComputedFarmConfigV3[]>([])
-
-  useEffect(() => {
-    const fetchFarmV3Config = async () => {
-      if (chainId) {
-        const farmsV3 = await fetchUniversalFarms(chainId, Protocol.V3)
-        setFarms(defineFarmV3ConfigsFromUniversalFarm(farmsV3 as UniversalFarmConfigV3[]))
-      }
-    }
-
-    fetchFarmV3Config()
-  }, [chainId])
+  const { farms } = useV3FarmAPI(chainId as ChainId)
 
   const farmConfig = useMemo(() => {
     if (!chainId || !currencyA || !currencyB || !feeAmount) {
