@@ -53,7 +53,7 @@ export const client = createClient({
         if (foundChain.nodeUrls.nodeReal && nodeReal[networkNameLowerCase]) {
           return new Aptos(
             new AptosConfig({
-              network: NetworkToNetworkName[networkNameLowerCase],
+              network,
               fullnode: `${foundChain.nodeUrls.nodeReal}/${nodeReal[networkNameLowerCase]}/v1`,
               clientConfig: {
                 WITH_CREDENTIALS: false,
@@ -63,7 +63,7 @@ export const client = createClient({
         }
         return new Aptos(
           new AptosConfig({
-            network: NetworkToNetworkName[networkNameLowerCase],
+            network,
             clientConfig,
           }),
         )
@@ -72,7 +72,7 @@ export const client = createClient({
 
     return new Aptos(
       new AptosConfig({
-        network: NetworkToNetworkName[defaultChain.network.toLowerCase()],
+        network,
         fullnode: defaultChain.nodeUrls.default,
         clientConfig,
       }),
