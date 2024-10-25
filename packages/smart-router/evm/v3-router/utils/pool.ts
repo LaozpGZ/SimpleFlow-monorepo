@@ -1,3 +1,4 @@
+import { SCALE, getPriceFromId } from '@pancakeswap/v4-sdk'
 import { Currency, Pair, Price } from '@pancakeswap/sdk'
 import { Pool as SDKV3Pool, computePoolAddress } from '@pancakeswap/v3-sdk'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
@@ -124,7 +125,22 @@ export function getTokenPrice(pool: Pool, base: Currency, quote: Currency): Pric
     const { currency0, currency1, fee, liquidity, sqrtRatioX96, tick } = pool
     const v3Pool = new SDKV3Pool(currency0.wrapped, currency1.wrapped, fee, sqrtRatioX96, liquidity, tick)
     const tokenPrice = v3Pool.priceOf(base.wrapped)
-    return new Price(base, quote, tokenPrice.denominator, tokenPrice.numerator)
+    const [baseCurrency, quoteCurrency] = base.wrapped.equals(currency0.wrapped)
+      ? [currency0, currency1]
+      : [currency1, currency0]
+    return new Price(baseCurrency, quoteCurrency, tokenPrice.denominator, tokenPrice.numerator)
+  }
+
+  if (isV4BinPool(pool)) {
+    const { activeId, binStep, currency0, currency1 } = pool
+    const rawPrice = getPriceFromId(BigInt(activeId), BigInt(binStep))
+    const price = new Price(
+      currency0,
+      currency1,
+      rawPrice * 10n ** BigInt(currency0.decimals),
+      SCALE * 10n ** BigInt(currency1.decimals),
+    )
+    return base.equals(price.baseCurrency) ? price : price.invert()
   }
 
   if (isV2Pool(pool)) {

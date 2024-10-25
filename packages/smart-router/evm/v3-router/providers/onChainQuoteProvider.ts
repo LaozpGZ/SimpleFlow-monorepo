@@ -21,12 +21,13 @@ import {
 import { encodeMixedRouteToPath, getQuoteCurrency, isStablePool, isV2Pool, isV3Pool } from '../utils'
 import { Result } from './multicallProvider'
 import { PancakeMulticallProvider } from './multicallSwapProvider'
-import { V4_CL_QUOTER_ADDRESSES, V4_MIXED_ROUTE_QUOTER_ADDRESSES } from '../../constants/v4'
+import { V4_BIN_QUOTER_ADDRESSES, V4_CL_QUOTER_ADDRESSES, V4_MIXED_ROUTE_QUOTER_ADDRESSES } from '../../constants/v4'
 import { clQuoterAbi } from '../../abis/ICLQuoter'
-import { PathKey, encodeV4ClRouteToPath } from '../utils/encodeV4ClRouteToPath'
+import { PathKey, encodeV4RouteToPath } from '../utils/encodeV4RouteToPath'
 import { v4MixedRouteQuoterAbi } from '../../abis/IV4MixedRouteQuoter'
 import { encodeV4MixedRouteActions } from '../utils/encodeV4MixedRouteActions'
 import { encodeV4MixedRouteParams } from '../utils/encodeV4MixedRouteParams'
+import { binQuoterAbi } from '../../abis/IBinQuoter'
 
 const DEFAULT_BATCH_RETRIES = 2
 
@@ -463,7 +464,7 @@ export const createV4ClOnChainQuoteProvider = onChainQuoteProviderFactory({
   getCallInputs: (route, isExactIn) => [
     {
       exactCurrency: getCurrencyAddress(isExactIn ? route.input : route.output),
-      path: encodeV4ClRouteToPath(route, !isExactIn),
+      path: encodeV4RouteToPath(route, !isExactIn),
       exactAmount: `0x${route.amount.quotient.toString(16)}`,
     },
   ],
@@ -478,5 +479,18 @@ export const createMixedRouteOnChainQuoteProviderV2 = onChainQuoteProviderFactor
     encodeV4MixedRouteActions(route),
     encodeV4MixedRouteParams(route),
     `0x${route.amount.quotient.toString(16)}`,
+  ],
+})
+
+export const createV4BinOnChainQuoteProvider = onChainQuoteProviderFactory({
+  getQuoterAddress: (chainId) => (V4_BIN_QUOTER_ADDRESSES as any)[chainId],
+  getQuoteFunctionName: (isExactIn) => (isExactIn ? 'quoteExactInput' : 'quoteExactOutput'),
+  abi: binQuoterAbi,
+  getCallInputs: (route, isExactIn) => [
+    {
+      exactCurrency: getCurrencyAddress(isExactIn ? route.input : route.output),
+      path: encodeV4RouteToPath(route, !isExactIn),
+      exactAmount: `0x${route.amount.quotient.toString(16)}`,
+    },
   ],
 })

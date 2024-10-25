@@ -77,6 +77,10 @@ export class PancakeSwapTrade implements Command {
         // TODO: implementation
         continue
       }
+      if (route.type === RouteType.V4BIN) {
+        // TODO: implementation
+        continue
+      }
       addMixedSwap(planner, singleRouteTrade, this.options, payerIsUser, routerMustCustody)
     }
 

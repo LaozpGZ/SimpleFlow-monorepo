@@ -74,8 +74,23 @@ const zV4ClPool = z
   .extend({
     hooks: zAddress.optional(),
   })
+const zV4BinPool = z
+  .object({
+    type: z.literal(PoolType.V4BIN),
+    currency0: zCurrency,
+    currency1: zCurrency,
+    fee: zFee,
+    activeId: z.number(),
+    binStep: z.number(),
+    poolManager: zAddress,
+    id: zHex,
+  })
+  .required()
+  .extend({
+    hooks: zAddress.optional(),
+  })
 
-export const zPools = z.array(z.union([zV2Pool, zV3Pool, zStablePool, zV4ClPool]))
+export const zPools = z.array(z.union([zV2Pool, zV3Pool, zStablePool, zV4ClPool, zV4BinPool]))
 
 export const zRouterGetParams = z
   .object({

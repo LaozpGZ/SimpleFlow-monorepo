@@ -8,6 +8,7 @@ import {
   createV3OnChainQuoteProvider,
   createV4ClOnChainQuoteProvider,
   createMixedRouteOnChainQuoteProviderV2,
+  createV4BinOnChainQuoteProvider,
 } from './onChainQuoteProvider'
 
 // For evm
@@ -26,6 +27,7 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
   })
   const v3OnChainQuoteProvider = createV3OnChainQuoteProvider({ onChainProvider, multicallConfigs, gasLimit })
   const v4ClOnChainQuoteProvider = createV4ClOnChainQuoteProvider({ onChainProvider, multicallConfigs, gasLimit })
+  const v4BinOnChainQuoteProvider = createV4BinOnChainQuoteProvider({ onChainProvider, multicallConfigs, gasLimit })
 
   const createGetRouteWithQuotes = (isExactIn = true) => {
     const getOffChainQuotes = isExactIn
@@ -37,6 +39,9 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
     const getV4ClQuotes = isExactIn
       ? v4ClOnChainQuoteProvider.getRouteWithQuotesExactIn
       : v4ClOnChainQuoteProvider.getRouteWithQuotesExactOut
+    const getV4BinQuotes = isExactIn
+      ? v4BinOnChainQuoteProvider.getRouteWithQuotesExactIn
+      : v4BinOnChainQuoteProvider.getRouteWithQuotesExactOut
     const createMixedRouteQuoteFetcher = (chainId: ChainId) => {
       const mixedRouteOnChainQuoteProvider = V4_SUPPORTED_CHAINS.includes(chainId)
         ? mixedRouteOnChainQuoteProviderV2
@@ -54,6 +59,7 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
       const getMixedRouteQuotes = createMixedRouteQuoteFetcher(chainId)
 
       const v4ClRoutes: RouteWithoutQuote[] = []
+      const v4BinRoutes: RouteWithoutQuote[] = []
       const v3SingleHopRoutes: RouteWithoutQuote[] = []
       const v3MultihopRoutes: RouteWithoutQuote[] = []
       const mixedRoutesHaveV3Pool: RouteWithoutQuote[] = []
@@ -75,6 +81,10 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
           v4ClRoutes.push(route)
           continue
         }
+        if (route.type === RouteType.V4BIN) {
+          v4BinRoutes.push(route)
+          continue
+        }
         const { pools } = route
         if (pools.some((pool) => isV3Pool(pool))) {
           mixedRoutesHaveV3Pool.push(route)
@@ -89,6 +99,7 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
         getV3Quotes(v3SingleHopRoutes, { blockNumber, gasModel, signal }),
         getV3Quotes(v3MultihopRoutes, { blockNumber, gasModel, retry: { retries: 1 }, signal }),
         getV4ClQuotes(v4ClRoutes, { blockNumber, gasModel, signal }),
+        getV4BinQuotes(v4BinRoutes, { blockNumber, gasModel, signal }),
       ])
       if (results.every((result) => result.status === 'rejected')) {
         throw new Error(results.map((result) => (result as PromiseRejectedResult).reason).join(','))
