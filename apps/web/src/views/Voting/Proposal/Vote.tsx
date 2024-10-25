@@ -48,7 +48,7 @@ const VoteComponent: React.FC<React.PropsWithChildren<VoteProps>> = ({
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
   const { address: account } = useAccount()
-  const { total } = useGetVotingPower()
+  const { total } = useGetVotingPower(Number(proposal.snapshot))
 
   useEffect(() => {
     const { type, choices } = proposal
