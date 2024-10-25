@@ -20,6 +20,7 @@ import { BigNumber } from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useEffect, useMemo, useState } from 'react'
 import { Proposal, ProposalState, ProposalTypeName, Vote } from 'state/types'
+import { VECAKE_VOTING_POWER_BLOCK } from 'views/Voting/helpers'
 import useGetVotingPower from 'views/Voting/hooks/useGetVotingPower'
 import { SingleVote } from 'views/Voting/Proposal/VoteType/SingleVote'
 import { SingleVoteState, VoteState, WeightedVoteState } from 'views/Voting/Proposal/VoteType/types'
@@ -92,7 +93,18 @@ const VoteComponent: React.FC<React.PropsWithChildren<VoteProps>> = ({
     />,
   )
 
-  const notEnoughVeCake = useMemo(() => total === undefined || new BigNumber(total).lte(0), [total])
+  const isVeCakeVersion = useMemo(
+    () => proposal.snapshot && BigInt(proposal.snapshot) >= VECAKE_VOTING_POWER_BLOCK,
+    [proposal],
+  )
+
+  const notEnoughVeCake = useMemo(() => {
+    if (isVeCakeVersion) {
+      return total === undefined || new BigNumber(total).lte(0)
+    }
+
+    return false
+  }, [isVeCakeVersion, total])
 
   const isAbleToVote = useMemo(() => {
     if (proposal.type === ProposalTypeName.SINGLE_CHOICE) {
@@ -111,7 +123,7 @@ const VoteComponent: React.FC<React.PropsWithChildren<VoteProps>> = ({
           <Heading as="h3" scale="md" mr="auto">
             {t('Cast your vote')}
           </Heading>
-          {account && (
+          {account && isVeCakeVersion && (
             <Flex alignItems="center">
               <Text color={notEnoughVeCake ? 'failure' : 'text'}>{t('veCake Balance')}:</Text>
               <Balance
