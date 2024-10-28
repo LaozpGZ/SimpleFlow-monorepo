@@ -3572,5 +3572,12 @@
   "Copy": "Kopiuj",
   "X": "X",
   "The difference between the latest quoted price and the minimum receiving amount set in the trade order.": "Różnica między ostatnią kwotowaną ceną a minimalną otrzymywaną kwotą określoną w zleceniu transakcji.",
-  "No fee when trade is going through PancakeSwap X. Subject to change in the future.": "Bez prowizji, gdy transakcja odbywa się za pośrednictwem PancakeSwap X. Może to ulec zmianie w przyszłości."
+  "No fee when trade is going through PancakeSwap X. Subject to change in the future.": "Bez prowizji, gdy transakcja odbywa się za pośrednictwem PancakeSwap X. Może to ulec zmianie w przyszłości.",
+  "Voting system": "System głosowania",
+  "Binary": "Binarny",
+  "Weighted": "Ważone",
+  "veCake Balance": "Saldo veCake",
+  "You cast your vote! Please wait until the voting ends to see the end results.": "Oddano głos! Zaczekaj do zakończenia głosowania, aby zobaczyć wyniki.",
+  "Not enough veCAKE": "Za mało veCAKE",
+  "Enter the votes to cast": "Wprowadź głosy do oddania"
 }
