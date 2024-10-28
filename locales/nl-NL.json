@@ -3572,5 +3572,12 @@
   "Copy": "Kopiëren",
   "X": "X",
   "The difference between the latest quoted price and the minimum receiving amount set in the trade order.": "Het verschil tussen de laatst opgegeven prijs en het minimale ontvangen bedrag dat is ingesteld in de handelsorder.",
-  "No fee when trade is going through PancakeSwap X. Subject to change in the future.": "Geen vergoeding als de transactie via PancakeSwap X verloopt. Onder voorbehoud van wijzigingen in de toekomst."
+  "No fee when trade is going through PancakeSwap X. Subject to change in the future.": "Geen vergoeding als de transactie via PancakeSwap X verloopt. Onder voorbehoud van wijzigingen in de toekomst.",
+  "Voting system": "Stemsysteem",
+  "Binary": "Binair",
+  "Weighted": "Gewogen",
+  "veCake Balance": "veCake-saldo",
+  "You cast your vote! Please wait until the voting ends to see the end results.": "Je hebt gestemd! Wacht tot de stemming is afgelopen om het eindresultaat te zien.",
+  "Not enough veCAKE": "Niet genoeg veCAKE",
+  "Enter the votes to cast": "Voer de stemmen in"
 }
