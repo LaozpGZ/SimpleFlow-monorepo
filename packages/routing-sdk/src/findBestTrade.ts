@@ -355,7 +355,7 @@ async function getBestTrade({
               gasSpent,
               bestAmount: quote.wrapped,
               bestSource: e,
-              bestQuote: newQuote,
+              bestQuote: newQuote.wrapped,
             })
           }
         } catch (_err) {
