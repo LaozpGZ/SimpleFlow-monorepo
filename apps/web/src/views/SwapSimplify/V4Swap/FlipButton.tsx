@@ -55,7 +55,7 @@ export const FlipButton = memo(function FlipButton() {
         <Lottie
           lottieRef={lottieRef}
           animationData={animationData}
-          style={{ height: '48px', cursor: 'pointer' }}
+          style={{ height: '44px', cursor: 'pointer' }}
           onClick={onFlip}
           autoplay={false}
           loop={false}
