@@ -3573,11 +3573,11 @@
   "X": "X",
   "The difference between the latest quoted price and the minimum receiving amount set in the trade order.": "Differenza tra l'ultimo prezzo quotato e l'importo minimo di ricezione impostato nell'ordine dell'operazione.",
   "No fee when trade is going through PancakeSwap X. Subject to change in the future.": "Nessuna commissione quando gli scambi avvengono tramite PancakeSwap X. Soggetto a modifiche future.",
-  "Voting system": "Voting system",
-  "Binary": "Binary",
-  "Weighted": "Weighted",
-  "veCake Balance": "veCake Balance",
-  "You cast your vote! Please wait until the voting ends to see the end results.": "You cast your vote! Please wait until the voting ends to see the end results.",
-  "Not enough veCAKE": "Not enough veCAKE",
-  "Enter the votes to cast": "Enter the votes to cast"
+  "Voting system": "Sistema di votazione",
+  "Binary": "Binario",
+  "Weighted": "Media pesata",
+  "veCake Balance": "Saldo veCAKE",
+  "You cast your vote! Please wait until the voting ends to see the end results.": "Esprimi il tuo voto! Attendi la fine delle votazioni per vedere i risultati finali.",
+  "Not enough veCAKE": "veCAKE insufficienti",
+  "Enter the votes to cast": "Esprimi i tuoi voti"
 }
