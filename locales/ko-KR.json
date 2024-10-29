@@ -3574,10 +3574,10 @@
   "The difference between the latest quoted price and the minimum receiving amount set in the trade order.": "최근 견적 가격과 거래 주문에 설정된 최소 수령 금액의 차이입니다.",
   "No fee when trade is going through PancakeSwap X. Subject to change in the future.": "PancakeSwap X를 통해 거래할 경우 수수료가 없습니다. 향후 변경될 수 있습니다.",
   "Voting system": "투표 시스템",
-  "Binary": "Binary",
+  "Binary": "바이너리",
   "Weighted": "가중치 적용됨",
   "veCake Balance": "veCake 잔액",
   "You cast your vote! Please wait until the voting ends to see the end results.": "투표를 하셨습니다! 투표가 끝날 때까지 기다린 후 최종 결과를 확인하세요.",
   "Not enough veCAKE": "veCAKE 부족",
-  "Enter the votes to cast": "Enter the votes to cast"
+  "Enter the votes to cast": "투표하려면 투표를 입력하세요"
 }
