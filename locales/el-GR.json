@@ -3573,11 +3573,11 @@
   "X": "X",
   "The difference between the latest quoted price and the minimum receiving amount set in the trade order.": "Η διαφορά μεταξύ της τελευταίας προσφερόμενης τιμής και του ελάχιστου ποσού λήψης που έχει οριστεί στην εντολή συναλλαγής.",
   "No fee when trade is going through PancakeSwap X. Subject to change in the future.": "Δεν υπάρχει χρέωση όταν η συναλλαγή γίνεται μέσω του PancakeSwap X. Μπορεί να αλλάξει στο μέλλον.",
-  "Voting system": "Voting system",
-  "Binary": "Binary",
-  "Weighted": "Weighted",
-  "veCake Balance": "veCake Balance",
-  "You cast your vote! Please wait until the voting ends to see the end results.": "You cast your vote! Please wait until the voting ends to see the end results.",
-  "Not enough veCAKE": "Not enough veCAKE",
-  "Enter the votes to cast": "Enter the votes to cast"
+  "Voting system": "Σύστημα ψηφοφορίας",
+  "Binary": "Δυαδικό",
+  "Weighted": "Σταθμισμένο",
+  "veCake Balance": "Υπόλοιπο veCake",
+  "You cast your vote! Please wait until the voting ends to see the end results.": "Ψηφίσατε! Περιμένετε μέχρι να ολοκληρωθεί η ψηφοφορία για να δείτε τα τελικά αποτελέσματα.",
+  "Not enough veCAKE": "Δεν έχετε αρκετό veCAKE",
+  "Enter the votes to cast": "Εισαγάγετε τις ψήφους για την ψηφοφορία"
 }
