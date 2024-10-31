@@ -3579,5 +3579,8 @@
   "veCake Balance": "veCake-saldo",
   "You cast your vote! Please wait until the voting ends to see the end results.": "Je hebt gestemd! Wacht tot de stemming is afgelopen om het eindresultaat te zien.",
   "Not enough veCAKE": "Niet genoeg veCAKE",
-  "Enter the votes to cast": "Voer de stemmen in"
+  "Enter the votes to cast": "Voer de stemmen in",
+  "TVL and APR data may not be reflected correctly due to technical limitation, please refer to": "TVL and APR data may not be reflected correctly due to technical limitation, please refer to",
+  "info page": "info page",
+  "for accurate values": "for accurate values"
 }
