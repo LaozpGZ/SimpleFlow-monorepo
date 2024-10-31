@@ -3579,5 +3579,8 @@
   "veCake Balance": "Υπόλοιπο veCake",
   "You cast your vote! Please wait until the voting ends to see the end results.": "Ψηφίσατε! Περιμένετε μέχρι να ολοκληρωθεί η ψηφοφορία για να δείτε τα τελικά αποτελέσματα.",
   "Not enough veCAKE": "Δεν έχετε αρκετό veCAKE",
-  "Enter the votes to cast": "Εισαγάγετε τις ψήφους για την ψηφοφορία"
+  "Enter the votes to cast": "Εισαγάγετε τις ψήφους για την ψηφοφορία",
+  "TVL and APR data may not be reflected correctly due to technical limitation, please refer to": "Τα δεδομένα TVL και APR ενδέχεται να μην αποτυπώνονται σωστά λόγω τεχνικού προβλήματος, ανατρέξτε στην ενότητα",
+  "info page": "σελίδα πληροφοριών",
+  "for accurate values": "για ακριβείς τιμές"
 }
