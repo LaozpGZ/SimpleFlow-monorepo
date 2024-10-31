@@ -3580,5 +3580,8 @@
   "You cast your vote! Please wait until the voting ends to see the end results.": "You cast your vote! Please wait until the voting ends to see the end results.",
   "Not enough veCAKE": "Not enough veCAKE",
   "Enter the votes to cast": "Enter the votes to cast",
-  "TWAP (Time-Weighted Average Price) helps minimises market impact from large orders by averaging the asset price over a set time period.": "TWAP (Time-Weighted Average Price) helps minimises market impact from large orders by averaging the asset price over a set time period."
+  "TWAP (Time-Weighted Average Price) helps minimises market impact from large orders by averaging the asset price over a set time period.": "TWAP (Time-Weighted Average Price) helps minimises market impact from large orders by averaging the asset price over a set time period.",
+  "TVL and APR data may not be reflected correctly due to technical limitation, please refer to": "TVL and APR data may not be reflected correctly due to technical limitation, please refer to",
+  "info page": "info page",
+  "for accurate values": "for accurate values"
 }
