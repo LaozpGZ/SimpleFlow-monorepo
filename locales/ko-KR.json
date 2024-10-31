@@ -3579,5 +3579,8 @@
   "veCake Balance": "veCake 잔액",
   "You cast your vote! Please wait until the voting ends to see the end results.": "투표를 하셨습니다! 투표가 끝날 때까지 기다린 후 최종 결과를 확인하세요.",
   "Not enough veCAKE": "veCAKE 부족",
-  "Enter the votes to cast": "투표하려면 투표를 입력하세요"
+  "Enter the votes to cast": "투표하려면 투표를 입력하세요",
+  "TVL and APR data may not be reflected correctly due to technical limitation, please refer to": "TVL 및 APR 데이터는 기술적 제한으로 인해 제대로 반영되지 않을 수 있으므로",
+  "info page": "정보 페이지",
+  "for accurate values": "내용에서 정확한 값을 확인하세요"
 }
