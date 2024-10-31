@@ -1,15 +1,14 @@
-import { ChainId } from '@pancakeswap/chains'
 import { Protocol, UniversalFarmConfig, fetchAllUniversalFarms, masterChefV3Addresses } from '@pancakeswap/farms'
 import { masterChefAddresses } from '@pancakeswap/farms/src/const'
 import { masterChefV3ABI } from '@pancakeswap/v3-sdk'
-import { UseQueryResult, useQueries, useQuery } from '@tanstack/react-query'
+import { useQuery } from '@tanstack/react-query'
 import { masterChefV2ABI } from 'config/abi/masterchefV2'
 import { QUERY_SETTINGS_IMMUTABLE, SLOW_INTERVAL } from 'config/constants'
 import dayjs from 'dayjs'
 import { useAtom } from 'jotai'
 import groupBy from 'lodash/groupBy'
 import keyBy from 'lodash/keyBy'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { publicClient } from 'utils/viem'
 import { zeroAddress } from 'viem'
 import { Address } from 'viem/accounts'
@@ -80,12 +79,17 @@ export const useV3PoolsLength = (chainIds: number[]) => {
       const results = await Promise.all(
         chainIds.map(async (chainId) => {
           const client = publicClient({ chainId })
-          const poolLength = await client.readContract({
-            address: masterChefV3Addresses[chainId],
-            abi: masterChefV3ABI,
-            functionName: 'poolLength',
-          })
-          return { chainId, length: Number(poolLength) }
+          try {
+            const poolLength = await client.readContract({
+              address: masterChefV3Addresses[chainId],
+              abi: masterChefV3ABI,
+              functionName: 'poolLength',
+            })
+            return { chainId, length: Number(poolLength) }
+          } catch (error) {
+            console.error(`Error fetching pool length for chainId ${chainId}:`, error)
+            return { chainId, length: 0 }
+          }
         }),
       )
       return results.reduce((acc, { chainId, length }) => {
@@ -118,12 +122,17 @@ export const useV2PoolsLength = (chainIds: number[]) => {
       const results = await Promise.all(
         chainIds.map(async (chainId) => {
           const client = publicClient({ chainId })
-          const poolLength = await client.readContract({
-            address: masterChefAddresses[chainId],
-            abi: masterChefV2ABI,
-            functionName: 'poolLength',
-          })
-          return { chainId, length: Number(poolLength) }
+          try {
+            const poolLength = await client.readContract({
+              address: masterChefAddresses[chainId],
+              abi: masterChefV2ABI,
+              functionName: 'poolLength',
+            })
+            return { chainId, length: Number(poolLength) }
+          } catch (error) {
+            console.error(`Error fetching pool length for chainId ${chainId}:`, error)
+            return { chainId, length: 0 }
+          }
         }),
       )
       return results.reduce((acc, { chainId, length }) => {
@@ -172,8 +181,13 @@ export const useMultiChainV3PoolsStatus = (pools: UniversalFarmConfig[]) => {
       const results = await Promise.all(
         poolsEntries.map(async ([chainId, poolList]) => {
           if (!poolList.length) return { [chainId]: {} }
-          const poolStatus = await fetchV3PoolsStatusByChainId(Number(chainId), poolList)
-          return { [chainId]: keyBy(poolStatus ?? [], ([, lpAddress]) => lpAddress) }
+          try {
+            const poolStatus = await fetchV3PoolsStatusByChainId(Number(chainId), poolList)
+            return { [chainId]: keyBy(poolStatus ?? [], ([, lpAddress]) => lpAddress) }
+          } catch (error) {
+            console.error(`Error fetching pool status for chainId ${chainId}:`, error)
+            return { [chainId]: {} }
+          }
         }),
       )
       return results.reduce((acc, result) => ({ ...acc, ...result }), {} as IPoolsStatusType)
@@ -261,8 +275,13 @@ export const useMultiChainPoolsTimeFrame = (pools: UniversalFarmConfig[]) => {
           const chainId = Number(chainId_)
           const bCakeAddresses = poolList.map(({ bCakeWrapperAddress }) => bCakeWrapperAddress ?? zeroAddress)
           if (bCakeAddresses.length === 0) return { [chainId]: {} }
-          const timeFrameData = await fetchPoolsTimeFrame(bCakeAddresses, chainId)
-          return timeFrameData ?? []
+          try {
+            const timeFrameData = await fetchPoolsTimeFrame(bCakeAddresses, chainId)
+            return timeFrameData ?? []
+          } catch (error) {
+            console.error(`Error fetching time frame data for chainId ${chainId}:`, error)
+            return []
+          }
         }),
       )
       return results.reduce((acc, result, idx) => {

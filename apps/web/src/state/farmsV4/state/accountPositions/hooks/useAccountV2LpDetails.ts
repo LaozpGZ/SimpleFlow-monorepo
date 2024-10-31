@@ -51,8 +51,13 @@ export const useAccountV2LpDetails = (chainIds: number[], account?: Address | nu
       const results = await Promise.all(
         Object.entries(lpTokensByChain).map(async ([chainId, lpTokens]) => {
           if (lpTokens.length === 0) return []
-          const details = await getAccountV2LpDetails(Number(chainId), account, lpTokens)
-          return details.filter((d) => d.nativeBalance.greaterThan('0') || d.farmingBalance.greaterThan('0'))
+          try {
+            const details = await getAccountV2LpDetails(Number(chainId), account, lpTokens)
+            return details.filter((d) => d.nativeBalance.greaterThan('0') || d.farmingBalance.greaterThan('0'))
+          } catch (error) {
+            console.error(`Error fetching LP details for chainId ${chainId}:`, error)
+            return []
+          }
         }),
       )
       return results.flat()

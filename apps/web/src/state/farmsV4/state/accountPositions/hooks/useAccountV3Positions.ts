@@ -16,9 +16,13 @@ export const useAccountV3Positions = (chainIds: number[], account?: Address | nu
       if (!account) return []
       const results = await Promise.all(
         chainIds.map(async (chainId) => {
-          // Fetch the account V3 positions for the current chainId
-          const positions = await getAccountV3Positions(chainId, account)
-          return positions ?? []
+          try {
+            const positions = await getAccountV3Positions(chainId, account)
+            return positions ?? []
+          } catch (error) {
+            console.error(`Error fetching V3 positions for chainId ${chainId}:`, error)
+            return []
+          }
         }),
       )
       return results.flat()

@@ -19,8 +19,13 @@ export const useAccountStableLpDetails = (chainIds: number[], account?: Address 
         chainIds.map(async (chainId) => {
           const stablePairs = LegacyRouter.stableSwapPairsByChainId[chainId]
           if (!stablePairs || stablePairs.length === 0) return []
-          const details = await getStablePairDetails(chainId, account, stablePairs)
-          return details.filter((d) => d.nativeBalance.greaterThan('0') || d.farmingBalance.greaterThan('0'))
+          try {
+            const details = await getStablePairDetails(chainId, account, stablePairs)
+            return details.filter((d) => d.nativeBalance.greaterThan('0') || d.farmingBalance.greaterThan('0'))
+          } catch (error) {
+            console.error(`Error fetching details for chainId ${chainId}:`, error)
+            return []
+          }
         }),
       )
       return results.flat()

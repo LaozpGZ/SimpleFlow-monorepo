@@ -215,17 +215,23 @@ export function usePoolsWithMultiChains(
             functionName: 'liquidity',
           }))
 
-          const [slot0Data, liquidityData] = await Promise.all([
-            client.multicall({
-              contracts: slot0Calls,
-              allowFailure: false,
-            }),
-            client.multicall({
-              contracts: liquidityCalls,
-              allowFailure: false,
-            }),
-          ])
-          return { [chainId]: { slot0: slot0Data, liquidity: liquidityData } }
+          try {
+            const [slot0Data, liquidityData] = await Promise.all([
+              client.multicall({
+                contracts: slot0Calls,
+                allowFailure: false,
+              }),
+              client.multicall({
+                contracts: liquidityCalls,
+                allowFailure: false,
+              }),
+            ])
+
+            return { [chainId]: { slot0: slot0Data, liquidity: liquidityData } }
+          } catch (error) {
+            console.error(`Error fetching data for chainId ${chainId}:`, error)
+            return { [chainId]: { slot0: undefined, liquidity: undefined } }
+          }
         }),
       )
       return results.reduce((acc, result) => {
