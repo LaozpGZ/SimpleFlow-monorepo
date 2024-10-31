@@ -3579,5 +3579,8 @@
   "veCake Balance": "رصيد veCake",
   "You cast your vote! Please wait until the voting ends to see the end results.": "لقد أدليت بصوتك! الرجاء الانتظار حتى ينتهي التصويت لمعرفة النتائج النهائية.",
   "Not enough veCAKE": "لا يوجد ما يكفي من VeCAKE",
-  "Enter the votes to cast": "أدخل الأصوات المراد الإدلاء بها"
+  "Enter the votes to cast": "أدخل الأصوات المراد الإدلاء بها",
+  "TVL and APR data may not be reflected correctly due to technical limitation, please refer to": "قد لا تنعكس بيانات TVL وAPR بشكل صحيح بسبب القيود التقنية، الرجاء الرجوع إلى",
+  "info page": "صفحة المعلومات",
+  "for accurate values": "للحصول على قيم دقيقة"
 }
