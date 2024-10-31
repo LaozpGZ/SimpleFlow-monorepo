@@ -3579,5 +3579,8 @@
   "veCake Balance": "veCake-saldo",
   "You cast your vote! Please wait until the voting ends to see the end results.": "Olet äänestänyt! Odota äänestyksen päättymistä, jotta näet lopulliset tulokset.",
   "Not enough veCAKE": "veCAKE ei riitä",
-  "Enter the votes to cast": "Syötä annettavat äänet"
+  "Enter the votes to cast": "Syötä annettavat äänet",
+  "TVL and APR data may not be reflected correctly due to technical limitation, please refer to": "TVL- ja APR-tiedot eivät välttämättä näy oikein teknisen rajoituksen takia, katso",
+  "info page": "tietosivulta",
+  "for accurate values": "tarkat arvot"
 }
