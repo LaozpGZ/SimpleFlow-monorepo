@@ -933,7 +933,7 @@
   "Expert Mode": "Mod Expert",
   "Don’t show this again": "Nu afișa din nou",
   "Global": "Global",
-  "Tx deadline": "Tx deadline",
+  "Tx deadline": "Termen Tx",
   "Flippy sounds": "Sunete de întoarcere a monedelor",
   "Your transaction will revert if it is left confirming for longer than this time.": "Tranzacția ta va fi anulată dacă este neconfirmată o perioadă mai lungă decât aceasta.",
   "Swaps & Liquidity": "Schimbări și lichiditate",
@@ -3510,7 +3510,7 @@
   "For more information, please refer to %org%’s": "Pentru mai multe informații, consultă %org%",
   "Please exercise due caution when trading / providing liquidity for the uniBTC token. The protocol recently encountered a security compromise.": "Procedează cu mare atenție când tranzacționezi/furnizezi lichidități pentru jetonul uniBTC. Protocolul a fost întâmpinat recent o problemă de securitate.",
   "Caution - %token% Token": "Atenție - jeton %token%",
-  "Gauges": "Gauges",
+  "Gauges": "Indicatori",
   "V4": "V4",
   "CAKE Incentives": "CAKE Incentives",
   "Staking Pools": "Staking Pools",
@@ -3576,8 +3576,11 @@
   "Voting system": "Voting system",
   "Binary": "Binary",
   "Weighted": "Weighted",
-  "veCake Balance": "veCake Balance",
+  "veCake Balance": "Soldul veCake",
   "You cast your vote! Please wait until the voting ends to see the end results.": "You cast your vote! Please wait until the voting ends to see the end results.",
   "Not enough veCAKE": "Not enough veCAKE",
-  "Enter the votes to cast": "Enter the votes to cast"
+  "Enter the votes to cast": "Enter the votes to cast",
+  "TVL and APR data may not be reflected correctly due to technical limitation, please refer to": "TVL and APR data may not be reflected correctly due to technical limitation, please refer to",
+  "info page": "info page",
+  "for accurate values": "for accurate values"
 }
