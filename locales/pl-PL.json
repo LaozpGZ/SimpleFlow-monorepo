@@ -3579,5 +3579,8 @@
   "veCake Balance": "Saldo veCake",
   "You cast your vote! Please wait until the voting ends to see the end results.": "Oddano głos! Zaczekaj do zakończenia głosowania, aby zobaczyć wyniki.",
   "Not enough veCAKE": "Za mało veCAKE",
-  "Enter the votes to cast": "Wprowadź głosy do oddania"
+  "Enter the votes to cast": "Wprowadź głosy do oddania",
+  "TVL and APR data may not be reflected correctly due to technical limitation, please refer to": "Dane TVL i APR mogą nie być poprawnie odzwierciedlone ze względu na ograniczenia techniczne, zapoznaj się ze",
+  "info page": "stroną informacyjną,",
+  "for accurate values": "aby uzyskać dokładne wartości"
 }
