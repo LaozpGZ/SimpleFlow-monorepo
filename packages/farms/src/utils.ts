@@ -3,6 +3,7 @@ import { getStableSwapPools } from '@pancakeswap/stable-swap-sdk'
 import {
   ComputedFarmConfigV3,
   FarmV3Data,
+  Protocol,
   SerializedClassicFarmConfig,
   SerializedFarmConfig,
   SerializedStableFarmConfig,
@@ -10,6 +11,7 @@ import {
   UniversalFarmConfigStableSwap,
   UniversalFarmConfigV2,
   UniversalFarmConfigV3,
+  UniversalFarmConfigV4,
 } from './types'
 
 export function isActiveV3Farm(farm: FarmV3Data, poolLength: number) {
@@ -24,6 +26,8 @@ type LegacyClassicFarmConfig = Omit<SerializedClassicFarmConfig, 'pid'> & { chai
   pid?: number
 }
 type LegacyV3FarmConfig = ComputedFarmConfigV3 & { chainId: ChainId; version: 2 | 3 }
+type LegacyV4FarmConfig = Omit<ComputedFarmConfigV3, 'feeAmount'> & { chainId: ChainId; version: 4 }
+
 export function formatUniversalFarmToSerializedFarm(farms: UniversalFarmConfig[]): Array<LegacyFarmConfig> {
   return farms
     .map((farm) => {
@@ -34,6 +38,9 @@ export function formatUniversalFarmToSerializedFarm(farms: UniversalFarmConfig[]
           return formatV2UniversalFarmToSerializedFarm(farm as UniversalFarmConfigV2)
         case 'v3':
           return formatV3UniversalFarmToSerializedFarm(farm as UniversalFarmConfigV3)
+        case Protocol.V4BIN:
+        case Protocol.V4CLAMM:
+          return formatV4UniversalFarmToSerializedFarm(farm as UniversalFarmConfigV4)
         default:
           return undefined
       }
@@ -98,5 +105,20 @@ const formatV3UniversalFarmToSerializedFarm = (farm: UniversalFarmConfigV3): Leg
     feeAmount,
     chainId,
     version: 3,
+  }
+}
+
+const formatV4UniversalFarmToSerializedFarm = (farm: UniversalFarmConfigV4): LegacyV4FarmConfig => {
+  const { chainId, pid, lpAddress, token0, token1 } = farm
+  return {
+    pid,
+    lpAddress,
+    lpSymbol: `${token0.symbol}-${token1.symbol} LP`,
+    token0,
+    token1,
+    token: token0,
+    quoteToken: token1,
+    chainId,
+    version: 4,
   }
 }
