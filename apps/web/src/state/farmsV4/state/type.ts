@@ -6,7 +6,7 @@ type Prettify<T> = {
   [K in keyof T]: T[K]
 } & object
 
-export type PoolInfo = Prettify<V2PoolInfo | StablePoolInfo | V3PoolInfo | V4BinPoolInfo>
+export type PoolInfo = Prettify<V2PoolInfo | StablePoolInfo | V3PoolInfo | V4PoolInfo>
 
 export type BasePoolInfo = {
   pid?: number
@@ -50,8 +50,24 @@ export type StablePoolInfo = BasePoolInfo & {
   bCakeWrapperAddress?: Address
 }
 
-export type V4BinPoolInfo = BasePoolInfo & {
-  protocol: Protocol.V4BIN
-}
+export type V4PoolInfo = V4BinPoolInfo | V4CLPoolInfo
+
+export type V4BinPoolInfo = Prettify<
+  BasePoolInfo & {
+    /** @deprecated use poolId instead */
+    lpAddress: string
+    poolId: Address
+    protocol: Protocol.V4BIN
+  }
+>
+
+export type V4CLPoolInfo = Prettify<
+  BasePoolInfo & {
+    /** @deprecated use poolId instead */
+    lpAddress: string
+    poolId: Address
+    protocol: Protocol.V4CLAMM
+  }
+>
 
 export type ChainIdAddressKey = `${number}:${Address}`
