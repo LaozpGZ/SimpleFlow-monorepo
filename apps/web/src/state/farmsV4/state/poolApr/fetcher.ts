@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import { supportedChainIdV4 } from '@pancakeswap/farms'
+import { Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { masterChefV3ABI, pancakeV3PoolABI } from '@pancakeswap/v3-sdk'
 import { create, windowedFiniteBatchScheduler } from '@yornaath/batshit'
@@ -34,15 +34,17 @@ export const getCakeApr = (pool: PoolInfo, cakePrice: BigNumber): Promise<CakeAp
   }
 }
 
+type NonV4Protocol = Exclude<Protocol, Protocol.V4BIN | Protocol.V4CLAMM>
+
 // @todo @ChefJerry should directly fetch from poolInfo api, BE need update
 export const getLpApr = async (pool: PoolInfo, signal?: AbortSignal): Promise<number> => {
   const { protocol } = pool
   const chainName = chainIdToExplorerInfoChainName[pool.chainId]
 
   const resp = await explorerApiClient.GET(
-    protocol === 'v4bin'
+    [Protocol.V4BIN, Protocol.V4CLAMM].includes(protocol)
       ? `/cached/pools/apr/v4/{chainName}/{id}`
-      : `/cached/pools/apr/${protocol}/{chainName}/{address}`,
+      : `/cached/pools/apr/${protocol as NonV4Protocol}/{chainName}/{address}`,
     {
       signal,
       params: {
