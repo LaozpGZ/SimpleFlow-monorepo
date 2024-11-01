@@ -48,6 +48,7 @@ export const fetchUniversalFarms = async (chainId: ChainId, protocol?: Protocol)
 
     return newData
   } catch (error) {
+    console.error('fetchUniversalFarms error: ', error)
     return []
   }
 }
