@@ -10,6 +10,7 @@ import {
   useQueryStates,
 } from 'nuqs'
 import { useCallback, useEffect, useState } from 'react'
+import { useDebounce } from '@pancakeswap/hooks'
 import { Filter, FilterValue, Gauges, OptionsType, SortOptions } from '../components/GaugesFilter'
 import { getPositionManagerName } from '../utils'
 
@@ -135,7 +136,7 @@ const useFilteredGauges = ({ filter, fullGauges, searchText, sort, setSort }) =>
   }, [fullGauges, setSort, sort])
 
   useEffect(() => {
-    const fetchFilteredGauges = async () => {
+    const fetchFilteredGauges = async (signal) => {
       if (!fullGauges || !fullGauges.length) {
         setFilteredGauges([])
         return
@@ -160,34 +161,56 @@ const useFilteredGauges = ({ filter, fullGauges, searchText, sort, setSort }) =>
 
       // Asynchronous search based on searchText
       if (searchText?.length > 0) {
-        const updatedResults = await Promise.all(
-          results.map(async (gauge) => {
-            const positionManagerName = await getPositionManagerName(gauge)
-            const isMatch = [
-              // search by pairName or tokenName
-              gauge.pairName.toLowerCase(),
-              // search by gauges type, e.g. "v2", "v3", "position manager"
-              GAUGE_TYPE_NAMES[gauge.type].toLowerCase(),
-              // search by chain name
-              chainNames[gauge.chainId],
-              // search by chain id
-              String(gauge.chainId),
-              // search by boost multiplier, e.g. "1.5x"
-              `${Number(gauge.boostMultiplier) / 100}x`,
-              // search by alm strategy name
-              positionManagerName.toLowerCase(),
-            ].some((text) => text?.includes(searchText.toLowerCase()))
-            return isMatch ? gauge : null
-          }),
-        )
-        results = updatedResults.filter(Boolean) // Remove nulls
-      }
+        try {
+          const updatedResults = await Promise.all(
+            results.map(async (gauge) => {
+              try {
+                const positionManagerName = await getPositionManagerName(gauge, signal)
+                const isMatch = [
+                  // search by pairName or tokenName
+                  gauge.pairName.toLowerCase(),
+                  // search by gauges type, e.g. "v2", "v3", "position manager"
+                  GAUGE_TYPE_NAMES[gauge.type].toLowerCase(),
+                  // search by chain name
+                  chainNames[gauge.chainId],
+                  // search by chain id
+                  String(gauge.chainId),
+                  // search by boost multiplier, e.g. "1.5x"
+                  `${Number(gauge.boostMultiplier) / 100}x`,
+                  // search by alm strategy name
+                  positionManagerName.toLowerCase(),
+                ].some((text) => text?.includes(searchText.toLowerCase()))
+                return isMatch ? gauge : null
+              } catch (error) {
+                if (error instanceof Error) {
+                  if (error.name !== 'AbortError') {
+                    console.error('Error fetching position manager name:', error)
+                  } else {
+                    throw error
+                  }
+                }
+                return null
+              }
+            }),
+          )
+          results = updatedResults.filter(Boolean) // Remove nulls
 
-      const sorter = getSorter(sort)
-      setFilteredGauges(results.sort(sorter))
+          const sorter = getSorter(sort)
+          setFilteredGauges(results.sort(sorter))
+        } catch (error) {
+          // eslint-disable-next-line no-empty
+        }
+      }
     }
 
-    fetchFilteredGauges()
+    const controller = new AbortController()
+    const { signal } = controller
+
+    fetchFilteredGauges(signal)
+
+    return () => {
+      controller.abort()
+    }
   }, [filter, fullGauges, searchText, sort])
 
   return filteredGauges
@@ -196,12 +219,13 @@ const useFilteredGauges = ({ filter, fullGauges, searchText, sort, setSort }) =>
 export const useGaugesQueryFilter = (fullGauges: Gauge[] | undefined) => {
   const { filter, setFilter, searchText, setSearchText } = useGaugesFilterQueryState()
   const [sort, setSort] = useState<SortOptions>()
+  const debouncedQuery = useDebounce(searchText, 200)
   const filterGauges = useFilteredGauges({ filter, fullGauges, searchText, sort, setSort })
 
   return {
     filterGauges,
 
-    searchText,
+    searchText: debouncedQuery,
     setSearchText,
 
     filter,
