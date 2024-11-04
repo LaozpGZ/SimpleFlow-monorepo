@@ -12,6 +12,7 @@ export const DEFAULT_PAYMASTER_TOKEN = Native.onChain(ChainId.ZKSYNC)
 export const paymasterTokens: Currency[] = [
   DEFAULT_PAYMASTER_TOKEN,
   zksyncTokens.zk,
+  zksyncTokens.cake,
   zksyncTokens.wbtc,
   zksyncTokens.dai,
   zksyncTokens.usdc,
@@ -31,8 +32,11 @@ export const paymasterTokens: Currency[] = [
 export const paymasterInfo: {
   [gasTokenAddress: Address]: { discount: `-${number}%` | 'FREE'; discountLabel?: string }
 } = {
+  [zksyncTokens.zk.address]: {
+    discount: '-40%',
+  },
   [zksyncTokens.wbtc.address]: {
-    discount: '-20%', // Example: -20%, FREE
+    discount: '-20%',
   },
   [zksyncTokens.dai.address]: {
     discount: '-20%',
@@ -73,8 +77,8 @@ export const paymasterInfo: {
   [zksyncTokens.hold.address]: {
     discount: '-20%',
   },
-  [zksyncTokens.zk.address]: {
-    discount: '-40%',
+  [zksyncTokens.cake.address]: {
+    discount: '-20%',
   },
 }
 
