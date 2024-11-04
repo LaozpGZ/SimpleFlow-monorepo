@@ -194,13 +194,12 @@ const useFilteredGauges = ({ filter, fullGauges, searchText, sort, setSort }) =>
             }),
           )
           results = updatedResults.filter(Boolean) // Remove nulls
-
-          const sorter = getSorter(sort)
-          setFilteredGauges(results.sort(sorter))
         } catch (error) {
-          // eslint-disable-next-line no-empty
+          return
         }
       }
+      const sorter = getSorter(sort)
+      setFilteredGauges(results.sort(sorter))
     }
 
     const controller = new AbortController()
