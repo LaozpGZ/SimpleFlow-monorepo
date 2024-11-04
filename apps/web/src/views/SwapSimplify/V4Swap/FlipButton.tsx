@@ -55,12 +55,12 @@ export const FlipButton = memo(function FlipButton() {
         <Lottie
           lottieRef={lottieRef}
           animationData={animationData}
-          style={{ height: '44px', cursor: 'pointer' }}
+          style={{ height: isDark ? '44px' : '40px', cursor: 'pointer' }}
           onClick={onFlip}
           autoplay={false}
           loop={false}
-          onMouseEnter={() => lottieRef.current?.playSegments(isDark ? [7, 23] : [19, 32], true)}
-          onMouseLeave={() => lottieRef.current?.playSegments(isDark ? [39, 62] : [52, 73], true)}
+          onMouseEnter={() => lottieRef.current?.playSegments(isDark ? [7, 23] : [7, 24], true)}
+          onMouseLeave={() => lottieRef.current?.playSegments(isDark ? [39, 62] : [22, 7], true)}
         />
       </AutoRow>
     </AutoColumn>
