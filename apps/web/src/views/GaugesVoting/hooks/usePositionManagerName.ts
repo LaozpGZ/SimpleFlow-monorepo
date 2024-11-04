@@ -5,7 +5,7 @@ import { getPositionManagerName } from 'views/GaugesVoting/utils'
 export const usePositionManagerName = (data: Gauge) => {
   const { data: managerName } = useQuery({
     queryKey: ['position-manager-name'],
-    queryFn: async ({ signal }) => getPositionManagerName(data, signal),
+    queryFn: async ({ signal }) => getPositionManagerName(data, undefined, signal),
     enabled: Boolean(data),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

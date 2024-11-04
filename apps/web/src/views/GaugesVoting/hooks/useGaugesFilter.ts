@@ -1,4 +1,4 @@
-import { chainNames } from '@pancakeswap/chains'
+import { ChainId, chainNames } from '@pancakeswap/chains'
 import { GAUGES_SUPPORTED_CHAIN_IDS, GAUGE_TYPE_NAMES, Gauge, GaugeType } from '@pancakeswap/gauges'
 import { FeeAmount } from '@pancakeswap/v3-sdk'
 import {
@@ -11,6 +11,8 @@ import {
 } from 'nuqs'
 import { useCallback, useEffect, useState } from 'react'
 import { useDebounce } from '@pancakeswap/hooks'
+import { fetchPositionManager, PCSDuoTokenVaultConfig } from '@pancakeswap/position-managers'
+import fromPairs from 'lodash/fromPairs'
 import { Filter, FilterValue, Gauges, OptionsType, SortOptions } from '../components/GaugesFilter'
 import { getPositionManagerName } from '../utils'
 
@@ -162,10 +164,29 @@ const useFilteredGauges = ({ filter, fullGauges, searchText, sort, setSort }) =>
       // Asynchronous search based on searchText
       if (searchText?.length > 0) {
         try {
+          const positionManagerPairs: Partial<Record<ChainId, PCSDuoTokenVaultConfig[]>> = fromPairs(
+            await Promise.all(
+              results
+                .reduce((acc, gauge) => {
+                  if (!acc.includes(gauge.chainId)) {
+                    acc.push(gauge.chainId)
+                  }
+                  return acc
+                }, [])
+                .map(async (chainId) => {
+                  const positionManagerName = await fetchPositionManager(chainId, signal)
+                  return [chainId, positionManagerName]
+                }),
+            ),
+          )
           const updatedResults = await Promise.all(
             results.map(async (gauge) => {
               try {
-                const positionManagerName = await getPositionManagerName(gauge, signal)
+                const positionManagerName = await getPositionManagerName(
+                  gauge,
+                  positionManagerPairs?.[gauge.chainId] ?? undefined,
+                  signal,
+                )
                 const isMatch = [
                   // search by pairName or tokenName
                   gauge.pairName.toLowerCase(),
