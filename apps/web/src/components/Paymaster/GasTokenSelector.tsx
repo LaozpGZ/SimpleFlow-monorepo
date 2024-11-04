@@ -6,6 +6,7 @@ import {
   Button,
   CircleLoader,
   Column,
+  DottedHelpText,
   Flex,
   Heading,
   ModalBody,
@@ -15,6 +16,7 @@ import {
   ModalTitle,
   ModalV2,
   QuestionHelper,
+  QuestionHelperV2,
   RowBetween,
   RowFixed,
   Text,
@@ -266,12 +268,9 @@ export const GasTokenSelector = ({ currency: inputCurrency }: GasTokenSelectorPr
 
   return (
     <>
-      <RowBetween style={{ padding: '4px 0 0 0' }}>
+      <RowBetween style={{ padding: '0 0 4px 0' }}>
         <RowFixed>
-          <Text fontSize="14px" color="textSubtle">
-            {t('Gas Token')}
-          </Text>
-          <QuestionHelper
+          <QuestionHelperV2
             text={
               <>
                 <Text mb="12px">
@@ -286,11 +285,14 @@ export const GasTokenSelector = ({ currency: inputCurrency }: GasTokenSelectorPr
                 </Text>
               </>
             }
-            ml="4px"
             placement="top"
-          />
+          >
+            <DottedHelpText fontSize="14px" color="textSubtle">
+              {t('Gas Token')}
+            </DottedHelpText>
+          </QuestionHelperV2>
           {gasTokenInfo && gasTokenInfo.discount && (
-            <Badge ref={targetRef} style={{ fontSize: '12px', fontWeight: 600, padding: '3px 5px', marginLeft: '4px' }}>
+            <Badge ref={targetRef} style={{ fontSize: '12px', fontWeight: 600, padding: '3px 5px', marginLeft: '6px' }}>
               ⛽️ {gasTokenInfo.discountLabel ?? gasTokenInfo.discount}
             </Badge>
           )}

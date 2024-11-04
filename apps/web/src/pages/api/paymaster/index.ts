@@ -25,7 +25,7 @@ const handler: NextApiHandler = async (req, res) => {
       // Check calldata for ERC20 approve
       const decodedCalldata = decodeFunctionData({ data: call.calldata, abi: erc20Abi })
       if (decodedCalldata.functionName === 'approve') isTransactionWhitelisted = true
-    } catch (e) {
+    } catch {
       // do nothing. must be another type of transaction if decoding failed
     }
 
