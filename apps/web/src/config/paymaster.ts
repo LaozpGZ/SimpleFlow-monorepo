@@ -83,7 +83,7 @@ export const paymasterInfo: {
 }
 
 /**
- * Contracts that the paymaster is allowed to interact with.
+ * Contracts that the paymaster is allowed to interact with if transaction is sponsored.
  * In addition, ERC20 Approve transactions are allowed.
  */
 export const PAYMASTER_CONTRACT_WHITELIST = [
