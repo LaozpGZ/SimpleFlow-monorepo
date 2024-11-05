@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-shadow, no-await-in-loop, no-constant-condition, no-console */
-import { BigintIsh, Currency } from '@pancakeswap/sdk'
+import { BigintIsh, ChainId, Currency } from '@pancakeswap/sdk'
 import { OnChainProvider, Pool, SmartRouter } from '@pancakeswap/smart-router'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
 import { POOLS_FAST_REVALIDATE } from 'config/pools'
 import { createViemPublicClientGetter } from 'utils/viem'
+import { StableSwapPool, getStableSwapPools } from '@pancakeswap/stable-swap-sdk'
 
 interface Options {
   blockNumber?: number
@@ -27,6 +28,7 @@ function candidatePoolsOnChainHookFactory<TPool extends Pool>(
     pairs: [Currency, Currency][],
     provider: OnChainProvider,
     blockNumber: BigintIsh,
+    poolConfigs: StableSwapPool[],
   ) => Promise<TPool[]>,
 ) {
   return function useCandidatePools(
@@ -68,7 +70,8 @@ function candidatePoolsOnChainHookFactory<TPool extends Pool>(
         SmartRouter.logger.metric(label)
         const getViemClients = createViemPublicClientGetter({ transportSignal: signal })
         const resolvedPairs = await SmartRouter.getPairCombinations(currencyA, currencyB)
-        const pools = await getPoolsOnChain(resolvedPairs ?? [], getViemClients, blockNumber)
+        const poolConfigs: StableSwapPool[] = await getStableSwapPools(currencyA?.chainId ?? ChainId.BSC)
+        const pools = await getPoolsOnChain(resolvedPairs ?? [], getViemClients, blockNumber, poolConfigs)
         SmartRouter.logger.metric(label, pools)
 
         return {
