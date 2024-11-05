@@ -1,5 +1,5 @@
 import { Trans, useTranslation } from '@pancakeswap/localization'
-import { Button, Card, Flex, FlexGap, Heading, Link, Text } from '@pancakeswap/uikit'
+import { Button, Card, Flex, FlexGap, Heading, Text } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import styled from 'styled-components'
 
