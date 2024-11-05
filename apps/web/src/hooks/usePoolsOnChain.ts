@@ -14,7 +14,7 @@ interface Options {
 
 export const useV2CandidatePools = candidatePoolsOnChainHookFactory('V2', SmartRouter.getV2PoolsOnChain)
 
-export const useStableCandidatePools = candidatePoolsOnChainHookFactory('Stable', SmartRouter.getStablePoolsOnChain)
+export const useStableCandidatePools = candidatePoolsOnChainHookFactory('Stable', SmartRouter.getStablePoolsOnChain) // TODO: Fix this
 
 export const useV3PoolsWithoutTicksOnChain = candidatePoolsOnChainHookFactory(
   'V3 without ticks',

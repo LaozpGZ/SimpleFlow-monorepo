@@ -1,5 +1,5 @@
-import { BigintIsh, Currency } from '@pancakeswap/sdk'
-
+import { BigintIsh, ChainId, Currency } from '@pancakeswap/sdk'
+import { getStableSwapPools } from '@pancakeswap/stable-swap-sdk'
 import { getPairCombinations } from '../../functions'
 import { OnChainProvider } from '../../types'
 import { getStablePoolsOnChain } from './onChainPoolProviders'
@@ -17,5 +17,7 @@ interface Params {
 export async function getStableCandidatePools(params: Params) {
   const { onChainProvider, currencyA, currencyB, pairs: providedPairs, blockNumber } = params
   const pairs = providedPairs || (await getPairCombinations(currencyA, currencyB))
-  return getStablePoolsOnChain(pairs, onChainProvider, blockNumber)
+  const poolConfigs = await getStableSwapPools(currencyA?.chainId ?? ChainId.BSC)
+
+  return getStablePoolsOnChain(pairs, onChainProvider, blockNumber, poolConfigs)
 }
