@@ -7,7 +7,7 @@ import { isStableSwapSupported, STABLE_SUPPORTED_CHAIN_IDS } from './pools'
 const stableSwapCache: Record<string, StableSwapPool[]> = {}
 
 export const fetchStableSwapData = async (chainId: ChainId) => {
-  const cacheKey = `${chainId}-all}`
+  const cacheKey = `${chainId}-all`
 
   // Return cached data if it exists
   if (stableSwapCache[cacheKey]) {
