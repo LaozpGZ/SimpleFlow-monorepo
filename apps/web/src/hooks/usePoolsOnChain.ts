@@ -4,9 +4,9 @@ import { OnChainProvider, Pool, SmartRouter } from '@pancakeswap/smart-router'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 
+import { StableSwapPool, getStableSwapPools } from '@pancakeswap/stable-swap-sdk'
 import { POOLS_FAST_REVALIDATE } from 'config/pools'
 import { createViemPublicClientGetter } from 'utils/viem'
-import { StableSwapPool, getStableSwapPools } from '@pancakeswap/stable-swap-sdk'
 
 interface Options {
   blockNumber?: number
@@ -15,7 +15,7 @@ interface Options {
 
 export const useV2CandidatePools = candidatePoolsOnChainHookFactory('V2', SmartRouter.getV2PoolsOnChain)
 
-export const useStableCandidatePools = candidatePoolsOnChainHookFactory('Stable', SmartRouter.getStablePoolsOnChain) // TODO: Fix this
+export const useStableCandidatePools = candidatePoolsOnChainHookFactory('Stable', SmartRouter.getStablePoolsOnChain)
 
 export const useV3PoolsWithoutTicksOnChain = candidatePoolsOnChainHookFactory(
   'V3 without ticks',

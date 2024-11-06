@@ -79,7 +79,7 @@ router.get('/v0/quote', async (req, event: FetchEvent) => {
         SmartRouter.v3PoolSubgraphSelection(currencyA, currencyB, res),
       ),
       SmartRouter.getV2PoolsOnChain(pairs, viemProviders, blockNumber),
-      SmartRouter.getStablePoolsOnChain(pairs, viemProviders, blockNumber, poolConfigs), // TODO: Fix this
+      SmartRouter.getStablePoolsOnChain(pairs, viemProviders, blockNumber, poolConfigs),
     ])
 
     pools = {
