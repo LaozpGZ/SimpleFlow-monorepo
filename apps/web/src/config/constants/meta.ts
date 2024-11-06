@@ -88,5 +88,5 @@ export const getCustomMeta = memoize(
     }
     return null
   },
-  (path, t, locale) => `${path}#${locale}`,
+  (path, _, locale) => `${path}#${locale}`,
 )
