@@ -59,8 +59,8 @@ export const FlipButton = memo(function FlipButton() {
           onClick={onFlip}
           autoplay={false}
           loop={false}
-          onMouseEnter={() => lottieRef.current?.playSegments(isDark ? [7, 23] : [7, 24], true)}
-          onMouseLeave={() => lottieRef.current?.playSegments(isDark ? [39, 62] : [22, 7], true)}
+          onMouseEnter={() => lottieRef.current?.playSegments([7, 19], true)}
+          onMouseLeave={() => lottieRef.current?.playSegments([39, 54], true)}
         />
       </AutoRow>
     </AutoColumn>
