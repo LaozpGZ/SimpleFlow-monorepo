@@ -20,7 +20,6 @@ import { useCallback, useDeferredValue, useEffect, useMemo, useRef } from 'react
 import { zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
 
-import { QUOTING_API_PREFIX_OPTIMIZED, QUOTING_API_PREFIX_ORIGINAL } from 'config/constants/endpoints'
 import { POOLS_FAST_REVALIDATE, POOLS_NORMAL_REVALIDATE } from 'config/pools'
 import { useIsWrapping } from 'hooks/useWrapCallback'
 import { useCurrentBlock } from 'state/block/hooks'
@@ -33,6 +32,7 @@ import { publicClient } from 'utils/wagmi'
 import { EXPERIMENTAL_FEATURES } from 'config/experimentalFeatures'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 
+import { QUOTING_API, QUOTING_API_PREFIX } from 'config/constants/endpoints'
 import {
   CommonPoolsParams,
   PoolsWithState,
@@ -47,6 +47,9 @@ import { useSpeedQuote } from './useSpeedQuote'
 import { useTokenFee } from './useTokenFee'
 import { useTradeVerifiedByQuoter } from './useTradeVerifiedByQuoter'
 import { useGlobalWorker } from './useWorker'
+
+const QUOTING_API_PREFIX_ORIGINAL = 'https://pcsx-order-price-api-test-master-viosr.ondigitalocean.app'
+const QUOTING_API_PREFIX_OPTIMIZED = 'https://pcsx-order-price-api-test-branch-nfu7y.ondigitalocean.app'
 
 export class NoValidRouteError extends Error {
   constructor(message?: string) {
@@ -628,7 +631,7 @@ export function useBestTradeFromApi({
         },
       })
 
-      const serverRes = await fetch(`${QUOTING_API_PREFIX_ORIGINAL}/get-price-with-amm`, {
+      const serverRes = await fetch(`${QUOTING_API}`, {
         method: 'POST',
         signal,
         headers: {
@@ -709,6 +712,7 @@ export function useBestTradeFromApiShadow({
   const { gasPrice } = useFeeDataWithGasPrice()
 
   const previousEnabled = usePreviousValue(enabled)
+  const prefix = Math.random() < 0.5 ? QUOTING_API_PREFIX_ORIGINAL : QUOTING_API_PREFIX_OPTIMIZED
 
   return useQuery({
     enabled: featureFlag && !!(amount && currency && deferQuotient && enabled),
@@ -747,7 +751,7 @@ export function useBestTradeFromApiShadow({
         },
       })
 
-      const serverRes = await fetch(`${QUOTING_API_PREFIX_OPTIMIZED}/get-price-with-amm`, {
+      const serverRes = await fetch(`${prefix}/get-price-with-amm`, {
         method: 'POST',
         signal,
         headers: {
@@ -794,7 +798,7 @@ export const useBestAMMTradeFromQuoterApi = bestTradeHookFactory<V4Router.V4Trad
   createQuoteProvider,
   useGetBestTrade: createSimpleUseGetBestTradeHook(
     async (amount, currency, tradeType, { maxHops, maxSplits, allowedPoolTypes, signal }) => {
-      const serverRes = await fetch(`${QUOTING_API_PREFIX_ORIGINAL}/get-price-with-amm`, {
+      const serverRes = await fetch(`${QUOTING_API}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -933,7 +937,7 @@ export function useTradeApiPrefetch({ currencyA, currencyB, poolTypes, enabled =
       }
 
       const serverRes = await fetch(
-        `${QUOTING_API_PREFIX_ORIGINAL}/_pools/${currencyA.chainId}/${getCurrencyIdentifierForApi(
+        `${QUOTING_API_PREFIX}/_pools/${currencyA.chainId}/${getCurrencyIdentifierForApi(
           currencyA,
         )}/${getCurrencyIdentifierForApi(currencyB)}?${qs.stringify({ protocols: poolTypes.map(getPoolTypeKey) })}`,
         {

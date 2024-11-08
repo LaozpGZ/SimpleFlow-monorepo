@@ -82,8 +82,9 @@ export const TRADING_REWARD_API = 'https://trading-reward.pancakeswap.com/api/v1
 
 export const X_API_ENDPOINT = process.env.NEXT_PUBLIC_QUOTING_API
 
-export const QUOTING_API_PREFIX_ORIGINAL = 'https://pcsx-order-price-api-test-master-viosr.ondigitalocean.app'
-export const QUOTING_API_PREFIX_OPTIMIZED = 'https://pcsx-order-price-api-test-branch-nfu7y.ondigitalocean.app'
+export const QUOTING_API_PREFIX = `${X_API_ENDPOINT}/order-price`
+
+export const QUOTING_API = `${QUOTING_API_PREFIX}/get-price`
 
 export const FARMS_API = 'https://farms-api.pancakeswap.com'
 
