@@ -122,7 +122,7 @@
   "Click here for more information": "点击这里查看更多详情",
   "Funds will not be available for withdrawal for the first %days% days, and subsequently an early withdrawal fee will be applied if amount is unstaked before locked period is up. ": "前 %days% 天将无法提取资金，随后如果在锁定期结束前解除质押，将收取提前提取费用。",
   "Your funds have been restaked in the pool": "您的资金已重新质押进资金池中",
-  "This collection has been inactived for a while. Trade at your own risk.": "此收藏已被停用一段时间了。自行承担交易风险。",
+  "This collection has been inactive for a while. Trade at your own risk.": "This collection has been inactive for a while. Trade at your own risk.",
   "Info": "信息",
   "IFO": "IFO",
   "More": "更多",
