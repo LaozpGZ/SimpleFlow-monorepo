@@ -122,7 +122,7 @@
   "Click here for more information": "আরও তথ্যের জন্য এখানে ক্লিক করুন",
   "Funds will not be available for withdrawal for the first %days% days, and subsequently an early withdrawal fee will be applied if amount is unstaked before locked period is up. ": "প্রথম %days% দিনের জন্য তহবিল উত্তোলন করা যাবে না, এবং পরবর্তীতে লক করার সময়কাল শেষ হওয়ার আগে অর্থ আনস্টেক করা হলে দ্রুত উত্তোলন ফি প্রয়োগ করা হবে।",
   "Your funds have been restaked in the pool": "আপনার ফান্ড পুলে রিস্টেক করা হয়েছে",
-  "This collection has been inactived for a while. Trade at your own risk.": "এই সংগ্রহটি কিছু সময়ের জন্য নিষ্ক্রিয় করা হয়েছে। আপনার নিজের ঝুঁকিতে ট্রেড করুন।",
+  "This collection has been inactive for a while. Trade at your own risk.": "This collection has been inactive for a while. Trade at your own risk.",
   "Info": "তথ্য",
   "IFO": "IFO",
   "More": "আরও",
