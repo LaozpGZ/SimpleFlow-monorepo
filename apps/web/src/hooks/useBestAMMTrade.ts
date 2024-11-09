@@ -706,6 +706,19 @@ export function useBestTradeFromApiShadow({
     return types
   }, [v2Swap, v3Swap, stableSwap])
 
+  const poolPreFetch = useTradeApiPrefetchShadow({
+    currencyA: amount?.currency,
+    currencyB: currency,
+    enabled: false,
+    poolTypes,
+  })
+
+  useEffect(() => {
+    if (featureFlag && !!(amount && currency)) {
+      poolPreFetch.refetch()
+    }
+  }, [amount?.currency, currency])
+
   const deferQuotientRaw = useDeferredValue(amount?.quotient?.toString())
   const deferQuotient = useDebounce(deferQuotientRaw, 500)
   const { address } = useAccount()
@@ -925,6 +938,35 @@ type PrefetchParams = {
 
 function getCurrencyIdentifierForApi(currency: Currency) {
   return currency.isNative ? zeroAddress : currency.address
+}
+export function useTradeApiPrefetchShadow({ currencyA, currencyB, poolTypes, enabled = true }: PrefetchParams) {
+  const prefix = Math.random() < 0.5 ? QUOTING_API_PREFIX_ORIGINAL : QUOTING_API_PREFIX_OPTIMIZED
+  return useQuery({
+    enabled: !!(currencyA && currencyB && poolTypes?.length && enabled),
+    queryKey: ['quote-api-prefetch', currencyA?.chainId, currencyA?.symbol, currencyB?.symbol, poolTypes] as const,
+    queryFn: async ({ signal }) => {
+      if (!currencyA || !currencyB || !poolTypes?.length) {
+        throw new Error('Invalid prefetch params')
+      }
+
+      const serverRes = await fetch(
+        `${prefix}/_pools/${currencyA.chainId}/${getCurrencyIdentifierForApi(currencyA)}/${getCurrencyIdentifierForApi(
+          currencyB,
+        )}?${qs.stringify({ protocols: poolTypes.map(getPoolTypeKey) })}`,
+        {
+          method: 'GET',
+          signal,
+        },
+      )
+      const res = await serverRes.json()
+      if (!res.success) {
+        throw new Error(res.message)
+      }
+      return res
+    },
+    staleTime: currencyA?.chainId ? POOLS_FAST_REVALIDATE[currencyA.chainId] : 0,
+    refetchInterval: currencyA?.chainId ? POOLS_FAST_REVALIDATE[currencyA.chainId] : 0,
+  })
 }
 
 export function useTradeApiPrefetch({ currencyA, currencyB, poolTypes, enabled = true }: PrefetchParams) {
