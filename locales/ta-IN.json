@@ -122,7 +122,7 @@
   "Click here for more information": "மேலும் தகவலுக்கு இங்கே கிளிக் செய்க",
   "Funds will not be available for withdrawal for the first %days% days, and subsequently an early withdrawal fee will be applied if amount is unstaked before locked period is up. ": "முதல் %days% நாட்களுக்கு வித்டிராயலுக்கு நிதிகள் கிடைக்காது, மேலும் லாக் செய்யப்பட்ட காலம் முடிவடைவதற்கு முன் தொகை அன்ஸ்டேக் செய்யப்பட்டால், முன்கூட்டியே வித்டிரா செய்வதற்குக் கட்டணம் விதிக்கப்படும். ",
   "Your funds have been restaked in the pool": "உங்கள் நிதிகள், பூலில் ரீஸ்டேக் செய்யப்பட்டுள்ளன",
-  "This collection has been inactived for a while. Trade at your own risk.": "இந்தத் தொகுப்பு சிறிது காலமாகச் செயலற்ற நிலையில் உள்ளது. உங்கள் சொந்த துணிச்சலில் டிரேடிங் செய்திடுங்கள்.",
+  "This collection has been inactive for a while. Trade at your own risk.": "This collection has been inactive for a while. Trade at your own risk.",
   "Info": "தகவல்",
   "IFO": "IFO",
   "More": "மேலும்",
