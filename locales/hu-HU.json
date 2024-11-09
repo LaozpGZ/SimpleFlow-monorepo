@@ -122,7 +122,7 @@
   "Click here for more information": "További információért kattintson ide",
   "Funds will not be available for withdrawal for the first %days% days, and subsequently an early withdrawal fee will be applied if amount is unstaked before locked period is up. ": "A pénzeszközök az első %days% napon nem vonhatóak vissza, és ha az összeget a zárolási időszak lejárta előtt visszaveszik, akkor idő előtti kifizetési díjat számítunk fel. ",
   "Your funds have been restaked in the pool": "Az Ön pénzeszközeit újra feltette tétként az összevont pénzalapban",
-  "This collection has been inactived for a while. Trade at your own risk.": "Ez a gyűjtemény egy ideje már nem működik. Kereskedjen saját felelősségére.",
+  "This collection has been inactive for a while. Trade at your own risk.": "This collection has been inactive for a while. Trade at your own risk.",
   "Info": "Infó",
   "IFO": "IFO",
   "More": "Több",
