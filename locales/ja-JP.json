@@ -122,7 +122,7 @@
   "Click here for more information": "詳細はこちらをクリック",
   "Funds will not be available for withdrawal for the first %days% days, and subsequently an early withdrawal fee will be applied if amount is unstaked before locked period is up. ": "最初の%days%日間は資金を引き出せません。その後、ロック期間が満期になるまえにステーキング解除された場合、早期引き出し手数料が適用されます。",
   "Your funds have been restaked in the pool": "あなたの資金がプールに再ステーキングされました",
-  "This collection has been inactived for a while. Trade at your own risk.": "このコレクションはしばらく動きがありません。自己リスクでトレードしてください。",
+  "This collection has been inactive for a while. Trade at your own risk.": "This collection has been inactive for a while. Trade at your own risk.",
   "Info": "情報",
   "IFO": "IFO",
   "More": "その他",
