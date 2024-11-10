@@ -7,7 +7,7 @@ export const useLatestTxReceipt = () => {
   const [latestTxReceipt, setTxReceipt] = useAtom(txReceiptAtom)
 
   const setLatestTxReceipt = useCallback(
-    (receipt?: TransactionReceipt) => {
+    (receipt?: TransactionReceipt | null) => {
       if (receipt?.status === 'success') {
         setTxReceipt({ blockHash: receipt.blockHash, confirmedTime: Date.now() })
       }
