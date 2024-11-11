@@ -3,8 +3,9 @@ import { useAllSortedRecentTransactions } from 'state/transactions/hooks'
 import { useInitialBlockTimestamp } from 'state/block/hooks'
 import { useAtom } from 'jotai/index'
 import { txReceiptAtom } from 'state/farmsV4/state/accountPositions/atom'
+import { TransactionType } from 'state/transactions/actions'
 
-const LIQUIDITY_TRANSACTION_TYPES = [
+const LIQUIDITY_TRANSACTION_TYPES: TransactionType[] = [
   'add-liquidity',
   'add-liquidity-v3',
   'remove-liquidity-v3',
@@ -23,7 +24,7 @@ export const useUpdateLatestTxReceipt = () => {
       const newestReceipt = Object.entries(allTransactions)
         .flatMap(([_, txs]) =>
           Object.values(txs)
-            .filter((tx) => LIQUIDITY_TRANSACTION_TYPES.includes(tx.type ?? ''))
+            .filter((tx) => tx.type && LIQUIDITY_TRANSACTION_TYPES.includes(tx.type))
             .map(({ receipt, confirmedTime }) =>
               receipt && confirmedTime && receipt.status === 1 && confirmedTime > initialBlockTimestamp
                 ? {
