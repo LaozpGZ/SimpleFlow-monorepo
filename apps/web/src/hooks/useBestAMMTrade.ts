@@ -48,9 +48,6 @@ import { useTokenFee } from './useTokenFee'
 import { useTradeVerifiedByQuoter } from './useTradeVerifiedByQuoter'
 import { useGlobalWorker } from './useWorker'
 
-const QUOTING_API_PREFIX_ORIGINAL = 'https://pcsx-order-price-api-test-master-viosr.ondigitalocean.app'
-const QUOTING_API_PREFIX_OPTIMIZED = 'https://pcsx-order-price-api-test-branch-nfu7y.ondigitalocean.app'
-
 export class NoValidRouteError extends Error {
   constructor(message?: string) {
     super(message)
@@ -672,20 +669,23 @@ export function useBestTradeFromApi({
   })
 }
 
-export function useBestTradeFromApiShadow({
-  // baseCurrency,
-  amount,
-  currency,
-  enabled,
-  maxHops,
-  maxSplits,
-  stableSwap,
-  trackPerf,
-  tradeType = TradeType.EXACT_INPUT,
-  v2Swap,
-  v3Swap,
-  retry = false,
-}: Options) {
+export function useBestTradeFromApiShadow(
+  {
+    // baseCurrency,
+    amount,
+    currency,
+    enabled,
+    maxHops,
+    maxSplits,
+    stableSwap,
+    trackPerf,
+    tradeType = TradeType.EXACT_INPUT,
+    v2Swap,
+    v3Swap,
+    retry = false,
+  }: Options,
+  prefix: string,
+) {
   const { enabled: featureFlag } = useExperimentalFeature(EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE)
 
   const [slippage] = useUserSlippage()
@@ -706,12 +706,15 @@ export function useBestTradeFromApiShadow({
     return types
   }, [v2Swap, v3Swap, stableSwap])
 
-  const poolPreFetch = useTradeApiPrefetchShadow({
-    currencyA: amount?.currency,
-    currencyB: currency,
-    enabled: false,
-    poolTypes,
-  })
+  const poolPreFetch = useTradeApiPrefetchShadow(
+    {
+      currencyA: amount?.currency,
+      currencyB: currency,
+      enabled: false,
+      poolTypes,
+    },
+    prefix,
+  )
 
   useEffect(() => {
     if (featureFlag && !!(amount && currency)) {
@@ -725,10 +728,9 @@ export function useBestTradeFromApiShadow({
   const { gasPrice } = useFeeDataWithGasPrice()
 
   const previousEnabled = usePreviousValue(enabled)
-  const prefix = Math.random() < 0.5 ? QUOTING_API_PREFIX_ORIGINAL : QUOTING_API_PREFIX_OPTIMIZED
 
   return useQuery({
-    enabled: featureFlag && !!(amount && currency && deferQuotient && enabled),
+    enabled: featureFlag && !!(amount && currency && deferQuotient && enabled && poolTypes?.length),
     refetchInterval: POOLS_FAST_REVALIDATE[currency?.chainId as keyof typeof POOLS_FAST_REVALIDATE] ?? 10_000,
     queryKey: [
       'quote-api',
@@ -939,8 +941,10 @@ type PrefetchParams = {
 function getCurrencyIdentifierForApi(currency: Currency) {
   return currency.isNative ? zeroAddress : currency.address
 }
-export function useTradeApiPrefetchShadow({ currencyA, currencyB, poolTypes, enabled = true }: PrefetchParams) {
-  const prefix = Math.random() < 0.5 ? QUOTING_API_PREFIX_ORIGINAL : QUOTING_API_PREFIX_OPTIMIZED
+export function useTradeApiPrefetchShadow(
+  { currencyA, currencyB, poolTypes, enabled = true }: PrefetchParams,
+  prefix: string,
+) {
   return useQuery({
     enabled: !!(currencyA && currencyB && poolTypes?.length && enabled),
     queryKey: ['quote-api-prefetch', currencyA?.chainId, currencyA?.symbol, currencyB?.symbol, poolTypes] as const,

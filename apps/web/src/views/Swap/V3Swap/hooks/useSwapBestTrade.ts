@@ -1,6 +1,7 @@
 import { TradeType } from '@pancakeswap/sdk'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useUserSingleHopOnly } from '@pancakeswap/utils/user'
+import { QUOTING_API_PREFIX_OPTIMIZED, QUOTING_API_PREFIX_ORIGINAL } from 'config/constants/endpoints'
 
 import { useCurrency } from 'hooks/Tokens'
 import { useBestAMMTrade, useBestTradeFromApi, useBestTradeFromApiShadow } from 'hooks/useBestAMMTrade'
@@ -60,7 +61,8 @@ export function useSwapBestOrder({ maxHops }: Options = {}) {
     retry: 1,
   }
   const { fetchStatus, data, isStale, error, refetch } = useBestTradeFromApi(bestTradeOptions)
-  useBestTradeFromApiShadow(bestTradeOptions)
+  useBestTradeFromApiShadow(bestTradeOptions, QUOTING_API_PREFIX_ORIGINAL)
+  useBestTradeFromApiShadow(bestTradeOptions, QUOTING_API_PREFIX_OPTIMIZED)
 
   const [loading, setLoading] = useState(false)
   const refresh = useCallback(async () => {
