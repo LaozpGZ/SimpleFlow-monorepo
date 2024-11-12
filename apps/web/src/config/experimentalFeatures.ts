@@ -44,7 +44,7 @@ export const EXPERIMENTAL_FEATURE_CONFIGS: ExperimentalFeatureConfigs = [
   },
   {
     feature: EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE,
-    percentage: 0.01,
+    percentage: 1,
     whitelist: [],
   },
 ]

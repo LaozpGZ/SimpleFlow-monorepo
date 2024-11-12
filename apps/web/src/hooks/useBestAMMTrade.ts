@@ -686,7 +686,7 @@ export function useBestTradeFromApiShadow({
   v3Swap,
   retry = false,
 }: Options) {
-  const featureFlag = useExperimentalFeature(EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE)
+  const { enabled: featureFlag } = useExperimentalFeature(EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE)
 
   const [slippage] = useUserSlippage()
   const poolTypes = useMemo(() => {
