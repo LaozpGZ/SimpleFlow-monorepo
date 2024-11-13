@@ -61,7 +61,7 @@ export function useSwapBestOrder({ maxHops }: Options = {}) {
   }
   const { fetchStatus, data, isStale, error, refetch } = useBestTradeFromApi(bestTradeOptions)
   useBestTradeFromApiShadow(bestTradeOptions, 'quote-api-ori')
-  useBestTradeFromApiShadow(bestTradeOptions, 'quote-api-ori')
+  useBestTradeFromApiShadow(bestTradeOptions, 'quote-api-opt')
 
   const [loading, setLoading] = useState(false)
   const refresh = useCallback(async () => {
