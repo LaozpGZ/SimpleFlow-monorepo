@@ -32,7 +32,12 @@ import { publicClient } from 'utils/wagmi'
 import { EXPERIMENTAL_FEATURES } from 'config/experimentalFeatures'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 
-import { QUOTING_API, QUOTING_API_PREFIX } from 'config/constants/endpoints'
+import {
+  QUOTING_API,
+  QUOTING_API_PREFIX,
+  QUOTING_API_PREFIX_OPTIMIZED,
+  QUOTING_API_PREFIX_ORIGINAL,
+} from 'config/constants/endpoints'
 import {
   CommonPoolsParams,
   PoolsWithState,
@@ -684,8 +689,9 @@ export function useBestTradeFromApiShadow(
     v3Swap,
     retry = false,
   }: Options,
-  prefix: string,
+  queryType: 'quote-api-ori' | 'quote-api-opt',
 ) {
+  const prefix = queryType === 'quote-api-ori' ? QUOTING_API_PREFIX_ORIGINAL : QUOTING_API_PREFIX_OPTIMIZED
   const { enabled: featureFlag } = useExperimentalFeature(EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE)
 
   const [slippage] = useUserSlippage()
@@ -714,6 +720,7 @@ export function useBestTradeFromApiShadow(
       poolTypes,
     },
     prefix,
+    queryType,
   )
 
   useEffect(() => {
@@ -733,7 +740,7 @@ export function useBestTradeFromApiShadow(
     enabled: featureFlag && !!(amount && currency && deferQuotient && enabled && poolTypes?.length),
     refetchInterval: POOLS_FAST_REVALIDATE[currency?.chainId as keyof typeof POOLS_FAST_REVALIDATE] ?? 10_000,
     queryKey: [
-      'quote-api',
+      queryType,
       address,
       currency?.chainId,
       amount?.currency?.symbol,
@@ -944,10 +951,11 @@ function getCurrencyIdentifierForApi(currency: Currency) {
 export function useTradeApiPrefetchShadow(
   { currencyA, currencyB, poolTypes, enabled = true }: PrefetchParams,
   prefix: string,
+  queryType: string,
 ) {
   return useQuery({
     enabled: !!(currencyA && currencyB && poolTypes?.length && enabled),
-    queryKey: ['quote-api-prefetch', currencyA?.chainId, currencyA?.symbol, currencyB?.symbol, poolTypes] as const,
+    queryKey: [`${queryType}-prefetch`, currencyA?.chainId, currencyA?.symbol, currencyB?.symbol, poolTypes] as const,
     queryFn: async ({ signal }) => {
       if (!currencyA || !currencyB || !poolTypes?.length) {
         throw new Error('Invalid prefetch params')
