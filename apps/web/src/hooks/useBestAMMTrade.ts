@@ -32,12 +32,7 @@ import { publicClient } from 'utils/wagmi'
 import { EXPERIMENTAL_FEATURES } from 'config/experimentalFeatures'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 
-import {
-  QUOTING_API,
-  QUOTING_API_PREFIX,
-  QUOTING_API_PREFIX_OPTIMIZED,
-  QUOTING_API_PREFIX_ORIGINAL,
-} from 'config/constants/endpoints'
+import { QUOTING_API, QUOTING_API_PREFIX_OPTIMIZED, QUOTING_API_PREFIX_ORIGINAL } from 'config/constants/endpoints'
 import {
   CommonPoolsParams,
   PoolsWithState,
@@ -679,7 +674,6 @@ export function useBestTradeFromApiShadow(
     // baseCurrency,
     amount,
     currency,
-    enabled,
     maxHops,
     maxSplits,
     stableSwap,
@@ -712,7 +706,7 @@ export function useBestTradeFromApiShadow(
     return types
   }, [v2Swap, v3Swap, stableSwap])
 
-  const poolPreFetch = useTradeApiPrefetchShadow(
+  const poolPreFetch = useTradeApiPrefetch(
     {
       currencyA: amount?.currency,
       currencyB: currency,
@@ -734,10 +728,10 @@ export function useBestTradeFromApiShadow(
   const { address } = useAccount()
   const { gasPrice } = useFeeDataWithGasPrice()
 
-  const previousEnabled = usePreviousValue(enabled)
+  const previousEnabled = usePreviousValue(Boolean(currency?.chainId))
 
   return useQuery({
-    enabled: featureFlag && !!(amount && currency && deferQuotient && enabled && poolTypes?.length),
+    enabled: featureFlag && !!(amount && currency?.chainId && deferQuotient && poolTypes?.length),
     refetchInterval: POOLS_FAST_REVALIDATE[currency?.chainId as keyof typeof POOLS_FAST_REVALIDATE] ?? 10_000,
     queryKey: [
       queryType,
@@ -948,7 +942,7 @@ type PrefetchParams = {
 function getCurrencyIdentifierForApi(currency: Currency) {
   return currency.isNative ? zeroAddress : currency.address
 }
-export function useTradeApiPrefetchShadow(
+export function useTradeApiPrefetch(
   { currencyA, currencyB, poolTypes, enabled = true }: PrefetchParams,
   prefix: string,
   queryType: string,
@@ -965,35 +959,6 @@ export function useTradeApiPrefetchShadow(
         `${prefix}/_pools/${currencyA.chainId}/${getCurrencyIdentifierForApi(currencyA)}/${getCurrencyIdentifierForApi(
           currencyB,
         )}?${qs.stringify({ protocols: poolTypes.map(getPoolTypeKey) })}`,
-        {
-          method: 'GET',
-          signal,
-        },
-      )
-      const res = await serverRes.json()
-      if (!res.success) {
-        throw new Error(res.message)
-      }
-      return res
-    },
-    staleTime: currencyA?.chainId ? POOLS_FAST_REVALIDATE[currencyA.chainId] : 0,
-    refetchInterval: currencyA?.chainId ? POOLS_FAST_REVALIDATE[currencyA.chainId] : 0,
-  })
-}
-
-export function useTradeApiPrefetch({ currencyA, currencyB, poolTypes, enabled = true }: PrefetchParams) {
-  return useQuery({
-    enabled: !!(currencyA && currencyB && poolTypes?.length && enabled),
-    queryKey: ['quote-api-prefetch', currencyA?.chainId, currencyA?.symbol, currencyB?.symbol, poolTypes] as const,
-    queryFn: async ({ signal }) => {
-      if (!currencyA || !currencyB || !poolTypes?.length) {
-        throw new Error('Invalid prefetch params')
-      }
-
-      const serverRes = await fetch(
-        `${QUOTING_API_PREFIX}/_pools/${currencyA.chainId}/${getCurrencyIdentifierForApi(
-          currencyA,
-        )}/${getCurrencyIdentifierForApi(currencyB)}?${qs.stringify({ protocols: poolTypes.map(getPoolTypeKey) })}`,
         {
           method: 'GET',
           signal,
