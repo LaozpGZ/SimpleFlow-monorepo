@@ -32,7 +32,7 @@ import { publicClient } from 'utils/wagmi'
 import { EXPERIMENTAL_FEATURES } from 'config/experimentalFeatures'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 
-import { QUOTING_API, QUOTING_API_PREFIX_OPTIMIZED, QUOTING_API_PREFIX_ORIGINAL } from 'config/constants/endpoints'
+import { QUOTING_API } from 'config/constants/endpoints'
 import {
   CommonPoolsParams,
   PoolsWithState,
@@ -685,6 +685,8 @@ export function useBestTradeFromApiShadow(
   }: Options,
   queryType: 'quote-api-ori' | 'quote-api-opt',
 ) {
+  const QUOTING_API_PREFIX_ORIGINAL = 'https://pcsx-order-price-api-test-master-viosr.ondigitalocean.app'
+  const QUOTING_API_PREFIX_OPTIMIZED = 'https://pcsx-order-price-api-test-branch-nfu7y.ondigitalocean.app'
   const prefix = queryType === 'quote-api-ori' ? QUOTING_API_PREFIX_ORIGINAL : QUOTING_API_PREFIX_OPTIMIZED
   const { enabled: featureFlag } = useExperimentalFeature(EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE)
 

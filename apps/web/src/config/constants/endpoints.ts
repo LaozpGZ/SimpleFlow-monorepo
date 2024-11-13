@@ -99,7 +99,3 @@ export const WALLET_API = 'https://wallet-api.pancakeswap.com'
 export const BINANCE_DATA_API = 'https://data-api.binance.vision/api'
 
 export const PREDICTION_PRICE_API = '/api/prediction/price'
-
-export const QUOTING_API_PREFIX_ORIGINAL = 'https://pcsx-order-price-api-test-master-viosr.ondigitalocean.app'
-
-export const QUOTING_API_PREFIX_OPTIMIZED = 'https://pcsx-order-price-api-test-branch-nfu7y.ondigitalocean.app'
