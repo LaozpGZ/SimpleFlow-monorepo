@@ -708,25 +708,20 @@ export function useBestTradeFromApiShadow(
     return types
   }, [v2Swap, v3Swap, stableSwap])
 
-  const poolPreFetch = useTradeApiPrefetch(
+  const deferQuotientRaw = useDeferredValue(amount?.quotient?.toString())
+
+  const deferQuotient = useDebounce(deferQuotientRaw, 500)
+  const enabled = featureFlag && !!(amount && currency?.chainId && deferQuotient && poolTypes?.length)
+  useTradeApiPrefetch(
     {
       currencyA: amount?.currency,
       currencyB: currency,
-      enabled: false,
+      enabled,
       poolTypes,
     },
     prefix,
     queryType,
   )
-
-  useEffect(() => {
-    if (featureFlag && !!(amount && currency)) {
-      poolPreFetch.refetch()
-    }
-  }, [amount?.currency, currency])
-
-  const deferQuotientRaw = useDeferredValue(amount?.quotient?.toString())
-  const deferQuotient = useDebounce(deferQuotientRaw, 500)
   const { address } = useAccount()
   const { gasPrice } = useFeeDataWithGasPrice()
 
@@ -945,7 +940,7 @@ function getCurrencyIdentifierForApi(currency: Currency) {
   return currency.isNative ? zeroAddress : currency.address
 }
 export function useTradeApiPrefetch(
-  { currencyA, currencyB, poolTypes, enabled = true }: PrefetchParams,
+  { currencyA, currencyB, poolTypes, enabled }: PrefetchParams,
   prefix: string,
   queryType: string,
 ) {
