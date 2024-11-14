@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
-import { BigintIsh, Currency, CurrencyAmount, Percent, erc20Abi } from '@pancakeswap/sdk'
-import { StableSwapPool } from '@pancakeswap/stable-swap-sdk'
+import { BigintIsh, Currency, CurrencyAmount, erc20Abi, Percent } from '@pancakeswap/sdk'
+import { getStableSwapPools } from '@pancakeswap/stable-swap-sdk'
 import { deserializeToken } from '@pancakeswap/token-lists'
 import { DEPLOYER_ADDRESSES, FeeAmount, pancakeV3PoolABI, parseProtocolFees } from '@pancakeswap/v3-sdk'
 import { Abi, Address } from 'viem'
@@ -13,7 +13,7 @@ import { PoolMeta, V3PoolMeta } from './internalTypes'
 
 export const getV2PoolsOnChain = createOnChainPoolFactory<V2Pool, PoolMeta>({
   abi: pancakePairABI,
-  getPossiblePoolMetas: ([currencyA, currencyB]) => [
+  getPossiblePoolMetas: async ([currencyA, currencyB]) => [
     { id: computeV2PoolAddress(currencyA.wrapped, currencyB.wrapped), currencyA, currencyB },
   ],
   buildPoolInfoCalls: ({ id: address }) => [
@@ -39,80 +39,74 @@ export const getV2PoolsOnChain = createOnChainPoolFactory<V2Pool, PoolMeta>({
   },
 })
 
-export const getStablePoolsOnChain = (
-  pairs: [Currency, Currency][],
-  viemProviders: any, // Replace `any` with the appropriate type
-  blockNumber: BigintIsh | number | undefined,
-  poolConfigs: StableSwapPool[],
-) =>
-  createOnChainPoolFactory<StablePool, PoolMeta>({
-    abi: stableSwapPairABI,
-    getPossiblePoolMetas: ([currencyA, currencyB]) => {
-      return poolConfigs
-        .filter(({ token, quoteToken }) => {
-          const tokenA = deserializeToken(token)
-          const tokenB = deserializeToken(quoteToken)
-          return (
-            (tokenA.equals(currencyA.wrapped) && tokenB.equals(currencyB.wrapped)) ||
-            (tokenA.equals(currencyB.wrapped) && tokenB.equals(currencyA.wrapped))
-          )
-        })
-        .map(({ stableSwapAddress }) => ({
-          id: stableSwapAddress,
-          currencyA,
-          currencyB,
-        }))
+export const getStablePoolsOnChain = createOnChainPoolFactory<StablePool, PoolMeta>({
+  abi: stableSwapPairABI,
+  getPossiblePoolMetas: async ([currencyA, currencyB]) => {
+    const poolConfigs = await getStableSwapPools(currencyA.chainId)
+    return poolConfigs
+      .filter(({ token, quoteToken }) => {
+        const tokenA = deserializeToken(token)
+        const tokenB = deserializeToken(quoteToken)
+        return (
+          (tokenA.equals(currencyA.wrapped) && tokenB.equals(currencyB.wrapped)) ||
+          (tokenA.equals(currencyB.wrapped) && tokenB.equals(currencyA.wrapped))
+        )
+      })
+      .map(({ stableSwapAddress }) => ({
+        id: stableSwapAddress,
+        currencyA,
+        currencyB,
+      }))
+  },
+  buildPoolInfoCalls: ({ id: address }) => [
+    {
+      address,
+      functionName: 'balances',
+      args: [0],
     },
-    buildPoolInfoCalls: ({ id: address }) => [
-      {
-        address,
-        functionName: 'balances',
-        args: [0],
-      },
-      {
-        address,
-        functionName: 'balances',
-        args: [1],
-      },
-      {
-        address,
-        functionName: 'A',
-        args: [],
-      },
-      {
-        address,
-        functionName: 'fee',
-        args: [],
-      },
-      {
-        address,
-        functionName: 'FEE_DENOMINATOR',
-        args: [],
-      },
-    ],
-    buildPool: ({ currencyA, currencyB, id: address }, [balance0, balance1, a, fee, feeDenominator]) => {
-      if (!balance0 || !balance1 || !a || !fee || !feeDenominator) {
-        return null
-      }
-      const [token0, token1] = currencyA.wrapped.sortsBefore(currencyB.wrapped)
-        ? [currencyA, currencyB]
-        : [currencyB, currencyA]
-      return {
-        address,
-        type: PoolType.STABLE,
-        balances: [
-          CurrencyAmount.fromRawAmount(token0, balance0.toString()),
-          CurrencyAmount.fromRawAmount(token1, balance1.toString()),
-        ],
-        amplifier: BigInt(a.toString()),
-        fee: new Percent(BigInt(fee.toString()), BigInt(feeDenominator.toString())),
-      }
+    {
+      address,
+      functionName: 'balances',
+      args: [1],
     },
-  })(pairs, viemProviders, blockNumber)
-
+    {
+      address,
+      functionName: 'A',
+      args: [],
+    },
+    {
+      address,
+      functionName: 'fee',
+      args: [],
+    },
+    {
+      address,
+      functionName: 'FEE_DENOMINATOR',
+      args: [],
+    },
+  ],
+  buildPool: ({ currencyA, currencyB, id: address }, [balance0, balance1, a, fee, feeDenominator]) => {
+    if (!balance0 || !balance1 || !a || !fee || !feeDenominator) {
+      return null
+    }
+    const [token0, token1] = currencyA.wrapped.sortsBefore(currencyB.wrapped)
+      ? [currencyA, currencyB]
+      : [currencyB, currencyA]
+    return {
+      address,
+      type: PoolType.STABLE,
+      balances: [
+        CurrencyAmount.fromRawAmount(token0, balance0.toString()),
+        CurrencyAmount.fromRawAmount(token1, balance1.toString()),
+      ],
+      amplifier: BigInt(a.toString()),
+      fee: new Percent(BigInt(fee.toString()), BigInt(feeDenominator.toString())),
+    }
+  },
+})
 export const getV3PoolsWithoutTicksOnChain = createOnChainPoolFactory<V3Pool, V3PoolMeta>({
   abi: pancakeV3PoolABI,
-  getPossiblePoolMetas: ([currencyA, currencyB]) => {
+  getPossiblePoolMetas: async ([currencyA, currencyB]) => {
     const deployerAddress = DEPLOYER_ADDRESSES[currencyA.chainId as ChainId]
     if (!deployerAddress) {
       return []
@@ -187,7 +181,7 @@ type ContractFunctionConfig = {
 
 interface OnChainPoolFactoryParams<TPool extends Pool, TPoolMeta extends PoolMeta, TAbi extends Abi | unknown[] = Abi> {
   abi: TAbi
-  getPossiblePoolMetas: (pair: [Currency, Currency]) => TPoolMeta[]
+  getPossiblePoolMetas: (pair: [Currency, Currency]) => Promise<TPoolMeta[]>
   buildPoolInfoCalls: (poolMeta: TPoolMeta) => ContractFunctionConfig[]
   buildPool: (poolMeta: TPoolMeta, data: any[]) => TPool | null
 }
@@ -215,8 +209,8 @@ export function createOnChainPoolFactory<
     const poolAddressSet = new Set<string>()
 
     const poolMetas: TPoolMeta[] = []
-    for (const pair of pairs) {
-      const possiblePoolMetas = getPossiblePoolMetas(pair)
+    const allPossibleMetas = await Promise.all(pairs.map((pair) => getPossiblePoolMetas(pair)))
+    for (const possiblePoolMetas of allPossibleMetas) {
       for (const meta of possiblePoolMetas) {
         if (!poolAddressSet.has(meta.id)) {
           poolMetas.push(meta)

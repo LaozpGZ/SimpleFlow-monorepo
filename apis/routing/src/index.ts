@@ -1,7 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { Currency } from '@pancakeswap/sdk'
 import { SmartRouter, StablePool, V2Pool, V3Pool } from '@pancakeswap/smart-router'
-import { getStableSwapPools, StableSwapPool } from '@pancakeswap/stable-swap-sdk'
 import { CORS_ALLOW, handleCors, wrapCorsHeader } from '@pancakeswap/worker-utils'
 import { Router } from 'itty-router'
 import { error, json, missing } from 'itty-router-extras'
@@ -72,14 +71,13 @@ router.get('/v0/quote', async (req, event: FetchEvent) => {
 
   if (!pools) {
     const pairs = await SmartRouter.getPairCombinations(currencyA, currencyB)
-    const poolConfigs: StableSwapPool[] = await getStableSwapPools(currencyA?.chainId ?? ChainId.BSC)
 
     const [v3Pools, v2Pools, stablePools] = await Promise.all([
       SmartRouter.getV3PoolSubgraph({ provider: v3SubgraphProvider, pairs }).then((res) =>
         SmartRouter.v3PoolSubgraphSelection(currencyA, currencyB, res),
       ),
       SmartRouter.getV2PoolsOnChain(pairs, viemProviders, blockNumber),
-      SmartRouter.getStablePoolsOnChain(pairs, viemProviders, blockNumber, poolConfigs),
+      SmartRouter.getStablePoolsOnChain(pairs, viemProviders, blockNumber),
     ])
 
     pools = {
