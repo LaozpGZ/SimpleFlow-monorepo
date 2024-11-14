@@ -6,12 +6,7 @@ import { isStableSwapSupported, STABLE_SUPPORTED_CHAIN_IDS } from './pools'
 
 export const fetchStableSwapData = async (chainId: ChainId) => {
   try {
-    const params = { chainId }
-    const queryString = Object.entries(params)
-      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(value)}`)
-      .join('&')
-
-    const response = await fetch(`${STABLE_SWAP_API}?${queryString}`, {
+    const response = await fetch(`${STABLE_SWAP_API}?chainId=${chainId}`, {
       signal: AbortSignal.timeout(3000),
     })
     const result = await response.json()
