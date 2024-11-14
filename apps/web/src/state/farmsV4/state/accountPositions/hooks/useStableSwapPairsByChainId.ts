@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 
 export const useStableSwapPairsByChainId = (chainId: ChainId) => {
   const { data } = useQuery({
-    queryKey: ['fetch-stable-swap-pairs'],
+    queryKey: ['fetch-stable-swap-pairs', chainId],
     queryFn: async () => {
       if (chainId) {
         const stableSwapPair = await LegacyRouter.getStableSwapPairs(chainId)

@@ -123,8 +123,12 @@ export const useV2PoolsLength = (chainIds: number[]) => {
         chainIds.map(async (chainId) => {
           const client = publicClient({ chainId })
           try {
+            const masterChefAddress = masterChefAddresses[chainId]
+            if (!masterChefAddress) {
+              return { chainId, length: 0 }
+            }
             const poolLength = await client.readContract({
-              address: masterChefAddresses[chainId],
+              address: masterChefAddress,
               abi: masterChefV2ABI,
               functionName: 'poolLength',
             })
