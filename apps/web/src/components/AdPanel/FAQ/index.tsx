@@ -34,7 +34,7 @@ export const FAQ = memo(({ type }: FAQProps) => {
     <FAQWrapper>
       {config &&
         config.data.map((faq, index) => (
-          <Box key={faq.title} overflow="hidden">
+          <Box key={`${type}-${faq.title}`} overflow="hidden">
             <Collapse
               isOpen={activeIndex === index}
               onToggle={() => {
