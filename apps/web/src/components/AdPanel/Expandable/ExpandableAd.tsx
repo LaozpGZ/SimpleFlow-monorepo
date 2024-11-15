@@ -21,13 +21,12 @@ const ExpandedContent: React.FC = () => {
 
 export const ExpandableAd = (props: AdPlayerProps) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   const { actionPanelRef, adCardRef, extendedContentRef, handleDismiss, handleExpand, isOpen, isExpanded } =
     useExpandableCard({
       adId: 'expandable-ad',
       forceMobile: props.forceMobile,
     })
-
-  const { isMobile } = useMatchBreakpoints()
 
   const { title, subtitle, imageUrl, docsUrl } = useFaqConfig()(t)
 
@@ -43,9 +42,9 @@ export const ExpandableAd = (props: AdPlayerProps) => {
       isExpanded={isExpanded}
       {...props}
       ref={adCardRef}
-      style={{ maxHeight: isMobile ? 'auto' : '600px' }}
+      style={{ maxHeight: isMobile ? '500px' : '600px' }}
     >
-      <Flex flexDirection="column" justifyContent="space-between" height="100%">
+      <Flex flexDirection="column" justifyContent="space-between" height="100%" flexGrow={0}>
         <ExpandableContent
           title={title}
           isExpanded={isExpanded}

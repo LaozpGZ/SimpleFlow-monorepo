@@ -27,13 +27,18 @@ export const ExpandableContent = ({
   return (
     <>
       {isExpanded ? (
-        <Box overflow="hidden" height="calc(100% - 64px)">
+        <Box overflow="hidden" height="calc(100% - 64px)" position="relative">
           <Text bold as="h1" textAlign="center" p="16px">
             {title}
           </Text>
           <Divider />
-          {/* <ScrollableBox p="16px">{expandableContent}</ScrollableBox> */}
-          <Box ref={extendedContentRef} p="16px" height="calc(100% - 56px)" overflowY={isMobile ? 'hidden' : 'scroll'}>
+          <Box
+            ref={extendedContentRef}
+            position="relative"
+            p="16px"
+            height="calc(100% - 56px)"
+            overflowY={isMobile ? 'hidden' : 'scroll'}
+          >
             {expandableContent}
           </Box>
         </Box>
