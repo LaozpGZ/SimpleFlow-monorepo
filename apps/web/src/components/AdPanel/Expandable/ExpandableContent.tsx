@@ -2,6 +2,12 @@ import { Box, Text } from '@pancakeswap/uikit'
 import { PropsWithChildren, ReactNode } from 'react'
 import { Divider } from './styles'
 
+// TODO: check for mobile modal view as well
+// export const ScrollableBox = styled(Box)`
+//   max-height: 400px;
+//   overflow-y: auto;
+// `
+
 interface ExpandableContentProps extends PropsWithChildren {
   title: string
   isExpanded: boolean
@@ -27,6 +33,7 @@ export const ExpandableContent = ({
             {title}
           </Text>
           <Divider />
+          {/* <ScrollableBox p="16px">{expandableContent}</ScrollableBox> */}
           <Box p="16px">{expandableContent}</Box>
         </Box>
       ) : (
