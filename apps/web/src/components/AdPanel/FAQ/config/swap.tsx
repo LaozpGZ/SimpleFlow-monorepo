@@ -47,7 +47,7 @@ export const swapFAQConfig: FAQConfig = (t) => ({
               <Link m="0 5px" href="https://pancakeswap.finance/buy-crypto" color="primary">
                 {t('Buy Crypto')}
               </Link>
-              {t('feature to buy')}
+              {t('feature to buy.')}
             </StyledFlex>
             <StyledFlex flexWrap="wrap">
               <Link m="0 5px" href="https://bridge.pancakeswap.finance">
