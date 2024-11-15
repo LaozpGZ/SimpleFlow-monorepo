@@ -43,7 +43,8 @@ export const FAQ = memo(({ type }: FAQProps) => {
               title={<Text bold>{faq.title}</Text>}
               content={<Text>{faq.content}</Text>}
               titleBoxProps={{ p: '16px' }}
-              contentBoxProps={{ p: '0px 16px 16px' }}
+              contentBoxProps={{ p: '0px 16px 16px', overflowY: 'scroll' }}
+              contentExtendableMaxHeight={120}
             />
             {index !== config.data.length - 1 && <Divider />}
           </FlexGap>

@@ -1,7 +1,21 @@
-import { Text } from '@pancakeswap/uikit'
+import { FlexGap, Link, Text } from '@pancakeswap/uikit'
 import { getImageUrl } from 'components/AdPanel/utils'
-import Link from 'next/link'
+import { styled } from 'styled-components'
 import { FAQConfig } from '../types'
+
+export const StyledFlex = styled(FlexGap)`
+  display: inline-flex;
+  &::before {
+    content: '';
+    position: relative;
+    height: 6px;
+    width: 6px;
+    margin-right: 15px;
+    margin-top: 9px;
+    background-color: ${({ theme }) => theme.colors.text};
+    border-radius: 50%;
+  }
+`
 
 export const swapFAQConfig: FAQConfig = (t) => ({
   title: t('Quick start now on How to Swap!'),
@@ -28,13 +42,19 @@ export const swapFAQConfig: FAQConfig = (t) => ({
         <>
           {t('To get Crypto for swaps and gas fee:')}
           <ul>
-            <li>
-              {t('Use the <Link href="https://pancakeswap.finance/buy-crypto">Buy Crypto</Link> feature to buy.')}
-            </li>
-            <li>
-              <Link href="https://bridge.pancakeswap.finance">{t('Bridge your assets')}</Link>{' '}
-              {t('from other blockchains.')}
-            </li>
+            <StyledFlex flexWrap="wrap">
+              {t('Use the')}
+              <Link m="0 5px" href="https://pancakeswap.finance/buy-crypto" color="primary">
+                Buy Crypto
+              </Link>
+              {t('feature to buy')}
+            </StyledFlex>
+            <StyledFlex flexWrap="wrap">
+              <Link m="0 5px" href="https://bridge.pancakeswap.finance">
+                {t('Bridge your assets')}
+              </Link>{' '}
+              <Text>{t('from other blockchains.')}</Text>
+            </StyledFlex>
           </ul>
         </>
       ),

@@ -40,6 +40,7 @@ interface CollapseProps extends Omit<BoxProps, "title" | "content"> {
   recalculateDep?: boolean;
   titleBoxProps?: BoxProps;
   contentBoxProps?: BoxProps;
+  contentExtendableMaxHeight?: number;
 }
 
 export const Collapse: React.FC<CollapseProps> = ({
@@ -50,6 +51,7 @@ export const Collapse: React.FC<CollapseProps> = ({
   recalculateDep = false,
   titleBoxProps,
   contentBoxProps,
+  contentExtendableMaxHeight,
   ...props
 }) => {
   const contentRef = useRef<HTMLDivElement>(null);
@@ -64,9 +66,10 @@ export const Collapse: React.FC<CollapseProps> = ({
     if (!contentRef.current || !titleRef.current || !wrapperRef.current) return;
     const contentHeight = contentRef.current.scrollHeight;
     const titleHeight = titleRef.current.scrollHeight;
+    const finalContentHeight = contentExtendableMaxHeight ?? contentHeight;
 
-    wrapperRef.current.style.height = `${isOpen ? titleHeight + contentHeight : titleHeight}px`;
-  }, [isOpen, recalculateDep]);
+    wrapperRef.current.style.height = `${isOpen ? titleHeight + finalContentHeight : titleHeight}px`;
+  }, [isOpen, recalculateDep, contentExtendableMaxHeight]);
 
   return (
     <Container ref={wrapperRef} {...props}>
