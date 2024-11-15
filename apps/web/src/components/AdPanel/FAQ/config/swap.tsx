@@ -81,10 +81,10 @@ export const swapFAQConfig: FAQConfig = (t) => ({
             <li>{t('Increase your slippage while trading volatile assets.')}</li>
             <li>{t('Check if you have enough token in your wallet to pay the gas fee.')}</li>
             <li>{t('When trading fee-on-Transfer tokens, increase slippage % over the transfer fee.')}</li>
-            <li>{t('Some scam tokens may have a block on all transfers or swaps on chain')}</li>
+            <li>{t('Some scam tokens may have a block on all transfers or swaps on chain.')}</li>
           </ul>
 
-          <Text>
+          <FlexGap gap="5px">
             {t('For more details,')}{' '}
             <Link
               href="https://docs.pancakeswap.finance/products/pancakeswap-exchange/faq"
@@ -92,7 +92,7 @@ export const swapFAQConfig: FAQConfig = (t) => ({
             >
               {t('read here.')}
             </Link>
-          </Text>
+          </FlexGap>
         </>
       ),
     },

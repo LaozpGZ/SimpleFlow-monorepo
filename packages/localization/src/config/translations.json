@@ -3625,7 +3625,7 @@
   "Increase your slippage while trading volatile assets.": "Increase your slippage while trading volatile assets.",
   "Check if you have enough token in your wallet to pay the gas fee.": "Check if you have enough token in your wallet to pay the gas fee.",
   "When trading fee-on-Transfer tokens, increase slippage % over the transfer fee.": "When trading fee-on-Transfer tokens, increase slippage % over the transfer fee.",
-  "Some scam tokens may have a block on all transfers or swaps on chain": "Some scam tokens may have a block on all transfers or swaps on chain",
+  "Some scam tokens may have a block on all transfers or swaps on chain.": "Some scam tokens may have a block on all transfers or swaps on chain.",
   "For more details,": "For more details,",
   "read here.": "read here.",
   "Try out Limit Orders": "Try out Limit Orders",
