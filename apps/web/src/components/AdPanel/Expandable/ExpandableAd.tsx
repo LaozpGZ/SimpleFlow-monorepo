@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Flex } from '@pancakeswap/uikit'
+import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'
@@ -21,19 +21,13 @@ const ExpandedContent: React.FC = () => {
 
 export const ExpandableAd = (props: AdPlayerProps) => {
   const { t } = useTranslation()
-  const {
-    actionPanelRef,
-    adCardRef,
-    extendedContentRef,
-    handleDismiss,
-    handleExpand,
-    isOpen,
-    isExpanded,
-    toggleHeight,
-  } = useExpandableCard({
-    adId: 'expandable-ad',
-    forceMobile: props.forceMobile,
-  })
+  const { actionPanelRef, adCardRef, extendedContentRef, handleDismiss, handleExpand, isOpen, isExpanded } =
+    useExpandableCard({
+      adId: 'expandable-ad',
+      forceMobile: props.forceMobile,
+    })
+
+  const { isMobile } = useMatchBreakpoints()
 
   const { title, subtitle, imageUrl, docsUrl } = useFaqConfig()(t)
 
@@ -44,12 +38,18 @@ export const ExpandableAd = (props: AdPlayerProps) => {
   )
 
   return (
-    <AdCard imageUrl={imageUrl} isExpanded={isExpanded} {...props} ref={adCardRef}>
+    <AdCard
+      imageUrl={imageUrl}
+      isExpanded={isExpanded}
+      {...props}
+      ref={adCardRef}
+      style={{ maxHeight: isMobile ? 'auto' : '600px' }}
+    >
       <Flex flexDirection="column" justifyContent="space-between" height="100%">
         <ExpandableContent
           title={title}
-          extendedContentRef={extendedContentRef}
           isExpanded={isExpanded}
+          extendedContentRef={extendedContentRef}
           expandableContent={<ExpandedContent />}
           defaultContent={
             <>
@@ -64,7 +64,6 @@ export const ExpandableAd = (props: AdPlayerProps) => {
           actionButton={actionButton}
           handleDismiss={handleDismiss}
           handleExpand={handleExpand}
-          toggleHeight={toggleHeight}
         />
       </Flex>
 

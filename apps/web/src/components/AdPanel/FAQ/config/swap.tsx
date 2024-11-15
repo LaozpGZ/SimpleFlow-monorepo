@@ -1,4 +1,4 @@
-import { FlexGap, Link, Text } from '@pancakeswap/uikit'
+import { Box, FlexGap, Link, Text } from '@pancakeswap/uikit'
 import { getImageUrl } from 'components/AdPanel/utils'
 import { styled } from 'styled-components'
 import { FAQConfig } from '../types'
@@ -26,7 +26,7 @@ export const swapFAQConfig: FAQConfig = (t) => ({
     {
       title: t('How to Swap?'),
       content: (
-        <ul>
+        <ul style={{ overflow: 'auto', height: '' }}>
           <li>
             {t('Connect your wallet and ensure there are sufficient tokens in your wallet for swapping and gas fee.')}
           </li>
@@ -39,52 +39,51 @@ export const swapFAQConfig: FAQConfig = (t) => ({
     {
       title: t('Where to get Crypto?'),
       content: (
-        <>
+        <Box>
           {t('To get Crypto for swaps and gas fee:')}
-          <ul>
-            <StyledFlex flexWrap="wrap">
+          <ul style={{ overflow: 'auto' }}>
+            <StyledFlex flexWrap="wrap" flexGrow={0}>
               {t('Use the')}
               <Link m="0 5px" href="https://pancakeswap.finance/buy-crypto" color="primary">
                 {t('Buy Crypto')}
               </Link>
               {t('feature to buy.')}
             </StyledFlex>
-            <StyledFlex flexWrap="wrap">
+            <StyledFlex flexWrap="wrap" flexGrow={0}>
               <Link m="0 5px" href="https://bridge.pancakeswap.finance">
                 {t('Bridge your assets')}
               </Link>
               <Text>{t('from other blockchains.')}</Text>
             </StyledFlex>
           </ul>
-        </>
+        </Box>
       ),
     },
     {
       title: t('What is slippage %?'),
       content: (
-        <>
+        <Box>
           <Text>
             {t(
               'Slippage % controls the gap between the expected receiving amount and the minimum guaranteed amount of a swap. High volatility may require adjusting slippage tolerance in settings to successfully complete a swap.',
             )}
           </Text>
-          <br />
           <Text>{t('Always check “minimum receive” section for the guaranteed receiving amount of a swap.')}</Text>
-        </>
+        </Box>
       ),
     },
     {
       title: t('Why is my transaction failing?'),
       content: (
-        <>
-          <ul>
+        <Box>
+          <ul style={{ overflow: 'auto' }}>
             <li>{t('Increase your slippage while trading volatile assets.')}</li>
             <li>{t('Check if you have enough token in your wallet to pay the gas fee.')}</li>
             <li>{t('When trading fee-on-Transfer tokens, increase slippage % over the transfer fee.')}</li>
             <li>{t('Some scam tokens may have a block on all transfers or swaps on chain.')}</li>
           </ul>
 
-          <FlexGap gap="5px">
+          <FlexGap gap="5px" flexGrow={0}>
             {t('For more details,')}{' '}
             <Link
               href="https://docs.pancakeswap.finance/products/pancakeswap-exchange/faq"
@@ -93,7 +92,7 @@ export const swapFAQConfig: FAQConfig = (t) => ({
               {t('read here.')}
             </Link>
           </FlexGap>
-        </>
+        </Box>
       ),
     },
     {

@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Collapse, FlexGap, Text } from '@pancakeswap/uikit'
+import { Box, Collapse, Text } from '@pancakeswap/uikit'
 import { memo, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
 import { faqConfig } from './config'
@@ -34,7 +34,7 @@ export const FAQ = memo(({ type }: FAQProps) => {
     <FAQWrapper>
       {config &&
         config.data.map((faq, index) => (
-          <FlexGap flexDirection="column" key={faq.title}>
+          <Box key={faq.title} overflow="hidden">
             <Collapse
               isOpen={activeIndex === index}
               onToggle={() => {
@@ -43,11 +43,10 @@ export const FAQ = memo(({ type }: FAQProps) => {
               title={<Text bold>{faq.title}</Text>}
               content={<Text>{faq.content}</Text>}
               titleBoxProps={{ p: '16px' }}
-              contentBoxProps={{ p: '0px 16px 16px', overflowY: 'scroll' }}
-              contentExtendableMaxHeight={120}
+              contentBoxProps={{ p: '0px 16px 16px' }}
             />
             {index !== config.data.length - 1 && <Divider />}
-          </FlexGap>
+          </Box>
         ))}
     </FAQWrapper>
   )

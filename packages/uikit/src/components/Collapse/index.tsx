@@ -9,7 +9,9 @@ const TitleWrapper = styled(Box)`
   align-items: center;
   cursor: pointer;
 `;
-const ContentWrapper = styled(Box)``;
+const ContentWrapper = styled(Box)`
+  overflow: hidden;
+`;
 
 const IconWrapper = styled.div`
   display: flex;

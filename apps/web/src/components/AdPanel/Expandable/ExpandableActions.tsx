@@ -23,7 +23,6 @@ export const ExpandableActions = ({
   actionButton,
   handleDismiss,
   handleExpand,
-  toggleHeight,
   ...props
 }: ExpandableActionsProps) => {
   return (
@@ -32,8 +31,6 @@ export const ExpandableActions = ({
         mb={isExpanded ? '0' : '16px'}
         onClick={isExpanded ? handleDismiss : handleExpand}
         isExpanded={isExpanded}
-        onMouseOver={() => toggleHeight?.(false, isExpanded)}
-        onMouseOut={() => toggleHeight?.(true, isExpanded)}
       />
       {isExpanded && actionButton && <StyledBox>{actionButton}</StyledBox>}
     </ActionContainer>

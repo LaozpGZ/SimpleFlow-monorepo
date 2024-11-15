@@ -33,16 +33,10 @@ export const useExpandableCard = ({ adId, forceMobile }: UseExpandableCardProps)
     onDismiss()
   }, [adId, onDismiss, setSlideExpanded])
 
-  const toggleHeight = useCallback((isAuto: boolean, isExpend: boolean) => {
-    const targetCard = adCardRef.current
-    if (!targetCard || !isExpend) return
-    targetCard.style.height = isAuto ? 'auto' : `${targetCard.offsetHeight}px`
-  }, [])
-
   useEffect(() => {
     if (isExpanded && extendedContentRef.current && adCardRef.current && actionPanelRef.current) {
       const targetCard = adCardRef.current
-      const contentPanelHeight = extendedContentRef.current.scrollHeight - 13
+      const contentPanelHeight = extendedContentRef.current.scrollHeight + 44 || 0
       const actionPanelHeight = actionPanelRef.current.scrollHeight || 64
       targetCard.style.height = `${contentPanelHeight + actionPanelHeight}px`
     } else if (!isExpanded && adCardRef.current) {
@@ -59,6 +53,5 @@ export const useExpandableCard = ({ adId, forceMobile }: UseExpandableCardProps)
     actionPanelRef,
     handleExpand,
     handleDismiss,
-    toggleHeight,
   }
 }
