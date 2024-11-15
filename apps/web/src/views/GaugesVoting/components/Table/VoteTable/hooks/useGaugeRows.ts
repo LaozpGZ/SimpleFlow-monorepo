@@ -62,7 +62,7 @@ const useSelectRowsWithQuery = (gauges: Gauge[] | undefined) => {
       const urlHashes = queryHashes.filter((hash) => !newHashes.includes(hash))
       setSelectRowsHash(urlHashes.concat(newHashes))
     }
-  }, [isLoading, prevVotedGauges.map((x) => x.hash).join('-'), queryHashes])
+  }, [isLoading, prevVotedGauges, queryHashes])
 
   return { selectRowsHash, setSelectRowsHash, onRowSelect, refetch, isLoading }
 }
