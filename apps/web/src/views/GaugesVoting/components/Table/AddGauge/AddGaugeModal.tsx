@@ -87,7 +87,15 @@ export const AddGaugeModal = ({ isOpen, onDismiss, selectRows, onGaugeAdd }) => 
                     {t('Search and add the gauge you want to vote')}
                   </Text>
                 </AutoColumn>
-                <Button variant="text" onClick={onDismiss} px={0} height="fit-content">
+                <Button
+                  variant="text"
+                  onClick={() => {
+                    setSearchText('')
+                    onDismiss()
+                  }}
+                  px={0}
+                  height="fit-content"
+                >
                   <CloseIcon color="textSubtle" />
                 </Button>
               </FlexGap>
