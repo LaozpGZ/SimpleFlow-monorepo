@@ -38,15 +38,13 @@ export const useUserVoteSlopes = () => {
     initialData: [],
     queryFn: async (): Promise<VoteSlope[]> => {
       if (!gauges || gauges.length === 0 || !account || !publicClient) return []
-      const validGauges = gauges.filter((gauge) => !!gauge.hash)
-      if (validGauges.length === 0) return []
 
       const delegated = userInfo?.cakePoolType === CakePoolType.DELEGATED
 
       const hasProxy =
         userInfo?.cakePoolProxy && !isAddressEqual(userInfo?.cakePoolProxy, zeroAddress) && userInfo && !delegated
 
-      const contracts = validGauges.map((gauge) => {
+      const contracts = gauges.map((gauge) => {
         return {
           ...gaugesVotingContract,
           functionName: 'voteUserSlopes',
@@ -55,7 +53,7 @@ export const useUserVoteSlopes = () => {
       })
 
       if (hasProxy) {
-        validGauges.forEach((gauge) => {
+        gauges.forEach((gauge) => {
           contracts.push({
             ...gaugesVotingContract,
             functionName: 'voteUserSlopes',
@@ -69,8 +67,8 @@ export const useUserVoteSlopes = () => {
           allowFailure: false,
         })
 
-        const len = validGauges.length
-        return validGauges.map((gauge, index) => {
+        const len = gauges.length
+        return gauges.map((gauge, index) => {
           const [nativeSlope, nativePower, nativeEnd] = response[index] ?? [0n, 0n, 0n]
           const [proxySlope, proxyPower, proxyEnd] = response[index + len] ?? [0n, 0n, 0n]
 
