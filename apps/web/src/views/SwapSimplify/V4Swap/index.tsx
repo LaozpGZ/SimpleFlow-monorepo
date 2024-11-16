@@ -180,7 +180,7 @@ export function V4SwapForm() {
           </FlexGap>
         }
         tradeDetails={<TradeDetails loaded={tradeLoaded} order={bestOrder} />}
-        shouldRenderDetails={Boolean(executionPrice) && Boolean(bestOrder) && !isWrapping}
+        shouldRenderDetails={Boolean(executionPrice) && Boolean(bestOrder) && !isWrapping && !tradeError}
       />
     </SwapUIV2.SwapFormWrapper>
   )
