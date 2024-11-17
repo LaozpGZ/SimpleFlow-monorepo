@@ -54,7 +54,7 @@ export function V4SwapForm() {
     () => (bestOrder?.trade ? SmartRouter.getExecutionPrice(bestOrder.trade) : undefined),
     [bestOrder?.trade],
   )
-  const { isPriceImpactTooHigh } = useIsPriceImpactTooHigh(bestOrder, !tradeLoaded)
+  const { isPriceImpactTooHigh } = useIsPriceImpactTooHigh(!tradeError ? bestOrder : undefined, !tradeLoaded)
 
   const commitHooks = useMemo(() => {
     return {
