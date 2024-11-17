@@ -202,10 +202,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   }, [order])
 
   const hasNoValidRouteError = useMemo(
-    () =>
-      tradeError &&
-      (tradeError instanceof NoValidRouteError ||
-        (typeof tradeError === 'string' && tradeError === 'Cannot find a valid swap route')),
+    () => Boolean(tradeError && tradeError instanceof NoValidRouteError),
     [tradeError],
   )
 
