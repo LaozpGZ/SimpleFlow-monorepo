@@ -74,15 +74,15 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
 
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const [isWalletConnectOpen, setIsWalletConnectOpen] = useState(false)
+  const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
 
   const [initDepositTokens, setInitDepositTokens] = useState<string>('')
 
   const [initAmounts, setInitAmounts] = useState<string>('')
 
-  const handleWalletConnectOnDismiss = useCallback(() => setIsWalletConnectOpen(false), [])
+  const handleWalletModalOnDismiss = useCallback(() => setIsWalletModalOpen(false), [])
 
-  const handleOnWalletConnect = useCallback(() => setIsWalletConnectOpen(true), [])
+  const handleOnWalletConnect = useCallback(() => setIsWalletModalOpen(true), [])
 
   const handleOnClick = useCallback(() => {
     setInitDepositTokens(
@@ -213,7 +213,7 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
           </span>
         </Flex>
       </Message>
-      <WalletModalManager isOpen={isWalletConnectOpen} onDismiss={handleWalletConnectOnDismiss} />
+      <WalletModalManager isOpen={isWalletModalOpen} onDismiss={handleWalletModalOnDismiss} />
       <ModalV2 closeOnOverlayClick isOpen={isModalOpen} onDismiss={handleOnDismiss}>
         <ModalContainer style={{ maxHeight: '90vh', overflow: 'auto' }}>
           <LiquidityWidget
