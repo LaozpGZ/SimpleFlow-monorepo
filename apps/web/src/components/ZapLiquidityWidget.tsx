@@ -14,7 +14,6 @@ import {
 import { Pool } from '@pancakeswap/v3-sdk'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import noop from 'lodash/noop'
 import dynamic from 'next/dynamic'
 import { useCallback, useMemo, useState } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
@@ -24,6 +23,7 @@ import { useWalletClient } from 'wagmi'
 import CurrencySearchModal from 'components/SearchModal/CurrencySearchModal'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { isAddressEqual } from 'utils'
+import WalletModalManager from 'components/WalletModalManager'
 
 export enum InitDepositToken {
   BASE_CURRENCY,
@@ -70,13 +70,19 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
 
   const { toastSuccess } = useToast()
 
+  const poolAddress = useMemo(() => pool && Pool.getAddress(pool.token0, pool.token1, pool.fee), [pool])
+
   const [isModalOpen, setIsModalOpen] = useState(false)
 
-  const poolAddress = useMemo(() => pool && Pool.getAddress(pool.token0, pool.token1, pool.fee), [pool])
+  const [isWalletConnectOpen, setIsWalletConnectOpen] = useState(false)
 
   const [initDepositTokens, setInitDepositTokens] = useState<string>('')
 
   const [initAmounts, setInitAmounts] = useState<string>('')
+
+  const handleWalletConnectOnDismiss = useCallback(() => setIsWalletConnectOpen(false), [])
+
+  const handleOnWalletConnect = useCallback(() => setIsWalletConnectOpen(true), [])
 
   const handleOnClick = useCallback(() => {
     setInitDepositTokens(
@@ -90,7 +96,7 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
     )
     setInitAmounts(initAmount || '')
     setIsModalOpen(true)
-  }, [])
+  }, [baseCurrency, quoteCurrency, initDepositToken, initAmount])
 
   const handleOnDismiss = useCallback(() => {
     setIsModalOpen(false)
@@ -207,13 +213,13 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
           </span>
         </Flex>
       </Message>
-
+      <WalletModalManager isOpen={isWalletConnectOpen} onDismiss={handleWalletConnectOnDismiss} />
       <ModalV2 closeOnOverlayClick isOpen={isModalOpen} onDismiss={handleOnDismiss}>
         <ModalContainer style={{ maxHeight: '90vh', overflow: 'auto' }}>
           <LiquidityWidget
             feeAddress="0xB82bb6Ce9A249076Ca7135470e7CA634806De168"
             feePcm={0}
-            onConnectWallet={noop}
+            onConnectWallet={handleOnWalletConnect}
             walletClient={walletClient}
             account={account ?? undefined}
             networkChainId={chainId}
