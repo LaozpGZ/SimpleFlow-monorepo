@@ -76,16 +76,16 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
 
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false)
 
-  const [initDepositTokens, setInitDepositTokens] = useState<string>('')
+  const [depositTokens, setDepositTokens] = useState<string>('')
 
-  const [initAmounts, setInitAmounts] = useState<string>('')
+  const [amounts, setAmounts] = useState<string>('')
 
   const handleWalletModalOnDismiss = useCallback(() => setIsWalletModalOpen(false), [])
 
   const handleOnWalletConnect = useCallback(() => setIsWalletModalOpen(true), [])
 
   const handleOnClick = useCallback(() => {
-    setInitDepositTokens(
+    setDepositTokens(
       initDepositToken === InitDepositToken.BASE_CURRENCY
         ? baseCurrency?.isNative
           ? NATIVE_CURRENCY_ADDRESS
@@ -94,7 +94,7 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
         ? NATIVE_CURRENCY_ADDRESS
         : quoteCurrency?.wrapped?.address || '',
     )
-    setInitAmounts(initAmount || '')
+    setAmounts(initAmount || '')
     setIsModalOpen(true)
   }, [baseCurrency, quoteCurrency, initDepositToken, initAmount])
 
@@ -125,58 +125,56 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
   const handleSelectToken = useCallback(
     (token: Currency) => {
       const selectedTokenAddress = token?.isNative ? NATIVE_CURRENCY_ADDRESS : token?.wrapped?.address || ''
-      const indexOfToken = initDepositTokens
+      const indexOfToken = depositTokens
         .split(',')
         .findIndex((depositToken) => isAddressEqual(depositToken === selectedTokenAddress))
 
       if (indexOfToken > -1) return
-      setInitDepositTokens(
-        initDepositTokens ? `${initDepositTokens},${selectedTokenAddress}` : `${selectedTokenAddress}`,
-      )
-      setInitAmounts(initAmounts ? `${initAmounts},` : '')
+      setDepositTokens(depositTokens ? `${depositTokens},${selectedTokenAddress}` : `${selectedTokenAddress}`)
+      setAmounts(amounts ? `${amounts},` : '')
     },
-    [initDepositTokens, initAmounts],
+    [depositTokens, amounts],
   )
 
   const handleAmountChange = useCallback(
     (tokenAddress: string, amount: string) => {
-      const indexOfToken = initDepositTokens
+      const indexOfToken = depositTokens
         .split(',')
         .findIndex((depositToken) => isAddressEqual(depositToken, tokenAddress))
       if (indexOfToken === -1) return
 
-      const amounts = initAmounts.split(',')
-      amounts[indexOfToken] = amount
-      setInitAmounts(amounts.join(','))
+      const amountList = amounts.split(',')
+      amountList[indexOfToken] = amount
+      setAmounts(amountList.join(','))
     },
-    [initAmounts, initDepositTokens],
+    [amounts, depositTokens],
   )
 
   const handleAddTokens = useCallback(
     (tokenAddresses: string) => {
-      setInitDepositTokens(initDepositTokens ? `${initDepositTokens},${tokenAddresses}` : tokenAddresses)
+      setDepositTokens(depositTokens ? `${depositTokens},${tokenAddresses}` : tokenAddresses)
       const amountsToAdd = tokenAddresses
         .split('')
         .filter((item) => item === ',')
         .join('')
-      setInitAmounts(initAmounts ? `${initAmounts},${amountsToAdd}` : amountsToAdd)
+      setAmounts(amounts ? `${amounts},${amountsToAdd}` : amountsToAdd)
     },
-    [initAmounts, initDepositTokens],
+    [amounts, depositTokens],
   )
 
   const handleRemoveToken = useCallback(
     (tokenAddress: string) => {
-      const tokens = initDepositTokens.split(',')
+      const tokens = depositTokens.split(',')
       const indexOfToken = tokens.findIndex((depositToken) => isAddressEqual(depositToken, tokenAddress))
       if (indexOfToken === -1) return
 
       tokens.splice(indexOfToken, 1)
-      const amounts = initAmounts.split(',')
-      amounts.splice(indexOfToken, 1)
-      setInitDepositTokens(tokens.join(','))
-      setInitAmounts(amounts.join(','))
+      setDepositTokens(tokens.join(','))
+      const amountList = amounts.split(',')
+      amountList.splice(indexOfToken, 1)
+      setAmounts(amountList.join(','))
     },
-    [initAmounts, initDepositTokens],
+    [amounts, depositTokens],
   )
 
   const [onPresentCurrencyModal] = useModal(
@@ -223,8 +221,8 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
             chainId={chainId}
             initTickLower={tickLower ? +tickLower : undefined}
             initTickUpper={tickUpper ? +tickUpper : undefined}
-            initAmounts={initAmounts}
-            initDepositTokens={initDepositTokens}
+            initAmounts={amounts}
+            initDepositTokens={depositTokens}
             onAddTokens={handleAddTokens}
             onRemoveToken={handleRemoveToken}
             onAmountChange={handleAmountChange}
