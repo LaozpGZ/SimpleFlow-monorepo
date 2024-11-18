@@ -2,12 +2,6 @@ import { Box, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { PropsWithChildren, ReactNode } from 'react'
 import { Divider } from './styles'
 
-// TODO: check for mobile modal view as well
-// export const ScrollableBox = styled(Box)`
-//   max-height: 400px;
-//   overflow-y: auto;
-// `
-
 interface ExpandableContentProps extends PropsWithChildren {
   title: string
   isExpanded: boolean
