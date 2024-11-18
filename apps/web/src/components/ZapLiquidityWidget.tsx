@@ -74,25 +74,27 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
 
   const poolAddress = useMemo(() => pool && Pool.getAddress(pool.token0, pool.token1, pool.fee), [pool])
 
-  const handleOnDismiss = useCallback(() => {
-    setIsModalOpen(false)
-  }, [])
+  const [initDepositTokens, setInitDepositTokens] = useState<string>('')
+
+  const [initAmounts, setInitAmounts] = useState<string>('')
 
   const handleOnClick = useCallback(() => {
+    setInitDepositTokens(
+      initDepositToken === InitDepositToken.BASE_CURRENCY
+        ? baseCurrency?.isNative
+          ? NATIVE_CURRENCY_ADDRESS
+          : baseCurrency?.wrapped?.address || ''
+        : quoteCurrency?.isNative
+        ? NATIVE_CURRENCY_ADDRESS
+        : quoteCurrency?.wrapped?.address || '',
+    )
+    setInitAmounts(initAmount || '')
     setIsModalOpen(true)
   }, [])
 
-  const [initDepositTokens, setInitDepositTokens] = useState(() =>
-    initDepositToken === InitDepositToken.BASE_CURRENCY
-      ? baseCurrency?.isNative
-        ? NATIVE_CURRENCY_ADDRESS
-        : baseCurrency?.wrapped?.address || ''
-      : quoteCurrency?.isNative
-      ? NATIVE_CURRENCY_ADDRESS
-      : quoteCurrency?.wrapped?.address || '',
-  )
-
-  const [initAmounts, setInitAmounts] = useState(initAmount || '')
+  const handleOnDismiss = useCallback(() => {
+    setIsModalOpen(false)
+  }, [])
 
   const handleTransaction = useCallback(
     (txHash: string) => {
