@@ -124,17 +124,14 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
 
   const handleSelectToken = useCallback(
     (token: Currency) => {
-      const selectedToken =
-        token.wrapped && !token.isNative
-          ? { ...token, ...token.wrapped }
-          : { ...token, address: NATIVE_CURRENCY_ADDRESS }
+      const selectedTokenAddress = token?.isNative ? NATIVE_CURRENCY_ADDRESS : token?.wrapped?.address || ''
       const indexOfToken = initDepositTokens
         .split(',')
-        .findIndex((depositToken) => isAddressEqual(depositToken === selectedToken.address))
+        .findIndex((depositToken) => isAddressEqual(depositToken === selectedTokenAddress))
 
       if (indexOfToken > -1) return
       setInitDepositTokens(
-        initDepositTokens ? `${initDepositTokens},${selectedToken.address}` : `${selectedToken.address}`,
+        initDepositTokens ? `${initDepositTokens},${selectedTokenAddress}` : `${selectedTokenAddress}`,
       )
       setInitAmounts(initAmounts ? `${initAmounts},` : '')
     },
