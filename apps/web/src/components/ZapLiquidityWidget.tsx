@@ -127,7 +127,7 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
       const selectedTokenAddress = token?.isNative ? NATIVE_CURRENCY_ADDRESS : token?.wrapped?.address || ''
       const indexOfToken = depositTokens
         .split(',')
-        .findIndex((depositToken) => isAddressEqual(depositToken === selectedTokenAddress))
+        .findIndex((depositToken) => isAddressEqual(depositToken, selectedTokenAddress))
 
       if (indexOfToken > -1) return
       setDepositTokens(depositTokens ? `${depositTokens},${selectedTokenAddress}` : `${selectedTokenAddress}`)
