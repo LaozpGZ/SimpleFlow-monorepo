@@ -1,4 +1,4 @@
-import { UnknownRpcError, UserRejectedRequestError } from 'viem'
+import { UserRejectedRequestError } from 'viem'
 
 const possibleRejectMessage = ['Cancelled by User', 'cancel', 'Transaction was rejected', 'denied']
 

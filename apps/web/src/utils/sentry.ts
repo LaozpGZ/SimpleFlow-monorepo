@@ -1,5 +1,5 @@
 import { captureException } from '@sentry/nextjs'
-import { UnknownRpcError, UserRejectedRequestError } from 'viem'
+import { UserRejectedRequestError } from 'viem'
 
 const assignError = (maybeError: any) => {
   if (typeof maybeError === 'string') {
