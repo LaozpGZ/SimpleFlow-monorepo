@@ -36,9 +36,9 @@ import { QUOTING_API } from 'config/constants/endpoints'
 import {
   CommonPoolsParams,
   PoolsWithState,
+  useCommonPools as useCommonPoolsWithTicks,
   useCommonPoolsLite,
   useCommonPoolsOnChain,
-  useCommonPools as useCommonPoolsWithTicks,
 } from './useCommonPools'
 import { useCurrencyUsdPrice } from './useCurrencyUsdPrice'
 import { useExperimentalFeature } from './useExperimentalFeatureEnabled'
