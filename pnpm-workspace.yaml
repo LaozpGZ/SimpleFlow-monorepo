@@ -16,3 +16,4 @@ catalog:
   eslint: ^8.32.0
   '@next/eslint-plugin-next': 14.2.3
   '@aptos-labs/ts-sdk': 1.30.0
+  jotai: ^2.4.3

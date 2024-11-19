@@ -13,11 +13,6 @@ const nextConfig = {
     CUSTOM_ENV_VAR: 'value', // Replace with your variables
   },
 
-  // Enable experimental features (e.g., Turbopack)
-  experimental: {
-    turbo: true, // Enable Turbopack (optional)
-  },
-
   // Add basePath if the app is served under a subdirectory
   basePath: '',
 
