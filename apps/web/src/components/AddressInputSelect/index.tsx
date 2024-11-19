@@ -1,9 +1,9 @@
-import { ChangeEvent, useState, useEffect } from 'react'
-import { Box, BoxProps, Text, Input } from '@pancakeswap/uikit'
+import { useTranslation } from '@pancakeswap/localization'
+import { Box, BoxProps, Input, Text } from '@pancakeswap/uikit'
+import CircleLoader from 'components/Loader/CircleLoader'
+import { ChangeEvent, useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 import { isAddress } from 'viem'
-import { useTranslation } from '@pancakeswap/localization'
-import CircleLoader from 'components/Loader/CircleLoader'
 
 enum ResultStatus {
   NOT_VALID,

@@ -1,4 +1,4 @@
-import { addressAtom, isConnectedAtom } from '@/atoms/addressAtom'
+import { addressAtom, isConnectedAtom } from 'atoms/addressAtom'
 import { useAtomValue } from 'jotai'
 
 export default () => {

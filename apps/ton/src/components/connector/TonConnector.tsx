@@ -1,5 +1,5 @@
-import { addressAtom } from '@/atoms/addressAtom'
 import { TonConnectUIProvider, useTonAddress } from '@tonconnect/ui-react'
+import { addressAtom } from 'atoms/addressAtom'
 import { useSetAtom } from 'jotai'
 import { useEffect } from 'react'
 
