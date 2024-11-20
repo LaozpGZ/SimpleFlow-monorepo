@@ -72,15 +72,24 @@ const floatWithRotateAnimation = keyframes`
 
 const HeroWrapper = styled(Box)`
   position: relative;
-  display: flex;
-  flex-wrap: wrap;
   background: linear-gradient(139.73deg, #e5fdff 0%, #f3efff 100%);
   min-height: 100vh;
-  justify-content: space-between;
-  gap: 40px;
+
   ${({ theme }) => theme.mediaQueries.lg} {
     padding: 160px;
   }
+`
+const Wrapper = styled.div`
+  max-width: 1200px;
+  margin: 0 auto;
+`
+
+const InnerWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 40px;
 `
 
 const RightTopBox = styled.div`
@@ -252,76 +261,80 @@ export const Hero: React.FC = () => {
   const { t } = useTranslation()
   return (
     <HeroWrapper>
-      <LeftTopBox>
-        <Text fontSize="64px" lineHeight="64px" color="secondary" bold>
-          {t('PancakeSwap MEV GARD')}
-        </Text>
-        <Text fontSize="32px" lineHeight="38px" bold>
-          {t('Safeguard your swap against frontrunning and sandwich attacks!')}
-        </Text>
-        <Box>
-          <Text bold>{t('Total volume protected:')}</Text>
-          <FlexGap gap="8px" alignItems="center">
-            <CoinsImg src={getImageUrl('coins.png')} />
-            <Text fontSize="64px" lineHeight="77px" color="secondary" bold>
-              $84B+
+      <Wrapper>
+        <InnerWrapper>
+          <LeftTopBox>
+            <Text fontSize="64px" lineHeight="64px" color="secondary" bold>
+              {t('PancakeSwap MEV GARD')}
             </Text>
-          </FlexGap>
-        </Box>
-      </LeftTopBox>
-      <RightTopBox>
-        <ImageWrapper>
-          <HeroImg1 src={getImageUrl('hero1.png')} />
-          <HeroImg2 src={getImageUrl('hero2.png')} />
-          <HeroImg3 src={getImageUrl('hero3.png')} />
-          <HeroImg4 src={getImageUrl('hero4.png')} />
-          <HeroImgBg src={hero.src} />
-          <LeftBling src={getImageUrl('bling.png')} />
-          <RightBling src={getImageUrl('bling.png')} />
-        </ImageWrapper>
-      </RightTopBox>
-      <BottomBox>
-        <Box>
-          <Text fontSize="40px" lineHeight="48px" color="secondary" bold>
-            {t('Get protected now')}
-          </Text>
-          <Text>{t('By following these settings, your swap will be protected from MEV attacks')}</Text>
-        </Box>
-        <CardsWrapper>
-          <Card>
-            <FlexGap gap="8px" height="100%">
-              <FlexGap gap="8px" alignItems="center" flexBasis="30%" position="relative">
-                <RightBlingInCard src={getImageUrl('bling.png')} />
-                <LeftBlingInCard src={getImageUrl('bling.png')} />
-                <HeroWalletImg src={getImageUrl('hero-wallet.png')} alt="hero-wallet" />
-              </FlexGap>
-              <FlexGap flexDirection="column" justifyContent="space-between">
-                <Box>
-                  <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                    {t('In one click')}
-                  </Text>
-                  <Text>{t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}</Text>
-                </Box>
-                <ConnectWalletButton withIcon />
-              </FlexGap>
-            </FlexGap>
-          </Card>
-          <Card>
-            <Text fontSize="20px" bold mb="16px">
-              {t('Or add manually this RPC endpoint to your wallet')}
+            <Text fontSize="32px" lineHeight="38px" bold>
+              {t('Safeguard your swap against frontrunning and sandwich attacks!')}
             </Text>
-            <FlexGap gap="8px" flexDirection="column">
-              {Object.entries(rpcData).map(([key, value], index) => (
-                <FlexGap gap="8px" alignItems="center" key={key}>
-                  <Text bold>{key}:</Text>
-                  <UnderLineBox />
-                  <Text>{value}</Text>
+            <Box>
+              <Text bold>{t('Total volume protected:')}</Text>
+              <FlexGap gap="8px" alignItems="center">
+                <CoinsImg src={getImageUrl('coins.png')} />
+                <Text fontSize="64px" lineHeight="77px" color="secondary" bold>
+                  $84B+
+                </Text>
+              </FlexGap>
+            </Box>
+          </LeftTopBox>
+          <RightTopBox>
+            <ImageWrapper>
+              <HeroImg1 src={getImageUrl('hero1.png')} />
+              <HeroImg2 src={getImageUrl('hero2.png')} />
+              <HeroImg3 src={getImageUrl('hero3.png')} />
+              <HeroImg4 src={getImageUrl('hero4.png')} />
+              <HeroImgBg src={hero.src} />
+              <LeftBling src={getImageUrl('bling.png')} />
+              <RightBling src={getImageUrl('bling.png')} />
+            </ImageWrapper>
+          </RightTopBox>
+          <BottomBox>
+            <Box>
+              <Text fontSize="40px" lineHeight="48px" color="secondary" bold>
+                {t('Get protected now')}
+              </Text>
+              <Text>{t('By following these settings, your swap will be protected from MEV attacks')}</Text>
+            </Box>
+            <CardsWrapper>
+              <Card>
+                <FlexGap gap="8px" height="100%">
+                  <FlexGap gap="8px" alignItems="center" flexBasis="30%" position="relative">
+                    <RightBlingInCard src={getImageUrl('bling.png')} />
+                    <LeftBlingInCard src={getImageUrl('bling.png')} />
+                    <HeroWalletImg src={getImageUrl('hero-wallet.png')} alt="hero-wallet" />
+                  </FlexGap>
+                  <FlexGap flexDirection="column" justifyContent="space-between">
+                    <Box>
+                      <Text fontSize="32px" lineHeight="38px" bold mb="8px">
+                        {t('In one click')}
+                      </Text>
+                      <Text>{t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}</Text>
+                    </Box>
+                    <ConnectWalletButton withIcon />
+                  </FlexGap>
                 </FlexGap>
-              ))}
-            </FlexGap>
-          </Card>
-        </CardsWrapper>
-      </BottomBox>
+              </Card>
+              <Card>
+                <Text fontSize="20px" bold mb="16px">
+                  {t('Or add manually this RPC endpoint to your wallet')}
+                </Text>
+                <FlexGap gap="8px" flexDirection="column">
+                  {Object.entries(rpcData).map(([key, value], index) => (
+                    <FlexGap gap="8px" alignItems="center" key={key}>
+                      <Text bold>{key}:</Text>
+                      <UnderLineBox />
+                      <Text>{value}</Text>
+                    </FlexGap>
+                  ))}
+                </FlexGap>
+              </Card>
+            </CardsWrapper>
+          </BottomBox>
+        </InnerWrapper>
+      </Wrapper>
       <WaveBg src={waveBg.src} />
     </HeroWrapper>
   )
