@@ -1,8 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, FlexGap, Text } from '@pancakeswap/uikit'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import useTheme from 'hooks/useTheme'
 import styled, { css, keyframes } from 'styled-components'
+import { AddMevRpcButton } from './AddMevRpcButton'
 
 import { getImageUrl } from './utils'
 
@@ -316,7 +316,7 @@ export const Hero: React.FC = () => {
                       </Text>
                       <Text>{t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}</Text>
                     </Box>
-                    <ConnectWalletButton withIcon />
+                    <AddMevRpcButton />
                   </FlexGap>
                 </FlexGap>
               </Card>
