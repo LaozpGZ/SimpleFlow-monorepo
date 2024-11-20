@@ -81,7 +81,16 @@ export const InfoSection: React.FC = () => {
             {walletConfig.map((wallet) => (
               <FlexGap flexDirection="column" alignItems="center" gap="8px">
                 <img src={getImageUrl(wallet.image)} alt={wallet.title} width="64px" />
-                <Text fontSize="16px" lineHeight="24px" bold color="#02919D">
+                <Text
+                  onClick={() => {
+                    window.open(wallet.doc, '_blank', 'noopener noreferrer')
+                  }}
+                  fontSize="16px"
+                  lineHeight="24px"
+                  bold
+                  color="#02919D"
+                  style={{ cursor: 'pointer' }}
+                >
                   {t(wallet.title)}
                 </Text>
               </FlexGap>
@@ -89,7 +98,14 @@ export const InfoSection: React.FC = () => {
           </FlexGap>
           <FlexGap flexDirection="column" gap="24px" justifyContent="center" alignItems="center">
             <Text>{t('or')}</Text>
-            <Button endIcon={<LinkExternal color={theme.colors.background} />}>{t('View FAQ docs')}</Button>
+            <Button
+              onClick={() => {
+                window.open('https://docs.pancakeswap.finance/', '_blank', 'noopener noreferrer')
+              }}
+              endIcon={<LinkExternal color={theme.colors.background} />}
+            >
+              {t('View FAQ docs')}
+            </Button>
           </FlexGap>
         </InnerWrapper>
       </Wrapper>
