@@ -86,7 +86,7 @@ const HeroWrapper = styled(Box)`
       ? `linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)`
       : `linear-gradient(139.73deg, #e5fdff 0%, #f3efff 100%)`};
   min-height: 100vh;
-  ${({ theme }) => theme.mediaQueries.lg} {
+  ${({ theme }) => theme.mediaQueries.xxl} {
     padding: 160px;
   }
 `
@@ -109,18 +109,31 @@ const InnerWrapper = styled.div`
 
 const RightTopBox = styled.div`
   position: relative;
-  flex-basis: calc(55% - 20px);
+  flex-basis: 100%;
+
   flex-grow: 0;
   z-index: 1;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-basis: calc(45% - 20px);
+  }
+  ${({ theme }) => theme.mediaQueries.xxl} {
+    flex-basis: calc(55% - 20px);
+  }
 `
 const LeftTopBox = styled.div`
   position: relative;
-  flex-basis: calc(45% - 20px);
+  flex-basis: 100%;
   display: flex;
   flex-direction: column;
   flex-grow: 0;
   gap: 24px;
   z-index: 1;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-basis: calc(45% - 20px);
+  }
+  ${({ theme }) => theme.mediaQueries.xxl} {
+    flex-basis: calc(45% - 20px);
+  }
 `
 const TopBox = styled.div`
   position: relative;
@@ -151,7 +164,6 @@ const CardsWrapper = styled.div`
   }
 `
 const Card = styled.div`
-  height: 246px;
   min-height: 246px;
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   padding: 24px;

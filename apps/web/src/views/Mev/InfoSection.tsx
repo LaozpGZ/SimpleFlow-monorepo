@@ -10,7 +10,7 @@ const InfoSectionWrapper = styled.div`
   min-height: 657px;
   padding: 80px 24px;
 
-  ${({ theme }) => theme.mediaQueries.lg} {
+  ${({ theme }) => theme.mediaQueries.xxl} {
     padding: 160px;
   }
 `

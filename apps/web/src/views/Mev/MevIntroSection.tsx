@@ -16,7 +16,7 @@ const MevIntroSectionWrapper = styled.div`
     linear-gradient(139.73deg, #e5fdff 0%, #f3efff 100%)`};
 
   min-height: 700px;
-  ${({ theme }) => theme.mediaQueries.lg} {
+  ${({ theme }) => theme.mediaQueries.xxl} {
     padding: 160px;
   }
 `
@@ -51,6 +51,7 @@ const CardsWrapper = styled.div`
   ${({ theme }) => theme.mediaQueries.lg} {
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
   }
 `
 const Card = styled.div`
@@ -65,6 +66,9 @@ const Card = styled.div`
   max-width: 400px;
   overflow: hidden;
   ${({ theme }) => theme.mediaQueries.lg} {
+    flex-basis: calc(50% - 40px / 2);
+  }
+  ${({ theme }) => theme.mediaQueries.xl} {
     flex-basis: calc(33.3333% - 40px / 3);
   }
 `
