@@ -1,0 +1,328 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { Box, FlexGap, Text } from '@pancakeswap/uikit'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+import styled, { css, keyframes } from 'styled-components'
+import waveBg from './images/hero-wave.png'
+import hero from './images/mev-hero.png'
+import { getImageUrl } from './utils'
+
+const blingAnimation = keyframes`
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+`
+const blingWithRotateAnimation = keyframes`
+  0% {
+    opacity: 1;
+    transform: rotate(-21deg);
+  }
+  50% {
+    opacity: 0;
+    transform: rotate(-21deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-21deg);
+  }
+`
+
+const blingInCardWithRotateAnimation = keyframes`
+  0% {
+    opacity: 1;
+    transform: rotate(20deg);
+  }
+  50% {
+    opacity: 0;
+    transform: rotate(20deg);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(20deg);
+  }
+`
+
+const floatAnimation = keyframes`
+  0% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-18px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+`
+const floatWithRotateAnimation = keyframes`
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-25px) rotate(5deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+`
+
+const HeroWrapper = styled(Box)`
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  background: linear-gradient(139.73deg, #e5fdff 0%, #f3efff 100%);
+  min-height: 100vh;
+  justify-content: space-between;
+  gap: 40px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    padding: 160px;
+  }
+`
+
+const RightTopBox = styled.div`
+  position: relative;
+  flex-basis: calc(55% - 20px);
+  flex-grow: 0;
+  z-index: 1;
+`
+const LeftTopBox = styled.div`
+  position: relative;
+  flex-basis: calc(45% - 20px);
+  display: flex;
+  flex-direction: column;
+  flex-grow: 0;
+  gap: 24px;
+  z-index: 1;
+`
+const BottomBox = styled.div`
+  position: relative;
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  z-index: 1;
+`
+
+const CardsWrapper = styled.div`
+  display: flex;
+  gap: 24px;
+`
+const Card = styled.div`
+  min-height: 246px;
+  min-height: 246px;
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+  padding: 24px;
+  border-radius: 24px;
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-bottom-width: 2px;
+  flex-grow: 1;
+  flex-basis: 50%;
+  flex-shrink: 0;
+`
+
+/* ImageLayers */
+
+const ImageWrapper = styled.div`
+  position: relative;
+  width: 100%;
+  max-width: 660px;
+`
+
+const heroImgBase = css`
+  position: absolute;
+`
+const HeroImg1 = styled.img`
+  ${heroImgBase}
+  z-index: 4;
+  width: 20%;
+  bottom: 4%;
+  left: 1%;
+  animation: ${floatAnimation} 6s ease-in-out infinite 0s;
+`
+const HeroImg2 = styled.img`
+  ${heroImgBase}
+  z-index: 3;
+  width: 63%;
+  bottom: 0;
+  animation: ${floatAnimation} 6s ease-in-out infinite 0.8s;
+`
+const HeroImg3 = styled.img`
+  ${heroImgBase}
+  z-index: 2;
+  width: 76%;
+  left: 19%;
+  top: 0.5%;
+  animation: ${floatWithRotateAnimation} 6s ease-in-out infinite 1.6s;
+  overflow: hidden;
+`
+const HeroImg4 = styled.img`
+  ${heroImgBase}
+  z-index: 1;
+  width: 38%;
+  right: 0;
+  bottom: 12%;
+  animation: ${floatAnimation} 6s ease-in-out infinite 2.4s;
+`
+const LeftBling = styled.img`
+  ${heroImgBase}
+  z-index: 5;
+  width: 9%;
+  left: 18.5%;
+  top: 9%;
+  animation: ${blingAnimation} 3s infinite ease-in-out;
+`
+
+const RightBling = styled.img`
+  ${heroImgBase}
+  z-index: 6;
+  width: 7%;
+  right: 5.5%;
+  top: 27%;
+  animation: ${blingWithRotateAnimation} 2s infinite ease-in-out 1s;
+`
+
+const HeroImgBg = styled.img`
+  z-index: 0;
+  width: 100%;
+  opacity: 0;
+  position: relative;
+`
+const CoinsImg = styled.img`
+  width: 57px;
+`
+
+const HeroWalletImg = styled.img`
+  width: 80%;
+`
+const UnderLineBox = styled.div`
+  position: relative;
+  flex-grow: 1;
+  height: 100%;
+  &::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    top: 0px;
+    left: 0;
+    width: 100%;
+    border-bottom: 1px dotted ${({ theme }) => theme.colors.cardBorder};
+  }
+`
+
+const rpcData = {
+  'Network Name': 'PancakeSwap MEV Guard',
+  'New RPC URL': 'https://mev-rpc.pancakeswap.finance',
+  'Chain ID': '56',
+  'Currency symbol': 'BNB',
+  'Block Explorer URL': 'https://bscscan.com',
+}
+
+const LeftBlingInCard = styled.img`
+  ${heroImgBase}
+  z-index: 5;
+  width: 20%;
+  left: -5%;
+  top: 0;
+  animation: ${blingAnimation} 3s infinite ease-in-out 1.2s;
+`
+
+const RightBlingInCard = styled.img`
+  ${heroImgBase}
+  z-index: 6;
+  width: 13%;
+  right: 15.5%;
+  bottom: 0;
+
+  animation: ${blingInCardWithRotateAnimation} 2s infinite ease-in-out 2s;
+`
+
+const WaveBg = styled.img`
+  width: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+`
+
+export const Hero: React.FC = () => {
+  const { t } = useTranslation()
+  return (
+    <HeroWrapper>
+      <LeftTopBox>
+        <Text fontSize="64px" lineHeight="64px" color="secondary" bold>
+          {t('PancakeSwap MEV GARD')}
+        </Text>
+        <Text fontSize="32px" lineHeight="38px" bold>
+          {t('Safeguard your swap against frontrunning and sandwich attacks!')}
+        </Text>
+        <Box>
+          <Text bold>{t('Total volume protected:')}</Text>
+          <FlexGap gap="8px" alignItems="center">
+            <CoinsImg src={getImageUrl('coins.png')} />
+            <Text fontSize="64px" lineHeight="77px" color="secondary" bold>
+              $84B+
+            </Text>
+          </FlexGap>
+        </Box>
+      </LeftTopBox>
+      <RightTopBox>
+        <ImageWrapper>
+          <HeroImg1 src={getImageUrl('hero1.png')} />
+          <HeroImg2 src={getImageUrl('hero2.png')} />
+          <HeroImg3 src={getImageUrl('hero3.png')} />
+          <HeroImg4 src={getImageUrl('hero4.png')} />
+          <HeroImgBg src={hero.src} />
+          <LeftBling src={getImageUrl('bling.png')} />
+          <RightBling src={getImageUrl('bling.png')} />
+        </ImageWrapper>
+      </RightTopBox>
+      <BottomBox>
+        <Box>
+          <Text fontSize="40px" lineHeight="48px" color="secondary" bold>
+            {t('Get protected now')}
+          </Text>
+          <Text>{t('By following these settings, your swap will be protected from MEV attacks')}</Text>
+        </Box>
+        <CardsWrapper>
+          <Card>
+            <FlexGap gap="8px" height="100%">
+              <FlexGap gap="8px" alignItems="center" flexBasis="30%" position="relative">
+                <RightBlingInCard src={getImageUrl('bling.png')} />
+                <LeftBlingInCard src={getImageUrl('bling.png')} />
+                <HeroWalletImg src={getImageUrl('hero-wallet.png')} alt="hero-wallet" />
+              </FlexGap>
+              <FlexGap flexDirection="column" justifyContent="space-between">
+                <Box>
+                  <Text fontSize="32px" lineHeight="38px" bold mb="8px">
+                    {t('In one click')}
+                  </Text>
+                  <Text>{t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}</Text>
+                </Box>
+                <ConnectWalletButton withIcon />
+              </FlexGap>
+            </FlexGap>
+          </Card>
+          <Card>
+            <Text fontSize="20px" bold mb="16px">
+              {t('Or add manually this RPC endpoint to your wallet')}
+            </Text>
+            <FlexGap gap="8px" flexDirection="column">
+              {Object.entries(rpcData).map(([key, value], index) => (
+                <FlexGap gap="8px" alignItems="center" key={key}>
+                  <Text bold>{key}:</Text>
+                  <UnderLineBox />
+                  <Text>{value}</Text>
+                </FlexGap>
+              ))}
+            </FlexGap>
+          </Card>
+        </CardsWrapper>
+      </BottomBox>
+      <WaveBg src={waveBg.src} />
+    </HeroWrapper>
+  )
+}
