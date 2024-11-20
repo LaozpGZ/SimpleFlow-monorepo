@@ -4,6 +4,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
 import { useCallback, useState } from 'react'
+import { bsc } from 'viem/chains'
 
 export const AddMevRpcButton: React.FC = () => {
   const { t } = useTranslation()
@@ -17,14 +18,10 @@ export const AddMevRpcButton: React.FC = () => {
     try {
       const networkParams = {
         chainId: '0x38', // Chain ID in hexadecimal (56 for Binance Smart Chain)
-        chainName: 'Binance Smart Chain MEV',
-        rpcUrls: ['https://mev-rpc.pancakeswap.finance'], // PancakeSwap MEV RPC
-        nativeCurrency: {
-          name: 'BNB',
-          symbol: 'BNB',
-          decimals: 18,
-        },
-        blockExplorerUrls: ['https://bscscan.com'], // Optional: block explorer
+        chainName: 'PancakeSwap MEV Guard',
+        rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC
+        nativeCurrency: bsc.nativeCurrency,
+        blockExplorerUrls: [bsc.blockExplorers.default.url],
       }
 
       // Check if the Ethereum provider is available
@@ -41,7 +38,7 @@ export const AddMevRpcButton: React.FC = () => {
           console.error('Error adding RPC network:', error)
         }
       } else {
-        alert('Ethereum provider not found. Please install MetaMask!')
+        console.warn('Ethereum provider not found. Please check your wallet')
       }
     } catch (error) {
       console.error(error)

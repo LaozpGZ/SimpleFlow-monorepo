@@ -6,6 +6,14 @@ import { AddMevRpcButton } from './AddMevRpcButton'
 
 import { getImageUrl } from './utils'
 
+const rpcData = {
+  'Network Name': 'PancakeSwap MEV Guard',
+  'New RPC URL': 'https://bscrpc.pancakeswap.finance',
+  'Chain ID': '56',
+  'Currency symbol': 'BNB',
+  'Block Explorer URL': 'https://bscscan.com',
+}
+
 const blingAnimation = keyframes`
   0% {
     opacity: 1;
@@ -72,6 +80,7 @@ const floatWithRotateAnimation = keyframes`
 
 const HeroWrapper = styled(Box)`
   position: relative;
+  padding: 24px 80px;
   background: ${({ theme }) =>
     theme.isDark
       ? `linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)`
@@ -89,9 +98,13 @@ const Wrapper = styled.div`
 const InnerWrapper = styled.div`
   position: relative;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: space-between;
   gap: 40px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 `
 
 const RightTopBox = styled.div`
@@ -223,14 +236,6 @@ const UnderLineBox = styled.div`
     border-bottom: 1px dotted ${({ theme }) => theme.colors.cardBorder};
   }
 `
-
-const rpcData = {
-  'Network Name': 'PancakeSwap MEV Guard',
-  'New RPC URL': 'https://mev-rpc.pancakeswap.finance',
-  'Chain ID': '56',
-  'Currency symbol': 'BNB',
-  'Block Explorer URL': 'https://bscscan.com',
-}
 
 const LeftBlingInCard = styled.img`
   ${heroImgBase}
