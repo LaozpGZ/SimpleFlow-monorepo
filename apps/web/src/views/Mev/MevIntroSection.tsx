@@ -7,6 +7,7 @@ import { getImageUrl } from './utils'
 
 const MevIntroSectionWrapper = styled.div`
   position: relative;
+  padding: 80px 24px;
   background: ${({ theme }) =>
     theme.isDark
       ? `linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%),
@@ -43,8 +44,14 @@ const WaveBg = styled.img`
 
 const CardsWrapper = styled.div`
   display: flex;
+  flex-direction: column;
   gap: 24px;
   width: 100%;
+  align-items: center;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
 `
 const Card = styled.div`
   position: relative;
@@ -54,8 +61,12 @@ const Card = styled.div`
   border-radius: 24px;
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   border-bottom-width: 2px;
-  flex-basis: calc(100% / 3 - 40px / 3);
+  width: 100%;
+  max-width: 400px;
   overflow: hidden;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-basis: calc(33.3333% - 40px / 3);
+  }
 `
 export const ImageBox = styled.img`
   position: absolute;
@@ -71,11 +82,11 @@ export const MevIntroSection: React.FC = () => {
     <MevIntroSectionWrapper>
       <Wrapper>
         <InnerWrapper>
-          <FlexGap width="100%" gap="8px" alignItems="center" justifyContent="center">
-            <Text fontSize="64px" lineHeight="78px" bold>
+          <FlexGap width="100%" gap="8px" alignItems="center" justifyContent="center" flexWrap="wrap">
+            <Text fontSize="64px" lineHeight="78px" bold textAlign="center">
               {t('Free and Automated')}
             </Text>
-            <Text fontSize="64px" lineHeight="78px" bold color="secondary">
+            <Text fontSize="64px" lineHeight="78px" bold color="secondary" textAlign="center">
               {t('MEV Protection')}
             </Text>
           </FlexGap>

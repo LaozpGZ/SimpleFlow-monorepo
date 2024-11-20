@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, FlexGap, Text } from '@pancakeswap/uikit'
+import { Box, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import styled, { css, keyframes } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
@@ -80,7 +80,7 @@ const floatWithRotateAnimation = keyframes`
 
 const HeroWrapper = styled(Box)`
   position: relative;
-  padding: 24px 80px;
+  padding: 80px 24px;
   background: ${({ theme }) =>
     theme.isDark
       ? `linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)`
@@ -100,7 +100,7 @@ const InnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  gap: 40px;
+  gap: 80px;
   ${({ theme }) => theme.mediaQueries.lg} {
     flex-direction: row;
     flex-wrap: wrap;
@@ -122,6 +122,17 @@ const LeftTopBox = styled.div`
   gap: 24px;
   z-index: 1;
 `
+const TopBox = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: space-between;
+  gap: 40px;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+`
 const BottomBox = styled.div`
   position: relative;
   flex-basis: 100%;
@@ -134,9 +145,13 @@ const BottomBox = styled.div`
 const CardsWrapper = styled.div`
   display: flex;
   gap: 24px;
+  flex-direction: column;
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: row;
+  }
 `
 const Card = styled.div`
-  min-height: 246px;
+  height: 246px;
   min-height: 246px;
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   padding: 24px;
@@ -267,38 +282,41 @@ const WaveBg = styled.img`
 export const Hero: React.FC = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
+  const { isMobile } = useMatchBreakpoints()
   return (
     <HeroWrapper>
       <Wrapper>
         <InnerWrapper>
-          <LeftTopBox>
-            <Text fontSize="64px" lineHeight="64px" color="secondary" bold>
-              {t('PancakeSwap MEV GARD')}
-            </Text>
-            <Text fontSize="32px" lineHeight="38px" bold>
-              {t('Safeguard your swap against frontrunning and sandwich attacks!')}
-            </Text>
-            <Box>
-              <Text bold>{t('Total volume protected:')}</Text>
-              <FlexGap gap="8px" alignItems="center">
-                <CoinsImg src={getImageUrl('coins.png')} />
-                <Text fontSize="64px" lineHeight="77px" color="secondary" bold>
-                  $84B+
-                </Text>
-              </FlexGap>
-            </Box>
-          </LeftTopBox>
-          <RightTopBox>
-            <ImageWrapper>
-              <HeroImg1 src={getImageUrl('hero1.png')} />
-              <HeroImg2 src={getImageUrl('hero2.png')} />
-              <HeroImg3 src={getImageUrl('hero3.png')} />
-              <HeroImg4 src={getImageUrl('hero4.png')} />
-              <HeroImgBg src={getImageUrl('mev-hero.png')} />
-              <LeftBling src={getImageUrl('bling.png')} />
-              <RightBling src={getImageUrl('bling.png')} />
-            </ImageWrapper>
-          </RightTopBox>
+          <TopBox>
+            <LeftTopBox>
+              <Text fontSize="64px" lineHeight="64px" color="secondary" bold>
+                {t('PancakeSwap MEV GARD')}
+              </Text>
+              <Text fontSize="32px" lineHeight="38px" bold>
+                {t('Safeguard your swap against frontrunning and sandwich attacks!')}
+              </Text>
+              <Box>
+                <Text bold>{t('Total volume protected:')}</Text>
+                <FlexGap gap="8px" alignItems="center">
+                  <CoinsImg src={getImageUrl('coins.png')} />
+                  <Text fontSize="64px" lineHeight="77px" color="secondary" bold>
+                    $84B+
+                  </Text>
+                </FlexGap>
+              </Box>
+            </LeftTopBox>
+            <RightTopBox>
+              <ImageWrapper>
+                <HeroImg1 src={getImageUrl('hero1.png')} />
+                <HeroImg2 src={getImageUrl('hero2.png')} />
+                <HeroImg3 src={getImageUrl('hero3.png')} />
+                <HeroImg4 src={getImageUrl('hero4.png')} />
+                <HeroImgBg src={getImageUrl('mev-hero.png')} />
+                <LeftBling src={getImageUrl('bling.png')} />
+                <RightBling src={getImageUrl('bling.png')} />
+              </ImageWrapper>
+            </RightTopBox>
+          </TopBox>
           <BottomBox>
             <Box>
               <Text fontSize="40px" lineHeight="48px" color="secondary" bold>
@@ -308,22 +326,24 @@ export const Hero: React.FC = () => {
             </Box>
             <CardsWrapper>
               <Card>
-                <FlexGap gap="8px" height="100%">
-                  <FlexGap gap="8px" alignItems="center" flexBasis="30%" position="relative">
-                    <RightBlingInCard src={getImageUrl('bling.png')} />
-                    <LeftBlingInCard src={getImageUrl('bling.png')} />
-                    <HeroWalletImg src={getImageUrl('hero-wallet.png')} alt="hero-wallet" />
+                <Box height="100%">
+                  <FlexGap gap="8px" height="100%">
+                    <FlexGap gap="8px" alignItems="center" flexBasis={isMobile ? '50%' : '30%'} position="relative">
+                      <RightBlingInCard src={getImageUrl('bling.png')} />
+                      <LeftBlingInCard src={getImageUrl('bling.png')} />
+                      <HeroWalletImg src={getImageUrl('hero-wallet.png')} alt="hero-wallet" />
+                    </FlexGap>
+                    <FlexGap flexDirection="column" justifyContent="space-between" height="198px">
+                      <Box>
+                        <Text fontSize="32px" lineHeight="38px" bold mb="8px">
+                          {t('In one click')}
+                        </Text>
+                        <Text>{t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}</Text>
+                      </Box>
+                      <AddMevRpcButton />
+                    </FlexGap>
                   </FlexGap>
-                  <FlexGap flexDirection="column" justifyContent="space-between">
-                    <Box>
-                      <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                        {t('In one click')}
-                      </Text>
-                      <Text>{t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}</Text>
-                    </Box>
-                    <AddMevRpcButton />
-                  </FlexGap>
-                </FlexGap>
+                </Box>
               </Card>
               <Card>
                 <Text fontSize="20px" bold mb="16px">

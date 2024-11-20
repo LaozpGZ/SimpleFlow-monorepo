@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, FlexGap, LinkExternal, Text } from '@pancakeswap/uikit'
+import { Box, Button, FlexGap, LinkExternal, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 import { getImageUrl } from './utils'
@@ -8,6 +8,7 @@ const InfoSectionWrapper = styled.div`
   position: relative;
   background: ${({ theme }) => theme.colors.background};
   min-height: 657px;
+  padding: 80px 24px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
     padding: 160px;
@@ -28,16 +29,33 @@ const InnerWrapper = styled.div`
   gap: 40px;
 `
 const walletConfig = [
-  { title: 'Trust Wallet', image: 'trust.png' },
-  { title: 'SafePal', image: 'safepal.png' },
-  { title: 'Coinbase Wallet', image: 'coinbase.png' },
-  { title: 'TokenPocket', image: 'token-pocket.png' },
-  { title: 'Others', image: 'others.png' },
+  { title: 'Trust Wallet', image: 'trust.png', doc: 'https://trustwallet.com/' },
+  {
+    title: 'SafePal',
+    image: 'safepal.png',
+    doc: 'https://safepalsupport.zendesk.com/hc/en-us/articles/14688426876443-How-to-add-a-Custom-network-in-the-SafePal-software-wallet',
+  },
+  {
+    title: 'Coinbase Wallet',
+    image: 'coinbase.png',
+    doc: ' https://www.coinbase.com/en-sg/learn/wallet/How-to-add-custom-networks-Coinbase-Wallet',
+  },
+  {
+    title: 'TokenPocket',
+    image: 'token-pocket.png',
+    doc: 'https://help.tokenpocket.pro/en/wallet-operation/custom-network-token/how-to-add-custom-network',
+  },
+  {
+    title: 'Others',
+    image: 'others.png',
+    doc: 'https://support.metamask.io/networks-and-sidechains/managing-networks/how-to-add-a-custom-network-rpc/',
+  },
 ]
 
 export const InfoSection: React.FC = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
+  const { isMobile } = useMatchBreakpoints()
   return (
     <InfoSectionWrapper>
       <Wrapper>
@@ -46,12 +64,20 @@ export const InfoSection: React.FC = () => {
             <Text textAlign="center" fontSize="64px" bold color="secondary" lineHeight="76px">
               126,280
             </Text>
-            <Text fontSize="40px" lineHeight="48px" bold>
+            <Text fontSize="40px" lineHeight="48px" textAlign="center" bold>
               {t('Total onboarded addresses')}
             </Text>
           </Box>
-          <Text>{t('Having trouble? Choose your wallet to view the detailed guide on how to apply MEV Guard:')}</Text>
-          <FlexGap maxWidth="588px" gap="40px">
+          <Text textAlign="center">
+            {t('Having trouble? Choose your wallet to view the detailed guide on how to apply MEV Guard:')}
+          </Text>
+          <FlexGap
+            maxWidth="588px"
+            gap="40px"
+            flexWrap={isMobile ? 'wrap' : 'nowrap'}
+            alignItems="center"
+            justifyContent="center"
+          >
             {walletConfig.map((wallet) => (
               <FlexGap flexDirection="column" alignItems="center" gap="8px">
                 <img src={getImageUrl(wallet.image)} alt={wallet.title} width="64px" />

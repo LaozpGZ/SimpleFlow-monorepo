@@ -52,7 +52,6 @@ export const AddMevRpcButton: React.FC = () => {
   return (
     <Button
       width="100%"
-      mb="16px"
       endIcon={
         isLoading ? (
           <SwapLoading />
