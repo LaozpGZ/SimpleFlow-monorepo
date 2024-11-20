@@ -5,7 +5,7 @@ import { AutoColumn, Box, Button, CardBody, useModal } from '@pancakeswap/uikit'
 import { ConfirmationModalContent } from '@pancakeswap/widgets-internal'
 
 import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
-import { FeeAmount, MasterChefV3, NonfungiblePositionManager } from '@pancakeswap/v3-sdk'
+import { FeeAmount, MasterChefV3, NonfungiblePositionManager, Pool } from '@pancakeswap/v3-sdk'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
 import { useDerivedPositionInfo } from 'hooks/v3/useDerivedPositionInfo'
 import useV3DerivedInfo from 'hooks/v3/useV3DerivedInfo'
@@ -36,6 +36,8 @@ import { getViemClients } from 'utils/viem'
 import { hexToBigInt } from 'viem'
 
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
+import { ZapLiquidityWidget } from 'components/ZapLiquidityWidget'
+import { ZAP_V3_POOL_ADDRESSES } from 'config/constants/zapV3'
 import { V3SubmitButton } from './components/V3SubmitButton'
 import LockedDeposit from './formViews/V3FormView/components/LockedDeposit'
 import { PositionPreview } from './formViews/V3FormView/components/PositionPreview'
@@ -99,10 +101,12 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
   const { independentField, typedValue } = formState
 
   const {
+    pool,
     dependentField,
     parsedAmounts,
     position,
     noLiquidity,
+    hasInsufficentBalance,
     currencies,
     errorMessage,
     invalidRange,
@@ -119,6 +123,18 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
     existingPosition,
     formState,
   )
+
+  const hasZapV3Pool = useMemo(() => {
+    if (pool) {
+      const zapV3Whitelist = ZAP_V3_POOL_ADDRESSES[pool.chainId]
+      if (zapV3Whitelist) {
+        if (zapV3Whitelist.length === 0) return true
+        return zapV3Whitelist.includes(Pool.getAddress(pool.token0, pool.token1, pool.fee))
+      }
+    }
+    return false
+  }, [pool])
+
   const { onFieldAInput, onFieldBInput } = useV3MintActionHandlers(noLiquidity)
   const isValid = !errorMessage && !invalidRange
 
@@ -366,6 +382,10 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
     />
   )
 
+  const handleOnZapSubmit = useCallback(() => {
+    router.push(`/liquidity/${tokenId}`)
+  }, [router, tokenId])
+
   return (
     <Page>
       <BodyWrapper>
@@ -432,9 +452,21 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
           <AutoColumn
             style={{
               flexGrow: 1,
+              gap: 16,
             }}
           >
             {buttons}
+            {hasZapV3Pool && hasInsufficentBalance && (
+              <ZapLiquidityWidget
+                tokenId={tokenId}
+                pool={pool}
+                baseCurrency={baseCurrency}
+                baseCurrencyAmount={formattedAmounts[Field.CURRENCY_A]}
+                quoteCurrency={quoteCurrency}
+                quoteCurrencyAmount={formattedAmounts[Field.CURRENCY_B]}
+                onSubmit={handleOnZapSubmit}
+              />
+            )}
           </AutoColumn>
         </CardBody>
       </BodyWrapper>

@@ -25,19 +25,15 @@ import { CommonBasesType } from 'components/SearchModal/types'
 import { isAddressEqual } from 'utils'
 import WalletModalManager from 'components/WalletModalManager'
 
-export enum InitDepositToken {
-  BASE_CURRENCY,
-  QUOTE_CURRENCY,
-}
-
 interface ZapLiquidityProps {
   tickLower?: number
   tickUpper?: number
   pool?: Pool | null
+  tokenId?: string | null
   baseCurrency?: Currency | null
+  baseCurrencyAmount?: string | null
   quoteCurrency?: Currency | null
-  initDepositToken?: InitDepositToken
-  initAmount?: string
+  quoteCurrencyAmount?: string | null
   onSubmit?: () => void
 }
 
@@ -51,11 +47,12 @@ const NATIVE_CURRENCY_ADDRESS = getAddress('0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeee
 export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
   tickLower,
   tickUpper,
+  tokenId,
   pool,
   baseCurrency,
+  baseCurrencyAmount,
   quoteCurrency,
-  initDepositToken,
-  initAmount,
+  quoteCurrencyAmount,
   onSubmit,
 }) => {
   const { t } = useTranslation()
@@ -86,17 +83,31 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
 
   const handleOnClick = useCallback(() => {
     setDepositTokens(
-      initDepositToken === InitDepositToken.BASE_CURRENCY
-        ? baseCurrency?.isNative
-          ? NATIVE_CURRENCY_ADDRESS
-          : baseCurrency?.wrapped?.address || ''
-        : quoteCurrency?.isNative
-        ? NATIVE_CURRENCY_ADDRESS
-        : quoteCurrency?.wrapped?.address || '',
+      [
+        baseCurrencyAmount && baseCurrencyAmount !== '0'
+          ? baseCurrency?.isNative
+            ? NATIVE_CURRENCY_ADDRESS
+            : baseCurrency?.wrapped?.address || ''
+          : '',
+        quoteCurrencyAmount && quoteCurrencyAmount !== '0'
+          ? quoteCurrency?.isNative
+            ? NATIVE_CURRENCY_ADDRESS
+            : quoteCurrency?.wrapped?.address || ''
+          : '',
+      ]
+        .filter(Boolean)
+        .join(','),
     )
-    setAmounts(initAmount || '')
+    setAmounts(
+      [
+        baseCurrencyAmount && baseCurrencyAmount !== '0' ? baseCurrencyAmount : '',
+        quoteCurrencyAmount && quoteCurrencyAmount !== '0' ? quoteCurrencyAmount : '',
+      ]
+        .filter(Boolean)
+        .join(','),
+    )
     setIsModalOpen(true)
-  }, [baseCurrency, quoteCurrency, initDepositToken, initAmount])
+  }, [baseCurrency, quoteCurrency, baseCurrencyAmount, quoteCurrencyAmount])
 
   const handleOnDismiss = useCallback(() => {
     setIsModalOpen(false)
@@ -220,6 +231,7 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
             chainId={chainId}
             initTickLower={tickLower ? +tickLower : undefined}
             initTickUpper={tickUpper ? +tickUpper : undefined}
+            positionId={tokenId || undefined}
             initAmounts={amounts}
             initDepositTokens={depositTokens}
             onAddTokens={handleAddTokens}

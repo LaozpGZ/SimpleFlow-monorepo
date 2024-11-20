@@ -62,7 +62,7 @@ import { useSendTransaction, useWalletClient } from 'wagmi'
 
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { useDensityChartData } from 'views/AddLiquidityV3/hooks/useDensityChartData'
-import { InitDepositToken, ZapLiquidityWidget } from 'components/ZapLiquidityWidget'
+import { ZapLiquidityWidget } from 'components/ZapLiquidityWidget'
 import { ZAP_V3_POOL_ADDRESSES } from 'config/constants/zapV3'
 import LockedDeposit from './components/LockedDeposit'
 import { PositionPreview } from './components/PositionPreview'
@@ -521,6 +521,10 @@ export default function V3FormView({
     [price, feeAmount, invertPrice, onBothRangeInput, baseCurrency, quoteCurrency],
   )
 
+  const handleOnZapSubmit = useCallback(() => {
+    router.push('/liquidity/positions')
+  }, [router])
+
   const {
     isLoading: isChartDataLoading,
     error: chartDataError,
@@ -593,14 +597,10 @@ export default function V3FormView({
             tickUpper={tickUpper}
             pool={pool}
             baseCurrency={baseCurrency}
+            baseCurrencyAmount={formattedAmounts[Field.CURRENCY_A]}
             quoteCurrency={quoteCurrency}
-            initDepositToken={
-              independentField === Field.CURRENCY_A ? InitDepositToken.BASE_CURRENCY : InitDepositToken.QUOTE_CURRENCY
-            }
-            initAmount={typedValue}
-            onSubmit={() => {
-              router.push('/liquidity/positions')
-            }}
+            quoteCurrencyAmount={formattedAmounts[Field.CURRENCY_B]}
+            onSubmit={handleOnZapSubmit}
           />
         )}
       </HideMedium>
@@ -817,16 +817,10 @@ export default function V3FormView({
                 tickUpper={tickUpper}
                 pool={pool}
                 baseCurrency={baseCurrency}
+                baseCurrencyAmount={formattedAmounts[Field.CURRENCY_A]}
                 quoteCurrency={quoteCurrency}
-                initDepositToken={
-                  independentField === Field.CURRENCY_A
-                    ? InitDepositToken.BASE_CURRENCY
-                    : InitDepositToken.QUOTE_CURRENCY
-                }
-                initAmount={typedValue}
-                onSubmit={() => {
-                  router.push('/liquidity/positions')
-                }}
+                quoteCurrencyAmount={formattedAmounts[Field.CURRENCY_B]}
+                onSubmit={handleOnZapSubmit}
               />
             )}
           </MediumOnly>
