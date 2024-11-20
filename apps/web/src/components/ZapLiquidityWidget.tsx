@@ -44,6 +44,9 @@ const LiquidityWidget = dynamic(
 
 const NATIVE_CURRENCY_ADDRESS = getAddress('0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE')
 
+const getCurrencyAddress = (currency: Currency | undefined | null): string =>
+  currency?.isNative ? NATIVE_CURRENCY_ADDRESS : currency?.wrapped?.address || ''
+
 export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
   tickLower,
   tickUpper,
@@ -84,16 +87,8 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
   const handleOnClick = useCallback(() => {
     setDepositTokens(
       [
-        baseCurrencyAmount && baseCurrencyAmount !== '0'
-          ? baseCurrency?.isNative
-            ? NATIVE_CURRENCY_ADDRESS
-            : baseCurrency?.wrapped?.address || ''
-          : '',
-        quoteCurrencyAmount && quoteCurrencyAmount !== '0'
-          ? quoteCurrency?.isNative
-            ? NATIVE_CURRENCY_ADDRESS
-            : quoteCurrency?.wrapped?.address || ''
-          : '',
+        baseCurrencyAmount && baseCurrencyAmount !== '0' ? getCurrencyAddress(baseCurrency) : '',
+        quoteCurrencyAmount && quoteCurrencyAmount !== '0' ? getCurrencyAddress(quoteCurrency) : '',
       ]
         .filter(Boolean)
         .join(','),
@@ -135,7 +130,7 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
 
   const handleSelectToken = useCallback(
     (token: Currency) => {
-      const selectedTokenAddress = token?.isNative ? NATIVE_CURRENCY_ADDRESS : token?.wrapped?.address || ''
+      const selectedTokenAddress = getCurrencyAddress(token)
       const indexOfToken = depositTokens
         .split(',')
         .findIndex((depositToken) => isAddressEqual(depositToken, selectedTokenAddress))
