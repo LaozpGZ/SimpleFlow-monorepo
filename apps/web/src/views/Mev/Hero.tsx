@@ -2,8 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, FlexGap, Text } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import styled, { css, keyframes } from 'styled-components'
-import waveBg from './images/hero-wave.png'
-import hero from './images/mev-hero.png'
+
 import { getImageUrl } from './utils'
 
 const blingAnimation = keyframes`
@@ -286,7 +285,7 @@ export const Hero: React.FC = () => {
               <HeroImg2 src={getImageUrl('hero2.png')} />
               <HeroImg3 src={getImageUrl('hero3.png')} />
               <HeroImg4 src={getImageUrl('hero4.png')} />
-              <HeroImgBg src={hero.src} />
+              <HeroImgBg src={getImageUrl('mev-hero.png')} />
               <LeftBling src={getImageUrl('bling.png')} />
               <RightBling src={getImageUrl('bling.png')} />
             </ImageWrapper>
@@ -335,7 +334,7 @@ export const Hero: React.FC = () => {
           </BottomBox>
         </InnerWrapper>
       </Wrapper>
-      <WaveBg src={waveBg.src} />
+      <WaveBg src={getImageUrl('hero-wave.png')} />
     </HeroWrapper>
   )
 }

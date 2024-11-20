@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
-import introWaveBg from './images/intro-wave.png'
+
 import { getImageUrl } from './utils'
 
 const MevIntroSectionWrapper = styled.div`
@@ -98,7 +98,7 @@ export const MevIntroSection: React.FC = () => {
           </CardsWrapper>
         </InnerWrapper>
       </Wrapper>
-      <WaveBg src={introWaveBg.src} />
+      <WaveBg src={getImageUrl('intro-wave.png')} />
     </MevIntroSectionWrapper>
   )
 }
