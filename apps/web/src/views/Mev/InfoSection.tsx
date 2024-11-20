@@ -1,11 +1,12 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, FlexGap, LinkExternal, Text } from '@pancakeswap/uikit'
+import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 import { getImageUrl } from './utils'
 
 const InfoSectionWrapper = styled.div`
   position: relative;
-  background: #faf9fa;
+  background: ${({ theme }) => theme.colors.background};
   min-height: 657px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
@@ -36,6 +37,7 @@ const walletConfig = [
 
 export const InfoSection: React.FC = () => {
   const { t } = useTranslation()
+  const { theme } = useTheme()
   return (
     <InfoSectionWrapper>
       <Wrapper>
@@ -61,7 +63,7 @@ export const InfoSection: React.FC = () => {
           </FlexGap>
           <FlexGap flexDirection="column" gap="24px" justifyContent="center" alignItems="center">
             <Text>{t('or')}</Text>
-            <Button endIcon={<LinkExternal color="white" />}>{t('View FAQ docs')}</Button>
+            <Button endIcon={<LinkExternal color={theme.colors.background} />}>{t('View FAQ docs')}</Button>
           </FlexGap>
         </InnerWrapper>
       </Wrapper>

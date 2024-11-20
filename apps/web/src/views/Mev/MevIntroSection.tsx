@@ -1,13 +1,18 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text } from '@pancakeswap/uikit'
+import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 
 import { getImageUrl } from './utils'
 
 const MevIntroSectionWrapper = styled.div`
   position: relative;
-  background: linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%),
-    linear-gradient(139.73deg, #e5fdff 0%, #f3efff 100%);
+  background: ${({ theme }) =>
+    theme.isDark
+      ? `linear-gradient(180deg, rgba(0, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0) 100%),
+      linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)`
+      : `linear-gradient(180deg, #ffffff 0%, rgba(255, 255, 255, 0) 100%),
+    linear-gradient(139.73deg, #e5fdff 0%, #f3efff 100%)`};
 
   min-height: 700px;
   ${({ theme }) => theme.mediaQueries.lg} {
@@ -61,6 +66,7 @@ export const ImageBox = styled.img`
 
 export const MevIntroSection: React.FC = () => {
   const { t } = useTranslation()
+  const { theme } = useTheme()
   return (
     <MevIntroSectionWrapper>
       <Wrapper>
@@ -98,7 +104,7 @@ export const MevIntroSection: React.FC = () => {
           </CardsWrapper>
         </InnerWrapper>
       </Wrapper>
-      <WaveBg src={getImageUrl('intro-wave.png')} />
+      <WaveBg src={getImageUrl(theme.isDark ? 'intro-wave-dark.png' : 'intro-wave.png')} />
     </MevIntroSectionWrapper>
   )
 }

@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, FlexGap, Text } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import useTheme from 'hooks/useTheme'
 import styled, { css, keyframes } from 'styled-components'
 
 import { getImageUrl } from './utils'
@@ -71,9 +72,11 @@ const floatWithRotateAnimation = keyframes`
 
 const HeroWrapper = styled(Box)`
   position: relative;
-  background: linear-gradient(139.73deg, #e5fdff 0%, #f3efff 100%);
+  background: ${({ theme }) =>
+    theme.isDark
+      ? `linear-gradient(139.73deg, #313D5C 0%, #3D2A54 100%)`
+      : `linear-gradient(139.73deg, #e5fdff 0%, #f3efff 100%)`};
   min-height: 100vh;
-
   ${({ theme }) => theme.mediaQueries.lg} {
     padding: 160px;
   }
@@ -258,6 +261,7 @@ const WaveBg = styled.img`
 
 export const Hero: React.FC = () => {
   const { t } = useTranslation()
+  const { theme } = useTheme()
   return (
     <HeroWrapper>
       <Wrapper>
@@ -334,7 +338,7 @@ export const Hero: React.FC = () => {
           </BottomBox>
         </InnerWrapper>
       </Wrapper>
-      <WaveBg src={getImageUrl('hero-wave.png')} />
+      <WaveBg src={getImageUrl(theme.isDark ? 'hero-wave-dark.png' : 'hero-wave.png')} />
     </HeroWrapper>
   )
 }
