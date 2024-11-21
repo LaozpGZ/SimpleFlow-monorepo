@@ -164,13 +164,15 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
   const positionManager = useV3NFTPositionManagerContract()
   const [allowedSlippage] = useUserSlippage() // custom from users
 
-  const isStakedInMCv3 = useMemo(
-    () => Boolean(tokenId && stakedTokenIds.find((id) => id === BigInt(tokenId))),
-    [tokenId, stakedTokenIds],
-  )
+  const isStakedInMCv3 = useMemo(() => {
+    if (tokenIdsInMCv3Loading) {
+      return 'loading'
+    }
+    return tokenId && stakedTokenIds.find((id) => id === BigInt(tokenId)) ? 'true' : 'false'
+  }, [tokenIdsInMCv3Loading, tokenId, stakedTokenIds])
 
-  const manager = isStakedInMCv3 ? masterchefV3 : positionManager
-  const interfaceManager = isStakedInMCv3 ? MasterChefV3 : NonfungiblePositionManager
+  const manager = isStakedInMCv3 === 'true' ? masterchefV3 : positionManager
+  const interfaceManager = isStakedInMCv3 === 'true' ? MasterChefV3 : NonfungiblePositionManager
 
   const {
     approvalState: approvalA,
@@ -456,7 +458,7 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
             }}
           >
             {buttons}
-            {hasZapV3Pool && hasInsufficentBalance && (
+            {hasZapV3Pool && hasInsufficentBalance && isStakedInMCv3 === 'false' && (
               <ZapLiquidityWidget
                 tokenId={tokenId}
                 pool={pool}
