@@ -315,11 +315,11 @@ export const Hero: React.FC = () => {
                 {t('Safeguard your swap against frontrunning and sandwich attacks!')}
               </Text>
               <Box>
-                <Text bold>{t('Total volume protected:')}</Text>
+                <Text bold>{t('Total transactions protected:')}</Text>
                 <FlexGap gap="8px" alignItems="center">
                   <CoinsImg src={getImageUrl('coins.png')} />
                   <Text fontSize="64px" lineHeight="77px" color="secondary" bold>
-                    $84B+
+                    1.2M+
                   </Text>
                 </FlexGap>
               </Box>
