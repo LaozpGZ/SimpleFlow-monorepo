@@ -346,23 +346,49 @@ export const Hero: React.FC = () => {
             <CardsWrapper>
               <Card>
                 <Box height="100%">
-                  <FlexGap gap="8px" height="100%">
-                    <FlexGap gap="8px" alignItems="center" flexBasis={isMobile ? '50%' : '30%'} position="relative">
-                      <RightBlingInCard src={getImageUrl('bling.png')} />
-                      <LeftBlingInCard src={getImageUrl('bling.png')} />
-                      <HeroWalletImg src={getImageUrl('hero-wallet.png')} alt="hero-wallet" />
-                    </FlexGap>
-                    <FlexGap flexDirection="column" justifyContent="space-between" height="198px">
-                      <Box>
-                        <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                          {addedToWallet ? t('You are Protected!') : t('In one click')}
-                        </Text>
-                        <Text>
-                          {addedToWallet
-                            ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
-                            : t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}
-                        </Text>
-                      </Box>
+                  <FlexGap gap={isMobile ? '16px' : '8px'} height="100%" flexDirection={isMobile ? 'column' : 'row'}>
+                    {isMobile ? (
+                      <FlexGap>
+                        <FlexGap gap="8px" alignItems="center" flexBasis="40%" position="relative">
+                          <RightBlingInCard src={getImageUrl('bling.png')} />
+                          <LeftBlingInCard src={getImageUrl('bling.png')} />
+                          <HeroWalletImg src={getImageUrl('hero-wallet.png')} alt="hero-wallet" />
+                        </FlexGap>
+                        <Box style={{ flexBasis: '60%' }}>
+                          <Text fontSize="32px" lineHeight="38px" bold mb="8px">
+                            {addedToWallet ? t('You are Protected!') : t('In one click')}
+                          </Text>
+                          <Text>
+                            {addedToWallet
+                              ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
+                              : t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}
+                          </Text>
+                        </Box>
+                      </FlexGap>
+                    ) : (
+                      <FlexGap gap="8px" alignItems="center" flexBasis={isMobile ? '50%' : '30%'} position="relative">
+                        <RightBlingInCard src={getImageUrl('bling.png')} />
+                        <LeftBlingInCard src={getImageUrl('bling.png')} />
+                        <HeroWalletImg src={getImageUrl('hero-wallet.png')} alt="hero-wallet" />
+                      </FlexGap>
+                    )}
+                    <FlexGap
+                      flexDirection="column"
+                      justifyContent="space-between"
+                      height={isMobile ? undefined : '198px'}
+                    >
+                      {!isMobile && (
+                        <Box>
+                          <Text fontSize="32px" lineHeight="38px" bold mb="8px">
+                            {addedToWallet ? t('You are Protected!') : t('In one click')}
+                          </Text>
+                          <Text>
+                            {addedToWallet
+                              ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
+                              : t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}
+                          </Text>
+                        </Box>
+                      )}
                       <AddMevRpcButton addedToWallet={addedToWallet} setAddedToWallet={setAddedToWallet} />
                     </FlexGap>
                   </FlexGap>
