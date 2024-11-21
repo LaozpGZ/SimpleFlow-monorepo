@@ -373,8 +373,8 @@ export const Hero: React.FC = () => {
                   {t('Or add manually this RPC endpoint to your wallet')}
                 </Text>
                 <FlexGap gap="8px" flexDirection="column">
-                  {Object.entries(rpcData).map(([key, value], index) => (
-                    <FlexGap gap="8px" alignItems="center" key={key}>
+                  {Object.entries(rpcData).map(([key, value]) => (
+                    <FlexGap gap="8px" alignItems="center" key={key} flexWrap={isMobile ? 'wrap' : 'nowrap'}>
                       <Text>{key}:</Text>
                       <UnderLineBox />
                       <Text bold>{value}</Text>
