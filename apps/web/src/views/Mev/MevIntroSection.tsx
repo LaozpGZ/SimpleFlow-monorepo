@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { FlexGap, Text } from '@pancakeswap/uikit'
+import { FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 
@@ -82,15 +82,22 @@ export const ImageBox = styled.img`
 export const MevIntroSection: React.FC = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
+  const { isMobile } = useMatchBreakpoints()
   return (
     <MevIntroSectionWrapper>
       <Wrapper>
         <InnerWrapper>
           <FlexGap width="100%" gap="8px" alignItems="center" justifyContent="center" flexWrap="wrap">
-            <Text fontSize="64px" lineHeight="78px" bold textAlign="center">
+            <Text fontSize={isMobile ? '40px' : '64px'} lineHeight={isMobile ? '48px' : '64px'} bold textAlign="center">
               {t('Free and Automated')}
             </Text>
-            <Text fontSize="64px" lineHeight="78px" bold color="secondary" textAlign="center">
+            <Text
+              fontSize={isMobile ? '40px' : '64px'}
+              lineHeight={isMobile ? '48px' : '64px'}
+              bold
+              color="secondary"
+              textAlign="center"
+            >
               {t('MEV Protection')}
             </Text>
           </FlexGap>
