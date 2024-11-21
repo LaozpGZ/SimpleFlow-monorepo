@@ -303,10 +303,15 @@ export const Hero: React.FC = () => {
         <InnerWrapper>
           <TopBox>
             <LeftTopBox>
-              <Text fontSize="64px" lineHeight="64px" color="secondary" bold>
+              <Text
+                fontSize={isMobile ? '40px' : '64px'}
+                lineHeight={isMobile ? '48px' : '64px'}
+                color="secondary"
+                bold
+              >
                 {t('PancakeSwap MEV GARD')}
               </Text>
-              <Text fontSize="32px" lineHeight="38px" bold>
+              <Text fontSize={isMobile ? '24px' : '32px'} lineHeight={isMobile ? '36px' : '38px'} bold>
                 {t('Safeguard your swap against frontrunning and sandwich attacks!')}
               </Text>
               <Box>
