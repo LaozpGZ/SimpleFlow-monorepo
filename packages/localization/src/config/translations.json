@@ -3656,5 +3656,7 @@
   "Fast and reliable RPC endpoint for your daily usage, beyond Swapping and trading.": "Fast and reliable RPC endpoint for your daily usage, beyond Swapping and trading.",
   "Easy to set up and completely free solution for all kinds of Swappers.": "Easy to set up and completely free solution for all kinds of Swappers.",
   "Frontrunning and sandwich attacks occur when someone identifies your transaction in the public mempool and trades ahead of you. This can result in you receiving a worse price and potentially losing the entire amount of slippage tolerance.": "Frontrunning and sandwich attacks occur when someone identifies your transaction in the public mempool and trades ahead of you. This can result in you receiving a worse price and potentially losing the entire amount of slippage tolerance.",
-  "Secure your swaps on BNB Chain with MEV guard.": "Secure your swaps on BNB Chain with MEV guard."
+  "Secure your swaps on BNB Chain with MEV guard.": "Secure your swaps on BNB Chain with MEV guard.",
+  "You are Protected!": "You are Protected!",
+  "Added automatically on BNB Smart Chain: PancakeSwap MEV Guard": "Added automatically on BNB Smart Chain: PancakeSwap MEV Guard"
 }

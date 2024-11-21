@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
+import { useState } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
 
@@ -295,6 +296,7 @@ export const Hero: React.FC = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
+  const [addedToWallet, setAddedToWallet] = useState(false)
   return (
     <HeroWrapper>
       <Wrapper>
@@ -348,11 +350,15 @@ export const Hero: React.FC = () => {
                     <FlexGap flexDirection="column" justifyContent="space-between" height="198px">
                       <Box>
                         <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                          {t('In one click')}
+                          {addedToWallet ? t('You are Protected!') : t('In one click')}
                         </Text>
-                        <Text>{t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}</Text>
+                        <Text>
+                          {addedToWallet
+                            ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
+                            : t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}
+                        </Text>
                       </Box>
-                      <AddMevRpcButton />
+                      <AddMevRpcButton addedToWallet={addedToWallet} setAddedToWallet={setAddedToWallet} />
                     </FlexGap>
                   </FlexGap>
                 </Box>

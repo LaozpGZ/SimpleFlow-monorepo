@@ -6,10 +6,13 @@ import useTheme from 'hooks/useTheme'
 import { useCallback, useState } from 'react'
 import { bsc } from 'viem/chains'
 
-export const AddMevRpcButton: React.FC = () => {
+export const AddMevRpcButton: React.FC<{
+  addedToWallet: boolean
+  setAddedToWallet: (addedToWallet: boolean) => void
+}> = ({ addedToWallet, setAddedToWallet }) => {
   const { t } = useTranslation()
   const { account } = useActiveWeb3React()
-  const [addedToWallet, setAddedToWallet] = useState(false)
+
   const [isLoading, setIsLoading] = useState(false)
   const { theme } = useTheme()
 
@@ -63,7 +66,7 @@ export const AddMevRpcButton: React.FC = () => {
       isLoading={isLoading}
       onClick={addedToWallet && !isLoading ? undefined : addRpc}
     >
-      {isLoading ? t('Adding to Wallet') : addedToWallet ? t('Added to wallet') : t('Add to Wallet')}
+      {isLoading ? t('Adding to Wallet') : addedToWallet ? t('Added to Wallet!') : t('Add to Wallet')}
     </Button>
   )
 }
