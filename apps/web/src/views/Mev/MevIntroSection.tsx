@@ -69,7 +69,7 @@ const Card = styled.div`
     flex-basis: calc(50% - 40px / 2);
   }
   ${({ theme }) => theme.mediaQueries.xl} {
-    flex-basis: calc(33.3333% - 40px / 3);
+    flex-basis: calc(33.3333% - 80px / 3);
   }
 `
 export const ImageBox = styled.img`

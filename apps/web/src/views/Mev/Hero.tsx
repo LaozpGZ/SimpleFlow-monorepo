@@ -370,9 +370,9 @@ export const Hero: React.FC = () => {
                 <FlexGap gap="8px" flexDirection="column">
                   {Object.entries(rpcData).map(([key, value], index) => (
                     <FlexGap gap="8px" alignItems="center" key={key}>
-                      <Text bold>{key}:</Text>
+                      <Text>{key}:</Text>
                       <UnderLineBox />
-                      <Text>{value}</Text>
+                      <Text bold>{value}</Text>
                     </FlexGap>
                   ))}
                 </FlexGap>
