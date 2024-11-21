@@ -136,7 +136,7 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
   }, [pool])
 
   const { onFieldAInput, onFieldBInput } = useV3MintActionHandlers(noLiquidity)
-  const isValid = !errorMessage && !invalidRange
+  const isValid = !errorMessage && !invalidRange && !tokenIdsInMCv3Loading
 
   // txn values
   const [deadline] = useTransactionDeadline() // custom from users settings
