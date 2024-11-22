@@ -300,12 +300,12 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
   const addIsWarning = useIsTransactionWarning(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
   const handleDismissConfirmation = useCallback(() => {
+    setTxnErrorMessage(undefined)
     // if there was a tx hash, we want to clear the input
     if (txHash && tokenId) {
       onFieldAInput('')
       router.push(`/liquidity/${tokenId}`)
     }
-    setTxnErrorMessage(undefined)
   }, [onFieldAInput, router, txHash, tokenId])
 
   const pendingText = useMemo(() => {
