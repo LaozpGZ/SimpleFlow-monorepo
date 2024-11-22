@@ -171,8 +171,10 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
     return tokenId && stakedTokenIds.find((id) => id === BigInt(tokenId)) ? 'true' : 'false'
   }, [tokenIdsInMCv3Loading, tokenId, stakedTokenIds])
 
-  const manager = isStakedInMCv3 === 'true' ? masterchefV3 : positionManager
-  const interfaceManager = isStakedInMCv3 === 'true' ? MasterChefV3 : NonfungiblePositionManager
+  const manager =
+    isStakedInMCv3 !== 'loading' ? (isStakedInMCv3 === 'true' ? masterchefV3 : positionManager) : undefined
+  const interfaceManager =
+    isStakedInMCv3 !== 'loading' ? (isStakedInMCv3 === 'true' ? MasterChefV3 : NonfungiblePositionManager) : undefined
 
   const {
     approvalState: approvalA,
