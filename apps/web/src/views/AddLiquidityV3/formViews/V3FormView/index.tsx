@@ -243,7 +243,7 @@ export default function V3FormView({
     [dependentField]: parsedAmounts[dependentField]?.toSignificant(6) ?? '',
   }
 
-  //   // get the max amounts user can add
+  // Get the max amounts user can add
   const maxAmounts: { [field in Field]?: CurrencyAmount<Currency> } = useMemo(
     () =>
       [Field.CURRENCY_A, Field.CURRENCY_B].reduce((accumulator, field) => {
