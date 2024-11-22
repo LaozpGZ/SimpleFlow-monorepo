@@ -11,7 +11,7 @@ export const MevLanding: React.FC<PageProps> = ({ txCount, walletCount }) => {
     <Wrapper>
       <Hero txCount={txCount} />
       <MevIntroSection />
-      <InfoSection />
+      <InfoSection walletCount={walletCount} />
     </Wrapper>
   )
 }

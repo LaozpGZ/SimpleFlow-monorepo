@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, FlexGap, LinkExternal, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
+import { useMemo } from 'react'
 import { styled } from 'styled-components'
 import { getImageUrl } from './utils'
 
@@ -52,17 +53,22 @@ const walletConfig = [
   },
 ]
 
-export const InfoSection: React.FC = () => {
+export const InfoSection: React.FC<{ walletCount: number }> = ({ walletCount }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
+  const walletCountDisplay = useMemo(() => {
+    if (walletCount < 126780) return '126,780'
+    return walletCount.toLocaleString()
+  }, [walletCount])
+
   return (
     <InfoSectionWrapper>
       <Wrapper>
         <InnerWrapper>
           <Box>
             <Text textAlign="center" fontSize="64px" bold color="secondary" lineHeight="76px">
-              126,280
+              {walletCountDisplay}
             </Text>
             <Text fontSize="40px" lineHeight="48px" textAlign="center" bold>
               {t('Total onboarded addresses')}
