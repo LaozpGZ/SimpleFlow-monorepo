@@ -9,7 +9,7 @@ export const Wrapper = styled.div``
 export const MevLanding: React.FC<PageProps> = ({ txCount, walletCount }) => {
   return (
     <Wrapper>
-      <Hero />
+      <Hero txCount={txCount} />
       <MevIntroSection />
       <InfoSection />
     </Wrapper>

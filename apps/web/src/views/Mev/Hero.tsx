@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
 
@@ -292,11 +292,15 @@ const WaveBg = styled.img`
   z-index: 0;
 `
 
-export const Hero: React.FC = () => {
+export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
   const [addedToWallet, setAddedToWallet] = useState(false)
+  const txCountDisplay = useMemo(() => {
+    if (txCount < 1000000) return '1M+'
+    return `${(txCount / 1000000).toFixed(1)}M+`
+  }, [txCount])
   return (
     <HeroWrapper>
       <Wrapper>
@@ -319,7 +323,7 @@ export const Hero: React.FC = () => {
                 <FlexGap gap="8px" alignItems="center">
                   <CoinsImg src={getImageUrl('coins.png')} />
                   <Text fontSize="64px" lineHeight="77px" color="secondary" bold>
-                    1.2M+
+                    {txCountDisplay}
                   </Text>
                 </FlexGap>
               </Box>
