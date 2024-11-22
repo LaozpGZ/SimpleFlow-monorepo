@@ -194,79 +194,86 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
   const showApprovalB = approvalB !== ApprovalState.APPROVED && !!parsedAmounts[Field.CURRENCY_B]
 
   const onIncrease = useCallback(async () => {
-    if (!chainId || !sendTransactionAsync || !account || !interfaceManager || !manager) return
-
-    if (tokenIdsInMCv3Loading || !positionManager || !baseCurrency || !quoteCurrency) {
+    if (
+      tokenIdsInMCv3Loading ||
+      !chainId ||
+      !sendTransactionAsync ||
+      !account ||
+      !interfaceManager ||
+      !manager ||
+      !positionManager ||
+      !baseCurrency ||
+      !quoteCurrency ||
+      !deadline ||
+      !position
+    )
       return
-    }
 
-    if (position && account && deadline) {
-      const useNative = baseCurrency.isNative ? baseCurrency : quoteCurrency.isNative ? quoteCurrency : undefined
-      const { calldata, value } =
-        hasExistingPosition && tokenId
-          ? interfaceManager.addCallParameters(position, {
-              tokenId,
-              slippageTolerance: basisPointsToPercent(allowedSlippage),
-              deadline: deadline.toString(),
-              useNative,
-            })
-          : interfaceManager.addCallParameters(position, {
-              slippageTolerance: basisPointsToPercent(allowedSlippage),
-              recipient: account,
-              deadline: deadline.toString(),
-              useNative,
-              createPool: noLiquidity,
-            })
+    const useNative = baseCurrency.isNative ? baseCurrency : quoteCurrency.isNative ? quoteCurrency : undefined
+    const { calldata, value } =
+      hasExistingPosition && tokenId
+        ? interfaceManager.addCallParameters(position, {
+            tokenId,
+            slippageTolerance: basisPointsToPercent(allowedSlippage),
+            deadline: deadline.toString(),
+            useNative,
+          })
+        : interfaceManager.addCallParameters(position, {
+            slippageTolerance: basisPointsToPercent(allowedSlippage),
+            recipient: account,
+            deadline: deadline.toString(),
+            useNative,
+            createPool: noLiquidity,
+          })
 
-      setAttemptingTxn(true)
-      getViemClients({ chainId })
-        ?.estimateGas({
+    setAttemptingTxn(true)
+    getViemClients({ chainId })
+      ?.estimateGas({
+        account,
+        to: manager.address,
+        data: calldata,
+        value: hexToBigInt(value),
+      })
+      .then((gasLimit) => {
+        return sendTransactionAsync({
           account,
           to: manager.address,
           data: calldata,
           value: hexToBigInt(value),
+          gas: calculateGasMargin(gasLimit),
+          chainId,
         })
-        .then((gasLimit) => {
-          return sendTransactionAsync({
-            account,
-            to: manager.address,
-            data: calldata,
-            value: hexToBigInt(value),
-            gas: calculateGasMargin(gasLimit),
-            chainId,
-          })
-        })
-        .then((response) => {
-          const baseAmount = formatRawAmount(
-            parsedAmounts[Field.CURRENCY_A]?.quotient?.toString() ?? '0',
-            baseCurrency.decimals,
-            4,
-          )
-          const quoteAmount = formatRawAmount(
-            parsedAmounts[Field.CURRENCY_B]?.quotient?.toString() ?? '0',
-            quoteCurrency.decimals,
-            4,
-          )
+      })
+      .then((response) => {
+        const baseAmount = formatRawAmount(
+          parsedAmounts[Field.CURRENCY_A]?.quotient?.toString() ?? '0',
+          baseCurrency.decimals,
+          4,
+        )
+        const quoteAmount = formatRawAmount(
+          parsedAmounts[Field.CURRENCY_B]?.quotient?.toString() ?? '0',
+          quoteCurrency.decimals,
+          4,
+        )
 
-          setAttemptingTxn(false)
-          addTransaction(
-            { hash: response },
-            {
-              type: 'increase-liquidity-v3',
-              summary: `Increase ${baseAmount} ${baseCurrency?.symbol} and ${quoteAmount} ${quoteCurrency?.symbol}`,
-            },
-          )
-          setTxHash(response)
-        })
-        .catch((err) => {
-          // we only care if the error is something _other_ than the user rejected the tx
-          if (!isUserRejected(err)) {
-            setTxnErrorMessage(transactionErrorToUserReadableMessage(err, t))
-          }
-          setAttemptingTxn(false)
-          console.error(err)
-        })
-    }
+        setAttemptingTxn(false)
+        addTransaction(
+          { hash: response },
+          {
+            type: 'increase-liquidity-v3',
+            summary: `Increase ${baseAmount} ${baseCurrency?.symbol} and ${quoteAmount} ${quoteCurrency?.symbol}`,
+          },
+        )
+        setTxHash(response)
+      })
+      .catch((err) => {
+        // we only care if the error is something _other_ than the user rejected the tx
+        if (!isUserRejected(err)) {
+          setTxnErrorMessage(transactionErrorToUserReadableMessage(err, t))
+        }
+        setAttemptingTxn(false)
+        console.error(err)
+      })
   }, [
     account,
     addTransaction,
