@@ -26,5 +26,5 @@ export const useUserIsInAffiliateListData = () => {
     enabled: Boolean(account),
   })
 
-  return useMemo(() => data, [data])
+  return useMemo(() => data ?? false, [data])
 }
