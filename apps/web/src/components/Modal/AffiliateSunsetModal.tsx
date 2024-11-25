@@ -32,9 +32,6 @@ export function AffiliateSunsetModal() {
       modalHeader={t('Important Update: Closure of the PancakeSwap Affiliate Program')}
       header={
         <>
-          <Text bold fontSize="1.25rem">
-            {t('Important Update')}
-          </Text>
           <Text mt="1.5rem">
             {t(`The PancakeSwap Affiliate Program will officially close on %time%`, {
               time: 'December 31, 2024',
