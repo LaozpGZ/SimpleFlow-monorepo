@@ -22,8 +22,9 @@ function Trans({ text, data = {} }: { text: string; data?: { [key: string]: Reac
 export function AffiliateSunsetModal() {
   const { t } = useTranslation()
   const isInList = useUserIsInAffiliateListData()
-  const [ack, setACK] = useUserAcknowledgement('affiliate-referral-sunset-v1')
+  const [ack, setACK] = useUserAcknowledgement('affiliate-referral-sunset-v2')
   const onConfirm = useCallback(() => setACK(true), [setACK])
+  console.log(isInList, 'isInList')
 
   const [onOptionsConfirmModalPresent] = useModal(
     <DisclaimerModal
@@ -58,6 +59,14 @@ export function AffiliateSunsetModal() {
                 ),
               }}
             />
+          </Text>
+          <Text mt="1.5rem">
+            {t(
+              'If you were referred by an affiliate who enabled commission sharing, please note that trading discounts from their referral link ended on November 25, 2024, and you will no longer receive discounts from this date onwards.',
+            )}
+          </Text>
+          <Text mt="1.5rem">
+            {t('Thank you for your understanding and being a valued PancakeSwap community member.')}
           </Text>
         </>
       }

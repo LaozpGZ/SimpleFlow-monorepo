@@ -4,29 +4,27 @@ import { Address } from 'viem'
 import { useAccount } from 'wagmi'
 
 export const fetchAffiliateList = async (account: Address): Promise<any> => {
-  const response = await fetch(`https://proofs.pancakeswap.com/aff-program/v2/${account}`)
+  const response = await fetch(`https://proofs.pancakeswap.com/aff-program/v2/${account.toLowerCase()}`)
   if (!response.ok) {
     throw new Error('User is not in affiliate list')
   }
-  return response.json() as Promise<any>
+  return true
 }
 
 export const useUserIsInAffiliateListData = () => {
   const { address: account } = useAccount()
   const { data } = useQuery({
-    queryKey: ['zksyncAirdropWhiteList', account],
+    queryKey: ['IsInAffiliateListData', account],
     queryFn: async () => {
       try {
-        return await fetchAffiliateList(account!)
+        await fetchAffiliateList(account!)
+        return true
       } catch (error) {
         return false
       }
     },
     enabled: Boolean(account),
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    refetchOnWindowFocus: false,
   })
 
-  return useMemo(() => !!data, [data])
+  return useMemo(() => data, [data])
 }
