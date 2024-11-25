@@ -1,10 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { LinkExternal, Text, useModal } from '@pancakeswap/uikit'
 import { ReactNode, useCallback, useEffect } from 'react'
-import { useAccount } from 'wagmi'
 
 import DisclaimerModal from 'components/DisclaimerModal'
-import { useAffiliateExpired } from 'hooks/useAffiliateExpired'
+import { useUserIsInAffiliateListData } from 'hooks/useAffiliateSunsetList'
 import { useUserAcknowledgement } from 'hooks/useUserAcknowledgement'
 
 const transRegex = /(%[^%]+%)/
@@ -22,8 +21,7 @@ function Trans({ text, data = {} }: { text: string; data?: { [key: string]: Reac
 
 export function AffiliateSunsetModal() {
   const { t } = useTranslation()
-  const { address } = useAccount()
-  const expired = useAffiliateExpired(address)
+  const isInList = useUserIsInAffiliateListData()
   const [ack, setACK] = useUserAcknowledgement('affiliate-referral-sunset-v1')
   const onConfirm = useCallback(() => setACK(true), [setACK])
 
@@ -79,10 +77,10 @@ export function AffiliateSunsetModal() {
   )
 
   useEffect(() => {
-    if (expired && ack === false) {
+    if (isInList && ack === false) {
       onOptionsConfirmModalPresent()
     }
-  }, [expired, ack, onOptionsConfirmModalPresent])
+  }, [isInList, ack, onOptionsConfirmModalPresent])
 
   return null
 }
