@@ -3,11 +3,7 @@ import { useMemo } from 'react'
 import { Address } from 'viem'
 import { useAccount } from 'wagmi'
 
-interface ZksyncAirDropWhiteListData {
-  address: Address
-}
-
-export const fetchAffiliateList = async (account: Address): Promise<ZksyncAirDropWhiteListData> => {
+export const fetchAffiliateList = async (account: Address): Promise<any> => {
   const response = await fetch(`https://proofs.pancakeswap.com/aff-program/v2/${account}`)
   if (!response.ok) {
     throw new Error('User is not in affiliate list')
