@@ -24,7 +24,6 @@ export function AffiliateSunsetModal() {
   const isInList = useUserIsInAffiliateListData()
   const [ack, setACK] = useUserAcknowledgement('affiliate-referral-sunset-v2')
   const onConfirm = useCallback(() => setACK(true), [setACK])
-  console.log(isInList, 'isInList')
 
   const [onOptionsConfirmModalPresent] = useModal(
     <DisclaimerModal
