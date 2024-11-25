@@ -27,7 +27,7 @@ export function AffiliateSunsetModal() {
 
   const [onOptionsConfirmModalPresent] = useModal(
     <DisclaimerModal
-      bodyMaxWidth={['100%', '100%', '100%', '640px']}
+      bodyMaxWidth={['100%', '100%', '100%', '740px']}
       bodyMaxHeight="80vh"
       modalHeader={t('Important Update: Closure of the PancakeSwap Affiliate Program')}
       header={
@@ -43,8 +43,7 @@ export function AffiliateSunsetModal() {
           <Text mt="1.5rem">
             <Trans
               text={t(
-                `Please claim any pending trading discounts before this date, as discount redemptions will no longer be available after that.`,
-                { time: 'Oct 31, 2024' },
+                `Please %claim% any pending trading discounts before this date, as discount redemptions will no longer be available after that.`,
               )}
               data={{
                 claim: (
@@ -73,7 +72,7 @@ export function AffiliateSunsetModal() {
     />,
     false,
     false,
-    'affiliateExpiredModal',
+    'affiliateSunsetModal',
   )
 
   useEffect(() => {
