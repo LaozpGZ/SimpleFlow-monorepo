@@ -15,18 +15,17 @@ export const fetchStableSwapData = async (chainId: ChainId): Promise<StableSwapP
     return stableSwapCache[cacheKey]
   }
 
-  // If a fetch is already in progress for this chainId, return the existing promise
-  if (inProgressFetches[cacheKey] !== undefined) {
-    return inProgressFetches[cacheKey]
+  // Return in-progress fetch if available
+  if (inProgressFetches[cacheKey]) {
+    return inProgressFetches[cacheKey]!
   }
 
-  // Start a new fetch and track it
-  const fetchPromise = (async () => {
-    try {
-      const response = await fetch(`${STABLE_SWAP_API}?chainId=${chainId}`, {
-        signal: AbortSignal.timeout(3000),
-      })
-      const result = await response.json()
+  // Start a new fetch, assign it to the in-progress tracker
+  inProgressFetches[cacheKey] = fetch(`${STABLE_SWAP_API}?chainId=${chainId}`, {
+    signal: AbortSignal.timeout(3000),
+  })
+    .then((response) => response.json())
+    .then((result) => {
       const newData: StableSwapPool[] = result.map((p: any) => ({
         ...p,
         token: new ERC20Token(
@@ -50,16 +49,16 @@ export const fetchStableSwapData = async (chainId: ChainId): Promise<StableSwapP
       // Cache the result before returning it
       stableSwapCache[cacheKey] = newData
       return newData
-    } catch (error) {
+    })
+    .catch(() => {
       return []
-    } finally {
+    })
+    .finally(() => {
       // Clean up in-progress fetch tracker
       delete inProgressFetches[cacheKey]
-    }
-  })()
+    })
 
-  inProgressFetches[cacheKey] = fetchPromise
-  return fetchPromise
+  return inProgressFetches[cacheKey]!
 }
 
 export async function getStableSwapPools(chainId: ChainId): Promise<StableSwapPool[]> {
