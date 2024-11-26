@@ -3,8 +3,8 @@ import { Button, CheckmarkCircleFillIcon, SwapLoading } from '@pancakeswap/uikit
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
-import { useCallback, useState } from 'react'
-import { bsc } from 'viem/chains'
+import { useState } from 'react'
+import { useAddMevRpc } from './hooks'
 
 export const AddMevRpcButton: React.FC<{
   addedToWallet: boolean
@@ -15,39 +15,11 @@ export const AddMevRpcButton: React.FC<{
 
   const [isLoading, setIsLoading] = useState(false)
   const { theme } = useTheme()
-
-  const addRpc = useCallback(async () => {
-    setIsLoading(true)
-    try {
-      const networkParams = {
-        chainId: '0x38', // Chain ID in hexadecimal (56 for Binance Smart Chain)
-        chainName: 'PancakeSwap MEV Guard',
-        rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC
-        nativeCurrency: bsc.nativeCurrency,
-        blockExplorerUrls: [bsc.blockExplorers.default.url],
-      }
-
-      // Check if the Ethereum provider is available
-      if (window.ethereum) {
-        try {
-          // Prompt the wallet to add the custom network
-          await (window.ethereum as any)?.request({
-            method: 'wallet_addEthereumChain',
-            params: [networkParams],
-          })
-          console.info('RPC network added successfully!')
-          setAddedToWallet(true)
-        } catch (error) {
-          console.error('Error adding RPC network:', error)
-        }
-      } else {
-        console.warn('Ethereum provider not found. Please check your wallet')
-      }
-    } catch (error) {
-      console.error(error)
-    }
-    setIsLoading(false)
-  }, [])
+  const { addMevRpc } = useAddMevRpc(
+    () => setAddedToWallet(true),
+    () => setIsLoading(true),
+    () => setIsLoading(false),
+  )
 
   if (!account) {
     return <ConnectWalletButton withIcon />
@@ -64,7 +36,7 @@ export const AddMevRpcButton: React.FC<{
       }
       variant={addedToWallet ? 'success' : undefined}
       isLoading={isLoading}
-      onClick={addedToWallet && !isLoading ? undefined : addRpc}
+      onClick={addedToWallet && !isLoading ? undefined : addMevRpc}
     >
       {isLoading ? t('Adding to wallet') : addedToWallet ? t('Added to wallet') : t('Add to wallet')}
     </Button>
