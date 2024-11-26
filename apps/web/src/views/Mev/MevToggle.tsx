@@ -14,7 +14,6 @@ import {
   Toggle,
   useModalV2,
 } from '@pancakeswap/uikit'
-import { useState } from 'react'
 import { styled } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
 import { useIsMEVEnabled, useShouldShowMEVToggle } from './hooks'
@@ -57,7 +56,7 @@ export const MevToggle: React.FC = () => {
         </FlexGap>
         <Toggle scale="md" checked={isMEVEnabled} onClick={onOpen} />
       </ToggleWrapper>
-      <MevModal isOpen={isOpen} onDismiss={onDismiss} onSuccess={refetch} />
+      <MevModal isOpen={isOpen} onDismiss={onDismiss} />
     </>
   )
 }
@@ -65,10 +64,8 @@ export const MevToggle: React.FC = () => {
 export const MevModal: React.FC<{ isOpen: boolean; onDismiss?: () => void; onSuccess?: () => void }> = ({
   isOpen,
   onDismiss,
-  onSuccess,
 }) => {
   const { t } = useTranslation()
-  const [addedToWallet, setAddedToWallet] = useState(false)
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
@@ -96,11 +93,7 @@ export const MevModal: React.FC<{ isOpen: boolean; onDismiss?: () => void; onSuc
             </Box>
             <ModalImg src={getImageUrl('swap-toggle-modal.png')} alt="swap-toggle-modal" />
             <Box width="100%">
-              <AddMevRpcButton
-                addedToWallet={addedToWallet}
-                setAddedToWallet={setAddedToWallet}
-                onSuccess={onSuccess}
-              />
+              <AddMevRpcButton />
               <Button width="100%" variant="text">
                 {t('Learn More')}
               </Button>

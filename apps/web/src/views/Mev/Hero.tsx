@@ -1,9 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
+import { useIsMEVEnabled } from './hooks'
 
 import { getImageUrl } from './utils'
 
@@ -296,7 +297,7 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
-  const [addedToWallet, setAddedToWallet] = useState(false)
+  const { isMEVEnabled } = useIsMEVEnabled()
   const txCountDisplay = useMemo(() => {
     if (txCount < 1000000) return '1M+'
     return `${(txCount / 1000000).toFixed(1)}M+`
@@ -360,10 +361,10 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                         </FlexGap>
                         <Box style={{ flexBasis: '60%' }}>
                           <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                            {addedToWallet ? t('You are Protected!') : t('In one click')}
+                            {isMEVEnabled ? t('You are Protected!') : t('In one click')}
                           </Text>
                           <Text>
-                            {addedToWallet
+                            {isMEVEnabled
                               ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
                               : t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}
                           </Text>
@@ -384,16 +385,16 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                       {!isMobile && (
                         <Box>
                           <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                            {addedToWallet ? t('You are Protected!') : t('In one click')}
+                            {isMEVEnabled ? t('You are Protected!') : t('In one click')}
                           </Text>
                           <Text>
-                            {addedToWallet
+                            {isMEVEnabled
                               ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
                               : t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}
                           </Text>
                         </Box>
                       )}
-                      <AddMevRpcButton addedToWallet={addedToWallet} setAddedToWallet={setAddedToWallet} />
+                      <AddMevRpcButton />
                     </FlexGap>
                   </FlexGap>
                 </Box>
