@@ -19,14 +19,13 @@ import { priceHelperTokens } from '@pancakeswap/farms/constants/common'
 import { bCakeFarmBoosterVeCakeABI } from '@pancakeswap/farms/constants/v3/abi/bCakeFarmBoosterVeCake'
 import { TvlMap, fetchCommonTokenUSDValue } from '@pancakeswap/farms/src/fetchFarmsV3'
 import { deserializeToken } from '@pancakeswap/token-lists'
+import { masterChefV3ABI } from '@pancakeswap/v3-sdk'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
+import BN from 'bignumber.js'
 import { FAST_INTERVAL } from 'config/constants'
-import { FARMS_API } from 'config/constants/endpoints'
+import { FARMS_API_V2 } from 'config/constants/endpoints'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCakePrice } from 'hooks/useCakePrice'
-
-import { masterChefV3ABI } from '@pancakeswap/v3-sdk'
-import BN from 'bignumber.js'
 import {
   useBCakeFarmBoosterVeCakeContract,
   useMasterchefV3,
@@ -34,6 +33,7 @@ import {
   useV3NFTPositionManagerContract,
 } from 'hooks/useContract'
 import { useV3PositionsFromTokenIds, useV3TokenIdsByAccount } from 'hooks/v3/useV3Positions'
+import chunk from 'lodash/chunk'
 import toLower from 'lodash/toLower'
 import { useMemo } from 'react'
 import fetchWithTimeout from 'utils/fetchWithTimeout'
@@ -134,9 +134,19 @@ export const useFarmsV3 = ({ mockApr = false, boosterLiquidityX = {} }: UseFarms
       const tvls: TvlMap = {}
       if (supportedChainIdV3.includes(chainId)) {
         const farmsToFetch = farmV3.data.farmsWithPrice.filter((f) => f.poolWeight !== '0')
+
+        // Chunk farm addresses into batches of 10
+        const addressChunks = chunk(
+          farmsToFetch.map((f) => f.lpAddress),
+          10,
+        )
+
         const results = await Promise.allSettled(
-          farmsToFetch.map((f) =>
-            fetchWithTimeout(`${FARMS_API}/v3/${chainId}/liquidity/${f.lpAddress}`, {
+          addressChunks.map((addressChunk, index) =>
+            fetchWithTimeout(`${FARMS_API_V2}/v3/${chainId}/liquidity?page=${index + 1}&size=10`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ farmAddresses: addressChunk }),
               signal,
             })
               .then((r) => r.json())
@@ -146,6 +156,7 @@ export const useFarmsV3 = ({ mockApr = false, boosterLiquidityX = {} }: UseFarms
               }),
           ),
         )
+
         results.forEach((r, i) => {
           tvls[farmsToFetch[i].lpAddress] =
             r.status === 'fulfilled' ? { ...r.value.formatted, updatedAt: r.value.updatedAt } : null
