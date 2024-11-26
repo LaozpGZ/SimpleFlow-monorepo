@@ -8,7 +8,7 @@ const stableSwapCache: Record<string, StableSwapPool[]> = {}
 const inProgressFetches: Record<string, Promise<StableSwapPool[]> | undefined> = {}
 
 export const fetchStableSwapData = async (chainId: ChainId): Promise<StableSwapPool[]> => {
-  const cacheKey = `${chainId}-all}`
+  const cacheKey = `${chainId}-all`
 
   // Return cached data if it exists
   if (stableSwapCache[cacheKey]) {
