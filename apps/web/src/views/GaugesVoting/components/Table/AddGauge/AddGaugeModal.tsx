@@ -46,7 +46,7 @@ export const AddGaugeModal = ({ isOpen, onDismiss, selectRows, onGaugeAdd }) => 
   const dismissHandler = useCallback(() => {
     setSearchText('')
     onDismiss()
-  }, [])
+  }, [onDismiss])
 
   const gaugesTable = isDesktop ? (
     <AddGaugesTable
