@@ -4,7 +4,16 @@ import { STABLE_SWAP_API } from '../../config/endpoint'
 import { StableSwapPool } from '../../types'
 import { isStableSwapSupported, STABLE_SUPPORTED_CHAIN_IDS } from './pools'
 
+const stableSwapCache: Record<string, StableSwapPool[]> = {}
+
 export const fetchStableSwapData = async (chainId: ChainId) => {
+  const cacheKey = `${chainId}-all}`
+
+  // Return cached data if it exists
+  if (stableSwapCache[cacheKey]) {
+    return stableSwapCache[cacheKey]
+  }
+
   try {
     const response = await fetch(`${STABLE_SWAP_API}?chainId=${chainId}`, {
       signal: AbortSignal.timeout(3000),
@@ -29,6 +38,9 @@ export const fetchStableSwapData = async (chainId: ChainId) => {
         p.quoteToken.projectLink,
       ),
     }))
+
+    // Cache the result before returning it
+    stableSwapCache[cacheKey] = newData
 
     return newData
   } catch (error) {
