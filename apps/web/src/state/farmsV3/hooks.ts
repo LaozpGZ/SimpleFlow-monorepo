@@ -157,9 +157,12 @@ export const useFarmsV3 = ({ mockApr = false, boosterLiquidityX = {} }: UseFarms
           ),
         )
 
-        results.forEach((r, i) => {
-          tvls[farmsToFetch[i].lpAddress] =
-            r.status === 'fulfilled' ? { ...r.value.formatted, updatedAt: r.value.updatedAt } : null
+        results.forEach((r) => {
+          if (r.status === 'fulfilled') {
+            r.value.data.forEach((value) => {
+              tvls[value.farmAddress] = { ...value.formatted, updatedAt: new Date().getTime() }
+            })
+          }
         })
       }
 
