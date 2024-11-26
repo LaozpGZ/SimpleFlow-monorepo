@@ -35,7 +35,7 @@ export const AddMevRpcButton: React.FC<{
             method: 'wallet_addEthereumChain',
             params: [networkParams],
           })
-          console.log('RPC network added successfully!')
+          console.info('RPC network added successfully!')
           setAddedToWallet(true)
         } catch (error) {
           console.error('Error adding RPC network:', error)

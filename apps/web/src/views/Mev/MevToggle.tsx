@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, ShieldIcon, Text, Toggle } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
+import { useShouldShowMEVToggle } from './hooks'
 
 export const ToggleWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -16,6 +17,10 @@ export const ToggleWrapper = styled.div`
 
 export const MevToggle: React.FC = () => {
   const { t } = useTranslation()
+  const shouldShowMEVToggle = useShouldShowMEVToggle()
+  if (!shouldShowMEVToggle) {
+    return null
+  }
   return (
     <ToggleWrapper>
       <FlexGap gap="4px">

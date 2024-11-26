@@ -28,7 +28,7 @@ async function fetchMEVStatus(): Promise<boolean> {
 export function useIsMEVEnabled() {
   const isMetaMask = useIsConnectedMetaMask()
 
-  const { data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['isMEVEnabled'],
     queryFn: fetchMEVStatus,
     enabled: isMetaMask,
@@ -36,7 +36,7 @@ export function useIsMEVEnabled() {
     retry: false,
   })
 
-  return data ?? false
+  return { isMEVEnabled: data ?? false, isLoading }
 }
 
 export const useIsConnectedMetaMask = () => {
@@ -48,6 +48,6 @@ export const useIsConnectedMetaMask = () => {
 
 export const useShouldShowMEVToggle = () => {
   const isMetaMask = useIsConnectedMetaMask()
-  const isMEVEnabled = useIsMEVEnabled()
-  return !isMEVEnabled && isMetaMask
+  const { isMEVEnabled, isLoading } = useIsMEVEnabled()
+  return !isMEVEnabled && !isLoading && isMetaMask
 }
