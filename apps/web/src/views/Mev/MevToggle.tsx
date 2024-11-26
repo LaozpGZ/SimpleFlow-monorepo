@@ -13,6 +13,7 @@ import {
   Text,
   Toggle,
   useModalV2,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
@@ -37,8 +38,15 @@ export const ModalImg = styled.img`
 export const MevToggle: React.FC = () => {
   const { t } = useTranslation()
   const shouldShowMEVToggle = useShouldShowMEVToggle()
-  const { isMEVEnabled, refetch } = useIsMEVEnabled()
+  const { isMEVEnabled } = useIsMEVEnabled()
   const { isOpen, onOpen, onDismiss } = useModalV2()
+  const { tooltip, tooltipVisible, targetRef } = useTooltip(
+    t('PancakeSwap MEV Guard protects you from frontrunning and sandwich attacks when Swapping.'),
+    {
+      placement: 'auto',
+      trigger: 'hover',
+    },
+  )
 
   if (!shouldShowMEVToggle) {
     return null
@@ -50,9 +58,13 @@ export const MevToggle: React.FC = () => {
         <FlexGap gap="4px">
           <ShieldIcon width="24px" />
           <Text>{t('Enable')}</Text>
-          <Text style={{ textDecoration: 'underline', textDecorationStyle: 'dotted', cursor: 'pointer' }}>
-            {t('MEV Project')}
+          <Text
+            ref={targetRef}
+            style={{ textDecoration: 'underline', textDecorationStyle: 'dotted', cursor: 'pointer' }}
+          >
+            {t('MEV Protect')}
           </Text>
+          {tooltipVisible && tooltip}
         </FlexGap>
         <Toggle scale="md" checked={isMEVEnabled} onClick={onOpen} />
       </ToggleWrapper>
@@ -94,7 +106,7 @@ export const MevModal: React.FC<{ isOpen: boolean; onDismiss?: () => void; onSuc
             <ModalImg src={getImageUrl('swap-toggle-modal.png')} alt="swap-toggle-modal" />
             <Box width="100%">
               <AddMevRpcButton />
-              <Button width="100%" variant="text">
+              <Button width="100%" variant="text" onClick={() => window.open('/mev', '_blank', 'noopener noreferrer')}>
                 {t('Learn More')}
               </Button>
             </Box>
