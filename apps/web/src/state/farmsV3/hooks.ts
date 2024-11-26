@@ -215,7 +215,7 @@ export const useFarmsV3 = ({ mockApr = false, boosterLiquidityX = {} }: UseFarms
 
     enabled: Boolean(farmV3.data.farmsWithPrice.length > 0),
     refetchInterval: FAST_INTERVAL * 3,
-    staleTime: FAST_INTERVAL,
+    staleTime: FAST_INTERVAL * 3,
   })
 
   return {
