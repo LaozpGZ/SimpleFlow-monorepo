@@ -287,7 +287,7 @@ export const useStakedPositionsByUser = (stakedTokenIds: bigint[], _chainId?: nu
     placeholderData: keepPreviousData,
   })
 
-  return { tokenIdResults: data || [], isLoading: harvestCalls.length > 0 && !data }
+  return { tokenIdResults: useMemo(() => data || [], [data]), isLoading: harvestCalls.length > 0 && !data }
 }
 
 const usePositionsByUserFarms = (
@@ -446,20 +446,23 @@ const useV3BoostedLiquidityX = (): { data: Record<number, number> } => {
       }),
 
     enabled: Boolean(chainId && pids && pids.length > 0 && bCakeSupportedChainId.includes(chainId)),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: false,
     retry: 3,
     retryDelay: 3000,
   })
 
-  const result = useMemo(() => {
+  return useMemo(() => {
     const dataMap = data?.reduce((acc, d) => {
-      const updatedAcc = { ...acc }
-      updatedAcc[d.pid] = Number.isNaN(d.boosterliquidityX) ? 1 : d.boosterliquidityX
-      return updatedAcc
+      // eslint-disable-next-line no-param-reassign
+      acc[d.pid] = Number.isNaN(d.boosterliquidityX) ? 1 : d.boosterliquidityX
+      return acc
     }, {})
-    return dataMap
+    return {
+      data: dataMap ?? {},
+    }
   }, [data])
-
-  return { data: result ?? {} }
 }
 
 export async function getV3FarmBoosterWhiteList({
