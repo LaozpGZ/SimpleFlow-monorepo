@@ -1,7 +1,24 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { FlexGap, ShieldIcon, Text, Toggle } from '@pancakeswap/uikit'
+import {
+  Box,
+  Button,
+  FlexGap,
+  ModalBody,
+  ModalCloseButton,
+  ModalContainer,
+  ModalHeader,
+  ModalTitle,
+  ModalV2,
+  ShieldIcon,
+  Text,
+  Toggle,
+  useModalV2,
+} from '@pancakeswap/uikit'
+import { useState } from 'react'
 import { styled } from 'styled-components'
-import { useShouldShowMEVToggle } from './hooks'
+import { AddMevRpcButton } from './AddMevRpcButton'
+import { useIsMEVEnabled, useShouldShowMEVToggle } from './hooks'
+import { getImageUrl } from './utils'
 
 export const ToggleWrapper = styled.div`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -14,23 +31,83 @@ export const ToggleWrapper = styled.div`
   align-items: center;
   justify-content: space-between;
 `
+export const ModalImg = styled.img`
+  width: 258px;
+`
 
 export const MevToggle: React.FC = () => {
   const { t } = useTranslation()
   const shouldShowMEVToggle = useShouldShowMEVToggle()
+  const { isMEVEnabled, refetch } = useIsMEVEnabled()
+  const { isOpen, onOpen, onDismiss } = useModalV2()
+
   if (!shouldShowMEVToggle) {
     return null
   }
+
   return (
-    <ToggleWrapper>
-      <FlexGap gap="4px">
-        <ShieldIcon width="24px" />
-        <Text>{t('Enable')}</Text>
-        <Text style={{ textDecoration: 'underline', textDecorationStyle: 'dotted', cursor: 'pointer' }}>
-          {t('MEV Project')}
-        </Text>
-      </FlexGap>
-      <Toggle scale="md" />
-    </ToggleWrapper>
+    <>
+      <ToggleWrapper>
+        <FlexGap gap="4px">
+          <ShieldIcon width="24px" />
+          <Text>{t('Enable')}</Text>
+          <Text style={{ textDecoration: 'underline', textDecorationStyle: 'dotted', cursor: 'pointer' }}>
+            {t('MEV Project')}
+          </Text>
+        </FlexGap>
+        <Toggle scale="md" checked={isMEVEnabled} onClick={onOpen} />
+      </ToggleWrapper>
+      <MevModal isOpen={isOpen} onDismiss={onDismiss} onSuccess={refetch} />
+    </>
+  )
+}
+
+export const MevModal: React.FC<{ isOpen: boolean; onDismiss?: () => void; onSuccess?: () => void }> = ({
+  isOpen,
+  onDismiss,
+  onSuccess,
+}) => {
+  const { t } = useTranslation()
+  const [addedToWallet, setAddedToWallet] = useState(false)
+
+  return (
+    <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
+      <ModalContainer>
+        <ModalHeader style={{ border: 'none', position: 'relative' }}>
+          <ModalTitle />
+          <Text
+            style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}
+            width="100%"
+            bold
+            fontSize="20px"
+            textAlign="center"
+          >
+            {t('Enable MEV Protect')}
+          </Text>
+          <ModalCloseButton onDismiss={onDismiss} />
+        </ModalHeader>
+        <ModalBody p="24px">
+          <FlexGap gap="24px" flexDirection="column" alignItems="center" minWidth="340px">
+            <Box width="100%">
+              <Text width="100%">{t('Add automatically on BNB Smart Chain:')}</Text>
+              <Text bold width="100%">
+                {t('PancakeSwap MEV Guard')}
+              </Text>
+            </Box>
+            <ModalImg src={getImageUrl('swap-toggle-modal.png')} alt="swap-toggle-modal" />
+            <Box width="100%">
+              <AddMevRpcButton
+                addedToWallet={addedToWallet}
+                setAddedToWallet={setAddedToWallet}
+                onSuccess={onSuccess}
+              />
+              <Button width="100%" variant="text">
+                {t('Learn More')}
+              </Button>
+            </Box>
+          </FlexGap>
+        </ModalBody>
+      </ModalContainer>
+    </ModalV2>
   )
 }

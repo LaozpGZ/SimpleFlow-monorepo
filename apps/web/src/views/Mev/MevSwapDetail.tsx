@@ -7,7 +7,7 @@ export const MevSwapDetail: React.FC = () => {
   const { t } = useTranslation()
   const isConnected = useIsConnectedMetaMask()
   const { isMEVEnabled, isLoading } = useIsMEVEnabled()
-  if (!isConnected) {
+  if (!isConnected && !isMEVEnabled) {
     return null
   }
   return (

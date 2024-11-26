@@ -9,14 +9,18 @@ import { useAddMevRpc } from './hooks'
 export const AddMevRpcButton: React.FC<{
   addedToWallet: boolean
   setAddedToWallet: (addedToWallet: boolean) => void
-}> = ({ addedToWallet, setAddedToWallet }) => {
+  onSuccess?: () => void
+}> = ({ addedToWallet, setAddedToWallet, onSuccess }) => {
   const { t } = useTranslation()
   const { account } = useActiveWeb3React()
 
   const [isLoading, setIsLoading] = useState(false)
   const { theme } = useTheme()
   const { addMevRpc } = useAddMevRpc(
-    () => setAddedToWallet(true),
+    () => {
+      setAddedToWallet(true)
+      onSuccess?.()
+    },
     () => setIsLoading(true),
     () => setIsLoading(false),
   )

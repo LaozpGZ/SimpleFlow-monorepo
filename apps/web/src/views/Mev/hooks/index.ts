@@ -29,15 +29,15 @@ async function fetchMEVStatus(): Promise<boolean> {
 export function useIsMEVEnabled() {
   const isMetaMask = useIsConnectedMetaMask()
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     queryKey: ['isMEVEnabled'],
     queryFn: fetchMEVStatus,
     enabled: isMetaMask,
-    staleTime: Infinity,
+    staleTime: 60000,
     retry: false,
   })
 
-  return { isMEVEnabled: data ?? false, isLoading }
+  return { isMEVEnabled: data ?? false, isLoading, refetch }
 }
 
 export const useIsConnectedMetaMask = () => {
