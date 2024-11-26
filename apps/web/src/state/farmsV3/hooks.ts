@@ -36,6 +36,7 @@ import { useV3PositionsFromTokenIds, useV3TokenIdsByAccount } from 'hooks/v3/use
 import chunk from 'lodash/chunk'
 import toLower from 'lodash/toLower'
 import { useMemo } from 'react'
+import { safeGetAddress } from 'utils'
 import fetchWithTimeout from 'utils/fetchWithTimeout'
 import { getViemClients } from 'utils/viem'
 import { publicClient } from 'utils/wagmi'
@@ -96,8 +97,15 @@ export const useFarmsV3Public = () => {
           farms,
           commonPrice,
         })
-
-        return data
+        return {
+          ...data,
+          farmsWithPrice: data.farmsWithPrice
+            .map((farm) => {
+              const checksummedAddress = safeGetAddress(farm.lpAddress)
+              return checksummedAddress ? { ...farm, lpAddress: checksummedAddress } : undefined
+            })
+            .filter((farm): farm is FarmV3DataWithPrice => Boolean(farm)),
+        }
       } catch (error) {
         console.error(error)
         // return fallback for now since not all chains supported
@@ -160,7 +168,10 @@ export const useFarmsV3 = ({ mockApr = false, boosterLiquidityX = {} }: UseFarms
         results.forEach((r) => {
           if (r.status === 'fulfilled') {
             r.value.data.forEach((value) => {
-              tvls[value.farmAddress] = { ...value.formatted, updatedAt: new Date().getTime() }
+              const checksummedAddress = safeGetAddress(value.farmAddress)
+              if (checksummedAddress) {
+                tvls[checksummedAddress] = { ...value.formatted, updatedAt: new Date().getTime() }
+              }
             })
           }
         })
