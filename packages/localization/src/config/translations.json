@@ -3637,7 +3637,6 @@
   "Please %claim% any pending trading discounts before this date, as discount redemptions will no longer be available after that.": "Please %claim% any pending trading discounts before this date, as discount redemptions will no longer be available after that.",
   "If you were referred by an affiliate who enabled commission sharing, please note that trading discounts from their referral link ended on November 25, 2024, and you will no longer receive discounts from this date onwards.": "If you were referred by an affiliate who enabled commission sharing, please note that trading discounts from their referral link ended on November 25, 2024, and you will no longer receive discounts from this date onwards.",
   "Thank you for your understanding and being a valued PancakeSwap community member.": "Thank you for your understanding and being a valued PancakeSwap community member.",
-  "Adding to Wallet": "Adding to Wallet",
   "Adding to wallet": "Adding to wallet",
   "Added to wallet": "Added to wallet",
   "PancakeSwap MEV GARD": "PancakeSwap MEV GARD",
@@ -3660,5 +3659,9 @@
   "You are Protected!": "You are Protected!",
   "Added automatically on BNB Smart Chain: PancakeSwap MEV Guard": "Added automatically on BNB Smart Chain: PancakeSwap MEV Guard",
   "Add to wallet": "Add to wallet",
-  "Total transactions protected:": "Total transactions protected:"
+  "Total transactions protected:": "Total transactions protected:",
+  "PancakeSwap MEV Guard protects you from frontrunning and sandwich attacks when Swapping.": "PancakeSwap MEV Guard protects you from frontrunning and sandwich attacks when Swapping.",
+  "MEV Protect": "MEV Protect",
+  "Disabled": "Disabled",
+  "MEV Project": "MEV Project"
 }
