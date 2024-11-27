@@ -170,7 +170,7 @@ export const useFarmsV3 = ({ mockApr = false, boosterLiquidityX = {} }: UseFarms
             r.value.data.forEach((value) => {
               const checksummedAddress = safeGetAddress(value.farmAddress)
               if (checksummedAddress) {
-                tvls[checksummedAddress] = { ...value.formatted, updatedAt: new Date().getTime() }
+                tvls[checksummedAddress] = { ...value.formatted, updatedAt: new Date() }
               }
             })
           }
