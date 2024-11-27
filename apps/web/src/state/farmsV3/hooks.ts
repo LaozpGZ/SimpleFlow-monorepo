@@ -214,6 +214,16 @@ export const useFarmsV3 = ({ mockApr = false, boosterLiquidityX = {} }: UseFarms
     },
 
     enabled: Boolean(farmV3.data.farmsWithPrice.length > 0),
+    placeholderData: (previousData, previousQuery) => {
+      const queryKey = previousQuery?.queryKey
+      if (!queryKey) return undefined
+
+      if (queryKey[0] === chainId) {
+        return previousData
+      }
+
+      return undefined
+    },
     refetchInterval: FAST_INTERVAL * 3,
     staleTime: FAST_INTERVAL * 3,
   })
@@ -431,7 +441,7 @@ const useV3BoostedFarm = (pids?: number[]) => {
 
 const useV3BoostedLiquidityX = (): { data: Record<number, number> } => {
   const farmV3 = useFarmsV3Public()
-  const pids = farmV3.data?.farmsWithPrice?.map((f) => f.pid)
+  const pids = useMemo(() => farmV3?.data?.farmsWithPrice?.map((f) => f.pid), [farmV3?.data?.farmsWithPrice])
   const { chainId } = useActiveChainId()
   const masterChefV3Contract = useMasterchefV3()
 
@@ -446,11 +456,6 @@ const useV3BoostedLiquidityX = (): { data: Record<number, number> } => {
       }),
 
     enabled: Boolean(chainId && pids && pids.length > 0 && bCakeSupportedChainId.includes(chainId)),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchOnMount: false,
-    retry: 3,
-    retryDelay: 3000,
   })
 
   return useMemo(() => {
