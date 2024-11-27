@@ -46,10 +46,6 @@ export const useMultipleBannerConfig = () => {
         banner: <UserBanner />,
       },
       {
-        shouldRender: true,
-        banner: <TurkeyMeetupBanner />,
-      },
-      {
         shouldRender: isRenderIFOBannerFromConfig,
         banner: <EigenpieIFOBanner />,
       },
