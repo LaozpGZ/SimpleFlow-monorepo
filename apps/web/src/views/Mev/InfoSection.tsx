@@ -85,18 +85,17 @@ export const InfoSection: React.FC<{ walletCount: number }> = ({ walletCount }) 
             justifyContent="center"
           >
             {walletConfig.map((wallet) => (
-              <FlexGap flexDirection="column" alignItems="center" gap="8px">
+              <FlexGap
+                flexDirection="column"
+                alignItems="center"
+                gap="8px"
+                onClick={() => {
+                  window.open(wallet.doc, '_blank', 'noopener noreferrer')
+                }}
+                style={{ cursor: 'pointer' }}
+              >
                 <img src={getImageUrl(wallet.image)} alt={wallet.title} width="64px" />
-                <Text
-                  onClick={() => {
-                    window.open(wallet.doc, '_blank', 'noopener noreferrer')
-                  }}
-                  fontSize="16px"
-                  lineHeight="24px"
-                  bold
-                  color="#02919D"
-                  style={{ cursor: 'pointer' }}
-                >
+                <Text fontSize="16px" lineHeight="24px" bold color="#02919D">
                   {t(wallet.title)}
                 </Text>
               </FlexGap>
