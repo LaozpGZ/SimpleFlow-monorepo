@@ -3,6 +3,7 @@ import {
   Box,
   Button,
   FlexGap,
+  InjectedModalProps,
   ModalBody,
   ModalCloseButton,
   ModalContainer,
@@ -15,6 +16,7 @@ import {
   useModalV2,
   useTooltip,
 } from '@pancakeswap/uikit'
+
 import { styled } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
 import { useIsMEVEnabled, useShouldShowMEVToggle } from './hooks'
@@ -73,7 +75,7 @@ export const MevToggle: React.FC = () => {
   )
 }
 
-export const MevModal: React.FC<{ isOpen: boolean; onDismiss?: () => void; onSuccess?: () => void }> = ({
+export const MevModal: React.FC<{ isOpen: boolean; onSuccess?: () => void } & InjectedModalProps> = ({
   isOpen,
   onDismiss,
 }) => {

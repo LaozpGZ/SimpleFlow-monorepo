@@ -314,7 +314,7 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                 color="secondary"
                 bold
               >
-                {t('PancakeSwap MEV GARD')}
+                {t('PancakeSwap MEV GUARD')}
               </Text>
               <Text fontSize={isMobile ? '24px' : '32px'} lineHeight={isMobile ? '36px' : '38px'} bold>
                 {t('Safeguard your swap against frontrunning and sandwich attacks!')}

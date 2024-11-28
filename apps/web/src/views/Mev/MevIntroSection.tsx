@@ -116,7 +116,7 @@ export const MevIntroSection: React.FC = () => {
             <Card>
               <Text maxWidth="60%">
                 {t('Fast and reliable RPC endpoint for your daily usage, beyond Swapping and trading.')}
-              </Text>{' '}
+              </Text>
               <ImageBox src={getImageUrl('card2.png')} />
             </Card>
             <Card>
