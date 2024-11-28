@@ -36,7 +36,7 @@ export const AddMevRpcButton: React.FC = () => {
         isLoading ? (
           <SwapLoading />
         ) : isMEVEnabled ? (
-          <CheckmarkCircleFillIcon color={theme.colors.background} />
+          <CheckmarkCircleFillIcon color={theme.isDark ? 'white' : theme.colors.background} />
         ) : undefined
       }
       variant={isMEVEnabled ? 'success' : undefined}
