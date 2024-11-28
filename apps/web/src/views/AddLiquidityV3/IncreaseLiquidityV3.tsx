@@ -413,7 +413,6 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
             assetA: currencies[Field.CURRENCY_A]?.symbol ?? '',
             assetB: currencies[Field.CURRENCY_B]?.symbol ?? '',
           })}
-          noConfig
         />
         <CardBody>
           <Box mb="16px">
