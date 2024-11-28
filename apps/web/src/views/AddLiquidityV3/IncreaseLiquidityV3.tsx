@@ -474,7 +474,7 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
             }}
           >
             {buttons}
-            {hasZapV3Pool && hasInsufficentBalance && isStakedInMCv3 === 'false' && (
+            {hasZapV3Pool && hasInsufficentBalance && (
               <ZapLiquidityWidget
                 tokenId={tokenId}
                 pool={pool}
