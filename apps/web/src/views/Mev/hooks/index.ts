@@ -76,7 +76,9 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
           console.info('RPC network added successfully!')
           onSuccess?.()
         } catch (error) {
-          console.error('Error adding RPC network:', error)
+          if ((error as any).code === -32601) {
+            console.error('wallet_addEthereumChain is not supported')
+          } else console.error('Error adding RPC network:', error)
         }
       } else {
         console.warn('Ethereum provider not found. Please check your wallet')
