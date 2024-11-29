@@ -4,7 +4,6 @@ import { AdMevProtection } from './Ads/AdMevProtection'
 import { AdOptionsTrading } from './Ads/AdOptionsTrading'
 import { AdPCSX } from './Ads/AdPCSX'
 import { AdRocker } from './Ads/AdRocker'
-import { AdSpringboard } from './Ads/AdSpringboard'
 import { AdTelegramBot } from './Ads/AdTelegramBot'
 import { ExpandableAd } from './Expandable/ExpandableAd'
 import { shouldRenderOnPages } from './renderConditions'
@@ -33,10 +32,6 @@ export const useAdConfig = () => {
       component: <ExpandableAd />,
       priority: Priority.FIRST_AD,
       shouldRender: [shouldRenderOnPages(['/buy-crypto', '/', '/prediction'])],
-    },
-    {
-      id: 'ad-springboard',
-      component: <AdSpringboard />,
     },
     {
       id: 'ad-mev',
