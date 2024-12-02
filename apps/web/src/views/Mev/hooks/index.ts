@@ -4,6 +4,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCallback } from 'react'
 import { Address } from 'viem'
 import { bsc } from 'viem/chains'
+import { useWalletClient } from 'wagmi'
 
 async function fetchMEVStatus(account: Address): Promise<{ mevEnabled: boolean; isError: boolean }> {
   if (!window.ethereum || (!window.ethereum as any)?.request || account === '0x') {
@@ -48,6 +49,7 @@ export const useShouldShowMEVToggle = () => {
 }
 
 export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void, onFinish?: () => void) => {
+  const { data: walletClient } = useWalletClient()
   const addMevRpc = useCallback(async () => {
     onBeforeStart?.()
     try {
@@ -60,10 +62,10 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
       }
 
       // Check if the Ethereum provider is available
-      if (window.ethereum) {
+      if (walletClient) {
         try {
           // Prompt the wallet to add the custom network
-          await (window.ethereum as any)?.request({
+          await walletClient.request({
             method: 'wallet_addEthereumChain',
             params: [networkParams],
           })
@@ -80,6 +82,6 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
     } finally {
       onFinish?.()
     }
-  }, [onBeforeStart, onSuccess, onFinish])
+  }, [onBeforeStart, onSuccess, onFinish, walletClient])
   return { addMevRpc }
 }
