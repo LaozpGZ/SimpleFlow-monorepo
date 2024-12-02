@@ -4,14 +4,13 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
 import { useState } from 'react'
-import { useAddMevRpc, useIsConnectedMetaMask, useIsMEVEnabled } from './hooks'
+import { useAddMevRpc, useIsMEVEnabled } from './hooks'
 
 export const AddMevRpcButton: React.FC = () => {
   const { t } = useTranslation()
   const { account } = useActiveWeb3React()
 
-  const isConnectedMatamask = useIsConnectedMetaMask()
-  const { isMEVEnabled, refetch } = useIsMEVEnabled()
+  const { isMEVEnabled, refetch, isLoading: isMEVStatusLoading, isError } = useIsMEVEnabled()
   const [isLoading, setIsLoading] = useState(false)
   const { theme } = useTheme()
   const { addMevRpc } = useAddMevRpc(
@@ -25,7 +24,8 @@ export const AddMevRpcButton: React.FC = () => {
   if (!account) {
     return <ConnectWalletButton withIcon />
   }
-  if (!isConnectedMatamask) {
+  console.log('isMEVEnabled', isMEVEnabled, isError, isMEVStatusLoading)
+  if (isMEVStatusLoading || isError) {
     return null
   }
 

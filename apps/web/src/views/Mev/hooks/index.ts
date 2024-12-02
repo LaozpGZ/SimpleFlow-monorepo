@@ -1,11 +1,12 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
+import { Address } from 'viem'
 import { bsc } from 'viem/chains'
 
-async function fetchMEVStatus(): Promise<boolean> {
-  if (!window.ethereum || (!window.ethereum as any)?.request) {
+async function fetchMEVStatus(account: Address): Promise<{ mevEnabled: boolean; isError: boolean }> {
+  if (!window.ethereum || (!window.ethereum as any)?.request || account === '0x') {
     throw new Error('Ethereum provider not found')
   }
 
@@ -14,43 +15,35 @@ async function fetchMEVStatus(): Promise<boolean> {
       method: 'eth_call',
       params: [
         {
+          from: account,
           to: '0x0000000000000000000000000000000000000048',
           value: '0x30',
         },
       ],
     })
-    return result === '0x30'
+    return { mevEnabled: result === '0x30', isError: false }
   } catch (error) {
     console.error('Error checking MEV status:', error)
-    return false
+    return { mevEnabled: false, isError: true }
   }
 }
 
 export function useIsMEVEnabled() {
-  const isMetaMask = useIsConnectedMetaMask()
-
+  const { account, chainId } = useActiveWeb3React()
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['isMEVEnabled'],
-    queryFn: fetchMEVStatus,
-    enabled: isMetaMask,
+    queryFn: () => fetchMEVStatus(account ?? '0x'),
+    enabled: Boolean(account) && chainId === ChainId.BSC,
     staleTime: 60000,
     retry: false,
   })
 
-  return { isMEVEnabled: data ?? false, isLoading, refetch }
-}
-
-export const useIsConnectedMetaMask = () => {
-  const { account, chainId } = useActiveWeb3React()
-  return useMemo(() => {
-    return Boolean(account) && Boolean(window.ethereum?.isMetaMask) && chainId === ChainId.BSC
-  }, [account, chainId])
+  return { isMEVEnabled: data?.mevEnabled ?? false, isLoading, refetch, isError: data?.isError ?? false }
 }
 
 export const useShouldShowMEVToggle = () => {
-  const isMetaMask = useIsConnectedMetaMask()
-  const { isMEVEnabled, isLoading } = useIsMEVEnabled()
-  return !isMEVEnabled && !isLoading && isMetaMask
+  const { isMEVEnabled, isLoading, isError } = useIsMEVEnabled()
+  return !isMEVEnabled && !isLoading && !isError
 }
 
 export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void, onFinish?: () => void) => {
