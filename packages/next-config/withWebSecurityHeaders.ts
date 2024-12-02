@@ -39,7 +39,7 @@ export function withWebSecurityHeaders(config: NextConfig): NextConfig {
           },
           {
             key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin',
+            value: 'same-origin-allow-popups',
           },
           // createCSP(),
         ],
