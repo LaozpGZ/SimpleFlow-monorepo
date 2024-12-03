@@ -22,7 +22,7 @@ const getChain = (chainId: number | undefined) => {
 }
 
 // Where page network is not equal to wallet network
-export function WrongNetworkModal({ currentChain, onDismiss }: { currentChain: Chain; onDismiss: () => void }) {
+export function WrongNetworkModal({ currentChain }: { currentChain: Chain }) {
   const { switchNetworkAsync, isLoading, canSwitch } = useSwitchNetwork()
   const { logout } = useAuth()
   const { isConnected, chain, chainId: walletChainId } = useAccount()
@@ -59,7 +59,7 @@ export function WrongNetworkModal({ currentChain, onDismiss }: { currentChain: C
   }, [chainId, logout, setQueryChainId, router])
 
   return (
-    <Modal title={t('You are in wrong network')} headerBackground="gradientCardHeader" onDismiss={onDismiss}>
+    <Modal title={t('You are in wrong network')} headerBackground="gradientCardHeader" hideCloseButton>
       <Grid style={{ gap: '16px' }} maxWidth={['100%', null, '336px']}>
         <Text>{t('This page is located for %network%.', { network: currentChain.name })}</Text>
         <Text>
