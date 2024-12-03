@@ -2,21 +2,21 @@ import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCallback } from 'react'
-import { Address } from 'viem'
+import { WalletClient } from 'viem'
 import { bsc } from 'viem/chains'
 import { useWalletClient } from 'wagmi'
 
-async function fetchMEVStatus(account: Address): Promise<{ mevEnabled: boolean; isError: boolean }> {
-  if (!window.ethereum || (!window.ethereum as any)?.request || account === '0x') {
-    throw new Error('Ethereum provider not found')
+async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled: boolean; isError: boolean }> {
+  if (!walletClient || !walletClient.request) {
+    console.error('Ethereum provider not found')
+    return { mevEnabled: false, isError: true }
   }
 
   try {
-    const result = await (window.ethereum as any)?.request({
+    const result = await walletClient?.account?.client?.request({
       method: 'eth_call',
       params: [
         {
-          from: account,
           to: '0x0000000000000000000000000000000000000048',
           value: '0x30',
         },
@@ -31,11 +31,12 @@ async function fetchMEVStatus(account: Address): Promise<{ mevEnabled: boolean; 
 }
 
 export function useIsMEVEnabled() {
+  const { data: walletClient } = useWalletClient()
   const { account, chainId } = useActiveWeb3React()
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['isMEVEnabled'],
-    queryFn: () => fetchMEVStatus(account ?? '0x'),
-    enabled: Boolean(account) && chainId === ChainId.BSC,
+    queryFn: () => fetchMEVStatus(walletClient!),
+    enabled: Boolean(account) && walletClient && chainId === ChainId.BSC,
     staleTime: 60000,
     retry: false,
   })
