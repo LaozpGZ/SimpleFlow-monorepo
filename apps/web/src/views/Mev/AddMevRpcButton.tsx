@@ -24,7 +24,6 @@ export const AddMevRpcButton: React.FC = () => {
   if (!account) {
     return <ConnectWalletButton withIcon />
   }
-  console.log('isMEVEnabled', isMEVEnabled, isError, isMEVStatusLoading)
   if (isMEVStatusLoading || isError) {
     return null
   }
