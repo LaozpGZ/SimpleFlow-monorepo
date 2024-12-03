@@ -4,6 +4,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCallback } from 'react'
 import { WalletClient } from 'viem'
 import { bsc } from 'viem/chains'
+
 import { useWalletClient } from 'wagmi'
 
 async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled: boolean; isError: boolean }> {
@@ -13,12 +14,15 @@ async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled:
   }
 
   try {
-    const result = await walletClient?.account?.client?.request({
+    const result = await walletClient.request({
+      // @ts-ignore
       method: 'eth_call',
       params: [
         {
+          from: walletClient.account?.address ?? '0x',
           to: '0x0000000000000000000000000000000000000048',
           value: '0x30',
+          data: '0x',
         },
       ],
     })
@@ -33,8 +37,9 @@ async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled:
 export function useIsMEVEnabled() {
   const { data: walletClient } = useWalletClient()
   const { account, chainId } = useActiveWeb3React()
+
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['isMEVEnabled'],
+    queryKey: ['isMEVEnabled', walletClient, account, chainId],
     queryFn: () => fetchMEVStatus(walletClient!),
     enabled: Boolean(account) && walletClient && chainId === ChainId.BSC,
     staleTime: 60000,
@@ -51,6 +56,7 @@ export const useShouldShowMEVToggle = () => {
 
 export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void, onFinish?: () => void) => {
   const { data: walletClient } = useWalletClient()
+
   const addMevRpc = useCallback(async () => {
     onBeforeStart?.()
     try {
