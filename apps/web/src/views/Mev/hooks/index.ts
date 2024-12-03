@@ -50,13 +50,13 @@ export function useIsMEVEnabled() {
 }
 
 export const useShouldShowMEVToggle = () => {
+  const { account } = useActiveWeb3React()
   const { isMEVEnabled, isLoading, isError } = useIsMEVEnabled()
-  return !isMEVEnabled && !isLoading && !isError
+  return !isMEVEnabled && !isLoading && !isError && Boolean(account)
 }
 
 export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void, onFinish?: () => void) => {
   const { data: walletClient } = useWalletClient()
-
   const addMevRpc = useCallback(async () => {
     onBeforeStart?.()
     try {
