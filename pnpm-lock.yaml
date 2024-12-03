@@ -208,6 +208,9 @@ importers:
       '@pancakeswap/smart-router':
         specifier: workspace:*
         version: link:../../packages/smart-router
+      '@pancakeswap/stable-swap-sdk':
+        specifier: workspace:*
+        version: link:../../packages/stable-swap-sdk
       '@pancakeswap/v3-sdk':
         specifier: workspace:*
         version: link:../../packages/v3-sdk
