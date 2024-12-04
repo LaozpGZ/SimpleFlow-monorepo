@@ -194,6 +194,7 @@
     "stylelint-config-styled-components": "^0.1.1",
     "tilg": "^0.1.1",
     "typescript": "5.2.2",
-    "vite-tsconfig-paths": "^4.0.3"
+    "vite-tsconfig-paths": "^4.0.3",
+    "webpack-retry-chunk-load-plugin": "3.1.1"
   }
 }
