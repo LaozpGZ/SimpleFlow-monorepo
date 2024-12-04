@@ -50,12 +50,10 @@ export const FlipButton = memo(function FlipButton() {
     <AutoColumn justify="space-between" position="relative">
       <Line />
       <AutoRow justify="center" style={{ padding: '0 1rem', marginTop: '1em' }}>
-        {/* <SwapUIV2.SwitchButtonV2 onClick={onFlip} /> */}
-
         <Lottie
           lottieRef={lottieRef}
           animationData={animationData}
-          style={{ height: isDark ? '44px' : '40px', cursor: 'pointer' }}
+          style={{ height: '40px', cursor: 'pointer' }}
           onClick={onFlip}
           autoplay={false}
           loop={false}
