@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import { memo, useCallback, useMemo, useRef } from 'react'
 
-import { AutoColumn, Button } from '@pancakeswap/uikit'
+import { AutoColumn, Button, useMatchBreakpoints } from '@pancakeswap/uikit'
 
 import { useTranslation } from '@pancakeswap/localization'
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
@@ -13,6 +13,7 @@ import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { styled } from 'styled-components'
 
 import { useTheme } from '@pancakeswap/hooks'
+import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { LottieRefCurrentProps } from 'lottie-react'
 import { useAllowRecipient } from '../../Swap/V3Swap/hooks'
 
@@ -33,6 +34,7 @@ export const Line = styled.div`
 export const FlipButton = memo(function FlipButton() {
   const lottieRef = useRef<LottieRefCurrentProps | null>(null)
   const { isDark } = useTheme()
+  const { isDesktop } = useMatchBreakpoints()
 
   const animationData = useMemo(() => (isDark ? ArrowDark : ArrowLight), [isDark])
 
@@ -54,16 +56,20 @@ export const FlipButton = memo(function FlipButton() {
     <AutoColumn justify="space-between" position="relative">
       <Line />
       <AutoRow justify="center" style={{ padding: '0 1rem', marginTop: '1em' }}>
-        <Lottie
-          lottieRef={lottieRef}
-          animationData={animationData}
-          style={{ height: '40px', cursor: 'pointer' }}
-          onClick={onFlip}
-          autoplay={false}
-          loop={false}
-          onMouseEnter={() => lottieRef.current?.playSegments([7, 19], true)}
-          onMouseLeave={() => lottieRef.current?.playSegments([39, 54], true)}
-        />
+        {isDesktop ? (
+          <Lottie
+            lottieRef={lottieRef}
+            animationData={animationData}
+            style={{ height: '40px', cursor: 'pointer' }}
+            onClick={onFlip}
+            autoplay={false}
+            loop={false}
+            onMouseEnter={() => lottieRef.current?.playSegments([7, 19], true)}
+            onMouseLeave={() => lottieRef.current?.playSegments([39, 54], true)}
+          />
+        ) : (
+          <SwapUIV2.SwitchButtonV2 onClick={onFlip} />
+        )}
       </AutoRow>
     </AutoColumn>
   )
