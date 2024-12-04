@@ -28,8 +28,7 @@ async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled:
     })
     return { mevEnabled: result === '0x30', isError: false }
   } catch (error) {
-    if ((error as any).code === -32601) console.error('wallet_addEthereumChain is not supported')
-    else console.error('Error checking MEV status:', error)
+    console.error('Error checking MEV status:', error)
     return { mevEnabled: false, isError: true }
   }
 }
@@ -85,7 +84,8 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
         console.warn('Ethereum provider not found. Please check your wallet')
       }
     } catch (error) {
-      console.error(error)
+      if ((error as any).code === -32601) console.error('wallet_addEthereumChain is not supported')
+      else console.error(error)
     } finally {
       onFinish?.()
     }
