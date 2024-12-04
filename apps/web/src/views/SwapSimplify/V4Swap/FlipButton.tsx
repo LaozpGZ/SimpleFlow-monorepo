@@ -1,8 +1,10 @@
+import dynamic from 'next/dynamic'
+import { memo, useCallback, useMemo, useRef } from 'react'
+
 import { AutoColumn, Button } from '@pancakeswap/uikit'
 
 import { useTranslation } from '@pancakeswap/localization'
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
-import { memo, useCallback, useMemo, useRef } from 'react'
 
 import { AutoRow } from 'components/Layout/Row'
 import { Field } from 'state/swap/actions'
@@ -11,11 +13,13 @@ import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { styled } from 'styled-components'
 
 import { useTheme } from '@pancakeswap/hooks'
-import Lottie, { LottieRefCurrentProps } from 'lottie-react'
+import { LottieRefCurrentProps } from 'lottie-react'
 import { useAllowRecipient } from '../../Swap/V3Swap/hooks'
 
 import ArrowDark from '../../../../public/images/swap/arrow_dark.json' assert { type: 'json' }
 import ArrowLight from '../../../../public/images/swap/arrow_light.json' assert { type: 'json' }
+
+const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
 export const Line = styled.div`
   position: absolute;
