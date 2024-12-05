@@ -14,6 +14,7 @@ async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
     await walletClient.request({
       method: 'wallet_addEthereumChain',
       params: [
+        // mock data without ket param nativeCurrency
         {
           chainId: '0x38', // Chain ID in hexadecimal (56 for Binance Smart Chain)
           chainName: 'PancakeSwap MEV Guard',
