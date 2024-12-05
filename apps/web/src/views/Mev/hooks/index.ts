@@ -8,18 +8,25 @@ import { bsc } from 'viem/chains'
 import { useWalletClient } from 'wagmi'
 
 async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
-  console.log('Checking wallet support for addEthereumChain ------------------------------------------------')
   try {
-    console.log('testing wallet_addEthereumChain----------------------------------------------------')
-    // @ts-ignore
-    await walletClient.request({ method: 'wallet_addEthereumChain', params: [] })
+    console.info('testing wallet_addEthereumChain----------------------------------------------------')
 
-    console.log('wallet_addEthereumChain is supported')
-    return true
+    await walletClient.request({
+      method: 'wallet_addEthereumChain',
+      params: [
+        {
+          chainId: '0x38', // Chain ID in hexadecimal (56 for Binance Smart Chain)
+          chainName: 'PancakeSwap MEV Guard',
+          rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC}
+        },
+      ],
+    })
+
+    console.error('lack of parameter, should be error')
+    return false
   } catch (error) {
-    console.log('testing wallet_addEthereumChain')
     if ((error as any)?.code === -32602) {
-      console.info("the mock test passed, there's so parameter issue as expected")
+      console.info("the mock test passed, there's so parameter issue as expected", error)
       return true
     }
     if ((error as any)?.code === -32601) {
@@ -30,7 +37,7 @@ async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
     console.error(error, 'wallet_addEthereumChain is not supported')
     return false
   } finally {
-    console.log('Checking wallet support for addEthereumChain END ----------------------------------------------------')
+    console.info('testing wallet support for addEthereumChain END ----------------------------------------------------')
   }
 }
 
@@ -104,7 +111,6 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
         rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC
         nativeCurrency: bsc.nativeCurrency,
         blockExplorerUrls: [bsc.blockExplorers.default.url],
-        value: '0x30',
       }
 
       // Check if the Ethereum provider is available
