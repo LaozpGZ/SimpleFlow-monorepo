@@ -15,7 +15,7 @@ async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
       method: 'wallet_addEthereumChain',
       // @ts-ignore
       params: [
-        // mock data without key param nativeCurrency
+        // mock data without key params nativeCurrency
         // {
         //   chainId: '0x38', // Chain ID in hexadecimal (56 for Binance Smart Chain)
         //   chainName: 'PancakeSwap MEV Guard',
