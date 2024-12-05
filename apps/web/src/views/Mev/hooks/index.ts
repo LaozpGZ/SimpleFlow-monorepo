@@ -9,8 +9,6 @@ import { useWalletClient } from 'wagmi'
 
 async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
   try {
-    console.info('testing wallet_addEthereumChain----------------------------------------------------')
-
     await walletClient.request({
       method: 'wallet_addEthereumChain',
       // @ts-ignore
@@ -38,8 +36,6 @@ async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
 
     console.error(error, 'wallet_addEthereumChain is not supported')
     return false
-  } finally {
-    console.info('testing wallet support for addEthereumChain END ----------------------------------------------------')
   }
 }
 
