@@ -7,10 +7,31 @@ import { bsc } from 'viem/chains'
 
 import { useWalletClient } from 'wagmi'
 
-async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled: boolean; isError: boolean }> {
+async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
+  const mockParam = {
+    chainId: '0x', // Chain ID in hexadecimal (56 for Binance Smart Chain)
+    chainName: 'PancakeSwap MEV Guard Tester',
+    rpcUrls: [''], // PancakeSwap MEV RPC
+    nativeCurrency: undefined,
+    blockExplorerUrls: [''],
+  }
+  try {
+    await walletClient.request({ method: 'wallet_addEthereumChain', params: [mockParam] })
+    return true
+  } catch (error) {
+    if ((error as any).code === -32601) {
+      console.error('wallet_addEthereumChain is not supported')
+      return false
+    }
+    console.error(error)
+    return true
+  }
+}
+
+async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled: boolean }> {
   if (!walletClient || !walletClient.request) {
     console.error('Ethereum provider not found')
-    return { mevEnabled: false, isError: true }
+    return { mevEnabled: false }
   }
 
   try {
@@ -26,11 +47,22 @@ async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled:
         },
       ],
     })
-    return { mevEnabled: result === '0x30', isError: false }
+    return { mevEnabled: result === '0x30' }
   } catch (error) {
     console.error('Error checking MEV status:', error)
-    return { mevEnabled: false, isError: true }
+    return { mevEnabled: false }
   }
+}
+
+export function useWalletSupportsAddEthereumChain() {
+  const { data: walletClient } = useWalletClient()
+  const { data, isLoading } = useQuery({
+    queryKey: ['walletSupportsAddEthereumChain', walletClient],
+    queryFn: () => checkWalletSupportAddEthereumChain(walletClient!),
+    enabled: Boolean(walletClient),
+    retry: false,
+  })
+  return { walletSupportsAddEthereumChain: data ?? false, isLoading }
 }
 
 export function useIsMEVEnabled() {
@@ -45,13 +77,14 @@ export function useIsMEVEnabled() {
     retry: false,
   })
 
-  return { isMEVEnabled: data?.mevEnabled ?? false, isLoading, refetch, isError: data?.isError ?? false }
+  return { isMEVEnabled: data?.mevEnabled ?? false, isLoading, refetch }
 }
 
 export const useShouldShowMEVToggle = () => {
+  const { walletSupportsAddEthereumChain, isLoading: isWalletSupportLoading } = useWalletSupportsAddEthereumChain()
   const { account } = useActiveWeb3React()
-  const { isMEVEnabled, isLoading, isError } = useIsMEVEnabled()
-  return !isMEVEnabled && !isLoading && !isError && Boolean(account)
+  const { isMEVEnabled, isLoading } = useIsMEVEnabled()
+  return !isMEVEnabled && !isLoading && !isWalletSupportLoading && Boolean(account) && walletSupportsAddEthereumChain
 }
 
 export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void, onFinish?: () => void) => {
