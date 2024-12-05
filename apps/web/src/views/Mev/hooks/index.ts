@@ -8,23 +8,29 @@ import { bsc } from 'viem/chains'
 import { useWalletClient } from 'wagmi'
 
 async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
-  const mockParam = {
-    chainId: '0x', // Chain ID in hexadecimal (56 for Binance Smart Chain)
-    chainName: 'PancakeSwap MEV Guard Tester',
-    rpcUrls: [''], // PancakeSwap MEV RPC
-    nativeCurrency: undefined,
-    blockExplorerUrls: [''],
-  }
+  console.log('Checking wallet support for addEthereumChain ------------------------------------------------')
   try {
-    await walletClient.request({ method: 'wallet_addEthereumChain', params: [mockParam] })
+    console.log('testing wallet_addEthereumChain----------------------------------------------------')
+    // @ts-ignore
+    await walletClient.request({ method: 'wallet_addEthereumChain', params: [] })
+
+    console.log('wallet_addEthereumChain is supported')
     return true
   } catch (error) {
-    if ((error as any).code === -32601) {
+    console.log('error wallet_addEthereumChain----------------------------------------------------')
+    if ((error as any)?.code === -32602) {
+      console.info("the mock test passed, there's so parameter issue as expected")
+      return true
+    }
+    if ((error as any)?.code === -32601) {
       console.error('wallet_addEthereumChain is not supported')
       return false
     }
-    console.error(error)
-    return true
+
+    console.error(error, 'wallet_addEthereumChain is not supported')
+    return false
+  } finally {
+    console.log('Checking wallet support for addEthereumChain END ----------------------------------------------------')
   }
 }
 
@@ -98,6 +104,7 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
         rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC
         nativeCurrency: bsc.nativeCurrency,
         blockExplorerUrls: [bsc.blockExplorers.default.url],
+        value: '0x30',
       }
 
       // Check if the Ethereum provider is available
