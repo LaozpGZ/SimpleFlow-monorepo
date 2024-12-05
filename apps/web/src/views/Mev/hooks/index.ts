@@ -17,7 +17,7 @@ async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
     console.log('wallet_addEthereumChain is supported')
     return true
   } catch (error) {
-    console.log('error wallet_addEthereumChain----------------------------------------------------')
+    console.log('testing wallet_addEthereumChain')
     if ((error as any)?.code === -32602) {
       console.info("the mock test passed, there's so parameter issue as expected")
       return true

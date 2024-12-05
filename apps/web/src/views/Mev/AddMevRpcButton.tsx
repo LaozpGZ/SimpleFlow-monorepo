@@ -4,13 +4,14 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
 import { useState } from 'react'
-import { useAddMevRpc, useIsMEVEnabled } from './hooks'
+import { useAddMevRpc, useIsMEVEnabled, useShouldShowMEVToggle } from './hooks'
 
 export const AddMevRpcButton: React.FC = () => {
   const { t } = useTranslation()
   const { account } = useActiveWeb3React()
 
-  const { isMEVEnabled, refetch, isLoading: isMEVStatusLoading, isError } = useIsMEVEnabled()
+  const { isMEVEnabled, refetch, isLoading: isMEVStatusLoading } = useIsMEVEnabled()
+  const shouldShowMEVToggle = useShouldShowMEVToggle()
   const [isLoading, setIsLoading] = useState(false)
   const { theme } = useTheme()
   const { addMevRpc } = useAddMevRpc(
@@ -24,7 +25,7 @@ export const AddMevRpcButton: React.FC = () => {
   if (!account) {
     return <ConnectWalletButton withIcon />
   }
-  if (isMEVStatusLoading || isError) {
+  if (isMEVStatusLoading || !shouldShowMEVToggle) {
     return null
   }
 
