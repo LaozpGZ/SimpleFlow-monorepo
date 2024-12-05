@@ -88,8 +88,9 @@ export function useIsMEVEnabled() {
     queryKey: ['isMEVEnabled', walletClient, account, chainId],
     queryFn: () => fetchMEVStatus(walletClient!),
     enabled: Boolean(account) && walletClient && chainId === ChainId.BSC,
-    staleTime: 10000,
-    retry: false,
+    staleTime: 3000,
+    refetchOnWindowFocus: true,
+    refetchInterval: 3000,
   })
 
   return { isMEVEnabled: data?.mevEnabled ?? false, isLoading, refetch }
