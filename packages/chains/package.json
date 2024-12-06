@@ -37,6 +37,9 @@
   "engines": {
     "node": ">=10"
   },
+  "dependencies": {
+    "viem": "catalog:"
+  },
   "devDependencies": {
     "tsup": "^6.7.0"
   }

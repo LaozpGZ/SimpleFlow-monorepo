@@ -12,12 +12,7 @@ test('exports', () => {
       "mainnetChainNamesInKebabCase",
       "chainNameToChainId",
       "defiLlamaChainNames",
-      "getChainName",
-      "getChainNameInKebabCase",
-      "getMainnetChainNameInKebabCase",
-      "getLlamaChainName",
-      "getChainIdByChainName",
-      "isTestnetChainId",
+      "BSCMevGuardChain",
       "V3_SUBGRAPHS",
       "V2_SUBGRAPHS",
       "BLOCKS_SUBGRAPHS",
@@ -26,6 +21,12 @@ test('exports', () => {
       "getV3Subgraphs",
       "getV2Subgraphs",
       "getBlocksSubgraphs",
+      "getChainName",
+      "getChainNameInKebabCase",
+      "getMainnetChainNameInKebabCase",
+      "getLlamaChainName",
+      "getChainIdByChainName",
+      "isTestnetChainId",
     ]
   `)
 })
