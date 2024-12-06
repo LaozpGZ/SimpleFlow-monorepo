@@ -2,7 +2,7 @@ import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCallback } from 'react'
-import { WalletClient } from 'viem'
+import { InternalRpcError, InvalidParamsRpcError, MethodNotFoundRpcError, WalletClient } from 'viem'
 import { bsc } from 'viem/chains'
 
 import { useWalletClient } from 'wagmi'
@@ -18,11 +18,11 @@ async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
     console.error('lack of parameter, should be error')
     return false
   } catch (error) {
-    if ([-32602, -32603].includes((error as any)?.code)) {
+    if ([InvalidParamsRpcError.code, InternalRpcError.code].includes((error as any)?.code)) {
       console.info("the mock test passed, there's some parameter issue as expected", error)
       return true
     }
-    if ((error as any)?.code === -32601) {
+    if ((error as any)?.code === MethodNotFoundRpcError.code) {
       console.error('wallet_addEthereumChain is not supported')
       return false
     }
