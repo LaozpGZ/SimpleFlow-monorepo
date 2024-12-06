@@ -6,19 +6,32 @@ import { InternalRpcError, InvalidParamsRpcError, MethodNotFoundRpcError, Wallet
 import { addChain } from 'viem/actions'
 
 import { useWalletClient } from 'wagmi'
+import { bsc } from 'viem/chains'
 
 async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
   try {
     await walletClient.request({
       method: 'wallet_addEthereumChain',
       // @ts-ignore
-      params: [{}],
+      params: [
+        // mock data without key params chainId
+        // @ts-ignore
+        {
+          chainName: 'PancakeSwap MEV Guard',
+          rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC}
+          nativeCurrency: bsc.nativeCurrency,
+          blockExplorerUrls: [bsc.blockExplorers.default.url],
+        },
+      ],
     })
 
     console.error('lack of parameter, should be error')
     return false
   } catch (error) {
-    if ([InvalidParamsRpcError.code, InternalRpcError.code].includes((error as any)?.code)) {
+    if (
+      [InvalidParamsRpcError.code, InternalRpcError.code].includes((error as any)?.code) &&
+      (error as any)?.message?.includes('chainId')
+    ) {
       console.info("the mock test passed, there's some parameter issue as expected", error)
       return true
     }
