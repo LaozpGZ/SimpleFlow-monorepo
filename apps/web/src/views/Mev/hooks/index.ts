@@ -120,7 +120,7 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
         console.warn('Ethereum provider not found. Please check your wallet')
       }
     } catch (error) {
-      if ((error as any).code === -32601) console.error('wallet_addEthereumChain is not supported')
+      if ((error as any).code === MethodNotFoundRpcError.code) console.error('wallet_addEthereumChain is not supported')
       else console.error(error)
     } finally {
       onFinish?.()
