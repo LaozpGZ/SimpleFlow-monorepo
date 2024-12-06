@@ -22,7 +22,7 @@ export const useChainIdListener = () => {
     return () => {
       connector?.emitter?.off('change', onChainChanged)
     }
-  })
+  }, [connector, onChainChanged])
 }
 
 const useAddressListener = () => {

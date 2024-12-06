@@ -12,20 +12,13 @@ async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
     await walletClient.request({
       method: 'wallet_addEthereumChain',
       // @ts-ignore
-      params: [
-        // mock data without key params nativeCurrency
-        {
-          chainId: '0x38', // Chain ID in hexadecimal (56 for Binance Smart Chain)
-          chainName: 'PancakeSwap MEV Guard',
-          rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC}
-        },
-      ],
+      params: [],
     })
 
     console.error('lack of parameter, should be error')
     return false
   } catch (error) {
-    if ((error as any)?.code === -32602) {
+    if ([-32602, -32603].includes((error as any)?.code)) {
       console.info("the mock test passed, there's some parameter issue as expected", error)
       return true
     }
