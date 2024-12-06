@@ -1,9 +1,9 @@
-import { ChainId } from '@pancakeswap/chains'
+import { BSCMevGuardChain, ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCallback } from 'react'
 import { InternalRpcError, InvalidParamsRpcError, MethodNotFoundRpcError, WalletClient } from 'viem'
-import { bsc } from 'viem/chains'
+import { addChain } from 'viem/actions'
 
 import { useWalletClient } from 'wagmi'
 
@@ -95,22 +95,11 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
   const addMevRpc = useCallback(async () => {
     onBeforeStart?.()
     try {
-      const networkParams = {
-        chainId: '0x38', // Chain ID in hexadecimal (56 for Binance Smart Chain)
-        chainName: 'PancakeSwap MEV Guard',
-        rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC
-        nativeCurrency: bsc.nativeCurrency,
-        blockExplorerUrls: [bsc.blockExplorers.default.url],
-      }
-
       // Check if the Ethereum provider is available
       if (walletClient) {
         try {
           // Prompt the wallet to add the custom network
-          await walletClient.request({
-            method: 'wallet_addEthereumChain',
-            params: [networkParams],
-          })
+          await addChain(walletClient, { chain: BSCMevGuardChain })
           console.info('RPC network added successfully!')
           onSuccess?.()
         } catch (error) {
