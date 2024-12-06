@@ -12,7 +12,7 @@ async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
     await walletClient.request({
       method: 'wallet_addEthereumChain',
       // @ts-ignore
-      params: [],
+      params: [{}],
     })
 
     console.error('lack of parameter, should be error')
