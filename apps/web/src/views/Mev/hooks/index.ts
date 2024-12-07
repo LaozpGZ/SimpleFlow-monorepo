@@ -12,7 +12,6 @@ async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
   try {
     await walletClient.request({
       method: 'wallet_addEthereumChain',
-      // @ts-ignore
       params: [
         // mock data without key params chainId
         // @ts-ignore
@@ -110,20 +109,16 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
     try {
       // Check if the Ethereum provider is available
       if (walletClient) {
-        try {
-          // Prompt the wallet to add the custom network
-          await addChain(walletClient, { chain: BSCMevGuardChain })
-          console.info('RPC network added successfully!')
-          onSuccess?.()
-        } catch (error) {
-          console.error('Error adding RPC network:', error)
-        }
+        // Prompt the wallet to add the custom network
+        await addChain(walletClient, { chain: BSCMevGuardChain })
+        console.info('RPC network added successfully!')
+        onSuccess?.()
       } else {
         console.warn('Ethereum provider not found. Please check your wallet')
       }
     } catch (error) {
       if ((error as any).code === MethodNotFoundRpcError.code) console.error('wallet_addEthereumChain is not supported')
-      else console.error(error)
+      else console.error('Error adding RPC network:', error)
     } finally {
       onFinish?.()
     }
