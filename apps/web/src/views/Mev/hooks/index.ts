@@ -11,21 +11,19 @@ import { BSCMevGuardChain } from 'utils/mevGuardChains'
 
 async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
   try {
+    if (window?.ethereum?.isSafePal) return false
     await walletClient.request({
       method: 'wallet_addEthereumChain',
-      // @ts-ignore
-      params: window?.ethereum?.isSafePal
-        ? []
-        : [
-            // mock data without key params chainId
-            // @ts-ignore
-            {
-              chainName: 'PancakeSwap MEV Guard',
-              rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC}
-              nativeCurrency: bsc.nativeCurrency,
-              blockExplorerUrls: [bsc.blockExplorers.default.url],
-            },
-          ],
+      params: [
+        // mock data without key params chainId
+        // @ts-ignore
+        {
+          chainName: 'PancakeSwap MEV Guard',
+          rpcUrls: ['https://bscrpc.pancakeswap.finance'], // PancakeSwap MEV RPC}
+          nativeCurrency: bsc.nativeCurrency,
+          blockExplorerUrls: [bsc.blockExplorers.default.url],
+        },
+      ],
     })
 
     console.error('lack of parameter, should be error')
