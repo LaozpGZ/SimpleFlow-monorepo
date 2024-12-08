@@ -65,6 +65,7 @@ async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled:
           value: '0x30',
           data: '0x',
         },
+        'latest',
       ],
     })
     return { mevEnabled: result === '0x30' }
