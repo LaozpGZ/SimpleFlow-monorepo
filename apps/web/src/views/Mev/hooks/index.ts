@@ -1,4 +1,4 @@
-import { BSCMevGuardChain, ChainId } from '@pancakeswap/chains'
+import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useCallback } from 'react'
@@ -7,6 +7,7 @@ import { addChain } from 'viem/actions'
 
 import { useWalletClient } from 'wagmi'
 import { bsc } from 'viem/chains'
+import { BSCMevGuardChain } from 'utils/mevGuardChains'
 
 async function checkWalletSupportAddEthereumChain(walletClient: WalletClient) {
   try {
