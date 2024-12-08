@@ -84,7 +84,7 @@ export function SimpleStakingSunsetModal() {
   )
 
   useEffect(() => {
-    if (stakedPositions.length === 0 && ack === false) {
+    if (stakedPositions.length > 0 && ack === false) {
       onOptionsConfirmModalPresent()
     }
   }, [stakedPositions, ack, onOptionsConfirmModalPresent])
