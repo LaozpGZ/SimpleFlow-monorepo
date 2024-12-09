@@ -30,7 +30,14 @@ export const useAccountPositionDetailByPool = <TProtocol extends keyof PoolPosit
   const [latestTxReceipt] = useLatestTxReceipt()
 
   return useQuery({
-    queryKey: ['accountPosition', account, chainId, poolInfo?.lpAddress, latestTxReceipt?.blockHash],
+    queryKey: [
+      'accountPosition',
+      account,
+      chainId,
+      poolInfo?.lpAddress,
+      poolInfo?.protocol,
+      latestTxReceipt?.blockHash,
+    ],
     queryFn: async () => {
       if (poolInfo?.protocol === 'v2') {
         return getAccountV2LpDetails(
@@ -50,7 +57,9 @@ export const useAccountPositionDetailByPool = <TProtocol extends keyof PoolPosit
       }
       return Promise.resolve([])
     },
-    enabled: Boolean(account && poolInfo?.lpAddress && (poolInfo?.protocol === 'stable' ? pairs.length : true)),
+    enabled: Boolean(
+      account && poolInfo?.lpAddress && poolInfo?.protocol && (poolInfo?.protocol === 'stable' ? pairs.length : true),
+    ),
     select: useCallback(
       (data) => {
         if (poolInfo?.protocol === 'v3') {
