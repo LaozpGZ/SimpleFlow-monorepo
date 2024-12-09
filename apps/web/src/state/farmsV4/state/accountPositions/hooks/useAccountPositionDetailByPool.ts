@@ -58,7 +58,11 @@ export const useAccountPositionDetailByPool = <TProtocol extends keyof PoolPosit
       return Promise.resolve([])
     },
     enabled: Boolean(
-      account && poolInfo?.lpAddress && poolInfo?.protocol && (poolInfo?.protocol === 'stable' ? pairs.length : true),
+      account &&
+        poolInfo &&
+        poolInfo.lpAddress &&
+        poolInfo.protocol &&
+        (poolInfo.protocol === 'stable' ? pairs.length : true),
     ),
     select: useCallback(
       (data) => {
@@ -81,7 +85,7 @@ export const useAccountPositionDetailByPool = <TProtocol extends keyof PoolPosit
           ? data[0]
           : undefined
       },
-      [poolInfo, poolInfo?.protocol],
+      [poolInfo],
     ),
   })
 }
