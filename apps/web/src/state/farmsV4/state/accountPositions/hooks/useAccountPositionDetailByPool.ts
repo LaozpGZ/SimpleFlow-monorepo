@@ -26,35 +26,34 @@ export const useAccountPositionDetailByPool = <TProtocol extends keyof PoolPosit
     const { token0, token1 } = poolInfo
     return [token0.wrapped, token1.wrapped]
   }, [poolInfo])
-  const protocol = useMemo(() => poolInfo?.protocol, [poolInfo])
-  const pairs = useStableSwapPairsByChainId(chainId, protocol === 'stable')
+  const pairs = useStableSwapPairsByChainId(chainId, poolInfo?.protocol === 'stable')
   const [latestTxReceipt] = useLatestTxReceipt()
 
   return useQuery({
     queryKey: ['accountPosition', account, chainId, poolInfo?.lpAddress, latestTxReceipt?.blockHash],
     queryFn: async () => {
-      if (protocol === 'v2') {
+      if (poolInfo?.protocol === 'v2') {
         return getAccountV2LpDetails(
           chainId,
           account!,
           currency0 && currency1 ? [[currency0.wrapped, currency1.wrapped]] : [],
         )
       }
-      if (protocol === 'stable') {
+      if (poolInfo?.protocol === 'stable') {
         const stablePair = pairs.find((pair) => {
           return isAddressEqual(pair.stableSwapAddress, poolInfo?.stableSwapAddress as Address)
         })
         return getStablePairDetails(chainId, account!, stablePair ? [stablePair] : [])
       }
-      if (protocol === 'v3') {
+      if (poolInfo?.protocol === 'v3') {
         return getAccountV3Positions(chainId, account!)
       }
       return Promise.resolve([])
     },
-    enabled: Boolean(account && poolInfo?.lpAddress && (protocol === 'stable' ? pairs.length : true)),
+    enabled: Boolean(account && poolInfo?.lpAddress && (poolInfo?.protocol === 'stable' ? pairs.length : true)),
     select: useCallback(
       (data) => {
-        if (protocol === 'v3') {
+        if (poolInfo?.protocol === 'v3') {
           // v3
           const d = data.filter((position) => {
             const { token0, token1, fee } = position as PositionDetail
@@ -73,7 +72,7 @@ export const useAccountPositionDetailByPool = <TProtocol extends keyof PoolPosit
           ? data[0]
           : undefined
       },
-      [poolInfo, protocol],
+      [poolInfo, poolInfo?.protocol],
     ),
   })
 }
