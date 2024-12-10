@@ -8,51 +8,46 @@ import { BSCMevGuardChain } from 'utils/mevGuardChains'
 import { addChain } from 'viem/actions'
 import { Connector, useAccount, useWalletClient } from 'wagmi'
 
-type WalletProviderFlags =
-  | 'isApexWallet'
-  | 'isAvalanche'
-  | 'isBackpack'
-  | 'isBifrost'
-  | 'isBitKeep'
-  | 'isBitski'
-  | 'isBlockWallet'
-  | 'isBraveWallet'
-  | 'isCoinbaseWallet'
-  | 'isDawn'
-  | 'isEnkrypt'
-  | 'isExodus'
-  | 'isFrame'
-  | 'isFrontier'
-  | 'isGamestop'
-  | 'isHyperPay'
-  | 'isImToken'
-  | 'isKuCoinWallet'
-  | 'isMathWallet'
-  | 'isMetaMask'
-  | 'isOkxWallet'
-  | 'isOKExWallet'
-  | 'isOneInchAndroidWallet'
-  | 'isOneInchIOSWallet'
-  | 'isOneKey'
-  | 'isOpera'
-  | 'isPhantom'
-  | 'isPortal'
-  | 'isRabby'
-  | 'isRainbow'
-  | 'isStatus'
-  | 'isTally'
-  | 'isTokenPocket'
-  | 'isTokenary'
-  | 'isTrust'
-  | 'isTrustWallet'
-  | 'isUniswapWallet'
-  | 'isXDEFI'
-  | 'isZerion'
-
-const SUPPORT_ADD_ETHEREUM_CHAIN_FLAG: WalletProviderFlags[] = [
-  // 'isRabby',
-  // 'isOneKey',
+const WalletProviders = [
+  'isApexWallet',
+  'isAvalanche',
+  'isBackpack',
+  'isBifrost',
+  'isBitKeep',
+  'isBitski',
+  'isBlockWallet',
+  'isBraveWallet',
+  'isCoinbaseWallet',
+  'isDawn',
+  'isEnkrypt',
+  'isExodus',
+  'isFrame',
+  'isFrontier',
+  'isGamestop',
+  'isHyperPay',
   'isImToken',
+  'isKuCoinWallet',
+  'isMathWallet',
+  // 'isMetaMask',
+  'isOkxWallet',
+  'isOKExWallet',
+  'isOneInchAndroidWallet',
+  'isOneInchIOSWallet',
+  'isOneKey',
+  'isOpera',
+  'isPhantom',
+  'isPortal',
+  'isRabby',
+  'isRainbow',
+  'isStatus',
+  'isTally',
+  'isTokenPocket',
+  'isTokenary',
+  'isTrust',
+  'isTrustWallet',
+  'isUniswapWallet',
+  'isXDEFI',
+  'isZerion',
 ]
 
 async function checkWalletSupportAddEthereumChain(connector: Connector) {
@@ -61,9 +56,7 @@ async function checkWalletSupportAddEthereumChain(connector: Connector) {
 
     const provider = (await connector.getProvider()) as any
 
-    const haveSupportFlag = SUPPORT_ADD_ETHEREUM_CHAIN_FLAG.some((flag) => provider?.[flag])
-
-    return connector.name === 'Injected' && (haveSupportFlag || (!haveSupportFlag && provider?.isMetaMask))
+    return provider && provider.isMetaMask && !WalletProviders.some((p: string) => p in provider)
   } catch (error) {
     console.error(error, 'wallet_addEthereumChain is not supported')
     return false
