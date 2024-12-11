@@ -24,7 +24,6 @@ import CurrencySearchModal from 'components/SearchModal/CurrencySearchModal'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { isAddressEqual } from 'utils'
 import WalletModalManager from 'components/WalletModalManager'
-import { useMasterchefV3 } from 'hooks/useContract'
 
 interface ZapLiquidityProps {
   tickLower?: number
@@ -84,10 +83,6 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
   const handleWalletModalOnDismiss = useCallback(() => setIsWalletModalOpen(false), [])
 
   const handleOnWalletConnect = useCallback(() => setIsWalletModalOpen(true), [])
-
-  const masterChefV3 = useMasterchefV3()
-
-  const masterChefV3Addresses = useMemo(() => (masterChefV3 ? [masterChefV3.address] : undefined), [masterChefV3])
 
   const handleOnClick = useCallback(() => {
     setDepositTokens(
@@ -235,7 +230,6 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
             initAmounts={amounts}
             initDepositTokens={depositTokens}
             poolAddress={poolAddress ?? '0x'}
-            farmContractAddresses={masterChefV3Addresses}
             onConnectWallet={handleOnWalletConnect}
             onAddTokens={handleAddTokens}
             onOpenTokenSelectModal={onPresentCurrencyModal}
