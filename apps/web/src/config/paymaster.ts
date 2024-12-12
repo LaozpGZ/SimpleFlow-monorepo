@@ -27,6 +27,7 @@ export const paymasterTokens: Currency[] = [
   zksyncTokens.weth,
   zksyncTokens.wethe,
   zksyncTokens.hold,
+  zksyncTokens.zfi,
 ]
 
 export const paymasterInfo: {
@@ -34,6 +35,9 @@ export const paymasterInfo: {
 } = {
   [zksyncTokens.zk.address]: {
     discount: '-40%',
+  },
+  [zksyncTokens.zfi.address]: {
+    discount: '-20%',
   },
   [zksyncTokens.wbtc.address]: {
     discount: '-20%',

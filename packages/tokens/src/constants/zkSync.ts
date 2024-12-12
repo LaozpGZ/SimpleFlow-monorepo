@@ -135,4 +135,12 @@ export const zksyncTokens = {
     'ReactorFusion',
     'https://reactorfusion.xyz/',
   ),
+  zfi: new ERC20Token(
+    ChainId.ZKSYNC,
+    '0x5d0d7BCa050e2E98Fd4A5e8d3bA823B49f39868d',
+    18,
+    'ZFI',
+    'Zyfi Token',
+    'https://www.zyfi.org/',
+  ),
 }
