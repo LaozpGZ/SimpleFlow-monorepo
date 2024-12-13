@@ -1,1 +1,1 @@
-# Empty Ton App Folder
+# Empty NextJS Ton App
