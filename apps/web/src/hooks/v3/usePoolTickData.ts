@@ -20,7 +20,7 @@ function useTicksFromSubgraph(
   const poolAddress = useMemo(
     () =>
       currencyA && currencyB && feeAmount
-        ? Pool.getAddress(currencyA?.wrapped, currencyB?.wrapped, feeAmount, undefined)
+        ? Pool.getAddress(currencyA.wrapped, currencyB.wrapped, feeAmount)
         : undefined,
     [currencyA, currencyB, feeAmount],
   )
