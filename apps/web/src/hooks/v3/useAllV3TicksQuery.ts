@@ -105,15 +105,13 @@ export async function getPoolTicks(
       after = undefined
     }
 
-    allTicks.push(
-      ...resp.data.rows.map((tick) => {
-        return {
-          tick: tick.tickIdx.toString(),
-          liquidityNet: tick.liquidityNet,
-          liquidityGross: tick.liquidityGross,
-        }
-      }),
-    )
+    resp.data.rows.forEach((tick) => {
+      allTicks.push({
+        tick: tick.tickIdx.toString(),
+        liquidityNet: tick.liquidityNet,
+        liquidityGross: tick.liquidityGross,
+      })
+    })
   }
 
   return allTicks

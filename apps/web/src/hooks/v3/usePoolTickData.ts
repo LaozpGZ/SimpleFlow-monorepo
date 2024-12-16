@@ -17,10 +17,13 @@ function useTicksFromSubgraph(
   activeTick: number | undefined,
   enabled = true,
 ) {
-  const poolAddress =
-    currencyA && currencyB && feeAmount
-      ? Pool.getAddress(currencyA?.wrapped, currencyB?.wrapped, feeAmount, undefined)
-      : undefined
+  const poolAddress = useMemo(
+    () =>
+      currencyA && currencyB && feeAmount
+        ? Pool.getAddress(currencyA?.wrapped, currencyB?.wrapped, feeAmount, undefined)
+        : undefined,
+    [currencyA, currencyB, feeAmount],
+  )
 
   return useAllV3TicksQuery(poolAddress, activeTick, 30000, enabled)
 }
