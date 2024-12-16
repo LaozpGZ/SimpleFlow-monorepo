@@ -13,6 +13,7 @@ export type AllV3TicksQuery = {
 }
 
 export type Ticks = AllV3TicksQuery['ticks']
+
 export type TickData = Ticks[number]
 
 export default function useAllV3TicksQuery(
