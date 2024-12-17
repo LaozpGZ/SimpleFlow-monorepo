@@ -1,5 +1,5 @@
 {
-  "name": "@pancakeswap/ton-addon",
+  "name": "@pancakeswap/routing-sdk-addon-ton",
   "version": "0.0.1",
   "description": "Routing sdk addon for pcs Ton",
   "repository": {
