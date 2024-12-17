@@ -93,7 +93,7 @@ const nextConfig = {
           retryDelay: `function(retryAttempt) {
           return 2 ** (retryAttempt - 1) * 500;
         }`,
-          maxRetries: 5,
+          maxRetries: 3,
         }),
     )
     if (!isServer && webpackConfig.optimization.splitChunks) {
