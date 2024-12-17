@@ -117,9 +117,16 @@ export function useIsMEVEnabled() {
 
 export const useShouldShowMEVToggle = () => {
   const { walletSupportsAddEthereumChain, isLoading: isWalletSupportLoading } = useWalletSupportsAddEthereumChain()
-  const { account } = useActiveWeb3React()
+  const { account, chainId } = useActiveWeb3React()
   const { isMEVEnabled, isLoading } = useIsMEVEnabled()
-  return !isMEVEnabled && !isLoading && !isWalletSupportLoading && Boolean(account) && walletSupportsAddEthereumChain
+  return (
+    !isMEVEnabled &&
+    !isLoading &&
+    !isWalletSupportLoading &&
+    Boolean(account) &&
+    walletSupportsAddEthereumChain &&
+    chainId === ChainId.BSC
+  )
 }
 
 export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void, onFinish?: () => void) => {
