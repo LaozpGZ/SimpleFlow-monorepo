@@ -19,6 +19,7 @@
     "bignumber.js": "^9.0.0",
     "jotai": "catalog:",
     "styled-components": "6.0.7",
+    "react": "catalog:",
     "viem": "catalog:"
   },
   "peerDependenciesMeta": {
