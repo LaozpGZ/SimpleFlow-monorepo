@@ -1,7 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { MethodNotFoundRpcError, WalletClient } from 'viem'
 
 import { BSCMevGuardChain } from 'utils/mevGuardChains'
@@ -112,20 +112,24 @@ export function useIsMEVEnabled() {
     staleTime: 60000,
   })
 
-  return { isMEVEnabled: data?.mevEnabled ?? false, isLoading, refetch }
+  const isMEVProtectAvailable = useMemo(() => {
+    return chainId === ChainId.BSC
+  }, [chainId])
+
+  return { isMEVEnabled: data?.mevEnabled ?? false, isLoading, refetch, isMEVProtectAvailable }
 }
 
 export const useShouldShowMEVToggle = () => {
   const { walletSupportsAddEthereumChain, isLoading: isWalletSupportLoading } = useWalletSupportsAddEthereumChain()
-  const { account, chainId } = useActiveWeb3React()
-  const { isMEVEnabled, isLoading } = useIsMEVEnabled()
+  const { account } = useActiveWeb3React()
+  const { isMEVEnabled, isLoading, isMEVProtectAvailable } = useIsMEVEnabled()
   return (
     !isMEVEnabled &&
     !isLoading &&
     !isWalletSupportLoading &&
     Boolean(account) &&
     walletSupportsAddEthereumChain &&
-    chainId === ChainId.BSC
+    isMEVProtectAvailable
   )
 }
 
