@@ -9,7 +9,7 @@ export class Jetton extends Token {
     name?: string,
     projectLink?: string,
   ) {
-    super(chainId, address as `0x{string}`, decimals, symbol, name, projectLink)
+    super(chainId, address as `0x${string}`, decimals, symbol, name, projectLink)
   }
 
   public sortsBefore(other: Jetton): boolean {
