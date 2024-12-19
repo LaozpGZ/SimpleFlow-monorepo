@@ -1,6 +1,6 @@
 import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { SERVER_NODES } from 'config/nodes'
+import { PUBLIC_NODES } from 'config/nodes'
 import { lazy, Suspense } from 'react'
 import { CHAIN_IDS } from 'utils/wagmi'
 import Page from 'views/Page'
@@ -30,7 +30,7 @@ const BridgePage = () => {
             connectWalletButton={<ConnectWalletButton width="100%" />}
             supportedChainIds={CHAIN_IDS}
             // @ts-ignore
-            rpcConfig={SERVER_NODES}
+            rpcConfig={PUBLIC_NODES}
           />
         </Suspense>
       </Flex>
