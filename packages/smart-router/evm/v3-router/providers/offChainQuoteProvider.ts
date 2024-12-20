@@ -45,7 +45,8 @@ export function createOffChainQuoteProvider(): QuoteProvider {
       const routesWithQuote: RouteWithQuote[] = []
       for (const route of routes) {
         try {
-          const { pools, amount, output } = route
+          const { pools, amount, output, input } = route
+          const quoteCurrency = amount.currency.wrapped.equals(input.wrapped) ? output : input
           let quote = amount
           const initializedTickCrossedList = Array(pools.length).fill(0)
           let quoteSuccess = true
@@ -75,7 +76,7 @@ export function createOffChainQuoteProvider(): QuoteProvider {
             continue
           }
 
-          const finalQuote = CurrencyAmount.fromRawAmount(output, quote.quotient)
+          const finalQuote = CurrencyAmount.fromRawAmount(quoteCurrency, quote.quotient)
           const { gasEstimate, gasCostInUSD, gasCostInToken } = gasModel.estimateGasCost(
             {
               ...route,
