@@ -401,7 +401,7 @@ export const PositionPage = () => {
     if (!account) {
       return <EmptyListPlaceholder text={t('Please Connect Wallet to view positions.')} />
     }
-    if (v3Loading && v2Loading && stableLoading) {
+    if (v3Loading || v2Loading || stableLoading) {
       return (
         <>
           <PositionItemSkeleton />
