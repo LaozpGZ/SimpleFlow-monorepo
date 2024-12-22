@@ -401,7 +401,7 @@ export const PositionPage = () => {
     if (!account) {
       return <EmptyListPlaceholder text={t('Please Connect Wallet to view positions.')} />
     }
-    if (v3Loading || v2Loading || stableLoading) {
+    if (v3Loading && v2Loading && stableLoading) {
       return (
         <>
           <PositionItemSkeleton />
@@ -412,7 +412,14 @@ export const PositionPage = () => {
       )
     }
 
-    if (!v3PositionList.length && !v2PositionList.length && !stablePositionList.length) {
+    if (
+      !v3Loading &&
+      !v2Loading &&
+      !stableLoading &&
+      !v3PositionList.length &&
+      !v2PositionList.length &&
+      !stablePositionList.length
+    ) {
       return (
         <EmptyListPlaceholder
           text={t('You have no %status% position in this wallet.', {
@@ -435,7 +442,19 @@ export const PositionPage = () => {
       [Protocol.V2]: v2PositionList,
       [Protocol.STABLE]: stablePositionList,
     }
-    return selectedPoolTypes.reduce((acc, type) => acc.concat(sectionMap[type]), []).slice(0, cursorVisible)
+    const elements = selectedPoolTypes.reduce((acc, type) => acc.concat(sectionMap[type]), []).slice(0, cursorVisible)
+    if (v3Loading || v2Loading || stableLoading) {
+      return [
+        ...elements,
+        <>
+          <PositionItemSkeleton />
+          <Text color="textSubtle" textAlign="center">
+            <Dots>{t('Loading')}</Dots>
+          </Text>
+        </>,
+      ]
+    }
+    return elements
   }, [
     account,
     t,
