@@ -7,7 +7,6 @@ import { getLSOrders, hashOrder, hashOrderSet, saveOrder, saveOrders } from 'uti
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { usePublicClient } from 'wagmi'
-import { Transaction, decodeFunctionData } from 'viem'
 import { gelatoLimitABI } from 'config/abi/gelatoLimit'
 import { useMemo } from 'react'
 import orderBy from 'lodash/orderBy'
@@ -17,6 +16,22 @@ export const EXISTING_ORDERS_QUERY_KEY = ['limitOrders', 'gelato', 'existingOrde
 export const OPEN_ORDERS_QUERY_KEY = ['limitOrders', 'gelato', 'openOrders']
 export const EXECUTED_CANCELLED_ORDERS_QUERY_KEY = ['limitOrders', 'gelato', 'cancelledExecutedOrders']
 export const EXECUTED_EXPIRED_ORDERS_QUERY_KEY = ['limitOrders', 'gelato', 'expiredExecutedOrders']
+
+type DepositLog = {
+  key: string
+  transactionHash: string
+  caller: string
+  amount: string
+  blockNumber: number
+  data: {
+    module: string
+    inputToken: string
+    owner: string
+    witness: string
+    data: string
+    secret: string
+  }
+}
 
 function newOrdersFirst(a: Order, b: Order) {
   return Number(b.updatedAt) - Number(a.updatedAt)
@@ -80,70 +95,50 @@ const useExistingOrders = (turnOn: boolean): ExistingOrder[] => {
 
   const provider = usePublicClient({ chainId })
 
-  const startFetch = turnOn && gelatoLimitOrders && account && chainId
+  const startFetch = turnOn && gelatoLimitOrders && account && chainId && provider
 
-  const { data = [] } = useQuery({
+  const { data } = useQuery({
     queryKey: [...EXISTING_ORDERS_QUERY_KEY, account],
 
     queryFn: async () => {
-      if (!gelatoLimitOrders || !account || !chainId) {
+      if (!gelatoLimitOrders || !account || !chainId || !provider) {
         throw new Error('Missing gelatoLimitOrders, account or chainId')
       }
+
       try {
-        if (provider) {
-          const response = await fetch(
-            `/api/query/transaction?sender=${account}&to=${gelatoLimitOrders?.contract.address}`,
-          )
-          const { hashes }: { hashes: `0x${string}`[] } = await response.json()
-          const transactionDetails: Transaction[] = await Promise.all(
-            hashes.map((hash) => provider.getTransaction({ hash })),
-          )
+        const response = await fetch(`https://proofs.pancakeswap.com/gelato/v1/${account}.log`)
 
-          const orders = transactionDetails
-            .map((transaction) => {
-              if (!transaction.input) return undefined
-              const { functionName, args } = decodeFunctionData({
-                abi: gelatoLimitABI,
-                data: transaction.input,
-              })
-              if (functionName !== 'depositEth') return undefined
-              if (args && args.length > 0) {
-                const data_ = args[0] as string
-                const offset = data_.startsWith('0x') ? 2 : 0
-                const owner = `0x${data_.substr(offset + 64 * 2 + 24, 40)}`
-                const module_ = `0x${data_.substr(offset + 64 * 0 + 24, 40)}`
-                const inputToken = `0x${data_.substr(offset + 64 * 1 + 24, 40)}`
-                const witness = `0x${data_.substr(offset + 64 * 3 + 24, 40)}`
-                return {
-                  transactionHash: transaction.hash,
-                  module: module_,
-                  inputToken,
-                  owner,
-                  witness,
-                  data: `0x${data_.substr(offset + 64 * 7, 64 * 3)}`,
-                }
-              }
-              return undefined
-            })
-            .filter(Boolean) as ExistingOrder[]
-
-          const existRoles = await provider.multicall({
-            contracts: orders.map((order) => {
-              return {
-                abi: gelatoLimitABI,
-                address: gelatoLimitOrders.contract.address,
-                functionName: 'existOrder',
-                args: [order.module, order.inputToken, order.owner, order.witness, order.data],
-              }
-            }) as any[],
-            allowFailure: false,
-          })
-          return orders.filter((_, index) => existRoles[index])
+        if (response.status === 404) {
+          return undefined
         }
+
+        const logs: DepositLog[] = await response.json()
+
+        const existRoles = await provider.multicall({
+          contracts: logs.map((log) => {
+            return {
+              abi: gelatoLimitABI,
+              address: gelatoLimitOrders.contract.address,
+              functionName: 'existOrder',
+              args: [log.data.module, log.data.inputToken, log.data.owner, log.data.witness, log.data.data],
+            }
+          }) as any[],
+        })
+
+        return logs
+          .filter((_, index) => existRoles[index]?.status === 'success' && existRoles[index]?.result)
+          .map((log) => ({
+            transactionHash: log.transactionHash,
+            module: log.data.module,
+            inputToken: log.data.inputToken,
+            owner: log.data.owner,
+            witness: log.data.witness,
+            data: log.data.data,
+          }))
       } catch (e) {
-        console.error('Error fetching open orders from subgraph', e)
+        console.error('Error fetching logs or querying existOrder', e)
+        return undefined
       }
-      return undefined
     },
     enabled: Boolean(startFetch),
     refetchOnMount: false,
@@ -151,7 +146,7 @@ const useExistingOrders = (turnOn: boolean): ExistingOrder[] => {
     refetchOnReconnect: false,
   })
 
-  return data
+  return useMemo(() => data ?? [], [data])
 }
 
 const useOpenOrders = (turnOn: boolean): Order[] => {
