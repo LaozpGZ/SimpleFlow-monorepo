@@ -8,6 +8,8 @@ export const SnowflakesWrapper = styled.div`
   bottom: 0;
   width: 100%;
   height: 100%;
+  pointer-events: none;
+  user-select: none;
 `
 
 const XmaxBg = styled.div`
@@ -23,7 +25,11 @@ const XmaxBg = styled.div`
 
 const XmaxTree = styled.div`
   position: absolute;
-  bottom: 15%;
+  bottom: 5%;
+  ${({ theme }) => theme.mediaQueries.md} {
+    bottom: 15%;
+  }
+
   left: 1%;
   width: 16vw;
   height: 19.2vw;
