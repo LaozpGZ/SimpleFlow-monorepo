@@ -119,6 +119,8 @@ export default function V4Swap() {
           height="100%"
           width={isChartDisplayed && !isMobile ? 'auto' : '100%'}
           mt={isChartExpanded && !isMobile ? '42px' : undefined}
+          position="relative"
+          zIndex={1}
         >
           <StyledSwapContainer
             justifyContent="center"
