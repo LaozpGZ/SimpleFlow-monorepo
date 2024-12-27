@@ -124,27 +124,27 @@ const CONFIG: BannerConfig[] = [
   },
   {
     component: TradingCompetitionAiTech,
-    stripeImage: `${ASSET_CDN}/web/promotions/aitech_competion.png`,
+    stripeImage: `${ASSET_CDN}/web/promotions/aitech_competition.png`,
     stripeImageWidth: '92px',
-    stripeImageAlt: 'aitech_competion',
+    stripeImageAlt: 'aitech_competition',
   },
   {
     component: TradingCompetitionBfg,
-    stripeImage: `${ASSET_CDN}/web/promotions/bfg_competion.png`,
+    stripeImage: `${ASSET_CDN}/web/promotions/bfg_competition.png`,
     stripeImageWidth: '92px',
-    stripeImageAlt: 'bfg_competion',
+    stripeImageAlt: 'bfg_competition',
   },
   {
     component: TradingCompetitionApt,
-    stripeImage: `${ASSET_CDN}/web/promotions/apt_competion.png`,
+    stripeImage: `${ASSET_CDN}/web/promotions/apt_competition.png`,
     stripeImageWidth: '92px',
-    stripeImageAlt: 'apt_competion',
+    stripeImageAlt: 'apt_competition',
   },
   {
     component: TradingCompetitionVinu,
-    stripeImage: `${ASSET_CDN}/web/promotions/vinu_competion.png`,
+    stripeImage: `${ASSET_CDN}/web/promotions/vinu_competition.png`,
     stripeImageWidth: '92px',
-    stripeImageAlt: 'vinu_competion',
+    stripeImageAlt: 'vinu_competition',
   },
 ]
 
