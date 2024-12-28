@@ -27,7 +27,7 @@ export const tradingCompetitionConfig = {
     learnMoreUrl:
       'https://blog.pancakeswap.finance/articles/aptos-pancake-swap-trading-competition-win-from-8-000-apt?utm_source=Website&utm_medium=infostripe&utm_campaign=APT&utm_id=TradingCompetition',
     reward: '8,000',
-    unit: 'ATP',
+    unit: 'APT',
   },
   vinu: {
     imgUrl: 'vinu_competition',
