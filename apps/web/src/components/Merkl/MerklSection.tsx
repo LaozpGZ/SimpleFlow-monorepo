@@ -54,6 +54,7 @@ const LearnMoreLink = () => {
 
 export function MerklSection({
   poolAddress,
+  tokenId,
   chainId,
   notEnoughLiquidity,
   outRange,
@@ -61,20 +62,21 @@ export function MerklSection({
 }: {
   poolAddress?: `0x${string}`
   chainId?: ChainId
+  tokenId?: bigint
   notEnoughLiquidity: boolean
   outRange: boolean
   disabled: boolean
 }) {
   const { t } = useTranslation()
 
-  const { claimTokenReward, isClaiming, rewardsPerToken, hasMerkl } = useMerkl(poolAddress)
+  const { claimTokenReward, isClaiming, rewardsPerToken, hasMerkl } = useMerkl(poolAddress, tokenId)
 
   const merklLink = useMemo(() => getMerklLink({ chainId, lpAddress: poolAddress }), [chainId, poolAddress])
 
   if (!rewardsPerToken.length || (!hasMerkl && rewardsPerToken.every((r) => r.equalTo('0')))) return null
 
   return (
-    <Column justifyContent="space-between" gap="8px" width="100%" ml={['0px', '0px', '16px', '16px']} mt="24px">
+    <Column justifyContent="space-between" gap="8px" width="100%">
       <AutoRow justifyContent="space-between">
         <Text fontSize="12px" color="secondary" bold textTransform="uppercase">
           {t('Merkl Rewards')}
