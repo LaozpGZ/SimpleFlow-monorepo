@@ -154,7 +154,7 @@ export function useMerklInfo(
       const unclaimed = BigInt(amount) - BigInt(claimed)
 
       // eslint-disable-next-line no-param-reassign
-      acc[reward?.token?.address] = { proof: reward.proof, claim: unclaimed }
+      acc[reward?.token?.address] = { proof: reward.proofs, claim: unclaimed }
       return acc
     }, {})
 
@@ -260,8 +260,8 @@ export default function useMerkl(poolAddress?: string, tokenId?: bigint) {
       })
       .filter(Boolean) as string[]
 
-    const claims = tokens.map((txnData) => transactionData[txnData].claim)
-    const proofs = tokens.map((txnData) => transactionData[txnData].proof)
+    const claims = tokens.map((token) => transactionData[token].claim)
+    const proofs = tokens.map((token) => transactionData[token].proof)
 
     const receipt = await fetchWithCatchTxError(() => {
       return callWithGasPrice(distributorContract, 'claim', [
