@@ -189,7 +189,9 @@ export function useMerklInfo(poolAddress?: string): {
         return CurrencyAmount.fromRawAmount(t, '0')
       })
 
-    const merklApr = data?.pools?.[poolAddress ?? '']?.apr as number | undefined
+    const merklApr = data?.pools?.find((pool) => isAddressEqual(pool.identifier, poolAddress))?.apr as
+      | number
+      | undefined
 
     return {
       ...rest,
