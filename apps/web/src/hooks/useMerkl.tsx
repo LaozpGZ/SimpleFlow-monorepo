@@ -23,10 +23,7 @@ import { useCurrentBlockTimestamp as useBlockTimestamp } from 'state/block/hooks
 export const MERKL_API_V2 = 'https://api.angle.money/v2/merkl'
 export const MERKL_API_V4 = 'https://api.merkl.xyz/v4'
 
-export function useMerklInfo(
-  poolAddress?: string,
-  tokenId?: bigint,
-): {
+export function useMerklInfo(poolAddress?: string): {
   rewardsPerToken: CurrencyAmount<Currency>[]
   isPending: boolean
   transactionData: {
@@ -140,17 +137,14 @@ export function useMerklInfo(
     })
 
     const rewardsPerTokenObject = userData?.rewards?.filter((reward) => {
-      const { amount, claimed } = reward
-      const unclaimed = BigInt(amount) - BigInt(claimed)
+      const { amount, claimed } = reward || {}
+      const unclaimed = BigInt(amount || 0) - BigInt(claimed || 0)
       return unclaimed > 0
     })
 
     const transactionData = rewardsPerTokenObject?.reduce((acc, reward) => {
-      const { amount, claimed } = reward
-      const unclaimed = BigInt(amount) - BigInt(claimed)
-
       // eslint-disable-next-line no-param-reassign
-      acc[reward?.token?.address] = { proof: reward.proofs, claim: unclaimed }
+      acc[reward?.token?.address] = { proof: reward?.proofs, claim: reward?.amount }
       return acc
     }, {})
 
@@ -160,13 +154,13 @@ export function useMerklInfo(
         ? rewardsPerTokenObject
             .map((tokenInfo) => {
               const {
+                amount,
+                claimed,
                 token: { address, decimals, symbol },
               } = tokenInfo
 
-              const { amount, claimed } = tokenInfo
-
               const token = new Token(chainId as number, address as Address, decimals, symbol)
-              const unclaimed = BigInt(amount) - BigInt(claimed)
+              const unclaimed = BigInt(amount || 0) - BigInt(claimed || 0)
               return CurrencyAmount.fromRawAmount(token, unclaimed)
             })
             .filter(Boolean)
@@ -204,27 +198,15 @@ export function useMerklInfo(
       refreshData: refetch,
       merklApr,
     }
-  }, [
-    chainId,
-    data,
-    lists,
-    refetch,
-    isPending,
-    poolAddress,
-    account,
-    masterChefV3Address,
-    currentTimestamp,
-    tokenId,
-    userData,
-  ])
+  }, [chainId, data, lists, refetch, isPending, poolAddress, account, masterChefV3Address, currentTimestamp, userData])
 }
 
-export default function useMerkl(poolAddress?: string, tokenId?: bigint) {
+export default function useMerkl(poolAddress?: string) {
   const { account, chainId } = useAccountActiveChain()
 
   const { data: signer } = useWalletClient()
 
-  const { transactionData, rewardsPerToken, refreshData, hasMerkl } = useMerklInfo(poolAddress, tokenId)
+  const { transactionData, rewardsPerToken, refreshData, hasMerkl } = useMerklInfo(poolAddress)
 
   const { callWithGasPrice } = useCallWithGasPrice()
   const { fetchWithCatchTxError, loading: isTxPending } = useCatchTxError()

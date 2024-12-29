@@ -805,7 +805,6 @@ export default function PoolPage() {
                         : false,
                     )}
                     poolAddress={poolAddress}
-                    tokenId={tokenId}
                     chainId={pool?.chainId}
                   />
                 </Flex>

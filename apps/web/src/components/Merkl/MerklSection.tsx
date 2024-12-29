@@ -54,7 +54,6 @@ const LearnMoreLink = () => {
 
 export function MerklSection({
   poolAddress,
-  tokenId,
   chainId,
   notEnoughLiquidity,
   outRange,
@@ -69,7 +68,7 @@ export function MerklSection({
 }) {
   const { t } = useTranslation()
 
-  const { claimTokenReward, isClaiming, rewardsPerToken, hasMerkl } = useMerkl(poolAddress, tokenId)
+  const { claimTokenReward, isClaiming, rewardsPerToken, hasMerkl } = useMerkl(poolAddress)
 
   const merklLink = useMemo(() => getMerklLink({ chainId, lpAddress: poolAddress }), [chainId, poolAddress])
 
