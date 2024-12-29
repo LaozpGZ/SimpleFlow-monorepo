@@ -139,18 +139,14 @@ export function useMerklInfo(
       return hasLiveDistribution
     })
 
-    const rewardsPerTokenObject = userData?.rewards
-      ?.map((reward) => {
-        const breakdowns = reward?.breakdowns.filter((breakdown) =>
-          tokenId ? breakdown?.reason.includes(tokenId) : breakdown?.reason.includes(poolAddress),
-        )
-        if (breakdowns?.length === 0) return undefined
-        return { ...reward, breakdowns }
-      })
-      .filter(Boolean)
+    const rewardsPerTokenObject = userData?.rewards?.filter((reward) => {
+      const { amount, claimed } = reward
+      const unclaimed = BigInt(amount) - BigInt(claimed)
+      return unclaimed > 0
+    })
 
     const transactionData = rewardsPerTokenObject?.reduce((acc, reward) => {
-      const { amount, claimed } = reward.breakdowns[0]
+      const { amount, claimed } = reward
       const unclaimed = BigInt(amount) - BigInt(claimed)
 
       // eslint-disable-next-line no-param-reassign
@@ -164,11 +160,10 @@ export function useMerklInfo(
         ? rewardsPerTokenObject
             .map((tokenInfo) => {
               const {
-                breakdowns,
                 token: { address, decimals, symbol },
               } = tokenInfo
 
-              const { amount, claimed } = breakdowns[0]
+              const { amount, claimed } = tokenInfo
 
               const token = new Token(chainId as number, address as Address, decimals, symbol)
               const unclaimed = BigInt(amount) - BigInt(claimed)
