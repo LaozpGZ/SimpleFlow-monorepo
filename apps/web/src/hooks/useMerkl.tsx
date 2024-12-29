@@ -43,6 +43,8 @@ export function useMerklInfo(poolAddress?: string): {
   const { data, isPending, refetch } = useQuery({
     queryKey: [`fetchMerkl-${chainId}`],
     queryFn: async () => {
+      if (!chainId) return undefined
+
       const responsev4 = await fetch(
         `${MERKL_API_V4}/opportunities?chainId=${chainId}&test=false&items=1000&action=POOL,HOLD`,
       )
@@ -55,17 +57,20 @@ export function useMerklInfo(poolAddress?: string): {
 
       const opportunities = merklDataV4?.filter(
         (opportunity) =>
-          opportunity?.tokens?.[0].name?.toLowerCase().startsWith('pancake') ||
+          opportunity?.tokens?.[0]?.symbol?.toLowerCase().startsWith('Cake-LP') ||
           opportunity?.protocol?.id?.toLowerCase().startsWith('pancakeswap'),
       )
 
-      if (!chainId || !opportunities || !opportunities.length) return undefined
+      if (!opportunities || !opportunities.length) return undefined
 
       const pools = await Promise.all(
         opportunities.map(async (opportunity) => {
           const responseCampaignV4 = await fetch(`${MERKL_API_V4}/opportunities/${opportunity.id}/campaigns`)
+          if (!responseCampaignV4.ok) {
+            throw responseCampaignV4
+          }
           const campaignV4 = await responseCampaignV4.json()
-          return { ...opportunity, campaigns: campaignV4.campaigns }
+          return { ...opportunity, campaigns: campaignV4?.campaigns }
         }),
       )
 
@@ -79,6 +84,8 @@ export function useMerklInfo(poolAddress?: string): {
   const { data: userData } = useQuery({
     queryKey: [`fetchMerkl-${chainId}-${account}`],
     queryFn: async () => {
+      if (!chainId) return undefined
+
       const responsev4 = await fetch(`${MERKL_API_V4}/users/${account}/rewards?chainId=${chainId}`)
 
       if (!responsev4.ok) {
@@ -87,7 +94,7 @@ export function useMerklInfo(poolAddress?: string): {
 
       const merklDataV4 = await responsev4.json()
 
-      if (!chainId || !merklDataV4) return undefined
+      if (!merklDataV4) return undefined
 
       return merklDataV4?.[0] || {}
     },
@@ -114,23 +121,28 @@ export function useMerklInfo(poolAddress?: string): {
 
       if (!hasMeanAPR) return false
 
-      const hasLiveDistribution = pool.campaigns.some((campaign) => {
-        const { startTimestamp, endTimestamp, whitelist, blacklist } = campaign
-        const startTimestampNumber = Number(startTimestamp)
-        const endTimestampNumber = Number(endTimestamp)
-        const isLive = startTimestampNumber < currentTimestamp && currentTimestamp < endTimestampNumber
-        if (!isLive) return false
-        const whitelistValid =
-          !whitelist || whitelist.length === 0 || whitelist.includes(account) || whitelist.includes(masterChefV3Address)
+      const hasLiveDistribution = Boolean(
+        pool.campaigns?.some((campaign) => {
+          const { startTimestamp, endTimestamp, whitelist, blacklist } = campaign
+          const startTimestampNumber = Number(startTimestamp)
+          const endTimestampNumber = Number(endTimestamp)
+          const isLive = startTimestampNumber <= currentTimestamp && currentTimestamp <= endTimestampNumber
+          if (!isLive) return false
+          const whitelistValid =
+            !whitelist ||
+            whitelist.length === 0 ||
+            whitelist.includes(account) ||
+            whitelist.includes(masterChefV3Address)
 
-        const blacklistValid =
-          !blacklist ||
-          blacklist.length === 0 ||
-          !blacklist.includes(account) ||
-          !blacklist.includes(masterChefV3Address)
+          const blacklistValid =
+            !blacklist ||
+            blacklist.length === 0 ||
+            !blacklist.includes(account) ||
+            !blacklist.includes(masterChefV3Address)
 
-        return whitelistValid && blacklistValid
-      })
+          return whitelistValid && blacklistValid
+        }),
+      )
 
       return hasLiveDistribution
     })
