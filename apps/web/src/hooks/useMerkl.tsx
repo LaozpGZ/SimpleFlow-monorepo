@@ -20,7 +20,6 @@ import { useMasterchefV3 } from 'hooks/useContract'
 import { isAddressEqual } from 'utils'
 import { useCurrentBlockTimestamp as useBlockTimestamp } from 'state/block/hooks'
 
-export const MERKL_API_V2 = 'https://api.angle.money/v2/merkl'
 export const MERKL_API_V4 = 'https://api.merkl.xyz/v4'
 
 export function useMerklInfo(poolAddress?: string): {
