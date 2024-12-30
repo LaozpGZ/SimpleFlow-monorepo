@@ -85,7 +85,7 @@ export const Snowflake = styled.div`
   user-select: none;
   cursor: default;
   will-change: transform;
-  animation: ${snowflakeAnimation} 10s linear infinite;
+  animation: ${snowflakeAnimation} 15s linear infinite;
 
   &:nth-of-type(1) {
     left: 1%;
