@@ -116,36 +116,38 @@ export function useMerklInfo(poolAddress?: string): {
 
     const { pools } = data
 
-    const hasLive = pools.some((pool) => {
-      const hasMeanAPR = pool.status === 'LIVE' && pool.apr > 0
+    const hasLive = pools
+      .filter((pool) => isAddressEqual(pool.identifier, poolAddress))
+      .some((pool) => {
+        const hasMeanAPR = pool.status === 'LIVE' && pool.apr > 0
 
-      if (!hasMeanAPR) return false
+        if (!hasMeanAPR) return false
 
-      const hasLiveDistribution = Boolean(
-        pool.campaigns?.some((campaign) => {
-          const { startTimestamp, endTimestamp, whitelist, blacklist } = campaign
-          const startTimestampNumber = Number(startTimestamp)
-          const endTimestampNumber = Number(endTimestamp)
-          const isLive = startTimestampNumber <= currentTimestamp && currentTimestamp <= endTimestampNumber
-          if (!isLive) return false
-          const whitelistValid =
-            !whitelist ||
-            whitelist.length === 0 ||
-            whitelist.includes(account) ||
-            whitelist.includes(masterChefV3Address)
+        const hasLiveDistribution = Boolean(
+          pool.campaigns?.some((campaign) => {
+            const { startTimestamp, endTimestamp, whitelist, blacklist } = campaign
+            const startTimestampNumber = Number(startTimestamp)
+            const endTimestampNumber = Number(endTimestamp)
+            const isLive = startTimestampNumber <= currentTimestamp && currentTimestamp <= endTimestampNumber
+            if (!isLive) return false
+            const whitelistValid =
+              !whitelist ||
+              whitelist.length === 0 ||
+              whitelist.includes(account) ||
+              whitelist.includes(masterChefV3Address)
 
-          const blacklistValid =
-            !blacklist ||
-            blacklist.length === 0 ||
-            !blacklist.includes(account) ||
-            !blacklist.includes(masterChefV3Address)
+            const blacklistValid =
+              !blacklist ||
+              blacklist.length === 0 ||
+              !blacklist.includes(account) ||
+              !blacklist.includes(masterChefV3Address)
 
-          return whitelistValid && blacklistValid
-        }),
-      )
+            return whitelistValid && blacklistValid
+          }),
+        )
 
-      return hasLiveDistribution
-    })
+        return hasLiveDistribution
+      })
 
     const rewardsPerTokenObject = userData?.rewards?.filter((reward) => {
       const { amount, claimed } = reward || {}
