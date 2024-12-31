@@ -275,7 +275,7 @@ export default function PoolV2Page() {
                     {t('LP reward APR')}: {formatAmount(poolData.lpApr)}%
                   </Text>
                 )}
-                <Text color="textSubtle" ml="4px">
+                <Text color="textSubtle">
                   {t('Your share in pool')}: {poolTokenPercentage ? `${poolTokenPercentage.toFixed(8)}%` : '-'}
                 </Text>
               </Flex>
