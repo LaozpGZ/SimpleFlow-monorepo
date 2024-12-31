@@ -57,7 +57,7 @@ export function useMerklInfo(poolAddress?: string): {
 
       const opportunities = merklDataV4?.filter(
         (opportunity) =>
-          opportunity?.tokens?.[0]?.symbol?.toLowerCase().startsWith('Cake-LP') ||
+          opportunity?.tokens?.[0]?.symbol?.toLowerCase().startsWith('cake-lp') ||
           opportunity?.protocol?.id?.toLowerCase().startsWith('pancakeswap'),
       )
 
@@ -149,11 +149,18 @@ export function useMerklInfo(poolAddress?: string): {
         return hasLiveDistribution
       })
 
-    const rewardsPerTokenObject = userData?.rewards?.filter((reward) => {
-      const { amount, claimed } = reward || {}
-      const unclaimed = BigInt(amount || 0) - BigInt(claimed || 0)
-      return unclaimed > 0
-    })
+    const rewardAddresses = pools
+      .filter((pool) => isAddressEqual(pool.identifier, poolAddress))
+      .flatMap((pool) => pool.rewardsRecord.breakdowns.flatMap((breakdown) => breakdown.token.address))
+      .filter((address, index, allAddresses) => allAddresses.indexOf(address) === index)
+
+    const rewardsPerTokenObject = userData?.rewards
+      ?.filter((reward) => rewardAddresses.some((rewardAddress) => isAddressEqual(reward.token.address, rewardAddress)))
+      .filter((reward) => {
+        const { amount, claimed } = reward || {}
+        const unclaimed = BigInt(amount || 0) - BigInt(claimed || 0)
+        return unclaimed > 0
+      })
 
     const transactionData = rewardsPerTokenObject?.reduce((acc, reward) => {
       // eslint-disable-next-line no-param-reassign
