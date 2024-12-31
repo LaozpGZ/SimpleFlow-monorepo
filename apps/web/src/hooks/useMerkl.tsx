@@ -106,7 +106,9 @@ export function useMerklInfo(poolAddress?: string): {
   })
 
   return useMemo(() => {
-    if (!data || !currentTimestamp)
+    const pool = data?.pools?.filter((opportunity) => isAddressEqual(opportunity.identifier, poolAddress))?.[0]
+
+    if (!pool || !currentTimestamp)
       return {
         rewardsPerToken: [],
         rewardTokenAddresses: [],
@@ -116,45 +118,35 @@ export function useMerklInfo(poolAddress?: string): {
         isPending,
       }
 
-    const { pools } = data
+    const hasLive =
+      pool.status === 'LIVE' &&
+      pool.apr > 0 &&
+      Boolean(
+        pool.campaigns?.some((campaign) => {
+          const { startTimestamp, endTimestamp, whitelist, blacklist } = campaign
+          const startTimestampNumber = Number(startTimestamp)
+          const endTimestampNumber = Number(endTimestamp)
+          const isLive = startTimestampNumber <= currentTimestamp && currentTimestamp <= endTimestampNumber
+          if (!isLive) return false
+          const whitelistValid =
+            !whitelist ||
+            whitelist.length === 0 ||
+            whitelist.includes(account) ||
+            whitelist.includes(masterChefV3Address)
 
-    const hasLive = pools
-      .filter((pool) => isAddressEqual(pool.identifier, poolAddress))
-      .some((pool) => {
-        const hasMeanAPR = pool.status === 'LIVE' && pool.apr > 0
+          const blacklistValid =
+            !blacklist ||
+            blacklist.length === 0 ||
+            !blacklist.includes(account) ||
+            !blacklist.includes(masterChefV3Address)
 
-        if (!hasMeanAPR) return false
+          return whitelistValid && blacklistValid
+        }),
+      )
 
-        const hasLiveDistribution = Boolean(
-          pool.campaigns?.some((campaign) => {
-            const { startTimestamp, endTimestamp, whitelist, blacklist } = campaign
-            const startTimestampNumber = Number(startTimestamp)
-            const endTimestampNumber = Number(endTimestamp)
-            const isLive = startTimestampNumber <= currentTimestamp && currentTimestamp <= endTimestampNumber
-            if (!isLive) return false
-            const whitelistValid =
-              !whitelist ||
-              whitelist.length === 0 ||
-              whitelist.includes(account) ||
-              whitelist.includes(masterChefV3Address)
-
-            const blacklistValid =
-              !blacklist ||
-              blacklist.length === 0 ||
-              !blacklist.includes(account) ||
-              !blacklist.includes(masterChefV3Address)
-
-            return whitelistValid && blacklistValid
-          }),
-        )
-
-        return hasLiveDistribution
-      })
-
-    const rewardAddresses = pools
-      .filter((pool) => isAddressEqual(pool.identifier, poolAddress))
-      .flatMap((pool) => pool.rewardsRecord?.breakdowns?.flatMap((breakdown) => breakdown.token.address) || [])
-      .filter((address, index, allAddresses) => allAddresses.indexOf(address) === index)
+    const rewardAddresses = (
+      pool.rewardsRecord?.breakdowns?.flatMap((breakdown) => breakdown.token.address) || []
+    ).filter((address, index, allAddresses) => allAddresses.indexOf(address) === index)
 
     const rewardsPerTokenObject = userData?.rewards
       ?.filter((reward) => rewardAddresses.some((rewardAddress) => isAddressEqual(reward.token.address, rewardAddress)))
@@ -214,9 +206,7 @@ export function useMerklInfo(poolAddress?: string): {
             return CurrencyAmount.fromRawAmount(t, '0')
           })
 
-    const merklApr = data?.pools?.find((pool) => isAddressEqual(pool.identifier, poolAddress))?.apr as
-      | number
-      | undefined
+    const merklApr = pool?.apr as number | undefined
 
     return {
       ...rest,
