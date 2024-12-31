@@ -44,8 +44,6 @@ export function useMerklInfo(poolAddress?: string): {
   const { data, isPending, refetch } = useQuery({
     queryKey: [`fetchMerklPools`],
     queryFn: async () => {
-      if (!chainId) return undefined
-
       const responsev4 = await fetch(
         `${MERKL_API_V4}/opportunities?${supportedChainIdV4.join(
           ',',
@@ -80,7 +78,7 @@ export function useMerklInfo(poolAddress?: string): {
 
       return { pools }
     },
-    enabled: Boolean(chainId && poolAddress),
+    enabled: Boolean(poolAddress),
     staleTime: FAST_INTERVAL,
     retryDelay: (attemptIndex) => Math.min(2000 * 2 ** attemptIndex, 30000),
   })
@@ -196,23 +194,25 @@ export function useMerklInfo(poolAddress?: string): {
 
     const { rewardsPerToken = [], rewardTokenAddresses = [], ...rest } = rewardResult
 
-    const rewardCurrencies = (rewardTokenAddresses as string[])
-      .reduce<TokenInfo[]>((result, address) => {
-        Object.values(lists).find((list) => {
-          const token: TokenInfo | undefined = list?.current?.tokens.find((t) => isAddressEqual(t.address, address))
+    const rewardCurrencies = rewardsPerToken.length
+      ? rewardsPerToken
+      : (rewardTokenAddresses as string[])
+          .reduce<TokenInfo[]>((result, address) => {
+            Object.values(lists).find((list) => {
+              const token: TokenInfo | undefined = list?.current?.tokens.find((t) => isAddressEqual(t.address, address))
 
-          if (token) return result.push(token)
+              if (token) return result.push(token)
 
-          return false
-        })
+              return false
+            })
 
-        return result
-      }, [])
-      .map((info) => {
-        const t = new Token(chainId as number, info.address, info.decimals, info.symbol)
+            return result
+          }, [])
+          .map((info) => {
+            const t = new Token(chainId as number, info.address, info.decimals, info.symbol)
 
-        return CurrencyAmount.fromRawAmount(t, '0')
-      })
+            return CurrencyAmount.fromRawAmount(t, '0')
+          })
 
     const merklApr = data?.pools?.find((pool) => isAddressEqual(pool.identifier, poolAddress))?.apr as
       | number
@@ -220,7 +220,7 @@ export function useMerklInfo(poolAddress?: string): {
 
     return {
       ...rest,
-      rewardsPerToken: rewardsPerToken.length ? rewardsPerToken : rewardCurrencies,
+      rewardsPerToken: rewardCurrencies,
       refreshData: refetch,
       merklApr,
     }
