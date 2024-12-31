@@ -63,16 +63,17 @@ export function useMerklInfo(poolAddress?: string): {
 
       if (!opportunities || !opportunities.length) return undefined
 
-      const pools = await Promise.all(
-        opportunities.map(async (opportunity) => {
-          const responseCampaignV4 = await fetch(`${MERKL_API_V4}/opportunities/${opportunity.id}/campaigns`)
-          if (!responseCampaignV4.ok) {
-            throw responseCampaignV4
-          }
-          const campaignV4 = await responseCampaignV4.json()
-          return { ...opportunity, campaigns: campaignV4?.campaigns }
-        }),
-      )
+      const pools =
+        (await Promise.all(
+          opportunities.map(async (opportunity) => {
+            const responseCampaignV4 = await fetch(`${MERKL_API_V4}/opportunities/${opportunity.id}/campaigns`)
+            if (!responseCampaignV4.ok) {
+              throw responseCampaignV4
+            }
+            const campaignV4 = await responseCampaignV4.json()
+            return { ...opportunity, campaigns: campaignV4?.campaigns }
+          }),
+        )) ?? []
 
       return { pools }
     },
@@ -151,7 +152,7 @@ export function useMerklInfo(poolAddress?: string): {
 
     const rewardAddresses = pools
       .filter((pool) => isAddressEqual(pool.identifier, poolAddress))
-      .flatMap((pool) => pool.rewardsRecord.breakdowns.flatMap((breakdown) => breakdown.token.address))
+      .flatMap((pool) => pool.rewardsRecord?.breakdowns?.flatMap((breakdown) => breakdown.token.address) || [])
       .filter((address, index, allAddresses) => allAddresses.indexOf(address) === index)
 
     const rewardsPerTokenObject = userData?.rewards
