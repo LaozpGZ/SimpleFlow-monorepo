@@ -98,7 +98,7 @@ export function useMerklInfo(poolAddress?: string): {
 
       if (!merklDataV4) return undefined
 
-      return merklDataV4?.[0] || {}
+      return merklDataV4
     },
     enabled: Boolean(data && chainId && account && poolAddress),
     staleTime: FAST_INTERVAL,
@@ -148,7 +148,9 @@ export function useMerklInfo(poolAddress?: string): {
       pool.rewardsRecord?.breakdowns?.flatMap((breakdown) => breakdown.token.address) || []
     ).filter((address, index, allAddresses) => allAddresses.indexOf(address) === index)
 
-    const rewardsPerTokenObject = userData?.rewards
+    const chainUserData = userData?.filter((chainUserReward) => chainUserReward?.chain?.id === pool.chainId)?.[0]
+
+    const rewardsPerTokenObject = chainUserData?.rewards
       ?.filter((reward) => rewardAddresses.some((rewardAddress) => isAddressEqual(reward.token.address, rewardAddress)))
       .filter((reward) => {
         const { amount, claimed } = reward || {}
