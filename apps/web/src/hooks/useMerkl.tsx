@@ -64,17 +64,16 @@ export function useMerklInfo(poolAddress?: string): {
 
       if (!opportunities || !opportunities.length) return undefined
 
-      const pools =
-        (await Promise.all(
-          opportunities.map(async (opportunity) => {
-            const responseCampaignV4 = await fetch(`${MERKL_API_V4}/opportunities/${opportunity.id}/campaigns`)
-            if (!responseCampaignV4.ok) {
-              throw responseCampaignV4
-            }
-            const campaignV4 = await responseCampaignV4.json()
-            return { ...opportunity, campaigns: campaignV4?.campaigns }
-          }),
-        )) ?? []
+      const pools = await Promise.all(
+        opportunities.map(async (opportunity) => {
+          const responseCampaignV4 = await fetch(`${MERKL_API_V4}/opportunities/${opportunity.id}/campaigns`)
+          if (!responseCampaignV4.ok) {
+            throw responseCampaignV4
+          }
+          const campaignV4 = await responseCampaignV4.json()
+          return { ...opportunity, campaigns: campaignV4?.campaigns }
+        }),
+      )
 
       return { pools }
     },
