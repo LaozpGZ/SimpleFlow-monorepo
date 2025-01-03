@@ -12,6 +12,7 @@ import {
   Input,
   ReactMarkdown,
   ScanLink,
+  Spinner,
   Text,
   useModal,
   useToast,
@@ -20,17 +21,20 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import snapshot from '@snapshot-labs/snapshot.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Container from 'components/Layout/Container'
+import { useAtomValue } from 'jotai'
 import isEmpty from 'lodash/isEmpty'
 import times from 'lodash/times'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from 'react'
+import { ChangeEvent, FormEvent, Suspense, useEffect, useMemo, useState } from 'react'
 import { useInitialBlock } from 'state/block/hooks'
 import { ProposalTypeName } from 'state/types'
+import styled from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 import { DatePicker, DatePickerPortal, TimePicker } from 'views/Voting/components/DatePicker'
 import { useAccount, useWalletClient } from 'wagmi'
+import { spaceAtom } from '../atom/spaceAtom'
 import Layout from '../components/Layout'
 import VoteDetailsModal from '../components/VoteDetailsModal'
 import { ADMINS, PANCAKE_SPACE, VOTE_THRESHOLD } from '../config'
@@ -47,19 +51,24 @@ const EasyMde = dynamic(() => import('components/EasyMde'), {
 })
 
 const CreateProposal = () => {
+  const { t } = useTranslation()
+  const space = useAtomValue(spaceAtom)
+
+  const { delay, period } = space?.voting || {}
+  const created = Math.floor(Date.now() / 1000)
+
   const [state, setState] = useState<FormState>(() => ({
     name: '',
     body: '',
     choices: times(MINIMUM_CHOICES).map(makeChoice),
-    startDate: null,
-    startTime: null,
-    endDate: null,
-    endTime: null,
+    startDate: delay ? new Date(Date.now() + delay * 1000) : null,
+    startTime: delay ? new Date(Date.now() + delay * 1000) : null,
+    endDate: delay && period ? new Date(Date.now() + delay * 1000 + period * 1000) : null,
+    endTime: delay && period ? new Date(Date.now() + delay * 1000 + period * 1000) : null,
     snapshot: 0,
   }))
   const [isLoading, setIsLoading] = useState(false)
   const [fieldsState, setFieldsState] = useState<{ [key: string]: boolean }>({})
-  const { t } = useTranslation()
   const { address: account } = useAccount()
   const initialBlock = useInitialBlock()
   const { push } = useRouter()
@@ -94,13 +103,16 @@ const CreateProposal = () => {
         },
       }
 
+      const start = delay ? created + delay : combineDateAndTime(startDate, startTime) || 0
+      const end = period ? start + period : combineDateAndTime(endDate, endTime) || 0
       const data: any = await client.proposal(web3 as any, account, {
         space: PANCAKE_SPACE,
         type: ProposalTypeName.SINGLE_CHOICE, // TODO
         title: name,
         body,
-        start: combineDateAndTime(startDate, startTime) || 0,
-        end: combineDateAndTime(endDate, endTime) || 0,
+        timestamp: created,
+        start,
+        end,
         choices: choices
           .filter((choice) => choice.value)
           .map((choice) => {
@@ -170,6 +182,10 @@ const CreateProposal = () => {
     }
   }, [initialBlock, setState])
 
+  if (!space) {
+    return <Box>{t('Network unstable. Please refresh to continue.')}</Box>
+  }
+
   return (
     <Container py="40px">
       <Box mb="48px">
@@ -230,6 +246,7 @@ const CreateProposal = () => {
                 <Box mb="24px">
                   <SecondaryLabel>{t('Start Date')}</SecondaryLabel>
                   <DatePicker
+                    disabled={Boolean(delay)}
                     name="startDate"
                     onChange={handleDateChange('startDate')}
                     selected={startDate}
@@ -240,6 +257,7 @@ const CreateProposal = () => {
                 <Box mb="24px">
                   <SecondaryLabel>{t('Start Time')}</SecondaryLabel>
                   <TimePicker
+                    disabled={Boolean(delay)}
                     name="startTime"
                     onChange={handleDateChange('startTime')}
                     selected={startTime}
@@ -250,6 +268,7 @@ const CreateProposal = () => {
                 <Box mb="24px">
                   <SecondaryLabel>{t('End Date')}</SecondaryLabel>
                   <DatePicker
+                    disabled={Boolean(period)}
                     name="endDate"
                     onChange={handleDateChange('endDate')}
                     selected={endDate}
@@ -260,6 +279,7 @@ const CreateProposal = () => {
                 <Box mb="24px">
                   <SecondaryLabel>{t('End Time')}</SecondaryLabel>
                   <TimePicker
+                    disabled={Boolean(period)}
                     name="endTime"
                     onChange={handleDateChange('endTime')}
                     selected={endTime}
@@ -317,4 +337,27 @@ const CreateProposal = () => {
   )
 }
 
-export default CreateProposal
+const Wrapped = () => {
+  return (
+    <Suspense fallback={<SpinnerPage />}>
+      <CreateProposal />
+    </Suspense>
+  )
+}
+
+const FullScreenBox = styled(Box)`
+  width: 100%;
+  height: 50vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+export const SpinnerPage = () => {
+  return (
+    <FullScreenBox>
+      <Spinner />
+    </FullScreenBox>
+  )
+}
+export default Wrapped
