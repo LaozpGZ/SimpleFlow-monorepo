@@ -37,6 +37,7 @@ import { spaceAtom } from '../atom/spaceAtom'
 import Layout from '../components/Layout'
 import VoteDetailsModal from '../components/VoteDetailsModal'
 import { PANCAKE_SPACE, VOTE_THRESHOLD } from '../config'
+import useGetVotingPower from '../hooks/useGetVotingPower'
 import Choices, { MINIMUM_CHOICES, makeChoice } from './Choices'
 import { combineDateAndTime, getFormErrors } from './helpers' // You can adapt or remove this
 import { FormErrors, Label, SecondaryLabel } from './styles'
@@ -86,6 +87,10 @@ const CreateProposal = () => {
       snapshot: 0,
     },
   })
+
+  const { total, isLoading } = useGetVotingPower(watch('snapshot'))
+  console.log(total)
+  const enoughVotingPower = total >= VOTE_THRESHOLD
 
   const {
     fields: choiceFields,
@@ -338,6 +343,13 @@ const CreateProposal = () => {
                   </Flex>
                 )}
 
+                <Flex alignItems="center" mb="8px">
+                  <Text color="textSubtle" mr="16px">
+                    {t('Voting Power')}
+                  </Text>
+                  <Text>{isLoading ? '-' : total ?? 0}</Text>
+                </Flex>
+
                 {/* Snapshot */}
                 <Flex alignItems="center" mb="16px">
                   <Text color="textSubtle" mr="16px">
@@ -353,17 +365,19 @@ const CreateProposal = () => {
                     <Button
                       type="submit"
                       width="100%"
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || !enoughVotingPower || isLoading}
                       endIcon={isSubmitting ? <AutoRenewIcon spin color="currentColor" /> : null}
                       mb="16px"
                     >
                       {t('Publish')}
                     </Button>
-                    <Text color="failure" as="p" mb="4px">
-                      {t('You need at least %count% voting power to publish a proposal.', {
-                        count: VOTE_THRESHOLD,
-                      })}
-                    </Text>
+                    {!enoughVotingPower && (
+                      <Text color="failure" as="p" mb="4px">
+                        {t('You need at least %count% voting power to publish a proposal.', {
+                          count: VOTE_THRESHOLD,
+                        })}
+                      </Text>
+                    )}
                     <Button scale="sm" type="button" variant="text" onClick={onPresentVoteDetailsModal} p={0}>
                       {t('Check voting power')}
                     </Button>
