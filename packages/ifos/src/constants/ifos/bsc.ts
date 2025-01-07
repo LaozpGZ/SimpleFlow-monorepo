@@ -707,13 +707,13 @@ export const ifos: BaseIfoConfig[] = [
   },
   {
     id: 'testpie',
-    address: '0x93520856Cd54B26f0757F360B2A17240844c7Cf0',
+    address: '0xB88DcDc932cd83A278d674A94D79aeA9512d09B5',
     isActive: true,
     name: 'TESTPIE',
     poolUnlimited: {
-      saleAmount: '300,000 LTP',
-      raiseAmount: '$300,000',
-      cakeToBurn: '$150,000',
+      saleAmount: '840 USDT',
+      raiseAmount: '$300',
+      cakeToBurn: '$10',
       distributionRatio: 1,
     },
     currency: USDT[ChainId.BSC],
