@@ -22,6 +22,7 @@ import {
   useToast,
   useTooltip,
 } from '@pancakeswap/uikit'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import snapshot from '@snapshot-labs/snapshot.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -91,7 +92,6 @@ const CreateProposal = () => {
   })
 
   const { total, isLoading } = useGetVotingPower(watch('snapshot'))
-  console.log(total)
   const enoughVotingPower = total >= VOTE_THRESHOLD
 
   const {
@@ -361,7 +361,9 @@ const CreateProposal = () => {
                     {t('Voting Power')}
                   </Text>
                   <Box ml="8px">
-                    <TooltipText ref={votingPowerTargetRef}>{isLoading ? '-' : total ?? 0}</TooltipText>
+                    <TooltipText ref={votingPowerTargetRef}>
+                      {isLoading ? '-' : formatNumber(total ?? 0, { maxDecimalDisplayDigits: 2 })}
+                    </TooltipText>
                     {votingPowerTooltipVisible && votingPowerTooltip}
                   </Box>
                 </Flex>
