@@ -704,4 +704,22 @@ export const ifos: BaseIfoConfig[] = [
     tokenOfferingPrice: null,
     version: 1,
   },
+  {
+    id: 'listapie',
+    address: '0x48a7c510797B8f00c0AAAe30bf621EC9F2930140',
+    isActive: true,
+    name: 'LISTAPIE',
+    poolUnlimited: {
+      saleAmount: '300,000 LTP',
+      raiseAmount: '$300,000',
+      cakeToBurn: '$150,000',
+      distributionRatio: 1,
+    },
+    currency: cakeBnbLpToken,
+    token: bscTokens.listapie,
+    campaignId: '512500000',
+    articleUrl: 'https://pancakeswap.finance/voting/proposal/XXXXXXXXX',
+    tokenOfferingPrice: null,
+    version: 1,
+  },
 ]

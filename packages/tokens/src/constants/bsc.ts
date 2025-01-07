@@ -3341,4 +3341,12 @@ export const bscTokens = {
     'YieldNest: BNB Liquid Restaking',
     'https://app.yieldnest.finance/restake/ynBNB',
   ),
+  listapie: new ERC20Token(
+    ChainId.BSC,
+    '0xFceB31A79F71AC9CBDCF853519c1b12D379EdC46',
+    18,
+    'LISTA-PIE',
+    'Lista Pie',
+    'https://lista.org/',
+  ),
 }
