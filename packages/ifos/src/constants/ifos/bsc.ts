@@ -1,5 +1,6 @@
-import { bscTokens } from '@pancakeswap/tokens'
+import { bscTokens, USDT } from '@pancakeswap/tokens'
 
+import { ChainId } from '@pancakeswap/chains'
 import { BaseIfoConfig } from '../../types'
 import { cakeBnbLpToken } from '../lpTokens'
 
@@ -705,18 +706,18 @@ export const ifos: BaseIfoConfig[] = [
     version: 1,
   },
   {
-    id: 'listapie',
+    id: 'testpie',
     address: '0x93520856Cd54B26f0757F360B2A17240844c7Cf0',
     isActive: true,
-    name: 'LISTAPIE',
+    name: 'TESTPIE',
     poolUnlimited: {
       saleAmount: '300,000 LTP',
       raiseAmount: '$300,000',
       cakeToBurn: '$150,000',
       distributionRatio: 1,
     },
-    currency: cakeBnbLpToken,
-    token: bscTokens.listapie,
+    currency: USDT[ChainId.BSC],
+    token: bscTokens.cake,
     campaignId: '512500000',
     articleUrl: 'https://pancakeswap.finance/voting/proposal/XXXXXXXXX',
     tokenOfferingPrice: null,
