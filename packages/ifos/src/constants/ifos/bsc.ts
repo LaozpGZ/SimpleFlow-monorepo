@@ -6,6 +6,29 @@ import { cakeBnbLpToken } from '../lpTokens'
 
 export const ifos: BaseIfoConfig[] = [
   {
+    id: 'testpie',
+    address: '0xB88DcDc932cd83A278d674A94D79aeA9512d09B5',
+    isActive: true,
+    cIFO: false,
+    plannedStartTime: 1736250000, // 19 June 09:30 UTC
+    poolBasic: {
+      raiseAmount: '$30',
+    },
+    poolUnlimited: {
+      raiseAmount: '$270',
+      additionalClaimingFee: false,
+    },
+    name: 'TESTPIE',
+    currency: USDT[ChainId.BSC],
+    token: bscTokens.cake,
+    campaignId: '512500000',
+    articleUrl: 'https://pancakeswap.finance/voting/proposal/XXXXXXXXX',
+    tokenOfferingPrice: 2.8,
+    version: 8,
+    twitterUrl: 'https://x.com/lista_dao',
+    description: 'This is a test IFO',
+  },
+  {
     id: 'lista',
     address: '0x232c577a3A9c4ecbeeb213E1eb5519cB0C2FDb0F',
     isActive: false,
@@ -702,24 +725,6 @@ export const ifos: BaseIfoConfig[] = [
     token: bscTokens.blink,
     campaignId: '511010000',
     articleUrl: 'https://medium.com/pancakeswap/1-000-000-ifo-blink-joins-pancakeswap-15841800bdd8',
-    tokenOfferingPrice: null,
-    version: 1,
-  },
-  {
-    id: 'testpie',
-    address: '0xB88DcDc932cd83A278d674A94D79aeA9512d09B5',
-    isActive: true,
-    name: 'TESTPIE',
-    poolUnlimited: {
-      saleAmount: '840 USDT',
-      raiseAmount: '$300',
-      cakeToBurn: '$10',
-      distributionRatio: 1,
-    },
-    currency: USDT[ChainId.BSC],
-    token: bscTokens.cake,
-    campaignId: '512500000',
-    articleUrl: 'https://pancakeswap.finance/voting/proposal/XXXXXXXXX',
     tokenOfferingPrice: null,
     version: 1,
   },
