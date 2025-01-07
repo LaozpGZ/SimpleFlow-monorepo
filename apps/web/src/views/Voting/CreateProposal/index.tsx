@@ -17,8 +17,10 @@ import {
   ScanLink,
   Spinner,
   Text,
+  TooltipText,
   useModal,
   useToast,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import snapshot from '@snapshot-labs/snapshot.js'
@@ -124,6 +126,17 @@ const CreateProposal = () => {
   }, [initialBlock, setValue])
 
   const [onPresentVoteDetailsModal] = useModal(<VoteDetailsModal block={watch('snapshot')} />)
+
+  const votingPowerTooltipContent = t(
+    'Your voting power is determined by your veCAKE balance at the snapshot block, which represents how much weight your vote carries.',
+  )
+  const {
+    targetRef: votingPowerTargetRef,
+    tooltip: votingPowerTooltip,
+    tooltipVisible: votingPowerTooltipVisible,
+  } = useTooltip(<Text>{votingPowerTooltipContent}</Text>, {
+    placement: 'top',
+  })
 
   const onSubmit = async (data: any) => {
     if (!account) return
@@ -348,6 +361,10 @@ const CreateProposal = () => {
                     {t('Voting Power')}
                   </Text>
                   <Text>{isLoading ? '-' : total ?? 0}</Text>
+                  <Box ml="8px">
+                    <TooltipText ref={votingPowerTargetRef}>{isLoading ? '-' : total ?? 0}</TooltipText>
+                    {votingPowerTooltipVisible && votingPowerTooltip}
+                  </Box>
                 </Flex>
 
                 {/* Snapshot */}

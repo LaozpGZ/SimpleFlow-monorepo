@@ -16,6 +16,7 @@ import {
   Tag,
   Text,
   WarningIcon,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { formatBigInt, formatNumber, getBalanceAmount, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import dayjs from 'dayjs'
