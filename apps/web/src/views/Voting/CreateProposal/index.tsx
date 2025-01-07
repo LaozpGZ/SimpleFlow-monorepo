@@ -1,4 +1,4 @@
-import { Suspense, useEffect } from 'react'
+import { Suspense, useEffect, useMemo } from 'react'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 
 import { useTranslation } from '@pancakeswap/localization'
@@ -66,7 +66,7 @@ const CreateProposal = () => {
   const { data: signer } = useWalletClient()
   const initialBlock = useInitialBlock()
   const { delay, period } = space?.voting || {}
-  const created = Math.floor(Date.now() / 1000) // current timestamp in seconds
+  const created = useMemo(() => Math.floor(Date.now() / 1000), []) // current timestamp in seconds
   const { push } = useRouter()
 
   const {
@@ -214,7 +214,7 @@ const CreateProposal = () => {
               <Input
                 id="name"
                 // register returns an object of onChange, onBlur, ref, etc.
-                // Provide validations inline or via a validation resolver.
+                // Provide valiions inline or via a validation resolver.
                 // e.g. required: t('Title is required')
                 {...register('name', { required: t('Title is required') as string })}
                 scale="lg"
@@ -360,7 +360,6 @@ const CreateProposal = () => {
                   <Text color="textSubtle" mr="16px">
                     {t('Voting Power')}
                   </Text>
-                  <Text>{isLoading ? '-' : total ?? 0}</Text>
                   <Box ml="8px">
                     <TooltipText ref={votingPowerTargetRef}>{isLoading ? '-' : total ?? 0}</TooltipText>
                     {votingPowerTooltipVisible && votingPowerTooltip}
