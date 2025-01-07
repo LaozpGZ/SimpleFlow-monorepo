@@ -706,7 +706,7 @@ export const ifos: BaseIfoConfig[] = [
   },
   {
     id: 'listapie',
-    address: '0x48a7c510797B8f00c0AAAe30bf621EC9F2930140',
+    address: '0x93520856Cd54B26f0757F360B2A17240844c7Cf0',
     isActive: true,
     name: 'LISTAPIE',
     poolUnlimited: {
