@@ -10,7 +10,7 @@ export const ifos: BaseIfoConfig[] = [
     address: '0x44a827faDF47207C56e2498deAe4bD75188A09B8',
     isActive: true,
     cIFO: false,
-    plannedStartTime: 1736250000, // 19 June 09:30 UTC
+    plannedStartTime: new Date('2025-01-08T03:00:00Z').getTime() / 1000,
     poolBasic: {
       raiseAmount: '$3',
     },
