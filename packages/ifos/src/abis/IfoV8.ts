@@ -592,4 +592,4 @@ export const ifoV8ABI = [
     stateMutability: 'view',
     type: 'function',
   },
-]
+] as const
