@@ -260,4 +260,7 @@ export default {
     [ChainId.ZKSYNC_TESTNET]: '0xbfcCF87Ee5cd03d4550Cc1526Bf152cc2EE1C7AB',
     [ChainId.ZKSYNC]: '0xB774c13bA5a665713037c42A12f0ED9De70585cB',
   },
+  ido: {
+    [ChainId.BSC_TESTNET]: '0xCd2358dd6FD92447ACAdB9f1A437A658151a2C25',
+  },
 } as const satisfies Record<string, Record<number, `0x${string}`>>
