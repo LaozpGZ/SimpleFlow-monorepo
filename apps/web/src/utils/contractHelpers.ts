@@ -16,15 +16,16 @@ import {
   getCalcGaugesVotingAddress,
   getCrossFarmingReceiverAddress,
   getCrossFarmingSenderAddress,
+  getCrossFarmingVaultAddress,
   getFarmAuctionAddress,
   getFixedStakingAddress,
   getGaugesVotingAddress,
+  getIDOAddress,
   getLotteryV2Address,
   getMasterChefV2Address,
   getMasterChefV3Address,
   getNftMarketAddress,
   getNftSaleAddress,
-  getCrossFarmingVaultAddress,
   getPancakeProfileAddress,
   getPancakeSquadAddress,
   getPancakeVeSenderV2Address,
@@ -53,8 +54,8 @@ import {
 import { predictionsV1ABI, predictionsV2ABI, predictionsV3ABI } from '@pancakeswap/prediction'
 import { crossFarmingProxyABI } from 'config/abi/crossFarmingProxy'
 import { crossFarmingSenderABI } from 'config/abi/crossFarmingSender'
-import { nftSaleABI } from 'config/abi/nftSale'
 import { crossFarmingVaultABI } from 'config/abi/crossFarmingVault'
+import { nftSaleABI } from 'config/abi/nftSale'
 import { pointCenterIfoABI } from 'config/abi/pointCenterIfo'
 import { stableSwapNativeHelperABI } from 'config/abi/stableSwapNativeHelper'
 
@@ -82,6 +83,7 @@ import { chainlinkOracleABI } from 'config/abi/chainlinkOracle'
 import { crossFarmingReceiverABI } from 'config/abi/crossFarmingReceiver'
 import { farmAuctionABI } from 'config/abi/farmAuction'
 import { fixedStakingABI } from 'config/abi/fixedStaking'
+import { idoABI } from 'config/abi/ido'
 import { lotteryV2ABI } from 'config/abi/lotteryV2'
 import { lpTokenABI } from 'config/abi/lpTokenAbi'
 import { masterChefV2ABI } from 'config/abi/masterchefV2'
@@ -588,6 +590,15 @@ export const getRevenueSharingPoolGatewayContract = (signer?: WalletClient, chai
   return getContract({
     abi: revenueSharingPoolGatewayABI,
     address: getRevenueSharingPoolGatewayAddress(chainId) ?? getRevenueSharingPoolGatewayAddress(ChainId.BSC),
+    signer,
+    chainId,
+  })
+}
+
+export const getIDOContract = (signer?: WalletClient, chainId?: number) => {
+  return getContract({
+    abi: idoABI,
+    address: getIDOAddress(chainId) ?? getIDOAddress(ChainId.BSC),
     signer,
     chainId,
   })
