@@ -1,12 +1,12 @@
+import { Ifo, PoolIds } from '@pancakeswap/ifos'
+import { useQuery } from '@tanstack/react-query'
+import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
-import { Ifo, PoolIds } from '@pancakeswap/ifos'
-import BigNumber from 'bignumber.js'
-import { useQuery } from '@tanstack/react-query'
 
-import { useIfoConfigsAcrossChains } from 'hooks/useIfoConfig'
 import { FAST_INTERVAL } from 'config/constants'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useIfoConfigsAcrossChains } from 'hooks/useIfoConfig'
 
 import { fetchUserWalletIfoData } from './fetchUserWalletIfoData'
 
@@ -23,12 +23,13 @@ const useFetchVestingData = () => {
     queryKey: ['vestingData', account],
 
     queryFn: async () => {
-      const allData = await Promise.all(
+      const allDataSettled = await Promise.allSettled(
         allVestingIfo.map(async (ifo) => {
           const response = await fetchUserWalletIfoData(ifo, account)
           return response
         }),
       )
+      const allData = allDataSettled.filter((result) => result.status === 'fulfilled').map((x) => x.value)
 
       const currentTimeStamp = Date.now()
 
