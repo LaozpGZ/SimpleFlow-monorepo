@@ -8,7 +8,7 @@ import { FAST_INTERVAL } from 'config/constants'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useIfoConfigsAcrossChains } from 'hooks/useIfoConfig'
 
-import { fetchUserWalletIfoData } from './fetchUserWalletIfoData'
+import { fetchUserWalletIfoData, VestingData } from './fetchUserWalletIfoData'
 
 const useFetchVestingData = () => {
   const { address: account } = useAccount()
@@ -23,13 +23,15 @@ const useFetchVestingData = () => {
     queryKey: ['vestingData', account],
 
     queryFn: async () => {
-      const allData = await Promise.all(
+      const allDataSettled = await Promise.allSettled(
         allVestingIfo.map(async (ifo) => {
           const response = await fetchUserWalletIfoData(ifo, account)
           return response
         }),
       )
-
+      const allData = allDataSettled
+        .filter((result) => result.status === 'fulfilled')
+        .map((result) => (result as PromiseFulfilledResult<VestingData>).value)
       const currentTimeStamp = Date.now()
 
       return allData.filter(
