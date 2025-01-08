@@ -1,6 +1,5 @@
-import { bscTokens, USDT } from '@pancakeswap/tokens'
+import { bscTokens } from '@pancakeswap/tokens'
 
-import { ChainId } from '@pancakeswap/chains'
 import { BaseIfoConfig } from '../../types'
 import { cakeBnbLpToken } from '../lpTokens'
 
@@ -19,8 +18,8 @@ export const ifos: BaseIfoConfig[] = [
       additionalClaimingFee: false,
     },
     name: 'TESTPIE',
-    currency: USDT[ChainId.BSC],
-    token: bscTokens.cake,
+    currency: bscTokens.cake,
+    token: bscTokens.usdt,
     campaignId: '512500000',
     articleUrl: 'https://pancakeswap.finance/voting/proposal/XXXXXXXXX',
     tokenOfferingPrice: 2.8,
