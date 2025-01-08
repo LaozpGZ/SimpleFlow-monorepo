@@ -7,15 +7,15 @@ import { cakeBnbLpToken } from '../lpTokens'
 export const ifos: BaseIfoConfig[] = [
   {
     id: 'testpie',
-    address: '0xB88DcDc932cd83A278d674A94D79aeA9512d09B5',
+    address: '0x44a827faDF47207C56e2498deAe4bD75188A09B8',
     isActive: true,
     cIFO: false,
     plannedStartTime: 1736250000, // 19 June 09:30 UTC
     poolBasic: {
-      raiseAmount: '$30',
+      raiseAmount: '$3',
     },
     poolUnlimited: {
-      raiseAmount: '$270',
+      raiseAmount: '$27',
       additionalClaimingFee: false,
     },
     name: 'TESTPIE',
