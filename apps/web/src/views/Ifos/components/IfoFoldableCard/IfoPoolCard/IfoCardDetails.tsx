@@ -164,7 +164,6 @@ const IfoCardDetails: React.FC<React.PropsWithChildren<IfoCardDetailsProps>> = (
   const { t } = useTranslation()
   const { status, currencyPriceInUSD } = publicIfoData
   const poolCharacteristic = publicIfoData[poolId]
-  console.log('---', poolCharacteristic)
   const walletCharacteristic = walletIfoData[poolId]
   const hasTax = poolCharacteristic?.hasTax
 

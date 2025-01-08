@@ -23,13 +23,12 @@ const useFetchVestingData = () => {
     queryKey: ['vestingData', account],
 
     queryFn: async () => {
-      const allDataSettled = await Promise.allSettled(
+      const allData = await Promise.all(
         allVestingIfo.map(async (ifo) => {
           const response = await fetchUserWalletIfoData(ifo, account)
           return response
         }),
       )
-      const allData = allDataSettled.filter((result) => result.status === 'fulfilled').map((x) => x.value)
 
       const currentTimeStamp = Date.now()
 

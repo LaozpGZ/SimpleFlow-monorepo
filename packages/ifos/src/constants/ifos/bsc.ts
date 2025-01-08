@@ -26,6 +26,8 @@ export const ifos: BaseIfoConfig[] = [
     version: 8,
     twitterUrl: 'https://x.com/lista_dao',
     description: 'This is a test IFO',
+    vestingTitle:
+      'TESTPIE is the primary token issued by Testpie which can be locked for vlTESTPIE (Vote-Locked Testpie) at a 4:1 ratio.',
   },
   {
     id: 'lista',
