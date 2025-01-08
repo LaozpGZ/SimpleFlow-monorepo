@@ -29,19 +29,19 @@ export const useIDOAddresses = () => {
             address: idoContract.address,
             abi: idoContract.abi,
             functionName: 'addresses',
-            args: [0],
+            args: [0n],
           },
           {
             address: idoContract.address,
             abi: idoContract.abi,
             functionName: 'addresses',
-            args: [1],
+            args: [1n],
           },
           {
             address: idoContract.address,
             abi: idoContract.abi,
             functionName: 'addresses',
-            args: [2],
+            args: [2n],
           },
         ],
       })
