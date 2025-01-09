@@ -18,8 +18,10 @@ interface TypeProps {
 }
 
 const CurrentIfo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIfo }) => {
+  console.log(activeIfo, 'activeIfo???')
   useFetchIfo()
   const publicIfoData = useGetPublicIfoV8Data(activeIfo)
+  console.log(publicIfoData, 'publicIfoData???')
   const walletIfoData = useGetWalletIfoV8Data(activeIfo)
   const { hasBridged, sourceChainCredit, srcChainId, destChainCredit } = useICakeBridgeStatus({
     ifoChainId: activeIfo.chainId,
