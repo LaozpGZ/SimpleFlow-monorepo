@@ -170,6 +170,7 @@ const Info: React.FC<React.PropsWithChildren<InfoProps>> = ({
         <Claim
           poolId={poolId}
           data={data}
+          enabled={isVestingOver}
           claimableAmount={claimable}
           isVestingInitialized={isVestingInitialized}
           fetchUserVestingData={fetchUserVestingData}

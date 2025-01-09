@@ -1,15 +1,16 @@
-import { useMemo, useState, useCallback, useEffect } from 'react'
-import { styled } from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, CardBody, CardHeader, Flex, Text, Image, IfoNotTokens } from '@pancakeswap/uikit'
+import { Box, Card, CardBody, CardHeader, Flex, IfoNotTokens, Image, Text } from '@pancakeswap/uikit'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
 
 import Trans from 'components/Trans'
 
-import { VestingStatus } from './types'
-import TokenInfo from './VestingPeriod/TokenInfo'
-import VestingEnded from './VestingEnded'
+import { getVestingStatus } from 'views/Ifos/helpers/getVestingStatus'
 import useFetchVestingData from '../../hooks/vesting/useFetchVestingData'
+import { VestingStatus } from './types'
+import VestingEnded from './VestingEnded'
+import TokenInfo from './VestingPeriod/TokenInfo'
 
 const StyleVestingCard = styled(Card)`
   width: 100%;
@@ -77,10 +78,11 @@ const IfoVesting: React.FC<React.PropsWithChildren<IfoVestingProps>> = ({ ifoBas
     }
   }, [account, fetchUserVestingData, setIsFirstTime])
 
+  const vestingStatus = getVestingStatus(data?.userVestingData)
   const cardStatus = useMemo(() => {
     if (account) {
-      if (data.length > 0) return IfoVestingStatus[VestingStatus.HAS_TOKENS_CLAIM]
-      if (data.length === 0 && !isFirstTime) return IfoVestingStatus[VestingStatus.ENDED]
+      if (data && vestingStatus === 'end') return IfoVestingStatus[VestingStatus.HAS_TOKENS_CLAIM]
+      if (!data && !isFirstTime) return IfoVestingStatus[VestingStatus.ENDED]
     }
     return IfoVestingStatus[VestingStatus.NOT_TOKENS_CLAIM]
   }, [data, account, isFirstTime])
@@ -91,7 +93,7 @@ const IfoVesting: React.FC<React.PropsWithChildren<IfoVestingProps>> = ({ ifoBas
   }, [fetchUserVestingData])
 
   return (
-    <StyleVestingCard isActive>
+    <StyleVestingCard isActive={vestingStatus === 'end'}>
       <CardHeader p="16px">
         <Flex justifyContent="space-between" alignItems="center">
           <Box ml="8px">
@@ -122,15 +124,15 @@ const IfoVesting: React.FC<React.PropsWithChildren<IfoVestingProps>> = ({ ifoBas
         )}
         {cardStatus.status === VestingStatus.HAS_TOKENS_CLAIM && (
           <TokenInfoContainer>
-            {data.map((ifo, index) => (
+            {data && (
               <TokenInfo
-                key={ifo.ifo.id}
-                index={index}
-                data={ifo}
+                key={data.ifo.id}
+                index={0}
+                data={data}
                 fetchUserVestingData={handleFetchUserVesting}
                 ifoBasicSaleType={ifoBasicSaleType}
               />
-            ))}
+            )}
           </TokenInfoContainer>
         )}
         {cardStatus.status === VestingStatus.ENDED && <VestingEnded />}
