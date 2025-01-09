@@ -93,11 +93,9 @@ const Hero = () => {
           >
             <Box>
               <StyledHeading as="h1" mb={['12px', '12px', '24px']}>
-                {t('IFO: Initial Farm Offerings')}
+                {t('IDO: Initial Dex Offerings')}
               </StyledHeading>
-              <StyledSubTitle bold>
-                {isMobile ? t('Buy new tokens using CAKE') : t('Buy new tokens launching on PancakeSwap using CAKE')}
-              </StyledSubTitle>
+              <StyledSubTitle bold>{t('Get new tokens launching on Binance Web3 Wallet')}</StyledSubTitle>
             </Box>
             {isMobile ? (
               <StyledButton onClick={handleClick} mt="0.375rem">

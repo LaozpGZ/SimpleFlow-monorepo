@@ -1,5 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Container, LinkExternal } from '@pancakeswap/uikit'
+import { Container } from '@pancakeswap/uikit'
 import { ReactNode } from 'react'
 import { Address } from 'viem'
 
@@ -15,8 +14,6 @@ interface TypeProps {
 }
 
 const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection, ifoSteps, faq }) => {
-  const { t } = useTranslation()
-
   return (
     <IfoLayout id="current-ifo" py={['24px', '24px', '40px']}>
       <Container>
@@ -25,14 +22,14 @@ const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection
       <SectionBackground>
         <Container>{ifoSteps}</Container>
       </SectionBackground>
-      {faq}
+      {/* {faq}
       <LinkExternal
         href="https://docs.pancakeswap.finance/ecosystem-and-partnerships/business-partnerships/initial-farm-offerings-ifos"
         mx="auto"
         mt="16px"
       >
         {t('Apply to run an IFO!')}
-      </LinkExternal>
+      </LinkExternal> */}
     </IfoLayout>
   )
 }
