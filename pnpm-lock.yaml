@@ -967,8 +967,8 @@ importers:
         specifier: ^1.2.0
         version: 1.2.0(@wagmi/core@2.10.5(@tanstack/query-core@5.52.0)(@types/react@18.2.37)(bufferutil@4.0.8)(immer@9.0.21)(react@18.2.0)(typescript@5.2.2)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@kyberswap/pancake-liquidity-widgets':
-        specifier: 1.0.4
-        version: 1.0.4(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.2.2)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4)
+        specifier: 1.0.5
+        version: 1.0.5(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.2.2)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4)
       '@next/bundle-analyzer':
         specifier: 13.0.7
         version: 13.0.7(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -5141,8 +5141,8 @@ packages:
   '@kurkle/color@0.3.2':
     resolution: {integrity: sha512-fuscdXJ9G1qb7W8VdHi+IwRqij3lBkosAm4ydQtEmbY58OzHXqQhvlxqEkoz0yssNVn38bcpRWgA9PP+OGoisw==}
 
-  '@kyberswap/pancake-liquidity-widgets@1.0.4':
-    resolution: {integrity: sha512-U716DdlX2lMF6pBV90mxuJk5ZqASTdEn3EX51qWhx3QnjselO9Xaxe+dpjQZ2De9X8vkBm7iH+4CgzNmaAD77A==}
+  '@kyberswap/pancake-liquidity-widgets@1.0.5':
+    resolution: {integrity: sha512-fsk0n/RhbMLhC5EZUQZAFICsMYpCIKX3NhbzeOlaJV35k8emjTDXNl8OMu+yBnCuuGi+No+fd/lGSUML/etwoA==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -19921,7 +19921,7 @@ snapshots:
 
   '@kurkle/color@0.3.2': {}
 
-  '@kyberswap/pancake-liquidity-widgets@1.0.4(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.2.2)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4)':
+  '@kyberswap/pancake-liquidity-widgets@1.0.5(bufferutil@4.0.8)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(typescript@5.2.2)(utf-8-validate@5.0.10)(viem@2.21.22(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4)':
     dependencies:
       '@pancakeswap/sdk': 5.8.8(bufferutil@4.0.8)(typescript@5.2.2)(utf-8-validate@5.0.10)(zod@3.22.4)
       '@pancakeswap/swap-sdk-core': 1.2.0
