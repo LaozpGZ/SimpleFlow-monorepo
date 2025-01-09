@@ -4,7 +4,6 @@ import { CAKE } from '@pancakeswap/tokens'
 import { Box, Flex, IfoSkeletonCardDetails, Skeleton, Text, TooltipText, useTooltip } from '@pancakeswap/uikit'
 import { BIG_ONE_HUNDRED } from '@pancakeswap/utils/bigNumber'
 import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
-import { DAY_IN_SECONDS } from '@pancakeswap/utils/getTimePeriods'
 import BigNumber from 'bignumber.js'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { ReactNode, useMemo } from 'react'
@@ -141,6 +140,20 @@ const MaxTokenEntry = ({
   )
 }
 
+function timeUntilDiffTime(diffTime: number): string {
+  if (diffTime <= 0) {
+    return 'The time has already passed.'
+  }
+
+  const diffInHours = Math.floor(diffTime / (60 * 60))
+  const diffInDays = Math.floor(diffInHours / 24)
+
+  if (diffInDays >= 1) {
+    return `${diffInDays} day(s)`
+  }
+  return `${diffInHours} hour(s)`
+}
+
 const IfoCardDetails: React.FC<React.PropsWithChildren<IfoCardDetailsProps>> = ({
   isEligible,
   poolId,
@@ -151,6 +164,7 @@ const IfoCardDetails: React.FC<React.PropsWithChildren<IfoCardDetailsProps>> = (
   const { t } = useTranslation()
   const { status, currencyPriceInUSD } = publicIfoData
   const poolCharacteristic = publicIfoData[poolId]
+  console.log('---', poolCharacteristic)
   const walletCharacteristic = walletIfoData[poolId]
   const hasTax = poolCharacteristic?.hasTax
 
@@ -220,7 +234,8 @@ const IfoCardDetails: React.FC<React.PropsWithChildren<IfoCardDetailsProps>> = (
   )
 
   const durationInSeconds = ifo.version >= 3.2 ? poolCharacteristic?.vestingInformation?.duration ?? 0 : 0
-  const vestingDays = Math.ceil(durationInSeconds / DAY_IN_SECONDS)
+  // const vestingDays = Math.ceil(durationInSeconds / DAY_IN_SECONDS)
+  const vestingCountdown = timeUntilDiffTime(durationInSeconds)
 
   /* Format end */
   const renderBasedOnIfoStatus = () => {
@@ -276,9 +291,9 @@ const IfoCardDetails: React.FC<React.PropsWithChildren<IfoCardDetailsProps>> = (
               />
               <FooterEntry
                 label={t('Vesting schedule:')}
-                value={`${vestingDays} days`}
-                tooltipContent={t('The vested tokens will be released linearly over a period of %days% days.', {
-                  days: vestingDays,
+                value={vestingCountdown}
+                tooltipContent={t('The vested tokens will be released linearly over a period of %countdown%.', {
+                  countdown: vestingCountdown,
                 })}
               />
             </>

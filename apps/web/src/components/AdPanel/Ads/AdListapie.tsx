@@ -1,0 +1,29 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { BodyText } from '../BodyText'
+import { AdButton } from '../Button'
+import { AdCard } from '../Card'
+import { Countdown } from '../Countdown'
+import { AdPlayerProps } from '../types'
+import { getImageUrl } from '../utils'
+
+export const AdListPieListing = (props: AdPlayerProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <AdCard imageUrl={getImageUrl('listapie')} {...props}>
+      <BodyText mb="8px">{t('Listapie IFO starts in')}</BodyText>
+
+      <Countdown
+        targetTime={3000 + new Date().getTime() / 1000}
+        subtleColor="rgba(0,0,0,.6)"
+        background="linear-gradient(180deg, #FCC631 0%, #FF9D00 100%)"
+        color="black"
+        mb="8px"
+      />
+
+      <AdButton variant="text" isExternalLink>
+        {t('Get Started')}
+      </AdButton>
+    </AdCard>
+  )
+}

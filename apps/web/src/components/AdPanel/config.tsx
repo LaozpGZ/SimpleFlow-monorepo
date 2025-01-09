@@ -1,6 +1,7 @@
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
 import { AdCakeStaking } from './Ads/AdCakeStaking'
+import { AdListPieListing } from './Ads/AdListapie'
 import { AdOptionsTrading } from './Ads/AdOptionsTrading'
 import { AdPCSX } from './Ads/AdPCSX'
 import { AdRocker } from './Ads/AdRocker'
@@ -35,6 +36,10 @@ export const useAdConfig = () => {
         component: <ExpandableAd />,
         priority: Priority.FIRST_AD,
         shouldRender: [shouldRenderOnPage],
+      },
+      {
+        id: 'listapie',
+        component: <AdListPieListing />,
       },
       {
         id: 'ad-springboard',
