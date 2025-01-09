@@ -1,18 +1,18 @@
-import { useMemo } from 'react'
-import { styled } from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Text, Progress, Tag } from '@pancakeswap/uikit'
-import { VestingData } from 'views/Ifos/hooks/vesting/fetchUserWalletIfoData'
 import { PoolIds } from '@pancakeswap/ifos'
+import { useTranslation } from '@pancakeswap/localization'
+import { Flex, Progress, Tag, Text } from '@pancakeswap/uikit'
 import { getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
-import { useCurrentBlock } from 'state/block/hooks'
-import useGetPublicIfoV3Data from 'views/Ifos/hooks/v3/useGetPublicIfoData'
 import BigNumber from 'bignumber.js'
 import dayjs from 'dayjs'
+import { useMemo } from 'react'
+import { useCurrentBlock } from 'state/block/hooks'
+import { styled } from 'styled-components'
+import useGetPublicIfoV3Data from 'views/Ifos/hooks/v3/useGetPublicIfoData'
+import { VestingData } from 'views/Ifos/hooks/vesting/fetchUserWalletIfoData'
 
 import { useQuery } from '@tanstack/react-query'
-import Claim from './Claim'
 import { isBasicSale } from '../../../hooks/v7/helpers'
+import Claim from './Claim'
 
 const WhiteCard = styled.div`
   background: ${({ theme }) => theme.colors.backgroundAlt};

@@ -1,9 +1,9 @@
+import { getActiveIfo, getIfoConfig, getInActiveIfos, Ifo, SUPPORTED_CHAIN_IDS } from '@pancakeswap/ifos'
 import { useQuery } from '@tanstack/react-query'
-import { getActiveIfo, getInActiveIfos, getIfoConfig, SUPPORTED_CHAIN_IDS, Ifo } from '@pancakeswap/ifos'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useMemo } from 'react'
 import sortBy from 'lodash/sortBy'
+import { useMemo } from 'react'
 
 export function useIfoConfigs() {
   const { chainId } = useActiveChainId()
