@@ -30,15 +30,20 @@ const isPoolEligible = (poolId: PoolIds, userVestingData: UserVestingData) => {
   return vestingEndTime.gte(currentTimeStamp)
 }
 
+export const isVestingEnd = (vestingData: VestingData) => {
+  const pool = vestingData.userVestingData[PoolIds.poolBasic] || vestingData.userVestingData[PoolIds.poolUnlimited]
+  const currentTimeStamp = Date.now()
+  const vestingEndTime = (vestingData.userVestingData.vestingStartTime + pool.vestingInformationDuration) * 1000
+  return vestingEndTime < currentTimeStamp
+}
+
 const isEligibleVestingData = (ifo: VestingData) => {
   const { userVestingData } = ifo
   return POOLS.some((poolId) => isPoolEligible(poolId, userVestingData))
 }
 
 const useFetchVestingData = () => {
-  let { address: account } = useAccount()
-  // For demo purposes, overriding the account here
-  account = '0xa9c60777fD1A95602D6c080A72Ff02324373F609'
+  const { address: account } = useAccount()
 
   const { chainId } = useActiveChainId()
   const configs = useIfoConfigsAcrossChains()
