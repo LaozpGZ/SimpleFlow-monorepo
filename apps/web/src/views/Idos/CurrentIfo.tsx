@@ -2,8 +2,9 @@ import { Ifo, isCrossChainIfoSupportedOnly } from '@pancakeswap/ifos'
 import { useMemo } from 'react'
 
 import { useFetchIfo } from 'state/pools/hooks'
-import useGetPublicIfoV8Data from 'views/Ifos/hooks/v8/useGetPublicIfoData'
-import useGetWalletIfoV8Data from 'views/Ifos/hooks/v8/useGetWalletIfoData'
+import useGetPublicIfoV8Data from 'views/Idos/hooks/v8/useGetPublicIfoData'
+import useGetWalletIfoV8Data from 'views/Idos/hooks/v8/useGetWalletIfoData'
+import { useIDOPoolInfo } from './hooks/ido/useIDOPoolInfo'
 
 import IfoContainer from './components/IfoContainer'
 import { IfoCurrentCard } from './components/IfoFoldableCard'
@@ -13,16 +14,18 @@ import { SectionBackground } from './components/SectionBackground'
 import { useICakeBridgeStatus } from './hooks/useIfoCredit'
 import { isBasicSale } from './hooks/v7/helpers'
 
+import { PublicIfoData, WalletIfoData } from './types'
+
 interface TypeProps {
   activeIfo: Ifo
 }
 
 const CurrentIfo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIfo }) => {
-  console.log(activeIfo, 'activeIfo???')
   useFetchIfo()
-  const publicIfoData = useGetPublicIfoV8Data(activeIfo)
-  console.log(publicIfoData, 'publicIfoData???')
-  const walletIfoData = useGetWalletIfoV8Data(activeIfo)
+  const publicIfoData: PublicIfoData = useGetPublicIfoV8Data(activeIfo)
+  const walletIfoData: WalletIfoData = useGetWalletIfoV8Data(activeIfo)
+  const idoPoolInfo = useIDOPoolInfo()
+
   const { hasBridged, sourceChainCredit, srcChainId, destChainCredit } = useICakeBridgeStatus({
     ifoChainId: activeIfo.chainId,
     ifoAddress: activeIfo.address,
