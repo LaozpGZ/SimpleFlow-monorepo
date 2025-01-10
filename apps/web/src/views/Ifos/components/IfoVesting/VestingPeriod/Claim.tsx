@@ -92,7 +92,7 @@ const ClaimButton: React.FC<React.PropsWithChildren<Props>> = ({
       disabled={isReady && !enabled && !isEnd}
       endIcon={isPending ? <AutoRenewIcon spin color="currentColor" /> : null}
     >
-      {t('Claim %symbol%', { symbol: token.symbol })}
+      {t('Claim', { symbol: token.symbol })}
     </Button>
   )
 }
