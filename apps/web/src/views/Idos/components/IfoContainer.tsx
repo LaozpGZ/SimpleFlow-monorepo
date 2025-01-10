@@ -9,7 +9,6 @@ interface TypeProps {
   ifoSection: ReactNode
   ifoSteps: ReactNode
   faq?: ReactNode
-  ifoBasicSaleType?: number
   ifoAddress?: Address
 }
 
