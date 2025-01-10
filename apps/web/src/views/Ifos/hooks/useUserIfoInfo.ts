@@ -14,6 +14,7 @@ type ICakeRatioParams = {
 }
 
 export function useICakeRatio({ chainId }: ICakeRatioParams) {
+  const { address: account } = useAccount()
   const { data } = useQuery({
     queryKey: [chainId, 'current-ifo-ratio'],
 
@@ -21,6 +22,7 @@ export function useICakeRatio({ chainId }: ICakeRatioParams) {
       getCurrentIfoRatio({
         chainId,
         provider: getViemClients,
+        account,
       }),
 
     enabled: Boolean(chainId),
