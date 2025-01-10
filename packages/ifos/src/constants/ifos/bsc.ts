@@ -6,10 +6,10 @@ import { cakeBnbLpToken } from '../lpTokens'
 export const ifos: BaseIfoConfig[] = [
   {
     id: 'testpie',
-    address: '0x3b2f8F65A0E236809ae7027d78c1E6f7cc70738F',
+    address: '0x4639E1136E1fB8543f429c39cf640EFE87029986',
     isActive: true,
     cIFO: false,
-    plannedStartTime: new Date('2025-01-10T05:00:00Z').getTime() / 1000,
+    plannedStartTime: new Date('2025-01-10T11:30:00Z').getTime() / 1000,
     poolBasic: {
       raiseAmount: '$3',
     },
