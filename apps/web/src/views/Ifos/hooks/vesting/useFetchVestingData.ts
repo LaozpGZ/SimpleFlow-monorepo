@@ -16,11 +16,7 @@ const isPoolEligible = (poolId: PoolIds, userVestingData: UserVestingData) => {
   const currentTimeStamp = Date.now()
   if (!poolData) return false
 
-  if (poolData.offeringAmountInToken.lte(0)) {
-    return false
-  }
-
-  if (poolData.vestingComputeReleasableAmount.gt(0)) {
+  if (poolData.offeringAmountInToken.gt(0) || poolData.vestingComputeReleasableAmount.gt(0)) {
     return true
   }
 
@@ -59,7 +55,7 @@ const useFetchVestingData = () => {
         .filter((result) => result.status === 'fulfilled')
         .map((result) => (result as PromiseFulfilledResult<VestingData>).value)
 
-      const filteredData = allData.filter(isEligibleVestingData)
+      const filteredData = allData.filter((x) => x.ifo.isActive).filter(isEligibleVestingData)
 
       const sortedData = filteredData.toSorted((a, b) => {
         if (a.ifo.chainId === chainId && b.ifo.chainId !== chainId) return -1
