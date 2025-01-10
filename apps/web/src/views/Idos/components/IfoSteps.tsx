@@ -29,17 +29,12 @@ import { Address } from 'viem'
 import { useChainName } from '../hooks/useChainNames'
 
 interface TypeProps {
-  sourceChainIfoCredit?: CurrencyAmount<Currency>
-  dstChainIfoCredit?: CurrencyAmount<Currency>
-  srcChainId?: ChainId
   ifoChainId?: ChainId
   ifoCurrencyAddress: Address
   hasClaimed: boolean
   isCommitted: boolean
   isLive?: boolean
   isFinished?: boolean
-  isCrossChainIfo?: boolean
-  hasBridged?: boolean
 }
 
 const SmallStakePoolCard = styled(Box)`
@@ -94,16 +89,7 @@ function ICakeCard({
   )
 }
 
-const Step1 = ({
-  hasProfile,
-  sourceChainIfoCredit,
-  isCrossChainIfo,
-}: {
-  srcChainId?: ChainId
-  hasProfile: boolean
-  sourceChainIfoCredit?: CurrencyAmount<Currency>
-  isCrossChainIfo?: boolean
-}) => {
+const Step1 = () => {
   const { t } = useTranslation()
 
   return (
@@ -124,28 +110,18 @@ const Step1 = ({
 }
 
 const IfoSteps: React.FC<React.PropsWithChildren<TypeProps>> = ({
-  dstChainIfoCredit,
-  sourceChainIfoCredit,
-  srcChainId,
   ifoChainId,
   isCommitted,
   hasClaimed,
   isLive,
   isFinished,
-  isCrossChainIfo,
-  hasBridged,
 }) => {
   const { hasActiveProfile } = useProfile()
   const { address: account } = useAccount()
   const { t } = useTranslation()
   const ifoChainName = useChainName(ifoChainId)
-  const sourceChainHasICake = useMemo(
-    () => sourceChainIfoCredit && sourceChainIfoCredit.quotient > 0n,
-    [sourceChainIfoCredit],
-  )
-  const stepsValidationStatus = isCrossChainIfo
-    ? [hasActiveProfile, sourceChainHasICake, hasBridged]
-    : [hasActiveProfile, sourceChainHasICake, isCommitted]
+
+  const stepsValidationStatus = [1, 2, 3]
 
   const getStatusProp = (index: number): StepStatus => {
     const arePreviousValid = index === 0 ? true : every(stepsValidationStatus.slice(0, index), Boolean)
@@ -207,14 +183,7 @@ const IfoSteps: React.FC<React.PropsWithChildren<TypeProps>> = ({
           </CardBody>
         )
       case 1:
-        return (
-          <Step1
-            hasProfile={hasActiveProfile}
-            sourceChainIfoCredit={sourceChainIfoCredit}
-            srcChainId={srcChainId}
-            isCrossChainIfo={isCrossChainIfo}
-          />
-        )
+        return <Step1 />
       case 2:
         return claimIDoAirDrop()
       default:
