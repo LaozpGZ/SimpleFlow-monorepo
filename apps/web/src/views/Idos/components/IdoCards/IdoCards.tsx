@@ -2,7 +2,6 @@ import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Percent } from '@pancakeswap/sdk'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { bscTokens } from '@pancakeSwap/tokens'
 import {
   Box,
   Button,
@@ -182,26 +181,29 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
 export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { onDismiss, onOpen, isOpen } = useModalV2()
-  const [value, setValue] = useState('0.00')
-  const updateValue = useCallback((newValue: string) => {
-    if (newValue === '' || !newValue) {
-      setValue('0.00')
-    } else setValue(newValue)
-  }, [])
+  const [value, setValue] = useState('')
+
   const { address: account } = useAccount()
-  const inputBalance = useCurrencyBalance(account ?? undefined, bscTokens.bnb ?? undefined)
+  const inputBalance = useCurrencyBalance(account ?? undefined, idoPublicData?.stakeCurrency ?? undefined)
   const balance = idoPublicData?.stakeCurrency ? formatAmount(inputBalance, 6) : undefined
   const { deposit } = useIDODepositCallback()
 
   const maxAmountInput = useMemo(() => maxAmountSpend(inputBalance), [inputBalance])
 
+  const getPercentAmount = useCallback(
+    (percent: number) => {
+      return maxAmountInput.multiply(new Percent(percent, 100)).toExact()
+    },
+    [maxAmountInput],
+  )
+
   const handlePercentInput = useCallback(
     (percent: number) => {
       if (maxAmountInput) {
-        updateValue(maxAmountInput.multiply(new Percent(percent, 100)).toExact())
+        setValue(getPercentAmount(percent))
       }
     },
-    [maxAmountInput],
+    [maxAmountInput, setValue],
   )
 
   const handleMaxInput = useCallback(() => {
@@ -213,12 +215,20 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ i
     () => new BigNumber(10).pow(idoPublicData?.stakeCurrency?.decimals ?? 18),
     [idoPublicData?.stakeCurrency?.decimals],
   )
-  const depositAmount = idoPublicData?.stakeCurrency
-    ? CurrencyAmount.fromRawAmount(
-        idoPublicData.stakeCurrency,
-        new BigNumber(value).times(tokenBalanceMultiplier).toFixed(0),
-      )
-    : undefined
+  const depositAmount =
+    idoPublicData?.stakeCurrency && value !== ''
+      ? CurrencyAmount.fromRawAmount(
+          idoPublicData.stakeCurrency,
+          new BigNumber(value ?? 0).times(tokenBalanceMultiplier).toFixed(0),
+        )
+      : undefined
+
+  const isUserInsufficientBalance = useMemo(() => {
+    if (depositAmount && inputBalance) {
+      return depositAmount.greaterThan(inputBalance)
+    }
+    return false
+  }, [depositAmount, inputBalance])
 
   return (
     <>
@@ -234,14 +244,15 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ i
                 disabled={false}
                 error={false}
                 value={value}
-                onUserInput={updateValue}
+                placeholder="0.00"
+                onUserInput={setValue}
                 top={
                   <FlexGap justifyContent="space-between" alignItems="center" width="100%" position="relative">
-                    {t('Deposit')}
+                    <Text bold>{t('Deposit')}</Text>
                     <LazyAnimatePresence mode="wait" features={domAnimation}>
                       {account ? (
                         <SwapUIV2.WalletAssetDisplay
-                          isUserInsufficientBalance={false}
+                          isUserInsufficientBalance={isUserInsufficientBalance}
                           balance={balance}
                           onMax={handleMaxInput}
                         />
@@ -256,6 +267,28 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ i
                   </FlexGap>
                 }
               />
+              <FlexGap>
+                {maxAmountInput?.greaterThan(0) &&
+                  [25, 50, 75, 100].map((percent) => {
+                    const isAtCurrentPercent = maxAmountInput && value !== '0' && value === getPercentAmount(percent)
+                    return (
+                      <Button
+                        key={`btn_quickCurrency${percent}`}
+                        data-dd-action-name={`Balance percent ${percent}`}
+                        onClick={() => {
+                          handlePercentInput(percent)
+                        }}
+                        scale="sm"
+                        mr="5px"
+                        width="100%"
+                        variant={isAtCurrentPercent ? 'primary' : 'secondary'}
+                        style={{ textTransform: 'uppercase' }}
+                      >
+                        {percent === 100 ? t('Max') : `${percent}%`}
+                      </Button>
+                    )
+                  })}
+              </FlexGap>
               <FlexGap flexDirection="column" gap="8px">
                 <FlexGap justifyContent="space-between">
                   <Text color="textSubtle">{t('Project Duration')}</Text>
@@ -269,6 +302,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ i
                   )}
                 </Text>
                 <Button
+                  disabled={value === '' || !depositAmount || isUserInsufficientBalance}
                   width="100%"
                   onClick={() => {
                     if (depositAmount) deposit(depositAmount)
