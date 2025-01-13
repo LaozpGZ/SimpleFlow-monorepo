@@ -6,7 +6,7 @@ import { useIDOUserInfo } from './hooks/ido/useIDOUserInfo'
 import { useIDOUserStatus } from './hooks/ido/useIDOUserStatus'
 import { useIdoPublicData } from './hooks/ido/useIdoPublicData'
 
-import { IDoCurrentCard } from './components/IdoCard/IdoCard'
+import { IDoCurrentCard } from './components/IdoCards/IdoCards'
 import IfoContainer from './components/IfoContainer'
 import IfoQuestions from './components/IfoQuestions'
 import IfoSteps from './components/IfoSteps'
