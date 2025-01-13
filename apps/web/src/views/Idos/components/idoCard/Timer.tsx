@@ -7,6 +7,7 @@ import { styled } from 'styled-components'
 interface Props {
   plannedStartTime: number
   startTime: number
+  endTime: number
   ifoStatus: IfoStatus
   dark?: boolean
 }
@@ -111,13 +112,10 @@ const LiveNowHeading = styled(EndInHeading)`
   }
 `
 
-const LiveTimer: React.FC<React.PropsWithChildren<Pick<Props, 'startTime' | 'ifoStatus'>>> = ({
-  startTime,
-  ifoStatus,
-}) => {
+const LiveTimer: React.FC<React.PropsWithChildren<Pick<Props, 'endTime' | 'ifoStatus'>>> = ({ endTime, ifoStatus }) => {
   const { t } = useTranslation()
   const now = Math.floor(Date.now() / 1000)
-  const timeUntil = getTimePeriods(startTime - now)
+  const timeUntil = getTimePeriods(endTime - now)
 
   const timeDisplay =
     ifoStatus !== 'idle' ? (

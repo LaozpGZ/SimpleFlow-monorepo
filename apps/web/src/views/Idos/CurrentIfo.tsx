@@ -1,24 +1,22 @@
 import { Ifo } from '@pancakeswap/ifos'
 import { useMemo } from 'react'
 
-import { useFetchIfo } from 'state/pools/hooks'
 import { useIDOPoolInfo } from './hooks/ido/useIDOPoolInfo'
 import { useIDOUserInfo } from './hooks/ido/useIDOUserInfo'
 import { useIDOUserStatus } from './hooks/ido/useIDOUserStatus'
 import { useIdoPublicData } from './hooks/ido/useIdoPublicData'
 
+import { IDoCurrentCard } from './components/IdoCard/IdoCard'
 import IfoContainer from './components/IfoContainer'
 import IfoQuestions from './components/IfoQuestions'
 import IfoSteps from './components/IfoSteps'
 import { SectionBackground } from './components/SectionBackground'
-import { IDoCurrentCard } from './components/idoCard/idoCard'
 
 interface TypeProps {
   activeIfo: Ifo
 }
 
-const CurrentIfo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIfo }) => {
-  useFetchIfo()
+const CurrentIdo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIfo }) => {
   const { data: idoPoolInfo } = useIDOPoolInfo()
   const idoUserStatus = useIDOUserStatus()
   const idoPublicData = useIdoPublicData(activeIfo.chainId)
@@ -67,4 +65,4 @@ const CurrentIfo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIfo })
   )
 }
 
-export default CurrentIfo
+export default CurrentIdo
