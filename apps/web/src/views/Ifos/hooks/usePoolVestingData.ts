@@ -68,7 +68,7 @@ export const getHasClaimable = (poolIds: PoolIds[], data: VestingData | null) =>
   }
 
   return poolIds.some((poolId) => {
-    const { claimable, remaining } = getVestingInfo(poolId, data)
-    return claimable !== '0' || remaining !== '0'
+    const { claimable } = getVestingInfo(poolId, data)
+    return claimable !== '0'
   })
 }
