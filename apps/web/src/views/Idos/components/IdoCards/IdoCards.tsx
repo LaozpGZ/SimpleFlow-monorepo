@@ -1,14 +1,37 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, Card, CardBody, CardHeader, FlexGap, Text } from '@pancakeswap/uikit'
+import { Percent } from '@pancakeswap/sdk'
+import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { bscTokens } from '@pancakeSwap/tokens'
+import {
+  Box,
+  Button,
+  Card,
+  CardBody,
+  CardHeader,
+  domAnimation,
+  FlexGap,
+  LazyAnimatePresence,
+  ModalBody,
+  ModalContainer,
+  ModalV2,
+  Text,
+  useModalV2,
+} from '@pancakeswap/uikit'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
+import BigNumber from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useCallback, useMemo, useState } from 'react'
+import { useCurrencyBalance } from 'state/wallet/hooks'
 import { styled } from 'styled-components'
+import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useAccount } from 'wagmi'
 import { IdoRibbon } from './IdoRibbon'
 
 import { getBannerUrl } from '../../helpers'
+import { useIDODepositCallback } from '../../hooks/ido/useIDODepositCallback'
 import { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
 
 export const StyledCardBody = styled(CardBody)`
@@ -114,13 +137,13 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
     <Card background="#FAF9FA">
       <CardBody>
         <FlexGap flexDirection="column" gap="8px">
-          <FlexGap flexDirection="column">
+          <FlexGap flexDirection="column" gap="8px">
             <Text fontSize="12px" bold color="secondary" lineHeight="18px">
               {idoPublicData.stakeCurrency?.symbol} {t('Pool')}
             </Text>
             <FlexGap gap="8px">
               {/* @ts-ignore */}
-              <CurrencyLogo size="40px" currency={idoPublicData?.offeringCurrency} />
+              <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
               {account ? <IdoDepositButton idoPublicData={idoPublicData} /> : <ConnectWalletButton width="100%" />}
             </FlexGap>
           </FlexGap>
@@ -158,11 +181,106 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
 
 export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
+  const { onDismiss, onOpen, isOpen } = useModalV2()
+  const [value, setValue] = useState('0.00')
+  const updateValue = useCallback((newValue: string) => {
+    if (newValue === '' || !newValue) {
+      setValue('0.00')
+    } else setValue(newValue)
+  }, [])
+  const { address: account } = useAccount()
+  const inputBalance = useCurrencyBalance(account ?? undefined, bscTokens.bnb ?? undefined)
+  const balance = idoPublicData?.stakeCurrency ? formatAmount(inputBalance, 6) : undefined
+  const { deposit } = useIDODepositCallback()
+
+  const maxAmountInput = useMemo(() => maxAmountSpend(inputBalance), [inputBalance])
+
+  const handlePercentInput = useCallback(
+    (percent: number) => {
+      if (maxAmountInput) {
+        updateValue(maxAmountInput.multiply(new Percent(percent, 100)).toExact())
+      }
+    },
+    [maxAmountInput],
+  )
+
+  const handleMaxInput = useCallback(() => {
+    if (maxAmountInput) {
+      setValue(maxAmountInput.toExact())
+    }
+  }, [maxAmountInput])
+  const tokenBalanceMultiplier = useMemo(
+    () => new BigNumber(10).pow(idoPublicData?.stakeCurrency?.decimals ?? 18),
+    [idoPublicData?.stakeCurrency?.decimals],
+  )
+  const depositAmount = idoPublicData?.stakeCurrency
+    ? CurrencyAmount.fromRawAmount(
+        idoPublicData.stakeCurrency,
+        new BigNumber(value).times(tokenBalanceMultiplier).toFixed(0),
+      )
+    : undefined
+
   return (
     <>
-      <Button width="100%">
+      <Button width="100%" onClick={onOpen}>
         {t('Deposit')} {idoPublicData?.stakeCurrency?.symbol ?? ''}
       </Button>
+      <ModalV2 isOpen={isOpen} title="Deposit" onDismiss={onDismiss} closeOnOverlayClick>
+        <ModalContainer>
+          <ModalBody p="16px" pt="30px">
+            <FlexGap flexDirection="column" gap="8px">
+              <SwapUIV2.CurrencyInputPanelSimplify
+                id={`idoStakeCurrency${idoPublicData?.stakeCurrency?.symbol ?? ''}`}
+                disabled={false}
+                error={false}
+                value={value}
+                onUserInput={updateValue}
+                top={
+                  <FlexGap justifyContent="space-between" alignItems="center" width="100%" position="relative">
+                    {t('Deposit')}
+                    <LazyAnimatePresence mode="wait" features={domAnimation}>
+                      {account ? (
+                        <SwapUIV2.WalletAssetDisplay
+                          isUserInsufficientBalance={false}
+                          balance={balance}
+                          onMax={handleMaxInput}
+                        />
+                      ) : null}
+                    </LazyAnimatePresence>
+                  </FlexGap>
+                }
+                inputLeft={
+                  <FlexGap alignItems="center">
+                    {/* @ts-ignore */}
+                    <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
+                  </FlexGap>
+                }
+              />
+              <FlexGap flexDirection="column" gap="8px">
+                <FlexGap justifyContent="space-between">
+                  <Text color="textSubtle">{t('Project Duration')}</Text>
+                  <Text>
+                    {getTimePeriods(idoPublicData.duration).days} {t('days')}
+                  </Text>
+                </FlexGap>
+                <Text color="textSubtle" fontSize="12px">
+                  {t(
+                    'Some Rules/ T&C context or information that user need to know before locking BNB/ participating in IDO, show here.',
+                  )}
+                </Text>
+                <Button
+                  width="100%"
+                  onClick={() => {
+                    if (depositAmount) deposit(depositAmount)
+                  }}
+                >
+                  {t('Confirm Deposit')}
+                </Button>
+              </FlexGap>
+            </FlexGap>
+          </ModalBody>
+        </ModalContainer>
+      </ModalV2>
     </>
   )
 }
