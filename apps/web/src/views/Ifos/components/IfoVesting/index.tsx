@@ -6,7 +6,8 @@ import { useAccount } from 'wagmi'
 
 import Trans from 'components/Trans'
 
-import { getVestingStatus } from 'views/Ifos/helpers/getVestingStatus'
+import { PoolIds } from '@pancakeswap/ifos'
+import { getHasClaimable } from 'views/Ifos/hooks/usePoolVestingData'
 import useFetchVestingData from '../../hooks/vesting/useFetchVestingData'
 import { VestingStatus } from './types'
 import VestingEnded from './VestingEnded'
@@ -71,21 +72,23 @@ const IfoVesting: React.FC<React.PropsWithChildren<IfoVestingProps>> = ({ ifoBas
   const { data, fetchUserVestingData } = useFetchVestingData()
 
   useEffect(() => {
-    // When switch account need init
     if (account) {
       setIsFirstTime(true)
       fetchUserVestingData()
     }
   }, [account, fetchUserVestingData, setIsFirstTime])
 
-  const vestingStatus = getVestingStatus(data?.userVestingData)
+  const hasClaimable = getHasClaimable([PoolIds.poolBasic, PoolIds.poolUnlimited], data)
+
   const cardStatus = useMemo(() => {
     if (account) {
-      if (data && vestingStatus === 'end') return IfoVestingStatus[VestingStatus.HAS_TOKENS_CLAIM]
-      if (!data && !isFirstTime) return IfoVestingStatus[VestingStatus.ENDED]
+      if (hasClaimable) {
+        return IfoVestingStatus[VestingStatus.HAS_TOKENS_CLAIM]
+      }
+      if (!hasClaimable && !isFirstTime) return IfoVestingStatus[VestingStatus.ENDED]
     }
     return IfoVestingStatus[VestingStatus.NOT_TOKENS_CLAIM]
-  }, [data, account, isFirstTime])
+  }, [data, account, isFirstTime, hasClaimable])
 
   const handleFetchUserVesting = useCallback(() => {
     setIsFirstTime(false)
@@ -93,7 +96,7 @@ const IfoVesting: React.FC<React.PropsWithChildren<IfoVestingProps>> = ({ ifoBas
   }, [fetchUserVestingData])
 
   return (
-    <StyleVestingCard isActive={vestingStatus === 'end'}>
+    <StyleVestingCard isActive>
       <CardHeader p="16px">
         <Flex justifyContent="space-between" alignItems="center">
           <Box ml="8px">
