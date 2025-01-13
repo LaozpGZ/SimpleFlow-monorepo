@@ -10,6 +10,8 @@ export type IDOConfig = {
   duration: number
   pricePerToken: Price<Currency, Currency> | undefined
   maxStakePerUser: CurrencyAmount<Currency> | undefined
+  raiseAmount: CurrencyAmount<Currency> | undefined
+  saleAmount: CurrencyAmount<Currency> | undefined
 }
 
 export const useIDOConfig = () => {
@@ -26,14 +28,20 @@ export const useIDOConfig = () => {
       pricePerToken:
         stakeCurrency && offeringCurrency
           ? new Price(
-              stakeCurrency,
               offeringCurrency,
-              poolInfo?.raisingAmountPool ?? 0n,
+              stakeCurrency,
               poolInfo?.offeringAmountPool ?? 0n,
+              poolInfo?.raisingAmountPool ?? 0n,
             )
           : undefined,
       maxStakePerUser: stakeCurrency
         ? CurrencyAmount.fromRawAmount(stakeCurrency, poolInfo?.capPerUserInLP ?? 0n)
+        : undefined,
+      raiseAmount: stakeCurrency
+        ? CurrencyAmount.fromRawAmount(stakeCurrency, poolInfo?.raisingAmountPool ?? 0n)
+        : undefined,
+      saleAmount: offeringCurrency
+        ? CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.offeringAmountPool ?? 0n)
         : undefined,
     } satisfies IDOConfig
   }, [poolInfo, stakeCurrency, offeringCurrency])

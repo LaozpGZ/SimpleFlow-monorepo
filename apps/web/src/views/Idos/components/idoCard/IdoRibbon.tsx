@@ -8,7 +8,6 @@ import { styled } from 'styled-components'
 import { IfoStatus } from '@pancakeswap/ifos'
 import { getBannerUrl } from '../../helpers'
 import { PublicIfoData } from '../../types'
-import { IfoChainBoard } from '../IfoChainBoard'
 import LiveTimer, { SoonTimer } from './Timer'
 
 const StyledProgress = styled(Progress)`
@@ -77,6 +76,7 @@ export const IdoRibbon = ({
   plannedStartTime,
   startTime,
   timeProgress,
+  endTime,
 }: {
   ifoChainId?: ChainId
   ifoStatus: IfoStatus
@@ -84,6 +84,7 @@ export const IdoRibbon = ({
   plannedStartTime: number
   startTime: number
   timeProgress: number
+  endTime: number
 }) => {
   const bannerUrl = useMemo(() => ifoId && getBannerUrl(ifoId), [ifoId])
   const { isDarkColor } = useImageColor({ url: bannerUrl })
@@ -94,11 +95,12 @@ export const IdoRibbon = ({
       ribbon = <IfoRibbonEnd />
       break
     case 'live':
-      ribbon = <IfoRibbonLive startTime={startTime} ifoStatus={ifoStatus} dark={isDarkColor} />
+      ribbon = <IfoRibbonLive endTime={endTime} ifoStatus={ifoStatus} dark={isDarkColor} />
       break
     case 'coming_soon':
       ribbon = (
         <IfoRibbonSoon
+          endTime={endTime}
           startTime={startTime}
           ifoStatus={ifoStatus}
           plannedStartTime={plannedStartTime}
@@ -136,9 +138,9 @@ export const IdoRibbon = ({
       >
         {ribbon}
       </Flex>
-      <ChainBoardContainer zIndex={2}>
+      {/* <ChainBoardContainer zIndex={2}>
         <IfoChainBoard chainId={ifoChainId} />
-      </ChainBoardContainer>
+      </ChainBoardContainer> */}
     </Container>
   )
 }
@@ -166,25 +168,32 @@ const IfoRibbonSoon = ({
   ifoStatus,
   plannedStartTime,
   dark,
-}: { plannedStartTime: number; startTime: number; ifoStatus: IfoStatus } & RibbonProps) => {
+  endTime,
+}: { plannedStartTime: number; startTime: number; endTime: number; ifoStatus: IfoStatus } & RibbonProps) => {
   return (
     <>
       <BigCurve $status="coming_soon" $dark={dark} />
       <RibbonContainer>
         <Heading as="h3" scale="lg" color="secondary">
-          <SoonTimer startTime={startTime} ifoStatus={ifoStatus} plannedStartTime={plannedStartTime} dark={dark} />
+          <SoonTimer
+            startTime={startTime}
+            endTime={endTime}
+            ifoStatus={ifoStatus}
+            plannedStartTime={plannedStartTime}
+            dark={dark}
+          />
         </Heading>
       </RibbonContainer>
     </>
   )
 }
 
-const IfoRibbonLive = ({ startTime, ifoStatus, dark }: { startTime: number; ifoStatus: IfoStatus } & RibbonProps) => {
+const IfoRibbonLive = ({ ifoStatus, dark, endTime }: { endTime: number; ifoStatus: IfoStatus } & RibbonProps) => {
   return (
     <>
       <BigCurve $status="live" $dark={dark} />
       <RibbonContainer>
-        <LiveTimer startTime={startTime} ifoStatus={ifoStatus} />
+        <LiveTimer endTime={endTime} ifoStatus={ifoStatus} />
       </RibbonContainer>
     </>
   )

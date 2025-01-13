@@ -1,12 +1,14 @@
 import { ChainId } from '@pancakeswap/chains'
 import { IfoStatus } from '@pancakeswap/ifos'
-import { type Currency, CurrencyAmount, Percent } from '@pancakeswap/swap-sdk-core'
+import { type Currency, CurrencyAmount, Percent, Price } from '@pancakeswap/swap-sdk-core'
 import { CAKE } from '@pancakeswap/tokens'
 import BigNumber from 'bignumber.js'
+import { UnsafeCurrency } from 'config/constants/types'
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useLpTokenPrice } from 'state/farms/hooks'
 import { getStatusByTimestamp } from '../helpers'
 import { useIDOStatus } from './usdIDOStatus'
+import { useIDOConfig } from './useIDOConfig'
 import { useIDOCurrencies } from './useIDOCurrencies'
 import { useIDOPoolInfo } from './useIDOPoolInfo'
 
@@ -21,21 +23,27 @@ export type IDOPublicData = {
   progress: Percent
   currentStakedAmount?: CurrencyAmount<Currency>
   timeProgress: number
+  duration: number
+  pricePerToken: Price<Currency, Currency> | undefined
+  stakeCurrency: UnsafeCurrency
+  offeringCurrency: UnsafeCurrency
+  raiseAmount: CurrencyAmount<Currency> | undefined
+  saleAmount: CurrencyAmount<Currency> | undefined
 }
 
 export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
   const { data: poolInfo } = useIDOPoolInfo()
-  const { stakeCurrency } = useIDOCurrencies()
+  const { stakeCurrency, offeringCurrency } = useIDOCurrencies()
   const { progress, currentStakedAmount } = useIDOStatus()
+  const { pricePerToken, raiseAmount, saleAmount } = useIDOConfig()
 
   const startTime = Number(poolInfo?.startTimestamp) || 0
-  const endTime = Number(poolInfo?.endTimestamp) || 0
+  const endTime = 1737407928 // Number(poolInfo?.endTimestamp) || 0
   const now = Math.floor(Date.now() / 1000)
   const status = getStatusByTimestamp(now, startTime, endTime)
   const lpTokenPriceInUsd = useLpTokenPrice(stakeCurrency?.symbol ?? 'BNB')
   const cakePrice = useCakePrice()
-  const duration =
-    poolInfo?.endTimestamp && poolInfo?.startTimestamp ? poolInfo?.endTimestamp - poolInfo?.startTimestamp : 0
+  const duration = startTime - endTime
   const currencyPriceInUSD = stakeCurrency === CAKE[chainId] ? cakePrice : lpTokenPriceInUsd
   const timeProgress = status === 'live' ? ((now - startTime) / duration) * 100 : 0
 
@@ -50,5 +58,11 @@ export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
     progress,
     currentStakedAmount,
     timeProgress,
+    duration,
+    pricePerToken,
+    stakeCurrency,
+    offeringCurrency,
+    raiseAmount,
+    saleAmount,
   }
 }

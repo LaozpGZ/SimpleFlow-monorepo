@@ -82,7 +82,7 @@ const Hero = () => {
   }
 
   return (
-    <Box mb="8px">
+    <Box>
       <StyledHero py={['14px', '14px', '40px']} minHeight={['212px', '212px', '197px']}>
         <HeaderBunny />
         <Container position="relative" zIndex="2">

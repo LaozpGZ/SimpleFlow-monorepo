@@ -11,7 +11,6 @@ export const IfoLayoutWrapper = styled(IfoLayout)`
   display: grid;
   grid-template-columns: 1fr;
   align-items: flex-start;
-
   > div {
     margin: 0 auto;
   }
