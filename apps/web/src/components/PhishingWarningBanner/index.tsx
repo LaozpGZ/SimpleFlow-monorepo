@@ -102,7 +102,7 @@ type BannerConfig = {
 const CONFIG: BannerConfig[] = [
   {
     component: SolvStrip,
-    stripeImage: `${ASSET_CDN}/web/phishing-warning/solv.png`,
+    stripeImage: `${ASSET_CDN}/web/phishing-warning/solv.png?v=1`,
     stripeImageWidth: '92px',
     stripeImageAlt: 'SOLV IFO',
   },
