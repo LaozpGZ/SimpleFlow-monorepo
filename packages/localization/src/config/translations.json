@@ -3680,5 +3680,5 @@
   "Content is required": "Content is required",
   "Please provide valid choices": "Please provide valid choices",
   "The vested tokens will be released linearly over a period of %countdown%.": "The vested tokens will be released linearly over a period of %countdown%.",
-  "Listapie IFO starts in": "Listapie IFO starts in"
+  "%token% IFO starts in": "%token% IFO starts in"
 }

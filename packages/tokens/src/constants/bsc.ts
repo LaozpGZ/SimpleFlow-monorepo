@@ -3349,4 +3349,12 @@ export const bscTokens = {
     'Lista Pie',
     'https://lista.org/',
   ),
+  solv: new ERC20Token(
+    ChainId.BSC,
+    '0x04830A96a23EA718fAA695a5AAe74695AAE3A23f',
+    18,
+    'SOLV',
+    'Solv',
+    'https://solv.finance/',
+  ),
 }

@@ -5,29 +5,29 @@ import { cakeBnbLpToken } from '../lpTokens'
 
 export const ifos: BaseIfoConfig[] = [
   {
-    id: 'testpie',
-    address: '0x8579CF86785eeFA03a84d5cDAbA5b37293904edd',
+    id: 'solv',
+    address: '0xb0De22aAe05789C13E900688b420F1Bb7c2C3889',
     isActive: true,
     cIFO: false,
-    plannedStartTime: new Date('2025-01-13T05:30:00Z').getTime() / 1000,
+    plannedStartTime: new Date('2025-01-16T00:00:00Z').getTime() / 1000,
     poolBasic: {
-      raiseAmount: '$3',
+      raiseAmount: '$90,000',
     },
     poolUnlimited: {
-      raiseAmount: '$27',
-      additionalClaimingFee: false,
+      raiseAmount: '$10,000',
+      additionalClaimingFee: true,
     },
-    name: 'TESTPIE',
+    name: 'SOLV',
     currency: bscTokens.cake,
-    token: bscTokens.usdt,
-    campaignId: '512500000',
+    token: bscTokens.solv,
+    campaignId: '512600000',
     articleUrl: 'https://pancakeswap.finance/voting/proposal/XXXXXXXXX',
-    tokenOfferingPrice: 2.8,
+    tokenOfferingPrice: 0.0310559006,
     version: 8,
-    twitterUrl: 'https://x.com/lista_dao',
-    description: 'This is a test IFO',
-    vestingTitle:
-      'TESTPIE is the primary token issued by Testpie which can be locked for vlTESTPIE (Vote-Locked Testpie) at a 4:1 ratio.',
+    twitterUrl: 'https://twitter.com/SolvProtocol/',
+    description:
+      'Solv is a Bitcoin staking protocol that unlocks liquidity and maximizes the utility of idle Bitcoin assets',
+    vestingTitle: 'SOLV is Solv Protocol’s native utility token meant for governance, staking, and fee discounts',
   },
   {
     id: 'lista',
