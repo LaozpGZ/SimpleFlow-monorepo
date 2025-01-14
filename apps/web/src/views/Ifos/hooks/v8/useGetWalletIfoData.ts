@@ -12,7 +12,7 @@ import { WalletIfoData, WalletIfoState } from '../../types'
 import useIfoAllowance from '../useIfoAllowance'
 import { useIfoCredit } from '../useIfoCredit'
 import { useIfoSourceChain } from '../useIfoSourceChain'
-import { fetchIfoData } from './fetchInfoData'
+import { fetchIfoData } from './fetchIfoData'
 
 const initialState = {
   isInitialized: false,
