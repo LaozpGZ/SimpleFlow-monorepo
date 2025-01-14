@@ -11,6 +11,7 @@ import {
   domAnimation,
   FlexGap,
   LazyAnimatePresence,
+  Loading,
   ModalBody,
   ModalContainer,
   ModalV2,
@@ -22,6 +23,7 @@ import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { useCallback, useMemo, useState } from 'react'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { styled } from 'styled-components'
@@ -178,6 +180,13 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
   )
 }
 
+const formatDollarAmount = (amount: number) => {
+  if (amount > 0 && amount < 0.01) {
+    return '<0.01'
+  }
+  return formatNumber(amount)
+}
+
 export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { onDismiss, onOpen, isOpen } = useModalV2()
@@ -230,6 +239,16 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ i
     return false
   }, [depositAmount, inputBalance])
 
+  const amountInDollar = useStablecoinPriceAmount(
+    idoPublicData?.stakeCurrency ?? undefined,
+    value !== undefined && Number.isFinite(+value) ? +value : undefined,
+    {
+      hideIfPriceImpactTooHigh: true,
+      enabled: Boolean(value !== undefined && Number.isFinite(+value)),
+    },
+  )
+  const isInputloading = inputBalance === undefined
+
   return (
     <>
       <Button width="100%" onClick={onOpen}>
@@ -265,6 +284,28 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ i
                     {/* @ts-ignore */}
                     <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
                   </FlexGap>
+                }
+                bottom={
+                  isInputloading || Number.isFinite(amountInDollar) ? (
+                    <Box position="absolute" bottom="12px" right="0px">
+                      <FlexGap justifyContent="flex-end" mr="1rem">
+                        <FlexGap maxWidth={['120px', '160px', '200px', '240px']}>
+                          {isInputloading ? (
+                            <Loading width="14px" height="14px" />
+                          ) : Number.isFinite(amountInDollar) ? (
+                            <>
+                              <Text fontSize="14px" color="textSubtle" ellipsis>
+                                {`~${amountInDollar && formatDollarAmount(amountInDollar)}`}
+                              </Text>
+                              <Text ml="4px" fontSize="14px" color="textSubtle">
+                                USD
+                              </Text>
+                            </>
+                          ) : null}
+                        </FlexGap>
+                      </FlexGap>
+                    </Box>
+                  ) : null
                 }
               />
               <FlexGap>
