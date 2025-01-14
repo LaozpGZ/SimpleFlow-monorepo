@@ -18,6 +18,7 @@ import {
   Text,
   useModalV2,
 } from '@pancakeswap/uikit'
+import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
@@ -212,7 +213,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ i
         setValue(getPercentAmount(percent))
       }
     },
-    [maxAmountInput, setValue],
+    [getPercentAmount, maxAmountInput],
   )
 
   const handleMaxInput = useCallback(() => {
