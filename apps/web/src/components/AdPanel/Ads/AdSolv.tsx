@@ -18,7 +18,7 @@ export const AdSolv = (props: AdPlayerProps) => {
       </BodyText>
 
       <Countdown
-        targetTime={new Date('2025-01-16T00:00:00Z').getTime() / 1000}
+        targetTime={new Date('2025-01-16T10:00:00Z').getTime() / 1000}
         subtleColor="rgba(0,0,0,.6)"
         background="linear-gradient(180deg, #FCC631 0%, #FF9D00 100%)"
         color="black"
