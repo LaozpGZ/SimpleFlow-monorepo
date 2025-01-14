@@ -140,18 +140,21 @@ const MaxTokenEntry = ({
   )
 }
 
-function timeUntilDiffTime(diffTime: number): string {
+const useTimeUntilDiffTime = (diffTime: number): string => {
+  const { t } = useTranslation()
   if (diffTime <= 0) {
-    return 'The time has already passed.'
+    return t('The time has already passed.')
   }
 
   const diffInHours = Math.floor(diffTime / (60 * 60))
   const diffInDays = Math.floor(diffInHours / 24)
+  const unitDay = t('day(s)')
+  const unitHour = t('hour(s)')
 
   if (diffInDays >= 1) {
-    return `${diffInDays} day(s)`
+    return `${diffInDays} ${unitDay}`
   }
-  return `${diffInHours} hour(s)`
+  return `${diffInHours} ${unitHour}`
 }
 
 const IfoCardDetails: React.FC<React.PropsWithChildren<IfoCardDetailsProps>> = ({
@@ -234,7 +237,7 @@ const IfoCardDetails: React.FC<React.PropsWithChildren<IfoCardDetailsProps>> = (
 
   const durationInSeconds = ifo.version >= 3.2 ? poolCharacteristic?.vestingInformation?.duration ?? 0 : 0
   // const vestingDays = Math.ceil(durationInSeconds / DAY_IN_SECONDS)
-  const vestingCountdown = timeUntilDiffTime(durationInSeconds)
+  const vestingCountdown = useTimeUntilDiffTime(durationInSeconds)
 
   /* Format end */
   const renderBasedOnIfoStatus = () => {
