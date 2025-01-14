@@ -11,7 +11,11 @@ export const AdListPieListing = (props: AdPlayerProps) => {
 
   return (
     <AdCard imageUrl={getImageUrl('listapie')} {...props}>
-      <BodyText mb="8px">{t('Listapie IFO starts in')}</BodyText>
+      <BodyText mb="8px">
+        {t('%token% IFO starts in', {
+          token: 'LISTPIE',
+        })}
+      </BodyText>
 
       <Countdown
         targetTime={3000 + new Date().getTime() / 1000}

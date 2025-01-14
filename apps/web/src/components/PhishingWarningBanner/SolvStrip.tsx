@@ -25,7 +25,10 @@ export const SolvStrip = () => {
 
   return (
     <Box mr={['6px']}>
-      <TextHighlight text={t('Join the SOLV IFO on BNB Chain Pancakeswap')} highlights={['SOLV', 'Pancakeswap']} />{' '}
+      <TextHighlight
+        text={t('Join the SOLV Token Launch (IFO) on BNB Chain PancakeSwap')}
+        highlights={['SOLV', 'PancakeSwap']}
+      />{' '}
       <Link
         external
         display="inline !important"
