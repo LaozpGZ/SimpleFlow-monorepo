@@ -4,16 +4,17 @@ import { VerticalDivider } from '@pancakeswap/widgets-internal'
 
 const TextHighlight = ({ text, highlights }: { text: string; highlights: string[] }) => {
   const prts = text.split(new RegExp(`(${highlights.join('|')})`, 'g'))
-  return prts.map((prt) => {
+  return prts.map((prt, i) => {
+    const key = `${prt}-${i}`
     if (highlights.includes(prt)) {
       return (
-        <Text bold as="span" color="#FCC631" fontSize={['12px', '12px', '14px']} key={`${prt}-${i}`}>
+        <Text bold as="span" color="#FCC631" fontSize={['12px', '12px', '14px']} key={key}>
           {prt}
         </Text>
       )
     }
     return (
-      <Text bold as="span" color="#FFFFFF" fontSize={['12px', '12px', '14px']} key={`${prt}-${i}`}>
+      <Text bold as="span" color="#FFFFFF" fontSize={['12px', '12px', '14px']} key={key}>
         {prt}
       </Text>
     )
