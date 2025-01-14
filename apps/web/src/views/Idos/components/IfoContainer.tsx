@@ -14,12 +14,14 @@ interface TypeProps {
 
 const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection, ifoSteps, faq }) => {
   return (
-    <IfoLayout id="current-ifo">
-      <Container px="0">
+    <IfoLayout id="current-ido">
+      {/* <Container px="0">
         <IfoLayoutWrapper>{ifoSection}</IfoLayoutWrapper>
-      </Container>
+      </Container> */}
       <SectionBackground>
-        <Container>{ifoSteps}</Container>
+        <Container px="0">
+          <IfoLayoutWrapper>{ifoSection}</IfoLayoutWrapper>
+        </Container>
       </SectionBackground>
       {/* {faq}
       <LinkExternal
