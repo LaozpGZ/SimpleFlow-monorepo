@@ -4,7 +4,7 @@ import { number as zNumber, object as zObject, string as zString } from 'zod'
 const zBody = zObject({
   address: zString(),
   timestamp: zNumber(),
-  nonce: zString(),
+  nonce: zString().or(zNumber()),
   signature: zString(),
 })
 

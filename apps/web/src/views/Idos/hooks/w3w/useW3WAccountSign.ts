@@ -11,9 +11,13 @@ export const useW3WAccountSign = () => {
     if (!address) throw new Error('No address provided')
     const timestamp = Date.now() + 1000 * 60 * 20 // now + 20 minutes
     const nonce = v4()
-    const digest = keccak256([address, timestamp.toString(), nonce].join(' ') as `0x${string}`)
+    const message = keccak256([address, timestamp.toString(), nonce].join(' ') as `0x${string}`)
 
-    const signature = await signMessageAsync({ message: digest })
+    console.debug('message', message)
+
+    const signature = await signMessageAsync({
+      message,
+    })
 
     return w3wSign({
       address,
@@ -57,7 +61,7 @@ const w3wSign = async ({
   address: Address
   signature: Hex
   timestamp: number
-  nonce: string
+  nonce: string | number
 }) => {
   try {
     const response = await fetch('/api/w3w/sign', {
