@@ -21,7 +21,7 @@ export const ifos: BaseIfoConfig[] = [
     currency: bscTokens.cake,
     token: bscTokens.solv,
     campaignId: '512600000',
-    articleUrl: 'https://pancakeswap.finance/voting/proposal/XXXXXXXXX',
+    articleUrl: 'https://forum.pancakeswap.finance/t/solv-ifo-discussion-thread/993',
     tokenOfferingPrice: 0.0310559006,
     version: 8,
     twitterUrl: 'https://twitter.com/SolvProtocol/',

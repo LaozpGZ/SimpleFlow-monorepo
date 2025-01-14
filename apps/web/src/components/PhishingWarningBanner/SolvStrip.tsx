@@ -53,7 +53,7 @@ export const SolvStrip = () => {
         external
         display="inline !important"
         fontSize={['12px', '12px', '14px']}
-        href="https://docs.pancakeswap.finance/token-distribution"
+        href="https://forum.pancakeswap.finance/t/solv-ifo-discussion-thread/993"
       >
         {t('Learn More')}
       </Link>
