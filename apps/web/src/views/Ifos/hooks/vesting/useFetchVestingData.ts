@@ -26,13 +26,6 @@ const isPoolEligible = (poolId: PoolIds, userVestingData: UserVestingData) => {
   return vestingEndTime.gte(currentTimeStamp)
 }
 
-export const isVestingEnd = (vestingData: VestingData) => {
-  const pool = vestingData.userVestingData[PoolIds.poolBasic] || vestingData.userVestingData[PoolIds.poolUnlimited]
-  const currentTimeStamp = Date.now()
-  const vestingEndTime = (vestingData.userVestingData.vestingStartTime + pool.vestingInformationDuration) * 1000
-  return vestingEndTime < currentTimeStamp
-}
-
 const isEligibleVestingData = (ifo: VestingData) => {
   const { userVestingData } = ifo
   return POOLS.some((poolId) => isPoolEligible(poolId, userVestingData))

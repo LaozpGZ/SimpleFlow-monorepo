@@ -8,7 +8,7 @@ import useGetPublicIfoV3Data from 'views/Ifos/hooks/v3/useGetPublicIfoData'
 import { VestingData } from 'views/Ifos/hooks/vesting/fetchUserWalletIfoData'
 
 import { useQuery } from '@tanstack/react-query'
-import { getVestingInfo } from 'views/Ifos/hooks/usePoolVestingData'
+import { getVestingInfo } from 'views/Ifos/hooks/getVestingInfo'
 import { isBasicSale } from '../../../hooks/v7/helpers'
 import Claim from './Claim'
 

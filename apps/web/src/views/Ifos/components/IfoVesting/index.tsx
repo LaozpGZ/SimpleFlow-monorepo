@@ -7,7 +7,7 @@ import { useAccount } from 'wagmi'
 import Trans from 'components/Trans'
 
 import { PoolIds } from '@pancakeswap/ifos'
-import { getHasClaimable } from 'views/Ifos/hooks/usePoolVestingData'
+import { getHasClaimable } from 'views/Ifos/hooks/getVestingInfo'
 import useFetchVestingData from '../../hooks/vesting/useFetchVestingData'
 import { VestingStatus } from './types'
 import VestingEnded from './VestingEnded'

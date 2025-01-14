@@ -9,7 +9,6 @@ import { useCallback, useMemo } from 'react'
 import { Address } from 'viem'
 import { VestingData } from 'views/Ifos/hooks/vesting/fetchUserWalletIfoData'
 
-import { isVestingEnd } from 'views/Ifos/hooks/vesting/useFetchVestingData'
 import { SwitchNetworkTips } from '../../IfoFoldableCard/IfoPoolCard/SwitchNetworkTips'
 
 interface Props {
@@ -35,7 +34,6 @@ const ClaimButton: React.FC<React.PropsWithChildren<Props>> = ({
   const { address, token, chainId } = data.ifo
   const contract = useIfoV3Contract(address)
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError()
-  const isEnd = isVestingEnd(data)
 
   const isReady = useMemo(() => {
     const checkClaimableAmount = isVestingInitialized ? claimableAmount === '0' : false
@@ -89,7 +87,7 @@ const ClaimButton: React.FC<React.PropsWithChildren<Props>> = ({
       width="100%"
       onClick={handleClaim}
       isLoading={isPending}
-      disabled={isReady && !enabled && !isEnd}
+      disabled={isReady && !enabled}
       endIcon={isPending ? <AutoRenewIcon spin color="currentColor" /> : null}
     >
       {t('Claim', { symbol: token.symbol })}
