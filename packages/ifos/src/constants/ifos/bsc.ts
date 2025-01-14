@@ -9,12 +9,12 @@ export const ifos: BaseIfoConfig[] = [
     address: '0xb0De22aAe05789C13E900688b420F1Bb7c2C3889',
     isActive: true,
     cIFO: false,
-    plannedStartTime: new Date('2025-01-16T00:00:00Z').getTime() / 1000,
+    plannedStartTime: new Date('2025-01-16T10:00:00Z').getTime() / 1000,
     poolBasic: {
-      raiseAmount: '$90,000',
+      raiseAmount: '$10,000',
     },
     poolUnlimited: {
-      raiseAmount: '$10,000',
+      raiseAmount: '$90,000',
       additionalClaimingFee: true,
     },
     name: 'SOLV',
