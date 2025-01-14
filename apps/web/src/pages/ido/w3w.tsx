@@ -26,7 +26,7 @@ export default function W3W() {
             <pre>
               address: {address}
               <br />
-              isVerified: {isVerified}
+              isVerified: {isVerified ? 'true' : 'false'}
             </pre>
             <Button onClick={handleSign}>Sign</Button>
             <pre>{signature ? JSON.stringify(signature, null, 2) : 'No signature'}</pre>

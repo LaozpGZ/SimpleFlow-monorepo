@@ -60,22 +60,15 @@ const w3wSign = async ({
   nonce: string
 }) => {
   try {
-    const response = await fetch(
-      `https://www.binance.com/bapi/defi/v1/public/wallet-direct/buw/wallet/address/sign?address=${address}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-gray-env': 'infra',
-        },
-        body: JSON.stringify({
-          timestamp,
-          address,
-          nonce,
-          signature,
-        }),
-      },
-    )
+    const response = await fetch('/api/w3w/sign', {
+      method: 'POST',
+      body: JSON.stringify({
+        timestamp,
+        address,
+        nonce,
+        signature,
+      }),
+    })
     const result: W3WSignResponse = await response.json()
 
     if (result.code !== SignResponseCode.Normal) {

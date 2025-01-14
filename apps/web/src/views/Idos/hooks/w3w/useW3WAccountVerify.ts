@@ -11,14 +11,7 @@ interface W3WVerifyResponse {
 const verifyW3WAccount = async (address: Address): Promise<boolean> => {
   try {
     const timestamp = Date.now()
-    const response = await fetch(
-      `https://www.binance.com/bapi/defi/v1/public/wallet-direct/buw/wallet/address/verify?address=${address}&timestamp=${timestamp}`,
-      {
-        headers: {
-          'x-gray-env': 'infra',
-        },
-      },
-    )
+    const response = await fetch(`/api/w3w/verify?address=${address}&timestamp=${timestamp}`)
     const result: W3WVerifyResponse = await response.json()
 
     if (result.code !== '000000' || !result.success) {
