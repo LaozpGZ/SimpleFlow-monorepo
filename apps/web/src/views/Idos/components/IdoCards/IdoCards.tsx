@@ -3,6 +3,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Percent } from '@pancakeswap/sdk'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import {
+  AddIcon,
   Box,
   Button,
   Card,
@@ -264,13 +265,17 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
 
   return (
     <>
-      <Button width={type === 'deposit' ? '100%' : undefined} onClick={onOpen}>
+      <Button
+        width={type === 'deposit' ? '100%' : undefined}
+        onClick={onOpen}
+        variant={type === 'add' ? 'secondary' : undefined}
+      >
         {type === 'deposit' ? (
           <>
             {t('Deposit')} {idoPublicData?.stakeCurrency?.symbol ?? ''}
           </>
         ) : (
-          <></>
+          <AddIcon color="primary" />
         )}
       </Button>
       <ModalV2 isOpen={isOpen} title="Deposit" onDismiss={onDismiss} closeOnOverlayClick>
@@ -391,9 +396,9 @@ export const StakedDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoP
     },
   )
   return (
-    <FlexGap gap="8px" justifyContent="space-between">
+    <FlexGap gap="8px" justifyContent="space-between" alignItems="center">
       <FlexGap flexDirection="column">
-        <FlexGap gap="8px">
+        <FlexGap gap="8px" alignItems="center">
           {/* @ts-ignore */}
           <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
           <Text fontSize="12px" bold color="secondary" lineHeight="18px">
@@ -405,14 +410,16 @@ export const StakedDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoP
             {stakedAmount?.toSignificant(6)}
           </Text>
           <FlexGap>
-            <>
-              <Text fontSize="14px" color="textSubtle" ellipsis>
-                {`~${amountInDollar && formatDollarAmount(amountInDollar)}`}
-              </Text>
-              <Text ml="4px" fontSize="14px" color="textSubtle">
-                USD
-              </Text>
-            </>
+            {Number.isFinite(amountInDollar) ? (
+              <>
+                <Text fontSize="14px" color="textSubtle" ellipsis>
+                  {`~${amountInDollar && formatDollarAmount(amountInDollar)}`}
+                </Text>
+                <Text ml="4px" fontSize="14px" color="textSubtle">
+                  USD
+                </Text>
+              </>
+            ) : null}
           </FlexGap>
         </FlexGap>
       </FlexGap>
