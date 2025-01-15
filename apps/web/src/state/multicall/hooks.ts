@@ -195,7 +195,7 @@ SingleContractMultipleDataCallParameters<TAbi, TFunctionName>): CallState<any>[]
             }
           })
         : [],
-    [args, contract, functionName],
+    [args, contract, enabled, functionName],
   )
 
   const results = useCallsData(calls, options)
@@ -314,7 +314,7 @@ SingleCallParameters<TAbi, TFunctionName>): CallState<any> {
           },
         ]
       : []
-  }, [contract, args, functionName])
+  }, [contract, args, enabled, functionName])
 
   const result = useCallsData(calls, options)[0]
 
