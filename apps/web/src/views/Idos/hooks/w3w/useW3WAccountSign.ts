@@ -13,7 +13,7 @@ export const useW3WAccountSign = () => {
     if (!address) throw new Error('No address provided')
     const timestamp = Date.now() + 1000 * 60 * 20 // now + 20 minutes
     const nonce = v4()
-    const message = [contractAddress, 'VerifyAddress', address, timestamp.toString(), nonce].join(' ') as `0x${string}`
+    const message = [timestamp.toString(), address, nonce].join(' ') as `0x${string}`
 
     console.debug('message', message)
 
