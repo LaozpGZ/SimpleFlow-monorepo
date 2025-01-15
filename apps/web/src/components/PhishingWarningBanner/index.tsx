@@ -8,9 +8,11 @@ import 'swiper/css/effect-fade'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { Countdown } from './Countdown'
 
+import { SolvStrip } from './SolvStrip'
 import { Step1 } from './Step1'
 import { Step2 } from './Step2'
 import { Step3 } from './Step3'
+import { TradingCompetitionVinu } from './TradingCompetition'
 
 const Container = styled(Flex).withConfig({ shouldForwardProp: (prop) => !['$background'].includes(prop) })<{
   $background?: string
@@ -99,6 +101,12 @@ type BannerConfig = {
 
 const CONFIG: BannerConfig[] = [
   {
+    component: SolvStrip,
+    stripeImage: `${ASSET_CDN}/web/phishing-warning/solv.png?v=1`,
+    stripeImageWidth: '92px',
+    stripeImageAlt: 'SOLV IFO',
+  },
+  {
     component: Step1,
     stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-1.png`,
     stripeImageWidth: '92px',
@@ -115,6 +123,12 @@ const CONFIG: BannerConfig[] = [
     stripeImage: `${ASSET_CDN}/web/banners/pcsx/pcsx-bg-medium.png`,
     stripeImageWidth: '92px',
     stripeImageAlt: 'PCSX',
+  },
+  {
+    component: TradingCompetitionVinu,
+    stripeImage: `${ASSET_CDN}/web/promotions/vinu_competition.png`,
+    stripeImageWidth: '92px',
+    stripeImageAlt: 'vinu_competition',
   },
 ]
 

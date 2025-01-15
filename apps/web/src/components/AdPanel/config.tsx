@@ -1,11 +1,10 @@
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useMemo } from 'react'
 import { AdCakeStaking } from './Ads/AdCakeStaking'
-import { AdMevProtection } from './Ads/AdMevProtection'
-import { AdOptionsTrading } from './Ads/AdOptionsTrading'
 import { AdPCSX } from './Ads/AdPCSX'
-import { AdRocker } from './Ads/AdRocker'
+import { AdSolv } from './Ads/AdSolv'
 import { AdSpringboard } from './Ads/AdSpringboard'
-import { AdTelegramBot } from './Ads/AdTelegramBot'
+import { AdTradingCompetitionVinu } from './Ads/AdTradingCompetition'
 import { ExpandableAd } from './Expandable/ExpandableAd'
 import { shouldRenderOnPages } from './renderConditions'
 
@@ -20,6 +19,7 @@ enum Priority {
 
 export const useAdConfig = () => {
   const { isDesktop } = useMatchBreakpoints()
+  const shouldRenderOnPage = shouldRenderOnPages(['/buy-crypto', '/', '/prediction'])
   const MAX_ADS = isDesktop ? 6 : 4
 
   const adList: Array<{
@@ -27,48 +27,46 @@ export const useAdConfig = () => {
     component: JSX.Element
     shouldRender?: Array<boolean>
     priority?: number
-  }> = [
-    {
-      id: 'expandable-ad',
-      component: <ExpandableAd />,
-      priority: Priority.FIRST_AD,
-      shouldRender: [shouldRenderOnPages(['/buy-crypto', '/', '/prediction'])],
-    },
-    {
-      id: 'ad-springboard',
-      component: <AdSpringboard />,
-    },
-    {
-      id: 'ad-mev',
-      component: <AdMevProtection />,
-    },
-    {
-      id: 'prediction-telegram-bot',
-      component: <AdTelegramBot />,
-    },
-    {
-      id: 'pcsx',
-      component: <AdPCSX />,
-    },
-    {
-      id: 'cake-staking',
-      component: <AdCakeStaking />,
-    },
-    {
-      id: 'clamm-options-trading',
-      component: <AdOptionsTrading />,
-    },
+  }> = useMemo(
+    () => [
+      {
+        id: 'expandable-ad',
+        component: <ExpandableAd />,
+        priority: Priority.FIRST_AD,
+        shouldRender: [shouldRenderOnPage],
+      },
+      {
+        id: 'ad-springboard',
+        component: <AdSpringboard />,
+      },
+      {
+        id: 'ad-vinu-tc',
+        component: <AdTradingCompetitionVinu />,
+      },
+      {
+        id: 'ad-ifo-solv',
+        component: <AdSolv />,
+      },
+      {
+        id: 'pcsx',
+        component: <AdPCSX />,
+      },
+      {
+        id: 'cake-staking',
+        component: <AdCakeStaking />,
+      },
+    ],
+    [shouldRenderOnPage],
+  )
 
-    {
-      id: 'rocker-meme-career',
-      component: <AdRocker />,
-    },
-  ]
-
-  return adList
-    .filter((ad) => ad.shouldRender === undefined || ad.shouldRender.every(Boolean))
-    .sort((a, b) => (b.priority || Priority.VERY_LOW) - (a.priority || Priority.VERY_LOW))
-    .slice(0, MAX_ADS)
+  return useMemo(
+    () =>
+      adList
+        .filter((ad) => ad.shouldRender === undefined || ad.shouldRender.every(Boolean))
+        .sort((a, b) => (b.priority || Priority.VERY_LOW) - (a.priority || Priority.VERY_LOW))
+        .slice(0, MAX_ADS),
+    [adList, MAX_ADS],
+  )
 }
 
 // Array of strings or regex patterns
