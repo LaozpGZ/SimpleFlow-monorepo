@@ -62,6 +62,13 @@ const Header = styled(CardHeader)<{ ifoId: string; $isCurrent?: boolean }>`
   }
 `
 
+export const Divider = styled.div`
+  width: 100%;
+  height: 1px;
+  background-color: ${({ theme }) => theme.colors.cardBorder};
+  margin: 8px 0 16px;
+`
+
 export const IDoCurrentCard = ({
   idoPublicData,
   chainId,
@@ -136,7 +143,7 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
 export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
+  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0) || true
   return (
     <Card background="#FAF9FA">
       <CardBody>
@@ -159,6 +166,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
               </FlexGap>
             </FlexGap>
           )}
+          {userHasStaked && <Divider />}
           <FlexGap justifyContent="space-between">
             <Text color="textSubtle">{t('Sale Price per TOKEN')}</Text>
             <Text>
@@ -400,7 +408,7 @@ export const StakedDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoP
       <FlexGap flexDirection="column">
         <FlexGap gap="8px" alignItems="center">
           {/* @ts-ignore */}
-          <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
+          <CurrencyLogo size="24px" currency={idoPublicData?.stakeCurrency} />
           <Text fontSize="12px" bold color="secondary" lineHeight="18px">
             {idoPublicData.stakeCurrency?.symbol} {t('Pool')} {t('Deposited')}
           </Text>
