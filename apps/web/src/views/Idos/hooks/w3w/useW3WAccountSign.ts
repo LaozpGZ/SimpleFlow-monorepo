@@ -1,17 +1,19 @@
 import { useCallback } from 'react'
 import { v4 } from 'uuid'
-import { Address, Hex, keccak256 } from 'viem'
+import { Address, Hex, zeroAddress } from 'viem'
 import { useAccount, useSignMessage } from 'wagmi'
 
 export const useW3WAccountSign = () => {
   const { address } = useAccount()
   const { signMessageAsync } = useSignMessage()
+  // const contract = useIDOContract()
+  const contractAddress = zeroAddress
 
   const sign = useCallback(async () => {
     if (!address) throw new Error('No address provided')
     const timestamp = Date.now() + 1000 * 60 * 20 // now + 20 minutes
     const nonce = v4()
-    const message = keccak256([address, timestamp.toString(), nonce].join(' ') as `0x${string}`)
+    const message = [contractAddress, 'VerifyAddress', address, timestamp.toString(), nonce].join(' ') as `0x${string}`
 
     console.debug('message', message)
 
@@ -21,11 +23,13 @@ export const useW3WAccountSign = () => {
 
     return w3wSign({
       address,
+      // contractAddress: contract?.address,
+      contractAddress,
       signature,
       timestamp,
       nonce,
     })
-  }, [address, signMessageAsync])
+  }, [address, contractAddress, signMessageAsync])
 
   return sign
 }
@@ -54,11 +58,13 @@ enum SignResponseCode {
 
 const w3wSign = async ({
   address,
+  contractAddress,
   signature,
   timestamp,
   nonce,
 }: {
   address: Address
+  contractAddress: Address
   signature: Hex
   timestamp: number
   nonce: string | number
@@ -69,6 +75,7 @@ const w3wSign = async ({
       body: JSON.stringify({
         timestamp,
         address,
+        contractAddress,
         nonce,
         signature,
       }),
