@@ -135,20 +135,29 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
 export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
+  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
   return (
     <Card background="#FAF9FA">
       <CardBody>
         <FlexGap flexDirection="column" gap="8px">
-          <FlexGap flexDirection="column" gap="8px">
-            <Text fontSize="12px" bold color="secondary" lineHeight="18px">
-              {idoPublicData.stakeCurrency?.symbol} {t('Pool')}
-            </Text>
-            <FlexGap gap="8px">
-              {/* @ts-ignore */}
-              <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
-              {account ? <IdoDepositButton idoPublicData={idoPublicData} /> : <ConnectWalletButton width="100%" />}
+          {userHasStaked ? (
+            <StakedDisplay idoPublicData={idoPublicData} />
+          ) : (
+            <FlexGap flexDirection="column" gap="8px">
+              <Text fontSize="12px" bold color="secondary" lineHeight="18px">
+                {idoPublicData.stakeCurrency?.symbol} {t('Pool')}
+              </Text>
+              <FlexGap gap="8px">
+                {/* @ts-ignore */}
+                <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
+                {account ? (
+                  <IdoDepositButton type="deposit" idoPublicData={idoPublicData} />
+                ) : (
+                  <ConnectWalletButton width="100%" />
+                )}
+              </FlexGap>
             </FlexGap>
-          </FlexGap>
+          )}
           <FlexGap justifyContent="space-between">
             <Text color="textSubtle">{t('Sale Price per TOKEN')}</Text>
             <Text>
@@ -188,7 +197,10 @@ const formatDollarAmount = (amount: number) => {
   return formatNumber(amount)
 }
 
-export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
+export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'add' | 'deposit' }> = ({
+  idoPublicData,
+  type,
+}) => {
   const { t } = useTranslation()
   const { onDismiss, onOpen, isOpen } = useModalV2()
   const [value, setValue] = useState('')
@@ -252,8 +264,14 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ i
 
   return (
     <>
-      <Button width="100%" onClick={onOpen}>
-        {t('Deposit')} {idoPublicData?.stakeCurrency?.symbol ?? ''}
+      <Button width={type === 'deposit' ? '100%' : undefined} onClick={onOpen}>
+        {type === 'deposit' ? (
+          <>
+            {t('Deposit')} {idoPublicData?.stakeCurrency?.symbol ?? ''}
+          </>
+        ) : (
+          <></>
+        )}
       </Button>
       <ModalV2 isOpen={isOpen} title="Deposit" onDismiss={onDismiss} closeOnOverlayClick>
         <ModalContainer>
@@ -358,5 +376,47 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData }> = ({ i
         </ModalContainer>
       </ModalV2>
     </>
+  )
+}
+
+export const StakedDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
+  const { t } = useTranslation()
+  const stakedAmount = idoPublicData?.userStakedAmount
+  const amountInDollar = useStablecoinPriceAmount(
+    idoPublicData?.stakeCurrency ?? undefined,
+    stakedAmount !== undefined && Number.isFinite(+stakedAmount) ? +stakedAmount : undefined,
+    {
+      hideIfPriceImpactTooHigh: true,
+      enabled: Boolean(stakedAmount !== undefined && Number.isFinite(+stakedAmount)),
+    },
+  )
+  return (
+    <FlexGap gap="8px" justifyContent="space-between">
+      <FlexGap flexDirection="column">
+        <FlexGap gap="8px">
+          {/* @ts-ignore */}
+          <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
+          <Text fontSize="12px" bold color="secondary" lineHeight="18px">
+            {idoPublicData.stakeCurrency?.symbol} {t('Pool')} {t('Deposited')}
+          </Text>
+        </FlexGap>
+        <FlexGap gap="8px" flexDirection="column">
+          <Text fontSize="20px" bold lineHeight="30px">
+            {stakedAmount?.toSignificant(6)}
+          </Text>
+          <FlexGap>
+            <>
+              <Text fontSize="14px" color="textSubtle" ellipsis>
+                {`~${amountInDollar && formatDollarAmount(amountInDollar)}`}
+              </Text>
+              <Text ml="4px" fontSize="14px" color="textSubtle">
+                USD
+              </Text>
+            </>
+          </FlexGap>
+        </FlexGap>
+      </FlexGap>
+      <IdoDepositButton idoPublicData={idoPublicData} type="add" />
+    </FlexGap>
   )
 }

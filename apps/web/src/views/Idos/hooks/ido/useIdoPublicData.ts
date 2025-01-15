@@ -11,6 +11,7 @@ import { useIDOStatus } from './usdIDOStatus'
 import { useIDOConfig } from './useIDOConfig'
 import { useIDOCurrencies } from './useIDOCurrencies'
 import { useIDOPoolInfo } from './useIDOPoolInfo'
+import { useIDOUserStatus } from './useIDOUserStatus'
 
 export type IDOPublicData = {
   isInitialized: boolean
@@ -29,6 +30,9 @@ export type IDOPublicData = {
   offeringCurrency: UnsafeCurrency
   raiseAmount: CurrencyAmount<Currency> | undefined
   saleAmount: CurrencyAmount<Currency> | undefined
+  userStakedAmount?: CurrencyAmount<Currency>
+  userStakedRefund?: CurrencyAmount<Currency>
+  userStakedTax?: CurrencyAmount<Currency>
 }
 
 export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
@@ -36,6 +40,7 @@ export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
   const { stakeCurrency, offeringCurrency } = useIDOCurrencies()
   const { progress, currentStakedAmount } = useIDOStatus()
   const { pricePerToken, raiseAmount, saleAmount } = useIDOConfig()
+  const { stakedAmount: userStakedAmount, stakeRefund: userStakedRefund, stakeTax: userStakedTax } = useIDOUserStatus()
 
   const startTime = Number(poolInfo?.startTimestamp) || 0
   const endTime = 1737407928 // Number(poolInfo?.endTimestamp) || 0
@@ -64,5 +69,8 @@ export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
     offeringCurrency,
     raiseAmount,
     saleAmount,
+    userStakedAmount,
+    userStakedRefund,
+    userStakedTax,
   }
 }
