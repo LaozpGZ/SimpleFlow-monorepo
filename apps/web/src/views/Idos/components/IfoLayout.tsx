@@ -2,8 +2,8 @@ import { Box } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 
 const IfoLayout = styled(Box)`
+  background-color: ${({ theme }) => theme.colors.gradientBubblegum};
   > div:not(.sticky-header) {
-    margin-bottom: 32px;
   }
 `
 export const IfoLayoutWrapper = styled(IfoLayout)`
