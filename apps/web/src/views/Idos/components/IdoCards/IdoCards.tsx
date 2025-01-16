@@ -33,10 +33,11 @@ import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useAccount } from 'wagmi'
 import { IdoRibbon } from './IdoRibbon'
 
-import { getBannerUrl } from '../../helpers'
+import { getBannerUrl, getTempBannerUrl } from '../../helpers'
 import { useIDOClaimCallback } from '../../hooks/ido/useIDOClaimCallback'
 import { useIDODepositCallback } from '../../hooks/ido/useIDODepositCallback'
 import { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
+import { Footer } from '../Footer'
 
 export const StyledCardBody = styled(CardBody)`
   padding: 24px 16px;
@@ -57,7 +58,8 @@ const Header = styled(CardHeader)<{ ifoId: string; $isCurrent?: boolean }>`
   border-top-left-radius: 32px;
   border-top-right-radius: 32px;
   background-color: ${({ theme }) => theme.colors.dropdown};
-  background-image: ${({ ifoId }) => `url('${getBannerUrl(ifoId)}')`};
+  /* background-image: ${({ ifoId }) => `url('${getBannerUrl(ifoId)}')`}; */
+  background-image: url('${getTempBannerUrl()}');
   ${({ theme }) => theme.mediaQueries.md} {
     height: 112px;
   }
@@ -94,6 +96,7 @@ export const IDoCurrentCard = ({
         />
         <IdoCard idoPublicData={idoPublicData} />
       </Box>
+      <Footer />
     </Card>
   )
 }
