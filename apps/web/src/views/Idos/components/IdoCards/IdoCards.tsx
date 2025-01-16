@@ -143,7 +143,8 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
 export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0) || true
+  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
+
   return (
     <Card background="#FAF9FA">
       <CardBody>
@@ -393,6 +394,50 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
 }
 
 export const StakedDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
+  const { t } = useTranslation()
+  const stakedAmount = idoPublicData?.userStakedAmount
+  const amountInDollar = useStablecoinPriceAmount(
+    idoPublicData?.stakeCurrency ?? undefined,
+    stakedAmount !== undefined && Number.isFinite(+stakedAmount) ? +stakedAmount : undefined,
+    {
+      hideIfPriceImpactTooHigh: true,
+      enabled: Boolean(stakedAmount !== undefined && Number.isFinite(+stakedAmount)),
+    },
+  )
+  return (
+    <FlexGap gap="8px" justifyContent="space-between" alignItems="center">
+      <FlexGap flexDirection="column">
+        <FlexGap gap="8px" alignItems="center">
+          {/* @ts-ignore */}
+          <CurrencyLogo size="24px" currency={idoPublicData?.stakeCurrency} />
+          <Text fontSize="12px" bold color="secondary" lineHeight="18px">
+            {idoPublicData.stakeCurrency?.symbol} {t('Pool')} {t('Deposited')}
+          </Text>
+        </FlexGap>
+        <FlexGap gap="8px" flexDirection="column">
+          <Text fontSize="20px" bold lineHeight="30px">
+            {stakedAmount?.toSignificant(6)}
+          </Text>
+          <FlexGap>
+            {Number.isFinite(amountInDollar) ? (
+              <>
+                <Text fontSize="14px" color="textSubtle" ellipsis>
+                  {`~${amountInDollar && formatDollarAmount(amountInDollar)}`}
+                </Text>
+                <Text ml="4px" fontSize="14px" color="textSubtle">
+                  USD
+                </Text>
+              </>
+            ) : null}
+          </FlexGap>
+        </FlexGap>
+      </FlexGap>
+      <IdoDepositButton idoPublicData={idoPublicData} type="add" />
+    </FlexGap>
+  )
+}
+
+export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const stakedAmount = idoPublicData?.userStakedAmount
   const amountInDollar = useStablecoinPriceAmount(
