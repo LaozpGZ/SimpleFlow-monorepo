@@ -34,6 +34,7 @@ import { useAccount } from 'wagmi'
 import { IdoRibbon } from './IdoRibbon'
 
 import { getBannerUrl } from '../../helpers'
+import { useIDOClaimCallback } from '../../hooks/ido/useIDOClaimCallback'
 import { useIDODepositCallback } from '../../hooks/ido/useIDODepositCallback'
 import { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
 
@@ -149,7 +150,9 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
     <Card background="#FAF9FA">
       <CardBody>
         <FlexGap flexDirection="column" gap="8px">
-          {userHasStaked ? (
+          {idoPublicData.status === 'finished' ? (
+            <ClaimDisplay idoPublicData={idoPublicData} />
+          ) : userHasStaked ? (
             <StakedDisplay idoPublicData={idoPublicData} />
           ) : (
             <FlexGap flexDirection="column" gap="8px">
@@ -439,13 +442,14 @@ export const StakedDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoP
 
 export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
-  const stakedAmount = idoPublicData?.userStakedAmount
+  const { claim } = useIDOClaimCallback()
+  const claimableAmount = idoPublicData?.userClaimableAmount
   const amountInDollar = useStablecoinPriceAmount(
     idoPublicData?.stakeCurrency ?? undefined,
-    stakedAmount !== undefined && Number.isFinite(+stakedAmount) ? +stakedAmount : undefined,
+    claimableAmount !== undefined && Number.isFinite(+claimableAmount) ? +claimableAmount : undefined,
     {
       hideIfPriceImpactTooHigh: true,
-      enabled: Boolean(stakedAmount !== undefined && Number.isFinite(+stakedAmount)),
+      enabled: Boolean(claimableAmount !== undefined && Number.isFinite(+claimableAmount)),
     },
   )
   return (
@@ -460,7 +464,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
         </FlexGap>
         <FlexGap gap="8px" flexDirection="column">
           <Text fontSize="20px" bold lineHeight="30px">
-            {stakedAmount?.toSignificant(6)}
+            {claimableAmount?.toSignificant(6)}
           </Text>
           <FlexGap>
             {Number.isFinite(amountInDollar) ? (
@@ -476,7 +480,14 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
           </FlexGap>
         </FlexGap>
       </FlexGap>
-      <IdoDepositButton idoPublicData={idoPublicData} type="add" />
+      <Button
+        width="100%"
+        onClick={() => {
+          claim()
+        }}
+      >
+        {t('Claim')}
+      </Button>
     </FlexGap>
   )
 }

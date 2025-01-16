@@ -16,7 +16,7 @@ export type IDOUserStatus = {
 export const useIDOUserStatus = () => {
   const { data: userInfo } = useIDOUserInfo()
   const { data: offeringAndRefundingAmounts } = useViewUserOfferingAndRefundingAmounts()
-  const { stakeCurrency } = useIDOCurrencies()
+  const { stakeCurrency, offeringCurrency } = useIDOCurrencies()
 
   const stakedAmount = useMemo(() => {
     if (!stakeCurrency || !userInfo) return undefined
@@ -33,10 +33,16 @@ export const useIDOUserStatus = () => {
     return CurrencyAmount.fromRawAmount(stakeCurrency, offeringAndRefundingAmounts?.userRefundingAmount ?? 0n)
   }, [stakeCurrency, offeringAndRefundingAmounts])
 
+  const claimableAmount = useMemo(() => {
+    if (!offeringCurrency) return undefined
+    return CurrencyAmount.fromRawAmount(offeringCurrency, offeringAndRefundingAmounts?.userOfferingAmount ?? 0n)
+  }, [offeringCurrency, offeringAndRefundingAmounts])
+
   return {
     stakedAmount,
     stakeTax,
     stakeRefund,
+    claimableAmount,
   }
 }
 
