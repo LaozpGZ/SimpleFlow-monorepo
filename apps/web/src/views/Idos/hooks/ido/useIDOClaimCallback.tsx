@@ -5,28 +5,37 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
+import { isUserRejected } from 'utils/sentry'
 
 export const useIDOClaimCallback = () => {
   const idoContract = useIDOContract()
   const { t } = useTranslation()
   const { account } = useAccountActiveChain()
-  const { toastSuccess } = useToast()
-  const { fetchWithCatchTxError, loading: isPending } = useCatchTxError()
+  const { toastSuccess, toastWarning } = useToast()
+  const { fetchWithCatchTxError, loading: isPending } = useCatchTxError({ throwUserRejectError: true })
 
   const claim = useCallback(
-    async (pid: number) => {
+    async (pid: number, onFinish?: () => void) => {
       if (!account || !idoContract || (!pid && pid !== 0)) return
-      const receipt = await fetchWithCatchTxError(() =>
-        idoContract.write.harvestPool([pid], {
-          account,
-          chain: idoContract.chain,
-        }),
-      )
-      if (receipt?.status) {
-        toastSuccess(t('Claim successful'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
+      try {
+        const receipt = await fetchWithCatchTxError(() =>
+          idoContract.write.harvestPool([pid], {
+            account,
+            chain: idoContract.chain,
+          }),
+        )
+        if (receipt?.status) {
+          toastSuccess(t('Claim successful'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
+        }
+      } catch (error) {
+        if (isUserRejected(error)) {
+          toastWarning(t('You canceled claim'))
+        }
+      } finally {
+        onFinish?.()
       }
     },
-    [account, idoContract, fetchWithCatchTxError, toastSuccess, t],
+    [account, idoContract, fetchWithCatchTxError, toastSuccess, t, toastWarning],
   )
 
   return { claim, isPending }

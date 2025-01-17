@@ -18,6 +18,7 @@ import {
   ModalBody,
   ModalContainer,
   ModalV2,
+  SwapLoading,
   Text,
   useModalV2,
   useTooltip,
@@ -242,12 +243,11 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   const { t } = useTranslation()
   const { onDismiss, onOpen, isOpen } = useModalV2()
   const [value, setValue] = useState('')
-  const [loading, setLoading] = useState(false)
 
   const { address: account } = useAccount()
   const inputBalance = useCurrencyBalance(account ?? undefined, idoPublicData?.stakeCurrency ?? undefined)
   const balance = idoPublicData?.stakeCurrency ? formatAmount(inputBalance, 6) : undefined
-  const { deposit } = useIDODepositCallback()
+  const { deposit, isPending: isLoading } = useIDODepositCallback()
 
   const maxAmountInput = useMemo(() => maxAmountSpend(inputBalance), [inputBalance])
 
@@ -407,23 +407,15 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 <Button
                   disabled={value === '' || !depositAmount || isUserInsufficientBalance}
                   width="100%"
-                  isLoading={loading}
+                  isLoading={isLoading}
                   onClick={() => {
                     if (depositAmount)
-                      deposit(
-                        0,
-                        depositAmount,
-                        () => {
-                          setLoading(true)
-                        },
-                        () => {
-                          setLoading(true)
-                          onDismiss()
-                        },
-                      )
+                      deposit(0, depositAmount, () => {
+                        onDismiss()
+                      })
                   }}
                 >
-                  {t('Confirm Deposit')}
+                  {t('Confirm Deposit')} {isLoading ? <SwapLoading ml="3px" /> : null}
                 </Button>
               </FlexGap>
             </FlexGap>
@@ -480,7 +472,7 @@ export const StakedDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoP
 
 export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
-  const { claim } = useIDOClaimCallback()
+  const { claim, isPending: isLoading } = useIDOClaimCallback()
   const claimableAmount = idoPublicData?.userClaimableAmount
   const amountInDollar = useStablecoinPriceAmount(
     idoPublicData?.stakeCurrency ?? undefined,
@@ -554,8 +546,15 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
               }}
               width={userClaimed ? '48px' : undefined}
               variant={userClaimed ? 'success' : undefined}
+              isLoading={isLoading}
             >
-              {userClaimed ? <CheckmarkIcon color={isDark ? '#000000' : '#FFFFFF'} /> : t('Claim')}
+              {userClaimed ? (
+                <CheckmarkIcon color={isDark ? '#000000' : '#FFFFFF'} />
+              ) : (
+                <>
+                  {t('Claim')} {isLoading ? <SwapLoading ml="3px" /> : null}
+                </>
+              )}
             </Button>
           </FlexGap>
           <FlexGap justifyContent="space-between" mt="8px">
