@@ -51,7 +51,7 @@ export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
   } = useIDOUserStatus()
 
   const startTime = Number(poolInfo?.startTimestamp) || 0
-  const endTime = 1737407928 // Number(poolInfo?.endTimestamp) || 0
+  const endTime = Number(poolInfo?.endTimestamp) || 0 // 1737407928
   const now = Math.floor(Date.now() / 1000)
   const status = getStatusByTimestamp(now, startTime, endTime)
   const lpTokenPriceInUsd = useLpTokenPrice(stakeCurrency?.symbol ?? 'BNB')
@@ -64,7 +64,7 @@ export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
     isInitialized: true,
     startTime,
     endTime,
-    status: 'finished',
+    status,
     currencyPriceInUSD,
     poolInfo,
     plannedStartTime: poolInfo?.startTimestamp ? poolInfo?.startTimestamp - 432000 : 0, // five days before
