@@ -7,7 +7,8 @@ import { getViemClients } from 'utils/viem'
 import type { Address } from 'viem/accounts'
 
 type IDOAddresses = {
-  lpToken: Address
+  lpToken0: Address
+  lpToken1: Address
   offeringToken: Address
   adminAddress: Address
 }
@@ -22,7 +23,7 @@ export const useIDOAddresses = () => {
       const publicClient = getViemClients({ chainId })
       if (!idoContract || !publicClient) throw new Error('IDO contract not found')
 
-      const [lpToken, offeringToken, adminAddress] = await publicClient.multicall({
+      const [lpToken0, lpToken1, offeringToken, adminAddress] = await publicClient.multicall({
         allowFailure: false,
         contracts: [
           {
@@ -43,11 +44,18 @@ export const useIDOAddresses = () => {
             functionName: 'addresses',
             args: [2n],
           },
+          {
+            address: idoContract.address,
+            abi: idoContract.abi,
+            functionName: 'addresses',
+            args: [3n],
+          },
         ],
       })
 
       return {
-        lpToken,
+        lpToken0,
+        lpToken1,
         offeringToken,
         adminAddress,
       }
@@ -59,11 +67,13 @@ export const useIDOAddresses = () => {
 
 export const useIDOCurrencies = () => {
   const { data: addresses } = useIDOAddresses()
-  const stakeCurrency = useCurrency(addresses?.lpToken)
+  const stakeCurrency0 = useCurrency(addresses?.lpToken0)
+  const stakeCurrency1 = useCurrency(addresses?.lpToken1)
   const offeringCurrency = useCurrency(addresses?.offeringToken)
 
   return {
-    stakeCurrency,
+    stakeCurrency0,
+    stakeCurrency1,
     offeringCurrency,
   }
 }
