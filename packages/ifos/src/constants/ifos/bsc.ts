@@ -6,8 +6,8 @@ import { cakeBnbLpToken } from '../lpTokens'
 export const ifos: BaseIfoConfig[] = [
   // {
   //   id: 'listapie',
-  //   address: '0xe1C5dc4d2f63B39c611A9D75C23dbC85d9146E46',
-  //   isActive: false,
+  //   address: '0x70326b28eaF03eBE05Ae327731835F3F697735D0',
+  //   isActive: true,
   //   cIFO: false,
   //   plannedStartTime: new Date('2025-01-21T10:00:00Z').getTime() / 1000,
   //   poolBasic: {

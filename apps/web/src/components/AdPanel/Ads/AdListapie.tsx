@@ -6,14 +6,14 @@ import { Countdown } from '../Countdown'
 import { AdPlayerProps } from '../types'
 import { getImageUrl } from '../utils'
 
-export const AdSolv = (props: AdPlayerProps) => {
+export const AdListaPie = (props: AdPlayerProps) => {
   const { t } = useTranslation()
 
   return (
     <AdCard imageUrl={getImageUrl('listapie')} {...props}>
       <BodyText mb="8px">
         {t('%token% IFO starts in', {
-          token: 'LISTAPIE',
+          token: 'Listapie',
         })}
       </BodyText>
 
