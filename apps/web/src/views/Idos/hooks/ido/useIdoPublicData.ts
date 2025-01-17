@@ -1,10 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { IfoStatus } from '@pancakeswap/ifos'
 import { type Currency, CurrencyAmount, Percent, Price } from '@pancakeswap/swap-sdk-core'
-import { CAKE } from '@pancakeswap/tokens'
 import { UnsafeCurrency } from 'config/constants/types'
-import { useCakePrice } from 'hooks/useCakePrice'
-import { useLpTokenPrice } from 'state/farms/hooks'
 import { getStatusByTimestamp } from '../helpers'
 import { useIDOStatus } from './usdIDOStatus'
 import { useIDOConfig } from './useIDOConfig'
@@ -17,7 +14,7 @@ export type IDOPublicData = {
   endTime: number
   status: IfoStatus
   // currencyPriceInUSD: BigNumber
-  poolInfo: PoolInfo
+  poolInfo?: PoolInfo
   plannedStartTime: number
   progress: Percent
   currentStakedAmount?: CurrencyAmount<Currency>
@@ -43,37 +40,65 @@ export const useIdoPublicData = (chainId: ChainId): [IDOPublicData, IDOPublicDat
   const { pricePerTokens, raiseAmounts, saleAmounts } = useIDOConfig()
   const [userStatus0, userStatus1] = useIDOUserStatus()
 
+  const {
+    stakedAmount: userStakedAmount,
+    stakeRefund: userStakedRefund,
+    stakeTax: userStakedTax,
+    claimableAmount: userClaimableAmount,
+    claimed: userClaimed,
+  } = userStatus0
+
   const startTime = Number(startTimestamp) || 0
   const endTime = Number(endTimestamp) || 0 // 1737407928
   const now = Math.floor(Date.now() / 1000)
   const status = getStatusByTimestamp(now, startTime, endTime)
-  const lpToken0PriceInUsd = useLpTokenPrice(stakeCurrency0?.symbol ?? 'BNB')
-  // const lpToken1PriceInUsd = useLpTokenPrice(stakeCurrency1?.symbol ?? 'BNB')
-  const cakePrice = useCakePrice()
+
   const duration = startTime - endTime
-  const currencyPriceInUSD = stakeCurrency0 === CAKE[chainId] ? cakePrice : lpToken0PriceInUsd
+
   const timeProgress = status === 'live' ? ((now - startTime) / duration) * 100 : 0
 
-  return {
-    // startTime,
-    // endTime,
-    // status,
-    // // currencyPriceInUSD,
-    // poolInfo: pool0Info,
-    // plannedStartTime: poolInfo?.startTimestamp ? poolInfo?.startTimestamp - 432000 : 0, // five days before
-    // progress,
-    // currentStakedAmount: status0.currentStakedAmount,
-    // timeProgress,
-    // duration,
-    // pricePerToken,
-    // stakeCurrency,
-    // offeringCurrency,
-    // raiseAmount,
-    // saleAmount,
-    // userStakedAmount,
-    // userStakedRefund,
-    // userStakedTax,
-    // userClaimableAmount,
-    // userClaimed,
-  }
+  return [
+    {
+      startTime,
+      endTime,
+      status,
+      poolInfo: pool0Info,
+      plannedStartTime: startTimestamp ? startTimestamp - 432000 : 0, // five days before
+      progress: status0.progress,
+      currentStakedAmount: status0.currentStakedAmount,
+      timeProgress,
+      duration,
+      pricePerToken: pricePerTokens[0],
+      stakeCurrency: stakeCurrency0,
+      offeringCurrency,
+      raiseAmount: raiseAmounts[0],
+      saleAmount: saleAmounts[0],
+      userStakedAmount,
+      userStakedRefund,
+      userStakedTax,
+      userClaimableAmount,
+      userClaimed,
+    },
+    {
+      startTime,
+      endTime,
+      status,
+      poolInfo: pool1Info,
+      plannedStartTime: startTimestamp ? startTimestamp - 432000 : 0, // five days before
+      progress: status1.progress,
+      currentStakedAmount: status1.currentStakedAmount,
+      timeProgress,
+      duration,
+      pricePerToken: pricePerTokens[1],
+      stakeCurrency: stakeCurrency1,
+      offeringCurrency,
+      raiseAmount: raiseAmounts[1],
+      saleAmount: saleAmounts[1],
+      userStakedAmount: userStatus1.stakedAmount,
+      userStakedRefund: userStatus1.stakeRefund,
+      userStakedTax: userStatus1.stakeTax,
+      userClaimableAmount: userStatus1.claimableAmount,
+      userClaimed: userStatus1.claimed,
+    },
+  ]
 }

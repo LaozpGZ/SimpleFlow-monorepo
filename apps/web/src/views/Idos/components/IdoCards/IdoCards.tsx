@@ -407,7 +407,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   disabled={value === '' || !depositAmount || isUserInsufficientBalance}
                   width="100%"
                   onClick={() => {
-                    if (depositAmount) deposit(depositAmount)
+                    if (depositAmount) deposit(0, depositAmount)
                   }}
                 >
                   {t('Confirm Deposit')}
@@ -537,7 +537,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
             </FlexGap>
             <Button
               onClick={() => {
-                if (!userClaimed) claim()
+                if (!userClaimed) claim(0)
               }}
               width={userClaimed ? '48px' : undefined}
               variant={userClaimed ? 'success' : undefined}

@@ -17,15 +17,15 @@ export type IDOUserStatus = {
 export const useIDOUserStatus = (): [IDOUserStatus, IDOUserStatus] => {
   const { data: userInfo } = useIDOUserInfo()
   const { data: offeringAndRefundingAmounts } = useViewUserOfferingAndRefundingAmounts()
-  const { stakeCurrency, offeringCurrency } = useIDOCurrencies()
+  const { stakeCurrency0, stakeCurrency1, offeringCurrency } = useIDOCurrencies()
 
   const stakedAmounts = useMemo(() => {
-    if (!stakeCurrency || !userInfo) return [undefined, undefined]
+    if (!stakeCurrency0 || !stakeCurrency1 || !userInfo) return [undefined, undefined]
     return [
-      CurrencyAmount.fromRawAmount(stakeCurrency, userInfo[0].amountPool),
-      CurrencyAmount.fromRawAmount(stakeCurrency, userInfo[1].amountPool),
+      CurrencyAmount.fromRawAmount(stakeCurrency0, userInfo[0].amountPool),
+      CurrencyAmount.fromRawAmount(stakeCurrency1, userInfo[1].amountPool),
     ]
-  }, [stakeCurrency, userInfo])
+  }, [stakeCurrency0, stakeCurrency1, userInfo])
 
   const claimed = useMemo(() => {
     if (!userInfo) return [undefined, undefined]
@@ -33,20 +33,20 @@ export const useIDOUserStatus = (): [IDOUserStatus, IDOUserStatus] => {
   }, [userInfo])
 
   const stakeTax = useMemo(() => {
-    if (!stakeCurrency) return [undefined, undefined]
+    if (!stakeCurrency0 || !stakeCurrency1) return [undefined, undefined]
     return [
-      CurrencyAmount.fromRawAmount(stakeCurrency, offeringAndRefundingAmounts?.[0].userTaxAmount ?? 0n),
-      CurrencyAmount.fromRawAmount(stakeCurrency, offeringAndRefundingAmounts?.[1].userTaxAmount ?? 0n),
+      CurrencyAmount.fromRawAmount(stakeCurrency0, offeringAndRefundingAmounts?.[0].userTaxAmount ?? 0n),
+      CurrencyAmount.fromRawAmount(stakeCurrency1, offeringAndRefundingAmounts?.[1].userTaxAmount ?? 0n),
     ]
-  }, [stakeCurrency, offeringAndRefundingAmounts])
+  }, [stakeCurrency0, stakeCurrency1, offeringAndRefundingAmounts])
 
   const stakeRefund = useMemo(() => {
-    if (!stakeCurrency) return [undefined, undefined]
+    if (!stakeCurrency0 || !stakeCurrency1) return [undefined, undefined]
     return [
-      CurrencyAmount.fromRawAmount(stakeCurrency, offeringAndRefundingAmounts?.[0].userRefundingAmount ?? 0n),
-      CurrencyAmount.fromRawAmount(stakeCurrency, offeringAndRefundingAmounts?.[1].userRefundingAmount ?? 0n),
+      CurrencyAmount.fromRawAmount(stakeCurrency0, offeringAndRefundingAmounts?.[0].userRefundingAmount ?? 0n),
+      CurrencyAmount.fromRawAmount(stakeCurrency1, offeringAndRefundingAmounts?.[1].userRefundingAmount ?? 0n),
     ]
-  }, [stakeCurrency, offeringAndRefundingAmounts])
+  }, [stakeCurrency0, stakeCurrency1, offeringAndRefundingAmounts])
 
   const claimableAmount = useMemo(() => {
     if (!offeringCurrency) return [undefined, undefined]
