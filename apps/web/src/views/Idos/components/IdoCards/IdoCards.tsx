@@ -98,6 +98,8 @@ export const IDoCurrentCard = ({
           ifoStatus={idoPublicData.status}
           ifoChainId={chainId}
           endTime={idoPublicData.endTime}
+          hasUserStaked={idoPublicData.userStakedAmount?.greaterThan(0)}
+          isClaimed={idoPublicData.userClaimed}
         />
         <IdoCard idoPublicData={idoPublicData} />
       </Box>

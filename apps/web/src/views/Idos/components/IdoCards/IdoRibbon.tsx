@@ -76,6 +76,8 @@ export const IdoRibbon = ({
   startTime,
   timeProgress,
   endTime,
+  isClaimed,
+  hasUserStaked,
 }: {
   ifoChainId?: ChainId
   ifoStatus: IfoStatus
@@ -84,13 +86,15 @@ export const IdoRibbon = ({
   startTime: number
   timeProgress: number
   endTime: number
+  isClaimed?: boolean
+  hasUserStaked?: boolean
 }) => {
   const { isDark } = useTheme()
 
   let ribbon: ReactNode = null
   switch (ifoStatus) {
     case 'finished':
-      ribbon = <IfoRibbonEnd />
+      ribbon = <IfoRibbonEnd isClaimed={isClaimed} hasUserStaked={hasUserStaked} />
       break
     case 'live':
       ribbon = <IfoRibbonLive endTime={endTime} ifoStatus={ifoStatus} dark={isDark} />
@@ -147,14 +151,23 @@ type RibbonProps = {
   dark?: boolean
 }
 
-const IfoRibbonEnd = () => {
+const IfoRibbonEnd: React.FC<{
+  isClaimed?: boolean
+  hasUserStaked?: boolean
+}> = ({ isClaimed, hasUserStaked }) => {
   const { t } = useTranslation()
-  const { isDark } = useTheme()
+  const { isDark, theme } = useTheme()
   return (
     <>
-      <BigCurve $status="finished" />
+      <BigCurve
+        $status="finished"
+        style={{ background: isClaimed ? theme.colors.success : hasUserStaked ? theme.colors.secondary : undefined }}
+      />
       <RibbonContainer>
-        <Text color={isDark ? '#39373E' : '#8D8D8D'}>{t('Sale Finished')}</Text>
+        <Text color={isClaimed || hasUserStaked ? 'white' : isDark ? '#39373E' : '#8D8D8D'}>
+          {t('Sale Finished')}{' '}
+          {isClaimed ? <> & {t('Claimed')}</> : hasUserStaked ? <> - {t('Claim available!')}</> : ''}
+        </Text>
       </RibbonContainer>
     </>
   )
