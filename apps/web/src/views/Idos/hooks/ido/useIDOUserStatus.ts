@@ -23,6 +23,11 @@ export const useIDOUserStatus = () => {
     return CurrencyAmount.fromRawAmount(stakeCurrency, userInfo.amountPool)
   }, [stakeCurrency, userInfo])
 
+  const claimed = useMemo(() => {
+    if (!userInfo) return undefined
+    return userInfo.claimedPool
+  }, [userInfo])
+
   const stakeTax = useMemo(() => {
     if (!stakeCurrency) return undefined
     return CurrencyAmount.fromRawAmount(stakeCurrency, offeringAndRefundingAmounts?.userTaxAmount ?? 0n)
@@ -43,6 +48,7 @@ export const useIDOUserStatus = () => {
     stakeTax,
     stakeRefund,
     claimableAmount,
+    claimed,
   }
 }
 

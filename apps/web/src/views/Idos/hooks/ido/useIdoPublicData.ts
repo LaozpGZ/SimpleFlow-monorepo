@@ -34,6 +34,7 @@ export type IDOPublicData = {
   userStakedAmount?: CurrencyAmount<Currency>
   userStakedRefund?: CurrencyAmount<Currency>
   userStakedTax?: CurrencyAmount<Currency>
+  userClaimed?: boolean
 }
 
 export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
@@ -46,6 +47,7 @@ export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
     stakeRefund: userStakedRefund,
     stakeTax: userStakedTax,
     claimableAmount: userClaimableAmount,
+    claimed: userClaimed,
   } = useIDOUserStatus()
 
   const startTime = Number(poolInfo?.startTimestamp) || 0
@@ -79,5 +81,6 @@ export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
     userStakedRefund,
     userStakedTax,
     userClaimableAmount,
+    userClaimed,
   }
 }
