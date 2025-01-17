@@ -9,6 +9,7 @@ import {
   Card,
   CardBody,
   CardHeader,
+  CheckmarkIcon,
   domAnimation,
   FlexGap,
   InfoIcon,
@@ -19,6 +20,7 @@ import {
   ModalV2,
   Text,
   useModalV2,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
@@ -149,7 +151,7 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
 export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
+  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0) || true
   const { theme, isDark } = useTheme()
   return (
     <Card background={isDark ? '#18171A' : theme.colors.background}>
@@ -200,7 +202,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
                 <Text color="textSubtle">{t('Status')}</Text>
                 <FlexGap gap="3px">
                   <Text>{idoPublicData.progress.toFixed(2)} %</Text>
-                  <InfoIcon color="textSubtle" />
+                  <InfoIcon width="14px" color="textSubtle" />
                 </FlexGap>
               </FlexGap>
             </>
@@ -460,31 +462,98 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
       enabled: Boolean(claimableAmount !== undefined && Number.isFinite(+claimableAmount)),
     },
   )
+  const refundAmount = idoPublicData?.userStakedRefund
+
+  const refundInDollar = useStablecoinPriceAmount(
+    idoPublicData?.stakeCurrency ?? undefined,
+    refundAmount !== undefined && Number.isFinite(+refundAmount) ? +refundAmount : undefined,
+    {
+      hideIfPriceImpactTooHigh: true,
+      enabled: Boolean(refundAmount !== undefined && Number.isFinite(+refundAmount)),
+    },
+  )
+
   const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
+
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(
+    t(
+      'When the sale is oversubscribed, deposit that were not used is being refunded. You may withdraw together when claiming.',
+    ),
+    {
+      placement: 'top',
+    },
+  )
+  const userClaimed = idoPublicData?.userClaimed
+
+  const { isDark } = useTheme()
   return (
-    <FlexGap gap="8px" justifyContent="space-between" alignItems="center">
+    <>
       {userHasStaked ? (
-        <>
-          <FlexGap flexDirection="column">
-            <FlexGap gap="8px" alignItems="center">
-              {/* @ts-ignore */}
-              <CurrencyLogo size="24px" currency={idoPublicData?.stakeCurrency} />
-              <Text fontSize="12px" bold color="secondary" lineHeight="18px">
-                {idoPublicData.stakeCurrency?.symbol} {t('Pool')} {t('Deposited')}
-              </Text>
+        <FlexGap flexDirection="column" gap="8px">
+          <FlexGap gap="8px" justifyContent="space-between" alignItems="center">
+            <FlexGap flexDirection="column">
+              <FlexGap gap="8px" alignItems="center">
+                {/* @ts-ignore */}
+                <CurrencyLogo size="24px" currency={idoPublicData?.stakeCurrency} />
+                <Text fontSize="12px" bold color="secondary" lineHeight="18px">
+                  {idoPublicData.stakeCurrency?.symbol} {t('Pool')} {t('Deposited')}
+                </Text>
+              </FlexGap>
+              <FlexGap gap="8px" flexDirection="column" mt="8px">
+                <Text textTransform="uppercase" color="secondary" fontSize="12px" bold>
+                  {idoPublicData?.offeringCurrency?.symbol} {t('allocated')}
+                </Text>
+                <Text fontSize="20px" bold lineHeight="30px">
+                  {claimableAmount?.toSignificant(6)}
+                </Text>
+                <FlexGap>
+                  {Number.isFinite(amountInDollar) ? (
+                    <>
+                      <Text fontSize="14px" color="textSubtle" ellipsis>
+                        {`~${amountInDollar && formatDollarAmount(amountInDollar)}`}
+                      </Text>
+                      <Text ml="4px" fontSize="14px" color="textSubtle">
+                        USD
+                      </Text>
+                    </>
+                  ) : null}
+                </FlexGap>
+              </FlexGap>
             </FlexGap>
-            <FlexGap gap="8px" flexDirection="column" mt="8px">
-              <Text textTransform="uppercase" color="secondary" fontSize="12px" bold>
-                {idoPublicData?.offeringCurrency?.symbol} {t('allocated')}
-              </Text>
-              <Text fontSize="20px" bold lineHeight="30px">
-                {claimableAmount?.toSignificant(6)}
+            <Button
+              onClick={() => {
+                if (!userClaimed) claim()
+              }}
+              width={userClaimed ? '48px' : undefined}
+              variant={userClaimed ? 'success' : undefined}
+            >
+              {userClaimed ? <CheckmarkIcon color={isDark ? '#000000' : '#FFFFFF'} /> : t('Claim')}
+            </Button>
+          </FlexGap>
+          <FlexGap justifyContent="space-between" mt="8px">
+            <Text color="textSubtle">{t('Subscribed')}</Text>
+            <Text>
+              {idoPublicData.userStakedAmount?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
+            </Text>
+          </FlexGap>
+          <FlexGap justifyContent="space-between">
+            <FlexGap gap="3px" alignItems="center">
+              <Text color="textSubtle">{t('Refund')}</Text>
+              <Box ref={targetRef}>
+                <InfoIcon width="14px" color="textSubtle" />
+                {tooltipVisible && tooltip}
+              </Box>
+            </FlexGap>
+
+            <FlexGap gap="8px" flexDirection="column">
+              <Text>
+                {idoPublicData.userStakedRefund?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
               </Text>
               <FlexGap>
-                {Number.isFinite(amountInDollar) ? (
+                {Number.isFinite(refundInDollar) ? (
                   <>
                     <Text fontSize="14px" color="textSubtle" ellipsis>
-                      {`~${amountInDollar && formatDollarAmount(amountInDollar)}`}
+                      {`~${refundInDollar && formatDollarAmount(refundInDollar)}`}
                     </Text>
                     <Text ml="4px" fontSize="14px" color="textSubtle">
                       USD
@@ -494,14 +563,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
               </FlexGap>
             </FlexGap>
           </FlexGap>
-          <Button
-            onClick={() => {
-              claim()
-            }}
-          >
-            {t('Claim')}
-          </Button>
-        </>
+        </FlexGap>
       ) : (
         <FlexGap flexDirection="column" gap="8px">
           <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
@@ -516,6 +578,6 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
           </FlexGap>
         </FlexGap>
       )}
-    </FlexGap>
+    </>
   )
 }
