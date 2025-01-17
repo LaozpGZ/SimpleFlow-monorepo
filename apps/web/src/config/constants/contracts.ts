@@ -261,6 +261,15 @@ export default {
     [ChainId.ZKSYNC]: '0xB774c13bA5a665713037c42A12f0ED9De70585cB',
   },
   ido: {
-    [ChainId.BSC_TESTNET]: '0xF9EFE79856A2a2a8C43dACBD3Df0b006bd314250',
+    [ChainId.BSC_TESTNET]: getTestIdoAddress() ?? '0xF9EFE79856A2a2a8C43dACBD3Df0b006bd314250',
   },
 } as const satisfies Record<string, Record<number, `0x${string}`>>
+
+function getTestIdoAddress(): `0x${string}` | null {
+  if (typeof window !== 'undefined') {
+    const urlParams = new URLSearchParams(window.location.search)
+    return urlParams.get('testIdoAddress') as `0x${string}` | null
+  }
+
+  return process.env.NEXT_PUBLIC_BSC_TESTNET_IDO_ADDRESS as `0x${string}` | null
+}
