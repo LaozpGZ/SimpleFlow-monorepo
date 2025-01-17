@@ -161,7 +161,7 @@ const IfoRibbonEnd: React.FC<{
     <>
       <BigCurve
         $status="finished"
-        style={{ background: isClaimed ? theme.colors.success : hasUserStaked ? theme.colors.secondary : undefined }}
+        style={{ background: isClaimed ? theme.colors.success : hasUserStaked ? theme.colors.textSubtle : undefined }}
       />
       <RibbonContainer>
         <Text color={isClaimed || hasUserStaked ? 'white' : isDark ? '#39373E' : '#8D8D8D'}>
