@@ -12,7 +12,7 @@ export const AdIfo = (props: AdPlayerProps) => {
   const { t } = useTranslation()
   const ifoConfig = useActiveIfoConfigAcrossChains()
 
-  if (!ifoConfig || dayjs().isBefore(dayjs.unix(ifoConfig.plannedStartTime || 0))) return null
+  if (!ifoConfig || dayjs().isAfter(dayjs.unix(ifoConfig.plannedStartTime || 0))) return null
 
   return (
     <AdCard imageUrl={getImageUrl(ifoConfig.id)} {...props}>
