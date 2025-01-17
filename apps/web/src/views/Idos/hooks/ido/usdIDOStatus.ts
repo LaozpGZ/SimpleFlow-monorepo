@@ -11,20 +11,19 @@ export type IDOStatus = {
 export const useIDOStatus = (): [IDOStatus, IDOStatus] => {
   const { stakeCurrency0, stakeCurrency1 } = useIDOCurrencies()
   const { data: poolInfo } = useIDOPoolInfo()
-
   const progresses = useMemo(() => {
-    if (!poolInfo?.[0] || !poolInfo?.[1]) return [new Percent(0, 100), new Percent(0, 100)]
+    if (!poolInfo?.pool0Info || !poolInfo?.pool1Info) return [new Percent(0, 100), new Percent(0, 100)]
     return [
-      new Percent(poolInfo[0].totalAmountPool, poolInfo[0].raisingAmountPool),
-      new Percent(poolInfo[1].totalAmountPool, poolInfo[1].raisingAmountPool),
+      new Percent(poolInfo.pool0Info.totalAmountPool, poolInfo.pool0Info.raisingAmountPool),
+      new Percent(poolInfo.pool1Info.totalAmountPool, poolInfo.pool1Info.raisingAmountPool),
     ]
   }, [poolInfo])
 
   const currentStakedAmounts = useMemo(() => {
-    if (!poolInfo?.[0] || !poolInfo?.[1]) return [undefined, undefined]
+    if (!poolInfo?.pool0Info || !poolInfo?.pool1Info) return [undefined, undefined]
     return [
-      stakeCurrency0 ? CurrencyAmount.fromRawAmount(stakeCurrency0, poolInfo[0].totalAmountPool) : undefined,
-      stakeCurrency1 ? CurrencyAmount.fromRawAmount(stakeCurrency1, poolInfo[1].totalAmountPool) : undefined,
+      stakeCurrency0 ? CurrencyAmount.fromRawAmount(stakeCurrency0, poolInfo.pool0Info.totalAmountPool) : undefined,
+      stakeCurrency1 ? CurrencyAmount.fromRawAmount(stakeCurrency1, poolInfo.pool1Info.totalAmountPool) : undefined,
     ]
   }, [poolInfo, stakeCurrency0, stakeCurrency1])
 
