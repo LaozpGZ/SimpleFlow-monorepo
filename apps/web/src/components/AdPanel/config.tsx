@@ -2,10 +2,12 @@ import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
 import { AdCakeStaking } from './Ads/AdCakeStaking'
 import { AdPCSX } from './Ads/AdPCSX'
+import { AdIfo } from './Ads/AdIfo'
 import { AdSpringboard } from './Ads/AdSpringboard'
 import { AdTradingCompetitionVinu } from './Ads/AdTradingCompetition'
 import { ExpandableAd } from './Expandable/ExpandableAd'
 import { shouldRenderOnPages } from './renderConditions'
+import { useShouldRenderAdIfo } from './useShouldRenderAdIfo'
 
 enum Priority {
   FIRST_AD = 6,
@@ -20,6 +22,7 @@ export const useAdConfig = () => {
   const { isDesktop } = useMatchBreakpoints()
   const shouldRenderOnPage = shouldRenderOnPages(['/buy-crypto', '/', '/prediction'])
   const MAX_ADS = isDesktop ? 6 : 4
+  const shouldRenderAdIfo = useShouldRenderAdIfo()
 
   const adList: Array<{
     id: string
@@ -43,6 +46,11 @@ export const useAdConfig = () => {
         component: <AdTradingCompetitionVinu />,
       },
       {
+        id: 'ad-ifo',
+        component: <AdIfo />,
+        shouldRender: [shouldRenderAdIfo],
+      },
+      {
         id: 'pcsx',
         component: <AdPCSX />,
       },
@@ -51,7 +59,7 @@ export const useAdConfig = () => {
         component: <AdCakeStaking />,
       },
     ],
-    [shouldRenderOnPage],
+    [shouldRenderOnPage, shouldRenderAdIfo],
   )
 
   return useMemo(
