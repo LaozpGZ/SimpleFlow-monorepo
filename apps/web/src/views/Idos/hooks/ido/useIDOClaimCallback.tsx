@@ -15,7 +15,7 @@ export const useIDOClaimCallback = () => {
 
   const claim = useCallback(
     async (pid: number) => {
-      if (!account || !idoContract || !pid) return
+      if (!account || !idoContract || (!pid && pid !== 0)) return
       const receipt = await fetchWithCatchTxError(() =>
         idoContract.write.harvestPool([pid], {
           account,
