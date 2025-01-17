@@ -35,7 +35,7 @@ const sign = async (req: NextApiRequest, res: NextApiResponse) => {
 
   try {
     const response = await fetch(
-      `https://www.binance.com/bapi/defi/v1/public/wallet-direct/buw/wallet/address/sign?address=${address}`,
+      `https://www.binance.com/bapi/defi/v1/public/wallet-direct/wallet/address/sign?address=${address}`,
       {
         method: 'POST',
         headers: {

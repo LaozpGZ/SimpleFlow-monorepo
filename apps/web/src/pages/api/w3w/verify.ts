@@ -17,7 +17,7 @@ const verify = async (req: NextApiRequest, res: NextApiResponse) => {
 
   const { address, timestamp } = parsed.data
   const response = await fetch(
-    `https://www.binance.com/bapi/defi/v1/public/wallet-direct/buw/wallet/address/verify?address=${address}&timestamp=${timestamp}`,
+    `https://www.binance.com/bapi/defi/v1/public/wallet-direct/wallet/address/verify?address=${address}&timestamp=${timestamp}`,
     {
       headers: {
         'x-gray-env': 'infra',
