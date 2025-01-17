@@ -1,7 +1,6 @@
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
 import { AdCakeStaking } from './Ads/AdCakeStaking'
-import { AdListaPie } from './Ads/AdListapie'
 import { AdPCSX } from './Ads/AdPCSX'
 import { AdSpringboard } from './Ads/AdSpringboard'
 import { AdTradingCompetitionVinu } from './Ads/AdTradingCompetition'
@@ -42,10 +41,6 @@ export const useAdConfig = () => {
       {
         id: 'ad-vinu-tc',
         component: <AdTradingCompetitionVinu />,
-      },
-      {
-        id: 'ad-ifo-listapie',
-        component: <AdListaPie />,
       },
       {
         id: 'pcsx',
