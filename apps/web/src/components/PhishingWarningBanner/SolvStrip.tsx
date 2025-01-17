@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Link, Text } from '@pancakeswap/uikit'
+import { Box, Link } from '@pancakeswap/uikit'
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
 import { TextHighlight } from './TextHighlight'
 
@@ -9,7 +9,9 @@ export const SolvStrip = () => {
   return (
     <Box mr={['6px']}>
       <TextHighlight
-        text={t('Join the SOLV Token Launch (IFO) on BNB Chain PancakeSwap')}
+        text={t('Join the %token% Token Launch (IFO) on BNB Chain PancakeSwap', {
+          token: 'SOLV',
+        })}
         highlights={['SOLV', 'PancakeSwap']}
       />{' '}
       <Link

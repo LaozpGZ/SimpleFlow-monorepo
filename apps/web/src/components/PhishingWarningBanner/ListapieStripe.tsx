@@ -34,7 +34,12 @@ export const ListapieStripe = () => {
           marginRight: '8px',
         }}
       />
-      <Link external display="inline !important" fontSize={['12px', '12px', '14px']} href="https://example">
+      <Link
+        external
+        display="inline !important"
+        fontSize={['12px', '12px', '14px']}
+        href="https://pancakeswap.finance/ifo"
+      >
         {t('Learn More')}
       </Link>
     </Box>
