@@ -21,11 +21,12 @@ export const useIDODepositCallback = () => {
 
   const deposit = useCallback(
     async (pid: number, amount: CurrencyAmount<Currency>) => {
-      if (!account || !idoContract || !pid) return
+      if (!account || !idoContract || (!pid && pid !== 0)) return
 
       const depositAddress = amount.currency.isNative ? zeroAddress : amount.currency.address
+      const poolToken = pid === 0 ? poolInfo?.pool0Info?.poolToken : poolInfo?.pool1Info?.poolToken
 
-      if (!poolInfo?.[pid].poolToken || !isAddressEqual(poolInfo[pid].poolToken, depositAddress)) {
+      if (!poolToken || !isAddressEqual(poolToken, depositAddress)) {
         console.error('Invalid pool token')
         return
       }
