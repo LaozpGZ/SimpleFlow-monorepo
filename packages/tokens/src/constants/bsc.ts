@@ -3347,7 +3347,7 @@ export const bscTokens = {
     18,
     'LTP',
     'Listapie',
-    ' https://www.lista.magpiexyz.io/',
+    'https://www.lista.magpiexyz.io/',
   ),
   solv: new ERC20Token(
     ChainId.BSC,
