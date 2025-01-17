@@ -242,6 +242,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   const { t } = useTranslation()
   const { onDismiss, onOpen, isOpen } = useModalV2()
   const [value, setValue] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const { address: account } = useAccount()
   const inputBalance = useCurrencyBalance(account ?? undefined, idoPublicData?.stakeCurrency ?? undefined)
@@ -406,11 +407,20 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 <Button
                   disabled={value === '' || !depositAmount || isUserInsufficientBalance}
                   width="100%"
+                  isLoading={loading}
                   onClick={() => {
                     if (depositAmount)
-                      deposit(0, depositAmount, () => {
-                        onDismiss()
-                      })
+                      deposit(
+                        0,
+                        depositAmount,
+                        () => {
+                          setLoading(true)
+                        },
+                        () => {
+                          setLoading(true)
+                          onDismiss()
+                        },
+                      )
                   }}
                 >
                   {t('Confirm Deposit')}

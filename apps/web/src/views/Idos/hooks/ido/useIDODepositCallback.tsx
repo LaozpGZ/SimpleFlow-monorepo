@@ -22,7 +22,7 @@ export const useIDODepositCallback = () => {
   const { refetch } = useIDOUserInfo()
 
   const deposit = useCallback(
-    async (pid: number, amount: CurrencyAmount<Currency>, onFinish?: () => void) => {
+    async (pid: number, amount: CurrencyAmount<Currency>, onStart?: () => void, onFinish?: () => void) => {
       if (!account || !idoContract || (!pid && pid !== 0)) return
 
       const depositAddress = amount.currency.isNative ? zeroAddress : amount.currency.address
@@ -32,7 +32,7 @@ export const useIDODepositCallback = () => {
         console.error('Invalid pool token')
         return
       }
-
+      onStart?.()
       const value = amount.currency.isNative ? amount.quotient : 0n
       const amountPool = amount.currency.isNative ? 0n : amount.quotient
       try {
