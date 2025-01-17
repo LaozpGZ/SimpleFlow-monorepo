@@ -120,7 +120,7 @@ export const IdoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicD
 export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { theme, isDark } = useTheme()
-  console.log('idoPublicData???', idoPublicData)
+
   return (
     <Card background={isDark ? '#18171A' : theme.colors.background} mb="16px">
       <CardBody>
@@ -166,7 +166,7 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
 export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0) || true
+  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
   const { theme, isDark } = useTheme()
   return (
     <Card background={isDark ? '#18171A' : theme.colors.background}>
