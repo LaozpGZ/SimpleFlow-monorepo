@@ -8,7 +8,7 @@ import 'swiper/css/effect-fade'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { Countdown } from './Countdown'
 
-import { ListapieStripe } from './ListapieStrip'
+import { ListapieStripe } from './ListapieStripe'
 import { Step1 } from './Step1'
 import { Step2 } from './Step2'
 import { Step3 } from './Step3'
