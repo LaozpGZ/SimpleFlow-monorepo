@@ -3345,7 +3345,7 @@ export const bscTokens = {
     ChainId.BSC,
     '0x56fA5F7BF457454Be33D8B978C86A5f5B9DD84C2',
     18,
-    'LTP',
+    'listapie',
     'Listapie',
     ' https://www.lista.magpiexyz.io/',
   ),

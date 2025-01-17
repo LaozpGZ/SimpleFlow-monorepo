@@ -6,7 +6,7 @@ import { cakeBnbLpToken } from '../lpTokens'
 export const ifos: BaseIfoConfig[] = [
   {
     id: 'listapie',
-    address: '0xe1C5dc4d2f63B39c611A9D75C23dbC85d9146E46',
+    address: '0x4F045CD0C3293845e0A0460fA64caC5d59b4Dc37',
     isActive: true,
     cIFO: false,
     plannedStartTime: new Date('2025-01-21T10:00:00Z').getTime() / 1000,
@@ -20,7 +20,7 @@ export const ifos: BaseIfoConfig[] = [
     name: 'LISTAPIE',
     currency: bscTokens.cake,
     token: bscTokens.listapie,
-    campaignId: '512600000',
+    campaignId: '512700000',
     articleUrl: '',
     tokenOfferingPrice: 1,
     version: 8,
