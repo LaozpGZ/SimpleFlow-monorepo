@@ -11,6 +11,7 @@ import {
   CardHeader,
   domAnimation,
   FlexGap,
+  InfoIcon,
   LazyAnimatePresence,
   Loading,
   ModalBody,
@@ -197,7 +198,10 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
               </FlexGap>
               <FlexGap justifyContent="space-between">
                 <Text color="textSubtle">{t('Status')}</Text>
-                <Text>{idoPublicData.progress.toFixed(2)} %</Text>
+                <FlexGap gap="3px">
+                  <Text>{idoPublicData.progress.toFixed(2)} %</Text>
+                  <InfoIcon color="textSubtle" />
+                </FlexGap>
               </FlexGap>
             </>
           )}
@@ -417,7 +421,7 @@ export const StakedDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoP
         <FlexGap gap="8px" alignItems="center">
           {/* @ts-ignore */}
           <CurrencyLogo size="24px" currency={idoPublicData?.stakeCurrency} />
-          <Text fontSize="12px" bold color="secondary" lineHeight="18px">
+          <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
             {idoPublicData.stakeCurrency?.symbol} {t('Pool')} {t('Deposited')}
           </Text>
         </FlexGap>
@@ -456,42 +460,62 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
       enabled: Boolean(claimableAmount !== undefined && Number.isFinite(+claimableAmount)),
     },
   )
+  const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
   return (
     <FlexGap gap="8px" justifyContent="space-between" alignItems="center">
-      <FlexGap flexDirection="column">
-        <FlexGap gap="8px" alignItems="center">
-          {/* @ts-ignore */}
-          <CurrencyLogo size="24px" currency={idoPublicData?.stakeCurrency} />
-          <Text fontSize="12px" bold color="secondary" lineHeight="18px">
-            {idoPublicData.stakeCurrency?.symbol} {t('Pool')} {t('Deposited')}
+      {userHasStaked ? (
+        <>
+          <FlexGap flexDirection="column">
+            <FlexGap gap="8px" alignItems="center">
+              {/* @ts-ignore */}
+              <CurrencyLogo size="24px" currency={idoPublicData?.stakeCurrency} />
+              <Text fontSize="12px" bold color="secondary" lineHeight="18px">
+                {idoPublicData.stakeCurrency?.symbol} {t('Pool')} {t('Deposited')}
+              </Text>
+            </FlexGap>
+            <FlexGap gap="8px" flexDirection="column" mt="8px">
+              <Text textTransform="uppercase" color="secondary" fontSize="12px" bold>
+                {idoPublicData?.offeringCurrency?.symbol} {t('allocated')}
+              </Text>
+              <Text fontSize="20px" bold lineHeight="30px">
+                {claimableAmount?.toSignificant(6)}
+              </Text>
+              <FlexGap>
+                {Number.isFinite(amountInDollar) ? (
+                  <>
+                    <Text fontSize="14px" color="textSubtle" ellipsis>
+                      {`~${amountInDollar && formatDollarAmount(amountInDollar)}`}
+                    </Text>
+                    <Text ml="4px" fontSize="14px" color="textSubtle">
+                      USD
+                    </Text>
+                  </>
+                ) : null}
+              </FlexGap>
+            </FlexGap>
+          </FlexGap>
+          <Button
+            onClick={() => {
+              claim()
+            }}
+          >
+            {t('Claim')}
+          </Button>
+        </>
+      ) : (
+        <FlexGap flexDirection="column" gap="8px">
+          <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
+            {idoPublicData.stakeCurrency?.symbol} {t('Pool')}
           </Text>
-        </FlexGap>
-        <FlexGap gap="8px" flexDirection="column">
-          <Text fontSize="20px" bold lineHeight="30px">
-            {claimableAmount?.toSignificant(6)}
-          </Text>
-          <FlexGap>
-            {Number.isFinite(amountInDollar) ? (
-              <>
-                <Text fontSize="14px" color="textSubtle" ellipsis>
-                  {`~${amountInDollar && formatDollarAmount(amountInDollar)}`}
-                </Text>
-                <Text ml="4px" fontSize="14px" color="textSubtle">
-                  USD
-                </Text>
-              </>
-            ) : null}
+          <FlexGap gap="8px" alignItems="center">
+            {/* @ts-ignore */}
+            <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
+            <Text fontSize="16px" color="textDisabled" bold>
+              {t('You didn’t deposit')} {idoPublicData?.stakeCurrency?.symbol}
+            </Text>
           </FlexGap>
         </FlexGap>
-      </FlexGap>
-      <Button
-        width="100%"
-        onClick={() => {
-          claim()
-        }}
-      >
-        {t('Claim')}
-      </Button>
+      )}
     </FlexGap>
   )
 }

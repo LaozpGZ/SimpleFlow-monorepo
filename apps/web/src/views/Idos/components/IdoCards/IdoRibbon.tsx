@@ -1,13 +1,11 @@
-import { useImageColor } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { ChainId } from '@pancakeswap/sdk'
-import { Box, Flex, Heading, Progress, ProgressBar } from '@pancakeswap/uikit'
-import { ReactNode, useMemo } from 'react'
+import { Box, Flex, Heading, Progress, Text } from '@pancakeswap/uikit'
+import { ReactNode } from 'react'
 import { styled } from 'styled-components'
 
 import { IfoStatus } from '@pancakeswap/ifos'
 import useTheme from 'hooks/useTheme'
-import { getBannerUrl } from '../../helpers'
 import { PublicIfoData } from '../../types'
 import LiveTimer, { SoonTimer } from './Timer'
 
@@ -40,11 +38,11 @@ const BigCurve = styled(Box)<{ $status?: PublicIfoData['status']; $dark?: boolea
         `
       case 'live':
         return `
-          background: linear-gradient(180deg, #8051D6 0%, #492286 100%);
+          background: linear-gradient(269.16deg, #8051D6 14.87%, #492286 103.19%);
         `
       case 'finished':
         return `
-          background: ${theme.colors.input};
+          background: ${$dark ? '#9373E' : '#E0E0E0'};
         `
       default:
         return ''
@@ -87,8 +85,6 @@ export const IdoRibbon = ({
   timeProgress: number
   endTime: number
 }) => {
-  const bannerUrl = useMemo(() => ifoId && getBannerUrl(ifoId), [ifoId])
-  const { isDarkColor } = useImageColor({ url: bannerUrl })
   const { isDark } = useTheme()
 
   let ribbon: ReactNode = null
@@ -120,7 +116,7 @@ export const IdoRibbon = ({
 
   return (
     <Container>
-      {ifoStatus === 'live' && (
+      {/* {ifoStatus === 'live' && (
         <StyledProgress variant="flat">
           <ProgressBar
             $useDark
@@ -128,7 +124,7 @@ export const IdoRibbon = ({
             style={{ width: `${Math.min(Math.max(timeProgress, 0), 100)}%` }}
           />
         </StyledProgress>
-      )}
+      )} */}
       <Flex
         justifyContent="center"
         alignItems="center"
@@ -153,13 +149,12 @@ type RibbonProps = {
 
 const IfoRibbonEnd = () => {
   const { t } = useTranslation()
+  const { isDark } = useTheme()
   return (
     <>
       <BigCurve $status="finished" />
       <RibbonContainer>
-        <Heading as="h3" scale="lg" color="textSubtle">
-          {t('Sale Finished!')}
-        </Heading>
+        <Text color={isDark ? '#39373E' : '#8D8D8D'}>{t('Sale Finished')}</Text>
       </RibbonContainer>
     </>
   )
