@@ -6,6 +6,7 @@ import { ReactNode, useMemo } from 'react'
 import { styled } from 'styled-components'
 
 import { IfoStatus } from '@pancakeswap/ifos'
+import useTheme from 'hooks/useTheme'
 import { getBannerUrl } from '../../helpers'
 import { PublicIfoData } from '../../types'
 import LiveTimer, { SoonTimer } from './Timer'
@@ -35,7 +36,7 @@ const BigCurve = styled(Box)<{ $status?: PublicIfoData['status']; $dark?: boolea
     switch ($status) {
       case 'coming_soon':
         return `
-          background: ${$dark ? '#353547' : '#EFF3F4'};
+          background: ${$dark ? '#322B48' : '#F6F4FB'};
         `
       case 'live':
         return `
@@ -88,6 +89,7 @@ export const IdoRibbon = ({
 }) => {
   const bannerUrl = useMemo(() => ifoId && getBannerUrl(ifoId), [ifoId])
   const { isDarkColor } = useImageColor({ url: bannerUrl })
+  const { isDark } = useTheme()
 
   let ribbon: ReactNode = null
   switch (ifoStatus) {
@@ -95,7 +97,7 @@ export const IdoRibbon = ({
       ribbon = <IfoRibbonEnd />
       break
     case 'live':
-      ribbon = <IfoRibbonLive endTime={endTime} ifoStatus={ifoStatus} dark={isDarkColor} />
+      ribbon = <IfoRibbonLive endTime={endTime} ifoStatus={ifoStatus} dark={isDark} />
       break
     case 'coming_soon':
       ribbon = (
@@ -104,7 +106,7 @@ export const IdoRibbon = ({
           startTime={startTime}
           ifoStatus={ifoStatus}
           plannedStartTime={plannedStartTime}
-          dark={isDarkColor}
+          dark={isDark}
         />
       )
       break
