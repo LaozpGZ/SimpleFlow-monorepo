@@ -13,18 +13,21 @@ export const useIDOClaimCallback = () => {
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError()
 
-  const claim = useCallback(async () => {
-    if (!account || !idoContract) return
-    const receipt = await fetchWithCatchTxError(() =>
-      idoContract.write.harvestPool({
-        account,
-        chain: idoContract.chain,
-      }),
-    )
-    if (receipt?.status) {
-      toastSuccess(t('Claim successful'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
-    }
-  }, [account, idoContract, fetchWithCatchTxError, toastSuccess, t])
+  const claim = useCallback(
+    async (pid: number) => {
+      if (!account || !idoContract || !pid) return
+      const receipt = await fetchWithCatchTxError(() =>
+        idoContract.write.harvestPool([pid], {
+          account,
+          chain: idoContract.chain,
+        }),
+      )
+      if (receipt?.status) {
+        toastSuccess(t('Claim successful'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
+      }
+    },
+    [account, idoContract, fetchWithCatchTxError, toastSuccess, t],
+  )
 
   return { claim, isPending }
 }

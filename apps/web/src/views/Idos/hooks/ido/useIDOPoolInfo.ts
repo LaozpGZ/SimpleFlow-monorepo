@@ -2,14 +2,22 @@ import { useQuery } from '@tanstack/react-query'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useIDOContract } from 'hooks/useContract'
 import { getViemClients } from 'utils/viem'
+import type { Address } from 'viem'
 
-export type IDOPoolInfo = {
+export type PoolInfo = {
+  pid: number
+  /**
+   * token address that is used to stake in the pool
+   */
+  poolToken: Address
   /**
    * Amount of tokens raised in the pool
    */
   raisingAmountPool: bigint
   /**
    * Amount of tokens offered in the pool
+   *
+   * if pool is not offering tokens, it will be 0
    */
   offeringAmountPool: bigint
   /**
@@ -32,6 +40,11 @@ export type IDOPoolInfo = {
    * Sum of taxes overflow
    */
   sumTaxesOverflow: bigint
+}
+
+export type IDOPoolInfo = {
+  pool0Info: PoolInfo
+  pool1Info: PoolInfo
   /**
    * Start timestamp of the pool
    */
@@ -52,39 +65,74 @@ export const useIDOPoolInfo = () => {
       const publicClient = getViemClients({ chainId })
       if (!idoContract || !publicClient) throw new Error('IDO contract not found')
 
-      const [
-        [raisingAmountPool, offeringAmountPool, capPerUserInLP, hasTax, flatTaxRate, totalAmountPool, sumTaxesOverflow],
-        startTimestamp,
-        endTimestamp,
-      ] = await publicClient.multicall({
-        contracts: [
-          {
-            address: idoContract.address,
-            abi: idoContract.abi,
-            functionName: 'viewPoolInformation',
-          },
-          {
-            address: idoContract.address,
-            abi: idoContract.abi,
-            functionName: 'startTimestamp',
-          },
-          {
-            address: idoContract.address,
-            abi: idoContract.abi,
-            functionName: 'endTimestamp',
-          },
-        ],
-        allowFailure: false,
-      })
+      const [pool0Token, pool1Token, _pool0Info, _pool1Info, startTimestamp, endTimestamp] =
+        await publicClient.multicall({
+          contracts: [
+            {
+              address: idoContract.address,
+              abi: idoContract.abi,
+              functionName: 'addresses',
+              args: [0n],
+            },
+            {
+              address: idoContract.address,
+              abi: idoContract.abi,
+              functionName: 'addresses',
+              args: [1n],
+            },
+            {
+              address: idoContract.address,
+              abi: idoContract.abi,
+              functionName: '_poolInformation',
+              args: [0n],
+            },
+            {
+              address: idoContract.address,
+              abi: idoContract.abi,
+              functionName: '_poolInformation',
+              args: [1n],
+            },
+            {
+              address: idoContract.address,
+              abi: idoContract.abi,
+              functionName: 'startTimestamp',
+            },
+            {
+              address: idoContract.address,
+              abi: idoContract.abi,
+              functionName: 'endTimestamp',
+            },
+          ],
+          allowFailure: false,
+        })
+
+      const pool0Info = {
+        pid: 0,
+        poolToken: pool0Token,
+        raisingAmountPool: _pool0Info[0],
+        offeringAmountPool: _pool0Info[1],
+        capPerUserInLP: _pool0Info[2],
+        hasTax: _pool0Info[3],
+        flatTaxRate: _pool0Info[4],
+        totalAmountPool: _pool0Info[5],
+        sumTaxesOverflow: _pool0Info[6],
+      }
+
+      const pool1Info = {
+        pid: 1,
+        poolToken: pool1Token,
+        raisingAmountPool: _pool1Info[0],
+        offeringAmountPool: _pool1Info[1],
+        capPerUserInLP: _pool1Info[2],
+        hasTax: _pool1Info[3],
+        flatTaxRate: _pool1Info[4],
+        totalAmountPool: _pool1Info[5],
+        sumTaxesOverflow: _pool1Info[6],
+      }
 
       return {
-        raisingAmountPool,
-        offeringAmountPool,
-        capPerUserInLP,
-        hasTax,
-        flatTaxRate,
-        totalAmountPool,
-        sumTaxesOverflow,
+        pool0Info,
+        pool1Info,
         startTimestamp: Number(startTimestamp),
         endTimestamp: Number(endTimestamp),
       }
