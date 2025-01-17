@@ -28,6 +28,7 @@ import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import dayjs from 'dayjs'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import useTheme from 'hooks/useTheme'
 import { useCallback, useMemo, useState } from 'react'
@@ -117,6 +118,7 @@ export const IdoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicD
 export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { theme, isDark } = useTheme()
+  console.log('idoPublicData???', idoPublicData)
   return (
     <Card background={isDark ? '#18171A' : theme.colors.background} mb="16px">
       <CardBody>
@@ -136,13 +138,24 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
           <FlexGap justifyContent="space-between">
             <Text color="textSubtle">{t('Project Duration')}</Text>
             <Text>
-              {getTimePeriods(idoPublicData.duration).days} {t('days')}
+              {idoPublicData.status !== 'finished' ? (
+                <>
+                  {getTimePeriods(idoPublicData.duration).days} {t('days')}
+                </>
+              ) : (
+                <>
+                  {dayjs.unix(idoPublicData.startTime).format('DD-MM-YYYY')} {t('to')}{' '}
+                  {dayjs.unix(idoPublicData.endTime).format('DD-MM-YYYY')}
+                </>
+              )}
             </Text>
           </FlexGap>
         </FlexGap>
-        <Text color="textSubtle" mt="16px">
-          {t('You can subscribe to the sale by depositing BNB and CAKE half in ratio.')}
-        </Text>
+        {idoPublicData.status !== 'finished' && (
+          <Text color="textSubtle" mt="16px">
+            {t('You can subscribe to the sale by depositing BNB and CAKE half in ratio.')}
+          </Text>
+        )}
       </CardBody>
     </Card>
   )
