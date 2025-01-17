@@ -407,7 +407,10 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   disabled={value === '' || !depositAmount || isUserInsufficientBalance}
                   width="100%"
                   onClick={() => {
-                    if (depositAmount) deposit(0, depositAmount)
+                    if (depositAmount)
+                      deposit(0, depositAmount, () => {
+                        onDismiss()
+                      })
                   }}
                 >
                   {t('Confirm Deposit')}

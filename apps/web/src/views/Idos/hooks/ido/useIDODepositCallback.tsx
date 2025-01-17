@@ -10,6 +10,7 @@ import { isAddressEqual } from 'utils'
 import { isUserRejected } from 'utils/sentry'
 import { zeroAddress } from 'viem'
 import { useIDOPoolInfo } from './useIDOPoolInfo'
+import { useIDOUserInfo } from './useIDOUserInfo'
 
 export const useIDODepositCallback = () => {
   const idoContract = useIDOContract()
@@ -18,9 +19,10 @@ export const useIDODepositCallback = () => {
   const { toastSuccess, toastWarning } = useToast()
   const { data: poolInfo } = useIDOPoolInfo()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError({ throwUserRejectError: true })
+  const { refetch } = useIDOUserInfo()
 
   const deposit = useCallback(
-    async (pid: number, amount: CurrencyAmount<Currency>) => {
+    async (pid: number, amount: CurrencyAmount<Currency>, onFinish?: () => void) => {
       if (!account || !idoContract || (!pid && pid !== 0)) return
 
       const depositAddress = amount.currency.isNative ? zeroAddress : amount.currency.address
@@ -53,9 +55,12 @@ export const useIDODepositCallback = () => {
             }),
           )
         }
+      } finally {
+        onFinish?.()
+        refetch()
       }
     },
-    [account, idoContract, poolInfo, fetchWithCatchTxError, toastSuccess, t, toastWarning],
+    [account, idoContract, poolInfo, fetchWithCatchTxError, toastSuccess, t, toastWarning, refetch],
   )
 
   return {
