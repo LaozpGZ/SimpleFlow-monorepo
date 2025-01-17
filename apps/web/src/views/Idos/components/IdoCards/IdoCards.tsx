@@ -26,6 +26,7 @@ import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
+import useTheme from 'hooks/useTheme'
 import { useCallback, useMemo, useState } from 'react'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { styled } from 'styled-components'
@@ -69,7 +70,7 @@ export const Divider = styled.div`
   width: 100%;
   height: 1px;
   background-color: ${({ theme }) => theme.colors.cardBorder};
-  margin: 8px 0 16px;
+  margin: 8px 0 0 0;
 `
 
 export const IDoCurrentCard = ({
@@ -112,19 +113,19 @@ export const IdoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicD
 
 export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
+  const { theme, isDark } = useTheme()
   return (
-    <Card background="#FAF9FA" mb="16px">
+    <Card background={isDark ? '#18171A' : theme.colors.background} mb="16px">
       <CardBody>
         <FlexGap gap="8px">
           {/* @ts-ignore */}
           <CurrencyLogo size="40px" currency={idoPublicData?.offeringCurrency} />
           <FlexGap flexDirection="column">
-            <Text fontSize="12px" bold color="secondary" lineHeight="18px">
+            <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
               {t('Total Sale')}
             </Text>
             <Text bold fontSize="20px" lineHeight="30px">
-              {idoPublicData.saleAmount?.toSignificant(6)}
-              {idoPublicData.offeringCurrency?.symbol}
+              {idoPublicData.saleAmount?.toSignificant(6)} {idoPublicData.offeringCurrency?.symbol}
             </Text>
           </FlexGap>
         </FlexGap>
@@ -148,9 +149,9 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
-
+  const { theme, isDark } = useTheme()
   return (
-    <Card background="#FAF9FA">
+    <Card background={isDark ? '#18171A' : theme.colors.background}>
       <CardBody>
         <FlexGap flexDirection="column" gap="8px">
           {idoPublicData.status === 'finished' ? (
@@ -159,7 +160,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
             <StakedDisplay idoPublicData={idoPublicData} />
           ) : (
             <FlexGap flexDirection="column" gap="8px">
-              <Text fontSize="12px" bold color="secondary" lineHeight="18px">
+              <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
                 {idoPublicData.stakeCurrency?.symbol} {t('Pool')}
               </Text>
               <FlexGap gap="8px">
@@ -174,7 +175,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
             </FlexGap>
           )}
           {userHasStaked && <Divider />}
-          <FlexGap justifyContent="space-between">
+          <FlexGap justifyContent="space-between" mt="8px">
             <Text color="textSubtle">{t('Sale Price per TOKEN')}</Text>
             <Text>
               {idoPublicData.pricePerToken?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
@@ -186,7 +187,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
               {idoPublicData.raiseAmount?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
             </Text>
           </FlexGap>
-          {idoPublicData.status === 'live' && (
+          {(idoPublicData.status === 'live' || idoPublicData.status === 'finished') && (
             <>
               <FlexGap justifyContent="space-between">
                 <Text color="textSubtle">{t('Total committed')}</Text>

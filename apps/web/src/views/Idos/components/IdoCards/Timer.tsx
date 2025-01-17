@@ -2,6 +2,7 @@ import { IfoStatus } from '@pancakeswap/ifos'
 import { useTranslation } from '@pancakeswap/localization'
 import { Flex, Heading, PocketWatchIcon, Skeleton, Text, TimerIcon } from '@pancakeswap/uikit'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
+import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 
 interface Props {
@@ -26,12 +27,8 @@ const FlexGap = styled(Flex)<{ gap: string }>`
 
 const USE_BLOCK_TIMESTAMP_UNTIL = 3
 
-export const SoonTimer: React.FC<React.PropsWithChildren<Props>> = ({
-  startTime,
-  ifoStatus,
-  dark,
-  plannedStartTime,
-}) => {
+export const SoonTimer: React.FC<React.PropsWithChildren<Props>> = ({ startTime, ifoStatus, plannedStartTime }) => {
+  const { theme } = useTheme()
   const { t } = useTranslation()
 
   const now = Math.floor(Date.now() / 1000)
@@ -43,41 +40,34 @@ export const SoonTimer: React.FC<React.PropsWithChildren<Props>> = ({
   } else {
     timeUntil = getTimePeriods(startTime - now)
   }
-  const textColor = dark ? '#EFF3F4' : '#674F9C'
+  const textColor = theme.colors.secondary
 
   const countdownDisplay =
     ifoStatus !== 'idle' ? (
       <>
         <FlexGap gap="8px" alignItems="center">
-          <Heading as="h3" scale="lg" color={textColor}>
-            {t('Starts in')}
-          </Heading>
+          <Text fontSize="16px" color={textColor}>
+            {t('Starts in')}:
+          </Text>
           <FlexGap gap="4px" alignItems="baseline">
             {timeUntil.days ? (
-              <>
-                <Heading scale="lg" color={textColor}>
-                  {timeUntil.days}
-                </Heading>
-                <Text color={textColor}>{t('d')}</Text>
-              </>
+              <Text fontSize="20px" bold color={textColor}>
+                {timeUntil.days}
+                {t('d')} :
+              </Text>
             ) : null}
             {timeUntil.days || timeUntil.hours ? (
-              <>
-                <Heading color={textColor} scale="lg">
-                  {timeUntil.hours}
-                </Heading>
-                <Text color={textColor}>{t('h')}</Text>
-              </>
+              <Text fontSize="20px" bold color={textColor}>
+                {timeUntil.hours}
+                {t('h')} :
+              </Text>
             ) : null}
-            <>
-              <Heading color={textColor} scale="lg">
-                {!timeUntil.days && !timeUntil.hours && timeUntil.minutes === 0 ? '< 1' : timeUntil.minutes}
-              </Heading>
-              <Text color={textColor}>{t('m')}</Text>
-            </>
+            <Text fontSize="20px" bold color={textColor}>
+              {!timeUntil.days && !timeUntil.hours && timeUntil.minutes === 0 ? '< 1' : timeUntil.minutes}
+              {t('m')}
+            </Text>
           </FlexGap>
         </FlexGap>
-        <TimerIcon ml="4px" color={textColor} />
       </>
     ) : null
 

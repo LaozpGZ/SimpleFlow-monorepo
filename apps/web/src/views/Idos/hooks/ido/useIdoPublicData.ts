@@ -62,7 +62,7 @@ export const useIdoPublicData = (chainId: ChainId): IDOPublicData => {
     isInitialized: true,
     startTime,
     endTime,
-    status,
+    status: 'coming_soon',
     currencyPriceInUSD,
     poolInfo,
     plannedStartTime: poolInfo?.startTimestamp ? poolInfo?.startTimestamp - 432000 : 0, // five days before
