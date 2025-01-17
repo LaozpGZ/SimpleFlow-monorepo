@@ -13,14 +13,23 @@ export const useIDOUserInfo = () => {
 
   return useQuery({
     queryKey: ['idoUserInfo', account, chainId],
-    queryFn: async (): Promise<IDOUserInfo> => {
+    queryFn: async (): Promise<[IDOUserInfo, IDOUserInfo]> => {
       if (!account || !idoContract) throw new Error('IDO contract not found')
 
-      const [amountPool, claimedPool] = await idoContract.read.viewUserInfo([account])
-      return {
-        amountPool,
-        claimedPool,
-      }
+      const [amountPools, claimedPools] = await idoContract.read.viewUserInfo([
+        account,
+        [0, 1], // @note: hardcode for now, as we currently only support max 2 pool
+      ])
+      return [
+        {
+          amountPool: amountPools[0],
+          claimedPool: claimedPools[0],
+        },
+        {
+          amountPool: amountPools[1],
+          claimedPool: claimedPools[1],
+        },
+      ]
     },
     enabled: !!account && !!idoContract,
   })
