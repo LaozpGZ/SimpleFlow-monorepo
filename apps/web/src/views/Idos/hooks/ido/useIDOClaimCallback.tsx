@@ -6,6 +6,7 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { isUserRejected } from 'utils/sentry'
+import { useIDOUserInfo } from './useIDOUserInfo'
 
 export const useIDOClaimCallback = () => {
   const idoContract = useIDOContract()
@@ -13,6 +14,7 @@ export const useIDOClaimCallback = () => {
   const { account } = useAccountActiveChain()
   const { toastSuccess, toastWarning } = useToast()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError({ throwUserRejectError: true })
+  const { refetch } = useIDOUserInfo()
 
   const claim = useCallback(
     async (pid: number, onFinish?: () => void) => {
@@ -32,10 +34,11 @@ export const useIDOClaimCallback = () => {
           toastWarning(t('You canceled claim'))
         }
       } finally {
+        refetch()
         onFinish?.()
       }
     },
-    [account, idoContract, fetchWithCatchTxError, toastSuccess, t, toastWarning],
+    [account, idoContract, fetchWithCatchTxError, toastSuccess, t, toastWarning, refetch],
   )
 
   return { claim, isPending }
