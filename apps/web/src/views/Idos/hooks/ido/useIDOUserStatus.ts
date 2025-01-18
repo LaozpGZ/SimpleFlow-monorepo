@@ -51,10 +51,10 @@ export const useIDOUserStatus = (): [IDOUserStatus, IDOUserStatus] => {
   const claimableAmount = useMemo(() => {
     if (!offeringCurrency) return [undefined, undefined]
     return [
-      CurrencyAmount.fromRawAmount(offeringCurrency, offeringAndRefundingAmounts?.[0].userOfferingAmount ?? 0n),
-      CurrencyAmount.fromRawAmount(offeringCurrency, offeringAndRefundingAmounts?.[1].userOfferingAmount ?? 0n),
+      CurrencyAmount.fromRawAmount(offeringCurrency, userInfo?.[0].amountPool ?? 0n),
+      CurrencyAmount.fromRawAmount(offeringCurrency, userInfo?.[1].amountPool ?? 0n),
     ]
-  }, [offeringCurrency, offeringAndRefundingAmounts])
+  }, [offeringCurrency, userInfo])
 
   return [
     {

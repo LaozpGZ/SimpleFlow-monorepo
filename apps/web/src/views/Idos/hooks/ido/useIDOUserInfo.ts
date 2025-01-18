@@ -20,6 +20,7 @@ export const useIDOUserInfo = () => {
         account,
         [0, 1], // @note: hardcode for now, as we currently only support max 2 pool
       ])
+
       return [
         {
           amountPool: amountPools[0],
