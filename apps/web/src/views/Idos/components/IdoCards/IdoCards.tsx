@@ -10,7 +10,6 @@ import {
   CardBody,
   CardHeader,
   CheckmarkIcon,
-  domAnimation,
   FlexGap,
   InfoIcon,
   LazyAnimatePresence,
@@ -20,6 +19,7 @@ import {
   ModalV2,
   SwapLoading,
   Text,
+  domAnimation,
   useModalV2,
   useTooltip,
 } from '@pancakeswap/uikit'
@@ -323,7 +323,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
               <SwapUIV2.CurrencyInputPanelSimplify
                 id={`idoStakeCurrency${idoPublicData?.stakeCurrency?.symbol ?? ''}`}
                 disabled={false}
-                error={false}
+                error={idoPublicData.maxStakePerUser && depositAmount?.greaterThan(idoPublicData.maxStakePerUser)}
                 value={value}
                 placeholder="0.00"
                 onUserInput={setValue}
@@ -370,6 +370,9 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   ) : null
                 }
               />
+              {idoPublicData.maxStakePerUser && depositAmount?.greaterThan(idoPublicData.maxStakePerUser) && (
+                <Text color="failure">{t('Max stake per user exceeded')}</Text>
+              )}
               <FlexGap>
                 {maxAmountInput?.greaterThan(0) &&
                   [25, 50, 75, 100].map((percent) => {
@@ -405,7 +408,12 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   )}
                 </Text>
                 <Button
-                  disabled={value === '' || !depositAmount || isUserInsufficientBalance}
+                  disabled={
+                    value === '' ||
+                    !depositAmount ||
+                    isUserInsufficientBalance ||
+                    (idoPublicData.maxStakePerUser && depositAmount.greaterThan(idoPublicData.maxStakePerUser))
+                  }
                   width="100%"
                   isLoading={isLoading}
                   onClick={() => {

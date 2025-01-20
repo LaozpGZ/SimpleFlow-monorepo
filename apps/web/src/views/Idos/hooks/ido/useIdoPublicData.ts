@@ -18,6 +18,7 @@ export type IDOPublicData = {
   plannedStartTime: number
   progress: Percent
   currentStakedAmount?: CurrencyAmount<Currency>
+  maxStakePerUser?: CurrencyAmount<Currency>
   timeProgress: number
   duration: number
   pricePerToken: Price<Currency, Currency> | undefined
@@ -37,7 +38,7 @@ export const useIdoPublicData = (chainId: ChainId): [IDOPublicData, IDOPublicDat
   const { pool0Info, pool1Info, startTimestamp, endTimestamp } = info ?? {}
   const { stakeCurrency0, stakeCurrency1, offeringCurrency } = useIDOCurrencies()
   const [status0, status1] = useIDOStatus()
-  const { pricePerTokens, raiseAmounts, saleAmounts } = useIDOConfig()
+  const { pricePerTokens, raiseAmounts, saleAmounts, maxStakePerUsers } = useIDOConfig()
   const [userStatus0, userStatus1] = useIDOUserStatus()
 
   const {
@@ -66,6 +67,7 @@ export const useIdoPublicData = (chainId: ChainId): [IDOPublicData, IDOPublicDat
       plannedStartTime: startTimestamp ? startTimestamp - 432000 : 0, // five days before
       progress: status0.progress,
       currentStakedAmount: status0.currentStakedAmount,
+      maxStakePerUser: maxStakePerUsers[0],
       timeProgress,
       duration,
       pricePerToken: pricePerTokens[0],
@@ -87,6 +89,7 @@ export const useIdoPublicData = (chainId: ChainId): [IDOPublicData, IDOPublicDat
       plannedStartTime: startTimestamp ? startTimestamp - 432000 : 0, // five days before
       progress: status1.progress,
       currentStakedAmount: status1.currentStakedAmount,
+      maxStakePerUser: maxStakePerUsers[1],
       timeProgress,
       duration,
       pricePerToken: pricePerTokens[1],

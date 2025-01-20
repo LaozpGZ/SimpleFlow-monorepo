@@ -3672,5 +3672,6 @@
   "No Existing Orders": "No Existing Orders",
   "Existing Orders": "Existing Orders",
   "Swap %token% to win a share of": "Swap %token% to win a share of",
-  "with daily prizes and leaderboard rewards!": "with daily prizes and leaderboard rewards!"
+  "with daily prizes and leaderboard rewards!": "with daily prizes and leaderboard rewards!",
+  "Max stake per user exceeded": "Max stake per user exceeded"
 }
