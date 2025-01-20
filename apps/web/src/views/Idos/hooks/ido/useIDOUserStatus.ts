@@ -88,18 +88,21 @@ const useViewUserOfferingAndRefundingAmounts = () => {
     queryKey: ['idoUserOfferingAndRefundingAmounts', idoContract?.address, account],
     queryFn: async (): Promise<[UserOfferingAndRefundingAmounts, UserOfferingAndRefundingAmounts]> => {
       if (!idoContract || !account) throw new Error('IDO contract not found')
-      const [userOfferingAmounts, userRefundingAmounts, userTaxAmounts] =
-        await idoContract.read.viewUserOfferingAndRefundingAmountsForPools([account, [0, 1]])
+      const [
+        [userOfferingAmount0, userRefundingAmount0, userTaxAmount0],
+        [userOfferingAmount1, userRefundingAmount1, userTaxAmount1],
+      ] = await idoContract.read.viewUserOfferingAndRefundingAmountsForPools([account, [0, 1]])
+
       return [
         {
-          userOfferingAmount: userOfferingAmounts[0],
-          userRefundingAmount: userRefundingAmounts[0],
-          userTaxAmount: userTaxAmounts[0],
+          userOfferingAmount: userOfferingAmount0,
+          userRefundingAmount: userRefundingAmount0,
+          userTaxAmount: userTaxAmount0,
         },
         {
-          userOfferingAmount: userOfferingAmounts[1],
-          userRefundingAmount: userRefundingAmounts[1],
-          userTaxAmount: userTaxAmounts[1],
+          userOfferingAmount: userOfferingAmount1,
+          userRefundingAmount: userRefundingAmount1,
+          userTaxAmount: userTaxAmount1,
         },
       ]
     },
