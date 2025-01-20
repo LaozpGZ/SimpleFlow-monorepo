@@ -553,6 +553,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
   const userClaimed = idoPublicData?.userClaimed
 
   const { isDark } = useTheme()
+  const { address: account } = useAccount()
   return (
     <>
       {userHasStaked ? (
@@ -647,9 +648,13 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
           <FlexGap gap="8px" alignItems="center">
             {/* @ts-ignore */}
             <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
-            <Text fontSize="16px" color="textDisabled" bold>
-              {t('You didn’t deposit')} {idoPublicData?.stakeCurrency?.symbol}
-            </Text>
+            {!account ? (
+              <ConnectWalletButton width="100%" />
+            ) : (
+              <Text fontSize="16px" color="textDisabled" bold>
+                {t('You didn’t deposit')} {idoPublicData?.stakeCurrency?.symbol}
+              </Text>
+            )}
           </FlexGap>
         </FlexGap>
       )}
