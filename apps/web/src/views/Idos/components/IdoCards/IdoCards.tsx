@@ -143,7 +143,10 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
             <Text>
               {idoPublicData.status !== 'finished' ? (
                 <>
-                  {getTimePeriods(idoPublicData.duration).days} {t('days')}
+                  {getTimePeriods(idoPublicData.duration).days + getTimePeriods(idoPublicData.duration).days < 1
+                    ? 1
+                    : 0}{' '}
+                  {t('days')}
                 </>
               ) : (
                 <>
@@ -422,7 +425,10 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 <FlexGap justifyContent="space-between">
                   <Text color="textSubtle">{t('Project Duration')}</Text>
                   <Text>
-                    {getTimePeriods(idoPublicData.duration).days} {t('days')}
+                    {getTimePeriods(idoPublicData.duration).days + getTimePeriods(idoPublicData.duration).days < 1
+                      ? 1
+                      : 0}{' '}
+                    {t('days')}
                   </Text>
                 </FlexGap>
                 <FlexGap justifyContent="space-between">
