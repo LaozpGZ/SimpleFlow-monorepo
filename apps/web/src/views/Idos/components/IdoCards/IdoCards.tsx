@@ -67,9 +67,6 @@ const Header = styled(CardHeader)<{ ifoId: string; $isCurrent?: boolean }>`
   background-color: ${({ theme }) => theme.colors.dropdown};
   /* background-image: ${({ ifoId }) => `url('${getBannerUrl(ifoId)}')`}; */
   background-image: url('${getTempBannerUrl()}');
-  ${({ theme }) => theme.mediaQueries.md} {
-    height: 112px;
-  }
 `
 
 export const Divider = styled.div`
