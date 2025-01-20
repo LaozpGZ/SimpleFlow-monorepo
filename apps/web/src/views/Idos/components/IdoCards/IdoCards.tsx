@@ -104,7 +104,7 @@ export const IDoCurrentCard = ({
         />
         <IdoCard idoPublicData={idoPublicData} />
       </Box>
-      <Footer />
+      <Footer tokenSymbol={idoPublicData?.offeringCurrency?.symbol} />
     </Card>
   )
 }
@@ -472,12 +472,15 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
 export const StakedDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const stakedAmount = idoPublicData?.userStakedAmount
+
   const amountInDollar = useStablecoinPriceAmount(
     idoPublicData?.stakeCurrency ?? undefined,
-    stakedAmount !== undefined && Number.isFinite(+stakedAmount) ? +stakedAmount : undefined,
+    stakedAmount !== undefined && Number.isFinite(+stakedAmount.toSignificant(6))
+      ? +stakedAmount.toSignificant(6)
+      : undefined,
     {
       hideIfPriceImpactTooHigh: true,
-      enabled: Boolean(stakedAmount !== undefined && Number.isFinite(+stakedAmount)),
+      enabled: Boolean(stakedAmount !== undefined && Number.isFinite(+stakedAmount.toSignificant(6))),
     },
   )
   return (
