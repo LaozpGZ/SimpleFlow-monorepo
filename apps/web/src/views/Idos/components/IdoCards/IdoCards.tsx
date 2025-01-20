@@ -236,13 +236,15 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
                       {idoPublicData.progress.toFixed(2)} % {idoPublicData.progress.greaterThan(1) && <>🎉</>}
                     </Text>
                   </FlexGap>
-                  <FlexGap gap="3px">
-                    <Text>{t('Oversubscribed')}</Text>
-                    <FlexGap ref={targetRef}>
-                      <InfoIcon width="14px" color="textSubtle" />
-                      {tooltipVisible && tooltip}
+                  {idoPublicData.progress.greaterThan(1) && (
+                    <FlexGap gap="3px">
+                      <Text>{t('Oversubscribed')}</Text>
+                      <FlexGap ref={targetRef}>
+                        <InfoIcon width="14px" color="textSubtle" />
+                        {tooltipVisible && tooltip}
+                      </FlexGap>
                     </FlexGap>
-                  </FlexGap>
+                  )}
                 </FlexGap>
               </FlexGap>
             </>
