@@ -219,7 +219,6 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
                 <Text color="textSubtle">{t('Status')}</Text>
                 <FlexGap gap="3px">
                   <Text>{idoPublicData.progress.toFixed(2)} %</Text>
-                  <InfoIcon width="14px" color="textSubtle" />
                 </FlexGap>
               </FlexGap>
             </>
