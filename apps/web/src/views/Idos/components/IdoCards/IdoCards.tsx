@@ -285,10 +285,16 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   const handlePercentInput = useCallback(
     (percent: number) => {
       if (maxAmountInput) {
-        setValue(getPercentAmount(percent))
+        if (
+          percent === 100 &&
+          idoPublicData?.maxStakePerUser &&
+          maxAmountInput.greaterThan(idoPublicData?.maxStakePerUser)
+        ) {
+          setValue(idoPublicData?.maxStakePerUser?.toSignificant(6))
+        } else setValue(getPercentAmount(percent))
       }
     },
-    [getPercentAmount, maxAmountInput],
+    [getPercentAmount, maxAmountInput, idoPublicData],
   )
 
   const handleMaxInput = useCallback(() => {
