@@ -319,8 +319,8 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
       : undefined
 
   const totalDepositedAmount = idoPublicData?.stakeCurrency
-    ? CurrencyAmount.fromRawAmount(idoPublicData.stakeCurrency, idoPublicData.userStakedAmount?.toExact() ?? 0).add(
-        CurrencyAmount.fromRawAmount(idoPublicData.stakeCurrency, depositAmount?.toExact() ?? 0),
+    ? CurrencyAmount.fromRawAmount(idoPublicData.stakeCurrency, idoPublicData.userStakedAmount?.quotient ?? 0).add(
+        CurrencyAmount.fromRawAmount(idoPublicData.stakeCurrency, depositAmount?.quotient ?? 0),
       )
     : undefined
 
