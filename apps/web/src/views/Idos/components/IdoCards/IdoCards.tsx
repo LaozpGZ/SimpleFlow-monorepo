@@ -318,6 +318,12 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
         )
       : undefined
 
+  const totalDepositedAmount = idoPublicData?.stakeCurrency
+    ? CurrencyAmount.fromRawAmount(idoPublicData.stakeCurrency, idoPublicData.userStakedAmount?.toExact() ?? 0).add(
+        CurrencyAmount.fromRawAmount(idoPublicData.stakeCurrency, depositAmount?.toExact() ?? 0),
+      )
+    : undefined
+
   const isUserInsufficientBalance = useMemo(() => {
     if (depositAmount && inputBalance) {
       return depositAmount.greaterThan(inputBalance)
@@ -411,8 +417,8 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 }
               />
               {idoPublicData.maxStakePerUser &&
-                depositAmount?.greaterThan(idoPublicData.maxStakePerUser) &&
-                !idoPublicData.maxStakePerUser.equalTo(0) && (
+                !idoPublicData.maxStakePerUser.equalTo(0) &&
+                totalDepositedAmount?.greaterThan(idoPublicData.maxStakePerUser) && (
                   <Text color="failure">{t('Max stake per user exceeded')}</Text>
                 )}
               <FlexGap>
@@ -452,6 +458,14 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                     {idoPublicData.maxStakePerUser?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
                   </Text>
                 </FlexGap>
+                {idoPublicData.userStakedAmount?.greaterThan(0) ? (
+                  <FlexGap justifyContent="space-between">
+                    <Text color="textSubtle">{t('Subscribed')}</Text>
+                    <Text>
+                      {idoPublicData.userStakedAmount?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
+                    </Text>
+                  </FlexGap>
+                ) : null}
                 <Text color="textSubtle" fontSize="12px">
                   {t(
                     'Some Rules/ T&C context or information that user need to know before locking BNB/ participating in IDO, show here.',
@@ -463,8 +477,8 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                     !depositAmount ||
                     isUserInsufficientBalance ||
                     (idoPublicData.maxStakePerUser &&
-                      depositAmount.greaterThan(idoPublicData.maxStakePerUser) &&
-                      !idoPublicData.maxStakePerUser.equalTo(0))
+                      !idoPublicData.maxStakePerUser.equalTo(0) &&
+                      totalDepositedAmount?.greaterThan(idoPublicData.maxStakePerUser))
                   }
                   width="100%"
                   isLoading={isLoading}
