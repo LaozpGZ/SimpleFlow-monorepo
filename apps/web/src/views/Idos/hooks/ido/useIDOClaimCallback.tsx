@@ -5,6 +5,7 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
+import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { isUserRejected } from 'utils/sentry'
 import { useIDOUserInfo } from './useIDOUserInfo'
 
@@ -15,6 +16,7 @@ export const useIDOClaimCallback = () => {
   const { toastSuccess, toastWarning } = useToast()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError({ throwUserRejectError: true })
   const { refetch } = useIDOUserInfo()
+  const [, setLatestTxReceipt] = useLatestTxReceipt()
 
   const claim = useCallback(
     async (pid: number, onFinish?: () => void) => {
@@ -27,6 +29,7 @@ export const useIDOClaimCallback = () => {
           }),
         )
         if (receipt?.status) {
+          setLatestTxReceipt(receipt)
           toastSuccess(t('Claim successful'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
         }
       } catch (error) {
@@ -38,7 +41,7 @@ export const useIDOClaimCallback = () => {
         onFinish?.()
       }
     },
-    [account, idoContract, fetchWithCatchTxError, toastSuccess, t, toastWarning, refetch],
+    [account, idoContract, fetchWithCatchTxError, setLatestTxReceipt, toastSuccess, t, toastWarning, refetch],
   )
 
   return { claim, isPending }
