@@ -291,6 +291,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
         if (
           percent === 100 &&
           idoPublicData?.maxStakePerUser &&
+          !idoPublicData.maxStakePerUser.equalTo(0) &&
           maxAmountInput.greaterThan(idoPublicData?.maxStakePerUser)
         ) {
           setValue(idoPublicData?.maxStakePerUser?.toSignificant(6))
@@ -356,7 +357,11 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
               <SwapUIV2.CurrencyInputPanelSimplify
                 id={`idoStakeCurrency${idoPublicData?.stakeCurrency?.symbol ?? ''}`}
                 disabled={false}
-                error={idoPublicData.maxStakePerUser && depositAmount?.greaterThan(idoPublicData.maxStakePerUser)}
+                error={
+                  idoPublicData.maxStakePerUser &&
+                  depositAmount?.greaterThan(idoPublicData.maxStakePerUser) &&
+                  !idoPublicData.maxStakePerUser.equalTo(0)
+                }
                 value={value}
                 placeholder="0.00"
                 onUserInput={setValue}
@@ -405,9 +410,11 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   ) : null
                 }
               />
-              {idoPublicData.maxStakePerUser && depositAmount?.greaterThan(idoPublicData.maxStakePerUser) && (
-                <Text color="failure">{t('Max stake per user exceeded')}</Text>
-              )}
+              {idoPublicData.maxStakePerUser &&
+                depositAmount?.greaterThan(idoPublicData.maxStakePerUser) &&
+                !idoPublicData.maxStakePerUser.equalTo(0) && (
+                  <Text color="failure">{t('Max stake per user exceeded')}</Text>
+                )}
               <FlexGap>
                 {maxAmountInput?.greaterThan(0) &&
                   [25, 50, 75, 100].map((percent) => {
@@ -455,7 +462,9 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                     value === '' ||
                     !depositAmount ||
                     isUserInsufficientBalance ||
-                    (idoPublicData.maxStakePerUser && depositAmount.greaterThan(idoPublicData.maxStakePerUser))
+                    (idoPublicData.maxStakePerUser &&
+                      depositAmount.greaterThan(idoPublicData.maxStakePerUser) &&
+                      !idoPublicData.maxStakePerUser.equalTo(0))
                   }
                   width="100%"
                   isLoading={isLoading}
