@@ -44,6 +44,7 @@ import { useIDOClaimCallback } from '../../hooks/ido/useIDOClaimCallback'
 import { useIDODepositCallback } from '../../hooks/ido/useIDODepositCallback'
 import { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
 import { Footer } from '../Footer'
+import { PreSaleEligibleCard, PreSaleInfoCard } from './PreSaleInfoCard'
 
 export const StyledCardBody = styled(CardBody)`
   padding: 24px 16px;
@@ -197,12 +198,12 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
                 <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
                 {account ? (
                   idoPublicData?.status === 'coming_soon' ? (
-                    <>to be new design</>
+                    <PreSaleEligibleCard />
                   ) : (
                     <IdoDepositButton type="deposit" idoPublicData={idoPublicData} />
                   )
                 ) : idoPublicData?.status === 'coming_soon' ? (
-                  <>to be new design</>
+                  <PreSaleInfoCard />
                 ) : (
                   <ConnectWalletButton width="100%" />
                 )}
