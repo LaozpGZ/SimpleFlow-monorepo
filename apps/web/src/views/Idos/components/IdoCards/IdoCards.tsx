@@ -174,9 +174,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
   const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
   const { theme, isDark } = useTheme()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    t(
-      'When the sale is oversubscribed, deposit that were not used is being refunded. You may withdraw together when claiming.',
-    ),
+    t('This sale has been oversubscribed. You will get partial refund of the deposit.'),
     {
       placement: 'top',
     },
@@ -545,7 +543,9 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
   const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    t('This sale has been oversubscribed. You will get partial refund of the deposit.'),
+    t(
+      'When the sale is oversubscribed, deposit that were not used is being refunded. You may withdraw together when claiming.',
+    ),
     {
       placement: 'top',
     },
