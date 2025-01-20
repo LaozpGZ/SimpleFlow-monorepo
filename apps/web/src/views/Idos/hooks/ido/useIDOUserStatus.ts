@@ -21,10 +21,10 @@ export const useIDOUserStatus = (): [IDOUserStatus, IDOUserStatus] => {
   const { stakeCurrency0, stakeCurrency1, offeringCurrency } = useIDOCurrencies()
 
   const stakedAmounts = useMemo(() => {
-    if (!stakeCurrency0 || !stakeCurrency1 || !userInfo) return [undefined, undefined]
+    if (!stakeCurrency0 || !userInfo) return [undefined, undefined]
     return [
       CurrencyAmount.fromRawAmount(stakeCurrency0, userInfo[0].amountPool),
-      CurrencyAmount.fromRawAmount(stakeCurrency1, userInfo[1].amountPool),
+      stakeCurrency1 ? CurrencyAmount.fromRawAmount(stakeCurrency1, userInfo[1].amountPool) : undefined,
     ]
   }, [stakeCurrency0, stakeCurrency1, userInfo])
 
@@ -34,18 +34,22 @@ export const useIDOUserStatus = (): [IDOUserStatus, IDOUserStatus] => {
   }, [userInfo])
 
   const stakeTax = useMemo(() => {
-    if (!stakeCurrency0 || !stakeCurrency1) return [undefined, undefined]
+    if (!stakeCurrency0) return [undefined, undefined]
     return [
       CurrencyAmount.fromRawAmount(stakeCurrency0, offeringAndRefundingAmounts?.[0].userTaxAmount ?? 0n),
-      CurrencyAmount.fromRawAmount(stakeCurrency1, offeringAndRefundingAmounts?.[1].userTaxAmount ?? 0n),
+      stakeCurrency1
+        ? CurrencyAmount.fromRawAmount(stakeCurrency1, offeringAndRefundingAmounts?.[1].userTaxAmount ?? 0n)
+        : undefined,
     ]
   }, [stakeCurrency0, stakeCurrency1, offeringAndRefundingAmounts])
 
   const stakeRefund = useMemo(() => {
-    if (!stakeCurrency0 || !stakeCurrency1) return [undefined, undefined]
+    if (!stakeCurrency0) return [undefined, undefined]
     return [
       CurrencyAmount.fromRawAmount(stakeCurrency0, offeringAndRefundingAmounts?.[0].userRefundingAmount ?? 0n),
-      CurrencyAmount.fromRawAmount(stakeCurrency1, offeringAndRefundingAmounts?.[1].userRefundingAmount ?? 0n),
+      stakeCurrency1
+        ? CurrencyAmount.fromRawAmount(stakeCurrency1, offeringAndRefundingAmounts?.[1].userRefundingAmount ?? 0n)
+        : undefined,
     ]
   }, [stakeCurrency0, stakeCurrency1, offeringAndRefundingAmounts])
 
