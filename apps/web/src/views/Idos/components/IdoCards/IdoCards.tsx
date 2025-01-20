@@ -563,7 +563,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
                 {/* @ts-ignore */}
                 <CurrencyLogo size="24px" currency={idoPublicData?.stakeCurrency} />
                 <Text fontSize="12px" bold color="secondary" lineHeight="18px">
-                  {idoPublicData.stakeCurrency?.symbol} {t('Pool')} {t('Deposited')}
+                  {idoPublicData.stakeCurrency?.symbol} {t('Pool')}
                 </Text>
               </FlexGap>
               <FlexGap gap="8px" flexDirection="column" mt="8px">
