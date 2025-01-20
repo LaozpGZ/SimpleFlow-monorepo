@@ -196,7 +196,13 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
                 {/* @ts-ignore */}
                 <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
                 {account ? (
-                  <IdoDepositButton type="deposit" idoPublicData={idoPublicData} />
+                  idoPublicData?.status === 'coming_soon' ? (
+                    <>to be new design</>
+                  ) : (
+                    <IdoDepositButton type="deposit" idoPublicData={idoPublicData} />
+                  )
+                ) : idoPublicData?.status === 'coming_soon' ? (
+                  <>to be new design</>
                 ) : (
                   <ConnectWalletButton width="100%" />
                 )}
@@ -569,7 +575,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
               <FlexGap gap="8px" alignItems="center">
                 {/* @ts-ignore */}
                 <CurrencyLogo size="24px" currency={idoPublicData?.stakeCurrency} />
-                <Text fontSize="12px" bold color="secondary" lineHeight="18px">
+                <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
                   {idoPublicData.stakeCurrency?.symbol} {t('Pool')}
                 </Text>
               </FlexGap>
