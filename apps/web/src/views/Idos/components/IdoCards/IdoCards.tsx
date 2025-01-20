@@ -196,7 +196,9 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
           )}
           {userHasStaked && <Divider />}
           <FlexGap justifyContent="space-between" mt="8px">
-            <Text color="textSubtle">{t('Sale Price per TOKEN')}</Text>
+            <Text color="textSubtle">
+              {t('Sale Price per')} {idoPublicData?.offeringCurrency?.symbol ?? ''}
+            </Text>
             <Text>
               {idoPublicData.pricePerToken?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
             </Text>
