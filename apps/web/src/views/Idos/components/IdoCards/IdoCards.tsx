@@ -170,6 +170,14 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
   const { address: account } = useAccount()
   const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
   const { theme, isDark } = useTheme()
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(
+    t(
+      'When the sale is oversubscribed, deposit that were not used is being refunded. You may withdraw together when claiming.',
+    ),
+    {
+      placement: 'top',
+    },
+  )
   return (
     <Card background={isDark ? '#18171A' : theme.colors.background}>
       <CardBody>
@@ -219,8 +227,19 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
               </FlexGap>
               <FlexGap justifyContent="space-between">
                 <Text color="textSubtle">{t('Status')}</Text>
-                <FlexGap gap="3px">
-                  <Text>{idoPublicData.progress.toFixed(2)} %</Text>
+                <FlexGap flexDirection="column" alignItems="flex-end">
+                  <FlexGap gap="3px">
+                    <Text>
+                      {idoPublicData.progress.toFixed(2)} % {idoPublicData.progress.greaterThan(1) && <>🎉</>}
+                    </Text>
+                  </FlexGap>
+                  <FlexGap gap="3px">
+                    <Text>{t('Oversubscribed')}</Text>
+                    <FlexGap ref={targetRef}>
+                      <InfoIcon width="14px" color="textSubtle" />
+                      {tooltipVisible && tooltip}
+                    </FlexGap>
+                  </FlexGap>
                 </FlexGap>
               </FlexGap>
             </>
@@ -515,9 +534,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
   const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
-    t(
-      'When the sale is oversubscribed, deposit that were not used is being refunded. You may withdraw together when claiming.',
-    ),
+    t('This sale has been oversubscribed. You will get partial refund of the deposit.'),
     {
       placement: 'top',
     },
@@ -586,10 +603,10 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
             <FlexGap justifyContent="space-between">
               <FlexGap gap="3px" alignItems="center">
                 <Text color="textSubtle">{t('Refund')}</Text>
-                <Box ref={targetRef}>
+                <FlexGap ref={targetRef}>
                   <InfoIcon width="14px" color="textSubtle" />
                   {tooltipVisible && tooltip}
-                </Box>
+                </FlexGap>
               </FlexGap>
               <FlexGap gap="8px" flexDirection="column">
                 <Text>
