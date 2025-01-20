@@ -6,6 +6,7 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
+import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { isAddressEqual } from 'utils'
 import { isUserRejected } from 'utils/sentry'
 import { zeroAddress } from 'viem'
@@ -17,6 +18,7 @@ export const useIDODepositCallback = () => {
   const { t } = useTranslation()
   const { account } = useAccountActiveChain()
   const { toastSuccess, toastWarning } = useToast()
+  const [, setLatestTxReceipt] = useLatestTxReceipt()
   const { data: poolInfo } = useIDOPoolInfo()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError({ throwUserRejectError: true })
   const { refetch } = useIDOUserInfo()
@@ -43,6 +45,7 @@ export const useIDODepositCallback = () => {
           }),
         )
         if (receipt?.status) {
+          setLatestTxReceipt(receipt)
           toastSuccess(t('Deposit successful'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
         }
       } catch (error) {
@@ -59,7 +62,18 @@ export const useIDODepositCallback = () => {
         refetch()
       }
     },
-    [account, idoContract, poolInfo, fetchWithCatchTxError, toastSuccess, t, toastWarning, refetch],
+    [
+      account,
+      idoContract,
+      poolInfo?.pool0Info?.poolToken,
+      poolInfo?.pool1Info?.poolToken,
+      fetchWithCatchTxError,
+      setLatestTxReceipt,
+      toastSuccess,
+      t,
+      toastWarning,
+      refetch,
+    ],
   )
 
   return {

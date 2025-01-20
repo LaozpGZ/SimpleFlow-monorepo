@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useIDOContract } from 'hooks/useContract'
+import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { getViemClients } from 'utils/viem'
 import type { Address } from 'viem'
 
@@ -58,9 +59,10 @@ export type IDOPoolInfo = {
 export const useIDOPoolInfo = () => {
   const { chainId } = useActiveChainId()
   const idoContract = useIDOContract()
+  const latestTxReceipt = useLatestTxReceipt()
 
   return useQuery({
-    queryKey: ['idoPoolInfo', chainId],
+    queryKey: ['idoPoolInfo', chainId, latestTxReceipt],
     queryFn: async (): Promise<IDOPoolInfo> => {
       const publicClient = getViemClients({ chainId })
       if (!idoContract || !publicClient) throw new Error('IDO contract not found')

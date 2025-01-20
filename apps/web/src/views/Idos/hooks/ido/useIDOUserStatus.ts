@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useIDOContract } from 'hooks/useContract'
 import { useMemo } from 'react'
+import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { useIDOCurrencies } from './useIDOCurrencies'
 import { useIDOUserInfo } from './useIDOUserInfo'
 
@@ -83,9 +84,10 @@ export type UserOfferingAndRefundingAmounts = {
 const useViewUserOfferingAndRefundingAmounts = () => {
   const idoContract = useIDOContract()
   const { account } = useAccountActiveChain()
+  const latestTxReceipt = useLatestTxReceipt()
 
   return useQuery({
-    queryKey: ['idoUserOfferingAndRefundingAmounts', idoContract?.address, account],
+    queryKey: ['idoUserOfferingAndRefundingAmounts', idoContract?.address, account, latestTxReceipt],
     queryFn: async (): Promise<[UserOfferingAndRefundingAmounts, UserOfferingAndRefundingAmounts]> => {
       if (!idoContract || !account) throw new Error('IDO contract not found')
       const [

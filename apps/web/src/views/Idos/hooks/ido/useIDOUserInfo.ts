@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useIDOContract } from 'hooks/useContract'
+import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 
 export type IDOUserInfo = {
   amountPool: bigint
@@ -10,9 +11,10 @@ export type IDOUserInfo = {
 export const useIDOUserInfo = () => {
   const { chainId, account } = useAccountActiveChain()
   const idoContract = useIDOContract()
+  const latestTxReceipt = useLatestTxReceipt()
 
   return useQuery({
-    queryKey: ['idoUserInfo', account, chainId],
+    queryKey: ['idoUserInfo', account, chainId, latestTxReceipt],
     queryFn: async (): Promise<[IDOUserInfo, IDOUserInfo]> => {
       if (!account || !idoContract) throw new Error('IDO contract not found')
 
