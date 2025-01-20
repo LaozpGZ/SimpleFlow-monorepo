@@ -484,6 +484,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   disabled={
                     value === '' ||
                     !depositAmount ||
+                    depositAmount.equalTo(0) ||
                     isUserInsufficientBalance ||
                     (idoPublicData.maxStakePerUser &&
                       !idoPublicData.maxStakePerUser.equalTo(0) &&
