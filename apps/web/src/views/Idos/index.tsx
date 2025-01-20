@@ -7,12 +7,19 @@ export const Wrapper = styled.div`
   padding: 16px;
 `
 
+const WidthWrapper = styled.div`
+  max-width: 450px;
+  margin: 0 auto;
+`
+
 export const IdoPageLayout = ({ children }) => {
   return (
     <IfoProvider>
       <Wrapper>
-        <Hero />
-        {children}
+        <WidthWrapper>
+          <Hero />
+          {children}
+        </WidthWrapper>
       </Wrapper>
     </IfoProvider>
   )

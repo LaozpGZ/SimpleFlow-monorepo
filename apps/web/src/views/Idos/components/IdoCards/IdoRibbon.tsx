@@ -26,10 +26,6 @@ const BigCurve = styled(Box)<{ $status?: PublicIfoData['status']; $dark?: boolea
   transform: translateX(-50%);
   z-index: 1;
 
-  ${({ theme }) => theme.mediaQueries.md} {
-    border-radius: 50%;
-  }
-
   ${({ $status, $dark, theme }) => {
     switch ($status) {
       case 'coming_soon':
@@ -133,7 +129,7 @@ export const IdoRibbon = ({
         justifyContent="center"
         alignItems="center"
         flexDirection="column"
-        minHeight={['48px', '48px', '48px', '75px']}
+        minHeight={['48px', '48px', '48px', '48px']}
         position="relative"
         overflow="hidden"
         zIndex={1}
