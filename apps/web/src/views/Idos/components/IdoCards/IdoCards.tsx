@@ -156,7 +156,8 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
         </FlexGap>
         {idoPublicData.status !== 'finished' && (
           <Text color="textSubtle" mt="16px">
-            {t('You can subscribe to the sale by depositing BNB and CAKE half in ratio.')}
+            {/* {t('You can subscribe to the sale by depositing BNB and CAKE half in ratio.')} */}
+            {t('You can subscribe to the sale by depositing BNB.')}
           </Text>
         )}
       </CardBody>
