@@ -324,6 +324,12 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
       )
     : undefined
 
+  const maxDepositExceeded =
+    idoPublicData.maxStakePerUser &&
+    !idoPublicData.maxStakePerUser.equalTo(0) &&
+    (totalDepositedAmount?.greaterThan(idoPublicData.maxStakePerUser) ||
+      totalDepositedAmount?.equalTo(idoPublicData.maxStakePerUser))
+
   const isUserInsufficientBalance = useMemo(() => {
     if (depositAmount && inputBalance) {
       return depositAmount.greaterThan(inputBalance)
@@ -346,6 +352,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
       <Button
         width={type === 'deposit' ? '100%' : undefined}
         onClick={onOpen}
+        disabled={maxDepositExceeded}
         variant={type === 'add' ? 'secondary' : undefined}
       >
         {type === 'deposit' ? (
@@ -353,7 +360,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
             {t('Deposit')} {idoPublicData?.stakeCurrency?.symbol ?? ''}
           </>
         ) : (
-          <AddIcon color="primary" />
+          <AddIcon color={maxDepositExceeded ? 'textDisabled' : 'primary'} />
         )}
       </Button>
       <ModalV2 isOpen={isOpen} title="Deposit" onDismiss={onDismiss} closeOnOverlayClick>
