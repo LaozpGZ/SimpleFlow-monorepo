@@ -501,6 +501,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
     },
   )
   const refundAmount = idoPublicData?.userStakedRefund
+  const hasRefund = refundAmount?.greaterThan(0)
 
   const refundInDollar = useStablecoinPriceAmount(
     idoPublicData?.stakeCurrency ?? undefined,
@@ -581,33 +582,34 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
               {idoPublicData.userStakedAmount?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
             </Text>
           </FlexGap>
-          <FlexGap justifyContent="space-between">
-            <FlexGap gap="3px" alignItems="center">
-              <Text color="textSubtle">{t('Refund')}</Text>
-              <Box ref={targetRef}>
-                <InfoIcon width="14px" color="textSubtle" />
-                {tooltipVisible && tooltip}
-              </Box>
-            </FlexGap>
-
-            <FlexGap gap="8px" flexDirection="column">
-              <Text>
-                {idoPublicData.userStakedRefund?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
-              </Text>
-              <FlexGap>
-                {Number.isFinite(refundInDollar) ? (
-                  <>
-                    <Text fontSize="14px" color="textSubtle" ellipsis>
-                      {`~${refundInDollar && formatDollarAmount(refundInDollar)}`}
-                    </Text>
-                    <Text ml="4px" fontSize="14px" color="textSubtle">
-                      USD
-                    </Text>
-                  </>
-                ) : null}
+          {hasRefund && (
+            <FlexGap justifyContent="space-between">
+              <FlexGap gap="3px" alignItems="center">
+                <Text color="textSubtle">{t('Refund')}</Text>
+                <Box ref={targetRef}>
+                  <InfoIcon width="14px" color="textSubtle" />
+                  {tooltipVisible && tooltip}
+                </Box>
+              </FlexGap>
+              <FlexGap gap="8px" flexDirection="column">
+                <Text>
+                  {idoPublicData.userStakedRefund?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
+                </Text>
+                <FlexGap>
+                  {Number.isFinite(refundInDollar) ? (
+                    <>
+                      <Text fontSize="14px" color="textSubtle" ellipsis>
+                        {`~${refundInDollar && formatDollarAmount(refundInDollar)}`}
+                      </Text>
+                      <Text ml="4px" fontSize="14px" color="textSubtle">
+                        USD
+                      </Text>
+                    </>
+                  ) : null}
+                </FlexGap>
               </FlexGap>
             </FlexGap>
-          </FlexGap>
+          )}
         </FlexGap>
       ) : (
         <FlexGap flexDirection="column" gap="8px">
