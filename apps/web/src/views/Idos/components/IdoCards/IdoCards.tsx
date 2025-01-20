@@ -329,7 +329,9 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 onUserInput={setValue}
                 top={
                   <FlexGap justifyContent="space-between" alignItems="center" width="100%" position="relative">
-                    <Text bold>{t('Deposit')}</Text>
+                    <Text fontSize="12px" bold>
+                      {t('Deposit')}
+                    </Text>
                     <LazyAnimatePresence mode="wait" features={domAnimation}>
                       {account ? (
                         <SwapUIV2.WalletAssetDisplay
@@ -400,6 +402,12 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   <Text color="textSubtle">{t('Project Duration')}</Text>
                   <Text>
                     {getTimePeriods(idoPublicData.duration).days} {t('days')}
+                  </Text>
+                </FlexGap>
+                <FlexGap justifyContent="space-between">
+                  <Text color="textSubtle">{t('Max. stake per user')}</Text>
+                  <Text>
+                    {idoPublicData.maxStakePerUser?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
                   </Text>
                 </FlexGap>
                 <Text color="textSubtle" fontSize="12px">
