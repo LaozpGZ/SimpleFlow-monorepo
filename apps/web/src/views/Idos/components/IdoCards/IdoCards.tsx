@@ -452,12 +452,14 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                     {t('days')}
                   </Text>
                 </FlexGap>
-                <FlexGap justifyContent="space-between">
-                  <Text color="textSubtle">{t('Max. stake per user')}</Text>
-                  <Text>
-                    {idoPublicData.maxStakePerUser?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
-                  </Text>
-                </FlexGap>
+                {idoPublicData.maxStakePerUser && !idoPublicData.maxStakePerUser.equalTo(0) && (
+                  <FlexGap justifyContent="space-between">
+                    <Text color="textSubtle">{t('Max. stake per user')}</Text>
+                    <Text>
+                      {idoPublicData.maxStakePerUser?.toSignificant(6)} {idoPublicData.stakeCurrency?.symbol ?? ''}
+                    </Text>
+                  </FlexGap>
+                )}
                 {idoPublicData.userStakedAmount?.greaterThan(0) ? (
                   <FlexGap justifyContent="space-between">
                     <Text color="textSubtle">{t('Subscribed')}</Text>
