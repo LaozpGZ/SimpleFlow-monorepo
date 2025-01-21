@@ -26,7 +26,7 @@ import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useAccount } from 'wagmi'
@@ -155,6 +155,14 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
     },
   )
 
+  const inputRef = useRef<HTMLDivElement>(null)
+
+  const handleInputFocus = useCallback(() => {
+    if (inputRef.current) {
+      inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  }, [])
+
   return (
     <>
       <Button
@@ -174,7 +182,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
       <ModalV2 isOpen={isOpen} title="Deposit" onDismiss={onDismiss} closeOnOverlayClick>
         <ModalContainer>
           <ModalBody p="16px" pt="30px">
-            <FlexGap flexDirection="column" gap="8px">
+            <FlexGap flexDirection="column" gap="8px" ref={inputRef}>
               <SwapUIV2.CurrencyInputPanelSimplify
                 id={`idoStakeCurrency${idoPublicData?.stakeCurrency?.symbol ?? ''}`}
                 disabled={false}
@@ -185,6 +193,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 }
                 value={value}
                 placeholder="0.00"
+                onInputFocus={handleInputFocus}
                 onUserInput={setValue}
                 top={
                   <FlexGap justifyContent="space-between" alignItems="center" width="100%" position="relative">
