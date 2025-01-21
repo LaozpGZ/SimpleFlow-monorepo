@@ -15,7 +15,7 @@ import {
 } from '@pancakeswap/uikit'
 import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import ConnectWalletButton from 'components/ConnectWalletButton'
+import ConnectW3WButton from 'components/ConnectW3WButton'
 import dayjs from 'dayjs'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import useTheme from 'hooks/useTheme'
@@ -25,7 +25,7 @@ import { IdoRibbon } from './IdoRibbon'
 
 import { getBannerUrl, getTempBannerUrl } from '../../helpers'
 import { useIDOClaimCallback } from '../../hooks/ido/useIDOClaimCallback'
-import { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
+import type { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
 import { Footer } from '../Footer'
 import { IdoDepositButton, formatDollarAmount } from './IdoDespositButton'
 import { PreSaleEligibleCard, PreSaleInfoCard } from './PreSaleInfoCard'
@@ -185,7 +185,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
                 ) : idoPublicData?.status === 'coming_soon' ? (
                   <PreSaleInfoCard />
                 ) : (
-                  <ConnectWalletButton width="100%" />
+                  <ConnectW3WButton width="100%" />
                 )}
               </FlexGap>
             </FlexGap>
@@ -420,7 +420,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
             {/* @ts-ignore */}
             <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
             {!account ? (
-              <ConnectWalletButton width="100%" />
+              <ConnectW3WButton width="100%" />
             ) : (
               <Text fontSize="16px" color="textDisabled" bold>
                 {t('You didn’t deposit')} {idoPublicData?.stakeCurrency?.symbol}
