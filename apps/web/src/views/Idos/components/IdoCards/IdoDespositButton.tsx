@@ -5,7 +5,10 @@ import {
   AddIcon,
   Box,
   Button,
+  Flex,
   FlexGap,
+  Heading,
+  Image,
   LazyAnimatePresence,
   Loading,
   ModalBody,
@@ -15,6 +18,7 @@ import {
   Text,
   domAnimation,
   useModalV2,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
@@ -27,8 +31,10 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useAccount } from 'wagmi'
 
+import { ASSET_CDN } from 'config/constants/endpoints'
+import { useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
 import { useIDODepositCallback } from '../../hooks/ido/useIDODepositCallback'
-import { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
+import type { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
 
 export const formatDollarAmount = (amount: number) => {
   if (amount > 0 && amount < 0.01) {
@@ -43,6 +49,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
 }) => {
   const { t } = useTranslation()
   const { onDismiss, onOpen, isOpen } = useModalV2()
+  const { isOpen: isUnverifiedOpen, onOpen: onUnverifiedOpen, onDismiss: onUnverifiedDismiss } = useModalV2()
   const [value, setValue] = useState('')
 
   const { address: account } = useAccount()
@@ -122,12 +129,38 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   )
   const isInputloading = inputBalance === undefined
 
+  const { isVerified } = useW3WAccountVerify()
+
+  const disabled = useMemo(() => {
+    return maxDepositExceeded || isUserInsufficientBalance
+  }, [maxDepositExceeded, isUserInsufficientBalance])
+
+  const handleDeposit = useCallback(() => {
+    if (isVerified) {
+      onOpen()
+    } else {
+      onUnverifiedOpen()
+    }
+  }, [isVerified, onOpen, onUnverifiedOpen])
+
+  const { targetRef, tooltip } = useTooltip(
+    <Text>
+      {t(
+        'Please choose a Binance keyless wallet. If you do not have one, go to Binance wallet management page to create one. ',
+      )}
+    </Text>,
+    {
+      placement: 'top-end',
+      manualVisible: isUnverifiedOpen,
+    },
+  )
+
   return (
     <>
       <Button
         width={type === 'deposit' ? '100%' : undefined}
-        onClick={onOpen}
-        disabled={maxDepositExceeded}
+        onClick={handleDeposit}
+        disabled={disabled}
         variant={type === 'add' ? 'secondary' : undefined}
       >
         {type === 'deposit' ? (
@@ -278,6 +311,25 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   {t('Confirm Deposit')} {isLoading ? <SwapLoading ml="3px" /> : null}
                 </Button>
               </FlexGap>
+            </FlexGap>
+          </ModalBody>
+        </ModalContainer>
+      </ModalV2>
+      <ModalV2 isOpen={isUnverifiedOpen} title="" onDismiss={onUnverifiedDismiss} closeOnOverlayClick>
+        <>
+          <Box style={{ position: 'fixed', right: '10px', top: '0' }} width="5px" height="5px" ref={targetRef} />
+          {tooltip}
+        </>
+        <ModalContainer>
+          <ModalBody p="16px" pt="30px">
+            <Heading textAlign="center" fontSize="20px" bold mb="16px">
+              {t('Binance Keyless Wallet')}
+            </Heading>
+            <FlexGap flexDirection="column" gap="16px">
+              <Flex justifyContent="center">
+                <Image src={`${ASSET_CDN}/web/wallets/binance-w3w.png`} width={40} height={40} />
+              </Flex>
+              <Text>{t('This IDO subscription is exclusively available using the Binance Keyless Wallet.')}</Text>
             </FlexGap>
           </ModalBody>
         </ModalContainer>
