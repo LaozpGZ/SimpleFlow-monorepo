@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import type { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   Box,
@@ -21,13 +21,13 @@ import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
-import { IdoRibbon } from './IdoRibbon'
 
 import { getBannerUrl, getTempBannerUrl } from '../../helpers'
 import { useIDOClaimCallback } from '../../hooks/ido/useIDOClaimCallback'
 import type { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
 import { Footer } from '../Footer'
 import { IdoDepositButton, formatDollarAmount } from './IdoDespositButton'
+import { IdoRibbon } from './IdoRibbon'
 import { PreSaleEligibleCard, PreSaleInfoCard } from './PreSaleInfoCard'
 
 export const StyledCardBody = styled(CardBody)`
@@ -218,7 +218,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
                 <FlexGap flexDirection="column" alignItems="flex-end">
                   <FlexGap gap="3px">
                     <Text>
-                      {idoPublicData.progress.toFixed(2)} % {idoPublicData.progress.greaterThan(1) && <>🎉</>}
+                      {idoPublicData.progress.toFixed(2)} % {idoPublicData.progress.greaterThan(1) && '🎉'}
                     </Text>
                   </FlexGap>
                   {idoPublicData.progress.greaterThan(1) && (
