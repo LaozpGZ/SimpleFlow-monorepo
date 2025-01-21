@@ -194,7 +194,7 @@ const IfoCardDetails: React.FC<React.PropsWithChildren<IfoCardDetailsProps>> = (
                 label={t('Vested percentage:')}
                 value={`${poolCharacteristic.vestingInformation.percentage}%`}
                 tooltipContent={t(
-                  '%percentageVested%% of the purchased token will be released at the end of the vesting schedule. 0% of the purchased token will be released immediately and available for claiming when IFO ends.',
+                  '%percentageVested%% of the purchased token will be released at the end of the vesting schedule. %percentageTgeRelease%% of the purchased token will be released immediately and available for claiming when IFO ends.',
                   {
                     percentageVested: poolCharacteristic.vestingInformation.percentage,
                     percentageTgeRelease: new BigNumber(100)
