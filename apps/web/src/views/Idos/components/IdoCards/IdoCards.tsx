@@ -119,10 +119,12 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
             </Text>
           </FlexGap>
         </FlexGap>
-        <FlexGap flexDirection="column" gap="8px">
+        <FlexGap flexDirection="column" gap="8px" mt="16px">
           <FlexGap justifyContent="space-between">
-            <Text color="textSubtle">{t('Project Duration')}</Text>
-            <Text>
+            <Text color="textSubtle" style={{ whiteSpace: 'nowrap' }}>
+              {t('Project Duration')}
+            </Text>
+            <Text textAlign="right">
               {idoPublicData.status !== 'finished' ? (
                 <>
                   {getTimePeriods(idoPublicData.duration).days +
@@ -131,7 +133,7 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
                 </>
               ) : (
                 <>
-                  {dayjs.unix(idoPublicData.startTime).format('DD-MM-YYYY')} {t('to')}{' '}
+                  {dayjs.unix(idoPublicData.startTime).format('DD-MM-YYYY')} {t('to')} <br />
                   {dayjs.unix(idoPublicData.endTime).format('DD-MM-YYYY')}
                 </>
               )}
