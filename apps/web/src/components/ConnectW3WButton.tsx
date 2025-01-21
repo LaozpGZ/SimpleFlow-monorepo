@@ -1,4 +1,3 @@
-import { useIsMounted } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   Button,
@@ -12,7 +11,7 @@ import {
 } from '@pancakeswap/uikit'
 import { ConnectorNames } from 'config/wallet'
 import useAuth from 'hooks/useAuth'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import Trans from './Trans'
 
 interface ConnectWalletButtonProps extends ButtonProps {
@@ -34,11 +33,6 @@ export const getBinanceDeepLink = (url: string, chainId = 1) => {
 const InstallModal = () => {
   const { t } = useTranslation()
 
-  const href = useMemo(() => {
-    const { http } = getBinanceDeepLink(`${window.location.origin}/ido?chain=bsc`, 56)
-    return http
-  }, [])
-
   return (
     <Modal title={t('Connect Binance Wallet')}>
       <ModalBody>
@@ -54,9 +48,9 @@ const InstallModal = () => {
               'To participate, please create a wallet using the Binance Wallet, as importing wallets with seed phrases is not supported for this sale.',
             )}
           </Text>
-          <Button as="a" href={href} target="_blank" rel="noopener noreferrer">
+          <Button as="a" href="https://www.binance.com/en/download" target="_blank" rel="noopener noreferrer">
             <Text bold fontSize="16px" color="invertedContrast">
-              {t('Use Binance Wallet')}
+              {t('Download Now')}
             </Text>
           </Button>
         </FlexGap>
@@ -83,16 +77,6 @@ const ConnectW3WButton = ({ children, withIcon, ...props }: ConnectWalletButtonP
       setOpen(true)
     }
   }
-
-  const [autoConnected, setAutoConnected] = useState(false)
-  const isMounted = useIsMounted()
-
-  useEffect(() => {
-    if (isMounted && !autoConnected && isBinanceWallet()) {
-      login(ConnectorNames.Injected)
-      setAutoConnected(true)
-    }
-  }, [autoConnected, isMounted, login])
 
   return (
     <>
