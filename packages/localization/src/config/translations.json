@@ -1774,7 +1774,6 @@
   "Boosted by vCAKE": "Boosted by vCAKE",
   "Boosting Expired": "Boosting Expired",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.",
-  "The vested tokens will be released linearly over a period of %days% days.": "The vested tokens will be released linearly over a period of %days% days.",
   "Yield Booster": "Yield Booster",
   "Connect wallet to view booster": "Connect wallet to view booster",
   "No CAKE locked": "No CAKE locked",
