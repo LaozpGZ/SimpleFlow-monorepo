@@ -4,12 +4,14 @@ import IDo from '../../views/Idos/ido'
 
 const IDO_SUPPORT_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET]
 
-const CurrentIfoPage = () => {
+const CurrentIdoPage = () => {
   return <IDo />
 }
 
-CurrentIfoPage.Layout = IdoPageLayout
+CurrentIdoPage.Layout = IdoPageLayout
 
-CurrentIfoPage.chains = IDO_SUPPORT_CHAINS
+CurrentIdoPage.chains = IDO_SUPPORT_CHAINS
 
-export default CurrentIfoPage
+CurrentIdoPage.showMenu = false
+
+export default CurrentIdoPage
