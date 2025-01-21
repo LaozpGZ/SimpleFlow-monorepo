@@ -5,10 +5,13 @@ import {
   FlexGap,
   Modal,
   ModalBody,
+  ModalV2,
   Text,
   WalletFilledV2Icon,
-  useModal,
 } from '@pancakeswap/uikit'
+import { ConnectorNames } from 'config/wallet'
+import useAuth from 'hooks/useAuth'
+import { useCallback, useState } from 'react'
 import Trans from './Trans'
 
 interface ConnectWalletButtonProps extends ButtonProps {
@@ -43,16 +46,35 @@ const InstallModal = () => {
   )
 }
 
+const isBinanceWallet = () => {
+  return (
+    typeof window !== 'undefined' && (window.ethereum?.isBinance || window.navigator?.userAgent.includes('Binance'))
+  )
+}
+
 const ConnectW3WButton = ({ children, withIcon, ...props }: ConnectWalletButtonProps) => {
-  const [onPresentInstallModal] = useModal(<InstallModal />, true, true, 'install-w3w')
+  const { login } = useAuth()
+  const [open, setOpen] = useState(false)
+  const handleOnDismiss = useCallback(() => setOpen(false), [])
+
+  const handleClick = () => {
+    if (isBinanceWallet()) {
+      login(ConnectorNames.Injected)
+    } else {
+      setOpen(true)
+    }
+  }
 
   return (
     <>
-      <Button onClick={onPresentInstallModal} {...props}>
+      <Button onClick={handleClick} {...props}>
         <FlexGap gap="8px" justifyContent="center" alignItems="center">
           {children || <Trans>Connect Wallet</Trans>} {withIcon && <WalletFilledV2Icon color="invertedContrast" />}
         </FlexGap>
       </Button>
+      <ModalV2 isOpen={open} onDismiss={handleOnDismiss}>
+        <InstallModal />
+      </ModalV2>
     </>
   )
 }
