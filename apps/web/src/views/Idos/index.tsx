@@ -5,6 +5,7 @@ import IfoProvider from './contexts/IfoContext'
 export const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
   padding: 16px;
+  min-height: 100vh;
 `
 
 const WidthWrapper = styled.div`
