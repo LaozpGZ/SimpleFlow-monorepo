@@ -1,3 +1,4 @@
+import { useIsMounted } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   Button,
@@ -11,7 +12,7 @@ import {
 } from '@pancakeswap/uikit'
 import { ConnectorNames } from 'config/wallet'
 import useAuth from 'hooks/useAuth'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import Trans from './Trans'
 
 interface ConnectWalletButtonProps extends ButtonProps {
@@ -64,6 +65,16 @@ const ConnectW3WButton = ({ children, withIcon, ...props }: ConnectWalletButtonP
       setOpen(true)
     }
   }
+
+  const [autoConnected, setAutoConnected] = useState(false)
+  const isMounted = useIsMounted()
+
+  useEffect(() => {
+    if (isMounted && !autoConnected && isBinanceWallet()) {
+      login(ConnectorNames.Injected)
+      setAutoConnected(true)
+    }
+  }, [autoConnected, isMounted, login])
 
   return (
     <>
