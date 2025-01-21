@@ -175,7 +175,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
               <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
                 {idoPublicData.stakeCurrency?.symbol} {t('Pool')}
               </Text>
-              <FlexGap gap="8px">
+              <FlexGap gap="8px" alignItems="center">
                 {/* @ts-ignore */}
                 <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
                 {account ? (
