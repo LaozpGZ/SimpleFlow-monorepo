@@ -5,6 +5,7 @@ const zBody = zObject({
   address: zString(),
   timestamp: zNumber(),
   nonce: zString().or(zNumber()),
+  contractAddress: zString(),
   signature: zString(),
 })
 
@@ -31,7 +32,7 @@ const sign = async (req: NextApiRequest, res: NextApiResponse) => {
     return res.status(400).json({ message: 'Invalid request body', reason: parsed.error })
   }
 
-  const { address, timestamp, nonce, signature } = parsed.data
+  const { address, timestamp, nonce, signature, contractAddress } = parsed.data
 
   try {
     const response = await fetch(
@@ -47,6 +48,7 @@ const sign = async (req: NextApiRequest, res: NextApiResponse) => {
           timestamp,
           nonce,
           signature,
+          contractAddress,
         }),
       },
     )
