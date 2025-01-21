@@ -54,7 +54,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
 
   const getPercentAmount = useCallback(
     (percent: number) => {
-      return maxAmountInput.multiply(new Percent(percent, 100)).toExact()
+      return maxAmountInput.multiply(new Percent(percent, 100))
     },
     [maxAmountInput],
   )
@@ -62,14 +62,15 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   const handlePercentInput = useCallback(
     (percent: number) => {
       if (maxAmountInput) {
+        const percentAmount = getPercentAmount(percent)
         if (
-          percent === 100 &&
+          idoPublicData?.userStakedAmount &&
           idoPublicData?.maxStakePerUser &&
           !idoPublicData.maxStakePerUser.equalTo(0) &&
-          maxAmountInput.greaterThan(idoPublicData?.maxStakePerUser)
+          percentAmount.greaterThan(idoPublicData?.maxStakePerUser.subtract(idoPublicData?.userStakedAmount))
         ) {
-          setValue(idoPublicData?.maxStakePerUser?.toSignificant(6))
-        } else setValue(getPercentAmount(percent))
+          setValue(idoPublicData?.maxStakePerUser.subtract(idoPublicData?.userStakedAmount).toExact())
+        } else setValue(percentAmount.toExact())
       }
     },
     [getPercentAmount, maxAmountInput, idoPublicData],
@@ -205,7 +206,8 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
               <FlexGap>
                 {maxAmountInput?.greaterThan(0) &&
                   [25, 50, 75, 100].map((percent) => {
-                    const isAtCurrentPercent = maxAmountInput && value !== '0' && value === getPercentAmount(percent)
+                    const isAtCurrentPercent =
+                      maxAmountInput && value !== '0' && value === getPercentAmount(percent).toExact()
                     return (
                       <Button
                         key={`btn_quickCurrency${percent}`}
