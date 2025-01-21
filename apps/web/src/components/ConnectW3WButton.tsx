@@ -12,15 +12,33 @@ import {
 } from '@pancakeswap/uikit'
 import { ConnectorNames } from 'config/wallet'
 import useAuth from 'hooks/useAuth'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Trans from './Trans'
 
 interface ConnectWalletButtonProps extends ButtonProps {
   withIcon?: boolean
 }
 
+export const getBinanceDeepLink = (url: string, chainId = 1) => {
+  const base = 'bnc://app.binance.com/mp/app'
+  const appId = 'yFK5FCqYprrXDiVFbhyRx7'
+
+  const startPagePath = btoa('/pages/browser/index')
+  const startPageQuery = btoa(`url=${url}&defaultChainId=${chainId}`)
+  const deeplink = `${base}?appId=${appId}&startPagePath=${startPagePath}&startPageQuery=${startPageQuery}`
+  const dp = btoa(deeplink)
+  const http = `https://app.binance.com/en/download?_dp=${dp}`
+  return { http, bnc: deeplink }
+}
+
 const InstallModal = () => {
   const { t } = useTranslation()
+
+  const href = useMemo(() => {
+    const { http } = getBinanceDeepLink(`${window.location.origin}/ido?chain=bsc`, 56)
+    return http
+  }, [])
+
   return (
     <Modal title={t('Connect Binance Wallet')}>
       <ModalBody>
@@ -36,9 +54,9 @@ const InstallModal = () => {
               'To participate, please create a wallet using the Binance Wallet, as importing wallets with seed phrases is not supported for this sale.',
             )}
           </Text>
-          <Button as="a" href="https://www.binance.com/en/download" target="_blank" rel="noopener noreferrer">
+          <Button as="a" href={href} target="_blank" rel="noopener noreferrer">
             <Text bold fontSize="16px" color="invertedContrast">
-              {t('Download Now')}
+              {t('Use Binance Wallet')}
             </Text>
           </Button>
         </FlexGap>
