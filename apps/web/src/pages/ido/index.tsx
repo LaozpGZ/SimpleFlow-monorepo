@@ -12,6 +12,6 @@ CurrentIdoPage.Layout = IdoPageLayout
 
 CurrentIdoPage.chains = IDO_SUPPORT_CHAINS
 
-CurrentIdoPage.mp = true
+CurrentIdoPage.mp = false
 
 export default CurrentIdoPage
