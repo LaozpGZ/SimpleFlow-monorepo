@@ -8,8 +8,8 @@ import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { isAddressEqual } from 'utils'
-import { isUserRejected } from 'utils/sentry'
 import { zeroAddress } from 'viem'
+import { userRejectedError } from 'views/Swap/V3Swap/hooks/useSendSwapTransaction'
 import { useIDOPoolInfo } from './useIDOPoolInfo'
 import { useIDOUserInfo } from './useIDOUserInfo'
 
@@ -49,7 +49,7 @@ export const useIDODepositCallback = () => {
           toastSuccess(t('Deposit successful'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
         }
       } catch (error) {
-        if (isUserRejected(error)) {
+        if (userRejectedError(error)) {
           toastWarning(
             t('You canceled deposit'),
             t(`You didn't confirm %symbol% deposit in your wallet`, {
