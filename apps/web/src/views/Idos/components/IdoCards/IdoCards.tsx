@@ -155,7 +155,7 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
 export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const { isVerified } = useW3WAccountVerify()
+  const { isVerified, isLoading: isPendingVerify } = useW3WAccountVerify()
   const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
   const { theme, isDark } = useTheme()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
@@ -181,7 +181,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
                 {/* @ts-ignore */}
                 <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
 
-                {account ? (
+                {account && !isPendingVerify ? (
                   idoPublicData?.status === 'coming_soon' ? (
                     isVerified ? (
                       <PreSaleEligibleCard />
