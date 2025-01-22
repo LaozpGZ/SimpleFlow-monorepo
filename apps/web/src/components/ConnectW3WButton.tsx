@@ -72,7 +72,7 @@ const ConnectW3WButton = ({ children, withIcon, ...props }: ConnectWalletButtonP
 
   const handleClick = () => {
     if (isBinanceWallet()) {
-      login(ConnectorNames.Injected)
+      login(ConnectorNames.BinanceW3W)
     } else {
       setOpen(true)
     }
