@@ -84,6 +84,8 @@ function MPGlobalHooks() {
   return null
 }
 
+const LoadVConsole = dynamic(() => import('components/vConsole'), { ssr: false })
+
 function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>) {
   const { pageProps, Component } = props
   const store = useStore(pageProps.initialReduxState)
@@ -111,6 +113,7 @@ function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>
         )}
       </Head>
       <DefaultSeo {...SEO} />
+      <LoadVConsole />
       <Providers store={store} dehydratedState={pageProps.dehydratedState}>
         <PageMeta />
         {(Component as NextPageWithLayout).Meta && (
