@@ -106,11 +106,14 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
       )
     : undefined
 
-  const maxDepositExceeded =
-    idoPublicData.maxStakePerUser &&
-    !idoPublicData.maxStakePerUser.equalTo(0) &&
-    (totalDepositedAmount?.greaterThan(idoPublicData.maxStakePerUser) ||
-      totalDepositedAmount?.equalTo(idoPublicData.maxStakePerUser))
+  const maxDepositExceeded = useMemo(() => {
+    return (
+      idoPublicData.maxStakePerUser &&
+      !idoPublicData.maxStakePerUser.equalTo(0) &&
+      (totalDepositedAmount?.greaterThan(idoPublicData.maxStakePerUser) ||
+        totalDepositedAmount?.equalTo(idoPublicData.maxStakePerUser))
+    )
+  }, [idoPublicData.maxStakePerUser, totalDepositedAmount])
 
   const isUserInsufficientBalance = useMemo(() => {
     if (depositAmount && inputBalance) {
@@ -313,6 +316,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   onClick={() => {
                     if (depositAmount)
                       deposit(0, depositAmount, () => {
+                        setValue('')
                         onDismiss()
                       })
                   }}
