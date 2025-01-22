@@ -37,9 +37,8 @@ const InstallModal = () => {
 
   return (
     <Modal title={t('Connect Binance Wallet')}>
-      <ModalBody>
+      <ModalBody maxWidth={['100%', '100%', '100%', '360px']}>
         <FlexGap gap="16px" flexDirection="column">
-          {/* <Heading textAlign="center">{t('Connect Binance Wallet')}</Heading> */}
           <Text>
             {t(
               'This IDO is exclusively available on the Binance Wallet. It seems you do not have the Binance App installed. Please download it on your mobile device to proceed.',
