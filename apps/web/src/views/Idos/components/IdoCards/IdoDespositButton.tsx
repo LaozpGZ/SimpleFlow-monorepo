@@ -174,6 +174,11 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
     }
   }, [isAndroid, isBinance])
 
+  const handleCloseModal = useCallback(() => {
+    onDismiss()
+    setValue('')
+  }, [onDismiss])
+
   return (
     <>
       <Button
@@ -190,7 +195,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
           <AddIcon color={maxDepositExceeded ? 'textDisabled' : 'primary'} />
         )}
       </Button>
-      <ModalV2 isOpen={isOpen} title="Deposit" onDismiss={onDismiss} closeOnOverlayClick>
+      <ModalV2 isOpen={isOpen} title="Deposit" onDismiss={handleCloseModal} closeOnOverlayClick>
         <ModalContainer minHeight={minHeight}>
           <ModalBody p="16px" pt="30px" style={{ overflowY: 'scroll' }}>
             <FlexGap flexDirection="column" gap="8px" ref={inputRef}>
@@ -323,11 +328,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   width="100%"
                   isLoading={isLoading}
                   onClick={() => {
-                    if (depositAmount)
-                      deposit(0, depositAmount, () => {
-                        setValue('')
-                        onDismiss()
-                      })
+                    if (depositAmount) deposit(0, depositAmount, handleCloseModal)
                   }}
                 >
                   {t('Confirm Deposit')} {isLoading ? <SwapLoading ml="3px" /> : null}
