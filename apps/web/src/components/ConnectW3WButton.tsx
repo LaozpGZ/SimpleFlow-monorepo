@@ -1,3 +1,4 @@
+import { isInBinance } from '@binance/w3w-utils'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   Button,
@@ -9,9 +10,10 @@ import {
   Text,
   WalletFilledV2Icon,
 } from '@pancakeswap/uikit'
-import { ConnectorNames } from 'config/wallet'
-import useAuth from 'hooks/useAuth'
 import { useCallback, useState } from 'react'
+import { useChainIdByQuery } from 'state/info/hooks'
+import { binanceWeb3WalletConnector } from 'utils/wagmi'
+import { useConnect } from 'wagmi'
 import Trans from './Trans'
 
 interface ConnectWalletButtonProps extends ButtonProps {
@@ -59,20 +61,19 @@ const InstallModal = () => {
   )
 }
 
-const isBinanceWallet = () => {
-  return (
-    typeof window !== 'undefined' && (window.ethereum?.isBinance || window.navigator?.userAgent.includes('Binance'))
-  )
-}
-
 const ConnectW3WButton = ({ children, withIcon, ...props }: ConnectWalletButtonProps) => {
-  const { login } = useAuth()
   const [open, setOpen] = useState(false)
   const handleOnDismiss = useCallback(() => setOpen(false), [])
+  const { connectAsync } = useConnect()
+  const chainId = useChainIdByQuery()
 
   const handleClick = () => {
-    if (isBinanceWallet()) {
-      login(ConnectorNames.BinanceW3W)
+    if (isInBinance()) {
+      console.debug('debug connect w3w chainId', chainId)
+      connectAsync({
+        connector: binanceWeb3WalletConnector(),
+        chainId,
+      })
     } else {
       setOpen(true)
     }
