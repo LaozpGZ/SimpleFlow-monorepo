@@ -22,6 +22,7 @@ import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
 
+import { useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
 import { getBannerUrl, getTempBannerUrl } from '../../helpers'
 import { useIDOClaimCallback } from '../../hooks/ido/useIDOClaimCallback'
 import type { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
@@ -154,6 +155,7 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
 export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
+  const { isVerified } = useW3WAccountVerify()
   const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
   const { theme, isDark } = useTheme()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
@@ -178,14 +180,17 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
               <FlexGap gap="8px" alignItems="center">
                 {/* @ts-ignore */}
                 <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
+
                 {account ? (
                   idoPublicData?.status === 'coming_soon' ? (
-                    <PreSaleEligibleCard />
+                    isVerified ? (
+                      <PreSaleEligibleCard />
+                    ) : (
+                      <PreSaleInfoCard />
+                    )
                   ) : (
                     <IdoDepositButton type="deposit" idoPublicData={idoPublicData} />
                   )
-                ) : idoPublicData?.status === 'coming_soon' ? (
-                  <PreSaleInfoCard />
                 ) : (
                   <ConnectW3WButton width="100%" />
                 )}
