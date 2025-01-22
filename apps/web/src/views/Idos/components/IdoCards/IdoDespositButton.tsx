@@ -334,7 +334,6 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 </Button>
               </FlexGap>
             </FlexGap>
-            {isAndroid && isBinance ? <Box height="60px" /> : null}
           </ModalBody>
         </ModalContainer>
       </ModalV2>
@@ -354,8 +353,6 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
               </Flex>
               <Text>{t('This IDO subscription is exclusively available using the Binance Keyless Wallet.')}</Text>
             </FlexGap>
-
-            {isAndroid && isBinance ? <Box height="60px" /> : null}
           </ModalBody>
         </ModalContainer>
       </ModalV2>
