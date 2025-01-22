@@ -31,6 +31,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useAccount } from 'wagmi'
 
+import { getIsAndroid, isInBinance } from '@binance/w3w-utils'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
 import { useIDODepositCallback } from '../../hooks/ido/useIDODepositCallback'
@@ -51,6 +52,8 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   const { onDismiss, onOpen, isOpen } = useModalV2()
   const { isOpen: isUnverifiedOpen, onOpen: onUnverifiedOpen, onDismiss: onUnverifiedDismiss } = useModalV2()
   const [value, setValue] = useState('')
+  const isAndroid = getIsAndroid()
+  const isBinance = isInBinance()
 
   const { address: account } = useAccount()
   const inputBalance = useCurrencyBalance(account ?? undefined, idoPublicData?.stakeCurrency ?? undefined)
@@ -160,11 +163,16 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
 
   const inputRef = useRef<HTMLDivElement>(null)
 
+  const [minHeight, setMinHeight] = useState<string | undefined>(undefined)
+
   const handleInputFocus = useCallback(() => {
     if (inputRef.current) {
-      inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      inputRef.current?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      if (isAndroid && isBinance) {
+        setMinHeight('calc(100vh - 120px)')
+      }
     }
-  }, [])
+  }, [isAndroid, isBinance])
 
   return (
     <>
@@ -183,8 +191,8 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
         )}
       </Button>
       <ModalV2 isOpen={isOpen} title="Deposit" onDismiss={onDismiss} closeOnOverlayClick>
-        <ModalContainer>
-          <ModalBody p="16px" pt="30px">
+        <ModalContainer minHeight={minHeight}>
+          <ModalBody p="16px" pt="30px" style={{ overflowY: 'scroll' }}>
             <FlexGap flexDirection="column" gap="8px" ref={inputRef}>
               <SwapUIV2.CurrencyInputPanelSimplify
                 id={`idoStakeCurrency${idoPublicData?.stakeCurrency?.symbol ?? ''}`}
@@ -197,6 +205,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 value={value}
                 placeholder="0.00"
                 onInputFocus={handleInputFocus}
+                onInputBlur={() => setMinHeight(undefined)}
                 onUserInput={setValue}
                 top={
                   <FlexGap justifyContent="space-between" alignItems="center" width="100%" position="relative">
@@ -325,6 +334,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 </Button>
               </FlexGap>
             </FlexGap>
+            {isAndroid && isBinance ? <Box height="60px" /> : null}
           </ModalBody>
         </ModalContainer>
       </ModalV2>
@@ -344,6 +354,8 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
               </Flex>
               <Text>{t('This IDO subscription is exclusively available using the Binance Keyless Wallet.')}</Text>
             </FlexGap>
+
+            {isAndroid && isBinance ? <Box height="60px" /> : null}
           </ModalBody>
         </ModalContainer>
       </ModalV2>
