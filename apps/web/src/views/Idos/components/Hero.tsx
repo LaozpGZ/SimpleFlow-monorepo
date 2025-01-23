@@ -50,9 +50,9 @@ const Hero = () => {
               </p>
             </Box>
 
-            <Text onClick={handleClick} mt="0.375rem" bold color="#02919D" style={{ cursor: 'pointer' }}>
+            {/* <Text onClick={handleClick} mt="0.375rem" bold color="#02919D" style={{ cursor: 'pointer' }}>
               {t('How does it work?')}
-            </Text>
+            </Text> */}
           </Flex>
         </Container>
       </StyledHero>
