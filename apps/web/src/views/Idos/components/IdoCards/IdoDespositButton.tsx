@@ -183,7 +183,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   const accountEllipsis = account ? `${account.substring(0, 2)}...${account.substring(account.length - 4)}` : null
 
   const handleConfirmDeposit = () => {
-    if (verifyStatus !== VerifyStatus.eligible) {
+    if (verifyStatus !== VerifyStatus.eligible || !isBinance) {
       onUnverifiedOpen()
       return
     }
