@@ -86,7 +86,7 @@ export const IDoCurrentCard = ({
         />
         <IdoCard idoPublicData={idoPublicData} />
       </Box>
-      <Footer tokenSymbol={idoPublicData?.offeringCurrency?.symbol} />
+      <Footer />
     </Card>
   )
 }
