@@ -198,9 +198,15 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   useEffect(() => {
     if (account && isBinance && verifyStatus === VerifyStatus.ineligible) {
       onUnverifiedOpen()
+    }
+  }, [account, isBinance, verifyStatus, onUnverifiedOpen])
+
+  const handleUnverifiedDismiss = () => {
+    onUnverifiedDismiss()
+    if (account && isBinance && verifyStatus === VerifyStatus.ineligible) {
       disconnectAsync()
     }
-  }, [account, isBinance, verifyStatus, onUnverifiedOpen, disconnectAsync])
+  }
 
   return (
     <>
@@ -368,7 +374,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
           </ModalBody>
         </ModalContainer>
       </ModalV2>
-      <ModalV2 isOpen={isUnverifiedOpen} title="" onDismiss={onUnverifiedDismiss} closeOnOverlayClick>
+      <ModalV2 isOpen={isUnverifiedOpen} title="" onDismiss={handleUnverifiedDismiss} closeOnOverlayClick>
         <>
           <Box style={{ position: 'fixed', right: '10px', top: '0' }} width="5px" height="5px" ref={targetRef} />
           {tooltip}
