@@ -158,7 +158,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
     </Text>,
     {
       placement: 'top-end',
-      manualVisible: isUnverifiedOpen,
+      manualVisible: isUnverifiedOpen && verifyStatus !== VerifyStatus.restricted,
     },
   )
 
