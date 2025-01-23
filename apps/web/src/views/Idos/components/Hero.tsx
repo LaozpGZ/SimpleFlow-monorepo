@@ -45,8 +45,8 @@ const Hero = () => {
                 {t('Exclusive TGE')}
               </StyledHeading>
               <p>
-                <StyledSubTitle bold>{t('Token Generation Event')}</StyledSubTitle>
-                <StyledSubTitle>: {t('Get new tokens launching on Binance Wallet')}</StyledSubTitle>
+                <StyledSubTitle bold>{t(`MyShell's Token Generation Event`)}</StyledSubTitle>
+                <StyledSubTitle>: {t('Exclusively via Binance Keyless Wallet')}</StyledSubTitle>
               </p>
             </Box>
 
