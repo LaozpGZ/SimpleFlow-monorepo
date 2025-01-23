@@ -1,6 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
-import { ifos } from '../../config'
+import { idos } from '../../config'
 
 export const useCurrentIDOConfig = () => {
-  return { activeIfo: { ...ifos[1], chainId: ChainId.BSC_TESTNET }, isPending: false }
+  return { activeIdo: idos[0] }
 }

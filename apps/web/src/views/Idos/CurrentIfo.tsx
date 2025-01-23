@@ -1,4 +1,4 @@
-import { Ifo } from '@pancakeswap/ifos'
+import { IDOConfig } from './config'
 
 import { useIdoPublicData } from './hooks/ido/useIdoPublicData'
 
@@ -8,11 +8,11 @@ import IfoQuestions from './components/IfoQuestions'
 import { SectionBackground } from './components/SectionBackground'
 
 interface TypeProps {
-  activeIfo: Ifo
+  activeIdo: IDOConfig
 }
 
-const CurrentIdo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIfo }) => {
-  const idoPublicData = useIdoPublicData(activeIfo.chainId)?.[0]
+const CurrentIdo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIdo }) => {
+  const idoPublicData = useIdoPublicData(activeIdo.chainId)?.[0]
 
   const steps = <></>
 
@@ -24,8 +24,8 @@ const CurrentIdo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIfo })
 
   return (
     <IfoContainer
-      ifoAddress={activeIfo.address}
-      ifoSection={<IDoCurrentCard chainId={activeIfo.chainId} idoPublicData={idoPublicData} idoId={activeIfo.id} />}
+      ifoAddress="0x"
+      ifoSection={<IDoCurrentCard chainId={activeIdo.chainId} idoPublicData={idoPublicData} idoId={activeIdo.id} />}
       ifoSteps={steps}
       faq={faq}
     />

@@ -12,7 +12,7 @@ interface TypeProps {
   ifoAddress?: Address
 }
 
-const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection, ifoSteps, faq }) => {
+const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection }) => {
   return (
     <IdoLayout id="current-ido">
       <SectionBackground>

@@ -39,7 +39,7 @@ export const StyledCardBody = styled(CardBody)`
   }
 `
 
-const Header = styled(CardHeader)<{ ifoId: string; $isCurrent?: boolean }>`
+const Header = styled(CardHeader)<{ idoId: string; $isCurrent?: boolean }>`
   width: 100%;
   display: flex;
   justify-content: flex-end;
@@ -48,11 +48,9 @@ const Header = styled(CardHeader)<{ ifoId: string; $isCurrent?: boolean }>`
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  border-top-left-radius: 32px;
-  border-top-right-radius: 32px;
   background-color: ${({ theme }) => theme.colors.dropdown};
-  /* background-image: ${({ ifoId }) => `url('${getBannerUrl(ifoId)}')`}; */
-  background-image: url('${getTempBannerUrl()}');
+  background-image: ${({ idoId }) => `url('${getBannerUrl(idoId)}')`};
+  /* background-image: url('${getTempBannerUrl()}'); */
 `
 
 export const Divider = styled.div`
@@ -74,7 +72,7 @@ export const IDoCurrentCard = ({
   return (
     <Card style={{ width: '100%' }}>
       <Box className="sticky-header" position="sticky" bottom="48px" width="100%" zIndex={6}>
-        <Header $isCurrent ifoId={idoId} />
+        <Header $isCurrent idoId={idoId} />
         <IdoRibbon
           ifoId={idoId}
           startTime={idoPublicData.startTime}

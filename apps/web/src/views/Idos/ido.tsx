@@ -1,11 +1,9 @@
 import CurrentIfo from './CurrentIfo'
-import { IfoPlaceholder } from './IfoPlaceholder'
-import SoonIfo from './SoonIfo'
 import { useCurrentIDOConfig } from './hooks/ido/useCurrentIDOConfig'
 
 const Ido = () => {
-  const { activeIfo, isPending } = useCurrentIDOConfig()
-  return activeIfo ? <CurrentIfo activeIfo={activeIfo} /> : isPending ? <IfoPlaceholder /> : <SoonIfo />
+  const { activeIdo } = useCurrentIDOConfig()
+  return <CurrentIfo activeIdo={activeIdo} />
 }
 
 export default Ido
