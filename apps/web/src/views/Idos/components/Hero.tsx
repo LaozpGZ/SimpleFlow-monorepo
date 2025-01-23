@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Container, Flex, FlexGap, Heading, Text } from '@pancakeswap/uikit'
+import { Box, Container, Flex, Heading, Text } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { styled } from 'styled-components'
 
@@ -15,6 +15,7 @@ const StyledHeading = styled(Heading)`
 
 const StyledSubTitle = styled(Text)`
   font-size: 16px;
+  display: inline;
 `
 
 const Hero = () => {
@@ -41,13 +42,12 @@ const Hero = () => {
           >
             <Box>
               <StyledHeading as="h1" mb={['12px', '12px', '12px', '12px']}>
-                {t('Initial Dex Offerings')}
+                {t('Exclusive TGE')}
               </StyledHeading>
-              <FlexGap gap="3px">
-                <StyledSubTitle bold>{t('IDO')}</StyledSubTitle>
-                <StyledSubTitle>:</StyledSubTitle>
-                <StyledSubTitle>{t('Get new tokens launching on Binance Wallet')}</StyledSubTitle>
-              </FlexGap>
+              <p>
+                <StyledSubTitle bold>{t('Token Generation Event')}</StyledSubTitle>
+                <StyledSubTitle>: {t('Get new tokens launching on Binance Wallet')}</StyledSubTitle>
+              </p>
             </Box>
 
             <Text onClick={handleClick} mt="0.375rem" bold color="#02919D" style={{ cursor: 'pointer' }}>

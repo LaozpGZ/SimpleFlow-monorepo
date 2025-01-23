@@ -3697,7 +3697,6 @@
   "This IDO is exclusively available on the Binance Wallet. It seems you do not have the Binance App installed. Please download it on your mobile device to proceed.": "This IDO is exclusively available on the Binance Wallet. It seems you do not have the Binance App installed. Please download it on your mobile device to proceed.",
   "To participate, please create a wallet using the Binance Wallet, as importing wallets with seed phrases is not supported for this sale.": "To participate, please create a wallet using the Binance Wallet, as importing wallets with seed phrases is not supported for this sale.",
   "is a new DeFi platform that lorem ispum here is a brief introduction to the IDO token projects and above shows links to project websites": "is a new DeFi platform that lorem ispum here is a brief introduction to the IDO token projects and above shows links to project websites",
-  "Initial Dex Offerings": "Initial Dex Offerings",
   "IDO": "IDO",
   "Get new tokens launching on Binance Wallet": "Get new tokens launching on Binance Wallet",
   "Total Sale": "Total Sale",
@@ -3731,5 +3730,7 @@
   "You canceled claim": "You canceled claim",
   "Deposit successful": "Deposit successful",
   "You canceled deposit": "You canceled deposit",
-  "You didn't confirm %symbol% deposit in your wallet": "You didn't confirm %symbol% deposit in your wallet"
+  "You didn't confirm %symbol% deposit in your wallet": "You didn't confirm %symbol% deposit in your wallet",
+  "Exclusive TGE": "Exclusive TGE",
+  "Token Generation Event": "Token Generation Event"
 }
