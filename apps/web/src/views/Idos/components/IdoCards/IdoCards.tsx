@@ -22,6 +22,7 @@ import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
 
+import { logGTMIdoConnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
 import { getBannerUrl, getTempBannerUrl } from '../../helpers'
 import { useIDOClaimCallback } from '../../hooks/ido/useIDOClaimCallback'
@@ -164,6 +165,9 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
       placement: 'top',
     },
   )
+  const handleConnectWallet = (e) => {
+    logGTMIdoConnectWalletEvent(idoPublicData.status === 'coming_soon')
+  }
   return (
     <Card background={isDark ? '#18171A' : theme.colors.background}>
       <CardBody>
@@ -192,7 +196,7 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
                     <IdoDepositButton type="deposit" idoPublicData={idoPublicData} />
                   )
                 ) : (
-                  <ConnectW3WButton width="100%" />
+                  <ConnectW3WButton width="100%" onClick={handleConnectWallet} />
                 )}
               </FlexGap>
             </FlexGap>
@@ -332,6 +336,9 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
 
   const { isDark } = useTheme()
   const { address: account } = useAccount()
+  const handleConnectWallet = (e) => {
+    logGTMIdoConnectWalletEvent(idoPublicData.status === 'coming_soon')
+  }
   return (
     <>
       {userHasStaked ? (
@@ -427,7 +434,7 @@ export const ClaimDisplay: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPu
             {/* @ts-ignore */}
             <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
             {!account ? (
-              <ConnectW3WButton width="100%" />
+              <ConnectW3WButton width="100%" onClick={handleConnectWallet} />
             ) : (
               <Text fontSize="16px" color="textDisabled" bold>
                 {t('You didn’t deposit')} {idoPublicData?.stakeCurrency?.symbol}

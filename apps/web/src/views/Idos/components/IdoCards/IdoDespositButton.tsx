@@ -33,6 +33,7 @@ import { useAccount } from 'wagmi'
 
 import { getIsAndroid, isInBinance } from '@binance/w3w-utils'
 import { ASSET_CDN } from 'config/constants/endpoints'
+import { logGTMIdoDepositEvent } from 'utils/customGTMEventTracking'
 import { useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
 import { useIDODepositCallback } from '../../hooks/ido/useIDODepositCallback'
 import type { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
@@ -180,6 +181,17 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   }, [onDismiss])
 
   const accountEllipsis = account ? `${account.substring(0, 2)}...${account.substring(account.length - 4)}` : null
+
+  const handleConfirmDeposit = () => {
+    if (!isVerified) {
+      onUnverifiedOpen()
+      return
+    }
+    if (depositAmount) {
+      logGTMIdoDepositEvent()
+      deposit(0, depositAmount, handleCloseModal)
+    }
+  }
 
   return (
     <>
@@ -337,13 +349,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   }
                   width="100%"
                   isLoading={isLoading}
-                  onClick={() => {
-                    if (!isVerified) {
-                      onUnverifiedOpen()
-                      return
-                    }
-                    if (depositAmount) deposit(0, depositAmount, handleCloseModal)
-                  }}
+                  onClick={handleConfirmDeposit}
                 >
                   {t('Confirm Deposit')} {isLoading ? <SwapLoading ml="3px" /> : null}
                 </Button>

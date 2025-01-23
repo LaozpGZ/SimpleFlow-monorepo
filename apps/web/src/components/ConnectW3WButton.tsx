@@ -60,19 +60,22 @@ const InstallModal = () => {
   )
 }
 
-const ConnectW3WButton = ({ children, withIcon, ...props }: ConnectWalletButtonProps) => {
+const ConnectW3WButton = ({ children, withIcon, onClick, ...props }: ConnectWalletButtonProps) => {
   const [open, setOpen] = useState(false)
   const handleOnDismiss = useCallback(() => setOpen(false), [])
   const { connectAsync } = useConnect()
   const chainId = useChainIdByQuery()
 
-  const handleClick = () => {
+  const handleClick = (e) => {
     if (isInBinance()) {
       console.debug('debug connect w3w chainId', chainId)
       connectAsync({
         connector: binanceWeb3WalletConnector(),
         chainId,
       })
+      if (onClick) {
+        onClick(e)
+      }
     } else {
       setOpen(true)
     }
