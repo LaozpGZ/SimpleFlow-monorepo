@@ -179,6 +179,8 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
     setValue('')
   }, [onDismiss])
 
+  const accountEllipsis = account ? `${account.substring(0, 2)}...${account.substring(account.length - 4)}` : null
+
   return (
     <>
       <Button
@@ -197,7 +199,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
       </Button>
       <ModalV2 isOpen={isOpen} title="Deposit" onDismiss={handleCloseModal} closeOnOverlayClick>
         <ModalContainer minHeight={minHeight}>
-          <ModalBody p="16px" pt="30px" style={{ overflowY: 'scroll' }}>
+          <ModalBody p="16px" pt="28px">
             <FlexGap flexDirection="column" gap="8px" ref={inputRef}>
               <SwapUIV2.CurrencyInputPanelSimplify
                 id={`idoStakeCurrency${idoPublicData?.stakeCurrency?.symbol ?? ''}`}
@@ -213,19 +215,27 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                 onInputBlur={() => setMinHeight(undefined)}
                 onUserInput={setValue}
                 top={
-                  <FlexGap justifyContent="space-between" alignItems="center" width="100%" position="relative">
-                    <Text fontSize="12px" bold>
-                      {t('Deposit')}
-                    </Text>
-                    <LazyAnimatePresence mode="wait" features={domAnimation}>
-                      {account ? (
-                        <SwapUIV2.WalletAssetDisplay
-                          isUserInsufficientBalance={isUserInsufficientBalance}
-                          balance={balance}
-                          onMax={handleMaxInput}
-                        />
-                      ) : null}
-                    </LazyAnimatePresence>
+                  <FlexGap flexDirection="column" gap="8px" width="100%">
+                    <FlexGap justifyContent="space-between" alignItems="center">
+                      <Text fontSize="12px" bold>
+                        {t('Address')}
+                      </Text>
+                      <Text>{accountEllipsis}</Text>
+                    </FlexGap>
+                    <FlexGap justifyContent="space-between" alignItems="center" position="relative">
+                      <Text fontSize="12px" bold>
+                        {t('Deposit')}
+                      </Text>
+                      <LazyAnimatePresence mode="wait" features={domAnimation}>
+                        {account ? (
+                          <SwapUIV2.WalletAssetDisplay
+                            isUserInsufficientBalance={isUserInsufficientBalance}
+                            balance={balance}
+                            onMax={handleMaxInput}
+                          />
+                        ) : null}
+                      </LazyAnimatePresence>
+                    </FlexGap>
                   </FlexGap>
                 }
                 inputLeft={
