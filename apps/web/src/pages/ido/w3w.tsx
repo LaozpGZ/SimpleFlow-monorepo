@@ -8,7 +8,7 @@ import { useAccount } from 'wagmi'
 
 export default function W3W() {
   const { address } = useAccount()
-  const { isVerified } = useW3WAccountVerify()
+  const { verifyStatus } = useW3WAccountVerify()
   const sign = useW3WAccountSign()
   const [signature, setSignature] = useState<{ signature: string | null; expiredAt: number } | null>(null)
 
@@ -26,7 +26,7 @@ export default function W3W() {
             <pre>
               address: {address}
               <br />
-              isVerified: {isVerified ? 'true' : 'false'}
+              isVerified: {verifyStatus}
             </pre>
             <Button onClick={handleSign}>Sign</Button>
             <pre>{signature ? JSON.stringify(signature, null, 2) : 'No signature'}</pre>

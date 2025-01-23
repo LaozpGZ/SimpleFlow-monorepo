@@ -34,7 +34,7 @@ import { useAccount } from 'wagmi'
 import { getIsAndroid, isInBinance } from '@binance/w3w-utils'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { logGTMIdoDepositEvent } from 'utils/customGTMEventTracking'
-import { useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
+import { VerifyStatus, useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
 import { useIDODepositCallback } from '../../hooks/ido/useIDODepositCallback'
 import type { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
 
@@ -136,19 +136,19 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   )
   const isInputloading = inputBalance === undefined
 
-  const { isVerified } = useW3WAccountVerify()
+  const { verifyStatus } = useW3WAccountVerify()
 
   const disabled = useMemo(() => {
     return maxDepositExceeded || isUserInsufficientBalance
   }, [maxDepositExceeded, isUserInsufficientBalance])
 
   const handleDeposit = useCallback(() => {
-    if (isVerified) {
+    if (verifyStatus === VerifyStatus.eligible) {
       onOpen()
     } else {
       onUnverifiedOpen()
     }
-  }, [isVerified, onOpen, onUnverifiedOpen])
+  }, [verifyStatus, onOpen, onUnverifiedOpen])
 
   const { targetRef, tooltip } = useTooltip(
     <Text>
@@ -183,7 +183,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
   const accountEllipsis = account ? `${account.substring(0, 2)}...${account.substring(account.length - 4)}` : null
 
   const handleConfirmDeposit = () => {
-    if (!isVerified) {
+    if (verifyStatus !== VerifyStatus.eligible) {
       onUnverifiedOpen()
       return
     }
@@ -365,19 +365,36 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
           {tooltip}
         </>
         <ModalContainer>
-          <ModalBody p="16px" pt="30px">
-            <Heading textAlign="center" fontSize="20px" bold mb="16px">
-              {t('Binance Keyless Wallet')}
-            </Heading>
-            <FlexGap flexDirection="column" gap="16px">
-              <Flex justifyContent="center">
-                <Image src={`${ASSET_CDN}/web/wallets/binance-w3w.png`} width={40} height={40} />
-              </Flex>
-              <Text>{account}</Text>
-              <Text>{t('This IDO subscription is exclusively available using the Binance Keyless Wallet.')}</Text>
-            </FlexGap>
-            {isAndroid && isBinance ? <Box height="60px" width="100%" /> : null}
-          </ModalBody>
+          {verifyStatus === VerifyStatus.restricted ? (
+            <ModalBody p="16px" pt="30px">
+              <FlexGap flexDirection="column" gap="16px">
+                <Flex justifyContent="center">
+                  <Image src={`${ASSET_CDN}/web/wallets/binance-w3w.png`} width={40} height={40} />
+                </Flex>
+                <Text>{account}</Text>
+                <Text>
+                  {t(
+                    'Due to regulatory requirements, you are not eligible to participate in. This may be due to your location or other compliance factors.',
+                  )}
+                </Text>
+              </FlexGap>
+              {isAndroid && isBinance ? <Box height="60px" width="100%" /> : null}
+            </ModalBody>
+          ) : (
+            <ModalBody p="16px" pt="30px">
+              <Heading textAlign="center" fontSize="20px" bold mb="16px">
+                {t('Binance Keyless Wallet')}
+              </Heading>
+              <FlexGap flexDirection="column" gap="16px">
+                <Flex justifyContent="center">
+                  <Image src={`${ASSET_CDN}/web/wallets/binance-w3w.png`} width={40} height={40} />
+                </Flex>
+                <Text>{account}</Text>
+                <Text>{t('This IDO subscription is exclusively available using the Binance Keyless Wallet.')}</Text>
+              </FlexGap>
+              {isAndroid && isBinance ? <Box height="60px" width="100%" /> : null}
+            </ModalBody>
+          )}
         </ModalContainer>
       </ModalV2>
     </>

@@ -8,20 +8,30 @@ interface W3WVerifyResponse {
   data: boolean
 }
 
-const verifyW3WAccount = async (address: Address): Promise<boolean> => {
+export enum VerifyStatus {
+  ineligible = 'ineligible',
+  eligible = 'eligible',
+  restricted = 'restricted',
+}
+
+const verifyW3WAccount = async (address: Address): Promise<VerifyStatus> => {
   try {
     const timestamp = Date.now()
     const response = await fetch(`/api/w3w/verify?address=${address}&timestamp=${timestamp}`)
     const result: W3WVerifyResponse = await response.json()
 
-    if (result.code !== '000000' || !result.success) {
-      throw new Error('Failed to verify account')
+    if (result?.code === '351083') {
+      return VerifyStatus.restricted
     }
 
-    return result.data
+    if (result.code === '000000' && !result.success) {
+      return VerifyStatus.ineligible
+    }
+
+    return VerifyStatus.eligible
   } catch (error) {
     console.error('Error verifying W3W account:', error)
-    return false
+    return VerifyStatus.ineligible
   }
 }
 
@@ -38,7 +48,7 @@ export const useW3WAccountVerify = () => {
   })
 
   return {
-    isVerified: data,
+    verifyStatus: data,
     isLoading,
     error,
   }

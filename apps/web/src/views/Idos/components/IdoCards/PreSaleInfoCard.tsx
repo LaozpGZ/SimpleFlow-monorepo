@@ -39,3 +39,15 @@ export const PreSaleEligibleCard: React.FC = () => {
     </CardWrapper>
   )
 }
+
+export const ComplianceCard: React.FC = () => {
+  const { t } = useTranslation()
+
+  return (
+    <CardWrapper>
+      {t(
+        'Due to regulatory requirements, you are not eligible to participate in. This may be due to your location or other compliance factors.',
+      )}
+    </CardWrapper>
+  )
+}

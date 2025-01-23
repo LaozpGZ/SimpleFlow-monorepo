@@ -23,14 +23,14 @@ import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
 
 import { logGTMIdoConnectWalletEvent } from 'utils/customGTMEventTracking'
-import { useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
+import { VerifyStatus, useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
 import { getBannerUrl, getTempBannerUrl } from '../../helpers'
 import { useIDOClaimCallback } from '../../hooks/ido/useIDOClaimCallback'
 import type { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
 import { Footer } from '../Footer'
 import { IdoDepositButton, formatDollarAmount } from './IdoDespositButton'
 import { IdoRibbon } from './IdoRibbon'
-import { PreSaleEligibleCard, PreSaleInfoCard } from './PreSaleInfoCard'
+import { ComplianceCard, PreSaleEligibleCard, PreSaleInfoCard } from './PreSaleInfoCard'
 
 export const StyledCardBody = styled(CardBody)`
   padding: 24px 16px;
@@ -154,7 +154,7 @@ export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ id
 export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const { isVerified, isLoading: isPendingVerify } = useW3WAccountVerify()
+  const { verifyStatus, isLoading: isPendingVerify } = useW3WAccountVerify()
   const userHasStaked = idoPublicData?.userStakedAmount?.greaterThan(0)
   const { theme, isDark } = useTheme()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
@@ -185,8 +185,10 @@ export const IdoStakeActionCard: React.FC<{ idoPublicData: IDOPublicData }> = ({
 
                 {account && !isPendingVerify ? (
                   idoPublicData?.status === 'coming_soon' ? (
-                    isVerified ? (
+                    verifyStatus === VerifyStatus.eligible ? (
                       <PreSaleEligibleCard />
+                    ) : verifyStatus === VerifyStatus.restricted ? (
+                      <ComplianceCard />
                     ) : (
                       <PreSaleInfoCard />
                     )
