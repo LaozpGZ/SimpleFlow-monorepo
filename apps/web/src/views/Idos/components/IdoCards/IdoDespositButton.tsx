@@ -26,10 +26,10 @@ import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
-import { useAccount } from 'wagmi'
+import { useAccount, useDisconnect } from 'wagmi'
 
 import { getIsAndroid, isInBinance } from '@binance/w3w-utils'
 import { ASSET_CDN } from 'config/constants/endpoints'
@@ -192,6 +192,15 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
       deposit(0, depositAmount, handleCloseModal)
     }
   }
+
+  const { disconnectAsync } = useDisconnect()
+
+  useEffect(() => {
+    if (account && isBinance && verifyStatus === VerifyStatus.ineligible) {
+      onUnverifiedOpen()
+      disconnectAsync()
+    }
+  }, [account, isBinance, verifyStatus, onUnverifiedOpen, disconnectAsync])
 
   return (
     <>
