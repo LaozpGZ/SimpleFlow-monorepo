@@ -1,6 +1,6 @@
 import { CloseIcon, Flex, IconButton, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePhishingBanner } from '@pancakeswap/utils/user'
-import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { CSSProperties, useCallback, useEffect, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
@@ -121,42 +121,16 @@ const CONFIG: BannerConfig[] = [
 const PhishingWarningBanner: React.FC<React.PropsWithChildren> = () => {
   const [, hideBanner] = usePhishingBanner()
   const { isDesktop, isLg } = useMatchBreakpoints()
-  const [percentage, setPerCentage] = useState(0)
   const showInBigDevice = isDesktop || isLg
   const [step, setStep] = useState(0)
-  const timer = useRef<number | null>(null)
   const [showAnimation, setShowAnimation] = useState(true)
-  const [_, setRemainingTimer] = useState(DISPLAY_TIMER)
   const banner = useMemo(() => CONFIG[step], [step])
 
   const nextItem = useMemo(() => (step < CONFIG.length - 1 ? step + 1 : 0), [step])
-  useEffect(() => {
-    const timerRef = timer.current
 
-    const updateTimer = (prev: number) => {
-      const timeInSecond = prev - 70
-      const newRemainingTimer = timeInSecond > 0 ? timeInSecond : DISPLAY_TIMER
-      const newPercentage = 1 - timeInSecond / DISPLAY_TIMER
-
-      setPerCentage(newPercentage)
-
-      if (newPercentage >= 1) {
-        setStep(nextItem)
-        setShowAnimation(true)
-      }
-
-      return newRemainingTimer
-    }
-
-    timer.current = setInterval(() => {
-      setRemainingTimer(updateTimer)
-    }, 50)
-
-    return () => {
-      if (timerRef) {
-        clearInterval(timerRef)
-      }
-    }
+  const handleClickNext = useCallback(() => {
+    setStep(nextItem)
+    setShowAnimation(true)
   }, [nextItem])
 
   useEffect(() => {
@@ -166,15 +140,6 @@ const PhishingWarningBanner: React.FC<React.PropsWithChildren> = () => {
     }
     return undefined
   }, [showAnimation])
-
-  const handleClickNext = useCallback(() => {
-    setTimeout(() => {
-      setStep(nextItem)
-      setPerCentage(0)
-      setRemainingTimer(DISPLAY_TIMER)
-      setShowAnimation(true)
-    }, 600)
-  }, [nextItem])
 
   return (
     <Container className="warning-banner" $background={banner.background}>
@@ -192,7 +157,7 @@ const PhishingWarningBanner: React.FC<React.PropsWithChildren> = () => {
             <InnerContainer>
               <banner.component />
             </InnerContainer>
-            <Countdown percentage={percentage} onClick={handleClickNext} />
+            <Countdown step={step} duration={DISPLAY_TIMER} onClick={handleClickNext} />
           </SpeechBubble>
         </Flex>
       </AnimationContainer>
