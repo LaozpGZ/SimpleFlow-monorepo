@@ -373,6 +373,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
               <Flex justifyContent="center">
                 <Image src={`${ASSET_CDN}/web/wallets/binance-w3w.png`} width={40} height={40} />
               </Flex>
+              <Text>{account}</Text>
               <Text>{t('This IDO subscription is exclusively available using the Binance Keyless Wallet.')}</Text>
             </FlexGap>
             {isAndroid && isBinance ? <Box height="60px" width="100%" /> : null}
