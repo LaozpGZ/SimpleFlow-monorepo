@@ -24,11 +24,11 @@ const verifyW3WAccount = async (address: Address): Promise<VerifyStatus> => {
       return VerifyStatus.restricted
     }
 
-    if (result.code === '000000' && !result.success) {
-      return VerifyStatus.ineligible
+    if (result.code === '000000' && result.success && result.data) {
+      return VerifyStatus.eligible
     }
 
-    return VerifyStatus.eligible
+    return VerifyStatus.ineligible
   } catch (error) {
     console.error('Error verifying W3W account:', error)
     return VerifyStatus.ineligible
