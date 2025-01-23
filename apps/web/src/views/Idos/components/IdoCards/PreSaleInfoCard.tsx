@@ -1,10 +1,18 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CheckmarkCircleIcon, FlexGap, Text } from '@pancakeswap/uikit'
+import { CheckmarkCircleIcon, CloseCircleIcon, FlexGap, Text } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 
 export const CardWrapper = styled.div`
   background: ${({ theme }) => (theme.isDark ? '#13393C' : '#EEFBFC')};
   border: 1px solid ${({ theme }) => (theme.isDark ? '#094D53' : '#C1EDF0')};
+  border-radius: 20px;
+
+  padding: 12px;
+`
+
+export const FailureCardWrapper = styled.div`
+  background: ${({ theme }) => theme.colors.failure33};
+  border: 1px solid ${({ theme }) => theme.shadows.danger};
   border-radius: 20px;
 
   padding: 12px;
@@ -44,10 +52,13 @@ export const ComplianceCard: React.FC = () => {
   const { t } = useTranslation()
 
   return (
-    <CardWrapper>
-      {t(
-        'Due to regulatory requirements, you are not eligible to participate in. This may be due to your location or other compliance factors.',
-      )}
-    </CardWrapper>
+    <FailureCardWrapper>
+      <FlexGap gap="8px" alignItems="flex-start">
+        <FlexGap>
+          <CloseCircleIcon color="failure" width="24px" />
+        </FlexGap>
+        <Text>{t('Due to regulatory requirements, you are not eligible to participate in.')}</Text>
+      </FlexGap>
+    </FailureCardWrapper>
   )
 }

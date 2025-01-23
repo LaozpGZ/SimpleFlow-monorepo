@@ -372,11 +372,7 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   <Image src={`${ASSET_CDN}/web/wallets/binance-w3w.png`} width={40} height={40} />
                 </Flex>
                 <Text>{account}</Text>
-                <Text>
-                  {t(
-                    'Due to regulatory requirements, you are not eligible to participate in. This may be due to your location or other compliance factors.',
-                  )}
-                </Text>
+                <Text>{t('Due to regulatory requirements, you are not eligible to participate in.')}</Text>
               </FlexGap>
               {isAndroid && isBinance ? <Box height="60px" width="100%" /> : null}
             </ModalBody>
