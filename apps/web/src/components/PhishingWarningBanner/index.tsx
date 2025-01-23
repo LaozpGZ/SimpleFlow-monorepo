@@ -1,6 +1,6 @@
 import { CloseIcon, Flex, IconButton, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { usePhishingBanner } from '@pancakeswap/utils/user'
-import { CSSProperties, useEffect, useMemo, useRef, useState } from 'react'
+import { CSSProperties, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import 'swiper/css'
 import 'swiper/css/effect-fade'
@@ -126,53 +126,55 @@ const PhishingWarningBanner: React.FC<React.PropsWithChildren> = () => {
   const [step, setStep] = useState(0)
   const timer = useRef<number | null>(null)
   const [showAnimation, setShowAnimation] = useState(true)
-  const [remainingTimer, setRemainingTimer] = useState(DISPLAY_TIMER)
+  const [_, setRemainingTimer] = useState(DISPLAY_TIMER)
   const banner = useMemo(() => CONFIG[step], [step])
 
   const nextItem = useMemo(() => (step < CONFIG.length - 1 ? step + 1 : 0), [step])
   useEffect(() => {
-    const startCountdown = () => {
-      // Clear previous interval
-      if (timer.current) {
-        if (showAnimation) {
-          setTimeout(() => setShowAnimation(false), 1000)
-        }
+    const timerRef = timer.current
 
-        clearInterval(timer.current)
+    const updateTimer = (prev: number) => {
+      const timeInSecond = prev - 70
+      const newRemainingTimer = timeInSecond > 0 ? timeInSecond : DISPLAY_TIMER
+      const newPercentage = 1 - timeInSecond / DISPLAY_TIMER
+
+      setPerCentage(newPercentage)
+
+      if (newPercentage >= 1) {
+        setStep(nextItem)
+        setShowAnimation(true)
       }
 
-      timer.current = setInterval(() => {
-        const timeInSecond = remainingTimer - 70
-        const newRemainingTimer = timeInSecond > 0 ? timeInSecond : DISPLAY_TIMER
-        setRemainingTimer(newRemainingTimer)
-
-        const newPercentage = 1 - timeInSecond / DISPLAY_TIMER
-        setPerCentage(newPercentage)
-
-        if (newPercentage >= 1) {
-          setStep(nextItem)
-          setShowAnimation(true)
-        }
-      }, 50)
+      return newRemainingTimer
     }
 
-    startCountdown()
+    timer.current = setInterval(() => {
+      setRemainingTimer(updateTimer)
+    }, 50)
 
     return () => {
-      if (timer.current) {
-        clearInterval(timer.current)
+      if (timerRef) {
+        clearInterval(timerRef)
       }
     }
-  }, [remainingTimer, showAnimation, step, nextItem])
+  }, [nextItem])
 
-  const handleClickNext = () => {
+  useEffect(() => {
+    if (showAnimation) {
+      const timeoutId = setTimeout(() => setShowAnimation(false), 1000)
+      return () => clearTimeout(timeoutId)
+    }
+    return undefined
+  }, [showAnimation])
+
+  const handleClickNext = useCallback(() => {
     setTimeout(() => {
       setStep(nextItem)
       setPerCentage(0)
       setRemainingTimer(DISPLAY_TIMER)
       setShowAnimation(true)
     }, 600)
-  }
+  }, [nextItem])
 
   return (
     <Container className="warning-banner" $background={banner.background}>
