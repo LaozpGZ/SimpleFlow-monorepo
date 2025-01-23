@@ -338,6 +338,10 @@ export const IdoDepositButton: React.FC<{ idoPublicData: IDOPublicData; type: 'a
                   width="100%"
                   isLoading={isLoading}
                   onClick={() => {
+                    if (!isVerified) {
+                      onUnverifiedOpen()
+                      return
+                    }
                     if (depositAmount) deposit(0, depositAmount, handleCloseModal)
                   }}
                 >
