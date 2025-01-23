@@ -70,7 +70,7 @@ const ConnectW3WButton = ({ children, withIcon, onClick, ...props }: ConnectWall
     if (isInBinance()) {
       console.debug('debug connect w3w chainId', chainId)
       connectAsync({
-        connector: binanceWeb3WalletConnector(),
+        connector: binanceWeb3WalletConnector({ shimDisconnect: false }),
         chainId,
       })
       if (onClick) {
