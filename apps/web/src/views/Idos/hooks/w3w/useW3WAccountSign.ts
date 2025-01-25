@@ -1,13 +1,13 @@
+import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { v4 } from 'uuid'
-import { Address, Hex, zeroAddress } from 'viem'
+import { Address, Hex } from 'viem'
 import { useAccount, useSignMessage } from 'wagmi'
 
 export const useW3WAccountSign = () => {
   const { address } = useAccount()
   const { signMessageAsync } = useSignMessage()
-  // const contract = useIDOContract()
-  const contractAddress = zeroAddress
+  const contract = useIDOContract()
 
   const sign = useCallback(async () => {
     if (!address) throw new Error('No address provided')
@@ -23,13 +23,12 @@ export const useW3WAccountSign = () => {
 
     return w3wSign({
       address,
-      // contractAddress: contract?.address,
-      contractAddress,
+      contractAddress: contract?.address,
       signature,
       timestamp,
       nonce,
     })
-  }, [address, contractAddress, signMessageAsync])
+  }, [address, contract?.address, signMessageAsync])
 
   return sign
 }
@@ -40,6 +39,7 @@ interface W3WSignResponse {
   message: string
   data: {
     // if address is not a w3w address, signature will be null
+    // @note: signature is not a string starting with 0x
     signature: string | null
     // time in seconds
     expireAt: number
@@ -77,7 +77,7 @@ const w3wSign = async ({
   timestamp: number
   nonce: string | number
 }): Promise<{
-  signature: Hex | null
+  signature: string | null
   expireAt: number
 }> => {
   try {
@@ -102,7 +102,7 @@ const w3wSign = async ({
     }
 
     return {
-      signature: result.data?.signature as Hex,
+      signature: result.data?.signature,
       expireAt: result.data?.expireAt,
     }
   } catch (error) {

@@ -8,7 +8,7 @@ import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { isAddressEqual } from 'utils'
-import { Hex, zeroAddress } from 'viem'
+import { zeroAddress } from 'viem'
 import { userRejectedError } from 'views/Swap/V3Swap/hooks/useSendSwapTransaction'
 import { useW3WAccountSign } from '../w3w/useW3WAccountSign'
 import { useIDOPoolInfo } from './useIDOPoolInfo'
@@ -56,7 +56,7 @@ export const useIDODepositCallback = () => {
             throw new W3WSignError('Invalid signature or expiredAt')
           }
 
-          return idoContract.write.depositPool([amountPool, pid, BigInt(expireAt), signature as Hex], {
+          return idoContract.write.depositPool([amountPool, pid, BigInt(expireAt), `0x${signature}`], {
             account,
             chain: idoContract.chain,
             value,
