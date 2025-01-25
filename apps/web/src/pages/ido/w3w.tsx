@@ -10,7 +10,7 @@ export default function W3W() {
   const { address } = useAccount()
   const { verifyStatus } = useW3WAccountVerify()
   const sign = useW3WAccountSign()
-  const [signature, setSignature] = useState<{ signature: string | null; expiredAt: number } | null>(null)
+  const [signature, setSignature] = useState<{ signature: string | null; expireAt: number } | null>(null)
 
   const handleSign = async () => {
     const s = await sign()
