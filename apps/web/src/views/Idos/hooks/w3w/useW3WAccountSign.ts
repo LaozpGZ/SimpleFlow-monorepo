@@ -42,7 +42,7 @@ interface W3WSignResponse {
     // if address is not a w3w address, signature will be null
     signature: string | null
     // time in seconds
-    expiredAt: number
+    expireAt: number
   }
 }
 
@@ -54,6 +54,14 @@ enum SignResponseCode {
   IllegalTimestamp = '351005',
   IllegalNonce = '351082',
   IllegalAddress = '351026',
+  RestrictedAddress = '351083',
+}
+
+export class W3WSignRestrictedError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'W3WSignRestrictedError'
+  }
 }
 
 const w3wSign = async ({
@@ -68,7 +76,10 @@ const w3wSign = async ({
   signature: Hex
   timestamp: number
   nonce: string | number
-}) => {
+}): Promise<{
+  signature: Hex | null
+  expireAt: number
+}> => {
   try {
     const response = await fetch('/api/w3w/sign', {
       method: 'POST',
@@ -82,16 +93,23 @@ const w3wSign = async ({
     })
     const result: W3WSignResponse = await response.json()
 
+    if (result.code === SignResponseCode.RestrictedAddress) {
+      throw new W3WSignRestrictedError('Restricted address')
+    }
+
     if (result.code !== SignResponseCode.Normal) {
       throw new Error('Failed to sign')
     }
 
-    return result.data
+    return {
+      signature: result.data?.signature as Hex,
+      expireAt: result.data?.expireAt,
+    }
   } catch (error) {
     console.error('Error signing W3W account:', error)
     return {
       signature: null,
-      expiredAt: 0,
+      expireAt: 0,
     }
   }
 }

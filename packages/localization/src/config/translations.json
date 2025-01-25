@@ -3732,5 +3732,6 @@
   "You canceled deposit": "You canceled deposit",
   "You didn't confirm %symbol% deposit in your wallet": "You didn't confirm %symbol% deposit in your wallet",
   "Exclusive TGE": "Exclusive TGE",
-  "Token Generation Event": "Token Generation Event"
+  "Token Generation Event": "Token Generation Event",
+  "Invalid signature": "Invalid signature"
 }

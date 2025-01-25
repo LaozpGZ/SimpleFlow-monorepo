@@ -17,21 +17,15 @@ export const idoABI = [
   { inputs: [], name: 'NewAmountAboveUserCap', type: 'error' },
   { inputs: [], name: 'NotEnoughLPTokens', type: 'error' },
   { inputs: [], name: 'NotEnoughOfferingTokens', type: 'error' },
-  { inputs: [], name: 'OnTheBlackList', type: 'error' },
-  { inputs: [], name: 'PoolCanNotHarvest', type: 'error' },
   { inputs: [], name: 'PoolIdNotValid', type: 'error' },
   { inputs: [], name: 'PoolNotSet', type: 'error' },
+  { inputs: [], name: 'SignatureVerifyFailed', type: 'error' },
+  { inputs: [], name: 'SignerAddressZero', type: 'error' },
   { inputs: [], name: 'StartAndEndTimestampsLengthNotCorrect', type: 'error' },
   { inputs: [], name: 'StartTimeMustInferiorToEndTime', type: 'error' },
   { inputs: [], name: 'TokensNotDepositedProperly', type: 'error' },
   { inputs: [], name: 'TooEarly', type: 'error' },
   { inputs: [], name: 'TooLate', type: 'error' },
-  {
-    anonymous: false,
-    inputs: [{ indexed: true, internalType: 'address', name: 'user', type: 'address' }],
-    name: 'AddedIntoBlackList',
-    type: 'event',
-  },
   {
     anonymous: false,
     inputs: [
@@ -102,17 +96,17 @@ export const idoABI = [
   },
   {
     anonymous: false,
-    inputs: [{ indexed: false, internalType: 'bool', name: 'canHarvest', type: 'bool' }],
-    name: 'UpdatedCanHarvestPool',
-    type: 'event',
-  },
-  {
-    anonymous: false,
     inputs: [
       { indexed: false, internalType: 'uint256', name: 'minAmount', type: 'uint256' },
       { indexed: true, internalType: 'uint8', name: 'pid', type: 'uint8' },
     ],
     name: 'UpdatedMinDepositAmount',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [{ indexed: true, internalType: 'address', name: 'signerAddr', type: 'address' }],
+    name: 'UpdatedSignerAddress',
     type: 'event',
   },
   {
@@ -152,13 +146,6 @@ export const idoABI = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'address[]', name: 'addresses', type: 'address[]' }],
-    name: 'addAddressToBlacklist',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'addresses',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
@@ -166,23 +153,11 @@ export const idoABI = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'address', name: '', type: 'address' }],
-    name: 'blacklist',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'canHarvestPool',
-    outputs: [{ internalType: 'bool', name: '', type: 'bool' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
       { internalType: 'uint8', name: '_pid', type: 'uint8' },
+      { internalType: 'uint256', name: '_expiredAt', type: 'uint256' },
+      { internalType: 'bytes', name: '_signature', type: 'bytes' },
     ],
     name: 'depositPool',
     outputs: [],
@@ -245,13 +220,6 @@ export const idoABI = [
   },
   { inputs: [], name: 'renounceOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
   {
-    inputs: [{ internalType: 'bool', name: '_canHarvestPool', type: 'bool' }],
-    name: 'setCanHarvestPool',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
     inputs: [
       { internalType: 'uint256', name: '_offeringAmountPool', type: 'uint256' },
       { internalType: 'uint256', name: '_raisingAmountPool', type: 'uint256' },
@@ -263,6 +231,13 @@ export const idoABI = [
     name: 'setPool',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'signerAddress',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -292,6 +267,13 @@ export const idoABI = [
       { internalType: 'uint8', name: '_pid', type: 'uint8' },
     ],
     name: 'updateMinDepositAmount',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: '_signerAddr', type: 'address' }],
+    name: 'updateSignerAddress',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

@@ -8,10 +8,18 @@ import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { isAddressEqual } from 'utils'
-import { zeroAddress } from 'viem'
+import { Hex, zeroAddress } from 'viem'
 import { userRejectedError } from 'views/Swap/V3Swap/hooks/useSendSwapTransaction'
+import { useW3WAccountSign } from '../w3w/useW3WAccountSign'
 import { useIDOPoolInfo } from './useIDOPoolInfo'
 import { useIDOUserInfo } from './useIDOUserInfo'
+
+class W3WSignError extends Error {
+  constructor(message: string) {
+    super(message)
+    this.name = 'W3WSignError'
+  }
+}
 
 export const useIDODepositCallback = () => {
   const idoContract = useIDOContract()
@@ -22,6 +30,7 @@ export const useIDODepositCallback = () => {
   const { data: poolInfo } = useIDOPoolInfo()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError({ throwUserRejectError: true })
   const { refetch } = useIDOUserInfo()
+  const sign = useW3WAccountSign()
 
   const deposit = useCallback(
     async (pid: number, amount: CurrencyAmount<Currency>, onFinish?: () => void) => {
@@ -37,13 +46,22 @@ export const useIDODepositCallback = () => {
       const value = amount.currency.isNative ? amount.quotient : 0n
       const amountPool = amount.currency.isNative ? 0n : amount.quotient
       try {
-        const receipt = await fetchWithCatchTxError(() =>
-          idoContract.write.depositPool([amountPool, pid], {
+        const receipt = await fetchWithCatchTxError(async () => {
+          const { signature, expireAt } = await sign()
+
+          console.log('signature', signature)
+          console.log('expireAt', expireAt)
+
+          if (!signature || !expireAt) {
+            throw new W3WSignError('Invalid signature or expiredAt')
+          }
+
+          return idoContract.write.depositPool([amountPool, pid, BigInt(expireAt), signature as Hex], {
             account,
             chain: idoContract.chain,
             value,
-          }),
-        )
+          })
+        })
         if (receipt?.status) {
           setLatestTxReceipt(receipt)
           toastSuccess(t('Deposit successful'), <ToastDescriptionWithTx txHash={receipt.transactionHash} />)
@@ -57,6 +75,7 @@ export const useIDODepositCallback = () => {
             }),
           )
         }
+        console.error(error)
       } finally {
         onFinish?.()
         refetch()
@@ -65,6 +84,7 @@ export const useIDODepositCallback = () => {
     [
       account,
       idoContract,
+      sign,
       poolInfo?.pool0Info?.poolToken,
       poolInfo?.pool1Info?.poolToken,
       fetchWithCatchTxError,
