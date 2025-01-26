@@ -81,8 +81,12 @@ const w3wSign = async ({
   expireAt: number
 }> => {
   try {
-    const response = await fetch('/api/w3w/sign', {
+    const response = await fetch('https://www.binance.com/bapi/defi/v2/public/wallet-direct/wallet/address/sign', {
       method: 'POST',
+      headers: {
+        'x-gray-env': 'infra',
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
         timestamp,
         address,
