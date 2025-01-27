@@ -86,6 +86,8 @@ const w3wSign = async ({
       headers: {
         'x-gray-env': 'infra',
         'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
       },
       body: JSON.stringify({
         timestamp,

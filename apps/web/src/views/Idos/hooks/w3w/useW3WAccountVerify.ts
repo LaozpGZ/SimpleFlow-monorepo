@@ -23,6 +23,8 @@ const verifyW3WAccount = async (address: Address): Promise<VerifyStatus> => {
         headers: {
           'Content-Type': 'application/json',
           'x-gray-env': 'infra',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
         },
       },
     )
