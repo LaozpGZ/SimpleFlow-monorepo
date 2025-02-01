@@ -35,7 +35,6 @@ export const useUserVoteSlopes = () => {
       userInfo?.cakePoolProxy,
       publicClient,
     ],
-    initialData: [],
     queryFn: async (): Promise<VoteSlope[]> => {
       if (!gauges || gauges.length === 0 || !account || !publicClient) return []
 
@@ -93,7 +92,7 @@ export const useUserVoteSlopes = () => {
   })
 
   return {
-    data,
+    data: useMemo(() => data || [], [data]),
     refetch,
     isLoading,
   }
