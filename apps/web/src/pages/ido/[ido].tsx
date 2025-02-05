@@ -1,11 +1,11 @@
 import { ChainId } from '@pancakeswap/chains'
 import { IdoPageLayout } from '../../views/Idos'
-import IDo from '../../views/Idos/ido'
+import IDO from '../../views/Idos/ido'
 
 const IDO_SUPPORT_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET]
 
 const CurrentIdoPage = () => {
-  return <IDo />
+  return <IDO />
 }
 
 CurrentIdoPage.Layout = IdoPageLayout
