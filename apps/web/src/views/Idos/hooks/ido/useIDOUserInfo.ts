@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useIDOContract } from 'hooks/useContract'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
+import { useIDOContract } from './useIDOContract'
 
 export type IDOUserInfo = {
   amountPool: bigint

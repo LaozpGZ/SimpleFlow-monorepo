@@ -3,10 +3,10 @@ import { useToast } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { isUserRejected } from 'utils/sentry'
+import { useIDOContract } from './useIDOContract'
 import { useIDOUserInfo } from './useIDOUserInfo'
 
 export const useIDOClaimCallback = () => {

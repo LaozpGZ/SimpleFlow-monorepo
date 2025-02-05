@@ -28,7 +28,6 @@ import {
   getFarmAuctionContract,
   getFixedStakingContract,
   getGaugesVotingContract,
-  getIDOContract,
   getIfoCreditAddressContract,
   getLotteryV2Contract,
   getMasterChefContract,
@@ -587,11 +586,4 @@ export const useRevenueSharingPoolGatewayContract = () => {
   const { data: signer } = useWalletClient()
 
   return useMemo(() => getRevenueSharingPoolGatewayContract(signer ?? undefined, chainId), [signer, chainId])
-}
-
-export const useIDOContract = () => {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-
-  return useMemo(() => getIDOContract(signer ?? undefined, chainId), [chainId, signer])
 }

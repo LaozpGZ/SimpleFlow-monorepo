@@ -1,8 +1,8 @@
-import { useIDOContract } from 'hooks/useContract'
 import { useCallback } from 'react'
 import { v4 } from 'uuid'
-import { Address, Hex } from 'viem'
+import type { Address, Hex } from 'viem'
 import { useAccount, useSignMessage } from 'wagmi'
+import { useIDOContract } from '../ido/useIDOContract'
 
 export const useW3WAccountSign = () => {
   const { address } = useAccount()

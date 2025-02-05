@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query'
 import { QUERY_SETTINGS_IMMUTABLE } from 'config/constants'
 import { useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useIDOContract } from 'hooks/useContract'
 import { getViemClients } from 'utils/viem'
 import type { Address } from 'viem/accounts'
+import { useIDOContract } from './useIDOContract'
 
 type IDOAddresses = {
   lpToken0: Address

@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useIDOContract } from 'hooks/useContract'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { getViemClients } from 'utils/viem'
 import type { Address } from 'viem'
+import { useIDOContract } from './useIDOContract'
 
 export type PoolInfo = {
   pid: number

@@ -1,10 +1,10 @@
 import { getCurrentIfoRatio, getUserIfoInfo } from '@pancakeswap/ifos'
-import { ChainId, CurrencyAmount } from '@pancakeswap/sdk'
+import type { ChainId, CurrencyAmount } from '@pancakeswap/sdk'
 import { CAKE } from '@pancakeswap/tokens'
 import { useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
-import { Address } from 'viem'
+import type { Address } from 'viem'
 import { useAccount } from 'wagmi'
 
 import { getViemClients } from 'utils/viem'

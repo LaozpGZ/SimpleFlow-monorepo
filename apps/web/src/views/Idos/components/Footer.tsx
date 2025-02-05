@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { BscScanIcon, CardBody, FlexGap, LanguageIcon, Link, Text } from '@pancakeswap/uikit'
-import { useIDOContract } from 'hooks/useContract'
 import useTheme from 'hooks/useTheme'
+import { useIDOContract } from '../hooks/ido/useIDOContract'
 
 export const Footer: React.FC = () => {
   const { theme } = useTheme()
