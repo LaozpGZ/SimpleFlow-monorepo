@@ -12,10 +12,13 @@ export const useIDOStatus = (): [IDOStatus, IDOStatus] => {
   const { stakeCurrency0, stakeCurrency1 } = useIDOCurrencies()
   const { data: poolInfo } = useIDOPoolInfo()
   const progresses = useMemo(() => {
-    if (!poolInfo?.pool0Info || !poolInfo?.pool1Info) return [new Percent(0, 100), new Percent(0, 100)]
     return [
-      new Percent(poolInfo.pool0Info.totalAmountPool, poolInfo.pool0Info.raisingAmountPool),
-      new Percent(poolInfo.pool1Info.totalAmountPool, poolInfo.pool1Info.raisingAmountPool),
+      poolInfo?.pool0Info
+        ? new Percent(poolInfo.pool0Info.totalAmountPool, poolInfo.pool0Info.raisingAmountPool)
+        : new Percent(0, 100),
+      poolInfo?.pool1Info
+        ? new Percent(poolInfo.pool1Info.totalAmountPool, poolInfo.pool1Info.raisingAmountPool)
+        : new Percent(0, 100),
     ]
   }, [poolInfo])
 
