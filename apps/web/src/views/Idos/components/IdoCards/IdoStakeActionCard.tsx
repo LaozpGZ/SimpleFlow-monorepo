@@ -26,11 +26,12 @@ export const IdoStakeActionCard: React.FC<{
   const { address: account } = useAccount()
   const { theme, isDark } = useTheme()
   const { verifyStatus, isLoading: isPendingVerify } = useW3WAccountVerify()
-  const stakeCurrency = userStatus?.stakedAmount?.currency
+  const { offeringCurrency, stakeCurrency0, stakeCurrency1 } = useIDOCurrencies()
+
+  const stakeCurrency = pid === 0 ? stakeCurrency0 : stakeCurrency1
   const userHasStaked = userStatus?.stakedAmount?.greaterThan(0)
 
   const { status, raiseAmounts, pricePerTokens, saleAmounts } = useIDOConfig()
-  const { offeringCurrency } = useIDOCurrencies()
 
   const [raiseAmount, pricePerToken] = useMemo(() => {
     if (!stakeCurrency) return [undefined, undefined, undefined]
