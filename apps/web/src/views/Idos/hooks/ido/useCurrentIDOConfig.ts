@@ -1,5 +1,9 @@
-import { idos } from '../../config'
+import { useRouter } from 'next/router'
+import { idoConfigDict } from '../../config'
 
 export const useCurrentIDOConfig = () => {
-  return { activeIdo: idos[0] }
+  const { query } = useRouter()
+  console.debug('debug query', query)
+  const currentIdo = query.ido as string
+  return { activeIdo: idoConfigDict[currentIdo] ?? idoConfigDict.myshell }
 }

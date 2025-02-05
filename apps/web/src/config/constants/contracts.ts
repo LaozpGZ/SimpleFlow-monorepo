@@ -260,17 +260,4 @@ export default {
     [ChainId.ZKSYNC_TESTNET]: '0xbfcCF87Ee5cd03d4550Cc1526Bf152cc2EE1C7AB',
     [ChainId.ZKSYNC]: '0xB774c13bA5a665713037c42A12f0ED9De70585cB',
   },
-  ido: {
-    [ChainId.BSC]: getTestIdoAddress() ?? '0xD25fbd3F2fbD261798b987C84A409Ba687E39afb',
-    [ChainId.BSC_TESTNET]: getTestIdoAddress() ?? '0x51bc9C57A9401d7826ADd434e4D20bf3cf4880Ac',
-  },
 } as const satisfies Record<string, Record<number, `0x${string}`>>
-
-function getTestIdoAddress(): `0x${string}` | null {
-  if (typeof window !== 'undefined') {
-    const urlParams = new URLSearchParams(window.location.search)
-    return urlParams.get('testIdoAddress') as `0x${string}` | null
-  }
-
-  return process.env.NEXT_PUBLIC_BSC_TESTNET_IDO_ADDRESS as `0x${string}` | null
-}
