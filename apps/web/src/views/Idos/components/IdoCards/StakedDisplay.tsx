@@ -5,7 +5,7 @@ import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import type { IDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
 import { IdoDepositButtonV2, formatDollarAmount } from './IdoDepositButtonV2'
 
-export const StakedDisplay: React.FC<{ userStatus: IDOUserStatus }> = ({ userStatus }) => {
+export const StakedDisplay: React.FC<{ userStatus: IDOUserStatus; pid: number }> = ({ userStatus, pid }) => {
   const { t } = useTranslation()
   const stakedAmount = userStatus?.stakedAmount
   const stakeCurrency = userStatus?.stakedAmount?.currency
@@ -47,7 +47,7 @@ export const StakedDisplay: React.FC<{ userStatus: IDOUserStatus }> = ({ userSta
           </FlexGap>
         </FlexGap>
       </FlexGap>
-      <IdoDepositButtonV2 userStatus={userStatus} type="add" />
+      <IdoDepositButtonV2 userStatus={userStatus} type="add" pid={pid} />
     </FlexGap>
   )
 }

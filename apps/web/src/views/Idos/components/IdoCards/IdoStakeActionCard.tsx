@@ -18,6 +18,7 @@ import { ComplianceCard, PreSaleEligibleCard, PreSaleInfoCard } from './PreSaleI
 import { StakedDisplay } from './StakedDisplay'
 
 export const IdoStakeActionCard: React.FC<{
+  pid: number
   userStatus: IDOUserStatus
   idoStatus: IDOStatus
 }> = ({ userStatus, idoStatus }) => {
@@ -57,7 +58,7 @@ export const IdoStakeActionCard: React.FC<{
           {status === 'finished' ? (
             <ClaimDisplay userStatus={userStatus} />
           ) : userStatus?.stakedAmount?.greaterThan(0) ? (
-            <StakedDisplay userStatus={userStatus} />
+            <StakedDisplay userStatus={userStatus} pid={pid} />
           ) : (
             <FlexGap flexDirection="column" gap="8px">
               <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
@@ -76,7 +77,7 @@ export const IdoStakeActionCard: React.FC<{
                       <PreSaleInfoCard />
                     )
                   ) : (
-                    <IdoDepositButtonV2 userStatus={userStatus} type="deposit" />
+                    <IdoDepositButtonV2 userStatus={userStatus} type="deposit" pid={pid} />
                   )
                 ) : (
                   <ConnectW3WButton width="100%" onClick={handleConnectWallet} />

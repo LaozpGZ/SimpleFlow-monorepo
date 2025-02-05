@@ -78,8 +78,8 @@ export const IdoCard: React.FC = () => {
     <CardBody>
       <IdoSaleInfoCard />
       <FlexGap flexDirection="column" gap="16px">
-        {pool0Info && <IdoStakeActionCard userStatus={userStatus0} idoStatus={idoStatus0} />}
-        {pool1Info && <IdoStakeActionCard userStatus={userStatus1} idoStatus={idoStatus1} />}
+        {pool0Info && <IdoStakeActionCard pid={pool0Info.pid} userStatus={userStatus0} idoStatus={idoStatus0} />}
+        {pool1Info && <IdoStakeActionCard pid={pool1Info.pid} userStatus={userStatus1} idoStatus={idoStatus1} />}
       </FlexGap>
     </CardBody>
   )

@@ -48,8 +48,9 @@ export const formatDollarAmount = (amount: number) => {
 
 export const IdoDepositButtonV2: React.FC<{
   userStatus: IDOUserStatus
+  pid: number
   type: 'add' | 'deposit'
-}> = ({ userStatus, type }) => {
+}> = ({ userStatus, type, pid }) => {
   const { t } = useTranslation()
   const { onDismiss, onOpen, isOpen } = useModalV2()
   const { isOpen: isUnverifiedOpen, onOpen: onUnverifiedOpen, onDismiss: onUnverifiedDismiss } = useModalV2()
@@ -196,7 +197,7 @@ export const IdoDepositButtonV2: React.FC<{
     }
     if (depositAmount) {
       logGTMIdoDepositEvent()
-      deposit(0, depositAmount, handleCloseModal)
+      deposit(pid, depositAmount, handleCloseModal)
     }
   }
 
