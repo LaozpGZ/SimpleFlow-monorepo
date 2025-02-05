@@ -94,7 +94,7 @@ export const ClaimDisplay: React.FC<{
             </FlexGap>
             <Button
               onClick={() => {
-                if (!userClaimed) claim(0)
+                if (!userClaimed) claim(pid)
               }}
               width={userClaimed ? '48px' : undefined}
               variant={userClaimed ? 'success' : undefined}
