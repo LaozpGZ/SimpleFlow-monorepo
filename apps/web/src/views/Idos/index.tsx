@@ -1,6 +1,5 @@
 import { styled } from 'styled-components'
 import Hero from './components/Hero'
-import IfoProvider from './contexts/IfoContext'
 
 export const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
@@ -15,13 +14,11 @@ const WidthWrapper = styled.div`
 
 export const IdoPageLayout = ({ children }) => {
   return (
-    <IfoProvider>
-      <Wrapper>
-        <WidthWrapper>
-          <Hero />
-          {children}
-        </WidthWrapper>
-      </Wrapper>
-    </IfoProvider>
+    <Wrapper>
+      <WidthWrapper>
+        <Hero />
+        {children}
+      </WidthWrapper>
+    </Wrapper>
   )
 }
