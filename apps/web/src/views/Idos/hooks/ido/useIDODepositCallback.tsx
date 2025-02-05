@@ -32,7 +32,7 @@ export const useIDODepositCallback = () => {
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError({ throwUserRejectError: true })
   const { refetch } = useIDOUserInfo()
   const sign = useW3WAccountSign()
-  const { writeContractAsync } = useWriteContract()
+  const { writeContractAsync } = useWriteContract({})
 
   const deposit = useCallback(
     async (pid: number, amount: CurrencyAmount<Currency>, onFinish?: () => void) => {
@@ -95,10 +95,11 @@ export const useIDODepositCallback = () => {
     [
       account,
       idoContract,
-      sign,
       poolInfo?.pool0Info?.poolToken,
       poolInfo?.pool1Info?.poolToken,
       fetchWithCatchTxError,
+      sign,
+      writeContractAsync,
       setLatestTxReceipt,
       toastSuccess,
       t,
