@@ -57,7 +57,7 @@ export const IdoStakeActionCard: React.FC<{
       <CardBody>
         <FlexGap flexDirection="column" gap="8px">
           {status === 'finished' ? (
-            <ClaimDisplay userStatus={userStatus} />
+            <ClaimDisplay userStatus={userStatus} pid={pid} />
           ) : userStatus?.stakedAmount?.greaterThan(0) ? (
             <StakedDisplay userStatus={userStatus} pid={pid} />
           ) : (

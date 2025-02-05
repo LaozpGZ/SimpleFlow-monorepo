@@ -12,12 +12,15 @@ import type { IDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
 import { useAccount } from 'wagmi'
 import { formatDollarAmount } from './IdoDespositButton'
 
-export const ClaimDisplay: React.FC<{ userStatus: IDOUserStatus }> = ({ userStatus }) => {
+export const ClaimDisplay: React.FC<{
+  userStatus: IDOUserStatus
+  pid: number
+}> = ({ userStatus, pid }) => {
   const { t } = useTranslation()
   const { claim, isPending: isLoading } = useIDOClaimCallback()
   const claimableAmount = userStatus?.claimableAmount?.toSignificant(6)
-  const { offeringCurrency } = useIDOCurrencies()
-  const stakeCurrency = userStatus?.stakedAmount?.currency
+  const { offeringCurrency, stakeCurrency0, stakeCurrency1 } = useIDOCurrencies()
+  const stakeCurrency = pid === 0 ? stakeCurrency0 : stakeCurrency1
   const { status } = useIDOConfig()
   const amountInDollar = useStablecoinPriceAmount(
     offeringCurrency ?? undefined,
