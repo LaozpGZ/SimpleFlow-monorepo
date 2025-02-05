@@ -1,5 +1,5 @@
 import { getCurrentIfoRatio, getUserIfoInfo } from '@pancakeswap/ifos'
-import type { ChainId, CurrencyAmount } from '@pancakeswap/sdk'
+import { ChainId, CurrencyAmount } from '@pancakeswap/sdk'
 import { CAKE } from '@pancakeswap/tokens'
 import { useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
