@@ -4,7 +4,8 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { getContract } from 'utils/contractHelpers'
-import type { WalletClient } from 'viem'
+import { createPublicClient, custom, http, type WalletClient } from 'viem'
+import { bsc } from 'viem/chains'
 import { idoConfigDict } from 'views/Idos/config'
 import { useWalletClient } from 'wagmi'
 
@@ -41,5 +42,9 @@ function getIDOContract(idoId: string, signer?: WalletClient, chainId?: number) 
     abi: idoABI,
     signer,
     chainId,
+    publicClient: createPublicClient({
+      chain: bsc,
+      transport: typeof window !== 'undefined' && window.ethereum ? custom(window.ethereum as any) : http(),
+    }),
   })
 }
