@@ -7,8 +7,9 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallback } from 'react'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { isAddressEqual } from 'utils'
-import { zeroAddress } from 'viem'
+import { erc20Abi, zeroAddress } from 'viem'
 import { userRejectedError } from 'views/Swap/V3Swap/hooks/useSendSwapTransaction'
+import { useWriteContract } from 'wagmi'
 import { useW3WAccountSign } from '../w3w/useW3WAccountSign'
 import { useIDOContract } from './useIDOContract'
 import { useIDOPoolInfo } from './useIDOPoolInfo'
@@ -31,6 +32,7 @@ export const useIDODepositCallback = () => {
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError({ throwUserRejectError: true })
   const { refetch } = useIDOUserInfo()
   const sign = useW3WAccountSign()
+  const { writeContractAsync } = useWriteContract()
 
   const deposit = useCallback(
     async (pid: number, amount: CurrencyAmount<Currency>, onFinish?: () => void) => {
@@ -48,6 +50,15 @@ export const useIDODepositCallback = () => {
       try {
         const receipt = await fetchWithCatchTxError(async () => {
           const { signature, expireAt } = await sign()
+
+          if (amount.currency.isToken) {
+            await writeContractAsync({
+              address: amount.currency.address,
+              abi: erc20Abi,
+              functionName: 'approve',
+              args: [idoContract.address, amount.quotient],
+            })
+          }
 
           console.log('signature', signature)
           console.log('expireAt', expireAt)
