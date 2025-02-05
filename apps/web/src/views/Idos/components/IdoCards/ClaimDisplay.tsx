@@ -147,8 +147,7 @@ export const ClaimDisplay: React.FC<{ userStatus: IDOUserStatus }> = ({ userStat
             {stakeCurrency?.symbol} {t('Pool')}
           </Text>
           <FlexGap gap="8px" alignItems="center">
-            {/* @ts-ignore */}
-            <CurrencyLogo size="40px" currency={idoPublicData?.stakeCurrency} />
+            {stakeCurrency && <CurrencyLogo size="40px" currency={stakeCurrency} />}
             {!account ? (
               <ConnectW3WButton width="100%" onClick={handleConnectWallet} />
             ) : (
