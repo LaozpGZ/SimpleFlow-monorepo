@@ -23,6 +23,7 @@ export const useIDOConfig = () => {
   const { data: poolInfo } = useIDOPoolInfo()
   const { pool0Info, pool1Info } = poolInfo ?? {}
   const { stakeCurrency0, stakeCurrency1, offeringCurrency } = useIDOCurrencies()
+  const now = dayjs().unix()
 
   return useMemo(() => {
     return {
@@ -70,7 +71,20 @@ export const useIDOConfig = () => {
             CurrencyAmount.fromRawAmount(offeringCurrency, pool1Info?.offeringAmountPool ?? 0n),
           )
         : undefined,
-      status: getStatusByTimestamp(dayjs().unix(), poolInfo?.startTimestamp, poolInfo?.endTimestamp),
+      status: getStatusByTimestamp(now, poolInfo?.startTimestamp, poolInfo?.endTimestamp),
     } satisfies IDOConfig
-  }, [poolInfo, stakeCurrency0, stakeCurrency1, offeringCurrency, pool0Info, pool1Info])
+  }, [
+    pool0Info?.offeringAmountPool,
+    pool0Info?.raisingAmountPool,
+    pool0Info?.capPerUserInLP,
+    pool1Info?.offeringAmountPool,
+    pool1Info?.raisingAmountPool,
+    pool1Info?.capPerUserInLP,
+    poolInfo?.startTimestamp,
+    poolInfo?.endTimestamp,
+    stakeCurrency0,
+    offeringCurrency,
+    stakeCurrency1,
+    now,
+  ])
 }
