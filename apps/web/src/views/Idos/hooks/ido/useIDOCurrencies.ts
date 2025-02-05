@@ -3,12 +3,13 @@ import { QUERY_SETTINGS_IMMUTABLE } from 'config/constants'
 import { useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getViemClients } from 'utils/viem'
+import { isAddressEqual, zeroAddress } from 'viem'
 import type { Address } from 'viem/accounts'
 import { useIDOContract } from './useIDOContract'
 
 type IDOAddresses = {
   lpToken0: Address
-  lpToken1: Address
+  lpToken1: Address | undefined
   offeringToken: Address
   adminAddress: Address
 }
@@ -55,7 +56,7 @@ export const useIDOAddresses = () => {
 
       return {
         lpToken0,
-        lpToken1,
+        lpToken1: isAddressEqual(lpToken1, zeroAddress) ? undefined : lpToken1,
         offeringToken,
         adminAddress,
       }

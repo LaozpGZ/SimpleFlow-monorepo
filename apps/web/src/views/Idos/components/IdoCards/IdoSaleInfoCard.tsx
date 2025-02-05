@@ -56,8 +56,6 @@ export const IdoSaleInfoCard: React.FC = () => {
               : t('You can subscribe to the sale by depositing %stakeCurrency%.', {
                   stakeCurrency: stakeCurrency0?.symbol ?? stakeCurrency1?.symbol,
                 })}
-            {/* {t('You can subscribe to the sale by depositing BNB and CAKE half in ratio.')} */}
-            {/* {t('You can subscribe to the sale by depositing BNB.')} */}
           </Text>
         )}
       </CardBody>

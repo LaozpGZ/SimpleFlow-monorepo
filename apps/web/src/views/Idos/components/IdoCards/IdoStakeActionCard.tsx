@@ -86,6 +86,7 @@ export const IdoStakeActionCard: React.FC<{
               </FlexGap>
             </FlexGap>
           )}
+
           {userHasStaked && <Divider />}
           <FlexGap justifyContent="space-between" mt="8px">
             <Text color="textSubtle">
@@ -106,7 +107,7 @@ export const IdoStakeActionCard: React.FC<{
               <FlexGap justifyContent="space-between">
                 <Text color="textSubtle">{t('Total committed')}</Text>
                 <Text>
-                  {idoStatus.currentStakedAmount?.toSignificant(6)} {stakeCurrency?.symbol ?? ''}
+                  {idoStatus.currentStakedAmount?.toSignificant(6) ?? 0} {stakeCurrency?.symbol ?? ''}
                 </Text>
               </FlexGap>
               <FlexGap justifyContent="space-between">
