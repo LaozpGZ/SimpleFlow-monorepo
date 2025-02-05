@@ -21,7 +21,7 @@ export const IdoStakeActionCard: React.FC<{
   pid: number
   userStatus: IDOUserStatus
   idoStatus: IDOStatus
-}> = ({ userStatus, idoStatus }) => {
+}> = ({ userStatus, idoStatus, pid }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { theme, isDark } = useTheme()
