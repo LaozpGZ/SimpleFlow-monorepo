@@ -1,12 +1,14 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { BscScanIcon, CardBody, FlexGap, LanguageIcon, Link, Text } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
+import { useCurrentIDOConfig } from '../hooks/ido/useCurrentIDOConfig'
 import { useIDOContract } from '../hooks/ido/useIDOContract'
 
 export const Footer: React.FC = () => {
   const { theme } = useTheme()
   const { t } = useTranslation()
   const idoContract = useIDOContract()
+  const currentIdoConfig = useCurrentIDOConfig()
   return (
     <CardBody>
       <FlexGap gap="12px" flexDirection="column">
@@ -19,9 +21,7 @@ export const Footer: React.FC = () => {
           </Link>
         </FlexGap>
         <Text color="textSubtle" fontSize="14px" lineHeight="16.8px">
-          {t(
-            'MyShell is an AI creator platform for everyone to build, share, and own AI agents. Our vision is to create a unified platform that provides product-driven value for web2 users and offers the crypto community participating ownership in practical AI applications, bridging the gap between frontier AI applications and blockchain technology.',
-          )}
+          {t(currentIdoConfig.description)}
         </Text>
       </FlexGap>
     </CardBody>

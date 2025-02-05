@@ -2,8 +2,8 @@ import CurrentIfo from './CurrentIfo'
 import { useCurrentIDOConfig } from './hooks/ido/useCurrentIDOConfig'
 
 const Ido = () => {
-  const { activeIdo } = useCurrentIDOConfig()
-  return <CurrentIfo activeIdo={activeIdo} />
+  const currentIdoConfig = useCurrentIDOConfig()
+  return <CurrentIfo idoConfig={currentIdoConfig} />
 }
 
 export default Ido

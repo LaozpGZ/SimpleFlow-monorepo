@@ -44,8 +44,8 @@ export type PoolInfo = {
 }
 
 export type IDOPoolInfo = {
-  pool0Info: PoolInfo
-  pool1Info: PoolInfo
+  pool0Info: PoolInfo | undefined
+  pool1Info: PoolInfo | undefined
   /**
    * Start timestamp of the pool
    */
@@ -133,8 +133,8 @@ export const useIDOPoolInfo = () => {
       }
 
       return {
-        pool0Info,
-        pool1Info,
+        pool0Info: pool0Info.offeringAmountPool > 0n ? pool0Info : undefined,
+        pool1Info: pool1Info.offeringAmountPool > 0n ? pool1Info : undefined,
         startTimestamp: Number(startTimestamp),
         endTimestamp: Number(endTimestamp),
       }

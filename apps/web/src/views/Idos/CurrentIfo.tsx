@@ -1,6 +1,4 @@
-import { IDOConfig } from './config'
-
-import { useIdoPublicData } from './hooks/ido/useIdoPublicData'
+import type { IDOConfig } from './config'
 
 import { IDoCurrentCard } from './components/IdoCards/IdoCards'
 import IfoContainer from './components/IfoContainer'
@@ -8,12 +6,10 @@ import IfoQuestions from './components/IfoQuestions'
 import { SectionBackground } from './components/SectionBackground'
 
 interface TypeProps {
-  activeIdo: IDOConfig
+  idoConfig: IDOConfig
 }
 
-const CurrentIdo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIdo }) => {
-  const idoPublicData = useIdoPublicData(activeIdo.chainId)?.[0]
-
+const CurrentIdo: React.FC<React.PropsWithChildren<TypeProps>> = ({ idoConfig }) => {
   const steps = <></>
 
   const faq = (
@@ -23,12 +19,7 @@ const CurrentIdo: React.FC<React.PropsWithChildren<TypeProps>> = ({ activeIdo })
   )
 
   return (
-    <IfoContainer
-      ifoAddress="0x"
-      ifoSection={<IDoCurrentCard chainId={activeIdo.chainId} idoPublicData={idoPublicData} idoId={activeIdo.id} />}
-      ifoSteps={steps}
-      faq={faq}
-    />
+    <IfoContainer ifoAddress="0x" ifoSection={<IDoCurrentCard idoId={idoConfig.id} />} ifoSteps={steps} faq={faq} />
   )
 }
 

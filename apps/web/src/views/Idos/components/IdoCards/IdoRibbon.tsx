@@ -1,5 +1,4 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { ChainId } from '@pancakeswap/sdk'
 import { Box, Flex, Heading, Progress, Text } from '@pancakeswap/uikit'
 import { ReactNode } from 'react'
 import { styled } from 'styled-components'
@@ -65,22 +64,16 @@ const ChainBoardContainer = styled(Box)`
 `
 
 export const IdoRibbon = ({
-  ifoId,
-  ifoChainId,
   ifoStatus,
   plannedStartTime,
   startTime,
-  timeProgress,
   endTime,
   isClaimed,
   hasUserStaked,
 }: {
-  ifoChainId?: ChainId
   ifoStatus: IfoStatus
-  ifoId?: string
   plannedStartTime: number
   startTime: number
-  timeProgress: number
   endTime: number
   isClaimed?: boolean
   hasUserStaked?: boolean

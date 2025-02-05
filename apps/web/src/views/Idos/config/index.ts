@@ -18,6 +18,6 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     chainId: ChainId.BSC,
     contractAddress: '0x',
     description:
-      'MyShell is building an AI consumer layer that connects users, creators, and open-source AI researchers.',
+      'MyShell is an AI creator platform for everyone to build, share, and own AI agents. Our vision is to create a unified platform that provides product-driven value for web2 users and offers the crypto community participating ownership in practical AI applications, bridging the gap between frontier AI applications and blockchain technology.',
   },
 }

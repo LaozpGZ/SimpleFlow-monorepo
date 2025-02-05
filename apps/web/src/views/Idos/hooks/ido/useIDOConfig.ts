@@ -21,11 +21,12 @@ export type IDOConfig = {
 
 export const useIDOConfig = () => {
   const { data: poolInfo } = useIDOPoolInfo()
+  const { pool0Info, pool1Info } = poolInfo ?? {}
   const { stakeCurrency0, stakeCurrency1, offeringCurrency } = useIDOCurrencies()
 
   return useMemo(() => {
     return {
-      totalSales: [poolInfo?.pool0Info.offeringAmountPool ?? 0n, poolInfo?.pool1Info.offeringAmountPool ?? 0n],
+      totalSales: [pool0Info?.offeringAmountPool ?? 0n, pool1Info?.offeringAmountPool ?? 0n],
       startTimestamp: poolInfo?.startTimestamp ?? 0,
       endTimestamp: poolInfo?.endTimestamp ?? 0,
       duration:
@@ -35,45 +36,41 @@ export const useIDOConfig = () => {
           ? new Price(
               offeringCurrency,
               stakeCurrency0,
-              poolInfo?.pool0Info.offeringAmountPool ?? 0n,
-              poolInfo?.pool0Info.raisingAmountPool ?? 0n,
+              pool0Info?.offeringAmountPool ?? 0n,
+              pool0Info?.raisingAmountPool ?? 0n,
             )
           : undefined,
         stakeCurrency1 && offeringCurrency
           ? new Price(
               offeringCurrency,
               stakeCurrency1,
-              poolInfo?.pool1Info.offeringAmountPool ?? 0n,
-              poolInfo?.pool1Info.raisingAmountPool ?? 0n,
+              pool1Info?.offeringAmountPool ?? 0n,
+              pool1Info?.raisingAmountPool ?? 0n,
             )
           : undefined,
       ],
       maxStakePerUsers: [
-        stakeCurrency0
-          ? CurrencyAmount.fromRawAmount(stakeCurrency0, poolInfo?.pool0Info.capPerUserInLP ?? 0n)
-          : undefined,
-        stakeCurrency1
-          ? CurrencyAmount.fromRawAmount(stakeCurrency1, poolInfo?.pool1Info.capPerUserInLP ?? 0n)
-          : undefined,
+        stakeCurrency0 ? CurrencyAmount.fromRawAmount(stakeCurrency0, pool0Info?.capPerUserInLP ?? 0n) : undefined,
+        stakeCurrency1 ? CurrencyAmount.fromRawAmount(stakeCurrency1, pool1Info?.capPerUserInLP ?? 0n) : undefined,
       ],
       raiseAmounts: offeringCurrency
         ? [
-            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool0Info.raisingAmountPool ?? 0n),
-            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool1Info.raisingAmountPool ?? 0n),
+            CurrencyAmount.fromRawAmount(offeringCurrency, pool0Info?.raisingAmountPool ?? 0n),
+            CurrencyAmount.fromRawAmount(offeringCurrency, pool1Info?.raisingAmountPool ?? 0n),
           ]
         : [undefined, undefined],
       saleAmounts: offeringCurrency
         ? [
-            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool0Info.offeringAmountPool ?? 0n),
-            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool1Info.offeringAmountPool ?? 0n),
+            CurrencyAmount.fromRawAmount(offeringCurrency, pool0Info?.offeringAmountPool ?? 0n),
+            CurrencyAmount.fromRawAmount(offeringCurrency, pool1Info?.offeringAmountPool ?? 0n),
           ]
         : [undefined, undefined],
       totalSalesAmount: offeringCurrency
-        ? CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool0Info.offeringAmountPool ?? 0n).add(
-            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool1Info.offeringAmountPool ?? 0n),
+        ? CurrencyAmount.fromRawAmount(offeringCurrency, pool0Info?.offeringAmountPool ?? 0n).add(
+            CurrencyAmount.fromRawAmount(offeringCurrency, pool1Info?.offeringAmountPool ?? 0n),
           )
         : undefined,
       status: getStatusByTimestamp(dayjs().unix(), poolInfo?.startTimestamp, poolInfo?.endTimestamp),
     } satisfies IDOConfig
-  }, [poolInfo, stakeCurrency0, stakeCurrency1, offeringCurrency])
+  }, [poolInfo, stakeCurrency0, stakeCurrency1, offeringCurrency, pool0Info, pool1Info])
 }
