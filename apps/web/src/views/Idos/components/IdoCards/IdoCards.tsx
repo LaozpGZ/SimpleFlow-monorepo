@@ -13,10 +13,8 @@ import {
   Text,
   useTooltip,
 } from '@pancakeswap/uikit'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import ConnectW3WButton from 'components/ConnectW3WButton'
-import dayjs from 'dayjs'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
@@ -30,6 +28,7 @@ import type { IDOPublicData } from '../../hooks/ido/useIdoPublicData'
 import { Footer } from '../Footer'
 import { IdoDepositButton, formatDollarAmount } from './IdoDespositButton'
 import { IdoRibbon } from './IdoRibbon'
+import { IdoSaleInfoCard } from './IdoSaleInfoCard'
 import { ComplianceCard, PreSaleEligibleCard, PreSaleInfoCard } from './PreSaleInfoCard'
 
 export const StyledCardBody = styled(CardBody)`
@@ -94,60 +93,9 @@ export const IDoCurrentCard = ({
 export const IdoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
   return (
     <CardBody>
-      <IdoSaleInfoCard idoPublicData={idoPublicData} />
+      <IdoSaleInfoCard />
       <IdoStakeActionCard idoPublicData={idoPublicData} />
     </CardBody>
-  )
-}
-
-export const IdoSaleInfoCard: React.FC<{ idoPublicData: IDOPublicData }> = ({ idoPublicData }) => {
-  const { t } = useTranslation()
-  const { theme, isDark } = useTheme()
-
-  return (
-    <Card background={isDark ? '#18171A' : theme.colors.background} mb="16px">
-      <CardBody>
-        <FlexGap gap="8px">
-          {/* @ts-ignore */}
-          <CurrencyLogo size="40px" currency={idoPublicData?.offeringCurrency} />
-          <FlexGap flexDirection="column">
-            <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
-              {t('Total Sale')}
-            </Text>
-            <Text bold fontSize="20px" lineHeight="30px">
-              {idoPublicData.saleAmount?.toSignificant(6)} {idoPublicData.offeringCurrency?.symbol}
-            </Text>
-          </FlexGap>
-        </FlexGap>
-        <FlexGap flexDirection="column" gap="8px" mt="16px">
-          <FlexGap justifyContent="space-between">
-            <Text color="textSubtle" style={{ whiteSpace: 'nowrap' }}>
-              {t('Project Duration')}
-            </Text>
-            <Text textAlign="right">
-              {idoPublicData.status !== 'finished' ? (
-                <>
-                  {getTimePeriods(idoPublicData.duration).days +
-                    (getTimePeriods(idoPublicData.duration).days < 1 ? 1 : 0)}{' '}
-                  {t('days')}
-                </>
-              ) : (
-                <>
-                  {dayjs.unix(idoPublicData.startTime).format('DD-MM-YYYY')} {t('to')} <br />
-                  {dayjs.unix(idoPublicData.endTime).format('DD-MM-YYYY')}
-                </>
-              )}
-            </Text>
-          </FlexGap>
-        </FlexGap>
-        {idoPublicData.status !== 'finished' && (
-          <Text color="textSubtle" mt="16px">
-            {/* {t('You can subscribe to the sale by depositing BNB and CAKE half in ratio.')} */}
-            {t('You can subscribe to the sale by depositing BNB.')}
-          </Text>
-        )}
-      </CardBody>
-    </Card>
   )
 }
 

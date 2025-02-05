@@ -1,5 +1,8 @@
+import type { IfoStatus } from '@pancakeswap/ifos'
 import { type Currency, CurrencyAmount, Price } from '@pancakeswap/swap-sdk-core'
+import dayjs from 'dayjs'
 import { useMemo } from 'react'
+import { getStatusByTimestamp } from '../helpers'
 import { useIDOCurrencies } from './useIDOCurrencies'
 import { useIDOPoolInfo } from './useIDOPoolInfo'
 
@@ -12,6 +15,8 @@ export type IDOConfig = {
   maxStakePerUsers: [CurrencyAmount<Currency> | undefined, CurrencyAmount<Currency> | undefined]
   raiseAmounts: [CurrencyAmount<Currency> | undefined, CurrencyAmount<Currency> | undefined]
   saleAmounts: [CurrencyAmount<Currency> | undefined, CurrencyAmount<Currency> | undefined]
+  totalSalesAmount: CurrencyAmount<Currency> | undefined
+  status: IfoStatus
 }
 
 export const useIDOConfig = () => {
@@ -51,22 +56,24 @@ export const useIDOConfig = () => {
           ? CurrencyAmount.fromRawAmount(stakeCurrency1, poolInfo?.pool1Info.capPerUserInLP ?? 0n)
           : undefined,
       ],
-      raiseAmounts: [
-        stakeCurrency0
-          ? CurrencyAmount.fromRawAmount(stakeCurrency0, poolInfo?.pool0Info.raisingAmountPool ?? 0n)
-          : undefined,
-        stakeCurrency1
-          ? CurrencyAmount.fromRawAmount(stakeCurrency1, poolInfo?.pool1Info.raisingAmountPool ?? 0n)
-          : undefined,
-      ],
-      saleAmounts: [
-        offeringCurrency
-          ? CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool0Info.offeringAmountPool ?? 0n)
-          : undefined,
-        offeringCurrency
-          ? CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool1Info.offeringAmountPool ?? 0n)
-          : undefined,
-      ],
+      raiseAmounts: offeringCurrency
+        ? [
+            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool0Info.raisingAmountPool ?? 0n),
+            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool1Info.raisingAmountPool ?? 0n),
+          ]
+        : [undefined, undefined],
+      saleAmounts: offeringCurrency
+        ? [
+            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool0Info.offeringAmountPool ?? 0n),
+            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool1Info.offeringAmountPool ?? 0n),
+          ]
+        : [undefined, undefined],
+      totalSalesAmount: offeringCurrency
+        ? CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool0Info.offeringAmountPool ?? 0n).add(
+            CurrencyAmount.fromRawAmount(offeringCurrency, poolInfo?.pool1Info.offeringAmountPool ?? 0n),
+          )
+        : undefined,
+      status: getStatusByTimestamp(dayjs().unix(), poolInfo?.startTimestamp, poolInfo?.endTimestamp),
     } satisfies IDOConfig
   }, [poolInfo, stakeCurrency0, stakeCurrency1, offeringCurrency])
 }
