@@ -17,17 +17,7 @@ export enum VerifyStatus {
 const verifyW3WAccount = async (address: Address): Promise<VerifyStatus> => {
   try {
     const timestamp = Date.now()
-    const response = await fetch(
-      `https://www.binance.com/bapi/defi/v1/public/wallet-direct/wallet/address/verify?address=${address}&timestamp=${timestamp}`,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          'x-gray-env': 'infra',
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Methods': 'GET,HEAD,POST,OPTIONS',
-        },
-      },
-    )
+    const response = await fetch(`/api/w3w/verify?address=${address}&timestamp=${timestamp}`)
     const result: W3WVerifyResponse = await response.json()
 
     if (result?.code === '351083') {
