@@ -33,13 +33,13 @@ export const IdoStakeActionCard: React.FC<{
 
   const { status, raiseAmounts, pricePerTokens, saleAmounts } = useIDOConfig()
 
-  const [raiseAmount, pricePerToken] = useMemo(() => {
-    if (!stakeCurrency) return [undefined, undefined, undefined]
-    if (raiseAmounts[0]?.currency && stakeCurrency.equals(raiseAmounts[0].currency)) {
+  const [raiseAmount, pricePerToken, saleAmount] = useMemo(() => {
+    if (pid === 0) {
       return [raiseAmounts[0], pricePerTokens[0], saleAmounts[0]]
     }
+
     return [raiseAmounts[1], pricePerTokens[1], saleAmounts[1]]
-  }, [raiseAmounts, pricePerTokens, saleAmounts, stakeCurrency])
+  }, [pid, raiseAmounts, pricePerTokens, saleAmounts])
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t('This sale has been oversubscribed. You will get partial refund of the deposit.'),
