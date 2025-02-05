@@ -105,7 +105,11 @@ function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>
       </Head>
       <DefaultSeo {...SEO} />
       <LoadVConsole />
-      <Providers store={store} dehydratedState={pageProps.dehydratedState}>
+      <Providers
+        store={store}
+        dehydratedState={pageProps.dehydratedState}
+        w3wWagmiConfig={(Component as any).w3wWagmiConfig}
+      >
         <PageMeta />
         {(Component as NextPageWithLayout).Meta && (
           // @ts-ignore
