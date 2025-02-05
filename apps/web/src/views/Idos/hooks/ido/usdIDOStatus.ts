@@ -20,10 +20,13 @@ export const useIDOStatus = (): [IDOStatus, IDOStatus] => {
   }, [poolInfo])
 
   const currentStakedAmounts = useMemo(() => {
-    if (!poolInfo?.pool0Info || !poolInfo?.pool1Info) return [undefined, undefined]
     return [
-      stakeCurrency0 ? CurrencyAmount.fromRawAmount(stakeCurrency0, poolInfo.pool0Info.totalAmountPool) : undefined,
-      stakeCurrency1 ? CurrencyAmount.fromRawAmount(stakeCurrency1, poolInfo.pool1Info.totalAmountPool) : undefined,
+      stakeCurrency0 && poolInfo?.pool0Info
+        ? CurrencyAmount.fromRawAmount(stakeCurrency0, poolInfo.pool0Info.totalAmountPool)
+        : undefined,
+      stakeCurrency1 && poolInfo?.pool1Info
+        ? CurrencyAmount.fromRawAmount(stakeCurrency1, poolInfo.pool1Info.totalAmountPool)
+        : undefined,
     ]
   }, [poolInfo, stakeCurrency0, stakeCurrency1])
 
