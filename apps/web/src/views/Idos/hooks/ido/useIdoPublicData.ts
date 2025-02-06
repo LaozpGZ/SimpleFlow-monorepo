@@ -1,4 +1,3 @@
-import { ChainId } from '@pancakeswap/chains'
 import { IfoStatus } from '@pancakeswap/ifos'
 import { type Currency, CurrencyAmount, Percent, Price } from '@pancakeswap/swap-sdk-core'
 import { UnsafeCurrency } from 'config/constants/types'
@@ -33,7 +32,7 @@ export type IDOPublicData = {
   userClaimed?: boolean
 }
 
-export const useIdoPublicData = (chainId: ChainId): [IDOPublicData, IDOPublicData] | [IDOPublicData] => {
+export const useIdoPublicData = (): [IDOPublicData, IDOPublicData] | [IDOPublicData] => {
   const { data: info } = useIDOPoolInfo()
   const { pool0Info, pool1Info, startTimestamp, endTimestamp } = info ?? {}
   const { stakeCurrency0, stakeCurrency1, offeringCurrency } = useIDOCurrencies()
@@ -47,7 +46,7 @@ export const useIdoPublicData = (chainId: ChainId): [IDOPublicData, IDOPublicDat
     stakeTax: userStakedTax,
     claimableAmount: userClaimableAmount,
     claimed: userClaimed,
-  } = userStatus0
+  } = userStatus0 ?? {}
 
   const startTime = Number(startTimestamp) || 0
   const endTime = Number(endTimestamp) || 0 // 1737407928
@@ -97,11 +96,11 @@ export const useIdoPublicData = (chainId: ChainId): [IDOPublicData, IDOPublicDat
       offeringCurrency,
       raiseAmount: raiseAmounts[1],
       saleAmount: saleAmounts[1],
-      userStakedAmount: userStatus1.stakedAmount,
-      userStakedRefund: userStatus1.stakeRefund,
-      userStakedTax: userStatus1.stakeTax,
-      userClaimableAmount: userStatus1.claimableAmount,
-      userClaimed: userStatus1.claimed,
+      userStakedAmount: userStatus1?.stakedAmount,
+      userStakedRefund: userStatus1?.stakeRefund,
+      userStakedTax: userStatus1?.stakeTax,
+      userClaimableAmount: userStatus1?.claimableAmount,
+      userClaimed: userStatus1?.claimed,
     },
   ]
 }
