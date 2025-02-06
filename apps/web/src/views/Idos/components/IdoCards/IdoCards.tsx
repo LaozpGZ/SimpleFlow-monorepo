@@ -1,9 +1,10 @@
-import { Box, Card, CardBody, CardHeader, FlexGap } from '@pancakeswap/uikit'
+import { Box, Card, CardBody, CardHeader, FlexGap, Spinner } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 
 import { useMemo } from 'react'
 import { useIDOStatus } from 'views/Idos/hooks/ido/usdIDOStatus'
 import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
+import { useIDOCurrencies } from 'views/Idos/hooks/ido/useIDOCurrencies'
 import { useIDOPoolInfo } from 'views/Idos/hooks/ido/useIDOPoolInfo'
 import { useIDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
 import { getBannerUrl, getTempBannerUrl } from '../../helpers'
@@ -43,12 +44,17 @@ export const Divider = styled.div`
 export const IDoCurrentCard = ({ idoId }: { idoId: string }) => {
   const { status, duration, startTimestamp, endTimestamp } = useIDOConfig()
   const [userStatus0, userStatus1] = useIDOUserStatus()
+  const { offeringCurrency } = useIDOCurrencies()
   const hasUserStaked = userStatus0?.stakedAmount?.greaterThan(0) || userStatus1?.stakedAmount?.greaterThan(0)
   const isClaimed = useMemo(() => {
     if (!userStatus0 && !userStatus1) return false
     if (userStatus0 && userStatus1) return userStatus0.claimed && userStatus1.claimed
     return userStatus0?.claimed || userStatus1?.claimed
   }, [userStatus0, userStatus1])
+
+  if (!status || !offeringCurrency) {
+    return <Spinner />
+  }
 
   return (
     <Card style={{ width: '100%' }}>
