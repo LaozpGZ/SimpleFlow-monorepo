@@ -19,7 +19,7 @@ import { StakedDisplay } from './StakedDisplay'
 
 export const IdoStakeActionCard: React.FC<{
   pid: number
-  userStatus: IDOUserStatus
+  userStatus: IDOUserStatus | undefined
   idoStatus: IDOStatus
 }> = ({ userStatus, idoStatus, pid }) => {
   const { t } = useTranslation()

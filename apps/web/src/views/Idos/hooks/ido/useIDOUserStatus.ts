@@ -5,6 +5,7 @@ import { useMemo } from 'react'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { useIDOContract } from './useIDOContract'
 import { useIDOCurrencies } from './useIDOCurrencies'
+import { useIDOPoolInfo } from './useIDOPoolInfo'
 import { useIDOUserInfo } from './useIDOUserInfo'
 
 export type IDOUserStatus = {
@@ -15,8 +16,10 @@ export type IDOUserStatus = {
   claimed: boolean | undefined
 }
 
-export const useIDOUserStatus = (): [IDOUserStatus, IDOUserStatus] => {
+export const useIDOUserStatus = (): [IDOUserStatus | undefined, IDOUserStatus | undefined] => {
   const { data: userInfo } = useIDOUserInfo()
+  const { data: poolInfo } = useIDOPoolInfo()
+  const { pool0Info, pool1Info } = poolInfo ?? {}
   const { data: offeringAndRefundingAmounts } = useViewUserOfferingAndRefundingAmounts()
   const { stakeCurrency0, stakeCurrency1, offeringCurrency } = useIDOCurrencies()
 
@@ -62,20 +65,24 @@ export const useIDOUserStatus = (): [IDOUserStatus, IDOUserStatus] => {
   }, [offeringCurrency, offeringAndRefundingAmounts])
 
   return [
-    {
-      stakedAmount: stakedAmounts[0],
-      stakeTax: stakeTax[0],
-      stakeRefund: stakeRefund[0],
-      claimableAmount: claimableAmount[0],
-      claimed: claimed[0],
-    },
-    {
-      stakedAmount: stakedAmounts[1],
-      stakeTax: stakeTax[1],
-      stakeRefund: stakeRefund[1],
-      claimableAmount: claimableAmount[1],
-      claimed: claimed[1],
-    },
+    pool0Info
+      ? {
+          stakedAmount: stakedAmounts[0],
+          stakeTax: stakeTax[0],
+          stakeRefund: stakeRefund[0],
+          claimableAmount: claimableAmount[0],
+          claimed: claimed[0],
+        }
+      : undefined,
+    pool1Info
+      ? {
+          stakedAmount: stakedAmounts[1],
+          stakeTax: stakeTax[1],
+          stakeRefund: stakeRefund[1],
+          claimableAmount: claimableAmount[1],
+          claimed: claimed[1],
+        }
+      : undefined,
   ]
 }
 

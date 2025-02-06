@@ -13,7 +13,7 @@ import { useAccount } from 'wagmi'
 import { formatDollarAmount } from './IdoDespositButton'
 
 export const ClaimDisplay: React.FC<{
-  userStatus: IDOUserStatus
+  userStatus: IDOUserStatus | undefined
   pid: number
 }> = ({ userStatus, pid }) => {
   const { t } = useTranslation()
@@ -118,11 +118,13 @@ export const ClaimDisplay: React.FC<{
           {hasRefund && (
             <FlexGap justifyContent="space-between" alignItems="flex-start">
               <FlexGap gap="3px" alignItems="center">
-                <Text color="textSubtle">{t('Refund')}</Text>
-                <FlexGap ref={targetRef}>
-                  <InfoIcon width="14px" color="textSubtle" />
-                  {tooltipVisible && tooltip}
-                </FlexGap>
+                <Text color="textSubtle">{userStatus?.claimed ? t('Refunded') : t('Refund')}</Text>
+                {userStatus?.claimed ? null : (
+                  <FlexGap ref={targetRef}>
+                    <InfoIcon width="14px" color="textSubtle" />
+                    {tooltipVisible && tooltip}
+                  </FlexGap>
+                )}
               </FlexGap>
               <FlexGap flexDirection="column" alignItems="flex-end">
                 <Text>

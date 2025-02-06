@@ -1,6 +1,7 @@
 import { Box, Card, CardBody, CardHeader, FlexGap } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 
+import { useMemo } from 'react'
 import { useIDOStatus } from 'views/Idos/hooks/ido/usdIDOStatus'
 import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
 import { useIDOPoolInfo } from 'views/Idos/hooks/ido/useIDOPoolInfo'
@@ -42,12 +43,12 @@ export const Divider = styled.div`
 export const IDoCurrentCard = ({ idoId }: { idoId: string }) => {
   const { status, duration, startTimestamp, endTimestamp } = useIDOConfig()
   const [userStatus0, userStatus1] = useIDOUserStatus()
-  const hasUserStaked = userStatus0.stakedAmount?.greaterThan(0) || userStatus1.stakedAmount?.greaterThan(0)
-  const isClaimed =
-    userStatus0.stakedAmount?.greaterThan(0) &&
-    userStatus0.claimed &&
-    userStatus1.stakedAmount?.greaterThan(0) &&
-    userStatus1.claimed
+  const hasUserStaked = userStatus0?.stakedAmount?.greaterThan(0) || userStatus1?.stakedAmount?.greaterThan(0)
+  const isClaimed = useMemo(() => {
+    if (!userStatus0 && !userStatus1) return false
+    if (userStatus0 && userStatus1) return userStatus0.claimed && userStatus1.claimed
+    return userStatus0?.claimed || userStatus1?.claimed
+  }, [userStatus0, userStatus1])
 
   return (
     <Card style={{ width: '100%' }}>
