@@ -46,7 +46,7 @@ export const formatDollarAmount = (amount: number) => {
   return formatNumber(amount)
 }
 
-export const IdoDepositButtonV2: React.FC<{
+export const IdoDepositButton: React.FC<{
   userStatus: IDOUserStatus | undefined
   pid: number
   type: 'add' | 'deposit'

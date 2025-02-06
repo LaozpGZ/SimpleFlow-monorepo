@@ -10,7 +10,7 @@ import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
 import { useIDOCurrencies } from 'views/Idos/hooks/ido/useIDOCurrencies'
 import type { IDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
 import { useAccount } from 'wagmi'
-import { formatDollarAmount } from './IdoDespositButton'
+import { formatDollarAmount } from './IdoDepositButton'
 
 export const ClaimDisplay: React.FC<{
   userStatus: IDOUserStatus | undefined

@@ -13,7 +13,7 @@ import { VerifyStatus, useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAc
 import { useAccount } from 'wagmi'
 import { ClaimDisplay } from './ClaimDisplay'
 import { Divider } from './Divider'
-import { IdoDepositButtonV2 } from './IdoDepositButtonV2'
+import { IdoDepositButton } from './IdoDepositButton'
 import { ComplianceCard, PreSaleEligibleCard, PreSaleInfoCard } from './PreSaleInfoCard'
 import { StakedDisplay } from './StakedDisplay'
 
@@ -78,7 +78,7 @@ export const IdoStakeActionCard: React.FC<{
                       <PreSaleInfoCard />
                     )
                   ) : (
-                    <IdoDepositButtonV2 userStatus={userStatus} type="deposit" pid={pid} />
+                    <IdoDepositButton userStatus={userStatus} type="deposit" pid={pid} />
                   )
                 ) : (
                   <ConnectW3WButton width="100%" onClick={handleConnectWallet} />
