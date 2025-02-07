@@ -144,7 +144,7 @@ export const IdoDepositButton: React.FC<{
   )
   const isInputloading = inputBalance === undefined
 
-  const { verifyStatus } = useW3WAccountVerify()
+  const { verifyStatus, verifyCode } = useW3WAccountVerify()
 
   const disabled = useMemo(() => {
     return maxDepositExceeded || isUserInsufficientBalance
@@ -399,6 +399,7 @@ export const IdoDepositButton: React.FC<{
                 <Flex justifyContent="center">
                   <Image src={`${ASSET_CDN}/web/wallets/binance-w3w.png`} width={40} height={40} />
                 </Flex>
+                <Text>error code: {verifyCode}</Text>
                 <Text>{account}</Text>
                 <Text>{t('This IDO subscription is exclusively available using the Binance Keyless Wallet.')}</Text>
               </FlexGap>
