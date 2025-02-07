@@ -1,4 +1,8 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { Flex, LogoWithTextIcon } from '@pancakeswap/uikit'
+import ConnectW3WButton, { DisconnectW3WButton } from 'components/ConnectW3WButton'
 import { styled } from 'styled-components'
+import { useAccount } from 'wagmi'
 import Hero from './components/Hero'
 
 export const Wrapper = styled.div`
@@ -13,12 +17,22 @@ const WidthWrapper = styled.div`
 `
 
 export const IdoPageLayout = ({ children }) => {
+  const { address } = useAccount()
+  const { t } = useTranslation()
+
   return (
-    <Wrapper>
-      <WidthWrapper>
-        <Hero />
-        {children}
-      </WidthWrapper>
-    </Wrapper>
+    <>
+      <Flex px="16px" py="11.5px" justifyContent="space-between">
+        {/* <LogoIcon width="30px" height="30px" /> */}
+        <LogoWithTextIcon height="30px" width="130px" />
+        {address ? <DisconnectW3WButton scale="sm" /> : <ConnectW3WButton scale="sm">{t('Connect')}</ConnectW3WButton>}
+      </Flex>
+      <Wrapper>
+        <WidthWrapper>
+          <Hero />
+          {children}
+        </WidthWrapper>
+      </Wrapper>
+    </>
   )
 }

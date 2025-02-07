@@ -13,7 +13,7 @@ import {
 import { useCallback, useState } from 'react'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { binanceWeb3WalletConnector } from 'utils/wagmi'
-import { useConnect } from 'wagmi'
+import { useConnect, useDisconnect } from 'wagmi'
 import Trans from './Trans'
 
 interface ConnectWalletButtonProps extends ButtonProps {
@@ -93,6 +93,15 @@ const ConnectW3WButton = ({ children, withIcon, onClick, ...props }: ConnectWall
         <InstallModal />
       </ModalV2>
     </>
+  )
+}
+
+export const DisconnectW3WButton: React.FC<ButtonProps> = (props) => {
+  const { disconnectAsync } = useDisconnect()
+  return (
+    <Button onClick={() => disconnectAsync()} {...props}>
+      Disconnect
+    </Button>
   )
 }
 

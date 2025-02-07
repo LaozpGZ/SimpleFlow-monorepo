@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Container, Flex, FlexGap, Heading, LogoIcon, Text } from '@pancakeswap/uikit'
+import { Box, Container, Flex, FlexGap, Heading, Text } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { styled } from 'styled-components'
 
@@ -43,7 +43,7 @@ const Hero = () => {
             <Box>
               <StyledHeading as="h1" mb={['12px', '12px', '12px', '12px']}>
                 <FlexGap alignItems="center" gap="8px">
-                  <LogoIcon width="32px" height="32px" />
+                  {/* <LogoIcon width="32px" height="32px" /> */}
                   {t('Exclusive TGE')}
                 </FlexGap>
               </StyledHeading>
