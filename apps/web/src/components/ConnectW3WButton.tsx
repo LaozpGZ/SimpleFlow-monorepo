@@ -7,8 +7,10 @@ import {
   Modal,
   ModalBody,
   ModalV2,
+  SwapLoading,
   Text,
   WalletFilledV2Icon,
+  useToast,
 } from '@pancakeswap/uikit'
 import { useCallback, useState } from 'react'
 import { useChainIdByQuery } from 'state/info/hooks'
@@ -97,10 +99,26 @@ const ConnectW3WButton = ({ children, withIcon, onClick, ...props }: ConnectWall
 }
 
 export const DisconnectW3WButton: React.FC<ButtonProps> = (props) => {
-  const { disconnectAsync } = useDisconnect()
+  const { disconnectAsync, status } = useDisconnect()
+  const { t } = useTranslation()
+  const { toastError, toastSuccess } = useToast()
+  const disconnect = useCallback(async () => {
+    try {
+      await disconnectAsync(
+        {},
+        {
+          onError: (error) => toastError(error.message),
+          onSuccess: () => toastSuccess(t('Disconnected from Binance Wallet')),
+        },
+      )
+    } catch (error) {
+      console.error('debug disconnect w3w', error)
+    }
+  }, [disconnectAsync, toastError, toastSuccess, t])
+
   return (
-    <Button onClick={() => disconnectAsync()} {...props}>
-      Disconnect
+    <Button onClick={disconnect} {...props}>
+      {t('Disconnect')} {status === 'pending' ? <SwapLoading ml="3px" /> : null}
     </Button>
   )
 }
