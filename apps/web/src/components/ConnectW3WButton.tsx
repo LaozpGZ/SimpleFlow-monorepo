@@ -112,14 +112,18 @@ export const DisconnectW3WButton: React.FC<ButtonProps> = (props) => {
         },
       )
       if (window.ethereum) {
+        // await window.ethereum.request({
+        //   method: 'wallet_revokePermissions',
+        //   params: [
+        //     {
+        //       eth_accounts: {},
+        //     },
+        //   ],
+        // })
         // @ts-expect-error
         await window.ethereum.request({
-          method: 'wallet_revokePermissions',
-          params: [
-            {
-              eth_accounts: {},
-            },
-          ],
+          method: 'eth_requestAccounts',
+          params: [{ eth_accounts: {} }],
         })
       }
     } catch (error) {
