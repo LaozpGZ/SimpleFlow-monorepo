@@ -8,8 +8,6 @@ import { TonEndPoints } from './endpoints'
 export class TonContext extends Emiter<TonContextEvents> {
   private tonClient?: TonClient
 
-  private endpoint?: string
-
   constructor() {
     super()
 
@@ -17,17 +15,12 @@ export class TonContext extends Emiter<TonContextEvents> {
 
     this.tonClient = new TonClient({ endpoint: TonEndPoints[network] })
     getHttpEndpoint({ network: network === TonNetworks.Mainnet ? 'mainnet' : 'testnet' }).then((endpoint) => {
-      this.endpoint = endpoint
       this.tonClient = new TonClient({ endpoint })
     })
   }
 
   public getClient() {
     return this.tonClient ?? ({} as unknown as TonClient)
-  }
-
-  public getEndPoint() {
-    return this.endpoint
   }
 
   public static instance = new TonContext()
