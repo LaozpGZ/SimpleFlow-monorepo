@@ -7,25 +7,18 @@ import { Emiter } from 'ton/utils/Emiter'
 export class TonContext extends Emiter<TonContextEvents> {
   private tonClient?: TonClient
 
-  private endpoint?: string
-
   constructor() {
     super()
 
     const { network } = tonState
 
     getHttpEndpoint({ network: network === TonNetworks.Mainnet ? 'mainnet' : 'testnet' }).then((endpoint) => {
-      this.endpoint = endpoint
       this.tonClient = new TonClient({ endpoint })
     })
   }
 
   public getClient() {
     return this.tonClient!
-  }
-
-  public getEndPoint() {
-    return this.endpoint
   }
 
   public static instance = new TonContext()

@@ -1,7 +1,6 @@
 import { Currency } from '@pancakeswap/ton-v2-sdk'
 import { storeJettonTransferMessage } from '@ton-community/assets-sdk'
 import { Address, Builder, Cell, beginCell, toNano } from '@ton/core'
-import { JettonMaster, TonClient } from '@ton/ton'
 import { SendTransactionRequest, useTonConnectUI } from '@tonconnect/ui-react'
 import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
@@ -10,7 +9,7 @@ import { TonContext } from 'ton/context/TonContext'
 import { Contracts } from 'ton/def/contracts.def'
 import { TON_OPCODES } from 'ton/opcodes'
 import { TonContractNames } from 'ton/ton.enums'
-import { parseAddress } from 'ton/utils/address'
+import { getJettonWalletAddress, parseAddress } from 'ton/utils/address'
 
 type SwapNext = {
   $$type: 'SwapNext'
@@ -76,14 +75,6 @@ interface SwapArgs {
   minOut: string
 }
 
-const getJettonWalletAddress = async (client: TonClient, userAddress: Address, currency: Currency) => {
-  if (currency.isNative) {
-    return userAddress
-  }
-  const jettonMaster0 = client.open(JettonMaster.create(parseAddress(currency.address)))
-  return jettonMaster0.getWalletAddress(userAddress)
-}
-
 export const useSwap = () => {
   const userAddress_ = useAtomValue(addressAtom)
   const [tonUI] = useTonConnectUI()
@@ -107,8 +98,7 @@ export const useSwap = () => {
             minOut: toNano(minOut),
             refAddress: null,
             refMessageValue: 0n,
-            // token0 will load from sender, so this one should be token1
-            tokenWallet: userJettonWallet1,
+            tokenWallet: routerJettonWallet1,
             next: null,
           }),
         )
@@ -120,10 +110,10 @@ export const useSwap = () => {
             queryId: 1n,
             // input amount
             amount: toNano(amount0),
-            destination: routerJettonWallet1,
+            destination: routerAddress,
             responseDestination: userAddress,
             customPayload: null,
-            forwardAmount: toNano('0'),
+            forwardAmount: toNano('0.5'),
             forwardPayload,
           }),
         )
@@ -135,8 +125,7 @@ export const useSwap = () => {
           {
             address: userJettonWallet0.toString(),
             // Attached TON for fees, not the amount of jettons to transfer!
-            // Usually 0.05-0.1 TON is enough
-            amount: toNano('0.05').toString(),
+            amount: toNano('0.6').toString(),
             payload: payload.toBoc().toString('base64'),
           },
         ],
