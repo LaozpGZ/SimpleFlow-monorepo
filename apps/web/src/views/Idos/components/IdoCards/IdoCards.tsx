@@ -48,7 +48,8 @@ export const IDoCurrentCard = ({ idoId }: { idoId: string }) => {
   const hasUserStaked = userStatus0?.stakedAmount?.greaterThan(0) || userStatus1?.stakedAmount?.greaterThan(0)
   const isClaimed = useMemo(() => {
     if (!userStatus0 && !userStatus1) return false
-    if (userStatus0 && userStatus1) return userStatus0.claimed && userStatus1.claimed
+    if (userStatus0?.claimableAmount?.greaterThan(0) && userStatus1?.claimableAmount?.greaterThan(0))
+      return userStatus0.claimed && userStatus1.claimed
     return userStatus0?.claimed || userStatus1?.claimed
   }, [userStatus0, userStatus1])
 
