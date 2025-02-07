@@ -111,6 +111,17 @@ export const DisconnectW3WButton: React.FC<ButtonProps> = (props) => {
           onSuccess: () => toastSuccess(t('Disconnected from Binance Wallet')),
         },
       )
+      if (window.ethereum) {
+        // @ts-expect-error
+        await window.ethereum.request({
+          method: 'wallet_revokePermissions',
+          params: [
+            {
+              eth_accounts: {},
+            },
+          ],
+        })
+      }
     } catch (error) {
       console.error('debug disconnect w3w', error)
     }
