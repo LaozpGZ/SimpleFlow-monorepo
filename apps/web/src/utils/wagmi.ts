@@ -6,7 +6,7 @@ import { PUBLIC_NODES } from 'config/nodes'
 import memoize from 'lodash/memoize'
 import { Transport, custom } from 'viem'
 import { createConfig, fallback, http } from 'wagmi'
-import { bsc, mainnet } from 'wagmi/chains'
+import { mainnet } from 'wagmi/chains'
 import { coinbaseWallet, injected, safe, walletConnect } from 'wagmi/connectors'
 import { CLIENT_CONFIG, publicClient } from './viem'
 
@@ -125,7 +125,7 @@ export function createWagmiConfig() {
 
 export const createW3WWagmiConfig = () => {
   return createConfig({
-    chains: [bsc],
+    chains,
     ssr: true,
     syncConnectedChain: true,
     transports: injectedTransports,
