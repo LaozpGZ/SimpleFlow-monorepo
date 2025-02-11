@@ -22,7 +22,6 @@ import {
 } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
@@ -35,6 +34,7 @@ import { getIsAndroid, isInBinance } from '@binance/w3w-utils'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { logGTMIdoDepositEvent } from 'utils/customGTMEventTracking'
 import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
+import { useIDODuration } from 'views/Idos/hooks/ido/useIDODuration'
 import type { IDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
 import { VerifyStatus, useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
 import { useIDODepositCallback } from '../../hooks/ido/useIDODepositCallback'
@@ -204,6 +204,7 @@ export const IdoDepositButton: React.FC<{
   }
 
   const { disconnectAsync } = useDisconnect()
+  const durationText = useIDODuration(duration)
 
   useEffect(() => {
     if (account && isBinance && verifyStatus === VerifyStatus.ineligible) {
@@ -328,9 +329,7 @@ export const IdoDepositButton: React.FC<{
               <FlexGap flexDirection="column" gap="8px">
                 <FlexGap justifyContent="space-between">
                   <Text color="textSubtle">{t('Project Duration')}</Text>
-                  <Text>
-                    {getTimePeriods(duration).days + (getTimePeriods(duration).days < 1 ? 1 : 0)} {t('days')}
-                  </Text>
+                  <Text>{durationText}</Text>
                 </FlexGap>
                 {maxStakePerUser && !maxStakePerUser.equalTo(0) && (
                   <FlexGap justifyContent="space-between">

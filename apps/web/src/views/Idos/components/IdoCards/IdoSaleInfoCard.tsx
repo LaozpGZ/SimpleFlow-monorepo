@@ -1,17 +1,18 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Card, CardBody, FlexGap, Text } from '@pancakeswap/uikit'
-import getTimePeriods from '@pancakeswap/utils/getTimePeriods'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import dayjs from 'dayjs'
 import useTheme from 'hooks/useTheme'
 import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
 import { useIDOCurrencies } from 'views/Idos/hooks/ido/useIDOCurrencies'
+import { useIDODuration } from 'views/Idos/hooks/ido/useIDODuration'
 
 export const IdoSaleInfoCard: React.FC = () => {
   const { t } = useTranslation()
   const { theme, isDark } = useTheme()
   const { offeringCurrency, stakeCurrency0, stakeCurrency1 } = useIDOCurrencies()
   const { totalSalesAmount, status, duration, startTimestamp, endTimestamp } = useIDOConfig()
+  const durationText = useIDODuration(duration)
 
   return (
     <Card background={isDark ? '#18171A' : theme.colors.background} mb="16px">
@@ -34,9 +35,7 @@ export const IdoSaleInfoCard: React.FC = () => {
             </Text>
             <Text textAlign="right">
               {status !== 'finished' ? (
-                <>
-                  {getTimePeriods(duration).days + (getTimePeriods(duration).days < 1 ? 1 : 0)} {t('days')}
-                </>
+                <>{durationText}</>
               ) : (
                 <>
                   {dayjs.unix(startTimestamp).format('DD-MM-YYYY')} {t('to')} <br />
