@@ -7,7 +7,7 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallback } from 'react'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { isAddressEqual } from 'utils'
-import { erc20Abi, zeroAddress } from 'viem'
+import { WriteContractReturnType, erc20Abi, zeroAddress } from 'viem'
 import { userRejectedError } from 'views/Swap/V3Swap/hooks/useSendSwapTransaction'
 import { useWriteContract } from 'wagmi'
 import { useW3WAccountSign } from '../w3w/useW3WAccountSign'
@@ -35,7 +35,11 @@ export const useIDODepositCallback = () => {
   const { writeContractAsync } = useWriteContract()
 
   const deposit = useCallback(
-    async (pid: number, amount: CurrencyAmount<Currency>, onFinish?: () => void) => {
+    async (
+      pid: number,
+      amount: CurrencyAmount<Currency>,
+      onFinish?: () => void,
+    ): Promise<WriteContractReturnType | undefined> => {
       if (!account || !idoContract || (!pid && pid !== 0)) return
 
       const depositAddress = amount.currency.isNative ? zeroAddress : amount.currency.address
