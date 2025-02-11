@@ -1,7 +1,5 @@
 import invariant from 'tiny-invariant'
 import {
-  Currency,
-  CurrencyAmount,
   InsufficientInputAmountError,
   InsufficientReservesError,
   ONE,
@@ -9,6 +7,7 @@ import {
   _10000,
   _9975,
 } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount } from '../constants'
 
 interface SwapAmountParams {
   reserve0: CurrencyAmount<Currency>

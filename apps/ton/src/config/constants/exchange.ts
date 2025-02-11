@@ -24,3 +24,8 @@ export const QUERY_DEFAULT_STALE_TIME = 1000 * 60 // 1 minute
 export const QUERY_MEDIUM_STALE_TIME = 1000 * 60 * 5 // 5 minutes
 
 export const DEFAULT_SIGNIFICANT_DIGITS = 5
+
+export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(50n, BIPS_BASE)
+
+// max hops for swap
+export const MAX_HOPS = 3
