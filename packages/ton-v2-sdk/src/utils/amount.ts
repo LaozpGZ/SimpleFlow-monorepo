@@ -40,8 +40,8 @@ export const getOutputAmount = (
   return [
     outputAmount,
     {
-      reserve0: reserve0.add(inputAmount),
-      reserve1: reserve1.subtract(outputAmount),
+      reserve0: inputReserve.add(inputAmount),
+      reserve1: outputReserve.subtract(outputAmount),
       token0,
       token1,
     },
@@ -69,8 +69,8 @@ export const getInputAmount = (
   return [
     inputAmount,
     {
-      reserve0: reserve0.add(inputAmount),
-      reserve1: reserve1.subtract(outputAmount),
+      reserve0: inputReserve.add(inputAmount),
+      reserve1: outputReserve.subtract(outputAmount),
       token0,
       token1,
     },

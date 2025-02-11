@@ -1,13 +1,10 @@
 import { useMemo } from 'react'
 import flatMap from 'lodash/flatMap'
-import { Currency, Token, CurrencyAmount, Pair, TonNetworks } from '@pancakeswap/ton-v2-sdk'
-
-export const BASES_TO_CHECK_TRADES_AGAINST = {
-  [TonNetworks.Testnet]: [],
-  [TonNetworks.Mainnet]: [],
-}
-const ADDITIONAL_BASES = []
-const CUSTOM_BASES: { [key: number]: { [address: string]: Token } } = {}
+import uniqBy from 'lodash/uniqBy'
+import { Currency, Token, Pair, CurrencyAmount } from '@pancakeswap/ton-v2-sdk'
+import { ADDITIONAL_BASES, BASES_TO_CHECK_TRADES_AGAINST, CUSTOM_BASES } from 'config/constants/exchange'
+import { useAtomValue } from 'jotai'
+import { poolDataQueriesAtom } from 'ton/atom/liquidity/poolDataQueriesAtom'
 
 export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): Pair[] {
   const chainId = currencyA?.chainId
@@ -67,20 +64,40 @@ export function useAllCommonPairs(currencyA?: Currency, currencyB?: Currency): P
   // only pass along valid pairs, non-duplicated pairs
   return useMemo(
     () =>
-      Object.values(
-        allPairs
-          // filter out invalid pairs
-          // .filter((result): result is [PairState.EXISTS, Pair] => Boolean(result[0] === PairState.EXISTS && result[1]))
-          // filter out duplicated pairs
-          .reduce<{ [pairAddress: string]: Pair }>((memo, [, curr]) => {
-            // memo[curr.liquidityToken.address] = memo[curr.liquidityToken.address] ?? curr
-            return memo
-          }, {}),
+      uniqBy(
+        allPairs.filter((result): result is NonNullable<typeof result> => Boolean(result)),
+        (p) => p.poolAddress,
       ),
     [allPairs],
   )
 }
 
 const usePairs = (pairs: [Token, Token][]) => {
-  return [[]]
+  const pairsAddress = useMemo(
+    () =>
+      pairs.map(([token0, token1]) => ({
+        token0Address: token0.wrapped.address,
+        token1Address: token1.wrapped.address,
+      })),
+    [pairs],
+  )
+  const result = useAtomValue(poolDataQueriesAtom(pairsAddress))
+  return useMemo(() => {
+    if (result.isLoading) {
+      return []
+    }
+    return pairs.map(([token0, token1], idx) => {
+      const pool = result.data?.[idx]
+      return pool
+        ? {
+            ...pool,
+            chainId: token0.chainId,
+            token0,
+            token1,
+            reserve0: CurrencyAmount.fromRawAmount(token0, pool.reserve0),
+            reserve1: CurrencyAmount.fromRawAmount(token1, pool.reserve1),
+          }
+        : null
+    })
+  }, [pairs, result.data, result.isLoading])
 }

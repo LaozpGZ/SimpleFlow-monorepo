@@ -21,14 +21,14 @@ export function useTradeExactIn(
     if (currencyAmountIn && currencyOut && allowedPairs.length > 0) {
       if (singleHopOnly) {
         return (
-          bestTradeExactIn(allowedPairs, currencyOut, currencyAmountIn, { maxHops: 1, maxNumResults: 1 })[0] ?? null
+          bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, { maxHops: 1, maxNumResults: 1 })[0] ?? null
         )
       }
       // search through trades with varying hops, find best trade out of them
       let bestTradeSoFar: Trade<Currency, Currency, TradeType> | null = null
       for (let i = 1; i <= MAX_HOPS; i++) {
         const currentTrade: Trade<Currency, Currency, TradeType> | null =
-          bestTradeExactIn(allowedPairs, currencyOut, currencyAmountIn, { maxHops: i, maxNumResults: 1 })[0] ?? null
+          bestTradeExactIn(allowedPairs, currencyAmountIn, currencyOut, { maxHops: i, maxNumResults: 1 })[0] ?? null
         // if current trade is best yet, save it
         if (isTradeBetter(bestTradeSoFar, currentTrade, BETTER_TRADE_LESS_HOPS_THRESHOLD)) {
           bestTradeSoFar = currentTrade

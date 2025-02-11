@@ -15,6 +15,8 @@ test('exports', () => {
       "TonContextEvents",
       "TonContractTypes",
       "TonContractNames",
+      "NATIVE",
+      "WNATIVE",
       "priceOf",
       "getPairAddress",
       "getOutputAmount",

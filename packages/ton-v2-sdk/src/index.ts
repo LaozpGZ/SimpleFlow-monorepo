@@ -1,18 +1,20 @@
 export {
+  type Currency,
+  type TonContractInstance,
+  type TonFunctionDef,
   Token,
   Native,
   CurrencyAmount,
   Price,
   TON_OPCODES,
-  type Currency,
   Contracts,
   TonNetworks,
   TonChainId,
   TonContextEvents,
   TonContractTypes,
   TonContractNames,
-  type TonContractInstance,
-  type TonFunctionDef,
+  NATIVE,
+  WNATIVE,
 } from './constants'
 
 export {
