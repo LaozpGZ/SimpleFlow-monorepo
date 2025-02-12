@@ -6,6 +6,7 @@ import { withSentryConfig } from '@sentry/nextjs'
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin'
 import vercelToolbarPlugin from '@vercel/toolbar/plugins/next'
 import path from 'path'
+import os from 'os'
 import { fileURLToPath } from 'url'
 import { RetryChunkLoadPlugin } from 'webpack-retry-chunk-load-plugin'
 
@@ -31,7 +32,7 @@ const sentryWebpackPluginOptions =
         validate: true,
         hideSourceMaps: false,
         tryRun: true,
-        disable: true
+        disable: true,
         // https://github.com/getsentry/sentry-webpack-plugin#options.
       }
     : {
@@ -53,8 +54,14 @@ const config = {
     styledComponents: true,
   },
   experimental: {
+    workerThreads: true,
+    parallelServerCompiles: true,
+    parallelServerBuildTraces: true,
+    webpackBuildWorker: true,
+    cpus: ((os.cpus() || { length: 2 }).length) - 1,
     scrollRestoration: true,
     fallbackNodePolyfills: false,
+    useLightningcss: true,
     outputFileTracingRoot: path.join(__dirname, '../../'),
     outputFileTracingExcludes: {
       '*': [],
@@ -69,12 +76,10 @@ const config = {
     '@pancakeswap/utils',
     '@pancakeswap/widgets-internal',
     '@pancakeswap/ifos',
-    '@pancakeswap/uikit',
-    // https://github.com/TanStack/query/issues/6560#issuecomment-1975771676
-    '@tanstack/query-core',
+    '@pancakeswap/uikit'
   ],
   reactStrictMode: true,
-  swcMinify: false,
+  swcMinify: true,
   images: {
     contentDispositionType: 'attachment',
     remotePatterns: [
@@ -224,30 +229,32 @@ const config = {
         __SENTRY_TRACING__: false,
       }),
     )
-    webpackConfig.plugins.push(
-      new RetryChunkLoadPlugin({
-        cacheBust: `function() {
+    if (!isServer) {
+      webpackConfig.plugins.push(
+        new RetryChunkLoadPlugin({
+          cacheBust: `function() {
           return 'cache-bust=' + Date.now();
         }`,
-        retryDelay: `function(retryAttempt) {
+          retryDelay: `function(retryAttempt) {
           return 2 ** (retryAttempt - 1) * 500;
         }`,
-        maxRetries: 5,
-      }),
-    )
-    if (!isServer && webpackConfig.optimization.splitChunks) {
-      // webpack doesn't understand worker deps on quote worker, so we need to manually add them
-      // https://github.com/webpack/webpack/issues/16895
-      // eslint-disable-next-line no-param-reassign
-      webpackConfig.optimization.splitChunks.cacheGroups.workerChunks = {
-        chunks: 'all',
-        test(module) {
-          const resource = module.nameForCondition?.() ?? ''
-          return resource ? workerDeps.some((d) => resource.includes(d)) : false
-        },
-        priority: 31,
-        name: 'worker-chunks',
-        reuseExistingChunk: true,
+          maxRetries: 5,
+        }),
+      )
+      if (webpackConfig.optimization.splitChunks) {
+        // webpack doesn't understand worker deps on quote worker, so we need to manually add them
+        // https://github.com/webpack/webpack/issues/16895
+        // eslint-disable-next-line no-param-reassign
+        webpackConfig.optimization.splitChunks.cacheGroups.workerChunks = {
+          chunks: 'all',
+          test(module) {
+            const resource = module.nameForCondition?.() ?? ''
+            return resource ? workerDeps.some((d) => resource.includes(d)) : false
+          },
+          priority: 31,
+          name: 'worker-chunks',
+          reuseExistingChunk: true,
+        }
       }
     }
     return webpackConfig
