@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Card, CardBody, FlexGap, Text } from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { CurrencyLogo, NumberDisplay } from '@pancakeswap/widgets-internal'
 import dayjs from 'dayjs'
 import useTheme from 'hooks/useTheme'
 import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
@@ -23,9 +23,13 @@ export const IdoSaleInfoCard: React.FC = () => {
             <Text fontSize="12px" bold color="secondary" lineHeight="18px" textTransform="uppercase">
               {t('Total Sale')}
             </Text>
-            <Text bold fontSize="20px" lineHeight="30px">
-              {totalSalesAmount?.toSignificant(6)} {offeringCurrency?.symbol}
-            </Text>
+            <NumberDisplay
+              bold
+              fontSize="20px"
+              lineHeight="30px"
+              value={totalSalesAmount?.toSignificant(6)}
+              suffix={` ${offeringCurrency?.symbol}`}
+            />
           </FlexGap>
         </FlexGap>
         <FlexGap flexDirection="column" gap="8px" mt="16px">
