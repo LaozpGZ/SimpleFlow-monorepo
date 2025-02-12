@@ -23,7 +23,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     projectUrl: 'https://myshell.ai/',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/myshell-banner.png`,
-    contractAddress: '0x',
+    contractAddress: '0x0D54115eF8474C48103A1e3b41464BF3dB00E4B2',
     // eslint-disable-next-line react/no-unescaped-entities
     tgeTitle: <Trans>MyShell's Token Generation Event</Trans>,
     tgeSubtitle: <Trans>Exclusively via Binance Keyless Wallet</Trans>,
