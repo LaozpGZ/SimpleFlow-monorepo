@@ -16,7 +16,7 @@ function calcCacheKey(args: any[], epoch: number) {
   return r
 }
 
-export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key, name }: CacheOptions<T>) => {
+export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key }: CacheOptions<T>) => {
   const cache = new LRUCache<string, Promise<any>>({
     max: 1000,
     ttl,
