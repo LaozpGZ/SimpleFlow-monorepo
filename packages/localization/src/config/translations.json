@@ -3727,5 +3727,9 @@
   "To participate, please create a wallet using the Binance Wallet, as importing wallets with seed phrases is not supported for this sale.": "To participate, please create a wallet using the Binance Wallet, as importing wallets with seed phrases is not supported for this sale.",
   "MyShell's Token Generation Event": "MyShell's Token Generation Event",
   "Exclusively via Binance Keyless Wallet": "Exclusively via Binance Keyless Wallet",
-  "Due to regulatory requirements, you are not eligible to participate in.": "Due to regulatory requirements, you are not eligible to participate in."
+  "Due to regulatory requirements, you are not eligible to participate in.": "Due to regulatory requirements, you are not eligible to participate in.",
+  "Disconnected from Binance Wallet": "Disconnected from Binance Wallet",
+  "MyShell is an AI creator platform for everyone to build, share, and own AI agents. Our vision is to create a unified platform that provides product-driven value for web2 users and offers the crypto community participating ownership in practical AI applications, bridging the gap between frontier AI applications and blockchain technology.": "MyShell is an AI creator platform for everyone to build, share, and own AI agents. Our vision is to create a unified platform that provides product-driven value for web2 users and offers the crypto community participating ownership in practical AI applications, bridging the gap between frontier AI applications and blockchain technology.",
+  "hours": "hours",
+  "< 1 hour": "< 1 hour"
 }

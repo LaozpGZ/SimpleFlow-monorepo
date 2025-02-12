@@ -1,4 +1,3 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { BscScanIcon, CardBody, FlexGap, LanguageIcon, Link, Text } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { useCurrentIDOConfig } from '../hooks/ido/useCurrentIDOConfig'
@@ -6,7 +5,6 @@ import { useIDOContract } from '../hooks/ido/useIDOContract'
 
 export const Footer: React.FC = () => {
   const { theme } = useTheme()
-  const { t } = useTranslation()
   const idoContract = useIDOContract()
   const currentIdoConfig = useCurrentIDOConfig()
   return (
@@ -21,7 +19,7 @@ export const Footer: React.FC = () => {
           </Link>
         </FlexGap>
         <Text color="textSubtle" fontSize="14px" lineHeight="16.8px">
-          {t(currentIdoConfig.description)}
+          {currentIdoConfig.description}
         </Text>
       </FlexGap>
     </CardBody>
