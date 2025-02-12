@@ -1,5 +1,6 @@
 import keyBy from 'lodash/keyBy'
 import { PublicClient } from 'viem'
+import { cacheByLRU } from './cacheByLRU'
 import { getGauges } from './constants/config/getGauges'
 import { CONFIG_TESTNET } from './constants/config/testnet'
 import { fetchAllGauges } from './fetchAllGauges'
@@ -60,7 +61,7 @@ export const getAllGauges = async (
   }, [] as Gauge[])
 }
 
-async function fetchGaugesSC(client: PublicClient, killed?: boolean, blockNumber?: bigint) {
+async function _fetchGaugesSC(client: PublicClient, killed?: boolean, blockNumber?: bigint) {
   let gaugesSC = await fetchAllGauges(client, {
     blockNumber,
   })
@@ -68,3 +69,12 @@ async function fetchGaugesSC(client: PublicClient, killed?: boolean, blockNumber
   if (!killed) gaugesSC = gaugesSC.filter((gauge) => !gauge.killed)
   return gaugesSC
 }
+
+const fetchGaugesSC = cacheByLRU(_fetchGaugesSC, {
+  name: 'gaugesSC',
+  ttl: 10000,
+  key: (params) => {
+    const [, killed, blockNumber] = params
+    return JSON.stringify([killed, blockNumber])
+  },
+})

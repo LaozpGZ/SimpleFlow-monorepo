@@ -1,11 +1,12 @@
 import { AbiStateMutability, ContractFunctionReturnType, PublicClient } from 'viem'
 import { gaugesVotingABI } from './abis/gaugesVoting'
+import { cacheByLRU } from './cacheByLRU'
 import { getContract } from './contract'
 import { fetchGaugesCount } from './fetchGaugesCount'
 import { getGaugeHash } from './getGaugeHash'
 import { GaugeInfo } from './types'
 
-export const fetchAllGauges = async (
+const _fetchAllGauges = async (
   client: PublicClient,
   options?: {
     blockNumber?: bigint
@@ -44,3 +45,12 @@ export const fetchAllGauges = async (
     } as GaugeInfo
   })
 }
+
+export const fetchAllGauges = cacheByLRU(_fetchAllGauges, {
+  name: 'fetchAllGauges',
+  ttl: 10000,
+  key: (params) => {
+    const [, options] = params
+    return [options?.blockNumber]
+  },
+})

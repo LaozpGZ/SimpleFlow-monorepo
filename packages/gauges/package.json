@@ -23,8 +23,8 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "@pancakeswap/sdk": "workspace:^",
     "@pancakeswap/position-managers": "workspace:^",
+    "@pancakeswap/sdk": "workspace:^",
     "@types/lodash": "^4.14.202",
     "lodash": "^4.17.21",
     "tsup": "^6.7.0"
@@ -33,6 +33,8 @@
     "@pancakeswap/chains": "workspace:^",
     "@pancakeswap/tokens": "workspace:^",
     "@pancakeswap/v3-sdk": "workspace:^",
+    "@types/lru-cache": "^7.10.10",
+    "lru-cache": "^11.0.2",
     "viem": "catalog:"
   }
 }
