@@ -75,6 +75,6 @@ const fetchGaugesSC = cacheByLRU(_fetchGaugesSC, {
   ttl: 10000,
   key: (params) => {
     const [, killed, blockNumber] = params
-    return JSON.stringify([killed, blockNumber])
+    return [killed, blockNumber]
   },
 })
