@@ -64,7 +64,7 @@ export const IDoCurrentCard = ({ idoId, bannerUrl }: { idoId: string; bannerUrl:
         <Header $isCurrent $bannerUrl={bannerUrl} />
         <IdoRibbon
           startTime={startTimestamp}
-          plannedStartTime={startTimestamp - duration}
+          plannedStartTime={startTimestamp}
           ifoStatus={status}
           endTime={endTimestamp}
           hasUserStaked={hasUserStaked}
