@@ -1,8 +1,8 @@
 import type { IDOConfig } from './config'
 
 import { IDoCurrentCard } from './components/IdoCards/IdoCards'
-import IfoContainer from './components/IfoContainer'
-import IfoQuestions from './components/IfoQuestions'
+import IdoContainer from './components/IdoContainer'
+import IdoQuestions from './components/IdoQuestions'
 import { SectionBackground } from './components/SectionBackground'
 
 interface TypeProps {
@@ -14,12 +14,16 @@ const CurrentIdo: React.FC<React.PropsWithChildren<TypeProps>> = ({ idoConfig })
 
   const faq = (
     <SectionBackground padding="32px 0">
-      <IfoQuestions />
+      <IdoQuestions />
     </SectionBackground>
   )
 
   return (
-    <IfoContainer ifoAddress="0x" ifoSection={<IDoCurrentCard idoId={idoConfig.id} />} ifoSteps={steps} faq={faq} />
+    <IdoContainer
+      idoSection={<IDoCurrentCard idoId={idoConfig.id} bannerUrl={idoConfig.bannerUrl} />}
+      idoSteps={steps}
+      faq={faq}
+    />
   )
 }
 

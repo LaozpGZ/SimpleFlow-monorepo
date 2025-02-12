@@ -7,7 +7,6 @@ import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
 import { useIDOCurrencies } from 'views/Idos/hooks/ido/useIDOCurrencies'
 import { useIDOPoolInfo } from 'views/Idos/hooks/ido/useIDOPoolInfo'
 import { useIDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
-import { getBannerUrl, getTempBannerUrl } from '../../helpers'
 import { Footer } from '../Footer'
 import { IdoRibbon } from './IdoRibbon'
 import { IdoSaleInfoCard } from './IdoSaleInfoCard'
@@ -20,7 +19,10 @@ export const StyledCardBody = styled(CardBody)`
   }
 `
 
-const Header = styled(CardHeader)<{ idoId: string; $isCurrent?: boolean }>`
+const Header = styled(CardHeader)<{
+  $isCurrent?: boolean
+  $bannerUrl: string
+}>`
   width: 100%;
   display: flex;
   justify-content: flex-end;
@@ -30,8 +32,7 @@ const Header = styled(CardHeader)<{ idoId: string; $isCurrent?: boolean }>`
   background-size: cover;
   background-position: center;
   background-color: ${({ theme }) => theme.colors.dropdown};
-  background-image: ${({ idoId }) => `url('${getBannerUrl(idoId)}')`};
-  /* background-image: url('${getTempBannerUrl()}'); */
+  background-image: ${({ $bannerUrl }) => `url('${$bannerUrl}')`};
 `
 
 export const Divider = styled.div`
@@ -41,7 +42,7 @@ export const Divider = styled.div`
   margin: 8px 0 0 0;
 `
 
-export const IDoCurrentCard = ({ idoId }: { idoId: string }) => {
+export const IDoCurrentCard = ({ idoId, bannerUrl }: { idoId: string; bannerUrl: string }) => {
   const { status, duration, startTimestamp, endTimestamp } = useIDOConfig()
   const [userStatus0, userStatus1] = useIDOUserStatus()
   const { offeringCurrency } = useIDOCurrencies()
@@ -60,7 +61,7 @@ export const IDoCurrentCard = ({ idoId }: { idoId: string }) => {
   return (
     <Card style={{ width: '100%' }}>
       <Box className="sticky-header" position="sticky" bottom="48px" width="100%" zIndex={6}>
-        <Header $isCurrent idoId={idoId} />
+        <Header $isCurrent $bannerUrl={bannerUrl} />
         <IdoRibbon
           startTime={startTimestamp}
           plannedStartTime={startTimestamp - duration}

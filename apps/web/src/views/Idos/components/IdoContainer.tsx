@@ -6,22 +6,22 @@ import IdoLayout, { IdoLayoutWrapper } from './IfoLayout'
 import { SectionBackground } from './SectionBackground'
 
 interface TypeProps {
-  ifoSection: ReactNode
-  ifoSteps: ReactNode
+  idoSection: ReactNode
+  idoSteps: ReactNode
   faq?: ReactNode
-  ifoAddress?: Address
+  idoAddress?: Address
 }
 
-const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection }) => {
+const IdoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ idoSection }) => {
   return (
     <IdoLayout id="current-ido">
       <SectionBackground>
         <Container px="0">
-          <IdoLayoutWrapper>{ifoSection}</IdoLayoutWrapper>
+          <IdoLayoutWrapper>{idoSection}</IdoLayoutWrapper>
         </Container>
       </SectionBackground>
     </IdoLayout>
   )
 }
 
-export default IfoContainer
+export default IdoContainer

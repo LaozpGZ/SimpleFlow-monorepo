@@ -1,12 +1,12 @@
+import { isIfoSupported } from '@pancakeswap/ifos'
+import { useTranslation } from '@pancakeswap/localization'
+import { ChainId } from '@pancakeswap/sdk'
+import { Card, CardBody, CardHeader, Container, Flex, Heading, Image, Text } from '@pancakeswap/uikit'
+import FoldableText from 'components/FoldableSection/FoldableText'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useMemo } from 'react'
 /* eslint-disable react/no-array-index-key */
 import { styled } from 'styled-components'
-import { Text, Heading, Card, CardHeader, CardBody, Flex, Image, Container } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
-import FoldableText from 'components/FoldableSection/FoldableText'
-import { useMemo } from 'react'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { isIfoSupported } from '@pancakeswap/ifos'
-import { ChainId } from '@pancakeswap/sdk'
 
 import { getChainBasedImageUrl } from 'views/Ifos/helpers'
 
@@ -35,7 +35,7 @@ const DetailsWrapper = styled.div`
   }
 `
 
-const IfoQuestions = () => {
+const IdoQuestions = () => {
   const { t } = useTranslation()
   const { chainId: currentChainId } = useActiveChainId()
   const bunnyImageUrl = useMemo(() => {
@@ -78,4 +78,4 @@ const IfoQuestions = () => {
   )
 }
 
-export default IfoQuestions
+export default IdoQuestions

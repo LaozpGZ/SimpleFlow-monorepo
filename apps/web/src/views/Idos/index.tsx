@@ -23,7 +23,6 @@ export const IdoPageLayout = ({ children }) => {
   return (
     <>
       <Flex px="16px" py="11.5px" justifyContent="space-between">
-        {/* <LogoIcon width="30px" height="30px" /> */}
         <LogoWithTextIcon height="30px" width="130px" />
         {address ? <DisconnectW3WButton scale="sm" /> : <ConnectW3WButton scale="sm">{t('Connect')}</ConnectW3WButton>}
       </Flex>

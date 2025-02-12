@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Container, Flex, FlexGap, Heading, Text } from '@pancakeswap/uikit'
-import { useRouter } from 'next/router'
 import { styled } from 'styled-components'
+import { useCurrentIDOConfig } from '../hooks/ido/useCurrentIDOConfig'
 
 const StyledHero = styled(Box)`
   position: relative;
@@ -19,17 +19,18 @@ const StyledSubTitle = styled(Text)`
 `
 
 const Hero = () => {
-  const router = useRouter()
   const { t } = useTranslation()
+  const currentIdoConfig = useCurrentIDOConfig()
 
-  const handleClick = () => {
-    const howToElem = document.getElementById('ifo-how-to')
-    if (howToElem != null) {
-      howToElem.scrollIntoView()
-    } else {
-      router.push('/ido#ifo-how-to')
-    }
-  }
+  // const router = useRouter()
+  // const handleClick = () => {
+  //   const howToElem = document.getElementById('ifo-how-to')
+  //   if (howToElem != null) {
+  //     howToElem.scrollIntoView()
+  //   } else {
+  //     router.push('/ido#ifo-how-to')
+  //   }
+  // }
 
   return (
     <Box mb="24px">
@@ -43,13 +44,12 @@ const Hero = () => {
             <Box>
               <StyledHeading as="h1" mb={['12px', '12px', '12px', '12px']}>
                 <FlexGap alignItems="center" gap="8px">
-                  {/* <LogoIcon width="32px" height="32px" /> */}
                   {t('Exclusive TGE')}
                 </FlexGap>
               </StyledHeading>
               <p>
-                <StyledSubTitle bold>{t(`MyShell's Token Generation Event`)}</StyledSubTitle>
-                <StyledSubTitle>: {t('Exclusively via Binance Keyless Wallet')}</StyledSubTitle>
+                <StyledSubTitle bold>{currentIdoConfig.tgeTitle}</StyledSubTitle>
+                <StyledSubTitle>: {currentIdoConfig.tgeSubtitle}</StyledSubTitle>
               </p>
             </Box>
 
