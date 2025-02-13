@@ -30,11 +30,11 @@ export const getAllGauges = async (
   const gaugesCMS = testnet ? CONFIG_TESTNET : await getGauges()
   gaugesCMS.sort((a, b) => (a.gid < b.gid ? -1 : 1))
   const gaugesSC = await fetchGaugesSC(client, killed, blockNumber)
-  const gaugesSCMap = keyBy(gaugesSC, 'gid')
+  const gaugesCMSMap = keyBy(gaugesCMS, 'gid')
 
-  const allGaugeInfoConfigs = (killed ? gaugesCMS : gaugesCMS.filter((g) => !g.killed)).map((config) => {
-    const correspondingSC = gaugesSCMap[config.gid]
-    const mergedConfig: GaugeInfoConfig = { ...config, ...correspondingSC }
+  const allGaugeInfoConfigs = (killed ? gaugesSC : gaugesSC.filter((g) => !g.killed)).map((config) => {
+    const correspondingCMS: any = gaugesCMSMap[config.gid]
+    const mergedConfig: GaugeInfoConfig = { ...correspondingCMS, ...config }
     return mergedConfig
   })
 
@@ -72,7 +72,7 @@ async function _fetchGaugesSC(client: PublicClient, killed?: boolean, blockNumbe
 
 const fetchGaugesSC = cacheByLRU(_fetchGaugesSC, {
   name: 'gaugesSC',
-  ttl: 10000,
+  ttl: 15000,
   key: (params) => {
     const [, killed, blockNumber] = params
     return [killed, blockNumber]
