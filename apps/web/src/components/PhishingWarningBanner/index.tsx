@@ -100,6 +100,12 @@ type BannerConfig = {
 
 const CONFIG: BannerConfig[] = [
   {
+    component: TradingCompetitionInfoStripeAndy,
+    stripeImage: `${ASSET_CDN}/web/phishing-warning/andy.png`,
+    stripeImageWidth: '92px',
+    stripeImageAlt: 'ANDY',
+  },
+  {
     component: Step1,
     stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-1.png`,
     stripeImageWidth: '92px',
@@ -116,12 +122,6 @@ const CONFIG: BannerConfig[] = [
     stripeImage: `${ASSET_CDN}/web/banners/pcsx/pcsx-bg-medium.png`,
     stripeImageWidth: '92px',
     stripeImageAlt: 'PCSX',
-  },
-  {
-    component: TradingCompetitionInfoStripeAndy,
-    stripeImage: `${ASSET_CDN}/web/phishing-warning/andy.png`,
-    stripeImageWidth: '92px',
-    stripeImageAlt: 'ANDY',
   },
 ]
 
