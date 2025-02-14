@@ -5,8 +5,8 @@ import dayjs from 'dayjs'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useGaugesVotingContract } from 'hooks/useContract'
 import { useEffect, useMemo } from 'react'
-import { publicClient as getPublicClient } from 'utils/viem'
 import { isAddressEqual } from 'utils'
+import { publicClient as getPublicClient } from 'utils/viem'
 import { Address, Hex, zeroAddress } from 'viem'
 import { useCurrentBlockTimestamp } from 'views/CakeStaking/hooks/useCurrentBlockTimestamp'
 import { useVeCakeUserInfo } from 'views/CakeStaking/hooks/useVeCakeUserInfo'
@@ -197,7 +197,7 @@ export const useUserVote = (gauge: Gauge | undefined, submitted?: boolean, usePr
           })
         : []
       const [[nativeSlope, nativePower, nativeEnd], lastVoteTime] = response
-      const voteLocked = dayjs.unix(Number(lastVoteTime)).add(10, 'day').isAfter(dayjs.unix(currentTimestamp))
+      const voteLocked = Boolean(lastVoteTime)
 
       return {
         hash: gauge?.hash as Hex,

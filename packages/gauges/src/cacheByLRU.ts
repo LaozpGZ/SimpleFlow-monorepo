@@ -49,14 +49,19 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key }: Ca
     const cacheKey = calcCacheKey(key(args), epochId)
     // logger(cacheKey, `exists=${cache.has(cacheKey)}`)
     if (cache.has(cacheKey)) {
-      // logger('cache hit', cacheKey)
       return cache.get(cacheKey)
     }
 
     const promise = fn(...args)
 
     cache.set(cacheKey, promise)
-    // logger(`cache set`, cacheKey)
+
+    if (epochId > 0) {
+      const prevKey = calcCacheKey(key(args), epochId - 1)
+      if (cache.has(prevKey)) {
+        return cache.get(prevKey)
+      }
+    }
 
     try {
       return await promise
