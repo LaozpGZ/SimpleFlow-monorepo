@@ -12,7 +12,7 @@ const config: AdsCampainConfig = {
     img: 'perp',
     texts: [
       {
-        text: t('Trade $TST Perpetual to Win $10,000.'),
+        text: t('Trade Perpetual v2 to Win $10,000.'),
       },
       {
         text: t('Trade Now'),
@@ -31,7 +31,7 @@ const config: AdsCampainConfig = {
     img: 'perp',
     texts: [
       {
-        text: t('Trade $TST Perpetual to Win $10,000.'),
+        text: t('Trade $TST, $PEPE, and More on Perpetual V2 to Win $10,000.'),
       },
     ],
     btns: [
