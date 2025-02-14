@@ -1,5 +1,5 @@
+import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import { PublicClient } from 'viem'
-import { cacheByLRU } from './cacheByLRU'
 import { getCalcContract } from './contract'
 import { Gauge, GaugeInfoConfig } from './types'
 

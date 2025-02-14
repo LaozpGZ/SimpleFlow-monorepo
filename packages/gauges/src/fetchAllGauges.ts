@@ -1,6 +1,6 @@
+import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import { AbiStateMutability, ContractFunctionReturnType, PublicClient } from 'viem'
 import { gaugesVotingABI } from './abis/gaugesVoting'
-import { cacheByLRU } from './cacheByLRU'
 import { getContract } from './contract'
 import { fetchGaugesCount } from './fetchGaugesCount'
 import { getGaugeHash } from './getGaugeHash'

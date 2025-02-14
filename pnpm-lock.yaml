@@ -1755,15 +1755,12 @@ importers:
       '@pancakeswap/tokens':
         specifier: workspace:^
         version: link:../tokens
+      '@pancakeswap/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@pancakeswap/v3-sdk':
         specifier: workspace:^
         version: link:../v3-sdk
-      '@types/lru-cache':
-        specifier: ^7.10.10
-        version: 7.10.10
-      lru-cache:
-        specifier: ^11.0.2
-        version: 11.0.2
       viem:
         specifier: 'catalog:'
         version: 2.23.2(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@6.0.3)(zod@3.22.4)
@@ -2799,6 +2796,9 @@ importers:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
+      lru-cache:
+        specifier: ^11.0.2
+        version: 11.0.2
       url-parse:
         specifier: ^1.5.10
         version: 1.5.10
@@ -2812,6 +2812,9 @@ importers:
       '@types/lodash':
         specifier: ^4.14.168
         version: 4.14.201
+      '@types/lru-cache':
+        specifier: ^7.10.10
+        version: 7.10.10
       bignumber.js:
         specifier: ^9.0.0
         version: 9.1.2
@@ -12762,6 +12765,7 @@ packages:
 
   lodash.isequal@4.5.0:
     resolution: {integrity: sha512-pDo3lu8Jhfjqls6GkMgpahsF9kCyayhgykjyLMNFTKWrpVdAQtYyB4muAMWozBB4ig/dtWAmsMxLEI8wuz+DYQ==}
+    deprecated: This package is deprecated. Use require('node:util').isDeepStrictEqual instead.
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}

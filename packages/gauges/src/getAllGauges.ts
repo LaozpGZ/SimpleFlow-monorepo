@@ -1,6 +1,6 @@
+import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import keyBy from 'lodash/keyBy'
 import { PublicClient } from 'viem'
-import { cacheByLRU } from './cacheByLRU'
 import { getGauges } from './constants/config/getGauges'
 import { CONFIG_TESTNET } from './constants/config/testnet'
 import { fetchAllGauges } from './fetchAllGauges'

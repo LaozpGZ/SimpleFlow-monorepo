@@ -6,8 +6,9 @@ type AsyncFunction<T extends any[]> = (...args: T) => Promise<any>
 // Type definitions for the cache.
 type CacheOptions<T extends AsyncFunction<any>> = {
   name?: string
+  maxCacheSize?: number
   ttl: number
-  key: (params: Parameters<T>) => any
+  key?: (params: Parameters<T>) => any
 }
 
 function calcCacheKey(args: any[], epoch: number) {
@@ -16,16 +17,15 @@ function calcCacheKey(args: any[], epoch: number) {
   return r
 }
 
-export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key }: CacheOptions<T>) => {
+const identity = (args: any) => args
+
+export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key, maxCacheSize }: CacheOptions<T>) => {
   const cache = new LRUCache<string, Promise<any>>({
-    max: 1000,
+    max: maxCacheSize || 1000,
     ttl,
   })
 
-  // function logger(...args: any[]) {
-  //   const nameStr = `${name || 'def'}`
-  //   console.log(`[${nameStr}]`, ...args)
-  // }
+  const keyFunction = key || identity
 
   let startTime = 0
   return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
@@ -39,14 +39,14 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key }: Ca
 
     // Setup next epoch cache if halfTTS passed
     if (halfTTS) {
-      const nextKey = calcCacheKey(key(args), epochId + 1)
+      const nextKey = calcCacheKey(keyFunction(args), epochId + 1)
       if (!cache.has(nextKey)) {
         const nextPromise = fn(...args)
         cache.set(nextKey, nextPromise)
       }
     }
 
-    const cacheKey = calcCacheKey(key(args), epochId)
+    const cacheKey = calcCacheKey(keyFunction(args), epochId)
     // logger(cacheKey, `exists=${cache.has(cacheKey)}`)
     if (cache.has(cacheKey)) {
       return cache.get(cacheKey)
@@ -57,7 +57,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key }: Ca
     cache.set(cacheKey, promise)
 
     if (epochId > 0) {
-      const prevKey = calcCacheKey(key(args), epochId - 1)
+      const prevKey = calcCacheKey(keyFunction(args), epochId - 1)
       if (cache.has(prevKey)) {
         return cache.get(prevKey)
       }
