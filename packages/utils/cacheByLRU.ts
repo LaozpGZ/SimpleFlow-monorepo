@@ -1,5 +1,5 @@
 import { LRUCache } from 'lru-cache'
-import { keccak256 } from 'viem'
+import { keccak256, stringify } from 'viem'
 
 type AsyncFunction<T extends any[]> = (...args: T) => Promise<any>
 
@@ -12,7 +12,7 @@ type CacheOptions<T extends AsyncFunction<any>> = {
 }
 
 function calcCacheKey(args: any[], epoch: number) {
-  const json = JSON.stringify(args)
+  const json = stringify(args)
   const r = keccak256(`0x${json}@${epoch}`)
   return r
 }
