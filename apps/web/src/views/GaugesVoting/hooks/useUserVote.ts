@@ -197,18 +197,23 @@ export const useUserVote = (gauge: Gauge | undefined, submitted?: boolean, usePr
           })
         : []
       const [[nativeSlope, nativePower, nativeEnd], lastVoteTime] = response
-      const voteLocked = Boolean(lastVoteTime)
+      let voteLocked = dayjs.unix(Number(lastVoteTime)).add(10, 'day').isAfter(dayjs.unix(currentTimestamp))
+      let votedPower = nativePower
+      if (gauge?.killed) {
+        voteLocked = true
+        votedPower = 0n
+      }
 
       return {
         hash: gauge?.hash as Hex,
         nativeSlope,
-        nativePower,
+        nativePower: votedPower,
         nativeEnd,
         nativeLastVoteTime: lastVoteTime,
         nativeVoteLocked: voteLocked,
 
         slope: nativeSlope,
-        power: nativePower,
+        power: votedPower,
         end: nativeEnd,
         lastVoteTime,
         voteLocked,
