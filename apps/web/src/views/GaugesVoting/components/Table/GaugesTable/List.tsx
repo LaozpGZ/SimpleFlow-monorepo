@@ -157,6 +157,15 @@ export function GaugeIdentifierDetails({ data }: ListItemProps) {
               </Text>
             </Flex>
           ) : null}
+          {data.killed && (
+            <span
+              style={{
+                color: '#FFB237',
+              }}
+            >
+              deleted
+            </span>
+          )}
         </Flex>
       </FlexGap>
       <FlexGap gap="0.25em" justifyContent="flex-end" flexWrap="wrap" style={{ flex: 1 }}>
