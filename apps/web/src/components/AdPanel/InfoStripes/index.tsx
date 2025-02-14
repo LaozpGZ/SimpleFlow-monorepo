@@ -8,8 +8,8 @@ import 'swiper/css/effect-fade'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { Countdown } from './Countdown'
 
-import { AdsIds } from '../hooks/adsConfig'
-import { getInfoStripeConfig } from './InfoStripeCommon'
+import { AdsIds } from '../hooks/useAdsConfig'
+import { useGetInfoStripeConfig } from './InfoStripeCommon'
 import { Step1 } from './Step1'
 import { Step2 } from './Step2'
 import { Step3 } from './Step3'
@@ -100,35 +100,39 @@ type BannerConfig = {
   customStyle?: CSSProperties
 }
 
-const CONFIG: BannerConfig[] = [
-  {
-    component: <TradingCompetitionInfoStripeAndy />,
-    stripeImage: `${ASSET_CDN}/web/phishing-warning/andy.png`,
-    stripeImageWidth: '92px',
-    stripeImageAlt: 'ANDY',
-  },
-  {
-    ...getInfoStripeConfig(AdsIds.TST_PERP),
-  },
-  {
-    component: <Step1 />,
-    stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-1.png`,
-    stripeImageWidth: '92px',
-    stripeImageAlt: 'Phishing Warning',
-  },
-  {
-    component: <Step2 />,
-    stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-2.png`,
-    stripeImageWidth: '92px',
-    stripeImageAlt: 'Phishing Warning',
-  },
-  {
-    component: <Step3 />,
-    stripeImage: `${ASSET_CDN}/web/banners/pcsx/pcsx-bg-medium.png`,
-    stripeImageWidth: '92px',
-    stripeImageAlt: 'PCSX',
-  },
-]
+const useBannerConfigs = () => {
+  const perpConfig = useGetInfoStripeConfig(AdsIds.TST_PERP)
+  const CONFIG: BannerConfig[] = [
+    {
+      component: <TradingCompetitionInfoStripeAndy />,
+      stripeImage: `${ASSET_CDN}/web/phishing-warning/andy.png`,
+      stripeImageWidth: '92px',
+      stripeImageAlt: 'ANDY',
+    },
+    {
+      ...perpConfig,
+    },
+    {
+      component: <Step1 />,
+      stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-1.png`,
+      stripeImageWidth: '92px',
+      stripeImageAlt: 'Phishing Warning',
+    },
+    {
+      component: <Step2 />,
+      stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-2.png`,
+      stripeImageWidth: '92px',
+      stripeImageAlt: 'Phishing Warning',
+    },
+    {
+      component: <Step3 />,
+      stripeImage: `${ASSET_CDN}/web/banners/pcsx/pcsx-bg-medium.png`,
+      stripeImageWidth: '92px',
+      stripeImageAlt: 'PCSX',
+    },
+  ]
+  return CONFIG
+}
 
 const InfoStripes: React.FC<React.PropsWithChildren> = () => {
   const [, hideBanner] = usePhishingBanner()
@@ -136,7 +140,9 @@ const InfoStripes: React.FC<React.PropsWithChildren> = () => {
   const showInBigDevice = isDesktop || isLg
   const [step, setStep] = useState(0)
   const [showAnimation, setShowAnimation] = useState(true)
-  const banner = useMemo(() => CONFIG[step], [step])
+  const CONFIG = useBannerConfigs()
+  const banner = CONFIG[step]
+  // const banner = useMemo(() => CONFIG[step], [step])
 
   const nextItem = useMemo(() => (step < CONFIG.length - 1 ? step + 1 : 0), [step])
 

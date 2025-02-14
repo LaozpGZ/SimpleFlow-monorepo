@@ -33,7 +33,7 @@ export interface InfoStripeConfig {
   btns: BtnConfig[]
 }
 
-export interface AdsCampainConfig {
+export interface AdsCampaignConfig {
   id: string
   ad: AdsConfig
   infoStripe: InfoStripeConfig

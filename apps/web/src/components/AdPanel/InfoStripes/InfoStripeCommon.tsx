@@ -2,12 +2,12 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Link } from '@pancakeswap/uikit'
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
 import { ASSET_CDN } from 'config/constants/endpoints'
-import { AdsConfigs, AdsIds } from '../hooks/adsConfig'
+import { AdsIds, useAdsConfig } from '../hooks/useAdsConfig'
 import { AdTextConfig } from '../types'
 import { TextHighlight } from './TextHighlight'
 
-export const getInfoStripeConfig = (id: AdsIds) => {
-  const config = AdsConfigs[id].infoStripe
+export const useGetInfoStripeConfig = (id: AdsIds) => {
+  const config = useAdsConfig(id).infoStripe
   return {
     component: <InfoStripeCommon id={id} />,
     stripeImage: `${ASSET_CDN}/web/phishing-warning/${config.img}.png`,
@@ -16,7 +16,7 @@ export const getInfoStripeConfig = (id: AdsIds) => {
   }
 }
 export const InfoStripeCommon = (props: { id: AdsIds }) => {
-  const config = AdsConfigs[props.id].infoStripe
+  const config = useAdsConfig(props.id).infoStripe
   const { t } = useTranslation()
   return (
     <Box mr={['6px']}>

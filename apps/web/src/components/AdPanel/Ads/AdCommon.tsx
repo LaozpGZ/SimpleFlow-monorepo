@@ -3,13 +3,13 @@ import { Link } from '@pancakeswap/uikit'
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'
 import { AdCard } from '../Card'
-import { AdsConfigs, AdsIds } from '../hooks/adsConfig'
+import { AdsIds, useAdsConfig } from '../hooks/useAdsConfig'
 import { AdTextConfig } from '../types'
 import { getImageUrl } from '../utils'
 
 export const AdCommon = (props: { id: AdsIds }) => {
   const { t } = useTranslation()
-  const config = AdsConfigs[props.id]
+  const config = useAdsConfig(props.id)
   const { img, texts, btn, options } = config.ad
 
   return (

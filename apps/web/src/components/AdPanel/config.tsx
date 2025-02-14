@@ -7,7 +7,7 @@ import { AdPCSX } from './Ads/AdPCSX'
 import { AdSpringboard } from './Ads/AdSpringboard'
 import { AdTradingCompetitionAndy } from './Ads/AdTradingCompetition'
 import { ExpandableAd } from './Expandable/ExpandableAd'
-import { AdsIds } from './hooks/adsConfig'
+import { AdsIds } from './hooks/useAdsConfig'
 import { shouldRenderOnPages } from './renderConditions'
 import { useShouldRenderAdIfo } from './useShouldRenderAdIfo'
 
