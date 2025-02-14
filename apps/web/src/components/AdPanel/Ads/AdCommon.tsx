@@ -1,4 +1,3 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { Link } from '@pancakeswap/uikit'
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'
@@ -8,7 +7,6 @@ import { AdTextConfig } from '../types'
 import { getImageUrl } from '../utils'
 
 export const AdCommon = (props: { id: AdsIds }) => {
-  const { t } = useTranslation()
   const config = useAdsConfig(props.id)
   const { img, texts, btn, options } = config.ad
 
@@ -21,21 +19,20 @@ export const AdCommon = (props: { id: AdsIds }) => {
         })}
       </BodyText>
       <AdButton mt="16px" href={btn.link} externalIcon isExternalLink>
-        {t(btn.text)}
+        {btn.text}
       </AdButton>
     </AdCard>
   )
 }
 
 const TextRender = (props: { config: AdTextConfig }) => {
-  const { t } = useTranslation()
   const { config } = props
   if (config.link) {
     return (
       <Link fontSize="inherit" href={config.link} color="secondary" bold>
-        {t(config.text)}
+        {config.text}
       </Link>
     )
   }
-  return <>{t(config.text)}</>
+  return <>{config.text}</>
 }

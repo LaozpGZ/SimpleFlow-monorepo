@@ -1,4 +1,3 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { Box, Link } from '@pancakeswap/uikit'
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
 import { ASSET_CDN } from 'config/constants/endpoints'
@@ -17,7 +16,6 @@ export const useGetInfoStripeConfig = (id: AdsIds) => {
 }
 export const InfoStripeCommon = (props: { id: AdsIds }) => {
   const config = useAdsConfig(props.id).infoStripe
-  const { t } = useTranslation()
   return (
     <Box mr={['6px']}>
       {config.texts.map((text, index) => {
@@ -30,7 +28,7 @@ export const InfoStripeCommon = (props: { id: AdsIds }) => {
         return (
           <>
             <Link external display="inline !important" fontSize={['12px', '12px', '14px']} href={btn.link} key={keyBtn}>
-              {t(btn.text)}
+              {btn.text}
             </Link>
 
             {index !== config.btns.length - 1 && (
@@ -56,6 +54,5 @@ export const InfoStripeCommon = (props: { id: AdsIds }) => {
 }
 
 const RenderText = ({ config }: { config: AdTextConfig }) => {
-  const { t } = useTranslation()
-  return <TextHighlight text={t(config.text)} highlights={config.highlights || []} />
+  return <TextHighlight text={config.text} highlights={config.highlights || []} />
 }

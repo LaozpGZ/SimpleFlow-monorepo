@@ -142,7 +142,6 @@ const InfoStripes: React.FC<React.PropsWithChildren> = () => {
   const [showAnimation, setShowAnimation] = useState(true)
   const CONFIG = useBannerConfigs()
   const banner = CONFIG[step]
-  // const banner = useMemo(() => CONFIG[step], [step])
 
   const nextItem = useMemo(() => (step < CONFIG.length - 1 ? step + 1 : 0), [step])
 
