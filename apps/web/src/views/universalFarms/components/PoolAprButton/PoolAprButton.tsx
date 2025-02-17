@@ -23,7 +23,6 @@ export const PoolAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, lpApr,
   const baseApr = useMemo(() => {
     return sumApr(lpApr, cakeApr?.value, merklApr)
   }, [lpApr, cakeApr?.value, merklApr])
-  console.log('baseApr', baseApr)
   const boostApr = useMemo(() => {
     return typeof cakeApr?.boost !== 'undefined' && parseFloat(cakeApr.boost) > 0
       ? sumApr(lpApr, cakeApr?.boost, merklApr)
