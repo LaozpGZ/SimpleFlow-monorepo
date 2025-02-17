@@ -98,7 +98,7 @@ export const TableRow: React.FC<RowProps> = ({ data, submitted, vote = { ...DEFA
                 color: '#FFB237',
               }}
             >
-              deleted
+              {t('Deleted')}
             </span>
           )}
         </Flex>
