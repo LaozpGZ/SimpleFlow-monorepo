@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency as EVMCurrency, TradeType } from '@pancakeswap/swap-sdk-core'
 import { Currency, Trade } from '@pancakeswap/ton-v2-sdk'
-import { ArrowDownIcon, Button, Flex, FlexGap, Text } from '@pancakeswap/uikit'
+import { ArrowDownIcon, Button, Flex, FlexGap, Heading } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { CurrencyLogo } from 'components/widgets'
 
@@ -28,25 +28,17 @@ export const ConfirmSwapModal = ({
     <>
       <FlexGap flexDirection="column" gap="16px">
         <Flex justifyContent="space-between">
-          <Text fontSize="24px" bold>
-            {trade?.inputAmount.toExact() ?? '-'}
-          </Text>
+          <Heading scale="md">{trade?.inputAmount.toExact() ?? '-'}</Heading>
           <FlexGap gap="8px" alignItems="center">
-            <Text fontSize="24px" bold>
-              {inputCurrency.symbol}
-            </Text>
+            <Heading scale="md">{inputCurrency.symbol}</Heading>
             <CurrencyLogo currency={inputCurrency as unknown as EVMCurrency} size={`${LOGO_SIZE.MAX}px`} />
           </FlexGap>
         </Flex>
         <ArrowDownIcon color="textSubtle" width="24px" />
         <Flex justifyContent="space-between">
-          <Text fontSize="24px" bold>
-            {trade?.outputAmount.toExact() ?? '-'}
-          </Text>
+          <Heading scale="md">{trade?.outputAmount.toExact() ?? '-'}</Heading>
           <FlexGap gap="8px" alignItems="center">
-            <Text fontSize="24px" bold>
-              {outputCurrency.symbol}
-            </Text>
+            <Heading scale="md">{outputCurrency.symbol}</Heading>
             <CurrencyLogo currency={outputCurrency as unknown as EVMCurrency} size={`${LOGO_SIZE.MAX}px`} />
           </FlexGap>
         </Flex>

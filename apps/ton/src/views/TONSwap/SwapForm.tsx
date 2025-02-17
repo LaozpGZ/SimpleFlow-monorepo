@@ -57,9 +57,8 @@ export const SwapForm = () => {
   const { data: activeList, isFetched } = useAtomValue(fetchListAtom)
 
   const setApprovalModal = useSetAtom(setApprovalModalAtom)
-  const setTransactionModal = useSetAtom(setTransactionModalAtom)
   const setSwapConfirmModal = useSetAtom(setConfirmSwapModalAtom)
-  const [userAllowedSlippage] = useUserSlippage()
+  const setTransactionModal = useSetAtom(setTransactionModalAtom)
 
   const parsedAmounts = useMemo(
     () => ({
@@ -99,22 +98,13 @@ export const SwapForm = () => {
     if (!inputCurrency || !outputCurrency) {
       return
     }
-    setTransactionModal({
-      type: ActionType.ConfirmSwap,
-      isOpen: true,
-    })
-    /* await swap({
+    swap({
       minOut: '0.01',
       amount0: formattedAmounts[Field.INPUT] ?? '0',
       token0: inputCurrency,
       token1: outputCurrency,
-    }) */
-    // simulate modal states
-    // setApprovalModal('TON', '1000')
-    /* setTimeout(() => {
-      setTransactionModal(ActionType.TransactionComplete, true)
-    }, 3000) */
-  }, [swap, inputCurrency, outputCurrency, formattedAmounts, setTransactionModal])
+    })
+  }, [formattedAmounts, swap, inputCurrency, outputCurrency])
 
   const confirmSwap = useCallback(() => {
     if (!inputCurrency || !outputCurrency) {

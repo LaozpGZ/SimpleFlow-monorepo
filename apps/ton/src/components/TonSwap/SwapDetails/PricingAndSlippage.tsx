@@ -1,7 +1,7 @@
 import { Currency, CurrencyAmount, Price } from '@pancakeswap/ton-v2-sdk'
 import { FlexGap, Text, useModal } from '@pancakeswap/uikit'
 import { useUserSlippage } from '@pancakeswap/utils/user'
-import { RefreshButton, SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { SettingsModal } from 'components/Modals/SettingsModal'
 import { memo, useMemo } from 'react'
 
@@ -40,7 +40,12 @@ export const PricingAndSlippage = memo(({ isLoading, price, showSlippage, showFe
         alignItems="center"
         flexWrap="wrap"
       >
-        <RefreshButton refreshDuration={12_000} onRefresh={onRefresh} refreshDisabled={isLoading} loading={isLoading} />
+        <SwapUIV2.RefreshButton
+          refreshDuration={12_000}
+          onRefresh={onRefresh}
+          refreshDisabled={isLoading}
+          loading={isLoading}
+        />
         <SwapUIV2.SwapInfo
           price={priceNode}
           allowedSlippage={showSlippage ? allowedSlippage : undefined}

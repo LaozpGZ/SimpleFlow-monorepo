@@ -1,17 +1,18 @@
+import { memo } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Text } from '@pancakeswap/uikit'
 import { ConfirmSwapModal, ConfirmSwapModalProps } from 'components/TonSwap/ConfirmSwapModal'
 import { atom } from 'jotai'
 import { appModalAtom } from './appModalAtom'
 
-const Title = () => {
+const Title = memo(() => {
   const { t } = useTranslation()
   return (
     <Text fontSize="20px" width="100%" textAlign="center" bold>
       {t('Confirm Swap')}
     </Text>
   )
-}
+})
 
 type ConfirmSwapModalAtomProps = { isOpen: boolean } & ConfirmSwapModalProps
 
