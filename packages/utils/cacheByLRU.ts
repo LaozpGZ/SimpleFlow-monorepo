@@ -1,4 +1,4 @@
-import { LRUCache } from 'lru-cache'
+import QuickLRU from 'quick-lru'
 import { keccak256, stringify } from 'viem'
 
 type AsyncFunction<T extends any[]> = (...args: T) => Promise<any>
@@ -20,9 +20,9 @@ function calcCacheKey(args: any[], epoch: number) {
 const identity = (args: any) => args
 
 export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key, maxCacheSize }: CacheOptions<T>) => {
-  const cache = new LRUCache<string, Promise<any>>({
-    max: maxCacheSize || 1000,
-    ttl,
+  const cache = new QuickLRU<string, Promise<any>>({
+    maxAge: ttl,
+    maxSize: maxCacheSize || 1000,
   })
 
   const keyFunction = key || identity
