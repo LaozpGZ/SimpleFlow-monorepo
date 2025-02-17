@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@pancakeswap/chains": "workspace:*",
-    "install": "^0.13.0",
     "quick-lru": "^7.0.0",
     "url-parse": "^1.5.10"
   }
