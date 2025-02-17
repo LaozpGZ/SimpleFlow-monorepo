@@ -112,7 +112,6 @@ export const useUserVote = (gauge: Gauge | undefined, submitted?: boolean, usePr
         }
 
         if (!proxyEnd) {
-          console.log('return 0', { nativePower, nativeSlope })
           return {
             hash: gauge?.hash as Hex,
             nativeSlope,
@@ -174,7 +173,6 @@ export const useUserVote = (gauge: Gauge | undefined, submitted?: boolean, usePr
           }
         }
 
-        console.log('return 1')
         return {
           hash: gauge?.hash as Hex,
           proxyPower,
@@ -206,14 +204,12 @@ export const useUserVote = (gauge: Gauge | undefined, submitted?: boolean, usePr
         : []
       const [[nativeSlope, nativePower, nativeEnd], lastVoteTime] = response
       let voteLocked = dayjs.unix(Number(lastVoteTime)).add(10, 'day').isAfter(dayjs.unix(currentTimestamp))
-      console.log('lock', voteLocked, gauge?.killed)
       let votedPower = nativePower
       if (gauge?.killed) {
         voteLocked = true
         votedPower = 0n
       }
 
-      console.log('return 2')
       return {
         hash: gauge?.hash as Hex,
         nativeSlope,
