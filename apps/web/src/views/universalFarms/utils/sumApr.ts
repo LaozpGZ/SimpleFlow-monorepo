@@ -3,7 +3,12 @@ export const sumApr = (...aprs: Array<number | `${number}` | undefined>): number
     if (typeof apr === 'undefined') {
       return acc ?? 0
     }
-    return Number(acc ?? 0) + Number(apr ?? 0)
+    const x = Number(apr ?? 0)
+    if (!Number.isFinite(x) || Number.isNaN(x)) {
+      return 0
+    }
+
+    return Number(acc ?? 0) + x
   }, 0)
   return Number(sum) ? Number(sum) : 0
 }
