@@ -1,14 +1,15 @@
 export const sumApr = (...aprs: Array<number | `${number}` | undefined>): number => {
-  const sum = aprs.reduce((acc, apr) => {
+  const sum = aprs.reduce<number>((acc, apr) => {
     if (typeof apr === 'undefined') {
       return acc ?? 0
     }
     const x = Number(apr ?? 0)
     if (!Number.isFinite(x) || Number.isNaN(x)) {
-      return 0
+      return acc
     }
 
-    return Number(acc ?? 0) + x
+    return acc + x
   }, 0)
+  console.log(aprs, sum)
   return Number(sum) ? Number(sum) : 0
 }
