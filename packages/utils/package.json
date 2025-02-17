@@ -6,7 +6,6 @@
   },
   "private": true,
   "peerDependencies": {
-    "quick-lru": "*",
     "@pancakeswap/localization": "workspace:*",
     "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
@@ -31,6 +30,7 @@
     }
   },
   "dependencies": {
+    "quick-lru": "7.0.0t ",
     "@pancakeswap/chains": "workspace:*",
     "url-parse": "^1.5.10"
   }
