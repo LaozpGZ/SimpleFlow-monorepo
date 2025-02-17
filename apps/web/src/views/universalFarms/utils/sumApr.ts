@@ -10,6 +10,5 @@ export const sumApr = (...aprs: Array<number | `${number}` | undefined>): number
 
     return acc + x
   }, 0)
-  console.log(aprs, sum)
   return Number(sum) ? Number(sum) : 0
 }
