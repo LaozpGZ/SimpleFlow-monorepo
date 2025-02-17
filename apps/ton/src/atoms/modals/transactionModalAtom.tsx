@@ -16,6 +16,7 @@ const Title = ({ type }: TitleProps) => {
     [ActionType.TransactionComplete]: t('Transaction Complete'),
     [ActionType.ConfirmSupply]: t('Confirm Supply'),
     [ActionType.ConfirmRemoval]: t('Confirm LP Removal'),
+    [ActionType.ConfirmSwap]: t('Confirm Swap'),
   }
 
   return (

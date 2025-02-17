@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency } from '@pancakeswap/ton-v2-sdk'
+import { Currency, CurrencyAmount } from '@pancakeswap/ton-v2-sdk'
 import { Box, FlexGap, Grid, Text } from '@pancakeswap/uikit'
 import { AddCircleLoading } from 'components/Misc/AddCircleLoading'
 import { CurrencyLogo } from 'components/widgets'
@@ -26,6 +26,7 @@ export enum ActionType {
   TransactionComplete = 'TransactionComplete',
   ConfirmSupply = 'ConfirmSupply',
   ConfirmRemoval = 'ConfirmRemoval',
+  ConfirmSwap = 'ConfirmSwap',
 }
 
 const iconByActionType: {
@@ -44,6 +45,10 @@ const iconByActionType: {
   },
   [ActionType.ConfirmRemoval]: {
     icon: <AddCircleLoading />,
+  },
+  [ActionType.ConfirmSwap]: {
+    icon: <AddCircleLoading />,
+    alt: 'Confirm Swap',
   },
 }
 
@@ -120,3 +125,11 @@ export const ActionModal = ({ currency0, currency1, amount0, amount1, hash, type
     </StyledFlexColumn>
   )
 }
+
+interface swapConfirmModalProps {
+  currency0?: Currency
+  currency1?: Currency
+  amount0?: CurrencyAmount<Currency>
+  amount1?: CurrencyAmount<Currency>
+}
+const swapConfirmModal = ({ currency0, currency1, amount0, amount1 }: swapConfirmModalProps) => {}
