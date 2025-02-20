@@ -66,7 +66,12 @@ const isMetamaskInstalled = () => {
 }
 
 function isBinanceWeb3WalletInstalled() {
-  return typeof window !== 'undefined' && Boolean((window.ethereum as ExtendEthereum)?.isBinance)
+  try {
+    return typeof window !== 'undefined' && Boolean((window.ethereum as ExtendEthereum)?.isBinance)
+  } catch (error) {
+    console.error('Error checking Binance Web3 Wallet:', error)
+    return false
+  }
 }
 
 const walletsConfig = <config extends Config = Config, context = unknown>({
@@ -235,9 +240,14 @@ const walletsConfig = <config extends Config = Config, context = unknown>({
       icon: `${ASSET_CDN}/web/wallets/blocto.png`,
       connectorId: ConnectorNames.Blocto,
       get installed() {
-        return typeof window !== 'undefined' && Boolean((window.ethereum as ExtendEthereum)?.isBlocto)
-          ? true
-          : undefined // undefined to show SDK
+        try {
+          return typeof window !== 'undefined' && Boolean((window.ethereum as ExtendEthereum)?.isBlocto)
+            ? true
+            : undefined // undefined to show SDK
+        } catch (error) {
+          console.error('Error checking Blocto installation:', error)
+          return undefined
+        }
       },
     },
     {
