@@ -45,7 +45,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork }) => {
       {chains
         .filter((chain) => {
           if (chain.id === chainId) return true
-          if ('testnet' in chain && chain.testnet) {
+          if ('testnet' in chain && chain.testnet && chain.id !== ChainId.MONAD_TESTNET) {
             return showTestnet
           }
           return true
