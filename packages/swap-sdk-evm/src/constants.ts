@@ -299,7 +299,7 @@ export const NATIVE = {
   },
   [ChainId.MONAD_TESTNET]: {
     name: 'Monad Testnet Ether',
-    symbol: 'ETH',
+    symbol: 'MON',
     decimals: 18,
   },
 } satisfies Record<
