@@ -274,7 +274,6 @@ export default function V3FormView({
 
   const onAdd = useCallback(async () => {
     logGTMClickAddLiquidityConfirmEvent()
-    console.log('add')
     if (
       !chainId ||
       !signer ||
@@ -310,7 +309,6 @@ export default function V3FormView({
       value: hexToBigInt(value),
       account,
     }
-    console.log(calldata, 'calldata')
     getViemClients({ chainId })
       ?.estimateGas(txn)
       .then((gas) => {
@@ -446,7 +444,7 @@ export default function V3FormView({
           }
           bottomContent={() => (
             <Button width="100%" mt="16px" onClick={onAdd}>
-              {t('Add')} ???
+              {t('Add')}
             </Button>
           )}
         />
