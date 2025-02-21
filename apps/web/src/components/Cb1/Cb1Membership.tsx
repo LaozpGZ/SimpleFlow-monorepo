@@ -1,27 +1,61 @@
-import { getChainName } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { Modal, ModalV2, Text } from '@pancakeswap/uikit'
+import { Button, Modal, ModalV2, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useEffect } from 'react'
+import { useRouter } from 'next/router'
+import { Suspense, useState } from 'react'
 import styled from 'styled-components'
+import { useShowCb1Popup } from './useCb1Membership'
 
 export const Cb1Membership = () => {
-  const { chainId, account } = useAccountActiveChain()
-  const chainName = getChainName(chainId)
-
-  useEffect(() => {}, [chainId, account])
-  const { t } = useTranslation()
-
   return (
-    <ModalV2 isOpen>
-      <Modal title={t('You are Eligible!')}>
-        <Cb1Image src={`${ASSET_CDN}/web/promotion/cb1.webp`} />
-        <Text>$8.453 {t('to be earned!')}</Text>
-        <Text>
+    <Suspense fallback={null}>
+      <Cb1Inner />
+    </Suspense>
+  )
+}
+
+const Cb1Inner = () => {
+  const { t } = useTranslation()
+  const showCb1 = useShowCb1Popup()
+  const [close, setClose] = useState(false)
+  const { isMobile } = useMatchBreakpoints()
+  const router = useRouter()
+  return (
+    <ModalV2
+      isOpen={showCb1 && !close}
+      closeOnOverlayClick
+      onDismiss={() => {
+        setClose(true)
+      }}
+    >
+      <Modal title={t('You are Eligible!')} width={isMobile ? '100%' : '336px'}>
+        <Cb1Image src={`${ASSET_CDN}/web/promotions/cb1.png`} />
+        <Text
+          style={{
+            marginTop: '24px',
+          }}
+        >
+          $8.453 {t('to be earned!')}
+        </Text>
+        <Text
+          style={{
+            marginTop: '24px',
+          }}
+        >
           <b>Coinbase One </b>
           {t('members who trade on PancakeSwap are eligible to earn $8,453 airdropped to their wallet 2x monthly!')}
         </Text>
+        <Button
+          style={{
+            marginTop: '24px',
+          }}
+          onClick={() => {
+            router.replace('/')
+            setClose(true)
+          }}
+        >
+          {t('Trade now to participate!')}
+        </Button>
       </Modal>
     </ModalV2>
   )
@@ -30,5 +64,4 @@ export const Cb1Membership = () => {
 const Cb1Image = styled.img`
   width: 100%;
   height: auto;
-  margin-top: 24px;
 `
