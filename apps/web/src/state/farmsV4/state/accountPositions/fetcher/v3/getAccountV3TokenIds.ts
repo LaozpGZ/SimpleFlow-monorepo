@@ -11,12 +11,15 @@ import { Address } from 'viem'
  * @param account target account address
  * @returns
  */
-export const getAccountV3TokenIds = async (chainId: number, account: Address) => {
+export const getAccountV3TokenIds = async (
+  chainId: number,
+  account: Address,
+): Promise<{ farmingTokenIds: bigint[]; nonFarmTokenIds: bigint[] }> => {
   const masterChefV3Address = getMasterChefV3Address(chainId)
   const nftPositionManagerAddress = NFT_POSITION_MANAGER_ADDRESSES[chainId]
 
   const [farmingTokenIds, nonFarmTokenIds] = await Promise.all([
-    getAccountV3TokenIdsFromContract(chainId, account, masterChefV3Address),
+    masterChefV3Address === '0x' ? [] : getAccountV3TokenIdsFromContract(chainId, account, masterChefV3Address),
     getAccountV3TokenIdsFromContract(chainId, account, nftPositionManagerAddress),
   ])
 
