@@ -143,7 +143,7 @@ const InfoStripes: React.FC<React.PropsWithChildren> = () => {
   const CONFIG = useBannerConfigs()
   const banner = CONFIG[step]
 
-  const nextItem = useMemo(() => (step < CONFIG.length - 1 ? step + 1 : 0), [step])
+  const nextItem = useMemo(() => (step < CONFIG.length - 1 ? step + 1 : 0), [step, CONFIG.length])
 
   const handleClickNext = useCallback(() => {
     setStep(nextItem)
