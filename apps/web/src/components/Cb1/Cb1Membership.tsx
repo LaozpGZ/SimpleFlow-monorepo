@@ -2,7 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Button, Modal, ModalV2, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useRouter } from 'next/router'
-import { Suspense, useState } from 'react'
+import { Suspense, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useShowCb1Popup } from './useCb1Membership'
 
@@ -17,9 +17,15 @@ export const Cb1Membership = () => {
 const Cb1Inner = () => {
   const { t } = useTranslation()
   const showCb1 = useShowCb1Popup()
-  const [close, setClose] = useState(false)
+  const [close, setClose] = useState(showCb1)
   const { isMobile } = useMatchBreakpoints()
   const router = useRouter()
+
+  useEffect(() => {
+    if (!showCb1) {
+      setClose(false)
+    }
+  }, [showCb1])
   return (
     <ModalV2
       isOpen={showCb1 && !close}
