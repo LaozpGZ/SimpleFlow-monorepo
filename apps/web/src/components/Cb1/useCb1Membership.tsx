@@ -47,7 +47,6 @@ async function showCb1Popup(chain?: string, address?: string) {
   const lsItem = localStorage.getItem(`${LS_CB1}-${address}`)
   if (lsItem) {
     const cb1State: CB1State = JSON.parse(lsItem)
-    console.log('ls item', cb1State)
     if (cb1State.expired < Date.now()) {
       return true
     }
@@ -71,12 +70,10 @@ export const useShowCb1Popup = () => {
   const load = async () => {
     const show = await showCb1Popup(chainName, account)
     requestAnimationFrame(() => {
-      console.log('[cb1]', `show=${show}, account=${account}`)
       setShowCb1(show)
     })
   }
   useEffect(() => {
-    console.log('[cb1] reload', account, chainId)
     load()
   }, [account, chainId])
 
