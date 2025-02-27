@@ -61,3 +61,39 @@ export const logGTMSwapTxSentEvent = () => {
     category: GTMCategory.Swap,
   })
 }
+
+export const logGTMClickAddLiquidityEvent = () => {
+  console.info('---AddLiquidity---')
+  window?.dataLayer?.push({
+    event: GTMEvent.AddLiquidity,
+    action: GTMAction.ClickAddLiquidityButton,
+    category: GTMCategory.AddLiquidity,
+  })
+}
+
+export const logGTMClickAddLiquidityConfirmEvent = () => {
+  console.info('---AddLiquidityConfirmed---')
+  window?.dataLayer?.push({
+    event: GTMEvent.AddLiquidityConfirmed,
+    action: GTMAction.ClickAddLiquidityConfirmButton,
+    category: GTMCategory.AddLiquidity,
+  })
+}
+
+export const logGTMAddLiquidityTxSentEvent = () => {
+  console.info('---AddLiquidityTxSent---')
+  window?.dataLayer?.push({
+    event: GTMEvent.AddLiquidityTxSent,
+    action: GTMAction.AddLiquidityTransactionSent,
+    category: GTMCategory.AddLiquidity,
+  })
+}
+
+export const logGTMClickRemoveLiquidityEvent = () => {
+  console.info('---RemoveLiquidity---')
+  window?.dataLayer?.push({
+    event: GTMEvent.RemoveLiquidity,
+    action: GTMAction.ClickRemoveLiquidityButton,
+    category: GTMCategory.RemoveLiquidity,
+  })
+}
