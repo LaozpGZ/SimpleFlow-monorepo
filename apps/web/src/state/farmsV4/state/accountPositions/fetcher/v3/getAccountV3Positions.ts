@@ -3,7 +3,7 @@ import { NFT_POSITION_MANAGER_ADDRESSES, nonfungiblePositionManagerABI } from '@
 import BigNumber from 'bignumber.js'
 import { getMasterChefV3Contract } from 'utils/contractHelpers'
 import { publicClient } from 'utils/viem'
-import { Address } from 'viem'
+import { Address, isAddress } from 'viem'
 import { PositionDetail } from '../../type'
 import { getAccountV3TokenIds } from './getAccountV3TokenIds'
 
@@ -25,7 +25,7 @@ export const readPositions = async (chainId: number, tokenIds: bigint[]): Promis
     } as const
   })
   const farmingCalls =
-    masterChefV3 && masterChefV3?.address !== '0x'
+    masterChefV3 && isAddress(masterChefV3.address)
       ? tokenIds.map((tokenId) => {
           return {
             abi: masterChefV3.abi,
@@ -41,7 +41,7 @@ export const readPositions = async (chainId: number, tokenIds: bigint[]): Promis
       contracts: positionCalls,
       allowFailure: false,
     }),
-    masterChefV3 && masterChefV3?.address !== '0x'
+    masterChefV3 && isAddress(masterChefV3.address)
       ? client.multicall({
           contracts: farmingCalls,
           allowFailure: false,
