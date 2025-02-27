@@ -29,7 +29,9 @@ const useOptionsSunsetNotification = () => {
           )}{' '}
           <Flex style={{ gap: 2 }} alignItems="center">
             {t('For more details,')}
-            <Link href="https://blog.pancakeswap.finance/articles/retirement-options">{t('read here.')}</Link>
+            <Link external href="https://blog.pancakeswap.finance/articles/retirement-options">
+              {t('read here.')}
+            </Link>
           </Flex>
         </>,
       )
