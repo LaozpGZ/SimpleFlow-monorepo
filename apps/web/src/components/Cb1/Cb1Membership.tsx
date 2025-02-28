@@ -49,7 +49,9 @@ const Cb1Inner = () => {
           }}
         >
           <b>Coinbase One </b>
-          {t('members who trade on PancakeSwap are eligible to earn $8,453 airdropped to their wallet 2x monthly!')}
+          {t(
+            'members who trade on PancakeSwap on Base, BNB, or Arbitrum are eligible to earn a portion of $8453 airdropped to their wallet biweekly! Must trade a minimum of $100 to qualify.',
+          )}
         </Text>
         <Button
           style={{

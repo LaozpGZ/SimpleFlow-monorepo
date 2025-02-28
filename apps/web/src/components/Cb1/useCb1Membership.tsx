@@ -8,7 +8,7 @@ interface CB1State {
 }
 
 const BASE_URI = 'https://user-volume-api-dzb9r.ondigitalocean.app'
-const EXPIRE = 1000 * 24 * 3600 * 7
+const EXPIRE = 1000 * 24 * 3600
 
 async function getCb1Membership(chain: string, address: string) {
   const date = getLastUpdateDate()
