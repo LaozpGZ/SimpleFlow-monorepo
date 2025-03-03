@@ -28,7 +28,7 @@ async function showCb1Popup(chain?: string, address?: string) {
   if (!address || !chain) {
     return false
   }
-  if (!['base', 'bnb', 'arb'].includes(chain)) {
+  if (!['base', 'bsc', 'arb'].includes(chain)) {
     return false
   }
 
