@@ -7,7 +7,8 @@ interface CB1State {
   expired: number
 }
 
-const BASE_URI = 'https://user-volume-api-dzb9r.ondigitalocean.app'
+const BASE_URI = 'https://attestation-api.pancakeswap.com'
+
 const EXPIRE = 1000 * 24 * 3600
 
 async function getCb1Membership(chain: string, address: string) {
