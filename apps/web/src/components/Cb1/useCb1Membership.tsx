@@ -53,15 +53,15 @@ export const useShowCb1Popup = () => {
   const [showCb1, setShowCb1] = useState(false)
 
   const chainName = getChainName(chainId)
-  const load = async () => {
-    const show = await showCb1Popup(chainName, account)
-    requestAnimationFrame(() => {
-      setShowCb1(show)
-    })
-  }
+
   useEffect(() => {
+    const load = async () => {
+      const show = await showCb1Popup(chainName, account)
+      requestAnimationFrame(() => setShowCb1(show))
+    }
+
     load()
-  }, [account, chainId])
+  }, [account, chainName])
 
   return showCb1
 }
