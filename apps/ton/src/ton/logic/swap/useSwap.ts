@@ -226,6 +226,10 @@ export const useSwap = ({ amount0, minOut, token0, token1, trade, refreshTrade }
         reject()
       }
     }
+    const onClose = () => {
+      reject()
+    }
+
     setSwapConfirmModal({
       isOpen: true,
       inputCurrency: token0,
@@ -233,6 +237,7 @@ export const useSwap = ({ amount0, minOut, token0, token1, trade, refreshTrade }
       trade,
       refreshTrade,
       onConfirm,
+      onClose,
     })
     return pm
   }, [token0, token1, setSwapConfirmModal, trade, refreshTrade, swap, swapPreflightCheck])

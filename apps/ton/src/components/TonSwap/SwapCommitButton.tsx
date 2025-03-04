@@ -61,8 +61,11 @@ export const SwapCommitButton = memo(
           ? t('Price Impact Too High')
           : priceImpactSeverity > 2
           ? t('Swap Anyway')
+          : isSwaping
+          ? t('Waiting For Confirmation')
           : t('Swap'),
       [
+        isSwaping,
         inputCurrency?.symbol,
         isConnected,
         isInsufficientLiquidity,

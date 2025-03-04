@@ -1,6 +1,6 @@
 import { useAtomValue } from 'jotai'
 import noop from 'lodash/noop'
-import { useCallback, useMemo } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { Rounding } from '@pancakeswap/swap-sdk-core'
@@ -40,6 +40,7 @@ export const SwapForm = () => {
   const address = useAtomValue(addressAtom)
   const isWalletConnected = !!address
 
+  const [isSwaping, setIsSwaping] = useState(false)
   const { data: activeList } = useAtomValue(fetchListAtom)
   const cakeAddress = useMemo(() => activeList?.find((item) => item.symbol === 'CAKE')?.address ?? '', [activeList])
   const [inputCurrency] = useInputCurrencyQueryState(Native.onNetwork(network).symbol)
@@ -109,10 +110,13 @@ export const SwapForm = () => {
 
   const handleSwap = useCallback(async () => {
     try {
+      setIsSwaping(true)
       await confirmSwap()
       onUserInput(Field.INPUT, '')
     } catch (e) {
       refreshTrade()
+    } finally {
+      setIsSwaping(false)
     }
   }, [onUserInput, confirmSwap, refreshTrade])
 
@@ -185,7 +189,9 @@ export const SwapForm = () => {
       ) : (
         <ButtonAndDetailsPanel
           shouldRenderDetails={Boolean(typedValue) && !isInsufficientLiquidity}
-          swapCommitButton={<SwapCommitButton trade={trade} isLoading={isTradeLoading} onClick={handleSwap} />}
+          swapCommitButton={
+            <SwapCommitButton trade={trade} isSwaping={isSwaping} isLoading={isTradeLoading} onClick={handleSwap} />
+          }
           pricingAndSlippage={
             <PricingAndSlippage
               isLoading={isTradeLoading}
