@@ -1,5 +1,5 @@
 import unsupportedTokens from 'config/constants/tokenLists/pancake-unsupported.tokenlist.json'
-import { GetStaticPaths, GetStaticProps } from 'next'
+import type { GetStaticPaths, GetStaticProps } from 'next'
 
 export const getTokenStaticPaths = (): GetStaticPaths => {
   return () => {
