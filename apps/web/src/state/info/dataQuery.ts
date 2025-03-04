@@ -19,7 +19,6 @@ export async function fetchV2TokenData({ chainId, signal, chainName, address, ty
     throw new Error('No chain name')
   }
   if (type === 'stableSwap' && STABLE_SUPPORTED_CHAIN_IDS.includes(chainId as number)) {
-    console.log('go here1')
     return explorerApiClient
       .GET('/cached/tokens/stable/{chainName}/{address}', {
         signal,
@@ -35,7 +34,6 @@ export async function fetchV2TokenData({ chainId, signal, chainName, address, ty
       .then((data) => transformToken(data))
   }
 
-  console.log('go here0', type, STABLE_SUPPORTED_CHAIN_IDS.includes(chainId as number))
   return explorerApiClient
     .GET('/cached/tokens/v2/{chainName}/{address}', {
       signal,

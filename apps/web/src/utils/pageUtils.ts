@@ -1,11 +1,12 @@
 import unsupportedTokens from 'config/constants/tokenLists/pancake-unsupported.tokenlist.json'
-import type { GetStaticPaths, GetStaticProps } from 'next'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import { isAddress } from 'viem'
 
 export const getTokenStaticPaths = (): GetStaticPaths => {
   return () => {
     return {
       paths: [],
-      fallback: true,
+      fallback: 'blocking',
     }
   }
 }
@@ -18,6 +19,7 @@ export const getTokenStaticProps = (): GetStaticProps => {
     // In case somebody pastes checksummed address into url (since GraphQL expects lowercase address)
     if (
       !address ||
+      !isAddress(String(address).toLowerCase()) ||
       unsupportedTokens.tokens.map((t) => t.address.toLowerCase()).includes(String(address).toLowerCase())
     ) {
       return {
