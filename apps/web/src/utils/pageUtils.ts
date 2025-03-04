@@ -14,6 +14,7 @@ export const getTokenStaticPaths = (): GetStaticPaths => {
 export const getTokenStaticProps = (): GetStaticProps => {
   return async ({ params }) => {
     const address = params?.address
+    const chain = params?.chainName
 
     // In case somebody pastes checksummed address into url (since GraphQL expects lowercase address)
     if (
@@ -31,6 +32,7 @@ export const getTokenStaticProps = (): GetStaticProps => {
     return {
       props: {
         address,
+        chain,
       },
     }
   }

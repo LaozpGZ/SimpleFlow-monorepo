@@ -1,16 +1,14 @@
 import { Flex, Spinner } from '@pancakeswap/uikit'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
 import { Suspense } from 'react'
+import { getTokenStaticPaths, getTokenStaticProps } from 'utils/pageUtils'
 import { InfoPageLayout } from 'views/V3Info/components/Layout'
 
 const Token = dynamic(() => import('views/V3Info/views/TokenPage'), { ssr: false })
 
-const TokenPage = () => {
-  const router = useRouter()
-  const { address, chainName } = router.query
-
-  if (!address || !chainName) {
+const TokenPage = ({ address, chain }: { address?: string; chain?: string }) => {
+  if (!address) {
     return null
   }
 
@@ -22,12 +20,16 @@ const TokenPage = () => {
         </Flex>
       }
     >
-      <Token address={String(address).toLowerCase()} chain={String(chainName)} />
+      <Token address={String(address).toLowerCase()} chain={String(chain)} />
     </Suspense>
   )
 }
 
 TokenPage.Layout = InfoPageLayout
 TokenPage.chains = [] // set all
+
+export const getStaticPaths: GetStaticPaths = getTokenStaticPaths()
+
+export const getStaticProps: GetStaticProps = getTokenStaticProps()
 
 export default TokenPage

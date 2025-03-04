@@ -80,7 +80,7 @@ enum ChartView {
 
 interface TokenPageParams {
   address: string
-  chain: string
+  chain?: string
 }
 
 interface TokenQueryResponse {
@@ -92,13 +92,13 @@ interface TokenQueryResponse {
 
 const tokenPageDataAtom = atomFamily((params: TokenPageParams) => {
   return atom(async () => {
-    const resp = await fetch(`/api/token/${params.chain}/${params.address}`)
+    const resp = await fetch(`/api/token/v3/${params.chain || 'bsc'}/${params.address}`)
     const json = await resp.json()
     return json as TokenQueryResponse
   })
 }, isEqual)
 
-const TokenPage: React.FC<{ address: string; chain: string }> = ({ address, chain }) => {
+const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, chain }) => {
   const { isXs, isSm } = useMatchBreakpoints()
   // const { chainId } = useActiveChainId()
   // eslint-disable-next-line no-param-reassign
