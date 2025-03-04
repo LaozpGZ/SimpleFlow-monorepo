@@ -1,9 +1,9 @@
 import { gql, GraphQLClient } from 'graphql-request'
 
-import { Block } from 'state/info/types'
-import { getPercentChange } from 'utils/infoDataHelpers'
 import { explorerApiClient } from 'state/info/api/client'
 import { components } from 'state/info/api/schema'
+import { Block } from 'state/info/types'
+import { getPercentChange } from 'utils/infoDataHelpers'
 import { get2DayChange } from '../../utils/data'
 import { fetchEthPrices } from '../../utils/getEthPrices'
 
@@ -63,7 +63,7 @@ interface TokenDataResponse {
 export async function fetchedTokenData(
   chainName: components['schemas']['ChainName'],
   tokenAddress: string,
-  signal: AbortSignal,
+  signal?: AbortSignal,
 ): Promise<{
   error: boolean
   data: TokenData | undefined

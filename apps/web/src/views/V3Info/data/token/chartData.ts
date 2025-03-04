@@ -12,7 +12,7 @@ export async function fetchTokenChartData(
   protocol: 'v2' | 'v3' | 'stable',
   chainName: components['schemas']['ChainName'],
   address: string,
-  signal: AbortSignal,
+  signal?: AbortSignal,
 ) {
   let error = false
 
