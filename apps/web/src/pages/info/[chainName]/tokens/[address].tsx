@@ -1,6 +1,6 @@
 import { Flex, Spinner } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
-import { Suspense, useEffect } from 'react'
+import { Suspense } from 'react'
 import { invalidAddressCheck } from 'utils/pageUtils'
 import { InfoPageLayout } from 'views/Info'
 import Token from 'views/Info/Tokens/TokenPage'
@@ -8,12 +8,6 @@ import Token from 'views/Info/Tokens/TokenPage'
 const TokenPage = () => {
   const router = useRouter()
   const { address } = router.query
-
-  useEffect(() => {
-    if (!address || invalidAddressCheck(address)) {
-      router.replace('/')
-    }
-  }, [address, router])
 
   if (invalidAddressCheck(String(address))) {
     return null
