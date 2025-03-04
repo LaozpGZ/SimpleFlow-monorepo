@@ -11,6 +11,17 @@ export const getTokenStaticPaths = (): GetStaticPaths => {
   }
 }
 
+export const invalidAddressCheck = (address: string | string[]) => {
+  if (
+    !address ||
+    !isAddress(String(address).toLowerCase()) ||
+    unsupportedTokens.tokens.map((t) => t.address.toLowerCase()).includes(String(address).toLowerCase())
+  ) {
+    return true
+  }
+  return false
+}
+
 export const getTokenStaticProps = (): GetStaticProps => {
   return async ({ params }) => {
     const address = params?.address
