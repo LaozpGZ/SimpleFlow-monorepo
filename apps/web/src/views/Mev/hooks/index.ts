@@ -6,7 +6,9 @@ import { MethodNotFoundRpcError, WalletClient } from 'viem'
 
 import { BSCMevGuardChain } from 'utils/mevGuardChains'
 import { addChain } from 'viem/actions'
+import { WalletType } from 'views/Mev/types'
 import { Connector, useAccount, useWalletClient } from 'wagmi'
+import { walletSupportCustomRPCNative, walletSupportDefaultMevOnBSC, walletSupportManualRPCConfig } from '../constant'
 
 const WalletProviders = [
   'isApexWallet',
@@ -152,4 +154,25 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
     }
   }, [onBeforeStart, onSuccess, onFinish, walletClient])
   return { addMevRpc }
+}
+
+export async function getWalletType(connector?: Connector): Promise<WalletType> {
+  if (!connector || typeof connector.getProvider !== 'function') return WalletType.mevNotSupported
+  const provider = (await connector.getProvider()) as any
+
+  if (walletSupportDefaultMevOnBSC.some((d) => d in provider)) return WalletType.mevDefaultOnBSC
+  if (walletSupportManualRPCConfig.some((d) => d in provider)) return WalletType.mevOnlyManualConfig
+  if (walletSupportCustomRPCNative.some((d) => d in provider)) return WalletType.nativeSupportCustomRPC
+  return WalletType.mevNotSupported
+}
+
+export function useWalletType() {
+  const { connector } = useAccount()
+  const { data, isLoading } = useQuery({
+    queryKey: ['useWalletType', connector?.uid],
+    queryFn: () => getWalletType(connector!),
+    enabled: Boolean(connector),
+    retry: false,
+  })
+  return { walletType: data ?? WalletType.mevNotSupported, isLoading }
 }

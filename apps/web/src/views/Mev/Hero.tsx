@@ -4,7 +4,8 @@ import useTheme from 'hooks/useTheme'
 import { useMemo } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
-import { useIsMEVEnabled } from './hooks'
+import { useIsMEVEnabled, useWalletType } from './hooks'
+import { WalletType } from './types'
 
 import { getImageUrl } from './utils'
 
@@ -293,15 +294,36 @@ const WaveBg = styled.img`
   z-index: 0;
 `
 
+const mevConfig = {
+  [WalletType.mevDefaultOnBSC]: {
+    title: 'You are Protected!',
+    desc: 'MEV Guard is now active, your trades are secure with PancakeSwap',
+  },
+  [WalletType.mevOnlyManualConfig]: {
+    title: 'Setup Required!',
+    desc: 'Your wallet requires manual setup to enable PancakeSwap MEV Guard',
+  },
+  [WalletType.nativeSupportCustomRPC]: {
+    title: 'In one click',
+    desc: 'Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ',
+  },
+  [WalletType.mevNotSupported]: {
+    title: 'Can’t Enable MEV Guard!',
+    desc: 'Your wallet provider doesn’t support PancakeSwap MEV Guard',
+  },
+}
+
 export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
   const { isMEVEnabled } = useIsMEVEnabled()
+  const { walletType, isLoading } = useWalletType()
   const txCountDisplay = useMemo(() => {
     if (txCount < 1000000) return '1M+'
     return `${(txCount / 1000000).toFixed(1)}M+`
   }, [txCount])
+
   return (
     <HeroWrapper>
       <Wrapper>
@@ -361,12 +383,12 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                         </FlexGap>
                         <Box style={{ flexBasis: '60%' }}>
                           <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                            {isMEVEnabled ? t('You are Protected!') : t('In one click')}
+                            {isMEVEnabled ? t('You are Protected!') : t(mevConfig[walletType].title)}
                           </Text>
                           <Text>
                             {isMEVEnabled
                               ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
-                              : t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}
+                              : t(mevConfig[walletType].desc)}
                           </Text>
                         </Box>
                       </FlexGap>
@@ -385,12 +407,12 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                       {!isMobile && (
                         <Box>
                           <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                            {isMEVEnabled ? t('You are Protected!') : t('In one click')}
+                            {isMEVEnabled ? t('You are Protected!') : t(mevConfig[walletType].title)}
                           </Text>
                           <Text>
                             {isMEVEnabled
                               ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
-                              : t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ')}
+                              : t(mevConfig[walletType].desc)}
                           </Text>
                         </Box>
                       )}
