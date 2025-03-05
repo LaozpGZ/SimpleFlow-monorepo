@@ -294,23 +294,30 @@ const WaveBg = styled.img`
   z-index: 0;
 `
 
-const mevConfig = {
-  [WalletType.mevDefaultOnBSC]: {
-    title: 'You are Protected!',
-    desc: 'MEV Guard is now active, your trades are secure with PancakeSwap',
-  },
-  [WalletType.mevOnlyManualConfig]: {
-    title: 'Setup Required!',
-    desc: 'Your wallet requires manual setup to enable PancakeSwap MEV Guard',
-  },
-  [WalletType.nativeSupportCustomRPC]: {
-    title: 'In one click',
-    desc: 'Add automatically on BNB Smart Chain: PancakeSwap MEV Guard ',
-  },
-  [WalletType.mevNotSupported]: {
-    title: 'Can’t Enable MEV Guard!',
-    desc: 'Your wallet provider doesn’t support PancakeSwap MEV Guard',
-  },
+const useMevConfig = (walletType: WalletType) => {
+  const { t } = useTranslation()
+  const config = useMemo(
+    () => ({
+      [WalletType.mevDefaultOnBSC]: {
+        title: t('You are Protected!'),
+        desc: t('MEV Guard is now active, your trades are secure with PancakeSwap'),
+      },
+      [WalletType.mevOnlyManualConfig]: {
+        title: t('Setup Required!'),
+        desc: t('Your wallet requires manual setup to enable PancakeSwap MEV Guard'),
+      },
+      [WalletType.nativeSupportCustomRPC]: {
+        title: t('In one click'),
+        desc: t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard '),
+      },
+      [WalletType.mevNotSupported]: {
+        title: t('Can’t Enable MEV Guard!'),
+        desc: t('Your wallet provider doesn’t support PancakeSwap MEV Guard'),
+      },
+    }),
+    [t],
+  )
+  return config[walletType]
 }
 
 export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
@@ -318,11 +325,12 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
   const { isMEVEnabled } = useIsMEVEnabled()
-  const { walletType, isLoading } = useWalletType()
+  const { walletType } = useWalletType()
   const txCountDisplay = useMemo(() => {
     if (txCount < 1000000) return '1M+'
     return `${(txCount / 1000000).toFixed(1)}M+`
   }, [txCount])
+  const mevConfig = useMevConfig(walletType)
 
   return (
     <HeroWrapper>
@@ -383,12 +391,12 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                         </FlexGap>
                         <Box style={{ flexBasis: '60%' }}>
                           <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                            {isMEVEnabled ? t('You are Protected!') : t(mevConfig[walletType].title)}
+                            {isMEVEnabled ? t('You are Protected!') : mevConfig.title}
                           </Text>
                           <Text>
                             {isMEVEnabled
                               ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
-                              : t(mevConfig[walletType].desc)}
+                              : mevConfig.desc}
                           </Text>
                         </Box>
                       </FlexGap>
@@ -407,12 +415,12 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                       {!isMobile && (
                         <Box>
                           <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                            {isMEVEnabled ? t('You are Protected!') : t(mevConfig[walletType].title)}
+                            {isMEVEnabled ? t('You are Protected!') : mevConfig.title}
                           </Text>
                           <Text>
                             {isMEVEnabled
                               ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
-                              : t(mevConfig[walletType].desc)}
+                              : mevConfig.desc}
                           </Text>
                         </Box>
                       )}
