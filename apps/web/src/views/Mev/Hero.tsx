@@ -4,18 +4,10 @@ import useTheme from 'hooks/useTheme'
 import { useMemo } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
+import { rpcData } from './constant'
 import { useIsMEVEnabled, useWalletType } from './hooks'
 import { WalletType } from './types'
-
 import { getImageUrl } from './utils'
-
-const rpcData = {
-  'Network Name': 'PancakeSwap MEV Guard',
-  'New RPC URL': 'https://bscrpc.pancakeswap.finance',
-  'Chain ID': '56',
-  'Currency symbol': 'BNB',
-  'Block Explorer URL': 'https://bscscan.com',
-}
 
 const blingAnimation = keyframes`
   0% {

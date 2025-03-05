@@ -6,3 +6,11 @@ export const walletSupportCustomRPCNative = ['isMetaMask', 'isOkxWallet', 'isCoi
 
 export const walletSupportManualRPCConfig = ['isSafePal', 'isRabby', 'isTokenPocket']
 // wallet support manual config on wallet app, don't support support wallet_addEthereumChain native
+
+export const rpcData = {
+  'Network Name': 'PancakeSwap MEV Guard',
+  'New RPC URL': 'https://bscrpc.pancakeswap.finance',
+  'Chain ID': '56',
+  'Currency symbol': 'BNB',
+  'Block Explorer URL': 'https://bscscan.com',
+}

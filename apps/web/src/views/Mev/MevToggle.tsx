@@ -19,7 +19,9 @@ import {
 
 import { styled } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
-import { useIsMEVEnabled, useShouldShowMEVToggle } from './hooks'
+import { useIsMEVEnabled, useShouldShowMEVToggle, useWalletType } from './hooks'
+import { ManualConfigModal } from './ManualConfigModal'
+import { WalletType } from './types'
 import { getImageUrl } from './utils'
 
 export const ToggleWrapper = styled.div`
@@ -80,6 +82,7 @@ export const MevModal: React.FC<{ isOpen: boolean; onSuccess?: () => void } & In
   onDismiss,
 }) => {
   const { t } = useTranslation()
+  const { walletType } = useWalletType()
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
@@ -97,23 +100,31 @@ export const MevModal: React.FC<{ isOpen: boolean; onSuccess?: () => void } & In
           </Text>
           <ModalCloseButton onDismiss={onDismiss} />
         </ModalHeader>
-        <ModalBody p="24px">
-          <FlexGap gap="24px" flexDirection="column" alignItems="center" minWidth="340px">
-            <Box width="100%">
-              <Text width="100%">{t('Add automatically on BNB Smart Chain:')}</Text>
-              <Text bold width="100%">
-                {t('PancakeSwap MEV Guard')}
-              </Text>
-            </Box>
-            <ModalImg src={getImageUrl('swap-toggle-modal.png')} alt="swap-toggle-modal" />
-            <Box width="100%">
-              <AddMevRpcButton />
-              <Button width="100%" variant="text" onClick={() => window.open('/mev', '_blank', 'noopener noreferrer')}>
-                {t('Learn More')}
-              </Button>
-            </Box>
-          </FlexGap>
-        </ModalBody>
+        {walletType === WalletType.mevOnlyManualConfig || true ? (
+          <ManualConfigModal />
+        ) : (
+          <ModalBody p="24px">
+            <FlexGap gap="24px" flexDirection="column" alignItems="center" minWidth="340px">
+              <Box width="100%">
+                <Text width="100%">{t('Add automatically on BNB Smart Chain:')}</Text>
+                <Text bold width="100%">
+                  {t('PancakeSwap MEV Guard')}
+                </Text>
+              </Box>
+              <ModalImg src={getImageUrl('swap-toggle-modal.png')} alt="swap-toggle-modal" />
+              <Box width="100%">
+                <AddMevRpcButton />
+                <Button
+                  width="100%"
+                  variant="text"
+                  onClick={() => window.open('/mev', '_blank', 'noopener noreferrer')}
+                >
+                  {t('Learn More')}
+                </Button>
+              </Box>
+            </FlexGap>
+          </ModalBody>
+        )}
       </ModalContainer>
     </ModalV2>
   )
