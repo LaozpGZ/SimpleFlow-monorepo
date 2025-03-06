@@ -1,4 +1,5 @@
 import { ContextApi, useTranslation } from '@pancakeswap/localization'
+import { useMemo } from 'react'
 import { AdsCampaignConfig } from '../types'
 
 export enum AdsIds {
@@ -56,11 +57,15 @@ const getPerpConfigs = (t: ContextApi['t']): AdsCampaignConfig[] => {
 export const useAdsConfigs = (): AdsConfigMap => {
   const { t } = useTranslation()
 
-  const AdsConfigs: AdsConfigMap = getPerpConfigs(t).reduce((acc, config) => {
-    // eslint-disable-next-line no-param-reassign
-    acc[config.id] = config
-    return acc
-  }, {} as AdsConfigMap)
+  const AdsConfigs: AdsConfigMap = useMemo(
+    () =>
+      getPerpConfigs(t).reduce((acc, config) => {
+        // eslint-disable-next-line no-param-reassign
+        acc[config.id] = config
+        return acc
+      }, {} as AdsConfigMap),
+    [t],
+  )
 
   return AdsConfigs
 }
