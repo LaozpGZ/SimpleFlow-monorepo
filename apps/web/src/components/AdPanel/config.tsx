@@ -71,7 +71,7 @@ export const useAdConfig = () => {
         component: <AdCakeStaking />,
       },
     ],
-    [shouldRenderOnPage, shouldRenderAdIfo],
+    [shouldRenderOnPage, shouldRenderAdIfo, commonAdConfigs],
   )
 
   return useMemo(

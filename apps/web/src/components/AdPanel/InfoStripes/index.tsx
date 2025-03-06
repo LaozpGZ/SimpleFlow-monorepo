@@ -116,27 +116,30 @@ const useBannerConfigs = () => {
       })
       .filter(Boolean) as BannerConfig[]
   }, [configs])
-  const CONFIG: BannerConfig[] = [
-    ...commonAdConfigs,
-    {
-      component: <Step1 />,
-      stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-1.png`,
-      stripeImageWidth: '92px',
-      stripeImageAlt: 'Phishing Warning',
-    },
-    {
-      component: <Step2 />,
-      stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-2.png`,
-      stripeImageWidth: '92px',
-      stripeImageAlt: 'Phishing Warning',
-    },
-    {
-      component: <Step3 />,
-      stripeImage: `${ASSET_CDN}/web/banners/pcsx/pcsx-bg-medium.png`,
-      stripeImageWidth: '92px',
-      stripeImageAlt: 'PCSX',
-    },
-  ]
+  const CONFIG: BannerConfig[] = useMemo(
+    () => [
+      ...commonAdConfigs,
+      {
+        component: <Step1 />,
+        stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-1.png`,
+        stripeImageWidth: '92px',
+        stripeImageAlt: 'Phishing Warning',
+      },
+      {
+        component: <Step2 />,
+        stripeImage: `${ASSET_CDN}/web/phishing-warning/phishing-warning-bunny-2.png`,
+        stripeImageWidth: '92px',
+        stripeImageAlt: 'Phishing Warning',
+      },
+      {
+        component: <Step3 />,
+        stripeImage: `${ASSET_CDN}/web/banners/pcsx/pcsx-bg-medium.png`,
+        stripeImageWidth: '92px',
+        stripeImageAlt: 'PCSX',
+      },
+    ],
+    [commonAdConfigs],
+  )
   return CONFIG
 }
 
@@ -149,7 +152,7 @@ const InfoStripes: React.FC<React.PropsWithChildren> = () => {
   const CONFIG = useBannerConfigs()
   const banner = CONFIG[step]
 
-  const nextItem = useMemo(() => (step < CONFIG.length - 1 ? step + 1 : 0), [step])
+  const nextItem = useMemo(() => (step < CONFIG.length - 1 ? step + 1 : 0), [step, CONFIG.length])
 
   const handleClickNext = useCallback(() => {
     setStep(nextItem)
