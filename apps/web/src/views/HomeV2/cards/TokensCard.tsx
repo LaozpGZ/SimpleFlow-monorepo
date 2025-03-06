@@ -1,3 +1,4 @@
+import { useTranslation } from '@pancakeswap/localization'
 import { Box, Text } from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { HomePageToken } from 'pages/api/home/types'
@@ -59,12 +60,15 @@ const TokenRow = ({
   </CardRowLayout>
 )
 
-export const TokensCard = ({ tokens }: SwapPricesCardProps) => (
-  <CardSection title="Swap with Best Prices" subtitle="with Fees as Low as 0.01%">
-    <Box mt="8px">
-      {tokens.slice(0, 3).map((token, i) => (
-        <TokenRow key={token.id} {...token} isLast={i === 2} />
-      ))}
-    </Box>
-  </CardSection>
-)
+export const TokensCard = ({ tokens }: SwapPricesCardProps) => {
+  const { t } = useTranslation()
+  return (
+    <CardSection title={t('Swap with Best Prices')} subtitle={t('with Fees as Low as 0.01%')}>
+      <Box mt="8px">
+        {tokens.slice(0, 3).map((token, i) => (
+          <TokenRow key={token.id} {...token} isLast={i === 2} />
+        ))}
+      </Box>
+    </CardSection>
+  )
+}
