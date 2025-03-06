@@ -1,5 +1,4 @@
 import { Box, Flex, Text } from '@pancakeswap/uikit'
-import { ASSET_CDN } from 'config/constants/endpoints'
 import { HomePagePoolInfo } from 'pages/api/home/types'
 import styled from 'styled-components'
 import { getNetworkFullName } from 'views/BuyCrypto/constants'
@@ -29,7 +28,6 @@ export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
     <CardSection title="Trading Pairs" subtitle="by Providing Liquidity">
       <Box>
         {pairs.map((pair, index) => {
-          const chainIcon = `${ASSET_CDN}/web/chains/${pair.chainId}.png`
           return (
             <CardRowLayout
               key={`${pair.token0}-${pair.token1}`}
@@ -48,7 +46,7 @@ export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
               isLast={index === pairs.length - 1}
             >
               <HomepageCardBadge>
-                <Text bold color="success" ml="auto">
+                <Text bold color="positive60">
                   {`Up to ${pair.apr24h.toFixed(2)}% APR`}
                 </Text>
               </HomepageCardBadge>

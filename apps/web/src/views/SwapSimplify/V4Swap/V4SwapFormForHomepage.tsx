@@ -3,8 +3,6 @@ import { SmartRouter } from '@pancakeswap/smart-router/evm'
 import { FlexGap } from '@pancakeswap/uikit'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
-import { useTokenRisk } from 'components/AccessRisk'
-import { RiskDetailsPanel, useShouldRiskPanelDisplay } from 'components/AccessRisk/SwapRevampRiskDisplay'
 import { GasTokenSelector } from 'components/Paymaster/GasTokenSelector'
 import { useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -16,15 +14,13 @@ import { useSwapState } from 'state/swap/hooks'
 import { logger } from 'utils/datadog'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { useAllTypeBestTrade } from '../../Swap/V3Swap/hooks/useAllTypeBestTrade'
-import { useBuyCryptoInfo } from '../hooks/useBuyCryptoInfo'
-import { useIsPriceImpactTooHigh } from '../hooks/useIsPriceImpactTooHigh'
 import { useUserInsufficientBalance } from '../hooks/useUserInsufficientBalance'
 import { ButtonAndDetailsPanel } from './ButtonAndDetailsPanel'
-import { BuyCryptoPanel } from './BuyCryptoPanel'
 import { CommitButton } from './CommitButton'
 import { FormMain } from './FormMainV4'
 import { PricingAndSlippage } from './PricingAndSlippage'
 import { RefreshButton } from './RefreshButton'
+import { SwapCommitButton } from './SwapCommitButtonForHomepage'
 import { TradeDetails } from './TradeDetails'
 import { TradingFee } from './TradingFee'
 
@@ -45,7 +41,6 @@ export function V4SwapFormForHomePage() {
   const isWrapping = useIsWrapping()
   const { chainId: activeChianId } = useActiveChainId()
   const isUserInsufficientBalance = useUserInsufficientBalance(bestOrder)
-  const { shouldShowBuyCrypto, buyCryptoLink } = useBuyCryptoInfo(bestOrder)
 
   const { data: inputUsdPrice } = useCurrencyUsdPrice(bestOrder?.trade?.inputAmount.currency)
   const { data: outputUsdPrice } = useCurrencyUsdPrice(bestOrder?.trade?.outputAmount.currency)
@@ -54,7 +49,6 @@ export function V4SwapFormForHomePage() {
     () => (bestOrder?.trade ? SmartRouter.getExecutionPrice(bestOrder.trade) : undefined),
     [bestOrder?.trade],
   )
-  const { isPriceImpactTooHigh } = useIsPriceImpactTooHigh(!tradeError ? bestOrder : undefined, !tradeLoaded)
 
   const commitHooks = useMemo(() => {
     return {
@@ -115,11 +109,6 @@ export function V4SwapFormForHomePage() {
   const outputCurrency = useCurrency(outputCurrencyId)
 
   const [userSlippageTolerance] = useUserSlippage()
-  const isSlippageTooHigh = useMemo(() => userSlippageTolerance > 500, [userSlippageTolerance])
-  const shouldRiskPanelDisplay = useShouldRiskPanelDisplay(inputCurrency?.wrapped, outputCurrency?.wrapped)
-  const token0Risk = useTokenRisk(inputCurrency?.wrapped)
-  const token1Risk = useTokenRisk(outputCurrency?.wrapped)
-
   const { isPaymasterAvailable } = usePaymaster()
 
   return (
@@ -135,20 +124,9 @@ export function V4SwapFormForHomePage() {
           isUserInsufficientBalance={isUserInsufficientBalance}
         />
       </SwapUIV2.SwapTabAndInputPanelWrapper>
-      {shouldShowBuyCrypto && <BuyCryptoPanel link={buyCryptoLink} />}
-      {(shouldRiskPanelDisplay || isPriceImpactTooHigh || isSlippageTooHigh) && (
-        <RiskDetailsPanel
-          isPriceImpactTooHigh={isPriceImpactTooHigh}
-          isSlippageTooHigh={isSlippageTooHigh}
-          token0={inputCurrency?.wrapped}
-          token1={outputCurrency?.wrapped}
-          token0RiskLevelDescription={token0Risk.data?.riskLevelDescription}
-          token1RiskLevelDescription={token1Risk.data?.riskLevelDescription}
-        />
-      )}
       <ButtonAndDetailsPanel
         swapCommitButton={
-          <CommitButton order={bestOrder} tradeLoaded={tradeLoaded} tradeError={tradeError} {...commitHooks} />
+          <SwapCommitButton order={bestOrder} tradeLoading={!tradeLoaded} tradeError={tradeError} {...commitHooks} />
         }
         pricingAndSlippage={
           <FlexGap

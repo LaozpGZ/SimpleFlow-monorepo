@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex } from '@pancakeswap/uikit'
 import React from 'react'
 import styled from 'styled-components'
+import { formatNumber } from './util/formatNumber'
 
 export type SiteStats = {
   allTimeTraders: number
@@ -49,12 +50,6 @@ const Value = styled.div<{ textColor: string }>`
   margin-top: 4px;
   color: ${({ theme, textColor }) => theme.colors[textColor]};
 `
-
-const formatNumber = (num: number): string => {
-  if (num >= 1e9) return `${(num / 1e9).toFixed(1)}B+`
-  if (num >= 1e6) return `${(num / 1e6).toFixed(1)}M+`
-  return num.toString()
-}
 
 export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
   const { t } = useTranslation()
