@@ -100,7 +100,7 @@ export const MevModal: React.FC<{ isOpen: boolean; onSuccess?: () => void } & In
           </Text>
           <ModalCloseButton onDismiss={onDismiss} />
         </ModalHeader>
-        {walletType === WalletType.mevOnlyManualConfig || true ? (
+        {walletType === WalletType.mevOnlyManualConfig ? (
           <ManualConfigModal />
         ) : (
           <ModalBody p="24px">

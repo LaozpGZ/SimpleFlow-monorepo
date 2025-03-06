@@ -5,6 +5,7 @@ import { useCallback } from 'react'
 import { MethodNotFoundRpcError, WalletClient } from 'viem'
 
 import { BSCMevGuardChain } from 'utils/mevGuardChains'
+
 import { addChain } from 'viem/actions'
 import { WalletType } from 'views/Mev/types'
 import { Connector, useAccount, useWalletClient } from 'wagmi'

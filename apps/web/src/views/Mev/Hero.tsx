@@ -286,25 +286,29 @@ const WaveBg = styled.img`
   z-index: 0;
 `
 
-const useMevConfig = (walletType: WalletType) => {
+export const useMevConfig = (walletType: WalletType) => {
   const { t } = useTranslation()
   const config = useMemo(
     () => ({
       [WalletType.mevDefaultOnBSC]: {
         title: t('You are Protected!'),
         desc: t('MEV Guard is now active, your trades are secure with PancakeSwap'),
+        btnText: t('Added to wallet'),
       },
       [WalletType.mevOnlyManualConfig]: {
         title: t('Setup Required!'),
         desc: t('Your wallet requires manual setup to enable PancakeSwap MEV Guard'),
+        btnText: t('See the guides'),
       },
       [WalletType.nativeSupportCustomRPC]: {
         title: t('In one click'),
         desc: t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard '),
+        btnText: t('Add to wallet'),
       },
       [WalletType.mevNotSupported]: {
         title: t('Can’t Enable MEV Guard!'),
         desc: t('Your wallet provider doesn’t support PancakeSwap MEV Guard'),
+        btnText: t('See the wallets supported'),
       },
     }),
     [t],
