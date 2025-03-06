@@ -47,7 +47,7 @@ export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
             >
               <HomepageCardBadge>
                 <Text bold color="positive60">
-                  {`Up to ${pair.apr24h.toFixed(2)}% APR`}
+                  {`Up to ${(pair.apr24h * 100).toFixed(2)}% APR`}
                 </Text>
               </HomepageCardBadge>
             </CardRowLayout>

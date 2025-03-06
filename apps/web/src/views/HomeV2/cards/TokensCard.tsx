@@ -18,12 +18,14 @@ const Percent = styled(Text)`
   font-size: 14px;
   line-height: 21px;
   letter-spacing: 0%;
-  color: var(--V1-Fill-Secondary, #7a6eaa);
+  color: ${({ theme }) => theme.colors.textSubtle};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `
 
 const TokenRow = ({
   id,
-  icon,
   symbol,
   price,
   percent,
@@ -52,10 +54,36 @@ const TokenRow = ({
       <Text bold color="success" mr="4px">
         ${price.toLocaleString()}
       </Text>
-      <Text fontSize="12px" color="success">
-        ▲
-      </Text>
-      <Percent>{percent.toFixed(2)}%</Percent>
+
+      <Percent ml="2px">
+        {percent > 0 && (
+          <Text
+            fontSize="10px"
+            color="success"
+            style={{
+              position: 'relative',
+              top: '1px',
+              marginRight: '2px',
+            }}
+          >
+            ▲
+          </Text>
+        )}
+        {percent < 0 && (
+          <Text
+            fontSize="10px"
+            color="failure"
+            style={{
+              position: 'relative',
+              top: '1px',
+              marginRight: '2px',
+            }}
+          >
+            ▼
+          </Text>
+        )}
+        {percent.toFixed(2)}%
+      </Percent>
     </HomepageCardBadge>
   </CardRowLayout>
 )

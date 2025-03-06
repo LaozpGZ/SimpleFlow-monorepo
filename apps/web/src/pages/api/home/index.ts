@@ -1,6 +1,5 @@
 import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import { NextApiHandler } from 'next'
-import { defaultSiteData } from './defaultSiteData'
 import { homePageChainsInfo, homePageCurrencies, partners, queryPools, queryTokens } from './homePageDataQuery'
 import { queryCakeRelated } from './queryCakeRelated'
 import { querySiteStats } from './querySiteStats'
@@ -27,7 +26,7 @@ async function _load() {
 }
 export const loadHomePageData = cacheByLRU(_load, {
   ttl: 3600 * 24 * 1000,
-  defaultValue: defaultSiteData,
+  // defaultValue: defaultSiteData,
 })
 
 const handler: NextApiHandler = async (req, res) => {

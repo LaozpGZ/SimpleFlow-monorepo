@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
-import { getTokenPrices } from '@pancakeswap/price-api-sdk'
-import { ASSET_CDN } from 'config/constants/endpoints'
+import { getCurrencyKey } from '@pancakeswap/price-api-sdk'
+import { ASSET_CDN, WALLET_API } from 'config/constants/endpoints'
 import keyBy from 'lodash/keyBy'
 import { fetchExplorerFarmPools } from 'state/farmsV4/state/farmPools/fetcher'
 import { checksumAddress } from 'utils/checksumAddress'
@@ -163,11 +163,33 @@ export async function queryPools() {
   return pairs
 }
 
+async function getTokenPrices(chainId: ChainId, addresses: `0x${string}`[]) {
+  const ids = addresses.map((address) => getCurrencyKey({ chainId, address }))
+  const url24h = `${WALLET_API}/v1/prices24h/list/${ids.join(',')}`
+  const url = `${WALLET_API}/v1/prices/list/${ids.join(',')}`
+
+  const [result, result24h] = await Promise.all([
+    fetch(url).then((res) => res.json()),
+    fetch(url24h).then((res) => res.json()),
+  ])
+
+  return addresses.map((address) => {
+    const key = getCurrencyKey({ chainId, address })!
+    const price = result[key]
+    const price24h = result24h[key]
+    return {
+      priceUSD: price,
+      percent: 100 * ((price24h ? price / price24h : 0) - 1),
+    }
+  })
+}
+
 export async function queryTokens() {
   const prices = await getTokenPrices(
     ChainId.BSC,
     tokens.map((x) => x.id),
   )
+  console.log(prices)
 
   return tokens.map((x, i) => {
     const price = prices[i]
@@ -176,6 +198,7 @@ export async function queryTokens() {
       ...x,
       id: addr,
       price: price ? price.priceUSD : 0,
+      percent: price ? price.percent : 0,
       icon: `https://tokens.pancakeswap.finance/images/${addr}.png`,
     }
   })
