@@ -1,6 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import {
   Card,
+  CopyIcon,
+  copyText,
   FlexGap,
   LinkExternal,
   Message,
@@ -11,6 +13,7 @@ import {
 } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import { rpcData } from './constant'
+import { getImageUrl } from './utils'
 
 const UnderLineBox = styled.div`
   position: relative;
@@ -27,6 +30,29 @@ const UnderLineBox = styled.div`
   }
 `
 
+const walletConfig = [
+  {
+    title: 'Trust Wallet',
+    image: 'trust.png',
+    doc: 'https://community.trustwallet.com/t/how-to-add-a-custom-network-on-the-trust-wallet-mobile-app/626781',
+  },
+  {
+    title: 'Rabbit Wallet',
+    image: 'safepal.png',
+    doc: 'https://support.rabby.io/hc/en-us',
+  },
+  {
+    title: 'SafePal',
+    image: 'safepal.png',
+    doc: 'https://safepalsupport.zendesk.com/hc/en-us/articles/14688426876443-How-to-add-a-Custom-network-in-the-SafePal-software-wallet',
+  },
+  {
+    title: 'Others',
+    image: 'others.png',
+    doc: 'https://support.metamask.io/networks-and-sidechains/managing-networks/how-to-add-a-custom-network-rpc/',
+  },
+]
+
 export const ManualConfigModal: React.FC = () => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
@@ -37,7 +63,30 @@ export const ManualConfigModal: React.FC = () => {
           <Text bold>{t('PancakeSwap MEV Guard')}</Text>
           {t('requires a manual configuration for your wallet. Choose your wallet to view a detailed guide:')}
         </Text>
-
+        <FlexGap
+          maxWidth="588px"
+          gap="40px"
+          flexWrap={isMobile ? 'wrap' : 'nowrap'}
+          alignItems="center"
+          justifyContent="center"
+        >
+          {walletConfig.map((wallet) => (
+            <FlexGap
+              flexDirection="column"
+              alignItems="center"
+              gap="8px"
+              onClick={() => {
+                window.open(wallet.doc, '_blank', 'noopener noreferrer')
+              }}
+              style={{ cursor: 'pointer' }}
+            >
+              <img src={getImageUrl(wallet.image)} alt={wallet.title} width="36px" />
+              <Text fontSize="12px" lineHeight="15px" bold color="#02919D">
+                {t(wallet.title)}
+              </Text>
+            </FlexGap>
+          ))}
+        </FlexGap>
         <Card innerCardProps={{ p: '16px' }}>
           <Text fontSize="20px" bold mb="16px">
             {t('Or add manually this RPC endpoint to your wallet')}
@@ -48,6 +97,7 @@ export const ManualConfigModal: React.FC = () => {
                 <Text>{key}:</Text>
                 <UnderLineBox />
                 <Text bold>{value}</Text>
+                <CopyIcon cursor="pointer" color="#02919D" onClick={() => copyText(value)} />
               </FlexGap>
             ))}
           </FlexGap>

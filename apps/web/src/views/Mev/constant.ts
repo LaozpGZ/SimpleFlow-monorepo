@@ -9,7 +9,7 @@ export const walletSupportManualRPCConfig = ['isSafePal', 'isRabby', 'isTokenPoc
 
 export const rpcData = {
   'Network Name': 'PancakeSwap MEV Guard',
-  'New RPC URL': 'https://bscrpc.pancakeswap.finance',
+  'RPC URL': 'https://bscrpc.pancakeswap.finance',
   'Chain ID': '56',
   'Currency symbol': 'BNB',
   'Block Explorer URL': 'https://bscscan.com',
