@@ -108,6 +108,7 @@ export function useWalletSupportsAddEthereumChain() {
 export function useIsMEVEnabled() {
   const { data: walletClient } = useWalletClient()
   const { account, chainId } = useActiveWeb3React()
+  const { walletType } = useWalletType()
 
   const { data, isLoading, refetch } = useQuery({
     queryKey: ['isMEVEnabled', walletClient, account, chainId],
@@ -116,7 +117,12 @@ export function useIsMEVEnabled() {
     staleTime: 60000,
   })
 
-  return { isMEVEnabled: data?.mevEnabled ?? false, isLoading, refetch, isMEVProtectAvailable: chainId === ChainId.BSC }
+  return {
+    isMEVEnabled: (data?.mevEnabled || (walletType === WalletType.mevDefaultOnBSC && chainId === ChainId.BSC)) ?? false,
+    isLoading,
+    refetch,
+    isMEVProtectAvailable: chainId === ChainId.BSC,
+  }
 }
 
 export const useShouldShowMEVToggle = () => {

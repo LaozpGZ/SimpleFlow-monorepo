@@ -38,7 +38,7 @@ const walletConfig = [
   },
   {
     title: 'Rabbit Wallet',
-    image: 'safepal.png',
+    image: 'rabby.png',
     doc: 'https://support.rabby.io/hc/en-us',
   },
   {
