@@ -8,6 +8,7 @@ type CacheOptions<T extends AsyncFunction<any>> = {
   name?: string
   maxCacheSize?: number
   ttl: number
+  defaultValue?: any
   key?: (params: Parameters<T>) => any
 }
 
@@ -19,11 +20,26 @@ function calcCacheKey(args: any[], epoch: number) {
 
 const identity = (args: any) => args
 
-export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key, maxCacheSize }: CacheOptions<T>) => {
+export const cacheByLRU = <T extends AsyncFunction<any>>(
+  fn: T,
+  { ttl, key, maxCacheSize, defaultValue }: CacheOptions<T>,
+) => {
   const cache = new QuickLRU<string, Promise<any>>({
     maxAge: ttl,
     maxSize: maxCacheSize || 1000,
   })
+
+  function ensureDefault(promise: Promise<any>) {
+    if (defaultValue) {
+      const def = new Promise((resolve) => {
+        setTimeout(() => {
+          resolve(defaultValue)
+        }, 0)
+      })
+      return Promise.race([promise, def])
+    }
+    return promise
+  }
 
   const keyFunction = key || identity
 
@@ -50,7 +66,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key, maxC
     const cacheKey = calcCacheKey(keyFunction(args), epochId)
     // logger(cacheKey, `exists=${cache.has(cacheKey)}`)
     if (cache.has(cacheKey)) {
-      return cache.get(cacheKey)
+      return ensureDefault(cache.get(cacheKey)!)
     }
 
     // @ts-ignore
@@ -66,7 +82,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(fn: T, { ttl, key, maxC
     }
 
     try {
-      return await promise
+      return ensureDefault(promise)
     } catch (error) {
       // logger('error', cacheKey, error)
       cache.delete(cacheKey)
