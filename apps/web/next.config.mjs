@@ -213,12 +213,7 @@ const config = {
         source: '/images/tokens/:address',
         destination: 'https://tokens.pancakeswap.finance/images/:address',
         permanent: false,
-      },
-      {
-        source: '/swap',
-        destination: '/',
-        permanent: true,
-      },
+      }
     ]
   },
   webpack: (webpackConfig, { webpack, isServer }) => {
