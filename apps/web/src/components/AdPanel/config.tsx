@@ -24,13 +24,25 @@ enum Priority {
 
 const picksConfigAtom = atom(async () => {
   const time = Math.floor((Date.now() / 1000) * 60 * 5) // Cache 5min
-  const url = `https://proofs.pancakeswap.com/picks/today.json?t=${time}`
-  const response = await fetch(url)
-  const json = await response.json()
-  return json as PicksConfig
+
+  const urlPreview = `https://proofs.pancakeswap.com/picks/today-preview.json?t=${time}`
+  const isPreview = window.location.origin !== 'https://pancakeswap.finance'
+  const url = isPreview ? urlPreview : `https://proofs.pancakeswap.com/picks/today.json?t=${time}`
+  try {
+    const response = await fetch(url)
+    const json = await response.json()
+    return json as PicksConfig
+  } catch (ex) {
+    return null
+  }
 })
 export const usePicksConfig = () => {
   const picksConfig = useAtomValue(picksConfigAtom)
+
+  if (!picksConfig) {
+    return []
+  }
+
   const adList: AdSlide[] = picksConfig.configs.map((config, i) => {
     return {
       id: `pick-${config.poolId}`,
