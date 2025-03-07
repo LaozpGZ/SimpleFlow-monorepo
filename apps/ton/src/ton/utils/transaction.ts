@@ -51,17 +51,13 @@ export const checkTransactionApplied = async ({ hash }: { hash: string }) => {
   const chainId = store.get(chainIdAtom)
   return retry(
     async () => {
-      try {
-        const traceResponse = await fetch(`${traceEndPoints[chainId]}&tx_hash=${hash}&include_actions=true`)
-        const traceData = await traceResponse.json()
+      const traceResponse = await fetch(`${traceEndPoints[chainId]}&tx_hash=${hash}&include_actions=true`)
+      const traceData = await traceResponse.json()
 
-        if (!traceData || !traceData.traces.length) {
-          throw new Error('Transaction not applied yet')
-        }
+      if (traceData?.traces?.length) {
         return traceData
-      } catch (error) {
-        throw new Error('Transaction not applied yet')
       }
+      throw new Error('Transaction not applied')
     },
     { retries: 30, delay: 1000 },
   )

@@ -65,11 +65,12 @@ export const useSwap = ({ amount0, minOut, token0, token1, trade, refreshTrade }
     if (trade.route.path.length > 2) {
       const path = trade?.route.path
       for (let idx = path.length - 1; idx >= 2; idx--) {
+        const currency = path[idx]
         // eslint-disable-next-line no-await-in-loop
-        const routerJettonWalletOut = await getJettonWalletAddress(routerAddress, path[idx].wrapped.address)
+        const routerJettonWalletOut = await getJettonWalletAddress(routerAddress, currency.wrapped.address)
         const next = {
           tokenAddress: routerJettonWalletOut,
-          minOut: idx === path.length - 1 && minOut ? parseUnits(minOut, token1?.decimals) : 1n,
+          minOut: idx === path.length - 1 && minOut ? parseUnits(minOut, currency?.decimals) : 1n,
           next: lastSwapNext,
         }
         lastSwapNext = next
@@ -114,7 +115,7 @@ export const useSwap = ({ amount0, minOut, token0, token1, trade, refreshTrade }
           // Attached TON for fees, not the amount of jettons to transfer
           amount: (isTonToJetton
             ? parseUnits(amount0, token0.decimals) + GAS_CONSTANTS.swapTonToJetton.forwardGasAmount
-            : GAS_CONSTANTS.swapJettonToJetton.gasAmount + GAS_CONSTANTS.swapJettonToJetton.forwardGasAmount
+            : GAS_CONSTANTS.swapJettonToJetton.gasAmount
           ).toString(),
           payload: payload.toBoc().toString('base64'),
         },
@@ -122,7 +123,6 @@ export const useSwap = ({ amount0, minOut, token0, token1, trade, refreshTrade }
     }
   }, [
     minOut,
-    token1?.decimals,
     userAddress,
     amount0,
     routerAddress,
@@ -174,9 +174,11 @@ export const useSwap = ({ amount0, minOut, token0, token1, trade, refreshTrade }
           hash,
         })
         // dont await, just let it go
-        checkTransactionApplied({ hash }).then(() => {
-          setLatestTxReceipt({ hash })
-        })
+        checkTransactionApplied({ hash })
+          .then(() => {
+            setLatestTxReceipt({ hash })
+          })
+          .catch((e) => console.error(e))
       }
       return Promise.resolve()
     } catch (e) {
