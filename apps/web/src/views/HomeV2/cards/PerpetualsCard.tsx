@@ -81,7 +81,9 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
           isLast={index === tokens.length - 1}
         >
           <HomepageCardBadge>
-            <LeverageText>{t(`Up to ${token.symbol === 'BTCUSD' ? '1001x' : '250x'} leverage`)}</LeverageText>
+            <LeverageText>
+              {t(`Up to`)} {token.symbol === 'BTCUSD' ? '1001x' : '250x'} {t('leverage')}
+            </LeverageText>
           </HomepageCardBadge>
         </CardRowLayout>
       ))}

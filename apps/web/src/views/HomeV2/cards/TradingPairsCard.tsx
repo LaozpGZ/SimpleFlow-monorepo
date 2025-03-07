@@ -1,3 +1,4 @@
+import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, Text } from '@pancakeswap/uikit'
 import { HomePagePoolInfo } from 'pages/api/home/types'
 import styled from 'styled-components'
@@ -24,6 +25,7 @@ const ChainText = styled(Text)`
 `
 
 export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
+  const { t } = useTranslation()
   return (
     <CardSection title="Trading Pairs" subtitle="by Providing Liquidity">
       <Box>
@@ -57,7 +59,7 @@ export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
             >
               <HomepageCardBadge>
                 <Text bold color="positive60">
-                  {`Up to ${(pair.apr24h * 100).toFixed(2)}% APR`}
+                  {t('Up to')} {`${(pair.apr24h * 100).toFixed(2)}% APR`}
                 </Text>
               </HomepageCardBadge>
             </CardRowLayout>
