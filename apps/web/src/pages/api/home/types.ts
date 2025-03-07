@@ -5,10 +5,10 @@ type TokenBase = {
   id: `0x${string}`
   symbol: string
   chainId: ChainId
+  icon: string
 }
 export type HomePageToken = TokenBase & {
   price: number
-  icon: string
   percent: number
 }
 

@@ -1,4 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
+import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
 import keyBy from 'lodash/keyBy'
 import { fetchExplorerFarmPools } from 'state/farmsV4/state/farmPools/fetcher'
 import { checksumAddress } from 'utils/checksumAddress'
@@ -23,6 +24,13 @@ const pairsConfig: HomePagePairConfig[] = [
   },
 ]
 
+function tokenLogo(address: `0x${string}`) {
+  if (address === ZERO_ADDRESS) {
+    return `https://assets.pancakeswap.finance/web/native/${ChainId.BSC}.png`
+  }
+  return `https://tokens.pancakeswap.finance/images/${address}.png`
+}
+
 export async function queryPools() {
   const poolsInfo = await fetchExplorerFarmPools()
   const byIds = keyBy(poolsInfo, (x) => poolId(x.chainId, x.lpAddress.toLowerCase()))
@@ -37,11 +45,13 @@ export async function queryPools() {
         id: related.token0.wrapped.address,
         symbol: related.token0.wrapped.symbol,
         chainId: related.chainId,
+        icon: tokenLogo(related.token0.isNative ? ZERO_ADDRESS : related.token0.wrapped.address),
       },
       token1: {
         id: related.token1.wrapped.address,
         symbol: related.token0.wrapped.symbol,
         chainId: related.chainId,
+        icon: tokenLogo(related.token1.isNative ? ZERO_ADDRESS : related.token1.wrapped.address),
       },
       chainId: related.chainId,
       apr24h: Number(related.lpApr),

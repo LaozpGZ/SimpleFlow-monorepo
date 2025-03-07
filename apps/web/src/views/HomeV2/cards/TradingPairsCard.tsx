@@ -33,7 +33,17 @@ export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
               key={`${pair.token0}-${pair.token1}`}
               left={
                 <Flex alignItems="center">
-                  <MultipleCurrencyLogos tokens={[pair.token0, pair.token1]} chainId={pair.chainId} />
+                  <MultipleCurrencyLogos
+                    tokens={[
+                      {
+                        logo: pair.token0.icon,
+                      },
+                      {
+                        logo: pair.token1.icon,
+                      },
+                    ]}
+                    chainId={pair.chainId}
+                  />
 
                   <VerticalLayout>
                     <HomepageSymbol>

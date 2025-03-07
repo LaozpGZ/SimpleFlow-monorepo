@@ -1,7 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Text } from '@pancakeswap/uikit'
+import { Box, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import React from 'react'
 import styled from 'styled-components'
+import { MultipleLogos } from './cards/component/MultipleLogos'
 
 export type HomepageChain = {
   logo: string
@@ -25,33 +26,34 @@ const ChainIcons = styled(Flex)`
   }
 `
 
-const TitleText = styled(Text)`
+const TitleText = styled(Text)<{ isMobile: boolean }>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: 88px;
-  line-height: 88px;
+  font-size: ${({ isMobile }) => (isMobile ? '40px' : '88px')};
+  line-height: ${({ isMobile }) => (isMobile ? '48px' : '88px')};
   letter-spacing: -2%;
-  text-align: left;
+  text-align: ${({ isMobile }) => (isMobile ? 'center' : 'left')};
   color: ${({ theme }) => theme.colors.text};
 `
 
-const HighlightedText = styled(Text)`
+const HighlightedText = styled(Text)<{ isMobile: boolean }>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: 88px;
-  line-height: 88px;
+  font-size: ${({ isMobile }) => (isMobile ? '48px' : '88px')};
+  line-height: ${({ isMobile }) => (isMobile ? '48px' : '88px')};
   letter-spacing: -2%;
-  text-align: left;
+  text-align: ${({ isMobile }) => (isMobile ? 'center' : 'left')};
   color: ${({ theme }) => theme.colors.secondary};
+  white-space: nowrap;
 `
 
-const DescriptionText = styled(Text)`
+const DescriptionText = styled(Text)<{ isMobile: boolean }>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: 24px;
-  line-height: 36px;
+  font-size: ${({ isMobile }) => (isMobile ? '18px' : '24px')};
+  line-height: ${({ isMobile }) => (isMobile ? '28px' : '36px')};
   letter-spacing: -1%;
-  text-align: left;
+  text-align: ${({ isMobile }) => (isMobile ? 'center' : 'left')};
   color: ${({ theme }) => theme.colors.text};
   margin-top: 40px;
   margin-bottom: 24px;
@@ -63,24 +65,27 @@ interface FavoriteDEXBannerProps {
 
 export const FavoriteDEXBanner: React.FC<FavoriteDEXBannerProps> = ({ chains }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
 
   return (
     <Wrapper>
-      <TitleText>{t("Everyone's")}</TitleText>
-      <HighlightedText>{t('Favorite DEX')}</HighlightedText>
-      <DescriptionText>{t('Trade Crypto Instantly Across %count%+ Chains', { count: chains.length })}</DescriptionText>
-      <ChainIcons>
-        {chains.map((chain) => (
-          <img
-            style={{
-              marginLeft: '8px',
-            }}
-            key={chain.logo}
-            src={chain.logo}
-            alt={chain.banner}
-          />
-        ))}
-      </ChainIcons>
+      <TitleText as={isMobile ? 'span' : 'h2'} isMobile={isMobile}>
+        {t("Everyone's")}{' '}
+      </TitleText>
+      <HighlightedText as={isMobile ? 'span' : 'h2'} isMobile={isMobile}>
+        {t('Favorite DEX')}
+      </HighlightedText>
+      <DescriptionText isMobile={isMobile}>
+        {t('Trade Crypto Instantly Across %count%+ Chains', { count: chains.length })}
+      </DescriptionText>
+      <Flex alignItems="center" justifyContent={isMobile ? 'center' : 'flex-start'}>
+        <MultipleLogos
+          size={isMobile ? 32 : 40}
+          gap={isMobile ? -8 : 20}
+          logos={chains.map((x) => x.logo)}
+          maxDisplay={20}
+        />
+      </Flex>
     </Wrapper>
   )
 }

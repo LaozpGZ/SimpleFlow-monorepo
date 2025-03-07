@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, PageSection, Text } from '@pancakeswap/uikit'
+import { Box, PageSection, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
 import styled from 'styled-components'
 import SimpleSwapForHomePage from 'views/SwapSimplify/SimpleSwapForHomePage'
@@ -7,12 +7,16 @@ import { homePageDataAtom } from './atom/homePageDataAtom'
 import { BridgeCryptoCard, CakeStatsCard, TokensCard, TradingPairsCard } from './cards'
 import { PerpetualCard } from './cards/PerpetualsCard'
 import { PredictionCard } from './cards/PredictionCard'
+import { RowLayout } from './component/RowLayout'
 import { ScrollableFullScreen } from './component/ScrollableFullScreen'
 import { FavoriteDEXBanner } from './FavoriteDEXBanner'
 import { PancakeBanner } from './PancakeBanner'
 
-const Wrapper = styled(Box)`
+const Wrapper = styled(Box)<{
+  isMobile: boolean
+}>`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
+  padding-top: ${({ isMobile }) => (isMobile ? '67x' : '0')};
 `
 
 const Section = styled(PageSection)`
@@ -23,15 +27,21 @@ const Section = styled(PageSection)`
 export const HomeV2 = () => {
   const { tokens, chains, pools, currencies, cakeRelated, predictionUsers } = useAtomValue(homePageDataAtom)
   const cakeToken = tokens.find((x) => x.symbol === 'CAKE')!
+
+  const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
+  const Container = isMobile ? Box : ScrollableFullScreen
   return (
-    <Wrapper>
-      <ScrollableFullScreen>
+    <Wrapper
+      isMobile={isMobile}
+      style={{ width: isMobile ? '100vw' : 'calc(100vw - 8px)', overflow: 'hidden', boxSizing: 'border-box' }}
+    >
+      <Container>
         <RowLayout>
           <FavoriteDEXBanner chains={chains} />
           <SimpleSwapForHomePage />
         </RowLayout>
-      </ScrollableFullScreen>
+      </Container>
 
       <RowLayout
         mt="24px"
@@ -52,7 +62,11 @@ export const HomeV2 = () => {
         <BridgeCryptoCard chains={chains} currencies={currencies} />
         <CakeStatsCard cakeToken={cakeToken} figures={cakeRelated} />
       </RowLayout>
-      <FeaturedText>{t('Featured on PancakeSwap')}</FeaturedText>
+      {!isMobile && (
+        <RowLayout>
+          <FeaturedText>{t('Featured on PancakeSwap')}</FeaturedText>
+        </RowLayout>
+      )}
       <RowLayout
         style={{
           marginTop: '40px',
@@ -63,6 +77,7 @@ export const HomeV2 = () => {
       </RowLayout>
 
       <RowLayout
+        sidePadding="0px"
         style={{
           marginTop: '160px',
         }}
@@ -81,19 +96,4 @@ const FeaturedText = styled(Text)`
   letter-spacing: -1%;
   margin-top: 60px;
   color: ${({ theme }) => theme.colors.text};
-`
-
-const RowLayout = styled(Box)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-
-  & > div {
-    flex: 1;
-  }
 `

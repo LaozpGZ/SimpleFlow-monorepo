@@ -3,12 +3,17 @@ import React, { ReactNode } from 'react'
 import styled from 'styled-components'
 
 const StyledCard = styled(Card)`
-  border-radius: 16px;
+  border-radius: 48px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   background: ${({ theme }) => theme.colors.card};
   max-width: 588px;
   padding: 0px 32px;
-  border-radius: 48px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  }
 `
 
 interface CardSectionProps {
@@ -39,18 +44,16 @@ const Subtitle = styled(Text)`
 export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, children, button }) => (
   <StyledCard>
     <CardBody>
-      <Box
-        style={{
-          padding: '24px 0px',
-        }}
-      >
+      <Box style={{ padding: '24px 0' }}>
         <Flex justifyContent="space-between" alignItems="center">
-          <Title>{title}</Title>
+          <Box>
+            <Title>{title}</Title>
+            {subtitle && <Subtitle>{subtitle}</Subtitle>}
+          </Box>
           {button}
         </Flex>
-        {subtitle && <Subtitle>{subtitle}</Subtitle>}
       </Box>
-      <Flex flexDirection="column">{children}</Flex>
+      {children}
     </CardBody>
   </StyledCard>
 )

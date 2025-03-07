@@ -1,4 +1,4 @@
-import { Text } from '@pancakeswap/uikit'
+import { Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useAtomValue } from 'jotai'
 import React from 'react'
@@ -55,6 +55,7 @@ const BunnyImageUrl = `${ASSET_CDN}/web/landing/earn-bunny.png`
 
 export const PancakeBanner: React.FC = () => {
   const { partners, stats } = useAtomValue(homePageDataAtom)
+  const { isMobile } = useMatchBreakpoints()
 
   return (
     <Container>
@@ -63,7 +64,7 @@ export const PancakeBanner: React.FC = () => {
         Used by <Highlight1>millions.</Highlight1> Trusted with <Highlight2>billions.</Highlight2>
       </HeadlineText>
       <StatsSummary stats={stats} />
-      <Partners partners={partners} />
+      {!isMobile && <Partners partners={partners} />}
     </Container>
   )
 }
