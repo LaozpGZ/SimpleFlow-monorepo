@@ -9,7 +9,12 @@ import { BSCMevGuardChain } from 'utils/mevGuardChains'
 import { addChain } from 'viem/actions'
 import { WalletType } from 'views/Mev/types'
 import { Connector, useAccount, useWalletClient } from 'wagmi'
-import { walletSupportCustomRPCNative, walletSupportDefaultMevOnBSC, walletSupportManualRPCConfig } from '../constant'
+import {
+  walletPretendToMetamask,
+  walletSupportCustomRPCNative,
+  walletSupportDefaultMevOnBSC,
+  walletSupportManualRPCConfig,
+} from '../constant'
 
 const WalletProviders = [
   'isApexWallet',
@@ -170,7 +175,8 @@ export async function getWalletType(connector?: Connector): Promise<WalletType> 
 
   if (walletSupportDefaultMevOnBSC.some((d) => d in provider)) return WalletType.mevDefaultOnBSC
   if (walletSupportManualRPCConfig.some((d) => d in provider)) return WalletType.mevOnlyManualConfig
-  if (walletSupportCustomRPCNative.some((d) => d in provider)) return WalletType.nativeSupportCustomRPC
+  if (walletSupportCustomRPCNative.some((d) => d in provider) && !walletPretendToMetamask.some((d) => d in provider))
+    return WalletType.nativeSupportCustomRPC
   return WalletType.mevNotSupported
 }
 

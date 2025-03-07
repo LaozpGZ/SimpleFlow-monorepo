@@ -7,6 +7,29 @@ export const walletSupportCustomRPCNative = ['isMetaMask', 'isOkxWallet', 'isCoi
 export const walletSupportManualRPCConfig = ['isSafePal', 'isRabby', 'isTokenPocket']
 // wallet support manual config on wallet app, don't support support wallet_addEthereumChain native
 
+export const walletPretendToMetamask = [
+  'isBraveWallet',
+  'isApexWallet',
+  'isAvalanche',
+  'isBitKeep',
+  'isBlockWallet',
+  'isKuCoinWallet',
+  'isMathWallet',
+  'isOkxWallet',
+  'isOKExWallet',
+  'isOneInchIOSWallet',
+  'isOneInchAndroidWallet',
+  'isOpera',
+  'isPortal',
+  'isPhantom',
+  'isRabby',
+  'isTokenPocket',
+  'isTokenary',
+  'isUniswapWallet',
+  'isZerion',
+]
+// wallet support mev on bsc default, but it not using PCS RPC
+
 export const rpcData = {
   'Network Name': 'PancakeSwap MEV Guard',
   'RPC URL': 'https://bscrpc.pancakeswap.finance',
