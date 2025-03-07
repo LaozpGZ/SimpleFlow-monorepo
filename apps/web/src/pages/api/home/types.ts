@@ -1,4 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
+import { PredictionUser } from 'state/types'
 
 type TokenBase = {
   id: `0x${string}`
@@ -68,6 +69,7 @@ export type HomePageData = {
   cakeRelated: CakeRelatedFigures
   stats: SiteStats
   partners: HomePagePartner[]
+  predictionUsers: PredictionUser[]
 }
 
 // Supporting types (you may need to adjust according to your actual implementation)

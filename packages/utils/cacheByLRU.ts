@@ -8,7 +8,11 @@ type CacheOptions<T extends AsyncFunction<any>> = {
   name?: string
   maxCacheSize?: number
   ttl: number
-  defaultValue?: any
+  persist?: {
+    key: string
+    get: () => Promise<any>
+    set: (value: any) => Promise<void>
+  }
   key?: (params: Parameters<T>) => any
 }
 
@@ -22,23 +26,23 @@ const identity = (args: any) => args
 
 export const cacheByLRU = <T extends AsyncFunction<any>>(
   fn: T,
-  { ttl, key, maxCacheSize, defaultValue }: CacheOptions<T>,
+  { ttl, key, maxCacheSize, persist }: CacheOptions<T>,
 ) => {
   const cache = new QuickLRU<string, Promise<any>>({
     maxAge: ttl,
     maxSize: maxCacheSize || 1000,
   })
 
-  function ensureDefault(promise: Promise<any>) {
-    if (defaultValue) {
-      const def = new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(defaultValue)
-        }, 0)
-      })
-      return Promise.race([promise, def])
+  async function ensurePersist(promise: Promise<any>) {
+    if (!persist) {
+      return promise
     }
-    return promise
+    try {
+      const value = await Promise.race([persist.get(), promise])
+      return value
+    } catch (ex) {
+      return promise
+    }
   }
 
   const keyFunction = key || identity
@@ -66,7 +70,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     const cacheKey = calcCacheKey(keyFunction(args), epochId)
     // logger(cacheKey, `exists=${cache.has(cacheKey)}`)
     if (cache.has(cacheKey)) {
-      return ensureDefault(cache.get(cacheKey)!)
+      return ensurePersist(cache.get(cacheKey)!)
     }
 
     // @ts-ignore
@@ -82,7 +86,16 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     }
 
     try {
-      return ensureDefault(promise)
+      // Persist to R2 or other storage
+      promise.then((result) => {
+        const jsonResult = stringify(result)
+        if (persist && result && jsonResult !== '{}' && jsonResult !== '[]') {
+          persist.set(result).catch((ex) => {
+            console.error('Failed to persist cache', ex)
+          })
+        }
+      })
+      return ensurePersist(promise)
     } catch (error) {
       // logger('error', cacheKey, error)
       cache.delete(cacheKey)

@@ -1,16 +1,20 @@
 import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import { NextApiHandler } from 'next'
-import { homePageChainsInfo, homePageCurrencies, partners, queryPools, queryTokens } from './homePageDataQuery'
+import { homePageChainsInfo, homePageCurrencies, partners } from './homePageDataQuery'
+import { queryPools } from './queries/queryPools'
+import { queryPredictionUser } from './queries/queryPrediction'
+import { queryTokens } from './queries/queryTokens'
 import { queryCakeRelated } from './queryCakeRelated'
 import { querySiteStats } from './querySiteStats'
 import { HomePageData } from './types'
 
 async function _load() {
-  const [tokens, pools, cakeRelated, stats] = await Promise.all([
+  const [tokens, pools, cakeRelated, stats, predictionUsers] = await Promise.all([
     queryTokens(),
     queryPools(),
     queryCakeRelated(),
     querySiteStats(),
+    queryPredictionUser(),
   ])
   const currencies = homePageCurrencies
   const chains = homePageChainsInfo()
@@ -22,11 +26,11 @@ async function _load() {
     cakeRelated,
     stats,
     partners,
+    predictionUsers,
   } as HomePageData
 }
 export const loadHomePageData = cacheByLRU(_load, {
   ttl: 3600 * 24 * 1000,
-  // defaultValue: defaultSiteData,
 })
 
 const handler: NextApiHandler = async (req, res) => {

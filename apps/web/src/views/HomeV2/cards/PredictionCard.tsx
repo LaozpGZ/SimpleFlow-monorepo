@@ -1,19 +1,20 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, Flex, Image, Text } from '@pancakeswap/uikit'
+import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
+import { ArrowForwardIcon, BunnyPlaceholderIcon, Button, Flex, Text } from '@pancakeswap/uikit'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { useRouter } from 'next/router'
+import { HomePageToken } from 'pages/api/home/types'
+import { PredictionUser } from 'state/types'
 import styled from 'styled-components'
 import { CardRowLayout } from './component/CardRowLayout'
 import { CardSection } from './component/CardSection'
+import { HomepagePriceChange } from './component/HomepagePriceChange'
+import { HomepageSymbol } from './component/HomepageSymbol'
 
-const PriceText = styled(Text)`
+const TokenPrice = styled(Text)`
   font-weight: 600;
-  font-size: 24px;
-  line-height: 36px;
-  color: ${({ theme }) => theme.colors.success};
-`
-
-const PercentageText = styled(Text)`
-  font-size: 16px;
-  color: ${({ theme }) => theme.colors.textSubtle};
+  font-size: 18px;
+  color: ${({ theme }) => theme.colors.text};
 `
 
 const WinnerText = styled(Text)`
@@ -22,30 +23,66 @@ const WinnerText = styled(Text)`
   color: ${({ theme }) => theme.colors.text};
 `
 
-const PlayButton = styled(Button).attrs({ variant: 'primary', scale: 'sm' })``
+const PlayButton = styled(Button)`
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  height: 32px;
+`
 
-export const PredictionCard = () => {
+interface PredictionCardProps {
+  token: HomePageToken
+  user: PredictionUser
+}
+
+export const PredictionCard: React.FC<PredictionCardProps> = ({ token, user }) => {
   const { t } = useTranslation()
+  const router = useRouter()
 
   return (
-    <CardSection title={t('BNB 5 min. Prediction')} button={<PlayButton>{t('Play')} →</PlayButton>}>
+    <CardSection
+      title={t('BNB 5-Min Prediction')}
+      button={
+        <PlayButton
+          onClick={() => {
+            router.push('/prediction')
+          }}
+        >
+          {t('Play Now')}
+          <ArrowForwardIcon color="card" />
+        </PlayButton>
+      }
+    >
       <CardRowLayout
         left={
           <Flex alignItems="center">
-            <Image src="/images/tokens/bnb.png" width={32} height={32} alt="BNB" />
-            <WinnerText ml="8px">BNBUSD</WinnerText>
+            <CurrencyLogo
+              style={{
+                width: '40px',
+                height: '40px',
+              }}
+              currency={{
+                chainId: 56,
+                address: ZERO_ADDRESS,
+                isNative: true,
+              }}
+            />
+            {/* <Image src={token.icon} width={32} height={32} alt={token.symbol} /> */}
+            <HomepageSymbol ml="8px">{token.symbol}USD</HomepageSymbol>
           </Flex>
         }
       >
-        <Flex alignItems="center">
-          <PriceText>$568.11</PriceText>
-          <PercentageText ml="4px">▲ 0.74%</PercentageText>
+        <Flex alignItems="flex-end" flexDirection="column">
+          <TokenPrice>${token.price.toFixed(2)}</TokenPrice>
+          <HomepagePriceChange token={token} />
         </Flex>
       </CardRowLayout>
+
       <CardRowLayout
         left={
           <Flex alignItems="center">
-            <Image src="/images/profile-pic.png" width={32} height={32} alt="Winner" />
+            <BunnyPlaceholderIcon height={40} width={40} />
             <Text ml="8px" color="textSubtle">
               {t('Last Top Winner')}
             </Text>
@@ -53,10 +90,9 @@ export const PredictionCard = () => {
         }
         isLast
       >
-        <Flex alignItems="center">
-          <WinnerText>0xHysC...0114</WinnerText>
-          <PriceText ml="8px">+1.28 BNB</PriceText>
-        </Flex>
+        <WinnerText>
+          {user.id.slice(0, 6)}...{user.id.slice(-4)}
+        </WinnerText>
       </CardRowLayout>
     </CardSection>
   )

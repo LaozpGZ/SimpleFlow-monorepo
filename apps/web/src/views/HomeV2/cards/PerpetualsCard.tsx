@@ -34,6 +34,14 @@ const LeverageText = styled(Text)`
   color: ${({ theme }) => theme.colors.positive60};
 `
 
+const PlayButton = styled(Button)`
+  font-size: 14px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 999px;
+  height: 32px;
+`
+
 interface PerpetualCardProps {
   tokens: HomePageToken[]
 }
@@ -45,15 +53,10 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
     <CardSection
       title={t('Perpetuals')}
       button={
-        <Button
-          style={{
-            borderRadius: 999,
-            height: '32px',
-          }}
-        >
+        <PlayButton onClick={() => window.open('https://perp.pancakeswap.finance/')}>
           See All
           <ArrowForwardIcon color="card" />
-        </Button>
+        </PlayButton>
       }
     >
       {tokens.map((token, index) => (

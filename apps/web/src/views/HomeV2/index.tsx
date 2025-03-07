@@ -21,7 +21,7 @@ const Section = styled(PageSection)`
 `
 
 export const HomeV2 = () => {
-  const { tokens, chains, pools, currencies, cakeRelated } = useAtomValue(homePageDataAtom)
+  const { tokens, chains, pools, currencies, cakeRelated, predictionUsers } = useAtomValue(homePageDataAtom)
   const cakeToken = tokens.find((x) => x.symbol === 'CAKE')!
   const { t } = useTranslation()
   return (
@@ -59,7 +59,7 @@ export const HomeV2 = () => {
         }}
       >
         <PerpetualCard tokens={tokens.filter((x) => x.symbol === 'BTC' || x.symbol === 'ETH')} />
-        <PredictionCard />
+        <PredictionCard token={tokens.find((x) => x.symbol === 'BNB')!} user={predictionUsers[0]} />
       </RowLayout>
 
       <RowLayout
