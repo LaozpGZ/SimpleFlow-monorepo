@@ -3778,5 +3778,18 @@
   "If you've already set this up manually, no action is needed - just proceed with the swap!": "If you've already set this up manually, no action is needed - just proceed with the swap!",
   "MEV Protected": "MEV Protected",
   "Add automatically on BNB Smart Chain: PancakeSwap MEV Guard": "Add automatically on BNB Smart Chain: PancakeSwap MEV Guard",
-  "Dual Incentives are Completed! You will continue to earn trading fees and check the Finished farms tab to find your positions.": "Dual Incentives are Completed! You will continue to earn trading fees and check the Finished farms tab to find your positions."
+  "Dual Incentives are Completed! You will continue to earn trading fees and check the Finished farms tab to find your positions.": "Dual Incentives are Completed! You will continue to earn trading fees and check the Finished farms tab to find your positions.",
+  "members who trade on PancakeSwap on Base, BNB, or Arbitrum are eligible to earn a portion of $8453 airdropped to their wallet biweekly! Must trade a minimum of $100 to qualify.": "members who trade on PancakeSwap on Base, BNB, or Arbitrum are eligible to earn a portion of $8453 airdropped to their wallet biweekly! Must trade a minimum of $100 to qualify.",
+  "Favorite DEX": "Favorite DEX",
+  "Trade Crypto Instantly Across %count%+ Chains": "Trade Crypto Instantly Across %count%+ Chains",
+  "All Time Traders": "All Time Traders",
+  "All Time TV": "All Time TV",
+  "All Time LP Fees": "All Time LP Fees",
+  "Vote for CAKE Emissions": "Vote for CAKE Emissions",
+  "on over 600+ Pools": "on over 600+ Pools",
+  "%burned%M+ BURN • $%marketCap% MKT. CAP": "%burned%M+ BURN • $%marketCap% MKT. CAP",
+  "TOTAL VOTES: %totalVotes%": "TOTAL VOTES: %totalVotes%",
+  "%rewards%K+ CAKE Rewards/Epoch": "%rewards%K+ CAKE Rewards/Epoch",
+  "Swap with Best Prices": "Swap with Best Prices",
+  "with Fees as Low as 0.01%": "with Fees as Low as 0.01%"
 }
