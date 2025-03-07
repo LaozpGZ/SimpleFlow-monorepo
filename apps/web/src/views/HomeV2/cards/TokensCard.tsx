@@ -1,10 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Text } from '@pancakeswap/uikit'
+import { Box, Text, TriangleDownIcon, TriangleUpIcon } from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { HomePageToken } from 'pages/api/home/types'
 import styled from 'styled-components'
-import { CardRowLayout } from './CardRowLayout'
-import { CardSection } from './CardSection'
+import { CardRowLayout } from './component/CardRowLayout'
+import { CardSection } from './component/CardSection'
 import { HomepageCardBadge } from './component/HomepageCardBadge'
 import { HomepageSymbol } from './component/HomepageSymbol'
 
@@ -56,32 +56,8 @@ const TokenRow = ({
       </Text>
 
       <Percent ml="2px">
-        {percent > 0 && (
-          <Text
-            fontSize="10px"
-            color="success"
-            style={{
-              position: 'relative',
-              top: '1px',
-              marginRight: '2px',
-            }}
-          >
-            ▲
-          </Text>
-        )}
-        {percent < 0 && (
-          <Text
-            fontSize="10px"
-            color="failure"
-            style={{
-              position: 'relative',
-              top: '1px',
-              marginRight: '2px',
-            }}
-          >
-            ▼
-          </Text>
-        )}
+        {percent > 0 && <TriangleUpIcon />}
+        {percent < 0 && <TriangleDownIcon />}
         {percent.toFixed(2)}%
       </Percent>
     </HomepageCardBadge>

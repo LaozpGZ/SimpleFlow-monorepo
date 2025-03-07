@@ -15,6 +15,7 @@ interface CardSectionProps {
   title: string
   subtitle?: string
   children: ReactNode
+  button?: ReactNode
 }
 
 const Title = styled(Text)`
@@ -35,7 +36,7 @@ const Subtitle = styled(Text)`
   color: ${({ theme }) => theme.colors.textSubtle};
 `
 
-export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, children }) => (
+export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, children, button }) => (
   <StyledCard>
     <CardBody>
       <Box
@@ -43,7 +44,10 @@ export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, child
           padding: '24px 0px',
         }}
       >
-        <Title>{title}</Title>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Title>{title}</Title>
+          {button}
+        </Flex>
         {subtitle && <Subtitle>{subtitle}</Subtitle>}
       </Box>
       <Flex flexDirection="column">{children}</Flex>

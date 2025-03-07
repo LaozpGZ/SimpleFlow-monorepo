@@ -1,9 +1,12 @@
-import { Box, PageSection } from '@pancakeswap/uikit'
+import { useTranslation } from '@pancakeswap/localization'
+import { Box, PageSection, Text } from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
 import styled from 'styled-components'
 import SimpleSwapForHomePage from 'views/SwapSimplify/SimpleSwapForHomePage'
 import { homePageDataAtom } from './atom/homePageDataAtom'
 import { BridgeCryptoCard, CakeStatsCard, TokensCard, TradingPairsCard } from './cards'
+import { PerpetualCard } from './cards/PerpetualsCard'
+import { PredictionCard } from './cards/PredictionCard'
 import { ScrollableFullScreen } from './component/ScrollableFullScreen'
 import { FavoriteDEXBanner } from './FavoriteDEXBanner'
 import { PancakeBanner } from './PancakeBanner'
@@ -20,6 +23,7 @@ const Section = styled(PageSection)`
 export const HomeV2 = () => {
   const { tokens, chains, pools, currencies, cakeRelated } = useAtomValue(homePageDataAtom)
   const cakeToken = tokens.find((x) => x.symbol === 'CAKE')!
+  const { t } = useTranslation()
   return (
     <Wrapper>
       <ScrollableFullScreen>
@@ -48,6 +52,15 @@ export const HomeV2 = () => {
         <BridgeCryptoCard chains={chains} currencies={currencies} />
         <CakeStatsCard cakeToken={cakeToken} figures={cakeRelated} />
       </RowLayout>
+      <FeaturedText>{t('Featured on PancakeSwap')}</FeaturedText>
+      <RowLayout
+        style={{
+          marginTop: '40px',
+        }}
+      >
+        <PerpetualCard tokens={tokens.filter((x) => x.symbol === 'BTC' || x.symbol === 'ETH')} />
+        <PredictionCard />
+      </RowLayout>
 
       <RowLayout
         style={{
@@ -59,6 +72,16 @@ export const HomeV2 = () => {
     </Wrapper>
   )
 }
+
+const FeaturedText = styled(Text)`
+  font-family: Kanit;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 38.4px;
+  letter-spacing: -1%;
+  margin-top: 60px;
+  color: ${({ theme }) => theme.colors.text};
+`
 
 const RowLayout = styled(Box)`
   display: flex;

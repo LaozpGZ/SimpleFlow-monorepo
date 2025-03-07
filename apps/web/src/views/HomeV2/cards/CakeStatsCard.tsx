@@ -6,8 +6,8 @@ import { CakeRelatedFigures, HomePageToken } from 'pages/api/home/types'
 import React from 'react'
 import styled from 'styled-components'
 import { formatNumber } from '../util/formatNumber'
-import { CardRowLayout } from './CardRowLayout'
-import { CardSection } from './CardSection'
+import { CardRowLayout } from './component/CardRowLayout'
+import { CardSection } from './component/CardSection'
 import { HomepageCardBadge } from './component/HomepageCardBadge'
 import { HomepageSymbol } from './component/HomepageSymbol'
 
@@ -39,7 +39,7 @@ export const CakeStatsCard: React.FC<CakeStatsCardProps> = ({ figures, cakeToken
   return (
     <CardSection title={t('Vote for CAKE Emissions')} subtitle={t('on over 600+ Pools')}>
       <CardRowLayout
-        icon={
+        left={
           <>
             <CurrencyLogo
               style={{ width: '40px', height: '40px', marginRight: '12px' }}
@@ -66,7 +66,7 @@ export const CakeStatsCard: React.FC<CakeStatsCardProps> = ({ figures, cakeToken
       </CardRowLayout>
 
       <CardRowLayout
-        icon={
+        left={
           <>
             <img style={{ width: '40px', height: '40px', marginRight: '12px' }} src={GAUGE_ICON} alt="icon" />
             <Flex flexDirection="column">

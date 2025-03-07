@@ -12,16 +12,16 @@ const Layout = styled(Flex)<{ $isLast?: boolean }>`
 `
 
 export const CardRowLayout = ({
-  icon,
+  left,
   children,
   isLast,
 }: {
-  icon: React.ReactNode
+  left: React.ReactNode
   children: React.ReactNode
   isLast?: boolean
 }) => (
   <Layout alignItems="center" justifyContent="space-between" py="8px" $isLast={isLast}>
-    <Flex alignItems="center">{icon}</Flex>
+    <Flex alignItems="center">{left}</Flex>
     <Flex alignItems="center">{children}</Flex>
   </Layout>
 )

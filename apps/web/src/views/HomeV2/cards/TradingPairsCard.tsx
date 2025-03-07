@@ -2,8 +2,8 @@ import { Box, Flex, Text } from '@pancakeswap/uikit'
 import { HomePagePoolInfo } from 'pages/api/home/types'
 import styled from 'styled-components'
 import { getNetworkFullName } from 'views/BuyCrypto/constants'
-import { CardRowLayout } from './CardRowLayout'
-import { CardSection } from './CardSection'
+import { CardRowLayout } from './component/CardRowLayout'
+import { CardSection } from './component/CardSection'
 import { HomepageCardBadge } from './component/HomepageCardBadge'
 import { HomepageSymbol } from './component/HomepageSymbol'
 import { MultipleCurrencyLogos } from './component/MultipleCurrencyLogos'
@@ -31,7 +31,7 @@ export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
           return (
             <CardRowLayout
               key={`${pair.token0}-${pair.token1}`}
-              icon={
+              left={
                 <Flex alignItems="center">
                   <MultipleCurrencyLogos tokens={[pair.token0, pair.token1]} chainId={pair.chainId} />
 
