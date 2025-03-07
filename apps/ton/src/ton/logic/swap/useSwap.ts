@@ -20,7 +20,7 @@ import { parseAddress } from 'ton/utils/address'
 import { parseUnits } from 'ton/utils/formatting'
 import { generateQueryId } from 'ton/utils/generateQueryId'
 import { getJettonWalletAddress } from 'ton/utils/jettonWalletAddress'
-import { getTransactionByBOC } from 'ton/utils/transaction'
+import { checkTransactionApplied, getTransactionByBOC } from 'ton/utils/transaction'
 import { logGTMClickSwapConfirmEvent, logGTMClickSwapEvent, logGTMSwapTxSentEvent } from 'utils/customGTMEventTracking'
 import { computeTradePriceBreakdown } from 'utils/exchange'
 
@@ -165,7 +165,6 @@ export const useSwap = ({ amount0, minOut, token0, token1, trade, refreshTrade }
       const hash = await getTransactionByBOC(userAddress, boc)
       if (hash) {
         logGTMSwapTxSentEvent()
-        setLatestTxReceipt({ hash })
         setTransactionModal({
           type: ActionType.SwapCompleted,
           currency0: token0,
@@ -173,6 +172,10 @@ export const useSwap = ({ amount0, minOut, token0, token1, trade, refreshTrade }
           amount0,
           amount1: minOut,
           hash,
+        })
+        // dont await, just let it go
+        checkTransactionApplied({ hash }).then(() => {
+          setLatestTxReceipt({ hash })
         })
       }
       return Promise.resolve()
