@@ -9,19 +9,24 @@ import { WalletType } from './types'
 
 export const useMevConfig = (walletType: WalletType) => {
   const { t } = useTranslation()
+  const { theme } = useTheme()
+  const color = theme.isDark ? theme.colors.background : 'white'
   const config = useMemo(
     () => ({
-      [WalletType.mevDefaultOnBSC]: { btnText: t('Added to wallet'), icon: <CheckmarkCircleFillIcon /> },
-      [WalletType.mevOnlyManualConfig]: { btnText: t('See the guides'), icon: <ArrowDownIcon /> },
+      [WalletType.mevDefaultOnBSC]: {
+        btnText: t('Added to wallet'),
+        icon: <CheckmarkCircleFillIcon color={color} />,
+      },
+      [WalletType.mevOnlyManualConfig]: { btnText: t('See the guides'), icon: <ArrowDownIcon color={color} /> },
       [WalletType.nativeSupportCustomRPC]: { btnText: t('Add to wallet'), icon: null },
-      [WalletType.mevNotSupported]: { btnText: t('See the wallets supported'), icon: <LinkExternal /> },
+      [WalletType.mevNotSupported]: { btnText: t('See the wallets supported'), icon: <LinkExternal color={color} /> },
     }),
-    [t],
+    [t, color],
   )
   return config[walletType]
 }
 
-export const AddMevRpcButton: React.FC = () => {
+export const AddMevRpcButton: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   const { t } = useTranslation()
   const { account } = useActiveWeb3React()
 
@@ -60,7 +65,7 @@ export const AddMevRpcButton: React.FC = () => {
       }
       variant={isMEVEnabled ? 'success' : undefined}
       isLoading={isLoading}
-      onClick={isMEVEnabled && !isLoading ? undefined : addMevRpc}
+      onClick={isMEVEnabled && !isLoading ? undefined : onClick ?? addMevRpc}
     >
       {isLoading ? t('Adding to wallet') : isMEVEnabled ? t('Added to wallet') : mevConfig.btnText}
     </Button>

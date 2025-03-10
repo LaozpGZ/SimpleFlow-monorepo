@@ -60,3 +60,5 @@ export const walletConfig = [
     doc: 'https://support.metamask.io/networks-and-sidechains/managing-networks/how-to-add-a-custom-network-rpc/',
   },
 ]
+
+export const INFO_SECTION_ID = 'mev-info-section'

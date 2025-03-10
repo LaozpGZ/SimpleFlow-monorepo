@@ -4,7 +4,7 @@ import useTheme from 'hooks/useTheme'
 import { useMemo } from 'react'
 import styled, { css, keyframes } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
-import { rpcData } from './constant'
+import { INFO_SECTION_ID, rpcData } from './constant'
 import { useIsMEVEnabled, useWalletType } from './hooks'
 import { WalletType } from './types'
 import { getImageUrl } from './utils'
@@ -286,9 +286,16 @@ const WaveBg = styled.img`
   z-index: 0;
 `
 
+interface MevConfig {
+  title: string
+  desc: string
+  btnText: string
+  onClick?: () => void
+}
+
 export const useMevConfig = (walletType: WalletType) => {
   const { t } = useTranslation()
-  const config = useMemo(
+  const config: Record<WalletType, MevConfig> = useMemo(
     () => ({
       [WalletType.mevDefaultOnBSC]: {
         title: t('You are Protected!'),
@@ -299,6 +306,12 @@ export const useMevConfig = (walletType: WalletType) => {
         title: t('Setup Required!'),
         desc: t('Your wallet requires manual setup to enable PancakeSwap MEV Guard'),
         btnText: t('See the guides'),
+        onClick: () => {
+          const element = document.getElementById(INFO_SECTION_ID)
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth' })
+          }
+        },
       },
       [WalletType.nativeSupportCustomRPC]: {
         title: t('In one click'),
@@ -420,7 +433,7 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                           </Text>
                         </Box>
                       )}
-                      <AddMevRpcButton />
+                      <AddMevRpcButton onClick={mevConfig?.onClick} />
                     </FlexGap>
                   </FlexGap>
                 </Box>

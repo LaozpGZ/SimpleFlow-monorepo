@@ -3,7 +3,7 @@ import { Box, Button, FlexGap, LinkExternal, Text, useMatchBreakpoints } from '@
 import useTheme from 'hooks/useTheme'
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
-import { walletConfig } from './constant'
+import { INFO_SECTION_ID, walletConfig } from './constant'
 import { getImageUrl } from './utils'
 
 const InfoSectionWrapper = styled.div`
@@ -41,7 +41,7 @@ export const InfoSection: React.FC<{ walletCount: number }> = ({ walletCount }) 
   }, [walletCount])
 
   return (
-    <InfoSectionWrapper>
+    <InfoSectionWrapper id={INFO_SECTION_ID}>
       <Wrapper>
         <InnerWrapper>
           <Box>
