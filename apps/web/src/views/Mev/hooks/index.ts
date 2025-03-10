@@ -188,6 +188,9 @@ export function useWalletType() {
     queryFn: () => getWalletType(connector!),
     enabled: Boolean(connector),
     retry: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
   })
   return { walletType: data ?? WalletType.mevNotSupported, isLoading }
 }
