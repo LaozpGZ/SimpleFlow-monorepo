@@ -11,7 +11,7 @@ import {
   RowBetween,
   Text,
 } from '@pancakeswap/uikit'
-import { MobileCard } from 'components/AdPanel'
+import { MobileCard } from 'components/AdPanel/MobileCard'
 import { commonLayoutWhitelistedPages } from 'components/AdPanel/config'
 import { shouldRenderOnPages } from 'components/AdPanel/renderConditions'
 import Page from 'components/Layout/Page'
