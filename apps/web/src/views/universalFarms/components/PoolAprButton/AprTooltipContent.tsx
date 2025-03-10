@@ -95,12 +95,13 @@ export const AprTooltipContent: React.FC<PropsWithChildren<AprTooltipContentProp
             <>
               <Text>
                 {t('To receive boosted Farm APRs, lock more CAKE as')}{' '}
-                <Link style={{ display: 'inline-block' }} href="https://pancakeswap.finance/cake-staking">
+                <Link style={{ display: 'inline-block' }} href="/cake-staking">
                   veCAKE
                 </Link>
                 {', '}
                 {t('and for longer durations.')}{' '}
                 <Link
+                  external
                   style={{ display: 'inline-block' }}
                   href="https://docs.pancakeswap.finance/products/yield-farming/bcake/how-to-use-the-new-bcake"
                 >
