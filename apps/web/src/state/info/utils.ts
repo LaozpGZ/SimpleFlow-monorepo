@@ -3,7 +3,7 @@ import { ChainId } from '@pancakeswap/chains'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 
 import { multiChainPaths } from './constant'
-import { ApiPoolData, InfoDataSource, PoolData } from './types'
+import { ApiPoolData, InfoDataSource, PoolDataForView } from './types'
 
 // TODO: refactor
 // Params should be defined in object for future extension
@@ -29,7 +29,7 @@ export const get2DayChange = (valueNow: string, value24HoursAgo: string, value48
   return [currentChange, adjustedPercentChange]
 }
 
-export function transformPoolData(item: ApiPoolData): PoolData {
+export function transformPoolData(item: ApiPoolData): PoolDataForView {
   return {
     feeTier: item.feeTier,
     address: item.id,

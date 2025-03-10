@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Text } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
-import { PoolData } from 'state/info/types'
+import { PoolDataForView } from 'state/info/types'
 import { styled } from 'styled-components'
 import { formatAmount } from '../../utils/numbers'
 import { LightCard } from '../Card'
@@ -20,7 +20,7 @@ const TooltipWrapper = styled(LightCard)`
 
 interface CustomToolTipProps {
   chartProps: any
-  poolData?: PoolData
+  poolData?: PoolDataForView
   currentPrice: number | undefined
 }
 

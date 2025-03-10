@@ -34,7 +34,7 @@ const usePicksData = (poolId: `0x{string}`, chain: string) => {
   const numerator = useMemo(() => {
     if (!pool || !cakeApr) return BIG_ZERO // Default value if pool or cakeApr is missing
     return new BigNumber(lpApr).times(cakeApr?.userTvlUsd ?? BIG_ZERO)
-  }, [lpApr, cakeApr?.userTvlUsd, pool])
+  }, [lpApr, cakeApr, cakeApr?.userTvlUsd, pool])
 
   const denominator = useMemo(() => {
     return cakeApr?.userTvlUsd ?? BIG_ZERO

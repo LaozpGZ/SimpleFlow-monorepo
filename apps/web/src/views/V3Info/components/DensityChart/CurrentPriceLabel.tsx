@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Box, Text } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
-import { DensityChartEntry, PoolData } from 'state/info/types'
+import { DensityChartEntry, PoolDataForView } from 'state/info/types'
 import { styled } from 'styled-components'
 import { RowFixed } from '../Row'
 
@@ -23,7 +23,7 @@ interface LabelProps {
 interface CurrentPriceLabelProps {
   data: DensityChartEntry[] | undefined
   chartProps: any
-  poolData?: PoolData
+  poolData?: PoolDataForView
 }
 
 export function CurrentPriceLabel({ data, chartProps, poolData }: CurrentPriceLabelProps) {

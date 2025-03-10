@@ -16,9 +16,9 @@ import {
   Block,
   ChartDayData,
   PoolChartEntry,
-  PoolData,
+  PoolDataForView,
   PriceChartEntry,
-  ProtocolData,
+  ProtocolDataForView,
   TokenChartEntry,
   TokenDataForView,
   Transaction,
@@ -58,7 +58,7 @@ export const useProtocolChartData = (): ChartDayData[] | undefined => {
   return useMemo(() => chartData?.data ?? [], [chartData])
 }
 
-export const useProtocolData = (): ProtocolData | undefined => {
+export const useProtocolData = (): ProtocolDataForView | undefined => {
   const chainName = useChainNameByQuery()
   const chainId = multiChainId[chainName]
   const explorerChainName = useExplorerChainNameByQuery()
@@ -295,7 +295,7 @@ export async function fetchTopPools(chainName: components['schemas']['ChainName'
           }
         },
         {} as {
-          [address: string]: PoolData
+          [address: string]: PoolDataForView
         },
       ),
       error: false,
@@ -311,7 +311,7 @@ export async function fetchTopPools(chainName: components['schemas']['ChainName'
 
 export const useTopPoolsData = ():
   | {
-      [address: string]: PoolData
+      [address: string]: PoolDataForView
     }
   | undefined => {
   const chainName = useChainNameByQuery()
@@ -330,7 +330,7 @@ export const useTopPoolsData = ():
   return data?.data
 }
 
-export const usePoolsDataForToken = (address: string): PoolData[] | undefined => {
+export const usePoolsDataForToken = (address: string): PoolDataForView[] | undefined => {
   const chainName = useChainNameByQuery()
   const explorerChainName = useExplorerChainNameByQuery()
 
@@ -346,7 +346,7 @@ export const usePoolsDataForToken = (address: string): PoolData[] | undefined =>
   return data?.data
 }
 
-export const usePoolData = (address: string): PoolData | undefined => {
+export const usePoolData = (address: string): PoolDataForView | undefined => {
   const chainName = useChainNameByQuery()
   const chainId = multiChainId[chainName]
   const explorerChainName = useExplorerChainNameByQuery()

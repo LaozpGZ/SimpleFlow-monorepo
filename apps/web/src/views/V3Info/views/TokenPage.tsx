@@ -36,6 +36,7 @@ import { atomFamily } from 'jotai/utils'
 import isEqual from 'lodash/isEqual'
 import { ChainLinkSupportChains, multiChainId, multiChainScan } from 'state/info/constant'
 import { useChainNameByQuery, useMultiChainPath, useStableSwapPath } from 'state/info/hooks'
+import { PoolDataForView, TokenChartEntry, TokenDataForView, Transaction } from 'state/info/types'
 import { styled } from 'styled-components'
 import { getTokenNameAlias, getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
@@ -48,7 +49,6 @@ import TransactionTable from '../components/TransactionsTable'
 import { MonoSpace, StyledCMCLink } from '../components/shared'
 import { v3InfoPath } from '../constants'
 import { useTokenPriceData } from '../hooks'
-import { PoolData, TokenChartEntry, TokenData, Transaction } from '../types'
 import { currentTimestamp } from '../utils'
 import { unixToDate } from '../utils/date'
 import { formatDollarAmount } from '../utils/numbers'
@@ -84,8 +84,8 @@ interface TokenPageParams {
 }
 
 interface TokenQueryResponse {
-  token: TokenData
-  pool: PoolData[]
+  token: TokenDataForView
+  pool: PoolDataForView[]
   transactions: Transaction[]
   charts: TokenChartEntry[]
 }

@@ -3,7 +3,7 @@ import { Flex, Spinner } from '@pancakeswap/uikit'
 import { FeeAmount, Pool, TICK_SPACINGS, TickMath } from '@pancakeswap/v3-sdk'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Bar, BarChart, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
-import { DensityChartEntry, PoolData } from 'state/info/types'
+import { DensityChartEntry, PoolDataForView } from 'state/info/types'
 import { styled } from 'styled-components'
 import { safeGetAddress } from 'utils'
 import { MAX_UINT128 } from '../../constants'
@@ -72,7 +72,7 @@ const initialState = {
 
 export default function DensityChart({ address }: DensityChartProps) {
   // poolData
-  const poolData: PoolData | undefined = usePoolData(address)
+  const poolData: PoolDataForView | undefined = usePoolData(address)
   const formattedAddress0 = safeGetAddress(poolData?.token0?.address)
   const formattedAddress1 = safeGetAddress(poolData?.token1?.address)
   const feeTier = poolData?.feeTier
