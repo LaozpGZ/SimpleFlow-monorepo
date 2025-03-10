@@ -94,14 +94,17 @@ export const AprTooltipContent: React.FC<PropsWithChildren<AprTooltipContentProp
           {cakeApr?.boost && (
             <>
               <Text>
-                {t('To receive boosted Farm APRs, lock more CAKE as veCAKE, and for longer durations.')}
+                {t('To receive boosted Farm APRs, lock more CAKE as')}{' '}
+                <Link style={{ display: 'inline-block' }} href="https://pancakeswap.finance/cake-staking">
+                  veCAKE
+                </Link>
+                {', '}
+                {t('and for longer durations.')}{' '}
                 <Link
-                  style={{
-                    display: 'inline-block',
-                  }}
+                  style={{ display: 'inline-block' }}
                   href="https://docs.pancakeswap.finance/products/yield-farming/bcake/how-to-use-the-new-bcake"
                 >
-                  {t('More Info')}
+                  {t('More info')}
                 </Link>
               </Text>
             </>
@@ -111,9 +114,10 @@ export const AprTooltipContent: React.FC<PropsWithChildren<AprTooltipContentProp
               'APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.',
             )}
           </Text>
-          <Text mt="10">{t('APRs for individual positions may vary depending on the price range set.')}</Text>
+          <Text mt="10px">{t('APRs for individual positions may vary depending on the price range set.')}</Text>
         </>
       )}
+
       {children}
     </>
   )
