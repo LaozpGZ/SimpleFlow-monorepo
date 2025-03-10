@@ -17,6 +17,7 @@ import {
   useTooltip,
 } from '@pancakeswap/uikit'
 
+import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 import { AddMevRpcButton } from './AddMevRpcButton'
 import { useIsMEVEnabled, useShouldShowMEVToggle, useWalletType } from './hooks'
@@ -44,6 +45,7 @@ export const MevToggle: React.FC = () => {
   const shouldShowMEVToggle = useShouldShowMEVToggle()
   const { isMEVEnabled } = useIsMEVEnabled()
   const { isOpen, onOpen, onDismiss } = useModalV2()
+  const { theme } = useTheme()
   const { tooltip, tooltipVisible, targetRef } = useTooltip(
     t('PancakeSwap MEV Guard protects you from frontrunning and sandwich attacks when Swapping.'),
     {
@@ -64,7 +66,14 @@ export const MevToggle: React.FC = () => {
           <Text>{t('Enable')}</Text>
           <Text
             ref={targetRef}
-            style={{ textDecoration: 'underline', textDecorationStyle: 'dotted', cursor: 'pointer' }}
+            bold
+            style={{
+              textDecoration: 'underline',
+              textDecorationStyle: 'dotted',
+              cursor: 'pointer',
+              textUnderlineOffset: '4px',
+              textDecorationColor: theme.colors.textSubtle,
+            }}
           >
             {t('MEV Protect')}
           </Text>

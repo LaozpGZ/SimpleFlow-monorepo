@@ -37,6 +37,7 @@ export const MevSwapDetail: React.FC = () => {
                 textDecorationStyle: 'dotted',
                 textDecorationColor: theme.colors.textSubtle,
                 textUnderlineOffset: '4px',
+                cursor: 'pointer',
               }}
               ml="7px"
               lineHeight="150%"
