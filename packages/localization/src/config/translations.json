@@ -3739,7 +3739,7 @@
   "Please connect wallet to view your position / add liquidity.": "Please connect wallet to view your position / add liquidity.",
   "To receive boosted Farm APRs, lock more CAKE as": "To receive boosted Farm APRs, lock more CAKE as",
   "and for longer durations.": "and for longer durations.",
-  "More info": "More it nfo",
+  "More info": "More info",
   "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.": "APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.",
   "APRs for individual positions may vary depending on the price range set.": "APRs for individual positions may vary depending on the price range set."
 }
