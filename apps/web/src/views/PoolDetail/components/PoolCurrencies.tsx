@@ -24,21 +24,27 @@ type PoolCurrenciesProps = {
 
 function getTokenUrls(chainPath: string, poolInfo?: PoolInfo | null) {
   if (!poolInfo) {
-    return ''
+    return { token0Url: '', token1Url: '' }
   }
+
   const { protocol } = poolInfo
   const stableSwapUrlQuery = protocol === 'stable' ? '?type=stableSwap' : ''
 
-  function v2Url(token: Currency) {
-    return `/info${chainPath}/tokens/${token.wrapped.address}${stableSwapUrlQuery}`
-  }
-  function v3Url(token: Currency) {
-    return `/info/${protocol}/${chainPath}/tokens/${token.wrapped.address}`
-  }
+  const v2Url = (token: Currency) => `/info${chainPath}/tokens/${token.wrapped.address}${stableSwapUrlQuery}`
+
+  const v3Url = (token: Currency) => `/info/${protocol}/${chainPath}/tokens/${token.wrapped.address}`
+
   if (protocol === 'stable' || protocol === 'v2') {
-    return [v2Url(poolInfo.token0.wrapped), v2Url(poolInfo.token1.wrapped)]
+    return {
+      token0Url: v2Url(poolInfo.token0.wrapped),
+      token1Url: v2Url(poolInfo.token1.wrapped),
+    }
   }
-  return [v3Url(poolInfo.token0.wrapped), v3Url(poolInfo.token1.wrapped)]
+
+  return {
+    token0Url: v3Url(poolInfo.token0.wrapped),
+    token1Url: v3Url(poolInfo.token1.wrapped),
+  }
 }
 export const PoolCurrencies: React.FC<PoolCurrenciesProps> = ({ poolInfo }) => {
   const chainPath = useMultiChainPath()
@@ -74,7 +80,7 @@ export const PoolCurrencies: React.FC<PoolCurrenciesProps> = ({ poolInfo }) => {
   return (
     <Flex justifyContent="space-between" flexDirection={['column', 'column', 'column', 'row']}>
       <Flex flexDirection={['column', 'column', 'row']}>
-        <NextLinkFromReactRouter to={infoUrls[0]}>
+        <NextLinkFromReactRouter to={infoUrls.token0Url}>
           <TokenButton>
             <CurrencyLogo address={poolInfo.token0.wrapped.address} size="24px" chainName={chainName} />
             <Text fontSize="16px" ml="4px" style={{ whiteSpace: 'nowrap' }} width="fit-content">
@@ -86,7 +92,7 @@ export const PoolCurrencies: React.FC<PoolCurrenciesProps> = ({ poolInfo }) => {
             </Text>
           </TokenButton>
         </NextLinkFromReactRouter>
-        <NextLinkFromReactRouter to={infoUrls[1]}>
+        <NextLinkFromReactRouter to={infoUrls.token1Url}>
           <TokenButton ml={[null, null, '10px']}>
             <CurrencyLogo address={poolInfo.token1.address} size="24px" chainName={chainName} />
             <Text fontSize="16px" ml="4px" style={{ whiteSpace: 'nowrap' }} width="fit-content">
