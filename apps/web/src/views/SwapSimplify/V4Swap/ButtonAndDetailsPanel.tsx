@@ -46,7 +46,7 @@ export const ButtonAndDetailsPanel: React.FC<ButtonAndDetailsPanelProps> = ({
           content={tradeDetails}
         />
       )}
-      {!isOpen && mevToggleSlot}
+      {mevToggleSlot}
     </PanelWrapper>
   )
 }
