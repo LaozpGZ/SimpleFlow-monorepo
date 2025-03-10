@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useCallback } from 'react'
 import { MethodNotFoundRpcError, WalletClient } from 'viem'
 
@@ -112,7 +112,7 @@ export function useWalletSupportsAddEthereumChain() {
 
 export function useIsMEVEnabled() {
   const { data: walletClient } = useWalletClient()
-  const { account, chainId } = useActiveWeb3React()
+  const { account, chainId } = useAccountActiveChain()
   const { walletType } = useWalletType()
 
   const { data, isLoading, refetch } = useQuery({
@@ -131,8 +131,8 @@ export function useIsMEVEnabled() {
 }
 
 export const useShouldShowMEVToggle = () => {
-  const { walletSupportsAddEthereumChain, isLoading: isWalletSupportLoading } = useWalletSupportsAddEthereumChain()
-  const { account } = useActiveWeb3React()
+  const { isLoading: isWalletSupportLoading } = useWalletSupportsAddEthereumChain()
+  const { account } = useAccountActiveChain()
   const { isMEVEnabled, isLoading, isMEVProtectAvailable } = useIsMEVEnabled()
   const { walletType, isLoading: isWalletTypeLoading } = useWalletType()
   return (
