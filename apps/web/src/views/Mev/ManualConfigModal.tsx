@@ -32,21 +32,17 @@ const UnderLineBox = styled.div`
 
 export const ManualConfigModal: React.FC = () => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isMd } = useMatchBreakpoints()
   return (
-    <ModalBody maxWidth="440px" p="24px">
+    <ModalBody maxWidth={isMobile || isMd ? '100%' : '440px'} p={isMobile ? '16px' : '24px'}>
       <FlexGap gap="24px" flexDirection="column" alignItems="center" minWidth="340px">
-        <Text>
-          <Text bold>{t('PancakeSwap MEV Guard')}</Text>
+        <Text textAlign="center">
+          <Text as="span" bold pr="4px">
+            {t('PancakeSwap MEV Guard')}
+          </Text>
           {t('requires a manual configuration for your wallet. Choose your wallet to view a detailed guide:')}
         </Text>
-        <FlexGap
-          maxWidth="588px"
-          gap="40px"
-          flexWrap={isMobile ? 'wrap' : 'nowrap'}
-          alignItems="center"
-          justifyContent="center"
-        >
+        <FlexGap width="100%" flexWrap="nowrap" alignItems="center" justifyContent="space-around">
           {walletConfig.map((wallet) => (
             <FlexGap
               flexDirection="column"
@@ -65,16 +61,23 @@ export const ManualConfigModal: React.FC = () => {
           ))}
         </FlexGap>
         <Card innerCardProps={{ p: '16px' }}>
-          <Text fontSize="20px" bold mb="16px">
+          <Text fontSize={isMobile ? '14px' : '20px'} bold mb="16px">
             {t('Or add manually this RPC endpoint to your wallet')}
           </Text>
           <FlexGap gap="8px" flexDirection="column">
             {Object.entries(rpcData).map(([key, value]) => (
               <FlexGap gap="8px" alignItems="center" key={key} flexWrap={isMobile ? 'wrap' : 'nowrap'}>
-                <Text>{key}:</Text>
+                <Text fontSize={isMobile ? '12px' : '14px'}>{key}:</Text>
                 <UnderLineBox />
-                <Text bold>{value}</Text>
-                <CopyIcon cursor="pointer" color="#02919D" onClick={() => copyText(value)} />
+                <Text bold fontSize={isMobile ? '12px' : '14px'}>
+                  {value}
+                </Text>
+                <CopyIcon
+                  width={isMobile ? '16px' : '20px'}
+                  cursor="pointer"
+                  color="#02919D"
+                  onClick={() => copyText(value)}
+                />
               </FlexGap>
             ))}
           </FlexGap>

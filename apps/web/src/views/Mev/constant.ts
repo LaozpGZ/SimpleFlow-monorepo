@@ -40,9 +40,9 @@ export const rpcData = {
 
 export const walletConfig = [
   {
-    title: 'Trust Wallet',
-    image: 'trust.png',
-    doc: 'https://community.trustwallet.com/t/how-to-add-a-custom-network-on-the-trust-wallet-mobile-app/626781',
+    title: 'SafePal',
+    image: 'safepal.png',
+    doc: 'https://safepalsupport.zendesk.com/hc/en-us/articles/14688426876443-How-to-add-a-Custom-network-in-the-SafePal-software-wallet',
   },
   {
     title: 'Rabbit Wallet',
@@ -50,10 +50,11 @@ export const walletConfig = [
     doc: 'https://support.rabby.io/hc/en-us',
   },
   {
-    title: 'SafePal',
-    image: 'safepal.png',
-    doc: 'https://safepalsupport.zendesk.com/hc/en-us/articles/14688426876443-How-to-add-a-Custom-network-in-the-SafePal-software-wallet',
+    title: 'TokenPocket',
+    image: 'token-pocket.png',
+    doc: 'https://help.tokenpocket.pro/en/wallet-operation/custom-network-token/how-to-add-custom-network',
   },
+
   {
     title: 'Others',
     image: 'others.png',
