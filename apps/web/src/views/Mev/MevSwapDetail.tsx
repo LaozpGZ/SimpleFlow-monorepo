@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { QuestionHelperV2, ShieldCheckIcon, Text } from '@pancakeswap/uikit'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
+import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 import { useIsMEVEnabled } from './hooks'
 
@@ -15,6 +16,7 @@ const Wrapper = styled.div`
 export const MevSwapDetail: React.FC = () => {
   const { t } = useTranslation()
   const { isMEVEnabled, isLoading } = useIsMEVEnabled()
+  const { theme } = useTheme()
   if (!isMEVEnabled || isLoading) {
     return null
   }
@@ -29,9 +31,15 @@ export const MevSwapDetail: React.FC = () => {
             <ShieldCheckIcon width="15px" color="success" />
             <Text
               fontSize="14px"
-              color="textSubtle"
-              style={{ textDecoration: 'underline', textDecorationStyle: 'dotted' }}
+              bold
+              style={{
+                textDecoration: 'underline',
+                textDecorationStyle: 'dotted',
+                textDecorationColor: theme.colors.textSubtle,
+                textUnderlineOffset: '4px',
+              }}
               ml="7px"
+              lineHeight="150%"
             >
               {t('MEV Protected')}
             </Text>
