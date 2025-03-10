@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Link, LinkExternal, Text } from '@pancakeswap/uikit'
+import { LinkExternal, Text } from '@pancakeswap/uikit'
+import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 import styled from 'styled-components'
 import { displayApr } from '../../utils/displayApr'
@@ -96,17 +97,16 @@ export const AprTooltipContent: React.FC<PropsWithChildren<AprTooltipContentProp
               <Text>
                 {t('To receive boosted Farm APRs, lock more CAKE as')}{' '}
                 <Link style={{ display: 'inline-block' }} href="/cake-staking">
-                  veCAKE
+                  <Text color="primary">veCAKE</Text>
                 </Link>
                 {', '}
                 {t('and for longer durations.')}{' '}
-                <Link
-                  external
+                <LinkExternal
                   style={{ display: 'inline-block' }}
                   href="https://docs.pancakeswap.finance/products/yield-farming/bcake/how-to-use-the-new-bcake"
                 >
                   {t('More info')}
-                </Link>
+                </LinkExternal>
               </Text>
             </>
           )}
