@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { LinkExternal, Text } from '@pancakeswap/uikit'
+import { Link, LinkExternal, Text } from '@pancakeswap/uikit'
 import { PropsWithChildren } from 'react'
 import styled from 'styled-components'
 import { displayApr } from '../../utils/displayApr'
@@ -92,14 +92,26 @@ export const AprTooltipContent: React.FC<PropsWithChildren<AprTooltipContentProp
         <>
           <br />
           {cakeApr?.boost && (
-            <Text>
-              {/* {t('Calculated using the total active liquidity staked versus the CAKE reward emissions for the farm.')} */}
-              {t(
-                'Calculated using the total liquidity in the pool versus the total reward amount. Actual APR may be higher as some liquidity is not staked or not in-range.',
-              )}
-            </Text>
+            <>
+              <Text>
+                {t('To receive boosted Farm APRs, lock more CAKE as veCAKE, and for longer durations.')}
+                <Link
+                  style={{
+                    display: 'inline-block',
+                  }}
+                  href="https://docs.pancakeswap.finance/products/yield-farming/bcake/how-to-use-the-new-bcake"
+                >
+                  {t('More Info')}
+                </Link>
+              </Text>
+            </>
           )}
-          <Text mt="15px">{t('APRs for individual positions may vary depending on the configs.')}</Text>
+          <Text mt="10px">
+            {t(
+              'APRs are calculated using the total liquidity in the pool versus the total reward amount, actual APRs may be higher as some liquidity is not staked or in-range.',
+            )}
+          </Text>
+          <Text mt="10">{t('APRs for individual positions may vary depending on the price range set.')}</Text>
         </>
       )}
       {children}
