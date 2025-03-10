@@ -37,3 +37,26 @@ export const rpcData = {
   'Currency symbol': 'BNB',
   'Block Explorer URL': 'https://bscscan.com',
 }
+
+export const walletConfig = [
+  {
+    title: 'Trust Wallet',
+    image: 'trust.png',
+    doc: 'https://community.trustwallet.com/t/how-to-add-a-custom-network-on-the-trust-wallet-mobile-app/626781',
+  },
+  {
+    title: 'Rabbit Wallet',
+    image: 'rabby.png',
+    doc: 'https://support.rabby.io/hc/en-us',
+  },
+  {
+    title: 'SafePal',
+    image: 'safepal.png',
+    doc: 'https://safepalsupport.zendesk.com/hc/en-us/articles/14688426876443-How-to-add-a-Custom-network-in-the-SafePal-software-wallet',
+  },
+  {
+    title: 'Others',
+    image: 'others.png',
+    doc: 'https://support.metamask.io/networks-and-sidechains/managing-networks/how-to-add-a-custom-network-rpc/',
+  },
+]
