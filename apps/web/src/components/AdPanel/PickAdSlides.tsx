@@ -1,6 +1,6 @@
 import { memo } from 'react'
 import { AdSlidesRender } from './AdSlidesRender'
-import { usePicksConfig } from './config'
+import { usePicksConfig } from './hooks/usePicksConfig'
 import { StaticContainer } from './StaticContainer'
 import { AdPlayerProps } from './types'
 
