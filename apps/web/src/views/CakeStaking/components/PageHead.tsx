@@ -11,7 +11,7 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
-import { AdPlayer } from 'components/AdPanel'
+import { AdPlayer } from 'components/AdPanel/AdPlayer'
 import { useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import { useCakeLockStatus } from '../hooks/useVeCakeUserInfo'
