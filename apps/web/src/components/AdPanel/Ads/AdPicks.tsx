@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Link, Text, useTooltip } from '@pancakeswap/uikit'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import BigNumber from 'bignumber.js'
 import { getChainId } from 'config/chains'
 import { ASSET_CDN } from 'config/constants/endpoints'
@@ -89,7 +90,7 @@ export const AdPicks = ({ config, index }: { config: PickConfig; index: number }
 
   const { pickData } = data
   const { fee, apr, tvl } = pickData
-  const tvlAmt = formatCurrency(Number(tvl || '0'))
+  const tvlAmt = formatAmount(Number(tvl || '0'))
   return (
     <div
       style={{
@@ -146,7 +147,7 @@ export const AdPicks = ({ config, index }: { config: PickConfig; index: number }
         >
           <AdTag title="FEE TIER" value={`${fee}%`} index={0} />
           <AdTag title="APR" value={`${(100 * apr).toFixed(2)}%`} index={1} />
-          <AdTag title="TVL" value={tvlAmt} index={2} />
+          <AdTag title="TVL" value={tvlAmt || '-'} index={2} />
         </Box>
       </AdCard>
     </div>
@@ -165,16 +166,6 @@ const AdPicksTooltip = () => {
       <Link href="https://pancakeswap.finance">{t('More Information')}</Link>
     </>
   )
-}
-
-function formatCurrency(amount: number): string {
-  if (amount >= 1_000_000) {
-    return `${(amount / 1_000_000).toFixed(2)}M`
-  }
-  if (amount >= 1_000) {
-    return `${(amount / 1_000).toFixed(0)}k`
-  }
-  return amount.toString()
 }
 
 const ChainImage = styled.img`
