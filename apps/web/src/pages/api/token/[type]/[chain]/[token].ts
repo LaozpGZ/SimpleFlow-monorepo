@@ -37,6 +37,8 @@ const chainNameForQuery = (chain: string) => {
   }
 }
 
+const resultsOrUdef = <T>(result: PromiseSettledResult<T>) => (result.status === 'fulfilled' ? result.value : undefined)
+
 async function _loadData(chain?: string, address?: string, type?: SupportedType) {
   if (!chain || !address || !type) {
     return null
@@ -54,7 +56,7 @@ async function _loadData(chain?: string, address?: string, type?: SupportedType)
         address,
         type,
       }
-      const result = await Promise.all([
+      const result = await Promise.allSettled([
         fetchV2TokenData(query),
         fetchV2PoolsForToken(query),
         fetchV2TransactionData(query),
@@ -63,35 +65,33 @@ async function _loadData(chain?: string, address?: string, type?: SupportedType)
       ])
 
       const [token, pool, transactions, chartVolume, chartTvl] = result
+
       return {
-        token,
-        pool,
-        transactions,
-        chartVolume,
-        chartTvl,
+        token: resultsOrUdef(token),
+        pool: resultsOrUdef(pool),
+        transactions: resultsOrUdef(transactions),
+        chartVolume: resultsOrUdef(chartVolume),
+        chartTvl: resultsOrUdef(chartTvl),
       }
     }
 
     case 'v3': {
-      const result = await Promise.all([
+      const result = await Promise.allSettled([
         fetchPoolsForToken(address, queryChainName),
         fetchedTokenData(queryChainName, address),
         fetchTokenTransactions(address, queryChainName),
         fetchTokenChartData('v3', queryChainName, address),
       ])
-
-      const hasError = result.some((r) => r.error)
-      if (hasError) {
-        return null
-      }
-
-      const [poolsData, token, transactions, charts] = result.map((x) => x.data)
+      const poolsData = resultsOrUdef(result[0])
+      const token = resultsOrUdef(result[1])
+      const transactions = resultsOrUdef(result[2])
+      const charts = resultsOrUdef(result[3])
 
       return {
-        token,
-        pool: poolsData,
-        transactions,
-        charts,
+        token: token?.data,
+        pool: poolsData?.data,
+        transactions: transactions?.data,
+        charts: charts?.data,
       }
     }
     default: {
