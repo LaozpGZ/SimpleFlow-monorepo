@@ -134,10 +134,11 @@ export const useShouldShowMEVToggle = () => {
   const { walletSupportsAddEthereumChain, isLoading: isWalletSupportLoading } = useWalletSupportsAddEthereumChain()
   const { account } = useActiveWeb3React()
   const { isMEVEnabled, isLoading, isMEVProtectAvailable } = useIsMEVEnabled()
-  const { walletType } = useWalletType()
+  const { walletType, isLoading: isWalletTypeLoading } = useWalletType()
   return (
-    !isMEVEnabled &&
     !isLoading &&
+    !isWalletTypeLoading &&
+    !isMEVEnabled &&
     !isWalletSupportLoading &&
     Boolean(account) &&
     walletType > WalletType.mevNotSupported &&
