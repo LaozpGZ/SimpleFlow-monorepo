@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { ArrowDownIcon, Button, CheckmarkCircleFillIcon, LinkExternal, SwapLoading } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import useActiveWeb3React from 'hooks/useActiveWeb3React'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useTheme from 'hooks/useTheme'
 import React, { useCallback, useMemo, useState } from 'react'
 import { useAddMevRpc, useIsMEVEnabled, useShouldShowMEVToggle, useWalletType } from './hooks'
@@ -28,7 +28,7 @@ export const useMevConfig = (walletType: WalletType) => {
 
 export const AddMevRpcButton: React.FC<{ onClick?: () => void }> = ({ onClick }) => {
   const { t } = useTranslation()
-  const { account } = useActiveWeb3React()
+  const { account } = useAccountActiveChain()
 
   const { isMEVEnabled, refetch, isLoading: isMEVStatusLoading } = useIsMEVEnabled()
   const shouldShowMEVToggle = useShouldShowMEVToggle()
