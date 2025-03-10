@@ -3,7 +3,7 @@ import utc from 'dayjs/plugin/utc'
 
 import { explorerApiClient } from 'state/info/api/client'
 import type { components } from 'state/info/api/schema'
-import { TokenChartEntry } from '../../types'
+import { TokenChartEntry } from 'state/info/types'
 
 // format dayjs with the libraries that we need
 dayjs.extend(utc)

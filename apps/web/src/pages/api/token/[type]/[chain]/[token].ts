@@ -9,9 +9,9 @@ import {
   fetchV2TransactionData,
   V2TokenDataQuery,
 } from 'state/info/dataQuery'
-import { fetchTokenChartData } from 'views/V3Info/data/token/chartData'
-import { fetchPoolsForToken } from 'views/V3Info/data/token/poolsForToken'
-import { fetchedTokenData } from 'views/V3Info/data/token/tokenData'
+import { fetchPoolsForToken } from 'state/info/queries/tokens/fetchPoolsForToken'
+import { fetchTokenChartData } from 'state/info/queries/tokens/fetchTokenChartData'
+import { fetchedTokenData } from 'state/info/queries/tokens/fetchTokenData'
 import { fetchTokenTransactions } from 'views/V3Info/data/token/transactions'
 
 type SupportedType = 'swap' | 'v3' | 'stableSwap'

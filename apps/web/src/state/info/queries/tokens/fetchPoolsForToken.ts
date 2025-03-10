@@ -1,7 +1,7 @@
 import { explorerApiClient } from 'state/info/api/client'
 import { components } from 'state/info/api/schema'
-import { PoolData } from 'views/V3Info/types'
-import { transformPoolData } from 'views/V3Info/utils'
+import { PoolData } from 'state/info/types'
+import { transformPoolData } from 'state/info/utils'
 
 /**
  * Fetch top addresses by volume

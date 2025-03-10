@@ -1,8 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Box, Text } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
+import { DensityChartEntry, PoolData } from 'state/info/types'
 import { styled } from 'styled-components'
-import { DensityChartEntry, PoolData } from '../../types'
 import { RowFixed } from '../Row'
 
 const Wrapper = styled.div`
