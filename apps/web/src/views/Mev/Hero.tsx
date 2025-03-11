@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useTheme from 'hooks/useTheme'
 import { useMemo } from 'react'
 import styled, { css, keyframes } from 'styled-components'
@@ -340,6 +341,7 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
     return `${(txCount / 1000000).toFixed(1)}M+`
   }, [txCount])
   const mevConfig = useMevConfig(walletType)
+  const { account } = useAccountActiveChain()
   return (
     <HeroWrapper>
       <Wrapper>
@@ -399,11 +401,13 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                         </FlexGap>
                         <Box style={{ flexBasis: '60%' }}>
                           <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                            {isMEVEnabled ? t('You are Protected!') : mevConfig.title}
+                            {isMEVEnabled ? t('You are Protected!') : !account ? t('In one click') : mevConfig.title}
                           </Text>
                           <Text>
                             {isMEVEnabled
                               ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
+                              : !account
+                              ? t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard')
                               : mevConfig.desc}
                           </Text>
                         </Box>
@@ -423,11 +427,11 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                       {!isMobile && (
                         <Box>
                           <Text fontSize="32px" lineHeight="38px" bold mb="8px">
-                            {isMEVEnabled ? t('You are Protected!') : mevConfig.title}
+                            {isMEVEnabled ? t('You are Protected!') : !account ? t('In one click') : mevConfig.title}
                           </Text>
                           <Text>
-                            {isMEVEnabled
-                              ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
+                            {isMEVEnabled || !account
+                              ? t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard')
                               : mevConfig.desc}
                           </Text>
                         </Box>
