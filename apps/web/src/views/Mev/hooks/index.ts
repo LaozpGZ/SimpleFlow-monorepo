@@ -148,13 +148,20 @@ export const useShouldShowMEVToggle = () => {
 
 export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void, onFinish?: () => void) => {
   const { data: walletClient } = useWalletClient()
+  const { connector } = useAccount()
   const addMevRpc = useCallback(async () => {
     onBeforeStart?.()
     try {
+      const provider = (await connector?.getProvider()) as any
       // Check if the Ethereum provider is available
       if (walletClient) {
         // Prompt the wallet to add the custom network
         const result = await addChain(walletClient, { chain: BSCMevGuardChain })
+
+        if (provider?.isMetaMask && !walletPretendToMetamask.some((d) => d in provider)) {
+          console.info('MetaMask chain dapp detected. Adding RPC network again. on metamask dapp need to run twice')
+          await addChain(walletClient, { chain: BSCMevGuardChain })
+        }
         console.info('RPC network added successfully!', result)
         onSuccess?.()
       } else {
@@ -166,7 +173,7 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
     } finally {
       onFinish?.()
     }
-  }, [onBeforeStart, onSuccess, onFinish, walletClient])
+  }, [onBeforeStart, connector, walletClient, onSuccess, onFinish])
   return { addMevRpc }
 }
 
