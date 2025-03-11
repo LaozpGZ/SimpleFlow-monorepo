@@ -6,8 +6,8 @@ const picksConfigAtom = atom(async () => {
   const time = Math.floor((Date.now() / 1000) * 60 * 5) // Cache 5min
 
   const urlPreview = `https://proofs.pancakeswap.com/picks/today-preview.json?t=${time}`
-  const isPreview = window.location.origin !== 'https://pancakeswap.finance'
-  const url = isPreview ? urlPreview : `https://proofs.pancakeswap.com/picks/today.json?t=${time}`
+  const showPreviewVersion = process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production'
+  const url = showPreviewVersion ? urlPreview : `https://proofs.pancakeswap.com/picks/today.json?t=${time}`
   try {
     const response = await fetch(url)
     const json = await response.json()
