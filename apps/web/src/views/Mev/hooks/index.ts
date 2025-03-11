@@ -194,13 +194,8 @@ export async function getWalletType(connector?: Connector): Promise<WalletType> 
       console.error('Error detecting Wallet via WalletConnect:', error)
     }
   }
-
-  if (
-    walletSupportDefaultMevOnBSC.some((d) => d in provider) &&
-    !walletSupportCustomRPCNative.some((d) => d in provider)
-  )
-    return WalletType.mevDefaultOnBSC
   if (walletSupportManualRPCConfig.some((d) => d in provider)) return WalletType.mevOnlyManualConfig
+  if (walletSupportDefaultMevOnBSC.some((d) => d in provider)) return WalletType.mevDefaultOnBSC
   if (walletSupportCustomRPCNative.some((d) => d in provider) && !walletPretendToMetamask.some((d) => d in provider))
     return WalletType.nativeSupportCustomRPC
   return WalletType.mevNotSupported
