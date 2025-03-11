@@ -340,7 +340,7 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
     return `${(txCount / 1000000).toFixed(1)}M+`
   }, [txCount])
   const mevConfig = useMevConfig(walletType)
-
+  console.log('mevConfig', walletType)
   return (
     <HeroWrapper>
       <Wrapper>

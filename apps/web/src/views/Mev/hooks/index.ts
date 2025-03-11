@@ -1,7 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { MethodNotFoundRpcError, WalletClient } from 'viem'
 
 import { BSCMevGuardChain } from 'utils/mevGuardChains'
@@ -14,6 +14,7 @@ import {
   walletSupportCustomRPCNative,
   walletSupportDefaultMevOnBSC,
   walletSupportManualRPCConfig,
+  walletConnectSupportDefaultMevOnBSC,
 } from '../constant'
 
 const WalletProviders = [
@@ -183,6 +184,19 @@ export async function getWalletType(connector?: Connector): Promise<WalletType> 
   if (!connector || typeof connector.getProvider !== 'function') return WalletType.mevNotSupported
   const provider = (await connector.getProvider()) as any
 
+  // check WalletConnect + supported wallets
+  if (provider.isWalletConnect) {
+    try {
+      // check session metadata
+      const walletName = provider.session?.peer?.metadata?.name
+      if (walletConnectSupportDefaultMevOnBSC.includes(walletName)) {
+        return WalletType.mevDefaultOnBSC
+      }
+    } catch (error) {
+      console.error('Error detecting Wallet via WalletConnect:', error)
+    }
+  }
+
   if (
     walletSupportDefaultMevOnBSC.some((d) => d in provider) &&
     !walletSupportCustomRPCNative.some((d) => d in provider)
@@ -195,6 +209,7 @@ export async function getWalletType(connector?: Connector): Promise<WalletType> 
 }
 
 export function useWalletType() {
+  useWalletDebugger()
   const { connector } = useAccount()
   const { data, isLoading } = useQuery({
     queryKey: ['useWalletType', connector?.uid],
@@ -206,4 +221,48 @@ export function useWalletType() {
     refetchOnMount: false,
   })
   return { walletType: data ?? WalletType.mevNotSupported, isLoading }
+}
+
+function useWalletDebugger() {
+  const { connector } = useAccount()
+
+  useEffect(() => {
+    const debugWallet = async () => {
+      if (!connector) return
+
+      try {
+        const provider = (await connector.getProvider()) as any
+        console.log('Provider full object:', provider)
+
+        // 检查是否是 WalletConnect
+        console.log('Is WalletConnect:', provider.isWalletConnect)
+
+        // 尝试获取会话信息
+        if (provider.session) {
+          console.log('Session:', provider.session)
+          console.log('Peer metadata:', provider.session.peer?.metadata)
+        }
+
+        // 检查其他可能的路径
+        if (provider.signer) {
+          console.log('Signer:', provider.signer)
+          console.log('Signer session:', provider.signer.session)
+        }
+
+        // 检查所有属性
+        console.log('All provider keys:', Object.keys(provider))
+
+        // 检查特定属性
+        console.log('isBinance:', 'isBinance' in provider)
+        console.log('isTrust:', 'isTrust' in provider)
+        console.log('isMetaMask:', 'isMetaMask' in provider)
+      } catch (error) {
+        console.error('Debug error:', error)
+      }
+    }
+
+    debugWallet()
+  }, [connector])
+
+  return null // 这是一个纯调试组件，不需要渲染任何内容
 }

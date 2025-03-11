@@ -1,6 +1,9 @@
 export const walletSupportDefaultMevOnBSC = ['isTrustWallet', 'isTrust', 'isBinance']
 // wallet support mev on bsc default, but it not using PCS RPC
 
+export const walletConnectSupportDefaultMevOnBSC = ['Binance Wallet', 'Trust Wallet']
+// wallet connect wallets that support mev on bsc default
+
 export const walletSupportCustomRPCNative = ['isOkxWallet', 'isMetaMask', 'isCoinbaseWallet']
 // wallet support wallet_addEthereumChain native
 
