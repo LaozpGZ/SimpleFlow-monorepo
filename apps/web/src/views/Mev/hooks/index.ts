@@ -199,6 +199,5 @@ export function useWalletType() {
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   })
-  console.log('useWalletType', data)
   return { walletType: data ?? WalletType.mevNotSupported, isLoading }
 }
