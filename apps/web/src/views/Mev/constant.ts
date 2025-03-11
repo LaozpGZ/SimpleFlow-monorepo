@@ -1,7 +1,7 @@
 export const walletSupportDefaultMevOnBSC = ['isTrustWallet', 'isTrust', 'isBinance']
 // wallet support mev on bsc default, but it not using PCS RPC
 
-export const walletSupportCustomRPCNative = ['isMetaMask', 'isOkxWallet', 'isCoinbaseWallet']
+export const walletSupportCustomRPCNative = ['isOkxWallet', 'isMetaMask', 'isCoinbaseWallet']
 // wallet support wallet_addEthereumChain native
 
 export const walletSupportManualRPCConfig = ['isSafePal', 'isRabby', 'isTokenPocket']
@@ -15,8 +15,6 @@ export const walletPretendToMetamask = [
   'isBlockWallet',
   'isKuCoinWallet',
   'isMathWallet',
-  'isOkxWallet',
-  'isOKExWallet',
   'isOneInchIOSWallet',
   'isOneInchAndroidWallet',
   'isOpera',
