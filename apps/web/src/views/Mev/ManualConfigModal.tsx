@@ -88,9 +88,7 @@ export const ManualConfigModal: React.FC = () => {
             <MessageText>
               {t(`If you've already set this up manually, no action is needed - just proceed with the swap!`)}
             </MessageText>
-            <LinkExternal href="https://docs.pancakeswap.finance/pancake-swap-docs/pancakeswap-features/mev-protection">
-              {t('Learn more')}
-            </LinkExternal>
+            <LinkExternal href="/mev">{t('Learn more')}</LinkExternal>
           </FlexGap>
         </Message>
       </FlexGap>
