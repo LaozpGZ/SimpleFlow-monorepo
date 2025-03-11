@@ -430,7 +430,9 @@ export const Hero: React.FC<{ txCount: number }> = ({ txCount }) => {
                             {isMEVEnabled ? t('You are Protected!') : !account ? t('In one click') : mevConfig.title}
                           </Text>
                           <Text>
-                            {isMEVEnabled || !account
+                            {isMEVEnabled
+                              ? t('Added automatically on BNB Smart Chain: PancakeSwap MEV Guard')
+                              : !account
                               ? t('Add automatically on BNB Smart Chain: PancakeSwap MEV Guard')
                               : mevConfig.desc}
                           </Text>
