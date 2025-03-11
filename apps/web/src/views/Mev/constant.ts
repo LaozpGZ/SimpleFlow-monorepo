@@ -31,6 +31,7 @@ export const walletPretendToMetamask = [
   'isUniswapWallet',
   'isZerion',
   'isSafePal',
+  'isBybit',
 ]
 // wallet support mev on bsc default, but it not using PCS RPC
 
