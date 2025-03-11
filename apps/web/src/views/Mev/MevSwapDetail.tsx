@@ -6,7 +6,7 @@ import { styled } from 'styled-components'
 import { useIsMEVEnabled } from './hooks'
 
 const Wrapper = styled.div`
-  background-color: ${({ theme }) => (theme.isDark ? theme.colors.backgroundAlt : '#F7F7F7')};
+  background-color: ${({ theme }) => (theme.isDark ? '#323037' : '#F7F7F7')};
   border-radius: 16px;
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   padding: 12px 16px;
