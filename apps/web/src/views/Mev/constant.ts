@@ -7,7 +7,7 @@ export const walletConnectSupportDefaultMevOnBSC = ['Binance Wallet', 'Trust Wal
 export const walletSupportCustomRPCNative = ['isOkxWallet', 'isMetaMask', 'isCoinbaseWallet']
 // wallet support wallet_addEthereumChain native
 
-export const walletSupportManualRPCConfig = ['isSafePal', 'isRabby', 'isTokenPocket']
+export const walletSupportManualRPCConfig = ['isRabby', 'isTokenPocket']
 // wallet support manual config on wallet app, don't support support wallet_addEthereumChain native
 
 export const walletPretendToMetamask = [
