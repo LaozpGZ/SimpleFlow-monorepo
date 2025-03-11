@@ -35,7 +35,7 @@ export const ManualConfigModal: React.FC = () => {
   const { isMobile, isMd } = useMatchBreakpoints()
   return (
     <ModalBody maxWidth={isMobile || isMd ? '100%' : '440px'} p={isMobile ? '16px' : '24px'}>
-      <FlexGap gap="24px" flexDirection="column" alignItems="center" minWidth="340px">
+      <FlexGap gap="24px" flexDirection="column" alignItems="center">
         <Text textAlign="center">
           <Text as="span" bold pr="4px">
             {t('PancakeSwap MEV Guard')}
