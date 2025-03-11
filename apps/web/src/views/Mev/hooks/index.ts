@@ -9,6 +9,7 @@ import { WalletType } from 'views/Mev/types'
 import { Connector, useAccount, useWalletClient } from 'wagmi'
 import {
   walletConnectSupportDefaultMevOnBSC,
+  walletPretendToBinanceWallet,
   walletPretendToMetamask,
   walletSupportCustomRPCNative,
   walletSupportDefaultMevOnBSC,
@@ -195,7 +196,11 @@ export async function getWalletType(connector?: Connector): Promise<WalletType> 
     }
   }
   if (walletSupportManualRPCConfig.some((d) => d in provider)) return WalletType.mevOnlyManualConfig
-  if (walletSupportDefaultMevOnBSC.some((d) => d in provider)) return WalletType.mevDefaultOnBSC
+  if (
+    walletSupportDefaultMevOnBSC.some((d) => d in provider) &&
+    !walletPretendToBinanceWallet.some((d) => d in provider)
+  )
+    return WalletType.mevDefaultOnBSC
   if (walletSupportCustomRPCNative.some((d) => d in provider) && !walletPretendToMetamask.some((d) => d in provider))
     return WalletType.nativeSupportCustomRPC
   return WalletType.mevNotSupported

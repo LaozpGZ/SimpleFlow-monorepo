@@ -10,6 +10,8 @@ export const walletSupportCustomRPCNative = ['isOkxWallet', 'isMetaMask', 'isCoi
 export const walletSupportManualRPCConfig = ['isRabby', 'isTokenPocket']
 // wallet support manual config on wallet app, don't support support wallet_addEthereumChain native
 
+export const walletPretendToBinanceWallet = ['isSafePal']
+
 export const walletPretendToMetamask = [
   'isBraveWallet',
   'isApexWallet',
