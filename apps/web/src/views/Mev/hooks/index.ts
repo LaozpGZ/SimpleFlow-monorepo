@@ -183,7 +183,11 @@ export async function getWalletType(connector?: Connector): Promise<WalletType> 
   if (!connector || typeof connector.getProvider !== 'function') return WalletType.mevNotSupported
   const provider = (await connector.getProvider()) as any
 
-  if (walletSupportDefaultMevOnBSC.some((d) => d in provider)) return WalletType.mevDefaultOnBSC
+  if (
+    walletSupportDefaultMevOnBSC.some((d) => d in provider) &&
+    !walletSupportCustomRPCNative.some((d) => d in provider)
+  )
+    return WalletType.mevDefaultOnBSC
   if (walletSupportManualRPCConfig.some((d) => d in provider)) return WalletType.mevOnlyManualConfig
   if (walletSupportCustomRPCNative.some((d) => d in provider) && !walletPretendToMetamask.some((d) => d in provider))
     return WalletType.nativeSupportCustomRPC
