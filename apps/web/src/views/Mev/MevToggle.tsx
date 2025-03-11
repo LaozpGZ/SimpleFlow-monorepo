@@ -35,6 +35,7 @@ export const ToggleWrapper = styled.div`
   border-radius: 16px;
   align-items: center;
   justify-content: space-between;
+  margin-top: 8px;
 `
 export const ModalImg = styled.img`
   width: 258px;
