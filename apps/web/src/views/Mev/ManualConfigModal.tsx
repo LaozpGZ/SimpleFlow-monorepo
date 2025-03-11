@@ -32,7 +32,7 @@ const UnderLineBox = styled.div`
 
 export const ManualConfigModal: React.FC = () => {
   const { t } = useTranslation()
-  const { isMobile, isMd } = useMatchBreakpoints()
+  const { isMobile, isMd, isXs } = useMatchBreakpoints()
   return (
     <ModalBody maxWidth={isMobile || isMd ? '100%' : '440px'} p={isMobile ? '16px' : '24px'}>
       <FlexGap gap="24px" flexDirection="column" alignItems="center">
@@ -66,14 +66,16 @@ export const ManualConfigModal: React.FC = () => {
           </Text>
           <FlexGap gap="8px" flexDirection="column">
             {Object.entries(rpcData).map(([key, value]) => (
-              <FlexGap gap="8px" alignItems="center" key={key} flexWrap={isMobile ? 'wrap' : 'nowrap'}>
-                <Text fontSize={isMobile ? '12px' : '14px'}>{key}:</Text>
+              <FlexGap gap="8px" alignItems="center" key={key} flexWrap="nowrap">
+                <Text style={{ whiteSpace: 'nowrap' }} fontSize={isMobile ? '12px' : '14px'}>
+                  {key}:
+                </Text>
                 <UnderLineBox />
                 <Text bold fontSize={isMobile ? '12px' : '14px'}>
                   {value}
                 </Text>
                 <CopyIcon
-                  width={isMobile ? '16px' : '20px'}
+                  width={isMobile ? (isXs ? '14px' : '16px') : '20px'}
                   cursor="pointer"
                   color="#02919D"
                   onClick={() => copyText(value)}
