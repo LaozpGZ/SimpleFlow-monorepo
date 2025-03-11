@@ -125,7 +125,10 @@ export function useIsMEVEnabled() {
 
   // console.log('isMEVEnabled', data?.mevEnabled, walletType, chainId, walletClient)
   return {
-    isMEVEnabled: (data?.mevEnabled || (walletType === WalletType.mevDefaultOnBSC && chainId === ChainId.BSC)) ?? false,
+    isMEVEnabled:
+      (walletType !== WalletType.mevNotSupported &&
+        (data?.mevEnabled || (walletType === WalletType.mevDefaultOnBSC && chainId === ChainId.BSC))) ??
+      false,
     isLoading,
     refetch,
     isMEVProtectAvailable: chainId === ChainId.BSC,
