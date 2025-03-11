@@ -43,9 +43,9 @@ export const walletConfig = [
     doc: 'https://safepalsupport.zendesk.com/hc/en-us/articles/14688426876443-How-to-add-a-Custom-network-in-the-SafePal-software-wallet',
   },
   {
-    title: 'Rabbit Wallet',
+    title: 'Rabby Wallet',
     image: 'rabby.png',
-    doc: 'https://support.rabby.io/hc/en-us',
+    doc: 'https://support.rabby.io/hc/en-us/articles/11319672399247-List-of-supported-chains-and-tokens#:~:text=For%20testnets%20and%20networks%20that%20are%20not%20yet%20integrated%2C%20you%20can%20still%20access%20them%20by%20adding%20a%20custom%20network%20through%3A%20More%20%3E%20Add%20Custom%20Network.',
   },
   {
     title: 'TokenPocket',
