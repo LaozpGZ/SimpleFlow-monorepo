@@ -92,6 +92,7 @@ async function fetchMEVStatus(walletClient: WalletClient): Promise<{ mevEnabled:
         'latest',
       ],
     })
+
     return { mevEnabled: result === '0x30' }
   } catch (error) {
     console.error('Error checking MEV status:', error)
@@ -116,12 +117,13 @@ export function useIsMEVEnabled() {
   const { walletType } = useWalletType()
 
   const { data, isLoading, refetch } = useQuery({
-    queryKey: ['isMEVEnabled', walletClient, account, chainId],
+    queryKey: ['isMEVEnabled', walletClient, account, chainId, walletType],
     queryFn: () => fetchMEVStatus(walletClient!),
     enabled: Boolean(account) && walletClient && chainId === ChainId.BSC,
     staleTime: 60000,
   })
 
+  // console.log('isMEVEnabled', data?.mevEnabled, walletType, chainId, walletClient)
   return {
     isMEVEnabled: (data?.mevEnabled || (walletType === WalletType.mevDefaultOnBSC && chainId === ChainId.BSC)) ?? false,
     isLoading,

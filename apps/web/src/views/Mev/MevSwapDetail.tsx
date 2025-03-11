@@ -20,6 +20,7 @@ export const MevSwapDetail: React.FC = () => {
   if (!isMEVEnabled || isLoading) {
     return null
   }
+
   return (
     <Wrapper>
       <RowBetween>
