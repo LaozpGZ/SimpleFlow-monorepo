@@ -22,7 +22,7 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
       <CardRowLayout
         left={<MultipleCurrencyLogos maxDisplay={4} tokens={chains.map((chain) => ({ logo: chain.logo }))} />}
       >
-        <Button scale="sm" onClick={() => router.push('/bridge')} variant="bubblegum">
+        <Button scale="sm" onClick={() => router.push('/bridge')} variant="light">
           {isMobile ? t('Bridge Now') : t('Bridge across %num% Chains Now', { num: chains.length })}
         </Button>
       </CardRowLayout>
@@ -31,8 +31,12 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
         left={<MultipleCurrencyLogos maxDisplay={4} tokens={currencies.map((currency) => ({ logo: currency.logo }))} />}
         isLast
       >
-        <Button scale="sm" onClick={() => router.push('/swap')}>
-          {isMobile ? t('Buy Now') : t('Buy Crypto Now')}
+        <Button scale="sm" onClick={() => router.push('/swap')} variant="light">
+          {isMobile
+            ? t('Buy Now')
+            : t('Choose from %num% Currencies', {
+                num: currencies.length,
+              })}
         </Button>
       </CardRowLayout>
     </CardSection>

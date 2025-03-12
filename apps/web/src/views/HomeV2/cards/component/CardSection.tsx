@@ -7,7 +7,7 @@ const StyledCard = styled(Card)<{ isMobile: boolean }>`
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   background: ${({ theme }) => theme.colors.card};
   max-width: ${({ isMobile }) => (isMobile ? '100%' : '588px')};
-  padding: ${({ isMobile }) => (isMobile ? '16px' : '0px 32px')};
+  padding: ${({ isMobile }) => (isMobile ? '16px' : '0px 32px 20px 32px')};
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
   &:hover {

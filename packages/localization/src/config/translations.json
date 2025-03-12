@@ -3800,5 +3800,8 @@
   "Last Top Winner": "Last Top Winner",
   "Featured on PancakeSwap": "Featured on PancakeSwap",
   "leverage": "leverage",
-  "Bridge across %num% Chains Now": "Bridge across %num% Chains Now"
+  "Bridge across %num% Chains Now": "Bridge across %num% Chains Now",
+  "Earn Trading Fees": "Earn Trading Fees",
+  "by Providing Liquidity": "by Providing Liquidity",
+  "Choose from %num% Currencies": "Choose from %num% Currencies"
 }

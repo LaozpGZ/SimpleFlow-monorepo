@@ -1,7 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Text } from '@pancakeswap/uikit'
+import { Box, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { HomePagePoolInfo } from 'pages/api/home/types'
-import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
 import { getNetworkFullName } from 'views/BuyCrypto/constants'
 import { CardRowLayout } from './component/CardRowLayout'
@@ -28,8 +27,9 @@ const ChainText = styled(Text)`
 
 export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   return (
-    <CardSection title="Trading Pairs" subtitle="by Providing Liquidity">
+    <CardSection title={t('Earn Trading Fees')} subtitle={t('by Providing Liquidity')}>
       <Box>
         {pairs.map((pair, index) => {
           return (

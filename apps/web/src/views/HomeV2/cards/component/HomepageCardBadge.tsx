@@ -7,12 +7,12 @@ interface HomepageCardBadgeProps {
   priceChange?: number
 }
 
-const Badge = styled(Flex)<{ positive: boolean }>`
+const Badge = styled(Flex)`
   height: 40px;
   padding: 0 16px;
   border-radius: 999px;
   border-width: 3px;
-  background: ${({ theme, positive }) => (positive ? theme.colors.positive10 : theme.colors.warning)};
+  background: ${({ theme }) => theme.colors.positive10};
   display: flex;
   align-items: center;
   text-align: right;
@@ -39,12 +39,12 @@ export const HomepageCardBadge: React.FC<HomepageCardBadgeProps> = ({ text, pric
   const positive = (priceChange ?? 0) >= 0
 
   return (
-    <Badge positive={positive}>
+    <Badge>
       <Box>
         {typeof text !== 'string' ? (
           text
         ) : (
-          <Text bold color={positive ? theme.colors.positive60 : theme.colors.warning} mr="4px">
+          <Text bold color={positive ? theme.colors.positive60 : theme.colors.destructive60} mr="4px">
             {text}
           </Text>
         )}
