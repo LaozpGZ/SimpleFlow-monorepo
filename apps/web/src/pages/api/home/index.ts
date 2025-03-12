@@ -34,6 +34,7 @@ export const loadHomePageData = cacheByLRU(_load, {
   persist: {
     name: 'homepage',
     type: 'r2',
+    version: 'v1',
   },
 })
 

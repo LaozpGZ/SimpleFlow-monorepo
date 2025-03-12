@@ -9,6 +9,7 @@ type CacheOptions<T extends AsyncFunction<any>> = {
   ttl: number
   persist?: {
     name: string
+    version: string
     type: 'r2'
   }
   key?: (params: Parameters<T>) => any
@@ -36,10 +37,14 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
       })
     : undefined
 
+  function persistKey() {
+    return `${persist?.name}-${persist?.version}`
+  }
+
   async function ensurePersist(promise: Promise<any>) {
     try {
       if (fetchR2Cache && persist) {
-        const value = await Promise.race([fetchR2Cache(persist.name), promise])
+        const value = await Promise.race([fetchR2Cache(persistKey()), promise])
         return value
       }
       return promise
@@ -93,11 +98,12 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
       promise.then((result) => {
         const jsonResult = stringify(result)
         if (persist && result && jsonResult !== '{}' && jsonResult !== '[]') {
-          uploadR2(persist.name, result).catch((ex) => {
+          uploadR2(persistKey(), result).catch((ex) => {
             console.error('Failed to persist cache', ex)
           })
         }
       })
+
       return ensurePersist(promise)
     } catch (error) {
       // logger('error', cacheKey, error)
