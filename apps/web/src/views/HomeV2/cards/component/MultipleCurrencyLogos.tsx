@@ -3,14 +3,13 @@ import styled from 'styled-components'
 import { MultipleLogos } from './MultipleLogos'
 
 const ChainImage = styled.img`
-  width: 16px;
-  height: 16px;
+  width: 10px;
+  height: 10px;
   position: absolute;
-  bottom: -4px;
-  right: -4px;
-  background-color: white;
-  border-radius: 20px;
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  bottom: 0px;
+  right: 0px;
+  background-color: transparent;
+  border-radius: 4px;
 `
 
 interface Token {
@@ -24,6 +23,7 @@ interface MultipleCurrencyLogosProps {
   maxDisplay?: number
   isFirstSmall?: boolean
   borderRadius?: string
+  gap?: number
 }
 
 export const MultipleCurrencyLogos = ({
@@ -31,9 +31,10 @@ export const MultipleCurrencyLogos = ({
   chainId,
   maxDisplay = 3,
   isFirstSmall,
+  gap,
   borderRadius,
 }: MultipleCurrencyLogosProps) => {
-  const chainIcon = chainId ? `${ASSET_CDN}/web/chains/${chainId}.png` : null
+  const chainIcon = chainId ? `${ASSET_CDN}/web/chains/svg/${chainId}.svg` : null
 
   return (
     <MultipleLogos
@@ -41,6 +42,7 @@ export const MultipleCurrencyLogos = ({
       isFirstSmall={isFirstSmall}
       logos={tokens.map((token) => token.logo!)}
       maxDisplay={maxDisplay}
+      gap={gap}
     >
       {chainIcon && <ChainImage src={chainIcon} />}
     </MultipleLogos>

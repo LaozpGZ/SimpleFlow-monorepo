@@ -22,6 +22,7 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
       <CardRowLayout
         left={
           <MultipleCurrencyLogos
+            gap={-8}
             borderRadius="12px"
             maxDisplay={4}
             tokens={chains.map((chain) => ({ logo: chain.logo }))}
@@ -34,7 +35,13 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
       </CardRowLayout>
 
       <CardRowLayout
-        left={<MultipleCurrencyLogos maxDisplay={4} tokens={currencies.map((currency) => ({ logo: currency.logo }))} />}
+        left={
+          <MultipleCurrencyLogos
+            gap={-8}
+            maxDisplay={4}
+            tokens={currencies.map((currency) => ({ logo: currency.logo }))}
+          />
+        }
         isLast
       >
         <Button scale="sm" onClick={() => router.push('/swap')} variant="light">

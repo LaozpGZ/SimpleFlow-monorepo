@@ -1,4 +1,4 @@
-import { Box, Flex, Text, TriangleDownIcon, TriangleUpIcon } from '@pancakeswap/uikit'
+import { Box, Flex, Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
 import React, { ReactNode } from 'react'
 import styled, { useTheme } from 'styled-components'
 
@@ -7,10 +7,10 @@ interface HomepageCardBadgeProps {
   priceChange?: number
 }
 
-const Badge = styled(Flex)`
+const Badge = styled(Flex)<{ isMobile: boolean }>`
   height: 40px;
-  padding: 0 16px;
-  border-radius: 999px;
+  padding: 4px ${({ isMobile }) => (isMobile ? 8 : 16)}px;
+  border-radius: ${({ isMobile }) => (isMobile ? '16px' : '999px')};
   border-width: 3px;
   background: ${({ theme }) => theme.colors.positive10};
   display: flex;
@@ -37,9 +37,10 @@ const Percent = styled(Text)`
 export const HomepageCardBadge: React.FC<HomepageCardBadgeProps> = ({ text, priceChange }) => {
   const theme = useTheme()
   const positive = (priceChange ?? 0) >= 0
+  const { isMobile } = useMatchBreakpoints()
 
   return (
-    <Badge>
+    <Badge isMobile={isMobile}>
       <Box>
         {typeof text !== 'string' ? (
           text

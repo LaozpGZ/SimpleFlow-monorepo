@@ -14,11 +14,11 @@ const ImageContainer = styled.div<{
   size: number
   index: number
   isActive?: boolean
-}>(({ gap, isFirstSmall, size, index, isActive }) => {
-  const logoSize = isFirstSmall && index === 0 ? '20px' : `${size}px`
+}>(({ gap, isFirstSmall, size, isActive }) => {
   return `
   position: relative;
   width: ${isActive ? size * 2 : size}px;
+  height: ${size}px;
   transition: all 0.3s;
   &:not(:first-child) {
     margin-left: ${gap}px;
@@ -77,7 +77,7 @@ const ExpandLogo = styled.img<{
     will-change: transform;
     height: auto;
     flex-shrink: 0;
-    border-radius: ${borderRadius};
+    border-radius: '16px';
   `
 })
 
@@ -110,7 +110,7 @@ interface MultipleLogosProps {
 export const MultipleLogos = ({
   logos,
   maxDisplay = 3,
-  gap = -8,
+  gap = -16,
   isFirstSmall = false,
   children,
   borderRadius,
@@ -155,7 +155,14 @@ export const MultipleLogos = ({
         const active = isMobile && index === expandIndex
         const expandIcon = clickExpand?.logos[index]
         return (
-          <ImageContainer isActive={active} size={size} index={index} gap={gap} isFirstSmall={isFirstSmall} key={logo}>
+          <ImageContainer
+            isActive={active}
+            size={size}
+            index={index}
+            gap={gap}
+            isFirstSmall={isFirstSmall && isMobile}
+            key={logo}
+          >
             <OverlapLogo
               onClick={() => {
                 if (!isMobile || !clickExpand) {

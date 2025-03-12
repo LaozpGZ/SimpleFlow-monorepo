@@ -87,7 +87,11 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({ token, user }) =
         }
         isLast
       >
-        <HomepageCardBadge text={`+${formatAmount(user.totalBNB)} BNB`} />
+        <HomepageCardBadge
+          text={`+${formatAmount(user.totalBNB, {
+            precision: 1,
+          })} BNB`}
+        />
       </CardRowLayout>
     </CardSection>
   )
