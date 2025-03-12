@@ -20,7 +20,13 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
   return (
     <CardSection title={t('Bridge & Buy Crypto')} subtitle={t('Seamlessly')}>
       <CardRowLayout
-        left={<MultipleCurrencyLogos maxDisplay={4} tokens={chains.map((chain) => ({ logo: chain.logo }))} />}
+        left={
+          <MultipleCurrencyLogos
+            borderRadius="12px"
+            maxDisplay={4}
+            tokens={chains.map((chain) => ({ logo: chain.logo }))}
+          />
+        }
       >
         <Button scale="sm" onClick={() => router.push('/bridge')} variant="light">
           {isMobile ? t('Bridge Now') : t('Bridge across %num% Chains Now', { num: chains.length })}

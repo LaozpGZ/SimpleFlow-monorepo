@@ -14,7 +14,8 @@ export type HomePageToken = TokenBase & {
 
 export type HomepageChain = {
   logo: string
-  banner: string
+  logoM: string
+  logoL: string
 }
 
 export type HomePagePartner = {

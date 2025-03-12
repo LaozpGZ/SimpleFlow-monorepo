@@ -9,7 +9,7 @@ const ChainImage = styled.img`
   bottom: -4px;
   right: -4px;
   background-color: white;
-  border-radius: 50%;
+  border-radius: 20px;
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
 `
 
@@ -23,6 +23,7 @@ interface MultipleCurrencyLogosProps {
   chainId?: number
   maxDisplay?: number
   isFirstSmall?: boolean
+  borderRadius?: string
 }
 
 export const MultipleCurrencyLogos = ({
@@ -30,11 +31,17 @@ export const MultipleCurrencyLogos = ({
   chainId,
   maxDisplay = 3,
   isFirstSmall,
+  borderRadius,
 }: MultipleCurrencyLogosProps) => {
   const chainIcon = chainId ? `${ASSET_CDN}/web/chains/${chainId}.png` : null
 
   return (
-    <MultipleLogos isFirstSmall={isFirstSmall} logos={tokens.map((token) => token.logo!)} maxDisplay={maxDisplay}>
+    <MultipleLogos
+      borderRadius={borderRadius}
+      isFirstSmall={isFirstSmall}
+      logos={tokens.map((token) => token.logo!)}
+      maxDisplay={maxDisplay}
+    >
       {chainIcon && <ChainImage src={chainIcon} />}
     </MultipleLogos>
   )

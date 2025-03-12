@@ -59,14 +59,19 @@ export function homePageChainsInfo() {
     ChainId.LINEA,
     ChainId.BASE,
     ChainId.OPBNB,
-    ChainId.MONAD_TESTNET,
   ]
 
   const evmChains: HomepageChain[] = evms.map((chainId) => {
     return {
-      logo: `${ASSET_CDN}/web/chains/${chainId}.png`,
-      banner: '',
+      logo: `${ASSET_CDN}/web/chains/v2/${chainId}.png`,
+      logoM: `${ASSET_CDN}/web/chains/v2/${chainId}-m.png`,
+      logoL: `${ASSET_CDN}/web/chains/v2/${chainId}-l.png`,
     }
+  })
+  evmChains.push({
+    logo: `${ASSET_CDN}/web/chains/v2/aptos.png`,
+    logoM: `${ASSET_CDN}/web/chains/v2/aptos-m.png`,
+    logoL: `${ASSET_CDN}/web/chains/v2/aptos-l.png`,
   })
   return evmChains
 }

@@ -1,29 +1,14 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { HomepageChain } from 'pages/api/home/types'
 import React from 'react'
 import styled from 'styled-components'
 import { MultipleLogos } from './cards/component/MultipleLogos'
-
-export type HomepageChain = {
-  logo: string
-  banner: string
-}
 
 const Wrapper = styled(Box)`
   padding: 24px;
   text-align: center;
   background-color: transparent;
-`
-
-const ChainIcons = styled(Flex)`
-  justify-content: flex-start;
-  margin-top: 16px;
-
-  img {
-    width: 32px;
-    height: 32px;
-    margin: 0 4px;
-  }
 `
 
 const TitleText = styled(Text)<{ isMobile: boolean }>`
@@ -79,7 +64,15 @@ export const FavoriteDEXBanner: React.FC<FavoriteDEXBannerProps> = ({ chains }) 
         {t('Trade Crypto Instantly Across %count%+ Chains', { count: chains.length })}
       </DescriptionText>
       <Flex alignItems="center" justifyContent={isMobile ? 'center' : 'flex-start'}>
-        <MultipleLogos gap={isMobile ? -8 : 20} logos={chains.map((x) => x.logo)} maxDisplay={20} />
+        <MultipleLogos
+          clickExpand={{
+            logos: chains.map((x) => x.logoM),
+          }}
+          borderRadius="12px"
+          gap={isMobile ? -8 : 20}
+          logos={chains.map((x) => x.logo)}
+          maxDisplay={20}
+        />
       </Flex>
     </Wrapper>
   )
