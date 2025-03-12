@@ -1,8 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import React from 'react'
 import styled from 'styled-components'
-import { formatNumber } from './util/formatNumber'
 
 export type SiteStats = {
   allTimeTraders: number
@@ -11,7 +11,13 @@ export type SiteStats = {
   community: number
 }
 
-const StatCard = styled(Box)<{ bgColor: string; borderColor: string; textColor: string; isMobile?: boolean }>`
+const StatCard = styled(Box)<{
+  bgColor: string
+  borderColor: string
+  textColor: string
+  isMobile?: boolean
+  index: number
+}>`
   width: ${({ isMobile }) => (isMobile ? '156px' : '210px')};
   height: ${({ isMobile }) => (isMobile ? '110px' : '146px')};
   border-radius: ${({ isMobile }) => (isMobile ? '36px' : '48px')};
@@ -26,7 +32,8 @@ const StatCard = styled(Box)<{ bgColor: string; borderColor: string; textColor: 
   align-items: center;
   background-color: ${({ theme, bgColor }) => theme.colors[bgColor]};
   border-color: ${({ theme, borderColor }) => theme.colors[borderColor]};
-  margin: ${({ isMobile }) => (isMobile ? '4px' : '8px')};
+  margin-top: ${({ isMobile }) => (isMobile ? '8px' : '0')};
+  margin-right: ${({ isMobile, index }) => (isMobile ? (index % 2 === 0 ? '16px' : '0px') : '24px')};
 `
 
 const Title = styled.div<{ textColor: string; isMobile?: boolean }>`
@@ -65,40 +72,47 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
       width="100%"
       maxWidth={isMobile ? '420px' : 'none'}
       mx="auto"
+      padding="0"
     >
-      <StatCard bgColor="primary10" borderColor="primary20" textColor="primary60" isMobile={isMobile}>
+      <StatCard bgColor="primary10" borderColor="primary20" textColor="primary60" isMobile={isMobile} index={0}>
         <Title textColor="primary60" isMobile={isMobile}>
           {t('All Time Traders')}
         </Title>
         <Value textColor="primary60" isMobile={isMobile}>
-          {formatNumber(stats.allTimeTraders)}
+          ~{formatAmount(stats.allTimeTraders)}
         </Value>
       </StatCard>
 
-      <StatCard bgColor="secondary10" borderColor="cardBorder" textColor="secondary" isMobile={isMobile}>
+      <StatCard bgColor="secondary10" borderColor="cardBorder" textColor="secondary" isMobile={isMobile} index={1}>
         <Title textColor="secondary" isMobile={isMobile}>
           {t('All Time TV')}
         </Title>
         <Value textColor="secondary" isMobile={isMobile}>
-          ${formatNumber(stats.allTimeTv)}
+          ${formatAmount(stats.allTimeTv)}
         </Value>
       </StatCard>
 
-      <StatCard bgColor="blue10" borderColor="blue20" textColor="blue60" isMobile={isMobile}>
+      <StatCard bgColor="blue10" borderColor="blue20" textColor="blue60" isMobile={isMobile} index={2}>
         <Title textColor="blue60" isMobile={isMobile}>
           {t('All Time LP Fees')}
         </Title>
         <Value textColor="blue60" isMobile={isMobile}>
-          ${formatNumber(stats.allTimeLPFees)}
+          ${formatAmount(stats.allTimeLPFees)}
         </Value>
       </StatCard>
 
-      <StatCard bgColor="destructive10" borderColor="destructive20" textColor="destructive60" isMobile={isMobile}>
+      <StatCard
+        index={3}
+        bgColor="destructive10"
+        borderColor="destructive20"
+        textColor="destructive60"
+        isMobile={isMobile}
+      >
         <Title textColor="destructive60" isMobile={isMobile}>
           {t('Community')}
         </Title>
         <Value textColor="destructive60" isMobile={isMobile}>
-          {formatNumber(stats.community)}
+          {formatAmount(stats.community)}
         </Value>
       </StatCard>
     </Flex>

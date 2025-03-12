@@ -7,12 +7,12 @@ import { homePageDataAtom } from './atom/homePageDataAtom'
 import { Partners } from './Partners'
 import { StatsSummary } from './StatsSummary'
 
-const Container = styled.div`
+const Container = styled.div<{ isMobile: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 24px;
+  padding: ${({ isMobile }) => (isMobile ? '24px 0px' : '24px')};
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   overflow: visible;
   position: relative;
@@ -58,7 +58,7 @@ export const PancakeBanner: React.FC = () => {
   const { isMobile } = useMatchBreakpoints()
 
   return (
-    <Container>
+    <Container isMobile>
       <BannerImage src={BunnyImageUrl} alt="PancakeSwap Banner" />
       <HeadlineText>
         Used by <Highlight1>millions.</Highlight1> Trusted with <Highlight2>billions.</Highlight2>

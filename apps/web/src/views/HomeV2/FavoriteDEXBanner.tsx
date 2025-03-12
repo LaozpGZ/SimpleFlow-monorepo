@@ -79,12 +79,7 @@ export const FavoriteDEXBanner: React.FC<FavoriteDEXBannerProps> = ({ chains }) 
         {t('Trade Crypto Instantly Across %count%+ Chains', { count: chains.length })}
       </DescriptionText>
       <Flex alignItems="center" justifyContent={isMobile ? 'center' : 'flex-start'}>
-        <MultipleLogos
-          size={isMobile ? 32 : 40}
-          gap={isMobile ? -8 : 20}
-          logos={chains.map((x) => x.logo)}
-          maxDisplay={20}
-        />
+        <MultipleLogos gap={isMobile ? -8 : 20} logos={chains.map((x) => x.logo)} maxDisplay={20} />
       </Flex>
     </Wrapper>
   )

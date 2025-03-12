@@ -26,11 +26,9 @@ export const FeaturesCard = () => {
 
   return (
     <>
-      {!isMobile && (
-        <RowLayout>
-          <FeaturedText>{t('Featured on PancakeSwap')}</FeaturedText>
-        </RowLayout>
-      )}
+      <RowLayout>
+        <FeaturedText>{t('Featured on PancakeSwap')}</FeaturedText>
+      </RowLayout>
       <RowLayout
         style={{
           marginTop: '40px',

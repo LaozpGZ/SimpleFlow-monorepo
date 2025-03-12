@@ -17,16 +17,9 @@ const StyledCard = styled(Card)<{ isMobile: boolean }>`
 `
 
 const FramelessCard = styled(Box)<{ isMobile: boolean }>`
-  border-radius: ${({ isMobile }) => (isMobile ? '24px' : '48px')};
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   background: ${({ theme }) => theme.colors.card};
   max-width: ${({ isMobile }) => (isMobile ? '100%' : '588px')};
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-
-  &:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-  }
 `
 
 interface CardSectionProps {

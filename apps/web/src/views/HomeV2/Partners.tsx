@@ -45,9 +45,12 @@ const LinkItem = styled.a`
 `
 
 const TextWrapper = styled(Text)`
-  margin-top: 8px;
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 14px;
-  font-weight: bold;
+  font-family: Kanit;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0%;
   text-align: center;
+  margin-top: 8px;
+  color: ${({ theme }) => theme.colors.textSubtle};
 `

@@ -6,7 +6,7 @@ export const partners: HomePagePartner[] = [
   {
     logo: `${ASSET_CDN}/web/landing/partner/x.png`,
     link: 'https://twitter.com/pancakeswap',
-    name: 'X',
+    name: '(ex. Twitter)',
   },
   {
     logo: `${ASSET_CDN}/web/landing/partner/telegram.png`,
