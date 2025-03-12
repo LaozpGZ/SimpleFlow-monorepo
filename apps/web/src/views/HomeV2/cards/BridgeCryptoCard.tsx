@@ -1,9 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useRouter } from 'next/router'
+import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { HomepageChain, HomePageCurrency } from 'pages/api/home/types'
 import React from 'react'
 import { CardRowLayout } from './component/CardRowLayout'
+import { CardRowSectionButton } from './component/CardRowSectionButton'
 import { CardSection } from './component/CardSection'
 import { MultipleCurrencyLogos } from './component/MultipleCurrencyLogos'
 
@@ -14,7 +14,6 @@ interface BridgeAndBuyCryptoCardProps {
 
 export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains, currencies }) => {
   const { t } = useTranslation()
-  const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
 
   return (
@@ -29,9 +28,12 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
           />
         }
       >
-        <Button scale="sm" onClick={() => router.push('/bridge')} variant="light">
-          {isMobile ? t('Bridge Now') : t('Bridge across %num% Chains Now', { num: chains.length })}
-        </Button>
+        <CardRowSectionButton
+          alwaysShow
+          link="/bridge"
+          hoverText={t('Bridge Now')}
+          text={isMobile ? t('Bridge Now') : t('Bridge across %num% Chains Now', { num: chains.length })}
+        />
       </CardRowLayout>
 
       <CardRowLayout
@@ -44,13 +46,12 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
         }
         isLast
       >
-        <Button scale="sm" onClick={() => router.push('/swap')} variant="light">
-          {isMobile
-            ? t('Buy Now')
-            : t('Choose from %num% Currencies', {
-                num: currencies.length,
-              })}
-        </Button>
+        <CardRowSectionButton
+          alwaysShow
+          link="/buy-crypto"
+          hoverText={t('Buy Crypto Now')}
+          text={isMobile ? t('Buy Now') : t('Choose from %num% Currencies', { num: currencies.length })}
+        />
       </CardRowLayout>
     </CardSection>
   )

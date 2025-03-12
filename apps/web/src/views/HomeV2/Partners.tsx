@@ -42,6 +42,25 @@ const LinkItem = styled.a`
   flex-direction: column;
   align-items: center;
   text-decoration: none;
+  width: 111;
+  height: 128;
+  border-radius: 24px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 2px;
+  border-width: 1px;
+  border-style: solid;
+  border-left-width: 1px;
+  border-color: transparent;
+  box-sizing: border-box;
+  transition: all 0.3s;
+  padding: 12px;
+  &: hover {
+    background: ${({ theme }) => theme.colors.primary10};
+    border-width: 1px, 1px, 2px, 1px;
+    border-style: solid;
+    border-color: ${({ theme }) => theme.colors.primary20};
+  }
 `
 
 const TextWrapper = styled(Text)`

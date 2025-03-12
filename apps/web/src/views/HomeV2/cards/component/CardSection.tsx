@@ -1,5 +1,5 @@
 import { Box, Card, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useHover } from 'hooks/useHover'
+import { HoverProvider } from 'hooks/useHover'
 import { ReactNode } from 'react'
 import styled from 'styled-components'
 import { CardSectionButton } from './CardSectionButton'
@@ -65,7 +65,6 @@ const Subtitle = styled(Text)<{ isMobile: boolean }>`
 
 export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, children, button, isFrameLess }) => {
   const { isMobile } = useMatchBreakpoints()
-  const [ref, isHover] = useHover()
 
   if (isFrameLess) {
     return (
@@ -78,7 +77,7 @@ export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, child
               </FramelessTitle>
               {subtitle && <Subtitle isMobile={isMobile}>{subtitle}</Subtitle>}
             </Box>
-            {button && <CardSectionButton show={isHover} link={button.link} text={button.text} />}
+            {button && <CardSectionButton link={button.link} text={button.text} />}
           </Flex>
         </Box>
         {children}
@@ -86,21 +85,27 @@ export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, child
     )
   }
   return (
-    <StyledCard isMobile={isMobile}>
-      <Box ref={ref}>
-        <Box style={{ padding: isMobile ? '16px 0' : '24px 0' }}>
-          <Flex justifyContent="space-between" alignItems="center">
-            <Box>
-              <Title isFrameless={Boolean(isFrameLess)} isMobile={isMobile}>
-                {title}
-              </Title>
-              {subtitle && <Subtitle isMobile={isMobile}>{subtitle}</Subtitle>}
+    <HoverProvider>
+      {(ref) => {
+        return (
+          <StyledCard isMobile={isMobile}>
+            <Box ref={ref}>
+              <Box style={{ padding: isMobile ? '16px 0' : '24px 0' }}>
+                <Flex justifyContent="space-between" alignItems="center">
+                  <Box>
+                    <Title isFrameless={Boolean(isFrameLess)} isMobile={isMobile}>
+                      {title}
+                    </Title>
+                    {subtitle && <Subtitle isMobile={isMobile}>{subtitle}</Subtitle>}
+                  </Box>
+                  {button && <CardSectionButton link={button.link} text={button.text} />}
+                </Flex>
+              </Box>
+              {children}
             </Box>
-            {button && <CardSectionButton show={isHover} link={button.link} text={button.text} />}
-          </Flex>
-        </Box>
-        {children}
-      </Box>
-    </StyledCard>
+          </StyledCard>
+        )
+      }}
+    </HoverProvider>
   )
 }

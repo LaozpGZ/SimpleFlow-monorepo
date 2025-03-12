@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, Flex, Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Flex, Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { HomePageToken } from 'pages/api/home/types'
 import React from 'react'
 import styled from 'styled-components'
@@ -41,14 +41,6 @@ const LeverageText = styled(Text)`
   color: ${({ theme }) => theme.colors.positive60};
 `
 
-const PlayButton = styled(Button)`
-  font-size: 14px;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 999px;
-  height: 32px;
-`
-
 interface PerpetualCardProps {
   tokens: HomePageToken[]
 }
@@ -62,13 +54,10 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
     <CardSection
       isFrameLess={isMobile}
       title={t('Perpetuals')}
-      button={
-        isMobile ? (
-          <PlayButton variant="light" onClick={() => window.open('https://perp.pancakeswap.finance/')}>
-            See All
-          </PlayButton>
-        ) : null
-      }
+      button={{
+        text: t('See All'),
+        link: 'https://perp.pancakeswap.finance/',
+      }}
     >
       {tokens.map((token, index) => (
         <CardRowLayout

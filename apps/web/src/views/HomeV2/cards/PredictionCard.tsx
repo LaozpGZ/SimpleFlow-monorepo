@@ -1,9 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
-import { BunnyPlaceholderIcon, Button, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { BunnyPlaceholderIcon, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import { useRouter } from 'next/router'
 import { HomePageToken } from 'pages/api/home/types'
 import { PredictionUser } from 'state/types'
 import styled from 'styled-components'
@@ -19,14 +18,6 @@ const WinnerText = styled(Text)`
   color: ${({ theme }) => theme.colors.text};
 `
 
-const PlayButton = styled(Button)`
-  font-size: 14px;
-  font-weight: 600;
-  padding: 6px 12px;
-  border-radius: 999px;
-  height: 32px;
-`
-
 interface PredictionCardProps {
   token: HomePageToken
   user: PredictionUser
@@ -34,23 +25,16 @@ interface PredictionCardProps {
 
 export const PredictionCard: React.FC<PredictionCardProps> = ({ token, user }) => {
   const { t } = useTranslation()
-  const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
 
   return (
     <CardSection
       isFrameLess={isMobile}
       title={t('BNB 5-Min Prediction')}
-      button={
-        <PlayButton
-          onClick={() => {
-            router.push('/prediction')
-          }}
-          variant="light"
-        >
-          {t('Play Now')}
-        </PlayButton>
-      }
+      button={{
+        text: t('Play Now'),
+        link: '/prediction',
+      }}
     >
       <CardRowLayout
         left={
