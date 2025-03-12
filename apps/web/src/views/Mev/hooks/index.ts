@@ -1,7 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { BSCMevGuardChain } from 'utils/mevGuardChains'
 import { MethodNotFoundRpcError, WalletClient } from 'viem'
 import { addChain } from 'viem/actions'
@@ -210,7 +210,6 @@ export async function getWalletType(connector?: Connector): Promise<WalletType> 
 }
 
 export function useWalletType() {
-  useWalletDebugger()
   const { connector } = useAccount()
   const { data, isLoading } = useQuery({
     queryKey: ['useWalletType', connector?.uid],
@@ -222,44 +221,4 @@ export function useWalletType() {
     },
   })
   return { walletType: data ?? WalletType.mevNotSupported, isLoading }
-}
-
-function useWalletDebugger() {
-  const { connector } = useAccount()
-
-  useEffect(() => {
-    const debugWallet = async () => {
-      if (!connector) return
-
-      try {
-        const provider = (await connector.getProvider()) as any
-        console.log('Provider full object:', provider)
-
-        // check is WalletConnect
-        console.log('Is WalletConnect:', provider.isWalletConnect)
-
-        // try get session info
-        if (provider.session) {
-          console.log('Session:', provider.session)
-          console.log('Peer metadata:', provider.session.peer?.metadata)
-        }
-
-        // check other possible paths
-        if (provider.walletMeta) {
-          console.log('Wallet meta:', provider.walletMeta)
-        }
-
-        if (provider.connector) {
-          console.log('Provider connector:', provider.connector)
-        }
-
-        // 打印所有属性
-        console.log('Provider keys:', Object.keys(provider))
-      } catch (error) {
-        console.error('Error in wallet debugger:', error)
-      }
-    }
-
-    debugWallet()
-  }, [connector])
 }
