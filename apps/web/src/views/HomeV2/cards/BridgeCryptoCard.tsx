@@ -22,7 +22,7 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
         left={
           <MultipleCurrencyLogos
             gap={-8}
-            borderRadius="12px"
+            borderRadius={isMobile ? '12px' : '16px'}
             maxDisplay={4}
             tokens={chains.map((chain) => ({ logo: chain.logo }))}
           />
@@ -31,8 +31,12 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
         <CardRowSectionButton
           alwaysShow
           link="/bridge"
-          hoverText={t('Bridge Now')}
-          text={isMobile ? t('Bridge Now') : t('Bridge across %num% Chains Now', { num: chains.length })}
+          hover={{
+            text: t('Bridge Now'),
+            width: 150,
+            originalWidth: 208,
+          }}
+          text={isMobile ? t('Bridge Now') : t('Bridge across %num% chains', { num: chains.length })}
         />
       </CardRowLayout>
 
