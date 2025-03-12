@@ -50,7 +50,7 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
               <Flex flexDirection="column">
                 <HomepageSymbol fontSize="16px">{t('CAKE Staking')}</HomepageSymbol>
                 <StyledSubtitle>
-                  {t('%burned%M+ BURN • $%marketCap% MKT. CAP', {
+                  {t('%burned% BURN • $%marketCap% MKT. CAP', {
                     burned: formatNumber(figures.burned),
                     marketCap: formatNumber(figures.cakeStats.circulatingSupply * cakeToken.price),
                   })}

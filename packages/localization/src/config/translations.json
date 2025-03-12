@@ -3787,7 +3787,6 @@
   "All Time LP Fees": "All Time LP Fees",
   "Vote for CAKE Emissions": "Vote for CAKE Emissions",
   "on over 600+ Pools": "on over 600+ Pools",
-  "%burned%M+ BURN • $%marketCap% MKT. CAP": "%burned%M+ BURN • $%marketCap% MKT. CAP",
   "TOTAL VOTES: %totalVotes%": "TOTAL VOTES: %totalVotes%",
   "Rewards/Epoch": "Rewards/Epoch",
   "Swap with Best Prices": "Swap with Best Prices",
@@ -3800,8 +3799,9 @@
   "Last Top Winner": "Last Top Winner",
   "Featured on PancakeSwap": "Featured on PancakeSwap",
   "leverage": "leverage",
-  "Bridge across %num% Chains Now": "Bridge across %num% Chains Now",
   "Earn Trading Fees": "Earn Trading Fees",
   "by Providing Liquidity": "by Providing Liquidity",
-  "Choose from %num% Currencies": "Choose from %num% Currencies"
+  "Choose from %num% Currencies": "Choose from %num% Currencies",
+  "Bridge across %num% chains": "Bridge across %num% chains",
+  "%burned% BURN • $%marketCap% MKT. CAP": "%burned% BURN • $%marketCap% MKT. CAP"
 }
