@@ -3776,5 +3776,6 @@
   "Your wallet provider doesn’t support PancakeSwap MEV Guard": "Your wallet provider doesn’t support PancakeSwap MEV Guard",
   "requires a manual configuration for your wallet. Choose your wallet to view a detailed guide:": "requires a manual configuration for your wallet. Choose your wallet to view a detailed guide:",
   "If you've already set this up manually, no action is needed - just proceed with the swap!": "If you've already set this up manually, no action is needed - just proceed with the swap!",
-  "MEV Protected": "MEV Protected"
+  "MEV Protected": "MEV Protected",
+  "Add automatically on BNB Smart Chain: PancakeSwap MEV Guard": "Add automatically on BNB Smart Chain: PancakeSwap MEV Guard"
 }
