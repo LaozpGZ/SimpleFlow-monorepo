@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { ArrowForwardIcon, Button, Flex, Text, TriangleDownIcon, TriangleUpIcon } from '@pancakeswap/uikit'
+import { Button, Flex, Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { HomePageToken } from 'pages/api/home/types'
 import React from 'react'
 import styled from 'styled-components'
@@ -24,6 +24,13 @@ const PercentageChange = styled(Text)`
   line-height: 21px;
   letter-spacing: 0%;
   color: ${({ theme }) => theme.colors.textSubtle};
+  position: relative;
+
+  svg {
+    width: 11px;
+    margin-left: 4px;
+    transform: translateY(2px);
+  }
 `
 
 const LeverageText = styled(Text)`
@@ -49,14 +56,18 @@ interface PerpetualCardProps {
 export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
   const { t } = useTranslation()
 
+  const { isMobile } = useMatchBreakpoints()
+
   return (
     <CardSection
+      isFrameLess={isMobile}
       title={t('Perpetuals')}
       button={
-        <PlayButton onClick={() => window.open('https://perp.pancakeswap.finance/')}>
-          See All
-          <ArrowForwardIcon color="card" />
-        </PlayButton>
+        isMobile ? (
+          <PlayButton variant="light" onClick={() => window.open('https://perp.pancakeswap.finance/')}>
+            See All
+          </PlayButton>
+        ) : null
       }
     >
       {tokens.map((token, index) => (
@@ -70,7 +81,11 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
 
                 <Flex alignItems="center" justifyContent="center">
                   <PriceText>${token.price.toLocaleString()}</PriceText>
-                  <PercentageChange>
+                  <PercentageChange
+                    style={{
+                      position: 'relative',
+                    }}
+                  >
                     {token.percent >= 0 ? <TriangleUpIcon /> : <TriangleDownIcon />}{' '}
                     {Math.abs(token.percent).toFixed(2)}%
                   </PercentageChange>
@@ -80,11 +95,24 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
           }
           isLast={index === tokens.length - 1}
         >
-          <HomepageCardBadge>
-            <LeverageText>
-              {t(`Up to`)} {token.symbol === 'BTCUSD' ? '1001x' : '250x'} {t('leverage')}
-            </LeverageText>
-          </HomepageCardBadge>
+          <HomepageCardBadge
+            text={
+              !isMobile ? (
+                <LeverageText>
+                  {t(`Up to`)} {token.symbol === 'BTCUSD' ? '1001x' : '250x'} {t('leverage')}
+                </LeverageText>
+              ) : (
+                <>
+                  <Text bold color="positive60" fontSize="12px">
+                    {t(`Up to`)}{' '}
+                  </Text>
+                  <Text bold color="positive60" fontSize="14px">
+                    {token.symbol === 'BTCUSD' ? '1001x' : '250x'} {t('leverage')}
+                  </Text>
+                </>
+              )
+            }
+          />
         </CardRowLayout>
       ))}
     </CardSection>

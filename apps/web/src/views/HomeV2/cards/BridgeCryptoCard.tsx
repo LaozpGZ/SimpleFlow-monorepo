@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Button } from '@pancakeswap/uikit'
+import { Button, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { HomepageChain, HomePageCurrency } from 'pages/api/home/types'
 import React from 'react'
@@ -15,14 +15,15 @@ interface BridgeAndBuyCryptoCardProps {
 export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains, currencies }) => {
   const { t } = useTranslation()
   const router = useRouter()
+  const { isMobile } = useMatchBreakpoints()
 
   return (
     <CardSection title={t('Bridge & Buy Crypto')} subtitle={t('Seamlessly')}>
       <CardRowLayout
         left={<MultipleCurrencyLogos maxDisplay={4} tokens={chains.map((chain) => ({ logo: chain.logo }))} />}
       >
-        <Button scale="sm" onClick={() => router.push('/bridge')}>
-          {t('Bridge Now')} →
+        <Button scale="sm" onClick={() => router.push('/bridge')} variant="bubblegum">
+          {isMobile ? t('Bridge Now') : t('Bridge across %num% Chains Now', { num: chains.length })}
         </Button>
       </CardRowLayout>
 
@@ -31,7 +32,7 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
         isLast
       >
         <Button scale="sm" onClick={() => router.push('/swap')}>
-          {t('Buy Crypto Now')} →
+          {isMobile ? t('Buy Now') : t('Buy Crypto Now')}
         </Button>
       </CardRowLayout>
     </CardSection>

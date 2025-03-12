@@ -3789,7 +3789,7 @@
   "on over 600+ Pools": "on over 600+ Pools",
   "%burned%M+ BURN • $%marketCap% MKT. CAP": "%burned%M+ BURN • $%marketCap% MKT. CAP",
   "TOTAL VOTES: %totalVotes%": "TOTAL VOTES: %totalVotes%",
-  "%rewards%K+ CAKE Rewards/Epoch": "%rewards%K+ CAKE Rewards/Epoch",
+  "Rewards/Epoch": "Rewards/Epoch",
   "Swap with Best Prices": "Swap with Best Prices",
   "with Fees as Low as 0.01%": "with Fees as Low as 0.01%",
   "Bridge & Buy Crypto": "Bridge & Buy Crypto",
@@ -3799,5 +3799,6 @@
   "BNB 5-Min Prediction": "BNB 5-Min Prediction",
   "Last Top Winner": "Last Top Winner",
   "Featured on PancakeSwap": "Featured on PancakeSwap",
-  "leverage": "leverage"
+  "leverage": "leverage",
+  "Bridge across %num% Chains Now": "Bridge across %num% Chains Now"
 }

@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, Text } from '@pancakeswap/uikit'
 import { HomePagePoolInfo } from 'pages/api/home/types'
+import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
 import { getNetworkFullName } from 'views/BuyCrypto/constants'
 import { CardRowLayout } from './component/CardRowLayout'
@@ -22,9 +23,10 @@ const ChainText = styled(Text)`
   line-height: 18px;
   letter-spacing: 2%;
   color: ${({ theme }) => theme.colors.textSubtle};
+  white-space: nowrap;
 `
 
-export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
+export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
   const { t } = useTranslation()
   return (
     <CardSection title="Trading Pairs" subtitle="by Providing Liquidity">
@@ -36,6 +38,7 @@ export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
               left={
                 <Flex alignItems="center">
                   <MultipleCurrencyLogos
+                    isFirstSmall
                     tokens={[
                       {
                         logo: pair.token0.icon,
@@ -57,11 +60,22 @@ export const TradingPairsCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
               }
               isLast={index === pairs.length - 1}
             >
-              <HomepageCardBadge>
-                <Text bold color="positive60">
-                  {t('Up to')} {`${(pair.apr24h * 100).toFixed(2)}% APR`}
-                </Text>
-              </HomepageCardBadge>
+              <HomepageCardBadge
+                text={
+                  isMobile ? (
+                    <Box>
+                      <Text color="positive60" bold fontSize="12px">
+                        {t('Up to')}{' '}
+                      </Text>
+                      <Text color="positive60" bold fontSize="14px">
+                        {(pair.apr24h * 100).toFixed(2)}% APR
+                      </Text>
+                    </Box>
+                  ) : (
+                    `${t('Up to')} ${(pair.apr24h * 100).toFixed(2)} APR`
+                  )
+                }
+              />
             </CardRowLayout>
           )
         })}

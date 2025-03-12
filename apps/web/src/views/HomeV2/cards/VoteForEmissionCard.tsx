@@ -1,0 +1,154 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { Box, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { ASSET_CDN } from 'config/constants/endpoints'
+import { CakeRelatedFigures, HomePageToken } from 'pages/api/home/types'
+import React from 'react'
+import styled from 'styled-components'
+import { formatNumber } from '../util/formatNumber'
+import { CardRowLayout } from './component/CardRowLayout'
+import { CardSection } from './component/CardSection'
+import { HomepageCardBadge } from './component/HomepageCardBadge'
+import { HomepageSymbol } from './component/HomepageSymbol'
+
+interface CakeStatsCardProps {
+  figures: CakeRelatedFigures
+  cakeToken: HomePageToken
+}
+
+const GAUGE_ICON = `${ASSET_CDN}/web/landing/gauge-icon.png`
+
+const StyledTitle = styled.p`
+  font-size: 16px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.colors.text};
+`
+
+const StyledSubtitle = styled.p`
+  font-family: Kanit;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 2%;
+  color: ${({ theme }) => theme.colors.textSubtle};
+`
+
+export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cakeToken }) => {
+  const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
+  return (
+    <CardSection title={t('Vote for CAKE Emissions')} subtitle={t('on over 600+ Pools')}>
+      <CardRowLayout
+        left={
+          !isMobile ? (
+            <>
+              <CurrencyLogo
+                style={{ width: '40px', height: '40px', marginRight: '12px' }}
+                currency={{ address: cakeToken.id, chainId: cakeToken.chainId, isToken: true }}
+                size="24px"
+              />
+              <Flex flexDirection="column">
+                <HomepageSymbol fontSize="16px">{t('CAKE Staking')}</HomepageSymbol>
+                <StyledSubtitle>
+                  {t('%burned%M+ BURN • $%marketCap% MKT. CAP', {
+                    burned: formatNumber(figures.burned),
+                    marketCap: formatNumber(figures.cakeStats.circulatingSupply * cakeToken.price),
+                  })}
+                </StyledSubtitle>
+              </Flex>
+            </>
+          ) : (
+            <Flex flexDirection="column">
+              <Flex flexDirection="row">
+                <CurrencyLogo
+                  style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                  currency={{ address: cakeToken.id, chainId: cakeToken.chainId, isToken: true }}
+                  size="24px"
+                />
+                <HomepageSymbol fontSize="16px" lineHeight="24px">
+                  {t('CAKE Staking')}
+                </HomepageSymbol>
+              </Flex>
+              <StyledSubtitle>
+                {t('%burned% BURN • $%marketCap% MKT. CAP', {
+                  burned: formatNumber(figures.burned),
+                  marketCap: formatNumber(figures.cakeStats.circulatingSupply * cakeToken.price),
+                })}
+              </StyledSubtitle>
+            </Flex>
+          )
+        }
+      >
+        <HomepageCardBadge
+          text={
+            isMobile ? (
+              <Box>
+                <Text bold color="positive60" fontSize="12px">
+                  {t('Up to')}
+                </Text>
+                <Text
+                  bold
+                  color="positive60"
+                  fontSize="14px"
+                  style={{
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {figures.totalApr.toFixed(2)}% APR
+                </Text>
+              </Box>
+            ) : (
+              `${t('Up to')} ${figures.totalApr.toFixed(2)}% APR`
+            )
+          }
+        />
+      </CardRowLayout>
+
+      <CardRowLayout
+        left={
+          !isMobile ? (
+            <>
+              <img style={{ width: '40px', height: '40px', marginRight: '12px' }} src={GAUGE_ICON} alt="icon" />
+              <Flex flexDirection="column">
+                <StyledTitle>{t('Gauges Voting')}</StyledTitle>
+                <StyledSubtitle>
+                  {t('TOTAL VOTES: %totalVotes%', { totalVotes: formatNumber(Number(figures.gaugeTotalWeight)) })}
+                </StyledSubtitle>
+              </Flex>
+            </>
+          ) : (
+            <Flex flexDirection="column">
+              <Flex flexDirection="row">
+                <img style={{ width: '24px', height: '24px', marginRight: '8px' }} src={GAUGE_ICON} alt="icon" />
+                <HomepageSymbol lineHeight="24px" fontSize="16px">
+                  {t('Gauges Voting')}
+                </HomepageSymbol>
+              </Flex>
+              <StyledSubtitle>
+                {t('TOTAL VOTES: %totalVotes%', { totalVotes: formatNumber(Number(figures.gaugeTotalWeight)) })}
+              </StyledSubtitle>
+            </Flex>
+          )
+        }
+        isLast
+      >
+        <HomepageCardBadge
+          text={
+            isMobile ? (
+              <Box>
+                <Text bold color="positive60" fontSize="14px">
+                  {(figures.weeklyReward / 1e3).toFixed(0)}K+ CAKE{' '}
+                </Text>
+                <Text bold color="positive60" fontSize="12px">
+                  {t('Rewards/Epoch')}
+                </Text>
+              </Box>
+            ) : (
+              `${(figures.weeklyReward / 1e3).toFixed(0)}K+ CAKE ${t('Rewards/Epoch')}`
+            )
+          }
+        />
+      </CardRowLayout>
+    </CardSection>
+  )
+}

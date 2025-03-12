@@ -1,4 +1,4 @@
 export * from './BridgeCryptoCard'
-export * from './CakeStatsCard'
-export * from './TokensCard'
-export * from './TradingPairsCard'
+export * from './EarnTradingFeesCard'
+export * from './SwapWithBestPriceCard'
+export * from './VoteForEmissionCard'

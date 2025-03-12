@@ -1,23 +1,26 @@
-import { Box } from '@pancakeswap/uikit'
+import { Box, useMatchBreakpoints } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 
 const LogoWrapper = styled(Box)`
   position: relative;
   display: flex;
   align-items: center;
-  overflow: hidden;
 `
 
-const OverlapLogo = styled.img<{ gap: number; size: number }>`
-  width: ${({ size }) => `${size}px`};
-  height: ${({ size }) => `${size}px`};
+const OverlapLogo = styled.img<{ gap: number; size: number; isFirstSmall: boolean; index: number }>`
+  width: ${({ size, isFirstSmall, index }) => (isFirstSmall && index === 0 ? '20px' : `${size}px`)};
+  height: ${({ size, isFirstSmall, index }) => (isFirstSmall && index === 0 ? '20px' : `${size}px`)};
   flex-shrink: 0;
-  border: ${({ gap }) => (gap < 0 ? '2px solid white' : 'none')};
+  border: ${({ gap, isFirstSmall }) => (gap < 0 && !isFirstSmall ? '2px solid white' : 'none')};
   border-radius: 50%;
 
   &:not(:first-child) {
     margin-left: ${({ gap }) => `${gap}px`};
   }
+  &:first-child {
+    margin-top: ${({ isFirstSmall }) => `${isFirstSmall ? '-12px' : '0'}`}; 
+  }
+}
 `
 
 const ExtraCount = styled(Box)<{ size: number }>`
@@ -39,18 +42,35 @@ interface MultipleLogosProps {
   logos: string[]
   maxDisplay?: number
   gap?: number
-  size?: number
+  isFirstSmall?: boolean
   children?: React.ReactNode
 }
 
-export const MultipleLogos = ({ logos, maxDisplay = 3, gap = -8, size = 40, children }: MultipleLogosProps) => {
+export const MultipleLogos = ({
+  logos,
+  maxDisplay = 3,
+  gap = -8,
+  isFirstSmall = false,
+  children,
+}: MultipleLogosProps) => {
+  const { isMobile } = useMatchBreakpoints()
+  const size = isMobile ? (isFirstSmall ? 28 : 32) : 40
+
   const displayedLogos = logos.slice(0, maxDisplay)
   const hiddenCount = logos.length - displayedLogos.length
 
   return (
     <LogoWrapper>
       {displayedLogos.map((logo, index) => (
-        <OverlapLogo key={logo} src={logo} alt={`logo-${index}`} gap={gap} size={size} />
+        <OverlapLogo
+          key={logo}
+          src={logo}
+          alt={`logo-${index}`}
+          gap={gap}
+          size={size}
+          index={index}
+          isFirstSmall={isFirstSmall && isMobile}
+        />
       ))}
       {hiddenCount > 0 && <ExtraCount size={size}>+{hiddenCount}</ExtraCount>}
       {children}

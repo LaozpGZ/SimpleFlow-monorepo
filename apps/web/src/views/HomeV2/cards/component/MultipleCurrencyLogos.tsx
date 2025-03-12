@@ -22,13 +22,19 @@ interface MultipleCurrencyLogosProps {
   tokens: Token[]
   chainId?: number
   maxDisplay?: number
+  isFirstSmall?: boolean
 }
 
-export const MultipleCurrencyLogos = ({ tokens, chainId, maxDisplay = 3 }: MultipleCurrencyLogosProps) => {
+export const MultipleCurrencyLogos = ({
+  tokens,
+  chainId,
+  maxDisplay = 3,
+  isFirstSmall,
+}: MultipleCurrencyLogosProps) => {
   const chainIcon = chainId ? `${ASSET_CDN}/web/chains/${chainId}.png` : null
 
   return (
-    <MultipleLogos logos={tokens.map((token) => token.logo!)} maxDisplay={maxDisplay}>
+    <MultipleLogos isFirstSmall={isFirstSmall} logos={tokens.map((token) => token.logo!)} maxDisplay={maxDisplay}>
       {chainIcon && <ChainImage src={chainIcon} />}
     </MultipleLogos>
   )
