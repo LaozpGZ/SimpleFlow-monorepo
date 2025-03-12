@@ -5,13 +5,11 @@ type AsyncFunction<T extends any[]> = (...args: T) => Promise<any>
 
 // Type definitions for the cache.
 type CacheOptions<T extends AsyncFunction<any>> = {
-  name?: string
   maxCacheSize?: number
   ttl: number
   persist?: {
-    key: string
-    get: () => Promise<any>
-    set: (value: any) => Promise<void>
+    name: string
+    type: 'r2'
   }
   key?: (params: Parameters<T>) => any
 }
@@ -32,14 +30,19 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     maxAge: ttl,
     maxSize: maxCacheSize || 1000,
   })
+  const fetchR2Cache = persist
+    ? cacheByLRU(_fetchR2Cache, {
+        ttl,
+      })
+    : undefined
 
   async function ensurePersist(promise: Promise<any>) {
-    if (!persist) {
-      return promise
-    }
     try {
-      const value = await Promise.race([persist.get(), promise])
-      return value
+      if (fetchR2Cache && persist) {
+        const value = await Promise.race([fetchR2Cache(persist.name), promise])
+        return value
+      }
+      return promise
     } catch (ex) {
       return promise
     }
@@ -90,7 +93,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
       promise.then((result) => {
         const jsonResult = stringify(result)
         if (persist && result && jsonResult !== '{}' && jsonResult !== '[]') {
-          persist.set(result).catch((ex) => {
+          uploadR2(persist.name, result).catch((ex) => {
             console.error('Failed to persist cache', ex)
           })
         }
@@ -102,4 +105,27 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
       throw error
     }
   }
+}
+
+async function uploadR2(key: string, value: any) {
+  console.info('update homepage cache', key)
+  if (!process.env.OBJECT_CACHE_SECRET) {
+    return
+  }
+  await fetch(`https://obj-cache.pancakeswap.com`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${process.env.OBJECT_CACHE_SECRET}`,
+    },
+    body: JSON.stringify({ key, value }),
+  })
+}
+
+async function _fetchR2Cache(key: string) {
+  const resp = await fetch(`https://proofs.pancakeswap.com/cache/${key}`)
+  if (resp.status === 200) {
+    return resp.json()
+  }
+  throw new Error(`Failed to fetch cache:https://proofs.pancakeswap.com/cache/${key}`)
 }
