@@ -40,8 +40,16 @@ const TokenRow = ({ token, isLast }: { token: HomePageToken; isLast?: boolean })
 
 export const SwapWithBestPriceCard = ({ tokens }: SwapPricesCardProps) => {
   const { t } = useTranslation()
+
   return (
-    <CardSection title={t('Swap with Best Prices')} subtitle={t('with Fees as Low as 0.01%')}>
+    <CardSection
+      title={t('Swap with Best Prices')}
+      subtitle={t('with Fees as Low as 0.01%')}
+      button={{
+        link: '/swap',
+        text: 'Swap',
+      }}
+    >
       <Box mt="8px">
         {tokens.slice(0, 3).map((token, i) => (
           <TokenRow key={token.id} token={token} isLast={i === 2} />

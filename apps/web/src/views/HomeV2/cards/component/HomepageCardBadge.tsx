@@ -1,4 +1,5 @@
 import { Box, Flex, Text, TriangleDownIcon, TriangleUpIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useHoverContext } from 'hooks/useHover'
 import React, { ReactNode } from 'react'
 import styled, { useTheme } from 'styled-components'
 
@@ -7,11 +8,14 @@ interface HomepageCardBadgeProps {
   priceChange?: number
 }
 
-const Badge = styled(Flex)<{ isMobile: boolean }>`
+const Badge = styled(Flex)<{ isMobile: boolean; isHover: boolean }>`
   height: 40px;
   padding: 4px ${({ isMobile }) => (isMobile ? 8 : 16)}px;
   border-radius: ${({ isMobile }) => (isMobile ? '16px' : '999px')};
-  border-width: 3px;
+  border-color: ${({ theme }) => theme.colors.positive20};
+  border-width: ${({ isHover }) => (isHover ? 3 : 0)}px;
+  transition: border-width 0.5s;
+  border-style: solid;
   background: ${({ theme }) => theme.colors.positive10};
   display: flex;
   align-items: center;
@@ -38,9 +42,10 @@ export const HomepageCardBadge: React.FC<HomepageCardBadgeProps> = ({ text, pric
   const theme = useTheme()
   const positive = (priceChange ?? 0) >= 0
   const { isMobile } = useMatchBreakpoints()
+  const isHover = useHoverContext()
 
   return (
-    <Badge isMobile={isMobile}>
+    <Badge isMobile={isMobile} isHover={isHover}>
       <Box>
         {typeof text !== 'string' ? (
           text

@@ -5,8 +5,9 @@ import styled from 'styled-components'
 export const RowLayout = ({ sidePadding = '24px', ...props }: BoxProps & { sidePadding?: string }) => {
   const { isMobile } = useMatchBreakpoints()
   const flexDirection = useMemo(() => (isMobile ? 'column' : 'row'), [isMobile])
+  const _sidePadding = isMobile ? '16px' : sidePadding
 
-  return <StyledRowLayout {...props} flexDirection={flexDirection} isMobile={isMobile} sidePadding={sidePadding} />
+  return <StyledRowLayout {...props} flexDirection={flexDirection} isMobile={isMobile} sidePadding={_sidePadding} />
 }
 
 const StyledRowLayout = styled(Box)<{

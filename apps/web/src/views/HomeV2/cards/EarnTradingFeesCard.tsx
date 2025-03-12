@@ -29,7 +29,11 @@ export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) =>
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   return (
-    <CardSection title={t('Earn Trading Fees')} subtitle={t('by Providing Liquidity')}>
+    <CardSection
+      title={t('Earn Trading Fees')}
+      subtitle={t('by Providing Liquidity')}
+      button={{ link: '/liquidity/pools', text: t('Liquidity') }}
+    >
       <Box>
         {pairs.map((pair, index) => {
           return (
