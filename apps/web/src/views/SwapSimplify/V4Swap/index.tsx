@@ -14,6 +14,7 @@ import { useMemo } from 'react'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { logger } from 'utils/datadog'
+import { CHAIN_REFRESH_TIME } from 'config/constants/exchange'
 import { MevToggle } from 'views/Mev/MevToggle'
 import { SwapType } from '../../Swap/types'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
@@ -26,7 +27,6 @@ import { BuyCryptoPanel } from './BuyCryptoPanel'
 import { CommitButton } from './CommitButton'
 import { FormMain } from './FormMainV4'
 import { PricingAndSlippage } from './PricingAndSlippage'
-import { RefreshButton } from './RefreshButton'
 import { SwapSelection } from './SwapSelectionTab'
 import { TradeDetails } from './TradeDetails'
 import { TradingFee } from './TradingFee'
@@ -169,10 +169,10 @@ export function V4SwapForm() {
               alignItems="center"
               flexWrap="wrap"
             >
-              <RefreshButton
+              <SwapUIV2.RefreshButton
                 onRefresh={refreshOrder}
                 refreshDisabled={refreshDisabled}
-                chainId={activeChianId}
+                refreshDuration={activeChianId ? CHAIN_REFRESH_TIME[activeChianId] : undefined}
                 loading={!tradeLoaded}
               />
               <PricingAndSlippage

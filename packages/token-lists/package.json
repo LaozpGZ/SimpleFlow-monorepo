@@ -17,15 +17,15 @@
   },
   "peerDependencies": {
     "@reduxjs/toolkit": "^1.9.1",
-    "jotai": "^2.4.3",
+    "jotai": "catalog:",
     "localforage": "^1.10.0",
     "react": "^18.2.0"
   },
   "devDependencies": {
     "@pancakeswap/utils": "workspace:*",
     "@reduxjs/toolkit": "^1.9.1",
-    "@types/react": "^18.2.21",
-    "jotai": "^2.4.3",
+    "@types/react": "catalog:",
+    "jotai": "catalog:",
     "localforage": "^1.10.0",
     "react": "^18.2.0",
     "tsup": "^6.7.0"

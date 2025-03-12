@@ -14,7 +14,7 @@
     "react": "^18.2.0"
   },
   "devDependencies": {
-    "@types/react": "^18.2.21",
+    "@types/react": "catalog:",
     "@types/lodash": "^4.14.178"
   }
 }

@@ -26,4 +26,5 @@ export interface ModalProps extends ModalWrapperProps {
   bodyAlignItems?: string;
   headerBorderColor?: string;
   bodyTop?: string;
+  overrideHeaderContent?: React.ReactNode;
 }

@@ -10,5 +10,13 @@ catalog:
   viem: ^2.22.23
   wagmi: ^2.14.11
   next: 14.2.14
+  react: ^18.2.0
+  react-dom: ^18.2.0
+  '@types/react': ^18.2.21
+  '@types/react-dom': ^18.0.6
   wrangler: 3.81.0
+  eslint: ^8.32.0
+  '@next/eslint-plugin-next': 14.2.3
   '@aptos-labs/ts-sdk': 1.30.0
+  jotai: ^2.4.3
+  '@vanilla-extract/vite-plugin': ^4.0.2

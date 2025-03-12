@@ -85,6 +85,7 @@ const MotionModal: React.FC<React.PropsWithChildren<ModalProps>> = ({
   bodyAlignItems,
   headerBorderColor,
   bodyTop = "0px",
+  overrideHeaderContent,
   ...props
 }) => {
   const context = useContext(ModalV2Context);
@@ -103,12 +104,16 @@ const MotionModal: React.FC<React.PropsWithChildren<ModalProps>> = ({
         style={{ padding: headerPadding }}
         headerBorderColor={headerBorderColor}
       >
-        <ModalTitle>
-          {onBack && <ModalBackButton onBack={onBack} />}
-          <Heading>{title}</Heading>
-        </ModalTitle>
-        {headerRightSlot}
-        {!hideCloseButton && <ModalCloseButton onDismiss={onDismiss} mb="-4px" />}
+        {overrideHeaderContent || (
+          <>
+            <ModalTitle>
+              {onBack && <ModalBackButton onBack={onBack} />}
+              <Heading>{title}</Heading>
+            </ModalTitle>
+            {headerRightSlot}
+            {!hideCloseButton && <ModalCloseButton onDismiss={onDismiss} mb="-4px" />}
+          </>
+        )}
       </ModalHeader>
       <ModalBody
         position="relative"

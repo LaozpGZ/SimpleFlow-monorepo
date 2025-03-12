@@ -1,0 +1,31 @@
+{
+  "name": "Main",
+  "timestamp": 0,
+  "version": 1,
+  "tokens": [
+    {
+      "chainId": -239,
+      "address": "kQA8oT-HRBY-9-yFymg17hD5FE07--Z1gYc_sZTbzqpOZr1t",
+      "name": "Pancake Token",
+      "symbol": "CAKE",
+      "decimals": 9,
+      "logoURI": "https://tokens.pancakeswap.finance/images/0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82.png"
+    },
+    {
+      "chainId": -239,
+      "address": "EQDo_ZJyQ_YqBzBwbVpMmhbhIddKtRP99HugZJ14aFscxi7B",
+      "name": "jDAI",
+      "symbol": "jDAI",
+      "decimals": 18,
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ton/assets/EQAAXwH0cajPsMF-nNC5kz-SaLaeaDr4M7Q1foVwP_vOW1tR/logo.png"
+    },
+    {
+      "chainId": -239,
+      "address": "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs",
+      "name": "Tether USD",
+      "symbol": "USDT",
+      "decimals": 6,
+      "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ton/assets/EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs/logo.png"
+    }
+  ]
+}
