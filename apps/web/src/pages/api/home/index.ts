@@ -9,7 +9,7 @@ import { querySiteStats } from './querySiteStats'
 import { HomePageData } from './types'
 
 async function _load() {
-  const [tokens, pools, cakeRelated, stats, predictionUsers] = await Promise.all([
+  const [tokens, pools, cakeRelated, stats, topWinner] = await Promise.all([
     queryTokens(),
     queryPools(),
     queryCakeRelated(),
@@ -26,7 +26,7 @@ async function _load() {
     cakeRelated,
     stats,
     partners,
-    predictionUsers,
+    topWinner,
   } as HomePageData
 }
 export const loadHomePageData = cacheByLRU(_load, {

@@ -3,8 +3,7 @@ import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
 import { BunnyPlaceholderIcon, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import { HomePageToken } from 'pages/api/home/types'
-import { PredictionUser } from 'state/types'
+import { HomePageToken, HomePageUser } from 'pages/api/home/types'
 import styled from 'styled-components'
 import { CardRowLayout } from './component/CardRowLayout'
 import { CardSection } from './component/CardSection'
@@ -20,12 +19,14 @@ const WinnerText = styled(Text)`
 
 interface PredictionCardProps {
   token: HomePageToken
-  user: PredictionUser
+  winner: HomePageUser
 }
 
-export const PredictionCard: React.FC<PredictionCardProps> = ({ token, user }) => {
+export const PredictionCard: React.FC<PredictionCardProps> = ({ token, winner }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
+  const { user, profile } = winner
+  const avatar = profile?.nft?.image.thumbnail
 
   return (
     <CardSection
@@ -60,7 +61,11 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({ token, user }) =
       <CardRowLayout
         left={
           <Flex alignItems="center">
-            <BunnyPlaceholderIcon height={40} width={40} />
+            {avatar ? (
+              <img src={avatar} alt="avatar" style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+            ) : (
+              <BunnyPlaceholderIcon height={40} width={40} />
+            )}
             <Flex flexDirection="column" ml="8px">
               <TopWinnerTitle color="textSubtle">{t('Last Top Winner')}</TopWinnerTitle>
               <WinnerText>

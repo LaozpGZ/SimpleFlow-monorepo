@@ -10,7 +10,7 @@ import { CardSection } from './component/CardSection'
 
 export const FeaturesCard = () => {
   const { isMobile } = useMatchBreakpoints()
-  const { tokens, predictionUsers } = useAtomValue(homePageDataAtom)
+  const { tokens, topWinner } = useAtomValue(homePageDataAtom)
   const { t } = useTranslation()
 
   if (isMobile) {
@@ -35,7 +35,7 @@ export const FeaturesCard = () => {
         }}
       >
         <PerpetualCard tokens={tokens.filter((x) => x.symbol === 'BTC' || x.symbol === 'ETH')} />
-        <PredictionCard token={tokens.find((x) => x.symbol === 'BNB')!} user={predictionUsers[0]} />
+        <PredictionCard token={tokens.find((x) => x.symbol === 'BNB')!} winner={topWinner} />
       </RowLayout>
     </>
   )
