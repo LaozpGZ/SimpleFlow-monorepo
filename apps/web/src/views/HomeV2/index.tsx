@@ -1,4 +1,4 @@
-import { Box, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, domAnimation, LazyAnimatePresence, MotionBox, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
 import styled from 'styled-components'
 import SimpleSwapForHomePage from 'views/SwapSimplify/SimpleSwapForHomePage'
@@ -31,7 +31,16 @@ export const HomeV2 = () => {
       <Container>
         <RowLayout>
           <FavoriteDEXBanner chains={chains} />
-          <SimpleSwapForHomePage />
+          <LazyAnimatePresence features={domAnimation}>
+            <MotionBox
+              initial={{ opacity: 0, scale: 0.85, y: 30 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.85, y: 30 }}
+              transition={{ type: 'spring', stiffness: 60, damping: 20 }}
+            >
+              <SimpleSwapForHomePage />
+            </MotionBox>
+          </LazyAnimatePresence>
         </RowLayout>
       </Container>
 
