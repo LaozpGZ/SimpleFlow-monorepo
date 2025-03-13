@@ -5,8 +5,10 @@ import React from 'react'
 import styled from 'styled-components'
 import { MultipleLogos } from './cards/component/MultipleLogos'
 
-const Wrapper = styled(MotionBox)`
-  padding: 24px;
+const Wrapper = styled(MotionBox)<{
+  isMobile: boolean
+}>`
+  padding: ${({ isMobile }) => (isMobile ? '24px 0px 0px 0px' : '24px')};
   text-align: center;
   background-color: transparent;
 `
@@ -24,8 +26,8 @@ const TitleText = styled(Text)<{ isMobile: boolean }>`
 const HighlightedText = styled(Text)<{ isMobile: boolean }>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: ${({ isMobile }) => (isMobile ? '48px' : '88px')};
-  line-height: ${({ isMobile }) => (isMobile ? '48px' : '88px')};
+  font-size: ${({ isMobile }) => (isMobile ? '40px' : '88px')};
+  line-height: ${({ isMobile }) => (isMobile ? '40px' : '88px')};
   letter-spacing: -2%;
   text-align: ${({ isMobile }) => (isMobile ? 'center' : 'left')};
   color: ${({ theme }) => theme.colors.secondary};
@@ -35,13 +37,13 @@ const HighlightedText = styled(Text)<{ isMobile: boolean }>`
 const DescriptionText = styled(Text)<{ isMobile: boolean }>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: ${({ isMobile }) => (isMobile ? '18px' : '24px')};
+  font-size: ${({ isMobile }) => (isMobile ? '16px' : '24px')};
   line-height: ${({ isMobile }) => (isMobile ? '28px' : '36px')};
   letter-spacing: -1%;
   text-align: ${({ isMobile }) => (isMobile ? 'center' : 'left')};
   color: ${({ theme }) => theme.colors.text};
-  margin-top: 40px;
-  margin-bottom: 24px;
+  margin-top: ${({ isMobile }) => (isMobile ? ' 16px' : '40px')};
+  margin-bottom: ${({ isMobile }) => (isMobile ? ' 16px' : '24px')};
 `
 
 interface FavoriteDEXBannerProps {
@@ -55,10 +57,11 @@ export const FavoriteDEXBanner: React.FC<FavoriteDEXBannerProps> = ({ chains }) 
   return (
     <LazyAnimatePresence features={domAnimation}>
       <Wrapper
+        isMobile={isMobile}
         initial={{ opacity: 0, scale: 0.3, y: 50 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.8, y: 50 }}
-        transition={{ type: 'spring', stiffness: 100, damping: 12, duration: 0.5 }}
+        transition={{ type: 'spring', delay: 0.3, stiffness: 100, damping: 12, duration: 0.5 }}
       >
         <TitleText as={isMobile ? 'span' : 'h2'} isMobile={isMobile}>
           {t("Everyone's")}{' '}

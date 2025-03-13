@@ -8,7 +8,6 @@ import { useSwapHotTokenDisplay } from 'hooks/useSwapHotTokenDisplay'
 import { Field } from 'state/swap/actions'
 import { useSingleTokenSwapInfo, useSwapState } from 'state/swap/hooks'
 import { styled } from 'styled-components'
-import Page from '../Page'
 import { StyledSwapContainer } from '../Swap/styles'
 import { SwapFeaturesContext } from '../Swap/SwapFeaturesContext'
 import { V4SwapFormForHomePage } from './V4Swap/V4SwapFormForHomepage'
@@ -68,44 +67,34 @@ export default function SimpleSwapForHomePage() {
   )
 
   return (
-    <Page
-      removePadding
-      hideFooterOnDesktop={isChartExpanded || false}
-      showExternalLink={false}
-      showHelpLink={false}
-      style={{
-        background: 'transparent',
-      }}
+    <Flex
+      width="100%"
+      height="100%"
+      justifyContent="center"
+      position="relative"
+      mt={isChartExpanded ? undefined : isMobile ? '0px' : '42px'}
+      p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
     >
       <Flex
-        width="100%"
+        flexDirection="column"
+        alignItems="center"
         height="100%"
-        justifyContent="center"
+        width={isChartDisplayed && !isMobile ? 'auto' : '100%'}
+        mt={isChartExpanded && !isMobile ? '42px' : undefined}
         position="relative"
-        mt={isChartExpanded ? undefined : isMobile ? '18px' : '42px'}
-        p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
+        zIndex={1}
       >
-        <Flex
-          flexDirection="column"
-          alignItems="center"
-          height="100%"
-          width={isChartDisplayed && !isMobile ? 'auto' : '100%'}
-          mt={isChartExpanded && !isMobile ? '42px' : undefined}
-          position="relative"
-          zIndex={1}
+        <StyledSwapContainer
+          justifyContent="center"
+          width="100%"
+          style={{ height: '100%' }}
+          $isChartExpanded={isChartExpanded}
         >
-          <StyledSwapContainer
-            justifyContent="center"
-            width="100%"
-            style={{ height: '100%' }}
-            $isChartExpanded={isChartExpanded}
-          >
-            <Wrapper height="100%">
-              <V4SwapFormForHomePage />
-            </Wrapper>
-          </StyledSwapContainer>
-        </Flex>
+          <Wrapper height="100%">
+            <V4SwapFormForHomePage />
+          </Wrapper>
+        </StyledSwapContainer>
       </Flex>
-    </Page>
+    </Flex>
   )
 }
