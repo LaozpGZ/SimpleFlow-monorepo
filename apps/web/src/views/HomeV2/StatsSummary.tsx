@@ -77,10 +77,10 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
     >
       <StatCard bgColor="primary10" borderColor="primary20" textColor="primary60" isMobile={isMobile} index={0}>
         <Title textColor="primary60" isMobile={isMobile}>
-          {t('All Time Traders')}
+          {t('All Time Traders')}+
         </Title>
         <Value textColor="primary60" isMobile={isMobile}>
-          $<CountUpAnimation num={stats.allTimeTraders} />
+          ~<CountUpAnimation num={stats.allTimeTraders} />
         </Value>
       </StatCard>
 
@@ -89,7 +89,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
           {t('All Time TV')}
         </Title>
         <Value textColor="secondary" isMobile={isMobile}>
-          $<CountUpAnimation num={stats.allTimeTv} />
+          $<CountUpAnimation num={stats.allTimeTv} />+
         </Value>
       </StatCard>
 
@@ -98,7 +98,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
           {t('All Time LP Fees')}
         </Title>
         <Value textColor="blue60" isMobile={isMobile}>
-          $<CountUpAnimation num={stats.allTimeLPFees} />
+          $<CountUpAnimation num={stats.allTimeLPFees} />+
         </Value>
       </StatCard>
 
@@ -113,7 +113,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
           {t('Community')}
         </Title>
         <Value textColor="destructive60" isMobile={isMobile}>
-          <CountUpAnimation num={stats.community} />
+          <CountUpAnimation num={stats.community} />+
         </Value>
       </StatCard>
     </Flex>
