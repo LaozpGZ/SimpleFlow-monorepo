@@ -57,5 +57,6 @@ const StyledButton = styled(Button)<{
   padding-left: 16px;
   border-radius: 999px;
   border-width: 3px;
-  color: ${({ theme, isHover }) => (isHover ? theme.colors.card : theme.colors.textSubtle)};
+  color: ${({ theme, isHover, isMobile }) =>
+    isHover ? theme.colors.card : isMobile ? theme.colors.card : theme.colors.textSubtle};
 `

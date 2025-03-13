@@ -45,37 +45,34 @@ const Highlight2 = styled.span<{ color?: string }>`
   color: ${({ color, theme }) => color || theme.colors.secondary};
 `
 
-const HeadlineText = styled(Text)`
+const HeadlineText = styled(Text)<{
+  isMobile
+}>`
   font-family: Kanit;
   font-weight: 600;
   font-size: 40px;
   line-height: 48px;
   letter-spacing: -1%;
   text-align: center;
-  margin-top: 280px;
+  margin-top: ${({ isMobile }) => (isMobile ? '0px' : '280px')};
 `
 
 const BunnyVideoUrl = `${ASSET_CDN}/web/landing/bunny.webm`
-const BunnyImageUrl = `${ASSET_CDN}/web/landing/earn-bunny.png`
 
 export const PancakeBanner: React.FC = () => {
   const { partners, stats } = useAtomValue(homePageDataAtom)
   const { isMobile } = useMatchBreakpoints()
 
-  const isIphone = /iPhone|iPad|iPod/i.test(navigator.userAgent)
-
   return (
     <Container isMobile>
       <BannerMediaContainer>
-        {!isIphone ? (
+        {!isMobile && (
           <BannerVideo autoPlay loop muted playsInline>
             <source src={BunnyVideoUrl} type="video/webm" />
           </BannerVideo>
-        ) : (
-          <BannerImage src={BunnyImageUrl} alt="PancakeSwap Banner" />
         )}
       </BannerMediaContainer>
-      <HeadlineText>
+      <HeadlineText isMobile={isMobile}>
         Used by <Highlight1>millions.</Highlight1> Trusted with <Highlight2>billions.</Highlight2>
       </HeadlineText>
       <StatsSummary stats={stats} />
