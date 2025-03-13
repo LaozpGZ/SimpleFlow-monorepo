@@ -12,8 +12,8 @@ const Badge = styled(Flex)<{ isMobile: boolean; isHover: boolean }>`
   height: 40px;
   padding: 4px ${({ isMobile }) => (isMobile ? 8 : 16)}px;
   border-radius: ${({ isMobile }) => (isMobile ? '16px' : '999px')};
-  border-color: ${({ theme }) => theme.colors.positive20};
-  border-width: ${({ isHover }) => (isHover ? 3 : 0)}px;
+  border-color: ${({ theme, isHover }) => (isHover ? theme.colors.positive20 : 'transparent')};
+  border-width: 2px;
   transition: border-width 0.5s;
   border-style: solid;
   background: ${({ theme }) => theme.colors.positive10};

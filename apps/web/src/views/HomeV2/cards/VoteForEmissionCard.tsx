@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { ASSET_CDN } from 'config/constants/endpoints'
+import { useRouter } from 'next/router'
 import { CakeRelatedFigures, HomePageToken } from 'pages/api/home/types'
 import React from 'react'
 import styled from 'styled-components'
@@ -36,6 +37,8 @@ const StyledSubtitle = styled.p`
 export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cakeToken }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
+  const router = useRouter()
+
   return (
     <CardSection title={t('Vote for CAKE Emissions')} subtitle={t('on over 600+ Pools')}>
       <CardRowLayout
@@ -48,7 +51,15 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
                 size="24px"
               />
               <Flex flexDirection="column">
-                <HomepageSymbol fontSize="16px">{t('CAKE Staking')}</HomepageSymbol>
+                <HomepageSymbol
+                  isCTA
+                  onClick={() => {
+                    router.push('/cake-staking')
+                  }}
+                  fontSize="16px"
+                >
+                  {t('CAKE Staking')}
+                </HomepageSymbol>
                 <StyledSubtitle>
                   {t('%burned% BURN • $%marketCap% MKT. CAP', {
                     burned: formatNumber(figures.burned),
@@ -65,7 +76,14 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
                   currency={{ address: cakeToken.id, chainId: cakeToken.chainId, isToken: true }}
                   size="24px"
                 />
-                <HomepageSymbol fontSize="16px" lineHeight="24px">
+                <HomepageSymbol
+                  onClick={() => {
+                    router.push('/gauges-voting')
+                  }}
+                  isCTA
+                  fontSize="16px"
+                  lineHeight="24px"
+                >
                   {t('CAKE Staking')}
                 </HomepageSymbol>
               </Flex>
