@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useRouter } from 'next/router'
 import { HomePagePoolInfo } from 'pages/api/home/types'
 import styled from 'styled-components'
 import { getNetworkFullName } from 'views/BuyCrypto/constants'
@@ -28,6 +29,7 @@ const ChainText = styled(Text)`
 export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
+  const router = useRouter()
   return (
     <CardSection
       title={t('Earn Trading Fees')}
@@ -55,7 +57,12 @@ export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) =>
                   />
 
                   <VerticalLayout>
-                    <HomepageSymbol>
+                    <HomepageSymbol
+                      isCTA
+                      onClick={() => {
+                        router.push(pair.link)
+                      }}
+                    >
                       {pair.token0.symbol.toUpperCase()}/{pair.token1.symbol.toUpperCase()}
                     </HomepageSymbol>
                     <ChainText>{getNetworkFullName(pair.chainId)}</ChainText>
@@ -76,7 +83,7 @@ export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) =>
                       </Text>
                     </Box>
                   ) : (
-                    `${t('Up to')} ${(pair.apr24h * 100).toFixed(2)} APR`
+                    `${t('Up to')} ${(pair.apr24h * 100).toFixed(2)}% APR`
                   )
                 }
               />

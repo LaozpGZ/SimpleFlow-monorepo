@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId, getChainName } from '@pancakeswap/chains'
 import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
-import keyBy from 'lodash/keyBy'
 import { fetchExplorerFarmPools } from 'state/farmsV4/state/farmPools/fetcher'
+import { PoolInfo } from 'state/farmsV4/state/type'
 import { checksumAddress } from 'utils/checksumAddress'
 import { HomePagePairConfig, HomePagePoolInfo } from '../types'
 
@@ -31,31 +31,62 @@ function tokenLogo(address: `0x${string}`) {
   return `https://tokens.pancakeswap.finance/images/${address}.png`
 }
 
+function scorePools(
+  pools: PoolInfo[],
+  weights = {
+    tvlUsd: 8,
+    apr: 2,
+  },
+) {
+  const liquidityValues = pools.map((p) => Number(p.tvlUsd))
+  const aprValues = pools.map((p) => parseFloat(p.lpApr || '0'))
+
+  const minLiquidity = Math.min(...liquidityValues)
+  const maxLiquidity = Math.max(...liquidityValues)
+
+  const minApr = Math.min(...aprValues)
+  const maxApr = Math.max(...aprValues)
+
+  const normalize = (value: number, min: number, max: number) => (max === min ? 0 : (value - min) / (max - min))
+
+  return pools
+    .map((pool) => {
+      const liquidityScore = normalize(Number(pool.tvlUsd), minLiquidity, maxLiquidity)
+      const aprScore = normalize(Number(pool.lpApr), minApr, maxApr)
+      const score = liquidityScore * weights.tvlUsd + aprScore * weights.apr
+
+      return { pool, score }
+    })
+    .sort((a, b) => b.score - a.score)
+}
+
 export async function queryPools() {
   const poolsInfo = await fetchExplorerFarmPools()
-  const byIds = keyBy(poolsInfo, (x) => poolId(x.chainId, x.lpAddress.toLowerCase()))
-  const pairs = pairsConfig.map((x) => {
-    const related = byIds[poolId(x.chainId, x.id.toLowerCase())]
-    if (!related) {
-      throw new Error(`Pool not found for ${x.id}`)
-    }
+  const filtered = poolsInfo.filter((x) => x.lpApr && x.tvlUsd)
+
+  scorePools(filtered)
+  const tops = filtered.slice(0, 3)
+
+  return tops.map((p) => {
+    const chain = getChainName(p.chainId)
+    const link = `/liquidity/pool/${chain}/${p.lpAddress}`
     return {
-      id: checksumAddress(related.lpAddress),
+      id: checksumAddress(p.lpAddress),
+      link,
       token0: {
-        id: related.token0.wrapped.address,
-        symbol: related.token0.wrapped.symbol,
-        chainId: related.chainId,
-        icon: tokenLogo(related.token0.isNative ? ZERO_ADDRESS : related.token0.wrapped.address),
+        id: p.token0.wrapped.address,
+        symbol: p.token0.wrapped.symbol,
+        chainId: p.chainId,
+        icon: tokenLogo(p.token0.isNative ? ZERO_ADDRESS : p.token0.wrapped.address),
       },
       token1: {
-        id: related.token1.wrapped.address,
-        symbol: related.token1.wrapped.symbol,
-        chainId: related.chainId,
-        icon: tokenLogo(related.token1.isNative ? ZERO_ADDRESS : related.token1.wrapped.address),
+        id: p.token1.wrapped.address,
+        symbol: p.token1.wrapped.symbol,
+        chainId: p.chainId,
+        icon: tokenLogo(p.token1.isNative ? ZERO_ADDRESS : p.token1.wrapped.address),
       },
-      chainId: related.chainId,
-      apr24h: Number(related.lpApr),
+      chainId: p.chainId,
+      apr24h: Number(p.lpApr),
     } as HomePagePoolInfo
   })
-  return pairs
 }

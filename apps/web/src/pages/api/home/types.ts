@@ -55,6 +55,7 @@ export type HomePagePoolInfo = {
   token1: TokenBase
   chainId: ChainId
   apr24h: number
+  link: string
 }
 
 export type HomePageCurrency = {
