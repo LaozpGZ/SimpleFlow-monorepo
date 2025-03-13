@@ -51,6 +51,7 @@ export const HomeV2 = () => {
       </Container>
 
       <RowLayout
+        sidePadding={isMobile ? '16px' : '24px'}
         mt="24px"
         style={{
           marginTop: '24px',
@@ -61,6 +62,7 @@ export const HomeV2 = () => {
       </RowLayout>
 
       <RowLayout
+        sidePadding={isMobile ? '16px' : '24px'}
         mt="24px"
         style={{
           marginTop: '24px',

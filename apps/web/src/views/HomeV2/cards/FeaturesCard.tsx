@@ -15,7 +15,7 @@ export const FeaturesCard = () => {
 
   if (isMobile) {
     return (
-      <RowLayout style={{ marginTop: '20px' }}>
+      <RowLayout style={{ marginTop: '20px' }} sidePadding="16px">
         <CardSection title={t('Featured on PancakeSwap')}>
           <PerpetualCard tokens={tokens.filter((x) => x.symbol === 'BTC' || x.symbol === 'ETH')} />
           <PredictionCard token={tokens.find((x) => x.symbol === 'BNB')!} winner={topWinner} />
@@ -26,7 +26,7 @@ export const FeaturesCard = () => {
 
   return (
     <>
-      <RowLayout>
+      <RowLayout sidePadding="24px">
         <FeaturedText>{t('Featured on PancakeSwap')}</FeaturedText>
       </RowLayout>
       <RowLayout

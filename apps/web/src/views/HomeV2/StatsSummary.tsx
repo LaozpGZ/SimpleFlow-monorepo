@@ -19,7 +19,7 @@ const StatCard = styled(Box)<{
   isMobile?: boolean
   index: number
 }>`
-  width: ${({ isMobile }) => (isMobile ? '156px' : '210px')};
+  width: ${({ isMobile }) => (isMobile ? '152px' : '210px')};
   height: ${({ isMobile }) => (isMobile ? '110px' : '146px')};
   border-radius: ${({ isMobile }) => (isMobile ? '36px' : '48px')};
   border-top-width: 1px;
