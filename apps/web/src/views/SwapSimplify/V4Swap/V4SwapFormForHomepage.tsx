@@ -1,7 +1,6 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { SmartRouter } from '@pancakeswap/smart-router/evm'
 import { FlexGap } from '@pancakeswap/uikit'
-import { useUserSlippage } from '@pancakeswap/utils/user'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { GasTokenSelector } from 'components/Paymaster/GasTokenSelector'
 import { useCurrency } from 'hooks/Tokens'
@@ -17,7 +16,7 @@ import { useAllTypeBestTrade } from '../../Swap/V3Swap/hooks/useAllTypeBestTrade
 import { useUserInsufficientBalance } from '../hooks/useUserInsufficientBalance'
 import { ButtonAndDetailsPanel } from './ButtonAndDetailsPanel'
 import { CommitButton } from './CommitButton'
-import { FormMain } from './FormMainV4'
+import { FormMainForHomePage } from './FormMainV4ForHomePage'
 import { PricingAndSlippage } from './PricingAndSlippage'
 import { RefreshButton } from './RefreshButton'
 import { SwapCommitButton } from './SwapCommitButtonForHomepage'
@@ -106,15 +105,13 @@ export function V4SwapFormForHomePage() {
   } = useSwapState()
 
   const inputCurrency = useCurrency(inputCurrencyId)
-  const outputCurrency = useCurrency(outputCurrencyId)
 
-  const [userSlippageTolerance] = useUserSlippage()
   const { isPaymasterAvailable } = usePaymaster()
 
   return (
     <SwapUIV2.SwapFormWrapper>
       <SwapUIV2.SwapTabAndInputPanelWrapper>
-        <FormMain
+        <FormMainForHomePage
           tradeLoading={!tradeLoaded}
           inputAmount={bestOrder?.trade?.inputAmount}
           outputAmount={bestOrder?.trade?.outputAmount}

@@ -282,7 +282,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         ? t('Price Impact Too High')
         : priceImpactSeverity > 2
         ? t('Swap Anyway')
-        : t('Swap'))
+        : t('Get Started'))
     )
   }, [isExpertMode, isRecipientEmpty, isRecipientError, priceImpactSeverity, swapInputError, t, tradeLoading])
 

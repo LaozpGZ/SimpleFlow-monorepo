@@ -28,7 +28,6 @@ export default function SimpleSwapForHomePage() {
     isChartExpanded,
     isChartDisplayed,
     setIsChartDisplayed,
-    setIsChartExpanded,
     isChartSupported,
     // isHotTokenSupported,
   } = useContext(SwapFeaturesContext)
