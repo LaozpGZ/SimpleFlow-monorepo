@@ -19,13 +19,16 @@ const Wrapper = styled(Box)<{
   height: 100vh;
   overflow: auto;
 `
+const MobileContainer = styled(Box)`
+  scroll-snap-align: start;
+`
 
 export const HomeV2 = () => {
   const { tokens, chains, pools, currencies, cakeRelated } = useAtomValue(homePageDataAtom)
   const cakeToken = tokens.find((x) => x.symbol === 'CAKE')!
 
   const { isMobile } = useMatchBreakpoints()
-  const Container = isMobile ? Box : ScrollableFullScreen
+  const Container = isMobile ? MobileContainer : ScrollableFullScreen
   return (
     <Wrapper isMobile={isMobile} style={{ width: isMobile ? '100vw' : 'calc(100vw - 8px)', boxSizing: 'border-box' }}>
       <Container>

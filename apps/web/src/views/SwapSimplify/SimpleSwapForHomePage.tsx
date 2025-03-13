@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from 'react'
 import { useCurrency } from 'hooks/Tokens'
 import { useSwapHotTokenDisplay } from 'hooks/useSwapHotTokenDisplay'
 import { Field } from 'state/swap/actions'
-import { useSingleTokenSwapInfo, useSwapState } from 'state/swap/hooks'
+import { useSwapState } from 'state/swap/hooks'
 import { styled } from 'styled-components'
 import { StyledSwapContainer } from '../Swap/styles'
 import { SwapFeaturesContext } from '../Swap/SwapFeaturesContext'
@@ -57,14 +57,6 @@ export default function SimpleSwapForHomePage() {
     [Field.INPUT]: inputCurrency ?? undefined,
     [Field.OUTPUT]: outputCurrency ?? undefined,
   }
-
-  const singleTokenPrice = useSingleTokenSwapInfo(
-    inputCurrencyId,
-    inputCurrency,
-    outputCurrencyId,
-    outputCurrency,
-    isChartSupported,
-  )
 
   return (
     <Flex
