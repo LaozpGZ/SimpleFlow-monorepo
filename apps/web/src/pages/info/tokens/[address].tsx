@@ -1,12 +1,12 @@
 import { GetStaticPaths, GetStaticProps } from 'next'
-import { getTokenStaticPaths, getTokenStaticProps } from 'utils/pageUtils'
+import { getTokenStaticPaths, getTokenStaticProps, invalidAddressCheck } from 'utils/pageUtils'
 import { InfoPageLayout } from 'views/Info'
 import Token from 'views/Info/Tokens/TokenPage'
 import { Suspense } from 'react'
 import { Flex, Spinner } from '@pancakeswap/uikit'
 
 const TokenPage = ({ address }: { address: string }) => {
-  if (!address) {
+  if (invalidAddressCheck(String(address))) {
     return null
   }
 
