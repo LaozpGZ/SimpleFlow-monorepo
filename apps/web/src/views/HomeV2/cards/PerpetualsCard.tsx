@@ -88,7 +88,7 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
             text={
               !isMobile ? (
                 <LeverageText>
-                  {t(`Up to`)} {token.symbol === 'BTCUSD' ? '1001x' : '250x'} {t('leverage')}
+                  {t(`Up to`)} {token.symbol === 'BTC' ? '1001x' : '250x'} {t('leverage')}
                 </LeverageText>
               ) : (
                 <>
@@ -96,7 +96,7 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
                     {t(`Up to`)}{' '}
                   </Text>
                   <Text bold color="positive60" fontSize="14px">
-                    {token.symbol === 'BTCUSD' ? '1001x' : '250x'} {t('leverage')}
+                    {token.symbol === 'BTC' ? '1001x' : '250x'} {t('leverage')}
                   </Text>
                 </>
               )

@@ -49,7 +49,7 @@ export async function queryPools() {
       },
       token1: {
         id: related.token1.wrapped.address,
-        symbol: related.token0.wrapped.symbol,
+        symbol: related.token1.wrapped.symbol,
         chainId: related.chainId,
         icon: tokenLogo(related.token1.isNative ? ZERO_ADDRESS : related.token1.wrapped.address),
       },
