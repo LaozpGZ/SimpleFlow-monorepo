@@ -199,8 +199,6 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
       {shouldScreenWallet && <Blocklist />}
       {isShowV4IconButton && <V4CakeIcon />}
       <ZKSyncAirdropModalWithAutoPopup />
-      {/* <AffiliateExpiredModal />
-      <AffiliateSunsetModal /> */}
       <SimpleStakingSunsetModal />
       <VercelToolbar />
       <Cb1Membership />
