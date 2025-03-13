@@ -47,8 +47,15 @@ const ScrollDownArrow = styled.div`
 export const ScrollableFullScreen: React.FC<ScrollableFullScreenProps> = ({ children, headerSelector = '#menu' }) => {
   const [headerHeight, setHeaderHeight] = useState(0)
 
+  React.useEffect(() => {
+    const header = document.querySelector(headerSelector)
+    if (header) {
+      setHeaderHeight(header.clientHeight)
+    }
+  }, [headerSelector])
+
   return (
-    <FullScreenContainer offsetHeight={headerHeight}>
+    <FullScreenContainer offsetHeight={headerHeight} className="homepage-snap">
       {children}
       <ScrollDownArrow>
         <ChevronDownIcon width="32px" color="textSubtle" />

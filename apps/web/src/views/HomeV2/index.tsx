@@ -8,17 +8,9 @@ import { FeaturesCard } from './cards/FeaturesCard'
 import { RowLayout } from './component/RowLayout'
 import { ScrollableFullScreen } from './component/ScrollableFullScreen'
 import { FavoriteDEXBanner } from './FavoriteDEXBanner'
+import { useScrollToNearestSnap } from './hook/useScrollToNearestSnap'
 import { PancakeBanner } from './PancakeBanner'
 
-const Wrapper = styled(Box)<{
-  isMobile: boolean
-}>`
-  background: ${({ theme }) => theme.colors.gradientBubblegum};
-  padding-top: ${({ isMobile }) => (isMobile ? '67x' : '0')};
-  scroll-snap-type: y mandatory;
-  height: 100vh;
-  overflow: auto;
-`
 const MobileContainer = styled(Box)`
   scroll-snap-align: start;
 `
@@ -29,8 +21,11 @@ export const HomeV2 = () => {
 
   const { isMobile } = useMatchBreakpoints()
   const Container = isMobile ? MobileContainer : ScrollableFullScreen
+
+  useScrollToNearestSnap('homepage-snap')
+
   return (
-    <Wrapper isMobile={isMobile} style={{ width: isMobile ? '100vw' : 'calc(100vw - 8px)', boxSizing: 'border-box' }}>
+    <>
       <Container>
         <RowLayout>
           <FavoriteDEXBanner chains={chains} />
@@ -53,6 +48,7 @@ export const HomeV2 = () => {
       </Container>
 
       <RowLayout
+        className="homepage-snap"
         sidePadding={isMobile ? '16px' : '24px'}
         mt="24px"
         style={{
@@ -77,6 +73,8 @@ export const HomeV2 = () => {
       <FeaturesCard />
 
       <RowLayout
+        className="homepage-snap"
+        fullScreen
         sidePadding="0px"
         style={{
           marginTop: '160px',
@@ -84,6 +82,6 @@ export const HomeV2 = () => {
       >
         <PancakeBanner />
       </RowLayout>
-    </Wrapper>
+    </>
   )
 }

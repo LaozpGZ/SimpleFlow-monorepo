@@ -26,7 +26,7 @@ export const FeaturesCard = () => {
 
   return (
     <>
-      <RowLayout sidePadding="24px">
+      <RowLayout sidePadding="24px" className="homepage-snap">
         <FeaturedText>{t('Featured on PancakeSwap')}</FeaturedText>
       </RowLayout>
       <RowLayout

@@ -88,7 +88,7 @@ export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, child
     <HoverProvider>
       {(ref) => {
         return (
-          <StyledCard isMobile={isMobile}>
+          <StyledCard isMobile={isMobile} className={isMobile ? 'homepage-snap' : ''}>
             <Box ref={ref}>
               <Box style={{ padding: isMobile ? '16px 0' : '24px 0' }}>
                 <Flex justifyContent="space-between" alignItems="center">
