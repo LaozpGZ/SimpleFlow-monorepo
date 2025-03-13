@@ -53,7 +53,11 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
         <CardRowSectionButton
           alwaysShow
           link="/buy-crypto"
-          hoverText={t('Buy Crypto Now')}
+          hover={{
+            text: t('Buy Crypto Now'),
+            width: 200,
+            originalWidth: 240,
+          }}
           text={isMobile ? t('Buy Now') : t('Choose from %num% Currencies', { num: currencies.length })}
         />
       </CardRowLayout>
