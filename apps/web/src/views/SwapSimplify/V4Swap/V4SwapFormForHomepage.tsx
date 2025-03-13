@@ -20,7 +20,6 @@ import { FormMainForHomePage } from './FormMainV4ForHomePage'
 import { PricingAndSlippage } from './PricingAndSlippage'
 import { RefreshButton } from './RefreshButton'
 import { SwapCommitButton } from './SwapCommitButtonForHomepage'
-import { TradeDetails } from './TradeDetails'
 import { TradingFee } from './TradingFee'
 
 export function V4SwapFormForHomePage() {
@@ -155,8 +154,8 @@ export function V4SwapFormForHomePage() {
             <TradingFee loaded={tradeLoaded} order={bestOrder} />
           </FlexGap>
         }
-        tradeDetails={<TradeDetails loaded={tradeLoaded} order={bestOrder} />}
-        shouldRenderDetails={Boolean(executionPrice) && Boolean(bestOrder) && !isWrapping && !tradeError}
+        tradeDetails={null}
+        shouldRenderDetails={false}
         gasTokenSelector={
           isPaymasterAvailable && <GasTokenSelector mt="8px" inputCurrency={inputCurrency || undefined} />
         }

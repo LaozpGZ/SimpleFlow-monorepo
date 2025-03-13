@@ -1,5 +1,5 @@
 import { Currency } from '@pancakeswap/swap-sdk-core'
-import { AutoColumn, Box, Button, Dots, Message, MessageText, Text, useModal } from '@pancakeswap/uikit'
+import { AutoColumn, Box, Button, Message, MessageText, Text, useModal } from '@pancakeswap/uikit'
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useTranslation } from '@pancakeswap/localization'
@@ -273,17 +273,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   }, [indirectlyOpenConfirmModalState, openConfirmSwapModal])
 
   const buttonText = useMemo(() => {
-    if (isRecipientEmpty) return t('Enter a recipient')
-    if (isRecipientError) return t('Invalid recipient')
-    return (
-      swapInputError ||
-      (tradeLoading && <Dots>{t('Searching For The Best Price')}</Dots>) ||
-      (priceImpactSeverity > 3 && !isExpertMode
-        ? t('Price Impact Too High')
-        : priceImpactSeverity > 2
-        ? t('Swap Anyway')
-        : t('Get Started'))
-    )
+    return t('Get Started')
   }, [isExpertMode, isRecipientEmpty, isRecipientError, priceImpactSeverity, swapInputError, t, tradeLoading])
 
   if (noRoute && userHasSpecifiedInputOutput && (hasNoValidRouteError || !tradeLoading)) {
@@ -297,7 +287,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         width="100%"
         data-dd-action-name="Swap commit button"
         variant={isValid && priceImpactSeverity > 2 && !errorMessage ? 'danger' : 'primary'}
-        disabled={disabled}
         onClick={handleSwap}
       >
         {buttonText}
