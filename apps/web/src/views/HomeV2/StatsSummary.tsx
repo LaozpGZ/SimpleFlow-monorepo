@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import React from 'react'
+import CountUp from 'react-countup'
 import styled from 'styled-components'
 
 export type SiteStats = {
@@ -79,7 +80,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
           {t('All Time Traders')}
         </Title>
         <Value textColor="primary60" isMobile={isMobile}>
-          ~{formatAmount(stats.allTimeTraders)}
+          $<CountUpAnimation num={stats.allTimeTraders} />
         </Value>
       </StatCard>
 
@@ -88,7 +89,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
           {t('All Time TV')}
         </Title>
         <Value textColor="secondary" isMobile={isMobile}>
-          ${formatAmount(stats.allTimeTv)}
+          $<CountUpAnimation num={stats.allTimeTv} />
         </Value>
       </StatCard>
 
@@ -97,7 +98,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
           {t('All Time LP Fees')}
         </Title>
         <Value textColor="blue60" isMobile={isMobile}>
-          ${formatAmount(stats.allTimeLPFees)}
+          $<CountUpAnimation num={stats.allTimeLPFees} />
         </Value>
       </StatCard>
 
@@ -112,9 +113,21 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
           {t('Community')}
         </Title>
         <Value textColor="destructive60" isMobile={isMobile}>
-          {formatAmount(stats.community)}
+          <CountUpAnimation num={stats.community} />
         </Value>
       </StatCard>
     </Flex>
   )
+}
+
+const CountUpAnimation = ({ num }: { num: number }) => {
+  return <CountUp delay={1.5} end={num} duration={2} separator="," formattingFn={formatFunction} />
+}
+
+const formatFunction = (num: number) => {
+  return (
+    formatAmount(num, {
+      precision: 1,
+    }) || ''
+  ).replace('.0', '')
 }

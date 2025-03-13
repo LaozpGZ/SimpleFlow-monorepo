@@ -23,6 +23,7 @@ const StyledRowLayout = styled(Box)<{
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  scroll-snap-align: start;
 
   ${({ isMobile, sidePadding }) =>
     isMobile &&
@@ -30,7 +31,6 @@ const StyledRowLayout = styled(Box)<{
     padding-left: ${sidePadding};
     padding-right: ${sidePadding};
   `}
-
   & > div {
     flex: 1;
     ${({ isMobile }) => isMobile && 'width: 100%;'}/* Cards take full width in mobile */

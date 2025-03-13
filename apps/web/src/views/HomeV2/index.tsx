@@ -15,6 +15,9 @@ const Wrapper = styled(Box)<{
 }>`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
   padding-top: ${({ isMobile }) => (isMobile ? '67x' : '0')};
+  scroll-snap-type: y mandatory;
+  height: 100vh;
+  overflow: auto;
 `
 
 export const HomeV2 = () => {
@@ -24,10 +27,7 @@ export const HomeV2 = () => {
   const { isMobile } = useMatchBreakpoints()
   const Container = isMobile ? Box : ScrollableFullScreen
   return (
-    <Wrapper
-      isMobile={isMobile}
-      style={{ width: isMobile ? '100vw' : 'calc(100vw - 8px)', overflow: 'hidden', boxSizing: 'border-box' }}
-    >
+    <Wrapper isMobile={isMobile} style={{ width: isMobile ? '100vw' : 'calc(100vw - 8px)', boxSizing: 'border-box' }}>
       <Container>
         <RowLayout>
           <FavoriteDEXBanner chains={chains} />

@@ -1,5 +1,5 @@
 import { ChevronDownIcon } from '@pancakeswap/uikit'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 
 interface ScrollableFullScreenProps {
@@ -8,6 +8,7 @@ interface ScrollableFullScreenProps {
 }
 
 const FullScreenContainer = styled.div<{ offsetHeight: number }>`
+  scroll-snap-align: start;
   height: calc(100vh - ${({ offsetHeight }) => offsetHeight}px);
   width: 100%;
   overflow: hidden;
@@ -46,57 +47,10 @@ const ScrollDownArrow = styled.div`
 export const ScrollableFullScreen: React.FC<ScrollableFullScreenProps> = ({ children, headerSelector = '#menu' }) => {
   const [headerHeight, setHeaderHeight] = useState(0)
 
-  const updateHeaderHeight = useCallback(() => {
-    const header = document.querySelector(headerSelector)
-    setHeaderHeight(header?.clientHeight || 0)
-  }, [headerSelector])
-
-  const scrollToNextScreen = useCallback(() => {
-    window.scrollTo({ top: window.innerHeight - headerHeight, behavior: 'smooth' })
-  }, [headerHeight])
-
-  useEffect(() => {
-    updateHeaderHeight()
-    window.addEventListener('resize', updateHeaderHeight)
-
-    let startY = 0
-    let scrolled = false
-
-    const handleWheel = (event: WheelEvent) => {
-      if (event.deltaY > 10 && !scrolled) {
-        scrollToNextScreen()
-        scrolled = true
-      }
-    }
-
-    const handleTouchStart = (event: TouchEvent) => {
-      startY = event.touches[0].clientY
-    }
-
-    const handleTouchMove = (event: TouchEvent) => {
-      const currentY = event.touches[0].clientY
-      if (startY - currentY > 30 && !scrolled) {
-        scrollToNextScreen()
-        scrolled = true
-      }
-    }
-
-    window.addEventListener('wheel', handleWheel)
-    window.addEventListener('touchstart', handleTouchStart)
-    window.addEventListener('touchmove', handleTouchMove)
-
-    return () => {
-      window.removeEventListener('wheel', handleWheel)
-      window.removeEventListener('touchstart', handleTouchStart)
-      window.removeEventListener('touchmove', handleTouchMove)
-      window.removeEventListener('resize', updateHeaderHeight)
-    }
-  }, [scrollToNextScreen, updateHeaderHeight])
-
   return (
     <FullScreenContainer offsetHeight={headerHeight}>
       {children}
-      <ScrollDownArrow onClick={scrollToNextScreen}>
+      <ScrollDownArrow>
         <ChevronDownIcon width="32px" color="textSubtle" />
       </ScrollDownArrow>
     </FullScreenContainer>
