@@ -59,7 +59,6 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading, i
   // }
 
   useDefaults()
-  console.log('FormMainForHomePage.tsx: loadedUrlParams:', loadedUrlParams)
   const handleTypeInput = useCallback((value: string) => onUserInput(Field.INPUT, value), [onUserInput])
   const handleTypeOutput = useCallback((value: string) => onUserInput(Field.OUTPUT, value), [onUserInput])
 

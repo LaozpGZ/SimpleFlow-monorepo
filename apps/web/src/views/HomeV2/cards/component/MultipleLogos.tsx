@@ -27,6 +27,66 @@ const ImageContainer = styled.div<{
   &:first-child {
     margin-top: ${isFirstSmall ? '-12px' : '0'};
   }
+
+`
+})
+
+const ImageContainerExpandable = styled.div<{
+  gap: number
+  isFirstSmall: boolean
+  size: number
+  index: number
+  isActive?: boolean
+  isMobile?: boolean
+}>(({ gap, isFirstSmall, size, isActive, isMobile }) => {
+  return `
+  position: relative;
+  width: ${isActive ? size * 2 : size}px;
+  height: ${size}px;
+  transition: all 0.3s;
+  &:not(:first-child) {
+    margin-left: ${gap}px;
+  }
+
+  &:first-child {
+    margin-top: ${isFirstSmall ? '-12px' : '0'};
+  }
+
+  &:hover {
+    width: ${isMobile ? 'auto' : '120px'};
+  }
+
+  &:hover ${OverlapLogo} {
+    opacity: 0;
+  }
+
+  &:hover ${ExpandLogo} {
+    opacity: 1;
+    z-index: 2;
+  }
+`
+})
+
+const ImageContainerExpandableMobile = styled.div<{
+  gap: number
+  isFirstSmall: boolean
+  size: number
+  index: number
+  isActive?: boolean
+  isMobile?: boolean
+}>(({ gap, isFirstSmall, size, isActive }) => {
+  return `
+  position: relative;
+  width: ${isActive ? size * 2 : size}px;
+  height: ${size}px;
+  transition: all 0.3s;
+  &:not(:first-child) {
+    margin-left: ${gap}px;
+  }
+
+  &:first-child {
+    margin-top: ${isFirstSmall ? '-12px' : '0'};
+  }
 `
 })
 
@@ -61,7 +121,8 @@ const ExpandLogo = styled.img<{
   index: number
   borderRadius: string
   isActive: boolean
-}>(({ size, isFirstSmall, index, borderRadius, isActive }) => {
+  isMobile: boolean
+}>(({ size, isFirstSmall, isMobile, index, isActive }) => {
   const logoSize = isFirstSmall && index === 0 ? '20px' : `${size}px`
 
   return `
@@ -69,15 +130,19 @@ const ExpandLogo = styled.img<{
     top: 0;
     left: 0;
     transition: all 0.3s;
-    width: ${logoSize};
+    width: ${isMobile ? logoSize : 'auto'};
+    height: ${!isMobile ? `${logoSize} !important` : 'auto'};
+    max-width: none !important;
+    max-height: none !important;
     opacity: ${isActive ? 1 : 0};
     transition: all 0.3s;
     transform: scale(${isActive ? 2 : 1});
-    transform-origin: top left;
+    transform-origin: ${isMobile ? 'top left' : 'center'};
     will-change: transform;
     height: auto;
     flex-shrink: 0;
     border-radius: '16px';
+    z-index: 2;
   `
 })
 
@@ -154,10 +219,16 @@ export const MultipleLogos = ({
       {displayedLogos.map((logo, index) => {
         const active = isMobile && index === expandIndex
         const expandIcon = clickExpand?.logos[index]
+        const Container = clickExpand
+          ? isMobile
+            ? ImageContainerExpandableMobile
+            : ImageContainerExpandable
+          : ImageContainer
         return (
-          <ImageContainer
+          <Container
             isActive={active}
             size={size}
+            isMobile={isMobile}
             index={index}
             gap={gap}
             isFirstSmall={isFirstSmall && isMobile}
@@ -165,6 +236,7 @@ export const MultipleLogos = ({
           >
             <OverlapLogo
               onClick={() => {
+                console.log('set expand', index)
                 if (!isMobile || !clickExpand) {
                   return
                 }
@@ -181,6 +253,7 @@ export const MultipleLogos = ({
             />
             {expandIcon && (
               <ExpandLogo
+                isMobile={isMobile}
                 onClick={() => {
                   if (!isMobile || !clickExpand) {
                     return
@@ -197,7 +270,7 @@ export const MultipleLogos = ({
                 borderRadius={borderRadius || '50%'}
               />
             )}
-          </ImageContainer>
+          </Container>
         )
       })}
       {hiddenCount > 0 && (

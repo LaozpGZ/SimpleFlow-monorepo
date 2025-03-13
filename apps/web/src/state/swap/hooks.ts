@@ -266,7 +266,6 @@ export function useDefaultsFromURLSearch():
       native.symbol,
       CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address,
     )
-    console.log('parsed', parsed)
 
     dispatch(
       replaceSwapState({

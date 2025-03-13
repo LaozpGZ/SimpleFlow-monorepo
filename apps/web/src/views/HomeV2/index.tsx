@@ -38,6 +38,8 @@ export const HomeV2 = () => {
             <MotionBox
               style={{
                 willChange: 'transform',
+                flexShrink: 0,
+                flex: 1,
               }}
               initial={{ opacity: 0, scale: 0.85, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}

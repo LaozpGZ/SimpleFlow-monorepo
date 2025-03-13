@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { domAnimation, Flex, LazyAnimatePresence, MotionBox, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, domAnimation, Flex, LazyAnimatePresence, MotionBox, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { HomepageChain } from 'pages/api/home/types'
 import React from 'react'
 import styled from 'styled-components'
@@ -72,16 +72,24 @@ export const FavoriteDEXBanner: React.FC<FavoriteDEXBannerProps> = ({ chains }) 
         <DescriptionText isMobile={isMobile}>
           {t('Trade Crypto Instantly Across %count%+ Chains', { count: chains.length })}
         </DescriptionText>
-        <Flex alignItems="center" justifyContent={isMobile ? 'center' : 'flex-start'}>
-          <MultipleLogos
-            clickExpand={{
-              logos: chains.map((x) => x.logoM),
-            }}
-            borderRadius="12px"
-            gap={isMobile ? -8 : 20}
-            logos={chains.map((x) => x.logo)}
-            maxDisplay={20}
-          />
+        <Flex
+          alignItems="center"
+          justifyContent={isMobile ? 'center' : 'flex-start'}
+          style={{
+            position: 'relative',
+          }}
+        >
+          <Box>
+            <MultipleLogos
+              clickExpand={{
+                logos: isMobile ? chains.map((x) => x.logoM) : chains.map((x) => x.logoL),
+              }}
+              borderRadius="12px"
+              gap={isMobile ? -8 : 20}
+              logos={chains.map((x) => x.logo)}
+              maxDisplay={20}
+            />
+          </Box>
         </Flex>
       </Wrapper>
     </LazyAnimatePresence>
