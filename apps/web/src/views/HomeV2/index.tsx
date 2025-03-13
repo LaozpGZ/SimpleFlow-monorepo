@@ -33,6 +33,9 @@ export const HomeV2 = () => {
           <FavoriteDEXBanner chains={chains} />
           <LazyAnimatePresence features={domAnimation}>
             <MotionBox
+              style={{
+                willChange: 'transform',
+              }}
               initial={{ opacity: 0, scale: 0.85, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.85, y: 30 }}
