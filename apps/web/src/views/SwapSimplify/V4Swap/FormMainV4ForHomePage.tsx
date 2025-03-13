@@ -3,18 +3,23 @@ import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
 import { Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
-import { ReactNode, useCallback, useMemo } from 'react'
+import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { useCurrency } from 'hooks/Tokens'
-import { Field } from 'state/swap/actions'
+import { Field, replaceSwapState } from 'state/swap/actions'
 import { useDefaultsFromURLSearch, useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { currencyId } from 'utils/currencyId'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import useNativeCurrency from 'hooks/useNativeCurrency'
+import { useAtom } from 'jotai'
+import { useRouter } from 'next/router'
+import { swapReducerAtom } from 'state/swap/reducer'
 import { useAccount } from 'wagmi'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
@@ -48,6 +53,13 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading, i
   const [inputBalance] = useCurrencyBalances(account, [inputCurrency, outputCurrency])
   const maxAmountInput = useMemo(() => maxAmountSpend(inputBalance), [inputBalance])
   const loadedUrlParams = useDefaultsFromURLSearch()
+  // const loadedUrlParams = {
+  //   inputCurrencyId: 'BNB',
+  //   outputCurrencyId: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+  // }
+
+  useDefaults()
+  console.log('FormMainForHomePage.tsx: loadedUrlParams:', loadedUrlParams)
   const handleTypeInput = useCallback((value: string) => onUserInput(Field.INPUT, value), [onUserInput])
   const handleTypeOutput = useCallback((value: string) => onUserInput(Field.OUTPUT, value), [onUserInput])
 
@@ -163,4 +175,31 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading, i
       <Recipient />
     </FormContainer>
   )
+}
+
+function useDefaults(): { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined {
+  const { chainId } = useActiveChainId()
+  const [, dispatch] = useAtom(swapReducerAtom)
+  const native = useNativeCurrency()
+  const { query, isReady } = useRouter()
+  const [result, setResult] = useState<
+    { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
+  >()
+
+  useEffect(() => {
+    if (!chainId || !native || !isReady) return
+
+    dispatch(
+      replaceSwapState({
+        typedValue: '',
+        field: Field.INPUT,
+        inputCurrencyId: 'BNB',
+        outputCurrencyId: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+        recipient: null,
+      }),
+    )
+    setResult({ inputCurrencyId: 'BNB', outputCurrencyId: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82' })
+  }, [dispatch, chainId, query, native, isReady])
+
+  return result
 }
