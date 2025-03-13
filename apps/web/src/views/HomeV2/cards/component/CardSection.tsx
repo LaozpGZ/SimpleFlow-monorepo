@@ -10,7 +10,7 @@ const StyledCard = styled(Card)<{ isMobile: boolean }>`
   background: ${({ theme }) => theme.colors.card};
   max-width: ${({ isMobile }) => (isMobile ? '100%' : '588px')};
   cursor: pointer;
-  padding: ${({ isMobile }) => (isMobile ? '16px' : '0px 32px 20px 32px')};
+  padding: ${({ isMobile }) => (isMobile ? '16px' : '0px 0px 20px 0px')};
   transition: transform 0.5s ease, box-shadow 0.5s ease;
 
   &:hover {
@@ -42,6 +42,7 @@ const Title = styled(Text)<{ isMobile: boolean; isFrameless: boolean }>`
   font-size: ${({ isMobile, isFrameless }) => (isMobile ? (isFrameless ? '16px' : '20px') : '32px')};
   line-height: ${({ isMobile }) => (isMobile ? '30px' : '38.4px')};
   letter-spacing: -0.16px;
+  padding: ${({ isMobile }) => (isMobile ? '0 0px' : '0 32px')};
   color: ${({ theme }) => theme.colors.text};
 `
 
@@ -59,6 +60,7 @@ const Subtitle = styled(Text)<{ isMobile: boolean }>`
   font-weight: 600;
   font-size: ${({ isMobile }) => (isMobile ? '16px' : '20px')};
   line-height: ${({ isMobile }) => (isMobile ? '24px' : '30px')};
+  padding: ${({ isMobile }) => (isMobile ? '0 0px' : '0 32px')};
   letter-spacing: -1%;
   color: ${({ theme }) => theme.colors.textSubtle};
 `
@@ -69,7 +71,7 @@ export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, child
   if (isFrameLess) {
     return (
       <FramelessCard isMobile={isMobile}>
-        <Box style={{ padding: isMobile ? '16px 0' : '24px 0' }}>
+        <Box style={{ padding: isMobile ? '0px 0' : '24px 0' }}>
           <Flex justifyContent="space-between" alignItems="center">
             <Box>
               <FramelessTitle isMobile={isMobile} isFrameless>

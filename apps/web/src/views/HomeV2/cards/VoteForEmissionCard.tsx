@@ -42,6 +42,9 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
   return (
     <CardSection title={t('Vote for CAKE Emissions')} subtitle={t('on over 600+ Pools')}>
       <CardRowLayout
+        onClick={() => {
+          router.push('/cake-staking')
+        }}
         left={
           !isMobile ? (
             <>
@@ -51,15 +54,7 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
                 size="24px"
               />
               <Flex flexDirection="column">
-                <HomepageSymbol
-                  isCTA
-                  onClick={() => {
-                    router.push('/cake-staking')
-                  }}
-                  fontSize="16px"
-                >
-                  {t('CAKE Staking')}
-                </HomepageSymbol>
+                <HomepageSymbol fontSize="16px">{t('CAKE Staking')}</HomepageSymbol>
                 <StyledSubtitle>
                   {t('%burned% BURN • $%marketCap% MKT. CAP', {
                     burned: formatNumber(figures.burned),
@@ -76,14 +71,7 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
                   currency={{ address: cakeToken.id, chainId: cakeToken.chainId, isToken: true }}
                   size="24px"
                 />
-                <HomepageSymbol
-                  onClick={() => {
-                    router.push('/gauges-voting')
-                  }}
-                  isCTA
-                  fontSize="16px"
-                  lineHeight="24px"
-                >
+                <HomepageSymbol fontSize="16px" lineHeight="24px">
                   {t('CAKE Staking')}
                 </HomepageSymbol>
               </Flex>
@@ -123,6 +111,9 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
       </CardRowLayout>
 
       <CardRowLayout
+        onClick={() => {
+          router.push('/gauges-voting')
+        }}
         left={
           !isMobile ? (
             <>

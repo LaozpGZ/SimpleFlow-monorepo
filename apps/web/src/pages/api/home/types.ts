@@ -55,6 +55,7 @@ export type HomePagePoolInfo = {
   token1: TokenBase
   chainId: ChainId
   apr24h: number
+  protocol: string
   link: string
 }
 

@@ -73,6 +73,7 @@ export async function queryPools() {
     return {
       id: checksumAddress(p.lpAddress),
       link,
+      protocol: p.protocol,
       token0: {
         id: p.token0.wrapped.address,
         symbol: p.token0.wrapped.symbol,

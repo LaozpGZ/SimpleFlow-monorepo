@@ -39,7 +39,7 @@ const StyledButton = styled(Button)<{ isMobile: boolean; show: boolean }>`
   transition: opacity 1s;
   opacity: ${({ show }) => (show ? 1 : 0)};
   width: 66;
-  height: 40;
+  height: 40px;
   padding-right: 16px;
   padding-left: 16px;
   border-radius: 999px;

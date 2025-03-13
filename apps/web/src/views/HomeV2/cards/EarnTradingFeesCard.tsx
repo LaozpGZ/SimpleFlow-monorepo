@@ -40,6 +40,9 @@ export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) =>
         {pairs.map((pair, index) => {
           return (
             <CardRowLayout
+              onClick={() => {
+                router.push(pair.link)
+              }}
               key={`${pair.token0}-${pair.token1}`}
               left={
                 <Flex alignItems="center">
@@ -57,12 +60,7 @@ export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) =>
                   />
 
                   <VerticalLayout>
-                    <HomepageSymbol
-                      isCTA
-                      onClick={() => {
-                        router.push(pair.link)
-                      }}
-                    >
+                    <HomepageSymbol>
                       {pair.token0.symbol.toUpperCase()}/{pair.token1.symbol.toUpperCase()}
                     </HomepageSymbol>
                     <ChainText>{getNetworkFullName(pair.chainId)}</ChainText>

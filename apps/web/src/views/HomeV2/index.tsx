@@ -27,7 +27,7 @@ export const HomeV2 = () => {
   return (
     <>
       <Container>
-        <RowLayout>
+        <RowLayout sidePadding="0">
           <FavoriteDEXBanner chains={chains} />
           <LazyAnimatePresence features={domAnimation}>
             <MotionBox
