@@ -97,7 +97,7 @@ const OverlapLogo = styled.img<{
   index: number
   borderRadius: string
   isActive: boolean
-}>(({ gap, size, isFirstSmall, index, borderRadius, isActive }) => {
+}>(({ gap, size, isFirstSmall, index, borderRadius, isActive, theme }) => {
   const logoSize = isFirstSmall && index === 0 ? '20px' : `${size}px`
 
   return `
@@ -109,7 +109,7 @@ const OverlapLogo = styled.img<{
     opacity: ${isActive ? 1 : 0};
     height: auto;
     flex-shrink: 0;
-    border: ${gap < 0 && !isFirstSmall ? '2px solid white' : 'none'};
+    border: ${gap < 0 ? `3px solid ${theme.colors.card}` : 'none'};
     border-radius: ${borderRadius};
   `
 })
@@ -151,7 +151,7 @@ const ExtraCount = styled(Box)<{ gap: number; size: number; borderRadius: string
   width: ${({ size }) => `${size}px`};
   height: ${({ size }) => `${size}px`};
   flex-shrink: 0;
-  border: ${({ gap }) => (gap < 0 ? '2px solid white' : 'none')};
+  border: ${({ theme, gap }) => `${gap < 0 ? `3px solid ${theme.colors.card}` : 'none'}`};
   margin-left: ${({ gap }) => `${gap}px`};
   border-radius: ${({ borderRadius }) => borderRadius};
   background-color: ${({ theme }) => theme.colors.secondary10};
