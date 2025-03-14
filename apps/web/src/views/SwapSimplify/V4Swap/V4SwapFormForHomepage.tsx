@@ -1,8 +1,6 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { SmartRouter } from '@pancakeswap/smart-router/evm'
-import { FlexGap } from '@pancakeswap/uikit'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
-import { GasTokenSelector } from 'components/Paymaster/GasTokenSelector'
 import { useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
@@ -16,10 +14,7 @@ import { useUserInsufficientBalance } from '../hooks/useUserInsufficientBalance'
 import { ButtonAndDetailsPanel } from './ButtonAndDetailsPanel'
 import { CommitButton } from './CommitButton'
 import { FormMainForHomePage } from './FormMainV4ForHomePage'
-import { PricingAndSlippage } from './PricingAndSlippage'
-import { RefreshButton } from './RefreshButton'
 import { SwapCommitButton } from './SwapCommitButtonForHomepage'
-import { TradingFee } from './TradingFee'
 
 export function V4SwapFormForHomePage() {
   const {
@@ -125,41 +120,10 @@ export function V4SwapFormForHomePage() {
         swapCommitButton={
           <SwapCommitButton order={bestOrder} tradeLoading={!tradeLoaded} tradeError={tradeError} {...commitHooks} />
         }
-        pricingAndSlippage={
-          <FlexGap
-            alignItems="center"
-            flexWrap="wrap"
-            justifyContent="space-between"
-            width="calc(100% - 20px)"
-            gap="8px"
-          >
-            <FlexGap
-              onClick={(e) => {
-                e.stopPropagation()
-              }}
-              alignItems="center"
-              flexWrap="wrap"
-            >
-              <RefreshButton
-                onRefresh={refreshOrder}
-                refreshDisabled={refreshDisabled}
-                chainId={activeChianId}
-                loading={!tradeLoaded}
-              />
-              <PricingAndSlippage
-                priceLoading={!tradeLoaded}
-                price={executionPrice ?? undefined}
-                showSlippage={false}
-              />
-            </FlexGap>
-            <TradingFee loaded={tradeLoaded} order={bestOrder} />
-          </FlexGap>
-        }
+        pricingAndSlippage={null}
         tradeDetails={null}
         shouldRenderDetails={false}
-        gasTokenSelector={
-          isPaymasterAvailable && <GasTokenSelector mt="8px" inputCurrency={inputCurrency || undefined} />
-        }
+        gasTokenSelector={null}
       />
     </SwapUIV2.SwapFormWrapper>
   )

@@ -25,8 +25,7 @@ import { swapReducerAtom } from 'state/swap/reducer'
 import { useAccount } from 'wagmi'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
-import { AssignRecipientButton, FlipButton } from './FlipButton'
-import { Recipient } from './Recipient'
+import { FlipButton } from './FlipButton'
 
 interface Props {
   inputAmount?: CurrencyAmount<Currency>
@@ -181,8 +180,6 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading, i
             </Text>
           }
         />
-        <AssignRecipientButton />
-        <Recipient />
       </Column>
     </SwapUIV2.InputPanelWrapper>
   )
