@@ -1,9 +1,9 @@
+import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import styled from 'styled-components'
-import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { MultipleLogos } from './MultipleLogos'
 
-const getChainDimension = (isMobile: boolean, isTablet: boolean) => {
+const getChainDimension = (isMobile?: boolean, isTablet?: boolean) => {
   // Minimal layout adjustment for tablet
   if (isMobile) return '8px'
   if (isTablet) return '10px'
