@@ -20,7 +20,7 @@ const getBorderRadius = (isMobile: boolean, isTablet: boolean) => {
   return '999px'
 }
 
-const Badge = styled(Flex)<{ isMobile: boolean; isTablet: boolean; isHover: boolean }>`
+const Badge = styled(Flex)<{ isMobile: boolean; isTablet: boolean; isHover: boolean; isPositive: boolean }>`
   height: 40px;
   padding: 4px ${({ isMobile, isTablet }) => getPadding(isMobile, isTablet)}px;
   border-radius: ${({ isMobile, isTablet }) => getBorderRadius(isMobile, isTablet)};
@@ -28,7 +28,7 @@ const Badge = styled(Flex)<{ isMobile: boolean; isTablet: boolean; isHover: bool
   border-width: 2px;
   transition: border-width 0.5s;
   border-style: solid;
-  background: ${({ theme }) => theme.colors.positive10};
+  background: ${({ theme, isPositive }) => (isPositive ? theme.colors.positive10 : theme.colors.destructive10)};
   display: flex;
   align-items: center;
   text-align: right;
@@ -52,17 +52,17 @@ const Percent = styled(Text)`
 
 export const HomepageCardBadge: React.FC<HomepageCardBadgeProps> = ({ text, priceChange }) => {
   const theme = useTheme()
-  const positive = (priceChange ?? 0) >= 0
   const { isMobile, isTablet } = useMatchBreakpoints()
   const isHover = useHoverContext()
+  const isPositive = !priceChange || priceChange >= 0
 
   return (
-    <Badge isMobile={isMobile} isTablet={isTablet} isHover={isHover}>
+    <Badge isMobile={isMobile} isTablet={isTablet} isHover={isHover} isPositive={isPositive}>
       <Box>
         {typeof text !== 'string' ? (
           text
         ) : (
-          <Text bold color={positive ? theme.colors.positive60 : theme.colors.destructive60} mr="4px">
+          <Text bold color={isPositive ? theme.colors.positive60 : theme.colors.destructive} mr="4px">
             {text}
           </Text>
         )}
