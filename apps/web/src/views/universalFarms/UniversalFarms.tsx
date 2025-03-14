@@ -1,7 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, Card, Tab, TabMenu, Text } from '@pancakeswap/uikit'
+import { AddIcon, Button, Card, FlexGap, Tab, TabMenu, Text } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import Page from 'components/Layout/Page'
+import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { PropsWithChildren, useMemo } from 'react'
 import styled from 'styled-components'
@@ -13,6 +14,17 @@ const StyledTab = styled(Tab)`
   padding: 0;
   & > a {
     padding: 8px;
+  }
+`
+
+const ButtonContainer = styled.div`
+  @media (max-width: 967px) {
+    width: 100%;
+
+    button {
+      width: 50%;
+      height: 50px;
+    }
   }
 `
 
@@ -98,9 +110,18 @@ export const UniversalFarms: React.FC<PropsWithChildren> = () => {
     <>
       <PoolsBanner additionLink={<LegacyPage />} />
       <Page>
-        <TabMenu gap="8px" activeIndex={tabIdx} isShowBorderBottom={false}>
-          {Object.values(tabsConfig).map(({ menu }) => menu())}
-        </TabMenu>
+        <FlexGap alignItems="center" justifyContent="space-between">
+          <TabMenu gap="8px" activeIndex={tabIdx} isShowBorderBottom={false}>
+            {Object.values(tabsConfig).map(({ menu }) => menu())}
+          </TabMenu>
+          <ButtonContainer>
+            <NextLink href="/add">
+              <Button endIcon={<AddIcon color="invertedContrast" />} scale="md" mb="12px">
+                {t('Add Liquidity')}
+              </Button>
+            </NextLink>
+          </ButtonContainer>
+        </FlexGap>
         {tabsConfig[tabIdx].page()}
       </Page>
     </>

@@ -1,7 +1,6 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  AddIcon,
   Button,
   ButtonMenu,
   ButtonMenuItem,
@@ -41,28 +40,28 @@ import {
 import styled from 'styled-components'
 import { useAccount } from 'wagmi'
 
+import { useIntersectionObserver } from '@pancakeswap/hooks'
 import { Currency } from '@pancakeswap/swap-sdk-core'
 import { getTokenByAddress } from '@pancakeswap/tokens'
 import { Pool } from '@pancakeswap/v3-sdk'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+import { V3_MIGRATION_SUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { usePoolsWithMultiChains } from 'hooks/v3/usePools'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
-import { V3_MIGRATION_SUPPORTED_CHAINS } from 'config/constants/supportChains'
-import { useIntersectionObserver } from '@pancakeswap/hooks'
-import ConnectWalletButton from 'components/ConnectWalletButton'
 import {
   Card,
   IPoolsFilterPanelProps,
   PoolsFilterPanel,
+  PositionItemSkeleton,
   StablePositionItem,
   CardBody as StyledCardBody,
   CardHeader as StyledCardHeader,
   useSelectedPoolTypes,
   V2PositionItem,
   V3PositionItem,
-  PositionItemSkeleton,
 } from './components'
+import { useFilterToQueries, V3_STATUS } from './hooks/useFilterToQueries'
 import { MAINNET_CHAINS } from './hooks/useMultiChains'
-import { V3_STATUS, useFilterToQueries } from './hooks/useFilterToQueries'
 
 const ToggleWrapper = styled.div`
   display: inline-flex;
@@ -117,17 +116,6 @@ const SubPanel = styled(Flex)`
   border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
   margin: 24px -24px 0;
-`
-
-const ButtonContainer = styled.div`
-  @media (max-width: 967px) {
-    width: 100%;
-
-    button {
-      width: 50%;
-      height: 50px;
-    }
-  }
 `
 
 const getPoolStatus = (pos: PositionDetail, pool: Pool | null) => {
@@ -515,13 +503,6 @@ export const PositionPage = () => {
             <ButtonMenuItem>{t('Inactive')}</ButtonMenuItem>
             <ButtonMenuItem>{t('Closed')}</ButtonMenuItem>
           </StyledButtonMenu>
-          <ButtonContainer>
-            <NextLink href="/add">
-              <Button endIcon={<AddIcon color="invertedContrast" />} scale="sm">
-                {t('Add Liquidity')}
-              </Button>
-            </NextLink>
-          </ButtonContainer>
         </SubPanel>
       </CardHeader>
       <CardBody>
