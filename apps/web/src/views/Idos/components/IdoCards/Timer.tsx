@@ -1,3 +1,4 @@
+import { useCountdown } from '@pancakeswap/hooks'
 import { IfoStatus } from '@pancakeswap/ifos'
 import { useTranslation } from '@pancakeswap/localization'
 import { Flex, Skeleton, Text } from '@pancakeswap/uikit'
@@ -22,16 +23,7 @@ const USE_BLOCK_TIMESTAMP_UNTIL = 3
 export const SoonTimer: React.FC<React.PropsWithChildren<Props>> = ({ startTime, ifoStatus, plannedStartTime }) => {
   const { theme } = useTheme()
   const { t } = useTranslation()
-
-  const now = Math.floor(Date.now() / 1000)
-  const hoursLeft = plannedStartTime && now ? (plannedStartTime - Number(now)) / 3600 : 0
-  const fallbackToBlockTimestamp = hoursLeft > USE_BLOCK_TIMESTAMP_UNTIL
-  let timeUntil: ReturnType<typeof getTimePeriods> | undefined
-  if (fallbackToBlockTimestamp) {
-    timeUntil = getTimePeriods((plannedStartTime || Number(now)) - Number(now))
-  } else {
-    timeUntil = getTimePeriods(startTime - now)
-  }
+  const { days, hours, minutes, seconds } = useCountdown(startTime) ?? { days: 0, hours: 0, minutes: 0, seconds: 0 }
   const textColor = theme.colors.secondary
 
   const countdownDisplay =
@@ -42,21 +34,25 @@ export const SoonTimer: React.FC<React.PropsWithChildren<Props>> = ({ startTime,
             {t('Starts in')}:
           </Text>
           <FlexGap gap="4px" alignItems="baseline">
-            {timeUntil.days ? (
+            {days ? (
               <Text fontSize="20px" bold color={textColor}>
-                {timeUntil.days}
+                {days}
                 {t('d')} :
               </Text>
             ) : null}
-            {timeUntil.days || timeUntil.hours ? (
+            {hours ? (
               <Text fontSize="20px" bold color={textColor}>
-                {timeUntil.hours}
+                {hours}
                 {t('h')} :
               </Text>
             ) : null}
             <Text fontSize="20px" bold color={textColor}>
-              {!timeUntil.days && !timeUntil.hours && timeUntil.minutes === 0 ? '< 1' : timeUntil.minutes}
+              {minutes ?? '0'}
               {t('m')}
+            </Text>
+            <Text fontSize="20px" bold color={textColor}>
+              {seconds}
+              {t('s')}
             </Text>
           </FlexGap>
         </FlexGap>
