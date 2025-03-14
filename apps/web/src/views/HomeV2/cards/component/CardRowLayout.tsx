@@ -30,6 +30,10 @@ const Layout = styled(Flex)<{ $isLast?: boolean; isMobile: boolean; isTablet: bo
     `}
   padding: ${({ isMobile, isTablet }) => getPadding(isMobile, isTablet)};
   height: ${({ isMobile, isTablet }) => getHeight(isMobile, isTablet)};
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 
   ${({ isMobile }) =>
     !isMobile &&
@@ -61,7 +65,6 @@ export const CardRowLayout = ({
         onClick={onClick}
         alignItems="center"
         justifyContent="space-between"
-        py="8px"
         $isLast={isLast}
       >
         <Flex alignItems="center">{left}</Flex>

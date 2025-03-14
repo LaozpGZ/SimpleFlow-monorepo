@@ -29,7 +29,7 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
       <CardRowLayout
         left={
           <MultipleCurrencyLogos
-            gap={-8}
+            gap={-12}
             borderRadius={getBorderRadius(isMobile, isTablet)}
             maxDisplay={4}
             tokens={chains.map((chain) => ({ logo: chain.logo }))}
@@ -41,8 +41,8 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
           link="/bridge"
           hover={{
             text: t('Bridge Now'),
-            width: 150,
-            originalWidth: 248,
+            width: 240,
+            originalWidth: 250,
           }}
           text={isMobile ? t('Bridge Now') : t('Bridge across %num% chains', { num: chains.length })}
         />
@@ -51,7 +51,7 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
       <CardRowLayout
         left={
           <MultipleCurrencyLogos
-            gap={-8}
+            gap={-12}
             maxDisplay={4}
             tokens={currencies.map((currency) => ({ logo: currency.logo }))}
           />
@@ -63,8 +63,8 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
           link="/buy-crypto"
           hover={{
             text: t('Buy Crypto Now'),
-            width: 200,
-            originalWidth: 260,
+            width: 240,
+            originalWidth: 250,
           }}
           text={isMobile ? t('Buy Now') : t('Choose from %num% Currencies', { num: currencies.length })}
         />

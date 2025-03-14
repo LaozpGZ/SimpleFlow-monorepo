@@ -19,7 +19,7 @@ interface CardRowSectionButtonProps {
 const getButtonHeight = (isMobile: boolean, isTablet: boolean) => {
   if (isMobile) return '40px'
   if (isTablet) return '48px'
-  return '56px'
+  return '40px'
 }
 
 const getButtonPadding = (isMobile: boolean, isTablet: boolean) => {
@@ -68,7 +68,7 @@ const StyledButton = styled(Button)<{
   isMobile: boolean
   isHover?: boolean
 }>`
-  transition: width 0.2s ease;
+  transition: width 0.5s ease;
   opacity: ${({ show }) => (show ? 1 : 0)};
   height: ${({ isMobile, isTablet }) => getButtonHeight(isMobile, isTablet)};
   padding-right: ${({ isMobile, isTablet }) => getButtonPadding(isMobile, isTablet)};

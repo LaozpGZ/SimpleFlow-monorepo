@@ -43,7 +43,7 @@ const StyledButton = styled(Button)<{ isMobile: boolean; isTablet: boolean; show
   height: ${({ isMobile, isTablet }) => {
     if (isMobile) return '40px'
     if (isTablet) return '44px'
-    return '50px'
+    return '48px'
   }};
   padding-right: ${({ isMobile, isTablet }) => {
     if (isMobile) return '16px'
