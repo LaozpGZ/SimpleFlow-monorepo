@@ -1,15 +1,25 @@
-import { Box, domAnimation, LazyAnimatePresence, MotionBox, Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
+import {
+  ArrowDownIcon,
+  Box,
+  domAnimation,
+  Flex,
+  LazyAnimatePresence,
+  MotionBox,
+  Skeleton,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
 import { Suspense } from 'react'
 import styled from 'styled-components'
 import SimpleSwapForHomePage from 'views/SwapSimplify/SimpleSwapForHomePage'
 import { homePageDataAtom } from './atom/homePageDataAtom'
 import { BridgeCryptoCard, EarnTradingFeesCard, SwapWithBestPriceCard, VoteForEmissionCard } from './cards'
+import { ScrollDownArrow } from './cards/component/ScrollDownArrow'
 import { FeaturesCard } from './cards/FeaturesCard'
 import { RowLayout } from './component/RowLayout'
 import { ScrollableFullScreen } from './component/ScrollableFullScreen'
 import { FavoriteDEXBanner } from './FavoriteDEXBanner'
-import { useScrollToNearestSnap } from './hook/useScrollToNearestSnap'
+import { snapToNext, useScrollToNearestSnap } from './hook/useScrollToNearestSnap'
 import { PancakeBanner } from './PancakeBanner'
 
 const MobileContainer = styled(Box)`
@@ -76,15 +86,12 @@ const HomeV2Inner = () => {
   const { isMobile, isTablet } = useMatchBreakpoints()
   const Container = isTablet || isMobile ? MobileContainer : ScrollableFullScreen
 
+  const showArrow = isMobile || isTablet
   useScrollToNearestSnap('homepage-snap')
 
   return (
     <>
-      <Container
-        style={{
-          minHeight: '100vh',
-        }}
-      >
+      <Container>
         <RowLayout sidePadding="0">
           <FavoriteDEXBanner chains={chains} />
           <LazyAnimatePresence features={domAnimation}>
@@ -104,6 +111,29 @@ const HomeV2Inner = () => {
             </MotionBox>
           </LazyAnimatePresence>
         </RowLayout>
+
+        {showArrow && (
+          <Flex
+            flexDirection="column"
+            justifyContent="center"
+            alignItems="center"
+            style={{ position: 'relative', height: '30px' }}
+            mt="25px"
+            mb="35px"
+          >
+            <ScrollDownArrow
+              id="arrow-abc"
+              isMobile={isMobile}
+              isTablet={isTablet}
+              onClick={() => {
+                snapToNext('down', 'homepage-snap', window.innerHeight * 0.1)
+              }}
+            >
+              {/* <ChevronDownIcon width="32px" color="textSubtle" /> */}
+              <ArrowDownIcon width="24px" color="textSubtle" />
+            </ScrollDownArrow>
+          </Flex>
+        )}
       </Container>
 
       <RowLayout

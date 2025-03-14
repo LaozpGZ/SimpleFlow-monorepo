@@ -1,16 +1,12 @@
-import { ChevronDownIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { ArrowDownIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
 import React, { useState } from 'react'
 import styled from 'styled-components'
+import { ScrollDownArrow } from '../cards/component/ScrollDownArrow'
+import { snapToNext } from '../hook/useScrollToNearestSnap'
 
 interface ScrollableFullScreenProps {
   children: React.ReactNode
   headerSelector?: string
-}
-
-const getArrowBottom = (isMobile: boolean, isTablet: boolean) => {
-  if (isMobile) return '16px'
-  if (isTablet) return '20px'
-  return '24px'
 }
 
 const FullScreenContainer = styled.div<{ offsetHeight: number }>`
@@ -23,31 +19,6 @@ const FullScreenContainer = styled.div<{ offsetHeight: number }>`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-`
-
-const ScrollDownArrow = styled.div<{ isMobile: boolean; isTablet: boolean }>`
-  position: absolute;
-  bottom: ${({ isMobile, isTablet }) => getArrowBottom(isMobile, isTablet)};
-  left: 50%;
-  transform: translateX(-50%);
-  cursor: pointer;
-  animation: bounce 2s infinite;
-
-  @keyframes bounce {
-    0%,
-    20%,
-    50%,
-    80%,
-    100% {
-      transform: translateX(-50%) translateY(0);
-    }
-    40% {
-      transform: translateX(-50%) translateY(-10px);
-    }
-    60% {
-      transform: translateX(-50%) translateY(-5px);
-    }
-  }
 `
 
 export const ScrollableFullScreen: React.FC<ScrollableFullScreenProps> = ({ children, headerSelector = '#menu' }) => {
@@ -64,8 +35,14 @@ export const ScrollableFullScreen: React.FC<ScrollableFullScreenProps> = ({ chil
   return (
     <FullScreenContainer offsetHeight={headerHeight} className="homepage-snap">
       {children}
-      <ScrollDownArrow isMobile={isMobile} isTablet={isTablet}>
-        <ChevronDownIcon width="32px" color="textSubtle" />
+      <ScrollDownArrow
+        isMobile={isMobile}
+        isTablet={isTablet}
+        onClick={() => {
+          snapToNext('down', 'homepage-snap', window.innerHeight * 0.1)
+        }}
+      >
+        <ArrowDownIcon width="32px" color="textSubtle" />
       </ScrollDownArrow>
     </FullScreenContainer>
   )
