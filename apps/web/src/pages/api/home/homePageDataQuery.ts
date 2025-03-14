@@ -20,12 +20,12 @@ export const partners: HomePagePartner[] = [
   },
   {
     logo: `${ASSET_CDN}/web/landing/partner/instagram.png`,
-    link: 'https://www.instagram.com/pancakeswap/',
+    link: 'https://instagram.com/pancakeswap_official',
     name: 'Instagram',
   },
   {
     logo: `${ASSET_CDN}/web/landing/partner/youtube.png`,
-    link: 'https://www.youtube.com/c/PancakeSwap',
+    link: 'https://www.youtube.com/@pancakeswap_official',
     name: 'Youtube',
   },
   {
