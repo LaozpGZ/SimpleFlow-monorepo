@@ -42,7 +42,7 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
           hover={{
             text: t('Bridge Now'),
             width: 150,
-            originalWidth: 208,
+            originalWidth: 248,
           }}
           text={isMobile ? t('Bridge Now') : t('Bridge across %num% chains', { num: chains.length })}
         />
@@ -64,7 +64,7 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
           hover={{
             text: t('Buy Crypto Now'),
             width: 200,
-            originalWidth: 240,
+            originalWidth: 260,
           }}
           text={isMobile ? t('Buy Now') : t('Choose from %num% Currencies', { num: currencies.length })}
         />
