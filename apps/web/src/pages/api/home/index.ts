@@ -9,13 +9,15 @@ import { querySiteStats } from './querySiteStats'
 import { HomePageData } from './types'
 
 async function _load() {
-  const [tokens, pools, cakeRelated, stats, topWinner] = await Promise.all([
+  const [tokens, cakeRelated, stats, topWinner] = await Promise.all([
     queryTokens(),
-    queryPools(),
     queryCakeRelated(),
     querySiteStats(),
     queryPredictionUser(),
   ])
+  const cake = tokens.find((x) => x.symbol === 'CAKE')!
+  const cakePrice = cake.price
+  const pools = await queryPools(cakePrice)
   const currencies = homePageCurrencies
   const chains = homePageChainsInfo()
   return {
@@ -30,7 +32,7 @@ async function _load() {
   } as HomePageData
 }
 export const loadHomePageData = cacheByLRU(_load, {
-  ttl: 3600 * 24 * 1000,
+  ttl: 3600 * 1000,
   persist: {
     name: 'homepage',
     type: 'r2',

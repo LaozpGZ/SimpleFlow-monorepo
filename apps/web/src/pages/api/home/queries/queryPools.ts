@@ -1,6 +1,8 @@
 import { ChainId, getChainName } from '@pancakeswap/chains'
 import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
+import BN from 'bignumber.js'
 import { fetchExplorerFarmPools } from 'state/farmsV4/state/farmPools/fetcher'
+import { getCakeApr } from 'state/farmsV4/state/poolApr/fetcher'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { checksumAddress } from 'utils/checksumAddress'
 import { HomePagePairConfig, HomePagePoolInfo } from '../types'
@@ -60,14 +62,18 @@ function scorePools(
     .sort((a, b) => b.score - a.score)
 }
 
-export async function queryPools() {
+export async function queryPools(cakePrice: number) {
   const poolsInfo = await fetchExplorerFarmPools()
   const filtered = poolsInfo.filter((x) => x.lpApr && x.tvlUsd)
 
   scorePools(filtered)
   const tops = filtered.slice(0, 3)
 
-  return tops.map((p) => {
+  const t = Date.now()
+  const cakeAprs = await Promise.all(tops.map((p) => getCakeApr(p, BN(cakePrice))))
+  const aprs = cakeAprs.map((x) => Number.parseFloat(Object.values(x)[0].boost || '0'))
+
+  return tops.map((p, i) => {
     const chain = getChainName(p.chainId)
     const link = `/liquidity/pool/${chain}/${p.lpAddress}`
     return {
@@ -87,7 +93,7 @@ export async function queryPools() {
         icon: tokenLogo(p.token1.isNative ? ZERO_ADDRESS : p.token1.wrapped.address),
       },
       chainId: p.chainId,
-      apr24h: Number(p.lpApr),
+      apr24h: Number(p.lpApr) + aprs[i],
     } as HomePagePoolInfo
   })
 }
