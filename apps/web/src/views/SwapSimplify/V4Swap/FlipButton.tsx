@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic'
-import { memo, useCallback, useMemo, useRef } from 'react'
+import { CSSProperties, memo, useCallback, useMemo, useRef } from 'react'
 
 import { AutoColumn, Button, useMatchBreakpoints } from '@pancakeswap/uikit'
 
@@ -43,7 +43,33 @@ export const Line = styled.div`
   top: calc(50% + 6px);
 `
 
-export const FlipButton = memo(function FlipButton() {
+const getCompactWapperStyle = (compact?: boolean): CSSProperties => {
+  if (compact) {
+    return {
+      position: 'relative',
+      height: 0,
+      padding: 0,
+      margin: 0,
+    }
+  }
+  return {}
+}
+const getCompactStyle = (compact?: boolean): CSSProperties => {
+  if (compact) {
+    return {
+      position: 'absolute',
+      zIndex: 2,
+      top: 0,
+      marginTop: 0,
+      padding: 0,
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+    }
+  }
+  return {}
+}
+
+export const FlipButton = memo(function FlipButton({ compact }: { compact?: boolean }) {
   const flipButtonRef = useRef<HTMLDivElement>(null)
   const lottieRef = useRef<LottieRefCurrentProps | null>(null)
   const { isDark } = useTheme()
@@ -78,9 +104,22 @@ export const FlipButton = memo(function FlipButton() {
   }, [])
 
   return (
-    <AutoColumn justify="space-between" position="relative">
-      <Line />
-      <AutoRow justify="center" style={{ padding: '0 1rem', marginTop: '1em' }}>
+    <AutoColumn
+      justify="space-between"
+      position="relative"
+      style={{
+        ...getCompactWapperStyle(compact),
+      }}
+    >
+      {!compact && <Line />}
+      <AutoRow
+        justify="center"
+        style={{
+          padding: '0 1rem',
+          marginTop: '1em',
+          ...getCompactStyle(compact),
+        }}
+      >
         {isDesktop ? (
           <FlipButtonWrapper ref={flipButtonRef} onAnimationEnd={handleAnimationEnd}>
             <Lottie

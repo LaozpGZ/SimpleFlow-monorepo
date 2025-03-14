@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
-import { Text } from '@pancakeswap/uikit'
+import { Column, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
@@ -16,6 +16,7 @@ import { currencyId } from 'utils/currencyId'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 
 import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
+import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useAtom } from 'jotai'
@@ -25,7 +26,6 @@ import { useAccount } from 'wagmi'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { AssignRecipientButton, FlipButton } from './FlipButton'
-import { FormContainer } from './FormContainer'
 import { Recipient } from './Recipient'
 
 interface Props {
@@ -41,6 +41,7 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading, i
   const { address: account } = useAccount()
   const { t } = useTranslation()
   const warningSwapHandler = useWarningImport()
+  const { isMobile } = useMatchBreakpoints()
   const {
     independentField,
     typedValue,
@@ -124,56 +125,66 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading, i
   const outputLoading = typedValue ? isTypingInput && tradeLoading : false
 
   return (
-    <FormContainer>
-      <CurrencyInputPanelSimplify
-        id="swap-currency-input"
-        showUSDPrice
-        showMaxButton
-        showCommonBases
-        inputLoading={!isWrapping && inputLoading}
-        currencyLoading={!loadedUrlParams}
-        label={!isTypingInput && !isWrapping ? t('From (estimated)') : t('From')}
-        value={isWrapping ? typedValue : inputValue}
-        maxAmount={maxAmountInput}
-        showQuickInputButton
-        currency={inputCurrency}
-        onUserInput={handleTypeInput}
-        onPercentInput={handlePercentInput}
-        onMax={handleMaxInput}
-        onCurrencySelect={handleInputSelect}
-        otherCurrency={outputCurrency}
-        commonBasesType={CommonBasesType.SWAP_LIMITORDER}
-        title={
-          <Text color="textSubtle" fontSize={12} bold>
-            {t('From')}
-          </Text>
-        }
-        isUserInsufficientBalance={isUserInsufficientBalance}
-      />
-      <FlipButton />
-      <CurrencyInputPanelSimplify
-        id="swap-currency-output"
-        showUSDPrice
-        showCommonBases
-        showMaxButton={false}
-        inputLoading={!isWrapping && outputLoading}
-        currencyLoading={!loadedUrlParams}
-        label={isTypingInput && !isWrapping ? t('To (estimated)') : t('To')}
-        value={isWrapping ? typedValue : outputValue}
-        currency={outputCurrency}
-        onUserInput={handleTypeOutput}
-        onCurrencySelect={handleOutputSelect}
-        otherCurrency={inputCurrency}
-        commonBasesType={CommonBasesType.SWAP_LIMITORDER}
-        title={
-          <Text color="textSubtle" fontSize={12} bold>
-            {t('To')}
-          </Text>
-        }
-      />
-      <AssignRecipientButton />
-      <Recipient />
-    </FormContainer>
+    <SwapUIV2.InputPanelWrapper id="swap-page">
+      <Column gap={isMobile ? '0px' : 'sm'}>
+        <CurrencyInputPanelSimplify
+          id="swap-currency-input"
+          showUSDPrice
+          showMaxButton
+          showCommonBases
+          topOptions={{
+            show: !isMobile,
+            walletDisplay: false,
+          }}
+          inputLoading={!isWrapping && inputLoading}
+          currencyLoading={!loadedUrlParams}
+          label={!isTypingInput && !isWrapping ? t('From (estimated)') : t('From')}
+          value={isWrapping ? typedValue : inputValue}
+          maxAmount={maxAmountInput}
+          showQuickInputButton
+          currency={inputCurrency}
+          onUserInput={handleTypeInput}
+          onPercentInput={handlePercentInput}
+          onMax={handleMaxInput}
+          onCurrencySelect={handleInputSelect}
+          otherCurrency={outputCurrency}
+          commonBasesType={CommonBasesType.SWAP_LIMITORDER}
+          title={
+            <Text color="textSubtle" fontSize={12} bold>
+              {t('From')}
+            </Text>
+          }
+          isUserInsufficientBalance={isUserInsufficientBalance}
+        />
+        <FlipButton compact={isMobile} />
+        <CurrencyInputPanelSimplify
+          id="swap-currency-output"
+          showUSDPrice
+          showCommonBases
+          showMaxButton={false}
+          inputLoading={!isWrapping && outputLoading}
+          currencyLoading={!loadedUrlParams}
+          label={isTypingInput && !isWrapping ? t('To (estimated)') : t('To')}
+          value={isWrapping ? typedValue : outputValue}
+          currency={outputCurrency}
+          onUserInput={handleTypeOutput}
+          onCurrencySelect={handleOutputSelect}
+          otherCurrency={inputCurrency}
+          commonBasesType={CommonBasesType.SWAP_LIMITORDER}
+          topOptions={{
+            show: !isMobile,
+            walletDisplay: false,
+          }}
+          title={
+            <Text color="textSubtle" fontSize={12} bold>
+              {t('To')}
+            </Text>
+          }
+        />
+        <AssignRecipientButton />
+        <Recipient />
+      </Column>
+    </SwapUIV2.InputPanelWrapper>
   )
 }
 
