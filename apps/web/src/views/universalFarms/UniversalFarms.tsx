@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AddIcon, Button, Card, FlexGap, Tab, TabMenu, Text } from '@pancakeswap/uikit'
+import { AddIcon, Button, Card, FlexGap, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import Page from 'components/Layout/Page'
 import NextLink from 'next/link'
@@ -19,10 +19,9 @@ const StyledTab = styled(Tab)`
 
 const ButtonContainer = styled.div`
   @media (max-width: 967px) {
-    width: 100%;
-
+    min-width: 200px;
     button {
-      width: 50%;
+      width: 100%;
       height: 50px;
     }
   }
@@ -76,6 +75,7 @@ const LegacyPage = () => {
 export const UniversalFarms: React.FC<PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { tabIdx } = usePageInfo()
+  const { isMobile, isMd } = useMatchBreakpoints()
 
   const tabsConfig = useMemo(() => {
     return {
@@ -110,17 +110,19 @@ export const UniversalFarms: React.FC<PropsWithChildren> = () => {
     <>
       <PoolsBanner additionLink={<LegacyPage />} />
       <Page>
-        <FlexGap alignItems="center" justifyContent="space-between">
+        <FlexGap width="100%" alignItems="center" justifyContent="space-between">
           <TabMenu gap="8px" activeIndex={tabIdx} isShowBorderBottom={false}>
             {Object.values(tabsConfig).map(({ menu }) => menu())}
           </TabMenu>
-          <ButtonContainer>
-            <NextLink href="/add">
-              <Button endIcon={<AddIcon color="invertedContrast" />} scale="md" mb="12px">
-                {t('Add Liquidity')}
-              </Button>
-            </NextLink>
-          </ButtonContainer>
+          {!isMobile && !isMd && (
+            <ButtonContainer>
+              <NextLink href="/add">
+                <Button endIcon={<AddIcon color="invertedContrast" />} scale="md" mb="12px">
+                  {t('Add Liquidity')}
+                </Button>
+              </NextLink>
+            </ButtonContainer>
+          )}
         </FlexGap>
         {tabsConfig[tabIdx].page()}
       </Page>
