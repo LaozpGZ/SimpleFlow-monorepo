@@ -40,14 +40,24 @@ export const partners: HomePagePartner[] = [
   },
 ]
 
-export const homePageCurrencies: HomePageCurrency[] = ['usd', 'eur', 'gbp', 'hkd', 'cad', 'aud', 'brl'].map(
-  (symbol) => {
-    return {
-      symbol,
-      logo: `${ASSET_CDN}/web/onramp/currencies/${symbol}.png`,
-    }
-  },
-)
+export const homePageCurrencies: HomePageCurrency[] = [
+  'usd',
+  'eur',
+  'gbp',
+  'hkd',
+  'cad',
+  'aud',
+  'brl',
+  'jpy',
+  'krw',
+  'vnd',
+  'idr',
+].map((symbol) => {
+  return {
+    symbol,
+    logo: `${ASSET_CDN}/web/onramp/currencies/${symbol}.png`,
+  }
+})
 
 export function homePageChainsInfo() {
   const evms = [
