@@ -14,14 +14,30 @@ interface CardRowSectionButtonProps {
   }
   alwaysShow?: boolean
 }
+
+// Helper functions for layout
+const getButtonHeight = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '40px'
+  if (isTablet) return '48px'
+  return '56px'
+}
+
+const getButtonPadding = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '16px'
+  if (isTablet) return '20px'
+  return '24px'
+}
+
 export const CardRowSectionButton = ({ link, text, alwaysShow = false, hover }: CardRowSectionButtonProps) => {
   const router = useRouter()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
   const isHover = useHoverContext()
+
+  // For width, treat tablet same as PC
+  const width = !isMobile && !isTablet && hover ? (isHover ? `${hover.width}px` : `${hover.originalWidth}px`) : 'auto'
 
   const buttonRef = useRef<HTMLDivElement>(null)
   const displayText = hover ? (isHover ? hover.text : text) : text
-  const width = !isMobile && hover ? (isHover ? `${hover.width}px` : `${hover.originalWidth}px`) : 'auto'
 
   return (
     <StyledButton
@@ -36,6 +52,7 @@ export const CardRowSectionButton = ({ link, text, alwaysShow = false, hover }: 
         }
         router.push(link)
       }}
+      // No logic changes, so keep the original variant usage.
       variant={isHover || isMobile ? 'primary' : 'light'}
     >
       <Flex flexDirection="row" ref={buttonRef}>
@@ -49,14 +66,24 @@ export const CardRowSectionButton = ({ link, text, alwaysShow = false, hover }: 
 const StyledButton = styled(Button)<{
   show: boolean
   isMobile: boolean
+  isHover?: boolean
 }>`
   transition: width 0.2s ease;
   opacity: ${({ show }) => (show ? 1 : 0)};
-  height: 40px;
-  padding-right: 16px;
-  padding-left: 16px;
+  height: ${({ isMobile, isTablet }) => getButtonHeight(isMobile, isTablet)};
+  padding-right: ${({ isMobile, isTablet }) => getButtonPadding(isMobile, isTablet)};
+  padding-left: ${({ isMobile, isTablet }) => getButtonPadding(isMobile, isTablet)};
   border-radius: 999px;
   border-width: 3px;
-  color: ${({ theme, isHover, isMobile }) =>
-    isHover ? theme.colors.card : isMobile ? theme.colors.card : theme.colors.textSubtle};
+  color: ${({ theme, isHover, isMobile, isTablet }) => {
+    // Tablet shares the same color set as PC
+    if (isHover) {
+      return theme.colors.card
+    }
+    if (isMobile) {
+      return theme.colors.card
+    }
+    // treat tablet as PC
+    return theme.colors.textSubtle
+  }};
 `

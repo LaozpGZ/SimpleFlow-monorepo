@@ -8,10 +8,22 @@ interface HomepageCardBadgeProps {
   priceChange?: number
 }
 
-const Badge = styled(Flex)<{ isMobile: boolean; isHover: boolean }>`
+const getPadding = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return 8
+  if (isTablet) return 12
+  return 16
+}
+
+const getBorderRadius = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '16px'
+  if (isTablet) return '24px'
+  return '999px'
+}
+
+const Badge = styled(Flex)<{ isMobile: boolean; isTablet: boolean; isHover: boolean }>`
   height: 40px;
-  padding: 4px ${({ isMobile }) => (isMobile ? 8 : 16)}px;
-  border-radius: ${({ isMobile }) => (isMobile ? '16px' : '999px')};
+  padding: 4px ${({ isMobile, isTablet }) => getPadding(isMobile, isTablet)}px;
+  border-radius: ${({ isMobile, isTablet }) => getBorderRadius(isMobile, isTablet)};
   border-color: ${({ theme, isHover }) => (isHover ? theme.colors.positive20 : 'transparent')};
   border-width: 2px;
   transition: border-width 0.5s;
@@ -41,11 +53,11 @@ const Percent = styled(Text)`
 export const HomepageCardBadge: React.FC<HomepageCardBadgeProps> = ({ text, priceChange }) => {
   const theme = useTheme()
   const positive = (priceChange ?? 0) >= 0
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
   const isHover = useHoverContext()
 
   return (
-    <Badge isMobile={isMobile} isHover={isHover}>
+    <Badge isMobile={isMobile} isTablet={isTablet} isHover={isHover}>
       <Box>
         {typeof text !== 'string' ? (
           text

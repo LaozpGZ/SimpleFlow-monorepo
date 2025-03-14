@@ -15,18 +15,41 @@ const MobileContainer = styled(Box)`
   scroll-snap-align: start;
 `
 
+// Helper functions for tablet layout
+const getSidePadding = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '16px'
+  if (isTablet) return '20px'
+  return '24px'
+}
+
+const getMarginTopForBanner = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return `40px`
+  if (isTablet) return `160px`
+  return `200px`
+}
+
+const getMarginTop = (isMobile: boolean, isTablet: boolean, base: number) => {
+  if (isMobile) return base
+  if (isTablet) return base * 1.2
+  return base * 1.5
+}
+
 export const HomeV2 = () => {
   const { tokens, chains, pools, currencies, cakeRelated } = useAtomValue(homePageDataAtom)
   const cakeToken = tokens.find((x) => x.symbol === 'CAKE')!
 
-  const { isMobile } = useMatchBreakpoints()
-  const Container = isMobile ? MobileContainer : ScrollableFullScreen
+  const { isMobile, isTablet } = useMatchBreakpoints()
+  const Container = isTablet || isMobile ? MobileContainer : ScrollableFullScreen
 
   useScrollToNearestSnap('homepage-snap')
 
   return (
     <>
-      <Container>
+      <Container
+        style={{
+          minHeight: '100vh',
+        }}
+      >
         <RowLayout sidePadding="0">
           <FavoriteDEXBanner chains={chains} />
           <LazyAnimatePresence features={domAnimation}>
@@ -35,6 +58,7 @@ export const HomeV2 = () => {
                 willChange: 'transform',
                 flexShrink: 0,
                 flex: 1,
+                width: '100%',
               }}
               initial={{ opacity: 0, scale: 0.85, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -49,10 +73,10 @@ export const HomeV2 = () => {
 
       <RowLayout
         className="homepage-snap"
-        sidePadding={isMobile ? '16px' : '24px'}
-        mt="24px"
+        sidePadding={getSidePadding(isMobile, isTablet)}
+        mt={getMarginTop(isMobile, isTablet, 24)}
         style={{
-          marginTop: '24px',
+          marginTop: getMarginTop(isMobile, isTablet, 24),
         }}
       >
         <SwapWithBestPriceCard tokens={tokens} />
@@ -60,10 +84,10 @@ export const HomeV2 = () => {
       </RowLayout>
 
       <RowLayout
-        sidePadding={isMobile ? '16px' : '24px'}
-        mt="24px"
+        sidePadding={getSidePadding(isMobile, isTablet)}
+        mt={getMarginTop(isMobile, isTablet, 24)}
         style={{
-          marginTop: '24px',
+          marginTop: getMarginTop(isMobile, isTablet, 24),
         }}
       >
         <BridgeCryptoCard chains={chains} currencies={currencies} />
@@ -77,7 +101,7 @@ export const HomeV2 = () => {
         fullScreen
         sidePadding="0px"
         style={{
-          marginTop: '160px',
+          marginTop: getMarginTopForBanner(isMobile, isTablet),
         }}
       >
         <PancakeBanner />

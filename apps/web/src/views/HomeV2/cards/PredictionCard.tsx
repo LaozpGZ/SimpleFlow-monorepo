@@ -9,12 +9,49 @@ import { CardRowLayout } from './component/CardRowLayout'
 import { CardSection } from './component/CardSection'
 import { HomepageCardBadge } from './component/HomepageCardBadge'
 import { HomepageSymbol } from './component/HomepageSymbol'
-// import { HomepageSymbol } from './component/HomepageSymbol'
 
-const WinnerText = styled(Text)`
+// Tablet uses the same color set as PC, so no color changes.
+// We'll only handle layout updates (font sizes, image sizes, etc.).
+
+function getWinnerTextFontSize(isMobile?: boolean, isTablet?: boolean) {
+  if (isMobile) return '16px'
+  if (isTablet) return '17px'
+  return '18px'
+}
+
+function getTopWinnerFontSize(isMobile?: boolean, isTablet?: boolean) {
+  if (isMobile) return '12px'
+  if (isTablet) return '13px'
+  return '14px'
+}
+
+// For the CurrencyLogo, avatar and BunnyPlaceholderIcon
+// we provide slightly larger size for tablet.
+function getImageStyle(isMobile?: boolean) {
+  if (isMobile) {
+    return {
+      width: '32px',
+      height: '32px',
+    }
+  }
+  return {
+    width: '40px',
+    height: '40px',
+  }
+}
+
+const WinnerText = styled(Text)<{ isMobile?: boolean; isTablet?: boolean }>`
   font-weight: 600;
-  font-size: 18px;
+  font-size: ${({ isMobile, isTablet }) => getWinnerTextFontSize(isMobile, isTablet)};
   color: ${({ theme }) => theme.colors.text};
+`
+
+const TopWinnerTitle = styled(Text)<{ isMobile?: boolean; isTablet?: boolean }>`
+  font-family: Kanit;
+  font-weight: 600;
+  font-size: ${({ isMobile, isTablet }) => getTopWinnerFontSize(isMobile, isTablet)};
+  line-height: 21px;
+  letter-spacing: 0%;
 `
 
 interface PredictionCardProps {
@@ -24,12 +61,14 @@ interface PredictionCardProps {
 
 export const PredictionCard: React.FC<PredictionCardProps> = ({ token, winner }) => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
   const { user, profile } = winner
   const avatar = profile?.nft?.image.thumbnail
 
   return (
     <CardSection
+      // Keep the original logic for isFrameLess.
+      // Not changing logic, only layout.
       isFrameLess={isMobile}
       title={t('BNB 5-Min Prediction')}
       button={{
@@ -41,17 +80,16 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({ token, winner })
         left={
           <Flex alignItems="center">
             <CurrencyLogo
-              style={{
-                width: '40px',
-                height: '40px',
-              }}
+              style={getImageStyle(isMobile)}
               currency={{
                 chainId: 56,
                 address: ZERO_ADDRESS,
                 isNative: true,
               }}
             />
-            <HomepageSymbol ml="8px">{token.symbol}USD</HomepageSymbol>
+            <HomepageSymbol isMobile={isMobile} isTablet={isTablet} ml="8px">
+              {token.symbol}USD
+            </HomepageSymbol>
           </Flex>
         }
       >
@@ -62,13 +100,22 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({ token, winner })
         left={
           <Flex alignItems="center">
             {avatar ? (
-              <img src={avatar} alt="avatar" style={{ width: '40px', height: '40px', borderRadius: '50%' }} />
+              <img
+                src={avatar}
+                alt="avatar"
+                style={{
+                  ...getImageStyle(isMobile),
+                  borderRadius: '50%',
+                }}
+              />
             ) : (
-              <BunnyPlaceholderIcon height={40} width={40} />
+              <BunnyPlaceholderIcon {...getImageStyle(isMobile)} />
             )}
             <Flex flexDirection="column" ml="8px">
-              <TopWinnerTitle color="textSubtle">{t('Last Top Winner')}</TopWinnerTitle>
-              <WinnerText>
+              <TopWinnerTitle isMobile={isMobile} isTablet={isTablet} color="textSubtle">
+                {t('Last Top Winner')}
+              </TopWinnerTitle>
+              <WinnerText isMobile={isMobile} isTablet={isTablet}>
                 {user.id.slice(0, 6)}...{user.id.slice(-4)}
               </WinnerText>
             </Flex>
@@ -85,11 +132,3 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({ token, winner })
     </CardSection>
   )
 }
-
-const TopWinnerTitle = styled(Text)`
-  font-family: Kanit;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 21px;
-  letter-spacing: 0%;
-`

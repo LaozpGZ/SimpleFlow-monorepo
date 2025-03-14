@@ -11,7 +11,6 @@ import { useMemo } from 'react'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { logger } from 'utils/datadog'
-import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { useAllTypeBestTrade } from '../../Swap/V3Swap/hooks/useAllTypeBestTrade'
 import { useUserInsufficientBalance } from '../hooks/useUserInsufficientBalance'
 import { ButtonAndDetailsPanel } from './ButtonAndDetailsPanel'
@@ -36,7 +35,6 @@ export function V4SwapFormForHomePage() {
     ammOrder,
   } = useAllTypeBestTrade()
 
-  const isWrapping = useIsWrapping()
   const { chainId: activeChianId } = useActiveChainId()
   const isUserInsufficientBalance = useUserInsufficientBalance(bestOrder)
 
@@ -100,7 +98,6 @@ export function V4SwapFormForHomePage() {
   }, [pauseQuoting, resumeQuoting, xOrder, ammOrder, inputUsdPrice, outputUsdPrice, betterOrder?.type])
   const {
     [Field.INPUT]: { currencyId: inputCurrencyId },
-    [Field.OUTPUT]: { currencyId: outputCurrencyId },
   } = useSwapState()
 
   const inputCurrency = useCurrency(inputCurrencyId)
@@ -108,7 +105,11 @@ export function V4SwapFormForHomePage() {
   const { isPaymasterAvailable } = usePaymaster()
 
   return (
-    <SwapUIV2.SwapFormWrapper>
+    <SwapUIV2.SwapFormWrapper
+      style={{
+        marginBottom: 0,
+      }}
+    >
       <SwapUIV2.SwapTabAndInputPanelWrapper>
         <FormMainForHomePage
           tradeLoading={!tradeLoaded}

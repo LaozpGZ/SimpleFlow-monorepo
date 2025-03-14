@@ -1,10 +1,16 @@
-import { ChevronDownIcon } from '@pancakeswap/uikit'
+import { ChevronDownIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 
 interface ScrollableFullScreenProps {
   children: React.ReactNode
   headerSelector?: string
+}
+
+const getArrowBottom = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '16px'
+  if (isTablet) return '20px'
+  return '24px'
 }
 
 const FullScreenContainer = styled.div<{ offsetHeight: number }>`
@@ -19,9 +25,9 @@ const FullScreenContainer = styled.div<{ offsetHeight: number }>`
   align-items: center;
 `
 
-const ScrollDownArrow = styled.div`
+const ScrollDownArrow = styled.div<{ isMobile: boolean; isTablet: boolean }>`
   position: absolute;
-  bottom: 24px;
+  bottom: ${({ isMobile, isTablet }) => getArrowBottom(isMobile, isTablet)};
   left: 50%;
   transform: translateX(-50%);
   cursor: pointer;
@@ -46,6 +52,7 @@ const ScrollDownArrow = styled.div`
 
 export const ScrollableFullScreen: React.FC<ScrollableFullScreenProps> = ({ children, headerSelector = '#menu' }) => {
   const [headerHeight, setHeaderHeight] = useState(0)
+  const { isMobile, isTablet } = useMatchBreakpoints()
 
   React.useEffect(() => {
     const header = document.querySelector(headerSelector)
@@ -57,7 +64,7 @@ export const ScrollableFullScreen: React.FC<ScrollableFullScreenProps> = ({ chil
   return (
     <FullScreenContainer offsetHeight={headerHeight} className="homepage-snap">
       {children}
-      <ScrollDownArrow>
+      <ScrollDownArrow isMobile={isMobile} isTablet={isTablet}>
         <ChevronDownIcon width="32px" color="textSubtle" />
       </ScrollDownArrow>
     </FullScreenContainer>

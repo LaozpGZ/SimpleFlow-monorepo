@@ -8,19 +8,35 @@ import { CardSection } from './component/CardSection'
 import { HomepageCardBadge } from './component/HomepageCardBadge'
 import { HomepageSymbol } from './component/HomepageSymbol'
 
-const PriceText = styled(Text)`
+// Helper function for dynamic font sizes
+const getFontSize = (isMobile?: boolean, isTablet?: boolean): string => {
+  if (isMobile) {
+    return '12px'
+  }
+  if (isTablet) {
+    return '13px'
+  }
+  return '14px'
+}
+
+interface StyledProps {
+  isMobile?: boolean
+  isTablet?: boolean
+}
+
+const PriceText = styled(Text)<StyledProps>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: 14px;
+  font-size: ${({ isMobile, isTablet }) => getFontSize(isMobile, isTablet)};
   line-height: 21px;
   letter-spacing: 0%;
   color: ${({ theme }) => theme.colors.text};
 `
 
-const PercentageChange = styled(Text)`
+const PercentageChange = styled(Text)<StyledProps>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: 14px;
+  font-size: ${({ isMobile, isTablet }) => getFontSize(isMobile, isTablet)};
   line-height: 21px;
   letter-spacing: 0%;
   color: ${({ theme }) => theme.colors.textSubtle};
@@ -33,8 +49,8 @@ const PercentageChange = styled(Text)`
   }
 `
 
-const LeverageText = styled(Text)`
-  font-size: 14px;
+const LeverageText = styled(Text)<StyledProps>`
+  font-size: ${({ isMobile, isTablet }) => getFontSize(isMobile, isTablet)};
   font-weight: 600;
   padding: 6px 12px;
   border-radius: 24px;
@@ -45,10 +61,18 @@ interface PerpetualCardProps {
   tokens: HomePageToken[]
 }
 
+function getIconSize(isMobile: boolean): string {
+  if (isMobile) {
+    return '32px'
+  }
+  return '40px'
+}
+
 export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
   const { t } = useTranslation()
 
-  const { isMobile } = useMatchBreakpoints()
+  // Include isTablet here
+  const { isMobile, isTablet } = useMatchBreakpoints()
 
   return (
     <CardSection
@@ -64,13 +88,19 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
           key={token.id}
           left={
             <>
-              <img src={token.icon} alt={token.symbol} width={40} height={40} />
+              <img src={token.icon} alt={token.symbol} width={getIconSize(isMobile)} height={getIconSize(isMobile)} />
               <Flex flexDirection="column" ml="12px">
-                <HomepageSymbol>{token.symbol}</HomepageSymbol>
+                <HomepageSymbol isMobile={isMobile} isTablet={isTablet}>
+                  {token.symbol}
+                </HomepageSymbol>
 
                 <Flex alignItems="center" justifyContent="center">
-                  <PriceText>${token.price.toLocaleString()}</PriceText>
+                  <PriceText isMobile={isMobile} isTablet={isTablet}>
+                    ${token.price.toLocaleString()}
+                  </PriceText>
                   <PercentageChange
+                    isMobile={isMobile}
+                    isTablet={isTablet}
                     style={{
                       position: 'relative',
                     }}
@@ -87,15 +117,15 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
           <HomepageCardBadge
             text={
               !isMobile ? (
-                <LeverageText>
+                <LeverageText isMobile={isMobile} isTablet={isTablet}>
                   {t(`Up to`)} {token.symbol === 'BTC' ? '1001x' : '250x'} {t('leverage')}
                 </LeverageText>
               ) : (
                 <>
-                  <Text bold color="positive60" fontSize="12px">
+                  <Text bold color="positive60" fontSize={isTablet ? '13px' : '12px'}>
                     {t(`Up to`)}{' '}
                   </Text>
-                  <Text bold color="positive60" fontSize="14px">
+                  <Text bold color="positive60" fontSize={isTablet ? '15px' : '14px'}>
                     {token.symbol === 'BTC' ? '1001x' : '250x'} {t('leverage')}
                   </Text>
                 </>

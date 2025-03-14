@@ -12,16 +12,31 @@ export type SiteStats = {
   community: number
 }
 
-const StatCard = styled(Box)<{
+interface StatCardProps {
   bgColor: string
   borderColor: string
   textColor: string
   isMobile?: boolean
+  isTablet?: boolean
   index: number
-}>`
-  width: ${({ isMobile }) => (isMobile ? '152px' : '210px')};
-  height: ${({ isMobile }) => (isMobile ? '110px' : '146px')};
-  border-radius: ${({ isMobile }) => (isMobile ? '36px' : '48px')};
+}
+
+const StatCard = styled(Box)<StatCardProps>`
+  width: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '152px'
+    if (isTablet) return '190px'
+    return '210px'
+  }};
+  height: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '110px'
+    if (isTablet) return '130px'
+    return '146px'
+  }};
+  border-radius: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '36px'
+    if (isTablet) return '42px'
+    return '48px'
+  }};
   border-top-width: 1px;
   border-right-width: 1px;
   border-bottom-width: 2px;
@@ -33,71 +48,124 @@ const StatCard = styled(Box)<{
   align-items: center;
   background-color: ${({ theme, bgColor }) => theme.colors[bgColor]};
   border-color: ${({ theme, borderColor }) => theme.colors[borderColor]};
-  margin-top: ${({ isMobile }) => (isMobile ? '8px' : '0')};
+  margin-top: ${({ isMobile, isTablet }) => (isMobile || isTablet ? '8px' : '0')};
   margin-right: ${({ isMobile, index }) => (isMobile ? (index % 2 === 0 ? '16px' : '0px') : '24px')};
 `
 
-const Title = styled.div<{ textColor: string; isMobile?: boolean }>`
+interface TitleProps {
+  textColor: string
+  isMobile?: boolean
+  isTablet?: boolean
+}
+
+const Title = styled.div<TitleProps>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: ${({ isMobile }) => (isMobile ? '14px' : '20px')};
-  line-height: ${({ isMobile }) => (isMobile ? '24px' : '30px')};
+  font-size: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '14px'
+    if (isTablet) return '18px'
+    return '20px'
+  }};
+  line-height: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '24px'
+    if (isTablet) return '28px'
+    return '30px'
+  }};
   text-align: center;
   letter-spacing: -1%;
   color: ${({ theme, textColor }) => theme.colors[textColor]};
 `
 
-const Value = styled.div<{ textColor: string; isMobile?: boolean }>`
+interface ValueProps {
+  textColor: string
+  isMobile?: boolean
+  isTablet?: boolean
+}
+
+const Value = styled.div<ValueProps>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: ${({ isMobile }) => (isMobile ? '32px' : '40px')};
-  line-height: ${({ isMobile }) => (isMobile ? '40px' : '48px')};
+  font-size: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '32px'
+    if (isTablet) return '36px'
+    return '40px'
+  }};
+  line-height: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '40px'
+    if (isTablet) return '44px'
+    return '48px'
+  }};
   letter-spacing: -1%;
   background: transparent;
   text-align: center;
-  margin-top: ${({ isMobile }) => (isMobile ? '2px' : '4px')};
+  margin-top: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '2px'
+    if (isTablet) return '3px'
+    return '4px'
+  }};
   color: ${({ theme, textColor }) => theme.colors[textColor]};
 `
 
 export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
   const { t } = useTranslation()
 
   return (
     <Flex
       justifyContent="center"
       alignItems="center"
-      flexWrap={isMobile ? 'wrap' : 'nowrap'}
-      flexDirection={isMobile ? 'row' : 'row'}
+      flexWrap={isTablet || isMobile ? 'wrap' : 'nowrap'}
+      flexDirection={isTablet || isMobile ? 'row' : 'row'}
       mt={isMobile ? '40px' : '80px'}
       width="100%"
       maxWidth={isMobile ? '420px' : 'none'}
       mx="auto"
       padding="0"
     >
-      <StatCard bgColor="primary10" borderColor="primary20" textColor="primary60" isMobile={isMobile} index={0}>
-        <Title textColor="primary60" isMobile={isMobile}>
+      <StatCard
+        bgColor="primary10"
+        borderColor="primary20"
+        textColor="primary60"
+        isMobile={isMobile}
+        isTablet={isTablet}
+        index={0}
+      >
+        <Title textColor="primary60" isMobile={isMobile} isTablet={isTablet}>
           {t('All Time Traders')}+
         </Title>
-        <Value textColor="primary60" isMobile={isMobile}>
+        <Value textColor="primary60" isMobile={isMobile} isTablet={isTablet}>
           ~<CountUpAnimation num={stats.allTimeTraders} />
         </Value>
       </StatCard>
 
-      <StatCard bgColor="secondary10" borderColor="cardBorder" textColor="secondary" isMobile={isMobile} index={1}>
-        <Title textColor="secondary" isMobile={isMobile}>
+      <StatCard
+        bgColor="secondary10"
+        borderColor="cardBorder"
+        textColor="secondary"
+        isMobile={isMobile}
+        isTablet={isTablet}
+        index={1}
+      >
+        <Title textColor="secondary" isMobile={isMobile} isTablet={isTablet}>
           {t('All Time TV')}
         </Title>
-        <Value textColor="secondary" isMobile={isMobile}>
+        <Value textColor="secondary" isMobile={isMobile} isTablet={isTablet}>
           $<CountUpAnimation num={stats.allTimeTv} />+
         </Value>
       </StatCard>
 
-      <StatCard bgColor="blue10" borderColor="blue20" textColor="blue60" isMobile={isMobile} index={2}>
-        <Title textColor="blue60" isMobile={isMobile}>
+      <StatCard
+        bgColor="blue10"
+        borderColor="blue20"
+        textColor="blue60"
+        isMobile={isMobile}
+        isTablet={isTablet}
+        index={2}
+      >
+        <Title textColor="blue60" isMobile={isMobile} isTablet={isTablet}>
           {t('All Time LP Fees')}
         </Title>
-        <Value textColor="blue60" isMobile={isMobile}>
+        <Value textColor="blue60" isMobile={isMobile} isTablet={isTablet}>
           $<CountUpAnimation num={stats.allTimeLPFees} />+
         </Value>
       </StatCard>
@@ -108,11 +176,12 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
         borderColor="destructive20"
         textColor="destructive60"
         isMobile={isMobile}
+        isTablet={isTablet}
       >
-        <Title textColor="destructive60" isMobile={isMobile}>
+        <Title textColor="destructive60" isMobile={isMobile} isTablet={isTablet}>
           {t('Community')}
         </Title>
-        <Value textColor="destructive60" isMobile={isMobile}>
+        <Value textColor="destructive60" isMobile={isMobile} isTablet={isTablet}>
           <CountUpAnimation num={stats.community} />+
         </Value>
       </StatCard>

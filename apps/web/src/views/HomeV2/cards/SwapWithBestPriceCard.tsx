@@ -12,8 +12,25 @@ type SwapPricesCardProps = {
   tokens: HomePageToken[]
 }
 
+// Helper function to determine dimension based on device type
+const getDimension = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '32px'
+  if (isTablet) return '36px'
+  return '40px'
+}
+
+// Helper function to determine logo size
+const getLogoSize = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '20px'
+  if (isTablet) return '22px'
+  return '24px'
+}
+
 const TokenRow = ({ token, isLast }: { token: HomePageToken; isLast?: boolean }) => {
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
+
+  const dimension = getDimension(isMobile, isTablet)
+  const logoSize = getLogoSize(isMobile, isTablet)
 
   return (
     <CardRowLayout
@@ -22,14 +39,16 @@ const TokenRow = ({ token, isLast }: { token: HomePageToken; isLast?: boolean })
         <>
           <CurrencyLogo
             style={{
-              width: isMobile ? '32px' : '40px',
-              height: isMobile ? '32px' : '40px',
+              width: dimension,
+              height: dimension,
               marginRight: '12px',
             }}
             currency={{ address: token.id, chainId: 56, isToken: true }}
-            size={isMobile ? '20px' : '24px'}
+            size={logoSize}
           />
-          <HomepageSymbol>{token.symbol}</HomepageSymbol>
+          <HomepageSymbol isMobile={isMobile} isTablet={isTablet}>
+            {token.symbol}
+          </HomepageSymbol>
         </>
       }
     >

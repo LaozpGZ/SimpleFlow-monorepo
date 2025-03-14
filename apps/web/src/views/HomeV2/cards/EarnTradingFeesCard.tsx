@@ -10,16 +10,30 @@ import { HomepageCardBadge } from './component/HomepageCardBadge'
 import { HomepageSymbol } from './component/HomepageSymbol'
 import { MultipleCurrencyLogos } from './component/MultipleCurrencyLogos'
 
-const VerticalLayout = styled(Flex)`
+const getMarginLeft = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '12px'
+  if (isTablet) return '20px'
+  // Keep the original 12px for PC or update if needed
+  return '12px'
+}
+
+const VerticalLayout = styled(Flex)<{ isMobile?: boolean; isTablet?: boolean }>`
   flex-direction: column;
   align-items: flex-start;
-  margin-left: 12px;
+  margin-left: ${({ isMobile, isTablet }) => getMarginLeft(isMobile, isTablet)};
 `
 
-const ChainText = styled(Text)`
+const getChainTextFontSize = (isMobile: boolean, isTablet: boolean) => {
+  // Keep original font size for mobile & PC, only adjust tablet slightly
+  if (isMobile) return '12px'
+  if (isTablet) return '14px'
+  return '12px'
+}
+
+const ChainText = styled(Text)<{ isMobile?: boolean; isTablet?: boolean }>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: 12px;
+  font-size: ${({ isMobile, isTablet }) => getChainTextFontSize(isMobile, isTablet)};
   line-height: 18px;
   letter-spacing: 2%;
   color: ${({ theme }) => theme.colors.textSubtle};
@@ -28,7 +42,7 @@ const ChainText = styled(Text)`
 
 export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
   const router = useRouter()
   return (
     <CardSection
@@ -59,11 +73,15 @@ export const EarnTradingFeesCard = ({ pairs }: { pairs: HomePagePoolInfo[] }) =>
                     chainId={pair.chainId}
                   />
 
-                  <VerticalLayout>
-                    <HomepageSymbol>
+                  {/* Pass isMobile, isTablet to VerticalLayout */}
+                  <VerticalLayout isMobile={isMobile} isTablet={isTablet}>
+                    <HomepageSymbol isMobile={isMobile} isTablet={isTablet}>
                       {pair.token0.symbol.toUpperCase()}/{pair.token1.symbol.toUpperCase()}
                     </HomepageSymbol>
-                    <ChainText>{getNetworkFullName(pair.chainId)}</ChainText>
+                    {/* Pass isMobile, isTablet to ChainText */}
+                    <ChainText isMobile={isMobile} isTablet={isTablet}>
+                      {getNetworkFullName(pair.chainId)}
+                    </ChainText>
                   </VerticalLayout>
                 </Flex>
               }

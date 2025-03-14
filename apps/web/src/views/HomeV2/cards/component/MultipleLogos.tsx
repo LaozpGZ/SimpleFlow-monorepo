@@ -172,6 +172,14 @@ interface MultipleLogosProps {
   }
 }
 
+// Helper function to get different size for mobile, tablet, and desktop.
+const getSize = (isMobile: boolean, isFirstSmall: boolean) => {
+  if (isMobile) {
+    return isFirstSmall ? 28 : 32
+  }
+  return 40
+}
+
 export const MultipleLogos = ({
   logos,
   maxDisplay = 3,
@@ -181,8 +189,8 @@ export const MultipleLogos = ({
   borderRadius,
   clickExpand,
 }: MultipleLogosProps) => {
-  const { isMobile } = useMatchBreakpoints()
-  const size = isMobile ? (isFirstSmall ? 28 : 32) : 40
+  const { isMobile, isTablet } = useMatchBreakpoints()
+  const size = getSize(isMobile, isFirstSmall)
 
   const displayedLogos = logos.slice(0, maxDisplay)
   const hiddenCount = logos.length - displayedLogos.length
@@ -212,7 +220,7 @@ export const MultipleLogos = ({
       document.removeEventListener('touchmove', handleTap)
       document.addEventListener('click', handleTap)
     }
-  }, [expandIndex, ref.current])
+  }, [expandIndex, ref.current, isMobile])
 
   return (
     <LogoWrapper ref={ref}>

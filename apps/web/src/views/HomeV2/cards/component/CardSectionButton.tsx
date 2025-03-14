@@ -13,13 +13,14 @@ export const CardSectionButton = ({
   alwaysShow?: boolean
 }) => {
   const router = useRouter()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
   const isHover = useHoverContext()
 
   return (
     <StyledButton
       show={isMobile || isHover || alwaysShow}
       isMobile={isMobile}
+      isTablet={isTablet}
       onClick={() => {
         if (link.startsWith('http')) {
           window.open(link, '_blank')
@@ -35,15 +36,28 @@ export const CardSectionButton = ({
   )
 }
 
-const StyledButton = styled(Button)<{ isMobile: boolean; show: boolean }>`
+const StyledButton = styled(Button)<{ isMobile: boolean; isTablet: boolean; show: boolean }>`
   transition: opacity 1s;
   opacity: ${({ show }) => (show ? 1 : 0)};
-  width: 66;
-  height: 40px;
-  padding-right: 16px;
-  padding-left: 16px;
+
+  height: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '40px'
+    if (isTablet) return '44px'
+    return '50px'
+  }};
+  padding-right: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '16px'
+    if (isTablet) return '20px'
+    return '24px'
+  }};
+  padding-left: ${({ isMobile, isTablet }) => {
+    if (isMobile) return '16px'
+    if (isTablet) return '20px'
+    return '24px'
+  }};
   border-radius: 999px;
   border-width: 3px;
 
+  /* Tablet shares the same color as PC, so we only differentiate mobile vs. not mobile */
   color: ${({ theme, isMobile }) => (isMobile ? theme.colors.textSubtle : theme.colors.card)};
 `

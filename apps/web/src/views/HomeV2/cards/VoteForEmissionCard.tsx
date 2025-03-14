@@ -19,16 +19,16 @@ interface CakeStatsCardProps {
 
 const GAUGE_ICON = `${ASSET_CDN}/web/landing/gauge-icon.png`
 
-const StyledTitle = styled.p`
-  font-size: 16px;
+const StyledTitle = styled.p<{ isMobile?: boolean; isTablet?: boolean }>`
+  font-size: 16px; /* You could replace with a function if needed, for now keep minimal */
   font-weight: bold;
   color: ${({ theme }) => theme.colors.text};
 `
 
-const StyledSubtitle = styled.p`
+const StyledSubtitle = styled.p<{ isMobile?: boolean; isTablet?: boolean }>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 12px; /* You could replace with a function if needed, for now keep minimal */
   line-height: 18px;
   letter-spacing: 2%;
   color: ${({ theme }) => theme.colors.textSubtle};
@@ -36,7 +36,7 @@ const StyledSubtitle = styled.p`
 
 export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cakeToken }) => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
   const router = useRouter()
 
   return (
@@ -46,7 +46,26 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
           router.push('/cake-staking')
         }}
         left={
-          !isMobile ? (
+          isTablet ? (
+            <>
+              <CurrencyLogo
+                style={{ width: '36px', height: '36px', marginRight: '10px' }}
+                currency={{ address: cakeToken.id, chainId: cakeToken.chainId, isToken: true }}
+                size="24px"
+              />
+              <Flex flexDirection="column">
+                <HomepageSymbol isMobile={isMobile} isTablet={isTablet}>
+                  {t('CAKE Staking')}
+                </HomepageSymbol>
+                <StyledSubtitle>
+                  {t('%burned% BURN • $%marketCap% MKT. CAP', {
+                    burned: formatNumber(figures.burned),
+                    marketCap: formatNumber(figures.cakeStats.circulatingSupply * cakeToken.price),
+                  })}
+                </StyledSubtitle>
+              </Flex>
+            </>
+          ) : !isMobile ? (
             <>
               <CurrencyLogo
                 style={{ width: '40px', height: '40px', marginRight: '12px' }}
@@ -54,7 +73,9 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
                 size="24px"
               />
               <Flex flexDirection="column">
-                <HomepageSymbol fontSize="16px">{t('CAKE Staking')}</HomepageSymbol>
+                <HomepageSymbol isMobile={isMobile} isTablet={isTablet}>
+                  {t('CAKE Staking')}
+                </HomepageSymbol>
                 <StyledSubtitle>
                   {t('%burned% BURN • $%marketCap% MKT. CAP', {
                     burned: formatNumber(figures.burned),
@@ -71,7 +92,7 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
                   currency={{ address: cakeToken.id, chainId: cakeToken.chainId, isToken: true }}
                   size="24px"
                 />
-                <HomepageSymbol fontSize="16px" lineHeight="24px">
+                <HomepageSymbol isMobile={isMobile} isTablet={isTablet}>
                   {t('CAKE Staking')}
                 </HomepageSymbol>
               </Flex>
@@ -87,7 +108,9 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
       >
         <HomepageCardBadge
           text={
-            isMobile ? (
+            isTablet ? (
+              `${t('Up to')} ${figures.totalApr.toFixed(2)}% APR`
+            ) : isMobile ? (
               <Box>
                 <Text bold color="positive60" fontSize="12px">
                   {t('Up to')}
@@ -115,13 +138,27 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
           router.push('/gauges-voting')
         }}
         left={
-          !isMobile ? (
+          isTablet ? (
+            <>
+              <img style={{ width: '36px', height: '36px', marginRight: '10px' }} src={GAUGE_ICON} alt="icon" />
+              <Flex flexDirection="column">
+                <StyledTitle>{t('Gauges Voting')}</StyledTitle>
+                <StyledSubtitle>
+                  {t('TOTAL VOTES: %totalVotes%', {
+                    totalVotes: formatNumber(Number(figures.gaugeTotalWeight)),
+                  })}
+                </StyledSubtitle>
+              </Flex>
+            </>
+          ) : !isMobile ? (
             <>
               <img style={{ width: '40px', height: '40px', marginRight: '12px' }} src={GAUGE_ICON} alt="icon" />
               <Flex flexDirection="column">
                 <StyledTitle>{t('Gauges Voting')}</StyledTitle>
                 <StyledSubtitle>
-                  {t('TOTAL VOTES: %totalVotes%', { totalVotes: formatNumber(Number(figures.gaugeTotalWeight)) })}
+                  {t('TOTAL VOTES: %totalVotes%', {
+                    totalVotes: formatNumber(Number(figures.gaugeTotalWeight)),
+                  })}
                 </StyledSubtitle>
               </Flex>
             </>
@@ -129,12 +166,14 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
             <Flex flexDirection="column">
               <Flex flexDirection="row">
                 <img style={{ width: '24px', height: '24px', marginRight: '8px' }} src={GAUGE_ICON} alt="icon" />
-                <HomepageSymbol lineHeight="24px" fontSize="16px">
+                <HomepageSymbol isMobile={isMobile} isTablet={isTablet}>
                   {t('Gauges Voting')}
                 </HomepageSymbol>
               </Flex>
               <StyledSubtitle>
-                {t('TOTAL VOTES: %totalVotes%', { totalVotes: formatNumber(Number(figures.gaugeTotalWeight)) })}
+                {t('TOTAL VOTES: %totalVotes%', {
+                  totalVotes: formatNumber(Number(figures.gaugeTotalWeight)),
+                })}
               </StyledSubtitle>
             </Flex>
           )
@@ -143,7 +182,9 @@ export const VoteForEmissionCard: React.FC<CakeStatsCardProps> = ({ figures, cak
       >
         <HomepageCardBadge
           text={
-            isMobile ? (
+            isTablet ? (
+              `${(figures.weeklyReward / 1e3).toFixed(0)}K+ CAKE ${t('Rewards/Epoch')}`
+            ) : isMobile ? (
               <Box>
                 <Text bold color="positive60" fontSize="14px">
                   {(figures.weeklyReward / 1e3).toFixed(0)}K+ CAKE{' '}

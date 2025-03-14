@@ -12,9 +12,17 @@ interface BridgeAndBuyCryptoCardProps {
   currencies: HomePageCurrency[]
 }
 
+// Added a small helper function for borderRadius to support tablet
+const getBorderRadius = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '12px'
+  if (isTablet) return '14px'
+  return '16px'
+}
+
 export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains, currencies }) => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
+  // Added isTablet for layout changes
+  const { isMobile, isTablet } = useMatchBreakpoints()
 
   return (
     <CardSection title={t('Bridge & Buy Crypto')} subtitle={t('Seamlessly')}>
@@ -22,7 +30,7 @@ export const BridgeCryptoCard: React.FC<BridgeAndBuyCryptoCardProps> = ({ chains
         left={
           <MultipleCurrencyLogos
             gap={-8}
-            borderRadius={isMobile ? '12px' : '16px'}
+            borderRadius={getBorderRadius(isMobile, isTablet)}
             maxDisplay={4}
             tokens={chains.map((chain) => ({ logo: chain.logo }))}
           />

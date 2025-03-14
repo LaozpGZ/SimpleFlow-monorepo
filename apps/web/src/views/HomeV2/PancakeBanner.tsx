@@ -7,12 +7,18 @@ import { homePageDataAtom } from './atom/homePageDataAtom'
 import { Partners } from './Partners'
 import { StatsSummary } from './StatsSummary'
 
-const Container = styled.div<{ isMobile: boolean }>`
+const getContainerPadding = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '24px 0px'
+  if (isTablet) return '24px 40px'
+  return '24px'
+}
+
+const Container = styled.div<{ isMobile: boolean; isTablet: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: ${({ isMobile }) => (isMobile ? '24px 0px' : '24px')};
+  padding: ${({ isMobile, isTablet }) => getContainerPadding(isMobile, isTablet)};
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   overflow: visible;
   position: relative;
@@ -32,11 +38,6 @@ const BannerVideo = styled.video`
   width: 100%;
 `
 
-const BannerImage = styled.img`
-  width: 100%;
-  animation: float 3s ease-in-out infinite;
-`
-
 const Highlight1 = styled.span<{ color?: string }>`
   color: ${({ color, theme }) => color || theme.colors.primary60};
 `
@@ -45,26 +46,36 @@ const Highlight2 = styled.span<{ color?: string }>`
   color: ${({ color, theme }) => color || theme.colors.secondary};
 `
 
-const HeadlineText = styled(Text)<{
-  isMobile
-}>`
+const getHeadlineFontSize = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '32px'
+  if (isTablet) return '48px'
+  return '64px'
+}
+
+const getHeadlineMarginTop = (isMobile: boolean, isTablet: boolean) => {
+  if (isMobile) return '0px'
+  if (isTablet) return '280px'
+  return '280px'
+}
+
+const HeadlineText = styled(Text)<{ isMobile: boolean; isTablet: boolean }>`
   font-family: Kanit;
   font-weight: 600;
-  font-size: 40px;
-  line-height: 48px;
+  font-size: ${({ isMobile, isTablet }) => getHeadlineFontSize(isMobile, isTablet)};
+  line-height: 1.1;
   letter-spacing: -1%;
   text-align: center;
-  margin-top: ${({ isMobile }) => (isMobile ? '0px' : '280px')};
+  margin-top: ${({ isMobile, isTablet }) => getHeadlineMarginTop(isMobile, isTablet)};
 `
 
 const BunnyVideoUrl = `${ASSET_CDN}/web/landing/bunny.webm`
 
 export const PancakeBanner: React.FC = () => {
   const { partners, stats } = useAtomValue(homePageDataAtom)
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
 
   return (
-    <Container isMobile>
+    <Container isMobile={isMobile} isTablet={isTablet}>
       <BannerMediaContainer>
         {!isMobile && (
           <BannerVideo autoPlay loop muted playsInline>
@@ -72,7 +83,7 @@ export const PancakeBanner: React.FC = () => {
           </BannerVideo>
         )}
       </BannerMediaContainer>
-      <HeadlineText isMobile={isMobile}>
+      <HeadlineText isMobile={isMobile} isTablet={isTablet}>
         Used by <Highlight1>millions.</Highlight1> Trusted with <Highlight2>billions.</Highlight2>
       </HeadlineText>
       <StatsSummary stats={stats} />
