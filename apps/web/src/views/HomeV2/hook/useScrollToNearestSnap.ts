@@ -45,17 +45,17 @@ export function useScrollToNearestSnap(snapClassName: string) {
         }
       })
 
-      if (nearestElement && nearestDistance > 20) {
+      if (nearestElement) {
         const el = nearestElement as HTMLElement
 
-        console.log('scrolling to', el, nearestDistance)
         isScrolling.current = true
-        window.scrollTo({ top: el.offsetTop - window.innerHeight * 0.1, behavior: 'smooth' })
+        // window.scrollTo({ top: el.offsetTop - sightPosition, behavior: 'smooth' })
+        smoothScrollTo(el.offsetTop - sightPosition)
 
         setTimeout(() => {
           isScrolling.current = false
           prevScrollY.current = window.scrollY
-        }, 1500)
+        }, 1000)
       }
 
       prevScrollY.current = currentScrollY
@@ -67,4 +67,25 @@ export function useScrollToNearestSnap(snapClassName: string) {
     window.addEventListener('scroll', scrollToNearestSnap, { passive: true })
     return () => window.removeEventListener('scroll', scrollToNearestSnap)
   }, [scrollToNearestSnap])
+}
+
+function smoothScrollTo(targetPosition: number, duration = 150) {
+  const startPosition = window.scrollY
+  const distance = targetPosition - startPosition
+  const startTime = performance.now()
+
+  function scroll(currentTime: number) {
+    const elapsed = currentTime - startTime
+    const progress = Math.min(elapsed / duration, 1)
+    window.scrollTo(0, startPosition + distance * easeInOutCubic(progress))
+    if (progress < 1) {
+      requestAnimationFrame(scroll)
+    }
+  }
+
+  requestAnimationFrame(scroll)
+}
+
+function easeInOutCubic(t: number) {
+  return t < 0.5 ? 4 * t ** 3 : 1 - (-2 * t + 2) ** 3 / 2
 }
