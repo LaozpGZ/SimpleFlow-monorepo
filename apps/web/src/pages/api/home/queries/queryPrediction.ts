@@ -15,7 +15,7 @@ export async function queryPredictionUser() {
     },
     extra,
   )
-  const topUser = result.results.slice(0, 1)
+  const topUser = result.results
   const user = topUser[0]
   const profile = await getProfile(user.id)
   return {

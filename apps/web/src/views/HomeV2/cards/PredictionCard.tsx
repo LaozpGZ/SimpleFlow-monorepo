@@ -1,8 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
-import { BunnyPlaceholderIcon, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import BlockiesSvg from 'blockies-react-svg'
 import { HomePageToken, HomePageUser } from 'pages/api/home/types'
 import styled from 'styled-components'
 import { CardRowLayout } from './component/CardRowLayout'
@@ -110,7 +111,13 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({ token, winner })
                 }}
               />
             ) : (
-              <BunnyPlaceholderIcon {...getImageStyle(isMobile)} />
+              <BlockiesSvg
+                address={user.id}
+                style={{
+                  ...getImageStyle(isMobile),
+                  borderRadius: '50%',
+                }}
+              />
             )}
             <Flex flexDirection="column" ml="8px">
               <TopWinnerTitle isMobile={isMobile} isTablet={isTablet} color="textSubtle">
