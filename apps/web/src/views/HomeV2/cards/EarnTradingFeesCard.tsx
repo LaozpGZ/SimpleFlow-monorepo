@@ -10,7 +10,7 @@ import { HomepageCardBadge } from './component/HomepageCardBadge'
 import { HomepageSymbol } from './component/HomepageSymbol'
 import { MultipleCurrencyLogos } from './component/MultipleCurrencyLogos'
 
-const getMarginLeft = (isMobile: boolean, isTablet: boolean) => {
+const getMarginLeft = (isMobile?: boolean, isTablet?: boolean) => {
   if (isMobile) return '12px'
   if (isTablet) return '20px'
   // Keep the original 12px for PC or update if needed
@@ -23,7 +23,7 @@ const VerticalLayout = styled(Flex)<{ isMobile?: boolean; isTablet?: boolean }>`
   margin-left: ${({ isMobile, isTablet }) => getMarginLeft(isMobile, isTablet)};
 `
 
-const getChainTextFontSize = (isMobile: boolean, isTablet: boolean) => {
+const getChainTextFontSize = (isMobile?: boolean, isTablet?: boolean) => {
   // Keep original font size for mobile & PC, only adjust tablet slightly
   if (isMobile) return '12px'
   if (isTablet) return '14px'
