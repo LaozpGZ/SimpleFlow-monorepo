@@ -174,8 +174,10 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     description: (
       <>
         <Trans>
-          Bedrock is a multiple asset liquid restaking protocol, that backed by non-custodial solution designed in
-          partnership with RockX, a longstanding blockchain infrastructure company with strong roots in crypto staking.
+          Bedrock is the first multi-asset liquid restaking protocol, pioneering Bitcoin staking with uniBTC. As the
+          leading BTC liquid staking token, uniBTC enables holders to earn rewards while maintaining liquidity—unlocking
+          new yield opportunities in Bitcoin’s $1T market. With its cutting-edge approach to BTCFi 2.0, Bedrock is
+          redefining Bitcoin’s role in DeFi.
         </Trans>
       </>
     ),
