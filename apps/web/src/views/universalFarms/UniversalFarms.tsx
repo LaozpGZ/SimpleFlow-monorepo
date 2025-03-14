@@ -1,12 +1,12 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AddIcon, Button, Card, FlexGap, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Button, Card, FlexGap, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import Page from 'components/Layout/Page'
-import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import { PropsWithChildren, useMemo } from 'react'
 import styled from 'styled-components'
 import { PoolsBanner } from './components'
+import { AddLiquidityButton } from './components/AddLiquidityButton'
 import { PoolsPage } from './PoolsPage'
 import { PositionPage } from './PositionPage'
 
@@ -116,11 +116,7 @@ export const UniversalFarms: React.FC<PropsWithChildren> = () => {
           </TabMenu>
           {!isMobile && !isMd && (
             <ButtonContainer>
-              <NextLink href="/add">
-                <Button endIcon={<AddIcon color="invertedContrast" />} scale="md" mb="12px">
-                  {t('Add Liquidity')}
-                </Button>
-              </NextLink>
+              <AddLiquidityButton scale="md" mb="12px" />
             </ButtonContainer>
           )}
         </FlexGap>

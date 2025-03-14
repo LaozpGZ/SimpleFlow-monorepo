@@ -12,6 +12,7 @@ import {
   NotificationDot,
   Text,
   Toggle,
+  useMatchBreakpoints,
   useModal,
 } from '@pancakeswap/uikit'
 import { useExpertMode } from '@pancakeswap/utils/user'
@@ -49,6 +50,7 @@ import { V3_MIGRATION_SUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { usePoolsWithMultiChains } from 'hooks/v3/usePools'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import {
+  AddLiquidityButton,
   Card,
   IPoolsFilterPanelProps,
   PoolsFilterPanel,
@@ -327,6 +329,7 @@ export const PositionPage = () => {
   const [cursorVisible, setCursorVisible] = useState(NUMBER_OF_FARMS_VISIBLE)
   const { replaceURLQueriesByFilter, ...filters } = useFilterToQueries()
   const { selectedTypeIndex, selectedNetwork, selectedTokens, positionStatus, farmsOnly } = filters
+  const { isMobile, isMd } = useMatchBreakpoints()
 
   const poolsFilter = useMemo(
     () => ({
@@ -489,6 +492,7 @@ export const PositionPage = () => {
               </NotificationDot>
             </ButtonWrapper>
           </ControlWrapper>
+          {(isMobile || isMd) && <AddLiquidityButton scale="sm" width="100%" />}
         </PoolsFilterPanel>
         <SubPanel>
           <StyledButtonMenu
