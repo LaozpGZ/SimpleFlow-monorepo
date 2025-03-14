@@ -15,7 +15,7 @@ const getArrowBottom = (isMobile: boolean, isTablet: boolean) => {
 
 const FullScreenContainer = styled.div<{ offsetHeight: number }>`
   scroll-snap-align: start;
-  height: calc(100vh - ${({ offsetHeight }) => offsetHeight}px);
+  height: calc(100vh - ${({ offsetHeight }) => offsetHeight + 50}px);
   width: 100%;
   overflow: hidden;
   position: relative;

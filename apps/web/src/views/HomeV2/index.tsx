@@ -1,5 +1,6 @@
-import { Box, domAnimation, LazyAnimatePresence, MotionBox, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, domAnimation, LazyAnimatePresence, MotionBox, Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
+import { Suspense } from 'react'
 import styled from 'styled-components'
 import SimpleSwapForHomePage from 'views/SwapSimplify/SimpleSwapForHomePage'
 import { homePageDataAtom } from './atom/homePageDataAtom'
@@ -34,7 +35,41 @@ const getMarginTop = (isMobile: boolean, isTablet: boolean, base: number) => {
   return base * 1.5
 }
 
+const BgBox = styled(Box)`
+  background: ${({ theme }) => theme.colors.gradientBubblegum};
+`
 export const HomeV2 = () => {
+  return (
+    <Suspense
+      fallback={
+        <BgBox
+          style={{
+            minHeight: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <Skeleton
+            style={{
+              background: `rgba(255, 255, 255, 0.3)`,
+            }}
+            animation="waves"
+            width="80%"
+            height="50vh"
+            variant="round"
+            borderRadius="0"
+          />
+        </BgBox>
+      }
+    >
+      <BgBox>
+        <HomeV2Inner />
+      </BgBox>
+    </Suspense>
+  )
+}
+const HomeV2Inner = () => {
   const { tokens, chains, pools, currencies, cakeRelated } = useAtomValue(homePageDataAtom)
   const cakeToken = tokens.find((x) => x.symbol === 'CAKE')!
 
