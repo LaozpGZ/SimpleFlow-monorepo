@@ -1,8 +1,20 @@
 import debounce from 'lodash/debounce'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 export function useScrollToNearestSnap(snapClassName: string) {
   const prevScrollY = useRef(window.scrollY)
+
+  const [sightPosition, updateSitePosition] = useState(window.innerHeight * 0.1)
+
+  useEffect(() => {
+    const handleResize = () => {
+      updateSitePosition(window.innerHeight * 0.1)
+    }
+    document.addEventListener('resize', handleResize)
+    return () => {
+      document.removeEventListener('resize', handleResize)
+    }
+  }, [])
 
   const isScrolling = useRef(false)
   const scrollToNearestSnap = useCallback(
@@ -14,36 +26,27 @@ export function useScrollToNearestSnap(snapClassName: string) {
       if (Math.abs(scrollDelta) < 20) return
       const direction = scrollDelta > 0 ? 'down' : 'up'
 
-      const snapElements = Array.from(document.querySelectorAll(`.${snapClassName}`))
+      const snapElements = Array.from(document.querySelectorAll(`.${snapClassName}`)) as HTMLElement[]
       if (snapElements.length === 0) return
 
-      const viewportHeight = window.innerHeight
-      const viewportCenter = currentScrollY + viewportHeight / 3
+      const viewPos = currentScrollY + sightPosition
 
       let nearestElement: HTMLElement | null = null
       let nearestDistance = Infinity
 
       snapElements.forEach((el) => {
-        const elRect = el.getBoundingClientRect()
-        const elCenter = currentScrollY + el.getBoundingClientRect().top + elRect.height / 2
-        const eleTop = currentScrollY + el.getBoundingClientRect().top
-        const eleBottom = currentScrollY + el.getBoundingClientRect().bottom
-        const isElementInDirection =
-          (direction === 'down' && elCenter > viewportCenter) || (direction === 'up' && elCenter < viewportCenter)
-
+        const snapPos = el.offsetTop - sightPosition
         const isDown = direction === 'down'
-        if (isElementInDirection) {
-          const distance = isDown ? eleTop - viewportCenter : viewportCenter - eleBottom
-          if (distance > 0 && distance < nearestDistance) {
-            nearestDistance = distance
-            nearestElement = el as HTMLElement
-          }
+        const distance = isDown ? snapPos - viewPos : viewPos - snapPos
+
+        if (distance > 0 && distance < nearestDistance) {
+          nearestDistance = distance
+          nearestElement = el as HTMLElement
         }
       })
 
       if (nearestElement && nearestDistance > 20) {
         const el = nearestElement as HTMLElement
-        const rect = el.getBoundingClientRect()
 
         console.log('scrolling to', el, nearestDistance)
         isScrolling.current = true
@@ -57,7 +60,7 @@ export function useScrollToNearestSnap(snapClassName: string) {
 
       prevScrollY.current = currentScrollY
     }, 50),
-    [snapClassName],
+    [snapClassName, sightPosition],
   )
 
   useEffect(() => {

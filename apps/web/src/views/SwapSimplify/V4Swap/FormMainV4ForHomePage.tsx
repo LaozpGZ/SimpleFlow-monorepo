@@ -9,12 +9,13 @@ import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { useCurrency } from 'hooks/Tokens'
 import { Field, replaceSwapState } from 'state/swap/actions'
-import { useDefaultsFromURLSearch, useSwapState } from 'state/swap/hooks'
+import { queryParametersToSwapState, useDefaultsFromURLSearch, useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { currencyId } from 'utils/currencyId'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 
+import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useAtom } from 'jotai'
@@ -180,7 +181,7 @@ function useDefaults(): { inputCurrencyId: string | undefined; outputCurrencyId:
   const { chainId } = useActiveChainId()
   const [, dispatch] = useAtom(swapReducerAtom)
   const native = useNativeCurrency()
-  const { query, isReady } = useRouter()
+  const { isReady } = useRouter()
   const [result, setResult] = useState<
     { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
   >()
@@ -188,17 +189,23 @@ function useDefaults(): { inputCurrencyId: string | undefined; outputCurrencyId:
   useEffect(() => {
     if (!chainId || !native || !isReady) return
 
+    const parsed = queryParametersToSwapState(
+      {},
+      native.symbol,
+      CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address,
+    )
+
     dispatch(
       replaceSwapState({
-        typedValue: '',
-        field: Field.INPUT,
-        inputCurrencyId: 'BNB',
-        outputCurrencyId: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82',
+        typedValue: parsed.typedValue,
+        field: parsed.independentField,
+        inputCurrencyId: parsed[Field.INPUT].currencyId,
+        outputCurrencyId: parsed[Field.OUTPUT].currencyId,
         recipient: null,
       }),
     )
-    setResult({ inputCurrencyId: 'BNB', outputCurrencyId: '0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82' })
-  }, [dispatch, chainId, query, native, isReady])
+    setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
+  }, [dispatch, chainId, native, isReady])
 
   return result
 }
