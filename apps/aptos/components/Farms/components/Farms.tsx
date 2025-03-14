@@ -312,7 +312,11 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
     <FarmsContext.Provider value={providerValue}>
       <PageHeader>
         <Box mb="32px" mt="16px">
-          <WarningTips content="Dual Incentives are Completed! You will continue to earn trading fees and check the Finished farms tab to find your positions." />
+          <WarningTips
+            content={t(
+              'Dual Incentives are Completed! You will continue to earn trading fees and check the Finished farms tab to find your positions.',
+            )}
+          />
         </Box>
         <FarmFlexWrapper justifyContent="space-between">
           <Box>
