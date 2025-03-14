@@ -5,6 +5,6 @@ export async function querySiteStats() {
     allTimeLPFees: 176_370_000,
     allTimeTraders: 117_000_000,
     allTimeTv: 1_200_000_000_000,
-    community: 2000000,
+    community: 2_400_000,
   } as SiteStats
 }

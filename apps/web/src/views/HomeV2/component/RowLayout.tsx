@@ -2,13 +2,6 @@ import { Box, BoxProps, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 
-// Optional helper function for sidePadding customization
-const getSidePadding = (isMobile: boolean, isTablet: boolean, basePadding: string) => {
-  if (isMobile) return basePadding
-  if (isTablet) return '40px' // Example: slightly bigger padding for tablet
-  return '56px' // Example: bigger padding for desktop
-}
-
 export const RowLayout = ({
   sidePadding = '24px',
   fullScreen = false,
@@ -16,14 +9,7 @@ export const RowLayout = ({
 }: BoxProps & { sidePadding?: string; fullScreen?: boolean }) => {
   const { isMobile, isTablet } = useMatchBreakpoints()
 
-  // Keep the same logic for flexDirection (row vs column)
   const flexDirection = useMemo(() => (isTablet || isMobile ? 'column' : 'row'), [isMobile, isTablet])
-
-  // Compute sidePadding based on whether it's mobile, tablet, or desktop
-  const computedSidePadding = useMemo(
-    () => getSidePadding(isMobile, isTablet, sidePadding),
-    [isMobile, isTablet, sidePadding],
-  )
 
   return (
     <StyledRowLayout
@@ -32,7 +18,7 @@ export const RowLayout = ({
       flexDirection={flexDirection}
       isMobile={isMobile}
       isTablet={isTablet}
-      sidePadding={computedSidePadding}
+      sidePadding={sidePadding}
     />
   )
 }
