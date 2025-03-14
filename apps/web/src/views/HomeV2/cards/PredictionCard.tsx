@@ -64,6 +64,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({ token, winner })
   const { isMobile, isTablet } = useMatchBreakpoints()
   const { user, profile } = winner
   const avatar = profile?.nft?.image.thumbnail
+  const win = user.totalBNBClaimed - user.totalBNB
 
   return (
     <CardSection
@@ -124,7 +125,7 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({ token, winner })
         isLast
       >
         <HomepageCardBadge
-          text={`+${formatAmount(user.totalBNB, {
+          text={`+${formatAmount(win, {
             precision: 1,
           })} BNB`}
         />

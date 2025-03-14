@@ -52,7 +52,6 @@ const StyledRowLayout = styled(Box)<{
   width: 100%;
   max-width: ${({ fullScreen }) => (fullScreen ? 'none' : '1200px')};
   margin: 0 auto;
-  scroll-snap-align: center;
 
   ${({ sidePadding }) => `
     padding-left: ${sidePadding};

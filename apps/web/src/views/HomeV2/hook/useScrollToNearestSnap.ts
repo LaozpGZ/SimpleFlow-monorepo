@@ -11,16 +11,14 @@ export function useScrollToNearestSnap(snapClassName: string) {
       const currentScrollY = window.scrollY
       const scrollDelta = currentScrollY - prevScrollY.current
 
-      if (Math.abs(scrollDelta) < 100) return
+      if (Math.abs(scrollDelta) < 20) return
       const direction = scrollDelta > 0 ? 'down' : 'up'
 
       const snapElements = Array.from(document.querySelectorAll(`.${snapClassName}`))
       if (snapElements.length === 0) return
 
       const viewportHeight = window.innerHeight
-      const viewportCenter = currentScrollY + viewportHeight / 2
-      const viewportTop = currentScrollY
-      const viewPortBottom = currentScrollY + viewportHeight
+      const viewportCenter = currentScrollY + viewportHeight / 3
 
       let nearestElement: HTMLElement | null = null
       let nearestDistance = Infinity
@@ -35,7 +33,7 @@ export function useScrollToNearestSnap(snapClassName: string) {
 
         const isDown = direction === 'down'
         if (isElementInDirection) {
-          const distance = isDown ? eleTop - (viewportTop + 100) : viewportTop - eleTop
+          const distance = isDown ? eleTop - viewportCenter : viewportCenter - eleBottom
           if (distance > 0 && distance < nearestDistance) {
             nearestDistance = distance
             nearestElement = el as HTMLElement
@@ -43,13 +41,13 @@ export function useScrollToNearestSnap(snapClassName: string) {
         }
       })
 
-      if (nearestElement && nearestDistance > 50) {
+      if (nearestElement && nearestDistance > 20) {
         const el = nearestElement as HTMLElement
         const rect = el.getBoundingClientRect()
-        const scrollTop = window.scrollY + rect.top - 100
 
+        console.log('scrolling to', el, nearestDistance)
         isScrolling.current = true
-        window.scrollTo({ top: scrollTop, behavior: 'smooth' })
+        window.scrollTo({ top: el.offsetTop - window.innerHeight * 0.1, behavior: 'smooth' })
 
         setTimeout(() => {
           isScrolling.current = false
