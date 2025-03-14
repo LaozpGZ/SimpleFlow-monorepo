@@ -88,7 +88,7 @@ export const defaultSiteData = {
     gaugeTotalWeight: '29257830.417012257687436852',
     weeklyReward: 401644,
   },
-  stats: { allTimeLPFees: 16000000, allTimeTraders: 2800000000, allTimeTv: 1500000000, community: 2000000 },
+  stats: { allTimeLPFees: 176_370_000, allTimeTraders: 117_000_000, allTimeTv: 12_000_000_000_000, community: 2000000 },
   partners: [
     {
       logo: 'https://assets.pancakeswap.finance/web/landing/partner/x.png',
