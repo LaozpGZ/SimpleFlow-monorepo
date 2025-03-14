@@ -108,7 +108,7 @@ const FramelessCard = styled(Box)<{ isMobile: boolean; isTablet: boolean }>`
 `
 
 interface CardSectionProps {
-  title: string
+  title?: string
   subtitle?: string
   children: ReactNode
   button?: {
@@ -181,9 +181,11 @@ export const CardSection: React.FC<CardSectionProps> = ({ title, subtitle, child
               <Box style={{ padding: isMobile ? '16px 0' : '24px 0' }}>
                 <Flex justifyContent="space-between" alignItems="center">
                   <Box>
-                    <Title isFrameless={Boolean(isFrameLess)} isMobile={isMobile} isTablet={isTablet}>
-                      {title}
-                    </Title>
+                    {title && (
+                      <Title isFrameless={Boolean(isFrameLess)} isMobile={isMobile} isTablet={isTablet}>
+                        {title}
+                      </Title>
+                    )}
                     {subtitle && (
                       <Subtitle isMobile={isMobile} isTablet={isTablet}>
                         {subtitle}

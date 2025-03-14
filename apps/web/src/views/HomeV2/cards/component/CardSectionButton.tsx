@@ -57,6 +57,7 @@ const StyledButton = styled(Button)<{ isMobile: boolean; isTablet: boolean; show
   }};
   border-radius: 999px;
   border-width: 3px;
+  margin-right: ${({ isMobile }) => (isMobile ? '0px' : '16px')};
 
   /* Tablet shares the same color as PC, so we only differentiate mobile vs. not mobile */
   color: ${({ theme, isMobile }) => (isMobile ? theme.colors.textSubtle : theme.colors.card)};

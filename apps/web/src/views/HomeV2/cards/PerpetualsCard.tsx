@@ -77,7 +77,7 @@ export const PerpetualCard: React.FC<PerpetualCardProps> = ({ tokens }) => {
   return (
     <CardSection
       isFrameLess={isMobile}
-      title={t('Perpetuals')}
+      subtitle={t('Perpetuals')}
       button={{
         text: t('See All'),
         link: 'https://perp.pancakeswap.finance/',

@@ -72,7 +72,8 @@ export const PredictionCard: React.FC<PredictionCardProps> = ({ token, winner })
       // Keep the original logic for isFrameLess.
       // Not changing logic, only layout.
       isFrameLess={isMobile}
-      title={t('BNB 5-Min Prediction')}
+      // title={t('BNB 5-Min Prediction')}
+      subtitle={t('Prediction')}
       button={{
         text: t('Play Now'),
         link: '/prediction',
