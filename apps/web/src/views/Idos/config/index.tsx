@@ -163,44 +163,20 @@ export const idoConfigDict: Record<string, IDOConfig> = {
       },
     ],
   },
-  round3: {
-    id: 'round3',
-    projectUrl: 'https://bubblemaps.io/',
+  bedrock: {
+    id: 'bedrock',
+    projectUrl: 'https://www.bedrock.technology/',
     chainId: ChainId.BSC,
-    bannerUrl: `${ASSET_CDN}/web/ido/bubblemaps-banner.png`,
+    bannerUrl: `${ASSET_CDN}/web/ido/bedrock-banner.png`,
     contractAddress: '0xb330A50d27341730b7B3fD285B150e5742C3b090',
-    tgeTitle: <Trans>Round-3 Token Generation Event</Trans>,
+    tgeTitle: <Trans>Bedrock's Token Generation Event</Trans>,
     tgeSubtitle: <Trans>Exclusively via Binance Keyless Wallet</Trans>,
     description: (
       <>
         <Trans>
-          Bubblemaps is a crypto analytical tool turning blockchain data into a powerful visual experience. It shows
-          connections between a token’s holders and helps identify team wallets, VCs, and insiders—making it easier to
-          understand the tokenomics and spot potential risks.
+          Bedrock is a multiple asset liquid restaking protocol, that backed by non-custodial solution designed in
+          partnership with RockX, a longstanding blockchain infrastructure company with strong roots in crypto staking.
         </Trans>
-        <br />
-        <br />
-        Website:{' '}
-        <a href="https://bubblemaps.io/" target="_blank" rel="noreferrer">
-          https://bubblemaps.io/
-        </a>
-        <br />
-        <br />
-        X:{' '}
-        <a href="https://x.com/bubblemaps" target="_blank" rel="noreferrer">
-          https://x.com/bubblemaps
-        </a>
-        <br />
-        <br />
-        <Trans> What can Bubblemaps do? </Trans>
-        <br />
-        <Trans>
-          Investigate wallets, reveal connections, and see through the noise of blockchain data. For more detailed case
-          studies of Bubblemaps capabilities, please refer to the following link:
-        </Trans>{' '}
-        <a href="https://bubblemaps.io/case-studies" target="_blank" rel="noreferrer">
-          https://bubblemaps.io/case-studies
-        </a>
       </>
     ),
     faqs: [
