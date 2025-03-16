@@ -1,8 +1,8 @@
-import { describe, it, expect, beforeEach } from 'vitest'
 import { configureStore, type EnhancedStore } from '@reduxjs/toolkit'
+import { beforeEach, describe, expect, it } from 'vitest'
 
-import { fetchTokenList, acceptListUpdate, addList, removeList, enableList, updateListVersion } from './actions'
-import { ListsState, createTokenListReducer, NEW_LIST_STATE, type ListByUrlState } from './reducer'
+import { acceptListUpdate, addList, enableList, fetchTokenList, removeList, updateListVersion } from './actions'
+import { createTokenListReducer, ListsState, NEW_LIST_STATE, type ListByUrlState } from './reducer'
 
 const DEFAULT_ACTIVE_LIST_URLS: string[] = []
 const DEFAULT_LIST_OF_LISTS = ['https://tokens.pancakeswap.finance/pancakeswap-extended.json']
@@ -462,13 +462,13 @@ describe('list reducer', () => {
       beforeEach(() => {
         store = resetStore({
           byUrl: {
-            'https://unpkg.com/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json': {
+            'https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json': {
               error: null,
               current: STUB_TOKEN_LIST,
               loadingRequestId: null,
               pendingUpdate: null,
             },
-            'https://unpkg.com/@uniswap/default-token-list@latest': {
+            'https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest': {
               error: null,
               current: STUB_TOKEN_LIST,
               loadingRequestId: null,
@@ -482,9 +482,9 @@ describe('list reducer', () => {
 
       it('clears the current lists', () => {
         expect(
-          store.getState().byUrl['https://unpkg.com/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json'],
+          store.getState().byUrl['https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json'],
         ).toBeUndefined()
-        expect(store.getState().byUrl['https://unpkg.com/@uniswap/default-token-list@latest']).toBeUndefined()
+        expect(store.getState().byUrl['https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest']).toBeUndefined()
       })
 
       it('puts in all the new lists', () => {
@@ -512,13 +512,13 @@ describe('list reducer', () => {
       beforeEach(() => {
         store = resetStore({
           byUrl: {
-            'https://unpkg.com/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json': {
+            'https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json': {
               error: null,
               current: STUB_TOKEN_LIST,
               loadingRequestId: null,
               pendingUpdate: null,
             },
-            'https://unpkg.com/@uniswap/default-token-list@latest': {
+            'https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest': {
               error: null,
               current: STUB_TOKEN_LIST,
               loadingRequestId: null,
@@ -526,14 +526,14 @@ describe('list reducer', () => {
             },
           },
           activeListUrls: undefined,
-          lastInitializedDefaultListOfLists: ['https://unpkg.com/@uniswap/default-token-list@latest'],
+          lastInitializedDefaultListOfLists: ['https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest'],
         })
         store.dispatch(updateListVersion())
       })
 
       it('does not remove lists not in last initialized list of lists', () => {
         expect(
-          store.getState().byUrl['https://unpkg.com/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json'],
+          store.getState().byUrl['https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json'],
         ).toEqual({
           error: null,
           current: STUB_TOKEN_LIST,
@@ -542,7 +542,7 @@ describe('list reducer', () => {
         })
       })
       it('removes lists in the last initialized list of lists', () => {
-        expect(store.getState().byUrl['https://unpkg.com/@uniswap/default-token-list@latest']).toBeUndefined()
+        expect(store.getState().byUrl['https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest']).toBeUndefined()
       })
 
       it('each of those initialized lists is empty', () => {
@@ -550,7 +550,7 @@ describe('list reducer', () => {
         // note we don't expect the uniswap default list to be prepopulated
         // this is ok.
         Object.keys(byUrl).forEach((url) => {
-          if (url !== 'https://unpkg.com/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json') {
+          if (url !== 'https://cdn.jsdelivr.net/npm/@uniswap/default-token-list@latest/uniswap-default.tokenlist.json') {
             expect(byUrl[url]).toEqual({
               error: null,
               current: null,
