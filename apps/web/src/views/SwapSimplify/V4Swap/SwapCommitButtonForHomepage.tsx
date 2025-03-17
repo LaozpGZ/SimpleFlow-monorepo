@@ -111,11 +111,9 @@ const UnsupportedSwapButtonReplace = ({ children }) => {
 const SwapCommitButtonComp: React.FC<SwapCommitButtonPropsType & CommitButtonProps> = (props) => {
   return (
     <UnsupportedSwapButtonReplace>
-      <ConnectButtonReplace>
-        <WrapCommitButtonReplace>
-          <SwapCommitButtonInner {...props} />
-        </WrapCommitButtonReplace>
-      </ConnectButtonReplace>
+      <WrapCommitButtonReplace>
+        <SwapCommitButtonInner {...props} />
+      </WrapCommitButtonReplace>
     </UnsupportedSwapButtonReplace>
   )
 }
