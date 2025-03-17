@@ -26,6 +26,13 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
 
   return (
     <PageHeader>
+      {isPancakePicks && isMobile && (
+        <FlexGap width="100%" justifyContent="center" alignItems="center">
+          <Suspense>
+            <PickAdSlides isDismissible={false} />
+          </Suspense>
+        </FlexGap>
+      )}
       <Column>
         <FarmFlexWrapper>
           <Box style={{ flex: '1 1 100%' }}>
@@ -65,7 +72,11 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
                   px="16px"
                   scale="md"
                   onClick={() =>
-                    window.open('https://docs.pancakeswap.finance/products/farms', '_blank', 'noopener noreferrer')
+                    window.open(
+                      'https://docs.pancakeswap.finance/products/yield-farming/how-to-use-farms',
+                      '_blank',
+                      'noopener noreferrer',
+                    )
                   }
                 >
                   <HelpIcon color={theme.isDark ? '#280D5F' : 'white'} />
@@ -100,7 +111,7 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
             )}
           </Box>
           <Box>
-            {(isPancakePicks || !isMobile) && (
+            {!isMobile && (
               <Suspense>
                 <PickAdSlides isDismissible={false} />
               </Suspense>
