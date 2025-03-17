@@ -3622,5 +3622,6 @@
   "by Providing Liquidity": "by Providing Liquidity",
   "Choose from %num% Currencies": "Choose from %num% Currencies",
   "Bridge across %num% chains": "Bridge across %num% chains",
-  "%burned% BURN • $%marketCap% MKT. CAP": "%burned% BURN • $%marketCap% MKT. CAP"
+  "%burned% BURN • $%marketCap% MKT. CAP": "%burned% BURN • $%marketCap% MKT. CAP",
+  "in the last 30 days": "in the last 30 days"
 }

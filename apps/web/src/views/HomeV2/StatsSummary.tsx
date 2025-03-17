@@ -76,6 +76,16 @@ interface ValueProps {
   isTablet?: boolean
 }
 
+export const Additional = styled.div`
+  font-family: Kanit;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 150%;
+  letter-spacing: 0%;
+  vertical-align: middle;
+  color: ${({ theme }) => theme.colors.textSubtle};
+`
+
 const Value = styled.div<ValueProps>`
   font-family: Kanit;
   font-weight: 600;
@@ -101,7 +111,7 @@ const Value = styled.div<ValueProps>`
 `
 
 export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
-  const { isMobile, isTablet } = useMatchBreakpoints()
+  const { isMobile, isTablet, isDesktop } = useMatchBreakpoints()
   const { t } = useTranslation()
 
   return (
@@ -130,6 +140,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
         <Value textColor="primary60" isMobile={isMobile} isTablet={isTablet}>
           ~<CountUpAnimation num={stats.totalUsers} />+
         </Value>
+        {isDesktop && <Additional>{t('in the last 30 days')}</Additional>}
       </StatCard>
 
       <StatCard
@@ -146,6 +157,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
         <Value textColor="secondary" isMobile={isMobile} isTablet={isTablet}>
           <CountUpAnimation num={stats.totalTrades} />+
         </Value>
+        {isDesktop && <Additional>{t('in the last 30 days')}</Additional>}
       </StatCard>
 
       <StatCard
