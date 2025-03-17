@@ -1,16 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
+import { SiteStats } from 'pages/api/home/types'
 import React from 'react'
 import CountUp from 'react-countup'
 import styled from 'styled-components'
-
-export type SiteStats = {
-  allTimeTraders: number
-  allTimeTv: number
-  allTimeLPFees: number
-  community: number
-}
 
 interface StatCardProps {
   bgColor: string
@@ -131,10 +125,10 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
         index={0}
       >
         <Title textColor="primary60" isMobile={isMobile} isTablet={isTablet}>
-          {t('All Time Traders')}+
+          {t('Total Users')}+
         </Title>
         <Value textColor="primary60" isMobile={isMobile} isTablet={isTablet}>
-          ~<CountUpAnimation num={stats.allTimeTraders} />
+          ~<CountUpAnimation num={stats.totalUsers} />
         </Value>
       </StatCard>
 
@@ -147,10 +141,10 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
         index={1}
       >
         <Title textColor="secondary" isMobile={isMobile} isTablet={isTablet}>
-          {t('All Time TV')}
+          {t('Total Trades')}
         </Title>
         <Value textColor="secondary" isMobile={isMobile} isTablet={isTablet}>
-          $<CountUpAnimation num={stats.allTimeTv} />+
+          $<CountUpAnimation num={stats.totalTrades} />+
         </Value>
       </StatCard>
 
@@ -163,10 +157,10 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
         index={2}
       >
         <Title textColor="blue60" isMobile={isMobile} isTablet={isTablet}>
-          {t('All Time LP Fees')}
+          {t('Total Value Locked')}
         </Title>
         <Value textColor="blue60" isMobile={isMobile} isTablet={isTablet}>
-          $<CountUpAnimation num={stats.allTimeLPFees} />+
+          $<CountUpAnimation num={stats.totalValueLocked} />+
         </Value>
       </StatCard>
 

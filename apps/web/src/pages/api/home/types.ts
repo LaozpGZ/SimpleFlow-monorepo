@@ -43,9 +43,9 @@ export type CakeRelatedFigures = {
 }
 
 export type SiteStats = {
-  allTimeTraders: number
-  allTimeTv: number
-  allTimeLPFees: number
+  totalUsers: number
+  totalTrades: number
+  totalValueLocked: number
   community: number
 }
 

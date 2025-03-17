@@ -1,10 +1,13 @@
+import { getTotalTvl } from 'utils/getTotalTVL'
 import { SiteStats } from './types'
 
 export async function querySiteStats() {
+  const results = await getTotalTvl()
+
   return {
-    allTimeLPFees: 176_370_000,
-    allTimeTraders: 117_000_000,
-    allTimeTv: 1_200_000_000_000,
+    totalUsers: results.addressCount30Days,
+    totalTrades: results.totalTx30Days,
+    totalValueLocked: results.tvl,
     community: 2_400_000,
   } as SiteStats
 }
