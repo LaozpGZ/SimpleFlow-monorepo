@@ -25,9 +25,9 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
   const [isPancakePicks, setIsPancakePicks] = useUserPancakePicks(isMobile)
 
   return (
-    <PageHeader>
+    <PageHeader style={isMobile ? { padding: '16px 0' } : undefined}>
       {isPancakePicks && isMobile && (
-        <FlexGap width="100%" justifyContent="center" alignItems="center">
+        <FlexGap width="100%" justifyContent="center" alignItems="center" mb="12px">
           <Suspense>
             <PickAdSlides isDismissible={false} />
           </Suspense>
