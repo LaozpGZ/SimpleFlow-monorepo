@@ -169,7 +169,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
         index={2}
       >
         <Title textColor="blue60" isMobile={isMobile} isTablet={isTablet}>
-          ${t('Total Value Locked')}
+          {t('Total Value Locked')}
         </Title>
         <Value textColor="blue60" isMobile={isMobile} isTablet={isTablet}>
           $<CountUpAnimation num={stats.totalValueLocked} />+
