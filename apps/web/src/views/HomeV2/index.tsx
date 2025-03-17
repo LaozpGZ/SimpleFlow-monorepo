@@ -48,6 +48,11 @@ const getMarginTop = (isMobile: boolean, isTablet: boolean, base: number) => {
 const BgBox = styled(Box)`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
 `
+
+const StyledSkeleton = styled(Skeleton)`
+  background: ${({ theme }) => theme.colors.gradientBubblegum};
+  opacity: 0.01;
+`
 export const HomeV2 = () => {
   return (
     <Suspense
@@ -60,16 +65,7 @@ export const HomeV2 = () => {
             alignItems: 'center',
           }}
         >
-          <Skeleton
-            style={{
-              background: `rgba(255, 255, 255, 0.01)`,
-            }}
-            animation="waves"
-            width="80%"
-            height="50vh"
-            variant="round"
-            borderRadius="0"
-          />
+          <StyledSkeleton animation="waves" width="80%" height="50vh" variant="round" borderRadius="0" />
         </BgBox>
       }
     >
