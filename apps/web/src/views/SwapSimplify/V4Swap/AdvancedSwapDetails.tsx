@@ -22,12 +22,12 @@ import { RowBetween, RowFixed } from 'components/Layout/Row'
 import { RoutingSettingsButton } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { Field } from 'state/swap/actions'
 import { styled } from 'styled-components'
-import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
-import { RouterViewer } from '../../Swap/components/RouterViewer'
-import SwapRoute from '../../Swap/components/SwapRoute'
-import { useFeeSaved } from '../../Swap/hooks/useFeeSaved'
-import { SlippageButton } from '../../Swap/V3Swap/components/SlippageButton'
-import { SlippageAdjustedAmounts } from '../../Swap/V3Swap/utils/exchange'
+import { SlippageAdjustedAmounts } from 'views/Swap/utils/exchange'
+import FormattedPriceImpact from 'views/Swap/components/FormattedPriceImpact'
+import { RouterViewer } from 'views/Swap/components/RouterViewer'
+import SwapRoute from 'views/Swap/components/SwapRoute'
+import { useFeeSaved } from 'views/Swap/hooks/useFeeSaved'
+import { SlippageButton } from 'views/Swap/components/SlippageButton'
 
 const DetailsTitle = styled(Text)`
   text-decoration: underline dotted;
@@ -232,98 +232,6 @@ export const TradeSummary = memo(function TradeSummary({
             )}
           </SkeletonV2>
         </RowBetween>
-      )}
-    </AutoColumn>
-  )
-})
-
-export interface AdvancedSwapDetailsProps {
-  hasStablePair?: boolean
-  pairs?: Pair[]
-  path?: Currency[]
-  priceImpactWithoutFee?: Percent
-  realizedLPFee?: CurrencyAmount<Currency> | null
-  slippageAdjustedAmounts: SlippageAdjustedAmounts
-  inputAmount?: CurrencyAmount<Currency>
-  outputAmount?: CurrencyAmount<Currency>
-  tradeType?: TradeType
-}
-
-export const AdvancedSwapDetails = memo(function AdvancedSwapDetails({
-  pairs,
-  path,
-  priceImpactWithoutFee,
-  realizedLPFee,
-  slippageAdjustedAmounts,
-  inputAmount,
-  outputAmount,
-  tradeType,
-  hasStablePair,
-}: AdvancedSwapDetailsProps) {
-  const { t } = useTranslation()
-  const [isModalOpen, setIsModalOpen] = useState(false)
-  const showRoute = Boolean(path && path.length > 1)
-  return (
-    <AutoColumn gap="0px">
-      {inputAmount && (
-        <>
-          <TradeSummary
-            inputAmount={inputAmount}
-            outputAmount={outputAmount}
-            tradeType={tradeType}
-            slippageAdjustedAmounts={slippageAdjustedAmounts ?? {}}
-            priceImpactWithoutFee={priceImpactWithoutFee}
-            realizedLPFee={realizedLPFee}
-            hasStablePair={hasStablePair}
-          />
-          {showRoute && (
-            <>
-              <RowBetween style={{ padding: '0 24px' }}>
-                <span style={{ display: 'flex', alignItems: 'center' }}>
-                  <Text fontSize="14px" color="textSubtle">
-                    {t('MM Route')}
-                  </Text>
-                  <QuestionHelper
-                    text={t(
-                      'The Market Maker (MM) route is automatically selected for your trade to achieve the best price for your trade.',
-                    )}
-                    ml="4px"
-                    placement="top"
-                  />
-                </span>
-                {path ? <SwapRoute path={path} /> : null}
-                <SearchIcon style={{ cursor: 'pointer' }} onClick={() => setIsModalOpen(true)} />
-                <ModalV2 closeOnOverlayClick isOpen={isModalOpen} onDismiss={() => setIsModalOpen(false)}>
-                  <Modal
-                    title={
-                      <Flex justifyContent="center">
-                        {t('Route')}{' '}
-                        <QuestionHelper
-                          text={t(
-                            'Route is automatically calculated based on your routing preference to achieve the best price for your trade.',
-                          )}
-                          ml="4px"
-                          placement="top"
-                        />
-                      </Flex>
-                    }
-                    onDismiss={() => setIsModalOpen(false)}
-                  >
-                    <RouterViewer
-                      inputCurrency={inputAmount?.currency}
-                      pairs={pairs}
-                      path={path}
-                      outputCurrency={outputAmount?.currency}
-                    />
-                    <Flex mt="3em" width="100%" justifyContent="center">
-                      <RoutingSettingsButton />
-                    </Flex>
-                  </Modal>
-                </ModalV2>
-              </RowBetween>
-            </>
-          )}
-        </>
       )}
     </AutoColumn>
   )
