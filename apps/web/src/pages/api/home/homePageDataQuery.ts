@@ -6,7 +6,7 @@ export const partners: HomePagePartner[] = [
   {
     logo: `${ASSET_CDN}/web/landing/partner/x.png`,
     link: 'https://twitter.com/pancakeswap',
-    name: '(ex. Twitter)',
+    name: 'X',
   },
   {
     logo: `${ASSET_CDN}/web/landing/partner/telegram.png`,
@@ -27,11 +27,6 @@ export const partners: HomePagePartner[] = [
     logo: `${ASSET_CDN}/web/landing/partner/youtube.png`,
     link: 'https://www.youtube.com/@pancakeswap_official',
     name: 'Youtube',
-  },
-  {
-    logo: `${ASSET_CDN}/web/landing/partner/reddit.png`,
-    link: 'https://www.reddit.com/',
-    name: 'Reddit',
   },
   {
     logo: `${ASSET_CDN}/web/landing/partner/blog.png`,

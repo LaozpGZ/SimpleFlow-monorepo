@@ -125,10 +125,10 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
         index={0}
       >
         <Title textColor="primary60" isMobile={isMobile} isTablet={isTablet}>
-          {t('Total Users')}+
+          {t('Total Users')}
         </Title>
         <Value textColor="primary60" isMobile={isMobile} isTablet={isTablet}>
-          ~<CountUpAnimation num={stats.totalUsers} />
+          ~<CountUpAnimation num={stats.totalUsers} />+
         </Value>
       </StatCard>
 
@@ -144,7 +144,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
           {t('Total Trades')}
         </Title>
         <Value textColor="secondary" isMobile={isMobile} isTablet={isTablet}>
-          $<CountUpAnimation num={stats.totalTrades} />+
+          <CountUpAnimation num={stats.totalTrades} />+
         </Value>
       </StatCard>
 
@@ -157,7 +157,7 @@ export const StatsSummary: React.FC<{ stats: SiteStats }> = ({ stats }) => {
         index={2}
       >
         <Title textColor="blue60" isMobile={isMobile} isTablet={isTablet}>
-          {t('Total Value Locked')}
+          ${t('Total Value Locked')}
         </Title>
         <Value textColor="blue60" isMobile={isMobile} isTablet={isTablet}>
           $<CountUpAnimation num={stats.totalValueLocked} />+

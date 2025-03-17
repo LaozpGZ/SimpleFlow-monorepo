@@ -5,26 +5,7 @@ import { fetchExplorerFarmPools } from 'state/farmsV4/state/farmPools/fetcher'
 import { getCakeApr } from 'state/farmsV4/state/poolApr/fetcher'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { checksumAddress } from 'utils/checksumAddress'
-import { HomePagePairConfig, HomePagePoolInfo } from '../types'
-
-function poolId(chainId: ChainId, id: string) {
-  return `${chainId}:${id}`
-}
-
-const pairsConfig: HomePagePairConfig[] = [
-  {
-    id: '0x172fcD41E0913e95784454622d1c3724f546f849',
-    chainId: ChainId.BSC,
-  },
-  {
-    id: '0x36696169C63e42cd08ce11f5deeBbCeBae652050',
-    chainId: ChainId.BSC,
-  },
-  {
-    id: '0xD0e226f674bBf064f54aB47F42473fF80DB98CBA',
-    chainId: ChainId.BSC,
-  },
-]
+import { HomePagePoolInfo } from '../types'
 
 function tokenLogo(address: `0x${string}`) {
   if (address === ZERO_ADDRESS) {
@@ -63,13 +44,22 @@ function scorePools(
 }
 
 export async function queryPools(cakePrice: number) {
+  console.log('start fetch')
   const poolsInfo = await fetchExplorerFarmPools()
-  const filtered = poolsInfo.filter((x) => x.lpApr && x.tvlUsd)
+  let filtered = poolsInfo.filter((x) => x.lpApr && x.tvlUsd)
 
+  const uniq = new Set<string>()
+  filtered = filtered.slice(0, 10).filter((p) => {
+    const pair = `${p.token0.symbol}:${p.token1.symbol}`
+    if (uniq.has(pair)) {
+      return false
+    }
+    uniq.add(pair)
+    return true
+  })
   scorePools(filtered)
   const tops = filtered.slice(0, 3)
 
-  const t = Date.now()
   const cakeAprs = await Promise.all(tops.map((p) => getCakeApr(p, BN(cakePrice))))
   const aprs = cakeAprs.map((x) => Number.parseFloat(Object.values(x)[0].boost || '0'))
 

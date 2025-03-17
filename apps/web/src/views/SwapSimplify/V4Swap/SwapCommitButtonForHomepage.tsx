@@ -1,20 +1,14 @@
 import { Currency } from '@pancakeswap/swap-sdk-core'
-import { AutoColumn, Box, Button, Message, MessageText, Text, useModal } from '@pancakeswap/uikit'
+import { Box, Button, useModal } from '@pancakeswap/uikit'
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { PriceOrder } from '@pancakeswap/price-api-sdk'
 import { getUniversalRouterAddress } from '@pancakeswap/universal-router-sdk'
 import { ConfirmModalState } from '@pancakeswap/widgets-internal'
-import { GreyCard } from 'components/Card'
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { AutoRow } from 'components/Layout/Row'
-import {
-  RoutingSettingsButton,
-  SettingsModalV2,
-  withCustomOnDismiss,
-} from 'components/Menu/GlobalSettings/SettingsModalV2'
+import { SettingsModalV2, withCustomOnDismiss } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { BIG_INT_ZERO } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
@@ -25,7 +19,6 @@ import { useRouter } from 'next/router'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
-import { useRoutingSettingChanged } from 'state/user/smartRouter'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import currencyId from 'utils/currencyId'
 import { logGTMClickSwapConfirmEvent } from 'utils/customGTMEventTracking'
@@ -290,37 +283,3 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     </Box>
   )
 })
-
-const ResetRoutesButton = () => {
-  const { t } = useTranslation()
-  const [isRoutingSettingChange, resetRoutingSetting] = useRoutingSettingChanged()
-  return (
-    <AutoColumn gap="12px">
-      <GreyCard style={{ textAlign: 'center', padding: '0.75rem' }}>
-        <Text color="textSubtle">{t('Insufficient liquidity for this trade.')}</Text>
-      </GreyCard>
-      {isRoutingSettingChange && (
-        <Message variant="warning" icon={<></>}>
-          <AutoColumn gap="8px">
-            <MessageText>{t('Unable to establish trading route due to customized routing.')}</MessageText>
-            <AutoRow gap="4px">
-              <RoutingSettingsButton
-                buttonProps={{
-                  scale: 'xs',
-                  p: 0,
-                }}
-                showRedDot={false}
-              >
-                {t('Check your settings')}
-              </RoutingSettingsButton>
-              <MessageText>{t('or')}</MessageText>
-              <Button variant="text" scale="xs" p="0" onClick={resetRoutingSetting}>
-                {t('Reset to default')}
-              </Button>
-            </AutoRow>
-          </AutoColumn>
-        </Message>
-      )}
-    </AutoColumn>
-  )
-}
