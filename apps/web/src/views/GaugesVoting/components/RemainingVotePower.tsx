@@ -13,7 +13,6 @@ const StyledBox = styled(Box)`
   border-radius: 16px;
   background: linear-gradient(229deg, #1fc7d4 -13.69%, #7645d9 91.33%);
   padding: 18px;
-  display: inline-flex;
   align-items: center;
   min-width: 100%;
   flex-direction: row;
@@ -27,11 +26,17 @@ export const RemainingVotePower: React.FC<{
   votedPercent: number
 }> = ({ votedPercent }) => {
   const { t } = useTranslation()
+  const { data: epochPower } = useEpochVotePower()
+
+  const { balance } = useVeCakeBalance()
+
+  const showWillUnlockWarning = useMemo(() => {
+    return balance.gt(0) && epochPower === 0n
+  }, [balance, epochPower])
 
   const { cakeLockedAmount } = useCakeLockStatus()
   const locked = useMemo(() => cakeLockedAmount > 0n, [cakeLockedAmount])
   const { balance: veCakeBalance } = useVeCakeBalance()
-  const { data: epochPower } = useEpochVotePower()
 
   // @note: real power is EpochEndPower * (10000 - PercentVoted)
   // use veCakeBalance as cardinal number for better UX understanding
@@ -45,7 +50,40 @@ export const RemainingVotePower: React.FC<{
 
   return (
     <StyledBox id="vecake-vote-power">
-      <img src="/images/cake-staking/token-vecake.png" alt="token-vecake" width="58px" />
+      <Flex flexDirection="row" ml="4px" alignItems="center" justifyContent="space-between">
+        <Flex alignItems="center">
+          <img src="/images/cake-staking/token-vecake.png" alt="token-vecake" width="58px" />
+          <Text fontSize="20px" bold lineHeight="120%" ml={['8px', '8px', '16px']}>
+            {t('MY veCAKE')}
+          </Text>
+        </Flex>
+        <FlexGap gap="4px" alignItems="center">
+          <Balance
+            fontSize="24px"
+            color={showWillUnlockWarning ? 'warning' : 'white'}
+            bold
+            lineHeight="110%"
+            value={getBalanceNumber(balance)}
+            decimals={2}
+          />
+          {showWillUnlockWarning ? (
+            <Tooltips
+              content={
+                <>
+                  {t(
+                    'Your positions are unlocking soon. Therefore, you have no veCAKE balance at the end of the current voting epoch while votes are being tallied. ',
+                  )}
+                  <br />
+                  <br />
+                  {t('Extend your lock to cast votes.')}
+                </>
+              }
+            >
+              <ErrorIcon color="warning" style={{ marginBottom: '-3.5px' }} />
+            </Tooltips>
+          ) : null}
+        </FlexGap>
+      </Flex>
       <Flex
         flexDirection={['column', 'column', 'row']}
         justifyContent="space-between"
@@ -53,7 +91,7 @@ export const RemainingVotePower: React.FC<{
         ml="4px"
         alignItems={['flex-start', 'flex-start', 'center']}
       >
-        <Text fontSize="20px" bold color="white" lineHeight="2">
+        <Text fontSize="16px" bold color="white" lineHeight="2">
           {t('Remaining veCAKE')}
         </Text>
         {epochPower === 0n && realPower.gt(0) ? (
@@ -87,14 +125,16 @@ export const RemainingVotePower: React.FC<{
           >
             <FlexGap gap="4px" alignItems="center">
               <Balance
-                fontSize="24px"
+                fontSize="20px"
                 bold
                 color={locked ? 'white' : 'warning'}
                 lineHeight="110%"
                 value={getBalanceNumber(votePower) || 0}
                 decimals={2}
               />
-              {!locked ? <ErrorIcon color="warning" style={{ marginBottom: '-2.5px' }} /> : null}
+              {!locked ? (
+                <ErrorIcon width="16px" height="16px" color="warning" style={{ marginBottom: '-2.5px' }} />
+              ) : null}
             </FlexGap>
           </Tooltips>
         )}

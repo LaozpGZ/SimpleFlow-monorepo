@@ -20,7 +20,6 @@ import { PropsWithChildren, useState } from 'react'
 import styled from 'styled-components'
 import { CurrentEpoch } from './components/CurrentEpoch'
 import { FilterFieldByType, FilterFieldInput, FilterFieldSort } from './components/GaugesFilter'
-import { MyVeCakeBalance } from './components/MyVeCakeBalance'
 import { GaugesList, GaugesTable, VoteTable } from './components/Table'
 import { WeightsPieChart } from './components/WeightsPieChart'
 import { useGauges } from './hooks/useGauges'
@@ -216,9 +215,9 @@ const GaugesVoting = () => {
               )}
             </ResponsiveCard>
           ) : (
-            <Box mt="24px">
+            <Card innerCardProps={{ padding: '2em 2em 0 2em' }}>
               <VoteTable />
-            </Box>
+            </Card>
           )}
         </Box>
       </StyledPage>
@@ -229,7 +228,6 @@ const GaugesVoting = () => {
 const EpochPreview = () => {
   return (
     <Card isActive style={{ height: 'fit-content' }}>
-      <MyVeCakeBalance />
       <CurrentEpoch />
     </Card>
   )
