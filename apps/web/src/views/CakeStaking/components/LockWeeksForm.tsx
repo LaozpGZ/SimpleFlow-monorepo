@@ -1,5 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoRow, BalanceInput, BalanceInputProps, Box, Button, FlexGap, Image, Text } from '@pancakeswap/uikit'
+import {
+  AutoRow,
+  BalanceInput,
+  BalanceInputProps,
+  Box,
+  Button,
+  FlexGap,
+  Image,
+  Text,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { MAX_VECAKE_LOCK_WEEKS } from 'config/constants/veCake'
 import { useAtom, useAtomValue } from 'jotai'
 import React, { useCallback, useMemo } from 'react'
@@ -10,6 +20,25 @@ import { useWriteWithdrawCallback } from '../hooks/useContractWrite/useWriteWith
 import { useMaxUnlockWeeks } from '../hooks/useMaxUnlockTime'
 import { useCakeLockStatus } from '../hooks/useVeCakeUserInfo'
 import { LockWeeksDataSet } from './DataSet'
+
+const weeksOnMobile = [
+  {
+    value: 2,
+    label: '2W',
+  },
+  {
+    value: 26,
+    label: '6M',
+  },
+  {
+    value: 52,
+    label: '1Y',
+  },
+  {
+    value: 208,
+    label: 'Max',
+  },
+]
 
 const weeks = [
   {
@@ -51,11 +80,13 @@ const WeekInput: React.FC<{
   disabled?: boolean
 }> = ({ value, onUserInput, disabled }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   const { cakeLockExpired, cakeUnlockTime } = useCakeLockStatus()
   const showMax = useMemo(() => (cakeLockExpired ? false : cakeUnlockTime > 0), [cakeLockExpired, cakeUnlockTime])
   const weekOptions = useMemo(() => {
-    return showMax ? weeks.slice(0, weeks.length - 1) : weeks
-  }, [showMax])
+    const options = isMobile ? weeksOnMobile : weeks
+    return showMax ? options.slice(0, options.length - 1) : options
+  }, [showMax, isMobile])
   const maxUnlockWeeks = useMaxUnlockWeeks(MAX_VECAKE_LOCK_WEEKS, cakeLockExpired ? 0 : cakeUnlockTime)
   const onInput = useCallback(
     (v: string) => {
