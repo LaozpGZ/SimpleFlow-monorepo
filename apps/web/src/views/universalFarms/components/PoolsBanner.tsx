@@ -35,7 +35,14 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
               </FarmH1>
             ) : (
               <FlexGap gap="16px">
-                <Text fontSize="20px">{t('Earn from Farm / Liquidity')}</Text>
+                <FlexGap gap="3px">
+                  <Text fontSize="20px" bold>
+                    {t('Earn from')}
+                  </Text>
+                  <Text fontSize="20px" bold color="secondary">
+                    {t('Farm / Liquidity')}
+                  </Text>
+                </FlexGap>
                 <Button
                   width="40px"
                   height="40px"
@@ -57,9 +64,11 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
                   variant="subtle"
                   px="16px"
                   scale="md"
-                  onClick={() => setIsPancakePicks((prev) => !prev)}
+                  onClick={() =>
+                    window.open('https://docs.pancakeswap.finance/products/farms', '_blank', 'noopener noreferrer')
+                  }
                 >
-                  <HelpIcon />
+                  <HelpIcon color={theme.isDark ? '#280D5F' : 'white'} />
                 </Button>
               </FlexGap>
             )}
