@@ -22,8 +22,8 @@ const NftSubgraphWarning: React.FC = () => {
             {t(
               'Due to an ongoing Subgraph indexing issue from the underlying infrastructure provider. The PancakeSwap NFT marketplace is currently showing outdated data. Continuing trading may be subject to the risk of executing orders at unexpected prices and loss of funds. We recommend not to trade until the issue is resolved. Follow our ',
             )}
-            <StyledAnchor target="_blank" rel="noreferrer noopener" href="https://twitter.com/pancakeswap/">
-              Twitter
+            <StyledAnchor target="_blank" rel="noreferrer noopener" href="https://x.com/pancakeswap/">
+              X
             </StyledAnchor>{' '}
             {t('for the latest update.')}
           </Text>

@@ -1,5 +1,5 @@
 import { styled } from 'styled-components'
-import { Flex, Text, LanguageIcon, SvgProps, Svg, TwitterIcon, Link, TelegramIcon, FlexGap } from '@pancakeswap/uikit'
+import { Flex, Text, LanguageIcon, SvgProps, Svg, XIcon, Link, TelegramIcon, FlexGap } from '@pancakeswap/uikit'
 import { Ifo } from 'config/constants/types'
 import { getBlockExploreLinkDefault } from 'utils'
 import { IFO_ADDRESS } from 'views/Ifos/constants'
@@ -71,9 +71,9 @@ const IfoCardFooter: React.FC<React.PropsWithChildren<Props>> = ({ status, ifo }
             <Link external href={getBlockExploreLinkDefault(IFO_ADDRESS, 'token', chainId)}>
               <SmartContractIcon color="textSubtle" />
             </Link>
-            {ifo.twitterUrl && (
-              <Link external href={ifo.twitterUrl}>
-                <TwitterIcon color="textSubtle" />
+            {ifo.xUrl && (
+              <Link external href={ifo.xUrl}>
+                <XIcon color="textSubtle" />
               </Link>
             )}
             {ifo.telegramUrl && (
