@@ -44,7 +44,6 @@ function scorePools(
 }
 
 export async function queryPools(cakePrice: number) {
-  console.log('start fetch')
   const poolsInfo = await fetchExplorerFarmPools()
   let filtered = poolsInfo.filter((x) => x.lpApr && x.tvlUsd)
 
@@ -59,6 +58,7 @@ export async function queryPools(cakePrice: number) {
   })
   scorePools(filtered)
   const tops = filtered.slice(0, 3)
+  console.log(tops)
 
   const cakeAprs = await Promise.all(tops.map((p) => getCakeApr(p, BN(cakePrice))))
   const aprs = cakeAprs.map((x) => Number.parseFloat(Object.values(x)[0].boost || '0'))

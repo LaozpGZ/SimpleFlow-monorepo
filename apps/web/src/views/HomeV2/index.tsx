@@ -19,7 +19,7 @@ import { FeaturesCard } from './cards/FeaturesCard'
 import { RowLayout } from './component/RowLayout'
 import { ScrollableFullScreen } from './component/ScrollableFullScreen'
 import { FavoriteDEXBanner } from './FavoriteDEXBanner'
-import { snapToNext, useScrollToNearestSnap } from './hook/useScrollToNearestSnap'
+import { snapToNext } from './hook/useScrollToNearestSnap'
 import { PancakeBanner } from './PancakeBanner'
 
 const MobileContainer = styled(Box)`
@@ -87,7 +87,6 @@ const HomeV2Inner = () => {
   const Container = isTablet || isMobile ? MobileContainer : ScrollableFullScreen
 
   const showArrow = isMobile || isTablet
-  useScrollToNearestSnap('homepage-snap')
 
   return (
     <>
