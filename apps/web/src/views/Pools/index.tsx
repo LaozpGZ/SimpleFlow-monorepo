@@ -4,7 +4,18 @@ import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { checkIsBoostedPool } from '@pancakeswap/pools'
 import { Token } from '@pancakeswap/sdk'
-import { Flex, FlexLayout, Heading, Image, Link, Loading, PageHeader, Text, ViewMode } from '@pancakeswap/uikit'
+import {
+  Flex,
+  FlexLayout,
+  Heading,
+  Image,
+  Link,
+  Loading,
+  PageHeader,
+  Text,
+  ViewMode,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { Pool } from '@pancakeswap/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
@@ -44,27 +55,30 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
   const { pools, userDataLoaded } = usePoolsWithVault()
+  const { isMobile } = useMatchBreakpoints()
 
   usePoolsPageFetch()
 
   return (
     <>
-      <PageHeader>
-        <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
-          <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
-            <Heading as="h1" scale="xxl" color="secondary" mb="24px">
-              {t('Syrup Pools')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('Just stake some tokens to earn.')}
-            </Heading>
-            <Heading scale="md" color="text">
-              {t('High APR, low risk.')}
-            </Heading>
+      {!isMobile && (
+        <PageHeader>
+          <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
+            <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
+              <Heading as="h1" scale="xxl" color="secondary" mb="24px">
+                {t('Syrup Pools')}
+              </Heading>
+              <Heading scale="md" color="text">
+                {t('Just stake some tokens to earn.')}
+              </Heading>
+              <Heading scale="md" color="text">
+                {t('High APR, low risk.')}
+              </Heading>
+            </Flex>
+            <VeCakeFourYearCard />
           </Flex>
-          <VeCakeFourYearCard />
-        </Flex>
-      </PageHeader>
+        </PageHeader>
+      )}
       <Page>
         <PoolControls pools={pools}>
           {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
