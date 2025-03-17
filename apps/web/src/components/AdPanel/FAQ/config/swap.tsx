@@ -1,6 +1,7 @@
 import { Box, FlexGap, Link, Text } from '@pancakeswap/uikit'
 import { getImageUrl } from 'components/AdPanel/utils'
 import { styled } from 'styled-components'
+import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { FAQConfig } from '../types'
 
 export const StyledFlex = styled(FlexGap)`
@@ -50,10 +51,8 @@ export const swapFAQConfig: FAQConfig = (t) => ({
               </Link>
               {t('feature to buy.')}
             </StyledFlex>
-            <StyledFlex flexWrap="wrap" flexGrow={0}>
-              <Link m="0 5px" href="https://bridge.pancakeswap.finance">
-                {t('Bridge your assets')}
-              </Link>
+            <StyledFlex flexWrap="wrap" flexGrow={0} m="0 5px">
+              <NextLinkFromReactRouter to="/bridge">{t('Bridge your assets')}</NextLinkFromReactRouter>
               <Text>{t('from other blockchains.')}</Text>
             </StyledFlex>
           </ul>
