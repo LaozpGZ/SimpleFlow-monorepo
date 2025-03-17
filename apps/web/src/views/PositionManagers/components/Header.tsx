@@ -29,7 +29,7 @@ export const Header = memo(function Header() {
       <Box mb="32px" mt="16px">
         <BCakeMigrationBanner />
       </Box>
-      <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
+      <Flex justifyContent="space-between" alignItems="flex-end" flexDirection="row" flexWrap="nowrap">
         <Flex
           flex="1"
           flexDirection="column"
