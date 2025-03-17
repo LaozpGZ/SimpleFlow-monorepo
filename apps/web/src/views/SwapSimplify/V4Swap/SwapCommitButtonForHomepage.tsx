@@ -276,10 +276,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     return t('Get Started')
   }, [isExpertMode, isRecipientEmpty, isRecipientError, priceImpactSeverity, swapInputError, t, tradeLoading])
 
-  if (noRoute && userHasSpecifiedInputOutput && (hasNoValidRouteError || !tradeLoading)) {
-    return <ResetRoutesButton />
-  }
-
   return (
     <Box mt="0.25rem">
       <CommitButton
