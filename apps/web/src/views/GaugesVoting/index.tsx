@@ -81,50 +81,54 @@ const GaugesVoting = () => {
 
   return (
     <StyledGaugesVotingPage>
-      <StyledPageHeader background="transparent">
-        <Flex justifyContent="space-between">
-          <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
-            <NextLink href="/cake-staking">
-              <StyledLink color="primary">
-                <Button p="0" variant="text">
-                  <ArrowBackIcon color="primary" />
-                  <Text color="primary" bold fontSize="16px" mr="4px" textTransform="uppercase">
-                    {t('cake staking')}
-                  </Text>
-                </Button>
-              </StyledLink>
-            </NextLink>
-            <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
-              {t('Gauges Voting')}
-            </Text>
-            <Box maxWidth={['200px', '200px', '537px']}>
-              <Flex flexDirection={['column', 'column', 'row']}>
-                <Text color="textSubtle" maxWidth={['142px', '100%', '100%']}>
-                  {t('Use veCAKE to vote and determine CAKE emissions.')}
+      {!isMobile && (
+        <>
+          <StyledPageHeader background="transparent">
+            <Flex justifyContent="space-between">
+              <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
+                <NextLink href="/cake-staking">
+                  <StyledLink color="primary">
+                    <Button p="0" variant="text">
+                      <ArrowBackIcon color="primary" />
+                      <Text color="primary" bold fontSize="16px" mr="4px" textTransform="uppercase">
+                        {t('cake staking')}
+                      </Text>
+                    </Button>
+                  </StyledLink>
+                </NextLink>
+                <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
+                  {t('Gauges Voting')}
                 </Text>
-                <Box ml={['-8px', '-8px', 0]}>
-                  <InlineLink
-                    external
-                    showExternalIcon
-                    color="textSubtle"
-                    href="https://docs.pancakeswap.finance/products/vecake"
-                  >
-                    {t('Learn More')}
-                  </InlineLink>
+                <Box maxWidth={['200px', '200px', '537px']}>
+                  <Flex flexDirection={['column', 'column', 'row']}>
+                    <Text color="textSubtle" maxWidth={['142px', '100%', '100%']}>
+                      {t('Use veCAKE to vote and determine CAKE emissions.')}
+                    </Text>
+                    <Box ml={['-8px', '-8px', 0]}>
+                      <InlineLink
+                        external
+                        showExternalIcon
+                        color="textSubtle"
+                        href="https://docs.pancakeswap.finance/products/vecake"
+                      >
+                        {t('Learn More')}
+                      </InlineLink>
+                    </Box>
+                  </Flex>
                 </Box>
               </Flex>
-            </Box>
-          </Flex>
-          <Flex justifyContent="flex-end">
-            <BunnyImage src="/images/gauges-voting/landing-bunny.png" alt="bunny" />
-          </Flex>
-        </Flex>
-      </StyledPageHeader>
+              <Flex justifyContent="flex-end">
+                <BunnyImage src="/images/gauges-voting/landing-bunny.png" alt="bunny" />
+              </Flex>
+            </Flex>
+          </StyledPageHeader>
+        </>
+      )}
       <StyledPage>
         <Box
           pl={['16px', '16px', '24px']}
           pr={['16px', '16px', '24px']}
-          mt={['32px', '32px', '32px', '-18px']}
+          mt={['0px', '0px', '32px', '-18px']}
           pb={['32px', '32px', '52px']}
         >
           <ResponsiveCard>
