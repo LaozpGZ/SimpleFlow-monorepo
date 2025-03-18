@@ -14,7 +14,7 @@ import {
 } from '@pancakeswap/uikit'
 import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { BCakeBoosterCard } from 'views/Farms/components/YieldBooster/components/bCakeV3/BCakeBoosterCard'
 import { BCakeMigrationBanner } from 'views/Home/components/Banners/BCakeMigrationBanner'
 
@@ -23,6 +23,15 @@ export const Header = memo(function Header() {
   const { isDesktop, isMobile } = useMatchBreakpoints()
   const { chainId } = useActiveWeb3React()
   const { theme } = useTheme()
+  const redirectToDocs = useCallback(() => {
+    if (typeof window !== 'undefined' && window) {
+      window.open(
+        'https://blog.pancakeswap.finance/articles/pancakeswap-rolls-out-the-position-manager-feature-on-v3',
+        '_blank',
+        'noopener noreferrer',
+      )
+    }
+  }, [])
 
   return (
     <PageHeader>
@@ -46,20 +55,7 @@ export const Header = memo(function Header() {
 
         {isDesktop && bCakeSupportedChainId.includes(chainId) && <BCakeBoosterCard variants="pm" />}
         {isMobile && (
-          <Button
-            width="40px"
-            height="40px"
-            variant="subtle"
-            px="16px"
-            scale="md"
-            onClick={() =>
-              window.open(
-                'https://blog.pancakeswap.finance/articles/pancakeswap-rolls-out-the-position-manager-feature-on-v3',
-                '_blank',
-                'noopener noreferrer',
-              )
-            }
-          >
+          <Button width="40px" height="40px" variant="subtle" px="16px" scale="md" onClick={redirectToDocs}>
             <HelpIcon color={theme.isDark ? '#280D5F' : 'white'} />
           </Button>
         )}
