@@ -34,7 +34,7 @@ export const NewStakingDataSet: React.FC<React.PropsWithChildren<NewStakingDataS
 }) => {
   const { t } = useTranslation()
   const { cakeLockWeeks } = useLockCakeData()
-  const { isDesktop } = useMatchBreakpoints()
+  const { isDesktop, isMobile } = useMatchBreakpoints()
 
   const unlockTimestamp = useTargetUnlockTime(Number(cakeLockWeeks) * WEEK)
   const cakeAmountBN = useMemo(() => getDecimalAmount(new BN(cakeAmount)).toString(), [cakeAmount])
@@ -52,61 +52,72 @@ export const NewStakingDataSet: React.FC<React.PropsWithChildren<NewStakingDataS
       : '0x'
   const unlockOn = useMemo(() => formatDate(dayjs.unix(Number(unlockTimestamp))), [unlockTimestamp])
 
+  const detail = (
+    <>
+      <AutoRow px={['0px', '0px', '16px']} py={['16px', '16px', '12px']} gap="8px">
+        {customDataRow}
+        <TotalApy veCake={veCake} cakeAmount={cakeAmount} cakeLockWeeks={cakeLockWeeks} />
+        <DataRow
+          label={
+            <Text fontSize={14} color="textSubtle" textTransform="uppercase">
+              {t('CAKE to be locked')}
+            </Text>
+          }
+          value={<ValueText>{cakeAmount}</ValueText>}
+        />
+        <DataRow
+          label={
+            <Tooltips
+              content={t(
+                'The ratio factor between the amount of CAKE locked and the final veCAKE number. Extend your lock duration for a higher ratio factor.',
+              )}
+            >
+              <TooltipText fontSize={14} fontWeight={400} color="textSubtle">
+                {t('Factor')}
+              </TooltipText>
+            </Tooltips>
+          }
+          value={<ValueText>{factor}</ValueText>}
+        />
+        <DataRow
+          label={
+            <Text fontSize={14} color="textSubtle">
+              {t('Duration')}
+            </Text>
+          }
+          value={<ValueText>{cakeLockWeeks} weeks</ValueText>}
+        />
+        <DataRow
+          label={
+            <Tooltips
+              content={t(
+                'Once locked, your CAKE will be staked in veCAKE contract until this date. Early withdrawal is not available.',
+              )}
+            >
+              <TooltipText fontSize={14} fontWeight={400} color="textSubtle">
+                {t('Unlock on')}
+              </TooltipText>
+            </Tooltips>
+          }
+          value={<ValueText>{unlockOn}</ValueText>}
+        />
+      </AutoRow>
+    </>
+  )
+
+  if (isMobile) {
+    return <Box padding="16px 0">{detail}</Box>
+  }
+
   return (
     <>
       <Text fontSize={12} bold color={isDesktop ? 'textSubtle' : undefined} textTransform="uppercase">
         {t('lock overview')}
       </Text>
-      <Box padding={['16px 0', '16px 0', 12]}>
+      <Box padding={12}>
         {customVeCakeCard ?? <MyVeCakeCard type="row" value={veCake} />}
-        <AutoRow px={['0px', '0px', '16px']} py={['16px', '16px', '12px']} gap="8px">
-          {customDataRow}
-          <TotalApy veCake={veCake} cakeAmount={cakeAmount} cakeLockWeeks={cakeLockWeeks} />
-          <DataRow
-            label={
-              <Text fontSize={14} color="textSubtle" textTransform="uppercase">
-                {t('CAKE to be locked')}
-              </Text>
-            }
-            value={<ValueText>{cakeAmount}</ValueText>}
-          />
-          <DataRow
-            label={
-              <Tooltips
-                content={t(
-                  'The ratio factor between the amount of CAKE locked and the final veCAKE number. Extend your lock duration for a higher ratio factor.',
-                )}
-              >
-                <TooltipText fontSize={14} fontWeight={400} color="textSubtle">
-                  {t('Factor')}
-                </TooltipText>
-              </Tooltips>
-            }
-            value={<ValueText>{factor}</ValueText>}
-          />
-          <DataRow
-            label={
-              <Text fontSize={14} color="textSubtle">
-                {t('Duration')}
-              </Text>
-            }
-            value={<ValueText>{cakeLockWeeks} weeks</ValueText>}
-          />
-          <DataRow
-            label={
-              <Tooltips
-                content={t(
-                  'Once locked, your CAKE will be staked in veCAKE contract until this date. Early withdrawal is not available.',
-                )}
-              >
-                <TooltipText fontSize={14} fontWeight={400} color="textSubtle">
-                  {t('Unlock on')}
-                </TooltipText>
-              </Tooltips>
-            }
-            value={<ValueText>{unlockOn}</ValueText>}
-          />
-        </AutoRow>
+
+        {detail}
       </Box>
     </>
   )
