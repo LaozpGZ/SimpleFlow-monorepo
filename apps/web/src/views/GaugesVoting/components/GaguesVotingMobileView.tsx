@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, Grid, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Card, Flex, Grid, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Divider from 'components/Divider'
+import PinnedFQAButton from 'components/PinnedFQAButton'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { useGauges } from '../hooks/useGauges'
@@ -29,9 +30,12 @@ const GaugesVotingMobileView = () => {
 
   return (
     <StyledGaugesVotingPage>
-      <Text px="16px" py="24px" lineHeight="110%" bold color="secondary" fontSize={['32px', '32px', '64px', '64px']}>
-        {t('Gauges Voting')}
-      </Text>
+      <Flex alignItems="baseline" width="100%" justifyContent="space-between" px="16px" py="24px">
+        <Text lineHeight="110%" bold color="secondary" fontSize={['32px', '32px', '64px', '64px']}>
+          {t('Gauges Voting')}
+        </Text>
+        <PinnedFQAButton modalContent={<>Frequently Asked Questions</>} />
+      </Flex>
 
       <Box px="40px">
         <TabMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth={isMobile} isShowBorderBottom={false}>

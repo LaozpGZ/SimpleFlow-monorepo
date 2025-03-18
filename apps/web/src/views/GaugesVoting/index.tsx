@@ -76,9 +76,9 @@ const BunnyImage = styled.img`
 const GaugesVoting = () => {
   const { t } = useTranslation()
   const totalGaugesWeight = useGaugesTotalWeight()
-  const { isDesktop, isMobile, isXl, isXs } = useMatchBreakpoints()
+  const { isDesktop, isMobile, isXl } = useMatchBreakpoints()
   const { data: gauges, isLoading } = useGauges()
-  const { filterGauges, setSearchText, searchText, filter, setFilter, sort, setSort } = useGaugesQueryFilter(gauges)
+  const { filterGauges, setSearchText, searchText, filter, setFilter } = useGaugesQueryFilter(gauges)
 
   if (isMobile) {
     return <GaugesVotingMobileView />

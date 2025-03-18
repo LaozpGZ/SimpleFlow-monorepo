@@ -19,6 +19,7 @@ import {
 import { Pool } from '@pancakeswap/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
+import PinnedFQAButton from 'components/PinnedFQAButton'
 import { TokenPairImage } from 'components/TokenImage'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
@@ -156,9 +157,12 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     <>
       {isMobile ? (
         <PageHeader>
-          <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
-            {t('Syrup Pools')}
-          </Text>
+          <Flex alignItems="baseline" width="100%" justifyContent="space-between">
+            <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
+              {t('Syrup Pools')}
+            </Text>
+            {isMobile ? <PinnedFQAButton modalContent={<>Frequently Asked Questions</>} /> : null}
+          </Flex>
           {isMobile ? poolContent : null}
         </PageHeader>
       ) : (
