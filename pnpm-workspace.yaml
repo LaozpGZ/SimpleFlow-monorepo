@@ -9,7 +9,7 @@ packages:
 catalog:
   viem: ^2.22.23
   wagmi: ^2.14.11
-  next: 15.0.2
+  next: 15.2.3
   "@vercel/functions": 1.4.2
   wrangler: 3.81.0
   '@aptos-labs/ts-sdk': 1.30.0
