@@ -23,7 +23,6 @@ import { TokenPairImage } from 'components/TokenImage'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
 import { useAccount } from 'wagmi'
-
 import CakeVaultCard from './components/CakeVaultCard'
 import AprRow from './components/PoolCard/AprRow'
 import CardActions from './components/PoolCard/CardActions'
@@ -59,6 +58,100 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
 
   usePoolsPageFetch()
 
+  const poolContent = (
+    <PoolControls pools={pools}>
+      {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
+        <>
+          {showFinishedPools && chainId === ChainId.BSC && (
+            <FinishedTextContainer>
+              <Text fontSize={['16px', null, '20px']} color="failure" pr="4px">
+                {t('Looking for v1 CAKE syrup pools?')}
+              </Text>
+              <FinishedTextLink
+                href="https://v1-farms.pancakeswap.finance/pools/history"
+                fontSize={['16px', null, '20px']}
+                color="failure"
+              >
+                {t('Go to migration page')}.
+              </FinishedTextLink>
+            </FinishedTextContainer>
+          )}
+          {account && !userDataLoaded && stakedOnly && (
+            <Flex justifyContent="center" mb="4px">
+              <Loading />
+            </Flex>
+          )}
+          {viewMode === ViewMode.CARD ? (
+            <CardLayout>
+              {chosenPools.map((pool) =>
+                pool.vaultKey ? (
+                  <CakeVaultCard key={pool.vaultKey} pool={pool} showStakedOnly={stakedOnly} />
+                ) : (
+                  <Pool.PoolCard<Token>
+                    key={pool.sousId}
+                    pool={pool}
+                    isBoostedPool={Boolean(chainId && checkIsBoostedPool(pool.contractAddress, chainId))}
+                    isStaked={Boolean(pool?.userData?.stakedBalance?.gt(0))}
+                    cardContent={
+                      account ? (
+                        <CardActions pool={pool} stakedBalance={pool?.userData?.stakedBalance} />
+                      ) : (
+                        <>
+                          <Text mb="10px" textTransform="uppercase" fontSize="12px" color="textSubtle" bold>
+                            {t('Start earning')}
+                          </Text>
+                          <ConnectWalletButton />
+                        </>
+                      )
+                    }
+                    tokenPairImage={
+                      <TokenPairImage
+                        primaryToken={pool.earningToken}
+                        secondaryToken={pool.stakingToken}
+                        width={64}
+                        height={64}
+                      />
+                    }
+                    cardFooter={<CardFooter pool={pool} account={account ?? ''} />}
+                    aprRow={<AprRow pool={pool} stakedBalance={pool?.userData?.stakedBalance} />}
+                  />
+                ),
+              )}
+            </CardLayout>
+          ) : (
+            <Pool.PoolsTable>
+              {chosenPools.map((pool) =>
+                pool.vaultKey ? (
+                  <VaultPoolRow
+                    initialActivity={normalizedUrlSearch.toLowerCase() === pool.earningToken.symbol?.toLowerCase()}
+                    key={pool.vaultKey}
+                    vaultKey={pool.vaultKey}
+                    account={account ?? ''}
+                  />
+                ) : (
+                  <PoolRow
+                    initialActivity={normalizedUrlSearch.toLowerCase() === pool.earningToken.symbol?.toLowerCase()}
+                    key={pool.sousId}
+                    sousId={pool.sousId}
+                    account={account ?? ''}
+                  />
+                ),
+              )}
+            </Pool.PoolsTable>
+          )}
+          <Image
+            mx="auto"
+            mt="12px"
+            src="/images/decorations/3d-syrup-bunnies.png"
+            alt="Pancake illustration"
+            width={192}
+            height={184.5}
+          />
+        </>
+      )}
+    </PoolControls>
+  )
+
   return (
     <>
       {isMobile ? (
@@ -66,6 +159,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
           <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
             {t('Syrup Pools')}
           </Text>
+          {isMobile ? poolContent : null}
         </PageHeader>
       ) : (
         <PageHeader>
@@ -85,99 +179,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
           </Flex>
         </PageHeader>
       )}
-      <Page>
-        <PoolControls pools={pools}>
-          {({ chosenPools, viewMode, stakedOnly, normalizedUrlSearch, showFinishedPools }) => (
-            <>
-              {showFinishedPools && chainId === ChainId.BSC && (
-                <FinishedTextContainer>
-                  <Text fontSize={['16px', null, '20px']} color="failure" pr="4px">
-                    {t('Looking for v1 CAKE syrup pools?')}
-                  </Text>
-                  <FinishedTextLink
-                    href="https://v1-farms.pancakeswap.finance/pools/history"
-                    fontSize={['16px', null, '20px']}
-                    color="failure"
-                  >
-                    {t('Go to migration page')}.
-                  </FinishedTextLink>
-                </FinishedTextContainer>
-              )}
-              {account && !userDataLoaded && stakedOnly && (
-                <Flex justifyContent="center" mb="4px">
-                  <Loading />
-                </Flex>
-              )}
-              {viewMode === ViewMode.CARD ? (
-                <CardLayout>
-                  {chosenPools.map((pool) =>
-                    pool.vaultKey ? (
-                      <CakeVaultCard key={pool.vaultKey} pool={pool} showStakedOnly={stakedOnly} />
-                    ) : (
-                      <Pool.PoolCard<Token>
-                        key={pool.sousId}
-                        pool={pool}
-                        isBoostedPool={Boolean(chainId && checkIsBoostedPool(pool.contractAddress, chainId))}
-                        isStaked={Boolean(pool?.userData?.stakedBalance?.gt(0))}
-                        cardContent={
-                          account ? (
-                            <CardActions pool={pool} stakedBalance={pool?.userData?.stakedBalance} />
-                          ) : (
-                            <>
-                              <Text mb="10px" textTransform="uppercase" fontSize="12px" color="textSubtle" bold>
-                                {t('Start earning')}
-                              </Text>
-                              <ConnectWalletButton />
-                            </>
-                          )
-                        }
-                        tokenPairImage={
-                          <TokenPairImage
-                            primaryToken={pool.earningToken}
-                            secondaryToken={pool.stakingToken}
-                            width={64}
-                            height={64}
-                          />
-                        }
-                        cardFooter={<CardFooter pool={pool} account={account ?? ''} />}
-                        aprRow={<AprRow pool={pool} stakedBalance={pool?.userData?.stakedBalance} />}
-                      />
-                    ),
-                  )}
-                </CardLayout>
-              ) : (
-                <Pool.PoolsTable>
-                  {chosenPools.map((pool) =>
-                    pool.vaultKey ? (
-                      <VaultPoolRow
-                        initialActivity={normalizedUrlSearch.toLowerCase() === pool.earningToken.symbol?.toLowerCase()}
-                        key={pool.vaultKey}
-                        vaultKey={pool.vaultKey}
-                        account={account ?? ''}
-                      />
-                    ) : (
-                      <PoolRow
-                        initialActivity={normalizedUrlSearch.toLowerCase() === pool.earningToken.symbol?.toLowerCase()}
-                        key={pool.sousId}
-                        sousId={pool.sousId}
-                        account={account ?? ''}
-                      />
-                    ),
-                  )}
-                </Pool.PoolsTable>
-              )}
-              <Image
-                mx="auto"
-                mt="12px"
-                src="/images/decorations/3d-syrup-bunnies.png"
-                alt="Pancake illustration"
-                width={192}
-                height={184.5}
-              />
-            </>
-          )}
-        </PoolControls>
-      </Page>
+      {isMobile ? null : <Page>{poolContent}</Page>}
     </>
   )
 }
