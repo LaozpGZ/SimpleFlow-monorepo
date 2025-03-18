@@ -16,14 +16,13 @@ import isEmpty from 'lodash/isEmpty'
 import React, { useMemo } from 'react'
 import { UpdaterByChainId } from 'state/lists/updater'
 import styled from 'styled-components'
-import { getChainFullName } from '../utils'
 import { MAINNET_CHAINS } from '../hooks/useMultiChains'
 import { useMultiChainsTokens } from '../hooks/useMultiChainsTokens'
+import { getChainFullName } from '../utils'
 
 const PoolsFilterContainer = styled(Flex)<{ $childrenCount: number }>`
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 16px;
 
   & > div {
     flex: 1;
@@ -35,6 +34,7 @@ const PoolsFilterContainer = styled(Flex)<{ $childrenCount: number }>`
   }
 
   @media (min-width: 1200px) {
+    gap: 16px;
     & {
       flex-wrap: nowrap;
     }
@@ -56,6 +56,7 @@ const PoolsFilterContainer = styled(Flex)<{ $childrenCount: number }>`
   }
 
   @media (max-width: 575px) {
+    gap: 8px;
     & > div {
       flex: 0 0 100%;
       max-width: 100%;
