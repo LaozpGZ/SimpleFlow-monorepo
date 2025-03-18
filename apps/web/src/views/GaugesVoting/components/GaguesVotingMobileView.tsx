@@ -69,7 +69,13 @@ const GaugesVotingMobileView = () => {
               </Box>
             </Grid>
 
-            <Grid background="background" p={16} gridTemplateColumns="1fr" gridGap="1em" position="sticky" top="0">
+            <Divider />
+
+            <Text px={16} bold fontSize="24px">
+              {t('Gauges')}
+            </Text>
+
+            <Grid p={16} gridTemplateColumns="1fr" gridGap="1em" position="sticky" top="0">
               <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
                 <FilterFieldByTypeMobile onFilterChange={setFilter} value={filter} />
                 <FilterFieldSort onChange={setSort} />
