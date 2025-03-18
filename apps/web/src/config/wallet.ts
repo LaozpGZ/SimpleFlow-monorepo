@@ -6,7 +6,7 @@ import type { ExtendEthereum } from 'global'
 import { Config } from 'wagmi'
 import { ConnectMutateAsync } from 'wagmi/query'
 import { chains, createWagmiConfig, walletConnectNoQrCodeConnector } from 'utils/wagmi'
-import { safeGetWindow } from 'utils/safeGetWindow'
+import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
 import { ASSET_CDN } from './constants/endpoints'
 
 export enum ConnectorNames {

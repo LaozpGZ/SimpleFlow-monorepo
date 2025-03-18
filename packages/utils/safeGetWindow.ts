@@ -1,4 +1,4 @@
-export function safeGetWindow(): typeof window | undefined {
+const safeGetWindow: () => typeof window | undefined = () => {
   try {
     return typeof window !== 'undefined' ? window : undefined
   } catch (error) {
@@ -6,3 +6,4 @@ export function safeGetWindow(): typeof window | undefined {
     return undefined
   }
 }
+export default safeGetWindow
