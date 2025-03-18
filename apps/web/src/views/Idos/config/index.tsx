@@ -247,10 +247,11 @@ export const idoConfigDict: Record<string, IDOConfig> = {
                   <Trans>Binance Wallet users</Trans>
                 </b>{' '}
                 <Trans>
-                  from the following nationalities are currently not eligible to participate in this event: United
-                  States, Poland, Belgium, Kazakhstan, Bahrain, UAE, Australia, Japan, New Zealand, Argentina, Brazil,
-                  Colombia, Sweden, Indonesia, Thailand, Canada, Iran, Cuba, North Korea, Syria, Russia, Ukraine,
-                  Belarus.
+                  from the following nationalities are currently not eligible to participate in this event: American
+                  Samoa, Argentina, Australia, Belarus, Belgium, Brazil, Canada, Cuba, Haiti, Iran, Japan, Kazakhstan,
+                  Netherlands, New Zealand, North Korea, Poland, Puerto Rico, Russia, Syria, U.S. Minor Outlying
+                  Islands, U.S. Virgin Islands, United States, AE entity, KZ entity, Bahrain entity, UK_Falcon, JP
+                  entity, MICA no transactions in 90D.
                 </Trans>
               </li>
               <li>
