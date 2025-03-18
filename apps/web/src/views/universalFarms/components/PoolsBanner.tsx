@@ -85,29 +85,29 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
             )}
 
             {!isMobile && (
-              <FarmH2 scale="lg" color="text">
-                {t('Liquidity Pools & Farms')}
-              </FarmH2>
-            )}
-            {!isMobile && (
-              <Row flexWrap="wrap" gap="16px">
-                <LinkExternal
-                  href="https://docs.pancakeswap.finance/products/yield-farming/how-to-use-farms"
-                  showExternalIcon={false}
-                >
-                  <Button p="0" variant="text">
-                    <Text color="primary" bold fontSize="16px" mr="4px">
-                      {t('Learn How')}
-                    </Text>
-                  </Button>
-                </LinkExternal>
-                {!!additionLink && (
-                  <>
-                    <VerticalDivider bg={theme.colors.inputSecondary} />
-                    {additionLink}
-                  </>
-                )}
-              </Row>
+              <>
+                <FarmH2 scale="lg" color="text">
+                  {t('Liquidity Pools & Farms')}
+                </FarmH2>
+                <Row flexWrap="wrap" gap="16px">
+                  <LinkExternal
+                    href="https://docs.pancakeswap.finance/products/yield-farming/how-to-use-farms"
+                    showExternalIcon={false}
+                  >
+                    <Button p="0" variant="text">
+                      <Text color="primary" bold fontSize="16px" mr="4px">
+                        {t('Learn How')}
+                      </Text>
+                    </Button>
+                  </LinkExternal>
+                  {!!additionLink && (
+                    <>
+                      <VerticalDivider bg={theme.colors.inputSecondary} />
+                      {additionLink}
+                    </>
+                  )}
+                </Row>
+              </>
             )}
           </Box>
           <Box>
