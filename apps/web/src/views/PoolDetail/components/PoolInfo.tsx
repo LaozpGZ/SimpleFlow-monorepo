@@ -53,9 +53,9 @@ export const PoolInfo = () => {
     <Column gap="24px">
       <NextSeo title={`${currency0?.symbol} / ${currency1?.symbol}`} />
       <Header>
-        <Flex alignItems="center">
+        <FlexGap alignItems="center" flexWrap="wrap" gap="12px">
           <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={48} innerMargin="-8px" />
-          <FlexGap gap="4px" ml="12px">
+          <FlexGap gap="4px">
             <Text bold fontSize={40}>
               {currency0?.symbol}
             </Text>
@@ -67,7 +67,7 @@ export const PoolInfo = () => {
               {currency1?.symbol}
             </Text>
           </FlexGap>
-        </Flex>
+        </FlexGap>
         <FlexGap gap="16px" flexWrap="wrap">
           {poolInfo?.protocol ? (
             <AutoColumn rowGap="4px">
