@@ -168,7 +168,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
         <Card>
           <CardBody>
             <FlexGap alignItems="center" justifyContent="center" flexDirection="column" gap="24px">
-              <Text>
+              <Text color="textSubtle">
                 {!account
                   ? t('Please connect wallet to view your position / add liquidity.')
                   : t('You currently have no position in this liquidity pair.')}
