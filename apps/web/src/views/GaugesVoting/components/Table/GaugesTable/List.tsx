@@ -26,11 +26,6 @@ import { NetworkBadge } from '../../NetworkBadge'
 import { PositionManagerLogo } from '../../PositionManagerLogo'
 import { RowData } from './types'
 
-const ListContainer = styled(Flex)`
-  margin-left: -1em;
-  margin-right: -1em;
-`
-
 const ListItemContainer = styled(Box)`
   padding: 0.875em;
   border-bottom: 1px solid ${(props) => props.theme.colors.cardBorder};
@@ -115,7 +110,7 @@ export const GaugesList = ({
   ) : null
 
   return (
-    <ListContainer {...props} flexDirection="column">
+    <Flex {...props} flexDirection="column">
       {isLoading ? (
         Loading
       ) : (
@@ -124,7 +119,7 @@ export const GaugesList = ({
           {paginationButton}
         </>
       )}
-    </ListContainer>
+    </Flex>
   )
 }
 

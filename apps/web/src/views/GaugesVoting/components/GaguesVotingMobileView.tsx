@@ -1,36 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
-import {
-  ArrowBackIcon,
-  Box,
-  Button,
-  Card,
-  Flex,
-  Grid,
-  LinkExternal,
-  PageHeader,
-  StyledLink,
-  Tab,
-  TabMenu,
-  Text,
-  useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+import { Box, Card, Grid, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Divider from 'components/Divider'
-import NextLink from 'next/link'
 import { useState } from 'react'
 import styled from 'styled-components'
 import { useGauges } from '../hooks/useGauges'
 import { useGaugesQueryFilter } from '../hooks/useGaugesFilter'
 import { useGaugesTotalWeight } from '../hooks/useGaugesTotalWeight'
 import { CurrentEpoch } from './CurrentEpoch'
-import { FilterFieldByType, FilterFieldInput, FilterFieldSort } from './GaugesFilter'
-import { GaugesList, GaugesTable, VoteTable } from './Table'
+import { FilterFieldByTypeMobile, FilterFieldInput, FilterFieldSort } from './GaugesFilter'
+import { GaugesList, VoteTable } from './Table'
 import { WeightsPieChart } from './WeightsPieChart'
-
-const InlineLink = styled(LinkExternal)`
-  display: inline-flex;
-  text-decoration: underline;
-  margin-left: 8px;
-`
 
 const StyledGaugesVotingPage = styled.div`
   background: transparent;
@@ -40,85 +19,20 @@ const StyledGaugesVotingPage = styled.div`
   }
 `
 
-const StyledPageHeader = styled(PageHeader)`
-  padding-top: 9px;
-  padding-bottom: 33px;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    padding-bottom: 0px;
-  }
-`
-
-const BunnyImage = styled.img`
-  /* width: 218px; */
-  width: 180px;
-  position: absolute;
-  right: -30px;
-  top: 16px;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    width: 218px;
-    position: static;
-  }
-`
-
 const GaugesVotingMobileView = () => {
   const { t } = useTranslation()
   const totalGaugesWeight = useGaugesTotalWeight()
-  const { isDesktop, isMobile, isXl, isXs } = useMatchBreakpoints()
+  const { isDesktop, isMobile } = useMatchBreakpoints()
   const { data: gauges, isLoading } = useGauges()
   const { filterGauges, setSearchText, searchText, filter, setFilter, sort, setSort } = useGaugesQueryFilter(gauges)
   const [activeTab, setActiveTab] = useState(0)
 
   return (
     <StyledGaugesVotingPage>
-      {isMobile ? (
-        <Text px="16px" py="24px" lineHeight="110%" bold color="secondary" fontSize={['32px', '32px', '64px', '64px']}>
-          {t('Gauges Voting')}
-        </Text>
-      ) : (
-        <>
-          <StyledPageHeader background="transparent">
-            <Flex justifyContent="space-between">
-              <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
-                <NextLink href="/cake-staking">
-                  <StyledLink color="primary">
-                    <Button p="0" variant="text">
-                      <ArrowBackIcon color="primary" />
-                      <Text color="primary" bold fontSize="16px" mr="4px" textTransform="uppercase">
-                        {t('cake staking')}
-                      </Text>
-                    </Button>
-                  </StyledLink>
-                </NextLink>
-                <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
-                  {t('Gauges Voting')}
-                </Text>
-                <Box maxWidth={['200px', '200px', '537px']}>
-                  <Flex flexDirection={['column', 'column', 'row']}>
-                    <Text color="textSubtle" maxWidth={['142px', '100%', '100%']}>
-                      {t('Use veCAKE to vote and determine CAKE emissions.')}
-                    </Text>
-                    <Box ml={['-8px', '-8px', 0]}>
-                      <InlineLink
-                        external
-                        showExternalIcon
-                        color="textSubtle"
-                        href="https://docs.pancakeswap.finance/products/vecake"
-                      >
-                        {t('Learn More')}
-                      </InlineLink>
-                    </Box>
-                  </Flex>
-                </Box>
-              </Flex>
-              <Flex justifyContent="flex-end">
-                <BunnyImage src="/images/gauges-voting/landing-bunny.png" alt="bunny" />
-              </Flex>
-            </Flex>
-          </StyledPageHeader>
-        </>
-      )}
+      <Text px="16px" py="24px" lineHeight="110%" bold color="secondary" fontSize={['32px', '32px', '64px', '64px']}>
+        {t('Gauges Voting')}
+      </Text>
+
       <Box px="40px">
         <TabMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth={isMobile} isShowBorderBottom={false}>
           <Tab>
@@ -153,64 +67,23 @@ const GaugesVotingMobileView = () => {
                   />
                 </Box>
               </Box>
-              {!isMobile && !isXl ? (
-                <Grid gridTemplateColumns="1fr 1fr" gridGap="32px">
-                  <FilterFieldByType onFilterChange={setFilter} value={filter} />
-                  <FilterFieldInput initialValue={searchText} placeholder={t('Search')} onChange={setSearchText} />
-                </Grid>
-              ) : null}
             </Grid>
-            {/* for tablet fit */}
-            {isXl ? (
-              <Grid gridTemplateColumns="1fr 1fr">
-                <FilterFieldByType onFilterChange={setFilter} value={filter} />
-                <FilterFieldInput initialValue={searchText} placeholder={t('Search')} onChange={setSearchText} />
+
+            <Grid background="background" p={16} gridTemplateColumns="1fr" gridGap="1em" position="sticky" top="0">
+              <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
+                <FilterFieldByTypeMobile onFilterChange={setFilter} value={filter} />
+                <FilterFieldSort onChange={setSort} />
               </Grid>
-            ) : null}
-            {/* for mobile sticky, make it redundancy */}
-            {isMobile ? (
-              <Grid
-                background="background"
-                mx={-16}
-                p={16}
-                gridTemplateColumns="1fr"
-                gridGap="1em"
-                position="sticky"
-                top="0"
-              >
-                {isXs ? (
-                  <FilterFieldByType onFilterChange={setFilter} value={filter} />
-                ) : (
-                  <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
-                    <FilterFieldByType onFilterChange={setFilter} value={filter} />
-                    <FilterFieldSort onChange={setSort} />
-                  </Grid>
-                )}
-                {isXs ? (
-                  <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
-                    <FilterFieldInput placeholder={t('Search')} initialValue={searchText} onChange={setSearchText} />
-                    <FilterFieldSort onChange={setSort} />
-                  </Grid>
-                ) : (
-                  <FilterFieldInput placeholder={t('Search')} initialValue={searchText} onChange={setSearchText} />
-                )}
-              </Grid>
-            ) : null}
-            {isMobile ? (
-              <GaugesList
-                key={sort}
-                data={filterGauges}
-                isLoading={isLoading}
-                totalGaugesWeight={Number(totalGaugesWeight)}
-              />
-            ) : (
-              <GaugesTable
-                mt="1.5em"
-                data={filterGauges}
-                isLoading={isLoading}
-                totalGaugesWeight={Number(totalGaugesWeight)}
-              />
-            )}
+
+              <FilterFieldInput placeholder={t('Search')} initialValue={searchText} onChange={setSearchText} />
+            </Grid>
+
+            <GaugesList
+              key={sort}
+              data={filterGauges}
+              isLoading={isLoading}
+              totalGaugesWeight={Number(totalGaugesWeight)}
+            />
           </Card>
         ) : (
           <Card innerCardProps={{ padding: '2em 2em 0 2em' }}>
