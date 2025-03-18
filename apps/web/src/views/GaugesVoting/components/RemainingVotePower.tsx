@@ -1,10 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Balance, Box, ErrorIcon, Flex, FlexGap, Text } from '@pancakeswap/uikit'
+import { Balance, Box, ErrorIcon, Flex, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import BN from 'bignumber.js'
 import { useVeCakeBalance } from 'hooks/useTokenBalance'
 import { useMemo } from 'react'
-import { isMobile } from 'react-device-detect'
 import styled from 'styled-components'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useCakeLockStatus } from 'views/CakeStaking/hooks/useVeCakeUserInfo'
@@ -39,6 +38,8 @@ export const RemainingVotePower: React.FC<{
     return balance.gt(0) && epochPower === 0n
   }, [balance, epochPower])
 
+  const { isMobile } = useMatchBreakpoints()
+
   // @note: real power is EpochEndPower * (10000 - PercentVoted)
   // use veCakeBalance as cardinal number for better UX understanding
   const votePower = useMemo(() => {
@@ -51,7 +52,7 @@ export const RemainingVotePower: React.FC<{
 
   if (isMobile) {
     return (
-      <StyledBox id="vecake-vote-power" display="flex" $isMobile>
+      <StyledBox display="flex" $isMobile>
         <Flex width="100%" flexDirection="row" ml="4px" alignItems="center" justifyContent="space-between">
           <Flex alignItems="center">
             <img src="/images/cake-staking/token-vecake.png" alt="token-vecake" width="58px" />
@@ -144,6 +145,7 @@ export const RemainingVotePower: React.FC<{
       </StyledBox>
     )
   }
+
   return (
     <StyledBox id="vecake-vote-power">
       <img src="/images/cake-staking/token-vecake.png" alt="token-vecake" width="58px" />
