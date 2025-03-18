@@ -59,8 +59,14 @@ export async function queryPools(cakePrice: number) {
   scorePools(filtered)
   const tops = filtered.slice(0, 3)
 
+  console.log('--- read cake ---')
+  console.log('pools', tops)
   const cakeAprs = await Promise.all(tops.map((p) => getCakeApr(p, BN(cakePrice))))
-  const aprs = cakeAprs.map((x) => Number.parseFloat(Object.values(x)[0].boost || '0'))
+  const aprs = cakeAprs.map((x) => {
+    const obj = Object.values(x)[0]
+    if (!obj) return 0
+    return Number.parseFloat(obj.boost || '0')
+  })
 
   return tops.map((p, i) => {
     const chain = getChainName(p.chainId)
