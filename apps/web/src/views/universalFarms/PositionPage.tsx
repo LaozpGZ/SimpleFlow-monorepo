@@ -476,7 +476,7 @@ export const PositionPage = () => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader p={isMobile ? '16px' : undefined}>
         <PoolsFilterPanel onChange={handleFilterChange} value={poolsFilter}>
           <ControlWrapper>
             <ToggleWrapper>

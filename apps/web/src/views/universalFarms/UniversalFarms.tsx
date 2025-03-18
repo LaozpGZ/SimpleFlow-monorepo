@@ -109,7 +109,7 @@ export const UniversalFarms: React.FC<PropsWithChildren> = () => {
   return (
     <>
       <PoolsBanner additionLink={<LegacyPage />} />
-      <Page>
+      <Page style={isMobile ? { padding: '16px' } : undefined}>
         <FlexGap width="100%" alignItems="center" justifyContent="space-between">
           <TabMenu gap="8px" activeIndex={tabIdx} isShowBorderBottom={false}>
             {Object.values(tabsConfig).map(({ menu }) => menu())}

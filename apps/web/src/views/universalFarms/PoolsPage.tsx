@@ -211,7 +211,7 @@ export const PoolsPage = () => {
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader p={isMobile ? '16px' : undefined}>
         <PoolsFilterPanel onChange={handleFilterChange} value={poolsFilter}>
           {(isMobile || isMd) && <AddLiquidityButton scale="sm" width="100%" />}
         </PoolsFilterPanel>
