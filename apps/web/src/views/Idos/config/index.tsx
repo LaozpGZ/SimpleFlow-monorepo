@@ -9,6 +9,7 @@ export type IDOFAQs = Array<{ title: ReactNode; description: ReactNode }>
 
 export type IDOConfig = {
   id: string
+  icon: string
   projectUrl: string
   chainId: ChainId
   bannerUrl: string
@@ -22,6 +23,7 @@ export type IDOConfig = {
 export const idoConfigDict: Record<string, IDOConfig> = {
   myshell: {
     id: 'myshell',
+    icon: '/images/ido/myshell.png',
     projectUrl: 'https://myshell.ai/',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/myshell-banner.png`,
@@ -40,6 +42,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
   bubblemaps: {
     id: 'bubblemaps',
     projectUrl: 'https://bubblemaps.io/',
+    icon: '/images/ido/bubblemaps.png',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/bubblemaps-banner.png`,
     contractAddress: '0xb330A50d27341730b7B3fD285B150e5742C3b090',
@@ -166,6 +169,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
   bedrock: {
     id: 'bedrock',
     projectUrl: 'https://www.bedrock.technology/',
+    icon: '/images/ido/bedrock.png',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/bedrock-banner.png`,
     contractAddress: '0xb330A50d27341730b7B3fD285B150e5742C3b090',
