@@ -6,6 +6,7 @@ import {
   Flex,
   Heading,
   HelpIcon,
+  LinkExternal,
   Message,
   MessageText,
   PageHeader,
@@ -35,9 +36,11 @@ export const Header = memo(function Header() {
 
   return (
     <PageHeader>
-      <Box mb="32px" mt="16px">
-        <BCakeMigrationBanner />
-      </Box>
+      {!isMobile && (
+        <Box mb="32px" mt="16px">
+          <BCakeMigrationBanner />
+        </Box>
+      )}
       <Flex justifyContent="space-between" alignItems="flex-end" flexDirection="row" flexWrap="nowrap">
         <Flex
           flex="1"
@@ -45,12 +48,29 @@ export const Header = memo(function Header() {
           mr={['8px', 0]}
           alignSelf={['flex-start', 'flex-start', 'flex-start', 'center']}
         >
-          <Heading as="h1" scale={isMobile ? 'md' : 'xxl'} color="secondary" mb={isMobile ? '8px' : '24px'}>
+          <Heading
+            as="h1"
+            scale={isMobile ? 'md' : 'xxl'}
+            color={isMobile ? 'text' : 'secondary'}
+            mb={isMobile ? '8px' : '24px'}
+          >
             {t('Position Manager')}
           </Heading>
-          <Heading scale={isMobile ? 'md' : 'lg'} color="text">
+          <Heading scale={isMobile ? 'md' : 'lg'} color={isMobile ? 'secondary' : 'text'}>
             {t('Automate your PancakeSwap V3 liquidity')}
           </Heading>
+          {!isMobile && (
+            <LinkExternal
+              href="https://blog.pancakeswap.finance/articles/pancakeswap-rolls-out-the-position-manager-feature-on-v3"
+              showExternalIcon={false}
+            >
+              <Button p="0" variant="text">
+                <Text color="primary" bold fontSize="16px" mr="4px">
+                  {t('Learn How')}
+                </Text>
+              </Button>
+            </LinkExternal>
+          )}
         </Flex>
 
         {isDesktop && bCakeSupportedChainId.includes(chainId) && <BCakeBoosterCard variants="pm" />}
