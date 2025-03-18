@@ -11,6 +11,7 @@ import {
   CardBody,
   CardHeader,
   Flex,
+  FlexGap,
   Grid,
   Image,
   Row,
@@ -39,6 +40,7 @@ import styled from 'styled-components'
 import { addQueryToPath } from 'utils/addQueryToPath'
 import { useFarmsV3BatchHarvest } from 'views/Farms/hooks/v3/useFarmV3Actions'
 import {
+  AddLiquidityButton,
   PositionItemSkeleton,
   StablePositionItem,
   V2PositionItem,
@@ -92,6 +94,7 @@ export const MyPositions: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 
 const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   const { t } = useTranslation()
+  const { account } = useAccountActiveChain()
   const [count, setCount] = useState(0)
   const [totalLiquidityUSD, setTotalLiquidityUSD] = useState('0')
   const [filter, setFilter] = useState(PositionFilter.All)
@@ -155,6 +158,24 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 
   const { earningsBusd: v2EarningsBusd } = useV2CakeEarning(poolInfo)
   const { earningsBusd: v3EarningsBusd } = useV3CakeEarningsByPool(poolInfo)
+
+  if (count === 0 || !account) {
+    return (
+      <Grid gridGap="24px">
+        <Text as="h3" fontWeight={600} fontSize={24}>
+          {t('My Positions')}
+        </Text>
+        <Card>
+          <CardBody>
+            <FlexGap alignItems="center" justifyContent="center" flexDirection="column" gap="24px">
+              <Text>{t('Please connect wallet to view your position / add liquidity.')}</Text>
+              <AddLiquidityButton />
+            </FlexGap>
+          </CardBody>
+        </Card>
+      </Grid>
+    )
+  }
 
   return (
     <AutoColumn gap="lg">

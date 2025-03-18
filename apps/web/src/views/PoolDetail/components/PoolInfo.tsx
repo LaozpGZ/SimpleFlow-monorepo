@@ -1,22 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Percent } from '@pancakeswap/swap-sdk-core'
-import {
-  AddIcon,
-  AutoColumn,
-  AutoRow,
-  Box,
-  Card,
-  CardBody,
-  Column,
-  Flex,
-  FlexGap,
-  Grid,
-  Spinner,
-  Text,
-} from '@pancakeswap/uikit'
+import { AutoColumn, AutoRow, Box, Column, Flex, FlexGap, Grid, Spinner, Text } from '@pancakeswap/uikit'
 import { ChainLogo, DoubleCurrencyLogo, FeatureStack, FeeTierTooltip } from '@pancakeswap/widgets-internal'
-import ConnectWalletButton from 'components/ConnectWalletButton'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { NextSeo } from 'next-seo'
 import { useMemo } from 'react'
 import { useChainIdByQuery, useChainNameByQuery } from 'state/info/hooks'
@@ -56,7 +41,6 @@ export const PoolInfo = () => {
   const fee = useMemo(() => {
     return new Percent(poolInfo?.feeTier ?? 0n, poolInfo?.feeTierBase)
   }, [poolInfo?.feeTier, poolInfo?.feeTierBase])
-  const { account } = useAccountActiveChain()
 
   if (!poolInfo)
     return (
@@ -120,36 +104,8 @@ export const PoolInfo = () => {
           </AutoColumn>
         </FlexGap>
       </Header>
-      {!account && (
-        <Grid gridGap="24px">
-          <Text as="h3" fontWeight={600} fontSize={24}>
-            {t('My Positions')}
-          </Text>
-          <Card>
-            <CardBody>
-              <Box
-                display="flex"
-                style={{
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  flexDirection: 'column',
-                }}
-              >
-                <Text>{t('Please connect wallet to view your position / add liquidity.')}</Text>
-                <ConnectWalletButton
-                  style={{
-                    marginTop: '24px',
-                  }}
-                >
-                  {t('Add Liquidity')}
-                  <AddIcon ml="8px" color="var(--colors-invertedContrast)" />
-                </ConnectWalletButton>
-              </Box>
-            </CardBody>
-          </Card>
-        </Grid>
-      )}
-      {account && poolInfo ? <MyPositions poolInfo={poolInfo} /> : null}
+
+      {poolInfo ? <MyPositions poolInfo={poolInfo} /> : null}
 
       <AutoRow gap="lg" flexWrap="wrap">
         <Text as="h3" fontWeight={600} fontSize={24}>
