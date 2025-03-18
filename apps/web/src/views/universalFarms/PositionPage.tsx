@@ -492,7 +492,7 @@ export const PositionPage = () => {
               </NotificationDot>
             </ButtonWrapper>
           </ControlWrapper>
-          {(isMobile || isMd) && <AddLiquidityButton scale="sm" width="100%" />}
+          {(isMobile || isMd) && <AddLiquidityButton scale="sm" height="40px" width="100%" />}
         </PoolsFilterPanel>
         <SubPanel>
           <StyledButtonMenu
