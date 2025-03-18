@@ -155,7 +155,7 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading, i
           }
           isUserInsufficientBalance={isUserInsufficientBalance}
         />
-        <FlipButton compact={isMobile} />
+        <FlipButton compact={isMobile} replaceBrowser={false} />
         <CurrencyInputPanelSimplify
           id="swap-currency-output"
           showUSDPrice

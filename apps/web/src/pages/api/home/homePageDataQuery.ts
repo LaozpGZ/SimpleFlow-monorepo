@@ -57,13 +57,12 @@ export const homePageCurrencies: HomePageCurrency[] = [
 export function homePageChainsInfo() {
   const evms = [
     ChainId.BSC,
+    ChainId.ETHEREUM,
     ChainId.BASE,
     ChainId.ARBITRUM_ONE,
-    ChainId.ETHEREUM,
-    ChainId.POLYGON_ZKEVM,
     ChainId.ZKSYNC,
     ChainId.LINEA,
-    ChainId.OPBNB,
+    ChainId.POLYGON_ZKEVM,
   ]
 
   const evmChains: HomepageChain[] = evms.map((chainId) => {
@@ -73,10 +72,18 @@ export function homePageChainsInfo() {
       logoL: `${ASSET_CDN}/web/chains/svg/${chainId}-l.svg`,
     }
   })
-  evmChains.push({
-    logo: `${ASSET_CDN}/web/chains/svg/aptos.svg`,
-    logoM: `${ASSET_CDN}/web/chains/svg/aptos-m.svg`,
-    logoL: `${ASSET_CDN}/web/chains/svg/aptos-l.svg`,
-  })
+
+  evmChains.push(
+    {
+      logo: `${ASSET_CDN}/web/chains/svg/aptos.svg`,
+      logoM: `${ASSET_CDN}/web/chains/svg/aptos-m.svg`,
+      logoL: `${ASSET_CDN}/web/chains/svg/aptos-l.svg`,
+    },
+    {
+      logo: `${ASSET_CDN}/web/chains/svg/${ChainId.OPBNB}.svg`,
+      logoM: `${ASSET_CDN}/web/chains/svg/${ChainId.OPBNB}-m.svg`,
+      logoL: `${ASSET_CDN}/web/chains/svg/${ChainId.OPBNB}-l.svg`,
+    },
+  )
   return evmChains
 }

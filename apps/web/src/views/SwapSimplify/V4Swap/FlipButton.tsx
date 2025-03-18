@@ -69,7 +69,13 @@ const getCompactStyle = (compact?: boolean): CSSProperties => {
   return {}
 }
 
-export const FlipButton = memo(function FlipButton({ compact }: { compact?: boolean }) {
+export const FlipButton = memo(function FlipButton({
+  compact,
+  replaceBrowser = true,
+}: {
+  compact?: boolean
+  replaceBrowser?: boolean
+}) {
   const flipButtonRef = useRef<HTMLDivElement>(null)
   const lottieRef = useRef<LottieRefCurrentProps | null>(null)
   const { isDark } = useTheme()
@@ -85,10 +91,12 @@ export const FlipButton = memo(function FlipButton({ compact }: { compact?: bool
 
   const onFlip = useCallback(() => {
     onSwitchTokens()
-    replaceBrowserHistoryMultiple({
-      inputCurrency: outputCurrencyId,
-      outputCurrency: inputCurrencyId,
-    })
+    if (replaceBrowser) {
+      replaceBrowserHistoryMultiple({
+        inputCurrency: outputCurrencyId,
+        outputCurrency: inputCurrencyId,
+      })
+    }
   }, [onSwitchTokens, inputCurrencyId, outputCurrencyId])
 
   const handleAnimatedButtonClick = useCallback(() => {
