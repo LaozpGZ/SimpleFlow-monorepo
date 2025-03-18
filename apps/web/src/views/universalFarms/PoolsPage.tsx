@@ -219,7 +219,7 @@ export const PoolsPage = () => {
       <CardBody>
         <PoolsContent>
           {isMobile ? (
-            <ListView data={renderData} />
+            <ListView data={renderData} onRowClick={handleRowClick} />
           ) : (
             <TableView
               getRowKey={getRowKey}
