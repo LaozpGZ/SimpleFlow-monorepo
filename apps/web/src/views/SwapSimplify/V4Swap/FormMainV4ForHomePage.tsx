@@ -2,7 +2,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
 import { Column, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
@@ -93,10 +92,6 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading, i
       const oldCurrencyId = isInput ? currentInputCurrencyId : currentOutputCurrencyId
       const otherCurrencyId = isInput ? currentOutputCurrencyId : currentInputCurrencyId
       const newCurrencyId = currencyId(newCurrency)
-      replaceBrowserHistoryMultiple({
-        ...(newCurrencyId === otherCurrencyId && { [isInput ? 'outputCurrency' : 'inputCurrency']: oldCurrencyId }),
-        [isInput ? 'inputCurrency' : 'outputCurrency']: newCurrencyId,
-      })
     },
     [onCurrencySelection, warningSwapHandler],
   )
