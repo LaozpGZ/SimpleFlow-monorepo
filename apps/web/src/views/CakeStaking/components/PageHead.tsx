@@ -1,15 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import {
-  ArrowForwardIcon,
-  Box,
-  Button,
-  Flex,
-  Grid,
-  HelpIcon,
-  Link,
-  Text,
-  useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+import { ArrowForwardIcon, Box, Button, Flex, Grid, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { AdPlayer } from 'components/AdPanel/AdPlayer'
 import { useMemo } from 'react'
@@ -17,6 +7,7 @@ import styled, { css } from 'styled-components'
 import { useCakeLockStatus } from '../hooks/useVeCakeUserInfo'
 import { CakeLockStatus } from '../types'
 import { HeadBunny, MobileHeadBunny } from './HeadImage'
+import PinnedFQAButton from './PinnedFQAButton'
 
 export const PageHead = () => {
   const { t } = useTranslation()
@@ -71,17 +62,7 @@ const Heading = () => {
       <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
         {t('CAKE Staking')}
       </Text>
-      {isMobile ? (
-        <Link
-          external
-          href="https://docs.pancakeswap.finance/products/vecake/how-to-get-vecake"
-          style={{ textDecoration: 'none', zIndex: 1 }}
-        >
-          <Button width="48px" height="48px" variant="subtle" ml={staking ? 0 : '16px'}>
-            <HelpIcon ml="0" color="white" width="24px" />
-          </Button>
-        </Link>
-      ) : null}
+      {isMobile ? <PinnedFQAButton modalContent={<>Frequently Asked Questions</>} /> : null}
     </Flex>
   )
 }
