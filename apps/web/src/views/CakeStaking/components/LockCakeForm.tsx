@@ -39,7 +39,7 @@ const CakeInput: React.FC<{
       onUserInput={onInput}
       title={
         <Text color="textSubtle" fontSize={12} bold>
-          {t('CAKE amount')}
+          {t('CAKE Amount')}
         </Text>
       }
     />
