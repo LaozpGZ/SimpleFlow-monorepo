@@ -2740,7 +2740,7 @@
   "Migrated:": "Migrated:",
   "Current EPOCH": "Current EPOCH",
   "Results for the current epoch will be snapshotted and tallied at 00:00 UTC on %date%.": "Results for the current epoch will be snapshotted and tallied at 00:00 UTC on %date%.",
-  "snapshots in": "snapshots in",
+  "Snapshots in": "Snapshots in",
   "Voting ends in": "Voting ends in",
   "Ended, ": "Ended, ",
   "Tallying": "Tallying",

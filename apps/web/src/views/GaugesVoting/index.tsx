@@ -14,9 +14,8 @@ import {
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
-import Page from 'components/Layout/Page'
 import NextLink from 'next/link'
-import { PropsWithChildren, useState } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
 import { CurrentEpoch } from './components/CurrentEpoch'
 import { FilterFieldByType, FilterFieldInput, FilterFieldSort } from './components/GaugesFilter'
@@ -49,16 +48,6 @@ const StyledPageHeader = styled(PageHeader)`
   }
 `
 
-const StyledPage = styled(Page)`
-  padding: 0px;
-
-  background: ${({ theme }) => theme.colors.backgroundAlt};
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    background: transparent;
-  }
-`
-
 const BunnyImage = styled.img`
   /* width: 218px; */
   width: 180px;
@@ -82,7 +71,11 @@ const GaugesVoting = () => {
 
   return (
     <StyledGaugesVotingPage>
-      {!isMobile && (
+      {isMobile ? (
+        <Text px="16px" py="24px" lineHeight="110%" bold color="secondary" fontSize={['32px', '32px', '64px', '64px']}>
+          {t('Gauges Voting')}
+        </Text>
+      ) : (
         <>
           <StyledPageHeader background="transparent">
             <Flex justifyContent="space-between">
@@ -125,120 +118,108 @@ const GaugesVoting = () => {
           </StyledPageHeader>
         </>
       )}
-      <StyledPage>
-        <Box
-          pl={['16px', '16px', '24px']}
-          pr={['16px', '16px', '24px']}
-          mt={['0px', '0px', '32px', '-18px']}
-          pb={['32px', '32px', '52px']}
-        >
-          <TabMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth={isMobile} isShowBorderBottom={false}>
-            <Tab>
-              {t('Gauges')} ({filterGauges.length})
-            </Tab>
-            <Tab>{t('My veCAKE/Votes')}</Tab>
-          </TabMenu>
+      <Box px="40px">
+        <TabMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth={isMobile} isShowBorderBottom={false}>
+          <Tab>
+            {t('Gauges')} ({filterGauges.length})
+          </Tab>
+          <Tab>{t('My veCAKE/Votes')}</Tab>
+        </TabMenu>
+      </Box>
 
-          {activeTab === 0 ? (
-            <ResponsiveCard>
-              <Grid gridTemplateColumns={isDesktop ? '2.2fr 3fr' : '1fr'}>
-                <EpochPreview />
-                <Box ml={isDesktop ? '60px' : '0'} mt={isDesktop ? '0' : '1em'}>
-                  <Text color="secondary" textTransform="uppercase" bold>
-                    {t('proposed weights')}
-                  </Text>
-                  <Box mt={isDesktop ? '40px' : '0'} mb={isDesktop ? '20px' : 0}>
-                    <WeightsPieChart
-                      data={filterGauges}
-                      totalGaugesWeight={Number(totalGaugesWeight)}
-                      isLoading={isLoading}
-                    />
-                  </Box>
+      <Box
+        pl={['16px', '16px', '24px']}
+        pr={['16px', '16px', '24px']}
+        mt={['0px', '0px', '32px', '-18px']}
+        pb={['32px', '32px', '52px']}
+      >
+        {activeTab === 0 ? (
+          <Card>
+            <Grid gridTemplateColumns={isDesktop ? '2.2fr 3fr' : '1fr'}>
+              <EpochPreview />
+              <Box ml={isDesktop ? '60px' : '0'} mt={isDesktop ? '0' : '1em'}>
+                <Text color="secondary" textTransform="uppercase" bold>
+                  {t('proposed weights')}
+                </Text>
+                <Box mt={isDesktop ? '40px' : '0'} mb={isDesktop ? '20px' : 0}>
+                  <WeightsPieChart
+                    data={filterGauges}
+                    totalGaugesWeight={Number(totalGaugesWeight)}
+                    isLoading={isLoading}
+                  />
                 </Box>
-                {!isMobile && !isXl ? (
-                  <Grid gridTemplateColumns="1fr 1fr" gridGap="32px">
-                    <FilterFieldByType onFilterChange={setFilter} value={filter} />
-                    <FilterFieldInput initialValue={searchText} placeholder={t('Search')} onChange={setSearchText} />
-                  </Grid>
-                ) : null}
-              </Grid>
-              {/* for tablet fit */}
-              {isXl ? (
-                <Grid gridTemplateColumns="1fr 1fr">
+              </Box>
+              {!isMobile && !isXl ? (
+                <Grid gridTemplateColumns="1fr 1fr" gridGap="32px">
                   <FilterFieldByType onFilterChange={setFilter} value={filter} />
                   <FilterFieldInput initialValue={searchText} placeholder={t('Search')} onChange={setSearchText} />
                 </Grid>
               ) : null}
-              {/* for mobile sticky, make it redundancy */}
-              {isMobile ? (
-                <Grid
-                  background="background"
-                  mx={-16}
-                  p={16}
-                  gridTemplateColumns="1fr"
-                  gridGap="1em"
-                  position="sticky"
-                  top="0"
-                >
-                  {isXs ? (
+            </Grid>
+            {/* for tablet fit */}
+            {isXl ? (
+              <Grid gridTemplateColumns="1fr 1fr">
+                <FilterFieldByType onFilterChange={setFilter} value={filter} />
+                <FilterFieldInput initialValue={searchText} placeholder={t('Search')} onChange={setSearchText} />
+              </Grid>
+            ) : null}
+            {/* for mobile sticky, make it redundancy */}
+            {isMobile ? (
+              <Grid
+                background="background"
+                mx={-16}
+                p={16}
+                gridTemplateColumns="1fr"
+                gridGap="1em"
+                position="sticky"
+                top="0"
+              >
+                {isXs ? (
+                  <FilterFieldByType onFilterChange={setFilter} value={filter} />
+                ) : (
+                  <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
                     <FilterFieldByType onFilterChange={setFilter} value={filter} />
-                  ) : (
-                    <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
-                      <FilterFieldByType onFilterChange={setFilter} value={filter} />
-                      <FilterFieldSort onChange={setSort} />
-                    </Grid>
-                  )}
-                  {isXs ? (
-                    <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
-                      <FilterFieldInput placeholder={t('Search')} initialValue={searchText} onChange={setSearchText} />
-                      <FilterFieldSort onChange={setSort} />
-                    </Grid>
-                  ) : (
+                    <FilterFieldSort onChange={setSort} />
+                  </Grid>
+                )}
+                {isXs ? (
+                  <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
                     <FilterFieldInput placeholder={t('Search')} initialValue={searchText} onChange={setSearchText} />
-                  )}
-                </Grid>
-              ) : null}
-              {isMobile ? (
-                <GaugesList
-                  key={sort}
-                  data={filterGauges}
-                  isLoading={isLoading}
-                  totalGaugesWeight={Number(totalGaugesWeight)}
-                />
-              ) : (
-                <GaugesTable
-                  mt="1.5em"
-                  data={filterGauges}
-                  isLoading={isLoading}
-                  totalGaugesWeight={Number(totalGaugesWeight)}
-                />
-              )}
-            </ResponsiveCard>
-          ) : (
-            <Card innerCardProps={{ padding: '2em 2em 0 2em' }}>
-              <VoteTable />
-            </Card>
-          )}
-        </Box>
-      </StyledPage>
+                    <FilterFieldSort onChange={setSort} />
+                  </Grid>
+                ) : (
+                  <FilterFieldInput placeholder={t('Search')} initialValue={searchText} onChange={setSearchText} />
+                )}
+              </Grid>
+            ) : null}
+            {isMobile ? (
+              <GaugesList
+                key={sort}
+                data={filterGauges}
+                isLoading={isLoading}
+                totalGaugesWeight={Number(totalGaugesWeight)}
+              />
+            ) : (
+              <GaugesTable
+                mt="1.5em"
+                data={filterGauges}
+                isLoading={isLoading}
+                totalGaugesWeight={Number(totalGaugesWeight)}
+              />
+            )}
+          </Card>
+        ) : (
+          <Card innerCardProps={{ padding: '2em 2em 0 2em' }}>
+            <VoteTable />
+          </Card>
+        )}
+      </Box>
     </StyledGaugesVotingPage>
   )
 }
 
 const EpochPreview = () => {
-  return (
-    <Card isActive style={{ height: 'fit-content' }}>
-      <CurrentEpoch />
-    </Card>
-  )
-}
-
-const ResponsiveCard: React.FC<PropsWithChildren> = ({ children }) => {
-  const { isDesktop } = useMatchBreakpoints()
-  if (isDesktop) {
-    return <Card innerCardProps={{ padding: '2em 2em 0 2em' }}>{children}</Card>
-  }
-  return <Box pt="2em">{children}</Box>
+  return <CurrentEpoch />
 }
 
 export default GaugesVoting

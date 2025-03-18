@@ -1,5 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoRow, Balance, Box, ErrorIcon, FlexGap, Text, TooltipText, useMatchBreakpoints } from '@pancakeswap/uikit'
+import {
+  AutoRow,
+  Balance,
+  Box,
+  ErrorIcon,
+  Flex,
+  FlexGap,
+  Text,
+  TooltipText,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import {
   formatNumber,
   getBalanceNumber,
@@ -8,9 +18,9 @@ import {
 } from '@pancakeswap/utils/formatBalance'
 import BN from 'bignumber.js'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useCurrentBlockTimestamp } from 'views/CakeStaking/hooks/useCurrentBlockTimestamp'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import { useCurrentEpochEnd, useEpochOnTally, useNextEpochStart } from '../hooks/useEpochTime'
 import { useGaugesTotalWeight } from '../hooks/useGaugesTotalWeight'
 
@@ -38,10 +48,20 @@ export const CurrentEpoch = () => {
             alignItems="baseline"
             justifyContent="space-between"
             width="100%"
+            mb="4px"
           >
-            <Text bold fontSize={20}>
-              {t('Current EPOCH')}
-            </Text>
+            <Flex>
+              <Text color="secondary" textTransform="uppercase" bold mr="8px">
+                {t('Current EPOCH')}
+              </Text>
+              <Tooltips
+                content={t(
+                  'Results are updated weekly. Vote numbers are estimations based on the veCAKE balance at 00:00 UTC on the upcoming Thursday.',
+                )}
+              >
+                <ErrorIcon color="#7A6EAA" width="24px" mr="8px" />
+              </Tooltips>
+            </Flex>
             <FlexGap
               justifyContent={['space-between', 'space-between', 'flex-end']}
               alignItems="baseline"
@@ -54,7 +74,7 @@ export const CurrentEpoch = () => {
                 })}
               >
                 <TooltipText fontSize={14} color="textSubtle">
-                  {t('snapshots in')}
+                  {t('Snapshots in')}
                 </TooltipText>
               </Tooltips>
               <FlexGap gap="2px" alignItems="baseline">
@@ -118,14 +138,6 @@ export const CurrentEpoch = () => {
             </TooltipText>
           </Tooltips>
           <Balance bold fontSize={16} value={getBalanceNumber(new BN(totalWeight.toString()))} unit=" veCAKE" />
-        </AutoRow>
-        <AutoRow alignItems="center" flexDirection="row" justifyContent="flex-start" flexWrap="nowrap" mt="16px">
-          <ErrorIcon color="#7A6EAA" width="24px" mr="8px" />
-          <Text color="textSubtle" fontSize={12}>
-            {t(
-              'Results are updated weekly. Vote numbers are estimations based on the veCAKE balance at 00:00 UTC on the upcoming Thursday.',
-            )}
-          </Text>
         </AutoRow>
       </FlexGap>
     </Box>
