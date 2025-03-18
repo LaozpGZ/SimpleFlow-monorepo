@@ -92,9 +92,7 @@ const GaugesVotingMobileView = () => {
             />
           </Card>
         ) : (
-          <Card innerCardProps={{ padding: '2em 2em 0 2em' }}>
-            <VoteTable />
-          </Card>
+          <VoteTable />
         )}
       </Box>
     </StyledGaugesVotingPage>
