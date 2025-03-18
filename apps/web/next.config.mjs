@@ -55,11 +55,11 @@ const config = {
   experimental: {
     scrollRestoration: true,
     fallbackNodePolyfills: false,
-    outputFileTracingRoot: path.join(__dirname, '../../'),
-    outputFileTracingExcludes: {
-      '*': [],
-    },
     optimizePackageImports: ['@pancakeswap/widgets-internal', '@pancakeswap/uikit'],
+  },
+  outputFileTracingRoot: path.join(__dirname, '../../'),
+  outputFileTracingExcludes: {
+    '*': [],
   },
   transpilePackages: [
     '@pancakeswap/farms',
