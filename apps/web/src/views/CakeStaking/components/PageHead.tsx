@@ -2,12 +2,12 @@ import { useTranslation } from '@pancakeswap/localization'
 import { ArrowForwardIcon, Box, Button, Flex, Grid, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { AdPlayer } from 'components/AdPanel/AdPlayer'
+import PinnedFQAButton from 'components/PinnedFQAButton'
 import { useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import { useCakeLockStatus } from '../hooks/useVeCakeUserInfo'
 import { CakeLockStatus } from '../types'
 import { HeadBunny, MobileHeadBunny } from './HeadImage'
-import PinnedFQAButton from './PinnedFQAButton'
 
 export const PageHead = () => {
   const { t } = useTranslation()
