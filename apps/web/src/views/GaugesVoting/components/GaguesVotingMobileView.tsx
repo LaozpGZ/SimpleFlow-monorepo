@@ -2,11 +2,13 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Card, Flex, Grid, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Divider from 'components/Divider'
 import PinnedFQAButton from 'components/PinnedFQAButton'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useCakeLockStatus } from 'views/CakeStaking/hooks/useVeCakeUserInfo'
 import { useGauges } from '../hooks/useGauges'
 import { useGaugesQueryFilter } from '../hooks/useGaugesFilter'
 import { useGaugesTotalWeight } from '../hooks/useGaugesTotalWeight'
+import { useUserVoteGauges } from '../hooks/useUserVoteGauges'
 import { CurrentEpoch } from './CurrentEpoch'
 import { FilterFieldByTypeMobile, FilterFieldInput, FilterFieldSort } from './GaugesFilter'
 import { GaugesList, VoteTable } from './Table'
@@ -27,6 +29,15 @@ const GaugesVotingMobileView = () => {
   const { data: gauges, isLoading } = useGauges()
   const { filterGauges, setSearchText, searchText, filter, setFilter, sort, setSort } = useGaugesQueryFilter(gauges)
   const [activeTab, setActiveTab] = useState(0)
+  const { cakeLockedAmount } = useCakeLockStatus()
+  const { data: userVotedGauges } = useUserVoteGauges()
+
+  useEffect(() => {
+    // If user has stake (veCake) or votes, default to "My veCake/Votes" tab
+    if (cakeLockedAmount > 0n || (userVotedGauges && userVotedGauges.length > 0)) {
+      setActiveTab(1)
+    }
+  }, [cakeLockedAmount, userVotedGauges])
 
   return (
     <StyledGaugesVotingPage>
