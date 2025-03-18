@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Button, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { AutoColumn, Button, FlexGap, Select, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import React, { useState } from 'react'
 import styled from 'styled-components'
 import { FilterModal } from './FilterModal'
@@ -15,6 +15,38 @@ const FilterButton = styled(Button)`
 type FilterButtonGroupProps = {
   onFilterChange: (type: OptionsType, value: FilterValue) => void
   value: Filter
+}
+
+export const FilterFieldByTypeMobile: React.FC<FilterButtonGroupProps> = ({ onFilterChange, value }) => {
+  const { t } = useTranslation()
+  const [option, setOption] = useState<OptionsType | null>(null)
+
+  const SORT_OPTIONS: Array<{ label: string; value: OptionsType }> = [
+    { label: t('Chain'), value: OptionsType.ByChain },
+    { label: t('Fee Tier'), value: OptionsType.ByFeeTier },
+    { label: t('Type'), value: OptionsType.ByType },
+  ]
+
+  return (
+    <AutoColumn gap="4px">
+      <Text fontSize={12} fontWeight={600} color="textSubtle" textTransform="uppercase">
+        {t('filter')}
+      </Text>
+      <Select
+        style={{ minWidth: '100px' }}
+        placeHolderText="Chains, Fee Tiers, Types"
+        options={SORT_OPTIONS}
+        onOptionChange={(opt) => setOption(opt.value)}
+      />
+      <FilterModal
+        isOpen={Boolean(option)}
+        onDismiss={() => setOption(null)}
+        type={option}
+        options={value}
+        onChange={onFilterChange}
+      />
+    </AutoColumn>
+  )
 }
 
 export const FilterFieldByType: React.FC<FilterButtonGroupProps> = ({ onFilterChange, value }) => {

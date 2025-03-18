@@ -50,9 +50,16 @@ export const CurrentEpoch = () => {
             width="100%"
           >
             <Flex alignItems="center">
-              <Text bold fontSize={20} mr="8px">
-                {t('Current EPOCH')}
-              </Text>
+              {isMobile ? (
+                <Text color="secondary" textTransform="uppercase" bold mr="8px">
+                  {t('Current EPOCH')}
+                </Text>
+              ) : (
+                <Text bold fontSize={20}>
+                  {t('Current EPOCH')}
+                </Text>
+              )}
+
               {isMobile ? (
                 <Tooltips
                   content={t(
