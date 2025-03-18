@@ -55,14 +55,14 @@ export const RemainingVotePower: React.FC<{
       <StyledBox display="flex" $isMobile>
         <Flex width="100%" flexDirection="row" ml="4px" alignItems="center" justifyContent="space-between">
           <Flex alignItems="center">
-            <img src="/images/cake-staking/token-vecake.png" alt="token-vecake" width="58px" />
-            <Text fontSize="20px" bold lineHeight="120%" ml={['8px', '8px', '16px']}>
+            <img src="/images/cake-staking/token-vecake.png" alt="token-vecake" width="32px" />
+            <Text fontSize="14px" bold lineHeight="120%" ml="8px">
               {t('MY veCAKE')}
             </Text>
           </Flex>
           <FlexGap gap="4px" alignItems="center">
             <Balance
-              fontSize="24px"
+              fontSize="20px"
               color={showWillUnlockWarning ? 'warning' : 'white'}
               bold
               lineHeight="110%"
@@ -87,14 +87,8 @@ export const RemainingVotePower: React.FC<{
             ) : null}
           </FlexGap>
         </Flex>
-        <Flex
-          flexDirection={['column', 'column', 'row']}
-          justifyContent="space-between"
-          width="100%"
-          ml="4px"
-          alignItems={['flex-start', 'flex-start', 'center']}
-        >
-          <Text fontSize="16px" bold color="white" lineHeight="2">
+        <Flex flexDirection="row" justifyContent="space-between" width="100%" ml="4px" alignItems="flex-start">
+          <Text fontSize="14px" bold color="white" lineHeight="2">
             {t('Remaining veCAKE')}
           </Text>
           {epochPower === 0n && realPower.gt(0) ? (
