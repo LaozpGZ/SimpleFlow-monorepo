@@ -13,11 +13,11 @@ import { LockCakeForm } from '../LockCakeForm'
 import { LockWeeksForm } from '../LockWeeksForm'
 import { StyledCard } from './styled'
 
-export const NotLocking = () => {
+export const NotLocking = ({ hideTitle }: { hideTitle?: boolean }) => {
   return (
     <>
       <Box maxWidth={['100%', '100%', '72%']} mx="auto">
-        <NotLockingCard />
+        <NotLockingCard hideTitle={hideTitle} />
       </Box>
     </>
   )
@@ -64,7 +64,7 @@ export const NotLockingCard: React.FC<React.PropsWithChildren<NotLockingCardProp
         gridColumnGap="24px"
         gridRowGap={isDesktop ? '0' : '24px'}
         padding={[0, 0, 12]}
-        mt={32}
+        mt={[0, 0, 32]}
         mb={32}
       >
         <LockCakeForm fieldOnly />
