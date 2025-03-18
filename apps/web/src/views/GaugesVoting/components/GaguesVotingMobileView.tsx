@@ -6,26 +6,25 @@ import {
   Card,
   Flex,
   Grid,
-  Heading,
   LinkExternal,
   PageHeader,
   StyledLink,
+  Tab,
+  TabMenu,
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
-import Page from 'components/Layout/Page'
+import Divider from 'components/Divider'
 import NextLink from 'next/link'
-import { PropsWithChildren } from 'react'
+import { useState } from 'react'
 import styled from 'styled-components'
-import { CurrentEpoch } from './components/CurrentEpoch'
-import GaugesVotingMobileView from './components/GaguesVotingMobileView'
-import { FilterFieldByType, FilterFieldInput, FilterFieldSort } from './components/GaugesFilter'
-import { MyVeCakeBalance } from './components/MyVeCakeBalance'
-import { GaugesList, GaugesTable, VoteTable } from './components/Table'
-import { WeightsPieChart } from './components/WeightsPieChart'
-import { useGauges } from './hooks/useGauges'
-import { useGaugesQueryFilter } from './hooks/useGaugesFilter'
-import { useGaugesTotalWeight } from './hooks/useGaugesTotalWeight'
+import { useGauges } from '../hooks/useGauges'
+import { useGaugesQueryFilter } from '../hooks/useGaugesFilter'
+import { useGaugesTotalWeight } from '../hooks/useGaugesTotalWeight'
+import { CurrentEpoch } from './CurrentEpoch'
+import { FilterFieldByType, FilterFieldInput, FilterFieldSort } from './GaugesFilter'
+import { GaugesList, GaugesTable, VoteTable } from './Table'
+import { WeightsPieChart } from './WeightsPieChart'
 
 const InlineLink = styled(LinkExternal)`
   display: inline-flex;
@@ -50,16 +49,6 @@ const StyledPageHeader = styled(PageHeader)`
   }
 `
 
-const StyledPage = styled(Page)`
-  padding: 0px;
-
-  background: ${({ theme }) => theme.colors.backgroundAlt};
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    background: transparent;
-  }
-`
-
 const BunnyImage = styled.img`
   /* width: 218px; */
   width: 180px;
@@ -73,20 +62,21 @@ const BunnyImage = styled.img`
   }
 `
 
-const GaugesVoting = () => {
+const GaugesVotingMobileView = () => {
   const { t } = useTranslation()
   const totalGaugesWeight = useGaugesTotalWeight()
   const { isDesktop, isMobile, isXl, isXs } = useMatchBreakpoints()
   const { data: gauges, isLoading } = useGauges()
   const { filterGauges, setSearchText, searchText, filter, setFilter, sort, setSort } = useGaugesQueryFilter(gauges)
-
-  if (isMobile) {
-    return <GaugesVotingMobileView />
-  }
+  const [activeTab, setActiveTab] = useState(0)
 
   return (
     <StyledGaugesVotingPage>
-      {!isMobile && (
+      {isMobile ? (
+        <Text px="16px" py="24px" lineHeight="110%" bold color="secondary" fontSize={['32px', '32px', '64px', '64px']}>
+          {t('Gauges Voting')}
+        </Text>
+      ) : (
         <>
           <StyledPageHeader background="transparent">
             <Flex justifyContent="space-between">
@@ -129,17 +119,29 @@ const GaugesVoting = () => {
           </StyledPageHeader>
         </>
       )}
-      <StyledPage>
-        <Box
-          pl={['16px', '16px', '24px']}
-          pr={['16px', '16px', '24px']}
-          mt={['0px', '0px', '32px', '-18px']}
-          pb={['32px', '32px', '52px']}
-        >
-          <ResponsiveCard>
+      <Box px="40px">
+        <TabMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth={isMobile} isShowBorderBottom={false}>
+          <Tab>
+            {t('Gauges')} ({filterGauges.length})
+          </Tab>
+          <Tab>{t('My veCAKE/Votes')}</Tab>
+        </TabMenu>
+      </Box>
+
+      <Box
+        pl={['16px', '16px', '24px']}
+        pr={['16px', '16px', '24px']}
+        mt={['0px', '0px', '32px', '-18px']}
+        pb={['32px', '32px', '52px']}
+      >
+        {activeTab === 0 ? (
+          <Card>
             <Grid gridTemplateColumns={isDesktop ? '2.2fr 3fr' : '1fr'}>
-              <EpochPreview />
-              <Box ml={isDesktop ? '60px' : '0'} mt={isDesktop ? '0' : '1em'}>
+              <CurrentEpoch />
+
+              <Divider />
+
+              <Box ml={isDesktop ? '60px' : '0'} mt={0} padding={['16px', '16px', '16px 24px 24px']}>
                 <Text color="secondary" textTransform="uppercase" bold>
                   {t('proposed weights')}
                 </Text>
@@ -209,34 +211,15 @@ const GaugesVoting = () => {
                 totalGaugesWeight={Number(totalGaugesWeight)}
               />
             )}
-          </ResponsiveCard>
-          <Box mt="80px">
-            <Heading as="h2" scale="xl" mb="24px">
-              {t('My votes')}
-            </Heading>
+          </Card>
+        ) : (
+          <Card innerCardProps={{ padding: '2em 2em 0 2em' }}>
             <VoteTable />
-          </Box>
-        </Box>
-      </StyledPage>
+          </Card>
+        )}
+      </Box>
     </StyledGaugesVotingPage>
   )
 }
 
-const EpochPreview = () => {
-  return (
-    <Card isActive style={{ height: 'fit-content' }}>
-      <MyVeCakeBalance />
-      <CurrentEpoch />
-    </Card>
-  )
-}
-
-const ResponsiveCard: React.FC<PropsWithChildren> = ({ children }) => {
-  const { isDesktop } = useMatchBreakpoints()
-  if (isDesktop) {
-    return <Card innerCardProps={{ padding: '2em 2em 0 2em' }}>{children}</Card>
-  }
-  return <Box pt="2em">{children}</Box>
-}
-
-export default GaugesVoting
+export default GaugesVotingMobileView
