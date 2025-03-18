@@ -23,7 +23,7 @@ import { getChainFullName } from '../utils'
 const PoolsFilterContainer = styled(Flex)<{ $childrenCount: number }>`
   flex-wrap: wrap;
   justify-content: flex-start;
-
+  gap: 16px;
   & > div {
     flex: 1;
   }
@@ -34,7 +34,6 @@ const PoolsFilterContainer = styled(Flex)<{ $childrenCount: number }>`
   }
 
   @media (min-width: 1200px) {
-    gap: 16px;
     & {
       flex-wrap: nowrap;
     }
