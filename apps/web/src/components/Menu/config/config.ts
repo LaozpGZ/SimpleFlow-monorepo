@@ -54,7 +54,7 @@ const config: (
       label: t('Trade'),
       icon: SwapIcon,
       fillIcon: SwapFillIcon,
-      href: '/',
+      href: '/swap',
       hideSubNav: true,
       items: [
         {
