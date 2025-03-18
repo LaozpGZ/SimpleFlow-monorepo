@@ -123,7 +123,7 @@ const WeekInput: React.FC<{
     <AtomBox position="relative" id="lock-weeks-input" display="grid" gap="4px" width="100%">
       <AtomBox display="flex" alignItems="center" justifyContent="space-between" mb="8px">
         <Text color="textSubtle" fontSize={12} bold width="100%">
-          {t('Lock duration')}
+          {t('Lock Duration')}
         </Text>
         <LazyAnimatePresence mode="wait" features={domAnimation}>
           <FlexGap
