@@ -31,7 +31,9 @@ export const PageHead = () => {
       )}
 
       <Flex justifyContent="space-between" flexDirection="row">
-        {isMobile ? null : (
+        {isMobile ? (
+          <Heading />
+        ) : (
           <Flex flex="1" flexDirection="column" mr={[0, 0, '8px']}>
             <Heading />
             <Description />
@@ -65,7 +67,7 @@ const Heading = () => {
   const staking = useMemo(() => status === CakeLockStatus.Locking, [status])
 
   return (
-    <Flex alignItems="baseline" justifyContent={staking ? 'space-between' : undefined}>
+    <Flex alignItems="baseline" width="100%" justifyContent={staking || isMobile ? 'space-between' : undefined}>
       <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
         {t('CAKE Staking')}
       </Text>

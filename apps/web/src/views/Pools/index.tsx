@@ -61,7 +61,13 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
 
   return (
     <>
-      {!isMobile && (
+      {isMobile ? (
+        <PageHeader>
+          <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
+            {t('Syrup Pools')}
+          </Text>
+        </PageHeader>
+      ) : (
         <PageHeader>
           <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
             <Flex flex="1" flexDirection="column" mr={['8px', 0]}>
