@@ -169,7 +169,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
           <CardBody>
             <FlexGap alignItems="center" justifyContent="center" flexDirection="column" gap="24px">
               <Text>{t('Please connect wallet to view your position / add liquidity.')}</Text>
-              <AddLiquidityButton />
+              <AddLiquidityButton wrapperProps={{ width: 'auto' }} />
             </FlexGap>
           </CardBody>
         </Card>
