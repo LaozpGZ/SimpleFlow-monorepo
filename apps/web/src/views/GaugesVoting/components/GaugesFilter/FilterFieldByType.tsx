@@ -34,7 +34,7 @@ export const FilterFieldByTypeMobile: React.FC<FilterButtonGroupProps> = ({ onFi
       </Text>
       <Select
         style={{ minWidth: '100px' }}
-        placeHolderText="Chains, Fee Tiers, Types"
+        placeHolderText="Chains,Fee Tiers..."
         options={SORT_OPTIONS}
         onOptionChange={(opt) => setOption(opt.value)}
       />
