@@ -22,6 +22,7 @@ import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { formatFiatNumber } from '@pancakeswap/utils/formatFiatNumber'
 import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
+import ConnectWalletButton from 'components/ConnectWalletButton'
 import Divider from 'components/Divider'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { CHAIN_QUERY_NAME } from 'config/chains'
@@ -173,7 +174,11 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
                   ? t('Please connect wallet to view your position / add liquidity.')
                   : t('You currently have no position in this liquidity pair.')}
               </Text>
-              <AddLiquidityButton wrapperProps={{ width: 'auto' }} />
+              {!account ? (
+                <ConnectWalletButton variant="tertiary" mr="auto" width="100%" />
+              ) : (
+                <AddLiquidityButton wrapperProps={{ width: 'auto' }} />
+              )}
             </FlexGap>
           </CardBody>
         </Card>
