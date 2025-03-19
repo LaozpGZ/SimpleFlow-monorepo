@@ -25,7 +25,7 @@ const PoolControlsView = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 16px 32px;
+    padding: 16px 0px;
     margin-bottom: 0;
   }
 `;
@@ -220,7 +220,7 @@ export function PoolControls<T>({
               />
             </ControlStretch>
           </LabelWrapper>
-          <LabelWrapper style={{ marginLeft: 16 }}>
+          <LabelWrapper style={{ marginLeft: 16, width: "100%" }}>
             <Text fontSize="12px" bold color="textSubtle" textTransform="uppercase">
               {t("Search")}
             </Text>

@@ -158,7 +158,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
     <>
       {isMobile ? (
         <StyledPageHeader>
-          <Flex alignItems="baseline" width="100%" justifyContent="space-between" mt="16px" mb="24px">
+          <Flex alignItems="baseline" width="100%" justifyContent="space-between" mt="16px" mb="16px">
             <Text lineHeight="110%" bold color="secondary" fontSize="32px">
               {t('Syrup Pools')}
             </Text>
