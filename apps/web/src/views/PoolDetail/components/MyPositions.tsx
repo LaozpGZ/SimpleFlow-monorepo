@@ -159,7 +159,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 
   const { earningsBusd: v2EarningsBusd } = useV2CakeEarning(poolInfo)
   const { earningsBusd: v3EarningsBusd } = useV3CakeEarningsByPool(poolInfo)
-
+  console.log('count', count)
   if (count === 0 || !account) {
     return (
       <Grid gridGap="24px">
