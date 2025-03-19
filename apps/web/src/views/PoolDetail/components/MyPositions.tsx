@@ -96,7 +96,7 @@ export const MyPositions: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   const { t } = useTranslation()
   const { account } = useAccountActiveChain()
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(-1) // -1 means not loaded
   const [totalLiquidityUSD, setTotalLiquidityUSD] = useState('0')
   const [filter, setFilter] = useState(PositionFilter.All)
   const addLiquidityLink = useMemo(() => {
@@ -367,7 +367,7 @@ const MyV3Positions: React.FC<{
 
   useEffect(() => {
     setCount(positions?.[filter].length ?? 0)
-  }, [filter, positions, setCount, isLoading])
+  }, [filter, positions, setCount])
 
   const { data: poolsLength } = useV3PoolsLength([chainId])
 
@@ -450,8 +450,7 @@ const MyV2OrStablePositions: React.FC<{
   const count = useMemo(() => {
     if (!data) return 0
     return [data.nativeBalance.greaterThan('0'), data.farmingBalance.greaterThan('0')].filter(Boolean).length
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, isLoading])
+  }, [data])
   const { onHarvest } = useV2FarmActions(poolInfo.lpAddress, poolInfo.bCakeWrapperAddress)
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError } = useCatchTxError()
@@ -475,7 +474,7 @@ const MyV2OrStablePositions: React.FC<{
 
   useEffect(() => {
     setCount(count)
-  }, [count, setCount, isLoading])
+  }, [count, setCount])
 
   useEffect(() => {
     setTotalTvlUsd(formatFiatNumber(totalTVLUsd, ''))
