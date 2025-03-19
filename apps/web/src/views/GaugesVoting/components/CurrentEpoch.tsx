@@ -38,7 +38,7 @@ export const CurrentEpoch = () => {
   const { isDesktop, isMobile } = useMatchBreakpoints()
 
   return (
-    <Box padding={['16px', '16px', '16px 24px 24px']}>
+    <Box padding={['24px 24px 8px 24px', '24px 24px 8px 24px', '16px 24px 24px']}>
       <FlexGap gap="8px" flexDirection="column">
         <AutoRow justifyContent="space-between">
           <FlexGap
@@ -51,7 +51,7 @@ export const CurrentEpoch = () => {
           >
             <Flex alignItems="center">
               {isMobile ? (
-                <Text color="secondary" textTransform="uppercase" bold mr="8px">
+                <Text fontSize="12px" color="secondary" textTransform="uppercase" bold mr="8px">
                   {t('Current EPOCH')}
                 </Text>
               ) : (
@@ -66,7 +66,7 @@ export const CurrentEpoch = () => {
                     'Results are updated weekly. Vote numbers are estimations based on the veCAKE balance at 00:00 UTC on the upcoming Thursday.',
                   )}
                 >
-                  <ErrorIcon color="#7A6EAA" width="24px" mr="8px" />
+                  <ErrorIcon color="#7A6EAA" width="16px" mr="4px" />
                 </Tooltips>
               ) : null}
             </Flex>

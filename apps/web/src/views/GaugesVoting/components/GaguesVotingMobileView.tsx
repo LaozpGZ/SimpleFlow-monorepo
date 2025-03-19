@@ -41,8 +41,8 @@ const GaugesVotingMobileView = () => {
 
   return (
     <StyledGaugesVotingPage>
-      <Flex alignItems="baseline" width="100%" justifyContent="space-between" px="16px" py="24px">
-        <Text lineHeight="110%" bold color="secondary" fontSize={['32px', '32px', '64px', '64px']}>
+      <Flex alignItems="baseline" width="100%" justifyContent="space-between" px="16px" py="16px">
+        <Text lineHeight="110%" bold color="secondary" fontSize="32px">
           {t('Gauges Voting')}
         </Text>
         <PinnedFQAButton modalContent={<>Frequently Asked Questions</>} />
@@ -51,7 +51,7 @@ const GaugesVotingMobileView = () => {
       <Box px="40px">
         <TabMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth={isMobile} isShowBorderBottom={false}>
           <Tab>
-            {t('Gauges')} ({filterGauges.length})
+            {t('Gauges')} ({gauges?.length || 0})
           </Tab>
           <Tab>{t('My veCAKE/Votes')}</Tab>
         </TabMenu>
@@ -70,11 +70,11 @@ const GaugesVotingMobileView = () => {
 
               <Divider />
 
-              <Box ml={isDesktop ? '60px' : '0'} mt={0} padding={['16px', '16px', '16px 24px 24px']}>
+              <Box ml="0" mt={0} padding="8px 24px 8px 24px">
                 <Text color="secondary" textTransform="uppercase" bold>
                   {t('proposed weights')}
                 </Text>
-                <Box mt={isDesktop ? '40px' : '0'} mb={isDesktop ? '20px' : 0}>
+                <Box mt="0" mb={0}>
                   <WeightsPieChart
                     data={filterGauges}
                     totalGaugesWeight={Number(totalGaugesWeight)}
@@ -87,7 +87,7 @@ const GaugesVotingMobileView = () => {
             <Divider />
 
             <Text px={16} bold fontSize="24px">
-              {t('Gauges')}
+              {t('Gauges')} ({filterGauges?.length || 0})
             </Text>
 
             <Grid p={16} gridTemplateColumns="1fr" gridGap="1em" position="sticky" top="0">
@@ -98,6 +98,8 @@ const GaugesVotingMobileView = () => {
 
               <FilterFieldInput placeholder={t('Search')} initialValue={searchText} onChange={setSearchText} />
             </Grid>
+
+            <Divider />
 
             <GaugesList
               key={sort}
