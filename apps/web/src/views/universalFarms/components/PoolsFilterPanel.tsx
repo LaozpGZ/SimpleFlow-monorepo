@@ -39,13 +39,6 @@ const PoolsFilterContainer = styled(Flex)<{ $childrenCount: number }>`
     }
   }
 
-  @media (max-width: 1199px) {
-    & > div {
-      flex: 0 0 calc(50% - 16px);
-      max-width: calc(50% - 16px);
-    }
-  }
-
   @media (max-width: 967px) {
     & > div:nth-child(3),
     & > div:nth-child(4) {

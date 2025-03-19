@@ -79,8 +79,16 @@ const ButtonWrapper = styled.div`
 const ControlWrapper = styled.div`
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 24px;
+  margin-top: 8px;
+  width: 100%;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    width: auto;
+    justify-content: flex-end;
+    margin-top: 0;
+  }
 `
 
 const CardBody = styled(StyledCardBody)`
@@ -478,6 +486,7 @@ export const PositionPage = () => {
     <Card>
       <CardHeader p={isMobile ? '16px' : undefined}>
         <PoolsFilterPanel onChange={handleFilterChange} value={poolsFilter}>
+          {(isMobile || isMd) && <AddLiquidityButton scale="sm" height="40px" width="100%" />}
           <ControlWrapper>
             <ToggleWrapper>
               <Text>{t('Farms only')}</Text>
@@ -492,7 +501,6 @@ export const PositionPage = () => {
               </NotificationDot>
             </ButtonWrapper>
           </ControlWrapper>
-          {(isMobile || isMd) && <AddLiquidityButton scale="sm" height="40px" width="100%" />}
         </PoolsFilterPanel>
         <SubPanel>
           <StyledButtonMenu
