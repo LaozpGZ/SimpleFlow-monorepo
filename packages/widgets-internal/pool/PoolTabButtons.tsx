@@ -116,7 +116,7 @@ const PoolTabButtons = ({
       <FlexGap flexDirection="column" gap="16px">
         <Flex justifyContent="space-between" alignItems="center">
           <Flex alignItems="center">
-            <Text>{t("Pool Status")}</Text>
+            <Text>{t("Pool status")}</Text>
           </Flex>
           {liveOrFinishedSwitch}
         </Flex>
@@ -124,7 +124,14 @@ const PoolTabButtons = ({
           <Flex alignItems="center">
             <Text>{t("Stake only")}</Text>
           </Flex>
-          <Toggle checked={stakedOnly} onChange={() => setStakedOnly(!stakedOnly)} scale="md" />
+          <Toggle
+            checked={stakedOnly}
+            onChange={() => {
+              setStakedOnly(!stakedOnly);
+              filterModal.setIsOpen(false);
+            }}
+            scale="md"
+          />
         </Flex>
       </FlexGap>
     </Modal>
