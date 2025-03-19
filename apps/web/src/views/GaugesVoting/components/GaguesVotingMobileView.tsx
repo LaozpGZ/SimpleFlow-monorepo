@@ -57,12 +57,7 @@ const GaugesVotingMobileView = () => {
         </TabMenu>
       </Box>
 
-      <Box
-        pl={['16px', '16px', '24px']}
-        pr={['16px', '16px', '24px']}
-        mt={['0px', '0px', '32px', '-18px']}
-        pb={['32px', '32px', '52px']}
-      >
+      <Box pl="16px" pr="16px" mt="0px" pb="32px">
         {activeTab === 0 ? (
           <Card>
             <Grid gridTemplateColumns={isDesktop ? '2.2fr 3fr' : '1fr'}>
