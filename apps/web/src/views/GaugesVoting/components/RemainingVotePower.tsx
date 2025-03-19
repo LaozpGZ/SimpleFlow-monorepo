@@ -12,7 +12,7 @@ import { useEpochVotePower } from '../hooks/useEpochVotePower'
 const StyledBox = styled(Box)<{ $isMobile?: boolean }>`
   border-radius: 16px;
   background: linear-gradient(229deg, #1fc7d4 -13.69%, #7645d9 91.33%);
-  padding: 18px;
+  padding: 8px 16px;
   display: inline-flex;
   align-items: center;
   min-width: 100%;
@@ -53,10 +53,10 @@ export const RemainingVotePower: React.FC<{
   if (isMobile) {
     return (
       <StyledBox display="flex" $isMobile>
-        <Flex width="100%" flexDirection="row" ml="4px" alignItems="center" justifyContent="space-between">
+        <Flex width="100%" flexDirection="row" alignItems="center" justifyContent="space-between">
           <Flex alignItems="center">
             <img src="/images/cake-staking/token-vecake.png" alt="token-vecake" width="32px" />
-            <Text fontSize="14px" bold lineHeight="120%" ml="8px">
+            <Text fontSize="14px" bold color="white" lineHeight="120%" ml="8px">
               {t('MY veCAKE')}
             </Text>
           </Flex>
@@ -87,7 +87,7 @@ export const RemainingVotePower: React.FC<{
             ) : null}
           </FlexGap>
         </Flex>
-        <Flex flexDirection="row" justifyContent="space-between" width="100%" ml="4px" alignItems="flex-start">
+        <Flex flexDirection="row" justifyContent="space-between" width="100%" alignItems="flex-start">
           <Text fontSize="14px" bold color="white" lineHeight="2">
             {t('Remaining veCAKE')}
           </Text>
