@@ -1,4 +1,4 @@
-import { Button, getPortalRoot, HelpIcon, Modal, ModalProps, ModalV2 } from '@pancakeswap/uikit'
+import { Box, Button, getPortalRoot, HelpIcon, Modal, ModalProps, ModalV2 } from '@pancakeswap/uikit'
 import { ReactElement, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { styled } from 'styled-components'
@@ -63,7 +63,14 @@ const PinnedFQAButton: React.FC<PinnedFQAButtonProps> = ({ modalContent }) => {
   }
 
   const button = (
-    <Button width="48px" height="48px" variant="subtle" onClick={handleOpenModal}>
+    <Button
+      px="0px"
+      style={{ borderRadius: '12px' }}
+      width="36px"
+      height="36px"
+      variant="subtle"
+      onClick={handleOpenModal}
+    >
       <HelpIcon ml="0" color="white" width="24px" />
     </Button>
   )
@@ -72,9 +79,9 @@ const PinnedFQAButton: React.FC<PinnedFQAButtonProps> = ({ modalContent }) => {
 
   return (
     <>
-      <div ref={anchorRef} id="anchor-fqa-button">
+      <Box ref={anchorRef} id="anchor-fqa-button">
         {button}
-      </div>
+      </Box>
       {portal &&
         createPortal(
           <FixedContainer style={{ display: visible ? 'inline' : 'none' }}>{button}</FixedContainer>,
