@@ -450,7 +450,8 @@ const MyV2OrStablePositions: React.FC<{
   const count = useMemo(() => {
     if (!data) return 0
     return [data.nativeBalance.greaterThan('0'), data.farmingBalance.greaterThan('0')].filter(Boolean).length
-  }, [data])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data, isLoading])
   const { onHarvest } = useV2FarmActions(poolInfo.lpAddress, poolInfo.bCakeWrapperAddress)
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError } = useCatchTxError()
