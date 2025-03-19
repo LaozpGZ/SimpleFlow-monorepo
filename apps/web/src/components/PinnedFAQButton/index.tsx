@@ -26,11 +26,11 @@ const FaqModal: React.FC<React.PropsWithChildren<Omit<ModalProps, 'title'>>> = (
   )
 }
 
-interface PinnedFQAButtonProps {
+interface PinnedFAQButtonProps {
   modalContent: ReactElement
 }
 
-const PinnedFQAButton: React.FC<PinnedFQAButtonProps> = ({ modalContent }) => {
+const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ modalContent }) => {
   const [visible, setVisible] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const anchorRef = useRef<HTMLDivElement>(null)
@@ -95,4 +95,4 @@ const PinnedFQAButton: React.FC<PinnedFQAButtonProps> = ({ modalContent }) => {
   )
 }
 
-export default PinnedFQAButton
+export default PinnedFAQButton

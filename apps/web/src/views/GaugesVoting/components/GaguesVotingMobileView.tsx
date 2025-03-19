@@ -1,10 +1,12 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Card, Flex, Grid, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Divider from 'components/Divider'
-import PinnedFQAButton from 'components/PinnedFQAButton'
+import FoldableText from 'components/FoldableSection/FoldableText'
+import PinnedFAQButton from 'components/PinnedFAQButton'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useCakeLockStatus } from 'views/CakeStaking/hooks/useVeCakeUserInfo'
+import faqConfig from '../faqConfig'
 import { useGauges } from '../hooks/useGauges'
 import { useGaugesQueryFilter } from '../hooks/useGaugesFilter'
 import { useGaugesTotalWeight } from '../hooks/useGaugesTotalWeight'
@@ -45,7 +47,42 @@ const GaugesVotingMobileView = () => {
         <Text lineHeight="110%" bold color="secondary" fontSize="32px">
           {t('Gauges Voting')}
         </Text>
-        <PinnedFQAButton modalContent={<>Frequently Asked Questions</>} />
+        <PinnedFAQButton
+          modalContent={
+            <Box border="2px solid" borderColor="cardBorder" borderRadius="24px" backgroundColor="background">
+              {faqConfig.map(({ title, description }, i) => {
+                return (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <FoldableText
+                    expandableLabelProps={{
+                      iconColor: 'secondary',
+                      iconSize: '24px',
+                    }}
+                    wrapperProps={{
+                      py: '4px',
+                    }}
+                    hideExpandableLabel
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={i}
+                    title={title}
+                    borderBottom="1px solid"
+                    borderColor="cardBorder"
+                    px="20px"
+                  >
+                    {description.map((desc, index) => {
+                      return (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Text key={index} color="textSubtle" as="p">
+                          {desc}
+                        </Text>
+                      )
+                    })}
+                  </FoldableText>
+                )
+              })}
+            </Box>
+          }
+        />
       </Flex>
 
       <Box px="40px">

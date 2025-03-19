@@ -19,7 +19,7 @@ import {
 import { Pool } from '@pancakeswap/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
-import PinnedFQAButton from 'components/PinnedFQAButton'
+import PinnedFQAButton from 'components/PinnedFAQButton'
 import { TokenPairImage } from 'components/TokenImage'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
