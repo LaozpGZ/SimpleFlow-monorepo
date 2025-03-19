@@ -74,7 +74,10 @@ const PositionsCard = styled(Card)`
 `
 const PositionCardHeader = styled(CardHeader)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  padding: 12px 24px;
+  padding: 12px 16px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 12px 24px;
+  }
 `
 const PositionCardBody = styled(CardBody)`
   background: ${({ theme }) => theme.colors.dropdown};
@@ -312,17 +315,24 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
                     isMobile
                       ? {
                           gap: '6px',
-                          padding: '0px 6px',
                           justifyContent: 'space-between',
                           alignItems: 'center',
                         }
                       : undefined
                   }
                 >
-                  <ButtonMenuItem px={isMobile ? '0px' : undefined}>{t('All')}</ButtonMenuItem>
-                  <ButtonMenuItem px={isMobile ? '0px' : undefined}>{t('Active')}</ButtonMenuItem>
-                  <ButtonMenuItem px={isMobile ? '0px' : undefined}>{t('Inactive')}</ButtonMenuItem>
-                  <ButtonMenuItem px={isMobile ? '0px' : undefined}>{t('Closed')}</ButtonMenuItem>
+                  <ButtonMenuItem p="0px" style={{ flex: '1 1 auto' }}>
+                    {t('All')}
+                  </ButtonMenuItem>
+                  <ButtonMenuItem p="0px" style={{ flex: '1 1 auto' }}>
+                    {t('Active')}
+                  </ButtonMenuItem>
+                  <ButtonMenuItem p="0px" style={{ flex: '1 1 auto' }}>
+                    {t('Inactive')}
+                  </ButtonMenuItem>
+                  <ButtonMenuItem p="0px" style={{ flex: '1 1 auto' }}>
+                    {t('Closed')}
+                  </ButtonMenuItem>
                 </ButtonMenu>
               ) : null}
             </Row>
