@@ -4,8 +4,10 @@ import {
   Box,
   Button,
   Column,
+  darkColors,
   FlexGap,
   HelpIcon,
+  lightColors,
   LinkExternal,
   PageHeader,
   Row,
@@ -14,7 +16,7 @@ import {
 } from '@pancakeswap/uikit'
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
 import { PickAdSlides } from 'components/AdPanel/PickAdSlides'
-import { Suspense } from 'react'
+import { Suspense, useCallback } from 'react'
 import { useUserPancakePicks } from 'state/user/hooks/useUserPancakePicks'
 import { FarmFlexWrapper, FarmH1, FarmH2 } from 'views/Farms/styled'
 
@@ -23,6 +25,16 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
   const [isPancakePicks, setIsPancakePicks] = useUserPancakePicks(isMobile)
+
+  const handleLearnMoreClick = useCallback(() => {
+    if (typeof window !== 'undefined' && window) {
+      window.open(
+        'https://docs.pancakeswap.finance/products/yield-farming/how-to-use-farms',
+        '_blank',
+        'noopener noreferrer',
+      )
+    }
+  }, [])
 
   return (
     <PageHeader
@@ -76,15 +88,10 @@ export const PoolsBanner = ({ additionLink }: { additionLink?: React.ReactNode }
                     variant="subtle"
                     px="16px"
                     scale="md"
-                    onClick={() =>
-                      window.open(
-                        'https://docs.pancakeswap.finance/products/yield-farming/how-to-use-farms',
-                        '_blank',
-                        'noopener noreferrer',
-                      )
-                    }
+                    onClick={handleLearnMoreClick}
                   >
-                    <HelpIcon color={theme.isDark ? '#280D5F' : 'white'} />
+                    {/* can't use theme directly, in this case it's applying the reversed theme */}
+                    <HelpIcon color={theme.isDark ? lightColors.text : darkColors.contrast} />
                   </Button>
                 </FlexGap>
               </FlexGap>
