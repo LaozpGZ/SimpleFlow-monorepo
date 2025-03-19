@@ -1,10 +1,19 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoRow, Box, Text, TooltipText, useMatchBreakpoints } from '@pancakeswap/uikit'
+import {
+  AutoRow,
+  Box,
+  ChevronDownIcon,
+  ChevronUpIcon,
+  Flex,
+  Text,
+  TooltipText,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { getDecimalAmount, getFullDisplayBalance } from '@pancakeswap/utils/formatBalance'
 import BN from 'bignumber.js'
 import { WEEK } from 'config/constants/veCake'
 import dayjs from 'dayjs'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useLockCakeData } from 'state/vecake/hooks'
 import styled from 'styled-components'
 import { useProxyVeCakeBalance } from 'views/CakeStaking/hooks/useProxyVeCakeBalance'
@@ -35,6 +44,11 @@ export const NewStakingDataSet: React.FC<React.PropsWithChildren<NewStakingDataS
   const { t } = useTranslation()
   const { cakeLockWeeks } = useLockCakeData()
   const { isDesktop, isMobile } = useMatchBreakpoints()
+  const [expanded, setExpanded] = useState(false)
+
+  const toggleExpanded = () => {
+    setExpanded((prev) => !prev)
+  }
 
   const unlockTimestamp = useTargetUnlockTime(Number(cakeLockWeeks) * WEEK)
   const cakeAmountBN = useMemo(() => getDecimalAmount(new BN(cakeAmount)).toString(), [cakeAmount])
@@ -107,11 +121,32 @@ export const NewStakingDataSet: React.FC<React.PropsWithChildren<NewStakingDataS
 
   if (isMobile) {
     return (
-      <>
+      <Box width="100%">
         {customVeCakeCard ?? <MyVeCakeCardMobile value={veCake} />}
 
-        {detail}
-      </>
+        {expanded ? null : (
+          <TotalApy showTotalAPYOnly veCake={veCake} cakeAmount={cakeAmount} cakeLockWeeks={cakeLockWeeks} />
+        )}
+
+        <Flex
+          mb={expanded ? '4px' : '0px'}
+          justifyContent="space-between"
+          width="100%"
+          alignItems="center"
+          onClick={toggleExpanded}
+        >
+          <Text fontSize={14} color="textSubtle">
+            Details
+          </Text>
+          {expanded ? (
+            <ChevronUpIcon width="24px" height="24px" color="textSubtle" />
+          ) : (
+            <ChevronDownIcon width="24px" height="24px" color="textSubtle" />
+          )}
+        </Flex>
+
+        {expanded && detail}
+      </Box>
     )
   }
 
