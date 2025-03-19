@@ -40,15 +40,15 @@ const nextConfig = {
   },
   webpack: (webpackConfig) => {
     webpackConfig.plugins.push(
-        new RetryChunkLoadPlugin({
-          cacheBust: `function() {
+      new RetryChunkLoadPlugin({
+        cacheBust: `function() {
           return 'cache-bust=' + Date.now();
         }`,
-          retryDelay: `function(retryAttempt) {
+        retryDelay: `function(retryAttempt) {
           return 2 ** (retryAttempt - 1) * 500;
         }`,
-          maxRetries: 5,
-        }),
+        maxRetries: 5,
+      }),
     )
     return webpackConfig
   },

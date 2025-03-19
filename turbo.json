@@ -31,6 +31,11 @@
       "cache": false,
       "persistent": true
     },
+    "dev:solana": {
+      "dependsOn": ["@pancakeswap/next-config#build", "@pancakeswap/jupiter-terminal#dev"],
+      "cache": false,
+      "persistent": true
+    },
     "start": {
       "cache": false
     },
