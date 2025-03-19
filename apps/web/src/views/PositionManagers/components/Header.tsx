@@ -35,13 +35,13 @@ export const Header = memo(function Header() {
   }, [])
 
   return (
-    <PageHeader>
+    <PageHeader style={isMobile ? { padding: '16px 0' } : undefined}>
       {!isMobile && (
         <Box mb="32px" mt="16px">
           <BCakeMigrationBanner />
         </Box>
       )}
-      <Flex justifyContent="space-between" alignItems="flex-end" flexDirection="row" flexWrap="nowrap">
+      <Flex justifyContent="space-between" alignItems="flex-start" flexDirection="row" flexWrap="nowrap">
         <Flex
           flex="1"
           flexDirection="column"
