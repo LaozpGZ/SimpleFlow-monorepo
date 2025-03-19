@@ -17,6 +17,7 @@ import {
   Row,
   SkeletonV2,
   Text,
+  useMatchBreakpoints,
   useToast,
 } from '@pancakeswap/uikit'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
@@ -193,7 +194,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 
   const { earningsBusd: v2EarningsBusd } = useV2CakeEarning(poolInfo)
   const { earningsBusd: v3EarningsBusd } = useV3CakeEarningsByPool(poolInfo)
-
+  const { isMobile } = useMatchBreakpoints()
   if (isLoading) {
     return (
       <AutoColumn gap="lg">
@@ -301,11 +302,27 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
                 {count} {t('positions')}
               </Text>
               {poolInfo.protocol === 'v3' ? (
-                <ButtonMenu scale="sm" variant="subtle" activeIndex={filter} onItemClick={setFilter}>
-                  <ButtonMenuItem>{t('All')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Active')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Inactive')}</ButtonMenuItem>
-                  <ButtonMenuItem>{t('Closed')}</ButtonMenuItem>
+                <ButtonMenu
+                  fullWidth={isMobile}
+                  scale="sm"
+                  variant="subtle"
+                  activeIndex={filter}
+                  onItemClick={setFilter}
+                  style={
+                    isMobile
+                      ? {
+                          gap: '6px',
+                          padding: '0px 6px',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                        }
+                      : undefined
+                  }
+                >
+                  <ButtonMenuItem px={isMobile ? '0px' : undefined}>{t('All')}</ButtonMenuItem>
+                  <ButtonMenuItem px={isMobile ? '0px' : undefined}>{t('Active')}</ButtonMenuItem>
+                  <ButtonMenuItem px={isMobile ? '0px' : undefined}>{t('Inactive')}</ButtonMenuItem>
+                  <ButtonMenuItem px={isMobile ? '0px' : undefined}>{t('Closed')}</ButtonMenuItem>
                 </ButtonMenu>
               ) : null}
             </Row>
