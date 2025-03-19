@@ -30,7 +30,9 @@ export const MyVeCakeCardMobile: React.FC<{
         </Text>
       </Flex>
 
-      <Text fontSize="16px">{value ?? formatNumber(getBalanceNumber(balance))}</Text>
+      <Text fontSize="16px" bold>
+        {value ?? formatNumber(getBalanceNumber(balance))} veCAKE
+      </Text>
     </AutoRow>
   )
 }

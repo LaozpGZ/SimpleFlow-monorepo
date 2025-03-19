@@ -87,10 +87,14 @@ export const NotLockingCard: React.FC<React.PropsWithChildren<NotLockingCardProp
         <ColumnCenter>
           {account ? (
             <Button disabled={disabled} width={['100%', '100%', '50%']} onClick={handleModalOpen} mb="8px">
-              {t('Lock CAKE')}
+              {getDecimalAmount(new BN(cakeLockAmount)).gt(_cakeBalance.toString())
+                ? t('Insufficient CAKE balance')
+                : !Number(cakeLockWeeks)
+                ? t('Select lock duration')
+                : t('Lock CAKE')}
             </Button>
           ) : (
-            <ConnectWalletButton width={['100%', '100%', '50%']} />
+            <ConnectWalletButton width={['100%', '100%', '50%']} mb="8px" />
           )}
         </ColumnCenter>
 
