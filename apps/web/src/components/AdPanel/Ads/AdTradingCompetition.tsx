@@ -4,9 +4,20 @@ import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'
 import { AdCard } from '../Card'
 
-import { tradingCompetitionConfig } from '../InfoStripes/TradingCompetition'
 import { AdPlayerProps } from '../types'
 import { getImageUrl } from '../utils'
+
+const tradingCompetitionConfig = {
+  eos: {
+    imgUrl: 'eos_competition',
+    swapUrl:
+      'https://pancakeswap.finance/swap?outputCurrency=0x56b6fB708fC5732DEC1Afc8D8556423A2EDcCbD6&utm_source=Website&utm_medium=banner&utm_campaign=EOS&utm_id=TradingCompetition',
+    learnMoreUrl:
+      'https://blog.pancakeswap.finance/articles/pancake-swap-x-eos-network-trading-competition-75-000-in-rewards?utm_source=Website&utm_medium=banner&utm_campaign=EOS&utm_id=TradingCompetition',
+    reward: '75,000',
+    unit: '$',
+  },
+}
 
 export const AdTradingCompetition = (props: AdPlayerProps & { token: 'eos' }) => {
   const { t } = useTranslation()
