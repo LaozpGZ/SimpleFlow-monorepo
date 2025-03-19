@@ -41,7 +41,7 @@ const weeksOnMobile = [
   },
   {
     value: 208,
-    label: 'Max',
+    label: 'MAX',
   },
 ]
 
@@ -72,9 +72,9 @@ const ButtonBlocked = styled(Button)<{ selected?: boolean }>`
   flex: 1;
   white-space: nowrap;
   font-size: 12px;
-  padding: 0 4px;
-  color: ${({ selected, theme }) => (selected ? theme.colors.white : 'inherit')};
-  font-weight: ${({ selected }) => (selected ? 'bold' : 'normal')};
+  padding: 0 2px;
+  color: ${({ selected, theme }) => (selected ? theme.colors.primary : 'inherit')};
+  font-weight: 600;
   cursor: pointer;
 `
 
@@ -142,7 +142,6 @@ const WeekInput: React.FC<{
                   data-week={v}
                   disabled={disabled || maxUnlockWeeks < v}
                   onClick={handleWeekSelect}
-                  variant={Number(value) === v ? 'subtle' : 'light'}
                   selected={Number(value) === v}
                 >
                   {label}
@@ -159,7 +158,6 @@ const WeekInput: React.FC<{
                   data-week={maxUnlockWeeks}
                   disabled={disabled || maxUnlockWeeks <= 0}
                   onClick={handleWeekSelect}
-                  variant={Number(value) === maxUnlockWeeks ? 'subtle' : 'light'}
                   selected={Number(value) === maxUnlockWeeks}
                 >
                   {t('Max')}
