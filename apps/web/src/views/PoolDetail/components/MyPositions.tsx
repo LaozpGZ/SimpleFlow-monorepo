@@ -15,6 +15,7 @@ import {
   Grid,
   Image,
   Row,
+  SkeletonV2,
   Text,
   useToast,
 } from '@pancakeswap/uikit'
@@ -96,7 +97,40 @@ export const MyPositions: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   const { t } = useTranslation()
   const { account } = useAccountActiveChain()
-  const [count, setCount] = useState(-1) // -1 means not loaded
+  const chainId = useChainIdByQuery()
+
+  // Fetch data at the parent level
+  const { data: v3Data, isLoading: isV3Loading } = useAccountPositionDetailByPool<Protocol.V3>(
+    chainId,
+    account,
+    poolInfo.protocol === 'v3' ? poolInfo : undefined,
+  )
+
+  const { data: v2OrStableData, isLoading: isV2OrStableLoading } = useAccountPositionDetailByPool<
+    Protocol.STABLE | Protocol.V2
+  >(
+    chainId,
+    account,
+    ['v2', 'stable'].includes(poolInfo.protocol) ? (poolInfo as V2PoolInfo | StablePoolInfo) : undefined,
+  )
+
+  // Calculate count based on protocol
+  const count = useMemo(() => {
+    if (poolInfo.protocol === 'v3') {
+      return v3Data?.length ?? 0
+    }
+    if (['v2', 'stable'].includes(poolInfo.protocol)) {
+      if (!v2OrStableData) return 0
+      return [v2OrStableData.nativeBalance.greaterThan('0'), v2OrStableData.farmingBalance.greaterThan('0')].filter(
+        Boolean,
+      ).length
+    }
+    return 0
+  }, [poolInfo.protocol, v3Data, v2OrStableData])
+
+  const isLoading =
+    (poolInfo.protocol === 'v3' && isV3Loading) || (['v2', 'stable'].includes(poolInfo.protocol) && isV2OrStableLoading)
+
   const [totalLiquidityUSD, setTotalLiquidityUSD] = useState('0')
   const [filter, setFilter] = useState(PositionFilter.All)
   const addLiquidityLink = useMemo(() => {
@@ -159,7 +193,6 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 
   const { earningsBusd: v2EarningsBusd } = useV2CakeEarning(poolInfo)
   const { earningsBusd: v3EarningsBusd } = useV3CakeEarningsByPool(poolInfo)
-  console.log('count', count)
   if (count === 0 || !account) {
     return (
       <Grid gridGap="24px">
@@ -179,6 +212,32 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
           </CardBody>
         </Card>
       </Grid>
+    )
+  }
+
+  // Show loading state if data is still being fetched
+  if (isLoading) {
+    return (
+      <AutoColumn gap="lg">
+        <Text as="h3" bold fontSize={24}>
+          {t('My Positions')}
+        </Text>
+        <Grid gridGap={24} gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 2fr']}>
+          <OverviewCard innerCardProps={{ p: 24 }}>
+            <SkeletonV2 width="100%" height={200} />
+          </OverviewCard>
+          <PositionsCard>
+            <PositionCardHeader variant="pale">
+              <SkeletonV2 width={100} height={32} />
+            </PositionCardHeader>
+            <PositionCardBody>
+              <PositionItemSkeleton />
+              <PositionItemSkeleton />
+              <PositionItemSkeleton />
+            </PositionCardBody>
+          </PositionsCard>
+        </Grid>
+      </AutoColumn>
     )
   }
 
@@ -257,7 +316,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
               <MyV3Positions
                 poolInfo={poolInfo}
                 filter={filter}
-                setCount={setCount}
+                v3Data={v3Data}
                 setTotalLiquidityUSD={setTotalLiquidityUSD}
                 setHandleHarvestAll={setHandleHarvestAll}
               />
@@ -265,7 +324,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
             {['v2', 'stable'].includes(poolInfo.protocol) ? (
               <MyV2OrStablePositions
                 poolInfo={poolInfo as V2PoolInfo | StablePoolInfo}
-                setCount={setCount}
+                v2OrStableData={v2OrStableData}
                 setTotalTvlUsd={setTotalLiquidityUSD}
                 setHandleHarvestAll={setHandleHarvestAll}
               />
@@ -285,14 +344,12 @@ type V3Positions = Record<PositionFilter, PositionDetail[]> | null
 const MyV3Positions: React.FC<{
   poolInfo: PoolInfo
   filter: PositionFilter
-  setCount: (count: number) => void
+  v3Data: PositionDetail[] | undefined
   setTotalLiquidityUSD: (value: string) => void
   setHandleHarvestAll: (fn: () => () => Promise<void>) => void
-}> = ({ poolInfo, filter, setCount, setTotalLiquidityUSD, setHandleHarvestAll }) => {
+}> = ({ poolInfo, filter, v3Data, setTotalLiquidityUSD, setHandleHarvestAll }) => {
   const { t } = useTranslation()
   const chainId = useChainIdByQuery()
-  const { account } = useAccountActiveChain()
-  const { data, isLoading } = useAccountPositionDetailByPool<Protocol.V3>(chainId, account, poolInfo)
   const [, pool] = usePoolByChainId(poolInfo.token0.wrapped, poolInfo.token1.wrapped, poolInfo.feeTier)
   const { data: price0Usd } = useCurrencyUsdPrice(poolInfo.token0.wrapped, {
     enabled: !!poolInfo.token0.wrapped,
@@ -305,7 +362,7 @@ const MyV3Positions: React.FC<{
     poolInfo.token0.wrapped.address,
     poolInfo.token1.wrapped.address,
     poolInfo.feeTier,
-    data?.filter((position) => position.liquidity !== 0n),
+    v3Data?.filter((position) => position.liquidity !== 0n),
   )
   const totalLiquidityUSD = useMemo(() => {
     if (!positionsData) {
@@ -323,10 +380,10 @@ const MyV3Positions: React.FC<{
   }, [positionsData, price0Usd, price1Usd])
   const { onHarvestAll } = useFarmsV3BatchHarvest()
   const handleHarvestAll = useCallback(() => {
-    if (!onHarvestAll || !data) return async () => {}
-    const tokenIds = data.filter((p) => p.isStaked).map((p) => p.tokenId.toString())
+    if (!onHarvestAll || !v3Data) return async () => {}
+    const tokenIds = v3Data.filter((p) => p.isStaked).map((p) => p.tokenId.toString())
     return async () => onHarvestAll(tokenIds)
-  }, [data, onHarvestAll])
+  }, [v3Data, onHarvestAll])
 
   useEffect(() => {
     setHandleHarvestAll(handleHarvestAll)
@@ -337,7 +394,7 @@ const MyV3Positions: React.FC<{
   }, [totalLiquidityUSD, setTotalLiquidityUSD])
 
   const positions: V3Positions = useMemo(() => {
-    if (!data) {
+    if (!v3Data) {
       return null
     }
     const p: V3Positions = {
@@ -347,7 +404,7 @@ const MyV3Positions: React.FC<{
       [PositionFilter.Closed]: [],
     }
 
-    data.forEach((position) => {
+    v3Data.forEach((position) => {
       if (position.liquidity === 0n) {
         p[PositionFilter.Closed].push(position)
         return
@@ -363,23 +420,9 @@ const MyV3Positions: React.FC<{
     p[PositionFilter.All] = p[PositionFilter.Active].concat(p[PositionFilter.Inactive], p[PositionFilter.Closed])
 
     return p
-  }, [data, pool])
-
-  useEffect(() => {
-    setCount(positions?.[filter].length ?? 0)
-  }, [filter, positions, setCount])
+  }, [v3Data, pool])
 
   const { data: poolsLength } = useV3PoolsLength([chainId])
-
-  if (isLoading) {
-    return (
-      <>
-        <PositionItemSkeleton />
-        <PositionItemSkeleton />
-        <PositionItemSkeleton />
-      </>
-    )
-  }
 
   if (!positions) {
     return null
@@ -433,24 +476,20 @@ const MyV3Positions: React.FC<{
 
 const MyV2OrStablePositions: React.FC<{
   poolInfo: V2PoolInfo | StablePoolInfo
-  setCount: (count: number) => void
+  v2OrStableData: V2LPDetail | StableLPDetail | undefined
   setTotalTvlUsd: (value: string) => void
   setHandleHarvestAll: (fn: () => () => Promise<void>) => void
-}> = ({ poolInfo, setCount, setTotalTvlUsd, setHandleHarvestAll }) => {
+}> = ({ poolInfo, v2OrStableData, setTotalTvlUsd, setHandleHarvestAll }) => {
   const { t } = useTranslation()
   const chainId = useChainIdByQuery()
-  const { account } = useAccountActiveChain()
-  const { data, isLoading } = useAccountPositionDetailByPool<Protocol.STABLE | Protocol.V2>(chainId, account, poolInfo)
+
   const totalTVLUsd = useTotalPriceUSD({
-    currency0: data?.pair.token0,
-    currency1: data?.pair.token1,
-    amount0: data?.nativeDeposited0.add(data?.farmingDeposited0),
-    amount1: data?.nativeDeposited1.add(data?.farmingDeposited1),
+    currency0: v2OrStableData?.pair.token0,
+    currency1: v2OrStableData?.pair.token1,
+    amount0: v2OrStableData?.nativeDeposited0.add(v2OrStableData?.farmingDeposited0),
+    amount1: v2OrStableData?.nativeDeposited1.add(v2OrStableData?.farmingDeposited1),
   })
-  const count = useMemo(() => {
-    if (!data) return 0
-    return [data.nativeBalance.greaterThan('0'), data.farmingBalance.greaterThan('0')].filter(Boolean).length
-  }, [data])
+
   const { onHarvest } = useV2FarmActions(poolInfo.lpAddress, poolInfo.bCakeWrapperAddress)
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError } = useCatchTxError()
@@ -473,26 +512,12 @@ const MyV2OrStablePositions: React.FC<{
   }, [handleHarvest, setHandleHarvestAll])
 
   useEffect(() => {
-    setCount(count)
-  }, [count, setCount])
-
-  useEffect(() => {
     setTotalTvlUsd(formatFiatNumber(totalTVLUsd, ''))
   }, [totalTVLUsd, setTotalTvlUsd])
 
   const { data: v2PoolsLength } = useV2PoolsLength([chainId])
 
-  if (isLoading) {
-    return (
-      <>
-        <PositionItemSkeleton />
-        <PositionItemSkeleton />
-        <PositionItemSkeleton />
-      </>
-    )
-  }
-
-  if (!data) {
+  if (!v2OrStableData) {
     return null
   }
 
@@ -501,16 +526,16 @@ const MyV2OrStablePositions: React.FC<{
       {poolInfo.protocol === 'v2' ? (
         <V2PositionItem
           detailMode
-          key={data.pair.liquidityToken.address}
-          data={data as V2LPDetail}
+          key={v2OrStableData.pair.liquidityToken.address}
+          data={v2OrStableData as V2LPDetail}
           poolLength={v2PoolsLength[chainId]}
         />
       ) : null}
       {poolInfo.protocol === 'stable' ? (
         <StablePositionItem
           detailMode
-          key={data.pair.liquidityToken.address}
-          data={data as StableLPDetail}
+          key={v2OrStableData.pair.liquidityToken.address}
+          data={v2OrStableData as StableLPDetail}
           poolLength={v2PoolsLength[chainId]}
         />
       ) : null}
