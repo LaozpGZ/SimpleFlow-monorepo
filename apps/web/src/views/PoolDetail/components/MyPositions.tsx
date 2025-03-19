@@ -174,11 +174,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
                   ? t('Please connect wallet to view your position / add liquidity.')
                   : t('You currently have no position in this liquidity pair.')}
               </Text>
-              {!account ? (
-                <ConnectWalletButton variant="tertiary" mr="auto" width="100%" />
-              ) : (
-                <AddLiquidityButton wrapperProps={{ width: 'auto' }} />
-              )}
+              {!account ? <ConnectWalletButton /> : <AddLiquidityButton wrapperProps={{ width: 'auto' }} />}
             </FlexGap>
           </CardBody>
         </Card>
