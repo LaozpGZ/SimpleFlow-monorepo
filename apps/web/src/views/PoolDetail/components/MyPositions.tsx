@@ -193,29 +193,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 
   const { earningsBusd: v2EarningsBusd } = useV2CakeEarning(poolInfo)
   const { earningsBusd: v3EarningsBusd } = useV3CakeEarningsByPool(poolInfo)
-  if (count === 0 || !account) {
-    return (
-      <Grid gridGap="24px">
-        <Text as="h3" fontWeight={600} fontSize={24}>
-          {t('My Positions')}
-        </Text>
-        <Card>
-          <CardBody>
-            <FlexGap alignItems="center" justifyContent="center" flexDirection="column" gap="24px">
-              <Text color="textSubtle">
-                {!account
-                  ? t('Please connect wallet to view your position / add liquidity.')
-                  : t('You currently have no position in this liquidity pair.')}
-              </Text>
-              {!account ? <ConnectWalletButton /> : <AddLiquidityButton wrapperProps={{ width: 'auto' }} />}
-            </FlexGap>
-          </CardBody>
-        </Card>
-      </Grid>
-    )
-  }
 
-  // Show loading state if data is still being fetched
   if (isLoading) {
     return (
       <AutoColumn gap="lg">
@@ -238,6 +216,27 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
           </PositionsCard>
         </Grid>
       </AutoColumn>
+    )
+  }
+  if (count === 0 || !account) {
+    return (
+      <Grid gridGap="24px">
+        <Text as="h3" fontWeight={600} fontSize={24}>
+          {t('My Positions')}
+        </Text>
+        <Card>
+          <CardBody>
+            <FlexGap alignItems="center" justifyContent="center" flexDirection="column" gap="24px">
+              <Text color="textSubtle">
+                {!account
+                  ? t('Please connect wallet to view your position / add liquidity.')
+                  : t('You currently have no position in this liquidity pair.')}
+              </Text>
+              {!account ? <ConnectWalletButton /> : <AddLiquidityButton wrapperProps={{ width: 'auto' }} />}
+            </FlexGap>
+          </CardBody>
+        </Card>
+      </Grid>
     )
   }
 
