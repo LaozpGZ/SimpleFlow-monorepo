@@ -1,6 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { useSearchParams } from 'next/navigation'
 import { useCallback } from 'react'
 import { BSCMevGuardChain } from 'utils/mevGuardChains'
 import { MethodNotFoundRpcError, WalletClient } from 'viem'
@@ -182,7 +183,7 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
   return { addMevRpc }
 }
 
-export async function getWalletType(connector?: Connector): Promise<WalletType> {
+export async function getWalletType(connector?: Connector, mevParam?: string): Promise<WalletType> {
   if (!connector || typeof connector.getProvider !== 'function') return WalletType.mevNotSupported
   const provider = (await connector.getProvider()) as any
 
@@ -200,8 +201,9 @@ export async function getWalletType(connector?: Connector): Promise<WalletType> 
   }
   if (walletSupportManualRPCConfig.some((d) => d in provider)) return WalletType.mevOnlyManualConfig
   if (
-    walletSupportDefaultMevOnBSC.some((d) => d in provider) &&
-    !walletPretendToBinanceWallet.some((d) => d in provider)
+    mevParam === 'isOkxWallet' ||
+    (walletSupportDefaultMevOnBSC.some((d) => d in provider) &&
+      !walletPretendToBinanceWallet.some((d) => d in provider))
   )
     return WalletType.mevDefaultOnBSC
   if (walletSupportCustomRPCNative.some((d) => d in provider) && !walletPretendToMetamask.some((d) => d in provider))
@@ -210,9 +212,12 @@ export async function getWalletType(connector?: Connector): Promise<WalletType> 
 }
 
 export function useWalletType() {
+  const searchParams = useSearchParams()
+  const mevParam = searchParams.get('mev')
+
   const { connector } = useAccount()
   const { data, isLoading } = useQuery({
-    queryKey: ['useWalletType', connector?.uid],
+    queryKey: ['useWalletType', connector?.uid, mevParam],
     queryFn: async () => {
       if (!connector) {
         return WalletType.mevNotSupported
