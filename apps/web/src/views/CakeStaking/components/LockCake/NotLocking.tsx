@@ -57,46 +57,51 @@ export const NotLockingCard: React.FC<React.PropsWithChildren<NotLockingCardProp
   const handleModalOpen = useWriteApproveAndLockCallback(onDismiss)
 
   return (
-    <StyledCard innerCardProps={{ padding: hideCardPadding ? 0 : ['24px 16px', '24px 16px', '24px'] }}>
-      {!hideTitle && <Heading scale="md">{t('Lock CAKE to get veCAKE')}</Heading>}
-
-      <Grid
-        gridTemplateColumns={isDesktop ? '1fr 1fr' : '1fr'}
-        gridColumnGap="24px"
-        gridRowGap={isDesktop ? '0' : '24px'}
-        padding={[0, 0, 12]}
-        mt={[0, 0, 32]}
-        mb={32}
+    <>
+      <StyledCard
+        innerCardProps={{ padding: hideCardPadding ? 0 : ['24px 16px 24px 16px', '24px 16px 24px 16px', '24px'] }}
+        style={{ marginBottom: '24px' }}
       >
-        <LockCakeForm fieldOnly />
-        <LockWeeksForm fieldOnly />
-      </Grid>
+        {!hideTitle && <Heading scale="md">{t('Lock CAKE to get veCAKE')}</Heading>}
 
-      {isMobile ? null : (
-        <NewStakingDataSet
-          cakeAmount={Number(cakeLockAmount)}
-          customVeCakeCard={customVeCakeCard}
-          customDataRow={customDataRow}
-        />
-      )}
-
-      <ColumnCenter mb="8px">
-        {account ? (
-          <Button disabled={disabled} width={['100%', '100%', '50%']} onClick={handleModalOpen}>
-            {t('Lock CAKE')}
-          </Button>
-        ) : (
-          <ConnectWalletButton width={['100%', '100%', '50%']} />
+        <Grid
+          gridTemplateColumns={isDesktop ? '1fr 1fr' : '1fr'}
+          gridColumnGap="24px"
+          gridRowGap={isDesktop ? '0' : '16px'}
+          padding={[0, 0, 12]}
+          mt={[0, 0, 32]}
+        >
+          <LockCakeForm fieldOnly />
+          <LockWeeksForm fieldOnly />
+        </Grid>
+      </StyledCard>
+      <StyledCard innerCardProps={{ padding: hideCardPadding ? 0 : ['16px', '16px', '24px'] }}>
+        {isMobile ? null : (
+          <NewStakingDataSet
+            cakeAmount={Number(cakeLockAmount)}
+            customVeCakeCard={customVeCakeCard}
+            customDataRow={customDataRow}
+          />
         )}
-      </ColumnCenter>
 
-      {isMobile ? (
-        <NewStakingDataSet
-          cakeAmount={Number(cakeLockAmount)}
-          customVeCakeCard={customVeCakeCard}
-          customDataRow={customDataRow}
-        />
-      ) : null}
-    </StyledCard>
+        <ColumnCenter>
+          {account ? (
+            <Button disabled={disabled} width={['100%', '100%', '50%']} onClick={handleModalOpen} mb="8px">
+              {t('Lock CAKE')}
+            </Button>
+          ) : (
+            <ConnectWalletButton width={['100%', '100%', '50%']} />
+          )}
+        </ColumnCenter>
+
+        {isMobile ? (
+          <NewStakingDataSet
+            cakeAmount={Number(cakeLockAmount)}
+            customVeCakeCard={customVeCakeCard}
+            customDataRow={customDataRow}
+          />
+        ) : null}
+      </StyledCard>
+    </>
   )
 }

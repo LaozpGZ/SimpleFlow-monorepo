@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import { useProxyVeCakeBalance } from 'views/CakeStaking/hooks/useProxyVeCakeBalance'
 import { useTargetUnlockTime } from 'views/CakeStaking/hooks/useTargetUnlockTime'
 import { useVeCakeAmount } from 'views/CakeStaking/hooks/useVeCakeAmount'
-import { MyVeCakeCard } from '../MyVeCakeCard'
+import { MyVeCakeCard, MyVeCakeCardMobile } from '../MyVeCakeCard'
 import { Tooltips } from '../Tooltips'
 import { DataRow } from './DataBox'
 import { TotalApy } from './TotalApy'
@@ -54,12 +54,12 @@ export const NewStakingDataSet: React.FC<React.PropsWithChildren<NewStakingDataS
 
   const detail = (
     <>
-      <AutoRow px={['0px', '0px', '16px']} py={['16px', '16px', '12px']} gap="8px">
+      <AutoRow px={['0px', '0px', '16px']} pt={['0px', '0px', '12px']} gap="4px">
         {customDataRow}
         <TotalApy veCake={veCake} cakeAmount={cakeAmount} cakeLockWeeks={cakeLockWeeks} />
         <DataRow
           label={
-            <Text fontSize={14} color="textSubtle" textTransform="uppercase">
+            <Text fontSize={14} color="textSubtle">
               {t('CAKE to be locked')}
             </Text>
           }
@@ -106,7 +106,13 @@ export const NewStakingDataSet: React.FC<React.PropsWithChildren<NewStakingDataS
   )
 
   if (isMobile) {
-    return <Box padding="16px 0">{detail}</Box>
+    return (
+      <>
+        {customVeCakeCard ?? <MyVeCakeCardMobile value={veCake} />}
+
+        {detail}
+      </>
+    )
   }
 
   return (
