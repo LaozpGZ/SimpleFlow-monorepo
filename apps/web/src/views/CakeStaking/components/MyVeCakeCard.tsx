@@ -14,7 +14,6 @@ export const StyledBox = styled(Box)`
 `
 
 export const MyVeCakeCardMobile: React.FC<{
-  type?: 'row' | 'column'
   value?: string
 }> = ({ value }) => {
   const { t } = useTranslation()

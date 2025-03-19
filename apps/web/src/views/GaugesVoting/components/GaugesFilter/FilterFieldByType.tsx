@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Button, FlexGap, Select, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { FilterModal } from './FilterModal'
 import { Filter, FilterValue, OptionsType } from './type'
@@ -21,11 +21,14 @@ export const FilterFieldByTypeMobile: React.FC<FilterButtonGroupProps> = ({ onFi
   const { t } = useTranslation()
   const [option, setOption] = useState<OptionsType | null>(null)
 
-  const SORT_OPTIONS: Array<{ label: string; value: OptionsType }> = [
-    { label: t('Chain'), value: OptionsType.ByChain },
-    { label: t('Fee Tier'), value: OptionsType.ByFeeTier },
-    { label: t('Type'), value: OptionsType.ByType },
-  ]
+  const SORT_OPTIONS: Array<{ label: string; value: OptionsType }> = useMemo(
+    () => [
+      { label: t('Chain'), value: OptionsType.ByChain },
+      { label: t('Fee Tier'), value: OptionsType.ByFeeTier },
+      { label: t('Type'), value: OptionsType.ByType },
+    ],
+    [t],
+  )
 
   return (
     <AutoColumn gap="4px">
@@ -34,7 +37,7 @@ export const FilterFieldByTypeMobile: React.FC<FilterButtonGroupProps> = ({ onFi
       </Text>
       <Select
         style={{ minWidth: '100px' }}
-        placeHolderText="Chains,Fee Tiers..."
+        placeHolderText={t('Chains,Fee Tiers...')}
         options={SORT_OPTIONS}
         onOptionChange={(opt) => setOption(opt.value)}
       />
