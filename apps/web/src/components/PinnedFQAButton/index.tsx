@@ -65,9 +65,9 @@ const PinnedFQAButton: React.FC<PinnedFQAButtonProps> = ({ modalContent }) => {
   const button = (
     <Button
       px="0px"
-      style={{ borderRadius: '12px' }}
-      width="36px"
-      height="36px"
+      style={{ borderRadius: visible ? '' : '12px' }}
+      width={visible ? '48px' : '36px'}
+      height={visible ? '48px' : '36px'}
       variant="subtle"
       onClick={handleOpenModal}
     >
