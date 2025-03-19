@@ -23,6 +23,7 @@ import PinnedFQAButton from 'components/PinnedFQAButton'
 import { TokenPairImage } from 'components/TokenImage'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
+import { StyledPageHeader } from 'views/CakeStaking'
 import { useAccount } from 'wagmi'
 import CakeVaultCard from './components/CakeVaultCard'
 import AprRow from './components/PoolCard/AprRow'
@@ -156,15 +157,15 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   return (
     <>
       {isMobile ? (
-        <PageHeader>
-          <Flex alignItems="baseline" width="100%" justifyContent="space-between">
-            <Text lineHeight="110%" bold color="secondary" mb="16px" fontSize={['32px', '32px', '64px', '64px']}>
+        <StyledPageHeader>
+          <Flex alignItems="baseline" width="100%" justifyContent="space-between" mt="16px" mb="24px">
+            <Text lineHeight="110%" bold color="secondary" fontSize="32px">
               {t('Syrup Pools')}
             </Text>
             {isMobile ? <PinnedFQAButton modalContent={<>Frequently Asked Questions</>} /> : null}
           </Flex>
           {isMobile ? poolContent : null}
-        </PageHeader>
+        </StyledPageHeader>
       ) : (
         <PageHeader>
           <Flex justifyContent="space-between" flexDirection={['column', null, null, 'row']}>
