@@ -8,9 +8,7 @@ import { tradingCompetitionConfig } from '../InfoStripes/TradingCompetition'
 import { AdPlayerProps } from '../types'
 import { getImageUrl } from '../utils'
 
-export const AdTradingCompetition = (
-  props: AdPlayerProps & { token: 'aitech' | 'apt' | 'vinu' | 'bfg' | 'andy' | 'eos' },
-) => {
+export const AdTradingCompetition = (props: AdPlayerProps & { token: 'eos' }) => {
   const { t } = useTranslation()
   const { token, ...rest } = props
   const { unit, reward } = tradingCompetitionConfig[token]
@@ -29,26 +27,6 @@ export const AdTradingCompetition = (
       </AdButton>
     </AdCard>
   )
-}
-
-export const AdTradingCompetitionAiTech = (props: AdPlayerProps) => {
-  return <AdTradingCompetition token="aitech" {...props} />
-}
-
-export const AdTradingCompetitionApt = (props: AdPlayerProps) => {
-  return <AdTradingCompetition token="apt" {...props} />
-}
-
-export const AdTradingCompetitionBfg = (props: AdPlayerProps) => {
-  return <AdTradingCompetition token="bfg" {...props} />
-}
-
-export const AdTradingCompetitionVinu = (props: AdPlayerProps) => {
-  return <AdTradingCompetition token="vinu" {...props} />
-}
-
-export const AdTradingCompetitionAndy = (props: AdPlayerProps) => {
-  return <AdTradingCompetition token="andy" {...props} />
 }
 
 export const AdTradingCompetitionEos = (props: AdPlayerProps) => {
