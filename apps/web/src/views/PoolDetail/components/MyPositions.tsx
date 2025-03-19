@@ -321,18 +321,14 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
                       : undefined
                   }
                 >
-                  <ButtonMenuItem p="0px" style={{ flex: '1 1 auto' }}>
-                    {t('All')}
-                  </ButtonMenuItem>
-                  <ButtonMenuItem p="0px" style={{ flex: '1 1 auto' }}>
-                    {t('Active')}
-                  </ButtonMenuItem>
-                  <ButtonMenuItem p="0px" style={{ flex: '1 1 auto' }}>
-                    {t('Inactive')}
-                  </ButtonMenuItem>
-                  <ButtonMenuItem p="0px" style={{ flex: '1 1 auto' }}>
-                    {t('Closed')}
-                  </ButtonMenuItem>
+                  {[t('All'), t('Active'), t('Inactive'), t('Closed')].map((label) => {
+                    const buttonItemProps = isMobile ? { p: '0px', style: { flex: '1 1 auto' } } : {}
+                    return (
+                      <ButtonMenuItem key={label} {...buttonItemProps}>
+                        {label}
+                      </ButtonMenuItem>
+                    )
+                  })}
                 </ButtonMenu>
               ) : null}
             </Row>
