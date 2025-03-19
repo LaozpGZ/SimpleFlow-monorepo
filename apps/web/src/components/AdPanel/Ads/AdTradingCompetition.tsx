@@ -22,7 +22,7 @@ export const AdTradingCompetition = (props: AdPlayerProps & { token: 'eos' }) =>
           : t('Join %token% Trading Competition to share of', { token: token.toUpperCase() })}{' '}
         {unit === '$' ? `$${reward}` : `${reward} ${unit}`}.{' '}
         <Link
-          style={{ display: 'inline' }}
+          style={!isMobile ? { display: 'inline' } : {}}
           fontSize="inherit"
           href={tradingCompetitionConfig[token].swapUrl}
           color="secondary"
