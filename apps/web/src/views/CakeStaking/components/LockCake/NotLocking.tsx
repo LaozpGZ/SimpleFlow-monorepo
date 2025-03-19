@@ -16,7 +16,7 @@ import { StyledCard } from './styled'
 export const NotLocking = ({ hideTitle }: { hideTitle?: boolean }) => {
   return (
     <>
-      <Box maxWidth={['100%', '100%', '72%']} mx="auto">
+      <Box maxWidth={['100%', '100%', '72%']} mx="auto" width="100%">
         <NotLockingCard hideTitle={hideTitle} />
       </Box>
     </>
