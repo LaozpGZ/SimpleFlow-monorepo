@@ -367,7 +367,7 @@ const MyV3Positions: React.FC<{
 
   useEffect(() => {
     setCount(positions?.[filter].length ?? 0)
-  }, [filter, positions, setCount])
+  }, [filter, positions, setCount, isLoading])
 
   const { data: poolsLength } = useV3PoolsLength([chainId])
 
@@ -474,7 +474,7 @@ const MyV2OrStablePositions: React.FC<{
 
   useEffect(() => {
     setCount(count)
-  }, [count, setCount])
+  }, [count, setCount, isLoading])
 
   useEffect(() => {
     setTotalTvlUsd(formatFiatNumber(totalTVLUsd, ''))
