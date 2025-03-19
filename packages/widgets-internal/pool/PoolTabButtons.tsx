@@ -122,7 +122,7 @@ const PoolTabButtons = ({
         </Flex>
         <Flex justifyContent="space-between" alignItems="center">
           <Flex alignItems="center">
-            <Text>{t("Stake only")}</Text>
+            <Text>{t("Staked only")}</Text>
           </Flex>
           <Toggle
             checked={stakedOnly}
