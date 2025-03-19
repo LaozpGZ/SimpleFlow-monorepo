@@ -183,7 +183,7 @@ export const useAddMevRpc = (onSuccess?: () => void, onBeforeStart?: () => void,
   return { addMevRpc }
 }
 
-export async function getWalletType(connector?: Connector, mevParam?: string): Promise<WalletType> {
+export async function getWalletType(connector?: Connector, mevParam?: string | null): Promise<WalletType> {
   if (!connector || typeof connector.getProvider !== 'function') return WalletType.mevNotSupported
   const provider = (await connector.getProvider()) as any
 
@@ -201,12 +201,14 @@ export async function getWalletType(connector?: Connector, mevParam?: string): P
   }
   if (walletSupportManualRPCConfig.some((d) => d in provider)) return WalletType.mevOnlyManualConfig
   if (
-    mevParam === 'isOkxWallet' ||
-    (walletSupportDefaultMevOnBSC.some((d) => d in provider) &&
-      !walletPretendToBinanceWallet.some((d) => d in provider))
+    walletSupportDefaultMevOnBSC.some((d) => d in provider) &&
+    !walletPretendToBinanceWallet.some((d) => d in provider)
   )
     return WalletType.mevDefaultOnBSC
-  if (walletSupportCustomRPCNative.some((d) => d in provider) && !walletPretendToMetamask.some((d) => d in provider))
+  if (
+    mevParam === 'isOkxWallet' ||
+    (walletSupportCustomRPCNative.some((d) => d in provider) && !walletPretendToMetamask.some((d) => d in provider))
+  )
     return WalletType.nativeSupportCustomRPC
   return WalletType.mevNotSupported
 }
@@ -222,7 +224,7 @@ export function useWalletType() {
       if (!connector) {
         return WalletType.mevNotSupported
       }
-      return getWalletType(connector)
+      return getWalletType(connector, mevParam)
     },
   })
   return { walletType: data ?? WalletType.mevNotSupported, isLoading }
