@@ -261,7 +261,7 @@ export const VoteTable = () => {
       </Box>
 
       {isMobile ? (
-        <Box mb="8px">
+        <Box my="-8px">
           <Divider />
         </Box>
       ) : null}
