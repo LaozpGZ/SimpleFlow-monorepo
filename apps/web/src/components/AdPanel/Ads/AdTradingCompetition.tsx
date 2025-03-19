@@ -21,7 +21,13 @@ export const AdTradingCompetition = (props: AdPlayerProps & { token: 'eos' }) =>
           ? t('Swap %token% to win a share of', { token: token.toUpperCase() })
           : t('Join %token% Trading Competition to share of', { token: token.toUpperCase() })}{' '}
         {unit === '$' ? `$${reward}` : `${reward} ${unit}`}.{' '}
-        <Link fontSize="inherit" href={tradingCompetitionConfig[token].swapUrl} color="secondary" bold>
+        <Link
+          style={{ display: 'inline' }}
+          fontSize="inherit"
+          href={tradingCompetitionConfig[token].swapUrl}
+          color="secondary"
+          bold
+        >
           {t('Swap Now')}
         </Link>
       </BodyText>
