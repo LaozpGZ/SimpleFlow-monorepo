@@ -172,7 +172,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     icon: '/images/ido/bedrock.png',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/bedrock-banner.png`,
-    contractAddress: '0xb330A50d27341730b7B3fD285B150e5742C3b090',
+    contractAddress: '0xA7082d7935830e476932196D241D5Db60529B4Af',
     tgeTitle: <Trans>Bedrock's Token Generation Event</Trans>,
     tgeSubtitle: <Trans>Exclusively via Binance Keyless Wallet</Trans>,
     description: (
