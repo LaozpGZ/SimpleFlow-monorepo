@@ -50,14 +50,7 @@ const GaugesVotingMobileView = () => {
         <PinnedFAQButton
           docLink=" https://docs.pancakeswap.finance/products/vecake"
           modalContent={
-            <Box
-              border="2px solid"
-              borderColor="cardBorder"
-              borderRadius="24px"
-              backgroundColor="background"
-              overflowX="hidden"
-              overflowY="auto"
-            >
+            <>
               {faqConfig.map(({ title, description }, i) => {
                 return (
                   // eslint-disable-next-line react/no-array-index-key
@@ -89,7 +82,7 @@ const GaugesVotingMobileView = () => {
                   </FoldableText>
                 )
               })}
-            </Box>
+            </>
           }
         />
       </Flex>
