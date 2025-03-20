@@ -66,6 +66,7 @@ export const TerminalWrapper = styled.div`
     font-weight: 600;
   }
 
+  .pcs-refresh-button,
   .pcs-submit-button {
     border: none;
     background-color: ${({ theme }) => theme.colors.primary};

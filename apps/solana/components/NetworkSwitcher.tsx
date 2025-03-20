@@ -1,9 +1,8 @@
-import { useNetwork } from '@pancakeswap/awgmi'
 import { useIsMounted } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Text, UserMenu, UserMenuDivider, UserMenuItem } from '@pancakeswap/uikit'
-import { APEX_DOMAIN, ASSETS_CDN } from 'config'
-import { defaultChain } from 'config/chains'
+import { ASSETS_CDN, EVM_DOMAIN } from 'config/constant'
+import { APTOS_MENU, defaultChain } from 'config/chains'
 import Image from 'next/image'
 
 const evmChains = [
@@ -33,7 +32,7 @@ const NetworkSelect = () => {
           style={{ justifyContent: 'flex-start' }}
           as="a"
           target="_blank"
-          href={`${APEX_DOMAIN}?chain=${chain.chainName}`}
+          href={`${EVM_DOMAIN}?chain=${chain.chainName}`}
         >
           <Image
             src={`${ASSETS_CDN}/web/chains/${chain.id}.png`}
@@ -47,14 +46,24 @@ const NetworkSelect = () => {
           </Text>
         </UserMenuItem>
       ))}
+      <UserMenuItem
+        key={APTOS_MENU.id}
+        style={{ justifyContent: 'flex-start' }}
+        as="a"
+        target="_blank"
+        href={APTOS_MENU.link}
+      >
+        <Image src={APTOS_MENU.image} width={24} height={24} unoptimized alt={`chain-${APTOS_MENU.id}`} />
+        <Text color="text" pl="12px">
+          {APTOS_MENU.name}
+        </Text>
+      </UserMenuItem>
     </>
   )
 }
 
 export const NetworkSwitcher = () => {
-  const network = useNetwork() || defaultChain
-
-  const { chain = defaultChain } = network
+  const chain = defaultChain
 
   const isMounted = useIsMounted()
 
@@ -62,14 +71,14 @@ export const NetworkSwitcher = () => {
     <UserMenu
       mr="8px"
       variant="default"
-      avatarSrc="https://tokens.pancakeswap.finance/images/symbol/apt.png"
+      avatarSrc="https://tokens.pancakeswap.finance/images/symbol/sol.png"
       placement="bottom"
       text={
         <>
           <Box display={['none', null, null, null, null, 'block']}>
             {`Solana${isMounted && chain?.testnet && chain?.name ? ` ${chain?.name}` : ''}`}
           </Box>
-          <Box display={['block', null, null, null, null, 'none']}>APT</Box>
+          <Box display={['block', null, null, null, null, 'none']}>Solana</Box>
         </>
       }
     >

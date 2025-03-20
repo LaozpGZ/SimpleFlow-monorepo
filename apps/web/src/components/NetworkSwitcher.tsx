@@ -38,7 +38,7 @@ const NON_EVM_CHAINS = [
     id: 2,
     name: 'Solana',
     link: 'https://solana.pancakeswap.finance/swap',
-    image: 'https://solana.pancakeswap.finance/images/sol.png',
+    image: 'https://tokens.pancakeswap.finance/images/symbol/sol.png',
   },
 ]
 

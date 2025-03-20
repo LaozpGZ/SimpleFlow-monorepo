@@ -47,7 +47,7 @@ export const WalletButton: FC<{ setIsWalletModalOpen(toggle: boolean): void }> =
           ref={ref}
           role="menu"
         >
-          <li onClick={onClickDisconnect} role="menuitem">
+          <li onClick={onClickDisconnect} role="menuitem" className="pcs-disconnect-btn">
             <span>Disconnect</span>
           </li>
         </ul>

@@ -368,7 +368,7 @@ const Form: React.FC<{
         ) : (
           <JupButton
             size="lg"
-            className={cn('w-full mt-4 !text-uiv2-text/75 leading-none !max-h-14 ')}
+            className={cn('w-full mt-4 leading-none !max-h-14 ')}
             bgClass="pcs-submit-button"
             type="button"
             onClick={onSubmit}

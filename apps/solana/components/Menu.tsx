@@ -1,10 +1,11 @@
-import { DropdownMenuItems, MenuItemsType, ThemeSwitcher, Menu as UIMenu } from '@pancakeswap/uikit'
+import { DropdownMenuItems, FlexGap, MenuItemsType, ThemeSwitcher, Menu as UIMenu } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useNetwork'
 import orderBy from 'lodash/orderBy'
 import { useTheme } from 'next-themes'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
+import { NetworkSwitcher } from './NetworkSwitcher'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boolean }
 export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: boolean; image?: string } & {
@@ -69,13 +70,10 @@ export const Menu = (props) => {
           activeItem={activeMenuItem?.href}
           isDark={isDark}
           rightSide={
-            <>
+            <FlexGap gap="8px">
               <ThemeSwitcher isDark={isDark} toggleTheme={() => setTheme(isDark ? 'light' : 'dark')} />
-              {/*
               <NetworkSwitcher />
-              <UserMenu />
-                */}
-            </>
+            </FlexGap>
           }
           showLangSelector={false}
           langs={languageList}

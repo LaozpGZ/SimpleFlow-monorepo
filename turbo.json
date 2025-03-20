@@ -22,6 +22,11 @@
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
+    "build:solana": {
+      "dependsOn": ["@pancakeswap/next-config#build", "@pancakeswap/jupiter-terminal#build"],
+      "cache": false,
+      "persistent": true
+    },
     "lint": {
       "dependsOn": ["@pancakeswap/next-config#build"],
       "outputs": []
