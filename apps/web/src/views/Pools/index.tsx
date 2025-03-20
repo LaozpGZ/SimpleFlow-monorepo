@@ -19,7 +19,7 @@ import {
 import { Pool } from '@pancakeswap/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
-import PinnedFQAButton from 'components/PinnedFAQButton'
+import PinnedFAQButton from 'components/PinnedFAQButton'
 import { TokenPairImage } from 'components/TokenImage'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
@@ -32,6 +32,7 @@ import CardFooter from './components/PoolCard/CardFooter'
 import PoolControls from './components/PoolControls'
 import PoolRow, { VaultPoolRow } from './components/PoolsTable/PoolRow'
 import { VeCakeFourYearCard } from './components/VeCakeFourYearCard'
+import faqConfig from './faqConfig'
 
 const CardLayout = styled(FlexLayout)`
   justify-content: center;
@@ -162,7 +163,12 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
             <Text lineHeight="110%" bold color="secondary" fontSize="32px">
               {t('Syrup Pools')}
             </Text>
-            {isMobile ? <PinnedFQAButton modalContent={<>Frequently Asked Questions</>} /> : null}
+            {isMobile ? (
+              <PinnedFAQButton
+                docLink="https://docs.pancakeswap.finance/products/syrup-pool/syrup-pool-guide"
+                faqConfig={faqConfig}
+              />
+            ) : null}
           </Flex>
           {isMobile ? poolContent : null}
         </StyledPageHeader>

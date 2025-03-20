@@ -10,9 +10,11 @@ import {
   Modal,
   ModalProps,
   ModalV2,
+  Text,
 } from '@pancakeswap/uikit'
 import ChevronsCollapse from '@pancakeswap/uikit/components/Svg/Icons/ChevronsCollapse'
-import { ReactElement, useEffect, useMemo, useRef, useState } from 'react'
+import FoldableText from 'components/FoldableSection/FoldableText'
+import { ReactNode, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { styled } from 'styled-components'
 
@@ -43,12 +45,17 @@ const FaqModal: React.FC<React.PropsWithChildren<ModalProps>> = ({ children, ...
   )
 }
 
+export interface FaqConfig {
+  title: ReactNode
+  description: ReactNode[]
+}
+
 interface PinnedFAQButtonProps {
-  modalContent: ReactElement
+  faqConfig: FaqConfig[]
   docLink: string
 }
 
-const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ modalContent, docLink }) => {
+const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ faqConfig, docLink }) => {
   const [visible, setVisible] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const anchorRef = useRef<HTMLDivElement>(null)
@@ -117,7 +124,39 @@ const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ modalContent, docLink
             overflowX="hidden"
             overflowY="auto"
           >
-            {modalContent}
+            <>
+              {faqConfig.map(({ title, description }, i) => {
+                return (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <FoldableText
+                    expandableLabelProps={{
+                      iconColor: 'secondary',
+                      iconSize: '24px',
+                      height: '24px',
+                    }}
+                    wrapperProps={{
+                      py: '16px',
+                    }}
+                    hideExpandableLabel
+                    // eslint-disable-next-line react/no-array-index-key
+                    key={i}
+                    title={title}
+                    borderBottom="1px solid"
+                    borderColor="cardBorder"
+                    px="20px"
+                  >
+                    {description.map((desc, index) => {
+                      return (
+                        // eslint-disable-next-line react/no-array-index-key
+                        <Text key={index} color="textSubtle" as="p">
+                          {desc}
+                        </Text>
+                      )
+                    })}
+                  </FoldableText>
+                )
+              })}
+            </>
           </Box>
           <FlexGap flexDirection="row" gap="16px" mt="16px">
             <IconButton minWidth="fit-content" variant="text" onClick={handleCloseModal} display="flex">
