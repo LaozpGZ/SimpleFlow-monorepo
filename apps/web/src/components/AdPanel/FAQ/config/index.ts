@@ -10,7 +10,7 @@ export const faqConfig: Record<ConfigType, FAQConfig> = {
 }
 
 export const faqTypeByPage: Record<string, ConfigType> = {
-  '/': 'swap',
+  '/swap': 'swap',
   '/prediction': 'prediction',
   '/buy-crypto': 'buyCrypto',
 }
