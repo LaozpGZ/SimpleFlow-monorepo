@@ -97,7 +97,7 @@ const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ faqConfig, docLink })
       variant="subtle"
       onClick={handleOpenModal}
     >
-      <HelpIcon ml="0" color="white" width="24px" />
+      <HelpIcon ml="0" color="invertedContrast" width="24px" />
     </Button>
   )
 
