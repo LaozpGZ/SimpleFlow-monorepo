@@ -1,7 +1,7 @@
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { AdTradingCompetitionEos } from 'components/AdPanel/Ads/AdTradingCompetition'
 import { AdsIds, useAdsConfigs } from 'components/AdPanel/hooks/useAdsConfig'
 import { useMemo } from 'react'
-import { AdTradingCompetitionEos } from 'components/AdPanel/Ads/AdTradingCompetition'
 import { AdCakeStaking } from './Ads/AdCakeStaking'
 import { AdCommon } from './Ads/AdCommon'
 import { AdIfo } from './Ads/AdIfo'
@@ -23,7 +23,7 @@ enum Priority {
 
 export const useAdConfig = () => {
   const { isDesktop } = useMatchBreakpoints()
-  const shouldRenderOnPage = shouldRenderOnPages(['/buy-crypto', '/', '/prediction'])
+  const shouldRenderOnPage = shouldRenderOnPages(['/buy-crypto', '/swap', '/prediction'])
   const MAX_ADS = isDesktop ? 6 : 4
   const shouldRenderAdIfo = useShouldRenderAdIfo()
   const configs = useAdsConfigs()
