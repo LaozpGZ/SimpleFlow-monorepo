@@ -178,11 +178,24 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     description: (
       <>
         <Trans>
-          Bedrock is the first multi-asset liquid restaking protocol, pioneering Bitcoin staking with uniBTC. As the
-          leading BTC liquid staking token, uniBTC enables holders to earn rewards while maintaining liquidity—unlocking
-          new yield opportunities in Bitcoin’s $1T market. With its cutting-edge approach to BTCFi 2.0, Bedrock is
-          redefining Bitcoin’s role in DeFi.
+          Bedrock is a multi-asset liquid restaking protocol that enables Bitcoin staking through uniBTC. uniBTC allows
+          holders to earn rewards while maintaining liquidity, unlocking new yield opportunities in Bitcoin’s 1 trillion
+          market cap. With a cutting-edge approach to BTCFi 2.0, Bedrock is redefining Bitcoin’s role in DeFi — and
+          extending liquid restaking across 12+ blockchains for BTC, ETH, and DePIN assets.
         </Trans>
+        <br />
+        <br />
+        Website:{' '}
+        <a href="https://www.bedrock.technology" target="_blank" rel="noreferrer">
+          https://www.bedrock.technology
+        </a>
+        <br />
+        <br />
+        X:{' '}
+        <a href="https://x.com/Bedrock_DeFi" target="_blank" rel="noreferrer">
+          https://x.com/Bedrock_DeFi
+        </a>
+        <br />
       </>
     ),
     faqs: [
@@ -232,42 +245,6 @@ export const idoConfigDict: Record<string, IDOConfig> = {
             Yes. If the TGE is oversubscribed, any excess BNB that was not used to purchase tokens will be automatically
             refunded to your wallet when you claim your tokens.
           </Trans>
-        ),
-      },
-      {
-        title: <Trans>4. Which regions or countries are restricted from participating in this event?</Trans>,
-        description: (
-          <>
-            <Trans>
-              The following nationalities are currently not eligible to participate in Binance-exclusive TGEs:
-            </Trans>
-            <ul>
-              <li>
-                <b>
-                  <Trans>Binance Wallet users</Trans>
-                </b>{' '}
-                <Trans>
-                  from the following nationalities are currently not eligible to participate in this event: American
-                  Samoa, Argentina, Australia, Belarus, Belgium, Brazil, Canada, Cuba, Haiti, Iran, Japan, Kazakhstan,
-                  Netherlands, New Zealand, North Korea, Poland, Puerto Rico, Russia, Syria, U.S. Minor Outlying
-                  Islands, U.S. Virgin Islands, United States, AE entity, KZ entity, Bahrain entity, UK_Falcon, JP
-                  entity, MICA no transactions in 90D.
-                </Trans>
-              </li>
-              <li>
-                <b>
-                  <Trans>PancakeSwap users</Trans>
-                </b>{' '}
-                <Trans>
-                  from the following nationalities are currently not eligible to participate in this event: Belarus,
-                  Myanmar, Côte d'Ivoire, Cuba, Iran, Iraq, Liberia, Sudan, Syria, Zimbabwe, Congo (Kinshasa), North
-                  Korea.
-                </Trans>
-              </li>
-            </ul>
-            <br />
-            <Trans>Please ensure you comply with the eligibility requirements before participating.</Trans>
-          </>
         ),
       },
     ],
