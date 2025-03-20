@@ -1,13 +1,19 @@
+import { Link } from '@pancakeswap/uikit'
 import { FaqConfig } from 'components/PinnedFAQButton'
 import Trans from 'components/Trans'
+import { styled } from 'styled-components'
+
+const InlineLink = styled(Link)`
+  display: inline;
+`
 
 const faqConfig: FaqConfig[] = [
   {
     title: <Trans>What are Syrup Pools?</Trans>,
     description: [
       <Trans key="syrup-pools-desc">
-        Syrup Pools allow you to stake CAKE and earn passive rewards. By depositing CAKE into a Syrup Pool, you can
-        receive additional CAKE or other tokens from partner projects, depending on the pool.
+        Syrup Pools let you stake CAKE to earn rewards. By depositing CAKE into a Syrup Pool, you can receive tokens
+        from partner projects, depending on the pool.
       </Trans>,
     ],
   },
@@ -15,10 +21,10 @@ const faqConfig: FaqConfig[] = [
     title: <Trans>How do I stake CAKE in Syrup Pools?</Trans>,
     description: [
       <>
-        <Trans key="stake-cake-desc">Go to the</Trans> <strong>Syrup Pools</strong>{' '}
+        <Trans>Go to the</Trans> <strong>Syrup Pools</strong>{' '}
         <Trans>
           section on PancakeSwap, choose a pool, and deposit CAKE. Your rewards will start accumulating automatically.
-          You can unstake your CAKE anytime unless otherwise stated.
+          You can unstake your CAKE anytime.
         </Trans>
       </>,
     ],
@@ -28,32 +34,14 @@ const faqConfig: FaqConfig[] = [
     description: [
       <ul key="rewards-list">
         <li>
-          <strong>CAKE Pools</strong>: <Trans>Earn CAKE by staking CAKE.</Trans>
+          <strong>Partner Token Pools</strong>:{' '}
+          <Trans>Earn tokens from partner projects by staking CAKE (e.g., Stake CAKE to earn PEPE)</Trans>
         </li>
         <li>
-          <strong>Partner Token Pools</strong>: <Trans>Earn tokens from partner projects by staking CAKE.</Trans>
-        </li>
-      </ul>,
-    ],
-  },
-  {
-    title: <Trans>How do I claim my rewards?</Trans>,
-    description: [
-      <ul key="claim-rewards-steps">
-        <li>
-          <>
-            <Trans>In</Trans> <strong>Auto CAKE Pools</strong>,{' '}
-            <Trans>
-              rewards are automatically compounded, meaning they are reinvested for higher returns. You can withdraw
-              CAKE anytime.
-            </Trans>
-          </>
-        </li>
-        <li>
-          <>
-            <Trans>In</Trans> <strong>Manual CAKE Pools</strong> <Trans>and other Syrup Pools, you need to</Trans>{' '}
-            <strong>manually claim</strong> <Trans>rewards by clicking the &quot;Harvest&quot; button.</Trans>
-          </>
+          <Trans>
+            Rewards must be claimed manually by clicking the &quot;Harvest&quot; button under &quot;Details&quot; for
+            each pool.
+          </Trans>
         </li>
       </ul>,
     ],
@@ -61,50 +49,65 @@ const faqConfig: FaqConfig[] = [
   {
     title: <Trans>Are there any fees for staking or unstaking?</Trans>,
     description: [
-      <ul key="fees-list">
-        <li>
-          <>
-            <strong>Auto CAKE Pool</strong>: <Trans>A</Trans> <strong>2% performance fee</strong>{' '}
-            <Trans>applies to rewards when they are auto-compounded. Unstaking within</Trans> <strong>72 hours</strong>{' '}
-            <Trans>incurs a</Trans> <strong>0.1% withdrawal fee</strong>.
-          </>
-        </li>
-        <li>
-          <>
-            <strong>Manual CAKE Pool & Partner Pools</strong>: <Trans>No fees for staking or unstaking.</Trans>
-          </>
-        </li>
-      </ul>,
+      <>
+        <Trans key="fees-description-part1">There are</Trans>{' '}
+        <strong>
+          <Trans>no platform fees</Trans>
+        </strong>{' '}
+        <Trans key="fees-description-part2">for staking or unstaking in Syrup Pools. However,</Trans>{' '}
+        <strong>
+          <Trans>standard blockchain gas fees</Trans>
+        </strong>{' '}
+        <Trans key="fees-description-part3">
+          will still apply when making transactions, such as depositing, harvesting rewards, or unstaking CAKE.
+        </Trans>
+      </>,
     ],
   },
   {
     title: <Trans>What happens if I don&apos;t claim my rewards?</Trans>,
     description: [
       <>
-        <Trans>Your rewards will continue to accumulate while your CAKE remains staked. However, in</Trans>{' '}
-        <strong>Auto CAKE Pools</strong>,{' '}
-        <Trans>
-          rewards are compounded automatically, so you won&apos;t see a claimable balance unless you unstake.
+        <Trans key="unclaimed-rewards-part1">
+          Your rewards will continue to accumulate while your CAKE remains staked. You can claim them at any time by
+          clicking the
         </Trans>
+        {' "'}
+        <strong>
+          <Trans>Harvest</Trans>
+        </strong>
+        {'" '}
+        <Trans key="unclaimed-rewards-part2">button.</Trans>
       </>,
     ],
   },
   {
-    title: <Trans>What is the difference between the Auto and Manual CAKE Pools?</Trans>,
+    title: <Trans>I still have CAKE staked in the old Auto or Manual CAKE Pools. What should I do?</Trans>,
     description: [
-      <ul key="pool-differences">
-        <li>
-          <>
-            <strong>Auto CAKE Pool</strong>:{' '}
-            <Trans>Automatically compounds your rewards, increasing earnings over time.</Trans>
-          </>
-        </li>
-        <li>
-          <>
-            <strong>Manual CAKE Pool</strong>: <Trans>Requires you to manually claim and reinvest your rewards.</Trans>
-          </>
-        </li>
-      </ul>,
+      <>
+        <Trans key="legacy-pools-part1">The</Trans>{' '}
+        <strong>
+          <Trans>Auto CAKE and Manual CAKE Pools</Trans>
+        </strong>{' '}
+        <Trans key="legacy-pools-part2">have been upgraded to</Trans>{' '}
+        <strong>
+          <Trans>veCAKE</Trans>
+        </strong>{' '}
+        <Trans key="legacy-pools-part3">
+          staking. If you still have CAKE staked in the legacy pools, you&apos;ll need to
+        </Trans>{' '}
+        <strong>
+          <Trans>migrate to veCAKE</Trans>
+        </strong>{' '}
+        <Trans key="legacy-pools-part4">to continue earning rewards.</Trans>{' '}
+        <InlineLink
+          target="_blank"
+          rel="noreferrer"
+          href="https://docs.pancakeswap.finance/products/vecake/migrate-from-cake-pool"
+        >
+          <Trans>Learn how to migrate here</Trans>
+        </InlineLink>
+      </>,
     ],
   },
 ]

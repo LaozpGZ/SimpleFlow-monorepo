@@ -42,9 +42,13 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
       <ul key="benefits-list">
         <li>
           <strong>Revenue sharing</strong>: <Trans>Earn a share of platform revenue.</Trans>{' '}
-          <a href="https://docs.pancakeswap.finance/products/vecake/earn-cake-weekly" target="_blank" rel="noreferrer">
+          <InlineLink
+            href="https://docs.pancakeswap.finance/products/vecake/earn-cake-weekly"
+            target="_blank"
+            rel="noreferrer"
+          >
             <Trans>More details here</Trans>
-          </a>
+          </InlineLink>
           .
         </li>
         <li>
@@ -78,21 +82,15 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
     description: [
       <>
         <Trans>
-          While your CAKE is locked, rewards will continue to accumulate and can be claimed at any time. However, once
-          your CAKE lock expires,
-        </Trans>{' '}
+          Once your CAKE is locked, rewards will accumulate continuously. You can claim your revenue sharing CAKE
+          rewards weekly.To avoid losing rewards, make sure to
+        </Trans>
         <strong>
-          <Trans>
-            unclaimed rewards will no longer accumulate and may become unclaimable if not collected in time.
-          </Trans>
+          <Trans> claim your CAKE regularly or extend your locking period.</Trans>
         </strong>
       </>,
       <>
-        <Trans>To avoid losing rewards, make sure to </Trans>
-        <strong>
-          <Trans>claim your CAKE regularly or extend your locking period</Trans>
-        </strong>
-        <Trans>. You can do this directly from the veCAKE staking page.</Trans>
+        <Trans>You can do this directly from the veCAKE staking page.</Trans>
       </>,
     ],
   },
@@ -101,13 +99,13 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
     description: [
       <>
         <Trans>
-          Cross-chain CAKE allows veCAKE holders on BNB Chain to participate in governance and rewards on other chains
-          like Ethereum. Using
+          Cross-chain CAKE allows veCAKE holders to participate in gauges voting on multiple chains, including Ethereum
+          and Arbitrum. Through
         </Trans>{' '}
         <strong>
           <Trans>cross-chain bridging</Trans>
         </strong>
-        <Trans>, users can influence liquidity incentives and earn rewards across multiple networks. </Trans>
+        <Trans>, users can influence CAKE emissions and liquidity across various chains. </Trans>
         <InlineLink
           href="https://docs.pancakeswap.finance/products/vecake/bridge-your-vecake"
           target="_blank"
