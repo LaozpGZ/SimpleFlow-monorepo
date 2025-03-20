@@ -18,7 +18,7 @@ import NextLink from 'next/link'
 import { PropsWithChildren } from 'react'
 import styled from 'styled-components'
 import { CurrentEpoch } from './components/CurrentEpoch'
-import GaugesVotingMobileView from './components/GaguesVotingMobileView'
+import GaugesVotingMobileView, { StyledGaugesVotingPage } from './components/GaguesVotingMobileView'
 import { FilterFieldByType, FilterFieldInput } from './components/GaugesFilter'
 import { MyVeCakeBalance } from './components/MyVeCakeBalance'
 import { GaugesTable, VoteTable } from './components/Table'
@@ -31,14 +31,6 @@ const InlineLink = styled(LinkExternal)`
   display: inline-flex;
   text-decoration: underline;
   margin-left: 8px;
-`
-
-const StyledGaugesVotingPage = styled.div`
-  background: transparent;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    background: ${({ theme }) => theme.colors.gradientBubblegum};
-  }
 `
 
 const StyledPageHeader = styled(PageHeader)`
