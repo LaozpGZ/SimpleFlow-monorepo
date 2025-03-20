@@ -1,6 +1,18 @@
 import { CommonBasesType } from 'components/SearchModal/types'
 
-import { AutoColumn, AutoRow, Box, Button, Dots, Flex, QuestionHelper, RowBetween, Text } from '@pancakeswap/uikit'
+import {
+  AutoColumn,
+  AutoRow,
+  Box,
+  Button,
+  Dots,
+  Flex,
+  Message,
+  MessageText,
+  QuestionHelper,
+  RowBetween,
+  Text,
+} from '@pancakeswap/uikit'
 
 import { CommitButton } from 'components/CommitButton'
 import CurrencyInputPanel from 'components/CurrencyInputPanel'
@@ -52,6 +64,7 @@ export default function StableFormView({
   stableTotalFee,
   stableAPR,
   executionSlippage,
+  hasSevereSlippage,
   loading,
   infoLoading,
   price,
@@ -181,7 +194,18 @@ export default function StableFormView({
           commonBasesType={CommonBasesType.LIQUIDITY}
         />
       </AutoColumn>
-      <HideMedium>{buttons}</HideMedium>
+      <HideMedium style={{ gap: 16, width: '100%', flexDirection: 'column' }}>
+        {hasSevereSlippage && (
+          <Message variant="warning">
+            <MessageText>
+              {t(
+                'Adding liquidity is disabled due to severe slippage. Enable Expert Mode to proceed, but do so with caution.',
+              )}
+            </MessageText>
+          </Message>
+        )}
+        {buttons}
+      </HideMedium>
 
       <RightContainer>
         <AutoColumn>
@@ -276,7 +300,18 @@ export default function StableFormView({
               />
             </AutoRow>
           </Box>
-          <MediumOnly>{buttons}</MediumOnly>
+          <MediumOnly style={{ gap: 16, flexDirection: 'column' }}>
+            {hasSevereSlippage && (
+              <Message variant="warning">
+                <MessageText>
+                  {t(
+                    'Adding liquidity is disabled due to severe slippage. Enable Expert Mode to proceed, but do so with caution.',
+                  )}
+                </MessageText>
+              </Message>
+            )}
+            {buttons}
+          </MediumOnly>
         </AutoColumn>
       </RightContainer>
     </>
