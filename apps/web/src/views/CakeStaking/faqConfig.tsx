@@ -113,7 +113,7 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
         >
           <Trans>Learn more here</Trans>
         </InlineLink>
-        <Trans>.</Trans>
+        .
       </>,
     ],
   },
