@@ -34,7 +34,7 @@ export const ExpandableLabel: React.FC<React.PropsWithChildren<ExpandableButtonP
   expanded,
   children,
   iconColor = "primary",
-  iconSize = "20px",
+  iconSize,
   ...rest
 }) => {
   return (

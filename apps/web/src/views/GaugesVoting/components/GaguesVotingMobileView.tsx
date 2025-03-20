@@ -15,7 +15,7 @@ import { FilterFieldByTypeMobile, FilterFieldInput, FilterFieldSort } from './Ga
 import { GaugesList, VoteTable } from './Table'
 import { WeightsPieChart } from './WeightsPieChart'
 
-const StyledGaugesVotingPage = styled.div`
+export const StyledGaugesVotingPage = styled.div`
   background: transparent;
 
   ${({ theme }) => theme.mediaQueries.lg} {
