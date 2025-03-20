@@ -181,6 +181,7 @@ export function useStakedPools(): FixedStakingPool[] {
       () => Array.from(Array(numberOfPools).keys()).map((index) => [BigInt(index)] as const),
       [numberOfPools],
     ),
+    options: { enabled: Boolean(numberOfPools) },
   })
 
   return useMemo(() => {
