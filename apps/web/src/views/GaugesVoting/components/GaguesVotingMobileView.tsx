@@ -60,51 +60,65 @@ const GaugesVotingMobileView = () => {
 
       <Box pl="16px" pr="16px" mt="0px" pb="32px">
         {activeTab === 0 ? (
-          <Card>
-            <Grid gridTemplateColumns={isDesktop ? '2.2fr 3fr' : '1fr'}>
-              <CurrentEpoch />
+          <>
+            <Card
+              style={{ overflow: 'initial' }}
+              innerCardProps={{
+                pb: '64px',
+              }}
+            >
+              <Grid gridTemplateColumns={isDesktop ? '2.2fr 3fr' : '1fr'}>
+                <CurrentEpoch />
+
+                <Divider />
+
+                <Box ml="0" mt={0} padding="8px 24px 8px 24px">
+                  <Text color="secondary" textTransform="uppercase" bold>
+                    {t('proposed weights')}
+                  </Text>
+                  <Box mt="0" mb={0}>
+                    <WeightsPieChart
+                      data={filterGauges}
+                      totalGaugesWeight={Number(totalGaugesWeight)}
+                      isLoading={isLoading}
+                    />
+                  </Box>
+                </Box>
+              </Grid>
 
               <Divider />
 
-              <Box ml="0" mt={0} padding="8px 24px 8px 24px">
-                <Text color="secondary" textTransform="uppercase" bold>
-                  {t('proposed weights')}
-                </Text>
-                <Box mt="0" mb={0}>
-                  <WeightsPieChart
-                    data={filterGauges}
-                    totalGaugesWeight={Number(totalGaugesWeight)}
-                    isLoading={isLoading}
-                  />
-                </Box>
-              </Box>
-            </Grid>
+              <Text px={16} bold fontSize="24px">
+                {t('Gauges')} ({filterGauges?.length || 0})
+              </Text>
 
-            <Divider />
+              <Grid
+                backgroundColor="backgroundAlt"
+                p={16}
+                gridTemplateColumns="1fr"
+                gridGap="1em"
+                position="sticky"
+                top="0"
+                zIndex="100"
+                borderBottom="1px solid"
+                borderColor="cardBorder"
+              >
+                <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
+                  <FilterFieldByTypeMobile onFilterChange={setFilter} value={filter} />
+                  <FilterFieldSort onChange={setSort} />
+                </Grid>
 
-            <Text px={16} bold fontSize="24px">
-              {t('Gauges')} ({filterGauges?.length || 0})
-            </Text>
-
-            <Grid p={16} gridTemplateColumns="1fr" gridGap="1em" position="sticky" top="0">
-              <Grid gridTemplateColumns="2fr 1fr" gridGap="8px">
-                <FilterFieldByTypeMobile onFilterChange={setFilter} value={filter} />
-                <FilterFieldSort onChange={setSort} />
+                <FilterFieldInput placeholder={t('Search')} initialValue={searchText} onChange={setSearchText} />
               </Grid>
 
-              <FilterFieldInput placeholder={t('Search')} initialValue={searchText} onChange={setSearchText} />
-            </Grid>
-
-            <Divider />
-
-            <GaugesList
-              key={sort}
-              data={filterGauges}
-              isLoading={isLoading}
-              totalGaugesWeight={Number(totalGaugesWeight)}
-            />
-
-            <Box width="100%" p="16px">
+              <GaugesList
+                key={sort}
+                data={filterGauges}
+                isLoading={isLoading}
+                totalGaugesWeight={Number(totalGaugesWeight)}
+              />
+            </Card>
+            <Box width="100%" px="32px" position="absolute" bottom="64px" left="0" right="0">
               <Button
                 width="100%"
                 onClick={() => {
@@ -118,7 +132,7 @@ const GaugesVotingMobileView = () => {
                 {t('Vote now')}
               </Button>
             </Box>
-          </Card>
+          </>
         ) : (
           <VoteTable />
         )}
