@@ -16,7 +16,7 @@ const JupiterTerminal = () => {
     init({
       displayMode: 'integrated',
       integratedTargetId: 'integrated-terminal',
-      endpoint: 'https://api.devnet.solana.com',
+      endpoint: process.env.NEXT_PUBLIC_SOLANA_RPC_ENDPOINT ?? 'https://api.devnet.solana.com',
       containerStyles: {
         maxHeight: '90vh',
         maxWidth: '480px',
