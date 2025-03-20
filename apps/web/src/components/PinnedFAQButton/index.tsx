@@ -11,6 +11,7 @@ import {
   ModalProps,
   ModalV2,
 } from '@pancakeswap/uikit'
+import ChevronsCollapse from '@pancakeswap/uikit/components/Svg/Icons/ChevronsCollapse'
 import { ReactElement, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { styled } from 'styled-components'
@@ -28,9 +29,8 @@ const FaqModal: React.FC<React.PropsWithChildren<ModalProps>> = ({ children, ...
       minHeight="415px"
       width={['100%', '100%', '100%', '400px']}
       headerPadding="12px 24px"
-      bodyPadding="0 24px 24px"
+      bodyPadding="16px 24px"
       headerBackground="transparent"
-      headerBorderColor="transparent"
       headerProps={{
         width: '100%',
         textAlign: 'center',
@@ -109,10 +109,22 @@ const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ modalContent, docLink
 
       <ModalV2 isOpen={showModal} onDismiss={handleCloseModal}>
         <FaqModal onDismiss={handleCloseModal} title={t('Quick start')}>
-          {modalContent}
+          <Box
+            border="2px solid"
+            borderColor="cardBorder"
+            borderRadius="24px"
+            backgroundColor="background"
+            overflowX="hidden"
+            overflowY="auto"
+          >
+            {modalContent}
+          </Box>
           <FlexGap flexDirection="row" gap="16px" mt="16px">
-            <IconButton variant="text" onClick={handleCloseModal}>
+            <IconButton minWidth="fit-content" variant="text" onClick={handleCloseModal} display="flex">
               {t('Hide')}
+              <Box position="relative" top="2px" left="4px">
+                <ChevronsCollapse width="24px" height="24px" color="primary" />
+              </Box>
             </IconButton>
             <Button width="100%" variant="subtle" as="a" target="_blank" href={docLink}>
               <LinkExternal color="backgroundAlt" href={docLink}>
