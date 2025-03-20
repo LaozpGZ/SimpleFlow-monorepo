@@ -1,13 +1,13 @@
 import { Link } from '@pancakeswap/uikit'
+import { FaqConfig } from 'components/PinnedFAQButton'
 import Trans from 'components/Trans'
-import { ReactNode } from 'react'
 import { styled } from 'styled-components'
 
 const InlineLink = styled(Link)`
   display: inline;
 `
 
-const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
+const faqConfig: FaqConfig[] = [
   {
     title: <Trans>What is gauges voting?</Trans>,
     description: [

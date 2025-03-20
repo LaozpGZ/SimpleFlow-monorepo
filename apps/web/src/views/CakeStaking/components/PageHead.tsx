@@ -2,9 +2,10 @@ import { useTranslation } from '@pancakeswap/localization'
 import { ArrowForwardIcon, Box, Button, Flex, Grid, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { AdPlayer } from 'components/AdPanel/AdPlayer'
-import PinnedFQAButton from 'components/PinnedFAQButton'
+import PinnedFAQButton from 'components/PinnedFAQButton'
 import { useMemo } from 'react'
 import styled, { css } from 'styled-components'
+import faqConfig from '../faqConfig'
 import { useCakeLockStatus } from '../hooks/useVeCakeUserInfo'
 import { CakeLockStatus } from '../types'
 import { HeadBunny, MobileHeadBunny } from './HeadImage'
@@ -62,7 +63,12 @@ const Heading = () => {
       <Text lineHeight="110%" bold color="secondary" mb="0px" fontSize={['32px', '32px', '64px', '64px']}>
         {t('CAKE Staking')}
       </Text>
-      {isMobile ? <PinnedFQAButton modalContent={<>Frequently Asked Questions</>} /> : null}
+      {isMobile ? (
+        <PinnedFAQButton
+          faqConfig={faqConfig}
+          docLink="https://docs.pancakeswap.finance/products/vecake/what-is-vecake"
+        />
+      ) : null}
     </Flex>
   )
 }
