@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { ExpandableButtonProps, ExpandableLabel, Flex, FlexProps, Text } from '@pancakeswap/uikit'
+import { ButtonProps, ExpandableButtonProps, ExpandableLabel, Flex, FlexProps, Text } from '@pancakeswap/uikit'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
 
@@ -8,7 +8,7 @@ interface FoldableTextProps extends Omit<FlexProps, 'title'> {
   noBorder?: boolean
   hideExpandableLabel?: boolean
   wrapperProps?: FlexProps
-  expandableLabelProps?: ExpandableButtonProps
+  expandableLabelProps?: ButtonProps & ExpandableButtonProps
 }
 
 const Wrapper = styled(Flex)`
@@ -48,7 +48,7 @@ const FoldableText: React.FC<React.PropsWithChildren<FoldableTextProps>> = ({
   return (
     <Flex {...props} flexDirection="column">
       <Wrapper justifyContent="space-between" alignItems="center" pb="16px" onClick={handleClick} {...wrapperProps}>
-        <Text fontWeight="bold">{title}</Text>
+        <Text fontWeight="600">{title}</Text>
         <StyledExpandableLabelWrapper>
           <ExpandableLabel expanded={isExpanded} {...expandableLabelProps}>
             {hideExpandableLabel ? '' : expandableText}

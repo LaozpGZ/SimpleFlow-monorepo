@@ -1,4 +1,16 @@
-import { Box, Button, getPortalRoot, HelpIcon, Modal, ModalProps, ModalV2 } from '@pancakeswap/uikit'
+import { useTranslation } from '@pancakeswap/localization'
+import {
+  Box,
+  Button,
+  FlexGap,
+  getPortalRoot,
+  HelpIcon,
+  IconButton,
+  LinkExternal,
+  Modal,
+  ModalProps,
+  ModalV2,
+} from '@pancakeswap/uikit'
 import { ReactElement, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { styled } from 'styled-components'
@@ -9,16 +21,21 @@ const FixedContainer = styled.div`
   bottom: calc(54px + env(safe-area-inset-bottom));
 `
 
-const FaqModal: React.FC<React.PropsWithChildren<Omit<ModalProps, 'title'>>> = ({ children, ...props }) => {
+const FaqModal: React.FC<React.PropsWithChildren<ModalProps>> = ({ children, ...props }) => {
   return (
     <Modal
-      title="FAQ"
+      hideCloseButton
       minHeight="415px"
       width={['100%', '100%', '100%', '400px']}
       headerPadding="12px 24px"
       bodyPadding="0 24px 24px"
       headerBackground="transparent"
       headerBorderColor="transparent"
+      headerProps={{
+        width: '100%',
+        textAlign: 'center',
+        py: '4px',
+      }}
       {...props}
     >
       {children}
@@ -28,12 +45,14 @@ const FaqModal: React.FC<React.PropsWithChildren<Omit<ModalProps, 'title'>>> = (
 
 interface PinnedFAQButtonProps {
   modalContent: ReactElement
+  docLink: string
 }
 
-const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ modalContent }) => {
+const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ modalContent, docLink }) => {
   const [visible, setVisible] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const anchorRef = useRef<HTMLDivElement>(null)
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (!anchorRef.current) return undefined
@@ -89,7 +108,19 @@ const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ modalContent }) => {
         )}
 
       <ModalV2 isOpen={showModal} onDismiss={handleCloseModal}>
-        <FaqModal onDismiss={handleCloseModal}>{modalContent}</FaqModal>
+        <FaqModal onDismiss={handleCloseModal} title={t('Quick start')}>
+          {modalContent}
+          <FlexGap flexDirection="row" gap="16px" mt="16px">
+            <IconButton variant="text" onClick={handleCloseModal}>
+              {t('Hide')}
+            </IconButton>
+            <Button width="100%" variant="subtle" as="a" target="_blank" href={docLink}>
+              <LinkExternal color="backgroundAlt" href={docLink}>
+                {t('View details in Docs')}
+              </LinkExternal>
+            </Button>
+          </FlexGap>
+        </FaqModal>
       </ModalV2>
     </>
   )

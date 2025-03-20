@@ -48,8 +48,16 @@ const GaugesVotingMobileView = () => {
           {t('Gauges Voting')}
         </Text>
         <PinnedFAQButton
+          docLink=" https://docs.pancakeswap.finance/products/vecake"
           modalContent={
-            <Box border="2px solid" borderColor="cardBorder" borderRadius="24px" backgroundColor="background">
+            <Box
+              border="2px solid"
+              borderColor="cardBorder"
+              borderRadius="24px"
+              backgroundColor="background"
+              overflowX="hidden"
+              overflowY="auto"
+            >
               {faqConfig.map(({ title, description }, i) => {
                 return (
                   // eslint-disable-next-line react/no-array-index-key
@@ -57,9 +65,10 @@ const GaugesVotingMobileView = () => {
                     expandableLabelProps={{
                       iconColor: 'secondary',
                       iconSize: '24px',
+                      height: '24px',
                     }}
                     wrapperProps={{
-                      py: '4px',
+                      py: '16px',
                     }}
                     hideExpandableLabel
                     // eslint-disable-next-line react/no-array-index-key
