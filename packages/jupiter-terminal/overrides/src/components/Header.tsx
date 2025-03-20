@@ -2,8 +2,9 @@ import React, { useCallback } from 'react'
 import { useSwapContext } from 'src/contexts/SwapContext'
 import RefreshSVG from 'src/icons/RefreshSVG'
 import { useAccounts } from 'src/contexts/accounts'
+import { WalletButton } from './WalletComponents'
 
-const Header: React.FC = () => {
+const Header: React.FC<{ setIsWalletModalOpen(toggle: boolean): void }> = ({ setIsWalletModalOpen }) => {
   const { form, refresh } = useSwapContext()
   const { refresh: refreshAccounts } = useAccounts()
 
@@ -24,6 +25,7 @@ const Header: React.FC = () => {
           >
             <RefreshSVG />
           </button>
+          <WalletButton setIsWalletModalOpen={setIsWalletModalOpen} />
         </div>
       </div>
     </div>

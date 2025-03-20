@@ -3,8 +3,9 @@ import styled from 'styled-components'
 export const TerminalWrapper = styled.div`
   height: 100vh;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
+  margin-top: 34px;
   color: ${({ theme }) => theme.colors.textSubtle};
   #jupiter-terminal {
     * {
@@ -68,6 +69,7 @@ export const TerminalWrapper = styled.div`
   .pcs-submit-button {
     border: none;
     background-color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.invertedContrast};
     &[disabled] {
       background-color: ${({ theme }) => theme.colors.backgroundDisabled};
       color: ${({ theme }) => theme.colors.textDisabled};
@@ -172,6 +174,25 @@ export const TerminalWrapper = styled.div`
     }
     &::-webkit-scrollbar {
       width: 6px;
+    }
+  }
+
+  .pcs-wallet-btn {
+    > div {
+      > div {
+        background: ${({ theme }) => theme.colors.tertiary};
+        border-radius: 999px;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      }
+    }
+    div.text-white {
+      color: ${({ theme }) => theme.colors.text};
+    }
+  }
+  .pcs-dropdown-list {
+    background: ${({ theme }) => theme.colors.tertiary};
+    li {
+      list-style: none;
     }
   }
 `

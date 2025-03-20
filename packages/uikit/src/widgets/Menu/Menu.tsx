@@ -85,6 +85,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
   activeItem,
   activeSubItem,
   activeSubItemChildItem,
+  showLangSelector = true,
   langs,
   buyCakeLabel,
   buyCakeLink,
@@ -165,16 +166,18 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
                 <AtomBox mr="12px" display={{ xs: "none", xxl: "block" }}>
                   <CakePrice chainId={chainId} showSkeleton={false} cakePriceUsd={cakePriceUsd} />
                 </AtomBox>
-                <Box mt="4px">
-                  <LangSelector
-                    currentLang={currentLang}
-                    langs={langs}
-                    setLang={setLang}
-                    buttonScale="xs"
-                    color="textSubtle"
-                    hideLanguage
-                  />
-                </Box>
+                {showLangSelector && (
+                  <Box mt="4px">
+                    <LangSelector
+                      currentLang={currentLang}
+                      langs={langs}
+                      setLang={setLang}
+                      buttonScale="xs"
+                      color="textSubtle"
+                      hideLanguage
+                    />
+                  </Box>
+                )}
                 {rightSide}
               </Flex>
             </StyledNav>

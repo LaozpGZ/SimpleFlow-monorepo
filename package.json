@@ -28,7 +28,7 @@
     "build:games": "turbo run build --filter=games...",
     "build:packages": "turbo run build --filter=./packages/* --filter=./packages/routing-sdk/addons/*",
     "build:gamification": "turbo run build --filter=gamification...",
-    "build:solana": "pnpm turbo run dev --filter=solana-web... --concurrency=50",
+    "build:solana": "turbo run build --filter=solana-web...",
     "start": "turbo run start --filter=web",
     "test:config": "pnpm turbo run test:config --filter=web...[HEAD^1]",
     "test:ci": "pnpm turbo run test --filter=[HEAD^1]",

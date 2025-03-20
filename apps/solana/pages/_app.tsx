@@ -1,9 +1,6 @@
 import { ResetCSS, ToastListener, type PancakeTheme } from '@pancakeswap/uikit'
-import Providers from 'components/Providers'
-/* import BigNumber from 'bignumber.js'
 import { Menu } from 'components/Menu'
-import { WrongNetworkModal } from 'components/WrongNetworkModal'
-import useEagerConnect from 'hooks/useEagerConnect' */
+import Providers from 'components/Providers'
 import type { NextPage } from 'next'
 import { DefaultSeo } from 'next-seo'
 import { SEO } from 'next-seo.config'
@@ -11,34 +8,11 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import Script from 'next/script'
 import { Fragment } from 'react'
-/* import ListsUpdater from 'state/lists/updater'
-import TransactionUpdater from 'state/transactions/updater'
-import GlobalStyle from 'style/Global' */
-
-// This config is required for number formatting
-/* BigNumber.config({
-  EXPONENTIAL_AT: 1000,
-  DECIMAL_PLACES: 80,
-}) */
 
 declare module 'styled-components' {
   /* eslint-disable @typescript-eslint/no-empty-interface */
   export interface DefaultTheme extends PancakeTheme {}
 }
-
-/* function Updaters() {
-  return (
-    <>
-      <ListsUpdater />
-      <TransactionUpdater />
-    </>
-  )
-} */
-
-/* function GlobalHooks() {
-  useEagerConnect()
-  return null
-} */
 
 function MyApp(props: AppProps) {
   return (
@@ -70,17 +44,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <ResetCSS />
         <App {...props} />
       </Providers>
-      {process.env.NEXT_PUBLIC_GTM_ID ? (
-        <noscript>
-          <iframe
-            title="gtm"
-            src={`https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
-            height="0"
-            width="0"
-            style={{ display: 'none', visibility: 'hidden' }}
-          />
-        </noscript>
-      ) : null}
+
+      <noscript>
+        <iframe
+          title="gtm"
+          src={`https://www.googletagmanager.com/ns.html?id=${process.env.NEXT_PUBLIC_GTM_ID}`}
+          height="0"
+          width="0"
+          style={{ display: 'none', visibility: 'hidden' }}
+        />
+      </noscript>
     </>
   )
 }
@@ -105,10 +78,12 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
 
   return (
     <>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-      <ToastListener />
+      <Menu>
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
+        <ToastListener />
+      </Menu>
     </>
   )
 }
