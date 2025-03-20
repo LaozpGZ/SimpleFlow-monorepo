@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, Flex, Grid, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Button, Card, Flex, Grid, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Divider from 'components/Divider'
 import PinnedFAQButton from 'components/PinnedFAQButton'
 import { useEffect, useState } from 'react'
@@ -103,6 +103,21 @@ const GaugesVotingMobileView = () => {
               isLoading={isLoading}
               totalGaugesWeight={Number(totalGaugesWeight)}
             />
+
+            <Box width="100%" p="16px">
+              <Button
+                width="100%"
+                onClick={() => {
+                  setActiveTab(1)
+                  window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth',
+                  })
+                }}
+              >
+                {t('Vote now')}
+              </Button>
+            </Box>
           </Card>
         ) : (
           <VoteTable />
