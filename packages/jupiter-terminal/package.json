@@ -8,7 +8,7 @@
   "module": "./dist/index.mjs",
   "scripts": {
     "dev": "pnpm prebuild",
-    "prebuild": "chmod +x ./scripts/build.sh && ./scripts/build.sh",
+    "prebuild": "GITHUB_TOKEN=${GITHUB_TOKEN} chmod +x ./scripts/build.sh && ./scripts/build.sh",
     "build": "rm -rf dist && pnpm prebuild",
     "test:u": "vitest -u --run",
     "test": "vitest --run"
