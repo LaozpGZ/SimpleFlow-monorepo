@@ -114,7 +114,7 @@ const PinnedFAQButton: React.FC<PinnedFAQButtonProps> = ({ faqConfig, docLink })
           portal,
         )}
 
-      <ModalV2 isOpen={showModal} onDismiss={handleCloseModal}>
+      <ModalV2 isOpen={showModal} onDismiss={handleCloseModal} closeOnOverlayClick>
         <FaqModal onDismiss={handleCloseModal} title={t('Quick start')}>
           <Box
             border="2px solid"
