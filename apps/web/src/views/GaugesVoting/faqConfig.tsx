@@ -1,4 +1,4 @@
-import { Box, Link } from '@pancakeswap/uikit'
+import { Link } from '@pancakeswap/uikit'
 import Trans from 'components/Trans'
 import { ReactNode } from 'react'
 import { styled } from 'styled-components'
@@ -25,38 +25,33 @@ const faqConfig: { title: ReactNode; description: ReactNode[] }[] = [
           veCAKE (vote-escrowed CAKE) is a token you receive when locking CAKE. It gives you voting power in gauge
           voting and boosts rewards in the PancakeSwap ecosystem.
         </Trans>
-        <Box mt="1rem">
-          <Trans>Learn more</Trans>
-          <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/vecake/what-is-vecake">
-            <Trans>here</Trans>
-          </InlineLink>
-        </Box>
+        <InlineLink ml="4px" external href="https://docs.pancakeswap.finance/products/vecake/what-is-vecake">
+          <Trans>Learn more here</Trans>
+        </InlineLink>
       </>,
     ],
   },
   {
     title: <Trans>How does gauges voting benefit me?</Trans>,
     description: [
-      <>
-        <Trans key="gauges-benefits">By voting with veCAKE, you can:</Trans>
-        <ul>
-          <li>
-            <Trans>Direct CAKE emissions to the pools you provide liquidity in, increasing your yield.</Trans>
-          </li>
-          <li>
-            <Trans>Influence which pools get more rewards, shaping PancakeSwap&apos;s reward distribution.</Trans>
-          </li>
-          <li>
-            <>
-              <Trans>Earn voting incentives (</Trans>
-              <InlineLink external href="https://docs.pancakeswap.finance/products/vecake/bribes-vote-incentives">
-                <Trans>bribes</Trans>
-              </InlineLink>
-              <Trans>) from projects looking to attract liquidity to their pools.</Trans>
-            </>
-          </li>
-        </ul>
-      </>,
+      <Trans key="gauges-benefits">By voting with veCAKE, you can:</Trans>,
+      <ul>
+        <li>
+          <Trans>Direct CAKE emissions to the pools you provide liquidity in, increasing your yield.</Trans>
+        </li>
+        <li>
+          <Trans>Influence which pools get more rewards, shaping PancakeSwap&apos;s reward distribution.</Trans>
+        </li>
+        <li>
+          <>
+            <Trans>Earn voting incentives (</Trans>
+            <InlineLink external href="https://docs.pancakeswap.finance/products/vecake/bribes-vote-incentives">
+              <Trans>bribes</Trans>
+            </InlineLink>
+            <Trans>) from projects looking to attract liquidity to their pools.</Trans>
+          </>
+        </li>
+      </ul>,
     ],
   },
   {
