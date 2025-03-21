@@ -27,7 +27,7 @@ catalogs:
 
 patchedDependencies:
   '@ledgerhq/connect-kit-loader@1.1.2':
-    hash: xlsebypdiwsukm3c2ow7voujra
+    hash: 77a04fbf6aaea300c9466462a61fbad2255be12e465f7be78d725521f1e55e40
     path: patches/@ledgerhq__connect-kit-loader@1.1.2.patch
 
 importers:
@@ -1599,7 +1599,7 @@ importers:
     dependencies:
       '@bnb-chain/canonical-bridge-widget':
         specifier: 0.5.15
-        version: 0.5.15(a7gj225jbcuyqlz5jqifsy2pue)
+        version: 0.5.15(66e9df8f5339deb3105ec4964bf9bdd0)
       '@emotion/react':
         specifier: ^11
         version: 11.11.4(@types/react@18.2.37)(react@18.2.0)
@@ -18751,7 +18751,7 @@ snapshots:
       - debug
       - utf-8-validate
 
-  '@bnb-chain/canonical-bridge-widget@0.5.15(a7gj225jbcuyqlz5jqifsy2pue)':
+  '@bnb-chain/canonical-bridge-widget@0.5.15(66e9df8f5339deb3105ec4964bf9bdd0)':
     dependencies:
       '@emotion/react': 11.11.4(@types/react@18.2.37)(react@18.2.0)
       '@emotion/styled': 11.11.5(@emotion/react@11.11.4(@types/react@18.2.37)(react@18.2.0))(@types/react@18.2.37)(react@18.2.0)
@@ -20353,7 +20353,7 @@ snapshots:
     dependencies:
       axios: 1.7.4
 
-  '@ledgerhq/connect-kit-loader@1.1.2(patch_hash=xlsebypdiwsukm3c2ow7voujra)': {}
+  '@ledgerhq/connect-kit-loader@1.1.2(patch_hash=77a04fbf6aaea300c9466462a61fbad2255be12e465f7be78d725521f1e55e40)': {}
 
   '@ledgerhq/iframe-provider@0.4.3':
     dependencies:
@@ -24360,11 +24360,11 @@ snapshots:
   '@types/eslint-scope@3.7.7':
     dependencies:
       '@types/eslint': 8.44.7
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
 
   '@types/eslint@8.44.7':
     dependencies:
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       '@types/json-schema': 7.0.15
 
   '@types/estree@0.0.51': {}
@@ -25232,7 +25232,7 @@ snapshots:
   '@wagmi/connectors@0.3.16(@react-native-async-storage/async-storage@1.24.0(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10)))(@wagmi/core@0.10.17(@react-native-async-storage/async-storage@1.24.0(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10)))(@types/react@18.2.37)(bufferutil@4.0.8)(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(immer@9.0.21)(react@18.2.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))(bufferutil@4.0.8)(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(react@18.2.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
       '@coinbase/wallet-sdk': 3.9.3
-      '@ledgerhq/connect-kit-loader': 1.1.2(patch_hash=xlsebypdiwsukm3c2ow7voujra)
+      '@ledgerhq/connect-kit-loader': 1.1.2(patch_hash=77a04fbf6aaea300c9466462a61fbad2255be12e465f7be78d725521f1e55e40)
       '@safe-global/safe-apps-provider': 0.15.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@safe-global/safe-apps-sdk': 7.11.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@walletconnect/ethereum-provider': 2.7.0(@react-native-async-storage/async-storage@1.24.0(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10)))(@web3modal/standalone@2.4.3(react@18.2.0))(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -25267,7 +25267,7 @@ snapshots:
   '@wagmi/connectors@0.3.24(@react-native-async-storage/async-storage@1.24.0(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10)))(@types/react@18.2.37)(@wagmi/core@0.10.17(@react-native-async-storage/async-storage@1.24.0(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10)))(@types/react@18.2.37)(bufferutil@4.0.8)(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(immer@9.0.21)(react@18.2.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))(bufferutil@4.0.8)(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(react@18.2.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4)':
     dependencies:
       '@coinbase/wallet-sdk': 3.9.3
-      '@ledgerhq/connect-kit-loader': 1.1.2(patch_hash=xlsebypdiwsukm3c2ow7voujra)
+      '@ledgerhq/connect-kit-loader': 1.1.2(patch_hash=77a04fbf6aaea300c9466462a61fbad2255be12e465f7be78d725521f1e55e40)
       '@safe-global/safe-apps-provider': 0.15.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@safe-global/safe-apps-sdk': 7.11.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@walletconnect/ethereum-provider': 2.9.0(@react-native-async-storage/async-storage@1.24.0(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10)))(@walletconnect/modal@2.6.2(@types/react@18.2.37)(react@18.2.0))(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -26950,9 +26950,9 @@ snapshots:
       mime-types: 2.1.35
       negotiator: 0.6.3
 
-  acorn-import-assertions@1.9.0(acorn@8.11.2):
+  acorn-import-assertions@1.9.0(acorn@8.14.1):
     dependencies:
-      acorn: 8.11.2
+      acorn: 8.14.1
 
   acorn-import-attributes@1.9.5(acorn@8.14.1):
     dependencies:
@@ -35572,7 +35572,7 @@ snapshots:
   terser@5.24.0:
     dependencies:
       '@jridgewell/source-map': 0.3.5
-      acorn: 8.11.2
+      acorn: 8.14.1
       commander: 2.20.3
       source-map-support: 0.5.21
 
@@ -37068,12 +37068,12 @@ snapshots:
   webpack@5.89.0(esbuild@0.17.19):
     dependencies:
       '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       '@webassemblyjs/ast': 1.11.6
       '@webassemblyjs/wasm-edit': 1.11.6
       '@webassemblyjs/wasm-parser': 1.11.6
-      acorn: 8.11.2
-      acorn-import-assertions: 1.9.0(acorn@8.11.2)
+      acorn: 8.14.1
+      acorn-import-assertions: 1.9.0(acorn@8.14.1)
       browserslist: 4.23.0
       chrome-trace-event: 1.0.3
       enhanced-resolve: 5.15.0
@@ -37099,12 +37099,12 @@ snapshots:
   webpack@5.89.0(esbuild@0.18.20):
     dependencies:
       '@types/eslint-scope': 3.7.7
-      '@types/estree': 1.0.5
+      '@types/estree': 1.0.6
       '@webassemblyjs/ast': 1.11.6
       '@webassemblyjs/wasm-edit': 1.11.6
       '@webassemblyjs/wasm-parser': 1.11.6
-      acorn: 8.11.2
-      acorn-import-assertions: 1.9.0(acorn@8.11.2)
+      acorn: 8.14.1
+      acorn-import-assertions: 1.9.0(acorn@8.14.1)
       browserslist: 4.23.0
       chrome-trace-event: 1.0.3
       enhanced-resolve: 5.15.0
