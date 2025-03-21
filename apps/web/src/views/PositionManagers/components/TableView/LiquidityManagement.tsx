@@ -1,10 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { styled, useTheme } from 'styled-components'
 import { AtomBox, Button, Flex, RowBetween, useMatchBreakpoints } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import { memo, useCallback, useMemo, useState } from 'react'
 import { useCurrencyBalances } from 'state/wallet/hooks'
-import { styled, useTheme } from 'styled-components'
 import { StatusView } from 'views/Farms/components/YieldBooster/components/bCakeV3/StatusView'
 import { StatusViewButtons } from 'views/Farms/components/YieldBooster/components/bCakeV3/StatusViewButtons'
 import { useBCakeBoostLimitAndLockInfo } from 'views/Farms/components/YieldBooster/hooks/bCakeV3/useBCakeV3Info'
@@ -112,34 +111,20 @@ export const LiquidityManagement = memo(function LiquidityManagement({
   const dividerBorderStyle = useMemo(() => `1px solid ${colors.input}`, [colors.input])
   const isSingleDepositToken0 = isSingleDepositToken && allowDepositToken0
 
+  const { status: positionManagerStatus } = usePositionManagerStatus()
   const { status } = useBoostStatusPM(Boolean(bCakeWrapper), boosterMultiplier, refetch)
   const { shouldUpdate, veCakeUserMultiplierBeforeBoosted } = useWrapperBooster(
     boosterContractAddress ?? '0x',
     boosterMultiplier ?? 1,
     bCakeWrapper,
   )
-  const { isTxLoading, onStake: originalOnStake, onUpdate } = useOnStake(manager.id, contractAddress, bCakeWrapper)
   const { locked } = useBCakeBoostLimitAndLockInfo()
   const { isDesktop } = useMatchBreakpoints()
-  const { status: positionManagerStatus } = usePositionManagerStatus()
-
-  const isDisabled = positionManagerStatus === PositionManagerStatus.FINISHED
-
-  // Create a wrapper for onStake that does nothing when disabled
-  const onStake = useCallback(
-    (
-      amountA: CurrencyAmount<Currency>,
-      amountB: CurrencyAmount<Currency>,
-      allowDepositToken0Param: boolean,
-      allowDepositToken1Param: boolean,
-      onDone?: () => void,
-    ) => {
-      if (isDisabled) {
-        return undefined
-      }
-      return originalOnStake(amountA, amountB, allowDepositToken0Param, allowDepositToken1Param, onDone)
-    },
-    [isDisabled, originalOnStake],
+  const { isTxLoading, onStake, onUpdate } = useOnStake(
+    manager.id,
+    contractAddress,
+    bCakeWrapper,
+    positionManagerStatus === PositionManagerStatus.FINISHED,
   )
 
   return (
@@ -162,7 +147,7 @@ export const LiquidityManagement = memo(function LiquidityManagement({
                 isSingleDepositToken0={isSingleDepositToken0}
                 onAdd={showAddLiquidityModal}
                 onRemove={showRemoveLiquidityModal}
-                isDisabled={isDisabled}
+                isDisabled={positionManagerStatus === PositionManagerStatus.FINISHED}
               />
               {!isDesktop && (
                 <AtomBox
@@ -245,7 +230,12 @@ export const LiquidityManagement = memo(function LiquidityManagement({
               {!account ? (
                 <ConnectWalletButton mt="4px" width="100%" />
               ) : (
-                <Button variant="primary" width="100%" onClick={showAddLiquidityModal} disabled={isDisabled}>
+                <Button
+                  variant="primary"
+                  width="100%"
+                  onClick={showAddLiquidityModal}
+                  disabled={positionManagerStatus === PositionManagerStatus.FINISHED}
+                >
                   {t('Add Liquidity')}
                 </Button>
               )}
