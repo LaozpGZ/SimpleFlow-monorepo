@@ -104,8 +104,6 @@ export const useOnStake = (
 
   const onUpdate = useCallback(
     async (onDone?: () => void) => {
-      // If disabled, do nothing and return
-
       const receipt = await fetchWithCatchTxError(
         bCakeWrapperAddress
           ? async () =>
