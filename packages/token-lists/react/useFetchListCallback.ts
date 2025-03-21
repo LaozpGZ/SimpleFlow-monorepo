@@ -14,7 +14,6 @@ function useFetchListCallback(
       if (sendDispatch) {
         dispatch(fetchTokenList.pending({ requestId, url: listUrl }))
       }
-      // lazy load avj and token list schema
       return getTokenList(listUrl)
         .then((tokenList) => {
           if (sendDispatch) {

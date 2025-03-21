@@ -32,7 +32,7 @@ async function _load() {
   } as HomePageData
 }
 export const loadHomePageData = cacheByLRU(_load, {
-  ttl: 300 * 1000, //  mins
+  ttl: 300 * 1000, // 5 minutes
   persist: {
     name: 'homepage',
     type: 'r2',
