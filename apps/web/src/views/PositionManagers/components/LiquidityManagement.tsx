@@ -15,7 +15,13 @@ import { StatusViewButtons } from 'views/Farms/components/YieldBooster/component
 import { useBCakeBoostLimitAndLockInfo } from 'views/Farms/components/YieldBooster/hooks/bCakeV3/useBCakeV3Info'
 import { useBoostStatusPM } from 'views/Farms/components/YieldBooster/hooks/bCakeV3/useBoostStatus'
 import { useAccount } from 'wagmi'
-import { AprDataInfo, usePMV2SSMaxBoostMultiplier, useWrapperBooster } from '../hooks'
+import {
+  AprDataInfo,
+  PositionManagerStatus,
+  usePMV2SSMaxBoostMultiplier,
+  usePositionManagerStatus,
+  useWrapperBooster,
+} from '../hooks'
 import { useOnStake } from '../hooks/useOnStake'
 import { AddLiquidity } from './AddLiquidity'
 import { RemoveLiquidity } from './RemoveLiquidity'
@@ -153,6 +159,7 @@ export const LiquidityManagement = memo(function LiquidityManagement({
 
   const showRemoveLiquidityModal = useCallback(() => setRemoveLiquidityModalOpen(true), [])
   const hideRemoveLiquidityModal = useCallback(() => setRemoveLiquidityModalOpen(false), [])
+
   const { maxBoostMultiplier } = usePMV2SSMaxBoostMultiplier()
 
   const relevantTokenBalances = useCurrencyBalances(
@@ -172,8 +179,28 @@ export const LiquidityManagement = memo(function LiquidityManagement({
     boosterMultiplier ?? 1,
     bCakeWrapper,
   )
-  const { isTxLoading, onStake, onUpdate } = useOnStake(manager.id, contractAddress, bCakeWrapper)
+  const { isTxLoading, onStake: originalOnStake, onUpdate } = useOnStake(manager.id, contractAddress, bCakeWrapper)
   const { locked } = useBCakeBoostLimitAndLockInfo()
+  const { status: positionManagerStatus } = usePositionManagerStatus()
+
+  const isDisabled = positionManagerStatus === PositionManagerStatus.FINISHED
+
+  // Create a wrapper for onStake that does nothing when disabled
+  const onStake = useCallback(
+    (
+      amountA: CurrencyAmount<Currency>,
+      amountB: CurrencyAmount<Currency>,
+      allowDepositToken0Param: boolean,
+      allowDepositToken1Param: boolean,
+      onDone?: () => void,
+    ) => {
+      if (isDisabled) {
+        return undefined
+      }
+      return originalOnStake(amountA, amountB, allowDepositToken0Param, allowDepositToken1Param, onDone)
+    },
+    [isDisabled, originalOnStake],
+  )
 
   return (
     <>
@@ -185,12 +212,13 @@ export const LiquidityManagement = memo(function LiquidityManagement({
               currencyB={currencyB}
               staked0Amount={staked0Amount}
               staked1Amount={staked1Amount}
-              onAdd={showAddLiquidityModal}
-              onRemove={showRemoveLiquidityModal}
               token0PriceUSD={token0PriceUSD}
               token1PriceUSD={token1PriceUSD}
               isSingleDepositToken={isSingleDepositToken}
               isSingleDepositToken0={isSingleDepositToken0}
+              onAdd={showAddLiquidityModal}
+              onRemove={showRemoveLiquidityModal}
+              isDisabled={isDisabled}
             />
             <AtomBox
               width={{
@@ -248,7 +276,7 @@ export const LiquidityManagement = memo(function LiquidityManagement({
               {!account ? (
                 <ConnectWalletButton mt="4px" width="100%" />
               ) : (
-                <Button variant="primary" width="100%" onClick={showAddLiquidityModal}>
+                <Button variant="primary" width="100%" onClick={showAddLiquidityModal} disabled={isDisabled}>
                   {t('Add Liquidity')}
                 </Button>
               )}
