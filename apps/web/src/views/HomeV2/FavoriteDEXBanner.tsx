@@ -82,7 +82,7 @@ export const FavoriteDEXBanner: React.FC<FavoriteDEXBannerProps> = ({ chains }) 
             height: isMobile ? '10px' : '56px',
           }}
         >
-          <Box style={{ position: isMobile ? 'static' : 'absolute', marginTop: isMobile ? '0px' : '0px' }}>
+          <Box style={{ position: isMobile ? 'static' : 'absolute', marginTop: '0px' }}>
             <MultipleLogos
               clickExpand={{
                 logos: isMobile ? chains.map((x) => x.logoM) : chains.map((x) => x.logoL),
