@@ -158,6 +158,12 @@ export const IdoDepositButton: React.FC<{
     }
   }, [verifyStatus, onOpen, onUnverifiedOpen])
 
+  useEffect(() => {
+    if (verifyStatus === VerifyStatus.eligible && isUnverifiedOpen) {
+      onUnverifiedDismiss()
+    }
+  }, [isUnverifiedOpen, onUnverifiedDismiss, verifyStatus])
+
   const { targetRef, tooltip } = useTooltip(
     <Text>
       {t(
