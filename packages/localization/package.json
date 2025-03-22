@@ -11,7 +11,7 @@
   "dependencies": {
     "tslib": "^2.2.0",
     "lodash": "^4.17.21",
-    "react": "^18.2.0"
+    "react": "catalog:"
   },
   "devDependencies": {
     "@types/react": "^18.2.21",

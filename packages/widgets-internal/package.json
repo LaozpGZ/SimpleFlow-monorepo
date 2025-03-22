@@ -30,7 +30,7 @@
   "peerDependencies": {
     "@sentry/nextjs": "^9.6.0",
     "next": "catalog:",
-    "react": "^18.2.0",
+    "react": "catalog:",
     "styled-components": "6.0.7",
     "styled-system": "^5.1.5"
   },
@@ -42,7 +42,7 @@
     "csstype": "^3.1.2",
     "next": "catalog:",
     "polished": "^4.2.2",
-    "react": "^18.2.0",
+    "react": "catalog:",
     "styled-components": "6.0.7",
     "@types/d3": "^7.4.0"
   }
