@@ -10,9 +10,9 @@ type TaggedKeys = [string[], Tag]
 const TRANSLATIONS_FILE = path.resolve(__dirname, '../packages/localization/src/config/translations.json')
 
 /**
- * Updates the translations.json file by adding or removing specified keys
- * @param keysToProcess Object containing keys to add or remove in format { "key1": "key1", "key2": "key2" }
- * @param taggedKeys Array of tagged keys: [["key1", "key2"], "unused"] or [["key3"], "missing"]
+ * Manages the translations.json file by adding missing keys or removing unused ones
+ * @param keysToProcess Object containing keys in format { "key1": "key1", "key2": "key2" }
+ * @param taggedKeys Array of tagged keys with format [["key1", "key2"], "unused"] or [["key3"], "missing"]
  */
 async function updateTranslationsFile(keysToProcess: TranslationKeys, taggedKeys: TaggedKeys) {
   const [keys, tag] = taggedKeys
@@ -20,7 +20,7 @@ async function updateTranslationsFile(keysToProcess: TranslationKeys, taggedKeys
 }
 
 /**
- * Process a single translation file by adding or removing keys
+ * Process a translation file by adding missing keys or removing unused ones
  */
 function processFile(filePath: string, keysToProcess: TranslationKeys, targetKeys: string[], tag: Tag) {
   try {
@@ -101,7 +101,7 @@ function processFile(filePath: string, keysToProcess: TranslationKeys, targetKey
 }
 
 /**
- * Main function to run the script
+ * Main function that handles CLI arguments and runs the translation management
  */
 async function main() {
   const args = process.argv.slice(2)
@@ -110,14 +110,14 @@ async function main() {
     // eslint-disable-next-line no-console
     console.log(`
 Usage: 
-  pnpm tsx scripts/updateTranslation.ts <keys_json_string> -tag <tag>
+  pnpm tsx scripts/translationManager.ts <keys_json_string> -tag <tag>
 
 Examples:
-  // Remove unused keys from translations.json
-  pnpm tsx scripts/updateTranslation.ts '{"key1":"key1","key2":"key2"}' -tag unused
+  # Remove unused keys from translations file
+  pnpm tsx scripts/translationManager.ts '{"key1":"key1","key2":"key2"}' -tag unused
   
-  // Add missing keys to translations.json
-  pnpm tsx scripts/updateTranslation.ts '{"key3":"key3"}' -tag missing
+  # Add missing keys to translations file
+  pnpm tsx scripts/translationManager.ts '{"key3":"key3"}' -tag missing
     `)
     process.exit(1)
   }
