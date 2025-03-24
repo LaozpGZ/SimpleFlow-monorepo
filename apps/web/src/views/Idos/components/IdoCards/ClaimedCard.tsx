@@ -7,9 +7,6 @@ import { IDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
 import { useAccount, useChainId } from 'wagmi'
 import { formatDollarAmount } from './IdoDepositButton'
 
-const base64Encode = (str: string) =>
-  Buffer.from(str).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
-
 declare global {
   interface Window {
     bn: any
@@ -19,7 +16,6 @@ declare global {
       toChainId: number
       fromTokenAddress: string
       toTokenAddress: string
-      fromPercentage?: number
     }) => void
   }
 }
@@ -58,31 +54,11 @@ export const ClaimedCard: React.FC<{
 
   const handleSwap = () => {
     try {
-      // window._bnJumpToTrade({
-      //   fromChainId: chainId,
-      //   toChainId: chainId,
-      //   fromTokenAddress: offeringCurrency?.wrapped.address ?? '',
-      //   toTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-      //   fromPercentage: 100,
-      // })
-      // const query = base64Encode(
-      //   `fromTokenAddress=${
-      //     offeringCurrency?.wrapped.address ?? ''
-      //   }&fromBinanceChainId=${chainId}&fromWalletAddress=${account}&toTokenAddress=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&toBinanceChainId=${chainId}&toWalletAddress=${account}&fromPercentage=100&timestamp=${+new Date()}`,
-      // )
-      // window.open(
-      //   `bnc://app.binance.com/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=cGFnZXMvc3dhcC13aXRoLXRhYi9pbmRleA&startPageQuery=${query}&showOptions=2`,
-      // i
-      window.bn.miniProgram.postMessage({
-        name: 'jump_to_mp_page',
-        data: {
-          url: 'pages/swap-with-tab/index',
-          fromTokenAddress: offeringCurrency?.wrapped.address ?? '',
-          toTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-          fromBinanceChainId: String(chainId),
-          toBinanceChainId: String(chainId),
-          fromPercentage: '100',
-        },
+      window._bnJumpToTrade({
+        fromChainId: chainId,
+        toChainId: chainId,
+        fromTokenAddress: offeringCurrency?.wrapped.address ?? '',
+        toTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       })
     } catch (error) {
       console.error('Failed to open swap', error)
