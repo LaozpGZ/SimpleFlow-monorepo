@@ -65,6 +65,12 @@ const JupiterApp = (props: IInit) => {
   const { refetchIntervalForTokenAccounts } = props
   const { wallet } = useWalletPassThrough()
 
+  useEffect(() => {
+    if (wallet) {
+      props.onWalletConnected?.(wallet)
+    }
+  }, [wallet])
+
   return (
     <AccountsProvider refetchIntervalForTokenAccounts={refetchIntervalForTokenAccounts}>
       <SwapContextProvider {...props}>

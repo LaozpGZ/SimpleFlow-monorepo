@@ -2,14 +2,14 @@ import '@pancakeswap/jupiter-terminal/global.css'
 import '@pancakeswap/jupiter-terminal/index.css'
 
 import { useEffect } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { type Wallet } from '@solana/wallet-adapter-react'
 import { TerminalWrapper } from 'components/SwapForm'
 import { Card, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ExchangeLayout } from 'components/Layout/ExchangeLayout'
-import { init, syncProps } from '@pancakeswap/jupiter-terminal'
+import { init } from '@pancakeswap/jupiter-terminal'
+import { logGTMSwapTxSentEvent, logGTMWalletConnectedEvent } from 'utils/curstomGTMEventTracking'
 
 const JupiterTerminal = () => {
-  const walletContextState = useWallet()
   const { isMobile, isTablet } = useMatchBreakpoints()
 
   useEffect(() => {
@@ -23,9 +23,16 @@ const JupiterTerminal = () => {
         overflow: 'hidden',
         width: isMobile || isTablet ? 'auto' : '480px',
       },
+      onSuccess() {
+        logGTMSwapTxSentEvent()
+      },
+      onWalletConnected(wallet: Wallet | null) {
+        if (wallet) {
+          logGTMWalletConnectedEvent(wallet.adapter.name)
+        }
+      },
     })
-    syncProps({ passthroughWalletContextState: walletContextState })
-  }, [walletContextState, isMobile, isTablet])
+  }, [isMobile, isTablet])
 
   return (
     <TerminalWrapper>
