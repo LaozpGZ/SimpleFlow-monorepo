@@ -115,14 +115,3 @@ export const ClaimedCard: React.FC<{
     </Card>
   )
 }
-;(() => {
-  const chainId = 56
-  const account = '0xF311890536De04F9Ca8aCC4840c71Fb98694C98C'
-  const query = base64Encode(
-    `fromTokenAddress=0xf2c88757f8d03634671208935974b60a2a28bdb3&fromBinanceChainId=${chainId}&fromWalletAddress=${account}&toTokenAddress=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&toBinanceChainId=${chainId}&toWalletAddress=${account}&fromPercentage=100&timestamp=${+new Date()}`,
-  )
-  const link = `
-        bnc://app.binance.com/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=cGFnZXMvc3dhcC13aXRoLXRhYi9pbmRleA&startPageQuery=${query}&showOptions=2
-      `
-  console.log(link)
-})()
