@@ -249,4 +249,92 @@ export const idoConfigDict: Record<string, IDOConfig> = {
       },
     ],
   },
+  particle: {
+    id: 'particle',
+    projectUrl: 'https://particle.network/',
+    icon: '/images/ido/particle.png',
+    chainId: ChainId.BSC,
+    bannerUrl: `${ASSET_CDN}/web/ido/particle-banner.png`,
+    contractAddress: '0xc12337FE433847fd98A78E5De64E954314C9b291',
+    tgeTitle: <Trans>Particle Network's Token Generation Event</Trans>,
+    tgeSubtitle: <Trans>Exclusively via Binance Keyless Wallet</Trans>,
+    description: (
+      <>
+        <Trans>
+          Particle Network is the largest chain abstraction infrastructure for Web3. Its core technology, Universal
+          Accounts, represents the solution to Web3's user, data, and liquidity fragmentation, giving users a single
+          account and balance across all chains.
+        </Trans>
+        <Trans>
+          The Particle Chain, Particle Network’s L1 blockchain, acts as the engine powering Universal Accounts. To
+          showcase this innovation, Particle has already released the chain-agnostic Mainnet dApp — UniversalX. With it,
+          users can trade using tokens from any chain, combining their assets across all ecosystems and paying gas with
+          any token.
+        </Trans>
+        <br />
+        <br />
+        Website:{' '}
+        <a href="https://particle.network/" target="_blank" rel="noreferrer">
+          https://particle.network/
+        </a>
+        <br />
+        <br />
+        X:{' '}
+        <a href="https://x.com/ParticleNtwrk" target="_blank" rel="noreferrer">
+          https://x.com/ParticleNtwrk
+        </a>
+        <br />
+      </>
+    ),
+    faqs: [
+      {
+        title: <Trans>1. When can I claim my tokens?</Trans>,
+        description: (
+          <>
+            <Trans>
+              You can claim your tokens immediately once the TGE ends by clicking the Claim button. Alternatively, you
+              can return to the TGE page at any time afterward to claim your tokens—there is no fixed claim period.
+            </Trans>
+            <Trans>On the TGE page, you will also find key details, including:</Trans>
+            <ul>
+              <li>
+                <Trans>The number of tokens available for claiming</Trans>
+              </li>
+              <li>
+                <Trans>The TGE duration</Trans>
+              </li>
+              <li>
+                <Trans>The total amount of BNB subscribed</Trans>
+              </li>
+              <li>
+                <Trans>The total amount of refunded BNB (if applicable)</Trans>
+              </li>
+              <li>
+                <Trans>The TGE status (e.g., oversubscribed or not)</Trans>
+              </li>
+            </ul>
+          </>
+        ),
+      },
+      {
+        title: <Trans>2. How many tokens will I receive?</Trans>,
+        description: (
+          <Trans>
+            During the TGE, users can subscribe up to a maximum of 3 BNB. The final token allocation is determined based
+            on the proportion of BNB a user contributed relative to the total BNB subscribed by all participants at the
+            time the sale ends.
+          </Trans>
+        ),
+      },
+      {
+        title: <Trans>3. Will I receive a refund if the pool is oversubscribed?</Trans>,
+        description: (
+          <Trans>
+            Yes. If the TGE is oversubscribed, any excess BNB that was not used to purchase tokens will be automatically
+            refunded to your wallet when you claim your tokens.
+          </Trans>
+        ),
+      },
+    ],
+  },
 }
