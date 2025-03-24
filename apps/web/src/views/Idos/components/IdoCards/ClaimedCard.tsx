@@ -12,6 +12,7 @@ const base64Encode = (str: string) =>
 
 declare global {
   interface Window {
+    bn: any
     _bnJumpToAsset: () => void
     _bnJumpToTrade: (params: {
       fromChainId: number
@@ -64,14 +65,25 @@ export const ClaimedCard: React.FC<{
       //   toTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
       //   fromPercentage: 100,
       // })
-      const query = base64Encode(
-        `fromTokenAddress=${
-          offeringCurrency?.wrapped.address ?? ''
-        }&fromBinanceChainId=${chainId}&fromWalletAddress=${account}&toTokenAddress=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&toBinanceChainId=${chainId}&toWalletAddress=${account}&fromPercentage=100&timestamp=${+new Date()}`,
-      )
-      window.open(
-        `bnc://app.binance.com/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=cGFnZXMvc3dhcC13aXRoLXRhYi9pbmRleA&startPageQuery=${query}&showOptions=2`,
-      )
+      // const query = base64Encode(
+      //   `fromTokenAddress=${
+      //     offeringCurrency?.wrapped.address ?? ''
+      //   }&fromBinanceChainId=${chainId}&fromWalletAddress=${account}&toTokenAddress=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&toBinanceChainId=${chainId}&toWalletAddress=${account}&fromPercentage=100&timestamp=${+new Date()}`,
+      // )
+      // window.open(
+      //   `bnc://app.binance.com/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=cGFnZXMvc3dhcC13aXRoLXRhYi9pbmRleA&startPageQuery=${query}&showOptions=2`,
+      // i
+      window.bn.miniProgram.postMessage({
+        name: 'jump_to_mp_page',
+        data: {
+          url: 'pages/swap-with-tab/index',
+          fromTokenAddress: offeringCurrency?.wrapped.address ?? '',
+          toTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+          fromBinanceChainId: String(chainId),
+          toBinanceChainId: String(chainId),
+          fromPercentage: '100',
+        },
+      })
     } catch (error) {
       console.error('Failed to open swap', error)
       window.open(
