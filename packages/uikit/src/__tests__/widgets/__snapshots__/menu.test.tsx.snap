@@ -757,6 +757,7 @@ exports[`renders correctly 1`] = `
     >
       <nav
         class="c2"
+        id="nav"
       >
         <div
           class="c3"
@@ -767,7 +768,7 @@ exports[`renders correctly 1`] = `
             <a
               aria-label="Pancake home page"
               class="c5"
-              href="/"
+              href="/home"
             >
               <svg
                 class="c6 mobile-icon"

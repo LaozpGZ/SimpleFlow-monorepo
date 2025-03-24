@@ -568,7 +568,6 @@
   "Register": "Register",
   "Contribute %symbol%": "Contribute %symbol%",
   "Volume": "Volume",
-  "Prediction (BETA)": "Prediction (BETA)",
   "You can now start prediction": "You can now start prediction",
   "Leaderboard": "Leaderboard",
   "Tokens": "Tokens",
@@ -2217,7 +2216,7 @@
   "Split routing enables token swaps to be broken into multiple routes to achieve the best deal.": "Split routing enables token swaps to be broken into multiple routes to achieve the best deal.",
   "Turning this off will only allow a single route, which may result in low efficiency or higher slippage.": "Turning this off will only allow a single route, which may result in low efficiency or higher slippage.",
   "Route is automatically calculated based on your routing preference to achieve the best price for your trade.": "Route is automatically calculated based on your routing preference to achieve the best price for your trade.",
-  "Fee ranging from 0.1% to 0.01% depending on the pool fee tier. You can check the fee tier by clicking the magnifier icon under the “Route” section.": "Fee ranging from 0.1% to 0.01% depending on the pool fee tier. You can check the fee tier by clicking the magnifier icon under the “Route” section.",
+  "Fee ranging from 0.01% to 1% depending on the pool fee tier. You can check the fee tier by clicking the magnifier icon under the “Route” section.": "Fee ranging from 0.01% to 1% depending on the pool fee tier. You can check the fee tier by clicking the magnifier icon under the “Route” section.",
   "Fee Breakdown and Tokenomics": "Fee Breakdown and Tokenomics",
   "Harvest All": "Harvest All",
   "Avg": "Avg",
@@ -3281,7 +3280,6 @@
   "security compromise": "security compromise",
   "For more information, please refer to Penpie’s": "For more information, please refer to Penpie’s",
   "Please exercise due caution when trading / providing liquidity for the mPENDLE token. The protocol recently encountered a": "Please exercise due caution when trading / providing liquidity for the mPENDLE token. The protocol recently encountered a",
-  "Caution - PNP Token": "Caution - PNP Token",
   "Try Zap to automatically balance and provide V3 liquidity in one click.": "Try Zap to automatically balance and provide V3 liquidity in one click.",
   "Click here to start": "Click here to start",
   "Zap in for %lpSymbol%": "Zap in for %lpSymbol%",
@@ -3329,7 +3327,6 @@
   "Swap order filled": "Swap order filled",
   "We are having some trouble filling your order. Please retry.": "We are having some trouble filling your order. Please retry.",
   "No gas cost or fee will be charged on failed orders.": "No gas cost or fee will be charged on failed orders.",
-  "Please exercise due caution when trading / providing liquidity for the PNP token. The protocol recently encountered a": "Please exercise due caution when trading / providing liquidity for the PNP token. The protocol recently encountered a",
   "For more information, please refer to %org%’s": "For more information, please refer to %org%’s",
   "Please exercise due caution when trading / providing liquidity for the uniBTC token. The protocol recently encountered a security compromise.": "Please exercise due caution when trading / providing liquidity for the uniBTC token. The protocol recently encountered a security compromise.",
   "Caution - %token% Token": "Caution - %token% Token",
@@ -3402,7 +3399,6 @@
   "PancakeSwap Prediction Telegram Bot is now live!": "PancakeSwap Prediction Telegram Bot is now live!",
   "Quick start to Buy Crypto": "Quick start to Buy Crypto",
   "Need Help?": "Need Help?",
-  "Quick start to Prediction (BETA)": "Quick start to Prediction (BETA)",
   "What is the Prediction Feature?": "What is the Prediction Feature?",
   "How Do I Participate in Prediction?": "How Do I Participate in Prediction?",
   "What Are the Risks in Prediction?": "What Are the Risks in Prediction?",
@@ -3639,7 +3635,6 @@
   "Please upgrade your wallet app": "Please upgrade your wallet app",
   "Account Already Participated": "Account Already Participated",
   "You have already participated in this TGE": "You have already participated in this TGE",
-
   "Quick start": "Quick start",
   "View details in Docs": "View details in Docs",
   "What is CAKE staking?": "What is CAKE staking?",
@@ -3696,5 +3691,6 @@
   "Learn how to migrate here": "Learn how to migrate here",
   "Particle Network's Token Generation Event": "Particle Network's Token Generation Event",
   "Particle Network is the largest chain abstraction infrastructure for Web3. Its core technology, Universal Accounts, represents the solution to Web3's user, data, and liquidity fragmentation, giving users a single account and balance across all chains.": "Particle Network is the largest chain abstraction infrastructure for Web3. Its core technology, Universal Accounts, represents the solution to Web3's user, data, and liquidity fragmentation, giving users a single account and balance across all chains.",
-  "The Particle Chain, Particle Network’s L1 blockchain, acts as the engine powering Universal Accounts. To showcase this innovation, Particle has already released the chain-agnostic Mainnet dApp — UniversalX. With it, users can trade using tokens from any chain, combining their assets across all ecosystems and paying gas with any token.": "The Particle Chain, Particle Network’s L1 blockchain, acts as the engine powering Universal Accounts. To showcase this innovation, Particle has already released the chain-agnostic Mainnet dApp — UniversalX. With it, users can trade using tokens from any chain, combining their assets across all ecosystems and paying gas with any token."
+  "The Particle Chain, Particle Network’s L1 blockchain, acts as the engine powering Universal Accounts. To showcase this innovation, Particle has already released the chain-agnostic Mainnet dApp — UniversalX. With it, users can trade using tokens from any chain, combining their assets across all ecosystems and paying gas with any token.": "The Particle Chain, Particle Network’s L1 blockchain, acts as the engine powering Universal Accounts. To showcase this innovation, Particle has already released the chain-agnostic Mainnet dApp — UniversalX. With it, users can trade using tokens from any chain, combining their assets across all ecosystems and paying gas with any token.",
+  "Quick start to Prediction": "Quick start to Prediction"
 }
