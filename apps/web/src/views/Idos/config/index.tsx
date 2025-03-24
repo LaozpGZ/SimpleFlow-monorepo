@@ -255,7 +255,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     icon: '/images/ido/particle.png',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/particle-banner.png`,
-    contractAddress: '0xc12337FE433847fd98A78E5De64E954314C9b291',
+    contractAddress: '0x935de2dBc611F4b01b2D8b14AE5c58d940d2f719',
     tgeTitle: <Trans>Particle Network's Token Generation Event</Trans>,
     tgeSubtitle: <Trans>Exclusively via Binance Keyless Wallet</Trans>,
     description: (
