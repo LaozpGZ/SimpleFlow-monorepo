@@ -4,8 +4,11 @@ import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import useTheme from 'hooks/useTheme'
 import { useIDOCurrencies } from 'views/Idos/hooks/ido/useIDOCurrencies'
 import { IDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
-import { useChainId } from 'wagmi'
+import { useAccount, useChainId } from 'wagmi'
 import { formatDollarAmount } from './IdoDepositButton'
+
+const base64Encode = (str: string) =>
+  Buffer.from(str).toString('base64').replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_')
 
 declare global {
   interface Window {
@@ -28,6 +31,7 @@ export const ClaimedCard: React.FC<{
   const { theme, isDark } = useTheme()
   const claimed = userStatus?.claimed
   const chainId = useChainId()
+  const { address: account } = useAccount()
   const userHasStaked = userStatus?.stakedAmount?.greaterThan(0)
   const claimableAmount = userStatus?.claimableAmount?.toSignificant(6)
   const { offeringCurrency, stakeCurrency0, stakeCurrency1 } = useIDOCurrencies()
@@ -53,13 +57,21 @@ export const ClaimedCard: React.FC<{
 
   const handleSwap = () => {
     try {
-      window._bnJumpToTrade({
-        fromChainId: chainId,
-        toChainId: chainId,
-        fromTokenAddress: offeringCurrency?.wrapped.address ?? '',
-        toTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
-        fromPercentage: 100,
-      })
+      // window._bnJumpToTrade({
+      //   fromChainId: chainId,
+      //   toChainId: chainId,
+      //   fromTokenAddress: offeringCurrency?.wrapped.address ?? '',
+      //   toTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+      //   fromPercentage: 100,
+      // })
+      const query = base64Encode(
+        `fromTokenAddress=${
+          offeringCurrency?.wrapped.address ?? ''
+        }&fromBinanceChainId=${chainId}&fromWalletAddress=${account}&toTokenAddress=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&toBinanceChainId=${chainId}&toWalletAddress=${account}&fromPercentage=100&timestamp=${+new Date()}`,
+      )
+      window.open(
+        `bnc://app.binance.com/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=cGFnZXMvc3dhcC13aXRoLXRhYi9pbmRleA&startPageQuery=${query}&showOptions=2`,
+      )
     } catch (error) {
       console.error('Failed to open swap', error)
       window.open(
@@ -115,3 +127,14 @@ export const ClaimedCard: React.FC<{
     </Card>
   )
 }
+;(() => {
+  const chainId = 56
+  const account = '0xF311890536De04F9Ca8aCC4840c71Fb98694C98C'
+  const query = base64Encode(
+    `fromTokenAddress=0xf2c88757f8d03634671208935974b60a2a28bdb3&fromBinanceChainId=${chainId}&fromWalletAddress=${account}&toTokenAddress=0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE&toBinanceChainId=${chainId}&toWalletAddress=${account}&fromPercentage=100&timestamp=${+new Date()}`,
+  )
+  const link = `
+        bnc://app.binance.com/mp/app?appId=xoqXxUSMRccLCrZNRebmzj&startPagePath=cGFnZXMvc3dhcC13aXRoLXRhYi9pbmRleA&startPageQuery=${query}&showOptions=2
+      `
+  console.log(link)
+})()
