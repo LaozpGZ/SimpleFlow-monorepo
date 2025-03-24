@@ -4,7 +4,7 @@ import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import useTheme from 'hooks/useTheme'
 import { useIDOCurrencies } from 'views/Idos/hooks/ido/useIDOCurrencies'
 import { IDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
-import { useAccount, useChainId } from 'wagmi'
+import { useChainId } from 'wagmi'
 import { formatDollarAmount } from './IdoDepositButton'
 
 declare global {
@@ -28,10 +28,9 @@ export const ClaimedCard: React.FC<{
   const { theme, isDark } = useTheme()
   const claimed = userStatus?.claimed
   const chainId = useChainId()
-  const { address: account } = useAccount()
   const userHasStaked = userStatus?.stakedAmount?.greaterThan(0)
   const claimableAmount = userStatus?.claimableAmount?.toSignificant(6)
-  const { offeringCurrency, stakeCurrency0, stakeCurrency1 } = useIDOCurrencies()
+  const { offeringCurrency } = useIDOCurrencies()
   const amountInDollar = useStablecoinPriceAmount(
     offeringCurrency ?? undefined,
     claimableAmount !== undefined && Number.isFinite(+claimableAmount) ? +claimableAmount : undefined,
