@@ -58,13 +58,13 @@ export const idoConfigDict: Record<string, IDOConfig> = {
         <br />
         <br />
         Website:{' '}
-        <a href="https://bubblemaps.io/" target="_blank" rel="noreferrer">
+        <a href="https://bubblemaps.io/" target="_blank" rel="noreferrer noopener">
           https://bubblemaps.io/
         </a>
         <br />
         <br />
         X:{' '}
-        <a href="https://x.com/bubblemaps" target="_blank" rel="noreferrer">
+        <a href="https://x.com/bubblemaps" target="_blank" rel="noreferrer noopener">
           https://x.com/bubblemaps
         </a>
         <br />
@@ -75,7 +75,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
           Investigate wallets, reveal connections, and see through the noise of blockchain data. For more detailed case
           studies of Bubblemaps capabilities, please refer to the following link:
         </Trans>{' '}
-        <a href="https://bubblemaps.io/case-studies" target="_blank" rel="noreferrer">
+        <a href="https://bubblemaps.io/case-studies" target="_blank" rel="noreferrer noopener">
           https://bubblemaps.io/case-studies
         </a>
       </>
@@ -186,13 +186,13 @@ export const idoConfigDict: Record<string, IDOConfig> = {
         <br />
         <br />
         Website:{' '}
-        <a href="https://www.bedrock.technology" target="_blank" rel="noreferrer">
+        <a href="https://www.bedrock.technology" target="_blank" rel="noreferrer noopener">
           https://www.bedrock.technology
         </a>
         <br />
         <br />
         X:{' '}
-        <a href="https://x.com/Bedrock_DeFi" target="_blank" rel="noreferrer">
+        <a href="https://x.com/Bedrock_DeFi" target="_blank" rel="noreferrer noopener">
           https://x.com/Bedrock_DeFi
         </a>
         <br />
@@ -274,13 +274,13 @@ export const idoConfigDict: Record<string, IDOConfig> = {
         <br />
         <br />
         Website:{' '}
-        <a href="https://particle.network/" target="_blank" rel="noreferrer">
+        <a href="https://particle.network/" target="_blank" rel="noreferrer noopener">
           https://particle.network/
         </a>
         <br />
         <br />
         X:{' '}
-        <a href="https://x.com/ParticleNtwrk" target="_blank" rel="noreferrer">
+        <a href="https://x.com/ParticleNtwrk" target="_blank" rel="noreferrer noopener">
           https://x.com/ParticleNtwrk
         </a>
         <br />
