@@ -15,6 +15,7 @@ declare global {
       toChainId: number
       fromTokenAddress: string
       toTokenAddress: string
+      fromPercentage?: number
     }) => void
   }
 }
@@ -57,6 +58,7 @@ export const ClaimedCard: React.FC<{
         toChainId: chainId,
         fromTokenAddress: offeringCurrency?.wrapped.address ?? '',
         toTokenAddress: '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE',
+        fromPercentage: 100,
       })
     } catch (error) {
       console.error('Failed to open swap', error)
