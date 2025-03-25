@@ -7,6 +7,7 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useCallback } from 'react'
 import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { isAddressEqual } from 'utils'
+import { logger } from 'utils/datadog'
 import { erc20Abi, WriteContractReturnType, zeroAddress } from 'viem'
 import { userRejectedError } from 'views/Swap/V3Swap/hooks/useSendSwapTransaction'
 import { useWriteContract } from 'wagmi'
@@ -99,6 +100,13 @@ export const useIDODepositCallback = () => {
           )
         }
         console.error(error)
+        logger.error('[ido]: Error deposit ', {
+          error,
+          account,
+          chainId: idoContract?.chain?.id,
+          amount: amount?.quotient,
+          address: idoContract?.address,
+        })
       } finally {
         onFinish?.()
         refetch()
