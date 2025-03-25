@@ -66,7 +66,6 @@ export const TerminalWrapper = styled.div`
     font-weight: 600;
   }
 
-  .pcs-refresh-button,
   .pcs-submit-button {
     border: none;
     background-color: ${({ theme }) => theme.colors.primary};
@@ -75,6 +74,12 @@ export const TerminalWrapper = styled.div`
       background-color: ${({ theme }) => theme.colors.backgroundDisabled};
       color: ${({ theme }) => theme.colors.textDisabled};
     }
+  }
+
+  .pcs-refresh-button {
+    border: none;
+    background-color: ${({ theme }) => theme.colors.tertiary};
+    color: ${({ theme }) => theme.colors.primary60};
   }
 
   .pcs-switch-btn {
@@ -195,5 +200,24 @@ export const TerminalWrapper = styled.div`
     li {
       list-style: none;
     }
+  }
+  .text-v2-lily,
+  .text-v2-primary {
+    color: ${({ theme }) => theme.colors.textSubtle};
+  }
+
+  .border-v2-lily\/5,
+  .border-v2-primary\/5 {
+    border: 2px solid ${({ theme }) => theme.colors.tertiaryPale20};
+    border-radius: 999px;
+  }
+
+  .bg-v2-lily\/5,
+  .bg-v2-primary\/5 {
+    background: ${({ theme }) => theme.colors.tertiary};
+  }
+
+  .pcs-apy-border {
+    border: 1px solid ${({ theme }) => theme.colors.tertiaryPale20};
   }
 `

@@ -28,4 +28,4 @@ fi
 cp -rf $TEMP_DIR/dist/* $BUNDLE_DEST/
 
 # 5. Cleanup
-rm -rf $TEMP_DIR
+# rm -rf $TEMP_DIR

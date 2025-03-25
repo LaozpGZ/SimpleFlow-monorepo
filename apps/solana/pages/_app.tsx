@@ -19,11 +19,14 @@ declare module 'styled-components' {
 }
 
 const GlobalStyle = createGlobalStyle`
-dialog {
-  max-width: 100%;
-  max-height: 100%;
-}
+  dialog {
+    max-width: 100%;
+    max-height: 100%;
+  }
 
+  li {
+    list-style: none;
+  }
 `
 
 function MyApp(props: AppProps) {

@@ -157,7 +157,7 @@ const SwappingScreen = () => {
     return (
       <>
         <div className="flex justify-center mt-12">
-          <div className="absolute top-[52px] bg-[#23C1AA] bg-opacity-[15%] rounded-full w-20 h-20 flex justify-center items-center animate-pulse" />
+          <div className="absolute top-[52px] rounded-full w-20 h-20 flex justify-center items-center animate-pulse" />
 
           <div className="h-[56px] w-[56px] rounded-full">
             <SuccessIcon />
@@ -167,7 +167,7 @@ const SwappingScreen = () => {
         <div className="flex flex-col justify-center items-center">
           <p className="mt-5 text-xl font-semibold">Swap successful</p>
 
-          <div className="mt-4 rounded-xl overflow-y-auto w-full webkit-scrollbar py-4 max-h-[260px]">
+          <div className="mt-4 rounded-xl overflow-y-auto w-full webkit-scrollbar py-4 max-h-[290px]">
             <div className="mt-2 flex flex-col items-center justify-center text-center px-4">
               <p className="text-xs font-semibold">
                 Swapped {fromLamports(inputAmount, fromTokenInfo.decimals)} {fromTokenInfo.symbol} to
@@ -201,8 +201,9 @@ const SwappingScreen = () => {
 
         <div className="mt-auto px-5 pb-4 flex space-x-2">
           <JupButton
+            bgClass="pcs-submit-button"
             size="lg"
-            className="w-full mt-4 disabled:opacity-50 leading-none !max-h-14 bg-gradient-to-r from-[#00BEF0] to-[#C7F284]"
+            className="w-full mt-4 disabled:opacity-50 leading-none !max-h-14 "
             type="button"
             onClick={onSwapMore}
           >
@@ -213,6 +214,7 @@ const SwappingScreen = () => {
 
           {displayMode !== 'integrated' ? (
             <JupButton
+              bgClass="pcs-submit-button"
               size="lg"
               className="w-full mt-4 disabled:opacity-50 leading-none !max-h-14"
               type="button"
@@ -238,8 +240,9 @@ const SwappingScreen = () => {
             {errorMessage ? <p className="text-xs mt-2 break-all">{errorMessage}</p> : ''}
 
             <JupButton
+              bgClass="pcs-submit-button"
               size="lg"
-              className="w-full mt-6 disabled:opacity-50 leading-none !max-h-14 bg-gradient-to-r from-[#00BEF0] to-[#C7F284]"
+              className="w-full mt-6 disabled:opacity-50 leading-none !max-h-14 "
               type="button"
               onClick={onGoBack}
             >
@@ -259,8 +262,9 @@ const SwappingScreen = () => {
             {errorMessage ? <p className="text-xs mt-2">{errorMessage}</p> : ''}
 
             <JupButton
+              bgClass="pcs-submit-button"
               size="lg"
-              className="w-full mt-6 disabled:opacity-50 leading-none !max-h-14 bg-gradient-to-r from-[#00BEF0] to-[#C7F284]"
+              className="w-full mt-6 disabled:opacity-50 leading-none !max-h-14 "
               type="button"
               onClick={onGoBack}
             >

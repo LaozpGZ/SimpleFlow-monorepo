@@ -58,8 +58,9 @@ const ConfirmationScreen = () => {
 
       {hasExpired ? (
         <JupButton
+          bgClass="pcs-refresh-button"
           size="lg"
-          className="w-full mt-4 disabled:opacity-50 !p-0 pcs-refersh-button"
+          className="w-full mt-4 disabled:opacity-50 !p-0"
           type="button"
           onClick={onGoBack}
         >
@@ -67,6 +68,7 @@ const ConfirmationScreen = () => {
         </JupButton>
       ) : (
         <JupButton
+          bgClass="pcs-submit-button"
           size="lg"
           className={cn('w-full mt-4 disabled:opacity-50 leading-none !max-h-14 bg-gradient-to-r pcs-submit-button')}
           type="button"

@@ -38,7 +38,7 @@ export const WalletButton: FC = () => {
       avatarSrc={wallet?.adapter.icon}
       account={base58}
     >
-      {({ isOpen }) => (isOpen ? <UserMenuItems /> : <UserMenuItems />)}
+      {({ isOpen }) => (isOpen ? <UserMenuItems /> : null)}
     </UIKitUserMenu>
   )
 }
