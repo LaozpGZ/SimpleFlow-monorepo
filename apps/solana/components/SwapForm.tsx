@@ -220,4 +220,8 @@ export const TerminalWrapper = styled.div`
   .pcs-apy-border {
     border: 1px solid ${({ theme }) => theme.colors.tertiaryPale20};
   }
+
+  .pcs-explorer-link {
+    color: ${({ theme }) => theme.colors.primary60};
+  }
 `
