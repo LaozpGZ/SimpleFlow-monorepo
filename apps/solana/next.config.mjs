@@ -54,4 +54,40 @@ const nextConfig = {
   },
 }
 
-export default withBundleAnalyzer(withVanillaExtract(withWebSecurityHeaders(nextConfig)))
+// Create a custom headers wrapper
+const withCustomHeaders = (config) => ({
+  ...config,
+  async headers() {
+    const defaultHeaders = await (config.headers?.() ?? [])
+    return [
+      ...defaultHeaders,
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=31536000; includeSubDomains',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin',
+          },
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups', // allow wallet popups
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: "frame-ancestors 'self' https://*.solflare.com",
+          },
+        ],
+      },
+    ]
+  },
+})
+
+export default withBundleAnalyzer(withVanillaExtract(withCustomHeaders(nextConfig)))

@@ -23,16 +23,16 @@ const queryClient = new QueryClient({
 
 export const Providers: React.FC<React.PropsWithChildren<{ children: React.ReactNode }>> = ({ children }) => {
   return (
-    <WalletProvider>
-      <QueryClientProvider client={queryClient}>
-        <NextThemeProvider>
+    <NextThemeProvider>
+      <WalletProvider>
+        <QueryClientProvider client={queryClient}>
           <StyledUIKitProvider>
             <LanguageProvider>
               <ModalProvider portalProvider={DialogProvider}>{children}</ModalProvider>
             </LanguageProvider>
           </StyledUIKitProvider>
-        </NextThemeProvider>
-      </QueryClientProvider>
-    </WalletProvider>
+        </QueryClientProvider>
+      </WalletProvider>
+    </NextThemeProvider>
   )
 }

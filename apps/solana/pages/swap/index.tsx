@@ -8,6 +8,7 @@ import { Card, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ExchangeLayout } from 'components/Layout/ExchangeLayout'
 import { init } from '@pancakeswap/jupiter-terminal'
 import { logGTMSwapTxSentEvent, logGTMWalletConnectedEvent } from 'utils/curstomGTMEventTracking'
+import { SOLANA_ENDPOINT } from 'config/endpoint'
 
 const JupiterTerminal = () => {
   const { isMobile, isTablet } = useMatchBreakpoints()
@@ -24,12 +25,13 @@ const JupiterTerminal = () => {
     init({
       displayMode: 'integrated',
       integratedTargetId: 'integrated-terminal',
-      endpoint: process.env.NEXT_PUBLIC_SOLANA_RPC_ENDPOINT ?? 'https://api.devnet.solana.com',
+      endpoint: SOLANA_ENDPOINT,
+      refetchIntervalForTokenAccounts: 10000,
       containerStyles: {
         maxHeight: '90vh',
         maxWidth: '480px',
         overflow: 'hidden',
-        width: isMobile || isTablet ? 'auto' : '480px',
+        width: isMobile ? 'auto' : '480px',
       },
       enableWalletPassthrough: true,
       passthroughWalletContextState,
