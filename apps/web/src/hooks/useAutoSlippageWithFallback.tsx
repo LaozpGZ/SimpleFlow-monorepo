@@ -1,0 +1,45 @@
+import { Percent, TradeType } from '@pancakeswap/sdk'
+import { SmartRouterTrade } from '@pancakeswap/smart-router'
+import { useUserSlippage } from '@pancakeswap/utils/user'
+import { useMemo } from 'react'
+import { useAtom } from 'jotai'
+import { atomWithStorage } from 'jotai/utils'
+import useClassicAutoSlippageTolerance from './useAutoSlippage'
+
+// Atom to store the user's preference for auto slippage
+const autoSlippageEnabledAtom = atomWithStorage('pcs:auto-slippage-enabled', false)
+
+export const useAutoSlippageEnabled = () => {
+  return useAtom(autoSlippageEnabledAtom)
+}
+
+/**
+ * Returns the slippage tolerance based on user settings or auto-calculated value
+ * If auto slippage is enabled, it will use the auto-calculated value
+ * Otherwise, it will use the user's manually set slippage
+ */
+export function useAutoSlippageWithFallback(trade?: SmartRouterTrade<TradeType>): {
+  slippageTolerance: Percent
+  isAuto: boolean
+} {
+  const [isAutoSlippageEnabled] = useAutoSlippageEnabled()
+  const [userSlippageTolerance] = useUserSlippage()
+  const autoSlippageTolerance = useClassicAutoSlippageTolerance(trade)
+
+  return useMemo(() => {
+    if (isAutoSlippageEnabled && trade) {
+      return {
+        slippageTolerance: autoSlippageTolerance,
+        isAuto: true,
+      }
+    }
+
+    // Convert basis points to percent
+    const userSlippageTolerancePercent = new Percent(userSlippageTolerance, 10_000)
+
+    return {
+      slippageTolerance: userSlippageTolerancePercent,
+      isAuto: false,
+    }
+  }, [isAutoSlippageEnabled, trade, autoSlippageTolerance, userSlippageTolerance])
+}

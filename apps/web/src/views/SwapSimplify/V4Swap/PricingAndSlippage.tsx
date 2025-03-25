@@ -13,14 +13,18 @@ interface Props {
   showSlippage?: boolean
   priceLoading?: boolean
   price?: Price<Currency, Currency>
+  trade?: any // Accept any trade type
 }
 
 export const PricingAndSlippage = memo(function PricingAndSlippage({
   priceLoading,
   price,
   showSlippage = true,
+  trade: _trade, // Prefix with underscore to indicate unused
 }: Props) {
   const [allowedSlippage] = useUserSlippage()
+  // We're using the user slippage directly instead of the auto slippage hook
+  // since the trade types are different between V3 and V4
   const isWrapping = useIsWrapping()
   const [onPresentSettingsModal] = useModal(<SettingsModal mode={SettingsMode.SWAP_LIQUIDITY} />)
 

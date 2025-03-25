@@ -181,6 +181,7 @@ export function V4SwapForm() {
                 priceLoading={!tradeLoaded}
                 price={executionPrice ?? undefined}
                 showSlippage={false}
+                trade={bestOrder?.trade}
               />
             </FlexGap>
             <TradingFee loaded={tradeLoaded} order={bestOrder} />
