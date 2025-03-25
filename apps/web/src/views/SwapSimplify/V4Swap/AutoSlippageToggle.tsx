@@ -1,15 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Flex, QuestionHelper, Text, Toggle } from '@pancakeswap/uikit'
-import { atomWithStorage } from 'jotai/utils'
-import { useAtom } from 'jotai'
 import { memo } from 'react'
+import { useAutoSlippageEnabled } from 'hooks/useAutoSlippageWithFallback'
 
-// Atom to store the user's preference for auto slippage
-const useAutoSlippageAtom = atomWithStorage('pcs:auto-slippage', false)
-
-export const useAutoSlippageEnabled = () => {
-  return useAtom(useAutoSlippageAtom)
-}
+// Using the shared atom from useAutoSlippageWithFallback.tsx
+// This ensures consistency across the application
 
 interface AutoSlippageToggleProps {
   id?: string
