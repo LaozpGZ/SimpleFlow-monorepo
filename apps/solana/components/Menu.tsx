@@ -1,3 +1,4 @@
+import styled from 'styled-components'
 import { DropdownMenuItems, FlexGap, MenuItemsType, ThemeSwitcher, Menu as UIMenu } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useNetwork'
@@ -6,6 +7,7 @@ import { useTheme } from 'next-themes'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { NetworkSwitcher } from './NetworkSwitcher'
+import { WalletButton } from './WalletButton'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & { hideSubNav?: boolean }
 export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & { hideSubNav?: boolean; image?: string } & {
@@ -41,6 +43,28 @@ const LinkComponent = (linkProps) => {
 
 const languageList = []
 
+const MenuWrapper = styled.div`
+  .pcs-connect-btn {
+    background: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.invertedContrast};
+    position: relative;
+    align-items: center;
+    border: 0px;
+    border-radius: 16px;
+    cursor: pointer;
+    display: inline-flex;
+    font-size: 16px;
+    font-weight: 600;
+    justify-content: center;
+    letter-spacing: 0.03em;
+    line-height: 1;
+    opacity: 1;
+    outline: 0px;
+    height: 32px;
+    padding: 0px 16px;
+  }
+`
+
 export const Menu = (props) => {
   const menuItems = useMemo(() => [], [])
   const { pathname } = useRouter()
@@ -63,24 +87,27 @@ export const Menu = (props) => {
   return (
     <>
       {isClient ? (
-        <UIMenu
-          linkComponent={LinkComponent}
-          chainId={chainId}
-          links={menuItems}
-          activeItem={activeMenuItem?.href}
-          isDark={isDark}
-          rightSide={
-            <FlexGap gap="8px">
-              <ThemeSwitcher isDark={isDark} toggleTheme={() => setTheme(isDark ? 'light' : 'dark')} />
-              <NetworkSwitcher />
-            </FlexGap>
-          }
-          showLangSelector={false}
-          langs={languageList}
-          activeSubItem={activeSubMenuItem?.href}
-          toggleTheme={toggleTheme}
-          {...props}
-        />
+        <MenuWrapper>
+          <UIMenu
+            linkComponent={LinkComponent}
+            chainId={chainId}
+            links={menuItems}
+            activeItem={activeMenuItem?.href}
+            isDark={isDark}
+            rightSide={
+              <FlexGap gap="8px">
+                <ThemeSwitcher isDark={isDark} toggleTheme={() => setTheme(isDark ? 'light' : 'dark')} />
+                <NetworkSwitcher />
+                <WalletButton />
+              </FlexGap>
+            }
+            showLangSelector={false}
+            langs={languageList}
+            activeSubItem={activeSubMenuItem?.href}
+            toggleTheme={toggleTheme}
+            {...props}
+          />
+        </MenuWrapper>
       ) : undefined}
     </>
   )

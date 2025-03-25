@@ -196,7 +196,4 @@ export const TerminalWrapper = styled.div`
       list-style: none;
     }
   }
-  .pcs-connect-btn {
-    background: ${({ theme }) => theme.colors.primary};
-  }
 `

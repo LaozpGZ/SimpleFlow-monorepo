@@ -1,20 +1,30 @@
 import { AdPanel, AdPanelCardProps } from '@pancakeswap/widgets-internal'
 import { ResetCSS, ToastListener, type PancakeTheme } from '@pancakeswap/uikit'
 import { Menu } from 'components/Menu'
-import Providers from 'components/Providers'
+import { Providers } from 'components/Provider'
 import type { NextPage } from 'next'
 import { DefaultSeo } from 'next-seo'
 import { SEO } from 'next-seo.config'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import Script from 'next/script'
-import { Fragment, useMemo } from 'react'
+import { Fragment, useEffect, useMemo } from 'react'
 import { adList, commonLayoutWhitelistedPages } from 'config/adBanner/config'
+import { useUnifiedWalletContext } from '@jup-ag/wallet-adapter'
+import { createGlobalStyle } from 'styled-components'
 
 declare module 'styled-components' {
   /* eslint-disable @typescript-eslint/no-empty-interface */
   export interface DefaultTheme extends PancakeTheme {}
 }
+
+const GlobalStyle = createGlobalStyle`
+dialog {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+`
 
 function MyApp(props: AppProps) {
   return (
@@ -44,6 +54,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <DefaultSeo {...SEO} />
       <Providers>
         <ResetCSS />
+        <GlobalStyle />
         <App {...props} />
       </Providers>
 
@@ -78,6 +89,17 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     }),
     [],
   )
+
+  const { showModal } = useUnifiedWalletContext()
+
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = 'unset'
+    }
+  }, [showModal])
+
   if (Component.pure) {
     return <Component {...pageProps} />
   }
@@ -86,15 +108,13 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const Layout = Component.Layout || Fragment
 
   return (
-    <>
-      <Menu>
-        <Layout>
-          <Component {...pageProps} />
-          <AdPanel config={adConfig} />
-        </Layout>
-        <ToastListener />
-      </Menu>
-    </>
+    <Menu>
+      <Layout>
+        <Component {...pageProps} />
+        <AdPanel config={adConfig} />
+      </Layout>
+      <ToastListener />
+    </Menu>
   )
 }
 

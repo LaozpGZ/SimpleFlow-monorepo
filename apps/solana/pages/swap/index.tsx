@@ -1,6 +1,8 @@
 import '@pancakeswap/jupiter-terminal/global.css'
 import '@pancakeswap/jupiter-terminal/index.css'
 
+import { useUnifiedWalletContext, useWallet } from '@jup-ag/wallet-adapter'
+
 import { useEffect } from 'react'
 import { type Wallet } from '@solana/wallet-adapter-react'
 import { TerminalWrapper } from 'components/SwapForm'
@@ -11,6 +13,8 @@ import { logGTMSwapTxSentEvent, logGTMWalletConnectedEvent } from 'utils/curstom
 
 const JupiterTerminal = () => {
   const { isMobile, isTablet } = useMatchBreakpoints()
+  const passthroughWalletContextState = useWallet()
+  const { setShowModal } = useUnifiedWalletContext()
 
   useEffect(() => {
     init({
@@ -23,6 +27,10 @@ const JupiterTerminal = () => {
         overflow: 'hidden',
         width: isMobile || isTablet ? 'auto' : '480px',
       },
+      enableWalletPassthrough: true,
+      passthroughWalletContextState,
+      onRequestConnectWallet: () => setShowModal(true),
+
       onSuccess() {
         logGTMSwapTxSentEvent()
       },
@@ -32,7 +40,7 @@ const JupiterTerminal = () => {
         }
       },
     })
-  }, [isMobile, isTablet])
+  }, [isMobile, isTablet, passthroughWalletContextState, setShowModal])
 
   return (
     <TerminalWrapper>

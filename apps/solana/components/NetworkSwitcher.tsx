@@ -69,7 +69,6 @@ export const NetworkSwitcher = () => {
 
   return (
     <UserMenu
-      mr="8px"
       variant="default"
       avatarSrc="https://tokens.pancakeswap.finance/images/symbol/sol.png"
       placement="bottom"
