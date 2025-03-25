@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { Percent, TradeType } from '@pancakeswap/sdk'
-import { SmartRouterTrade } from '@pancakeswap/smart-router'
+import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
 import { BigNumber } from 'bignumber.js'
 import { L2_CHAIN_IDS } from 'config/chains'
 import { useMemo } from 'react'
@@ -25,14 +25,23 @@ const chainSupportsGasEstimates = (chainId?: number): boolean => {
   return chainId === ChainId.ETHEREUM || chainId === ChainId.BSC
 }
 
+// Type guard to check if trade is V4Trade
+const isV4Trade = (
+  trade: SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType> | undefined,
+): trade is V4Router.V4TradeWithoutGraph<TradeType> => {
+  return trade !== undefined && 'gasUseEstimate' in trade
+}
+
 // Estimate gas for a trade
-const guesstimateGas = (trade?: SmartRouterTrade<TradeType>): number => {
+const guesstimateGas = (trade?: SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>): number => {
   if (!trade) return 0
   // A very rough gas estimation based on the trade type
   return 200000 // Default gas estimate
 }
 
-export default function useClassicAutoSlippageTolerance(trade?: SmartRouterTrade<TradeType>): Percent {
+type SupportedTrade = SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>
+
+export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade): Percent {
   const { chainId } = useAccount()
   const onL2 = isL2ChainId(chainId)
 
@@ -46,13 +55,31 @@ export default function useClassicAutoSlippageTolerance(trade?: SmartRouterTrade
   // Gas estimation
   const supportsGasEstimate = useMemo(() => chainId && chainSupportsGasEstimates(chainId), [chainId])
 
-  // For chains that support gas estimates
-  const gasEstimateUSD =
-    supportsGasEstimate && trade?.gasEstimateInUSD
+  // Get base gas estimate currency price for V4 trades
+  const baseGasEstimateCurrency = isV4Trade(trade) ? trade.gasUseEstimateBase?.currency : undefined
+  const baseGasEstimatePrice = useStablecoinPrice(baseGasEstimateCurrency)
+
+  // Get gas estimate in USD based on trade type
+  const gasEstimateUSD = useMemo(() => {
+    if (!supportsGasEstimate || !trade) return null
+
+    if (isV4Trade(trade)) {
+      // For V4Trade, use gasUseEstimateBase and convert to USD
+      const baseGasEstimate = trade.gasUseEstimateBase
+      if (baseGasEstimate && baseGasEstimatePrice) {
+        const baseAmount = parseFloat(baseGasEstimate.toSignificant(6))
+        return baseAmount * parseFloat(baseGasEstimatePrice.toSignificant(6))
+      }
+      return null
+    }
+
+    // For SmartRouterTrade, use gasEstimateInUSD
+    return trade.gasEstimateInUSD
       ? typeof trade.gasEstimateInUSD === 'string'
         ? parseFloat(trade.gasEstimateInUSD)
         : Number(trade.gasEstimateInUSD)
       : null
+  }, [supportsGasEstimate, trade, baseGasEstimatePrice])
 
   const nativeGasPrice = useGasPrice()
   const nativeCurrency = useNativeCurrency(chainId)
