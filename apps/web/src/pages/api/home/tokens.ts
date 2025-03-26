@@ -1,8 +1,8 @@
 import { NextApiHandler } from 'next'
-import { _queryTokenList } from './queries/queryTokenList'
+import { queryTokenList } from './queries/queryTokenList'
 
 async function load() {
-  return _queryTokenList()
+  return queryTokenList()
 }
 const handler: NextApiHandler = async (req, res) => {
   res.setHeader('Cache-Control', 's-maxage=60, max-age=30, stale-while-revalidate=300')

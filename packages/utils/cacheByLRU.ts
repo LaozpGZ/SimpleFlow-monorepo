@@ -42,17 +42,17 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
   }
 
   async function ensurePersist(promise: Promise<any>) {
-    try {
-      if (fetchR2Cache && persist) {
-        const t = Date.now()
-        const value = await Promise.race([fetchR2Cache(persistKey()), promise])
-        console.log('*****time usage****', Date.now() - t)
-        return value
-      }
-      return promise
-    } catch (ex) {
-      return promise
+    if (fetchR2Cache && persist) {
+      const t = Date.now()
+      const r2Promise = fetchR2Cache(persistKey()).catch((ex) => {
+        console.warn('R2 cache fetch failed:', ex)
+        return null // explicitly handled rejection
+      })
+      const value = await Promise.race([r2Promise, promise])
+      console.log('*****time usage****', Date.now() - t)
+      return value ?? promise
     }
+    return promise
   }
 
   const keyFunction = key || identity
