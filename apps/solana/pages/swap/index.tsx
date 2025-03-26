@@ -28,7 +28,6 @@ const JupiterTerminal = () => {
       endpoint: SOLANA_ENDPOINT,
       refetchIntervalForTokenAccounts: 60000,
       containerStyles: {
-        maxHeight: '90vh',
         maxWidth: '480px',
         overflow: 'hidden',
       },
