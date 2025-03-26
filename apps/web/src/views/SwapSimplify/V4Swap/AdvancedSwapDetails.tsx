@@ -46,6 +46,7 @@ export const TradeSummary = memo(function TradeSummary({
   realizedLPFee,
   isX = false,
   loading = false,
+  trade,
 }: {
   hasStablePair?: boolean
   inputAmount?: CurrencyAmount<Currency>
@@ -56,6 +57,7 @@ export const TradeSummary = memo(function TradeSummary({
   realizedLPFee?: CurrencyAmount<Currency> | null
   isX?: boolean
   loading?: boolean
+  trade?: any
 }) {
   const { t } = useTranslation()
   const isExactIn = tradeType === TradeType.EXACT_INPUT
@@ -179,7 +181,7 @@ export const TradeSummary = memo(function TradeSummary({
             <DetailsTitle>{t('Slippage Tolerance')}</DetailsTitle>
           </QuestionHelperV2>
         </RowFixed>
-        <SlippageButton slippage={allowedSlippage} />
+        <SlippageButton slippage={allowedSlippage} trade={trade} />
       </RowBetween>
 
       {(realizedLPFee || isX) && (
