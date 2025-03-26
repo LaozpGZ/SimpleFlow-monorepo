@@ -6,12 +6,12 @@ import { useEffect } from 'react'
 import { TerminalWrapper } from 'components/SwapForm'
 import { Card, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ExchangeLayout } from 'components/Layout/ExchangeLayout'
-import { init } from '@pancakeswap/jupiter-terminal'
+import { init, syncProps } from '@pancakeswap/jupiter-terminal'
 import { logGTMSwapTxSentEvent, logGTMWalletConnectedEvent } from 'utils/curstomGTMEventTracking'
 import { SOLANA_ENDPOINT } from 'config/endpoint'
 
 const JupiterTerminal = () => {
-  const { isMobile, isTablet } = useMatchBreakpoints()
+  const { isMobile } = useMatchBreakpoints()
   const passthroughWalletContextState = useWallet()
   const { setShowModal } = useUnifiedWalletContext()
 
@@ -26,7 +26,7 @@ const JupiterTerminal = () => {
       displayMode: 'integrated',
       integratedTargetId: 'integrated-terminal',
       endpoint: SOLANA_ENDPOINT,
-      refetchIntervalForTokenAccounts: 10000,
+      refetchIntervalForTokenAccounts: 60000,
       containerStyles: {
         maxHeight: '90vh',
         maxWidth: '480px',
@@ -34,13 +34,21 @@ const JupiterTerminal = () => {
         width: isMobile ? 'auto' : '480px',
       },
       enableWalletPassthrough: true,
-      passthroughWalletContextState,
       onRequestConnectWallet: () => setShowModal(true),
       onSuccess() {
         logGTMSwapTxSentEvent()
       },
     })
-  }, [isMobile, isTablet, passthroughWalletContextState, setShowModal])
+  }, [isMobile, setShowModal])
+
+  // Do not pass the passthroughWalletContextState into init.
+  // Otherwise, the entire widget will refresh when the theme switches.
+  useEffect(() => {
+    syncProps({
+      enableWalletPassthrough: true,
+      passthroughWalletContextState,
+    })
+  }, [passthroughWalletContextState])
 
   return (
     <TerminalWrapper>
