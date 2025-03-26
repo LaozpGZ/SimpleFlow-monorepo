@@ -1,12 +1,19 @@
 import { TokenInfo, TokenList } from '@pancakeswap/token-lists'
 import { getTokenList } from '@pancakeswap/token-lists/react'
+import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
 import keyBy from 'lodash/keyBy'
 import { safeGetAddress } from 'utils'
 
-export const queryTokenList = async () => {
-  const results = await Promise.allSettled(DEFAULT_ACTIVE_LIST_URLS.map((url) => getTokenList(url)))
+const _queryTokenList = async () => {
+  const list = DEFAULT_ACTIVE_LIST_URLS
 
+  const results = await Promise.allSettled(list.map((url) => getTokenList(url)))
+  const allFailed = results.every((result) => result.status === 'rejected')
+
+  if (allFailed) {
+    throw new Error('All token list failed')
+  }
   const lists = results
     .filter((result): result is PromiseFulfilledResult<TokenList> => result.status === 'fulfilled')
     .map((result) => result.value.tokens)
@@ -16,3 +23,12 @@ export const queryTokenList = async () => {
 
   return keyBy(lists, (x) => `${x.chainId}-${x.address}`)
 }
+
+export const queryTokenList = cacheByLRU(_queryTokenList, {
+  ttl: 300 * 1000, // 5 minutes
+  persist: {
+    name: 'hompage-tokenlist',
+    type: 'r2',
+    version: 'v1',
+  },
+})

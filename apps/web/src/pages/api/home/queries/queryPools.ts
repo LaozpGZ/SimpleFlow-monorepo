@@ -60,8 +60,8 @@ export async function queryPools(cakePrice: number, tokenMap: Record<string, Tok
     return Number.parseFloat(obj.boost || '0')
   })
 
-  function tokenLogo(chainId: ChainId, address: string) {
-    const key = `${chainId}-${address}`
+  function tokenLogo(chainId: ChainId, address: `0x${string}`) {
+    const key = `${chainId}-${checksumAddress(address)}`
     return tokenMap[key].logoURI
   }
   return tops.map((p, i) => {
