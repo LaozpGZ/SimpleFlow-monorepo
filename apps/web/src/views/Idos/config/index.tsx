@@ -343,7 +343,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     icon: '/images/ido/kiloex.png',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/kiloex-banner.png`,
-    contractAddress: '0xE2674bD4353Ade9A2Dd9ab6F567AeE855a0b85f3',
+    contractAddress: '0x61222059aAC449252949B3911AC1e325966F31eC',
     tgeTitle: <Trans>KiloEx's Token Generation Event</Trans>,
     tgeSubtitle: <Trans>Exclusively via Binance Keyless Wallet</Trans>,
     description: (
