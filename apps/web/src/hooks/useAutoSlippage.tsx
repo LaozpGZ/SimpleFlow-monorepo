@@ -11,8 +11,8 @@ import useNativeCurrency from './useNativeCurrency'
 import { useStablecoinPrice, useStablecoinPriceAmount } from './useStablecoinPrice'
 
 const DEFAULT_AUTO_SLIPPAGE = new Percent(50, 10_000) // 0.5%
-const MIN_AUTO_SLIPPAGE_TOLERANCE = new Percent(5, 10_000) // 0.05%
-const MAX_AUTO_SLIPPAGE_TOLERANCE = new Percent(100, 10_000) // 1%
+const MIN_AUTO_SLIPPAGE_TOLERANCE = new Percent(5, 10_000) // 0.5%
+const MAX_AUTO_SLIPPAGE_TOLERANCE = new Percent(500, 10_000) // 5%
 
 // Helper functions
 const isL2ChainId = (chainId?: number): boolean => {
@@ -99,7 +99,25 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
   const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount)
 
   return useMemo(() => {
+    console.log('Auto Slippage Debug:', {
+      hasTrade: !!trade,
+      onL2,
+      chainId,
+      supportsGasEstimate,
+      gasEstimateUSD,
+      gasCostUSDValue,
+      outputDollarValue,
+      outputCurrency: outputCurrency?.symbol,
+      outputUSDPrice: outputUSDPrice?.toSignificant(6),
+      outputAmount,
+      nativeGasPrice: nativeGasPrice?.toString(),
+      gasEstimate,
+      nativeGasCost: nativeGasCost?.toString(),
+      gasCostAmount,
+    })
+
     if (!trade || onL2) {
+      console.log('Auto Slippage: Using DEFAULT_AUTO_SLIPPAGE because', !trade ? 'no trade' : 'on L2')
       return DEFAULT_AUTO_SLIPPAGE
     }
 
@@ -114,17 +132,44 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
       const fraction = dollarCostToUse / outputDollarValue
       const result = new Percent(Math.floor(fraction * 10000), 10000)
 
+      console.log('Auto Slippage: Calculated result', {
+        dollarCostToUse,
+        outputDollarValue,
+        fraction,
+        resultBasisPoints: Math.floor(fraction * 10000),
+        result: result.toFixed(2),
+      })
+
       if (result.greaterThan(MAX_AUTO_SLIPPAGE_TOLERANCE)) {
+        console.log('Auto Slippage: Using MAX_AUTO_SLIPPAGE_TOLERANCE', MAX_AUTO_SLIPPAGE_TOLERANCE.toFixed(2))
         return MAX_AUTO_SLIPPAGE_TOLERANCE
       }
 
       if (result.lessThan(MIN_AUTO_SLIPPAGE_TOLERANCE)) {
+        console.log('Auto Slippage: Using MIN_AUTO_SLIPPAGE_TOLERANCE', MIN_AUTO_SLIPPAGE_TOLERANCE.toFixed(2))
         return MIN_AUTO_SLIPPAGE_TOLERANCE
       }
 
+      console.log('Auto Slippage: Using calculated result', result.toFixed(2))
       return result
     }
 
+    console.log('Auto Slippage: Using DEFAULT_AUTO_SLIPPAGE because missing outputDollarValue or dollarCostToUse')
     return DEFAULT_AUTO_SLIPPAGE
-  }, [trade, onL2, supportsGasEstimate, gasEstimateUSD, gasCostUSDValue, outputDollarValue])
+  }, [
+    trade,
+    onL2,
+    supportsGasEstimate,
+    gasEstimateUSD,
+    gasCostUSDValue,
+    outputDollarValue,
+    chainId,
+    nativeGasPrice,
+    gasEstimate,
+    outputCurrency,
+    outputUSDPrice,
+    outputAmount,
+    nativeGasCost,
+    gasCostAmount,
+  ])
 }
