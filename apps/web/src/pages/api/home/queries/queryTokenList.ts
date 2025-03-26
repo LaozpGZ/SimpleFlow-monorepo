@@ -1,3 +1,4 @@
+import { TokenInfo, TokenList } from '@pancakeswap/token-lists'
 import { getTokenList } from '@pancakeswap/token-lists/react'
 import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
 import keyBy from 'lodash/keyBy'
@@ -7,11 +8,11 @@ export const queryTokenList = async () => {
   const results = await Promise.allSettled(DEFAULT_ACTIVE_LIST_URLS.map((url) => getTokenList(url)))
 
   const lists = results
-    .filter((result): result is PromiseFulfilledResult<any> => result.status === 'fulfilled')
+    .filter((result): result is PromiseFulfilledResult<TokenList> => result.status === 'fulfilled')
     .map((result) => result.value.tokens)
     .flat()
     .map((x) => ({ ...x, address: safeGetAddress(x.address) }))
-    .filter((x) => x.address)
+    .filter((x) => x.address) as TokenInfo[]
 
   return keyBy(lists, (x) => `${x.chainId}-${x.address}`)
 }
