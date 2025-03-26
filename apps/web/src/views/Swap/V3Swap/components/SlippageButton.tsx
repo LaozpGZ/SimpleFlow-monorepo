@@ -1,11 +1,22 @@
 import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, PencilIcon, RiskAlertIcon, useMatchBreakpoints, useTooltip, WarningIcon } from '@pancakeswap/uikit'
+import {
+  Button,
+  PencilIcon,
+  RiskAlertIcon,
+  useMatchBreakpoints,
+  useTooltip,
+  WarningIcon,
+  Text,
+} from '@pancakeswap/uikit'
 import GlobalSettings from 'components/Menu/GlobalSettings'
 import { SettingsMode } from 'components/Menu/GlobalSettings/types'
-import { ReactElement } from 'react'
+import { ReactElement, useMemo } from 'react'
 import styled from 'styled-components'
 import { basisPointsToPercent } from 'utils/exchange'
+import useClassicAutoSlippageTolerance from 'hooks/useAutoSlippage'
+import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
+import { TradeType } from '@pancakeswap/sdk'
 
 const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: string }>`
   height: unset;
@@ -16,11 +27,18 @@ const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: s
   color: ${({ $color }) => $color};
 `
 
+const AutoSlippageText = styled(Text)`
+  font-size: 12px;
+  margin-top: 4px;
+  color: ${({ theme }) => theme.colors.textSubtle};
+`
+
 interface SlippageButtonProps {
   slippage?: number | ReactElement
+  trade?: SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>
 }
 
-export const SlippageButton = ({ slippage }: SlippageButtonProps) => {
+export const SlippageButton = ({ slippage, trade }: SlippageButtonProps) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
@@ -28,6 +46,13 @@ export const SlippageButton = ({ slippage }: SlippageButtonProps) => {
   const isRiskyLow = typeof slippage === 'number' && slippage < 50
   const isRiskyHigh = typeof slippage === 'number' && slippage > 100
   const isRiskyVeryHigh = typeof slippage === 'number' && slippage > 2000
+
+  // Calculate auto slippage
+  const autoSlippage = useClassicAutoSlippageTolerance(trade)
+  const autoSlippageValue = useMemo(() => {
+    if (!autoSlippage) return null
+    return autoSlippage.toFixed(2)
+  }, [autoSlippage])
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     isRiskyLow
@@ -51,7 +76,7 @@ export const SlippageButton = ({ slippage }: SlippageButtonProps) => {
         key="slippage_btn_global_settings"
         mode={SettingsMode.SWAP_LIQUIDITY}
         overrideButton={(onClick) => (
-          <>
+          <div style={{ textAlign: 'center' }}>
             <div ref={!isMobile ? targetRef : undefined}>
               <TertiaryButton
                 $color={color}
@@ -68,8 +93,11 @@ export const SlippageButton = ({ slippage }: SlippageButtonProps) => {
                 {typeof slippage === 'number' ? `${basisPointsToPercent(slippage).toFixed(2)}%` : slippage}
               </TertiaryButton>
             </div>
+            {autoSlippageValue && (
+              <AutoSlippageText>{t('Auto: %value%', { value: `${autoSlippageValue}%` })}</AutoSlippageText>
+            )}
             {(isRiskyLow || isRiskyHigh) && tooltipVisible && tooltip}
-          </>
+          </div>
         )}
       />
     </>
