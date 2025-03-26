@@ -5,6 +5,9 @@ TEMP_DIR="temp-jupiter"
 BUNDLE_DEST="./dist"
 
 # 1. Clone and prepare Jupiter terminal repo
+if [ -d "$TEMP_DIR" ]; then
+  rm -rf "$TEMP_DIR"
+fi
 git clone --depth 1 --branch main "https://${GITHUB_TOKEN}@github.com/jup-ag/terminal.git" $TEMP_DIR
 cd $TEMP_DIR
 git reset --hard origin/main
@@ -28,4 +31,4 @@ fi
 cp -rf $TEMP_DIR/dist/* $BUNDLE_DEST/
 
 # 5. Cleanup
-# rm -rf $TEMP_DIR
+rm -rf $TEMP_DIR

@@ -1,6 +1,5 @@
 import bundleAnalyzer from '@next/bundle-analyzer'
 
-import { withWebSecurityHeaders } from '@pancakeswap/next-config/withWebSecurityHeaders'
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin'
 import { RetryChunkLoadPlugin } from 'webpack-retry-chunk-load-plugin'
 
