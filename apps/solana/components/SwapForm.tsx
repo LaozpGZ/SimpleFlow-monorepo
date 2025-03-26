@@ -1,6 +1,8 @@
+import { Card } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 
 export const TerminalWrapper = styled.div`
+  width: 100%;
   height: 100vh;
   display: flex;
   align-items: flex-start;
@@ -11,6 +13,10 @@ export const TerminalWrapper = styled.div`
     * {
       font-family: Kanit, sans-serif;
     }
+    width: auto;
+    ${({ theme }) => theme.mediaQueries.sm} {
+      width: 480px;
+    }}
   }
 
   .focus-within\:shadow-swap-input-dark:focus-within {
@@ -224,4 +230,11 @@ export const TerminalWrapper = styled.div`
   .pcs-explorer-link {
     color: ${({ theme }) => theme.colors.primary60};
   }
+`
+
+export const TerminalCard = styled(Card)`
+  width: 100%;
+  ${({ theme }) => theme.mediaQueries.sm} {
+    width: auto;
+  }}
 `
