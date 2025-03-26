@@ -27,7 +27,7 @@ export const _queryTokenList = async () => {
 export const queryTokenList = cacheByLRU(_queryTokenList, {
   ttl: 300 * 1000, // 5 minutes
   persist: {
-    name: 'homepage-token-list',
+    name: ' hompage-tokenlist',
     type: 'r2',
     version: 'v1',
   },
