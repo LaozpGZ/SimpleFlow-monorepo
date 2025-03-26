@@ -5,7 +5,7 @@ import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
 import keyBy from 'lodash/keyBy'
 import { checksumAddress } from 'utils/checksumAddress'
 
-const _queryTokenList = async () => {
+export const _queryTokenList = async () => {
   const list = DEFAULT_ACTIVE_LIST_URLS
 
   const results = await Promise.allSettled(list.map((url) => getTokenList(url)))
