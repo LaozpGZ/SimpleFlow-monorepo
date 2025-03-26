@@ -43,7 +43,7 @@ export const NumericalInput = memo(function InnerInput({
         })
       )}
       {...rest}
-      value={value}
+      value={truncateDecimals(value?.toString())}
       onChange={(event) => {
         // replace commas with periods, because we exclusively uses period as the decimal separator
         enforcer(event.target.value.replace(/,/g, "."));
