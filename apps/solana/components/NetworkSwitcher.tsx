@@ -14,7 +14,7 @@ const evmChains = [
   { id: 59144, name: 'Linea', chainName: 'linea' },
   { id: 8453, name: 'Base', chainName: 'base' },
   { id: 204, name: 'opBNB Mainnet', chainName: 'opBNB' },
-  { id: 10143, name: 'Monad Testnet', chainName: 'monad' },
+  { id: 10143, name: 'Monad Testnet', chainName: 'monadTestnet' },
 ]
 
 const NetworkSelect = () => {
@@ -32,7 +32,7 @@ const NetworkSelect = () => {
           style={{ justifyContent: 'flex-start' }}
           as="a"
           target="_blank"
-          href={`${EVM_DOMAIN}?chain=${chain.chainName}`}
+          href={`${EVM_DOMAIN}/swap?chain=${chain.chainName}`}
         >
           <Image
             src={`${ASSETS_CDN}/web/chains/${chain.id}.png`}
