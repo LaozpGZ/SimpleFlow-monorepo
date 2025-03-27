@@ -107,6 +107,7 @@ export const Menu = (props: Omit<NavProps, 'chainId' | 'links' | 'isDark' | 'lan
             isDark={isDark}
             rightSide={rightSideMenus}
             showLangSelector={false}
+            showCakePrice={false}
             langs={languageList}
             activeSubItem={activeSubMenuItem?.href}
             toggleTheme={toggleTheme}

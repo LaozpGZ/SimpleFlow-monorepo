@@ -85,6 +85,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
   activeItem,
   activeSubItem,
   activeSubItemChildItem,
+  showCakePrice = true,
   showLangSelector = true,
   langs,
   buyCakeLabel,
@@ -219,6 +220,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
         buyCakeLabel={buyCakeLabel}
         buyCakeLink={buyCakeLink}
         showLangSelector={showLangSelector}
+        showCakePrice={showCakePrice}
         mb={[`${MOBILE_MENU_HEIGHT}px`, null, "0px"]}
       />
       <AtomBox display={{ xs: "block", lg: "none" }}>
