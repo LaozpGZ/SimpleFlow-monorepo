@@ -235,6 +235,8 @@ export const TerminalWrapper = styled.div`
     width: 200px;
     left: -50px;
     padding: 8px;
+    background: ${({ theme }) => theme.colors.contrast};
+    color: ${({ theme }) => theme.colors.invertedContrast};
     &::after {
       content: '';
       position: absolute;
@@ -242,7 +244,8 @@ export const TerminalWrapper = styled.div`
       left: 60px;
       border-width: 8px 8px 0;
       border-style: solid;
-      border-color: black transparent transparent transparent;
+      border-color: ${({ theme }) => theme.colors.contrast} transparent transparent transparent;
+      background: transparent;
     }
   }
 `
