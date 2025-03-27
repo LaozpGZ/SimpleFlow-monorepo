@@ -17,6 +17,10 @@ export const InfoPageLayout = ({ children }) => {
   const subMenuItems = useMemo(() => {
     const config = [
       {
+        label: t('Infinity'),
+        href: `/info/infinity${chainPath}`,
+      },
+      {
         label: t('V3'),
         href: `/info/v3${chainPath}`,
       },

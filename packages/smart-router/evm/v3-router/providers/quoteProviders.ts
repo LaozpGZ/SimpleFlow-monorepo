@@ -1,14 +1,14 @@
 import { ChainId } from '@pancakeswap/chains'
-import { V4_SUPPORTED_CHAINS } from '../../constants/v4'
+import { INFI_SUPPORTED_CHAINS } from '../../constants/infinity'
 import { QuoteProvider, QuoterConfig, QuoterOptions, RouteType, RouteWithQuote, RouteWithoutQuote } from '../types'
-import { isV3Pool } from '../utils'
+import { isInfinityBinPool, isInfinityClPool, isV3Pool } from '../utils'
 import { createOffChainQuoteProvider } from './offChainQuoteProvider'
 import {
+  createInfinityBinOnChainQuoteProvider,
+  createInfinityClOnChainQuoteProvider,
   createMixedRouteOnChainQuoteProvider,
-  createV3OnChainQuoteProvider,
-  createV4ClOnChainQuoteProvider,
   createMixedRouteOnChainQuoteProviderV2,
-  createV4BinOnChainQuoteProvider,
+  createV3OnChainQuoteProvider,
 } from './onChainQuoteProvider'
 
 // For evm
@@ -26,8 +26,16 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
     gasLimit,
   })
   const v3OnChainQuoteProvider = createV3OnChainQuoteProvider({ onChainProvider, multicallConfigs, gasLimit })
-  const v4ClOnChainQuoteProvider = createV4ClOnChainQuoteProvider({ onChainProvider, multicallConfigs, gasLimit })
-  const v4BinOnChainQuoteProvider = createV4BinOnChainQuoteProvider({ onChainProvider, multicallConfigs, gasLimit })
+  const infinityClOnChainQuoteProvider = createInfinityClOnChainQuoteProvider({
+    onChainProvider,
+    multicallConfigs,
+    gasLimit,
+  })
+  const infinityBinOnChainQuoteProvider = createInfinityBinOnChainQuoteProvider({
+    onChainProvider,
+    multicallConfigs,
+    gasLimit,
+  })
 
   const createGetRouteWithQuotes = (isExactIn = true) => {
     const getOffChainQuotes = isExactIn
@@ -36,14 +44,14 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
     const getV3Quotes = isExactIn
       ? v3OnChainQuoteProvider.getRouteWithQuotesExactIn
       : v3OnChainQuoteProvider.getRouteWithQuotesExactOut
-    const getV4ClQuotes = isExactIn
-      ? v4ClOnChainQuoteProvider.getRouteWithQuotesExactIn
-      : v4ClOnChainQuoteProvider.getRouteWithQuotesExactOut
-    const getV4BinQuotes = isExactIn
-      ? v4BinOnChainQuoteProvider.getRouteWithQuotesExactIn
-      : v4BinOnChainQuoteProvider.getRouteWithQuotesExactOut
+    const getInfinityClQuotes = isExactIn
+      ? infinityClOnChainQuoteProvider.getRouteWithQuotesExactIn
+      : infinityClOnChainQuoteProvider.getRouteWithQuotesExactOut
+    const getInfinityBinQuotes = isExactIn
+      ? infinityBinOnChainQuoteProvider.getRouteWithQuotesExactIn
+      : infinityBinOnChainQuoteProvider.getRouteWithQuotesExactOut
     const createMixedRouteQuoteFetcher = (chainId: ChainId) => {
-      const mixedRouteOnChainQuoteProvider = V4_SUPPORTED_CHAINS.includes(chainId)
+      const mixedRouteOnChainQuoteProvider = INFI_SUPPORTED_CHAINS.includes(chainId as any)
         ? mixedRouteOnChainQuoteProviderV2
         : mixedRouteOnChainQuoteProviderV1
       return isExactIn
@@ -58,8 +66,8 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
       const { chainId } = routes[0]?.input || {}
       const getMixedRouteQuotes = createMixedRouteQuoteFetcher(chainId)
 
-      const v4ClRoutes: RouteWithoutQuote[] = []
-      const v4BinRoutes: RouteWithoutQuote[] = []
+      const infinityClRoutes: RouteWithoutQuote[] = []
+      const infinityBinRoutes: RouteWithoutQuote[] = []
       const v3SingleHopRoutes: RouteWithoutQuote[] = []
       const v3MultihopRoutes: RouteWithoutQuote[] = []
       const mixedRoutesHaveV3Pool: RouteWithoutQuote[] = []
@@ -77,16 +85,24 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
           v3MultihopRoutes.push(route)
           continue
         }
-        if (route.type === RouteType.V4CL) {
-          v4ClRoutes.push(route)
+        if (route.type === RouteType.InfinityCL) {
+          if (isExactIn) {
+            mixedRoutesHaveV3Pool.push(route)
+            continue
+          }
+          infinityClRoutes.push(route)
           continue
         }
-        if (route.type === RouteType.V4BIN) {
-          v4BinRoutes.push(route)
+        if (route.type === RouteType.InfinityBIN) {
+          if (isExactIn) {
+            mixedRoutesHaveV3Pool.push(route)
+            continue
+          }
+          infinityBinRoutes.push(route)
           continue
         }
         const { pools } = route
-        if (pools.some((pool) => isV3Pool(pool))) {
+        if (pools.some((pool) => isV3Pool(pool) || isInfinityClPool(pool) || isInfinityBinPool(pool))) {
           mixedRoutesHaveV3Pool.push(route)
           continue
         }
@@ -98,8 +114,8 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
         getMixedRouteQuotes(mixedRoutesHaveV3Pool, { blockNumber, gasModel, retry: { retries: 0 }, signal }),
         getV3Quotes(v3SingleHopRoutes, { blockNumber, gasModel, signal }),
         getV3Quotes(v3MultihopRoutes, { blockNumber, gasModel, retry: { retries: 1 }, signal }),
-        getV4ClQuotes(v4ClRoutes, { blockNumber, gasModel, signal }),
-        getV4BinQuotes(v4BinRoutes, { blockNumber, gasModel, signal }),
+        getInfinityClQuotes(infinityClRoutes, { blockNumber, gasModel, signal }),
+        getInfinityBinQuotes(infinityBinRoutes, { blockNumber, gasModel, signal }),
       ])
       if (results.every((result) => result.status === 'rejected')) {
         throw new Error(results.map((result) => (result as PromiseRejectedResult).reason).join(','))

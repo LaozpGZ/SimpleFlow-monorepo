@@ -16,6 +16,10 @@ export const InfoPageLayout = ({ children }) => {
   const subMenuItems = useMemo(() => {
     const config = [
       {
+        label: t('Infinity'),
+        href: `/info/infinity${chainPath}`,
+      },
+      {
         label: t('V3'),
         href: `/info/v3${chainPath}`,
       },
@@ -32,13 +36,16 @@ export const InfoPageLayout = ({ children }) => {
     return config
   }, [t, chainPath, chainName])
 
+  const activeItem = useMemo(() => {
+    if (router.pathname.includes('infinity')) return `/info/infinity${chainPath}`
+    if (router.pathname.includes('v3')) return `/info/v3${chainPath}`
+    if (isStableSwap) return `/info${chainPath}?type=stableSwap`
+    return `/info${chainPath}`
+  }, [router.pathname, chainPath, isStableSwap])
+
   return (
     <>
-      <SubMenuItems
-        items={subMenuItems}
-        activeItem={isStableSwap ? `/info${chainPath}?type=stableSwap` : `/info${chainPath}`}
-      />
-
+      <SubMenuItems items={subMenuItems} activeItem={activeItem} />
       <InfoNav isStableSwap={isStableSwap} />
       {children}
     </>

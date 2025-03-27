@@ -1,9 +1,10 @@
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 
-import { SupportedPool, buildV3QuoteCall } from './fetchV3Quote'
-import { FetchQuotes } from './types'
-import { isV3Route } from './utils'
+import { buildInfinityBinQuoteCall, buildInfinityCLQuoteCall, buildInfinityMixedQuoteCall } from './fetchInfinityQuote'
 import { buildMixedRouteQuoteCall } from './fetchMixedRouteQuote'
+import { buildV3QuoteCall } from './fetchV3Quote'
+import { FetchQuotes, SupportedPool } from './types'
+import { isInfinityBinRoute, isInfinityCLRoute, isInfinityMixedRoute, isV3Route } from './utils'
 
 export const fetchQuotes: FetchQuotes<SupportedPool> = async ({ routes, client }) => {
   const [route] = routes
@@ -12,9 +13,18 @@ export const fetchQuotes: FetchQuotes<SupportedPool> = async ({ routes, client }
   const results = await client.multicall({
     contracts: routes.map((r) => {
       if (isV3Route(r)) {
-        return buildV3QuoteCall<SupportedPool>(r)
+        return buildV3QuoteCall(r)
       }
-      return buildMixedRouteQuoteCall<SupportedPool>(r)
+      if (isInfinityCLRoute(r)) {
+        return isExactOut ? buildInfinityCLQuoteCall(r) : buildInfinityMixedQuoteCall(r)
+      }
+      if (isInfinityBinRoute(r)) {
+        return isExactOut ? buildInfinityBinQuoteCall(r) : buildInfinityMixedQuoteCall(r)
+      }
+      if (isInfinityMixedRoute(r)) {
+        return buildInfinityMixedQuoteCall(r)
+      }
+      return buildMixedRouteQuoteCall(r)
     }),
   })
 
@@ -25,6 +35,13 @@ export const fetchQuotes: FetchQuotes<SupportedPool> = async ({ routes, client }
     }
     const { path: currentPath } = routes[i]
     const outCurrency = isExactOut ? currentPath[0] : currentPath[currentPath.length - 1]
+    if (result.result.length === 2) {
+      const [quote, gasUseEstimate] = result.result
+      return {
+        quote: CurrencyAmount.fromRawAmount(outCurrency, quote),
+        gasUseEstimate,
+      }
+    }
     const [quote, , , gasUseEstimate] = result.result
     return {
       quote: CurrencyAmount.fromRawAmount(outCurrency, quote),

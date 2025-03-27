@@ -1,11 +1,9 @@
 import { useMemo } from 'react'
-
 import { Field } from 'state/swap/actions'
-
 import { PriceOrder } from '@pancakeswap/price-api-sdk'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { useAccount } from 'wagmi'
-import { useAllTypeBestTrade } from '../../Swap/V3Swap/hooks/useAllTypeBestTrade'
+import { useAllTypeBestTrade } from 'hooks/quoter/useAllTypeBestTrade'
 import { useSlippageAdjustedAmounts } from '../../Swap/V3Swap/hooks/useSlippageAdjustedAmounts'
 import { useSwapCurrency } from '../../Swap/V3Swap/hooks/useSwapCurrency'
 

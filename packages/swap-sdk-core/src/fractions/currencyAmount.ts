@@ -1,12 +1,12 @@
-import invariant from 'tiny-invariant'
 import _Big from 'big.js'
+import invariant from 'tiny-invariant'
 // @ts-ignore
 import toFormat from 'toformat'
 import { Currency } from '../currency'
 import { Token } from '../token'
 import { Fraction } from './fraction'
 
-import { BigintIsh, Rounding, MaxUint256 } from '../constants'
+import { BigintIsh, MaxUint256, Rounding } from '../constants'
 
 const Big = toFormat(_Big)
 
@@ -51,9 +51,21 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     return CurrencyAmount.fromFractionalAmount(this.currency, added.numerator, added.denominator)
   }
 
-  public subtract(other: CurrencyAmount<T>): CurrencyAmount<T> {
-    invariant(this.currency.equals(other.currency), 'CURRENCY')
-    const subtracted = super.subtract(other)
+  public subtract(value: bigint): CurrencyAmount<T>
+
+  public subtract(other: CurrencyAmount<T>): CurrencyAmount<T>
+
+  public subtract(value: CurrencyAmount<T> | bigint): CurrencyAmount<T> {
+    if (typeof value === 'bigint') {
+      return CurrencyAmount.fromFractionalAmount(
+        this.currency,
+        this.numerator - value * this.denominator,
+        this.denominator
+      )
+    }
+
+    invariant(this.currency.equals(value.currency), 'CURRENCY')
+    const subtracted = super.subtract(value)
     return CurrencyAmount.fromFractionalAmount(this.currency, subtracted.numerator, subtracted.denominator)
   }
 
