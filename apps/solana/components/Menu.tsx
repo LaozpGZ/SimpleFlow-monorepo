@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { DropdownMenuItems, FlexGap, MenuItemsType, ThemeSwitcher, Menu as UIMenu } from '@pancakeswap/uikit'
+import { DropdownMenuItems, FlexGap, MenuItemsType, NavProps, ThemeSwitcher, Menu as UIMenu } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useNetwork'
 import orderBy from 'lodash/orderBy'
@@ -65,7 +65,7 @@ const MenuWrapper = styled.div`
   }
 `
 
-export const Menu = (props) => {
+export const Menu = (props: Omit<NavProps, 'chainId' | 'links' | 'isDark' | 'langs' | 'toggleTheme'>) => {
   const menuItems = useMemo(() => [], [])
   const { pathname } = useRouter()
   const activeMenuItem = getActiveMenuItem({ menuConfig: menuItems, pathname })
@@ -79,6 +79,17 @@ export const Menu = (props) => {
   }, [setTheme, isDark])
 
   const [isClient, setIsClient] = useState(false)
+
+  const rightSideMenus = useMemo(
+    () => (
+      <FlexGap gap="8px">
+        <ThemeSwitcher isDark={isDark} toggleTheme={toggleTheme} />
+        <NetworkSwitcher />
+        <WalletButton />
+      </FlexGap>
+    ),
+    [isDark, toggleTheme],
+  )
 
   useEffect(() => {
     setIsClient(true)
@@ -94,13 +105,7 @@ export const Menu = (props) => {
             links={menuItems}
             activeItem={activeMenuItem?.href}
             isDark={isDark}
-            rightSide={
-              <FlexGap gap="8px">
-                <ThemeSwitcher isDark={isDark} toggleTheme={() => setTheme(isDark ? 'light' : 'dark')} />
-                <NetworkSwitcher />
-                <WalletButton />
-              </FlexGap>
-            }
+            rightSide={rightSideMenus}
             showLangSelector={false}
             langs={languageList}
             activeSubItem={activeSubMenuItem?.href}
