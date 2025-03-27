@@ -229,6 +229,22 @@ export const TerminalWrapper = styled.div`
   .pcs-explorer-link {
     color: ${({ theme }) => theme.colors.primary60};
   }
+
+  .pcs-tooltip {
+    bottom: calc(100% + 10px);
+    width: 200px;
+    left: -50px;
+    padding: 8px;
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -7px;
+      left: 60px;
+      border-width: 8px 8px 0;
+      border-style: solid;
+      border-color: black transparent transparent transparent;
+    }
+  }
 `
 
 export const TerminalCard = styled(Card)`
