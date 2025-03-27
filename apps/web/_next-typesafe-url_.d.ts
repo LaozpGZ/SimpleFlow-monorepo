@@ -21,11 +21,6 @@ declare module "@@@next-typesafe-url" {
     "/404": StaticRoute;
     "/451": StaticRoute;
     "/add/[[...currency]]": StaticRoute;
-    "/affiliates-program/agreement": StaticRoute;
-    "/affiliates-program/dashboard": StaticRoute;
-    "/affiliates-program": StaticRoute;
-    "/affiliates-program/leaderboard": StaticRoute;
-    "/affiliates-program/us-agreement": StaticRoute;
     "/bridge": StaticRoute;
     "/buy-crypto": StaticRoute;
     "/cake-staking": StaticRoute;
@@ -56,6 +51,8 @@ declare module "@@@next-typesafe-url" {
     "/info/infinity/[chainName]/tokens/[address]": StaticRoute;
     "/info/infinity/[chainName]/tokens": StaticRoute;
     "/info/infinity": StaticRoute;
+    "/info/infinity/tokens/[address]": StaticRoute;
+    "/info/infinity/tokens": StaticRoute;
     "/info/pairs/[address]": StaticRoute;
     "/info/pairs": StaticRoute;
     "/info/tokens/[address]": StaticRoute;
