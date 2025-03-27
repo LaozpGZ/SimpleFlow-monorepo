@@ -65,7 +65,7 @@ const MenuWrapper = styled.div`
   }
 `
 
-export const Menu = (props: Omit<NavProps, 'chainId' | 'links' | 'isDark' | 'langs' | 'toggleTheme'>) => {
+export const Menu = (props) => {
   const menuItems = useMemo(() => [], [])
   const { pathname } = useRouter()
   const activeMenuItem = getActiveMenuItem({ menuConfig: menuItems, pathname })
