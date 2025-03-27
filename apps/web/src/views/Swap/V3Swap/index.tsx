@@ -5,9 +5,9 @@ import { OrderType } from '@pancakeswap/price-api-sdk'
 import { logger } from 'utils/datadog'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 
+import { useAllTypeBestTrade } from 'hooks/quoter/useAllTypeBestTrade'
 import { BuyCryptoLink, FormHeader, FormMain, PricingAndSlippage, TradeDetails } from './containers'
 import { CommitButton } from './containers/CommitButton'
-import { useAllTypeBestTrade } from './hooks/useAllTypeBestTrade'
 import { useCheckInsufficientError } from './hooks/useCheckSufficient'
 
 export function V3SwapForm() {

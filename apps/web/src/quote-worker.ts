@@ -1,12 +1,12 @@
 import 'utils/workerPolyfill'
 
 import { findBestTrade } from '@pancakeswap/routing-sdk'
-import { SmartRouter, V4Router } from '@pancakeswap/smart-router'
+import { InfinityRouter, SmartRouter } from '@pancakeswap/smart-router'
 import { Call } from 'state/multicall/actions'
 import { fetchChunk } from 'state/multicall/fetchChunk'
+import { toRoutingSDKPool, toSerializableInfinityTrade } from 'utils/convertTrade'
 import { getLogger } from 'utils/datadog'
 import { createViemPublicClientGetter } from 'utils/viem'
-import { toRoutingSDKPool, toSerializableV4Trade } from 'utils/convertTrade'
 
 const { parseCurrency, parseCurrencyAmount, parsePool, serializeTrade } = SmartRouter.Transformer
 
@@ -78,7 +78,7 @@ export type WorkerGetBestTradeOffchainEvent = [
   id: number,
   message: {
     cmd: 'getBestTradeOffchain'
-    params: V4Router.APISchema.RouterPostParams
+    params: InfinityRouter.APISchema.RouterPostParams
   },
 ]
 
@@ -212,7 +212,7 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
   }
 
   if (message.cmd === 'getBestTradeOffchain') {
-    const parsed = V4Router.APISchema.zRouterPostParams.safeParse(message.params)
+    const parsed = InfinityRouter.APISchema.zRouterPostParams.safeParse(message.params)
     if (parsed.success === false) {
       postMessage([
         id,
@@ -253,12 +253,12 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
         }
         const { graph: _, ...trade } = t
 
-        const v4Trade = toSerializableV4Trade(trade)
+        const infinityTrade = toSerializableInfinityTrade(trade)
         postMessage([
           id,
           {
             success: true,
-            result: v4Trade,
+            result: infinityTrade,
           },
         ])
       })

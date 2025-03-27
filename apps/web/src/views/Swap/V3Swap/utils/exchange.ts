@@ -74,6 +74,10 @@ export function computeTradePriceBreakdown(trade?: TradeEssentialForPriceBreakdo
         if (SmartRouter.isV3Pool(pool)) {
           return currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(v3FeeToPercent(pool.fee)))
         }
+        if (SmartRouter.isInfinityClPool(pool) || SmartRouter.isInfinityBinPool(pool)) {
+          const v4FeePercent = calculateV4FeePercent(pool)
+          return currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(v4FeePercent))
+        }
         return currentFee
       }, ONE_HUNDRED_PERCENT),
     )
@@ -125,4 +129,12 @@ export function formatExecutionPrice(
 
 export function v3FeeToPercent(fee: FeeAmount): Percent {
   return new Percent(fee, BIPS_BASE * 100n)
+}
+
+export function calculateV4FeePercent(pool: { protocolFee?: number; fee: number }): Percent {
+  /* eslint-disable no-bitwise */
+  const protocolFee = (pool.protocolFee ?? 0) & 0xfff
+  const lpFee = pool.fee
+  const totalFee = (protocolFee + ((1e6 - protocolFee) * lpFee) / 1e6).toFixed(0)
+  return new Percent(totalFee, 1e6)
 }

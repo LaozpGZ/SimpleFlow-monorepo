@@ -13,7 +13,7 @@ import Page from '../Page'
 import PriceChartContainer from '../Swap/components/Chart/PriceChartContainer'
 import { StyledSwapContainer } from '../Swap/styles'
 import { SwapFeaturesContext } from '../Swap/SwapFeaturesContext'
-import { V4SwapForm } from './V4Swap'
+import { InfinitySwapForm } from './InfinitySwap'
 
 const Wrapper = styled(Box)`
   width: 100%;
@@ -23,7 +23,7 @@ const Wrapper = styled(Box)`
   }
 `
 
-export default function V4Swap() {
+export default function InfinitySwap() {
   const { query } = useRouter()
   const { isDesktop, isMobile } = useMatchBreakpoints()
   const {
@@ -128,7 +128,7 @@ export default function V4Swap() {
             $isChartExpanded={isChartExpanded}
           >
             <Wrapper height="100%">
-              <V4SwapForm />
+              <InfinitySwapForm />
             </Wrapper>
           </StyledSwapContainer>
         </Flex>

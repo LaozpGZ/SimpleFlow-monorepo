@@ -5,10 +5,12 @@ import { useQuery } from '@tanstack/react-query'
 import { masterChefV2ABI } from 'config/abi/masterchefV2'
 import { QUERY_SETTINGS_IMMUTABLE, SLOW_INTERVAL } from 'config/constants'
 import dayjs from 'dayjs'
+import { useMultiChainPoolsFarmingStatus } from 'hooks/infinity/useIsFarming'
 import { useAtom } from 'jotai'
 import groupBy from 'lodash/groupBy'
 import keyBy from 'lodash/keyBy'
 import { useEffect, useMemo, useState } from 'react'
+import { isInfinityProtocol } from 'utils/protocols'
 import { publicClient } from 'utils/viem'
 import { zeroAddress } from 'viem'
 import { Address } from 'viem/accounts'
@@ -46,10 +48,17 @@ export const useFarmPools = () => {
 
   const { data: poolsStatus, pending: isPoolStatusPending } = useMultiChainV3PoolsStatus(farmConfig)
   const { data: poolsTimeFrame, pending: isPoolsTimeFramePending } = useMultiChainPoolsTimeFrame(farmConfig)
+  const infinityPoolsFarmingStatus = useMultiChainPoolsFarmingStatus(farmConfig)
 
   const poolsWithStatus: ((PoolInfo | UniversalFarmConfig) & { isActiveFarm?: boolean })[] = useMemo(() => {
     const farms = pools.length ? pools : farmConfig
     return farms.map((f: PoolInfo | UniversalFarmConfig) => {
+      if (isInfinityProtocol(f.protocol)) {
+        return {
+          ...f,
+          isActiveFarm: !!infinityPoolsFarmingStatus[f.chainId]?.[f.lpAddress],
+        }
+      }
       if (f.protocol === Protocol.V3) {
         return {
           ...f,
@@ -67,7 +76,15 @@ export const useFarmPools = () => {
       }
       return f
     })
-  }, [pools, farmConfig, isPoolStatusPending, poolsStatus, isPoolsTimeFramePending, poolsTimeFrame])
+  }, [
+    pools,
+    farmConfig,
+    isPoolStatusPending,
+    poolsStatus,
+    isPoolsTimeFramePending,
+    poolsTimeFrame,
+    infinityPoolsFarmingStatus,
+  ])
 
   return { loaded: !isLoading, data: poolsWithStatus }
 }

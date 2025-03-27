@@ -1,7 +1,7 @@
-import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, IconButton, MinusIcon, useModalV2 } from '@pancakeswap/uikit'
 import { useCallback, useMemo } from 'react'
+import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/useLatestTxReceipt'
 import styled from 'styled-components'
 import { logGTMClickStakeFarmEvent } from 'utils/customGTMEventTracking'
 import useFarmV3Actions from 'views/Farms/hooks/v3/useFarmV3Actions'
@@ -147,6 +147,8 @@ export const V3PositionActions = ({
     useMemo(() => (isStaked && tokenId ? [tokenId] : []), [tokenId, isStaked]),
     chainId,
   )
+
+  if (!isStaked) return null
 
   return (
     <StopPropagation>
