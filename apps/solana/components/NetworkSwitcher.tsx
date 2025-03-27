@@ -5,7 +5,7 @@ import { ASSETS_CDN, EVM_DOMAIN } from 'config/constant'
 import { APTOS_MENU, defaultChain } from 'config/chains'
 import Image from 'next/image'
 
-const evmChains = [
+const EVM_CHAINS = [
   { id: 56, name: 'BNB Chain', chainName: 'bsc' },
   { id: 1, name: 'Ethereum', chainName: 'eth' },
   { id: 324, name: 'zkSync Era', chainName: 'zkSync' },
@@ -17,6 +17,8 @@ const evmChains = [
   { id: 10143, name: 'Monad Testnet', chainName: 'monadTestnet' },
 ]
 
+const NON_EVM_CHAINS = [APTOS_MENU]
+
 const NetworkSelect = () => {
   const { t } = useTranslation()
 
@@ -26,7 +28,7 @@ const NetworkSelect = () => {
         <Text color="textSubtle">{t('Select a Network')}</Text>
       </Box>
       <UserMenuDivider />
-      {evmChains.map((chain) => (
+      {EVM_CHAINS.map((chain) => (
         <UserMenuItem
           key={chain.id}
           style={{ justifyContent: 'flex-start' }}
@@ -46,18 +48,14 @@ const NetworkSelect = () => {
           </Text>
         </UserMenuItem>
       ))}
-      <UserMenuItem
-        key={APTOS_MENU.id}
-        style={{ justifyContent: 'flex-start' }}
-        as="a"
-        target="_blank"
-        href={APTOS_MENU.link}
-      >
-        <Image src={APTOS_MENU.image} width={24} height={24} unoptimized alt={`chain-${APTOS_MENU.id}`} />
-        <Text color="text" pl="12px">
-          {APTOS_MENU.name}
-        </Text>
-      </UserMenuItem>
+      {NON_EVM_CHAINS.map((chain) => (
+        <UserMenuItem key={chain.id} style={{ justifyContent: 'flex-start' }} as="a" target="_blank" href={chain.link}>
+          <Image src={chain.image} width={24} height={24} unoptimized alt={`chain-${chain.id}`} />
+          <Text color="text" pl="12px">
+            {chain.name}
+          </Text>
+        </UserMenuItem>
+      ))}
     </>
   )
 }
