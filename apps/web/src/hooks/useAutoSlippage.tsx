@@ -39,6 +39,70 @@ const guesstimateGas = (trade?: SmartRouterTrade<TradeType> | V4Router.V4TradeWi
   return 200000 // Default gas estimate
 }
 
+// Calculate gas estimate in USD based on trade type
+const calculateGasEstimateUSD = (
+  supportsGasEstimate: boolean,
+  trade?: SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>,
+  baseGasEstimatePrice?: any,
+) => {
+  if (!supportsGasEstimate || !trade) return null
+
+  if (isV4Trade(trade)) {
+    // For V4Trade, use gasUseEstimateBase and convert to USD
+    const baseGasEstimate = trade.gasUseEstimateBase
+    if (baseGasEstimate && baseGasEstimatePrice) {
+      const baseAmount = parseFloat(baseGasEstimate.toSignificant(6))
+      return baseAmount * parseFloat(baseGasEstimatePrice.toSignificant(6))
+    }
+    return null
+  }
+
+  // For SmartRouterTrade, use gasEstimateInUSD
+  return trade.gasEstimateInUSD
+    ? typeof trade.gasEstimateInUSD === 'string'
+      ? parseFloat(trade.gasEstimateInUSD)
+      : Number(trade.gasEstimateInUSD)
+    : null
+}
+
+// Calculate native gas cost
+const calculateNativeGasCost = (nativeGasPrice?: string, gasEstimate?: number) => {
+  return nativeGasPrice && typeof gasEstimate === 'number'
+    ? new BigNumber(nativeGasPrice.toString()).multipliedBy(gasEstimate)
+    : undefined
+}
+
+// Calculate gas cost amount
+const calculateGasCostAmount = (nativeGasCost?: BigNumber, nativeCurrency?: any) => {
+  return nativeGasCost && nativeCurrency
+    ? parseFloat(nativeGasCost.toFixed(0)) / 10 ** nativeCurrency.decimals
+    : undefined
+}
+
+// Calculate slippage based on dollar cost and output value
+const calculateSlippageFromDollarValues = (dollarCostToUse: number, outputDollarValue: number) => {
+  // Optimize for highest possible slippage without getting MEV'd
+  // Set slippage % such that the difference between expected amount out and minimum amount out < gas fee to sandwich the trade
+  const fraction = dollarCostToUse / outputDollarValue
+  return new Percent(Math.floor(fraction * 10000), 10000)
+}
+
+// Apply slippage tolerance limits
+const applySlippageLimits = (calculatedSlippage: Percent) => {
+  if (calculatedSlippage.greaterThan(MAX_AUTO_SLIPPAGE_TOLERANCE)) {
+    console.log('Auto Slippage: Using MAX_AUTO_SLIPPAGE_TOLERANCE', MAX_AUTO_SLIPPAGE_TOLERANCE.toFixed(2))
+    return MAX_AUTO_SLIPPAGE_TOLERANCE
+  }
+
+  if (calculatedSlippage.lessThan(MIN_AUTO_SLIPPAGE_TOLERANCE)) {
+    console.log('Auto Slippage: Using MIN_AUTO_SLIPPAGE_TOLERANCE', MIN_AUTO_SLIPPAGE_TOLERANCE.toFixed(2))
+    return MIN_AUTO_SLIPPAGE_TOLERANCE
+  }
+
+  console.log('Auto Slippage: Using calculated result', calculatedSlippage.toFixed(2))
+  return calculatedSlippage
+}
+
 type SupportedTrade = SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>
 
 export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade): Percent {
@@ -60,40 +124,26 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
   const baseGasEstimatePrice = useStablecoinPrice(baseGasEstimateCurrency)
 
   // Get gas estimate in USD based on trade type
-  const gasEstimateUSD = useMemo(() => {
-    if (!supportsGasEstimate || !trade) return null
-
-    if (isV4Trade(trade)) {
-      // For V4Trade, use gasUseEstimateBase and convert to USD
-      const baseGasEstimate = trade.gasUseEstimateBase
-      if (baseGasEstimate && baseGasEstimatePrice) {
-        const baseAmount = parseFloat(baseGasEstimate.toSignificant(6))
-        return baseAmount * parseFloat(baseGasEstimatePrice.toSignificant(6))
-      }
-      return null
-    }
-
-    // For SmartRouterTrade, use gasEstimateInUSD
-    return trade.gasEstimateInUSD
-      ? typeof trade.gasEstimateInUSD === 'string'
-        ? parseFloat(trade.gasEstimateInUSD)
-        : Number(trade.gasEstimateInUSD)
-      : null
-  }, [supportsGasEstimate, trade, baseGasEstimatePrice])
+  const gasEstimateUSD = useMemo(
+    () => calculateGasEstimateUSD(!!supportsGasEstimate, trade, baseGasEstimatePrice),
+    [supportsGasEstimate, trade, baseGasEstimatePrice],
+  )
 
   const nativeGasPrice = useGasPrice()
   const nativeCurrency = useNativeCurrency(chainId)
   const gasEstimate = guesstimateGas(trade)
 
   // Calculate native gas cost
-  const nativeGasCost =
-    nativeGasPrice && typeof gasEstimate === 'number'
-      ? new BigNumber(nativeGasPrice.toString()).multipliedBy(gasEstimate)
-      : undefined
+  const nativeGasCost = useMemo(
+    () => calculateNativeGasCost(nativeGasPrice?.toString(), gasEstimate),
+    [nativeGasPrice, gasEstimate],
+  )
 
   // Convert native gas cost to USD without using CurrencyAmount
-  const gasCostAmount =
-    nativeGasCost && nativeCurrency ? parseFloat(nativeGasCost.toFixed(0)) / 10 ** nativeCurrency.decimals : undefined
+  const gasCostAmount = useMemo(
+    () => calculateGasCostAmount(nativeGasCost, nativeCurrency),
+    [nativeGasCost, nativeCurrency],
+  )
 
   // Always call the hook unconditionally
   const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount)
@@ -127,31 +177,17 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
     const dollarCostToUse = supportsGasEstimate && gasEstimateUSD ? gasEstimateUSD : gasCostUSDValue
 
     if (outputDollarValue && dollarCostToUse) {
-      // Optimize for highest possible slippage without getting MEV'd
-      // Set slippage % such that the difference between expected amount out and minimum amount out < gas fee to sandwich the trade
-      const fraction = dollarCostToUse / outputDollarValue
-      const result = new Percent(Math.floor(fraction * 10000), 10000)
+      const calculatedSlippage = calculateSlippageFromDollarValues(dollarCostToUse, outputDollarValue)
 
       console.log('Auto Slippage: Calculated result', {
         dollarCostToUse,
         outputDollarValue,
-        fraction,
-        resultBasisPoints: Math.floor(fraction * 10000),
-        result: result.toFixed(2),
+        fraction: dollarCostToUse / outputDollarValue,
+        resultBasisPoints: Math.floor((dollarCostToUse / outputDollarValue) * 10000),
+        result: calculatedSlippage.toFixed(2),
       })
 
-      if (result.greaterThan(MAX_AUTO_SLIPPAGE_TOLERANCE)) {
-        console.log('Auto Slippage: Using MAX_AUTO_SLIPPAGE_TOLERANCE', MAX_AUTO_SLIPPAGE_TOLERANCE.toFixed(2))
-        return MAX_AUTO_SLIPPAGE_TOLERANCE
-      }
-
-      if (result.lessThan(MIN_AUTO_SLIPPAGE_TOLERANCE)) {
-        console.log('Auto Slippage: Using MIN_AUTO_SLIPPAGE_TOLERANCE', MIN_AUTO_SLIPPAGE_TOLERANCE.toFixed(2))
-        return MIN_AUTO_SLIPPAGE_TOLERANCE
-      }
-
-      console.log('Auto Slippage: Using calculated result', result.toFixed(2))
-      return result
+      return applySlippageLimits(calculatedSlippage)
     }
 
     console.log('Auto Slippage: Using DEFAULT_AUTO_SLIPPAGE because missing outputDollarValue or dollarCostToUse')
