@@ -1,10 +1,10 @@
 import { AdSlide, Priority } from '@pancakeswap/widgets-internal'
-import { AdPCSX } from './ads/AdPCSX'
+import { AdPCSxSolana } from './ads/AdPCSxSolana'
 
 export const adList: Array<AdSlide> = [
   {
     id: 'expandable-ad',
-    component: <AdPCSX />,
+    component: <AdPCSxSolana />,
     priority: Priority.FIRST_AD,
   },
 ]

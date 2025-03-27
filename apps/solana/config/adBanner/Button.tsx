@@ -6,13 +6,16 @@ import {
   ChevronsExpandIcon,
   Link,
   OpenNewIcon,
+  useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { PropsWithChildren } from 'react'
 import styled from 'styled-components'
 
-const StyledButton = styled(Button)<{ $variant?: string }>`
+const StyledButton = styled(Button)<{ $variant?: string; $isMobile?: boolean }>`
   transition: all 0.2s ease-in-out;
   border-radius: ${({ theme }) => theme.radii['12px']};
+  font-size: 14px;
+  ${({ $isMobile }) => $isMobile && `font-size: 12px;`}
   ${({ theme, $variant }) =>
     $variant === 'text' &&
     `
@@ -38,9 +41,12 @@ export const AdButton = ({
   href,
   ...props
 }: AdButtonProps) => {
+  const { isMobile } = useMatchBreakpoints()
+
   return (
     <Link href={href} fontSize="inherit" color="inherit" external={isExternalLink} style={{ textDecoration: 'none' }}>
       <StyledButton
+        $isMobile={isMobile}
         scale="sm"
         variant="subtle"
         width="max-content"

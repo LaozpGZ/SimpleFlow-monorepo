@@ -114,7 +114,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
     <Menu>
       <Layout>
         <Component {...pageProps} />
-        <AdPanel config={adConfig} />
+        <AdPanel mt="22px" config={adConfig} />
       </Layout>
       <ToastListener />
     </Menu>

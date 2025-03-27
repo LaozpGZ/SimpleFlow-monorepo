@@ -24,9 +24,10 @@ const BaseCard = styled(Box)<{ $isExpanded?: boolean }>`
   `}
 `
 
-const Content = styled(Box)<{ $isExpanded?: boolean }>`
+const Content = styled(Box)<{ $isMobile?: boolean; $isExpanded?: boolean }>`
   position: relative;
   width: 148px;
+  ${({ $isMobile }) => $isMobile && `width: 164px;`}
 
   height: 98%;
 
@@ -147,7 +148,9 @@ export const AdCard = forwardRef<HTMLDivElement, AdCardProps>(
 
     return (
       <BaseCard $isExpanded={isExpanded} {...props} ref={ref}>
-        <Content $isExpanded={isExpanded}>{children}</Content>
+        <Content $isMobile={isMobile} $isExpanded={isExpanded}>
+          {children}
+        </Content>
         {isDismissible && (
           <CloseButtonContainer
             $isMobile={isMobile}
