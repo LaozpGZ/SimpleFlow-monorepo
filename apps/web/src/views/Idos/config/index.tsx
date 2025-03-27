@@ -423,6 +423,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
       },
     ],
   },
+  // TODO: gasOptimization preview config, need to remove before merge
   gasOptimization: {
     id: 'gasOptimization',
     projectUrl: 'https://www.kiloex.io/',
@@ -430,19 +431,17 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/kiloex-banner.png`,
     contractAddress: '0x60a8Cf71306572B893876407ce42ace9c4581DAE',
-    tgeTitle: <Trans>gasOptimization Token Generation Event</Trans>,
+    tgeTitle: <>gasOptimization Token Generation Event</>,
     tgeSubtitle: <Trans>Exclusively via Binance Keyless Wallet</Trans>,
     description: (
       <>
-        <Trans>
-          gasOptimization is building the next generation of user-friendly perpetual DEX fully integrated with LSTfi.
-        </Trans>
+        <>gasOptimization is building the next generation of user-friendly perpetual DEX fully integrated with LSTfi.</>
         <br />
-        <Trans>
+        <>
           gasOptimization platform provides traders with lightning-fast trades, real-time tracking of market activity,
           and an intuitive trading experience, while offering liquidity providers risk-neutral positions and LP-friendly
           solutions.
-        </Trans>
+        </>
         <br />
         <br />
         Website:{' '}
