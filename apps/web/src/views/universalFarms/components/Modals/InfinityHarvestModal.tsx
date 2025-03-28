@@ -200,11 +200,7 @@ export const InfinityHarvestModal = ({
               </AutoRow>
               {stakedPositions?.length ? (
                 <ExpandableLabelContainer style={{ textAlign: 'center' }}>
-                  <ExpandableLabel
-                    color={theme.colors.v2Primary60}
-                    expanded={isExpanded}
-                    onClick={() => setIsExpanded((prev) => !prev)}
-                  >
+                  <ExpandableLabel expanded={isExpanded} onClick={() => setIsExpanded((prev) => !prev)}>
                     {isExpanded ? t('Hide') : t('Details')}
                   </ExpandableLabel>
                 </ExpandableLabelContainer>

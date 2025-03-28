@@ -16,5 +16,4 @@ export interface ButtonMenuProps extends SpaceProps {
   fullWidth?: boolean;
   style?: React.CSSProperties;
   noButtonMargin?: boolean;
-  style?: React.CSSProperties;
 }

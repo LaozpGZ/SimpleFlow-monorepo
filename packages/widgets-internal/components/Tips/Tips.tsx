@@ -1,7 +1,7 @@
-import { Message, MessageText, ExpandableLabel, Text, LightBulbIcon, FlexGap } from "@pancakeswap/uikit";
-import { useTranslation } from "@pancakeswap/localization";
-import { useState } from "react";
 import { useTheme } from "@pancakeswap/hooks";
+import { useTranslation } from "@pancakeswap/localization";
+import { ExpandableLabel, FlexGap, LightBulbIcon, Message, MessageText, Text } from "@pancakeswap/uikit";
+import { useState } from "react";
 import styled from "styled-components";
 
 export const ExpandableLabelContainer = styled.span`
@@ -65,11 +65,7 @@ export const Tips = ({
         {additionalDetails
           ? toggleButton ?? (
               <ExpandableLabelContainer>
-                <ExpandableLabel
-                  color={theme.colors.v2Primary60}
-                  expanded={isExpanded}
-                  onClick={() => setIsExpanded((prev) => !prev)}
-                >
+                <ExpandableLabel expanded={isExpanded} onClick={() => setIsExpanded((prev) => !prev)}>
                   {isExpanded
                     ? toggleButtonLabel?.hideLabel ?? t("Hide")
                     : toggleButtonLabel?.showLabel ?? t("Details")}
