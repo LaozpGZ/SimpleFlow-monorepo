@@ -1,4 +1,5 @@
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
+import { AdTradingCompetitionEos } from 'components/AdPanel/Ads/AdTradingCompetition'
 import { AdsIds, useAdsConfigs } from 'components/AdPanel/hooks/useAdsConfig'
 import { useMemo } from 'react'
 import { AdCakeStaking } from './Ads/AdCakeStaking'
@@ -6,6 +7,7 @@ import { AdCommon } from './Ads/AdCommon'
 import { AdIfo } from './Ads/AdIfo'
 import { AdPCSX } from './Ads/AdPCSX'
 import { AdSpringboard } from './Ads/AdSpringboard'
+import { commonLayoutWhitelistedPages } from './constants'
 import { ExpandableAd } from './Expandable/ExpandableAd'
 import { shouldRenderOnPages } from './renderConditions'
 import { AdSlide } from './types'
@@ -22,7 +24,7 @@ enum Priority {
 
 export const useAdConfig = () => {
   const { isDesktop } = useMatchBreakpoints()
-  const shouldRenderOnPage = shouldRenderOnPages(['/buy-crypto', '/', '/prediction'])
+  const shouldRenderOnPage = shouldRenderOnPages(commonLayoutWhitelistedPages)
   const MAX_ADS = isDesktop ? 6 : 4
   const shouldRenderAdIfo = useShouldRenderAdIfo()
   const configs = useAdsConfigs()
@@ -52,6 +54,10 @@ export const useAdConfig = () => {
       {
         id: 'ad-springboard',
         component: <AdSpringboard />,
+      },
+      {
+        id: 'ad-eos-tc',
+        component: <AdTradingCompetitionEos />,
       },
       {
         id: 'ad-ifo',
@@ -107,6 +113,3 @@ export const layoutMobileAdIgnoredPages = [
  *  Contains strings or regex patterns.
  */
 export const layoutDesktopAdIgnoredPages = [...commonLayoutAdIgnoredPages]
-
-// NOTE: In current phase, we're adding pages to whitelist as well for AdPlayer.
-export const commonLayoutWhitelistedPages = ['/swap', '/buy-crypto', '/prediction']
