@@ -8,6 +8,6 @@ export const chains = [mainnet, testnet].filter(Boolean) as Chain[]
 export const SOLANA_MENU = {
   id: 2,
   name: 'Solana',
-  link: 'https://solana.pancake.run/swap',
+  link: process.env.SOLANA_SWAP_PAGE ?? 'https://solana.pancake.run/swap',
   image: 'https://tokens.pancakeswap.finance/images/symbol/sol.png',
 }

@@ -37,7 +37,7 @@ const NON_EVM_CHAINS = [
   {
     id: 2,
     name: 'Solana',
-    link: 'https://solana.pancake.run/swap',
+    link: process.env.SOLANA_SWAP_PAGE ?? 'https://solana.pancake.run/swap',
     image: 'https://tokens.pancakeswap.finance/images/symbol/sol.png',
   },
 ]
