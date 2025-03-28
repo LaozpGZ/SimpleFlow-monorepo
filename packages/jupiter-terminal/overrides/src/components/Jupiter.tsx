@@ -30,7 +30,7 @@ const Content = () => {
   return (
     <div
       id="jupiter-terminal"
-      className={cn('relative h-full', { 'min-h-[600px] h-[600px] min-w-[340px]': selectPairSelector !== null })}
+      className={cn('relative h-full', { 'min-h-[600px] h-[600px] min-w-[300px]': selectPairSelector !== null })}
     >
       {screen === 'Initial' ? (
         <>
