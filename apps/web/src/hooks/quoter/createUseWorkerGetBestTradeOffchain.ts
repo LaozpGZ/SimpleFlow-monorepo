@@ -2,6 +2,7 @@ import { InfinityRouter, SmartRouter } from '@pancakeswap/smart-router'
 import { useGlobalWorker } from 'hooks/useWorker'
 import { useCallback } from 'react'
 import { GetBestTradeParams, InfinityGetBestTradeReturnType, NoValidRouteError } from './quoter.types'
+import { getVerifiedTrade } from './useTradeVerifiedByQuoter'
 
 export function createUseWorkerGetBestTradeOffchain() {
   return function useWorkerGetBestTradeOffchain(): (
@@ -49,9 +50,11 @@ export function createUseWorkerGetBestTradeOffchain() {
           if (!result) {
             throw new NoValidRouteError()
           }
-          return InfinityRouter.Transformer.parseTrade(currency.chainId, result) ?? null
+          const trade = InfinityRouter.Transformer.parseTrade(currency.chainId, result) ?? null
+          const verifiedTrade = await getVerifiedTrade(trade)
+          return (verifiedTrade || null) as InfinityGetBestTradeReturnType | null
         } catch (e) {
-          console.error(e)
+          console.warn(e)
           throw new NoValidRouteError()
         }
       },

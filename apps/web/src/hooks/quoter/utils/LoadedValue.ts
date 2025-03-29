@@ -2,6 +2,9 @@ export type LoadedValue<T> =
   | ({
       isLoading: boolean
       error: Error | undefined
+      syncing?: boolean
+      isStale?: boolean
+      refresh?: (...args: any[]) => Promise<void>
     } & T)
   | undefined
 

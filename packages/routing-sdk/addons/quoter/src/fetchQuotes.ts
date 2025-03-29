@@ -30,7 +30,7 @@ export const fetchQuotes: FetchQuotes<SupportedPool> = async ({ routes, client }
 
   return results.map((result, i) => {
     if (result.status === 'failure') {
-      console.error('[QUOTER]: fail to get quote', result.error)
+      console.warn('[QUOTER]: fail to get quote', result.error)
       return undefined
     }
     const { path: currentPath } = routes[i]

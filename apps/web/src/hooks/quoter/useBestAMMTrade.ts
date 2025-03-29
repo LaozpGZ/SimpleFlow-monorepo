@@ -7,7 +7,6 @@ import { useBestAMMTradeFromOffchainQuoter } from './useBestAMMTradeFromOffchain
 import { useBestAMMTradeFromQuoterWorker } from './useBestAMMTradeFromQuoterWorker'
 import { useBestAMMTradeFromQuoterWorker2 } from './useBestAMMTradeFromQuoterWorker2'
 import { useBetterQuote } from './useBetterQuote'
-import { useTradeVerifiedByQuoter } from './useTradeVerifiedByQuoter'
 
 SmartRouter.logger.enable('error,log')
 
@@ -49,26 +48,24 @@ export function useBestAMMTrade({ type = 'quoter', ...params }: useBestAMMTradeO
     enabled: offchainQuoterEnabled,
     autoRevalidate: quoterAutoRevalidate,
   })
-  const bestTradeFromOffchainQuoter = useBestAMMTradeFromOffchainQuoter({
+  const bestVerifiedTradeFromOffchainQuoter = useBestAMMTradeFromOffchainQuoter({
     ...params,
     enabled: offchainQuoterEnabled,
     autoRevalidate: quoterAutoRevalidate,
   })
-  const bestVerifiedTradeFromOffchainQuoter = useTradeVerifiedByQuoter({
-    ...bestTradeFromOffchainQuoter,
-    enabled: offchainQuoterEnabled,
-  })
+
   const bestOffchainWithQuickOnChainQuote = useBetterQuote(
     bestVerifiedTradeFromOffchainQuoter,
     bestTradeFromQuickOnChainQuote,
     { factorGasCost: false },
   )
 
-  const noValidRouteFromOffchainQuoter =
-    Boolean(amount) &&
-    !bestVerifiedTradeFromOffchainQuoter.trade &&
-    !bestVerifiedTradeFromOffchainQuoter.isLoading &&
-    bestVerifiedTradeFromOffchainQuoter.error
+  const noValidRouteFromOffchainQuoter = Boolean(
+    amount &&
+      !bestVerifiedTradeFromOffchainQuoter.trade &&
+      !bestVerifiedTradeFromOffchainQuoter.isLoading &&
+      bestVerifiedTradeFromOffchainQuoter.error,
+  )
 
   const shouldFallbackQuoterOnChain = !speedQuoteEnabled || noValidRouteFromOffchainQuoter
   const bestTradeFromOnChainQuoter = useBestAMMTradeFromQuoterWorker({

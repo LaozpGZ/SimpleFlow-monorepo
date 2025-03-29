@@ -1,3 +1,4 @@
+import { ClassicOrder, OrderType } from '@pancakeswap/price-api-sdk'
 import { TradeType } from '@pancakeswap/sdk'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useUserSingleHopOnly } from '@pancakeswap/utils/user'
@@ -14,6 +15,7 @@ import {
   useUserV3SwapEnable,
 } from 'state/user/smartRouter'
 import { useBestAMMTrade } from './useBestAMMTrade'
+import { LoadedValue } from './utils/LoadedValue'
 
 interface Options {
   maxHops?: number
@@ -90,7 +92,6 @@ export function useSwapBestTrade({ maxHops }: Options = {}) {
       trade.outputAmount.currency.equals(outputCurrency),
     [loading, isLoading, syncing, amount, trade, isExactIn, inputCurrency, outputCurrency],
   )
-
   return {
     refresh,
     syncing,
@@ -100,5 +101,6 @@ export function useSwapBestTrade({ maxHops }: Options = {}) {
       Boolean(((isLoading || syncing) && !isAutoRefetch) || (typedValue && !trade && !error)),
     ),
     trade: typedValue ? trade : undefined,
-  }
+    type: OrderType.PCS_CLASSIC,
+  } as LoadedValue<ClassicOrder>
 }
