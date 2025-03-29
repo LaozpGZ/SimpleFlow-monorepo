@@ -5,6 +5,9 @@ import {
   CL_DYNAMIC_FEE_HOOK_REGISTRATION_BITMAP,
   CL_DYNAMIC_FEE_HOOKS_BY_CHAIN,
   DYNAMIC_FEE_FLAG,
+  encodeHooksRegistration,
+  hooksList,
+  POOL_TYPE,
   type InfinitySupportedChains,
   type PoolKey,
   type PoolType,
@@ -31,6 +34,17 @@ export const CL_HOOK_PRESETS_BY_CHAIN: { [key in InfinitySupportedChains]: HookP
         fee: DYNAMIC_FEE_FLAG,
       },
     },
+    ...hooksList[ChainId.BSC]
+      .filter((x) => x.poolType === POOL_TYPE.CLAMM)
+      .map((x) => {
+        return {
+          address: x.address,
+          registrationBitmap: encodeHooksRegistration(x.hooksRegistration),
+          poolKeyOverride: {
+            fee: DYNAMIC_FEE_FLAG,
+          },
+        }
+      }),
   ],
   [ChainId.BSC_TESTNET]: [
     EMPTY_HOOK,
