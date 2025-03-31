@@ -36,7 +36,7 @@ export function createInfinityCLPool(params: InfinityCLPoolData): InfinityCLPool
       p = { ...p, ...poolData }
     },
     log: () =>
-      `V3 ${p.currency0.symbol} - ${p.currency1.symbol} (${getInfinityPoolFee(p.fee, p.protocolFee)}) - ${
+      `Infinity CL ${p.currency0.symbol} - ${p.currency1.symbol} (${getInfinityPoolFee(p.fee, p.protocolFee)}) - ${
         p.id
       } - price ${token0Price(p).toSignificant(6)} ${p.currency0.symbol}/${p.currency1.symbol}`,
 
