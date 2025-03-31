@@ -423,7 +423,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
       },
     ],
   },
-  purgent: {
+  dwm85n6: {
     id: 'purgent',
     projectUrl: 'https://pumpbtc.xyz/',
     icon: '/images/ido/pump.svg',
@@ -435,14 +435,19 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     description: (
       <>
         <Trans>
-          PumpBTC is building a modular, multi-chain, AI-driven staking and liquidity operating system, seamlessly
-          integrating with DeFi to help Bitcoin holders maximize returns
+          PumpBTC is building an modular, multi-chain, AI-driven staking and liquidity operating system that seamlessly
+          integrates with DeFi to help Bitcoin holders maximize returns.
         </Trans>
         <br />
         <br />
-        Website:{' '}
-        <a href="https://pumpbtc.xyz/" target="_blank" rel="noreferrer noopener">
-          https://pumpbtc.xyz/
+        <Trans>Website</Trans>:{' '}
+        <a href="https://mainnet.pumpbtc.xyz/" target="_blank" rel="noreferrer noopener">
+          https://mainnet.pumpbtc.xyz/
+        </a>
+        <br />
+        X:{' '}
+        <a href="https://x.com/Pumpbtcxyz" target="_blank" rel="noreferrer noopener">
+          https://x.com/Pumpbtcxyz
         </a>
         <br />
       </>
