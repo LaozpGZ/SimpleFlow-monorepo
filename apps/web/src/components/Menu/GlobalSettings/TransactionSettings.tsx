@@ -1,12 +1,12 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, Flex, FlexGap, Input, Message, QuestionHelper, Text, Toggle } from '@pancakeswap/uikit'
+import { Box, Button, Flex, FlexGap, Input, Message, QuestionHelper, Text } from '@pancakeswap/uikit'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useEffect, useState } from 'react'
 import { escapeRegExp } from 'utils'
 
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
-import { useUserTransactionTTL } from 'hooks/useTransactionDeadline'
 import { useAutoSlippageEnabled } from 'hooks/useAutoSlippageWithFallback'
+import { useUserTransactionTTL } from 'hooks/useTransactionDeadline'
 import styled from 'styled-components'
 import { PrimaryOutlineButton } from './styles'
 
@@ -127,89 +127,82 @@ const SlippageTabs = () => {
           />
         </Flex>
 
-        <Flex justifyContent="space-between" alignItems="center" mb="12px">
-          <Flex alignItems="center">
-            <Text>{t('Auto Slippage')}</Text>
-            <QuestionHelper
-              text={t(
-                'When enabled, slippage will be automatically calculated based on the trade size and gas costs to provide optimal protection against MEV.',
-              )}
-              placement="top"
-              ml="4px"
-            />
-          </Flex>
-          <Toggle
-            id="auto-slippage-toggle"
-            checked={isAutoSlippageEnabled}
-            scale="md"
-            onChange={() => {
-              setIsAutoSlippageEnabled(!isAutoSlippageEnabled)
+        <ButtonsContainer>
+          <StyledButton
+            scale="sm"
+            onClick={() => {
+              setSlippageInput('')
+              setIsAutoSlippageEnabled(true)
             }}
-          />
-        </Flex>
-
-        {!isAutoSlippageEnabled && (
-          <ButtonsContainer>
-            <StyledButton
-              scale="sm"
-              onClick={() => {
-                setSlippageInput('')
-                setUserSlippageTolerance(10)
-              }}
-              variant={userSlippageTolerance === 10 ? 'subtle' : 'light'}
-            >
-              0.1%
-            </StyledButton>
-            <StyledButton
-              scale="sm"
-              onClick={() => {
-                setSlippageInput('')
-                setUserSlippageTolerance(50)
-              }}
-              variant={userSlippageTolerance === 50 ? 'subtle' : 'light'}
-            >
-              0.5%
-            </StyledButton>
-            <StyledButton
-              scale="sm"
-              onClick={() => {
-                setSlippageInput('')
-                setUserSlippageTolerance(100)
-              }}
-              variant={userSlippageTolerance === 100 ? 'subtle' : 'light'}
-            >
-              1.0%
-            </StyledButton>
-            <Flex ml="8px" pr="8px" alignItems="center">
-              <Box position="relative" width="82px">
-                <Input
-                  scale="md"
-                  inputMode="decimal"
-                  pattern="^[0-9]*[.,]?[0-9]{0,2}$"
-                  placeholder={(userSlippageTolerance / 100).toFixed(2)}
-                  value={slippageInput}
-                  onBlur={() => {
-                    parseCustomSlippage((userSlippageTolerance / 100).toFixed(2))
-                  }}
-                  onChange={(event) => {
-                    if (event.currentTarget.validity.valid) {
-                      parseCustomSlippage(event.target.value.replace(/,/g, '.'))
-                    }
-                  }}
-                  isWarning={!slippageInputIsValid}
-                  isSuccess={![10, 50, 100].includes(userSlippageTolerance)}
-                  style={{
-                    paddingRight: '28px',
-                  }}
-                />
-                <Flex position="absolute" right="8px" top="8px" alignItems="center">
-                  <StyledVerticalDivider />
-                  <Text color="textSubtle"> %</Text>
-                </Flex>
-              </Box>
-            </Flex>
-          </ButtonsContainer>
-        )}
+            variant={isAutoSlippageEnabled ? 'subtle' : 'light'}
+          >
+            Auto
+          </StyledButton>
+          <StyledButton
+            scale="sm"
+            onClick={() => {
+              setSlippageInput('')
+              setUserSlippageTolerance(10)
+              setIsAutoSlippageEnabled(false)
+            }}
+            variant={userSlippageTolerance === 10 && !isAutoSlippageEnabled ? 'subtle' : 'light'}
+          >
+            0.1%
+          </StyledButton>
+          <StyledButton
+            scale="sm"
+            onClick={() => {
+              setSlippageInput('')
+              setUserSlippageTolerance(50)
+              setIsAutoSlippageEnabled(false)
+            }}
+            variant={userSlippageTolerance === 50 && !isAutoSlippageEnabled ? 'subtle' : 'light'}
+          >
+            0.5%
+          </StyledButton>
+          <StyledButton
+            scale="sm"
+            onClick={() => {
+              setSlippageInput('')
+              setUserSlippageTolerance(100)
+              setIsAutoSlippageEnabled(false)
+            }}
+            variant={userSlippageTolerance === 100 && !isAutoSlippageEnabled ? 'subtle' : 'light'}
+          >
+            1.0%
+          </StyledButton>
+          <Flex ml="8px" pr="8px" alignItems="center">
+            <Box position="relative" width="82px">
+              <Input
+                scale="md"
+                inputMode="decimal"
+                pattern="^[0-9]*[.,]?[0-9]{0,2}$"
+                placeholder={isAutoSlippageEnabled ? 'Auto' : (userSlippageTolerance / 100).toFixed(2)}
+                value={slippageInput}
+                onBlur={() => {
+                  parseCustomSlippage((userSlippageTolerance / 100).toFixed(2))
+                }}
+                onChange={(event) => {
+                  if (isAutoSlippageEnabled) {
+                    setIsAutoSlippageEnabled(false)
+                  }
+                  if (event.currentTarget.validity.valid) {
+                    parseCustomSlippage(event.target.value.replace(/,/g, '.'))
+                  }
+                }}
+                isWarning={!slippageInputIsValid}
+                isSuccess={![10, 50, 100].includes(userSlippageTolerance)}
+                style={{
+                  paddingRight: '28px',
+                }}
+              />
+              <Flex position="absolute" right="8px" top="8px" alignItems="center">
+                <StyledVerticalDivider />
+                <Text color="textSubtle"> %</Text>
+              </Flex>
+            </Box>
+          </Flex>
+        </ButtonsContainer>
 
         {!isAutoSlippageEnabled && !!slippageError && (
           <Message
