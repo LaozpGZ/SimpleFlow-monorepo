@@ -2,7 +2,6 @@ import { Protocol } from '@pancakeswap/farms'
 import { useIntersectionObserver } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  AddIcon,
   Button,
   ButtonMenu,
   ButtonMenuItem,
@@ -29,7 +28,6 @@ import TransactionsModal from 'components/App/Transactions/TransactionsModal'
 import GlobalSettings from 'components/Menu/GlobalSettings'
 import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { ASSET_CDN } from 'config/constants/endpoints'
-import { LIQUIDITY_PAGES } from 'config/constants/liquidity'
 import { V3_MIGRATION_SUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { useAtom } from 'jotai'
 import flatten from 'lodash/flatten'
@@ -87,7 +85,7 @@ const ControlWrapper = styled.div`
 `
 
 const CardBody = styled(StyledCardBody)`
-  padding: 8px;
+  padding: 24px;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     padding: 24px;
@@ -125,7 +123,7 @@ const SubPanel = styled(Flex)`
   flex-wrap: wrap;
   border-top: 1px solid ${({ theme }) => theme.colors.cardBorder};
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  margin: 16px -16px 0;
+  margin: 24px -24px 0;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     margin: 24px -24px 0;
@@ -244,12 +242,12 @@ const EmptyListPlaceholder = ({ text, imageUrl }: { text: string; imageUrl?: str
   const { address: account } = useAccount()
 
   return (
-    <FlexGap alignItems="center" flexDirection="column" gap="16px" my="auto">
+    <FlexGap alignItems="center" flexDirection="column" gap="16px">
       <img
-        width={116}
-        height={94}
+        width={156}
+        height={179}
         alt="empty placeholder"
-        src={imageUrl ?? `${ASSET_CDN}/web/universalFarms/empty_list_bunny_02.png`}
+        src={imageUrl ?? `${ASSET_CDN}/web/universalFarms/empty_list_bunny.png`}
       />
       <Text fontSize="14px" color="textSubtle" textAlign="center">
         {text}
@@ -406,7 +404,7 @@ export const PositionPage = () => {
           {(isMobile || isMd) && <AddLiquidityButton scale="sm" height="40px" width="100%" />}
           <ControlWrapper>
             <ToggleWrapper>
-              <Text style={{ whiteSpace: 'nowrap' }}>{t('Farms only')}</Text>
+              <Text>{t('Farms only')}</Text>
               <Toggle checked={farmsOnly} onChange={toggleFarmsOnly} scale="sm" />
             </ToggleWrapper>
             <ButtonWrapper>
@@ -432,16 +430,16 @@ export const PositionPage = () => {
             <ButtonMenuItem>{t('Inactive')}</ButtonMenuItem>
             <ButtonMenuItem>{t('Closed')}</ButtonMenuItem>
           </StyledButtonMenu>
-          <ButtonContainer>
+          {/* <ButtonContainer>
             <NextLink href={LIQUIDITY_PAGES.infinity.ADD_LIQUIDITY_SELECT}>
               <Button endIcon={<AddIcon color="invertedContrast" />} scale="sm" style={{ whiteSpace: 'nowrap' }}>
                 {t('Add Liquidity')}
               </Button>
             </NextLink>
-          </ButtonContainer>
+          </ButtonContainer> */}
         </SubPanel>
       </CardHeader>
-      <CardBody style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+      <CardBody>
         {mainSection}
         {selectedPoolTypes.length === 1 && selectedPoolTypes.includes(Protocol.V2) ? (
           <Liquidity.FindOtherLP>
