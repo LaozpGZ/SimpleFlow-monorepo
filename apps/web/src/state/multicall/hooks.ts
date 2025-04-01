@@ -286,7 +286,7 @@ export function useMultipleContractSingleData<TAbi extends Abi | readonly unknow
 }: // FIXME: wagmiv2
 // MultipleSameDataCallParameters<TAbi, TFunctionName>): CallState<ContractFunctionResult<TAbi, TFunctionName>>[] {
 MultipleSameDataCallParameters<TAbi, TFunctionName>): CallState<any>[] {
-  const { enabled = true, blocksPerFetch } = options ?? {}
+  const { enabled = true, blocksPerFetch, chainId } = options ?? {}
   const callData: Hex | undefined = useMemo(
     () =>
       abi && enabled
@@ -313,8 +313,9 @@ MultipleSameDataCallParameters<TAbi, TFunctionName>): CallState<any>[] {
         : [],
     [addresses, callData],
   )
+  const { chainId: activeChainId } = useActiveChainId()
 
-  const { chainId } = useActiveChainId()
+  const usedChainId = chainId ?? activeChainId
 
   const results = useCallsData(calls, options?.blocksPerFetch ? { blocksPerFetch } : DEFAULT_OPTIONS, chainId)
 
@@ -322,10 +323,10 @@ MultipleSameDataCallParameters<TAbi, TFunctionName>): CallState<any>[] {
 
   return useMemo(() => {
     const currentBlockNumber = queryClient.getQueryCache().find<number>({
-      queryKey: ['blockNumber', chainId],
+      queryKey: ['blockNumber', usedChainId],
     })?.state?.data
     return results.map((result) => toCallState(result, abi, functionName, currentBlockNumber))
-  }, [queryClient, chainId, results, abi, functionName])
+  }, [queryClient, usedChainId, results, abi, functionName])
 }
 
 export type SingleCallParameters<
