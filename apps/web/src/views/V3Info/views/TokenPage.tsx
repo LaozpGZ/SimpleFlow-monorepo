@@ -86,10 +86,10 @@ interface TokenPageParams {
 }
 
 interface TokenQueryResponse {
-  token: TokenDataForView
-  pool: PoolDataForView[]
-  transactions: Transaction[]
-  charts: TokenChartEntry[]
+  token: TokenDataForView | undefined
+  pool: PoolDataForView[] | undefined
+  transactions: Transaction[] | undefined
+  charts: TokenChartEntry[] | undefined
 }
 
 const tokenPageDataAtom = atomFamily((params: TokenPageParams) => {
@@ -100,6 +100,7 @@ const tokenPageDataAtom = atomFamily((params: TokenPageParams) => {
       const json = await resp.json()
       return json as TokenQueryResponse
     },
+    fallbackValue: { token: undefined, pool: undefined, transactions: undefined, charts: undefined },
   })
 }, isEqual)
 
