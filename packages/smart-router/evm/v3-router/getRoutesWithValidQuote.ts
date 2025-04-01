@@ -1,10 +1,10 @@
 import { BigintIsh, Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
-import chunk from 'lodash/chunk.js'
 import { AbortControl } from '@pancakeswap/utils/abortControl'
+import chunk from 'lodash/chunk.js'
 
+import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
 import { getAmountDistribution } from './functions'
 import { BaseRoute, GasModel, QuoteProvider, RouteWithoutQuote, RouteWithQuote } from './types'
-import { logger } from './utils/logger'
 
 type Params = {
   blockNumber?: BigintIsh
@@ -15,6 +15,7 @@ type Params = {
   tradeType: TradeType
   gasModel: GasModel
   quoterOptimization?: boolean
+  quoteId?: string
 } & AbortControl
 
 export async function getRoutesWithValidQuote({
@@ -27,7 +28,9 @@ export async function getRoutesWithValidQuote({
   gasModel,
   quoterOptimization = true,
   signal,
+  quoteId,
 }: Params): Promise<RouteWithQuote[]> {
+  const logger = RemoteLogger.getLogger(quoteId)
   const [percents, amounts] = getAmountDistribution(amount, distributionPercent)
   const routesWithoutQuote = amounts.reduce<RouteWithoutQuote[]>(
     (acc, curAmount, i) => [
@@ -50,7 +53,7 @@ export async function getRoutesWithValidQuote({
   }
 
   const requestCallback = typeof window === 'undefined' ? setTimeout : window.requestIdleCallback || window.setTimeout
-  logger.metric('Get quotes', 'from', routesWithoutQuote.length, 'routes', routesWithoutQuote)
+  logger.debug(`Get quotes from ${routesWithoutQuote.length} routes routesWithoutQuote`)
   // Split into chunks so the calculation won't block the main thread
   const getQuotes = (routes: RouteWithoutQuote[]): Promise<RouteWithQuote[]> =>
     new Promise((resolve, reject) => {
@@ -69,6 +72,7 @@ export async function getRoutesWithValidQuote({
     acc.push(...cur)
     return acc
   }, [])
-  logger.metric('Get quotes', 'success, got', quotes.length, 'quoted routes', quotes)
+  logger.debug(`Get quotes success, got, ${quotes.length}`)
+
   return quotes
 }

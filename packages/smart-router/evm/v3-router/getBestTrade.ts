@@ -1,11 +1,13 @@
-import { BigintIsh, Currency, CurrencyAmount, TradeType, ZERO } from '@pancakeswap/sdk'
 import { ChainId } from '@pancakeswap/chains'
+import { BigintIsh, Currency, CurrencyAmount, TradeType, ZERO } from '@pancakeswap/sdk'
 
+import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
+import { ROUTE_CONFIG_BY_CHAIN } from './constants'
 import { computeAllRoutes, getBestRouteCombinationByQuotes } from './functions'
 import { createGasModel } from './gasModel'
 import { getRoutesWithValidQuote } from './getRoutesWithValidQuote'
-import { BestRoutes, TradeConfig, RouteConfig, SmartRouterTrade, RouteType } from './types'
-import { ROUTE_CONFIG_BY_CHAIN } from './constants'
+import { BestRoutes, RouteConfig, RouteType, SmartRouterTrade, TradeConfig } from './types'
+import { logPools, logRoutes, logRoutesWithQuote } from './utils/remoteLogs'
 
 export async function getBestTrade(
   amount: CurrencyAmount<Currency>,
@@ -13,28 +15,44 @@ export async function getBestTrade(
   tradeType: TradeType,
   config: TradeConfig,
 ): Promise<SmartRouterTrade<TradeType> | null> {
-  const { blockNumber: blockNumberFromConfig } = config
-  const blockNumber: BigintIsh | undefined =
-    typeof blockNumberFromConfig === 'function' ? await blockNumberFromConfig() : blockNumberFromConfig
-  const bestRoutes = await getBestRoutes(amount, currency, tradeType, {
-    ...config,
-    blockNumber,
-  })
-  if (!bestRoutes || bestRoutes.outputAmount.equalTo(ZERO)) {
-    throw new Error('Cannot find a valid swap route')
-  }
+  const logger = RemoteLogger.getLogger(config.quoteId)
+  logger.debug(`[SmartRouter] getBestTrade ${config.quoteId}, input=${amount.toFixed(2)} ${currency.symbol}`)
+  try {
+    const { blockNumber: blockNumberFromConfig } = config
+    const blockNumber: BigintIsh | undefined =
+      typeof blockNumberFromConfig === 'function' ? await blockNumberFromConfig() : blockNumberFromConfig
+    const bestRoutes = await getBestRoutes(
+      amount,
+      currency,
+      tradeType,
+      {
+        ...config,
+        blockNumber,
+      },
+      config.quoteId,
+    )
+    if (!bestRoutes || bestRoutes.outputAmount.equalTo(ZERO)) {
+      logger.debug('No valid route found')
+      throw new Error('Cannot find a valid swap route')
+    }
 
-  const { routes, gasEstimateInUSD, gasEstimate, inputAmount, outputAmount } = bestRoutes
-  // TODO restrict trade type to exact input if routes include one of the old
-  // stable swap pools, which only allow to swap with exact input
-  return {
-    tradeType,
-    routes,
-    gasEstimate,
-    gasEstimateInUSD,
-    inputAmount,
-    outputAmount,
-    blockNumber,
+    const { routes, gasEstimateInUSD, gasEstimate, inputAmount, outputAmount } = bestRoutes
+    // TODO restrict trade type to exact input if routes include one of the old
+    // stable swap pools, which only allow to swap with exact input
+    const trade = {
+      tradeType,
+      routes,
+      gasEstimate,
+      gasEstimateInUSD,
+      inputAmount,
+      outputAmount,
+      blockNumber,
+    }
+    logger.debug(`find trade`)
+    logger.debug(JSON.stringify(trade, null, 2))
+    return trade
+  } finally {
+    logger.flush()
   }
 }
 
@@ -43,6 +61,7 @@ async function getBestRoutes(
   currency: Currency,
   tradeType: TradeType,
   routeConfig: RouteConfig,
+  quoteId?: string,
 ): Promise<BestRoutes | null> {
   const { chainId } = currency
   const {
@@ -62,6 +81,7 @@ async function getBestRoutes(
     ...routeConfig,
     ...(ROUTE_CONFIG_BY_CHAIN[chainId as ChainId] || {}),
   }
+  const logger = RemoteLogger.getLogger(quoteId)
   const isExactIn = tradeType === TradeType.EXACT_INPUT
   const inputCurrency = isExactIn ? amount.currency : currency
   const outputCurrency = isExactIn ? currency : amount.currency
@@ -73,12 +93,16 @@ async function getBestRoutes(
     protocols: allowedPoolTypes,
     signal,
   })
+  logger.debug(`Candidate pools: ${candidatePools.length}`)
+  logPools(quoteId, candidatePools, 2)
 
   let baseRoutes = computeAllRoutes(inputCurrency, outputCurrency, candidatePools, maxHops)
   // Do not support mix route on exact output
   if (tradeType === TradeType.EXACT_OUTPUT) {
     baseRoutes = baseRoutes.filter(({ type }) => type !== RouteType.MIXED)
   }
+  logger.debug(`Discovered ${baseRoutes.length} Base routes`)
+  logRoutes(quoteId, baseRoutes, 2)
 
   const gasModel = await createGasModel({
     gasPriceWei,
@@ -97,8 +121,11 @@ async function getBestRoutes(
     blockNumber,
     gasModel,
     quoterOptimization,
+    quoteId,
     signal,
   })
+  logger.debug('Result after filter routes with valid quote')
+  logRoutesWithQuote(quoteId, routesWithValidQuote)
   // routesWithValidQuote.forEach(({ percent, path, amount: a, quote }) => {
   //   const pathStr = path.map((t) => t.symbol).join('->')
   //   console.log(
@@ -112,5 +139,5 @@ async function getBestRoutes(
   //     quote.currency.symbol,
   //   )
   // })
-  return getBestRouteCombinationByQuotes(amount, currency, routesWithValidQuote, tradeType, { maxSplits })
+  return getBestRouteCombinationByQuotes(amount, currency, routesWithValidQuote, tradeType, { maxSplits }, quoteId)
 }

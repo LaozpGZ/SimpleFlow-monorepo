@@ -2,6 +2,7 @@ import 'utils/workerPolyfill'
 
 import { findBestTrade } from '@pancakeswap/routing-sdk'
 import { InfinityRouter, SmartRouter } from '@pancakeswap/smart-router'
+import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
 import { Call } from 'state/multicall/actions'
 import { fetchChunk } from 'state/multicall/fetchChunk'
 import { toRoutingSDKPool, toSerializableInfinityTrade } from 'utils/convertTrade'
@@ -177,6 +178,7 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
       ? BigInt(gasPriceWei)
       : async () => BigInt((await onChainProvider({ chainId }).getGasPrice()).toString())
 
+    const quoteId = RemoteLogger.generateUniqId('quote')
     SmartRouter.getBestTrade(currencyAAmount, currencyB, tradeType, {
       gasPriceWei: gasPrice,
       poolProvider: SmartRouter.createStaticPoolProvider(pools),
@@ -189,6 +191,7 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
       quoteCurrencyUsdPrice,
       nativeCurrencyUsdPrice,
       signal: abortController.signal,
+      quoteId,
     })
       .then((res) => {
         postMessage([
@@ -208,7 +211,11 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
           },
         ])
       })
-      .finally(cleanupAbortController)
+      .finally(() => {
+        cleanupAbortController()
+        // eslint-disable-next-line no-restricted-globals, no-console
+        console.log(`[SmartRouter] check log for quoteId:  ${self.origin}/api/logger?id=${quoteId}`)
+      })
   }
 
   if (message.cmd === 'getBestTradeOffchain') {
@@ -231,6 +238,7 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
     const currencyB = parseCurrency(chainId, currency)
     // FIXME: typing issue
     const pools = candidatePools.map((pool) => parsePool(chainId, pool as any))
+    const quoteId = RemoteLogger.generateUniqId('quote')
 
     const gasPrice = gasPriceWei
       ? BigInt(gasPriceWei)
@@ -246,6 +254,7 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
       candidatePools: initializedPools,
       maxHops,
       maxSplits,
+      quoteId,
     })
       .then((t) => {
         if (!t) {
@@ -271,6 +280,12 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
           },
         ])
       })
-      .finally(cleanupAbortController)
+      .finally(() => {
+        cleanupAbortController()
+        if (process.env.NODE_ENV !== 'production') {
+          // eslint-disable-next-line no-restricted-globals, no-console
+          console.log(`check log for quoteId:  ${self.origin}/api/logger?id=${quoteId}`)
+        }
+      })
   }
 })

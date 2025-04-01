@@ -1,0 +1,57 @@
+export class RemoteLogger {
+  private logs: string[] = []
+
+  private id: string = ''
+
+  constructor(_id: string) {
+    this.id = _id
+  }
+
+  debug(log: string, indent: number = 0) {
+    if (process.env.NODE_ENV === 'development' && this.id !== '__dummy__') {
+      const indentStr = '  '.repeat(indent)
+      this.logs.push(`${indentStr}${log}`)
+    }
+  }
+
+  debugJson(obj: any) {
+    if (process.env.NODE_ENV === 'development' && this.id !== '__dummy__') {
+      this.logs.push(JSON.stringify(obj, null, 2))
+    }
+  }
+
+  flush() {
+    if (process.env.NODE_ENV === 'development' && this.id !== '__dummy__') {
+      // eslint-disable-next-line no-restricted-globals
+      const origin = self.origin || window.location.origin
+      fetch(`${origin}/api/logger`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: this.id,
+          logs: this.logs,
+        }),
+      })
+    }
+  }
+
+  private static __loggers = new Map<string, RemoteLogger>()
+
+  public static getLogger(id?: string) {
+    if (!id) {
+      return new RemoteLogger('__dummy__')
+    }
+    if (!RemoteLogger.__loggers.has(id)) {
+      RemoteLogger.__loggers.set(id, new RemoteLogger(id))
+    }
+    return RemoteLogger.__loggers.get(id)!
+  }
+
+  public static generateUniqId(topic: string) {
+    const t = new Date().getTime()
+    const rnd = Math.floor(Math.random() * 1000000)
+    return `${topic}-${t}-${rnd}`
+  }
+}
