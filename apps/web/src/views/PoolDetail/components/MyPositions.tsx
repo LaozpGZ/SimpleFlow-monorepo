@@ -356,7 +356,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
       </AutoColumn>
     )
   }
-  if (count === 0 || !account) {
+  if ((count === 0 && !isInfinityProtocol(protocol)) || !account) {
     return (
       <Grid gridGap="24px">
         <Text as="h3" fontWeight={600} fontSize={24}>
