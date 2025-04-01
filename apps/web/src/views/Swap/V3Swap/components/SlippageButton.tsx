@@ -111,10 +111,7 @@ export const SlippageButton = ({ slippage, trade }: SlippageButtonProps) => {
                   : slippage}
               </TertiaryButton>
             </div>
-            {autoSlippageValue && isAutoSlippageEnabled && <AutoSlippageText>{t('Auto')}</AutoSlippageText>}
-            {!isAutoSlippageEnabled && autoSlippageValue && (
-              <AutoSlippageText>{t('Auto: %value%', { value: `${autoSlippageValue}%` })}</AutoSlippageText>
-            )}
+
             {(isRiskyLow || isRiskyHigh) && tooltipVisible && tooltip}
           </div>
         )}
