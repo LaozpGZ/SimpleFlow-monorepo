@@ -108,6 +108,7 @@ const whitelist = [
   'Enjoying the %stakingToken% Staking APR? Get more rewards with the %lpLabel% LP on our',
   'The rewards for this Syrup Pool will not be applicable to or claimable by',
   'Try it now',
+  'This Product is in beta.',
 ]
 
 describe.concurrent('Check translations integrity', () => {
