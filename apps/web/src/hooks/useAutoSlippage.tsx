@@ -11,7 +11,7 @@ import useNativeCurrency from './useNativeCurrency'
 import { useStablecoinPrice, useStablecoinPriceAmount } from './useStablecoinPrice'
 
 const DEFAULT_AUTO_SLIPPAGE = new Percent(50, 10_000) // 0.5%
-const MIN_AUTO_SLIPPAGE_TOLERANCE = new Percent(5, 10_000) // 0.5%
+const MIN_AUTO_SLIPPAGE_TOLERANCE = new Percent(50, 10_000) // 0.5%
 const MAX_AUTO_SLIPPAGE_TOLERANCE = new Percent(500, 10_000) // 5%
 
 // Helper functions
