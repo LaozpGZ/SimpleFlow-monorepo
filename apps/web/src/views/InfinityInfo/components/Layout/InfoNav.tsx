@@ -1,3 +1,4 @@
+import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import type { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import {
@@ -82,7 +83,9 @@ const InfoNav: React.FC<{ isStableSwap: boolean }> = ({ isStableSwap }) => {
   )
 }
 
-const targetChains = [mainnet, bsc, bscTestnet, polygonZkEvm, zkSync, arbitrum, linea, base, opBNB]
+const targetChains = [mainnet, bsc, bscTestnet, polygonZkEvm, zkSync, arbitrum, linea, base, opBNB].filter((chain) =>
+  INFINITY_SUPPORTED_CHAINS.includes(chain.id as any),
+)
 
 export const NetworkSwitcher: React.FC<{ activeIndex: number }> = ({ activeIndex }) => {
   const { t } = useTranslation()
