@@ -35,24 +35,22 @@ export async function findBestTrade({
   // NOTE: there's no max split cap right now. This option is only used to control the on/off of multiple splits
   const splitDisabled = maxSplits !== undefined && maxSplits === 0
   RemoteLogger.getLogger(params.quoteId).debug(`FindBestTrade with quoteId=${params.quoteId}`)
-
   let bestTrade: TradeWithGraph<TradeType> | undefined
   try {
-    bestTrade = await findBestTradeByStreams({
-      ...params,
-      streams: 1,
-    })
-  } catch (e) {
-    if (splitDisabled) {
-      RemoteLogger.getLogger(params.quoteId).flush()
-      throw e
+    try {
+      bestTrade = await findBestTradeByStreams({
+        ...params,
+        streams: 1,
+      })
+    } catch (e) {
+      if (splitDisabled) {
+        throw e
+      }
+      bestTrade = await findBestTradeByStreams({
+        ...params,
+        streams: DEFAULT_STREAM,
+      })
     }
-    bestTrade = await findBestTradeByStreams({
-      ...params,
-      streams: DEFAULT_STREAM,
-    })
-  }
-  try {
     if (splitDisabled) {
       return bestTrade
     }
@@ -69,6 +67,14 @@ export async function findBestTrade({
     const betterTrade = getBetterTrade(bestTrade, bestTradeWithStreams)
     logTrade(params.quoteId, betterTrade)
     return betterTrade
+  } catch (ex: any) {
+    if (ex instanceof Error) {
+      RemoteLogger.getLogger(params.quoteId).debug(ex.message)
+      RemoteLogger.getLogger(params.quoteId).debug(`FindBestTrade error: ${ex.toString()}`)
+    } else {
+      RemoteLogger.getLogger(params.quoteId).debug(`FindBestTrade error: ${ex.toString()}`)
+    }
+    throw ex
   } finally {
     RemoteLogger.getLogger(params.quoteId).flush()
   }

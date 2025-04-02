@@ -31,6 +31,7 @@ export async function getRoutesWithValidQuote({
   quoteId,
 }: Params): Promise<RouteWithQuote[]> {
   const logger = RemoteLogger.getLogger(quoteId)
+  logger.debug('run getRoutesWithValidQuote')
   const [percents, amounts] = getAmountDistribution(amount, distributionPercent)
   const routesWithoutQuote = amounts.reduce<RouteWithoutQuote[]>(
     (acc, curAmount, i) => [
@@ -49,11 +50,12 @@ export async function getRoutesWithValidQuote({
       : quoteProvider.getRouteWithQuotesExactOut
 
   if (!quoterOptimization) {
-    return getRoutesWithQuote(routesWithoutQuote, { blockNumber, gasModel, signal })
+    return getRoutesWithQuote(routesWithoutQuote, { blockNumber, gasModel, signal, quoteId })
   }
 
+  logger.debug('via quote optimization', 2)
   const requestCallback = typeof window === 'undefined' ? setTimeout : window.requestIdleCallback || window.setTimeout
-  logger.debug(`Get quotes from ${routesWithoutQuote.length} routes routesWithoutQuote`)
+  logger.debug(`Get quotes from ${routesWithoutQuote.length} routes routesWithoutQuote`, 2)
   // Split into chunks so the calculation won't block the main thread
   const getQuotes = (routes: RouteWithoutQuote[]): Promise<RouteWithQuote[]> =>
     new Promise((resolve, reject) => {

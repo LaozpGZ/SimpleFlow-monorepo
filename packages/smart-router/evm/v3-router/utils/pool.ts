@@ -87,32 +87,19 @@ export const computeV2PoolAddress = memoize(
   (tokenA, tokenB) => `${tokenA.chainId}_${tokenA.address}_${tokenB.address}`,
 )
 
-export const getPoolAddress = memoize(
-  function getAddress(pool: Pool): Address | '' {
-    if (isStablePool(pool) || isV3Pool(pool)) {
-      return pool.address
-    }
-    if (isV2Pool(pool)) {
-      const { reserve0, reserve1 } = pool
-      return computeV2PoolAddress(reserve0.currency.wrapped, reserve1.currency.wrapped)
-    }
-    return ''
-  },
-  (pool) => {
-    if (isStablePool(pool)) {
-      const { balances } = pool
-      const tokenAddresses = balances.map((b) => b.currency.wrapped.address)
-      return `${pool.type}_${balances[0]?.currency.chainId}_${tokenAddresses.join('_')}`
-    }
-    const [token0, token1] = isV2Pool(pool)
-      ? [pool.reserve0.currency.wrapped, pool.reserve1.currency.wrapped]
-      : isV3Pool(pool)
-      ? [pool.token0.wrapped, pool.token1.wrapped]
-      : [pool.currency0, pool.currency1]
-    const fee = isV3Pool(pool) ? pool.fee : 'V2_FEE'
-    return `${pool.type}_${token0.chainId}_${token0.isNative}_${token0.wrapped.address}_${token1.isNative}_${token1.wrapped.address}_${fee}`
-  },
-)
+export const getPoolAddress = (pool: Pool): Address | '' => {
+  if (isStablePool(pool) || isV3Pool(pool)) {
+    return pool.address
+  }
+  if (isV2Pool(pool)) {
+    const { reserve0, reserve1 } = pool
+    return computeV2PoolAddress(reserve0.currency.wrapped, reserve1.currency.wrapped)
+  }
+  if (isInfinityBinPool(pool) || isInfinityClPool(pool)) {
+    return pool.id
+  }
+  return ''
+}
 
 export function getTokenPrice(pool: Pool, base: Currency, quote: Currency): Price<Currency, Currency> {
   if (isV3Pool(pool)) {

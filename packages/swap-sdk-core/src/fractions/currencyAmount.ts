@@ -101,4 +101,8 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     if (this.currency.isToken) return this as CurrencyAmount<Token>
     return CurrencyAmount.fromFractionalAmount(this.currency.wrapped, this.numerator, this.denominator)
   }
+
+  public info() {
+    return `${this.toExact()}${this.currency.symbol}`
+  }
 }

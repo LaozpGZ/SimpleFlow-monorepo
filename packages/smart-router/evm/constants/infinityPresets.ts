@@ -27,23 +27,20 @@ export const EMPTY_HOOK = {
 export const CL_HOOK_PRESETS_BY_CHAIN: { [key in InfinitySupportedChains]: HookPreset<'CL'>[] } = {
   [ChainId.BSC]: [
     EMPTY_HOOK,
-    {
-      address: CL_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.BSC],
-      registrationBitmap: CL_DYNAMIC_FEE_HOOK_REGISTRATION_BITMAP[ChainId.BSC],
-      poolKeyOverride: {
-        fee: DYNAMIC_FEE_FLAG,
-      },
-    },
     ...hooksList[ChainId.BSC]
       .filter((x) => x.poolType === POOL_TYPE.CLAMM)
       .map((x) => {
-        return {
+        const hook = {
           address: x.address,
           registrationBitmap: encodeHooksRegistration(x.hooksRegistration),
-          poolKeyOverride: {
-            fee: DYNAMIC_FEE_FLAG,
-          },
+          poolKeyOverride: {},
         }
+        if (hook.address === CL_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.BSC]) {
+          hook.poolKeyOverride = {
+            fee: DYNAMIC_FEE_FLAG,
+          }
+        }
+        return hook
       }),
   ],
   [ChainId.BSC_TESTNET]: [

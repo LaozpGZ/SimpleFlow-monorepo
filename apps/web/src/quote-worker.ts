@@ -238,7 +238,7 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
     const currencyB = parseCurrency(chainId, currency)
     // FIXME: typing issue
     const pools = candidatePools.map((pool) => parsePool(chainId, pool as any))
-    const quoteId = RemoteLogger.generateUniqId('quote')
+    const quoteId = RemoteLogger.generateUniqId('quote-rsdk')
 
     const gasPrice = gasPriceWei
       ? BigInt(gasPriceWei)
@@ -284,7 +284,7 @@ addEventListener('message', (event: MessageEvent<WorkerEvent>) => {
         cleanupAbortController()
         if (process.env.NODE_ENV !== 'production') {
           // eslint-disable-next-line no-restricted-globals, no-console
-          console.log(`check log for quoteId:  ${self.origin}/api/logger?id=${quoteId}`)
+          console.log(`[routing-sdk] check log for quoteId:  ${self.origin}/api/logger?id=${quoteId}`)
         }
       })
   }

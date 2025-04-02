@@ -47,20 +47,14 @@ export const logTrade = (quoteId: string | undefined, trade?: TradeWithGraph<Tra
     return
   }
   logger.debug(`trade result found`, 1)
-  try {
-    const json = JSON.stringify(
-      {
-        type: trade.tradeType,
-        inputAmount: trade.inputAmount.toExact(),
-        outputAmount: trade.outputAmount.toExact(),
-        route: trade.routes,
-      },
-      (_key, value) => (typeof value === 'bigint' ? value.toString() : value),
-      2,
-    )
-    logger.debug(json)
-  } catch (e: any) {
-    logger.debug(e.toString())
-  }
+  logger.debugJson(
+    {
+      type: trade.tradeType,
+      inputAmount: trade.inputAmount.toExact(),
+      outputAmount: trade.outputAmount.toExact(),
+      route: trade.routes,
+    },
+    2,
+  )
   logger.debug('\n')
 }
