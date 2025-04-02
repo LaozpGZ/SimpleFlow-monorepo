@@ -4,6 +4,8 @@ import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useMemo } from 'react'
+import { Currency } from '@pancakeswap/swap-sdk-core'
+import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import useClassicAutoSlippageTolerance from './useAutoSlippage'
 
 // Atom to store the user's preference for auto slippage
@@ -13,7 +15,10 @@ export const useAutoSlippageEnabled = () => {
   return useAtom(autoSlippageEnabledAtom)
 }
 
-type SupportedTrade = SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>
+type SupportedTrade =
+  | SmartRouterTrade<TradeType>
+  | V4Router.V4TradeWithoutGraph<TradeType>
+  | ExclusiveDutchOrderTrade<Currency, Currency>
 
 /**
  * Returns the slippage tolerance based on user settings or auto-calculated value

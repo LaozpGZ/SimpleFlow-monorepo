@@ -1,6 +1,8 @@
 import { ChainId } from '@pancakeswap/chains'
+import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { Percent, TradeType } from '@pancakeswap/sdk'
 import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
+import { Currency } from '@pancakeswap/swap-sdk-core'
 import { BigNumber } from 'bignumber.js'
 import { L2_CHAIN_IDS } from 'config/chains'
 import { useMemo } from 'react'
@@ -27,13 +29,22 @@ const chainSupportsGasEstimates = (chainId?: number): boolean => {
 
 // Type guard to check if trade is V4Trade
 const isV4Trade = (
-  trade: SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType> | undefined,
+  trade:
+    | SmartRouterTrade<TradeType>
+    | V4Router.V4TradeWithoutGraph<TradeType>
+    | ExclusiveDutchOrderTrade<Currency, Currency>
+    | undefined,
 ): trade is V4Router.V4TradeWithoutGraph<TradeType> => {
-  return trade !== undefined && 'gasUseEstimate' in trade
+  return trade !== undefined && 'gasUseEstimate' in trade && !('orderInfo' in trade)
 }
 
 // Estimate gas for a trade
-const guesstimateGas = (trade?: SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>): number => {
+const guesstimateGas = (
+  trade?:
+    | SmartRouterTrade<TradeType>
+    | V4Router.V4TradeWithoutGraph<TradeType>
+    | ExclusiveDutchOrderTrade<Currency, Currency>,
+): number => {
   if (!trade) return 0
   // A very rough gas estimation based on the trade type
   return 200000 // Default gas estimate
@@ -42,7 +53,10 @@ const guesstimateGas = (trade?: SmartRouterTrade<TradeType> | V4Router.V4TradeWi
 // Calculate gas estimate in USD based on trade type
 const calculateGasEstimateUSD = (
   supportsGasEstimate: boolean,
-  trade?: SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>,
+  trade?:
+    | SmartRouterTrade<TradeType>
+    | V4Router.V4TradeWithoutGraph<TradeType>
+    | ExclusiveDutchOrderTrade<Currency, Currency>,
   baseGasEstimatePrice?: any,
 ) => {
   if (!supportsGasEstimate || !trade) return null
@@ -57,8 +71,14 @@ const calculateGasEstimateUSD = (
     return null
   }
 
+  // For ExclusiveDutchOrderTrade, use a default gas estimate
+  if ('orderInfo' in trade) {
+    // This is an ExclusiveDutchOrderTrade
+    return 0.5 // Default gas cost in USD for Dutch Order trades
+  }
+
   // For SmartRouterTrade, use gasEstimateInUSD
-  return trade.gasEstimateInUSD
+  return 'gasEstimateInUSD' in trade
     ? typeof trade.gasEstimateInUSD === 'string'
       ? parseFloat(trade.gasEstimateInUSD)
       : Number(trade.gasEstimateInUSD)
@@ -103,7 +123,10 @@ const applySlippageLimits = (calculatedSlippage: Percent) => {
   return calculatedSlippage
 }
 
-type SupportedTrade = SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>
+type SupportedTrade =
+  | SmartRouterTrade<TradeType>
+  | V4Router.V4TradeWithoutGraph<TradeType>
+  | ExclusiveDutchOrderTrade<Currency, Currency>
 
 export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade): Percent {
   const { chainId } = useAccount()
