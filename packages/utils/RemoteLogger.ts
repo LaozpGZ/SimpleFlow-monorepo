@@ -8,23 +8,31 @@ export class RemoteLogger {
   }
 
   debug(log: string, indent: number = 0) {
-    if (process.env.NODE_ENV === 'development' && this.id !== '__dummy__') {
+    if (process.env.NODE_ENV !== 'production' && this.id !== '__dummy__') {
       const indentStr = '  '.repeat(indent)
       this.logs.push(`${indentStr}${log}`)
     }
   }
 
-  debugJson(obj: any) {
-    if (process.env.NODE_ENV === 'development' && this.id !== '__dummy__') {
-      this.logs.push(JSON.stringify(obj, null, 2))
+  debugJson(obj: any, indent: number = 0) {
+    if (process.env.NODE_ENV !== 'production' && this.id !== '__dummy__') {
+      try {
+        const str = JSON.stringify(obj, (_, value) => (typeof value === 'bigint' ? value.toString() : value), 2)
+        const lines = str.split('\n')
+        const indentStr = '  '.repeat(indent)
+        const logs = lines.map((line) => `${indentStr}${line}`)
+        this.logs.push(...logs)
+      } catch (e) {
+        this.logs.push(`Error in json, ${e}`)
+      }
     }
   }
 
-  flush() {
-    if (process.env.NODE_ENV === 'development' && this.id !== '__dummy__') {
+  async flush() {
+    if (process.env.NODE_ENV !== 'production' && this.id !== '__dummy__') {
       // eslint-disable-next-line no-restricted-globals
       const origin = self.origin || window.location.origin
-      fetch(`${origin}/api/logger`, {
+      await fetch(`${origin}/api/logger`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -49,7 +49,6 @@ export async function getBestTrade(
       blockNumber,
     }
     logger.debug(`find trade`)
-    logger.debug(JSON.stringify(trade, null, 2))
     return trade
   } finally {
     logger.flush()
@@ -124,7 +123,7 @@ async function getBestRoutes(
     quoteId,
     signal,
   })
-  logger.debug('Result after filter routes with valid quote')
+  logger.debug(`valid route=${routesWithValidQuote.length}`)
   logRoutesWithQuote(quoteId, routesWithValidQuote)
   // routesWithValidQuote.forEach(({ percent, path, amount: a, quote }) => {
   //   const pathStr = path.map((t) => t.symbol).join('->')

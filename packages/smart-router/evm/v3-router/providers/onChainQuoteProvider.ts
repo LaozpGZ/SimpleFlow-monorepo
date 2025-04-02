@@ -4,6 +4,7 @@ import { AbortControl, isAbortError } from '@pancakeswap/utils/abortControl'
 import retry from 'async-retry'
 import { Abi, Address } from 'viem'
 
+import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
 import { binQuoterAbi } from '../../abis/IBinQuoter'
 import { clQuoterAbi } from '../../abis/ICLQuoter'
 import { infinityMixedRouteQuoterAbi } from '../../abis/IInfinityMixedRouteQuoter'
@@ -159,8 +160,9 @@ function onChainQuoteProviderFactory({ getQuoteFunctionName, getQuoterAddress, a
 
       return async function getRoutesWithQuote(
         routes: RouteWithoutQuote[],
-        { blockNumber: blockNumberFromConfig, gasModel, retry: retryOptions, signal }: QuoterOptions,
+        { blockNumber: blockNumberFromConfig, gasModel, retry: retryOptions, signal, quoteId }: QuoterOptions,
       ): Promise<RouteWithQuote[]> {
+        const logger = RemoteLogger.getLogger(quoteId)
         if (!routes.length) {
           return []
         }
@@ -185,6 +187,8 @@ function onChainQuoteProviderFactory({ getQuoteFunctionName, getQuoterAddress, a
         const multicall2Provider = new PancakeMulticallProvider(chainId, chainProvider, defaultGasLimitPerCall)
         const inputs = routes.map<CallInputs>((route) => getCallInputs(route, isExactIn))
 
+        logger.debug(`Try with Inputs: ${inputs.length}`, 3)
+        // logger.debugJson(inputs, 2)
         const retryOptionsWithDefault = {
           retries: DEFAULT_BATCH_RETRIES,
           minTimeout: 25,
@@ -214,6 +218,11 @@ function onChainQuoteProviderFactory({ getQuoteFunctionName, getQuoterAddress, a
                 },
               })
             const successRateError = validateSuccessRate(results, minSuccessRate)
+            // results.forEach((result) => {
+            //   if (!result.success) {
+            //     logger.debugJson(result, 3)
+            //   }
+            // })
             if (successRateError) {
               throw successRateError
             }
@@ -252,6 +261,7 @@ function onChainQuoteProviderFactory({ getQuoteFunctionName, getQuoterAddress, a
             })
             return quotes
           } catch (e: unknown) {
+            logger.debug(`Error getting quotes: ${e}`, 2)
             const error = e instanceof Error ? e : new Error(`Unexpected error type ${e}`)
             if (!shouldRetry(error)) {
               // bail is actually rejecting the promise on retry function
@@ -276,6 +286,8 @@ function onChainQuoteProviderFactory({ getQuoteFunctionName, getQuoterAddress, a
         }, retryOptionsWithDefault)
 
         if (!quoteResult) {
+          logger.debug(`Empty quote result`, 2)
+          logger.debugJson(quoteResult, 2)
           throw new Error(`Unexpected empty quote result ${quoteResult}`)
         }
 

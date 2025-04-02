@@ -1,4 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
+import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
 import { INFI_SUPPORTED_CHAINS } from '../../constants/infinity'
 import { QuoteProvider, QuoterConfig, QuoterOptions, RouteType, RouteWithQuote, RouteWithoutQuote } from '../types'
 import { isInfinityBinPool, isInfinityClPool, isV3Pool } from '../utils'
@@ -61,7 +62,7 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
 
     return async function getRoutesWithQuotes(
       routes: RouteWithoutQuote[],
-      { blockNumber, gasModel, signal }: QuoterOptions,
+      { blockNumber, gasModel, signal, quoteId }: QuoterOptions,
     ): Promise<RouteWithQuote[]> {
       const { chainId } = routes[0]?.input || {}
       const getMixedRouteQuotes = createMixedRouteQuoteFetcher(chainId)
@@ -109,13 +110,23 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
         routesCanQuoteOffChain.push(route)
       }
 
+      logQuoters(
+        quoteId,
+        routesCanQuoteOffChain,
+        mixedRoutesHaveV3Pool,
+        v3SingleHopRoutes,
+        v3MultihopRoutes,
+        infinityClRoutes,
+        infinityBinRoutes,
+      )
+
       const results = await Promise.allSettled([
-        getOffChainQuotes(routesCanQuoteOffChain, { blockNumber, gasModel, signal }),
-        getMixedRouteQuotes(mixedRoutesHaveV3Pool, { blockNumber, gasModel, retry: { retries: 0 }, signal }),
-        getV3Quotes(v3SingleHopRoutes, { blockNumber, gasModel, signal }),
-        getV3Quotes(v3MultihopRoutes, { blockNumber, gasModel, retry: { retries: 1 }, signal }),
-        getInfinityClQuotes(infinityClRoutes, { blockNumber, gasModel, signal }),
-        getInfinityBinQuotes(infinityBinRoutes, { blockNumber, gasModel, signal }),
+        getOffChainQuotes(routesCanQuoteOffChain, { blockNumber, gasModel, signal, quoteId }),
+        getMixedRouteQuotes(mixedRoutesHaveV3Pool, { blockNumber, gasModel, retry: { retries: 0 }, signal, quoteId }),
+        getV3Quotes(v3SingleHopRoutes, { blockNumber, gasModel, signal, quoteId }),
+        getV3Quotes(v3MultihopRoutes, { blockNumber, gasModel, retry: { retries: 1 }, signal, quoteId }),
+        getInfinityClQuotes(infinityClRoutes, { blockNumber, gasModel, signal, quoteId }),
+        getInfinityBinQuotes(infinityBinRoutes, { blockNumber, gasModel, signal, quoteId }),
       ])
       if (results.every((result) => result.status === 'rejected')) {
         throw new Error(results.map((result) => (result as PromiseRejectedResult).reason).join(','))
@@ -130,5 +141,36 @@ export function createQuoteProvider(config: QuoterConfig): QuoteProvider<QuoterC
     getRouteWithQuotesExactIn: createGetRouteWithQuotes(true),
     getRouteWithQuotesExactOut: createGetRouteWithQuotes(false),
     getConfig: () => config,
+  }
+}
+
+function logQuoters(
+  quoteId: string | undefined,
+  routesCanQuoteOffChain: RouteWithoutQuote[],
+  mixedRoutesHaveV3Pool: RouteWithoutQuote[],
+  v3SingleHopRoutes: RouteWithoutQuote[],
+  v3MultihopRoutes: RouteWithoutQuote[],
+  infinityClRoutes: RouteWithoutQuote[],
+  infinityBinRoutes: RouteWithoutQuote[],
+) {
+  const logger = RemoteLogger.getLogger(quoteId)
+
+  if (routesCanQuoteOffChain.length) {
+    logger.debug(`try getOffChainQuotes=${routesCanQuoteOffChain.length}`, 2)
+  }
+  if (mixedRoutesHaveV3Pool.length) {
+    logger.debug(`try getMixedRouteQuotes=${mixedRoutesHaveV3Pool.length}`, 2)
+  }
+  if (v3SingleHopRoutes.length) {
+    logger.debug(`try getV3Quotes=${v3SingleHopRoutes.length}`, 2)
+  }
+  if (v3MultihopRoutes.length) {
+    logger.debug(`try getV3Quotes=${v3MultihopRoutes.length}`, 2)
+  }
+  if (infinityClRoutes.length) {
+    logger.debug(`try getInfinityClQuotes=${infinityClRoutes.length}`, 2)
+  }
+  if (infinityBinRoutes.length) {
+    logger.debug(`try getInfinityBinQuotes=${infinityBinRoutes.length}`, 2)
   }
 }

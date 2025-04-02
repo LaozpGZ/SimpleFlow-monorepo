@@ -91,8 +91,8 @@ export const getInfinityClPoolsWithoutTicks = createOnChainPoolFactory<InfinityC
     const poolIdList = new Set<string>()
     const metas: InfinityClPoolMeta[] = []
     const presets = CL_PRESETS_BY_CHAIN[chainId]
+    const hookPresets = CL_HOOK_PRESETS_BY_CHAIN[chainId]
     for (const { fee, tickSpacing } of presets) {
-      const hookPresets = CL_HOOK_PRESETS_BY_CHAIN[chainId]
       for (const { address: hooks, registrationBitmap, poolKeyOverride } of hookPresets) {
         const poolKey: PoolKey<'CL'> = {
           currency0: getCurrencyAddress(currency0),

@@ -4,37 +4,27 @@ import { BaseRoute, Pool, PoolType, RouteType, RouteWithQuote } from '../types'
 
 export const logPools = (quoteId: string | undefined, pools: Pool[], indent = 1) => {
   const logger = RemoteLogger.getLogger(quoteId)
-
   for (const pool of pools) {
-    switch (pool.type) {
-      case PoolType.V3: {
-        const id = pool.address
-        logger.debug(`[V3] id=${id}, ${pool.token0.symbol}/${pool.token1.symbol}`, indent)
-        break
-      }
-      case PoolType.V2: {
-        const id = Pair.getAddress(pool.reserve0.currency.wrapped, pool.reserve1.currency.wrapped)
-        logger.debug(`[V2] id=${id}, ${pool.reserve0.currency.symbol}/${pool.reserve1.currency.symbol}`, indent)
-        break
-      }
-      case PoolType.STABLE: {
-        logger.debug(
-          `[Stable] id=${pool.address}, ${pool.balances[0].currency.symbol}/${pool.balances[1].currency.symbol}`,
-          indent,
-        )
-        break
-      }
-      case PoolType.InfinityBIN: {
-        logger.debug(`[InfinityBIN] id=${pool.id}, ${pool.currency0.symbol}/${pool.currency1.symbol}`, indent)
-        break
-      }
-      case PoolType.InfinityCL: {
-        logger.debug(`[InfinityCL] id=${pool.id}, ${pool.currency0.symbol}/${pool.currency1.symbol}`, indent)
-        break
-      }
-      default:
-        throw new Error('Unknown pool type')
+    logger.debug(poolInfoStr(pool), indent)
+  }
+}
+
+export const poolInfoStr = (pool: Pool): string => {
+  switch (pool.type) {
+    case PoolType.V3:
+      return `[V3] id=${pool.address}, ${pool.token0.symbol}/${pool.token1.symbol}`
+    case PoolType.V2: {
+      const id = Pair.getAddress(pool.reserve0.currency.wrapped, pool.reserve1.currency.wrapped)
+      return `[V2] id=${id}, ${pool.reserve0.currency.symbol}/${pool.reserve1.currency.symbol}`
     }
+    case PoolType.STABLE:
+      return `[Stable] id=${pool.address}, ${pool.balances[0].currency.symbol}/${pool.balances[1].currency.symbol}`
+    case PoolType.InfinityBIN:
+      return `[InfinityBIN] id=${pool.id}, ${pool.currency0.symbol}/${pool.currency1.symbol}`
+    case PoolType.InfinityCL:
+      return `[InfinityCL] id=${pool.id}, ${pool.currency0.symbol}/${pool.currency1.symbol}`
+    default:
+      throw new Error('Unknown pool type')
   }
 }
 
