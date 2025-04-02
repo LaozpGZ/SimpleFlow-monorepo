@@ -44,11 +44,7 @@ export function useTokenBalancesWithLoadingIndicator(
   // NOTE: assume all tokens have the same chainId
   const chainId = first(validatedTokens)?.chainId
 
-  const {
-    data: balances,
-    isLoading,
-    error,
-  } = useMultipleContractSingleDataWagmi({
+  const { data: balances, isLoading } = useMultipleContractSingleDataWagmi({
     abi: erc20Abi,
     addresses: validatedTokenAddresses,
     functionName: 'balanceOf',
@@ -58,17 +54,6 @@ export function useTokenBalancesWithLoadingIndicator(
     },
     chainId,
   })
-
-  // const balances = useMultipleContractSingleData({
-  //   abi: erc20Abi,
-  //   addresses: validatedTokenAddresses,
-  //   functionName: 'balanceOf',
-  //   args: useMemo(() => [address as Address] as const, [address]),
-  //   options: {
-  //     enabled: Boolean(address && validatedTokenAddresses.length > 0),
-  //     chainId,
-  //   },
-  // })
 
   const aggregatedBalances = useMemo(
     () =>
