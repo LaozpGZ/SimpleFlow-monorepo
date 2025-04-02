@@ -1,4 +1,5 @@
 import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
+import { isStableSwapSupported } from '@pancakeswap/stable-swap-sdk'
 import { Select } from '@pancakeswap/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useMemo } from 'react'
@@ -13,6 +14,8 @@ interface NetworkSelectorProps {
   onChange?: (chain: Chain) => void
 }
 
+// TODO: should design in a better way to rely on infinity
+// This should be a standalone component
 export const NetworkSelector = ({
   version,
   onChange,
@@ -24,6 +27,7 @@ export const NetworkSelector = ({
     () =>
       chains
         .filter((chain) => version !== 'infinity' || INFINITY_SUPPORTED_CHAINS.includes(chain.id))
+        .filter((chain) => version !== 'stableSwap' || isStableSwapSupported(chain.id))
         .filter((chain) => {
           if (chain.id === chainId) return true
           if ('testnet' in chain && chain.testnet) return showTestnet

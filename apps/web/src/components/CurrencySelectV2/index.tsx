@@ -38,6 +38,7 @@ export const CurrencySelectV2 = ({
   commonBasesType,
   hideBalance,
   chainId,
+  tokensToShow,
   ...props
 }: CurrencySelectV2Props) => {
   const { address: account } = useAccount()
@@ -52,6 +53,7 @@ export const CurrencySelectV2 = ({
 
   const [onPresentCurrencyModal] = useModal(
     <CurrencySearchModalV2
+      tokensToShow={tokensToShow}
       onCurrencySelect={onCurrencySelect}
       selectedCurrency={selectedCurrency}
       otherSelectedCurrency={otherSelectedCurrency}

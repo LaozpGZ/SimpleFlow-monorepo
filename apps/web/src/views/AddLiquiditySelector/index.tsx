@@ -26,6 +26,7 @@ import { usePoolTypes } from 'views/universalFarms/constants'
 import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import { CurrencySelectV2 } from 'components/CurrencySelectV2'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
+import { useStableSwapSupportedTokens } from 'hooks/useStableSwapSupportedTokens'
 import { COMPACT_LIQUIDITY_TYPES, LIQUIDITY_TYPES, LiquidityType } from 'utils/types'
 import { usePoolTypeQuery } from './hooks/usePoolTypeQuery'
 
@@ -47,12 +48,18 @@ export const AddLiquiditySelector = () => {
   const { poolType, setPoolType, poolTypeQuery } = usePoolTypeQuery()
 
   const { chainId, protocol, currencyIdA, currencyIdB, updateParams } = useSelectIdRouteParams()
-
   const queryChainName = chainId && CHAIN_QUERY_NAME[chainId]
   const baseCurrency = useCurrencyByChainId(currencyIdA, chainId)
   const currencyB = useCurrencyByChainId(currencyIdB, chainId)
   const quoteCurrency =
     baseCurrency && currencyB && baseCurrency.wrapped.equals(currencyB.wrapped) ? undefined : currencyB
+
+  const { data: ssSupportedBaseToken } = useStableSwapSupportedTokens(chainId)
+  const { data: ssSupportedQuoteToken } = useStableSwapSupportedTokens(chainId, baseCurrency?.wrapped)
+  const [baseTokensToSelect, quoteTokensToSelect] = useMemo(
+    () => (protocol === 'stableSwap' ? [ssSupportedBaseToken, ssSupportedQuoteToken] : [undefined, undefined]),
+    [ssSupportedBaseToken, ssSupportedQuoteToken, protocol],
+  )
 
   const types = useMemo(() => {
     return isMobile ? COMPACT_LIQUIDITY_TYPES : LIQUIDITY_TYPES
@@ -155,8 +162,9 @@ export const AddLiquiditySelector = () => {
                 chainId={chainId}
                 selectedCurrency={baseCurrency}
                 onCurrencySelect={handleCurrencyASelect}
-                showCommonBases
+                showCommonBases={protocol !== 'stableSwap'}
                 commonBasesType={CommonBasesType.LIQUIDITY}
+                tokensToShow={baseTokensToSelect}
                 hideBalance
               />
               <AddIcon color="textSubtle" />
@@ -165,7 +173,8 @@ export const AddLiquiditySelector = () => {
                 chainId={chainId}
                 selectedCurrency={quoteCurrency}
                 onCurrencySelect={handleCurrencyBSelect}
-                showCommonBases
+                tokensToShow={quoteTokensToSelect}
+                showCommonBases={protocol !== 'stableSwap'}
                 commonBasesType={CommonBasesType.LIQUIDITY}
                 hideBalance
               />
