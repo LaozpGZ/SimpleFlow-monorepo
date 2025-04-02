@@ -161,7 +161,9 @@ export const PoolsFilterPanel: React.FC<React.PropsWithChildren<IPoolsFilterPane
         )}
         {showPoolFilter && <PoolTypeFilter data={poolTypeData} value={poolType} onChange={handlePoolFeatureChange} />}
         {showProtocolMenu && !isUndefined(selectedType) && (
-          <ProtocolMenu data={protocols} activeIndex={selectedType} onChange={handleProtocolIndexChange} />
+          <Flex alignSelf="flex-start">
+            <ProtocolMenu data={protocols} activeIndex={selectedType} onChange={handleProtocolIndexChange} />
+          </Flex>
         )}
         {children}
       </PoolsFilterContainer>

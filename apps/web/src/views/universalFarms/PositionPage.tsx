@@ -62,6 +62,11 @@ const ToggleWrapper = styled.div`
   display: inline-flex;
   align-items: center;
   gap: 8px;
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 `
 const ButtonWrapper = styled.div`
   display: inline-flex;
