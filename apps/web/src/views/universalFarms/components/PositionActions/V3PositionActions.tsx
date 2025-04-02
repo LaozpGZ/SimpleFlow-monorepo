@@ -148,8 +148,6 @@ export const V3PositionActions = ({
     chainId,
   )
 
-  if (!isStaked) return null
-
   return (
     <StopPropagation>
       <ActionPanelContainer>
