@@ -1,3 +1,4 @@
+import { Protocol } from '@pancakeswap/farms'
 import { Currency } from '@pancakeswap/swap-sdk-core'
 import { Flex, Text } from '@pancakeswap/uikit'
 import { CurrencyLogo, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
@@ -28,10 +29,18 @@ function getTokenUrls(chainPath: string, poolInfo?: PoolInfo | null) {
 
   const { protocol } = poolInfo
   const stableSwapUrlQuery = protocol === 'stable' ? '?type=stableSwap' : ''
+  const infinityUrl = (token: Currency) => `/info/infinity${chainPath}/tokens/${token.wrapped.address}`
 
   const v2Url = (token: Currency) => `/info${chainPath}/tokens/${token.wrapped.address}${stableSwapUrlQuery}`
 
   const v3Url = (token: Currency) => `/info/${protocol}/${chainPath}/tokens/${token.wrapped.address}`
+
+  if (protocol === Protocol.InfinityBIN || protocol === Protocol.InfinityCLAMM) {
+    return {
+      token0Url: infinityUrl(poolInfo.token0.wrapped),
+      token1Url: infinityUrl(poolInfo.token1.wrapped),
+    }
+  }
 
   if (protocol === 'stable' || protocol === 'v2') {
     return {
