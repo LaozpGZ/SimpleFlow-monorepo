@@ -124,6 +124,7 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
           poolId={(pool as InfinityPoolInfo).poolId}
           lpApr={lpApr}
           cakeApr={cakeApr}
+          tvlUSD={denominator.toFixed() as `${number}`}
           {...APRBreakdownModalState}
         />
       ) : null}

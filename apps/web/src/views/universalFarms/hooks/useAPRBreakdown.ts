@@ -21,8 +21,9 @@ export interface APRBreakdownProps {
   tvlUSD?: `${number}`
 }
 
-export const useAPRBreakdown = ({ currency0, currency1, lpApr, cakeApr, tvlUSD }: APRBreakdownProps) => {
+export const useAPRBreakdown = ({ currency0, currency1, lpApr, cakeApr, tvlUSD: tvlUSD_ }: APRBreakdownProps) => {
   const { t } = useTranslation()
+  const tvlUSD = tvlUSD_ ?? cakeApr.userTvlUsd
 
   const cakePrice = useCakePrice()
 
