@@ -192,10 +192,7 @@ export const TradeSummary = memo(function TradeSummary({
                     <Text bold display="inline-block">
                       {t('AMM')}
                     </Text>
-                    :{' '}
-                    {t(
-                      'Fee ranging from 0.01% to 1% depending on the pool fee tier. You can check the fee tier by clicking the magnifier icon under the “Route” section.',
-                    )}
+                    : {t('Trading fee varies by pool fee tier. Check it via the magnifier icon under "Route."')}
                   </Text>
                   <Text mt="12px">
                     <Link
@@ -211,7 +208,7 @@ export const TradeSummary = memo(function TradeSummary({
                     <Text bold display="inline-block">
                       {t('X')}
                     </Text>
-                    : {t('No fee when trade is going through PancakeSwap X. Subject to change in the future.')}
+                    : {t('No fee when trading through PancakeSwap X (subject to change).')}
                   </Text>
                 </>
               }
