@@ -5,6 +5,7 @@ import { forwardRef, MouseEvent, useCallback, useMemo } from 'react'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 
 type ApyButtonProps = {
+  showApyButton?: boolean
   loading?: boolean
   onClick?: () => void
   onAPRTextClick?: () => void
@@ -13,7 +14,7 @@ type ApyButtonProps = {
 }
 
 export const AprButton = forwardRef<HTMLElement, ApyButtonProps>(
-  ({ loading, onClick, onAPRTextClick, baseApr, boostApr }, ref) => {
+  ({ showApyButton = true, loading, onClick, onAPRTextClick, baseApr, boostApr }, ref) => {
     const handleClick = useCallback(
       (e: MouseEvent) => {
         e.preventDefault()
@@ -31,7 +32,7 @@ export const AprButton = forwardRef<HTMLElement, ApyButtonProps>(
 
     return (
       <FlexGap alignItems="center">
-        <FarmWidget.FarmApyButton variant="text-and-button" handleClickButton={handleClick} />
+        {showApyButton && <FarmWidget.FarmApyButton variant="text-and-button" handleClickButton={handleClick} />}
         <AprButtonText baseApr={baseApr} boostApr={boostApr} ref={ref} onClick={onAPRTextClick} />
       </FlexGap>
     )

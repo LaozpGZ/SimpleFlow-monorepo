@@ -65,6 +65,7 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
         onAPRTextClick={APRBreakdownModalState.onOpen}
+        showApyButton={false}
       />
       {APRBreakdownModalState.isOpen ? (
         <APRBreakdownModal

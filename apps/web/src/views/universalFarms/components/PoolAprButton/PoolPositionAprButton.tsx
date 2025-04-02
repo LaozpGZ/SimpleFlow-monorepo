@@ -2,6 +2,7 @@ import { useModalV2 } from '@pancakeswap/uikit'
 import { getCurrencyAddress } from '@pancakeswap/widgets-internal'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { useEffect } from 'react'
+import noop from 'lodash/noop'
 import {
   InfinityBinPositionDetail,
   InfinityCLPositionDetail,
@@ -114,6 +115,7 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
         merklApr={merklApr}
         userPosition={userPosition}
         onAPRTextClick={APRBreakdownModalState.onOpen}
+        showApyButton={false}
       />
       {APRBreakdownModalState.isOpen ? (
         <APRBreakdownModal
@@ -141,11 +143,29 @@ export const V3PoolDerivedAprButton: React.FC<Omit<PoolPositionAprButtonProps<Po
 export const InfinityCLPoolDerivedAprButton: React.FC<{ pool: InfinityCLPoolInfo }> = ({ pool }) => {
   const { lpApr, cakeApr, merklApr } = useInfinityCLDerivedApr(pool)
 
-  return <PoolAprButton pool={pool} lpApr={lpApr} cakeApr={cakeApr} merklApr={merklApr} />
+  return (
+    <PoolAprButton
+      showApyButton={false}
+      pool={pool}
+      lpApr={lpApr}
+      cakeApr={cakeApr}
+      merklApr={merklApr}
+      onAPRTextClick={noop}
+    />
+  )
 }
 
 export const InfinityBinPoolDerivedAprButton: React.FC<{ pool: InfinityBinPoolInfo }> = ({ pool }) => {
   const { lpApr, cakeApr, merklApr } = useInfinityBinDerivedApr(pool)
 
-  return <PoolAprButton pool={pool} lpApr={lpApr} cakeApr={cakeApr} merklApr={merklApr} />
+  return (
+    <PoolAprButton
+      showApyButton={false}
+      pool={pool}
+      lpApr={lpApr}
+      cakeApr={cakeApr}
+      merklApr={merklApr}
+      onAPRTextClick={noop}
+    />
+  )
 }
