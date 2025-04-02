@@ -1,33 +1,69 @@
-import { Text } from '@pancakeswap/uikit'
-import { useQuery } from '@tanstack/react-query'
+import { useTranslation } from '@pancakeswap/localization'
+import { Button, Flex, FlexGap, Grid, LogoRoundIcon, Text } from '@pancakeswap/uikit'
+import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useRef } from 'react'
-import { Area, AreaChart, Bar, BarChart, Line, LineChart, Tooltip } from 'recharts'
+import { CakeHoldersCard } from './components/general/CakeHoldersCard'
+import { CumulativeDeflation } from './components/general/CumulativeDeflation'
+import { FDVCard } from './components/general/FDVCard'
+import { MarketCapCard } from './components/general/MarketCapCard'
+import { SupplyCard } from './components/general/SupplyCard'
+import { SupplyDeflationCard } from './components/general/SupplyDeflationCard'
 
-export const BurnDashboard = () => {
+export const CakeDashboard = () => {
+  const { t } = useTranslation()
   const chartRef = useRef<HTMLDivElement>(null)
 
-  const { data } = useQuery({
-    queryKey: ['burnStats'],
-    queryFn: async () => {
-      const response = await fetch('/api/stats')
-      if (!response.ok) {
-        throw new Error('Error while fetching burn statistics')
-      }
-      return response.json()
-    },
-    initialData: {},
-  })
+  // const { data } = useQuery({
+  //   queryKey: ['burnStats'],
+  //   queryFn: async () => {
+  //     const response = await fetch('/api/stats')
+  //     if (!response.ok) {
+  //       throw new Error('Error while fetching burn statistics')
+  //     }
+  //     return response.json()
+  //   },
+  //   initialData: {},
+  // })
 
-  const { netMintCumulative, circulatingSupply, netMintWeekly, weeklyTotalBurn, weeklyBurnBreakdown } = data
+  // const { netMintCumulative, circulatingSupply, netMintWeekly, weeklyTotalBurn, weeklyBurnBreakdown } = data
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-4xl font-bold mb-4">Burn Page</h1>
-      <p className="text-lg">This is the burn page.</p>
-      <div ref={chartRef} className="mt-8">
-        &nbsp;
-      </div>
-      <Text>Net Mint Cumulative</Text>
+      <FlexGap alignItems="center" gap="8px" flexWrap="wrap">
+        <LogoRoundIcon width="60px" height="60px" />
+        <Text fontSize="32px" bold>
+          {t('Burn Dashboard')}
+        </Text>
+      </FlexGap>
+
+      <Flex mt="24px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+        <Text fontSize="24px" bold>
+          {t('General Overview')}
+        </Text>
+        <NextLinkFromReactRouter
+          to="https://docs.pancakeswap.finance/governance-and-tokenomics/cake-tokenomics"
+          target="_blank"
+        >
+          <Button variant="subtle">{t('Learn More')}</Button>
+        </NextLinkFromReactRouter>
+      </Flex>
+
+      <Grid
+        mt="24px"
+        gridTemplateColumns={['1fr', '1fr', '1fr', '2fr 1fr']}
+        gridTemplateRows={['1fr 1fr 1fr']}
+        style={{ gap: '24px' }}
+      >
+        <SupplyCard style={{ gridColumn: 1, gridRow: 'span 3' }} />
+        <MarketCapCard />
+        <FDVCard />
+        <CakeHoldersCard />
+      </Grid>
+
+      <SupplyDeflationCard mt="24px" />
+      <CumulativeDeflation mt="24px" />
+
+      {/* <Text>Net Mint Cumulative</Text>
       {netMintCumulative && (
         <AreaChart
           width={500}
@@ -112,7 +148,7 @@ export const BurnDashboard = () => {
           <Bar type="monotone" dataKey="burn" fill="#8884d8" strokeWidth={2} />
           <Tooltip />
         </BarChart>
-      )}
+      )} */}
     </div>
   )
 }
