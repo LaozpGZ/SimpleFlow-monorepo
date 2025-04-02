@@ -94,7 +94,12 @@ export const HookListModal = ({
       data.filter(
         (item) =>
           (!poolType?.length || !item.poolType || poolType.includes(item.poolType)) &&
-          (!categories?.length || !item.category || intersection(categories, item.category).length),
+          (!categories?.length ||
+            !item.category ||
+            intersection(
+              categories.map((c) => HOOK_CATEGORY[c]),
+              item.category,
+            ).length),
       ),
     [categories, data, poolType],
   )
@@ -138,14 +143,14 @@ export const HookListModal = ({
               )}
             </FixedSizeList>
           ) : (
-            <>
+            <Box minHeight="30vh">
               <Text color="textSubtle" size="sm">
                 {t('No hooks available with the selected filters')}
               </Text>
               <Button variant="textPrimary60" scale="xs" p="16px" onClick={handleReset}>
                 {t('Reset filters')}
               </Button>
-            </>
+            </Box>
           )}
         </StyledModalBody>
       </StyledModalContainer>

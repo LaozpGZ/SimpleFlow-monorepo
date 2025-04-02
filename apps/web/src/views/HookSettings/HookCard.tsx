@@ -45,10 +45,6 @@ export const HookCard = ({ onClick, hookData }: HookCardProps) => {
       </Flex>
 
       <FlexGap mt="16px" gap="5px" alignItems="center" justifyContent={isMobile ? 'space-between' : 'normal'}>
-        <Text color="textSubtle" small bold>
-          {t('Published on Mon DD, YYYY')}
-        </Text>
-        {!isMobile && <VerticalDivider bg="#aaa" height="12px" />}
         <ScanLink href={hookData.github} small icon={<GithubIcon width="16px" />} style={{ cursor: 'pointer' }}>
           {t('Learn More')}
         </ScanLink>
