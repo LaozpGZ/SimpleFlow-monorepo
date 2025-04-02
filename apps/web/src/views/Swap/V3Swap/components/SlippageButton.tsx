@@ -45,7 +45,6 @@ export const SlippageButton = ({ slippage, trade }: SlippageButtonProps) => {
 
   // Calculate auto slippage
   const { slippageTolerance, isAuto } = useAutoSlippageWithFallback(trade)
-  console.log(slippageTolerance)
 
   const isRiskyLow = slippageTolerance < 50
 

@@ -32,8 +32,6 @@ export function useUserInsufficientBalance(order: PriceOrder | undefined): boole
     const balanceIn = currencyBalances[Field.INPUT]
     const actualInputAmount = order.trade?.inputAmount
 
-    console.log('balanceIn, actualInputAmount', balanceIn, actualInputAmount)
-
     if (balanceIn && actualInputAmount && balanceIn.lessThan(actualInputAmount)) {
       return true
     }
