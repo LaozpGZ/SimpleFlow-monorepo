@@ -26,8 +26,8 @@ import { parseFarmPools } from '../utils'
 
 dayjs.extend(utc)
 
-const DEFAULT_PROTOCOLS: Protocol[] = Object.values(Protocol)
-const DEFAULT_CHAINS: FarmV4SupportedChainId[] = Object.values(supportedChainIdV4)
+export const DEFAULT_PROTOCOLS: Protocol[] = Object.values(Protocol)
+export const DEFAULT_CHAINS: FarmV4SupportedChainId[] = Object.values(supportedChainIdV4)
 
 type PoolIdentifier = {
   id: string

@@ -353,7 +353,7 @@ export const useInfinityPositionApr = <T extends InfinityCLPositionDetail | Infi
     denominator,
     numerator,
     lpApr,
-    cakeApr,
+    cakeApr: outOfRange || removed ? { ...cakeApr, value: '0' } : cakeApr,
     merklApr,
   }
 }

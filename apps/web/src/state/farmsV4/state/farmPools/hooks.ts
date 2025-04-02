@@ -1,3 +1,4 @@
+import { isTestnetChainId } from '@pancakeswap/chains'
 import { Protocol, UniversalFarmConfig, fetchAllUniversalFarms, masterChefV3Addresses } from '@pancakeswap/farms'
 import { masterChefAddresses } from '@pancakeswap/farms/src/const'
 import { masterChefV3ABI } from '@pancakeswap/v3-sdk'
@@ -14,22 +15,34 @@ import { isInfinityProtocol } from 'utils/protocols'
 import { publicClient } from 'utils/viem'
 import { zeroAddress } from 'viem'
 import { Address } from 'viem/accounts'
+import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
 
 import { PoolInfo, StablePoolInfo, V2PoolInfo } from '../type'
 import { farmPoolsAtom } from './atom'
-import { fetchFarmPools, fetchPoolsTimeFrame, fetchV3PoolsStatusByChainId } from './fetcher'
+import {
+  DEFAULT_CHAINS,
+  DEFAULT_PROTOCOLS,
+  fetchFarmPools,
+  fetchPoolsTimeFrame,
+  fetchV3PoolsStatusByChainId,
+} from './fetcher'
 
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type ArrayItemType<T> = T extends Array<infer U> ? U : T
 
 export const useFarmPools = () => {
+  const [showTestnet] = useUserShowTestnet()
   const [pools, setPools] = useAtom(farmPoolsAtom)
   const [farmConfig, setFarmConfig] = useState<UniversalFarmConfig[]>([])
+  const chainId = useMemo(
+    () => (showTestnet ? DEFAULT_CHAINS : DEFAULT_CHAINS.filter((c) => !isTestnetChainId(c))),
+    [showTestnet],
+  )
 
   const { isLoading } = useQuery({
-    queryKey: ['fetchFarmPools'],
+    queryKey: ['fetchFarmPools', ...chainId],
     queryFn: async ({ signal }) => {
-      const data = await fetchFarmPools(undefined, signal)
+      const data = await fetchFarmPools({ chainId, protocols: DEFAULT_PROTOCOLS }, signal)
       setPools(data)
     },
     refetchOnMount: false,
