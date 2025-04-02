@@ -2,11 +2,11 @@ import { useModal } from '@pancakeswap/uikit'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 
 import { Currency, Price } from '@pancakeswap/sdk'
-import { useUserSlippage } from '@pancakeswap/utils/user'
 import { memo } from 'react'
 
 import SettingsModal from 'components/Menu/GlobalSettings/SettingsModal'
 import { SettingsMode } from 'components/Menu/GlobalSettings/types'
+import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 
 interface Props {
@@ -20,11 +20,10 @@ export const PricingAndSlippage = memo(function PricingAndSlippage({
   priceLoading,
   price,
   showSlippage = true,
-  trade: _trade, // Prefix with underscore to indicate unused
+  trade,
 }: Props) {
-  const [allowedSlippage] = useUserSlippage()
-  // We're using the user slippage directly instead of the auto slippage hook
-  // since the trade types are different between V3 and V4
+  const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(trade)
+
   const isWrapping = useIsWrapping()
   const [onPresentSettingsModal] = useModal(<SettingsModal mode={SettingsMode.SWAP_LIQUIDITY} />)
 

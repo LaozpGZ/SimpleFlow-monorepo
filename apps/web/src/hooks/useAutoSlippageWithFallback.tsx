@@ -1,9 +1,9 @@
-import { Percent, TradeType } from '@pancakeswap/sdk'
+import { TradeType } from '@pancakeswap/sdk'
 import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
 import { useUserSlippage } from '@pancakeswap/utils/user'
-import { useMemo } from 'react'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
+import { useMemo } from 'react'
 import useClassicAutoSlippageTolerance from './useAutoSlippage'
 
 // Atom to store the user's preference for auto slippage
@@ -21,7 +21,7 @@ type SupportedTrade = SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph
  * Otherwise, it will use the user's manually set slippage
  */
 export function useAutoSlippageWithFallback(trade?: SupportedTrade): {
-  slippageTolerance: Percent
+  slippageTolerance: number
   isAuto: boolean
 } {
   const [isAutoSlippageEnabled] = useAutoSlippageEnabled()
@@ -31,13 +31,13 @@ export function useAutoSlippageWithFallback(trade?: SupportedTrade): {
   return useMemo(() => {
     if (isAutoSlippageEnabled && trade) {
       return {
-        slippageTolerance: autoSlippageTolerance,
+        slippageTolerance: Number(autoSlippageTolerance.numerator),
         isAuto: true,
       }
     }
 
     // Convert basis points to percent
-    const userSlippageTolerancePercent = new Percent(userSlippageTolerance, 10_000)
+    const userSlippageTolerancePercent = userSlippageTolerance
 
     return {
       slippageTolerance: userSlippageTolerancePercent,

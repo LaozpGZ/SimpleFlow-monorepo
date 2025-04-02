@@ -1,10 +1,10 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { SmartRouter } from '@pancakeswap/smart-router/evm'
 import { FlexGap } from '@pancakeswap/uikit'
-import { useUserSlippage } from '@pancakeswap/utils/user'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { useTokenRisk } from 'components/AccessRisk'
 import { RiskDetailsPanel, useShouldRiskPanelDisplay } from 'components/AccessRisk/SwapRevampRiskDisplay'
+import { useAutoSlippageWithFallback } from 'components/Menu/GlobalSettings/TransactionSettings'
 import { GasTokenSelector } from 'components/Paymaster/GasTokenSelector'
 import { useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -118,7 +118,7 @@ export function V4SwapForm() {
   const inputCurrency = useCurrency(inputCurrencyId)
   const outputCurrency = useCurrency(outputCurrencyId)
 
-  const [userSlippageTolerance] = useUserSlippage()
+  const { slippageTolerance: userSlippageTolerance } = useAutoSlippageWithFallback(bestOrder?.trade)
   const isSlippageTooHigh = useMemo(() => userSlippageTolerance > 500, [userSlippageTolerance])
   const shouldRiskPanelDisplay = useShouldRiskPanelDisplay(inputCurrency?.wrapped, outputCurrency?.wrapped)
   const token0Risk = useTokenRisk(inputCurrency?.wrapped)
