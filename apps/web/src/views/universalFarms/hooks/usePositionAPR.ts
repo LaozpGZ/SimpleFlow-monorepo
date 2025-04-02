@@ -335,9 +335,9 @@ export const useInfinityPositionApr = <T extends InfinityCLPositionDetail | Infi
     if (userTVLUsd.isZero()) {
       return `0`
     }
-    const apr = new BN(pool.lpFee24hUsd ?? 0).times(365).div(userTVLUsd).toString()
+    const apr = new BN(pool.lpFee24hUsd ?? 0).times(365).times(share).div(userTVLUsd).toString()
     return apr as `${number}`
-  }, [userTVLUsd, outOfRange, pool.lpFee24hUsd, removed])
+  }, [userTVLUsd, outOfRange, pool.lpFee24hUsd, removed, share])
 
   const merklApr = 0
 
