@@ -7,6 +7,7 @@ import { EmissionsThirtyDaysCard } from './components/emissions/EmissionsThirtyD
 import { LastEmissionCard } from './components/emissions/LastEmissionCard'
 import { TotalEmissionsCard } from './components/emissions/TotalEmissionsCard'
 import { V3FarmsEmissionsPieChart } from './components/emissions/V3FarmsEmissionsPieChart'
+import { WeeklyEmissionsStackedBarChart } from './components/emissions/WeeklyEmissionsStackedBarChart'
 import { CakeHoldersCard } from './components/general/CakeHoldersCard'
 import { CumulativeDeflationCard } from './components/general/CumulativeDeflationCard'
 import { FDVCard } from './components/general/FDVCard'
@@ -72,12 +73,7 @@ export const CakeDashboard = () => {
         {t('Emissions')}
       </Text>
 
-      <Grid
-        mt="24px"
-        gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr 1fr']}
-        gridTemplateRows={['1fr 1fr 1fr']}
-        style={{ gap: '24px' }}
-      >
+      <Grid mt="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr 1fr']} style={{ gap: '24px' }}>
         <EmissionsPerBlockPieChart />
         <FlexGap flexDirection="column" gap="24px">
           <TotalEmissionsCard />
@@ -86,6 +82,8 @@ export const CakeDashboard = () => {
         </FlexGap>
         <V3FarmsEmissionsPieChart />
       </Grid>
+
+      <WeeklyEmissionsStackedBarChart mt="24px" />
 
       {/* <Text>Net Mint Cumulative</Text>
       {netMintCumulative && (

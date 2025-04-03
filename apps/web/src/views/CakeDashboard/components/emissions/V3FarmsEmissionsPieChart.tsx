@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, DotIcon, FlexGap, Grid, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
-import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
 import styled from 'styled-components'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
@@ -63,6 +63,7 @@ export const V3FarmsEmissionsPieChart = (props: CardProps) => {
                 <Cell key={`cell-${entry.name}`} fill={entry.color} />
               ))}
             </Pie>
+            <Tooltip />
           </PieChart>
         </ResponsiveContainer>
       </ChartWrapper>
