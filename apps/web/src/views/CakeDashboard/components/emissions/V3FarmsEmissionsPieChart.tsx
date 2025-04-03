@@ -20,13 +20,13 @@ const TextContainer = styled.div`
 `
 
 const data = [
-  { name: 'BNB Chain', value: 200, color: '#F0B90B' },
-  { name: 'Ethereum', value: 200, color: '#6074E3' },
+  { name: 'BNB Chain', value: 400, color: '#F0B90B' },
+  { name: 'Ethereum', value: 300, color: '#6074E3' },
   { name: 'zkEVM', value: 200, color: '#7645D9' },
   { name: 'ZKsync Era', value: 200, color: '#000000' },
-  { name: 'Arbitrum', value: 200, color: '#28A0F0' },
+  { name: 'Arbitrum', value: 300, color: '#28A0F0' },
   { name: 'Linea', value: 200, color: '#87CEEB' },
-  { name: 'Base', value: 200, color: '#0052FF' },
+  { name: 'Base', value: 300, color: '#0052FF' },
   { name: 'Aptos', value: 200, color: '#27D17F' },
   { name: 'Monad', value: 200, color: '#C5A1FF' },
   { name: 'opBNB', value: 200, color: '#F0943C' },
@@ -54,9 +54,10 @@ export const V3FarmsEmissionsPieChart = (props: CardProps) => {
               nameKey="name"
               cx="50%"
               cy="50%"
-              innerRadius={85}
+              innerRadius={95}
               outerRadius={110}
               cornerRadius={10}
+              paddingAngle={2}
               fill="#8884d8"
             >
               {data.map((entry) => (

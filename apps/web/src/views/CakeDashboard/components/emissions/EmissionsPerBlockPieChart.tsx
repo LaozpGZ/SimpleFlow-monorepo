@@ -52,6 +52,7 @@ export const EmissionsPerBlockPieChart = (props: CardProps) => {
               innerRadius={85}
               outerRadius={110}
               cornerRadius={10}
+              paddingAngle={2}
               fill="#8884d8"
             >
               {data.map((entry) => (
