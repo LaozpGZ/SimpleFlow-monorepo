@@ -34,19 +34,19 @@ export const CL_DYNAMIC_HOOK = {
 //     beforeSwap: true,
 //   },
 // }
-const BIN_DYNAMIC_HOOK = undefined
+// const BIN_DYNAMIC_HOOK = undefined
 
 const dynamicHooksList: HookData[] = [CL_DYNAMIC_HOOK]
 
 export const bscHooksList: HookData[] = [
   ...dynamicHooksList,
   {
-    address: '0x9f0d5091d31a7801d34da352572bac84e8ac48ad',
+    address: '0x9F0D5091D31a7801d34da352572BAc84e8Ac48Ad',
     name: 'Fee Discount Hook (CAKE Holding)',
     poolType: POOL_TYPE.CLAMM,
     description: 'Fee discount based on the last 30-day CAKE token holding.',
     github: 'https://github.com/brevis-network/pancake-tokenholding-hook/tree/main',
-    category: [HOOK_CATEGORY.Oracle, HOOK_CATEGORY.JIT, HOOK_CATEGORY.Others],
+    category: [HOOK_CATEGORY.Oracle, HOOK_CATEGORY.JIT, HOOK_CATEGORY.Others, HOOK_CATEGORY.DynamicFees],
     creator: 'https://github.com/brevis-network',
     audit: '',
     isVerified: true,

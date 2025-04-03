@@ -1,10 +1,9 @@
 import {
-  BIN_DYNAMIC_FEE_HOOKS_BY_CHAIN,
   BinPoolParameter,
-  CL_DYNAMIC_FEE_HOOKS_BY_CHAIN,
   CLPoolParameter,
   decodeHooksRegistration,
   DYNAMIC_FEE_FLAG,
+  isDynamicFeeHook,
   PoolKey,
 } from '@pancakeswap/infinity-sdk'
 import { InfinityBinPool, InfinityClPool, SmartRouter } from '@pancakeswap/smart-router'
@@ -21,12 +20,11 @@ export const getPoolKey = (pool: InfinityBinPool | InfinityClPool): PoolKey => {
   }
 
   const chainId = pool.currency0.chainId
-  if (pool.hooks === CL_DYNAMIC_FEE_HOOKS_BY_CHAIN[chainId as keyof typeof CL_DYNAMIC_FEE_HOOKS_BY_CHAIN]) {
+
+  if (isDynamicFeeHook(chainId, pool.hooks)) {
     base.fee = DYNAMIC_FEE_FLAG
   }
-  if (pool.hooks === BIN_DYNAMIC_FEE_HOOKS_BY_CHAIN[chainId as keyof typeof BIN_DYNAMIC_FEE_HOOKS_BY_CHAIN]) {
-    base.fee = DYNAMIC_FEE_FLAG
-  }
+
   const hooksRegistration =
     pool.hooksRegistrationBitmap !== undefined ? decodeHooksRegistration(pool.hooksRegistrationBitmap) : undefined
   if (SmartRouter.isInfinityClPool(pool)) {
