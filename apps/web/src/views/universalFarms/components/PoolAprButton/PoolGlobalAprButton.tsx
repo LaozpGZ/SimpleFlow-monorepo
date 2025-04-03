@@ -74,6 +74,7 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
           poolId={(pool as InfinityPoolInfo).poolId}
           lpApr={lpApr}
           cakeApr={cakeApr}
+          tvlUSD={pool.tvlUsd}
           {...APRBreakdownModalState}
         />
       ) : null}

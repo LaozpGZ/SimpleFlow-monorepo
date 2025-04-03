@@ -23,7 +23,9 @@ export const useInfinityCakeAPR = ({ chainId, poolId, tvlUSD, cakePrice }: Infin
         value: '0' as `${number}`,
       }
     }
-    const validCampaigns = campaigns?.filter((c) => c?.duration && Number(c.duration) > 0)
+    const validCampaigns = campaigns?.filter(
+      (c) => c?.duration && Number(c.duration) > 0 && c?.startTime && Number(c.startTime) * 1000 >= Date.now(),
+    )
     const cakeRewardsPerYear = validCampaigns
       ?.filter((c) => (Number(c.startTime) + Number(c.duration)) * 1000 >= Date.now())
       .reduce((acc, campaign) => {
