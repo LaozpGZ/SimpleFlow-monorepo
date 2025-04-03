@@ -5,10 +5,10 @@ import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
 import { Currency } from '@pancakeswap/swap-sdk-core'
 import { BigNumber } from 'bignumber.js'
 import { L2_CHAIN_IDS } from 'config/chains'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useMemo } from 'react'
-import { useAccount } from 'wagmi'
-import { useGasPrice } from '../state/user/hooks'
 
+import { useGasPrice } from '../state/user/hooks'
 import useNativeCurrency from './useNativeCurrency'
 import { useStablecoinPrice, useStablecoinPriceAmount } from './useStablecoinPrice'
 
@@ -81,7 +81,7 @@ const calculateGasEstimateUSD = (
   return 'gasEstimateInUSD' in trade
     ? typeof trade.gasEstimateInUSD === 'string'
       ? parseFloat(trade.gasEstimateInUSD)
-      : Number(trade.gasEstimateInUSD)
+      : Number(trade.gasEstimateInUSD?.toSignificant(6))
     : null
 }
 
@@ -129,7 +129,7 @@ type SupportedTrade =
   | ExclusiveDutchOrderTrade<Currency, Currency>
 
 export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade): Percent {
-  const { chainId } = useAccount()
+  const { chainId } = useActiveChainId()
   const onL2 = isL2ChainId(chainId)
 
   // Get USD price of output amount
