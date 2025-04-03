@@ -26,7 +26,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
 import dynamic from 'next/dynamic'
 import type React from 'react'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { getBlockExploreLink, safeGetAddress } from 'utils'
 import { formatAmount } from 'utils/formatInfoNumbers'
 
@@ -56,8 +56,6 @@ import Percent from 'views/V3Info/components/Percent'
 import PoolTable from 'views/V3Info/components/PoolTable'
 import TransactionTable from 'views/V3Info/components/TransactionsTable'
 import { MonoSpace, StyledCMCLink } from 'views/V3Info/components/shared'
-import { useTokenPriceData } from 'views/V3Info/hooks'
-import { currentTimestamp } from 'views/V3Info/utils'
 import { unixToDate } from 'views/V3Info/utils/date'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { infinityInfoPath } from '../../constants'
@@ -142,28 +140,28 @@ const TokenInfo: React.FC<{ address: string }> = ({ address }) => {
   const [valueLabel, setValueLabel] = useState<string | undefined>()
 
   // pricing data
-  const infinityClPriceData = useTokenPriceData(address, 'week', 'infinityCl')
-  const infinityBinPriceData = useTokenPriceData(address, 'week', 'infinityBin')
-  const getAdjustedToCurrent = useCallback(
-    (priceData) => {
-      if (priceData && tokenData && priceData.length > 0) {
-        const adjusted = [...priceData]
-        adjusted.push({
-          time: currentTimestamp() / 1000,
-          open: priceData[priceData.length - 1].close,
-          close: tokenData?.priceUSD,
-          high: tokenData?.priceUSD,
-          low: priceData[priceData.length - 1].close,
-        })
-        return adjusted
-      }
-      return undefined
-    },
-    [tokenData],
-  )
-  const [infinityClAdjustedToCurrent, infinityBinAdjustedToCurrent] = useMemo(() => {
-    return [getAdjustedToCurrent(infinityClPriceData), getAdjustedToCurrent(infinityBinPriceData)]
-  }, [getAdjustedToCurrent, infinityClPriceData, infinityBinPriceData])
+  // const infinityClPriceData = useTokenPriceData(address, 'week', 'infinityCl')
+  // const infinityBinPriceData = useTokenPriceData(address, 'week', 'infinityBin')
+  // const getAdjustedToCurrent = useCallback(
+  //   (priceData) => {
+  //     if (priceData && tokenData && priceData.length > 0) {
+  //       const adjusted = [...priceData]
+  //       adjusted.push({
+  //         time: currentTimestamp() / 1000,
+  //         open: priceData[priceData.length - 1].close,
+  //         close: tokenData?.priceUSD,
+  //         high: tokenData?.priceUSD,
+  //         low: priceData[priceData.length - 1].close,
+  //       })
+  //       return adjusted
+  //     }
+  //     return undefined
+  //   },
+  //   [tokenData],
+  // )
+  // const [infinityClAdjustedToCurrent, infinityBinAdjustedToCurrent] = useMemo(() => {
+  //   return [getAdjustedToCurrent(infinityClPriceData), getAdjustedToCurrent(infinityBinPriceData)]
+  // }, [getAdjustedToCurrent, infinityClPriceData, infinityBinPriceData])
   const chainPath = useMultiChainPath()
   const infoTypeParam = useStableSwapPath()
   const chainName = useChainNameByQuery()
@@ -326,7 +324,7 @@ const TokenInfo: React.FC<{ address: string }> = ({ address }) => {
                   <TabToggle isActive={view === ChartView.TVL} onClick={() => setView(ChartView.TVL)}>
                     <Text>{t('Liquidity')}</Text>
                   </TabToggle>
-                  <TabToggle
+                  {/* <TabToggle
                     isActive={view === ChartView.PRICE_INFI_CL}
                     onClick={() => setView(ChartView.PRICE_INFI_CL)}
                   >
@@ -341,7 +339,7 @@ const TokenInfo: React.FC<{ address: string }> = ({ address }) => {
                     <Text>
                       {t('LBAMM')} {t('Price')}
                     </Text>
-                  </TabToggle>
+                  </TabToggle> */}
                 </TabToggleGroup>
                 <Flex flexDirection="column" px="24px" pt="24px">
                   {latestValue
@@ -380,19 +378,20 @@ const TokenInfo: React.FC<{ address: string }> = ({ address }) => {
                       setValue={setLatestValue}
                       setLabel={setValueLabel}
                     />
-                  ) : view === ChartView.PRICE_INFI_CL ? (
-                    <CandleChart
-                      data={infinityClAdjustedToCurrent}
-                      setValue={setLatestValue}
-                      setLabel={setValueLabel}
-                    />
-                  ) : view === ChartView.PRICE_INFI_BIN ? (
-                    <CandleChart
-                      data={infinityBinAdjustedToCurrent}
-                      setValue={setLatestValue}
-                      setLabel={setValueLabel}
-                    />
-                  ) : null}
+                  ) : // : view === ChartView.PRICE_INFI_CL ? (
+                  //   <CandleChart
+                  //     data={infinityClAdjustedToCurrent}
+                  //     setValue={setLatestValue}
+                  //     setLabel={setValueLabel}
+                  //   />
+                  // ) : view === ChartView.PRICE_INFI_BIN ? (
+                  //   <CandleChart
+                  //     data={infinityBinAdjustedToCurrent}
+                  //     setValue={setLatestValue}
+                  //     setLabel={setValueLabel}
+                  //   />
+                  // )
+                  null}
                 </Box>
               </Card>
             </ContentLayout>
