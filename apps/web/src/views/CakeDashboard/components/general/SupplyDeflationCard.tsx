@@ -502,7 +502,7 @@ export const SupplyDeflationCard = (props: CardProps) => {
       </ResponsiveContainer>
 
       <LightGreyCard padding="8px" width="fit-content" mx="auto" mt="4px">
-        <FlexGap alignItems="center" gap="4px">
+        <FlexGap alignItems="center" gap="4px" flexWrap="wrap">
           <FlexGap alignItems="center" gap="4px">
             <DotIcon color="#31D0AA" width="12px" />
             <Text small>{t('Supply & Deflation')}</Text>

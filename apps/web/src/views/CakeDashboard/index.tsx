@@ -2,6 +2,10 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, FlexGap, Grid, LogoRoundIcon, Text } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useRef } from 'react'
+import { BurnLastThirtyDaysCard } from './components/burns/BurnLastThirtyDaysCard'
+import { LastBurnCard } from './components/burns/LastBurnCard'
+import { TotalBurnedCard } from './components/burns/TotalBurnedCard'
+import { WeeklyBurnStackedChart } from './components/burns/WeeklyBurnStackedChart'
 import { EmissionsPerBlockPieChart } from './components/emissions/EmissionsPerBlockPieChart'
 import { EmissionsThirtyDaysCard } from './components/emissions/EmissionsThirtyDaysCard'
 import { LastEmissionCard } from './components/emissions/LastEmissionCard'
@@ -84,6 +88,19 @@ export const CakeDashboard = () => {
       </Grid>
 
       <WeeklyEmissionsStackedBarChart mt="24px" />
+
+      <Text mt="40px" fontSize="24px" bold>
+        {t('Burn')}
+      </Text>
+
+      <Grid mt="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 2fr']} style={{ gap: '24px' }}>
+        <FlexGap flexDirection="column" gap="24px">
+          <TotalBurnedCard />
+          <LastBurnCard />
+          <BurnLastThirtyDaysCard />
+        </FlexGap>
+        <WeeklyBurnStackedChart />
+      </Grid>
 
       {/* <Text>Net Mint Cumulative</Text>
       {netMintCumulative && (
