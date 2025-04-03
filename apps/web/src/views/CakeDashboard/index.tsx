@@ -2,12 +2,17 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, FlexGap, Grid, LogoRoundIcon, Text } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useRef } from 'react'
+import { EmissionsPerBlockPieChart } from './components/emissions/EmissionsPerBlockPieChart'
+import { EmissionsThirtyDaysCard } from './components/emissions/EmissionsThirtyDaysCard'
+import { LastEmissionCard } from './components/emissions/LastEmissionCard'
+import { TotalEmissionsCard } from './components/emissions/TotalEmissionsCard'
+import { V3FarmsEmissionsPieChart } from './components/emissions/V3FarmsEmissionsPieChart'
 import { CakeHoldersCard } from './components/general/CakeHoldersCard'
 import { CumulativeDeflationCard } from './components/general/CumulativeDeflationCard'
 import { FDVCard } from './components/general/FDVCard'
 import { MarketCapCard } from './components/general/MarketCapCard'
-import { SupplyCard } from './components/general/SupplyCard'
 import { SupplyDeflationCard } from './components/general/SupplyDeflationCard'
+import { SupplyPieChart } from './components/general/SupplyPieChart'
 
 export const CakeDashboard = () => {
   const { t } = useTranslation()
@@ -54,7 +59,7 @@ export const CakeDashboard = () => {
         gridTemplateRows={['1fr 1fr 1fr']}
         style={{ gap: '24px' }}
       >
-        <SupplyCard style={{ gridColumn: 1, gridRow: 'span 3' }} />
+        <SupplyPieChart style={{ gridColumn: 1, gridRow: 'span 3' }} />
         <MarketCapCard />
         <FDVCard />
         <CakeHoldersCard />
@@ -62,6 +67,25 @@ export const CakeDashboard = () => {
 
       <SupplyDeflationCard mt="24px" />
       <CumulativeDeflationCard mt="24px" />
+
+      <Text mt="40px" fontSize="24px" bold>
+        {t('Emissions')}
+      </Text>
+
+      <Grid
+        mt="24px"
+        gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr 1fr']}
+        gridTemplateRows={['1fr 1fr 1fr']}
+        style={{ gap: '24px' }}
+      >
+        <EmissionsPerBlockPieChart />
+        <FlexGap flexDirection="column" gap="24px">
+          <TotalEmissionsCard />
+          <LastEmissionCard />
+          <EmissionsThirtyDaysCard />
+        </FlexGap>
+        <V3FarmsEmissionsPieChart />
+      </Grid>
 
       {/* <Text>Net Mint Cumulative</Text>
       {netMintCumulative && (

@@ -22,7 +22,7 @@ const ChartWrapper = styled(Box)`
   height: 280px;
 `
 
-export const SupplyCard = (props: CardProps) => {
+export const SupplyPieChart = (props: CardProps) => {
   const { t } = useTranslation()
 
   const TOTAL_MAX = 450
@@ -39,26 +39,6 @@ export const SupplyCard = (props: CardProps) => {
     <StatsCard {...props}>
       <StatsCardHeader>{t('Supply')}</StatsCardHeader>
       <ChartWrapper mt="24px">
-        <ResponsiveContainer width="100%" height={280}>
-          <PieChart width={280} height={280}>
-            <Pie
-              data={data}
-              cx="50%"
-              cy="50%"
-              startAngle={210}
-              endAngle={-150}
-              innerRadius={85}
-              outerRadius={110}
-              paddingAngle={2}
-              dataKey="value"
-            >
-              {data.map((entry) => (
-                <Cell key={`cell-${entry.name}`} fill={entry.color} />
-              ))}
-            </Pie>
-            <Tooltip />
-          </PieChart>
-        </ResponsiveContainer>
         <TextContainer>
           <Text small>Circulating</Text>
           <Text fontSize="24px" bold>
@@ -71,6 +51,27 @@ export const SupplyCard = (props: CardProps) => {
             Max {TOTAL_MAX}M
           </Text>
         </TextContainer>
+        <ResponsiveContainer width="100%" height={280}>
+          <PieChart width={280} height={280}>
+            <Pie
+              data={data}
+              cx="50%"
+              cy="50%"
+              startAngle={210}
+              endAngle={-150}
+              cornerRadius={10}
+              innerRadius={85}
+              outerRadius={110}
+              paddingAngle={2}
+              dataKey="value"
+            >
+              {data.map((entry) => (
+                <Cell key={`cell-${entry.name}`} fill={entry.color} />
+              ))}
+            </Pie>
+            <Tooltip />
+          </PieChart>
+        </ResponsiveContainer>
       </ChartWrapper>
     </StatsCard>
   )
