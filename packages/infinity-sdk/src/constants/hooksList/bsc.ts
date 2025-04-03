@@ -34,7 +34,7 @@ export const CL_DYNAMIC_HOOK = {
 //     beforeSwap: true,
 //   },
 // }
-const BIN_DYNAMIC_HOOK = undefined
+// const BIN_DYNAMIC_HOOK = undefined
 
 const dynamicHooksList: HookData[] = [CL_DYNAMIC_HOOK]
 
