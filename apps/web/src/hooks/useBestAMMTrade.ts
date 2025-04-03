@@ -29,10 +29,9 @@ import { basisPointsToPercent } from 'utils/exchange'
 import { createViemPublicClientGetter } from 'utils/viem'
 import { publicClient } from 'utils/wagmi'
 
-import { EXPERIMENTAL_FEATURES } from 'config/experimentalFeatures'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 
-import { QUOTING_API } from 'config/constants/endpoints'
+import { QUOTING_API, QUOTING_API_PREFIX } from 'config/constants/endpoints'
 import {
   CommonPoolsParams,
   PoolsWithState,
@@ -41,7 +40,6 @@ import {
   useCommonPools as useCommonPoolsWithTicks,
 } from './useCommonPools'
 import { useCurrencyUsdPrice } from './useCurrencyUsdPrice'
-import { useExperimentalFeature } from './useExperimentalFeatureEnabled'
 import { useMulticallGasLimit } from './useMulticallGasLimit'
 import { useSpeedQuote } from './useSpeedQuote'
 import { useTokenFee } from './useTokenFee'
@@ -546,7 +544,7 @@ export const useBestAMMTradeFromOffchainQuoter = bestTradeHookFactory<V4Router.V
 })
 
 export function useBestTradeFromApi({
-  // baseCurrency,
+  baseCurrency,
   amount,
   currency,
   enabled,
@@ -577,12 +575,12 @@ export function useBestTradeFromApi({
     return types
   }, [v2Swap, v3Swap, stableSwap])
 
-  // useTradeApiPrefetch({
-  //   currencyA: baseCurrency,
-  //   currencyB: currency,
-  //   enabled,
-  //   poolTypes,
-  // })
+  useTradeApiPrefetch({
+    currencyA: baseCurrency,
+    currencyB: currency,
+    enabled,
+    poolTypes,
+  })
 
   const deferQuotientRaw = useDeferredValue(amount?.quotient?.toString())
   const deferQuotient = useDebounce(deferQuotientRaw, 500)
@@ -629,142 +627,6 @@ export function useBestTradeFromApi({
       })
 
       const serverRes = await fetch(`${QUOTING_API}`, {
-        method: 'POST',
-        signal,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      })
-      const serializedRes = await serverRes.json()
-
-      const isExactIn = tradeType === TradeType.EXACT_INPUT
-      const result = parseQuoteResponse(serializedRes, {
-        chainId: currency.chainId,
-        currencyIn: isExactIn ? amount.currency : currency,
-        currencyOut: isExactIn ? currency : amount.currency,
-        tradeType,
-      })
-
-      const duration = Math.floor(performance.now() - startTime)
-
-      if (trackPerf) {
-        tracker.log(`[PERF] ${key} duration:${duration}ms`, {
-          chainId: currency.chainId,
-          label: key,
-          duration,
-        })
-      }
-
-      return result
-    },
-    placeholderData: (previousData, previousQuery) => {
-      const queryKey = previousQuery?.queryKey
-
-      if (!queryKey) return undefined
-      if (!previousEnabled) return undefined
-
-      return previousData
-    },
-  })
-}
-
-export function useBestTradeFromApiShadow(
-  {
-    // baseCurrency,
-    amount,
-    currency,
-    maxHops,
-    maxSplits,
-    stableSwap,
-    trackPerf,
-    tradeType = TradeType.EXACT_INPUT,
-    v2Swap,
-    v3Swap,
-    retry = false,
-  }: Options,
-  queryType: 'quote-api-ori' | 'quote-api-opt',
-) {
-  const QUOTING_API_PREFIX_ORIGINAL = 'https://pcsx-order-price-api-test-master-viosr.ondigitalocean.app'
-  const QUOTING_API_PREFIX_OPTIMIZED = 'https://pcsx-order-price-api-test-branch-nfu7y.ondigitalocean.app'
-  const prefix = queryType === 'quote-api-ori' ? QUOTING_API_PREFIX_ORIGINAL : QUOTING_API_PREFIX_OPTIMIZED
-  const { enabled: featureFlag } = useExperimentalFeature(EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE)
-
-  const [slippage] = useUserSlippage()
-  const poolTypes = useMemo(() => {
-    const types: PoolType[] = []
-    if (v2Swap) {
-      types.push(PoolType.V2)
-    }
-    if (v3Swap) {
-      types.push(PoolType.V3)
-    }
-    if (stableSwap) {
-      types.push(PoolType.STABLE)
-    }
-    if (types.length === 0) {
-      return undefined
-    }
-    return types
-  }, [v2Swap, v3Swap, stableSwap])
-
-  const deferQuotientRaw = useDeferredValue(amount?.quotient?.toString())
-
-  const deferQuotient = useDebounce(deferQuotientRaw, 500)
-  const enabled = featureFlag && !!(amount && currency?.chainId && deferQuotient && poolTypes?.length)
-  useTradeApiPrefetch(
-    {
-      currencyA: amount?.currency,
-      currencyB: currency,
-      enabled,
-      poolTypes,
-    },
-    prefix,
-    queryType,
-  )
-  const { address } = useAccount()
-  const { gasPrice } = useFeeDataWithGasPrice()
-
-  const previousEnabled = usePreviousValue(Boolean(currency?.chainId))
-
-  return useQuery({
-    enabled: featureFlag && !!(amount && currency?.chainId && deferQuotient && poolTypes?.length),
-    refetchInterval: POOLS_FAST_REVALIDATE[currency?.chainId as keyof typeof POOLS_FAST_REVALIDATE] ?? 10_000,
-    queryKey: [
-      queryType,
-      address,
-      currency?.chainId,
-      amount?.currency?.symbol,
-      currency?.symbol,
-      tradeType,
-      deferQuotient,
-      maxHops,
-      maxSplits,
-      poolTypes,
-      slippage,
-    ] as const,
-    retry,
-    queryFn: async ({ signal, queryKey }) => {
-      const [key] = queryKey
-      if (!amount || !amount.currency || !currency || !deferQuotient) {
-        throw new Error('Invalid amount or currency')
-      }
-
-      const startTime = performance.now()
-
-      const body = getRequestBody({
-        amount,
-        quoteCurrency: currency,
-        tradeType,
-        slippage: basisPointsToPercent(slippage),
-        amm: { maxHops, maxSplits, poolTypes, gasPriceWei: gasPrice },
-        x: {
-          useSyntheticQuotes: true,
-          swapper: address,
-        },
-      })
-
-      const serverRes = await fetch(`${prefix}/get-price-with-amm`, {
         method: 'POST',
         signal,
         headers: {
@@ -946,23 +808,19 @@ type PrefetchParams = {
 function getCurrencyIdentifierForApi(currency: Currency) {
   return currency.isNative ? zeroAddress : currency.address
 }
-export function useTradeApiPrefetch(
-  { currencyA, currencyB, poolTypes, enabled }: PrefetchParams,
-  prefix: string,
-  queryType: string,
-) {
+export function useTradeApiPrefetch({ currencyA, currencyB, poolTypes, enabled }: PrefetchParams) {
   return useQuery({
     enabled: !!(currencyA && currencyB && poolTypes?.length && enabled),
-    queryKey: [`${queryType}-prefetch`, currencyA?.chainId, currencyA?.symbol, currencyB?.symbol, poolTypes] as const,
+    queryKey: [`trade-api-prefetch`, currencyA?.chainId, currencyA?.symbol, currencyB?.symbol, poolTypes] as const,
     queryFn: async ({ signal }) => {
       if (!currencyA || !currencyB || !poolTypes?.length) {
         throw new Error('Invalid prefetch params')
       }
 
       const serverRes = await fetch(
-        `${prefix}/_pools/${currencyA.chainId}/${getCurrencyIdentifierForApi(currencyA)}/${getCurrencyIdentifierForApi(
-          currencyB,
-        )}?${qs.stringify({ protocols: poolTypes.map(getPoolTypeKey) })}`,
+        `${QUOTING_API_PREFIX}/_pools/${currencyA.chainId}/${getCurrencyIdentifierForApi(
+          currencyA,
+        )}/${getCurrencyIdentifierForApi(currencyB)}?${qs.stringify({ protocols: poolTypes.map(getPoolTypeKey) })}`,
         {
           method: 'GET',
           signal,
