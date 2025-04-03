@@ -22,21 +22,13 @@ import {
   ThemeSwitcher,
   Toggle,
 } from '@pancakeswap/uikit'
-import {
-  useAudioPlay,
-  useExpertMode,
-  useUserExpertModeAcknowledgement,
-  useUserSingleHopOnly,
-} from '@pancakeswap/utils/user'
-import { ExpertModal } from '@pancakeswap/widgets-internal'
+import { useUserSingleHopOnly } from '@pancakeswap/utils/user'
 import { TOKEN_RISK } from 'components/AccessRisk'
 import AccessRiskTooltips from 'components/AccessRisk/AccessRiskTooltips'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useSpeedQuote } from 'hooks/useSpeedQuote'
 import useTheme from 'hooks/useTheme'
 import { useWebNotifications } from 'hooks/useWebNotifications'
 import { ReactNode, Suspense, lazy, useCallback, useState } from 'react'
-import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useSubgraphHealthIndicatorManager, useUserUsernameVisibility } from 'state/user/hooks'
 import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
 import { useUserTokenRisk } from 'state/user/hooks/useUserTokenRisk'
@@ -50,9 +42,8 @@ import {
 } from 'state/user/smartRouter'
 import { usePCSX, usePCSXFeatureEnabled } from 'hooks/usePCSX'
 import { styled } from 'styled-components'
+import { useGlobalSettingsChanged } from 'hooks/useGlobalSettingsChanged'
 import GasSettings from './GasSettings'
-import TransactionSettings from './TransactionSettings'
-import { SettingsMode } from './types'
 
 const WebNotiToggle = lazy(() => import('./WebNotiToggle'))
 
@@ -79,234 +70,133 @@ const ScrollableContainer = styled(Flex)`
   }
 `
 
-export const withCustomOnDismiss =
-  (Component) =>
-  ({
-    onDismiss,
-    customOnDismiss,
-    mode,
-    ...props
-  }: {
-    onDismiss?: () => void
-    customOnDismiss: () => void
-    mode: SettingsMode
-  }) => {
-    const handleDismiss = useCallback(() => {
-      onDismiss?.()
-      if (customOnDismiss) {
-        customOnDismiss()
-      }
-    }, [customOnDismiss, onDismiss])
+const SettingsModal: React.FC<React.PropsWithChildren<InjectedModalProps>> = ({ onDismiss }) => {
+  const { chainId } = useActiveChainId()
+  const { t } = useTranslation()
+  const { isDark, setTheme } = useTheme()
 
-    return <Component {...props} mode={mode} onDismiss={handleDismiss} />
-  }
-
-const SettingsModal: React.FC<React.PropsWithChildren<InjectedModalProps>> = ({ onDismiss, mode }) => {
-  const [showConfirmExpertModal, setShowConfirmExpertModal] = useState(false)
-  const [showExpertModeAcknowledgement, setShowExpertModeAcknowledgement] = useUserExpertModeAcknowledgement()
-  const [expertMode, setExpertMode] = useExpertMode()
-  const [audioPlay, setAudioMode] = useAudioPlay()
-  const [speedQuote, setSpeedQuote] = useSpeedQuote()
+  const { isGlobalSettingsChanged, resetSettings } = useGlobalSettingsChanged()
   const [subgraphHealth, setSubgraphHealth] = useSubgraphHealthIndicatorManager()
   const [userUsernameVisibility, setUserUsernameVisibility] = useUserUsernameVisibility()
   const [showTestnet, setShowTestnet] = useUserShowTestnet()
   const { enabled } = useWebNotifications()
-
-  const { onChangeRecipient } = useSwapActionHandlers()
-  const { chainId } = useActiveChainId()
   const [tokenRisk, setTokenRisk] = useUserTokenRisk()
 
-  const { t } = useTranslation()
-  const { isDark, setTheme } = useTheme()
-
-  if (showConfirmExpertModal) {
-    return (
-      <ExpertModal
-        setShowConfirmExpertModal={setShowConfirmExpertModal}
-        onDismiss={onDismiss}
-        toggleExpertMode={() => setExpertMode((s) => !s)}
-        setShowExpertModeAcknowledgement={setShowExpertModeAcknowledgement}
-      />
-    )
-  }
-
-  const handleExpertModeToggle = () => {
-    if (expertMode || !showExpertModeAcknowledgement) {
-      onChangeRecipient(null)
-      setExpertMode((s) => !s)
-    } else {
-      setShowConfirmExpertModal(true)
-    }
-  }
-
   return (
-    <Modal title={t('Settings')} headerBackground="gradientCardHeader" onDismiss={onDismiss}>
+    <Modal
+      title={t('Settings')}
+      headerBackground="gradientCardHeader"
+      onDismiss={onDismiss}
+      headerRightSlot={
+        isGlobalSettingsChanged && (
+          <Button ml="8px" variant="text" scale="sm" onClick={resetSettings}>
+            {t('Reset')}
+          </Button>
+        )
+      }
+    >
       <ScrollableContainer>
-        {mode === SettingsMode.GLOBAL && (
-          <>
-            <Flex pb="24px" flexDirection="column">
-              <PreTitle mb="24px">{t('Global')}</PreTitle>
-              <Flex justifyContent="space-between" mb="24px">
-                <Text>{t('Dark mode')}</Text>
-                <ThemeSwitcher isDark={isDark} toggleTheme={() => setTheme(isDark ? 'light' : 'dark')} />
-              </Flex>
+        <Flex pb="24px" flexDirection="column">
+          <PreTitle mb="24px">{t('Global')}</PreTitle>
+          <Flex justifyContent="space-between" mb="24px">
+            <Text>{t('Dark mode')}</Text>
+            <ThemeSwitcher isDark={isDark} toggleTheme={() => setTheme(isDark ? 'light' : 'dark')} />
+          </Flex>
+          <Flex justifyContent="space-between" alignItems="center" mb="24px">
+            <Flex alignItems="center">
+              <Text>{t('Subgraph Health Indicator')}</Text>
+              <QuestionHelper
+                text={t(
+                  'Turn on subgraph health indicator all the time. Default is to show the indicator only when the network is delayed',
+                )}
+                placement="top"
+                ml="4px"
+              />
+            </Flex>
+            <Toggle
+              id="toggle-subgraph-health-button"
+              checked={subgraphHealth}
+              scale="md"
+              onChange={() => {
+                setSubgraphHealth(!subgraphHealth)
+              }}
+            />
+          </Flex>
+          <Flex justifyContent="space-between" alignItems="center" mb="24px">
+            <Flex alignItems="center">
+              <Text>{t('Show username')}</Text>
+              <QuestionHelper text={t('Shows username of wallet instead of bunnies')} placement="top" ml="4px" />
+            </Flex>
+            <Toggle
+              id="toggle-username-visibility"
+              checked={userUsernameVisibility}
+              scale="md"
+              onChange={() => {
+                setUserUsernameVisibility(!userUsernameVisibility)
+              }}
+            />
+          </Flex>
+          <Flex justifyContent="space-between" alignItems="center" mb="24px">
+            <Flex alignItems="center">
+              <Text>{t('Allow notifications')}</Text>
+              <QuestionHelper
+                text={t(
+                  'Enables the web notifications feature. If turned off you will be automatically unsubscribed and the notification bell will not be visible',
+                )}
+                placement="top"
+                ml="4px"
+              />
+              <BetaTag>{t('BETA')}</BetaTag>
+            </Flex>
+            <Suspense fallback={null}>
+              <WebNotiToggle enabled={enabled} />
+            </Suspense>
+          </Flex>
+          <Flex justifyContent="space-between" alignItems="center" mb="24px">
+            <Flex alignItems="center">
+              <Text>{t('Show testnet')}</Text>
+            </Flex>
+            <Toggle
+              id="toggle-show-testnet"
+              checked={showTestnet}
+              scale="md"
+              onChange={() => {
+                setShowTestnet((s) => !s)
+              }}
+            />
+          </Flex>
+          {chainId === ChainId.BSC && (
+            <>
               <Flex justifyContent="space-between" alignItems="center" mb="24px">
                 <Flex alignItems="center">
-                  <Text>{t('Subgraph Health Indicator')}</Text>
+                  <Text>{t('Token Risk Scanning')}</Text>
                   <QuestionHelper
-                    text={t(
-                      'Turn on subgraph health indicator all the time. Default is to show the indicator only when the network is delayed',
-                    )}
-                    placement="top"
-                    ml="4px"
-                  />
-                </Flex>
-                <Toggle
-                  id="toggle-subgraph-health-button"
-                  checked={subgraphHealth}
-                  scale="md"
-                  onChange={() => {
-                    setSubgraphHealth(!subgraphHealth)
-                  }}
-                />
-              </Flex>
-              <Flex justifyContent="space-between" alignItems="center" mb="24px">
-                <Flex alignItems="center">
-                  <Text>{t('Show username')}</Text>
-                  <QuestionHelper text={t('Shows username of wallet instead of bunnies')} placement="top" ml="4px" />
-                </Flex>
-                <Toggle
-                  id="toggle-username-visibility"
-                  checked={userUsernameVisibility}
-                  scale="md"
-                  onChange={() => {
-                    setUserUsernameVisibility(!userUsernameVisibility)
-                  }}
-                />
-              </Flex>
-              <Flex justifyContent="space-between" alignItems="center" mb="24px">
-                <Flex alignItems="center">
-                  <Text>{t('Allow notifications')}</Text>
-                  <QuestionHelper
-                    text={t(
-                      'Enables the web notifications feature. If turned off you will be automatically unsubscribed and the notification bell will not be visible',
-                    )}
-                    placement="top"
-                    ml="4px"
-                  />
-                  <BetaTag>{t('BETA')}</BetaTag>
-                </Flex>
-                <Suspense fallback={null}>
-                  <WebNotiToggle enabled={enabled} />
-                </Suspense>
-              </Flex>
-              <Flex justifyContent="space-between" alignItems="center" mb="24px">
-                <Flex alignItems="center">
-                  <Text>{t('Show testnet')}</Text>
-                </Flex>
-                <Toggle
-                  id="toggle-show-testnet"
-                  checked={showTestnet}
-                  scale="md"
-                  onChange={() => {
-                    setShowTestnet((s) => !s)
-                  }}
-                />
-              </Flex>
-              {chainId === ChainId.BSC && (
-                <>
-                  <Flex justifyContent="space-between" alignItems="center" mb="24px">
-                    <Flex alignItems="center">
-                      <Text>{t('Token Risk Scanning')}</Text>
-                      <QuestionHelper
-                        text={
-                          <AccessRiskTooltips
-                            hasResult
-                            riskLevel={TOKEN_RISK.SOME_RISK}
-                            riskLevelDescription={t(
-                              'Automatic risk scanning for the selected token. This scanning result is for reference only, and should NOT be taken as investment advice.',
-                            )}
-                          />
-                        }
-                        placement="top"
-                        ml="4px"
+                    text={
+                      <AccessRiskTooltips
+                        hasResult
+                        riskLevel={TOKEN_RISK.SOME_RISK}
+                        riskLevelDescription={t(
+                          'Automatic risk scanning for the selected token. This scanning result is for reference only, and should NOT be taken as investment advice.',
+                        )}
                       />
-                    </Flex>
-                    <Toggle
-                      id="toggle-token-risk"
-                      checked={tokenRisk}
-                      scale="md"
-                      onChange={() => {
-                        setTokenRisk(!tokenRisk)
-                      }}
-                    />
-                  </Flex>
-                  <GasSettings />
-                </>
-              )}
-            </Flex>
-          </>
-        )}
-        {mode === SettingsMode.SWAP_LIQUIDITY && (
-          <>
-            <Flex pt="3px" flexDirection="column">
-              <PreTitle>{t('Swaps & Liquidity')}</PreTitle>
-              <Flex justifyContent="space-between" alignItems="center" mb="24px">
-                {chainId === ChainId.BSC && <GasSettings />}
-              </Flex>
-              <TransactionSettings />
-            </Flex>
-            <Flex justifyContent="space-between" alignItems="center" mb="24px">
-              <Flex alignItems="center">
-                <Text>{t('Expert Mode')}</Text>
-                <QuestionHelper
-                  text={t('Bypasses confirmation modals and allows high slippage trades. Use at your own risk.')}
-                  placement="top"
-                  ml="4px"
+                    }
+                    placement="top"
+                    ml="4px"
+                  />
+                </Flex>
+                <Toggle
+                  id="toggle-token-risk"
+                  checked={tokenRisk}
+                  scale="md"
+                  onChange={() => {
+                    setTokenRisk(!tokenRisk)
+                  }}
                 />
               </Flex>
-              <Toggle
-                id="toggle-expert-mode-button"
-                scale="md"
-                checked={expertMode}
-                onChange={handleExpertModeToggle}
-              />
-            </Flex>
-            <Flex justifyContent="space-between" alignItems="center" mb="24px">
-              <Flex alignItems="center">
-                <Text>{t('Flippy sounds')}</Text>
-                <QuestionHelper
-                  text={t('Fun sounds to make a truly immersive pancake-flipping trading experience')}
-                  placement="top"
-                  ml="4px"
-                />
-              </Flex>
-              <PancakeToggle
-                id="toggle-audio-play"
-                checked={audioPlay}
-                onChange={() => setAudioMode((s) => !s)}
-                scale="md"
-              />
-            </Flex>
-            <Flex justifyContent="space-between" alignItems="center" mb="24px">
-              <Flex alignItems="center">
-                <Text>{t('Fast routing (BETA)')}</Text>
-                <QuestionHelper
-                  text={t('Increase the speed of finding best swapping routes')}
-                  placement="top"
-                  ml="4px"
-                />
-              </Flex>
-              <PancakeToggle
-                id="toggle-speed-quote"
-                checked={speedQuote}
-                onChange={() => setSpeedQuote((s) => !s)}
-                scale="md"
-              />
-            </Flex>
-            <RoutingSettingsButton />
-          </>
-        )}
+              <GasSettings />
+            </>
+          )}
+        </Flex>
       </ScrollableContainer>
     </Modal>
   )

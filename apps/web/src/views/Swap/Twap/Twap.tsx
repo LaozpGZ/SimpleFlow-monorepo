@@ -119,7 +119,6 @@ const useTokenModal = (
       showCommonBases
       commonBasesType={CommonBasesType.SWAP_LIMITORDER}
       showSearchInput
-      mode="swap-currency-input"
     />,
   )
 
