@@ -10,14 +10,21 @@ import type { InfinityPoolInfo } from 'state/farmsV4/state/type'
 import { isInfinityProtocol } from 'utils/protocols'
 import { Address } from 'viem'
 import { useAccount } from 'wagmi'
+import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
+import { isTestnetChainId } from '@pancakeswap/chains'
 
 import { fetchCampaignsByPoolIds } from './useCampaigns'
 import { useFarmRewardsFromAPIByChains, usePoolFarmRewardsFormAPI } from './useFarmReward'
 
 export const useMultiChainPoolsFarmingStatus = (pools: UniversalFarmConfig[]) => {
+  const [isShowTestnet] = useUserShowTestnet()
+
   const infinityPools = useMemo(
-    () => pools.filter((p) => isInfinityProtocol(p.protocol)) as InfinityPoolInfo[],
-    [pools],
+    () =>
+      pools.filter(
+        (p) => isInfinityProtocol(p.protocol) && (isShowTestnet || !isTestnetChainId(p.chainId)),
+      ) as InfinityPoolInfo[],
+    [pools, isShowTestnet],
   )
 
   const chainIdToPoolIdsMap = useMemo(() => {
