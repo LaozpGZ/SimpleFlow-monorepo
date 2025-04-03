@@ -509,7 +509,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     icon: '/images/ido/stakestone.svg', // Token Icon updated from provided assets
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/stakestone-banner.png`, // Updated Banner URL
-    contractAddress: '0xd44Ad558D691E5E32320e02D6896e9cB679D42d2', // Updated IDO Contract Address
+    contractAddress: '0xf87c2D0869e4864788e3EfF1f0354d9d3B19907b', // Updated IDO Contract Address
     tgeTitle: <Trans>StakeStone Token Generation Event</Trans>,
     tgeSubtitle: <Trans>Exclusively via Binance Keyless Wallet</Trans>,
     description: (
