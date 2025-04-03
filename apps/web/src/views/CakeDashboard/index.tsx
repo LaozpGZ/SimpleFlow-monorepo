@@ -3,7 +3,7 @@ import { Button, Flex, FlexGap, Grid, LogoRoundIcon, Text } from '@pancakeswap/u
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useRef } from 'react'
 import { CakeHoldersCard } from './components/general/CakeHoldersCard'
-import { CumulativeDeflation } from './components/general/CumulativeDeflation'
+import { CumulativeDeflationCard } from './components/general/CumulativeDeflationCard'
 import { FDVCard } from './components/general/FDVCard'
 import { MarketCapCard } from './components/general/MarketCapCard'
 import { SupplyCard } from './components/general/SupplyCard'
@@ -61,7 +61,7 @@ export const CakeDashboard = () => {
       </Grid>
 
       <SupplyDeflationCard mt="24px" />
-      <CumulativeDeflation mt="24px" />
+      <CumulativeDeflationCard mt="24px" />
 
       {/* <Text>Net Mint Cumulative</Text>
       {netMintCumulative && (

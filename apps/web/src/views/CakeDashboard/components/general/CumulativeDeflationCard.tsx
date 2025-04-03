@@ -482,18 +482,18 @@ const data = [
   },
 ]
 
-export const SupplyDeflationCard = (props: CardProps) => {
+export const CumulativeDeflationCard = (props: CardProps) => {
   const { t } = useTranslation()
 
   return (
     <StatsCard {...props}>
-      <StatsCardHeader mb="16px">{t('Supply & Deflation')}</StatsCardHeader>
+      <StatsCardHeader mb="16px">{t('Cumulative Deflation')}</StatsCardHeader>
 
       <ResponsiveContainer width="100%" height={300}>
         <ComposedChart width={900} height={300} data={data}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#F6F4FB" />
-          <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} />
           <Line type="monotone" dataKey="circulatingSupply" stroke="#31D0AA" strokeWidth={2} dot={false} />
+          <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} />
           <Bar dataKey="deflation" fill="#02919D" barSize={4} radius={[4, 4, 4, 4]} />
           <Tooltip />
           <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} tick={{ fill: '#9383B4' }} />
@@ -505,17 +505,17 @@ export const SupplyDeflationCard = (props: CardProps) => {
         <FlexGap alignItems="center" gap="4px">
           <FlexGap alignItems="center" gap="4px">
             <DotIcon color="#31D0AA" width="12px" />
-            <Text small>{t('Supply & Deflation')}</Text>
+            <Text small>{t('Cumulative Deflation')}</Text>
           </FlexGap>
           <VerticalDivider bg="#D7CAEC" />
           <FlexGap alignItems="center" gap="4px">
             <DotIcon color="#7645D9" width="12px" />
-            <Text small>{t('Total Supply')}</Text>
+            <Text small>{t('Deflation')}</Text>
           </FlexGap>
           <VerticalDivider bg="#D7CAEC" />
           <FlexGap alignItems="center" gap="4px">
             <DotIcon color="#02919D" width="12px" />
-            <Text small>{t('Deflation')}</Text>
+            <Text small>{t('Net Mint')}</Text>
           </FlexGap>
         </FlexGap>
       </LightGreyCard>
