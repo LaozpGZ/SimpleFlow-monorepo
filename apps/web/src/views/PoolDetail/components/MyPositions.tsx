@@ -281,15 +281,33 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   const currency1 = useCurrencyByChainId(poolInfo?.token1.address, chainId) ?? undefined
 
   const key = useMemo(() => `${chainId}:${lpAddress}` as const, [chainId, lpAddress])
-  const { lpApr, cakeApr, merklApr } = usePoolApr(key, poolInfo)
+  const { cakeApr, merklApr } = usePoolApr(key, poolInfo)
+
+  const { totalLpApr, totalCakeApr } = useMemo(() => {
+    const [lpNumerator, lpDenominator, cakeNumerator, cakeDenominator] = Object.values(totalApr).reduce(
+      (acc, v) => {
+        return [
+          acc[0].plus(new BigNumber(v.lpApr ?? 0).times(v.denominator)),
+          acc[1].plus(v.denominator),
+          acc[2].plus(new BigNumber(v.cakeApr?.value ?? 0).times(v.denominator)),
+          acc[3].plus(v.denominator),
+        ]
+      },
+      [BIG_ZERO, BIG_ZERO, BIG_ZERO, BIG_ZERO],
+    )
+    return {
+      totalLpApr: lpDenominator.isZero() ? '0' : (lpNumerator.div(lpDenominator).toFixed() as `${number}`),
+      totalCakeApr: cakeDenominator.isZero() ? '0' : (cakeNumerator.div(cakeDenominator).toFixed() as `${number}`),
+    }
+  }, [totalApr])
 
   const rewards = useAPRBreakdown({
     poolId: (poolInfo as InfinityPoolInfo).poolId,
-    tvlUSD: poolInfo.tvlUsd,
+    tvlUSD: denominator.isZero() ? '0' : (denominator.toFixed() as `${number}`),
     currency0,
     currency1,
-    lpApr,
-    cakeApr,
+    lpApr: totalLpApr,
+    cakeApr: { ...cakeApr, value: totalCakeApr },
     merklApr,
   })
 

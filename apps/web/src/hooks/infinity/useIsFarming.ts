@@ -1,9 +1,8 @@
-import { Protocol, UniversalFarmConfig } from '@pancakeswap/farms'
+import { UniversalFarmConfig } from '@pancakeswap/farms'
 import { useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import groupBy from 'lodash/groupBy'
 import mapValues from 'lodash/mapValues'
-import uniq from 'lodash/uniq'
 import { useMemo } from 'react'
 import { InfinityBinPositionDetail, InfinityCLPositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import type { InfinityPoolInfo } from 'state/farmsV4/state/type'
@@ -14,7 +13,7 @@ import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
 import { isTestnetChainId } from '@pancakeswap/chains'
 
 import { fetchCampaignsByPoolIds } from './useCampaigns'
-import { useFarmRewardsFromAPIByChains, usePoolFarmRewardsFormAPI } from './useFarmReward'
+import { usePoolFarmRewardsFormAPI } from './useFarmReward'
 
 export const useMultiChainPoolsFarmingStatus = (pools: UniversalFarmConfig[]) => {
   const [isShowTestnet] = useUserShowTestnet()
@@ -50,7 +49,9 @@ export const useMultiChainPoolsFarmingStatus = (pools: UniversalFarmConfig[]) =>
             const resultOfChain = campaignsByChains[idx]
             if (resultOfChain.status === 'fulfilled') {
               const activeCampaigns = resultOfChain.value.filter(
-                (camp) => Number(camp.startTime) + Number(camp.duration) >= Number(dayjs().unix()),
+                (camp) =>
+                  Number(camp.startTime) <= Number(dayjs().unix()) &&
+                  Number(camp.startTime) + Number(camp.duration) >= Number(dayjs().unix()),
               )
               // eslint-disable-next-line no-param-reassign
               acc[chain] = groupBy(activeCampaigns, 'poolId')
@@ -86,32 +87,32 @@ export const usePositionsWithFarming = <T extends InfinityBinPositionDetail | In
 }: {
   positions?: T[]
 }) => {
-  const { address } = useAccount()
-  const chainIds = useMemo(() => uniq(positions?.map((p) => p.chainId)), [positions])
-  const rewardMap = useFarmRewardsFromAPIByChains({
-    chainIds,
-    address,
-  })
+  const pools = useMemo(
+    () =>
+      positions?.map(
+        (p) =>
+          ({
+            chainId: p.chainId,
+            protocol: p.protocol,
+            poolId: p.poolId,
+          } as UniversalFarmConfig),
+      ) ?? [],
+    [positions],
+  )
+  const infinityPoolsFarmingStatus = useMultiChainPoolsFarmingStatus(pools)
   return useMemo(
     () =>
-      rewardMap
+      infinityPoolsFarmingStatus
         ? positions?.map((pos) => {
-            if (!(isInfinityProtocol(pos.protocol) && rewardMap[pos.chainId])) {
+            if (!(isInfinityProtocol(pos.protocol) && infinityPoolsFarmingStatus[pos.chainId]?.[pos.poolId])) {
               return pos
-            }
-            let isStaked = false
-            if (pos.protocol === Protocol.InfinityCLAMM) {
-              isStaked = !!rewardMap[pos.chainId].find((r) => r.tokenIds.includes(pos.tokenId.toString()))
-            }
-            if (pos.protocol === Protocol.InfinityBIN) {
-              isStaked = !!rewardMap[pos.chainId].find((r) => r.poolId === pos.poolId)
             }
             return {
               ...pos,
-              isStaked,
+              isStaked: !!infinityPoolsFarmingStatus[pos.chainId]?.[pos.poolId],
             }
           })
         : positions,
-    [positions, rewardMap],
+    [positions, infinityPoolsFarmingStatus],
   )
 }
