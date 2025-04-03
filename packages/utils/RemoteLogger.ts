@@ -8,14 +8,14 @@ export class RemoteLogger {
   }
 
   debug(log: string, indent: number = 0) {
-    if (process.env.NODE_ENV !== 'production' && this.id !== '__dummy__') {
+    if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production' && this.id !== '__dummy__') {
       const indentStr = '  '.repeat(indent)
       this.logs.push(`${indentStr}${log}`)
     }
   }
 
   debugJson(obj: any, indent: number = 0) {
-    if (process.env.NODE_ENV !== 'production' && this.id !== '__dummy__') {
+    if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production' && this.id !== '__dummy__') {
       try {
         const str = JSON.stringify(obj, (_, value) => (typeof value === 'bigint' ? value.toString() : value), 2)
         const lines = str.split('\n')
@@ -29,7 +29,7 @@ export class RemoteLogger {
   }
 
   async flush() {
-    if (process.env.NODE_ENV !== 'production' && this.id !== '__dummy__') {
+    if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production' && this.id !== '__dummy__') {
       // eslint-disable-next-line no-restricted-globals
       const origin = self.origin || window.location.origin
       await fetch(`${origin}/api/logger`, {
