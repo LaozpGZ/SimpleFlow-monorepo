@@ -6,6 +6,8 @@ import {
   CL_DYNAMIC_FEE_HOOKS_BY_CHAIN,
   DYNAMIC_FEE_FLAG,
   encodeHooksRegistration,
+  HOOK_CATEGORY,
+  HookData,
   hooksList,
   POOL_TYPE,
   type InfinitySupportedChains,
@@ -24,23 +26,27 @@ export const EMPTY_HOOK = {
   address: zeroAddress,
 }
 
+function getCLHookPreset(x: HookData) {
+  const hook = {
+    address: x.address,
+    registrationBitmap: encodeHooksRegistration(x.hooksRegistration),
+    poolKeyOverride: undefined as Partial<PoolKey<'CL'>> | undefined,
+  }
+
+  if (hook.address === CL_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.BSC] || x.category?.includes(HOOK_CATEGORY.DynamicFees)) {
+    hook.poolKeyOverride = {
+      fee: DYNAMIC_FEE_FLAG,
+    }
+  }
+  return hook
+}
 export const CL_HOOK_PRESETS_BY_CHAIN: { [key in InfinitySupportedChains]: HookPreset<'CL'>[] } = {
   [ChainId.BSC]: [
     EMPTY_HOOK,
     ...hooksList[ChainId.BSC]
       .filter((x) => x.poolType === POOL_TYPE.CLAMM)
       .map((x) => {
-        const hook = {
-          address: x.address,
-          registrationBitmap: encodeHooksRegistration(x.hooksRegistration),
-          poolKeyOverride: {},
-        }
-        if (hook.address === CL_DYNAMIC_FEE_HOOKS_BY_CHAIN[ChainId.BSC]) {
-          hook.poolKeyOverride = {
-            fee: DYNAMIC_FEE_FLAG,
-          }
-        }
-        return hook
+        return getCLHookPreset(x)
       }),
   ],
   [ChainId.BSC_TESTNET]: [

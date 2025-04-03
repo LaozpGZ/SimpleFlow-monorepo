@@ -30,6 +30,7 @@
     "@pancakeswap/swap-sdk-core": "workspace:*",
     "@pancakeswap/v3-sdk": "workspace:*",
     "@pancakeswap/permit2-sdk": "workspace:*",
+    "@pancakeswap/utils": "workspace:*",
     "bignumber.js": "^9.0.0",
     "tiny-invariant": "^1.3.3",
     "viem": "catalog:"
