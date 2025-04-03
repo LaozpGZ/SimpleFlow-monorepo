@@ -4,6 +4,7 @@ import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useRef } from 'react'
 import { BurnLastThirtyDaysCard } from './components/burns/BurnLastThirtyDaysCard'
 import { LastBurnCard } from './components/burns/LastBurnCard'
+import { RealTimeBurnHistoryCard } from './components/burns/RealTimeBurnHistoryCard'
 import { TotalBurnedCard } from './components/burns/TotalBurnedCard'
 import { WeeklyBurnStackedChart } from './components/burns/WeeklyBurnStackedChart'
 import { EmissionsPerBlockPieChart } from './components/emissions/EmissionsPerBlockPieChart'
@@ -101,6 +102,11 @@ export const CakeDashboard = () => {
         </FlexGap>
         <WeeklyBurnStackedChart />
       </Grid>
+
+      <Text mt="40px" fontSize="24px" bold>
+        {t('Real-Time Burn History')}
+      </Text>
+      <RealTimeBurnHistoryCard />
 
       {/* <Text>Net Mint Cumulative</Text>
       {netMintCumulative && (
