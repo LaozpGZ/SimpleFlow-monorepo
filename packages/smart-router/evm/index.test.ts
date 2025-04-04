@@ -40,6 +40,7 @@ test('exports', () => {
       "feeOnTransferDetectorAddresses",
       "fetchTokenFeeOnTransfer",
       "fetchTokenFeeOnTransferBatch",
+      "InfinityRouter",
       "SmartRouter",
       "Transformer",
       "getPoolAddress",
@@ -48,7 +49,6 @@ test('exports', () => {
       "InfinityMixedQuoterActions",
       "PoolType",
       "RouteType",
-      "InfinityRouter",
     ]
   `)
 })
