@@ -23,7 +23,7 @@ export function getBestRouteCombinationByQuotesNew(
   config: Config,
   quoteId?: string,
 ): BestRoutes | null {
-  const maxSplits = config.maxSplits ?? 4
+  const maxSplits = config.maxSplits || 4
   const minSplits = config.minSplits ?? 0
   if (maxSplits > 4) {
     throw new Error('maxSplits should be less than or equal to 4')
@@ -44,6 +44,15 @@ export function getBestRouteCombinationByQuotesNew(
     percentToQuotes[routeWithQuote.percent]!.push(routeWithQuote)
   }
 
+  Object.keys(percentToQuotes).forEach((key) => {
+    const _key = parseInt(key)
+    const list = percentToQuotes[parseInt(key)]
+    list.sort((a, b) => Number(b.quoteAdjustedForGas.quotient - a.quoteAdjustedForGas.quotient))
+    const oneHops = list.filter((x) => x.pools.length === 1)
+    const others = list.filter((x) => x.pools.length > 1)
+    percentToQuotes[_key] = [...oneHops, ...others.slice(0, 3)] // prune the search range.
+  })
+
   logger.debug('--- percentToQuotes ---')
   logger.debugJson(
     mapValues(percentToQuotes, (x) => {
@@ -58,69 +67,69 @@ export function getBestRouteCombinationByQuotesNew(
   )
   logger.debug('--- END percentToQuotes ---')
 
-  // Find all possible routes
-  // from split4Percents table each split's sum is 100%, avoiding bfs
-  const splits = split4Percents.filter((x) => x.length <= maxSplits && x.length >= minSplits)
+  for (let i = Math.max(minSplits, 1); i <= maxSplits; i++) {
+    const splits = split4Percents.filter((x) => x.length === i)
+    logger.debug(`try splits candidates=${splits.length}, minSplit=${minSplits}, maxSplit=${maxSplits}`)
+    logger.debugJson(splits, 2)
+    const candidateRoutes = splits
+      .map((percents) => {
+        return [
+          ...findPossibleRoutesByPercents(percentToQuotes, percents, { usedPools: new Set(), routes: [] }, quoteId),
+        ]
+      })
+      .flat()
+    logger.debug(`candidates=${candidateRoutes.length}`)
 
-  // Limit the candidates to 100 to speed-up
-  const candidateRoutes = splits
-    .map((percents) => [
-      ...take(
-        findPossibleRoutesByPercents(percentToQuotes, percents, { usedPools: new Set(), routes: [] }, quoteId),
-        100,
-      ),
-    ])
-    .flat()
-  logger.debug(`candidates=${candidateRoutes.length}`)
+    const weightedCandidates = candidateRoutes.map(scoreResult)
+    if (weightedCandidates.length === 0) {
+      throw new Error('No valid routes found')
+    }
+    weightedCandidates.sort((a, b) => Number(b.weight - a.weight))
+    const bestResult = weightedCandidates[0]
+    const swapRoute = computeSwapGasAdjustedQuotes(bestResult.data, chainId, tradeType)
 
-  const weightedCandidates = candidateRoutes.map(scoreResult)
-  if (weightedCandidates.length === 0) {
-    throw new Error('No valid routes found')
-  }
-  weightedCandidates.sort((a, b) => Number(b.weight - a.weight))
-  const bestResult = weightedCandidates[0]
-  const swapRoute = computeSwapGasAdjustedQuotes(bestResult.data, chainId, tradeType)
-
-  // Due to potential loss of precision when taking percentages of the input it is possible that the sum of the amounts of each
-  // route of our optimal quote may not add up exactly to exactIn or exactOut.
-  //
-  // We check this here, and if there is a mismatch
-  // add the missing amount to a random route. The missing amount size should be neglible so the quote should still be highly accurate.
-  const { routes: routeAmounts } = swapRoute
-  const totalAmount = routeAmounts.reduce(
-    (total, routeAmount) => total.add(routeAmount.amount),
-    CurrencyAmount.fromRawAmount(routeAmounts[0]!.amount.currency, 0),
-  )
-
-  const missingAmount = amount.subtract(totalAmount)
-  if (missingAmount.greaterThan(0)) {
-    logger.debug(
-      `Optimal route's amounts did not equal exactIn/exactOut total. Adding missing amount to last route in array. missingAmount=${missingAmount.quotient.toString()}`,
+    // Due to potential loss of precision when taking percentages of the input it is possible that the sum of the amounts of each
+    // route of our optimal quote may not add up exactly to exactIn or exactOut.
+    //
+    // We check this here, and if there is a mismatch
+    // add the missing amount to a random route. The missing amount size should be neglible so the quote should still be highly accurate.
+    const { routes: routeAmounts } = swapRoute
+    const totalAmount = routeAmounts.reduce(
+      (total, routeAmount) => total.add(routeAmount.amount),
+      CurrencyAmount.fromRawAmount(routeAmounts[0]!.amount.currency, 0),
     )
 
-    routeAmounts[routeAmounts.length - 1]!.amount = routeAmounts[routeAmounts.length - 1]!.amount.add(missingAmount)
-  }
+    const missingAmount = amount.subtract(totalAmount)
+    if (missingAmount.greaterThan(0)) {
+      logger.debug(
+        `Optimal route's amounts did not equal exactIn/exactOut total. Adding missing amount to last route in array. missingAmount=${missingAmount.quotient.toString()}`,
+      )
 
-  const { routes, quote: quoteAmount, estimatedGasUsed, estimatedGasUsedUSD } = swapRoute
-  const quote = CurrencyAmount.fromRawAmount(quoteCurrency, quoteAmount.quotient)
-  const isExactIn = tradeType === TradeType.EXACT_INPUT
-  return {
-    routes: routes.map(({ type, amount: routeAmount, quote: routeQuoteAmount, pools, path, percent }) => {
-      const routeQuote = CurrencyAmount.fromRawAmount(quoteCurrency, routeQuoteAmount.quotient)
-      return {
-        percent,
-        type,
-        pools,
-        path,
-        inputAmount: isExactIn ? routeAmount : routeQuote,
-        outputAmount: isExactIn ? routeQuote : routeAmount,
-      }
-    }),
-    gasEstimate: estimatedGasUsed,
-    gasEstimateInUSD: estimatedGasUsedUSD,
-    inputAmount: isExactIn ? amount : quote,
-    outputAmount: isExactIn ? quote : amount,
+      routeAmounts[routeAmounts.length - 1]!.amount = routeAmounts[routeAmounts.length - 1]!.amount.add(missingAmount)
+    }
+
+    const { routes, quote: quoteAmount, estimatedGasUsed, estimatedGasUsedUSD } = swapRoute
+    const quote = CurrencyAmount.fromRawAmount(quoteCurrency, quoteAmount.quotient)
+    const isExactIn = tradeType === TradeType.EXACT_INPUT
+    return {
+      routes: routes.map(({ type, amount: routeAmount, quote: routeQuoteAmount, pools, path, percent }) => {
+        const routeQuote = CurrencyAmount.fromRawAmount(quoteCurrency, routeQuoteAmount.quotient)
+        return {
+          percent,
+          type,
+          pools,
+          path,
+          inputAmount: isExactIn ? routeAmount : routeQuote,
+          outputAmount: isExactIn ? routeQuote : routeAmount,
+        }
+      }),
+      gasEstimate: estimatedGasUsed,
+      gasEstimateInUSD: estimatedGasUsedUSD,
+      inputAmount: isExactIn ? amount : quote,
+      outputAmount: isExactIn ? quote : amount,
+    }
   }
+  throw new Error('No valid routes found')
 }
 
 function computeSwapGasAdjustedQuotes(
@@ -210,7 +219,8 @@ function sumFn(currencyAmounts: CurrencyAmount<Currency>[]): CurrencyAmount<Curr
 
 function scoreResult(result: FindRouteResult): Weighted<RouteWithQuote[]> {
   const { routes } = result
-  const totalQuote = sumFn(routes.map((route) => route.quoteAdjustedForGas))
+  const totalQuote = sumFn(routes.map((route) => route.quoteAdjustedForGas)) // assume totalQuote.quotient is bigint
+
   return {
     weight: totalQuote.quotient,
     data: routes,
