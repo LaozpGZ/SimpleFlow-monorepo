@@ -1,5 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 
+import { checksumAddress } from 'viem'
 import { HOOK_CATEGORY, POOL_TYPE, type HookData, type PoolType } from '../../types'
 import { CL_DYNAMIC_FEE_HOOKS_BY_CHAIN } from './dynamicFeeHook'
 
@@ -8,7 +9,7 @@ export const CL_DYNAMIC_HOOK = {
   name: 'Dynamic Fees (CLAMM)',
   poolType: POOL_TYPE.CLAMM,
   description: 'It will set lpFee to 3000 i.e 0.3% in afterInitialize',
-  github: 'https://bscscan.com/address/0x80DAf0057F5A454e70eAecD6e5F6769f563F7AC3',
+  github: 'https://github.com/pancakeswap/infinity-dynamic-fee-hook',
   category: [HOOK_CATEGORY.DynamicFees],
   isVerified: true,
   isUpgradable: false,
@@ -41,7 +42,7 @@ const dynamicHooksList: HookData[] = [CL_DYNAMIC_HOOK]
 export const bscHooksList: HookData[] = [
   ...dynamicHooksList,
   {
-    address: '0x9F0D5091D31a7801d34da352572BAc84e8Ac48Ad',
+    address: checksumAddress('0x9F0D5091D31a7801d34da352572BAc84e8Ac48Ad'),
     name: 'Fee Discount Hook (CAKE Holding)',
     poolType: POOL_TYPE.CLAMM,
     description: 'Fee discount based on the last 30-day CAKE token holding.',
@@ -56,12 +57,12 @@ export const bscHooksList: HookData[] = [
     },
   },
   {
-    address: '0x4910a4852A06D0F6B206bd737ea3C98866Be796C',
+    address: checksumAddress('0x4910a4852A06D0F6B206bd737ea3C98866Be796C'),
     name: 'Fee Discount Hook (Trading Volume)',
     poolType: POOL_TYPE.CLAMM,
     description: 'Fee discount based on the last 30-day trading volume.',
     github: 'https://github.com/brevis-network/vip-hook',
-    category: [HOOK_CATEGORY.Oracle, HOOK_CATEGORY.JIT, HOOK_CATEGORY.Others],
+    category: [HOOK_CATEGORY.Oracle, HOOK_CATEGORY.JIT, HOOK_CATEGORY.Others, HOOK_CATEGORY.DynamicFees],
     creator: 'https://github.com/brevis-network',
     audit: '',
     isVerified: true,
