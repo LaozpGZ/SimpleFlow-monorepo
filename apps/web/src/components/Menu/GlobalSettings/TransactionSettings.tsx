@@ -151,7 +151,7 @@ const SlippageTabs = () => {
             }}
             variant={isAutoSlippageEnabled ? 'subtle' : 'light'}
           >
-            Auto
+            {t('Auto')}
           </StyledButton>
           <StyledButton
             scale="sm"
