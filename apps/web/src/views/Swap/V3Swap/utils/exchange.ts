@@ -42,21 +42,6 @@ export function computeSlippageAdjustedAmounts(
   const pct = basisPointsToPercent(allowedSlippage)
   const trade = order?.trade
 
-  // If it's a V4 trade, handle it differently
-  if (trade && isV4Trade(trade)) {
-    // For V4 trades, we need to calculate the slippage-adjusted amounts manually
-    const { inputAmount, outputAmount } = trade
-
-    // Calculate slippage-adjusted amounts
-    const slippageAdjustedInput = inputAmount.multiply(ONE_HUNDRED_PERCENT.add(pct))
-    const slippageAdjustedOutput = outputAmount.multiply(ONE_HUNDRED_PERCENT.subtract(pct))
-
-    return {
-      [Field.INPUT]: slippageAdjustedInput,
-      [Field.OUTPUT]: slippageAdjustedOutput,
-    }
-  }
-
   // For regular SmartRouterTrade
   return {
     [Field.INPUT]: order?.trade && SmartRouter.maximumAmountIn(order.trade, pct),

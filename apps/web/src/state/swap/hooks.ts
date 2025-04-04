@@ -168,8 +168,8 @@ export function useDerivedSwapInfo(
   ) {
     inputError = inputError ?? t('Invalid recipient')
   }
-
-  const { slippageTolerance: allowedSlippage, isAuto } = useAutoSlippageWithFallback()
+  // @ts-ignore
+  const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(v2Trade)
 
   const slippageAdjustedAmounts = v2Trade && allowedSlippage && computeSlippageAdjustedAmounts(v2Trade, allowedSlippage)
 

@@ -78,7 +78,7 @@ export const ConfirmSwapModal: React.FC<ConfirmSwapModalProps> = ({
 }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const { slippageTolerance: allowedSlippage, isAuto } = useAutoSlippageWithFallback()
+  const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(originalOrder?.trade)
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(originalOrder)
   const { recipient } = useSwapState()
   const loadingAnimationVisible = useMemo(() => {
