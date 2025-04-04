@@ -34,6 +34,7 @@ export const useHookByAddress = (chainId?: ChainId, address?: HookData['address'
 export const useHookByPoolId = (chainId?: ChainId, poolId?: Address): HookData | undefined => {
   const { data: poolKey } = usePoolKeyByPoolId(poolId, chainId)
   const hooksMap = useHooksMap(chainId)
+
   return useMemo(() => (poolKey?.hooks ? hooksMap[poolKey.hooks] : undefined), [hooksMap, poolKey?.hooks])
 }
 

@@ -24,17 +24,19 @@ const HookInfoItem = ({
   href,
   text,
   icon,
+  external,
 }: {
   label: string
   href: string
   text: string
   icon: React.ReactNode
+  external?: boolean
 }) => (
   <AutoRow gap="sm" justifyContent="space-between">
     <PreTitle bold={false} fontSize="16px" color="textSubtle" textTransform="capitalize">
       {label}
     </PreTitle>
-    <Link href={href}>
+    <Link href={href} target={external ? '_blank' : undefined} rel={external ? 'noreferrer' : undefined}>
       <Button scale="sm" variant="text" width="fit-content" px="0">
         <Text fontSize="16px" color="primary60" bold>
           {text}
@@ -75,7 +77,8 @@ export const PoolFeatures = ({ hookData }: { hookData: HookData }) => {
                 label={t('Hook Address')}
                 text={truncateHash(hookData.address)}
                 icon={forwardIcon}
-                href={hookData.address}
+                external
+                href={`https://bscscan.com/address/${hookData.address}`}
               />
             )}
             {hookData.github && (
