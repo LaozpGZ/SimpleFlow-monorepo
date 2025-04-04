@@ -131,6 +131,7 @@ type SupportedTrade =
 export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade): Percent {
   const { chainId } = useActiveChainId()
   const onL2 = isL2ChainId(chainId)
+  const inputBasedSlippage = useInputBasedAutoSlippage(trade?.inputAmount)
 
   // Get USD price of output amount
   const outputCurrency = trade?.outputAmount?.currency
@@ -210,7 +211,9 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
         result: calculatedSlippage.toFixed(2),
       })
 
-      return applySlippageLimits(calculatedSlippage)
+      return calculatedSlippage.lessThan(inputBasedSlippage)
+        ? inputBasedSlippage
+        : applySlippageLimits(calculatedSlippage)
     }
 
     console.log('Auto Slippage: Using DEFAULT_AUTO_SLIPPAGE because missing outputDollarValue or dollarCostToUse')
