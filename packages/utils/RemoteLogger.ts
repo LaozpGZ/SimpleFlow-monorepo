@@ -3,6 +3,8 @@ export class RemoteLogger {
 
   private id: string = ''
 
+  private createTime = new Date().getTime()
+
   constructor(_id: string) {
     this.id = _id
   }
@@ -11,6 +13,14 @@ export class RemoteLogger {
     if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production' && this.id !== '__dummy__') {
       const indentStr = '  '.repeat(indent)
       this.logs.push(`${indentStr}${log}`)
+    }
+  }
+
+  metric(log: string, indent: number = 0) {
+    if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production' && this.id !== '__dummy__') {
+      const indentStr = '  '.repeat(indent)
+      const time = new Date().getTime() - this.createTime
+      this.logs.push(`[${time}ms]${indentStr}${log}`)
     }
   }
 

@@ -3,7 +3,8 @@ import { BigintIsh, Currency, CurrencyAmount, TradeType, ZERO } from '@pancakesw
 
 import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
 import { ROUTE_CONFIG_BY_CHAIN } from './constants'
-import { computeAllRoutes, getBestRouteCombinationByQuotes } from './functions'
+import { computeAllRoutesNew } from './functions/computeAllRoutesNew'
+import { getBestRouteCombinationByQuotesNew } from './functions/getBestRouteCombinationByQuotesNew'
 import { createGasModel } from './gasModel'
 import { getRoutesWithValidQuote } from './getRoutesWithValidQuote'
 import { BestRoutes, RouteConfig, RouteType, SmartRouterTrade, TradeConfig } from './types'
@@ -50,6 +51,9 @@ export async function getBestTrade(
     }
     logger.debug(`find trade`)
     return trade
+  } catch (ex) {
+    logger.debug(`Error in getBestTrade ${ex}`)
+    throw ex
   } finally {
     logger.flush()
   }
@@ -95,7 +99,7 @@ async function getBestRoutes(
   logger.debug(`Candidate pools: ${candidatePools.length}`)
   logPools(quoteId, candidatePools, 2)
 
-  let baseRoutes = computeAllRoutes(inputCurrency, outputCurrency, candidatePools, maxHops)
+  let baseRoutes = computeAllRoutesNew(inputCurrency, outputCurrency, candidatePools, maxHops, quoteId)
   // Do not support mix route on exact output
   if (tradeType === TradeType.EXACT_OUTPUT) {
     baseRoutes = baseRoutes.filter(({ type }) => type !== RouteType.MIXED)
@@ -138,5 +142,5 @@ async function getBestRoutes(
   //     quote.currency.symbol,
   //   )
   // })
-  return getBestRouteCombinationByQuotes(amount, currency, routesWithValidQuote, tradeType, { maxSplits }, quoteId)
+  return getBestRouteCombinationByQuotesNew(amount, currency, routesWithValidQuote, tradeType, { maxSplits }, quoteId)
 }
