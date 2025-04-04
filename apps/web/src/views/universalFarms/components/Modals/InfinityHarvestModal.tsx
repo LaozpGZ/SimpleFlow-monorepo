@@ -99,8 +99,8 @@ export const InfinityHarvestModal = ({
           p.isStaked &&
           (p.protocol === Protocol.InfinityCLAMM
             ? positionEarningAmount?.[p.chainId]?.[p.poolId]?.[(p as InfinityCLPositionDetail).tokenId.toString()] ??
-              true
-            : positionEarningAmount?.[p.chainId]?.[p.poolId] ?? true)
+              false
+            : positionEarningAmount?.[p.chainId]?.[p.poolId] ?? false)
         )
       }),
     [positionList, positionEarningAmount],
