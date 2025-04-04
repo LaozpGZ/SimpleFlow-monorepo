@@ -3,6 +3,7 @@ import { CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
+import { TooltipCard } from '../styles'
 
 const data = [
   {
@@ -245,19 +246,22 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   const { t } = useTranslation()
   if (active && payload && payload.length) {
     return (
-      <LightGreyCard padding="8px 16px" style={{ userSelect: 'none' }}>
+      <TooltipCard>
         <Text small mb="8px">
           {label}
         </Text>
         {payload.map((entry: any) => (
-          <FlexGap key={entry.name} alignItems="center" gap="4px" mb="4px">
-            <DotIcon color={entry.color} width="12px" />
-            <Text small>
-              {t(entry.name)}: {entry.value.toLocaleString()}
+          <FlexGap justifyContent="space-between" gap="16px" key={entry.name}>
+            <FlexGap key={entry.name} alignItems="center" gap="6px" mb="4px">
+              <DotIcon color={entry.color} width="8px" mt="2px" />
+              <Text small>{t(entry.name)}</Text>
+            </FlexGap>
+            <Text small bold>
+              {entry.value.toLocaleString()}
             </Text>
           </FlexGap>
         ))}
-      </LightGreyCard>
+      </TooltipCard>
     )
   }
   return null

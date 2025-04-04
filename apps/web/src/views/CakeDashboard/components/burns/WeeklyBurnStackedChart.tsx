@@ -3,6 +3,7 @@ import { CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
+import { TooltipCard } from '../styles'
 
 const data = [
   {
@@ -261,19 +262,22 @@ const percentageData = data.map((week) => {
 const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
   if (active && payload && payload.length) {
     return (
-      <LightGreyCard padding="8px 16px" style={{ userSelect: 'none' }}>
+      <TooltipCard>
         <Text small mb="8px">
           {label}
         </Text>
         {payload.map((entry) => (
-          <FlexGap key={entry.name} alignItems="center" gap="4px" mb="4px">
-            <DotIcon color={entry.color} width="12px" />
-            <Text small>
-              {entry.name}: {entry.value?.toFixed(2)}%
+          <FlexGap justifyContent="space-between" gap="16px" key={entry.name}>
+            <FlexGap key={entry.name} alignItems="center" gap="6px" mb="4px">
+              <DotIcon color={entry.color} width="8px" mt="2px" />
+              <Text small>{entry.name}</Text>
+            </FlexGap>
+            <Text small bold>
+              {entry.value?.toFixed(2)}%
             </Text>
           </FlexGap>
         ))}
-      </LightGreyCard>
+      </TooltipCard>
     )
   }
   return null
@@ -286,8 +290,8 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
     <StatsCard {...props}>
       <StatsCardHeader mb="16px">{t('Weekly Burn')}</StatsCardHeader>
 
-      <ResponsiveContainer width="100%" height={420}>
-        <BarChart data={percentageData}>
+      <ResponsiveContainer width="100%" height={360}>
+        <BarChart data={percentageData} barCategoryGap="95%">
           <XAxis dataKey="name" fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />
           <YAxis
             fontSize="12px"

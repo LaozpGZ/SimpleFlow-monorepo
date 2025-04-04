@@ -1,4 +1,4 @@
-import { ScanLink, Table, Text } from '@pancakeswap/uikit'
+import { Box, BoxProps, ScanLink, Table, Text } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { styled } from 'styled-components'
 
@@ -6,10 +6,8 @@ const StyledTable = styled(Table)`
   width: 100%;
   background-color: ${({ theme }) => theme.card.background};
   padding: 8px;
-  margin-top: 24px;
 
   border-radius: ${({ theme }) => theme.radii.card};
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
 
   td,
   th {
@@ -62,65 +60,67 @@ const StyledScanLink = styled(ScanLink)`
   }
 `
 
-export const RealTimeBurnHistoryCard = () => {
+export const RealTimeBurnHistoryCard = (props: BoxProps) => {
   return (
-    <StyledTable>
-      <thead>
-        <tr>
-          <th>Tx Hash</th>
-          <th>Amount</th>
-          <th>Timestamp</th>
-          <th>From</th>
-          <th>To</th>
-          <th>Type</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>
-            <StyledScanLink href="#">
-              <Text>{truncateHash('0xef5546edb...ef5546edb')}</Text>
-            </StyledScanLink>
-          </td>
-          <td>
-            <Text>1.27 CAKE</Text>
-          </td>
-          <td>
-            <Text>1 minute ago</Text>
-          </td>
-          <td>
-            <Text>{truncateHash('0x0753...F2cD')}</Text>
-          </td>
-          <td>
-            <Text>{truncateHash('0x0753...F2cD')}</Text>
-          </td>
-          <td>
-            <Text color="textSubtle">Transfer</Text>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <StyledScanLink href="#">
-              <Text>{truncateHash('0xef5546edb...ef5546edb')}</Text>
-            </StyledScanLink>
-          </td>
-          <td>
-            <Text>127,382,283 CAKE</Text>
-          </td>
-          <td>
-            <Text>1 minute ago</Text>
-          </td>
-          <td>
-            <Text>{truncateHash('0x0753...F2cD')}</Text>
-          </td>
-          <td>
-            <Text>{truncateHash('0x0753...F2cD')}</Text>
-          </td>
-          <td>
-            <Text color="textSubtle">Transfer</Text>
-          </td>
-        </tr>
-      </tbody>
-    </StyledTable>
+    <Box {...props}>
+      <StyledTable>
+        <thead>
+          <tr>
+            <th>Tx Hash</th>
+            <th>Amount</th>
+            <th>Timestamp</th>
+            <th>From</th>
+            <th>To</th>
+            <th>Type</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <StyledScanLink href="#">
+                <Text>{truncateHash('0xef5546edb...ef5546edb')}</Text>
+              </StyledScanLink>
+            </td>
+            <td>
+              <Text>1.27 CAKE</Text>
+            </td>
+            <td>
+              <Text>1 minute ago</Text>
+            </td>
+            <td>
+              <Text>{truncateHash('0x0753...F2cD')}</Text>
+            </td>
+            <td>
+              <Text>{truncateHash('0x0753...F2cD')}</Text>
+            </td>
+            <td>
+              <Text color="textSubtle">Transfer</Text>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <StyledScanLink href="#">
+                <Text>{truncateHash('0xef5546edb...ef5546edb')}</Text>
+              </StyledScanLink>
+            </td>
+            <td>
+              <Text>127,382,283 CAKE</Text>
+            </td>
+            <td>
+              <Text>1 minute ago</Text>
+            </td>
+            <td>
+              <Text>{truncateHash('0x0753...F2cD')}</Text>
+            </td>
+            <td>
+              <Text>{truncateHash('0x0753...F2cD')}</Text>
+            </td>
+            <td>
+              <Text color="textSubtle">Transfer</Text>
+            </td>
+          </tr>
+        </tbody>
+      </StyledTable>
+    </Box>
   )
 }

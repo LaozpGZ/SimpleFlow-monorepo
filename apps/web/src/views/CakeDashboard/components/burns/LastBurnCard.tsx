@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CardProps, Flex, FlexGap, Text } from '@pancakeswap/uikit'
+import { CardProps, Flex, FlexGap, ScanLink, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { ProgressBar } from 'components/Progress/ProgressBar'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
@@ -9,8 +9,13 @@ export const LastBurnCard = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <StatsCardHeader>{t('Last Burn (date here)')}</StatsCardHeader>
+      <FlexGap alignItems="center" justifyContent="space-between">
+        <StatsCardHeader>{t('Last Burn')}</StatsCardHeader>
 
+        <ScanLink href="https://bscscan.com/tx/0x00" color="primary60" fontSize="14px" useBscCoinFallback>
+          a123s5re...
+        </ScanLink>
+      </FlexGap>
       <LightGreyCard mt="8px" padding="16px">
         <FlexGap alignItems="center" justifyContent="space-between">
           <Text fontSize="18px" bold>

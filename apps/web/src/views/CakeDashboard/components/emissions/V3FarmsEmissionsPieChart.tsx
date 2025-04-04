@@ -4,6 +4,7 @@ import { LightGreyCard } from 'components/Card'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts'
 import styled from 'styled-components'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
+import { TooltipCard } from '../styles'
 
 const ChartWrapper = styled.div`
   position: relative;
@@ -40,14 +41,17 @@ const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
     const percentage = ((entry.value / total) * 100).toFixed(2)
 
     return (
-      <LightGreyCard padding="8px 16px" style={{ userSelect: 'none' }}>
-        <FlexGap alignItems="center" gap="4px">
-          <DotIcon color={entry.color} width="12px" />
-          <Text small>
-            {entry.name}: {percentage}%
+      <TooltipCard>
+        <FlexGap justifyContent="space-between" gap="8px">
+          <FlexGap alignItems="center" gap="4px">
+            <DotIcon color={entry.color} width="12px" />
+            <Text small>{entry.name}</Text>
+          </FlexGap>
+          <Text small bold>
+            {percentage}%
           </Text>
         </FlexGap>
-      </LightGreyCard>
+      </TooltipCard>
     )
   }
   return null

@@ -1,24 +1,27 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, Flex, FlexGap, Grid, LogoRoundIcon, Text } from '@pancakeswap/uikit'
+import { Button, FlexGap, Grid, LogoRoundIcon, Text } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { LightGreyCard } from 'components/Card'
 import { useRef } from 'react'
-import { BurnLastThirtyDaysCard } from './components/burns/BurnLastThirtyDaysCard'
+import styled from 'styled-components'
 import { LastBurnCard } from './components/burns/LastBurnCard'
 import { RealTimeBurnHistoryCard } from './components/burns/RealTimeBurnHistoryCard'
 import { TotalBurnedCard } from './components/burns/TotalBurnedCard'
 import { WeeklyBurnStackedChart } from './components/burns/WeeklyBurnStackedChart'
-import { EmissionsPerBlockPieChart } from './components/emissions/EmissionsPerBlockPieChart'
-import { EmissionsThirtyDaysCard } from './components/emissions/EmissionsThirtyDaysCard'
 import { LastEmissionCard } from './components/emissions/LastEmissionCard'
 import { TotalEmissionsCard } from './components/emissions/TotalEmissionsCard'
-import { V3FarmsEmissionsPieChart } from './components/emissions/V3FarmsEmissionsPieChart'
 import { WeeklyEmissionsStackedBarChart } from './components/emissions/WeeklyEmissionsStackedBarChart'
 import { CakeHoldersCard } from './components/general/CakeHoldersCard'
-import { CumulativeDeflationCard } from './components/general/CumulativeDeflationCombinedGraph'
 import { FDVCard } from './components/general/FDVCard'
 import { MarketCapCard } from './components/general/MarketCapCard'
 import { SupplyDeflationCard } from './components/general/SupplyDeflationCombinedGraph'
 import { SupplyPieChart } from './components/general/SupplyPieChart'
+
+const StyledGradientCard = styled(LightGreyCard)`
+  background: ${({ theme }) => theme.colors.gradientCardHeader};
+  padding: 12px 16px;
+  width: fit-content;
+`
 
 export const CakeDashboard = () => {
   const { t } = useTranslation()
@@ -40,26 +43,64 @@ export const CakeDashboard = () => {
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
-      <FlexGap alignItems="center" gap="8px" flexWrap="wrap">
-        <LogoRoundIcon width="60px" height="60px" />
-        <Text fontSize="32px" bold>
-          {t('Burn Dashboard')}
-        </Text>
+      <FlexGap mt="24px" gap="16px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+        <FlexGap alignItems="center" gap="8px" flexWrap="wrap">
+          <LogoRoundIcon width="60px" height="60px" />
+          <Text fontSize="56px" color="secondary" bold>
+            {t('Burn Dashboard')}
+          </Text>
+        </FlexGap>
+        <FlexGap alignItems="center" gap="8px" flexWrap="wrap">
+          <StyledGradientCard>
+            <Text bold>{t('Last updated at: 2025 -April-3, UTC 00:00')}</Text>
+          </StyledGradientCard>
+          <NextLinkFromReactRouter
+            to="https://docs.pancakeswap.finance/governance-and-tokenomics/cake-tokenomics"
+            target="_blank"
+          >
+            <Button variant="subtle" width="max-content">
+              {t('Learn More')}
+            </Button>
+          </NextLinkFromReactRouter>
+        </FlexGap>
       </FlexGap>
 
-      <Flex mt="24px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-        <Text fontSize="24px" bold>
-          {t('General Overview')}
-        </Text>
-        <NextLinkFromReactRouter
-          to="https://docs.pancakeswap.finance/governance-and-tokenomics/cake-tokenomics"
-          target="_blank"
-        >
-          <Button variant="subtle">{t('Learn More')}</Button>
-        </NextLinkFromReactRouter>
-      </Flex>
+      <Grid mt="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr']} style={{ gap: '24px' }}>
+        <TotalBurnedCard />
+        <LastBurnCard />
+      </Grid>
+      <WeeklyBurnStackedChart mt="24px" />
+      <RealTimeBurnHistoryCard mt="24px" />
+
+      <Text mt="40px" fontSize="24px" bold>
+        {t('Emissions')}
+      </Text>
+      <Grid mt="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr']} style={{ gap: '24px' }}>
+        <TotalEmissionsCard />
+        <LastEmissionCard />
+      </Grid>
+
+      <WeeklyEmissionsStackedBarChart mt="24px" />
+
+      <Text mt="40px" fontSize="24px" bold>
+        {t('Key Statistics')}
+      </Text>
 
       <Grid
+        mt="24px"
+        gridTemplateColumns={['1fr', '1fr', '1fr', '2fr 1fr']}
+        gridTemplateRows={['1fr 1fr 1fr']}
+        style={{ gap: '24px' }}
+      >
+        <SupplyPieChart style={{ gridColumn: 1, gridRow: 'span 3' }} />
+        <MarketCapCard />
+        <FDVCard />
+        <CakeHoldersCard />
+      </Grid>
+
+      <SupplyDeflationCard mt="24px" />
+
+      {/* <Grid
         mt="24px"
         gridTemplateColumns={['1fr', '1fr', '1fr', '2fr 1fr']}
         gridTemplateRows={['1fr 1fr 1fr']}
@@ -106,7 +147,7 @@ export const CakeDashboard = () => {
       <Text mt="40px" fontSize="24px" bold>
         {t('Real-Time Burn History')}
       </Text>
-      <RealTimeBurnHistoryCard />
+      <RealTimeBurnHistoryCard /> */}
 
       {/* <Text>Net Mint Cumulative</Text>
       {netMintCumulative && (

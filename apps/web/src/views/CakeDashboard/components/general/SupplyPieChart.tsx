@@ -1,9 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
-import { LightGreyCard } from 'components/Card'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts'
 import styled from 'styled-components'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
+import { TooltipCard } from '../styles'
 
 const TextContainer = styled(Box)`
   position: absolute;
@@ -40,14 +40,17 @@ export const SupplyPieChart = (props: CardProps) => {
     if (active && payload && payload.length) {
       const entry = payload[0].payload
       return (
-        <LightGreyCard padding="8px 16px" style={{ userSelect: 'none' }}>
-          <FlexGap alignItems="center" gap="4px">
-            <DotIcon color={entry.color} width="12px" />
-            <Text small>
-              {entry.name}: {entry.value}M CAKE
+        <TooltipCard>
+          <FlexGap justifyContent="space-between" gap="8px">
+            <FlexGap alignItems="center" gap="4px">
+              <DotIcon color={entry.color} width="12px" />
+              <Text small>{entry.name}</Text>
+            </FlexGap>
+            <Text small bold>
+              {entry.value}M CAKE
             </Text>
           </FlexGap>
-        </LightGreyCard>
+        </TooltipCard>
       )
     }
     return null

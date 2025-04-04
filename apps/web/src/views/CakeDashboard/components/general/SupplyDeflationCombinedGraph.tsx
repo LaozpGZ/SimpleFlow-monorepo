@@ -14,6 +14,7 @@ import {
   YAxis,
 } from 'recharts'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
+import { TooltipCard } from '../styles'
 
 const data = [
   {
@@ -498,27 +499,39 @@ const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
   if (active && payload && payload.length) {
     const entry = payload[0].payload
     return (
-      <LightGreyCard padding="8px 16px" style={{ userSelect: 'none' }}>
+      <TooltipCard>
         <Text small>{entry.name}</Text>
 
-        <FlexGap flexDirection="column" gap="4px">
-          <FlexGap alignItems="center" gap="4px">
-            <DotIcon color="#7645D9" width="12px" />
-            <Text small>{t('Total Supply')}</Text>
-            <Text small>{entry.totalSupply}</Text>
+        <FlexGap mt="8px" flexDirection="column" gap="4px">
+          <FlexGap justifyContent="space-between" gap="16px">
+            <FlexGap alignItems="center" gap="4px">
+              <DotIcon color="#7645D9" width="12px" />
+              <Text small>{t('Total Supply')}</Text>
+            </FlexGap>
+            <Text small bold>
+              {entry.totalSupply}
+            </Text>
           </FlexGap>
-          <FlexGap alignItems="center" gap="4px">
-            <DotIcon color="#31D0AA" width="12px" />
-            <Text small>{t('Circulating Supply')}</Text>
-            <Text small>{entry.circulatingSupply}</Text>
+          <FlexGap justifyContent="space-between" gap="16px">
+            <FlexGap alignItems="center" gap="4px">
+              <DotIcon color="#31D0AA" width="12px" />
+              <Text small>{t('Circulating Supply')}</Text>
+            </FlexGap>
+            <Text small bold>
+              {entry.circulatingSupply}
+            </Text>
           </FlexGap>
-          <FlexGap alignItems="center" gap="4px">
-            <DotIcon color="#02919D" width="12px" />
-            <Text small>{t('Deflation')}</Text>
-            <Text small>{entry.deflation}</Text>
+          <FlexGap justifyContent="space-between" gap="16px">
+            <FlexGap alignItems="center" gap="4px">
+              <DotIcon color="#02919D" width="12px" />
+              <Text small>{t('Deflation')}</Text>
+            </FlexGap>
+            <Text small bold>
+              {entry.deflation}
+            </Text>
           </FlexGap>
         </FlexGap>
-      </LightGreyCard>
+      </TooltipCard>
     )
   }
   return null
