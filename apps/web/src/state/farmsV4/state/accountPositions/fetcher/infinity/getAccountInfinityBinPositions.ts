@@ -137,8 +137,7 @@ export const parseBinPositions = async (rows: Rows, chainId: number): Promise<In
           ...bin,
           reserveX: BigInt(bin.reserveX),
           reserveY: BigInt(bin.reserveY),
-          // @FIXME: @ChefJerry: This is a temporary fix for the issue that the userSharesOfBin is not returned from the API
-          userSharesOfBin: 0n,
+          userSharesOfBin: BigInt(bin.userSharesOfBin ?? 0),
           binLiquidity: BigInt(bin.binLiquidity),
         } satisfies ReserveOfBin),
     )

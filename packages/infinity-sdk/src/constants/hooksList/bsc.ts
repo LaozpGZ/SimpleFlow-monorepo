@@ -56,7 +56,7 @@ export const bscHooksList: HookData[] = [
     },
   },
   {
-    address: '0x4910a4852a06d0f6b206bd737ea3c98866be796c',
+    address: '0x4910a4852A06D0F6B206bd737ea3C98866Be796C',
     name: 'Fee Discount Hook (Trading Volume)',
     poolType: POOL_TYPE.CLAMM,
     description: 'Fee discount based on the last 30-day trading volume.',
