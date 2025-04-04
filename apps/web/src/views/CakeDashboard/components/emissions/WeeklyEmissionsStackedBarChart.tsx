@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
+import { CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
@@ -272,9 +272,14 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <StatsCardHeader>{t('Weekly Emissions')}</StatsCardHeader>
+      <FlexGap gap="6px" alignItems="center">
+        <StatsCardHeader>{t('Weekly Allocation')}</StatsCardHeader>
+        <QuestionHelperV2 text={t('This chart shows the weekly allocation of the CAKE token')}>
+          <InfoIcon color="textSubtle" />
+        </QuestionHelperV2>
+      </FlexGap>
 
-      <FlexGap height="100%" flexWrap={['wrap', 'wrap', 'wrap', 'wrap', 'nowrap']}>
+      <FlexGap mt="24px" height="100%" flexWrap={['wrap', 'wrap', 'wrap', 'wrap', 'nowrap']}>
         <ResponsiveContainer width="100%" height="100%" minWidth={100} minHeight={300}>
           <BarChart
             data={data}

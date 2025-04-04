@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
+import { CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
@@ -288,7 +288,12 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <StatsCardHeader mb="16px">{t('Weekly Burn')}</StatsCardHeader>
+      <FlexGap gap="6px" alignItems="center" mb="24px">
+        <StatsCardHeader>{t('Weekly Burn')}</StatsCardHeader>
+        <QuestionHelperV2 text={t('This chart shows the weekly burn of the CAKE token')}>
+          <InfoIcon color="textSubtle" />
+        </QuestionHelperV2>
+      </FlexGap>
 
       <ResponsiveContainer width="100%" height={360}>
         <BarChart data={percentageData} barCategoryGap="95%">
