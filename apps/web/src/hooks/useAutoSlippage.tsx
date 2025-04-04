@@ -173,23 +173,6 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
   const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount)
 
   return useMemo(() => {
-    console.log('Auto Slippage Debug:', {
-      hasTrade: !!trade,
-      onL2,
-      chainId,
-      supportsGasEstimate,
-      gasEstimateUSD,
-      gasCostUSDValue,
-      outputDollarValue,
-      outputCurrency: outputCurrency?.symbol,
-      outputUSDPrice: outputUSDPrice?.toSignificant(6),
-      outputAmount,
-      nativeGasPrice: nativeGasPrice?.toString(),
-      gasEstimate,
-      nativeGasCost: nativeGasCost?.toString(),
-      gasCostAmount,
-    })
-
     if (!trade || onL2) {
       console.log('Auto Slippage: Using DEFAULT_AUTO_SLIPPAGE because', !trade ? 'no trade' : 'on L2')
       return DEFAULT_AUTO_SLIPPAGE
@@ -203,7 +186,7 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
     if (outputDollarValue && dollarCostToUse) {
       const calculatedSlippage = calculateSlippageFromDollarValues(dollarCostToUse, outputDollarValue)
 
-      console.log('Auto Slippage: Calculated result', {
+      console.info('Auto Slippage: Calculated result', {
         dollarCostToUse,
         outputDollarValue,
         fraction: dollarCostToUse / outputDollarValue,
