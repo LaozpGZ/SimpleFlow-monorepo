@@ -1,12 +1,12 @@
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { TradeType } from '@pancakeswap/sdk'
 import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useMemo } from 'react'
-import useClassicAutoSlippageTolerance from './useAutoSlippage'
+import useClassicAutoSlippageTolerance, { useInputBasedAutoSlippage } from './useAutoSlippage'
 
 // Atom to store the user's preference for auto slippage
 const autoSlippageEnabledAtom = atomWithStorage('pcs:auto-slippage-enabled-2', true)
@@ -49,4 +49,24 @@ export function useAutoSlippageWithFallback(trade?: SupportedTrade): {
       isAuto: false,
     }
   }, [isAutoSlippageEnabled, trade, autoSlippageTolerance, userSlippageTolerance])
+}
+
+export const useInputBasedAutoSlippageWithFallback = (inputAmount?: CurrencyAmount<Currency>) => {
+  const [isAutoSlippageEnabled] = useAutoSlippageEnabled()
+  const [userSlippageTolerance] = useUserSlippage()
+  const autoSlippageTolerance = useInputBasedAutoSlippage(inputAmount)
+
+  return useMemo(() => {
+    if (isAutoSlippageEnabled && inputAmount) {
+      return {
+        slippageTolerance: Number(autoSlippageTolerance.numerator),
+        isAuto: true,
+      }
+    }
+
+    return {
+      slippageTolerance: userSlippageTolerance,
+      isAuto: false,
+    }
+  }, [isAutoSlippageEnabled, inputAmount, autoSlippageTolerance, userSlippageTolerance])
 }

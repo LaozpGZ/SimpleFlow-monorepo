@@ -2,7 +2,7 @@ import { ChainId } from '@pancakeswap/chains'
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { Percent, TradeType } from '@pancakeswap/sdk'
 import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { BigNumber } from 'bignumber.js'
 import { L2_CHAIN_IDS } from 'config/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -108,15 +108,15 @@ const calculateSlippageFromDollarValues = (dollarCostToUse: number, outputDollar
 }
 
 // Apply slippage tolerance limits
-const applySlippageLimits = (calculatedSlippage: Percent) => {
-  if (calculatedSlippage.greaterThan(MAX_AUTO_SLIPPAGE_TOLERANCE)) {
-    console.log('Auto Slippage: Using MAX_AUTO_SLIPPAGE_TOLERANCE', MAX_AUTO_SLIPPAGE_TOLERANCE.toFixed(2))
-    return MAX_AUTO_SLIPPAGE_TOLERANCE
+const applySlippageLimits = (calculatedSlippage: Percent, min = 50, max = 550) => {
+  if (calculatedSlippage.greaterThan(new Percent(max, 10_000))) {
+    console.log('Auto Slippage: Using MAX_AUTO_SLIPPAGE_TOLERANCE', new Percent(max, 10_000).toFixed(2))
+    return new Percent(max, 10_000)
   }
 
-  if (calculatedSlippage.lessThan(MIN_AUTO_SLIPPAGE_TOLERANCE)) {
-    console.log('Auto Slippage: Using MIN_AUTO_SLIPPAGE_TOLERANCE', MIN_AUTO_SLIPPAGE_TOLERANCE.toFixed(2))
-    return MIN_AUTO_SLIPPAGE_TOLERANCE
+  if (calculatedSlippage.lessThan(new Percent(min, 10_000))) {
+    console.log('Auto Slippage: Using MIN_AUTO_SLIPPAGE_TOLERANCE', new Percent(min, 10_000).toFixed(2))
+    return new Percent(min, 10_000)
   }
 
   console.log('Auto Slippage: Using calculated result', calculatedSlippage.toFixed(2))
@@ -231,4 +231,65 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
     nativeGasCost,
     gasCostAmount,
   ])
+}
+
+// Calculate slippage based on input dollar value
+export function useInputBasedAutoSlippage(inputAmount?: CurrencyAmount<Currency>): Percent {
+  const { chainId } = useActiveChainId()
+  const onL2 = isL2ChainId(chainId)
+
+  // Get USD price of input amount
+  const inputCurrency = inputAmount?.currency
+  const inputUSDPrice = useStablecoinPrice(inputCurrency)
+  const inputAmountValue = inputAmount?.toSignificant(6)
+  const inputDollarValue =
+    inputAmountValue && inputUSDPrice
+      ? parseFloat(inputAmountValue) * parseFloat(inputUSDPrice.toSignificant(6))
+      : undefined
+
+  // Gas estimation
+  const supportsGasEstimate = useMemo(() => chainId && chainSupportsGasEstimates(chainId), [chainId])
+  const nativeGasPrice = useGasPrice()
+  const nativeCurrency = useNativeCurrency(chainId)
+
+  // Use a fixed gas estimate for input-based calculation
+  const gasEstimate = 200000 // Default gas estimate
+
+  // Calculate native gas cost
+  const nativeGasCost = useMemo(
+    () => calculateNativeGasCost(nativeGasPrice?.toString(), gasEstimate),
+    [nativeGasPrice, gasEstimate],
+  )
+
+  // Convert native gas cost to USD
+  const gasCostAmount = useMemo(
+    () => calculateGasCostAmount(nativeGasCost, nativeCurrency),
+    [nativeGasCost, nativeCurrency],
+  )
+
+  // Get gas cost in USD
+  const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount)
+
+  return useMemo(() => {
+    // If no input amount or on L2 chain, use default
+    if (!inputAmount || onL2) {
+      return DEFAULT_AUTO_SLIPPAGE
+    }
+    // If we have input dollar value and gas cost, calculate slippage
+    if (inputDollarValue && gasCostUSDValue) {
+      // For input-based calculation, we use a different formula
+      // We want to ensure the slippage covers the gas cost relative to the input amount
+      const calculatedSlippage = calculateSlippageFromDollarValues(gasCostUSDValue, inputDollarValue)
+
+      // For input-based calculation, we might want to be more conservative
+      return applySlippageLimits(
+        calculatedSlippage,
+        Number(MIN_AUTO_SLIPPAGE_TOLERANCE.numerator),
+        Number(MAX_AUTO_SLIPPAGE_TOLERANCE.numerator),
+      )
+    }
+
+    // Default fallback
+    return DEFAULT_AUTO_SLIPPAGE
+  }, [inputAmount, onL2, inputDollarValue, gasCostUSDValue])
 }
