@@ -30,7 +30,7 @@ const ButtonsContainer = styled(FlexGap).attrs({ flexWrap: 'wrap', gap: '4px' })
 `
 
 const StyledButton = styled(Button)`
-  height: 40px;
+  height: 48px;
   padding: 0 8px;
   ${({ theme }) => theme.mediaQueries.md} {
     height: 52px;
@@ -189,7 +189,7 @@ const SlippageTabs = () => {
           <Flex ml="8px" pr="8px" alignItems="center">
             <Box position="relative" width="82px">
               <Input
-                scale={isMobile ? 'sm' : 'md'}
+                scale="md"
                 inputMode="decimal"
                 pattern="^[0-9]*[.,]?[0-9]{0,2}$"
                 placeholder={isAutoSlippageEnabled ? 'Auto' : (userSlippageTolerance / 100).toFixed(2)}
