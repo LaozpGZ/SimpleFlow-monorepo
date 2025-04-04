@@ -847,11 +847,18 @@ const getInfinityTokenData = async (
   chainName: components['schemas']['ChainName'],
   signal: AbortSignal,
 ) => {
-  const [infinityCl, infinityBin] = await Promise.all([
+  const [infinityClResult, infinityBinResult] = await Promise.allSettled([
     getTokenData(address, chainName, 'infinityCl', signal),
     getTokenData(address, chainName, 'infinityBin', signal),
   ])
-  return infinityCl ?? infinityBin ?? undefined
+
+  if (infinityClResult.status === 'fulfilled') {
+    return infinityClResult.value
+  }
+  if (infinityBinResult.status === 'fulfilled') {
+    return infinityBinResult.value
+  }
+  return undefined
 }
 
 export const useTokenDataQuery = (address: string | undefined): TokenData | undefined => {
