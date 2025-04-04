@@ -14,10 +14,10 @@ import { TotalEmissionsCard } from './components/emissions/TotalEmissionsCard'
 import { V3FarmsEmissionsPieChart } from './components/emissions/V3FarmsEmissionsPieChart'
 import { WeeklyEmissionsStackedBarChart } from './components/emissions/WeeklyEmissionsStackedBarChart'
 import { CakeHoldersCard } from './components/general/CakeHoldersCard'
-import { CumulativeDeflationCard } from './components/general/CumulativeDeflationCard'
+import { CumulativeDeflationCard } from './components/general/CumulativeDeflationCombinedGraph'
 import { FDVCard } from './components/general/FDVCard'
 import { MarketCapCard } from './components/general/MarketCapCard'
-import { SupplyDeflationCard } from './components/general/SupplyDeflationCard'
+import { SupplyDeflationCard } from './components/general/SupplyDeflationCombinedGraph'
 import { SupplyPieChart } from './components/general/SupplyPieChart'
 
 export const CakeDashboard = () => {

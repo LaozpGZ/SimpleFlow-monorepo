@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, CardProps, Text } from '@pancakeswap/uikit'
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
+import { Box, CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
+import { LightGreyCard } from 'components/Card'
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts'
 import styled from 'styled-components'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
@@ -34,6 +35,23 @@ export const SupplyPieChart = (props: CardProps) => {
     { name: 'Non-Circulating', value: TOTAL_SUPPLY - CIRCULATING, color: '#7645D9' },
     { name: 'Remaining', value: TOTAL_MAX - TOTAL_SUPPLY, color: '#FFB237' },
   ]
+
+  const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+      const entry = payload[0].payload
+      return (
+        <LightGreyCard padding="8px 16px" style={{ userSelect: 'none' }}>
+          <FlexGap alignItems="center" gap="4px">
+            <DotIcon color={entry.color} width="12px" />
+            <Text small>
+              {entry.name}: {entry.value}M CAKE
+            </Text>
+          </FlexGap>
+        </LightGreyCard>
+      )
+    }
+    return null
+  }
 
   return (
     <StatsCard {...props}>
@@ -69,7 +87,7 @@ export const SupplyPieChart = (props: CardProps) => {
                 <Cell key={`cell-${entry.name}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
           </PieChart>
         </ResponsiveContainer>
       </ChartWrapper>

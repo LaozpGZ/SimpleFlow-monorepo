@@ -298,7 +298,7 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
             ticks={[0, 50, 100]}
             tickFormatter={(value) => `${value}%`}
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
           <Bar dataKey="tradingFeeV3" fill="#7645D9" stackId="stack" />
           <Bar dataKey="prediction" fill="#FFB237" stackId="stack" />
           <Bar dataKey="lottery" fill="#ED4B9E" stackId="stack" />

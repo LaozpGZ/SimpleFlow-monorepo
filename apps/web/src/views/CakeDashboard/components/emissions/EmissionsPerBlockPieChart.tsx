@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
-import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts'
+import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts'
 import styled from 'styled-components'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
@@ -27,6 +27,26 @@ const data = [
   { name: 'V2Farms + StableSwap', value: 100, color: '#31D0AA' },
   { name: 'Special Farms', value: 300, color: '#FC9D31' },
 ]
+
+const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+  if (active && payload && payload.length) {
+    const entry = payload[0].payload
+    const total = data.reduce((sum, item) => sum + item.value, 0)
+    const percentage = ((entry.value / total) * 100).toFixed(2)
+
+    return (
+      <LightGreyCard padding="8px 16px" style={{ userSelect: 'none' }}>
+        <FlexGap alignItems="center" gap="4px">
+          <DotIcon color={entry.color} width="12px" />
+          <Text small>
+            {entry.name}: {percentage}%
+          </Text>
+        </FlexGap>
+      </LightGreyCard>
+    )
+  }
+  return null
+}
 
 export const EmissionsPerBlockPieChart = (props: CardProps) => {
   const { t } = useTranslation()
@@ -59,7 +79,7 @@ export const EmissionsPerBlockPieChart = (props: CardProps) => {
                 <Cell key={`cell-${entry.name}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip />
+            <Tooltip wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
           </PieChart>
         </ResponsiveContainer>
       </ChartWrapper>

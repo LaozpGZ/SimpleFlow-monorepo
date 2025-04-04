@@ -245,14 +245,17 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   const { t } = useTranslation()
   if (active && payload && payload.length) {
     return (
-      <LightGreyCard padding="8px 16px">
-        <Text small color="textSubtle" mb="4px">
+      <LightGreyCard padding="8px 16px" style={{ userSelect: 'none' }}>
+        <Text small mb="8px">
           {label}
         </Text>
         {payload.map((entry: any) => (
-          <Text key={`item-${entry.name}`} small color={entry.color}>
-            {t(entry.name)}: {entry.value.toLocaleString()}
-          </Text>
+          <FlexGap key={entry.name} alignItems="center" gap="4px" mb="4px">
+            <DotIcon color={entry.color} width="12px" />
+            <Text small>
+              {t(entry.name)}: {entry.value.toLocaleString()}
+            </Text>
+          </FlexGap>
         ))}
       </LightGreyCard>
     )
@@ -284,7 +287,7 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
             <Bar dataKey="lottery" fill="#ED4B9E" stackId="stack" barSize={20} />
             <Bar dataKey="perpetual" fill="#2882CC" stackId="stack" barSize={20} />
             <Bar dataKey="stableSwap" fill="#31D0AA" stackId="stack" radius={[4, 4, 0, 0]} barSize={20} />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
+            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} wrapperStyle={{ outline: 'none' }} />
             <XAxis dataKey="name" fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />
             <YAxis fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />
           </BarChart>

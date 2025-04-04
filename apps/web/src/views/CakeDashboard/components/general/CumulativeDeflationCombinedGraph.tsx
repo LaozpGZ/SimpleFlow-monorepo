@@ -2,7 +2,17 @@ import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
 import { LightGreyCard } from 'components/Card'
-import { Bar, CartesianGrid, ComposedChart, Line, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import {
+  Bar,
+  CartesianGrid,
+  ComposedChart,
+  Line,
+  ResponsiveContainer,
+  Tooltip,
+  TooltipProps,
+  XAxis,
+  YAxis,
+} from 'recharts'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
 const data = [
@@ -482,6 +492,38 @@ const data = [
   },
 ]
 
+const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
+  const { t } = useTranslation()
+
+  if (active && payload && payload.length) {
+    const entry = payload[0].payload
+    return (
+      <LightGreyCard padding="8px 16px" style={{ userSelect: 'none' }}>
+        <Text small>{entry.name}</Text>
+
+        <FlexGap flexDirection="column" gap="4px">
+          <FlexGap alignItems="center" gap="4px">
+            <DotIcon color="#7645D9" width="12px" />
+            <Text small>{t('Total Supply')}</Text>
+            <Text small>{entry.totalSupply}</Text>
+          </FlexGap>
+          <FlexGap alignItems="center" gap="4px">
+            <DotIcon color="#31D0AA" width="12px" />
+            <Text small>{t('Circulating Supply')}</Text>
+            <Text small>{entry.circulatingSupply}</Text>
+          </FlexGap>
+          <FlexGap alignItems="center" gap="4px">
+            <DotIcon color="#02919D" width="12px" />
+            <Text small>{t('Deflation')}</Text>
+            <Text small>{entry.deflation}</Text>
+          </FlexGap>
+        </FlexGap>
+      </LightGreyCard>
+    )
+  }
+  return null
+}
+
 export const CumulativeDeflationCard = (props: CardProps) => {
   const { t } = useTranslation()
 
@@ -495,7 +537,7 @@ export const CumulativeDeflationCard = (props: CardProps) => {
           <Line type="monotone" dataKey="circulatingSupply" stroke="#31D0AA" strokeWidth={2} dot={false} />
           <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} />
           <Bar dataKey="deflation" fill="#02919D" barSize={4} radius={[4, 4, 4, 4]} />
-          <Tooltip />
+          <Tooltip wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
           <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} tick={{ fill: '#9383B4' }} />
           <YAxis axisLine={false} tickLine={false} fontSize={12} tick={{ fill: '#9383B4' }} />
         </ComposedChart>
