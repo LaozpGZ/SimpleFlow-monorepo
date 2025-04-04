@@ -1,7 +1,6 @@
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
-import { TradeType } from '@pancakeswap/sdk'
 import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
@@ -32,9 +31,10 @@ export function useAutoSlippageWithFallback(trade?: SupportedTrade): {
   const [isAutoSlippageEnabled] = useAutoSlippageEnabled()
   const [userSlippageTolerance] = useUserSlippage()
   const autoSlippageTolerance = useClassicAutoSlippageTolerance(trade)
+  const isXOrder = Boolean((trade as ExclusiveDutchOrderTrade<Currency, Currency>)?.orderInfo)
 
   return useMemo(() => {
-    if (isAutoSlippageEnabled && trade) {
+    if (isAutoSlippageEnabled && trade && !isXOrder) {
       return {
         slippageTolerance: Number(autoSlippageTolerance.numerator),
         isAuto: true,
