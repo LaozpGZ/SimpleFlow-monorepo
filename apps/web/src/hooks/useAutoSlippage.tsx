@@ -35,7 +35,7 @@ const isV4Trade = (
     | ExclusiveDutchOrderTrade<Currency, Currency>
     | undefined,
 ): trade is V4Router.V4TradeWithoutGraph<TradeType> => {
-  return trade !== undefined && 'gasUseEstimate' in trade && !('orderInfo' in trade)
+  return trade !== undefined && trade !== null && 'gasUseEstimate' in trade && !('orderInfo' in trade)
 }
 
 // Estimate gas for a trade
