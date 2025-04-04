@@ -7,6 +7,7 @@ import {
   InfinityCLPositionDetail,
   POSITION_STATUS,
 } from 'state/farmsV4/state/accountPositions/type'
+import { usePoolTypeQuery } from 'views/AddLiquiditySelector/hooks/usePoolTypeQuery'
 import { useAccount } from 'wagmi'
 import { InfinityPositionActions } from '../components/PositionActions/InfinityPositionActions'
 import { InfinityBinPositionItem } from '../components/PositionItem/InfinityBinPositionItem'
@@ -27,10 +28,23 @@ export const useInfinityPositionItems = ({
   farmsOnly,
 }: InfinityPositionItemsParams) => {
   const { data: positions, isLoading } = useInfinityPositions()
+  const { poolTypeQuery } = usePoolTypeQuery()
+  const infinityTypes = useMemo(() => {
+    if (!poolTypeQuery?.length) return [Protocol.InfinityCLAMM, Protocol.InfinityBIN]
+    if (poolTypeQuery.includes(Protocol.InfinityCLAMM)) {
+      return [Protocol.InfinityCLAMM]
+    }
+    if (poolTypeQuery.includes(Protocol.InfinityBIN)) {
+      return [Protocol.InfinityBIN]
+    }
+    return []
+  }, [poolTypeQuery])
+
   const filteredPositions = useMemo(
     () =>
       positions.filter(
         (pos) =>
+          infinityTypes.includes(pos.protocol) &&
           selectedNetwork.includes(pos.chainId) &&
           (!selectedTokens?.length ||
             selectedTokens.some(
@@ -43,7 +57,7 @@ export const useInfinityPositionItems = ({
           (positionStatus === POSITION_STATUS.ALL || pos.status === positionStatus) &&
           (!farmsOnly || pos.isStaked),
       ),
-    [selectedNetwork, selectedTokens, positions, positionStatus, farmsOnly],
+    [positions, infinityTypes, selectedNetwork, selectedTokens, positionStatus, farmsOnly],
   )
 
   const sortedPositions = useMemo(() => filteredPositions.sort((a, b) => a.status - b.status), [filteredPositions])
