@@ -88,7 +88,7 @@ export const SlippageButton = ({ slippage, trade }: SlippageButtonProps) => {
                 onClick={onClick}
               >
                 {isAuto && slippageTolerance
-                  ? `Auto:${basisPointsToPercent(slippageTolerance).toFixed(2)}%`
+                  ? `Auto: ${basisPointsToPercent(slippageTolerance).toFixed(2)}%`
                   : typeof slippage === 'number'
                   ? `${basisPointsToPercent(slippage).toFixed(2)}%`
                   : slippage}

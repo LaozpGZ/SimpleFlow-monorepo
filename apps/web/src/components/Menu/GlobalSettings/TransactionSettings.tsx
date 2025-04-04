@@ -1,5 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, Flex, FlexGap, Input, Message, QuestionHelper, Text } from '@pancakeswap/uikit'
+import {
+  Box,
+  Button,
+  Flex,
+  FlexGap,
+  Input,
+  Message,
+  QuestionHelper,
+  Text,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useEffect, useState } from 'react'
 import { escapeRegExp } from 'utils'
@@ -20,7 +30,12 @@ const ButtonsContainer = styled(FlexGap).attrs({ flexWrap: 'wrap', gap: '4px' })
 `
 
 const StyledButton = styled(Button)`
-  height: 52px;
+  height: 40px;
+  padding: 0 8px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    height: 52px;
+    padding: 0 16px;
+  }
 `
 
 const StyledVerticalDivider = styled(VerticalDivider).attrs(({ theme }) => ({ bg: theme.colors.inputSecondary }))`
@@ -51,7 +66,7 @@ const SlippageTabs = () => {
   const [slippageInput, setSlippageInput] = useState('')
   const [deadlineInput, setDeadlineInput] = useState('')
   const [isAutoSlippageEnabled, setIsAutoSlippageEnabled] = useAutoSlippageEnabled()
-
+  const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
 
   const slippageInputIsValid =
@@ -127,7 +142,7 @@ const SlippageTabs = () => {
           />
         </Flex>
 
-        <ButtonsContainer>
+        <ButtonsContainer style={{ flexWrap: isMobile ? 'nowrap' : 'wrap' }}>
           <StyledButton
             scale="sm"
             onClick={() => {
@@ -174,7 +189,7 @@ const SlippageTabs = () => {
           <Flex ml="8px" pr="8px" alignItems="center">
             <Box position="relative" width="82px">
               <Input
-                scale="md"
+                scale={isMobile ? 'sm' : 'md'}
                 inputMode="decimal"
                 pattern="^[0-9]*[.,]?[0-9]{0,2}$"
                 placeholder={isAutoSlippageEnabled ? 'Auto' : (userSlippageTolerance / 100).toFixed(2)}
