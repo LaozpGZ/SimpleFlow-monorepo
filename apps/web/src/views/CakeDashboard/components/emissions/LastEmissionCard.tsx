@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CardProps, Text } from '@pancakeswap/uikit'
+import { CardProps, FlexGap, ScanLink, Text } from '@pancakeswap/uikit'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
 export const LastEmissionCard = (props: CardProps) => {
@@ -7,11 +7,13 @@ export const LastEmissionCard = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <StatsCardHeader>
-        {t('Last Emission')}
-        &nbsp;
-        <span style={{ fontSize: '14px' }}>({t('Date Here')})</span>
-      </StatsCardHeader>
+      <FlexGap justifyContent="space-between" alignItems="center">
+        <StatsCardHeader>{t('Last Emission')}</StatsCardHeader>
+
+        <ScanLink href="https://bscscan.com/tx/0x00" color="primary60" fontSize="14px" useBscCoinFallback>
+          a123s5re...
+        </ScanLink>
+      </FlexGap>
 
       <Text fontSize="24px" bold>
         9.3m CAKE

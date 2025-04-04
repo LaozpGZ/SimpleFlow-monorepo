@@ -70,6 +70,10 @@ export const CakeDashboard = () => {
         <LastBurnCard />
       </Grid>
       <WeeklyBurnStackedChart mt="24px" />
+
+      <Text mt="40px" fontSize="24px" bold>
+        {t('Real-Time Burn History')}
+      </Text>
       <RealTimeBurnHistoryCard mt="24px" />
 
       <Text mt="40px" fontSize="24px" bold>
