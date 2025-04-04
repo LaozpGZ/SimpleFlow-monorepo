@@ -17,7 +17,11 @@ export async function getBestTrade(
   config: TradeConfig,
 ): Promise<SmartRouterTrade<TradeType> | null> {
   const logger = RemoteLogger.getLogger(config.quoteId)
-  logger.debug(`[SmartRouter] getBestTrade ${config.quoteId}, input=${amount.toFixed(2)} ${currency.symbol}`)
+  logger.debug(
+    `[SmartRouter] getBestTrade ${config.quoteId}, [${TradeType[tradeType]}] input=${amount.toExact()} ${
+      currency.symbol
+    }`,
+  )
   try {
     const { blockNumber: blockNumberFromConfig } = config
     const blockNumber: BigintIsh | undefined =
