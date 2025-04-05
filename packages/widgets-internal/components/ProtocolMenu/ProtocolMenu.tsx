@@ -14,12 +14,16 @@ const StyledButtonMenuItem = styled(ButtonMenuItem)`
   ${({ isActive }) => (isActive ? `padding: 0 12px;` : "")};
 `;
 
+const StyledMenu = styled(ButtonMenu)`
+  width: 100%;
+`;
+
 export const ProtocolMenu: React.FC<IProtocolMenuProps> = ({ data, activeIndex, onChange }) => (
-  <ButtonMenu scale="sm" activeIndex={activeIndex ?? 0} onItemClick={onChange} variant="subtle">
+  <StyledMenu scale="sm" activeIndex={activeIndex ?? 0} onItemClick={onChange} variant="subtle">
     {data.map(({ label, value }) => (
       <StyledButtonMenuItem key={Array.isArray(value) ? value.join("") : value} height="38px">
         {label}
       </StyledButtonMenuItem>
     ))}
-  </ButtonMenu>
+  </StyledMenu>
 );
