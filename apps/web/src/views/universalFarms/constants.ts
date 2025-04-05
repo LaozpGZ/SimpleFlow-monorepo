@@ -7,7 +7,7 @@ import { useMemo } from 'react'
 
 export const usePoolProtocols = () => {
   const { t } = useTranslation()
-  const { isXs } = useMatchBreakpoints()
+  const { isMobile } = useMatchBreakpoints()
   return useMemo(
     () => [
       {
@@ -27,7 +27,7 @@ export const usePoolProtocols = () => {
         value: Protocol.V2,
       },
       {
-        label: isXs ? t('SS') : t('StableSwap'),
+        label: isMobile ? t('SS') : t('StableSwap'),
         value: Protocol.STABLE,
       },
     ],
