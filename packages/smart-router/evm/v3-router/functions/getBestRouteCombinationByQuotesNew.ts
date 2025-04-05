@@ -1,18 +1,23 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { ChainId } from '@pancakeswap/chains'
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
-import mapValues from 'lodash/mapValues.js'
+import { Currency, CurrencyAmount, Fraction, TradeType } from '@pancakeswap/sdk'
 
 import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
+import { keccak256 } from 'viem'
 import { usdGasTokensByChain } from '../../constants'
 import { BestRoutes, L1ToL2GasCosts, RouteWithQuote } from '../types'
 import { getPoolAddress } from '../utils'
 import { poolInfoStr } from '../utils/remoteLogs'
-import { split4Percents } from '../utils/split4Percents'
 
 interface Config {
   minSplits?: number
   maxSplits?: number
+}
+
+function hashRouteWithQuote(route: RouteWithQuote): string {
+  const { pools, percent } = route
+  const poolStr = pools.map((pool) => getPoolAddress(pool)).join('-')
+  return keccak256(`0x${poolStr}`)
 }
 
 export function getBestRouteCombinationByQuotesNew(
@@ -28,108 +33,124 @@ export function getBestRouteCombinationByQuotesNew(
   if (maxSplits > 4) {
     throw new Error('maxSplits should be less than or equal to 4')
   }
-
+  const { routes: sorted, routeDict: dict } = sortByWeights(routesWithQuote)
   const logger = RemoteLogger.getLogger(quoteId)
+  // Fill user's order by better price router first
+  let percent = 0
+  logger.debug(`sorted routes: ${sorted.length}, start fill order`)
+  const bestRoutes: RouteWithQuote[] = []
+  for (let i = 0; i < sorted.length && percent < 100; i++) {
+    const route = sorted[i]
+    percent += route.percent
+    logger.debug(`filled: ${percent}%, with ${route.pools.map(poolInfoStr).join('->')}`)
+    bestRoutes.push(route)
+  }
+
+  if (percent < 100) {
+    logger.debug('no route found because percent < 100')
+    throw new Error('No valid routes found')
+  }
+
+  if (percent > 100) {
+    const last = bestRoutes[bestRoutes.length - 1]
+    const left = last.percent - (percent - 100)
+    const last2 = dict[`${left}-${hashRouteWithQuote(last)}`]
+    if (!last2) {
+      logger.debug(`no route found because cannot fill last ${left}%`)
+      throw new Error('No valid routes found')
+    }
+    bestRoutes[bestRoutes.length - 1] = last2
+  }
+
   // eslint-disable-next-line
   const chainId: ChainId = amount.currency.chainId
   // const now = Date.now()
 
-  // Build a map of percentage of the input to list of valid quotes.
-  // Quotes can be null for a variety of reasons (not enough liquidity etc), so we drop them here too.
-  const percentToQuotes: { [percent: number]: RouteWithQuote[] } = {}
-  for (const routeWithQuote of routesWithQuote) {
-    if (!percentToQuotes[routeWithQuote.percent]) {
-      percentToQuotes[routeWithQuote.percent] = []
-    }
-    percentToQuotes[routeWithQuote.percent]!.push(routeWithQuote)
-  }
-
-  Object.keys(percentToQuotes).forEach((key) => {
-    const _key = parseInt(key)
-    const list = percentToQuotes[parseInt(key)]
-    list.sort((a, b) => Number(b.quoteAdjustedForGas.quotient - a.quoteAdjustedForGas.quotient))
-    const oneHops = list.filter((x) => x.pools.length === 1)
-    const others = list.filter((x) => x.pools.length > 1)
-    percentToQuotes[_key] = [...oneHops, ...others.slice(0, 3)] // prune the search range.
-  })
-
-  logger.debug('--- percentToQuotes ---')
-  logger.debugJson(
-    mapValues(percentToQuotes, (x) => {
-      return x.map((y) => {
-        return {
-          pools: y.pools.map((pool) => poolInfoStr(pool)),
-          quoteAdjustedForGas: y.quoteAdjustedForGas.info(),
-        }
-      })
-    }),
-    2,
-  )
   logger.debug('--- END percentToQuotes ---')
 
-  for (let i = Math.max(minSplits, 1); i <= maxSplits; i++) {
-    const splits = split4Percents.filter((x) => x.length === i)
-    logger.debug(`try splits candidates=${splits.length}, minSplit=${minSplits}, maxSplit=${maxSplits}`)
-    logger.debugJson(splits, 2)
-    const candidateRoutes = splits
-      .map((percents) => {
-        return [
-          ...findPossibleRoutesByPercents(percentToQuotes, percents, { usedPools: new Set(), routes: [] }, quoteId),
-        ]
-      })
-      .flat()
-    logger.debug(`candidates=${candidateRoutes.length}`)
+  const swapRoute = computeSwapGasAdjustedQuotes(bestRoutes, chainId, tradeType)
 
-    const weightedCandidates = candidateRoutes.map(scoreResult)
-    if (weightedCandidates.length === 0) {
-      throw new Error('No valid routes found')
-    }
-    weightedCandidates.sort((a, b) => Number(b.weight - a.weight))
-    const bestResult = weightedCandidates[0]
-    const swapRoute = computeSwapGasAdjustedQuotes(bestResult.data, chainId, tradeType)
+  // Due to potential loss of precision when taking percentages of the input it is possible that the sum of the amounts of each
+  // route of our optimal quote may not add up exactly to exactIn or exactOut.
+  //
+  // We check this here, and if there is a mismatch
+  // add the missing amount to a random route. The missing amount size should be neglible so the quote should still be highly accurate.
+  const { routes: routeAmounts } = swapRoute
+  const totalAmount = routeAmounts.reduce(
+    (total, routeAmount) => total.add(routeAmount.amount),
+    CurrencyAmount.fromRawAmount(routeAmounts[0]!.amount.currency, 0),
+  )
 
-    // Due to potential loss of precision when taking percentages of the input it is possible that the sum of the amounts of each
-    // route of our optimal quote may not add up exactly to exactIn or exactOut.
-    //
-    // We check this here, and if there is a mismatch
-    // add the missing amount to a random route. The missing amount size should be neglible so the quote should still be highly accurate.
-    const { routes: routeAmounts } = swapRoute
-    const totalAmount = routeAmounts.reduce(
-      (total, routeAmount) => total.add(routeAmount.amount),
-      CurrencyAmount.fromRawAmount(routeAmounts[0]!.amount.currency, 0),
+  const missingAmount = amount.subtract(totalAmount)
+  if (missingAmount.greaterThan(0)) {
+    logger.debug(
+      `Optimal route's amounts did not equal exactIn/exactOut total. Adding missing amount to last route in array. missingAmount=${missingAmount.quotient.toString()}`,
     )
 
-    const missingAmount = amount.subtract(totalAmount)
-    if (missingAmount.greaterThan(0)) {
-      logger.debug(
-        `Optimal route's amounts did not equal exactIn/exactOut total. Adding missing amount to last route in array. missingAmount=${missingAmount.quotient.toString()}`,
-      )
+    routeAmounts[routeAmounts.length - 1]!.amount = routeAmounts[routeAmounts.length - 1]!.amount.add(missingAmount)
+  }
 
-      routeAmounts[routeAmounts.length - 1]!.amount = routeAmounts[routeAmounts.length - 1]!.amount.add(missingAmount)
+  const { routes, quote: quoteAmount, estimatedGasUsed, estimatedGasUsedUSD } = swapRoute
+  const quote = CurrencyAmount.fromRawAmount(quoteCurrency, quoteAmount.quotient)
+  const isExactIn = tradeType === TradeType.EXACT_INPUT
+  return {
+    routes: routes.map(({ type, amount: routeAmount, quote: routeQuoteAmount, pools, path, percent }) => {
+      const routeQuote = CurrencyAmount.fromRawAmount(quoteCurrency, routeQuoteAmount.quotient)
+      return {
+        percent,
+        type,
+        pools,
+        path,
+        inputAmount: isExactIn ? routeAmount : routeQuote,
+        outputAmount: isExactIn ? routeQuote : routeAmount,
+      }
+    }),
+    gasEstimate: estimatedGasUsed,
+    gasEstimateInUSD: estimatedGasUsedUSD,
+    inputAmount: isExactIn ? amount : quote,
+    outputAmount: isExactIn ? quote : amount,
+  }
+}
+
+function weight(a: RouteWithQuote) {
+  const input = a.amount.quotient
+  const quote = a.quoteAdjustedForGas.quotient
+  return new Fraction(quote, input)
+}
+
+function sortByWeights(routes: RouteWithQuote[]) {
+  const largerRoutes: Record<string, RouteWithQuote> = {}
+  const dict: Record<string, RouteWithQuote> = {}
+  for (const route of routes) {
+    const hash = hashRouteWithQuote(route)
+    const item = largerRoutes[hash]
+    dict[`${route.percent}-${hash}`] = route
+    if (!item) {
+      largerRoutes[hash] = route
+      continue
     }
-
-    const { routes, quote: quoteAmount, estimatedGasUsed, estimatedGasUsedUSD } = swapRoute
-    const quote = CurrencyAmount.fromRawAmount(quoteCurrency, quoteAmount.quotient)
-    const isExactIn = tradeType === TradeType.EXACT_INPUT
-    return {
-      routes: routes.map(({ type, amount: routeAmount, quote: routeQuoteAmount, pools, path, percent }) => {
-        const routeQuote = CurrencyAmount.fromRawAmount(quoteCurrency, routeQuoteAmount.quotient)
-        return {
-          percent,
-          type,
-          pools,
-          path,
-          inputAmount: isExactIn ? routeAmount : routeQuote,
-          outputAmount: isExactIn ? routeQuote : routeAmount,
-        }
-      }),
-      gasEstimate: estimatedGasUsed,
-      gasEstimateInUSD: estimatedGasUsedUSD,
-      inputAmount: isExactIn ? amount : quote,
-      outputAmount: isExactIn ? quote : amount,
+    if (route.percent > item.percent) {
+      largerRoutes[hash] = route
     }
   }
-  throw new Error('No valid routes found')
+
+  const uniqRoutes = Object.values(largerRoutes)
+  uniqRoutes.sort((a, b) => {
+    const weightA = weight(a)
+    const weightB = weight(b)
+    if (weightA.lessThan(weightB)) {
+      return 1
+    }
+    if (weightA.greaterThan(weightB)) {
+      return -1
+    }
+    return 0
+  })
+
+  return {
+    routes: uniqRoutes,
+    routeDict: dict,
+  }
 }
 
 function computeSwapGasAdjustedQuotes(
@@ -200,74 +221,10 @@ function computeSwapGasAdjustedQuotes(
   }
 }
 
-interface Weighted<T> {
-  data: T
-  weight: bigint
-}
-interface FindRouteResult {
-  usedPools: Set<string>
-  routes: RouteWithQuote[]
-}
-
 function sumFn(currencyAmounts: CurrencyAmount<Currency>[]): CurrencyAmount<Currency> {
   let sum = currencyAmounts[0]!
   for (let i = 1; i < currencyAmounts.length; i++) {
     sum = sum.add(currencyAmounts[i]!)
   }
   return sum
-}
-
-function scoreResult(result: FindRouteResult): Weighted<RouteWithQuote[]> {
-  const { routes } = result
-  const totalQuote = sumFn(routes.map((route) => route.quoteAdjustedForGas)) // assume totalQuote.quotient is bigint
-
-  return {
-    weight: totalQuote.quotient,
-    data: routes,
-  }
-}
-
-function* findPossibleRoutesByPercents(
-  percentToQuotes: { [percent: number]: RouteWithQuote[] },
-  percents: number[],
-  state: FindRouteResult = { usedPools: new Set(), routes: [] },
-  quoteId?: string,
-): Generator<FindRouteResult, void, unknown> {
-  const index = state.routes.length
-  if (index === percents.length) {
-    yield state
-    return
-  }
-  const percent = percents[index]
-  const routes = percentToQuotes[percent]
-  if (!routes || routes.length === 0) {
-    return
-  }
-
-  for (const route of routes) {
-    const hasPoolUsed = route.pools.some((pool) => {
-      const poolAddress = getPoolAddress(pool)
-      return state.usedPools.has(poolAddress)
-    })
-    if (hasPoolUsed) {
-      continue
-    }
-    yield* findPossibleRoutesByPercents(
-      percentToQuotes,
-      percents,
-      {
-        usedPools: new Set([...state.usedPools, ...route.pools.map(getPoolAddress)]),
-        routes: [...state.routes, route],
-      },
-      quoteId,
-    )
-  }
-}
-
-function* take<T>(iterable: Iterable<T>, count: number): Generator<T> {
-  let i = 0
-  for (const item of iterable) {
-    if (i++ >= count) break
-    yield item
-  }
 }
