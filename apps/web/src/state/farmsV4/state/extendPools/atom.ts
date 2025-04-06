@@ -1,11 +1,11 @@
-import { useMemo } from 'react'
 import { ChainId } from '@pancakeswap/chains'
 import { Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
 import { atom, useAtom, useAtomValue } from 'jotai'
-import { type Address, isAddress } from 'viem'
-import { isAddressEqual } from 'utils'
-import uniqWith from 'lodash/uniqWith'
 import isEqual from 'lodash/isEqual'
+import uniqWith from 'lodash/uniqWith'
+import { useMemo } from 'react'
+import { isAddressEqual } from 'utils'
+import { type Address, isAddress } from 'viem'
 import { farmPoolsAtom } from '../farmPools/atom'
 import { ChainIdAddressKey, PoolInfo } from '../type'
 
@@ -39,6 +39,17 @@ export const DEFAULT_QUERIES = {
   after: '',
 }
 
+export const extendPoolsAtom = atom([] as PoolInfo[], (get, set, values: PoolInfo[], replaced = false) => {
+  // remove duplicates pools with farmPoolsAtom
+  const farms = get(farmPoolsAtom)
+  const newData = values.filter(
+    (pool) => !farms.some((farm) => isAddressEqual(farm.lpAddress, pool.lpAddress) && farm.protocol === pool.protocol),
+  )
+
+  const updatedPools = replaced ? newData : uniqWith([...get(extendPoolsAtom), ...newData], isEqual)
+  set(extendPoolsAtom, updatedPools)
+})
+
 export const useExtendPoolsAtom = () => {
   const [pools, setPools] = useAtom(extendPoolsAtom)
   const farms = useAtomValue(farmPoolsAtom)
@@ -47,7 +58,6 @@ export const useExtendPoolsAtom = () => {
     () => ({
       pools,
       setPools: (values: PoolInfo[], replaced = false, removeFarms = false) => {
-        // remove duplicates pools with farmPoolsAtom
         const newData = removeFarms
           ? values.filter(
               (pool) =>
@@ -60,14 +70,12 @@ export const useExtendPoolsAtom = () => {
             )
           : values
 
-        setPools(replaced ? newData : uniqWith(pools.concat(newData), isEqual))
+        setPools(newData, replaced)
       },
     }),
     [farms, pools, setPools],
   )
 }
-
-export const extendPoolsAtom = atom([] as PoolInfo[])
 
 interface PoolsOfPositionType {
   [address: Address]: PoolInfo
