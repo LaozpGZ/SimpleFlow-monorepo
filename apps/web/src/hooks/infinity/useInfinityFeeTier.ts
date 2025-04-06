@@ -9,7 +9,14 @@ export const useInfinityFeeTier = (pool: Pool | BinPool | null) => {
   }, [pool])
 }
 
-export function getInfinityFeeTier(pool: Pool | BinPool | null) {
+export function getInfinityFeeTier(
+  pool: {
+    protocolFee: number
+    fee: number
+    poolType: 'Bin' | 'CL' | undefined
+    dynamic?: boolean
+  } | null,
+) {
   /* eslint-disable no-bitwise */
   const protocolFee = (pool?.protocolFee ?? 0) & 0xfff
   const lpFee = pool?.fee ?? 0

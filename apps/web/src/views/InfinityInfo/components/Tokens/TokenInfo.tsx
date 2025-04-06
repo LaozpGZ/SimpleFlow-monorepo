@@ -62,10 +62,6 @@ import { infinityInfoPath } from '../../constants'
 import { usePoolsDataForToken } from './hooks/usePoolsDataForToken'
 import { useTokenChartData } from './hooks/useTokenChartData'
 
-const CandleChart = dynamic(() => import('views/V3Info/components/CandleChart'), {
-  ssr: false,
-})
-
 const LineChart = dynamic(() => import('views/V3Info/components/LineChart/alt'), {
   ssr: false,
 })
