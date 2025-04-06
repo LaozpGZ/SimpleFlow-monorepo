@@ -31,7 +31,7 @@ export const usePoolProtocols = () => {
         value: Protocol.STABLE,
       },
     ],
-    [t],
+    [isMobile, t],
   )
 }
 
