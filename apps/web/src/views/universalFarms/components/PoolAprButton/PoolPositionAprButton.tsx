@@ -1,3 +1,4 @@
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { useModalV2 } from '@pancakeswap/uikit'
 import { getCurrencyAddress } from '@pancakeswap/widgets-internal'
 import { useCurrencyByChainId } from 'hooks/Tokens'
@@ -94,11 +95,18 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
   const { updateTotalApr } = useMyPositions()
 
   useEffect(() => {
-    if (!numerator.isZero()) {
-      const key = `${pool.chainId}:${pool.lpAddress}:${'tokenId' in userPosition ? userPosition.tokenId : ''}`
-      updateTotalApr(key, numerator, denominator, lpApr, cakeApr)
-    }
+    const key = `${pool.chainId}:${pool.lpAddress}:${'tokenId' in userPosition ? userPosition.tokenId : ''}`
+    updateTotalApr(key, numerator, denominator, lpApr, cakeApr)
   }, [denominator, numerator, pool.chainId, pool.lpAddress, updateTotalApr, userPosition, lpApr, cakeApr])
+
+  useEffect(
+    () => () => {
+      const key = `${pool.chainId}:${pool.lpAddress}:${'tokenId' in userPosition ? userPosition.tokenId : ''}`
+      updateTotalApr(key, BIG_ZERO, BIG_ZERO, '0', { value: '0' })
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [],
+  )
 
   const { chainId } = userPosition
   const currency0 = useCurrencyByChainId(getCurrencyAddress(pool.token0), chainId)

@@ -95,13 +95,9 @@ export const InfinityHarvestModal = ({
   const stakedPositions = useMemo(
     () =>
       positionList?.filter((p) => {
-        return (
-          p.isStaked &&
-          (p.protocol === Protocol.InfinityCLAMM
-            ? positionEarningAmount?.[p.chainId]?.[p.poolId]?.[(p as InfinityCLPositionDetail).tokenId.toString()] ??
-              false
-            : positionEarningAmount?.[p.chainId]?.[p.poolId] ?? false)
-        )
+        return p.protocol === Protocol.InfinityCLAMM
+          ? positionEarningAmount?.[p.chainId]?.[p.poolId]?.[(p as InfinityCLPositionDetail).tokenId.toString()] ?? true
+          : positionEarningAmount?.[p.chainId]?.[p.poolId] ?? true
       }),
     [positionList, positionEarningAmount],
   )

@@ -154,6 +154,7 @@ export const PositionInfo = memo((props: PositionInfoProps) => {
         </DetailInfoTitle>
       ),
     [
+      isMobile,
       chainId,
       miniMode,
       feeTierBase,
@@ -214,11 +215,12 @@ export const PositionInfo = memo((props: PositionInfoProps) => {
             <V2Earnings pool={pool} />
           ) : Protocol.V3 === protocol && pool?.chainId ? (
             <V3Earnings tokenId={tokenId} chainId={pool?.chainId} />
-          ) : Protocol.InfinityCLAMM === protocol ? (
-            <InfinityCLEarnings tokenId={tokenId} chainId={pool?.chainId} poolId={pool?.lpAddress} />
-          ) : Protocol.InfinityBIN === protocol ? (
-            <InfinityBinEarnings chainId={pool?.chainId} poolId={pool?.lpAddress} />
           ) : null
+        ) : null}
+        {Protocol.InfinityCLAMM === protocol ? (
+          <InfinityCLEarnings tokenId={tokenId} chainId={pool?.chainId} poolId={pool?.lpAddress} />
+        ) : Protocol.InfinityBIN === protocol ? (
+          <InfinityBinEarnings chainId={pool?.chainId} poolId={pool?.lpAddress} />
         ) : null}
       </DetailInfoDesc>
     </>
@@ -256,7 +258,10 @@ const V3Earnings = ({ tokenId, chainId }: { tokenId?: bigint; chainId: number })
 
 const InfinityBinEarnings = ({ chainId, poolId }: { chainId?: number; poolId?: Address }) => {
   const { address } = useAccount()
-  const { rewardsAmount, rewardsUSD } = useUnclaimedFarmRewardsUSDByPoolId({
+  const {
+    data: { rewardsAmount, rewardsUSD },
+    isLoading,
+  } = useUnclaimedFarmRewardsUSDByPoolId({
     chainId,
     poolId,
     address,
@@ -270,17 +275,20 @@ const InfinityBinEarnings = ({ chainId, poolId }: { chainId?: number; poolId?: A
   const [, updatePositionEarningAmount] = usePositionEarningAmount()
 
   useEffect(() => {
-    if (!(chainId && poolId && rewardsAmount)) {
+    if (!(chainId && poolId && !isLoading)) {
       return
     }
     updatePositionEarningAmount(chainId, poolId, amount)
-  }, [amount, chainId, poolId, rewardsAmount, updatePositionEarningAmount])
+  }, [amount, chainId, poolId, isLoading, updatePositionEarningAmount])
   return <Earnings earningsAmount={amount} earningsBusd={rewardsUSD} />
 }
 
 const InfinityCLEarnings = ({ tokenId, chainId, poolId }: { tokenId?: bigint; chainId?: number; poolId?: Address }) => {
   const { address } = useAccount()
-  const { rewardsAmount, rewardsUSD } = useUnclaimedFarmRewardsUSDByTokenId({
+  const {
+    data: { rewardsAmount, rewardsUSD },
+    isLoading,
+  } = useUnclaimedFarmRewardsUSDByTokenId({
     chainId,
     tokenId,
     poolId,
@@ -295,11 +303,11 @@ const InfinityCLEarnings = ({ tokenId, chainId, poolId }: { tokenId?: bigint; ch
   const [, updatePositionEarningAmount] = usePositionEarningAmount()
 
   useEffect(() => {
-    if (!(chainId && poolId && tokenId && rewardsAmount)) {
+    if (!(chainId && poolId && tokenId && !isLoading)) {
       return
     }
     updatePositionEarningAmount(chainId, poolId, tokenId, amount)
-  }, [amount, chainId, poolId, tokenId, rewardsAmount, updatePositionEarningAmount])
+  }, [amount, chainId, poolId, tokenId, isLoading, updatePositionEarningAmount])
 
   return <Earnings earningsAmount={amount} earningsBusd={rewardsUSD} />
 }

@@ -44,13 +44,16 @@ export const logRoutesWithQuote = (quoteId: string | undefined, _routes: RouteWi
     const logger = RemoteLogger.getLogger(quoteId)
     const percent = route.percent.toFixed(2)
     const amt = route.amount
-    const { type, pools, input, output, quote } = route
+    const { type, pools, input, output, quote, quoteAdjustedForGas } = route
+
     logger.debug(
       `- #${i} [${percent}%] ${RouteType[type]}, pools=${pools.length}, ${input.symbol}/${output.symbol}`,
       indent,
     )
     logger.debug(
-      `quote: input:${amt.toFixed(2)} ${input.symbol} quote:${quote.toFixed(2)} ${output.symbol}`,
+      `quote: amount:${amt.toExact()} ${amt.currency.symbol} quote:${quoteAdjustedForGas.toExact()} ${
+        quoteAdjustedForGas.currency.symbol
+      }`,
       indent + 1,
     )
 

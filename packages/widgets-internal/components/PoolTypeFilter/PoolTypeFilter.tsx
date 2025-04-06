@@ -7,6 +7,7 @@ import { styled } from "styled-components";
 
 const Container = styled(Box)<{ isShow: boolean }>`
   width: 100%;
+  overflow: hidden;
   ${({ isShow, theme }) =>
     isShow &&
     `
@@ -130,6 +131,7 @@ export const PoolTypeFilter: React.FC<IPoolTypeFilterProps> = ({ data, onChange,
         style={{
           backgroundColor: theme.colors.input,
           width,
+          maxWidth: "100%",
         }}
         panelStyle={{
           backgroundColor: theme.colors.input,

@@ -25,6 +25,7 @@ import { useExtraInfinityPositionInfo, useExtraV3PositionInfo, usePoolApr } from
 import {
   InfinityBinPositionDetail,
   InfinityCLPositionDetail,
+  POSITION_STATUS,
   PositionDetail,
   StableLPDetail,
   V2LPDetail,
@@ -285,9 +286,8 @@ export const useInfinityBinPositionApr = (pool: InfinityPoolInfo, position: Infi
     pool,
     position,
     positionLiquidity: position.activeLiquidity,
-    // todo:@eric
-    removed: false,
-    outOfRange: false,
+    removed: position.status === POSITION_STATUS.CLOSED,
+    outOfRange: position.status === POSITION_STATUS.INACTIVE,
     cakeApr,
     userTVLUsd: poolTVLUsd,
   })
