@@ -108,8 +108,8 @@ async function getBestRoutes(
   if (tradeType === TradeType.EXACT_OUTPUT) {
     baseRoutes = baseRoutes.filter(({ type }) => type !== RouteType.MIXED)
   }
-  logger.debug(`Discovered ${baseRoutes.length} Base routes`)
-  logRoutes(quoteId, baseRoutes, 2)
+  logger.debug(`Discovered ${baseRoutes.length} Base routes, maxShow = 10`)
+  logRoutes(quoteId, baseRoutes.slice(0, 10), 2)
 
   const gasModel = await createGasModel({
     gasPriceWei,
@@ -131,8 +131,8 @@ async function getBestRoutes(
     quoteId,
     signal,
   })
-  logger.debug(`valid route=${routesWithValidQuote.length}`)
-  logRoutesWithQuote(quoteId, routesWithValidQuote)
+  logger.debug(`valid route=${routesWithValidQuote.length}, maxShow=100`)
+  logRoutesWithQuote(quoteId, routesWithValidQuote.slice(0, 100))
   // routesWithValidQuote.forEach(({ percent, path, amount: a, quote }) => {
   //   const pathStr = path.map((t) => t.symbol).join('->')
   //   console.log(
