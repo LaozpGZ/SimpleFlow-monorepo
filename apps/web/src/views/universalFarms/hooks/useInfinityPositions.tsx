@@ -1,5 +1,5 @@
 import intersection from 'lodash/intersection'
-import { Protocol } from '@pancakeswap/farms'
+import { ALL_PROTOCOLS, Protocol } from '@pancakeswap/farms'
 import { INetworkProps, ITokenProps, toTokenValue } from '@pancakeswap/widgets-internal'
 import { useMemo } from 'react'
 import { getKeyForPools, useAccountInfinityBinPositions, useAccountInfinityCLPositions } from 'state/farmsV4/hooks'
@@ -31,7 +31,11 @@ export const useInfinityPositionItems = ({
   farmsOnly,
 }: InfinityPositionItemsParams) => {
   const { data: positions, isLoading } = useInfinityPositions()
-  const { protocols: infinityTypes, isSelectAllFeatures, features } = usePoolFeatureAndType()
+  const { protocols, isSelectAllProtocols, isSelectAllFeatures, features } = usePoolFeatureAndType()
+  const infinityTypes = useMemo(
+    () => (isSelectAllProtocols || !protocols.length ? ALL_PROTOCOLS : protocols),
+    [protocols, isSelectAllProtocols],
+  )
 
   const filteredPositions = useMemo(
     () =>

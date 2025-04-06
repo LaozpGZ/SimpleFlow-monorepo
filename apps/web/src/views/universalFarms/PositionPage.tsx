@@ -263,7 +263,7 @@ export const PositionPage = () => {
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const [cursorVisible, setCursorVisible] = useState(NUMBER_OF_FARMS_VISIBLE)
   const { replaceURLQueriesByFilter, ...filters } = useFilterToQueries()
-  const { features, isSelectAllFeatures, isSelectAllProtocols } = usePoolFeatureAndType()
+  const { features, isSelectAllFeatures, isSelectAllProtocols, protocols } = usePoolFeatureAndType()
   const { isMobile, isMd } = useMatchBreakpoints()
 
   const { selectedProtocolIndex, selectedNetwork, selectedTokens, positionStatus, farmsOnly } = filters
@@ -331,15 +331,15 @@ export const PositionPage = () => {
     farmsOnly,
   })
 
-  const sectionMap = useMemo(
-    () => ({
+  const sectionMap = useMemo(() => {
+    const allProtocols = isSelectAllProtocols || !protocols.length
+    return {
       [Protocol.InfinityCLAMM]: infinityPositionList,
-      [Protocol.V3]: isSelectAllProtocols ? v3PositionList : [],
-      [Protocol.V2]: isSelectAllProtocols ? v2PositionList : [],
-      [Protocol.STABLE]: isSelectAllProtocols ? stablePositionList : [],
-    }),
-    [isSelectAllProtocols, infinityPositionList, v3PositionList, v2PositionList, stablePositionList],
-  )
+      [Protocol.V3]: allProtocols ? v3PositionList : [],
+      [Protocol.V2]: allProtocols ? v2PositionList : [],
+      [Protocol.STABLE]: allProtocols ? stablePositionList : [],
+    }
+  }, [isSelectAllProtocols, protocols, infinityPositionList, v3PositionList, v2PositionList, stablePositionList])
 
   const allPositionList = useMemo(() => {
     return flatten(Object.values(sectionMap))
