@@ -126,10 +126,12 @@ export const getAccountInfinityBinPositionByPoolId = async ({
 
     const reserveX = reserveOfBins.reduce((acc, bin) => acc + bin.reserveX, BigInt(0))
     const reserveY = reserveOfBins.reduce((acc, bin) => acc + bin.reserveY, BigInt(0))
-    const liquidity = reserveOfBins.reduce((acc, bin) => acc + bin.binLiquidity, BigInt(0))
-    const activeLiquidity = reserveOfBins.find((bin) => bin.binId === activeBinId)?.binLiquidity ?? 0n
+    const poolLiquidity = reserveOfBins.reduce((acc, bin) => acc + bin.binLiquidity, BigInt(0))
+    const poolActiveLiquidity = reserveOfBins.find((bin) => bin.binId === activeBinId)?.binLiquidity ?? 0n
+    const userLiquidity = reserveOfBins.reduce((acc, bin) => acc + bin.userSharesOfBin, BigInt(0))
+    const userActiveLiquidity = reserveOfBins.find((bin) => bin.binId === activeBinId)?.userSharesOfBin ?? 0n
 
-    if (liquidity === 0n) return undefined
+    if (userLiquidity === 0n) return undefined
 
     let status: POSITION_STATUS = POSITION_STATUS.INACTIVE
     const activeBin = reserveOfBins.find((bin) => bin.binId === activeBinId)
@@ -147,10 +149,12 @@ export const getAccountInfinityBinPositionByPoolId = async ({
       reserveY,
       minBinId,
       maxBinId,
-      liquidity,
+      liquidity: userLiquidity,
+      poolLiquidity,
       status,
       poolKey,
-      activeLiquidity,
+      poolActiveLiquidity,
+      activeLiquidity: userActiveLiquidity,
     } satisfies InfinityBinPositionDetail
   } catch (error) {
     console.error('error getUserPosition', poolId, error)

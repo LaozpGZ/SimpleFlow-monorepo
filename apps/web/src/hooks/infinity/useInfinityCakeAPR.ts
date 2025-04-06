@@ -89,13 +89,14 @@ export const useInfinityBinPositionCakeAPR = ({
 }: InfinityPositionCakeAPR<InfinityBinPositionDetail>) => {
   const { chainId, poolId } = pool
   const activeTVLUsd = useMemo(() => {
-    if (!tvlUSD || !position.activeLiquidity || !pool.liquidity) {
+    if (!tvlUSD || !position.liquidity || !position.poolLiquidity) {
       return '0' as `${number}`
     }
     return new BigNumber(tvlUSD).times(
-      new BigNumber(position.activeLiquidity.toString()).dividedBy(pool.liquidity.toString()),
+      new BigNumber(position.liquidity.toString()).dividedBy(position.poolLiquidity.toString()),
     )
-  }, [pool.liquidity, position.activeLiquidity, tvlUSD])
+  }, [position.poolLiquidity, position.liquidity, tvlUSD])
+
   const { cakePerYear, poolWeight } = useInfinityCakeAPR({ chainId, poolId, tvlUSD: activeTVLUsd, cakePrice })
 
   return useMemo(() => {
@@ -105,7 +106,7 @@ export const useInfinityBinPositionCakeAPR = ({
       }
     }
 
-    const share = new BigNumber(position.activeLiquidity.toString()).dividedBy(pool.liquidity?.toString() ?? 1)
+    const share = new BigNumber(position.liquidity.toString()).dividedBy(position.poolLiquidity?.toString() ?? 1)
 
     return {
       value: new BigNumber(cakePerYear)
@@ -115,5 +116,5 @@ export const useInfinityBinPositionCakeAPR = ({
         .div(tvlUSD)
         .toString() as `${number}`,
     }
-  }, [cakePerYear, tvlUSD, position.activeLiquidity, pool.liquidity, poolWeight, cakePrice])
+  }, [cakePerYear, tvlUSD, position.liquidity, position.poolLiquidity, poolWeight, cakePrice])
 }
