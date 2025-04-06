@@ -52,8 +52,8 @@ export type InfinityBinPositionDetail = {
   reserveOfBins: ReserveOfBin[]
   liquidity: bigint
   activeLiquidity: bigint
-  poolLiquidity: bigint
-  poolActiveLiquidity: bigint
+  poolLiquidity?: bigint
+  poolActiveLiquidity?: bigint
 }
 
 export type PositionDetail = {

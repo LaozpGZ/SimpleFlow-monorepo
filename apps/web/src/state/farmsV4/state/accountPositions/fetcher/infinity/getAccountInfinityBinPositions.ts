@@ -150,8 +150,6 @@ export const parseBinPositions = async (rows: Rows, chainId: number): Promise<In
 
     const activeBin = reserveOfBins.find((bin) => bin.binId === activeId)
 
-    const poolLiquidity = row.reserveOfBins.reduce((acc, bin) => acc + BigInt(bin.binLiquidity), 0n)
-    const poolActiveLiquidity = activeBin ? BigInt(activeBin.binLiquidity ?? 0) : 0n
     const liquidity = row.reserveOfBins.reduce((acc, bin) => acc + BigInt(bin.userSharesOfBin), 0n)
     const activeLiquidity = activeBin ? BigInt(activeBin.userSharesOfBin ?? 0) : 0n
 
@@ -168,8 +166,6 @@ export const parseBinPositions = async (rows: Rows, chainId: number): Promise<In
       reserveOfBins,
       liquidity,
       activeLiquidity,
-      poolLiquidity,
-      poolActiveLiquidity,
       poolKey,
     } satisfies InfinityBinPositionDetail
   })
