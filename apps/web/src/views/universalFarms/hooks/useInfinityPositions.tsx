@@ -54,6 +54,7 @@ export const useInfinityPositionItems = ({
           (positionStatus === POSITION_STATUS.ALL || pos.status === positionStatus) &&
           (!farmsOnly || pos.isStaked) &&
           (isSelectAllFeatures ||
+            !features.length ||
             (isInfinityProtocol(pos.protocol) &&
               pos.poolKey?.hooks &&
               intersection(features, getHookByAddress(pos.chainId, pos.poolKey.hooks)?.category).length)),
