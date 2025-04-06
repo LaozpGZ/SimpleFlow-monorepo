@@ -119,8 +119,14 @@ export const parseBinPositions = async (rows: Rows, chainId: number): Promise<In
     let minBinId: number | null = null
 
     row.reserveOfBins.forEach((bin) => {
-      reserveX += BigInt(bin.reserveX)
-      reserveY += BigInt(bin.reserveY)
+      const totalShares = BigInt(bin.totalShares)
+      const userSharesOfBin = BigInt(bin.userSharesOfBin)
+      const binReserveX = BigInt(bin.reserveX)
+      const binReserveY = BigInt(bin.reserveY)
+      const userReserveX = totalShares > 0n ? (userSharesOfBin * binReserveX) / totalShares : 0n
+      const userReserveY = totalShares > 0n ? (userSharesOfBin * binReserveY) / totalShares : 0n
+      reserveX += BigInt(userReserveX)
+      reserveY += BigInt(userReserveY)
       maxBinId = maxBinId ?? bin.binId
       minBinId = minBinId ?? bin.binId
       if (bin.binId > maxBinId) {

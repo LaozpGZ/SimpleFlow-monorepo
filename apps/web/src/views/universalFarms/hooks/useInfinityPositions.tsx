@@ -31,13 +31,14 @@ export const useInfinityPositionItems = ({
   const { poolTypeQuery } = usePoolTypeQuery()
   const infinityTypes = useMemo(() => {
     if (!poolTypeQuery?.length) return [Protocol.InfinityCLAMM, Protocol.InfinityBIN]
+    const types: Protocol[] = []
     if (poolTypeQuery.includes(Protocol.InfinityCLAMM)) {
-      return [Protocol.InfinityCLAMM]
+      types.push(Protocol.InfinityCLAMM)
     }
     if (poolTypeQuery.includes(Protocol.InfinityBIN)) {
-      return [Protocol.InfinityBIN]
+      types.push(Protocol.InfinityBIN)
     }
-    return []
+    return types
   }, [poolTypeQuery])
 
   const filteredPositions = useMemo(
