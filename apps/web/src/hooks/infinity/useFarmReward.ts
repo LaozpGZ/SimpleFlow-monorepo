@@ -80,14 +80,12 @@ const fetchUserClaimedRewards = async ({ chainId, address }: UserClaimedRewardsP
 }
 
 export const usePoolFarmRewardsFormAPI = ({ chainId, address, poolId, timestamp }: PoolFarmRewardsProps) => {
-  const { data } = useQuery({
+  return useQuery({
     queryKey: ['poolFarmRewards', chainId, address, poolId, timestamp],
     queryFn: () => fetchUserFarmRewards({ chainId, address, poolId, timestamp }),
     enabled: !!(chainId && address && timestamp),
     ...FETCH_OPTIONS,
   })
-
-  return data
 }
 
 const useClaimedRewardsFromAPI = ({ chainId, address }: UserClaimedRewardsProps) => {
@@ -192,9 +190,9 @@ const useUnclaimedRewards = ({
   tokenId,
   timestamp,
 }: PoolFarmRewardsProps & { tokenId?: bigint }) => {
-  const rewards = usePoolFarmRewardsFormAPI({ chainId, address, poolId, timestamp })
+  const { data: rewards, isLoading } = usePoolFarmRewardsFormAPI({ chainId, address, poolId, timestamp })
   const claimedHistory = useClaimedRewardsFromAPI({ chainId, address })
-  const rewardsBeforeLastClaimed = usePoolFarmRewardsFormAPI({
+  const { data: rewardsBeforeLastClaimed, isLoading: isLoadingBLC } = usePoolFarmRewardsFormAPI({
     chainId,
     address,
     poolId,
@@ -228,11 +226,12 @@ const useUnclaimedRewards = ({
     rewardsMap,
     rewardsBeforeLastClaimedMap,
     currency,
+    isLoading: isLoading || isLoadingBLC,
   }
 }
 
 const useUnclaimedFarmRewardsAmountByPoolId = ({ chainId, address, poolId, timestamp }: PoolFarmRewardsProps) => {
-  const { currency, rewardsBeforeLastClaimedMap, rewardsMap } = useUnclaimedRewards({
+  const { currency, rewardsBeforeLastClaimedMap, rewardsMap, isLoading } = useUnclaimedRewards({
     chainId,
     address,
     poolId,
@@ -241,19 +240,22 @@ const useUnclaimedFarmRewardsAmountByPoolId = ({ chainId, address, poolId, times
 
   return useMemo(() => {
     if (!currency || !rewardsMap) {
-      return undefined
+      return { data: undefined, isLoading }
     }
 
-    return CurrencyAmount.fromRawAmount(
-      currency,
-      Object.keys(rewardsMap)
-        .reduce(
-          (acc, key) => new BN(rewardsMap[key]).minus(rewardsBeforeLastClaimedMap?.[key] ?? 0).plus(acc),
-          new BN(0),
-        )
-        .toNumber(),
-    )
-  }, [currency, rewardsMap, rewardsBeforeLastClaimedMap])
+    return {
+      data: CurrencyAmount.fromRawAmount(
+        currency,
+        Object.keys(rewardsMap)
+          .reduce(
+            (acc, key) => new BN(rewardsMap[key]).minus(rewardsBeforeLastClaimedMap?.[key] ?? 0).plus(acc),
+            new BN(0),
+          )
+          .toNumber(),
+      ),
+      isLoading,
+    }
+  }, [isLoading, currency, rewardsMap, rewardsBeforeLastClaimedMap])
 }
 
 const useUnclaimedFarmRewardsAmountByTokenId = ({
@@ -263,7 +265,7 @@ const useUnclaimedFarmRewardsAmountByTokenId = ({
   tokenId,
   timestamp,
 }: PoolFarmRewardsProps & { tokenId?: bigint }) => {
-  const { currency, rewardsBeforeLastClaimedMap, rewardsMap } = useUnclaimedRewards({
+  const { currency, rewardsBeforeLastClaimedMap, rewardsMap, isLoading } = useUnclaimedRewards({
     chainId,
     address,
     poolId,
@@ -272,28 +274,31 @@ const useUnclaimedFarmRewardsAmountByTokenId = ({
   })
   return useMemo(() => {
     if (!currency || !rewardsMap) {
-      return undefined
+      return { data: undefined, isLoading }
     }
 
-    return CurrencyAmount.fromRawAmount<Currency>(
-      currency,
-      Object.keys(rewardsMap)
-        .reduce((acc, key) => {
-          return new BN(rewardsMap[key] ?? 0).minus(rewardsBeforeLastClaimedMap?.[key] ?? 0).plus(acc)
-        }, new BN(0))
-        .toNumber(),
-    )
-  }, [currency, rewardsBeforeLastClaimedMap, rewardsMap])
+    return {
+      isLoading,
+      data: CurrencyAmount.fromRawAmount<Currency>(
+        currency,
+        Object.keys(rewardsMap)
+          .reduce((acc, key) => {
+            return new BN(rewardsMap[key] ?? 0).minus(rewardsBeforeLastClaimedMap?.[key] ?? 0).plus(acc)
+          }, new BN(0))
+          .toNumber(),
+      ),
+    }
+  }, [currency, rewardsBeforeLastClaimedMap, rewardsMap, isLoading])
 }
 
 export const useUnclaimedFarmRewardsUSDByPoolId = ({ chainId, address, poolId, timestamp }: PoolFarmRewardsProps) => {
-  const rewardsAmount = useUnclaimedFarmRewardsAmountByPoolId({
+  const { data: rewardsAmount, isLoading } = useUnclaimedFarmRewardsAmountByPoolId({
     chainId,
     address,
     poolId,
     timestamp,
   })
-  return useFarmRewardsUSD(rewardsAmount)
+  return { data: useFarmRewardsUSD(rewardsAmount), isLoading }
 }
 
 export const useUnclaimedFarmRewardsUSDByTokenId = ({
@@ -303,14 +308,14 @@ export const useUnclaimedFarmRewardsUSDByTokenId = ({
   tokenId,
   timestamp,
 }: PoolFarmRewardsProps & { tokenId?: bigint }) => {
-  const rewardsAmount = useUnclaimedFarmRewardsAmountByTokenId({
+  const { data: rewardsAmount, isLoading } = useUnclaimedFarmRewardsAmountByTokenId({
     chainId,
     address,
     poolId,
     tokenId,
     timestamp,
   })
-  return useFarmRewardsUSD(rewardsAmount)
+  return { isLoading, data: useFarmRewardsUSD(rewardsAmount) }
 }
 
 const useFarmRewardsUSD = (rewardsAmount?: CurrencyAmount<Currency>) => {

@@ -73,7 +73,12 @@ export const usePositionIsFarming = ({
   tokenId?: bigint
 }) => {
   const { address } = useAccount()
-  const rewards = usePoolFarmRewardsFormAPI({ address, chainId, poolId, timestamp: dayjs().startOf('hour').unix() })
+  const { data: rewards } = usePoolFarmRewardsFormAPI({
+    address,
+    chainId,
+    poolId,
+    timestamp: dayjs().startOf('hour').unix(),
+  })
   return useMemo(() => {
     if (!tokenId) {
       return !!rewards?.find((r) => r.poolId === poolId)
