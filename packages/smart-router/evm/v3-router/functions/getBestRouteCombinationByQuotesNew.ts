@@ -7,17 +7,10 @@ import { keccak256 } from 'viem'
 import { usdGasTokensByChain } from '../../constants'
 import { BestRoutes, L1ToL2GasCosts, RouteWithQuote } from '../types'
 import { getPoolAddress } from '../utils'
-import { poolInfoStr } from '../utils/remoteLogs'
 
 interface Config {
   minSplits?: number
   maxSplits?: number
-}
-
-function hashRouteWithQuote(route: RouteWithQuote): string {
-  const { pools, percent } = route
-  const poolStr = pools.map((pool) => getPoolAddress(pool)).join('-')
-  return keccak256(`0x${poolStr}`)
 }
 
 export function getBestRouteCombinationByQuotesNew(
@@ -28,40 +21,29 @@ export function getBestRouteCombinationByQuotesNew(
   config: Config,
   quoteId?: string,
 ): BestRoutes | null {
-  const maxSplits = config.maxSplits || 4
-  const minSplits = config.minSplits ?? 0
-  if (maxSplits > 4) {
-    throw new Error('maxSplits should be less than or equal to 4')
-  }
-  const { routes: sorted, routeDict: dict } = sortByWeights(routesWithQuote)
   const logger = RemoteLogger.getLogger(quoteId)
+  const maxSplits = config.maxSplits || 4
   // Fill user's order by better price router first
-  let percent = 0
-  logger.debug(`sorted routes: ${sorted.length}, start fill order`)
-  const bestRoutes: RouteWithQuote[] = []
-  for (let i = 0; i < sorted.length && percent < 100; i++) {
-    const route = sorted[i]
-    percent += route.percent
-    logger.debug(`filled: ${percent}%, with ${route.pools.map(poolInfoStr).join('->')}`)
-    bestRoutes.push(route)
-  }
+  const weightedRoutes = routesWithQuote.map((route) => {
+    const price =
+      tradeType === TradeType.EXACT_INPUT
+        ? new Fraction(route.quoteAdjustedForGas.quotient, route.amount.quotient)
+        : new Fraction(route.amount.quotient, route.quoteAdjustedForGas.quotient)
 
-  if (percent < 100) {
-    logger.debug('no route found because percent < 100')
-    throw new Error('No valid routes found')
+    const val = Number.parseFloat(price.toSignificant(6))
+    return {
+      data: route,
+      weight: route.percent,
+      value: val,
+      key: hashRouteWithQuote(route),
+    } as FillTarget<RouteWithQuote>
+  })
+  const filled = fillOrders(weightedRoutes, 100, maxSplits)
+  const bestRoutes = filled.selectedItems.map((x) => x.data)
+  const sumPercents = bestRoutes.reduce((sum, route) => sum + route.percent, 0)
+  if (sumPercents !== 100) {
+    throw new Error(`Sum of percents is not 100, got ${sumPercents}`)
   }
-
-  if (percent > 100) {
-    const last = bestRoutes[bestRoutes.length - 1]
-    const left = last.percent - (percent - 100)
-    const last2 = dict[`${left}-${hashRouteWithQuote(last)}`]
-    if (!last2) {
-      logger.debug(`no route found because cannot fill last ${left}%`)
-      throw new Error('No valid routes found')
-    }
-    bestRoutes[bestRoutes.length - 1] = last2
-  }
-
   // eslint-disable-next-line
   const chainId: ChainId = amount.currency.chainId
   // const now = Date.now()
@@ -109,47 +91,6 @@ export function getBestRouteCombinationByQuotesNew(
     gasEstimateInUSD: estimatedGasUsedUSD,
     inputAmount: isExactIn ? amount : quote,
     outputAmount: isExactIn ? quote : amount,
-  }
-}
-
-function weight(a: RouteWithQuote) {
-  const input = a.amount.quotient
-  const quote = a.quoteAdjustedForGas.quotient
-  return new Fraction(quote, input)
-}
-
-function sortByWeights(routes: RouteWithQuote[]) {
-  const largerRoutes: Record<string, RouteWithQuote> = {}
-  const dict: Record<string, RouteWithQuote> = {}
-  for (const route of routes) {
-    const hash = hashRouteWithQuote(route)
-    const item = largerRoutes[hash]
-    dict[`${route.percent}-${hash}`] = route
-    if (!item) {
-      largerRoutes[hash] = route
-      continue
-    }
-    if (route.percent > item.percent) {
-      largerRoutes[hash] = route
-    }
-  }
-
-  const uniqRoutes = Object.values(largerRoutes)
-  uniqRoutes.sort((a, b) => {
-    const weightA = weight(a)
-    const weightB = weight(b)
-    if (weightA.lessThan(weightB)) {
-      return 1
-    }
-    if (weightA.greaterThan(weightB)) {
-      return -1
-    }
-    return 0
-  })
-
-  return {
-    routes: uniqRoutes,
-    routeDict: dict,
   }
 }
 
@@ -227,4 +168,98 @@ function sumFn(currencyAmounts: CurrencyAmount<Currency>[]): CurrencyAmount<Curr
     sum = sum.add(currencyAmounts[i]!)
   }
   return sum
+}
+
+function hashRouteWithQuote(route: RouteWithQuote): string {
+  const { pools } = route
+  const poolStr = pools.map((pool) => getPoolAddress(pool)).join('-')
+  return keccak256(`0x${poolStr}`)
+}
+interface FillTarget<T> {
+  weight: number
+  value: number
+  key: string
+  data: T
+}
+
+function fillOrders<T>(
+  items: FillTarget<T>[],
+  maxWeight: number,
+  maxItems: number,
+): { totalValue: number; selectedItems: FillTarget<T>[] } {
+  const groups = new Map<string, FillTarget<T>[]>()
+  for (const item of items) {
+    if (!groups.has(item.key)) {
+      groups.set(item.key, [])
+    }
+    groups.get(item.key)!.push(item)
+  }
+
+  const uniqueKeys = Array.from(groups.keys())
+  const m = uniqueKeys.length
+
+  // i: the number of unique keys
+  // w: current total weight
+  // k: exact number of items
+  const dp: number[][][] = Array.from({ length: m + 1 }, () =>
+    Array.from({ length: maxWeight + 1 }, () => Array(maxItems + 1).fill(0)),
+  )
+
+  for (let i = 1; i <= m; i++) {
+    const groupItems = groups.get(uniqueKeys[i - 1])!
+    for (let w = 0; w <= maxWeight; w++) {
+      for (let k = 0; k <= maxItems; k++) {
+        dp[i][w][k] = dp[i - 1][w][k]
+
+        if (k > 0) {
+          for (const item of groupItems) {
+            if (w >= item.weight) {
+              dp[i][w][k] = Math.max(dp[i][w][k], dp[i - 1][w - item.weight][k - 1] + item.value)
+            }
+          }
+        }
+      }
+    }
+  }
+
+  let totalValue = 0
+  let optimalW = 0
+  let optimalK = 0
+
+  for (let k = 1; k <= maxItems; k++) {
+    for (let w = 0; w <= maxWeight; w++) {
+      if (dp[m][w][k] > totalValue) {
+        totalValue = dp[m][w][k]
+        optimalW = w
+        optimalK = k
+      }
+    }
+  }
+
+  const selectedItems: FillTarget<T>[] = []
+  let w = optimalW
+  let k = optimalK
+
+  for (let i = m; i > 0 && k > 0; i--) {
+    const groupItems = groups.get(uniqueKeys[i - 1])!
+    let chosenItem: FillTarget<T> | null = null
+
+    for (const item of groupItems) {
+      if (w >= item.weight && dp[i][w][k] === dp[i - 1][w - item.weight][k - 1] + item.value) {
+        chosenItem = item
+        break
+      }
+    }
+
+    if (chosenItem) {
+      selectedItems.push(chosenItem)
+      w -= chosenItem.weight
+      k -= 1
+    }
+  }
+
+  return {
+    totalValue,
+    selectedItems: selectedItems.reverse(),
+  }
 }
