@@ -39,8 +39,6 @@ export abstract class PancakeSwapUniversalRouter {
         ? BigInt(options.deadlineOrPreviousBlockhash.toString())
         : undefined,
     })
-    console.debug(`[calldata]`, encoded.calldata)
-    console.debug(`[decoded]`, decodeUniversalCalldata(encoded.calldata))
     return encoded
   }
 
