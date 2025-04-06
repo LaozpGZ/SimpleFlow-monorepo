@@ -922,6 +922,9 @@ const MyInfinityBinPositions: React.FC<{
     if (amount0?.greaterThan('0') || amount1?.greaterThan('0')) {
       setTotalLiquidityUSD(formatFiatNumber(totalTVLUsd, ''))
       setCount(1)
+    } else {
+      setTotalLiquidityUSD('')
+      setCount(0)
     }
   }, [amount0, amount1, totalTVLUsd, setTotalLiquidityUSD, setCount])
 
