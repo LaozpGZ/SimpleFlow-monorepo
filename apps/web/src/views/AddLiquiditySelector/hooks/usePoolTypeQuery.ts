@@ -52,36 +52,45 @@ export const usePoolFeatureAndType = () => {
   const { poolTypeQuery } = usePoolTypeQuery()
   return useMemo(
     () =>
-      poolTypeQuery.reduce<{
-        features: string[]
-        protocols: string[]
-        isSelectAllProtocols: boolean
-        isSelectAllFeatures: boolean
-      }>(
-        (v, q) => {
-          const isProtocol = ALL_PROTOCOLS.includes(q as Protocol)
-          if (isProtocol) {
-            v.protocols.push(q)
-          } else if (![POOL_TYPE_FEATURE.all, POOL_TYPE_FEATURE.poolType, POOL_TYPE_FEATURE.poolFeature].includes(q)) {
-            v.features.push(q)
-          }
-          if (q === POOL_TYPE_FEATURE.poolType) {
-            // eslint-disable-next-line no-param-reassign
-            v.isSelectAllProtocols = true
-          }
-          if (q === POOL_TYPE_FEATURE.poolFeature) {
-            // eslint-disable-next-line no-param-reassign
-            v.isSelectAllFeatures = true
-          }
-          return v
-        },
-        {
-          features: [],
-          protocols: [],
-          isSelectAllProtocols: false,
-          isSelectAllFeatures: false,
-        },
-      ),
+      poolTypeQuery.length
+        ? poolTypeQuery.reduce<{
+            features: string[]
+            protocols: string[]
+            isSelectAllProtocols: boolean
+            isSelectAllFeatures: boolean
+          }>(
+            (v, q) => {
+              const isProtocol = ALL_PROTOCOLS.includes(q as Protocol)
+              if (isProtocol) {
+                v.protocols.push(q)
+              } else if (
+                ![POOL_TYPE_FEATURE.all, POOL_TYPE_FEATURE.poolType, POOL_TYPE_FEATURE.poolFeature].includes(q)
+              ) {
+                v.features.push(q)
+              }
+              if (q === POOL_TYPE_FEATURE.poolType) {
+                // eslint-disable-next-line no-param-reassign
+                v.isSelectAllProtocols = true
+              }
+              if (q === POOL_TYPE_FEATURE.poolFeature) {
+                // eslint-disable-next-line no-param-reassign
+                v.isSelectAllFeatures = true
+              }
+              return v
+            },
+            {
+              features: [],
+              protocols: [],
+              isSelectAllProtocols: false,
+              isSelectAllFeatures: false,
+            },
+          )
+        : {
+            features: [],
+            protocols: [],
+            isSelectAllProtocols: true,
+            isSelectAllFeatures: true,
+          },
     [poolTypeQuery],
   )
 }

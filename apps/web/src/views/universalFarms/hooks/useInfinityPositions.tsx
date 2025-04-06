@@ -1,3 +1,4 @@
+import intersection from 'lodash/intersection'
 import { Protocol } from '@pancakeswap/farms'
 import { INetworkProps, ITokenProps, toTokenValue } from '@pancakeswap/widgets-internal'
 import { useMemo } from 'react'
@@ -7,7 +8,9 @@ import {
   InfinityCLPositionDetail,
   POSITION_STATUS,
 } from 'state/farmsV4/state/accountPositions/type'
-import { usePoolTypeQuery } from 'views/AddLiquiditySelector/hooks/usePoolTypeQuery'
+import { isInfinityProtocol } from 'utils/protocols'
+import { getHookByAddress } from 'utils/getHookByAddress'
+import { usePoolFeatureAndType } from 'views/AddLiquiditySelector/hooks/usePoolTypeQuery'
 import { useAccount } from 'wagmi'
 import { InfinityPositionActions } from '../components/PositionActions/InfinityPositionActions'
 import { InfinityBinPositionItem } from '../components/PositionItem/InfinityBinPositionItem'
@@ -28,18 +31,7 @@ export const useInfinityPositionItems = ({
   farmsOnly,
 }: InfinityPositionItemsParams) => {
   const { data: positions, isLoading } = useInfinityPositions()
-  const { poolTypeQuery } = usePoolTypeQuery()
-  const infinityTypes = useMemo(() => {
-    if (!poolTypeQuery?.length) return [Protocol.InfinityCLAMM, Protocol.InfinityBIN]
-    const types: Protocol[] = []
-    if (poolTypeQuery.includes(Protocol.InfinityCLAMM)) {
-      types.push(Protocol.InfinityCLAMM)
-    }
-    if (poolTypeQuery.includes(Protocol.InfinityBIN)) {
-      types.push(Protocol.InfinityBIN)
-    }
-    return types
-  }, [poolTypeQuery])
+  const { protocols: infinityTypes, isSelectAllFeatures, features } = usePoolFeatureAndType()
 
   const filteredPositions = useMemo(
     () =>
@@ -56,9 +48,22 @@ export const useInfinityPositionItems = ({
                   token === toTokenValue({ chainId: pos.chainId, address: pos.poolKey.currency1 })),
             )) &&
           (positionStatus === POSITION_STATUS.ALL || pos.status === positionStatus) &&
-          (!farmsOnly || pos.isStaked),
+          (!farmsOnly || pos.isStaked) &&
+          (isSelectAllFeatures ||
+            (isInfinityProtocol(pos.protocol) &&
+              pos.poolKey?.hooks &&
+              intersection(features, getHookByAddress(pos.chainId, pos.poolKey.hooks)?.category).length)),
       ),
-    [positions, infinityTypes, selectedNetwork, selectedTokens, positionStatus, farmsOnly],
+    [
+      positions,
+      infinityTypes,
+      selectedNetwork,
+      selectedTokens,
+      positionStatus,
+      farmsOnly,
+      features,
+      isSelectAllFeatures,
+    ],
   )
 
   const sortedPositions = useMemo(() => filteredPositions.sort((a, b) => a.status - b.status), [filteredPositions])

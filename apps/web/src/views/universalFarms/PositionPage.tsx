@@ -40,6 +40,8 @@ import styled from 'styled-components'
 import { useAccount } from 'wagmi'
 
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { isInfinityProtocol } from 'utils/protocols'
+import { usePoolFeatureAndType } from 'views/AddLiquiditySelector/hooks/usePoolTypeQuery'
 import {
   AddLiquidityButton,
   Card,
@@ -132,18 +134,6 @@ const SubPanel = styled(Flex)`
 
   ${({ theme }) => theme.mediaQueries.sm} {
     margin: 24px -24px 0;
-  }
-`
-
-const ButtonContainer = styled.div`
-  margin-left: auto;
-
-  ${({ theme }) => theme.mediaQueries.lg} {
-    margin-left: 0;
-  }
-
-  button {
-    height: 48px;
   }
 `
 
@@ -273,6 +263,7 @@ export const PositionPage = () => {
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const [cursorVisible, setCursorVisible] = useState(NUMBER_OF_FARMS_VISIBLE)
   const { replaceURLQueriesByFilter, ...filters } = useFilterToQueries()
+  const { features, isSelectAllFeatures, isSelectAllProtocols } = usePoolFeatureAndType()
   const { isMobile, isMd } = useMatchBreakpoints()
 
   const { selectedProtocolIndex, selectedNetwork, selectedTokens, positionStatus, farmsOnly } = filters
@@ -343,11 +334,11 @@ export const PositionPage = () => {
   const sectionMap = useMemo(
     () => ({
       [Protocol.InfinityCLAMM]: infinityPositionList,
-      [Protocol.V3]: v3PositionList,
-      [Protocol.V2]: v2PositionList,
-      [Protocol.STABLE]: stablePositionList,
+      [Protocol.V3]: isSelectAllProtocols ? v3PositionList : [],
+      [Protocol.V2]: isSelectAllProtocols ? v2PositionList : [],
+      [Protocol.STABLE]: isSelectAllProtocols ? stablePositionList : [],
     }),
-    [infinityPositionList, v3PositionList, v2PositionList, stablePositionList],
+    [isSelectAllProtocols, infinityPositionList, v3PositionList, v2PositionList, stablePositionList],
   )
 
   const allPositionList = useMemo(() => {
@@ -357,10 +348,15 @@ export const PositionPage = () => {
   const visibleList = useMemo(
     () =>
       selectedPoolTypes
-        .filter((type) => !!sectionMap[type])
+        .filter(
+          (type) =>
+            !!sectionMap[type] &&
+            // pool type and pool feature filter
+            (isSelectAllFeatures || !features.length || isInfinityProtocol(type)),
+        )
         .reduce((acc, type) => acc.concat(sectionMap[type]), [])
         .slice(0, cursorVisible),
-    [selectedPoolTypes, sectionMap, cursorVisible],
+    [selectedPoolTypes, sectionMap, cursorVisible, isSelectAllFeatures, features.length],
   )
 
   const mainSection = useMemo(() => {
