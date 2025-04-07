@@ -115,6 +115,7 @@ export const parseBinPositions = async (rows: Rows, chainId: number): Promise<In
 
     let reserveX = BigInt(0)
     let reserveY = BigInt(0)
+    let poolLiquidity = BigInt(0)
     let maxBinId: number | null = null
     let minBinId: number | null = null
 
@@ -127,13 +128,16 @@ export const parseBinPositions = async (rows: Rows, chainId: number): Promise<In
       const userReserveY = totalShares > 0n ? (userSharesOfBin * binReserveY) / totalShares : 0n
       reserveX += BigInt(userReserveX)
       reserveY += BigInt(userReserveY)
-      maxBinId = maxBinId ?? bin.binId
-      minBinId = minBinId ?? bin.binId
-      if (bin.binId > maxBinId) {
-        maxBinId = bin.binId
-      }
-      if (bin.binId < minBinId) {
-        minBinId = bin.binId
+      if (userSharesOfBin > 0n) {
+        poolLiquidity += BigInt(bin.binLiquidity)
+        maxBinId = maxBinId ?? bin.binId
+        minBinId = minBinId ?? bin.binId
+        if (bin.binId > maxBinId) {
+          maxBinId = bin.binId
+        }
+        if (bin.binId < minBinId) {
+          minBinId = bin.binId
+        }
       }
     })
 
@@ -165,6 +169,8 @@ export const parseBinPositions = async (rows: Rows, chainId: number): Promise<In
       minBinId,
       reserveOfBins,
       liquidity,
+      poolLiquidity,
+      poolActiveLiquidity: activeLiquidity,
       activeLiquidity,
       poolKey,
     } satisfies InfinityBinPositionDetail
