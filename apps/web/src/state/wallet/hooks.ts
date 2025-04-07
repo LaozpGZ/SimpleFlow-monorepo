@@ -13,6 +13,10 @@ import { Address, erc20Abi, getAddress, isAddress } from 'viem'
 import { useAccount, useBalance } from 'wagmi'
 import { useMultipleContractSingleDataWagmi } from '../multicall/hooks'
 
+export function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
+  return value !== null && value !== undefined
+}
+
 /**
  * Returns a map of the given addresses to their eventually consistent BNB balances.
  */
