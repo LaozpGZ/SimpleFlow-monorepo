@@ -109,10 +109,6 @@ export const parseBinPositions = async (rows: Rows, chainId: number): Promise<In
     const activeId = slot0s[idx][0]
     const poolKey = parsePoolKey(POOL_TYPE.Bin, ...poolKeys[idx])
 
-    if (row.reserveOfBins.length > 0 && row.reserveOfBins.find((bin) => bin.binId === activeId)) {
-      status = POSITION_STATUS.ACTIVE
-    }
-
     let reserveX = BigInt(0)
     let reserveY = BigInt(0)
     let poolLiquidity = BigInt(0)
@@ -153,6 +149,9 @@ export const parseBinPositions = async (rows: Rows, chainId: number): Promise<In
     )
 
     const activeBin = reserveOfBins.find((bin) => bin.binId === activeId)
+    if (activeBin && activeBin.userSharesOfBin > 0n) {
+      status = POSITION_STATUS.ACTIVE
+    }
 
     const liquidity = row.reserveOfBins.reduce((acc, bin) => acc + BigInt(bin.userSharesOfBin), 0n)
     const activeLiquidity = activeBin ? BigInt(activeBin.userSharesOfBin ?? 0) : 0n
