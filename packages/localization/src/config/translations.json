@@ -3259,8 +3259,6 @@
   "Reset slippage settings": "Reset slippage settings",
   "to avoid potential loss": "to avoid potential loss",
   "Mins": "Mins",
-  "Select token": "Select token",
-  "Search by name or paste address": "Search by name or paste address",
   "Copy token address": "Copy token address",
   "Open on Explorer": "Open on Explorer",
   "Your transaction may fail. Reset settings to avoid potential loss": "Your transaction may fail. Reset settings to avoid potential loss",
@@ -3745,5 +3743,7 @@
   "An error occurred while fetching the data. Please try again later.": "An error occurred while fetching the data. Please try again later.",
   "Real-Time Burn History": "Real-Time Burn History",
   "Powered by Brevis, this hook enables swap fee discounts": "Powered by Brevis, this hook enables swap fee discounts",
-  "Powered by Primus, this hook enables swap fee discounts": "Powered by Primus, this hook enables swap fee discounts"
+  "Powered by Primus, this hook enables swap fee discounts": "Powered by Primus, this hook enables swap fee discounts",
+  "Popular tokens": "Popular tokens",
+  "Search name / address": "Search name / address"
 }
