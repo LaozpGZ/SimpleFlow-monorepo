@@ -3,8 +3,8 @@ import { BigintIsh, Currency, CurrencyAmount, TradeType, ZERO } from '@pancakesw
 
 import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
 import { ROUTE_CONFIG_BY_CHAIN } from './constants'
+import { getBestRouteCombinationByQuotes } from './functions'
 import { computeAllRoutesNew } from './functions/computeAllRoutesNew'
-import { getBestRouteCombinationByQuotesNew } from './functions/getBestRouteCombinationByQuotesNew'
 import { createGasModel } from './gasModel'
 import { getRoutesWithValidQuote } from './getRoutesWithValidQuote'
 import { BestRoutes, RouteConfig, RouteType, SmartRouterTrade, TradeConfig } from './types'
@@ -146,5 +146,5 @@ async function getBestRoutes(
   //     quote.currency.symbol,
   //   )
   // })
-  return getBestRouteCombinationByQuotesNew(amount, currency, routesWithValidQuote, tradeType, { maxSplits }, quoteId)
+  return getBestRouteCombinationByQuotes(amount, currency, routesWithValidQuote, tradeType, { maxSplits }, quoteId)
 }
