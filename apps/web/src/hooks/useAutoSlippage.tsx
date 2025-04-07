@@ -10,6 +10,7 @@ import { useMemo } from 'react'
 
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useGasPrice } from 'state/user/hooks'
+import { useDebounce } from '@pancakeswap/hooks'
 import useNativeCurrency from './useNativeCurrency'
 import { useStablecoinPrice, useStablecoinPriceAmount } from './useStablecoinPrice'
 
@@ -132,6 +133,8 @@ type SupportedTrade =
 export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade): Percent {
   const { chainId } = useActiveChainId()
   const onL2 = isL2ChainId(chainId)
+  const debouncedOutputAmount = useDebounce(trade?.outputAmount?.wrapped?.toExact(), 250)
+
   const inputBasedSlippage = useInputBasedAutoSlippage(trade?.inputAmount)
 
   // Get USD price of output amount
@@ -166,7 +169,7 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
   const { data } = useQuery({
     queryKey: [
       'classic-auto-slippage',
-      trade?.outputAmount?.wrapped?.toExact(),
+      debouncedOutputAmount,
       outputUSDPrice?.wrapped?.toSignificant(),
       dollarCostToUse,
     ],
@@ -213,6 +216,7 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
 export function useInputBasedAutoSlippage(inputAmount?: CurrencyAmount<Currency>): Percent {
   const { chainId } = useActiveChainId()
   const onL2 = isL2ChainId(chainId)
+  const debouncedInputAmount = useDebounce(inputAmount?.wrapped?.toExact(), 250)
 
   const nativeGasPrice = useGasPrice()
   const nativeCurrency = useNativeCurrency(chainId)
@@ -230,7 +234,7 @@ export function useInputBasedAutoSlippage(inputAmount?: CurrencyAmount<Currency>
   const { data } = useQuery({
     queryKey: [
       'input-based-auto-slippage',
-      inputAmount?.wrapped?.toExact(),
+      debouncedInputAmount,
       inputUSDPrice?.wrapped?.toSignificant(),
       gasCostUSDValue,
     ],
