@@ -115,7 +115,7 @@ const useClaimedRewardsFromAPI = ({ chainId, address }: UserClaimedRewardsProps)
     enabled: !!(chainId && address),
     ...FETCH_OPTIONS,
   })
-  const latestClaimedTimestamp = claimedHistory?.[0].timestamp
+  const latestClaimedTimestamp = claimedHistory?.[0]?.timestamp
 
   const { data: merkleRoot } = useQuery({
     queryKey: ['fetchMerkleRootByTimestamp', chainId, address, latestClaimedTimestamp],
