@@ -7,7 +7,7 @@ import { styled } from "styled-components";
 
 const Container = styled(Box)<{ isShow: boolean }>`
   width: 100%;
-  overflow: hidden;
+
   ${({ isShow, theme }) =>
     isShow &&
     `
