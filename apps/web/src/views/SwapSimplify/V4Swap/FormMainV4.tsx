@@ -147,6 +147,9 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           </Text>
         }
         isUserInsufficientBalance={isUserInsufficientBalance}
+        modalTitle={t('From')}
+        showSearchInput={false}
+        showSearchHeader
       />
       <FlipButton />
       <CurrencyInputPanelSimplify
@@ -168,6 +171,9 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
             {t('To')}
           </Text>
         }
+        modalTitle={t('To')}
+        showSearchInput={false}
+        showSearchHeader
       />
       <AssignRecipientButton />
       <Recipient />
