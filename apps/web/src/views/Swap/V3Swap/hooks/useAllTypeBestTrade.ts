@@ -74,7 +74,9 @@ export const useAllTypeBestTrade = () => {
   const hasAvailableDutchOrder =
     bestOrder.enabled && bestOrder.order?.type === OrderType.DUTCH_LIMIT && bestOrder.isValidQuote
   const betterQuote = useBetterQuote(classicAmmOrder, hasAvailableDutchOrder ? currentOrder : undefined)
-  const finalOrder = xEnabled ? betterQuote : classicAmmOrder
+  const finalOrder =
+    bestOrder?.order?.type === OrderType.PCS_BRIDGE ? currentOrder : xEnabled ? betterQuote : classicAmmOrder
+
   const tradeLoaded = Boolean(finalOrder && !finalOrder.isLoading)
 
   return {
