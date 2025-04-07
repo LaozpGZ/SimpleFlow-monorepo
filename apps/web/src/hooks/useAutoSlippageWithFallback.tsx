@@ -30,7 +30,7 @@ export function useAutoSlippageWithFallback(trade?: SupportedTrade): {
 } {
   const [isAutoSlippageEnabled] = useAutoSlippageEnabled()
   const [userSlippageTolerance] = useUserSlippage()
-  const autoSlippageTolerance = useClassicAutoSlippageTolerance(trade)
+  const autoSlippageTolerance = useClassicAutoSlippageTolerance(trade, isAutoSlippageEnabled)
   const isXOrder = Boolean((trade as ExclusiveDutchOrderTrade<Currency, Currency>)?.orderInfo)
 
   return useMemo(() => {
@@ -54,7 +54,7 @@ export function useAutoSlippageWithFallback(trade?: SupportedTrade): {
 export const useInputBasedAutoSlippageWithFallback = (inputAmount?: CurrencyAmount<Currency>) => {
   const [isAutoSlippageEnabled] = useAutoSlippageEnabled()
   const [userSlippageTolerance] = useUserSlippage()
-  const autoSlippageTolerance = useInputBasedAutoSlippage(inputAmount)
+  const autoSlippageTolerance = useInputBasedAutoSlippage(inputAmount, isAutoSlippageEnabled)
 
   return useMemo(() => {
     if (isAutoSlippageEnabled && inputAmount) {

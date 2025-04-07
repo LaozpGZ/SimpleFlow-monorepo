@@ -129,14 +129,14 @@ type SupportedTrade =
   | V4Router.V4TradeWithoutGraph<TradeType>
   | ExclusiveDutchOrderTrade<Currency, Currency>
 
-export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade): Percent {
+export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade, enabled = true): Percent {
   const { chainId } = useActiveChainId()
   const onL2 = isL2ChainId(chainId)
-  const inputBasedSlippage = useInputBasedAutoSlippage(trade?.inputAmount)
+  const inputBasedSlippage = useInputBasedAutoSlippage(trade?.inputAmount, enabled)
 
   // Get USD price of output amount
   const outputCurrency = trade?.outputAmount?.currency
-  const outputUSDPrice = useStablecoinPrice(outputCurrency)
+  const outputUSDPrice = useStablecoinPrice(outputCurrency, { enabled })
 
   const nativeGasPrice = useGasPrice()
   const nativeCurrency = useNativeCurrency(chainId)
@@ -147,13 +147,13 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
 
   // Get base gas estimate currency price for V4 trades
   const baseGasEstimateCurrency = isV4Trade(trade) ? trade?.gasUseEstimateBase?.currency : undefined
-  const baseGasEstimatePrice = useStablecoinPrice(baseGasEstimateCurrency)
+  const baseGasEstimatePrice = useStablecoinPrice(baseGasEstimateCurrency, { enabled })
 
   const gasCostAmount = useMemo(() => {
     const nativeGasCost = calculateNativeGasCost(nativeGasPrice?.toString(), gasEstimate)
     return calculateGasCostAmount(nativeGasCost, nativeCurrency)
   }, [nativeGasPrice, gasEstimate, nativeCurrency])
-  const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount)
+  const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount, { enabled })
 
   // If valid estimate from API and using API trade, use gas estimate from API
   // NOTE - don't use gas estimate for L2s yet - need to verify accuracy
@@ -210,14 +210,14 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
 }
 
 // Calculate slippage based on input dollar value
-export function useInputBasedAutoSlippage(inputAmount?: CurrencyAmount<Currency>): Percent {
+export function useInputBasedAutoSlippage(inputAmount?: CurrencyAmount<Currency>, enabled = true): Percent {
   const { chainId } = useActiveChainId()
   const onL2 = isL2ChainId(chainId)
 
   const nativeGasPrice = useGasPrice()
   const nativeCurrency = useNativeCurrency(chainId)
   const inputCurrency = inputAmount?.currency
-  const inputUSDPrice = useStablecoinPrice(inputCurrency)
+  const inputUSDPrice = useStablecoinPrice(inputCurrency, { enabled })
 
   const gasEstimate = 200000
 
@@ -225,7 +225,7 @@ export function useInputBasedAutoSlippage(inputAmount?: CurrencyAmount<Currency>
     const nativeGasCost = calculateNativeGasCost(nativeGasPrice?.toString(), gasEstimate)
     return calculateGasCostAmount(nativeGasCost, nativeCurrency)
   }, [nativeGasPrice, nativeCurrency])
-  const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount)
+  const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount, { enabled })
 
   const { data } = useQuery({
     queryKey: [
