@@ -165,7 +165,7 @@ export default function CurrencySearchModal({
       }}
       ref={wrapperRef}
     >
-      {modalView !== CurrencyModalView.search && (
+      {!showSearchHeader && (
         <StyledModalHeader>
           <ModalTitle>
             {config[modalView].onBack && <ModalBackButton onBack={config[modalView].onBack} />}
