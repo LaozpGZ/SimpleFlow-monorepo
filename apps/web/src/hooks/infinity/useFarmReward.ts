@@ -79,6 +79,25 @@ const fetchUserClaimedRewards = async ({ chainId, address }: UserClaimedRewardsP
   return resp.data ?? []
 }
 
+interface FetchMerkleRootByTimestampProps {
+  chainId?: number
+  timestamp?: string
+}
+const fetchMerkleRootByTimestamp = async ({ chainId, timestamp }: FetchMerkleRootByTimestampProps) => {
+  if (!(chainId && timestamp)) {
+    return undefined
+  }
+  const resp = await rewardApiClient.GET('/farms/root/{chainId}/{timestamp}', {
+    params: {
+      path: {
+        chainId,
+        timestamp,
+      },
+    },
+  })
+  return resp.data ?? undefined
+}
+
 export const usePoolFarmRewardsFormAPI = ({ chainId, address, poolId, timestamp }: PoolFarmRewardsProps) => {
   return useQuery({
     queryKey: ['poolFarmRewards', chainId, address, poolId, timestamp],
@@ -90,14 +109,26 @@ export const usePoolFarmRewardsFormAPI = ({ chainId, address, poolId, timestamp 
 
 const useClaimedRewardsFromAPI = ({ chainId, address }: UserClaimedRewardsProps) => {
   const [latestTxReceipt] = useLatestTxReceipt()
-  const { data } = useQuery({
+  const { data: claimedHistory } = useQuery({
     queryKey: ['ClaimedRewardsFromAPI', chainId, address, latestTxReceipt?.blockHash],
     queryFn: () => fetchUserClaimedRewards({ chainId, address }),
     enabled: !!(chainId && address),
     ...FETCH_OPTIONS,
   })
+  const latestClaimedTimestamp = claimedHistory?.[0].timestamp
 
-  return data
+  const { data: merkleRoot } = useQuery({
+    queryKey: ['fetchMerkleRootByTimestamp', chainId, address, latestClaimedTimestamp],
+    queryFn: () =>
+      fetchMerkleRootByTimestamp({
+        chainId,
+        timestamp: (Math.floor(new Date(latestClaimedTimestamp!.toString()).getTime() / 1000) - 1).toString(),
+      }),
+    enabled: !!(chainId && latestClaimedTimestamp),
+    ...FETCH_OPTIONS,
+  })
+
+  return merkleRoot
 }
 
 type FarmRewardsFromAPIByChainsProps = {
@@ -196,9 +227,7 @@ const useUnclaimedRewards = ({
     chainId,
     address,
     poolId,
-    timestamp: claimedHistory?.[0]?.timestamp
-      ? +new Date(claimedHistory?.[0]?.timestamp.toString()) / 1000 - 1
-      : undefined,
+    timestamp: claimedHistory?.epochEndTimestamp ? Number(claimedHistory?.epochEndTimestamp) : undefined,
   })
 
   const rewardsOfTokenId = useMemo(

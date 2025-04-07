@@ -179,6 +179,32 @@ export interface operations {
       }
     }
   }
+  getMerkleRootByTimestamp: {
+    parameters: {
+      query?: never
+      header?: never
+      path: {
+        chainId: number
+        timestamp?: Record<string, never> | string
+      }
+      cookie?: never
+    }
+    requestBody?: never
+    responses: {
+      200: {
+        headers: {
+          [name: string]: unknown
+        }
+        content: {
+          'application/json': {
+            endBlock: number
+            epochEndTimestamp: Record<string, never> | string
+            merkleRoot: string
+          }
+        }
+      }
+    }
+  }
 }
 interface paths {
   '/farms/verification/verify-contract': {
@@ -270,6 +296,23 @@ interface paths {
       cookie?: never
     }
     get: operations['getPoolFarmRewards']
+    put?: never
+    post: never
+    delete?: never
+    options?: never
+    head?: never
+    patch?: never
+    trace?: never
+  }
+
+  '/farms/root/{chainId}/{timestamp}': {
+    parameters: {
+      query?: never
+      header?: never
+      path?: never
+      cookie?: never
+    }
+    get: operations['getMerkleRootByTimestamp']
     put?: never
     post: never
     delete?: never
