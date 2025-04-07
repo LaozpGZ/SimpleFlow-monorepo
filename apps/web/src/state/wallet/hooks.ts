@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Native, Token } from '@pancakeswap/sdk'
+import { ChainId, Currency, CurrencyAmount, Native, Token } from '@pancakeswap/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { multicallABI } from 'config/abi/Multicall'
 import { useAllTokens } from 'hooks/Tokens'
@@ -20,8 +20,8 @@ export function notEmpty<TValue>(value: TValue | null | undefined): value is TVa
 /**
  * Returns a map of the given addresses to their eventually consistent BNB balances.
  */
-export function useNativeBalances(account?: Address): CurrencyAmount<Native> {
-  const native = useNativeCurrency()
+export function useNativeBalances(account?: Address, chainId?: ChainId): CurrencyAmount<Native> {
+  const native = useNativeCurrency(chainId)
 
   const { data: results } = useBalance({
     address: account,
@@ -99,8 +99,8 @@ export function useCurrencyBalances(
 
   const [tokenBalances] = useTokenBalancesWithLoadingIndicator(account, tokens)
 
-  const containsNative: boolean = useMemo(
-    () => currencies?.some((currency) => currency?.isNative) ?? false,
+  const containsNative: Currency | null = useMemo(
+    () => currencies?.find((currency) => currency?.isNative) ?? null,
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [...(currencies ?? [])],
   )
@@ -108,7 +108,7 @@ export function useCurrencyBalances(
     () => (containsNative ? (account as Address) : undefined),
     [containsNative, account],
   )
-  const nativeBalance = useNativeBalances(uncheckedAddresses)
+  const nativeBalance = useNativeBalances(uncheckedAddresses, containsNative?.chainId)
 
   return useMemo(
     () =>
