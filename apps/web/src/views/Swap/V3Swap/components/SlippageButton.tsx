@@ -1,7 +1,7 @@
 import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { TradeType } from '@pancakeswap/sdk'
-import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
+import { SmartRouterTrade, InfinityRouter } from '@pancakeswap/smart-router'
 import {
   Button,
   PencilIcon,
@@ -35,7 +35,7 @@ const AutoSlippageText = styled(Text)`
 
 interface SlippageButtonProps {
   slippage?: number | ReactElement
-  trade?: SmartRouterTrade<TradeType> | V4Router.V4TradeWithoutGraph<TradeType>
+  trade?: SmartRouterTrade<TradeType> | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
 }
 
 export const SlippageButton = ({ slippage, trade }: SlippageButtonProps) => {

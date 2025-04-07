@@ -1,7 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { Percent, TradeType } from '@pancakeswap/sdk'
-import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
+import { SmartRouterTrade, InfinityRouter } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { BigNumber } from 'bignumber.js'
 import { L2_CHAIN_IDS } from 'config/chains'
@@ -31,10 +31,10 @@ const chainSupportsGasEstimates = (chainId?: number): boolean => {
 const isV4Trade = (
   trade:
     | SmartRouterTrade<TradeType>
-    | V4Router.V4TradeWithoutGraph<TradeType>
+    | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
     | ExclusiveDutchOrderTrade<Currency, Currency>
     | undefined,
-): trade is V4Router.V4TradeWithoutGraph<TradeType> => {
+): trade is InfinityRouter.InfinityTradeWithoutGraph<TradeType> => {
   return trade !== undefined && trade !== null && 'gasUseEstimate' in trade && !('orderInfo' in trade)
 }
 
@@ -42,7 +42,7 @@ const isV4Trade = (
 const guesstimateGas = (
   trade?:
     | SmartRouterTrade<TradeType>
-    | V4Router.V4TradeWithoutGraph<TradeType>
+    | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
     | ExclusiveDutchOrderTrade<Currency, Currency>,
 ): number => {
   if (!trade) return 0
@@ -55,7 +55,7 @@ const calculateGasEstimateUSD = (
   supportsGasEstimate: boolean,
   trade?:
     | SmartRouterTrade<TradeType>
-    | V4Router.V4TradeWithoutGraph<TradeType>
+    | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
     | ExclusiveDutchOrderTrade<Currency, Currency>,
   baseGasEstimatePrice?: any,
 ) => {
@@ -125,7 +125,7 @@ const applySlippageLimits = (calculatedSlippage: Percent, min = 50, max = 550) =
 
 type SupportedTrade =
   | SmartRouterTrade<TradeType>
-  | V4Router.V4TradeWithoutGraph<TradeType>
+  | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
   | ExclusiveDutchOrderTrade<Currency, Currency>
 
 export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade): Percent {
