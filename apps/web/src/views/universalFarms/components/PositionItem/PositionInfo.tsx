@@ -141,11 +141,13 @@ export const PositionInfo = memo((props: PositionInfoProps) => {
             <FeeTier type={protocol} fee={fee} denominator={feeTierBase} />
           )}
           <TagCell>
-            {isStaked && (
-              <Tag variant="primary60" mr="8px">
-                {t('Farming')}
-              </Tag>
-            )}
+            {isInfinityProtocol(protocol)
+              ? isStaked && !outOfRange && !removed
+              : isStaked && (
+                  <Tag variant="primary60" mr="8px">
+                    {t('Farming')}
+                  </Tag>
+                )}
             {![Protocol.STABLE, Protocol.V2].includes(protocol) && (
               <RangeTag lowContrast removed={removed} outOfRange={outOfRange} protocol={protocol} />
             )}
