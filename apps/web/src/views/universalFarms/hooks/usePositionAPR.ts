@@ -1,5 +1,5 @@
 import { getCurrencyPriceFromId } from '@pancakeswap/infinity-sdk'
-import { Currency, CurrencyAmount, Percent, Price } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, Price } from '@pancakeswap/swap-sdk-core'
 import { BIG_ONE, BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { formatPercent } from '@pancakeswap/utils/formatFractions'
 import {
@@ -8,7 +8,10 @@ import {
   FeeCalculator,
   getPriceOfCurrency,
   isPoolTickInRange,
+  maxLiquidityForAmount0Precise,
+  maxLiquidityForAmount1,
   parseProtocolFees,
+  TickMath,
 } from '@pancakeswap/v3-sdk'
 import { useAmountsByUsdValue, useRoi } from '@pancakeswap/widgets-internal/roi'
 import BN from 'bignumber.js'
@@ -18,6 +21,7 @@ import { useInfinityBinPositionCakeAPR, useInfinityCLPositionCakeAPR } from 'hoo
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import useV3DerivedInfo from 'hooks/v3/useV3DerivedInfo'
+import { useAtomValue } from 'jotai'
 import isUndefined from 'lodash/isUndefined'
 import { useMemo } from 'react'
 import { CakeApr } from 'state/farmsV4/atom'
@@ -38,7 +42,11 @@ import {
   PoolInfo,
 } from 'state/farmsV4/state/type'
 import { useBinRangeQueryState, useClRangeQueryState } from 'state/infinity/shared'
-import { useAddDepositAmounts, useClDepositAmounts } from 'views/AddLiquidityInfinity/hooks/useAddDepositAmounts'
+import {
+  lastEditAtom,
+  useAddDepositAmounts,
+  useClDepositAmounts,
+} from 'views/AddLiquidityInfinity/hooks/useAddDepositAmounts'
 import { usePool } from 'views/AddLiquidityInfinity/hooks/usePool'
 import { useV3FormState } from 'views/AddLiquidityV3/formViews/V3FormView/form/reducer'
 import { useLmPoolLiquidity } from 'views/Farms/hooks/useLmPoolLiquidity'
@@ -230,7 +238,7 @@ const usePositionTVLUsd = ({
 }
 
 export const useInfinityCLPositionApr = (pool: InfinityPoolInfo, position: InfinityCLPositionDetail) => {
-  const { removed, outOfRange, amount0, amount1 } = useExtraInfinityPositionInfo(position)
+  const { removed, outOfRange, amount0, amount1, pool: onChainPoolInfo } = useExtraInfinityPositionInfo(position)
   const { data: token0UsdPrice } = useCurrencyUsdPrice(pool.token0)
   const { data: token1UsdPrice } = useCurrencyUsdPrice(pool.token1)
   const cakePrice = useCakePrice()
@@ -243,8 +251,14 @@ export const useInfinityCLPositionApr = (pool: InfinityPoolInfo, position: Infin
     amount1,
   })
   const cakeApr = useInfinityCLPositionCakeAPR({ pool, position, cakePrice, tvlUSD: TVLUsd })
+  console.debug('debug', { pool, position, TVLUsd, cakeApr })
   return useInfinityPositionApr({
-    pool,
+    pool: {
+      ...pool,
+      // @notice: backend returns liquidity not 100% on time
+      // it will cause the derived apr not same as the position apr after created
+      liquidity: onChainPoolInfo?.liquidity ?? pool.liquidity,
+    },
     position,
     positionLiquidity: position.liquidity,
     removed,
@@ -319,8 +333,8 @@ export const useInfinityPositionApr = <T extends InfinityCLPositionDetail | Infi
   userTVLUsd: BN
 }): InfinityPositionAPR => {
   const share = useMemo(
-    () => new BN(positionLiquidity.toString()).dividedBy(pool.liquidity?.toString() ?? 1),
-    [pool.liquidity, positionLiquidity],
+    () => new BN(positionLiquidity.toString()).dividedBy(pool?.liquidity?.toString() ?? 1),
+    [pool?.liquidity, positionLiquidity],
   )
 
   const userTVLUsd = useMemo(() => {
@@ -489,7 +503,7 @@ export const useInfinityCLDerivedApr = (poolInfo: InfinityCLPoolInfo) => {
   )
   const { currency0, currency1 } = useCurrencyByPoolId({ poolId: poolInfo.poolId, chainId: poolInfo.chainId })
 
-  const { cakeApr: globalCakeApr, merklApr } = usePoolApr(key, poolInfo)
+  const { cakeApr: globalCakeApr, merklApr, lpApr: globalLpApr } = usePoolApr(key, poolInfo)
   const { data: token0UsdPrice } = useCurrencyUsdPrice(currency0)
   const { data: token1UsdPrice } = useCurrencyUsdPrice(currency1)
 
@@ -523,6 +537,7 @@ export const useInfinityCLDerivedApr = (poolInfo: InfinityCLPoolInfo) => {
     currencyAUsdPrice: token0UsdPrice,
     currencyBUsdPrice: token1UsdPrice,
   })
+  const lastEdit = useAtomValue(lastEditAtom)
   const { depositCurrencyAmount0, depositCurrencyAmount1 } = useClDepositAmounts()
   const amountA = useMemo(() => {
     return depositCurrencyAmount0 || aprAmountA
@@ -540,16 +555,15 @@ export const useInfinityCLDerivedApr = (poolInfo: InfinityCLPoolInfo) => {
     const amount1 = amountB.toExact()
     if (!amount0 || !amount1) return 0n
 
-    return (
-      FeeCalculator.getLiquidityByAmountsAndPrice({
-        amountA,
-        amountB,
-        tickLower: lowerTick,
-        tickUpper: upperTick,
-        sqrtRatioX96,
-      }) ?? 0n
+    const getLiquidity = lastEdit.lastEditCurrency === 0 ? maxLiquidityForAmount0Precise : maxLiquidityForAmount1
+    const liquidityFromAmount = lastEdit.lastEditCurrency === 0 ? amountA : amountB
+
+    return getLiquidity(
+      sqrtRatioX96,
+      lastEdit.lastEditCurrency === 0 ? TickMath.getSqrtRatioAtTick(upperTick) : TickMath.getSqrtRatioAtTick(lowerTick),
+      liquidityFromAmount.quotient,
     )
-  }, [amountA, amountB, sqrtRatioX96, lowerTick, upperTick])
+  }, [amountA, amountB, sqrtRatioX96, lowerTick, upperTick, lastEdit.lastEditCurrency])
 
   const inRange = useMemo(() => {
     if (!pool) return false
@@ -569,8 +583,15 @@ export const useInfinityCLDerivedApr = (poolInfo: InfinityCLPoolInfo) => {
     amount1: amountB,
   })
 
+  const share = useMemo(() => {
+    const lqBN = new BN(liquidity.toString())
+    const poolLqBN = new BN(pool?.liquidity?.toString() ?? 0)
+    const baseLqBN = lqBN.plus(poolLqBN).isGreaterThan(0) ? lqBN.plus(poolLqBN) : 1
+    return lqBN.dividedBy(baseLqBN)
+  }, [liquidity, pool?.liquidity])
+
   const cakeApr = useMemo(() => {
-    if (!inRange) {
+    if (!inRange || userTVLUsd.isZero()) {
       return {
         ...globalCakeApr,
         value: '0' as const,
@@ -578,16 +599,12 @@ export const useInfinityCLDerivedApr = (poolInfo: InfinityCLPoolInfo) => {
       }
     }
 
-    const lqBN = new BN(liquidity.toString())
-    const poolLqBN = new BN(poolInfo.liquidity?.toString() ?? 0)
-    const baseLqBN = lqBN.plus(poolLqBN).isGreaterThan(0) ? lqBN.plus(poolLqBN) : 1
-
     const baseApr = userTVLUsd.isZero()
       ? BIG_ZERO
       : new BN(globalCakeApr.cakePerYear ?? 0)
           .times(globalCakeApr.poolWeight ?? 0)
           .times(cakePrice)
-          .times(lqBN.dividedBy(baseLqBN))
+          .times(share)
           .div(userTVLUsd)
 
     return {
@@ -595,30 +612,18 @@ export const useInfinityCLDerivedApr = (poolInfo: InfinityCLPoolInfo) => {
       value: baseApr.toString() as `${number}`,
       boost: undefined,
     }
-  }, [inRange, globalCakeApr, cakePrice, liquidity, userTVLUsd, poolInfo.liquidity])
+  }, [inRange, globalCakeApr, cakePrice, userTVLUsd, share])
 
-  const protocolFee = useMemo(
-    /* eslint-disable no-bitwise */
-    () => (pool?.feeProtocol ? new Percent(pool.feeProtocol & 0xfff, 1e6) : undefined),
-    [pool?.feeProtocol],
-  )
+  const lpApr = useMemo(() => {
+    if (!inRange || !userTVLUsd) return globalLpApr
 
-  const { apr } = useRoi({
-    amountA,
-    amountB,
-    currencyAUsdPrice: token0UsdPrice,
-    currencyBUsdPrice: token1UsdPrice,
-    tickLower: lowerTick ?? undefined,
-    tickUpper: upperTick ?? undefined,
-    volume24H: poolInfo?.vol24hUsd && parseFloat(poolInfo?.vol24hUsd),
-    sqrtRatioX96,
-    mostActiveLiquidity: pool?.liquidity,
-    fee: poolInfo?.feeTier,
-    protocolFee,
-  })
+    const apr = new BN(poolInfo?.lpFee24hUsd ?? 0).times(365).times(share).div(userTVLUsd).toString()
+
+    return apr as `${number}`
+  }, [inRange, userTVLUsd, globalLpApr, poolInfo?.lpFee24hUsd, share])
 
   return {
-    lpApr: parseFloat(`${formatPercent(apr, 5) || '0'}`) / 100,
+    lpApr: (liquidity === 0n ? globalLpApr : lpApr) ?? 0,
     cakeApr,
     merklApr: inRange ? parseFloat(merklApr ?? 0) ?? 0 : 0,
   }
