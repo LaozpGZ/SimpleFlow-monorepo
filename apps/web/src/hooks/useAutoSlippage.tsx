@@ -37,6 +37,7 @@ const isV4Trade = (
     | SmartRouterTrade<TradeType>
     | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
     | ExclusiveDutchOrderTrade<Currency, Currency>
+    | BridgeTrade
     | undefined,
 ): trade is InfinityRouter.InfinityTradeWithoutGraph<TradeType> => {
   return trade !== undefined && trade !== null && 'gasUseEstimate' in trade && !('orderInfo' in trade)
