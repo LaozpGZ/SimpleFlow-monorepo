@@ -59,12 +59,12 @@ export function useAutoSlippageWithFallback(): {
 export const useInputBasedAutoSlippageWithFallback = (inputAmount?: CurrencyAmount<Currency>) => {
   const [isAutoSlippageEnabled] = useAutoSlippageEnabled()
   const [userSlippageTolerance] = useUserSlippage()
-  const autoSlippageTolerance = useInputBasedAutoSlippage(inputAmount)
+  const { inputBasedSlippage } = useInputBasedAutoSlippage(inputAmount)
 
   return useMemo(() => {
-    if (isAutoSlippageEnabled && inputAmount && autoSlippageTolerance) {
+    if (isAutoSlippageEnabled && inputAmount && inputBasedSlippage) {
       return {
-        slippageTolerance: Number(autoSlippageTolerance.numerator),
+        slippageTolerance: Number(inputBasedSlippage.numerator),
         isAuto: true,
       }
     }
@@ -73,7 +73,7 @@ export const useInputBasedAutoSlippageWithFallback = (inputAmount?: CurrencyAmou
       slippageTolerance: userSlippageTolerance,
       isAuto: false,
     }
-  }, [isAutoSlippageEnabled, inputAmount, autoSlippageTolerance, userSlippageTolerance])
+  }, [isAutoSlippageEnabled, inputAmount, inputBasedSlippage, userSlippageTolerance])
 }
 
 export const AutoSlippageProvider = ({ children }: { children?: React.ReactNode }) => {
