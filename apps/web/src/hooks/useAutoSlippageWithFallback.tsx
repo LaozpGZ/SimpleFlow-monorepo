@@ -50,11 +50,8 @@ export function useAutoSlippageWithFallback(): {
       }
     }
 
-    // Convert basis points to percent
-    const userSlippageTolerancePercent = userSlippageTolerance
-
     return {
-      slippageTolerance: userSlippageTolerancePercent,
+      slippageTolerance: userSlippageTolerance,
       isAuto: false,
     }
   }, [isAutoSlippageEnabled, hasTrade, autoSlippageTolerance, userSlippageTolerance])
