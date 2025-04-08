@@ -12,7 +12,6 @@ import {
   QuestionHelperV2,
   Text,
   WarningIcon,
-  useMatchBreakpoints,
   useTooltip,
 } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
@@ -33,6 +32,11 @@ import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/styleds'
 import { InterfaceOrder, isXOrder } from 'views/Swap/utils'
 import { SlippageAdjustedAmounts, formatExecutionPrice } from 'views/Swap/V3Swap/utils/exchange'
+
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+
+dayjs.extend(relativeTime)
 
 const SwapModalFooterContainer = styled(AutoColumn)`
   margin-top: 24px;
@@ -78,6 +82,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
   onConfirm,
   swapErrorMessage,
   disabledConfirm,
+  estimatedTime = 3 * 60 * 1000, // 3 Minutes (Testing),
 }: {
   order?: InterfaceOrder
   tradeType: TradeType
@@ -90,17 +95,27 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
   isEnoughInputBalance?: boolean
   swapErrorMessage?: string | undefined
   disabledConfirm: boolean
+
+  /** Estimated time in milliseconds */
+  estimatedTime?: number
   onConfirm: () => void
 }) {
   const { t } = useTranslation()
   const [showInverted, setShowInverted] = useState<boolean>(false)
-  const { isMobile } = useMatchBreakpoints()
 
   const [gasToken] = useGasToken()
   const { isPaymasterAvailable, isPaymasterTokenActive } = usePaymaster()
   const gasTokenInfo = paymasterInfo[gasToken.isToken ? gasToken?.wrapped.address : '']
 
-  const displayDecimals = isMobile ? 6 : 12
+  const displayPrecision = 6
+
+  const estimatedTimeDisplay = useMemo(() => {
+    if (estimatedTime) {
+      const time = dayjs.unix(estimatedTime / 1000).from(dayjs.unix(0), true)
+      return time
+    }
+    return null
+  }, [estimatedTime])
 
   const showSameTokenWarning = useMemo(
     () =>
@@ -197,8 +212,8 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
           <RowFixed>
             <Text fontSize="14px">
               {tradeType === TradeType.EXACT_INPUT
-                ? formatAmount(slippageAdjustedAmounts?.[Field.OUTPUT], displayDecimals) ?? '-'
-                : formatAmount(slippageAdjustedAmounts?.[Field.INPUT], displayDecimals) ?? '-'}
+                ? formatAmount(slippageAdjustedAmounts?.[Field.OUTPUT], displayPrecision) ?? '-'
+                : formatAmount(slippageAdjustedAmounts?.[Field.INPUT], displayPrecision) ?? '-'}
             </Text>
             <Text fontSize="14px" marginLeft="4px">
               {tradeType === TradeType.EXACT_INPUT ? outputAmount.currency.symbol : inputAmount.currency.symbol}
@@ -231,7 +246,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
                 </>
               }
             >
-              <DottedHelpText fontSize="14px">{t('Trading Fee')}</DottedHelpText>
+              <DottedHelpText fontSize="14px">{t('Total Fee')}</DottedHelpText>
             </QuestionHelperV2>
           </RowFixed>
           {realizedLPFee || isXOrder(order) ? (
@@ -254,6 +269,27 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
             </Text>
           )}
         </RowBetween>
+        {estimatedTimeDisplay && (
+          <RowBetween mt="8px">
+            <RowFixed>
+              <QuestionHelperV2
+                ml="4px"
+                placement="top"
+                text={
+                  <>
+                    <Text>{t('Estimated Time')}</Text>
+                  </>
+                }
+              >
+                <DottedHelpText fontSize="14px">{t('Est. Time')}</DottedHelpText>
+              </QuestionHelperV2>
+            </RowFixed>
+            <Text fontSize="14px" textAlign="right">
+              {estimatedTimeDisplay}
+            </Text>
+          </RowBetween>
+        )}
+
         {isXOrder(order) && (
           <RowBetween mt="8px">
             <RowFixed>
