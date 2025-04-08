@@ -1,7 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { Percent, TradeType } from '@pancakeswap/sdk'
-import { SmartRouterTrade, InfinityRouter } from '@pancakeswap/smart-router'
+import { InfinityRouter, SmartRouterTrade } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { BigNumber } from 'bignumber.js'
 import { L2_CHAIN_IDS } from 'config/chains'
@@ -37,6 +37,7 @@ const isV4Trade = (
     | SmartRouterTrade<TradeType>
     | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
     | ExclusiveDutchOrderTrade<Currency, Currency>
+    | BridgeTrade
     | undefined,
 ): trade is InfinityRouter.InfinityTradeWithoutGraph<TradeType> => {
   return trade !== undefined && trade !== null && 'gasUseEstimate' in trade && !('orderInfo' in trade)
