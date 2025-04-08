@@ -35,6 +35,7 @@ const isV4Trade = (
     | SmartRouterTrade<TradeType>
     | V4Router.V4TradeWithoutGraph<TradeType>
     | ExclusiveDutchOrderTrade<Currency, Currency>
+    | BridgeTrade
     | undefined,
 ): trade is V4Router.V4TradeWithoutGraph<TradeType> => {
   return trade !== undefined && trade !== null && 'gasUseEstimate' in trade && !('orderInfo' in trade)
@@ -45,7 +46,8 @@ const guesstimateGas = (
   trade?:
     | SmartRouterTrade<TradeType>
     | V4Router.V4TradeWithoutGraph<TradeType>
-    | ExclusiveDutchOrderTrade<Currency, Currency>,
+    | ExclusiveDutchOrderTrade<Currency, Currency>
+    | BridgeTrade,
 ): number => {
   if (!trade) return 0
   // A very rough gas estimation based on the trade type
@@ -58,7 +60,8 @@ const calculateGasEstimateUSD = (
   trade?:
     | SmartRouterTrade<TradeType>
     | V4Router.V4TradeWithoutGraph<TradeType>
-    | ExclusiveDutchOrderTrade<Currency, Currency>,
+    | ExclusiveDutchOrderTrade<Currency, Currency>
+    | BridgeTrade,
   baseGasEstimatePrice?: any,
 ) => {
   if (!supportsGasEstimate || !trade) return null
