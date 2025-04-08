@@ -61,11 +61,7 @@ export default function SwapModalHeaderV3({
     <AutoColumn gap="md">
       <Row justifyContent="space-around">
         <AutoColumn justify="center">
-          <CurrencyLogo
-            currency={currencyBalances?.INPUT?.currency ?? inputAmount.currency}
-            size="40px"
-            showChainLogo
-          />
+          <CurrencyLogo currency={inputAmount.currency} size="40px" showChainLogo />
 
           <Text color={inputTextColor} bold ellipsis>
             {formatAmount(inputAmount, displayPrecision)}&nbsp;
@@ -83,11 +79,7 @@ export default function SwapModalHeaderV3({
           <ArrowForwardIcon width="24px" ml="4px" color="textSubtle" />
         </RowFixed>
         <AutoColumn justify="center">
-          <CurrencyLogo
-            currency={currencyBalances?.OUTPUT?.currency ?? outputAmount.currency}
-            size="40px"
-            showChainLogo
-          />
+          <CurrencyLogo currency={outputAmount.currency} size="40px" showChainLogo />
 
           <Text
             bold
