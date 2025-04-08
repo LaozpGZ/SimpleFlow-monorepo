@@ -3745,5 +3745,8 @@
   "Powered by Brevis, this hook enables swap fee discounts": "Powered by Brevis, this hook enables swap fee discounts",
   "Powered by Primus, this hook enables swap fee discounts": "Powered by Primus, this hook enables swap fee discounts",
   "Popular tokens": "Popular tokens",
-  "Search name / address": "Search name / address"
+  "Search name / address": "Search name / address",
+  "Total Fee": "Total Fee",
+  "Estimated Time": "Estimated Time",
+  "Est. Time": "Est. Time"
 }
