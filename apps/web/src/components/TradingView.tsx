@@ -1,7 +1,7 @@
 import { Box, FlexProps, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import Script from 'next/script'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { DefaultTheme, useTheme } from 'styled-components'
 import { ChartByLabel } from './Chart/ChartbyLabel'
 
@@ -60,8 +60,27 @@ const TradingView = ({ id, symbol }: TradingViewProps) => {
   const { currentLanguage } = useTranslation()
   const theme = useTheme()
   const { isMobile } = useMatchBreakpoints()
+  const [integrity, setIntegrity] = useState<string | undefined>(undefined)
 
   useEffect(() => {
+    const fetchIntegrity = async () => {
+      try {
+        const res = await fetch('/api/integrity?id=tv')
+        if (res.ok) {
+          const data = await res.json()
+          setIntegrity(data.integrity)
+        }
+      } catch (error) {
+        console.error('Failed to fetch TradingView integrity hash:', error)
+      }
+    }
+
+    fetchIntegrity()
+  }, [])
+
+  useEffect(() => {
+    if (!integrity) return
+
     const opts: any = {
       container_id: id,
       symbol,
@@ -83,22 +102,23 @@ const TradingView = ({ id, symbol }: TradingViewProps) => {
 
     // Ignore isMobile to avoid re-render TV
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theme, currentLanguage, id, symbol])
+  }, [theme, currentLanguage, id, symbol, integrity])
 
   return (
     <Box overflow="hidden" className="tradingview_container">
-      <Script
-        src="https://s3.tradingview.com/tv.js"
-        integrity="sha384-k8vrFVf3QD6I0K1QIeOVPIlQS4zqjhpkVWb178bEtoDRZtLZeDCNlJaoGhlQaL27"
-        crossOrigin="anonymous"
-        strategy="lazyOnload"
-        id="tv.js"
-      />
+      {integrity && (
+        <Script
+          src="https://s3.tradingview.com/tv.js"
+          integrity={integrity}
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+          id="tv.js"
+        />
+      )}
       <div id={id} />
     </Box>
   )
 }
-
 export function useTradingViewEvent({
   id,
   onNoDataEvent,
