@@ -13,9 +13,10 @@ import useClassicAutoSlippageTolerance, {
 
 // Atom to store the user's preference for auto slippage
 const autoSlippageEnabledAtom = atomWithStorage('pcs:auto-slippage-enabled-2', true)
+const autoSlippageValueAtom = atom(MIN_DEFAULT_SLIPPAGE_NUMERATOR)
 
 export const useAutoSlippageAtom = () => {
-  return useAtom(atom(MIN_DEFAULT_SLIPPAGE_NUMERATOR))
+  return useAtom(autoSlippageValueAtom)
 }
 
 export const useAutoSlippageEnabled = () => {
