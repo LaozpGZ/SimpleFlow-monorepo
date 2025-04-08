@@ -4,7 +4,7 @@ import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useAllTypeBestTrade } from 'views/Swap/V3Swap/hooks/useAllTypeBestTrade'
 import useClassicAutoSlippageTolerance, {
   MIN_DEFAULT_SLIPPAGE_NUMERATOR,
@@ -40,10 +40,9 @@ export function useAutoSlippageWithFallback(): {
   const [isAutoSlippageEnabled] = useAutoSlippageEnabled()
   const [userSlippageTolerance] = useUserSlippage()
   const [autoSlippageTolerance] = useAutoSlippageAtom()
-  const hasTrade = Boolean(useAllTypeBestTrade()?.bestOrder?.trade)
 
   return useMemo(() => {
-    if (isAutoSlippageEnabled && hasTrade) {
+    if (isAutoSlippageEnabled) {
       return {
         slippageTolerance: autoSlippageTolerance,
         isAuto: true,
@@ -54,7 +53,7 @@ export function useAutoSlippageWithFallback(): {
       slippageTolerance: userSlippageTolerance,
       isAuto: false,
     }
-  }, [isAutoSlippageEnabled, hasTrade, autoSlippageTolerance, userSlippageTolerance])
+  }, [isAutoSlippageEnabled, autoSlippageTolerance, userSlippageTolerance])
 }
 
 export const useInputBasedAutoSlippageWithFallback = (inputAmount?: CurrencyAmount<Currency>) => {
@@ -63,7 +62,7 @@ export const useInputBasedAutoSlippageWithFallback = (inputAmount?: CurrencyAmou
   const autoSlippageTolerance = useInputBasedAutoSlippage(inputAmount)
 
   return useMemo(() => {
-    if (isAutoSlippageEnabled && inputAmount) {
+    if (isAutoSlippageEnabled && inputAmount && autoSlippageTolerance) {
       return {
         slippageTolerance: Number(autoSlippageTolerance.numerator),
         isAuto: true,
@@ -77,7 +76,7 @@ export const useInputBasedAutoSlippageWithFallback = (inputAmount?: CurrencyAmou
   }, [isAutoSlippageEnabled, inputAmount, autoSlippageTolerance, userSlippageTolerance])
 }
 
-export const AutoSlippageProvider = ({ children }: { children: React.ReactNode }) => {
+export const AutoSlippageProvider = ({ children }: { children?: React.ReactNode }) => {
   return (
     <>
       {children}
@@ -87,12 +86,28 @@ export const AutoSlippageProvider = ({ children }: { children: React.ReactNode }
 }
 export const Sync = () => {
   const result = useAllTypeBestTrade()
+  const tradeRef = useRef(result?.bestOrder?.trade)
+  const isSameOrder = useMemo(() => {
+    if (!tradeRef.current || !result?.bestOrder?.trade) return false
+    return (
+      tradeRef.current?.inputAmount?.currency?.equals(result?.bestOrder?.trade?.inputAmount?.currency) &&
+      tradeRef.current?.outputAmount?.currency?.equals(result?.bestOrder?.trade?.outputAmount?.currency) &&
+      tradeRef.current?.tradeType === result?.bestOrder?.trade?.tradeType &&
+      tradeRef.current?.inputAmount?.equalTo(result?.bestOrder?.trade?.inputAmount) &&
+      tradeRef.current?.outputAmount?.equalTo(result?.bestOrder?.trade?.outputAmount)
+    )
+  }, [result?.bestOrder])
   const autoSlippage = useClassicAutoSlippageTolerance(result?.bestOrder?.trade)
   const [, setAutoSlippageValue] = useAutoSlippageAtom()
-  useEffect(() => {
-    if (result?.bestOrder?.trade && autoSlippage) {
+  const updateAutoSlippage = useCallback(() => {
+    if (autoSlippage) {
       setAutoSlippageValue(Number(autoSlippage.numerator))
     }
-  }, [result, autoSlippage])
+  }, [autoSlippage])
+  useEffect(() => {
+    if (!isSameOrder) {
+      updateAutoSlippage()
+    }
+  }, [isSameOrder, updateAutoSlippage])
   return null
 }
