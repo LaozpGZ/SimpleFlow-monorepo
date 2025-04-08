@@ -28,14 +28,14 @@ import { PancakeSwapXTag } from 'components/PancakeSwapXTag'
 import { paymasterInfo } from 'config/paymaster'
 import { usePaymaster } from 'hooks/usePaymaster'
 import { isAddressEqual } from 'utils'
+import FormattedPriceImpact from 'views/Swap/components/FormattedPriceImpact'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/styleds'
 import { InterfaceOrder, isXOrder } from 'views/Swap/utils'
-import FormattedPriceImpact from '../../components/FormattedPriceImpact'
-import { StyledBalanceMaxMini, SwapCallbackError } from '../../components/styleds'
-import { SlippageAdjustedAmounts, formatExecutionPrice } from '../utils/exchange'
+import { SlippageAdjustedAmounts, formatExecutionPrice } from 'views/Swap/V3Swap/utils/exchange'
 
 const SwapModalFooterContainer = styled(AutoColumn)`
-  margin-top: 12px;
+  margin-top: 24px;
   padding: 16px;
   border-radius: ${({ theme }) => theme.radii.default};
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -65,7 +65,7 @@ const Badge = styled.span`
   background-color: ${({ theme }) => theme.colors.success};
 `
 
-export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
+export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
   priceImpact: priceImpactWithoutFee,
   lpFee: realizedLPFee,
   inputAmount,
