@@ -72,72 +72,72 @@ export default function V4Swap() {
   )
 
   return (
-    <AutoSlippageProvider>
-      <Page removePadding hideFooterOnDesktop={isChartExpanded || false} showExternalLink={false} showHelpLink={false}>
+    <Page removePadding hideFooterOnDesktop={isChartExpanded || false} showExternalLink={false} showHelpLink={false}>
+      <Flex
+        width="100%"
+        height="100%"
+        justifyContent="center"
+        position="relative"
+        mt={isChartExpanded ? undefined : isMobile ? '18px' : '42px'}
+        p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
+      >
+        {isDesktop && isChartSupported && (
+          <PriceChartContainer
+            inputCurrencyId={inputCurrencyId}
+            inputCurrency={currencies[Field.INPUT]}
+            outputCurrencyId={outputCurrencyId}
+            outputCurrency={currencies[Field.OUTPUT]}
+            isChartExpanded={isChartExpanded}
+            setIsChartExpanded={setIsChartExpanded}
+            isChartDisplayed={isChartDisplayed}
+            currentSwapPrice={singleTokenPrice}
+          />
+        )}
+        {!isDesktop && isChartSupported && (
+          <BottomDrawer
+            content={
+              <PriceChartContainer
+                inputCurrencyId={inputCurrencyId}
+                inputCurrency={currencies[Field.INPUT]}
+                outputCurrencyId={outputCurrencyId}
+                outputCurrency={currencies[Field.OUTPUT]}
+                isChartExpanded={isChartExpanded}
+                setIsChartExpanded={setIsChartExpanded}
+                isChartDisplayed={isChartDisplayed}
+                currentSwapPrice={singleTokenPrice}
+                isFullWidthContainer
+                isMobile
+              />
+            }
+            isOpen={isChartDisplayed}
+            setIsOpen={(isOpen) => setIsChartDisplayed?.(isOpen)}
+          />
+        )}
         <Flex
-          width="100%"
+          flexDirection="column"
+          alignItems="center"
           height="100%"
-          justifyContent="center"
+          width={isChartDisplayed && !isMobile ? 'auto' : '100%'}
+          mt={isChartExpanded && !isMobile ? '42px' : undefined}
           position="relative"
-          mt={isChartExpanded ? undefined : isMobile ? '18px' : '42px'}
-          p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
+          zIndex={1}
         >
-          {isDesktop && isChartSupported && (
-            <PriceChartContainer
-              inputCurrencyId={inputCurrencyId}
-              inputCurrency={currencies[Field.INPUT]}
-              outputCurrencyId={outputCurrencyId}
-              outputCurrency={currencies[Field.OUTPUT]}
-              isChartExpanded={isChartExpanded}
-              setIsChartExpanded={setIsChartExpanded}
-              isChartDisplayed={isChartDisplayed}
-              currentSwapPrice={singleTokenPrice}
-            />
-          )}
-          {!isDesktop && isChartSupported && (
-            <BottomDrawer
-              content={
-                <PriceChartContainer
-                  inputCurrencyId={inputCurrencyId}
-                  inputCurrency={currencies[Field.INPUT]}
-                  outputCurrencyId={outputCurrencyId}
-                  outputCurrency={currencies[Field.OUTPUT]}
-                  isChartExpanded={isChartExpanded}
-                  setIsChartExpanded={setIsChartExpanded}
-                  isChartDisplayed={isChartDisplayed}
-                  currentSwapPrice={singleTokenPrice}
-                  isFullWidthContainer
-                  isMobile
-                />
-              }
-              isOpen={isChartDisplayed}
-              setIsOpen={(isOpen) => setIsChartDisplayed?.(isOpen)}
-            />
-          )}
-          <Flex
-            flexDirection="column"
-            alignItems="center"
-            height="100%"
-            width={isChartDisplayed && !isMobile ? 'auto' : '100%'}
-            mt={isChartExpanded && !isMobile ? '42px' : undefined}
-            position="relative"
-            zIndex={1}
+          <StyledSwapContainer
+            justifyContent="center"
+            width="100%"
+            style={{ height: '100%' }}
+            $isChartExpanded={isChartExpanded}
           >
-            <StyledSwapContainer
-              justifyContent="center"
-              width="100%"
-              style={{ height: '100%' }}
-              $isChartExpanded={isChartExpanded}
-            >
+            <AutoSlippageProvider>
               <Wrapper height="100%">
                 <V4SwapForm />
               </Wrapper>
-            </StyledSwapContainer>
-          </Flex>
+            </AutoSlippageProvider>
+          </StyledSwapContainer>
         </Flex>
+      </Flex>
 
-        <MobileCard />
-      </Page>
-    </AutoSlippageProvider>
+      <MobileCard />
+    </Page>
   )
 }
