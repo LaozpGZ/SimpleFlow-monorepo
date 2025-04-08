@@ -9,9 +9,11 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import {
   ApproveCrossChainModalContent,
   ApproveModalContent,
+  ApproveModalContentV3,
   ConfirmationPendingContent,
   ConfirmModalState,
   SwapPendingModalContent,
+  SwapPendingModalContentV3,
   SwapTransactionReceiptModalContent,
 } from '@pancakeswap/widgets-internal'
 import AddToWalletButton, { AddToWalletTextOptions } from 'components/AddToWallet/AddToWalletButton'
@@ -28,7 +30,7 @@ import { chainNameConverter } from 'utils/chainNameConverter'
 import { Hash } from 'viem'
 import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 
-import { ApproveStepFlow } from 'views/Swap/V3Swap/containers/ApproveStepFlow'
+import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { useSlippageAdjustedAmounts } from 'views/Swap/V3Swap/hooks'
 import { ConfirmAction } from 'views/Swap/V3Swap/hooks/useConfirmModalState'
 import { AllowedAllowanceState } from 'views/Swap/V3Swap/types'
@@ -125,6 +127,27 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
     onDismiss?.()
   }, [customOnDismiss, onDismiss])
 
+  const modalTitle = useMemo(() => {
+    switch (confirmModalState) {
+      case ConfirmModalState.APPROVING_TOKEN:
+        return t('Approve %token%', {
+          token: currencyBalances?.INPUT?.currency.symbol ?? originalOrder?.trade?.inputAmount?.currency.symbol,
+        })
+      case ConfirmModalState.PENDING_CONFIRMATION:
+        return t('Submit Order')
+      case ConfirmModalState.REVIEWING:
+        return hasError ? '' : t('Confirm Swap')
+      default:
+        return ''
+    }
+  }, [
+    t,
+    hasError,
+    confirmModalState,
+    currencyBalances?.INPUT?.currency.symbol,
+    originalOrder?.trade?.inputAmount?.currency.symbol,
+  ])
+
   const modalContent = useMemo(() => {
     const isExactIn = originalOrder?.trade.tradeType === TradeType.EXACT_INPUT
     const currencyA = currencyBalances?.INPUT?.currency ?? originalOrder?.trade?.inputAmount?.currency
@@ -167,6 +190,21 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       confirmModalState === ConfirmModalState.PERMITTING ||
       confirmModalState === ConfirmModalState.RESETTING_APPROVAL
     ) {
+      if (isBridgeOrder(order)) {
+        return (
+          <ApproveModalContentV3
+            title={stepContents}
+            isX={isXOrder(order)}
+            // TODO
+            isBonus={false}
+            currencyA={currencyA as Currency}
+            chainName={getFullChainNameById(currencyA?.chainId)}
+            asBadge
+            currentStep={confirmModalState}
+            approvalModalSteps={pendingModalSteps.map((step) => step.step) as any}
+          />
+        )
+      }
       return (
         <ApproveModalContent
           title={stepContents}
@@ -217,6 +255,36 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       if (isXOrder(originalOrder)) {
         title = txHash ? t('Order Filled') : orderHash ? t('Order Submitted') : t('Confirm Swap')
       }
+
+      if (isBridgeOrder(originalOrder)) {
+        return (
+          <SwapPendingModalContentV3
+            title={title}
+            currencyA={currencyA}
+            currencyB={currencyB}
+            amountA={amountA}
+            amountB={amountB}
+            currentStep={confirmModalState}
+          >
+            {showAddToWalletButton && (txHash || orderHash) ? (
+              <AddToWalletButton
+                mt="39px"
+                height="auto"
+                variant="tertiary"
+                width="fit-content"
+                padding="6.5px 20px"
+                marginTextBetweenLogo="6px"
+                textOptions={AddToWalletTextOptions.TEXT_WITH_ASSET}
+                tokenAddress={token?.address}
+                tokenSymbol={currencyB?.symbol}
+                tokenDecimals={token?.decimals}
+                tokenLogo={token instanceof WrappedTokenInfo ? (token as WrappedTokenInfo)?.logoURI : undefined}
+              />
+            ) : null}
+          </SwapPendingModalContentV3>
+        )
+      }
+
       return (
         <SwapPendingModalContent
           title={title}
@@ -316,9 +384,10 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
 
   return (
     <ConfirmSwapModalV3Container
-      minHeight={hasError ? 'auto' : '415px'}
+      minHeight={hasError ? 'auto' : '251px'}
       width={['100%', '100%', '100%', '480px']}
-      hideTitleAndBackground={confirmModalState !== ConfirmModalState.REVIEWING || hasError}
+      title={modalTitle}
+      // hideTitleAndBackground={confirmModalState !== ConfirmModalState.REVIEWING || hasError}
       headerPadding={loadingAnimationVisible ? '12px 24px 0px 24px !important' : '12px 24px'}
       headerBackground="transparent"
       bodyPadding={loadingAnimationVisible && !hasError ? '0 24px 24px 24px' : '24px'}
@@ -326,12 +395,12 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       handleDismiss={handleDismiss}
     >
       <Box>{modalContent}</Box>
-      {stepsVisible ? (
+      {/* {stepsVisible ? (
         <ApproveStepFlow
           confirmModalState={confirmModalState}
           pendingModalSteps={pendingModalSteps.map((step) => step.step) as any}
         />
-      ) : null}
+      ) : null} */}
     </ConfirmSwapModalV3Container>
   )
 }

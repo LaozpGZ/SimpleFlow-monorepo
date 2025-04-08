@@ -1,16 +1,12 @@
-import { getChainName } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent, TradeType } from '@pancakeswap/sdk'
-import { ArrowForwardIcon, AutoColumn, Button, ErrorIcon, Row, Text } from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { AutoColumn, Button, ErrorIcon, Text } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
-import { chainNameConverter } from 'utils/chainNameConverter'
 
 import { warningSeverity } from 'utils/exchange'
-import { chains } from 'utils/wagmi'
 import { SwapShowAcceptChanges } from 'views/Swap/components/styleds'
+import { DualCurrencyDisplay } from '../DualCurrencyDisplay'
 
 export default function SwapModalHeaderV3({
   inputAmount,
@@ -40,14 +36,15 @@ export default function SwapModalHeaderV3({
 
   const priceImpactSeverity = warningSeverity(priceImpactWithoutFee)
 
-  const displayPrecision = 6
-
   const inputTextColor =
     showAcceptChanges && tradeType === TradeType.EXACT_OUTPUT && isEnoughInputBalance
       ? 'primary'
       : tradeType === TradeType.EXACT_OUTPUT && !isEnoughInputBalance
       ? 'failure'
       : 'text'
+
+  const outputTextColor =
+    priceImpactSeverity > 2 ? 'failure' : showAcceptChanges && tradeType === TradeType.EXACT_INPUT ? 'primary' : 'text'
 
   const truncatedRecipient = recipient ? truncateHash(recipient) : ''
 
@@ -59,50 +56,12 @@ export default function SwapModalHeaderV3({
 
   return (
     <AutoColumn gap="md">
-      <Row justifyContent="space-around">
-        <AutoColumn justify="center">
-          <CurrencyLogo currency={inputAmount.currency} size="40px" showChainLogo />
-
-          <Text color={inputTextColor} bold ellipsis>
-            {formatAmount(inputAmount, displayPrecision)}&nbsp;
-            {inputAmount.currency.symbol}
-          </Text>
-
-          <Text color="textSubtle" fontSize="12px" bold>
-            {chainNameConverter(
-              chains.find((item) => item.id === inputAmount.currency.chainId)?.name ||
-                getChainName(inputAmount.currency.chainId),
-            )}
-          </Text>
-        </AutoColumn>
-        <RowFixed my="auto">
-          <ArrowForwardIcon width="24px" ml="4px" color="textSubtle" />
-        </RowFixed>
-        <AutoColumn justify="center">
-          <CurrencyLogo currency={outputAmount.currency} size="40px" showChainLogo />
-
-          <Text
-            bold
-            ellipsis
-            color={
-              priceImpactSeverity > 2
-                ? 'failure'
-                : showAcceptChanges && tradeType === TradeType.EXACT_INPUT
-                ? 'primary'
-                : 'text'
-            }
-          >
-            {formatAmount(outputAmount, displayPrecision)}&nbsp;{outputAmount.currency.symbol}
-          </Text>
-
-          <Text color="textSubtle" fontSize="12px" bold>
-            {chainNameConverter(
-              chains.find((item) => item.id === outputAmount.currency.chainId)?.name ||
-                getChainName(outputAmount.currency.chainId),
-            )}
-          </Text>
-        </AutoColumn>
-      </Row>
+      <DualCurrencyDisplay
+        inputAmount={inputAmount}
+        outputAmount={outputAmount}
+        inputTextColor={inputTextColor}
+        outputTextColor={outputTextColor}
+      />
 
       {showAcceptChanges ? (
         <SwapShowAcceptChanges justify="flex-start" gap="0px">
