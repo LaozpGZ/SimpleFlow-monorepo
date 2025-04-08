@@ -14,7 +14,7 @@ import { useAccount } from 'wagmi'
 import { ClaimDisplay } from './ClaimDisplay'
 import { Divider } from './Divider'
 import { IdoDepositButton } from './IdoDepositButton'
-import { ComplianceCard, PreSaleEligibleCard, PreSaleInfoCard } from './PreSaleInfoCard'
+import { ComplianceCard, PreSaleEligibleCard, PreSaleInfoCard, SnapshotNotPassCard } from './PreSaleInfoCard'
 import { StakedDisplay } from './StakedDisplay'
 
 export const IdoStakeActionCard: React.FC<{
@@ -74,9 +74,15 @@ export const IdoStakeActionCard: React.FC<{
                       <PreSaleEligibleCard />
                     ) : verifyStatus === VerifyStatus.restricted ? (
                       <ComplianceCard />
+                    ) : verifyStatus === VerifyStatus.snapshotNotPass ? (
+                      // @chef-ryan need to check projectId logic
+                      <SnapshotNotPassCard projectId="PumpBTC" />
                     ) : (
                       <PreSaleInfoCard />
                     )
+                  ) : verifyStatus === VerifyStatus.snapshotNotPass ? (
+                    // @chef-ryan need to check projectId logic
+                    <SnapshotNotPassCard projectId="PumpBTC" />
                   ) : (
                     <IdoDepositButton userStatus={userStatus} type="deposit" pid={pid} />
                   )

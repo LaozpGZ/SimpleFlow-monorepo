@@ -1,6 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CheckmarkCircleIcon, CloseCircleIcon, FlexGap, Text } from '@pancakeswap/uikit'
+import { CheckmarkCircleIcon, ChevronRightIcon, CloseCircleIcon, Flex, FlexGap, Text } from '@pancakeswap/uikit'
+import { useMemo } from 'react'
 import { styled } from 'styled-components'
+import { getSnapshotDeepLink } from 'views/Idos/helpers/getSnapshotLink'
 
 export const CardWrapper = styled.div`
   background: ${({ theme }) => (theme.isDark ? '#13393C' : '#EEFBFC')};
@@ -13,6 +15,14 @@ export const CardWrapper = styled.div`
 export const FailureCardWrapper = styled.div`
   background: ${({ theme }) => theme.colors.failure33};
   border: 1px solid ${({ theme }) => theme.shadows.danger};
+  border-radius: 20px;
+
+  padding: 12px;
+`
+
+export const ErrorCardWrapper = styled.div`
+  background: #ed4b9e1a;
+  border: 1px solid ${({ theme }) => theme.colors.failure33};
   border-radius: 20px;
 
   padding: 12px;
@@ -60,5 +70,31 @@ export const ComplianceCard: React.FC = () => {
         <Text>{t('Due to regulatory requirements, you are not eligible to participate in.')}</Text>
       </FlexGap>
     </FailureCardWrapper>
+  )
+}
+
+export const SnapshotNotPassCard: React.FC<{ projectId: string }> = ({ projectId }) => {
+  const { t } = useTranslation()
+  const link = useMemo(() => {
+    return getSnapshotDeepLink(projectId)
+  }, [projectId])
+
+  return (
+    <ErrorCardWrapper>
+      <Text as="h2" fontSize="18px" bold>
+        {t(`You're not eligible to participate this TGE`)}
+      </Text>
+      <Text color="textSubtle">
+        {t(
+          `Make sure your total balance ofBinance Spot & Earn and BinanceWallet has exceeded $3,000 each day for the past 7 days (UTC).`,
+        )}
+      </Text>
+      <Flex onClick={() => window.open(link)}>
+        <Text color="failure">{t('View Snapshots')}</Text>
+        <ChevronRightIcon color="failure" width="24px" ml="2px" />
+      </Flex>
+      {/* @chef-ryan remove next line after test */}
+      <pre style={{ whiteSpace: 'pre-wrap', lineBreak: 'anywhere' }}>{link}</pre>
+    </ErrorCardWrapper>
   )
 }
