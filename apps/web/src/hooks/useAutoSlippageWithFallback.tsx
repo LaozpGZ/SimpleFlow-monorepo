@@ -2,7 +2,7 @@ import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { SmartRouterTrade, V4Router } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { useUserSlippage } from '@pancakeswap/utils/user'
-import { useAtom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useAllTypeBestTrade } from 'views/Swap/V3Swap/hooks/useAllTypeBestTrade'
@@ -13,10 +13,9 @@ import useClassicAutoSlippageTolerance, {
 
 // Atom to store the user's preference for auto slippage
 const autoSlippageEnabledAtom = atomWithStorage('pcs:auto-slippage-enabled-2', true)
-const autoSlippageAtom = atomWithStorage('pcs:auto-slippage-value', MIN_DEFAULT_SLIPPAGE_NUMERATOR)
 
 export const useAutoSlippageAtom = () => {
-  return useAtom(autoSlippageAtom)
+  return useAtom(atom(MIN_DEFAULT_SLIPPAGE_NUMERATOR))
 }
 
 export const useAutoSlippageEnabled = () => {
