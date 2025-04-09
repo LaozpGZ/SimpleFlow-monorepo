@@ -31,7 +31,7 @@ export const IdoStakeActionCard: React.FC<{
   const stakeCurrency = pid === 0 ? stakeCurrency0 : stakeCurrency1
   const userHasStaked = userStatus?.stakedAmount?.greaterThan(0)
 
-  const { status, raiseAmounts, pricePerTokens, saleAmounts } = useIDOConfig()
+  const { status, raiseAmounts, pricePerTokens, saleAmounts, id } = useIDOConfig()
 
   const [raiseAmount, pricePerToken, saleAmount] = useMemo(() => {
     if (pid === 0) {
@@ -75,14 +75,12 @@ export const IdoStakeActionCard: React.FC<{
                     ) : verifyStatus === VerifyStatus.restricted ? (
                       <ComplianceCard />
                     ) : verifyStatus === VerifyStatus.snapshotNotPass ? (
-                      // @chef-ryan need to check projectId logic
-                      <SnapshotNotPassCard projectId="PumpBTC" />
+                      <SnapshotNotPassCard projectId={id} />
                     ) : (
                       <PreSaleInfoCard />
                     )
-                  ) : verifyStatus === VerifyStatus.snapshotNotPass ? (
-                    // @chef-ryan need to check projectId logic
-                    <SnapshotNotPassCard projectId="PumpBTC" />
+                  ) : status !== 'finished' && verifyStatus === VerifyStatus.snapshotNotPass ? (
+                    <SnapshotNotPassCard projectId={id} />
                   ) : (
                     <IdoDepositButton userStatus={userStatus} type="deposit" pid={pid} />
                   )
