@@ -40,8 +40,7 @@ const verifyW3WAccount = async (address: Address): Promise<{ status: VerifyStatu
       return { status: VerifyStatus.restricted, code: result.code }
     }
 
-    // @chef-ryan remove `true` after test
-    if (result?.code === '351010' || true) {
+    if (result?.code === '351010') {
       return { status: VerifyStatus.snapshotNotPass, code: result.code }
     }
 

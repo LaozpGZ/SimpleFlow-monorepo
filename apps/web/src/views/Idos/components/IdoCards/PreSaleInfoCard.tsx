@@ -93,8 +93,6 @@ export const SnapshotNotPassCard: React.FC<{ projectId: string }> = ({ projectId
         <Text color="failure">{t('View Snapshots')}</Text>
         <ChevronRightIcon color="failure" width="24px" ml="2px" />
       </Flex>
-      {/* @chef-ryan remove next line after test */}
-      <pre style={{ whiteSpace: 'pre-wrap', lineBreak: 'anywhere' }}>{link}</pre>
     </ErrorCardWrapper>
   )
 }
