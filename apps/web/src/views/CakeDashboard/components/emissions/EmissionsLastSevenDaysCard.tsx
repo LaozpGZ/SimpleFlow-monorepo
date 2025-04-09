@@ -2,15 +2,15 @@ import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, Text } from '@pancakeswap/uikit'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
-export const TotalEmissionsCard = (props: CardProps) => {
+export const EmissionsLastSevenDaysCard = (props: CardProps) => {
   const { t } = useTranslation()
 
   return (
     <StatsCard {...props}>
       <StatsCardHeader>
-        {t('Total Emissions')}
+        {t('Emissions')}
         &nbsp;
-        <span style={{ fontSize: '14px' }}>({t('Since inception')})</span>
+        <span style={{ fontSize: '14px' }}>({t('In last 7d')})</span>
       </StatsCardHeader>
 
       <Text fontSize="24px" bold>

@@ -4,6 +4,7 @@ import { LightGreyCard } from 'components/Card'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 import { TooltipCard } from '../styles'
+import { TabMenu } from '../TabMenu'
 
 const data = [
   {
@@ -288,32 +289,30 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <FlexGap gap="6px" alignItems="center" mb="24px">
-        <StatsCardHeader>{t('Weekly Burn')}</StatsCardHeader>
-        <QuestionHelperV2 text={t('This chart shows the weekly burn of the CAKE token')}>
-          <InfoIcon color="textSubtle" />
-        </QuestionHelperV2>
+      <FlexGap mb="16px" justifyContent="space-between" alignItems="center">
+        <FlexGap gap="6px" alignItems="center">
+          <StatsCardHeader>{t('Weekly Burn')}</StatsCardHeader>
+          <QuestionHelperV2 text={t('Weekly breakdown of CAKE burn by product')}>
+            <InfoIcon color="textSubtle" />
+          </QuestionHelperV2>
+        </FlexGap>
+        <FlexGap gap="8px">
+          <TabMenu tabs={['CAKE', 'USD']} defaultTab="CAKE" />
+          <TabMenu />
+        </FlexGap>
       </FlexGap>
 
       <ResponsiveContainer width="100%" height={360}>
-        <BarChart data={percentageData} barCategoryGap="95%">
+        <BarChart data={data} barCategoryGap="95%" barSize={20}>
           <XAxis dataKey="name" fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />
-          <YAxis
-            fontSize="12px"
-            tick={{ fill: '#9383B4' }}
-            tickLine={false}
-            axisLine={false}
-            domain={[0, 100]}
-            ticks={[0, 50, 100]}
-            tickFormatter={(value) => `${value}%`}
-          />
-          <Tooltip wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
+          <YAxis fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />
+          <Tooltip cursor={{ fill: 'transparent' }} wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
+          <Bar dataKey="tradingFeeV2" fill="#1FC7D4" stackId="stack" radius={[0, 0, 4, 4]} />
           <Bar dataKey="tradingFeeV3" fill="#7645D9" stackId="stack" />
           <Bar dataKey="prediction" fill="#FFB237" stackId="stack" />
           <Bar dataKey="lottery" fill="#ED4B9E" stackId="stack" />
-          <Bar dataKey="tradingFeeV2" fill="#1FC7D4" stackId="stack" />
           <Bar dataKey="perpetual" fill="#2882CC" stackId="stack" />
-          <Bar dataKey="stableSwap" fill="#31D0AA" stackId="stack" />
+          <Bar dataKey="stableSwap" fill="#31D0AA" stackId="stack" radius={[4, 4, 0, 0]} />
         </BarChart>
       </ResponsiveContainer>
 

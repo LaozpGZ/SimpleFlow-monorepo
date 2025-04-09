@@ -273,8 +273,8 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
   return (
     <StatsCard {...props}>
       <FlexGap gap="6px" alignItems="center">
-        <StatsCardHeader>{t('Weekly Allocation')}</StatsCardHeader>
-        <QuestionHelperV2 text={t('This chart shows the weekly allocation of the CAKE token')}>
+        <StatsCardHeader>{t('Weekly Emissions Allocation')}</StatsCardHeader>
+        <QuestionHelperV2 text={t('Weekly breakdown of CAKE emissions allocation by product')}>
           <InfoIcon color="textSubtle" />
         </QuestionHelperV2>
       </FlexGap>
@@ -289,13 +289,14 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
               left: 20,
               bottom: 5,
             }}
+            barSize={20}
           >
-            <Bar dataKey="tradingFeeV2" fill="#1FC7D4" stackId="stack" radius={[0, 0, 4, 4]} barSize={20} />
-            <Bar dataKey="tradingFeeV3" fill="#7645D9" stackId="stack" barSize={20} />
-            <Bar dataKey="prediction" fill="#FFB237" stackId="stack" barSize={20} />
-            <Bar dataKey="lottery" fill="#ED4B9E" stackId="stack" barSize={20} />
-            <Bar dataKey="perpetual" fill="#2882CC" stackId="stack" barSize={20} />
-            <Bar dataKey="stableSwap" fill="#31D0AA" stackId="stack" radius={[4, 4, 0, 0]} barSize={20} />
+            <Bar dataKey="tradingFeeV2" fill="#1FC7D4" stackId="stack" radius={[0, 0, 4, 4]} />
+            <Bar dataKey="tradingFeeV3" fill="#7645D9" stackId="stack" />
+            <Bar dataKey="prediction" fill="#FFB237" stackId="stack" />
+            <Bar dataKey="lottery" fill="#ED4B9E" stackId="stack" />
+            <Bar dataKey="perpetual" fill="#2882CC" stackId="stack" />
+            <Bar dataKey="stableSwap" fill="#31D0AA" stackId="stack" radius={[4, 4, 0, 0]} />
             <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} wrapperStyle={{ outline: 'none' }} />
             <XAxis dataKey="name" fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />
             <YAxis fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />

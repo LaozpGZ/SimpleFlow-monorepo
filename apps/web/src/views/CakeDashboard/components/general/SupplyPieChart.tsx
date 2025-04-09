@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
+import { LightGreyCard } from 'components/Card'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts'
 import styled from 'styled-components'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
@@ -26,14 +27,12 @@ const ChartWrapper = styled(Box)`
 export const SupplyPieChart = (props: CardProps) => {
   const { t } = useTranslation()
 
-  const TOTAL_MAX = 450
+  const PEAK_SUPPLY = 450
   const TOTAL_SUPPLY = 380
-  const CIRCULATING = 290
 
   const data = [
-    { name: 'Circulating', value: CIRCULATING, color: '#1FC7D4' },
-    { name: 'Non-Circulating', value: TOTAL_SUPPLY - CIRCULATING, color: '#7645D9' },
-    { name: 'Remaining', value: TOTAL_MAX - TOTAL_SUPPLY, color: '#FFB237' },
+    { name: 'Total CAKE Supply', value: TOTAL_SUPPLY, color: '#1FC7D4' },
+    { name: 'Burned CAKE Supply', value: PEAK_SUPPLY - TOTAL_SUPPLY, color: '#7645D9' },
   ]
 
   const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
@@ -61,15 +60,15 @@ export const SupplyPieChart = (props: CardProps) => {
       <StatsCardHeader>{t('Supply')}</StatsCardHeader>
       <ChartWrapper mt="24px">
         <TextContainer>
-          <Text small>Circulating</Text>
+          <Text small>{t('Total Supply')}</Text>
           <Text fontSize="24px" bold>
-            {CIRCULATING}M CAKE
+            {TOTAL_SUPPLY}M CAKE
           </Text>
           <Text fontSize="14px" color="secondary" bold>
-            Out of {TOTAL_SUPPLY}M
+            {t('Burned')} {PEAK_SUPPLY - TOTAL_SUPPLY}M
           </Text>
           <Text fontSize="12px" color="textSubtle">
-            Max {TOTAL_MAX}M
+            {t('Peak Supply')} {PEAK_SUPPLY}M
           </Text>
         </TextContainer>
         <ResponsiveContainer width="100%" height={280}>
@@ -94,6 +93,23 @@ export const SupplyPieChart = (props: CardProps) => {
           </PieChart>
         </ResponsiveContainer>
       </ChartWrapper>
+
+      <LightGreyCard mt="auto" padding="8px 16px">
+        <FlexGap gap="8px" alignItems="center">
+          <DotIcon color="#1FC7D4" width="12px" />
+          <Text small>{t('Total CAKE Supply')}:</Text>
+          <Text fontSize="14px" bold>
+            {TOTAL_SUPPLY}M CAKE
+          </Text>
+        </FlexGap>
+        <FlexGap mt="8px" gap="8px" alignItems="center">
+          <DotIcon color="#7645D9" width="12px" />
+          <Text small>{t('Burned CAKE Supply')}:</Text>
+          <Text fontSize="14px" bold>
+            {PEAK_SUPPLY - TOTAL_SUPPLY}M CAKE
+          </Text>
+        </FlexGap>
+      </LightGreyCard>
     </StatsCard>
   )
 }

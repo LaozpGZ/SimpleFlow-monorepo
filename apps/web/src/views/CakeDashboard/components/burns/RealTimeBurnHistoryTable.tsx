@@ -60,7 +60,7 @@ const StyledScanLink = styled(ScanLink)`
   }
 `
 
-export const RealTimeBurnHistoryCard = (props: BoxProps) => {
+export const RealTimeBurnHistoryTable = (props: BoxProps) => {
   return (
     <Box {...props}>
       <StyledTable>
