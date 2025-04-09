@@ -12,7 +12,7 @@ import { YTDDeflationCard } from './components/burns/YTDDeflationCard'
 import { EmissionsLastSevenDaysCard } from './components/emissions/EmissionsLastSevenDaysCard'
 import { WeeklyEmissionsStackedBarChart } from './components/emissions/WeeklyEmissionsStackedBarChart'
 import { YTDEmissionsCard } from './components/emissions/YTDEmissionsCard'
-import { SupplyDeflationCard } from './components/general/SupplyDeflationCombinedGraph'
+import { SupplyDeflationCombinedGraph } from './components/general/SupplyDeflationCombinedGraph'
 import { SupplyPieChart } from './components/general/SupplyPieChart'
 import { useBurnStats } from './hooks/useBurnStats'
 
@@ -70,7 +70,7 @@ export const CakeDashboard = () => {
         </AutoColumn>
       </Grid>
 
-      <SupplyDeflationCard mt="24px" />
+      <SupplyDeflationCombinedGraph mt="24px" />
 
       <WeeklyBurnStackedChart mt="24px" />
 

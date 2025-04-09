@@ -1,4 +1,5 @@
 import { NextApiHandler } from 'next'
+import { getBurnTimeSeries } from 'utils/stats/burnTimeSeries'
 import { getDeflationTimeSeries } from 'utils/stats/deflationTimeSeries'
 import { getTotalSupplyMintBurn } from 'utils/stats/totalSupplyMintBurn'
 import { getTotalSupplyTimeSeries } from 'utils/stats/totalSupplyTimeSeries'
@@ -9,10 +10,11 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   try {
-    const [totalSupplyMintBurn, totalSupplyTimeSeries, deflationTimeSeries] = await Promise.all([
+    const [totalSupplyMintBurn, totalSupplyTimeSeries, deflationTimeSeries, burnTimeSeries] = await Promise.all([
       getTotalSupplyMintBurn(),
       getTotalSupplyTimeSeries(),
       getDeflationTimeSeries(),
+      getBurnTimeSeries(),
     ])
 
     const result = {
@@ -20,6 +22,7 @@ const handler: NextApiHandler = async (req, res) => {
       ...totalSupplyMintBurn.data,
       totalSupplyTimeSeries: totalSupplyTimeSeries.data,
       deflationTimeSeries: deflationTimeSeries.data,
+      burnTimeSeries: burnTimeSeries.data,
     }
 
     // Data is updated every Week

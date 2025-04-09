@@ -16,6 +16,11 @@ interface BurnStats {
     timestamp: number
     deflation: number
   }[]
+  burnTimeSeries: {
+    timestamp: number
+    burn: number
+    product: string
+  }[]
 }
 
 export const useBurnStats = () => {

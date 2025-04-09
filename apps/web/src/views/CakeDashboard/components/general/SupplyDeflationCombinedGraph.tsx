@@ -5,6 +5,7 @@ import { LightGreyCard } from 'components/Card'
 import keyBy from 'lodash/keyBy'
 import merge from 'lodash/merge'
 import values from 'lodash/values'
+import { useCallback, useMemo, useState } from 'react'
 import {
   Bar,
   CartesianGrid,
@@ -59,8 +60,9 @@ const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
   return null
 }
 
-export const SupplyDeflationCard = (props: CardProps) => {
+export const SupplyDeflationCombinedGraph = (props: CardProps) => {
   const { t } = useTranslation()
+  const [selectedTab, setSelectedTab] = useState('3m')
 
   const { data: burnStats } = useBurnStats()
 
@@ -70,7 +72,7 @@ export const SupplyDeflationCard = (props: CardProps) => {
   const mergedData = merge(keyedDataA, keyedDataB)
   const finalSeriesData = values(mergedData)
 
-  const chartData = finalSeriesData.map((item) => ({
+  const allChartData = finalSeriesData.map((item) => ({
     name: new Date(item.timestamp).toLocaleDateString('en-US', {
       year: 'numeric',
       month: 'short',
@@ -78,7 +80,35 @@ export const SupplyDeflationCard = (props: CardProps) => {
     }),
     totalSupply: item.total_supply,
     deflation: item.deflation,
+    timestamp: item.timestamp,
   }))
+
+  const filteredChartData = useMemo(() => {
+    if (selectedTab === 'All') return allChartData
+
+    const now = Date.now()
+    let startTime: number
+
+    switch (selectedTab) {
+      case '3m':
+        startTime = now - 3 * 30 * 24 * 60 * 60 * 1000 // 3 months in milliseconds
+        break
+      case '6m':
+        startTime = now - 6 * 30 * 24 * 60 * 60 * 1000 // 6 months in milliseconds
+        break
+      case '1y':
+        startTime = now - 365 * 24 * 60 * 60 * 1000 // 1 year in milliseconds
+        break
+      default:
+        return allChartData
+    }
+
+    return allChartData.filter((item) => item.timestamp >= startTime)
+  }, [allChartData, selectedTab])
+
+  const handleTabChange = useCallback((tab: string) => {
+    setSelectedTab(tab)
+  }, [])
 
   return (
     <StatsCard {...props}>
@@ -94,11 +124,11 @@ export const SupplyDeflationCard = (props: CardProps) => {
             </QuestionHelperV2>
           </FlexGap>
         </StatsCardHeader>
-        <TabMenu />
+        <TabMenu tabs={['3m', '6m', '1y', 'All']} defaultTab="3m" onTabChange={handleTabChange} />
       </FlexGap>
 
       <ResponsiveContainer width="100%" height={300}>
-        <ComposedChart width={900} height={300} data={chartData}>
+        <ComposedChart width={900} height={300} data={filteredChartData}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#F6F4FB" />
           <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} />
           <Bar dataKey="deflation" fill="#02919D" barSize={4} radius={[4, 4, 4, 4]} />
@@ -109,7 +139,11 @@ export const SupplyDeflationCard = (props: CardProps) => {
             tickLine={false}
             fontSize={12}
             tick={{ fill: '#9383B4' }}
-            tickFormatter={(value) => formatAmount(value, { precision: getBurnInfoPrecision(value) }) || value}
+            tickFormatter={(value) =>
+              `${value < 0 ? '-' : ''}${formatAmount(Math.abs(value), {
+                precision: getBurnInfoPrecision(value),
+              })}`
+            }
           />
         </ComposedChart>
       </ResponsiveContainer>
