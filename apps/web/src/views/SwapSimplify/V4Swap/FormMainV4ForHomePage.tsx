@@ -91,7 +91,6 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading }:
             walletDisplay: false,
           }}
           inputLoading={!isWrapping && inputLoading}
-          label={!isTypingInput && !isWrapping ? t('From (estimated)') : t('From')}
           defaultValue={isWrapping ? typedValue : inputValue}
           currency={inputCurrency}
           onUserInput={handleTypeInput}
@@ -111,7 +110,6 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading }:
           showCommonBases
           showMaxButton={false}
           inputLoading={!isWrapping && outputLoading}
-          label={isTypingInput && !isWrapping ? t('To (estimated)') : t('To')}
           defaultValue={isWrapping ? typedValue : outputValue}
           currency={outputCurrency}
           onUserInput={handleTypeOutput}
