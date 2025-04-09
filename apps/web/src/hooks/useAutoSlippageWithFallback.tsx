@@ -97,6 +97,7 @@ export const Sync = () => {
       tradeRef.current?.outputAmount?.equalTo(result?.bestOrder?.trade?.outputAmount)
     )
   }, [result?.bestOrder])
+
   const autoSlippage = useClassicAutoSlippageTolerance(result?.bestOrder?.trade)
   const [, setAutoSlippageValue] = useAutoSlippageAtom()
   const updateAutoSlippage = useCallback(() => {
@@ -106,6 +107,7 @@ export const Sync = () => {
   }, [autoSlippage])
   useEffect(() => {
     if (!isSameOrder) {
+      tradeRef.current = result?.bestOrder?.trade
       updateAutoSlippage()
     }
   }, [isSameOrder, updateAutoSlippage])
