@@ -1,0 +1,2 @@
+export const PEAK_SUPPLY = 397_036_557
+export const TOTAL_SUPPLY_YTD = 381_071_029

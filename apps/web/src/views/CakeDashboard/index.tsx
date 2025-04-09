@@ -14,6 +14,7 @@ import { WeeklyEmissionsStackedBarChart } from './components/emissions/WeeklyEmi
 import { YTDEmissionsCard } from './components/emissions/YTDEmissionsCard'
 import { SupplyDeflationCard } from './components/general/SupplyDeflationCombinedGraph'
 import { SupplyPieChart } from './components/general/SupplyPieChart'
+import { useBurnStats } from './hooks/useBurnStats'
 
 const StyledGradientCard = styled(LightGreyCard)`
   background: ${({ theme }) => theme.colors.gradientCardHeader};
@@ -24,19 +25,13 @@ const StyledGradientCard = styled(LightGreyCard)`
 export const CakeDashboard = () => {
   const { t } = useTranslation()
 
-  // const { data } = useQuery({
-  //   queryKey: ['burnStats'],
-  //   queryFn: async () => {
-  //     const response = await fetch('/api/stats')
-  //     if (!response.ok) {
-  //       throw new Error('Error while fetching burn statistics')
-  //     }
-  //     return response.json()
-  //   },
-  //   initialData: {},
-  // })
+  const { data } = useBurnStats()
 
-  // const { netMintCumulative, circulatingSupply, netMintWeekly, weeklyTotalBurn, weeklyBurnBreakdown } = data
+  const lastUpdatedAt = new Date(data?.timestamp || 0).toLocaleString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
 
   return (
     <div className="flex flex-col items-center justify-center h-screen">
@@ -49,7 +44,7 @@ export const CakeDashboard = () => {
         </FlexGap>
         <FlexGap alignItems="center" gap="8px" flexWrap="wrap">
           <StyledGradientCard>
-            <Text bold>{t('Last updated at: 2025 -April-3, UTC 00:00')}</Text>
+            <Text bold>{t(`Last updated at: ${lastUpdatedAt}`)}</Text>
           </StyledGradientCard>
           <NextLinkFromReactRouter
             to="https://docs.pancakeswap.finance/governance-and-tokenomics/cake-tokenomics"

@@ -3,6 +3,10 @@ import { Box, CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts'
 import styled from 'styled-components'
+import { formatAmount } from 'utils/formatInfoNumbers'
+import { PEAK_SUPPLY } from 'views/CakeDashboard/constants'
+import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 import { TooltipCard } from '../styles'
 
@@ -27,12 +31,18 @@ const ChartWrapper = styled(Box)`
 export const SupplyPieChart = (props: CardProps) => {
   const { t } = useTranslation()
 
-  const PEAK_SUPPLY = 450
-  const TOTAL_SUPPLY = 380
+  const { data } = useBurnStats()
 
-  const data = [
-    { name: 'Total CAKE Supply', value: TOTAL_SUPPLY, color: '#1FC7D4' },
-    { name: 'Burned CAKE Supply', value: PEAK_SUPPLY - TOTAL_SUPPLY, color: '#7645D9' },
+  const TOTAL_SUPPLY = data?.total_supply || 0
+  const NET_BURN = PEAK_SUPPLY - (data?.total_supply || 0)
+
+  const peakSupplyFormatted = formatAmount(PEAK_SUPPLY, { precision: getBurnInfoPrecision(PEAK_SUPPLY) }) // Hardcoded as Peak Supply is 380M
+  const totalSupplyFormatted = formatAmount(TOTAL_SUPPLY, { precision: getBurnInfoPrecision(TOTAL_SUPPLY) })
+  const netBurnedFormatted = formatAmount(NET_BURN, { precision: getBurnInfoPrecision(NET_BURN) })
+
+  const chartData = [
+    { name: 'Total CAKE Supply', value: TOTAL_SUPPLY, formatted: totalSupplyFormatted, color: '#1FC7D4' },
+    { name: 'Burned CAKE Supply', value: NET_BURN, formatted: netBurnedFormatted, color: '#7645D9' },
   ]
 
   const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
@@ -46,7 +56,7 @@ export const SupplyPieChart = (props: CardProps) => {
               <Text small>{entry.name}</Text>
             </FlexGap>
             <Text small bold>
-              {entry.value}M CAKE
+              {entry.formatted} CAKE
             </Text>
           </FlexGap>
         </TooltipCard>
@@ -62,19 +72,19 @@ export const SupplyPieChart = (props: CardProps) => {
         <TextContainer>
           <Text small>{t('Total Supply')}</Text>
           <Text fontSize="24px" bold>
-            {TOTAL_SUPPLY}M CAKE
+            {totalSupplyFormatted} CAKE
           </Text>
           <Text fontSize="14px" color="secondary" bold>
-            {t('Burned')} {PEAK_SUPPLY - TOTAL_SUPPLY}M
+            {t('Burned')} {netBurnedFormatted}
           </Text>
           <Text fontSize="12px" color="textSubtle">
-            {t('Peak Supply')} {PEAK_SUPPLY}M
+            {t('Peak Supply')} {peakSupplyFormatted}
           </Text>
         </TextContainer>
         <ResponsiveContainer width="100%" height={280}>
           <PieChart width={280} height={280}>
             <Pie
-              data={data}
+              data={chartData}
               cx="50%"
               cy="50%"
               startAngle={210}
@@ -85,7 +95,7 @@ export const SupplyPieChart = (props: CardProps) => {
               paddingAngle={2}
               dataKey="value"
             >
-              {data.map((entry) => (
+              {chartData.map((entry) => (
                 <Cell key={`cell-${entry.name}`} fill={entry.color} />
               ))}
             </Pie>
@@ -99,14 +109,14 @@ export const SupplyPieChart = (props: CardProps) => {
           <DotIcon color="#1FC7D4" width="12px" />
           <Text small>{t('Total CAKE Supply')}:</Text>
           <Text fontSize="14px" bold>
-            {TOTAL_SUPPLY}M CAKE
+            {totalSupplyFormatted} CAKE
           </Text>
         </FlexGap>
         <FlexGap mt="8px" gap="8px" alignItems="center">
           <DotIcon color="#7645D9" width="12px" />
           <Text small>{t('Burned CAKE Supply')}:</Text>
           <Text fontSize="14px" bold>
-            {PEAK_SUPPLY - TOTAL_SUPPLY}M CAKE
+            {netBurnedFormatted} CAKE
           </Text>
         </FlexGap>
       </LightGreyCard>

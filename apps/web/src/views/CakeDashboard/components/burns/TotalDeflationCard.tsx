@@ -2,10 +2,20 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, CardProps, Flex, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { ProgressBar } from 'components/Progress/ProgressBar'
+import { formatAmount } from 'utils/formatInfoNumbers'
+import { PEAK_SUPPLY } from 'views/CakeDashboard/constants'
+import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
 export const TotalDeflationCard = (props: CardProps) => {
   const { t } = useTranslation()
+
+  const { data } = useBurnStats()
+
+  const totalDeflation = PEAK_SUPPLY - (data?.total_supply || 0)
+
+  const totalDeflationByPeakSupplyPercentage = (totalDeflation / PEAK_SUPPLY) * 100
 
   return (
     <StatsCard {...props}>
@@ -17,12 +27,12 @@ export const TotalDeflationCard = (props: CardProps) => {
       </FlexGap>
       <LightGreyCard mt="8px" padding="16px">
         <Text fontSize="18px" bold>
-          10M CAKE
+          {formatAmount(totalDeflation, { precision: getBurnInfoPrecision(totalDeflation) })} CAKE
         </Text>
 
         <Text mt="16px" color="textSubtle" small>
           <Box as="span" color="text" style={{ fontWeight: 600 }}>
-            2.22%
+            {totalDeflationByPeakSupplyPercentage.toFixed(2)}%
           </Box>{' '}
           {t('of peak CAKE supply')}
         </Text>
@@ -30,7 +40,7 @@ export const TotalDeflationCard = (props: CardProps) => {
           mt="8px"
           min={0}
           max={100}
-          progress={50}
+          progress={totalDeflationByPeakSupplyPercentage}
           backgroundColor="secondary20"
           fillColor="success"
           height="8px"

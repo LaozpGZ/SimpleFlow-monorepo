@@ -9,8 +9,8 @@ interface Row {
   week: string
 }
 
-export const getCirculatingSupply = async () => {
-  const response = await fetchFromDune(DUNE_ENDPOINTS.CIRCULATING_SUPPLY)
+export const getTotalSupplyTimeSeries = async () => {
+  const response = await fetchFromDune(DUNE_ENDPOINTS.TOTAL_SUPPLY_TIME_SERIES)
   const data: DuneResponse<Row> = await response.json()
 
   const result = {
@@ -18,7 +18,6 @@ export const getCirculatingSupply = async () => {
     data: data.result.rows
       .map((row: Row) => ({
         timestamp: new Date(row.week).getTime(),
-        circulating_supply: row.Circulating_Supply,
         total_supply: row.Total_Supply,
       }))
       .slice()

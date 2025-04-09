@@ -8,7 +8,7 @@ export const YTDBurnCard = (props: CardProps) => {
   return (
     <StatsCard {...props}>
       <StatsCardHeader>{t('YTD Burn')}</StatsCardHeader>
-
+      TODO when weekly burn chart
       <Text fontSize="24px" bold>
         100.92m CAKE
       </Text>
