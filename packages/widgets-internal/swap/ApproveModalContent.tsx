@@ -29,6 +29,10 @@ export enum ConfirmModalState {
   PERMITTING,
   PENDING_CONFIRMATION,
   COMPLETED,
+
+  // Cross-Chain Swap
+  ORDER_SUBMITTED,
+  ORDER_COMPLETED,
 }
 
 export type PendingApproveModalState = Extract<

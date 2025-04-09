@@ -36,6 +36,8 @@ import { useSlippageAdjustedAmounts } from 'views/Swap/V3Swap/hooks'
 import { ConfirmAction } from 'views/Swap/V3Swap/hooks/useConfirmModalState'
 import { AllowedAllowanceState } from 'views/Swap/V3Swap/types'
 import ConfirmSwapModalV3Container from './ConfirmSwapModalV3Container'
+import { OrderCompletedModalContent } from './OrderCompletedModalContent'
+import { OrderSubmittedModalContent } from './OrderSubmittedModalContent'
 import { TransactionConfirmSwapContentV3 } from './TransactionConfirmSwapContentV3'
 
 export const useApprovalPhaseStepTitles: ({ trade }: { trade: InterfaceOrder['trade'] | undefined }) => {
@@ -135,14 +137,19 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
           token: currencyBalances?.INPUT?.currency.symbol ?? originalOrder?.trade?.inputAmount?.currency.symbol,
         })
       case ConfirmModalState.PENDING_CONFIRMATION:
-        return t('Submit Order')
+        return isBridgeOrder(order) ? t('Submit Order') : ''
       case ConfirmModalState.REVIEWING:
         return hasError ? '' : t('Confirm Swap')
+      case ConfirmModalState.ORDER_SUBMITTED:
+        return t('Order Submitted')
+      case ConfirmModalState.ORDER_COMPLETED:
+        return t('Order Completed')
       default:
         return ''
     }
   }, [
     t,
+    order,
     hasError,
     confirmModalState,
     currencyBalances?.INPUT?.currency.symbol,
@@ -251,12 +258,6 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
     }
 
     if (confirmModalState === ConfirmModalState.PENDING_CONFIRMATION) {
-      let title = txHash ? t('Transaction Submitted') : t('Confirm Swap')
-
-      if (isXOrder(originalOrder)) {
-        title = txHash ? t('Order Filled') : orderHash ? t('Order Submitted') : t('Confirm Swap')
-      }
-
       if (isBridgeOrder(originalOrder)) {
         return (
           <SwapPendingModalContentV3
@@ -286,6 +287,12 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
         )
       }
 
+      let title = txHash ? t('Transaction Submitted') : t('Confirm Swap')
+
+      if (isXOrder(originalOrder)) {
+        title = txHash ? t('Order Filled') : orderHash ? t('Order Submitted') : t('Confirm Swap')
+      }
+
       return (
         <SwapPendingModalContent
           title={title}
@@ -312,6 +319,14 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
           ) : null}
         </SwapPendingModalContent>
       )
+    }
+
+    if (confirmModalState === ConfirmModalState.ORDER_SUBMITTED) {
+      return <OrderSubmittedModalContent />
+    }
+
+    if (confirmModalState === ConfirmModalState.ORDER_COMPLETED) {
+      return <OrderCompletedModalContent />
     }
 
     if (confirmModalState === ConfirmModalState.COMPLETED && txHash) {

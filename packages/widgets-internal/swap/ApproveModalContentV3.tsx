@@ -15,6 +15,7 @@ import {
 import { FC, ReactNode, Ref, useMemo } from "react";
 import styled, { css } from "styled-components";
 import { CurrencyLogo } from "../components/CurrencyLogo";
+import { ConfirmModalState } from "./ApproveModalContent";
 import { AnimationType, slideInAnimation, slideOutAnimation } from "./styles";
 
 const TertiaryButton = styled(Button).attrs({ variant: "tertiary" })`
@@ -24,16 +25,6 @@ const TertiaryButton = styled(Button).attrs({ variant: "tertiary" })`
   border-radius: 12px;
   border-bottom: 2px solid rgba(0, 0, 0, 0.1);
 `;
-
-export enum ConfirmModalState {
-  REVIEWING,
-  WRAPPING,
-  RESETTING_APPROVAL,
-  APPROVING_TOKEN,
-  PERMITTING,
-  PENDING_CONFIRMATION,
-  COMPLETED,
-}
 
 export type PendingApproveModalState = Extract<
   ConfirmModalState,
