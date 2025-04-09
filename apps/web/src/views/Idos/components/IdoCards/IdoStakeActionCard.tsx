@@ -7,6 +7,7 @@ import { useMemo } from 'react'
 import { logGTMIdoConnectWalletEvent } from 'utils/customGTMEventTracking'
 import type { IDOStatus } from 'views/Idos/hooks/ido/usdIDOStatus'
 import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
+import { useCurrentIDOConfig } from 'views/Idos/hooks/ido/useCurrentIDOConfig'
 import { useIDOCurrencies } from 'views/Idos/hooks/ido/useIDOCurrencies'
 import type { IDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
 import { VerifyStatus, useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
@@ -31,7 +32,8 @@ export const IdoStakeActionCard: React.FC<{
   const stakeCurrency = pid === 0 ? stakeCurrency0 : stakeCurrency1
   const userHasStaked = userStatus?.stakedAmount?.greaterThan(0)
 
-  const { status, raiseAmounts, pricePerTokens, saleAmounts, id } = useIDOConfig()
+  const { status, raiseAmounts, pricePerTokens, saleAmounts } = useIDOConfig()
+  const { id } = useCurrentIDOConfig() ?? {}
 
   const [raiseAmount, pricePerToken, saleAmount] = useMemo(() => {
     if (pid === 0) {
