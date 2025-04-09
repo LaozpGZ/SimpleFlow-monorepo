@@ -165,7 +165,9 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
           <Tooltip
             cursor={{ fill: 'transparent' }}
             wrapperStyle={{ outline: 'none' }}
-            content={(tooltipProps) => <CustomTooltip {...tooltipProps} isUSD={selectedCurrency === 'USD'} />}
+            content={(tooltipProps) => (
+              <CustomTooltip {...(tooltipProps as TooltipProps<number, string>)} isUSD={selectedCurrency === 'USD'} />
+            )}
           />
           {Array.from(uniqueProducts).map((product, index) => (
             <Bar
