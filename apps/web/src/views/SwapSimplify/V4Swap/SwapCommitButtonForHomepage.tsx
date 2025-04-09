@@ -7,7 +7,6 @@ import { PriceOrder } from '@pancakeswap/price-api-sdk'
 import { CommitButton } from 'components/CommitButton'
 import { useCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
-import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { useRouter } from 'next/router'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
@@ -31,31 +30,6 @@ const useSwapCurrencies = () => {
   return { inputCurrency, outputCurrency }
 }
 
-const WrapCommitButtonReplace: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { t } = useTranslation()
-  const { inputCurrency, outputCurrency } = useSwapCurrencies()
-  const { typedValue } = useSwapState()
-  const {
-    wrapType,
-    execute: onWrap,
-    inputError: wrapInputError,
-  } = useWrapCallback(inputCurrency, outputCurrency, typedValue)
-  const showWrap = wrapType !== WrapType.NOT_APPLICABLE
-
-  const buttonText = useMemo(() => {
-    return (
-      wrapInputError ?? (wrapType === WrapType.WRAP ? t('Wrap') : wrapType === WrapType.UNWRAP ? t('Unwrap') : null)
-    )
-  }, [t, wrapInputError, wrapType])
-  if (!showWrap) return children
-
-  return (
-    <CommitButton width="100%" disabled={Boolean(wrapInputError)} onClick={onWrap}>
-      {buttonText}
-    </CommitButton>
-  )
-}
-
 const UnsupportedSwapButtonReplace = ({ children }) => {
   const { t } = useTranslation()
   const { inputCurrency, outputCurrency } = useSwapCurrencies()
@@ -74,9 +48,7 @@ const UnsupportedSwapButtonReplace = ({ children }) => {
 const SwapCommitButtonComp: React.FC<SwapCommitButtonPropsType & CommitButtonProps> = (props) => {
   return (
     <UnsupportedSwapButtonReplace>
-      <WrapCommitButtonReplace>
-        <SwapCommitButtonInner {...props} />
-      </WrapCommitButtonReplace>
+      <SwapCommitButtonInner {...props} />
     </UnsupportedSwapButtonReplace>
   )
 }
