@@ -86,7 +86,7 @@ export const SnapshotNotPassCard: React.FC<{ projectId: string }> = ({ projectId
       </Text>
       <Text color="textSubtle">
         {t(
-          `Make sure your total balance ofBinance Spot & Earn and BinanceWallet has exceeded $3,000 each day for the past 7 days (UTC).`,
+          `Ensure that the asset value of your Binance Wallet Keyless Address (only Binance Spot Listed tokens and Alpha tokens are counted, excluding LSD tokens) and Binance Account has held at least $100 each day for the past 7 days.`,
         )}
       </Text>
       <Flex onClick={() => window.open(link)}>
