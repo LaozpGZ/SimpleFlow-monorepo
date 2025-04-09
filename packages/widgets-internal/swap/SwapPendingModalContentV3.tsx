@@ -1,48 +1,48 @@
+import { useTranslation } from "@pancakeswap/localization";
 import { Currency } from "@pancakeswap/sdk";
-import { ArrowUpIcon, Box, ColumnCenter } from "@pancakeswap/uikit";
-import { ReactNode } from "react";
-import { ConfirmModalState } from "./ApproveModalContent";
-import { FadePresence, PendingSwapConfirmationIcon } from "./Logos";
+import { AutoColumn, Row, SwapLoading, Text } from "@pancakeswap/uikit";
+import { PropsWithChildren } from "react";
+import { DualCurrencyDisplay } from "../components/CurrencyLogo";
 
-interface SwapPendingModalContentV3Props {
-  title: string;
-  showIcon?: boolean;
+interface SwapPendingModalContentV3Props extends PropsWithChildren {
   currencyA: Currency | undefined;
   currencyB: Currency | undefined;
-  amountA: string;
-  amountB: string;
-  currentStep: ConfirmModalState;
-  children?: ReactNode;
+  amountA?: string;
+  amountB?: string;
+  chainNameA?: string;
+  chainNameB?: string;
 }
 
 export const SwapPendingModalContentV3: React.FC<SwapPendingModalContentV3Props> = ({
-  title,
-  showIcon,
   currencyA,
   currencyB,
   amountA,
   amountB,
-  currentStep,
+  chainNameA,
+  chainNameB,
   children,
 }) => {
-  const symbolA = currencyA?.symbol;
-  const symbolB = currencyB?.symbol;
+  const { t } = useTranslation();
 
   return (
-    <Box width="100%">
-      {showIcon ? (
-        <FadePresence $scale>
-          <Box margin="auto auto 22px auto" width="fit-content">
-            <ArrowUpIcon color="success" width={80} height={80} />
-          </Box>
-        </FadePresence>
-      ) : (
-        <Box mb="16px">
-          <ColumnCenter>
-            <PendingSwapConfirmationIcon />
-          </ColumnCenter>
-        </Box>
-      )}
-    </Box>
+    <AutoColumn width="100%">
+      <DualCurrencyDisplay
+        inputCurrency={currencyA}
+        outputCurrency={currencyB}
+        inputAmount={amountA}
+        outputAmount={amountB}
+        inputChainName={chainNameA}
+        outputChainName={chainNameB}
+      />
+
+      <Row mt="32px" justifyContent="center" gap="8px">
+        <Text color="textSubtle" small>
+          {t("Please proceed in your wallet")}
+        </Text>
+        <SwapLoading />
+      </Row>
+
+      {children}
+    </AutoColumn>
   );
 };

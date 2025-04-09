@@ -4,9 +4,12 @@ import { AutoColumn, Button, ErrorIcon, Text } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
 
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { DualCurrencyDisplay } from '@pancakeswap/widgets-internal'
+import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { warningSeverity } from 'utils/exchange'
+import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { SwapShowAcceptChanges } from 'views/Swap/components/styleds'
-import { DualCurrencyDisplay } from '../DualCurrencyDisplay'
 
 export default function SwapModalHeaderV3({
   inputAmount,
@@ -57,8 +60,12 @@ export default function SwapModalHeaderV3({
   return (
     <AutoColumn gap="md">
       <DualCurrencyDisplay
-        inputAmount={inputAmount}
-        outputAmount={outputAmount}
+        inputCurrency={inputAmount.currency}
+        outputCurrency={outputAmount.currency}
+        inputAmount={formatAmount(inputAmount, DISPLAY_PRECISION)}
+        outputAmount={formatAmount(outputAmount, DISPLAY_PRECISION)}
+        inputChainName={getFullChainNameById(inputAmount.currency.chainId)}
+        outputChainName={getFullChainNameById(outputAmount.currency.chainId)}
         inputTextColor={inputTextColor}
         outputTextColor={outputTextColor}
       />

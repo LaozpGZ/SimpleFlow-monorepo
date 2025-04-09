@@ -26,11 +26,12 @@ import { chains as evmChains } from 'utils/wagmi'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { SwapTransactionErrorContent } from 'views/Swap/components/SwapTransactionErrorContent'
 
+import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { chainNameConverter } from 'utils/chainNameConverter'
+import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { Hash } from 'viem'
 import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 
-import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { useSlippageAdjustedAmounts } from 'views/Swap/V3Swap/hooks'
 import { ConfirmAction } from 'views/Swap/V3Swap/hooks/useConfirmModalState'
 import { AllowedAllowanceState } from 'views/Swap/V3Swap/types'
@@ -152,8 +153,8 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
     const isExactIn = originalOrder?.trade.tradeType === TradeType.EXACT_INPUT
     const currencyA = currencyBalances?.INPUT?.currency ?? originalOrder?.trade?.inputAmount?.currency
     const currencyB = currencyBalances?.OUTPUT?.currency ?? originalOrder?.trade?.outputAmount?.currency
-    const amountAWithSlippage = formatAmount(slippageAdjustedAmounts[Field.INPUT], 6) ?? ''
-    const amountBWithSlippage = formatAmount(slippageAdjustedAmounts[Field.OUTPUT], 6) ?? ''
+    const amountAWithSlippage = formatAmount(slippageAdjustedAmounts[Field.INPUT], DISPLAY_PRECISION) ?? ''
+    const amountBWithSlippage = formatAmount(slippageAdjustedAmounts[Field.OUTPUT], DISPLAY_PRECISION) ?? ''
     const amountA = isExactIn ? amountAWithSlippage : `Max ${amountAWithSlippage}`
     const amountB = isExactIn ? `Min ${amountBWithSlippage}` : amountBWithSlippage
 
@@ -259,12 +260,12 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       if (isBridgeOrder(originalOrder)) {
         return (
           <SwapPendingModalContentV3
-            title={title}
-            currencyA={currencyA}
-            currencyB={currencyB}
-            amountA={amountA}
-            amountB={amountB}
-            currentStep={confirmModalState}
+            currencyA={order?.trade.inputAmount.currency}
+            currencyB={order?.trade.outputAmount.currency}
+            amountA={formatAmount(order?.trade.inputAmount)}
+            amountB={formatAmount(order?.trade.outputAmount)}
+            chainNameA={getFullChainNameById(currencyA?.chainId)}
+            chainNameB={getFullChainNameById(currencyB?.chainId)}
           >
             {showAddToWalletButton && (txHash || orderHash) ? (
               <AddToWalletButton
