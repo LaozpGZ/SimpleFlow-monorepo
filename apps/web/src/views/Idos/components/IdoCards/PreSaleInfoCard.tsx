@@ -73,10 +73,10 @@ export const ComplianceCard: React.FC = () => {
   )
 }
 
-export const SnapshotNotPassCard: React.FC<{ projectId: string }> = ({ projectId }) => {
+export const SnapshotNotPassCard: React.FC<{ projectId: string | undefined }> = ({ projectId }) => {
   const { t } = useTranslation()
   const link = useMemo(() => {
-    return getSnapshotDeepLink(projectId)
+    return getSnapshotDeepLink(projectId ?? '')
   }, [projectId])
 
   return (
