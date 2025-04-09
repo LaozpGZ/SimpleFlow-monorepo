@@ -82,6 +82,7 @@ export const FavoriteDEXBanner: React.FC<FavoriteDEXBannerProps> = ({ chains }) 
         style={{
           position: 'relative',
           height: isMobile ? '10px' : '56px',
+          overflow: 'hidden',
         }}
       >
         <Box style={{ position: isMobile ? 'static' : 'absolute', marginTop: '0px' }}>
