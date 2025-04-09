@@ -675,7 +675,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     ],
   },
   mindnetwork: {
-    id: 'mindnetowork',
+    id: 'mindnetwork',
     projectUrl: 'https://www.mindnetwork.xyz/',
     icon: '/images/ido/mindnetwork.svg',
     chainId: ChainId.BSC,
@@ -746,6 +746,51 @@ export const idoConfigDict: Record<string, IDOConfig> = {
             Yes. If the TGE is oversubscribed, any excess BNB that was not used to purchase tokens will be automatically
             refunded to your wallet when you claim your tokens.
           </Trans>
+        ),
+      },
+      {
+        title: <Trans>4. Which participants are eligible to take part in this event?</Trans>,
+        description: (
+          <>
+            Participant Eligibility: To qualify, participants must maintain a minimum daily asset value of $100 in
+            Binance accounts for 7 consecutive days before the TGE start date. Check your eligibility on the PancakeSwap
+            TGE event page.
+            <ul>
+              <li>Snapshot Period: April 3, 2025, 23:59:59 UTC – April 9, 2025, 23:59:59 UTC</li>
+              <li>
+                Snapshot Aggregated Assets:
+                <ol>
+                  <li>
+                    Assets in Binance Wallet (Keyless): Listed Binance Spot tokens and Alpha tokens, but excluded
+                    LSD-type tokens.
+                  </li>
+                  <li>Assets in Binance Exchange Account.</li>
+                </ol>
+              </li>
+              <li>
+                Examples
+                <ol>
+                  <li>
+                    User A has a daily asset value of $50 in Binance Wallet (Keyless), and a daily asset value of $50 in
+                    Binance Exchange Account for 7 consecutive days before the TGE start date. He/She is eligible.
+                  </li>
+                  <li>
+                    User B has a daily asset value of $100 in Binance Wallet (Keyless), and a daily asset value of $0 in
+                    Binance Exchange Account for 7 consecutive days before the TGE start date. He/She is eligible.
+                  </li>
+                  <li>
+                    User C has a daily asset value of $0 in Binance Wallet (Keyless), and a daily asset value of $100 in
+                    Binance Exchange Account for 7 consecutive days before the TGE start date. He/She is eligible.
+                  </li>
+                </ol>
+              </li>
+              <li>
+                Important Notes: Binance reserves the right to modify event rules and criteria at any time without prior
+                notice. All rule interpretations are solely at Binance’s discretion. Participants are strongly advised
+                to verify the latest rules via official channels before participating.
+              </li>
+            </ul>
+          </>
         ),
       },
     ],

@@ -6,8 +6,8 @@ import useTheme from 'hooks/useTheme'
 import { useMemo } from 'react'
 import { logGTMIdoConnectWalletEvent } from 'utils/customGTMEventTracking'
 import type { IDOStatus } from 'views/Idos/hooks/ido/usdIDOStatus'
-import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
 import { useCurrentIDOConfig } from 'views/Idos/hooks/ido/useCurrentIDOConfig'
+import { useIDOConfig } from 'views/Idos/hooks/ido/useIDOConfig'
 import { useIDOCurrencies } from 'views/Idos/hooks/ido/useIDOCurrencies'
 import type { IDOUserStatus } from 'views/Idos/hooks/ido/useIDOUserStatus'
 import { VerifyStatus, useW3WAccountVerify } from 'views/Idos/hooks/w3w/useW3WAccountVerify'
@@ -81,7 +81,7 @@ export const IdoStakeActionCard: React.FC<{
                     ) : (
                       <PreSaleInfoCard />
                     )
-                  ) : verifyStatus === VerifyStatus.snapshotNotPass ? (
+                  ) : ['idle', 'live'].includes(status) && verifyStatus === VerifyStatus.snapshotNotPass ? (
                     <SnapshotNotPassCard projectId={id} />
                   ) : (
                     <IdoDepositButton userStatus={userStatus} type="deposit" pid={pid} />
