@@ -81,7 +81,7 @@ export const IdoStakeActionCard: React.FC<{
                     ) : (
                       <PreSaleInfoCard />
                     )
-                  ) : status !== 'finished' && verifyStatus === VerifyStatus.snapshotNotPass ? (
+                  ) : verifyStatus === VerifyStatus.snapshotNotPass ? (
                     <SnapshotNotPassCard projectId={id} />
                   ) : (
                     <IdoDepositButton userStatus={userStatus} type="deposit" pid={pid} />
