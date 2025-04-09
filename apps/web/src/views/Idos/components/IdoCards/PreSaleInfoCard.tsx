@@ -86,7 +86,7 @@ export const SnapshotNotPassCard: React.FC<{ projectId: string }> = ({ projectId
       </Text>
       <Text color="textSubtle">
         {t(
-          `Ensure that the asset value of your Binance Wallet Keyless Address (only Binance Spot Listed tokens and Alpha tokens are counted, excluding LSD tokens) and Binance Account has held at least $100 each day for the past 7 days.`,
+          `Unfortunately you do not meet the participation requirements this time. To qualify, you must have maintained at least $100 in eligible aggregated assets across both your Binance Wallet Keyless Address (Binance Spot tokens or Alpha Platform tokens) and Exchange Account for 7 consecutive days before TGE. Note: LSD-type tokens are excluded.`,
         )}
       </Text>
       <Flex onClick={() => window.open(link)}>
