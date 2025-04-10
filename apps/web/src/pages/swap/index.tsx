@@ -1,3 +1,4 @@
+import { isInBinance } from '@binance/w3w-utils'
 import { CHAIN_IDS } from 'utils/wagmi'
 import SwapLayout from 'views/Swap/SwapLayout'
 import Swap from 'views/SwapSimplify'
@@ -10,6 +11,6 @@ const SwapPage = () => (
 
 SwapPage.chains = CHAIN_IDS
 SwapPage.screen = true
-SwapPage.w3wWagmiConfig = true
+SwapPage.w3wWagmiConfig = isInBinance()
 
 export default SwapPage
