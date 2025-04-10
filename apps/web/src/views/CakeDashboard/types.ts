@@ -14,6 +14,7 @@ export interface BurnStats {
     timestamp: number
     deflation: number
     actualMint: number
+    burn: number
   }[]
   burnTimeSeries: {
     timestamp: number

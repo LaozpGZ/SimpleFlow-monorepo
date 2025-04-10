@@ -12,7 +12,7 @@ export const YTDBurnCard = (props: CardProps) => {
   const { data } = useBurnStats()
   const cakePrice = useCakePrice()
 
-  const weeklyBurnSeries = data?.burnTimeSeries
+  const weeklyBurnSeries = data?.deflationTimeSeries
 
   // Calculate YTD burn by summing weekly burn series from start of year to today
   const ytdBurn = useMemo(() => {

@@ -22,6 +22,8 @@ export const getDeflationTimeSeries = async () => {
 
         deflation: row.net_mint,
 
+        burn: row.burn,
+
         actualMint: row.actualmint,
       }))
       .slice()
