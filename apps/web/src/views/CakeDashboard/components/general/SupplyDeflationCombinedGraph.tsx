@@ -5,7 +5,7 @@ import { LightGreyCard } from 'components/Card'
 import keyBy from 'lodash/keyBy'
 import merge from 'lodash/merge'
 import values from 'lodash/values'
-import { useCallback, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import {
   Bar,
   CartesianGrid,
@@ -22,12 +22,11 @@ import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
 import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 import { TooltipCard } from '../styles'
-import { TabMenu } from '../TabMenu'
 
 const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
   const { t } = useTranslation()
 
-  if (active && payload && payload.length) {
+  if (active && payload && payload.length && !payload[0].payload.isShadowValue) {
     const entry = payload[0].payload
     return (
       <TooltipCard>
@@ -48,7 +47,7 @@ const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
           <FlexGap justifyContent="space-between" gap="16px">
             <FlexGap alignItems="center" gap="6px">
               <DotIcon color="#02919D" width="8px" mt="1px" />
-              <Text small>{t('Deflation')}</Text>
+              <Text small>{t('Net Mint')}</Text>
             </FlexGap>
             <Text small bold>
               {entry.deflation < 0 ? '-' : ''}
@@ -64,7 +63,6 @@ const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
 
 export const SupplyDeflationCombinedGraph = (props: CardProps) => {
   const { t } = useTranslation()
-  const [selectedTab, setSelectedTab] = useState('3m')
 
   const { isDark } = useTheme()
   const { data: burnStats } = useBurnStats()
@@ -76,64 +74,49 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
     const mergedData = merge(keyedDataA, keyedDataB)
     const finalSeriesData = values(mergedData)
 
-    return finalSeriesData.map((item) => ({
+    const tempChartData = finalSeriesData.map((item) => ({
       timestamp: item.timestamp,
       timestampFormatted: new Date(item.timestamp).toLocaleDateString('en-US', {
-        ...(selectedTab !== '3m' && { year: 'numeric' }),
+        year: 'numeric',
         month: 'short',
-        day: selectedTab === 'All' ? undefined : 'numeric',
       }),
       totalSupply: item.total_supply,
       deflation: item.deflation,
     }))
-  }, [selectedTab, burnStats])
 
-  const filteredChartData = useMemo(() => {
-    if (selectedTab === 'All') return allChartData
+    const minimumBarValue = Math.min(...tempChartData.map((item) => item.deflation))
 
-    const now = Date.now()
-    let startTime: number
+    // Add a shadow value to push the graph up and align zero point with bar chart
+    tempChartData.unshift({
+      timestamp: tempChartData[0].timestamp,
+      timestampFormatted: tempChartData[0].timestampFormatted,
+      totalSupply: minimumBarValue,
+      deflation: 0,
+      // @ts-ignore
+      isShadowValue: true,
+    })
 
-    switch (selectedTab) {
-      case '3m':
-        startTime = now - 3 * 30 * 24 * 60 * 60 * 1000 // 3 months in milliseconds
-        break
-      case '6m':
-        startTime = now - 6 * 30 * 24 * 60 * 60 * 1000 // 6 months in milliseconds
-        break
-      case '1y':
-        startTime = now - 365 * 24 * 60 * 60 * 1000 // 1 year in milliseconds
-        break
-      default:
-        return allChartData
-    }
-
-    return allChartData.filter((item) => item.timestamp >= startTime)
-  }, [allChartData, selectedTab])
-
-  const handleTabChange = useCallback((tab: string) => {
-    setSelectedTab(tab)
-  }, [])
+    return tempChartData
+  }, [burnStats])
 
   return (
     <StatsCard {...props}>
-      <FlexGap mb="16px" justifyContent="space-between" flexWrap="wrap" gap="8px">
+      <FlexGap mb="24px" justifyContent="space-between" flexWrap="wrap" gap="8px">
         <StatsCardHeader>
           <FlexGap alignItems="center" gap="8px">
-            {t('Supply & Deflation')}
+            {t('Supply & Net Mint')}
             <QuestionHelperV2
-              text={t('Weekly decrease in CAKE supply (Deflation) and the corresponding CAKE supply')}
+              text={t('Weekly net mint added to CAKE supply and the corresponding CAKE supply')}
               placement="top"
             >
               <InfoIcon color="textSubtle" />
             </QuestionHelperV2>
           </FlexGap>
         </StatsCardHeader>
-        <TabMenu tabs={['3m', '6m', '1y', 'All']} defaultTab="3m" onTabChange={handleTabChange} />
       </FlexGap>
 
       <ResponsiveContainer width="100%" height={300}>
-        <ComposedChart data={filteredChartData}>
+        <ComposedChart data={allChartData}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={isDark ? '#35363C' : '#F6F4FB'} />
           <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} yAxisId="left" />
           <Bar dataKey="deflation" fill="#02919D" barSize={4} radius={[4, 4, 4, 4]} yAxisId="right" />
@@ -157,6 +140,7 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
                 precision: getBurnInfoPrecision(value),
               })}`
             }
+            // padding={{ bottom: 64 }}
           />
           <YAxis
             yAxisId="right"
@@ -185,7 +169,7 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
           <FlexGap alignItems="center" gap="4px">
             <DotIcon color="#02919D" width="12px" />
             <Text color="textSubtle" small>
-              {t('Deflation')}
+              {t('Net Mint')}
             </Text>
           </FlexGap>
         </FlexGap>

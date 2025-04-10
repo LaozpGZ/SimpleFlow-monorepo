@@ -54,10 +54,17 @@ const CustomTooltip = ({ active, payload, isUSD }: any) => {
   return null
 }
 
+const timeFilters = {
+  '3m': 90 * 24 * 60 * 60 * 1000,
+  '6m': 180 * 24 * 60 * 60 * 1000,
+  '1y': 365 * 24 * 60 * 60 * 1000,
+  Max: Infinity,
+}
+
 export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
   const { t } = useTranslation()
   const [currencyTab, setCurrencyTab] = useState('CAKE') // 'CAKE' or 'USD'
-  const [timeTab, setTimeTab] = useState('3m') // '3m', '6m', '1y', or 'All'
+  const [timeTab, setTimeTab] = useState('3m') // '3m', '6m', '1y', or 'Max'
   const cakePrice = useCakePrice()
 
   const { data } = useBurnStats()
@@ -73,12 +80,6 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
 
     const groupedData = groupBy(mintTimeSeries, 'timestamp')
     const now = Date.now()
-    const timeFilters = {
-      '3m': 90 * 24 * 60 * 60 * 1000,
-      '6m': 180 * 24 * 60 * 60 * 1000,
-      '1y': 365 * 24 * 60 * 60 * 1000,
-      All: Infinity,
-    }
 
     return Object.entries(groupedData)
       .filter(([timestamp]) => {
@@ -90,7 +91,7 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
           timestamp,
           timestampFormatted: new Date(Number(timestamp)).toLocaleDateString('en-US', {
             month: 'short',
-            day: timeTab === 'All' ? undefined : 'numeric',
+            day: timeTab === 'Max' ? undefined : 'numeric',
             ...(timeTab !== '3m' && { year: 'numeric' }),
           }),
           ...items.reduce((acc, item) => {
@@ -117,7 +118,7 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
         </FlexGap>
         <FlexGap gap="6px" alignItems="center" flexWrap="wrap">
           <TabMenu tabs={['CAKE', 'USD']} defaultTab={currencyTab} onTabChange={setCurrencyTab} />
-          <TabMenu tabs={['3m', '6m', '1y', 'All']} defaultTab={timeTab} onTabChange={setTimeTab} />
+          <TabMenu tabs={['3m', '6m', '1y', 'Max']} defaultTab={timeTab} onTabChange={setTimeTab} />
         </FlexGap>
       </FlexGap>
 

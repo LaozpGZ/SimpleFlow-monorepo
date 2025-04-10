@@ -88,7 +88,7 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
         timestampFormatted: new Date(Number(timestamp)).toLocaleDateString('en-US', {
           ...(selectedTab !== '3m' && { year: 'numeric' }),
           month: 'short',
-          day: selectedTab === 'All' ? undefined : 'numeric',
+          day: selectedTab === 'Max' ? undefined : 'numeric',
         }),
       }
 
@@ -100,7 +100,7 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
   }, [groupedData, selectedTab])
 
   const filteredChartData = useMemo(() => {
-    if (selectedTab === 'All') return allChartData
+    if (selectedTab === 'Max') return allChartData
 
     const now = Date.now()
     let startTime: number
@@ -157,7 +157,7 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
         </FlexGap>
         <FlexGap gap="8px" flexWrap="wrap">
           <TabMenu tabs={['CAKE', 'USD']} defaultTab="CAKE" onTabChange={handleCurrencyChange} />
-          <TabMenu tabs={['3m', '6m', '1y', 'All']} defaultTab="3m" onTabChange={handleTabChange} />
+          <TabMenu tabs={['3m', '6m', '1y', 'Max']} defaultTab="3m" onTabChange={handleTabChange} />
         </FlexGap>
       </FlexGap>
 
