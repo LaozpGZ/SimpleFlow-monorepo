@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, CardProps, DotIcon, FlexGap, Text } from '@pancakeswap/uikit'
+import { Box, CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip, TooltipProps } from 'recharts'
 import styled from 'styled-components'
@@ -67,7 +67,12 @@ export const SupplyPieChart = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <StatsCardHeader>{t('Supply')}</StatsCardHeader>
+      <FlexGap alignItems="center" gap="4px">
+        <StatsCardHeader>{t('Supply')}</StatsCardHeader>
+        <QuestionHelperV2 text={t('Peak Supply: Highest CAKE supply of 397,036,557 on Sep 25, 2023')} placement="top">
+          <InfoIcon color="textSubtle" />
+        </QuestionHelperV2>
+      </FlexGap>
       <ChartWrapper mt="24px">
         <TextContainer>
           <Text small>{t('Total Supply')}</Text>

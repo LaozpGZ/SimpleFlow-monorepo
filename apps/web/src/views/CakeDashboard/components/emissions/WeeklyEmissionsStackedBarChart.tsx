@@ -16,16 +16,25 @@ import { TabMenu } from '../TabMenu'
 
 const CustomTooltip = ({ active, payload, isUSD }: any) => {
   const { t } = useTranslation()
+
   if (active && payload && payload.length) {
+    const total = payload.reduce((acc, entry) => acc + entry.value, 0)
     return (
       <TooltipCard>
-        <Text small mb="8px">
-          {new Date(Number(payload[0].payload.timestamp)).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          })}
-        </Text>
+        <FlexGap mb="8px" justifyContent="space-between" alignItems="center" gap="16px">
+          <Text small>
+            {new Date(Number(payload[0].payload.timestamp)).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            })}
+          </Text>
+          <Text color="secondary" small bold>
+            {isUSD
+              ? `$${formatAmount(total, { precision: 2 })}`
+              : formatAmount(total, { precision: getBurnInfoPrecision(total) })}
+          </Text>
+        </FlexGap>
         {payload.map((entry: any) => (
           <FlexGap justifyContent="space-between" gap="16px" key={entry.name}>
             <FlexGap key={entry.name} alignItems="center" gap="6px" mb="4px">

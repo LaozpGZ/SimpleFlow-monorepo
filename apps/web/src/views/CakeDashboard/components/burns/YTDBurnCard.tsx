@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CardProps, Text } from '@pancakeswap/uikit'
+import { CardProps, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useMemo } from 'react'
 import { formatAmount } from 'utils/formatInfoNumbers'
@@ -32,7 +32,15 @@ export const YTDBurnCard = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <StatsCardHeader>{t('YTD Burn')}</StatsCardHeader>
+      <FlexGap alignItems="center" gap="4px">
+        <StatsCardHeader>{t('YTD Burn')}</StatsCardHeader>
+        <QuestionHelperV2
+          text={t('Year-to-date (YTD) Burn: Absolute total (not the net amount) of CAKE burn since start of the year')}
+          placement="top"
+        >
+          <InfoIcon color="textSubtle" />
+        </QuestionHelperV2>
+      </FlexGap>
       <Text fontSize="24px" bold>
         {formatAmount(ytdBurn, { precision: getBurnInfoPrecision(ytdBurn) })} CAKE
       </Text>

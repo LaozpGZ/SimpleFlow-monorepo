@@ -27,6 +27,8 @@ export const getDeflationTimeSeries = async () => {
         actualMint: row.actualmint,
       }))
       .slice()
+      // Filter out timestamps that are in the future
+      .filter((row) => row.timestamp < Date.now())
       .sort((a, b) => a.timestamp - b.timestamp),
   }
 

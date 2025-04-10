@@ -17,15 +17,23 @@ type CustomTooltipProps = TooltipProps<number, string> & { isUSD?: boolean }
 
 const CustomTooltip = ({ active, payload, isUSD }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
+    const total = payload.reduce((acc, entry) => acc + (entry.value || 0), 0)
     return (
       <TooltipCard>
-        <Text small mb="8px">
-          {new Date(payload[0].payload.timestamp).toLocaleDateString('en-US', {
-            month: 'short',
-            day: 'numeric',
-            year: 'numeric',
-          })}
-        </Text>
+        <FlexGap mb="8px" justifyContent="space-between" alignItems="center" gap="16px">
+          <Text small>
+            {new Date(payload[0].payload.timestamp).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: 'numeric',
+            })}
+          </Text>
+          <Text color="secondary" small bold>
+            {isUSD
+              ? `$${formatAmount(total, { precision: 2 })}`
+              : formatAmount(total, { precision: getBurnInfoPrecision(total) })}
+          </Text>
+        </FlexGap>
         {payload.map((entry) => (
           <FlexGap justifyContent="space-between" gap="16px" key={entry.name}>
             <FlexGap key={entry.name} alignItems="center" gap="6px" mb="4px">

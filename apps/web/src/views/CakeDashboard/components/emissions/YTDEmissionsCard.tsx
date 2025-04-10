@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CardProps, FlexGap, Text } from '@pancakeswap/uikit'
+import { CardProps, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useMemo } from 'react'
 import { formatAmount } from 'utils/formatInfoNumbers'
@@ -32,8 +32,16 @@ export const YTDEmissionsCard = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <FlexGap justifyContent="space-between" alignItems="center">
+      <FlexGap alignItems="center" gap="4px">
         <StatsCardHeader>{t('YTD Emissions')}</StatsCardHeader>
+        <QuestionHelperV2
+          text={t(
+            'Year-to-date (YTD) Emissions: Absolute total (not the net amount) of CAKE emissions since start of the year',
+          )}
+          placement="top"
+        >
+          <InfoIcon color="textSubtle" />
+        </QuestionHelperV2>
       </FlexGap>
 
       <Text fontSize="24px" bold>
