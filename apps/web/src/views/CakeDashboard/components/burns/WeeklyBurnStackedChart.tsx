@@ -74,7 +74,7 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
       const row = {
         timestamp: Number(timestamp),
         formattedDate: new Date(Number(timestamp)).toLocaleDateString('en-US', {
-          year: 'numeric',
+          ...(selectedTab !== '3m' && { year: 'numeric' }),
           month: 'short',
           day: 'numeric',
         }),
@@ -85,7 +85,7 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
       })
       return row
     })
-  }, [groupedData])
+  }, [groupedData, selectedTab])
 
   const filteredChartData = useMemo(() => {
     if (selectedTab === 'All') return allChartData
