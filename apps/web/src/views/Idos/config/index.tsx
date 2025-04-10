@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { ChainId } from '@pancakeswap/chains'
 import { Trans } from '@pancakeswap/localization'
+import { Box } from '@pancakeswap/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { ReactNode } from 'react'
 import type { Address } from 'viem'
@@ -693,6 +694,10 @@ export const idoConfigDict: Record<string, IDOConfig> = {
         </Trans>
         <br />
         <br />
+        Website:
+        <a href="https://www.mindnetwork.xyz/" target="_blank" rel="noreferrer noopener">
+          https://www.mindnetwork.xyz/
+        </a>
         X:
         <a href="https://x.com/mindnetwork_xyz" target="_blank" rel="noreferrer noopener">
           https://x.com/mindnetwork_xyz
@@ -751,42 +756,59 @@ export const idoConfigDict: Record<string, IDOConfig> = {
       {
         title: <Trans>4. Which participants are eligible to take part in this event?</Trans>,
         description: (
-          <>
-            Participant Eligibility: To qualify, participants must maintain a minimum daily asset value of $100 in
-            Binance accounts for 7 consecutive days before the TGE start date. Check your eligibility on the PancakeSwap
-            TGE event page.
+          <Box style={{ lineHeight: '1.5rem' }}>
+            Participant Eligibility:
+            <br />
+            To qualify, participants must maintain a minimum daily asset value of $100 in Binance accounts for 7
+            consecutive days before the TGE start date. Check your eligibility on the PancakeSwap TGE event page.
+            <br />
+            <br />
             <ul style={{ listStyle: 'circle', listStylePosition: 'inside' }}>
-              <li>Snapshot Period: April 3, 2025, 23:59:59 UTC – April 9, 2025, 23:59:59 UTC</li>
+              <li>Snapshot Period:</li>
+              <br />
+              <ol style={{ listStyle: 'decimal', listStylePosition: 'inside', marginLeft: '1.4rem' }}>
+                April 3, 2025, 23:59:59 UTC – April 9, 2025, 23:59:59 UTC
+              </ol>
+              <br />
               <li>Snapshot Aggregated Assets:</li>
-              <ol style={{ listStyle: 'decimal', listStylePosition: 'inside' }}>
+              <br />
+              <ol style={{ listStyle: 'decimal', listStylePosition: 'inside', marginLeft: '1.4rem' }}>
                 <li>
                   Assets in Binance Wallet (Keyless): Listed Binance Spot tokens and Alpha tokens, but excluded LSD-type
                   tokens.
                 </li>
+                <br />
                 <li>Assets in Binance Exchange Account.</li>
               </ol>
+              <br />
               <li>Examples</li>
-              <ol style={{ listStyle: 'decimal', listStylePosition: 'inside' }}>
+              <br />
+              <ol style={{ listStyle: 'decimal', listStylePosition: 'inside', marginLeft: '1.4rem' }}>
                 <li>
                   User A has a daily asset value of $50 in Binance Wallet (Keyless), and a daily asset value of $50 in
                   Binance Exchange Account for 7 consecutive days before the TGE start date. He/She is eligible.
                 </li>
+                <br />
                 <li>
                   User B has a daily asset value of $100 in Binance Wallet (Keyless), and a daily asset value of $0 in
                   Binance Exchange Account for 7 consecutive days before the TGE start date. He/She is eligible.
                 </li>
+                <br />
                 <li>
                   User C has a daily asset value of $0 in Binance Wallet (Keyless), and a daily asset value of $100 in
                   Binance Exchange Account for 7 consecutive days before the TGE start date. He/She is eligible.
                 </li>
+                <br />
               </ol>
-              <li>
-                Important Notes: Binance reserves the right to modify event rules and criteria at any time without prior
-                notice. All rule interpretations are solely at Binance’s discretion. Participants are strongly advised
-                to verify the latest rules via official channels before participating.
-              </li>
+              <li>Important Notes: </li>
+              <br />
+              <ol style={{ listStyle: 'decimal', listStylePosition: 'inside', marginLeft: '1.4rem' }}>
+                Binance reserves the right to modify event rules and criteria at any time without prior notice. All rule
+                interpretations are solely at Binance’s discretion. Participants are strongly advised to verify the
+                latest rules via official channels before participating.
+              </ol>
             </ul>
-          </>
+          </Box>
         ),
       },
     ],
