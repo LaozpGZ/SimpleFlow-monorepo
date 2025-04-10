@@ -681,7 +681,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     icon: '/images/ido/mindnetwork.svg',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/mindnetwork-banner.png`,
-    contractAddress: '0x3a8ab56936e19f901ad836e8cca129e59c08e53a',
+    contractAddress: '0x000D84716E4ffeFFa96Bb70F9a1a2C233586e0F3',
     tgeTitle: <Trans>Mind Network's Token Generation Event</Trans>,
     tgeSubtitle: <Trans>Exclusively via Binance Keyless Wallet</Trans>,
     description: (
