@@ -98,6 +98,10 @@ const PageButtons = styled(Flex)`
   padding: 0 16px;
 `
 
+const StyledTag = styled(Tag)`
+  border-color: ${({ theme }) => theme.colors.cardBorder};
+`
+
 const ITEMS_PER_PAGE = 5
 
 export const RealTimeBurnHistoryTable = (props: BoxProps) => {
@@ -186,7 +190,7 @@ export const RealTimeBurnHistoryTable = (props: BoxProps) => {
                     </StyledScanLink>
                   </td>
                   <td>
-                    <Tag variant="tertiary">{item.type}</Tag>
+                    <StyledTag variant="tertiary">{item.type}</StyledTag>
                   </td>
                 </tr>
               ))

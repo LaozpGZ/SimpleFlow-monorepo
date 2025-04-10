@@ -1,3 +1,4 @@
+import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
@@ -65,6 +66,7 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
   const { t } = useTranslation()
   const [selectedTab, setSelectedTab] = useState('3m')
 
+  const { isDark } = useTheme()
   const { data: burnStats } = useBurnStats()
 
   const allChartData = useMemo(() => {
@@ -132,7 +134,7 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
 
       <ResponsiveContainer width="100%" height={300}>
         <ComposedChart width={900} height={300} data={filteredChartData}>
-          <CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#F6F4FB" />
+          <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={isDark ? '#35363C' : '#F6F4FB'} />
           <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} />
           <Bar dataKey="deflation" fill="#02919D" barSize={4} radius={[4, 4, 4, 4]} />
           <Tooltip wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
