@@ -31,7 +31,7 @@ export const getBurnHistoryTable = async () => {
         txHash: row.Tx_hash,
       }))
       .slice()
-      .sort((a, b) => a.timestamp - b.timestamp),
+      .sort((a, b) => b.timestamp - a.timestamp),
   }
 
   return result
