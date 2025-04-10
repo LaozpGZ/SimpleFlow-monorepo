@@ -177,12 +177,6 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
               radius={index === 0 ? [0, 0, 4, 4] : index === uniqueProducts.size - 1 ? [4, 4, 0, 0] : undefined}
             />
           ))}
-          {/* <Bar dataKey="tradingFeeV2" fill="#1FC7D4" stackId="stack" radius={[0, 0, 4, 4]} />
-          <Bar dataKey="tradingFeeV3" fill="#7645D9" stackId="stack" />
-          <Bar dataKey="prediction" fill="#FFB237" stackId="stack" />
-          <Bar dataKey="lottery" fill="#ED4B9E" stackId="stack" />
-          <Bar dataKey="perpetual" fill="#2882CC" stackId="stack" />
-          <Bar dataKey="stableSwap" fill="#31D0AA" stackId="stack" radius={[4, 4, 0, 0]} /> */}
         </BarChart>
       </ResponsiveContainer>
 
@@ -196,43 +190,6 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
               </Text>
             </FlexGap>
           ))}
-
-          {/* <FlexGap alignItems="center" gap="4px">
-            <DotIcon color="#7645D9" width="12px" />
-            <Text color="textSubtle" width="max-content" small>
-              {t('Trading Fee V3')}
-            </Text>
-          </FlexGap>
-          <FlexGap alignItems="center" gap="4px">
-            <DotIcon color="#FFB237" width="12px" />
-            <Text color="textSubtle" width="max-content" small>
-              {t('Prediction')}
-            </Text>
-          </FlexGap>
-          <FlexGap alignItems="center" gap="4px">
-            <DotIcon color="#ED4B9E" width="12px" />
-            <Text color="textSubtle" small>
-              {t('Lottery')}
-            </Text>
-          </FlexGap>
-          <FlexGap alignItems="center" gap="4px">
-            <DotIcon color="#1FC7D4" width="12px" />
-            <Text color="textSubtle" small>
-              {t('Trading Fee V2')}
-            </Text>
-          </FlexGap>
-          <FlexGap alignItems="center" gap="4px">
-            <DotIcon color="#2882CC" width="12px" />
-            <Text color="textSubtle" small>
-              {t('Perpetual')}
-            </Text>
-          </FlexGap>
-          <FlexGap alignItems="center" gap="4px">
-            <DotIcon color="#31D0AA" width="12px" />
-            <Text color="textSubtle" small>
-              {t('StableSwap')}
-            </Text>
-          </FlexGap> */}
         </FlexGap>
       </LightGreyCard>
     </StatsCard>

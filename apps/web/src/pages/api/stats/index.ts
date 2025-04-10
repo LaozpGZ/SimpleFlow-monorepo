@@ -1,6 +1,7 @@
 import { NextApiHandler } from 'next'
 import { getBurnTimeSeries } from 'utils/stats/burnTimeSeries'
 import { getDeflationTimeSeries } from 'utils/stats/deflationTimeSeries'
+import { getMintTimeSeries } from 'utils/stats/mintTimeSeries'
 import { getTotalSupplyMintBurn } from 'utils/stats/totalSupplyMintBurn'
 import { getTotalSupplyTimeSeries } from 'utils/stats/totalSupplyTimeSeries'
 
@@ -10,12 +11,14 @@ const handler: NextApiHandler = async (req, res) => {
   }
 
   try {
-    const [totalSupplyMintBurn, totalSupplyTimeSeries, deflationTimeSeries, burnTimeSeries] = await Promise.all([
-      getTotalSupplyMintBurn(),
-      getTotalSupplyTimeSeries(),
-      getDeflationTimeSeries(),
-      getBurnTimeSeries(),
-    ])
+    const [totalSupplyMintBurn, totalSupplyTimeSeries, deflationTimeSeries, burnTimeSeries, mintTimeSeries] =
+      await Promise.all([
+        getTotalSupplyMintBurn(),
+        getTotalSupplyTimeSeries(),
+        getDeflationTimeSeries(),
+        getBurnTimeSeries(),
+        getMintTimeSeries(),
+      ])
 
     const result = {
       timestamp: totalSupplyMintBurn.timestamp,
@@ -23,16 +26,11 @@ const handler: NextApiHandler = async (req, res) => {
       totalSupplyTimeSeries: totalSupplyTimeSeries.data,
       deflationTimeSeries: deflationTimeSeries.data,
       burnTimeSeries: burnTimeSeries.data,
+      mintTimeSeries: mintTimeSeries.data,
     }
 
-    // Data is updated every Week
-    // const CACHE_DURATION = 60 * 60 * 24 * 7 // 1 week
-    // const lastUpdatedAt = Object.values(result).reduce((prev, curr) => Math.max(prev, curr.timestamp), 0)
-
-    // console.log('API Cache duration', resultCacheDuration)
-
-    // // Set cache to expire at the next Monday
-    // res.setHeader('Cache-Control', `s-maxage=${resultCacheDuration}`)
+    // Cache response for a day
+    // res.setHeader('Cache-Control', 's-maxage=86400')
 
     return res.status(200).json(result)
   } catch (error) {

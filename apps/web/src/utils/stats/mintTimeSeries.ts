@@ -10,10 +10,10 @@ interface Row {
 }
 
 /**
- * Burn Product Time Series
+ * Mint Product Time Series
  */
-export const getBurnTimeSeries = async () => {
-  const response = await fetchFromDune(DUNE_ENDPOINTS.BURN_TIME_SERIES)
+export const getMintTimeSeries = async () => {
+  const response = await fetchFromDune(DUNE_ENDPOINTS.MINT_TIME_SERIES)
   const data: DuneResponse<Row> = await response.json()
 
   const result = {

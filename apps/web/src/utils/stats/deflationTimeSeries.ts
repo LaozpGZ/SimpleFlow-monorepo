@@ -22,6 +22,8 @@ export const getDeflationTimeSeries = async () => {
 
         // Negative of net mint to show positive deflation
         deflation: -row.net_mint,
+
+        actualMint: row.actualmint,
       }))
       .slice()
       .sort((a, b) => a.timestamp - b.timestamp),

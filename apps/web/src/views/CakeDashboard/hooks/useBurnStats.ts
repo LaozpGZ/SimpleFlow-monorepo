@@ -15,8 +15,14 @@ interface BurnStats {
   deflationTimeSeries: {
     timestamp: number
     deflation: number
+    actualMint: number
   }[]
   burnTimeSeries: {
+    timestamp: number
+    burn: number
+    product: string
+  }[]
+  mintTimeSeries: {
     timestamp: number
     burn: number
     product: string

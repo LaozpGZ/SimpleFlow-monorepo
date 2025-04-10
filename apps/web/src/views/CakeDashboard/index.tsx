@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Button, FlexGap, Grid, LogoRoundIcon, Text } from '@pancakeswap/uikit'
+import { AutoColumn, Box, Button, FlexGap, Grid, LogoRoundIcon, Spinner, Text } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { LightGreyCard } from 'components/Card'
 import styled from 'styled-components'
@@ -25,7 +25,7 @@ const StyledGradientCard = styled(LightGreyCard)`
 export const CakeDashboard = () => {
   const { t } = useTranslation()
 
-  const { data } = useBurnStats()
+  const { data, isLoading } = useBurnStats()
 
   const lastUpdatedAt = new Date(data?.timestamp || 0).toLocaleString('en-US', {
     month: 'short',
@@ -43,9 +43,11 @@ export const CakeDashboard = () => {
           </Text>
         </FlexGap>
         <FlexGap alignItems="center" gap="8px" flexWrap="wrap">
-          <StyledGradientCard>
-            <Text bold>{t(`Last updated at: ${lastUpdatedAt}`)}</Text>
-          </StyledGradientCard>
+          {data && data?.timestamp && (
+            <StyledGradientCard>
+              <Text bold>{t(`Last updated at: ${lastUpdatedAt}`)}</Text>
+            </StyledGradientCard>
+          )}
           <NextLinkFromReactRouter
             to="https://docs.pancakeswap.finance/governance-and-tokenomics/cake-tokenomics"
             target="_blank"
@@ -56,38 +58,49 @@ export const CakeDashboard = () => {
           </NextLinkFromReactRouter>
         </FlexGap>
       </FlexGap>
+      {isLoading ? (
+        <FlexGap justifyContent="center" alignItems="center" height="100%" py="64px">
+          <Spinner size={140} />
+        </FlexGap>
+      ) : (
+        <Box>
+          <Grid
+            mt="24px"
+            gridTemplateColumns={['1fr', '1fr', '1fr', '1fr', '1fr', '4fr 3fr 2fr']}
+            style={{ gap: '24px' }}
+          >
+            <SupplyPieChart />
 
-      <Grid mt="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr', '1fr', '4fr 3fr 2fr']} style={{ gap: '24px' }}>
-        <SupplyPieChart />
+            <AutoColumn gap="24px">
+              <BurnLastSevenDaysCard />
+              <TotalDeflationCard />
+            </AutoColumn>
+            <AutoColumn gap="24px">
+              <YTDBurnCard />
+              <YTDDeflationCard />
+            </AutoColumn>
+          </Grid>
 
-        <AutoColumn gap="24px">
-          <BurnLastSevenDaysCard />
-          <TotalDeflationCard />
-        </AutoColumn>
-        <AutoColumn gap="24px">
-          <YTDBurnCard />
-          <YTDDeflationCard />
-        </AutoColumn>
-      </Grid>
+          <SupplyDeflationCombinedGraph mt="24px" />
 
-      <SupplyDeflationCombinedGraph mt="24px" />
+          <WeeklyBurnStackedChart mt="24px" />
 
-      <WeeklyBurnStackedChart mt="24px" />
+          <Text mt="40px" fontSize="24px" bold>
+            {t('Real-Time Burn History')}
+          </Text>
+          <RealTimeBurnHistoryTable mt="24px" />
 
-      <Text mt="40px" fontSize="24px" bold>
-        {t('Real-Time Burn History')}
-      </Text>
-      <RealTimeBurnHistoryTable mt="24px" />
+          <Text mt="40px" fontSize="24px" bold>
+            {t('Emissions')}
+          </Text>
+          <Grid mt="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr']} style={{ gap: '24px' }}>
+            <EmissionsLastSevenDaysCard />
+            <YTDEmissionsCard />
+          </Grid>
 
-      <Text mt="40px" fontSize="24px" bold>
-        {t('Emissions')}
-      </Text>
-      <Grid mt="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr']} style={{ gap: '24px' }}>
-        <EmissionsLastSevenDaysCard />
-        <YTDEmissionsCard />
-      </Grid>
-
-      <WeeklyEmissionsStackedBarChart mt="24px" />
+          <WeeklyEmissionsStackedBarChart mt="24px" />
+        </Box>
+      )}
     </div>
   )
 }

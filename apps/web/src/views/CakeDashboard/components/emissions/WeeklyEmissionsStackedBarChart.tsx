@@ -1,248 +1,20 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
+import BigNumber from 'bignumber.js'
 import { LightGreyCard } from 'components/Card'
+import { useCakePrice } from 'hooks/useCakePrice'
+import groupBy from 'lodash/groupBy'
+import { useMemo, useState } from 'react'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { formatAmount } from 'utils/formatInfoNumbers'
+import { CHART_COLORS_ALTERNATE } from 'views/CakeDashboard/constants'
+import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 import { TooltipCard } from '../styles'
+import { TabMenu } from '../TabMenu'
 
-const data = [
-  {
-    name: 'Dec 2nd',
-    tradingFeeV2: 400000,
-    tradingFeeV3: 600000,
-    prediction: 100000,
-    lottery: 50000,
-    perpetual: 100000,
-    stableSwap: 75000,
-  },
-  {
-    name: 'Dec 23rd',
-    tradingFeeV2: 300000,
-    tradingFeeV3: 500000,
-    prediction: 150000,
-    lottery: 50000,
-    perpetual: 125000,
-    stableSwap: 100000,
-  },
-  {
-    name: 'Jan 13th',
-    tradingFeeV2: 200000,
-    tradingFeeV3: 300000,
-    prediction: 100000,
-    lottery: 50000,
-    perpetual: 150000,
-    stableSwap: 125000,
-  },
-  {
-    name: 'Feb 3rd',
-    tradingFeeV2: 300000,
-    tradingFeeV3: 600000,
-    prediction: 150000,
-    lottery: 50000,
-    perpetual: 175000,
-    stableSwap: 150000,
-  },
-  {
-    name: 'Feb 24th',
-    tradingFeeV2: 500000,
-    tradingFeeV3: 1200000,
-    prediction: 200000,
-    lottery: 100000,
-    perpetual: 200000,
-    stableSwap: 175000,
-  },
-  {
-    name: 'Mar 17th',
-    tradingFeeV2: 1000000,
-    tradingFeeV3: 1500000,
-    prediction: 300000,
-    lottery: 200000,
-    perpetual: 225000,
-    stableSwap: 200000,
-  },
-  {
-    name: 'Apr 7th',
-    tradingFeeV2: 900000,
-    tradingFeeV3: 1300000,
-    prediction: 250000,
-    lottery: 150000,
-    perpetual: 200000,
-    stableSwap: 180000,
-  },
-  {
-    name: 'Apr 28th',
-    tradingFeeV2: 1100000,
-    tradingFeeV3: 1700000,
-    prediction: 280000,
-    lottery: 180000,
-    perpetual: 190000,
-    stableSwap: 160000,
-  },
-  {
-    name: 'May 19th',
-    tradingFeeV2: 800000,
-    tradingFeeV3: 1400000,
-    prediction: 220000,
-    lottery: 120000,
-    perpetual: 170000,
-    stableSwap: 140000,
-  },
-  {
-    name: 'Jun 9th',
-    tradingFeeV2: 1200000,
-    tradingFeeV3: 1900000,
-    prediction: 320000,
-    lottery: 220000,
-    perpetual: 210000,
-    stableSwap: 190000,
-  },
-  {
-    name: 'Jun 30th',
-    tradingFeeV2: 950000,
-    tradingFeeV3: 1600000,
-    prediction: 270000,
-    lottery: 170000,
-    perpetual: 190000,
-    stableSwap: 170000,
-  },
-  {
-    name: 'Jul 21st',
-    tradingFeeV2: 1300000,
-    tradingFeeV3: 2100000,
-    prediction: 350000,
-    lottery: 250000,
-    perpetual: 230000,
-    stableSwap: 210000,
-  },
-  {
-    name: 'Aug 11th',
-    tradingFeeV2: 1100000,
-    tradingFeeV3: 1800000,
-    prediction: 290000,
-    lottery: 190000,
-    perpetual: 210000,
-    stableSwap: 190000,
-  },
-  {
-    name: 'Sep 1st',
-    tradingFeeV2: 1400000,
-    tradingFeeV3: 2300000,
-    prediction: 380000,
-    lottery: 280000,
-    perpetual: 250000,
-    stableSwap: 230000,
-  },
-  {
-    name: 'Sep 22nd',
-    tradingFeeV2: 1200000,
-    tradingFeeV3: 2000000,
-    prediction: 320000,
-    lottery: 220000,
-    perpetual: 230000,
-    stableSwap: 210000,
-  },
-  {
-    name: 'Oct 13th',
-    tradingFeeV2: 1500000,
-    tradingFeeV3: 2500000,
-    prediction: 420000,
-    lottery: 320000,
-    perpetual: 270000,
-    stableSwap: 250000,
-  },
-  {
-    name: 'Nov 3rd',
-    tradingFeeV2: 1300000,
-    tradingFeeV3: 2200000,
-    prediction: 360000,
-    lottery: 260000,
-    perpetual: 250000,
-    stableSwap: 230000,
-  },
-  {
-    name: 'Nov 24th',
-    tradingFeeV2: 1600000,
-    tradingFeeV3: 2700000,
-    prediction: 450000,
-    lottery: 350000,
-    perpetual: 290000,
-    stableSwap: 270000,
-  },
-  {
-    name: 'Dec 15th',
-    tradingFeeV2: 1400000,
-    tradingFeeV3: 2400000,
-    prediction: 390000,
-    lottery: 290000,
-    perpetual: 270000,
-    stableSwap: 250000,
-  },
-  {
-    name: 'Jan 5th',
-    tradingFeeV2: 1700000,
-    tradingFeeV3: 2900000,
-    prediction: 480000,
-    lottery: 380000,
-    perpetual: 310000,
-    stableSwap: 290000,
-  },
-  {
-    name: 'Jan 26th',
-    tradingFeeV2: 1500000,
-    tradingFeeV3: 2600000,
-    prediction: 420000,
-    lottery: 320000,
-    perpetual: 290000,
-    stableSwap: 270000,
-  },
-  {
-    name: 'Feb 16th',
-    tradingFeeV2: 1800000,
-    tradingFeeV3: 3100000,
-    prediction: 510000,
-    lottery: 410000,
-    perpetual: 330000,
-    stableSwap: 310000,
-  },
-  {
-    name: 'Mar 9th',
-    tradingFeeV2: 1600000,
-    tradingFeeV3: 2800000,
-    prediction: 450000,
-    lottery: 350000,
-    perpetual: 310000,
-    stableSwap: 290000,
-  },
-  {
-    name: 'Mar 30th',
-    tradingFeeV2: 1900000,
-    tradingFeeV3: 3300000,
-    prediction: 540000,
-    lottery: 440000,
-    perpetual: 350000,
-    stableSwap: 330000,
-  },
-  {
-    name: 'Apr 20th',
-    tradingFeeV2: 1700000,
-    tradingFeeV3: 3000000,
-    prediction: 480000,
-    lottery: 380000,
-    perpetual: 330000,
-    stableSwap: 310000,
-  },
-  {
-    name: 'May 11th',
-    tradingFeeV2: 2000000,
-    tradingFeeV3: 3500000,
-    prediction: 570000,
-    lottery: 470000,
-    perpetual: 370000,
-    stableSwap: 350000,
-  },
-]
-
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, label, isUSD }: any) => {
   const { t } = useTranslation()
   if (active && payload && payload.length) {
     return (
@@ -257,7 +29,9 @@ const CustomTooltip = ({ active, payload, label }: any) => {
               <Text small>{t(entry.name)}</Text>
             </FlexGap>
             <Text small bold>
-              {entry.value.toLocaleString()}
+              {isUSD
+                ? `$${formatAmount(entry.value, { precision: 2 })}`
+                : formatAmount(entry.value, { precision: getBurnInfoPrecision(entry.value) })}
             </Text>
           </FlexGap>
         ))}
@@ -269,20 +43,75 @@ const CustomTooltip = ({ active, payload, label }: any) => {
 
 export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
   const { t } = useTranslation()
+  const [currencyTab, setCurrencyTab] = useState('CAKE') // 'CAKE' or 'USD'
+  const [timeTab, setTimeTab] = useState('3m') // '3m', '6m', '1y', or 'All'
+  const cakePrice = useCakePrice()
+
+  const { data } = useBurnStats()
+  const mintTimeSeries = data?.mintTimeSeries
+
+  const uniqueProducts = useMemo(() => {
+    if (!mintTimeSeries) return []
+    return [...new Set(mintTimeSeries.map((item) => item.product))]
+  }, [mintTimeSeries])
+
+  const chartData = useMemo(() => {
+    if (!mintTimeSeries) return []
+
+    const groupedData = groupBy(mintTimeSeries, 'timestamp')
+    const now = Date.now()
+    const timeFilters = {
+      '3m': 90 * 24 * 60 * 60 * 1000,
+      '6m': 180 * 24 * 60 * 60 * 1000,
+      '1y': 365 * 24 * 60 * 60 * 1000,
+      All: Infinity,
+    }
+
+    return Object.entries(groupedData)
+      .filter(([timestamp]) => {
+        const timeDiff = now - Number(timestamp)
+        return timeDiff <= timeFilters[timeTab]
+      })
+      .map(([timestamp, items]) => {
+        const baseData = {
+          timestamp,
+          timestampFormatted: new Date(Number(timestamp)).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            ...(timeTab !== '3m' && { year: 'numeric' }),
+          }),
+          ...items.reduce((acc, item) => {
+            const newAcc = { ...acc }
+            const value =
+              currencyTab === 'USD' ? new BigNumber(item.burn).times(cakePrice.toString()).toNumber() : item.burn
+            newAcc[item.product] = value
+            return newAcc
+          }, {}),
+        }
+        return baseData
+      })
+      .sort((a, b) => Number(a.timestamp) - Number(b.timestamp))
+  }, [mintTimeSeries, timeTab, currencyTab, cakePrice])
 
   return (
     <StatsCard {...props}>
-      <FlexGap gap="6px" alignItems="center">
-        <StatsCardHeader>{t('Weekly Emissions Allocation')}</StatsCardHeader>
-        <QuestionHelperV2 text={t('Weekly breakdown of CAKE emissions allocation by product')}>
-          <InfoIcon color="textSubtle" />
-        </QuestionHelperV2>
+      <FlexGap justifyContent="space-between" alignItems="center">
+        <FlexGap gap="6px" alignItems="center">
+          <StatsCardHeader>{t('Weekly Emissions Allocation')}</StatsCardHeader>
+          <QuestionHelperV2 text={t('Weekly breakdown of CAKE emissions allocation by product')}>
+            <InfoIcon color="textSubtle" />
+          </QuestionHelperV2>
+        </FlexGap>
+        <FlexGap gap="6px" alignItems="center">
+          <TabMenu tabs={['CAKE', 'USD']} defaultTab={currencyTab} onTabChange={setCurrencyTab} />
+          <TabMenu tabs={['3m', '6m', '1y', 'All']} defaultTab={timeTab} onTabChange={setTimeTab} />
+        </FlexGap>
       </FlexGap>
 
       <FlexGap mt="24px" height="100%" flexWrap={['wrap', 'wrap', 'wrap', 'wrap', 'nowrap']}>
         <ResponsiveContainer width="100%" height="100%" minWidth={100} minHeight={300}>
           <BarChart
-            data={data}
+            data={chartData}
             margin={{
               top: 20,
               right: 30,
@@ -291,55 +120,49 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
             }}
             barSize={20}
           >
-            <Bar dataKey="tradingFeeV2" fill="#1FC7D4" stackId="stack" radius={[0, 0, 4, 4]} />
-            <Bar dataKey="tradingFeeV3" fill="#7645D9" stackId="stack" />
-            <Bar dataKey="prediction" fill="#FFB237" stackId="stack" />
-            <Bar dataKey="lottery" fill="#ED4B9E" stackId="stack" />
-            <Bar dataKey="perpetual" fill="#2882CC" stackId="stack" />
-            <Bar dataKey="stableSwap" fill="#31D0AA" stackId="stack" radius={[4, 4, 0, 0]} />
-            <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} wrapperStyle={{ outline: 'none' }} />
-            <XAxis dataKey="name" fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />
-            <YAxis fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />
+            {uniqueProducts.map((product, index) => (
+              <Bar
+                dataKey={product}
+                fill={CHART_COLORS_ALTERNATE[index % CHART_COLORS_ALTERNATE.length]}
+                stackId="stack"
+                radius={index === 0 ? [0, 0, 4, 4] : index === uniqueProducts.length - 1 ? [4, 4, 0, 0] : undefined}
+              />
+            ))}
+            <Tooltip
+              content={<CustomTooltip isUSD={currencyTab === 'USD'} />}
+              cursor={{ fill: 'transparent' }}
+              wrapperStyle={{ outline: 'none' }}
+            />
+            <XAxis
+              dataKey="timestampFormatted"
+              fontSize="12px"
+              tick={{ fill: '#9383B4' }}
+              tickLine={false}
+              axisLine={false}
+            />
+            <YAxis
+              fontSize="12px"
+              tick={{ fill: '#9383B4' }}
+              tickLine={false}
+              axisLine={false}
+              tickFormatter={(value) =>
+                currencyTab === 'USD'
+                  ? `$${formatAmount(value, { precision: 2 })}`
+                  : formatAmount(value, { precision: getBurnInfoPrecision(value) }) || value
+              }
+            />
           </BarChart>
         </ResponsiveContainer>
         <LightGreyCard padding="8px 16px" width="fit-content" height="fit-content">
           <FlexGap flexDirection={['row', 'row', 'row', 'row', 'column']} gap="8px" flexWrap="wrap">
-            <FlexGap alignItems="center" gap="4px">
-              <DotIcon color="#1FC7D4" width="12px" />
-              <Text color="textSubtle" width="max-content" small>
-                {t('Trading Fee V2')}
-              </Text>
-            </FlexGap>
-            <FlexGap alignItems="center" gap="4px">
-              <DotIcon color="#7645D9" width="12px" />
-              <Text color="textSubtle" width="max-content" small>
-                {t('Trading Fee V3')}
-              </Text>
-            </FlexGap>
-            <FlexGap alignItems="center" gap="4px">
-              <DotIcon color="#FFB237" width="12px" />
-              <Text color="textSubtle" small>
-                {t('Prediction')}
-              </Text>
-            </FlexGap>
-            <FlexGap alignItems="center" gap="4px">
-              <DotIcon color="#ED4B9E" width="12px" />
-              <Text color="textSubtle" small>
-                {t('Lottery')}
-              </Text>
-            </FlexGap>
-            <FlexGap alignItems="center" gap="4px">
-              <DotIcon color="#2882CC" width="12px" />
-              <Text color="textSubtle" small>
-                {t('Perpetual')}
-              </Text>
-            </FlexGap>
-            <FlexGap alignItems="center" gap="4px">
-              <DotIcon color="#31D0AA" width="12px" />
-              <Text color="textSubtle" small>
-                {t('StableSwap')}
-              </Text>
-            </FlexGap>
+            {uniqueProducts.map((product, index) => (
+              <FlexGap alignItems="center" gap="4px" key={product}>
+                <DotIcon color={CHART_COLORS_ALTERNATE[index % CHART_COLORS_ALTERNATE.length]} width="12px" />
+                <Text color="textSubtle" width="max-content" small>
+                  {product}
+                </Text>
+              </FlexGap>
+            ))}
           </FlexGap>
         </LightGreyCard>
       </FlexGap>

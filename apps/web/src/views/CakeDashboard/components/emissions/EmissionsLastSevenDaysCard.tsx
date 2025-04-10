@@ -1,9 +1,17 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, Text } from '@pancakeswap/uikit'
+import { formatAmount } from 'utils/formatInfoNumbers'
+import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
 export const EmissionsLastSevenDaysCard = (props: CardProps) => {
   const { t } = useTranslation()
+
+  const { data } = useBurnStats()
+
+  const weeklyMint = data?.weekly_mint || 0
+  const totalSupply = data?.total_supply || 0
 
   return (
     <StatsCard {...props}>
@@ -14,10 +22,10 @@ export const EmissionsLastSevenDaysCard = (props: CardProps) => {
       </StatsCardHeader>
 
       <Text fontSize="24px" bold>
-        100.92m CAKE
+        {formatAmount(weeklyMint, { precision: getBurnInfoPrecision(weeklyMint) })} CAKE
       </Text>
       <Text fontSize="14px" color="textSubtle">
-        ~$234,937,842.04
+        {t('%percent%% of total CAKE supply', { percent: ((weeklyMint / totalSupply) * 100).toFixed(2) })}
       </Text>
     </StatsCard>
   )
