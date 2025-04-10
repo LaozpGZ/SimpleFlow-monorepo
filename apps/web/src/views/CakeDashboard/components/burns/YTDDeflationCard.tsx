@@ -33,7 +33,7 @@ export const YTDDeflationCard = (props: CardProps) => {
         {ytdDeflationOfTotalSupplyPercentage.toFixed(2)}%
       </Text>
       <Text fontSize="14px" color="textSubtle">
-        of {formatAmount(totalSupply, { precision: getBurnInfoPrecision(totalSupply) })} CAKE supply
+        of {formatAmount(TOTAL_SUPPLY_YTD, { precision: getBurnInfoPrecision(TOTAL_SUPPLY_YTD) })} CAKE supply
       </Text>
     </StatsCard>
   )
