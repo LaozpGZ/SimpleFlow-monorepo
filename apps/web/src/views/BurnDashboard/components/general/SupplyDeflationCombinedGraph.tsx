@@ -120,8 +120,8 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
       <ResponsiveContainer width="100%" height={300}>
         <ComposedChart data={allChartData}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={isDark ? '#35363C' : '#F6F4FB'} />
-          <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} yAxisId="left" />
           <Bar dataKey="deflation" fill="#02919D" barSize={4} radius={[4, 4, 4, 4]} yAxisId="right" />
+          <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} yAxisId="left" />
           <Tooltip wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
           <XAxis
             dataKey="timestampFormatted"
