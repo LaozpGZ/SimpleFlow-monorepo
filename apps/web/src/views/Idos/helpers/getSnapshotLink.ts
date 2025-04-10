@@ -1,4 +1,5 @@
 export const getSnapshotDeepLink = (projectId: string) => {
+  if (typeof window === 'undefined') return ''
   const appId = 'xoqXxUSMRccLCrZNRebmzj'
   const startPagePath = window.btoa('pages/subpackages/snapshot/index')
   const startPageQuery = window.btoa(`projectId=${projectId}`)
