@@ -754,7 +754,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
         ),
       },
       {
-        title: <Trans>4. Which participants are eligible to take part in this event?</Trans>,
+        title: <>4. Which participants are eligible to take part in this event?</>,
         description: (
           <Box style={{ lineHeight: '1.5rem' }}>
             Participant Eligibility:
