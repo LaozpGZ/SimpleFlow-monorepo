@@ -10,5 +10,6 @@ const SwapPage = () => (
 
 SwapPage.chains = CHAIN_IDS
 SwapPage.screen = true
+SwapPage.w3wWagmiConfig = true
 
 export default SwapPage
