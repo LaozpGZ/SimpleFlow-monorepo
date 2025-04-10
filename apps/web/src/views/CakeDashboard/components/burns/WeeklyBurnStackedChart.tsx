@@ -15,12 +15,16 @@ import { TabMenu } from '../TabMenu'
 
 type CustomTooltipProps = TooltipProps<number, string> & { isUSD?: boolean }
 
-const CustomTooltip = ({ active, payload, label, isUSD }: CustomTooltipProps) => {
+const CustomTooltip = ({ active, payload, isUSD }: CustomTooltipProps) => {
   if (active && payload && payload.length) {
     return (
       <TooltipCard>
         <Text small mb="8px">
-          {label}
+          {new Date(payload[0].payload.timestamp).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          })}
         </Text>
         {payload.map((entry) => (
           <FlexGap justifyContent="space-between" gap="16px" key={entry.name}>
@@ -73,10 +77,10 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
     return Object.entries(groupedData).map(([timestamp, items]) => {
       const row = {
         timestamp: Number(timestamp),
-        formattedDate: new Date(Number(timestamp)).toLocaleDateString('en-US', {
+        timestampFormatted: new Date(Number(timestamp)).toLocaleDateString('en-US', {
           ...(selectedTab !== '3m' && { year: 'numeric' }),
           month: 'short',
-          day: 'numeric',
+          day: selectedTab === 'All' ? undefined : 'numeric',
         }),
       }
 
@@ -151,7 +155,13 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
 
       <ResponsiveContainer width="100%" height={360}>
         <BarChart data={chartDataWithCurrency} barCategoryGap="95%" barSize={20}>
-          <XAxis dataKey="formattedDate" fontSize="12px" tick={{ fill: '#9383B4' }} tickLine={false} axisLine={false} />
+          <XAxis
+            dataKey="timestampFormatted"
+            fontSize="12px"
+            tick={{ fill: '#9383B4' }}
+            tickLine={false}
+            axisLine={false}
+          />
           <YAxis
             fontSize="12px"
             tick={{ fill: '#9383B4' }}
@@ -180,8 +190,8 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
         </BarChart>
       </ResponsiveContainer>
 
-      <LightGreyCard ml="auto" padding="8px 16px" width="fit-content" height="fit-content" maxWidth="400px">
-        <FlexGap gap="8px" flexWrap="wrap">
+      <LightGreyCard mx="auto" padding="8px 16px" width="fit-content" height="fit-content">
+        <FlexGap gap="16px" flexWrap="wrap">
           {Array.from(uniqueProducts).map((product, index) => (
             <FlexGap key={product} alignItems="center" gap="4px">
               <DotIcon color={CHART_COLORS[index % CHART_COLORS.length]} width="12px" />

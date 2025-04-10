@@ -20,8 +20,7 @@ export const getDeflationTimeSeries = async () => {
       .map((row: Row) => ({
         timestamp: new Date(row.week).getTime(),
 
-        // Negative of net mint to show positive deflation
-        deflation: -row.net_mint,
+        deflation: row.net_mint,
 
         actualMint: row.actualmint,
       }))

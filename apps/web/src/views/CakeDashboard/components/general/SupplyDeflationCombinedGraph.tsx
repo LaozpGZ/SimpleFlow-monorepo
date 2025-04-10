@@ -1,6 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
-import { VerticalDivider } from '@pancakeswap/widgets-internal'
 import { LightGreyCard } from 'components/Card'
 import keyBy from 'lodash/keyBy'
 import merge from 'lodash/merge'
@@ -31,12 +30,14 @@ const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
     const entry = payload[0].payload
     return (
       <TooltipCard>
-        <Text small>{entry.name}</Text>
+        <Text small>
+          {new Date(entry.timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+        </Text>
 
         <FlexGap mt="8px" flexDirection="column" gap="4px">
           <FlexGap justifyContent="space-between" gap="16px">
-            <FlexGap alignItems="center" gap="4px">
-              <DotIcon color="#7645D9" width="12px" />
+            <FlexGap alignItems="center" gap="6px">
+              <DotIcon color="#7645D9" width="8px" mt="1px" />
               <Text small>{t('Total Supply')}</Text>
             </FlexGap>
             <Text small bold>
@@ -44,8 +45,8 @@ const CustomTooltip = ({ active, payload }: TooltipProps<number, string>) => {
             </Text>
           </FlexGap>
           <FlexGap justifyContent="space-between" gap="16px">
-            <FlexGap alignItems="center" gap="4px">
-              <DotIcon color="#02919D" width="12px" />
+            <FlexGap alignItems="center" gap="6px">
+              <DotIcon color="#02919D" width="8px" mt="1px" />
               <Text small>{t('Deflation')}</Text>
             </FlexGap>
             <Text small bold>
@@ -66,22 +67,24 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
 
   const { data: burnStats } = useBurnStats()
 
-  const keyedDataA = keyBy(burnStats?.totalSupplyTimeSeries, 'timestamp')
-  const keyedDataB = keyBy(burnStats?.deflationTimeSeries, 'timestamp')
+  const allChartData = useMemo(() => {
+    const keyedDataA = keyBy(burnStats?.totalSupplyTimeSeries, 'timestamp')
+    const keyedDataB = keyBy(burnStats?.deflationTimeSeries, 'timestamp')
 
-  const mergedData = merge(keyedDataA, keyedDataB)
-  const finalSeriesData = values(mergedData)
+    const mergedData = merge(keyedDataA, keyedDataB)
+    const finalSeriesData = values(mergedData)
 
-  const allChartData = finalSeriesData.map((item) => ({
-    name: new Date(item.timestamp).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }),
-    totalSupply: item.total_supply,
-    deflation: item.deflation,
-    timestamp: item.timestamp,
-  }))
+    return finalSeriesData.map((item) => ({
+      timestamp: item.timestamp,
+      timestampFormatted: new Date(item.timestamp).toLocaleDateString('en-US', {
+        ...(selectedTab !== '3m' && { year: 'numeric' }),
+        month: 'short',
+        day: selectedTab === 'All' ? undefined : 'numeric',
+      }),
+      totalSupply: item.total_supply,
+      deflation: item.deflation,
+    }))
+  }, [selectedTab, burnStats])
 
   const filteredChartData = useMemo(() => {
     if (selectedTab === 'All') return allChartData
@@ -133,7 +136,13 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
           <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} />
           <Bar dataKey="deflation" fill="#02919D" barSize={4} radius={[4, 4, 4, 4]} />
           <Tooltip wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
-          <XAxis dataKey="name" axisLine={false} tickLine={false} fontSize={12} tick={{ fill: '#9383B4' }} />
+          <XAxis
+            dataKey="timestampFormatted"
+            axisLine={false}
+            tickLine={false}
+            fontSize={12}
+            tick={{ fill: '#9383B4' }}
+          />
           <YAxis
             axisLine={false}
             tickLine={false}
@@ -144,20 +153,36 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
                 precision: getBurnInfoPrecision(value),
               })}`
             }
+            domain={['auto', 'dataMax']}
           />
+          {/* <YAxis
+            axisLine={false}
+            tickLine={false}
+            fontSize={12}
+            tick={{ fill: '#9383B4' }}
+            tickFormatter={(value) =>
+              `${value < 0 ? '-' : ''}${formatAmount(Math.abs(value), {
+                precision: getBurnInfoPrecision(value),
+              })}`
+            }
+            domain={['dataMin', 0]}
+          /> */}
         </ComposedChart>
       </ResponsiveContainer>
 
-      <LightGreyCard padding="8px" width="fit-content" mx="auto" mt="4px">
-        <FlexGap alignItems="center" gap="4px" flexWrap="wrap">
+      <LightGreyCard padding="8px 16px" width="fit-content" mx="auto" mt="4px">
+        <FlexGap alignItems="center" gap="16px" flexWrap="wrap">
           <FlexGap alignItems="center" gap="4px">
             <DotIcon color="#7645D9" width="12px" />
-            <Text small>{t('Total Supply')}</Text>
+            <Text color="textSubtle" small>
+              {t('Total Supply')}
+            </Text>
           </FlexGap>
-          <VerticalDivider bg="#D7CAEC" />
           <FlexGap alignItems="center" gap="4px">
             <DotIcon color="#02919D" width="12px" />
-            <Text small>{t('Deflation')}</Text>
+            <Text color="textSubtle" small>
+              {t('Deflation')}
+            </Text>
           </FlexGap>
         </FlexGap>
       </LightGreyCard>

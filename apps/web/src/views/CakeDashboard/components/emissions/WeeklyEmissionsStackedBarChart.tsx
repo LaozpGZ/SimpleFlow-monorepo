@@ -14,13 +14,17 @@ import { StatsCard, StatsCardHeader } from '../StatsCard'
 import { TooltipCard } from '../styles'
 import { TabMenu } from '../TabMenu'
 
-const CustomTooltip = ({ active, payload, label, isUSD }: any) => {
+const CustomTooltip = ({ active, payload, isUSD }: any) => {
   const { t } = useTranslation()
   if (active && payload && payload.length) {
     return (
       <TooltipCard>
         <Text small mb="8px">
-          {label}
+          {new Date(Number(payload[0].payload.timestamp)).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          })}
         </Text>
         {payload.map((entry: any) => (
           <FlexGap justifyContent="space-between" gap="16px" key={entry.name}>
@@ -77,7 +81,7 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
           timestamp,
           timestampFormatted: new Date(Number(timestamp)).toLocaleDateString('en-US', {
             month: 'short',
-            day: 'numeric',
+            day: timeTab === 'All' ? undefined : 'numeric',
             ...(timeTab !== '3m' && { year: 'numeric' }),
           }),
           ...items.reduce((acc, item) => {
