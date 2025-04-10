@@ -133,10 +133,10 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
       </FlexGap>
 
       <ResponsiveContainer width="100%" height={300}>
-        <ComposedChart width={900} height={300} data={filteredChartData}>
+        <ComposedChart data={filteredChartData}>
           <CartesianGrid vertical={false} strokeDasharray="3 3" stroke={isDark ? '#35363C' : '#F6F4FB'} />
-          <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} />
-          <Bar dataKey="deflation" fill="#02919D" barSize={4} radius={[4, 4, 4, 4]} />
+          <Line type="monotone" dataKey="totalSupply" stroke="#7645D9" strokeWidth={2} dot={false} yAxisId="left" />
+          <Bar dataKey="deflation" fill="#02919D" barSize={4} radius={[4, 4, 4, 4]} yAxisId="right" />
           <Tooltip wrapperStyle={{ outline: 'none' }} content={<CustomTooltip />} />
           <XAxis
             dataKey="timestampFormatted"
@@ -146,6 +146,8 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
             tick={{ fill: '#9383B4' }}
           />
           <YAxis
+            yAxisId="left"
+            orientation="left"
             axisLine={false}
             tickLine={false}
             fontSize={12}
@@ -155,9 +157,10 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
                 precision: getBurnInfoPrecision(value),
               })}`
             }
-            domain={['auto', 'dataMax']}
           />
-          {/* <YAxis
+          <YAxis
+            yAxisId="right"
+            orientation="right"
             axisLine={false}
             tickLine={false}
             fontSize={12}
@@ -167,8 +170,7 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
                 precision: getBurnInfoPrecision(value),
               })}`
             }
-            domain={['dataMin', 0]}
-          /> */}
+          />
         </ComposedChart>
       </ResponsiveContainer>
 
