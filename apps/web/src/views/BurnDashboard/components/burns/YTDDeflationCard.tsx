@@ -1,16 +1,16 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
 import { formatAmount } from 'utils/formatInfoNumbers'
-import { TOTAL_SUPPLY_YTD } from 'views/CakeDashboard/constants'
-import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
-import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
+import { TOTAL_SUPPLY_YTD } from 'views/BurnDashboard/constants'
+import { useBurnStats } from 'views/BurnDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/BurnDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
 export const YTDDeflationCard = (props: CardProps) => {
   const { t } = useTranslation()
 
   const { data } = useBurnStats()
-
+  // todo: calculate total supply ytd
   const totalSupply = data?.total_supply || 0
   const ytdDeflation = TOTAL_SUPPLY_YTD - totalSupply
   const ytdDeflationOfTotalSupplyPercentage = (ytdDeflation / TOTAL_SUPPLY_YTD) * 100

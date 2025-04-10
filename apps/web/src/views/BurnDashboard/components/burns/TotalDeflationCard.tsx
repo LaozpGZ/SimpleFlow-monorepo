@@ -3,9 +3,9 @@ import { Box, CardProps, Flex, FlexGap, InfoIcon, QuestionHelperV2, Text } from 
 import { LightGreyCard } from 'components/Card'
 import { ProgressBar } from 'components/Progress/ProgressBar'
 import { formatAmount } from 'utils/formatInfoNumbers'
-import { PEAK_SUPPLY } from 'views/CakeDashboard/constants'
-import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
-import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
+import { PEAK_SUPPLY } from 'views/BurnDashboard/constants'
+import { useBurnStats } from 'views/BurnDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/BurnDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
 export const TotalDeflationCard = (props: CardProps) => {

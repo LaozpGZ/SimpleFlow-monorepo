@@ -1,6 +1,6 @@
 import Page from 'components/Layout/Page'
 import { NextSeo } from 'next-seo'
-import { CakeDashboard } from 'views/CakeDashboard'
+import { BurnDashboard } from 'views/BurnDashboard'
 
 const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
@@ -11,10 +11,10 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   )
 }
 
-const CakeDashboardPage = () => {
-  return <CakeDashboard />
+const BurnDashboardPage = () => {
+  return <BurnDashboard />
 }
 
-CakeDashboardPage.Layout = Layout
+BurnDashboardPage.Layout = Layout
 
-export default CakeDashboardPage
+export default BurnDashboardPage

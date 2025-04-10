@@ -22,7 +22,7 @@ const StyledGradientCard = styled(LightGreyCard)`
   width: fit-content;
 `
 
-export const CakeDashboard = () => {
+export const BurnDashboard = () => {
   const { t } = useTranslation()
 
   const { data, isLoading } = useBurnStats()

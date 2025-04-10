@@ -18,8 +18,8 @@ import {
   YAxis,
 } from 'recharts'
 import { formatAmount } from 'utils/formatInfoNumbers'
-import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
-import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
+import { useBurnStats } from 'views/BurnDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/BurnDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 import { TooltipCard } from '../styles'
 
@@ -87,14 +87,16 @@ export const SupplyDeflationCombinedGraph = (props: CardProps) => {
     const minimumBarValue = Math.min(...tempChartData.map((item) => item.deflation))
 
     // Add a shadow value to push the graph up and align zero point with bar chart
-    tempChartData.unshift({
-      timestamp: tempChartData[0].timestamp,
-      timestampFormatted: tempChartData[0].timestampFormatted,
-      totalSupply: minimumBarValue,
-      deflation: 0,
-      // @ts-ignore
-      isShadowValue: true,
-    })
+    if (tempChartData[0]) {
+      tempChartData.unshift({
+        timestamp: tempChartData[0].timestamp,
+        timestampFormatted: tempChartData[0].timestampFormatted,
+        totalSupply: minimumBarValue,
+        deflation: 0,
+        // @ts-ignore
+        isShadowValue: true,
+      })
+    }
 
     return tempChartData
   }, [burnStats])

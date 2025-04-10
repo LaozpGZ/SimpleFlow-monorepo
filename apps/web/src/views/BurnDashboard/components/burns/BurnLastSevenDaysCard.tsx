@@ -3,8 +3,8 @@ import { Box, CardProps, Flex, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { ProgressBar } from 'components/Progress/ProgressBar'
 import { formatAmount } from 'utils/formatInfoNumbers'
-import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
-import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
+import { useBurnStats } from 'views/BurnDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/BurnDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
 export const BurnLastSevenDaysCard = (props: CardProps) => {

@@ -6,8 +6,8 @@ import { useCallback, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 import { formatAmount } from 'utils/formatInfoNumbers'
-import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
-import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
+import { useBurnStats } from 'views/BurnDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/BurnDashboard/utils'
 
 // Wrapper for horizontal scrolling
 const TableWrapper = styled(Box)`

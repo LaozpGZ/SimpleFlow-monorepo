@@ -3,8 +3,8 @@ import { CardProps, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakesw
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useMemo } from 'react'
 import { formatAmount } from 'utils/formatInfoNumbers'
-import { useBurnStats } from 'views/CakeDashboard/hooks/useBurnStats'
-import { getBurnInfoPrecision } from 'views/CakeDashboard/utils'
+import { useBurnStats } from 'views/BurnDashboard/hooks/useBurnStats'
+import { getBurnInfoPrecision } from 'views/BurnDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 
 export const YTDEmissionsCard = (props: CardProps) => {

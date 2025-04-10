@@ -5,7 +5,7 @@ import { getDeflationTimeSeries } from 'utils/stats/deflationTimeSeries'
 import { getMintTimeSeries } from 'utils/stats/mintTimeSeries'
 import { getTotalSupplyMintBurn } from 'utils/stats/totalSupplyMintBurn'
 import { getTotalSupplyTimeSeries } from 'utils/stats/totalSupplyTimeSeries'
-import { BurnStats } from 'views/CakeDashboard/types'
+import { BurnStats } from 'views/BurnDashboard/types'
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method !== 'GET') {
