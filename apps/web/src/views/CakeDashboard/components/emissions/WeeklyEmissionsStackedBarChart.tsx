@@ -95,14 +95,14 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <FlexGap justifyContent="space-between" alignItems="center">
+      <FlexGap justifyContent="space-between" alignItems="center" gap="8px" flexWrap="wrap">
         <FlexGap gap="6px" alignItems="center">
           <StatsCardHeader>{t('Weekly Emissions Allocation')}</StatsCardHeader>
-          <QuestionHelperV2 text={t('Weekly breakdown of CAKE emissions allocation by product')}>
+          <QuestionHelperV2 text={t('Weekly breakdown of CAKE emissions allocation by product')} placement="top">
             <InfoIcon color="textSubtle" />
           </QuestionHelperV2>
         </FlexGap>
-        <FlexGap gap="6px" alignItems="center">
+        <FlexGap gap="6px" alignItems="center" flexWrap="wrap">
           <TabMenu tabs={['CAKE', 'USD']} defaultTab={currencyTab} onTabChange={setCurrencyTab} />
           <TabMenu tabs={['3m', '6m', '1y', 'All']} defaultTab={timeTab} onTabChange={setTimeTab} />
         </FlexGap>

@@ -136,14 +136,14 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
 
   return (
     <StatsCard {...props}>
-      <FlexGap mb="16px" justifyContent="space-between" alignItems="center">
+      <FlexGap mb="16px" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap="8px">
         <FlexGap gap="6px" alignItems="center">
           <StatsCardHeader>{t('Weekly Burn')}</StatsCardHeader>
-          <QuestionHelperV2 text={t('Weekly breakdown of CAKE burn by product')}>
+          <QuestionHelperV2 text={t('Weekly breakdown of CAKE burn by product')} placement="top">
             <InfoIcon color="textSubtle" />
           </QuestionHelperV2>
         </FlexGap>
-        <FlexGap gap="8px">
+        <FlexGap gap="8px" flexWrap="wrap">
           <TabMenu tabs={['CAKE', 'USD']} defaultTab="CAKE" onTabChange={handleCurrencyChange} />
           <TabMenu tabs={['3m', '6m', '1y', 'All']} defaultTab="3m" onTabChange={handleTabChange} />
         </FlexGap>
