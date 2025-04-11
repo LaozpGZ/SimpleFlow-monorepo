@@ -1,5 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Box, Button, FlexGap, Grid, LogoRoundIcon, Skeleton, Text } from '@pancakeswap/uikit'
+import {
+  AutoColumn,
+  Box,
+  Button,
+  FlexGap,
+  Grid,
+  LogoRoundIcon,
+  Skeleton,
+  Text,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { LightGreyCard } from 'components/Card'
 import styled from 'styled-components'
@@ -31,6 +41,7 @@ const SkeletonCard = styled(Box)`
 export const BurnDashboard = () => {
   const { t } = useTranslation()
 
+  const { isMobile } = useMatchBreakpoints()
   const { data, isLoading, error } = useBurnStats()
 
   const lastUpdatedAt = new Date(data?.timestamp || 0).toLocaleString('en-US', {
@@ -43,8 +54,8 @@ export const BurnDashboard = () => {
     <div className="flex flex-col items-center justify-center h-screen">
       <FlexGap mt="24px" gap="16px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
         <FlexGap alignItems="center" gap="8px" flexWrap="wrap">
-          <LogoRoundIcon width="60px" height="60px" />
-          <Text fontSize="56px" color="secondary" bold>
+          <LogoRoundIcon width={isMobile ? '40px' : '60px'} height={isMobile ? '40px' : '60px'} />
+          <Text fontSize={['32px', '32px', '56px']} color="secondary" bold>
             {t('Burn Dashboard')}
           </Text>
         </FlexGap>
