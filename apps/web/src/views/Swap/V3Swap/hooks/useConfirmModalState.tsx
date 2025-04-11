@@ -702,42 +702,34 @@ export const useConfirmModalState = (
   )
 
   const callToAction = useCallback(async () => {
-    try {
-      const steps = await createSteps()
+    const steps = await createSteps()
 
-      setConfirmSteps(steps)
-      const stepActions = steps.map((step) => actions[step])
-      const nextStep = steps[1] ?? undefined
+    setConfirmSteps(steps)
+    const stepActions = steps.map((step) => actions[step])
+    const nextStep = steps[1] ?? undefined
 
-      if (!(await swapPreflightCheck())) {
-        return
-      }
-
-      performStep({
-        nextStep,
-        stepActions,
-        state: steps[0],
-      })
-    } catch (error) {
-      console.error('Error creating confirmation steps:', error)
+    if (!(await swapPreflightCheck())) {
+      return
     }
+
+    performStep({
+      nextStep,
+      stepActions,
+      state: steps[0],
+    })
   }, [actions, createSteps, performStep, swapPreflightCheck])
 
   // auto perform the next step
   useEffect(() => {
-    const processNextStep = async () => {
-      if (
-        preConfirmState !== confirmState &&
-        preConfirmState !== ConfirmModalState.REVIEWING &&
-        confirmActions?.some((step) => step.step === confirmState)
-      ) {
-        const nextStep = confirmActions.findIndex((step) => step.step === confirmState)
-        const nextStepState = confirmActions[nextStep + 1]?.step ?? ConfirmModalState.PENDING_CONFIRMATION
-        await performStep({ nextStep: nextStepState, stepActions: confirmActions, state: confirmState })
-      }
+    if (
+      preConfirmState !== confirmState &&
+      preConfirmState !== ConfirmModalState.REVIEWING &&
+      confirmActions?.some((step) => step.step === confirmState)
+    ) {
+      const nextStep = confirmActions.findIndex((step) => step.step === confirmState)
+      const nextStepState = confirmActions[nextStep + 1]?.step ?? ConfirmModalState.PENDING_CONFIRMATION
+      performStep({ nextStep: nextStepState, stepActions: confirmActions, state: confirmState })
     }
-
-    processNextStep()
   }, [confirmActions, confirmState, performStep, preConfirmState])
 
   return {
