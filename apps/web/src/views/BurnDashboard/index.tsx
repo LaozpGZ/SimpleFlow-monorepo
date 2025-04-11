@@ -34,7 +34,7 @@ const StyledGradientCard = styled(LightGreyCard)`
 
 const SkeletonCard = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundAlt};
-  border-radius: ${({ theme }) => theme.radii.small};
+  border-radius: ${({ theme }) => theme.radii.card};
   height: 100%;
 `
 
@@ -60,11 +60,13 @@ export const BurnDashboard = () => {
           </Text>
         </FlexGap>
         <FlexGap alignItems="center" gap="8px" flexWrap="wrap">
-          {data && data?.timestamp && (
+          {isLoading ? (
+            <Skeleton width="240px" height="48px" borderRadius="default" />
+          ) : data && data?.timestamp ? (
             <StyledGradientCard>
               <Text bold>{t(`Last updated at: ${lastUpdatedAt}`)}</Text>
             </StyledGradientCard>
-          )}
+          ) : null}
           <NextLinkFromReactRouter
             to="https://docs.pancakeswap.finance/governance-and-tokenomics/cake-tokenomics"
             target="_blank"
@@ -88,40 +90,40 @@ export const BurnDashboard = () => {
             style={{ gap: '24px' }}
           >
             <SkeletonCard>
-              <Skeleton width="100%" height="100%" />
+              <Skeleton width="100%" height="100%" minHeight="400px" borderRadius="card" />
             </SkeletonCard>
 
             <AutoColumn gap="24px">
               <SkeletonCard>
-                <Skeleton width="100%" height="150px" />
+                <Skeleton width="100%" height="200px" borderRadius="card" />
               </SkeletonCard>
               <SkeletonCard>
-                <Skeleton width="100%" height="150px" />
+                <Skeleton width="100%" height="200px" borderRadius="card" />
               </SkeletonCard>
             </AutoColumn>
             <AutoColumn gap="24px">
               <SkeletonCard>
-                <Skeleton width="100%" height="150px" />
+                <Skeleton width="100%" height="200px" borderRadius="card" />
               </SkeletonCard>
               <SkeletonCard>
-                <Skeleton width="100%" height="150px" />
+                <Skeleton width="100%" height="200px" borderRadius="card" />
               </SkeletonCard>
             </AutoColumn>
           </Grid>
 
           <SkeletonCard mt="24px">
-            <Skeleton width="100%" height="300px" />
+            <Skeleton width="100%" height="300px" borderRadius="card" />
           </SkeletonCard>
 
           <SkeletonCard mt="24px">
-            <Skeleton width="100%" height="300px" />
+            <Skeleton width="100%" height="300px" borderRadius="card" />
           </SkeletonCard>
 
           <Text mt="40px" fontSize="24px" bold>
             {t('Real-Time Burn History')}
           </Text>
           <SkeletonCard mt="24px">
-            <Skeleton width="100%" height="200px" />
+            <Skeleton width="100%" height="200px" borderRadius="card" />
           </SkeletonCard>
 
           <Text mt="40px" fontSize="24px" bold>
@@ -129,15 +131,15 @@ export const BurnDashboard = () => {
           </Text>
           <Grid mt="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr']} style={{ gap: '24px' }}>
             <SkeletonCard>
-              <Skeleton width="100%" height="150px" />
+              <Skeleton width="100%" height="150px" borderRadius="card" />
             </SkeletonCard>
             <SkeletonCard>
-              <Skeleton width="100%" height="150px" />
+              <Skeleton width="100%" height="150px" borderRadius="card" />
             </SkeletonCard>
           </Grid>
 
           <SkeletonCard mt="24px">
-            <Skeleton width="100%" height="300px" />
+            <Skeleton width="100%" height="300px" borderRadius="card" />
           </SkeletonCard>
         </Box>
       ) : (
