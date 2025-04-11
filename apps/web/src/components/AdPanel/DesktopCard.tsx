@@ -30,4 +30,5 @@ const FloatingContainer = styled(Box)`
   position: absolute;
   right: 30px;
   bottom: 30px;
+  z-index: 10000;
 `
