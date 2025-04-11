@@ -9,5 +9,5 @@ export const DUNE_ENDPOINTS = {
   // Burn
   DEFLATION_TIME_SERIES: 'https://api.dune.com/api/v1/query/4906279/results?limit=1000',
   BURN_TIME_SERIES: 'https://api.dune.com/api/v1/query/4944938/results?limit=1000',
-  BURN_HISTORY_TABLE: 'https://api.dune.com/api/v1/query/4902984/results?limit=1000',
+  BURN_HISTORY_TABLE: 'https://api.dune.com/api/v1/query/4961182/results?limit=1000',
 }

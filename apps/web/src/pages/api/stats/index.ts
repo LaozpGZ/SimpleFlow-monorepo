@@ -48,11 +48,12 @@ const handler: NextApiHandler = async (req, res) => {
     }
 
     // Cache response for a day
-    // res.setHeader('Cache-Control', 's-maxage=86400')
+    res.setHeader('Cache-Control', 's-maxage=86400, stale-while-revalidate')
 
     return res.status(200).json(result)
   } catch (error) {
-    return res.status(500).json({ error: 'Internal Server Error' })
+    console.error(error)
+    return res.status(500).json({ error: `An error occurred while fetching burn statistics ${error}` })
   }
 }
 
