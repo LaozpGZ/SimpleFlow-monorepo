@@ -1,3 +1,4 @@
+import { Token } from '@pancakeswap/sdk'
 import { useReadContracts } from '@pancakeswap/wagmi'
 import { useQueryClient } from '@tanstack/react-query'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -227,6 +228,7 @@ export type MultipleSameDataCallParameters<
   TAbiStateMutability extends AbiStateMutability = AbiStateMutability,
 > = {
   addresses: (Address | undefined)[]
+  tokens?: (Token | undefined)[]
   abi: TAbi
   functionName?: string | undefined
   // FIXME: wagmiv2
