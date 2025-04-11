@@ -30,7 +30,10 @@ const Providers: React.FC<
     dehydratedState: any
   }>
 > = ({ children, store, dehydratedState }) => {
-  const wagmiConfig = useMemo(() => (isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()), [])
+  const wagmiConfig = useMemo(
+    () => (typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()),
+    [],
+  )
   return (
     <WagmiProvider reconnectOnMount config={wagmiConfig}>
       <W3WConfigProvider value={isInBinance()}>
