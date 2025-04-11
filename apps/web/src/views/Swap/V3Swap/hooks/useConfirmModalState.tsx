@@ -32,10 +32,13 @@ import {
   TransactionReceiptNotFoundError,
   erc20Abi,
 } from 'viem'
-import { isClassicOrder, isXOrder } from 'views/Swap/utils'
+import { isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
 import { waitForXOrderReceipt } from 'views/Swap/x/api'
 import { useSendXOrder } from 'views/Swap/x/useSendXOrder'
 
+import { getBridgeCalldata, postBridgeCheckApproval } from 'views/Swap/Bridge/api'
+import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
+import { useSendTransaction } from 'wagmi'
 import { computeTradePriceBreakdown } from '../utils/exchange'
 import { userRejectedError } from './useSendSwapTransaction'
 import { useSwapCallback } from './useSwapCallback'
@@ -74,8 +77,9 @@ const useCreateConfirmSteps = (
   const nativeCurrency = useNativeCurrency(order?.trade?.inputAmount.currency.chainId)
   const { account } = useAccountActiveChain()
   const balance = useCurrencyBalance(account ?? undefined, nativeCurrency.wrapped)
+  const { checkApproval } = useBridgeCheckApproval()
 
-  return useCallback(() => {
+  return useCallback(async () => {
     const steps: ConfirmModalState[] = []
     if (
       isXOrder(order) &&
@@ -88,15 +92,23 @@ const useCreateConfirmSteps = (
     if (requireRevoke) {
       steps.push(ConfirmModalState.RESETTING_APPROVAL)
     }
-    if (requireApprove) {
+
+    // Handle bridge order approval check
+    if (isBridgeOrder(order) && order.trade.inputAmount) {
+      const approvalCheck = await checkApproval(order.trade.inputAmount)
+      if (approvalCheck?.approval) {
+        steps.push(ConfirmModalState.APPROVING_TOKEN)
+      }
+    } else if (requireApprove) {
       steps.push(ConfirmModalState.APPROVING_TOKEN)
     }
+
     if (isClassicOrder(order) && requirePermit) {
       steps.push(ConfirmModalState.PERMITTING)
     }
     steps.push(ConfirmModalState.PENDING_CONFIRMATION)
     return steps
-  }, [requireRevoke, requireApprove, requirePermit, order, balance, amountToApprove])
+  }, [requireRevoke, requireApprove, requirePermit, order, balance, amountToApprove, checkApproval])
 }
 
 // define the actions of each step
@@ -134,6 +146,8 @@ const useConfirmActions = (
   const wrappedBalance = useCurrencyBalance(account ?? undefined, nativeCurrency.wrapped)
 
   const { mutateAsync: sendXOrder } = useSendXOrder()
+
+  const { sendTransactionAsync } = useSendTransaction()
 
   const [confirmState, setConfirmState] = useState<ConfirmModalState>(ConfirmModalState.REVIEWING)
   const [txHash, setTxHash] = useState<Hex | undefined>(undefined)
@@ -368,6 +382,115 @@ const useConfirmActions = (
     t,
   ])
 
+  const approvalBridgeStep = useMemo(() => {
+    return {
+      step: ConfirmModalState.APPROVING_TOKEN,
+      action: async (nextStep?: ConfirmModalState) => {
+        // TODO: show error message
+        if (!order) {
+          return
+        }
+
+        setTxHash(undefined)
+        setConfirmState(ConfirmModalState.APPROVING_TOKEN)
+
+        try {
+          const approvalResponse = await postBridgeCheckApproval({
+            currencyAmountIn: order.trade.inputAmount,
+            recipient: account ?? '0x',
+          })
+
+          if (approvalResponse?.approval) {
+            const { to, data } = approvalResponse.approval
+            const result = await sendTransactionAsync({
+              to,
+              data,
+            })
+
+            if (result) {
+              const hash = await safeTxHashTransformer(result)
+              setTxHash(hash)
+              await retryWaitForTransaction({ hash })
+            }
+
+            setConfirmState(nextStep ?? ConfirmModalState.PENDING_CONFIRMATION)
+          } else {
+            // If no approval needed, move to next step
+            setConfirmState(nextStep ?? ConfirmModalState.PENDING_CONFIRMATION)
+          }
+        } catch (error) {
+          if (userRejectedError(error)) {
+            showError(t('Transaction rejected'))
+          } else {
+            showError(typeof error === 'string' ? error : (error as any)?.message)
+          }
+        }
+      },
+      showIndicator: true,
+    }
+  }, [account, order, retryWaitForTransaction, safeTxHashTransformer, sendTransactionAsync, showError, t])
+
+  const swapBridgeStep = useMemo(() => {
+    return {
+      step: ConfirmModalState.PENDING_CONFIRMATION,
+      action: async () => {
+        // TODO: show error message
+        if (!order) {
+          return
+        }
+
+        setTxHash(undefined)
+        setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
+
+        try {
+          const bridgeCalldataResponse = await getBridgeCalldata({
+            currencyAmountIn: order.trade.inputAmount,
+            currencyAmountOut: order.trade.outputAmount,
+            recipient: account ?? '0x',
+          })
+
+          if (bridgeCalldataResponse?.transactionData?.calldata) {
+            const result = await sendTransactionAsync({
+              to: bridgeCalldataResponse.transactionData.router,
+              data: bridgeCalldataResponse.transactionData.calldata,
+            })
+
+            if (result) {
+              const hash = await safeTxHashTransformer(result)
+              setTxHash(hash)
+              logGTMSwapTxSentEvent()
+
+              await retryWaitForTransaction({
+                hash,
+                confirmations: order.trade.inputAmount.currency.chainId
+                  ? BLOCK_CONFIRMATION[order.trade.inputAmount.currency.chainId]
+                  : undefined,
+              })
+
+              setConfirmState(ConfirmModalState.COMPLETED)
+              toastSuccess(
+                t('Success!'),
+                <ToastDescriptionWithTx txHash={hash} txChainId={order.trade.inputAmount.currency.chainId}>
+                  {t('Bridge transaction submitted')}
+                </ToastDescriptionWithTx>,
+              )
+            }
+          } else {
+            showError(t('Failed to generate bridge transaction'))
+          }
+        } catch (error) {
+          console.error('bridge transaction error', error)
+          if (userRejectedError(error)) {
+            showError(t('Transaction rejected'))
+          } else {
+            showError(typeof error === 'string' ? error : (error as any)?.message)
+          }
+        }
+      },
+      showIndicator: true,
+    }
+  }, [account, order, retryWaitForTransaction, safeTxHashTransformer, sendTransactionAsync, showError, t, toastSuccess])
+
   const swapStep = useMemo(() => {
     return {
       step: ConfirmModalState.PENDING_CONFIRMATION,
@@ -501,10 +624,14 @@ const useConfirmActions = (
       [ConfirmModalState.WRAPPING]: wrapStep,
       [ConfirmModalState.RESETTING_APPROVAL]: revokeStep,
       [ConfirmModalState.PERMITTING]: permitStep,
-      [ConfirmModalState.APPROVING_TOKEN]: approveStep,
-      [ConfirmModalState.PENDING_CONFIRMATION]: isClassicOrder(order) ? swapStep : xSwapStep,
+      [ConfirmModalState.APPROVING_TOKEN]: isBridgeOrder(order) ? approvalBridgeStep : approveStep,
+      [ConfirmModalState.PENDING_CONFIRMATION]: isBridgeOrder(order)
+        ? swapBridgeStep
+        : isClassicOrder(order)
+        ? swapStep
+        : xSwapStep,
     } as { [k in ConfirmModalState]: ConfirmAction }
-  }, [revokeStep, permitStep, approveStep, order, swapStep, xSwapStep, wrapStep])
+  }, [revokeStep, permitStep, approveStep, order, swapStep, xSwapStep, wrapStep, approvalBridgeStep, swapBridgeStep])
 
   return {
     txHash,
@@ -575,7 +702,8 @@ export const useConfirmModalState = (
   )
 
   const callToAction = useCallback(async () => {
-    const steps = createSteps()
+    const steps = await createSteps()
+
     setConfirmSteps(steps)
     const stepActions = steps.map((step) => actions[step])
     const nextStep = steps[1] ?? undefined
