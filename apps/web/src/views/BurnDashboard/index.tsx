@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Box, Button, FlexGap, Grid, LogoRoundIcon, Spinner, Text } from '@pancakeswap/uikit'
+import { AutoColumn, Box, Button, FlexGap, Grid, LogoRoundIcon, Skeleton, Text } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { LightGreyCard } from 'components/Card'
 import styled from 'styled-components'
@@ -22,10 +22,16 @@ const StyledGradientCard = styled(LightGreyCard)`
   width: fit-content;
 `
 
+const SkeletonCard = styled(Box)`
+  background: ${({ theme }) => theme.colors.backgroundAlt};
+  border-radius: ${({ theme }) => theme.radii.small};
+  height: 100%;
+`
+
 export const BurnDashboard = () => {
   const { t } = useTranslation()
 
-  const { data, isLoading } = useBurnStats()
+  const { data, isLoading, error } = useBurnStats()
 
   const lastUpdatedAt = new Date(data?.timestamp || 0).toLocaleString('en-US', {
     month: 'short',
@@ -58,10 +64,71 @@ export const BurnDashboard = () => {
           </NextLinkFromReactRouter>
         </FlexGap>
       </FlexGap>
+      {error && (
+        <LightGreyCard mt="16px" padding="16px">
+          <Text>{t('An error occurred while fetching the data. Please try again later.')}</Text>
+        </LightGreyCard>
+      )}
       {isLoading ? (
-        <FlexGap justifyContent="center" alignItems="center" height="100%" py="64px">
-          <Spinner size={140} />
-        </FlexGap>
+        <Box>
+          <Grid
+            mt="24px"
+            gridTemplateColumns={['1fr', '1fr', '1fr', '1fr', '1fr', '4fr 3fr 2fr']}
+            style={{ gap: '24px' }}
+          >
+            <SkeletonCard>
+              <Skeleton width="100%" height="100%" />
+            </SkeletonCard>
+
+            <AutoColumn gap="24px">
+              <SkeletonCard>
+                <Skeleton width="100%" height="150px" />
+              </SkeletonCard>
+              <SkeletonCard>
+                <Skeleton width="100%" height="150px" />
+              </SkeletonCard>
+            </AutoColumn>
+            <AutoColumn gap="24px">
+              <SkeletonCard>
+                <Skeleton width="100%" height="150px" />
+              </SkeletonCard>
+              <SkeletonCard>
+                <Skeleton width="100%" height="150px" />
+              </SkeletonCard>
+            </AutoColumn>
+          </Grid>
+
+          <SkeletonCard mt="24px">
+            <Skeleton width="100%" height="300px" />
+          </SkeletonCard>
+
+          <SkeletonCard mt="24px">
+            <Skeleton width="100%" height="300px" />
+          </SkeletonCard>
+
+          <Text mt="40px" fontSize="24px" bold>
+            {t('Real-Time Burn History')}
+          </Text>
+          <SkeletonCard mt="24px">
+            <Skeleton width="100%" height="200px" />
+          </SkeletonCard>
+
+          <Text mt="40px" fontSize="24px" bold>
+            {t('Emissions')}
+          </Text>
+          <Grid mt="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr']} style={{ gap: '24px' }}>
+            <SkeletonCard>
+              <Skeleton width="100%" height="150px" />
+            </SkeletonCard>
+            <SkeletonCard>
+              <Skeleton width="100%" height="150px" />
+            </SkeletonCard>
+          </Grid>
+
+          <SkeletonCard mt="24px">
+            <Skeleton width="100%" height="300px" />
+          </SkeletonCard>
+        </Box>
       ) : (
         <Box>
           <Grid
