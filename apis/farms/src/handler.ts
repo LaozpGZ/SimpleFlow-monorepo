@@ -9,7 +9,7 @@ import { FarmKV, FarmResult } from './kv'
 import { bscClient, bscTestnetClient } from './provider'
 
 // copy from src/config, should merge them later
-const BSC_BLOCK_TIME = 3
+const BSC_BLOCK_TIME = 1.5
 const BLOCKS_PER_YEAR = (60 / BSC_BLOCK_TIME) * 60 * 24 * 365 // 10512000
 
 const FIXED_ZERO = new BN(0)

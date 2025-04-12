@@ -1,6 +1,7 @@
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
+import { AVERAGE_CHAIN_BLOCK_TIMES, ChainId } from '@pancakeswap/chains'
 
-export const BSC_BLOCK_TIME = 3
+export const BSC_BLOCK_TIME = AVERAGE_CHAIN_BLOCK_TIMES[ChainId.BSC]
 
 // CAKE_PER_BLOCK details
 // 40 CAKE is minted per block
