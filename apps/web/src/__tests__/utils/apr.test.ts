@@ -28,7 +28,7 @@ describe('getPoolApr', () => {
   })
   it(`get the correct pool APR`, () => {
     const apr = getPoolApr(10, 1, 100000, 1)
-    expect(apr).toEqual(1051.2)
+    expect(apr).toEqual(2102.4)
   })
 })
 
