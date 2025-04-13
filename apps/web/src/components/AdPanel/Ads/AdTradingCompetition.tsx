@@ -15,6 +15,7 @@ const tradingCompetitionConfig: {
     learnMoreUrl: string
     reward: string
     unit: string
+    endTimestamp: number
   }
 } = {}
 
@@ -43,14 +44,17 @@ export const AdTradingCompetition = (props: AdPlayerProps & { token: string }) =
 }
 
 export const useTradingCompetitionAds = () => {
-  return useMemo(
-    () =>
-      Object.keys(tradingCompetitionConfig)
-        .reverse()
-        .map((token) => ({
-          id: `ad-${token}-tc`,
-          component: <AdTradingCompetition key={token} token={token} />,
-        })),
-    [],
-  )
+  return useMemo(() => {
+    const currentTime = Math.floor(Date.now() / 1000)
+    return Object.keys(tradingCompetitionConfig)
+      .filter((token) => {
+        const { endTimestamp } = tradingCompetitionConfig[token]
+        return currentTime <= endTimestamp
+      })
+      .reverse()
+      .map((token) => ({
+        id: `ad-${token}-tc`,
+        component: <AdTradingCompetition key={token} token={token} />,
+      }))
+  }, [])
 }
