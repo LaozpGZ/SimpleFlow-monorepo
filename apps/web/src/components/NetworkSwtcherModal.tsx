@@ -57,7 +57,9 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
   return (
     <>
       <Box px="16px" py="8px">
-        <Text color="textSubtle">{t('Select a Network')}</Text>
+        <Text fontSize="18px" bold>
+          {t('Select a Network')}
+        </Text>
       </Box>
       <UserMenuDivider />
       {evmChains
@@ -196,7 +198,7 @@ export const NetworkSwitcherModal = () => {
   }
 
   return (
-    <ModalV2 isOpen={isOpen} onDismiss={handleDismiss}>
+    <ModalV2 isOpen={isOpen} onDismiss={handleDismiss} closeOnOverlayClick>
       <ModalWrapper minWidth="320px" style={{ overflow: 'visible' }}>
         {isNotMatched ? (
           <WrongNetworkSelect switchNetwork={switchNetworkAsync} chainId={chainId} onDismiss={handleDismiss} />
