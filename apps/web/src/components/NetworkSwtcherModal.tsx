@@ -129,7 +129,7 @@ const WrongNetworkSelect = ({ switchNetwork, chainId, onDismiss }: WrongNetworkS
   const { t } = useTranslation()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t(
-      "The URL you are accessing (Chain id: %chainId%) belongs to %network%; mismatching your wallet's network. Please switch the network to continue.",
+      'The URL you are accessing (Chain id: %chainId%) belongs to %network%; mismatching your wallet’s network. Please switch the network to continue.',
       {
         chainId,
         network: evmChains.find((c) => c.id === chainId)?.name ?? 'Unknown network',
