@@ -25,6 +25,7 @@ import useTheme from 'hooks/useTheme'
 import { atom, useAtom } from 'jotai'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
+import { useCallback } from 'react'
 import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
 import { chainNameConverter } from 'utils/chainNameConverter'
 import { chains as evmChains } from 'utils/wagmi'
@@ -199,9 +200,9 @@ export const NetworkSwitcherModal = () => {
   const router = useRouter()
   const [isOpen, setIsOpen] = useAtom(networkSwitcherModalAtom)
 
-  const handleDismiss = () => {
+  const handleDismiss = useCallback(() => {
     setIsOpen(false)
-  }
+  }, [])
 
   if (!chainId || router.pathname.includes('/info')) {
     return null
