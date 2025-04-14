@@ -82,7 +82,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
           .map((chain) => (
             <UserMenuItem
               key={chain.id}
-              style={{ justifyContent: 'flex-start', cursor: 'pointer' }}
+              style={{ justifyContent: 'flex-start', cursor: 'pointer', padding: '0px 24px' }}
               onClick={() => {
                 if (chain.id !== chainId || isWrongNetwork) {
                   switchNetwork(chain.id)
@@ -209,7 +209,7 @@ export const NetworkSwitcherModal = () => {
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={handleDismiss} closeOnOverlayClick>
-      <ModalWrapper minWidth="320px" maxHeight="90vh" style={{ overflowY: 'auto' }}>
+      <ModalWrapper minWidth="360px" maxHeight="90vh" style={{ overflowY: 'auto' }}>
         {isNotMatched ? (
           <WrongNetworkSelect switchNetwork={switchNetworkAsync} chainId={chainId} onDismiss={handleDismiss} />
         ) : (
