@@ -7,10 +7,10 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { chainNameConverter } from 'utils/chainNameConverter'
 import { chains as evmChains } from 'utils/wagmi'
-import { NetworkSwitcherModal, networkSwitcherModalAtom } from './NetworkSwtcherModal'
+import { NetworkSwitcherModal, networkSwitcherModalAtom } from './NetworkSwitcherModal'
 
 const SHORT_SYMBOL = {
   [ChainId.ETHEREUM]: 'ETH',
@@ -54,14 +54,14 @@ export const NetworkSwitcher = () => {
 
   const cannotChangeNetwork = !canSwitch
 
-  if (!chainId || router.pathname.includes('/info')) {
-    return null
-  }
-
-  const handleOpenNetworkModal = () => {
+  const handleOpenNetworkModal = useCallback(() => {
     if (!cannotChangeNetwork) {
       setIsNetworkSwitcherOpen(true)
     }
+  }, [cannotChangeNetwork])
+
+  if (!chainId || router.pathname.includes('/info')) {
+    return null
   }
 
   return (
