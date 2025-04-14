@@ -72,7 +72,7 @@ export const NetworkSwitcher = () => {
         placement="bottom"
         variant={isLoading ? 'pending' : isWrongNetwork ? 'danger' : 'default'}
         avatarSrc={`${ASSET_CDN}/web/chains/${chainId}.png`}
-        disabled={cannotChangeNetwork}
+        disabled={cannotChangeNetwork || true} // disable empty popup
         text={
           isLoading ? (
             t('Requesting')
@@ -88,7 +88,9 @@ export const NetworkSwitcher = () => {
           )
         }
         onClick={handleOpenNetworkModal}
-      />
+      >
+        {() => null}
+      </UserMenu>
       <NetworkSwitcherModal />
     </Box>
   )
