@@ -13,6 +13,7 @@ import {
   ModalV2,
   ModalWrapper,
   Text,
+  useMatchBreakpoints,
   UserMenuDivider,
   UserMenuItem,
   useTooltip,
@@ -58,9 +59,10 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
   const { t } = useTranslation()
   const [showTestnet] = useUserShowTestnet()
   const { theme } = useTheme()
+  const { isMobile } = useMatchBreakpoints()
   return (
-    <Box borderRadius="32px" overflow="hidden">
-      <ModalHeader background={theme.colors.gradientCardHeader} borderRadius="32px 32px 0 0">
+    <Box borderRadius={isMobile ? '32px' : '32px 32px 0 0'} overflow="hidden">
+      <ModalHeader background={theme.colors.gradientCardHeader}>
         <ModalTitle>
           <Text bold fontSize="20px">
             {t('Select a Network')}
@@ -68,49 +70,51 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
         </ModalTitle>
         <ModalCloseButton onDismiss={onDismiss} />
       </ModalHeader>
-      {evmChains
-        .filter((chain) => {
-          if (chain.id === chainId) return true
-          if ('testnet' in chain && chain.testnet && chain.id !== ChainId.MONAD_TESTNET) {
-            return showTestnet
-          }
-          return true
-        })
-        .map((chain) => (
-          <UserMenuItem
-            key={chain.id}
-            style={{ justifyContent: 'flex-start', cursor: 'pointer' }}
-            onClick={() => {
-              if (chain.id !== chainId || isWrongNetwork) {
-                switchNetwork(chain.id)
-              }
-              onDismiss()
-            }}
-          >
-            <ChainLogo chainId={chain.id} />
-            <Text
-              color={chain.id === chainId && !isWrongNetwork ? 'secondary' : 'text'}
-              bold={chain.id === chainId && !isWrongNetwork}
-              pl="12px"
+      <Box maxHeight="70vh" overflow="auto" padding="16px 0">
+        {evmChains
+          .filter((chain) => {
+            if (chain.id === chainId) return true
+            if ('testnet' in chain && chain.testnet && chain.id !== ChainId.MONAD_TESTNET) {
+              return showTestnet
+            }
+            return true
+          })
+          .map((chain) => (
+            <UserMenuItem
+              key={chain.id}
+              style={{ justifyContent: 'flex-start', cursor: 'pointer' }}
+              onClick={() => {
+                if (chain.id !== chainId || isWrongNetwork) {
+                  switchNetwork(chain.id)
+                }
+                onDismiss()
+              }}
             >
-              {chainNameConverter(chain.name)}
+              <ChainLogo chainId={chain.id} />
+              <Text
+                color={chain.id === chainId && !isWrongNetwork ? 'secondary' : 'text'}
+                bold={chain.id === chainId && !isWrongNetwork}
+                pl="12px"
+              >
+                {chainNameConverter(chain.name)}
+              </Text>
+            </UserMenuItem>
+          ))}
+        {NON_EVM_CHAINS.map((chain) => (
+          <UserMenuItem
+            key={`${chain.name}-${chain.id}`}
+            style={{ justifyContent: 'flex-start' }}
+            as="a"
+            target="_blank"
+            href={chain.link}
+          >
+            <Image src={chain.image} width={24} height={24} unoptimized alt={`chain-${chain.name}-${chain.id}`} />{' '}
+            <Text color="text" pl="12px">
+              {chain.name}
             </Text>
           </UserMenuItem>
         ))}
-      {NON_EVM_CHAINS.map((chain) => (
-        <UserMenuItem
-          key={`${chain.name}-${chain.id}`}
-          style={{ justifyContent: 'flex-start' }}
-          as="a"
-          target="_blank"
-          href={chain.link}
-        >
-          <Image src={chain.image} width={24} height={24} unoptimized alt={`chain-${chain.name}-${chain.id}`} />{' '}
-          <Text color="text" pl="12px">
-            {chain.name}
-          </Text>
-        </UserMenuItem>
-      ))}
+      </Box>
     </Box>
   )
 }
@@ -205,7 +209,7 @@ export const NetworkSwitcherModal = () => {
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={handleDismiss} closeOnOverlayClick>
-      <ModalWrapper minWidth="320px" style={{ overflow: 'visible' }}>
+      <ModalWrapper minWidth="320px" maxHeight="90vh" style={{ overflowY: 'auto' }}>
         {isNotMatched ? (
           <WrongNetworkSelect switchNetwork={switchNetworkAsync} chainId={chainId} onDismiss={handleDismiss} />
         ) : (
