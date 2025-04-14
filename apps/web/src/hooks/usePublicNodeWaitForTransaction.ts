@@ -3,7 +3,10 @@ import { AVERAGE_CHAIN_BLOCK_TIMES } from '@pancakeswap/chains'
 import { useFetchBlockData } from '@pancakeswap/wagmi'
 import { BSC_BLOCK_TIME } from 'config'
 import { CHAINS } from 'config/chains'
+import { PUBLIC_NODES } from 'config/nodes'
+import { useW3WConfig } from 'contexts/W3WConfigContext'
 import first from 'lodash/first'
+import memoize from 'lodash/memoize'
 import { useCallback } from 'react'
 import { RetryableError, retry } from 'state/multicall/retry'
 import {
@@ -16,14 +19,11 @@ import {
   TransactionReceiptNotFoundError,
   WaitForTransactionReceiptTimeoutError,
   createPublicClient,
-  http,
   custom,
   fallback,
+  http,
 } from 'viem'
 import { usePublicClient } from 'wagmi'
-import { useW3WConfig } from 'contexts/W3WConfigContext'
-import { PUBLIC_NODES } from 'config/nodes'
-import memoize from 'lodash/memoize'
 import { useActiveChainId } from './useActiveChainId'
 
 export const getViemClientsPublicNodes = memoize((w3WConfig = false) => {
@@ -58,8 +58,9 @@ export type PublicNodeWaitForTransactionParams = GetTransactionReceiptParameters
   chainId?: number
 }
 
-export function usePublicNodeWaitForTransaction() {
-  const { chainId } = useActiveChainId()
+export function usePublicNodeWaitForTransaction(chainId_?: number) {
+  const { chainId: activeChainId } = useActiveChainId()
+  const chainId = chainId_ ?? activeChainId
   const provider = usePublicClient({ chainId })
   const w3WConfig = useW3WConfig()
   const refetchBlockData = useFetchBlockData(chainId)
