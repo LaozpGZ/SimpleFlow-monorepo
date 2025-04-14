@@ -88,9 +88,7 @@ export const NetworkSwitcher = () => {
           )
         }
         onClick={handleOpenNetworkModal}
-      >
-        {() => null}
-      </UserMenu>
+      />
       <NetworkSwitcherModal />
     </Box>
   )
