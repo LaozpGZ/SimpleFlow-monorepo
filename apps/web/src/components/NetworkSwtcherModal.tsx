@@ -7,6 +7,9 @@ import {
   Button,
   Flex,
   InfoIcon,
+  ModalCloseButton,
+  ModalHeader,
+  ModalTitle,
   ModalV2,
   ModalWrapper,
   Text,
@@ -17,6 +20,7 @@ import {
 import { useActiveChainId, useLocalNetworkChain } from 'hooks/useActiveChainId'
 import { useHover } from 'hooks/useHover'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import useTheme from 'hooks/useTheme'
 import { atom, useAtom } from 'jotai'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
@@ -53,15 +57,17 @@ interface NetworkSelectProps {
 const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: NetworkSelectProps) => {
   const { t } = useTranslation()
   const [showTestnet] = useUserShowTestnet()
-
+  const { theme } = useTheme()
   return (
-    <>
-      <Box px="16px" py="8px">
-        <Text fontSize="18px" bold>
-          {t('Select a Network')}
-        </Text>
-      </Box>
-      <UserMenuDivider />
+    <Box borderRadius="32px" overflow="hidden">
+      <ModalHeader background={theme.colors.gradientCardHeader} borderRadius="32px 32px 0 0">
+        <ModalTitle>
+          <Text bold fontSize="20px">
+            {t('Select a Network')}
+          </Text>
+        </ModalTitle>
+        <ModalCloseButton onDismiss={onDismiss} />
+      </ModalHeader>
       {evmChains
         .filter((chain) => {
           if (chain.id === chainId) return true
@@ -73,7 +79,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
         .map((chain) => (
           <UserMenuItem
             key={chain.id}
-            style={{ justifyContent: 'flex-start' }}
+            style={{ justifyContent: 'flex-start', cursor: 'pointer' }}
             onClick={() => {
               if (chain.id !== chainId || isWrongNetwork) {
                 switchNetwork(chain.id)
@@ -105,7 +111,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
           </Text>
         </UserMenuItem>
       ))}
-    </>
+    </Box>
   )
 }
 
