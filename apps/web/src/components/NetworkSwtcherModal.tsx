@@ -103,7 +103,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
         {NON_EVM_CHAINS.map((chain) => (
           <UserMenuItem
             key={`${chain.name}-${chain.id}`}
-            style={{ justifyContent: 'flex-start' }}
+            style={{ justifyContent: 'flex-start', cursor: 'pointer', padding: '0px 24px' }}
             as="a"
             target="_blank"
             href={chain.link}
