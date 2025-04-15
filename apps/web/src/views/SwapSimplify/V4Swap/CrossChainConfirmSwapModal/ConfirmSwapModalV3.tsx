@@ -27,6 +27,7 @@ import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { SwapTransactionErrorContent } from 'views/Swap/components/SwapTransactionErrorContent'
 
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
+import { useAtomValue } from 'jotai'
 import { chainNameConverter } from 'utils/chainNameConverter'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { Hash } from 'viem'
@@ -36,9 +37,10 @@ import { useSlippageAdjustedAmounts } from 'views/Swap/V3Swap/hooks'
 import { ConfirmAction } from 'views/Swap/V3Swap/hooks/useConfirmModalState'
 import { AllowedAllowanceState } from 'views/Swap/V3Swap/types'
 import ConfirmSwapModalV3Container from './ConfirmSwapModalV3Container'
-import { OrderCompletedModalContent } from './OrderCompletedModalContent'
-import { OrderSubmittedModalContent } from './OrderSubmittedModalContent'
+import { OrderStatusModalContent } from './OrderStatus/OrderStatusModalContent'
+import { crossChainOrderData } from './state/orderData'
 import { TransactionConfirmSwapContentV3 } from './TransactionConfirmSwapContentV3'
+import { CrossChainOrderStatus } from './types'
 
 export const useApprovalPhaseStepTitles: ({ trade }: { trade: InterfaceOrder['trade'] | undefined }) => {
   [step in AllowedAllowanceState]: string
@@ -91,6 +93,8 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
   // @ts-ignore
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(originalOrder?.trade)
 
+  const crossChainOrder = useAtomValue(crossChainOrderData)
+
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(originalOrder)
   const { recipient } = useSwapState()
   const loadingAnimationVisible = useMemo(() => {
@@ -141,9 +145,16 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       case ConfirmModalState.REVIEWING:
         return hasError ? '' : t('Confirm Swap')
       case ConfirmModalState.ORDER_SUBMITTED:
-        return t('Order Submitted')
-      case ConfirmModalState.ORDER_COMPLETED:
-        return t('Order Completed')
+        switch (crossChainOrder?.status) {
+          case CrossChainOrderStatus.ORDER_SUBMITTED:
+            return t('Order Submitted')
+          case CrossChainOrderStatus.ORDER_SUCCESS:
+            return t('Success')
+          case CrossChainOrderStatus.ORDER_PARTIAL_SUCCESS:
+            return t('Partial Success')
+          default:
+            return ''
+        }
       default:
         return ''
     }
@@ -154,6 +165,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
     confirmModalState,
     currencyBalances?.INPUT?.currency.symbol,
     originalOrder?.trade?.inputAmount?.currency.symbol,
+    crossChainOrder?.status,
   ])
 
   const modalContent = useMemo(() => {
@@ -322,11 +334,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
     }
 
     if (confirmModalState === ConfirmModalState.ORDER_SUBMITTED) {
-      return <OrderSubmittedModalContent />
-    }
-
-    if (confirmModalState === ConfirmModalState.ORDER_COMPLETED) {
-      return <OrderCompletedModalContent />
+      return <OrderStatusModalContent order={order} originalOrder={originalOrder} />
     }
 
     if (confirmModalState === ConfirmModalState.COMPLETED && txHash) {

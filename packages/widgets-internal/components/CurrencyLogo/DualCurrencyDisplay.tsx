@@ -11,6 +11,7 @@ interface DualCurrencyDisplayProps {
   outputTextColor?: string;
   inputChainName?: string;
   outputChainName?: string;
+  overrideIcon?: React.ReactNode;
 }
 export const DualCurrencyDisplay = ({
   inputAmount,
@@ -21,6 +22,7 @@ export const DualCurrencyDisplay = ({
   outputCurrency,
   inputChainName,
   outputChainName,
+  overrideIcon,
 }: DualCurrencyDisplayProps) => {
   return (
     <Row justifyContent="space-around">
@@ -36,9 +38,7 @@ export const DualCurrencyDisplay = ({
           {inputChainName}
         </Text>
       </AutoColumn>
-      <RowFixed my="auto">
-        <ArrowForwardIcon width="24px" ml="4px" color="textSubtle" />
-      </RowFixed>
+      <RowFixed my="auto">{overrideIcon || <ArrowForwardIcon width="24px" ml="4px" color="textSubtle" />}</RowFixed>
       <AutoColumn justify="center">
         <CurrencyLogo currency={outputCurrency} size="40px" showChainLogo />
 

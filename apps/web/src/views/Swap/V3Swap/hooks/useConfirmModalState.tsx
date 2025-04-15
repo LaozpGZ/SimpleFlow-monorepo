@@ -646,30 +646,9 @@ const useConfirmActions = (
             {t('Bridging TOKEN to your address (TARGET_CHAIN)')}
           </ToastDescriptionWithTx>,
         )
-
-        // TODO: Watch for cross-chain order status
-        await new Promise((resolve) => setTimeout(resolve, 2000))
-
-        setConfirmState(ConfirmModalState.ORDER_COMPLETED)
       },
     }
   }, [t, toastInfo, setConfirmState])
-
-  const orderCompletedStep = useMemo(() => {
-    return {
-      step: ConfirmModalState.ORDER_COMPLETED,
-      showIndicator: false,
-      action: async () => {
-        setConfirmState(ConfirmModalState.ORDER_COMPLETED)
-        toastSuccess(
-          t('Success!'),
-          <ToastDescriptionWithTx txHash="" txChainId={56}>
-            {t('XYZ TOKEN have been sent to your wallet on TARGET_CHAIN')}
-          </ToastDescriptionWithTx>,
-        )
-      },
-    }
-  }, [t, toastSuccess])
 
   const actions = useMemo(() => {
     return {
@@ -683,7 +662,6 @@ const useConfirmActions = (
         ? swapStep
         : xSwapStep,
       [ConfirmModalState.ORDER_SUBMITTED]: orderSubmittedStep,
-      [ConfirmModalState.ORDER_COMPLETED]: orderCompletedStep,
     } as { [k in ConfirmModalState]: ConfirmAction }
   }, [
     revokeStep,
@@ -695,7 +673,6 @@ const useConfirmActions = (
     wrapStep,
     crossChainSwapStep,
     orderSubmittedStep,
-    orderCompletedStep,
   ])
 
   return {
