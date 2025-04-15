@@ -333,7 +333,11 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       )
     }
 
-    if (confirmModalState === ConfirmModalState.ORDER_SUBMITTED) {
+    if (
+      confirmModalState === ConfirmModalState.ORDER_SUBMITTED &&
+      isBridgeOrder(order) &&
+      isBridgeOrder(originalOrder)
+    ) {
       return <OrderStatusModalContent order={order} originalOrder={originalOrder} />
     }
 

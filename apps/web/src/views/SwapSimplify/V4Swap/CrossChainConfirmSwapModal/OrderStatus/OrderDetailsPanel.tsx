@@ -15,15 +15,19 @@ import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { LightGreyCard } from 'components/Card'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
+import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useMemo } from 'react'
 import { Field } from 'state/swap/actions'
 import styled from 'styled-components'
-import { computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter } from 'views/Swap/V3Swap/utils/exchange'
+import {
+  computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter,
+  computeTradePriceBreakdown as computeTradePriceBreakdownWithSmartRouter,
+} from 'views/Swap/V3Swap/utils/exchange'
 import { Timeline } from '../components/Timeline'
 import { detailsPanelExpanded, detailsPanelProgressExpanded } from '../state/detailsPanel'
 import { crossChainOrderData } from '../state/orderData'
-import { CrossChainOrderStepStatus, CrossChainOrderStepType } from '../types'
+import { CrossChainOrderStatus, CrossChainOrderStepStatus, CrossChainOrderStepType } from '../types'
 
 const ProgressPill = styled(Box)<{ $color: string }>`
   width: 16px;
@@ -35,7 +39,7 @@ const ProgressPill = styled(Box)<{ $color: string }>`
 interface OrderDetailsPanelProps extends BoxProps {}
 export const OrderDetailsPanel = ({ ...props }: OrderDetailsPanelProps) => {
   const { t } = useTranslation()
-  const { order, originalOrder, steps } = useAtomValue(crossChainOrderData)
+  const { order, originalOrder, steps, status } = useAtomValue(crossChainOrderData)
   const [detailsExpanded, setDetailsExpanded] = useAtom(detailsPanelExpanded)
   const [progressExpanded, setProgressExpanded] = useAtom(detailsPanelProgressExpanded)
 
@@ -46,6 +50,16 @@ export const OrderDetailsPanel = ({ ...props }: OrderDetailsPanelProps) => {
     () => computeSlippageAdjustedAmountsWithSmartRouter(order, allowedSlippage),
     [order, allowedSlippage],
   )
+
+  const { lpFeeAmount } = useMemo(() => computeTradePriceBreakdownWithSmartRouter(order?.trade), [order])
+
+  // Get lp fee value in USD
+  const { data: inputCurrencyPrice } = useCurrencyUsdPrice(order?.trade.inputAmount.currency)
+  const lpFeeUSD = useMemo(() => {
+    return lpFeeAmount && order?.trade.inputAmount.currency && inputCurrencyPrice
+      ? Number(lpFeeAmount.toFixed(18)) * Number(inputCurrencyPrice)
+      : undefined
+  }, [lpFeeAmount, order?.trade.inputAmount.currency, inputCurrencyPrice])
 
   const toggleDetailsExpanded = useCallback(() => {
     setDetailsExpanded(!detailsExpanded)
@@ -137,15 +151,16 @@ export const OrderDetailsPanel = ({ ...props }: OrderDetailsPanelProps) => {
                           return 'notStarted'
                       }
                     }
-                    const status = getStatus()
+
+                    const timelineStatus = getStatus()
 
                     return {
                       id: step.type,
                       title: getText(),
-                      status,
+                      status: timelineStatus,
                       isLast: step.type === steps[steps.length - 1].type,
                       ...(step.failureMessage
-                        ? status === 'failed'
+                        ? timelineStatus === 'failed'
                           ? { errorMessage: step.failureMessage }
                           : { warningMessage: step.failureMessage }
                         : undefined),
@@ -154,12 +169,24 @@ export const OrderDetailsPanel = ({ ...props }: OrderDetailsPanelProps) => {
                 />
               </RowFixed>
             )}
+
+            <RowBetween>
+              <Text color="textSubtle" small>
+                {status === CrossChainOrderStatus.ORDER_PARTIAL_SUCCESS ? t('Partial Fee') : t('Total Fee')}
+              </Text>
+              <Text color="textSubtle" small>
+                ${lpFeeUSD?.toPrecision(2) || '-'}&nbsp;
+              </Text>
+            </RowBetween>
+
             <RowBetween>
               <Text color="textSubtle" small>
                 {t('Minimum received')}
               </Text>
               <Text color="textSubtle" small>
                 {formatAmount(slippageAdjustedAmounts?.[Field.OUTPUT], DISPLAY_PRECISION)}
+                &nbsp;
+                {order?.trade.outputAmount.currency.symbol}
               </Text>
             </RowBetween>
           </AutoColumn>

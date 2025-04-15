@@ -1,15 +1,16 @@
 import { useTranslation } from '@pancakeswap/localization'
+import { BridgeOrder, ClassicOrder } from '@pancakeswap/price-api-sdk'
+import { TradeType } from '@pancakeswap/sdk'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
-import { InterfaceOrder } from 'views/Swap/utils'
 import { crossChainOrderData, crossChainOrderStatus } from '../state/orderData'
 import { CrossChainOrderStatus, CrossChainOrderStepStatus, CrossChainOrderStepType } from '../types'
 import { OrderResultModalContent } from './OrderResultModalContent'
 
 interface OrderStatusModalContentProps {
-  order: InterfaceOrder | null | undefined
-  originalOrder: InterfaceOrder | null | undefined
+  order: ClassicOrder<TradeType> | BridgeOrder<TradeType> | null | undefined
+  originalOrder: ClassicOrder<TradeType> | BridgeOrder<TradeType> | null | undefined
 }
 
 export const OrderStatusModalContent = ({ order, originalOrder }: OrderStatusModalContentProps) => {
@@ -22,7 +23,7 @@ export const OrderStatusModalContent = ({ order, originalOrder }: OrderStatusMod
   useEffect(() => {
     if (order && order !== orderData?.order) {
       setOrderData({
-        status: CrossChainOrderStatus.ORDER_SUBMITTED,
+        status: CrossChainOrderStatus.ORDER_PARTIAL_SUCCESS,
         resultInformation: {
           amount: '100',
           currency: order.trade.outputAmount.currency,

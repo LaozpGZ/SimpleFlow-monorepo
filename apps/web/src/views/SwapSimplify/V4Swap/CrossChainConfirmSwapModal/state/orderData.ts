@@ -1,6 +1,6 @@
-import { Currency } from '@pancakeswap/sdk'
+import { BridgeOrder, ClassicOrder } from '@pancakeswap/price-api-sdk'
+import { Currency, TradeType } from '@pancakeswap/sdk'
 import { atom } from 'jotai'
-import { InterfaceOrder } from 'views/Swap/utils'
 import { CrossChainOrderStatus, CrossChainOrderStepStatus, CrossChainOrderStepType } from '../types'
 
 export const crossChainOrderData = atom<{
@@ -12,8 +12,8 @@ export const crossChainOrderData = atom<{
     chainName: string
   }
 
-  order: InterfaceOrder | null | undefined
-  originalOrder: InterfaceOrder | null | undefined
+  order: ClassicOrder<TradeType> | BridgeOrder<TradeType> | null | undefined | null | undefined
+  originalOrder: ClassicOrder<TradeType> | BridgeOrder<TradeType> | null | undefined | null | undefined
   // TODO: Add txHash, orderId, etc. as needed
   steps?: {
     type: CrossChainOrderStepType
