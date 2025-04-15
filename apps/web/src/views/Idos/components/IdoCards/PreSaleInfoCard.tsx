@@ -59,7 +59,7 @@ export const PreSaleEligibleCard: React.FC<{ projectId: string | undefined }> = 
           <Text>{t('You are eligible to join this sale when TGE goes live!')}</Text>
           <Flex onClick={() => window.open(link)}>
             <Text color="positive60" bold>
-              {t('View Snapshots')}
+              {t('View details')}
             </Text>
             <ChevronRightIcon color="positive60" width="24px" ml="2px" />
           </Flex>
@@ -101,7 +101,7 @@ export const SnapshotNotPassCard: React.FC<{ projectId: string | undefined }> = 
         )}
       </Text>
       <Flex onClick={() => window.open(link)}>
-        <Text color="failure">{t('View Snapshots')}</Text>
+        <Text color="failure">{t('View details')}</Text>
         <ChevronRightIcon color="failure" width="24px" ml="2px" />
       </Flex>
     </ErrorCardWrapper>
