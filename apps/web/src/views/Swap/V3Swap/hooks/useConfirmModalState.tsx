@@ -484,7 +484,10 @@ const useConfirmActions = (
                     inputChainName: getFullChainNameById(order.trade.inputAmount.currency.chainId),
                     outputCurrency: order.trade.outputAmount.currency,
                     outputChainName: getFullChainNameById(order.trade.outputAmount.currency.chainId),
-                    txHash: hash,
+                    tx: {
+                      hash,
+                      chainId: order.trade.inputAmount.currency.chainId,
+                    },
                   },
                 ],
               })
