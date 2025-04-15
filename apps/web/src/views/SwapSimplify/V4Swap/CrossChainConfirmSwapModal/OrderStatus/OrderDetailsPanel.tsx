@@ -39,12 +39,12 @@ const ProgressPill = styled(Box)<{ $color: string }>`
 interface OrderDetailsPanelProps extends BoxProps {}
 export const OrderDetailsPanel = ({ ...props }: OrderDetailsPanelProps) => {
   const { t } = useTranslation()
-  const { order, originalOrder, steps, status } = useAtomValue(crossChainOrderDataAtom)
+  const { order, steps, status } = useAtomValue(crossChainOrderDataAtom)
   const [detailsExpanded, setDetailsExpanded] = useAtom(detailsPanelExpanded)
   const [progressExpanded, setProgressExpanded] = useAtom(detailsPanelProgressExpanded)
 
   // TODO: Remove/Update auto-slippage usage in bridging
-  const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(originalOrder?.trade)
+  const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
 
   const slippageAdjustedAmounts = useMemo(
     () => computeSlippageAdjustedAmountsWithSmartRouter(order, allowedSlippage),
