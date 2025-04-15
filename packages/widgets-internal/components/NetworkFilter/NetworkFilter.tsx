@@ -54,8 +54,7 @@ const ItemContainer = styled.div`
 const StyledButton = styled(Button)`
   position: absolute;
   right: 50px;
-  top: 50%;
-  transform: translateY(-50%);
+
   height: 27px;
   background-color: ${({ theme }) => theme.colors.input};
   color: ${({ theme }) => theme.colors.text};
@@ -67,6 +66,8 @@ const StyledContainer = styled(Container)`
   .p-multiselect-item {
     padding: 8px 16px;
     transition: background-color 0.2s ease;
+    cursor: pointer;
+    position: relative;
     &:hover {
       background-color: ${({ theme }) =>
         theme.isDark ? "#4B3B5F" : "#E8E2EE"}; // secondary20 & wait for v4 to merge to use it
