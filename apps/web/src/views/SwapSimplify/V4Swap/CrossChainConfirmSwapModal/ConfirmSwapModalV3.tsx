@@ -7,10 +7,8 @@ import { Box, BscScanIcon, Flex, InjectedModalProps, Link } from '@pancakeswap/u
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import {
-  ApproveCrossChainModalContent,
   ApproveModalContent,
   ApproveModalContentV3,
-  ConfirmationPendingContent,
   ConfirmModalState,
   SwapPendingModalContent,
   SwapPendingModalContentV3,
@@ -22,13 +20,11 @@ import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { getBlockExploreLink, getBlockExploreName } from 'utils'
-import { chains as evmChains } from 'utils/wagmi'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { SwapTransactionErrorContent } from 'views/Swap/components/SwapTransactionErrorContent'
 
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useAtomValue } from 'jotai'
-import { chainNameConverter } from 'utils/chainNameConverter'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { Hash } from 'viem'
 import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
@@ -189,28 +185,28 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       )
     }
 
-    if (isBridgeOrder(originalOrder)) {
-      if (currencyA && confirmModalState === ConfirmModalState.APPROVING_TOKEN) {
-        return (
-          <ApproveCrossChainModalContent
-            currency={currencyA as Currency}
-            chainName={chainNameConverter(evmChains.find((chain) => chain.id === currencyA.chainId)?.name || '')}
-          />
-        )
-      }
+    // if (isBridgeOrder(originalOrder)) {
+    //   if (currencyA && confirmModalState === ConfirmModalState.APPROVING_TOKEN) {
+    //     return (
+    //       <ApproveCrossChainModalContent
+    //         currency={currencyA as Currency}
+    //         chainName={chainNameConverter(evmChains.find((chain) => chain.id === currencyA.chainId)?.name || '')}
+    //       />
+    //     )
+    //   }
 
-      if (confirmModalState === ConfirmModalState.PENDING_CONFIRMATION) {
-        // TODO: update bridge UI
-        return <ConfirmationPendingContent pendingText="Confirm Bridge" />
-      }
-    }
+    //   if (confirmModalState === ConfirmModalState.PENDING_CONFIRMATION) {
+    //     // TODO: update bridge UI
+    //     return <ConfirmationPendingContent pendingText="Confirm Bridge" />
+    //   }
+    // }
 
     if (
       confirmModalState === ConfirmModalState.APPROVING_TOKEN ||
       confirmModalState === ConfirmModalState.PERMITTING ||
       confirmModalState === ConfirmModalState.RESETTING_APPROVAL
     ) {
-      if (isBridgeOrder(order)) {
+      if (isBridgeOrder(originalOrder)) {
         return (
           <ApproveModalContentV3
             title={stepContents}
