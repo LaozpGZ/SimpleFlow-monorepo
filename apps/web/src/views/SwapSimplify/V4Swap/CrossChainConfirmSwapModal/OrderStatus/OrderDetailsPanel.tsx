@@ -20,6 +20,7 @@ import { useAtom, useAtomValue } from 'jotai'
 import { useCallback, useMemo } from 'react'
 import { Field } from 'state/swap/actions'
 import styled from 'styled-components'
+import { isXOrder } from 'views/Swap/utils'
 import {
   computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter,
   computeTradePriceBreakdown as computeTradePriceBreakdownWithSmartRouter,
@@ -51,7 +52,10 @@ export const OrderDetailsPanel = ({ ...props }: OrderDetailsPanelProps) => {
     [order, allowedSlippage],
   )
 
-  const { lpFeeAmount } = useMemo(() => computeTradePriceBreakdownWithSmartRouter(order?.trade), [order])
+  const { lpFeeAmount } = useMemo(
+    () => computeTradePriceBreakdownWithSmartRouter(isXOrder(order) ? undefined : order?.trade),
+    [order],
+  )
 
   // Get lp fee value in USD
   const { data: inputCurrencyPrice } = useCurrencyUsdPrice(order?.trade.inputAmount.currency)
@@ -164,6 +168,7 @@ export const OrderDetailsPanel = ({ ...props }: OrderDetailsPanelProps) => {
                           ? { errorMessage: step.failureMessage }
                           : { warningMessage: step.failureMessage }
                         : undefined),
+                      tx: step.tx,
                     }
                   })}
                 />

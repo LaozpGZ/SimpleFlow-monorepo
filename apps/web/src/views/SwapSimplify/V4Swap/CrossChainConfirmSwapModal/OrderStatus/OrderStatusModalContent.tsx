@@ -37,6 +37,10 @@ export const OrderStatusModalContent = ({ order, originalOrder }: OrderStatusMod
           {
             type: CrossChainOrderStepType.SWAP_AT_SOURCE_CHAIN,
             status: CrossChainOrderStepStatus.SUCCESS,
+            tx: {
+              hash: '0x86286f6e38e49ec807e0cc6e37281d1f991e3f70a83e21435a1e94d30de89b88',
+              chainId: 56,
+            },
             inputCurrency: order.trade.inputAmount.currency, // Swap Source Currency
             outputCurrency: order.trade.outputAmount.currency, // Swap Destination Currency
             inputChainName: getFullChainNameById(order.trade.inputAmount.currency.chainId),

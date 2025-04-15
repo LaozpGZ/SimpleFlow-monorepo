@@ -1,6 +1,14 @@
-import { CheckmarkCircleFillIcon, CircleOutlineIcon, FlexGap, SwapLoading, WarningIcon } from '@pancakeswap/uikit'
+import {
+  CheckmarkCircleFillIcon,
+  CircleOutlineIcon,
+  FlexGap,
+  ScanLink,
+  SwapLoading,
+  WarningIcon,
+} from '@pancakeswap/uikit'
 import { useCallback } from 'react'
 import styled, { css } from 'styled-components'
+import { getBlockExploreLink } from 'utils'
 
 export type TimelineItemStatus = 'completed' | 'inProgress' | 'failed' | 'warning' | 'notStarted'
 
@@ -13,6 +21,10 @@ export interface TimelineItemProps {
   warningMessage?: string
   isLast?: boolean
   id: string
+  tx?: {
+    hash: string
+    chainId: number
+  }
 }
 
 const TimelineWrapper = styled(FlexGap).attrs({ flexDirection: 'column' })``
@@ -121,6 +133,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
   errorMessage,
   warningMessage,
   isLast,
+  tx,
 }) => {
   const getDefaultIcon = useCallback(() => {
     switch (status) {
@@ -155,6 +168,13 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
             {status === 'warning' && warningMessage && <MessageBox variant="warning">{warningMessage}</MessageBox>}
           </Content>
         </ItemWrapper>
+        {tx && (
+          <ScanLink
+            href={getBlockExploreLink(tx.hash, 'transaction', tx.chainId)}
+            color="primary60"
+            useBscCoinFallback
+          />
+        )}
       </ItemContainer>
       {!isLast && <Line />}
     </>

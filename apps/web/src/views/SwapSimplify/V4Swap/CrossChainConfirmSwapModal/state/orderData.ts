@@ -24,7 +24,10 @@ export const crossChainOrderDataAtom = atom<{
     outputAmount?: string
     inputChainName?: string
     outputChainName?: string
-    txHash?: string
+    tx?: {
+      hash: string
+      chainId: number
+    }
     failureMessage?: string
   }[]
 }>({
