@@ -56,6 +56,7 @@ const StyledButton = styled(Button)`
   right: 50px;
   top: 50%;
   transform: translateY(-50%);
+  height: 27px;
   background-color: ${({ theme }) => theme.colors.input};
   color: ${({ theme }) => theme.colors.text};
   opacity: 0;
