@@ -97,7 +97,7 @@ export const SnapshotNotPassCard: React.FC<{ projectId: string | undefined }> = 
       </Text>
       <Text color="textSubtle">
         {t(
-          `Unfortunately you do not meet the participation requirements this time. To qualify, you must have maintained at least $100 in eligible aggregated assets across both your Binance Wallet Keyless Address (Binance Spot tokens or Alpha Platform tokens) and Exchange Account for 7 consecutive days before TGE. Note: LSD-type tokens are excluded.`,
+          `Unfortunately you do not meet the participation requirements this time. To qualify, participants must have purchased Binance Alpha tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance Exchange within the 14-day period preceding the TGE start date.`,
         )}
       </Text>
       <Flex onClick={() => window.open(link)}>
