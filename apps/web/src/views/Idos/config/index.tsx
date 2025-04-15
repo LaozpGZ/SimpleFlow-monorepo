@@ -734,7 +734,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     ],
   },
   lorenzo: {
-    id: 'lorenzo',
+    id: 'lorenzoprotocol',
     projectUrl: 'https://lorenzo-protocol.xyz/',
     icon: '/images/ido/lorenzo.svg',
     chainId: ChainId.BSC,
