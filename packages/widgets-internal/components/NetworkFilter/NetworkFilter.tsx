@@ -1,4 +1,5 @@
-import { IMultiSelectChangeEvent, IMultiSelectProps, MultiSelect } from "@pancakeswap/uikit";
+import { Trans } from "@pancakeswap/localization";
+import { Button, IMultiSelectChangeEvent, IMultiSelectProps, MultiSelect } from "@pancakeswap/uikit";
 import { useCallback, useState } from "react";
 import styled from "styled-components";
 
@@ -43,24 +44,6 @@ const Container = styled.div<{ $isShow: boolean }>`
  `}
 `;
 
-const OnlyButton = styled.button`
-  background: transparent;
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  border-radius: 16px;
-  color: ${({ theme }) => theme.colors.text};
-  font-size: 12px;
-  font-weight: 600;
-  padding: 0px 8px;
-  height: 24px;
-  cursor: pointer;
-  display: none;
-  margin-left: 8px;
-
-  &:hover {
-    opacity: 0.7;
-  }
-`;
-
 const ItemContainer = styled.div`
   display: flex;
   align-items: center;
@@ -68,13 +51,26 @@ const ItemContainer = styled.div`
   width: 100%;
 `;
 
+const StyledButton = styled(Button)`
+  position: absolute;
+  right: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: ${({ theme }) => theme.colors.input};
+  color: ${({ theme }) => theme.colors.text};
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+`;
+
 const StyledContainer = styled(Container)`
   .p-multiselect-item {
     padding: 8px 16px;
-
+    transition: background-color 0.2s ease;
     &:hover {
-      ${OnlyButton} {
-        display: block;
+      background-color: ${({ theme }) =>
+        theme.isDark ? "#4B3B5F" : "#E8E2EE"}; // secondary20 & wait for v4 to merge to use it
+      ${StyledButton} {
+        opacity: 1;
       }
     }
   }
@@ -121,7 +117,9 @@ export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }
             )}
             <span>{option.label}</span>
           </div>
-          <OnlyButton onClick={(e) => handleOnlyClick(option.value, e)}>Only</OnlyButton>
+          <StyledButton scale="xs" onClick={(e: React.MouseEvent) => handleOnlyClick(option.value, e)}>
+            <Trans>Only</Trans>
+          </StyledButton>
         </ItemContainer>
       );
     },
