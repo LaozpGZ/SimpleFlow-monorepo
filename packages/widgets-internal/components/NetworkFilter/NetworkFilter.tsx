@@ -1,4 +1,4 @@
-import { MultiSelect, IMultiSelectChangeEvent, IMultiSelectProps } from "@pancakeswap/uikit";
+import { IMultiSelectChangeEvent, IMultiSelectProps, MultiSelect } from "@pancakeswap/uikit";
 import { useCallback, useState } from "react";
 import styled from "styled-components";
 
@@ -43,6 +43,35 @@ const Container = styled.div<{ $isShow: boolean }>`
  `}
 `;
 
+const OnlyButton = styled.button`
+  background: transparent;
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-radius: 16px;
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0px 8px;
+  height: 24px;
+  cursor: pointer;
+  display: none;
+  margin-left: 8px;
+
+  &:hover {
+    opacity: 0.7;
+  }
+`;
+
+const ItemContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+
+  &:hover ${OnlyButton} {
+    display: block;
+  }
+`;
+
 export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }: INetworkProps) => {
   const [isShow, setIsShow] = useState(false);
 
@@ -53,6 +82,42 @@ export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }
       onChange(sortedValue, e);
     },
     [onChange, data]
+  );
+
+  const handleOnlyClick = useCallback(
+    (networkValue: number, e: React.MouseEvent) => {
+      e.stopPropagation();
+      onChange([networkValue], {
+        value: [networkValue],
+        originalEvent: e,
+        stopPropagation: e.stopPropagation,
+        preventDefault: e.preventDefault,
+      });
+    },
+    [onChange]
+  );
+
+  const customItemTemplate = useCallback(
+    (option: { label: string; value: number; icon?: React.ReactNode | string }) => {
+      return (
+        <ItemContainer>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {option.icon && (
+              <span style={{ marginRight: "8px" }}>
+                {typeof option.icon === "string" ? (
+                  <img src={option.icon} alt={option.label} width="24" />
+                ) : (
+                  option.icon
+                )}
+              </span>
+            )}
+            <span>{option.label}</span>
+          </div>
+          <OnlyButton onClick={(e) => handleOnlyClick(option.value, e)}>Only</OnlyButton>
+        </ItemContainer>
+      );
+    },
+    [handleOnlyClick]
   );
 
   return (
@@ -72,6 +137,7 @@ export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }
         onShow={() => setIsShow(true)}
         onHide={() => setIsShow(false)}
         onChange={handleSelectChange}
+        itemTemplate={customItemTemplate}
       />
     </Container>
   );
