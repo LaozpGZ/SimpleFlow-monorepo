@@ -66,9 +66,17 @@ const ItemContainer = styled.div`
   align-items: center;
   justify-content: space-between;
   width: 100%;
+`;
 
-  &:hover ${OnlyButton} {
-    display: block;
+const StyledContainer = styled(Container)`
+  .p-multiselect-item {
+    padding: 8px 16px;
+
+    &:hover {
+      ${OnlyButton} {
+        display: block;
+      }
+    }
   }
 `;
 
@@ -121,7 +129,7 @@ export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }
   );
 
   return (
-    <Container $isShow={isShow}>
+    <StyledContainer $isShow={isShow}>
       <MultiSelect
         style={{
           backgroundColor: "var(--colors-input)",
@@ -139,6 +147,6 @@ export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }
         onChange={handleSelectChange}
         itemTemplate={customItemTemplate}
       />
-    </Container>
+    </StyledContainer>
   );
 };
