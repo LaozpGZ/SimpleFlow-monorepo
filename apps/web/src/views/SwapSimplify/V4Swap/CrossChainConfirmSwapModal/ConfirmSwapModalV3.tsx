@@ -34,7 +34,7 @@ import { ConfirmAction } from 'views/Swap/V3Swap/hooks/useConfirmModalState'
 import { AllowedAllowanceState } from 'views/Swap/V3Swap/types'
 import ConfirmSwapModalV3Container from './ConfirmSwapModalV3Container'
 import { OrderStatusModalContent } from './OrderStatus/OrderStatusModalContent'
-import { crossChainOrderData } from './state/orderData'
+import { crossChainOrderDataAtom } from './state/orderData'
 import { TransactionConfirmSwapContentV3 } from './TransactionConfirmSwapContentV3'
 import { CrossChainOrderStatus } from './types'
 
@@ -89,7 +89,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
   // @ts-ignore
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(originalOrder?.trade)
 
-  const crossChainOrder = useAtomValue(crossChainOrderData)
+  const crossChainOrder = useAtomValue(crossChainOrderDataAtom)
 
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(originalOrder)
   const { recipient } = useSwapState()

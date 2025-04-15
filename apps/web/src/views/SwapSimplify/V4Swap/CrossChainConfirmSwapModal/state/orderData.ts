@@ -1,9 +1,9 @@
-import { BridgeOrder, ClassicOrder } from '@pancakeswap/price-api-sdk'
-import { Currency, TradeType } from '@pancakeswap/sdk'
+import { PriceOrder } from '@pancakeswap/price-api-sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { atom } from 'jotai'
 import { CrossChainOrderStatus, CrossChainOrderStepStatus, CrossChainOrderStepType } from '../types'
 
-export const crossChainOrderData = atom<{
+export const crossChainOrderDataAtom = atom<{
   // status can be derived from steps status
   status: CrossChainOrderStatus | null
   resultInformation?: {
@@ -12,8 +12,8 @@ export const crossChainOrderData = atom<{
     chainName: string
   }
 
-  order: ClassicOrder<TradeType> | BridgeOrder<TradeType> | null | undefined | null | undefined
-  originalOrder: ClassicOrder<TradeType> | BridgeOrder<TradeType> | null | undefined | null | undefined
+  order: PriceOrder | null | undefined
+  originalOrder: PriceOrder | null | undefined
   // TODO: Add txHash, orderId, etc. as needed
   steps?: {
     type: CrossChainOrderStepType
@@ -34,4 +34,4 @@ export const crossChainOrderData = atom<{
   steps: [],
 })
 
-export const crossChainOrderStatus = atom((get) => get(crossChainOrderData).status)
+export const crossChainOrderStatus = atom((get) => get(crossChainOrderDataAtom).status)

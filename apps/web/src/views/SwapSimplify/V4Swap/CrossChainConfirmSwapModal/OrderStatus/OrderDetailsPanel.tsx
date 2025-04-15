@@ -26,7 +26,7 @@ import {
 } from 'views/Swap/V3Swap/utils/exchange'
 import { Timeline } from '../components/Timeline'
 import { detailsPanelExpanded, detailsPanelProgressExpanded } from '../state/detailsPanel'
-import { crossChainOrderData } from '../state/orderData'
+import { crossChainOrderDataAtom } from '../state/orderData'
 import { CrossChainOrderStatus, CrossChainOrderStepStatus, CrossChainOrderStepType } from '../types'
 
 const ProgressPill = styled(Box)<{ $color: string }>`
@@ -39,7 +39,7 @@ const ProgressPill = styled(Box)<{ $color: string }>`
 interface OrderDetailsPanelProps extends BoxProps {}
 export const OrderDetailsPanel = ({ ...props }: OrderDetailsPanelProps) => {
   const { t } = useTranslation()
-  const { order, originalOrder, steps, status } = useAtomValue(crossChainOrderData)
+  const { order, originalOrder, steps, status } = useAtomValue(crossChainOrderDataAtom)
   const [detailsExpanded, setDetailsExpanded] = useAtom(detailsPanelExpanded)
   const [progressExpanded, setProgressExpanded] = useAtom(detailsPanelProgressExpanded)
 

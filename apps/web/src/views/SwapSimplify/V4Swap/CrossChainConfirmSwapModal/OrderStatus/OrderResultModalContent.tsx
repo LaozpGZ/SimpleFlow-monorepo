@@ -17,7 +17,7 @@ import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { useMemo } from 'react'
 import styled from 'styled-components'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
-import { crossChainOrderData } from '../state/orderData'
+import { crossChainOrderDataAtom } from '../state/orderData'
 import { CrossChainOrderStatus } from '../types'
 import { OrderDetailsPanel } from './OrderDetailsPanel'
 
@@ -42,7 +42,7 @@ const DisplayMessage = styled(FlexGap).attrs({ alignItems: 'center', gap: '8px' 
 interface OrderResultModalContentProps extends BoxProps {}
 export const OrderResultModalContent = ({ ...props }: OrderResultModalContentProps) => {
   const { t } = useTranslation()
-  const orderData = useAtomValue(crossChainOrderData)
+  const orderData = useAtomValue(crossChainOrderDataAtom)
 
   const middleIcon = useMemo(() => {
     switch (orderData?.status) {

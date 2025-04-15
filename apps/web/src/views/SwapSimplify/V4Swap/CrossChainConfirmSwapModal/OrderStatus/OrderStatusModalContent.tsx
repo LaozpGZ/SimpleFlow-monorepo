@@ -4,7 +4,7 @@ import { TradeType } from '@pancakeswap/sdk'
 import { useAtom, useAtomValue } from 'jotai'
 import { useEffect } from 'react'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
-import { crossChainOrderData, crossChainOrderStatus } from '../state/orderData'
+import { crossChainOrderDataAtom, crossChainOrderStatus } from '../state/orderData'
 import { CrossChainOrderStatus, CrossChainOrderStepStatus, CrossChainOrderStepType } from '../types'
 import { OrderResultModalContent } from './OrderResultModalContent'
 
@@ -16,12 +16,13 @@ interface OrderStatusModalContentProps {
 export const OrderStatusModalContent = ({ order, originalOrder }: OrderStatusModalContentProps) => {
   const { t } = useTranslation()
   const orderStatus = useAtomValue(crossChainOrderStatus)
-  const [orderData, setOrderData] = useAtom(crossChainOrderData)
+  const [orderData, setOrderData] = useAtom(crossChainOrderDataAtom)
 
   // TODO: listen to order status changes
 
   useEffect(() => {
     if (order && order !== orderData?.order) {
+      // TODO: Remove test data
       setOrderData({
         status: CrossChainOrderStatus.ORDER_PARTIAL_SUCCESS,
         resultInformation: {
