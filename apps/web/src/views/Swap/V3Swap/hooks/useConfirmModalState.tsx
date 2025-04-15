@@ -714,7 +714,7 @@ const useConfirmActions = (
       [ConfirmModalState.WRAPPING]: wrapStep,
       [ConfirmModalState.RESETTING_APPROVAL]: revokeStep,
       [ConfirmModalState.PERMITTING]: permitStep,
-      [ConfirmModalState.APPROVING_TOKEN]: approveStep, // TODO: Update approve step for cross-chain swap contract
+      [ConfirmModalState.APPROVING_TOKEN]: isBridgeOrder(order) ? approvalBridgeStep : approveStep,
       [ConfirmModalState.PENDING_CONFIRMATION]: isBridgeOrder(order)
         ? swapBridgeStep
         : isClassicOrder(order)
@@ -722,7 +722,18 @@ const useConfirmActions = (
         : xSwapStep,
       [ConfirmModalState.ORDER_SUBMITTED]: orderSubmittedStep,
     } as { [k in ConfirmModalState]: ConfirmAction }
-  }, [revokeStep, permitStep, approveStep, order, swapStep, xSwapStep, wrapStep, swapBridgeStep, orderSubmittedStep])
+  }, [
+    revokeStep,
+    permitStep,
+    approveStep,
+    order,
+    swapStep,
+    xSwapStep,
+    wrapStep,
+    swapBridgeStep,
+    orderSubmittedStep,
+    approvalBridgeStep,
+  ])
 
   return {
     txHash,
