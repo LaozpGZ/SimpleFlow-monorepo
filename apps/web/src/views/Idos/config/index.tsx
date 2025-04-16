@@ -765,7 +765,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     ),
     faqs: [
       {
-        title: '1: Who is eligible?',
+        title: '1: Which participants are eligible to take part in this event?',
         description: (
           <>
             Participant Eligibility: To qualify, participants must have purchased Binance Alpha tokens through Binance
@@ -774,11 +774,46 @@ export const idoConfigDict: Record<string, IDOConfig> = {
             <ul>
               <li>Snapshot Period: March 18, 2025, 23:59 (UTC) - April 16, 2025, 23:59(UTC)</li>
               <li>How to check eligibility: Visit the TGE event page.</li>
-              <li>
-                Alpha token purchases are only considered valid after the token is officially listed on Binance, and
-                users can verify their detailed purchase records in their Binance Wallet (Keyless) or Spot/Funding
-                accounts on the Binance Exchange.
-              </li>
+
+              <li> Examples: </li>
+              <br />
+              <ol style={{ listStyle: 'decimal', listStylePosition: 'inside', marginLeft: '1.4rem' }}>
+                <li>
+                  User A purchased Binance Alpha tokens through Binance Wallet (Keyless) on April 5, 2025. He/She is
+                  eligible.
+                </li>
+                <br />
+                <li>
+                  User B purchased Binance Alpha tokens through Spot/Funding accounts on Binance Exchange on April 7,
+                  2025. He/She is eligible.
+                </li>
+                <br />
+                <li>
+                  User C purchased Binance Alpha tokens via Binance Wallet (Keyless) on March 2, 2025, which is before
+                  the snapshot period. He/She is not eligible.
+                </li>
+                <br />
+                <li>
+                  User D purchased “X” token via Binance Wallet (Keyless) on April 5, 2025, but “X” token was officially
+                  listed on Binance Alpha on April 7. He/She is not eligible.
+                </li>
+              </ol>
+              <br />
+              <li>Important Notes:</li>
+              <br />
+              <ol style={{ listStyle: 'decimal', listStylePosition: 'inside', marginLeft: '1.4rem' }}>
+                <li>
+                  Binance reserves the right to modify event rules and criteria at any time without prior notice. All
+                  rule interpretations are solely at Binance’s discretion. Participants are strongly advised to verify
+                  the latest rules via official channels before participating.
+                </li>
+                <br />
+                <li>
+                  Alpha token purchases are only considered valid after the token is officially listed on Binance, and
+                  users can verify their detailed purchase records in their Binance Wallet (Keyless) or Spot/Funding
+                  accounts on the Binance Exchange.
+                </li>
+              </ol>
             </ul>
           </>
         ),
