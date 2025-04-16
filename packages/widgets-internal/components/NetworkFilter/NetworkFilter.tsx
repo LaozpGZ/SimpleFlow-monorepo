@@ -1,7 +1,7 @@
 import { Trans } from "@pancakeswap/localization";
 import { Button, IMultiSelectChangeEvent, IMultiSelectProps, MultiSelect } from "@pancakeswap/uikit";
 import { useCallback, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 export interface INetworkProps {
   data: IMultiSelectProps<number>["options"];
@@ -62,17 +62,29 @@ const StyledButton = styled(Button)`
   transition: opacity 0.3s ease-in;
 `;
 
+const sharedStyle = css`
+  background-color: ${({ theme }) => theme.colors.secondary20};
+  ${StyledButton} {
+    opacity: 1;
+  }
+`;
+
 const StyledContainer = styled(Container)`
   .p-multiselect-item {
     padding: 8px 16px;
     transition: background-color 0.2s ease;
     cursor: pointer;
     position: relative;
-    &:hover {
-      background-color: ${({ theme }) =>
-        theme.isDark ? "#4B3B5F" : "#E8E2EE"}; // secondary20 & wait for v4 to merge to use it
-      ${StyledButton} {
-        opacity: 1;
+    /* desktop hover effect */
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        ${sharedStyle}
+      }
+    }
+    /* mobile active effect */
+    @media (hover: none) and (pointer: coarse) {
+      &:active {
+        ${sharedStyle}
       }
     }
   }
