@@ -1,5 +1,11 @@
 import { Trans } from "@pancakeswap/localization";
-import { Button, IMultiSelectChangeEvent, IMultiSelectProps, MultiSelect } from "@pancakeswap/uikit";
+import {
+  Button,
+  IMultiSelectChangeEvent,
+  IMultiSelectProps,
+  MultiSelect,
+  useMatchBreakpoints,
+} from "@pancakeswap/uikit";
 import { useCallback, useState } from "react";
 import styled, { css } from "styled-components";
 
@@ -63,35 +69,43 @@ const StyledButton = styled(Button)`
 `;
 
 const sharedStyle = css`
-  background-color: ${({ theme }) => theme.colors.secondary20};
   ${StyledButton} {
     opacity: 1;
   }
 `;
 
-const StyledContainer = styled(Container)`
-  .p-multiselect-item {
+const StyledContainer = styled(Container)<{ $activeIndex?: number }>`
+  li.p-multiselect-item {
     padding: 8px 16px;
     transition: background-color 0.2s ease;
     cursor: pointer;
     position: relative;
     /* desktop hover effect */
+    > span {
+      width: 100%;
+    }
     @media (hover: hover) and (pointer: fine) {
       &:hover {
+        background-color: ${({ theme }) => theme.colors.secondary20};
         ${sharedStyle}
       }
     }
-    /* mobile active effect */
-    @media (hover: none) and (pointer: coarse) {
-      &:active {
-        ${sharedStyle}
-      }
-    }
+    ${({ $activeIndex, theme }) =>
+      typeof $activeIndex === "number" &&
+      `&:nth-child(${$activeIndex + 1}) {
+      ${sharedStyle}
+      background-color: ${theme.colors.secondary20};
+    }`}
   }
 `;
 
 export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }: INetworkProps) => {
   const [isShow, setIsShow] = useState(false);
+  const [mobileActiveValue, setMobileActiveValue] = useState<number>(-1);
+  const { isMobile } = useMatchBreakpoints();
+
+  const activeIndex =
+    isMobile && mobileActiveValue !== -1 && data ? data.findIndex((opt) => opt.value === mobileActiveValue) : undefined;
 
   const handleSelectChange = useCallback(
     (e: IMultiSelectChangeEvent<number>) => {
@@ -117,8 +131,14 @@ export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }
 
   const customItemTemplate = useCallback(
     (option: { label: string; value: number; icon?: React.ReactNode | string }) => {
+      const onTouchStart = isMobile
+        ? () => {
+            console.log(option);
+            setMobileActiveValue(option.value);
+          }
+        : undefined;
       return (
-        <ItemContainer>
+        <ItemContainer onTouchStart={onTouchStart}>
           <div style={{ display: "flex", alignItems: "center" }}>
             {option.icon && (
               <span style={{ marginRight: "8px" }}>
@@ -131,17 +151,18 @@ export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }
             )}
             <span>{option.label}</span>
           </div>
+
           <StyledButton scale="xs" onClick={(e: React.MouseEvent) => handleOnlyClick(option.value, e)}>
             <Trans>Only</Trans>
           </StyledButton>
         </ItemContainer>
       );
     },
-    [handleOnlyClick]
+    [handleOnlyClick, isMobile, mobileActiveValue]
   );
 
   return (
-    <StyledContainer $isShow={isShow}>
+    <StyledContainer $isShow={isShow} $activeIndex={activeIndex}>
       <MultiSelect
         style={{
           backgroundColor: "var(--colors-input)",
