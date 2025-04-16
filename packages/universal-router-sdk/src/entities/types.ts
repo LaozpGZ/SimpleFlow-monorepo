@@ -21,11 +21,3 @@ export type PancakeSwapOptions = Omit<SwapOptions, 'inputTokenPermit'> & {
   inputTokenPermit?: Permit2Signature
   flatFee?: FlatFeeOptions
 }
-
-export interface UniversalRouterOptions {
-  /**
-   * Whether the payer of the trade is the user. Defaults to true.
-   * NOTE: This option is ignored in WETH case. Because WETH is now owned by the router, the router pays for inputs.
-   */
-  payerIsUser?: boolean
-}
