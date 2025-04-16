@@ -733,7 +733,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
       },
     ],
   },
-  lorenzo: {
+  lorenzoprotocol: {
     id: 'lorenzoprotocol',
     projectUrl: 'https://lorenzo-protocol.xyz/',
     icon: '/images/ido/lorenzo.svg',

@@ -97,7 +97,7 @@ export const SnapshotNotPassCard: React.FC<{ projectId: string | undefined }> = 
       </Text>
       <Text color="textSubtle">
         {t(
-          `Unfortunately you do not meet the participation requirements this time. To qualify, participants must have purchased Binance Alpha tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance Exchange within the 14-day period preceding the TGE start date.`,
+          `Unfortunately you do not meet the participation requirements this time. To qualify, participants must have purchased Binance Alpha tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance Exchange within the 30-day period preceding the TGE start date.`,
         )}
       </Text>
       <Flex onClick={() => window.open(link)}>
