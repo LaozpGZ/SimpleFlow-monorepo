@@ -133,7 +133,6 @@ export const NetworkFilter: React.FC<INetworkProps> = ({ data, value, onChange }
     (option: { label: string; value: number; icon?: React.ReactNode | string }) => {
       const onTouchStart = isMobile
         ? () => {
-            console.log(option);
             setMobileActiveValue(option.value);
           }
         : undefined;
