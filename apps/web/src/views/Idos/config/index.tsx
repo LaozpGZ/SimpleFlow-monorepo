@@ -738,7 +738,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     projectUrl: 'https://lorenzo-protocol.xyz/',
     icon: '/images/ido/lorenzo.svg',
     chainId: ChainId.BSC,
-    bannerUrl: `${ASSET_CDN}/web/ido/lorenzo-banner.png`,
+    bannerUrl: `${ASSET_CDN}/web/ido/lorenzo-banner.svg`,
     contractAddress: '0x',
     tgeTitle: `Lorenzo's Token Generation Event`,
     tgeSubtitle: 'Exclusively via Binance Keyless Wallet',
@@ -769,10 +769,11 @@ export const idoConfigDict: Record<string, IDOConfig> = {
         description: (
           <>
             Participant Eligibility: To qualify, participants must have purchased Binance Alpha tokens through Binance
-            Wallet (Keyless) or Spot/Funding accounts on Binance Exchange within the 14-day period preceding the TGE
+            Wallet (Keyless) or Spot/Funding accounts on Binance Exchange within the 30-day period preceding the TGE
             start date.
             <ul>
-              <li>Snapshot Period: April 3, 2025, 23:59 (UTC) - April 16,2025, 23:59(UTC)</li>
+              <li>Snapshot Period: March 18, 2025, 23:59 (UTC) - April 16, 2025, 23:59(UTC)</li>
+              <li>How to check eligibility: Visit the TGE event page.</li>
               <li>
                 Alpha token purchases are only considered valid after the token is officially listed on Binance, and
                 users can verify their detailed purchase records in their Binance Wallet (Keyless) or Spot/Funding
