@@ -1,6 +1,6 @@
 ---
-'@pancakeswap/smart-router': minor
-'@pancakeswap/tokens': minor
+'@pancakeswap/smart-router': patch
+'@pancakeswap/tokens': patch
 ---
 
 Add whitelist bases in router for susde-usde, olm-ora, ora-brm
