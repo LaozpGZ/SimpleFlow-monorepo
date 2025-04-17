@@ -170,9 +170,8 @@ export const ADDITIONAL_BASES: {
     [bscTokens.susde.address]: [bscTokens.usde],
     [bscTokens.usde.address]: [bscTokens.susde],
     [bscTokens.olm.address]: [bscTokens.ora],
-    [bscTokens.ora.address]: [bscTokens.olm],
+    [bscTokens.ora.address]: [bscTokens.olm, bscTokens.brm],
     [bscTokens.brm.address]: [bscTokens.ora],
-    [bscTokens.ora.address]: [bscTokens.brm],
 
     // pancakeswap/pancake-frontend#7909
     // LSDT
