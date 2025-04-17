@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { ExclusiveDutchOrder, createExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
-import { InfinityRouter, PoolType } from '@pancakeswap/smart-router'
+import { InfinityRouter, PoolType, RouteType } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, Percent, TradeType, type BigintIsh } from '@pancakeswap/swap-sdk-core'
 import { zeroAddress } from './getCurrencyPrice'
 import { getPoolTypeKey } from './getPoolType'
@@ -101,7 +101,14 @@ export function parseBridgeQuoteResponse<
     trade: {
       inputAmount: amountIn,
       outputAmount: CurrencyAmount.fromRawAmount(currencyOut, amountIn.quotient.toString()),
-      routes: [],
+      routes: [
+        {
+          path: [amountIn.currency, currencyOut],
+          inputAmount: amountIn,
+          outputAmount: CurrencyAmount.fromRawAmount(currencyOut, amountIn.quotient.toString()),
+          type: RouteType.BRIDGE,
+        },
+      ],
       tradeType,
     },
   }
