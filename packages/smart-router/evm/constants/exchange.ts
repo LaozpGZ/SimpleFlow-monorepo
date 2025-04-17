@@ -168,7 +168,7 @@ export const ADDITIONAL_BASES: {
     [bscTokens.dlp.address]: [bscTokens.mdlp],
 
     [bscTokens.susde.address]: [bscTokens.usde],
-    [bscTokens.usde.address]: [bscTokens.usde],
+    [bscTokens.usde.address]: [bscTokens.susde],
     [bscTokens.olm.address]: [bscTokens.ora],
     [bscTokens.ora.address]: [bscTokens.olm],
     [bscTokens.brm.address]: [bscTokens.ora],
