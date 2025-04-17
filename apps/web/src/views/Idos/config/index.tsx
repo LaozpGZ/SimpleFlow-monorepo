@@ -772,8 +772,8 @@ export const idoConfigDict: Record<string, IDOConfig> = {
             Wallet (Keyless) or Spot/Funding accounts on Binance Exchange within the 30-day period preceding the TGE
             start date.
             <ul>
-              <li>Snapshot Period: March 18, 2025, 23:59 (UTC) - April 16, 2025, 23:59(UTC)</li>
-              <li>How to check eligibility: Visit the TGE event page.</li>
+              <li>Valid Purchase Period: March 19, 2025, 00:00:00 to April 17, 2025, 23:59:59 (UTC)</li>
+              {/* <li>How to check eligibility: Visit the TGE event page.</li> */}
 
               <li> Examples: </li>
               <br />
