@@ -167,6 +167,13 @@ export const ADDITIONAL_BASES: {
     [bscTokens.mdlp.address]: [bscTokens.dlp],
     [bscTokens.dlp.address]: [bscTokens.mdlp],
 
+    [bscTokens.susde.address]: [bscTokens.usde],
+    [bscTokens.usde.address]: [bscTokens.usde],
+    [bscTokens.olm.address]: [bscTokens.ora],
+    [bscTokens.ora.address]: [bscTokens.olm],
+    [bscTokens.brm.address]: [bscTokens.ora],
+    [bscTokens.ora.address]: [bscTokens.brm],
+
     // pancakeswap/pancake-frontend#7909
     // LSDT
     '0xAa83Bb1Be2a74AaA8795a8887054919A0Ea96BFA': [czusd],
