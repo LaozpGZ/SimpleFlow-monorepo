@@ -1,20 +1,22 @@
 import { ChainId } from '@pancakeswap/chains'
+import memoize from 'lodash/memoize'
 import { useMemo } from 'react'
+import { isAddressEqual } from 'utils'
 import { rewardConfig } from './config'
-import { RewardProvider } from './types'
 
 // Pure function to check if a farm has rewards
-export const hasReward = (chainId?: ChainId, poolAddress?: string, provider = RewardProvider.Ethena): boolean => {
-  if (!chainId || !poolAddress) return false
-  const chainConfig = rewardConfig[chainId]
-  if (!chainConfig) return false
+export const hasReward = memoize(
+  (chainId?: ChainId, poolAddress?: string): boolean => {
+    if (!chainId || !poolAddress) return false
+    const chainConfig = rewardConfig[chainId]
+    if (!chainConfig) return false
 
-  return chainConfig.some(
-    (config) => config.poolAddress.toLowerCase() === poolAddress.toLowerCase() && config.rewardProvider === provider,
-  )
-}
+    return chainConfig.some((config) => isAddressEqual(config.poolAddress, poolAddress))
+  },
+  (chainId, poolAddress) => `${chainId}#${poolAddress}`,
+)
 
 // React hook version - uses the pure function with memoization
-export const useHasReward = (chainId?: ChainId, poolAddress?: string, provider = RewardProvider.Ethena): boolean => {
-  return useMemo(() => hasReward(chainId, poolAddress, provider), [chainId, poolAddress, provider])
+export const useHasReward = (chainId?: ChainId, poolAddress?: string): boolean => {
+  return useMemo(() => hasReward(chainId, poolAddress), [chainId, poolAddress])
 }
