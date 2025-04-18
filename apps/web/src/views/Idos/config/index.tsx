@@ -739,7 +739,7 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     icon: '/images/ido/lorenzo.svg',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/lorenzo-banner.svg`,
-    contractAddress: '0x',
+    contractAddress: '0x8f62d34113A1dE746eAac3b1F2D4CEeC9d393027',
     tgeTitle: `Lorenzo's Token Generation Event`,
     tgeSubtitle: 'Exclusively via Binance Keyless Wallet',
     description: (
