@@ -15,21 +15,19 @@ import { isMobile } from 'react-device-detect'
 import { useCurrentBlockTimestamp } from 'state/block/hooks'
 import styled from 'styled-components'
 import { getRevenueSharingCakePoolAddress, getRevenueSharingVeCakeAddress } from 'utils/addressHelpers'
-import { getRevenueSharingPoolGatewayContract } from 'utils/contractHelpers'
+import { getCakePoolContract, getRevenueSharingPoolGatewayContract, getVeCakeContract } from 'utils/contractHelpers'
 import formatLocaleNumber from 'utils/formatLocaleNumber'
 import { formatTime } from 'utils/formatTime'
 import { poolStartWeekCursors } from 'views/CakeStaking/config'
 import { RedeemHeader } from './components/RedeemHeader'
 import { DisplayUSDValue, DisplayValue, VeCakeExitField } from './components/VeCakeExitField'
 import { createWriteContractCallback } from './hooks/useContractWrite/createWriteContractCallback'
-import { useWriteCakePoolWithdrawAllCallback } from './hooks/useContractWrite/useWriteCakePoolWithdrawAllCallback'
-import { useWriteEarlyWithdrawCallback } from './hooks/useContractWrite/useWriteEarlyWithdrawCallback'
 import { useRevenueSharingCakePool, useRevenueSharingVeCake } from './hooks/useRevenueSharingProxy'
 import { useCakeLockStatus } from './hooks/useVeCakeUserInfo'
 
 const useCakeExitInfo = () => {
   const { balance } = useVeCakeBalance()
-  const { nativeCakeLockedAmount, proxyCakeLockedAmount, cakeUnlockTime } = useCakeLockStatus()
+  const { nativeCakeLockedAmount, proxyCakeLockedAmount, cakeUnlockTime, cakeLockExpired } = useCakeLockStatus()
   const veCakeShare = useRevenueSharingVeCake()
   const cakePoolShare = useRevenueSharingCakePool()
   const cakePrice = useCakePrice()
@@ -50,10 +48,14 @@ const useCakeExitInfo = () => {
     veCakeRewards: BigNumber(veCakeShare.availableClaim),
     cakePrice: cakePrice.toNumber(),
     proxyCakeLockedAmount,
+    cakeLockExpired,
   }
 }
 
+const useWriteCakePoolWithdrawAllCallback = createWriteContractCallback(getCakePoolContract, 'withdrawAll')
 const useClaimAll = createWriteContractCallback(getRevenueSharingPoolGatewayContract, 'claimMultiple')
+const useWriteEarlyWithdrawCallback = createWriteContractCallback(getVeCakeContract, 'earlyWithdraw')
+const useWriteWithdrawCallback = createWriteContractCallback(getVeCakeContract, 'withdrawAll')
 
 function useDisplayValue(val: bigint | BigNumber) {
   const {
@@ -84,15 +86,18 @@ export const VeCakeRedeem: React.FC = () => {
     availableClaimUSD,
     cakePoolRewards,
     veCakeRewards,
+    cakeLockExpired,
     proxyCakeLockedAmount,
   } = useCakeExitInfo()
   const userStaked = lockedCake.gt(0)
 
+  console.log(`[cake] cakeLockExpired`, cakeLockExpired)
   const totalAmount = cakePoolRewards.plus(veCakeRewards).plus(lockedCake)
   const totalAmountUSD = totalAmount.times(cakePrice)
   const userHasRewards = isWalletConnected && (cakePoolRewards.gt(0) || veCakeRewards.gt(0))
   const earlyWithdraw = useWriteEarlyWithdrawCallback()
   const withdrawAll = useWriteCakePoolWithdrawAllCallback()
+  const veCakeWithdrawAll = useWriteWithdrawCallback()
   const currentBlockTimestamp = useCurrentBlockTimestamp()
   const claimAll = useClaimAll()
 
@@ -125,9 +130,13 @@ export const VeCakeRedeem: React.FC = () => {
 
     if (userStaked) {
       console.log(`[cake], vecake account=${account}`, `amt=`, lockedCake.toFixed(0))
-      await earlyWithdraw.callMethod(account, BigInt(lockedCake.toFixed(0)))
+      if (cakeLockExpired) {
+        await veCakeWithdrawAll.callMethod(account)
+      } else {
+        await earlyWithdraw.callMethod(account, BigInt(lockedCake.toFixed(0)))
+      }
     }
-  }, [earlyWithdraw, userStaked, proxyCakeLockedAmount, account, chainId, currentBlockTimestamp])
+  }, [earlyWithdraw, userStaked, proxyCakeLockedAmount, account, chainId, currentBlockTimestamp, cakeLockExpired])
 
   const handleCakePool = useCallback(async () => {
     if (!account || !chainId || !currentBlockTimestamp) return
