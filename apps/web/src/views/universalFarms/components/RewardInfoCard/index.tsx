@@ -1,9 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, Flex, Link, PresentWonIcon, Text } from '@pancakeswap/uikit'
-import React from 'react'
+import { Box, Flex, Link, RewardIcon, Text } from '@pancakeswap/uikit'
+import React, { memo } from 'react'
 import styled from 'styled-components'
 
-const StyledCard = styled(Card)`
+const StyledCard = styled.div`
   background: ${({ theme }) => theme.colors.positive10};
   border: 1px solid ${({ theme }) => theme.colors.positive20};
   border-radius: 16px;
@@ -11,20 +11,12 @@ const StyledCard = styled(Card)`
   margin-top: 16px;
   margin-bottom: 16px;
 `
-
 const IconWrapper = styled(Box)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 8px;
+  color: ${({ theme }) => theme.colors.success};
 `
-
-const StyledPresentIcon = styled(PresentWonIcon)`
+const StyledRewardIcon = styled(RewardIcon)`
   width: 24px;
   height: 24px;
-  path {
-    fill: ${({ theme }) => theme.colors.success};
-  }
 `
 
 const StyledLink = styled(Link)`
@@ -45,32 +37,27 @@ interface RewardInfoCardProps {
   linkUrl?: string
 }
 
-const RewardInfoCard: React.FC<RewardInfoCardProps> = ({
-  title = 'Boost Your Yield with Ethena',
-  description = 'Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!',
-  linkText = "Claim your rewards & learn more on Ethena's official site.",
-  linkUrl = 'https://ethena.fi',
-}) => {
+export const RewardInfoCard: React.FC<RewardInfoCardProps> = memo(() => {
   const { t } = useTranslation()
 
   return (
     <StyledCard>
-      <Flex alignItems="flex-start">
+      <Flex alignItems="flex-start" justifyContent="center">
         <IconWrapper>
-          <StyledPresentIcon />
+          <StyledRewardIcon />
         </IconWrapper>
         <Box>
-          <Text bold color="success" mb="8px">
-            {t(title)}
+          <Text bold mb="8px">
+            {t('Boost Your Yield with Ethena')}
           </Text>
-          <Text mb="8px">{t(description)}</Text>
-          <StyledLink external href={linkUrl}>
-            🔗 {t(linkText)}
-          </StyledLink>
         </Box>
       </Flex>
+      <Text mb="8px">
+        {t('Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!')}
+      </Text>
+      <StyledLink external href="https://ethena.fi">
+        🔗 {t(`Claim your rewards & learn more on Ethena's official site.`)}
+      </StyledLink>
     </StyledCard>
   )
-}
-
-export default RewardInfoCard
+})

@@ -4,6 +4,7 @@ import {
   AddIcon,
   AutoColumn,
   AutoRenewIcon,
+  Box,
   Button,
   ButtonMenu,
   ButtonMenuItem,
@@ -49,6 +50,8 @@ import {
   V2PositionItem,
   V3PositionItem,
 } from 'views/universalFarms/components'
+import { useHasReward } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
+import { RewardInfoCard } from 'views/universalFarms/components/RewardInfoCard'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 import { useV2CakeEarning, useV3CakeEarningsByPool } from 'views/universalFarms/hooks/useCakeEarning'
 import { useV2FarmActions } from 'views/universalFarms/hooks/useV2FarmActions'
@@ -102,6 +105,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   const { t } = useTranslation()
   const { account } = useAccountActiveChain()
   const chainId = useChainIdByQuery()
+  const hasPoolReward = useHasReward(poolInfo.chainId, poolInfo.lpAddress)
 
   // Fetch data at the parent level
   const { data: v3Data, isLoading: isV3Loading } = useAccountPositionDetailByPool<Protocol.V3>(
@@ -254,54 +258,57 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
         {t('My Positions')}
       </Text>
       <Grid gridGap={24} gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 2fr']}>
-        <OverviewCard innerCardProps={{ p: 24 }}>
-          <AutoColumn gap="lg">
-            <AutoColumn gap="8px">
-              <Text color="secondary" fontWeight={600} textTransform="uppercase">
-                {t('overview')}
-              </Text>
+        <Box>
+          <OverviewCard innerCardProps={{ p: 24 }}>
+            <AutoColumn gap="lg">
+              <AutoColumn gap="8px">
+                <Text color="secondary" fontWeight={600} textTransform="uppercase">
+                  {t('overview')}
+                </Text>
+                <Row justifyContent="space-between">
+                  <Text color="textSubtle">{t('My Liquidity Value')}</Text>
+                  <Text>{formatDollarAmount(Number(totalLiquidityUSD))}</Text>
+                </Row>
+                <Row justifyContent="space-between">
+                  <Text color="textSubtle">{t('My Total APR')}</Text>
+                  <Text>{displayApr(totalAprValue)}</Text>
+                </Row>
+                <Row justifyContent="space-between">
+                  <Text color="textSubtle">{t('Earning')}</Text>
+                  <Flex>
+                    <Text mr="4px">{t('LP Fee')}</Text>
+                    <DoubleCurrencyLogo
+                      currency0={poolInfo.token0.wrapped}
+                      currency1={poolInfo.token1.wrapped}
+                      size={24}
+                      innerMargin="-8px"
+                    />
+                  </Flex>
+                </Row>
+              </AutoColumn>
+              <Divider />
               <Row justifyContent="space-between">
-                <Text color="textSubtle">{t('My Liquidity Value')}</Text>
-                <Text>{formatDollarAmount(Number(totalLiquidityUSD))}</Text>
+                {poolInfo.protocol === 'v3' ? <V3PoolEarnings pool={poolInfo} /> : <V2PoolEarnings pool={poolInfo} />}
+                {count > 0 ? (
+                  <Button
+                    variant="secondary"
+                    onClick={handleHarvestAll}
+                    endIcon={loading ? <AutoRenewIcon spin color="currentColor" /> : null}
+                    isLoading={loading}
+                    disabled={loading || (poolInfo.protocol === Protocol.V3 ? !v3EarningsBusd : !v2EarningsBusd)}
+                  >
+                    {loading ? t('Harvesting') : t('Harvest')}
+                  </Button>
+                ) : null}
               </Row>
-              <Row justifyContent="space-between">
-                <Text color="textSubtle">{t('My Total APR')}</Text>
-                <Text>{displayApr(totalAprValue)}</Text>
-              </Row>
-              <Row justifyContent="space-between">
-                <Text color="textSubtle">{t('Earning')}</Text>
-                <Flex>
-                  <Text mr="4px">{t('LP Fee')}</Text>
-                  <DoubleCurrencyLogo
-                    currency0={poolInfo.token0.wrapped}
-                    currency1={poolInfo.token1.wrapped}
-                    size={24}
-                    innerMargin="-8px"
-                  />
-                </Flex>
-              </Row>
+              <Button as="a" href={addLiquidityLink}>
+                {t('Add Liquidity')}
+                <AddIcon ml="8px" color="var(--colors-invertedContrast)" />
+              </Button>
             </AutoColumn>
-            <Divider />
-            <Row justifyContent="space-between">
-              {poolInfo.protocol === 'v3' ? <V3PoolEarnings pool={poolInfo} /> : <V2PoolEarnings pool={poolInfo} />}
-              {count > 0 ? (
-                <Button
-                  variant="secondary"
-                  onClick={handleHarvestAll}
-                  endIcon={loading ? <AutoRenewIcon spin color="currentColor" /> : null}
-                  isLoading={loading}
-                  disabled={loading || (poolInfo.protocol === Protocol.V3 ? !v3EarningsBusd : !v2EarningsBusd)}
-                >
-                  {loading ? t('Harvesting') : t('Harvest')}
-                </Button>
-              ) : null}
-            </Row>
-            <Button as="a" href={addLiquidityLink}>
-              {t('Add Liquidity')}
-              <AddIcon ml="8px" color="var(--colors-invertedContrast)" />
-            </Button>
-          </AutoColumn>
-        </OverviewCard>
+          </OverviewCard>
+          {hasPoolReward && <RewardInfoCard />}
+        </Box>
         <PositionsCard>
           <PositionCardHeader variant="pale">
             <Row justifyContent="space-between" flexWrap="wrap" gap="sm">

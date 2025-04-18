@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Link, PresentWonIcon, Text, useTooltip } from '@pancakeswap/uikit'
+import { Box, Flex, Link, RewardIcon, Text, useTooltip } from '@pancakeswap/uikit'
 
 import React from 'react'
 import styled from 'styled-components'
@@ -10,14 +10,16 @@ const IconWrapper = styled(Box)`
   align-items: center;
   justify-content: center;
   margin-left: 4px;
+  width: 33px;
+  height: 33px;
+  border-radius: 50%;
+  background: ${({ theme }) => theme.colors.positive10};
+  color: ${({ theme }) => theme.colors.positive60};
 `
 
-const StyledPresentIcon = styled(PresentWonIcon)`
-  width: 20px;
-  height: 20px;
-  path {
-    fill: ${({ theme }) => theme.colors.success};
-  }
+const StyledRewardIcon = styled(RewardIcon)`
+  width: 18px;
+  height: 18px;
 `
 
 const RewardStatusDisplay: React.FC = () => {
@@ -29,10 +31,8 @@ const RewardStatusDisplay: React.FC = () => {
         <Text bold as="span">
           {t('Earn 30x Ethena Points!')}
         </Text>
-        <Text ml="4px" as="span">
-          {t('Add liquidity to this pool and earn 30x Ethena points!')}
-        </Text>
       </Box>
+      <Text as="span">{t('Add liquidity to this pool and earn 30x Ethena points!')}</Text>
       <Link mt="8px" external href="https://ethena.fi">
         {t("Claim your rewards & learn more on Ethena's official site.")}
       </Link>
@@ -45,7 +45,7 @@ const RewardStatusDisplay: React.FC = () => {
   return (
     <Flex alignItems="center">
       <IconWrapper ref={targetRef}>
-        <StyledPresentIcon />
+        <StyledRewardIcon />
       </IconWrapper>
       {tooltipVisible && tooltip}
     </Flex>
