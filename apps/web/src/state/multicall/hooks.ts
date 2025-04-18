@@ -245,7 +245,7 @@ export function useMultipleContractSingleDataWagmi({
       address,
       functionName,
       args,
-      chainId: Array.isArray(chainIds) ? chainIds[index] : chainIds,
+      chainId: Array.isArray(chainIds) && addresses.length === chainIds.length ? chainIds[index] : chainIds,
     }))
   }, [abi, functionName, args, addresses, chainIds])
 
