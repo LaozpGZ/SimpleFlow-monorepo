@@ -17,6 +17,10 @@ function useTicksFromSubgraph(
   activeTick: number | undefined,
   enabled = true,
 ) {
+  const poolChainId = useMemo(() => {
+    return currencyA?.wrapped.chainId
+  }, [currencyA])
+
   const poolAddress = useMemo(
     () =>
       currencyA && currencyB && feeAmount
@@ -25,7 +29,7 @@ function useTicksFromSubgraph(
     [currencyA, currencyB, feeAmount],
   )
 
-  return useAllV3TicksQuery(poolAddress, activeTick, 30000, enabled)
+  return useAllV3TicksQuery(poolAddress, activeTick, 30000, enabled, poolChainId)
 }
 
 // Fetches all ticks for a given pool
