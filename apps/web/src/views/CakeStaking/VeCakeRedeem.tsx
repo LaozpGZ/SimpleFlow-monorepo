@@ -118,7 +118,7 @@ export const VeCakeRedeem: React.FC = () => {
       console.log(`[cake] claimAll`, revenueSharingPools, account)
       await claimAll.callMethod(revenueSharingPools, account)
     }
-  }, [earlyWithdraw, userStaked, proxyCakeLockedAmount])
+  }, [earlyWithdraw, userStaked, proxyCakeLockedAmount, account, chainId, currentBlockTimestamp])
 
   const handleVeCake = useCallback(async () => {
     if (!account || !chainId || !currentBlockTimestamp) return
@@ -127,7 +127,7 @@ export const VeCakeRedeem: React.FC = () => {
       console.log(`[cake], vecake account=${account}`, `amt=`, lockedCake.toFixed(0))
       await earlyWithdraw.callMethod(account, BigInt(lockedCake.toFixed(0)))
     }
-  }, [earlyWithdraw, userStaked, proxyCakeLockedAmount, account])
+  }, [earlyWithdraw, userStaked, proxyCakeLockedAmount, account, chainId, currentBlockTimestamp])
 
   const handleCakePool = useCallback(async () => {
     if (!account || !chainId || !currentBlockTimestamp) return
@@ -135,7 +135,7 @@ export const VeCakeRedeem: React.FC = () => {
       console.log(`[cake], cakepool`, `amt=`, lockedCake.toFixed(0))
       await withdrawAll.callMethod()
     }
-  }, [proxyCakeLockedAmount])
+  }, [proxyCakeLockedAmount, account, chainId, currentBlockTimestamp])
   const [expand, setExpand] = useState(false)
 
   const buttons = [
