@@ -238,7 +238,6 @@ export function useMultipleContractSingleDataWagmi({
   chainIds,
   functionName,
   args,
-  options,
 }: MultipleSameDataCallParameters) {
   const contracts = useMemo(() => {
     return addresses.map((address, index) => ({
@@ -248,7 +247,7 @@ export function useMultipleContractSingleDataWagmi({
       args,
       chainId: Array.isArray(chainIds) ? chainIds[index] : chainIds,
     }))
-  }, [abi, functionName, args, options?.chainId])
+  }, [abi, functionName, args, addresses, chainIds])
 
   return useReadContracts({
     // 2048 is the maximum batch size for wagmi.

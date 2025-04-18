@@ -17,9 +17,7 @@ function useTicksFromSubgraph(
   activeTick: number | undefined,
   enabled = true,
 ) {
-  const poolChainId = useMemo(() => {
-    return currencyA?.wrapped.chainId
-  }, [currencyA])
+  const poolChainId = currencyA?.wrapped.chainId
 
   const poolAddress = useMemo(
     () =>
