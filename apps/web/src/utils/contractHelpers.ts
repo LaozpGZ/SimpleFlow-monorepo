@@ -12,6 +12,7 @@ import {
   getBCakeFarmWrapperBoosterVeCakeAddress,
   getBunnyFactoryAddress,
   getCakeFlexibleSideVaultAddress,
+  getCakePoolAddress,
   getCakeVaultAddress,
   getCalcGaugesVotingAddress,
   getCrossFarmingReceiverAddress,
@@ -98,6 +99,7 @@ import { tradingCompetitionEasterABI } from 'config/abi/tradingCompetitionEaster
 import { tradingCompetitionFanTokenABI } from 'config/abi/tradingCompetitionFanToken'
 import { tradingCompetitionMoDABI } from 'config/abi/tradingCompetitionMoD'
 import { tradingCompetitionMoboxABI } from 'config/abi/tradingCompetitionMobox'
+import { cakePoolAbi } from 'config/abi/cakePool'
 import { tradingRewardABI } from 'config/abi/tradingReward'
 import { v2BCakeWrapperABI } from 'config/abi/v2BCakeWrapper'
 import { v3AirdropABI } from 'config/abi/v3Airdrop'
@@ -598,6 +600,18 @@ export const getRevenueSharingPoolGatewayContract: GetContractFn<typeof revenueS
   return getContract({
     abi: revenueSharingPoolGatewayABI,
     address: getRevenueSharingPoolGatewayAddress(chainId) ?? getRevenueSharingPoolGatewayAddress(ChainId.BSC),
+    signer,
+    chainId,
+  })
+}
+
+export const getCakePoolContract: GetContractFn<typeof cakePoolAbi, WalletClient> = (
+  signer?: WalletClient,
+  chainId?: number,
+) => {
+  return getContract({
+    abi: cakePoolAbi,
+    address: getCakePoolAddress(ChainId.BSC),
     signer,
     chainId,
   })

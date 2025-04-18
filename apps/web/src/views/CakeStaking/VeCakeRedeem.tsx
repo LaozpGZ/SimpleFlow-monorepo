@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, ChevronDownIcon, Flex, Link, Text } from '@pancakeswap/uikit'
+import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
@@ -15,11 +16,13 @@ import { useCurrentBlockTimestamp } from 'state/block/hooks'
 import styled from 'styled-components'
 import { getRevenueSharingCakePoolAddress, getRevenueSharingVeCakeAddress } from 'utils/addressHelpers'
 import { getRevenueSharingPoolGatewayContract } from 'utils/contractHelpers'
+import formatLocaleNumber from 'utils/formatLocaleNumber'
 import { formatTime } from 'utils/formatTime'
 import { poolStartWeekCursors } from 'views/CakeStaking/config'
 import { RedeemHeader } from './components/RedeemHeader'
 import { DisplayUSDValue, DisplayValue, VeCakeExitField } from './components/VeCakeExitField'
 import { createWriteContractCallback } from './hooks/useContractWrite/createWriteContractCallback'
+import { useWriteCakePoolWithdrawAllCallback } from './hooks/useContractWrite/useWriteCakePoolWithdrawAllCallback'
 import { useWriteEarlyWithdrawCallback } from './hooks/useContractWrite/useWriteEarlyWithdrawCallback'
 import { useRevenueSharingCakePool, useRevenueSharingVeCake } from './hooks/useRevenueSharingProxy'
 import { useCakeLockStatus } from './hooks/useVeCakeUserInfo'
@@ -46,10 +49,23 @@ const useCakeExitInfo = () => {
     cakePoolRewards: BigNumber(cakePoolShare.availableClaim),
     veCakeRewards: BigNumber(veCakeShare.availableClaim),
     cakePrice: cakePrice.toNumber(),
+    proxyCakeLockedAmount,
   }
 }
 
 const useClaimAll = createWriteContractCallback(getRevenueSharingPoolGatewayContract, 'claimMultiple')
+
+function useDisplayValue(val: bigint | BigNumber) {
+  const {
+    currentLanguage: { locale },
+  } = useTranslation()
+  const val1 = typeof val === 'bigint' ? getBalanceAmount(BigNumber(val.toString())).toNumber() : val.toNumber()
+  return formatLocaleNumber({
+    number: val1,
+    locale,
+    sigFigs: 4,
+  })
+}
 export const VeCakeRedeem: React.FC = () => {
   const {
     t,
@@ -57,6 +73,7 @@ export const VeCakeRedeem: React.FC = () => {
   } = useTranslation()
 
   const { account, chainId } = useAccountActiveChain()
+  console.log(`[cake]`, account)
   const isWalletConnected = !!account
   const {
     myVeCake,
@@ -67,6 +84,7 @@ export const VeCakeRedeem: React.FC = () => {
     availableClaimUSD,
     cakePoolRewards,
     veCakeRewards,
+    proxyCakeLockedAmount,
   } = useCakeExitInfo()
   const userStaked = lockedCake.gt(0)
 
@@ -74,13 +92,18 @@ export const VeCakeRedeem: React.FC = () => {
   const totalAmountUSD = totalAmount.times(cakePrice)
   const userHasRewards = isWalletConnected && (cakePoolRewards.gt(0) || veCakeRewards.gt(0))
   const earlyWithdraw = useWriteEarlyWithdrawCallback()
+  const withdrawAll = useWriteCakePoolWithdrawAllCallback()
   const currentBlockTimestamp = useCurrentBlockTimestamp()
   const claimAll = useClaimAll()
 
+  const proxyCakeLockedAmountDisplay = useDisplayValue(proxyCakeLockedAmount)
+  const nativeCakeDisplay = useDisplayValue(lockedCake)
+
   const buttonLabel = useMemo(() => {
     if (!isWalletConnected) return t('Connect Wallet')
-    if (userStaked) return t('Redeem veCAKE')
-    if (userHasRewards) return t('Claim Rewards')
+    if (proxyCakeLockedAmount > 0) return `${t('Redeem From Cake Pool')}(${proxyCakeLockedAmountDisplay}) CAKE`
+    if (userStaked) return `${t('Redeem from veCAKE')} ${nativeCakeDisplay} CAKE`
+    if (userHasRewards) return t('Claim All Rewards')
     return t('All claimed')
   }, [t, isWalletConnected, userStaked, userHasRewards])
 
@@ -92,7 +115,14 @@ export const VeCakeRedeem: React.FC = () => {
 
   const handleClick = useCallback(async () => {
     if (!account || !chainId || !currentBlockTimestamp) return
+
+    if (proxyCakeLockedAmount > 0) {
+      await withdrawAll.callMethod()
+      return
+    }
+
     if (userStaked) {
+      console.log(`[cake], normal cake pool stake withdraw`, `amt=`, lockedCake.toFixed(0))
       await earlyWithdraw.callMethod(account, BigInt(lockedCake.toFixed(0)))
       return
     }
@@ -108,9 +138,10 @@ export const VeCakeRedeem: React.FC = () => {
         ...Array(veCakePoolLength).fill(veCakeAddress),
       ]
 
+      console.log(`[cake] claimAll`, revenueSharingPools, account)
       await claimAll.callMethod(revenueSharingPools, account)
     }
-  }, [earlyWithdraw, userStaked])
+  }, [earlyWithdraw, userStaked, proxyCakeLockedAmount])
   const [expand, setExpand] = useState(false)
 
   return (

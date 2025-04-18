@@ -28,6 +28,7 @@ const ARBITRUM_NODES = [
 
 export const SERVER_NODES = {
   [ChainId.BSC]: [
+    process.env.NEXT_PUBLIC_BSC_FORK_RPC || '', // For fork testing
     getNodeRealUrl(ChainId.BSC, process.env.SERVER_NODE_REAL_API_ETH) || '',
     process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
     getGroveUrl(ChainId.BSC, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
@@ -36,7 +37,10 @@ export const SERVER_NODES = {
     'https://bsc-dataseed1.defibit.io',
     'https://bsc-dataseed1.binance.org',
   ].filter(Boolean),
-  [ChainId.BSC_TESTNET]: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+  [ChainId.BSC_TESTNET]: [
+    process.env.NEXT_PUBLIC_BSC_TESTNET_RPC || '',
+    'https://data-seed-prebsc-1-s1.binance.org:8545',
+  ],
   [ChainId.ETHEREUM]: [
     getNodeRealUrl(ChainId.ETHEREUM, process.env.SERVER_NODE_REAL_API_ETH) || '',
     'https://ethereum.publicnode.com',
@@ -90,8 +94,10 @@ export const SERVER_NODES = {
   ],
 } satisfies Record<ChainId, readonly string[]>
 
+console.log(`[node] NEXT_PUBLIC_BSC_TESTNET_RPC=`, process.env.NEXT_PUBLIC_BSC_TESTNET_RPC)
 export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
   [ChainId.BSC]: [
+    process.env.NEXT_PUBLIC_BSC_FORK_RPC || '', // For fork testing
     process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
     getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
     process.env.NEXT_PUBLIC_NODIES_BSC || '',
@@ -102,6 +108,7 @@ export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
     'https://bsc-dataseed1.binance.org',
   ].filter(Boolean),
   [ChainId.BSC_TESTNET]: [
+    process.env.NEXT_PUBLIC_BSC_TESTNET_RPC || '',
     getNodeRealUrl(ChainId.BSC_TESTNET, process.env.SERVER_NODE_REAL_API_ETH) || '',
     'https://data-seed-prebsc-1-s1.binance.org:8545',
   ].filter(Boolean),
