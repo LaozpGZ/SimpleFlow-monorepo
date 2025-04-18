@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Link, RewardIcon, Text } from '@pancakeswap/uikit'
+import { Box, Flex, FlexGap, Link, RewardIcon, Text } from '@pancakeswap/uikit'
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
@@ -42,7 +42,7 @@ export const RewardInfoCard: React.FC<RewardInfoCardProps> = memo(() => {
 
   return (
     <StyledCard>
-      <Flex alignItems="flex-start" justifyContent="center">
+      <Flex alignItems="center" justifyContent="flex-start">
         <IconWrapper>
           <StyledRewardIcon />
         </IconWrapper>
@@ -55,10 +55,18 @@ export const RewardInfoCard: React.FC<RewardInfoCardProps> = memo(() => {
       <Text mb="8px">
         {t('Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!')}
       </Text>
-      <StyledLink external href="https://app.ethena.fi/join">
-        🔗 {t(`Claim your rewards & learn more`)}
-      </StyledLink>
-      <Text as="span">{t(`on Ethena's official site.`)}</Text>
+      <FlexGap
+        gap="4px"
+        justifyContent="flex-start"
+        alignItems="center"
+        style={{ whiteSpace: 'nowrap' }}
+        flexWrap="wrap"
+      >
+        <StyledLink external href="https://app.ethena.fi/join">
+          {t(`Claim your rewards & learn more`)}
+        </StyledLink>
+        <Text as="span">{t(`on Ethena's official site.`)}</Text>
+      </FlexGap>
     </StyledCard>
   )
 })
