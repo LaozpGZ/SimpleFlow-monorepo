@@ -47,6 +47,7 @@ const useCakeExitInfo = () => {
     cakePoolRewards: BigNumber(cakePoolShare.availableClaim),
     veCakeRewards: BigNumber(veCakeShare.availableClaim),
     cakePrice: cakePrice.toNumber(),
+    nativeCakeLockedAmount,
     proxyCakeLockedAmount,
     cakeLockExpired,
   }
@@ -66,7 +67,7 @@ function useDisplayValue(val: bigint | BigNumber) {
   return formatLocaleNumber({
     number: val1,
     locale,
-    sigFigs: 4,
+    fixedDecimals: 2,
   })
 }
 export const VeCakeRedeem: React.FC = () => {
@@ -88,6 +89,7 @@ export const VeCakeRedeem: React.FC = () => {
     veCakeRewards,
     cakeLockExpired,
     proxyCakeLockedAmount,
+    nativeCakeLockedAmount,
   } = useCakeExitInfo()
   const userStaked = lockedCake.gt(0)
 
@@ -102,7 +104,7 @@ export const VeCakeRedeem: React.FC = () => {
   const claimAll = useClaimAll()
 
   const proxyCakeLockedAmountDisplay = useDisplayValue(proxyCakeLockedAmount)
-  const nativeCakeDisplay = useDisplayValue(lockedCake)
+  const nativeCakeDisplay = useDisplayValue(nativeCakeLockedAmount)
   const cakePoolRewardDisplay = useDisplayValue(cakePoolRewards.plus(veCakeRewards))
 
   const handleClaim = useCallback(async () => {
@@ -160,7 +162,7 @@ export const VeCakeRedeem: React.FC = () => {
       textEnabled: `${t('Redeem from veCAKE')}(${nativeCakeDisplay}) CAKE`,
       textDisable: `${t('Redeem from veCAKE')} ${t('Finished')}`,
       handler: handleVeCake,
-      enabled: userStaked,
+      enabled: nativeCakeLockedAmount > 0,
     },
     {
       key: 'claimall',
@@ -207,22 +209,24 @@ export const VeCakeRedeem: React.FC = () => {
                 usdValue={lockedCake.times(cakePrice)}
               />
 
-              <VeCakeExitField
-                label="Unlock Date"
-                value={
-                  <>
-                    <DateText
-                      style={{
-                        textDecoration: 'line-through',
-                        fontSize: '16px',
-                      }}
-                    >
-                      {endDate}
-                    </DateText>
-                    <Text style={{}}>{t('Anytime')}</Text>
-                  </>
-                }
-              />
+              {endDate !== '-' && (
+                <VeCakeExitField
+                  label="Unlock Date"
+                  value={
+                    <>
+                      <DateText
+                        style={{
+                          textDecoration: 'line-through',
+                          fontSize: '16px',
+                        }}
+                      >
+                        {endDate}
+                      </DateText>
+                      <Text>{t('Anytime')}</Text>
+                    </>
+                  }
+                />
+              )}
 
               <VeCakeExitField
                 label={t('My Total rewards')}
