@@ -22,7 +22,7 @@ const StyledRewardIcon = styled(RewardIcon)`
   height: 18px;
 `
 
-const RewardStatusDisplay: React.FC = () => {
+export const RewardStatusDisplay: React.FC = () => {
   const { t } = useTranslation()
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
