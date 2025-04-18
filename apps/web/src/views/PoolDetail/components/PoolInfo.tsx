@@ -7,7 +7,9 @@ import { useMemo } from 'react'
 import { useChainIdByQuery, useChainNameByQuery } from 'state/info/hooks'
 import styled from 'styled-components'
 import { multiChainNameConverter } from 'utils/chainNameConverter'
+import { useHasReward } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
 import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton'
+import RewardInfoCard from 'views/universalFarms/components/RewardInfoCard'
 import { useConnect } from 'wagmi'
 import { usePoolInfoByQuery } from '../hooks/usePoolInfo'
 import { MyPositions } from './MyPositions'
@@ -31,6 +33,9 @@ export const PoolInfo = () => {
   const chainId = useChainIdByQuery()
   const networkName = useChainNameByQuery()
   const { connectAsync } = useConnect()
+
+  // Check if this pool has rewards
+  const hasPoolReward = useHasReward(poolInfo?.chainId, poolInfo?.lpAddress)
 
   const [currency0, currency1] = useMemo(() => {
     if (!poolInfo) return [undefined, undefined]
@@ -119,6 +124,9 @@ export const PoolInfo = () => {
         <PoolStatus poolInfo={poolInfo} />
         <PoolCharts poolInfo={poolInfo} />
       </Grid>
+
+      {/* Display RewardInfoCard if this pool has rewards */}
+      {hasPoolReward && <RewardInfoCard />}
 
       <Transactions protocol={poolInfo?.protocol} />
     </Column>
