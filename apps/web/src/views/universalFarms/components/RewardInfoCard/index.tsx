@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, FlexGap, Link, RewardIcon, Text } from '@pancakeswap/uikit'
+import { Box, FlexGap, Link, RewardIcon, Text } from '@pancakeswap/uikit'
 import React, { memo } from 'react'
 import styled from 'styled-components'
 
@@ -42,16 +42,14 @@ export const RewardInfoCard: React.FC<RewardInfoCardProps> = memo(() => {
 
   return (
     <StyledCard>
-      <Flex alignItems="center" justifyContent="flex-start">
+      <FlexGap alignItems="center" justifyContent="flex-start" gap="4px">
         <IconWrapper>
           <StyledRewardIcon />
         </IconWrapper>
         <Box>
-          <Text bold mb="8px">
-            {t('Boost Your Yield with Ethena')}
-          </Text>
+          <Text bold>{t('Boost Your Yield with Ethena')}</Text>
         </Box>
-      </Flex>
+      </FlexGap>
       <Text mb="8px">
         {t('Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!')}
       </Text>
