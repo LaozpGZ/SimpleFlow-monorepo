@@ -55,9 +55,10 @@ export const RewardInfoCard: React.FC<RewardInfoCardProps> = memo(() => {
       <Text mb="8px">
         {t('Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!')}
       </Text>
-      <StyledLink external href="https://ethena.fi">
-        🔗 {t(`Claim your rewards & learn more on Ethena's official site.`)}
+      <StyledLink external href="https://app.ethena.fi/join">
+        🔗 {t(`Claim your rewards & learn more`)}
       </StyledLink>
+      <Text as="span">{t(`on Ethena's official site.`)}</Text>
     </StyledCard>
   )
 })

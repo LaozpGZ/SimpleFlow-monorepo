@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Link, RewardIcon, Text, useTooltip } from '@pancakeswap/uikit'
+import { Box, Flex, FlexGap, Link, RewardIcon, Text, useTooltip } from '@pancakeswap/uikit'
 
 import React from 'react'
 import styled from 'styled-components'
@@ -33,9 +33,18 @@ const RewardStatusDisplay: React.FC = () => {
         </Text>
       </Box>
       <Text as="span">{t('Add liquidity to this pool and earn 30x Ethena points!')}</Text>
-      <Link mt="8px" external href="https://ethena.fi">
-        {t("Claim your rewards & learn more on Ethena's official site.")}
-      </Link>
+      <FlexGap
+        gap="4px"
+        justifyContent="flex-start"
+        alignItems="center"
+        style={{ whiteSpace: 'nowrap' }}
+        flexWrap="wrap"
+      >
+        <Link mt="8px" external href="https://app.ethena.fi/join">
+          {t('Claim your rewards & learn more')}
+        </Link>
+        <Text as="span">{t(`on Ethena's official site.`)}</Text>
+      </FlexGap>
     </Box>,
     {
       placement: 'right',
