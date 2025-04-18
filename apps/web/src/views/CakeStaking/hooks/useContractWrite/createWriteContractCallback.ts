@@ -1,3 +1,4 @@
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { usePublicNodeWaitForTransaction } from 'hooks/usePublicNodeWaitForTransaction'
 import { atom, useAtom } from 'jotai'
@@ -5,7 +6,7 @@ import { useCallback, useMemo } from 'react'
 import { GetContractFn } from 'utils/contractHelpers'
 import { Abi, ContractFunctionArgs, ContractFunctionName } from 'viem'
 import { WalletClient } from 'viem/_types/clients/createWalletClient'
-import { useAccount, useWalletClient } from 'wagmi'
+import { useWalletClient } from 'wagmi'
 
 export const createWriteContractCallback = <
   TAbi extends Abi | readonly unknown[],
@@ -23,7 +24,7 @@ export const createWriteContractCallback = <
     const contract = useMemo(() => {
       return getContract()
     }, [getContract])
-    const { address: account } = useAccount()
+    const { account } = useAccountActiveChain()
     const [status, setStatus] = useAtom(statusAtom)
     const [txHash, setTxHash] = useAtom(txHashAtom)
     const { data: walletClient } = useWalletClient()
@@ -44,6 +45,7 @@ export const createWriteContractCallback = <
           account: account!,
           chain: contract.chain,
         })
+        console.log(`[cake] simulate`, request)
 
         setStatus('PENDING')
 

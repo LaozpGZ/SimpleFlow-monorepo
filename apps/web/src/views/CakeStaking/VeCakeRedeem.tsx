@@ -10,7 +10,7 @@ import dayjs from 'dayjs'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useVeCakeBalance } from 'hooks/useTokenBalance'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { useCurrentBlockTimestamp } from 'state/block/hooks'
 import styled from 'styled-components'
@@ -59,7 +59,8 @@ function useDisplayValue(val: bigint | BigNumber) {
   const {
     currentLanguage: { locale },
   } = useTranslation()
-  const val1 = typeof val === 'bigint' ? getBalanceAmount(BigNumber(val.toString())).toNumber() : val.toNumber()
+  const bnVal = typeof val === 'bigint' ? BigNumber(val.toString()) : val
+  const val1 = getBalanceAmount(bnVal, 18).toNumber()
   return formatLocaleNumber({
     number: val1,
     locale,
@@ -73,7 +74,6 @@ export const VeCakeRedeem: React.FC = () => {
   } = useTranslation()
 
   const { account, chainId } = useAccountActiveChain()
-  console.log(`[cake]`, account)
   const isWalletConnected = !!account
   const {
     myVeCake,
@@ -98,36 +98,13 @@ export const VeCakeRedeem: React.FC = () => {
 
   const proxyCakeLockedAmountDisplay = useDisplayValue(proxyCakeLockedAmount)
   const nativeCakeDisplay = useDisplayValue(lockedCake)
+  const cakePoolRewardDisplay = useDisplayValue(cakePoolRewards.plus(veCakeRewards))
 
-  const buttonLabel = useMemo(() => {
-    if (!isWalletConnected) return t('Connect Wallet')
-    if (proxyCakeLockedAmount > 0) return `${t('Redeem From Cake Pool')}(${proxyCakeLockedAmountDisplay}) CAKE`
-    if (userStaked) return `${t('Redeem from veCAKE')} ${nativeCakeDisplay} CAKE`
-    if (userHasRewards) return t('Claim All Rewards')
-    return t('All claimed')
-  }, [t, isWalletConnected, userStaked, userHasRewards])
-
-  const isButtonDisabled = useMemo(() => {
-    if (!isWalletConnected) return false
-    if (userStaked || userHasRewards) return false
-    return true
-  }, [isWalletConnected, userStaked, userHasRewards])
-
-  const handleClick = useCallback(async () => {
+  const handleClaim = useCallback(async () => {
     if (!account || !chainId || !currentBlockTimestamp) return
 
-    if (proxyCakeLockedAmount > 0) {
-      await withdrawAll.callMethod()
-      return
-    }
-
-    if (userStaked) {
-      console.log(`[cake], normal cake pool stake withdraw`, `amt=`, lockedCake.toFixed(0))
-      await earlyWithdraw.callMethod(account, BigInt(lockedCake.toFixed(0)))
-      return
-    }
-
     if (userHasRewards) {
+      console.log(`[cake], claim`)
       const cakePoolAddress = getRevenueSharingCakePoolAddress(chainId)
       const cakePoolLength = Math.ceil((currentBlockTimestamp - poolStartWeekCursors[cakePoolAddress]) / WEEK / 52)
       const veCakeAddress = getRevenueSharingVeCakeAddress(chainId)
@@ -142,7 +119,48 @@ export const VeCakeRedeem: React.FC = () => {
       await claimAll.callMethod(revenueSharingPools, account)
     }
   }, [earlyWithdraw, userStaked, proxyCakeLockedAmount])
+
+  const handleVeCake = useCallback(async () => {
+    if (!account || !chainId || !currentBlockTimestamp) return
+
+    if (userStaked) {
+      console.log(`[cake], vecake account=${account}`, `amt=`, lockedCake.toFixed(0))
+      await earlyWithdraw.callMethod(account, BigInt(lockedCake.toFixed(0)))
+    }
+  }, [earlyWithdraw, userStaked, proxyCakeLockedAmount, account])
+
+  const handleCakePool = useCallback(async () => {
+    if (!account || !chainId || !currentBlockTimestamp) return
+    if (proxyCakeLockedAmount > 0) {
+      console.log(`[cake], cakepool`, `amt=`, lockedCake.toFixed(0))
+      await withdrawAll.callMethod()
+    }
+  }, [proxyCakeLockedAmount])
   const [expand, setExpand] = useState(false)
+
+  const buttons = [
+    {
+      key: 'cakepool',
+      textEnabled: `${t('Redeem From Cake Pool')}(${proxyCakeLockedAmountDisplay}) CAKE`,
+      textDisable: `${t('Redeem From Cake Pool')} ${t('Finished')}`,
+      handler: handleCakePool,
+      enabled: proxyCakeLockedAmount > 0,
+    },
+    {
+      key: 'vecake',
+      textEnabled: `${t('Redeem from veCAKE')}(${nativeCakeDisplay}) CAKE`,
+      textDisable: `${t('Redeem from veCAKE')} ${t('Finished')}`,
+      handler: handleVeCake,
+      enabled: userStaked,
+    },
+    {
+      key: 'claimall',
+      textEnabled: `${t('Claim All Rewards')}(${cakePoolRewardDisplay}) CAKE`,
+      textDisable: `${t('Redeem from veCAKE')} ${t('Finished')}`,
+      handler: handleClaim,
+      enabled: userHasRewards,
+    },
+  ]
 
   return (
     <Bg>
@@ -250,16 +268,32 @@ export const VeCakeRedeem: React.FC = () => {
               </Flex>
             </TotalRedeemBox>
 
-            {isWalletConnected ? (
-              <StyledButton fullWidth onClick={handleClick} disabled={isButtonDisabled}>
-                {buttonLabel}
-              </StyledButton>
-            ) : (
+            {!isWalletConnected && (
               <ConnectWalletButton
                 style={{
                   width: '100%',
                 }}
               />
+            )}
+            {isWalletConnected && (
+              <>
+                {buttons.map((button, i) => {
+                  return (
+                    <StyledButton
+                      key={button.key}
+                      fullWidth
+                      onClick={button.handler}
+                      disabled={!button.enabled}
+                      style={{
+                        marginTop: '10px',
+                      }}
+                      variant={i === 0 ? 'secondary' : 'primary'}
+                    >
+                      {button.enabled ? button.textEnabled : button.textDisable}
+                    </StyledButton>
+                  )
+                })}
+              </>
             )}
           </StyledCard>
         </Container>
