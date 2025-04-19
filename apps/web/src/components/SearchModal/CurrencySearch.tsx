@@ -125,9 +125,11 @@ function CurrencySearch({
   const allTokens = useAllTokens(selectedChainId)
   const native = useNativeCurrency(selectedChainId)
 
-  const searchToken = useToken(debouncedQuery)
+  const searchToken = useToken(debouncedQuery, selectedChainId)
+
   // if they input an address, use it
-  const searchTokenIsAdded = useIsUserAddedToken(searchToken)
+  const searchTokenIsAdded = useIsUserAddedToken(searchToken, selectedChainId)
+
   // if no results on main list, show option to expand into inactive
   const filteredInactiveTokens = useSearchInactiveTokenLists(debouncedQuery)
 
@@ -201,6 +203,7 @@ function CurrencySearch({
       return (
         <Column style={{ padding: '20px 0', height: '100%' }}>
           <ImportRow
+            chainId={selectedChainId}
             onCurrencySelect={handleCurrencySelect}
             token={searchToken}
             showImportView={showImportView}
