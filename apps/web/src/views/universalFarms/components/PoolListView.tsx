@@ -40,15 +40,15 @@ export const ListView: React.FC<IPoolListViewProps> = ({ data, onRowClick }) => 
   return (
     <ListContainer>
       {data.map((item) => {
+        const hasRewards = checkHasReward(item.chainId, item.lpAddress)
         // DEBUG LOG: Print pool info for the specific pair address
-        if (item.lpAddress === '0x345E7D44E1eb8894b4524Cfc918906718bc1FFe2'.toLowerCase()) {
+        if (hasRewards) {
           // eslint-disable-next-line no-console
           console.log(
             '[DEBUG][PoolListView] Pair 0x345E7D44E1eb8894b4524Cfc918906718bc1FFe2:',
             JSON.stringify(item, null, 2),
           )
         }
-        const hasRewards = checkHasReward(item.chainId, item.lpAddress)
         return (
           <ListItemContainer key={`${item.chainId}-${item.lpAddress}`} onClick={() => onRowClick?.(item)}>
             <Column gap="12px">
