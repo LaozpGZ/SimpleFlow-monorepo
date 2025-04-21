@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, FlexGap, Link, RewardIcon, Text, useTooltip } from '@pancakeswap/uikit'
+import { Box, Flex, FlexGap, Link, RewardIcon, Text, useMatchBreakpoints, useTooltip } from '@pancakeswap/uikit'
 
 import React from 'react'
 import styled from 'styled-components'
@@ -24,7 +24,7 @@ const StyledRewardIcon = styled(RewardIcon)`
 
 export const RewardStatusDisplay: React.FC = () => {
   const { t } = useTranslation()
-
+  const { isMobile } = useMatchBreakpoints()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <Box>
       <Box>
@@ -41,7 +41,7 @@ export const RewardStatusDisplay: React.FC = () => {
       </FlexGap>
     </Box>,
     {
-      placement: 'right',
+      placement: isMobile ? 'auto' : 'right',
     },
   )
 
