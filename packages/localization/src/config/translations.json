@@ -3708,9 +3708,6 @@
   "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!": "Add liquidity to these pools (USDe/USDT and sUSDe/USDe) to earn massive rewards - 30x Ethena Points!",
   "Please update to the latest APP version": "Please update to the latest APP version",
   "Only": "Only",
-  "Redeem veCAKE": "Redeem veCAKE",
-  "Claim Rewards": "Claim Rewards",
-  "All claimed": "All claimed",
   "veCake Redeem": "veCake Redeem",
   "MY CAKE STAKING POSITION": "MY CAKE STAKING POSITION",
   "Anytime": "Anytime",
@@ -3722,5 +3719,10 @@
   "Redeem Staked CAKE": "Redeem Staked CAKE",
   "You may now redeem previously locked CAKE and claim remaining rewards.": "You may now redeem previously locked CAKE and claim remaining rewards.",
   "View details": "View details",
-  "View detailed announcement": "View detailed announcement"
+  "View detailed announcement": "View detailed announcement",
+  "Redeem From Cake Pool": "Redeem From Cake Pool",
+  "Redeem from veCAKE": "Redeem from veCAKE",
+  "Claim All Rewards": "Claim All Rewards",
+  "Redeem Staked Cake": "Redeem Staked Cake",
+  "Redeem & Claim": "Redeem & Claim"
 }

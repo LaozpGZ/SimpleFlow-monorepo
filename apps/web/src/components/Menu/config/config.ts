@@ -100,6 +100,11 @@ const config: (
           supportChainIds: SUPPORT_CAKE_STAKING,
         },
         {
+          label: t('veCake Redeem'),
+          href: '/cake-staking/redeem',
+          supportChainIds: SUPPORT_CAKE_STAKING,
+        },
+        {
           label: t('Syrup Pools'),
           href: '/pools',
           supportChainIds: POOL_SUPPORTED_CHAINS,

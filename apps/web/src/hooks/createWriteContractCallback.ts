@@ -45,8 +45,6 @@ export const createWriteContractCallback = <
           account: account!,
           chain: contract.chain,
         })
-        console.log(`[cake] simulate`, request)
-
         setStatus('PENDING')
 
         const hash = await walletClient?.writeContract({

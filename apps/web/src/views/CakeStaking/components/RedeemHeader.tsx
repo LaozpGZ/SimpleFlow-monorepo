@@ -43,7 +43,7 @@ export const RedeemHeader: React.FC = () => {
 }
 
 const Wrapper = styled.div<{ isMobile: boolean }>`
-  padding: 24px 16px;
+  padding: 40px 16px;
   margin-top: ${({ isMobile }) => (isMobile ? '0' : '40px')};
   margin-bottom: 24px;
   position: relative;
@@ -63,11 +63,14 @@ const TextContent = styled.div`
 
 const Title = styled.h1<{ $isMobile: boolean }>`
   font-family: Kanit;
+  font-size: 64px;
+  font-style: normal;
   font-weight: 600;
-  font-size: ${({ $isMobile }) => ($isMobile ? '32px' : '64px')};
   line-height: 110%;
+  font-family: Kanit;
+  font-size: ${({ $isMobile }) => ($isMobile ? '32px' : '64px')};
   color: ${({ theme }) => theme.colors.secondary};
-  margin-bottom: 24px;
+  margin-bottom: 16px;
 `
 
 const SubText = styled.p<{ $isMobile: boolean }>`
@@ -119,6 +122,6 @@ const ImageWrapper = styled.div`
 `
 
 const StyledImage = styled.img`
-  max-width: 280px;
-  height: auto;
+  width: 335px;
+  height: 206px;
 `
