@@ -234,7 +234,7 @@ export const VeCakeRedeem: React.FC = () => {
                   }}
                   usdValue={!allSettled ? lockedCake.times(cakePrice) : undefined}
                   labelTooltip={t(
-                    'All locked CAKE has unlocked on April 23, 2025, at 08:00 AM UTC, and will be available for claiming.',
+                    'All locked CAKE has been unlocked since April 23, 2025, at 08:00 AM UTC and is available for claiming.',
                   )}
                 />
 
