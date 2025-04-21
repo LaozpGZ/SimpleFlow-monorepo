@@ -868,8 +868,8 @@ export const idoConfigDict: Record<string, IDOConfig> = {
       },
     ],
   },
-  hyperlane: {
-    id: 'hyperlane',
+  hyperlane_0421: {
+    id: 'hyperlane_0421',
     projectUrl: 'https://hyperlane.xyz/',
     icon: '/images/ido/hyper.svg',
     chainId: ChainId.BSC,
