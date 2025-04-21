@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, Card, ChevronDownIcon, Flex, Link, Text } from '@pancakeswap/uikit'
 import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
+import { useQueryClient } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
@@ -28,8 +29,8 @@ import { useCakeLockStatus } from './hooks/useVeCakeUserInfo'
 const useCakeExitInfo = () => {
   const { balance } = useVeCakeBalance()
   const { nativeCakeLockedAmount, proxyCakeLockedAmount, cakeUnlockTime, cakeLockExpired } = useCakeLockStatus()
-  const veCakeShare = useRevenueSharingVeCake()
-  const cakePoolShare = useRevenueSharingCakePool()
+  const { data: veCakeShare, refetch: refetchRevenueShareVeCake } = useRevenueSharingVeCake()
+  const { data: cakePoolShare, refetch: refetchRevenueShareCake } = useRevenueSharingCakePool()
   const cakePrice = useCakePrice()
 
   const availableClaim = BigNumber(veCakeShare.availableClaim).plus(cakePoolShare.availableClaim)
@@ -50,6 +51,8 @@ const useCakeExitInfo = () => {
     proxyCakeLockedAmount,
     cakeLockExpired,
     unlockTime,
+    refetchRevenueShareVeCake,
+    refetchRevenueShareCake,
   }
 }
 
@@ -87,9 +90,12 @@ export const VeCakeRedeem: React.FC = () => {
     cakeLockExpired,
     proxyCakeLockedAmount,
     nativeCakeLockedAmount,
+    refetchRevenueShareVeCake,
+    refetchRevenueShareCake,
   } = useCakeExitInfo()
   const userStaked = lockedCake.gt(0)
   const unlockTimeDisplay = unlockTime ? formatTime(unlockTime) : '-'
+  const queryClient = useQueryClient()
 
   const totalAmount = cakePoolRewards.plus(veCakeRewards).plus(lockedCake)
   const totalAmountUSD = totalAmount.times(cakePrice)
@@ -105,7 +111,6 @@ export const VeCakeRedeem: React.FC = () => {
   const cakePoolRewardDisplay = useDisplayValue(cakePoolRewards.plus(veCakeRewards))
 
   const handleClaim = useCallback(async () => {
-    console.log(`[cake], handleClaim`)
     if (!account || !chainId || !currentBlockTimestamp) return
 
     if (userHasRewards) {
@@ -120,6 +125,8 @@ export const VeCakeRedeem: React.FC = () => {
       ]
 
       await claimAll.callMethod(revenueSharingPools, account)
+      refetchRevenueShareCake()
+      refetchRevenueShareVeCake()
     }
   }, [account, chainId, currentBlockTimestamp, claimAll, userHasRewards])
 
@@ -184,7 +191,10 @@ export const VeCakeRedeem: React.FC = () => {
     setProcessing(true)
 
     try {
-      await Promise.all(buttons.map((button) => button.handler()))
+      for (const button of buttons) {
+        // eslint-disable-next-line
+        await button.handler()
+      }
     } catch (ex) {
       console.warn(ex)
     } finally {

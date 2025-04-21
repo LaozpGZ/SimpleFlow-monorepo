@@ -35,7 +35,7 @@ export const useRevenueSharingProxy = (
   const currentBlockTimestamp = useCurrentBlockTimestamp()
   const gatewayContract = useRevenueSharingPoolGatewayContract()
 
-  const { data } = useQuery({
+  const { data, refetch } = useQuery({
     queryKey: ['/revenue-sharing-pool-for-cake', contract.address, contract.chain?.id, account],
     queryFn: async () => {
       if (!account || !currentBlockTimestamp) return undefined
@@ -81,7 +81,10 @@ export const useRevenueSharingProxy = (
     enabled: Boolean(account && currentBlockTimestamp),
   })
 
-  return data ?? initialData
+  return {
+    data: data ?? initialData,
+    refetch,
+  }
 }
 
 export const useRevenueSharingCakePool = () => {
