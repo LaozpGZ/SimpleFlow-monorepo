@@ -177,12 +177,15 @@ export const VeCakeRedeem: React.FC = () => {
   const [processing, setProcessing] = useState(false)
   const handleProcessAll = async () => {
     if (buttons.every((button) => !button.enabled)) return
+    setProcessing(true)
 
     try {
       for (const button of buttons) {
         // eslint-disable-next-line no-await-in-loop
         await button.handler()
       }
+    } catch (ex) {
+      console.warn(ex)
     } finally {
       setProcessing(false)
     }
