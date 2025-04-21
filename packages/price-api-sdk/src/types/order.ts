@@ -47,7 +47,7 @@ export interface BridgeTrade<tradeType extends TradeType = TradeType> {
     path: [Currency, Currency]
     inputAmount: CurrencyAmount<Currency>
     outputAmount: CurrencyAmount<Currency>
-    type: 'PCS_BRIDGE'
+    type: RouteType.BRIDGE
   }[]
   tradeType: tradeType
 }
