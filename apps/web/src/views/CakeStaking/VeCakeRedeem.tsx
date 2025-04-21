@@ -41,7 +41,6 @@ const useCakeExitInfo = () => {
   return {
     myVeCake: balance,
     lockedCake: BigNumber(lockedCake.toString()),
-    endDate: unlockTime ? formatTime(unlockTime) : '-',
     availableClaim,
     availableClaimUSD: availableClaim.times(cakePrice),
     cakePoolRewards: BigNumber(cakePoolShare.availableClaim),
@@ -50,6 +49,7 @@ const useCakeExitInfo = () => {
     nativeCakeLockedAmount,
     proxyCakeLockedAmount,
     cakeLockExpired,
+    unlockTime,
   }
 }
 
@@ -77,7 +77,7 @@ export const VeCakeRedeem: React.FC = () => {
   const isWalletConnected = !!account
   const {
     myVeCake,
-    endDate,
+    unlockTime,
     lockedCake,
     cakePrice,
     availableClaim,
@@ -89,6 +89,7 @@ export const VeCakeRedeem: React.FC = () => {
     nativeCakeLockedAmount,
   } = useCakeExitInfo()
   const userStaked = lockedCake.gt(0)
+  const unlockTimeDisplay = unlockTime ? formatTime(unlockTime) : '-'
 
   const totalAmount = cakePoolRewards.plus(veCakeRewards).plus(lockedCake)
   const totalAmountUSD = totalAmount.times(cakePrice)
@@ -180,10 +181,11 @@ export const VeCakeRedeem: React.FC = () => {
     setProcessing(true)
 
     try {
-      for (const button of buttons) {
-        // eslint-disable-next-line no-await-in-loop
-        await button.handler()
-      }
+      await Promise.all(buttons.map((button) => button.handler))
+      // for (const button of buttons) {
+      //   // eslint-disable-next-line no-await-in-loop
+      //   await button.handler()
+      // }
     } catch (ex) {
       console.warn(ex)
     } finally {
@@ -231,23 +233,27 @@ export const VeCakeRedeem: React.FC = () => {
                     lineHeight: '120%',
                     textAlign: 'right',
                   }}
-                  usdValue={lockedCake.times(cakePrice)}
+                  usdValue={!allSettled ? lockedCake.times(cakePrice) : undefined}
+                  labelTooltip={t(
+                    'All locked CAKE has unlocked on April 23, 2025, at 08:00 AM UTC, and will be available for claiming.',
+                  )}
                 />
 
-                {endDate !== '-' && (
+                {Boolean(nativeCakeLockedAmount > 0 && unlockTime > 0) && (
                   <VeCakeExitField
                     label="Unlock Date"
                     value={
                       <>
+                        {unlockTime < Date.now() && <Text>{t('Unlocked on')} </Text>}
                         <DateText
                           style={{
-                            textDecoration: 'line-through',
+                            textDecoration: unlockTime > Date.now() ? 'line-through' : 'none',
                             fontSize: '16px',
                           }}
                         >
-                          {endDate}
+                          {unlockTimeDisplay}
                         </DateText>
-                        <Text>{t('Anytime')}</Text>
+                        {unlockTime > Date.now() && <Text>{t('Anytime')}</Text>}
                       </>
                     }
                   />
@@ -264,22 +270,24 @@ export const VeCakeRedeem: React.FC = () => {
                         cursor: 'pointer',
                       }}
                     >
-                      <DisplayValue
-                        value={availableClaim}
-                        symbol="CAKE"
-                        style={{
-                          fontSize: '16px',
-                          fontWeight: 600,
-                        }}
-                      />
-                      <ChevronDownIcon color="primary60" />
+                      {!allSettled && (
+                        <DisplayValue
+                          value={availableClaim}
+                          symbol="CAKE"
+                          style={{
+                            fontSize: '16px',
+                            fontWeight: 600,
+                          }}
+                        />
+                      )}
+                      {!allSettled && <ChevronDownIcon color="primary60" />}
                     </Flex>
                   }
                   symbol="CAKE"
                   usdValue={availableClaimUSD}
                 />
 
-                {expand && (
+                {!allSettled && expand && (
                   <>
                     <SubField>
                       <VeCakeExitField label={t('CAKE Pool Rewards')} value={cakePoolRewards} symbol="CAKE" />
@@ -289,22 +297,24 @@ export const VeCakeRedeem: React.FC = () => {
                 )}
               </FieldGroup>
 
-              <TotalRedeemBox>
-                <Box>
-                  <RedeemIcon src={`${ASSET_CDN}/web/vecake/redeem-icon.png`} alt="redeem" />
-                </Box>
-                <Flex flex={1} flexDirection="row" justifyContent="space-between">
+              {!allSettled && (
+                <TotalRedeemBox>
                   <Box>
-                    <RedeemTitle>{t('REDEEM NOW')}</RedeemTitle>
-                    <RedeemLabel>{t('Total amount')}</RedeemLabel>
-                    {/* <VeCakeExitField label="Total amount" value={totalAmount} symbol="CAKE" usdValue={totalAmountUSD} /> */}
+                    <RedeemIcon src={`${ASSET_CDN}/web/vecake/redeem-icon.png`} alt="redeem" />
                   </Box>
-                  <Box>
-                    <StyledRedeemValue symbol="CAKE" value={totalAmount} />
-                    <DisplayUSDValue value={totalAmountUSD} />
-                  </Box>
-                </Flex>
-              </TotalRedeemBox>
+                  <Flex flex={1} flexDirection="row" justifyContent="space-between">
+                    <Box>
+                      <RedeemTitle>{t('REDEEM NOW')}</RedeemTitle>
+                      <RedeemLabel>{t('Total amount')}</RedeemLabel>
+                      {/* <VeCakeExitField label="Total amount" value={totalAmount} symbol="CAKE" usdValue={totalAmountUSD} /> */}
+                    </Box>
+                    <Box>
+                      <StyledRedeemValue symbol="CAKE" value={totalAmount} />
+                      <DisplayUSDValue value={totalAmountUSD} />
+                    </Box>
+                  </Flex>
+                </TotalRedeemBox>
+              )}
 
               {!isWalletConnected && (
                 <ConnectWalletButton
