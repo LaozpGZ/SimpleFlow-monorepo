@@ -54,5 +54,3 @@ export const RewardStatusDisplay: React.FC = () => {
     </Flex>
   )
 }
-
-export default RewardStatusDisplay

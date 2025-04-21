@@ -6,7 +6,7 @@ import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { getChainFullName } from '../utils'
 import { RewardStatusDisplay } from './FarmStatusDisplay'
-import { hasReward } from './FarmStatusDisplay/hooks'
+import { checkHasReward } from './FarmStatusDisplay/hooks'
 import { PoolGlobalAprButton } from './PoolAprButton'
 import { ActionItems } from './PoolListItemAction'
 import { useColumnMobileConfig } from './useColumnConfig'
@@ -40,7 +40,7 @@ export const ListView: React.FC<IPoolListViewProps> = ({ data, onRowClick }) => 
   return (
     <ListContainer>
       {data.map((item) => {
-        const hasRewards = hasReward(item.chainId, item.lpAddress)
+        const hasRewards = checkHasReward(item.chainId, item.lpAddress)
         return (
           <ListItemContainer key={`${item.chainId}-${item.lpAddress}`} onClick={() => onRowClick?.(item)}>
             <Column gap="12px">

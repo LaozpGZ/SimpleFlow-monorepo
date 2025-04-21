@@ -50,7 +50,7 @@ import {
   V2PositionItem,
   V3PositionItem,
 } from 'views/universalFarms/components'
-import { useHasReward } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
+import { checkHasReward } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
 import { RewardInfoCard } from 'views/universalFarms/components/RewardInfoCard'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 import { useV2CakeEarning, useV3CakeEarningsByPool } from 'views/universalFarms/hooks/useCakeEarning'
@@ -105,7 +105,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   const { t } = useTranslation()
   const { account } = useAccountActiveChain()
   const chainId = useChainIdByQuery()
-  const hasPoolReward = useHasReward(poolInfo.chainId, poolInfo.lpAddress)
+  const hasPoolReward = checkHasReward(poolInfo.chainId, poolInfo.lpAddress)
 
   // Fetch data at the parent level
   const { data: v3Data, isLoading: isV3Loading } = useAccountPositionDetailByPool<Protocol.V3>(

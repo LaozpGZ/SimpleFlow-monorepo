@@ -6,8 +6,8 @@ import { TokenPairImage } from 'components/TokenImage'
 import { useMemo } from 'react'
 import type { PoolInfo } from 'state/farmsV4/state/type'
 import { getChainFullName } from '../utils'
-import RewardStatusDisplay from './FarmStatusDisplay'
-import { hasReward } from './FarmStatusDisplay/hooks'
+import { RewardStatusDisplay } from './FarmStatusDisplay'
+import { checkHasReward } from './FarmStatusDisplay/hooks'
 import { PoolGlobalAprButton } from './PoolAprButton'
 import { PoolListItemAction } from './PoolListItemAction'
 
@@ -90,7 +90,7 @@ export const useColumnConfig = (): ITableViewProps<PoolInfo>['columns'] => {
         key: 'name',
         minWidth: '210px',
         render: (_, item) => {
-          const showReward = hasReward(item.chainId, item.lpAddress)
+          const showReward = checkHasReward(item.chainId, item.lpAddress)
 
           return (
             <div style={{ display: 'flex', alignItems: 'center' }}>
