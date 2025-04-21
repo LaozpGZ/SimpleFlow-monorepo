@@ -100,7 +100,6 @@ export const useCakeLockStatus = (
 } => {
   const currentTimestamp = useCurrentBlockTimestamp()
   const { data: userInfo } = useVeCakeUserInfo(targetChain)
-  console.log(userInfo)
   // if user locked at cakePool before, should migrate
   const cakePoolLockInfo = useCakePoolLockInfo(targetChain)
 

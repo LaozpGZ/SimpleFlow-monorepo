@@ -105,6 +105,7 @@ export const VeCakeRedeem: React.FC = () => {
   const cakePoolRewardDisplay = useDisplayValue(cakePoolRewards.plus(veCakeRewards))
 
   const handleClaim = useCallback(async () => {
+    console.log(`[cake], handleClaim`)
     if (!account || !chainId || !currentBlockTimestamp) return
 
     if (userHasRewards) {
@@ -123,6 +124,7 @@ export const VeCakeRedeem: React.FC = () => {
   }, [account, chainId, currentBlockTimestamp, claimAll, userHasRewards])
 
   const handleVeCake = useCallback(async () => {
+    console.log(`[cake], veCake`)
     if (!account || !chainId || !currentBlockTimestamp) return
 
     if (userStaked) {
@@ -144,6 +146,7 @@ export const VeCakeRedeem: React.FC = () => {
   ])
 
   const handleCakePool = useCallback(async () => {
+    console.log(`[cake], cakePool`)
     if (!account || !chainId || !currentBlockTimestamp) return
     if (proxyCakeLockedAmount > 0) {
       await withdrawAll.callMethod()
@@ -181,11 +184,7 @@ export const VeCakeRedeem: React.FC = () => {
     setProcessing(true)
 
     try {
-      await Promise.all(buttons.map((button) => button.handler))
-      // for (const button of buttons) {
-      //   // eslint-disable-next-line no-await-in-loop
-      //   await button.handler()
-      // }
+      await Promise.all(buttons.map((button) => button.handler()))
     } catch (ex) {
       console.warn(ex)
     } finally {
