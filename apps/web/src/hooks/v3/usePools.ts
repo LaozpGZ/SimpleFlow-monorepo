@@ -148,16 +148,24 @@ export function usePools(
 
   const { data: slot0s, isLoading: slot0Loading } = useMultipleContractSingleDataWagmi({
     addresses: poolAddresses,
-    chainIds: chainId,
+    chainId,
     abi: v3PoolStateABI,
     functionName: 'slot0',
+    options: {
+      enabled: poolAddresses.length > 0,
+      watch: true,
+    },
   })
 
   const { data: liquidities, isLoading: liquidityLoading } = useMultipleContractSingleDataWagmi({
     addresses: poolAddresses,
-    chainIds: chainId,
+    chainId,
     abi: v3PoolStateABI,
     functionName: 'liquidity',
+    options: {
+      enabled: poolAddresses.length > 0,
+      watch: true,
+    },
   })
 
   return useMemo(() => {
