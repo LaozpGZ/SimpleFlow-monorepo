@@ -33,13 +33,7 @@ export const RewardStatusDisplay: React.FC = () => {
         </Text>
       </Box>
       <Text as="span">{t('Add liquidity to this pool and earn 30x Ethena points!')}</Text>
-      <FlexGap
-        gap="4px"
-        justifyContent="flex-start"
-        alignItems="center"
-        style={{ whiteSpace: 'nowrap' }}
-        flexWrap="wrap"
-      >
+      <FlexGap gap="4px" justifyContent="flex-start" display="inline-flex" alignItems="center" flexWrap="wrap">
         <Link mt="8px" external href="https://app.ethena.fi/join">
           {t('Claim your rewards & learn more')}
         </Link>

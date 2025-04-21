@@ -228,26 +228,29 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   }
   if (count === 0 || !account) {
     return (
-      <Grid gridGap="24px">
-        <Text as="h3" fontWeight={600} fontSize={24}>
-          {t('My Positions')}
-        </Text>
-        <Card>
-          <CardBody>
-            <FlexGap alignItems="center" justifyContent="center" flexDirection="column" gap="24px">
-              <Text color="textSubtle">
-                {!account
-                  ? t('Please connect wallet to view your position / add liquidity.')
-                  : t('You currently have no position in this liquidity pair.')}
-              </Text>
-              {!account ? (
-                <ConnectWalletButton />
-              ) : (
-                <AddLiquidityButton to={addLiquidityLink} wrapperProps={{ width: 'auto' }} />
-              )}
-            </FlexGap>
-          </CardBody>
-        </Card>
+      <Grid gridGap="24px" gridTemplateColumns={['1fr', '1fr', '1fr', hasPoolReward ? '1fr 2fr' : '1fr']}>
+        {hasPoolReward && <RewardInfoCard />}
+        <Box>
+          <Text as="h3" fontWeight={600} fontSize={24}>
+            {t('My Positions')}
+          </Text>
+          <Card>
+            <CardBody>
+              <FlexGap alignItems="center" justifyContent="center" flexDirection="column" gap="24px">
+                <Text color="textSubtle">
+                  {!account
+                    ? t('Please connect wallet to view your position / add liquidity.')
+                    : t('You currently have no position in this liquidity pair.')}
+                </Text>
+                {!account ? (
+                  <ConnectWalletButton />
+                ) : (
+                  <AddLiquidityButton to={addLiquidityLink} wrapperProps={{ width: 'auto' }} />
+                )}
+              </FlexGap>
+            </CardBody>
+          </Card>
+        </Box>
       </Grid>
     )
   }
