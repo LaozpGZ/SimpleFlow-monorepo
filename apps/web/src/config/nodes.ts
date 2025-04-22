@@ -28,7 +28,6 @@ const ARBITRUM_NODES = [
 
 export const SERVER_NODES = {
   [ChainId.BSC]: [
-    process.env.NEXT_PUBLIC_BSC_FORK_RPC || '', // For fork testing
     getNodeRealUrl(ChainId.BSC, process.env.SERVER_NODE_REAL_API_ETH) || '',
     process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
     getGroveUrl(ChainId.BSC, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
@@ -107,7 +106,6 @@ function getUrlRpc() {
 export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
   [ChainId.BSC]: [
     getUrlRpc(),
-    process.env.NEXT_PUBLIC_BSC_FORK_RPC || '', // For fork testing
     process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
     getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
     process.env.NEXT_PUBLIC_NODIES_BSC || '',
@@ -118,6 +116,7 @@ export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
     'https://bsc-dataseed1.binance.org',
   ].filter(Boolean),
   [ChainId.BSC_TESTNET]: [
+    getUrlRpc(),
     process.env.NEXT_PUBLIC_BSC_TESTNET_RPC || '',
     getNodeRealUrl(ChainId.BSC_TESTNET, process.env.SERVER_NODE_REAL_API_ETH) || '',
     'https://data-seed-prebsc-1-s1.binance.org:8545',
