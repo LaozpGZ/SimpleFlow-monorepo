@@ -263,7 +263,8 @@ export function useDefaultsFromURLSearch():
   >()
 
   const {
-    [Field.INPUT]: { currencyId: inputCurrencyId },
+    [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
   } = useSwapState()
 
   useEffect(() => {
@@ -279,7 +280,9 @@ export function useDefaultsFromURLSearch():
         typedValue: parsed.typedValue,
         field: parsed.independentField,
         inputCurrencyId: inputCurrencyId || parsed[Field.INPUT].currencyId,
-        outputCurrencyId: parsed[Field.OUTPUT].currencyId,
+        outputCurrencyId: outputCurrencyId || parsed[Field.OUTPUT].currencyId,
+        inputChainId,
+        outputChainId,
         recipient: null,
       }),
     )
