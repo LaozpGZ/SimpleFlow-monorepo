@@ -1,12 +1,20 @@
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { useTranslation } from '@pancakeswap/localization'
+import { useToast } from '@pancakeswap/uikit'
+import { ToastDescriptionWithTx } from 'components/Toast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { atom, useAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 import { GetContractFn } from 'utils/contractHelpers'
 import { Abi, ContractFunctionArgs, ContractFunctionName } from 'viem'
 import { WalletClient } from 'viem/_types/clients/createWalletClient'
-import { useWalletClient } from 'wagmi'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
+
+interface UXOptions {
+  successToast: {
+    title: string
+    description: string
+  }
+}
 
 export const createWriteContractCallback = <
   TAbi extends Abi | readonly unknown[],
@@ -22,18 +30,18 @@ export const createWriteContractCallback = <
   return () => {
     const { callWithGasPrice } = useCallWithGasPrice()
     const { fetchWithCatchTxError, loading } = useCatchTxError()
+    const { t } = useTranslation()
     const contract = useMemo(() => {
       return getContract()
-    }, [getContract])
-    const { account } = useAccountActiveChain()
+    }, [])
     const [status, setStatus] = useAtom(statusAtom)
     const [txHash, setTxHash] = useAtom(txHashAtom)
-    const { data: walletClient } = useWalletClient()
+    const { toastSuccess } = useToast()
 
     const callMethod = useCallback(
       async (
-        // @ts-ignore
-        ...args: ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TMethod>
+        args: ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TMethod>,
+        options?: UXOptions,
       ): Promise<
         | {
             hash: `0x${string}`
@@ -61,26 +69,21 @@ export const createWriteContractCallback = <
         if (receipt?.status === 'success') {
           // const transactionReceipt = await waitForTransaction({ hash })
           setStatus('CONFIRMED')
+          toastSuccess(
+            options?.successToast.title || t('Success'),
+            options?.successToast.description && (
+              <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+                {options.successToast.description}
+              </ToastDescriptionWithTx>
+            ),
+          )
           return
         }
         setStatus('FAILED')
       },
-      [contract, account, setStatus, setTxHash, walletClient],
+      [contract, setStatus, setTxHash, callWithGasPrice, fetchWithCatchTxError, toastSuccess, t],
     )
 
-    const caller = useCallback(
-      (
-        // @ts-ignore
-        ...args: ContractFunctionArgs<TAbi, 'nonpayable' | 'payable', TMethod>
-      ) => {
-        return fetchWithCatchTxError(() => {
-          // @ts-ignore
-          return callMethod(...args)
-        })
-      },
-      [callMethod],
-    )
-
-    return { callMethod: caller, status, txHash, loading }
+    return { callMethod, status, txHash, loading }
   }
 }

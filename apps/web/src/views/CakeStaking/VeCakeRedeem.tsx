@@ -75,30 +75,55 @@ export const VeCakeRedeem: React.FC = () => {
       ]
       const uniq = [...new Set(revenueSharingPools)]
 
-      await claimAll.callMethod(uniq, account)
+      await claimAll.callMethod([uniq, account], {
+        successToast: {
+          title: t('Claim Successfully'),
+          description: t(`Rewards have been send to your wallet.`),
+        },
+      })
       refetchRevenueShareCake()
       refetchRevenueShareVeCake()
     }
-  }, [account, chainId, currentBlockTimestamp, claimAll, userHasRewards])
+  }, [
+    account,
+    chainId,
+    currentBlockTimestamp,
+    claimAll,
+    userHasRewards,
+    refetchRevenueShareCake,
+    refetchRevenueShareVeCake,
+    t,
+  ])
 
   const handleVeCake = useCallback(async () => {
     if (!account || !chainId || !currentBlockTimestamp) return
 
     if (userStaked) {
       if (cakeLockExpired) {
-        await veCakeWithdrawAll.callMethod(account)
+        await veCakeWithdrawAll.callMethod([account], {
+          successToast: {
+            title: t('veCAKE Redeem Successfully'),
+            description: `${nativeCakeDisplay} ${t('CAKE has been send to your wallet.')}`,
+          },
+        })
       } else {
-        await earlyWithdraw.callMethod(account, BigInt(nativeCakeLockedAmount))
+        await earlyWithdraw.callMethod([account, BigInt(nativeCakeLockedAmount)], {
+          successToast: {
+            title: t('veCAKE Redeem Successfully'),
+            description: `${nativeCakeDisplay} ${t('CAKE has been send to your wallet.')}`,
+          },
+        })
       }
     }
   }, [
+    t,
+    nativeCakeDisplay,
     earlyWithdraw,
     userStaked,
     account,
     chainId,
     currentBlockTimestamp,
     cakeLockExpired,
-    lockedCake,
     veCakeWithdrawAll,
     nativeCakeLockedAmount,
   ])
@@ -106,7 +131,12 @@ export const VeCakeRedeem: React.FC = () => {
   const handleCakePool = useCallback(async () => {
     if (!account || !chainId || !currentBlockTimestamp) return
     if (proxyCakeLockedAmount > 0) {
-      await withdrawAll.callMethod()
+      await withdrawAll.callMethod([], {
+        successToast: {
+          title: t('CAKE Pool Redeem Successfully'),
+          description: `${proxyCakeLockedAmountDisplay} ${t('CAKE has been send to your wallet.')}`,
+        },
+      })
     }
   }, [proxyCakeLockedAmount, account, chainId, currentBlockTimestamp, withdrawAll])
   const [expand, setExpand] = useState(false)
