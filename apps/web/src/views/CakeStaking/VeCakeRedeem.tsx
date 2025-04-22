@@ -1,7 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, Card, ChevronDownIcon, Flex, Link, Text } from '@pancakeswap/uikit'
-import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
-import { useQueryClient } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
@@ -18,13 +16,13 @@ import { useCurrentBlockTimestamp } from 'state/block/hooks'
 import styled from 'styled-components'
 import { getRevenueSharingCakePoolAddress, getRevenueSharingVeCakeAddress } from 'utils/addressHelpers'
 import { getCakePoolContract, getRevenueSharingPoolGatewayContract, getVeCakeContract } from 'utils/contractHelpers'
-import formatLocaleNumber from 'utils/formatLocaleNumber'
 import { formatTime } from 'utils/formatTime'
 import { poolStartWeekCursors } from 'views/CakeStaking/config'
 import { RedeemHeader } from './components/RedeemHeader'
 import { DisplayUSDValue, DisplayValue, VeCakeExitField } from './components/VeCakeExitField'
 import { useRevenueSharingCakePool, useRevenueSharingVeCake } from './hooks/useRevenueSharingProxy'
 import { useCakeLockStatus } from './hooks/useVeCakeUserInfo'
+import { useDisplayValue } from './utils/useDisplayValue'
 
 const useCakeExitInfo = () => {
   const { balance } = useVeCakeBalance()
@@ -61,18 +59,6 @@ const useClaimAll = createWriteContractCallback(getRevenueSharingPoolGatewayCont
 const useWriteEarlyWithdrawCallback = createWriteContractCallback(getVeCakeContract, 'earlyWithdraw')
 const useWriteWithdrawCallback = createWriteContractCallback(getVeCakeContract, 'withdrawAll')
 
-function useDisplayValue(val: bigint | BigNumber) {
-  const {
-    currentLanguage: { locale },
-  } = useTranslation()
-  const bnVal = typeof val === 'bigint' ? BigNumber(val.toString()) : val
-  const val1 = getBalanceAmount(bnVal, 18).toNumber()
-  return formatLocaleNumber({
-    number: val1,
-    locale,
-    fixedDecimals: 2,
-  })
-}
 export const VeCakeRedeem: React.FC = () => {
   const { t } = useTranslation()
 
@@ -95,7 +81,6 @@ export const VeCakeRedeem: React.FC = () => {
   } = useCakeExitInfo()
   const userStaked = lockedCake.gt(0)
   const unlockTimeDisplay = unlockTime ? formatTime(unlockTime) : '-'
-  const queryClient = useQueryClient()
 
   const totalAmount = cakePoolRewards.plus(veCakeRewards).plus(lockedCake)
   const totalAmountUSD = totalAmount.times(cakePrice)
@@ -279,7 +264,7 @@ export const VeCakeRedeem: React.FC = () => {
                         cursor: 'pointer',
                       }}
                     >
-                      {!allSettled && (
+                      {!allSettled && availableClaim.gt(0) && (
                         <DisplayValue
                           value={availableClaim}
                           symbol="CAKE"
@@ -289,7 +274,7 @@ export const VeCakeRedeem: React.FC = () => {
                           }}
                         />
                       )}
-                      {!allSettled && <ChevronDownIcon color="primary60" />}
+                      {!allSettled && availableClaim.gt(0) && <ChevronDownIcon color="primary60" />}
                     </Flex>
                   }
                   symbol="CAKE"

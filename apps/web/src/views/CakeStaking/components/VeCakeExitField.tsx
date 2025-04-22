@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js'
 import React, { ReactElement } from 'react'
 import styled from 'styled-components'
 import formatLocaleNumber from 'utils/formatLocaleNumber'
+import { getDisplayValue } from '../utils/useDisplayValue'
 
 type FieldProps = {
   label: string
@@ -30,23 +31,17 @@ export const DisplayValue = ({
   const {
     currentLanguage: { locale },
   } = useTranslation()
-  if (!value) {
-    return <ValueText className={className}>-</ValueText>
-  }
+
   if (typeof value === 'number' || value instanceof BigNumber) {
-    const val = value instanceof BigNumber ? getBalanceAmount(value).toNumber() : value
-    if (val === 0) {
+    const display = getDisplayValue(value, locale)
+    console.log('display', display)
+    if (display === '-') {
       return <ValueText className={className}>-</ValueText>
     }
 
-    const valueStr = formatLocaleNumber({
-      number: val,
-      locale,
-      fixedDecimals: 2,
-    })
     return (
       <ValueText style={style} className={className}>
-        {valueStr}
+        {display}
         {symbol && <SymbolText>&nbsp;{symbol}</SymbolText>}
       </ValueText>
     )
