@@ -1,12 +1,12 @@
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useCatchTxError from 'hooks/useCatchTxError'
-import { usePublicNodeWaitForTransaction } from 'hooks/usePublicNodeWaitForTransaction'
 import { atom, useAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 import { GetContractFn } from 'utils/contractHelpers'
 import { Abi, ContractFunctionArgs, ContractFunctionName } from 'viem'
 import { WalletClient } from 'viem/_types/clients/createWalletClient'
 import { useWalletClient } from 'wagmi'
+import { useCallWithGasPrice } from './useCallWithGasPrice'
 
 export const createWriteContractCallback = <
   TAbi extends Abi | readonly unknown[],
@@ -20,6 +20,7 @@ export const createWriteContractCallback = <
   const txHashAtom = atom<string>('')
 
   return () => {
+    const { callWithGasPrice } = useCallWithGasPrice()
     const { fetchWithCatchTxError, loading } = useCatchTxError()
     const contract = useMemo(() => {
       return getContract()
@@ -28,7 +29,6 @@ export const createWriteContractCallback = <
     const [status, setStatus] = useAtom(statusAtom)
     const [txHash, setTxHash] = useAtom(txHashAtom)
     const { data: walletClient } = useWalletClient()
-    const { waitForTransaction } = usePublicNodeWaitForTransaction()
 
     const callMethod = useCallback(
       async (
@@ -40,30 +40,32 @@ export const createWriteContractCallback = <
           }
         | undefined
       > => {
-        // @ts-ignore
-        const { request } = await contract.simulate[method](args, {
-          account: account!,
-          chain: contract.chain,
-        })
         setStatus('PENDING')
-
-        const hash = await walletClient?.writeContract({
-          ...request,
-          account,
+        const receipt = await fetchWithCatchTxError(async () => {
+          const result = await callWithGasPrice(
+            {
+              abi: contract.abi as Abi,
+              account: contract.account,
+              chain: contract.chain,
+              address: contract.address,
+            },
+            method,
+            // @ts-ignore
+            args,
+          )
+          setTxHash(result.hash)
+          setStatus('CONFIRMING')
+          return result
         })
-        setTxHash(hash ?? '')
-        setStatus('CONFIRMING')
 
-        if (hash) {
-          const transactionReceipt = await waitForTransaction({ hash })
-          setStatus(transactionReceipt?.status === 'success' ? 'CONFIRMED' : 'ERROR')
-          return {
-            hash,
-          }
+        if (receipt?.status === 'success') {
+          // const transactionReceipt = await waitForTransaction({ hash })
+          setStatus('CONFIRMED')
+          return
         }
-        return undefined
+        setStatus('FAILED')
       },
-      [contract, account, setStatus, setTxHash, waitForTransaction, walletClient],
+      [contract, account, setStatus, setTxHash, walletClient],
     )
 
     const caller = useCallback(
