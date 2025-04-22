@@ -3,9 +3,9 @@ import { fetchFromDune } from './request'
 import { DuneResponse } from './types'
 
 interface Row {
-  Circulating_Supply: number
-  Total_Pools: number
-  Total_Supply: number
+  circulating_supply: number
+  total_pools: number
+  total_supply: number
   week: string
 }
 
@@ -18,7 +18,7 @@ export const getTotalSupplyTimeSeries = async () => {
     data: data.result.rows
       .map((row: Row) => ({
         timestamp: new Date(row.week).getTime(),
-        total_supply: row.Total_Supply,
+        total_supply: row.total_supply,
       }))
       .slice()
       // Filter out timestamps that are in the future

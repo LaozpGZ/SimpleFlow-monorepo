@@ -16,5 +16,6 @@ const BurnDashboardPage = () => {
 }
 
 BurnDashboardPage.Layout = Layout
+BurnDashboardPage.chains = []
 
 export default BurnDashboardPage
