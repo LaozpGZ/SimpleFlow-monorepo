@@ -262,8 +262,4 @@ export default {
     [ChainId.ZKSYNC_TESTNET]: '0xbfcCF87Ee5cd03d4550Cc1526Bf152cc2EE1C7AB',
     [ChainId.ZKSYNC]: '0xB774c13bA5a665713037c42A12f0ED9De70585cB',
   },
-  cakePool: {
-    [ChainId.BSC]: '0x45c54210128a065de780C4B0Df3d16664f7f859e',
-    [ChainId.BSC_TESTNET]: '0x1088Fb24053F03802F673b84d16AE1A7023E400b',
-  },
 } as const satisfies Record<string, Record<number, `0x${string}`>>

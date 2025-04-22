@@ -217,5 +217,5 @@ export const getRevenueSharingPoolGatewayAddress = (chainId?: number) => {
 }
 
 export const getCakePoolAddress = (chainId?: number) => {
-  return getAddressFromMap(addresses.cakePool, chainId)
+  return getAddressFromMap(addresses.cakeVault, chainId)
 }
