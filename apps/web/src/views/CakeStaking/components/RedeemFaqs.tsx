@@ -134,7 +134,7 @@ export const RedeemFaqs = () => (
     </CardHeader>
     <CardBody>
       {faqs.map(({ title, description }, i) => (
-        <FoldableText key={title} mb={i + 1 === faqs.length ? '' : '24px'} title={title}>
+        <FoldableText key={i} mb={i + 1 === faqs.length ? '' : '24px'} title={title}>
           <Text color="textSubtle" as="p">
             {description}
           </Text>
