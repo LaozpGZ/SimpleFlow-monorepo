@@ -108,8 +108,9 @@ export const VeCakeRedeem: React.FC = () => {
         ...Array(cakePoolLength).fill(cakePoolAddress),
         ...Array(veCakePoolLength).fill(veCakeAddress),
       ]
+      const uniq = [...new Set(revenueSharingPools)]
 
-      await claimAll.callMethod(revenueSharingPools, account)
+      await claimAll.callMethod(uniq, account)
       refetchRevenueShareCake()
       refetchRevenueShareVeCake()
     }
@@ -123,7 +124,7 @@ export const VeCakeRedeem: React.FC = () => {
       if (cakeLockExpired) {
         await veCakeWithdrawAll.callMethod(account)
       } else {
-        await earlyWithdraw.callMethod(account, BigInt(lockedCake.toFixed(0)))
+        await earlyWithdraw.callMethod(account, BigInt(nativeCakeLockedAmount))
       }
     }
   }, [
@@ -135,6 +136,7 @@ export const VeCakeRedeem: React.FC = () => {
     cakeLockExpired,
     lockedCake,
     veCakeWithdrawAll,
+    nativeCakeLockedAmount,
   ])
 
   const handleCakePool = useCallback(async () => {
