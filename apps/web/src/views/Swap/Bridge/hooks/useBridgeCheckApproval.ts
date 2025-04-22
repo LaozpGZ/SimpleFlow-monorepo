@@ -1,7 +1,11 @@
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
+<<<<<<< HEAD
 import { useMemo } from 'react'
+=======
+import { useCallback, useMemo, useState } from 'react'
+>>>>>>> 760de2f9a (chore: update approval)
 import { Address } from 'viem'
 import { postBridgeCheckApproval, PostBridgeCheckApprovalResponse } from '../api'
 
@@ -82,4 +86,19 @@ export const useBridgeCheckApproval = ({ currencyAmountIn }: { currencyAmountIn?
     }),
     [finalApprovalData, requiresApproval, isLoading, refetch],
   )
+<<<<<<< HEAD
+=======
+
+  const requiresApproval = Boolean(approvalData?.approval?.isRequired)
+
+  return useMemo(
+    () => ({
+      checkApproval,
+      approvalData,
+      requiresApproval,
+      isLoading,
+    }),
+    [checkApproval, approvalData, requiresApproval, isLoading],
+  )
+>>>>>>> 760de2f9a (chore: update approval)
 }
