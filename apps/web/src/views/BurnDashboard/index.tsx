@@ -77,7 +77,7 @@ export const BurnDashboard = () => {
           </NextLinkFromReactRouter>
         </FlexGap>
       </FlexGap>
-      {error && (
+      {error && !data && (
         <LightGreyCard mt="16px" padding="16px">
           <Text>{t('An error occurred while fetching the data. Please try again later.')}</Text>
         </LightGreyCard>
