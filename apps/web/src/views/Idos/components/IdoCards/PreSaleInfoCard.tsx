@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CheckmarkCircleIcon, ChevronRightIcon, CloseCircleIcon, Flex, FlexGap, Text } from '@pancakeswap/uikit'
-import { useMemo } from 'react'
+import { ReactNode, useMemo } from 'react'
 import semver from 'semver'
 import { styled } from 'styled-components'
 import { getSnapshotDeepLink } from 'views/Idos/helpers/getSnapshotLink'
@@ -112,7 +112,10 @@ export const ComplianceCard: React.FC = () => {
   )
 }
 
-export const SnapshotNotPassCard: React.FC<{ projectId: string | undefined }> = ({ projectId }) => {
+export const SnapshotNotPassCard: React.FC<{
+  projectId: string | undefined
+  ineligibleContent?: ReactNode
+}> = ({ projectId, ineligibleContent }) => {
   const { t } = useTranslation()
   const link = useMemo(() => {
     return getSnapshotDeepLink(projectId ?? '')
@@ -124,9 +127,10 @@ export const SnapshotNotPassCard: React.FC<{ projectId: string | undefined }> = 
         {t(`You're not eligible to participate this TGE`)}
       </Text>
       <Text color="textSubtle">
-        {t(
-          `Unfortunately you do not meet the participation requirements this time. To qualify, participants must have purchased Binance Alpha tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance Exchange within the 30-day period preceding the TGE start date.`,
-        )}
+        {ineligibleContent ??
+          t(
+            `Unfortunately you do not meet the participation requirements this time. To qualify, participants must have purchased Binance Alpha tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance Exchange within the 30-day period preceding the TGE start date.`,
+          )}
       </Text>
       {isDeprecatedVersion() ? (
         <Text>{t('Please update to the latest APP version')}</Text>

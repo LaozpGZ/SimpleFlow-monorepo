@@ -17,6 +17,7 @@ export type IDOConfig = {
   tgeTitle: ReactNode
   tgeSubtitle: ReactNode
   description: ReactNode
+  ineligibleContent?: ReactNode
   contractAddress: Address
   faqs?: IDOFAQs
 }
@@ -874,9 +875,16 @@ export const idoConfigDict: Record<string, IDOConfig> = {
     icon: '/images/ido/hyper.svg',
     chainId: ChainId.BSC,
     bannerUrl: `${ASSET_CDN}/web/ido/hyperlane-banner.svg`,
-    contractAddress: '0xbaa887942be18bce0c8dd6662d3201790c679f03',
+    contractAddress: '0x445162BC2B73EC0631486F70A4a716e7ea2d9A4e',
     tgeTitle: `Hyperlane's Token Generation Event`,
     tgeSubtitle: 'Exclusively via Binance Keyless Wallet',
+    ineligibleContent: (
+      <>
+        Unfortunately you do not meet the participation requirements this time. Participants must have purchased at
+        least $20 worth of Binance Alpha tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance
+        Exchange from March 22, 2025, 00:00:00 to April 20, 2025, 23:59:59 (UTC).
+      </>
+    ),
     description: (
       <>
         Hyperlane is a permissionless interoperability protocol for cross-chain communication across different
@@ -901,28 +909,32 @@ export const idoConfigDict: Record<string, IDOConfig> = {
         title: '1: Which participants are eligible to take part in this event?',
         description: (
           <>
-            Participant Eligibility: To qualify, participants must have purchased Binance Alpha tokens through Binance
-            Wallet (Keyless) or Spot/Funding accounts on Binance Exchange within the 30-day period preceding the TGE
-            start date.
+            Participant Eligibility: To qualify, participants must have purchased at least $20 worth of Binance Alpha
+            tokens via Binance Wallet (Keyless) or through Spot/Funding accounts on Binance Exchange from March 22,
+            2025, 00:00:00 to April 20, 2025, 23:59:59 (UTC).
             <ul>
-              <li>Valid Purchase Period: March 19, 2025, 00:00:00 to April 17, 2025, 23:59:59 (UTC)</li>
+              <li>
+                Alpha token purchases are only considered valid after the token is officially listed on Binance, and
+                users can verify their detailed purchase records in their Binance Wallet (Keyless) or Spot/Funding
+                accounts on the Binance Exchange.
+              </li>
               {/* <li>How to check eligibility: Visit the TGE event page.</li> */}
 
               <li> Examples: </li>
               <br />
               <ol style={{ listStyle: 'decimal', listStylePosition: 'inside', marginLeft: '1.4rem' }}>
                 <li>
-                  User A purchased Binance Alpha tokens through Binance Wallet (Keyless) on April 5, 2025. He/She is
-                  eligible.
+                  User A Purchased $20 worth of Binance Alpha tokens via Binance Wallet (Keyless) on April 5, 2025.
+                  He/She is eligible.
                 </li>
                 <br />
                 <li>
-                  User B purchased Binance Alpha tokens through Spot/Funding accounts on Binance Exchange on April 7,
-                  2025. He/She is eligible.
+                  User B purchased $10 through Binance Spot/Funding Account and $10 via Binance Wallet (Keyless) on
+                  April 7, 2025, and is eligible.
                 </li>
                 <br />
                 <li>
-                  User C purchased Binance Alpha tokens via Binance Wallet (Keyless) on March 2, 2025, which is before
+                  User C purchased Binance Alpha tokens via Binance Wallet (Keyless) on March 13, 2025, which is before
                   the snapshot period. He/She is not eligible.
                 </li>
                 <br />
@@ -941,11 +953,6 @@ export const idoConfigDict: Record<string, IDOConfig> = {
                   the latest rules via official channels before participating.
                 </li>
                 <br />
-                <li>
-                  Alpha token purchases are only considered valid after the token is officially listed on Binance, and
-                  users can verify their detailed purchase records in their Binance Wallet (Keyless) or Spot/Funding
-                  accounts on the Binance Exchange.
-                </li>
               </ol>
             </ul>
           </>
