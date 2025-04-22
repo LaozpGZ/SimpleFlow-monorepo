@@ -209,6 +209,11 @@ export function useDefaultsFromURLSearch():
     { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
   >()
 
+  const {
+    [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
+  } = useSwapState()
+
   useEffect(() => {
     if (!chainId || !native || !isReady) return
     const parsed = queryParametersToSwapState(
@@ -221,8 +226,10 @@ export function useDefaultsFromURLSearch():
       replaceSwapState({
         typedValue: parsed.typedValue,
         field: parsed.independentField,
-        inputCurrencyId: parsed[Field.INPUT].currencyId,
-        outputCurrencyId: parsed[Field.OUTPUT].currencyId,
+        inputCurrencyId: inputCurrencyId || parsed[Field.INPUT].currencyId,
+        outputCurrencyId: outputCurrencyId || parsed[Field.OUTPUT].currencyId,
+        inputChainId,
+        outputChainId,
         recipient: null,
       }),
     )
