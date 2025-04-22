@@ -42,7 +42,7 @@ export const DisplayValue = ({
     const valueStr = formatLocaleNumber({
       number: val,
       locale,
-      sigFigs: 4,
+      fixedDecimals: 2,
     })
     return (
       <ValueText style={style} className={className}>
