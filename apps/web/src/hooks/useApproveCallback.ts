@@ -11,7 +11,6 @@ import { getViemErrorMessage } from 'utils/errors'
 import { isUserRejected, logError } from 'utils/sentry'
 import { Address, SendTransactionReturnType, encodeFunctionData, parseAbi } from 'viem'
 import { useAccount } from 'wagmi'
-import useGelatoLimitOrdersLib from './limitOrders/useGelatoLimitOrdersLib'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
 import { useTokenContract } from './useContract'
 import useTokenAllowance from './useTokenAllowance'
@@ -272,11 +271,4 @@ export function useApproveCallbackFromAmount({
     addToTransaction,
     targetAmount,
   })
-}
-
-// Wraps useApproveCallback in the context of a Gelato Limit Orders
-export function useApproveCallbackFromInputCurrencyAmount(currencyAmountIn: CurrencyAmount<Currency> | undefined) {
-  const gelatoLibrary = useGelatoLimitOrdersLib()
-
-  return useApproveCallback(currencyAmountIn, gelatoLibrary?.erc20OrderRouter?.address ?? undefined)
 }

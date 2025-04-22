@@ -1246,9 +1246,6 @@ importers:
       '@datadog/browser-rum':
         specifier: ^5.8.0
         version: 5.8.0(@datadog/browser-logs@5.8.0)
-      '@gelatonetwork/limit-orders-lib':
-        specifier: ^4.1.0
-        version: 4.5.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@gnosis.pm/safe-apps-wagmi':
         specifier: ^1.2.0
         version: 1.2.0(@wagmi/core@2.10.5(@tanstack/query-core@5.69.0)(@types/react@18.2.37)(bufferutil@4.0.8)(immer@9.0.21)(react@18.2.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.23.2(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4))(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -5834,9 +5831,6 @@ packages:
 
   '@fractalwagmi/solana-wallet-adapter@0.1.1':
     resolution: {integrity: sha512-oTZLEuD+zLKXyhZC5tDRMPKPj8iaxKLxXiCjqRfOo4xmSbS2izGRWLJbKMYYsJysn/OI3UJ3P6CWP8WUWi0dZg==}
-
-  '@gelatonetwork/limit-orders-lib@4.5.0':
-    resolution: {integrity: sha512-XXlRWxZSpWaoOvdqEiKwAvB4Vg85+q1NmIKfnryNnLt9jrBRw0OcOJ8VTU71e4X7XJ0xkKuiVSWUAnTOnGiJ2w==}
 
   '@gnosis.pm/safe-apps-provider@0.15.1':
     resolution: {integrity: sha512-jVU0jpXf30HFdLHSHkmscIm04BYSwfoddjcHI4uPolP+u4F+tHRgfah1xo4XNRSCDqs4GTq38d7YAipGTj0CLA==}
@@ -14492,19 +14486,10 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
-  graphql-request@3.7.0:
-    resolution: {integrity: sha512-dw5PxHCgBneN2DDNqpWu8QkbbJ07oOziy8z+bK/TAXufsOLaETuVO4GkXrbs0WjhdKhBMN3BkpN/RIvUHkmNUQ==}
-    peerDependencies:
-      graphql: 14 - 16
-
   graphql-request@5.0.0:
     resolution: {integrity: sha512-SpVEnIo2J5k2+Zf76cUkdvIRaq5FMZvGQYnA4lUWYbc99m+fHh4CZYRRO/Ff4tCLQ613fzCm3SiDT64ubW5Gyw==}
     peerDependencies:
       graphql: 14 - 16
-
-  graphql@15.8.0:
-    resolution: {integrity: sha512-5gghUc24tP9HRznNpV2+FIoq3xKkj5dTQqf4v0CpdPbFVwFkWoxOM+o+2OC9ZSvjEMTjfmG9QT+gcvggTwW1zw==}
-    engines: {node: '>= 10.x'}
 
   graphql@16.8.1:
     resolution: {integrity: sha512-59LZHPdGZVh695Ud9lRzPBVTtlX9ZCV150Er2W43ro37wVof0ctenSaskPPjN7lVTIN8mSZt8PHUNKZuNQUuxw==}
@@ -24119,17 +24104,6 @@ snapshots:
       - '@solana/web3.js'
       - react
       - react-dom
-
-  '@gelatonetwork/limit-orders-lib@4.5.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
-    dependencies:
-      ethers: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-      graphql: 15.8.0
-      graphql-request: 3.7.0(graphql@15.8.0)
-      tslib: 2.6.2
-    transitivePeerDependencies:
-      - bufferutil
-      - encoding
-      - utf-8-validate
 
   '@gnosis.pm/safe-apps-provider@0.15.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
@@ -38762,15 +38736,6 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  graphql-request@3.7.0(graphql@15.8.0):
-    dependencies:
-      cross-fetch: 3.1.8
-      extract-files: 9.0.0
-      form-data: 3.0.1
-      graphql: 15.8.0
-    transitivePeerDependencies:
-      - encoding
-
   graphql-request@5.0.0(graphql@16.8.1):
     dependencies:
       '@graphql-typed-document-node/core': 3.2.0(graphql@16.8.1)
@@ -38780,8 +38745,6 @@ snapshots:
       graphql: 16.8.1
     transitivePeerDependencies:
       - encoding
-
-  graphql@15.8.0: {}
 
   graphql@16.8.1: {}
 
