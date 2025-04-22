@@ -26,7 +26,7 @@ export const getMintTimeSeries = async () => {
       }))
       .slice()
       // Filter out timestamps that are in the future, and filter out misc products with name "Others"
-      .filter((row) => row.timestamp < Date.now() && row.product !== 'Others')
+      .filter((row) => row.timestamp < Date.now())
       .sort((a, b) => a.timestamp - b.timestamp),
   }
 
