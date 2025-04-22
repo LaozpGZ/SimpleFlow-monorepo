@@ -10,14 +10,16 @@ import { TransactionDetails } from 'state/transactions/reducer'
 import { chains } from 'utils/wagmi'
 import { GetXOrderReceiptResponseOrder } from 'views/Swap/x/api'
 import { useRecentXOrders } from 'views/Swap/x/useRecentXOders'
-import { CrossChainOrderStatus } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/types'
+
+import { useRecentCrossChainOrders } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/hooks/useRecentCrossChainOrders'
 import { useAccount } from 'wagmi'
 import ConnectWalletButton from '../../ConnectWalletButton'
 import { AutoRow } from '../../Layout/Row'
 import { CrossChainTransaction } from './CrossChainTransaction'
 import Transaction from './Transaction'
-import { CrossChainTransactionItem } from './types'
+
 import { XTransaction } from './XTransaction'
+import { CrossChainTransactionItem } from './types'
 
 type XTransactionItem = {
   type: 'xOrder'
@@ -60,34 +62,23 @@ export function RecentTransactions() {
     refetchInterval: 10_000,
   })
 
+  const { data: crossChainOrdersResponse } = useRecentCrossChainOrders({
+    chainId,
+    address: account,
+    refetchInterval: 10_000,
+  })
+  const recentCrossChainOrders: CrossChainTransactionItem[] =
+    crossChainOrdersResponse?.orders.map((order) => ({
+      type: 'crossChainOrder',
+      orderData: order,
+    })) ?? []
+
   const sortedRecentTransactions = useAllSortedRecentTransactions()
 
   const xOrders: XTransactionItem[] = useMemo(
     () => recentXOrders?.orders.reverse().map((order) => ({ type: 'xOrder', item: order })) ?? [],
     [recentXOrders],
   )
-
-  // Testing CrossChainTransactions
-  const crossChainOrders: CrossChainTransactionItem[] = [
-    {
-      type: 'crossChainOrder',
-      item: {
-        status: CrossChainOrderStatus.ORDER_SUCCESS,
-        timestamp: 1744809014677,
-        hash: '0x123',
-        inputs: {
-          token: 'ETH',
-          chainId: 1,
-          amount: '100',
-        },
-        outputs: {
-          token: '0x1b896893dfc86bb67Cf57767298b9073D2c1bA2c',
-          chainId: 56,
-          amount: '90',
-        },
-      },
-    },
-  ]
 
   const { t } = useTranslation()
 
@@ -100,7 +91,7 @@ export function RecentTransactions() {
   return (
     <>
       {account ? (
-        xOrders.length > 0 || hasTransactions || crossChainOrders.length > 0 ? (
+        xOrders.length > 0 || hasTransactions || recentCrossChainOrders.length > 0 ? (
           <>
             <AutoRow mb="1rem" style={{ justifyContent: 'space-between' }}>
               <Text color="secondary" fontSize="12px" textTransform="uppercase" bold>
@@ -119,7 +110,7 @@ export function RecentTransactions() {
                   <TransactionWithX
                     transactions={Object.values(transactions)}
                     xOrders={chainIdNumber === chainId ? xOrders : undefined}
-                    crossChainOrders={crossChainOrders}
+                    crossChainOrders={recentCrossChainOrders}
                     chainId={chainIdNumber}
                   />
                 )
@@ -136,7 +127,7 @@ export function RecentTransactions() {
                 )
               })
             ) : (
-              <TransactionWithX xOrders={xOrders} crossChainOrders={crossChainOrders} chainId={chainId} />
+              <TransactionWithX xOrders={xOrders} crossChainOrders={recentCrossChainOrders} chainId={chainId} />
             )}
           </>
         ) : (
@@ -199,7 +190,7 @@ function TransactionWithX({
           return <Transaction key={tx.item.hash + tx.item.addedTime} tx={tx.item} chainId={chainId} />
         }
         if (tx.type === 'crossChainOrder') {
-          return <CrossChainTransaction key={tx.item.hash} order={tx.item} />
+          return <CrossChainTransaction key={tx.orderData.id} orderData={tx.orderData} />
         }
         return <XTransaction key={tx.item.hash} order={tx.item} />
       })}

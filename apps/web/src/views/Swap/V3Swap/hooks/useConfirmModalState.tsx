@@ -41,7 +41,9 @@ import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { getBridgeCalldata, postBridgeCheckApproval } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
 import { crossChainOrderDataAtom } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/state/orderData'
+
 import {
+  CrossChainOrderData,
   CrossChainOrderStatus,
   CrossChainOrderStepStatus,
   CrossChainOrderStepType,
@@ -161,6 +163,7 @@ const useConfirmActions = (
   const [txHash, setTxHash] = useState<Hex | undefined>(undefined)
   const [orderHash, setOrderHash] = useState<Hex | undefined>(undefined)
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
+
   const setCrossChainOrderData = useSetAtom(crossChainOrderDataAtom)
 
   const { toastSuccess, toastError, toastInfo } = useToast()
@@ -453,6 +456,9 @@ const useConfirmActions = (
         setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
 
         try {
+          // TODO: Replace with order id if we're getting it from the backend
+          const id = Math.random().toString(36).substring(2, 15)
+
           const bridgeCalldataResponse = await getBridgeCalldata({
             currencyAmountIn: order.trade.inputAmount,
             currencyAmountOut: order.trade.outputAmount,
@@ -471,7 +477,8 @@ const useConfirmActions = (
               logGTMSwapTxSentEvent()
 
               setConfirmState(ConfirmModalState.ORDER_SUBMITTED)
-              setCrossChainOrderData({
+              let currentOrderData: CrossChainOrderData = {
+                id,
                 status: CrossChainOrderStatus.ORDER_SUBMITTED,
                 order,
                 originalOrder: order,
@@ -490,7 +497,8 @@ const useConfirmActions = (
                     },
                   },
                 ],
-              })
+              }
+              setCrossChainOrderData(currentOrderData)
 
               await retryWaitForTransaction({
                 hash,
@@ -499,10 +507,10 @@ const useConfirmActions = (
                   : undefined,
               })
 
-              setCrossChainOrderData((prev) => ({
+              // Update data and steps with success status
+              currentOrderData = {
+                ...currentOrderData,
                 status: CrossChainOrderStatus.ORDER_SUCCESS,
-                order,
-                originalOrder: order,
                 resultInformation: {
                   amount: order.trade.outputAmount.toExact(),
                   currency: order.trade.outputAmount.currency,
@@ -510,12 +518,14 @@ const useConfirmActions = (
                 },
                 steps: [
                   {
-                    ...prev?.steps?.[0],
+                    ...currentOrderData.steps?.[0],
                     type: CrossChainOrderStepType.BRIDGE,
                     status: CrossChainOrderStepStatus.SUCCESS,
                   },
                 ],
-              }))
+              }
+
+              setCrossChainOrderData(currentOrderData)
 
               toastSuccess(
                 t('Success!'),

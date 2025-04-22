@@ -23,6 +23,8 @@ export enum CrossChainOrderStepStatus {
 }
 
 export interface CrossChainOrderData {
+  id?: string
+
   // status can be derived from steps status
   status: CrossChainOrderStatus | null
   resultInformation?: {
@@ -33,7 +35,7 @@ export interface CrossChainOrderData {
 
   order: PriceOrder | null | undefined
   originalOrder: PriceOrder | null | undefined
-  // TODO: Add txHash, orderId, etc. as needed
+
   steps?: {
     type: CrossChainOrderStepType
     status?: CrossChainOrderStepStatus
