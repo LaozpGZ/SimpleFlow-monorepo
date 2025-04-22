@@ -82,7 +82,6 @@ export const VeCakeRedeem: React.FC = () => {
   }, [account, chainId, currentBlockTimestamp, claimAll, userHasRewards])
 
   const handleVeCake = useCallback(async () => {
-    console.log(`[cake], veCake`)
     if (!account || !chainId || !currentBlockTimestamp) return
 
     if (userStaked) {
@@ -105,7 +104,6 @@ export const VeCakeRedeem: React.FC = () => {
   ])
 
   const handleCakePool = useCallback(async () => {
-    console.log(`[cake], cakePool`)
     if (!account || !chainId || !currentBlockTimestamp) return
     if (proxyCakeLockedAmount > 0) {
       await withdrawAll.callMethod()

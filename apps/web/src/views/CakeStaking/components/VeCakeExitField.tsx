@@ -34,7 +34,6 @@ export const DisplayValue = ({
 
   if (typeof value === 'number' || value instanceof BigNumber) {
     const display = getDisplayValue(value, locale)
-    console.log('display', display)
     if (display === '-') {
       return <ValueText className={className}>-</ValueText>
     }
