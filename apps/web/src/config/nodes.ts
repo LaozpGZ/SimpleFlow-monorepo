@@ -94,9 +94,19 @@ export const SERVER_NODES = {
   ],
 } satisfies Record<ChainId, readonly string[]>
 
-console.log(`[node] NEXT_PUBLIC_BSC_TESTNET_RPC=`, process.env.NEXT_PUBLIC_BSC_TESTNET_RPC)
+function getUrlRpc() {
+  if (typeof window !== 'undefined') {
+    const url = new URL(window.location.href)
+    const urlParams = new URLSearchParams(url.search)
+    const urlRpc = urlParams.get('_rpc')
+    return urlRpc || ''
+  }
+  return ''
+}
+
 export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
   [ChainId.BSC]: [
+    getUrlRpc(),
     process.env.NEXT_PUBLIC_BSC_FORK_RPC || '', // For fork testing
     process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
     getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
