@@ -25,7 +25,10 @@ export const RedeemHeader: React.FC = () => {
             )}
           </SubText>
           {!isMobile && (
-            <AnnouncementLink href="#">
+            <AnnouncementLink
+              href="https://blog.pancakeswap.finance/articles/implementation-of-cake-tokenomics-3-0-what-you-need-to-know"
+              external
+            >
               <LinkText>{t('View detailed announcement')}</LinkText>
               <StyledArrowForwardIcon />
             </AnnouncementLink>

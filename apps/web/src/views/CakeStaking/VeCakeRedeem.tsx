@@ -1,15 +1,11 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, Card, ChevronDownIcon, Flex, Link, Text } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
+import { Box, Button, Card, ChevronDownIcon, Flex, Text } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Page from 'components/Layout/Page'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { WEEK } from 'config/constants/veCake'
-import dayjs from 'dayjs'
 import { createWriteContractCallback } from 'hooks/createWriteContractCallback'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useCakePrice } from 'hooks/useCakePrice'
-import { useVeCakeBalance } from 'hooks/useTokenBalance'
 import React, { useCallback, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { useCurrentBlockTimestamp } from 'state/block/hooks'
@@ -20,39 +16,8 @@ import { formatTime } from 'utils/formatTime'
 import { poolStartWeekCursors } from 'views/CakeStaking/config'
 import { RedeemHeader } from './components/RedeemHeader'
 import { DisplayUSDValue, DisplayValue, VeCakeExitField } from './components/VeCakeExitField'
-import { useRevenueSharingCakePool, useRevenueSharingVeCake } from './hooks/useRevenueSharingProxy'
-import { useCakeLockStatus } from './hooks/useVeCakeUserInfo'
+import { useCakeExitInfo } from './hooks/useCakeExitInfo'
 import { useDisplayValue } from './utils/useDisplayValue'
-
-const useCakeExitInfo = () => {
-  const { balance } = useVeCakeBalance()
-  const { nativeCakeLockedAmount, proxyCakeLockedAmount, cakeUnlockTime, cakeLockExpired } = useCakeLockStatus()
-  const { data: veCakeShare, refetch: refetchRevenueShareVeCake } = useRevenueSharingVeCake()
-  const { data: cakePoolShare, refetch: refetchRevenueShareCake } = useRevenueSharingCakePool()
-  const cakePrice = useCakePrice()
-
-  const availableClaim = BigNumber(veCakeShare.availableClaim).plus(cakePoolShare.availableClaim)
-
-  const lockedCake = nativeCakeLockedAmount + proxyCakeLockedAmount
-
-  const unlockTime = Number(dayjs.unix(Number(cakeUnlockTime || 0)))
-
-  return {
-    myVeCake: balance,
-    lockedCake: BigNumber(lockedCake.toString()),
-    availableClaim,
-    availableClaimUSD: availableClaim.times(cakePrice),
-    cakePoolRewards: BigNumber(cakePoolShare.availableClaim),
-    veCakeRewards: BigNumber(veCakeShare.availableClaim),
-    cakePrice: cakePrice.toNumber(),
-    nativeCakeLockedAmount,
-    proxyCakeLockedAmount,
-    cakeLockExpired,
-    unlockTime,
-    refetchRevenueShareVeCake,
-    refetchRevenueShareCake,
-  }
-}
 
 const useWriteCakePoolWithdrawAllCallback = createWriteContractCallback(getCakePoolContract, 'withdrawAll')
 const useClaimAll = createWriteContractCallback(getRevenueSharingPoolGatewayContract, 'claimMultiple')
@@ -193,7 +158,7 @@ export const VeCakeRedeem: React.FC = () => {
 
   return (
     <Bg>
-      <Page title={t('Redeem Staked Cake')}>
+      <Page>
         <Container>
           <RedeemHeader />
           <StyledCard isActive>
@@ -205,19 +170,7 @@ export const VeCakeRedeem: React.FC = () => {
               <SectionTitle isMobile={isMobile}>{t('MY CAKE STAKING POSITION')}</SectionTitle>
 
               <FieldGroup>
-                <VeCakeExitField
-                  label="My veCAKE"
-                  value={myVeCake}
-                  valueTooltip={
-                    <>
-                      {t(
-                        'veCAKE is calculated with number of CAKE locked, and the remaining time against maximum lock time.',
-                      )}
-
-                      <LearnMore />
-                    </>
-                  }
-                />
+                <VeCakeExitField label="My veCAKE" value={myVeCake} />
 
                 <VeCakeExitField
                   label="My Locked CAKE"
@@ -436,14 +389,3 @@ const StyledButton = styled(Button)`
   font-weight: 600;
   width: 100%;
 `
-
-const LearnMore: React.FC<{ href?: string }> = ({
-  href = 'https://docs.pancakeswap.finance/products/vecake/migrate-from-cake-pool#10ffc408-be58-4fa8-af56-be9f74d03f42',
-}) => {
-  const { t } = useTranslation()
-  return (
-    <Link href={href} color="text" external>
-      {t('Learn More >>')}
-    </Link>
-  )
-}
