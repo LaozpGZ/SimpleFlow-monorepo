@@ -14,6 +14,7 @@ import { getRevenueSharingCakePoolAddress, getRevenueSharingVeCakeAddress } from
 import { getCakePoolContract, getRevenueSharingPoolGatewayContract, getVeCakeContract } from 'utils/contractHelpers'
 import { formatTime } from 'utils/formatTime'
 import { poolStartWeekCursors } from 'views/CakeStaking/config'
+import { RedeemFaqs } from './components/RedeemFaqs'
 import { RedeemHeader } from './components/RedeemHeader'
 import { DisplayUSDValue, DisplayValue, VeCakeExitField } from './components/VeCakeExitField'
 import { useCakeExitInfo } from './hooks/useCakeExitInfo'
@@ -309,6 +310,7 @@ export const VeCakeRedeem: React.FC = () => {
               )}
             </div>
           </StyledCard>
+          <RedeemFaqs />
         </Container>
       </Page>
     </Bg>
