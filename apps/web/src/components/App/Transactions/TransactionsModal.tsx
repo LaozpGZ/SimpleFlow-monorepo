@@ -1,20 +1,25 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, InjectedModalProps, Modal, ModalBody, Text } from '@pancakeswap/uikit'
+import { TransactionList } from '@pancakeswap/widgets-internal'
 import isEmpty from 'lodash/isEmpty'
 import { useCallback, useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { clearAllTransactions } from 'state/transactions/actions'
-import { TransactionList } from '@pancakeswap/widgets-internal'
 import { useAllSortedRecentTransactions } from 'state/transactions/hooks'
 import { TransactionDetails } from 'state/transactions/reducer'
 import { chains } from 'utils/wagmi'
 import { GetXOrderReceiptResponseOrder } from 'views/Swap/x/api'
 import { useRecentXOrders } from 'views/Swap/x/useRecentXOders'
+
+import { useRecentCrossChainOrders } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/hooks/useRecentCrossChainOrders'
 import { useAccount } from 'wagmi'
 import ConnectWalletButton from '../../ConnectWalletButton'
 import { AutoRow } from '../../Layout/Row'
+import { CrossChainTransaction } from './CrossChainTransaction'
 import Transaction from './Transaction'
+
 import { XTransaction } from './XTransaction'
+import { CrossChainTransactionItem } from './types'
 
 type XTransactionItem = {
   type: 'xOrder'
@@ -27,6 +32,7 @@ type TransactionItem =
       item: TransactionDetails
     }
   | XTransactionItem
+  | CrossChainTransactionItem
 
 function sortByTransactionTime(a: TransactionItem, b: TransactionItem) {
   if (a.type === 'tx' && b.type === 'tx') {
@@ -56,6 +62,17 @@ export function RecentTransactions() {
     refetchInterval: 10_000,
   })
 
+  const { data: crossChainOrdersResponse } = useRecentCrossChainOrders({
+    chainId,
+    address: account,
+    refetchInterval: 10_000,
+  })
+  const recentCrossChainOrders: CrossChainTransactionItem[] =
+    crossChainOrdersResponse?.orders.map((order) => ({
+      type: 'crossChainOrder',
+      orderData: order,
+    })) ?? []
+
   const sortedRecentTransactions = useAllSortedRecentTransactions()
 
   const xOrders: XTransactionItem[] = useMemo(
@@ -74,10 +91,10 @@ export function RecentTransactions() {
   return (
     <>
       {account ? (
-        xOrders.length > 0 || hasTransactions ? (
+        xOrders.length > 0 || hasTransactions || recentCrossChainOrders.length > 0 ? (
           <>
             <AutoRow mb="1rem" style={{ justifyContent: 'space-between' }}>
-              <Text color="secondary" fontSize="12px" textTransform="uppercase" fontWeight="bold">
+              <Text color="secondary" fontSize="12px" textTransform="uppercase" bold>
                 {t('Recent Transactions')}
               </Text>
               {hasTransactions && (
@@ -93,6 +110,7 @@ export function RecentTransactions() {
                   <TransactionWithX
                     transactions={Object.values(transactions)}
                     xOrders={chainIdNumber === chainId ? xOrders : undefined}
+                    crossChainOrders={recentCrossChainOrders}
                     chainId={chainIdNumber}
                   />
                 )
@@ -109,7 +127,7 @@ export function RecentTransactions() {
                 )
               })
             ) : (
-              <TransactionWithX xOrders={xOrders} chainId={chainId} />
+              <TransactionWithX xOrders={xOrders} crossChainOrders={recentCrossChainOrders} chainId={chainId} />
             )}
           </>
         ) : (
@@ -138,14 +156,17 @@ function TransactionWithX({
   transactions,
   xOrders = [],
   chainId,
+  crossChainOrders = [],
 }: {
   transactions?: TransactionDetails[]
   xOrders?: TransactionItem[]
   chainId?: number
+  crossChainOrders?: TransactionItem[]
 }) {
   const allTransactionItems = useMemo(
     () =>
       [
+        ...crossChainOrders,
         ...(transactions || []).map(
           (t) =>
             ({
@@ -155,7 +176,7 @@ function TransactionWithX({
         ),
         ...xOrders,
       ].sort(sortByTransactionTime),
-    [transactions, xOrders],
+    [transactions, xOrders, crossChainOrders],
   )
 
   if (!chainId) {
@@ -167,6 +188,9 @@ function TransactionWithX({
       {allTransactionItems.map((tx) => {
         if (tx.type === 'tx') {
           return <Transaction key={tx.item.hash + tx.item.addedTime} tx={tx.item} chainId={chainId} />
+        }
+        if (tx.type === 'crossChainOrder') {
+          return <CrossChainTransaction key={tx.orderData.id} orderData={tx.orderData} />
         }
         return <XTransaction key={tx.item.hash} order={tx.item} />
       })}
