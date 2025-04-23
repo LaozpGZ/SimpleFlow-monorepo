@@ -28,7 +28,6 @@ import orderBy from 'lodash/orderBy'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFarms, usePollFarmsWithUserData } from 'state/farms/hooks'
-import { useCakeVaultUserData } from 'state/pools/hooks'
 import { ViewMode } from 'state/user/actions'
 import { useUserFarmStakedOnly, useUserFarmsViewMode } from 'state/user/hooks'
 import { styled } from 'styled-components'
@@ -176,8 +175,6 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
   const isActive = !isInactive && !isArchived
-
-  useCakeVaultUserData()
 
   usePollFarmsWithUserData()
 

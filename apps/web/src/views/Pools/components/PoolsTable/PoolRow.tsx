@@ -3,70 +3,19 @@ import { Box, Link, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { Pool } from '@pancakeswap/widgets-internal'
 import { memo, useCallback, useMemo } from 'react'
-import { useDeserializedPoolByVaultKey, usePool, useVaultPoolByKey } from 'state/pools/hooks'
-import { VaultKey } from 'state/types'
+import { usePool } from 'state/pools/hooks'
 
-import { Token } from '@pancakeswap/swap-sdk-core'
 import { bscTokens } from '@pancakeswap/tokens'
 import { GiftTooltip } from 'components/GiftTooltip/GiftTooltip'
 import { isAddressEqual } from 'utils'
 import { Address } from 'viem'
 import { bsc } from 'viem/chains'
-import { useIsUserDelegated } from 'views/CakeStaking/hooks/useIsUserDelegated'
 import { useChainId } from 'wagmi'
 import ActionPanel from './ActionPanel/ActionPanel'
 import AprCell from './Cells/AprCell'
-import AutoAprCell from './Cells/AutoAprCell'
-import AutoEarningsCell from './Cells/AutoEarningsCell'
 import EarningsCell from './Cells/EarningsCell'
 import NameCell from './Cells/NameCell'
-import StakedCell from './Cells/StakedCell'
 import TotalStakedCell from './Cells/TotalStakedCell'
-
-export const VaultPoolRow: React.FC<
-  React.PropsWithChildren<{ vaultKey: VaultKey; account: string; initialActivity?: boolean }>
-> = memo(({ vaultKey, account, initialActivity }) => {
-  const { isLg, isXl, isXxl } = useMatchBreakpoints()
-  const isLargerScreen = isLg || isXl || isXxl
-  const isXLargerScreen = isXl || isXxl
-  const pool = useDeserializedPoolByVaultKey(vaultKey) as Pool.DeserializedPoolLockedVault<Token>
-  const { totalCakeInVault } = useVaultPoolByKey(vaultKey)
-  const isUserDelegated = useIsUserDelegated()
-
-  const { stakingToken, totalStaked } = pool
-
-  const totalStakedBalance = useMemo(() => {
-    return getBalanceNumber(totalCakeInVault, stakingToken.decimals)
-  }, [stakingToken.decimals, totalCakeInVault])
-
-  // vault
-  const vaultData = useVaultPoolByKey(pool.vaultKey as Pool.VaultKey) as Pool.DeserializedPoolLockedVault<Token>
-
-  const { userShares } = vaultData.userData as Pool.DeserializedLockedVaultUser
-  const hasSharesStaked = userShares.gt(0)
-
-  if (!account || !hasSharesStaked) return null
-
-  return (
-    <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
-      <NameCell pool={pool} />
-      {account && !isUserDelegated && (
-        <>
-          {isXLargerScreen && <AutoEarningsCell pool={pool} account={account} />}
-          {isXLargerScreen ? <StakedCell pool={pool} account={account} /> : null}
-          <AutoAprCell pool={pool} />
-          {isLargerScreen && (
-            <TotalStakedCell
-              stakingToken={stakingToken}
-              totalStaked={totalStaked}
-              totalStakedBalance={totalStakedBalance}
-            />
-          )}
-        </>
-      )}
-    </Pool.ExpandRow>
-  )
-})
 
 const PoolRow: React.FC<React.PropsWithChildren<{ sousId: number; account: string; initialActivity?: boolean }>> = ({
   sousId,

@@ -38,7 +38,6 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFarms, usePollFarmsAvgInfo, usePollFarmsWithUserData } from 'state/farms/hooks'
 import { V2FarmWithoutStakedValue, V3FarmWithoutStakedValue, type V3Farm } from 'state/farms/types'
 import { useFarmsV3WithPositionsAndBooster } from 'state/farmsV3/hooks'
-import { useCakeVaultUserData } from 'state/pools/hooks'
 import { ViewMode } from 'state/user/actions'
 import { useUserFarmStakedOnly, useUserFarmsViewMode } from 'state/user/hooks'
 import { styled } from 'styled-components'
@@ -211,8 +210,6 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
   const isArchived = pathname.includes('archived')
   const isInactive = pathname.includes('history')
   const isActive = !isInactive && !isArchived
-
-  useCakeVaultUserData()
 
   usePollFarmsWithUserData()
 

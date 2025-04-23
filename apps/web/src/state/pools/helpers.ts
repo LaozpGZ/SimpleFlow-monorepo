@@ -3,13 +3,7 @@ import { Token } from '@pancakeswap/sdk'
 import { deserializeToken } from '@pancakeswap/token-lists'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BigNumber from 'bignumber.js'
-import {
-  DeserializedCakeVault,
-  SerializedCakeVault,
-  SerializedLockedCakeVault,
-  SerializedPool,
-  VaultKey,
-} from 'state/types'
+import { DeserializedCakeVault, SerializedCakeVault, SerializedPool, VaultKey } from 'state/types'
 import { safeGetAddress } from 'utils'
 import { convertSharesToCake } from 'views/Pools/helpers'
 
@@ -86,56 +80,10 @@ export const transformVault = (vaultKey: VaultKey, vault: SerializedCakeVault): 
   const pricePerFullShare = pricePerFullShareAsString ? new BigNumber(pricePerFullShareAsString) : BIG_ZERO
   const userShares = new BigNumber(userSharesAsString)
   const cakeAtLastUserAction = new BigNumber(cakeAtLastUserActionAsString)
-  let userDataExtra
-  let publicDataExtra
-  if (vaultKey === VaultKey.CakeVault) {
-    const {
-      totalCakeInVault: totalCakeInVaultAsString,
-      totalLockedAmount: totalLockedAmountAsString,
-      userData: {
-        userBoostedShare: userBoostedShareAsString,
-        lockEndTime,
-        lockStartTime,
-        locked,
-        lockedAmount: lockedAmountAsString,
-        currentOverdueFee: currentOverdueFeeAsString,
-        currentPerformanceFee: currentPerformanceFeeAsString,
-      },
-    } = vault as SerializedLockedCakeVault
-
-    const totalCakeInVault = new BigNumber(totalCakeInVaultAsString || '0')
-    const totalLockedAmount = new BigNumber(totalLockedAmountAsString || '0')
-    const lockedAmount = new BigNumber(lockedAmountAsString)
-    const userBoostedShare = new BigNumber(userBoostedShareAsString)
-    const currentOverdueFee = currentOverdueFeeAsString ? new BigNumber(currentOverdueFeeAsString) : BIG_ZERO
-    const currentPerformanceFee = currentPerformanceFeeAsString
-      ? new BigNumber(currentPerformanceFeeAsString)
-      : BIG_ZERO
-
-    const balance = convertSharesToCake(
-      userShares,
-      pricePerFullShare,
-      undefined,
-      undefined,
-      currentOverdueFee.plus(currentPerformanceFee).plus(userBoostedShare),
-    )
-    userDataExtra = {
-      lockEndTime,
-      lockStartTime,
-      locked,
-      lockedAmount,
-      userBoostedShare,
-      currentOverdueFee,
-      currentPerformanceFee,
-      balance,
-    }
-    publicDataExtra = { totalLockedAmount, totalCakeInVault }
-  } else {
-    const balance = convertSharesToCake(userShares, pricePerFullShare)
-    const { cakeAsBigNumber } = convertSharesToCake(totalShares, pricePerFullShare)
-    userDataExtra = { balance }
-    publicDataExtra = { totalCakeInVault: cakeAsBigNumber }
-  }
+  const balance = convertSharesToCake(userShares, pricePerFullShare)
+  const { cakeAsBigNumber } = convertSharesToCake(totalShares, pricePerFullShare)
+  const userDataExtra = { balance }
+  const publicDataExtra = { totalCakeInVault: cakeAsBigNumber }
 
   const performanceFeeAsDecimal = performanceFee && performanceFee / 100
 

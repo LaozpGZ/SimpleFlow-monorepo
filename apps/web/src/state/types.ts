@@ -28,11 +28,6 @@ export const GAS_PRICE_GWEI = {
   testnet: parseEther(GAS_PRICE.testnet, 'gwei').toString(),
 }
 
-export interface BigNumberToJson {
-  type: 'BigNumber'
-  hex: string
-}
-
 export type SerializedBigNumber = string
 
 export enum VaultKey {
@@ -204,11 +199,6 @@ export interface Round {
   AIPrice?: number
 }
 
-export interface Market {
-  paused: boolean
-  epoch: number
-}
-
 export interface Bet {
   id?: string
   hash?: string
@@ -372,11 +362,6 @@ export interface VoteWhere {
   voter_in?: string[]
   proposal?: string
   proposal_in?: string[]
-}
-
-export enum SnapshotCommand {
-  PROPOSAL = 'proposal',
-  VOTE = 'vote',
 }
 
 export enum ProposalType {
