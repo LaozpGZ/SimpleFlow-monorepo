@@ -18,7 +18,7 @@ import { useMemo } from 'react'
 import styled from 'styled-components'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { crossChainOrderDataAtom } from '../state/orderData'
-import { CrossChainOrderStatus } from '../types'
+import { CrossChainOrderData, CrossChainOrderStatus } from '../types'
 import { OrderDetailsPanel } from './OrderDetailsPanel'
 
 const IconContainer = styled(Box)`
@@ -39,10 +39,13 @@ const DisplayMessage = styled(FlexGap).attrs({ alignItems: 'center', gap: '8px' 
       $status === CrossChainOrderStatus.ORDER_SUCCESS ? theme.colors.primary20 : theme.colors.warning10};
 `
 
-interface OrderResultModalContentProps extends BoxProps {}
-export const OrderResultModalContent = ({ ...props }: OrderResultModalContentProps) => {
+interface OrderResultModalContentProps extends BoxProps {
+  overrideOrderData?: CrossChainOrderData
+}
+export const OrderResultModalContent = ({ overrideOrderData, ...props }: OrderResultModalContentProps) => {
   const { t } = useTranslation()
-  const orderData = useAtomValue(crossChainOrderDataAtom)
+  const stateOrderData = useAtomValue(crossChainOrderDataAtom)
+  const orderData = overrideOrderData || stateOrderData
 
   const middleIcon = useMemo(() => {
     switch (orderData?.status) {
@@ -98,7 +101,7 @@ export const OrderResultModalContent = ({ ...props }: OrderResultModalContentPro
         outputChainName={getFullChainNameById(orderData?.order?.trade.outputAmount.currency.chainId)}
         overrideIcon={middleIcon}
       />
-      <OrderDetailsPanel mt="24px" />
+      <OrderDetailsPanel mt="24px" overrideOrderData={orderData} />
     </Box>
   )
 }
