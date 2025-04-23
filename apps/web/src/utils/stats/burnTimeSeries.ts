@@ -4,6 +4,7 @@ import { DuneResponse } from './types'
 
 interface Row {
   Cake_burn: number
+  Cake_burn_USD: number
   name: string
   product_type: string
   week_start: string
@@ -22,6 +23,7 @@ export const getBurnTimeSeries = async () => {
       .map((row: Row) => ({
         timestamp: new Date(row.week_start).getTime(),
         burn: row.Cake_burn,
+        burnUSD: row.Cake_burn_USD,
         product: row.name,
       }))
       .slice()

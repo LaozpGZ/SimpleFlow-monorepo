@@ -1,7 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
-import { useCakePrice } from 'hooks/useCakePrice'
 import groupBy from 'lodash/groupBy'
 import { useCallback, useMemo, useState } from 'react'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, TooltipProps, XAxis, YAxis } from 'recharts'
@@ -12,6 +11,12 @@ import { getBurnInfoPrecision } from 'views/BurnDashboard/utils'
 import { StatsCard, StatsCardHeader } from '../StatsCard'
 import { TooltipCard } from '../styles'
 import { TabMenu } from '../TabMenu'
+
+const timeRanges = {
+  '3m': 3 * 30 * 24 * 60 * 60 * 1000,
+  '6m': 6 * 30 * 24 * 60 * 60 * 1000,
+  '1y': 365 * 24 * 60 * 60 * 1000,
+}
 
 type CustomTooltipProps = TooltipProps<number, string> & { isUSD?: boolean }
 
@@ -60,29 +65,23 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
   const [selectedCurrency, setSelectedCurrency] = useState('CAKE')
 
   const { data } = useBurnStats()
-  const cakePrice = useCakePrice()
-
   const { burnTimeSeries } = data || {}
 
-  const groupedData = groupBy(burnTimeSeries, 'timestamp')
-
-  // Memoize uniqueProducts to prevent it from changing on every render
   const uniqueProducts = useMemo(() => {
-    const products = new Set<string>()
-
-    // Process burnTimeSeries to extract unique products
-    if (burnTimeSeries) {
-      burnTimeSeries.forEach(({ product }) => {
-        products.add(product)
-      })
-    }
-
-    return products
+    if (!burnTimeSeries) return new Set<string>()
+    return new Set(burnTimeSeries.map(({ product }) => product))
   }, [burnTimeSeries])
 
-  // Combine the products data by timestamp
-  const allChartData = useMemo(() => {
-    return Object.entries(groupedData).map(([timestamp, items]) => {
+  const chartData = useMemo(() => {
+    if (!burnTimeSeries) return []
+
+    const now = Date.now()
+    const startTime = selectedTab === 'Max' ? 0 : now - (timeRanges[selectedTab] || timeRanges['3m'])
+
+    const filteredData = burnTimeSeries.filter((item) => item.timestamp >= startTime)
+    const groupedByTimestamp = groupBy(filteredData, 'timestamp')
+
+    return Object.entries(groupedByTimestamp).map(([timestamp, items]) => {
       const row = {
         timestamp: Number(timestamp),
         timestampFormatted: new Date(Number(timestamp)).toLocaleDateString('en-US', {
@@ -92,51 +91,12 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
         }),
       }
 
-      items.forEach(({ product, burn }) => {
-        row[product] = burn
+      items.forEach(({ product, burn, burnUSD }) => {
+        row[product] = selectedCurrency === 'USD' ? burnUSD : burn
       })
       return row
     })
-  }, [groupedData, selectedTab])
-
-  const filteredChartData = useMemo(() => {
-    if (selectedTab === 'Max') return allChartData
-
-    const now = Date.now()
-    let startTime: number
-
-    switch (selectedTab) {
-      case '3m':
-        startTime = now - 3 * 30 * 24 * 60 * 60 * 1000 // 3 months in milliseconds
-        break
-      case '6m':
-        startTime = now - 6 * 30 * 24 * 60 * 60 * 1000 // 6 months in milliseconds
-        break
-      case '1y':
-        startTime = now - 365 * 24 * 60 * 60 * 1000 // 1 year in milliseconds
-        break
-      default:
-        return allChartData
-    }
-
-    return allChartData.filter((item) => item.timestamp >= startTime)
-  }, [allChartData, selectedTab])
-
-  const chartDataWithCurrency = useMemo(() => {
-    if (selectedCurrency === 'CAKE') return filteredChartData
-
-    return filteredChartData.map((item) => {
-      const newItem = { ...item }
-      Array.from(uniqueProducts).forEach((product) => {
-        if (newItem[product]) {
-          // Ensure cakePrice is treated as a number
-          const price = Number(cakePrice) || 0
-          newItem[product] *= price
-        }
-      })
-      return newItem
-    })
-  }, [filteredChartData, selectedCurrency, cakePrice, uniqueProducts])
+  }, [burnTimeSeries, selectedTab, selectedCurrency])
 
   const handleTabChange = useCallback((tab: string) => {
     setSelectedTab(tab)
@@ -162,7 +122,7 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
       </FlexGap>
 
       <ResponsiveContainer width="100%" height={360}>
-        <BarChart data={chartDataWithCurrency} barCategoryGap="95%" barSize={20}>
+        <BarChart data={chartData} barCategoryGap="95%" barSize={20}>
           <XAxis
             dataKey="timestampFormatted"
             fontSize="12px"

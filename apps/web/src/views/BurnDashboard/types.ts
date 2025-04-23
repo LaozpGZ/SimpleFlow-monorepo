@@ -19,11 +19,13 @@ export interface BurnStats {
   burnTimeSeries: {
     timestamp: number
     burn: number
+    burnUSD: number
     product: string
   }[]
   mintTimeSeries: {
     timestamp: number
     burn: number
+    burnUSD: number
     product: string
   }[]
   burnHistoryTable: {
