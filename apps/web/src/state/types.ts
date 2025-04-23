@@ -61,10 +61,6 @@ export interface SerializedVaultFees {
   withdrawalFeePeriod: number
 }
 
-export interface DeserializedVaultFees extends SerializedVaultFees {
-  performanceFeeAsDecimal: number
-}
-
 export interface SerializedVaultUser {
   isLoading: boolean
   userShares: SerializedBigNumber
@@ -81,47 +77,6 @@ export interface SerializedLockedVaultUser extends SerializedVaultUser {
   lockedAmount: SerializedBigNumber
   currentPerformanceFee: SerializedBigNumber
   currentOverdueFee: SerializedBigNumber
-}
-
-export interface DeserializedVaultUser {
-  isLoading: boolean
-  userShares: BigNumber
-  cakeAtLastUserAction: BigNumber
-  lastDepositedTime: string
-  lastUserActionTime: string
-  lockedAmount: BigNumber
-  balance: {
-    cakeAsNumberBalance: number
-    cakeAsBigNumber: BigNumber
-    cakeAsDisplayBalance: string
-  }
-}
-
-export interface DeserializedLockedVaultUser extends DeserializedVaultUser {
-  lastDepositedTime: string
-  lastUserActionTime: string
-  lockStartTime: string
-  lockEndTime: string
-  burnStartTime: string
-  userBoostedShare: BigNumber
-  locked: boolean
-  lockedAmount: BigNumber
-  currentPerformanceFee: BigNumber
-  currentOverdueFee: BigNumber
-}
-
-export interface DeserializedCakeVault {
-  totalShares?: BigNumber
-  totalLockedAmount?: BigNumber
-  pricePerFullShare?: BigNumber
-  totalCakeInVault?: BigNumber
-  fees?: DeserializedVaultFees
-  userData?: DeserializedVaultUser
-}
-
-export interface DeserializedLockedCakeVault extends Omit<DeserializedCakeVault, 'userData'> {
-  totalLockedAmount?: BigNumber
-  userData?: DeserializedLockedVaultUser
 }
 
 export interface SerializedLockedCakeVault extends Omit<SerializedCakeVault, 'userData'> {

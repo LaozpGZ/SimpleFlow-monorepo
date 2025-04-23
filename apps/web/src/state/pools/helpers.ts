@@ -3,9 +3,8 @@ import { Token } from '@pancakeswap/sdk'
 import { deserializeToken } from '@pancakeswap/token-lists'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BigNumber from 'bignumber.js'
-import { DeserializedCakeVault, SerializedCakeVault, SerializedPool, VaultKey } from 'state/types'
+import { SerializedPool } from 'state/types'
 import { safeGetAddress } from 'utils'
-import { convertSharesToCake } from 'views/Pools/helpers'
 
 type UserData =
   | DeserializedPool<Token>['userData']
@@ -59,47 +58,6 @@ export const transformPool = (pool: SerializedPool): DeserializedPool<Token> => 
     totalStaked: new BigNumber(totalStaked || '0'),
     stakingLimit: new BigNumber(stakingLimit || '0'),
     stakingLimitEndTimestamp: (numberSecondsForUserLimit || 0) + (startTimestamp || 0),
-  }
-}
-
-export const transformVault = (vaultKey: VaultKey, vault: SerializedCakeVault): DeserializedCakeVault => {
-  const {
-    totalShares: totalSharesAsString,
-    pricePerFullShare: pricePerFullShareAsString,
-    fees: { performanceFee, withdrawalFee, withdrawalFeePeriod },
-    userData: {
-      isLoading,
-      userShares: userSharesAsString,
-      cakeAtLastUserAction: cakeAtLastUserActionAsString,
-      lastDepositedTime,
-      lastUserActionTime,
-    },
-  } = vault
-
-  const totalShares = totalSharesAsString ? new BigNumber(totalSharesAsString) : BIG_ZERO
-  const pricePerFullShare = pricePerFullShareAsString ? new BigNumber(pricePerFullShareAsString) : BIG_ZERO
-  const userShares = new BigNumber(userSharesAsString)
-  const cakeAtLastUserAction = new BigNumber(cakeAtLastUserActionAsString)
-  const balance = convertSharesToCake(userShares, pricePerFullShare)
-  const { cakeAsBigNumber } = convertSharesToCake(totalShares, pricePerFullShare)
-  const userDataExtra = { balance }
-  const publicDataExtra = { totalCakeInVault: cakeAsBigNumber }
-
-  const performanceFeeAsDecimal = performanceFee && performanceFee / 100
-
-  return {
-    totalShares,
-    pricePerFullShare,
-    ...publicDataExtra,
-    fees: { performanceFee, withdrawalFee, withdrawalFeePeriod, performanceFeeAsDecimal },
-    userData: {
-      isLoading,
-      userShares,
-      cakeAtLastUserAction,
-      lastDepositedTime,
-      lastUserActionTime,
-      ...userDataExtra,
-    },
   }
 }
 
