@@ -1,5 +1,5 @@
 import type { ExclusiveDutchOrderInfoJSON, ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
-import type { V4Router } from '@pancakeswap/smart-router'
+import type { RouteType, V4Router } from '@pancakeswap/smart-router'
 import type { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import type { AMMOrder } from './amm'
 import { Hex } from './common'
@@ -43,7 +43,12 @@ export type ClassicOrder<tradeType extends TradeType = TradeType> = {
 export interface BridgeTrade<tradeType extends TradeType = TradeType> {
   inputAmount: CurrencyAmount<Currency>
   outputAmount: CurrencyAmount<Currency>
-  routes: []
+  routes: {
+    path: [Currency, Currency]
+    inputAmount: CurrencyAmount<Currency>
+    outputAmount: CurrencyAmount<Currency>
+    type: RouteType.BRIDGE
+  }[]
   tradeType: tradeType
 }
 
