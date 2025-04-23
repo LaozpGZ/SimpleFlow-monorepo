@@ -36,7 +36,6 @@ import { useProfileRequirement } from 'views/Pools/hooks/useProfileRequirement'
 
 import { useCallback } from 'react'
 import { logGTMClickEnablePoolEvent } from 'utils/customGTMEventTracking'
-import { VeCakeButton } from 'views/CakeStaking/components/SyrupPool/VeCakeButton'
 import { useIsUserDelegated } from 'views/CakeStaking/hooks/useIsUserDelegated'
 import { useApprovePool, useCheckVaultApprovalStatus, useVaultApprove } from '../../../hooks/useApprove'
 import VaultStakeModal from '../../CakeVaultCard/VaultStakeModal'
@@ -221,28 +220,18 @@ const Staked: React.FunctionComponent<React.PropsWithChildren<StackedActionProps
     ((vaultKey === VaultKey.CakeVault || vaultKey === VaultKey.CakeFlexibleSideVault) && isUserDelegated)
   ) {
     if (isMobile) {
-      return vaultKey === VaultKey.CakeVault || vaultKey === VaultKey.CakeFlexibleSideVault ? (
-        <VeCakeButton type="get" />
-      ) : (
-        <ConnectWalletButton width="100%" />
-      )
+      return <ConnectWalletButton width="100%" />
     }
     if (vaultKey === VaultKey.CakeVault && isUserDelegated) return null
     return (
       <ActionContainer>
         <ActionTitles>
           <Text fontSize="12px" bold color="textSubtle" as="span" textTransform="uppercase">
-            {vaultKey === VaultKey.CakeVault || vaultKey === VaultKey.CakeFlexibleSideVault
-              ? t('Stake & Lock for veCAKE, to enjoy more rewards & benefit!')
-              : t('Start staking')}
+            {t('Start staking')}
           </Text>
         </ActionTitles>
         <ActionContent>
-          {vaultKey === VaultKey.CakeVault || vaultKey === VaultKey.CakeFlexibleSideVault ? (
-            <VeCakeButton type="get" />
-          ) : (
-            <ConnectWalletButton width="100%" />
-          )}
+          <ConnectWalletButton width="100%" />
         </ActionContent>
       </ActionContainer>
     )

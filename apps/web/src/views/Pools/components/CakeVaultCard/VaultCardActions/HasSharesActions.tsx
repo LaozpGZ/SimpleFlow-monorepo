@@ -12,8 +12,6 @@ import {
   useModal,
 } from '@pancakeswap/uikit'
 import { Pool } from '@pancakeswap/widgets-internal'
-import { LearnMoreLink } from 'views/CakeStaking/components/SyrupPool'
-import { useIsMigratedToVeCake } from 'views/CakeStaking/hooks/useIsMigratedToVeCake'
 
 import { Token } from '@pancakeswap/sdk'
 import { getBalanceNumber } from '@pancakeswap/utils/formatBalance'
@@ -41,7 +39,6 @@ const HasSharesActions: React.FC<React.PropsWithChildren<HasStakeActionProps>> =
 
   const cakeAsBigNumber = userData?.balance?.cakeAsBigNumber
   const cakeAsNumberBalance = userData?.balance?.cakeAsNumberBalance
-  const isMigratedToVeCake = useIsMigratedToVeCake()
 
   const lockPosition = getVaultPosition(userData)
 
@@ -103,24 +100,11 @@ const HasSharesActions: React.FC<React.PropsWithChildren<HasStakeActionProps>> =
           </IconButton>
         </Flex>
       </Flex>
-      <Message variant="warning" mb="16px">
-        <MessageText>
-          {lockPosition === VaultPosition.Flexible ? (
-            <>
-              {t('Flexible CAKE pool is discontinued and no longer distributing rewards.')}
-              <LearnMoreLink withArrow />
-            </>
-          ) : isMigratedToVeCake ? (
-            t(
-              'Extending or adding CAKE is not available for migrated positions. To get more veCAKE, withdraw from the unlocked CAKE pool position, and add CAKE to veCAKE.',
-            )
-          ) : (
-            t(
-              'The lock period has ended. To get more veCAKE, withdraw from the unlocked CAKE pool position, and add CAKE to veCAKE.',
-            )
-          )}
-        </MessageText>
-      </Message>
+      {lockPosition === VaultPosition.Flexible ? (
+        <Message variant="warning" mb="16px">
+          <MessageText>{t('Flexible CAKE pool is discontinued and no longer distributing rewards.')}</MessageText>
+        </Message>
+      ) : null}
     </LightGreyCard>
   )
 }

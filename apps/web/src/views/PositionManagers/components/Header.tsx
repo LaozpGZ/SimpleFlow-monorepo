@@ -17,7 +17,6 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import useTheme from 'hooks/useTheme'
 import { memo, useCallback } from 'react'
 import { BCakeBoosterCard } from 'views/Farms/components/YieldBooster/components/bCakeV3/BCakeBoosterCard'
-import { BCakeMigrationBanner } from 'views/Home/components/Banners/BCakeMigrationBanner'
 
 export const Header = memo(function Header() {
   const { t } = useTranslation()
@@ -36,11 +35,6 @@ export const Header = memo(function Header() {
 
   return (
     <PageHeader style={isMobile ? { padding: '16px 0' } : undefined}>
-      {!isMobile && (
-        <Box mb="32px" mt="16px">
-          <BCakeMigrationBanner />
-        </Box>
-      )}
       <Flex justifyContent="space-between" alignItems="flex-start" flexDirection="row" flexWrap="nowrap">
         <Flex
           flex="1"

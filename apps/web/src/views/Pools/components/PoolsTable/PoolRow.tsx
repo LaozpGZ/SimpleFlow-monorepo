@@ -5,12 +5,10 @@ import { Pool } from '@pancakeswap/widgets-internal'
 import { memo, useCallback, useMemo } from 'react'
 import { useDeserializedPoolByVaultKey, usePool, useVaultPoolByKey } from 'state/pools/hooks'
 import { VaultKey } from 'state/types'
-import { VeCakeBenefitCard } from 'views/CakeStaking/components/SyrupPool/VeCakeCard'
 
 import { Token } from '@pancakeswap/swap-sdk-core'
 import { bscTokens } from '@pancakeswap/tokens'
 import { GiftTooltip } from 'components/GiftTooltip/GiftTooltip'
-import styled from 'styled-components'
 import { isAddressEqual } from 'utils'
 import { Address } from 'viem'
 import { bsc } from 'viem/chains'
@@ -25,21 +23,10 @@ import NameCell from './Cells/NameCell'
 import StakedCell from './Cells/StakedCell'
 import TotalStakedCell from './Cells/TotalStakedCell'
 
-const MigrateCell = styled(Pool.BaseCell)`
-  padding: 0;
-  justify-content: center;
-  flex: 7.5;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    flex-grow: 1;
-  }
-`
-
 export const VaultPoolRow: React.FC<
   React.PropsWithChildren<{ vaultKey: VaultKey; account: string; initialActivity?: boolean }>
 > = memo(({ vaultKey, account, initialActivity }) => {
-  const { t } = useTranslation()
-  const { isLg, isXl, isXxl, isMobile } = useMatchBreakpoints()
+  const { isLg, isXl, isXxl } = useMatchBreakpoints()
   const isLargerScreen = isLg || isXl || isXxl
   const isXLargerScreen = isXl || isXxl
   const pool = useDeserializedPoolByVaultKey(vaultKey) as Pool.DeserializedPoolLockedVault<Token>
@@ -52,20 +39,17 @@ export const VaultPoolRow: React.FC<
     return getBalanceNumber(totalCakeInVault, stakingToken.decimals)
   }, [stakingToken.decimals, totalCakeInVault])
 
+  // vault
+  const vaultData = useVaultPoolByKey(pool.vaultKey as Pool.VaultKey) as Pool.DeserializedPoolLockedVault<Token>
+
+  const { userShares } = vaultData.userData as Pool.DeserializedLockedVaultUser
+  const hasSharesStaked = userShares.gt(0)
+
+  if (!account || !hasSharesStaked) return null
+
   return (
     <Pool.ExpandRow initialActivity={initialActivity} panel={<ActionPanel account={account} pool={pool} expanded />}>
       <NameCell pool={pool} />
-      {!account || isUserDelegated ? (
-        <MigrateCell>
-          {isMobile ? (
-            <Text fontSize={14} lineHeight="14px">
-              {t('This product have been upgraded!')}
-            </Text>
-          ) : (
-            <VeCakeBenefitCard isTableView />
-          )}
-        </MigrateCell>
-      ) : null}
       {account && !isUserDelegated && (
         <>
           {isXLargerScreen && <AutoEarningsCell pool={pool} account={account} />}

@@ -1,7 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { vaultPoolConfig } from 'config/constants/pools'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getApy } from '@pancakeswap/utils/compoundApyHelpers'
 import { getBalanceNumber, getFullDisplayBalance, getDecimalAmount } from '@pancakeswap/utils/formatBalance'
 import memoize from 'lodash/memoize'
 import { Token } from '@pancakeswap/sdk'
@@ -39,23 +37,6 @@ export const convertCakeToShares = (
   const sharesAsBigNumber = getDecimalAmount(new BigNumber(sharesAsNumberBalance), decimals)
   const sharesAsDisplayBalance = getFullDisplayBalance(amountInShares, decimals, decimalsToRound)
   return { sharesAsNumberBalance, sharesAsBigNumber, sharesAsDisplayBalance }
-}
-
-const MANUAL_POOL_AUTO_COMPOUND_FREQUENCY = 0
-
-export const getAprData = (pool: Pool.DeserializedPool<Token>, performanceFee: number) => {
-  const { vaultKey, apr } = pool
-
-  //   Estimate & manual for now. 288 = once every 5 mins. We can change once we have a better sense of this
-  const autoCompoundFrequency = vaultKey
-    ? vaultPoolConfig[vaultKey].autoCompoundFrequency
-    : MANUAL_POOL_AUTO_COMPOUND_FREQUENCY
-
-  if (vaultKey && apr !== undefined) {
-    const autoApr = getApy(apr, autoCompoundFrequency, 365, performanceFee) * 100
-    return { apr: autoApr, autoCompoundFrequency }
-  }
-  return { apr, autoCompoundFrequency }
 }
 
 export const getCakeVaultEarnings = (

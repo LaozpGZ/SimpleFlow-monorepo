@@ -11,7 +11,6 @@ import {
 import { Pool } from '@pancakeswap/widgets-internal'
 import { useMemo } from 'react'
 import { css, keyframes, styled } from 'styled-components'
-import { useIsMigratedToVeCake } from 'views/CakeStaking/hooks/useIsMigratedToVeCake'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
@@ -21,16 +20,6 @@ import BigNumber from 'bignumber.js'
 import { useVaultPoolByKey } from 'state/pools/hooks'
 import { DeserializedLockedCakeVault, DeserializedLockedVaultUser, VaultKey } from 'state/types'
 import { VaultPosition, getVaultPosition } from 'utils/cakePool'
-import {
-  LearnMoreLink,
-  VeCakeBunny,
-  VeCakeButton,
-  VeCakeCardTableView,
-  VeCakeDelegatedCard,
-  VeCakeMigrateCard,
-  VeCakeUpdateCard,
-  VeCakeUpdateCardTableView,
-} from 'views/CakeStaking/components/SyrupPool'
 import { useIsUserDelegated } from 'views/CakeStaking/hooks/useIsUserDelegated'
 import WithdrawAllButton from '../../LockedPool/Buttons/WithdrawAllButton'
 import LockDurationRow from '../../LockedPool/Common/LockDurationRow'
@@ -159,7 +148,6 @@ const ActionPanel: React.FC<React.PropsWithChildren<ActionPanelProps>> = ({ acco
     () => pool.vaultKey === VaultKey.CakeVault || pool.vaultKey === VaultKey.CakeFlexibleSideVault,
     [pool.vaultKey],
   )
-  const isMigratedToVeCake = useIsMigratedToVeCake()
   const isUserDelegated = useIsUserDelegated()
 
   return (
@@ -180,13 +168,7 @@ const ActionPanel: React.FC<React.PropsWithChildren<ActionPanelProps>> = ({ acco
           </Box>
         )}
         <Flex flexDirection="column" mb="8px">
-          <>
-            {!isMobile && vaultKey === VaultKey.CakeVault && !account ? (
-              <VeCakeBunny />
-            ) : (
-              <PoolStatsInfo pool={pool} account={account} showTotalStaked={isMobile} alignLinksToRight={isMobile} />
-            )}
-          </>
+          <PoolStatsInfo pool={pool} account={account} showTotalStaked={isMobile} alignLinksToRight={isMobile} />
         </Flex>
         <Flex alignItems="center">
           {vaultKey !== VaultKey.CakeVault && (
@@ -216,9 +198,7 @@ const ActionPanel: React.FC<React.PropsWithChildren<ActionPanelProps>> = ({ acco
                   isUserDelegated ? null : (
                     <AutoHarvest pool={pool} />
                   )
-                ) : (
-                  <VeCakeCardTableView />
-                )}
+                ) : null}
               </>
             ) : (
               <Harvest {...pool} />
@@ -236,42 +216,17 @@ const ActionPanel: React.FC<React.PropsWithChildren<ActionPanelProps>> = ({ acco
                   alignItems="center"
                   style={{ gap: isMobile ? 15 : 24, flexDirection: isMobile ? 'column' : 'row' }}
                 >
-                  {isUserDelegated && <VeCakeDelegatedCard isTableView />}
-                  {vaultPosition === VaultPosition.Locked && !isUserDelegated && (
-                    <VeCakeMigrateCard
-                      isTableView
-                      lockEndTime={(vaultData?.userData as DeserializedLockedVaultUser)?.lockEndTime}
-                    />
-                  )}
-                  {vaultPosition === VaultPosition.Flexible && <VeCakeUpdateCard isFlexibleStake isTableView />}
-                  {vaultPosition >= VaultPosition.LockedEnd && !isUserDelegated && <VeCakeUpdateCardTableView />}
                   {vaultPosition >= VaultPosition.LockedEnd && !isUserDelegated && <WithdrawAllButton />}
-                  <VeCakeButton style={{ flexBasis: '50%' }} type={isUserDelegated ? 'check' : 'get'} />
                 </Flex>
               }
               showIcon={vaultPosition !== VaultPosition.Locked}
             >
-              {vaultPosition !== VaultPosition.Locked && (
+              {vaultPosition === VaultPosition.Flexible ? (
                 <MessageText marginBottom="10px">
-                  {vaultPosition === VaultPosition.Flexible ? (
-                    <>
-                      {t('Flexible CAKE pool is discontinued and no longer distributing rewards.')}
-                      <LearnMoreLink withArrow />
-                    </>
-                  ) : vaultPosition >= VaultPosition.LockedEnd ? (
-                    isUserDelegated ? (
-                      t('To check out your converted position, please visit the protocol page.')
-                    ) : isMigratedToVeCake ? (
-                      t(
-                        'Extending or adding CAKE is not available for migrated positions. To get more veCAKE, withdraw from the unlocked CAKE pool position, and add CAKE to veCAKE.',
-                      )
-                    ) : (
-                      t(
-                        'The lock period has ended. To get more veCAKE, withdraw from the unlocked CAKE pool position, and add CAKE to veCAKE.',
-                      )
-                    )
-                  ) : null}
+                  {t('Flexible CAKE pool is discontinued and no longer distributing rewards.')}
                 </MessageText>
+              ) : (
+                <MessageText marginBottom="10px">{t('Reward paused for this position')}</MessageText>
               )}
             </Message>
           </Flex>

@@ -12,7 +12,6 @@ import BenefitsModal from 'views/Pools/components/RevenueSharing/BenefitsModal'
 import useVCake from 'views/Pools/hooks/useVCake'
 import { useAccount } from 'wagmi'
 
-import { VeCakeCard, VeCakeUpdateCard } from 'views/CakeStaking/components/SyrupPool'
 import { useIsUserDelegated } from 'views/CakeStaking/hooks/useIsUserDelegated'
 import LockedStakingApy from '../LockedPool/LockedStakingApy'
 import CardFooter from '../PoolCard/CardFooter'
@@ -73,8 +72,6 @@ export const CakeVaultDetail: React.FC<React.PropsWithChildren<CakeVaultDetailPr
   return (
     <>
       <StyledCardBody isLoading={isLoading}>
-        {vaultPosition >= VaultPosition.LockedEnd && !isUserDelegated && <VeCakeUpdateCard isLockEndOrAfterLock />}
-
         {account && pool.vaultKey === VaultKey.CakeVault && (
           <VaultPositionTagWithLabel userData={(vaultPool as DeserializedLockedCakeVault)?.userData} />
         )}
@@ -94,11 +91,6 @@ export const CakeVaultDetail: React.FC<React.PropsWithChildren<CakeVaultDetailPr
           </>
         ) : (
           <>
-            {account && vaultPosition === VaultPosition.Flexible && !isUserDelegated ? (
-              <VeCakeUpdateCard isFlexibleStake />
-            ) : (
-              <VeCakeCard />
-            )}
             {/* {<StakingApy pool={pool} />} */}
             {vaultPosition !== VaultPosition.None && !isUserDelegated && (
               <FlexGap mt="16px" gap="24px" flexDirection={accountHasSharesStaked ? 'column-reverse' : 'column'}>
@@ -134,7 +126,6 @@ export const CakeVaultDetail: React.FC<React.PropsWithChildren<CakeVaultDetailPr
 
 const CakeVaultCard: React.FC<React.PropsWithChildren<CakeVaultProps>> = ({
   pool,
-  showStakedOnly,
   defaultFooterExpanded,
   showICake = false,
   showSkeleton = true,
@@ -152,7 +143,7 @@ const CakeVaultCard: React.FC<React.PropsWithChildren<CakeVaultProps>> = ({
   const accountHasSharesStaked = userShares && userShares.gt(0)
   const isLoading = !pool?.userData || isVaultUserDataLoading
 
-  if (!pool || (showStakedOnly && !accountHasSharesStaked)) {
+  if (!pool || !accountHasSharesStaked) {
     return null
   }
 
