@@ -84,12 +84,12 @@ export function CrossChainTransaction({ orderData }: { orderData: CrossChainOrde
         }
       >
         <Text small>
-          {t('Swap ')}
+          {t('Swap')}&nbsp;
           <Text as="span" bold small>
             {orderData.order?.trade?.inputAmount.toExact()}&nbsp;
             {inputToken?.symbol}
           </Text>
-          &nbsp; ({t('on %chainSymbol%', { chainSymbol: inputChainName })}){t(' for ')}
+          &nbsp; ({t('on %chainSymbol%', { chainSymbol: inputChainName })}) {t('for')}&nbsp;
           <Text as="span" bold small>
             {orderData.order?.trade?.outputAmount.toExact()}&nbsp;
             {outputToken?.symbol}
