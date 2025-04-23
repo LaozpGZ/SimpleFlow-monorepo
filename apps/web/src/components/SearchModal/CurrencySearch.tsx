@@ -5,7 +5,7 @@ import { ChainId, Currency, getTokenComparator, Token } from '@pancakeswap/sdk'
 import { createFilterToken, WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { AutoColumn, Box, Column, ModalCloseButton, ModalTitle, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useAudioPlay } from '@pancakeswap/utils/user'
-import { KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react'
+import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FixedSizeList } from 'react-window'
 import { isAddress } from 'viem'
 
@@ -15,7 +15,6 @@ import { useAllLists, useInactiveListUrls } from 'state/lists/hooks'
 import { safeGetAddress } from 'utils'
 
 import { UpdaterByChainId } from 'state/lists/updater'
-import { useSearchQuery } from 'state/tokenList/searchQueryAtom'
 import { useAllTokenBalances } from 'state/wallet/hooks'
 import { useAllTokens, useIsUserAddedToken, useToken } from '../../hooks/Tokens'
 import Row from '../Layout/Row'
@@ -112,7 +111,7 @@ function CurrencySearch({
   const { chainId: activeChainId } = useActiveChainId()
 
   const { t } = useTranslation()
-  const [searchQuery] = useSearchQuery()
+  const [searchQuery, setSearchQuery] = useState<string>('')
   const debouncedQuery = useDebounce(searchQuery, 200)
   // refs for fixed size lists
   const fixedList = useRef<FixedSizeList>()
@@ -173,7 +172,10 @@ function CurrencySearch({
     if (!isMobile) inputRef.current?.focus()
   }, [isMobile])
 
-  const handleOnInput = useCallback(() => {
+  const handleOnInput = useCallback((event: ChangeEvent<HTMLInputElement>) => {
+    const input = event.target.value
+    const checksummedInput = safeGetAddress(input)
+    setSearchQuery(checksummedInput || input)
     fixedList.current?.scrollTo(0)
   }, [])
 
