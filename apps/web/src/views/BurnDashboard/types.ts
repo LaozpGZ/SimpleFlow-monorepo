@@ -24,8 +24,8 @@ export interface BurnStats {
   }[]
   mintTimeSeries: {
     timestamp: number
-    burn: number
-    burnUSD: number
+    mint: number
+    mintUSD: number
     product: string
   }[]
   burnHistoryTable: {

@@ -1,10 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CardProps, DotIcon, FlexGap, InfoIcon, QuestionHelperV2, Text } from '@pancakeswap/uikit'
-import BigNumber from 'bignumber.js'
 import { LightGreyCard } from 'components/Card'
-import { useCakePrice } from 'hooks/useCakePrice'
 import groupBy from 'lodash/groupBy'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { CHART_COLORS_ALTERNATE } from 'views/BurnDashboard/constants'
@@ -14,67 +12,85 @@ import { StatsCard, StatsCardHeader } from '../StatsCard'
 import { TooltipCard } from '../styles'
 import { TabMenu } from '../TabMenu'
 
-const CustomTooltip = ({ active, payload, isUSD }: any) => {
-  const { t } = useTranslation()
-
-  if (active && payload && payload.length) {
-    const total = payload.reduce((acc, entry) => acc + entry.value, 0)
-    return (
-      <TooltipCard>
-        <FlexGap mb="8px" justifyContent="space-between" alignItems="center" gap="16px">
-          <Text small>
-            {new Date(Number(payload[0].payload.timestamp)).toLocaleDateString('en-US', {
-              month: 'short',
-              day: 'numeric',
-              year: 'numeric',
-            })}
-          </Text>
-          <Text color="secondary" small bold>
-            {isUSD
-              ? `$${formatAmount(total, { precision: 2 })}`
-              : formatAmount(total, { precision: getBurnInfoPrecision(total) })}
-          </Text>
-        </FlexGap>
-        {payload.map((entry: any) => (
-          <FlexGap justifyContent="space-between" gap="16px" key={entry.name}>
-            <FlexGap key={entry.name} alignItems="center" gap="6px" mb="4px">
-              <DotIcon color={entry.color} width="8px" mt="2px" />
-              <Text small>{t(entry.name)}</Text>
-            </FlexGap>
-            <Text small bold>
-              {isUSD
-                ? `$${formatAmount(entry.value, { precision: 2 })}`
-                : formatAmount(entry.value, { precision: getBurnInfoPrecision(entry.value) })}
-            </Text>
-          </FlexGap>
-        ))}
-      </TooltipCard>
-    )
-  }
-  return null
-}
-
-const timeFilters = {
+// Constants
+const TIME_FILTERS = {
   '3m': 90 * 24 * 60 * 60 * 1000,
   '6m': 180 * 24 * 60 * 60 * 1000,
   '1y': 365 * 24 * 60 * 60 * 1000,
-  Max: Infinity,
+} as const
+
+type TimeFilterKey = keyof typeof TIME_FILTERS | 'Max'
+type CurrencyTab = 'CAKE' | 'USD'
+
+// Memoized tooltip component
+const CustomTooltip = ({ active, payload, isUSD }: { active?: boolean; payload?: any[]; isUSD: boolean }) => {
+  const { t } = useTranslation()
+
+  if (!active || !payload?.length) return null
+
+  const total = payload.reduce((acc, entry) => acc + entry.value, 0)
+  const date = new Date(Number(payload[0].payload.timestamp))
+
+  return (
+    <TooltipCard>
+      <FlexGap mb="8px" justifyContent="space-between" alignItems="center" gap="16px">
+        <Text small>
+          {date.toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+          })}
+        </Text>
+        <Text color="secondary" small bold>
+          {isUSD
+            ? `$${formatAmount(total, { precision: 2 })}`
+            : formatAmount(total, { precision: getBurnInfoPrecision(total) })}
+        </Text>
+      </FlexGap>
+      {payload.map((entry) => (
+        <FlexGap justifyContent="space-between" gap="16px" key={entry.name}>
+          <FlexGap alignItems="center" gap="6px" mb="4px">
+            <DotIcon color={entry.color} width="8px" mt="2px" />
+            <Text small>{t(entry.name)}</Text>
+          </FlexGap>
+          <Text small bold>
+            {isUSD
+              ? `$${formatAmount(entry.value, { precision: 2 })}`
+              : formatAmount(entry.value, { precision: getBurnInfoPrecision(entry.value) })}
+          </Text>
+        </FlexGap>
+      ))}
+    </TooltipCard>
+  )
 }
 
 export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
   const { t } = useTranslation()
-  const [currencyTab, setCurrencyTab] = useState('CAKE') // 'CAKE' or 'USD'
-  const [timeTab, setTimeTab] = useState('3m') // '3m', '6m', '1y', or 'Max'
-  const cakePrice = useCakePrice()
+  const [currencyTab, setCurrencyTab] = useState<CurrencyTab>('CAKE')
+  const [timeTab, setTimeTab] = useState<TimeFilterKey>('3m')
 
   const { data } = useBurnStats()
   const mintTimeSeries = data?.mintTimeSeries
 
+  // Extract unique products once
   const uniqueProducts = useMemo(() => {
     if (!mintTimeSeries) return []
     return [...new Set(mintTimeSeries.map((item) => item.product))]
   }, [mintTimeSeries])
 
+  // Format date based on time tab
+  const formatDate = useCallback(
+    (timestamp: number) => {
+      return new Date(timestamp).toLocaleDateString('en-US', {
+        month: 'short',
+        day: timeTab === 'Max' ? undefined : 'numeric',
+        ...(timeTab !== '3m' && { year: 'numeric' }),
+      })
+    },
+    [timeTab],
+  )
+
+  // Process chart data
   const chartData = useMemo(() => {
     if (!mintTimeSeries) return []
 
@@ -84,20 +100,15 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
     return Object.entries(groupedData)
       .filter(([timestamp]) => {
         const timeDiff = now - Number(timestamp)
-        return timeDiff <= timeFilters[timeTab]
+        return timeTab === 'Max' ? true : timeDiff <= TIME_FILTERS[timeTab as keyof typeof TIME_FILTERS]
       })
       .map(([timestamp, items]) => {
         const baseData = {
           timestamp,
-          timestampFormatted: new Date(Number(timestamp)).toLocaleDateString('en-US', {
-            month: 'short',
-            day: timeTab === 'Max' ? undefined : 'numeric',
-            ...(timeTab !== '3m' && { year: 'numeric' }),
-          }),
+          timestampFormatted: formatDate(Number(timestamp)),
           ...items.reduce((acc, item) => {
             const newAcc = { ...acc }
-            const value =
-              currencyTab === 'USD' ? new BigNumber(item.burn).times(cakePrice.toString()).toNumber() : item.burn
+            const value = currencyTab === 'USD' ? item.mintUSD : item.mint
             newAcc[item.product] = value
             return newAcc
           }, {}),
@@ -105,7 +116,26 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
         return baseData
       })
       .sort((a, b) => Number(a.timestamp) - Number(b.timestamp))
-  }, [mintTimeSeries, timeTab, currencyTab, cakePrice])
+  }, [mintTimeSeries, timeTab, currencyTab, formatDate])
+
+  // Memoize the legend items
+  const legendItems = useMemo(
+    () => (
+      <LightGreyCard padding="8px 16px" width="fit-content" height="fit-content">
+        <FlexGap flexDirection={['row', 'row', 'row', 'row', 'column']} gap="8px" flexWrap="wrap">
+          {uniqueProducts.map((product, index) => (
+            <FlexGap alignItems="center" gap="4px" key={product}>
+              <DotIcon color={CHART_COLORS_ALTERNATE[index % CHART_COLORS_ALTERNATE.length]} width="12px" />
+              <Text color="textSubtle" width="max-content" small>
+                {product}
+              </Text>
+            </FlexGap>
+          ))}
+        </FlexGap>
+      </LightGreyCard>
+    ),
+    [uniqueProducts],
+  )
 
   return (
     <StatsCard {...props}>
@@ -117,8 +147,16 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
           </QuestionHelperV2>
         </FlexGap>
         <FlexGap gap="6px" alignItems="center" flexWrap="wrap">
-          <TabMenu tabs={['CAKE', 'USD']} defaultTab={currencyTab} onTabChange={setCurrencyTab} />
-          <TabMenu tabs={['3m', '6m', '1y', 'Max']} defaultTab={timeTab} onTabChange={setTimeTab} />
+          <TabMenu
+            tabs={['CAKE', 'USD']}
+            defaultTab={currencyTab}
+            onTabChange={(tab) => setCurrencyTab(tab as CurrencyTab)}
+          />
+          <TabMenu
+            tabs={['3m', '6m', '1y', 'Max']}
+            defaultTab={timeTab}
+            onTabChange={(tab) => setTimeTab(tab as TimeFilterKey)}
+          />
         </FlexGap>
       </FlexGap>
 
@@ -167,18 +205,7 @@ export const WeeklyEmissionsStackedBarChart = (props: CardProps) => {
             />
           </BarChart>
         </ResponsiveContainer>
-        <LightGreyCard padding="8px 16px" width="fit-content" height="fit-content">
-          <FlexGap flexDirection={['row', 'row', 'row', 'row', 'column']} gap="8px" flexWrap="wrap">
-            {uniqueProducts.map((product, index) => (
-              <FlexGap alignItems="center" gap="4px" key={product}>
-                <DotIcon color={CHART_COLORS_ALTERNATE[index % CHART_COLORS_ALTERNATE.length]} width="12px" />
-                <Text color="textSubtle" width="max-content" small>
-                  {product}
-                </Text>
-              </FlexGap>
-            ))}
-          </FlexGap>
-        </LightGreyCard>
+        {legendItems}
       </FlexGap>
     </StatsCard>
   )

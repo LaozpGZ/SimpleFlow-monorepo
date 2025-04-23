@@ -12,11 +12,11 @@ import { StatsCard, StatsCardHeader } from '../StatsCard'
 import { TooltipCard } from '../styles'
 import { TabMenu } from '../TabMenu'
 
-const timeRanges = {
+const TIME_FILTERS = {
   '3m': 3 * 30 * 24 * 60 * 60 * 1000,
   '6m': 6 * 30 * 24 * 60 * 60 * 1000,
   '1y': 365 * 24 * 60 * 60 * 1000,
-}
+} as const
 
 type CustomTooltipProps = TooltipProps<number, string> & { isUSD?: boolean }
 
@@ -76,7 +76,7 @@ export const WeeklyBurnStackedChart = (props: CardProps) => {
     if (!burnTimeSeries) return []
 
     const now = Date.now()
-    const startTime = selectedTab === 'Max' ? 0 : now - (timeRanges[selectedTab] || timeRanges['3m'])
+    const startTime = selectedTab === 'Max' ? 0 : now - (TIME_FILTERS[selectedTab] || TIME_FILTERS['3m'])
 
     const filteredData = burnTimeSeries.filter((item) => item.timestamp >= startTime)
     const groupedByTimestamp = groupBy(filteredData, 'timestamp')

@@ -3,8 +3,8 @@ import { fetchFromDune } from './request'
 import { DuneResponse } from './types'
 
 interface Row {
-  Cake_burn: number
-  Cake_burn_USD: number
+  Cake_mint: number
+  Cake_mint_USD: number
   name: string
   product_type: string
   week_start: string
@@ -22,8 +22,8 @@ export const getMintTimeSeries = async () => {
     data: data.result.rows
       .map((row: Row) => ({
         timestamp: new Date(row.week_start).getTime(),
-        burn: row.Cake_burn,
-        burnUSD: row.Cake_burn_USD,
+        mint: row.Cake_mint,
+        mintUSD: row.Cake_mint_USD,
         product: row.name,
       }))
       .slice()
