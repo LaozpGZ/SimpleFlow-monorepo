@@ -28,7 +28,12 @@ import {
 import { Timeline } from '../components/Timeline'
 import { detailsPanelExpanded, detailsPanelProgressExpanded } from '../state/detailsPanel'
 import { crossChainOrderDataAtom } from '../state/orderData'
-import { CrossChainOrderStatus, CrossChainOrderStepStatus, CrossChainOrderStepType } from '../types'
+import {
+  CrossChainOrderData,
+  CrossChainOrderStatus,
+  CrossChainOrderStepStatus,
+  CrossChainOrderStepType,
+} from '../types'
 
 const ProgressPill = styled(Box)<{ $color: string }>`
   width: 16px;
@@ -37,10 +42,16 @@ const ProgressPill = styled(Box)<{ $color: string }>`
   background-color: ${({ theme, $color }) => theme.colors[$color]};
 `
 
-interface OrderDetailsPanelProps extends BoxProps {}
-export const OrderDetailsPanel = ({ ...props }: OrderDetailsPanelProps) => {
+interface OrderDetailsPanelProps extends BoxProps {
+  overrideOrderData?: CrossChainOrderData
+}
+export const OrderDetailsPanel = ({ overrideOrderData, ...props }: OrderDetailsPanelProps) => {
   const { t } = useTranslation()
-  const { order, steps, status } = useAtomValue(crossChainOrderDataAtom)
+
+  const stateOrderData = useAtomValue(crossChainOrderDataAtom)
+  const orderData = overrideOrderData || stateOrderData
+  const { order, steps, status } = orderData
+
   const [detailsExpanded, setDetailsExpanded] = useAtom(detailsPanelExpanded)
   const [progressExpanded, setProgressExpanded] = useAtom(detailsPanelProgressExpanded)
 
