@@ -4,6 +4,7 @@ import { ASSET_CDN } from 'config/constants/endpoints'
 import React from 'react'
 import styled from 'styled-components'
 
+const link = 'https://docs.pancakeswap.finance/protocol/cake-tokenomics'
 export const RedeemHeader: React.FC = () => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
@@ -16,7 +17,7 @@ export const RedeemHeader: React.FC = () => {
           <SubText $isMobile={isMobile}>
             {t('You may now redeem previously locked CAKE and claim remaining rewards.')}
             {isMobile && (
-              <AnnouncementLinkMobile href="#">
+              <AnnouncementLinkMobile href={link} external>
                 <LinkText>
                   {t('View details')}
                   {' >>'}
@@ -25,10 +26,7 @@ export const RedeemHeader: React.FC = () => {
             )}
           </SubText>
           {!isMobile && (
-            <AnnouncementLink
-              href="https://blog.pancakeswap.finance/articles/implementation-of-cake-tokenomics-3-0-what-you-need-to-know"
-              external
-            >
+            <AnnouncementLink href={link} external>
               <LinkText>{t('View detailed announcement')}</LinkText>
               <StyledArrowForwardIcon />
             </AnnouncementLink>

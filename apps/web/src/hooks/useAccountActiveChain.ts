@@ -1,4 +1,3 @@
-import { useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { useActiveChainId } from './useActiveChainId'
@@ -8,10 +7,7 @@ import { useActiveChainId } from './useActiveChainId'
  * Recreate web3 instance only if the provider change
  */
 const useAccountActiveChain = () => {
-  const params = useSearchParams()
-  const { address: _account, status, connector } = useAccount()
-  const accountFromUrl = params.get('_account') as `0x${string}` | undefined
-  const account = accountFromUrl || _account
+  const { address: account, status, connector } = useAccount()
   const { chainId } = useActiveChainId()
 
   return useMemo(() => ({ account, chainId, status, connector }), [account, chainId, connector, status])

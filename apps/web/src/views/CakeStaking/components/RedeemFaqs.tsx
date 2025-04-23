@@ -9,11 +9,10 @@ const faqs = [
     title: <Trans>What am I redeeming and how does this work?</Trans>,
     description: (
       <>
-        {/* eslint-disable-next-line react/no-unescaped-entities */}
         <Trans>You're redeeming:</Trans>
         <ul>
           <li>
-            <Trans>veCAKE (at a 1:1 ratio back to CAKE)</Trans>
+            <Trans>Underlying CAKE (from your veCAKE position)</Trans>
           </li>
           <li>
             <Trans>Legacy CAKE Pool rewards</Trans>
@@ -35,7 +34,7 @@ const faqs = [
     title: <Trans>How long will this redemption page be available?</Trans>,
     description: (
       <Trans>
-        You'll have 6 months to redeem your veCAKE and other unclaimed rewards, from April 23, 2025 at 9:00 UTC until
+        You'll have 6 months to redeem your veCAKE and other unclaimed rewards, from April 23, 2025 at 8:00 AM UTC until
         October 23, 2025.
       </Trans>
     ),
@@ -83,7 +82,8 @@ const faqs = [
           </li>
           <li>
             <Trans>
-              To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before May 6.
+              To earn all final APRs (veCAKE Pool + Bribe + Revenue Sharing), do not redeem CAKE before 00:00 AM UTC,
+              May 7, 2025.
             </Trans>
           </li>
         </ul>
@@ -102,12 +102,10 @@ const faqs = [
             </Trans>
           </li>
           <li>
-            <Trans>5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025.</Trans>
-          </li>
-          <li>
             <Trans>
-              Funds previously allocated to revenue sharing will be redirected to the CAKE burn mechanism, increasing
-              the burn rate for these pools from 10% to 15%.
+              5% Revenue Sharing from trading fees will end on 00:00 UTC on May 7, 2025. Funds previously allocated to
+              revenue sharing will now be redirected to the CAKE burn mechanism, increasing the burn rate for these
+              pools from 10% to 15%.
             </Trans>
           </li>
           <li>
@@ -160,6 +158,15 @@ export const RedeemFaqs = () => (
           href="https://blog.pancakeswap.finance/articles/implementation-of-cake-tokenomics-3-0-what-you-need-to-know"
         >
           <Trans>Blog Post: What You Need to Know</Trans>
+        </Link>
+        <Link
+          style={{
+            marginTop: '10px',
+          }}
+          external
+          href="https://docs.pancakeswap.finance/welcome-to-pancakeswap/vecake-sunset"
+        >
+          <Trans>Product Doc: veCAKE Redemption Guide</Trans>
         </Link>
       </div>
     </CardBody>

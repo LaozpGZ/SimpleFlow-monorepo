@@ -79,7 +79,7 @@ export const VeCakeRedeem: React.FC = () => {
       await claimAll.callMethod([uniq, account], {
         successToast: {
           title: t('Claim Successfully'),
-          description: t(`Rewards have been send to your wallet.`),
+          description: t(`Rewards have been sent to your wallet.`),
         },
       })
       refetchRevenueShareCake()
@@ -104,14 +104,14 @@ export const VeCakeRedeem: React.FC = () => {
         await veCakeWithdrawAll.callMethod([account], {
           successToast: {
             title: t('veCAKE Redeem Successfully'),
-            description: `${nativeCakeDisplay} ${t('CAKE has been send to your wallet.')}`,
+            description: `${nativeCakeDisplay} ${t('CAKE has been sent to your wallet.')}`,
           },
         })
       } else {
         await earlyWithdraw.callMethod([account, BigInt(nativeCakeLockedAmount)], {
           successToast: {
             title: t('veCAKE Redeem Successfully'),
-            description: `${nativeCakeDisplay} ${t('CAKE has been send to your wallet.')}`,
+            description: `${nativeCakeDisplay} ${t('CAKE has been sent to your wallet.')}`,
           },
         })
       }
@@ -135,7 +135,7 @@ export const VeCakeRedeem: React.FC = () => {
       await withdrawAll.callMethod([], {
         successToast: {
           title: t('CAKE Pool Redeem Successfully'),
-          description: `${proxyCakeLockedAmountDisplay} ${t('CAKE has been send to your wallet.')}`,
+          description: `${proxyCakeLockedAmountDisplay} ${t('CAKE has been sent to your wallet.')}`,
         },
       })
     }
@@ -145,22 +145,16 @@ export const VeCakeRedeem: React.FC = () => {
   const buttons = [
     {
       key: 'cakepool',
-      textEnabled: `${t('Redeem From Cake Pool')}(${proxyCakeLockedAmountDisplay}) CAKE`,
-      textDisable: `${t('Redeem From Cake Pool')} ${t('Finished')}`,
       handler: handleCakePool,
       enabled: proxyCakeLockedAmount > 0,
     },
     {
       key: 'vecake',
-      textEnabled: `${t('Redeem from veCAKE')}(${nativeCakeDisplay}) CAKE`,
-      textDisable: `${t('Redeem from veCAKE')} ${t('Finished')}`,
       handler: handleVeCake,
       enabled: nativeCakeLockedAmount > 0,
     },
     {
       key: 'claimall',
-      textEnabled: `${t('Claim All Rewards')}(${cakePoolRewardDisplay}) CAKE`,
-      textDisable: `${t('Redeem from veCAKE')} ${t('Finished')}`,
       handler: handleClaim,
       enabled: userHasRewards,
     },
