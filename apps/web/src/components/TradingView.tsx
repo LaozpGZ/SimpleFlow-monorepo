@@ -75,8 +75,6 @@ const TradingView = ({ id, symbol }: TradingViewProps) => {
   const integrity = useAtomValue(integrityAtom)
 
   useEffect(() => {
-    if (!integrity) return
-
     const opts: any = {
       container_id: id,
       symbol,
@@ -98,19 +96,17 @@ const TradingView = ({ id, symbol }: TradingViewProps) => {
 
     // Ignore isMobile to avoid re-render TV
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [theme, currentLanguage, id, symbol, integrity])
+  }, [theme, currentLanguage, id, symbol])
 
   return (
     <Box overflow="hidden" className="tradingview_container">
-      {integrity && (
-        <Script
-          src="https://s3.tradingview.com/tv.js"
-          integrity={integrity}
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-          id="tv.js"
-        />
-      )}
+      <Script
+        src="https://s3.tradingview.com/tv.js"
+        integrity={integrity}
+        crossOrigin="anonymous"
+        strategy="lazyOnload"
+        id="tv.js"
+      />
       <div id={id} />
     </Box>
   )
