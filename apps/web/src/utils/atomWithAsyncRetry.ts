@@ -25,7 +25,7 @@ export function atomWithAsyncRetry<T>({
         attempt++
         if (attempt >= maxRetries) {
           if (!isUndefinedOrNull(fallbackValue)) {
-            return fallbackValue
+            return fallbackValue as T
           }
           throw error
         }
