@@ -22,7 +22,7 @@ import Page from 'components/Layout/Page'
 import PinnedFAQButton from 'components/PinnedFAQButton'
 import { TokenPairImage } from 'components/TokenImage'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { usePoolsPageFetch, usePoolsWithVault } from 'state/pools/hooks'
+import { usePoolsPageFetch, usePools } from 'state/pools/hooks'
 import { StyledPageHeader } from 'views/CakeStaking'
 import { useAccount } from 'wagmi'
 import AprRow from './components/PoolCard/AprRow'
@@ -54,7 +54,7 @@ const Pools: React.FC<React.PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
-  const { pools, userDataLoaded } = usePoolsWithVault()
+  const { pools, userDataLoaded } = usePools()
   const { isMobile } = useMatchBreakpoints()
 
   usePoolsPageFetch()

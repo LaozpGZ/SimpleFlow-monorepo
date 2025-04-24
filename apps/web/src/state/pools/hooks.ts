@@ -28,7 +28,7 @@ import {
   fetchUserIfoCreditDataAsync,
 } from '.'
 import { fetchFarmsPublicDataAsync } from '../farms'
-import { ifoCreditSelector, makePoolWithUserDataLoadingSelector, poolsWithVaultSelector } from './selectors'
+import { ifoCreditSelector, makePoolWithUserDataLoadingSelector, poolsSelector } from './selectors'
 
 // Only fetch farms for live pools
 const getActiveFarms = async (chainId: number) => {
@@ -80,8 +80,8 @@ export const usePool = (sousId: number): { pool?: Pool.DeserializedPool<Token>; 
   return useSelector(poolWithUserDataLoadingSelector)
 }
 
-export const usePoolsWithVault = () => {
-  return useSelector(poolsWithVaultSelector)
+export const usePools = () => {
+  return useSelector(poolsSelector)
 }
 
 export const usePoolsConfigInitialize = () => {

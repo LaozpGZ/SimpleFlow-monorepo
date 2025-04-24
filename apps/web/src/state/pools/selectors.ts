@@ -22,7 +22,7 @@ export const poolsWithUserDataLoadingSelector = createSelector(
   },
 )
 
-export const poolsWithVaultSelector = createSelector([poolsWithUserDataLoadingSelector], (poolsWithUserDataLoading) => {
+export const poolsSelector = createSelector([poolsWithUserDataLoadingSelector], (poolsWithUserDataLoading) => {
   const { pools, userDataLoaded } = poolsWithUserDataLoading
   const withoutCakePool = pools.filter((pool) => pool.sousId !== 0)
 

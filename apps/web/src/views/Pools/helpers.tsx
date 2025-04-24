@@ -39,24 +39,6 @@ export const convertCakeToShares = (
   return { sharesAsNumberBalance, sharesAsBigNumber, sharesAsDisplayBalance }
 }
 
-export const getCakeVaultEarnings = (
-  account: string | undefined,
-  cakeAtLastUserAction: BigNumber,
-  userShares: BigNumber,
-  pricePerFullShare: BigNumber,
-  earningTokenPrice: number,
-  fee?: BigNumber,
-) => {
-  const hasAutoEarnings = account && cakeAtLastUserAction?.gt(0) && userShares?.gt(0)
-  const { cakeAsBigNumber } = convertSharesToCake(userShares, pricePerFullShare)
-  const autoCakeProfit = cakeAsBigNumber.minus(fee || BIG_ZERO).minus(cakeAtLastUserAction)
-  const autoCakeToDisplay = autoCakeProfit.gte(0) ? getBalanceNumber(autoCakeProfit, 18) : 0
-
-  const autoUsdProfit = autoCakeProfit.times(earningTokenPrice)
-  const autoUsdToDisplay = autoUsdProfit.gte(0) ? getBalanceNumber(autoUsdProfit, 18) : 0
-  return { hasAutoEarnings, autoCakeToDisplay, autoUsdToDisplay }
-}
-
 export const getPoolBlockInfo = memoize(
   (pool: Pool.DeserializedPool<Token>, currentBlock: number) => {
     const { startTimestamp, endTimestamp, isFinished } = pool
