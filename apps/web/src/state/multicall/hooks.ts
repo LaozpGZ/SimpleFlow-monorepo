@@ -246,7 +246,7 @@ export type MultipleSameDataCallParametersWagmi<TAbi extends Abi | readonly unkn
     enabled?: boolean
     watch?: boolean
   }
-  chainId?: number
+  chainId?: number | number[]
   args?: readonly unknown[] | undefined
 }
 
@@ -259,12 +259,15 @@ export function useMultipleContractSingleDataWagmi({
   options,
 }: MultipleSameDataCallParametersWagmi) {
   const contracts = useMemo(() => {
-    return addresses.map((address) => ({
+    return addresses.map((address, index) => ({
       abi,
       address,
       functionName,
       args,
-      chainId,
+      // We need to support multiple chainIds
+      // For example, when we fetch the balance of cross-chain pairs
+      // we need to fetch the balance of the token on both chains
+      chainId: Array.isArray(chainId) && chainId.length === addresses.length ? chainId[index] : chainId,
     }))
   }, [abi, functionName, args, addresses, chainId])
 
