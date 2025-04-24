@@ -16,7 +16,7 @@ const TradingView = () => {
             alignItems: 'center',
           }}
         >
-          <Spinner />{' '}
+          <Spinner />
         </Flex>
       }
     >

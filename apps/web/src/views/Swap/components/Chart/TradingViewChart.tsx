@@ -105,12 +105,11 @@ const TradingViewChart = ({ outputSymbol, inputSymbol, isDark, onTwChartSymbol }
                     alignItems: 'center',
                   }}
                 >
-                  <Spinner />{' '}
+                  <Spinner />
                 </Flex>
               }
             >
-              {' '}
-              <TradingView id={ID} symbol={`${SYMBOL_PREFIX}${symbol}`} />{' '}
+              <TradingView id={ID} symbol={`${SYMBOL_PREFIX}${symbol}`} />
             </Suspense>
           )}
         </TradingViewWrapper>
