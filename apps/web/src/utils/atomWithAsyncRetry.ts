@@ -1,3 +1,4 @@
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import { atom } from 'jotai'
 
 export function atomWithAsyncRetry<T>({
@@ -23,7 +24,7 @@ export function atomWithAsyncRetry<T>({
       } catch (error) {
         attempt++
         if (attempt >= maxRetries) {
-          if (fallbackValue) {
+          if (!isUndefinedOrNull(fallbackValue)) {
             return fallbackValue
           }
           throw error

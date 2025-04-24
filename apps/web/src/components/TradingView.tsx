@@ -1,9 +1,10 @@
 import { Box, FlexProps, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { atom, useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { useTranslation } from '@pancakeswap/localization'
 import Script from 'next/script'
 import { useEffect } from 'react'
 import { DefaultTheme, useTheme } from 'styled-components'
+import { atomWithAsyncRetry } from 'utils/atomWithAsyncRetry'
 import { ChartByLabel } from './Chart/ChartbyLabel'
 
 /**
@@ -57,29 +58,21 @@ interface TradingViewProps {
   symbol: string
 }
 
-const integrityAtom = atom<string | undefined>(undefined)
+const integrityAtom = atomWithAsyncRetry({
+  asyncFn: async () => {
+    const response = await fetch('/api/integrity?id=tv')
+    if (!response.ok) throw new Error('Failed to fetch TradingView integrity hash')
+    const data = await response.json()
+    return data.integrity as string
+  },
+  fallbackValue: '',
+})
 
 const TradingView = ({ id, symbol }: TradingViewProps) => {
   const { currentLanguage } = useTranslation()
   const theme = useTheme()
   const { isMobile } = useMatchBreakpoints()
-  const [integrity, setIntegrity] = useAtom(integrityAtom)
-
-  useEffect(() => {
-    const fetchIntegrity = async () => {
-      try {
-        const res = await fetch('/api/integrity?id=tv')
-        if (res.ok) {
-          const data = await res.json()
-          setIntegrity(data.integrity)
-        }
-      } catch (error) {
-        console.error('Failed to fetch TradingView integrity hash:', error)
-      }
-    }
-
-    fetchIntegrity()
-  }, [])
+  const integrity = useAtomValue(integrityAtom)
 
   useEffect(() => {
     if (!integrity) return
