@@ -42,13 +42,15 @@ export function useTokenBalancesWithLoadingIndicator(
     [tokens],
   )
 
+  const addresses = useMemo(() => validatedTokens.map((token) => token.address), [validatedTokens])
+
   const { data: balances, isLoading } = useMultipleContractSingleDataWagmi({
     abi: erc20Abi,
-    tokens: validatedTokens,
+    addresses,
     functionName: 'balanceOf',
     args: useMemo(() => [address as Address] as const, [address]),
     options: {
-      enabled: Boolean(address && validatedTokens.length > 0),
+      enabled: Boolean(address && addresses.length > 0),
     },
     chainId,
   })
