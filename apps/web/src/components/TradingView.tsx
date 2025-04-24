@@ -1,7 +1,8 @@
 import { Box, FlexProps, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { atom, useAtom } from 'jotai'
 import { useTranslation } from '@pancakeswap/localization'
 import Script from 'next/script'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { DefaultTheme, useTheme } from 'styled-components'
 import { ChartByLabel } from './Chart/ChartbyLabel'
 
@@ -56,11 +57,13 @@ interface TradingViewProps {
   symbol: string
 }
 
+const integrityAtom = atom<string | undefined>(undefined)
+
 const TradingView = ({ id, symbol }: TradingViewProps) => {
   const { currentLanguage } = useTranslation()
   const theme = useTheme()
   const { isMobile } = useMatchBreakpoints()
-  const [integrity, setIntegrity] = useState<string | undefined>(undefined)
+  const [integrity, setIntegrity] = useAtom(integrityAtom)
 
   useEffect(() => {
     const fetchIntegrity = async () => {
