@@ -29,11 +29,7 @@ export const PricingAndSlippage = memo(function PricingAndSlippage({
     return null
   }
 
-  const priceNode = price ? (
-    <>
-      <SwapUIV2.TradePrice price={price} loading={priceLoading} />
-    </>
-  ) : null
+  const priceNode = price ? <SwapUIV2.TradePrice price={price} loading={priceLoading} /> : null
 
   return (
     <SwapUIV2.SwapInfo

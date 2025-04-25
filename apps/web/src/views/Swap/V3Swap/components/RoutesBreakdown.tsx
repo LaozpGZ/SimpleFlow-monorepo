@@ -53,7 +53,7 @@ export const RoutesBreakdown = memo(function RoutesBreakdown({ routes = [], wrap
           />
         </span>
         <Box onClick={routeDisplayModal.onOpen} role="button">
-          <span style={{ display: 'flex', alignItems: 'center' }}>
+          <span style={{ display: 'flex', alignItems: 'flex-end' }}>
             {count > 1 ? (
               <Text fontSize="14px">{t('%count% Separate Routes', { count })}</Text>
             ) : (

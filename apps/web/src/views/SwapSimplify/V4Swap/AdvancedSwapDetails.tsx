@@ -89,11 +89,7 @@ export const TradeSummary = memo(function TradeSummary({
         <RowBetween align="flex-start" mt="10px">
           <RowFixed>
             <QuestionHelperV2
-              text={
-                <>
-                  <Text>{t('Fees saved on PancakeSwap compared to major DEXs charging interface fees')}</Text>
-                </>
-              }
+              text={<Text>{t('Fees saved on PancakeSwap compared to major DEXs charging interface fees')}</Text>}
               placement="top"
             >
               <DetailsTitle>{t('Fee saved')}</DetailsTitle>
@@ -277,51 +273,49 @@ export const AdvancedSwapDetails = memo(function AdvancedSwapDetails({
             hasStablePair={hasStablePair}
           />
           {showRoute && (
-            <>
-              <RowBetween style={{ padding: '0 24px' }}>
-                <span style={{ display: 'flex', alignItems: 'center' }}>
-                  <Text fontSize="14px" color="textSubtle">
-                    {t('MM Route')}
-                  </Text>
-                  <QuestionHelper
-                    text={t(
-                      'The Market Maker (MM) route is automatically selected for your trade to achieve the best price for your trade.',
-                    )}
-                    ml="4px"
-                    placement="top"
-                  />
-                </span>
-                {path ? <SwapRoute path={path} /> : null}
-                <SearchIcon style={{ cursor: 'pointer' }} onClick={() => setIsModalOpen(true)} />
-                <ModalV2 closeOnOverlayClick isOpen={isModalOpen} onDismiss={() => setIsModalOpen(false)}>
-                  <Modal
-                    title={
-                      <Flex justifyContent="center">
-                        {t('Route')}{' '}
-                        <QuestionHelper
-                          text={t(
-                            'Route is automatically calculated based on your routing preference to achieve the best price for your trade.',
-                          )}
-                          ml="4px"
-                          placement="top"
-                        />
-                      </Flex>
-                    }
-                    onDismiss={() => setIsModalOpen(false)}
-                  >
-                    <RouterViewer
-                      inputCurrency={inputAmount?.currency}
-                      pairs={pairs}
-                      path={path}
-                      outputCurrency={outputAmount?.currency}
-                    />
-                    <Flex mt="3em" width="100%" justifyContent="center">
-                      <RoutingSettingsButton />
+            <RowBetween style={{ padding: '0 24px' }}>
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                <Text fontSize="14px" color="textSubtle">
+                  {t('MM Route')}
+                </Text>
+                <QuestionHelper
+                  text={t(
+                    'The Market Maker (MM) route is automatically selected for your trade to achieve the best price for your trade.',
+                  )}
+                  ml="4px"
+                  placement="top"
+                />
+              </span>
+              {path ? <SwapRoute path={path} /> : null}
+              <SearchIcon style={{ cursor: 'pointer' }} onClick={() => setIsModalOpen(true)} />
+              <ModalV2 closeOnOverlayClick isOpen={isModalOpen} onDismiss={() => setIsModalOpen(false)}>
+                <Modal
+                  title={
+                    <Flex justifyContent="center">
+                      {t('Route')}{' '}
+                      <QuestionHelper
+                        text={t(
+                          'Route is automatically calculated based on your routing preference to achieve the best price for your trade.',
+                        )}
+                        ml="4px"
+                        placement="top"
+                      />
                     </Flex>
-                  </Modal>
-                </ModalV2>
-              </RowBetween>
-            </>
+                  }
+                  onDismiss={() => setIsModalOpen(false)}
+                >
+                  <RouterViewer
+                    inputCurrency={inputAmount?.currency}
+                    pairs={pairs}
+                    path={path}
+                    outputCurrency={outputAmount?.currency}
+                  />
+                  <Flex mt="3em" width="100%" justifyContent="center">
+                    <RoutingSettingsButton />
+                  </Flex>
+                </Modal>
+              </ModalV2>
+            </RowBetween>
           )}
         </>
       )}
