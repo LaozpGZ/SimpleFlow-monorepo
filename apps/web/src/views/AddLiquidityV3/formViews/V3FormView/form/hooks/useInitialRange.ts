@@ -13,7 +13,7 @@ export const useInitialRange = (baseToken?: Token, quoteToken?: Token) => {
     const { minPrice: rawMinPrice, maxPrice: rawMaxPrice } = query
 
     return [rawMinPrice, rawMaxPrice].map((p) => {
-      if (typeof p === 'string' && !Number.isNaN(p)) return p
+      if (typeof p === 'string' && (p === 'true' || !Number.isNaN(p))) return p
       return undefined
     })
   }, [query])
@@ -21,8 +21,8 @@ export const useInitialRange = (baseToken?: Token, quoteToken?: Token) => {
   useEffect(() => {
     if (!leftRangeTypedValue && !rightRangeTypedValue && minPrice && maxPrice) {
       onBothRangeInput({
-        leftTypedValue: tryParsePrice(baseToken, quoteToken, minPrice),
-        rightTypedValue: tryParsePrice(baseToken, quoteToken, maxPrice),
+        leftTypedValue: minPrice === 'true' ? true : tryParsePrice(baseToken, quoteToken, minPrice),
+        rightTypedValue: maxPrice === 'true' ? true : tryParsePrice(baseToken, quoteToken, maxPrice),
       })
     }
   }, [query, minPrice, maxPrice, baseToken, quoteToken, leftRangeTypedValue, rightRangeTypedValue, onBothRangeInput])

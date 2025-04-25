@@ -183,8 +183,15 @@ export default function V3FormView({
     }
     return false
   }, [pool])
-  const { onFieldAInput, onFieldBInput, onLeftRangeInput, onRightRangeInput, onStartPriceInput, onBothRangeInput } =
-    useV3MintActionHandlers(noLiquidity)
+  const {
+    onFieldAInput,
+    onFieldBInput,
+    onLeftRangeInput,
+    onRightRangeInput,
+    onStartPriceInput,
+    onBothRangeInput,
+    onSetFullRange,
+  } = useV3MintActionHandlers(noLiquidity)
 
   const onBothRangePriceInput = useCallback(
     (leftRangeValue: string, rightRangeValue: string) => {
@@ -384,8 +391,14 @@ export default function V3FormView({
 
   useInitialRange(baseCurrency?.wrapped, quoteCurrency?.wrapped)
 
-  const { getDecrementLower, getIncrementLower, getDecrementUpper, getIncrementUpper, getSetFullRange } =
-    useRangeHopCallbacks(baseCurrency ?? undefined, quoteCurrency ?? undefined, feeAmount, tickLower, tickUpper, pool)
+  const { getDecrementLower, getIncrementLower, getDecrementUpper, getIncrementUpper } = useRangeHopCallbacks(
+    baseCurrency ?? undefined,
+    quoteCurrency ?? undefined,
+    feeAmount,
+    tickLower,
+    tickUpper,
+    pool,
+  )
   // we need an existence check on parsed amounts for single-asset deposits
   const showApprovalA = approvalA !== ApprovalState.APPROVED && !!parsedAmounts[Field.CURRENCY_A]
   const showApprovalB = approvalB !== ApprovalState.APPROVED && !!parsedAmounts[Field.CURRENCY_B]
@@ -739,7 +752,7 @@ export default function V3FormView({
                     mt="16px"
                     onClick={() => {
                       setShowCapitalEfficiencyWarning(false)
-                      getSetFullRange()
+                      onSetFullRange()
                     }}
                     scale="md"
                     variant="danger"

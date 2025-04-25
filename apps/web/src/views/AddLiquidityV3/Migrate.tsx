@@ -164,7 +164,7 @@ function V2PairMigrate({
       existingPosition,
       formState,
     )
-  const { onLeftRangeInput, onRightRangeInput, onBothRangeInput } = useV3MintActionHandlers(noLiquidity)
+  const { onLeftRangeInput, onRightRangeInput, onBothRangeInput, onSetFullRange } = useV3MintActionHandlers(noLiquidity)
 
   const onBothRangePriceInput = useCallback(
     (leftRangeValue: string, rightRangeValue: string) => {
@@ -300,15 +300,14 @@ function V2PairMigrate({
     [token1Value, position, token1],
   )
 
-  const { getDecrementLower, getIncrementLower, getDecrementUpper, getIncrementUpper, getSetFullRange } =
-    useRangeHopCallbacks(
-      baseToken ?? undefined,
-      baseToken.equals(token0) ? token1 : token0,
-      feeAmount,
-      tickLower,
-      tickUpper,
-      pool,
-    )
+  const { getDecrementLower, getIncrementLower, getDecrementUpper, getIncrementUpper } = useRangeHopCallbacks(
+    baseToken ?? undefined,
+    baseToken.equals(token0) ? token1 : token0,
+    feeAmount,
+    tickLower,
+    tickUpper,
+    pool,
+  )
 
   const [confirmingMigration, setConfirmingMigration] = useState<boolean>(false)
   const [pendingMigrationHash, setPendingMigrationHash] = useState<string | null>(null)
@@ -735,7 +734,7 @@ function V2PairMigrate({
                   mt="16px"
                   onClick={() => {
                     setShowCapitalEfficiencyWarning(false)
-                    getSetFullRange()
+                    onSetFullRange()
                   }}
                   scale="md"
                   variant="danger"

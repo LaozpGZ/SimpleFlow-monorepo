@@ -24,16 +24,6 @@ import { usePool } from './usePools'
 import { tryParseTick } from './utils'
 import { getTickToPrice } from './utils/getTickToPrice'
 
-/**
- * if fee tier = 100 then TickMath.MAX_TICK will cause overflow, so minus 1 here
- */
-const checkAndParseMaxTick = (tick: number) => {
-  if (tick === TickMath.MAX_TICK) {
-    return TickMath.MAX_TICK - 1
-  }
-  return tick
-}
-
 export default function useV3DerivedInfo(
   currencyA?: Currency,
   currencyB?: Currency,
@@ -188,19 +178,15 @@ export default function useV3DerivedInfo(
           : (invertPrice && typeof rightRangeTypedValue === 'boolean') ||
             (!invertPrice && typeof leftRangeTypedValue === 'boolean')
           ? tickSpaceLimits[Bound.LOWER]
-            ? tickSpaceLimits[Bound.LOWER]
-            : tickSpaceLimits[Bound.LOWER]
           : invertPrice
           ? tryParseTick(feeAmount, rightRangeTypedValue)
           : tryParseTick(feeAmount, leftRangeTypedValue),
       [Bound.UPPER]:
         typeof existingPosition?.tickUpper === 'number'
-          ? checkAndParseMaxTick(existingPosition.tickUpper)
+          ? existingPosition.tickUpper
           : (!invertPrice && typeof rightRangeTypedValue === 'boolean') ||
             (invertPrice && typeof leftRangeTypedValue === 'boolean')
           ? tickSpaceLimits[Bound.UPPER]
-            ? checkAndParseMaxTick(tickSpaceLimits[Bound.UPPER])
-            : tickSpaceLimits[Bound.UPPER]
           : invertPrice
           ? tryParseTick(feeAmount, leftRangeTypedValue)
           : tryParseTick(feeAmount, rightRangeTypedValue),

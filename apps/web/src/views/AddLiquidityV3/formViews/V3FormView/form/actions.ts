@@ -6,10 +6,10 @@ export const typeInput = createAction<{ field: Field; typedValue: string | undef
   'mintV3/typeInputMint',
 )
 export const typeStartPriceInput = createAction<{ typedValue: string }>('mintV3/typeStartPriceInput')
-export const typeLeftRangeInput = createAction<{ typedValue: Price<Token, Token> | undefined }>(
+export const typeLeftRangeInput = createAction<{ typedValue: Price<Token, Token> | true | undefined }>(
   'mintV3/typeLeftRangeInput',
 )
-export const typeRightRangeInput = createAction<{ typedValue: Price<Token, Token> | undefined }>(
+export const typeRightRangeInput = createAction<{ typedValue: Price<Token, Token> | true | undefined }>(
   'mintV3/typeRightRangeInput',
 )
 export const resetMintState = createAction<void>('mintV3/resetMintState')
