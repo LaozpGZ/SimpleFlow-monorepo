@@ -1,11 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import {
-  FarmWithStakedValue,
-  bCakeSupportedChainId,
-  filterFarmsByQuery,
-  supportedChainIdV2,
-  supportedChainIdV3,
-} from '@pancakeswap/farms'
+import { FarmWithStakedValue, filterFarmsByQuery, supportedChainIdV2, supportedChainIdV3 } from '@pancakeswap/farms'
 import { useIntersectionObserver } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
@@ -46,7 +40,6 @@ import { getStakedFarms } from 'views/Farms/utils/getStakedFarms'
 import { useAccount } from 'wagmi'
 import Table from './components/FarmTable/FarmTable'
 import { FarmTypesFilter } from './components/FarmTypesFilter'
-import { BCakeBoosterCard } from './components/YieldBooster/components/bCakeV3/BCakeBoosterCard'
 import { FarmsV3Context } from './context'
 import { FarmFlexWrapper, FarmH1, FarmH2 } from './styled'
 
@@ -413,7 +406,6 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
                 {t('Stake LP tokens to earn.')}
               </FarmH2>
             </Box>
-            <Box>{bCakeSupportedChainId.includes(chainId) && <BCakeBoosterCard />}</Box>
           </FarmFlexWrapper>
         </Flex>
       </PageHeader>

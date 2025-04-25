@@ -39,7 +39,6 @@ import { useAccount } from 'wagmi'
 import { V2Farm } from './FarmsV3'
 import Table from './components/FarmTable/FarmTable'
 import { FarmTypesFilter } from './components/FarmTypesFilter'
-import { BCakeBoosterCard } from './components/YieldBooster/components/bCakeV3/BCakeBoosterCard'
 import { FarmsContext } from './context'
 import useMultiChainHarvestModal from './hooks/useMultiChainHarvestModal'
 
@@ -357,11 +356,6 @@ const Farms: React.FC<React.PropsWithChildren> = ({ children }) => {
                 {t('Stake LP tokens to earn.')}
               </FarmH2>
             </Box>
-            {chainId === ChainId.BSC && (
-              <Box>
-                <BCakeBoosterCard />
-              </Box>
-            )}
           </FarmFlexWrapper>
         </Flex>
       </PageHeader>
