@@ -1,4 +1,5 @@
 import BigNumber from 'bignumber.js'
+import noop from 'lodash/noop'
 import { createContext, PropsWithChildren, useCallback, useContext, useState } from 'react'
 
 type MyPositionsContextState = {
@@ -12,7 +13,7 @@ type MyPositionsContextState = {
 }
 const defaultState: MyPositionsContextState = {
   totalApr: {},
-  updateTotalApr: () => {},
+  updateTotalApr: noop,
 }
 const MyPositionsContext = createContext<MyPositionsContextState>(defaultState)
 export const MyPositionsProvider: React.FC<PropsWithChildren> = ({ children }) => {
