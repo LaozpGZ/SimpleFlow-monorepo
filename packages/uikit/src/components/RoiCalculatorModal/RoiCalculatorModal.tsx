@@ -84,7 +84,6 @@ export interface RoiCalculatorModalProps {
   farmCakePerSecond?: string;
   totalMultipliers?: string;
   dualTokenRewardApr?: number;
-  isBCakeBooster?: boolean;
 }
 
 const RoiCalculatorModal: React.FC<React.PropsWithChildren<RoiCalculatorModalProps>> = ({

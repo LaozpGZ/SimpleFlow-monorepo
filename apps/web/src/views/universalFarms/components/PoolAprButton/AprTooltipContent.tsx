@@ -29,7 +29,6 @@ const StyledLi = styled.li`
 
 type AprValue = {
   value: number | `${number}`
-  boost?: number | `${number}`
 }
 
 type AprTooltipContentProps = {
