@@ -4,15 +4,15 @@ export const chains: IChainConfig[] = [
   {
     id: 1,
     name: 'Ethereum',
+    chainType: 'evm',
     nativeCurrency: {
       name: 'Ether',
       symbol: 'ETH',
       decimals: 18,
     },
-    rpcUrl: 'https://ethereum-rpc.publicnode.com/',
-    explorer: {
-      name: 'Etherscan',
-      url: 'https://etherscan.io',
+    rpcUrls: { default: { http: ['https://ethereum-rpc.publicnode.com/'] } },
+    blockExplorers: {
+      default: { name: 'Etherscan', url: 'https://etherscan.io' },
     },
   },
   {
