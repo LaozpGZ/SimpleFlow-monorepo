@@ -231,19 +231,6 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                               : multiplier.farmCakePerSecond
                           }
                           totalMultipliers={multiplier.totalMultipliers}
-                          boosterMultiplier={
-                            props?.details?.bCakeWrapperAddress
-                              ? props?.details?.bCakeUserData?.boosterMultiplier === 0 ||
-                                props?.details?.bCakeUserData?.stakedBalance.eq(0) ||
-                                !locked
-                                ? 2.5
-                                : props?.details?.bCakeUserData?.boosterMultiplier
-                              : 1
-                          }
-                          isBooster={
-                            Boolean(props?.details?.bCakeWrapperAddress) &&
-                            props?.details?.bCakePublicData?.isRewardInRange
-                          }
                         />
                       </CellLayout>
                     </CellInner>
@@ -376,19 +363,6 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                             : multiplier.farmCakePerSecond
                         }
                         totalMultipliers={multiplier.totalMultipliers}
-                        isBooster={
-                          Boolean(props?.details?.bCakeWrapperAddress) &&
-                          props?.details?.bCakePublicData?.isRewardInRange
-                        }
-                        boosterMultiplier={
-                          props?.details?.bCakeWrapperAddress
-                            ? props?.details?.bCakeUserData?.boosterMultiplier === 0 ||
-                              props?.details?.bCakeUserData?.stakedBalance.eq(0) ||
-                              !locked
-                              ? 2.5
-                              : props?.details?.bCakeUserData?.boosterMultiplier
-                            : 1
-                        }
                       />
                     </>
                   )}

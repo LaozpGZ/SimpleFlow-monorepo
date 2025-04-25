@@ -272,14 +272,6 @@ const StakeAction: React.FC<React.PropsWithChildren<FarmCardActionsProps>> = ({
       lpRewardsApr={lpRewardsApr}
       onConfirm={handleStake}
       handleApprove={handleApprove}
-      isBooster={isBoosterAndRewardInRange}
-      boosterMultiplier={
-        isBoosterAndRewardInRange
-          ? bCakeUserData?.boosterMultiplier === 0 || bCakeUserData?.stakedBalance.eq(0) || !locked
-            ? 2.5
-            : bCakeUserData?.boosterMultiplier
-          : 1
-      }
       // bCakeCalculatorSlot={bCakeCalculatorSlot}
     />,
     true,

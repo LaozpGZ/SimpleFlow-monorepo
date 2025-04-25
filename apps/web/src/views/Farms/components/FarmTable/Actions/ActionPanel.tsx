@@ -434,16 +434,6 @@ export const ActionPanelV2: React.FunctionComponent<React.PropsWithChildren<Acti
                         : multiplier.farmCakePerSecond
                     }
                     totalMultipliers={multiplier.totalMultipliers}
-                    isBooster={Boolean(details?.bCakeWrapperAddress) && details?.bCakePublicData?.isRewardInRange}
-                    boosterMultiplier={
-                      details?.bCakeWrapperAddress
-                        ? details?.bCakeUserData?.boosterMultiplier === 0 ||
-                          details?.bCakeUserData?.stakedBalance.eq(0) ||
-                          !locked
-                          ? 2.5
-                          : details?.bCakeUserData?.boosterMultiplier
-                        : 1
-                    }
                   />
                 </ValueWrapper>
                 {!details?.bCakeWrapperAddress && (

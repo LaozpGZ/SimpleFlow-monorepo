@@ -170,14 +170,6 @@ const useDepositModal = (props: V2PositionActionsProps) => {
       apr={parseFloat(cakeApr?.value ?? '0') * 100}
       displayApr={(displayApr * 100).toString()}
       lpRewardsApr={parseFloat(lpApr) * 100}
-      isBooster={!!cakeApr?.boost}
-      boosterMultiplier={
-        data.farmingBalance && data.farmingBalance.greaterThan(0)
-          ? data.farmingBoosterMultiplier
-          : cakeApr?.boost
-          ? parseFloat(cakeApr.boost) / parseFloat(cakeApr.value)
-          : undefined
-      }
     />,
     true,
     true,

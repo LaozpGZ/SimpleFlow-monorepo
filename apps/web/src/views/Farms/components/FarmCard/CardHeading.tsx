@@ -24,7 +24,6 @@ import { Address } from 'viem'
 import { bsc } from 'viem/chains'
 import { useHasCustomFarmLpTooltips } from 'views/Farms/hooks/useHasCustomFarmLpTooltips'
 import { useChainId } from 'wagmi'
-import BoostedTag from '../YieldBooster/components/BoostedTag'
 
 const { FarmAuctionTag, StableFarmTag, V2Tag, V3FeeTag } = FarmWidget.Tags
 const { MerklNotice } = FarmWidget
@@ -48,8 +47,6 @@ type ExpandableSectionProps = {
   isBoosted?: boolean
   lpAddress?: Address
   merklApr?: number
-  isBooster?: boolean
-  bCakeWrapperAddress?: Address
 }
 
 const Wrapper = styled(Flex)`
@@ -78,12 +75,10 @@ const CardHeading: React.FC<React.PropsWithChildren<ExpandableSectionProps>> = (
   hasBothFarmAndMerkl,
   merklApr,
   lpAddress,
-  isBooster,
-  bCakeWrapperAddress,
 }) => {
   const { t } = useTranslation()
   const chainId = useChainId()
-  const isReady = multiplier !== undefined || bCakeWrapperAddress
+  const isReady = multiplier !== undefined
   const hasSwellReward = useHasSwellReward(lpAddress)
   const customTooltips = useHasCustomFarmLpTooltips(lpAddress)
 
@@ -161,7 +156,6 @@ const CardHeading: React.FC<React.PropsWithChildren<ExpandableSectionProps>> = (
           ) : (
             <Skeleton ml="4px" width={42} height={28} />
           )}
-          {isReady && isBooster && <BoostedTag mr="-4px" />}
         </AutoRow>
       </Flex>
     </Wrapper>
