@@ -12,8 +12,6 @@ import { CakeLockStatus } from 'views/CakeStaking/types'
 import { useReadContract } from '@pancakeswap/wagmi'
 import { PRECISION_FACTOR, getUserMultiplier } from './multiplierAPI'
 
-export const USER_ESTIMATED_MULTIPLIER = 2
-
 const QUERY_SETTINGS_WITHOUT_REFETCH = {
   retry: 3,
   retryDelay: 3000,

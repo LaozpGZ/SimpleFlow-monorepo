@@ -9,28 +9,6 @@ export enum BoostStatus {
   CanNotBoost,
 }
 
-export const useBoostStatus = (pid: number, tokenId?: string) => {
-  const { address: account } = useAccount()
-  const {
-    data: { boostMultiplier },
-    updateUserPositionInfo,
-  } = useUserPositionInfo(tokenId)
-  const { farmCanBoost } = useBakeV3farmCanBoost(pid)
-  const status = useMemo(() => {
-    if (!account && !farmCanBoost) return BoostStatus.CanNotBoost
-    if (!account && farmCanBoost) return BoostStatus.UpTo
-    if (farmCanBoost) return boostMultiplier > 1 ? BoostStatus.Boosted : BoostStatus.farmCanBoostButNot
-    return BoostStatus.CanNotBoost
-  }, [account, farmCanBoost, boostMultiplier])
-
-  return {
-    status,
-    updateStatus: () => {
-      updateUserPositionInfo()
-    },
-  }
-}
-
 export const useBoostStatusPM = (
   haveBCakeWrapper?: boolean,
   boostMultiplier?: number,
@@ -47,8 +25,5 @@ export const useBoostStatusPM = (
 
   return {
     status,
-    updateStatus: () => {
-      updateStatusCallback?.()
-    },
   }
 }

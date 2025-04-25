@@ -10,11 +10,8 @@ import { useMerklInfo } from 'hooks/useMerkl'
 import { type V3Farm } from 'state/farms/types'
 import { useMerklUserLink } from 'utils/getMerklLink'
 import { V2Farm } from 'views/Farms/FarmsV3'
-import { useBCakeBoostLimitAndLockInfo } from 'views/Farms/components/YieldBooster/hooks/bCakeV3/useBCakeV3Info'
 import { RewardPerDay } from 'views/PositionManagers/components/RewardPerDay'
 import { FarmV3ApyButton } from '../FarmCard/V3/FarmV3ApyButton'
-import { useUserBoostedPoolsTokenId } from '../YieldBooster/hooks/bCakeV3/useBCakeV3Info'
-import { useIsSomePositionBoosted } from '../YieldBooster/hooks/bCakeV3/useIsSomePositionBoosted'
 import { ActionPanelV2, ActionPanelV3 } from './Actions/ActionPanel'
 import Apr, { AprProps } from './Apr'
 import { FarmCell } from './Farm'
@@ -119,9 +116,6 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
   const { t } = useTranslation()
   // if (props.farm.pid === 163 || props.farm.pid === 2) console.log(props, '888')
 
-  const { tokenIds } = useUserBoostedPoolsTokenId()
-  const { isBoosted } = useIsSomePositionBoosted(props.type === 'v3' ? props?.details?.stakedPositions : [], tokenIds)
-  const { locked } = useBCakeBoostLimitAndLockInfo()
   const toggleActionPanel = useCallback(() => {
     setActionPanelExpanded(!actionPanelExpanded)
   }, [actionPanelExpanded])
