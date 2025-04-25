@@ -119,7 +119,6 @@ const RoiCalculatorModal: React.FC<React.PropsWithChildren<RoiCalculatorModalPro
   totalMultipliers,
   dualTokenRewardApr,
   lpRewardsApr,
-  isBCakeBooster,
 }) => {
   const { t } = useTranslation();
   const balanceInputRef = useRef<HTMLInputElement | null>(null);
@@ -325,7 +324,6 @@ const RoiCalculatorModal: React.FC<React.PropsWithChildren<RoiCalculatorModalPro
         farmCakePerSecond={farmCakePerSecond}
         totalMultipliers={totalMultipliers}
         dualTokenRewardApr={dualTokenRewardApr}
-        isBCakeBooster={isBCakeBooster}
       />
     </StyledModal>
   );
