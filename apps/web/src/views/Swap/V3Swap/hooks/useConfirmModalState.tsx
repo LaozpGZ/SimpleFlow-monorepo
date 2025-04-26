@@ -44,6 +44,7 @@ import { getBridgeCalldata } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
 import { crossChainOrderDataAtom } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/state/orderData'
 
+import { RouteType } from '@pancakeswap/smart-router'
 import {
   CrossChainOrderData,
   CrossChainOrderStatus,
@@ -90,7 +91,9 @@ const useCreateConfirmSteps = (
   const { account } = useAccountActiveChain()
   const balance = useCurrencyBalance(account ?? undefined, nativeCurrency.wrapped)
   const { requiresApproval } = useBridgeCheckApproval({
-    currencyAmountIn: isBridgeOrder(order) ? order?.trade.inputAmount : undefined,
+    currencyAmountIn: isBridgeOrder(order)
+      ? order?.trade?.routes?.find((r) => r.type === RouteType.BRIDGE)?.inputAmount
+      : undefined,
   })
 
   return useCallback(async () => {
@@ -397,7 +400,9 @@ const useConfirmActions = (
   ])
 
   const { approvalData, refetch } = useBridgeCheckApproval({
-    currencyAmountIn: isBridgeOrder(order) ? order?.trade.inputAmount : undefined,
+    currencyAmountIn: isBridgeOrder(order)
+      ? order?.trade?.routes?.find((r) => r.type === RouteType.BRIDGE)?.inputAmount
+      : undefined,
   })
 
   const approvalBridgeStep = useMemo(() => {
@@ -471,8 +476,7 @@ const useConfirmActions = (
           const id = Math.random().toString(36).substring(2, 15)
 
           const bridgeCalldataResponse = await getBridgeCalldata({
-            currencyAmountIn: order.trade.inputAmount,
-            currencyAmountOut: order.trade.outputAmount,
+            order,
             recipient: account ?? '0x',
           })
 
