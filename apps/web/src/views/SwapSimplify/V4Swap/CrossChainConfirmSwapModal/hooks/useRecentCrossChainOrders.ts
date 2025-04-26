@@ -35,6 +35,7 @@ export const useRecentCrossChainOrders = ({ chainId, address }: UseRecentCrossCh
 
       // Create a single order object to be used for both order and originalOrder
       const mockOrder: BridgeOrder<TradeType> = {
+        bridgeFee: CurrencyAmount.fromRawAmount(fromToken, '1000000000000000000'),
         type: OrderType.PCS_BRIDGE,
         trade: {
           tradeType: TradeType.EXACT_INPUT,
