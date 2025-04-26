@@ -267,7 +267,7 @@ export function useMultipleContractSingleDataWagmi({
       // We need to support multiple chainIds
       // For example, when we fetch the balance of cross-chain pairs
       // we need to fetch the balance of the token on both chains
-      chainId: Array.isArray(chainId) && chainId.length === addresses.length ? chainId[index] : chainId,
+      chainId: !Array.isArray(chainId) ? chainId : chainId.length === addresses.length ? chainId[index] : undefined,
     }))
   }, [abi, functionName, args, addresses, chainId])
 

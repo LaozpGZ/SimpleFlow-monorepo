@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { ExclusiveDutchOrder, createExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
-import { InfinityRouter, PoolType, RouteType } from '@pancakeswap/smart-router'
+import { InfinityRouter, PoolType } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, Percent, TradeType, type BigintIsh } from '@pancakeswap/swap-sdk-core'
 import { zeroAddress } from './getCurrencyPrice'
 import { getPoolTypeKey } from './getPoolType'
@@ -8,7 +8,6 @@ import { getTradeTypeKey } from './getTradeType'
 import {
   AMMOrder,
   AMMPriceResponse,
-  BridgeQuoteResponse,
   ErrorResponse,
   OrderType,
   PriceOrder,
@@ -72,45 +71,6 @@ export function getRequestBody({ amount, quoteCurrency, tradeType, amm, x, slipp
     tokenIn: getCurrencyIdentifier(currencyIn),
     tokenOut: getCurrencyIdentifier(currencyOut),
     configs,
-  }
-}
-
-// TODO: remove this mock
-export function parseBridgeQuoteResponse<
-  input extends Currency,
-  output extends Currency,
-  tradeType extends TradeType = TradeType,
->(
-  res: BridgeQuoteResponse | ErrorResponse,
-  {
-    amountIn,
-    amountOut,
-    tradeType,
-  }: {
-    amountIn: CurrencyAmount<input>
-    amountOut: CurrencyAmount<output>
-    tradeType: tradeType
-  },
-): PriceOrder<input, output, tradeType> {
-  if (res.messageType === ResponseType.ERROR) {
-    throw new Error(res.message.error)
-  }
-
-  return {
-    type: OrderType.PCS_BRIDGE,
-    trade: {
-      inputAmount: amountIn,
-      outputAmount: amountOut,
-      routes: [
-        {
-          path: [amountIn.currency, amountOut.currency],
-          inputAmount: amountIn,
-          outputAmount: amountOut,
-          type: RouteType.BRIDGE,
-        },
-      ],
-      tradeType,
-    },
   }
 }
 
