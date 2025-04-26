@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
-import { useBakeV3farmCanBoost, useUserPositionInfo } from './useBCakeV3Info'
 
 export enum BoostStatus {
   UpTo,
