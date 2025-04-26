@@ -27,7 +27,9 @@ import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import { CurrencySelectV2 } from 'components/CurrencySelectV2'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useStableSwapSupportedTokens } from 'hooks/useStableSwapSupportedTokens'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { COMPACT_LIQUIDITY_TYPES, LIQUIDITY_TYPES, LiquidityType } from 'utils/types'
+import { Chain } from 'viem/chains'
 import { usePoolTypeQuery } from './hooks/usePoolTypeQuery'
 
 const StyledCard = styled(Card)`
@@ -128,6 +130,12 @@ export const AddLiquiditySelector = () => {
     return noCurrency || networkNoSupport
   }, [baseCurrency, chainId, protocol, quoteCurrency])
 
+  const { switchNetworkAsync } = useSwitchNetwork()
+  const handleNetworkChange = async (chain: Chain) => {
+    await switchNetworkAsync?.(chain.id)
+    updateParams({ chainId: chain.id })
+  }
+
   return (
     <StyledCard mt="48px" mb={['120px', null, null, '0px']} mx="auto" style={{ overflow: 'visible' }}>
       <CardBody>
@@ -146,11 +154,7 @@ export const AddLiquiditySelector = () => {
               ))}
             </ButtonMenu>
 
-            <NetworkSelector
-              version={protocol}
-              chainId={chainId}
-              onChange={(chainValue) => updateParams({ chainId: chainValue.id })}
-            />
+            <NetworkSelector version={protocol} chainId={chainId} onChange={handleNetworkChange} />
           </FlexGap>
 
           <FlexGap gap="6px" flexDirection="column">
