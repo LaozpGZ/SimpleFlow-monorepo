@@ -154,7 +154,7 @@ export default function CurrencyList({
       const otherSelected = Boolean(otherCurrency && currency && otherCurrency.equals(currency))
 
       const handleSelect = () => onCurrencySelect(currency)
-      const token = wrappedCurrency(currency, currency.chainId)
+      const token = wrappedCurrency(currency, currency?.chainId)
       const showImport = index > currencies.length
 
       if (index === breakIndex || !data) {

@@ -84,11 +84,11 @@ export function parseBridgeQuoteResponse<
   res: BridgeQuoteResponse | ErrorResponse,
   {
     amountIn,
-    currencyOut,
+    amountOut,
     tradeType,
   }: {
     amountIn: CurrencyAmount<input>
-    currencyOut: output
+    amountOut: CurrencyAmount<output>
     tradeType: tradeType
   },
 ): PriceOrder<input, output, tradeType> {
@@ -100,12 +100,12 @@ export function parseBridgeQuoteResponse<
     type: OrderType.PCS_BRIDGE,
     trade: {
       inputAmount: amountIn,
-      outputAmount: CurrencyAmount.fromRawAmount(currencyOut, amountIn.quotient.toString()),
+      outputAmount: amountOut,
       routes: [
         {
-          path: [amountIn.currency, currencyOut],
+          path: [amountIn.currency, amountOut.currency],
           inputAmount: amountIn,
-          outputAmount: CurrencyAmount.fromRawAmount(currencyOut, amountIn.quotient.toString()),
+          outputAmount: amountOut,
           type: RouteType.BRIDGE,
         },
       ],
