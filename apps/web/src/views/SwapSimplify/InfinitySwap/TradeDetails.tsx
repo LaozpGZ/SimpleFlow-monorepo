@@ -5,6 +5,7 @@ import { memo, useMemo } from 'react'
 import { styled } from 'styled-components'
 
 import { PriceOrder } from '@pancakeswap/price-api-sdk'
+import { computeBridgeOrderFee } from 'views/Swap/Bridge/utils'
 import { isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
 import { RouteDisplayEssentials } from 'views/Swap/V3Swap/components'
 import { useIsWrapping, useSlippageAdjustedAmounts } from '../../Swap/V3Swap/hooks'
@@ -35,7 +36,10 @@ export const TradeDetails = memo(function TradeDetails({ loaded, order }: Props)
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(order)
   const isWrapping = useIsWrapping()
   const { priceImpactWithoutFee, lpFeeAmount } = useMemo(
-    () => (isBridgeOrder(order) ? {} : computeTradePriceBreakdown(isXOrder(order) ? order.ammTrade : order?.trade)),
+    () =>
+      isBridgeOrder(order)
+        ? computeBridgeOrderFee(order)
+        : computeTradePriceBreakdown(isXOrder(order) ? order.ammTrade : order?.trade),
     [order],
   )
   const hasStablePool = useMemo(
