@@ -1,4 +1,4 @@
-import { getChainName } from '@pancakeswap/chains'
+import { chainNames, getChainName } from '@pancakeswap/chains'
 import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import { CAKE, USDC } from '@pancakeswap/tokens'
 import { SelectIdRoute, zSelectId } from 'dynamicRoute'
@@ -79,7 +79,10 @@ export const useSelectIdRouteParams = () => {
       router.replace(
         {
           pathname: path,
-          query: router.query, // keep other query params
+          query: {
+            ...router.query,
+            chain: chainNames[p.chainId ?? params.chainId],
+          }, // keep other query params
         },
         undefined,
         { shallow: true },
