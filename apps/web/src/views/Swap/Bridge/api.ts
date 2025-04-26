@@ -77,7 +77,7 @@ export const getBridgeCalldata = async ({
       throw new Error('No bridge commands found')
     }
 
-    const commands = order.commands.map((command) => {
+    const commands: (BridgeDataSchema | SwapDataSchema)[] = order.commands.map((command) => {
       if (command.type === OrderType.PCS_BRIDGE) {
         return {
           command: Command.BRIDGE,
@@ -249,6 +249,7 @@ export interface MetadataSuccessResponse extends MetadataResponse {
   }
 }
 
+// TODO: need to seperate between success and error response type
 export const getMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
   const stringParams = Object.fromEntries(
     Object.entries(params)
@@ -256,6 +257,6 @@ export const getMetadata = async (params: GetMetadataParams): Promise<MetadataSu
       .map(([key, value]) => [key, value?.toString()]),
   )
   const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/metadata?${new URLSearchParams(stringParams).toString()}`)
-  const data = (await resp.json()) as Metadata
-  return data
+
+  return resp.json()
 }

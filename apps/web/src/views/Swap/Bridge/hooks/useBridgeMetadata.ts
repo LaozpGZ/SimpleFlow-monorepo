@@ -1,5 +1,6 @@
-import { parseBridgeQuoteResponse, ResponseType } from '@pancakeswap/price-api-sdk'
+import { OrderType } from '@pancakeswap/price-api-sdk'
 import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
+import { RouteType } from '@pancakeswap/smart-router'
 import { useQuery } from '@tanstack/react-query'
 import { UnsafeCurrency } from 'config/constants/types'
 import { getMetadata, getTokenAddress } from '../api'
@@ -32,23 +33,24 @@ export function useBridgeMetadata({
         throw new Error(metadata.reason)
       }
 
-      console.log('metadata', metadata)
-
       const outputAmount = CurrencyAmount.fromRawAmount(outputCurrency!, metadata.minOutputAmount)
 
       return {
         bridgeFee: CurrencyAmount.fromRawAmount(inputAmount!.currency, metadata.bridgeFee),
-        ...parseBridgeQuoteResponse(
-          {
-            messageType: ResponseType.MM_PRICE_RESPONSE,
-            message: '',
-          },
-          {
-            amountIn: inputAmount!,
-            amountOut: outputAmount,
-            tradeType: TradeType.EXACT_INPUT,
-          },
-        ),
+        type: OrderType.PCS_BRIDGE,
+        trade: {
+          inputAmount,
+          outputAmount,
+          routes: [
+            {
+              path: [inputAmount!.currency, outputAmount.currency],
+              inputAmount,
+              outputAmount,
+              type: RouteType.BRIDGE,
+            },
+          ],
+          tradeType: TradeType.EXACT_INPUT,
+        },
       }
     },
     enabled: !!inputAmount && !!outputCurrency && inputAmount.greaterThan(0),

@@ -32,7 +32,7 @@ import {
   TransactionReceiptNotFoundError,
   erc20Abi,
 } from 'viem'
-import { isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
+import { BridgeOrderWithCommands, isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
 import { waitForXOrderReceipt } from 'views/Swap/x/api'
 import { useSendXOrder } from 'views/Swap/x/useSendXOrder'
 
@@ -463,7 +463,7 @@ const useConfirmActions = (
     return {
       step: ConfirmModalState.PENDING_CONFIRMATION,
       action: async () => {
-        // TODO: show error message
+        // TODO: show error message???
         if (!order) {
           return
         }
@@ -476,7 +476,7 @@ const useConfirmActions = (
           const id = Math.random().toString(36).substring(2, 15)
 
           const bridgeCalldataResponse = await getBridgeCalldata({
-            order,
+            order: order as BridgeOrderWithCommands,
             recipient: account ?? '0x',
           })
 
