@@ -1,9 +1,10 @@
-import { parseBridgeQuoteResponse, ResponseType } from '@pancakeswap/price-api-sdk'
 import { TradeType } from '@pancakeswap/sdk'
+import { createFilterToken } from '@pancakeswap/token-lists'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useUserSingleHopOnly } from '@pancakeswap/utils/user'
 
-import { useCurrency } from 'hooks/Tokens'
+import { useAllTokens, useCurrency } from 'hooks/Tokens'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useBestAMMTrade, useBestTradeFromApi, useBestTradeFromApiShadow } from 'hooks/useBestAMMTrade'
 import { usePCSXEnabledOnChain } from 'hooks/usePCSX'
 import { useCallback, useDeferredValue, useMemo, useState } from 'react'
@@ -15,6 +16,7 @@ import {
   useUserV2SwapEnable,
   useUserV3SwapEnable,
 } from 'state/user/smartRouter'
+import { isAddress } from 'viem/utils'
 
 interface Options {
   maxHops?: number
@@ -46,12 +48,8 @@ export function useSwapBestOrder({ maxHops }: Options = {}) {
     return stableSwap && isExactIn
   }, [stableSwap, isExactIn])
 
-  const isBridge = useMemo(() => {
-    return inputCurrency && outputCurrency && inputCurrency?.chainId !== outputCurrency?.chainId
-  }, [inputCurrency, outputCurrency])
-
   const bestTradeOptions = {
-    enabled: isBridge ? false : enabled,
+    enabled,
     amount,
     currency: dependentCurrency,
     baseCurrency: independentCurrency,
@@ -64,28 +62,11 @@ export function useSwapBestOrder({ maxHops }: Options = {}) {
     trackPerf: true,
     retry: 1,
   }
-  const { fetchStatus, data: swapData, isStale, error, refetch } = useBestTradeFromApi(bestTradeOptions)
+  const { fetchStatus, data, isStale, error, refetch } = useBestTradeFromApi(bestTradeOptions)
   useBestTradeFromApiShadow(bestTradeOptions, 'quote-api-ori')
   useBestTradeFromApiShadow(bestTradeOptions, 'quote-api-opt')
 
   // if bridge, return bridege trade
-
-  let data = swapData
-
-  // TODO: remove this mock
-  if (isBridge && amount && outputCurrency) {
-    data = parseBridgeQuoteResponse(
-      {
-        messageType: ResponseType.MM_PRICE_RESPONSE,
-        message: 'good moock',
-      },
-      {
-        amountIn: amount,
-        currencyOut: outputCurrency,
-        tradeType,
-      },
-    )
-  }
 
   const [loading, setLoading] = useState(false)
   const refresh = useCallback(async () => {
@@ -133,11 +114,38 @@ export function useSwapBestTrade({ maxHops }: Options = {}) {
     independentField,
     typedValue,
     [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputCurrencyChainId },
-    [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputCurrencyChainId },
+    [Field.OUTPUT]: { currencyId: stateOutputCurrencyId, chainId: stateOutputCurrencyChainId },
   } = useSwapState()
+
+  // TODO: polish thi logic to make it more efficient for cross-chain
+  let outputCurrencyId = stateOutputCurrencyId
+  let outputCurrencyChainId = stateOutputCurrencyChainId
+  let outputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
+
+  const { chainId } = useActiveChainId()
+  const allTokens = useAllTokens(chainId)
+
+  const filterToken = outputCurrency
+    ? createFilterToken(outputCurrency.symbol, (address) => isAddress(address))
+    : undefined
+
+  const outputTokenOnInputChainId =
+    outputCurrency && filterToken
+      ? Object.values(allTokens)
+          .filter(filterToken)
+          .find((token) => token.symbol === outputCurrency?.symbol)
+      : undefined
+
+  if (outputCurrencyId && chainId && chainId !== outputCurrencyChainId && outputTokenOnInputChainId) {
+    outputCurrencyId = outputTokenOnInputChainId.address
+    outputCurrencyChainId = chainId
+  }
+
   const inputCurrency = useCurrency(inputCurrencyId, inputCurrencyChainId)
-  const outputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
-  const isExactIn = independentField === Field.INPUT
+  outputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
+
+  // If cross-chain, TradeType.EXACT_OUTPUT
+  const isExactIn = chainId === stateOutputCurrencyChainId ? true : independentField === Field.INPUT
   const independentCurrency = isExactIn ? inputCurrency : outputCurrency
   const dependentCurrency = isExactIn ? outputCurrency : inputCurrency
   const tradeType = isExactIn ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT

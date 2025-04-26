@@ -1,6 +1,8 @@
+import { OrderType } from '@pancakeswap/price-api-sdk'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
 import { BRIDGE_API_ENDPOINT } from 'config/constants/endpoints'
 import { Address } from 'viem/accounts'
+import { BridgeOrderWithCommands } from '../utils'
 
 export type GetBridgeCalldataResponse = {
   transactionData: {
@@ -59,53 +61,62 @@ interface CalldataRequestSchema {
   commands: (BridgeDataSchema | SwapDataSchema)[]
 }
 
-function getTokenAddress(currency: Currency): Address {
+export function getTokenAddress(currency: Currency): Address {
   return currency.isNative ? '0x0000000000000000000000000000000000000000' : currency.wrapped.address
 }
 
 export const getBridgeCalldata = async ({
-  currencyAmountIn,
-  currencyAmountOut,
+  order,
   recipient,
 }: {
-  currencyAmountIn: CurrencyAmount<Currency>
-  currencyAmountOut: CurrencyAmount<Currency>
+  order: BridgeOrderWithCommands
   recipient: Address
 }) => {
   try {
-    const bridgeCommand: BridgeDataSchema = {
-      command: Command.BRIDGE,
-      data: {
-        inputToken: getTokenAddress(currencyAmountIn.currency),
-        outputToken: getTokenAddress(currencyAmountOut.currency),
-
-        inputAmount: currencyAmountIn.quotient.toString(),
-        originChainId: currencyAmountIn.currency.chainId,
-        destinationChainId: currencyAmountOut.currency.chainId,
-        originChainRecipient: recipient,
-        destinationChainRecipient: recipient,
-        // TODO: replace with minOutputAmount from the response or Backend will calculate it
-        minOutputAmount: '1',
-      },
+    if (!Array.isArray(order?.commands)) {
+      throw new Error('No bridge commands found')
     }
 
-    // const swapCommand: SwapDataSchema = {
-    //   command: Command.SWAP,
-    //   data: {
-    //     originChainId: 42161,
-    //     trade: mockTrade,
-    //     slippageTolerance: 50,
-    //   },
-    // }
+    const commands = order.commands.map((command) => {
+      if (command.type === OrderType.PCS_BRIDGE) {
+        return {
+          command: Command.BRIDGE,
+          data: {
+            inputToken: getTokenAddress(command.trade.inputAmount.currency),
+            outputToken: getTokenAddress(command.trade.outputAmount.currency),
+
+            inputAmount: command.trade.inputAmount.quotient.toString(),
+            originChainId: command.trade.inputAmount.currency.chainId,
+            destinationChainId: command.trade.outputAmount.currency.chainId,
+            originChainRecipient: recipient,
+            destinationChainRecipient: recipient,
+            minOutputAmount: command.trade.outputAmount.quotient.toString(),
+          },
+        }
+      }
+
+      const replacer = (_, value: any) => {
+        return typeof value === 'bigint' ? value.toString() : value
+      }
+
+      return {
+        command: Command.SWAP,
+        data: {
+          originChainId: command.trade.inputAmount.currency.chainId,
+          trade: JSON.parse(JSON.stringify(command.trade, replacer, 2)),
+          slippageTolerance: 50,
+        },
+      }
+    })
 
     const calldataRequest: CalldataRequestSchema = {
-      inputToken: getTokenAddress(currencyAmountIn.currency),
-      outputToken: getTokenAddress(currencyAmountOut.currency),
-      inputAmount: currencyAmountIn.quotient.toString(),
-      originChainId: currencyAmountIn.currency.chainId,
-      destinationChainId: currencyAmountOut.currency.chainId,
+      inputToken: getTokenAddress(order.trade.inputAmount.currency),
+      outputToken: getTokenAddress(order.trade.outputAmount.currency),
+      inputAmount: order.trade.inputAmount.quotient.toString(),
+      originChainId: order.trade.inputAmount.currency.chainId,
+      destinationChainId: order.trade.outputAmount.currency.chainId,
       recipientOnDestChain: recipient,
-      commands: [bridgeCommand],
+      commands,
     }
 
     const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/calldata`, {
@@ -165,4 +176,86 @@ export const postBridgeCheckApproval = async ({
     console.error('postBridgeCheckApproval Error', error)
     throw error
   }
+}
+
+export interface Route {
+  originChainId: number
+  destinationChainId: number
+  originToken: string
+  destinationToken: string
+  destinationTokenSymbol: string
+}
+
+export type GetAvailableRoutesParams = {
+  originChainId?: number
+  destinationChainId?: number
+  originToken?: string
+  destinationToken?: string
+}
+
+export const getBridgeAvailableRoutes = async (params: GetAvailableRoutesParams) => {
+  const stringParams = Object.fromEntries(
+    Object.entries(params)
+      .filter(([_, value]) => value !== undefined && value !== '')
+      .map(([key, value]) => [key, value?.toString()]),
+  )
+  const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/routes?${new URLSearchParams(stringParams).toString()}`)
+  const data = (await resp.json()) as Route[]
+  return data
+}
+
+export type Metadata = {
+  // Define the metadata structure based on backend response
+  routes?: Route[]
+  quote?: {
+    outputAmount: string
+    minOutputAmount: string
+    gasFee?: string
+  }
+  // Add additional fields as needed
+}
+
+export type GetMetadataParams = {
+  inputToken: Address
+  originChainId: number | string
+  outputToken: Address
+  destinationChainId: number | string
+  amount: string
+}
+
+export interface MetadataResponse {
+  supported: boolean
+  reason?: string
+}
+
+export interface MetadataSuccessResponse extends MetadataResponse {
+  amount: string
+  inputToken: string
+  originChainId: number
+  outputToken: string
+  destinationChainId: number
+  bridgeFee: string
+  bridgeFeeUSD: string
+  fillDeadline: number
+  expectedFillTimeSec: string
+  isAmountTooLow: boolean
+  minOutputAmount: string
+  limits: {
+    minDeposit: string
+    maxDeposit: string
+    maxDepositInstant: string
+    maxDepositShortDelay: string
+    recommendedDepositInstant: string
+  }
+}
+
+export const getMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
+  const stringParams = Object.fromEntries(
+    Object.entries(params)
+      .filter(([_, value]) => value !== undefined && value !== '')
+      .map(([key, value]) => [key, value?.toString()]),
+  )
+  const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/metadata?${new URLSearchParams(stringParams).toString()}`)
+  const data = (await resp.json()) as Metadata
+  return data
 }

@@ -22,3 +22,10 @@ export type InterfaceOrder<
   output extends Currency = Currency,
   tradeType extends TradeType = TradeType,
 > = PriceOrder<input, output, tradeType>
+
+// Type to support commands property
+export type BridgeOrderWithCommands = InterfaceOrder & {
+  commands?: InterfaceOrder[]
+  isLoading: boolean
+  error: Error | undefined
+}

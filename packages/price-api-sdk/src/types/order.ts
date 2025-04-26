@@ -24,6 +24,10 @@ export type Order =
       type: OrderType.PCS_CLASSIC
       order: AMMOrder
     }
+  | {
+      type: OrderType.PCS_BRIDGE
+      order: BridgeOrder
+    }
 
 export type XOrder<
   input extends Currency = Currency,
@@ -55,6 +59,7 @@ export interface BridgeTrade<tradeType extends TradeType = TradeType> {
 export type BridgeOrder<tradeType extends TradeType = TradeType> = {
   type: OrderType.PCS_BRIDGE
   trade: BridgeTrade<tradeType>
+  bridgeFee: CurrencyAmount<Currency>
 }
 
 export type PriceOrder<
