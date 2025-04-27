@@ -6,7 +6,7 @@ import { useMemo } from 'react'
 import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
 import { LiquidityType } from 'utils/types'
 import { chains } from 'utils/wagmi'
-import { Chain } from 'wagmi/chains'
+import { Chain, monadTestnet } from 'wagmi/chains'
 
 interface NetworkSelectorProps {
   chainId?: number
@@ -30,7 +30,7 @@ export const NetworkSelector = ({
         .filter((chain) => version !== 'stableSwap' || isStableSwapSupported(chain.id))
         .filter((chain) => {
           if (chain.id === chainId) return true
-          if ('testnet' in chain && chain.testnet) return showTestnet
+          if ('testnet' in chain && chain.testnet && chain.id !== monadTestnet.id) return showTestnet
           return true
         }),
     [version, chainId, showTestnet],
