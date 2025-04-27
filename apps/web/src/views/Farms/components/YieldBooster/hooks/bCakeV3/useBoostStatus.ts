@@ -8,11 +8,7 @@ export enum BoostStatus {
   CanNotBoost,
 }
 
-export const useBoostStatusPM = (
-  haveBCakeWrapper?: boolean,
-  boostMultiplier?: number,
-  updateStatusCallback?: () => void,
-) => {
+export const useBoostStatusPM = (haveBCakeWrapper?: boolean, boostMultiplier?: number) => {
   const { address: account } = useAccount()
   const farmCanBoost = haveBCakeWrapper
   const status = useMemo(() => {
