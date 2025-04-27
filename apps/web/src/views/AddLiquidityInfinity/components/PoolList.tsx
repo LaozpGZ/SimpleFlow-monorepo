@@ -320,7 +320,7 @@ export const PoolList = () => {
       <Card marginTop={['16px', '24px']}>
         <CardHeader>
           <FilterContainer gridGap={24} gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 1fr 1fr']}>
-            <NetworkSelector chainId={chainId} onChange={handleNetworkChange} />
+            <NetworkSelector version="infinity" chainId={chainId} onChange={handleNetworkChange} />
             <TokenFilterContainer>
               <CurrencySelectV2
                 id="add-liquidity-select-tokenA"
