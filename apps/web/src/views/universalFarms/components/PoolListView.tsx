@@ -47,6 +47,11 @@ export const ListView = <T extends PoolInfo>({ data, getItemKey, onRowClick }: I
     [getItemKey],
   )
 
+  const handleMoreClick = (e, item) => {
+    e.stopPropagation()
+    setOpenItem(item)
+  }
+
   return (
     <ListContainer>
       {data.map((item) => (
@@ -57,7 +62,7 @@ export const ListView = <T extends PoolInfo>({ data, getItemKey, onRowClick }: I
           </Column>
 
           <Column>
-            <Button scale="xs" variant="text" onClick={() => setOpenItem(item)} py="2rem" pl="1rem">
+            <Button scale="xs" variant="text" onClick={(e) => handleMoreClick(e, item)} py="2rem" pl="1rem">
               <MoreIcon />
             </Button>
           </Column>
