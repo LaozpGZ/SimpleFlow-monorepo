@@ -120,7 +120,6 @@ const FarmCard: React.FC<React.PropsWithChildren<FarmCardProps>> = ({
           isCommunityFarm={farm.isCommunity}
           token={farm.token}
           quoteToken={farm.quoteToken}
-          boosted={false}
           isStable={farm.isStable}
           version={2}
           pid={farm.pid}

@@ -34,7 +34,6 @@ type ExpandableSectionProps = {
   isCommunityFarm?: boolean
   token: Token
   quoteToken: Token
-  boosted?: boolean
   isStable?: boolean
   version: 3 | 2
   feeAmount?: FeeAmount
@@ -44,7 +43,6 @@ type ExpandableSectionProps = {
   merklLink?: string
   merklUserLink?: string
   hasBothFarmAndMerkl?: boolean
-  isBoosted?: boolean
   lpAddress?: Address
   merklApr?: number
 }

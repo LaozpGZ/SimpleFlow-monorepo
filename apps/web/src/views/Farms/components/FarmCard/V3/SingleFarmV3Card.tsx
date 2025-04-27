@@ -31,12 +31,7 @@ import { type V3Farm } from 'state/farms/types'
 import { styled, useTheme } from 'styled-components'
 import { logGTMClickStakeFarmEvent } from 'utils/customGTMEventTracking'
 import useFarmV3Actions from 'views/Farms/hooks/v3/useFarmV3Actions'
-import {
-  useIsBoostedPool,
-  useUserBoostedPoolsTokenId,
-  useUserPositionInfo,
-  useVeCakeUserMultiplierBeforeBoosted,
-} from '../../YieldBooster/hooks/bCakeV3/useBCakeV3Info'
+import { useUserPositionInfo } from '../../YieldBooster/hooks/bCakeV3/useBCakeV3Info'
 import FarmV3StakeAndUnStake, { FarmV3LPPosition, FarmV3LPPositionDetail, FarmV3LPTitle } from './FarmV3StakeAndUnStake'
 
 const { FarmV3HarvestAction } = FarmWidget.FarmV3Table
@@ -115,17 +110,11 @@ const SingleFarmV3Card: React.FunctionComponent<
   const title = `${lpSymbol} (#${tokenId.toString()})`
   const liquidityUrl = `/liquidity/${tokenId.toString()}?chain=${CHAIN_QUERY_NAME[chainId ?? -1] ?? ''}`
 
-  const { updatedUserMultiplierBeforeBoosted } = useVeCakeUserMultiplierBeforeBoosted()
-  const { mutate: updateIsBoostedPool } = useIsBoostedPool(tokenId.toString())
   const { updateUserPositionInfo } = useUserPositionInfo(tokenId.toString())
-  const { updateBoostedPoolsTokenId } = useUserBoostedPoolsTokenId()
 
   const onDone = useCallback(() => {
-    updateIsBoostedPool()
     updateUserPositionInfo()
-    updateBoostedPoolsTokenId()
-    updatedUserMultiplierBeforeBoosted()
-  }, [updateIsBoostedPool, updateUserPositionInfo, updateBoostedPoolsTokenId, updatedUserMultiplierBeforeBoosted])
+  }, [updateUserPositionInfo])
 
   const { onStake, onUnstake, onHarvest, attemptingTxn } = useFarmV3Actions({
     tokenId: tokenId.toString(),
