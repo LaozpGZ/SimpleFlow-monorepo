@@ -35,7 +35,10 @@ export const useSelectIdRoute = () => {
     router.replace(
       {
         pathname: path,
-        query: router.query, // keep other query params
+        query: {
+          ...router.query,
+          chain: chainNames[activeChainId],
+        }, // keep other query params
       },
       undefined,
       { shallow: true },
