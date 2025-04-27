@@ -52,6 +52,10 @@ export const NetworkSelector = ({
       style={{
         zIndex: 30,
       }}
+      listStyle={{
+        maxHeight: '45vh',
+        overflowY: 'auto',
+      }}
       textStyle={{
         whiteSpace: 'nowrap',
         overflow: 'hidden',
