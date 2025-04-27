@@ -57,7 +57,7 @@ export const ListView = <T extends PoolInfo>({ data, getItemKey, onRowClick }: I
           </Column>
 
           <Column>
-            <Button scale="xs" variant="text" onClick={() => setOpenItem(item)}>
+            <Button scale="xs" variant="text" onClick={() => setOpenItem(item)} py="2rem" pl="1rem">
               <MoreIcon />
             </Button>
           </Column>
