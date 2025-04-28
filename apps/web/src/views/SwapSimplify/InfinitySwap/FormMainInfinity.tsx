@@ -13,7 +13,9 @@ import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 
+import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import currencyId from 'utils/currencyId'
 import { useAccount } from 'wagmi'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
@@ -82,18 +84,16 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
       const isInput = field === Field.INPUT
 
-      // TODO: Handle URL update currencyId??? Uniswap stops supporting it.
-      // const oldCurrencyId = isInput ? currentInputCurrencyId : currentOutputCurrencyId
-      // const otherCurrencyId = isInput ? currentOutputCurrencyId : currentInputCurrencyId
-      // const newCurrencyId = currencyId(newCurrency)
-
-      // replaceBrowserHistoryMultiple({
-      //   ...(newCurrencyId === otherCurrencyId && { [isInput ? 'outputCurrency' : 'inputCurrency']: oldCurrencyId }),
-      //   [isInput ? 'inputCurrency' : 'outputCurrency']: newCurrencyId,
-      // })
-
       if (isInput && canSwitch) {
         switchNetwork(newCurrency.chainId)
+      }
+
+      const newCurrencyId = currencyId(newCurrency)
+
+      if (isInput) {
+        replaceBrowserHistoryMultiple({
+          inputCurrency: newCurrencyId,
+        })
       }
     },
     [onCurrencySelection, warningSwapHandler, canSwitch, switchNetwork],
