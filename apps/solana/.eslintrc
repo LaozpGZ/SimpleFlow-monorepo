@@ -5,6 +5,25 @@
   },
   "extends": ["plugin:@next/next/recommended", "../../packages/eslint-config/lib/next-page-router.js"],
   "rules": {
+    "import/order": [
+      "error",
+      {
+        "groups": ["builtin", "external", "internal", "parent", "sibling", "index"],
+        "newlines-between": "always",
+        "pathGroups": [
+          {
+            "pattern": "^@\\w",
+            "group": "internal",
+            "position": "after"
+          },
+          {
+            "pattern": "^@/",
+            "group": "internal",
+            "position": "after"
+          }
+        ]
+      }
+    ],
     "no-empty-function": 0,
     "no-restricted-syntax": 0,
     "import/no-unresolved": 0,
