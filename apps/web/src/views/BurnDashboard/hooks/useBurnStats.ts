@@ -5,7 +5,7 @@ export const useBurnStats = () => {
   return useQuery<BurnStats>({
     queryKey: ['burnStats'],
     queryFn: async () => {
-      const response = await fetch('/api/stats')
+      const response = await fetch('/api/burn-statistics')
       if (!response.ok) {
         throw new Error('Error while fetching burn statistics')
       }
