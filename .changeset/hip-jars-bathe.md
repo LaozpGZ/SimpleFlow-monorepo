@@ -47,4 +47,4 @@
 
 [Patch Updates]
 
-Added internal types and updated unit tests to improve code maintainability and logging accuracy.
+Added support for infinity by introducing internal types and updating unit tests to improve code maintainability and logging accuracy.
