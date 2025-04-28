@@ -55,7 +55,6 @@ import {
 import { usePool } from 'views/AddLiquidityInfinity/hooks/usePool'
 import { useV3FormState } from 'views/AddLiquidityV3/formViews/V3FormView/form/reducer'
 import { useLmPoolLiquidity } from 'views/Farms/hooks/useLmPoolLiquidity'
-import { useEstimateUserMultiplier } from 'views/universalFarms/hooks/useEstimateUserMultiplier'
 import { useAccount } from 'wagmi'
 import { getActiveLiquidityFromShape } from '../utils/getActiveLiquidityFromShape'
 import { useBinAmountsFromUsdValue } from './useBinAmountsFromUsdValue'
@@ -105,7 +104,6 @@ export const useV2PositionApr = (pool: PoolInfo, userPosition: StableLPDetail | 
 
 export const useV3PositionApr = (pool: PoolInfo, userPosition: PositionDetail) => {
   const key = useMemo(() => `${pool.chainId}:${pool.lpAddress}` as const, [pool.chainId, pool.lpAddress])
-  const { data: estimateUserMultiplier } = useEstimateUserMultiplier(pool.chainId, userPosition.tokenId)
   const { removed, outOfRange, position } = useExtraV3PositionInfo(userPosition)
   const { cakeApr: globalCakeApr, merklApr: merklApr_ } = usePoolApr(key, pool)
   const { data: token0UsdPrice_ } = useCurrencyUsdPrice(pool.token0)
@@ -164,11 +162,9 @@ export const useV3PositionApr = (pool: PoolInfo, userPosition: PositionDetail) =
           .div(userTVLUsd)
       : BIG_ZERO
 
-    const apr = baseApr.times(estimateUserMultiplier || 1)
-
     return {
       ...globalCakeApr,
-      value: apr.toString() as `${number}`,
+      value: baseApr.toString() as `${number}`,
       boost: undefined,
     }
   }, [
@@ -182,7 +178,6 @@ export const useV3PositionApr = (pool: PoolInfo, userPosition: PositionDetail) =
     cakePrice,
     pool.liquidity,
     userTVLUsd,
-    estimateUserMultiplier,
   ])
 
   const lpApr = useMemo(() => {
