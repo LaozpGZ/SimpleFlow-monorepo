@@ -73,13 +73,7 @@ export const PoolAprButton: React.FC<PoolGlobalAprButtonProps> = ({
       />
       {tooltipVisible && tooltip}
       {hasBCake ? (
-        <V2PoolAprModal
-          modal={modal}
-          poolInfo={pool}
-          combinedApr={baseApr}
-          lpApr={Number(lpApr ?? 0)}
-          boostMultiplier={0}
-        />
+        <V2PoolAprModal modal={modal} poolInfo={pool} combinedApr={baseApr} lpApr={Number(lpApr ?? 0)} />
       ) : pool.protocol === Protocol.V3 ? (
         <V3PoolAprModal
           modal={modal}
