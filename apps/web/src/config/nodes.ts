@@ -17,7 +17,7 @@ import {
   scrollSepolia,
   sepolia,
   zkSync,
-  zkSyncSepoliaTestnet,
+  zksyncSepoliaTestnet,
 } from 'wagmi/chains'
 
 const ARBITRUM_NODES = [
@@ -61,8 +61,8 @@ export const SERVER_NODES = {
   [ChainId.ZKSYNC]: [
     ...zkSync.rpcUrls.default.http,
     getNodeRealUrl(ChainId.ZKSYNC, process.env.SERVER_NODE_REAL_API_ETH) || '',
-  ],
-  [ChainId.ZKSYNC_TESTNET]: zkSyncSepoliaTestnet.rpcUrls.default.http,
+  ].filter(Boolean),
+  [ChainId.ZKSYNC_TESTNET]: zksyncSepoliaTestnet.rpcUrls.default.http,
   [ChainId.LINEA]: linea.rpcUrls.default.http,
   [ChainId.LINEA_TESTNET]: [
     'https://rpc.goerli.linea.build',
@@ -92,8 +92,8 @@ export const SERVER_NODES = {
 
 export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
   [ChainId.BSC]: [
-    getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
     process.env.NEXT_PUBLIC_NODE_PRODUCTION || '',
+    getNodeRealUrl(ChainId.BSC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
     process.env.NEXT_PUBLIC_NODIES_BSC || '',
     getGroveUrl(ChainId.BSC, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
     'https://bsc.publicnode.com',
@@ -102,7 +102,7 @@ export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
     'https://bsc-dataseed1.binance.org',
   ].filter(Boolean),
   [ChainId.BSC_TESTNET]: [
-    getNodeRealUrl(ChainId.BSC_TESTNET, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
+    getNodeRealUrl(ChainId.BSC_TESTNET, process.env.SERVER_NODE_REAL_API_ETH) || '',
     'https://data-seed-prebsc-1-s1.binance.org:8545',
   ].filter(Boolean),
   [ChainId.ETHEREUM]: [
@@ -138,8 +138,8 @@ export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
     ...zkSync.rpcUrls.default.http,
     process.env.NEXT_PUBLIC_QUICK_NODE_ZKSYNC || '',
     getNodeRealUrl(ChainId.ZKSYNC, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
-  ],
-  [ChainId.ZKSYNC_TESTNET]: zkSyncSepoliaTestnet.rpcUrls.default.http,
+  ].filter(Boolean),
+  [ChainId.ZKSYNC_TESTNET]: zksyncSepoliaTestnet.rpcUrls.default.http,
   [ChainId.LINEA]: linea.rpcUrls.default.http,
   [ChainId.LINEA_TESTNET]: [
     'https://rpc.goerli.linea.build',

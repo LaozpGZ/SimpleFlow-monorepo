@@ -8,7 +8,7 @@ import { computeAllRoutesNew } from './functions/computeAllRoutesNew'
 import { createGasModel } from './gasModel'
 import { getRoutesWithValidQuote } from './getRoutesWithValidQuote'
 import { BestRoutes, RouteConfig, RouteType, SmartRouterTrade, TradeConfig } from './types'
-import { logPools, logRoutes, logRoutesWithQuote } from './utils/remoteLogs'
+import { logPools, logRoutes } from './utils/remoteLogs'
 
 export async function getBestTrade(
   amount: CurrencyAmount<Currency>,
@@ -132,19 +132,5 @@ async function getBestRoutes(
     signal,
   })
   logger.debug(`valid route=${routesWithValidQuote.length}, maxShow=100`)
-  logRoutesWithQuote(quoteId, routesWithValidQuote.slice(0, 100))
-  // routesWithValidQuote.forEach(({ percent, path, amount: a, quote }) => {
-  //   const pathStr = path.map((t) => t.symbol).join('->')
-  //   console.log(
-  //     `${percent}% Swap`,
-  //     a.toExact(),
-  //     a.currency.symbol,
-  //     'through',
-  //     pathStr,
-  //     ':',
-  //     quote.toExact(),
-  //     quote.currency.symbol,
-  //   )
-  // })
   return getBestRouteCombinationByQuotes(amount, currency, routesWithValidQuote, tradeType, { maxSplits }, quoteId)
 }

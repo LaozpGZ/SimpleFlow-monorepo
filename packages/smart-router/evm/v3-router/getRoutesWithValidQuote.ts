@@ -5,6 +5,7 @@ import chunk from 'lodash/chunk.js'
 import { RemoteLogger } from '@pancakeswap/utils/RemoteLogger'
 import { getAmountDistribution } from './functions'
 import { BaseRoute, GasModel, QuoteProvider, RouteWithoutQuote, RouteWithQuote } from './types'
+import { getPoolAddress } from './utils'
 
 type Params = {
   blockNumber?: BigintIsh
@@ -21,7 +22,7 @@ type Params = {
 export async function getRoutesWithValidQuote({
   amount,
   baseRoutes,
-  distributionPercent,
+  distributionPercent = 5,
   quoteProvider,
   tradeType,
   blockNumber,
@@ -30,6 +31,7 @@ export async function getRoutesWithValidQuote({
   signal,
   quoteId,
 }: Params): Promise<RouteWithQuote[]> {
+  // const distributionPercent = 100
   const logger = RemoteLogger.getLogger(quoteId)
   logger.debug('run getRoutesWithValidQuote')
   const [percents, amounts] = getAmountDistribution(amount, distributionPercent)
@@ -44,6 +46,15 @@ export async function getRoutesWithValidQuote({
     ],
     [],
   )
+  logger.debug(`quote calls=${routesWithoutQuote.length}`, 2)
+  for (const route of routesWithoutQuote) {
+    logger.debug(
+      `quote call, ${route.percent}% ${route.pools.map((x) => getPoolAddress(x)).join(',')} ${route.input.symbol} ${
+        route.output.symbol
+      } ${route.amount.quotient}`,
+      3,
+    )
+  }
   const getRoutesWithQuote =
     tradeType === TradeType.EXACT_INPUT
       ? quoteProvider.getRouteWithQuotesExactIn
