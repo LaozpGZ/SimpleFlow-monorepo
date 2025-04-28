@@ -67,7 +67,6 @@ export const PoolAprButton: React.FC<PoolGlobalAprButtonProps> = ({
         hasFarm={Number(cakeApr?.value) > 0}
         ref={targetRef}
         baseApr={baseApr}
-        boostApr={boostApr}
         onClick={modal.onOpen}
         onAPRTextClick={onAPRTextClick ?? modal.onOpen}
         showApyButton={showApyButton}
