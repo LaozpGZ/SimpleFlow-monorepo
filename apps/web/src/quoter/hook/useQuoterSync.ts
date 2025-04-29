@@ -56,15 +56,17 @@ export const useQuoterSync = () => {
     ? createFilterToken(outputCurrency.symbol, (address) => isAddress(address))
     : undefined
 
-  const outputTokenOnInputChainId =
-    outputCurrency && filterToken
-      ? Object.values(allTokens)
-          .filter(filterToken)
-          .find((token) => token.symbol === outputCurrency?.symbol)
-      : undefined
+  const outputTokenOnInputChainId = outputCurrency?.isNative
+    ? outputCurrency.symbol
+    : filterToken
+    ? Object.values(allTokens)
+        .filter(filterToken)
+        .find((token) => token.symbol === outputCurrency?.symbol)
+    : undefined
 
   if (outputCurrencyId && chainId && chainId !== outputCurrencyChainId && outputTokenOnInputChainId) {
-    outputCurrencyId = outputTokenOnInputChainId.address
+    outputCurrencyId =
+      typeof outputTokenOnInputChainId === 'string' ? outputTokenOnInputChainId : outputTokenOnInputChainId.address
     outputCurrencyChainId = chainId
   }
 
