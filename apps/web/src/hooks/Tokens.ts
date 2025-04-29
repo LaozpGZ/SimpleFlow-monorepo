@@ -188,7 +188,7 @@ export function useUnsupportedTokens(overrideChainId?: number): { [address: stri
   const chainId = overrideChainId || activeChainId
 
   const unsupportedTokensMap = useUnsupportedTokenList()
-  return useMemo(() => mapWithoutUrls(unsupportedTokensMap, selectedChainId), [unsupportedTokensMap, selectedChainId])
+  return useMemo(() => mapWithoutUrls(unsupportedTokensMap, chainId), [unsupportedTokensMap, chainId])
 }
 
 export function useWarningTokens(chainId?: ChainId): { [address: string]: ERC20Token } {
