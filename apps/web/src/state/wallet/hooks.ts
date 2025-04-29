@@ -4,6 +4,7 @@ import { multicallABI } from 'config/abi/Multicall'
 import { useAllTokens } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
+import orderBy from 'lodash/orderBy'
 import { useMemo } from 'react'
 import { safeGetAddress } from 'utils'
 import { getMulticallAddress } from 'utils/addressHelpers'
@@ -53,7 +54,6 @@ export function useTokenBalancesWithLoadingIndicator(
     options: {
       enabled: Boolean(address && addresses.length > 0),
     },
-    chainId,
   })
 
   const aggregatedBalances = useMemo(

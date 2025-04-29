@@ -1,5 +1,5 @@
 import type { ExclusiveDutchOrderInfoJSON, ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
-import type { InfinityRouter } from '@pancakeswap/smart-router'
+import type { InfinityRouter, RouteType } from '@pancakeswap/smart-router'
 import type { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import type { AMMOrder } from './amm'
 import { Hex } from './common'
@@ -54,6 +54,8 @@ export interface BridgeTrade<tradeType extends TradeType = TradeType> {
     type: RouteType.BRIDGE
   }[]
   tradeType: tradeType
+  // TODO: add this to compliance with other types. Need to clarify with team if needed
+  quoteQueryHash?: string
 }
 
 export type BridgeOrder<tradeType extends TradeType = TradeType> = {
