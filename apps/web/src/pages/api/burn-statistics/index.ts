@@ -28,8 +28,8 @@ const handler: NextApiHandler = async (req, res) => {
       return res.status(500).json({ error: 'No data found' })
     }
 
-    // Cache response on API side for 1 hour
-    res.setHeader('Cache-Control', 'max-age=3600, stale-while-revalidate')
+    // Cache response
+    res.setHeader('Cache-Control', 'max-age=60, s-maxage=3600, stale-while-revalidate=60')
 
     return res.status(200).json(JSON.parse(data))
   } catch (error) {

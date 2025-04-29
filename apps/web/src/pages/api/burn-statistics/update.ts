@@ -15,6 +15,7 @@ const handler: NextApiHandler = async (req, res) => {
 
   // Vercel's cron job automatically adds the Authorization header
   if (req.headers.authorization !== `Bearer ${process.env.CRON_SECRET}`) {
+    console.warn('Unauthorized attempt to update burn statistics with authorization:', req.headers.authorization)
     return res.status(401).json({ error: 'Unauthorized' })
   }
 
