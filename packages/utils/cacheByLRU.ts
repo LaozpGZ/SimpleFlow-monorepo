@@ -59,7 +59,6 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
         const t = Date.now()
         const r2Promise = fetchR2Cache(persistKey())
         const value = await Promise.race([r2Promise, promise])
-        console.log('*****time usage****', Date.now() - t)
         return value ?? promise
       }
       return promise
@@ -113,7 +112,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 }
 
 async function uploadR2(key: string, value: any) {
-  console.info('update homepage cache', key)
+  console.info('update cache', key)
   if (!process.env.OBJECT_CACHE_SECRET) {
     return
   }
