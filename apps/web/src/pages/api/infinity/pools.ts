@@ -1,23 +1,28 @@
-import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import BN from 'bignumber.js'
-import isArray from 'lodash/isArray'
-import { NextApiHandler } from 'next'
+import { NextRequest, NextResponse } from 'next/server'
 import qs from 'qs'
-import { stringify } from 'viem'
+
+export const config = {
+  runtime: 'edge',
+}
 
 const MAX_CACHE_SECONDS = 60 * 60
 
-const handler: NextApiHandler = async (req, res) => {
-  const queryString = qs.stringify(req.query)
-  const queryParsed = qs.parse(queryString)
+export default async function handler(req: NextRequest) {
+  const raw = new URL(req.url).search.slice(1)
+  if (!raw) {
+    return NextResponse.json({ error: 'Invalid query' }, { status: 400 })
+  }
+  const queryParsed = qs.parse(raw)
   const _protocol = queryParsed.protocol
   const protocols =
-    typeof _protocol === 'string' ? [_protocol] : isArray(_protocol) ? (_protocol as string[]) : undefined
+    typeof _protocol === 'string' ? [_protocol] : Array.isArray(_protocol) ? (_protocol as string[]) : undefined
+  console.log('protocol', protocols)
   const chain = queryParsed.chain
   const supported = ['infinityCl', 'infinityBin']
   const valid = protocols && protocols.every((p) => supported.includes(p))
   if (!valid) {
-    return res.status(400).json({ error: 'Invalid protocol or chain' })
+    return NextResponse.json({ error: 'Invalid protocol or chain' }, { status: 400 })
   }
 
   try {
@@ -33,15 +38,21 @@ const handler: NextApiHandler = async (req, res) => {
       tvlUSD: new BN(p.tvlUSD).decimalPlaces(0, BN.ROUND_CEIL).toString(),
     }))
 
-    res.setHeader('Cache-Control', `max-age=${MAX_CACHE_SECONDS}, s-maxage=${MAX_CACHE_SECONDS}`)
-    return res.status(200).json({
-      data: JSON.parse(stringify(result)),
-      lastUpdated: Number(Date.now()),
-    })
+    return NextResponse.json(
+      {
+        data: result,
+        lastUpdated: Number(Date.now()),
+      },
+      {
+        status: 200,
+        headers: {
+          'Cache-Control': `max-age=${MAX_CACHE_SECONDS}, s-maxage=${MAX_CACHE_SECONDS}`,
+          'Content-Type': 'application/json',
+        },
+      },
+    )
   } catch (err) {
-    return res.status(500).json({
-      error: JSON.parse(stringify(err)),
-    })
+    return NextResponse.json({ error: `${err}` }, { status: 500, headers: { 'Content-Type': 'application/json' } })
   }
 }
 
@@ -91,21 +102,12 @@ type FetchAllPoolsParams = {
   maxPages?: number // Optional safety limit for maximum pages to fetch
 }
 
-const fetchAllPools = cacheByLRU(_fetchAllPools, {
-  ttl: MAX_CACHE_SECONDS,
-  maxCacheSize: 1000,
-  persist: {
-    name: 'infinityTvlRefs',
-    version: 'v1',
-    type: 'r2',
-  },
-})
 /**
  * Fetches all data from a paginated API endpoint
  * @param params Configuration parameters for the fetch operation
  * @returns Promise resolving to an array of all pools
  */
-async function _fetchAllPools({
+async function fetchAllPools({
   baseUrl,
   orderBy = 'tvlUSD',
   protocols,
@@ -165,7 +167,12 @@ async function _fetchAllPools({
 
     try {
       // eslint-disable-next-line no-await-in-loop
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        headers: {
+          'x-api-key': process.env.EXPLORER_API_KEY || '',
+          'Content-Type': 'application/json',
+        },
+      })
 
       if (!response.ok) {
         throw new Error(`API request failed with status ${response.status}`)
@@ -193,5 +200,3 @@ async function _fetchAllPools({
 
   return allResults
 }
-
-export default handler
