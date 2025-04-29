@@ -36,8 +36,10 @@
   },
   "devDependencies": {
     "@pancakeswap/swap-sdk-evm": "workspace:*",
-    "@pancakeswap/utils": "workspace:*",
     "tsup": "^6.7.0"
+  },
+  "peerDependencies": {
+    "@pancakeswap/utils": "workspace:*"
   },
   "engines": {
     "node": ">=10"
