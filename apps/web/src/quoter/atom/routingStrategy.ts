@@ -29,7 +29,6 @@ const defaultRoutingStrategy: RoutingStrategy = [
       overrides: {
         maxHops: 1,
         maxSplits: 0,
-        enabled: true,
       },
     },
     // routing-sdk

@@ -10,7 +10,7 @@ import { NoValidRouteError, QuoteQuery, StrategyQuery } from '../quoter.types'
 import { activeQuoteHashAtom } from './abortControlAtoms'
 import { emptyLoadable, errorLoadable, Loadable, pendingLoadable, valueLoadable } from './atomWithLoadable'
 import { placeholderAtom } from './placeholderAtom'
-import { getRoutingStrategy, StrategyRoute, updateStrategy } from './routingStrategy'
+import { getRoutingStrategy, StrategyRoute } from './routingStrategy'
 
 const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
   const strategyQuery: StrategyQuery = {
@@ -39,7 +39,7 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
         const [bestQuote, bestIndex] = best
         if (bestQuote) {
           if (!anyLoading) {
-            updateStrategy(strategyHash, routes[bestIndex])
+            // updateStrategy(strategyHash, routes[bestIndex])
             return valueLoadable(bestQuote)
           }
           return pendingLoadable<InterfaceOrder | undefined>(bestQuote)
