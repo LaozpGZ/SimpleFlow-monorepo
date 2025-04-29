@@ -2,6 +2,7 @@ import {
   cBridge,
   deBridge,
   ICBridgeTransferConfig,
+  IChainConfig,
   ICustomizedBridgeConfig,
   IDeBridgeTransferConfig,
   IMesonTransferConfig,
@@ -13,11 +14,10 @@ import {
 import { useEffect, useState } from 'react'
 
 import axios from 'axios'
-import { chains } from '../configs/chains'
 import { env } from '../configs/env'
 import layerZeroConfig from '../token-config/mainnet/layerZero/config.json'
 
-export function useTransferConfig() {
+export function useTransferConfig(supportedChains: IChainConfig[]) {
   const [transferConfig, setTransferConfig] = useState<ICustomizedBridgeConfig['transfer']>()
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export function useTransferConfig() {
           'MBOX',
           'BNX',
         ],
-        chainConfigs: chains,
+        chainConfigs: supportedChains,
         displayTokenSymbols: {
           10: {
             '0x7F5c764cBc14f9669B88837ca1490cCa17c31607': 'USDC.e',

@@ -7,6 +7,7 @@ import {
   BridgeTransfer,
   CanonicalBridgeProvider,
   CanonicalBridgeProviderProps,
+  IChainConfig,
   ICustomizedBridgeConfig,
 } from '@bnb-chain/canonical-bridge-widget'
 import { useTheme } from 'styled-components'
@@ -31,21 +32,20 @@ export interface CanonicalBridgeProps {
 export const CanonicalBridge = (props: CanonicalBridgeProps) => {
   const { connectWalletButton, supportedChainIds } = props
 
-  const transferConfig = useTransferConfig()
   const { currentLanguage } = useTranslation()
   const theme = useTheme()
   const toast = useToast()
   const { connector } = useAccount()
-  const supportedChains = useMemo(() => {
+  const supportedChains = useMemo<IChainConfig[]>(() => {
     return chains
       .filter((e) => supportedChainIds.includes(e.id))
       .filter((e) => !(connector?.id === 'BinanceW3WSDK' && e.id === 1101))
       .map((chain) => ({
         ...chain,
-        rpcUrls: { default: { http: props.rpcConfig?.[chain.id]?.[0] ?? chain.rpcUrls.default.http[0] } },
+        rpcUrls: { default: { http: props.rpcConfig?.[chain.id] ?? chain.rpcUrls.default.http } },
       }))
   }, [supportedChainIds, connector?.id, props.rpcConfig])
-
+  const transferConfig = useTransferConfig(supportedChains)
   const handleError = useCallback(
     (params: { type: string; message?: string | undefined; error?: Error | undefined }) => {
       if (params.message) {
