@@ -56,7 +56,6 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 
     async function ensurePersist(promise: Promise<any>) {
       if (fetchR2Cache && persist) {
-        const t = Date.now()
         const r2Promise = fetchR2Cache(persistKey())
         const value = await Promise.race([r2Promise, promise])
         return value ?? promise
