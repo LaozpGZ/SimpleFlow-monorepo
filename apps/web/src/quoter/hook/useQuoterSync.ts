@@ -1,9 +1,11 @@
 import { useDebounce } from '@orbs-network/twap-ui/dist/hooks'
 import { OrderType } from '@pancakeswap/price-api-sdk'
+import { Native } from '@pancakeswap/sdk'
 import { RouteType } from '@pancakeswap/smart-router'
-import { TradeType } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { createFilterToken } from '@pancakeswap/token-lists'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { UnsafeCurrency } from 'config/constants/types'
 import { useAllTokens, useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useInputBasedAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
@@ -28,6 +30,10 @@ import { useQuoteContext } from './QuoteContext'
 
 const REVALIDATE_TIME = 7
 
+const isNeedDestinationSwap = (inputChainId?: number, outputCurrency?: UnsafeCurrency) => {
+  return inputChainId !== outputCurrency?.chainId && !outputCurrency?.isNative
+}
+
 export const useQuoterSync = () => {
   const swapState = useSwapState()
   const debouncedSwapState = useDebounce(swapState, 300)
@@ -45,6 +51,8 @@ export const useQuoterSync = () => {
 
   let outputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
 
+  const needsDestinationSwap = isNeedDestinationSwap(inputChainId, outputCurrency)
+
   const { chainId } = useActiveChainId()
   const allTokens = useAllTokens(chainId)
 
@@ -52,13 +60,14 @@ export const useQuoterSync = () => {
     ? createFilterToken(outputCurrency.symbol, (address) => isAddress(address))
     : undefined
 
-  const outputTokenOnInputChainId = outputCurrency?.isNative
-    ? outputCurrency.symbol
-    : filterToken
-    ? Object.values(allTokens)
-        .filter(filterToken)
-        .find((token) => token.symbol === outputCurrency?.symbol)
-    : undefined
+  const outputTokenOnInputChainId =
+    outputCurrency?.isNative || needsDestinationSwap
+      ? Native.onChain(chainId).symbol
+      : filterToken
+      ? Object.values(allTokens)
+          .filter(filterToken)
+          .find((token) => token.symbol === outputCurrency?.symbol)
+      : undefined
 
   if (outputCurrencyId && chainId && chainId !== outputCurrencyChainId && outputTokenOnInputChainId) {
     outputCurrencyId =
@@ -177,9 +186,41 @@ export const useQuoterSync = () => {
     error: bridgeError,
     isLoading: bridgeLoading,
   } = useBridgeMetadata({
-    inputAmount: swapOrder?.trade ? swapOrder?.trade?.outputAmount : amount,
-    outputCurrency: stateOutputCurrency,
+    inputAmount: needsDestinationSwap
+      ? CurrencyAmount.fromRawAmount(Native.onChain(chainId), swapOrder?.trade?.outputAmount?.quotient.toString() || 0)
+      : swapOrder?.trade
+      ? swapOrder?.trade?.outputAmount
+      : amount,
+    outputCurrency:
+      needsDestinationSwap && stateOutputCurrencyChainId
+        ? Native.onChain(stateOutputCurrencyChainId)
+        : stateOutputCurrency,
   })
+
+  const destinationQuoteQueryInit: QuoteQuery = {
+    amount: bridgeOrder?.trade?.outputAmount,
+    currency: stateOutputCurrency,
+    baseCurrency: bridgeOrder?.trade?.outputAmount?.currency,
+    tradeType: TradeType.EXACT_INPUT,
+    maxHops: singleHopOnly ? 1 : maxHops,
+    maxSplits: split ? undefined : 0,
+    v2Swap,
+    v3Swap,
+    infinitySwap,
+    stableSwap,
+    speedQuoteEnabled,
+    xEnabled,
+    slippage,
+    address,
+    blockNumber,
+    // TODO: remove this nonce hack
+    nonce: nonce + 100,
+    hash: '',
+  }
+
+  const destinationQuoteQuery = createQuoteQuery(destinationQuoteQueryInit)
+
+  const destinationSwapOrder = useAtomValue(bestQuoteAtom(destinationQuoteQuery))?.data
 
   useEffect(() => {
     if (paused) {
@@ -196,7 +237,9 @@ export const useQuoterSync = () => {
           type: OrderType.PCS_BRIDGE,
           trade: {
             inputAmount: swapOrder?.trade?.inputAmount,
-            outputAmount: bridgeOrder?.trade?.outputAmount,
+            outputAmount: needsDestinationSwap
+              ? destinationSwapOrder?.trade?.outputAmount
+              : bridgeOrder?.trade?.outputAmount,
             routes: [
               ...('routes' in swapOrder?.trade ? swapOrder.trade.routes : []),
               {
@@ -205,10 +248,15 @@ export const useQuoterSync = () => {
                 outputAmount: bridgeOrder?.trade?.outputAmount,
                 type: RouteType.BRIDGE,
               },
+              ...(needsDestinationSwap && destinationSwapOrder
+                ? 'routes' in destinationSwapOrder.trade
+                  ? destinationSwapOrder.trade.routes
+                  : []
+                : []),
             ],
             tradeType: bridgeOrder?.trade?.tradeType,
           },
-          commands: [swapOrder, bridgeOrder],
+          commands: [swapOrder, bridgeOrder, ...(needsDestinationSwap ? [destinationSwapOrder] : [])],
           isLoading: false,
           error: undefined,
         } as BridgeOrderWithCommands
@@ -220,6 +268,8 @@ export const useQuoterSync = () => {
           error: undefined,
         } as BridgeOrderWithCommands
       }
+
+      console.log('finalOrder', finalOrder)
 
       setTrade({
         bestOrder: finalOrder,
@@ -270,6 +320,7 @@ export const useQuoterSync = () => {
 
     setTyping(false)
   }, [
+    destinationSwapOrder,
     bridgeLoading,
     bridgeOrder,
     bridgeError,
