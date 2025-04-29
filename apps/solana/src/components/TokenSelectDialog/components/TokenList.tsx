@@ -1,26 +1,26 @@
-import { ChangeEvent, useCallback, useEffect, useMemo, useState, useRef, forwardRef, useImperativeHandle } from 'react'
-import { TokenInfo } from '@raydium-io/raydium-sdk-v2'
-import { useTranslation } from 'react-i18next'
-import { PublicKey } from '@solana/web3.js'
-import { Box, Divider, Flex, Heading, Input, InputGroup, InputRightAddon, SimpleGrid, Text } from '@chakra-ui/react'
-import Decimal from 'decimal.js'
+import AddressChip from '@/components/AddressChip'
+import Button from '@/components/Button'
+import List, { ListPropController } from '@/components/List'
+import TokenAvatar from '@/components/TokenAvatar'
+import useTokenInfo from '@/hooks/token/useTokenInfo'
+import useTokenPrice, { TokenPrice } from '@/hooks/token/useTokenPrice'
 import { useEvent } from '@/hooks/useEvent'
-import SearchIcon from '@/icons/misc/SearchIcon'
 import AddTokenIcon from '@/icons/misc/AddTokenIcon'
 import RemoveTokenIcon from '@/icons/misc/RemoveTokenIcon'
 import { useTokenAccountStore, useTokenStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
+import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import { isValidPublicKey } from '@/utils/publicKey'
 import { sortItems } from '@/utils/sortItems'
 import { filterTokenFn } from '@/utils/token'
+import { Box, Divider, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react'
+import { Input, InputGroup, SearchIcon } from '@pancakeswap/uikit'
+import { TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { PublicKey } from '@solana/web3.js'
+import Decimal from 'decimal.js'
+import { ChangeEvent, forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import PopularTokenCell from './PopularTokenCell'
-import List, { ListPropController } from '@/components/List'
-import AddressChip from '@/components/AddressChip'
-import TokenAvatar from '@/components/TokenAvatar'
-import Button from '@/components/Button'
-import useTokenInfo from '@/hooks/token/useTokenInfo'
-import { isValidPublicKey } from '@/utils/publicKey'
-import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
-import useTokenPrice, { TokenPrice } from '@/hooks/token/useTokenPrice'
 
 const perPage = 30
 
@@ -181,21 +181,14 @@ export default forwardRef<
   }))
   return (
     <Flex direction="column" height="100%">
-      <InputGroup bg={colors.backgroundDark} color={colors.textSecondary} rounded="8px">
+      <InputGroup startIcon={<SearchIcon color="textSubtle" />}>
         <Input
-          p="8px 16px"
-          variant="unstyled"
-          _placeholder={{
-            fontSize: '14px',
-            color: colors.textTertiary
-          }}
+          autoComplete="off"
+          scale="lg"
           placeholder={t('token_selector.search_placeholder') ?? undefined}
           value={search}
           onChange={handleSearchChange}
         />
-        <InputRightAddon bg="transparent">
-          <SearchIcon />
-        </InputRightAddon>
       </InputGroup>
 
       <Box pb="8px">
