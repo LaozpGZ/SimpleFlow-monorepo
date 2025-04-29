@@ -16,20 +16,25 @@ const whiteListBrevisDiscountHooks = [
 export const useBrevisHookDiscount = (pools: Route['pools']) => {
   const { chainId } = useActiveChainId()
   const { address: account } = useAccount()
-  const brevisHookPools = pools.filter(
-    (pool) =>
-      SmartRouter.isInfinityBinPool(pool) ||
-      (SmartRouter.isInfinityClPool(pool) && pool?.hooks && whiteListBrevisDiscountHooks.includes(pool.hooks)),
-  ) as Array<InfinityBinPool | InfinityClPool>
 
   const queries = useMemo(() => {
-    return brevisHookPools.map((pool) => ({
+    if (!pools?.length) {
+      return []
+    }
+
+    const brevisHookPools = pools?.filter(
+      (pool) =>
+        SmartRouter.isInfinityBinPool(pool) ||
+        (SmartRouter.isInfinityClPool(pool) && pool?.hooks && whiteListBrevisDiscountHooks.includes(pool.hooks)),
+    ) as Array<InfinityBinPool | InfinityClPool>
+
+    return brevisHookPools?.map((pool) => ({
       queryKey: ['brevisHookDiscount', pool.id],
       queryFn: () => getBrevisHookDiscountData({ chainId, pool, account }),
 
       enabled: !!pool && !!chainId,
     }))
-  }, [account, chainId, brevisHookPools])
+  }, [account, chainId])
 
   return useQueries({
     queries,
