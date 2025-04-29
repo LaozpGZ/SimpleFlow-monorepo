@@ -37,6 +37,21 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
       })
     : undefined
 
+  function persistKey() {
+    return `${persist?.name}-${persist?.version}`
+  }
+
+  async function ensurePersist(promise: Promise<any>) {
+    if (fetchR2Cache && persist) {
+      const t = Date.now()
+      const r2Promise = fetchR2Cache(persistKey())
+      const value = await Promise.race([r2Promise, promise])
+      console.log('*****time usage****', Date.now() - t)
+      return value ?? promise
+    }
+    return promise
+  }
+
   const keyFunction = key || identity
 
   let startTime = 0
@@ -48,20 +63,6 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     const epoch = (Date.now() - startTime) / ttl
     const halfTTS = epoch % 1 > 0.5
     const epochId = Math.floor(epoch)
-    const cacheKey = calcCacheKey(keyFunction(args), epochId)
-
-    function persistKey() {
-      return `${persist?.name}-${persist?.version}-${cacheKey}`
-    }
-
-    async function ensurePersist(promise: Promise<any>) {
-      if (fetchR2Cache && persist) {
-        const r2Promise = fetchR2Cache(persistKey())
-        const value = await Promise.race([r2Promise, promise])
-        return value ?? promise
-      }
-      return promise
-    }
 
     // Setup next epoch cache if halfTTS passed
     if (halfTTS) {
@@ -73,6 +74,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
       }
     }
 
+    const cacheKey = calcCacheKey(keyFunction(args), epochId)
     // logger(cacheKey, `exists=${cache.has(cacheKey)}`)
     if (cache.has(cacheKey)) {
       return ensurePersist(cache.get(cacheKey)!)
@@ -111,7 +113,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 }
 
 async function uploadR2(key: string, value: any) {
-  console.info('update cache', key)
+  console.info('update homepage cache', key)
   if (!process.env.OBJECT_CACHE_SECRET) {
     return
   }
