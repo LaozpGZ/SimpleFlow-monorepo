@@ -5,6 +5,13 @@ import { useQuery } from '@tanstack/react-query'
 import { UnsafeCurrency } from 'config/constants/types'
 import { getMetadata, getTokenAddress } from '../api'
 
+export class BridgeTradeError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = 'BridgeTradeError'
+  }
+}
+
 export function useBridgeMetadata({
   inputAmount,
   outputCurrency,
@@ -30,7 +37,7 @@ export function useBridgeMetadata({
       })
 
       if (!metadata.supported) {
-        throw new Error(metadata.reason)
+        throw new BridgeTradeError(metadata.reason)
       }
 
       const outputAmount = CurrencyAmount.fromRawAmount(outputCurrency!, metadata.minOutputAmount)
@@ -53,6 +60,6 @@ export function useBridgeMetadata({
         },
       }
     },
-    enabled: !!inputAmount && !!outputCurrency && inputAmount.greaterThan(0),
+    enabled: !!inputAmount && !!outputCurrency && inputAmount.greaterThan(0) && originChainId !== destinationChainId,
   })
 }

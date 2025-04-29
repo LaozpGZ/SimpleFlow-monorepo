@@ -15,6 +15,7 @@ import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { MevSwapDetail } from 'views/Mev/MevSwapDetail'
 import { MevToggle } from 'views/Mev/MevToggle'
+import { isBridgeOrder } from 'views/Swap/utils'
 import { SwapType } from '../../Swap/types'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { useBuyCryptoInfo } from '../hooks/useBuyCryptoInfo'
@@ -39,7 +40,7 @@ export const InfinitySwapForm = memo(() => {
   const { shouldShowBuyCrypto, buyCryptoLink } = useBuyCryptoInfo(bestOrder)
 
   const executionPrice = useMemo(
-    () => (bestOrder?.trade ? SmartRouter.getExecutionPrice(bestOrder.trade) : undefined),
+    () => (bestOrder?.trade && !isBridgeOrder(bestOrder) ? SmartRouter.getExecutionPrice(bestOrder.trade) : undefined),
     [bestOrder?.trade],
   )
   const { isPriceImpactTooHigh } = useIsPriceImpactTooHigh(!tradeError ? bestOrder : undefined, !tradeLoaded)

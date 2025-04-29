@@ -1,7 +1,7 @@
 import { parseProtocolFeesToNumbers } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Rounding } from '@pancakeswap/sdk'
-import { InfinityBinPool, InfinityClPool, Route, SmartRouter } from '@pancakeswap/smart-router'
+import { InfinityBinPool, InfinityClPool, Route, RouteType, SmartRouter } from '@pancakeswap/smart-router'
 import {
   AtomBox,
   AutoColumn,
