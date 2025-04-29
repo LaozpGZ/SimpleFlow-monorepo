@@ -16,7 +16,7 @@ import { FeeAmount } from '@pancakeswap/v3-sdk'
 import { BIPS_BASE, INPUT_FRACTION_AFTER_FEE } from 'config/constants/exchange'
 import { Field } from 'state/swap/actions'
 import { basisPointsToPercent } from 'utils/exchange'
-import { InterfaceOrder } from 'views/Swap/utils'
+import { InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
 
 export type SlippageAdjustedAmounts = {
   [field in Field]?: CurrencyAmount<Currency> | null
@@ -32,6 +32,13 @@ export function computeSlippageAdjustedAmounts(
   order: InterfaceOrder | undefined | null,
   allowedSlippage: number,
 ): SlippageAdjustedAmounts {
+  if (isBridgeOrder(order)) {
+    return {
+      [Field.INPUT]: order.trade.inputAmount,
+      [Field.OUTPUT]: order.trade.outputAmount,
+    }
+  }
+
   if (order?.type === OrderType.DUTCH_LIMIT) {
     return {
       [Field.INPUT]: order.trade.maximumAmountIn,
