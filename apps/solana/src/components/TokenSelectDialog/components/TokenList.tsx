@@ -13,8 +13,8 @@ import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import { isValidPublicKey } from '@/utils/publicKey'
 import { sortItems } from '@/utils/sortItems'
 import { filterTokenFn } from '@/utils/token'
-import { Box, Divider, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react'
-import { Input, InputGroup, SearchIcon } from '@pancakeswap/uikit'
+import { Box, Divider, Flex, Heading, SimpleGrid } from '@chakra-ui/react'
+import { Input, InputGroup, SearchIcon, Text } from '@pancakeswap/uikit'
 import { TokenInfo } from '@raydium-io/raydium-sdk-v2'
 import { PublicKey } from '@solana/web3.js'
 import Decimal from 'decimal.js'
@@ -191,10 +191,10 @@ export default forwardRef<
         />
       </InputGroup>
 
-      <Box pb="8px">
-        <Heading fontSize="xs" fontWeight={500} color={colors.textTertiary} py="12px">
+      <Box pb="8px" my="12px">
+        <Text fontSize="14px" py="12px">
           {t('common.popular_tokens')}
-        </Heading>
+        </Text>
 
         <SimpleGrid gridTemplateColumns="repeat(auto-fill, minmax(80px, 1fr))" gap={3}>
           <PopularTokenCell token={USDC} onClick={(token) => onChooseToken(token)} disabled={usdcDisabled} />
