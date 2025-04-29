@@ -12,7 +12,8 @@ import {
 } from 'quoter/atom/abortControlAtoms'
 import { baseAllTypeBestTradeAtom, pauseAtom, userTypingAtom } from 'quoter/atom/bestTradeUISyncAtom'
 import { updatePlaceholderAtom } from 'quoter/atom/placeholderAtom'
-import { QuoteQuery } from 'quoter/quoter.types'
+import { fetchCommonPoolsOnChain } from 'quoter/atom/poolsAtom'
+import { PoolQuery, QuoteQuery } from 'quoter/quoter.types'
 import { useEffect, useRef } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
 import { Field } from 'state/swap/actions'
@@ -91,6 +92,22 @@ export const useQuoterSync = () => {
   const viemProvider = useAtomValue(abortableViemProviderAtom(quoteQuery.hash))
   quoteQuery.signal = abortController.signal
   quoteQuery.provider = viemProvider
+
+  useEffect(() => {
+    const poolQuery: PoolQuery = {
+      quoteHash: quoteQuery.hash,
+      currencyA: quoteQuery?.amount?.currency,
+      currencyB: quoteQuery.currency || undefined,
+      options: {},
+      chainId,
+      infinity: quoteQuery.infinitySwap,
+      v2Pools: !!quoteQuery.v2Swap,
+      v3Pools: !!quoteQuery.v3Swap,
+      signal: quoteQuery.signal,
+      provider: quoteQuery.provider,
+    }
+    fetchCommonPoolsOnChain(poolQuery)
+  }, [quoteQuery.hash])
 
   useEffect(() => {
     for (let i = 0; i < historyHashes.current.length; i++) {

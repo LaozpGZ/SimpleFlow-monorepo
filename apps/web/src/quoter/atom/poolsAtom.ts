@@ -7,21 +7,37 @@ import { PoolQuery } from 'quoter/quoter.types'
 import { isEqualPoolQuery } from 'quoter/utils/PoolHashHelper'
 import { poolQueriesFactory } from 'quoter/utils/poolQueries'
 
+export const fetchCommonPoolsOnChain = async (query: PoolQuery) => {
+  const queries = poolQueriesFactory(query.currencyA?.chainId || ChainId.BSC)
+  try {
+    const poolsArray = await Promise.all([
+      queries.getStableSwapPools(query),
+      queries.getV2CandidatePools(query),
+      queries.getV3PoolsWithTicksOnChain(query),
+      queries.getInfinityCandidatePools(query),
+    ])
+    return poolsArray.flat() as Pool[]
+  } catch (ex) {
+    console.warn(ex)
+    return []
+  }
+}
 export const commonPoolsOnChainAtom = atomFamily((query: PoolQuery) => {
   return atom(async () => {
-    const queries = poolQueriesFactory(query.currencyA?.chainId || ChainId.BSC)
-    try {
-      const poolsArray = await Promise.all([
-        queries.getStableSwapPools(query),
-        queries.getV2CandidatePools(query),
-        queries.getV3PoolsWithTicksOnChain(query),
-        queries.getInfinityCandidatePools(query),
-      ])
-      return poolsArray.flat() as Pool[]
-    } catch (ex) {
-      console.warn(ex)
-      return []
-    }
+    return fetchCommonPoolsOnChain(query)
+    // const queries = poolQueriesFactory(query.currencyA?.chainId || ChainId.BSC)
+    // try {
+    //   const poolsArray = await Promise.all([
+    //     queries.getStableSwapPools(query),
+    //     queries.getV2CandidatePools(query),
+    //     queries.getV3PoolsWithTicksOnChain(query),
+    //     queries.getInfinityCandidatePools(query),
+    //   ])
+    //   return poolsArray.flat() as Pool[]
+    // } catch (ex) {
+    //   console.warn(ex)
+    //   return []
+    // }
   })
 }, isEqualPoolQuery)
 
