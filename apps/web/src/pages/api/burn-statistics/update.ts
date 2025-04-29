@@ -66,7 +66,6 @@ async function _updateBurnStatistics() {
 
 const updateBurnStatistics = cacheByLRU(_updateBurnStatistics, {
   ttl: 60 * 1000, // 1 minute
-  maxCacheSize: 1,
   persist: {
     name: 'burn-statistics',
     version: 'v1',
