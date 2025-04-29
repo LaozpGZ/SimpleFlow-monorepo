@@ -241,7 +241,6 @@ export default forwardRef<
               </InputGroup>
             </Flex>
             <Button
-              variant="solid-dark"
               width="full"
               bg={colors.backgroundDark}
               onClick={() => {

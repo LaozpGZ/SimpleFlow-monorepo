@@ -2,7 +2,7 @@ import { useEvent } from '@/hooks/useEvent'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { colors } from '@/theme/cssVariables'
 import { Box, Grid, GridItem, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import { Text } from '@pancakeswap/uikit'
+import { ModalBackButton, Text } from '@pancakeswap/uikit'
 import { TokenInfo } from '@raydium-io/raydium-sdk-v2'
 import { forwardRef, useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -60,15 +60,11 @@ export default forwardRef<TokenListHandles, TokenSelectDialogProps>(function Tok
     () => (
       <>
         <ModalHeader>
-          <Grid templateColumns="1fr 3fr 1fr" mb="24px">
-            <GridItem alignSelf="center" cursor="pointer" textAlign="left" onClick={() => setCurrentPage(PageType.TokenList)}>
-              <ChevronLeftIcon width="24px" fontWeight={500} />
-            </GridItem>
-            <GridItem textAlign="center">
-              <Heading fontSize="xl" fontWeight={500} color={colors.textPrimary}>
-                {t('common.token_list_settings')}
-              </Heading>
-            </GridItem>
+          <Grid templateColumns="1fr 3fr 1fr" mb="24px" alignItems="center">
+            <ModalBackButton onBack={() => setCurrentPage(PageType.TokenList)} />
+            <Text bold textAlign="center">
+              {t('common.token_list_settings')}
+            </Text>
             <GridItem textAlign="right" />
           </Grid>
         </ModalHeader>
