@@ -8,6 +8,7 @@ export default defineConfig((options) => ({
   },
   format: ['esm', 'cjs'],
   skipNodeModulesBundle: true,
+  noExternal: ['@pancakeswap/utils'],
   dts: false,
   treeshake: true,
   splitting: true,
