@@ -14,7 +14,7 @@ import { PoolHashHelper } from './PoolHashHelper'
 export const poolQueriesFactory = memoize((chainId: ChainId) => {
   const POOL_TTL = POOLS_FAST_REVALIDATE[chainId] || 10_000
   function getCacheKey(args: [PoolQuery]) {
-    const query: PoolQuery = { ...args[0], quoteHash: '', infinity: false, v2Pools: false, v3Pools: false }
+    const query: PoolQuery = { ...args[0], quoteHash: '', infinity: false, v2Pools: false, v3Pools: false, for: '' }
     const hash = PoolHashHelper.hashPoolQuery(query)
     return hash
   }
