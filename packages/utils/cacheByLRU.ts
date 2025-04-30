@@ -100,12 +100,19 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     }
 
     if (autoRevalidate) {
-      clearTimeout(halfTTSTimer!)
-      clearInterval(revalidateTimer!)
+      let max = 5
+      const stop = () => {
+        clearTimeout(halfTTSTimer!)
+        clearInterval(revalidateTimer!)
+      }
+      stop()
       let onEpoch = epochId + 1
       halfTTSTimer = setTimeout(() => {
         revalidateTimer = setInterval(() => {
           cacheForEpoch(onEpoch++)
+          if (--max === 0) {
+            stop()
+          }
         }, autoRevalidate)
       })
     }
