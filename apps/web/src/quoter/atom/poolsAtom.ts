@@ -17,7 +17,6 @@ export const fetchCommonPoolsOnChain = async (query: PoolQuery) => {
       queries.getV3PoolsWithTicksOnChain(query),
       queries.getInfinityCandidatePools(query),
     ])
-    console.log('[quote] find pools', Date.now() - t)
     return poolsArray.flat() as Pool[]
   } catch (ex) {
     console.warn(ex)
