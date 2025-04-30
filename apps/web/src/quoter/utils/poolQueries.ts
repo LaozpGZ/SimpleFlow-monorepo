@@ -18,6 +18,12 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     const hash = PoolHashHelper.hashPoolQuery(query)
     return hash
   }
+
+  function createRevalidateKey(id: string) {
+    return function getRevalidateKey(args: [PoolQuery]) {
+      return [id, args[0].for].join('/')
+    }
+  }
   function isValid(result: Pool[]) {
     return result && result.length > 0
   }
@@ -38,7 +44,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       autoRevalidate: {
-        id: 'getV2CandidatePools',
+        key: createRevalidateKey('getV2CandidatePools'),
         interval: POOL_TTL,
       },
       key: getCacheKey,
@@ -60,7 +66,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       autoRevalidate: {
-        id: 'getV3CandidatePools',
+        key: createRevalidateKey('getV3CandidatePools'),
         interval: POOL_TTL,
       },
       key: getCacheKey,
@@ -90,7 +96,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       autoRevalidate: {
-        id: 'getV3CandidatePoolsWithoutTicks',
+        key: createRevalidateKey('getV3CandidatePoolsWithoutTicks'),
         interval: POOL_TTL,
       },
       key: getCacheKey,
@@ -105,7 +111,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     return _getV3CandidatePoolsWithoutTicks(options)
   }
 
-  const getV3PoolsWithTicksOnChain = cacheByLRU(
+  const _getV3PoolsWithTicksOnChain = cacheByLRU(
     async (query: PoolQuery) => {
       if (!query.v3Pools) {
         return []
@@ -124,9 +130,20 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      autoRevalidate: {
+        key: createRevalidateKey('getV3PoolsWithTicksOnChain'),
+        interval: POOL_TTL,
+      },
       isValid,
     },
   )
+
+  const getV3PoolsWithTicksOnChain = async (query: PoolQuery) => {
+    if (!query.v3Pools) {
+      return []
+    }
+    return _getV3PoolsWithTicksOnChain(query)
+  }
 
   const fillV3Ticks = async (pools: V3Pool[]) => {
     const poolTicks = await Promise.all(
@@ -187,7 +204,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       autoRevalidate: {
-        id: 'getInfinityBinCandidatePoolsWithoutBins',
+        key: createRevalidateKey('getInfinityBinCandidatePoolsWithoutBins'),
         interval: POOL_TTL,
       },
       key: getCacheKey,
@@ -216,7 +233,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       autoRevalidate: {
-        id: 'getInfinityClCandidatePools',
+        key: createRevalidateKey('getInfinityClCandidatePools'),
         interval: POOL_TTL,
       },
       key: getCacheKey,
@@ -244,7 +261,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       autoRevalidate: {
-        id: 'getInfinityCandidatePoolsLight',
+        key: createRevalidateKey('getInfinityCandidatePoolsLight'),
         interval: POOL_TTL,
       },
       key: getCacheKey,
@@ -274,7 +291,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
       ttl: POOL_TTL,
       key: getCacheKey,
       autoRevalidate: {
-        id: 'getInfinityCandidatePools',
+        key: createRevalidateKey('getInfinityCandidatePools'),
         interval: POOL_TTL,
       },
       isValid,
@@ -303,7 +320,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
       ttl: POOL_TTL,
       key: getCacheKey,
       autoRevalidate: {
-        id: 'getInfinityClCandidatePoolsWithoutTicks',
+        key: createRevalidateKey('getInfinityClCandidatePoolsWithoutTicks'),
         interval: POOL_TTL,
       },
       isValid,
@@ -332,7 +349,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       autoRevalidate: {
-        id: 'getStableSwapPools',
+        key: createRevalidateKey('getStableSwapPools'),
         interval: POOL_TTL,
       },
       key: getCacheKey,

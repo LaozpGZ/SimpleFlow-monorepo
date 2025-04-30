@@ -40,6 +40,7 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
             options: {
               blockNumber: option.blockNumber,
             },
+            for: option.for,
           }),
         ),
         get(gasPriceWeiAtom(currency?.chainId)),

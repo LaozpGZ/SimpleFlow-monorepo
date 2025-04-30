@@ -3,6 +3,13 @@ import { keccak256, stringify } from 'viem'
 
 type AsyncFunction<T extends any[]> = (...args: T) => Promise<any>
 
+interface CacheItem {
+  promise: Promise<any>
+  resolved: any
+  createTime: number
+  epochId: number
+}
+
 // Type definitions for the cache.
 type CacheOptions<T extends AsyncFunction<any>> = {
   maxCacheSize?: number
@@ -15,7 +22,7 @@ type CacheOptions<T extends AsyncFunction<any>> = {
   key?: (params: Parameters<T>) => any
   isValid?: (result: any) => boolean
   autoRevalidate?: {
-    id: string
+    key: (params: Parameters<T>) => string
     interval: number
   }
 }
@@ -50,7 +57,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
   fn: T,
   { ttl, key, maxCacheSize, persist, isValid, autoRevalidate }: CacheOptions<T>,
 ) => {
-  const cache = new QuickLRU<string, Promise<any>>({
+  const cache = new QuickLRU<string, CacheItem>({
     maxAge: ttl,
     maxSize: maxCacheSize || 1000,
   })
@@ -66,13 +73,13 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     return `${persist?.name}-${persist?.version}-${cacheKey}`
   }
 
-  async function ensurePersist(promise: Promise<any>, cacheKey: string) {
+  async function ensurePersist(item: CacheItem, cacheKey: string) {
     if (fetchR2Cache && persist) {
       const r2Promise = fetchR2Cache(persistKey(cacheKey))
-      const value = await Promise.race([r2Promise, promise])
-      return value ?? promise
+      const value = await Promise.race([r2Promise, item.promise])
+      return value ?? item.promise
     }
-    return promise
+    return item.promise
   }
 
   let startTime = 0
@@ -85,14 +92,22 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     const halfTTS = epoch % 1 > 0.5
     const epochId = Math.floor(epoch)
 
-    const cacheForEpoch = async (epochId: number) => {
+    const cacheForEpoch = (epochId: number) => {
       const cacheKey = calcCacheKey(keyFunction(args), epochId)
       if (cache.has(cacheKey)) {
-        return ensurePersist(cache.get(cacheKey)!, cacheKey)
+        return cache.get(cacheKey)!
       }
       // @ts-ignore
       const promise = fn(...args)
-      cache.set(cacheKey, promise)
+      const item = {
+        promise,
+        resolved: undefined,
+        createTime: Date.now(),
+        epochId,
+      }
+      item.promise = ensurePersist(item, cacheKey)
+      cache.set(cacheKey, item)
+
       promise
         .then((result) => {
           if (!result) {
@@ -103,6 +118,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
             cache.delete(cacheKey)
             return
           }
+          item.resolved = result
           const jsonResult = stringify(result)
           if (persist && result && jsonResult !== '{}' && jsonResult !== '[]') {
             uploadR2(persistKey(cacheKey), result).catch((ex) => {
@@ -115,12 +131,13 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
           cache.delete(cacheKey)
         })
 
-      return ensurePersist(promise, cacheKey)
+      return item
     }
 
     if (autoRevalidate) {
       let max = 30 // TTS(around 10) * 30 = 300s
-      const timers = getTimer(autoRevalidate.id)
+      const id = autoRevalidate.key(args)
+      const timers = getTimer(id)
       const stop = () => {
         clearTimeout(timers.halfTTSTimer!)
         clearInterval(timers.invalidateTimer!)
@@ -140,7 +157,15 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
       cacheForEpoch(epochId + 1)
     }
 
-    return cacheForEpoch(epochId)
+    const current = cacheForEpoch(epochId)
+    if (current.resolved) {
+      return current.promise
+    }
+    const prevCacheKey = calcCacheKey(keyFunction(args), epochId - 1)
+    if (cache.has(prevCacheKey)) {
+      return cache.get(prevCacheKey)!.promise
+    }
+    return current.promise
   }
 }
 

@@ -84,6 +84,7 @@ export const useQuoterSync = () => {
     blockNumber,
     nonce,
     hash: '',
+    for: 'main',
   }
 
   const quoteQuery = createQuoteQuery(quoteQueryInit)

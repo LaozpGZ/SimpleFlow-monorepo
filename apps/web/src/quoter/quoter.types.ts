@@ -57,6 +57,7 @@ export interface PoolQuery {
   v3Pools: boolean
   signal?: AbortSignal
   provider?: typeof getViemClients
+  for?: string
 }
 interface PoolsHookParams {
   // Used for caching
@@ -77,6 +78,7 @@ export type QuoteQuery = Options & {
   provider?: typeof getViemClients
   nonce?: number
   placeholderHash?: string
+  for?: string
 }
 
 export interface StrategyQuery {
