@@ -4,17 +4,12 @@ import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useCurrency } from 'hooks/Tokens'
 import { useInputBasedAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import {
-  abortableViemProviderAtom,
-  abortControllerAtom,
-  abortSignalAtom,
-  activeQuoteHashAtom,
-} from 'quoter/atom/abortControlAtoms'
+import { activeQuoteHashAtom } from 'quoter/atom/abortControlAtoms'
 import { baseAllTypeBestTradeAtom, pauseAtom, userTypingAtom } from 'quoter/atom/bestTradeUISyncAtom'
 import { updatePlaceholderAtom } from 'quoter/atom/placeholderAtom'
 import { fetchCommonPoolsOnChain } from 'quoter/atom/poolsAtom'
 import { PoolQuery, QuoteQuery } from 'quoter/quoter.types'
-import { useEffect, useRef } from 'react'
+import { useEffect } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
@@ -24,7 +19,7 @@ import { quoteNonceAtom } from '../atom/revalidateAtom'
 import { createQuoteQuery } from '../utils/createQuoteQuery'
 import { useQuoteContext } from './QuoteContext'
 
-const REVALIDATE_TIME = 10
+const REVALIDATE_TIME = 7
 
 export const useQuoterSync = () => {
   const swapState = useSwapState()
@@ -62,8 +57,6 @@ export const useQuoterSync = () => {
   const { slippageTolerance: slippage } = useInputBasedAutoSlippageWithFallback(amount)
   const blockNumber = useCurrentBlock()
   const setActiveQuoteHash = useSetAtom(activeQuoteHashAtom)
-  const historyHashes = useRef<string[]>([])
-  const abortQuote = useSetAtom(abortSignalAtom)
   const [nonce, setNonce] = useAtom(quoteNonceAtom)
 
   const quoteQueryInit: QuoteQuery = {
@@ -85,14 +78,12 @@ export const useQuoterSync = () => {
     nonce,
     hash: '',
     for: 'main',
+    createTime: Date.now(),
   }
 
   const quoteQuery = createQuoteQuery(quoteQueryInit)
   const setPlaceholder = useSetAtom(updatePlaceholderAtom)
-  const abortController = useAtomValue(abortControllerAtom(quoteQuery.hash))
-  const viemProvider = useAtomValue(abortableViemProviderAtom(quoteQuery.hash))
-  quoteQuery.signal = abortController.signal
-  quoteQuery.provider = viemProvider
+  const quoteHistory: QuoteQuery[] = []
 
   useEffect(() => {
     if (!inputCurrency || !outputCurrency) {
@@ -114,11 +105,12 @@ export const useQuoterSync = () => {
   }, [quoteQuery.hash, inputCurrency, outputCurrency])
 
   useEffect(() => {
-    for (let i = 0; i < historyHashes.current.length; i++) {
-      const hash = historyHashes.current[i]
-      abortQuote(hash)
+    while (quoteHistory.length > 0) {
+      const historyQuote = quoteHistory.pop()
+      historyQuote?.controller?.abort()
     }
-    historyHashes.current = [quoteQuery.hash]
+
+    quoteHistory.push(quoteQuery)
     setActiveQuoteHash(quoteQuery.hash)
   }, [quoteQuery.hash])
 
@@ -129,9 +121,9 @@ export const useQuoterSync = () => {
   const quoteResult = useAtomValue(bestQuoteAtom(quoteQuery))
   useEffect(() => {
     let t = 0
-    const pauseTimer = paused || quoteResult.loading
     const interval = setInterval(() => {
-      if (pauseTimer) {
+      const outdated = Date.now() - quoteQuery.createTime! > REVALIDATE_TIME
+      if (paused || (!outdated && quoteResult.loading)) {
         return
       }
       if (t > 0) {

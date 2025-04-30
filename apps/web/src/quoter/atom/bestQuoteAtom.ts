@@ -77,8 +77,6 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
       }
 
       const strategies = getRoutingStrategy()
-      const shadowStrategy = strategies.find((x) => x.isShadow)!
-      const shadowQuote = executeRoutes([shadowStrategy], option)
       const others = strategies.filter((x) => !x.isShadow)
       const p1 = others.filter((x) => x.priority === 1)
       const p2 = others.filter((x) => x.priority === 2)
@@ -93,13 +91,10 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
             type: option.tradeType || TradeType.EXACT_INPUT,
             time: Date.now() - time,
           })
-          if ((quote.loading || quote.error) && shadowQuote?.data) {
-            return shadowQuote
-          }
           return quote
         }
       }
-      return shadowQuote || errorLoadable<InterfaceOrder | undefined>(new NoValidRouteError())
+      return errorLoadable<InterfaceOrder | undefined>(new NoValidRouteError())
     } catch (ex) {
       // eslint-disable-next-line no-console
       console.warn(`[quote]`, ex)
