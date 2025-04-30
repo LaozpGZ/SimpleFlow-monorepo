@@ -59,15 +59,17 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
     () => ({
       appName: 'canonical-bridge',
       assetPrefix: env.ASSET_PREFIX,
-      appearance: {
-        bridgeTitle: 'Bridge',
+      bridgeTitle: 'Bridge',
+      theme: {
         colorMode: theme.isDark ? 'dark' : 'light',
-        theme: {
+        breakpoints,
+        colors: {
           dark,
           light,
-          breakpoints,
         },
-        locale: currentLanguage.code,
+      },
+      locale: {
+        language: currentLanguage.code,
         messages: locales[currentLanguage.code] ?? locales.en,
       },
       http: {
@@ -82,7 +84,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       chains: supportedChains,
       onError: handleError,
     }),
-    [currentLanguage.code, theme.isDark, transferConfig, supportedChainIds, props.rpcConfig, handleError],
+    [currentLanguage.code, theme.isDark, transferConfig, supportedChains, props.rpcConfig, handleError],
   )
 
   return (
