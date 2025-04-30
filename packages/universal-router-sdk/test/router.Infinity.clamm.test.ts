@@ -1,7 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { ACTIONS, decodePoolKey, POOL_TYPE } from '@pancakeswap/infinity-sdk'
 import { CurrencyAmount, ERC20Token, Ether, Percent, TradeType, ZERO_ADDRESS } from '@pancakeswap/sdk'
-import { InfinityBinPool, InfinityClPool, MSG_SENDER, SmartRouter } from '@pancakeswap/smart-router'
+import { InfinityClPool, MSG_SENDER, SmartRouter } from '@pancakeswap/smart-router'
 import { ADDRESS_ZERO } from '@pancakeswap/v3-sdk'
 import { isHex, parseEther, stringify } from 'viem'
 import { beforeEach, describe, expect, it } from 'vitest'
@@ -45,7 +45,6 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
   let ETH_CAKE_CL_INFI: InfinityClPool
   let ETH_USDC_CL_INFI: InfinityClPool
   let WETH_USDC_CL_INFI: InfinityClPool
-  let WETH_CAKE_CL_INFI: InfinityBinPool
   expect.addSnapshotSerializer({
     serialize(val) {
       return stringify(decodeUniversalCalldata(val), null, 2)
@@ -73,7 +72,6 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
 
       const { calldata, value } = PancakeSwapUniversalRouter.swapERC20CallParameters(trade, options)
       expect(calldata).toMatchSnapshot()
-      const minOut = SmartRouter.minimumAmountOut(trade, options.slippageTolerance)
 
       expect(BigInt(value)).toEqual(amountIn)
       // expect(calldata).toMatchSnapshot()
@@ -111,7 +109,6 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
 
       const { calldata, value } = PancakeSwapUniversalRouter.swapERC20CallParameters(trade, options)
       expect(calldata).toMatchSnapshot()
-      const minOut = SmartRouter.minimumAmountOut(trade, options.slippageTolerance)
 
       expect(BigInt(value)).toEqual(0n)
       // expect(calldata).toMatchSnapshot()
@@ -146,7 +143,6 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
 
       const { calldata, value } = PancakeSwapUniversalRouter.swapERC20CallParameters(trade, options)
       expect(calldata).toMatchSnapshot()
-      const minOut = SmartRouter.minimumAmountOut(trade, options.slippageTolerance)
 
       expect(BigInt(value)).toEqual(0n)
       // expect(calldata).toMatchSnapshot()
@@ -377,7 +373,6 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
       const { calldata, value } = PancakeSwapUniversalRouter.swapERC20CallParameters(trade, options)
       const maxInAmount = SmartRouter.maximumAmountIn(trade, options.slippageTolerance).quotient
       const minOutAmount = SmartRouter.minimumAmountOut(trade, options.slippageTolerance).quotient
-      console.log('minOut', minOutAmount)
 
       expect(BigInt(value)).toEqual(0n)
       const decodedCommands = decodeUniversalCalldata(calldata)
