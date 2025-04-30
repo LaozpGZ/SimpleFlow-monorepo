@@ -37,6 +37,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
+      autoRevalidate: POOL_TTL,
       key: getCacheKey,
       isValid,
     },
@@ -55,6 +56,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
+      autoRevalidate: POOL_TTL,
       key: getCacheKey,
       isValid,
     },
@@ -81,6 +83,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
+      autoRevalidate: POOL_TTL,
       key: getCacheKey,
       isValid,
     },
@@ -174,6 +177,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
+      autoRevalidate: POOL_TTL,
       key: getCacheKey,
       isValid,
     },
@@ -199,6 +203,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
+      autoRevalidate: POOL_TTL,
       key: getCacheKey,
       isValid,
     },
@@ -223,6 +228,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
+      autoRevalidate: POOL_TTL,
       key: getCacheKey,
       isValid,
     },
@@ -249,6 +255,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      autoRevalidate: POOL_TTL,
       isValid,
     },
   )
@@ -274,6 +281,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      autoRevalidate: POOL_TTL,
       isValid,
     },
   )
@@ -299,6 +307,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
+      autoRevalidate: POOL_TTL,
       key: getCacheKey,
       isValid,
     },

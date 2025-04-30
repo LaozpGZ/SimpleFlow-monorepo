@@ -14,6 +14,7 @@ type CacheOptions<T extends AsyncFunction<any>> = {
   }
   key?: (params: Parameters<T>) => any
   isValid?: (result: any) => boolean
+  autoRevalidate?: number
 }
 
 function calcCacheKey(args: any[], epoch: number) {
@@ -26,7 +27,7 @@ const identity = (args: any) => args
 
 export const cacheByLRU = <T extends AsyncFunction<any>>(
   fn: T,
-  { ttl, key, maxCacheSize, persist, isValid }: CacheOptions<T>,
+  { ttl, key, maxCacheSize, persist, isValid, autoRevalidate }: CacheOptions<T>,
 ) => {
   const cache = new QuickLRU<string, Promise<any>>({
     maxAge: ttl,
@@ -40,6 +41,21 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 
   const keyFunction = key || identity
 
+  function persistKey(cacheKey: string) {
+    return `${persist?.name}-${persist?.version}-${cacheKey}`
+  }
+
+  async function ensurePersist(promise: Promise<any>, cacheKey: string) {
+    if (fetchR2Cache && persist) {
+      const r2Promise = fetchR2Cache(persistKey(cacheKey))
+      const value = await Promise.race([r2Promise, promise])
+      return value ?? promise
+    }
+    return promise
+  }
+
+  let revalidateTimer: NodeJS.Timeout | null = null
+  let halfTTSTimer: NodeJS.Timeout | null = null
   let startTime = 0
   return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
     // Start Time
@@ -49,73 +65,55 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     const epoch = (Date.now() - startTime) / ttl
     const halfTTS = epoch % 1 > 0.5
     const epochId = Math.floor(epoch)
-    const cacheKey = calcCacheKey(keyFunction(args), epochId)
 
-    function persistKey() {
-      return `${persist?.name}-${persist?.version}-${cacheKey}`
-    }
-
-    async function ensurePersist(promise: Promise<any>) {
-      if (fetchR2Cache && persist) {
-        const r2Promise = fetchR2Cache(persistKey())
-        const value = await Promise.race([r2Promise, promise])
-        return value ?? promise
+    const cacheForEpoch = async (epochId: number) => {
+      const cacheKey = calcCacheKey(keyFunction(args), epochId)
+      if (cache.has(cacheKey)) {
+        return ensurePersist(cache.get(cacheKey)!, cacheKey)
       }
-      return promise
-    }
-
-    // Setup next epoch cache if halfTTS passed
-    if (halfTTS) {
-      const nextKey = calcCacheKey(keyFunction(args), epochId + 1)
-      if (!cache.has(nextKey)) {
-        // @ts-ignore
-        const nextPromise = fn(...args)
-        cache.set(nextKey, nextPromise)
-      }
-    }
-
-    // logger(cacheKey, `exists=${cache.has(cacheKey)}`)
-    if (cache.has(cacheKey)) {
-      return ensurePersist(cache.get(cacheKey)!)
-    }
-
-    // @ts-ignore
-    const promise = fn(...args)
-
-    cache.set(cacheKey, promise)
-
-    if (epochId > 0) {
-      const prevKey = calcCacheKey(keyFunction(args), epochId - 1)
-      if (cache.has(prevKey)) {
-        return cache.get(prevKey)
-      }
-    }
-
-    try {
-      // Persist to R2 or other storage
-      promise.then((result) => {
-        if (!result) {
+      // @ts-ignore
+      const promise = fn(...args)
+      cache.set(cacheKey, promise)
+      promise
+        .then((result) => {
+          if (!result) {
+            cache.delete(cacheKey)
+            return
+          }
+          if (isValid && !isValid(result)) {
+            cache.delete(cacheKey)
+            return
+          }
+          const jsonResult = stringify(result)
+          if (persist && result && jsonResult !== '{}' && jsonResult !== '[]') {
+            uploadR2(persistKey(cacheKey), result).catch((ex) => {
+              console.error('Failed to persist cache', ex)
+            })
+          }
+        })
+        .catch((error) => {
+          console.error('Cache promise failed', error)
           cache.delete(cacheKey)
-          return
-        }
-        if (isValid && !isValid(result)) {
-          cache.delete(cacheKey)
-          return
-        }
-        const jsonResult = stringify(result)
-        if (persist && result && jsonResult !== '{}' && jsonResult !== '[]') {
-          uploadR2(persistKey(), result).catch((ex) => {
-            console.error('Failed to persist cache', ex)
-          })
-        }
+        })
+
+      return ensurePersist(promise, cacheKey)
+    }
+
+    if (autoRevalidate) {
+      clearTimeout(halfTTSTimer!)
+      clearInterval(revalidateTimer!)
+      let onEpoch = epochId + 1
+      halfTTSTimer = setTimeout(() => {
+        revalidateTimer = setInterval(() => {
+          cacheForEpoch(onEpoch++)
+        }, autoRevalidate)
       })
-
-      return await ensurePersist(promise)
-    } catch (error) {
-      // logger('error', cacheKey, error)
-      cache.delete(cacheKey)
-      throw error
     }
+    if (!autoRevalidate && halfTTS) {
+      cacheForEpoch(epochId + 1)
+    }
+
+    return cacheForEpoch(epochId)
   }
 }
 
