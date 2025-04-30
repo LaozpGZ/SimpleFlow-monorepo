@@ -13,6 +13,7 @@ type CacheOptions<T extends AsyncFunction<any>> = {
     type: 'r2'
   }
   key?: (params: Parameters<T>) => any
+  isValid?: (result: any) => boolean
 }
 
 function calcCacheKey(args: any[], epoch: number) {
@@ -25,7 +26,7 @@ const identity = (args: any) => args
 
 export const cacheByLRU = <T extends AsyncFunction<any>>(
   fn: T,
-  { ttl, key, maxCacheSize, persist }: CacheOptions<T>,
+  { ttl, key, maxCacheSize, persist, isValid }: CacheOptions<T>,
 ) => {
   const cache = new QuickLRU<string, Promise<any>>({
     maxAge: ttl,
@@ -93,6 +94,14 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     try {
       // Persist to R2 or other storage
       promise.then((result) => {
+        if (!result) {
+          cache.delete(cacheKey)
+          return
+        }
+        if (isValid && !isValid(result)) {
+          cache.delete(cacheKey)
+          return
+        }
         const jsonResult = stringify(result)
         if (persist && result && jsonResult !== '{}' && jsonResult !== '[]') {
           uploadR2(persistKey(), result).catch((ex) => {
@@ -101,7 +110,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
         }
       })
 
-      return ensurePersist(promise)
+      return await ensurePersist(promise)
     } catch (error) {
       // logger('error', cacheKey, error)
       cache.delete(cacheKey)

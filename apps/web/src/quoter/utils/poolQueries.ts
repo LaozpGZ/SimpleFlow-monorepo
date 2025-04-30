@@ -1,28 +1,30 @@
 import { ChainId } from '@pancakeswap/chains'
 import { Protocol } from '@pancakeswap/farms'
-import { InfinityRouter, SmartRouter, V3Pool } from '@pancakeswap/smart-router'
+import { InfinityRouter, Pool, SmartRouter, V3Pool } from '@pancakeswap/smart-router'
 import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import { Tick } from '@pancakeswap/v3-sdk'
 import { POOLS_FAST_REVALIDATE } from 'config/pools'
 import { getPoolTicks } from 'hooks/useAllTicksQuery'
+import memoize from 'lodash/memoize'
 import { PoolQuery } from 'quoter/quoter.types'
 import { v2Clients, v3Clients } from 'utils/graphql'
 import { createViemPublicClientGetter, getViemClients } from 'utils/viem'
 import { PoolHashHelper } from './PoolHashHelper'
 
-export const poolQueriesFactory = (chainId: ChainId) => {
-  const POOL_TTL = POOLS_FAST_REVALIDATE[chainId] ?? 10_000
+export const poolQueriesFactory = memoize((chainId: ChainId) => {
+  const POOL_TTL = POOLS_FAST_REVALIDATE[chainId] || 10_000
   function getCacheKey(args: [PoolQuery]) {
-    const query: PoolQuery = { ...args[0], quoteHash: '' }
+    const query: PoolQuery = { ...args[0], quoteHash: '', infinity: false, v2Pools: false, v3Pools: false }
     const hash = PoolHashHelper.hashPoolQuery(query)
     return hash
   }
-  const getV2CandidatePools = cacheByLRU(
+  function isValid(result: Pool[]) {
+    return result && result.length > 0
+  }
+
+  const _getV2CandidatePools = cacheByLRU(
     async (query: PoolQuery) => {
       const { currencyA, currencyB } = query
-      if (!query.v2Pools) {
-        return []
-      }
       const provider = query.provider ?? getViemClients
       const pools = await SmartRouter.getV2CandidatePools({
         currencyA,
@@ -36,28 +38,36 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
+  const getV2CandidatePools = async (query: PoolQuery) => {
+    if (!query.v2Pools) {
+      return []
+    }
+    return _getV2CandidatePools(query)
+  }
 
-  const getV3CandidatePools = cacheByLRU(
+  const _getV3CandidatePools = cacheByLRU(
     async (options: PoolQuery) => {
-      if (!options.v3Pools) {
-        return []
-      }
       const pools = await getV3CandidatePoolsWithoutTicks(options)
       return fillV3Ticks(pools)
     },
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
+  const getV3CandidatePools = async (options: PoolQuery) => {
+    if (!options.v3Pools) {
+      return []
+    }
+    return _getV3CandidatePools(options)
+  }
 
-  const getV3CandidatePoolsWithoutTicks = cacheByLRU(
+  const _getV3CandidatePoolsWithoutTicks = cacheByLRU(
     async (options: PoolQuery) => {
-      if (!options.v3Pools) {
-        return [] as V3Pool[]
-      }
       const provider = options.provider ?? getViemClients
 
       const { currencyA, currencyB } = options
@@ -72,8 +82,16 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
+
+  const getV3CandidatePoolsWithoutTicks = async (options: PoolQuery) => {
+    if (!options.v3Pools) {
+      return [] as V3Pool[]
+    }
+    return _getV3CandidatePoolsWithoutTicks(options)
+  }
 
   const getV3PoolsWithTicksOnChain = cacheByLRU(
     async (query: PoolQuery) => {
@@ -94,6 +112,7 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
 
@@ -116,12 +135,8 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     }))
   }
 
-  const getInfinityBinCandidatePools = cacheByLRU(
+  const _getInfinityBinCandidatePools = cacheByLRU(
     async (query: PoolQuery) => {
-      if (!query.infinity) {
-        return []
-      }
-
       const provider = query.provider ?? getViemClients
 
       const pools = await InfinityRouter.getInfinityBinCandidatePools({
@@ -134,14 +149,20 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
 
-  const getInfinityBinCandidatePoolsWithoutBins = cacheByLRU(
+  const getInfinityBinCandidatePools = async (query: PoolQuery) => {
+    if (!query.infinity) {
+      return []
+    }
+
+    return _getInfinityBinCandidatePools(query)
+  }
+
+  const _getInfinityBinCandidatePoolsWithoutBins = cacheByLRU(
     async (query: PoolQuery) => {
-      if (!query.infinity) {
-        return []
-      }
       const provider = query.provider ?? getViemClients
 
       const pools = await InfinityRouter.getInfinityBinCandidatePoolsWithoutBins({
@@ -154,15 +175,19 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
 
-  const getInfinityClCandidatePools = cacheByLRU(
-    async (query: PoolQuery) => {
-      if (!query.infinity) {
-        return []
-      }
+  const getInfinityBinCandidatePoolsWithoutBins = async (query: PoolQuery) => {
+    if (!query.infinity) {
+      return []
+    }
+    return _getInfinityBinCandidatePoolsWithoutBins(query)
+  }
 
+  const _getInfinityClCandidatePools = cacheByLRU(
+    async (query: PoolQuery) => {
       const provider = query.provider ?? getViemClients
       const { currencyA, currencyB } = query
       const pools = await InfinityRouter.getInfinityClCandidatePools({
@@ -175,14 +200,18 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
+  const getInfinityClCandidatePools = async (query: PoolQuery) => {
+    if (!query.infinity) {
+      return []
+    }
+    return _getInfinityClCandidatePools(query)
+  }
 
-  const getInfinityCandidatePoolsLight = cacheByLRU(
+  const _getInfinityCandidatePoolsLight = cacheByLRU(
     async (query: PoolQuery) => {
-      if (!query.infinity) {
-        return []
-      }
       const provider = query.provider ?? getViemClients
       const { currencyA, currencyB } = query
       const pools = await InfinityRouter.getInfinityCandidatePoolsLite({
@@ -195,14 +224,19 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
 
-  const getInfinityCandidatePools = cacheByLRU(
+  const getInfinityCandidatePoolsLight = async (query: PoolQuery) => {
+    if (!query.infinity) {
+      return []
+    }
+    return _getInfinityCandidatePoolsLight(query)
+  }
+
+  const _getInfinityCandidatePools = cacheByLRU(
     async (query: PoolQuery) => {
-      if (!query.infinity) {
-        return []
-      }
       const provider = query.provider ?? getViemClients
       const { currencyA, currencyB } = query
       const pools = await InfinityRouter.getInfinityCandidatePools({
@@ -215,14 +249,19 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
 
-  const getInfinityClCandidatePoolsWithoutTicks = cacheByLRU(
+  const getInfinityCandidatePools = async (query: PoolQuery) => {
+    if (!query.infinity) {
+      return []
+    }
+    return _getInfinityCandidatePools(query)
+  }
+
+  const _getInfinityClCandidatePoolsWithoutTicks = cacheByLRU(
     async (query: PoolQuery) => {
-      if (!query.infinity) {
-        return []
-      }
       const provider = query.provider ?? getViemClients
       const { currencyA, currencyB } = query
       const pools = await InfinityRouter.getInfinityClCandidatePoolsWithoutTicks({
@@ -235,18 +274,23 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
 
-  const getStableSwapPools = cacheByLRU(
+  const getInfinityClCandidatePoolsWithoutTicks = async (query: PoolQuery) => {
+    if (!query.infinity) {
+      return []
+    }
+    return _getInfinityClCandidatePoolsWithoutTicks(query)
+  }
+
+  const _getStableSwapPools = cacheByLRU(
     async (query: PoolQuery) => {
       const getViemClients = createViemPublicClientGetter({
         transportSignal: query.signal,
       })
       const blockNumber = query?.options?.blockNumber
-      if (!blockNumber) {
-        return []
-      }
       const { currencyA, currencyB } = query
       const provider = query.provider ?? getViemClients
       const resolvedPairs = await SmartRouter.getPairCombinations(currencyA, currencyB)
@@ -256,8 +300,16 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
+      isValid,
     },
   )
+  const getStableSwapPools = async (query: PoolQuery) => {
+    const blockNumber = query?.options?.blockNumber
+    if (!blockNumber) {
+      return []
+    }
+    return _getStableSwapPools(query)
+  }
 
   return {
     getV2CandidatePools,
@@ -272,4 +324,4 @@ export const poolQueriesFactory = (chainId: ChainId) => {
     getInfinityClCandidatePoolsWithoutTicks,
     getStableSwapPools,
   }
-}
+})

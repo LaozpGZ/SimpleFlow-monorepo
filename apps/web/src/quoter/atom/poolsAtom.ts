@@ -10,12 +10,14 @@ import { poolQueriesFactory } from 'quoter/utils/poolQueries'
 export const fetchCommonPoolsOnChain = async (query: PoolQuery) => {
   const queries = poolQueriesFactory(query.currencyA?.chainId || ChainId.BSC)
   try {
+    const t = Date.now()
     const poolsArray = await Promise.all([
       queries.getStableSwapPools(query),
       queries.getV2CandidatePools(query),
       queries.getV3PoolsWithTicksOnChain(query),
       queries.getInfinityCandidatePools(query),
     ])
+    console.log('[quote] find pools', Date.now() - t)
     return poolsArray.flat() as Pool[]
   } catch (ex) {
     console.warn(ex)
@@ -25,19 +27,6 @@ export const fetchCommonPoolsOnChain = async (query: PoolQuery) => {
 export const commonPoolsOnChainAtom = atomFamily((query: PoolQuery) => {
   return atom(async () => {
     return fetchCommonPoolsOnChain(query)
-    // const queries = poolQueriesFactory(query.currencyA?.chainId || ChainId.BSC)
-    // try {
-    //   const poolsArray = await Promise.all([
-    //     queries.getStableSwapPools(query),
-    //     queries.getV2CandidatePools(query),
-    //     queries.getV3PoolsWithTicksOnChain(query),
-    //     queries.getInfinityCandidatePools(query),
-    //   ])
-    //   return poolsArray.flat() as Pool[]
-    // } catch (ex) {
-    //   console.warn(ex)
-    //   return []
-    // }
   })
 }, isEqualPoolQuery)
 

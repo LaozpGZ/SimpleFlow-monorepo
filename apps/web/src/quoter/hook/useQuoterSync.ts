@@ -109,7 +109,6 @@ export const useQuoterSync = () => {
       signal: quoteQuery.signal,
       provider: quoteQuery.provider,
     }
-    console.log(`[quote]`, inputCurrency, outputCurrency)
     fetchCommonPoolsOnChain(poolQuery)
   }, [quoteQuery.hash, inputCurrency, outputCurrency])
 
