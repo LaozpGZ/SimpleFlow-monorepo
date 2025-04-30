@@ -129,6 +129,7 @@ export function useTransferConfig(supportedChains: IChainConfig[]) {
             config: deBridgeConfig,
             excludedChains: [],
             excludedTokens: {
+              // We excluded certain tokens because: previously during testing, these token transactions failed. Some due to internal errors from third parties, and others due to lack of liquidity, hence we removed them.
               1: ['cUSDCv3', '0x5e21d1ee5cf0077b314c381720273ae82378d613'],
               56: [
                 '0x67d66e8ec1fd25d98b3ccd3b19b7dc4b4b7fc493',
