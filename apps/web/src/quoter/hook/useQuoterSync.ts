@@ -66,7 +66,7 @@ export const useQuoterSync = () => {
 
   const outputTokenOnInputChainId =
     outputCurrency?.isNative || needsDestinationSwap
-      ? Native.onChain(chainId).symbol
+      ? Native.onChain(chainId).wrapped
       : filterToken
       ? Object.values(allTokens)
           .filter(filterToken)
@@ -74,8 +74,7 @@ export const useQuoterSync = () => {
       : undefined
 
   if (outputCurrencyId && chainId && chainId !== outputCurrencyChainId && outputTokenOnInputChainId) {
-    outputCurrencyId =
-      typeof outputTokenOnInputChainId === 'string' ? outputTokenOnInputChainId : outputTokenOnInputChainId.address
+    outputCurrencyId = outputTokenOnInputChainId.address
     outputCurrencyChainId = chainId
   }
 
@@ -173,13 +172,16 @@ export const useQuoterSync = () => {
     isLoading: bridgeLoading,
   } = useBridgeMetadata({
     inputAmount: needsDestinationSwap
-      ? CurrencyAmount.fromRawAmount(Native.onChain(chainId), swapOrder?.trade?.outputAmount?.quotient.toString() || 0)
+      ? CurrencyAmount.fromRawAmount(
+          Native.onChain(chainId).wrapped,
+          swapOrder?.trade?.outputAmount?.quotient.toString() || 0,
+        )
       : swapOrder?.trade
       ? swapOrder?.trade?.outputAmount
       : amount,
     outputCurrency:
       needsDestinationSwap && stateOutputCurrencyChainId
-        ? Native.onChain(stateOutputCurrencyChainId)
+        ? Native.onChain(stateOutputCurrencyChainId).wrapped
         : stateOutputCurrency,
   })
 
