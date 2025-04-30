@@ -99,7 +99,7 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
       testInfinityTakeAction(actions[2], CAKE, MSG_SENDER, ACTION_CONSTANTS.OPEN_DELTA)
     })
 
-    it('label: should encode a single exactInput ETH-CAKE CL swap zeroForOne ( payerIsUser = false ) ', async () => {
+    it('should encode a single exactInput ETH-CAKE CL swap zeroForOne ( payerIsUser = false ) ', async () => {
       const amountIn = parseEther('0.01')
       const inputAmount = CurrencyAmount.fromRawAmount(ETHER, amountIn)
       const outputAmount = CurrencyAmount.fromRawAmount(CAKE, parseEther('1'))
@@ -122,16 +122,16 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
       expect(decodedCommands[0].args.length).toEqual(0)
       const actions = decodedCommands[0].actions!
 
+      // SETTLE
+      testInfinitySettleAction(actions[0], ETHER, amountIn, false)
+
       // CL_SWAP_EXACT_IN_SINGLE
-      expect(actions[0].action).toEqual(ACTIONS[ACTIONS.CL_SWAP_EXACT_IN_SINGLE])
-      expect(actions[0].args[0].name).toEqual('params')
-      const encoded = actions[0].args[0].value as any
+      expect(actions[1].action).toEqual(ACTIONS[ACTIONS.CL_SWAP_EXACT_IN_SINGLE])
+      expect(actions[1].args[0].name).toEqual('params')
+      const encoded = actions[1].args[0].value as any
       const poolKey = decodePoolKey(encoded.poolKey, 'CL')
       expect(poolKey.currency0).toEqual(currencyAddressInfinity(inputAmount.currency))
       expect(poolKey.currency1).toEqual(currencyAddressInfinity(outputAmount.currency))
-
-      // SETTLE
-      testInfinitySettleAction(actions[1], ETHER, amountIn, true)
 
       // TAKE
       testInfinityTakeAction(actions[2], CAKE, MSG_SENDER, ACTION_CONSTANTS.OPEN_DELTA)
@@ -364,7 +364,7 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
       testInfinityTakeAction(actions[2], CAKE, MSG_SENDER, ACTION_CONSTANTS.OPEN_DELTA)
     })
 
-    it('label: should encode a multi-hop exactInput in Infinity: USDC->WETH->CAKE(via ETH->CAKE Pool)', async () => {
+    it('should encode a multi-hop exactInput in Infinity: USDC->WETH->CAKE(via ETH->CAKE Pool)', async () => {
       const inputAmount = CurrencyAmount.fromRawAmount(USDC, 1000)
       const outputAmount = CurrencyAmount.fromRawAmount(CAKE, 10000)
 
