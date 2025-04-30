@@ -94,10 +94,13 @@ export const useQuoterSync = () => {
   quoteQuery.provider = viemProvider
 
   useEffect(() => {
+    if (!inputCurrency || !outputCurrency) {
+      return
+    }
     const poolQuery: PoolQuery = {
       quoteHash: quoteQuery.hash,
-      currencyA: quoteQuery?.amount?.currency,
-      currencyB: quoteQuery.currency || undefined,
+      currencyA: inputCurrency,
+      currencyB: outputCurrency,
       options: {},
       chainId,
       infinity: quoteQuery.infinitySwap,
@@ -106,8 +109,9 @@ export const useQuoterSync = () => {
       signal: quoteQuery.signal,
       provider: quoteQuery.provider,
     }
+    console.log(`[quote]`, inputCurrency, outputCurrency)
     fetchCommonPoolsOnChain(poolQuery)
-  }, [quoteQuery.hash])
+  }, [quoteQuery.hash, inputCurrency, outputCurrency])
 
   useEffect(() => {
     for (let i = 0; i < historyHashes.current.length; i++) {
