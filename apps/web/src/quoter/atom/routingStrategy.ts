@@ -13,8 +13,10 @@ type AtomType = AtomFamily<QuoteQuery, Atom<Loadable<InterfaceOrder | undefined>
 export interface StrategyRoute {
   query: AtomType
   overrides: Partial<QuoteQuery>
+  isShadow?: boolean // shadow queries don't provide final result, used for get quite quote for user
+  priority?: number
 }
-type RoutingStrategy = StrategyRoute[][]
+type RoutingStrategy = StrategyRoute[]
 
 const cache = new SimpleCache<string, RoutingStrategy>({
   maxSize: 1000,
@@ -22,43 +24,36 @@ const cache = new SimpleCache<string, RoutingStrategy>({
 })
 
 const defaultRoutingStrategy: RoutingStrategy = [
-  [
-    // Single hop route & with light pools
-    {
-      query: bestAMMTradeFromQuoterWorker2Atom,
-      overrides: {
-        maxHops: 1,
-        maxSplits: 0,
-      },
+  // Single hop route & with light pools
+  {
+    query: bestAMMTradeFromQuoterWorker2Atom,
+    overrides: {
+      maxHops: 1,
+      maxSplits: 0,
     },
-    // routing-sdk
-    {
-      query: bestRoutingSDKTradeAtom,
-      overrides: {},
-    },
-    // X
-    {
-      query: bestXApiAtom,
-      overrides: {},
-    },
-  ],
-  [
-    {
-      // Fallback full route
-      query: bestAMMTradeFromQuoterWorkerAtom,
-      overrides: {},
-    },
-  ],
+    isShadow: true,
+    priority: 0,
+  },
+  // routing-sdk
+  {
+    query: bestRoutingSDKTradeAtom,
+    overrides: {},
+    priority: 1,
+  },
+  // X
+  {
+    query: bestXApiAtom,
+    overrides: {},
+    priority: 1,
+  },
+  {
+    // Fallback full route
+    query: bestAMMTradeFromQuoterWorkerAtom,
+    overrides: {},
+    priority: 2,
+  },
 ]
 
-export function getRoutingStrategy(hash: string) {
-  if (cache.has(hash)) {
-    return cache.get(hash)!
-  }
+export function getRoutingStrategy() {
   return defaultRoutingStrategy
-}
-
-export function updateStrategy(hash: string, route: StrategyRoute) {
-  const newStrategy: RoutingStrategy = [[route], ...defaultRoutingStrategy]
-  cache.set(hash, newStrategy)
 }
