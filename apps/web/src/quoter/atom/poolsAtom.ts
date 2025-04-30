@@ -10,7 +10,6 @@ import { poolQueriesFactory } from 'quoter/utils/poolQueries'
 export const fetchCommonPoolsOnChain = async (query: PoolQuery) => {
   const queries = poolQueriesFactory(query.currencyA?.chainId || ChainId.BSC)
   try {
-    const t = Date.now()
     const poolsArray = await Promise.all([
       queries.getStableSwapPools(query),
       queries.getV2CandidatePools(query),

@@ -49,6 +49,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
       },
       key: getCacheKey,
       isValid,
+      maxAge: 30_000,
     },
   )
   const getV2CandidatePools = async (query: PoolQuery) => {
@@ -71,6 +72,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
       },
       key: getCacheKey,
       isValid,
+      maxAge: 30_000,
     },
   )
   const getV3CandidatePools = async (options: PoolQuery) => {
@@ -101,6 +103,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
       },
       key: getCacheKey,
       isValid,
+      maxAge: 30_000,
     },
   )
 
@@ -135,6 +138,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
         interval: POOL_TTL,
       },
       isValid,
+      maxAge: 30_000,
     },
   )
 
@@ -209,6 +213,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
       },
       key: getCacheKey,
       isValid,
+      maxAge: 30_000,
     },
   )
 
@@ -238,6 +243,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
       },
       key: getCacheKey,
       isValid,
+      maxAge: 30_000,
     },
   )
   const getInfinityClCandidatePools = async (query: PoolQuery) => {
@@ -266,6 +272,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
       },
       key: getCacheKey,
       isValid,
+      maxAge: 30_000,
     },
   )
 
@@ -295,6 +302,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
         interval: POOL_TTL,
       },
       isValid,
+      maxAge: 30_000,
     },
   )
 
@@ -324,6 +332,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
         interval: POOL_TTL,
       },
       isValid,
+      maxAge: 30_000,
     },
   )
 
@@ -354,6 +363,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
       },
       key: getCacheKey,
       isValid,
+      maxAge: 30_000,
     },
   )
   const getStableSwapPools = async (query: PoolQuery) => {

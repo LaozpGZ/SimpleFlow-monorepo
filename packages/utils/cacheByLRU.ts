@@ -10,6 +10,12 @@ interface CacheItem {
   epochId: number
 }
 
+interface Epoch {
+  id: string
+  createTime: number
+  cacheKey: string
+}
+
 // Type definitions for the cache.
 type CacheOptions<T extends AsyncFunction<any>> = {
   maxCacheSize?: number
@@ -25,6 +31,7 @@ type CacheOptions<T extends AsyncFunction<any>> = {
     key: (params: Parameters<T>) => string
     interval: number
   }
+  maxAge?: number
 }
 
 function calcCacheKey(args: any[], epoch: number) {
@@ -55,10 +62,10 @@ function getTimer(id: string) {
 
 export const cacheByLRU = <T extends AsyncFunction<any>>(
   fn: T,
-  { ttl, key, maxCacheSize, persist, isValid, autoRevalidate }: CacheOptions<T>,
+  { ttl, key, maxCacheSize, persist, isValid, autoRevalidate, maxAge }: CacheOptions<T>,
 ) => {
   const cache = new QuickLRU<string, CacheItem>({
-    maxAge: ttl,
+    maxAge: Math.max(ttl * 2, maxAge || 0),
     maxSize: maxCacheSize || 1000,
   })
   const fetchR2Cache = persist
@@ -83,6 +90,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
   }
 
   let startTime = 0
+  const epochs: Epoch[] = []
   return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
     // Start Time
     if (!startTime) {
@@ -105,6 +113,11 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
         createTime: Date.now(),
         epochId,
       }
+      epochs.push({
+        id: cacheKey,
+        createTime: item.createTime,
+        cacheKey,
+      })
       item.promise = ensurePersist(item, cacheKey)
       cache.set(cacheKey, item)
 
@@ -161,10 +174,17 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     if (current.resolved) {
       return current.promise
     }
-    const prevCacheKey = calcCacheKey(keyFunction(args), epochId - 1)
-    if (cache.has(prevCacheKey)) {
-      return cache.get(prevCacheKey)!.promise
+    for (let i = epochs.length - 2, j = 5; i >= 0 && j > 0; i--, j--) {
+      const epoch = epochs[i]
+      if (maxAge && epoch.createTime + maxAge < Date.now()) {
+        continue
+      }
+      const epochCache = cache.get(epoch.cacheKey)
+      if (epochCache && epochCache.resolved) {
+        return epochCache.promise
+      }
     }
+
     return current.promise
   }
 }
