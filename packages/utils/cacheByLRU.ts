@@ -14,7 +14,10 @@ type CacheOptions<T extends AsyncFunction<any>> = {
   }
   key?: (params: Parameters<T>) => any
   isValid?: (result: any) => boolean
-  autoRevalidate?: number
+  autoRevalidate?: {
+    id: string
+    interval: number
+  }
 }
 
 function calcCacheKey(args: any[], epoch: number) {
@@ -24,6 +27,24 @@ function calcCacheKey(args: any[], epoch: number) {
 }
 
 const identity = (args: any) => args
+
+const revalidateTimers = new Map<
+  string,
+  {
+    halfTTSTimer: NodeJS.Timeout | null
+    invalidateTimer: NodeJS.Timeout | null
+  }
+>()
+
+function getTimer(id: string) {
+  if (!revalidateTimers.has(id)) {
+    revalidateTimers.set(id, {
+      halfTTSTimer: null,
+      invalidateTimer: null,
+    })
+  }
+  return revalidateTimers.get(id)!
+}
 
 export const cacheByLRU = <T extends AsyncFunction<any>>(
   fn: T,
@@ -54,8 +75,6 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     return promise
   }
 
-  let revalidateTimer: NodeJS.Timeout | null = null
-  let halfTTSTimer: NodeJS.Timeout | null = null
   let startTime = 0
   return async (...args: Parameters<T>): Promise<ReturnType<T>> => {
     // Start Time
@@ -100,20 +119,21 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     }
 
     if (autoRevalidate) {
-      let max = 5
+      let max = 30 // TTS(around 10) * 30 = 300s
+      const timers = getTimer(autoRevalidate.id)
       const stop = () => {
-        clearTimeout(halfTTSTimer!)
-        clearInterval(revalidateTimer!)
+        clearTimeout(timers.halfTTSTimer!)
+        clearInterval(timers.invalidateTimer!)
       }
       stop()
       let onEpoch = epochId + 1
-      halfTTSTimer = setTimeout(() => {
-        revalidateTimer = setInterval(() => {
+      timers.halfTTSTimer = setTimeout(() => {
+        timers.invalidateTimer = setInterval(() => {
           cacheForEpoch(onEpoch++)
           if (--max === 0) {
             stop()
           }
-        }, autoRevalidate)
+        }, autoRevalidate.interval)
       })
     }
     if (!autoRevalidate && halfTTS) {

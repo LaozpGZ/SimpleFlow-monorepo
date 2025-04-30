@@ -37,7 +37,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
-      autoRevalidate: POOL_TTL,
+      autoRevalidate: {
+        id: 'getV2CandidatePools',
+        interval: POOL_TTL,
+      },
       key: getCacheKey,
       isValid,
     },
@@ -56,7 +59,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
-      autoRevalidate: POOL_TTL,
+      autoRevalidate: {
+        id: 'getV3CandidatePools',
+        interval: POOL_TTL,
+      },
       key: getCacheKey,
       isValid,
     },
@@ -83,7 +89,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
-      autoRevalidate: POOL_TTL,
+      autoRevalidate: {
+        id: 'getV3CandidatePoolsWithoutTicks',
+        interval: POOL_TTL,
+      },
       key: getCacheKey,
       isValid,
     },
@@ -177,7 +186,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
-      autoRevalidate: POOL_TTL,
+      autoRevalidate: {
+        id: 'getInfinityBinCandidatePoolsWithoutBins',
+        interval: POOL_TTL,
+      },
       key: getCacheKey,
       isValid,
     },
@@ -203,7 +215,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
-      autoRevalidate: POOL_TTL,
+      autoRevalidate: {
+        id: 'getInfinityClCandidatePools',
+        interval: POOL_TTL,
+      },
       key: getCacheKey,
       isValid,
     },
@@ -228,7 +243,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
-      autoRevalidate: POOL_TTL,
+      autoRevalidate: {
+        id: 'getInfinityCandidatePoolsLight',
+        interval: POOL_TTL,
+      },
       key: getCacheKey,
       isValid,
     },
@@ -255,7 +273,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
-      autoRevalidate: POOL_TTL,
+      autoRevalidate: {
+        id: 'getInfinityCandidatePools',
+        interval: POOL_TTL,
+      },
       isValid,
     },
   )
@@ -281,7 +302,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     {
       ttl: POOL_TTL,
       key: getCacheKey,
-      autoRevalidate: POOL_TTL,
+      autoRevalidate: {
+        id: 'getInfinityClCandidatePoolsWithoutTicks',
+        interval: POOL_TTL,
+      },
       isValid,
     },
   )
@@ -307,7 +331,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     },
     {
       ttl: POOL_TTL,
-      autoRevalidate: POOL_TTL,
+      autoRevalidate: {
+        id: 'getStableSwapPools',
+        interval: POOL_TTL,
+      },
       key: getCacheKey,
       isValid,
     },
