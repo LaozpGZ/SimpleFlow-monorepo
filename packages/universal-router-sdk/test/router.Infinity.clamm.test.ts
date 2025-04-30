@@ -99,6 +99,44 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
       testInfinityTakeAction(actions[2], CAKE, MSG_SENDER, ACTION_CONSTANTS.OPEN_DELTA)
     })
 
+    it('label: should encode a single exactInput ETH-CAKE CL swap zeroForOne ( payerIsUser = false ) ', async () => {
+      const amountIn = parseEther('0.01')
+      const inputAmount = CurrencyAmount.fromRawAmount(ETHER, amountIn)
+      const outputAmount = CurrencyAmount.fromRawAmount(CAKE, parseEther('1'))
+      const trade = buildInfinityTrade(TradeType.EXACT_INPUT, inputAmount, outputAmount, [ETH_CAKE_CL_INFI])
+
+      const options = swapOptions({
+        payerIsUser: false,
+      })
+
+      const { calldata, value } = PancakeSwapUniversalRouter.swapERC20CallParameters(trade, options)
+      expect(calldata).toMatchSnapshot()
+      const minOut = SmartRouter.minimumAmountOut(trade, options.slippageTolerance)
+
+      expect(BigInt(value)).toEqual(0n)
+      // expect(calldata).toMatchSnapshot()
+
+      const decodedCommands = decodeUniversalCalldata(calldata)
+
+      expect(decodedCommands[0].command).toEqual(CommandType[CommandType.INFI_SWAP])
+      expect(decodedCommands[0].args.length).toEqual(0)
+      const actions = decodedCommands[0].actions!
+
+      // CL_SWAP_EXACT_IN_SINGLE
+      expect(actions[0].action).toEqual(ACTIONS[ACTIONS.CL_SWAP_EXACT_IN_SINGLE])
+      expect(actions[0].args[0].name).toEqual('params')
+      const encoded = actions[0].args[0].value as any
+      const poolKey = decodePoolKey(encoded.poolKey, 'CL')
+      expect(poolKey.currency0).toEqual(currencyAddressInfinity(inputAmount.currency))
+      expect(poolKey.currency1).toEqual(currencyAddressInfinity(outputAmount.currency))
+
+      // SETTLE
+      testInfinitySettleAction(actions[1], ETHER, amountIn, true)
+
+      // TAKE
+      testInfinityTakeAction(actions[2], CAKE, MSG_SENDER, ACTION_CONSTANTS.OPEN_DELTA)
+    })
+
     it('should encode a single exactInput CAKE->ETH CL swap oneForZero', async () => {
       const inputAmount = CurrencyAmount.fromRawAmount(CAKE, 10000n)
       const outputAmount = CurrencyAmount.fromRawAmount(ETHER, 50n)
