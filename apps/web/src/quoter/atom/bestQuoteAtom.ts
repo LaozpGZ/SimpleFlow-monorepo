@@ -95,6 +95,9 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
           if (quote.isShadow && !quote.loading && quote.data) {
             continue
           }
+          if (quote.isShadow && i < tests.length - 1) {
+            return { ...quote, loading: true }
+          }
 
           return quote
         }
