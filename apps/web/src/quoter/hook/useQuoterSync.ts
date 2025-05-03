@@ -239,10 +239,16 @@ export const useQuoterSync = () => {
       return []
     }
 
-    if (Array.isArray(swapBridgeOutputCurrency) && Array.isArray(bridgeInputAmount)) {
+    if (
+      Array.isArray(swapBridgeOutputCurrency) &&
+      Array.isArray(bridgeInputAmount) &&
+      bridgeInputAmount.length === swapBridgeOutputCurrency.length
+    ) {
       return bridgeInputAmount.map((x, i) => ({ inputAmount: x!, outputCurrency: swapBridgeOutputCurrency[i][1]! }))
     }
 
+    // In normal case, either bridgeInputAmount and swapBridgeOutputCurrency is an array with the same lenght or one of them is not an array
+    // In unexpected case, return empty array
     if (Array.isArray(bridgeInputAmount) || Array.isArray(swapBridgeOutputCurrency)) {
       return []
     }
