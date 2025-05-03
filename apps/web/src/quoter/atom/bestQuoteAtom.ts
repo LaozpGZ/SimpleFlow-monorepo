@@ -1,4 +1,4 @@
-import { TradeType } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { UnsafeCurrency } from 'config/constants/types'
 import { getIsWrapping } from 'hooks/useWrapCallback'
 import { atom } from 'jotai'
@@ -19,7 +19,13 @@ type StrategyQueryParams = {
   quoteCurrency: UnsafeCurrency
 }
 
-const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
+export type EnhancedQuoteQuery = Omit<QuoteQuery, 'baseCurrency' | 'currency' | 'amount'> & {
+  baseCurrency?: Currency | null | Currency[]
+  currency?: Currency | null | Currency[]
+  amount?: CurrencyAmount<Currency> | CurrencyAmount<Currency>[]
+}
+
+const bestQuoteWithoutHashAtom = atomFamily((_option: EnhancedQuoteQuery) => {
   const strategyQuery: (params: StrategyQueryParams) => StrategyQuery = ({ baseCurrency, quoteCurrency }) => ({
     baseCurrency: baseCurrency || undefined,
     quoteCurrency: quoteCurrency || undefined,
@@ -101,7 +107,12 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
       return pendingLoadable<InterfaceOrder | undefined>()
     }
 
-    const option: QuoteQuery = { enabled: true, type: 'quoter', tradeType: TradeType.EXACT_INPUT, ..._option }
+    const option: QuoteQuery = {
+      enabled: true,
+      type: 'quoter',
+      tradeType: TradeType.EXACT_INPUT,
+      ..._option,
+    } as QuoteQuery
 
     const quotes: Loadable<InterfaceOrder | undefined>[] = []
 
@@ -184,9 +195,9 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
   })
 }, isEqualQuoteQuery)
 
-export const bestQuoteAtom = atomFamily((_option: QuoteQuery) => {
+export const bestQuoteAtom = atomFamily((_option: EnhancedQuoteQuery) => {
   return atom((get) => {
-    const quotesResult = get(bestQuoteWithoutHashAtom(_option))
+    const quotesResult = get(bestQuoteWithoutHashAtom(_option as QuoteQuery))
 
     let result: Loadable<InterfaceOrder | (InterfaceOrder | undefined)[] | undefined> & {
       hash: string
