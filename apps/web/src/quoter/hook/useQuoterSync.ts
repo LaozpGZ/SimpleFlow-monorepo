@@ -178,22 +178,26 @@ export const useQuoterSync = () => {
 
   const hasBridgePair = bridgePairs && bridgePairs?.length > 0
 
-  const swapOriginOutputCurrency = isBridge && hasBridgePair ? bridgePairs.map((x) => x[0]) : dependentCurrency
-  const bridgeCurrencyOnDestinationChain = isBridge && hasBridgePair ? bridgePairs.map((x) => x[1]) : []
+  const swapOriginOutputCurrency = isBridge && hasBridgePair ? bridgePairs.map((x) => x[0]) : undefined
 
   useEffect(() => {
     setTyping(true)
   }, [typedValue, setTyping])
 
   // TODO: support swap -> Bridge: ETH case
-  const swapBridgeOutputCurrency =
-    Array.isArray(bridgeCurrencyOnDestinationChain) && outputCurrency && hasBridgePair
-      ? bridgePairs?.find(([_, dest]) => dest.equals(outputCurrency))?.[0]
-      : swapOriginOutputCurrency
+  const [swapBridgeCurrencyOnOriginChain, swapBridgeCurrencyOnDestinationChain] = (isBridge &&
+    hasBridgePair &&
+    outputCurrency &&
+    // swap -> bridge, return swapBridgeCurrencyOnOriginChain
+    bridgePairs?.find(([_, dest]) => dest.equals(outputCurrency))) || [swapOriginOutputCurrency, undefined] || [
+      // swap -> bridge -> swap, return array of swapOriginOutputCurrency[]
+      undefined,
+      undefined,
+    ]
 
   const quoteResult = useSwapQuoteSync({
     amount,
-    outputCurrency: swapBridgeOutputCurrency,
+    outputCurrency: swapBridgeCurrencyOnOriginChain || dependentCurrency,
     tradeType,
     paused,
     setNonce,
@@ -214,8 +218,6 @@ export const useQuoterSync = () => {
     )
   }
 
-  console.log('swapOrders', swapOrders)
-
   // if bridge only, swapOrder will be undefined
   // if swap -> bridge, swapOrders it not an array
   // if swap -> bridge -> swap, swapOrders is an array
@@ -225,8 +227,6 @@ export const useQuoterSync = () => {
         ? getBridgeInputAmount(swapOrders)
         : swapOrders?.trade.outputAmount
       : amount
-
-  console.log('bridgeInputAmount', bridgeInputAmount)
 
   const swapOrder = Array.isArray(quoteResult?.data) ? quoteResult?.data?.[0] : quoteResult?.data
 
@@ -248,20 +248,23 @@ export const useQuoterSync = () => {
 
     // In normal case, either bridgeInputAmount and swapBridgeOutputCurrency is an array with the same lenght or one of them is not an array
     // In unexpected case, return empty array
-    if (Array.isArray(bridgeInputAmount) || Array.isArray(swapBridgeOutputCurrency)) {
+    if (
+      Array.isArray(bridgeInputAmount) ||
+      Array.isArray(swapBridgeOutputCurrency) ||
+      Array.isArray(swapBridgeCurrencyOnDestinationChain) ||
+      !swapBridgeCurrencyOnDestinationChain
+    ) {
       return []
     }
 
-    return [{ inputAmount: bridgeInputAmount, outputCurrency: swapBridgeOutputCurrency }]
+    return [{ inputAmount: bridgeInputAmount, outputCurrency: swapBridgeCurrencyOnDestinationChain }]
   }
 
   const {
     data: bridgeOrders,
     error: bridgeError,
     isLoading: bridgeLoading,
-  } = useBridgeMetadata(getBridgeMetadataParams(swapBridgeOutputCurrency, bridgeInputAmount))
-
-  console.log('bridgeOrders', bridgeOrders)
+  } = useBridgeMetadata(getBridgeMetadataParams(swapBridgeCurrencyOnOriginChain, bridgeInputAmount))
 
   const bridgeOrder = first(bridgeOrders)
 
@@ -274,8 +277,6 @@ export const useQuoterSync = () => {
     setNonce,
     nonce,
   })
-
-  console.log('destinationQuoteResult', destinationQuoteResult)
 
   const destinationSwapOrder = Array.isArray(destinationQuoteResult?.data)
     ? destinationQuoteResult?.data?.[0]
@@ -327,8 +328,6 @@ export const useQuoterSync = () => {
           error: undefined,
         } as BridgeOrderWithCommands
       }
-
-      console.log('finalOrder', finalOrder)
 
       setTrade({
         bestOrder: finalOrder,
