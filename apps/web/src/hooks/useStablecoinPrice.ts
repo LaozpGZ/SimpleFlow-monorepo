@@ -65,6 +65,7 @@ export function useStablecoinPrice(
     infinitySwap: false,
     speedQuoteEnabled: true,
   })
+
   const { data: quoteResult } = useAtomValue(bestAMMTradeFromQuoterWorkerAtom(priceQuoter))
   const { trade } = quoteResult || {}
 
