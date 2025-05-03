@@ -201,8 +201,8 @@ export const getBridgeAvailableRoutes = async (params: GetAvailableRoutesParams)
       .map(([key, value]) => [key, value?.toString()]),
   )
   const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/routes?${new URLSearchParams(stringParams).toString()}`)
-  const data = (await resp.json()) as Route[]
-  return data
+  const data = (await resp.json()) as { routes: Route[] }
+  return data?.routes
 }
 
 export type Metadata = {

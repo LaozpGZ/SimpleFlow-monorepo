@@ -1,6 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { ChainId } from '@pancakeswap/chains'
-import { Currency, ERC20Token, NativeCurrency, Token } from '@pancakeswap/sdk'
+import { Currency, ERC20Token, Native, NativeCurrency, Token } from '@pancakeswap/sdk'
 import { type Address, erc20Abi, zeroAddress } from 'viem'
 
 import { TokenAddressMap } from '@pancakeswap/token-lists'
@@ -322,6 +322,17 @@ export function useOnRampCurrency(currencyId: string | undefined): NativeCurrenc
     currencyId?.toLowerCase() === GELATO_NATIVE ||
     currencyId?.toLowerCase() === zeroAddress
   const token = useOnRampToken(currencyId)
+
+  return isNative ? native : token
+}
+
+export function convertTokenToCurrency(token: ERC20Token): Currency {
+  const native = Native.onChain(token.chainId)
+
+  const isNative =
+    token.symbol?.toUpperCase() === native.symbol?.toUpperCase() ||
+    token.symbol?.toLowerCase() === GELATO_NATIVE ||
+    token.symbol?.toLowerCase() === zeroAddress
 
   return isNative ? native : token
 }

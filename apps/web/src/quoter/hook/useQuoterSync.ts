@@ -1,103 +1,72 @@
 import { useDebounce } from '@orbs-network/twap-ui/dist/hooks'
 import { OrderType } from '@pancakeswap/price-api-sdk'
-import { Native } from '@pancakeswap/sdk'
 import { RouteType } from '@pancakeswap/smart-router'
-import { CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
-import { createFilterToken } from '@pancakeswap/token-lists'
+import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { UnsafeCurrency } from 'config/constants/types'
-import { useAllTokens, useCurrency } from 'hooks/Tokens'
+import { convertTokenToCurrency, useAllTokens, useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useInputBasedAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { activeQuoteHashAtom } from 'quoter/atom/abortControlAtoms'
+import first from 'lodash/first'
+import {
+  abortableViemProviderAtom,
+  abortControllerAtom,
+  abortSignalAtom,
+  activeQuoteHashAtom,
+} from 'quoter/atom/abortControlAtoms'
 import { baseAllTypeBestTradeAtom, pauseAtom, userTypingAtom } from 'quoter/atom/bestTradeUISyncAtom'
 import { updatePlaceholderAtom } from 'quoter/atom/placeholderAtom'
-import { fetchCommonPoolsOnChain } from 'quoter/atom/poolsAtom'
-import { PoolQuery, QuoteQuery } from 'quoter/quoter.types'
-import { useEffect } from 'react'
+import { QuoteQuery } from 'quoter/quoter.types'
+import { useEffect, useRef } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
-import { isAddress } from 'viem/utils'
-import { useBridgeMetadata } from 'views/Swap/Bridge/hooks/useBridgeMetadata'
-import { BridgeOrderWithCommands } from 'views/Swap/utils'
+import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks'
+import { BridgeMetadataParams, useBridgeMetadata } from 'views/Swap/Bridge/hooks/useBridgeMetadata'
+import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
 import { useAccount } from 'wagmi'
 import { bestQuoteAtom } from '../atom/bestQuoteAtom'
 import { quoteNonceAtom } from '../atom/revalidateAtom'
 import { createQuoteQuery } from '../utils/createQuoteQuery'
 import { useQuoteContext } from './QuoteContext'
 
-const REVALIDATE_TIME = 7
+const REVALIDATE_TIME = 10
 
 const isNeedDestinationSwap = (inputChainId?: number, outputCurrency?: UnsafeCurrency) => {
   return inputChainId !== outputCurrency?.chainId && !outputCurrency?.isNative
 }
 
-export const useQuoterSync = () => {
-  const swapState = useSwapState()
-  const debouncedSwapState = useDebounce(swapState, 300)
-  const {
-    independentField,
-    typedValue,
-    [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
-    [Field.OUTPUT]: { currencyId: stateOutputCurrencyId, chainId: stateOutputCurrencyChainId },
-  } = debouncedSwapState
-  const { address } = useAccount()
-
-  // TODO: polish this logic to make it more efficient for cross-chain
-  let outputCurrencyId = stateOutputCurrencyId
-  let outputCurrencyChainId = stateOutputCurrencyChainId
-
-  let outputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
-
-  const needsDestinationSwap = isNeedDestinationSwap(inputChainId, outputCurrency)
-
-  const { chainId } = useActiveChainId()
-  const allTokens = useAllTokens(chainId)
-
-  const filterToken = outputCurrency
-    ? createFilterToken(outputCurrency.symbol, (address) => isAddress(address))
-    : undefined
-
-  const outputTokenOnInputChainId =
-    outputCurrency?.isNative || needsDestinationSwap
-      ? Native.onChain(chainId).wrapped
-      : filterToken
-      ? Object.values(allTokens)
-          .filter(filterToken)
-          .find((token) => token.symbol === outputCurrency?.symbol)
-      : undefined
-
-  if (outputCurrencyId && chainId && chainId !== outputCurrencyChainId && outputTokenOnInputChainId) {
-    outputCurrencyId = outputTokenOnInputChainId.address
-    outputCurrencyChainId = chainId
-  }
-
-  const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
-
-  outputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
-
-  const isExactIn = independentField === Field.INPUT
-  const independentCurrency = isExactIn ? inputCurrency : outputCurrency
-  const dependentCurrency = isExactIn ? outputCurrency : inputCurrency
-  const tradeType = isExactIn ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
-  const amount = tryParseAmount(typedValue, independentCurrency ?? undefined)
+export const useSwapQuoteSync = ({
+  amount,
+  outputCurrency,
+  tradeType,
+  paused,
+  setNonce,
+  nonce,
+  addNonce = false,
+}: {
+  amount?: CurrencyAmount<Currency>
+  outputCurrency: UnsafeCurrency | Currency[]
+  tradeType: TradeType
+  paused: boolean
+  setNonce: (nonce: number | ((v: number) => number)) => void
+  nonce: number
+  addNonce?: boolean
+}) => {
   const { singleHopOnly, split, v2Swap, v3Swap, infinitySwap, stableSwap, maxHops, speedQuoteEnabled, xEnabled } =
     useQuoteContext()
-  const setTrade = useSetAtom(baseAllTypeBestTradeAtom)
-  const setTyping = useSetAtom(userTypingAtom)
-  const [paused, pauseQuote] = useAtom(pauseAtom)
-
   const { slippageTolerance: slippage } = useInputBasedAutoSlippageWithFallback(amount)
   const blockNumber = useCurrentBlock()
   const setActiveQuoteHash = useSetAtom(activeQuoteHashAtom)
-  const [nonce, setNonce] = useAtom(quoteNonceAtom)
+  const historyHashes = useRef<string[]>([])
+  const abortQuote = useSetAtom(abortSignalAtom)
+  const { address } = useAccount()
 
   const quoteQueryInit: QuoteQuery = {
     amount,
-    currency: dependentCurrency,
-    baseCurrency: independentCurrency,
+    currency: outputCurrency,
+    baseCurrency: amount?.currency,
     tradeType,
     maxHops: singleHopOnly ? 1 : maxHops,
     maxSplits: split ? undefined : 0,
@@ -110,56 +79,33 @@ export const useQuoterSync = () => {
     slippage,
     address,
     blockNumber,
-    nonce,
+    // TODO: remove this nonce hack
+    nonce: addNonce ? nonce + 1000000 : nonce,
     hash: '',
-    for: 'main',
-    createTime: Date.now(),
   }
 
   const quoteQuery = createQuoteQuery(quoteQueryInit)
-  const setPlaceholder = useSetAtom(updatePlaceholderAtom)
-  const quoteHistory: QuoteQuery[] = []
+  const abortController = useAtomValue(abortControllerAtom(quoteQuery.hash))
+  const viemProvider = useAtomValue(abortableViemProviderAtom(quoteQuery.hash))
+  quoteQuery.signal = abortController.signal
+  quoteQuery.provider = viemProvider
 
   useEffect(() => {
-    if (!inputCurrency || !outputCurrency) {
-      return
+    for (let i = 0; i < historyHashes.current.length; i++) {
+      const hash = historyHashes.current[i]
+      abortQuote(hash)
     }
-    const poolQuery: PoolQuery = {
-      quoteHash: quoteQuery.hash,
-      currencyA: inputCurrency,
-      currencyB: outputCurrency,
-      options: {},
-      chainId,
-      infinity: quoteQuery.infinitySwap,
-      v2Pools: !!quoteQuery.v2Swap,
-      v3Pools: !!quoteQuery.v3Swap,
-      signal: quoteQuery.signal,
-      stableSwap: !!quoteQuery.stableSwap,
-      provider: quoteQuery.provider,
-    }
-    fetchCommonPoolsOnChain(poolQuery)
-  }, [quoteQuery.hash, inputCurrency, outputCurrency])
-
-  useEffect(() => {
-    while (quoteHistory.length > 0) {
-      const historyQuote = quoteHistory.pop()
-      historyQuote?.controller?.abort()
-    }
-
-    quoteHistory.push(quoteQuery)
+    historyHashes.current = [quoteQuery.hash]
     setActiveQuoteHash(quoteQuery.hash)
   }, [quoteQuery.hash])
 
-  useEffect(() => {
-    setTyping(true)
-  }, [typedValue, setTyping])
-
   const quoteResult = useAtomValue(bestQuoteAtom(quoteQuery))
+
   useEffect(() => {
     let t = 0
+    const pauseTimer = paused || quoteResult.loading
     const interval = setInterval(() => {
-      const outdated = Date.now() - quoteQuery.createTime! > REVALIDATE_TIME
-      if (paused || (!outdated && quoteResult.loading)) {
+      if (pauseTimer) {
         return
       }
       if (t > 0) {
@@ -176,53 +122,159 @@ export const useQuoterSync = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quoteQuery.hash, paused, quoteResult.loading])
 
-  const swapOrder = quoteResult?.data
+  return quoteResult
+}
 
-  const stateOutputCurrency = useCurrency(stateOutputCurrencyId, stateOutputCurrencyChainId)
-
+export const useQuoterSync = () => {
+  const swapState = useSwapState()
+  const debouncedSwapState = useDebounce(swapState, 300)
   const {
-    data: bridgeOrder,
-    error: bridgeError,
-    isLoading: bridgeLoading,
-  } = useBridgeMetadata({
-    inputAmount: needsDestinationSwap
-      ? CurrencyAmount.fromRawAmount(
-          Native.onChain(chainId).wrapped,
-          swapOrder?.trade?.outputAmount?.quotient.toString() || 0,
-        )
-      : swapOrder?.trade
-      ? swapOrder?.trade?.outputAmount
-      : amount,
-    outputCurrency:
-      needsDestinationSwap && stateOutputCurrencyChainId
-        ? Native.onChain(stateOutputCurrencyChainId).wrapped
-        : stateOutputCurrency,
+    independentField,
+    typedValue,
+    [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputCurrencyChainId },
+  } = debouncedSwapState
+
+  const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
+
+  const outputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
+
+  const { chainId } = useActiveChainId()
+
+  const isBridge = chainId && outputCurrencyChainId && chainId !== outputCurrencyChainId
+
+  const needsDestinationSwap = isBridge && isNeedDestinationSwap(inputChainId, outputCurrency)
+
+  const allTokens = useAllTokens(chainId)
+  const allTokensOnDestinationChain = useAllTokens(outputCurrencyChainId)
+
+  const isExactIn = isBridge ? true : independentField === Field.INPUT
+  const independentCurrency = isExactIn ? inputCurrency : outputCurrency
+  const dependentCurrency = isExactIn ? outputCurrency : inputCurrency
+  const tradeType = isExactIn ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
+  const amount = tryParseAmount(typedValue, independentCurrency ?? undefined)
+
+  const setTrade = useSetAtom(baseAllTypeBestTradeAtom)
+  const setTyping = useSetAtom(userTypingAtom)
+  const [paused, pauseQuote] = useAtom(pauseAtom)
+
+  const setPlaceholder = useSetAtom(updatePlaceholderAtom)
+  const [nonce, setNonce] = useAtom(quoteNonceAtom)
+
+  const stateOutputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
+
+  const { data: routes } = useBridgeAvailableRoutes({
+    originChainId: chainId,
+    destinationChainId: outputCurrencyChainId,
   })
 
-  const destinationQuoteQueryInit: QuoteQuery = {
-    amount: bridgeOrder?.trade?.outputAmount,
-    currency: stateOutputCurrency,
-    baseCurrency: bridgeOrder?.trade?.outputAmount?.currency,
-    tradeType: TradeType.EXACT_INPUT,
-    maxHops: singleHopOnly ? 1 : maxHops,
-    maxSplits: split ? undefined : 0,
-    v2Swap,
-    v3Swap,
-    infinitySwap,
-    stableSwap,
-    speedQuoteEnabled,
-    xEnabled,
-    slippage,
-    address,
-    blockNumber,
-    // TODO: remove this nonce hack
-    nonce: nonce + 100,
-    hash: '',
+  // TODO: remove duplication ETH pairs
+  // Instead of using [], use Object to store the pairs
+  const bridgePairs = routes
+    ?.filter((route) => allTokens[route.originToken] && allTokensOnDestinationChain[route.destinationToken])
+    .map((route) => [
+      convertTokenToCurrency(allTokens[route.originToken]),
+      convertTokenToCurrency(allTokensOnDestinationChain[route.destinationToken]),
+    ])
+
+  const hasBridgePair = bridgePairs && bridgePairs?.length > 0
+
+  const swapOriginOutputCurrency = isBridge && hasBridgePair ? bridgePairs.map((x) => x[0]) : dependentCurrency
+  const bridgeCurrencyOnDestinationChain = isBridge && hasBridgePair ? bridgePairs.map((x) => x[1]) : []
+
+  useEffect(() => {
+    setTyping(true)
+  }, [typedValue, setTyping])
+
+  // TODO: support swap -> Bridge: ETH case
+  const swapBridgeOutputCurrency =
+    Array.isArray(bridgeCurrencyOnDestinationChain) && outputCurrency && hasBridgePair
+      ? bridgePairs?.find(([_, dest]) => dest.equals(outputCurrency))?.[0]
+      : swapOriginOutputCurrency
+
+  const quoteResult = useSwapQuoteSync({
+    amount,
+    outputCurrency: swapBridgeOutputCurrency,
+    tradeType,
+    paused,
+    setNonce,
+    nonce,
+  })
+
+  const swapOrders = quoteResult?.data
+
+  function getBridgeInputAmount(swapOrders: (InterfaceOrder | undefined)[]) {
+    const filteredSwapOrders = swapOrders.filter((x) => x)
+
+    if (filteredSwapOrders.length === 0) {
+      return amount
+    }
+
+    return filteredSwapOrders.map((x) =>
+      CurrencyAmount.fromRawAmount(x!.trade.outputAmount.currency, x!.trade.outputAmount.quotient.toString()),
+    )
   }
 
-  const destinationQuoteQuery = createQuoteQuery(destinationQuoteQueryInit)
+  console.log('swapOrders', swapOrders)
 
-  const destinationSwapOrder = useAtomValue(bestQuoteAtom(destinationQuoteQuery))?.data
+  // if bridge only, swapOrder will be undefined
+  // if swap -> bridge, swapOrders it not an array
+  // if swap -> bridge -> swap, swapOrders is an array
+  const bridgeInputAmount =
+    isBridge && swapOrders
+      ? Array.isArray(swapOrders)
+        ? getBridgeInputAmount(swapOrders)
+        : swapOrders?.trade.outputAmount
+      : amount
+
+  console.log('bridgeInputAmount', bridgeInputAmount)
+
+  const swapOrder = Array.isArray(quoteResult?.data) ? quoteResult?.data?.[0] : quoteResult?.data
+
+  function getBridgeMetadataParams(
+    swapBridgeOutputCurrency: Currency | Currency[] | null | undefined,
+    bridgeInputAmount: CurrencyAmount<Currency> | CurrencyAmount<Currency>[] | undefined,
+  ): BridgeMetadataParams[] {
+    if (!bridgeInputAmount || !swapBridgeOutputCurrency) {
+      return []
+    }
+
+    if (Array.isArray(swapBridgeOutputCurrency) && Array.isArray(bridgeInputAmount)) {
+      return bridgeInputAmount.map((x, i) => ({ inputAmount: x!, outputCurrency: swapBridgeOutputCurrency[i][1]! }))
+    }
+
+    if (Array.isArray(bridgeInputAmount) || Array.isArray(swapBridgeOutputCurrency)) {
+      return []
+    }
+
+    return [{ inputAmount: bridgeInputAmount, outputCurrency: swapBridgeOutputCurrency }]
+  }
+
+  const {
+    data: bridgeOrders,
+    error: bridgeError,
+    isLoading: bridgeLoading,
+  } = useBridgeMetadata(getBridgeMetadataParams(swapBridgeOutputCurrency, bridgeInputAmount))
+
+  console.log('bridgeOrders', bridgeOrders)
+
+  const bridgeOrder = first(bridgeOrders)
+
+  const destinationQuoteResult = useSwapQuoteSync({
+    amount: bridgeOrder?.trade?.outputAmount,
+    outputCurrency: stateOutputCurrency,
+    tradeType: TradeType.EXACT_INPUT,
+    paused,
+    addNonce: true,
+    setNonce,
+    nonce,
+  })
+
+  console.log('destinationQuoteResult', destinationQuoteResult)
+
+  const destinationSwapOrder = Array.isArray(destinationQuoteResult?.data)
+    ? destinationQuoteResult?.data?.[0]
+    : destinationQuoteResult?.data
 
   useEffect(() => {
     if (paused) {
@@ -292,8 +344,8 @@ export const useQuoterSync = () => {
         },
       })
     } else {
-      if (quoteResult.data?.trade && quoteResult.placeholderHash && !quoteResult.loading) {
-        setPlaceholder(quoteResult.placeholderHash, quoteResult.data)
+      if (swapOrder?.trade && quoteResult.placeholderHash && !quoteResult.loading) {
+        setPlaceholder(quoteResult.placeholderHash, swapOrder)
       }
 
       if (paused) {
@@ -301,7 +353,7 @@ export const useQuoterSync = () => {
       }
 
       setTrade({
-        bestOrder: quoteResult.data,
+        bestOrder: swapOrder,
         tradeLoaded: !quoteResult?.loading,
         tradeError: quoteResult?.error,
         refreshDisabled: false,
