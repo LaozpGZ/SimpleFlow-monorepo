@@ -1,4 +1,4 @@
-import { TradeType } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { UnsafeCurrency } from 'config/constants/types'
 import { getIsWrapping } from 'hooks/useWrapCallback'
 import { atom } from 'jotai'
@@ -19,7 +19,13 @@ type StrategyQueryParams = {
   quoteCurrency: UnsafeCurrency
 }
 
-const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
+export type EnhancedQuoteQuery = Omit<QuoteQuery, 'baseCurrency' | 'currency' | 'amount'> & {
+  baseCurrency?: Currency | null | Currency[]
+  currency?: Currency | null | Currency[]
+  amount?: CurrencyAmount<Currency> | CurrencyAmount<Currency>[]
+}
+
+const bestQuoteWithoutHashAtom = atomFamily((_option: EnhancedQuoteQuery) => {
   const strategyQuery: (params: StrategyQueryParams) => StrategyQuery = ({ baseCurrency, quoteCurrency }) => ({
     baseCurrency: baseCurrency || undefined,
     quoteCurrency: quoteCurrency || undefined,
@@ -55,10 +61,6 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
   return atom((get) => {
     function executeRoutes(routes: StrategyRoute[], option: QuoteQuery, index: number) {
       try {
-<<<<<<< HEAD
-        const quotes = strategies.map((route) =>
-          get(route.query({ ...option, ...route.overrides, routeKey: route.key })),
-=======
         const quotes = routes.map((route) =>
           get(
             route.query({
@@ -71,7 +73,6 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
               hash: `${option.hash}-${strategyHashes[index]}`,
             }),
           ),
->>>>>>> b2879716f (chore: support multiple quotes)
         )
         const anyLoading = quotes.some((x) => x?.loading)
 
@@ -106,7 +107,12 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
       return pendingLoadable<InterfaceOrder | undefined>()
     }
 
-    const option: QuoteQuery = { enabled: true, type: 'quoter', tradeType: TradeType.EXACT_INPUT, ..._option }
+    const option: QuoteQuery = {
+      enabled: true,
+      type: 'quoter',
+      tradeType: TradeType.EXACT_INPUT,
+      ..._option,
+    } as QuoteQuery
 
     const quotes: Loadable<InterfaceOrder | undefined>[] = []
 
@@ -173,9 +179,6 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
     } catch (ex) {
       // eslint-disable-next-line no-console
       console.warn(`[quote]`, ex)
-<<<<<<< HEAD
-      return errorLoadable<InterfaceOrder | undefined>(ex)
-=======
 
       listCurrencies.map((currency) => {
         logGTMQuoteQueryEvent('fail', {
@@ -188,14 +191,13 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
         return undefined
       })
       return errorLoadable<InterfaceOrder[] | undefined>(ex)
->>>>>>> b2879716f (chore: support multiple quotes)
     }
   })
 }, isEqualQuoteQuery)
 
-export const bestQuoteAtom = atomFamily((_option: QuoteQuery) => {
+export const bestQuoteAtom = atomFamily((_option: EnhancedQuoteQuery) => {
   return atom((get) => {
-    const quotesResult = get(bestQuoteWithoutHashAtom(_option))
+    const quotesResult = get(bestQuoteWithoutHashAtom(_option as QuoteQuery))
 
     let result: Loadable<InterfaceOrder | (InterfaceOrder | undefined)[] | undefined> & {
       hash: string

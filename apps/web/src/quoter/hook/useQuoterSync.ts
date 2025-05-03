@@ -25,7 +25,7 @@ import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks'
 import { BridgeMetadataParams, useBridgeMetadata } from 'views/Swap/Bridge/hooks/useBridgeMetadata'
 import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
 import { useAccount } from 'wagmi'
-import { bestQuoteAtom } from '../atom/bestQuoteAtom'
+import { bestQuoteAtom, EnhancedQuoteQuery } from '../atom/bestQuoteAtom'
 import { quoteNonceAtom } from '../atom/revalidateAtom'
 import { createQuoteQuery } from '../utils/createQuoteQuery'
 import { useQuoteContext } from './QuoteContext'
@@ -62,7 +62,11 @@ export const useSwapQuoteSync = ({
   const abortQuote = useSetAtom(abortSignalAtom)
   const { address } = useAccount()
 
+<<<<<<< HEAD
   const quoteQueryInit = {
+=======
+  const quoteQueryInit: EnhancedQuoteQuery = {
+>>>>>>> 340d8a4bd (chore: fix eslint)
     amount,
     currency: outputCurrency,
     baseCurrency: amount?.currency,
@@ -82,8 +86,8 @@ export const useSwapQuoteSync = ({
     nonce: addNonce ? nonce + 1000000 : nonce,
     hash: '',
   }
-
-  const quoteQuery = createQuoteQuery(quoteQueryInit)
+  // TODO: force cast to QuoteQuery, fix later
+  const quoteQuery = createQuoteQuery(quoteQueryInit as QuoteQuery)
   const abortController = useAtomValue(abortControllerAtom(quoteQuery.hash))
   const viemProvider = useAtomValue(abortableViemProviderAtom(quoteQuery.hash))
   quoteQuery.signal = abortController.signal

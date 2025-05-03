@@ -82,7 +82,10 @@ const useBestTrade = (fromToken?: string, toToken?: string, value?: string) => {
   })
   const tradeResult = useAtomValue(bestQuoteAtom(quoteOption))
   const { data } = tradeResult
-  const trade = data?.trade
+
+  // TODO: cast type, fix later
+  // for TWAP, data can't be an array
+  const trade = Array.isArray(data) ? undefined : data?.trade
 
   const inCurrency = useCurrency(fromToken)
   const outCurrency = useCurrency(toToken)
