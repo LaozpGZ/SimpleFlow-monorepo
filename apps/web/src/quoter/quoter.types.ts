@@ -29,9 +29,9 @@ export type UseBetterQuoteOptions = {
 }
 
 export interface Options {
-  amount?: CurrencyAmount<Currency>
-  baseCurrency?: Currency | null
-  currency?: Currency | null
+  amount?: CurrencyAmount<Currency> | CurrencyAmount<Currency>[]
+  baseCurrency?: Currency | null | Currency[]
+  currency?: Currency | null | Currency[]
   tradeType?: TradeType
   maxHops?: number
   maxSplits?: number

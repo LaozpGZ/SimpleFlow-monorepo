@@ -4,10 +4,8 @@ import { GetAvailableRoutesParams, getBridgeAvailableRoutes } from '../api'
 export function useBridgeAvailableRoutes(params?: GetAvailableRoutesParams) {
   const { originChainId, destinationChainId, originToken, destinationToken } = params || {}
 
-  const { data: routes } = useQuery({
+  return useQuery({
     queryKey: ['bridge-available-routes', originChainId, destinationChainId, originToken, destinationToken],
     queryFn: () => getBridgeAvailableRoutes({ originChainId, destinationChainId, originToken, destinationToken }),
   })
-
-  return routes
 }
