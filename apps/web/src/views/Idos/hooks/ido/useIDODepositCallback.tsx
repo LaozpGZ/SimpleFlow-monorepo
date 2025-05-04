@@ -10,7 +10,7 @@ import { isAddressEqual } from 'utils'
 import { logger } from 'utils/datadog'
 import { erc20Abi, WriteContractReturnType, zeroAddress } from 'viem'
 import { userRejectedError } from 'views/Swap/V3Swap/hooks/useSendSwapTransaction'
-import { useWriteContract } from 'wagmi'
+import { useAccount, useWriteContract } from 'wagmi'
 import {
   useW3WAccountSign,
   W3WSignAlreadyParticipatedError,
@@ -31,7 +31,7 @@ class W3WSignError extends Error {
 export const useIDODepositCallback = () => {
   const idoContract = useIDOContract()
   const { t } = useTranslation()
-  const { account } = useAccountActiveChain()
+  const { address: account } = useAccount()
   const { toastSuccess, toastWarning } = useToast()
   const [, setLatestTxReceipt] = useLatestTxReceipt()
   const { data: poolInfo } = useIDOPoolInfo()
