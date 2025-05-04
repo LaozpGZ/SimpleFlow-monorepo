@@ -5,6 +5,7 @@ import { useCurrency } from 'hooks/Tokens'
 import { useInputBasedAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { activeQuoteHashAtom } from 'quoter/atom/abortControlAtoms'
+import { bestCrossChainQuoteAtom } from 'quoter/atom/bestCrossChainAtom'
 import { baseAllTypeBestTradeAtom, pauseAtom, userTypingAtom } from 'quoter/atom/bestTradeUISyncAtom'
 import { updatePlaceholderAtom } from 'quoter/atom/placeholderAtom'
 import { fetchCommonPoolsOnChain } from 'quoter/atom/poolsAtom'
@@ -14,7 +15,6 @@ import { useCurrentBlock } from 'state/block/hooks'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { useAccount } from 'wagmi'
-import { bestQuoteAtom } from '../atom/bestQuoteAtom'
 import { quoteNonceAtom } from '../atom/revalidateAtom'
 import { createQuoteQuery } from '../utils/createQuoteQuery'
 import { useQuoteContext } from './QuoteContext'
@@ -27,12 +27,12 @@ export const useQuoterSync = () => {
   const {
     independentField,
     typedValue,
-    [Field.INPUT]: { currencyId: inputCurrencyId },
-    [Field.OUTPUT]: { currencyId: outputCurrencyId },
+    [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputCurrencyChainId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputCurrencyChainId },
   } = debouncedSwapState
   const { address } = useAccount()
-  const inputCurrency = useCurrency(inputCurrencyId)
-  const outputCurrency = useCurrency(outputCurrencyId)
+  const inputCurrency = useCurrency(inputCurrencyId, inputCurrencyChainId)
+  const outputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
   const isExactIn = independentField === Field.INPUT
   const independentCurrency = isExactIn ? inputCurrency : outputCurrency
   const dependentCurrency = isExactIn ? outputCurrency : inputCurrency
@@ -119,7 +119,10 @@ export const useQuoterSync = () => {
     setTyping(true)
   }, [typedValue, setTyping])
 
-  const quoteResult = useAtomValue(bestQuoteAtom(quoteQuery))
+  const quoteResult = useAtomValue(bestCrossChainQuoteAtom(quoteQuery))
+
+  console.log('quoteResult', quoteResult)
+
   useEffect(() => {
     let t = 0
     const interval = setInterval(() => {
