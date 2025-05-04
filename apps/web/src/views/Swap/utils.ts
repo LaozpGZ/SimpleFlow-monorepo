@@ -26,6 +26,4 @@ export type InterfaceOrder<
 // Type to support commands property
 export type BridgeOrderWithCommands = InterfaceOrder & {
   commands?: InterfaceOrder[]
-  isLoading: boolean
-  error: Error | undefined
 }

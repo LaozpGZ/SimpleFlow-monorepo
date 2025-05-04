@@ -12,7 +12,10 @@ export class PoolHashHelper {
       list.push(b)
     }
 
-    const sorted = sortCurrencies(list)
+    const isCrossChain = a?.chainId !== b?.chainId
+
+    // For cross-chain quotes, we don't sort the currencies
+    const sorted = isCrossChain ? list : sortCurrencies(list)
     const str = sorted.map((currency) => getCurrencyAddress(currency)).join(',')
     const hash = keccak256(`0x${str}`)
     return hash
