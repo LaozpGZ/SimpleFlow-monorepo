@@ -18,7 +18,7 @@ export const TradingFee: React.FC<TradingFeeProps> = memo(({ order, loaded }) =>
   const { t } = useTranslation()
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(order)
 
-  const { lpFeeAmount } = useMemo(
+  const priceBreakdown = useMemo(
     () =>
       isBridgeOrder(order)
         ? computeBridgeOrderFee(order)
@@ -29,9 +29,16 @@ export const TradingFee: React.FC<TradingFeeProps> = memo(({ order, loaded }) =>
   const hasDynamicHooks = useHasDynamicHook(order)
   const isWrapping = useIsWrapping()
 
+  if (Array.isArray(priceBreakdown)) {
+    return null
+  }
+
   if (isWrapping || !order || !order.trade || !slippageAdjustedAmounts) {
     return null
   }
+
+  const { lpFeeAmount } = priceBreakdown
+
   const { inputAmount } = order.trade
 
   return (

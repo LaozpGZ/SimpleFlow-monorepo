@@ -60,11 +60,13 @@ export type TradeEssentialForPriceBreakdown = Pick<SmartRouterTrade<TradeType>, 
   routes: Pick<Route, 'percent' | 'pools' | 'path' | 'inputAmount'>[]
 }
 
-// computes price breakdown for the trade
-export function computeTradePriceBreakdown(trade?: TradeEssentialForPriceBreakdown | null): {
+export interface TradePriceBreakdown {
   priceImpactWithoutFee?: Percent | null
   lpFeeAmount?: CurrencyAmount<Currency> | null
-} {
+}
+
+// computes price breakdown for the trade
+export function computeTradePriceBreakdown(trade?: TradeEssentialForPriceBreakdown | null): TradePriceBreakdown {
   if (!trade) {
     return {
       priceImpactWithoutFee: undefined,
