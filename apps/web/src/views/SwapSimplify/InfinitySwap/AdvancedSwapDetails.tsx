@@ -6,6 +6,7 @@ import { formatAmount, formatFraction } from '@pancakeswap/utils/formatFractions
 import { memo, useMemo, useState } from 'react'
 
 import { OrderType } from '@pancakeswap/price-api-sdk'
+import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { NumberDisplay, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
@@ -42,7 +43,7 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
     return priceBreakdown.map((p, index) => {
       return new BigNumber(p.lpFeeAmount?.toExact() ?? 0).times(usdPrices[index] ?? 0)
     })
-  }, [usdPrices])
+  }, [usdPrices, priceBreakdown])
 
   return (
     <SwapUIV2.Collapse
@@ -93,7 +94,8 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
             isDataReady={priceBreakdown.every((p) => p.lpFeeAmount)}
           >
             <Text fontSize="14px" textAlign="right">
-              ${currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toFixed(2)}
+              $
+              {formatNumber(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber(), 0, 5)}
             </Text>
           </SkeletonV2>
         </RowBetween>
