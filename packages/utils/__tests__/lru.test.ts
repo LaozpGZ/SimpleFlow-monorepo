@@ -76,4 +76,28 @@ describe('cacheByLRU', () => {
     await expect(cachedFn()).rejects.toThrow('Failed')
     expect(errorFn).toBeCalledTimes(2)
   })
+
+  it('should use old epoch cache if has same contentCacheKey', async () => {
+    const cachedFn = cacheByLRU(testFn, { ttl, maxAge: ttl * 10 })
+
+    const res1 = cachedFn(10)
+    vi.runAllTimers()
+    expect(await res1).toBe(20)
+    expect(testFn).toBeCalledTimes(1)
+
+    vi.advanceTimersByTime(ttl * 2)
+
+    const res2 = cachedFn(10)
+    vi.runAllTimers()
+    expect(await res2).toBe(20)
+    expect(testFn).toBeCalledTimes(2)
+
+    // advance time to test old epoch reuse
+    vi.advanceTimersByTime(ttl)
+
+    const res3 = cachedFn(10)
+    vi.runAllTimers()
+    expect(await res3).toBe(20)
+    expect(testFn).toBeCalledTimes(3) // Should trigger re-fetch but return old epoch cache immediately
+  })
 })
