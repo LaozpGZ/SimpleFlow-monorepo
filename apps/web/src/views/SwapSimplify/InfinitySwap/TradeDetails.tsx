@@ -35,7 +35,7 @@ interface Props {
 export const TradeDetails = memo(function TradeDetails({ loaded, order }: Props) {
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(order)
   const isWrapping = useIsWrapping()
-  const { priceImpactWithoutFee, lpFeeAmount } = useMemo(
+  const priceBreakdown = useMemo(
     () =>
       isBridgeOrder(order)
         ? computeBridgeOrderFee(order)
@@ -66,8 +66,7 @@ export const TradeDetails = memo(function TradeDetails({ loaded, order }: Props)
           inputAmount={inputAmount}
           outputAmount={outputAmount}
           tradeType={tradeType}
-          priceImpactWithoutFee={priceImpactWithoutFee ?? undefined}
-          realizedLPFee={lpFeeAmount ?? undefined}
+          priceBreakdown={priceBreakdown}
           hasStablePair={hasStablePool}
           hasDynamicHook={hasDynamicHook}
           loading={!loaded}
