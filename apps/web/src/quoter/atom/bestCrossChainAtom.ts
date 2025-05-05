@@ -1,6 +1,7 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { RouteType } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
+import BigNumber from 'bignumber.js'
 import { convertTokenToCurrency, mapWithoutUrls } from 'hooks/Tokens'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
@@ -8,7 +9,6 @@ import { QuoteQuery } from 'quoter/quoter.types'
 import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { combinedTokenMapFromActiveUrlsAtom } from 'state/lists/hooks'
 import { getBridgeAvailableRoutes, getMetadata, getTokenAddress } from 'views/Swap/Bridge/api'
-import { BridgeMetadataParams, BridgeTradeError } from 'views/Swap/Bridge/hooks/useBridgeMetadata'
 import { BridgeOrderWithCommands } from 'views/Swap/utils'
 import { bestQuoteAtom } from './bestQuoteAtom'
 
@@ -50,6 +50,18 @@ export const getAvailableBridgeRoutes = atomFamily((option: QuoteQuery) => {
   })
 }, isEqualQuoteQuery)
 
+export type BridgeMetadataParams = {
+  inputAmount: CurrencyAmount<Currency>
+  outputCurrency: Currency
+}
+
+export class BridgeTradeError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = 'BridgeTradeError'
+  }
+}
+
 // Convert the function to an atom
 export const getBridgeQuote = atomFamily(
   (params: BridgeMetadataParams) =>
@@ -69,8 +81,17 @@ export const getBridgeQuote = atomFamily(
 
       const outputAmount = CurrencyAmount.fromRawAmount(outputCurrency, metadata.minOutputAmount)
 
+      /**
+       * Note: 1% is represented as 1e16, 100% is 1e18, 50% is 5e17, etc. These values are in the same format that the contract understands.
+       */
+      const bridgeFee = new BigNumber(inputAmount.quotient.toString())
+        .times(metadata.bridgeFee)
+        .div(1e18)
+        .integerValue(BigNumber.ROUND_DOWN)
+        .toString()
+
       const bridgeTrade: BridgeOrderWithCommands = {
-        bridgeFee: CurrencyAmount.fromRawAmount(inputAmount.currency, metadata.bridgeFee),
+        bridgeFee: CurrencyAmount.fromRawAmount(inputAmount.currency, bridgeFee),
         type: OrderType.PCS_BRIDGE,
         trade: {
           inputAmount,
