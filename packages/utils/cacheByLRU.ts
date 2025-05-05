@@ -34,6 +34,19 @@ type CacheOptions<T extends AsyncFunction<any>> = {
   maxAge?: number
 }
 
+function defaultIsValid(val: any) {
+  if (typeof val === 'undefined' || val === '') {
+    return false
+  }
+  if (Array.isArray(val)) {
+    return val.length > 0
+  }
+  if (typeof val === 'object') {
+    return Object.keys(val).length > 0
+  }
+  return true
+}
+
 function calcCacheKey(args: any[], epoch: number) {
   const json = stringify(args)
   const r = keccak256(`0x${json}@${epoch}`)
@@ -130,7 +143,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
             cache.delete(cacheKey)
             return
           }
-          if (isValid && !isValid(result)) {
+          if (!(isValid || defaultIsValid)(result)) {
             cache.delete(cacheKey)
             return
           }
