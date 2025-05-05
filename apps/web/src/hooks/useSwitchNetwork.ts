@@ -1,16 +1,15 @@
-import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
 import { useToast } from '@pancakeswap/uikit'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { ExtendEthereum } from 'global'
+import { queryChainIdAtom } from 'hooks/useActiveChainId'
+import { useAtom } from 'jotai/index'
+import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { useAppDispatch } from 'state'
 import { clearUserStates } from 'utils/clearUserStates'
-import { Connector, useAccount, useSwitchChain } from 'wagmi'
-import { useAtom } from 'jotai/index'
-import { queryChainIdAtom } from 'hooks/useActiveChainId'
-import { EXCHANGE_PAGE_PATHS } from 'config/constants/exchange'
 import { getHashFromRouter } from 'utils/getHashFromRouter'
+import { Connector, useAccount, useSwitchChain } from 'wagmi'
 import { useSwitchNetworkLoading } from './useSwitchNetworkLoading'
 
 const checkSwitchReloadNeeded = async (connector: Connector, chainId: number, address: `0x${string}` | undefined) => {
@@ -52,19 +51,21 @@ export function useSwitchNetworkLocal() {
       const { chain: queryChainName, chainId: queryChainId, persistChain } = router.query
       if (persistChain) return
       const newChainQueryName = CHAIN_QUERY_NAME[newChainId]
-      const chainQueryName = queryChainName || CHAIN_QUERY_NAME[queryChainId as string]
-      const removeQueriesFromPath =
-        newChainQueryName !== chainQueryName &&
-        EXCHANGE_PAGE_PATHS.some((item) => {
-          return router.pathname === '/' || router.pathname.startsWith(item)
-        })
+      // const chainQueryName = queryChainName || CHAIN_QUERY_NAME[queryChainId as string]
+      // const removeQueriesFromPath =
+      //   newChainQueryName !== chainQueryName &&
+      //   EXCHANGE_PAGE_PATHS.some((item) => {
+      //     return router.pathname === '/' || router.pathname.startsWith(item)
+      //   })
+
       const uriHash = getHashFromRouter(router)?.[0]
       const { chainId: _chainId, ...omittedQuery } = router.query
       router.replace(
         {
           pathname: router.pathname,
           query: {
-            ...(!removeQueriesFromPath && omittedQuery),
+            // ...(!removeQueriesFromPath && omittedQuery),
+            ...omittedQuery,
             chain: newChainQueryName,
           },
           ...(uriHash && { hash: uriHash }),

@@ -1,14 +1,33 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, AutoRow, Flex, InlineMenu, Text } from '@pancakeswap/uikit'
+import { AutoColumn, AutoRow, ChevronDownIcon, Flex, InlineMenu, Text } from '@pancakeswap/uikit'
 import { ChainLogo } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import drop from 'lodash/drop'
 import take from 'lodash/take'
 import { useMemo } from 'react'
+import styled from 'styled-components'
 import { chainNameConverter } from 'utils/chainNameConverter'
 import { chains as evmChains } from 'utils/wagmi'
 import { BaseWrapper, ButtonWrapper, RowWrapper } from './CommonBases'
+
+const NetworkMenuColumn = styled(Flex)`
+  flex-direction: column;
+  background-color: ${({ theme }) => theme.colors.input};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-radius: ${({ theme }) => theme.radii.default};
+  overflow: hidden;
+`
+
+const NetworkSelectRow = styled(Flex)`
+  cursor: pointer;
+  padding: 8px 16px 8px;
+  gap: 8px;
+  transition: background-color 0.15s;
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.background};
+  }
+`
 
 export default function SwapNetworkSelection({
   chainId,
@@ -82,22 +101,21 @@ export default function SwapNetworkSelection({
                 <Text color="textSubtle" bold px="6px">
                   +{hiddenChains.length}
                 </Text>
+                <ChevronDownIcon color="textSubtle" ml="-4px" />
               </BaseWrapper>
             </ButtonWrapper>
           }
         >
-          <Flex flexDirection="column" pt="12px" pb="4px">
+          <NetworkMenuColumn>
             {hiddenChains.map((chain) => {
               return (
-                <Flex key={`buttonNetworkSelect#${chain.id}`} onClick={() => onSelect(chain.id)} pb="8px" px="16px">
-                  <ChainLogo chainId={chain.id} px="4px" />
-                  <Text color="inherit" px="6px">
-                    {chainNameConverter(chain.name)}
-                  </Text>
-                </Flex>
+                <NetworkSelectRow key={`buttonNetworkSelect#${chain.id}`} onClick={() => onSelect(chain.id)}>
+                  <ChainLogo chainId={chain.id} />
+                  <Text color="inherit">{chainNameConverter(chain.name)}</Text>
+                </NetworkSelectRow>
               )
             })}
-          </Flex>
+          </NetworkMenuColumn>
         </InlineMenu>
       </RowWrapper>
     </AutoColumn>

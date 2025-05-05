@@ -14,6 +14,7 @@ import { useCurrencyBalances } from 'state/wallet/hooks'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
+import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import currencyId from 'utils/currencyId'
 import { useAccount } from 'wagmi'
@@ -75,8 +76,8 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
     (
       newCurrency: Currency,
       field: Field,
-      currentInputCurrencyId: string | undefined,
-      currentOutputCurrencyId: string | undefined,
+      _currentInputCurrencyId: string | undefined,
+      _currentOutputCurrencyId: string | undefined,
     ) => {
       onCurrencySelection(field, newCurrency)
 
@@ -90,11 +91,13 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
       const newCurrencyId = currencyId(newCurrency)
 
-      if (isInput) {
-        replaceBrowserHistoryMultiple({
-          inputCurrency: newCurrencyId,
-        })
-      }
+      // Output chain name
+      const chainOut = CHAIN_QUERY_NAME[newCurrency.chainId]
+
+      replaceBrowserHistoryMultiple({
+        [isInput ? 'inputCurrency' : 'outputCurrency']: newCurrencyId,
+        ...(!isInput && { chainOut }),
+      })
     },
     [onCurrencySelection, warningSwapHandler, canSwitch, switchNetwork],
   )
