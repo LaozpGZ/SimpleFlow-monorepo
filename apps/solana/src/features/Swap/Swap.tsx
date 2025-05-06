@@ -115,7 +115,7 @@ export default function Swap() {
         width={!isMobile && isPCChartShown ? 'min(100%, 1300px)' : undefined}
         height="100%"
       >
-        <FlexGap gap="16px" height="100%" width="full" alignItems="flex-start" flexDirection="column" justifyContent="center">
+        <FlexGap gap="16px" height="100%" width="full" alignItems="flex-start" flexDirection="column" justifyContent="center" mt="-50px">
           <FlexGap justifyContent="flex-end" width="100%" alignItems="center" gap="10px">
             <SlippageAdjuster />
             {/* <Tooltip
