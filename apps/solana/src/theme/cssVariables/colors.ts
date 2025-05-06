@@ -6,8 +6,12 @@ export const darkColors: Record<keyof typeof colors, string> = {
   primary10: pcsDarkColors.primary10,
   primary20: pcsDarkColors.primary20,
   primary60: pcsDarkColors.primary60,
+  destructive10: pcsDarkColors.destructive10,
+  destructive20: pcsDarkColors.destructive20,
+  destructive60: pcsDarkColors.destructive60,
+  destructive: pcsDarkColors.destructive,
   positive60: pcsDarkColors.positive60,
-  secondary: '#22D1F8',
+  secondary: pcsDarkColors.secondary,
   secondary10: 'rgba(34, 209, 248, 0.1)',
 
   // component color
@@ -75,6 +79,7 @@ export const darkColors: Record<keyof typeof colors, string> = {
 
   // success/warning/error/info
   success: pcsDarkColors.success,
+  failure: pcsDarkColors.failure,
   warning20: pcsDarkColors.warning20,
   warning50: pcsDarkColors.yellow,
   semanticSuccess: '#22D1F8',
@@ -99,6 +104,7 @@ export const darkColors: Record<keyof typeof colors, string> = {
   // tooltip (this color is not in figma ui color system,but in figma ui page)
   tooltipBg: pcsLightColors.backgroundAlt,
   tooltipText: pcsLightColors.text,
+  dropdown: pcsDarkColors.dropdown,
 
   popoverBg: '#141f3a',
 
@@ -123,7 +129,7 @@ export const darkColors: Record<keyof typeof colors, string> = {
   cardBg: pcsDarkColors.card,
 
   // customize (by V3 frontend coder)
-  backgroundApp: 'linear-gradient(29.71deg, #121C34 -18.98%, #050D17 14.6%, #070A15 56.26%, rgba(9, 14, 29, 0.97) 85.27%)',
+  backgroundApp: pcsDarkColors.background,
   solidButtonBg: 'linear-gradient(272.03deg, #39D0D8 2.63%, #22D1F8 95.31%)',
   outlineButtonBg: 'linear-gradient(272.03deg, rgba(57, 208, 216, 0.1) 2.63%, rgba(34, 209, 248, 0.1) 95.31%)',
   filledProgressBg: 'linear-gradient(270deg, #8C6EEF 0%, #4F53F3 100%)',
@@ -162,7 +168,7 @@ export const lightColors: Partial<typeof darkColors> = {
   destructive60: pcsLightColors.destructive60,
   destructive: pcsLightColors.destructive,
   positive60: pcsLightColors.positive60,
-  secondary: '#4F53F3',
+  secondary: pcsLightColors.secondary,
   secondary10: 'rgba(34, 209, 248, 0.1)',
 
   // component color
@@ -230,6 +236,7 @@ export const lightColors: Partial<typeof darkColors> = {
 
   // success/warning/error/info
   success: pcsLightColors.success,
+  failure: pcsLightColors.failure,
   warning20: pcsLightColors.warning20,
   warning50: pcsLightColors.yellow,
   semanticSuccess: '#39D0D8',
@@ -254,6 +261,7 @@ export const lightColors: Partial<typeof darkColors> = {
   // tooltip (this color is not in figma ui color system,but in figma ui page)
   tooltipBg: pcsDarkColors.backgroundAlt,
   tooltipText: pcsDarkColors.text,
+  dropdown: pcsLightColors.dropdown,
 
   popoverBg: '#fff',
 
@@ -279,7 +287,7 @@ export const lightColors: Partial<typeof darkColors> = {
   cardBg: pcsLightColors.card,
 
   // customize (by V3 frontend coder)
-  backgroundApp: '#fff',
+  backgroundApp: pcsLightColors.background,
 
   solidButtonBg: 'linear-gradient(272deg, #4F53F3 2.63%, #8C6EEF 95.31%)',
   outlineButtonBg: 'linear-gradient(270deg, #8C6EEF1a 0%, #4F53F31a 100%)',
@@ -391,6 +399,7 @@ export const colors = {
 
   // success/warning/error/info
   success: 'var(--success)',
+  failure: 'var(--failure)',
   warning20: 'var(---warning20)',
   warning50: 'var(---warning50)',
   semanticSuccess: 'var(--semantic-success)',
@@ -415,6 +424,7 @@ export const colors = {
   // tooltip (this color is not in figma ui color system,but in figma ui page)
   tooltipBg: 'var(--tooltip-bg)',
   tooltipText: 'var(--tooltip-text)',
+  dropdown: 'var(--dropdown)',
 
   popoverBg: 'var(--popover-bg)',
 

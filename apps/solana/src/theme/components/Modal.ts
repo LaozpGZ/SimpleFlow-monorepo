@@ -22,11 +22,11 @@ const baseStyle = definePartsStyle({
   body: {
     paddingInline: ['18px', '22px'],
     marginInline: ['-18px', '-22px'],
-    padding: '0',
     overflow: 'auto'
   },
   header: {
-    padding: '16px 0px',
+    paddingBlock: ['24px', '28px'],
+    paddingInline: 0,
     fontSize: ['lg', '2xl'],
     fontWeight: 600,
     marginInline: '0'

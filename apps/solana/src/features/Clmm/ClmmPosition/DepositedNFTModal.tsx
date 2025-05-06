@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
+import { Button } from '@pancakeswap/uikit'
 import {
   Flex,
   Image,
   Text,
-  Button,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -30,16 +30,16 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
 
   useEffect(() => {
     setValue(nftAddress)
-  }, [nftAddress])
+  }, [setValue, nftAddress])
 
   return (
     <Modal size="xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent sx={{ bg: 'rgba(28, 36, 62, 1)' }}>
+      <ModalContent>
         <ModalHeader fontSize="xl">{t('clmm.deposit_successful')}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          <Text variant="title" fontSize="md" mb="6" fontWeight="400">
+          <Text variant="title" color={colors.textPrimary} fontSize="sm" mb="6" fontWeight="400">
             {t('clmm.nft_desc')}
           </Text>
           <Image w="260px" height="260px" m="0 auto" src="/images/clmm-nft.jpg" />
@@ -48,19 +48,19 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
             py="2"
             px="4"
             gap="1"
-            bg={colors.backgroundDark}
-            rounded="xl"
+            rounded="full"
             alignItems="center"
             w="fit-content"
-            fontSize="md"
-            fontWeight="500"
+            fontSize="sm"
+            fontWeight="400"
             mt="2"
+            bg={colors.textSubtle}
+            color={colors.backgroundAlt}
           >
-            <Text color={colors.textSecondary}>{t('clmm.nft_mint')}:</Text>
-            <Text color={colors.textPurple} mr="2">
-              {encodeStr(nftAddress, 5, 3)}
-            </Text>
+            <Text>{t('clmm.nft_mint')}:</Text>
+            <Text mr="2">{encodeStr(nftAddress, 5, 3)}</Text>
             <CopyIcon
+              color={colors.backgroundAlt}
               cursor="pointer"
               onClick={() => {
                 onCopy()
@@ -77,19 +77,21 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
               target="_blank"
               rel="noreferrer"
             >
-              <ExternalLink cursor="pointer" width="14" height="14" />
+              <ExternalLink color={colors.backgroundAlt} cursor="pointer" width="14" height="14" />
             </a>
           </Flex>
 
-          <Text color={colors.textSecondary} mt="4" mb="2">
+          <Text fontSize="sm" color={colors.textPrimary} mt="4" mb="2">
             <Trans
               i18nKey="clmm.dont_burn_nft" // optional -> fallbacks to defaults if not provided
-              components={{ sub: <Text display="inline-block" color={colors.textPink} variant="title" /> }}
+              components={{
+                sub: <Text display="inline-block" fontWeight={600} color={colors.textPrimary} variant="title" fontSize="md" />
+              }}
             />
           </Text>
         </ModalBody>
         <ModalFooter px="0" py="0" mt="4" mb="2">
-          <Button onClick={() => router.push('/portfolio', { query: { tab: 'concentrated' }, hash: 'my-position' })} w="100%">
+          <Button onClick={() => router.push('/portfolio', { query: { tab: 'concentrated' }, hash: 'my-position' })} width="100%">
             {t('clmm.view_my_positions')}
           </Button>
         </ModalFooter>

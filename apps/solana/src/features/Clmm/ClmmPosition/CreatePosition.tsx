@@ -1,11 +1,12 @@
+import { ErrorIcon, Message, MessageText } from '@pancakeswap/uikit'
 import { Box, Flex, Grid, GridItem, HStack, Tag, Text, useDisclosure } from '@chakra-ui/react'
 import { ApiV3PoolInfoConcentratedItem, ApiV3Token, PoolFetchType, solToWSol } from '@raydium-io/raydium-sdk-v2'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
+
 import ConnectedButton from '@/components/ConnectedButton'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { AprKey } from '@/hooks/pool/type'
@@ -17,33 +18,34 @@ import { colors } from '@/theme/cssVariables'
 import { formatToMaxDigit, getFirstNonZeroDecimal, formatCurrency, formatToRawLocaleStr, trimTrailZero } from '@/utils/numberish/formatter'
 import toPercentString from '@/utils/numberish/toPercentString'
 import IntervalCircle, { IntervalCircleHandler } from '@/components/IntervalCircle'
-import EstimatedAprInfo from '../components/AprInfo'
-import ChartPriceLabel from '../components/ChartPriceLabel'
-import LiquidityChartRangeInput from '../components/LiquidityChartRangeInput'
-import PreviewDepositModal from '../components/PreviewDepositModal'
-import PriceSwitchButton from '../components/PriceSwitchButton'
-import RangeInput, { Side } from '../components/RangeInput'
-import RangePercentTabs from '../components/RangePercentTabs'
-import CLMMTokenInputGroup, { InputSide } from '../components/TokenInputGroup'
 import { QuestionToolTip } from '@/components/QuestionToolTip'
-import { getPriceBoundary } from '../utils/tick'
-import DepositedNFTModal from './DepositedNFTModal'
-import useValidate from './useValidate'
-
 import { Desktop } from '@/components/MobileDesktop'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import LockIcon from '@/icons/misc/LockIcon'
 import WarningIcon from '@/icons/misc/WarningIcon'
-import CircleWarning from '@/icons/misc/CircleWarning'
 import { debounce } from '@/utils/functionMethods'
 import { routeBack, useRouteQuery } from '@/utils/routeTools'
 import { wSolToSol } from '@/utils/token'
-import { calRatio } from '../utils/math'
 import useClmmApr from '@/features/Clmm/useClmmApr'
 import { useEvent } from '@/hooks/useEvent'
 import { SlippageAdjuster } from '@/components/SlippageAdjuster'
 import useBirdeyeTokenPrice from '@/hooks/token/useBirdeyeTokenPrice'
 import useFetchRpcClmmInfo from '@/hooks/pool/clmm/useFetchRpcClmmInfo'
+import { panelCard } from '@/theme/cssBlocks'
+import { Side } from '@/features/Create/ClmmPool/components/SetPriceAndRange'
+
+import { calRatio } from '../utils/math'
+import EstimatedAprInfo from '../components/AprInfo'
+import ChartPriceLabel from '../components/ChartPriceLabel'
+import LiquidityChartRangeInput from '../components/LiquidityChartRangeInput'
+import PreviewDepositModal from '../components/PreviewDepositModal'
+import PriceSwitchButton from '../components/PriceSwitchButton'
+import RangeInput from '../components/RangeInput'
+import RangePercentTabs from '../components/RangePercentTabs'
+import CLMMTokenInputGroup, { InputSide } from '../components/TokenInputGroup'
+import { getPriceBoundary } from '../utils/tick'
+import DepositedNFTModal from './DepositedNFTModal'
+import useValidate from './useValidate'
 
 type FormatParams = Parameters<typeof formatToMaxDigit>[0]
 
@@ -203,7 +205,7 @@ export default function CreatePosition() {
   useEffect(() => {
     if (!poolId) return
     setRangePercent(currentPool.config.defaultRange)
-  }, [poolId, baseIn])
+  }, [poolId, baseIn, currentPool?.config.defaultRange])
 
   useEffect(() => {
     // initialize pool tick
@@ -245,7 +247,7 @@ export default function CreatePosition() {
       inputA: focusPoolARef.current,
       amount
     })
-  }, [currentPool, baseIn, tokenAmount, priceRange, debounceCompute, rpcData?.currentPrice])
+  }, [poolId, currentPool, baseIn, tokenAmount, priceRange, debounceCompute, rpcData?.currentPrice])
 
   const handleAmountChange = useCallback(
     (val: string, side: string) => {
@@ -321,7 +323,7 @@ export default function CreatePosition() {
       setRangePercent(val)
       if (val === 0) setRangePercent(currentPool.config.defaultRange)
     },
-    [currentPool, baseIn]
+    [getPriceAndTick, formatDecimalToDigit, currentPool, baseIn]
   )
 
   const handleClickSwitch = useCallback(
@@ -359,13 +361,14 @@ export default function CreatePosition() {
       mintA: currentPool.mintA,
       mintB: currentPool.mintB
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentPool?.id])
 
   useEffect(() => {
     if (urlPoolId !== poolId && poolId) {
       router.replace(router.pathname, { query: { pool_id: poolId } })
     }
-  }, [urlPoolId, poolId])
+  }, [urlPoolId, poolId, router])
 
   const [priceMin, priceMax] = useMemo(() => {
     if (!currentPool) return [0, 0]
@@ -433,8 +436,8 @@ export default function CreatePosition() {
     >
       <GridItem area="back">
         <Flex>
-          <HStack cursor="pointer" onClick={routeBack} color={colors.textTertiary} fontWeight="500" fontSize={['md', 'xl']}>
-            <ChevronLeftIcon />
+          <HStack cursor="pointer" onClick={routeBack} color={colors.primary60} fontWeight="400" fontSize="md">
+            <ChevronLeftIcon color={colors.textTertiary} />
             <Text>{t('common.back')}</Text>
           </HStack>
         </Flex>
@@ -442,19 +445,11 @@ export default function CreatePosition() {
 
       <GridItem area="chip">
         <Box>
-          <HStack
-            rounded="xl"
-            color={colors.textPrimary}
-            bg={colors.backgroundLight}
-            justifyContent="space-between"
-            py={[4, 4]}
-            px={[4, 6]}
-            gap={[3, 4]}
-          >
-            <Flex direction={['column', 'row']} flex={1} gap="2" fontSize="20px" fontWeight="500">
+          <HStack rounded="xl" color={colors.textPrimary} justifyContent="space-between" py={[4, 4]} gap={[3, 4]}>
+            <Flex direction={['column', 'row']} flex={1} gap="2" fontSize="16px" fontWeight="600">
               <Flex gap="2" alignItems="center">
-                <TokenAvatarPair token1={currentPool?.mintA} token2={currentPool?.mintB} />
-                {currentPool?.poolName.replace('-', '/')}
+                <TokenAvatarPair size="smi" token1={currentPool?.mintA} token2={currentPool?.mintB} />
+                {currentPool?.poolName.replace('-', ' / ')}
                 <Tag size="sm" variant="rounded">
                   {formatToRawLocaleStr(toPercentString((currentPool?.feeRate || 0) * 100))}
                 </Tag>
@@ -462,7 +457,7 @@ export default function CreatePosition() {
               {hasLockedLiquidity && (
                 <Flex alignItems="center" gap={1}>
                   <LockIcon />
-                  <Text opacity={0.6} fontSize="xs" color={colors.lightPurple}>
+                  <Text opacity={0.6} fontSize="xs" color={colors.textSubtle}>
                     {t('liquidity.locked_percent', {
                       percent: formatToRawLocaleStr(toPercentString(currentPool.burnPercent || 0, { alreadyPercented: true }))
                     })}
@@ -472,19 +467,17 @@ export default function CreatePosition() {
             </Flex>
 
             <Desktop>
-              <Flex gap="clamp(32px, 2.7vw, 70px)" justifyContent="space-between" whiteSpace="nowrap">
-                <Flex gap="2" alignItems="center">
-                  <Text color={colors.textTertiary}>{t('liquidity.title')}</Text>
-                  <Text color={colors.textSecondary}>{formatCurrency(currentPool?.tvl, { symbol: '$', decimalPlaces: 2 })}</Text>
-                </Flex>
-                <Flex gap="2" alignItems="center">
-                  <Text color={colors.textTertiary}>{t('field.24h_volume')}</Text>
-                  <Text color={colors.textSecondary}>{formatCurrency(currentPool?.day.volume, { symbol: '$', decimalPlaces: 2 })}</Text>
-                </Flex>
-                <Flex gap="2" alignItems="center">
-                  <Text color={colors.textTertiary}>{t('field.24h_fees')}</Text>
-                  <Text color={colors.textSecondary}>{formatCurrency(currentPool?.day.volumeFee, { symbol: '$', decimalPlaces: 2 })}</Text>
-                </Flex>
+              <Flex gap="24px" justifyContent="space-between" whiteSpace="nowrap">
+                {[
+                  { label: t('liquidity.title'), value: currentPool?.tvl },
+                  { label: t('field.24h_volume'), value: currentPool?.day.volume },
+                  { label: t('field.24h_fees'), value: currentPool?.day.volumeFee }
+                ].map(({ label, value }) => (
+                  <Flex gap="2" alignItems="center">
+                    <Text color={colors.textSubtle}>{label}</Text>
+                    <Text color={colors.textPrimary}>{formatCurrency(value, { symbol: '$', decimalPlaces: 2 })}</Text>
+                  </Flex>
+                ))}
               </Flex>
             </Desktop>
           </HStack>
@@ -513,10 +506,10 @@ export default function CreatePosition() {
           p={[3, '20px']}
           gap={[2, 4]}
           alignItems="center"
-          bg={colors.backgroundLight}
+          {...panelCard}
         >
           <GridItem gridArea="section-title">
-            <Box fontWeight={500}>{t('clmm.set_price_range')}</Box>
+            <Text variant="title">{t('clmm.set_price_range')}</Text>
           </GridItem>
           <GridItem gridArea="chart-window">
             <Grid
@@ -531,10 +524,11 @@ export default function CreatePosition() {
               ]}
               p={[2, 4]}
               pt={12}
-              bg={colors.backgroundDark}
               borderRadius="xl"
-              gap="2"
+              gap="10"
               position="relative"
+              {...panelCard}
+              bg={colors.background}
             >
               <GridItem gridArea="chart">
                 <LiquidityChartRangeInput
@@ -582,10 +576,8 @@ export default function CreatePosition() {
               onLeftBlur={handleLeftRangeBlur}
               onRightBlur={handleRightRangeBlur}
               onClickAdd={handleClickAdd}
-              postfix={t('common.per_unit', {
-                subA: baseIn ? currentPool?.mintB.symbol : currentPool?.mintA.symbol,
-                subB: baseIn ? currentPool?.mintA.symbol : currentPool?.mintB.symbol
-              })}
+              tokenBase={baseIn ? currentPool?.mintB : currentPool?.mintA}
+              tokenQuote={baseIn ? currentPool?.mintA : currentPool?.mintB}
             />
           </GridItem>
 
@@ -604,38 +596,24 @@ export default function CreatePosition() {
       </GridItem>
 
       <GridItem area="inputs">
-        <Flex
-          fontWeight={500}
-          w="full"
-          flexDirection="column"
-          justifyContent="space-between"
-          rounded="xl"
-          bg={colors.backgroundLight}
-          p="4"
-        >
+        <Flex rounded="xl" p={[3, '20px']} gap={[2, 4]} {...panelCard} w="full" flexDirection="column" justifyContent="space-between">
           <Flex alignItems="center" justifyContent="space-between" mb="3">
-            <Flex>{t('clmm.add_deposit_amount')}</Flex>
+            <Text variant="title">{t('clmm.add_deposit_amount')}</Text>
             <Flex align="center" gap={3}>
               <SlippageAdjuster variant="liquidity" />
               <IntervalCircle
+                svgWidth={18}
+                strokeWidth={3}
+                trackStrokeColor={colors.textSecondary}
+                trackStrokeOpacity={0.5}
+                filledTrackStrokeColor={colors.textSecondary}
                 componentRef={refreshCircleRef}
                 duration={60 * 1000}
-                svgWidth={18}
-                strokeWidth={2}
-                trackStrokeColor={colors.secondary}
-                trackStrokeOpacity={0.5}
-                filledTrackStrokeColor={colors.secondary}
                 onClick={handleClickRefresh}
                 onEnd={handleClickRefresh}
               />
             </Flex>
           </Flex>
-          {/* TODO not need now */}
-          {/* <Flex color={colors.textSecondary} fontSize="sm" mb="4" alignItems="center" gap="1" mt="2">
-            <Text>{t('clmm.match_deposit_ratio')}</Text>
-            <QuestionToolTip iconType="info" label={t('clmm.match_deposit_ratio_tooltip')} />
-            <Switch />
-          </Flex> */}
           <CLMMTokenInputGroup
             disableSelectToken
             pool={currentPool}
@@ -648,16 +626,20 @@ export default function CreatePosition() {
             token2Disable={disabledInput[1]}
             maxMultiplier={0.985}
           />
-          <Box border={`1px solid ${colors.backgroundTransparent07}`} bg={colors.backgroundTransparent12} p="4" mt="4" borderRadius="xl">
+          <Box>
             <HStack justifyContent="space-between">
-              <Text fontSize={['sm', 'md']}>{t('clmm.total_deposit')}</Text>
-              <Text fontSize="lg" fontWeight="500">
+              <Text fontSize="sm" color={colors.textSubtle}>
+                {t('clmm.total_deposit')}
+              </Text>
+              <Text fontSize="sm">
                 {tokenAmount[0] && tokenAmount[1] ? formatCurrency(totalPrice.toString(), { symbol: '$', decimalPlaces: 2 }) : '--'}
               </Text>
             </HStack>
             <HStack justifyContent="space-between" mt={1.5}>
-              <Text fontSize={['sm', 'md']}>{t('clmm.deposit_ratio')}</Text>
-              <Flex alignItems="center" gap="2" fontWeight="500" fontSize="xs">
+              <Text fontSize="sm" color={colors.textSubtle}>
+                {t('clmm.deposit_ratio')}
+              </Text>
+              <Flex alignItems="center" gap="2" fontSize="sm" color={colors.positive60}>
                 <Text>
                   {formatToRawLocaleStr(
                     toPercentString(ratioA, {
@@ -692,24 +674,24 @@ export default function CreatePosition() {
             ) : null}
           </Box>
           {isLowLiquidity ? (
-            <Flex
-              color={colors.text01}
-              border={`1px solid ${colors.backgroundTransparent07}`}
-              bg={colors.warnButtonLightBg}
-              p="4"
-              mt="4"
-              borderRadius="xl"
-            >
-              <Text pt={0.5}>
-                <CircleWarning width={16} height={16} color={colors.semanticWarning} />
-              </Text>
-              <Text fontWeight="bold" fontSize="xs" pl={1.5} textOverflow="ellipsis" whiteSpace="pre-wrap" overflow="hidden">
-                {t('clmm.low_liquidity')}
-                <Text fontWeight="normal" as="span">
-                  {t('clmm.low_liquidity_desc')}
+            <Message variant="warning" icon={<ErrorIcon color={colors.warning50} />} style={{ borderColor: colors.warning20 }}>
+              <MessageText>
+                <Text
+                  color={colors.textPrimary}
+                  fontWeight="bold"
+                  fontSize="xs"
+                  pl={1.5}
+                  textOverflow="ellipsis"
+                  whiteSpace="pre-wrap"
+                  overflow="hidden"
+                >
+                  {t('clmm.low_liquidity')}
+                  <Text fontWeight="normal" as="span">
+                    {t('clmm.low_liquidity_desc')}
+                  </Text>
                 </Text>
-              </Text>
-            </Flex>
+              </MessageText>
+            </Message>
           ) : null}
           <ConnectedButton
             width="100%"
