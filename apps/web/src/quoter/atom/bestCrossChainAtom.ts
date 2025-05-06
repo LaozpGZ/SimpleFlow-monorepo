@@ -46,6 +46,7 @@ export const getAvailableBridgeRoutes = atomFamily((option: QuoteQuery) => {
 
       return routes || []
     } catch (error) {
+      // QUESTION: should we log this error?
       console.error('Failed to fetch bridge routes:', error)
       return []
     }
@@ -126,6 +127,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
 
     // handle cross chain quote
     if (isCrossChain && _option.amount && _option.currency) {
+      // Catch all errors here
       try {
         // we don't support outputamount when cross chain
         // so amount is always base currency amount
@@ -181,58 +183,54 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           // Create the output currency for the bridge
           const bridgeDestinationCurrency = convertTokenToCurrency(bridgedTokenInfo)
 
-          try {
-            // Get the bridge quote
-            const bridgeQuote = await get(
-              getBridgeQuote({
-                inputAmount: baseCurrencyAmount,
-                outputCurrency: bridgeDestinationCurrency,
-              }),
-            )
+          // Get the bridge quote
+          const bridgeQuote = await get(
+            getBridgeQuote({
+              inputAmount: baseCurrencyAmount,
+              outputCurrency: bridgeDestinationCurrency,
+            }),
+          )
 
-            // Create a modified option for the swap quote
-            const swapOption: QuoteQuery = {
-              ..._option,
-              baseCurrency: bridgeQuote.trade.outputAmount.currency,
-              amount: bridgeQuote.trade.outputAmount,
-              // NOTE: use suffix to avoid hash collision
-              // if there is a better way, please fix
-              hash: _option.hash ? `${_option.hash}-swap-bridge` : '',
-              placeholderHash: _option.placeholderHash ? `${_option.placeholderHash}-swap-bridge` : undefined,
+          // Create a modified option for the swap quote
+          const swapOption: QuoteQuery = {
+            ..._option,
+            baseCurrency: bridgeQuote.trade.outputAmount.currency,
+            amount: bridgeQuote.trade.outputAmount,
+            // NOTE: use suffix to avoid hash collision
+            // if there is a better way, please fix
+            hash: _option.hash ? `${_option.hash}-swap-bridge` : '',
+            placeholderHash: _option.placeholderHash ? `${_option.placeholderHash}-swap-bridge` : undefined,
+          }
+
+          // Get the swap quote using the bridge output amount
+          const swapOrder = get(bestQuoteAtom(swapOption))
+
+          if (swapOrder.data) {
+            // The final combined quote
+            quote = {
+              ...bridgeQuote,
+              trade: {
+                ...bridgeQuote.trade,
+                outputAmount: swapOrder.data.trade.outputAmount,
+                // Create a custom mixed route array by manually mapping routes to ensure type compatibility
+                routes: [
+                  // Add bridge routes
+                  ...(bridgeQuote.trade.routes || []),
+                  // Add swap routes with appropriate type casting for compatibility
+                  ...('routes' in swapOrder.data.trade
+                    ? (swapOrder.data.trade.routes || []).map((route) => ({
+                        ...route,
+                        // Ensure the route has all required properties for type compatibility
+                        type: route.type,
+                        path: route.path,
+                        inputAmount: route.inputAmount,
+                        outputAmount: route.outputAmount,
+                      }))
+                    : []),
+                ] as any, // Use type assertion as a last resort
+              },
+              commands: [bridgeQuote, swapOrder.data],
             }
-
-            // Get the swap quote using the bridge output amount
-            const swapOrder = get(bestQuoteAtom(swapOption))
-
-            if (swapOrder.data) {
-              // The final combined quote
-              quote = {
-                ...bridgeQuote,
-                trade: {
-                  ...bridgeQuote.trade,
-                  outputAmount: swapOrder.data.trade.outputAmount,
-                  // Create a custom mixed route array by manually mapping routes to ensure type compatibility
-                  routes: [
-                    // Add bridge routes
-                    ...(bridgeQuote.trade.routes || []),
-                    // Add swap routes with appropriate type casting for compatibility
-                    ...('routes' in swapOrder.data.trade
-                      ? (swapOrder.data.trade.routes || []).map((route) => ({
-                          ...route,
-                          // Ensure the route has all required properties for type compatibility
-                          type: route.type,
-                          path: route.path,
-                          inputAmount: route.inputAmount,
-                          outputAmount: route.outputAmount,
-                        }))
-                      : []),
-                  ] as any, // Use type assertion as a last resort
-                },
-                commands: [bridgeQuote, swapOrder.data],
-              }
-            }
-          } catch (error) {
-            console.error('Failed to get bridge -> swap quote:', error)
           }
         } else if (isSwapToBridgeQuery) {
           // handle swap -> bridge quote
@@ -253,57 +251,53 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           // Create the origin currency for the bridge
           const bridgeOriginCurrency = convertTokenToCurrency(bridgeOriginTokenInfo)
 
-          try {
-            // Create a modified option for the swap quote
-            const swapOption: QuoteQuery = {
-              ..._option,
-              currency: bridgeOriginCurrency,
-              // NOTE: use suffix to avoid hash collision
-              hash: _option.hash ? `${_option.hash}-swap-bridge` : '',
-              placeholderHash: _option.placeholderHash ? `${_option.placeholderHash}-swap-bridge` : undefined,
+          // Create a modified option for the swap quote
+          const swapOption: QuoteQuery = {
+            ..._option,
+            currency: bridgeOriginCurrency,
+            // NOTE: use suffix to avoid hash collision
+            hash: _option.hash ? `${_option.hash}-swap-bridge` : '',
+            placeholderHash: _option.placeholderHash ? `${_option.placeholderHash}-swap-bridge` : undefined,
+          }
+
+          // Get the swap quote from base currency to bridge origin currency
+          const swapOrder = get(bestQuoteAtom(swapOption))
+
+          if (swapOrder.data) {
+            // Use the swap output amount as the bridge input amount
+            const bridgeQuote = await get(
+              getBridgeQuote({
+                inputAmount: swapOrder.data.trade.outputAmount,
+                outputCurrency: quoteCurrency,
+              }),
+            )
+
+            // The final combined quote
+            quote = {
+              type: OrderType.PCS_BRIDGE,
+              bridgeFee: bridgeQuote.bridgeFee,
+              trade: {
+                inputAmount: swapOrder.data.trade.inputAmount,
+                outputAmount: bridgeQuote.trade.outputAmount,
+                tradeType: TradeType.EXACT_INPUT,
+                routes: [
+                  // Add swap routes with appropriate type casting for compatibility
+                  ...('routes' in swapOrder.data.trade
+                    ? (swapOrder.data.trade.routes || []).map((route) => ({
+                        ...route,
+                        // Ensure the route has all required properties for type compatibility
+                        type: route.type,
+                        path: route.path,
+                        inputAmount: route.inputAmount,
+                        outputAmount: route.outputAmount,
+                      }))
+                    : []),
+                  // Add bridge routes
+                  ...(bridgeQuote.trade.routes || []),
+                ] as any, // Use type assertion as a last resort
+              },
+              commands: [swapOrder.data, bridgeQuote],
             }
-
-            // Get the swap quote from base currency to bridge origin currency
-            const swapOrder = get(bestQuoteAtom(swapOption))
-
-            if (swapOrder.data) {
-              // Use the swap output amount as the bridge input amount
-              const bridgeQuote = await get(
-                getBridgeQuote({
-                  inputAmount: swapOrder.data.trade.outputAmount,
-                  outputCurrency: quoteCurrency,
-                }),
-              )
-
-              // The final combined quote
-              quote = {
-                type: OrderType.PCS_BRIDGE,
-                bridgeFee: bridgeQuote.bridgeFee,
-                trade: {
-                  inputAmount: swapOrder.data.trade.inputAmount,
-                  outputAmount: bridgeQuote.trade.outputAmount,
-                  tradeType: TradeType.EXACT_INPUT,
-                  routes: [
-                    // Add swap routes with appropriate type casting for compatibility
-                    ...('routes' in swapOrder.data.trade
-                      ? (swapOrder.data.trade.routes || []).map((route) => ({
-                          ...route,
-                          // Ensure the route has all required properties for type compatibility
-                          type: route.type,
-                          path: route.path,
-                          inputAmount: route.inputAmount,
-                          outputAmount: route.outputAmount,
-                        }))
-                      : []),
-                    // Add bridge routes
-                    ...(bridgeQuote.trade.routes || []),
-                  ] as any, // Use type assertion as a last resort
-                },
-                commands: [swapOrder.data, bridgeQuote],
-              }
-            }
-          } catch (error) {
-            console.error('Failed to get swap -> bridge quote:', error)
           }
         } else if (isSwapToBridgeToSwapQuery) {
           // handle swap -> bridge -> swap quote
@@ -531,7 +525,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           }
         }
 
-        throw new Error('No quote found')
+        throw new BridgeTradeError('No quote found')
       } catch (error) {
         console.error('Failed to get cross chain quote:', error)
         logGTMBridgeQuoteQueryEvent('fail', {
