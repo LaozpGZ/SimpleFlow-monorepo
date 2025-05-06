@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next'
 
 import { Desktop, Mobile } from '../MobileDesktop'
 import SolWallet from '../SolWallet'
-import AppVersion from './AppVersion'
 import { MobileBottomNavbar } from './MobileBottomNavbar'
 import { ColorThemeSettingField } from './components/ColorThemeSettingField'
 import { DefaultExplorerSettingField } from './components/DefaultExplorerSettingField'
@@ -177,7 +176,7 @@ function SettingsMenuModalContent({ onDismiss }: { onDismiss: () => void }) {
   return (
     <MotionModal
       title={t('setting_board.panel_title')}
-      minWidth={[null, null, '420px']}
+      minWidth={[null, null, '500px']}
       minHeight={isMobile ? '500px' : undefined}
       headerPadding="2px 14px 0 24px"
       onDismiss={onDismiss}
@@ -196,7 +195,7 @@ function SettingsMenuModalContent({ onDismiss }: { onDismiss: () => void }) {
       <Divider />
       <RPCConnectionSettingField />
       <Divider />
-      <AppVersion />
+      {/* <AppVersion /> */}
     </MotionModal>
   )
 }
