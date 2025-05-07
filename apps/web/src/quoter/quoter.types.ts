@@ -17,6 +17,13 @@ export type InfinityGetBestTradeReturnType = Omit<
   'graph'
 >
 
+export class BridgeTradeError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = 'BridgeTradeError'
+  }
+}
+
 export class NoValidRouteError extends Error {
   constructor(message?: string) {
     super(message)
