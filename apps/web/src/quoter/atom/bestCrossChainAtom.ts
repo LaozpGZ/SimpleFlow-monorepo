@@ -13,6 +13,7 @@ import { getBridgeAvailableRoutes, getMetadata, getTokenAddress } from 'views/Sw
 import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
 import { errorLoadable, valueLoadable } from './atomWithLoadable'
 import { bestQuoteAtom } from './bestQuoteAtom'
+import { placeholderAtom } from './placeholderAtom'
 
 // Define a type for our complete path
 type CompletePath = {
@@ -110,7 +111,9 @@ export const getBridgeQuote = atomFamily(
       }
     }),
   // add Equality check for BridgeMetadataParams
-  (a, b) => a.inputAmount === b.inputAmount && a.outputCurrency === b.outputCurrency,
+  (a, b) =>
+    a.inputAmount.quotient.toString() === b.inputAmount.quotient.toString() &&
+    a.outputCurrency.wrapped.address === b.outputCurrency.wrapped.address,
 )
 
 export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
@@ -170,7 +173,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           const bridgedTokenInfo = tokenMapWithoutUrls[bridgeRoute!.destinationToken]
 
           if (!bridgedTokenInfo) {
-            throw new Error('Could not find bridged token in token map')
+            throw new Error('Token not supported for bridge')
           }
 
           // Create the output currency for the bridge
@@ -192,7 +195,6 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             // NOTE: use suffix to avoid hash collision
             // if there is a better way, please fix
             hash: _option.hash ? `${_option.hash}-swap-bridge` : '',
-            placeholderHash: _option.placeholderHash ? `${_option.placeholderHash}-swap-bridge` : undefined,
           }
 
           // Get the swap quote using the bridge output amount
@@ -250,7 +252,6 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             currency: bridgeOriginCurrency,
             // NOTE: use suffix to avoid hash collision
             hash: _option.hash ? `${_option.hash}-swap-bridge` : '',
-            placeholderHash: _option.placeholderHash ? `${_option.placeholderHash}-swap-bridge` : undefined,
           }
 
           // Get the swap quote from base currency to bridge origin currency
@@ -327,9 +328,6 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
                 currency: originToken,
                 // NOTE: use suffix to avoid hash collision
                 hash: _option.hash ? `${_option.hash}-swap-origin-${originToken.symbol}` : '',
-                placeholderHash: _option.placeholderHash
-                  ? `${_option.placeholderHash}-swap-origin-${originToken.symbol}`
-                  : undefined,
               }
 
               // Get the swap quote from base currency to origin token
@@ -418,9 +416,6 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
                   hash: _option.hash
                     ? `${_option.hash}-destination-swap-${swapAndBridgeQuote.destinationToken.symbol}`
                     : '',
-                  placeholderHash: _option.placeholderHash
-                    ? `${_option.placeholderHash}-destination-swap-${swapAndBridgeQuote.destinationToken.symbol}`
-                    : undefined,
                 }
 
                 // Get the swap quote from bridge destination to quote currency
@@ -509,10 +504,21 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
 
         const result = valueLoadable<InterfaceOrder | undefined>(quote)
 
+        if (!result.data?.trade && _option.placeholderHash) {
+          const placeHolder = get(placeholderAtom(_option.placeholderHash))
+          return {
+            ...result,
+            data: placeHolder,
+            hash: _option.hash,
+            placeholderHash: `${_option.placeholderHash}`,
+            loading: !placeHolder,
+          }
+        }
+
         return {
           ...result,
           hash: _option.hash,
-          placeholderHash: _option.placeholderHash,
+          placeholderHash: `${_option.placeholderHash}-${result?.data?.trade?.outputAmount?.quotient.toString()}`,
         }
       } catch (error) {
         console.error('Failed to get cross chain quote:', error)
