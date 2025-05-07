@@ -17,7 +17,6 @@ const CHAIN_BUTTON_WIDTH = 42
 const CHAIN_BUTTON_MARGIN = 4
 const HIDDEN_CHAINS_BUTTON_WIDTH = CHAIN_BUTTON_WIDTH
 const CHAIN_LOGO_WIDTH = 24
-const TEXT_PADDING = 12 // 6px padding on each side
 
 const ChainOption = styled(Flex)`
   padding: 8px 16px;
@@ -63,7 +62,8 @@ export default function SwapNetworkSelection({
   useLayoutEffect(() => {
     if (selectedChainRef.current && selectedTextRef.current) {
       const textWidth = selectedTextRef.current.getBoundingClientRect().width
-      const totalWidth = CHAIN_LOGO_WIDTH + textWidth // 8px for padding around the BaseWrapper
+      // Add 4px to make logo size 24px consistent with other logos
+      const totalWidth = CHAIN_LOGO_WIDTH + textWidth + 4
       setSelectedChainWidth(totalWidth + CHAIN_BUTTON_MARGIN)
       setWrapperWidth(totalWidth)
     }
@@ -82,7 +82,26 @@ export default function SwapNetworkSelection({
     const availableWidth = CONTAINER_MAX_WIDTH - selectedChainWidth - HIDDEN_CHAINS_BUTTON_WIDTH - CHAIN_BUTTON_MARGIN
     const chainsToShow = Math.max(1, Math.floor(availableWidth / (CHAIN_BUTTON_WIDTH + CHAIN_BUTTON_MARGIN)))
 
-    return [filtered, take(filtered, chainsToShow), drop(filtered, chainsToShow)]
+    // Prioritize BSC, BASE, and ARB chains
+    const prioritizedChains = [ChainId.BSC, ChainId.BASE, ChainId.ARBITRUM_ONE]
+
+    // Sort the filtered chains to have priority chains first
+    const sortedFiltered = [...filtered].sort((a, b) => {
+      const aIsPriority = prioritizedChains.includes(a.id)
+      const bIsPriority = prioritizedChains.includes(b.id)
+
+      if (aIsPriority && !bIsPriority) return -1
+      if (!aIsPriority && bIsPriority) return 1
+
+      // If both are priority chains, sort by the order in prioritizedChains array
+      if (aIsPriority && bIsPriority) {
+        return prioritizedChains.indexOf(a.id) - prioritizedChains.indexOf(b.id)
+      }
+
+      return 0
+    })
+
+    return [filtered, take(sortedFiltered, chainsToShow), drop(sortedFiltered, chainsToShow)]
   }, [usedChainId, showTestnet, selectedChainWidth])
 
   return (
