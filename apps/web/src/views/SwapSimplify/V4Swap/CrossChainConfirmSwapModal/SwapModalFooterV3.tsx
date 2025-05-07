@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Percent, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
 import { SmartRouter } from '@pancakeswap/smart-router'
 import {
   AutoColumn,
@@ -31,11 +31,16 @@ import FormattedPriceImpact from 'views/Swap/components/FormattedPriceImpact'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/styleds'
 import { InterfaceOrder, isXOrder } from 'views/Swap/utils'
-import { SlippageAdjustedAmounts, formatExecutionPrice } from 'views/Swap/V3Swap/utils/exchange'
+import { SlippageAdjustedAmounts, TradePriceBreakdown, formatExecutionPrice } from 'views/Swap/V3Swap/utils/exchange'
 
+import { formatNumber } from '@pancakeswap/utils/formatBalance'
+import BigNumber from 'bignumber.js'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { currenciesUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
+import { useAtomValue } from 'jotai'
+import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
 
 dayjs.extend(relativeTime)
 
@@ -70,9 +75,28 @@ const Badge = styled.span`
   background-color: ${({ theme }) => theme.colors.success};
 `
 
+function TotalBridgeFee({ priceBreakdown }: { priceBreakdown: BridgeOrderFee[] }) {
+  const currencies = useMemo(() => {
+    return priceBreakdown.map((p) => p.lpFeeAmount!.currency)
+  }, [priceBreakdown])
+
+  const usdPrices = useAtomValue(currenciesUSDPriceAtom(currencies))
+
+  const currencyUsdPrices = useMemo(() => {
+    return priceBreakdown.map((p, index) => {
+      return new BigNumber(p.lpFeeAmount?.toExact() ?? 0).times(usdPrices[index] ?? 0)
+    })
+  }, [usdPrices, priceBreakdown])
+
+  return (
+    <Text fontSize="14px" textAlign="right">
+      ${formatNumber(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber(), 0, 5)}
+    </Text>
+  )
+}
+
 export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
-  priceImpact: priceImpactWithoutFee,
-  lpFee: realizedLPFee,
+  priceBreakdown,
   inputAmount,
   outputAmount,
   order,
@@ -87,10 +111,9 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
 }: {
   order?: InterfaceOrder
   tradeType: TradeType
-  lpFee?: CurrencyAmount<Currency>
   inputAmount: CurrencyAmount<Currency>
   outputAmount: CurrencyAmount<Currency>
-  priceImpact?: Percent
+  priceBreakdown?: BridgeOrderFee[] | TradePriceBreakdown
   allowedSlippage: number | ReactElement
   slippageAdjustedAmounts: SlippageAdjustedAmounts | undefined | null
   isEnoughInputBalance?: boolean
@@ -135,7 +158,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
         : t('%discount% discount on this gas fee token', { discount: gasTokenInfo.discount })),
   )
 
-  const severity = warningSeverity(priceImpactWithoutFee)
+  const severity = warningSeverity(!Array.isArray(priceBreakdown) ? priceBreakdown?.priceImpactWithoutFee : undefined)
 
   const executionPriceDisplay = useMemo(() => {
     const price = SmartRouter.getExecutionPrice(order?.trade) ?? undefined
@@ -176,7 +199,10 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
               <DottedHelpText fontSize="14px">{t('Price Impact')}</DottedHelpText>
             </QuestionHelperV2>
           </RowFixed>
-          <FormattedPriceImpact isX={isXOrder(order)} priceImpact={priceImpactWithoutFee} />
+          <FormattedPriceImpact
+            isX={isXOrder(order)}
+            priceImpact={!Array.isArray(priceBreakdown) ? priceBreakdown?.priceImpactWithoutFee : undefined}
+          />
         </RowBetween>
         {!isXOrder(order) && (
           <RowBetween mb="8px">
@@ -248,7 +274,9 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
               <DottedHelpText fontSize="14px">{t('Total Fee')}</DottedHelpText>
             </QuestionHelperV2>
           </RowFixed>
-          {realizedLPFee || isXOrder(order) ? (
+          {Array.isArray(priceBreakdown) ? (
+            <TotalBridgeFee priceBreakdown={priceBreakdown} />
+          ) : priceBreakdown?.lpFeeAmount || isXOrder(order) ? (
             <Flex alignItems="center">
               {isXOrder(order) ? (
                 <Text color="positive60" fontSize="16px" bold>
@@ -256,7 +284,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
                 </Text>
               ) : null}
               <Text fontSize="14px" ml="8px" strikeThrough={isXOrder(order)}>
-                {formatAmount(realizedLPFee, 6)}
+                {formatAmount(priceBreakdown?.lpFeeAmount, 6)}
               </Text>
               <Text ml="4px" fontSize="14px">
                 {inputAmount.currency.symbol}
