@@ -3,6 +3,7 @@ import { ConfirmationModalContent } from '@pancakeswap/widgets-internal'
 import { memo, useCallback, useMemo } from 'react'
 import { Field } from 'state/swap/actions'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
+import { computeBridgeOrderFee } from 'views/Swap/Bridge/utils'
 import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 import {
   computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter,
@@ -60,9 +61,11 @@ export const TransactionConfirmSwapContentV3 = memo<TransactionConfirmSwapConten
       () => computeSlippageAdjustedAmountsWithSmartRouter(order, allowedSlippage),
       [order, allowedSlippage],
     )
-    const { priceImpactWithoutFee, lpFeeAmount } = useMemo(
+    const priceBreakdown = useMemo(
       () =>
-        computeTradePriceBreakdownWithSmartRouter(isBridgeOrder(order) || isXOrder(order) ? undefined : order?.trade),
+        isBridgeOrder(order)
+          ? computeBridgeOrderFee(order)
+          : computeTradePriceBreakdownWithSmartRouter(isXOrder(order) ? undefined : order?.trade),
       [order],
     )
 
@@ -89,22 +92,14 @@ export const TransactionConfirmSwapContentV3 = memo<TransactionConfirmSwapConten
           outputAmount={order.trade.outputAmount}
           currencyBalances={currencyBalances}
           tradeType={order.trade.tradeType}
-          priceImpactWithoutFee={priceImpactWithoutFee ?? undefined}
+          priceImpactWithoutFee={(!Array.isArray(priceBreakdown) && priceBreakdown.priceImpactWithoutFee) || undefined}
           isEnoughInputBalance={isEnoughInputBalance ?? undefined}
           recipient={recipient ?? undefined}
           showAcceptChanges={showAcceptChanges}
           onAcceptChanges={onAcceptChanges}
         />
       ) : null
-    }, [
-      order,
-      currencyBalances,
-      priceImpactWithoutFee,
-      isEnoughInputBalance,
-      recipient,
-      showAcceptChanges,
-      onAcceptChanges,
-    ])
+    }, [order, currencyBalances, priceBreakdown, isEnoughInputBalance, recipient, showAcceptChanges, onAcceptChanges])
 
     const modalBottom = useCallback(() => {
       return order ? (
@@ -113,8 +108,7 @@ export const TransactionConfirmSwapContentV3 = memo<TransactionConfirmSwapConten
           tradeType={order.trade.tradeType}
           inputAmount={order.trade.inputAmount}
           outputAmount={order.trade.outputAmount}
-          lpFee={lpFeeAmount ?? undefined}
-          priceImpact={priceImpactWithoutFee ?? undefined}
+          priceBreakdown={priceBreakdown}
           disabledConfirm={showAcceptChanges}
           allowedSlippage={allowedSlippage}
           slippageAdjustedAmounts={slippageAdjustedAmounts ?? undefined}
@@ -124,8 +118,7 @@ export const TransactionConfirmSwapContentV3 = memo<TransactionConfirmSwapConten
       ) : null
     }, [
       order,
-      lpFeeAmount,
-      priceImpactWithoutFee,
+      priceBreakdown,
       showAcceptChanges,
       allowedSlippage,
       slippageAdjustedAmounts,

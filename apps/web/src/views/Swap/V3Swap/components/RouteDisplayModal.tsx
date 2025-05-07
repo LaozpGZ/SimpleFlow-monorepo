@@ -176,7 +176,7 @@ const HookDiscountFeeDisplay: React.FC<{
 
 export const RouteDisplay = memo(function RouteDisplay({ route }: RouteDisplayProps) {
   const isBridge = route.type === RouteType.BRIDGE
-  const { isMobile } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   const { hookDiscount, category } = useHookDiscount(route.pools)
   const { t } = useTranslation()
@@ -222,7 +222,7 @@ export const RouteDisplay = memo(function RouteDisplay({ route }: RouteDisplayPr
       <AutoColumn gap="24px">
         <RouterBox justifyContent="space-between" alignItems="center">
           <CurrencyLogoWrapper ref={targetRef}>
-            <CurrencyLogo showChainLogo size={isMobile ? '32px' : '48px'} currency={inputCurrency} />
+            <CurrencyLogo showChainLogo size={isDesktop ? '44px' : '30px'} currency={inputCurrency} />
           </CurrencyLogoWrapper>
           {tooltipVisible && tooltip}
           <PairBridgeNode
@@ -234,7 +234,7 @@ export const RouteDisplay = memo(function RouteDisplay({ route }: RouteDisplayPr
             } (${SHORT_SYMBOL[outputCurrency.chainId]})`}
           />
           <CurrencyLogoWrapper ref={outputTargetRef}>
-            <CurrencyLogo showChainLogo size={isMobile ? '32px' : '48px'} currency={outputCurrency} />
+            <CurrencyLogo showChainLogo size={isDesktop ? '44px' : '30px'} currency={outputCurrency} />
           </CurrencyLogoWrapper>
           {outputTooltipVisible && outputTooltip}
         </RouterBox>
