@@ -220,7 +220,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
   const isValid = useMemo(
     () => !swapInputError && !tradeLoading && !hasBridgeTradeError,
-    [swapInputError, tradeLoading],
+    [swapInputError, tradeLoading, hasBridgeTradeError],
   )
   const disabled = useMemo(
     () => !isValid || (priceImpactSeverity > 3 && !isExpertMode) || isRecipientEmpty || isRecipientError,
