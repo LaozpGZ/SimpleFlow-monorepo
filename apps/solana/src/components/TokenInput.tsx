@@ -1,32 +1,30 @@
-import { WalletFilledV2Icon } from '@pancakeswap/uikit'
-import { Box, BoxProps, Grid, GridItem, HStack, Spacer, StackProps, SystemStyleObject, Text, useDisclosure } from '@chakra-ui/react'
-import { ApiV3Token, TokenInfo, SOL_INFO } from '@raydium-io/raydium-sdk-v2'
-import { NumericFormat } from 'react-number-format'
-import Decimal from 'decimal.js'
-import { ReactNode, useEffect, useState, useRef, useMemo, useImperativeHandle, RefObject } from 'react'
-import { t } from 'i18next'
 import useTokenPrice from '@/hooks/token/useTokenPrice'
 import { useEvent } from '@/hooks/useEvent'
-import ChevronDownIcon from '@/icons/misc/ChevronDownIcon'
-import { useAppStore, useTokenAccountStore, useTokenStore } from '@/store'
-import { colors } from '@/theme/cssVariables'
-import { trimTrailZero, formatCurrency, detectedSeparator } from '@/utils/numberish/formatter'
 import useResponsive from '@/hooks/useResponsive'
+import { useAppStore, useTokenAccountStore, useTokenStore } from '@/store'
 import { inputCard, inputFocusStyle } from '@/theme/cssBlocks'
-
-import Button from './Button'
+import { colors } from '@/theme/cssVariables'
+import { detectedSeparator, formatCurrency, trimTrailZero } from '@/utils/numberish/formatter'
+import { Box, BoxProps, Grid, GridItem, HStack, Spacer, StackProps, SystemStyleObject, useDisclosure } from '@chakra-ui/react'
+import { AtomBox, Button, ChevronDownIcon, FlexGap, Text, WalletFilledV2Icon } from '@pancakeswap/uikit'
+import { ApiV3Token, SOL_INFO, TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import Decimal from 'decimal.js'
+import { ReactNode, RefObject, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { NumericFormat } from 'react-number-format'
+import styled from 'styled-components'
 import TokenAvatar from './TokenAvatar'
 import TokenSelectDialog, { TokenSelectDialogProps } from './TokenSelectDialog'
-import TokenUnknownAddDialog from './TokenSelectDialog/components/TokenUnknownAddDialog'
 import TokenFreezeDialog from './TokenSelectDialog/components/TokenFreezeDialog'
 import { TokenListHandles } from './TokenSelectDialog/components/TokenList'
+import TokenUnknownAddDialog from './TokenSelectDialog/components/TokenUnknownAddDialog'
 
-const linkButtonStyle = {
-  variant: 'link' as const,
-  size: 'xs',
-  color: colors.primary60,
-  fontWeight: 600
-}
+const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm' })`
+  padding: 24px 4px;
+
+  &:hover {
+    background: ${({ theme }) => colors.invertedContrast};
+  }
+`
 
 export const DEFAULT_SOL_RESERVER = 0.01
 export interface InputActionRef {
@@ -304,7 +302,7 @@ function TokenInput(props: TokenInputProps) {
   }))
 
   return (
-    <Box position="relative" rounded={12} sx={ctrSx}>
+    <AtomBox as="label" style={{ borderRadius: '24px' }}>
       {disableTotalInputByMask ? (
         <Box
           rounded="inherit"
@@ -336,14 +334,12 @@ function TokenInput(props: TokenInputProps) {
         {!hideBalance && maxString && (
           <HStack spacing={0.5} color={colors.textSubtle} fontSize="xs" fontWeight={600}>
             {renderTopRightPrefixLabel()}
-            <Text onClick={handleClickMax} cursor="pointer">
-              {formatCurrency(maxString, { decimalPlaces: token?.decimals })}
-            </Text>
+            <Text onClick={handleClickMax}>{formatCurrency(maxString, { decimalPlaces: token?.decimals })}</Text>
           </HStack>
         )}
 
         {/* buttons */}
-        {hideControlButton ? null : (
+        {/* {hideControlButton ? null : (
           <HStack>
             <Button disabled={disableClickBalance} onClick={handleClickMax} {...linkButtonStyle}>
               {t('input.max_button')}
@@ -352,7 +348,7 @@ function TokenInput(props: TokenInputProps) {
               50%
             </Button>
           </HStack>
-        )}
+        )} */}
       </HStack>
 
       <Grid
@@ -372,20 +368,17 @@ function TokenInput(props: TokenInputProps) {
         boxShadow={isFocus ? inputFocusStyle.boxShadow : 'none'}
       >
         <GridItem area="token" color={colors.textSecondary} fontWeight={600} fontSize={sizes.tokenSymbol}>
-          <HStack
-            bg={disableSelectToken ? undefined : colors.backgroundLight}
-            rounded={disableSelectToken ? undefined : 12}
-            px={disableSelectToken ? undefined : 3}
-            py={disableSelectToken ? undefined : 2.5}
-            cursor={disableSelectToken ? undefined : 'pointer'}
-            onClick={disableSelectToken ? undefined : onOpen}
-          >
-            {hideTokenIcon ? null : (
-              <TokenAvatar token={token} size={disableSelectToken ? sizes.disableSelectTokenIconSize : sizes.tokenIcon} />
-            )}
-            <Text color={colors.textPrimary}>{token?.symbol || ' '}</Text>
-            {disableSelectToken ? undefined : <ChevronDownIcon width={20} height={20} />}
-          </HStack>
+          <CurrencySelectButton onClick={disableSelectToken ? undefined : onOpen}>
+            <FlexGap alignItems="center" gap="8px">
+              {hideTokenIcon ? null : (
+                <TokenAvatar token={token} size={disableSelectToken ? sizes.disableSelectTokenIconSize : sizes.tokenIcon} />
+              )}
+              <Text bold fontSize="20px">
+                {token?.symbol || ' '}
+              </Text>
+              {disableSelectToken ? undefined : <ChevronDownIcon />}
+            </FlexGap>
+          </CurrencySelectButton>
         </GridItem>
 
         <GridItem area="input" color={colors.textPrimary} fontWeight={600} fontSize={sizes.inputText}>
@@ -439,7 +432,7 @@ function TokenInput(props: TokenInputProps) {
           onConfirm={handleFreezeTokenConfirm}
         />
       )}
-    </Box>
+    </AtomBox>
   )
 }
 
