@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js'
 import { convertTokenToCurrency, mapWithoutUrls } from 'hooks/Tokens'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
-import { QuoteQuery } from 'quoter/quoter.types'
+import { BridgeTradeError, QuoteQuery } from 'quoter/quoter.types'
 import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { combinedTokenMapFromActiveUrlsAtom } from 'state/lists/hooks'
 import { logGTMBridgeQuoteQueryEvent } from 'utils/customGTMEventTracking'
@@ -56,13 +56,6 @@ export const getAvailableBridgeRoutes = atomFamily((option: QuoteQuery) => {
 export type BridgeMetadataParams = {
   inputAmount: CurrencyAmount<Currency>
   outputCurrency: Currency
-}
-
-export class BridgeTradeError extends Error {
-  constructor(message?: string) {
-    super(message)
-    this.name = 'BridgeTradeError'
-  }
 }
 
 // Convert the function to an atom
@@ -203,7 +196,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           }
 
           // Get the swap quote using the bridge output amount
-          const swapOrder = get(bestQuoteAtom(swapOption))
+          const swapOrder = await get(bestQuoteAtom(swapOption))
 
           if (swapOrder.data) {
             // The final combined quote
@@ -261,7 +254,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           }
 
           // Get the swap quote from base currency to bridge origin currency
-          const swapOrder = get(bestQuoteAtom(swapOption))
+          const swapOrder = await get(bestQuoteAtom(swapOption))
 
           if (swapOrder.data) {
             // Use the swap output amount as the bridge input amount
@@ -516,16 +509,11 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
 
         const result = valueLoadable<InterfaceOrder | undefined>(quote)
 
-        if (quote) {
-          return {
-            ...result,
-            hash: _option.hash,
-            placeholderHash: _option.placeholderHash,
-            loading: false,
-          }
+        return {
+          ...result,
+          hash: _option.hash,
+          placeholderHash: _option.placeholderHash,
         }
-
-        throw new BridgeTradeError('No quote found')
       } catch (error) {
         console.error('Failed to get cross chain quote:', error)
         logGTMBridgeQuoteQueryEvent('fail', {
