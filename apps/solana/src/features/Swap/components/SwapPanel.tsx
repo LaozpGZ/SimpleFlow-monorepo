@@ -4,11 +4,8 @@ import TokenInput, { DEFAULT_SOL_RESERVER, InputActionRef } from '@/components/T
 import Tooltip from '@/components/Tooltip'
 import useTokenInfo from '@/hooks/token/useTokenInfo'
 import { useEvent } from '@/hooks/useEvent'
-import { useHover } from '@/hooks/useHover'
 import CircleInfo from '@/icons/misc/CircleInfo'
 import QuestionCircleIcon from '@/icons/misc/QuestionCircleIcon'
-import SwapButtonOneTurnIcon from '@/icons/misc/SwapButtonOneTurnIcon'
-import SwapButtonTwoTurnIcon from '@/icons/misc/SwapButtonTwoTurnIcon'
 import WarningIcon from '@/icons/misc/WarningIcon'
 import { useAppStore, useTokenAccountStore, useTokenStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
@@ -17,18 +14,7 @@ import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatte
 import ToPublicKey, { isValidPublicKey } from '@/utils/publicKey'
 import { setUrlQuery, useRouteQuery } from '@/utils/routeTools'
 import { getMintPriority, getMintSymbol, isSolWSol, mintToUrl, urlToMint } from '@/utils/token'
-import {
-  Box,
-  Button,
-  Tooltip as ChakraTip,
-  CircularProgress,
-  Collapse,
-  Flex,
-  HStack,
-  SimpleGrid,
-  Text,
-  useDisclosure
-} from '@chakra-ui/react'
+import { Box, Button, Tooltip as ChakraTip, CircularProgress, Collapse, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react'
 import { mediaQueries } from '@pancakeswap/uikit'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { ApiV3Token, RAYMint, SOL_INFO, TokenInfo, TransferFeeDataBaseType } from '@raydium-io/raydium-sdk-v2'
@@ -495,28 +481,6 @@ function SwapPriceUpdatedAlert({ onConfirm }: { onConfirm: () => void }) {
         {t('swap.alert_price_updated_button')}
       </Button>
     </HStack>
-  )
-}
-
-function SwapIcon(props: { onClick?: () => void }) {
-  const targetElement = useRef<HTMLDivElement | null>(null)
-  const isHover = useHover(targetElement)
-  return (
-    <SimpleGrid
-      ref={targetElement}
-      bg={isHover ? colors.semanticFocus : undefined}
-      width="42px"
-      height="42px"
-      placeContent="center"
-      rounded="full"
-      cursor="pointer"
-      my={-3}
-      mx="auto"
-      zIndex={2}
-      onClick={props.onClick}
-    >
-      {isHover ? <SwapButtonTwoTurnIcon /> : <SwapButtonOneTurnIcon />}
-    </SimpleGrid>
   )
 }
 

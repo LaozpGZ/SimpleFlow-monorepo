@@ -5,11 +5,23 @@ import { useAppStore, useTokenAccountStore, useTokenStore } from '@/store'
 import { inputCard, inputFocusStyle } from '@/theme/cssBlocks'
 import { colors } from '@/theme/cssVariables'
 import { detectedSeparator, formatCurrency, trimTrailZero } from '@/utils/numberish/formatter'
-import { Box, BoxProps, Grid, GridItem, HStack, Spacer, StackProps, SystemStyleObject, useDisclosure } from '@chakra-ui/react'
-import { AtomBox, Button, ChevronDownIcon, FlexGap, Text, WalletFilledV2Icon } from '@pancakeswap/uikit'
+import { Box, BoxProps, Grid, GridItem, StackProps, SystemStyleObject, useDisclosure } from '@chakra-ui/react'
+import {
+  AtomBox,
+  Button,
+  ChevronDownIcon,
+  domAnimation,
+  Flex,
+  FlexGap,
+  LazyAnimatePresence,
+  Text,
+  WalletFilledV2Icon
+} from '@pancakeswap/uikit'
+import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { ApiV3Token, SOL_INFO, TokenInfo } from '@raydium-io/raydium-sdk-v2'
 import Decimal from 'decimal.js'
 import { ReactNode, RefObject, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { NumericFormat } from 'react-number-format'
 import styled from 'styled-components'
 import TokenAvatar from './TokenAvatar'
@@ -62,7 +74,7 @@ export interface TokenInputProps extends Pick<TokenSelectDialogProps, 'filterFn'
   /** default is empty string */
   value?: string
 
-  topLeftLabel?: ReactNode
+  topLeftLabel?: string | null
 
   hideBalance?: boolean
   hideTokenIcon?: boolean
@@ -113,7 +125,7 @@ function TokenInput(props: TokenInputProps) {
     forceBalanceAmount,
     maxMultiplier,
     solReserveAmount = DEFAULT_SOL_RESERVER,
-    renderTopRightPrefixLabel = () => <WalletFilledV2Icon color={colors.textSubtle} />,
+    renderTopRightPrefixLabel = () => <WalletFilledV2Icon width="16px" height="16px" color={colors.textSubtle} />,
     onChange,
     onTokenChange,
     onFocus,
@@ -129,6 +141,7 @@ function TokenInput(props: TokenInputProps) {
     defaultUnknownToken,
     actionRef
   } = props
+  const { t } = useTranslation()
   const { isMobile } = useResponsive()
   const setExtraTokenListAct = useTokenStore((s) => s.setExtraTokenListAct)
   const whiteListMap = useTokenStore((s) => s.whiteListMap)
@@ -174,8 +187,11 @@ function TokenInput(props: TokenInputProps) {
 
   // balance
   const getTokenBalanceUiAmount = useTokenAccountStore((s) => s.getTokenBalanceUiAmount)
+  const balanceInfo = useMemo(
+    () => getTokenBalanceUiAmount({ mint: token?.address || '', decimals: token?.decimals }),
+    [getTokenBalanceUiAmount, token?.address, token?.decimals]
+  )
   const { balanceMaxString, maxString, maxDecimal } = useMemo(() => {
-    const balanceInfo = getTokenBalanceUiAmount({ mint: token?.address || '', decimals: token?.decimals })
     const balanceAmount = balanceInfo.amount
     const balanceMaxString_ = hideBalance
       ? null
@@ -187,7 +203,7 @@ function TokenInput(props: TokenInputProps) {
       maxString: maxString_,
       maxDecimal: maxDecimal_
     }
-  }, [forceBalanceAmount, getTokenBalanceUiAmount, hideBalance, maxMultiplier, token?.address, token?.decimals])
+  }, [forceBalanceAmount, getTokenBalanceUiAmount, hideBalance, maxMultiplier, token?.address, token?.decimals, balanceInfo.amount])
 
   const displayTokenSettings = useAppStore((s) => s.displayTokenSettings)
 
@@ -205,7 +221,9 @@ function TokenInput(props: TokenInputProps) {
     onFocus?.()
   })
   const handleBlur = useEvent(() => {
-    setIsFocus(false)
+    setTimeout(() => {
+      setIsFocus(false)
+    }, 300)
   })
 
   const getBalanceString = useEvent((amount: string) => {
@@ -223,10 +241,10 @@ function TokenInput(props: TokenInputProps) {
     onChange?.(getBalanceString(maxString))
   })
 
-  const handleClickHalf = useEvent(() => {
+  const handleClickPercent = useEvent((percent: number) => {
+    console.debug('debug handleClickPercent', percent)
     if (!maxString) return
-    handleFocus()
-    onChange?.(getBalanceString(maxDecimal.div(2).toString()))
+    onChange?.(getBalanceString(maxDecimal.mul(percent).div(100).toString()))
   })
 
   const isUnknownToken = useEvent((token_: TokenInfo) => {
@@ -302,7 +320,7 @@ function TokenInput(props: TokenInputProps) {
   }))
 
   return (
-    <AtomBox as="label" style={{ borderRadius: '24px' }}>
+    <AtomBox>
       {disableTotalInputByMask ? (
         <Box
           rounded="inherit"
@@ -318,38 +336,20 @@ function TokenInput(props: TokenInputProps) {
           {renderMaskContent}
         </Box>
       ) : null}
-      <HStack
-        pointerEvents={disableTotalInputByMask ? 'none' : 'initial'}
-        px={sizes.downerUpperGridPx}
-        py={sizes.upperGridPy}
-        {...(topBlockSx || {})}
-      >
+      <Flex mb="12px" justifyContent="space-between" alignItems="center" position="relative" width="100%">
         {/* top left label */}
-        <Box fontSize="sm" fontWeight={500}>
+        <Text color="textSubtle" fontSize={12} bold>
           {topLeftLabel}
-        </Box>
-        <Spacer />
-
+        </Text>
         {/* balance */}
-        {!hideBalance && maxString && (
-          <HStack spacing={0.5} color={colors.textSubtle} fontSize="xs" fontWeight={600}>
-            {renderTopRightPrefixLabel()}
-            <Text onClick={handleClickMax}>{formatCurrency(maxString, { decimalPlaces: token?.decimals })}</Text>
-          </HStack>
-        )}
-
-        {/* buttons */}
-        {/* {hideControlButton ? null : (
-          <HStack>
-            <Button disabled={disableClickBalance} onClick={handleClickMax} {...linkButtonStyle}>
-              {t('input.max_button')}
-            </Button>
-            <Button disabled={disableClickBalance} onClick={handleClickHalf} {...linkButtonStyle}>
-              50%
-            </Button>
-          </HStack>
-        )} */}
-      </HStack>
+        <LazyAnimatePresence mode="wait" features={domAnimation}>
+          {!hideBalance && maxString && !isFocus ? (
+            <SwapUIV2.WalletAssetDisplay isUserInsufficientBalance={false} balance={balanceInfo.text} onMax={handleClickMax} />
+          ) : (
+            <SwapUIV2.AssetSettingButtonList onPercentInput={handleClickPercent} />
+          )}
+        </LazyAnimatePresence>
+      </Flex>
 
       <Grid
         {...inputCard}
@@ -411,8 +411,10 @@ function TokenInput(props: TokenInputProps) {
             }}
           />
         </GridItem>
-        <GridItem area="price" color={colors.textTertiary} fontSize={sizes.opacityVolume}>
-          <Text textAlign="right">~{formatCurrency(totalPrice, { symbol: '$', maximumDecimalTrailingZeroes: 5 })}</Text>
+        <GridItem area="price" fontSize={sizes.opacityVolume}>
+          <Text fontSize="14px" color="textSubtle" textAlign="right">
+            ~{formatCurrency(totalPrice, { symbol: '$', maximumDecimalTrailingZeroes: 5 })}
+          </Text>
         </GridItem>
       </Grid>
       <TokenSelectDialog isOpen={isOpen} onClose={onClose} onSelectValue={handleSelectToken} filterFn={filterFn} ref={tokenListRef} />
