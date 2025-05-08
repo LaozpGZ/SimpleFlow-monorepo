@@ -61,6 +61,10 @@ export const InfinityBinPosition = () => {
     return amount0.add(amount1)
   }, [price0, price1, reserve0, reserve1])
 
+  const isRemoved = useMemo(() => {
+    return reserve0?.equalTo(0) && reserve1?.equalTo(0)
+  }, [reserve0, reserve1])
+
   // if (!binPool || !position) {
   if (!binPool) {
     return <PageLoader />
@@ -82,7 +86,7 @@ export const InfinityBinPosition = () => {
         <Card style={{ maxWidth: '800px' }} mx="auto">
           <PositionHeader
             isFarming={isFarming}
-            isRemoved={false}
+            isRemoved={isRemoved}
             protocol={Protocol.InfinityBIN}
             poolId={poolId}
             currency0={binPool?.token0}
