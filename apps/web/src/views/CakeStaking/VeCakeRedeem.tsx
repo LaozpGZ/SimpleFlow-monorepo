@@ -6,7 +6,7 @@ import { ASSET_CDN } from 'config/constants/endpoints'
 import { WEEK } from 'config/constants/veCake'
 import { createWriteContractCallback } from 'hooks/createWriteContractCallback'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import { useCurrentBlockTimestamp } from 'state/block/hooks'
 import styled from 'styled-components'
@@ -45,7 +45,6 @@ export const VeCakeRedeem: React.FC = () => {
     refetchRevenueShareVeCake,
     refetchRevenueShareCake,
   } = useCakeExitInfo()
-  console.info(nativeCakeLockedAmount)
   const userStaked = lockedCake.gt(0)
   const unlockTimeDisplay = unlockTime ? formatTime(unlockTime) : '-'
 
@@ -142,26 +141,29 @@ export const VeCakeRedeem: React.FC = () => {
   }, [proxyCakeLockedAmount, account, chainId, currentBlockTimestamp, withdrawAll, proxyCakeLockedAmountDisplay, t])
   const [expand, setExpand] = useState(false)
 
-  const buttons = [
-    {
-      key: 'cakepool',
-      handler: handleCakePool,
-      enabled: proxyCakeLockedAmount > 0,
-    },
-    {
-      key: 'vecake',
-      handler: handleVeCake,
-      enabled: nativeCakeLockedAmount > 0,
-    },
-    {
-      key: 'claimall',
-      handler: handleClaim,
-      enabled: userHasRewards,
-    },
-  ]
+  const buttons = useMemo(
+    () => [
+      {
+        key: 'cakepool',
+        handler: handleCakePool,
+        enabled: proxyCakeLockedAmount > 0,
+      },
+      {
+        key: 'vecake',
+        handler: handleVeCake,
+        enabled: nativeCakeLockedAmount > 0,
+      },
+      {
+        key: 'claimall',
+        handler: handleClaim,
+        enabled: userHasRewards,
+      },
+    ],
+    [handleCakePool, proxyCakeLockedAmount, handleVeCake, nativeCakeLockedAmount, handleClaim, userHasRewards],
+  )
 
   const [processing, setProcessing] = useState(false)
-  const handleProcessAll = async () => {
+  const handleProcessAll = useCallback(async () => {
     if (buttons.every((button) => !button.enabled)) return
     setProcessing(true)
 
@@ -177,7 +179,7 @@ export const VeCakeRedeem: React.FC = () => {
     } finally {
       setProcessing(false)
     }
-  }
+  }, [buttons])
 
   const allSettled = buttons.every((button) => !button.enabled)
 
