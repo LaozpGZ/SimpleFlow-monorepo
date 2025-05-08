@@ -253,11 +253,6 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
               placement="top"
               text={
                 <>
-                  <Text>
-                    {t(
-                      'Fee ranging from 0.01% to 1% depending on the pool fee tier. You can check the fee tier by clicking the magnifier icon under the “Route” section.',
-                    )}
-                  </Text>
                   <Text mt="12px">
                     <Link
                       style={{ display: 'inline' }}
