@@ -5,6 +5,8 @@ import { useVeCakeContract } from 'hooks/useContract'
 import { useCallback, useMemo } from 'react'
 import { Address } from 'viem'
 import { useAccount } from 'wagmi'
+import { convertSharesToCake } from 'views/Pools/helpers'
+import BigNumber from 'bignumber.js'
 import { CakeLockStatus, CakePoolType } from '../types'
 import { useCakePoolLockInfo } from './useCakePoolLockInfo'
 import { useCheckIsUserAllowMigrate } from './useCheckIsUserAllowMigrate'
@@ -147,10 +149,19 @@ export const useCakeLockStatus = (
   }, [userInfo])
 
   const proxyCakeLockedAmount = useMemo(() => {
+    if (!cakePoolLockInfo?.locked) {
+      const { cakeAsBigNumber } = convertSharesToCake(
+        new BigNumber(cakePoolLockInfo?.shares?.toString() ?? 0),
+        new BigNumber(cakePoolLockInfo?.pricePerFullShare?.toString() ?? 0),
+      )
+      if (!cakePoolLocked || delegated) return BigInt(cakeAsBigNumber.toString())
+
+      return (userInfo?.cakeAmount ?? 0n) + BigInt(cakeAsBigNumber.toString())
+    }
     if (!cakePoolLocked || delegated) return 0n
 
     return userInfo?.cakeAmount ?? 0n
-  }, [cakePoolLocked, delegated, userInfo?.cakeAmount])
+  }, [cakePoolLocked, cakePoolLockInfo, delegated, userInfo?.cakeAmount])
 
   const cakeLockedAmount = useMemo(() => {
     return nativeCakeLockedAmount + proxyCakeLockedAmount
