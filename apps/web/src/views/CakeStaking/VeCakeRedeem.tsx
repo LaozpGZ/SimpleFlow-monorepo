@@ -45,6 +45,7 @@ export const VeCakeRedeem: React.FC = () => {
     refetchRevenueShareVeCake,
     refetchRevenueShareCake,
   } = useCakeExitInfo()
+  console.info(nativeCakeLockedAmount)
   const userStaked = lockedCake.gt(0)
   const unlockTimeDisplay = unlockTime ? formatTime(unlockTime) : '-'
 
@@ -166,8 +167,10 @@ export const VeCakeRedeem: React.FC = () => {
 
     try {
       for (const button of buttons) {
-        // eslint-disable-next-line
-        await button.handler()
+        if (button.enabled) {
+          // eslint-disable-next-line
+          await button.handler()
+        }
       }
     } catch (ex) {
       console.warn(ex)
