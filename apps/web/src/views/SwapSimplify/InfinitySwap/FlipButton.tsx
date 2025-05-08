@@ -85,7 +85,7 @@ export const FlipButton = memo(function FlipButton({
   const lottieRef = useRef<LottieRefCurrentProps | null>(null)
   const { isDark } = useTheme()
   const { isDesktop } = useMatchBreakpoints()
-  const { canSwitch, switchNetwork, switchNetworkAsync } = useSwitchNetwork()
+  const { canSwitch, switchNetworkAsync } = useSwitchNetwork()
 
   const animationData = useMemo(() => (isDark ? ArrowDark : ArrowLight), [isDark])
 
@@ -94,14 +94,9 @@ export const FlipButton = memo(function FlipButton({
     [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
     [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
   } = useSwapState()
-  const { switchNetwork } = useSwitchNetwork()
 
   const onFlip = useCallback(() => {
     onSwitchTokens()
-
-    if (outputChainId && inputChainId !== outputChainId) {
-      switchNetwork(outputChainId)
-    }
 
     if (replaceBrowser) {
       replaceBrowserHistoryMultiple({

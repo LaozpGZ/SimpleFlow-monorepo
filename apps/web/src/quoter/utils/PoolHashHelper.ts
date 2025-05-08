@@ -1,5 +1,4 @@
 import { Currency, getCurrencyAddress, sortCurrencies } from '@pancakeswap/swap-sdk-core'
-import { EnhancedQuoteQuery } from 'quoter/atom/bestQuoteAtom'
 import { keccak256, stringify } from 'viem/utils'
 import { PoolQuery, QuoteQuery, StrategyQuery } from '../quoter.types'
 
@@ -22,30 +21,14 @@ export class PoolHashHelper {
     return hash
   }
 
-  static hashCurrencies(a?: Currency | Currency[], b?: Currency | Currency[]) {
+  static hashCurrencies(a?: Currency, b?: Currency) {
     const list: Currency[] = []
-
-    // Handle first argument, which could be a single Currency or Currency[]
     if (a) {
-      if (Array.isArray(a)) {
-        list.push(...a)
-      } else {
-        list.push(a)
-      }
+      list.push(a)
     }
-
-    // Handle second argument, which could be a single Currency or Currency[]
-    if (b) {
-      const bCurrencies = Array.isArray(b) ? b : [b]
-
-      // Only add currencies that aren't already in the list
-      for (const currency of bCurrencies) {
-        if (!list.some((c) => isEqualCurrency(c, currency))) {
-          list.push(currency)
-        }
-      }
+    if (b && !isEqualCurrency(a, b)) {
+      list.push(b)
     }
-
     const str = list.map((currency) => getCurrencyAddress(currency)).join(',')
     const hash = keccak256(`0x${str}`)
     return hash
@@ -64,7 +47,7 @@ export class PoolHashHelper {
     }
   }
 
-  static hashQuoteQuery = (query: EnhancedQuoteQuery) => {
+  static hashQuoteQuery = (query: QuoteQuery) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const {
       amount,
@@ -81,17 +64,8 @@ export class PoolHashHelper {
     } = query
     const chainId = query.baseCurrency?.chainId
     const restHash = keccak256(`0x${stringify(rest)}:${chainId}`)
-
-    // Extract currency from amount
-    const amountCurrency = Array.isArray(amount) ? amount.map((x) => x.currency) : amount?.currency
-
-    const hashCurrencies = PoolHashHelper.hashCurrencies(amountCurrency, currency || undefined)
-
-    const hashAmount = Array.isArray(amount)
-      ? amount.map((x) => x.quotient.toString()).join(',')
-      : amount?.quotient.toString()
-
-    const prts = [hashAmount, hashCurrencies, restHash]
+    const hashCurrencies = PoolHashHelper.hashCurrencies(amount?.currency, currency || undefined)
+    const prts = [amount?.toExact(), hashCurrencies, restHash]
     return keccak256(`0x${prts.join(':')}`)
   }
 
