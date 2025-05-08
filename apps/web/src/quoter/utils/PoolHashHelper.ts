@@ -13,7 +13,10 @@ export class PoolHashHelper {
       list.push(b)
     }
 
-    const sorted = sortCurrencies(list)
+    const isCrossChain = a?.chainId !== b?.chainId
+
+    // For cross-chain quotes, we don't sort the currencies
+    const sorted = isCrossChain ? list : sortCurrencies(list)
     const str = sorted.map((currency) => getCurrencyAddress(currency)).join(',')
     const hash = keccak256(`0x${str}`)
     return hash
@@ -63,10 +66,20 @@ export class PoolHashHelper {
 
   static hashQuoteQuery = (query: EnhancedQuoteQuery) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { amount, currency, slippage, blockNumber, provider, signal, hash, placeholderHash, ...rest } = query
-    const chainId = Array.isArray(query.baseCurrency)
-      ? query.baseCurrency.map((x) => x.chainId).join(',')
-      : query.baseCurrency?.chainId
+    const {
+      amount,
+      currency,
+      slippage,
+      controller,
+      blockNumber,
+      provider,
+      signal,
+      createTime,
+      hash,
+      placeholderHash,
+      ...rest
+    } = query
+    const chainId = query.baseCurrency?.chainId
     const restHash = keccak256(`0x${stringify(rest)}:${chainId}`)
 
     // Extract currency from amount

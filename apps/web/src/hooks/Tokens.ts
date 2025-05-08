@@ -23,7 +23,7 @@ import useUserAddedTokens, { useUserAddedTokensByChainIds } from '../state/user/
 import { useActiveChainId } from './useActiveChainId'
 import useNativeCurrency from './useNativeCurrency'
 
-const mapWithoutUrls = (tokenMap?: TokenAddressMap<ChainId>, chainId?: number) => {
+export const mapWithoutUrls = (tokenMap?: TokenAddressMap<ChainId>, chainId?: number) => {
   if (!tokenMap || !chainId) return {}
   return Object.keys(tokenMap[chainId] || {}).reduce<{ [address: string]: ERC20Token }>((newMap, address) => {
     const checksumAddress = safeGetAddress(address)

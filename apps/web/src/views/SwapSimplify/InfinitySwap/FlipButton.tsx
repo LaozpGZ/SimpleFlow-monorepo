@@ -7,6 +7,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 
 import { AutoRow } from 'components/Layout/Row'
+
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
@@ -93,9 +94,15 @@ export const FlipButton = memo(function FlipButton({
     [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
     [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
   } = useSwapState()
+  const { switchNetwork } = useSwitchNetwork()
 
   const onFlip = useCallback(() => {
     onSwitchTokens()
+
+    if (outputChainId && inputChainId !== outputChainId) {
+      switchNetwork(outputChainId)
+    }
+
     if (replaceBrowser) {
       replaceBrowserHistoryMultiple({
         inputCurrency: outputCurrencyId,

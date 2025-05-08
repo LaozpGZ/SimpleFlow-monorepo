@@ -89,9 +89,7 @@ export const getBridgeCalldata = async ({
             originChainId: command.trade.inputAmount.currency.chainId,
             destinationChainId: command.trade.outputAmount.currency.chainId,
             originChainRecipient: recipient,
-            // TODO: enable this after endpoint is updated
-            // minOutputAmount: command.trade.outputAmount.quotient.toString(),
-            minOutputAmount: '1',
+            minOutputAmount: command.trade.outputAmount.quotient.toString(),
           },
         }
       }

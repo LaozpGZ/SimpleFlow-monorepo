@@ -125,6 +125,8 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
   const inputLoading = typedValue ? !isTypingInput && tradeLoading : false
   const outputLoading = typedValue ? isTypingInput && tradeLoading : false
 
+  const isBridge = inputCurrency?.chainId !== outputCurrency?.chainId
+
   return (
     <FormContainer>
       <CurrencyInputPanelSimplify
@@ -156,6 +158,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
       />
       <FlipButton />
       <CurrencyInputPanelSimplify
+        disabled={isBridge}
         id="swap-currency-output"
         showUSDPrice
         showCommonBases

@@ -17,6 +17,13 @@ export type InfinityGetBestTradeReturnType = Omit<
   'graph'
 >
 
+export class BridgeTradeError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = 'BridgeTradeError'
+  }
+}
+
 export class NoValidRouteError extends Error {
   constructor(message?: string) {
     super(message)
@@ -55,8 +62,10 @@ export interface PoolQuery {
   infinity: boolean
   v2Pools: boolean
   v3Pools: boolean
+  stableSwap: boolean
   signal?: AbortSignal
   provider?: typeof getViemClients
+  for?: string
 }
 interface PoolsHookParams {
   // Used for caching
@@ -75,8 +84,11 @@ export type QuoteQuery = Options & {
   blockNumber?: number
   signal?: AbortSignal
   provider?: typeof getViemClients
+  controller?: AbortController
   nonce?: number
   placeholderHash?: string
+  for?: string
+  createTime?: number
 }
 
 export interface StrategyQuery {

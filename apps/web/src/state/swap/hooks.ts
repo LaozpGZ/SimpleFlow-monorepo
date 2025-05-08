@@ -191,11 +191,11 @@ export function queryParametersToSwapState(
   return {
     [Field.INPUT]: {
       currencyId: inputCurrency,
-      chainId: inputChainId,
+      chainId: undefined,
     },
     [Field.OUTPUT]: {
       currencyId: outputCurrency,
-      chainId: outputChainId,
+      chainId: undefined,
     },
     typedValue: parseTokenAmountURLParameter(parsedQs.exactAmount),
     independentField: parseIndependentFieldURLParameter(parsedQs.exactField),
@@ -245,10 +245,10 @@ export function useDefaultsFromURLSearch():
       replaceSwapState({
         typedValue: parsed.typedValue,
         field: parsed.independentField,
-        inputCurrencyId: finalInputCurrencyId,
+        inputCurrencyId: inputCurrencyId || parsed[Field.INPUT].currencyId,
         outputCurrencyId: outputCurrencyId || parsed[Field.OUTPUT].currencyId,
-        inputChainId: inputChainId || parsed[Field.INPUT].chainId,
-        outputChainId: outputChainId || parsed[Field.OUTPUT].chainId,
+        inputChainId,
+        outputChainId,
         recipient: null,
       }),
     )

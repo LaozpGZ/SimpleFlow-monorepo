@@ -20,7 +20,7 @@ import { BIG_INT_ZERO } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
-import { NoValidRouteError } from 'quoter/quoter.types'
+import { BridgeTradeError, NoValidRouteError } from 'quoter/quoter.types'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
@@ -28,7 +28,6 @@ import { useRoutingSettingChanged } from 'state/user/smartRouter'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { logGTMClickSwapConfirmEvent, logGTMClickSwapEvent } from 'utils/customGTMEventTracking'
 import { warningSeverity } from 'utils/exchange'
-import { BridgeTradeError } from 'views/Swap/Bridge/hooks/useBridgeMetadata'
 import { isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
 import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModalV2'
 import { useAccount, useChainId } from 'wagmi'
@@ -220,7 +219,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
   const isValid = useMemo(
     () => !swapInputError && !tradeLoading && !hasBridgeTradeError,
-    [swapInputError, tradeLoading],
+    [swapInputError, tradeLoading, hasBridgeTradeError],
   )
   const disabled = useMemo(
     () => !isValid || (priceImpactSeverity > 3 && !isExpertMode) || isRecipientEmpty || isRecipientError,
@@ -317,7 +316,16 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         ? t('Swap Anyway')
         : t('Swap'))
     )
-  }, [isExpertMode, isRecipientEmpty, isRecipientError, priceImpactSeverity, swapInputError, t, tradeLoading])
+  }, [
+    isExpertMode,
+    isRecipientEmpty,
+    isRecipientError,
+    priceImpactSeverity,
+    swapInputError,
+    t,
+    tradeLoading,
+    tradeError,
+  ])
 
   if (noRoute && userHasSpecifiedInputOutput && (hasNoValidRouteError || !tradeLoading)) {
     return <ResetRoutesButton />

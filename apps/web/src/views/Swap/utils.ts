@@ -24,8 +24,6 @@ export type InterfaceOrder<
 > = PriceOrder<input, output, tradeType>
 
 // Type to support commands property
-export type BridgeOrderWithCommands = InterfaceOrder & {
+export type BridgeOrderWithCommands = BridgeOrder & {
   commands?: InterfaceOrder[]
-  isLoading: boolean
-  error: Error | undefined
 }

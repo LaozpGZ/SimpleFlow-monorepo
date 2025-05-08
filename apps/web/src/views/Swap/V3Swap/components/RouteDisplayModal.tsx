@@ -16,7 +16,7 @@ import {
   UseModalV2Props,
   useTooltip,
 } from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { ChainLogo, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { memo, useMemo } from 'react'
 
 import { RoutingSettingsButton } from 'components/Menu/GlobalSettings/SettingsModalV2'
@@ -147,22 +147,35 @@ const BrevisDiscountFeeDisplay: React.FC<{
 }
 
 export const RouteDisplay = memo(function RouteDisplay({ route }: RouteDisplayProps) {
+  const isBridge = route.type === RouteType.BRIDGE
+  const { isDesktop } = useMatchBreakpoints()
+
   const hookDiscount = useBrevisHookDiscount(route.pools)
   const { t } = useTranslation()
   const { path, pools, inputAmount, outputAmount } = route
   const { currency: inputCurrency } = inputAmount
   const { currency: outputCurrency } = outputAmount
-  const { targetRef, tooltip, tooltipVisible } = useTooltip(<Text>{inputCurrency.symbol}</Text>, {
-    placement: 'right',
-  })
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(
+    <Text>
+      {inputCurrency.symbol} {isBridge ? `(${SHORT_SYMBOL[inputCurrency.chainId]})` : ''}
+    </Text>,
+    {
+      placement: 'right',
+    },
+  )
 
   const {
     targetRef: outputTargetRef,
     tooltip: outputTooltip,
     tooltipVisible: outputTooltipVisible,
-  } = useTooltip(<Text>{outputCurrency.symbol}</Text>, {
-    placement: 'right',
-  })
+  } = useTooltip(
+    <Text>
+      {outputCurrency.symbol} {isBridge ? `(${SHORT_SYMBOL[outputCurrency.chainId]})` : ''}
+    </Text>,
+    {
+      placement: 'right',
+    },
+  )
 
   const pairs = useMemo<Pair[]>(() => {
     if (path.length <= 1) {
@@ -176,34 +189,24 @@ export const RouteDisplay = memo(function RouteDisplay({ route }: RouteDisplayPr
     return currencyPairs
   }, [path])
 
-  if (route.type === RouteType.BRIDGE) {
+  if (isBridge) {
     return (
       <AutoColumn gap="24px">
         <RouterBox justifyContent="space-between" alignItems="center">
-          <CurrencyLogoWrapper
-            size={{
-              xs: '32px',
-              md: '48px',
-            }}
-            ref={targetRef}
-          >
-            <CurrencyLogo showChainLogo size="44px" currency={inputCurrency} />
+          <CurrencyLogoWrapper ref={targetRef}>
+            <CurrencyLogo showChainLogo size={isDesktop ? '44px' : '30px'} currency={inputCurrency} />
           </CurrencyLogoWrapper>
           {tooltipVisible && tooltip}
-          <PairNode
+          <PairBridgeNode
             pair={[inputCurrency, outputCurrency]}
             text={`${SHORT_SYMBOL[inputCurrency.chainId]} → ${SHORT_SYMBOL[outputCurrency.chainId]}`}
             className=""
-            tooltipText="hello text"
+            tooltipText={`${inputCurrency.symbol} (${SHORT_SYMBOL[inputCurrency.chainId]}) → ${
+              outputCurrency.symbol
+            } (${SHORT_SYMBOL[outputCurrency.chainId]})`}
           />
-          <CurrencyLogoWrapper
-            size={{
-              xs: '32px',
-              md: '48px',
-            }}
-            ref={outputTargetRef}
-          >
-            <CurrencyLogo showChainLogo size="44px" currency={outputCurrency} />
+          <CurrencyLogoWrapper ref={outputTargetRef}>
+            <CurrencyLogo showChainLogo size={isDesktop ? '44px' : '30px'} currency={outputCurrency} />
           </CurrencyLogoWrapper>
           {outputTooltipVisible && outputTooltip}
         </RouterBox>
@@ -319,6 +322,38 @@ export const RouteDisplay = memo(function RouteDisplay({ route }: RouteDisplayPr
     </AutoColumn>
   )
 })
+
+function PairBridgeNode({
+  pair,
+  text,
+  className,
+  tooltipText,
+}: {
+  pair: Pair
+  text: string | React.ReactNode
+  className: string
+  tooltipText: string
+}) {
+  const [input, output] = pair
+
+  const tooltip = useTooltip(tooltipText)
+
+  return (
+    <RouterPoolBox className={className}>
+      {tooltip.tooltipVisible && tooltip.tooltip}
+      <Flex ref={tooltip.targetRef} alignItems="center">
+        <ChainLogo chainId={input.chainId} width={24} height={24} />
+
+        <AtomBox style={{ marginLeft: '-8px', marginRight: '-8px', zIndex: -1 }}>
+          <CurrencyLogo currency={input} size="32px" />
+        </AtomBox>
+
+        <ChainLogo chainId={output.chainId} width={24} height={24} />
+      </Flex>
+      <RouterTypeText>{text}</RouterTypeText>
+    </RouterPoolBox>
+  )
+}
 
 function PairNode({
   pair,
