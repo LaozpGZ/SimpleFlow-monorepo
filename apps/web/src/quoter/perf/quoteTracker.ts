@@ -21,17 +21,18 @@ type QuoteTrace = {
 
 const logger = getLogger('quote')
 export class RouteTracker {
-  private start = Date.now()
-
   private records: [TrackKey, number][] = []
 
   private trace: QuoteTrace
 
   private routeKey: string
 
-  constructor(trace: QuoteTrace, routeKey: string) {
+  private start: number
+
+  constructor(trace: QuoteTrace, routeKey: string, start: number) {
     this.trace = trace
     this.routeKey = routeKey
+    this.start = start
   }
 
   public track(key: TrackKey) {
@@ -75,7 +76,7 @@ export const quoteTraceAtom = atomFamily(
           fail: 0,
         },
       }
-      const tracker = new RouteTracker(trace, params.routeKey!)
+      const tracker = new RouteTracker(trace, params.routeKey!, params.createTime)
       return {
         trace,
         tracker,
