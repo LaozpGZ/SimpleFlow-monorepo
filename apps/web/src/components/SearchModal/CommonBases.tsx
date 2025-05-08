@@ -17,18 +17,20 @@ export const ButtonWrapper = styled.div`
 `
 
 export const BaseWrapper = styled.div<{ disable?: boolean }>`
-  border: 1px solid ${({ theme, disable }) => (disable ? 'transparent' : theme.colors.dropdown)};
-  border-radius: ${({ theme }) => theme.radii.default};
   display: flex;
   align-items: center;
+  padding: 6px 4px;
+  transition: background-color 0.15s;
+
+  border: 1px solid ${({ theme, disable }) => (disable ? 'transparent' : theme.colors.dropdown)};
+  border-radius: ${({ theme }) => theme.radii.default};
+  color: ${({ theme, disable }) => (disable ? theme.colors.backgroundAlt : theme.colors.textSubtle)} !important;
+  background-color: ${({ theme, disable }) => (disable ? theme.colors.textSubtle : theme.colors.input)};
+
   &:hover {
     cursor: ${({ disable }) => !disable && 'pointer'};
     background-color: ${({ theme, disable }) => !disable && theme.colors.background};
   }
-  color: ${({ theme, disable }) => (disable ? theme.colors.backgroundAlt : theme.colors.textSubtle)} !important;
-  background-color: ${({ theme, disable }) => (disable ? theme.colors.textSubtle : theme.colors.input)};
-  transition: background-color 0.15s;
-  padding: 8px 4px;
 `
 
 export const RowWrapper = styled.div`
@@ -87,7 +89,7 @@ export default function CommonBases({
                 top: '1px',
               }}
             />
-            <Text pr="4px" color="inherit">
+            <Text px="4px" color="inherit">
               {native?.symbol}
             </Text>
           </BaseWrapper>
@@ -106,7 +108,7 @@ export default function CommonBases({
                     top: '1px',
                   }}
                 />
-                <Text pr="4px" color="inherit">
+                <Text px="4px" color="inherit">
                   {token.symbol}
                 </Text>
               </BaseWrapper>

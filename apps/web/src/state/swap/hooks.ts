@@ -4,6 +4,7 @@ import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
 import { PairDataTimeWindowEnum } from '@pancakeswap/uikit'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useQuery } from '@tanstack/react-query'
+import { getChainId } from 'config/chains'
 import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import dayjs from 'dayjs'
 import { useTradeExactIn, useTradeExactOut } from 'hooks/Trades'
@@ -178,6 +179,13 @@ export function queryParametersToSwapState(
     }
   }
 
+  // Parse chains
+  const inputChain = parsedQs.chain
+  const outputChain = parsedQs.chainOut
+
+  const inputChainId = typeof inputChain === 'string' ? getChainId(inputChain) : undefined
+  const outputChainId = typeof outputChain === 'string' ? getChainId(outputChain) : undefined
+
   const recipient = validatedRecipient(parsedQs.recipient)
 
   return {
@@ -216,11 +224,22 @@ export function useDefaultsFromURLSearch():
 
   useEffect(() => {
     if (!chainId || !native || !isReady) return
+
     const parsed = queryParametersToSwapState(
       query,
       native.symbol,
       CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address,
     )
+
+    const finalInputCurrencyId = inputCurrencyId || parsed[Field.INPUT].currencyId
+    // if (chainId !== inputChainId) {
+    //   finalInputCurrencyId = currencyId(native)
+    // }
+
+    // // TODO: Check if better to update in another place
+    // replaceBrowserHistoryMultiple({
+    //   inputCurrency: finalInputCurrencyId,
+    // })
 
     dispatch(
       replaceSwapState({
@@ -233,7 +252,8 @@ export function useDefaultsFromURLSearch():
         recipient: null,
       }),
     )
-    setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
+    // setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
+    setResult({ inputCurrencyId: finalInputCurrencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
   }, [dispatch, chainId, query, native, isReady])
 
   return result

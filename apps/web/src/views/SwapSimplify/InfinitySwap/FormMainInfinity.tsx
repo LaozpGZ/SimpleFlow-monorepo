@@ -14,6 +14,7 @@ import { useCurrencyBalances } from 'state/wallet/hooks'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
+import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import currencyId from 'utils/currencyId'
 import { useAccount } from 'wagmi'
@@ -42,12 +43,13 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
     [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
     [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
   } = useSwapState()
+  const { onCurrencySelection, onUserInput } = useSwapActionHandlers()
 
   const isWrapping = useIsWrapping()
-  const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
 
+  const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
   const outputCurrency = useCurrency(outputCurrencyId, outputChainId)
-  const { onCurrencySelection, onUserInput } = useSwapActionHandlers()
+
   const [inputBalance] = useCurrencyBalances(account, [inputCurrency, outputCurrency])
   const maxAmountInput = useMemo(() => maxAmountSpend(inputBalance), [inputBalance])
   const loadedUrlParams = useDefaultsFromURLSearch()
@@ -75,8 +77,8 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
     (
       newCurrency: Currency,
       field: Field,
-      currentInputCurrencyId: string | undefined,
-      currentOutputCurrencyId: string | undefined,
+      _currentInputCurrencyId: string | undefined,
+      _currentOutputCurrencyId: string | undefined,
     ) => {
       onCurrencySelection(field, newCurrency)
 
@@ -90,11 +92,13 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
       const newCurrencyId = currencyId(newCurrency)
 
-      if (isInput) {
-        replaceBrowserHistoryMultiple({
-          inputCurrency: newCurrencyId,
-        })
-      }
+      // Output chain name
+      const chainOut = !isInput && inputChainId !== newCurrency.chainId && CHAIN_QUERY_NAME[newCurrency.chainId]
+
+      replaceBrowserHistoryMultiple({
+        [isInput ? 'inputCurrency' : 'outputCurrency']: newCurrencyId,
+        ...(chainOut && { chainOut }),
+      })
     },
     [onCurrencySelection, warningSwapHandler, canSwitch, switchNetwork],
   )
