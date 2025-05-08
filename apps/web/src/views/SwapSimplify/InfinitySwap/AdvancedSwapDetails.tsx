@@ -244,18 +244,9 @@ export const TradeSummary = memo(function TradeSummary({
             text={
               <>
                 <Text>
-                  <Text bold display="inline-block">
-                    {t('AMM')}
-                  </Text>
-                  {`: ${t('The difference between the market price and estimated price due to trade size.')}`}
-                </Text>
-                <Text mt="10px">
-                  <Text bold display="inline-block">
-                    {t('X')}
-                  </Text>
-                  {`: ${t(
-                    'The difference between the latest quoted price and the minimum receiving amount set in the trade order.',
-                  )}`}
+                  {t(
+                    'Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.',
+                  )}
                 </Text>
               </>
             }
