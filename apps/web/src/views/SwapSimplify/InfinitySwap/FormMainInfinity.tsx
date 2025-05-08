@@ -43,12 +43,13 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
     [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
     [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
   } = useSwapState()
+  const { onCurrencySelection, onUserInput } = useSwapActionHandlers()
 
   const isWrapping = useIsWrapping()
-  const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
 
+  const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
   const outputCurrency = useCurrency(outputCurrencyId, outputChainId)
-  const { onCurrencySelection, onUserInput } = useSwapActionHandlers()
+
   const [inputBalance] = useCurrencyBalances(account, [inputCurrency, outputCurrency])
   const maxAmountInput = useMemo(() => maxAmountSpend(inputBalance), [inputBalance])
   const loadedUrlParams = useDefaultsFromURLSearch()
@@ -92,11 +93,11 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
       const newCurrencyId = currencyId(newCurrency)
 
       // Output chain name
-      const chainOut = CHAIN_QUERY_NAME[newCurrency.chainId]
+      const chainOut = !isInput && inputChainId !== newCurrency.chainId && CHAIN_QUERY_NAME[newCurrency.chainId]
 
       replaceBrowserHistoryMultiple({
         [isInput ? 'inputCurrency' : 'outputCurrency']: newCurrencyId,
-        ...(!isInput && { chainOut }),
+        ...(chainOut && { chainOut }),
       })
     },
     [onCurrencySelection, warningSwapHandler, canSwitch, switchNetwork],

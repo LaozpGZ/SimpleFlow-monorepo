@@ -15,10 +15,13 @@ import { keyframes, styled } from 'styled-components'
 import { useTheme } from '@pancakeswap/hooks'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { LottieRefCurrentProps } from 'lottie-react'
-import { useAllowRecipient } from '../../Swap/V3Swap/hooks'
 
+import { CHAIN_QUERY_NAME } from 'config/chains'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import ArrowDark from '../../../../public/images/swap/arrow_dark.json' assert { type: 'json' }
 import ArrowLight from '../../../../public/images/swap/arrow_light.json' assert { type: 'json' }
+import { useAllowRecipient } from '../../Swap/V3Swap/hooks'
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
@@ -76,17 +79,19 @@ export const FlipButton = memo(function FlipButton({
   compact?: boolean
   replaceBrowser?: boolean
 }) {
+  const { chainId } = useActiveChainId()
   const flipButtonRef = useRef<HTMLDivElement>(null)
   const lottieRef = useRef<LottieRefCurrentProps | null>(null)
   const { isDark } = useTheme()
   const { isDesktop } = useMatchBreakpoints()
+  const { canSwitch, switchNetwork, switchNetworkAsync } = useSwitchNetwork()
 
   const animationData = useMemo(() => (isDark ? ArrowDark : ArrowLight), [isDark])
 
   const { onSwitchTokens } = useSwapActionHandlers()
   const {
-    [Field.INPUT]: { currencyId: inputCurrencyId },
-    [Field.OUTPUT]: { currencyId: outputCurrencyId },
+    [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
   } = useSwapState()
 
   const onFlip = useCallback(() => {
@@ -95,7 +100,13 @@ export const FlipButton = memo(function FlipButton({
       replaceBrowserHistoryMultiple({
         inputCurrency: outputCurrencyId,
         outputCurrency: inputCurrencyId,
+        ...(inputChainId && inputChainId !== outputChainId && { chainOut: CHAIN_QUERY_NAME[inputChainId] }),
       })
+
+      // If cross-chain swap, switch network to new Input Currency's chain
+      if (outputChainId && inputChainId !== outputChainId && canSwitch) {
+        switchNetworkAsync(outputChainId)
+      }
     }
   }, [onSwitchTokens, inputCurrencyId, outputCurrencyId])
 

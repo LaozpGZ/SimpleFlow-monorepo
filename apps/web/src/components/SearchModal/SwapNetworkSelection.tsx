@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, AutoRow, ChevronDownIcon, Flex, InlineMenu, Text } from '@pancakeswap/uikit'
+import { appearAnimation, AutoColumn, AutoRow, ChevronDownIcon, Flex, InlineMenu, Text } from '@pancakeswap/uikit'
 import { ChainLogo } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import drop from 'lodash/drop'
@@ -13,10 +13,13 @@ import { BaseWrapper, ButtonWrapper, RowWrapper } from './CommonBases'
 
 const NetworkMenuColumn = styled(Flex)`
   flex-direction: column;
+  overflow: hidden;
+
   background-color: ${({ theme }) => theme.colors.input};
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
-  border-radius: ${({ theme }) => theme.radii.default};
-  overflow: hidden;
+  border-radius: ${({ theme }) => theme.radii.card};
+
+  animation: ${appearAnimation} 0.2s ease;
 `
 
 const NetworkSelectRow = styled(Flex)`
