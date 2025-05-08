@@ -10,7 +10,8 @@
     "dayjs": "^1.11.10",
     "lodash": "^4.17.21",
     "styled-components": "^6.0.7",
-    "viem": "catalog:"
+    "viem": "catalog:",
+    "quick-lru": "7.0.0"
   },
   "devDependencies": {
     "@pancakeswap/sdk": "workspace:*",
@@ -30,7 +31,6 @@
     }
   },
   "dependencies": {
-    "quick-lru": "7.0.0",
     "@pancakeswap/chains": "workspace:*",
     "url-parse": "^1.5.10"
   }
