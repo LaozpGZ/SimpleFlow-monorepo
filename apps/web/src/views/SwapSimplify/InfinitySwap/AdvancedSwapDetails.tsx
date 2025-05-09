@@ -143,6 +143,11 @@ export const TradeSummary = memo(function TradeSummary({
   const { feeSavedAmount, feeSavedUsdValue } = useFeeSaved(inputAmount, outputAmount)
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
 
+  // if priceBreakdown is an array and priceBreakdown only has one item, hide the slippage button because it's beidgeonly case
+  const isBridgeOnlyCase = useMemo(() => {
+    return Array.isArray(priceBreakdown) && priceBreakdown.length === 1
+  }, [priceBreakdown])
+
   return (
     <AutoColumn px="4px">
       <RowBetween>
@@ -238,25 +243,27 @@ export const TradeSummary = memo(function TradeSummary({
           </SkeletonV2>
         </RowBetween>
       )}
-      <RowBetween mt="8px">
-        <RowFixed>
-          <QuestionHelperV2
-            text={
-              <>
-                <Text>
-                  {t(
-                    'Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.',
-                  )}
-                </Text>
-              </>
-            }
-            placement="top"
-          >
-            <DetailsTitle>{t('Slippage Tolerance')}</DetailsTitle>
-          </QuestionHelperV2>
-        </RowFixed>
-        <SlippageButton slippage={allowedSlippage} />
-      </RowBetween>
+      {!isBridgeOnlyCase && (
+        <RowBetween mt="8px">
+          <RowFixed>
+            <QuestionHelperV2
+              text={
+                <>
+                  <Text>
+                    {t(
+                      'Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.',
+                    )}
+                  </Text>
+                </>
+              }
+              placement="top"
+            >
+              <DetailsTitle>{t('Slippage Tolerance')}</DetailsTitle>
+            </QuestionHelperV2>
+          </RowFixed>
+          <SlippageButton slippage={allowedSlippage} />
+        </RowBetween>
+      )}
 
       {(priceBreakdown || isX) &&
         (!Array.isArray(priceBreakdown) && priceBreakdown.lpFeeAmount ? (

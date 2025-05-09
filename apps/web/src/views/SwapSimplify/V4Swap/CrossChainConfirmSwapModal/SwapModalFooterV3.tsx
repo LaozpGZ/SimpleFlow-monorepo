@@ -30,7 +30,7 @@ import { isAddressEqual } from 'utils'
 import FormattedPriceImpact from 'views/Swap/components/FormattedPriceImpact'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/styleds'
-import { InterfaceOrder, isXOrder } from 'views/Swap/utils'
+import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 import { SlippageAdjustedAmounts, TradePriceBreakdown, formatExecutionPrice } from 'views/Swap/V3Swap/utils/exchange'
 
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
@@ -204,7 +204,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
             priceImpact={!Array.isArray(priceBreakdown) ? priceBreakdown?.priceImpactWithoutFee : undefined}
           />
         </RowBetween>
-        {!isXOrder(order) && (
+        {!isXOrder(order) && !isBridgeOrder(order) && (
           <RowBetween mb="8px">
             <RowFixed>
               <QuestionHelperV2
