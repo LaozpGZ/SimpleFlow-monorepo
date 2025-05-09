@@ -67,10 +67,6 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
         return emptyLoadable<InterfaceOrder | undefined>()
       }
 
-      if (!logMap.has(option.hash)) {
-        logMap.set(option.hash, Date.now())
-      }
-
       const strategies = getRoutingStrategy()
       const p1 = strategies.filter((x) => x.priority === 1)
       const p2 = strategies.filter((x) => x.priority === 2)
@@ -79,7 +75,6 @@ const bestQuoteWithoutHashAtom = atomFamily((_option: QuoteQuery) => {
         const strategy = tests[i]
         const quote = executeRoutes(strategy, option)
         if (quote) {
-          const time = logMap.get(option.hash) || Date.now()
           if (quote.isShadow && !quote.loading && quote.data) {
             continue
           }
@@ -136,5 +131,3 @@ function findBestQuote(...args: Loadable<InterfaceOrder | undefined>[]): [Interf
   }
   return bestOrder ? [bestOrder, idx] : undefined
 }
-
-const logMap = new Map<string, number>()
