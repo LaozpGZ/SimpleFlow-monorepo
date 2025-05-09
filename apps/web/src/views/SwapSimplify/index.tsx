@@ -1,16 +1,19 @@
-import { Box, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { BottomDrawer, Box, Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 
 import { MobileCard } from 'components/AdPanel/MobileCard'
 import { AutoSlippageProvider } from 'hooks/useAutoSlippageWithFallback'
 import { useSwapHotTokenDisplay } from 'hooks/useSwapHotTokenDisplay'
+import dynamic from 'next/dynamic'
 import { QuoteProvider } from 'quoter/QuoteProvider'
 import { styled } from 'styled-components'
 import Page from '../Page'
 import { StyledSwapContainer } from '../Swap/styles'
 import { SwapFeaturesContext } from '../Swap/SwapFeaturesContext'
 import { InfinitySwapForm } from './InfinitySwap'
+
+const TradingViewChart = dynamic(() => import('components/Chart/TradingViewChart'), { ssr: false })
 
 const Wrapper = styled(Box)`
   width: 100%;
@@ -22,7 +25,7 @@ const Wrapper = styled(Box)`
 
 const InfinitySwapInner = () => {
   const { query } = useRouter()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isDesktop } = useMatchBreakpoints()
   const { isChartExpanded, isChartDisplayed, setIsChartDisplayed } = useContext(SwapFeaturesContext)
   const [isSwapHotTokenDisplay, setIsSwapHotTokenDisplay] = useSwapHotTokenDisplay()
   // const { t } = useTranslation()
@@ -49,6 +52,14 @@ const InfinitySwapInner = () => {
         mt={isChartExpanded ? undefined : isMobile ? '18px' : '42px'}
         p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
       >
+        {isDesktop && isChartDisplayed && <TradingViewChart theme="Dark" />}
+        {!isDesktop && isChartDisplayed && (
+          <BottomDrawer
+            content={<TradingViewChart theme="Dark" />}
+            isOpen={isChartDisplayed}
+            setIsOpen={(isOpen) => setIsChartDisplayed?.(isOpen)}
+          />
+        )}
         <Flex
           flexDirection="column"
           alignItems="center"
