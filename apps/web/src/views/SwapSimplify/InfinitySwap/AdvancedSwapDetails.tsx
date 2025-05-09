@@ -6,7 +6,6 @@ import { formatAmount, formatFraction } from '@pancakeswap/utils/formatFractions
 import { memo, useMemo, useState } from 'react'
 
 import { OrderType } from '@pancakeswap/price-api-sdk'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { NumberDisplay, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
@@ -16,6 +15,7 @@ import { useAtomValue } from 'jotai'
 import { Field } from 'state/swap/actions'
 import { styled } from 'styled-components'
 import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
 import { SlippageButton } from '../../Swap/components/SlippageButton'
 import { useFeeSaved } from '../../Swap/hooks/useFeeSaved'
@@ -94,8 +94,7 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
             isDataReady={priceBreakdown.every((p) => p.lpFeeAmount)}
           >
             <Text fontSize="14px" textAlign="right">
-              $
-              {formatNumber(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber(), 0, 5)}
+              {formatDollarAmount(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber())}
             </Text>
           </SkeletonV2>
         </RowBetween>
