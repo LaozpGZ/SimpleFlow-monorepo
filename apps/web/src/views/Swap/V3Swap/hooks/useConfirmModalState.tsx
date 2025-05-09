@@ -43,6 +43,7 @@ import { getBridgeCalldata } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
 import { crossChainOrderDataAtom } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/state/orderData'
 
+import { useSwapState } from 'state/swap/hooks'
 import {
   CrossChainOrderData,
   CrossChainOrderStatus,
@@ -462,12 +463,15 @@ const useConfirmActions = (
     }
   }, [approvalData, account, order, retryWaitForTransaction, safeTxHashTransformer, sendTransactionAsync, showError, t])
 
+  const { recipient: recipientAddress } = useSwapState()
+  const recipient = recipientAddress === null ? account : recipientAddress
+
   const swapBridgeStep = useMemo(() => {
     return {
       step: ConfirmModalState.PENDING_CONFIRMATION,
       action: async () => {
         // TODO: show error message???
-        if (!order) {
+        if (!order || !recipient) {
           return
         }
 
@@ -480,7 +484,7 @@ const useConfirmActions = (
 
           const bridgeCalldataResponse = await getBridgeCalldata({
             order: order as BridgeOrderWithCommands,
-            recipient: account ?? '0x',
+            recipient: recipient as Address,
           })
 
           if (bridgeCalldataResponse?.transactionData?.calldata) {
@@ -582,7 +586,6 @@ const useConfirmActions = (
       showIndicator: true,
     }
   }, [
-    account,
     order,
     retryWaitForTransaction,
     safeTxHashTransformer,
@@ -591,6 +594,7 @@ const useConfirmActions = (
     t,
     toastSuccess,
     setCrossChainOrderData,
+    recipient,
   ])
 
   const swapStep = useMemo(() => {
@@ -720,21 +724,6 @@ const useConfirmActions = (
       showIndicator: false,
     }
   }, [account, t, order, resetState, sendXOrder, showError, nativeCurrency, toastSuccess, toastError])
-
-  // const crossChainSwapStep = useMemo(() => {
-  //   return {
-  //     step: ConfirmModalState.PENDING_CONFIRMATION,
-  //     showIndicator: false,
-  //     action: async () => {
-  //       console.log('CrossChainSwapStep is being executed!')
-  //       setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
-
-  //       // TODO: Implement Cross-Chain Swap Step
-  //       await new Promise((resolve) => setTimeout(resolve, 3000))
-  //       setConfirmState(ConfirmModalState.ORDER_SUBMITTED)
-  //     },
-  //   }
-  // }, [])
 
   const orderSubmittedStep = useMemo(() => {
     return {
