@@ -2,6 +2,7 @@ import { HookData } from "@pancakeswap/infinity-sdk";
 import { useTranslation } from "@pancakeswap/localization";
 import { AutoColumn, Flex, FlexGap, LinkExternal, Modal, Text } from "@pancakeswap/uikit";
 import Miscellaneous from "@pancakeswap/uikit/components/Svg/Icons/Miscellaneous";
+import { useMemo } from "react";
 
 const ModalTitle: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { t } = useTranslation();
@@ -34,9 +35,7 @@ export const HookModal: React.FC<{
             <Text fontSize={12} color="secondary" bold textTransform="uppercase">
               {t("Description")}
             </Text>
-            <Text ellipsis style={{ whiteSpace: "pre-wrap" }}>
-              {hookData.description}
-            </Text>
+            <LinkifyText text={hookData.description} />
           </AutoColumn>
 
           <LinkExternal href={hookData.github} marginTop="auto">
@@ -47,5 +46,26 @@ export const HookModal: React.FC<{
         </AutoColumn>
       </Flex>
     </Modal>
+  );
+};
+
+const urlRegex = /(https?:\/\/[^\s()]+|www\.[^\s()]+)/gi;
+const LinkifyText: React.FC<{
+  text?: string;
+}> = ({ text }) => {
+  const parts = useMemo(() => text?.split(urlRegex), [text]);
+  return (
+    <Text ellipsis style={{ whiteSpace: "pre-wrap" }}>
+      {parts?.map((part, index) => {
+        if (part.startsWith("http")) {
+          return (
+            <LinkExternal key={index} href={part} style={{ display: "inline-flex" }}>
+              {part}
+            </LinkExternal>
+          );
+        }
+        return part;
+      })}
+    </Text>
   );
 };
