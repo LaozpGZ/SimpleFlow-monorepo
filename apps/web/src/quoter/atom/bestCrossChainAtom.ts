@@ -25,38 +25,42 @@ type CompletePath = {
   outputAmount: CurrencyAmount<Currency>
 }
 
-export const getAvailableBridgeRoutes = atomFamily((option: QuoteQuery) => {
-  return atom(async () => {
-    // Early return if currencies or chainIds are not available
-    if (!option.baseCurrency || !option.currency) {
-      return []
-    }
+export const getAvailableBridgeRoutes = atomFamily(
+  (option: QuoteQuery) => {
+    return atom(async () => {
+      // Early return if currencies or chainIds are not available
+      if (!option.baseCurrency || !option.currency) {
+        return []
+      }
 
-    // Check if this is a cross-chain request
-    const isCrossChain = option.baseCurrency.chainId !== option.currency.chainId
-    if (!isCrossChain) {
-      return []
-    }
+      // Check if this is a cross-chain request
+      const isCrossChain = option.baseCurrency.chainId !== option.currency.chainId
+      if (!isCrossChain) {
+        return []
+      }
 
-    try {
-      // Fetch available routes from the bridge API
-      const routes = await getBridgeAvailableRoutes({
-        originChainId: option.baseCurrency.chainId,
-        destinationChainId: option.currency.chainId,
-      })
+      try {
+        // Fetch available routes from the bridge API
+        const routes = await getBridgeAvailableRoutes({
+          originChainId: option.baseCurrency.chainId,
+          destinationChainId: option.currency.chainId,
+        })
 
-      return routes || []
-    } catch (error) {
-      // QUESTION: should we log this error?
-      console.error('Failed to fetch bridge routes:', error)
-      return []
-    }
-  })
-}, isEqualQuoteQuery)
+        return routes || []
+      } catch (error) {
+        // QUESTION: should we log this error?
+        console.error('Failed to fetch bridge routes:', error)
+        return []
+      }
+    })
+  },
+  (a, b) => a?.baseCurrency?.chainId === b?.baseCurrency?.chainId && a?.currency?.chainId === b?.currency?.chainId,
+)
 
 export type BridgeMetadataParams = {
   inputAmount: CurrencyAmount<Currency>
   outputCurrency: Currency
+  nonce?: number
 }
 
 // Convert the function to an atom
@@ -113,7 +117,8 @@ export const getBridgeQuote = atomFamily(
   // add Equality check for BridgeMetadataParams
   (a, b) =>
     a.inputAmount.quotient.toString() === b.inputAmount.quotient.toString() &&
-    a.outputCurrency.wrapped.address === b.outputCurrency.wrapped.address,
+    a.outputCurrency.wrapped.address === b.outputCurrency.wrapped.address &&
+    a.nonce === b.nonce,
 )
 
 export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
@@ -155,6 +160,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             getBridgeQuote({
               inputAmount: baseCurrencyAmount,
               outputCurrency: quoteCurrency,
+              nonce: _option.nonce,
             }),
           )
         } else if (isBridgeToSwapQuery) {
@@ -184,6 +190,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             getBridgeQuote({
               inputAmount: baseCurrencyAmount,
               outputCurrency: bridgeDestinationCurrency,
+              nonce: _option.nonce,
             }),
           )
 
@@ -263,6 +270,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
               getBridgeQuote({
                 inputAmount: swapOrder.data.trade.outputAmount,
                 outputCurrency: quoteCurrency,
+                nonce: _option.nonce,
               }),
             )
 
@@ -358,6 +366,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
                     // Using non-null assertion as we've checked this above
                     inputAmount: swapOrder.data!.trade.outputAmount,
                     outputCurrency: destinationToken,
+                    nonce: _option.nonce,
                   }),
                 )
 

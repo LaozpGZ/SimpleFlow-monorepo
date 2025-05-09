@@ -27,12 +27,12 @@ export const useQuoterSync = () => {
   const {
     independentField,
     typedValue,
-    [Field.INPUT]: { currencyId: inputCurrencyId },
-    [Field.OUTPUT]: { currencyId: outputCurrencyId },
+    [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputCurrencyChainId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputCurrencyChainId },
   } = debouncedSwapState
   const { address } = useAccount()
-  const inputCurrency = useCurrency(inputCurrencyId)
-  const outputCurrency = useCurrency(outputCurrencyId)
+  const inputCurrency = useCurrency(inputCurrencyId, inputCurrencyChainId)
+  const outputCurrency = useCurrency(outputCurrencyId, outputCurrencyChainId)
   const isExactIn = independentField === Field.INPUT
   const independentCurrency = isExactIn ? inputCurrency : outputCurrency
   const dependentCurrency = isExactIn ? outputCurrency : inputCurrency
@@ -124,6 +124,9 @@ export const useQuoterSync = () => {
   }, [typedValue, setTyping])
 
   const quoteResult = useAtomValue(bestCrossChainQuoteAtom(quoteQuery))
+
+  console.log('quoteResult', quoteResult)
+
   useEffect(() => {
     let t = 0
     const interval = setInterval(() => {
