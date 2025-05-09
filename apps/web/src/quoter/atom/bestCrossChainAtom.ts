@@ -93,6 +93,7 @@ export const getBridgeQuote = atomFamily(
 
       const bridgeTrade: BridgeOrderWithCommands = {
         bridgeFee: CurrencyAmount.fromRawAmount(inputAmount.currency, bridgeFee),
+        expectedFillTimeSec: metadata.expectedFillTimeSec ? parseInt(metadata.expectedFillTimeSec) : 0,
         type: OrderType.PCS_BRIDGE,
         trade: {
           inputAmount,
