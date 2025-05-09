@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent, TradeType } from '@pancakeswap/sdk'
 import { LegacyPair as Pair } from '@pancakeswap/smart-router/legacy-router'
-import { AutoColumn, Box, Link, QuestionHelperV2, SkeletonV2, Text } from '@pancakeswap/uikit'
+import { AutoColumn, Box, DottedHelpText, Link, QuestionHelperV2, SkeletonV2, Text } from '@pancakeswap/uikit'
 import { formatAmount, formatFraction } from '@pancakeswap/utils/formatFractions'
 import { memo, useMemo, useState } from 'react'
 
@@ -20,6 +20,7 @@ import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
 import { SlippageButton } from '../../Swap/components/SlippageButton'
 import { useFeeSaved } from '../../Swap/hooks/useFeeSaved'
 import { SlippageAdjustedAmounts, TradePriceBreakdown } from '../../Swap/V3Swap/utils/exchange'
+import { EstimatedTime } from '../V4Swap/CrossChainConfirmSwapModal/components/EstimatedTime'
 
 const DetailsTitle = styled(Text)`
   text-decoration: underline dotted;
@@ -146,7 +147,9 @@ export const TradeSummary = memo(function TradeSummary({
   loading = false,
   hasDynamicHook,
   priceBreakdown,
+  expectedFillTimeSec,
 }: {
+  expectedFillTimeSec?: number
   priceBreakdown: BridgeOrderFee[] | TradePriceBreakdown
   hasStablePair?: boolean
   inputAmount?: CurrencyAmount<Currency>
@@ -346,6 +349,27 @@ export const TradeSummary = memo(function TradeSummary({
             <BridgeTradingViewSection priceBreakdown={priceBreakdown as BridgeOrderFee[]} />
           </Box>
         ))}
+
+      {expectedFillTimeSec && (
+        <RowBetween mt="10px">
+          <RowFixed>
+            <QuestionHelperV2
+              ml="4px"
+              placement="top"
+              text={
+                <>
+                  <Text>{t('Estimated Time')}</Text>
+                </>
+              }
+            >
+              <DottedHelpText fontSize="14px">{t('Est. Time')}</DottedHelpText>
+            </QuestionHelperV2>
+          </RowFixed>
+          <Text fontSize="14px" textAlign="right">
+            <EstimatedTime expectedFillTimeSec={expectedFillTimeSec} />
+          </Text>
+        </RowBetween>
+      )}
     </AutoColumn>
   )
 })

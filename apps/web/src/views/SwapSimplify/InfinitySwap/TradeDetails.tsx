@@ -61,6 +61,7 @@ export const TradeDetails = memo(function TradeDetails({ loaded, order }: Props)
     <AdvancedDetailsFooter show>
       <AutoColumn gap="0px">
         <TradeSummary
+          expectedFillTimeSec={isBridgeOrder(order) ? order.expectedFillTimeSec : undefined}
           isX={isXOrder(order)}
           slippageAdjustedAmounts={slippageAdjustedAmounts}
           inputAmount={inputAmount}
