@@ -498,7 +498,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             ...result,
             data: placeHolder,
             hash: _option.hash,
-            placeholderHash: _option.placeholderHash,
+            placeholderHash: `${_option.placeholderHash}`,
             loading: !placeHolder,
           }
         }
@@ -506,7 +506,8 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
         return {
           ...result,
           hash: _option.hash,
-          placeholderHash: _option.placeholderHash,
+          // TODO: remove this once we have a better way to handle placeholder hash
+          placeholderHash: `${_option.placeholderHash}-${result?.data?.trade?.outputAmount?.quotient.toString()}`,
         }
       } catch (error) {
         console.error('Failed to get cross chain quote:', error)
