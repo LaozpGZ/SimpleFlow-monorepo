@@ -1,4 +1,3 @@
-import { infinityPoolTvlSelector } from '../../v3-router/providers'
 import { InfinityBinPool, InfinityClPool, InfinityPoolWithTvl, PoolType } from '../../v3-router/types'
 import { GetInfinityCandidatePoolsParams } from '../types'
 import { fillPoolsWithBins, getInfinityBinCandidatePoolsWithoutBins } from './getInfinityBinPools'
@@ -40,6 +39,7 @@ export const getInfinityCandidatePoolsLite = async (
       tvlUSD: getInfinityPoolTvl(tvlMap, pool.id),
     } as InfinityPoolWithTvl
   })
-  const filtered = infinityPoolTvlSelector(params.currencyA, params.currencyB, poolsWithTvl)
-  return filtered as (InfinityClPool | InfinityBinPool)[]
+  // const filtered = infinityPoolTvlSelector(params.currencyA, params.currencyB, poolsWithTvl)
+  // return filtered as (InfinityClPool | InfinityBinPool)[]
+  return poolsWithTvl as (InfinityClPool | InfinityBinPool)[]
 }
