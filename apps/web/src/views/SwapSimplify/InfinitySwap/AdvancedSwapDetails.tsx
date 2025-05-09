@@ -45,6 +45,25 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
     })
   }, [usdPrices, priceBreakdown])
 
+  // Group and sum up fees by type
+  const groupedFees = useMemo(() => {
+    return priceBreakdown.reduce((acc, curr, index) => {
+      const type = curr.type === OrderType.PCS_BRIDGE ? 'bridge' : 'trading'
+      const existingFee = acc[type] || {
+        label: curr.type === OrderType.PCS_BRIDGE ? t('Bridge Fee') : t('Trading Fee'),
+        amount: new BigNumber(0),
+      }
+
+      return {
+        ...acc,
+        [type]: {
+          ...existingFee,
+          amount: existingFee.amount.plus(currencyUsdPrices[index] || 0),
+        },
+      }
+    }, {} as Record<string, { label: string; amount: BigNumber }>)
+  }, [currencyUsdPrices, priceBreakdown, t])
+
   return (
     <SwapUIV2.Collapse
       isOpen={isOpen}
@@ -101,13 +120,14 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
       }
       content={
         <Box px="16px" py="8px" borderRadius="16px" bg="background" mt="4px">
-          {priceBreakdown.map((p, index) => (
+          {/** display grouped fees */}
+          {Object.values(groupedFees).map((fee, index) => (
             <RowBetween key={index}>
               <Text fontSize="14px" color="textSubtle">
-                {p.type === OrderType.PCS_BRIDGE ? t('Bridge Fee') : t('Trading Fee')}
+                {fee.label}
               </Text>
               <Text fontSize="14px" textAlign="right">
-                {`${formatAmount(p.lpFeeAmount, 2)} ${p.lpFeeAmount?.currency?.symbol}`}
+                {`${formatDollarAmount(fee.amount.toNumber())}`}
               </Text>
             </RowBetween>
           ))}
