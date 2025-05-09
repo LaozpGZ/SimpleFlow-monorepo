@@ -4,7 +4,7 @@ import { Card, CardBody } from '@pancakeswap/uikit'
 import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
 import { FeeAmount } from '@pancakeswap/v3-sdk'
 import BigNumber from 'bignumber.js'
-import { PropsWithChildren, ReactNode, memo, useMemo } from 'react'
+import { PropsWithChildren, ReactNode, Suspense, memo, useMemo } from 'react'
 import { styled } from 'styled-components'
 import { Address } from 'viem'
 import { useApr } from 'views/PositionManagers/hooks/useApr'
@@ -199,48 +199,50 @@ export const DuoTokenVaultCard = memo(function DuoTokenVaultCard({
           strategy={strategy}
           allowTokenName={`${allowDepositToken0 ? currencyA.symbol : ''}${allowDepositToken1 ? currencyB.symbol : ''}`}
         />
-        <LiquidityManagement
-          boosterMultiplier={boosterMultiplier}
-          manager={manager}
-          currencyA={currencyA}
-          currencyB={currencyB}
-          id={id}
-          totalAssetsInUsd={totalAssetsInUsd}
-          earningToken={earningToken}
-          vaultName={vaultName}
-          feeTier={feeTier}
-          ratio={ratio}
-          isSingleDepositToken={isSingleDepositToken}
-          allowDepositToken0={allowDepositToken0}
-          allowDepositToken1={allowDepositToken1}
-          contractAddress={contractAddress}
-          staked0Amount={staked0Amount}
-          staked1Amount={staked1Amount}
-          token0PriceUSD={token0PriceUSD}
-          token1PriceUSD={token1PriceUSD}
-          pendingReward={pendingReward}
-          poolToken0Amount={poolToken0Amount}
-          poolToken1Amount={poolToken1Amount}
-          rewardPerSecond={rewardPerSecond}
-          aprDataInfo={aprDataInfo}
-          rewardEndTime={rewardEndTime}
-          refetch={refetch}
-          rewardStartTime={rewardStartTime}
-          totalSupplyAmounts={totalSupplyAmounts}
-          userLpAmounts={userLpAmounts}
-          precision={precision}
-          isInCakeRewardDateRange={apr.isInCakeRewardDateRange}
-          totalStakedInUsd={totalStakedInUsd}
-          strategyInfoUrl={strategyInfoUrl}
-          learnMoreAboutUrl={learnMoreAboutUrl}
-          lpTokenDecimals={lpTokenDecimals}
-          aprTimeWindow={aprDataInfo.timeWindow}
-          bCakeWrapper={bCakeWrapper}
-          minDepositUSD={minDepositUSD}
-          isBooster={isBoosterWhiteList && apr?.isInCakeRewardDateRange}
-          boosterContractAddress={boosterContractAddress}
-          adapterAddress={adapterAddress}
-        />
+        <Suspense>
+          <LiquidityManagement
+            boosterMultiplier={boosterMultiplier}
+            manager={manager}
+            currencyA={currencyA}
+            currencyB={currencyB}
+            id={id}
+            totalAssetsInUsd={totalAssetsInUsd}
+            earningToken={earningToken}
+            vaultName={vaultName}
+            feeTier={feeTier}
+            ratio={ratio}
+            isSingleDepositToken={isSingleDepositToken}
+            allowDepositToken0={allowDepositToken0}
+            allowDepositToken1={allowDepositToken1}
+            contractAddress={contractAddress}
+            staked0Amount={staked0Amount}
+            staked1Amount={staked1Amount}
+            token0PriceUSD={token0PriceUSD}
+            token1PriceUSD={token1PriceUSD}
+            pendingReward={pendingReward}
+            poolToken0Amount={poolToken0Amount}
+            poolToken1Amount={poolToken1Amount}
+            rewardPerSecond={rewardPerSecond}
+            aprDataInfo={aprDataInfo}
+            rewardEndTime={rewardEndTime}
+            refetch={refetch}
+            rewardStartTime={rewardStartTime}
+            totalSupplyAmounts={totalSupplyAmounts}
+            userLpAmounts={userLpAmounts}
+            precision={precision}
+            isInCakeRewardDateRange={apr.isInCakeRewardDateRange}
+            totalStakedInUsd={totalStakedInUsd}
+            strategyInfoUrl={strategyInfoUrl}
+            learnMoreAboutUrl={learnMoreAboutUrl}
+            lpTokenDecimals={lpTokenDecimals}
+            aprTimeWindow={aprDataInfo.timeWindow}
+            bCakeWrapper={bCakeWrapper}
+            minDepositUSD={minDepositUSD}
+            isBooster={isBoosterWhiteList && apr?.isInCakeRewardDateRange}
+            boosterContractAddress={boosterContractAddress}
+            adapterAddress={adapterAddress}
+          />
+        </Suspense>
         <ExpandableSection mt="1.5em">
           <VaultInfo
             currencyA={currencyA}

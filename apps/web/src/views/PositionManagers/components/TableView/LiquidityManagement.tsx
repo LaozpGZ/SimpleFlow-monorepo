@@ -9,6 +9,8 @@ import { StatusViewButtons } from 'views/Farms/components/YieldBooster/component
 import { useBCakeBoostLimitAndLockInfo } from 'views/Farms/components/YieldBooster/hooks/bCakeV3/useBCakeV3Info'
 import { useBoostStatusPM } from 'views/Farms/components/YieldBooster/hooks/bCakeV3/useBoostStatus'
 import { useAccount } from 'wagmi'
+import { useAtom } from 'jotai'
+import { disableAddingLiquidityAtom } from 'views/PositionManagers/utils/disableAddingLiquidityAtom'
 import {
   PositionManagerStatus,
   usePMV2SSMaxBoostMultiplier,
@@ -89,6 +91,7 @@ export const LiquidityManagement = memo(function LiquidityManagement({
 }: LiquidityManagementProps) {
   const { colors } = useTheme()
   const { t } = useTranslation()
+  const [disableAddingLiquidity] = useAtom(disableAddingLiquidityAtom(id))
   const [addLiquidityModalOpen, setAddLiquidityModalOpen] = useState(false)
   const [removeLiquidityModalOpen, setRemoveLiquidityModalOpen] = useState(false)
   const hasStaked = useMemo(() => Boolean(staked0Amount) || Boolean(staked1Amount), [staked0Amount, staked1Amount])
@@ -234,7 +237,7 @@ export const LiquidityManagement = memo(function LiquidityManagement({
                   variant="primary"
                   width="100%"
                   onClick={showAddLiquidityModal}
-                  disabled={positionManagerStatus === PositionManagerStatus.FINISHED}
+                  disabled={disableAddingLiquidity || positionManagerStatus === PositionManagerStatus.FINISHED}
                 >
                   {t('Add Liquidity')}
                 </Button>
@@ -302,6 +305,7 @@ export const LiquidityManagement = memo(function LiquidityManagement({
         onStake={onStake}
         isTxLoading={isTxLoading}
         adapterAddress={adapterAddress}
+        disableAddingLiquidity={disableAddingLiquidity}
       />
       <RemoveLiquidity
         isOpen={removeLiquidityModalOpen}
