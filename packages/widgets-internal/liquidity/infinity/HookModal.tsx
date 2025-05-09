@@ -50,7 +50,7 @@ export const HookModal: React.FC<{
 };
 
 const urlRegex = /(https?:\/\/[^\s()]+|www\.[^\s()]+)/gi;
-const LinkifyText: React.FC<{
+export const LinkifyText: React.FC<{
   text?: string;
 }> = ({ text }) => {
   const parts = useMemo(() => text?.split(urlRegex), [text]);
