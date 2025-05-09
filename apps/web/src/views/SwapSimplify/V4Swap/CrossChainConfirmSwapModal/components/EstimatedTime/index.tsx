@@ -3,16 +3,13 @@ import { useMemo } from 'react'
 
 export function EstimatedTime({ expectedFillTimeSec }: { expectedFillTimeSec?: number }) {
   const estimatedTimeDisplay = useMemo(() => {
-    if (expectedFillTimeSec) {
-      const time = dayjs.unix(expectedFillTimeSec / 1000).from(dayjs.unix(0), true)
-      return time
-    }
-    return null
-  }, [expectedFillTimeSec])
+    if (!expectedFillTimeSec) return '-'
 
-  if (!estimatedTimeDisplay) {
-    return '-'
-  }
+    const currentTime = dayjs().unix()
+    const secondsFromNow = expectedFillTimeSec - currentTime
+
+    return dayjs.duration(secondsFromNow, 'seconds').humanize(true)
+  }, [expectedFillTimeSec])
 
   return estimatedTimeDisplay
 }

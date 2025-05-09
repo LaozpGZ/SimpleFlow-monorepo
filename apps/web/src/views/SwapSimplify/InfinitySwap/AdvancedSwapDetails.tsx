@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent, TradeType } from '@pancakeswap/sdk'
 import { LegacyPair as Pair } from '@pancakeswap/smart-router/legacy-router'
-import { AutoColumn, Box, DottedHelpText, Link, QuestionHelperV2, SkeletonV2, Text } from '@pancakeswap/uikit'
+import { AutoColumn, Box, Link, QuestionHelperV2, SkeletonV2, Text } from '@pancakeswap/uikit'
 import { formatAmount, formatFraction } from '@pancakeswap/utils/formatFractions'
 import { memo, useMemo, useState } from 'react'
 
@@ -353,16 +353,10 @@ export const TradeSummary = memo(function TradeSummary({
       {expectedFillTimeSec && (
         <RowBetween mt="10px">
           <RowFixed>
-            <QuestionHelperV2
-              ml="4px"
-              placement="top"
-              text={
-                <>
-                  <Text>{t('Estimated Time')}</Text>
-                </>
-              }
-            >
-              <DottedHelpText fontSize="14px">{t('Est. Time')}</DottedHelpText>
+            <QuestionHelperV2 text={t('Estimated Time')}>
+              <DetailsTitle fontSize="14px" color="textSubtle">
+                {t('Est. Time')}
+              </DetailsTitle>
             </QuestionHelperV2>
           </RowFixed>
           <Text fontSize="14px" textAlign="right">
