@@ -190,7 +190,7 @@ function createBitmapIndexListBuilder(tickRange: number) {
 }
 
 // only allow 10% slippage
-const buildBitmapIndexList = createBitmapIndexListBuilder(1000)
+const buildBitmapIndexList = createBitmapIndexListBuilder(10)
 
 type FillPoolsWithTicksParams = {
   pools: InfinityClPool[]

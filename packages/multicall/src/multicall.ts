@@ -134,6 +134,14 @@ declare global {
 
 type CallReturnFromContract = [bigint, { success: boolean; gasUsed: bigint; returnData: string }[], bigint]
 
+declare global {
+  interface Window {
+    ethereum?: {
+      selectedAddress?: `0x${string}`
+    }
+  }
+}
+
 function formatCallReturn([blockNumber, results, successIndex]: CallReturnFromContract): MulticallReturn {
   const lastSuccessIndex = Number(successIndex)
   return {
@@ -169,7 +177,7 @@ async function call(calls: MulticallRequestWithGas[], params: CallParams): Promi
   try {
     const { result } = await contract.simulate.multicallWithGasLimitation(
       [calls, gasBuffer],
-      typeof window?.ethereum !== 'undefined' && window.ethereum.selectedAddress
+      typeof window !== 'undefined' && window.ethereum?.selectedAddress
         ? {
             account: window.ethereum.selectedAddress,
           }
