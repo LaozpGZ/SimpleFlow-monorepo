@@ -95,8 +95,11 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
       // Output chain name
       const chainOut = !isInput && inputChainId !== newCurrency.chainId && CHAIN_QUERY_NAME[newCurrency.chainId]
 
+      const isSameCurrency = !chainOut && newCurrencyId === inputCurrencyId && newCurrencyId === outputCurrencyId
+
       replaceBrowserHistoryMultiple({
         [isInput ? 'inputCurrency' : 'outputCurrency']: newCurrencyId,
+        ...(isSameCurrency && { [isInput ? 'outputCurrency' : 'inputCurrency']: undefined }),
         ...(chainOut && { chainOut }),
       })
     },
