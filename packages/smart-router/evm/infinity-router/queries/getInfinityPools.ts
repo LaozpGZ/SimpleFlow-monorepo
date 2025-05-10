@@ -32,7 +32,12 @@ export const getInfinityCandidatePoolsLite = async (
     getInfinityBinCandidatePoolsWithoutBins(params),
     getInfinityTvlReference(params),
   ])
-  const pools = [...clPools, ...binPools]
+  const pools = [...clPools, ...binPools].filter((p) => {
+    // if (p.currency0.symbol === 'BNB' && p.currency1.symbol === 'USDT') {
+    return p.id.toLowerCase() === '0x7a72f7622305444b6e0cf94e1f5202197155db4cb9bce1ce562e45140faca7a7'
+    // }
+    // return true
+  })
   const poolsWithTvl: InfinityPoolWithTvl[] = pools.map((pool) => {
     return {
       ...pool,

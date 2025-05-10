@@ -1,5 +1,12 @@
 import { ChainId } from '@pancakeswap/chains'
-import { type HookData, HookType, type PoolType, dynamicHooksList, hooksList } from '@pancakeswap/infinity-sdk'
+import {
+  HOOK_CATEGORY,
+  type HookData,
+  HookType,
+  type PoolType,
+  dynamicHooksList,
+  hooksList,
+} from '@pancakeswap/infinity-sdk'
 import keyBy from 'lodash/keyBy'
 import { useMemo } from 'react'
 import { safeGetAddress } from 'utils'
@@ -24,7 +31,33 @@ export const useHooksList = (chainId?: ChainId, poolType?: PoolType): HookData[]
 
 export const useHooksMap = (chainId?: ChainId): Record<string, HookData> => {
   const list = useHooksList(chainId)
-  return useMemo(() => keyBy(list, (l) => (l.address ? getAddress(l.address) : '')), [list])
+  return useMemo(() => keyBy(list, (l) => safeGetAddress(l.address) ?? ''), [list])
+}
+
+export const useBrevisHooks = (chainId?: ChainId): HookData[] => {
+  return useMemo(() => {
+    if (!chainId) {
+      return []
+    }
+    const list = hooksList[chainId] as HookData[] | undefined
+    if (!list) {
+      return []
+    }
+    return list.filter((h) => h.category?.includes(HOOK_CATEGORY.BrevisDiscount))
+  }, [chainId])
+}
+
+export const usePrimusHooks = (chainId?: ChainId): HookData[] => {
+  return useMemo(() => {
+    if (!chainId) {
+      return []
+    }
+    const list = hooksList[chainId] as HookData[] | undefined
+    if (!list) {
+      return []
+    }
+    return list.filter((h) => h.category?.includes(HOOK_CATEGORY.PrimusDiscount))
+  }, [chainId])
 }
 
 export const useHookByAddress = (chainId?: ChainId, address?: HookData['address']): HookData | undefined => {

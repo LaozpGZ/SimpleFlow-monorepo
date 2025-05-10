@@ -76,4 +76,5 @@ export const hookCategoryDesc: Record<HOOK_CATEGORY, React.ReactNode> = {
     </Trans>
   ),
   [HOOK_CATEGORY.BrevisDiscount]: <Trans>Powered by Brevis, this hook enables swap fee discounts</Trans>,
+  [HOOK_CATEGORY.PrimusDiscount]: <Trans>Powered by Primus, this hook enables swap fee discounts</Trans>,
 };
