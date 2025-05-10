@@ -100,7 +100,12 @@ export const FlipButton = memo(function FlipButton({
       replaceBrowserHistoryMultiple({
         inputCurrency: outputCurrencyId,
         outputCurrency: inputCurrencyId,
-        ...(inputChainId && inputChainId !== outputChainId && { chainOut: CHAIN_QUERY_NAME[inputChainId] }),
+        ...(inputChainId &&
+          outputChainId &&
+          inputChainId !== outputChainId && {
+            chainOut: CHAIN_QUERY_NAME[inputChainId],
+            chain: CHAIN_QUERY_NAME[outputChainId],
+          }),
       })
 
       // If cross-chain swap, switch network to new Input Currency's chain

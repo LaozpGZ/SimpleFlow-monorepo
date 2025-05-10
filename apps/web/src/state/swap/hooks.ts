@@ -232,11 +232,10 @@ export function useDefaultsFromURLSearch():
   useEffect(() => {
     if (!chainId || !native || !isReady) return
 
-    const parsed = queryParametersToSwapState(
-      query,
-      native.symbol,
-      CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address,
-    )
+    const defaultOutputCurrency =
+      CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address
+
+    const parsed = queryParametersToSwapState(query, native.symbol, defaultOutputCurrency)
 
     const finalInputCurrencyId = inputCurrencyId || parsed[Field.INPUT].currencyId
     const finalOutputCurrencyId = outputCurrencyId || parsed[Field.OUTPUT].currencyId
