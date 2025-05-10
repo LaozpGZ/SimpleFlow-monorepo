@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Trade, TradeType } from '@pancakeswap/sdk'
 import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
 import { PairDataTimeWindowEnum } from '@pancakeswap/uikit'
+import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useQuery } from '@tanstack/react-query'
 import { getChainId } from 'config/chains'
@@ -191,11 +192,11 @@ export function queryParametersToSwapState(
   return {
     [Field.INPUT]: {
       currencyId: inputCurrency,
-      chainId: undefined,
+      chainId: inputChainId,
     },
     [Field.OUTPUT]: {
       currencyId: outputCurrency,
-      chainId: undefined,
+      chainId: outputChainId,
     },
     typedValue: parseTokenAmountURLParameter(parsedQs.exactAmount),
     independentField: parseIndependentFieldURLParameter(parsedQs.exactField),
@@ -214,7 +215,13 @@ export function useDefaultsFromURLSearch():
   const native = useNativeCurrency()
   const { query, isReady } = useRouter()
   const [result, setResult] = useState<
-    { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined } | undefined
+    | {
+        inputCurrencyId: string | undefined
+        outputCurrencyId: string | undefined
+        inputChainId: number | undefined
+        outputChainId: number | undefined
+      }
+    | undefined
   >()
 
   const {
@@ -232,28 +239,36 @@ export function useDefaultsFromURLSearch():
     )
 
     const finalInputCurrencyId = inputCurrencyId || parsed[Field.INPUT].currencyId
-    // if (chainId !== inputChainId) {
-    //   finalInputCurrencyId = currencyId(native)
-    // }
+    const finalOutputCurrencyId = outputCurrencyId || parsed[Field.OUTPUT].currencyId
 
-    // // TODO: Check if better to update in another place
-    // replaceBrowserHistoryMultiple({
-    //   inputCurrency: finalInputCurrencyId,
-    // })
+    const finalInputChainId = inputChainId || parsed[Field.INPUT].chainId
+    const finalOutputChainId = outputChainId || parsed[Field.OUTPUT].chainId
+
+    replaceBrowserHistoryMultiple({
+      inputCurrency: finalInputCurrencyId,
+      outputCurrency: finalOutputCurrencyId,
+      chain: finalInputChainId,
+      chainOut: finalOutputChainId,
+    })
 
     dispatch(
       replaceSwapState({
         typedValue: parsed.typedValue,
         field: parsed.independentField,
-        inputCurrencyId: inputCurrencyId || parsed[Field.INPUT].currencyId,
-        outputCurrencyId: outputCurrencyId || parsed[Field.OUTPUT].currencyId,
-        inputChainId,
-        outputChainId,
+        inputCurrencyId: finalInputCurrencyId,
+        outputCurrencyId: finalOutputCurrencyId,
+        inputChainId: finalInputChainId,
+        outputChainId: finalOutputChainId,
         recipient: null,
       }),
     )
-    // setResult({ inputCurrencyId: parsed[Field.INPUT].currencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
-    setResult({ inputCurrencyId: finalInputCurrencyId, outputCurrencyId: parsed[Field.OUTPUT].currencyId })
+
+    setResult({
+      inputCurrencyId: finalInputCurrencyId,
+      outputCurrencyId: finalOutputCurrencyId,
+      inputChainId: finalInputChainId,
+      outputChainId: finalOutputChainId,
+    })
   }, [dispatch, chainId, query, native, isReady])
 
   return result
