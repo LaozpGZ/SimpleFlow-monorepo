@@ -159,8 +159,8 @@ function useDefaults(): { inputCurrencyId: string | undefined; outputCurrencyId:
         field: parsed.independentField,
         inputCurrencyId: parsed[Field.INPUT].currencyId,
         outputCurrencyId: parsed[Field.OUTPUT].currencyId,
-        inputChainId: parsed[Field.INPUT].chainId,
-        outputChainId: parsed[Field.OUTPUT].chainId,
+        inputChainId: parsed[Field.INPUT].chainId || chainId,
+        outputChainId: parsed[Field.OUTPUT].chainId || chainId,
         recipient: null,
       }),
     )
