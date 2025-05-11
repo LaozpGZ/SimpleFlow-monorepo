@@ -1,6 +1,7 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
 import { BRIDGE_API_ENDPOINT } from 'config/constants/endpoints'
+import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { Address } from 'viem/accounts'
 import { BridgeOrderWithCommands } from '../utils'
 
@@ -59,6 +60,51 @@ interface CalldataRequestSchema {
   destinationChainId: number
   recipientOnDestChain: Address
   commands: (BridgeDataSchema | SwapDataSchema)[]
+}
+
+export enum BridgeStatus {
+  SUCCESS = 'SUCCESS',
+  PARTIAL_SUCCESS = 'PARTIAL_SUCCESS',
+  PENDING = 'PENDING', // when a transaction is not yet indexed
+  BRIDGE_PENDING = 'BRIDGE_PENDING', // when bridging is pending
+  FAILED = 'FAILED',
+}
+
+export interface BridgeStatusResponse {
+  status: BridgeStatus
+  inputToken: string
+  outputToken: string
+  inputAmount: string
+  outputAmount: string
+  originChainId: number
+  destinationChainId: number
+  minOutputAmount: string
+  orderId: string
+  transactionId: string
+  data: BridgeStatusData[]
+}
+
+export interface BridgeStatusData {
+  command: string
+  status: Status
+  metadata: BridgeStatusMetadata
+}
+
+export interface Status {
+  code: string
+}
+
+export interface BridgeStatusMetadata {
+  originChainId: number
+  destinationChainId: number
+  depositId: number
+  bridgeStatus: string
+  fillTx: string
+  depositTxHash: string
+  depositRefundTxHash: string
+  inputAmount: string
+  outputAmount: string
+  fee: string
 }
 
 export function getTokenAddress(currency: Currency): Address {
@@ -257,5 +303,12 @@ export const getMetadata = async (params: GetMetadataParams): Promise<MetadataSu
   )
   const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/metadata?${new URLSearchParams(stringParams).toString()}`)
 
+  return resp.json()
+}
+
+export const getBridgeStatus = async (chainId: number, txHash: string): Promise<BridgeStatusResponse> => {
+  const resp = await fetch(
+    `${BRIDGE_API_ENDPOINT}/v1/status/${chainIdToExplorerInfoChainName[chainId]}?txHash=${txHash}`,
+  )
   return resp.json()
 }

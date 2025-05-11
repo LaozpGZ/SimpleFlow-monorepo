@@ -86,6 +86,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
 }) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
+
   // @ts-ignore
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(originalOrder?.trade)
 
@@ -100,7 +101,9 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       ConfirmModalState.PERMITTING,
     ].includes(confirmModalState)
   }, [confirmModalState])
+
   const hasError = useMemo(() => swapErrorMessage !== undefined, [swapErrorMessage])
+
   const stepsVisible = useMemo(() => {
     if (swapErrorMessage) return false
     if (confirmModalState === ConfirmModalState.REVIEWING || confirmModalState === ConfirmModalState.COMPLETED)

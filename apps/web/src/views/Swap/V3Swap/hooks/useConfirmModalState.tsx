@@ -541,6 +541,8 @@ const useConfirmActions = (
                   : undefined,
               })
 
+              // After txn is confirmed, we need to check the bridge status
+
               // Update data and steps with success status
               currentOrderData = {
                 ...currentOrderData,
