@@ -44,7 +44,7 @@ export function useStablecoinPrice(
     currency && stableCoin && enabled && currentChainId === chainId && !isCake && !isStableCoin,
   )
 
-  const { data: priceFromApi, isLoading } = useCurrencyUsdPrice(currency, {
+  const { data: priceFromApi } = useCurrencyUsdPrice(currency, {
     enabled: shouldEnabled,
   })
 
@@ -64,6 +64,7 @@ export function useStablecoinPrice(
     xEnabled: false,
     infinitySwap: false,
     speedQuoteEnabled: true,
+    routeKey: 'stable-coin-price',
   })
 
   const { data: quoteResult } = useAtomValue(bestAMMTradeFromQuoterWorkerAtom(priceQuoter))
@@ -137,5 +138,5 @@ export const useStablecoinPriceAmount = (
       }
     }
     return undefined
-  }, [amount, stablePrice, currency])
+  }, [amount, stablePrice])
 }

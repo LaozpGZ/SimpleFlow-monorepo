@@ -16,6 +16,7 @@ import { FeeAmount } from '@pancakeswap/v3-sdk'
 import { BIPS_BASE, INPUT_FRACTION_AFTER_FEE } from 'config/constants/exchange'
 import { Field } from 'state/swap/actions'
 import { basisPointsToPercent } from 'utils/exchange'
+import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
 import { InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
 
 export type SlippageAdjustedAmounts = {
@@ -156,4 +157,22 @@ export function calculateInfiFeePercent(lpFee: number, protocolFee?: number) {
     lpFee,
     protocolFee: protocolFee1,
   }
+}
+
+// Helper function to find the highest price impact from multiple breakdowns
+export function findHighestPriceImpact(breakdowns: BridgeOrderFee[]): Percent | null | undefined {
+  return breakdowns.reduce((highest, breakdown) => {
+    // Skip if current breakdown has no price impact
+    if (!breakdown.priceImpactWithoutFee) return highest
+
+    // If no highest value yet, use current one
+    if (!highest) return breakdown.priceImpactWithoutFee
+
+    // Compare and keep the higher value
+    if (highest.lessThan(breakdown.priceImpactWithoutFee)) {
+      return breakdown.priceImpactWithoutFee
+    }
+
+    return highest
+  }, null as Percent | null)
 }

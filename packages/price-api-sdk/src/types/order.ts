@@ -62,6 +62,7 @@ export type BridgeOrder<tradeType extends TradeType = TradeType> = {
   type: OrderType.PCS_BRIDGE
   trade: BridgeTrade<tradeType>
   bridgeFee: CurrencyAmount<Currency>
+  expectedFillTimeSec: number
 }
 
 export type PriceOrder<

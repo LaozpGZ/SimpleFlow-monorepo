@@ -9,7 +9,6 @@ import { ConfirmModalState, useAsyncConfirmPriceImpactWithoutFee } from '@pancak
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { BLOCK_CONFIRMATION } from 'config/confirmation'
 import { ALLOWED_PRICE_IMPACT_HIGH, PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN } from 'config/constants/exchange'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useNativeWrap } from 'hooks/useNativeWrap'
@@ -44,13 +43,14 @@ import { getBridgeCalldata } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
 import { crossChainOrderDataAtom } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/state/orderData'
 
+import { useSwapState } from 'state/swap/hooks'
 import {
   CrossChainOrderData,
   CrossChainOrderStatus,
   CrossChainOrderStepStatus,
   CrossChainOrderStepType,
 } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/types'
-import { useSendTransaction } from 'wagmi'
+import { useAccount, useSendTransaction } from 'wagmi'
 import { computeTradePriceBreakdown } from '../utils/exchange'
 import { userRejectedError } from './useSendSwapTransaction'
 import { useSwapCallback } from './useSwapCallback'
@@ -87,7 +87,7 @@ const useCreateConfirmSteps = (
 ) => {
   const { requireApprove, requirePermit, requireRevoke } = usePermit2Requires(amountToApprove, spender)
   const nativeCurrency = useNativeCurrency(order?.trade?.inputAmount.currency.chainId)
-  const { account } = useAccountActiveChain()
+  const { address: account } = useAccount()
   const balance = useCurrencyBalance(account ?? undefined, nativeCurrency.wrapped)
 
   const { chainId: activeChainId } = useActiveChainId()
@@ -141,7 +141,7 @@ const useConfirmActions = (
     enablePaymaster: true,
   })
   const nativeWrap = useNativeWrap()
-  const { account } = useAccountActiveChain()
+  const { address: account } = useAccount()
   const getAllowanceArgs = useMemo(() => {
     if (!chainId) return undefined
     const inputs = [account, getPermit2Address(chainId)] as [`0x${string}`, `0x${string}`]
@@ -463,12 +463,15 @@ const useConfirmActions = (
     }
   }, [approvalData, account, order, retryWaitForTransaction, safeTxHashTransformer, sendTransactionAsync, showError, t])
 
+  const { recipient: recipientAddress } = useSwapState()
+  const recipient = recipientAddress === null ? account : recipientAddress
+
   const swapBridgeStep = useMemo(() => {
     return {
       step: ConfirmModalState.PENDING_CONFIRMATION,
       action: async () => {
         // TODO: show error message???
-        if (!order) {
+        if (!order || !recipient) {
           return
         }
 
@@ -481,7 +484,7 @@ const useConfirmActions = (
 
           const bridgeCalldataResponse = await getBridgeCalldata({
             order: order as BridgeOrderWithCommands,
-            recipient: account ?? '0x',
+            recipient: recipient as Address,
           })
 
           if (bridgeCalldataResponse?.transactionData?.calldata) {
@@ -594,6 +597,7 @@ const useConfirmActions = (
     t,
     toastSuccess,
     setCrossChainOrderData,
+    recipient,
   ])
 
   const swapStep = useMemo(() => {
@@ -723,21 +727,6 @@ const useConfirmActions = (
       showIndicator: false,
     }
   }, [account, t, order, resetState, sendXOrder, showError, nativeCurrency, toastSuccess, toastError])
-
-  // const crossChainSwapStep = useMemo(() => {
-  //   return {
-  //     step: ConfirmModalState.PENDING_CONFIRMATION,
-  //     showIndicator: false,
-  //     action: async () => {
-  //       console.log('CrossChainSwapStep is being executed!')
-  //       setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
-
-  //       // TODO: Implement Cross-Chain Swap Step
-  //       await new Promise((resolve) => setTimeout(resolve, 3000))
-  //       setConfirmState(ConfirmModalState.ORDER_SUBMITTED)
-  //     },
-  //   }
-  // }, [])
 
   const orderSubmittedStep = useMemo(() => {
     return {

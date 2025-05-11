@@ -60,6 +60,7 @@ export class PoolHashHelper {
       createTime,
       hash,
       placeholderHash,
+      routeKey,
       ...rest
     } = query
     const chainId = query.baseCurrency?.chainId

@@ -30,7 +30,7 @@ import { isAddressEqual } from 'utils'
 import FormattedPriceImpact from 'views/Swap/components/FormattedPriceImpact'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/styleds'
-import { InterfaceOrder, isXOrder } from 'views/Swap/utils'
+import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 import { SlippageAdjustedAmounts, TradePriceBreakdown, formatExecutionPrice } from 'views/Swap/V3Swap/utils/exchange'
 
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
@@ -41,6 +41,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { currenciesUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
 import { useAtomValue } from 'jotai'
 import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
+import { EstimatedTime } from './components/EstimatedTime'
 
 dayjs.extend(relativeTime)
 
@@ -107,7 +108,6 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
   onConfirm,
   swapErrorMessage,
   disabledConfirm,
-  estimatedTime = 3 * 60 * 1000, // 3 Minutes (Testing),
 }: {
   order?: InterfaceOrder
   tradeType: TradeType
@@ -120,8 +120,6 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
   swapErrorMessage?: string | undefined
   disabledConfirm: boolean
 
-  /** Estimated time in milliseconds */
-  estimatedTime?: number
   onConfirm: () => void
 }) {
   const { t } = useTranslation()
@@ -130,14 +128,6 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
   const [gasToken] = useGasToken()
   const { isPaymasterAvailable, isPaymasterTokenActive } = usePaymaster()
   const gasTokenInfo = paymasterInfo[gasToken.isToken ? gasToken?.wrapped.address : '']
-
-  const estimatedTimeDisplay = useMemo(() => {
-    if (estimatedTime) {
-      const time = dayjs.unix(estimatedTime / 1000).from(dayjs.unix(0), true)
-      return time
-    }
-    return null
-  }, [estimatedTime])
 
   const showSameTokenWarning = useMemo(
     () =>
@@ -204,7 +194,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
             priceImpact={!Array.isArray(priceBreakdown) ? priceBreakdown?.priceImpactWithoutFee : undefined}
           />
         </RowBetween>
-        {!isXOrder(order) && (
+        {!isXOrder(order) && !isBridgeOrder(order) && (
           <RowBetween mb="8px">
             <RowFixed>
               <QuestionHelperV2
@@ -253,11 +243,6 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
               placement="top"
               text={
                 <>
-                  <Text>
-                    {t(
-                      'Fee ranging from 0.01% to 1% depending on the pool fee tier. You can check the fee tier by clicking the magnifier icon under the “Route” section.',
-                    )}
-                  </Text>
                   <Text mt="12px">
                     <Link
                       style={{ display: 'inline' }}
@@ -296,7 +281,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
             </Text>
           )}
         </RowBetween>
-        {estimatedTimeDisplay && (
+        {isBridgeOrder(order) && order.expectedFillTimeSec && (
           <RowBetween mt="8px">
             <RowFixed>
               <QuestionHelperV2
@@ -312,7 +297,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
               </QuestionHelperV2>
             </RowFixed>
             <Text fontSize="14px" textAlign="right">
-              {estimatedTimeDisplay}
+              <EstimatedTime expectedFillTimeSec={order.expectedFillTimeSec} />
             </Text>
           </RowBetween>
         )}

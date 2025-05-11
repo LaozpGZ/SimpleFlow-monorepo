@@ -1,4 +1,3 @@
-import { SimpleCache } from '@pancakeswap/utils/SimpleCache'
 import { Atom } from 'jotai'
 import { AtomFamily } from 'jotai/vanilla/utils/atomFamily'
 import { QuoteQuery } from 'quoter/quoter.types'
@@ -15,17 +14,14 @@ export interface StrategyRoute {
   overrides: Partial<QuoteQuery>
   isShadow?: boolean // shadow queries don't provide final result, used for get quite quote for user
   priority?: number
+  key: string
 }
 type RoutingStrategy = StrategyRoute[]
-
-const cache = new SimpleCache<string, RoutingStrategy>({
-  maxSize: 1000,
-  maxAge: 1000 * 120, // 2 minites
-})
 
 const defaultRoutingStrategy: RoutingStrategy = [
   // Single hop route & with light pools
   {
+    key: 'single',
     query: bestAMMTradeFromQuoterWorker2Atom,
     overrides: {
       maxHops: 1,
@@ -35,18 +31,21 @@ const defaultRoutingStrategy: RoutingStrategy = [
   },
   // routing-sdk
   {
+    key: 'routing-sdk',
     query: bestRoutingSDKTradeAtom,
     overrides: {},
     priority: 1,
   },
   // X
   {
+    key: 'x',
     query: bestXApiAtom,
     overrides: {},
     priority: 1,
   },
   {
     // Fallback full route
+    key: 'full',
     query: bestAMMTradeFromQuoterWorkerAtom,
     overrides: {},
     priority: 2,

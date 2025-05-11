@@ -6,7 +6,6 @@ import { formatAmount, formatFraction } from '@pancakeswap/utils/formatFractions
 import { memo, useMemo, useState } from 'react'
 
 import { OrderType } from '@pancakeswap/price-api-sdk'
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { NumberDisplay, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
@@ -16,10 +15,12 @@ import { useAtomValue } from 'jotai'
 import { Field } from 'state/swap/actions'
 import { styled } from 'styled-components'
 import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
 import { SlippageButton } from '../../Swap/components/SlippageButton'
 import { useFeeSaved } from '../../Swap/hooks/useFeeSaved'
 import { SlippageAdjustedAmounts, TradePriceBreakdown } from '../../Swap/V3Swap/utils/exchange'
+import { EstimatedTime } from '../V4Swap/CrossChainConfirmSwapModal/components/EstimatedTime'
 
 const DetailsTitle = styled(Text)`
   text-decoration: underline dotted;
@@ -44,6 +45,25 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
       return new BigNumber(p.lpFeeAmount?.toExact() ?? 0).times(usdPrices[index] ?? 0)
     })
   }, [usdPrices, priceBreakdown])
+
+  // Group and sum up fees by type
+  const groupedFees = useMemo(() => {
+    return priceBreakdown.reduce((acc, curr, index) => {
+      const type = curr.type === OrderType.PCS_BRIDGE ? 'bridge' : 'trading'
+      const existingFee = acc[type] || {
+        label: curr.type === OrderType.PCS_BRIDGE ? t('Bridge Fee') : t('Trading Fee'),
+        amount: new BigNumber(0),
+      }
+
+      return {
+        ...acc,
+        [type]: {
+          ...existingFee,
+          amount: existingFee.amount.plus(currencyUsdPrices[index] || 0),
+        },
+      }
+    }, {} as Record<string, { label: string; amount: BigNumber }>)
+  }, [currencyUsdPrices, priceBreakdown, t])
 
   return (
     <SwapUIV2.Collapse
@@ -94,21 +114,21 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
             isDataReady={priceBreakdown.every((p) => p.lpFeeAmount)}
           >
             <Text fontSize="14px" textAlign="right">
-              $
-              {formatNumber(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber(), 0, 5)}
+              {formatDollarAmount(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber())}
             </Text>
           </SkeletonV2>
         </RowBetween>
       }
       content={
         <Box px="16px" py="8px" borderRadius="16px" bg="background" mt="4px">
-          {priceBreakdown.map((p, index) => (
+          {/** display grouped fees */}
+          {Object.values(groupedFees).map((fee, index) => (
             <RowBetween key={index}>
               <Text fontSize="14px" color="textSubtle">
-                {p.type === OrderType.PCS_BRIDGE ? t('Bridge Fee') : t('Trading Fee')}
+                {fee.label}
               </Text>
               <Text fontSize="14px" textAlign="right">
-                {`${formatAmount(p.lpFeeAmount, 2)} ${p.lpFeeAmount?.currency?.symbol}`}
+                {`${formatDollarAmount(fee.amount.toNumber())}`}
               </Text>
             </RowBetween>
           ))}
@@ -127,7 +147,9 @@ export const TradeSummary = memo(function TradeSummary({
   loading = false,
   hasDynamicHook,
   priceBreakdown,
+  expectedFillTimeSec,
 }: {
+  expectedFillTimeSec?: number
   priceBreakdown: BridgeOrderFee[] | TradePriceBreakdown
   hasStablePair?: boolean
   inputAmount?: CurrencyAmount<Currency>
@@ -142,6 +164,11 @@ export const TradeSummary = memo(function TradeSummary({
   const isExactIn = tradeType === TradeType.EXACT_INPUT
   const { feeSavedAmount, feeSavedUsdValue } = useFeeSaved(inputAmount, outputAmount)
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
+
+  // if priceBreakdown is an array and priceBreakdown only has one item, hide the slippage button because it's beidgeonly case
+  const isBridgeOnlyCase = useMemo(() => {
+    return Array.isArray(priceBreakdown) && priceBreakdown.length === 1
+  }, [priceBreakdown])
 
   return (
     <AutoColumn px="4px">
@@ -238,34 +265,27 @@ export const TradeSummary = memo(function TradeSummary({
           </SkeletonV2>
         </RowBetween>
       )}
-      <RowBetween mt="8px">
-        <RowFixed>
-          <QuestionHelperV2
-            text={
-              <>
-                <Text>
-                  <Text bold display="inline-block">
-                    {t('AMM')}
+      {!isBridgeOnlyCase && (
+        <RowBetween mt="8px">
+          <RowFixed>
+            <QuestionHelperV2
+              text={
+                <>
+                  <Text>
+                    {t(
+                      'Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.',
+                    )}
                   </Text>
-                  {`: ${t('The difference between the market price and estimated price due to trade size.')}`}
-                </Text>
-                <Text mt="10px">
-                  <Text bold display="inline-block">
-                    {t('X')}
-                  </Text>
-                  {`: ${t(
-                    'The difference between the latest quoted price and the minimum receiving amount set in the trade order.',
-                  )}`}
-                </Text>
-              </>
-            }
-            placement="top"
-          >
-            <DetailsTitle>{t('Slippage Tolerance')}</DetailsTitle>
-          </QuestionHelperV2>
-        </RowFixed>
-        <SlippageButton slippage={allowedSlippage} />
-      </RowBetween>
+                </>
+              }
+              placement="top"
+            >
+              <DetailsTitle>{t('Slippage Tolerance')}</DetailsTitle>
+            </QuestionHelperV2>
+          </RowFixed>
+          <SlippageButton slippage={allowedSlippage} />
+        </RowBetween>
+      )}
 
       {(priceBreakdown || isX) &&
         (!Array.isArray(priceBreakdown) && priceBreakdown.lpFeeAmount ? (
@@ -329,6 +349,21 @@ export const TradeSummary = memo(function TradeSummary({
             <BridgeTradingViewSection priceBreakdown={priceBreakdown as BridgeOrderFee[]} />
           </Box>
         ))}
+
+      {expectedFillTimeSec && (
+        <RowBetween mt="10px">
+          <RowFixed>
+            <QuestionHelperV2 text={t('Estimated Time')}>
+              <DetailsTitle fontSize="14px" color="textSubtle">
+                {t('Est. Time')}
+              </DetailsTitle>
+            </QuestionHelperV2>
+          </RowFixed>
+          <Text fontSize="14px" textAlign="right">
+            <EstimatedTime expectedFillTimeSec={expectedFillTimeSec} />
+          </Text>
+        </RowBetween>
+      )}
     </AutoColumn>
   )
 })

@@ -18,7 +18,6 @@ import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { LottieRefCurrentProps } from 'lottie-react'
 
 import { CHAIN_QUERY_NAME } from 'config/chains'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import ArrowDark from '../../../../public/images/swap/arrow_dark.json' assert { type: 'json' }
 import ArrowLight from '../../../../public/images/swap/arrow_light.json' assert { type: 'json' }
@@ -80,7 +79,6 @@ export const FlipButton = memo(function FlipButton({
   compact?: boolean
   replaceBrowser?: boolean
 }) {
-  const { chainId } = useActiveChainId()
   const flipButtonRef = useRef<HTMLDivElement>(null)
   const lottieRef = useRef<LottieRefCurrentProps | null>(null)
   const { isDark } = useTheme()
