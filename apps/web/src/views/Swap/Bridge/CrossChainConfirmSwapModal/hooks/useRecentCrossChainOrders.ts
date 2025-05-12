@@ -43,6 +43,7 @@ export const useRecentCrossChainOrders = ({ chainId, address }: UseRecentCrossCh
           outputAmount: CurrencyAmount.fromRawAmount(toToken, '1000000000000000000'),
           routes: [],
         },
+        expectedFillTimeSec: 300,
       }
 
       return {

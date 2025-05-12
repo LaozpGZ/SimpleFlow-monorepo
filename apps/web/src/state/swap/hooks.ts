@@ -232,11 +232,10 @@ export function useDefaultsFromURLSearch():
   useEffect(() => {
     if (!chainId || !native || !isReady) return
 
-    const parsed = queryParametersToSwapState(
-      query,
-      native.symbol,
-      CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address,
-    )
+    const defaultOutputCurrency =
+      CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address
+
+    const parsed = queryParametersToSwapState(query, native.symbol, defaultOutputCurrency)
 
     const finalInputCurrencyId = inputCurrencyId || parsed[Field.INPUT].currencyId
     const finalOutputCurrencyId = outputCurrencyId || parsed[Field.OUTPUT].currencyId
@@ -244,6 +243,7 @@ export function useDefaultsFromURLSearch():
     const finalInputChainId = inputChainId || parsed[Field.INPUT].chainId
     const finalOutputChainId = outputChainId || parsed[Field.OUTPUT].chainId
 
+    // NOTE: not add chainId to browser history to keep URL clean
     replaceBrowserHistoryMultiple({
       inputCurrency: finalInputCurrencyId,
       outputCurrency: finalOutputCurrencyId,
@@ -257,8 +257,8 @@ export function useDefaultsFromURLSearch():
         field: parsed.independentField,
         inputCurrencyId: finalInputCurrencyId,
         outputCurrencyId: finalOutputCurrencyId,
-        inputChainId: finalInputChainId,
-        outputChainId: finalOutputChainId,
+        inputChainId: finalInputChainId || chainId,
+        outputChainId: finalOutputChainId || chainId,
         recipient: null,
       }),
     )
@@ -266,8 +266,8 @@ export function useDefaultsFromURLSearch():
     setResult({
       inputCurrencyId: finalInputCurrencyId,
       outputCurrencyId: finalOutputCurrencyId,
-      inputChainId: finalInputChainId,
-      outputChainId: finalOutputChainId,
+      inputChainId: finalInputChainId || chainId,
+      outputChainId: finalOutputChainId || chainId,
     })
   }, [dispatch, chainId, query, native, isReady])
 
