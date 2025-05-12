@@ -80,13 +80,14 @@ export const getBridgeQuote = atomFamily(
         throw new BridgeTradeError(metadata.reason)
       }
 
-      const outputAmount = CurrencyAmount.fromRawAmount(outputCurrency, metadata.minOutputAmount)
+      const outputAmount = CurrencyAmount.fromRawAmount(outputCurrency, metadata.bridgeTransactionData.outputAmount)
 
       /**
        * Note: 1% is represented as 1e16, 100% is 1e18, 50% is 5e17, etc. These values are in the same format that the contract understands.
+       * Bridge fee and expectedFillTimeSec is used for diplay purpose only.
        */
       const bridgeFee = new BigNumber(inputAmount.quotient.toString())
-        .times(metadata.bridgeFee)
+        .times(metadata.bridgeTransactionData.totalRelayFee)
         .div(1e18)
         .integerValue(BigNumber.ROUND_DOWN)
         .toString()

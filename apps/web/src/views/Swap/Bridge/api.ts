@@ -194,18 +194,23 @@ export interface MetadataSuccessResponse extends MetadataResponse {
   originChainId: number
   outputToken: string
   destinationChainId: number
-  bridgeFee: string
-  bridgeFeeUSD: string
-  fillDeadline: number
   expectedFillTimeSec: string
   isAmountTooLow: boolean
-  minOutputAmount: string
   limits: {
     minDeposit: string
     maxDeposit: string
     maxDepositInstant: string
     maxDepositShortDelay: string
     recommendedDepositInstant: string
+  }
+  bridgeTransactionData: {
+    exclusiveRelayer: string
+    exclusivityDeadline: number
+    fillDeadline: number
+    outputAmount: string
+    quoteTimestamp: number
+    relayerFeePct: string
+    totalRelayFee: string
   }
 }
 
