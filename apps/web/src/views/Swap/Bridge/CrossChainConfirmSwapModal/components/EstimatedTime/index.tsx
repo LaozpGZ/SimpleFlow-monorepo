@@ -1,20 +1,19 @@
 'use client'
 
-import dayjs from 'dayjs'
-import duration from 'dayjs/plugin/duration'
 import { useMemo } from 'react'
-
-// Extend dayjs with duration plugin
-dayjs.extend(duration)
 
 export function EstimatedTime({ expectedFillTimeSec }: { expectedFillTimeSec?: number }) {
   const estimatedTimeDisplay = useMemo(() => {
     if (!expectedFillTimeSec) return '-'
 
-    const currentTime = dayjs().unix()
-    const secondsFromNow = expectedFillTimeSec - currentTime
+    if (expectedFillTimeSec < 60) {
+      // Show in seconds if less than a minute
+      return expectedFillTimeSec === 1 ? '1 second' : `${expectedFillTimeSec} seconds`
+    }
 
-    return dayjs.duration(secondsFromNow, 'seconds').humanize(true)
+    // Convert to minutes and show in minutes format
+    const minutes = Math.floor(expectedFillTimeSec / 60)
+    return minutes === 1 ? '1 minute' : `${minutes} minutes`
   }, [expectedFillTimeSec])
 
   return estimatedTimeDisplay
