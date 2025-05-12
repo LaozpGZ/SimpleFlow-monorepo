@@ -31,7 +31,7 @@ import {
   computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter,
   computeTradePriceBreakdown as computeTradePriceBreakdownWithSmartRouter,
 } from 'views/Swap/V3Swap/utils/exchange'
-import { Timeline } from '../components/Timeline'
+import { Timeline, TimelineItemStatus } from '../components/Timeline'
 import { detailsPanelExpanded, detailsPanelProgressExpanded } from '../state/detailsPanel'
 import { activeBridgeOrderMetadataAtom } from '../state/orderDataState'
 
@@ -160,7 +160,7 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
           }
         }
 
-        const getStatus = () => {
+        const getStatus = (): TimelineItemStatus => {
           switch (step.status.code) {
             case BridgeStatus.SUCCESS:
               return 'completed'
