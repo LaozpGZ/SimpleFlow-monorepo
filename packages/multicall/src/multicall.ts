@@ -126,14 +126,6 @@ export type MulticallReturn = CallResult & {
   lastSuccessIndex: number
 }
 
-declare global {
-  interface Window {
-    ethereum?: {
-      selectedAddress?: `0x${string}`
-    }
-  }
-}
-
 type CallReturnFromContract = [bigint, { success: boolean; gasUsed: bigint; returnData: string }[], bigint]
 
 function formatCallReturn([blockNumber, results, successIndex]: CallReturnFromContract): MulticallReturn {
