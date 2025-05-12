@@ -190,9 +190,9 @@ export const Timeline: React.FC<TimelineProps> = ({ items }) => {
 
   return (
     <TimelineWrapper>
-      {items.map((item) => (
-        <TimelineItem key={item.id} {...item} isLast={isLastItem(item)} />
-      ))}
+      {items &&
+        items.length > 0 &&
+        items.map((item) => <TimelineItem key={item.id} {...item} isLast={isLastItem(item)} />)}
     </TimelineWrapper>
   )
 }

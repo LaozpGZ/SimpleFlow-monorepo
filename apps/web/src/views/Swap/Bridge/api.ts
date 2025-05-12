@@ -1,35 +1,17 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
 import { BRIDGE_API_ENDPOINT } from 'config/constants/endpoints'
+import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { Address } from 'viem/accounts'
 import { BridgeOrderWithCommands } from '../utils'
-
-export type GetBridgeCalldataResponse = {
-  transactionData: {
-    router: Address
-    calldata: `0x${string}`
-  }
-  gasFee: string
-}
-
-enum Command {
-  BRIDGE = 'BRIDGE',
-  SWAP = 'SWAP',
-}
-
-interface BridgeDataSchema {
-  command: Command.BRIDGE
-  data: {
-    inputToken: Address
-    outputToken: Address
-    inputAmount: string
-    minOutputAmount?: string
-    originChainId: number
-    destinationChainId: number
-    originChainRecipient: Address
-    // destinationChainRecipient?: Address
-  }
-}
+import {
+  BridgeDataSchema,
+  BridgeStatusResponse,
+  CalldataRequestSchema,
+  Command,
+  GetBridgeCalldataResponse,
+  SwapDataSchema,
+} from './types'
 
 // // Define the schema for the "SWAP" command data
 // export const SwapDataSchema = Type.Object({
@@ -39,27 +21,6 @@ interface BridgeDataSchema {
 //   deadlineOrPreviousBlockhash: Type.Optional(Type.String()),
 //   recipient: Type.Optional(addressModel),
 // });
-
-interface SwapDataSchema {
-  command: Command.SWAP
-  data: {
-    originChainId: number
-    trade: any
-    slippageTolerance: number
-    deadlineOrPreviousBlockhash?: string
-    recipient?: Address
-  }
-}
-
-interface CalldataRequestSchema {
-  inputToken: Address
-  outputToken: Address
-  inputAmount: string
-  originChainId: number
-  destinationChainId: number
-  recipientOnDestChain: Address
-  commands: (BridgeDataSchema | SwapDataSchema)[]
-}
 
 export function getTokenAddress(currency: Currency): Address {
   return currency.isNative ? '0x0000000000000000000000000000000000000000' : currency.wrapped.address
@@ -257,5 +218,12 @@ export const getMetadata = async (params: GetMetadataParams): Promise<MetadataSu
   )
   const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/metadata?${new URLSearchParams(stringParams).toString()}`)
 
+  return resp.json()
+}
+
+export const getBridgeStatus = async (chainId: number, txHash: string): Promise<BridgeStatusResponse> => {
+  const resp = await fetch(
+    `${BRIDGE_API_ENDPOINT}/v1/status/${chainIdToExplorerInfoChainName[chainId]}?txHash=${txHash}`,
+  )
   return resp.json()
 }

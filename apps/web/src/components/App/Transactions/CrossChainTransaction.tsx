@@ -12,8 +12,9 @@ import {
 import styled from 'styled-components'
 
 import { getFullChainNameById } from 'utils/getFullChainNameById'
-import { OrderResultModalContent } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
-import { CrossChainOrderData, CrossChainOrderStatus } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/types'
+import { OrderResultModalContent } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
+import { BridgeStatus } from 'views/Swap/Bridge/types'
+// import { CrossChainOrderData, CrossChainOrderStatus } from 'views/Swap/Bridge/types'
 
 const StyledChainLogo = styled(ChainLogo)`
   width: 22px;
@@ -22,17 +23,18 @@ const StyledChainLogo = styled(ChainLogo)`
   border-radius: 20px;
 `
 
-export function CrossChainTransaction({ orderData }: { orderData: CrossChainOrderData }) {
+// TODO: Update orderData type
+export function CrossChainTransaction({ orderData }: { orderData: any }) {
   const { t } = useTranslation()
   const modal = useModalV2()
 
   const status = useMemo(() => {
-    if (orderData.status === CrossChainOrderStatus.ORDER_SUCCESS) {
+    if (orderData.status === BridgeStatus.SUCCESS) {
       return TransactionStatus.Success
     }
     if (
-      orderData.status === CrossChainOrderStatus.ORDER_FAILED ||
-      orderData.status === CrossChainOrderStatus.ORDER_PARTIAL_SUCCESS // TODO: Add another one, warning status, to TransactionStatus for Partial Success
+      orderData.status === BridgeStatus.FAILED ||
+      orderData.status === BridgeStatus.PARTIAL_SUCCESS // TODO: Add another one, warning status, to TransactionStatus for Partial Success
     ) {
       return TransactionStatus.Failed
     }
@@ -104,7 +106,7 @@ export function CrossChainTransaction({ orderData }: { orderData: CrossChainOrde
           bodyPadding="0 24px 24px"
           minWidth="400px"
         >
-          <OrderResultModalContent overrideOrderData={orderData} />
+          <OrderResultModalContent overrideActiveOrderMetadata={orderData} />
         </MotionModal>
       </ModalV2>
     </>

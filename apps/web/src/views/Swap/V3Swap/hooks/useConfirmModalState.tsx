@@ -37,19 +37,12 @@ import { useSendXOrder } from 'views/Swap/x/useSendXOrder'
 
 import { useSetAtom } from 'jotai'
 import { calculateGasMargin } from 'utils'
-import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { getViemClients } from 'utils/viem'
 import { getBridgeCalldata } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
-import { crossChainOrderDataAtom } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/state/orderData'
 
 import { useSwapState } from 'state/swap/hooks'
-import {
-  CrossChainOrderData,
-  CrossChainOrderStatus,
-  CrossChainOrderStepStatus,
-  CrossChainOrderStepType,
-} from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/types'
+import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
 import { useAccount, useSendTransaction } from 'wagmi'
 import { computeTradePriceBreakdown } from '../utils/exchange'
 import { userRejectedError } from './useSendSwapTransaction'
@@ -170,7 +163,7 @@ const useConfirmActions = (
   const [orderHash, setOrderHash] = useState<Hex | undefined>(undefined)
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
-  const setCrossChainOrderData = useSetAtom(crossChainOrderDataAtom)
+  const setActiveBridgeOrderMetadata = useSetAtom(activeBridgeOrderMetadataAtom)
 
   const { toastSuccess, toastError, toastInfo } = useToast()
 
@@ -514,28 +507,14 @@ const useConfirmActions = (
               logGTMSwapTxSentEvent()
 
               setConfirmState(ConfirmModalState.ORDER_SUBMITTED)
-              let currentOrderData: CrossChainOrderData = {
-                id,
-                status: CrossChainOrderStatus.ORDER_SUBMITTED,
+
+              // Set the active bridge order metadata,
+              // used for tracking order from Status API
+              setActiveBridgeOrderMetadata({
                 order,
-                originalOrder: order,
-                // TODO: Add steps according to the proper Bridging route
-                steps: [
-                  {
-                    type: CrossChainOrderStepType.BRIDGE,
-                    status: CrossChainOrderStepStatus.IN_PROGRESS,
-                    inputCurrency: order.trade.inputAmount.currency,
-                    inputChainName: getFullChainNameById(order.trade.inputAmount.currency.chainId),
-                    outputCurrency: order.trade.outputAmount.currency,
-                    outputChainName: getFullChainNameById(order.trade.outputAmount.currency.chainId),
-                    tx: {
-                      hash,
-                      chainId: order.trade.inputAmount.currency.chainId,
-                    },
-                  },
-                ],
-              }
-              setCrossChainOrderData(currentOrderData)
+                txHash: hash,
+                originChainId: order.trade.inputAmount.currency.chainId,
+              })
 
               await retryWaitForTransaction({
                 hash,
@@ -543,26 +522,6 @@ const useConfirmActions = (
                   ? BLOCK_CONFIRMATION[order.trade.inputAmount.currency.chainId]
                   : undefined,
               })
-
-              // Update data and steps with success status
-              currentOrderData = {
-                ...currentOrderData,
-                status: CrossChainOrderStatus.ORDER_SUCCESS,
-                resultInformation: {
-                  amount: order.trade.outputAmount.toExact(),
-                  currency: order.trade.outputAmount.currency,
-                  chainName: getFullChainNameById(order.trade.outputAmount.currency.chainId),
-                },
-                steps: [
-                  {
-                    ...currentOrderData.steps?.[0],
-                    type: CrossChainOrderStepType.BRIDGE,
-                    status: CrossChainOrderStepStatus.SUCCESS,
-                  },
-                ],
-              }
-
-              setCrossChainOrderData(currentOrderData)
 
               toastSuccess(
                 t('Success!'),
@@ -586,6 +545,7 @@ const useConfirmActions = (
       showIndicator: true,
     }
   }, [
+    account,
     order,
     retryWaitForTransaction,
     safeTxHashTransformer,
@@ -593,7 +553,6 @@ const useConfirmActions = (
     showError,
     t,
     toastSuccess,
-    setCrossChainOrderData,
     recipient,
   ])
 

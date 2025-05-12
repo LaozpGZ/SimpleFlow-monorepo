@@ -16,11 +16,11 @@ import { Field } from 'state/swap/actions'
 import { styled } from 'styled-components'
 import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { EstimatedTime } from '../../Swap/Bridge/CrossChainConfirmSwapModal/components/EstimatedTime'
 import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
 import { SlippageButton } from '../../Swap/components/SlippageButton'
 import { useFeeSaved } from '../../Swap/hooks/useFeeSaved'
 import { SlippageAdjustedAmounts, TradePriceBreakdown } from '../../Swap/V3Swap/utils/exchange'
-import { EstimatedTime } from '../V4Swap/CrossChainConfirmSwapModal/components/EstimatedTime'
 
 const DetailsTitle = styled(Text)`
   text-decoration: underline dotted;
