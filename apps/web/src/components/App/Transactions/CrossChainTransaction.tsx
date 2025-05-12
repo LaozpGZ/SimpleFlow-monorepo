@@ -23,6 +23,7 @@ const StyledChainLogo = styled(ChainLogo)`
   border-radius: 20px;
 `
 
+// TODO: Update orderData type
 export function CrossChainTransaction({ orderData }: { orderData: any }) {
   const { t } = useTranslation()
   const modal = useModalV2()
