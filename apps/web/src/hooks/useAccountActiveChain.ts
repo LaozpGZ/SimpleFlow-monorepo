@@ -7,11 +7,11 @@ import { useActiveChainId } from './useActiveChainId'
 
 interface AccountChainState {
   account?: `0x${string}`
-  chainId: number | null
+  chainId: number | undefined
   status: 'connected' | 'disconnected' | 'connecting' | 'reconnecting' | null
 }
 
-const accountChainProxy = proxy<AccountChainState>({ chainId: null, status: null })
+const accountChainProxy = proxy<AccountChainState>({ chainId: undefined, status: null })
 export const accountActiveChainAtom = atomWithProxy(accountChainProxy)
 
 const useAccountActiveChain = () => {
