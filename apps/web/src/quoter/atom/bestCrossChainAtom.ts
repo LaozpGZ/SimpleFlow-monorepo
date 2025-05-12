@@ -279,6 +279,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             quote = {
               type: OrderType.PCS_BRIDGE,
               bridgeFee: bridgeQuote.bridgeFee,
+              expectedFillTimeSec: bridgeQuote.expectedFillTimeSec,
               trade: {
                 inputAmount: swapOrder.data.trade.inputAmount,
                 outputAmount: bridgeQuote.trade.outputAmount,
@@ -457,6 +458,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
                 'bridgeFee' in bridgeQuote
                   ? bridgeQuote.bridgeFee
                   : CurrencyAmount.fromRawAmount(swapOrder.trade.inputAmount.currency, '0'),
+              expectedFillTimeSec: 'expectedFillTimeSec' in bridgeQuote ? bridgeQuote.expectedFillTimeSec : 0,
               trade: {
                 inputAmount: swapOrder.trade.inputAmount,
                 outputAmount: finalSwapOrder ? finalSwapOrder.trade.outputAmount : bridgeQuote.trade.outputAmount,
