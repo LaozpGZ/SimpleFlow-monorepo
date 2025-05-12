@@ -161,12 +161,12 @@ const HookDiscountFeeDisplay: React.FC<{
               </Text>
             ) : null}
           </FlexGap>
-          <BrevisTip flexDirection="row" alignItems="center" gap="4px" ref={targetRef}>
-            {showIcon ? <BrevisIcon /> : null}
+          <HookTip flexDirection="row" alignItems="center" gap="4px" ref={targetRef}>
+            {showIcon && hookCategory === HOOK_CATEGORY.BrevisDiscount ? <BrevisIcon /> : null}
             <Text fontSize={12} lineHeight={1} color="secondaryText">
               {hookLabel}
             </Text>
-          </BrevisTip>
+          </HookTip>
         </>
       )}
     </>
@@ -359,7 +359,7 @@ function PairNode({
   )
 }
 
-const BrevisTip = styled(FlexGap)`
+const HookTip = styled(FlexGap)`
   cursor: pointer;
   border-radius: 8px;
 
