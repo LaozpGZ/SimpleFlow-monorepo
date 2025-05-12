@@ -1,5 +1,11 @@
+'use client'
+
 import dayjs from 'dayjs'
+import duration from 'dayjs/plugin/duration'
 import { useMemo } from 'react'
+
+// Extend dayjs with duration plugin
+dayjs.extend(duration)
 
 export function EstimatedTime({ expectedFillTimeSec }: { expectedFillTimeSec?: number }) {
   const estimatedTimeDisplay = useMemo(() => {
