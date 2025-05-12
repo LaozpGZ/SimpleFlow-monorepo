@@ -1,8 +1,10 @@
 import { InfinityBinPool, InfinityClPool, Route, SmartRouter } from '@pancakeswap/smart-router'
 import { useQueries } from '@tanstack/react-query'
+import { useBrevisHooks } from 'hooks/infinity/useHooksList'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import set from 'lodash/set'
 import { useMemo } from 'react'
+import { isAddressEqual } from 'utils'
 import { publicClient } from 'utils/viem'
 import { Address, ContractFunctionParameters, zeroAddress } from 'viem'
 import { parseAbi } from 'viem/utils'
@@ -11,25 +13,26 @@ import { useAccount } from 'wagmi'
 export const useBrevisHookDiscount = (pools: Route['pools']) => {
   const { chainId } = useActiveChainId()
   const { address: account } = useAccount()
+  const brevisHooks = useBrevisHooks(chainId)
+
+  const brevisHookPools = useMemo(() => {
+    return pools?.filter((pool) => {
+      if (SmartRouter.isInfinityBinPool(pool) || SmartRouter.isInfinityClPool(pool)) {
+        if (!pool.hooks) return false
+        return brevisHooks.find((h) => isAddressEqual(h.address, pool.hooks!.toLowerCase()))
+      }
+      return false
+    }) as Array<InfinityBinPool | InfinityClPool>
+  }, [brevisHooks, pools])
 
   const queries = useMemo(() => {
-    if (!pools?.length) {
-      return []
-    }
-
-    const brevisHookPools = pools?.filter(
-      (pool) =>
-        SmartRouter.isInfinityBinPool(pool) ||
-        (SmartRouter.isInfinityClPool(pool) && pool?.hooks && whiteListBrevisDiscountHooks.includes(pool.hooks)),
-    ) as Array<InfinityBinPool | InfinityClPool>
-
-    return brevisHookPools?.map((pool) => ({
+    return brevisHookPools.map((pool) => ({
       queryKey: ['brevisHookDiscount', pool.id],
       queryFn: () => getBrevisHookDiscountData({ chainId, pool, account }),
 
       enabled: !!pool && !!chainId,
     }))
-  }, [account, chainId])
+  }, [account, chainId, brevisHookPools])
 
   return useQueries({
     queries,
