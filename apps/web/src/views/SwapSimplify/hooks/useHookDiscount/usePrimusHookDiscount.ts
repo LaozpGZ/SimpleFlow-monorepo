@@ -66,11 +66,11 @@ const getPrimusHookDiscountData = async ({
     'function defaultFee() public view returns (uint24)',
   ])
 
-  const discountFeeCall = {
-    address: pool.hooks,
-    abi,
-    functionName: 'defaultDiscount',
-  } as const satisfies ContractFunctionParameters
+  // const discountFeeCall = {
+  //   address: pool.hooks,
+  //   abi,
+  //   functionName: 'defaultDiscount',
+  // } as const satisfies ContractFunctionParameters
 
   const defaultFeeCall = {
     address: pool.hooks,
@@ -78,14 +78,20 @@ const getPrimusHookDiscountData = async ({
     functionName: 'defaultFee',
   } as const satisfies ContractFunctionParameters
 
-  const [discountFee, originalFee] = await client.multicall({
-    contracts: [discountFeeCall, defaultFeeCall],
+  const [
+    // discountFee,
+    originalFee,
+  ] = await client.multicall({
+    contracts: [
+      // discountFeeCall, // cannot get discount fee from primus hook by user address now
+      defaultFeeCall,
+    ],
     allowFailure: false,
   })
 
   return {
     hooks: pool.hooks,
-    discountFee: originalFee - discountFee,
+    discountFee: originalFee,
     originalFee,
   }
 }
