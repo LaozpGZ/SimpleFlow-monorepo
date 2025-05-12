@@ -1,0 +1,122 @@
+import { PriceOrder } from '@pancakeswap/price-api-sdk'
+import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { Address } from 'viem/accounts'
+
+export type GetBridgeCalldataResponse = {
+  transactionData: {
+    router: Address
+    calldata: `0x${string}`
+  }
+  gasFee: string
+}
+
+export enum Command {
+  BRIDGE = 'BRIDGE',
+  SWAP = 'SWAP',
+}
+
+export interface BridgeDataSchema {
+  command: Command.BRIDGE
+  data: {
+    inputToken: Address
+    outputToken: Address
+    inputAmount: string
+    minOutputAmount?: string
+    originChainId: number
+    destinationChainId: number
+    originChainRecipient: Address
+    // destinationChainRecipient?: Address
+  }
+}
+
+export interface SwapDataSchema {
+  command: Command.SWAP
+  data: {
+    originChainId: number
+    trade: any
+    slippageTolerance: number
+    deadlineOrPreviousBlockhash?: string
+    recipient?: Address
+  }
+}
+
+export interface CalldataRequestSchema {
+  inputToken: Address
+  outputToken: Address
+  inputAmount: string
+  originChainId: number
+  destinationChainId: number
+  recipientOnDestChain: Address
+  commands: (BridgeDataSchema | SwapDataSchema)[]
+}
+
+export enum BridgeStatus {
+  SUCCESS = 'SUCCESS',
+  PARTIAL_SUCCESS = 'PARTIAL_SUCCESS',
+  PENDING = 'PENDING', // when a transaction is not yet indexed
+  BRIDGE_PENDING = 'BRIDGE_PENDING', // when bridging is pending
+  FAILED = 'FAILED',
+}
+
+export interface BridgeStatusResponse {
+  status: BridgeStatus
+  data?: BridgeResponseStatusData[]
+  inputToken?: string
+  outputToken?: string
+  inputAmount?: string
+  outputAmount?: string
+  originChainId?: number
+  destinationChainId?: number
+  minOutputAmount?: string
+  orderId?: string
+  transactionId?: string
+}
+
+type BridgeResponseStatusData =
+  | {
+      command: Command.BRIDGE
+      status: {
+        code: BridgeStatus
+      }
+      metadata: StatusMetadataBridge
+    }
+  | {
+      command: Command.SWAP
+      status: {
+        code: BridgeStatus
+      }
+      metadata: StatusMetadataSwap
+    }
+
+interface StatusMetadataBridge {
+  originChainId: number
+  destinationChainId: number
+  depositId: number
+  bridgeStatus: string
+  fillTx: string
+  depositTxHash: string
+  depositRefundTxHash: string
+  inputAmount: string
+  outputAmount: string
+  fee: string
+}
+
+export interface StatusMetadataSwap {
+  chainId: number
+  inputToken: Address
+  outputToken: Address
+  inputAmount: string
+  outputAmount: string
+  tx: string
+}
+
+export interface BridgeStatusData extends BridgeStatusResponse {
+  inputCurrencyAmount?: CurrencyAmount<Currency> | null
+  outputCurrencyAmount?: CurrencyAmount<Currency> | null
+}
+
+export interface ActiveBridgeOrderMetadata {
+  originChainId: number
+  txHash: string
+  order: PriceOrder | null | undefined
+}

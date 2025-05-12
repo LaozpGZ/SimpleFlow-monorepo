@@ -12,8 +12,8 @@ import {
 import styled from 'styled-components'
 
 import { getFullChainNameById } from 'utils/getFullChainNameById'
-import { OrderResultModalContent } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
-import { CrossChainOrderData, CrossChainOrderStatus } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/types'
+import { OrderResultModalContent } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
+import { CrossChainOrderData, CrossChainOrderStatus } from 'views/Swap/Bridge/types'
 
 const StyledChainLogo = styled(ChainLogo)`
   width: 22px;

@@ -32,11 +32,12 @@ import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 import { useSlippageAdjustedAmounts } from 'views/Swap/V3Swap/hooks'
 import { ConfirmAction } from 'views/Swap/V3Swap/hooks/useConfirmModalState'
 import { AllowedAllowanceState } from 'views/Swap/V3Swap/types'
+import { useBridgeStatus } from '../hooks'
+import { BridgeStatus } from '../types'
 import ConfirmSwapModalV3Container from './ConfirmSwapModalV3Container'
 import { OrderStatusModalContent } from './OrderStatus/OrderStatusModalContent'
-import { crossChainOrderDataAtom } from './state/orderData'
 import { TransactionConfirmSwapContentV3 } from './TransactionConfirmSwapContentV3'
-import { CrossChainOrderStatus } from './types'
+import { activeBridgeOrderMetadataAtom } from './state/orderDataState'
 
 export const useApprovalPhaseStepTitles: ({ trade }: { trade: InterfaceOrder['trade'] | undefined }) => {
   [step in AllowedAllowanceState]: string
@@ -90,7 +91,8 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
   // @ts-ignore
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(originalOrder?.trade)
 
-  const crossChainOrder = useAtomValue(crossChainOrderDataAtom)
+  const activeBridgeOrderMetadata = useAtomValue(activeBridgeOrderMetadataAtom)
+  const bridgeStatus = useBridgeStatus(activeBridgeOrderMetadata?.originChainId, activeBridgeOrderMetadata?.txHash)
 
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(originalOrder)
   const { recipient } = useSwapState()
@@ -104,13 +106,13 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
 
   const hasError = useMemo(() => swapErrorMessage !== undefined, [swapErrorMessage])
 
-  const stepsVisible = useMemo(() => {
-    if (swapErrorMessage) return false
-    if (confirmModalState === ConfirmModalState.REVIEWING || confirmModalState === ConfirmModalState.COMPLETED)
-      return false
-    if (confirmModalState === ConfirmModalState.PENDING_CONFIRMATION && txHash) return false
-    return pendingModalSteps.length > 0 && pendingModalSteps.some((step) => step.showIndicator)
-  }, [confirmModalState, pendingModalSteps, swapErrorMessage, txHash])
+  // const stepsVisible = useMemo(() => {
+  //   if (swapErrorMessage) return false
+  //   if (confirmModalState === ConfirmModalState.REVIEWING || confirmModalState === ConfirmModalState.COMPLETED)
+  //     return false
+  //   if (confirmModalState === ConfirmModalState.PENDING_CONFIRMATION && txHash) return false
+  //   return pendingModalSteps.length > 0 && pendingModalSteps.some((step) => step.showIndicator)
+  // }, [confirmModalState, pendingModalSteps, swapErrorMessage, txHash])
 
   const stepContents = useApprovalPhaseStepTitles({ trade: originalOrder?.trade })
   const token: Token | undefined = useMemo(
@@ -144,12 +146,13 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       case ConfirmModalState.REVIEWING:
         return hasError ? '' : t('Confirm Swap')
       case ConfirmModalState.ORDER_SUBMITTED:
-        switch (crossChainOrder?.status) {
-          case CrossChainOrderStatus.ORDER_SUBMITTED:
+        switch (bridgeStatus?.status) {
+          case BridgeStatus.PENDING:
+          case BridgeStatus.BRIDGE_PENDING:
             return t('Order Submitted')
-          case CrossChainOrderStatus.ORDER_SUCCESS:
+          case BridgeStatus.SUCCESS:
             return t('Success')
-          case CrossChainOrderStatus.ORDER_PARTIAL_SUCCESS:
+          case BridgeStatus.PARTIAL_SUCCESS:
             return t('Partial Success')
           default:
             return ''
@@ -164,7 +167,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
     confirmModalState,
     currencyBalances?.INPUT?.currency.symbol,
     originalOrder?.trade?.inputAmount?.currency.symbol,
-    crossChainOrder?.status,
+    bridgeStatus?.status,
   ])
 
   const modalContent = useMemo(() => {
@@ -178,7 +181,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
 
     if (swapErrorMessage) {
       return (
-        <Flex width="100%" alignItems="center" height="calc(430px - 73px - 120px)">
+        <Flex width="100%" alignItems="center" padding="12px 0">
           <SwapTransactionErrorContent
             message={swapErrorMessage}
             onDismiss={handleDismiss}
@@ -337,7 +340,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       isBridgeOrder(order) &&
       isBridgeOrder(originalOrder)
     ) {
-      return <OrderStatusModalContent order={order} originalOrder={originalOrder} />
+      return <OrderStatusModalContent />
     }
 
     if (confirmModalState === ConfirmModalState.COMPLETED && txHash) {

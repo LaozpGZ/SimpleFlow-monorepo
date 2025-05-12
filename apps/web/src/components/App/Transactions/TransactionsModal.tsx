@@ -11,7 +11,7 @@ import { chains } from 'utils/wagmi'
 import { GetXOrderReceiptResponseOrder } from 'views/Swap/x/api'
 import { useRecentXOrders } from 'views/Swap/x/useRecentXOders'
 
-import { useRecentCrossChainOrders } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/hooks/useRecentCrossChainOrders'
+import { useRecentCrossChainOrders } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useRecentCrossChainOrders'
 import { useAccount } from 'wagmi'
 import ConnectWalletButton from '../../ConnectWalletButton'
 import { AutoRow } from '../../Layout/Row'

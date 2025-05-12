@@ -169,6 +169,7 @@ const TertiaryButton = styled(Button).attrs({ variant: "tertiary" })<{ $color: s
   color: ${({ $color }) => $color};
 `;
 
+// TODO: Remove if not needed
 export const ApproveCrossChainModalContent = ({ currency, chainName }: { currency: Currency; chainName: string }) => {
   const { t } = useTranslation();
   const { theme } = useTheme();

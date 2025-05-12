@@ -1,9 +1,9 @@
 import { BRIDGE_API_ENDPOINT } from 'config/constants/endpoints'
 import { Address } from 'viem'
-import { CrossChainOrderData } from '../types'
+// import { CrossChainOrderData } from '../../types'
 
 export interface GetRecentCrossChainOrdersResponse {
-  orders: CrossChainOrderData[]
+  orders: any[]
 }
 
 export const getRecentCrossChainOrders = async (chainId: number, address: Address) => {

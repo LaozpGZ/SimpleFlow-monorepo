@@ -4,8 +4,8 @@ import { CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { createQueryKey, UseQueryParameters } from 'utils/reactQuery'
 import { Address } from 'viem'
+// import { CrossChainOrderStatus, CrossChainOrderStepStatus, CrossChainOrderStepType } from '../../types'
 import { GetRecentCrossChainOrdersResponse } from '../api'
-import { CrossChainOrderStatus, CrossChainOrderStepStatus, CrossChainOrderStepType } from '../types'
 
 const getRecentCrossChainOrdersQueryKey = createQueryKey<
   'recent-cross-chain-orders',
@@ -47,29 +47,29 @@ export const useRecentCrossChainOrders = ({ chainId, address }: UseRecentCrossCh
 
       return {
         orders: [
-          {
-            id: 'abc1',
-            status: CrossChainOrderStatus.ORDER_SUCCESS,
-            order: mockOrder,
-            originalOrder: mockOrder,
-            steps: [
-              {
-                id: '1',
-                status: CrossChainOrderStepStatus.SUCCESS,
-                type: CrossChainOrderStepType.BRIDGE,
-                inputAmount: '1000000000000000000',
-                outputAmount: '1000000000000000000',
-                inputCurrency: fromToken,
-                outputCurrency: toToken,
-                inputChainName: 'Ethereum',
-                outputChainName: 'BNB Chain',
-                tx: {
-                  chainId: 1,
-                  hash: '0x123',
-                },
-              },
-            ],
-          },
+          // {
+          //   id: 'abc1',
+          //   status: CrossChainOrderStatus.ORDER_SUCCESS,
+          //   order: mockOrder,
+          //   originalOrder: mockOrder,
+          //   steps: [
+          //     {
+          //       id: '1',
+          //       status: CrossChainOrderStepStatus.SUCCESS,
+          //       type: CrossChainOrderStepType.BRIDGE,
+          //       inputAmount: '1000000000000000000',
+          //       outputAmount: '1000000000000000000',
+          //       inputCurrency: fromToken,
+          //       outputCurrency: toToken,
+          //       inputChainName: 'Ethereum',
+          //       outputChainName: 'BNB Chain',
+          //       tx: {
+          //         chainId: 1,
+          //         hash: '0x123',
+          //       },
+          //     },
+          //   ],
+          // },
         ],
       }
     },

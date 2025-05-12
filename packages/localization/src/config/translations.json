@@ -3756,7 +3756,6 @@
   "Bridge %currency% (%inputChain% to %outputChain%)": "Bridge %currency% (%inputChain% to %outputChain%)",
   "Partial Fee": "Partial Fee",
   "%amount% %symbol% has been sent to your wallet on %outputChain%": "%amount% %symbol% has been sent to your wallet on %outputChain%",
-  "Failed due to: %reason%": "Failed due to: %reason%",
   "Why approving this?": "Why approving this?",
   "Please proceed in your wallet": "Please proceed in your wallet",
   "Swap %inputChainName% to %outputChainName%": "Swap %inputChainName% to %outputChainName%",

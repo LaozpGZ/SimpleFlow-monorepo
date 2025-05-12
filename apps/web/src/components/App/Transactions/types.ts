@@ -1,4 +1,4 @@
-import { CrossChainOrderData } from 'views/SwapSimplify/V4Swap/CrossChainConfirmSwapModal/types'
+import { CrossChainOrderData } from 'views/Swap/Bridge/types'
 
 export type CrossChainTransactionItem = {
   type: 'crossChainOrder'
