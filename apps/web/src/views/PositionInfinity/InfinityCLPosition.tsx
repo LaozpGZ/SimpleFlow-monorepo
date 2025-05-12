@@ -285,21 +285,23 @@ export const InfinityCLPosition = () => {
               </Box>
             ) : null}
             <Card style={{ maxWidth: '800px' }} mx="auto">
-              <PositionHeader
-                isOwner={isOwnNFT}
-                isOutOfRange={!inRange}
-                isFarming={isFarming}
-                protocol={Protocol.InfinityCLAMM}
-                currency0={currency0}
-                currency1={currency1}
-                chainId={chainId}
-                feeTier={feeAmount}
-                dynamic={poolInfo?.isDynamicFee}
-                isRemoved={removed}
-                hookData={hookData}
-                poolId={poolId}
-                tokenId={tokenId ? Number(tokenId) : undefined}
-              />
+              {chainId ? (
+                <PositionHeader
+                  isOwner={isOwnNFT}
+                  isOutOfRange={!inRange}
+                  isFarming={isFarming}
+                  protocol={Protocol.InfinityCLAMM}
+                  currency0={currency0}
+                  currency1={currency1}
+                  chainId={chainId}
+                  feeTier={feeAmount}
+                  dynamic={poolInfo?.isDynamicFee}
+                  isRemoved={removed}
+                  hookData={hookData}
+                  poolId={poolId}
+                  tokenId={tokenId ? Number(tokenId) : undefined}
+                />
+              ) : null}
               <CardBody>
                 <AutoRow>
                   <Flex
