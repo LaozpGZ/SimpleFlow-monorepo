@@ -249,7 +249,6 @@ export const AddLiquidity = memo(function AddLiquidity({
   }, [onDismiss, refetch])
 
   const disabled = useMemo(() => {
-    console.info(disableAddingLiquidity)
     if (disableAddingLiquidity) return true
     const balanceAmountMoreThenValueA =
       allowDepositToken0 &&

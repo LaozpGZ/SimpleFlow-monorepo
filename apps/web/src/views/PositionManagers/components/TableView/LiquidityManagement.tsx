@@ -11,6 +11,7 @@ import { useBoostStatusPM } from 'views/Farms/components/YieldBooster/hooks/bCak
 import { useAccount } from 'wagmi'
 import { useAtom } from 'jotai'
 import { disableAddingLiquidityAtom } from 'views/PositionManagers/utils/disableAddingLiquidityAtom'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import {
   PositionManagerStatus,
   usePMV2SSMaxBoostMultiplier,
@@ -91,7 +92,8 @@ export const LiquidityManagement = memo(function LiquidityManagement({
 }: LiquidityManagementProps) {
   const { colors } = useTheme()
   const { t } = useTranslation()
-  const [disableAddingLiquidity] = useAtom(disableAddingLiquidityAtom(id))
+  const { chainId } = useActiveChainId()
+  const [disableAddingLiquidity] = useAtom(disableAddingLiquidityAtom({ id, chainId, manager: manager.id }))
   const [addLiquidityModalOpen, setAddLiquidityModalOpen] = useState(false)
   const [removeLiquidityModalOpen, setRemoveLiquidityModalOpen] = useState(false)
   const hasStaked = useMemo(() => Boolean(staked0Amount) || Boolean(staked1Amount), [staked0Amount, staked1Amount])

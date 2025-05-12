@@ -1,14 +1,42 @@
 import { atomFamily } from 'jotai/utils'
-import { atomWithAsyncRetry } from 'utils/atomWithAsyncRetry'
+import { atom } from 'jotai'
+import { ChainId } from '@pancakeswap/chains'
+import isEqual from 'lodash/isEqual'
+import { MANAGER } from '@pancakeswap/position-managers'
 
-export const disableAddingLiquidityAtom = atomFamily((id: string | number) =>
-  atomWithAsyncRetry<boolean>({
-    asyncFn: async () => {
-      const response = await fetch(`/api/position-managers?id=${id}`)
-      if (!response.ok) throw new Error(`Failed to fetch disableAddingLiquidity for ID: ${id}`)
-      const data = await response.json()
-      return data.disableAddingLiquidity as boolean
-    },
-    fallbackValue: false,
-  }),
+type DisableCheckKey = {
+  chainId: number
+  id: string | number
+  manager: MANAGER
+}
+
+const DISABLED_VAULTS_CONFIG: {
+  byChainAndId: Partial<Record<ChainId, number[]>>
+  byManagerName: MANAGER[]
+} = {
+  // Disable by specific chainId and id
+  byChainAndId: {
+    // 56: [35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1],
+  },
+
+  // Disable by manager (applies across all chains)
+  byManagerName: [
+    // MANAGER.BRIL,MANAGER.DEFIEDGE, ...
+  ],
+}
+
+function isDisabledByManager(managerName: MANAGER) {
+  return DISABLED_VAULTS_CONFIG.byManagerName.includes(managerName)
+}
+
+function isDisabledByChainAndId(chainId: number, id: number) {
+  return Boolean(DISABLED_VAULTS_CONFIG.byChainAndId[chainId]?.includes(id) ?? false)
+}
+
+export const disableAddingLiquidityAtom = atomFamily(
+  (key: DisableCheckKey) =>
+    atom(() => {
+      return isDisabledByChainAndId(key.chainId, Number(key.id)) || isDisabledByManager(key.manager)
+    }),
+  isEqual,
 )
