@@ -113,8 +113,6 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     bscTokens.btcb,
     bscTokens.eth,
     bscTokens.usdc,
-    new ERC20Token(ChainId.BSC, '0x8666db51191d240268aea5f4033996A0b59cCA81', 18, 'T1', ''),
-    new ERC20Token(ChainId.BSC, '0xB3d8DDDc793F75a930313785e5d1612747093f25', 18, 'T0', ''),
   ],
   [ChainId.BSC_TESTNET]: [bscTestnetTokens.wbnb, bscTestnetTokens.cake, bscTestnetTokens.busd, bscTestnetTokens.usdc],
   [ChainId.ARBITRUM_ONE]: [arbitrumTokens.weth, arbitrumTokens.usdt, arbitrumTokens.usdc],
