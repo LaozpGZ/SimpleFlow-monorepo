@@ -43,6 +43,7 @@ import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
 
 import { useSwapState } from 'state/swap/hooks'
 import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
+import { Permit2Schema } from 'views/Swap/Bridge/types'
 import { useAccount, useSendTransaction } from 'wagmi'
 import { computeTradePriceBreakdown } from '../utils/exchange'
 import { userRejectedError } from './useSendSwapTransaction'
@@ -85,7 +86,7 @@ const useCreateConfirmSteps = (
 
   const { chainId: activeChainId } = useActiveChainId()
 
-  const { requiresApproval } = useBridgeCheckApproval({
+  const { requiresApproval, approvalData } = useBridgeCheckApproval({
     currencyAmountIn: isBridgeOrder(order)
       ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === activeChainId)?.inputAmount
       : undefined,
@@ -106,9 +107,9 @@ const useCreateConfirmSteps = (
     }
 
     // Handle bridge order approval check
-    if (isBridgeOrder(order) && requiresApproval) {
-      steps.push(ConfirmModalState.APPROVING_TOKEN)
-      steps.push(ConfirmModalState.PERMITTING)
+    if (isBridgeOrder(order)) {
+      if (requiresApproval) steps.push(ConfirmModalState.APPROVING_TOKEN)
+      if (approvalData?.isPermit2Required) steps.push(ConfirmModalState.PERMITTING)
     } else if (requireApprove) {
       steps.push(ConfirmModalState.APPROVING_TOKEN)
     }
@@ -118,7 +119,16 @@ const useCreateConfirmSteps = (
     }
     steps.push(ConfirmModalState.PENDING_CONFIRMATION)
     return steps
-  }, [requireRevoke, requireApprove, requirePermit, order, balance, amountToApprove, requiresApproval])
+  }, [
+    requireRevoke,
+    requireApprove,
+    requirePermit,
+    order,
+    balance,
+    amountToApprove,
+    requiresApproval,
+    approvalData?.isPermit2Required,
+  ])
 }
 
 // define the actions of each step
@@ -274,21 +284,34 @@ const useConfirmActions = (
     t,
   ])
 
+  const { approvalData, error, refetch, signPermit2 } = useBridgeCheckApproval({
+    currencyAmountIn: isBridgeOrder(order)
+      ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === activeChainId)?.inputAmount
+      : undefined,
+  })
+
   const permitStep = useMemo(() => {
     return {
       step: ConfirmModalState.PERMITTING,
       action: async (nextState?: ConfirmModalState) => {
         setConfirmState(ConfirmModalState.PERMITTING)
         try {
-          const { tx, ...result } = (await permit()) ?? {}
-          if (tx) {
-            const hash = await safeTxHashTransformer(tx)
-            retryWaitForTransaction({ hash })
-            // use transferAllowance, no need to use permit signature
-            setPermit2Signature(undefined)
+          if (isBridgeOrder(order)) {
+            const permitSignatureResponse = await signPermit2()
+
+            setPermit2Signature(permitSignatureResponse)
           } else {
-            setPermit2Signature(result)
+            const { tx, ...result } = (await permit()) ?? {}
+            if (tx) {
+              const hash = await safeTxHashTransformer(tx)
+              retryWaitForTransaction({ hash })
+              // use transferAllowance, no need to use permit signature
+              setPermit2Signature(undefined)
+            } else {
+              setPermit2Signature(result)
+            }
           }
+
           setConfirmState(nextState ?? ConfirmModalState.PENDING_CONFIRMATION)
         } catch (error) {
           if (userRejectedError(error)) {
@@ -300,7 +323,7 @@ const useConfirmActions = (
       },
       showIndicator: true,
     }
-  }, [permit, retryWaitForTransaction, safeTxHashTransformer, showError])
+  }, [permit, retryWaitForTransaction, safeTxHashTransformer, showError, signPermit2, order])
 
   const wrapStep = useMemo(() => {
     return {
@@ -397,12 +420,6 @@ const useConfirmActions = (
 
   const { chainId: activeChainId } = useActiveChainId()
 
-  const { approvalData, refetch, signPermit2 } = useBridgeCheckApproval({
-    currencyAmountIn: isBridgeOrder(order)
-      ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === activeChainId)?.inputAmount
-      : undefined,
-  })
-
   const approvalBridgeStep = useMemo(() => {
     return {
       step: ConfirmModalState.APPROVING_TOKEN,
@@ -415,20 +432,20 @@ const useConfirmActions = (
         setConfirmState(ConfirmModalState.APPROVING_TOKEN)
 
         try {
-          if (approvalData?.error?.code) {
-            throw new Error(`Approval check failed: ${approvalData.error.message || approvalData?.error?.code}`)
+          if (error?.code) {
+            throw new Error(`Approval check failed: ${error.message || error?.code}`)
           }
 
-          if (typeof approvalData?.approval?.isRequired !== 'boolean') {
+          if (typeof approvalData?.isApprovalRequired !== 'boolean') {
             throw new Error('Approval check response is failed!')
           }
 
           // we use approvalData?.approval?.isRequired instead of requiresApproval from the hook
           // because we want to ensure the accuracy of the approval check response
-          if (approvalData?.approval?.isRequired) {
-            const { to, data } = approvalData.approval
+          if (approvalData?.isApprovalRequired) {
+            const { permit2Address, data } = approvalData
             const result = await sendTransactionAsync({
-              to,
+              to: permit2Address,
               data,
             })
 
@@ -455,7 +472,18 @@ const useConfirmActions = (
       },
       showIndicator: true,
     }
-  }, [approvalData, account, order, retryWaitForTransaction, safeTxHashTransformer, sendTransactionAsync, showError, t])
+  }, [
+    approvalData,
+    account,
+    order,
+    retryWaitForTransaction,
+    safeTxHashTransformer,
+    sendTransactionAsync,
+    showError,
+    t,
+    error?.code,
+    error?.message,
+  ])
 
   const { recipient: recipientAddress } = useSwapState()
   const recipient = recipientAddress === null ? account : recipientAddress
@@ -473,15 +501,10 @@ const useConfirmActions = (
         setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
 
         try {
-          // TODO: Replace with order id if we're getting it from the backend
-          // const permitSignatureResponse = await signPermit2()
-
-          // console.log('permitSignatureResponse', permitSignatureResponse)
-
           const bridgeCalldataResponse = await getBridgeCalldata({
             order: order as BridgeOrderWithCommands,
             recipient: recipient as Address,
-            // permit2: permitSignatureResponse,
+            permit2: permit2Signature as Permit2Schema | undefined,
           })
 
           if (bridgeCalldataResponse?.transactionData?.calldata) {
@@ -559,6 +582,9 @@ const useConfirmActions = (
     toastSuccess,
     recipient,
     signPermit2,
+    chainId,
+    setActiveBridgeOrderMetadata,
+    permit2Signature,
   ])
 
   const swapStep = useMemo(() => {

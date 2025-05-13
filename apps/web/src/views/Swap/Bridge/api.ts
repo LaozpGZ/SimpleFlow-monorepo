@@ -106,14 +106,15 @@ export type Permit2ResponseSchema = {
 }
 
 export type PostBridgeCheckApprovalResponse = {
-  approval?: {
-    isRequired: boolean
-    permit2Details?: Permit2ResponseSchema
-    to?: `0x${string}`
-    tokenAddress?: `0x${string}`
-    walletAddress?: `0x${string}`
-    data?: `0x${string}`
-  }
+  isApprovalRequired: boolean
+  isPermit2Required: boolean
+  permit2Address: Address
+  spender: Address
+  permit2Details?: Permit2ResponseSchema
+  tokenAddress?: `0x${string}`
+  walletAddress?: `0x${string}`
+  data?: `0x${string}`
+
   error?: {
     code: string
     message: string
