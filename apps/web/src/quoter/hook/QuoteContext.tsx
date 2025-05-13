@@ -59,7 +59,7 @@ export const QuoteContextProvider = ({ children }: { children: React.ReactNode }
   const [infinitySwap] = useUserInfinitySwapEnable()
   const [stableSwap] = useUserStableSwapEnable()
   const config = useAtomValue(tokenRoutingConfigForInitAtom)
-  if (config.loading) {
+  if (config.loading || config.error) {
     return null
   }
 
