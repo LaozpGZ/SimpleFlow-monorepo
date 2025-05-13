@@ -1,20 +1,24 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { ChevronRightIcon, FlexGap, ModalV2, MotionModal, Text, useModalV2 } from '@pancakeswap/uikit'
+import { Box, ChevronRightIcon, FlexGap, ModalV2, MotionModal, Text, useModalV2 } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
 
 import {
   ChainLogo,
-  TransactionListItem,
   TransactionListItemTitle,
-  TransactionStatus,
+  TransactionListItemV2,
+  TransactionStatusV2,
 } from '@pancakeswap/widgets-internal'
 
 import styled from 'styled-components'
 
+import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { ViewOnExplorerButton } from 'components/ViewOnExplorerButton'
+import { DISPLAY_PRECISION } from 'config/constants/formatting'
+import { useCurrencyByChainId } from 'hooks/Tokens'
+import { multiChainName, multiChainShortName } from 'state/info/constant'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { OrderResultModalContent } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
-import { BridgeStatus } from 'views/Swap/Bridge/types'
-// import { CrossChainOrderData, CrossChainOrderStatus } from 'views/Swap/Bridge/types'
+import { BridgeStatus, UserBridgeOrder } from 'views/Swap/Bridge/types'
 
 const StyledChainLogo = styled(ChainLogo)`
   width: 22px;
@@ -23,30 +27,35 @@ const StyledChainLogo = styled(ChainLogo)`
   border-radius: 20px;
 `
 
-// TODO: Update orderData type
-export function CrossChainTransaction({ orderData }: { orderData: any }) {
+export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
   const { t } = useTranslation()
   const modal = useModalV2()
 
   const status = useMemo(() => {
-    if (orderData.status === BridgeStatus.SUCCESS) {
-      return TransactionStatus.Success
+    if (order.status === BridgeStatus.SUCCESS) {
+      return TransactionStatusV2.Success
     }
-    if (
-      orderData.status === BridgeStatus.FAILED ||
-      orderData.status === BridgeStatus.PARTIAL_SUCCESS // TODO: Add another one, warning status, to TransactionStatus for Partial Success
-    ) {
-      return TransactionStatus.Failed
+    if (order.status === BridgeStatus.FAILED) {
+      return TransactionStatusV2.Failed
     }
-    return TransactionStatus.Pending
-  }, [orderData.status])
+    if (order.status === BridgeStatus.PARTIAL_SUCCESS) {
+      return TransactionStatusV2.PartialSuccess
+    }
 
-  const inputToken = orderData.order?.trade?.inputAmount.currency
-  const outputToken = orderData.order?.trade?.outputAmount.currency
-  const inputChainId = orderData.order?.trade?.inputAmount.currency.chainId
-  const outputChainId = orderData.order?.trade?.outputAmount.currency.chainId
+    return TransactionStatusV2.Pending
+  }, [order.status])
+
+  const inputChainId = order.originChainId
+  const outputChainId = order.destinationChainId
+
   const inputChainName = getFullChainNameById(inputChainId)
   const outputChainName = getFullChainNameById(outputChainId)
+
+  const inputToken = useCurrencyByChainId(order.inputToken, inputChainId)
+  const outputToken = useCurrencyByChainId(order.outputToken, outputChainId)
+
+  const inputAmount = inputToken && CurrencyAmount.fromRawAmount(inputToken, order.inputAmount)
+  const outputAmount = outputToken && CurrencyAmount.fromRawAmount(outputToken, order.outputAmount)
 
   if (!inputToken || !outputToken || !inputChainId || !outputChainId) {
     return null
@@ -54,20 +63,20 @@ export function CrossChainTransaction({ orderData }: { orderData: any }) {
 
   return (
     <>
-      <TransactionListItem
+      <TransactionListItemV2
         onClick={modal.onOpen}
         status={status}
         title={
           <FlexGap alignItems="center" gap="4px">
             <FlexGap alignItems="center">
-              <StyledChainLogo chainId={orderData.order?.trade?.inputAmount.currency.chainId} />
-              <StyledChainLogo chainId={orderData.order?.trade?.outputAmount.currency.chainId} ml="-8px" />
+              <StyledChainLogo chainId={inputChainId} />
+              <StyledChainLogo chainId={outputChainId} ml="-8px" />
             </FlexGap>
 
             <TransactionListItemTitle>
               {t('Swap %inputChainName% to %outputChainName%', {
-                inputChainName: getFullChainNameById(orderData.order?.trade?.inputAmount.currency.chainId),
-                outputChainName: getFullChainNameById(orderData.order?.trade?.outputAmount.currency.chainId),
+                inputChainName,
+                outputChainName,
               })}
             </TransactionListItemTitle>
           </FlexGap>
@@ -76,37 +85,85 @@ export function CrossChainTransaction({ orderData }: { orderData: any }) {
           <FlexGap gap="0.25rem" justifyContent="flex-end">
             {/* {status === TransactionStatus.Pending ? <Countdown to={order.deadline} /> : null} */}
             {/* {order.timestamp && new Date(order.timestamp).toDateString()} */}
-            <ChevronRightIcon
-              style={{ cursor: 'pointer' }}
-              fontSize="1.25rem"
-              color="textSubtle"
-              onClick={modal.onOpen}
-            />
+            {order.transactionHash ? (
+              <ViewOnExplorerButton
+                chainId={order.originChainId}
+                address={order.transactionHash}
+                type="transaction"
+                color="primary60"
+              />
+            ) : (
+              <ChevronRightIcon
+                style={{ cursor: 'pointer' }}
+                fontSize="1.25rem"
+                color="textSubtle"
+                onClick={modal.onOpen}
+              />
+            )}
           </FlexGap>
         }
       >
-        <Text small>
-          {t('Swap')}&nbsp;
-          <Text as="span" bold small>
-            {orderData.order?.trade?.inputAmount.toExact()}&nbsp;
-            {inputToken?.symbol}
+        <Box maxWidth={[null, null, null, '380px']}>
+          <Text small>
+            {status === TransactionStatusV2.PartialSuccess ? (
+              <Text as="span" small bold>
+                {t('Incomplete')}:&nbsp;
+              </Text>
+            ) : status === TransactionStatusV2.Failed ? (
+              <Text as="span" small bold>
+                {t('Failed')}:&nbsp;
+              </Text>
+            ) : null}
+            {t('Swap')}&nbsp;
+            <Text as="span" bold small>
+              {inputAmount?.toSignificant(DISPLAY_PRECISION)}&nbsp;
+              {inputToken?.symbol}
+            </Text>
+            &nbsp; (
+            {t('on %chainSymbol%', { chainSymbol: multiChainShortName[inputChainId] ?? multiChainName[inputChainId] })}){' '}
+            {t('for')}&nbsp;
+            <Text as="span" bold small>
+              {outputAmount?.toSignificant(DISPLAY_PRECISION)}&nbsp;
+              {outputToken?.symbol}
+            </Text>
+            &nbsp; (
+            {t('on %chainSymbol%', {
+              chainSymbol: multiChainShortName[outputChainId] ?? multiChainName[outputChainId],
+            })}
+            )
           </Text>
-          &nbsp; ({t('on %chainSymbol%', { chainSymbol: inputChainName })}) {t('for')}&nbsp;
-          <Text as="span" bold small>
-            {orderData.order?.trade?.outputAmount.toExact()}&nbsp;
-            {outputToken?.symbol}
-          </Text>
-          &nbsp; ({t('on %chainSymbol%', { chainSymbol: outputChainName })})
-        </Text>
-      </TransactionListItem>
-      <ModalV2 {...modal}>
+          {order.transactionHash && (
+            <FlexGap mt="1px" alignItems="center">
+              <Text color="textSubtle" small>
+                {t('Details')}
+              </Text>
+              <ChevronRightIcon mt="1px" width="18px" color="textSubtle" />
+            </FlexGap>
+          )}
+        </Box>
+      </TransactionListItemV2>
+      <ModalV2 {...modal} closeOnOverlayClick>
         <MotionModal
           title={t('Order details')}
           headerBorderColor="transparent"
           bodyPadding="0 24px 24px"
           minWidth="400px"
         >
-          <OrderResultModalContent overrideActiveOrderMetadata={orderData} />
+          <OrderResultModalContent
+            overrideActiveOrderMetadata={{
+              txHash: order.transactionHash,
+              originChainId: order.originChainId,
+              order: null,
+              metadata: {
+                inputToken: order.inputToken,
+                outputToken: order.outputToken,
+                inputAmount: order.inputAmount,
+                outputAmount: order.outputAmount,
+                originChainId: order.originChainId,
+                destinationChainId: order.destinationChainId,
+              },
+            }}
+          />
         </MotionModal>
       </ModalV2>
     </>

@@ -3,9 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { useMemo } from 'react'
 import { getBridgeStatus } from '../api'
-import { BridgeStatus, BridgeStatusData } from '../types'
+import { ActiveBridgeOrderMetadata, BridgeStatusData, BridgeStatusResponse } from '../types'
 
-export const useBridgeStatus = (chainId?: number, txHash?: string) => {
+export const useBridgeStatus = (
+  chainId?: number,
+  txHash?: string,
+  metadata?: ActiveBridgeOrderMetadata['metadata'],
+) => {
   const queryResult = useQuery({
     queryKey: ['bridge-status', chainId, txHash],
     queryFn: () => (chainId && txHash ? getBridgeStatus(chainId, txHash) : undefined),
@@ -13,13 +17,15 @@ export const useBridgeStatus = (chainId?: number, txHash?: string) => {
     retry: 3,
     retryDelay: 1000,
     enabled: !!chainId && !!txHash,
-    notifyOnChangeProps: ['data'],
-    initialData: {
-      status: BridgeStatus.PENDING,
-    },
+    notifyOnChangeProps: ['data', 'isFetching'],
   })
 
-  const data = queryResult.data
+  const data: BridgeStatusResponse | undefined = metadata
+    ? {
+        ...(metadata as BridgeStatusResponse),
+        ...queryResult.data,
+      }
+    : queryResult.data
 
   const inputCurrency = useCurrencyByChainId(data?.inputToken, data?.originChainId)
   const outputCurrency = useCurrencyByChainId(data?.outputToken, data?.destinationChainId)
@@ -46,5 +52,5 @@ export const useBridgeStatus = (chainId?: number, txHash?: string) => {
     [data, inputCurrencyAmount, outputCurrencyAmount],
   )
 
-  return bridgeStatusData
+  return { data: bridgeStatusData, isLoading: queryResult.isFetching }
 }

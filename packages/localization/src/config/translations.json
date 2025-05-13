@@ -3767,5 +3767,6 @@
   "for": "for",
   "Order details": "Order details",
   "Bridge Fee": "Bridge Fee",
-  "Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.": "Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains."
+  "Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.": "Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.",
+  "Incomplete": "Incomplete"
 }
