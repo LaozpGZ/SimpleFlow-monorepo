@@ -1,6 +1,3 @@
-import { BridgeOrder, OrderType } from '@pancakeswap/price-api-sdk'
-import { Token } from '@pancakeswap/sdk'
-import { CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 import { createQueryKey, UseQueryParameters } from 'utils/reactQuery'
 import { Address } from 'viem'
@@ -30,21 +27,6 @@ export const useRecentCrossChainOrders = ({ chainId, address }: UseRecentCrossCh
       //
       // Returning test orders for now
       //
-      const fromToken = new Token(1, '0x0000000000000000000000000000000000000000', 18, 'ETH', 'Ethereum')
-      const toToken = new Token(56, '0x0000000000000000000000000000000000000000', 18, 'BNB', 'BNB Chain')
-
-      // Create a single order object to be used for both order and originalOrder
-      const mockOrder: BridgeOrder<TradeType> = {
-        bridgeFee: CurrencyAmount.fromRawAmount(fromToken, '1000000000000000000'),
-        type: OrderType.PCS_BRIDGE,
-        trade: {
-          tradeType: TradeType.EXACT_INPUT,
-          inputAmount: CurrencyAmount.fromRawAmount(fromToken, '1000000000000000000'),
-          outputAmount: CurrencyAmount.fromRawAmount(toToken, '1000000000000000000'),
-          routes: [],
-        },
-        expectedFillTimeSec: 300,
-      }
 
       return {
         orders: [
