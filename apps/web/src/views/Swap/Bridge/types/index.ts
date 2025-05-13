@@ -139,10 +139,10 @@ export interface UserBridgeOrdersResponse {
   startCursor: string
   endCursor: string
   hasNextPage: boolean
-  rows: UserBridgeOrderRow[]
+  rows: UserBridgeOrder[]
 }
 
-export interface UserBridgeOrderRow {
+export interface UserBridgeOrder {
   status: string
   inputToken: string
   outputToken: string

@@ -17,7 +17,7 @@ import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { OrderResultModalContent } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
-import { BridgeStatus, UserBridgeOrderRow } from 'views/Swap/Bridge/types'
+import { BridgeStatus, UserBridgeOrder } from 'views/Swap/Bridge/types'
 
 const StyledChainLogo = styled(ChainLogo)`
   width: 22px;
@@ -26,7 +26,7 @@ const StyledChainLogo = styled(ChainLogo)`
   border-radius: 20px;
 `
 
-export function CrossChainTransaction({ order }: { order: UserBridgeOrderRow }) {
+export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
   const { t } = useTranslation()
   const modal = useModalV2()
 
