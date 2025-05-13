@@ -92,6 +92,6 @@ export const useBridgeCheckApproval = ({ currencyAmountIn }: { currencyAmountIn?
           }
         : undefined,
     }),
-    [requiresApproval, isLoading, signPermit2, refetch, approvalData],
+    [requiresApproval, isLoading, signPermit2, refetch, approvalData, error],
   )
 }

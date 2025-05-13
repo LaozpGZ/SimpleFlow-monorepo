@@ -93,6 +93,7 @@ export const getBridgeQuote = atomFamily(
         .toString()
 
       const bridgeTrade: BridgeOrderWithCommands = {
+        bridgeTransactionData: metadata.bridgeTransactionData,
         bridgeFee: CurrencyAmount.fromRawAmount(inputAmount.currency, bridgeFee),
         expectedFillTimeSec: metadata.expectedFillTimeSec ? parseInt(metadata.expectedFillTimeSec) : 0,
         type: OrderType.PCS_BRIDGE,
@@ -279,6 +280,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             // The final combined quote
             quote = {
               type: OrderType.PCS_BRIDGE,
+              bridgeTransactionData: bridgeQuote.bridgeTransactionData,
               bridgeFee: bridgeQuote.bridgeFee,
               expectedFillTimeSec: bridgeQuote.expectedFillTimeSec,
               trade: {
@@ -454,6 +456,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
 
             // Create the combined quote with proper type handling
             quote = {
+              bridgeTransactionData: bridgeQuote.bridgeTransactionData,
               type: OrderType.PCS_BRIDGE,
               bridgeFee:
                 'bridgeFee' in bridgeQuote

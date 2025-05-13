@@ -1,4 +1,4 @@
-import { OrderType } from '@pancakeswap/price-api-sdk'
+import { BridgeTransactionData, OrderType } from '@pancakeswap/price-api-sdk'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
 import { BRIDGE_API_ENDPOINT } from 'config/constants/endpoints'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
@@ -54,6 +54,7 @@ export const getBridgeCalldata = async ({
             destinationChainId: command.trade.outputAmount.currency.chainId,
             originChainRecipient: recipient,
             minOutputAmount: command.trade.outputAmount.quotient.toString(),
+            bridgeTransactionData: command.bridgeTransactionData,
           },
         }
       }
@@ -215,15 +216,7 @@ export interface MetadataSuccessResponse extends MetadataResponse {
     maxDepositShortDelay: string
     recommendedDepositInstant: string
   }
-  bridgeTransactionData: {
-    exclusiveRelayer: string
-    exclusivityDeadline: number
-    fillDeadline: number
-    outputAmount: string
-    quoteTimestamp: number
-    relayerFeePct: string
-    totalRelayFee: string
-  }
+  bridgeTransactionData: BridgeTransactionData
 }
 
 // TODO: need to seperate between success and error response type

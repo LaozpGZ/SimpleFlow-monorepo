@@ -58,11 +58,22 @@ export interface BridgeTrade<tradeType extends TradeType = TradeType> {
   quoteQueryHash?: string
 }
 
+export type BridgeTransactionData = {
+  exclusiveRelayer: string
+  exclusivityDeadline: number
+  fillDeadline: number
+  outputAmount: string
+  quoteTimestamp: number
+  relayerFeePct: string
+  totalRelayFee: string
+}
+
 export type BridgeOrder<tradeType extends TradeType = TradeType> = {
   type: OrderType.PCS_BRIDGE
   trade: BridgeTrade<tradeType>
   bridgeFee: CurrencyAmount<Currency>
   expectedFillTimeSec: number
+  bridgeTransactionData: BridgeTransactionData
 }
 
 export type PriceOrder<

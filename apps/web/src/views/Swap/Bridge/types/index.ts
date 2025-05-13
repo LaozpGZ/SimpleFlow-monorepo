@@ -1,4 +1,4 @@
-import { PriceOrder } from '@pancakeswap/price-api-sdk'
+import { BridgeTransactionData, PriceOrder } from '@pancakeswap/price-api-sdk'
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { Address } from 'viem/accounts'
 
@@ -25,7 +25,8 @@ export interface BridgeDataSchema {
     originChainId: number
     destinationChainId: number
     originChainRecipient: Address
-    // destinationChainRecipient?: Address
+    destinationChainRecipient?: Address
+    bridgeTransactionData?: BridgeTransactionData
   }
 }
 
