@@ -1,6 +1,14 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { ChainId, Currency, CurrencyAmount, Token } from '@pancakeswap/sdk'
-import { ArrowForwardIcon, Column, QuestionHelper, Text } from '@pancakeswap/uikit'
+import {
+  ArrowForwardIcon,
+  Column,
+  CopyButton,
+  FlexGap,
+  QuestionHelper,
+  Text,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { LightGreyCard } from 'components/Card'
@@ -55,6 +63,30 @@ const MenuItem = styled(RowBetween)<{ disabled: boolean; selected: boolean }>`
   opacity: ${({ disabled, selected }) => (disabled || selected ? 0.5 : 1)};
 `
 
+function ComplementSection({ selectedCurrency }: { selectedCurrency: Currency }) {
+  const { isMobile } = useMatchBreakpoints()
+  const { t } = useTranslation()
+
+  if (selectedCurrency.isNative) {
+    return null
+  }
+
+  return (
+    <FlexGap ml="4px" alignItems="center">
+      <CopyButton
+        data-dd-action-name="Copy token address"
+        width="12px"
+        buttonColor="textSubtle"
+        text={selectedCurrency.wrapped.address}
+        tooltipMessage={t('Token address copied')}
+        defaultTooltipMessage={t('Copy token address')}
+        tooltipPlacement="top"
+        opacity={0.3}
+      />
+    </FlexGap>
+  )
+}
+
 function CurrencyRow({
   currency,
   onSelect,
@@ -91,7 +123,9 @@ function CurrencyRow({
       <CurrencyLogo showChainLogo={showChainLogo} currency={currency} size="40px" />
 
       <Column>
-        <Text bold>{currency?.symbol}</Text>
+        <FlexGap alignItems="center">
+          <Text bold>{currency?.symbol}</Text> <ComplementSection selectedCurrency={currency} />
+        </FlexGap>
         <Text color="textSubtle" small ellipsis maxWidth="200px">
           {!isOnSelectedList && customAdded && `${t('Added by user')} •`} {currency?.name}
         </Text>
