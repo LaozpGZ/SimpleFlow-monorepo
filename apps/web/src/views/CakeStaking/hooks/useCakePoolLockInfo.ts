@@ -17,7 +17,6 @@ export type CakePoolInfo = {
   overdueFee: bigint
   performanceFee: bigint
   locked: boolean
-  isFlexible: boolean
   lockedAmount: bigint
 }
 
@@ -58,7 +57,6 @@ export const useCakePoolLockInfo = (targetChain?: ChainId) => {
         overdueFee,
         performanceFee,
         pricePerFullShare,
-        isFlexible: !_locked,
         locked:
           _locked &&
           lockEndTimeStr !== '0' &&
