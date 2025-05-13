@@ -10,6 +10,7 @@ import {
   CalldataRequestSchema,
   Command,
   GetBridgeCalldataResponse,
+  Permit2Schema,
   SwapDataSchema,
 } from './types'
 
@@ -29,9 +30,11 @@ export function getTokenAddress(currency: Currency): Address {
 export const getBridgeCalldata = async ({
   order,
   recipient,
+  permit2,
 }: {
   order: BridgeOrderWithCommands
   recipient: Address
+  permit2?: Permit2Schema
 }) => {
   try {
     if (!Array.isArray(order?.commands)) {
@@ -77,6 +80,7 @@ export const getBridgeCalldata = async ({
       destinationChainId: order.trade.outputAmount.currency.chainId,
       recipientOnDestChain: recipient,
       commands,
+      permit2,
     }
 
     const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/calldata`, {
@@ -95,12 +99,19 @@ export const getBridgeCalldata = async ({
   }
 }
 
+export type Permit2ResponseSchema = {
+  amount: string
+  expiration: number
+  nonce: number
+}
+
 export type PostBridgeCheckApprovalResponse = {
   approval?: {
     isRequired: boolean
+    permit2Details?: Permit2ResponseSchema
     to?: `0x${string}`
-    value?: `0x${string}`
-    from?: `0x${string}`
+    tokenAddress?: `0x${string}`
+    walletAddress?: `0x${string}`
     data?: `0x${string}`
   }
   error?: {
@@ -124,7 +135,7 @@ export const postBridgeCheckApproval = async ({
       },
       body: JSON.stringify({
         walletAddress: recipient,
-        token: getTokenAddress(currencyAmountIn.currency),
+        tokenAddress: getTokenAddress(currencyAmountIn.currency),
         amount: currencyAmountIn.quotient.toString(),
         chainId: currencyAmountIn.currency.chainId,
       }),

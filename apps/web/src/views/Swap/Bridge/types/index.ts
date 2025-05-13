@@ -40,6 +40,18 @@ export interface SwapDataSchema {
   }
 }
 
+export interface Permit2Schema {
+  details?: {
+    token: string
+    amount: string
+    expiration: number
+    nonce: number
+  }
+  spender?: string
+  sigDeadline?: string
+  signature?: string
+}
+
 export interface CalldataRequestSchema {
   inputToken: Address
   outputToken: Address
@@ -48,6 +60,7 @@ export interface CalldataRequestSchema {
   destinationChainId: number
   recipientOnDestChain: Address
   commands: (BridgeDataSchema | SwapDataSchema)[]
+  permit2?: Permit2Schema
 }
 
 export enum BridgeStatus {

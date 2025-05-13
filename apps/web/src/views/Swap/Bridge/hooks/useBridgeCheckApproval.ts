@@ -3,10 +3,10 @@ import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useMemo } from 'react'
 
+import { useSubmitPermit2 } from 'hooks/usePermit2'
+import { getCurrencyAddress } from 'utils/getCurrencyAddress'
 import { Address } from 'viem'
-import { postBridgeCheckApproval, PostBridgeCheckApprovalResponse } from '../api'
-
-type BridgeCheckApprovalData = PostBridgeCheckApprovalResponse | null | undefined
+import { Permit2ResponseSchema, postBridgeCheckApproval, PostBridgeCheckApprovalResponse } from '../api'
 
 export const useBridgeCheckApproval = ({ currencyAmountIn }: { currencyAmountIn?: CurrencyAmount<Currency> }) => {
   const { account } = useAccountActiveChain()
@@ -18,7 +18,7 @@ export const useBridgeCheckApproval = ({ currencyAmountIn }: { currencyAmountIn?
     error,
     isLoading,
     refetch,
-  } = useQuery<BridgeCheckApprovalData>({
+  } = useQuery({
     queryKey: [
       'bridge-check-approval',
       account,
@@ -27,14 +27,25 @@ export const useBridgeCheckApproval = ({ currencyAmountIn }: { currencyAmountIn?
       currencyAmountIn?.quotient.toString(),
     ],
     queryFn: async () => {
-      if (!currencyAmountIn || !account) return Promise.resolve(null)
+      if (!currencyAmountIn || !account) return Promise.resolve(undefined)
 
       if (isNativeCurrency) {
+        const permit2Details: Permit2ResponseSchema = {
+          amount: '0',
+          expiration: 0,
+          nonce: 0,
+        }
+
         return {
           approval: {
             isRequired: false,
+            permit2Details,
+            to: `0x0`,
+            tokenAddress: getCurrencyAddress(currencyAmountIn.currency),
+            walletAddress: account,
+            // data?: `0x${string}`
           },
-        }
+        } as PostBridgeCheckApprovalResponse
       }
 
       try {
@@ -61,7 +72,7 @@ export const useBridgeCheckApproval = ({ currencyAmountIn }: { currencyAmountIn?
   const requiresApproval =
     typeof isRequiredFromResponse === 'boolean' ? isRequiredFromResponse : Boolean(approvalData?.error?.code || error)
 
-  const finalApprovalData: BridgeCheckApprovalData = useMemo(() => {
+  const finalApprovalData = useMemo(() => {
     if (error) {
       return {
         error: {
@@ -74,13 +85,32 @@ export const useBridgeCheckApproval = ({ currencyAmountIn }: { currencyAmountIn?
     return approvalData
   }, [approvalData, error])
 
+  const permit2Details = useMemo(() => {
+    if (!currencyAmountIn || !finalApprovalData?.approval?.permit2Details) return undefined
+
+    return {
+      ...finalApprovalData.approval.permit2Details,
+      amount: CurrencyAmount.fromRawAmount(
+        currencyAmountIn?.currency.asToken,
+        BigInt(finalApprovalData.approval.permit2Details?.amount ?? '0'),
+      ),
+    }
+  }, [finalApprovalData])
+
+  const { permit: signPermit2, isPermitting: isBridgePermitting } = useSubmitPermit2({
+    currency: currencyAmountIn?.currency.asToken,
+    spender: approvalData?.approval?.to,
+    permit2Details,
+  })
+
   return useMemo(
     () => ({
       approvalData: finalApprovalData,
       requiresApproval,
       isLoading,
       refetch,
+      signPermit2,
     }),
-    [finalApprovalData, requiresApproval, isLoading, refetch],
+    [finalApprovalData, requiresApproval, isLoading, signPermit2, refetch],
   )
 }

@@ -108,6 +108,7 @@ const useCreateConfirmSteps = (
     // Handle bridge order approval check
     if (isBridgeOrder(order) && requiresApproval) {
       steps.push(ConfirmModalState.APPROVING_TOKEN)
+      steps.push(ConfirmModalState.PERMITTING)
     } else if (requireApprove) {
       steps.push(ConfirmModalState.APPROVING_TOKEN)
     }
@@ -396,7 +397,7 @@ const useConfirmActions = (
 
   const { chainId: activeChainId } = useActiveChainId()
 
-  const { approvalData, refetch } = useBridgeCheckApproval({
+  const { approvalData, refetch, signPermit2 } = useBridgeCheckApproval({
     currencyAmountIn: isBridgeOrder(order)
       ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === activeChainId)?.inputAmount
       : undefined,
@@ -473,11 +474,14 @@ const useConfirmActions = (
 
         try {
           // TODO: Replace with order id if we're getting it from the backend
-          const id = Math.random().toString(36).substring(2, 15)
+          // const permitSignatureResponse = await signPermit2()
+
+          // console.log('permitSignatureResponse', permitSignatureResponse)
 
           const bridgeCalldataResponse = await getBridgeCalldata({
             order: order as BridgeOrderWithCommands,
             recipient: recipient as Address,
+            // permit2: permitSignatureResponse,
           })
 
           if (bridgeCalldataResponse?.transactionData?.calldata) {
@@ -554,6 +558,7 @@ const useConfirmActions = (
     t,
     toastSuccess,
     recipient,
+    signPermit2,
   ])
 
   const swapStep = useMemo(() => {
