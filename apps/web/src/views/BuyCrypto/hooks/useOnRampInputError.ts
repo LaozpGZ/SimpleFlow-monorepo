@@ -23,7 +23,9 @@ export const useLimitsAndInputError = ({ typedValue, cryptoCurrency, fiatCurrenc
   })
 
   const inputError = useMemo((): string | undefined => {
-    if (!limitsData?.baseCurrency || !limitsData?.quoteCurrency) return undefined
+    if (!limitsData?.baseCurrency || !limitsData?.quoteCurrency) {
+      return undefined
+    }
 
     const quoteCurrency = !isFiat(unit) ? limitsData?.baseCurrency : limitsData?.quoteCurrency
     const baseCurrency = !isFiat(unit) ? limitsData?.quoteCurrency : limitsData?.baseCurrency
@@ -54,11 +56,17 @@ export const useLimitsAndInputError = ({ typedValue, cryptoCurrency, fiatCurrenc
   }, [typedValue, t, limitsData?.baseCurrency, limitsData?.quoteCurrency, unit, currentLanguage.locale])
 
   const amountError = useMemo((): string | undefined => {
-    if (!limitsData?.baseCurrency) return undefined
+    if (!limitsData?.baseCurrency) {
+      return undefined
+    }
     const baseCurrency = isFiat(unit) ? limitsData?.baseCurrency : limitsData?.quoteCurrency
 
-    if (Number(typedValue) < baseCurrency.minBuyAmount) return t('Amount too low')
-    if (Number(typedValue) > baseCurrency.maxBuyAmount) return t('Amount too high')
+    if (Number(typedValue) < baseCurrency.minBuyAmount) {
+      return t('Amount too low')
+    }
+    if (Number(typedValue) > baseCurrency.maxBuyAmount) {
+      return t('Amount too high')
+    }
     return undefined
   }, [typedValue, t, limitsData?.baseCurrency, limitsData?.quoteCurrency, unit])
 

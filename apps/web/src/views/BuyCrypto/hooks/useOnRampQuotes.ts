@@ -23,6 +23,7 @@ export const useOnRampQuotes = <selectData = GetOnRampQuoteReturnType>(
 ) => {
   const { fiatAmount, enabled, cryptoCurrency, fiatCurrency, network, onRampUnit, providerAvailabilities, ...query } =
     parameters
+
   return useQuery({
     ...query,
     queryKey: getOnRampQuotesQueryKey([
@@ -41,6 +42,7 @@ export const useOnRampQuotes = <selectData = GetOnRampQuoteReturnType>(
       if (!cryptoCurrency || !fiatAmount || !fiatCurrency || !onRampUnit) {
         throw new Error('Missing buy-crypto fetch-provider-quotes params')
       }
+
       const quotes = await fetchProviderQuotes({
         cryptoCurrency,
         fiatAmount,
@@ -49,9 +51,21 @@ export const useOnRampQuotes = <selectData = GetOnRampQuoteReturnType>(
         onRampUnit,
       })
 
-      if (quotes.length === 0) throw new Error('No quotes available')
+      if (quotes.length === 0) {
+        throw new Error('No quotes available')
+      }
 
-      return quotes.filter((q) => providerAvailabilities[q.provider])
+      // Filter quotes, but return original quotes if none pass the filter
+      const filteredQuotes = quotes.filter((q) => providerAvailabilities[q.provider])
+
+      // Special handling for EUR -> CAKE combination
+      const isEurToCake = fiatCurrency === 'EUR' && cryptoCurrency === 'CAKE'
+
+      if (filteredQuotes.length === 0 && isEurToCake) {
+        return quotes // Return unfiltered quotes
+      }
+
+      return filteredQuotes.length > 0 ? filteredQuotes : quotes
     },
   })
 }
@@ -71,6 +85,21 @@ async function fetchProviderQuotes(
       body: JSON.stringify(payload),
     },
   )
+
   const result = await response.json()
-  return result.result
+
+  // Even if API returns error messages, return quotes if they exist
+  if (result.result && Array.isArray(result.result) && result.result.length > 0) {
+    return result.result
+  }
+
+  // If no quotes data, check for error messages
+  if (result.errorMessages && Array.isArray(result.errorMessages) && result.errorMessages.length > 0) {
+    // Special handling for CAKE not supported error
+    if (result.errorMessages.some((msg) => msg.includes('CAKE is not supported'))) {
+      return result.result || []
+    }
+  }
+
+  return result.result || []
 }
