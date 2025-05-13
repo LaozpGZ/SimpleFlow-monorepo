@@ -140,6 +140,10 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
 
         const crossChainRoutes = await get(getAvailableBridgeRoutes(_option))
 
+        if (crossChainRoutes.length === 0) {
+          throw new BridgeTradeError('No available routes')
+        }
+
         const isOriginTokenSupported = crossChainRoutes.find(
           (route) => route.originToken === baseCurrencyAmount.currency.wrapped.address,
         )
