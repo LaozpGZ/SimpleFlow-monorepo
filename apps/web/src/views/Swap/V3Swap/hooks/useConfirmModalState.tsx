@@ -86,10 +86,14 @@ const useCreateConfirmSteps = (
 
   const { chainId: activeChainId } = useActiveChainId()
 
-  const { requiresApproval, approvalData } = useBridgeCheckApproval({
-    currencyAmountIn: isBridgeOrder(order)
+  const currencyAmountIn = useMemo(() => {
+    return isBridgeOrder(order) && activeChainId
       ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === activeChainId)?.inputAmount
-      : undefined,
+      : undefined
+  }, [order, activeChainId])
+
+  const { requiresApproval, approvalData } = useBridgeCheckApproval({
+    currencyAmountIn,
   })
 
   return useCallback(async () => {
