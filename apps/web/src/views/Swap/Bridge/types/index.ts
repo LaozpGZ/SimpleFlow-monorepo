@@ -134,3 +134,24 @@ export interface ActiveBridgeOrderMetadata {
   txHash: string
   order: PriceOrder | null | undefined
 }
+
+export interface UserBridgeOrdersResponse {
+  startCursor: string
+  endCursor: string
+  hasNextPage: boolean
+  rows: UserBridgeOrderRow[]
+}
+
+export interface UserBridgeOrderRow {
+  status: string
+  inputToken: string
+  outputToken: string
+  inputAmount: string
+  outputAmount: string
+  originChainId: number
+  destinationChainId: number
+  orderId: string
+  transactionHash: string
+  command: string
+  timestamp: string
+}

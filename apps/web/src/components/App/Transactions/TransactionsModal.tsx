@@ -11,7 +11,7 @@ import { chains } from 'utils/wagmi'
 import { GetXOrderReceiptResponseOrder } from 'views/Swap/x/api'
 import { useRecentXOrders } from 'views/Swap/x/useRecentXOders'
 
-import { useRecentCrossChainOrders } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useRecentCrossChainOrders'
+import { useRecentBridgeOrders } from 'views/Swap/Bridge/hooks/useRecentBridgeOrders'
 import { useAccount } from 'wagmi'
 import ConnectWalletButton from '../../ConnectWalletButton'
 import { AutoRow } from '../../Layout/Row'
@@ -62,16 +62,17 @@ export function RecentTransactions() {
     refetchInterval: 10_000,
   })
 
-  const { data: crossChainOrdersResponse } = useRecentCrossChainOrders({
-    chainId,
+  const { data: crossChainOrdersResponse } = useRecentBridgeOrders({
     address: account,
     refetchInterval: 10_000,
   })
   const recentCrossChainOrders: CrossChainTransactionItem[] =
-    crossChainOrdersResponse?.orders.map((order) => ({
-      type: 'crossChainOrder',
-      orderData: order,
-    })) ?? []
+    crossChainOrdersResponse?.rows.map(
+      (order): CrossChainTransactionItem => ({
+        type: 'crossChainOrder',
+        order,
+      }),
+    ) ?? []
 
   const sortedRecentTransactions = useAllSortedRecentTransactions()
 
@@ -190,7 +191,7 @@ function TransactionWithX({
           return <Transaction key={tx.item.hash + tx.item.addedTime} tx={tx.item} chainId={chainId} />
         }
         if (tx.type === 'crossChainOrder') {
-          return <CrossChainTransaction key={tx.orderData.id} orderData={tx.orderData} />
+          return <CrossChainTransaction key={tx.order.orderId} order={tx.order} />
         }
         return <XTransaction key={tx.item.hash} order={tx.item} />
       })}
