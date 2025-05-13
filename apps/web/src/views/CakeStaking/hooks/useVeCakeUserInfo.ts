@@ -149,7 +149,7 @@ export const useCakeLockStatus = (
   }, [userInfo])
 
   const proxyCakeLockedAmount = useMemo(() => {
-    if (!cakePoolLockInfo?.locked) {
+    if (cakePoolLockInfo?.isFlexible) {
       const { cakeAsBigNumber } = convertSharesToCake(
         new BigNumber(cakePoolLockInfo?.shares?.toString() ?? 0),
         new BigNumber(cakePoolLockInfo?.pricePerFullShare?.toString() ?? 0),
