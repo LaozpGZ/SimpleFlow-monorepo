@@ -7,6 +7,7 @@ import { Address } from 'viem'
 import { useAccount } from 'wagmi'
 import { convertSharesToCake } from 'views/Pools/helpers'
 import BigNumber from 'bignumber.js'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { CakeLockStatus, CakePoolType } from '../types'
 import { useCakePoolLockInfo } from './useCakePoolLockInfo'
 import { useCheckIsUserAllowMigrate } from './useCheckIsUserAllowMigrate'
@@ -149,11 +150,31 @@ export const useCakeLockStatus = (
   }, [userInfo])
 
   const proxyCakeLockedAmount = useMemo(() => {
-    if (cakePoolLockInfo?.isFlexible) {
-      const { cakeAsBigNumber } = convertSharesToCake(
-        new BigNumber(cakePoolLockInfo?.shares?.toString() ?? 0),
-        new BigNumber(cakePoolLockInfo?.pricePerFullShare?.toString() ?? 0),
-      )
+    if (!cakePoolLockInfo?.locked) {
+      let cakeAsBigNumber
+      if (cakePoolLockInfo?.isFlexible) {
+        cakeAsBigNumber = convertSharesToCake(
+          new BigNumber(cakePoolLockInfo?.shares?.toString() ?? 0),
+          new BigNumber(cakePoolLockInfo?.pricePerFullShare?.toString() ?? 0),
+        )?.cakeAsBigNumber
+      } else {
+        const currentOverdueFee = cakePoolLockInfo?.overdueFee
+          ? new BigNumber(cakePoolLockInfo?.overdueFee?.toString())
+          : BIG_ZERO
+        const currentPerformanceFee = cakePoolLockInfo?.performanceFee
+          ? new BigNumber(cakePoolLockInfo?.performanceFee?.toString())
+          : BIG_ZERO
+        cakeAsBigNumber = convertSharesToCake(
+          new BigNumber(cakePoolLockInfo?.shares?.toString() ?? 0),
+          new BigNumber(cakePoolLockInfo?.pricePerFullShare?.toString() ?? 0),
+          undefined,
+          undefined,
+          currentOverdueFee
+            .plus(currentPerformanceFee)
+            .plus(new BigNumber(cakePoolLockInfo?.userBoostedShare?.toString() ?? 0)),
+        )?.cakeAsBigNumber
+      }
+
       if (!cakePoolLocked || delegated) return BigInt(cakeAsBigNumber.toString())
 
       return (userInfo?.cakeAmount ?? 0n) + BigInt(cakeAsBigNumber.toString())

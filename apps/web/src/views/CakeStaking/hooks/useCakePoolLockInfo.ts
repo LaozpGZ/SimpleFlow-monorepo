@@ -14,6 +14,8 @@ export type CakePoolInfo = {
   lockEndTime: bigint
   userBoostedShare: bigint
   pricePerFullShare: bigint
+  overdueFee: bigint
+  performanceFee: bigint
   locked: boolean
   isFlexible: boolean
   lockedAmount: bigint
@@ -42,6 +44,8 @@ export const useCakePoolLockInfo = (targetChain?: ChainId) => {
         lockedAmount,
       ] = await cakeVaultContract.read.userInfo([account])
       const pricePerFullShare = await cakeVaultContract.read.getPricePerFullShare()
+      const overdueFee = await cakeVaultContract.read.overdueFee()
+      const performanceFee = await cakeVaultContract.read.performanceFee()
       const lockEndTimeStr = lockEndTime.toString()
       return {
         shares,
@@ -51,6 +55,8 @@ export const useCakePoolLockInfo = (targetChain?: ChainId) => {
         lockStartTime,
         lockEndTime,
         userBoostedShare,
+        overdueFee,
+        performanceFee,
         pricePerFullShare,
         isFlexible: !_locked,
         locked:
