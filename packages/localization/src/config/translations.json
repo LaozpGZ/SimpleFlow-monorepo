@@ -3741,5 +3741,8 @@
   "Burned CAKE Supply": "Burned CAKE Supply",
   "Last updated at: ${lastUpdatedAt}": "Last updated at: ${lastUpdatedAt}",
   "An error occurred while fetching the data. Please try again later.": "An error occurred while fetching the data. Please try again later.",
-  "Real-Time Burn History": "Real-Time Burn History"
+  "Real-Time Burn History": "Real-Time Burn History",
+  "Previously used": "Previously used",
+  "Top Wallets": "Top Wallets",
+  "More Wallets": "More Wallets"
 }
