@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { ChevronRightIcon, FlexGap, ModalV2, MotionModal, Text, useModalV2 } from '@pancakeswap/uikit'
+import { Box, ChevronRightIcon, FlexGap, ModalV2, MotionModal, Text, useModalV2 } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
 
 import {
@@ -15,6 +15,7 @@ import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { ViewOnExplorerButton } from 'components/ViewOnExplorerButton'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useCurrencyByChainId } from 'hooks/Tokens'
+import { multiChainName, multiChainShortName } from 'state/info/constant'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { OrderResultModalContent } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
 import { BridgeStatus, UserBridgeOrder } from 'views/Swap/Bridge/types'
@@ -34,12 +35,13 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
     if (order.status === BridgeStatus.SUCCESS) {
       return TransactionStatusV2.Success
     }
-    if (
-      order.status === BridgeStatus.FAILED ||
-      order.status === BridgeStatus.PARTIAL_SUCCESS // TODO: Add another one, warning status, to TransactionStatus for Partial Success
-    ) {
+    if (order.status === BridgeStatus.FAILED) {
       return TransactionStatusV2.Failed
     }
+    if (order.status === BridgeStatus.PARTIAL_SUCCESS) {
+      return TransactionStatusV2.PartialSuccess
+    }
+
     return TransactionStatusV2.Pending
   }, [order.status])
 
@@ -101,21 +103,46 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
           </FlexGap>
         }
       >
-        <Text small>
-          {t('Swap')}&nbsp;
-          <Text as="span" bold small>
-            {inputAmount?.toSignificant(DISPLAY_PRECISION)}&nbsp;
-            {inputToken?.symbol}
+        <Box maxWidth={[null, null, null, '380px']}>
+          <Text small>
+            {status === TransactionStatusV2.PartialSuccess ? (
+              <Text as="span" small bold>
+                {t('Incomplete')}:&nbsp;
+              </Text>
+            ) : status === TransactionStatusV2.Failed ? (
+              <Text as="span" small bold>
+                {t('Failed')}:&nbsp;
+              </Text>
+            ) : null}
+            {t('Swap')}&nbsp;
+            <Text as="span" bold small>
+              {inputAmount?.toSignificant(DISPLAY_PRECISION)}&nbsp;
+              {inputToken?.symbol}
+            </Text>
+            &nbsp; (
+            {t('on %chainSymbol%', { chainSymbol: multiChainShortName[inputChainId] ?? multiChainName[inputChainId] })}){' '}
+            {t('for')}&nbsp;
+            <Text as="span" bold small>
+              {outputAmount?.toSignificant(DISPLAY_PRECISION)}&nbsp;
+              {outputToken?.symbol}
+            </Text>
+            &nbsp; (
+            {t('on %chainSymbol%', {
+              chainSymbol: multiChainShortName[outputChainId] ?? multiChainName[outputChainId],
+            })}
+            )
           </Text>
-          &nbsp; ({t('on %chainSymbol%', { chainSymbol: inputChainName })}) {t('for')}&nbsp;
-          <Text as="span" bold small>
-            {outputAmount?.toSignificant(DISPLAY_PRECISION)}&nbsp;
-            {outputToken?.symbol}
-          </Text>
-          &nbsp; ({t('on %chainSymbol%', { chainSymbol: outputChainName })})
-        </Text>
+          {order.transactionHash && (
+            <FlexGap mt="1px" alignItems="center">
+              <Text color="textSubtle" small>
+                {t('Details')}
+              </Text>
+              <ChevronRightIcon mt="1px" width="18px" color="textSubtle" />
+            </FlexGap>
+          )}
+        </Box>
       </TransactionListItemV2>
-      <ModalV2 {...modal}>
+      <ModalV2 {...modal} closeOnOverlayClick>
         <MotionModal
           title={t('Order details')}
           headerBorderColor="transparent"
@@ -127,6 +154,14 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
               txHash: order.transactionHash,
               originChainId: order.originChainId,
               order: null,
+              metadata: {
+                inputToken: order.inputToken,
+                outputToken: order.outputToken,
+                inputAmount: order.inputAmount,
+                outputAmount: order.outputAmount,
+                originChainId: order.originChainId,
+                destinationChainId: order.destinationChainId,
+              },
             }}
           />
         </MotionModal>

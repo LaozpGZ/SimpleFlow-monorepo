@@ -40,6 +40,11 @@ const DisplayMessage = styled(FlexGap).attrs({ alignItems: 'center', gap: '8px' 
     $status === BridgeStatus.SUCCESS ? theme.colors.primary10 : theme.colors.warning10};
   border: 1px solid
     ${({ theme, $status }) => ($status === BridgeStatus.SUCCESS ? theme.colors.primary20 : theme.colors.warning10)};
+
+  transition: all 0.3s ease-out;
+  overflow: hidden;
+  max-height: 100px;
+  opacity: 1;
 `
 
 interface OrderResultModalContentProps extends BoxProps {
@@ -53,10 +58,23 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   const txHash = bridgeMetadata?.txHash
   const originChainId = bridgeMetadata?.originChainId
   const order = bridgeMetadata?.order
+  const metadata = bridgeMetadata?.metadata
+
   const orderInputCurrency = order?.trade.inputAmount.currency
   const orderOutputCurrency = order?.trade.outputAmount.currency
 
-  const bridgeStatus = useBridgeStatus(originChainId, txHash)
+  console.log('order chains and currency', {
+    input: {
+      chainId: orderInputCurrency?.chainId,
+      symbol: orderInputCurrency?.symbol,
+    },
+    output: {
+      chainId: orderOutputCurrency?.chainId,
+      symbol: orderOutputCurrency?.symbol,
+    },
+  })
+
+  const { data: bridgeStatus } = useBridgeStatus(originChainId, txHash, metadata)
 
   const resultTokenData = useMemo(() => {
     // Derive result token and amount information from last command (swap or bridge)
@@ -135,23 +153,32 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
 
   return (
     <Box {...props}>
-      {bridgeStatus && resultCurrencyAmount && (
-        <DisplayMessage $status={bridgeStatus.status} mb="24px">
-          {bridgeStatus.status === BridgeStatus.SUCCESS ? (
-            <CheckmarkCircleIcon width="24px" color="primary60" />
-          ) : (
-            <ErrorIcon width="24px" color="warning60" />
-          )}
-          <Text small>
-            {/* TODO: Verify result information */}
-            {t('%amount% %symbol% has been sent to your wallet on %outputChain%', {
-              amount: resultCurrencyAmount.toSignificant(DISPLAY_PRECISION),
-              symbol: resultCurrencyAmount.currency.symbol,
-              outputChain: getFullChainNameById(bridgeStatus.destinationChainId),
-            })}
-          </Text>
-        </DisplayMessage>
-      )}
+      <Box
+        style={{
+          height: bridgeStatus && resultCurrencyAmount ? 'auto' : '0',
+          opacity: bridgeStatus && resultCurrencyAmount ? 1 : 0,
+          transition: 'all 0.3s ease-out',
+          overflow: 'hidden',
+          marginBottom: bridgeStatus && resultCurrencyAmount ? '24px' : '0',
+        }}
+      >
+        {bridgeStatus && resultCurrencyAmount && (
+          <DisplayMessage $status={bridgeStatus.status}>
+            {bridgeStatus.status === BridgeStatus.SUCCESS ? (
+              <CheckmarkCircleIcon width="24px" color="primary60" />
+            ) : (
+              <ErrorIcon width="24px" color="warning60" />
+            )}
+            <Text small>
+              {t('%amount% %symbol% has been sent to your wallet on %outputChain%', {
+                amount: resultCurrencyAmount.toSignificant(DISPLAY_PRECISION),
+                symbol: resultCurrencyAmount.currency.symbol,
+                outputChain: getFullChainNameById(bridgeStatus.destinationChainId),
+              })}
+            </Text>
+          </DisplayMessage>
+        )}
+      </Box>
       <DualCurrencyDisplay
         inputCurrency={bridgeStatus?.inputCurrencyAmount?.currency || orderInputCurrency}
         outputCurrency={bridgeStatus?.outputCurrencyAmount?.currency || orderOutputCurrency}
@@ -161,7 +188,9 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
         outputChainName={getFullChainNameById(bridgeStatus?.destinationChainId || orderOutputCurrency?.chainId)}
         overrideIcon={middleIcon}
       />
-      <OrderDetailsPanel mt="24px" overrideActiveOrderMetadata={bridgeMetadata} />
+      {bridgeStatus && bridgeStatus.data && bridgeStatus.data.length > 0 && (
+        <OrderDetailsPanel mt="24px" overrideActiveOrderMetadata={bridgeMetadata} />
+      )}
     </Box>
   )
 }
