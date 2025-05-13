@@ -143,7 +143,7 @@ function getValidToken(chainId: ChainId, token: RemoteToken): Currency {
     }
     return parseCurrency(chainId, raw)
   } catch (ex) {
-    console.warn('toValidToken', token, ex)
+    console.warn('invalid token', token, ex)
     throw ex
   }
 }
