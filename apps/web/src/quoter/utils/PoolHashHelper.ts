@@ -64,7 +64,9 @@ export class PoolHashHelper {
       ...rest
     } = query
     const chainId = query.baseCurrency?.chainId
-    const restHash = keccak256(`0x${stringify(rest)}:${chainId}`)
+    // NOTE: Support for cross-chain quotes
+    const destinationChainId = query.currency?.chainId
+    const restHash = keccak256(`0x${stringify(rest)}:${chainId}:${destinationChainId}`)
     const hashCurrencies = PoolHashHelper.hashCurrencies(amount?.currency, currency || undefined)
     const prts = [amount?.toExact(), hashCurrencies, restHash]
     return keccak256(`0x${prts.join(':')}`)
