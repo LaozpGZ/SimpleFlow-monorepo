@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { WalletModalV2 } from '@pancakeswap/ui-wallets'
-import { createWallets, getDocLink } from 'config/wallet'
+import { createWallets, getDocLink, TOP_WALLET_MAP } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
 
@@ -21,6 +21,10 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
   const docLink = useMemo(() => getDocLink(code), [code])
 
   const wallets = useMemo(() => createWallets(chainId || ChainId.BSC, connectAsync), [chainId, connectAsync])
+  const topWallets = useMemo(
+    () => TOP_WALLET_MAP[chainId].map((id) => wallets.find((w) => w.id === id)),
+    [wallets, chainId],
+  )
 
   return (
     <WalletModalV2
@@ -28,6 +32,7 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
       docLink={docLink}
       isOpen={isOpen}
       wallets={wallets}
+      topWallets={topWallets}
       login={login}
       onDismiss={onDismiss}
       onWalletConnectCallBack={logGTMWalletConnectEvent}
