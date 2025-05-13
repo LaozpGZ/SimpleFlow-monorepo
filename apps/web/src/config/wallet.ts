@@ -1,6 +1,6 @@
+import { WalletConfigV2, WalletIds } from '@pancakeswap/ui-wallets/src/types'
 import { ChainId } from '@pancakeswap/chains'
 import { isCyberWallet } from '@cyberlab/cyber-app-sdk'
-import { WalletConfigV2, WalletIds } from '@pancakeswap/ui-wallets'
 import { WalletFilledIcon } from '@pancakeswap/uikit'
 import { getTrustWalletProvider } from '@pancakeswap/wagmi/connectors/trustWallet'
 import type { ExtendEthereum } from 'global'
