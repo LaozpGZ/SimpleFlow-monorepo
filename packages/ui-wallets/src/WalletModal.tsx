@@ -9,18 +9,16 @@ import {
   Image,
   LinkExternal,
   ModalV2,
-  ModalV2Props,
   ModalWrapper,
   MoreHorizontalIcon,
   Row,
   ShieldCheckIcon,
-  SvgProps,
   Tab,
   TabMenu,
   Text,
   WarningIcon,
 } from '@pancakeswap/uikit'
-import { atom, useAtom } from 'jotai'
+import { useAtom } from 'jotai'
 import { PropsWithChildren, Suspense, lazy, useMemo, useState } from 'react'
 import { isMobile } from 'react-device-detect'
 import {
@@ -29,70 +27,16 @@ import {
   walletIconClass,
   walletSelectWrapperClass,
 } from './WalletModal.css'
+import { errorAtom, lastUsedWalletNameAtom, previouslyUsedWalletsAtom, selectedWalletAtom } from './atom'
+import { LinkOfDevice, WalletConfigV2, WalletModalV2Props } from './types'
 
 const StepIntro = lazy(() => import('./components/Intro'))
 
 const Qrcode = lazy(() => import('./components/QRCode'))
 
-type LinkOfTextAndLink = string | { text: string; url: string }
-
-type DeviceLink = {
-  desktop?: LinkOfTextAndLink
-  mobile?: LinkOfTextAndLink
-}
-
-type LinkOfDevice = string | DeviceLink
-
-export enum WalletIds {
-  Injected = 'injected',
-  Metamask = 'metamask',
-  Trust = 'trust',
-  Okx = 'okx',
-  BinanceW3W = 'BinanceW3W',
-  Coinbase = 'coinbase',
-  Walletconnect = 'walletconnect',
-  Opera = 'opera',
-  Brave = 'brave',
-  Rabby = 'rabby',
-  Math = 'math',
-  Tokenpocket = 'tokenpocket',
-  Safepal = 'safepal',
-  Coin98 = 'coin98',
-  Blocto = 'blocto',
-  Cyberwallet = 'cyberwallet',
-}
-
-export type WalletConfigV2<T = unknown> = {
-  id: WalletIds
-  title: string
-  icon: string | React.FC<React.PropsWithChildren<SvgProps>>
-  connectorId: T
-  deepLink?: string
-  installed?: boolean
-  guide?: LinkOfDevice
-  downloadLink?: LinkOfDevice
-  mobileOnly?: boolean
-  qrCode?: () => Promise<string>
-  isNotExtension?: boolean
-  MEVSupported?: boolean
-}
-
-interface WalletModalV2Props<T = unknown> extends ModalV2Props {
-  wallets: WalletConfigV2<T>[]
-  topWallets: WalletConfigV2<T>[]
-  login: (connectorId: T) => Promise<any>
-  docLink: string
-  docText: string
-  onWalletConnectCallBack?: (walletTitle?: string) => void
-}
-
 export class WalletConnectorNotFoundError extends Error {}
 
 export class WalletSwitchChainError extends Error {}
-
-const errorAtom = atom<string>('')
-
-const selectedWalletAtom = atom<WalletConfigV2<unknown> | null>(null)
 
 export function useSelectedWallet<T>() {
   // @ts-ignore
@@ -144,11 +88,13 @@ const MOBILE_DEFAULT_DISPLAY_COUNT = 8
 function MobileModal<T>({
   wallets,
   topWallets,
+  previouslyUsedWallets,
   connectWallet,
   docLink,
   docText,
 }: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
+  previouslyUsedWallets: WalletConfigV2<T>[]
 }) {
   const { t } = useTranslation()
 
@@ -164,6 +110,9 @@ function MobileModal<T>({
   })
 
   const topWalletsToShow: WalletConfigV2<T>[] = topWallets.filter((w) => w.installed !== false || w.deepLink)
+  const previouslyUsedWalletsToShow: WalletConfigV2<T>[] = previouslyUsedWallets.filter(
+    (w) => w.installed !== false || w.deepLink,
+  )
 
   return (
     <AtomBox width="100%">
@@ -193,6 +142,7 @@ function MobileModal<T>({
           displayCount={MOBILE_DEFAULT_DISPLAY_COUNT}
           wallets={walletsToShow}
           topWallets={topWalletsToShow}
+          previouslyUsedWallets={previouslyUsedWalletsToShow}
           onClick={(wallet) => {
             connectWallet(wallet)
             if (wallet.deepLink && wallet.installed === false) {
@@ -218,36 +168,44 @@ function MobileModal<T>({
 function WalletSelect<T>({
   wallets,
   topWallets,
+  previouslyUsedWallets,
   onClick,
   displayCount = 9,
 }: {
   wallets: WalletConfigV2<T>[]
   topWallets: WalletConfigV2<T>[]
+  previouslyUsedWallets: WalletConfigV2<T>[]
   onClick: (wallet: WalletConfigV2<T>) => void
   displayCount?: number | 'all'
 }) {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const [showMore, setShowMore] = useState(false)
-  const walletDisplayCount =
-    displayCount === 'all' ? wallets.length : wallets.length > displayCount ? displayCount - 1 : displayCount
-  const walletsToShow = showMore ? wallets : wallets.slice(0, walletDisplayCount)
+  const walletDisplayCount = useMemo(
+    () => (displayCount === 'all' ? wallets.length : wallets.length > displayCount ? displayCount - 1 : displayCount),
+    [displayCount, wallets.length],
+  )
+  const walletsToShow = useMemo(
+    () => (showMore ? wallets : wallets.slice(0, walletDisplayCount)),
+    [showMore, wallets, walletDisplayCount],
+  )
   const sections: { label: string; items: WalletConfigV2<T>[]; isMore?: boolean }[] = useMemo(
     () => [
-      { label: t('Previously used'), items: [] as WalletConfigV2<T>[] },
+      { label: t('Previously used'), items: previouslyUsedWallets },
       { label: t('Top Wallets'), items: topWallets },
       { label: t('More Wallets'), items: walletsToShow, isMore: true },
     ],
-    [t, walletsToShow, topWallets],
+    [t, walletsToShow, topWallets, previouslyUsedWallets],
   )
-  const [selected] = useSelectedWallet()
   return (
     <Column overflowY="auto" overflowX="hidden" gap="16px" style={{ paddingRight: '10px', marginRight: '-6px' }}>
       {sections.map(({ label, items, isMore }) => (
         <Column gap="6px">
-          <Text fontSize="14px" color="textSubtle" lineHeight={1.5}>
-            {label}
-          </Text>
+          {items.length > 0 ? (
+            <Text fontSize="14px" color="textSubtle" lineHeight={1.5}>
+              {label}
+            </Text>
+          ) : null}
           <AtomBox display="grid" overflowY="auto" overflowX="hidden" className={walletSelectWrapperClass}>
             {items.map((wallet) => {
               const isImage = typeof wallet.icon === 'string'
@@ -282,9 +240,6 @@ function WalletSelect<T>({
                           <Image src={Icon as string} width={48} height={48} />
                         ) : (
                           <Icon width={24} height={24} color="textSubtle" />
-                        )}
-                        {wallet.id === selected?.id && (
-                          <AtomBox position="absolute" inset="0px" bgc="secondary" opacity="0.5" borderRadius="12px" />
                         )}
                       </AtomBox>
                     </AtomBox>
@@ -331,17 +286,6 @@ function WalletSelect<T>({
   )
 }
 
-export const walletLocalStorageKey = 'wallet'
-
-const lastUsedWalletNameAtom = atom<string>('')
-
-lastUsedWalletNameAtom.onMount = (set) => {
-  const preferred = localStorage?.getItem(walletLocalStorageKey)
-  if (preferred) {
-    set(preferred)
-  }
-}
-
 function sortWallets<T>(wallets: WalletConfigV2<T>[], lastUsedWalletName: string | null) {
   const sorted = [...wallets].sort((a, b) => {
     if (a.installed === b.installed) return 0
@@ -359,11 +303,13 @@ function sortWallets<T>(wallets: WalletConfigV2<T>[], lastUsedWalletName: string
 function DesktopModal<T>({
   wallets: wallets_,
   topWallets: topWallets_,
+  previouslyUsedWallets,
   connectWallet,
   docLink,
   docText,
 }: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
+  previouslyUsedWallets: WalletConfigV2<T>[]
 }) {
   const wallets: WalletConfigV2<T>[] = useMemo(
     () =>
@@ -379,6 +325,14 @@ function DesktopModal<T>({
         return w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
       }),
     [topWallets_],
+  )
+
+  const preWallets: WalletConfigV2<T>[] = useMemo(
+    () =>
+      previouslyUsedWallets.filter((w) => {
+        return w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
+      }),
+    [previouslyUsedWallets],
   )
 
   const [selected] = useSelectedWallet<T>()
@@ -410,6 +364,7 @@ function DesktopModal<T>({
         <WalletSelect
           wallets={wallets}
           topWallets={topWallets}
+          previouslyUsedWallets={preWallets}
           displayCount="all"
           onClick={(w) => {
             connectToWallet(w)
@@ -461,19 +416,42 @@ function DesktopModal<T>({
 }
 
 export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
-  const { wallets: _wallets, topWallets, login, docLink, docText, onWalletConnectCallBack, ...rest } = props
+  const {
+    wallets: wallets_,
+    topWallets: topWallets_,
+    login,
+    docLink,
+    docText,
+    onWalletConnectCallBack,
+    ...rest
+  } = props
 
-  const [lastUsedWalletName] = useAtom(lastUsedWalletNameAtom)
+  const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
+  const previouslyUsedWallets = useMemo(
+    () =>
+      previouslyUsedWalletsId
+        .slice(0, 3)
+        .map((id) => wallets_.find((w) => w.id === id))
+        .filter<WalletConfigV2<T>>((w): w is WalletConfigV2<T> => Boolean(w)),
+    [wallets_, previouslyUsedWalletsId],
+  )
+
+  const topWallets = useMemo(
+    () => topWallets_.filter((w) => !previouslyUsedWalletsId.includes(w.id)),
+    [previouslyUsedWalletsId, topWallets_],
+  )
 
   const wallets = useMemo(
     () =>
       sortWallets(
-        _wallets.filter((i) => !topWallets.some((t) => t.id === i.id)),
-        lastUsedWalletName,
+        wallets_.filter((i) => !topWallets.some((t) => t.id === i.id) && !previouslyUsedWalletsId.includes(i.id)),
+        null,
       ),
-    [_wallets, lastUsedWalletName, topWallets],
+    [wallets_, topWallets, previouslyUsedWalletsId],
   )
-  const [, setSelected] = useSelectedWallet<T>()
+
+  const [, setSelected] = useSelectedWallet()
+  const [, setLastUsedWallet] = useAtom(lastUsedWalletNameAtom)
   const [, setError] = useAtom(errorAtom)
   const { t } = useTranslation()
 
@@ -495,7 +473,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
       login(wallet.connectorId)
         .then((v) => {
           if (v) {
-            localStorage.setItem(walletLocalStorageKey, wallet.title)
+            setLastUsedWallet(wallet.id)
             try {
               onWalletConnectCallBack?.(wallet.title)
             } catch (e) {
@@ -528,6 +506,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
               <MobileModal
                 connectWallet={connectWallet}
                 topWallets={topWallets}
+                previouslyUsedWallets={previouslyUsedWallets}
                 wallets={wallets}
                 docLink={docLink}
                 docText={docText}
@@ -536,6 +515,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
               <DesktopModal
                 connectWallet={connectWallet}
                 topWallets={topWallets}
+                previouslyUsedWallets={previouslyUsedWallets}
                 wallets={wallets}
                 docLink={docLink}
                 docText={docText}
