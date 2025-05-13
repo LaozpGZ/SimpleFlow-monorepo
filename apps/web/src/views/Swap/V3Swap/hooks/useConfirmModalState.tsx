@@ -288,10 +288,14 @@ const useConfirmActions = (
     t,
   ])
 
+  const currencyAmountIn = useMemo(() => {
+    return isBridgeOrder(order) && chainId
+      ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === chainId)?.inputAmount
+      : undefined
+  }, [order, chainId])
+
   const { approvalData, error, refetch, signPermit2 } = useBridgeCheckApproval({
-    currencyAmountIn: isBridgeOrder(order)
-      ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === activeChainId)?.inputAmount
-      : undefined,
+    currencyAmountIn,
   })
 
   const permitStep = useMemo(() => {
