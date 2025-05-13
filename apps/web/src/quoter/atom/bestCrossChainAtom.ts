@@ -77,7 +77,7 @@ export const getBridgeQuote = atomFamily(
       })
 
       if (!metadata.supported) {
-        throw new BridgeTradeError(metadata.reason)
+        throw new BridgeTradeError(metadata?.reason || metadata?.error?.message || 'Unknown error')
       }
 
       const outputAmount = CurrencyAmount.fromRawAmount(outputCurrency, metadata.bridgeTransactionData.outputAmount)

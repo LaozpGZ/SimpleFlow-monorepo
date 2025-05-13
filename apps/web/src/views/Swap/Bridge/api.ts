@@ -198,6 +198,11 @@ export type GetMetadataParams = {
 
 export interface MetadataResponse {
   supported: boolean
+  error?: {
+    code: string
+    message: string
+    description?: string
+  }
   reason?: string
 }
 
