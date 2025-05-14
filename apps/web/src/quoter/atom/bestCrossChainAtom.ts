@@ -153,7 +153,8 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
         )
 
         const isBridgeOnlyQuery = baseCurrencyAmount.currency.symbol === quoteCurrency.symbol && isOriginTokenSupported
-        const isBridgeToSwapQuery = isOriginTokenSupported && !isDestinationTokenSupported
+        // if origin/destination tokens is supported, then it's a bridge to swap quote
+        const isBridgeToSwapQuery = isOriginTokenSupported
         const isSwapToBridgeQuery = !isOriginTokenSupported && isDestinationTokenSupported
         const isSwapToBridgeToSwapQuery = !isOriginTokenSupported && !isDestinationTokenSupported
 
@@ -369,6 +370,10 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             // For each destination token, get a bridge quote from origin token
             const bridgeQuotes = await Promise.all(
               supportedDestinationTokens.map(async (destinationToken) => {
+                if (swapOrder.data!.trade.outputAmount.currency.chainId === destinationToken.chainId) {
+                  return null
+                }
+
                 // We already checked that swapOrder.data and swapOrder.data.trade.outputAmount exist above
                 const bridgeQuote = await get(
                   getBridgeQuote({
