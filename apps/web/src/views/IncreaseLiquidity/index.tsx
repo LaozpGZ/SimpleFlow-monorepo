@@ -317,12 +317,6 @@ export const IncreaseLiquidity = () => {
       <NavBreadcrumbs currency0={currency0} currency1={currency1}>
         <Text>{t('Increase Liquidity')}</Text>
       </NavBreadcrumbs>
-
-      <span>tickCurrent: {pool?.tickCurrent}</span>
-      <span>tickLower: {position?.tickLower}</span>
-      <span>tickUpper: {position?.tickUpper}</span>
-      <span>outOfRange: {isOutOfRange ? 'Yes' : 'No'}</span>
-
       <StyledCard mt="24px" mx="auto">
         <CardBody>
           <Flex alignItems="center">
