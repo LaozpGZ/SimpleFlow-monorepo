@@ -208,11 +208,14 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             ..._option,
             baseCurrency: bridgeQuote.trade.outputAmount.currency,
             amount: bridgeQuote.trade.outputAmount,
-            // NOTE: use suffix to avoid hash collision
+            hash: '',
+            placeholderHash: '',
           }
 
+          const quoteQuery = createQuoteQuery(swapOption)
+
           // Get the swap quote using the bridge output amount
-          const swapOrder = await get(bestQuoteAtom(swapOption))
+          const swapOrder = await get(bestQuoteAtom(quoteQuery))
 
           if (swapOrder.data) {
             // The final combined quote
@@ -264,10 +267,14 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           const swapOption: QuoteQuery = {
             ..._option,
             currency: bridgeOriginCurrency,
+            hash: '',
+            placeholderHash: '',
           }
 
+          const quoteQuery = createQuoteQuery(swapOption)
+
           // Get the swap quote from base currency to bridge origin currency
-          const swapOrder = await get(bestQuoteAtom(swapOption))
+          const swapOrder = await get(bestQuoteAtom(quoteQuery))
 
           if (swapOrder.data) {
             // Use the swap output amount as the bridge input amount
@@ -340,10 +347,13 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             const swapOption: QuoteQuery = {
               ..._option,
               currency: originToken,
+              hash: '',
+              placeholderHash: '',
             }
 
             // Get the swap quote from base currency to origin token
-            const swapOrder = get(bestQuoteAtom(swapOption))
+            const quoteQuery = createQuoteQuery(swapOption)
+            const swapOrder = get(bestQuoteAtom(quoteQuery))
 
             if (!swapOrder.data || !swapOrder.data.trade.outputAmount) {
               return null
@@ -424,11 +434,9 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
                 }
               }
 
-              const { hash, placeholderHash, ...restOptions } = _option
-
               // Create a swap query from the bridge destination token to the quote currency
               const finalSwapOption: QuoteQuery = {
-                ...restOptions,
+                ..._option,
                 baseCurrency: swapAndBridgeQuote.bridgeQuote.trade.outputAmount.currency,
                 amount: swapAndBridgeQuote.bridgeQuote.trade.outputAmount,
                 hash: '',
