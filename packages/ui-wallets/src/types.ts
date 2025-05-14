@@ -43,11 +43,16 @@ export type WalletConfigV2<T = unknown> = {
   MEVSupported?: boolean
 }
 
+type ConnectData = {
+  accounts: readonly [string, ...string[]]
+  chainId: number
+}
+
 export interface WalletModalV2Props<T = unknown> extends ModalV2Props {
   wallets: WalletConfigV2<T>[]
   topWallets: WalletConfigV2<T>[]
-  login: (connectorId: T) => Promise<any>
+  login: (connectorID: T) => Promise<ConnectData | undefined>
   docLink: string
   docText: string
-  onWalletConnectCallBack?: (walletTitle?: string) => void
+  onWalletConnectCallBack?: (walletTitle?: string, address?: string) => void
 }
