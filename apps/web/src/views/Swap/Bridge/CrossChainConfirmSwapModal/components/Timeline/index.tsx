@@ -2,6 +2,7 @@ import {
   CheckmarkCircleFillIcon,
   CircleOutlineIcon,
   FlexGap,
+  LinkExternal,
   ScanLink,
   SwapLoading,
   WarningIcon,
@@ -152,6 +153,8 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
     }
   }, [status])
 
+  const explorerLink = tx && tx.hash && getBlockExploreLink(tx.hash, 'transaction', tx.chainId)
+
   return (
     <>
       <ItemContainer>
@@ -160,21 +163,17 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
         </IconColumn>
         <ItemWrapper>
           <Content>
-            <Title status={status}>
-              {title}
-              {subtitle && <Subtitle>({subtitle})</Subtitle>}
-            </Title>
+            <LinkExternal href={explorerLink} showExternalIcon={false} rel="noopener noreferrer">
+              <Title status={status}>
+                {title}
+                {subtitle && <Subtitle>({subtitle})</Subtitle>}
+              </Title>
+            </LinkExternal>
             {status === 'failed' && errorMessage && <MessageBox variant="error">{errorMessage}</MessageBox>}
             {status === 'warning' && warningMessage && <MessageBox variant="warning">{warningMessage}</MessageBox>}
           </Content>
         </ItemWrapper>
-        {tx && (
-          <ScanLink
-            href={getBlockExploreLink(tx.hash, 'transaction', tx.chainId)}
-            color="primary60"
-            useBscCoinFallback
-          />
-        )}
+        {tx && <ScanLink href={explorerLink} color="primary60" useBscCoinFallback />}
       </ItemContainer>
       {!isLast && <Line />}
     </>

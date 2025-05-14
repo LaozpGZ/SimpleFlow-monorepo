@@ -38,6 +38,13 @@ import { activeBridgeOrderMetadataAtom } from '../state/orderDataState'
 import { useBridgeStatus } from '../../hooks'
 import { ActiveBridgeOrderMetadata, BridgeStatus, Command } from '../../types'
 
+const AnimatedContainer = styled.div<{ expanded: boolean }>`
+  overflow: hidden;
+  max-height: ${({ expanded }) => (expanded ? '1000px' : '0')};
+  opacity: ${({ expanded }) => (expanded ? 1 : 0)};
+  transition: all 0.2s ease;
+`
+
 const ProgressPill = styled(Box)<{ $color: string }>`
   width: 16px;
   height: 4px;
@@ -271,11 +278,11 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
                     </FlexGap>
                   </Button>
                 </RowBetween>
-                {progressExpanded && bridgeStatus?.data && (
+                <AnimatedContainer expanded={progressExpanded}>
                   <RowFixed ml="8px">
                     <Timeline items={timelineItems} />
                   </RowFixed>
-                )}
+                </AnimatedContainer>
               </>
             )}
 
