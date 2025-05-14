@@ -12,6 +12,7 @@ import {
   GetBridgeCalldataResponse,
   Permit2Schema,
   SwapDataSchema,
+  UserBridgeOrdersResponse,
 } from './types'
 
 // // Define the schema for the "SWAP" command data
@@ -240,5 +241,10 @@ export const getBridgeStatus = async (chainId: number, txHash: string): Promise<
   const resp = await fetch(
     `${BRIDGE_API_ENDPOINT}/v1/status/${chainIdToExplorerInfoChainName[chainId]}?txHash=${txHash}`,
   )
+  return resp.json()
+}
+
+export const getUserBridgeOrders = async (address: Address): Promise<UserBridgeOrdersResponse> => {
+  const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/orders/${address}`)
   return resp.json()
 }

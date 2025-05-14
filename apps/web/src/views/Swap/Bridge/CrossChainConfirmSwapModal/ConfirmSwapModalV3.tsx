@@ -92,7 +92,10 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(originalOrder?.trade)
 
   const activeBridgeOrderMetadata = useAtomValue(activeBridgeOrderMetadataAtom)
-  const bridgeStatus = useBridgeStatus(activeBridgeOrderMetadata?.originChainId, activeBridgeOrderMetadata?.txHash)
+  const { data: bridgeStatus } = useBridgeStatus(
+    activeBridgeOrderMetadata?.originChainId,
+    activeBridgeOrderMetadata?.txHash,
+  )
 
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(originalOrder)
   const { recipient } = useSwapState()

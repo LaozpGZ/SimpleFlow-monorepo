@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { zeroAddress } from '@pancakeswap/price-api-sdk'
-import { ERC20Token, Native } from '@pancakeswap/sdk'
+import { CurrencyAmount, Native } from '@pancakeswap/sdk'
 import {
   AutoColumn,
   Box,
@@ -38,6 +38,13 @@ import { activeBridgeOrderMetadataAtom } from '../state/orderDataState'
 import { useBridgeStatus } from '../../hooks'
 import { ActiveBridgeOrderMetadata, BridgeStatus, Command } from '../../types'
 
+const AnimatedContainer = styled.div<{ expanded: boolean }>`
+  overflow: hidden;
+  max-height: ${({ expanded }) => (expanded ? '1000px' : '0')};
+  opacity: ${({ expanded }) => (expanded ? 1 : 0)};
+  transition: all 0.2s ease;
+`
+
 const ProgressPill = styled(Box)<{ $color: string }>`
   width: 16px;
   height: 4px;
@@ -57,17 +64,14 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
   const order = bridgeMetadata?.order
   const originChainId = bridgeMetadata?.originChainId
   const originTxHash = bridgeMetadata?.txHash
+  const metadata = bridgeMetadata?.metadata
 
-  const bridgeStatus = useBridgeStatus(originChainId, originTxHash)
+  const { data: bridgeStatus } = useBridgeStatus(originChainId, originTxHash, metadata)
 
-  const availableChainIds: number[] = []
-  if (order?.trade.inputAmount.currency.chainId) {
-    availableChainIds.push(order.trade.inputAmount.currency.chainId)
-  }
-  if (order?.trade.outputAmount.currency.chainId) {
-    availableChainIds.push(order.trade.outputAmount.currency.chainId)
-  }
-  const allTokens = useAllTokensByChainIds(availableChainIds)
+  const allTokens = useAllTokensByChainIds([
+    bridgeStatus?.originChainId || order?.trade.inputAmount.currency.chainId || 0,
+    bridgeStatus?.destinationChainId || order?.trade.outputAmount.currency.chainId || 0,
+  ])
 
   const [detailsExpanded, setDetailsExpanded] = useAtom(detailsPanelExpanded)
   const [progressExpanded, setProgressExpanded] = useAtom(detailsPanelProgressExpanded)
@@ -85,6 +89,17 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
     [order],
   )
 
+  const minimumReceived = useMemo(() => {
+    const slippageAdjustedAmount = formatAmount(slippageAdjustedAmounts?.[Field.OUTPUT], DISPLAY_PRECISION)
+    if (slippageAdjustedAmount) return slippageAdjustedAmount
+
+    if (!bridgeStatus?.outputCurrencyAmount?.currency || !bridgeStatus.minOutputAmount) return undefined
+    return CurrencyAmount.fromRawAmount(
+      bridgeStatus?.outputCurrencyAmount?.currency,
+      bridgeStatus?.minOutputAmount,
+    ).toSignificant(DISPLAY_PRECISION)
+  }, [bridgeStatus, slippageAdjustedAmounts])
+
   const toggleDetailsExpanded = useCallback(() => {
     setDetailsExpanded(!detailsExpanded)
   }, [detailsExpanded, setDetailsExpanded])
@@ -95,13 +110,30 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
 
   const getCurrencyByAddress = useCallback(
     (chainId: number, address: Address) => {
-      const token: ERC20Token = allTokens[chainId][safeGetAddress(address) || '']
-      if (token) return token
-
       // Check if it is a native currency
       const native = Native.onChain(chainId)
       const isNative = address?.toLowerCase() === zeroAddress || address?.toLowerCase() === GELATO_NATIVE
       if (isNative) return native
+
+      if (
+        address === bridgeStatus?.inputCurrencyAmount?.currency.wrapped.address &&
+        chainId === bridgeStatus?.inputCurrencyAmount?.currency.chainId
+      ) {
+        return bridgeStatus?.inputCurrencyAmount?.currency
+      }
+      if (
+        address === bridgeStatus?.outputCurrencyAmount?.currency.wrapped.address &&
+        chainId === bridgeStatus?.outputCurrencyAmount?.currency.chainId
+      ) {
+        return bridgeStatus?.outputCurrencyAmount?.currency
+      }
+
+      console.log('getCurrencyByAddress', chainId, address)
+      console.log('allTokens', allTokens?.[chainId]?.[safeGetAddress(address) || ''], allTokens)
+      if (allTokens) {
+        const token = allTokens?.[chainId]?.[safeGetAddress(address) || '']
+        if (token) return token
+      }
 
       return undefined
 
@@ -145,13 +177,13 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
           switch (step.command) {
             case Command.SWAP:
               return t('Swapped %currencyA% to %currencyB% (%chainName%)', {
-                currencyA: getCurrencyByAddress(step.metadata.chainId, step.metadata.inputToken)?.symbol,
-                currencyB: getCurrencyByAddress(step.metadata.chainId, step.metadata.outputToken)?.symbol,
+                currencyA: getCurrencyByAddress(step.metadata.chainId, step.metadata.inputToken)?.symbol || '', // TODO: Get output of bridged token... can be different if prev swap step present
+                currencyB: getCurrencyByAddress(step.metadata.chainId, step.metadata.outputToken)?.symbol || '',
                 chainName: getFullChainNameById(step.metadata.chainId),
               })
             case Command.BRIDGE:
               return t('Bridge %currency% (%inputChain% to %outputChain%)', {
-                currency: order?.trade.inputAmount.currency.symbol, // TODO: Verify this currency symbol for Swap->Bridge?-> Cases
+                currency: order?.trade.inputAmount.currency.symbol || '', // TODO: Verify this currency symbol for Swap->Bridge?-> Cases
                 inputChain: getFullChainNameById(step.metadata.originChainId),
                 outputChain: getFullChainNameById(step.metadata.destinationChainId),
               })
@@ -246,11 +278,11 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
                     </FlexGap>
                   </Button>
                 </RowBetween>
-                {progressExpanded && bridgeStatus?.data && (
+                <AnimatedContainer expanded={progressExpanded}>
                   <RowFixed ml="8px">
                     <Timeline items={timelineItems} />
                   </RowFixed>
-                )}
+                </AnimatedContainer>
               </>
             )}
 
@@ -268,9 +300,9 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
                 {t('Minimum received')}
               </Text>
               <Text color="textSubtle" small>
-                {formatAmount(slippageAdjustedAmounts?.[Field.OUTPUT], DISPLAY_PRECISION)}
+                {minimumReceived}
                 &nbsp;
-                {order?.trade.outputAmount.currency.symbol}
+                {bridgeStatus?.outputCurrencyAmount?.currency.symbol || order?.trade.outputAmount.currency.symbol}
               </Text>
             </RowBetween>
           </AutoColumn>

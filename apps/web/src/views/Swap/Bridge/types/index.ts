@@ -132,5 +132,37 @@ export interface BridgeStatusData extends BridgeStatusResponse {
 export interface ActiveBridgeOrderMetadata {
   originChainId: number
   txHash: string
+
   order: PriceOrder | null | undefined
+
+  // Optional metadata to show in modals quickly
+  metadata?: {
+    inputToken: string
+    outputToken: string
+    inputAmount: string
+    outputAmount: string
+    originChainId: number
+    destinationChainId: number
+  }
+}
+
+export interface UserBridgeOrdersResponse {
+  startCursor: string
+  endCursor: string
+  hasNextPage: boolean
+  rows: UserBridgeOrder[]
+}
+
+export interface UserBridgeOrder {
+  status: string
+  inputToken: string
+  outputToken: string
+  inputAmount: string
+  outputAmount: string
+  originChainId: number
+  destinationChainId: number
+  orderId: string
+  transactionHash: string
+  command: string
+  timestamp: string
 }
