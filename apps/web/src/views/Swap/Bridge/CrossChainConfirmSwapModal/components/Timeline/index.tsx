@@ -7,7 +7,7 @@ import {
   SwapLoading,
   WarningIcon,
 } from '@pancakeswap/uikit'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import styled, { css } from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 
@@ -153,6 +153,17 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
     }
   }, [status])
 
+  const linkColor = useMemo(() => {
+    switch (status) {
+      case 'failed':
+        return 'failure'
+      case 'warning':
+        return 'warning'
+      default:
+        return 'primary60'
+    }
+  }, [status])
+
   const explorerLink = tx && tx.hash && getBlockExploreLink(tx.hash, 'transaction', tx.chainId)
 
   return (
@@ -163,7 +174,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
         </IconColumn>
         <ItemWrapper>
           <Content>
-            <LinkExternal href={explorerLink} showExternalIcon={false} rel="noopener noreferrer">
+            <LinkExternal href={explorerLink} showExternalIcon={false} color={linkColor} rel="noopener noreferrer">
               <Title status={status}>
                 {title}
                 {subtitle && <Subtitle>({subtitle})</Subtitle>}
