@@ -475,7 +475,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
           if (v) {
             setLastUsedWallet(wallet.id)
             try {
-              onWalletConnectCallBack?.(wallet.title)
+              onWalletConnectCallBack?.(wallet.title, v.accounts?.[0])
             } catch (e) {
               console.error(wallet.title, e)
             }

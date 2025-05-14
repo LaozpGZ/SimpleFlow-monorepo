@@ -1,13 +1,15 @@
 import { atom } from 'jotai'
 import { WalletConfigV2, WalletIds } from './types'
 
+const MAXIMUM_STORE_NUM = 3
+
 export const errorAtom = atom<string>('')
 
 export const selectedWalletAtom = atom<WalletConfigV2<unknown> | null>(null)
 
 export const lastUsedWalletNameAtom = atom('', (get, set, update: WalletIds) => {
   const list = get(previouslyUsedWalletsAtom)
-  set(previouslyUsedWalletsAtom, [update, ...list.filter((i) => i !== update)])
+  set(previouslyUsedWalletsAtom, [update, ...list.filter((i) => i !== update)].slice(0, MAXIMUM_STORE_NUM))
 })
 
 export const previouslyUsedWalletsKey = 'previous-used-wallets'
