@@ -19,16 +19,9 @@ export const useAccountV3Positions = (chainIds: number[], account?: Address | nu
       if (!account) return []
       const results = await Promise.all(
         chainIds.map(async (chainId) => {
-          const tokensOnChain = allTokens[chainId]
           try {
             const positions = await getAccountV3Positions(chainId, account)
-            return (positions ?? []).filter((position) => {
-              const { token0, token1 } = position
-              const tokenAddress0 = safeGetAddress(token0)
-              const tokenAddress1 = safeGetAddress(token1)
-              if (!tokenAddress0 || !tokenAddress1) return false
-              return Boolean(tokensOnChain[tokenAddress0] && tokensOnChain[tokenAddress1])
-            })
+            return positions ?? []
           } catch (error) {
             console.error(`Error fetching V3 positions for chainId ${chainId}:`, error)
             return []
@@ -46,11 +39,28 @@ export const useAccountV3Positions = (chainIds: number[], account?: Address | nu
     staleTime: SLOW_INTERVAL,
   })
 
-  return useMemo(
-    () => ({
-      data: data ?? [],
+  return useMemo(() => {
+    if (!data) {
+      return { data: [], pending: isPending }
+    }
+
+    const filteredData = data.filter((position) => {
+      const { chainId, token0, token1 } = position
+
+      const tokensOnChain = allTokens[chainId]
+      if (!tokensOnChain) return false
+
+      const tokenAddress0 = safeGetAddress(token0)
+      const tokenAddress1 = safeGetAddress(token1)
+
+      if (!tokenAddress0 || !tokenAddress1) return false
+
+      return Boolean(tokensOnChain[tokenAddress0] && tokensOnChain[tokenAddress1])
+    })
+
+    return {
+      data: filteredData,
       pending: isPending,
-    }),
-    [data, isPending],
-  )
+    }
+  }, [data, isPending, allTokens])
 }
