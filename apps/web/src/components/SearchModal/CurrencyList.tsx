@@ -153,6 +153,14 @@ function CurrencyRow({
 
   const balance = useCurrencyBalance(account ?? undefined, currency)
 
+  const setIsHoveredCallback = useCallback(() => {
+    setIsHovered(true)
+  }, [])
+
+  const setIsHoveredLeaveCallback = useCallback(() => {
+    setIsHovered(false)
+  }, [])
+
   // only show add or remove buttons if not on selected list
   return (
     <MenuItem
@@ -161,8 +169,8 @@ function CurrencyRow({
       onClick={() => (isSelected ? null : onSelect())}
       selected={otherSelected}
       disabled={isSelected}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseEnter={setIsHoveredCallback}
+      onMouseLeave={setIsHoveredLeaveCallback}
     >
       <CurrencyLogo showChainLogo={showChainLogo} currency={currency} size="40px" />
 
