@@ -217,7 +217,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           // Get the swap quote using the bridge output amount
           const swapOrder = await get(bestQuoteAtom(quoteQuery))
 
-          if (swapOrder.data) {
+          if (swapOrder.data?.trade?.outputAmount?.greaterThan(0)) {
             // The final combined quote
             quote = {
               ...bridgeQuote,
@@ -276,7 +276,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           // Get the swap quote from base currency to bridge origin currency
           const swapOrder = await get(bestQuoteAtom(quoteQuery))
 
-          if (swapOrder.data) {
+          if (swapOrder?.data?.trade?.outputAmount?.greaterThan(0)) {
             // Use the swap output amount as the bridge input amount
             const bridgeQuote = await get(
               getBridgeQuote({
@@ -355,7 +355,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             const quoteQuery = createQuoteQuery(swapOption)
             const swapOrder = get(bestQuoteAtom(quoteQuery))
 
-            if (!swapOrder.data || !swapOrder.data.trade.outputAmount) {
+            if (!swapOrder.data || !swapOrder.data.trade.outputAmount.greaterThan(0)) {
               return null
             }
 
@@ -448,7 +448,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
               // Get the swap quote from bridge destination to quote currency
               const finalSwapOrder = get(bestQuoteAtom(quoteQuery))
 
-              if (!finalSwapOrder.data) {
+              if (!finalSwapOrder.data?.trade?.outputAmount?.greaterThan(0)) {
                 return null
               }
 
