@@ -55,15 +55,7 @@ export const useOnRampQuotes = <selectData = GetOnRampQuoteReturnType>(
         throw new Error('No quotes available')
       }
 
-      // Filter quotes, but return original quotes if none pass the filter
       const filteredQuotes = quotes.filter((q) => providerAvailabilities[q.provider])
-
-      // Special handling for EUR -> CAKE combination
-      const isEurToCake = fiatCurrency === 'EUR' && cryptoCurrency === 'CAKE'
-
-      if (filteredQuotes.length === 0 && isEurToCake) {
-        return quotes // Return unfiltered quotes
-      }
 
       return filteredQuotes.length > 0 ? filteredQuotes : quotes
     },
@@ -87,19 +79,6 @@ async function fetchProviderQuotes(
   )
 
   const result = await response.json()
-
-  // Even if API returns error messages, return quotes if they exist
-  if (result.result && Array.isArray(result.result) && result.result.length > 0) {
-    return result.result
-  }
-
-  // If no quotes data, check for error messages
-  if (result.errorMessages && Array.isArray(result.errorMessages) && result.errorMessages.length > 0) {
-    // Special handling for CAKE not supported error
-    if (result.errorMessages.some((msg) => msg.includes('CAKE is not supported'))) {
-      return result.result || []
-    }
-  }
 
   return result.result || []
 }
