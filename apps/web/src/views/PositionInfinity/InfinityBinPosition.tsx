@@ -85,7 +85,7 @@ export const InfinityBinPosition = () => {
         ) : null}
         <Card style={{ maxWidth: '800px' }} mx="auto">
           <PositionHeader
-            isFarming={isFarming}
+            isFarming={isFarming && !isRemoved}
             isRemoved={isRemoved}
             protocol={Protocol.InfinityBIN}
             poolId={poolId}
