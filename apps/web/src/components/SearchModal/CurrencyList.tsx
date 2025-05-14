@@ -1,19 +1,14 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { ChainId, Currency, CurrencyAmount, Token } from '@pancakeswap/sdk'
-import {
-  ArrowForwardIcon,
-  Column,
-  CopyButton,
-  FlexGap,
-  QuestionHelper,
-  Text,
-  useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+import { WrappedTokenInfo } from '@pancakeswap/token-lists'
+import { ArrowForwardIcon, Column, CopyButton, FlexGap, QuestionHelper, Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import AddToWalletButton from 'components/AddToWallet/AddToWalletButton'
 import { LightGreyCard } from 'components/Card'
+import { ViewOnExplorerButton } from 'components/ViewOnExplorerButton'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import { CSSProperties, MutableRefObject, useCallback, useMemo } from 'react'
+import { CSSProperties, MutableRefObject, useCallback, useMemo, useState } from 'react'
 import { FixedSizeList } from 'react-window'
 import { styled } from 'styled-components'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
@@ -49,22 +44,28 @@ function Balance({ balance }: { balance: CurrencyAmount<Currency> }) {
   return <StyledBalanceText title={balance.toExact()}>{formatAmount(balance, 4)}</StyledBalanceText>
 }
 
-const MenuItem = styled(RowBetween)<{ disabled: boolean; selected: boolean }>`
+const MenuItem = styled(RowBetween)<{ disabled?: boolean; selected: boolean }>`
   padding: 4px 20px;
   height: 56px;
   display: grid;
   grid-template-columns: auto minmax(auto, 1fr) minmax(0, 72px);
   grid-gap: 10px;
   cursor: ${({ disabled }) => !disabled && 'pointer'};
-  pointer-events: ${({ disabled }) => disabled && 'none'};
   &:hover {
     background-color: ${({ theme, disabled }) => !disabled && theme.colors.background};
   }
   opacity: ${({ disabled, selected }) => (disabled || selected ? 0.5 : 1)};
 `
 
-function ComplementSection({ selectedCurrency }: { selectedCurrency: Currency }) {
-  const { isMobile } = useMatchBreakpoints()
+function ComplementSection({
+  selectedCurrency,
+  isSelected,
+  showActions,
+}: {
+  selectedCurrency: Currency
+  isSelected: boolean
+  showActions: boolean
+}) {
   const { t } = useTranslation()
 
   if (selectedCurrency.isNative) {
@@ -72,17 +73,57 @@ function ComplementSection({ selectedCurrency }: { selectedCurrency: Currency })
   }
 
   return (
-    <FlexGap ml="4px" alignItems="center">
-      <CopyButton
-        data-dd-action-name="Copy token address"
-        width="12px"
-        buttonColor="textSubtle"
-        text={selectedCurrency.wrapped.address}
-        tooltipMessage={t('Token address copied')}
-        defaultTooltipMessage={t('Copy token address')}
-        tooltipPlacement="top"
-        opacity={0.3}
-      />
+    <FlexGap ml="8px" alignItems="center">
+      {isSelected ? (
+        <>
+          <CopyButton
+            data-dd-action-name="Copy token address"
+            width="13px"
+            buttonColor="textSubtle"
+            text={selectedCurrency.wrapped.address}
+            tooltipMessage={t('Token address copied')}
+            defaultTooltipMessage={t('Copy token address')}
+            tooltipPlacement="top"
+          />
+          <ViewOnExplorerButton
+            address={selectedCurrency.wrapped.address}
+            chainId={selectedCurrency.chainId}
+            type="token"
+            color="textSubtle"
+            width="15px"
+            ml="8px"
+            tooltipPlacement="top"
+          />
+          <AddToWalletButton
+            data-dd-action-name="Add to wallet"
+            variant="text"
+            p="0"
+            ml="12px"
+            height="auto"
+            width="fit-content"
+            tokenAddress={selectedCurrency.wrapped.address}
+            tokenSymbol={selectedCurrency.symbol}
+            tokenDecimals={selectedCurrency.decimals}
+            tokenLogo={
+              selectedCurrency.wrapped instanceof WrappedTokenInfo ? selectedCurrency.wrapped.logoURI : undefined
+            }
+            tooltipPlacement="top"
+          />
+        </>
+      ) : (
+        showActions && (
+          <CopyButton
+            data-dd-action-name="Copy token address"
+            width="13px"
+            buttonColor="textSubtle"
+            text={selectedCurrency.wrapped.address}
+            tooltipMessage={t('Token address copied')}
+            defaultTooltipMessage={t('Copy token address')}
+            tooltipPlacement="top"
+            opacity={0.5}
+          />
+        )
+      )}
     </FlexGap>
   )
 }
@@ -108,6 +149,7 @@ function CurrencyRow({
   const selectedTokenList = useCombinedActiveList()
   const isOnSelectedList = isTokenOnList(selectedTokenList, currency)
   const customAdded = useIsUserAddedToken(currency)
+  const [isHovered, setIsHovered] = useState(false)
 
   const balance = useCurrencyBalance(account ?? undefined, currency)
 
@@ -117,14 +159,17 @@ function CurrencyRow({
       style={style}
       className={`token-item-${key}`}
       onClick={() => (isSelected ? null : onSelect())}
-      disabled={isSelected}
       selected={otherSelected}
+      disabled={isSelected}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <CurrencyLogo showChainLogo={showChainLogo} currency={currency} size="40px" />
 
       <Column>
         <FlexGap alignItems="center">
-          <Text bold>{currency?.symbol}</Text> <ComplementSection selectedCurrency={currency} />
+          <Text bold>{currency?.symbol}</Text>
+          <ComplementSection isSelected={isSelected} selectedCurrency={currency} showActions={isHovered} />
         </FlexGap>
         <Text color="textSubtle" small ellipsis maxWidth="200px">
           {!isOnSelectedList && customAdded && `${t('Added by user')} •`} {currency?.name}
