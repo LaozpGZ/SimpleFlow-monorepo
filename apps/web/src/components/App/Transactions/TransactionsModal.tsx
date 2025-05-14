@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { InjectedModalProps, Modal, ModalBody, Text } from '@pancakeswap/uikit'
+import { FlexGap, InjectedModalProps, Modal, ModalBody, SwapLoading, Text } from '@pancakeswap/uikit'
 import { TransactionList } from '@pancakeswap/widgets-internal'
 import isEmpty from 'lodash/isEmpty'
 import { useMemo } from 'react'
@@ -47,7 +47,7 @@ export function RecentTransactions() {
     refetchInterval: 10_000,
   })
 
-  const { data: crossChainOrdersResponse } = useRecentBridgeOrders({
+  const { data: crossChainOrdersResponse, isLoading: isRecentBridgeOrdersLoading } = useRecentBridgeOrders({
     address: account,
     refetchInterval: 10_000,
   })
@@ -74,15 +74,24 @@ export function RecentTransactions() {
   //   dispatch(clearAllTransactions())
   // }, [dispatch])
 
+  const recentTransactionsHeading = useMemo(() => {
+    return (
+      <FlexGap alignItems="center" gap="8px">
+        <Text color="secondary" fontSize="12px" textTransform="uppercase" bold>
+          {t('Recent Transactions')}
+        </Text>
+        {isRecentBridgeOrdersLoading && <SwapLoading />}
+      </FlexGap>
+    )
+  }, [t, isRecentBridgeOrdersLoading])
+
   return (
     <>
       {account ? (
         xOrders.length > 0 || hasTransactions || recentCrossChainOrders.length > 0 ? (
           <>
             <AutoRow mb="1rem" style={{ justifyContent: 'space-between' }}>
-              <Text color="secondary" fontSize="12px" textTransform="uppercase" bold>
-                {t('Recent Transactions')}
-              </Text>
+              {recentTransactionsHeading}
               {/* {hasTransactions && (
                 <Button variant="tertiary" scale="xs" onClick={clearAllTransactionsCallback}>
                   {t('clear all')}
@@ -117,7 +126,10 @@ export function RecentTransactions() {
             )}
           </>
         ) : (
-          <Text>{t('No recent transactions')}</Text>
+          <>
+            {recentTransactionsHeading}
+            <Text>{t('No recent transactions')}</Text>
+          </>
         )
       ) : (
         <ConnectWalletButton />

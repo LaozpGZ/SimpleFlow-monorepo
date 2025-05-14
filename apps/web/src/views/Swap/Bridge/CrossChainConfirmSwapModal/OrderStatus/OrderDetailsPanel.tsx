@@ -19,8 +19,8 @@ import { GELATO_NATIVE } from 'config/constants'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useAllTokensByChainIds } from 'hooks/Tokens'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
-import { useAtom, useAtomValue } from 'jotai'
-import { useCallback, useMemo } from 'react'
+import { useAtomValue } from 'jotai'
+import { useCallback, useMemo, useState } from 'react'
 import { Field } from 'state/swap/actions'
 import styled from 'styled-components'
 import { safeGetAddress } from 'utils'
@@ -32,7 +32,7 @@ import {
   computeTradePriceBreakdown as computeTradePriceBreakdownWithSmartRouter,
 } from 'views/Swap/V3Swap/utils/exchange'
 import { Timeline, TimelineItemStatus } from '../components/Timeline'
-import { detailsPanelExpanded, detailsPanelProgressExpanded } from '../state/detailsPanel'
+
 import { activeBridgeOrderMetadataAtom } from '../state/orderDataState'
 
 import { useBridgeStatus } from '../../hooks'
@@ -73,8 +73,13 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
     bridgeStatus?.destinationChainId || order?.trade.outputAmount.currency.chainId || 0,
   ])
 
-  const [detailsExpanded, setDetailsExpanded] = useAtom(detailsPanelExpanded)
-  const [progressExpanded, setProgressExpanded] = useAtom(detailsPanelProgressExpanded)
+  // If the order is failed or partial success, open the details panel by default
+  const [detailsExpanded, setDetailsExpanded] = useState(
+    bridgeStatus?.status === BridgeStatus.PARTIAL_SUCCESS || bridgeStatus?.status === BridgeStatus.FAILED,
+  )
+  const [progressExpanded, setProgressExpanded] = useState(
+    bridgeStatus?.status === BridgeStatus.PARTIAL_SUCCESS || bridgeStatus?.status === BridgeStatus.FAILED,
+  )
 
   // TODO: Remove/Update auto-slippage usage in bridging
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
