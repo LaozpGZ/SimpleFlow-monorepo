@@ -17,7 +17,6 @@ interface State {
   total: number
   lockedCakeBalance?: number
   lockedEndTime?: number
-  veCakeBalance?: number
 }
 
 const useGetVotingPower = (block?: number): State & { isLoading: boolean; isError: boolean } => {
