@@ -148,6 +148,7 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
           headerBorderColor="transparent"
           bodyPadding="0 24px 24px"
           minWidth="400px"
+          minHeight="200px"
         >
           <OrderResultModalContent
             overrideActiveOrderMetadata={{

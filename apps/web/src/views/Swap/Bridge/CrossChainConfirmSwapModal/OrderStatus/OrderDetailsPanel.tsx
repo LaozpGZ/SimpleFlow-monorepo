@@ -1,6 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { zeroAddress } from '@pancakeswap/price-api-sdk'
-import { CurrencyAmount, Native } from '@pancakeswap/sdk'
+import { CurrencyAmount } from '@pancakeswap/sdk'
 import {
   AutoColumn,
   Box,
@@ -15,28 +14,24 @@ import {
 } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { LightGreyCard } from 'components/Card'
-import { GELATO_NATIVE } from 'config/constants'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
-import { useAllTokensByChainIds } from 'hooks/Tokens'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
-import { useAtom, useAtomValue } from 'jotai'
-import { useCallback, useMemo } from 'react'
+import { useAtomValue } from 'jotai'
+import { useCallback, useMemo, useState } from 'react'
 import { Field } from 'state/swap/actions'
 import styled from 'styled-components'
-import { safeGetAddress } from 'utils'
-import { getFullChainNameById } from 'utils/getFullChainNameById'
-import { Address } from 'viem/accounts'
 import { isBridgeOrder, isXOrder } from 'views/Swap/utils'
 import {
   computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter,
   computeTradePriceBreakdown as computeTradePriceBreakdownWithSmartRouter,
 } from 'views/Swap/V3Swap/utils/exchange'
-import { Timeline, TimelineItemStatus } from '../components/Timeline'
-import { detailsPanelExpanded, detailsPanelProgressExpanded } from '../state/detailsPanel'
+import { Timeline } from '../components/Timeline'
+
 import { activeBridgeOrderMetadataAtom } from '../state/orderDataState'
 
 import { useBridgeStatus } from '../../hooks'
-import { ActiveBridgeOrderMetadata, BridgeStatus, Command } from '../../types'
+import { ActiveBridgeOrderMetadata, BridgeStatus } from '../../types'
+import { useTimelineItems } from '../hooks/useTimelineItems'
 
 const AnimatedContainer = styled.div<{ expanded: boolean }>`
   overflow: hidden;
@@ -68,13 +63,15 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
 
   const { data: bridgeStatus } = useBridgeStatus(originChainId, originTxHash, metadata)
 
-  const allTokens = useAllTokensByChainIds([
-    bridgeStatus?.originChainId || order?.trade.inputAmount.currency.chainId || 0,
-    bridgeStatus?.destinationChainId || order?.trade.outputAmount.currency.chainId || 0,
-  ])
+  const timelineItems = useTimelineItems({ bridgeStatus, order })
 
-  const [detailsExpanded, setDetailsExpanded] = useAtom(detailsPanelExpanded)
-  const [progressExpanded, setProgressExpanded] = useAtom(detailsPanelProgressExpanded)
+  // If the order is failed or partial success, open the details panel by default
+  const [detailsExpanded, setDetailsExpanded] = useState(
+    bridgeStatus?.status === BridgeStatus.PARTIAL_SUCCESS || bridgeStatus?.status === BridgeStatus.FAILED,
+  )
+  const [progressExpanded, setProgressExpanded] = useState(
+    bridgeStatus?.status === BridgeStatus.PARTIAL_SUCCESS || bridgeStatus?.status === BridgeStatus.FAILED,
+  )
 
   // TODO: Remove/Update auto-slippage usage in bridging
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
@@ -107,135 +104,6 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
   const toggleProgressExpanded = useCallback(() => {
     setProgressExpanded(!progressExpanded)
   }, [progressExpanded, setProgressExpanded])
-
-  const getCurrencyByAddress = useCallback(
-    (chainId: number, address: Address) => {
-      // Check if it is a native currency
-      const native = Native.onChain(chainId)
-      const isNative = address?.toLowerCase() === zeroAddress || address?.toLowerCase() === GELATO_NATIVE
-      if (isNative) return native
-
-      if (
-        address === bridgeStatus?.inputCurrencyAmount?.currency.wrapped.address &&
-        chainId === bridgeStatus?.inputCurrencyAmount?.currency.chainId
-      ) {
-        return bridgeStatus?.inputCurrencyAmount?.currency
-      }
-      if (
-        address === bridgeStatus?.outputCurrencyAmount?.currency.wrapped.address &&
-        chainId === bridgeStatus?.outputCurrencyAmount?.currency.chainId
-      ) {
-        return bridgeStatus?.outputCurrencyAmount?.currency
-      }
-
-      console.log('getCurrencyByAddress', chainId, address)
-      console.log('allTokens', allTokens?.[chainId]?.[safeGetAddress(address) || ''], allTokens)
-      if (allTokens) {
-        const token = allTokens?.[chainId]?.[safeGetAddress(address) || '']
-        if (token) return token
-      }
-
-      return undefined
-
-      // Else, read name, symbol and decimals from contract
-      // try {
-      //   const chainClient = publicClient({ chainId })
-      //   const [name, symbol, decimals] = await chainClient.multicall({
-      //     allowFailure: false,
-      //     contracts: [
-      //       {
-      //         address,
-      //         abi: erc20Abi,
-      //         functionName: 'name',
-      //       },
-      //       {
-      //         address,
-      //         abi: erc20Abi,
-      //         functionName: 'symbol',
-      //       },
-      //       {
-      //         address,
-      //         abi: erc20Abi,
-      //         functionName: 'decimals',
-      //       },
-      //     ],
-      //   })
-
-      //   return new ERC20Token(chainId, address, decimals ?? 18, symbol ?? '', name ?? '')
-      // } catch (error) {
-      //   console.error(error)
-      //   return undefined
-      // }
-    },
-    [allTokens],
-  )
-
-  const timelineItems = useMemo(() => {
-    return (
-      bridgeStatus?.data?.map((step) => {
-        const getText = () => {
-          switch (step.command) {
-            case Command.SWAP:
-              return t('Swapped %currencyA% to %currencyB% (%chainName%)', {
-                currencyA: getCurrencyByAddress(step.metadata.chainId, step.metadata.inputToken)?.symbol || '', // TODO: Get output of bridged token... can be different if prev swap step present
-                currencyB: getCurrencyByAddress(step.metadata.chainId, step.metadata.outputToken)?.symbol || '',
-                chainName: getFullChainNameById(step.metadata.chainId),
-              })
-            case Command.BRIDGE:
-              return t('Bridge %currency% (%inputChain% to %outputChain%)', {
-                currency: order?.trade.inputAmount.currency.symbol || '', // TODO: Verify this currency symbol for Swap->Bridge?-> Cases
-                inputChain: getFullChainNameById(step.metadata.originChainId),
-                outputChain: getFullChainNameById(step.metadata.destinationChainId),
-              })
-            default:
-              return ''
-          }
-        }
-
-        const getStatus = (): TimelineItemStatus => {
-          switch (step.status.code) {
-            case BridgeStatus.SUCCESS:
-              return 'completed'
-            case BridgeStatus.PARTIAL_SUCCESS:
-              return 'warning'
-            case BridgeStatus.FAILED:
-              return 'failed'
-            case BridgeStatus.PENDING:
-            case BridgeStatus.BRIDGE_PENDING:
-              return 'inProgress'
-            default:
-              return 'notStarted'
-          }
-        }
-
-        const timelineStatus = getStatus()
-
-        // TODO: Get and Handle error codes
-        const failureMessage =
-          step.status.code === BridgeStatus.FAILED
-            ? 'Failed'
-            : step.status.code === BridgeStatus.PARTIAL_SUCCESS
-            ? 'Partial Success'
-            : undefined
-
-        return {
-          id: step.command,
-          title: getText(),
-          status: timelineStatus,
-          isLast: bridgeStatus?.data && step.command === bridgeStatus?.data[bridgeStatus?.data.length - 1]?.command,
-          ...(failureMessage
-            ? timelineStatus === 'failed'
-              ? { errorMessage: failureMessage }
-              : { warningMessage: failureMessage }
-            : undefined),
-          tx: {
-            hash: step.command === Command.SWAP ? step.metadata.tx : step.metadata.depositTxHash,
-            chainId: step.command === Command.SWAP ? step.metadata.chainId : step.metadata.originChainId,
-          },
-        }
-      }) ?? []
-    )
-  }, [bridgeStatus, order, t, getCurrencyByAddress])
 
   return (
     <Box {...props}>
