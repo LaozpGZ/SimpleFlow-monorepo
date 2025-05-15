@@ -40,7 +40,7 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { currenciesUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
 import { useAtomValue } from 'jotai'
-import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
+import { BridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { EstimatedTime } from './components/EstimatedTime'
 
 dayjs.extend(relativeTime)
@@ -189,10 +189,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
               <DottedHelpText fontSize="14px">{t('Price Impact')}</DottedHelpText>
             </QuestionHelperV2>
           </RowFixed>
-          <FormattedPriceImpact
-            isX={isXOrder(order)}
-            priceImpact={!Array.isArray(priceBreakdown) ? priceBreakdown?.priceImpactWithoutFee : undefined}
-          />
+          <FormattedPriceImpact isX={isXOrder(order)} priceImpact={getBridgeOrderPriceImpact(priceBreakdown)} />
         </RowBetween>
         {!isXOrder(order) && !isBridgeOrder(order) && (
           <RowBetween mb="8px">

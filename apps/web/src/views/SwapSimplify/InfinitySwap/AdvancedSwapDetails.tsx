@@ -14,7 +14,7 @@ import { currenciesUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
 import { useAtomValue } from 'jotai'
 import { Field } from 'state/swap/actions'
 import { styled } from 'styled-components'
-import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
+import { BridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { EstimatedTime } from '../../Swap/Bridge/CrossChainConfirmSwapModal/components/EstimatedTime'
 import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
@@ -229,7 +229,7 @@ export const TradeSummary = memo(function TradeSummary({
           </SkeletonV2>
         </RowBetween>
       ) : null}
-      {priceBreakdown && !Array.isArray(priceBreakdown) && (
+      {priceBreakdown && (
         <RowBetween mt="10px">
           <RowFixed>
             <QuestionHelperV2
@@ -260,7 +260,7 @@ export const TradeSummary = memo(function TradeSummary({
             {isX ? (
               <Text color="primary">0%</Text>
             ) : (
-              <FormattedPriceImpact priceImpact={priceBreakdown.priceImpactWithoutFee} />
+              <FormattedPriceImpact priceImpact={getBridgeOrderPriceImpact(priceBreakdown)} />
             )}
           </SkeletonV2>
         </RowBetween>

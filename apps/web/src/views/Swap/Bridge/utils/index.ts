@@ -1,9 +1,29 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
+import { Percent } from '@pancakeswap/swap-sdk-core'
 import { BridgeOrderWithCommands, isXOrder } from 'views/Swap/utils'
 import { computeTradePriceBreakdown, TradePriceBreakdown } from 'views/Swap/V3Swap/utils/exchange'
 
 export interface BridgeOrderFee extends TradePriceBreakdown {
   type: OrderType
+}
+
+export function getBridgeOrderPriceImpact(
+  priceBreakdown?: BridgeOrderFee[] | TradePriceBreakdown,
+): Percent | null | undefined {
+  return Array.isArray(priceBreakdown)
+    ? // find the highest priceImpactWithoutFee
+      priceBreakdown
+        .filter((p) => !p || p.type !== OrderType.PCS_BRIDGE)
+        .reduce((highest, current) => {
+          if (
+            !highest ||
+            (highest && current.priceImpactWithoutFee && current.priceImpactWithoutFee.greaterThan(highest))
+          ) {
+            return current.priceImpactWithoutFee
+          }
+          return highest
+        }, priceBreakdown[0]?.priceImpactWithoutFee)
+    : priceBreakdown?.priceImpactWithoutFee
 }
 
 export function computeBridgeOrderFee(order: BridgeOrderWithCommands): BridgeOrderFee | BridgeOrderFee[] {
