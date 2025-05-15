@@ -324,29 +324,25 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           const destinationTokenMapWithoutUrls = mapWithoutUrls(tokenMap, quoteCurrency.chainId)
 
           // Get all supported bridge origin tokens from the available routes
-          const supportedOriginTokens: Currency[] = Array.from(
-            new Set(
-              crossChainRoutes
-                .map((route) => {
-                  const tokenInfo = originTokenMapWithoutUrls[route.originToken]
-                  return tokenInfo ? convertTokenToCurrency(tokenInfo) : null
-                })
-                .filter((token): token is Currency => token !== null)
-                .map((token) => token.wrapped.address),
-            ),
-          )
-            .map((address) => {
-              const tokenInfo = originTokenMapWithoutUrls[address]
-              return tokenInfo ? convertTokenToCurrency(tokenInfo) : null
-            })
-            .filter((token): token is Currency => token !== null)
+          const supportedOriginBridgeCurrencies: Currency[] = crossChainRoutes.reduce((uniqueTokens, route) => {
+            const tokenInfo = originTokenMapWithoutUrls[route.originToken]
+            if (!tokenInfo) return uniqueTokens
+
+            const token = convertTokenToCurrency(tokenInfo)
+            if (!token) return uniqueTokens
+
+            if (!uniqueTokens.some((t) => t.wrapped.address === token.wrapped.address)) {
+              uniqueTokens.push(token)
+            }
+            return uniqueTokens
+          }, [] as Currency[])
 
           // 2. find swap quotes from base currency to supported origin tokens and get bridge quotes
-          const swapAndBridgePromises = supportedOriginTokens.map(async (originToken) => {
+          const swapAndBridgePromises = supportedOriginBridgeCurrencies.map(async (originBridgeCurrency) => {
             // Create a modified option for the swap quote to get from base currency to bridge origin token
             const swapOption: QuoteQuery = {
               ..._option,
-              currency: originToken,
+              currency: originBridgeCurrency,
               hash: '',
               placeholderHash: '',
             }
@@ -355,85 +351,45 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
             const quoteQuery = createQuoteQuery(swapOption)
             const swapOrder = get(bestQuoteAtom(quoteQuery))
 
-            if (!swapOrder.data || !swapOrder.data.trade.outputAmount.greaterThan(0)) {
+            if (!swapOrder.data?.trade.outputAmount.greaterThan(0)) {
               return null
             }
 
-            // Find bridge routes that have this origin token
-            const bridgeRoutesForOrigin = crossChainRoutes.filter(
-              (route) => route.originToken === originToken.wrapped.address,
-            )
+            const originBridgeCurrencyAmount = swapOrder.data.trade.outputAmount
 
-            // Get the supported destination tokens for this origin token
-            const supportedDestinationTokens: Currency[] = bridgeRoutesForOrigin
-              .map((route) => {
-                const tokenInfo = destinationTokenMapWithoutUrls[route.destinationToken]
-                return tokenInfo ? convertTokenToCurrency(tokenInfo) : null
-              })
-              .filter((token): token is Currency => token !== null)
+            const destinationBridgeTokenAddress = crossChainRoutes.find(
+              (route) => route.originToken === originBridgeCurrency.wrapped.address,
+            )?.destinationToken
 
-            // For each destination token, get a bridge quote from origin token
-            const bridgeQuotes = await Promise.all(
-              supportedDestinationTokens.map(async (destinationToken) => {
-                const originBridgeToken = swapOrder.data!.trade.outputAmount
+            // safely use destinationBridgeTokenAddress! because we already checked if the bridge route is supported
+            const destinationBridgeToken = destinationTokenMapWithoutUrls[destinationBridgeTokenAddress!]
 
-                if (originBridgeToken.currency.chainId === destinationToken.chainId) {
-                  return null
-                }
+            const destinationBridgeCurrency = convertTokenToCurrency(destinationBridgeToken)
 
-                // check there is route from origin token to destination token in crossChainRoutes
-                const isRouteSupported = crossChainRoutes.some(
-                  (route) =>
-                    route.originToken === originBridgeToken.currency.wrapped.address &&
-                    route.destinationToken === destinationToken.wrapped.address,
-                )
-
-                if (!isRouteSupported) {
-                  return null
-                }
-
-                // We already checked that swapOrder.data and swapOrder.data.trade.outputAmount exist above
-                const bridgeQuote = await get(
-                  getBridgeQuote({
-                    // Using non-null assertion as we've checked this above
-                    inputAmount: originBridgeToken,
-                    outputCurrency: destinationToken,
-                    nonce: _option.nonce,
-                  }),
-                )
-
-                return {
-                  originToken,
-                  destinationToken,
-                  swapOrder: swapOrder.data!,
-                  bridgeQuote,
-                }
+            const bridgeQuote = await get(
+              getBridgeQuote({
+                // Using non-null assertion as we've checked this above
+                inputAmount: originBridgeCurrencyAmount,
+                outputCurrency: destinationBridgeCurrency,
+                nonce: _option.nonce,
               }),
             )
 
-            return bridgeQuotes.filter(Boolean)
+            return {
+              originToken: originBridgeCurrency,
+              destinationToken: destinationBridgeCurrency,
+              swapOrder: swapOrder.data,
+              bridgeQuote,
+            }
           })
 
-          // Resolve all promises and flatten the array
-          const allSwapAndBridgeQuotes = (await Promise.all(swapAndBridgePromises))
-            .filter(Boolean)
-            .flat()
-            .filter(Boolean)
+          // Resolve all promises. This action might be expensive.
+          const allSwapAndBridgeQuotes = (await Promise.all(swapAndBridgePromises)).filter(Boolean)
 
           // 3. find swapDestinationQuotes from allSwapAndBridgeQuotes -> quoteCurrency
           const completePathPromises = allSwapAndBridgeQuotes
             .filter((quote): quote is NonNullable<typeof quote> => quote !== null)
             .map(async (swapAndBridgeQuote) => {
-              // Skip if the bridge destination is already the quote currency
-              if (swapAndBridgeQuote.destinationToken.wrapped.address === quoteCurrency.wrapped.address) {
-                // This is already a complete path (swap -> bridge -> no final swap needed)
-                return {
-                  ...swapAndBridgeQuote,
-                  finalSwapOrder: null,
-                  outputAmount: swapAndBridgeQuote.bridgeQuote.trade.outputAmount,
-                }
-              }
-
               // Create a swap query from the bridge destination token to the quote currency
               const finalSwapOption: QuoteQuery = {
                 ..._option,
