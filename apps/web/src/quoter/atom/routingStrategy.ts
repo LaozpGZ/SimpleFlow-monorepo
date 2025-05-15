@@ -78,7 +78,7 @@ interface TokenSpecificRoutingStrategy {
 
 export const getTokenRoutingConfig = async () => {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_CMS_CONFIG}/cms-config/tokens-routing-config.json`)
+    const response = await fetch(`${process.env.NEXT_PUBLIC_PROOF_API}/cms-config/tokens-routing-config.json`)
     if (!response.ok) {
       return {}
     }
