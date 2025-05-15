@@ -574,6 +574,7 @@
     "Wallet": "Wallet",
     "Transactions": "Transactions",
     "your_wallet": "Your Wallet",
+    "copied": "Copied",
     "connected_hint": {
       "portfolio_info": "Connect wallet to see your asset distribution.",
       "portfolio_idle": "Connect wallet to see your deposited assets.",
