@@ -1,9 +1,12 @@
+import { isMobile as isMobileDevice } from 'react-device-detect'
 import { styled } from 'styled-components'
 import { usePreloadImages, useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   AtomBox,
   Button,
+  ButtonMenu,
+  ButtonMenuItem,
   Column,
   Heading,
   Image,
@@ -16,11 +19,11 @@ import {
   Tab,
   TabMenu,
   Text,
+  useMatchBreakpoints,
   WarningIcon,
 } from '@pancakeswap/uikit'
 import { useAtom } from 'jotai'
-import { PropsWithChildren, Suspense, lazy, useMemo, useState } from 'react'
-import { isMobile } from 'react-device-detect'
+import { PropsWithChildren, Suspense, lazy, useCallback, useMemo, useState } from 'react'
 import {
   desktopWalletSelectionClass,
   modalWrapperClass,
@@ -51,20 +54,26 @@ const StyledTab = styled(Tab)`
 const TabContainer = ({ children, docLink, docText }: PropsWithChildren<{ docLink: string; docText: string }>) => {
   const [index, setIndex] = useState(0)
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
 
   return (
     <AtomBox position="relative" zIndex="modal" className={modalWrapperClass}>
-      <AtomBox position="absolute" style={{ top: '-48px', left: '10px' }}>
-        <TabMenu activeIndex={index} onItemClick={setIndex} gap="16px" isColorInverse isShowBorderBottom={false}>
-          <StyledTab>{t('Connect Wallet')}</StyledTab>
-          <StyledTab>{t('What’s a Web3 Wallet?')}</StyledTab>
-        </TabMenu>
-      </AtomBox>
+      {isMobile ? null : (
+        <AtomBox position="absolute" style={{ top: '-48px', left: '10px' }}>
+          <TabMenu activeIndex={index} onItemClick={setIndex} gap="16px" isColorInverse isShowBorderBottom={false}>
+            <StyledTab>{t('Connect Wallet')}</StyledTab>
+            <StyledTab>{t('What’s a Web3 Wallet?')}</StyledTab>
+          </TabMenu>
+        </AtomBox>
+      )}
       <AtomBox
         display="flex"
         position="relative"
         background="gradientCardHeader"
         borderRadius="card"
+        flexDirection={isMobile ? 'column' : 'row'}
+        px={isMobile ? '16px' : '0px'}
+        py={isMobile ? '24px' : '0px'}
         borderBottomRadius={{
           xs: '0',
           md: 'card',
@@ -72,6 +81,12 @@ const TabContainer = ({ children, docLink, docText }: PropsWithChildren<{ docLin
         zIndex="modal"
         width="100%"
       >
+        {isMobile ? (
+          <ButtonMenu scale="sm" mb="16px" fullWidth activeIndex={index} onItemClick={setIndex} variant="subtle">
+            <ButtonMenuItem>{t('Connect Wallet')}</ButtonMenuItem>
+            <ButtonMenuItem minWidth="57%">{t('What’s a Web3 Wallet?')}</ButtonMenuItem>
+          </ButtonMenu>
+        ) : null}
         {index === 0 && children}
         {index === 1 && (
           <Suspense>
@@ -90,32 +105,27 @@ function MobileModal<T>({
   topWallets,
   previouslyUsedWallets,
   connectWallet,
-  docLink,
-  docText,
 }: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
 }) {
-  const { t } = useTranslation()
-
   const [selected] = useSelectedWallet()
   const [error] = useAtom(errorAtom)
 
-  const installedWallets: WalletConfigV2<T>[] = wallets.filter((w) => w.installed)
-  const walletsToShow: WalletConfigV2<T>[] = wallets.filter((w) => {
-    if (installedWallets.length) {
-      return w.installed
-    }
-    return w.installed !== false || w.deepLink
-  })
+  const filterFn = useCallback((w: WalletConfigV2<T>) => {
+    return isMobileDevice
+      ? w.installed !== false || w.deepLink
+      : w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
+  }, [])
 
-  const topWalletsToShow: WalletConfigV2<T>[] = topWallets.filter((w) => w.installed !== false || w.deepLink)
-  const previouslyUsedWalletsToShow: WalletConfigV2<T>[] = previouslyUsedWallets.filter(
-    (w) => w.installed !== false || w.deepLink,
-  )
+  // const installedWallets: WalletConfigV2<T>[] = wallets.filter((w) => w.installed)
+  const walletsToShow: WalletConfigV2<T>[] = wallets.filter(filterFn)
+
+  const topWalletsToShow: WalletConfigV2<T>[] = topWallets.filter(filterFn)
+  const previouslyUsedWalletsToShow: WalletConfigV2<T>[] = previouslyUsedWallets.filter(filterFn)
 
   return (
-    <AtomBox width="100%">
+    <AtomBox width="100%" overflowX="hidden" overflowY="auto">
       {error ? (
         <AtomBox
           display="flex"
@@ -130,37 +140,19 @@ function MobileModal<T>({
             <ErrorMessage message={error} />
           </div>
         </AtomBox>
-      ) : (
-        <Text color="textSubtle" small p="24px">
-          {t(
-            'Start by connecting with one of the wallets below. Be sure to store your private keys or seed phrase securely. Never share them with anyone.',
-          )}
-        </Text>
-      )}
-      <AtomBox flex={1} py="16px" style={{ maxHeight: '230px' }} overflow="auto">
-        <WalletSelect
-          displayCount={MOBILE_DEFAULT_DISPLAY_COUNT}
-          wallets={walletsToShow}
-          topWallets={topWalletsToShow}
-          previouslyUsedWallets={previouslyUsedWalletsToShow}
-          onClick={(wallet) => {
-            connectWallet(wallet)
-            if (wallet.deepLink && wallet.installed === false) {
-              window.open(wallet.deepLink, '_blank', 'noopener noreferrer')
-            }
-          }}
-        />
-      </AtomBox>
-      <AtomBox p="24px" borderTop="1">
-        <AtomBox>
-          <Text textAlign="center" color="textSubtle" as="p" mb="24px">
-            {t('Haven’t got a crypto wallet yet?')}
-          </Text>
-        </AtomBox>
-        <Button as="a" href={docLink} variant="subtle" width="100%" external>
-          {docText}
-        </Button>
-      </AtomBox>
+      ) : null}
+      <WalletSelect
+        displayCount="all"
+        wallets={walletsToShow}
+        topWallets={topWalletsToShow}
+        previouslyUsedWallets={previouslyUsedWalletsToShow}
+        onClick={(wallet) => {
+          connectWallet(wallet)
+          if (wallet.deepLink && wallet.installed === false) {
+            window.open(wallet.deepLink, '_blank', 'noopener noreferrer')
+          }
+        }}
+      />
     </AtomBox>
   )
 }
@@ -212,7 +204,7 @@ function WalletSelect<T>({
               const Icon = wallet.icon
 
               return (
-                <AtomBox border="1" borderRadius="default" p="12px">
+                <AtomBox border="1" borderRadius="default" p="12px" style={{ maxWidth: '106px' }}>
                   <Button
                     key={wallet.id}
                     variant="text"
@@ -426,11 +418,11 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
     ...rest
   } = props
 
+  const { isMobile } = useMatchBreakpoints()
   const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
   const previouslyUsedWallets = useMemo(
     () =>
       previouslyUsedWalletsId
-        .slice(0, 3)
         .map((id) => wallets_.find((w) => w.id === id))
         .filter<WalletConfigV2<T>>((w): w is WalletConfigV2<T> => Boolean(w)),
     [wallets_, previouslyUsedWalletsId],
