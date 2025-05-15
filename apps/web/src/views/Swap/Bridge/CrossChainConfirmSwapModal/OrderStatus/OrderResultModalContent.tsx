@@ -63,18 +63,19 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   const orderInputCurrency = order?.trade.inputAmount.currency
   const orderOutputCurrency = order?.trade.outputAmount.currency
 
-  console.log('order chains and currency', {
-    input: {
-      chainId: orderInputCurrency?.chainId,
-      symbol: orderInputCurrency?.symbol,
-    },
-    output: {
-      chainId: orderOutputCurrency?.chainId,
-      symbol: orderOutputCurrency?.symbol,
-    },
-  })
-
   const { data: bridgeStatus } = useBridgeStatus(originChainId, txHash, metadata)
+
+  const outputAmount = useMemo(() => {
+    if (bridgeStatus?.status === BridgeStatus.SUCCESS) {
+      return bridgeStatus.outputCurrencyAmount
+    }
+    const minOutputAmount =
+      bridgeStatus?.outputCurrencyAmount?.currency &&
+      bridgeStatus?.minOutputAmount &&
+      CurrencyAmount.fromRawAmount(bridgeStatus.outputCurrencyAmount?.currency, bridgeStatus.minOutputAmount)
+
+    return minOutputAmount || bridgeStatus?.outputCurrencyAmount || order?.trade.outputAmount
+  }, [bridgeStatus, order?.trade.outputAmount])
 
   const resultTokenData = useMemo(() => {
     // Derive result token and amount information from last command (swap or bridge)
@@ -92,9 +93,19 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
     if (lastCommand && bridgeStatus) {
       switch (command) {
         case Command.SWAP: {
-          resultTokenAddress = lastCommand.metadata.outputToken
-          resultAmount = lastCommand.metadata.outputAmount
           resultTokenChainId = lastCommand.metadata.chainId
+          resultAmount = lastCommand.metadata.outputAmount
+
+          // If swap failed or partially succeeded, use input token as result token.
+          // TODO: Check if this case is only for Partial Success or for Failed as well
+          if (
+            lastCommand.status.code === BridgeStatus.PARTIAL_SUCCESS ||
+            lastCommand.status.code === BridgeStatus.FAILED
+          ) {
+            resultTokenAddress = lastCommand.metadata.inputToken
+          } else {
+            resultTokenAddress = lastCommand.metadata.outputToken
+          }
           break
         }
         case Command.BRIDGE: {
@@ -183,7 +194,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
         inputCurrency={bridgeStatus?.inputCurrencyAmount?.currency || orderInputCurrency}
         outputCurrency={bridgeStatus?.outputCurrencyAmount?.currency || orderOutputCurrency}
         inputAmount={formatAmount(bridgeStatus?.inputCurrencyAmount || order?.trade.inputAmount)}
-        outputAmount={formatAmount(bridgeStatus?.outputCurrencyAmount || order?.trade.outputAmount)}
+        outputAmount={formatAmount(outputAmount)}
         inputChainName={getFullChainNameById(bridgeStatus?.originChainId || orderInputCurrency?.chainId)}
         outputChainName={getFullChainNameById(bridgeStatus?.destinationChainId || orderOutputCurrency?.chainId)}
         overrideIcon={middleIcon}

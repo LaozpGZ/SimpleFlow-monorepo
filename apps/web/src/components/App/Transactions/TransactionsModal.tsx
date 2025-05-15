@@ -128,7 +128,7 @@ export function RecentTransactions() {
         ) : (
           <>
             {recentTransactionsHeading}
-            <Text>{t('No recent transactions')}</Text>
+            <Text mt="8px">{t('No recent transactions')}</Text>
           </>
         )
       ) : (
