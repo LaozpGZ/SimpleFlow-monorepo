@@ -28,9 +28,8 @@ const StyledChainLogo = styled(ChainLogo)`
 
   & > img {
     background-color: ${({ theme }) => theme.colors.invertedContrast};
-    border: ${({ width }) => (width && width > 16 ? "2px" : "0px")} solid
-      ${({ theme }) => theme.colors.invertedContrast};
-    border-radius: 100%;
+    border: 0px solid ${({ theme }) => theme.colors.invertedContrast};
+    border-radius: 35%;
   }
 `;
 

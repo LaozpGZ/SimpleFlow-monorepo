@@ -129,6 +129,9 @@ export default function SwapNetworkSelection({
               <AnimatedWrapperDiv $width={wrapperWidth}>
                 <ChainLogo
                   chainId={selectedChain.id}
+                  imageStyles={{
+                    borderRadius: '35%',
+                  }}
                   style={{
                     position: 'relative',
                     top: '2px',
@@ -147,7 +150,13 @@ export default function SwapNetworkSelection({
           return (
             <ButtonWrapper key={`buttonNetworkSelect#${chain.id}`} style={{ marginRight: `${CHAIN_BUTTON_MARGIN}px` }}>
               <BaseWrapper onClick={() => onSelect(chain.id)}>
-                <ChainLogo chainId={chain.id} px="4px" />
+                <ChainLogo
+                  imageStyles={{
+                    borderRadius: '35%',
+                  }}
+                  chainId={chain.id}
+                  px="4px"
+                />
               </BaseWrapper>
             </ButtonWrapper>
           )
@@ -169,7 +178,13 @@ export default function SwapNetworkSelection({
               {hiddenChains.map((chain) => {
                 return (
                   <ChainOption key={`buttonNetworkSelect#${chain.id}`} onClick={() => onSelect(chain.id)} pb="8px">
-                    <ChainLogo chainId={chain.id} px="4px" />
+                    <ChainLogo
+                      chainId={chain.id}
+                      px="4px"
+                      imageStyles={{
+                        borderRadius: '35%',
+                      }}
+                    />
                     <Text color="inherit" px="6px">
                       {chainNameConverter(chain.name)}
                     </Text>
