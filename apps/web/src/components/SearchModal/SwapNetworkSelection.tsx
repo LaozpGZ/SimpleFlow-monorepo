@@ -156,6 +156,7 @@ export default function SwapNetworkSelection({
                   }}
                   chainId={chain.id}
                   px="4px"
+                  pt="2px"
                 />
               </BaseWrapper>
             </ButtonWrapper>
@@ -184,6 +185,7 @@ export default function SwapNetworkSelection({
                       imageStyles={{
                         borderRadius: '35%',
                       }}
+                      pt="2px"
                     />
                     <Text color="inherit" px="6px">
                       {chainNameConverter(chain.name)}

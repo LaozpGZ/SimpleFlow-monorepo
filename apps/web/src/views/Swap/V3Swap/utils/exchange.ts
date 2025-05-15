@@ -17,7 +17,7 @@ import { BIPS_BASE, INPUT_FRACTION_AFTER_FEE } from 'config/constants/exchange'
 import { Field } from 'state/swap/actions'
 import { basisPointsToPercent } from 'utils/exchange'
 import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
-import { InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
+import { BridgeOrderWithCommands, InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
 
 export type SlippageAdjustedAmounts = {
   [field in Field]?: CurrencyAmount<Currency> | null
@@ -33,13 +33,6 @@ export function computeSlippageAdjustedAmounts(
   order: InterfaceOrder | undefined | null,
   allowedSlippage: number,
 ): SlippageAdjustedAmounts {
-  if (isBridgeOrder(order)) {
-    return {
-      [Field.INPUT]: order.trade.inputAmount,
-      [Field.OUTPUT]: order.trade.outputAmount,
-    }
-  }
-
   if (order?.type === OrderType.DUTCH_LIMIT) {
     return {
       [Field.INPUT]: order.trade.maximumAmountIn,
@@ -47,13 +40,30 @@ export function computeSlippageAdjustedAmounts(
     }
   }
 
-  const pct = basisPointsToPercent(allowedSlippage)
   const trade = order?.trade
+
+  if (!trade) {
+    return {
+      [Field.INPUT]: undefined,
+      [Field.OUTPUT]: undefined,
+    }
+  }
+
+  const isBridgeOnly = order && isBridgeOrder(order) && (order as BridgeOrderWithCommands)?.commands?.length === 1
+
+  if (isBridgeOnly) {
+    return {
+      [Field.INPUT]: order.trade.inputAmount,
+      [Field.OUTPUT]: order.trade.outputAmount,
+    }
+  }
+
+  const pct = basisPointsToPercent(allowedSlippage)
 
   // For regular SmartRouterTrade
   return {
-    [Field.INPUT]: order?.trade && SmartRouter.maximumAmountIn(order.trade, pct),
-    [Field.OUTPUT]: order?.trade && SmartRouter.minimumAmountOut(order.trade, pct),
+    [Field.INPUT]: trade && SmartRouter.maximumAmountIn(trade, pct),
+    [Field.OUTPUT]: trade && SmartRouter.minimumAmountOut(trade, pct),
   }
 }
 
