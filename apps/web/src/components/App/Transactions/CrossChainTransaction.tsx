@@ -19,6 +19,7 @@ import { multiChainName, multiChainShortName } from 'state/info/constant'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { OrderResultModalContent } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
 import { BridgeStatus, UserBridgeOrder } from 'views/Swap/Bridge/types'
+import { getBridgeTitle } from 'views/Swap/Bridge/utils/bridgeTitle'
 
 const StyledChainLogo = styled(ChainLogo)`
   width: 22px;
@@ -55,6 +56,8 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
   const outputToken = useCurrencyByChainId(order.outputToken, outputChainId)
 
   const inputAmount = inputToken && CurrencyAmount.fromRawAmount(inputToken, order.inputAmount)
+
+  // TODO: Show min output amount if txn is not successful. Waiting on BE to provide this.
   const outputAmount = outputToken && CurrencyAmount.fromRawAmount(outputToken, order.outputAmount)
 
   if (!inputToken || !outputToken || !inputChainId || !outputChainId) {
@@ -144,7 +147,7 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
       </TransactionListItemV2>
       <ModalV2 {...modal} closeOnOverlayClick>
         <MotionModal
-          title={t('Order details')}
+          title={getBridgeTitle(t, order.status)}
           headerBorderColor="transparent"
           bodyPadding="0 24px 24px"
           minWidth="400px"
@@ -156,6 +159,7 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
               originChainId: order.originChainId,
               order: null,
               metadata: {
+                status: order.status,
                 inputToken: order.inputToken,
                 outputToken: order.outputToken,
                 inputAmount: order.inputAmount,

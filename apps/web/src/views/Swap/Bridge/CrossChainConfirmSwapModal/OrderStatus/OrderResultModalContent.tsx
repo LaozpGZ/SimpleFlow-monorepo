@@ -39,7 +39,7 @@ const DisplayMessage = styled(FlexGap).attrs({ alignItems: 'center', gap: '8px' 
   background-color: ${({ theme, $status }) =>
     $status === BridgeStatus.SUCCESS ? theme.colors.primary10 : theme.colors.warning10};
   border: 1px solid
-    ${({ theme, $status }) => ($status === BridgeStatus.SUCCESS ? theme.colors.primary20 : theme.colors.warning10)};
+    ${({ theme, $status }) => ($status === BridgeStatus.SUCCESS ? theme.colors.primary20 : theme.colors.warning20)};
 
   transition: all 0.3s ease-out;
   overflow: hidden;
@@ -83,6 +83,10 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
     let resultTokenAddress: string | undefined
     let resultAmount: string | undefined
     let resultTokenChainId: number | undefined
+
+    // TODO: Don't check just last command, keep going forward if success and stop at command that fails or partially succeeds
+    // Even if fail case the upcoming steps will be sent with status BridgeStatus.
+    // Basically, check the last executed command and use the result token and amount from that command
 
     const lastCommand =
       bridgeStatus && bridgeStatus.data && bridgeStatus.data.length > 0
@@ -136,7 +140,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   }, [resultCurrency, resultTokenData.resultAmount])
 
   const middleIcon = useMemo(() => {
-    switch (bridgeStatus?.status) {
+    switch (bridgeStatus?.status || metadata?.status) {
       case BridgeStatus.PENDING:
         return (
           <IconContainer>
@@ -198,6 +202,11 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
         inputChainName={getFullChainNameById(bridgeStatus?.originChainId || orderInputCurrency?.chainId)}
         outputChainName={getFullChainNameById(bridgeStatus?.destinationChainId || orderOutputCurrency?.chainId)}
         overrideIcon={middleIcon}
+        textRightOpacity={
+          bridgeStatus?.status === BridgeStatus.FAILED || bridgeStatus?.status === BridgeStatus.PARTIAL_SUCCESS
+            ? 0.5
+            : 1
+        }
       />
       {bridgeStatus && bridgeStatus.data && bridgeStatus.data.length > 0 && (
         <OrderDetailsPanel mt="24px" overrideActiveOrderMetadata={bridgeMetadata} />

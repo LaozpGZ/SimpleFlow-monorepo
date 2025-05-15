@@ -137,6 +137,7 @@ export interface ActiveBridgeOrderMetadata {
 
   // Optional metadata to show in modals quickly
   metadata?: {
+    status: BridgeStatus
     inputToken: string
     outputToken: string
     inputAmount: string
@@ -154,7 +155,7 @@ export interface UserBridgeOrdersResponse {
 }
 
 export interface UserBridgeOrder {
-  status: string
+  status: BridgeStatus
   inputToken: string
   outputToken: string
   inputAmount: string
