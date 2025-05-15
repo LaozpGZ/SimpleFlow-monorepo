@@ -145,7 +145,7 @@ export const VeMainView = ({
             <br />
             <Text color="textSubtle" fontSize="14px">
               {t(
-                'Your voting power is determined by the number of veCAKE you have at the block detailed above. CAKE held in other places does NOT contribute to your voting power.',
+                'Your voting power is determined by the number of CAKE you have at the block detailed above. CAKE held in other places does NOT contribute to your voting power.',
               )}
             </Text>
             <br />
