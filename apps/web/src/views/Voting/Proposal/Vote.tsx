@@ -163,7 +163,7 @@ const VoteComponent: React.FC<React.PropsWithChildren<VoteProps>> = ({
                   </Message>
                 ) : notEnoughVeCake ? (
                   <Button m="auto" display="block" disabled>
-                    {t('Not enough veCAKE')}
+                    {t('Not enough CAKE')}
                   </Button>
                 ) : !isAbleToVote ? (
                   <Button m="auto" display="block" disabled>

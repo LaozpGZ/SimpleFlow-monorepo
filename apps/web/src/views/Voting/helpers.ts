@@ -61,8 +61,8 @@ type GetVotingPowerType = {
   lockedEndTime?: number
 }
 
-// Voting power for veCake holders
-type GetVeVotingPowerType = {
+// Voting power for CAKE holders
+type GetCakeVotingPowerType = {
   total: number
   voter: string
   cakeBalance: number
@@ -73,7 +73,7 @@ const nodeRealProvider = createPublicClient({
   chain: bsc,
 })
 
-export const getCakeVotingPower = async (account: Address, blockNumber?: bigint): Promise<GetVeVotingPowerType> => {
+export const getCakeVotingPower = async (account: Address, blockNumber?: bigint): Promise<GetCakeVotingPowerType> => {
   // Use erc20-balance-of strategy to get CAKE balance as voting power
   const scores = await getScores(PANCAKE_SPACE, STRATEGIES, NETWORK, [account], Number(blockNumber))
   const result = scores[0][account] || 0
