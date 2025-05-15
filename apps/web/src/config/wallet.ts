@@ -292,12 +292,15 @@ export const createWallets = <config extends Config = Config, context = unknown>
   chainId: number,
   connect: ConnectMutateAsync<config, context>,
 ) => {
-  const hasInjected = typeof window !== 'undefined' && !window.ethereum
   const config = walletsConfig({ chainId, connect })
-  return hasInjected && config.some((c) => c.installed && c.connectorId === ConnectorNames.Injected)
-    ? config // add injected icon if none of injected type wallets installed
+  const hasInjected = !!safeGetWindow()?.ethereum
+  const currentInjectedWithinConfig = config.some((c) => c.installed && c.connectorId === ConnectorNames.Injected)
+
+  return !hasInjected || currentInjectedWithinConfig
+    ? config
     : [
         ...config,
+        // add injected icon if none of injected type wallets installed
         {
           id: WalletIds.Injected,
           title: 'Injected',
