@@ -32,6 +32,7 @@ export const modalWrapperClass = style([
     xs: {
       width: '100%',
       marginBottom: 0,
+      maxHeight: '80vh',
     },
     md: {
       height: '690px',
@@ -59,7 +60,7 @@ export const desktopWalletSelectionClass = style(
 export const walletSelectWrapperClass = style(
   responsiveStyle({
     xs: {
-      gridTemplateColumns: '1fr 1fr 1fr 1fr',
+      gridTemplateColumns: '1fr 1fr 1fr',
       rowGap: '8px',
       columnGap: '8px',
     },
