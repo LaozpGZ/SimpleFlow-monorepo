@@ -125,6 +125,8 @@ export const useQuoterSync = () => {
 
   const quoteResult = useAtomValue(bestCrossChainQuoteAtom(quoteQuery))
 
+  console.log('quoteResult', quoteResult)
+
   useEffect(() => {
     let t = 0
     const interval = setInterval(() => {
