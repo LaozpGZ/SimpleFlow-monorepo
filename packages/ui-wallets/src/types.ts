@@ -54,5 +54,6 @@ export interface WalletModalV2Props<T = unknown> extends ModalV2Props {
   login: (connectorID: T) => Promise<ConnectData | undefined>
   docLink: string
   docText: string
+  mevDocLink: string
   onWalletConnectCallBack?: (walletTitle?: string, address?: string) => void
 }

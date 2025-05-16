@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { WalletModalV2 } from '@pancakeswap/ui-wallets'
-import { ConnectorNames, createWallets, getDocLink, TOP_WALLET_MAP } from 'config/wallet'
+import { ConnectorNames, createWallets, getDocLink, mevDocLink, TOP_WALLET_MAP } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
 
@@ -39,6 +39,7 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
 
   return (
     <WalletModalV2
+      mevDocLink={mevDocLink}
       docText={t('Learn How to Connect')}
       docLink={docLink}
       isOpen={isOpen}

@@ -3750,5 +3750,6 @@
   "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.": "Adding liquidity to a low TVL pool carries higher risk of losses from price fluctuations. Proceed with caution.",
   "Previously used": "Previously used",
   "Top Wallets": "Top Wallets",
-  "More Wallets": "More Wallets"
+  "More Wallets": "More Wallets",
+  "Wallets with MEV Protection": "Wallets with MEV Protection"
 }

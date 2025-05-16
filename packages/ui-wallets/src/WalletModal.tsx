@@ -69,7 +69,7 @@ const TabContainer = ({ children, docLink, docText }: PropsWithChildren<{ docLin
       <AtomBox
         display="flex"
         position="relative"
-        background="gradientCardHeader"
+        background={isMobile ? 'backgroundAlt' : 'gradientCardHeader'}
         borderRadius="card"
         flexDirection={isMobile ? 'column' : 'row'}
         px={isMobile ? '16px' : '0px'}
@@ -105,7 +105,8 @@ function MobileModal<T>({
   topWallets,
   previouslyUsedWallets,
   connectWallet,
-}: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText'> & {
+  mevDocLink,
+}: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText' | 'mevDocLink'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
 }) {
@@ -141,18 +142,21 @@ function MobileModal<T>({
           </div>
         </AtomBox>
       ) : null}
-      <WalletSelect
-        displayCount="all"
-        wallets={walletsToShow}
-        topWallets={topWalletsToShow}
-        previouslyUsedWallets={previouslyUsedWalletsToShow}
-        onClick={(wallet) => {
-          connectWallet(wallet)
-          if (wallet.deepLink && wallet.installed === false) {
-            window.open(wallet.deepLink, '_blank', 'noopener noreferrer')
-          }
-        }}
-      />
+      <AtomBox display="flex" flexDirection="column" gap="16px">
+        <WalletSelect
+          displayCount="all"
+          wallets={walletsToShow}
+          topWallets={topWalletsToShow}
+          previouslyUsedWallets={previouslyUsedWalletsToShow}
+          onClick={(wallet) => {
+            connectWallet(wallet)
+            if (wallet.deepLink && wallet.installed === false) {
+              window.open(wallet.deepLink, '_blank', 'noopener noreferrer')
+            }
+          }}
+        />
+        <MEVSection mevDocLink={mevDocLink} />
+      </AtomBox>
     </AtomBox>
   )
 }
@@ -292,6 +296,29 @@ function sortWallets<T>(wallets: WalletConfigV2<T>[], lastUsedWalletName: string
   return [foundLastUsedWallet, ...sorted.filter((w) => w.id !== foundLastUsedWallet.id)]
 }
 
+const MEVSection = ({ mevDocLink }: { mevDocLink: string }) => {
+  const { t } = useTranslation()
+  const { theme, isDark } = useTheme()
+  return (
+    <Row
+      color="textSubtle"
+      fontSize="12px"
+      gap="4px"
+      width="100%"
+      padding="8px"
+      justifyContent="center"
+      alignItems="center"
+      style={{ borderRadius: '16px', background: isDark ? '#18171A' : theme.colors.background }}
+    >
+      <ShieldCheckIcon width={17} height={17} color={theme.colors.positive60} />
+      {t('Wallets with MEV Protection')}
+      <LinkExternal showExternalIcon={false} color="primary60" href={mevDocLink} fontSize="12px" fontWeight="400">
+        {t('Learn More')}
+      </LinkExternal>
+    </Row>
+  )
+}
+
 function DesktopModal<T>({
   wallets: wallets_,
   topWallets: topWallets_,
@@ -300,7 +327,8 @@ function DesktopModal<T>({
   onWalletConnected,
   docLink,
   docText,
-}: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText'> & {
+  mevDocLink,
+}: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText' | 'mevDocLink'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
   onWalletConnected: (wallet: WalletConfigV2<T>, connectData?: ConnectData) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
@@ -376,6 +404,7 @@ function DesktopModal<T>({
           displayCount="all"
           onClick={onWalletSelected}
         />
+        <MEVSection mevDocLink={mevDocLink} />
       </AtomBox>
       <AtomBox
         flex={1}
@@ -416,6 +445,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
     topWallets: topWallets_,
     login,
     docLink,
+    mevDocLink,
     docText,
     onWalletConnectCallBack,
     ...rest
@@ -509,6 +539,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
           <TabContainer docLink={docLink} docText={docText}>
             {isMobile ? (
               <MobileModal
+                mevDocLink={mevDocLink}
                 connectWallet={connectWallet}
                 topWallets={topWallets}
                 previouslyUsedWallets={previouslyUsedWallets}
@@ -518,6 +549,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
               />
             ) : (
               <DesktopModal
+                mevDocLink={mevDocLink}
                 connectWallet={connectWallet}
                 onWalletConnected={handleWalletConnected}
                 topWallets={topWallets}
