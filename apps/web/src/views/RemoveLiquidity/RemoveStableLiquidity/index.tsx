@@ -50,6 +50,8 @@ import { useGasPrice } from 'state/user/hooks'
 import { logGTMClickRemoveLiquidityEvent } from 'utils/customGTMEventTracking'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { isUserRejected, logError } from 'utils/sentry'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useAccount } from 'wagmi'
 import { RemoveLiquidityLayout } from '..'
 import ConnectWalletButton from '../../../components/ConnectWalletButton'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
@@ -72,7 +74,8 @@ export default function RemoveStableLiquidity({ currencyA, currencyB, currencyId
   const native = useNativeCurrency()
   const { isMobile } = useMatchBreakpoints()
 
-  const { account, chainId, isWrongNetwork } = useActiveWeb3React()
+  const { chainId, isWrongNetwork } = useActiveChainId()
+  const { address: account } = useAccount()
   const { toastError } = useToast()
   const [tokenA, tokenB] = useMemo(() => [currencyA?.wrapped, currencyB?.wrapped], [currencyA, currencyB])
 
