@@ -5,6 +5,7 @@ import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { QuoteQuery } from 'quoter/quoter.types'
 import { getLogger } from 'utils/datadog'
+import { InterfaceOrder } from 'views/Swap/utils'
 
 type TrackKey = 'start' | 'pool_success' | 'pool_error' | 'success' | 'fail' | 'duration'
 type QuoteTrace = {
@@ -23,6 +24,8 @@ type QuoteTrace = {
   account?: `0x${string}`
   route?: string
   app: string
+  quote: string
+  error: string
 }
 
 const logger = getLogger('quote')
@@ -85,6 +88,24 @@ export class RouteTracker {
     return records as Record<TrackKey, number>
   }
 
+  public success(order: InterfaceOrder) {
+    this.track('success')
+    if (order.trade.tradeType === TradeType.EXACT_INPUT) {
+      this.trace.quote = order.trade.outputAmount.toExact()
+    } else {
+      this.trace.quote = order.trade.inputAmount.toExact()
+    }
+  }
+
+  public fail(ex: any) {
+    if (ex instanceof Error) {
+      this.trace.error = ex.message
+    } else {
+      this.trace.error = String(ex)
+    }
+    this.track('fail')
+  }
+
   public report() {
     const records = this.getRecords()
     this.trace.perf = records
@@ -123,7 +144,10 @@ export const quoteTraceAtom = atomFamily(
           duration: 0,
         },
         app: detectApp() || 'web',
+        quote: '',
+        error: '',
       }
+
       const tracker = new RouteTracker(trace, params.routeKey!, params.createTime)
       return {
         trace,
