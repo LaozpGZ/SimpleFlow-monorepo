@@ -55,7 +55,6 @@ async function fetchPoolsOnChain(params: GetInfinityCandidatePoolsParams) {
 const fetchPoolsApi = cacheByLRU(
   async (params: GetInfinityCandidatePoolsParams) => {
     const { currencyA, currencyB } = params
-    console.log('[pools] chainid', currencyA?.chainId)
     const chain = getChainName(currencyA!.chainId)
     const pools = await fetchInfinityPoolsFromApi(currencyA!, currencyB!, chain)
 
