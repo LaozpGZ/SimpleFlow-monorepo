@@ -14,7 +14,7 @@ import { parseCurrency } from '../../v3-router/utils/transformer'
 import { GetInfinityCandidatePoolsParams } from '../types'
 import { fillPoolsWithBins, getInfinityBinCandidatePoolsWithoutBins } from './getInfinityBinPools'
 import { fillClPoolsWithTicks, getInfinityClCandidatePoolsWithoutTicks } from './getInfinityClPools'
-import { getInfinityPoolTvl, getInfinityTvlReference, InfinityPoolTvlReferenceMap } from './getPoolTvl'
+import { getInfinityPoolTvl, getInfinityTvlReference } from './getPoolTvl'
 
 export const getInfinityCandidatePools = async (params: GetInfinityCandidatePoolsParams) => {
   const pools = await getInfinityCandidatePoolsLite(params)
@@ -42,27 +42,37 @@ async function fetchPoolsOnChain(params: GetInfinityCandidatePoolsParams) {
     getInfinityBinCandidatePoolsWithoutBins(params),
     getInfinityTvlReference(params),
   ])
-  return [clPools, binPools, tvlMap] as [InfinityClPool[], InfinityBinPool[], InfinityPoolTvlReferenceMap]
+  const pools = [...clPools, ...binPools]
+  const poolsWithTvl: InfinityPoolWithTvl[] = pools.map((pool) => {
+    return {
+      ...pool,
+      tvlUSD: getInfinityPoolTvl(tvlMap, pool.id),
+    } as InfinityPoolWithTvl
+  })
+  return poolsWithTvl
 }
 
 const fetchPoolsApi = cacheByLRU(
   async (params: GetInfinityCandidatePoolsParams) => {
     const { currencyA, currencyB } = params
+    console.log('[pools] chainid', currencyA?.chainId)
     const chain = getChainName(currencyA!.chainId)
-    const [pools, tvlMap] = await Promise.all([
-      fetchInfinityPoolsFromApi(currencyA!, currencyB!, chain),
-      getInfinityTvlReference(params),
-    ])
-    const clPools = pools.filter((pool) => pool.type === PoolType.InfinityCL) as InfinityClPool[]
-    const binPools = pools.filter((pool) => pool.type === PoolType.InfinityBIN) as InfinityBinPool[]
-    return [clPools, binPools, tvlMap] as [InfinityClPool[], InfinityBinPool[], InfinityPoolTvlReferenceMap]
+    const pools = await fetchInfinityPoolsFromApi(currencyA!, currencyB!, chain)
+
+    return pools as InfinityPoolWithTvl[]
   },
   {
     ttl: 5_000,
     key: (args) => {
       const params = args[0]
       const chainId = params.currencyA?.chainId
-      return [chainId, getCurrencyAddress(params.currencyA!), getCurrencyAddress(params.currencyB!)]
+      return [
+        chainId,
+        getCurrencyAddress(params.currencyA!),
+        getCurrencyAddress(params.currencyB!),
+        params.currencyA?.chainId,
+        params.currencyB?.chainId,
+      ]
     },
   },
 )
@@ -80,15 +90,8 @@ async function fetchPools(params: GetInfinityCandidatePoolsParams) {
 export const getInfinityCandidatePoolsLite = async (
   params: GetInfinityCandidatePoolsParams,
 ): Promise<(InfinityClPool | InfinityBinPool)[]> => {
-  const [clPools, binPools, tvlMap] = await fetchPools(params)
-  const pools = [...clPools, ...binPools]
-  const poolsWithTvl: InfinityPoolWithTvl[] = pools.map((pool) => {
-    return {
-      ...pool,
-      tvlUSD: getInfinityPoolTvl(tvlMap, pool.id),
-    } as InfinityPoolWithTvl
-  })
-  const filtered = infinityPoolTvlSelector(params.currencyA, params.currencyB, poolsWithTvl)
+  const pools = await fetchPools(params)
+  const filtered = infinityPoolTvlSelector(params.currencyA, params.currencyB, pools)
   return filtered as (InfinityClPool | InfinityBinPool)[]
 }
 
