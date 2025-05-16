@@ -16,7 +16,7 @@ export class PoolHashHelper {
 
     // For cross-chain quotes, we don't sort the currencies
     const sorted = isCrossChain ? list : sortCurrencies(list)
-    const str = sorted.map((currency) => getCurrencyAddress(currency)).join(',')
+    const str = sorted.map((currency) => `${getCurrencyAddress(currency)}_${currency.chainId}`).join(',')
     const hash = keccak256(`0x${str}`)
     return hash
   }
@@ -29,7 +29,7 @@ export class PoolHashHelper {
     if (b && !isEqualCurrency(a, b)) {
       list.push(b)
     }
-    const str = list.map((currency) => getCurrencyAddress(currency)).join(',')
+    const str = list.map((currency) => `${getCurrencyAddress(currency)}_${currency.chainId}`).join(',')
     const hash = keccak256(`0x${str}`)
     return hash
   }
@@ -88,11 +88,15 @@ export const isEqualCurrency = (a: Currency | undefined, b: Currency | undefined
   if (!a || !b) {
     return false
   }
-  return getCurrencyAddress(a) === getCurrencyAddress(b)
+  return getCurrencyAddress(a) === getCurrencyAddress(b) && a.chainId === b.chainId
 }
 
 export const isEqualQuoteQuery = (a: QuoteQuery, b: QuoteQuery) => {
-  return a.hash === b.hash
+  return (
+    a.hash === b.hash &&
+    PoolHashHelper.hashCurrencies(a.baseCurrency || undefined, a.currency || undefined) ===
+      PoolHashHelper.hashCurrencies(b.baseCurrency || undefined, b.currency || undefined)
+  )
 }
 
 export const isEqualPoolQuery = (a: PoolQuery, b: PoolQuery) => {

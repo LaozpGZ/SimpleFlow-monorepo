@@ -13,7 +13,7 @@ import { logGTMBridgeQuoteQueryEvent } from 'utils/customGTMEventTracking'
 import { getBridgeAvailableRoutes, getMetadata, getTokenAddress } from 'views/Swap/Bridge/api'
 import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
 import { errorLoadable, valueLoadable } from './atomWithLoadable'
-import { bestQuoteAtom } from './bestQuoteAtom'
+import { bestQuoteWithoutPlaceHolderAtom } from './bestQuoteAtom'
 import { placeholderAtom } from './placeholderAtom'
 
 // Define a type for our complete path
@@ -125,7 +125,7 @@ export const getBridgeQuote = atomFamily(
     a.nonce === b.nonce,
 )
 
-export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
+export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: QuoteQuery) => {
   return atom(async (get) => {
     const isCrossChain =
       _option.baseCurrency && _option.currency && _option.baseCurrency?.chainId !== _option.currency?.chainId
@@ -215,7 +215,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           const quoteQuery = createQuoteQuery(swapOption)
 
           // Get the swap quote using the bridge output amount
-          const swapOrder = await get(bestQuoteAtom(quoteQuery))
+          const swapOrder = await get(bestQuoteWithoutPlaceHolderAtom(quoteQuery))
 
           if (swapOrder.data?.trade?.outputAmount?.greaterThan(0)) {
             // The final combined quote
@@ -274,7 +274,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           const quoteQuery = createQuoteQuery(swapOption)
 
           // Get the swap quote from base currency to bridge origin currency
-          const swapOrder = await get(bestQuoteAtom(quoteQuery))
+          const swapOrder = await get(bestQuoteWithoutPlaceHolderAtom(quoteQuery))
 
           if (swapOrder?.data?.trade?.outputAmount?.greaterThan(0)) {
             // Use the swap output amount as the bridge input amount
@@ -349,7 +349,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
 
             // Get the swap quote from base currency to origin token
             const quoteQuery = createQuoteQuery(swapOption)
-            const swapOrder = get(bestQuoteAtom(quoteQuery))
+            const swapOrder = get(bestQuoteWithoutPlaceHolderAtom(quoteQuery))
 
             if (!swapOrder.data?.trade.outputAmount.greaterThan(0)) {
               return null
@@ -402,7 +402,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
               const quoteQuery = createQuoteQuery(finalSwapOption)
 
               // Get the swap quote from bridge destination to quote currency
-              const finalSwapOrder = get(bestQuoteAtom(quoteQuery))
+              const finalSwapOrder = get(bestQuoteWithoutPlaceHolderAtom(quoteQuery))
 
               if (!finalSwapOrder.data?.trade?.outputAmount?.greaterThan(0)) {
                 return null
@@ -481,23 +481,24 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
         }
 
         const result = valueLoadable<InterfaceOrder | undefined>(quote)
+        return result
 
-        if (!result.data?.trade && _option.placeholderHash) {
-          const placeHolder = get(placeholderAtom(_option.placeholderHash))
-          return {
-            ...result,
-            data: placeHolder,
-            hash: _option.hash,
-            placeholderHash: `${_option.placeholderHash}`,
-            loading: !placeHolder,
-          }
-        }
+        // if (!result.data?.trade && _option.placeholderHash) {
+        //   const placeHolder = get(placeholderAtom(_option.placeholderHash))
+        //   return {
+        //     ...result,
+        //     data: placeHolder,
+        //     hash: _option.hash,
+        //     placeholderHash: `${_option.placeholderHash}`,
+        //     loading: !placeHolder,
+        //   }
+        // }
 
-        return {
-          ...result,
-          hash: _option.hash,
-          placeholderHash: _option.placeholderHash,
-        }
+        // return {
+        //   ...result,
+        //   hash: _option.hash,
+        //   placeholderHash: _option.placeholderHash,
+        // }
       } catch (error) {
         console.error('Failed to get cross chain quote:', error)
         logGTMBridgeQuoteQueryEvent('fail', {
@@ -518,6 +519,23 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
       }
     }
 
-    return get(bestQuoteAtom(_option))
+    return get(bestQuoteWithoutPlaceHolderAtom(_option))
+  })
+}, isEqualQuoteQuery)
+
+export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
+  return atom(async (get) => {
+    const result = await get(bestCrossChainQuoteWithoutPlaceHolderAtom(_option))
+    if (!result.data?.trade && _option.placeholderHash) {
+      const placeHolder = get(placeholderAtom(_option.placeholderHash))
+      return {
+        ...result,
+        data: placeHolder,
+        hash: _option.hash,
+        placeholderHash: _option.placeholderHash,
+        loading: !placeHolder,
+      }
+    }
+    return { ...result, hash: _option.hash, placeholderHash: _option.placeholderHash }
   })
 }, isEqualQuoteQuery)
