@@ -418,12 +418,6 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       handleDismiss={handleDismiss}
     >
       <Box>{modalContent}</Box>
-      {/* {stepsVisible ? (
-        <ApproveStepFlow
-          confirmModalState={confirmModalState}
-          pendingModalSteps={pendingModalSteps.map((step) => step.step) as any}
-        />
-      ) : null} */}
     </ConfirmSwapModalV3Container>
   )
 }

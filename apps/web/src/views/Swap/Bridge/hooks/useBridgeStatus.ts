@@ -5,13 +5,15 @@ import { useMemo } from 'react'
 import { getBridgeStatus } from '../api'
 import { ActiveBridgeOrderMetadata, BridgeStatusData, BridgeStatusResponse } from '../types'
 
+export const bridgeStatusQueryKey = (chainId?: number, txHash?: string) => ['bridge-status', chainId, txHash]
+
 export const useBridgeStatus = (
   chainId?: number,
   txHash?: string,
   metadata?: ActiveBridgeOrderMetadata['metadata'],
 ) => {
   const queryResult = useQuery({
-    queryKey: ['bridge-status', chainId, txHash],
+    queryKey: bridgeStatusQueryKey(chainId, txHash),
     queryFn: () => (chainId && txHash ? getBridgeStatus(chainId, txHash) : undefined),
     refetchInterval: 1000,
     retry: 3,
