@@ -9,7 +9,14 @@ import { Currency, getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
 import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import { Address, checksumAddress } from 'viem'
 import { infinityPoolTvlSelector } from '../../v3-router/providers'
-import { BaseInfinityPool, InfinityBinPool, InfinityClPool, InfinityPoolWithTvl, PoolType } from '../../v3-router/types'
+import {
+  BaseInfinityPool,
+  InfinityBinPool,
+  InfinityClPool,
+  InfinityPoolWithTvl,
+  PoolType,
+  WithTvl,
+} from '../../v3-router/types'
 import { parseCurrency } from '../../v3-router/utils/transformer'
 import { GetInfinityCandidatePoolsParams } from '../types'
 import { fillPoolsWithBins, getInfinityBinCandidatePoolsWithoutBins } from './getInfinityBinPools'
@@ -149,15 +156,23 @@ function getValidToken(chainId: ChainId, token: RemoteToken): Currency {
     throw ex
   }
 }
+
+function normalizeTvlUSD(tvlUSD: string) {
+  const val = Number(tvlUSD)
+  return Number.isFinite(val) ? Math.ceil(val).toString() : '0'
+}
+
 function parsePool(remote: RemotePoolCL | RemotePoolBIN, chainId: keyof typeof hooksList) {
-  const { id, protocol, feeTier, protocolFee, hookAddress } = remote
+  const { id, protocol, feeTier, protocolFee, hookAddress, tvlUSD } = remote
 
   const type = protocol === 'infinityCl' ? PoolType.InfinityCL : PoolType.InfinityBIN
   const relatedHook = hooksList[chainId].find((hook) => hook.address.toLowerCase() === hookAddress?.toLocaleLowerCase())
 
   const currency0 = getValidToken(chainId, remote.token0)
   const currency1 = getValidToken(chainId, remote.token1)
-  const pool: BaseInfinityPool = {
+  const bnTvlUsd = BigInt(normalizeTvlUSD(tvlUSD))
+
+  const pool: BaseInfinityPool & WithTvl = {
     id: checksumAddress(id),
     type,
     fee: feeTier,
@@ -168,6 +183,7 @@ function parsePool(remote: RemotePoolCL | RemotePoolBIN, chainId: keyof typeof h
       type === PoolType.InfinityCL ? INFI_CL_POOL_MANAGER_ADDRESSES[chainId] : INFI_BIN_POOL_MANAGER_ADDRESSES[chainId],
     currency0,
     currency1,
+    tvlUSD: bnTvlUsd,
   }
 
   if (pool.type === PoolType.InfinityCL) {
