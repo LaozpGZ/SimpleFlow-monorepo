@@ -18,8 +18,7 @@ const ChartWithPriceHeader = dynamic(() => import('components/Chart/ChartWithPri
 const Wrapper = styled(Box)`
   width: 100%;
   ${({ theme }) => theme.mediaQueries.md} {
-    min-width: 328px;
-    max-width: 480px;
+    min-width: 488px;
   }
 `
 
@@ -60,6 +59,7 @@ const InfinitySwapInner = () => {
             theme="Dark"
           />
         )}
+
         {!isDesktop && isChartDisplayed && (
           <BottomDrawer
             content={
