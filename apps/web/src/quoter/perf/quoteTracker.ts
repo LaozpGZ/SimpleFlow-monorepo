@@ -1,3 +1,4 @@
+import { getIsMobile, isInBinance } from '@binance/w3w-utils'
 import { getCurrencyAddress, TradeType } from '@pancakeswap/swap-sdk-core'
 import { accountActiveChainAtom } from 'hooks/useAccountActiveChain'
 import { atom } from 'jotai'
@@ -21,9 +22,42 @@ type QuoteTrace = {
   chainId?: number
   account?: `0x${string}`
   route?: string
+  app: string
 }
 
 const logger = getLogger('quote')
+
+const APPS = [
+  { regex: /MetaMask/i, app: 'mm' },
+  { regex: /Trust Wallet/i, app: 'trust' },
+  { regex: /CoinbaseWallet/i, app: 'coinbase' },
+]
+
+function detectApp() {
+  if (isInBinance()) {
+    return 'bn'
+  }
+
+  const ua = navigator.userAgent
+
+  for (const { regex, app } of APPS) {
+    if (regex.test(ua)) {
+      return app
+    }
+  }
+
+  if (getIsMobile()) {
+    if (/Android/i.test(ua)) {
+      return 'android'
+    }
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+      return 'ios'
+    }
+    return 'mobile'
+  }
+
+  return 'web'
+}
 export class RouteTracker {
   private records: [TrackKey, number][] = []
 
@@ -88,6 +122,7 @@ export const quoteTraceAtom = atomFamily(
           fail: 0,
           duration: 0,
         },
+        app: detectApp() || 'web',
       }
       const tracker = new RouteTracker(trace, params.routeKey!, params.createTime)
       return {
