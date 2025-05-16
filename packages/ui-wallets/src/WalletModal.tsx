@@ -31,7 +31,7 @@ import {
   walletSelectWrapperClass,
 } from './WalletModal.css'
 import { errorAtom, lastUsedWalletNameAtom, previouslyUsedWalletsAtom, selectedWalletAtom } from './atom'
-import { LinkOfDevice, WalletConfigV2, WalletModalV2Props } from './types'
+import { ConnectData, LinkOfDevice, WalletConfigV2, WalletModalV2Props } from './types'
 
 const StepIntro = lazy(() => import('./components/Intro'))
 
@@ -297,10 +297,12 @@ function DesktopModal<T>({
   topWallets: topWallets_,
   previouslyUsedWallets,
   connectWallet,
+  onWalletConnected,
   docLink,
   docText,
 }: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
+  onWalletConnected: (wallet: WalletConfigV2<T>, connectData?: ConnectData) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
 }) {
   const wallets: WalletConfigV2<T>[] = useMemo(
@@ -332,9 +334,23 @@ function DesktopModal<T>({
   const [qrCode, setQrCode] = useState<string | undefined>(undefined)
   const { t } = useTranslation()
 
-  const connectToWallet = (wallet: WalletConfigV2<T>) => {
-    connectWallet(wallet)
-  }
+  const onWalletSelected = useCallback(
+    (w: WalletConfigV2<T>) => {
+      connectWallet(w)
+      setQrCode(undefined)
+      if (w.qrCode) {
+        w.qrCode(() => onWalletConnected(w)).then(
+          (uri) => {
+            setQrCode(uri)
+          },
+          () => {
+            // do nothing.
+          },
+        )
+      }
+    },
+    [connectWallet, onWalletConnected],
+  )
 
   return (
     <>
@@ -358,20 +374,7 @@ function DesktopModal<T>({
           topWallets={topWallets}
           previouslyUsedWallets={preWallets}
           displayCount="all"
-          onClick={(w) => {
-            connectToWallet(w)
-            setQrCode(undefined)
-            if (w.qrCode) {
-              w.qrCode().then(
-                (uri) => {
-                  setQrCode(uri)
-                },
-                () => {
-                  // do nothing.
-                },
-              )
-            }
-          }}
+          onClick={onWalletSelected}
         />
       </AtomBox>
       <AtomBox
@@ -394,7 +397,7 @@ function DesktopModal<T>({
                 {t('Opening')} {selected.title}
               </Heading>
               {error ? (
-                <ErrorContent message={error} onRetry={() => connectToWallet(selected)} />
+                <ErrorContent message={error} onRetry={() => connectWallet(selected)} />
               ) : (
                 <Text>{t('Please confirm in %wallet%', { wallet: selected.title })}</Text>
               )}
@@ -458,32 +461,42 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
 
   usePreloadImages(imageSources.slice(0, MOBILE_DEFAULT_DISPLAY_COUNT))
 
-  const connectWallet = (wallet: WalletConfigV2<T>) => {
-    setSelected(wallet)
-    setError('')
-    if (wallet.installed !== false) {
-      login(wallet.connectorId)
-        .then((v) => {
-          if (v) {
-            setLastUsedWallet(wallet.id)
-            try {
-              onWalletConnectCallBack?.(wallet.title, v.accounts?.[0])
-            } catch (e) {
-              console.error(wallet.title, e)
+  const handleWalletConnected = useCallback(
+    (wallet: WalletConfigV2<T>, connectData?: ConnectData) => {
+      setLastUsedWallet(wallet.id)
+      try {
+        onWalletConnectCallBack?.(wallet.title, connectData?.accounts?.[0])
+      } catch (e) {
+        console.error(wallet.title, e)
+      }
+    },
+    [onWalletConnectCallBack, setLastUsedWallet],
+  )
+
+  const connectWallet = useCallback(
+    (wallet: WalletConfigV2<T>) => {
+      setSelected(wallet)
+      setError('')
+      if (wallet.installed !== false) {
+        login(wallet.connectorId)
+          .then((v) => {
+            if (v) {
+              handleWalletConnected(wallet, v)
             }
-          }
-        })
-        .catch((err) => {
-          if (err instanceof WalletConnectorNotFoundError) {
-            setError(t('no provider found'))
-          } else if (err instanceof WalletSwitchChainError) {
-            setError(err.message)
-          } else {
-            setError(t('Error connecting, please authorize wallet to access.'))
-          }
-        })
-    }
-  }
+          })
+          .catch((err) => {
+            if (err instanceof WalletConnectorNotFoundError) {
+              setError(t('no provider found'))
+            } else if (err instanceof WalletSwitchChainError) {
+              setError(err.message)
+            } else {
+              setError(t('Error connecting, please authorize wallet to access.'))
+            }
+          })
+      }
+    },
+    [handleWalletConnected, login, setError, setSelected, t],
+  )
 
   return (
     <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
@@ -506,6 +519,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
             ) : (
               <DesktopModal
                 connectWallet={connectWallet}
+                onWalletConnected={handleWalletConnected}
                 topWallets={topWallets}
                 previouslyUsedWallets={previouslyUsedWallets}
                 wallets={wallets}

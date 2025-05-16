@@ -26,7 +26,7 @@ export enum ConnectorNames {
 
 const createQrCode =
   <config extends Config = Config, context = unknown>(chainId: number, connect: ConnectMutateAsync<config, context>) =>
-  async () => {
+  async (connectedCb?: () => void) => {
     const wagmiConfig = createWagmiConfig()
     const injectedConnector = wagmiConfig.connectors.find((connector) => connector.id === ConnectorNames.Injected)
     if (!injectedConnector) {
@@ -47,6 +47,9 @@ const createQrCode =
       provider.on('display_uri', (uri) => {
         resolve(uri)
       })
+      if (connectedCb) {
+        provider.on('connect', connectedCb)
+      }
       connect({ connector, chainId })
     })
   }
