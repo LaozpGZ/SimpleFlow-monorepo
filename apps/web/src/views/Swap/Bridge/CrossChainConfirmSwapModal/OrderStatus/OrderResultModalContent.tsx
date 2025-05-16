@@ -166,6 +166,31 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
     }
   }, [bridgeStatus?.status])
 
+  const displayInfo = useMemo(() => {
+    if (!bridgeStatus || !bridgeStatus.data) return undefined
+
+    let status = bridgeStatus?.status
+    let isRefundCase = false
+
+    // Refund case: If swap on origin chain is successful but bridging has failed
+    if (
+      bridgeStatus?.data.length >= 2 &&
+      bridgeStatus?.data[0].status.code === BridgeStatus.SUCCESS &&
+      bridgeStatus.data[0].command === Command.SWAP &&
+      bridgeStatus.data[1].command === Command.BRIDGE &&
+      (bridgeStatus?.data[1].status.code === BridgeStatus.FAILED ||
+        bridgeStatus?.data[1].status.code === BridgeStatus.PARTIAL_SUCCESS)
+    ) {
+      isRefundCase = true
+      status = BridgeStatus.PARTIAL_SUCCESS
+    }
+
+    return {
+      status,
+      isRefundCase,
+    }
+  }, [bridgeStatus])
+
   return (
     <Box {...props}>
       <Box
@@ -177,19 +202,25 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
           marginBottom: bridgeStatus && resultCurrencyAmount ? '24px' : '0',
         }}
       >
-        {bridgeStatus && resultCurrencyAmount && (
-          <DisplayMessage $status={bridgeStatus.status}>
-            {bridgeStatus.status === BridgeStatus.SUCCESS ? (
+        {displayInfo && bridgeStatus && resultCurrencyAmount && (
+          <DisplayMessage $status={displayInfo.status}>
+            {displayInfo.status === BridgeStatus.SUCCESS ? (
               <CheckmarkCircleIcon width="24px" color="primary60" />
             ) : (
               <ErrorIcon width="24px" color="warning60" />
             )}
-            <Text small>
-              {t('%amount% %symbol% has been sent to your wallet on %outputChain%', {
-                amount: resultCurrencyAmount.toSignificant(DISPLAY_PRECISION),
-                symbol: resultCurrencyAmount.currency.symbol,
-                outputChain: getFullChainNameById(bridgeStatus.destinationChainId),
-              })}
+            <Text small bold>
+              {displayInfo.isRefundCase
+                ? t('%amount% %symbol% is being refunded to your wallet on %targetChain%', {
+                    amount: resultCurrencyAmount.toSignificant(DISPLAY_PRECISION),
+                    symbol: resultCurrencyAmount.currency.symbol,
+                    targetChain: getFullChainNameById(resultCurrencyAmount.currency.chainId),
+                  })
+                : t('%amount% %symbol% has been sent to your wallet on %outputChain%', {
+                    amount: resultCurrencyAmount.toSignificant(DISPLAY_PRECISION),
+                    symbol: resultCurrencyAmount.currency.symbol,
+                    outputChain: getFullChainNameById(resultCurrencyAmount.currency.chainId),
+                  })}
             </Text>
           </DisplayMessage>
         )}
