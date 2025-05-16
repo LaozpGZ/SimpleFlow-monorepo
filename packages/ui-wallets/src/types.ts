@@ -38,12 +38,12 @@ export type WalletConfigV2<T = unknown> = {
   guide?: LinkOfDevice
   downloadLink?: LinkOfDevice
   mobileOnly?: boolean
-  qrCode?: () => Promise<string>
+  qrCode?: (cb?: () => void) => Promise<string>
   isNotExtension?: boolean
   MEVSupported?: boolean
 }
 
-type ConnectData = {
+export type ConnectData = {
   accounts: readonly [string, ...string[]]
   chainId: number
 }
