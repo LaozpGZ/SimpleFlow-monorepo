@@ -11,7 +11,7 @@ import { emptyLoadable, errorLoadable, Loadable, pendingLoadable, valueLoadable 
 import { placeholderAtom } from './placeholderAtom'
 import { getRoutingStrategy, StrategyRoute } from './routingStrategy'
 
-export const bestQuoteWithoutPlaceHolderAtom = atomFamily((_option: QuoteQuery) => {
+export const bestSameChainWithoutPlaceHolderAtom = atomFamily((_option: QuoteQuery) => {
   return atom((get) => {
     function executeRoutes(strategies: StrategyRoute[], option: QuoteQuery) {
       try {
@@ -94,9 +94,9 @@ export const bestQuoteWithoutPlaceHolderAtom = atomFamily((_option: QuoteQuery) 
   })
 }, isEqualQuoteQuery)
 
-export const bestQuoteAtom = atomFamily((_option: QuoteQuery) => {
+export const bestSameChainAtom = atomFamily((_option: QuoteQuery) => {
   return atom((get) => {
-    const result = get(bestQuoteWithoutPlaceHolderAtom(_option))
+    const result = get(bestSameChainWithoutPlaceHolderAtom(_option))
     if (!result.data?.trade && _option.placeholderHash) {
       const placeHolder = get(placeholderAtom(_option.placeholderHash))
       return {

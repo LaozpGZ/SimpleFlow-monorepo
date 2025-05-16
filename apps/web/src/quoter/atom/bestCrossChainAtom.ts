@@ -13,7 +13,7 @@ import { logGTMBridgeQuoteQueryEvent } from 'utils/customGTMEventTracking'
 import { getBridgeAvailableRoutes, getMetadata, getTokenAddress } from 'views/Swap/Bridge/api'
 import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
 import { errorLoadable, valueLoadable } from './atomWithLoadable'
-import { bestQuoteWithoutPlaceHolderAtom } from './bestQuoteAtom'
+import { bestSameChainWithoutPlaceHolderAtom } from './bestSameChainAtom'
 import { placeholderAtom } from './placeholderAtom'
 
 // Define a type for our complete path
@@ -215,7 +215,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           const quoteQuery = createQuoteQuery(swapOption)
 
           // Get the swap quote using the bridge output amount
-          const swapOrder = await get(bestQuoteWithoutPlaceHolderAtom(quoteQuery))
+          const swapOrder = await get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
 
           if (swapOrder.data?.trade?.outputAmount?.greaterThan(0)) {
             // The final combined quote
@@ -274,7 +274,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           const quoteQuery = createQuoteQuery(swapOption)
 
           // Get the swap quote from base currency to bridge origin currency
-          const swapOrder = await get(bestQuoteWithoutPlaceHolderAtom(quoteQuery))
+          const swapOrder = await get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
 
           if (swapOrder?.data?.trade?.outputAmount?.greaterThan(0)) {
             // Use the swap output amount as the bridge input amount
@@ -349,7 +349,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
 
             // Get the swap quote from base currency to origin token
             const quoteQuery = createQuoteQuery(swapOption)
-            const swapOrder = get(bestQuoteWithoutPlaceHolderAtom(quoteQuery))
+            const swapOrder = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
 
             if (!swapOrder.data?.trade.outputAmount.greaterThan(0)) {
               return null
@@ -402,7 +402,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
               const quoteQuery = createQuoteQuery(finalSwapOption)
 
               // Get the swap quote from bridge destination to quote currency
-              const finalSwapOrder = get(bestQuoteWithoutPlaceHolderAtom(quoteQuery))
+              const finalSwapOrder = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
 
               if (!finalSwapOrder.data?.trade?.outputAmount?.greaterThan(0)) {
                 return null
@@ -519,7 +519,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
       }
     }
 
-    return get(bestQuoteWithoutPlaceHolderAtom(_option))
+    return get(bestSameChainWithoutPlaceHolderAtom(_option))
   })
 }, isEqualQuoteQuery)
 

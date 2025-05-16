@@ -26,7 +26,7 @@ import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useAtomValue } from 'jotai'
 import { LottieRefCurrentProps } from 'lottie-react'
 import dynamic from 'next/dynamic'
-import { bestQuoteAtom } from 'quoter/atom/bestQuoteAtom'
+import { bestSameChainAtom } from 'quoter/atom/bestSameChainAtom'
 import { useQuoteContext } from 'quoter/hook/QuoteContext'
 import { QuoteProvider } from 'quoter/QuoteProvider'
 import { createQuoteQuery } from 'quoter/utils/createQuoteQuery'
@@ -80,7 +80,7 @@ const useBestTrade = (fromToken?: string, toToken?: string, value?: string) => {
     blockNumber,
     routeKey: 'twap',
   })
-  const tradeResult = useAtomValue(bestQuoteAtom(quoteOption))
+  const tradeResult = useAtomValue(bestSameChainAtom(quoteOption))
   const { data } = tradeResult
 
   // TODO: cast type, fix later
