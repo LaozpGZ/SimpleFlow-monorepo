@@ -207,13 +207,8 @@ const config: (
         {
           label: t('Voting'),
           image: '/images/voting/voting-bunny.png',
-          items: [
-            {
-              label: t('Proposals'),
-              href: '/voting',
-              supportChainIds: SUPPORT_ONLY_BSC,
-            },
-          ].map((item) => addMenuItemSupported(item, chainId)),
+          href: '/voting',
+          supportChainIds: SUPPORT_ONLY_BSC,
         },
         {
           type: DropdownMenuItemType.DIVIDER,
