@@ -60,6 +60,7 @@ export const NetworkModal = ({ pageSupportedChains = SUPPORT_ONLY_BSC }: { pageS
     )
   }
 
+  // @ts-ignore
   if ((chain?.unsupported ?? false) || isPageNotSupported) {
     return (
       <ModalV2 isOpen closeOnOverlayClick={false}>
