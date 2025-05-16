@@ -59,7 +59,6 @@ import StyledInternalLink from '../../../components/Links'
 import Dots from '../../../components/Loader/Dots'
 import { CurrencyLogo } from '../../../components/Logo'
 import SettingsModal from '../../../components/Menu/GlobalSettings/SettingsModal'
-import useActiveWeb3React from '../../../hooks/useActiveWeb3React'
 import ConfirmLiquidityModal from '../../Swap/components/ConfirmRemoveLiquidityModal'
 import { useStableDerivedBurnInfo } from './hooks/useStableDerivedBurnInfo'
 
