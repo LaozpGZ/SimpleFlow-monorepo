@@ -17,7 +17,7 @@ import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHist
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import currencyId from 'utils/currencyId'
-import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
+import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
 import { useAccount } from 'wagmi'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
@@ -74,9 +74,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
   const { canSwitch, switchNetwork } = useSwitchNetwork()
 
-  const supportedBridgeChains = useBridgeAvailableChains({
-    originChainId: inputChainId,
-  })
+  const supportedBridgeChains = useBridgeAvailableRoutes()
 
   const handleCurrencySelect = useCallback(
     (
@@ -96,7 +94,11 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
       }
 
       if (isInput) {
-        const isOutputChainSupported = outputChainId && supportedBridgeChains.includes(outputChainId)
+        const isOutputChainSupported =
+          outputChainId &&
+          supportedBridgeChains.data?.some(
+            (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
+          )
 
         if (!isOutputChainSupported) {
           // if output chain is not supported, reset output currency
