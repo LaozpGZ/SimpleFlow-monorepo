@@ -9,6 +9,7 @@ import { useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { styled } from 'styled-components'
 import { chainNameConverter } from 'utils/chainNameConverter'
 import { chains as evmChains } from 'utils/wagmi'
+import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks'
 import { BaseWrapper, ButtonWrapper, RowWrapper } from './CommonBases'
 
 const NetworkMenuColumn = styled(Flex)`
@@ -50,9 +51,9 @@ const AnimatedWrapperDiv = styled.div<{ $width?: number }>`
 export default function SwapNetworkSelection({
   chainId,
   onSelect,
-  showTestnet,
+  isDependent,
 }: {
-  showTestnet?: boolean
+  isDependent?: boolean
   chainId?: ChainId
   onSelect: (chainId: ChainId) => void
 }) {
@@ -60,9 +61,27 @@ export default function SwapNetworkSelection({
 
   const usedChainId = chainId ?? activeChainId
 
+  const supportedBridgeChains = useBridgeAvailableChains({
+    originChainId: usedChainId,
+  })
+
   const { t } = useTranslation()
 
-  const selectedChain = useMemo(() => evmChains.find((chain) => chain.id === usedChainId), [usedChainId])
+  const supportedChains = useMemo(() => {
+    if (isDependent) {
+      return evmChains.filter((chain) => chain.id === usedChainId || supportedBridgeChains.includes(chain.id))
+    }
+
+    return evmChains.filter((chain) => {
+      if ('testnet' in chain && chain.testnet && chain.id !== ChainId.MONAD_TESTNET) {
+        return false
+      }
+
+      return true
+    })
+  }, [supportedBridgeChains, evmChains, usedChainId, isDependent])
+
+  const selectedChain = useMemo(() => supportedChains.find((chain) => chain.id === usedChainId), [usedChainId])
 
   const selectedChainRef = useRef<HTMLDivElement>(null)
   const selectedTextRef = useRef<HTMLDivElement>(null)
@@ -81,11 +100,8 @@ export default function SwapNetworkSelection({
   }, [selectedChain])
 
   const [_, shownChains, hiddenChains] = useMemo(() => {
-    const filtered = evmChains.filter((chain) => {
+    const filtered = supportedChains.filter((chain) => {
       if (chain.id === usedChainId) return false
-      if ('testnet' in chain && chain.testnet && chain.id !== ChainId.MONAD_TESTNET) {
-        return showTestnet
-      }
       return true
     })
 
@@ -113,7 +129,7 @@ export default function SwapNetworkSelection({
     })
 
     return [filtered, take(sortedFiltered, chainsToShow), drop(sortedFiltered, chainsToShow)]
-  }, [usedChainId, showTestnet, selectedChainWidth])
+  }, [usedChainId, selectedChainWidth])
 
   return (
     <AutoColumn gap="sm" style={{ maxWidth: `${CONTAINER_MAX_WIDTH}px` }}>

@@ -17,6 +17,7 @@ import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHist
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import currencyId from 'utils/currencyId'
+import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
 import { useAccount } from 'wagmi'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
@@ -73,6 +74,10 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
   const { canSwitch, switchNetwork } = useSwitchNetwork()
 
+  const supportedBridgeChains = useBridgeAvailableChains({
+    originChainId: inputChainId,
+  })
+
   const handleCurrencySelect = useCallback(
     (
       newCurrency: Currency,
@@ -90,6 +95,15 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
         switchNetwork(newCurrency.chainId)
       }
 
+      if (isInput) {
+        const isOutputChainSupported = outputChainId && supportedBridgeChains.includes(outputChainId)
+
+        if (!isOutputChainSupported) {
+          // if output chain is not supported, reset output currency
+          onCurrencySelection(Field.OUTPUT, undefined)
+        }
+      }
+
       const newCurrencyId = currencyId(newCurrency)
 
       // Output chain name
@@ -103,7 +117,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
         ...(chainOut && { chainOut }),
       })
     },
-    [onCurrencySelection, warningSwapHandler, canSwitch, switchNetwork],
+    [onCurrencySelection, warningSwapHandler, canSwitch, switchNetwork, outputChainId, supportedBridgeChains],
   )
   const handleInputSelect = useCallback(
     (newCurrency: Currency) =>

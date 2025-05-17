@@ -42,6 +42,7 @@ interface CurrencySearchProps {
   onDismiss?: () => void
   setSelectedChainId: (chainId: ChainId) => void
   selectedChainId?: ChainId
+  mode?: string
 }
 
 function useSearchInactiveTokenLists(search: string | undefined, minResults = 10): WrappedTokenInfo[] {
@@ -107,6 +108,7 @@ function CurrencySearch({
   headerTitle,
   setSelectedChainId,
   selectedChainId,
+  mode,
 }: CurrencySearchProps) {
   const { chainId: activeChainId } = useActiveChainId()
 
@@ -287,6 +289,7 @@ function CurrencySearch({
         <SwapNetworkSelection
           chainId={selectedChainId}
           onSelect={(currentChainId) => setSelectedChainId(currentChainId)}
+          isDependent={mode === 'swap-currency-output'}
         />
         {showCommonBases && (
           <CommonBases

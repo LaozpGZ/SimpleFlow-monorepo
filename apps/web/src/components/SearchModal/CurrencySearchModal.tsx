@@ -71,6 +71,7 @@ export interface CurrencySearchModalProps extends InjectedModalProps {
   showSearchHeader?: boolean
   showChainLogo?: boolean
   modalTitle?: React.ReactNode
+  mode?: string
 }
 
 export default function CurrencySearchModal({
@@ -86,6 +87,7 @@ export default function CurrencySearchModal({
   showSearchInput,
   showCurrencyInHeader = false,
   showSearchHeader,
+  mode,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.search)
   const [selectedChainId, setSelectedChainId] = useState<ChainId | undefined>(selectedCurrency?.chainId)
@@ -245,6 +247,7 @@ export default function CurrencySearchModal({
             showSearchHeader={showSearchHeader}
             headerTitle={modalTitle}
             onDismiss={onDismiss}
+            mode={mode}
             setSelectedChainId={setSelectedChainId}
             selectedChainId={selectedChainId}
           />
