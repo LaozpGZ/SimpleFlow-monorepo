@@ -14,6 +14,12 @@ export function useBridgeAvailableRoutes(params?: GetAvailableRoutesParams) {
 export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
   const { data } = useBridgeAvailableRoutes(params)
 
-  // only return chains array
-  return useMemo(() => (data ? [...new Set(data.map((route) => route.destinationChainId))] : []), [data])
+  // only return chains array,add origin chain id to the array
+  return useMemo(
+    () =>
+      data && params?.originChainId
+        ? [...new Set(data.map((route) => route.destinationChainId))].concat(params.originChainId)
+        : [],
+    [data, params?.originChainId],
+  )
 }
