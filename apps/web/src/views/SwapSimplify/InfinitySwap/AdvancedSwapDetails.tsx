@@ -8,6 +8,7 @@ import { memo, useMemo, useState } from 'react'
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { NumberDisplay, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
+import { LightGreyCard } from 'components/Card'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { currenciesUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
@@ -120,7 +121,7 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
         </RowBetween>
       }
       content={
-        <Box px="16px" py="8px" borderRadius="16px" bg="background" mt="4px">
+        <LightGreyCard mt="4px" padding="8px 16px">
           {/** display grouped fees */}
           {Object.values(groupedFees).map((fee, index) => (
             <RowBetween key={index}>
@@ -132,7 +133,7 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
               </Text>
             </RowBetween>
           ))}
-        </Box>
+        </LightGreyCard>
       }
     />
   )

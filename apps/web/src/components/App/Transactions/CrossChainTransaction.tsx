@@ -69,8 +69,12 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
 
   const inputAmount = inputToken && CurrencyAmount.fromRawAmount(inputToken, order.inputAmount)
 
-  // TODO: Show min output amount if txn is not successful. Waiting on BE to provide this.
-  const outputAmount = outputToken && CurrencyAmount.fromRawAmount(outputToken, order.outputAmount)
+  const outputAmount =
+    outputToken &&
+    CurrencyAmount.fromRawAmount(
+      outputToken,
+      order.status === BridgeStatus.SUCCESS ? order.outputAmount : order.minOutputAmount,
+    )
 
   const metadata: ActiveBridgeOrderMetadata['metadata'] = {
     status: order.status,

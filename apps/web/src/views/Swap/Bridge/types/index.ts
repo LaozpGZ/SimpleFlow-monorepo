@@ -160,6 +160,7 @@ export interface UserBridgeOrder {
   outputToken: string
   inputAmount: string
   outputAmount: string
+  minOutputAmount: string
   originChainId: number
   destinationChainId: number
   orderId: string
