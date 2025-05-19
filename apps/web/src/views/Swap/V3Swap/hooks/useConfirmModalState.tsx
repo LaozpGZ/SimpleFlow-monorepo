@@ -305,6 +305,8 @@ const useConfirmActions = (
         setConfirmState(ConfirmModalState.PERMITTING)
         try {
           if (isBridgeOrder(order)) {
+            console.log('permitStep')
+
             const permitSignatureResponse = await signPermit2()
 
             setPermit2Signature(permitSignatureResponse)
@@ -426,8 +428,6 @@ const useConfirmActions = (
     t,
   ])
 
-  const { chainId: activeChainId } = useActiveChainId()
-
   const approvalBridgeStep = useMemo(() => {
     return {
       step: ConfirmModalState.APPROVING_TOKEN,
@@ -451,9 +451,11 @@ const useConfirmActions = (
           // we use approvalData?.approval?.isRequired instead of requiresApproval from the hook
           // because we want to ensure the accuracy of the approval check response
           if (approvalData?.isApprovalRequired) {
-            const { permit2Address, data } = approvalData
+            const { tokenAddress, data } = approvalData
+
+            // NOTE: data will be approve(permit2Address, amount)
             const result = await sendTransactionAsync({
-              to: permit2Address,
+              to: tokenAddress,
               data,
             })
 
