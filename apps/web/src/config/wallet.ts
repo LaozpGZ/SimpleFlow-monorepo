@@ -296,8 +296,15 @@ export const createWallets = <config extends Config = Config, context = unknown>
   connect: ConnectMutateAsync<config, context>,
 ) => {
   const config = walletsConfig({ chainId, connect })
-  const hasInjected = !!safeGetWindow()?.ethereum
-  const currentInjectedWithinConfig = config.some((c) => c.installed && c.connectorId === ConnectorNames.Injected)
+  const ethereum = safeGetWindow()?.ethereum
+  const hasInjected = !!ethereum
+  const injectedMeta = Object.keys(ethereum).filter((i) => i.match(/^is\w+/))
+  const injectedIsMetamask = injectedMeta.length === 1 && ethereum.isMetaMask
+  const injectedIsTrust = ethereum.isTrust
+  const currentInjectedWithinConfig =
+    injectedIsMetamask ||
+    injectedIsTrust ||
+    config.some((c) => c.installed && ConnectorNames.Injected === c.connectorId)
 
   return !hasInjected || currentInjectedWithinConfig
     ? config
