@@ -132,7 +132,7 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
                 {fee.label}
               </Text>
               <Text fontSize="14px" textAlign="right">
-                {`${formatDollarAmount(fee.amount.toNumber())}`}
+                {`${formatDollarAmount(fee.amount.toNumber(), 3)}`}
               </Text>
             </RowBetween>
           ))}
