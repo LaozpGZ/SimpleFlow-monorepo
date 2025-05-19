@@ -113,11 +113,20 @@ function MobileModal<T>({
   const [selected] = useSelectedWallet()
   const [error] = useAtom(errorAtom)
 
-  const filterFn = useCallback((w: WalletConfigV2<T>) => {
-    return isMobileDevice
-      ? w.installed !== false || w.deepLink
-      : w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
-  }, [])
+  const installedWallets: WalletConfigV2<T>[] = useMemo(
+    () => [...wallets, ...topWallets, ...previouslyUsedWallets].filter((w) => w.installed),
+    [wallets, topWallets, previouslyUsedWallets],
+  )
+  const filterFn = useCallback(
+    (w: WalletConfigV2<T>) => {
+      return isMobileDevice
+        ? installedWallets.length
+          ? w.installed
+          : w.installed !== false || w.deepLink
+        : w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
+    },
+    [installedWallets.length],
+  )
 
   // const installedWallets: WalletConfigV2<T>[] = wallets.filter((w) => w.installed)
   const walletsToShow: WalletConfigV2<T>[] = wallets.filter(filterFn)
