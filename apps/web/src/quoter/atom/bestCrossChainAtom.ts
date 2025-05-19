@@ -1,6 +1,7 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { RouteType } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
+import { Loadable } from '@pancakeswap/utils/Loadable'
 import BigNumber from 'bignumber.js'
 import { convertTokenToCurrency, mapWithoutUrls } from 'hooks/Tokens'
 import { atom } from 'jotai'
@@ -12,7 +13,6 @@ import { combinedTokenMapFromActiveUrlsAtom } from 'state/lists/hooks'
 import { logGTMBridgeQuoteQueryEvent } from 'utils/customGTMEventTracking'
 import { getBridgeAvailableRoutes, getMetadata, getTokenAddress } from 'views/Swap/Bridge/api'
 import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
-import { errorLoadable, valueLoadable } from './atomWithLoadable'
 import { bestSameChainWithoutPlaceHolderAtom } from './bestSameChainAtom'
 import { placeholderAtom } from './placeholderAtom'
 
@@ -215,22 +215,22 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           const quoteQuery = createQuoteQuery(swapOption)
 
           // Get the swap quote using the bridge output amount
-          const swapOrder = await get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
+          const swapOrder = await get(bestSameChainWithoutPlaceHolderAtom(quoteQuery)).unwrapOr(undefined)
 
-          if (swapOrder.data?.trade?.outputAmount?.greaterThan(0)) {
+          if (swapOrder?.trade?.outputAmount?.greaterThan(0)) {
             // The final combined quote
             quote = {
               ...bridgeQuote,
               trade: {
                 ...bridgeQuote.trade,
-                outputAmount: swapOrder.data.trade.outputAmount,
+                outputAmount: swapOrder.trade.outputAmount,
                 // Create a custom mixed route array by manually mapping routes to ensure type compatibility
                 routes: [
                   // Add bridge routes
                   ...(bridgeQuote.trade.routes || []),
                   // Add swap routes with appropriate type casting for compatibility
-                  ...('routes' in swapOrder.data.trade
-                    ? (swapOrder.data.trade.routes || []).map((route) => ({
+                  ...('routes' in swapOrder.trade
+                    ? (swapOrder.trade.routes || []).map((route) => ({
                         ...route,
                         // Ensure the route has all required properties for type compatibility
                         type: route.type,
@@ -241,7 +241,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
                     : []),
                 ] as any, // Use type assertion as a last resort
               },
-              commands: [bridgeQuote, swapOrder.data],
+              commands: [bridgeQuote, swapOrder],
             }
           }
         } else if (isSwapToBridgeQuery) {
@@ -274,13 +274,13 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           const quoteQuery = createQuoteQuery(swapOption)
 
           // Get the swap quote from base currency to bridge origin currency
-          const swapOrder = await get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
+          const swapOrder = await get(bestSameChainWithoutPlaceHolderAtom(quoteQuery)).unwrapOr(undefined)
 
-          if (swapOrder?.data?.trade?.outputAmount?.greaterThan(0)) {
+          if (swapOrder?.trade?.outputAmount?.greaterThan(0)) {
             // Use the swap output amount as the bridge input amount
             const bridgeQuote = await get(
               getBridgeQuote({
-                inputAmount: swapOrder.data.trade.outputAmount,
+                inputAmount: swapOrder.trade.outputAmount,
                 outputCurrency: quoteCurrency,
                 nonce: _option.nonce,
               }),
@@ -293,13 +293,13 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
               bridgeFee: bridgeQuote.bridgeFee,
               expectedFillTimeSec: bridgeQuote.expectedFillTimeSec,
               trade: {
-                inputAmount: swapOrder.data.trade.inputAmount,
+                inputAmount: swapOrder.trade.inputAmount,
                 outputAmount: bridgeQuote.trade.outputAmount,
                 tradeType: TradeType.EXACT_INPUT,
                 routes: [
                   // Add swap routes with appropriate type casting for compatibility
-                  ...('routes' in swapOrder.data.trade
-                    ? (swapOrder.data.trade.routes || []).map((route) => ({
+                  ...('routes' in swapOrder.trade
+                    ? (swapOrder.trade.routes || []).map((route) => ({
                         ...route,
                         // Ensure the route has all required properties for type compatibility
                         type: route.type,
@@ -312,7 +312,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
                   ...(bridgeQuote.trade.routes || []),
                 ] as any, // Use type assertion as a last resort
               },
-              commands: [swapOrder.data, bridgeQuote],
+              commands: [swapOrder, bridgeQuote],
             }
           }
         } else if (isSwapToBridgeToSwapQuery) {
@@ -349,13 +349,13 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
 
             // Get the swap quote from base currency to origin token
             const quoteQuery = createQuoteQuery(swapOption)
-            const swapOrder = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
+            const swapOrder = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery)).unwrapOr(undefined)
 
-            if (!swapOrder.data?.trade.outputAmount.greaterThan(0)) {
+            if (!swapOrder?.trade.outputAmount.greaterThan(0)) {
               return null
             }
 
-            const originBridgeCurrencyAmount = swapOrder.data.trade.outputAmount
+            const originBridgeCurrencyAmount = swapOrder.trade.outputAmount
 
             const destinationBridgeTokenAddress = crossChainRoutes.find(
               (route) => route.originToken === originBridgeCurrency.wrapped.address,
@@ -378,7 +378,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
             return {
               originToken: originBridgeCurrency,
               destinationToken: destinationBridgeCurrency,
-              swapOrder: swapOrder.data,
+              swapOrder,
               bridgeQuote,
             }
           })
@@ -402,17 +402,17 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
               const quoteQuery = createQuoteQuery(finalSwapOption)
 
               // Get the swap quote from bridge destination to quote currency
-              const finalSwapOrder = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
+              const finalSwapOrder = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery)).unwrapOr(undefined)
 
-              if (!finalSwapOrder.data?.trade?.outputAmount?.greaterThan(0)) {
+              if (!finalSwapOrder?.trade?.outputAmount?.greaterThan(0)) {
                 return null
               }
 
               // Return the complete path with all three components
               return {
                 ...swapAndBridgeQuote,
-                finalSwapOrder: finalSwapOrder.data,
-                outputAmount: finalSwapOrder.data.trade.outputAmount,
+                finalSwapOrder,
+                outputAmount: finalSwapOrder.trade.outputAmount,
               }
             })
 
@@ -480,27 +480,10 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           }
         }
 
-        const result = valueLoadable<InterfaceOrder | undefined>(quote)
-        return result
-
-        // if (!result.data?.trade && _option.placeholderHash) {
-        //   const placeHolder = get(placeholderAtom(_option.placeholderHash))
-        //   return {
-        //     ...result,
-        //     data: placeHolder,
-        //     hash: _option.hash,
-        //     placeholderHash: `${_option.placeholderHash}`,
-        //     loading: !placeHolder,
-        //   }
-        // }
-
-        // return {
-        //   ...result,
-        //   hash: _option.hash,
-        //   placeholderHash: _option.placeholderHash,
-        // }
+        return quote ? Loadable.Just<InterfaceOrder>(quote) : Loadable.Nothing<InterfaceOrder>()
       } catch (error) {
         console.error('Failed to get cross chain quote:', error)
+
         logGTMBridgeQuoteQueryEvent('fail', {
           originChainId: _option.baseCurrency?.chainId,
           destinationChainId: _option.currency?.chainId,
@@ -508,14 +491,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           destinationToken: _option.currency?.symbol,
           amount: _option.amount?.toString(),
         })
-
-        return {
-          ...errorLoadable<InterfaceOrder | undefined>(error),
-          // QUESTION: should we add hash and placeholderHash here?
-          hash: _option.hash,
-          placeholderHash: _option.placeholderHash,
-          loading: false,
-        }
+        return Loadable.Fail<InterfaceOrder>(error)
       }
     }
 
@@ -526,16 +502,16 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
 export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
   return atom(async (get) => {
     const result = await get(bestCrossChainQuoteWithoutPlaceHolderAtom(_option))
-    if (!result.data?.trade && _option.placeholderHash) {
-      const placeHolder = get(placeholderAtom(_option.placeholderHash))
-      return {
-        ...result,
-        data: placeHolder,
-        hash: _option.hash,
-        placeholderHash: _option.placeholderHash,
-        loading: !placeHolder,
+
+    if (result.isPending()) {
+      const placeHolder = get(placeholderAtom(_option.placeholderHash || ''))
+      if (placeHolder) {
+        return Loadable.Just(placeHolder).setFlag('placeholder').setExtra('placeholderHash', _option.placeholderHash!)
       }
     }
-    return { ...result, hash: _option.hash, placeholderHash: _option.placeholderHash }
+    // eslint-disable-next-line no-console
+    console.info(`[ph]`, 'bestCrossChainQuoteAtom hash', _option.placeholderHash)
+
+    return result.setExtra('placeholderHash', _option.placeholderHash!)
   })
 }, isEqualQuoteQuery)
