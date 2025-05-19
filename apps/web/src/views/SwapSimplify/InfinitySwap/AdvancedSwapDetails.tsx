@@ -288,68 +288,67 @@ export const TradeSummary = memo(function TradeSummary({
         </RowBetween>
       )}
 
-      {(priceBreakdown || isX) &&
-        (!Array.isArray(priceBreakdown) && priceBreakdown.lpFeeAmount ? (
-          <RowBetween mt="10px">
-            <RowFixed>
-              <QuestionHelperV2
-                text={
-                  <>
-                    <Text mb="12px">
-                      <Text bold display="inline-block">
-                        {t('AMM')}
-                      </Text>
-                      : {t('Trading fee varies by pool fee tier. Check it via the magnifier icon under "Route."')}
+      {Array.isArray(priceBreakdown) ? (
+        <Box mt="10px">
+          <BridgeTradingViewSection priceBreakdown={priceBreakdown} />
+        </Box>
+      ) : priceBreakdown?.lpFeeAmount || isX ? (
+        <RowBetween mt="10px">
+          <RowFixed>
+            <QuestionHelperV2
+              text={
+                <>
+                  <Text mb="12px">
+                    <Text bold display="inline-block">
+                      {t('AMM')}
                     </Text>
-                    <Text mt="12px">
-                      <Link
-                        style={{ display: 'inline' }}
-                        ml="4px"
-                        external
-                        href="https://docs.pancakeswap.finance/products/pancakeswap-exchange/faq#what-will-be-the-trading-fee-breakdown-for-v3-exchange"
-                      >
-                        {t('Fee Breakdown and Tokenomics')}
-                      </Link>
+                    : {t('Trading fee varies by pool fee tier. Check it via the magnifier icon under "Route."')}
+                  </Text>
+                  <Text mt="12px">
+                    <Link
+                      style={{ display: 'inline' }}
+                      ml="4px"
+                      external
+                      href="https://docs.pancakeswap.finance/products/pancakeswap-exchange/faq#what-will-be-the-trading-fee-breakdown-for-v3-exchange"
+                    >
+                      {t('Fee Breakdown and Tokenomics')}
+                    </Link>
+                  </Text>
+                  <Text mt="10px">
+                    <Text bold display="inline-block">
+                      {t('X')}
                     </Text>
-                    <Text mt="10px">
-                      <Text bold display="inline-block">
-                        {t('X')}
-                      </Text>
-                      : {t('No fee when trading through PancakeSwap X (subject to change).')}
-                    </Text>
-                  </>
-                }
-                placement="top"
-              >
-                <DetailsTitle fontSize="14px" color="textSubtle">
-                  {t('Trading Fee')}
-                </DetailsTitle>
+                    : {t('No fee when trading through PancakeSwap X (subject to change).')}
+                  </Text>
+                </>
+              }
+              placement="top"
+            >
+              <DetailsTitle fontSize="14px" color="textSubtle">
+                {t('Trading Fee')}
+              </DetailsTitle>
+            </QuestionHelperV2>
+          </RowFixed>
+          <SkeletonV2 width="70px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
+            {isX ? (
+              <Text color="primary" fontSize="14px">
+                0 {inputAmount?.currency?.symbol}
+              </Text>
+            ) : hasDynamicHook ? (
+              <QuestionHelperV2 text={t('This route uses a dynamic fee pool; actual fees may vary.')}>
+                <Text fontSize="14px" style={{ textDecoration: 'underline dotted', cursor: 'help' }}>{`~${formatAmount(
+                  priceBreakdown.lpFeeAmount,
+                  4,
+                )} ${inputAmount?.currency?.symbol}`}</Text>
               </QuestionHelperV2>
-            </RowFixed>
-            <SkeletonV2 width="70px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
-              {isX ? (
-                <Text color="primary" fontSize="14px">
-                  0 {inputAmount?.currency?.symbol}
-                </Text>
-              ) : hasDynamicHook ? (
-                <QuestionHelperV2 text={t('This route uses a dynamic fee pool; actual fees may vary.')}>
-                  <Text
-                    fontSize="14px"
-                    style={{ textDecoration: 'underline dotted', cursor: 'help' }}
-                  >{`~${formatAmount(priceBreakdown.lpFeeAmount, 4)} ${inputAmount?.currency?.symbol}`}</Text>
-                </QuestionHelperV2>
-              ) : (
-                <Text fontSize="14px">{`${formatAmount(priceBreakdown.lpFeeAmount, 4)} ${
-                  inputAmount?.currency?.symbol
-                }`}</Text>
-              )}
-            </SkeletonV2>
-          </RowBetween>
-        ) : (
-          <Box mt="10px">
-            <BridgeTradingViewSection priceBreakdown={priceBreakdown as BridgeOrderFee[]} />
-          </Box>
-        ))}
+            ) : (
+              <Text fontSize="14px">{`${formatAmount(priceBreakdown.lpFeeAmount, 4)} ${
+                inputAmount?.currency?.symbol
+              }`}</Text>
+            )}
+          </SkeletonV2>
+        </RowBetween>
+      ) : null}
 
       {expectedFillTimeSec && (
         <RowBetween mt="10px">
