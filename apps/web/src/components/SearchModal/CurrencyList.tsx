@@ -11,6 +11,7 @@ import useNativeCurrency from 'hooks/useNativeCurrency'
 import { CSSProperties, MutableRefObject, useCallback, useMemo, useState } from 'react'
 import { FixedSizeList } from 'react-window'
 import { styled } from 'styled-components'
+import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { useAccount } from 'wagmi'
 import { useIsUserAddedToken } from '../../hooks/Tokens'
@@ -176,7 +177,7 @@ function CurrencyRow({
 
       <Column>
         <FlexGap alignItems="center">
-          <Text bold>{currency?.symbol}</Text>
+          <Text bold>{getTokenSymbolAlias(currency?.wrapped?.address, currency?.chainId, currency?.symbol)}</Text>
           <ComplementSection isSelected={isSelected} selectedCurrency={currency} showActions={isHovered} />
         </FlexGap>
         <Text color="textSubtle" small ellipsis maxWidth="200px">

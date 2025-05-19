@@ -81,11 +81,7 @@ const useBestTrade = (fromToken?: string, toToken?: string, value?: string) => {
     routeKey: 'twap',
   })
   const tradeResult = useAtomValue(bestSameChainAtom(quoteOption))
-  const { data } = tradeResult
-
-  // TODO: cast type, fix later
-  // for TWAP, data can't be an array
-  const trade = Array.isArray(data) ? undefined : data?.trade
+  const trade = tradeResult.map((x) => x.trade).unwrapOr(undefined)
 
   const inCurrency = useCurrency(fromToken)
   const outCurrency = useCurrency(toToken)

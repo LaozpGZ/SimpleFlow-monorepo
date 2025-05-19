@@ -25,6 +25,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAllLists } from 'state/lists/hooks'
 import { useListState } from 'state/lists/lists'
 import { styled } from 'styled-components'
+import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import CurrencySearch from './CurrencySearch'
 import ImportToken from './ImportToken'
 import Manage from './Manage'
@@ -181,7 +182,11 @@ export default function CurrencySearchModal({
                   style={{ borderRadius: '50%' }}
                 />
                 <Text px="8px" bold fontSize="20px">
-                  {selectedCurrency.symbol}
+                  {getTokenSymbolAlias(
+                    selectedCurrency.wrapped.address,
+                    selectedCurrency.chainId,
+                    selectedCurrency.symbol,
+                  )}
                 </Text>
                 {!selectedCurrency.isNative && (
                   <FlexGap gap="8px" alignItems="center">

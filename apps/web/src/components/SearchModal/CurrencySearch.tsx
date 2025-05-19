@@ -16,6 +16,7 @@ import { safeGetAddress } from 'utils'
 
 import { UpdaterByChainId } from 'state/lists/updater'
 import { useAllTokenBalances } from 'state/wallet/hooks'
+import { getTokenAddressFromSymbolAlias } from 'utils/getTokenAlias'
 import { useAllTokens, useIsUserAddedToken, useToken } from '../../hooks/Tokens'
 import Row from '../Layout/Row'
 import CommonBases from './CommonBases'
@@ -110,11 +111,9 @@ function CurrencySearch({
   selectedChainId,
   mode,
 }: CurrencySearchProps) {
-  const { chainId: activeChainId } = useActiveChainId()
-
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const debouncedQuery = useDebounce(searchQuery, 200)
+  const debouncedQuery = useDebounce(getTokenAddressFromSymbolAlias(searchQuery, selectedChainId, searchQuery), 200)
   // refs for fixed size lists
   const fixedList = useRef<FixedSizeList>()
 
@@ -266,7 +265,7 @@ function CurrencySearch({
 
   return (
     <>
-      <UpdaterByChainId chainId={selectedChainId ?? activeChainId} />
+      {selectedChainId ? <UpdaterByChainId chainId={selectedChainId} /> : null}
 
       {showSearchHeader && (
         <ModalTitle my="12px" justifyContent="space-between">

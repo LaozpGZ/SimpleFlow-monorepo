@@ -9,6 +9,7 @@ import { bestCrossChainQuoteAtom } from 'quoter/atom/bestCrossChainAtom'
 import { baseAllTypeBestTradeAtom, pauseAtom, userTypingAtom } from 'quoter/atom/bestTradeUISyncAtom'
 import { updatePlaceholderAtom } from 'quoter/atom/placeholderAtom'
 import { fetchCommonPoolsOnChain } from 'quoter/atom/poolsAtom'
+import { QUOTE_REVALIDATE_TIME } from 'quoter/consts'
 import { PoolQuery, QuoteQuery } from 'quoter/quoter.types'
 import { useEffect } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
@@ -18,8 +19,6 @@ import { useAccount } from 'wagmi'
 import { quoteNonceAtom } from '../atom/revalidateAtom'
 import { createQuoteQuery } from '../utils/createQuoteQuery'
 import { useQuoteContext } from './QuoteContext'
-
-const REVALIDATE_TIME = 7
 
 export const useQuoterSync = () => {
   const swapState = useSwapState()
@@ -130,12 +129,12 @@ export const useQuoterSync = () => {
   useEffect(() => {
     let t = 0
     const interval = setInterval(() => {
-      const outdated = Date.now() - quoteQuery.createTime! > REVALIDATE_TIME
+      const outdated = Date.now() - quoteQuery.createTime! > QUOTE_REVALIDATE_TIME
       if (paused || (!outdated && quoteResult.loading)) {
         return
       }
       if (t > 0) {
-        if (t % REVALIDATE_TIME === 0) {
+        if (t % QUOTE_REVALIDATE_TIME === 0) {
           setNonce((v) => v + 1)
         }
       }
@@ -149,18 +148,21 @@ export const useQuoterSync = () => {
   }, [quoteQuery.hash, paused, quoteResult.loading])
 
   useEffect(() => {
-    if (quoteResult.data?.trade && quoteResult.placeholderHash && !quoteResult.loading) {
-      setPlaceholder(quoteResult.placeholderHash, quoteResult.data)
+    if (quoteResult.isJust() && !quoteResult.hasFlag('placeholder')) {
+      const placeholderHash = quoteResult.getExtra('placeholderHash') as string
+      setPlaceholder(placeholderHash, quoteResult.unwrap())
     }
 
     if (paused) {
       return
     }
 
+    const order = quoteResult.unwrapOr(undefined)
+
     setTrade({
-      bestOrder: quoteResult.data,
-      tradeLoaded: !quoteResult?.loading,
-      tradeError: quoteResult?.error,
+      bestOrder: order,
+      tradeLoaded: !quoteResult.isPending(),
+      tradeError: quoteResult.error,
       refreshDisabled: false,
       refreshOrder: () => {
         setNonce((v) => v + 1)
@@ -176,5 +178,5 @@ export const useQuoterSync = () => {
       },
     })
     setTyping(false)
-  }, [quoteResult.data, quoteResult.loading, quoteResult.error, pauseQuote, setTrade, setTyping, setNonce, paused])
+  }, [quoteResult.value, quoteResult.loading, quoteResult.error, pauseQuote, setTrade, setTyping, setNonce, paused])
 }
