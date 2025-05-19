@@ -11,24 +11,28 @@ import { createQuoteQuery } from 'quoter/utils/createQuoteQuery'
 import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { combinedTokenMapFromActiveUrlsAtom } from 'state/lists/hooks'
 import { logGTMBridgeQuoteQueryEvent } from 'utils/customGTMEventTracking'
-import { getBridgeAvailableRoutes, getMetadata, getTokenAddress } from 'views/Swap/Bridge/api'
+import { getBridgeAvailableRoutes, getMetadata, getTokenAddress, Route } from 'views/Swap/Bridge/api'
 import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
+import { atomWithLoadable } from './atomWithLoadable'
 import { bestSameChainWithoutPlaceHolderAtom } from './bestSameChainAtom'
 import { placeholderAtom } from './placeholderAtom'
 
 // Define a type for our complete path
-type CompletePath = {
+type SwapAndBridgeQuote = {
   originToken: Currency
   destinationToken: Currency
-  swapOrder: BridgeOrderWithCommands
+  swapOrder: InterfaceOrder
   bridgeQuote: BridgeOrderWithCommands
-  finalSwapOrder: BridgeOrderWithCommands | null
+}
+
+type CompletePath = SwapAndBridgeQuote & {
+  finalSwapOrder: InterfaceOrder
   outputAmount: CurrencyAmount<Currency>
 }
 
 export const getAvailableBridgeRoutes = atomFamily(
   (option: QuoteQuery) => {
-    return atom(async () => {
+    return atomWithLoadable(async () => {
       // Early return if currencies or chainIds are not available
       if (!option.baseCurrency || !option.currency) {
         return []
@@ -49,8 +53,8 @@ export const getAvailableBridgeRoutes = atomFamily(
 
         return routes || []
       } catch (error) {
-        // QUESTION: should we log this error?
         console.error('Failed to fetch bridge routes:', error)
+        // TODO: return Loadable.Fail<Route[]>(error)
         return []
       }
     })
@@ -67,7 +71,7 @@ export type BridgeMetadataParams = {
 // Convert the function to an atom
 export const getBridgeQuote = atomFamily(
   (params: BridgeMetadataParams) =>
-    atom(async () => {
+    atomWithLoadable(async () => {
       const { inputAmount, outputCurrency } = params
       const metadata = await getMetadata({
         inputToken: getTokenAddress(inputAmount.currency),
@@ -139,7 +143,15 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
         const baseCurrencyAmount = _option.amount
         const quoteCurrency = _option.currency
 
-        const crossChainRoutes = await get(getAvailableBridgeRoutes(_option))
+        const crossChainRoutesLoadable = get(getAvailableBridgeRoutes(_option))
+
+        let crossChainRoutes: Route[] = []
+
+        if (crossChainRoutesLoadable.isPending()) {
+          return Loadable.Pending<InterfaceOrder>()
+        }
+
+        crossChainRoutes = crossChainRoutesLoadable.unwrapOr([]) || []
 
         if (crossChainRoutes.length === 0) {
           throw new BridgeTradeError('No available routes')
@@ -159,13 +171,13 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
         const isSwapToBridgeQuery = !isOriginTokenSupported && isDestinationTokenSupported
         const isSwapToBridgeToSwapQuery = !isOriginTokenSupported && !isDestinationTokenSupported
 
-        let quote: BridgeOrderWithCommands | undefined
+        let quoteLoadable: Loadable<BridgeOrderWithCommands> | undefined
 
         // handle bridge only quote
         if (isBridgeOnlyQuery) {
           // Native tokens use wrapped addresses for route checks but 0x000..00 for actual submission
           // If usser select ETH -> WETH or WETH -> ETH,
-          quote = await get(
+          quoteLoadable = get(
             getBridgeQuote({
               inputAmount: baseCurrencyAmount,
               outputCurrency: quoteCurrency,
@@ -195,13 +207,27 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           const bridgeDestinationCurrency = convertTokenToCurrency(bridgedTokenInfo)
 
           // Get the bridge quote
-          const bridgeQuote = await get(
+          const bridgeQuoteLoadable = get(
             getBridgeQuote({
               inputAmount: baseCurrencyAmount,
               outputCurrency: bridgeDestinationCurrency,
               nonce: _option.nonce,
             }),
           )
+
+          if (bridgeQuoteLoadable.isPending()) {
+            return Loadable.Pending<InterfaceOrder>()
+          }
+
+          if (bridgeQuoteLoadable.isFail()) {
+            return Loadable.Fail<InterfaceOrder>(bridgeQuoteLoadable.error)
+          }
+
+          const bridgeQuote = bridgeQuoteLoadable.unwrapOr(undefined)
+
+          if (!bridgeQuote) {
+            throw new BridgeTradeError('No bridge quote')
+          }
 
           // Create a modified option for the swap quote
           const swapOption: QuoteQuery = {
@@ -215,11 +241,21 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           const quoteQuery = createQuoteQuery(swapOption)
 
           // Get the swap quote using the bridge output amount
-          const swapOrder = await get(bestSameChainWithoutPlaceHolderAtom(quoteQuery)).unwrapOr(undefined)
+          const swapOrderLoadable = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
+
+          if (swapOrderLoadable.isPending()) {
+            return Loadable.Pending<InterfaceOrder>()
+          }
+
+          if (swapOrderLoadable.isFail()) {
+            return Loadable.Fail<InterfaceOrder>(swapOrderLoadable.error)
+          }
+
+          const swapOrder = swapOrderLoadable.unwrapOr(undefined)
 
           if (swapOrder?.trade?.outputAmount?.greaterThan(0)) {
             // The final combined quote
-            quote = {
+            quoteLoadable = Loadable.Just({
               ...bridgeQuote,
               trade: {
                 ...bridgeQuote.trade,
@@ -242,7 +278,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
                 ] as any, // Use type assertion as a last resort
               },
               commands: [bridgeQuote, swapOrder],
-            }
+            })
           }
         } else if (isSwapToBridgeQuery) {
           // handle swap -> bridge quote
@@ -274,11 +310,21 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           const quoteQuery = createQuoteQuery(swapOption)
 
           // Get the swap quote from base currency to bridge origin currency
-          const swapOrder = await get(bestSameChainWithoutPlaceHolderAtom(quoteQuery)).unwrapOr(undefined)
+          const swapOrderLoadable = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
+
+          if (swapOrderLoadable.isPending()) {
+            return Loadable.Pending<InterfaceOrder>()
+          }
+
+          if (swapOrderLoadable.isFail()) {
+            return Loadable.Fail<InterfaceOrder>(swapOrderLoadable.error)
+          }
+
+          const swapOrder = swapOrderLoadable.unwrapOr(undefined)
 
           if (swapOrder?.trade?.outputAmount?.greaterThan(0)) {
             // Use the swap output amount as the bridge input amount
-            const bridgeQuote = await get(
+            const bridgeQuoteLoadable = get(
               getBridgeQuote({
                 inputAmount: swapOrder.trade.outputAmount,
                 outputCurrency: quoteCurrency,
@@ -286,8 +332,22 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
               }),
             )
 
+            if (bridgeQuoteLoadable.isPending()) {
+              return Loadable.Pending<InterfaceOrder>()
+            }
+
+            if (bridgeQuoteLoadable.isFail()) {
+              return Loadable.Fail<InterfaceOrder>(bridgeQuoteLoadable.error)
+            }
+
+            const bridgeQuote = bridgeQuoteLoadable.unwrapOr(undefined)
+
+            if (!bridgeQuote) {
+              throw new BridgeTradeError('No bridge quote')
+            }
+
             // The final combined quote
-            quote = {
+            quoteLoadable = Loadable.Just({
               type: OrderType.PCS_BRIDGE,
               bridgeTransactionData: bridgeQuote.bridgeTransactionData,
               bridgeFee: bridgeQuote.bridgeFee,
@@ -313,10 +373,11 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
                 ] as any, // Use type assertion as a last resort
               },
               commands: [swapOrder, bridgeQuote],
-            }
+            })
           }
         } else if (isSwapToBridgeToSwapQuery) {
           // handle swap -> bridge -> swap quote
+          let quote: BridgeOrderWithCommands | undefined
 
           // 1. find swapOriginQuotes from baseCurrency -> crossChainRoutes[].originToken
           const tokenMap = get(combinedTokenMapFromActiveUrlsAtom)
@@ -338,7 +399,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           }, [] as Currency[])
 
           // 2. find swap quotes from base currency to supported origin tokens and get bridge quotes
-          const swapAndBridgePromises = supportedOriginBridgeCurrencies.map(async (originBridgeCurrency) => {
+          const swapAndBridgeQuotes = supportedOriginBridgeCurrencies.map((originBridgeCurrency) => {
             // Create a modified option for the swap quote to get from base currency to bridge origin token
             const swapOption: QuoteQuery = {
               ..._option,
@@ -349,10 +410,19 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
 
             // Get the swap quote from base currency to origin token
             const quoteQuery = createQuoteQuery(swapOption)
-            const swapOrder = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery)).unwrapOr(undefined)
+            const swapOrderLoadable = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
 
+            if (swapOrderLoadable.isPending()) {
+              return Loadable.Pending<SwapAndBridgeQuote>()
+            }
+
+            if (swapOrderLoadable.isFail()) {
+              return Loadable.Fail<SwapAndBridgeQuote>(swapOrderLoadable.error)
+            }
+
+            const swapOrder = swapOrderLoadable.unwrapOr(undefined)
             if (!swapOrder?.trade.outputAmount.greaterThan(0)) {
-              return null
+              return Loadable.Nothing<SwapAndBridgeQuote>()
             }
 
             const originBridgeCurrencyAmount = swapOrder.trade.outputAmount
@@ -366,7 +436,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
 
             const destinationBridgeCurrency = convertTokenToCurrency(destinationBridgeToken)
 
-            const bridgeQuote = await get(
+            const bridgeQuoteLoadable = get(
               getBridgeQuote({
                 // Using non-null assertion as we've checked this above
                 inputAmount: originBridgeCurrencyAmount,
@@ -375,58 +445,104 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
               }),
             )
 
-            return {
+            if (bridgeQuoteLoadable.isPending()) {
+              return Loadable.Pending<SwapAndBridgeQuote>()
+            }
+
+            if (bridgeQuoteLoadable.isFail()) {
+              return Loadable.Fail<SwapAndBridgeQuote>(bridgeQuoteLoadable.error)
+            }
+
+            const bridgeQuote = bridgeQuoteLoadable.unwrapOr(undefined)
+            if (!bridgeQuote) {
+              return Loadable.Nothing<SwapAndBridgeQuote>()
+            }
+
+            return Loadable.Just<SwapAndBridgeQuote>({
               originToken: originBridgeCurrency,
               destinationToken: destinationBridgeCurrency,
               swapOrder,
               bridgeQuote,
-            }
+            })
           })
 
-          // Resolve all promises. This action might be expensive.
-          const allSwapAndBridgeQuotes = (await Promise.all(swapAndBridgePromises)).filter(Boolean)
+          // Check if any quotes are pending
+          if (swapAndBridgeQuotes.some((quote) => quote.isPending())) {
+            return Loadable.Pending<InterfaceOrder>()
+          }
 
-          // 3. find swapDestinationQuotes from allSwapAndBridgeQuotes -> quoteCurrency
-          const completePathPromises = allSwapAndBridgeQuotes
-            .filter((quote): quote is NonNullable<typeof quote> => quote !== null)
-            .map(async (swapAndBridgeQuote) => {
-              // Create a swap query from the bridge destination token to the quote currency
-              const finalSwapOption: QuoteQuery = {
-                ..._option,
-                baseCurrency: swapAndBridgeQuote.bridgeQuote.trade.outputAmount.currency,
-                amount: swapAndBridgeQuote.bridgeQuote.trade.outputAmount,
-                hash: '',
-                placeholderHash: '',
-              }
+          // Check if any quotes failed
+          const failedQuote = swapAndBridgeQuotes.find((quote) => quote.isFail())
+          if (failedQuote) {
+            return Loadable.Fail<InterfaceOrder>(failedQuote.error)
+          }
 
-              const quoteQuery = createQuoteQuery(finalSwapOption)
+          // Filter out Nothing results and unwrap Just values
+          const validSwapAndBridgeQuotes = swapAndBridgeQuotes
+            .filter((quote) => !quote.isNothing())
+            .map((quote) => quote.unwrapOr(undefined))
+            .filter((quote): quote is SwapAndBridgeQuote => quote !== undefined)
 
-              // Get the swap quote from bridge destination to quote currency
-              const finalSwapOrder = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery)).unwrapOr(undefined)
+          // 3. find swapDestinationQuotes from validSwapAndBridgeQuotes -> quoteCurrency
+          const completePaths = validSwapAndBridgeQuotes.map((swapAndBridgeQuote) => {
+            // Create a swap query from the bridge destination token to the quote currency
+            const finalSwapOption: QuoteQuery = {
+              ..._option,
+              baseCurrency: swapAndBridgeQuote.bridgeQuote.trade.outputAmount.currency,
+              amount: swapAndBridgeQuote.bridgeQuote.trade.outputAmount,
+              hash: '',
+              placeholderHash: '',
+            }
 
-              if (!finalSwapOrder?.trade?.outputAmount?.greaterThan(0)) {
-                return null
-              }
+            const quoteQuery = createQuoteQuery(finalSwapOption)
 
-              // Return the complete path with all three components
-              return {
-                ...swapAndBridgeQuote,
-                finalSwapOrder,
-                outputAmount: finalSwapOrder.trade.outputAmount,
-              }
+            // Get the swap quote from bridge destination to quote currency
+            const finalSwapOrderLoadable = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
+
+            if (finalSwapOrderLoadable.isPending()) {
+              return Loadable.Pending<CompletePath>()
+            }
+
+            if (finalSwapOrderLoadable.isFail()) {
+              return Loadable.Fail<CompletePath>(finalSwapOrderLoadable.error)
+            }
+
+            const finalSwapOrder = finalSwapOrderLoadable.unwrapOr(undefined)
+            if (!finalSwapOrder?.trade?.outputAmount?.greaterThan(0)) {
+              return Loadable.Nothing<CompletePath>()
+            }
+
+            return Loadable.Just<CompletePath>({
+              ...swapAndBridgeQuote,
+              finalSwapOrder,
+              outputAmount: finalSwapOrder.trade.outputAmount,
             })
+          })
 
-          // Resolve all promises and filter out any null values
-          const completePaths = (await Promise.all(completePathPromises)).filter(Boolean)
+          // Check if any paths are pending
+          if (completePaths.some((path) => path.isPending())) {
+            return Loadable.Pending<InterfaceOrder>()
+          }
 
-          // 4. pick the best quote from completePaths based on output amount
-          if (completePaths.length > 0) {
+          // Check if any paths failed
+          const failedPath = completePaths.find((path) => path.isFail())
+          if (failedPath) {
+            return Loadable.Fail<InterfaceOrder>(failedPath.error)
+          }
+
+          // Filter out Nothing results and unwrap Just values
+          const validCompletePaths = completePaths
+            .filter((path) => !path.isNothing())
+            .map((path) => path.unwrapOr(undefined))
+            .filter((path): path is CompletePath => path !== undefined)
+
+          // 4. pick the best quote from validCompletePaths based on output amount
+          if (validCompletePaths.length > 0) {
             // Find the path with the highest output amount
-            // We can assert the type because we know completePaths contains objects of this structure
-            let bestPath = completePaths[0] as CompletePath
+            let bestPath = validCompletePaths[0]
 
-            for (let i = 1; i < completePaths.length; i++) {
-              const currentPath = completePaths[i] as CompletePath
+            for (let i = 1; i < validCompletePaths.length; i++) {
+              const currentPath = validCompletePaths[i]
 
               // Compare output amounts to find the best path
               if (currentPath.outputAmount.greaterThan(bestPath.outputAmount)) {
@@ -438,7 +554,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
             const { swapOrder, bridgeQuote, finalSwapOrder } = bestPath
 
             // Create the combined quote with proper type handling
-            quote = {
+            quoteLoadable = Loadable.Just({
               bridgeTransactionData: bridgeQuote.bridgeTransactionData,
               type: OrderType.PCS_BRIDGE,
               bridgeFee:
@@ -476,12 +592,16 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
                 ] as any, // Type assertion for routes compatibility
               },
               commands: [swapOrder, bridgeQuote, ...(finalSwapOrder ? [finalSwapOrder] : [])],
-            }
+            })
           }
         }
 
-        return quote ? Loadable.Just<InterfaceOrder>(quote) : Loadable.Nothing<InterfaceOrder>()
-      } catch (error) {
+        if (quoteLoadable?.isPending()) {
+          return Loadable.Pending<InterfaceOrder>()
+        }
+
+        return quoteLoadable || Loadable.Nothing<InterfaceOrder>()
+      } catch (error: unknown) {
         console.error('Failed to get cross chain quote:', error)
 
         logGTMBridgeQuoteQueryEvent('fail', {
@@ -491,7 +611,8 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           destinationToken: _option.currency?.symbol,
           amount: _option.amount?.toString(),
         })
-        return Loadable.Fail<InterfaceOrder>(error)
+
+        return Loadable.Fail<InterfaceOrder>(error as BridgeTradeError)
       }
     }
 
