@@ -298,7 +298,7 @@ export const createWallets = <config extends Config = Config, context = unknown>
   const config = walletsConfig({ chainId, connect })
   const ethereum = safeGetWindow()?.ethereum
   const hasInjected = !!ethereum
-  const injectedMeta = Object.keys(ethereum).filter((i) => i.match(/^is\w+/))
+  const injectedMeta = ethereum ? Object.keys(ethereum).filter((i) => i.match(/^is\w+/)) : []
   const injectedIsMetamask = injectedMeta.length === 1 && ethereum.isMetaMask
   const injectedIsTrust = ethereum.isTrust
   const currentInjectedWithinConfig =
