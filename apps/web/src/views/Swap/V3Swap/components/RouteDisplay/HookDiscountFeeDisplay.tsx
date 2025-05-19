@@ -2,6 +2,7 @@ import { HOOK_CATEGORY } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text, useMatchBreakpoints, useTooltip } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
+import styled from 'styled-components'
 
 const HookTip = styled(FlexGap)`
   cursor: pointer;

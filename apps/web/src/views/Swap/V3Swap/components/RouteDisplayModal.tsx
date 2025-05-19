@@ -1,7 +1,7 @@
 import { parseProtocolFeesToNumbers } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Rounding } from '@pancakeswap/sdk'
-import { InfinityBinPool, InfinityClPool, RouteType, SmartRouter } from '@pancakeswap/smart-router'
+import { InfinityBinPool, InfinityClPool, Route, RouteType, SmartRouter } from '@pancakeswap/smart-router'
 import {
   AtomBox,
   AutoColumn,
@@ -23,9 +23,10 @@ import { useHookDiscount } from 'views/SwapSimplify/hooks/useHookDiscount'
 import { v3FeeToPercent } from '../utils/exchange'
 import { BridgeRoutesDisplay } from './RouteDisplay/BridgeRoutesDisplay'
 import { HookDiscountFeeDisplay } from './RouteDisplay/HookDiscountFeeDisplay'
-import { RouteDisplayEssentials } from './RouteDisplay/types'
 
 type Pair = [Currency, Currency]
+
+export type RouteDisplayEssentials = Pick<Route, 'path' | 'pools' | 'inputAmount' | 'outputAmount' | 'percent' | 'type'>
 
 interface Props extends UseModalV2Props {
   routes: RouteDisplayEssentials[]
