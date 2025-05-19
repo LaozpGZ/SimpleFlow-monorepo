@@ -119,7 +119,7 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
 
   const timelineItems = useMemo(() => {
     return (
-      bridgeStatus?.data?.map((step) => {
+      bridgeStatus?.data?.map((step, i) => {
         const getText = () => {
           switch (step.command) {
             case Command.SWAP: {
@@ -146,7 +146,17 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
         }
 
         const getStatus = (): TimelineItemStatus => {
-          switch (step.status.code) {
+          const stepStatus = step.status.code
+
+          // If previous step is not completed or unsuccessful, then this step is not started
+          if (
+            (stepStatus === BridgeStatus.PENDING || stepStatus === BridgeStatus.BRIDGE_PENDING) &&
+            bridgeStatus?.data?.[i - 1]?.status.code !== BridgeStatus.SUCCESS
+          ) {
+            return 'notStarted'
+          }
+
+          switch (stepStatus) {
             case BridgeStatus.SUCCESS:
               return 'completed'
             case BridgeStatus.PARTIAL_SUCCESS:

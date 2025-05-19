@@ -1,5 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, ChevronRightIcon, FlexGap, ModalV2, MotionModal, Text, useModalV2 } from '@pancakeswap/uikit'
+import {
+  Box,
+  ChevronRightIcon,
+  Flex,
+  FlexGap,
+  ModalV2,
+  MotionModal,
+  SwapLoading,
+  Text,
+  useModalV2,
+} from '@pancakeswap/uikit'
 import { useMemo } from 'react'
 
 import {
@@ -12,13 +22,16 @@ import {
 import styled from 'styled-components'
 
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { useQuery } from '@tanstack/react-query'
 import { ViewOnExplorerButton } from 'components/ViewOnExplorerButton'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { multiChainName, multiChainShortName } from 'state/info/constant'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { OrderResultModalContent } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
-import { BridgeStatus, UserBridgeOrder } from 'views/Swap/Bridge/types'
+import { bridgeStatusQueryKey } from 'views/Swap/Bridge/hooks/useBridgeStatus'
+import { ActiveBridgeOrderMetadata, BridgeStatus, UserBridgeOrder } from 'views/Swap/Bridge/types'
+import { getBridgeTitle } from 'views/Swap/Bridge/utils/bridgeTitle'
 
 const StyledChainLogo = styled(ChainLogo)`
   width: 22px;
@@ -55,7 +68,29 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
   const outputToken = useCurrencyByChainId(order.outputToken, outputChainId)
 
   const inputAmount = inputToken && CurrencyAmount.fromRawAmount(inputToken, order.inputAmount)
-  const outputAmount = outputToken && CurrencyAmount.fromRawAmount(outputToken, order.outputAmount)
+
+  const outputAmount =
+    outputToken &&
+    CurrencyAmount.fromRawAmount(
+      outputToken,
+      order.status === BridgeStatus.SUCCESS ? order.outputAmount : order.minOutputAmount,
+    )
+
+  const metadata: ActiveBridgeOrderMetadata['metadata'] = {
+    status: order.status,
+    inputToken: order.inputToken,
+    outputToken: order.outputToken,
+    inputAmount: order.inputAmount,
+    outputAmount: order.outputAmount,
+    originChainId: order.originChainId,
+    destinationChainId: order.destinationChainId,
+  }
+
+  const { data: bridgeStatusData, isFetching } = useQuery({
+    queryKey: bridgeStatusQueryKey(inputChainId, order.transactionHash),
+  })
+
+  const isBridgeStatusLoading = !bridgeStatusData && isFetching
 
   if (!inputToken || !outputToken || !inputChainId || !outputChainId) {
     return null
@@ -144,7 +179,12 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
       </TransactionListItemV2>
       <ModalV2 {...modal} closeOnOverlayClick>
         <MotionModal
-          title={t('Order details')}
+          title={
+            <Flex alignItems="center">
+              {getBridgeTitle(t, order.status)}
+              {isBridgeStatusLoading && <SwapLoading size="24px" ml="8px" />}
+            </Flex>
+          }
           headerBorderColor="transparent"
           bodyPadding="0 24px 24px"
           minWidth="400px"
@@ -155,14 +195,7 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
               txHash: order.transactionHash,
               originChainId: order.originChainId,
               order: null,
-              metadata: {
-                inputToken: order.inputToken,
-                outputToken: order.outputToken,
-                inputAmount: order.inputAmount,
-                outputAmount: order.outputAmount,
-                originChainId: order.originChainId,
-                destinationChainId: order.destinationChainId,
-              },
+              metadata,
             }}
           />
         </MotionModal>

@@ -5,13 +5,15 @@ import { useMemo } from 'react'
 import { getBridgeStatus } from '../api'
 import { ActiveBridgeOrderMetadata, BridgeStatusData, BridgeStatusResponse } from '../types'
 
+export const bridgeStatusQueryKey = (chainId?: number, txHash?: string) => ['bridge-status', chainId, txHash]
+
 export const useBridgeStatus = (
   chainId?: number,
   txHash?: string,
   metadata?: ActiveBridgeOrderMetadata['metadata'],
 ) => {
   const queryResult = useQuery({
-    queryKey: ['bridge-status', chainId, txHash],
+    queryKey: bridgeStatusQueryKey(chainId, txHash),
     queryFn: () => (chainId && txHash ? getBridgeStatus(chainId, txHash) : undefined),
     refetchInterval: 1000,
     retry: 3,
@@ -40,6 +42,12 @@ export const useBridgeStatus = (
     return CurrencyAmount.fromRawAmount(outputCurrency, data?.outputAmount)
   }, [outputCurrency, data?.outputAmount])
 
+  const feesBreakdown = useMemo(() => {
+    return {
+      totalFeesUSD: data && data.data?.reduce((prev, curr) => prev + Number(curr.metadata.fee), 0),
+    }
+  }, [data])
+
   const bridgeStatusData: BridgeStatusData | undefined = useMemo(
     () =>
       data
@@ -47,6 +55,7 @@ export const useBridgeStatus = (
             ...data,
             inputCurrencyAmount,
             outputCurrencyAmount,
+            feesBreakdown,
           }
         : undefined,
     [data, inputCurrencyAmount, outputCurrencyAmount],

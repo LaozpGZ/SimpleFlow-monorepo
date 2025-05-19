@@ -39,7 +39,7 @@ const DisplayMessage = styled(FlexGap).attrs({ alignItems: 'center', gap: '8px' 
   background-color: ${({ theme, $status }) =>
     $status === BridgeStatus.SUCCESS ? theme.colors.primary10 : theme.colors.warning10};
   border: 1px solid
-    ${({ theme, $status }) => ($status === BridgeStatus.SUCCESS ? theme.colors.primary20 : theme.colors.warning10)};
+    ${({ theme, $status }) => ($status === BridgeStatus.SUCCESS ? theme.colors.primary20 : theme.colors.warning20)};
 
   transition: all 0.3s ease-out;
   overflow: hidden;
@@ -83,6 +83,10 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
     let resultTokenAddress: string | undefined
     let resultAmount: string | undefined
     let resultTokenChainId: number | undefined
+
+    // TODO: Don't check just last command, keep going forward if success and stop at command that fails or partially succeeds
+    // Even if fail case the upcoming steps will be sent with status BridgeStatus.
+    // Basically, check the last executed command and use the result token and amount from that command
 
     const lastCommand =
       bridgeStatus && bridgeStatus.data && bridgeStatus.data.length > 0
@@ -136,7 +140,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   }, [resultCurrency, resultTokenData.resultAmount])
 
   const middleIcon = useMemo(() => {
-    switch (bridgeStatus?.status) {
+    switch (bridgeStatus?.status || metadata?.status) {
       case BridgeStatus.PENDING:
         return (
           <IconContainer>
@@ -162,6 +166,31 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
     }
   }, [bridgeStatus?.status])
 
+  const displayInfo = useMemo(() => {
+    if (!bridgeStatus || !bridgeStatus.data) return undefined
+
+    let status = bridgeStatus?.status
+    let isRefundCase = false
+
+    // Refund case: If swap on origin chain is successful but bridging has failed
+    if (
+      bridgeStatus?.data.length >= 2 &&
+      bridgeStatus?.data[0].status.code === BridgeStatus.SUCCESS &&
+      bridgeStatus.data[0].command === Command.SWAP &&
+      bridgeStatus.data[1].command === Command.BRIDGE &&
+      (bridgeStatus?.data[1].status.code === BridgeStatus.FAILED ||
+        bridgeStatus?.data[1].status.code === BridgeStatus.PARTIAL_SUCCESS)
+    ) {
+      isRefundCase = true
+      status = BridgeStatus.PARTIAL_SUCCESS
+    }
+
+    return {
+      status,
+      isRefundCase,
+    }
+  }, [bridgeStatus])
+
   return (
     <Box {...props}>
       <Box
@@ -173,19 +202,25 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
           marginBottom: bridgeStatus && resultCurrencyAmount ? '24px' : '0',
         }}
       >
-        {bridgeStatus && resultCurrencyAmount && (
-          <DisplayMessage $status={bridgeStatus.status}>
-            {bridgeStatus.status === BridgeStatus.SUCCESS ? (
+        {displayInfo && bridgeStatus && resultCurrencyAmount && (
+          <DisplayMessage $status={displayInfo.status}>
+            {displayInfo.status === BridgeStatus.SUCCESS ? (
               <CheckmarkCircleIcon width="24px" color="primary60" />
             ) : (
               <ErrorIcon width="24px" color="warning60" />
             )}
-            <Text small>
-              {t('%amount% %symbol% has been sent to your wallet on %outputChain%', {
-                amount: resultCurrencyAmount.toSignificant(DISPLAY_PRECISION),
-                symbol: resultCurrencyAmount.currency.symbol,
-                outputChain: getFullChainNameById(bridgeStatus.destinationChainId),
-              })}
+            <Text small bold>
+              {displayInfo.isRefundCase
+                ? t('%amount% %symbol% is being refunded to your wallet on %targetChain%', {
+                    amount: resultCurrencyAmount.toSignificant(DISPLAY_PRECISION),
+                    symbol: resultCurrencyAmount.currency.symbol,
+                    targetChain: getFullChainNameById(resultCurrencyAmount.currency.chainId),
+                  })
+                : t('%amount% %symbol% has been sent to your wallet on %outputChain%', {
+                    amount: resultCurrencyAmount.toSignificant(DISPLAY_PRECISION),
+                    symbol: resultCurrencyAmount.currency.symbol,
+                    outputChain: getFullChainNameById(resultCurrencyAmount.currency.chainId),
+                  })}
             </Text>
           </DisplayMessage>
         )}
@@ -198,6 +233,11 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
         inputChainName={getFullChainNameById(bridgeStatus?.originChainId || orderInputCurrency?.chainId)}
         outputChainName={getFullChainNameById(bridgeStatus?.destinationChainId || orderOutputCurrency?.chainId)}
         overrideIcon={middleIcon}
+        textRightOpacity={
+          bridgeStatus?.status === BridgeStatus.FAILED || bridgeStatus?.status === BridgeStatus.PARTIAL_SUCCESS
+            ? 0.5
+            : 1
+        }
       />
       {bridgeStatus && bridgeStatus.data && bridgeStatus.data.length > 0 && (
         <OrderDetailsPanel mt="24px" overrideActiveOrderMetadata={bridgeMetadata} />

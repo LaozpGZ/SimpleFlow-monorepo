@@ -122,11 +122,15 @@ export interface StatusMetadataSwap {
   inputAmount: string
   outputAmount: string
   tx: string
+  fee: string
 }
 
 export interface BridgeStatusData extends BridgeStatusResponse {
   inputCurrencyAmount?: CurrencyAmount<Currency> | null
   outputCurrencyAmount?: CurrencyAmount<Currency> | null
+  feesBreakdown?: {
+    totalFeesUSD?: number
+  }
 }
 
 export interface ActiveBridgeOrderMetadata {
@@ -137,6 +141,7 @@ export interface ActiveBridgeOrderMetadata {
 
   // Optional metadata to show in modals quickly
   metadata?: {
+    status: BridgeStatus
     inputToken: string
     outputToken: string
     inputAmount: string
@@ -154,11 +159,12 @@ export interface UserBridgeOrdersResponse {
 }
 
 export interface UserBridgeOrder {
-  status: string
+  status: BridgeStatus
   inputToken: string
   outputToken: string
   inputAmount: string
   outputAmount: string
+  minOutputAmount: string
   originChainId: number
   destinationChainId: number
   orderId: string

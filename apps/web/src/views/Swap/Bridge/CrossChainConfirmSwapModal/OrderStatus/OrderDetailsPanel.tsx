@@ -13,6 +13,7 @@ import {
   Text,
 } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { LightGreyCard } from 'components/Card'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
@@ -159,7 +160,11 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
                 {bridgeStatus?.status === BridgeStatus.PARTIAL_SUCCESS ? t('Partial Fee') : t('Total Fee')}
               </Text>
               <Text color="textSubtle" small>
-                {lpFeeAmount?.toSignificant(2) || '-'}&nbsp;
+                {lpFeeAmount?.toSignificant(2) ||
+                  (bridgeStatus?.feesBreakdown?.totalFeesUSD &&
+                    `$${formatNumber(bridgeStatus?.feesBreakdown?.totalFeesUSD, { maximumSignificantDigits: 4 })}`) ||
+                  '-'}
+                &nbsp;
               </Text>
             </RowBetween>
 
