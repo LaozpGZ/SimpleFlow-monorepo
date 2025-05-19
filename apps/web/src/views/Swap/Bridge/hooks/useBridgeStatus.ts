@@ -44,9 +44,9 @@ export const useBridgeStatus = (
 
   const feesBreakdown = useMemo(() => {
     return {
-      totalFeesUSD: bridgeStatusData?.data?.reduce((prev, curr) => prev + Number(curr.metadata.fee), 0),
+      totalFeesUSD: data && data.data?.reduce((prev, curr) => prev + Number(curr.metadata.fee), 0),
     }
-  }, [])
+  }, [data])
 
   const bridgeStatusData: BridgeStatusData | undefined = useMemo(
     () =>
