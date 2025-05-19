@@ -16,7 +16,17 @@ export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
 
   // only return chains array,add origin chain id to the array
   return useMemo(
-    () => (data && params?.originChainId ? [...new Set(data.map((route) => route.destinationChainId))] : []),
+    () =>
+      data && params?.originChainId
+        ? [
+            params.originChainId,
+            ...new Set(
+              data
+                .filter((route) => route.originChainId === params.originChainId)
+                .map((route) => route.destinationChainId),
+            ),
+          ]
+        : [],
     [data],
   )
 }
