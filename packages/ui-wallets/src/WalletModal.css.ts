@@ -32,7 +32,6 @@ export const modalWrapperClass = style([
     xs: {
       width: '100%',
       marginBottom: 0,
-      maxHeight: '80vh',
     },
     md: {
       height: '690px',
