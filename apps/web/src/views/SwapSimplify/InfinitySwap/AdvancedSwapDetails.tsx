@@ -115,7 +115,10 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
             isDataReady={priceBreakdown.every((p) => p.lpFeeAmount)}
           >
             <Text fontSize="14px" textAlign="right">
-              {formatDollarAmount(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber())}
+              {formatDollarAmount(
+                currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber(),
+                3,
+              )}
             </Text>
           </SkeletonV2>
         </RowBetween>

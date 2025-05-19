@@ -33,7 +33,6 @@ import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/s
 import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 import { SlippageAdjustedAmounts, TradePriceBreakdown, formatExecutionPrice } from 'views/Swap/V3Swap/utils/exchange'
 
-import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import BigNumber from 'bignumber.js'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import dayjs from 'dayjs'
@@ -41,6 +40,7 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { currenciesUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
 import { useAtomValue } from 'jotai'
 import { BridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { EstimatedTime } from './components/EstimatedTime'
 
 dayjs.extend(relativeTime)
@@ -91,7 +91,7 @@ function TotalBridgeFee({ priceBreakdown }: { priceBreakdown: BridgeOrderFee[] }
 
   return (
     <Text fontSize="14px" textAlign="right">
-      ${formatNumber(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber(), 0, 5)}
+      {formatDollarAmount(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber(), 3)}
     </Text>
   )
 }
