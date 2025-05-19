@@ -42,6 +42,12 @@ export const useBridgeStatus = (
     return CurrencyAmount.fromRawAmount(outputCurrency, data?.outputAmount)
   }, [outputCurrency, data?.outputAmount])
 
+  const feesBreakdown = useMemo(() => {
+    return {
+      totalFeesUSD: bridgeStatusData?.data?.reduce((prev, curr) => prev + Number(curr.metadata.fee), 0),
+    }
+  }, [])
+
   const bridgeStatusData: BridgeStatusData | undefined = useMemo(
     () =>
       data
@@ -49,6 +55,7 @@ export const useBridgeStatus = (
             ...data,
             inputCurrencyAmount,
             outputCurrencyAmount,
+            feesBreakdown,
           }
         : undefined,
     [data, inputCurrencyAmount, outputCurrencyAmount],

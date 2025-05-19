@@ -3766,8 +3766,13 @@
   "Swap %inputChainName% to %outputChainName%": "Swap %inputChainName% to %outputChainName%",
   "on %chainSymbol%": "on %chainSymbol%",
   "for": "for",
-  "Order details": "Order details",
   "Bridge Fee": "Bridge Fee",
   "Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.": "Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.",
-  "Incomplete": "Incomplete"
+  "Incomplete": "Incomplete",
+  "%amount% %symbol% is being refunded to your wallet on %targetChain%": "%amount% %symbol% is being refunded to your wallet on %targetChain%",
+  "Unsuccessful": "Unsuccessful",
+  "Order Details": "Order Details",
+  "%split% Split": "%split% Split",
+  "Via %poolTypes% Pool": "Via %poolTypes% Pool",
+  "%percent%%": "%percent%%"
 }

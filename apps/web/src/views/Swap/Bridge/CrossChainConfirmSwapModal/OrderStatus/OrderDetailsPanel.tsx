@@ -159,7 +159,7 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
                 {bridgeStatus?.status === BridgeStatus.PARTIAL_SUCCESS ? t('Partial Fee') : t('Total Fee')}
               </Text>
               <Text color="textSubtle" small>
-                {lpFeeAmount?.toSignificant(2) || '-'}&nbsp;
+                {lpFeeAmount?.toSignificant(2) || `$${bridgeStatus?.feesBreakdown?.totalFeesUSD}` || '-'}&nbsp;
               </Text>
             </RowBetween>
 

@@ -122,11 +122,15 @@ export interface StatusMetadataSwap {
   inputAmount: string
   outputAmount: string
   tx: string
+  fee: string
 }
 
 export interface BridgeStatusData extends BridgeStatusResponse {
   inputCurrencyAmount?: CurrencyAmount<Currency> | null
   outputCurrencyAmount?: CurrencyAmount<Currency> | null
+  feesBreakdown?: {
+    totalFeesUSD?: number
+  }
 }
 
 export interface ActiveBridgeOrderMetadata {
