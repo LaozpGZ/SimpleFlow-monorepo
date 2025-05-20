@@ -53,6 +53,7 @@ export function useTokenBalancesWithLoadingIndicator(
     args: useMemo(() => [address as Address] as const, [address]),
     options: {
       enabled: Boolean(address && addresses.length > 0),
+      watch: true,
     },
   })
 

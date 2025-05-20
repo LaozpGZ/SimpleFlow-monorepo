@@ -223,6 +223,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   const [value, setValue] = useState<string | undefined>(defaultValue)
 
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+
   const { t } = useTranslation()
 
   const mode = id
