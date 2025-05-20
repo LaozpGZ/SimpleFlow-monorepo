@@ -32,10 +32,12 @@ export const getBridgeCalldata = async ({
   order,
   recipient,
   permit2,
+  allowedSlippage,
 }: {
   order: BridgeOrderWithCommands
   recipient: Address
   permit2?: Permit2Schema
+  allowedSlippage: number
 }) => {
   try {
     if (!Array.isArray(order?.commands)) {
@@ -69,7 +71,7 @@ export const getBridgeCalldata = async ({
         data: {
           originChainId: command.trade.inputAmount.currency.chainId,
           trade: JSON.parse(JSON.stringify(command.trade, replacer, 2)),
-          slippageTolerance: 50,
+          slippageTolerance: allowedSlippage,
         },
       }
     })

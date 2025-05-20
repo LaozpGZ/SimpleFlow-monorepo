@@ -41,6 +41,7 @@ import { getViemClients } from 'utils/viem'
 import { getBridgeCalldata } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
 
+import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useSwapState } from 'state/swap/hooks'
 import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
 import { Permit2Schema } from 'views/Swap/Bridge/types'
@@ -478,6 +479,8 @@ const useConfirmActions = (
   const { recipient: recipientAddress } = useSwapState()
   const recipient = recipientAddress === null ? account : recipientAddress
 
+  const [allowedSlippage] = useUserSlippage() // custom from users
+
   const swapBridgeStep = useMemo(() => {
     return {
       step: ConfirmModalState.PENDING_CONFIRMATION,
@@ -495,6 +498,7 @@ const useConfirmActions = (
             order: order as BridgeOrderWithCommands,
             recipient: recipient as Address,
             permit2: permit2Signature as Permit2Schema | undefined,
+            allowedSlippage,
           })
 
           if (bridgeCalldataResponse?.transactionData?.calldata) {
@@ -575,6 +579,7 @@ const useConfirmActions = (
     chainId,
     setActiveBridgeOrderMetadata,
     permit2Signature,
+    allowedSlippage,
   ])
 
   const swapStep = useMemo(() => {
