@@ -28,6 +28,7 @@ import { useRoutingSettingChanged } from 'state/user/smartRouter'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { logGTMClickSwapConfirmEvent, logGTMClickSwapEvent } from 'utils/customGTMEventTracking'
 import { warningSeverity } from 'utils/exchange'
+import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckApproval'
 import { isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
 import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModalV2'
 import { useAccount, useChainId } from 'wagmi'
@@ -221,9 +222,17 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     () => !swapInputError && !tradeLoading && !hasBridgeTradeError,
     [swapInputError, tradeLoading, hasBridgeTradeError],
   )
+
+  const { isLoading: isBridgeCheckApprovalLoading } = useBridgeCheckApproval(order)
+
   const disabled = useMemo(
-    () => !isValid || (priceImpactSeverity > 3 && !isExpertMode) || isRecipientEmpty || isRecipientError,
-    [isExpertMode, isRecipientEmpty, isRecipientError, isValid, priceImpactSeverity],
+    () =>
+      isBridgeCheckApprovalLoading ||
+      !isValid ||
+      (priceImpactSeverity > 3 && !isExpertMode) ||
+      isRecipientEmpty ||
+      isRecipientError,
+    [isExpertMode, isRecipientEmpty, isRecipientError, isValid, priceImpactSeverity, isBridgeCheckApprovalLoading],
   )
 
   const userHasSpecifiedInputOutput = Boolean(
@@ -300,22 +309,21 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   }, [indirectlyOpenConfirmModalState, openConfirmSwapModal])
 
   const buttonText = useMemo(() => {
+    // NOTE: use if statement for readability
+
     if (isRecipientEmpty) return t('Enter a recipient')
     if (isRecipientError) return t('Invalid recipient')
+    if (tradeError instanceof BridgeTradeError) return tradeError.message
+    if (swapInputError) return swapInputError
 
-    if (tradeError instanceof BridgeTradeError) {
-      return tradeError.message
-    }
+    if (tradeLoading) return <Dots>{t('Searching For The Best Price')}</Dots>
+    if (isBridgeCheckApprovalLoading) return <Dots>{t('Checking for approval')}</Dots>
 
-    return (
-      swapInputError ||
-      (tradeLoading && <Dots>{t('Searching For The Best Price')}</Dots>) ||
-      (priceImpactSeverity > 3 && !isExpertMode
-        ? t('Price Impact Too High')
-        : priceImpactSeverity > 2
-        ? t('Swap Anyway')
-        : t('Swap'))
-    )
+    if (priceImpactSeverity > 3 && !isExpertMode) return t('Price Impact Too High')
+
+    if (priceImpactSeverity > 2) return t('Swap Anyway')
+
+    return t('Swap')
   }, [
     isExpertMode,
     isRecipientEmpty,
@@ -325,6 +333,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     t,
     tradeLoading,
     tradeError,
+    isBridgeCheckApprovalLoading,
   ])
 
   if (noRoute && userHasSpecifiedInputOutput && (hasNoValidRouteError || !tradeLoading)) {

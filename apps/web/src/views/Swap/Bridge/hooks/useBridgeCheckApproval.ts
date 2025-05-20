@@ -1,14 +1,23 @@
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useMemo } from 'react'
 
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSubmitPermit2 } from 'hooks/usePermit2'
 import { Address } from 'viem'
+import { InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
 import { postBridgeCheckApproval } from '../api'
 
-export const useBridgeCheckApproval = ({ currencyAmountIn }: { currencyAmountIn?: CurrencyAmount<Currency> }) => {
+export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
   const { account } = useAccountActiveChain()
+  const { chainId: activeChainId } = useActiveChainId()
+
+  const currencyAmountIn = useMemo(() => {
+    return isBridgeOrder(order) && activeChainId
+      ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === activeChainId)?.inputAmount
+      : undefined
+  }, [order, activeChainId])
 
   const isNativeCurrency = currencyAmountIn?.currency?.isNative
 
@@ -45,9 +54,7 @@ export const useBridgeCheckApproval = ({ currencyAmountIn }: { currencyAmountIn?
       }
     },
     enabled: !!currencyAmountIn && !!account,
-    retry: 1,
-    // If the query fails, return an error object
-    throwOnError: false,
+    retry: 3,
   })
 
   const isRequiredFromResponse = approvalData?.isApprovalRequired

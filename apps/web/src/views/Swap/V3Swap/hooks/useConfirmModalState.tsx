@@ -84,17 +84,7 @@ const useCreateConfirmSteps = (
   const { address: account } = useAccount()
   const balance = useCurrencyBalance(account ?? undefined, nativeCurrency.wrapped)
 
-  const { chainId: activeChainId } = useActiveChainId()
-
-  const currencyAmountIn = useMemo(() => {
-    return isBridgeOrder(order) && activeChainId
-      ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === activeChainId)?.inputAmount
-      : undefined
-  }, [order, activeChainId])
-
-  const { requiresApproval, approvalData } = useBridgeCheckApproval({
-    currencyAmountIn,
-  })
+  const { requiresApproval, approvalData } = useBridgeCheckApproval(order)
 
   return useCallback(async () => {
     const steps: ConfirmModalState[] = []
@@ -288,15 +278,7 @@ const useConfirmActions = (
     t,
   ])
 
-  const currencyAmountIn = useMemo(() => {
-    return isBridgeOrder(order) && chainId
-      ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === chainId)?.inputAmount
-      : undefined
-  }, [order, chainId])
-
-  const { approvalData, error, refetch, signPermit2 } = useBridgeCheckApproval({
-    currencyAmountIn,
-  })
+  const { approvalData, error, refetch, signPermit2 } = useBridgeCheckApproval(order)
 
   const permitStep = useMemo(() => {
     return {
@@ -305,8 +287,6 @@ const useConfirmActions = (
         setConfirmState(ConfirmModalState.PERMITTING)
         try {
           if (isBridgeOrder(order)) {
-            console.log('permitStep')
-
             const permitSignatureResponse = await signPermit2()
 
             setPermit2Signature(permitSignatureResponse)
@@ -333,7 +313,7 @@ const useConfirmActions = (
       },
       showIndicator: true,
     }
-  }, [permit, retryWaitForTransaction, safeTxHashTransformer, showError, signPermit2, order])
+  }, [permit, retryWaitForTransaction, safeTxHashTransformer, showError, signPermit2, setPermit2Signature, order])
 
   const wrapStep = useMemo(() => {
     return {
