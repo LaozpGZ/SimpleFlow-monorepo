@@ -219,8 +219,12 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   const hasBridgeTradeError = useMemo(() => Boolean(tradeError && tradeError instanceof BridgeTradeError), [tradeError])
 
   const isValid = useMemo(
-    () => !swapInputError && !tradeLoading && !hasBridgeTradeError,
-    [swapInputError, tradeLoading, hasBridgeTradeError],
+    () =>
+      !swapInputError &&
+      !tradeLoading &&
+      !hasBridgeTradeError &&
+      parsedAmounts[Field.OUTPUT]?.greaterThan(BIG_INT_ZERO),
+    [swapInputError, tradeLoading, hasBridgeTradeError, parsedAmounts],
   )
 
   const { isLoading: isBridgeCheckApprovalLoading } = useBridgeCheckApproval(order)

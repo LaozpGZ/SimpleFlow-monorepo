@@ -598,11 +598,15 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           }
         }
 
+        if (!quoteLoadable) {
+          throw new BridgeTradeError('Unknown error in cross chain quote')
+        }
+
         if (quoteLoadable?.isPending()) {
           return Loadable.Pending<InterfaceOrder>()
         }
 
-        return quoteLoadable || Loadable.Nothing<InterfaceOrder>()
+        return quoteLoadable
       } catch (error: unknown) {
         console.error('Failed to get cross chain quote:', error)
 
