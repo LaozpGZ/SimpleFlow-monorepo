@@ -1,6 +1,6 @@
 import { atoms } from '@pancakeswap/uikit/css/atoms'
 import { responsiveStyle } from '@pancakeswap/uikit/css/responsiveStyle'
-import { style, keyframes } from '@vanilla-extract/css'
+import { keyframes, style } from '@vanilla-extract/css'
 
 const promotedGradientKf = keyframes({
   '0%': {
@@ -95,4 +95,10 @@ export const walletIconClass = style({
   width: '48px',
   height: '48px',
   borderRadius: '12px',
+})
+
+export const scrollbarClass = style({
+  '::-webkit-scrollbar': {
+    width: '6px',
+  },
 })

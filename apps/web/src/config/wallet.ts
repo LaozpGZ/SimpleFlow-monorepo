@@ -61,7 +61,8 @@ const isMetamaskInstalled = () => {
 
   try {
     if (window.ethereum?.isMetaMask) {
-      return true
+      // binance wallet doesn't support metamask
+      return !window.ethereum?.isBinance
     }
 
     if (window.ethereum?.providers?.some((p) => p.isMetaMask)) {

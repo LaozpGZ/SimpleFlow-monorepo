@@ -28,6 +28,7 @@ import {
   desktopWalletSelectionClass,
   fullSizeModalWrapperClass,
   modalWrapperClass,
+  scrollbarClass,
   walletIconClass,
   walletSelectWrapperClass,
 } from './WalletModal.css'
@@ -210,7 +211,13 @@ function WalletSelect<T>({
     [t, walletsToShow, topWallets, previouslyUsedWallets],
   )
   return (
-    <Column overflowY="auto" overflowX="hidden" gap="16px" style={{ paddingRight: '10px', marginRight: '-6px' }}>
+    <Column
+      overflowY="auto"
+      overflowX="hidden"
+      gap="16px"
+      style={{ paddingRight: '28px', marginRight: '-6px' }}
+      className={scrollbarClass}
+    >
       {sections.map(({ label, items, isMore }) =>
         items.length > 0 ? (
           <Column gap="6px">
