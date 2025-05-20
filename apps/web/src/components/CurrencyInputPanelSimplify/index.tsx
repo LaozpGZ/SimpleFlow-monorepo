@@ -242,7 +242,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
 
   const [onPresentCurrencyModal] = useModal(
     <CurrencySearchModal
-      showChainLogo
+      supportCrossChain
       onCurrencySelect={onCurrencySelect}
       selectedCurrency={currency}
       otherSelectedCurrency={otherCurrency}

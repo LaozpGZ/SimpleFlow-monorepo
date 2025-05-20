@@ -51,11 +51,13 @@ export default function CommonBases({
   onSelect,
   selectedCurrency,
   commonBasesType,
+  supportCrossChain,
 }: {
   chainId?: ChainId
   commonBasesType
   selectedCurrency?: Currency | null
   onSelect: (currency: Currency) => void
+  supportCrossChain?: boolean
 }) {
   const native = useNativeCurrency(chainId)
   const { t } = useTranslation()
@@ -82,7 +84,7 @@ export default function CommonBases({
             disable={selectedCurrency?.isNative}
           >
             <CurrencyLogo
-              showChainLogo
+              showChainLogo={supportCrossChain}
               currency={native}
               containerStyle={{
                 position: 'relative',
@@ -100,7 +102,7 @@ export default function CommonBases({
             <ButtonWrapper key={`buttonBase#${token.address}`}>
               <BaseWrapper onClick={() => !selected && onSelect(token)} disable={selected}>
                 <CurrencyLogo
-                  showChainLogo
+                  showChainLogo={supportCrossChain}
                   currency={token}
                   style={{ borderRadius: '50%' }}
                   containerStyle={{

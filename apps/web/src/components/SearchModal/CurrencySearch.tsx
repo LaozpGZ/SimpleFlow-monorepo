@@ -44,6 +44,7 @@ interface CurrencySearchProps {
   setSelectedChainId: (chainId: ChainId) => void
   selectedChainId?: ChainId
   mode?: string
+  supportCrossChain?: boolean
 }
 
 function useSearchInactiveTokenLists(search: string | undefined, minResults = 10): WrappedTokenInfo[] {
@@ -110,6 +111,7 @@ function CurrencySearch({
   setSelectedChainId,
   selectedChainId,
   mode,
+  supportCrossChain = false,
 }: CurrencySearchProps) {
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState<string>('')
@@ -285,13 +287,17 @@ function CurrencySearch({
             <CurrencySearchInput inputRef={inputRef} handleEnter={handleEnter} onInput={handleOnInput} />
           </Row>
         )}
-        <SwapNetworkSelection
-          chainId={selectedChainId}
-          onSelect={(currentChainId) => setSelectedChainId(currentChainId)}
-          isDependent={mode === 'swap-currency-output'}
-        />
+        {supportCrossChain ? (
+          <SwapNetworkSelection
+            chainId={selectedChainId}
+            onSelect={(currentChainId) => setSelectedChainId(currentChainId)}
+            isDependent={mode === 'swap-currency-output'}
+          />
+        ) : null}
+
         {showCommonBases && (
           <CommonBases
+            supportCrossChain={supportCrossChain}
             chainId={selectedChainId}
             onSelect={handleCurrencySelect}
             selectedCurrency={selectedCurrency}

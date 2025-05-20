@@ -70,19 +70,19 @@ export interface CurrencySearchModalProps extends InjectedModalProps {
   tokensToShow?: Token[]
   showCurrencyInHeader?: boolean
   showSearchHeader?: boolean
-  showChainLogo?: boolean
   modalTitle?: React.ReactNode
   mode?: string
+  supportCrossChain?: boolean
 }
 
 export default function CurrencySearchModal({
+  supportCrossChain = false,
   onDismiss = () => null,
   onCurrencySelect,
   selectedCurrency,
   otherSelectedCurrency,
   commonBasesType,
   tokensToShow,
-  showChainLogo,
   modalTitle,
   showCommonBases = true,
   showSearchInput,
@@ -177,7 +177,7 @@ export default function CurrencySearchModal({
               <>
                 <CurrencyLogo
                   size="32px"
-                  showChainLogo={showChainLogo}
+                  showChainLogo={supportCrossChain}
                   currency={selectedCurrency}
                   style={{ borderRadius: '50%' }}
                 />
@@ -238,6 +238,7 @@ export default function CurrencySearchModal({
       <StyledModalBody>
         {modalView === CurrencyModalView.search ? (
           <CurrencySearch
+            supportCrossChain={supportCrossChain}
             onCurrencySelect={handleCurrencySelect}
             selectedCurrency={selectedCurrency}
             otherSelectedCurrency={otherSelectedCurrency}
@@ -248,7 +249,7 @@ export default function CurrencySearchModal({
             setImportToken={setImportToken}
             height={height}
             tokensToShow={tokensToShow}
-            showChainLogo={showChainLogo}
+            showChainLogo={supportCrossChain}
             showSearchHeader={showSearchHeader}
             headerTitle={modalTitle}
             onDismiss={onDismiss}
