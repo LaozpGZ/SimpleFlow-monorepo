@@ -30,6 +30,7 @@ export const CurrencySearchInput = ({
       ref={inputRef as RefObject<HTMLInputElement>}
       onChange={onInput}
       onKeyDown={handleEnter}
+      autoFocus
       {...props}
     />
   )

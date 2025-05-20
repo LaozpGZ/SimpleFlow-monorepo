@@ -215,22 +215,23 @@ const BridgeChainRoutes = ({ routes }: { routes: RouteDisplayEssentials[] }) => 
 
   const poolTypes = [
     ...new Set(
-      routes.map((route) => {
-        const pool = route.pools[0]
-        if (SmartRouter.isInfinityClPool(pool) || SmartRouter.isInfinityBinPool(pool)) {
-          return 'Infinity'
-        }
-        if (SmartRouter.isStablePool(pool)) {
-          return 'StableSwap'
-        }
-        if (SmartRouter.isV3Pool(pool)) {
-          return 'V3'
-        }
-        if (SmartRouter.isV2Pool(pool)) {
-          return 'V2'
-        }
-        return 'Unknown'
-      }),
+      routes.flatMap((route) =>
+        route.pools.map((pool) => {
+          if (SmartRouter.isInfinityClPool(pool) || SmartRouter.isInfinityBinPool(pool)) {
+            return 'Infinity'
+          }
+          if (SmartRouter.isStablePool(pool)) {
+            return 'StableSwap'
+          }
+          if (SmartRouter.isV3Pool(pool)) {
+            return 'V3'
+          }
+          if (SmartRouter.isV2Pool(pool)) {
+            return 'V2'
+          }
+          return 'Unknown'
+        }),
+      ),
     ),
   ]
 
