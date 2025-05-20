@@ -7,8 +7,10 @@ import {
   Button,
   ButtonMenu,
   ButtonMenuItem,
+  CloseIcon,
   Column,
   Heading,
+  IconButton,
   Image,
   LinkExternal,
   ModalV2,
@@ -23,7 +25,7 @@ import {
   WarningIcon,
 } from '@pancakeswap/uikit'
 import { useAtom } from 'jotai'
-import { PropsWithChildren, Suspense, lazy, useCallback, useMemo, useState } from 'react'
+import { MouseEvent, PropsWithChildren, Suspense, lazy, useCallback, useMemo, useState } from 'react'
 import {
   desktopWalletSelectionClass,
   fullSizeModalWrapperClass,
@@ -57,9 +59,10 @@ type TabContainerProps = PropsWithChildren<{
   docLink: string
   docText: string
   fullSize?: boolean
+  onDismiss?: () => void
 }>
 
-const TabContainer = ({ children, docLink, docText, fullSize = true }: TabContainerProps) => {
+const TabContainer = ({ children, docLink, docText, fullSize = true, onDismiss }: TabContainerProps) => {
   const [index, setIndex] = useState(0)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
@@ -90,10 +93,24 @@ const TabContainer = ({ children, docLink, docText, fullSize = true }: TabContai
         width="100%"
       >
         {isMobile ? (
-          <ButtonMenu scale="sm" mb="16px" fullWidth activeIndex={index} onItemClick={setIndex} variant="subtle">
-            <ButtonMenuItem>{t('Connect Wallet')}</ButtonMenuItem>
-            <ButtonMenuItem minWidth="57%">{t('What’s a Web3 Wallet?')}</ButtonMenuItem>
-          </ButtonMenu>
+          <Row mb="16px" gap="16px">
+            <ButtonMenu scale="md" activeIndex={index} onItemClick={setIndex} variant="subtle">
+              <ButtonMenuItem>{t('Connect Wallet')}</ButtonMenuItem>
+              <ButtonMenuItem minWidth="57%">{t('What’s a Web3 Wallet?')}</ButtonMenuItem>
+            </ButtonMenu>
+
+            <IconButton
+              mr="-6px"
+              variant="text"
+              onClick={(e: MouseEvent<HTMLButtonElement>) => {
+                e.stopPropagation()
+                onDismiss?.()
+              }}
+              aria-label="Close the dialog"
+            >
+              <CloseIcon color="textSubtle" />
+            </IconButton>
+          </Row>
         ) : null}
         {index === 0 && children}
         {index === 1 && (
@@ -143,7 +160,7 @@ function MobileModal<T>({
   const previouslyUsedWalletsToShow: WalletConfigV2<T>[] = previouslyUsedWallets.filter(filterFn)
 
   return (
-    <AtomBox width="100%" overflowX="hidden" overflowY="auto">
+    <AtomBox width="100%">
       {error ? (
         <AtomBox
           display="flex"
@@ -159,8 +176,9 @@ function MobileModal<T>({
           </div>
         </AtomBox>
       ) : null}
-      <AtomBox display="flex" flexDirection="column" gap="16px">
+      <AtomBox display="flex" flexDirection="column" gap="16px" justifyContent="space-between">
         <WalletSelect
+          style={{ height: `calc(100vh - 150px)` }}
           displayCount="all"
           wallets={walletsToShow}
           topWallets={topWalletsToShow}
@@ -184,12 +202,14 @@ function WalletSelect<T>({
   previouslyUsedWallets,
   onClick,
   displayCount = 9,
+  style = {},
 }: {
   wallets: WalletConfigV2<T>[]
   topWallets: WalletConfigV2<T>[]
   previouslyUsedWallets: WalletConfigV2<T>[]
   onClick: (wallet: WalletConfigV2<T>) => void
   displayCount?: number | 'all'
+  style?: React.CSSProperties
 }) {
   const { t } = useTranslation()
   const { theme } = useTheme()
@@ -215,7 +235,7 @@ function WalletSelect<T>({
       overflowY="auto"
       overflowX="hidden"
       gap="16px"
-      style={{ paddingRight: '28px', marginRight: '-6px' }}
+      style={{ paddingRight: '28px', marginRight: '-6px', ...style }}
       className={scrollbarClass}
     >
       {sections.map(({ label, items, isMore }) =>
@@ -552,15 +572,17 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
     [handleWalletConnected, login, setError, setSelected, t],
   )
 
+  const mobileContainerStyle: React.CSSProperties = isMobile ? { height: '100%', borderRadius: 0 } : {}
+
   return (
     <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
       <ModalWrapper
         onDismiss={props.onDismiss}
-        containerStyle={{ border: 'none' }}
-        style={{ overflow: 'visible', border: 'none' }}
+        containerStyle={{ border: 'none', ...mobileContainerStyle }}
+        style={{ overflow: 'visible', border: 'none', ...mobileContainerStyle }}
       >
         <AtomBox position="relative">
-          <TabContainer docLink={docLink} docText={docText} fullSize={fullSize}>
+          <TabContainer docLink={docLink} docText={docText} fullSize={fullSize} onDismiss={props.onDismiss}>
             {isMobile ? (
               <MobileModal
                 mevDocLink={mevDocLink}
