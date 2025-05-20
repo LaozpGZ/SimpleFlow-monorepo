@@ -20,9 +20,7 @@ const DISABLED_VAULTS_CONFIG: {
   },
 
   // Disable by manager (applies across all chains)
-  byManagerName: [
-    // MANAGER.BRIL,MANAGER.DEFIEDGE, ...
-  ],
+  byManagerName: Object.values(MANAGER),
 }
 
 function isDisabledByManager(managerName: MANAGER) {
