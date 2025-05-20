@@ -409,7 +409,7 @@ export const BridgeRouteDisplay = memo(function BridgeRouteDisplay({ route }: Br
           {t('%percent%%', { percent: Math.round(percent) })}
         </Text>
       </RouteBoxHeader>
-      <Box p="12px 12px 48px">
+      <Box p="12px 18px 64px">
         <RouterBox
           justifyContent={pairNodes && pairNodes.length > 1 ? 'space-between' : 'center'}
           alignItems="center"
