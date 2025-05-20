@@ -29,7 +29,7 @@ export enum WalletIds {
 }
 
 export type WalletConfigV2<T = unknown> = {
-  id: WalletIds
+  id: string
   title: string
   icon: string | React.FC<React.PropsWithChildren<SvgProps>>
   connectorId: T

@@ -25,7 +25,7 @@ export enum WalletIds {
   Msafe = 'msafe',
 }
 
-export const wallets: WalletConfigV2<ConnectorNames, WalletIds>[] = [
+export const wallets: WalletConfigV2<ConnectorNames>[] = [
   {
     id: WalletIds.Petra,
     title: 'Petra',
