@@ -26,6 +26,7 @@ import { useAtom } from 'jotai'
 import { PropsWithChildren, Suspense, lazy, useCallback, useMemo, useState } from 'react'
 import {
   desktopWalletSelectionClass,
+  fullSizeModalWrapperClass,
   modalWrapperClass,
   walletIconClass,
   walletSelectWrapperClass,
@@ -51,13 +52,19 @@ const StyledTab = styled(Tab)`
   padding: 4px 12px;
 `
 
-const TabContainer = ({ children, docLink, docText }: PropsWithChildren<{ docLink: string; docText: string }>) => {
+type TabContainerProps = PropsWithChildren<{
+  docLink: string
+  docText: string
+  fullSize?: boolean
+}>
+
+const TabContainer = ({ children, docLink, docText, fullSize = true }: TabContainerProps) => {
   const [index, setIndex] = useState(0)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
   return (
-    <AtomBox position="relative" zIndex="modal" className={modalWrapperClass}>
+    <AtomBox position="relative" zIndex="modal" className={fullSize ? fullSizeModalWrapperClass : modalWrapperClass}>
       {isMobile ? null : (
         <AtomBox position="absolute" style={{ top: '-48px', left: '10px' }}>
           <TabMenu activeIndex={index} onItemClick={setIndex} gap="16px" isColorInverse isShowBorderBottom={false}>
@@ -164,7 +171,7 @@ function MobileModal<T>({
             }
           }}
         />
-        <MEVSection mevDocLink={mevDocLink} />
+        {mevDocLink ? <MEVSection mevDocLink={mevDocLink} /> : null}
       </AtomBox>
     </AtomBox>
   )
@@ -204,89 +211,89 @@ function WalletSelect<T>({
   )
   return (
     <Column overflowY="auto" overflowX="hidden" gap="16px" style={{ paddingRight: '10px', marginRight: '-6px' }}>
-      {sections.map(({ label, items, isMore }) => (
-        <Column gap="6px">
-          {items.length > 0 ? (
+      {sections.map(({ label, items, isMore }) =>
+        items.length > 0 ? (
+          <Column gap="6px">
             <Text fontSize="14px" color="textSubtle" lineHeight={1.5}>
               {label}
             </Text>
-          ) : null}
-          <AtomBox display="grid" overflowY="auto" overflowX="hidden" className={walletSelectWrapperClass}>
-            {items.map((wallet) => {
-              const isImage = typeof wallet.icon === 'string'
-              const Icon = wallet.icon
+            <AtomBox display="grid" overflowY="auto" overflowX="hidden" className={walletSelectWrapperClass}>
+              {items.map((wallet) => {
+                const isImage = typeof wallet.icon === 'string'
+                const Icon = wallet.icon
 
-              return (
-                <AtomBox border="1" borderRadius="default" p="12px" style={{ maxWidth: '106px' }}>
-                  <Button
-                    key={wallet.id}
-                    variant="text"
-                    height="auto"
-                    width="100%"
-                    as={AtomBox}
-                    display="flex"
-                    alignItems="center"
-                    style={{ justifyContent: 'flex-start', letterSpacing: 'normal', padding: '0' }}
-                    flexDirection="column"
-                    onClick={() => onClick(wallet)}
-                  >
-                    <AtomBox borderRadius="12px" mb="4px">
-                      <AtomBox
-                        bgc="dropdown"
-                        display="flex"
-                        position="relative"
-                        justifyContent="center"
-                        alignItems="center"
-                        className={walletIconClass}
-                        style={{ borderRadius: '13px' }}
-                        overflow="hidden"
-                      >
-                        {isImage ? (
-                          <Image src={Icon as string} width={48} height={48} />
-                        ) : (
-                          <Icon width={24} height={24} color="textSubtle" />
-                        )}
+                return (
+                  <AtomBox border="1" borderRadius="default" p="12px" style={{ maxWidth: '106px' }}>
+                    <Button
+                      key={wallet.id}
+                      variant="text"
+                      height="auto"
+                      width="100%"
+                      as={AtomBox}
+                      display="flex"
+                      alignItems="center"
+                      style={{ justifyContent: 'flex-start', letterSpacing: 'normal', padding: '0' }}
+                      flexDirection="column"
+                      onClick={() => onClick(wallet)}
+                    >
+                      <AtomBox borderRadius="12px" mb="4px">
+                        <AtomBox
+                          bgc="dropdown"
+                          display="flex"
+                          position="relative"
+                          justifyContent="center"
+                          alignItems="center"
+                          className={walletIconClass}
+                          style={{ borderRadius: '13px' }}
+                          overflow="hidden"
+                        >
+                          {isImage ? (
+                            <Image src={Icon as string} width={48} height={48} />
+                          ) : (
+                            <Icon width={24} height={24} color="textSubtle" />
+                          )}
+                        </AtomBox>
                       </AtomBox>
+                      <Row gap="2px">
+                        {wallet.MEVSupported ? (
+                          <ShieldCheckIcon width={17} height={17} color={theme.colors.positive60} />
+                        ) : null}
+                        <Text fontSize="12px" textAlign="center" width="100%" ellipsis>
+                          {wallet.title}
+                        </Text>
+                      </Row>
+                    </Button>
+                  </AtomBox>
+                )
+              })}
+              {isMore && !showMore && wallets.length > walletDisplayCount && (
+                <AtomBox display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+                  <Button
+                    height="auto"
+                    variant="text"
+                    as={AtomBox}
+                    flexDirection="column"
+                    onClick={() => setShowMore(true)}
+                  >
+                    <AtomBox
+                      className={walletIconClass}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      bgc="dropdown"
+                    >
+                      <MoreHorizontalIcon color="text" />
                     </AtomBox>
-                    <Row gap="2px">
-                      {wallet.MEVSupported ? (
-                        <ShieldCheckIcon width={17} height={17} color={theme.colors.positive60} />
-                      ) : null}
-                      <Text fontSize="12px" textAlign="center" width="100%" ellipsis>
-                        {wallet.title}
-                      </Text>
-                    </Row>
+                    <Text fontSize="12px" textAlign="center" mt="4px">
+                      {t('More')}
+                    </Text>
                   </Button>
                 </AtomBox>
-              )
-            })}
-            {isMore && !showMore && wallets.length > walletDisplayCount && (
-              <AtomBox display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-                <Button
-                  height="auto"
-                  variant="text"
-                  as={AtomBox}
-                  flexDirection="column"
-                  onClick={() => setShowMore(true)}
-                >
-                  <AtomBox
-                    className={walletIconClass}
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    bgc="dropdown"
-                  >
-                    <MoreHorizontalIcon color="text" />
-                  </AtomBox>
-                  <Text fontSize="12px" textAlign="center" mt="4px">
-                    {t('More')}
-                  </Text>
-                </Button>
-              </AtomBox>
-            )}
-          </AtomBox>
-        </Column>
-      ))}
+              )}
+            </AtomBox>
+          </Column>
+        ) : null,
+      )}
     </Column>
   )
 }
@@ -413,7 +420,7 @@ function DesktopModal<T>({
           displayCount="all"
           onClick={onWalletSelected}
         />
-        <MEVSection mevDocLink={mevDocLink} />
+        {mevDocLink ? <MEVSection mevDocLink={mevDocLink} /> : null}
       </AtomBox>
       <AtomBox
         flex={1}
@@ -457,6 +464,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
     mevDocLink,
     docText,
     onWalletConnectCallBack,
+    fullSize,
     ...rest
   } = props
 
@@ -545,7 +553,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
         style={{ overflow: 'visible', border: 'none' }}
       >
         <AtomBox position="relative">
-          <TabContainer docLink={docLink} docText={docText}>
+          <TabContainer docLink={docLink} docText={docText} fullSize={fullSize}>
             {isMobile ? (
               <MobileModal
                 mevDocLink={mevDocLink}

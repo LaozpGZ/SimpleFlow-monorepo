@@ -34,6 +34,23 @@ export const modalWrapperClass = style([
       marginBottom: 0,
     },
     md: {
+      height: '490px',
+    },
+    lg: {
+      width: '792px',
+    },
+  }),
+])
+export const fullSizeModalWrapperClass = style([
+  style({
+    display: 'flex',
+  }),
+  responsiveStyle({
+    xs: {
+      width: '100%',
+      marginBottom: 0,
+    },
+    md: {
       height: '690px',
     },
     lg: {

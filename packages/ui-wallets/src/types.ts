@@ -45,7 +45,7 @@ export type WalletConfigV2<T = unknown> = {
 
 export type ConnectData = {
   accounts: readonly [string, ...string[]]
-  chainId: number
+  chainId: number | string | undefined
 }
 
 export interface WalletModalV2Props<T = unknown> extends ModalV2Props {
@@ -54,6 +54,7 @@ export interface WalletModalV2Props<T = unknown> extends ModalV2Props {
   login: (connectorID: T) => Promise<ConnectData | undefined>
   docLink: string
   docText: string
-  mevDocLink: string
+  mevDocLink: string | null
   onWalletConnectCallBack?: (walletTitle?: string, address?: string) => void
+  fullSize?: boolean
 }

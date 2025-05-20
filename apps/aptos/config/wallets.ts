@@ -13,9 +13,21 @@ export enum ConnectorNames {
   Msafe = 'msafe',
 }
 
-export const wallets: WalletConfigV2<ConnectorNames>[] = [
+export enum WalletIds {
+  Petra = 'petra',
+  Martian = 'martian',
+  Pontem = 'pontem',
+  Fewcha = 'fewcha',
+  Blocto = 'blocto',
+  TrustWallet = 'trustWallet',
+  SafePal = 'safePal',
+  Rise = 'rise',
+  Msafe = 'msafe',
+}
+
+export const wallets: WalletConfigV2<ConnectorNames, WalletIds>[] = [
   {
-    id: 'petra',
+    id: WalletIds.Petra,
     title: 'Petra',
     icon: '/images/wallets/petra.png',
     get installed() {
@@ -27,7 +39,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: 'martian',
+    id: WalletIds.Martian,
     title: 'Martian',
     icon: '/images/wallets/martian.png',
     get installed() {
@@ -39,7 +51,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: 'pontem',
+    id: WalletIds.Pontem,
     title: 'Pontem',
     icon: '/images/wallets/pontem.png',
     get installed() {
@@ -51,7 +63,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: 'fewcha',
+    id: WalletIds.Fewcha,
     title: 'Fewcha',
     icon: '/images/wallets/fewcha.png',
     get installed() {
@@ -63,7 +75,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: 'blocto',
+    id: WalletIds.Blocto,
     title: 'Blocto',
     icon: '/images/wallets/blocto.png',
     get installed() {
@@ -72,7 +84,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     connectorId: ConnectorNames.Blocto,
   },
   {
-    id: 'trustWallet',
+    id: WalletIds.TrustWallet,
     title: 'Trust Wallet',
     icon: 'https://pancakeswap.finance/images/wallets/trust.png',
     get installed() {
@@ -82,7 +94,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     connectorId: ConnectorNames.TrustWallet,
   },
   {
-    id: 'safePal',
+    id: WalletIds.SafePal,
     title: 'SafePal',
     icon: 'https://pancakeswap.finance/images/wallets/safepal.png',
     get installed() {
@@ -94,7 +106,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: 'rise',
+    id: WalletIds.Rise,
     title: 'Rise Wallet',
     icon: '/images/wallets/rise.png',
     get installed() {
@@ -108,7 +120,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: 'msafe',
+    id: WalletIds.Msafe,
     title: 'Msafe',
     icon: '/images/wallets/msafe.png',
     get installed() {
