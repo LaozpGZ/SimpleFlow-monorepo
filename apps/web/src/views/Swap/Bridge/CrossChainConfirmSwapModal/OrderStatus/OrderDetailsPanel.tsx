@@ -8,31 +8,36 @@ import {
   ChevronDownIcon,
   ChevronUpIcon,
   FlexGap,
+  Link,
+  QuestionHelperV2,
   RowBetween,
   RowFixed,
+  SkeletonV2,
   Text,
 } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { LightGreyCard } from 'components/Card'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { useAtomValue } from 'jotai'
-import { useCallback, useMemo, useState } from 'react'
+import { Suspense, useCallback, useMemo, useState } from 'react'
 import { Field } from 'state/swap/actions'
 import styled from 'styled-components'
-import { isBridgeOrder, isXOrder } from 'views/Swap/utils'
-import {
-  computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter,
-  computeTradePriceBreakdown as computeTradePriceBreakdownWithSmartRouter,
-} from 'views/Swap/V3Swap/utils/exchange'
-import { Timeline } from '../components/Timeline'
+import { isBridgeOrder } from 'views/Swap/utils'
+import { computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter } from 'views/Swap/V3Swap/utils/exchange'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
-import { activeBridgeOrderMetadataAtom } from '../state/orderDataState'
-
+import { OrderType } from '@pancakeswap/price-api-sdk'
+import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { BigNumber } from 'bignumber.js'
+import { currenciesUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
+import { isNotUndefinedOrNull } from 'utils/isNotUndefinedOrNull'
 import { useBridgeStatus } from '../../hooks'
-import { ActiveBridgeOrderMetadata, BridgeStatus } from '../../types'
+import { ActiveBridgeOrderMetadata, BridgeStatus, BridgeStatusData } from '../../types'
+import { BridgeOrderFee, computeBridgeOrderFee } from '../../utils'
+import { Timeline } from '../components/Timeline'
 import { useTimelineItems } from '../hooks/useTimelineItems'
+import { activeBridgeOrderMetadataAtom } from '../state/orderDataState'
 
 const AnimatedContainer = styled.div<{ expanded: boolean }>`
   overflow: hidden;
@@ -46,6 +51,18 @@ const ProgressPill = styled(Box)<{ $color: string }>`
   height: 4px;
   border-radius: 8px;
   background-color: ${({ theme, $color }) => theme.colors[$color]};
+`
+
+const DetailsTitle = styled(Text)`
+  text-decoration: underline dotted;
+  font-size: 14px;
+  color: ${({ theme }) => theme.colors.textSubtle};
+  line-height: 150%;
+  cursor: help;
+`
+
+const FeePanelCard = styled(LightGreyCard)`
+  background-color: ${({ theme }) => (theme.isDark ? theme.colors.backgroundAlt : theme.colors.backgroundAlt3)};
 `
 
 interface OrderDetailsPanelProps extends BoxProps {
@@ -82,10 +99,16 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
     [order, allowedSlippage],
   )
 
-  const { lpFeeAmount } = useMemo(
-    () => computeTradePriceBreakdownWithSmartRouter(isBridgeOrder(order) || isXOrder(order) ? undefined : order?.trade),
-    [order],
-  )
+  const priceBreakdown: BridgeOrderFee[] | undefined = useMemo(() => {
+    if (isBridgeOrder(order)) {
+      const bridgeOrderFee = computeBridgeOrderFee(order)
+      if (Array.isArray(bridgeOrderFee)) {
+        return bridgeOrderFee
+      }
+      return undefined
+    }
+    return undefined
+  }, [order])
 
   const minimumReceived = useMemo(() => {
     const slippageAdjustedAmount = formatAmount(slippageAdjustedAmounts?.[Field.OUTPUT], DISPLAY_PRECISION)
@@ -155,24 +178,17 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
               </>
             )}
 
-            <RowBetween>
-              <Text color="textSubtle" small>
-                {bridgeStatus?.status === BridgeStatus.PARTIAL_SUCCESS ? t('Partial Fee') : t('Total Fee')}
-              </Text>
-              <Text color="textSubtle" small>
-                {lpFeeAmount?.toSignificant(2) ||
-                  (bridgeStatus?.feesBreakdown?.totalFeesUSD &&
-                    `$${formatNumber(bridgeStatus?.feesBreakdown?.totalFeesUSD, { maximumSignificantDigits: 4 })}`) ||
-                  '-'}
-                &nbsp;
-              </Text>
-            </RowBetween>
+            <BridgeFeesBreakdown
+              priceBreakdown={priceBreakdown}
+              feesBreakdown={bridgeStatus?.feesBreakdown}
+              status={bridgeStatus?.status}
+            />
 
             <RowBetween>
               <Text color="textSubtle" small>
                 {t('Minimum received')}
               </Text>
-              <Text color="textSubtle" small>
+              <Text small>
                 {minimumReceived}
                 &nbsp;
                 {bridgeStatus?.outputCurrencyAmount?.currency.symbol || order?.trade.outputAmount.currency.symbol}
@@ -190,5 +206,161 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
         </LightGreyCard>
       )}
     </Box>
+  )
+}
+
+const BridgeFeesBreakdown = ({
+  priceBreakdown,
+  feesBreakdown,
+  status,
+}: {
+  // Price breakdown for ongoing bridge order
+  priceBreakdown?: BridgeOrderFee[]
+
+  // Fees breakdown for data from status API
+  feesBreakdown?: BridgeStatusData['feesBreakdown']
+
+  status?: BridgeStatus
+}) => {
+  const { t } = useTranslation()
+  const [isOpen, setIsOpen] = useState(false)
+
+  // Calculate ongoing order fees from Price Breakdown
+  const currencies = useMemo(() => {
+    if (!priceBreakdown) return undefined
+    return priceBreakdown?.map((p) => p.lpFeeAmount!.currency)
+  }, [priceBreakdown])
+
+  const usdPrices = useAtomValue(currenciesUSDPriceAtom(currencies ?? []))
+
+  // Group and sum up fees by type
+  const groupedFees = useMemo(() => {
+    if (!priceBreakdown) return undefined
+
+    return priceBreakdown?.reduce((acc, curr, index) => {
+      const type = curr.type === OrderType.PCS_BRIDGE ? 'bridge' : 'trading'
+      const existingFee = acc[type] || {
+        label: curr.type === OrderType.PCS_BRIDGE ? t('Bridge Fee') : t('Trading Fee'),
+        amount: new BigNumber(0),
+      }
+
+      const usdAmount = new BigNumber(curr.lpFeeAmount?.toExact() ?? 0).times(usdPrices[index] ?? 0)
+
+      return {
+        ...acc,
+        [type]: {
+          ...existingFee,
+          amount: existingFee.amount.plus(usdAmount),
+        },
+      }
+    }, {} as Record<string, { label: string; amount: BigNumber }>)
+  }, [priceBreakdown, usdPrices, t])
+
+  const priceBreakdownTotalFeesUSD = useMemo(() => {
+    return Object.values(groupedFees ?? {})
+      .reduce((acc, curr) => acc.plus(curr.amount), new BigNumber(0))
+      .toNumber()
+  }, [groupedFees])
+
+  console.log('priceBreakdownTotalFeesUSD', {
+    priceBreakdownTotalFeesUSD: priceBreakdownTotalFeesUSD?.toPrecision(6),
+    groupedFees: Object.values(groupedFees ?? {}).map((fee) => ({
+      label: fee.label,
+      amount: fee.amount.toNumber(),
+    })),
+  })
+
+  return (
+    <SwapUIV2.Collapse
+      isOpen={isOpen}
+      onToggle={() => setIsOpen(!isOpen)}
+      title={
+        <RowBetween>
+          <RowFixed>
+            <QuestionHelperV2
+              text={
+                <>
+                  <Text mb="12px">
+                    <Text bold display="inline-block">
+                      {t('AMM')}
+                    </Text>
+                    : {t('Trading fee varies by pool fee tier. Check it via the magnifier icon under "Route."')}
+                  </Text>
+                  <Text mt="12px">
+                    <Link
+                      style={{ display: 'inline' }}
+                      ml="4px"
+                      external
+                      href="https://docs.pancakeswap.finance/products/pancakeswap-exchange/faq#what-will-be-the-trading-fee-breakdown-for-v3-exchange"
+                    >
+                      {t('Fee Breakdown and Tokenomics')}
+                    </Link>
+                  </Text>
+                  <Text mt="10px">
+                    <Text bold display="inline-block">
+                      {t('X')}
+                    </Text>
+                    : {t('No fee when trading through PancakeSwap X (subject to change).')}
+                  </Text>
+                </>
+              }
+              placement="top"
+            >
+              <DetailsTitle fontSize="14px" color="textSubtle">
+                {status === BridgeStatus.PARTIAL_SUCCESS ? t('Partial Fee') : t('Total Fee')}
+              </DetailsTitle>
+            </QuestionHelperV2>
+          </RowFixed>
+          <SkeletonV2
+            width="70px"
+            height="16px"
+            borderRadius="8px"
+            minHeight="auto"
+            isDataReady={isNotUndefinedOrNull(feesBreakdown && feesBreakdown.totalFeesUSD)}
+          >
+            <Text fontSize="14px" textAlign="right">
+              {formatDollarAmount(priceBreakdown ? priceBreakdownTotalFeesUSD : feesBreakdown?.totalFeesUSD || 0, 3)}
+            </Text>
+          </SkeletonV2>
+        </RowBetween>
+      }
+      content={
+        <FeePanelCard mt="4px" padding="8px 16px">
+          <Suspense fallback={<SkeletonV2 width="100%" height="100%" />}>
+            {priceBreakdown && groupedFees ? (
+              Object.values(groupedFees).map((fee, index) => (
+                <RowBetween key={index}>
+                  <Text fontSize="14px" color="textSubtle">
+                    {fee.label}
+                  </Text>
+                  <Text fontSize="14px" textAlign="right">
+                    {`${formatDollarAmount(fee.amount.toNumber(), 3)}`}
+                  </Text>
+                </RowBetween>
+              ))
+            ) : (
+              <>
+                <RowBetween>
+                  <Text fontSize="14px" color="textSubtle">
+                    {t('Bridge Fee')}
+                  </Text>
+                  <Text fontSize="14px" textAlign="right">
+                    {`${formatDollarAmount(feesBreakdown?.bridgeFeesUSD || 0, 3)}`}
+                  </Text>
+                </RowBetween>
+                <RowBetween>
+                  <Text fontSize="14px" color="textSubtle">
+                    {t('Trading Fee')}
+                  </Text>
+                  <Text fontSize="14px" textAlign="right">
+                    {`${formatDollarAmount(feesBreakdown?.swapFeesUSD || 0, 3)}`}
+                  </Text>
+                </RowBetween>
+              </>
+            )}
+          </Suspense>
+        </FeePanelCard>
+      }
+    />
   )
 }

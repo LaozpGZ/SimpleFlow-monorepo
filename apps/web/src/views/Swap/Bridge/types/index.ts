@@ -132,6 +132,8 @@ export interface BridgeStatusData extends BridgeStatusResponse {
   outputCurrencyAmount?: CurrencyAmount<Currency> | null
   feesBreakdown?: {
     totalFeesUSD?: number
+    swapFeesUSD?: number
+    bridgeFeesUSD?: number
   }
 }
 
