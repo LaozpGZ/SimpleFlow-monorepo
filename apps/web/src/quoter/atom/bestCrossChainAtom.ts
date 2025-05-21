@@ -2,6 +2,7 @@ import { OrderType } from '@pancakeswap/price-api-sdk'
 import { RouteType } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { Loadable } from '@pancakeswap/utils/Loadable'
+import { userSlippageAtomWithLocalStorage } from '@pancakeswap/utils/user/slippage'
 import BigNumber from 'bignumber.js'
 import { convertTokenToCurrency, mapWithoutUrls } from 'hooks/Tokens'
 import { atom } from 'jotai'
@@ -10,9 +11,11 @@ import { BridgeTradeError, QuoteQuery } from 'quoter/quoter.types'
 import { createQuoteQuery } from 'quoter/utils/createQuoteQuery'
 import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { combinedTokenMapFromActiveUrlsAtom } from 'state/lists/hooks'
+import { Field } from 'state/swap/actions'
 import { logGTMBridgeQuoteQueryEvent } from 'utils/customGTMEventTracking'
 import { getBridgeAvailableRoutes, getMetadata, getTokenAddress, Route } from 'views/Swap/Bridge/api'
 import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
+import { computeSlippageAdjustedAmounts } from 'views/Swap/V3Swap/utils/exchange'
 import { atomWithLoadable } from './atomWithLoadable'
 import { bestSameChainWithoutPlaceHolderAtom } from './bestSameChainAtom'
 import { placeholderAtom } from './placeholderAtom'
@@ -136,6 +139,8 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
 
     // handle cross chain quote
     if (isCrossChain && _option.amount && _option.currency) {
+      const userSlippage = get(userSlippageAtomWithLocalStorage)
+
       // Catch all errors here
       try {
         // we don't support outputamount when cross chain
@@ -256,27 +261,34 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           const swapOrder = swapOrderLoadable.unwrapOr(undefined)
 
           if (swapOrder?.trade?.outputAmount?.greaterThan(0)) {
+            swapOrder.trade.outputAmount =
+              computeSlippageAdjustedAmounts(swapOrder, userSlippage)[Field.OUTPUT] || swapOrder.trade.outputAmount
+
+            const swapOrderRoutes = ('routes' in swapOrder.trade && swapOrder.trade.routes) || []
+
             // The final combined quote
             quoteLoadable = Loadable.Just({
               ...bridgeQuote,
               trade: {
                 ...bridgeQuote.trade,
                 outputAmount: swapOrder.trade.outputAmount,
+
                 // Create a custom mixed route array by manually mapping routes to ensure type compatibility
+                // the last swap route will add slippage adjusted amount
                 routes: [
                   // Add bridge routes
                   ...(bridgeQuote.trade.routes || []),
                   // Add swap routes with appropriate type casting for compatibility
-                  ...('routes' in swapOrder.trade
-                    ? (swapOrder.trade.routes || []).map((route) => ({
-                        ...route,
-                        // Ensure the route has all required properties for type compatibility
-                        type: route.type,
-                        path: route.path,
-                        inputAmount: route.inputAmount,
-                        outputAmount: route.outputAmount,
-                      }))
-                    : []),
+                  ...swapOrderRoutes.map((route, index) => ({
+                    ...route,
+                    // Ensure the route has all required properties for type compatibility
+                    type: route.type,
+                    path: route.path,
+                    inputAmount: route.inputAmount,
+                    // NOTE: parseSwapTradeContext will replace the last output amount with the trade output amount
+                    // so we don't need to apply slippage adjustment here
+                    outputAmount: route.outputAmount,
+                  })),
                 ] as any, // Use type assertion as a last resort
               },
               commands: [bridgeQuote, swapOrder],
@@ -325,10 +337,13 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           const swapOrder = swapOrderLoadable.unwrapOr(undefined)
 
           if (swapOrder?.trade?.outputAmount?.greaterThan(0)) {
+            const slippagedOutputAmount =
+              computeSlippageAdjustedAmounts(swapOrder, userSlippage)[Field.OUTPUT] || swapOrder.trade.outputAmount
+
             // Use the swap output amount as the bridge input amount
             const bridgeQuoteLoadable = get(
               getBridgeQuote({
-                inputAmount: swapOrder.trade.outputAmount,
+                inputAmount: slippagedOutputAmount,
                 outputCurrency: quoteCurrency,
                 nonce: _option.nonce,
               }),
@@ -348,6 +363,10 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
               throw new BridgeTradeError('No bridge quote')
             }
 
+            swapOrder.trade.outputAmount = slippagedOutputAmount
+
+            const swapOrderRoutes = ('routes' in swapOrder.trade && swapOrder.trade.routes) || []
+
             // The final combined quote
             quoteLoadable = Loadable.Just({
               type: OrderType.PCS_BRIDGE,
@@ -360,16 +379,16 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
                 tradeType: TradeType.EXACT_INPUT,
                 routes: [
                   // Add swap routes with appropriate type casting for compatibility
-                  ...('routes' in swapOrder.trade
-                    ? (swapOrder.trade.routes || []).map((route) => ({
-                        ...route,
-                        // Ensure the route has all required properties for type compatibility
-                        type: route.type,
-                        path: route.path,
-                        inputAmount: route.inputAmount,
-                        outputAmount: route.outputAmount,
-                      }))
-                    : []),
+                  ...swapOrderRoutes.map((route) => ({
+                    ...route,
+                    // Ensure the route has all required properties for type compatibility
+                    type: route.type,
+                    path: route.path,
+                    inputAmount: route.inputAmount,
+                    // NOTE: parseSwapTradeContext will replace the last output amount with the trade output amount
+                    // so we don't need to apply slippage adjustment here
+                    outputAmount: route.outputAmount,
+                  })),
                   // Add bridge routes
                   ...(bridgeQuote.trade.routes || []),
                 ] as any, // Use type assertion as a last resort
@@ -379,7 +398,6 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
           }
         } else if (isSwapToBridgeToSwapQuery) {
           // handle swap -> bridge -> swap quote
-          let quote: BridgeOrderWithCommands | undefined
 
           // 1. find swapOriginQuotes from baseCurrency -> crossChainRoutes[].originToken
           const tokenMap = get(combinedTokenMapFromActiveUrlsAtom)
@@ -427,7 +445,10 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
               return Loadable.Nothing<SwapAndBridgeQuote>()
             }
 
-            const originBridgeCurrencyAmount = swapOrder.trade.outputAmount
+            const slippagedOutputAmount =
+              computeSlippageAdjustedAmounts(swapOrder, userSlippage)[Field.OUTPUT] || swapOrder.trade.outputAmount
+
+            const originBridgeCurrencyAmount = slippagedOutputAmount
 
             const destinationBridgeTokenAddress = crossChainRoutes.find(
               (route) => route.originToken === originBridgeCurrency.wrapped.address,
@@ -463,6 +484,8 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
             return Loadable.Just<SwapAndBridgeQuote>({
               originToken: originBridgeCurrency,
               destinationToken: destinationBridgeCurrency,
+              // NOTE: not apply slippage output amount here because it causes re-render of the atom
+              // so we apply it in the final step
               swapOrder,
               bridgeQuote,
             })
@@ -555,6 +578,18 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
             // 5. combine swap, bridge, and final swap quotes into a single quote
             const { swapOrder, bridgeQuote, finalSwapOrder } = bestPath
 
+            const swapOrderRoutes = ('routes' in swapOrder.trade && swapOrder.trade.routes) || []
+            const finalSwapOrderRoutes = ('routes' in finalSwapOrder.trade && finalSwapOrder.trade.routes) || []
+
+            // NOTE: need to apply slippate for swap order and final swap order
+            // because we don't apply it in the previous steps
+            swapOrder.trade.outputAmount =
+              computeSlippageAdjustedAmounts(swapOrder, userSlippage)[Field.OUTPUT] || swapOrder.trade.outputAmount
+
+            finalSwapOrder.trade.outputAmount =
+              computeSlippageAdjustedAmounts(finalSwapOrder, userSlippage)[Field.OUTPUT] ||
+              finalSwapOrder.trade.outputAmount
+
             // Create the combined quote with proper type handling
             quoteLoadable = Loadable.Just({
               bridgeTransactionData: bridgeQuote.bridgeTransactionData,
@@ -566,34 +601,34 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
               expectedFillTimeSec: 'expectedFillTimeSec' in bridgeQuote ? bridgeQuote.expectedFillTimeSec : 0,
               trade: {
                 inputAmount: swapOrder.trade.inputAmount,
-                outputAmount: finalSwapOrder ? finalSwapOrder.trade.outputAmount : bridgeQuote.trade.outputAmount,
+                outputAmount: finalSwapOrder.trade.outputAmount,
                 tradeType: TradeType.EXACT_INPUT,
                 routes: [
                   // Add initial swap routes
-                  ...('routes' in swapOrder.trade
-                    ? (swapOrder.trade.routes || []).map((route) => ({
-                        ...route,
-                        type: route.type,
-                        path: route.path,
-                        inputAmount: route.inputAmount,
-                        outputAmount: route.outputAmount,
-                      }))
-                    : []),
+                  ...swapOrderRoutes.map((route) => ({
+                    ...route,
+                    type: route.type,
+                    path: route.path,
+                    inputAmount: route.inputAmount,
+                    // NOTE: parseSwapTradeContext will replace the last output amount with the trade output amount
+                    // so we don't need to apply slippage adjustment here
+                    outputAmount: route.outputAmount,
+                  })),
                   // Add bridge routes
-                  ...('routes' in bridgeQuote.trade ? bridgeQuote.trade.routes || [] : []),
+                  ...bridgeQuote.trade.routes,
                   // Add final swap routes if they exist
-                  ...(finalSwapOrder && 'routes' in finalSwapOrder.trade
-                    ? (finalSwapOrder.trade.routes || []).map((route) => ({
-                        ...route,
-                        type: route.type,
-                        path: route.path,
-                        inputAmount: route.inputAmount,
-                        outputAmount: route.outputAmount,
-                      }))
-                    : []),
+                  ...finalSwapOrderRoutes.map((route) => ({
+                    ...route,
+                    type: route.type,
+                    path: route.path,
+                    inputAmount: route.inputAmount,
+                    // NOTE: parseSwapTradeContext will replace the last output amount with the trade output amount
+                    // so we don't need to apply slippage adjustment here
+                    outputAmount: route.outputAmount,
+                  })),
                 ] as any, // Type assertion for routes compatibility
               },
-              commands: [swapOrder, bridgeQuote, ...(finalSwapOrder ? [finalSwapOrder] : [])],
+              commands: [swapOrder, bridgeQuote, finalSwapOrder],
             })
           }
         }

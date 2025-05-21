@@ -51,9 +51,10 @@ export function computeSlippageAdjustedAmounts(
 
   const isBridgeOnly = order && isBridgeOrder(order) && (order as BridgeOrderWithCommands)?.commands?.length === 1
 
-  if (isBridgeOnly) {
+  if (isBridgeOnly || isBridgeOrder(order)) {
     return {
       [Field.INPUT]: order.trade.inputAmount,
+      // NOTE: Slippaged is already applied in constructing the bridge order
       [Field.OUTPUT]: order.trade.outputAmount,
     }
   }
