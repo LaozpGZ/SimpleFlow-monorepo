@@ -70,7 +70,7 @@ export const CopyButton: React.FC<React.PropsWithChildren<CopyButtonProps>> = ({
           onClick={handleOnClick}
           scale="sm"
           variant="text"
-          style={{ width: "auto", position: "relative" }}
+          style={{ width: "auto", position: "relative", height: "fit-content" }}
         >
           {props.children}
           <Icon color={buttonColor} width={width} {...props} />
