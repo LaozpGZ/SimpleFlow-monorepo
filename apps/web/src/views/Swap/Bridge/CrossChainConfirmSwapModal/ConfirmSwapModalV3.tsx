@@ -413,7 +413,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       // hideTitleAndBackground={confirmModalState !== ConfirmModalState.REVIEWING || hasError}
       headerPadding={loadingAnimationVisible ? '12px 24px 0px 24px !important' : '12px 24px'}
       headerBackground="transparent"
-      bodyPadding={loadingAnimationVisible && !hasError ? '0 24px 24px 24px' : '24px'}
+      bodyPadding={!hasError ? '0 24px 24px 24px' : '24px'}
       bodyTop={loadingAnimationVisible ? '-15px' : '0'}
       handleDismiss={handleDismiss}
     >
