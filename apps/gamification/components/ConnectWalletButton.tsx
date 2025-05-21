@@ -42,6 +42,8 @@ const ConnectWalletButton = ({ children, ...props }: ButtonProps) => {
         }
       `}</style>
       <WalletModalV2
+        topWallets={[]}
+        mevDocLink={null}
         docText={t('Learn How to Connect')}
         docLink={docLink}
         isOpen={open}
