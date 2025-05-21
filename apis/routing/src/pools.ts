@@ -56,28 +56,8 @@ export function poolsRoute(router: Router) {
           'Cache-Control',
           isQueryByDate ? 's-maxage=86400, stale-while-revalidate=3600' : 's-maxage=1800, stale-while-revalidate=900',
         )
-        if (route !== '/v0/v3-pools-tvl/:chainId' || chainId !== '56') {
-          return new Response(object.body, {
-            headers,
-          })
-        }
 
-        // FIXME: remove this hardcode once we understand the reason for out-dated tvl
-        const value: any = await object.json()
-        value.push({
-          address: '0x7d94b911A51670f78a44A7Af3C2Bf773C42f2497',
-          tvlUSD: '3748455',
-        })
-        value.push({
-          address: '0x5968FEACbA91D55010975E0CFe8ACfc32664ad33',
-          tvlUSD: '876383',
-        })
-        value.push({
-          address: '0xEa27B3E61144f0417f27AeDaa1B9e46FA5a49ff1',
-          tvlUSD: '305600',
-        })
-
-        return new Response(JSON.stringify(value), {
+        return new Response(object.body, {
           headers,
         })
       })
