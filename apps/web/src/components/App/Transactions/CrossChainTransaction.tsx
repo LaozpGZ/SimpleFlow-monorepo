@@ -34,10 +34,12 @@ import { ActiveBridgeOrderMetadata, BridgeStatus, UserBridgeOrder } from 'views/
 import { getBridgeTitle } from 'views/Swap/Bridge/utils/bridgeTitle'
 
 const StyledChainLogo = styled(ChainLogo)`
-  width: 22px;
-  height: 22px;
-  border: 2px solid ${({ theme }) => theme.colors.invertedContrast};
-  border-radius: 20px;
+  > img {
+    width: 22px;
+    height: 22px;
+    border-radius: 38%;
+    border: 1px solid ${({ theme }) => theme.colors.invertedContrast};
+  }
 `
 
 export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {

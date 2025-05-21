@@ -113,6 +113,8 @@ interface StatusMetadataBridge {
   inputAmount: string
   outputAmount: string
   fee: string
+  inputToken: Address
+  outputToken: Address
 }
 
 export interface StatusMetadataSwap {
