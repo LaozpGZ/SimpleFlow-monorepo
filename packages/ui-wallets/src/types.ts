@@ -26,10 +26,18 @@ export enum WalletIds {
   Coin98 = 'coin98',
   Blocto = 'blocto',
   Cyberwallet = 'cyberwallet',
+  Petra = 'petra',
+  Martian = 'martian',
+  Pontem = 'pontem',
+  Fewcha = 'fewcha',
+  TrustWallet = 'trustWallet',
+  SafePal = 'safePal',
+  Rise = 'rise',
+  Msafe = 'msafe',
 }
 
 export type WalletConfigV2<T = unknown> = {
-  id: string
+  id: WalletIds
   title: string
   icon: string | React.FC<React.PropsWithChildren<SvgProps>>
   connectorId: T

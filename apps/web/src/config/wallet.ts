@@ -1,4 +1,4 @@
-import { WalletConfigV2, WalletIds } from '@pancakeswap/ui-wallets/src/types'
+import { WalletConfigV2, WalletIds } from '@pancakeswap/ui-wallets'
 import { ChainId } from '@pancakeswap/chains'
 import { isCyberWallet } from '@cyberlab/cyber-app-sdk'
 import { WalletFilledIcon } from '@pancakeswap/uikit'

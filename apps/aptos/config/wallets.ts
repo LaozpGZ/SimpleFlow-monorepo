@@ -1,19 +1,7 @@
-import { WalletConfigV2 } from '@pancakeswap/ui-wallets'
+import { WalletConfigV2, WalletIds } from '@pancakeswap/ui-wallets'
 import { isFirefox } from 'react-device-detect'
 
 export enum ConnectorNames {
-  Petra = 'petra',
-  Martian = 'martian',
-  Pontem = 'pontem',
-  Fewcha = 'fewcha',
-  Blocto = 'blocto',
-  TrustWallet = 'trustWallet',
-  SafePal = 'safePal',
-  Rise = 'rise',
-  Msafe = 'msafe',
-}
-
-export enum WalletIds {
   Petra = 'petra',
   Martian = 'martian',
   Pontem = 'pontem',
