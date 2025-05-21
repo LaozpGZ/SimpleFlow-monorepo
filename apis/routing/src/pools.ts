@@ -68,6 +68,10 @@ export function poolsRoute(router: Router) {
           address: '0x7d94b911A51670f78a44A7Af3C2Bf773C42f2497',
           tvlUSD: '3748455',
         })
+        value.push({
+          address: '0x5968FEACbA91D55010975E0CFe8ACfc32664ad33',
+          tvlUSD: '876383',
+        })
 
         return new Response(JSON.stringify(value), {
           headers,
