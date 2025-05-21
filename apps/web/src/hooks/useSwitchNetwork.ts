@@ -131,8 +131,8 @@ export function useSwitchNetwork() {
           })
           .finally(() => setLoading(false))
       }
-      return new Promise(() => {
-        switchNetworkLocal(chainId)
+      return new Promise((resolve) => {
+        resolve(switchNetworkLocal(chainId))
       })
     },
     [isConnected, _switchNetworkAsync, isLoading, setLoading, switchNetworkLocal, toastError, t, connector, address],
