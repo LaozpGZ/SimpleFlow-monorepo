@@ -171,8 +171,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
         )
 
         // pass native token to bridge, server will convert to wrapped address for route check
-        const isBridgeOnlyQuery =
-          baseCurrencyAmount.currency.wrapped.symbol === quoteCurrency.wrapped.symbol && isOriginTokenSupported
+        const isBridgeOnlyQuery = isOriginTokenSupported && isDestinationTokenSupported
         // if origin/destination tokens is supported, then it's a bridge to swap quote
         const isBridgeToSwapQuery = isOriginTokenSupported
         const isSwapToBridgeQuery = !isOriginTokenSupported && isDestinationTokenSupported
