@@ -84,6 +84,7 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
     outputToken: order.outputToken,
     inputAmount: order.inputAmount,
     outputAmount: order.outputAmount,
+    minOutputAmount: order.minOutputAmount,
     originChainId: order.originChainId,
     destinationChainId: order.destinationChainId,
   }

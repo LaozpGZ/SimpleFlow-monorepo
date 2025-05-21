@@ -53,6 +53,7 @@ export const useBridgeStatus = (
       data
         ? {
             ...data,
+            minOutputAmount: metadata?.minOutputAmount || data?.minOutputAmount,
             inputCurrencyAmount,
             outputCurrencyAmount,
             feesBreakdown,

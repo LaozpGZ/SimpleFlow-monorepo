@@ -148,6 +148,7 @@ export interface ActiveBridgeOrderMetadata {
     outputToken: string
     inputAmount: string
     outputAmount: string
+    minOutputAmount: string
     originChainId: number
     destinationChainId: number
   }
