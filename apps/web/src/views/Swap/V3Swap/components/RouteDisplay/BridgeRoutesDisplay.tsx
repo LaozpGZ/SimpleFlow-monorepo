@@ -7,6 +7,7 @@ import {
   Column,
   Flex,
   FlexGap,
+  Image,
   Text,
   useMatchBreakpoints,
   useTooltip,
@@ -18,6 +19,7 @@ import { RoutingSettingsButton } from 'components/Menu/GlobalSettings/SettingsMo
 import { parseProtocolFeesToNumbers } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Rounding } from '@pancakeswap/sdk'
+import { ASSET_CDN } from 'config/constants/endpoints'
 import { memo, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
@@ -143,6 +145,11 @@ const DottedBackgroundContainer = styled(FlexGap)`
   }
 `
 
+const StyledBridgeLogo = styled(Image)`
+  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+  border-radius: 100%;
+`
+
 export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
   const { t } = useTranslation()
   const bridgeRouteIndex = routes.findIndex((route) => route.type === RouteType.BRIDGE)!
@@ -200,9 +207,12 @@ export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
           <Text mt="4px" textAlign="center">
             {t('Bridge')}
           </Text>
-          <Text textAlign="center" fontSize="12px">
-            Across
-          </Text>
+          <FlexGap mt="2px" gap="2px" alignItems="center" justifyContent="center">
+            <StyledBridgeLogo src={`${ASSET_CDN}/web/bridges/across.png`} alt="Across Bridge" width={16} height={16} />
+            <Text textAlign="center" fontSize="12px">
+              Across
+            </Text>
+          </FlexGap>
         </PrimaryCard>
         {destinationChainRoutes.length > 0 && <BridgeChainRoutes routes={destinationChainRoutes} />}
         <Box mt="24px" minWidth="42px">
