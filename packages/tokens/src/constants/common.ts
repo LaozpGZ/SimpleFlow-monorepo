@@ -69,7 +69,7 @@ export const USD1_BSC = new ERC20Token(
   18,
   'USD1',
   'USD1',
-  'https://pancakeswap.finance/',
+  'https://www.worldlibertyfinancial.com/',
 )
 
 export const USDT_ETH = new ERC20Token(
