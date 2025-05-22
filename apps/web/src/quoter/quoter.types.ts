@@ -54,11 +54,12 @@ export interface Options {
 }
 
 export interface PoolQuery {
-  quoteHash: string
-  currencyA?: Currency
-  currencyB?: Currency
-  options?: PoolsHookParams
-  chainId?: ChainId
+  currencyA: Currency
+  currencyB: Currency
+  blockNumber: number
+  chainId: ChainId
+}
+export interface PoolQueryOptions {
   infinity: boolean
   v2Pools: boolean
   v3Pools: boolean
@@ -66,14 +67,15 @@ export interface PoolQuery {
   signal?: AbortSignal
   provider?: typeof getViemClients
   for?: string
-}
-interface PoolsHookParams {
-  // Used for caching
-  key?: string
-  blockNumber?: number
-  enabled?: boolean
   gasLimit?: bigint
 }
+// interface PoolsHookParams {
+//   // Used for caching
+//   key?: string
+//   blockNumber?: number
+//   enabled?: boolean
+//   gasLimit?: bigint
+// }
 
 export type QuoteQuery = Options & {
   type?: 'offchain' | 'quoter' | 'auto' | 'api'
@@ -81,7 +83,7 @@ export type QuoteQuery = Options & {
   xEnabled: boolean
   slippage?: number
   address?: Address
-  blockNumber?: number
+  blockNumber: number
   signal?: AbortSignal
   provider?: typeof getViemClients
   controller?: AbortController
@@ -90,6 +92,7 @@ export type QuoteQuery = Options & {
   for?: string
   createTime: number
   routeKey?: string
+  gasLimit: bigint
 }
 
 export interface StrategyQuery {
