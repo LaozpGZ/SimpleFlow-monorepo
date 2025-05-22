@@ -38,7 +38,7 @@ async function handleScheduled(event: ScheduledEvent) {
               }
             }
 
-            await Promise.all([
+            await Promise.allSettled([
               SUBGRAPH_POOLS.put(getPoolsObjectName(chainId), JSON.stringify(serializedPools), {
                 httpMetadata: {
                   contentType: 'application/json',
