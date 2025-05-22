@@ -8,7 +8,7 @@ import { getPoolsObjectName, getPoolsTvlObjectName, getPoolsTvlObjectNameByDate 
 
 async function handleScheduled(event: ScheduledEvent) {
   switch (event.cron) {
-    case '*/30 * * * *':
+    case '0 * * * *':
       logRejectedActions(
         await Promise.allSettled(
           SUPPORTED_CHAINS.map(async (chainId) => {
