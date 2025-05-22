@@ -1,11 +1,11 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, domAnimation, Flex, LazyAnimatePresence, MotionBox, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { HomepageChain } from 'pages/api/home/types'
 import React from 'react'
 import styled from 'styled-components'
 import { MultipleLogos } from './cards/component/MultipleLogos'
 
-const Wrapper = styled(Box)<{
+const Wrapper = styled(MotionBox)<{
   isMobile: boolean
   isTablet: boolean
 }>`
@@ -59,6 +59,9 @@ export const FavoriteDEXBanner: React.FC<FavoriteDEXBannerProps> = ({ chains }) 
     <Wrapper
       isMobile={isMobile}
       isTablet={isTablet}
+      initial={{ opacity: 0, scale: 0.3, y: 50 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.8, y: 50 }}
       transition={{ type: 'spring', delay: 0.3, stiffness: 100, damping: 12, duration: 0.5 }}
     >
       <TitleText as={isMobile ? 'span' : 'h2'} isMobile={isMobile} isTablet={isTablet}>
