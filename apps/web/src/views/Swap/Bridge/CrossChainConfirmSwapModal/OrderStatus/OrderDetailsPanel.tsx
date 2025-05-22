@@ -20,17 +20,14 @@ import { LightGreyCard } from 'components/Card'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { useAtomValue } from 'jotai'
-import { Suspense, useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Field } from 'state/swap/actions'
 import styled from 'styled-components'
 import { isBridgeOrder } from 'views/Swap/utils'
 import { computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter } from 'views/Swap/V3Swap/utils/exchange'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
-import { OrderType } from '@pancakeswap/price-api-sdk'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
-import { BigNumber } from 'bignumber.js'
-import { currenciesUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
 import { isNotUndefinedOrNull } from 'utils/isNotUndefinedOrNull'
 import { useBridgeStatus } from '../../hooks'
 import { ActiveBridgeOrderMetadata, BridgeStatus, BridgeStatusData } from '../../types'
@@ -225,50 +222,42 @@ const BridgeFeesBreakdown = ({
   const { t } = useTranslation()
   const [isOpen, setIsOpen] = useState(false)
 
-  // Calculate ongoing order fees from Price Breakdown
-  const currencies = useMemo(() => {
-    if (!priceBreakdown) return undefined
-    return priceBreakdown?.map((p) => p.lpFeeAmount!.currency)
-  }, [priceBreakdown])
+  // // Calculate ongoing order fees from Price Breakdown
+  // const currencies = useMemo(() => {
+  //   if (!priceBreakdown) return undefined
+  //   return priceBreakdown?.map((p) => p.lpFeeAmount!.currency)
+  // }, [priceBreakdown])
 
-  const usdPrices = useAtomValue(currenciesUSDPriceAtom(currencies ?? []))
+  // const usdPrices = useAtomValue(currenciesUSDPriceAtom(currencies ?? []))
 
-  // Group and sum up fees by type
-  const groupedFees = useMemo(() => {
-    if (!priceBreakdown) return undefined
+  // // Group and sum up fees by type
+  // const groupedFees = useMemo(() => {
+  //   if (!priceBreakdown) return undefined
 
-    return priceBreakdown?.reduce((acc, curr, index) => {
-      const type = curr.type === OrderType.PCS_BRIDGE ? 'bridge' : 'trading'
-      const existingFee = acc[type] || {
-        label: curr.type === OrderType.PCS_BRIDGE ? t('Bridge Fee') : t('Trading Fee'),
-        amount: new BigNumber(0),
-      }
+  //   return priceBreakdown?.reduce((acc, curr, index) => {
+  //     const type = curr.type === OrderType.PCS_BRIDGE ? 'bridge' : 'trading'
+  //     const existingFee = acc[type] || {
+  //       label: curr.type === OrderType.PCS_BRIDGE ? t('Bridge Fee') : t('Trading Fee'),
+  //       amount: new BigNumber(0),
+  //     }
 
-      const usdAmount = new BigNumber(curr.lpFeeAmount?.toExact() ?? 0).times(usdPrices[index] ?? 0)
+  //     const usdAmount = new BigNumber(curr.lpFeeAmount?.toExact() ?? 0).times(usdPrices[index] ?? 0)
 
-      return {
-        ...acc,
-        [type]: {
-          ...existingFee,
-          amount: existingFee.amount.plus(usdAmount),
-        },
-      }
-    }, {} as Record<string, { label: string; amount: BigNumber }>)
-  }, [priceBreakdown, usdPrices, t])
+  //     return {
+  //       ...acc,
+  //       [type]: {
+  //         ...existingFee,
+  //         amount: existingFee.amount.plus(usdAmount),
+  //       },
+  //     }
+  //   }, {} as Record<string, { label: string; amount: BigNumber }>)
+  // }, [priceBreakdown, usdPrices, t])
 
-  const priceBreakdownTotalFeesUSD = useMemo(() => {
-    return Object.values(groupedFees ?? {})
-      .reduce((acc, curr) => acc.plus(curr.amount), new BigNumber(0))
-      .toNumber()
-  }, [groupedFees])
-
-  console.log('priceBreakdownTotalFeesUSD', {
-    priceBreakdownTotalFeesUSD: priceBreakdownTotalFeesUSD?.toPrecision(6),
-    groupedFees: Object.values(groupedFees ?? {}).map((fee) => ({
-      label: fee.label,
-      amount: fee.amount.toNumber(),
-    })),
-  })
+  // const priceBreakdownTotalFeesUSD = useMemo(() => {
+  //   return Object.values(groupedFees ?? {})
+  //     .reduce((acc, curr) => acc.plus(curr.amount), new BigNumber(0))
+  //     .toNumber()
+  // }, [groupedFees])
 
   return (
     <SwapUIV2.Collapse
@@ -319,15 +308,15 @@ const BridgeFeesBreakdown = ({
             isDataReady={isNotUndefinedOrNull(feesBreakdown && feesBreakdown.totalFeesUSD)}
           >
             <Text fontSize="14px" textAlign="right">
-              {formatDollarAmount(priceBreakdown ? priceBreakdownTotalFeesUSD : feesBreakdown?.totalFeesUSD || 0, 3)}
+              {/* {formatDollarAmount(priceBreakdown ? priceBreakdownTotalFeesUSD : feesBreakdown?.totalFeesUSD || 0, 3)} */}
+              {formatDollarAmount(feesBreakdown?.totalFeesUSD || 0, 3)}
             </Text>
           </SkeletonV2>
         </RowBetween>
       }
       content={
         <FeePanelCard mt="4px" padding="8px 16px">
-          <Suspense fallback={<SkeletonV2 width="100%" height="100%" />}>
-            {priceBreakdown && groupedFees ? (
+          {/* {priceBreakdown && groupedFees ? (
               Object.values(groupedFees).map((fee, index) => (
                 <RowBetween key={index}>
                   <Text fontSize="14px" color="textSubtle">
@@ -339,26 +328,25 @@ const BridgeFeesBreakdown = ({
                 </RowBetween>
               ))
             ) : (
-              <>
-                <RowBetween>
-                  <Text fontSize="14px" color="textSubtle">
-                    {t('Bridge Fee')}
-                  </Text>
-                  <Text fontSize="14px" textAlign="right">
-                    {`${formatDollarAmount(feesBreakdown?.bridgeFeesUSD || 0, 3)}`}
-                  </Text>
-                </RowBetween>
-                <RowBetween>
-                  <Text fontSize="14px" color="textSubtle">
-                    {t('Trading Fee')}
-                  </Text>
-                  <Text fontSize="14px" textAlign="right">
-                    {`${formatDollarAmount(feesBreakdown?.swapFeesUSD || 0, 3)}`}
-                  </Text>
-                </RowBetween>
-              </>
-            )}
-          </Suspense>
+              <> */}
+          <RowBetween>
+            <Text fontSize="14px" color="textSubtle">
+              {t('Bridge Fee')}
+            </Text>
+            <Text fontSize="14px" textAlign="right">
+              {`${formatDollarAmount(feesBreakdown?.bridgeFeesUSD || 0, 3)}`}
+            </Text>
+          </RowBetween>
+          <RowBetween>
+            <Text fontSize="14px" color="textSubtle">
+              {t('Trading Fee')}
+            </Text>
+            <Text fontSize="14px" textAlign="right">
+              {`${formatDollarAmount(feesBreakdown?.swapFeesUSD || 0, 3)}`}
+            </Text>
+          </RowBetween>
+          {/* </>
+            )} */}
         </FeePanelCard>
       }
     />
