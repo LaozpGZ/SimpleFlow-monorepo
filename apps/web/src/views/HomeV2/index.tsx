@@ -4,7 +4,6 @@ import {
   domAnimation,
   Flex,
   LazyAnimatePresence,
-  MotionBox,
   Skeleton,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
@@ -90,20 +89,16 @@ const HomeV2Inner = () => {
         <RowLayout sidePadding="0">
           <LazyAnimatePresence features={domAnimation}>
             <FavoriteDEXBanner chains={chains} />
-            <MotionBox
+            <Box
               style={{
                 willChange: 'transform, opacity',
                 flexShrink: 0,
                 flex: 1,
                 width: '100%',
               }}
-              initial={{ opacity: 0, scale: 0.85, y: 30 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.85, y: 30 }}
-              transition={{ type: 'spring', stiffness: 60, damping: 20 }}
             >
               <SimpleSwapForHomePage />
-            </MotionBox>
+            </Box>
           </LazyAnimatePresence>
         </RowLayout>
 
