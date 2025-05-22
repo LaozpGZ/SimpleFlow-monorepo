@@ -206,7 +206,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 
 async function existsR2(key: string) {
   try {
-    const resp = await fetch(`https://obj-cache.pancakeswap.com/${key}`, {
+    const resp = await fetch(`https://obj-cache.pancakeswap.com/cache/${key}`, {
       method: 'HEAD',
     })
     return resp.ok
