@@ -5,8 +5,8 @@ import { colors } from '../cssVariables'
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(modalAnatomy.keys)
 const baseStyle = definePartsStyle({
   closeButton: {
-    top: ['24px', '28px'],
-    right: ['24px', '32px'],
+    top: ['12px', '16px'],
+    right: ['24px', '0'],
     width: '2em',
     height: '2em',
     color: colors.textSubtle
@@ -25,7 +25,7 @@ const baseStyle = definePartsStyle({
     overflow: 'auto'
   },
   header: {
-    paddingBlock: ['24px', '28px'],
+    paddingBlock: ['12px', '16px'],
     paddingInline: 0,
     fontSize: ['lg', '2xl'],
     fontWeight: 600,
