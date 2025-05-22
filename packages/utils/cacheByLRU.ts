@@ -1,5 +1,6 @@
 import { keccak256, stringify } from 'viem'
 import { LRU } from './lru'
+import { takeFirstFulfilled } from './promise'
 
 type AsyncFunction<T extends any[]> = (...args: T) => Promise<any>
 
@@ -17,14 +18,15 @@ interface Epoch {
 }
 
 // Type definitions for the cache.
+export type PersistOption = {
+  name: string
+  version: string
+  type: 'r2'
+}
 export type CacheOptions<T extends AsyncFunction<any>> = {
   maxCacheSize?: number
   ttl: number
-  persist?: {
-    name: string
-    version: string
-    type: 'r2'
-  }
+  persist?: PersistOption
   key?: (params: Parameters<T>) => any
   isValid?: (result: any) => boolean
   maxAge?: number
@@ -46,10 +48,16 @@ function defaultIsValid(val: any) {
   return true
 }
 
-function calcCacheKey(args: any[], epoch: number) {
+export function calcCacheKey(args: any[], epoch: number) {
   const json = stringify(args)
   const r = keccak256(`0x${json}@${epoch}`)
   return r
+}
+
+const DAY = 24 * 60 * 60 * 1000
+export function persistKey(cacheKey: string, persist: PersistOption) {
+  const bucket = Math.floor(Date.now() / DAY)
+  return `${bucket}/${persist.name}/${persist.version}/${cacheKey}`
 }
 
 const identity = (args: any) => args
@@ -82,22 +90,17 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 
   const keyFunction = key || identity
 
-  function persistKey(cacheKey: string) {
-    return `${persist?.name}-${persist?.version}-${cacheKey}`
-  }
-
-  async function ensurePersist(item: CacheItem, cacheKey: string) {
+  async function ensurePersist(cacheKey: string, promise: Promise<any>) {
     if (fetchR2Cache && persist) {
-      const r2Promise = fetchR2Cache(persistKey(cacheKey))
-      const value = await Promise.race([r2Promise, item.promise])
-      return value ?? item.promise
+      const r2Promise = fetchR2Cache(persistKey(cacheKey, persist))
+      const { result: value } = await takeFirstFulfilled([r2Promise, promise])
+      return value
     }
-    return item.promise
+    return promise
   }
 
   const epochs: Epoch[] = []
-  // @ts-ignore
-  const cachedFn = async (...args: Parameters<T>): ReturnType<T> => {
+  const cachedFn = async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
     const epoch = Date.now() / ttl
     const epochId = Math.floor(epoch)
 
@@ -106,11 +109,12 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 
     const cacheForEpoch = (epochId: number) => {
       const cacheKey = calcCacheKey(keyFunction(args), epochId)
+      console.log(`[cacheByLRU] cacheKey: ${cacheKey}, epochId: ${epochId}`)
       if (cache.has(cacheKey)) {
         return cache.get(cacheKey)!
       }
       const caller = requestTimeout ? withTimeout(fn, requestTimeout) : fn
-      const promise = caller(...args)
+      const promise = ensurePersist(cacheKey, caller(...args))
       const item = {
         promise,
         resolved: undefined,
@@ -123,30 +127,33 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
         contentCacheKey,
       }
       epochs.push(epoch)
-      item.promise = ensurePersist(item, cacheKey)
       cache.set(cacheKey, item)
 
-      promise
+      item.promise = item.promise
         .then((result) => {
           if (!result) {
             cache.delete(cacheKey)
-            return
+            return result
           }
           if (!(isValid || defaultIsValid)(result)) {
             cache.delete(cacheKey)
-            return
+            return result
           }
           item.resolved = result
-          const jsonResult = stringify(result)
-          if (persist && result && jsonResult !== '{}' && jsonResult !== '[]') {
-            uploadR2(persistKey(cacheKey), result).catch((ex) => {
-              console.error('Failed to persist cache', ex)
-            })
+          if (persist) {
+            const jsonResult = stringify(result)
+            if (result && jsonResult !== '{}' && jsonResult !== '[]') {
+              uploadR2(persistKey(cacheKey, persist), result).catch((ex) => {
+                console.error('Failed to persist cache', ex)
+              })
+            }
           }
+          return result
         })
         .catch((error) => {
           console.error('Cache promise failed', error)
           cache.delete(cacheKey)
+          throw error
         })
 
       return item
@@ -169,11 +176,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
         const epochCache = cache.get(epoch.cacheKey)
 
         if (epochCache && epochCache.resolved) {
-          const timeElapsed = Date.now() - epochCache.createTime
-          if (timeElapsed < 5 * ttl) {
-            return epochCache.promise
-          }
-          break
+          return epochCache.promise
         }
       }
     }
@@ -185,7 +188,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 
     return current.promise
   }
-  return cachedFn as any as T
+  return cachedFn as T
 }
 
 async function uploadR2(key: string, value: any) {
@@ -193,6 +196,7 @@ async function uploadR2(key: string, value: any) {
   if (!process.env.OBJECT_CACHE_SECRET) {
     return
   }
+  console.log(`[upload] start...`)
   await fetch(`https://obj-cache.pancakeswap.com`, {
     method: 'POST',
     headers: {
@@ -201,15 +205,17 @@ async function uploadR2(key: string, value: any) {
     },
     body: JSON.stringify({ key, value }),
   })
+  console.log(`[upload] success!!`)
 }
 
 async function _fetchR2Cache(key: string) {
+  console.log(`[fetchR2Cache] start... https://proofs.pancakeswap.com/cache/${key}`)
   const resp = await fetch(`https://proofs.pancakeswap.com/cache/${key}`)
-  if (resp.status === 200) {
+  if (resp.ok) {
+    console.log(`[fetchR2Cache] ok...`)
     return resp.json()
   }
-  console.warn(`Failed to fetch cache:https://proofs.pancakeswap.com/cache/${key}`)
-  return undefined
+  throw new Error(`Failed to fetch cache`)
 }
 
 function withTimeout<Args extends any[], Return>(

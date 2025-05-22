@@ -32,12 +32,13 @@ async function _load() {
   } as HomePageData
 }
 export const loadHomePageData = cacheByLRU(_load, {
-  ttl: 300 * 1000, // 5 minutes
+  ttl: 300 * 1000, // 5 minutes for update
   persist: {
     name: 'homepage',
     type: 'r2',
     version: 'v3',
   },
+  maxAge: 60 * 60 * 1000, // 1 hour
 })
 
 const handler: NextApiHandler = async (req, res) => {
