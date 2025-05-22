@@ -68,7 +68,7 @@ export const queryPools = cacheByLRU(async () => {
 
   function tokenLogo(chainId: ChainId, address: `0x${string}`) {
     const key = `${chainId}-${checksumAddress(address)}`
-    return tokenMap[key].logoURI
+    return tokenMap[key]?.logoURI
   }
   return tops.map((p, i) => {
     const chain = getChainName(p.chainId)

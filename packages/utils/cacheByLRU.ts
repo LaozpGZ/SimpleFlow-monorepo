@@ -146,8 +146,10 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
             if (result && jsonResult !== '{}' && jsonResult !== '[]') {
               const pkey = persistKey(cacheKey, persist)
               uploadR2(pkey, result)
-                .then(() => {
-                  console.log(`[persist] cache succ: https://proofs.pancakeswap.com/cache/${pkey}, ${cacheKey}`)
+                .then((updated) => {
+                  if (updated) {
+                    console.log(`[persist] cache succ: https://proofs.pancakeswap.com/cache/${pkey}, ${cacheKey}`)
+                  }
                 })
                 .catch((ex) => {
                   console.error(`[persist] Failed to persist cache cache-size=${jsonResult.length}`, ex)
@@ -216,11 +218,11 @@ async function existsR2(key: string) {
 }
 async function uploadR2(key: string, value: any) {
   if (!process.env.OBJECT_CACHE_SECRET) {
-    return
+    return false
   }
 
   if (await existsR2(key)) {
-    return
+    return false
   }
   await fetch(`https://obj-cache.pancakeswap.com`, {
     method: 'POST',
@@ -230,6 +232,7 @@ async function uploadR2(key: string, value: any) {
     },
     body: JSON.stringify({ key, value }),
   })
+  return true
 }
 
 async function _fetchR2Cache(key: string) {

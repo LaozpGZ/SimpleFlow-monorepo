@@ -1,13 +1,13 @@
 import { TokenInfo, TokenList } from '@pancakeswap/token-lists'
 import { getTokenList } from '@pancakeswap/token-lists/react'
 import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
-import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
+import { PANCAKE_ARB_DEFAULT, PANCAKE_BASE_DEFAULT, PANCAKE_BSC_MM, PANCAKE_ETH_DEFAULT } from 'config/constants/lists'
 import keyBy from 'lodash/keyBy'
 import { checksumAddress } from 'utils/checksumAddress'
 import { getHomeCacheSettings } from './settings'
 
 export const _queryTokenList = async () => {
-  const list = DEFAULT_ACTIVE_LIST_URLS
+  const list = [PANCAKE_ETH_DEFAULT, PANCAKE_BSC_MM, PANCAKE_ARB_DEFAULT, PANCAKE_BASE_DEFAULT]
 
   const results = await Promise.allSettled(list.map((url) => getTokenList(url)))
   const allFailed = results.every((result) => result.status === 'rejected')
@@ -25,4 +25,4 @@ export const _queryTokenList = async () => {
   return keyBy(lists, (x) => `${x.chainId}-${x.address}`)
 }
 
-export const queryTokenList = cacheByLRU(_queryTokenList, getHomeCacheSettings('token-list'))
+export const queryTokenList = cacheByLRU(_queryTokenList, getHomeCacheSettings('token-map'))
