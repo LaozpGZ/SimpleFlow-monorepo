@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { useMemo } from 'react'
 import { getBridgeStatus } from '../api'
-import { ActiveBridgeOrderMetadata, BridgeStatusData, BridgeStatusResponse } from '../types'
+import { ActiveBridgeOrderMetadata, BridgeStatusData, BridgeStatusResponse, Command } from '../types'
 
 export const bridgeStatusQueryKey = (chainId?: number, txHash?: string) => ['bridge-status', chainId, txHash]
 
@@ -22,12 +22,16 @@ export const useBridgeStatus = (
     notifyOnChangeProps: ['data', 'isFetching'],
   })
 
-  const data: BridgeStatusResponse | undefined = metadata
-    ? {
-        ...(metadata as BridgeStatusResponse),
-        ...queryResult.data,
-      }
-    : queryResult.data
+  const data: BridgeStatusResponse | undefined = useMemo(
+    () =>
+      metadata
+        ? {
+            ...(metadata as BridgeStatusResponse),
+            ...queryResult.data,
+          }
+        : queryResult.data,
+    [metadata, queryResult.data],
+  )
 
   const inputCurrency = useCurrencyByChainId(data?.inputToken, data?.originChainId)
   const outputCurrency = useCurrencyByChainId(data?.outputToken, data?.destinationChainId)
@@ -45,6 +49,10 @@ export const useBridgeStatus = (
   const feesBreakdown = useMemo(() => {
     return {
       totalFeesUSD: data && data.data?.reduce((prev, curr) => prev + Number(curr.metadata.fee), 0),
+      swapFeesUSD:
+        data &&
+        data.data?.reduce((prev, curr) => prev + (curr.command === Command.SWAP ? Number(curr.metadata.fee) : 0), 0),
+      bridgeFeesUSD: data && Number(data.data?.find((item) => item.command === Command.BRIDGE)?.metadata.fee),
     }
   }, [data])
 
@@ -53,6 +61,7 @@ export const useBridgeStatus = (
       data
         ? {
             ...data,
+            minOutputAmount: metadata?.minOutputAmount || data?.minOutputAmount,
             inputCurrencyAmount,
             outputCurrencyAmount,
             feesBreakdown,

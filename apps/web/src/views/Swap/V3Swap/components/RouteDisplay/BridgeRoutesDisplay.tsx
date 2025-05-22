@@ -53,7 +53,7 @@ const RouterBox = styled(Flex)<{ $showDottedBackground?: boolean }>`
     left: 0;
     width: 100%;
     height: 3px;
-    border-top: 3px dotted ${({ theme }) => theme.colors.inputSecondary};
+    border-top: 3px dotted ${({ theme }) => (theme.isDark ? theme.colors.secondary20 : theme.colors.inputSecondary)};
     transform: translateY(-50%);
     z-index: 1;
   }
@@ -81,7 +81,7 @@ const PrimaryCard = styled(Box)`
 `
 
 const RouteBoxHeader = styled(Box)`
-  border: 2px solid ${({ theme }) => (theme.isDark ? theme.colors.cardBorder : theme.colors.tertiary20)};
+  border: 2px solid ${({ theme }) => (theme.isDark ? theme.colors.secondary20 : theme.colors.tertiary20)};
   background-color: ${({ theme }) => theme.colors.tertiary};
 `
 
@@ -97,7 +97,7 @@ const RouteModalContainer = styled(FlexGap)`
     width: 3px;
     height: calc(100% - 72px);
     border-top: none;
-    border-left: 3px dotted ${({ theme }) => theme.colors.inputSecondary};
+    border-left: 3px dotted ${({ theme }) => (theme.isDark ? theme.colors.secondary20 : theme.colors.inputSecondary)};
     z-index: 0;
   }
 
@@ -112,7 +112,7 @@ const RouteModalContainer = styled(FlexGap)`
       left: 36px;
       width: calc(100% - 72px);
       height: 3px;
-      border-top: 3px dotted ${({ theme }) => theme.colors.inputSecondary};
+      border-top: 3px dotted ${({ theme }) => (theme.isDark ? theme.colors.secondary20 : theme.colors.inputSecondary)};
       border-left: none;
       transform: translateY(-50%);
     }
@@ -131,7 +131,7 @@ const DottedBackgroundContainer = styled(FlexGap)`
     left: 0;
     width: 100%;
     height: 3px;
-    border-top: 3px dotted ${({ theme }) => theme.colors.inputSecondary};
+    border-top: 3px dotted ${({ theme }) => (theme.isDark ? theme.colors.secondary80 : theme.colors.inputSecondary)};
     border-left: none;
     transform: translateY(-50%);
     z-index: 0;
@@ -184,8 +184,18 @@ export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
             width="fit-content"
             mx="auto"
           >
-            <ChainLogo chainId={bridgeInputCurrency.chainId} width={32} height={32} />
-            <ChainLogo chainId={bridgeOutputCurrency.chainId} width={32} height={32} />
+            <ChainLogo
+              chainId={bridgeInputCurrency.chainId}
+              width={32}
+              height={32}
+              imageStyles={{ borderRadius: '35%' }}
+            />
+            <ChainLogo
+              chainId={bridgeOutputCurrency.chainId}
+              width={32}
+              height={32}
+              imageStyles={{ borderRadius: '35%' }}
+            />
           </DottedBackgroundContainer>
           <Text mt="4px" textAlign="center">
             {t('Bridge')}
@@ -208,6 +218,7 @@ const BridgeChainRoutes = ({ routes }: { routes: RouteDisplayEssentials[] }) => 
   const { t } = useTranslation()
 
   const { isDesktop } = useMatchBreakpoints()
+
   const [isExpanded, setIsExpanded] = useState(isDesktop)
 
   const inputCurrency = routes[0].inputAmount.currency
@@ -215,22 +226,23 @@ const BridgeChainRoutes = ({ routes }: { routes: RouteDisplayEssentials[] }) => 
 
   const poolTypes = [
     ...new Set(
-      routes.map((route) => {
-        const pool = route.pools[0]
-        if (SmartRouter.isInfinityClPool(pool) || SmartRouter.isInfinityBinPool(pool)) {
-          return 'Infinity'
-        }
-        if (SmartRouter.isStablePool(pool)) {
-          return 'StableSwap'
-        }
-        if (SmartRouter.isV3Pool(pool)) {
-          return 'V3'
-        }
-        if (SmartRouter.isV2Pool(pool)) {
-          return 'V2'
-        }
-        return 'Unknown'
-      }),
+      routes.flatMap((route) =>
+        route.pools.map((pool) => {
+          if (SmartRouter.isInfinityClPool(pool) || SmartRouter.isInfinityBinPool(pool)) {
+            return 'Infinity'
+          }
+          if (SmartRouter.isStablePool(pool)) {
+            return 'StableSwap'
+          }
+          if (SmartRouter.isV3Pool(pool)) {
+            return 'V3'
+          }
+          if (SmartRouter.isV2Pool(pool)) {
+            return 'V2'
+          }
+          return 'Unknown'
+        }),
+      ),
     ),
   ]
 
@@ -397,7 +409,7 @@ export const BridgeRouteDisplay = memo(function BridgeRouteDisplay({ route }: Br
           {t('%percent%%', { percent: Math.round(percent) })}
         </Text>
       </RouteBoxHeader>
-      <Box p="12px 12px 36px">
+      <Box p="12px 18px 64px">
         <RouterBox
           justifyContent={pairNodes && pairNodes.length > 1 ? 'space-between' : 'center'}
           alignItems="center"

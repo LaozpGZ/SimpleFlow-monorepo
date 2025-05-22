@@ -37,6 +37,7 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
       const isNative = address?.toLowerCase() === zeroAddress || address?.toLowerCase() === GELATO_NATIVE
       if (isNative) return native
 
+      // Check if it is an existing input or output currency
       if (
         address === bridgeStatus?.inputCurrencyAmount?.currency.wrapped.address &&
         chainId === bridgeStatus?.inputCurrencyAmount?.currency.chainId
@@ -50,12 +51,13 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
         return bridgeStatus?.outputCurrencyAmount?.currency
       }
 
+      // Check the list of all tokens
       if (allTokens) {
         const token = allTokens?.[chainId]?.[safeGetAddress(address) || '']
         if (token) return token
       }
 
-      //   Else, read name, symbol and decimals from contract
+      // Else, read name, symbol and decimals from contract
       try {
         const chainClient = publicClient({ chainId })
 
@@ -103,12 +105,18 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
             getCurrencyByAddress(step.metadata.chainId, step.metadata.inputToken),
             getCurrencyByAddress(step.metadata.chainId, step.metadata.outputToken),
           ])
+
           tokenMapping[stepTokenKey(step.metadata.chainId, step.metadata.inputToken)] = inputToken
           tokenMapping[stepTokenKey(step.metadata.chainId, step.metadata.outputToken)] = outputToken
         } else if (step.command === Command.BRIDGE) {
-          // TODO: Implement after getting input and output token addresses from Backend team
-          //   const token = await getCurrencyByAddress(step.metadata.originChainId, step.metadata.inputToken)
-          //   tokenMapping[stepTokenKey(step.metadata.originChainId, step.metadata.inputToken)] = token
+          // eslint-disable-next-line no-await-in-loop
+          const [inputToken, outputToken] = await Promise.all([
+            getCurrencyByAddress(step.metadata.originChainId, step.metadata.inputToken),
+            getCurrencyByAddress(step.metadata.destinationChainId, step.metadata.outputToken),
+          ])
+
+          tokenMapping[stepTokenKey(step.metadata.originChainId, step.metadata.inputToken)] = inputToken
+          tokenMapping[stepTokenKey(step.metadata.destinationChainId, step.metadata.outputToken)] = outputToken
         }
       }
       return tokenMapping
@@ -124,7 +132,7 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
           switch (step.command) {
             case Command.SWAP: {
               const variables = {
-                currencyA: tokenMapping[stepTokenKey(step.metadata.chainId, step.metadata.inputToken)]?.symbol || '', // TODO: Get output of bridged token... can be different if prev swap step present
+                currencyA: tokenMapping[stepTokenKey(step.metadata.chainId, step.metadata.inputToken)]?.symbol || '',
                 currencyB: tokenMapping[stepTokenKey(step.metadata.chainId, step.metadata.outputToken)]?.symbol || '',
                 chainName: getFullChainNameById(step.metadata.chainId),
               }
@@ -136,7 +144,8 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
             }
             case Command.BRIDGE:
               return t('Bridge %currency% (%inputChain% to %outputChain%)', {
-                currency: order?.trade.inputAmount.currency.symbol || '', // TODO: Verify this currency symbol for Swap->Bridge?-> Cases
+                currency:
+                  tokenMapping[stepTokenKey(step.metadata.originChainId, step.metadata.inputToken)]?.symbol || '',
                 inputChain: getFullChainNameById(step.metadata.originChainId),
                 outputChain: getFullChainNameById(step.metadata.destinationChainId),
               })

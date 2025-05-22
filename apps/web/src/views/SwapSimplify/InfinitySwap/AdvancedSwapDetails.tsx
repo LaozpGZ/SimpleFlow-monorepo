@@ -169,7 +169,7 @@ export const TradeSummary = memo(function TradeSummary({
   const { feeSavedAmount, feeSavedUsdValue } = useFeeSaved(inputAmount, outputAmount)
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
 
-  // if priceBreakdown is an array and priceBreakdown only has one item, hide the slippage button because it's beidgeonly case
+  // if priceBreakdown is an array and priceBreakdown only has one item, hide the slippage button because it's bridge-only case
   const isBridgeOnlyCase = useMemo(() => {
     return Array.isArray(priceBreakdown) && priceBreakdown.length === 1
   }, [priceBreakdown])

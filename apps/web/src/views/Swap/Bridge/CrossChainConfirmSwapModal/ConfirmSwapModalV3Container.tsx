@@ -28,7 +28,7 @@ const ConfirmSwapModalV3Container: React.FC<React.PropsWithChildren<ConfirmSwapM
     <MotionModal
       title={hideTitleAndBackground ? '' : title || t('Confirm Swap')}
       headerPadding={hideTitleAndBackground && headerPadding ? headerPadding : '12px 24px'}
-      bodyPadding={hideTitleAndBackground && bodyPadding ? bodyPadding : '24px'}
+      bodyPadding={bodyPadding || '24px'}
       bodyTop={bodyTop}
       headerBackground={headerBackground || (hideTitleAndBackground ? 'transparent' : 'gradientCardHeader')}
       headerBorderColor="transparent"

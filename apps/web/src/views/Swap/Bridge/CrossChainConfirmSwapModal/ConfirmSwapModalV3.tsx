@@ -24,7 +24,7 @@ import { wrappedCurrency } from 'utils/wrappedCurrency'
 import { SwapTransactionErrorContent } from 'views/Swap/components/SwapTransactionErrorContent'
 
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
-import { useAtomValue } from 'jotai'
+import { useAtom } from 'jotai'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { Hash } from 'viem'
 import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
@@ -91,7 +91,8 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
   // @ts-ignore
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback(originalOrder?.trade)
 
-  const activeBridgeOrderMetadata = useAtomValue(activeBridgeOrderMetadataAtom)
+  const [activeBridgeOrderMetadata, setActiveBridgeOrderMetadata] = useAtom(activeBridgeOrderMetadataAtom)
+
   const { data: bridgeStatus } = useBridgeStatus(
     activeBridgeOrderMetadata?.originChainId,
     activeBridgeOrderMetadata?.txHash,
@@ -131,6 +132,9 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
   }, [token, originalOrder])
 
   const handleDismiss = useCallback(() => {
+    // Reset the active bridge order metadata when the modal is dismissed
+    setActiveBridgeOrderMetadata(null)
+
     if (typeof customOnDismiss === 'function') {
       customOnDismiss()
     }
@@ -413,7 +417,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       // hideTitleAndBackground={confirmModalState !== ConfirmModalState.REVIEWING || hasError}
       headerPadding={loadingAnimationVisible ? '12px 24px 0px 24px !important' : '12px 24px'}
       headerBackground="transparent"
-      bodyPadding={loadingAnimationVisible && !hasError ? '0 24px 24px 24px' : '24px'}
+      bodyPadding={!hasError ? '0 24px 24px 24px' : '24px'}
       bodyTop={loadingAnimationVisible ? '-15px' : '0'}
       handleDismiss={handleDismiss}
     >
