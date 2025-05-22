@@ -21,7 +21,8 @@ export async function takeFirstFulfilled<T>(promises: Promise<T>[]): Promise<{
         errors[index] = err
         rejectionCount++
         if (rejectionCount === promises.length) {
-          reject(new Error('All promises were rejected'))
+          const msgs = `${errors.map((x) => x.toString()).join('\n\n')}`
+          reject(new Error(`All promises were rejected: ${msgs}`))
         }
       }
     })
