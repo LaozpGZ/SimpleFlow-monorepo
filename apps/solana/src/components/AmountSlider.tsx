@@ -84,7 +84,7 @@ export default function AmountSlider({
         </HStack>
 
         <Desktop>
-          <HStack spacing={sizes.buttonSpace}>
+          <HStack spacing={2}>
             {[25, 50, 75, 100].map((percent) => (
               <Button
                 disabled={isDisabled}
