@@ -4,6 +4,7 @@ import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { POOLS_FAST_REVALIDATE } from 'config/pools'
 import { useCurrency } from 'hooks/Tokens'
 import { useInputBasedAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
+import { usePCSXEnabledOnChain } from 'hooks/usePCSX'
 import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { activeQuoteHashAtom } from 'quoter/atom/abortControlAtoms'
@@ -62,6 +63,8 @@ export const useQuoterSync = () => {
   const [nonce, setNonce] = useAtom(quoteNonceAtom)
   const gasLimit = useAtomValue(multicallGasLimitAtom(chainId))
 
+  const xEnabledOnDestinationChain = usePCSXEnabledOnChain(outputCurrencyChainId)
+
   const quoteQueryInit = {
     amount,
     currency: dependentCurrency,
@@ -75,6 +78,7 @@ export const useQuoterSync = () => {
     stableSwap,
     speedQuoteEnabled,
     xEnabled,
+    xEnabledOnDestinationChain,
     slippage,
     address,
     blockNumber,

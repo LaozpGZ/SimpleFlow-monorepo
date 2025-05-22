@@ -132,8 +132,10 @@ export const getBridgeQuote = atomFamily(
     a.nonce === b.nonce,
 )
 
-export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: QuoteQuery) => {
+export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: QuoteQuery) => {
   return atom(async (get) => {
+    const { xEnabledOnDestinationChain, ..._option } = option
+
     const isCrossChain =
       _option.baseCurrency && _option.currency && _option.baseCurrency?.chainId !== _option.currency?.chainId
 
@@ -248,6 +250,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
             ..._option,
             baseCurrency: bridgeQuote.trade.outputAmount.currency,
             amount: bridgeQuote.trade.outputAmount,
+            xEnabled: xEnabledOnDestinationChain ?? false,
             hash: '',
             placeholderHash: '',
           }
@@ -524,6 +527,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((_option: Qu
               amount: swapAndBridgeQuote.bridgeQuote.trade.outputAmount,
               hash: '',
               placeholderHash: '',
+              xEnabled: xEnabledOnDestinationChain ?? false,
             }
 
             const quoteQuery = createQuoteQuery(finalSwapOption)

@@ -81,6 +81,7 @@ export type QuoteQuery = Options & {
   type?: 'offchain' | 'quoter' | 'auto' | 'api'
   speedQuoteEnabled: boolean
   xEnabled: boolean
+  xEnabledOnDestinationChain?: boolean
   slippage?: number
   address?: Address
   blockNumber: number
