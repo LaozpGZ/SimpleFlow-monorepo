@@ -20,7 +20,7 @@ import { parseProtocolFeesToNumbers } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Rounding } from '@pancakeswap/sdk'
 import { ASSET_CDN } from 'config/constants/endpoints'
-import { memo, useMemo, useState } from 'react'
+import { memo, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { RouterPoolBox, RouterTypeText } from 'views/Swap/components/RouterViewer'
@@ -150,6 +150,12 @@ const StyledBridgeLogo = styled(Image)`
   border-radius: 100%;
 `
 
+const AnimatedContent = styled(Box)<{ $height: number }>`
+  height: ${({ $height }) => `${$height}px`};
+  overflow: hidden;
+  transition: height 0.2s ease-in-out;
+`
+
 export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
   const { t } = useTranslation()
   const bridgeRouteIndex = routes.findIndex((route) => route.type === RouteType.BRIDGE)!
@@ -226,10 +232,16 @@ export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
 
 const BridgeChainRoutes = ({ routes }: { routes: RouteDisplayEssentials[] }) => {
   const { t } = useTranslation()
-
   const { isDesktop } = useMatchBreakpoints()
-
   const [isExpanded, setIsExpanded] = useState(isDesktop)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [contentHeight, setContentHeight] = useState(0)
+
+  useLayoutEffect(() => {
+    if (contentRef.current) {
+      setContentHeight(contentRef.current.scrollHeight + 12)
+    }
+  }, [routes])
 
   const inputCurrency = routes[0].inputAmount.currency
   const outputCurrency = routes[routes.length - 1].outputAmount.currency
@@ -286,14 +298,16 @@ const BridgeChainRoutes = ({ routes }: { routes: RouteDisplayEssentials[] }) => 
             {t('Via %poolTypes% Pool', { poolTypes: poolTypes.join(', ') })}
           </Text>
         </PrimaryCard>
-        {isExpanded && (
-          <AutoColumn mt="12px" gap="12px">
-            {routes.map((route, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <BridgeRouteDisplay key={i} route={route} />
-            ))}
-          </AutoColumn>
-        )}
+        <AnimatedContent $height={isExpanded ? contentHeight : 0}>
+          <div ref={contentRef}>
+            <AutoColumn mt="12px" gap="12px">
+              {routes.map((route, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <BridgeRouteDisplay key={i} route={route} />
+              ))}
+            </AutoColumn>
+          </div>
+        </AnimatedContent>
 
         <Flex
           mt="24px"
