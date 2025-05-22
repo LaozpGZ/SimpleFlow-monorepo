@@ -9,9 +9,10 @@ import {
   TradeType,
   ZERO,
 } from '@pancakeswap/sdk'
-import { InfinityRouter, Route, SmartRouter, SmartRouterTrade } from '@pancakeswap/smart-router'
+import { Route, SmartRouter, SmartRouterTrade } from '@pancakeswap/smart-router'
 import { formatPrice, parseNumberToFraction } from '@pancakeswap/utils/formatFractions'
 import { FeeAmount } from '@pancakeswap/v3-sdk'
+import { displaySymbolWithChainName } from '@pancakeswap/widgets-internal'
 
 import { BIPS_BASE, INPUT_FRACTION_AFTER_FEE } from 'config/constants/exchange'
 import { Field } from 'state/swap/actions'
@@ -21,11 +22,6 @@ import { BridgeOrderWithCommands, InterfaceOrder, isBridgeOrder } from 'views/Sw
 
 export type SlippageAdjustedAmounts = {
   [field in Field]?: CurrencyAmount<Currency> | null
-}
-
-// Helper function to check if a trade is V4Trade
-const isV4Trade = (trade: any): trade is InfinityRouter.InfinityTradeWithoutGraph<TradeType> => {
-  return trade && 'gasUseEstimate' in trade
 }
 
 // computes the minimum amount out and maximum amount in for a trade given a user specified allowed slippage in bips
@@ -150,9 +146,18 @@ export function formatExecutionPrice(
   if (!executionPrice || !inputAmount || !outputAmount) {
     return ''
   }
+
+  const isBridge = inputAmount.currency.chainId !== outputAmount.currency.chainId
+
   return inverted
-    ? `${formatPrice(executionPrice.invert(), 6)} ${inputAmount.currency.symbol} / ${outputAmount.currency.symbol}`
-    : `${formatPrice(executionPrice, 6)} ${outputAmount.currency.symbol} / ${inputAmount.currency.symbol}`
+    ? `${formatPrice(executionPrice.invert(), 6)} ${displaySymbolWithChainName(
+        inputAmount.currency,
+        isBridge,
+      )} / ${displaySymbolWithChainName(outputAmount.currency, isBridge)}`
+    : `${formatPrice(executionPrice, 6)} ${displaySymbolWithChainName(
+        outputAmount.currency,
+        isBridge,
+      )} / ${displaySymbolWithChainName(inputAmount.currency, isBridge)}`
 }
 
 export function v3FeeToPercent(fee: FeeAmount): Percent {
