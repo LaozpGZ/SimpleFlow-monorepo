@@ -10,5 +10,6 @@ export const getHomeCacheSettings = (name: string) => {
       version: 'v3',
     },
     maxAge: HOME_PAGE_CACHE_MAX_AGE,
+    cacheNextEpochOnHalfTTS: true,
   }
 }

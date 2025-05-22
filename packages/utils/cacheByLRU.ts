@@ -32,6 +32,7 @@ export type CacheOptions<T extends AsyncFunction<any>> = {
   maxAge?: number
   rejectWhenNoCache?: boolean
   usingStaleValue?: boolean
+  cacheNextEpochOnHalfTTS?: boolean
   requestTimeout?: number
 }
 
@@ -75,6 +76,7 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     rejectWhenNoCache,
     usingStaleValue = true,
     requestTimeout,
+    cacheNextEpochOnHalfTTS,
   }: CacheOptions<T>,
 ) => {
   cacheInstanceId++
@@ -164,6 +166,13 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
     }
 
     const current = cacheForEpoch(epochId)
+    if (cacheNextEpochOnHalfTTS) {
+      const next = epochId + 1
+      const exceedHalfTTS = epoch - epochId > 0.5
+      if (exceedHalfTTS) {
+        cacheForEpoch(next)
+      }
+    }
 
     if (current.resolved) {
       return current.promise
