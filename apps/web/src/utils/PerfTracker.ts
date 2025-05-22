@@ -6,6 +6,19 @@ export interface BasePerf {
 
 type BaseTrackKey = 'success' | 'fail' | 'start' | 'duration'
 type ExtendTrackKey = 'pool_success' | 'pool_error' | BaseTrackKey
+/**
+ * Usage:
+ * const tracker = new PerfTracker<MyTraceData>('topic', initialTraceData, Date.now())
+ * tracker.track('start')
+ * try {
+ *   // your code logic here
+ *   tracker.success()
+ * } catch (error) {
+ *   tracker.fail(error)
+ * } finally {
+ *   tracker.report('your-log-key')
+ * }
+ */
 export class PerfTracker<TTraceData extends BasePerf> {
   protected records: [ExtendTrackKey, number][] = []
 
