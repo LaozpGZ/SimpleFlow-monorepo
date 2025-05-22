@@ -16,9 +16,6 @@ r2_buckets = [
 ]
 name = "routing"
 
-[triggers]
-crons = ["0 * * * *"]
-
 # The necessary secrets are:
 # - ETH_NODE
 # - GOERLI_NODE
