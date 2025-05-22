@@ -109,7 +109,6 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 
     const cacheForEpoch = (epochId: number) => {
       const cacheKey = calcCacheKey(keyFunction(args), epochId)
-      console.log(`[cacheByLRU] cacheKey: ${cacheKey}, epochId: ${epochId}`)
       if (cache.has(cacheKey)) {
         return cache.get(cacheKey)!
       }
@@ -192,11 +191,9 @@ export const cacheByLRU = <T extends AsyncFunction<any>>(
 }
 
 async function uploadR2(key: string, value: any) {
-  console.info('update cache', key)
   if (!process.env.OBJECT_CACHE_SECRET) {
     return
   }
-  console.log(`[upload] start...`)
   await fetch(`https://obj-cache.pancakeswap.com`, {
     method: 'POST',
     headers: {
@@ -205,14 +202,11 @@ async function uploadR2(key: string, value: any) {
     },
     body: JSON.stringify({ key, value }),
   })
-  console.log(`[upload] success!!`)
 }
 
 async function _fetchR2Cache(key: string) {
-  console.log(`[fetchR2Cache] start... https://proofs.pancakeswap.com/cache/${key}`)
   const resp = await fetch(`https://proofs.pancakeswap.com/cache/${key}`)
   if (resp.ok) {
-    console.log(`[fetchR2Cache] ok...`)
     return resp.json()
   }
   throw new Error(`Failed to fetch cache`)
