@@ -4,9 +4,12 @@ import { colors } from '../cssVariables'
 
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(modalAnatomy.keys)
 const baseStyle = definePartsStyle({
+  overlay: {
+    bg: '#280d5f99'
+  },
   closeButton: {
     top: ['12px', '16px'],
-    right: ['24px', '0'],
+    right: ['24px', '24px'],
     width: '2em',
     height: '2em',
     color: colors.textSubtle
