@@ -288,6 +288,7 @@ export default function MigrateFromStandardDialog({
       .eq(new Decimal(clmmAmount.amountB).mul(10 ** mintBDecimal).toDecimalPlaces(0))
 
     migrateToClmmAct({
+      t,
       poolInfo,
       clmmPoolInfo: {
         ...clmmPoolInfo,

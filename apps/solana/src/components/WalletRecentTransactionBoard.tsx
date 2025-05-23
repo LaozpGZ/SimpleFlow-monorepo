@@ -128,15 +128,18 @@ export default function WalletRecentTransactionBoard({ wallet, address, isOpen =
   const recentTransactions: RecentTransaction[] = address
     ? allRecords
         .filter((r) => r.owner && r.owner === address)
-        .map((record) => ({
-          txId: record.txId,
-          name: (record.isMultiSig ? `(${t('Multisig Wallet')}) ` : '') + t(record.title, record.txValues || {}),
-          status: record.status,
-          description: t(record.description, record.txValues || {}).replaceAll(/(<([^>]+)>)/gi, ''),
-          date: record.time,
-          relatedTokens: record.mintInfo || [],
-          sub: record.subTx
-        }))
+        .map(
+          (record) =>
+            ({
+              txId: record.txId,
+              name: (record.isMultiSig ? `(${t('Multisig Wallet')}) ` : '') + t(record.title! as string, record.txValues || {}),
+              status: record.status,
+              description: t(record.description! as string, record.txValues || {}).replaceAll(/(<([^>]+)>)/gi, ''),
+              date: record.time,
+              relatedTokens: record.mintInfo || [],
+              sub: record.subTx
+            } as RecentTransaction)
+        )
     : []
 
   const normalDrawerBody = (

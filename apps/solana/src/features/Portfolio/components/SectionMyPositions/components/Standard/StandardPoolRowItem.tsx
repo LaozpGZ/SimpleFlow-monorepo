@@ -119,6 +119,7 @@ export default function StandardPoolRowItem({ pool, isLoading, position, stakedF
   const handleHarvest = useEvent(() => {
     onHarvesting()
     harvestAllFarmAct({
+      t,
       farmInfoList: stakedFarmList,
       onFinally: offHarvesting
     })

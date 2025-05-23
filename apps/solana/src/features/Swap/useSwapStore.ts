@@ -217,6 +217,7 @@ export const useSwapStore = createStore<SwapStore>(
             handleMultiTxRetry(processedId)
             const isSlippageError = isSwapSlippageError(signatureResult)
             handleMultiTxToast({
+              t,
               toastId,
               processedId: processedId.map((p) => ({ ...p, status: p.status === 'sent' ? 'info' : p.status })),
               txLength,
@@ -260,6 +261,7 @@ export const useSwapStore = createStore<SwapStore>(
 
           handleMultiTxRetry(processedId)
           handleMultiTxToast({
+            t,
             toastId,
             processedId: processedId.map((p) => ({ ...p, status: p.status === 'sent' ? 'info' : p.status })),
             txLength,

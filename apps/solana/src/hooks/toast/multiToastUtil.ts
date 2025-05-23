@@ -1,5 +1,6 @@
 import { v4 as uuid } from 'uuid'
 import { TranslateFunction } from '@pancakeswap/localization'
+import { ReactNode } from 'react'
 import { ToastStatus, TxCallbackProps } from '@/types/tx'
 import { txStatusSubject, multiTxStatusSubject } from './useTxStatus'
 
@@ -33,15 +34,15 @@ export const handleMultiTxToast = (
     txLength: number
     t: TranslateFunction
     meta: {
-      title: string | JSX.Element
-      description: string | JSX.Element
-      txHistoryTitle: string | JSX.Element
-      txHistoryDesc: string | JSX.Element
+      title: string | ReactNode
+      description: string | ReactNode
+      txHistoryTitle: string | ReactNode
+      txHistoryDesc: string | ReactNode
       txValues: Record<string, unknown>
     }
     skipWatchSignature?: boolean
     isSwap?: boolean
-    getSubTxTitle: (idx: number) => string
+    getSubTxTitle: (idx: number) => string | ReactNode
     handler: (
       processedId: {
         txId: string
@@ -87,7 +88,7 @@ export const handleMultiTxToast = (
       return {
         txId: tx.txId,
         status: tx.status,
-        title: t(titleKey),
+        title: typeof titleKey === 'string' ? t(titleKey) : titleKey,
         txHistoryTitle: titleKey
       }
     })

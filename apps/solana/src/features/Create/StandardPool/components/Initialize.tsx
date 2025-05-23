@@ -155,6 +155,7 @@ export default function Initialize({ isAmmV4 }: { isAmmV4: boolean }) {
     if (isAmmV4) {
       let poolId = ''
       createMarketAndPoolAct({
+        t,
         baseToken: solToWSolToken(baseToken!),
         quoteToken: solToWSolToken(quoteToken!),
         baseAmount: new Decimal(tokenAmount.base).mul(10 ** baseToken!.decimals).toFixed(0),

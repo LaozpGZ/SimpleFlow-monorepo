@@ -161,6 +161,7 @@ export default function CreateClmmPool() {
       ]
 
       openPositionAct({
+        t,
         poolInfo: buildData.extInfo.mockPoolInfo,
         poolKeys: buildData.extInfo.address,
         tickLower: Math.min(currentCreateInfo.current.tickLower!, currentCreateInfo.current.tickUpper!),

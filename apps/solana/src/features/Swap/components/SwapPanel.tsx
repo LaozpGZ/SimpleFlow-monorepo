@@ -146,6 +146,7 @@ export function SwapPanel({
   const handleUnwrap = useEvent(() => {
     onUnWrapping()
     unWrapSolAct({
+      t,
       amount: wsolBalance.rawAmount.toFixed(0),
       onSent: offUnWrapping,
       onClose: offUnWrapping,
