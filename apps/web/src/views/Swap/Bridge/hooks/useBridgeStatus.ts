@@ -15,9 +15,9 @@ export const useBridgeStatus = (
   const queryResult = useQuery({
     queryKey: bridgeStatusQueryKey(chainId, txHash),
     queryFn: () => (chainId && txHash ? getBridgeStatus(chainId, txHash) : undefined),
-    refetchInterval: 1000,
+    refetchInterval: 3_000,
     retry: 3,
-    retryDelay: 1000,
+    retryDelay: 1_000,
     enabled: !!chainId && !!txHash,
     notifyOnChangeProps: ['data', 'isFetching'],
   })

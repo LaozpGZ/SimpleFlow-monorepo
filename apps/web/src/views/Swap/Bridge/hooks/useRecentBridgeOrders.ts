@@ -26,7 +26,7 @@ export const useRecentBridgeOrders = ({ address }: UseRecentBridgeOrdersParamete
     retry: 3,
     retryDelay: 1_000,
     refetchOnMount: true,
-    refetchInterval: 3_000,
+    refetchInterval: 10_000,
   }
 
   return useQuery<UserBridgeOrdersResponse, Error, UserBridgeOrdersResponse>(queryOptions)
