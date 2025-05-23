@@ -1,5 +1,5 @@
 import { Text, Button, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, ModalFooter } from '@chakra-ui/react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import CircleInfo from '@/icons/misc/CircleInfo'
 import { colors } from '@/theme/cssVariables'
 
@@ -26,11 +26,9 @@ export default function HighRiskAlert({
         </ModalHeader>
         <ModalBody textAlign="center">
           <Text variant="title" fontSize="md" mb="6" fontWeight="400">
-            <Trans
-              i18nKey="swap.alert_high_price_warn_desc" // optional -> fallbacks to defaults if not provided
-              components={{ sub: <Text display="inline-block" color={colors.textPink} variant="title" /> }}
-              values={{ percent: `${percent}%` }}
-            />
+            {t('Price impact for this swap is %percent%')}
+            <br />
+            {t('Confirming may result in a poor price for this swap!')}
           </Text>
         </ModalBody>
         <ModalFooter flexDirection="column" gap="2" px="0" py="0" mt="4">

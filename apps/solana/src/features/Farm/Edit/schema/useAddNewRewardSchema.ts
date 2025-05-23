@@ -3,8 +3,7 @@ import * as yup from 'yup'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'
 import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
-import { useTranslation } from '@pancakeswap/localization'
-import { TFunction } from 'i18next'
+import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
 import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 
 interface Props {
@@ -17,7 +16,7 @@ interface Props {
   checkMint?: boolean
 }
 
-const schema = (t: TFunction<'translation', undefined, 'translation'>) =>
+const schema = (t: TranslateFunction) =>
   yup.object().shape({
     speed: yup.mixed().test('is-amount-enough', t('Reward emissions are lower than the min required') ?? '', function () {
       const minBoundary =

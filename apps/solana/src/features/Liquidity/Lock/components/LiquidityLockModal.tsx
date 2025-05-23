@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import Decimal from 'decimal.js'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3PoolInfoStandardItemCpmm } from '@raydium-io/raydium-sdk-v2'
 import BN from 'bn.js'
 import { colors } from '@/theme/cssVariables'
@@ -68,10 +68,9 @@ function LiquidityLockModal({
         <ModalCloseButton />
         <ModalBody mt={[5, 6]}>
           <Text color={colors.lightPurple} lineHeight="20px" fontSize={['sm', 'md']}>
-            <Trans i18nKey="liquidity.lock_desc4">
-              <Text as="span" fontWeight="bold" />
-              <Text as="span" fontWeight="bold" />
-            </Trans>
+            {t(
+              'Are you sure you want to permanently lock/burn liquidity? You will be unable to access or withdraw underlying position assets, only trading fees earned will remain claimable.'
+            )}
           </Text>
           <Box rounded="xl" border={`1px solid ${colors.selectInactive}`} bg={colors.modalContainerBg} px={[3, 4]} py={2} my={[5, 6]}>
             <Text color={colors.lightPurple} fontSize={['sm', 'md']} mb={2}>

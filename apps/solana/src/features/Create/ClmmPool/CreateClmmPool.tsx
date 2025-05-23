@@ -1,7 +1,7 @@
 import { Box, Flex, Grid, GridItem, HStack, Link, Text, useDisclosure } from '@chakra-ui/react'
 import { ApiClmmConfigInfo, ApiV3Token, solToWSol } from '@raydium-io/raydium-sdk-v2'
 import { useCallback, useRef, useState } from 'react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import { shallow } from 'zustand/shallow'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
@@ -236,22 +236,7 @@ export default function CreateClmmPool() {
               title={t('Please Note')}
               description={
                 <>
-                  <Trans i18nKey="create_pool.clmm_please_note_des">
-                    <Link
-                      color={colors.primary60}
-                      href="https://docs.raydium.io/raydium/pool-creation/creating-a-clmm-pool-and-farm"
-                      isExternal
-                    >
-                      CLMM
-                    </Link>
-                    <Link
-                      color={colors.primary60}
-                      href="https://docs.raydium.io/raydium/pool-creation/creating-a-standard-amm-pool"
-                      isExternal
-                    >
-                      Standard
-                    </Link>
-                  </Trans>
+                  <Text>{t('This tool is for advanced users. For detailed instructions, read the guide for CLMM and Standard')}</Text>
                 </>
               }
             />

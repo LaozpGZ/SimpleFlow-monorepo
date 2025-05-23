@@ -7,7 +7,7 @@ import { PublicKey } from '@solana/web3.js'
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { shallow } from 'zustand/shallow'
 import ConnectedButton from '@/components/ConnectedButton'
@@ -69,7 +69,7 @@ export function SwapPanel({
   const { inputMint: cacheInput, outputMint: cacheOutput } = getSwapPairCache()
   const [defaultInput, defaultOutput] = [urlInputMint || cacheInput, urlOutputMint || cacheOutput]
 
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { swap: swapDisabled } = useAppStore().featureDisabled
   const swapTokenAct = useSwapStore((s) => s.swapTokenAct)
   const unWrapSolAct = useSwapStore((s) => s.unWrapSolAct)
@@ -263,7 +263,7 @@ export function SwapPanel({
   const balanceAmount = getTokenBalanceUiAmount({ mint: inputMint, decimals: tokenInput?.decimals }).amount
   const balanceNotEnough = balanceAmount.lt(inputAmount || 0) ? t('Insufficent balance') : undefined
   const isSolFeeNotEnough = inputAmount && isSolWSol(inputMint || '') && balanceAmount.sub(inputAmount || 0).lt(DEFAULT_SOL_RESERVER)
-  const swapError = (error && i18n.exists(`swap.error_${error}`) ? t(`swap.error_${error}`) : error) || balanceNotEnough
+  const swapError = error || balanceNotEnough
   const isPoolNotOpenError = !!swapError && !!openTime
 
   const handleHighRiskConfirm = useEvent(() => {
@@ -276,6 +276,7 @@ export function SwapPanel({
     sendingResult.current = response as ApiSwapV1OutSuccess
     onSending()
     swapTokenAct({
+      t,
       swapResponse: response as ApiSwapV1OutSuccess,
       wrapSol: tokenInput?.address === PublicKey.default.toString(),
       unwrapSol: tokenOutput?.address === PublicKey.default.toString(),
@@ -419,15 +420,14 @@ export function SwapPanel({
             color={colors.textSecondary}
           >
             <CircleInfo />
-            <Trans
-              i18nKey="swap.unwrap_wsol_info"
-              values={{
-                amount: wsolBalance.text
-              }}
-              components={{
-                sub: isUnWrapping ? <Progress /> : <Text cursor="pointer" color={colors.textLink} onClick={handleUnwrap} />
-              }}
-            />
+            {t('You have %amount% WSOL that you can ', { amount: wsolBalance.text })}
+            {isUnWrapping ? (
+              <Progress />
+            ) : (
+              <Text cursor="pointer" color={colors.textLink} onClick={handleUnwrap}>
+                {t('unwrap')}
+              </Text>
+            )}
           </Flex>
         )}
         {inputFeeConfig || outputFeeConfig ? (

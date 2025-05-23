@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import { PublicKey } from '@solana/web3.js'
 import Decimal from 'decimal.js'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import Steps, { StepsRef } from '@/components/Steps'
 import SubPageNote from '@/components/SubPageNote'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'
@@ -276,17 +276,9 @@ export default function CreateFarm() {
             title={t('Please Note')}
             description={
               <Text fontSize="sm" color={isMobile ? colors.textSecondary : colors.textTertiary}>
-                <Trans i18nKey="create_farm.note_des">
-                  <Link href="https://docs.raydium.io/raydium/pool-creation/creating-a-clmm-pool-and-farm" isExternal>
-                    CLMM
-                  </Link>
-                  <Link
-                    href="https://docs.raydium.io/raydium/pool-creation/creating-a-standard-amm-pool/creating-an-ecosystem-farm"
-                    isExternal
-                  >
-                    Standard
-                  </Link>
-                </Trans>
+                {t(
+                  'A farm can be created for any pool that is already live. For detailed instructions, read the guide for CLMM or Standard farms.'
+                )}
               </Text>
             }
           />

@@ -2,7 +2,6 @@ import { parseUserAgent } from 'react-device-detect'
 import { updateReqHistory } from '@raydium-io/raydium-sdk-v2'
 import axios from 'axios'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
-import i18n from '@/i18n'
 import { isLocal } from '@/utils/common'
 import { useAppStore } from '@/store'
 

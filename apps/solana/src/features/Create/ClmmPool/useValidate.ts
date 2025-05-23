@@ -1,8 +1,7 @@
 import { useState, useEffect } from 'react'
 import { ApiClmmConfigInfo, TokenInfo } from '@raydium-io/raydium-sdk-v2'
 import * as yup from 'yup'
-import { TFunction } from 'i18next'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
 
 interface Props {
   config?: ApiClmmConfigInfo
@@ -18,7 +17,7 @@ interface Props {
 const numberTransform = yup.number().transform((value) => (Number.isNaN(value) ? 0 : value))
 const numberSchema = (errMsg: string) => numberTransform.moreThan(0, errMsg)
 
-const schema = (t: TFunction<'translation', undefined, 'translation'>) =>
+const schema = (t: TranslateFunction) =>
   yup.object().shape({
     tokenAmount: yup
       .array()
@@ -57,7 +56,7 @@ export default function useValidate(props: Props) {
   return error
 }
 
-const priceRangeSchema = (t: TFunction<'translation', undefined, 'translation'>) =>
+const priceRangeSchema = (t: TranslateFunction) =>
   yup.object().shape({
     minPrice: numberSchema(t('Enter min price')).test('is-minPrice-valid', t('Invalid min price') as string, function (value?: number) {
       if (this.parent.focusMintA && (value ?? 0) > this.parent.maxPrice) return false

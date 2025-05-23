@@ -18,11 +18,11 @@ import {
   UnorderedList,
   useColorMode
 } from '@chakra-ui/react'
-import { Text, Toggle, WalletFilledIcon } from '@pancakeswap/uikit'
+import { LinkExternal, Text, Toggle, WalletFilledIcon } from '@pancakeswap/uikit'
 import { WalletReadyState } from '@solana/wallet-adapter-base'
 import { Wallet } from '@solana/wallet-adapter-react'
 import { useCallback, useState } from 'react'
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from '@pancakeswap/localization'
 // import TealCircleCheckBadge from '@/icons/misc/TealCircleCheckBadge'
 // import AvalancheNetworkIcon from '@/icons/networks/AvalancheNetworkIcon'
 // import BinanceNetworkIcon from '@/icons/networks/BinanceNetworkIcon'
@@ -261,9 +261,12 @@ function WalletItem({
           </Text>
           <QuestionToolTip
             label={
-              <Trans i18nKey="wallet_connect_panel.auto_confirm_tip">
-                <Link href="https://phantom.com/learn/blog/auto-confirm" isExternal />
-              </Trans>
+              <>
+                {t('Auto-confirm is now available for all transactions on Raydium.')}
+                <LinkExternal href="https://phantom.com/learn/blog/auto-confirm" color={colors.textPurple} fontWeight="bold">
+                  {t('Learn more')}
+                </LinkExternal>
+              </>
             }
             iconProps={{ color: colors.textPurple }}
           />

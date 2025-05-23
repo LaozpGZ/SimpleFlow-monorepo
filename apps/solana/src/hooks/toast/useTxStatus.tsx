@@ -22,8 +22,9 @@ import { toastSubject } from './useGlobalToast'
 export interface TxMeta {
   title?: string | ReactNode
   description?: string | ReactNode
-  txHistoryTitle?: string
-  txHistoryDesc?: string
+  txHistoryTitle?: string | ReactNode
+  txHistoryDesc?: string | ReactNode
+  txValues?: Record<string, any>
 }
 
 export const txStatusSubject = new Subject<
@@ -137,7 +138,7 @@ function useTxStatus() {
 
           setTxRecord({
             status: status || 'info',
-            title: txHistoryTitle || 'transaction.title',
+            title: txHistoryTitle || t('Transaction'),
             description: txHistoryDesc || '',
             txId,
             owner,

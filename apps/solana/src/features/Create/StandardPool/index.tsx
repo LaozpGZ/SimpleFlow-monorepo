@@ -1,6 +1,6 @@
 import { Box, Flex, Grid, GridItem, HStack, Link, Text, VStack } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import { colors } from '@/theme/cssVariables'
 import PanelCard from '@/components/PanelCard'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
@@ -66,14 +66,7 @@ export default function CreatePool() {
             title={t('Please Note')}
             description={
               <Text fontSize="sm" color={isMobile ? colors.textSecondary : colors.textTertiary}>
-                <Trans i18nKey="create_standard_pool.please_note_des">
-                  <Link href="https://docs.raydium.io/raydium/pool-creation/creating-a-clmm-pool-and-farm" isExternal>
-                    CLMM
-                  </Link>
-                  <Link href="https://docs.raydium.io/raydium/pool-creation/creating-a-standard-amm-pool" isExternal>
-                    Standard
-                  </Link>
-                </Trans>
+                {t('This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.')}
               </Text>
             }
           />

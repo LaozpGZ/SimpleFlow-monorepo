@@ -1,6 +1,6 @@
 import { Box, Button, Flex, Grid, GridItem, HStack, Skeleton, Text, useDisclosure } from '@chakra-ui/react'
 import { useState, useCallback, useMemo, useEffect } from 'react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import { BN } from 'bn.js'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { colors } from '@/theme/cssVariables/colors'
@@ -115,9 +115,9 @@ export default function Lock() {
                 )}
               </Text>
               <Text mb={[4, 7]}>
-                <Trans i18nKey="liquidity.lock_clmm_desc2">
-                  <Text as="span" fontWeight="bold" />
-                </Trans>
+                {t(
+                  'To start, select a CLMM position below to lock. Ensure that position value and NFT mint  match the position you want to lock!'
+                )}
               </Text>
               <Text>{t('Note: Technically, your NFT is not burned but permanently locked.')}</Text>
             </Box>

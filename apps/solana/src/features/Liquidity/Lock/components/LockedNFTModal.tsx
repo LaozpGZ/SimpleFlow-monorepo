@@ -13,7 +13,7 @@ import {
   ModalFooter,
   useClipboard
 } from '@chakra-ui/react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import { colors } from '@/theme/cssVariables/colors'
 import { encodeStr } from '@/utils/common'
 import CopyIcon from '@/icons/misc/CopyIcon'
@@ -96,10 +96,9 @@ export default function LockedNFTModal({
           </Flex>
 
           <Text color={colors.textSecondary} fontSize={['sm', 'md']} mt="4" mb="2">
-            <Trans
-              i18nKey="liquidity.dont_burn_nft"
-              components={{ sub: <Text display="inline-block" color={colors.textPink} variant="title" /> }}
-            />
+            {t(
+              'DO NOT burn this NFT or you will lose the ability to claim fees forever! If you send the NFT to another wallet, only the new wallet will be able to claim fees.'
+            )}{' '}
           </Text>
         </ModalBody>
         <ModalFooter px="0" py="0" mt="4" mb="2">

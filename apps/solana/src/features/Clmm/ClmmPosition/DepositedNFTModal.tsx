@@ -14,7 +14,7 @@ import {
   useClipboard
 } from '@chakra-ui/react'
 import { useRouter } from 'next/router'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import { colors } from '@/theme/cssVariables/colors'
 import { encodeStr } from '@/utils/common'
 import CopyIcon from '@/icons/misc/CopyIcon'
@@ -82,12 +82,9 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
           </Flex>
 
           <Text fontSize="sm" color={colors.textPrimary} mt="4" mb="2">
-            <Trans
-              i18nKey="clmm.dont_burn_nft" // optional -> fallbacks to defaults if not provided
-              components={{
-                sub: <Text display="inline-block" fontWeight={600} color={colors.textPrimary} variant="title" fontSize="md" />
-              }}
-            />
+            {t(
+              'DO NOT burn this NFT or you will lose the ability to claim fees forever! If you send the NFT to another wallet, only the new wallet will be able to claim fees.'
+            )}
           </Text>
         </ModalBody>
         <ModalFooter px="0" py="0" mt="4" mb="2">

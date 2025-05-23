@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react'
 import { ApiV3Token, FetchPoolParams, PoolFetchType } from '@raydium-io/raydium-sdk-v2'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation, Trans } from '@pancakeswap/localization'
 
 import Button from '@/components/Button'
 import List, { ListPropController } from '@/components/List'
@@ -48,7 +48,6 @@ import { revertAppLayoutPaddingX } from '@/theme/detailConfig'
 import { isValidPublicKey } from '@/utils/publicKey'
 import toPercentString from '@/utils/numberish/toPercentString'
 import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
-import i18n from '@/i18n'
 import { setUrlQuery, useRouteQuery } from '@/utils/routeTools'
 import { urlToMint, mintToUrl } from '@/utils/token'
 import { useEffectWithUrl, useStateWithUrl } from '../../hooks/useStateWithUrl'
@@ -85,37 +84,37 @@ export const FILED_KEY: Record<TimeBase, AprKey> = {
 const SORT_ITEMS = [
   {
     name: 'default',
-    label: i18n.t('default'),
+    label: <Trans>default</Trans>,
     value: 'default'
   },
   {
     name: 'tvl_dsc',
-    label: i18n.t('Trading Volume (dsc)'),
+    label: <Trans>Trading Volume (dsc)</Trans>,
     value: 'volume_desc'
   },
   {
     name: 'tvl_asc',
-    label: i18n.t('Trading Volume (asc)'),
+    label: <Trans>Trading Volume (asc)</Trans>,
     value: 'volume_asc'
   },
   {
     name: 'lp_dsc',
-    label: i18n.t('Liquidity (dsc)'),
+    label: <Trans>Liquidity (dsc)</Trans>,
     value: 'liquidity_desc'
   },
   {
     name: 'lp_asc',
-    label: i18n.t('Liquidity (asc)'),
+    label: <Trans>Liquidity (asc)</Trans>,
     value: 'liquidity_asc'
   },
   {
     name: 'apr_dsc',
-    label: i18n.t('Yield (dsc)'),
+    label: <Trans>Yield (dsc)</Trans>,
     value: 'apr_desc'
   },
   {
     name: 'apr_asc',
-    label: i18n.t('Yield (asc)'),
+    label: <Trans>Yield (asc)</Trans>,
     value: 'apr_asc'
   }
 ]
@@ -126,11 +125,11 @@ const LAYOUT_ITEMS = [
 ]
 
 export default function Pools() {
-  const { t, i18n: i18n_ } = useTranslation()
+  const { t, currentLanguage } = useTranslation()
   const query = useRouteQuery()
   const currentQuery = useRef(query)
   currentQuery.current = query || {}
-  const isEN = i18n_.language === 'en'
+  const isEN = currentLanguage.locale === 'en'
   const isMobile = useAppStore((s) => s.isMobile)
 
   const tabItems: PoolTabItem[] = useMemo(

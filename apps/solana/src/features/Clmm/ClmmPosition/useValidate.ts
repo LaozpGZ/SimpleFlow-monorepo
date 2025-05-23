@@ -1,7 +1,6 @@
 import Decimal from 'decimal.js'
-import { TFunction } from 'i18next'
 import { useEffect, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
 import * as yup from 'yup'
 
 interface Props {
@@ -15,7 +14,7 @@ interface Props {
 const numberTransform = yup.number().transform((value) => (Number.isNaN(value) ? 0 : value))
 const numberSchema = (errMsg: string) => numberTransform.moreThan(0, errMsg)
 
-const schema = (t: TFunction<'translation', undefined, 'translation'>) =>
+const schema = (t: TranslateFunction) =>
   yup.object().shape({
     balanceB: yup
       .number()

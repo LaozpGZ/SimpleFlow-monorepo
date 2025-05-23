@@ -13,7 +13,7 @@ import {
   Input
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import { colors } from '@/theme/cssVariables'
 import TokenAvatar from '@/components/TokenAvatar'
 import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
@@ -74,10 +74,9 @@ function LiquidityLockModal({
         <ModalCloseButton />
         <ModalBody mt={[5, 6]}>
           <Text color={colors.lightPurple} lineHeight="20px" fontSize={['sm', 'md']}>
-            <Trans i18nKey="liquidity.lock_desc4">
-              <Text as="span" fontWeight="bold" />
-              <Text as="span" fontWeight="bold" />
-            </Trans>
+            {t(
+              'Are you sure you want to permanently lock/burn liquidity? You will be unable to access or withdraw underlying position assets, only trading fees earned will remain claimable.'
+            )}
           </Text>
           <Box
             rounded="xl"

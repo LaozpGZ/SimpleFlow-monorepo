@@ -1,9 +1,8 @@
 import Decimal from 'decimal.js'
 import { useEffect, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
 import * as yup from 'yup'
 import { ApiCpmmConfigInfo, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
-import { TFunction } from 'i18next'
 import BN from 'bn.js'
 import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 import { useTokenAccountStore } from '@/store/useTokenAccountStore'
@@ -24,7 +23,6 @@ interface Props {
 // new BN(baseAmount).mul(new BN(quoteAmount)).gt(new BN(1).mul(new BN(10 ** baseToken.decimals)).pow(new BN(2)))
 
 export default function useInitPoolSchema({ startTime, baseToken, quoteToken, tokenAmount, feeConfig, isAmmV4 }: Props) {
-  // prepare for i18n usage
   const { t } = useTranslation()
 
   const getTokenBalanceUiAmount = useTokenAccountStore((s) => s.getTokenBalanceUiAmount)
@@ -33,7 +31,7 @@ export default function useInitPoolSchema({ startTime, baseToken, quoteToken, to
   const baseBalance = getTokenBalanceUiAmount({ mint: wSolToSol(baseToken?.address) || '', decimals: baseToken?.decimals }).text
   const quoteBalance = getTokenBalanceUiAmount({ mint: wSolToSol(quoteToken?.address) || '', decimals: quoteToken?.decimals }).text
 
-  const schema = (t: TFunction<'translation', undefined, 'translation'>) =>
+  const schema = (t: TranslateFunction) =>
     yup.object().shape({
       ...(isAmmV4 ? {} : { feeConfig: yup.mixed().required(t('Select') + t('field.fee_tier')) }),
       ...(isAmmV4
