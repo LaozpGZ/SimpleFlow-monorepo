@@ -20,39 +20,31 @@ const schema = (t: TFunction<'translation', undefined, 'translation'>) =>
     balanceB: yup
       .number()
       .transform((value) => (Number.isNaN(value) ? 0 : value))
-      .test('is-balanceB-enough', t('error.balance_not_enough') ?? '', function (val) {
+      .test('is-balanceB-enough', t('Insufficient balance') ?? '', function (val) {
         return new Decimal(val || 0).gte(this.parent.tokenAmount[1])
       }),
     balanceA: yup
       .number()
       .transform((value) => (Number.isNaN(value) ? 0 : value))
-      .test('is-balanceA-enough', t('error.balance_not_enough') ?? '', function (val) {
+      .test('is-balanceA-enough', t('Insufficient balance') ?? '', function (val) {
         return new Decimal(val || 0).gte(this.parent.tokenAmount[0])
       }),
     tokenAmount: yup
       .array()
       .of(numberTransform)
-      .test('is-tokenAmount-valid', t('error.enter_token_amount') ?? '', (value: any) => {
+      .test('is-tokenAmount-valid', t('Enter Token Amount') ?? '', (value: any) => {
         if ((value as number[]).some((val) => val > 0)) return true
         return false
       }),
-    upperPrice: numberSchema(t('error.enter_upper_price')).test(
-      'is-priceMin-valid',
-      t('error.invalid_max_price') ?? '',
-      function (value?: number) {
-        if (value && value < this.parent.lowerPrice) return false
-        return true
-      }
-    ),
-    lowerPrice: numberSchema(t('error.enter_lower_price')).test(
-      'is-priceMax-valid',
-      t('error.invalid_min_price') ?? '',
-      function (value?: number) {
-        if (value && value > this.parent.upperPrice) return false
-        return true
-      }
-    ),
-    poolId: yup.string().required(t('error.pool_not_found') ?? '')
+    upperPrice: numberSchema(t('Enter Upper Price')).test('is-priceMin-valid', t('Invalid max price') ?? '', function (value?: number) {
+      if (value && value < this.parent.lowerPrice) return false
+      return true
+    }),
+    lowerPrice: numberSchema(t('Enter Lower Price')).test('is-priceMax-valid', t('Invalid min price') ?? '', function (value?: number) {
+      if (value && value > this.parent.upperPrice) return false
+      return true
+    }),
+    poolId: yup.string().required(t('Pool not found') ?? '')
   })
 
 export default function useValidate(props: Props) {

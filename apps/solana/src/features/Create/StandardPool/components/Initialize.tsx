@@ -436,8 +436,8 @@ export default function Initialize({ isAmmV4 }: { isAmmV4: boolean }) {
         <HStack color={colors.semanticWarning}>
           <Text fontWeight="medium" fontSize="sm" my="-2">
             {isAmmV4
-              ? t('Note: A creation fee of %subject% SOL is required for new pools.', { subject: '~0.45' })
-              : t('Note: A creation fee of %subject% SOL is required for new pools.', { subject: '~0.2' })}
+              ? t('Note: A creation fee of %subject% SOL is required for new pools.', { subject: '~0.45' })
+              : t('Note: A creation fee of %subject% SOL is required for new pools.', { subject: '~0.2' })}
           </Text>
           <QuestionToolTip
             iconType="question"
