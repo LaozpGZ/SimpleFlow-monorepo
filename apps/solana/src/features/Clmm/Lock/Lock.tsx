@@ -84,7 +84,7 @@ export default function Lock() {
               fontSize={['md', 'xl']}
             >
               <ChevronLeftIcon />
-              <Text>{t('common.back')}</Text>
+              <Text>{t('Back')}</Text>
             </HStack>
           </Flex>
         </GridItem>
@@ -106,16 +106,20 @@ export default function Lock() {
               textAlign={['center', 'start']}
               color={[colors.lightPurple, colors.textPrimary]}
             >
-              {t('liquidity.lock_clmm_title')}
+              {t('Burn/Lock Liquidity for CLMM position')}
             </Text>
             <Box color={colors.lightPurple} fontSize={['sm', 'md']} lineHeight="20px" mb={[4, 7]}>
-              <Text mb={[4, 7]}>{t('liquidity.lock_clmm_desc1')}</Text>
+              <Text mb={[4, 7]}>
+                {t(
+                  'Token teams can permanently lock liquidity. The NFT representing your position is sent to a locked token account. Fees will still be claimable.'
+                )}
+              </Text>
               <Text mb={[4, 7]}>
                 <Trans i18nKey="liquidity.lock_clmm_desc2">
                   <Text as="span" fontWeight="bold" />
                 </Trans>
               </Text>
-              <Text>{t('liquidity.lock_clmm_desc3')}</Text>
+              <Text>{t('Note: Technically, your NFT is not burned but permanently locked.')}</Text>
             </Box>
             <Flex flexDirection="column" gap={3} mb={[4, 7]}>
               {isLoading ? (
@@ -127,7 +131,7 @@ export default function Lock() {
                 </Flex>
               ) : allPosition.length === 0 ? (
                 <Box textAlign="center" fontSize="sm" color={colors.lightPurple} bg={colors.backgroundDark} rounded="md" py={7}>
-                  {t('liquidity.lock_clmm_positions_empty')}
+                  {t('You do not currently have any open CLMM positions')}
                 </Box>
               ) : (
                 allPosition.map((position) => {
@@ -149,7 +153,7 @@ export default function Lock() {
               )}
             </Flex>
             <Button isDisabled={selectedPosition === null} width="100%" onClick={onOpen}>
-              {t('liquidity.lock_liquidity')}
+              {t('Lock Liquidity')}
             </Button>
           </Flex>
         </GridItem>

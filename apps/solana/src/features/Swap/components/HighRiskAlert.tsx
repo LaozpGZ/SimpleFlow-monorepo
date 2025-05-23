@@ -22,7 +22,7 @@ export default function HighRiskAlert({
       <ModalContent sx={{ bg: 'rgba(28, 36, 62, 1)' }}>
         <ModalHeader display="flex" flexDirection="column" alignItems="center" gap="6" px="12" fontSize="xl">
           <CircleInfo fill={colors.semanticError} width={24} height={24} />
-          <Text variant="dialogTitle">{t('swap.alert_high_price_warn_title')}</Text>
+          <Text variant="dialogTitle">{t('High Price Impact Warning')}</Text>
         </ModalHeader>
         <ModalBody textAlign="center">
           <Text variant="title" fontSize="md" mb="6" fontWeight="400">
@@ -35,10 +35,10 @@ export default function HighRiskAlert({
         </ModalBody>
         <ModalFooter flexDirection="column" gap="2" px="0" py="0" mt="4">
           <Button onClick={onClose} w="100%">
-            {t('button.cancel')}
+            {t('Cancel')}
           </Button>
           <Button variant="ghost" onClick={onConfirm} w="100%">
-            {t('swap.swap_anyway')}
+            {t('Swap Anyway')}
           </Button>
         </ModalFooter>
       </ModalContent>

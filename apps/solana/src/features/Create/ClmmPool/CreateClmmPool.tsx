@@ -177,9 +177,9 @@ export default function CreateClmmPool() {
     })
   )
   const friendlySentence = [
-    t('create_pool.clmm_create_pool_note_step1'),
-    t('create_pool.clmm_create_pool_note_step2'),
-    t('create_pool.clmm_create_pool_note_step3')
+    t('First, select tokens & fee tier'),
+    t('Next, set initial token price & position price range'),
+    t('Last, please enter token deposit amount')
   ][step]
 
   const needToShowSelectPoolToken = isMobile ? step === 0 : step >= 0
@@ -221,7 +221,7 @@ export default function CreateClmmPool() {
           <Flex>
             <HStack cursor="pointer" onClick={routeBack} color={colors.textTertiary} fontWeight="500" fontSize={['md', 'xl']}>
               <ChevronLeftIcon />
-              <Text color={colors.primary60}>{t('common.back')}</Text>
+              <Text color={colors.primary60}>{t('Back')}</Text>
             </HStack>
           </Flex>
         </GridItem>
@@ -233,7 +233,7 @@ export default function CreateClmmPool() {
         <GridItem area="note">
           <Box w={['unset', 'clamp(300px, 100%, 500px)']}>
             <SubPageNote
-              title={t('create_pool.clmm_please_note')}
+              title={t('Please Note')}
               description={
                 <>
                   <Trans i18nKey="create_pool.clmm_please_note_des">

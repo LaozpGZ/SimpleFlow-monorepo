@@ -47,12 +47,14 @@ export default function LockedNFTModal({
       <ModalOverlay />
       <ModalContent sx={{ bg: colors.backgroundLight }}>
         <ModalHeader mb="5" fontSize={['lg', 'xl']}>
-          {t('liquidity.position_locked_success')}
+          {t('Position locked successfully!')}
         </ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text variant="title" fontSize={['sm', 'md']} mb="6" fontWeight="400">
-            {t('liquidity.nft_desc')}
+            {t(
+              'A new NFT is now in your wallet and represents the right to claim trading fees from the locked position. ONLY the NFT holder can claim fees.'
+            )}
           </Text>
           <Image w={['260px', '300px']} h={['260px', '300px']} m="0 auto" src="/images/lock-nft.png" />
           <Flex
@@ -68,7 +70,7 @@ export default function LockedNFTModal({
             fontWeight="500"
             mt={6}
           >
-            <Text color={colors.textSecondary}>{t('clmm.nft_mint')}:</Text>
+            <Text color={colors.textSecondary}>{t('NFT Mint')}:</Text>
             <Text color={colors.textPurple} mr="2">
               {encodeStr(nftAddress, 5, 3)}
             </Text>
@@ -78,7 +80,7 @@ export default function LockedNFTModal({
                 onCopy()
                 toastSubject.next({
                   status: 'success',
-                  title: t('common.copy_success')
+                  title: t('Copied successfully!')
                 })
               }}
             />
@@ -107,7 +109,7 @@ export default function LockedNFTModal({
             }}
             w="100%"
           >
-            {t('clmm.view_my_positions')}
+            {t('View my positions')}
           </Button>
         </ModalFooter>
       </ModalContent>

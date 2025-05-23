@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { ApiClmmConfigInfo, TokenInfo } from '@raydium-io/raydium-sdk-v2'
 import * as yup from 'yup'
 import { TFunction } from 'i18next'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 
 interface Props {
   config?: ApiClmmConfigInfo

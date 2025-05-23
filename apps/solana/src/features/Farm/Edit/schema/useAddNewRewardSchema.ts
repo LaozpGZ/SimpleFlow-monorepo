@@ -3,7 +3,7 @@ import * as yup from 'yup'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'
 import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import { TFunction } from 'i18next'
 import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
 

@@ -55,7 +55,7 @@ export default function CreatePool() {
             fontSize={['md', 'xl']}
           >
             <ChevronLeftIcon />
-            <Text>{t('common.back')}</Text>
+            <Text>{t('Back')}</Text>
           </HStack>
         </Flex>
       </GridItem>
@@ -63,7 +63,7 @@ export default function CreatePool() {
       <GridItem area="note">
         <Box w={['unset', 'clamp(300px, 100%, 500px)']}>
           <SubPageNote
-            title={t('create_standard_pool.please_note')}
+            title={t('Please Note')}
             description={
               <Text fontSize="sm" color={isMobile ? colors.textSecondary : colors.textTertiary}>
                 <Trans i18nKey="create_standard_pool.please_note_des">
@@ -83,7 +83,7 @@ export default function CreatePool() {
       <GridItem area="word" display={['none', 'unset']}>
         <Flex justify="left">
           <Text whiteSpace="pre-line" w="fit-content" cursor="pointer" color={colors.textSecondary} fontWeight="500" fontSize="xl">
-            {isAmmV4 ? t('create_standard_pool.initialize_amm_v4_pool') : t('create_standard_pool.initialize_cpmm_pool')}
+            {isAmmV4 ? t('Initialize AMM v4 pool') : t('Initialize CPMM pool')}
           </Text>
         </Flex>
       </GridItem>

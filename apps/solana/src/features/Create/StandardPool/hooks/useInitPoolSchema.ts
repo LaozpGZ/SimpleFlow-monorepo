@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import * as yup from 'yup'
 import { ApiCpmmConfigInfo, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
 import { TFunction } from 'i18next'
@@ -35,7 +35,7 @@ export default function useInitPoolSchema({ startTime, baseToken, quoteToken, to
 
   const schema = (t: TFunction<'translation', undefined, 'translation'>) =>
     yup.object().shape({
-      ...(isAmmV4 ? {} : { feeConfig: yup.mixed().required(t('common.select') + t('field.fee_tier')) }),
+      ...(isAmmV4 ? {} : { feeConfig: yup.mixed().required(t('Select') + t('field.fee_tier')) }),
       ...(isAmmV4
         ? {
             liquidity: yup.mixed().test('is-liquidity-valid', t('error.initial_liquidity_low') ?? 'initial liquidity too low', function () {

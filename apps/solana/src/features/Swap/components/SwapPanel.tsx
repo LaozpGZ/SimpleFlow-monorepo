@@ -261,7 +261,7 @@ export function SwapPanel({
   })
 
   const balanceAmount = getTokenBalanceUiAmount({ mint: inputMint, decimals: tokenInput?.decimals }).amount
-  const balanceNotEnough = balanceAmount.lt(inputAmount || 0) ? t('error.balance_not_enough') : undefined
+  const balanceNotEnough = balanceAmount.lt(inputAmount || 0) ? t('Insufficent balance') : undefined
   const isSolFeeNotEnough = inputAmount && isSolWSol(inputMint || '') && balanceAmount.sub(inputAmount || 0).lt(DEFAULT_SOL_RESERVER)
   const swapError = (error && i18n.exists(`swap.error_${error}`) ? t(`swap.error_${error}`) : error) || balanceNotEnough
   const isPoolNotOpenError = !!swapError && !!openTime
@@ -327,7 +327,7 @@ export function SwapPanel({
           {/* input */}
           <TokenInput
             name="swap"
-            topLeftLabel={t('swap.from_label')}
+            topLeftLabel={t('From')}
             ctrSx={getCtrSx('BaseIn')}
             token={tokenInput}
             value={isSwapBaseIn ? amountIn : inputAmount}
@@ -344,7 +344,7 @@ export function SwapPanel({
           {/* output */}
           <TokenInput
             name="swap"
-            topLeftLabel={t('swap.to_label')}
+            topLeftLabel={t('To')}
             ctrSx={getCtrSx('BaseOut')}
             token={tokenOutput}
             value={isSwapBaseIn ? outputAmount : amountIn}
@@ -361,11 +361,11 @@ export function SwapPanel({
         <ConnectedButton
           disabled={new Decimal(amountIn || 0).isZero() || !!swapError || needPriceUpdatedAlert || swapDisabled}
           isLoading={isComputing || isSending}
-          loadingText={<div>{isSending ? t('transaction.transaction_initiating') : isComputing ? t('swap.computing') : ''}</div>}
+          loadingText={<div>{isSending ? t('Transaction initiating') : isComputing ? t('Computing..') : ''}</div>}
           onClick={isHighRiskTx ? onHightRiskOpen : handleClickSwap}
         >
           <Text>
-            {swapDisabled ? t('common.disabled') : swapError || t('swap.title')}
+            {swapDisabled ? t('Disabled') : swapError || t('Swap')}
             {isPoolNotOpenError ? ` ${dayjs(Number(openTime) * 1000).format('YYYY/M/D HH:mm:ss')}` : null}
           </Text>
         </ConnectedButton>
@@ -380,7 +380,9 @@ export function SwapPanel({
             justifyContent="center"
           >
             <WarningIcon style={{ marginTop: '2px', marginRight: '4px' }} stroke={colors.semanticError} />
-            <Text>{t('swap.error_sol_fee_not_insufficient', { amount: formatToRawLocaleStr(DEFAULT_SOL_RESERVER) })}</Text>
+            <Text>
+              {t('You need at least %amount% SOL to pay for fees and deposits', { amount: formatToRawLocaleStr(DEFAULT_SOL_RESERVER) })}
+            </Text>
           </Flex>
         ) : null}
         <Collapse in={hasValidAmountOut} animateOpacity>
@@ -444,7 +446,7 @@ export function SwapPanel({
                   px="1"
                   borderRadius="4px"
                 >
-                  {getMintSymbol({ mint: tokenInput })} ({inputFeeConfig.newerTransferFee.transferFeeBasisPoints / 100}% {t('common.tax')})
+                  {getMintSymbol({ mint: tokenInput })} ({inputFeeConfig.newerTransferFee.transferFeeBasisPoints / 100}% {t('Tax')})
                 </Box>
               </Tooltip>
             ) : null}
@@ -463,8 +465,7 @@ export function SwapPanel({
                   px="1"
                   borderRadius="4px"
                 >
-                  {getMintSymbol({ mint: tokenOutput })} ({outputFeeConfig.newerTransferFee.transferFeeBasisPoints / 100}% {t('common.tax')}
-                  )
+                  {getMintSymbol({ mint: tokenOutput })} ({outputFeeConfig.newerTransferFee.transferFeeBasisPoints / 100}% {t('Tax')})
                 </Box>
               </Tooltip>
             ) : null}
@@ -487,11 +488,11 @@ function SwapPriceUpdatedAlert({ onConfirm }: { onConfirm: () => void }) {
   return (
     <HStack bg={colors.backgroundDark} padding="8px 16px" rounded="xl" justify="space-between">
       <HStack color={colors.textSecondary}>
-        <Text fontSize="sm">{t('swap.alert_price_updated')}</Text>
-        <QuestionToolTip label={t('swap.alert_price_updated_tooltip')} />
+        <Text fontSize="sm">{t('Price updated')}</Text>
+        <QuestionToolTip label={t('Price has changed since your swap amount was entered.')} />
       </HStack>
       <Button size={['sm', 'md']} onClick={onConfirm}>
-        {t('swap.alert_price_updated_button')}
+        {t('Accept')}
       </Button>
     </HStack>
   )
@@ -506,11 +507,13 @@ function TransferFeeTip({ feeConfig, token }: { feeConfig: TransferFeeDataBaseTy
   return (
     <>
       <Text color={colors.text02} fontWeight="500" mb="1">
-        {t('common.token_2022_assets')}
+        {t('Token2022 Asset')}
       </Text>
-      <Text color={colors.primary}>{t('common.token_2022_assets_desc')}</Text>
+      <Text color={colors.primary}>
+        {t('This token uses the Token2022 Program, which provides a set of token extensions to be enabled by the token creator.')}
+      </Text>
       <Text color={colors.semanticWarning} fontWeight="500">
-        {t('common.trade_with_caution')}
+        {t('Please trade with caution')}
       </Text>
       <Box
         mt="2"
@@ -527,7 +530,7 @@ function TransferFeeTip({ feeConfig, token }: { feeConfig: TransferFeeDataBaseTy
         <Flex flexDir={['column', 'row']} justifyContent="space-between" gap={[0, 2]}>
           <Flex alignItems="center" gap="0.5">
             <Text whiteSpace="nowrap" wordBreak="keep-all">
-              {t('common.transfer_fee')}
+              {t('Transfer Fee')}
             </Text>
             <ChakraTip label="A transfer fee derived from the amount of the token being transferred.">
               <QuestionCircleIcon />
@@ -538,7 +541,7 @@ function TransferFeeTip({ feeConfig, token }: { feeConfig: TransferFeeDataBaseTy
         <Flex flexDir={['column', 'row']} justifyContent="space-between" gap={[0, 2]}>
           <Flex alignItems="center" gap="0.5">
             <Text whiteSpace="nowrap" wordBreak="keep-all">
-              {t('common.max_transfer_fee')}
+              {t('Max Transfer Fee')}
             </Text>
             <ChakraTip label="Maximum amount for the transfer fee, set by the authority mint.">
               <QuestionCircleIcon />

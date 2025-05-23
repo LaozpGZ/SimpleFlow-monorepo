@@ -1,7 +1,7 @@
 import Decimal from 'decimal.js'
 import { TFunction } from 'i18next'
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import * as yup from 'yup'
 
 interface Props {

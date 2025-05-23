@@ -36,11 +36,11 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
     <Modal size="xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader fontSize="xl">{t('clmm.deposit_successful')}</ModalHeader>
+        <ModalHeader fontSize="xl">{t('Deposit successfully')}</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <Text variant="title" color={colors.textPrimary} fontSize="sm" mb="6" fontWeight="400">
-            {t('clmm.nft_desc')}
+            {t('A new NFT representing your Concentrated Liquidity position is now in your wallet.')}
           </Text>
           <Image w="260px" height="260px" m="0 auto" src="/images/clmm-nft.jpg" />
           <Flex
@@ -57,7 +57,7 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
             bg={colors.textSubtle}
             color={colors.backgroundAlt}
           >
-            <Text>{t('clmm.nft_mint')}:</Text>
+            <Text>{t('NFT Mint')}:</Text>
             <Text mr="2">{encodeStr(nftAddress, 5, 3)}</Text>
             <CopyIcon
               color={colors.backgroundAlt}
@@ -66,7 +66,7 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
                 onCopy()
                 toastSubject.next({
                   status: 'success',
-                  title: t('common.copy_success')
+                  title: t('Copied successfully!')
                 })
               }}
             />
@@ -92,7 +92,7 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
         </ModalBody>
         <ModalFooter px="0" py="0" mt="4" mb="2">
           <Button onClick={() => router.push('/portfolio', { query: { tab: 'concentrated' }, hash: 'my-position' })} width="100%">
-            {t('clmm.view_my_positions')}
+            {t('View my positions')}
           </Button>
         </ModalFooter>
       </ModalContent>

@@ -48,6 +48,7 @@
     "@pancakeswap/hooks": "workspace:*",
     "@pancakeswap/uikit": "workspace:*",
     "@pancakeswap/widgets-internal": "workspace:*",
+    "@pancakeswap/localization": "workspace:*",
     "@project-serum/serum": "^0.13.65",
     "@raydium-io/raydium-sdk-v2": "0.1.116-alpha",
     "@sentry/nextjs": "^8.26.0",

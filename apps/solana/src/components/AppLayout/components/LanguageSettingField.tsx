@@ -1,5 +1,5 @@
 import { Select } from '@pancakeswap/uikit'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from '@pancakeswap/localization'
 import { changeLang } from '../../../i18n'
 import { SettingField } from './SettingField'
 
@@ -22,8 +22,8 @@ export function LanguageSettingField() {
 
   return (
     <SettingField
-      fieldName={t('setting_board.language')}
-      tooltip={t('setting_board.language_tooltip')}
+      fieldName={t('Language')}
+      tooltip={t('Select preferred language')}
       renderToggleButton={
         <Select
           defaultOptionIndex={langOptions.findIndex((v) => v.value === i18n.language) + 1}
