@@ -106,9 +106,9 @@ const getInfinityCandidatePools = async (
 const fetchPools = cacheByLRU(_fetchPools, {
   ttl: 3_000,
   key: (args) => {
-    const [currencyA, currencyB, chainId, protocol, blockNumber] = args
+    const [currencyA, currencyB, chainId, protocol] = args
     const hashc = PoolHashHelper.hashCurrencies(currencyA, currencyB)
-    return `${hashc}-${chainId}-${protocol.join(',')}-${blockNumber}`
+    return `${hashc}-${chainId}-${protocol.join(',')}`
   },
   usingStaleValue: false,
 })
