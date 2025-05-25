@@ -1,5 +1,5 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
-import { RouteType } from '@pancakeswap/smart-router'
+import { RouteType, SmartRouter } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import { userSlippageAtomWithLocalStorage } from '@pancakeswap/utils/user/slippage'
@@ -13,6 +13,7 @@ import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { combinedTokenMapFromActiveUrlsAtom } from 'state/lists/hooks'
 import { Field } from 'state/swap/actions'
 import { logGTMBridgeQuoteQueryEvent } from 'utils/customGTMEventTracking'
+import { basisPointsToPercent } from 'utils/exchange'
 import { getBridgeAvailableRoutes, getMetadata, getTokenAddress, Route } from 'views/Swap/Bridge/api'
 import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
 import { computeSlippageAdjustedAmounts } from 'views/Swap/V3Swap/utils/exchange'
@@ -131,6 +132,38 @@ export const getBridgeQuote = atomFamily(
     a.outputCurrency.wrapped.address === b.outputCurrency.wrapped.address &&
     a.nonce === b.nonce,
 )
+
+type SwapOrderWithSlippage = InterfaceOrder & { trade: InterfaceOrder['trade'] & { routes: Route[] } }
+
+function constructSwapOrderRoutes({
+  swapOrder,
+  userSlippage,
+}: {
+  swapOrder: InterfaceOrder
+  userSlippage: number
+}): SwapOrderWithSlippage {
+  if (!('routes' in swapOrder.trade)) {
+    return swapOrder as SwapOrderWithSlippage
+  }
+
+  const swapOrderRoutes = swapOrder.trade.routes || []
+  const userSlippagePct = basisPointsToPercent(userSlippage)
+
+  const routes: Route[] = swapOrderRoutes.map((route) => {
+    return {
+      ...route,
+      outputAmount: SmartRouter.minimumAmountOut(swapOrder.trade, userSlippagePct, route.outputAmount),
+    }
+  })
+
+  return {
+    ...swapOrder,
+    trade: {
+      ...swapOrder.trade,
+      routes,
+    },
+  } as SwapOrderWithSlippage
+}
 
 export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: QuoteQuery) => {
   return atom(async (get) => {
@@ -274,7 +307,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
             swapOrder.trade.outputAmount =
               computeSlippageAdjustedAmounts(swapOrder, userSlippage)[Field.OUTPUT] || swapOrder.trade.outputAmount
 
-            const swapOrderRoutes = ('routes' in swapOrder.trade && swapOrder.trade.routes) || []
+            const swapOrderWithSlippage = constructSwapOrderRoutes({ swapOrder, userSlippage })
 
             // The final combined quote
             quoteLoadable = Loadable.Just({
@@ -289,19 +322,10 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
                   // Add bridge routes
                   ...(bridgeQuote.trade.routes || []),
                   // Add swap routes with appropriate type casting for compatibility
-                  ...swapOrderRoutes.map((route, index) => ({
-                    ...route,
-                    // Ensure the route has all required properties for type compatibility
-                    type: route.type,
-                    path: route.path,
-                    inputAmount: route.inputAmount,
-                    // NOTE: parseSwapTradeContext will replace the last output amount with the trade output amount
-                    // so we don't need to apply slippage adjustment here
-                    outputAmount: route.outputAmount,
-                  })),
+                  ...swapOrderWithSlippage.trade.routes,
                 ] as any, // Use type assertion as a last resort
               },
-              commands: [bridgeQuote, swapOrder],
+              commands: [bridgeQuote, swapOrderWithSlippage],
             })
           }
         } else if (isSwapToBridgeQuery) {
@@ -373,9 +397,10 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
               throw new BridgeTradeError('No bridge quote')
             }
 
+            // NOTE: we don't apply slippage before bridge quote because it causes re-render of the atom
             swapOrder.trade.outputAmount = slippagedOutputAmount
 
-            const swapOrderRoutes = ('routes' in swapOrder.trade && swapOrder.trade.routes) || []
+            const swapOrderWithSlippage = constructSwapOrderRoutes({ swapOrder, userSlippage })
 
             // The final combined quote
             quoteLoadable = Loadable.Just({
@@ -389,21 +414,12 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
                 tradeType: TradeType.EXACT_INPUT,
                 routes: [
                   // Add swap routes with appropriate type casting for compatibility
-                  ...swapOrderRoutes.map((route) => ({
-                    ...route,
-                    // Ensure the route has all required properties for type compatibility
-                    type: route.type,
-                    path: route.path,
-                    inputAmount: route.inputAmount,
-                    // NOTE: parseSwapTradeContext will replace the last output amount with the trade output amount
-                    // so we don't need to apply slippage adjustment here
-                    outputAmount: route.outputAmount,
-                  })),
+                  ...swapOrderWithSlippage.trade.routes,
                   // Add bridge routes
                   ...(bridgeQuote.trade.routes || []),
                 ] as any, // Use type assertion as a last resort
               },
-              commands: [swapOrder, bridgeQuote],
+              commands: [swapOrderWithSlippage, bridgeQuote],
             })
           }
         } else if (isSwapToBridgeToSwapQuery) {
@@ -589,17 +605,18 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
             // 5. combine swap, bridge, and final swap quotes into a single quote
             const { swapOrder, bridgeQuote, finalSwapOrder } = bestPath
 
-            const swapOrderRoutes = ('routes' in swapOrder.trade && swapOrder.trade.routes) || []
-            const finalSwapOrderRoutes = ('routes' in finalSwapOrder.trade && finalSwapOrder.trade.routes) || []
-
             // NOTE: need to apply slippate for swap order and final swap order
             // because we don't apply it in the previous steps
             swapOrder.trade.outputAmount =
               computeSlippageAdjustedAmounts(swapOrder, userSlippage)[Field.OUTPUT] || swapOrder.trade.outputAmount
 
+            const swapOrderWithSlippage = constructSwapOrderRoutes({ swapOrder, userSlippage })
+
             finalSwapOrder.trade.outputAmount =
               computeSlippageAdjustedAmounts(finalSwapOrder, userSlippage)[Field.OUTPUT] ||
               finalSwapOrder.trade.outputAmount
+
+            const finalSwapOrderWithSlippage = constructSwapOrderRoutes({ swapOrder: finalSwapOrder, userSlippage })
 
             // Create the combined quote with proper type handling
             quoteLoadable = Loadable.Just({
@@ -616,30 +633,14 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
                 tradeType: TradeType.EXACT_INPUT,
                 routes: [
                   // Add initial swap routes
-                  ...swapOrderRoutes.map((route) => ({
-                    ...route,
-                    type: route.type,
-                    path: route.path,
-                    inputAmount: route.inputAmount,
-                    // NOTE: parseSwapTradeContext will replace the last output amount with the trade output amount
-                    // so we don't need to apply slippage adjustment here
-                    outputAmount: route.outputAmount,
-                  })),
+                  ...swapOrderWithSlippage.trade.routes,
                   // Add bridge routes
                   ...bridgeQuote.trade.routes,
                   // Add final swap routes if they exist
-                  ...finalSwapOrderRoutes.map((route) => ({
-                    ...route,
-                    type: route.type,
-                    path: route.path,
-                    inputAmount: route.inputAmount,
-                    // NOTE: parseSwapTradeContext will replace the last output amount with the trade output amount
-                    // so we don't need to apply slippage adjustment here
-                    outputAmount: route.outputAmount,
-                  })),
+                  ...finalSwapOrderWithSlippage.trade.routes,
                 ] as any, // Type assertion for routes compatibility
               },
-              commands: [swapOrder, bridgeQuote, finalSwapOrder],
+              commands: [swapOrderWithSlippage, bridgeQuote, finalSwapOrderWithSlippage],
             })
           }
         }
