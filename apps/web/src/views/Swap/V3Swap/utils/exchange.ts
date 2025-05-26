@@ -93,8 +93,8 @@ export function computeTradePriceBreakdown(trade?: TradeEssentialForPriceBreakdo
               poolFee = hook.defaultFee
             }
           }
-          const v4FeePercent = new Percent(calculateInfiFeePercent(poolFee, pool.protocolFee).totalFee, 1e6)
-          return currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(v4FeePercent))
+          const infinityFeePercent = new Percent(calculateInfiFeePercent(poolFee, pool.protocolFee).totalFee, 1e6)
+          return currentFee.multiply(ONE_HUNDRED_PERCENT.subtract(infinityFeePercent))
         }
         return currentFee
       }, ONE_HUNDRED_PERCENT),
