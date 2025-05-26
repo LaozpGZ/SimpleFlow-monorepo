@@ -609,11 +609,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
             }
 
             // 5. combine swap, bridge, and final swap quotes into a single quote
-            const {
-              swapOrder,
-              bridgeQuote,
-              finalSwapOrder: finalSwapOrderWithoutPostbridgeCalldataFee,
-            } = bestPathWithoutPostbridgeCalldataFee
+            const { swapOrder, bridgeQuote, finalSwapOrder } = bestPathWithoutPostbridgeCalldataFee
 
             // NOTE: need to apply slippate for swap order and final swap order
             // because we don't apply it in the previous steps
@@ -621,50 +617,50 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
               computeSlippageAdjustedAmounts(swapOrder, userSlippage)[Field.OUTPUT] || swapOrder.trade.outputAmount
 
             // 6. refetch bridge quote with postbridge calldata fee
-            const bridgeQuoteWithPostbridgeCalldataFee = get(
-              getBridgeQuote({
-                inputAmount: swapOrder.trade.outputAmount,
-                outputCurrency: bridgeQuote.trade.inputAmount.currency,
-                nonce: _option.nonce,
-                postBridgeSwapTrade: constructSwapOrderRoutes({
-                  swapOrder: finalSwapOrderWithoutPostbridgeCalldataFee,
-                  userSlippage,
-                }),
-              }),
-            )
+            // const bridgeQuoteWithPostbridgeCalldataFee = get(
+            //   getBridgeQuote({
+            //     inputAmount: swapOrder.trade.outputAmount,
+            //     outputCurrency: bridgeQuote.trade.inputAmount.currency,
+            //     nonce: _option.nonce,
+            //     postBridgeSwapTrade: constructSwapOrderRoutes({
+            //       swapOrder: finalSwapOrderWithoutPostbridgeCalldataFee,
+            //       userSlippage,
+            //     }),
+            //   }),
+            // )
 
-            if (bridgeQuoteWithPostbridgeCalldataFee.isPending()) {
-              return Loadable.Pending<InterfaceOrder>()
-            }
+            // if (bridgeQuoteWithPostbridgeCalldataFee.isPending()) {
+            //   return Loadable.Pending<InterfaceOrder>()
+            // }
 
-            const finalBridgeQuote = bridgeQuoteWithPostbridgeCalldataFee.unwrapOr(undefined)
+            // const finalBridgeQuote = bridgeQuoteWithPostbridgeCalldataFee.unwrapOr(undefined)
 
-            if (!finalBridgeQuote) {
-              throw new BridgeTradeError('No bridge quote with postbridge calldata fee')
-            }
+            // if (!finalBridgeQuote) {
+            //   throw new BridgeTradeError('No bridge quote with postbridge calldata fee')
+            // }
 
-            const finalSwapOption: QuoteQuery = {
-              ..._option,
-              baseCurrency: finalBridgeQuote.trade.outputAmount.currency,
-              amount: finalBridgeQuote.trade.outputAmount,
-              hash: '',
-              placeholderHash: '',
-            }
+            // const finalSwapOption: QuoteQuery = {
+            //   ..._option,
+            //   baseCurrency: finalBridgeQuote.trade.outputAmount.currency,
+            //   amount: finalBridgeQuote.trade.outputAmount,
+            //   hash: '',
+            //   placeholderHash: '',
+            // }
 
-            const quoteQuery = createQuoteQuery(finalSwapOption)
+            // const quoteQuery = createQuoteQuery(finalSwapOption)
 
             // 7. refetch swap quote with postbridge calldata fee
-            const finalSwapOrderLoadable = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
+            // const finalSwapOrderLoadable = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
 
-            if (finalSwapOrderLoadable.isPending()) {
-              return Loadable.Pending<InterfaceOrder>()
-            }
+            // if (finalSwapOrderLoadable.isPending()) {
+            //   return Loadable.Pending<InterfaceOrder>()
+            // }
 
-            const finalSwapOrder = finalSwapOrderLoadable.unwrapOr(undefined)
+            // const finalSwapOrder = finalSwapOrderLoadable.unwrapOr(undefined)
 
-            if (!finalSwapOrder) {
-              throw new BridgeTradeError('No final swap order')
-            }
+            // if (!finalSwapOrder) {
+            //   throw new BridgeTradeError('No final swap order')
+            // }
 
             const swapOrderWithSlippage = constructSwapOrderRoutes({ swapOrder, userSlippage })
 
