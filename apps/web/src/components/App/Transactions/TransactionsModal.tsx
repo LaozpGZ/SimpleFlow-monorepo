@@ -49,7 +49,6 @@ export function RecentTransactions() {
 
   const { data: crossChainOrdersResponse, isLoading: isRecentBridgeOrdersLoading } = useRecentBridgeOrders({
     address: account,
-    refetchInterval: 10_000,
   })
   const recentCrossChainOrders: CrossChainTransactionItem[] =
     crossChainOrdersResponse?.rows.map(
