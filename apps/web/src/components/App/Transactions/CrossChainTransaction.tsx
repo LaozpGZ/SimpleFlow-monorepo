@@ -22,7 +22,7 @@ import {
 import styled from 'styled-components'
 
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { convertScientificToDecimal } from '@pancakeswap/utils/formatNumber'
+import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
 import { useQuery } from '@tanstack/react-query'
 import { ViewOnExplorerButton } from 'components/ViewOnExplorerButton'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
@@ -71,13 +71,13 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
   const outputToken = useCurrencyByChainId(order.outputToken, outputChainId)
 
   const inputAmount =
-    inputToken && CurrencyAmount.fromRawAmount(inputToken, convertScientificToDecimal(order.inputAmount))
+    inputToken && CurrencyAmount.fromRawAmount(inputToken, formatScientificToDecimal(order.inputAmount))
 
   const outputAmount =
     outputToken &&
     CurrencyAmount.fromRawAmount(
       outputToken,
-      convertScientificToDecimal(order.status === BridgeStatus.SUCCESS ? order.outputAmount : order.minOutputAmount),
+      formatScientificToDecimal(order.status === BridgeStatus.SUCCESS ? order.outputAmount : order.minOutputAmount),
     )
 
   const metadata: ActiveBridgeOrderMetadata['metadata'] = {

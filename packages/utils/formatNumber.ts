@@ -67,14 +67,15 @@ export function formatNumberWithFullDigits(
 /**
  * Convert scientific notation (exponentials) to decimal
  */
-export function convertScientificToDecimal(value: string | number): string {
+export function formatScientificToDecimal(value: string | number): string {
   if (typeof value === 'number') {
-    return value.toString()
+    return formatScientificToDecimal(value.toString())
   }
   // If it's already a regular decimal string, return as is
   if (!value.includes('e')) {
     return value
   }
+
   // Convert scientific notation to decimal
   return Number(value).toLocaleString('fullwide', { useGrouping: false })
 }

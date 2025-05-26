@@ -160,6 +160,7 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
           // If previous step is not completed or unsuccessful, then this step is not started
           if (
             (stepStatus === BridgeStatus.PENDING || stepStatus === BridgeStatus.BRIDGE_PENDING) &&
+            bridgeStatus?.data?.[i - 1] &&
             bridgeStatus?.data?.[i - 1]?.status.code !== BridgeStatus.SUCCESS
           ) {
             return 'notStarted'

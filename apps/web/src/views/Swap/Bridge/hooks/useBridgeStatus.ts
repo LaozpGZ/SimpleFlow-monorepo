@@ -1,5 +1,5 @@
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { convertScientificToDecimal } from '@pancakeswap/utils/formatNumber'
+import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
 import { useQuery } from '@tanstack/react-query'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { useMemo } from 'react'
@@ -40,12 +40,12 @@ export const useBridgeStatus = (
 
   const inputCurrencyAmount = useMemo(() => {
     if (!inputCurrency || !data || !data?.inputAmount) return undefined
-    return CurrencyAmount.fromRawAmount(inputCurrency, convertScientificToDecimal(data?.inputAmount))
+    return CurrencyAmount.fromRawAmount(inputCurrency, formatScientificToDecimal(data?.inputAmount))
   }, [inputCurrency, data?.inputAmount])
 
   const outputCurrencyAmount = useMemo(() => {
     if (!outputCurrency || !data || !data?.outputAmount) return undefined
-    return CurrencyAmount.fromRawAmount(outputCurrency, convertScientificToDecimal(data?.outputAmount))
+    return CurrencyAmount.fromRawAmount(outputCurrency, formatScientificToDecimal(data?.outputAmount))
   }, [outputCurrency, data?.outputAmount])
 
   const feesBreakdown = useMemo(() => {
