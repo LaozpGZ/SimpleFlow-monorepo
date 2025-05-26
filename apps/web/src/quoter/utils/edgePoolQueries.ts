@@ -164,7 +164,7 @@ export const poolTvlMap = async (protocols: Protocol[], chain: APIChain) => {
       protocols,
       chains: [chain],
       orderBy: 'tvlUSD',
-      pageSize: 100,
+      pageSize: 1000,
     })
     const tvlMap: Record<`0x${string}`, string> = {}
     for (const pool of remotePools) {

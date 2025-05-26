@@ -72,18 +72,23 @@ export function parseTvQuery(raw: string) {
   if (!raw) {
     throw new Error('Invalid query')
   }
+
   const queryParsed = qs.parse(raw)
   const protocols = ((queryParsed.protocol as string) || '').split(',') as Protocol[]
   const chainId = Number.parseInt(queryParsed.chainId as string)
-  const includeInfinity = protocols.includes('infinityBin') || protocols.includes('infinityCl')
-  if (!INFINITY_SUPPORTED_CHAINS.includes(chainId) && includeInfinity) {
+
+  const allowedProtocols = ['infinityBin', 'infinityCl']
+
+  if (!INFINITY_SUPPORTED_CHAINS.includes(chainId)) {
     throw new Error('Invalid chainId')
   }
+
   for (const protocol of protocols) {
-    if (ALLOWED_PROTOCOLS.indexOf(protocol) === -1) {
+    if (!allowedProtocols.includes(protocol)) {
       throw new Error('Invalid protocol')
     }
   }
+
   return {
     protocols,
     chainId,
