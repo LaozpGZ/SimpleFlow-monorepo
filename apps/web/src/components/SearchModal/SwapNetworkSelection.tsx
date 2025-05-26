@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { appearAnimation, AutoColumn, AutoRow, Flex, InlineMenu, Text } from '@pancakeswap/uikit'
+import { AutoColumn, AutoRow, Flex, InlineMenu, Text, appearAnimation } from '@pancakeswap/uikit'
 import { ChainLogo } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import drop from 'lodash/drop'
@@ -79,9 +79,12 @@ export default function SwapNetworkSelection({
 
       return true
     })
-  }, [supportedBridgeChains, evmChains, usedChainId, isDependent])
+  }, [supportedBridgeChains, usedChainId, isDependent])
 
-  const selectedChain = useMemo(() => supportedChains.find((chain) => chain.id === usedChainId), [usedChainId])
+  const selectedChain = useMemo(
+    () => supportedChains.find((chain) => chain.id === usedChainId),
+    [usedChainId, supportedChains],
+  )
 
   const selectedChainRef = useRef<HTMLDivElement>(null)
   const selectedTextRef = useRef<HTMLDivElement>(null)
@@ -97,7 +100,7 @@ export default function SwapNetworkSelection({
       setSelectedChainWidth(totalWidth + CHAIN_BUTTON_MARGIN)
       setWrapperWidth(totalWidth)
     }
-  }, [selectedChain])
+  })
 
   const [_, shownChains, hiddenChains] = useMemo(() => {
     const filtered = supportedChains.filter((chain) => {
@@ -129,7 +132,7 @@ export default function SwapNetworkSelection({
     })
 
     return [filtered, take(sortedFiltered, chainsToShow), drop(sortedFiltered, chainsToShow)]
-  }, [usedChainId, selectedChainWidth])
+  }, [supportedChains, usedChainId, selectedChainWidth])
 
   return (
     <AutoColumn gap="sm" style={{ maxWidth: `${CONTAINER_MAX_WIDTH}px` }}>
