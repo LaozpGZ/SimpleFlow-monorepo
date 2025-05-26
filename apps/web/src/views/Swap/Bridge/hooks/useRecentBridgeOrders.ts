@@ -20,9 +20,7 @@ export const useRecentBridgeOrders = ({ address }: UseRecentBridgeOrdersParamete
         throw new Error("No address provided for user's bridge orders")
       }
 
-      // return getUserBridgeOrders(address)
-      // TESTING Ruby's error. TODO: Remove after testing
-      return getUserBridgeOrders('0x9D24d495F7380BA80dC114D8C2cF1a54a68e25A4')
+      return getUserBridgeOrders(address)
     },
     enabled: !!address,
     retry: 3,

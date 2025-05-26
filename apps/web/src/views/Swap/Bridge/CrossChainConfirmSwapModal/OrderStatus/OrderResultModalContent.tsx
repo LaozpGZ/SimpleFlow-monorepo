@@ -74,6 +74,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
     let resultTokenChainId: number | undefined
 
     let lastExecutedCommand: BridgeResponseStatusData | undefined
+
     if (bridgeStatus && bridgeStatus?.data) {
       for (const step of bridgeStatus.data.toReversed()) {
         if (step.status.code === BridgeStatus.PENDING || step.status.code === BridgeStatus.BRIDGE_PENDING) {
@@ -88,24 +89,34 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
       switch (lastExecutedCommand.command) {
         case Command.SWAP: {
           resultTokenChainId = lastExecutedCommand.metadata.chainId
-          resultAmount = lastExecutedCommand.metadata.outputAmount
 
           // If swap failed or partially succeeded, use input token as result token.
-          // TODO: Check if this case is only for Partial Success or for Failed as well
           if (
             lastExecutedCommand.status.code === BridgeStatus.PARTIAL_SUCCESS ||
             lastExecutedCommand.status.code === BridgeStatus.FAILED
           ) {
             resultTokenAddress = lastExecutedCommand.metadata.inputToken
+            resultAmount = lastExecutedCommand.metadata.inputAmount
           } else {
             resultTokenAddress = lastExecutedCommand.metadata.outputToken
+            resultAmount = lastExecutedCommand.metadata.outputAmount
           }
           break
         }
         case Command.BRIDGE: {
-          resultTokenAddress = bridgeStatus.outputToken
-          resultTokenChainId = bridgeStatus.destinationChainId
-          resultAmount = lastExecutedCommand.metadata.outputAmount
+          if (
+            lastExecutedCommand.status.code === BridgeStatus.PARTIAL_SUCCESS ||
+            lastExecutedCommand.status.code === BridgeStatus.FAILED
+          ) {
+            resultTokenAddress = lastExecutedCommand.metadata.inputToken
+            resultTokenChainId = lastExecutedCommand.metadata.originChainId
+            resultAmount = lastExecutedCommand.metadata.inputAmount
+          } else {
+            resultTokenChainId = lastExecutedCommand.metadata.destinationChainId
+            resultTokenAddress = lastExecutedCommand.metadata.outputToken
+            resultAmount = lastExecutedCommand.metadata.outputAmount
+          }
+
           break
         }
         default:
