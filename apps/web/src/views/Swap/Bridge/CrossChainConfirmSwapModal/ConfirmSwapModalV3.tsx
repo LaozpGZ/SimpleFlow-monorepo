@@ -212,6 +212,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       if (isBridgeOrder(originalOrder)) {
         return (
           <ApproveModalContentV3
+            mt="8px"
             title={stepContents}
             isX={isXOrder(order)}
             // TODO

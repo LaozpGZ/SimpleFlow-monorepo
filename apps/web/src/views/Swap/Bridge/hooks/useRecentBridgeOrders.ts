@@ -1,14 +1,14 @@
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
-import { createQueryKey, UseQueryParameters } from 'utils/reactQuery'
+import { createQueryKey } from 'utils/reactQuery'
 import { Address } from 'viem'
 import { getUserBridgeOrders } from '../api'
-import { UserBridgeOrdersResponse } from '../types'
+import { BridgeStatus, UserBridgeOrdersResponse } from '../types'
 
 const getRecentCrossChainOrdersQueryKey = createQueryKey<'recent-cross-chain-orders', [address: Address]>(
   'recent-cross-chain-orders',
 )
 
-interface UseRecentBridgeOrdersParameters extends UseQueryParameters {
+interface UseRecentBridgeOrdersParameters {
   address?: Address
 }
 
@@ -26,7 +26,8 @@ export const useRecentBridgeOrders = ({ address }: UseRecentBridgeOrdersParamete
     retry: 3,
     retryDelay: 1_000,
     refetchOnMount: true,
-    refetchInterval: 3_000,
+    refetchInterval: (query) =>
+      query.state.data?.rows.find((row) => row.status === BridgeStatus.PENDING) ? 5_000 : 10_000,
   }
 
   return useQuery<UserBridgeOrdersResponse, Error, UserBridgeOrdersResponse>(queryOptions)

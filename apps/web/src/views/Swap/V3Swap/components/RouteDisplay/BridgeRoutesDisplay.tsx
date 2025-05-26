@@ -7,6 +7,7 @@ import {
   Column,
   Flex,
   FlexGap,
+  Image,
   Text,
   useMatchBreakpoints,
   useTooltip,
@@ -18,7 +19,8 @@ import { RoutingSettingsButton } from 'components/Menu/GlobalSettings/SettingsMo
 import { parseProtocolFeesToNumbers } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Rounding } from '@pancakeswap/sdk'
-import { memo, useMemo, useState } from 'react'
+import { ASSET_CDN } from 'config/constants/endpoints'
+import { memo, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { RouterPoolBox, RouterTypeText } from 'views/Swap/components/RouterViewer'
@@ -143,6 +145,17 @@ const DottedBackgroundContainer = styled(FlexGap)`
   }
 `
 
+const StyledBridgeLogo = styled(Image)`
+  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+  border-radius: 100%;
+`
+
+const AnimatedContent = styled(Box)<{ $height: number }>`
+  height: ${({ $height }) => `${$height}px`};
+  overflow: hidden;
+  transition: height 0.2s ease-in-out;
+`
+
 export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
   const { t } = useTranslation()
   const bridgeRouteIndex = routes.findIndex((route) => route.type === RouteType.BRIDGE)!
@@ -200,9 +213,12 @@ export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
           <Text mt="4px" textAlign="center">
             {t('Bridge')}
           </Text>
-          <Text textAlign="center" fontSize="12px">
-            Across
-          </Text>
+          <FlexGap mt="2px" gap="2px" alignItems="center" justifyContent="center">
+            <StyledBridgeLogo src={`${ASSET_CDN}/web/bridges/across.png`} alt="Across Bridge" width={16} height={16} />
+            <Text textAlign="center" fontSize="12px">
+              Across
+            </Text>
+          </FlexGap>
         </PrimaryCard>
         {destinationChainRoutes.length > 0 && <BridgeChainRoutes routes={destinationChainRoutes} />}
         <Box mt="24px" minWidth="42px">
@@ -216,10 +232,16 @@ export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
 
 const BridgeChainRoutes = ({ routes }: { routes: RouteDisplayEssentials[] }) => {
   const { t } = useTranslation()
-
   const { isDesktop } = useMatchBreakpoints()
-
   const [isExpanded, setIsExpanded] = useState(isDesktop)
+  const contentRef = useRef<HTMLDivElement>(null)
+  const [contentHeight, setContentHeight] = useState(0)
+
+  useLayoutEffect(() => {
+    if (contentRef.current) {
+      setContentHeight(contentRef.current.scrollHeight + 12)
+    }
+  }, [routes])
 
   const inputCurrency = routes[0].inputAmount.currency
   const outputCurrency = routes[routes.length - 1].outputAmount.currency
@@ -276,14 +298,16 @@ const BridgeChainRoutes = ({ routes }: { routes: RouteDisplayEssentials[] }) => 
             {t('Via %poolTypes% Pool', { poolTypes: poolTypes.join(', ') })}
           </Text>
         </PrimaryCard>
-        {isExpanded && (
-          <AutoColumn mt="12px" gap="12px">
-            {routes.map((route, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <BridgeRouteDisplay key={i} route={route} />
-            ))}
-          </AutoColumn>
-        )}
+        <AnimatedContent $height={isExpanded ? contentHeight : 0}>
+          <div ref={contentRef}>
+            <AutoColumn mt="12px" gap="12px">
+              {routes.map((route, i) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <BridgeRouteDisplay key={i} route={route} />
+              ))}
+            </AutoColumn>
+          </div>
+        </AnimatedContent>
 
         <Flex
           mt="24px"

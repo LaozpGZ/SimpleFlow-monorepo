@@ -2,6 +2,7 @@ import { useTranslation } from "@pancakeswap/localization";
 import { Currency } from "@pancakeswap/swap-sdk-core";
 import {
   Box,
+  BoxProps,
   Button,
   Column,
   ColumnCenter,
@@ -36,7 +37,7 @@ type AllowedAllowanceState =
   | ConfirmModalState.APPROVING_TOKEN
   | ConfirmModalState.PERMITTING;
 
-interface ApproveModalContentV3Props {
+interface ApproveModalContentV3Props extends Omit<BoxProps, "title"> {
   title: {
     [step in AllowedAllowanceState]: string;
   };
@@ -80,12 +81,13 @@ export const ApproveModalContentV3: React.FC<ApproveModalContentV3Props> = ({
   asBadge,
   currentStep,
   approvalModalSteps,
+  ...props
 }) => {
   const { t } = useTranslation();
 
   return useMemo(
     () => (
-      <Box width="100%">
+      <Box width="100%" {...props}>
         <Flex alignItems="center">
           <ColumnCenter>
             <CurrencyLogo currency={currencyA} size="40px" showChainLogo />
