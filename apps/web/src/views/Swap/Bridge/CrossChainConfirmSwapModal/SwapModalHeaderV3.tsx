@@ -60,6 +60,7 @@ export default function SwapModalHeaderV3({
   return (
     <AutoColumn gap="md">
       <DualCurrencyDisplay
+        mt="8px"
         inputCurrency={inputAmount.currency}
         outputCurrency={outputAmount.currency}
         inputAmount={formatAmount(inputAmount, DISPLAY_PRECISION)}

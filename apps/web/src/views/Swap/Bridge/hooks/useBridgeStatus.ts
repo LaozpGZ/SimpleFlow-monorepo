@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { useMemo } from 'react'
 import { getBridgeStatus } from '../api'
-import { ActiveBridgeOrderMetadata, BridgeStatusData, BridgeStatusResponse, Command } from '../types'
+import { ActiveBridgeOrderMetadata, BridgeStatus, BridgeStatusData, BridgeStatusResponse, Command } from '../types'
 
 export const bridgeStatusQueryKey = (chainId?: number, txHash?: string) => ['bridge-status', chainId, txHash]
 
@@ -15,7 +15,8 @@ export const useBridgeStatus = (
   const queryResult = useQuery({
     queryKey: bridgeStatusQueryKey(chainId, txHash),
     queryFn: () => (chainId && txHash ? getBridgeStatus(chainId, txHash) : undefined),
-    refetchInterval: 3_000,
+    refetchInterval: (query) =>
+      !query.state.data || query.state.data?.status === BridgeStatus.PENDING ? 2_000 : 15_000,
     retry: 3,
     retryDelay: 1_000,
     enabled: !!chainId && !!txHash,
@@ -61,7 +62,6 @@ export const useBridgeStatus = (
       data
         ? {
             ...data,
-            minOutputAmount: metadata?.minOutputAmount || data?.minOutputAmount,
             inputCurrencyAmount,
             outputCurrencyAmount,
             feesBreakdown,

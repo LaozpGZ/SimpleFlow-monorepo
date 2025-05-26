@@ -1,8 +1,8 @@
 import { Currency } from "@pancakeswap/sdk";
-import { ArrowForwardIcon, AutoColumn, Row, RowFixed, Text } from "@pancakeswap/uikit";
+import { ArrowForwardIcon, AtomBoxProps, AutoColumn, Row, RowFixed, Text } from "@pancakeswap/uikit";
 import { CurrencyLogo } from "./CurrencyLogo";
 
-interface DualCurrencyDisplayProps {
+interface DualCurrencyDisplayProps extends AtomBoxProps {
   inputCurrency?: Currency;
   outputCurrency?: Currency;
   inputAmount?: string;
@@ -25,9 +25,10 @@ export const DualCurrencyDisplay = ({
   outputChainName,
   overrideIcon,
   textRightOpacity,
+  ...props
 }: DualCurrencyDisplayProps) => {
   return (
-    <Row justifyContent="space-around">
+    <Row justifyContent="space-around" {...props}>
       <AutoColumn justify="center">
         <CurrencyLogo currency={inputCurrency} size="40px" showChainLogo />
 

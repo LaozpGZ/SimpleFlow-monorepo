@@ -86,7 +86,7 @@ export interface BridgeStatusResponse {
   transactionId?: string
 }
 
-type BridgeResponseStatusData =
+export type BridgeResponseStatusData =
   | {
       command: Command.BRIDGE
       status: {
