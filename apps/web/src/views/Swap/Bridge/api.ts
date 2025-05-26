@@ -246,7 +246,10 @@ export const getBridgeStatus = async (chainId: number, txHash: string): Promise<
   return resp.json()
 }
 
-export const getUserBridgeOrders = async (address: Address): Promise<UserBridgeOrdersResponse> => {
-  const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/orders/${address}`)
+export const getUserBridgeOrders = async (
+  address: Address,
+  afterCursor?: string,
+): Promise<UserBridgeOrdersResponse> => {
+  const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/orders/${address}${afterCursor ? `?after=${afterCursor}` : ''}`)
   return resp.json()
 }

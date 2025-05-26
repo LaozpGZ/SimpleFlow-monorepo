@@ -84,7 +84,7 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
 
         return new ERC20Token(chainId, address, decimals ?? 18, symbol ?? '', name ?? '')
       } catch (error) {
-        console.error(error)
+        console.error(`Failed to get currency for address ${address} on chain ${chainId}:`, error)
         return undefined
       }
     },

@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { FlexGap, InjectedModalProps, Modal, ModalBody, SwapLoading, Text } from '@pancakeswap/uikit'
+import { Button, FlexGap, InjectedModalProps, Modal, ModalBody, SwapLoading, Text } from '@pancakeswap/uikit'
 import { TransactionList } from '@pancakeswap/widgets-internal'
 import isEmpty from 'lodash/isEmpty'
 import { useMemo } from 'react'
@@ -47,15 +47,27 @@ export function RecentTransactions() {
     refetchInterval: 10_000,
   })
 
-  const { data: crossChainOrdersResponse, isLoading: isRecentBridgeOrdersLoading } = useRecentBridgeOrders({
+  // Cross-Chain Orders
+  const {
+    data: crossChainOrdersResponse,
+    isFetching: isRecentBridgeOrdersLoading,
+    fetchNextPage,
+  } = useRecentBridgeOrders({
     address: account,
   })
+
+  const hasMoreCrossChainOrders = Boolean(
+    crossChainOrdersResponse?.pages[crossChainOrdersResponse.pages.length - 1].hasNextPage,
+  )
+
   const recentCrossChainOrders: CrossChainTransactionItem[] =
-    crossChainOrdersResponse?.rows.map(
-      (order): CrossChainTransactionItem => ({
-        type: 'crossChainOrder',
-        order,
-      }),
+    crossChainOrdersResponse?.pages.flatMap((page) =>
+      page.rows.map(
+        (order): CrossChainTransactionItem => ({
+          type: 'crossChainOrder',
+          order,
+        }),
+      ),
     ) ?? []
 
   const sortedRecentTransactions = useAllSortedRecentTransactions()
@@ -122,6 +134,17 @@ export function RecentTransactions() {
               })
             ) : (
               <UnifiedTransactionList xOrders={xOrders} crossChainOrders={recentCrossChainOrders} chainId={chainId} />
+            )}
+            {hasMoreCrossChainOrders && (
+              <Button
+                variant="text"
+                scale="sm"
+                mt="16px"
+                disabled={isRecentBridgeOrdersLoading}
+                onClick={() => fetchNextPage()}
+              >
+                {isRecentBridgeOrdersLoading ? t('Loading...') : t('Load More')}
+              </Button>
             )}
           </>
         ) : (
