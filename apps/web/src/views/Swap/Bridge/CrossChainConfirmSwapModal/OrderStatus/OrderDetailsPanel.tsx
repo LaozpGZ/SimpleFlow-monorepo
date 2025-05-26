@@ -27,6 +27,7 @@ import { isBridgeOrder } from 'views/Swap/utils'
 import { computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter } from 'views/Swap/V3Swap/utils/exchange'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
+import { convertScientificToDecimal } from '@pancakeswap/utils/formatNumber'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { isNotUndefinedOrNull } from 'utils/isNotUndefinedOrNull'
 import { useBridgeStatus } from '../../hooks'
@@ -114,7 +115,7 @@ export const OrderDetailsPanel = ({ overrideActiveOrderMetadata, ...props }: Ord
     if (!bridgeStatus?.outputCurrencyAmount?.currency || !bridgeStatus.minOutputAmount) return undefined
     return CurrencyAmount.fromRawAmount(
       bridgeStatus?.outputCurrencyAmount?.currency,
-      bridgeStatus?.minOutputAmount,
+      convertScientificToDecimal(bridgeStatus?.minOutputAmount),
     ).toSignificant(DISPLAY_PRECISION)
   }, [bridgeStatus, slippageAdjustedAmounts])
 

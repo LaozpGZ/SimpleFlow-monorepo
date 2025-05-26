@@ -15,6 +15,7 @@ import { useAtomValue } from 'jotai'
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/sdk'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { convertScientificToDecimal } from '@pancakeswap/utils/formatNumber'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { useMemo } from 'react'
@@ -124,7 +125,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
 
   const resultCurrencyAmount = useMemo(() => {
     if (!resultCurrency || !resultTokenData.resultAmount) return undefined
-    return CurrencyAmount.fromRawAmount(resultCurrency, resultTokenData.resultAmount)
+    return CurrencyAmount.fromRawAmount(resultCurrency, convertScientificToDecimal(resultTokenData.resultAmount))
   }, [resultCurrency, resultTokenData.resultAmount])
 
   const outputAmount = useMemo(() => {
@@ -135,7 +136,10 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
     const minOutputAmount =
       bridgeStatus?.outputCurrencyAmount?.currency &&
       bridgeStatus?.minOutputAmount &&
-      CurrencyAmount.fromRawAmount(bridgeStatus.outputCurrencyAmount?.currency, bridgeStatus.minOutputAmount)
+      CurrencyAmount.fromRawAmount(
+        bridgeStatus.outputCurrencyAmount?.currency,
+        convertScientificToDecimal(bridgeStatus.minOutputAmount),
+      )
 
     return minOutputAmount || bridgeStatus?.outputCurrencyAmount || order?.trade.outputAmount
   }, [bridgeStatus, order?.trade.outputAmount])
