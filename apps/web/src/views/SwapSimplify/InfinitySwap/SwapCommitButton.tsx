@@ -29,8 +29,9 @@ import { useCurrencyBalances } from 'state/wallet/hooks'
 import { logGTMClickSwapConfirmEvent, logGTMClickSwapEvent } from 'utils/customGTMEventTracking'
 import { warningSeverity } from 'utils/exchange'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckApproval'
-import { isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
+import { computeBridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModalV2'
+import { isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
 import { useAccount, useChainId } from 'wagmi'
 import { ConfirmSwapModalV3 } from '../../Swap/Bridge/CrossChainConfirmSwapModal/ConfirmSwapModalV3'
 import { useParsedAmounts, useSlippageAdjustedAmounts, useSwapInputError } from '../../Swap/V3Swap/hooks'
@@ -146,13 +147,21 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   const { isRecipientEmpty, isRecipientError } = useIsRecipientError()
 
   const tradePriceBreakdown = useMemo(
-    () => computeTradePriceBreakdown(isBridgeOrder(order) || isXOrder(order) ? undefined : order?.trade),
+    () =>
+      isBridgeOrder(order)
+        ? computeBridgeOrderFee(order)
+        : computeTradePriceBreakdown(isXOrder(order) ? undefined : order?.trade),
     [order],
   )
 
   // warnings on slippage
   const priceImpactSeverity = warningSeverity(
-    tradePriceBreakdown ? tradePriceBreakdown.priceImpactWithoutFee : undefined,
+    tradePriceBreakdown
+      ? // if tradePriceBreakdown is array, it means it's a bridge order
+        Array.isArray(tradePriceBreakdown)
+        ? getBridgeOrderPriceImpact(tradePriceBreakdown)
+        : tradePriceBreakdown.priceImpactWithoutFee
+      : undefined,
   )
 
   const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
