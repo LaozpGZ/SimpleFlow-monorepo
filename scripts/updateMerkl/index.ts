@@ -44,6 +44,7 @@ const parseMerklConfig = (merklConfigResponse: any[]): MerklConfigPool[] => {
     .filter(
       (opportunity) =>
         (opportunity?.tokens?.[0]?.symbol?.toLowerCase().startsWith('cake-lp') ||
+          opportunity?.protocol?.id?.toLowerCase().startsWith('pancake-swap') ||
           opportunity?.protocol?.id?.toLowerCase().startsWith('pancakeswap')) &&
         opportunity?.apr > 0,
     )
