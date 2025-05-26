@@ -107,7 +107,7 @@ const fetchPools = cacheByLRU(_fetchPools, {
   ttl: 3_000,
   key: (args) => {
     const [currencyA, currencyB, chainId, protocol] = args
-    const hashc = PoolHashHelper.hashCurrencies(currencyA, currencyB)
+    const hashc = PoolHashHelper.hashCurrenciesWithSort(currencyA, currencyB)
     return `${hashc}-${chainId}-${protocol.join(',')}`
   },
   usingStaleValue: false,
