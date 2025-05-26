@@ -1,22 +1,22 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { RouteType, SmartRouter } from '@pancakeswap/smart-router'
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
+import { type Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import { userSlippageAtomWithLocalStorage } from '@pancakeswap/utils/user/slippage'
 import BigNumber from 'bignumber.js'
 import { convertTokenToCurrency, mapWithoutUrls } from 'hooks/Tokens'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
-import { BridgeTradeError, QuoteQuery } from 'quoter/quoter.types'
-import { createQuoteQuery } from 'quoter/utils/createQuoteQuery'
+import { BridgeTradeError, type QuoteQuery } from 'quoter/quoter.types'
 import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
+import { createQuoteQuery } from 'quoter/utils/createQuoteQuery'
 import { combinedTokenMapFromActiveUrlsAtom } from 'state/lists/hooks'
 import { Field } from 'state/swap/actions'
 import { logGTMBridgeQuoteQueryEvent } from 'utils/customGTMEventTracking'
 import { basisPointsToPercent } from 'utils/exchange'
-import { getBridgeAvailableRoutes, getMetadata, getTokenAddress, Route } from 'views/Swap/Bridge/api'
-import { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
+import { type Route, getBridgeAvailableRoutes, getMetadata, getTokenAddress } from 'views/Swap/Bridge/api'
 import { computeSlippageAdjustedAmounts } from 'views/Swap/V3Swap/utils/exchange'
+import type { BridgeOrderWithCommands, InterfaceOrder } from 'views/Swap/utils'
 import { atomWithLoadable } from './atomWithLoadable'
 import { bestSameChainWithoutPlaceHolderAtom } from './bestSameChainAtom'
 import { placeholderAtom } from './placeholderAtom'
@@ -70,6 +70,7 @@ export type BridgeMetadataParams = {
   inputAmount: CurrencyAmount<Currency>
   outputCurrency: Currency
   nonce?: number
+  postBridgeSwapTrade?: SwapOrderWithSlippage
 }
 
 // Convert the function to an atom
@@ -104,7 +105,7 @@ export const getBridgeQuote = atomFamily(
       const bridgeTrade: BridgeOrderWithCommands = {
         bridgeTransactionData: metadata.bridgeTransactionData,
         bridgeFee: CurrencyAmount.fromRawAmount(inputAmount.currency, bridgeFee),
-        expectedFillTimeSec: metadata.expectedFillTimeSec ? parseInt(metadata.expectedFillTimeSec) : 0,
+        expectedFillTimeSec: metadata.expectedFillTimeSec ? Number.parseInt(metadata.expectedFillTimeSec) : 0,
         type: OrderType.PCS_BRIDGE,
         trade: {
           inputAmount,
@@ -246,6 +247,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
 
           // Find the bridged token from the token map
           // can safely use bridgeRoute!.destinationToken.toLowerCase() because we already checked if the bridge route is supported
+          // biome-ignore lint/style/noNonNullAssertion: <explanation>
           const bridgedTokenInfo = tokenMapWithoutUrls[bridgeRoute!.destinationToken]
 
           if (!bridgedTokenInfo) {
@@ -323,6 +325,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
                   ...(bridgeQuote.trade.routes || []),
                   // Add swap routes with appropriate type casting for compatibility
                   ...swapOrderWithSlippage.trade.routes,
+                  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 ] as any, // Use type assertion as a last resort
               },
               commands: [bridgeQuote, swapOrderWithSlippage],
@@ -338,6 +341,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
 
           // Find the token on the origin chain that the bridge supports
           // can safely use bridgeRoute!.originToken.toLowerCase() because we already checked if the bridge route is supported
+          // biome-ignore lint/style/noNonNullAssertion: <explanation>
           const bridgeOriginTokenInfo = tokenMapWithoutUrls[bridgeRoute!.originToken]
 
           if (!bridgeOriginTokenInfo) {
@@ -417,6 +421,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
                   ...swapOrderWithSlippage.trade.routes,
                   // Add bridge routes
                   ...(bridgeQuote.trade.routes || []),
+                  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 ] as any, // Use type assertion as a last resort
               },
               commands: [swapOrderWithSlippage, bridgeQuote],
@@ -481,6 +486,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
             )?.destinationToken
 
             // safely use destinationBridgeTokenAddress! because we already checked if the bridge route is supported
+            // biome-ignore lint/style/noNonNullAssertion: <explanation>
             const destinationBridgeToken = destinationTokenMapWithoutUrls[destinationBridgeTokenAddress!]
 
             const destinationBridgeCurrency = convertTokenToCurrency(destinationBridgeToken)
@@ -591,24 +597,74 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
           // 4. pick the best quote from validCompletePaths based on output amount
           if (validCompletePaths.length > 0) {
             // Find the path with the highest output amount
-            let bestPath = validCompletePaths[0]
+            let bestPathWithoutPostbridgeCalldataFee = validCompletePaths[0]
 
             for (let i = 1; i < validCompletePaths.length; i++) {
               const currentPath = validCompletePaths[i]
 
               // Compare output amounts to find the best path
-              if (currentPath.outputAmount.greaterThan(bestPath.outputAmount)) {
-                bestPath = currentPath
+              if (currentPath.outputAmount.greaterThan(bestPathWithoutPostbridgeCalldataFee.outputAmount)) {
+                bestPathWithoutPostbridgeCalldataFee = currentPath
               }
             }
 
             // 5. combine swap, bridge, and final swap quotes into a single quote
-            const { swapOrder, bridgeQuote, finalSwapOrder } = bestPath
+            const {
+              swapOrder,
+              bridgeQuote,
+              finalSwapOrder: finalSwapOrderWithoutPostbridgeCalldataFee,
+            } = bestPathWithoutPostbridgeCalldataFee
 
             // NOTE: need to apply slippate for swap order and final swap order
             // because we don't apply it in the previous steps
             swapOrder.trade.outputAmount =
               computeSlippageAdjustedAmounts(swapOrder, userSlippage)[Field.OUTPUT] || swapOrder.trade.outputAmount
+
+            // 6. refetch bridge quote with postbridge calldata fee
+            const bridgeQuoteWithPostbridgeCalldataFee = get(
+              getBridgeQuote({
+                inputAmount: swapOrder.trade.outputAmount,
+                outputCurrency: bridgeQuote.trade.inputAmount.currency,
+                nonce: _option.nonce,
+                postBridgeSwapTrade: constructSwapOrderRoutes({
+                  swapOrder: finalSwapOrderWithoutPostbridgeCalldataFee,
+                  userSlippage,
+                }),
+              }),
+            )
+
+            if (bridgeQuoteWithPostbridgeCalldataFee.isPending()) {
+              return Loadable.Pending<InterfaceOrder>()
+            }
+
+            const finalBridgeQuote = bridgeQuoteWithPostbridgeCalldataFee.unwrapOr(undefined)
+
+            if (!finalBridgeQuote) {
+              throw new BridgeTradeError('No bridge quote with postbridge calldata fee')
+            }
+
+            const finalSwapOption: QuoteQuery = {
+              ..._option,
+              baseCurrency: finalBridgeQuote.trade.outputAmount.currency,
+              amount: finalBridgeQuote.trade.outputAmount,
+              hash: '',
+              placeholderHash: '',
+            }
+
+            const quoteQuery = createQuoteQuery(finalSwapOption)
+
+            // 7. refetch swap quote with postbridge calldata fee
+            const finalSwapOrderLoadable = get(bestSameChainWithoutPlaceHolderAtom(quoteQuery))
+
+            if (finalSwapOrderLoadable.isPending()) {
+              return Loadable.Pending<InterfaceOrder>()
+            }
+
+            const finalSwapOrder = finalSwapOrderLoadable.unwrapOr(undefined)
+
+            if (!finalSwapOrder) {
+              throw new BridgeTradeError('No final swap order')
+            }
 
             const swapOrderWithSlippage = constructSwapOrderRoutes({ swapOrder, userSlippage })
 
@@ -638,6 +694,7 @@ export const bestCrossChainQuoteWithoutPlaceHolderAtom = atomFamily((option: Quo
                   ...bridgeQuote.trade.routes,
                   // Add final swap routes if they exist
                   ...finalSwapOrderWithSlippage.trade.routes,
+                  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 ] as any, // Type assertion for routes compatibility
               },
               commands: [swapOrderWithSlippage, bridgeQuote, finalSwapOrderWithSlippage],
@@ -680,12 +737,15 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
     if (result.isPending()) {
       const placeHolder = get(placeholderAtom(_option.placeholderHash || ''))
       if (placeHolder) {
+        // biome-ignore lint/style/noNonNullAssertion: <explanation>
         return Loadable.Just(placeHolder).setFlag('placeholder').setExtra('placeholderHash', _option.placeholderHash!)
       }
     }
     // eslint-disable-next-line no-console
+    // biome-ignore lint/style/noUnusedTemplateLiteral: <explanation>
     console.info(`[ph]`, 'bestCrossChainQuoteAtom hash', _option.placeholderHash)
 
+    // biome-ignore lint/style/noNonNullAssertion: <explanation>
     return result.setExtra('placeholderHash', _option.placeholderHash!)
   })
 }, isEqualQuoteQuery)
