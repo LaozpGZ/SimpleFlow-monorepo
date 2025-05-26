@@ -108,7 +108,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
       const newCurrencyId = currencyId(newCurrency)
 
-      // Output chain name
+      // Output chain name (undefined if no need to apply)
       const chainOut = !isInput && inputChainId !== newCurrency.chainId && CHAIN_QUERY_NAME[newCurrency.chainId]
 
       const isSameCurrency = !chainOut && newCurrencyId === inputCurrencyId && newCurrencyId === outputCurrencyId

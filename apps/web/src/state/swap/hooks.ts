@@ -5,7 +5,7 @@ import { PairDataTimeWindowEnum } from '@pancakeswap/uikit'
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useQuery } from '@tanstack/react-query'
-import { getChainId } from 'config/chains'
+import { CHAIN_QUERY_NAME, getChainId } from 'config/chains'
 import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import dayjs from 'dayjs'
 import { useTradeExactIn, useTradeExactOut } from 'hooks/Trades'
@@ -237,18 +237,25 @@ export function useDefaultsFromURLSearch():
 
     const parsed = queryParametersToSwapState(query, native.symbol, defaultOutputCurrency)
 
-    const finalInputCurrencyId = inputCurrencyId || parsed[Field.INPUT].currencyId
+    let finalInputCurrencyId = inputCurrencyId || parsed[Field.INPUT].currencyId
     const finalOutputCurrencyId = outputCurrencyId || parsed[Field.OUTPUT].currencyId
 
-    const finalInputChainId = inputChainId || parsed[Field.INPUT].chainId
+    let finalInputChainId = inputChainId || parsed[Field.INPUT].chainId
     const finalOutputChainId = outputChainId || parsed[Field.OUTPUT].chainId
+
+    // Set input currency to default (native currency) if chain is changed by user
+    // and input currency is on different chain
+    if (finalInputChainId && finalInputChainId !== chainId) {
+      finalInputCurrencyId = native.symbol
+      finalInputChainId = chainId
+    }
 
     // NOTE: not add chainId to browser history to keep URL clean
     replaceBrowserHistoryMultiple({
       inputCurrency: finalInputCurrencyId,
       outputCurrency: finalOutputCurrencyId,
-      chain: finalInputChainId,
-      chainOut: finalOutputChainId,
+      chain: CHAIN_QUERY_NAME[finalInputChainId || chainId],
+      chainOut: CHAIN_QUERY_NAME[finalOutputChainId || chainId],
     })
 
     dispatch(
