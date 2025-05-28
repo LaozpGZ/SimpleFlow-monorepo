@@ -20,8 +20,6 @@ import CurrencyLogo from 'components/Logo/CurrencyLogo'
 
 import { ASSETS_CDN } from 'config'
 import { useAddressBalance } from 'hooks/useAddressBalance'
-import useAuth from 'hooks/useAuth'
-import useTheme from 'hooks/useTheme'
 import { useRouter } from 'next/router'
 import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -212,8 +210,6 @@ export const WalletContent = ({
 
   const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
-  const { logout } = useAuth()
-  const { theme } = useTheme()
 
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
@@ -232,7 +228,7 @@ export const WalletContent = ({
   const topTokens = balances
 
   return (
-    <Box minWidth="357px">
+    <Box minWidth={isMobile ? '100%' : '357px'}>
       <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px">
         <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
         <FlexGap>
@@ -246,7 +242,7 @@ export const WalletContent = ({
           <TotalBalanceInteger>${balanceDisplay.integer}</TotalBalanceInteger>
           <TotalBalanceDecimal>.{balanceDisplay.decimal}</TotalBalanceDecimal>
         </FlexGap>
-        <Text fontSize="20px" textTransform="uppercase" fontWeight="bold" mb="8px">
+        <Text fontSize="20px" fontWeight="bold" mb="8px">
           {t('My Wallet')}
         </Text>
         <FlexGap onClick={(e) => e.stopPropagation()}>
@@ -336,7 +332,7 @@ export const WalletContent = ({
                           minimumFractionDigits: 2,
                         })}
                       </Text>
-                      <Text color="success" fontSize="14px">
+                      <Text color="textSubtle" fontSize="14px">
                         ${asset.price?.totalUsd ? formatAmount(asset.price.totalUsd) : '0.00'}
                       </Text>
                     </Box>
