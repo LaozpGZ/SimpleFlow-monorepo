@@ -17,7 +17,7 @@ import { V2PoolAprModal } from '../Modals/V2PoolAprModal'
 import { V3PoolAprModal } from '../Modals/V3PoolAprModal'
 import { StopPropagation } from '../StopPropagation'
 import { AprButton } from './AprButton'
-import { AprTooltipContent, BCakeWrapperFarmAprTipContent } from './AprTooltipContent'
+import { AprTooltipContent } from './AprTooltipContent'
 
 type PoolGlobalAprButtonProps = {
   pool: PoolInfo
@@ -41,7 +41,7 @@ export const PoolAprButton: React.FC<PoolGlobalAprButtonProps> = ({
   const baseApr = useMemo(() => {
     return sumApr(lpApr, cakeApr?.value, merklApr)
   }, [lpApr, cakeApr?.value, merklApr])
-  const hasBCake = pool.protocol === 'v2' || pool.protocol === 'stable'
+  const hasV2OrStable = pool.protocol === 'v2' || pool.protocol === 'stable'
   const merklLink = useMemo(() => {
     return getMerklLink({ chainId: pool.chainId, lpAddress: pool.lpAddress })
   }, [pool.chainId, pool.lpAddress])
@@ -56,9 +56,7 @@ export const PoolAprButton: React.FC<PoolGlobalAprButtonProps> = ({
       merklApr={Number(merklApr) ?? 0}
       merklLink={merklLink}
       showDesc
-    >
-      {hasBCake ? <BCakeWrapperFarmAprTipContent /> : null}
-    </AprTooltipContent>,
+    />,
   )
 
   return (
@@ -72,7 +70,7 @@ export const PoolAprButton: React.FC<PoolGlobalAprButtonProps> = ({
         showApyButton={showApyButton}
       />
       {tooltipVisible && tooltip}
-      {hasBCake ? (
+      {hasV2OrStable ? (
         <V2PoolAprModal modal={modal} poolInfo={pool} combinedApr={baseApr} lpApr={Number(lpApr ?? 0)} />
       ) : pool.protocol === Protocol.V3 ? (
         <V3PoolAprModal
