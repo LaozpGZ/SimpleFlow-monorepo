@@ -524,9 +524,6 @@ export default function Pools() {
 
   return (
     <>
-      <div style={{ height: '45vh' }}>
-        <AgGridReact theme={gridTheme} rowData={sortedData} columnDefs={columnDefs} noRowsOverlayComponent={EmptyRow} />
-      </div>
       <Flex flexDirection="column" height="100%" flexGrow={1} lineHeight={1.5} {...containerProps}>
         {/* Title Part */}
         <Box {...titleContainerProps} display={['none', 'block']} flexShrink={0}>
@@ -717,7 +714,7 @@ export default function Pools() {
                               fontSize: '14px'
                             })}
                             popoverContentSx={{}}
-                            value={sortKey === 'default' ? 'default' : `${sortKey}_${order ? 'desc' : 'asc'}`}
+                            value={sortKey === 'default' ? t('default') : t(`${sortKey}_${order ? 'desc' : 'asc'}`)}
                             items={SORT_ITEMS}
                             onChange={(value) => {
                               const [key, order_] = value.split('_')
@@ -735,45 +732,53 @@ export default function Pools() {
           </Grid>
         </Box>
 
-        {/* List Header */}
-        {currentLayoutStyle === 'list' && (
-          <PoolListHeader order={order} timeBase={timeBase} sortKey={sortKey} handleClickSort={handleClickSort} />
-        )}
-
-        {/* List Content */}
-        {isNotFound ? (
-          <Box {...listContainerStyle} flexGrow="1" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-            <img width={156} height={179} alt="empty placeholder" src={`${ASSET_CDN}/web/universalFarms/empty_list_bunny.png`} />
-            <Text mt="4" fontSize="sm" color={colors.textSecondary}>
-              {t('No pools found')}
-            </Text>
-          </Box>
+        {currentLayoutStyle === 'list' ? (
+          <div style={{ height: '45vh' }}>
+            <AgGridReact
+              loading={isLoading}
+              theme={gridTheme}
+              rowData={sortedData}
+              columnDefs={columnDefs}
+              noRowsOverlayComponent={EmptyRow}
+            />
+          </div>
         ) : (
           <>
-            {isLoading ? (
-              <Box {...listContainerStyle} px="24px" py="12px">
-                <PoolItemLoadingSkeleton isGrid={currentLayoutStyle === 'grid'} />
+            {isNotFound ? (
+              <Box {...listContainerStyle} flexGrow="1" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
+                <img width={156} height={179} alt="empty placeholder" src={`${ASSET_CDN}/web/universalFarms/empty_list_bunny.png`} />
+                <Text mt="4" fontSize="sm" color={colors.textSecondary}>
+                  {t('No pools found')}
+                </Text>
               </Box>
             ) : (
-              <List
-                controllerRef={listControllerRef}
-                {...scrollBodyProps}
-                increaseRenderCount={showFarms ? 100 : 50}
-                initRenderCount={30}
-                reachBottomMargin={showFarms ? 200 : 150}
-                preventResetOnChange={search === prevSearch}
-                gridSlotCount={currentLayoutStyle === 'grid' && isMobile ? 1 : undefined}
-                gridSlotItemMinWidth={currentLayoutStyle === 'grid' ? gridCardSize : undefined}
-                haveLoadAll={isLoadEnded}
-                onLoadMore={loadMore}
-                items={sortedData}
-                getItemKey={(item) => item.id}
-                gap={currentLayoutStyle === 'grid' ? gridCardGap : undefined}
-                zIndex={1}
-                {...listContainerStyle}
-              >
-                {renderPoolListItem}
-              </List>
+              <>
+                {isLoading ? (
+                  <Box {...listContainerStyle} px="24px" py="12px">
+                    <PoolItemLoadingSkeleton isGrid={currentLayoutStyle === 'grid'} />
+                  </Box>
+                ) : (
+                  <List
+                    controllerRef={listControllerRef}
+                    {...scrollBodyProps}
+                    increaseRenderCount={showFarms ? 100 : 50}
+                    initRenderCount={30}
+                    reachBottomMargin={showFarms ? 200 : 150}
+                    preventResetOnChange={search === prevSearch}
+                    gridSlotCount={currentLayoutStyle === 'grid' && isMobile ? 1 : undefined}
+                    gridSlotItemMinWidth={currentLayoutStyle === 'grid' ? gridCardSize : undefined}
+                    haveLoadAll={isLoadEnded}
+                    onLoadMore={loadMore}
+                    items={sortedData}
+                    getItemKey={(item) => item.id}
+                    gap={currentLayoutStyle === 'grid' ? gridCardGap : undefined}
+                    zIndex={1}
+                    {...listContainerStyle}
+                  >
+                    {renderPoolListItem}
+                  </List>
+                )}
+              </>
             )}
           </>
         )}
