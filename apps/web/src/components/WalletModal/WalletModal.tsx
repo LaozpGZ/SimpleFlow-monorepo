@@ -15,6 +15,7 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
+
 import { ASSETS_CDN } from 'config'
 import { useAddressBalance } from 'hooks/useAddressBalance'
 import useAuth from 'hooks/useAuth'
@@ -241,87 +242,84 @@ export const WalletContent = ({
               <Skeleton height="80px" width="100%" />
             </FlexGap>
           ) : topTokens.length === 0 ? null : (
-            topTokens.map((asset) => (
-              <AssetItem key={asset.id}>
-                <FlexGap alignItems="center">
-                  <TokenIcon>
-                    <CurrencyLogo
-                      currency={
-                        new Token(
-                          asset.chainId,
-                          asset.token.address.startsWith('0x')
-                            ? (asset.token.address as `0x${string}`)
-                            : (`0x${asset.token.address}` as `0x${string}`),
-                          asset.token.decimals,
-                          asset.token.symbol,
-                          asset.token.name,
-                        )
-                      }
-                      src={asset.token.logoURI}
-                      size="40px"
-                    />
-                    <ChainIconWrapper>
-                      <img
-                        src={`${ASSETS_CDN}/web/chains/svg/${asset.chainId}.svg`}
-                        alt={getChainName(asset.chainId)}
-                        width="12px"
-                        height="12px"
-                      />
-                    </ChainIconWrapper>
-                  </TokenIcon>
-                  <Box>
-                    <FlexGap alignItems="center">
-                      <Text
-                        bold
-                        fontSize="16px"
-                        style={{
-                          maxWidth: '70px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        {asset.token.symbol}
-                      </Text>
-                      <Text
-                        ml="8px"
-                        color="textSubtle"
-                        fontSize="14px"
-                        style={{
-                          maxWidth: '60px',
-                          overflow: 'hidden',
-                          textOverflow: 'ellipsis',
-                          whiteSpace: 'nowrap',
-                        }}
-                      >
-                        {asset.token.name}
-                      </Text>
-                    </FlexGap>
+            topTokens.map((asset) => {
+              const token = new Token(
+                asset.chainId,
+                asset.token.address.startsWith('0x')
+                  ? (asset.token.address as `0x${string}`)
+                  : (`0x${asset.token.address}` as `0x${string}`),
+                asset.token.decimals,
+                asset.token.symbol,
+                asset.token.name,
+              )
+              return (
+                <AssetItem key={asset.id}>
+                  <FlexGap alignItems="center">
+                    <TokenIcon>
+                      <CurrencyLogo currency={token} src={asset.token.logoURI} size="40px" />
+                      <ChainIconWrapper>
+                        <img
+                          src={`${ASSETS_CDN}/web/chains/svg/${asset.chainId}.svg`}
+                          alt={getChainName(asset.chainId)}
+                          width="12px"
+                          height="12px"
+                        />
+                      </ChainIconWrapper>
+                    </TokenIcon>
+                    <Box>
+                      <FlexGap alignItems="center">
+                        <Text
+                          bold
+                          fontSize="16px"
+                          style={{
+                            maxWidth: '70px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {asset.token.symbol}
+                        </Text>
+                        <Text
+                          ml="8px"
+                          color="textSubtle"
+                          fontSize="14px"
+                          style={{
+                            maxWidth: '60px',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {asset.token.name}
+                        </Text>
+                      </FlexGap>
 
-                    <Text fontSize="12px" color="textSubtle" textTransform="uppercase">
-                      {getChainName(asset.chainId)} {t('Chain')}
+                      <Text fontSize="12px" color="textSubtle" textTransform="uppercase">
+                        {getChainName(asset.chainId)} {t('Chain')}
+                      </Text>
+                    </Box>
+                  </FlexGap>
+                  <Box style={{ textAlign: 'right' }}>
+                    <Text bold fontSize="14px">
+                      {parseFloat(asset.quantity).toLocaleString(undefined, {
+                        maximumFractionDigits:
+                          asset?.price?.totalUsd !== undefined &&
+                          asset?.price?.totalUsd !== null &&
+                          asset?.price?.totalUsd > 0 &&
+                          asset?.price?.totalUsd < 1
+                            ? 10
+                            : 4,
+                        minimumFractionDigits: 2,
+                      })}
+                    </Text>
+                    <Text color="success" fontSize="14px">
+                      ${asset.price?.totalUsd ? formatAmount(asset.price.totalUsd) : '0.00'}
                     </Text>
                   </Box>
-                </FlexGap>
-                <Box style={{ textAlign: 'right' }}>
-                  <Text bold fontSize="14px">
-                    {parseFloat(asset.quantity).toLocaleString(undefined, {
-                      maximumFractionDigits:
-                        asset?.price?.totalUsd !== undefined &&
-                        asset?.price?.totalUsd !== null &&
-                        asset?.price?.totalUsd > 0 &&
-                        asset?.price?.totalUsd < 1
-                          ? 10
-                          : 4,
-                      minimumFractionDigits: 2,
-                    })}
-                  </Text>
-                  <Text color="success" fontSize="14px">
-                    ${asset.price?.totalUsd ? formatAmount(asset.price.totalUsd) : '0.00'}
-                  </Text>
-                </Box>
-              </AssetItem>
-            ))
+                </AssetItem>
+              )
+            })
           )}
         </AssetList>
       </Box>

@@ -3,6 +3,7 @@ import { useHttpLocations } from '@pancakeswap/hooks'
 import { Currency } from '@pancakeswap/sdk'
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { BinanceIcon, TokenLogo } from '@pancakeswap/uikit'
+import { getImageUrlsFromToken } from 'components/TokenImage'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
@@ -34,7 +35,8 @@ export function FiatLogo({ currency, size = '24px', style }: LogoProps) {
 
 export default function CurrencyLogo({ currency, size = '24px', style, src }: LogoProps) {
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
-
+  // @ts-ignore
+  const imageUrls = getImageUrlsFromToken(currency)
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative) return []
 
@@ -42,11 +44,11 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
       const tokenLogoURL = getTokenLogoURL(currency)
 
       if (currency instanceof WrappedTokenInfo) {
-        if (!tokenLogoURL) return [...uriLocations]
-        return [...uriLocations, tokenLogoURL]
+        if (!tokenLogoURL) return [...imageUrls, ...uriLocations]
+        return [...imageUrls, ...uriLocations, tokenLogoURL]
       }
       if (!tokenLogoURL) return []
-      return [tokenLogoURL]
+      return [...imageUrls, tokenLogoURL]
     }
     return []
   }, [currency, uriLocations])
@@ -59,8 +61,17 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
       <StyledLogo size={size} srcs={[`${ASSET_CDN}/web/native/${currency.chainId}.png`]} width={size} style={style} />
     )
   }
+  // if (currency?.symbol === 'ZK') {
+  //   console.log(currency)
+  //   console.log(srcs, src, imageUrls)
+  // }
 
   return (
-    <StyledLogo size={size} srcs={[...srcs, src || '']} alt={`${currency?.symbol ?? 'token'} logo`} style={style} />
+    <StyledLogo
+      size={size}
+      srcs={src ? [src, ...srcs] : srcs}
+      alt={`${currency?.symbol ?? 'token'} logo`}
+      style={style}
+    />
   )
 }

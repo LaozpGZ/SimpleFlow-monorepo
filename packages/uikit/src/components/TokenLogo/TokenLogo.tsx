@@ -13,7 +13,9 @@ export interface TokenLogoProps extends React.ImgHTMLAttributes<HTMLImageElement
  */
 const TokenLogo: React.FC<React.PropsWithChildren<TokenLogoProps>> = ({ srcs, alt, imageRef, ...rest }) => {
   const [, refresh] = useState<number>(0);
-
+  // if (alt?.includes("ZK")) {
+  //   console.log(srcs, "??????????");
+  // }
   const src: string | undefined = srcs.find((s) => !BAD_SRCS[s]);
 
   if (src) {
