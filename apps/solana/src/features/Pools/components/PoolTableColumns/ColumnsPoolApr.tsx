@@ -65,33 +65,35 @@ export const ColumnPoolApr: React.FC<{
         </HStack>
       </Desktop>
       <Mobile>
-        <VStack justifyContent="space-between">
+        <Flex h="100%" align="center" justifyContent="flex-end">
           <Tooltip usePortal variant="card" placement="top-end" label={aprToolTipLabel}>
-            <HStack gap={1} justifyContent="flex-end">
-              {pool.burnPercent > 5 && (
-                <LockPercentCircle
-                  value={pool.burnPercent}
-                  circularProps={{
-                    size: '16px'
-                  }}
-                  iconProps={{
-                    width: 10,
-                    height: 10
-                  }}
-                />
-              )}
-              <Text as="span" fontWeight={600} textAlign="right">
-                {formatCurrency(timeData.volume, { symbol: '$', decimalPlaces: 0 })}
-              </Text>
-            </HStack>
-            <HStack gap={1} justifyContent="flex-end">
-              <Text fontSize="sm" whiteSpace="nowrap" align="revert" color={colors.textSubtle}>
-                {formatToRawLocaleStr(toAPRPercent(timeData.apr))}
-              </Text>
-              <PoolListItemAprLine aprData={aprData} />
-            </HStack>
+            <VStack justifyContent="space-between" h="100%">
+              <HStack gap={1} justifyContent="flex-end">
+                {pool.burnPercent > 5 && (
+                  <LockPercentCircle
+                    value={pool.burnPercent}
+                    circularProps={{
+                      size: '16px'
+                    }}
+                    iconProps={{
+                      width: 10,
+                      height: 10
+                    }}
+                  />
+                )}
+                <Text as="span" fontWeight={600} textAlign="right" lineHeight={1.5}>
+                  {formatCurrency(timeData.volume, { symbol: '$', decimalPlaces: 0 })}
+                </Text>
+              </HStack>
+              <HStack gap={1} justifyContent="flex-end">
+                <Text fontSize="sm" whiteSpace="nowrap" align="revert" color={colors.textSubtle} lineHeight={1.5}>
+                  {formatToRawLocaleStr(toAPRPercent(timeData.apr))}
+                </Text>
+                <PoolListItemAprLine aprData={aprData} />
+              </HStack>
+            </VStack>
           </Tooltip>
-        </VStack>
+        </Flex>
       </Mobile>
     </>
   )

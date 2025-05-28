@@ -270,7 +270,11 @@ export default function Pools() {
           headerName: t('Volume/%timeBase% APR', { timeBase }),
           flex: 1,
           field: 'poolName',
-          resizable: false
+          resizable: false,
+          cellRenderer: ColumnPoolApr,
+          cellRendererParams: {
+            timeBase
+          }
         }
       ] satisfies ColDef<FormattedPoolInfoItem>[]
     }
@@ -280,7 +284,7 @@ export default function Pools() {
         headerStyle: {
           paddingLeft: '56px'
         },
-        flex: 2,
+        flex: 2.5,
         field: 'poolName',
         cellRenderer: ColumnPoolName
       },
@@ -288,8 +292,7 @@ export default function Pools() {
         headerName: t('Liquidity'),
         field: 'tvl',
         flex: 1,
-        cellRenderer: ColumnsPoolLiquidity,
-        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', abbreviated: isMobile, decimalPlaces: 0 })
+        cellRenderer: ColumnsPoolLiquidity
       },
       {
         headerName: t('%timeBase% Volume', { timeBase }),
@@ -733,7 +736,7 @@ export default function Pools() {
         </Box>
 
         {currentLayoutStyle === 'list' ? (
-          <div style={{ height: '45vh' }}>
+          <div style={{ minHeight: '45vh', flex: 1, paddingBottom: '20px' }}>
             <AgGridReact
               loading={isLoading}
               theme={gridTheme}

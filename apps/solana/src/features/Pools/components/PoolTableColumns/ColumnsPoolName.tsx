@@ -104,14 +104,32 @@ export const ColumnPoolName: React.FC<{ data: FormattedPoolInfoItem }> = ({ data
         </Center>
       </Desktop>
       <Tooltip usePortal variant="card" label={infoToolTipLabel}>
-        <Flex alignItems="center" gap={2}>
+        <Grid
+          gridTemplate={[
+            `
+                  "a n" auto
+                  "t t" auto / auto 1fr`,
+            `
+                  "a t" auto
+                  "n n" auto / auto 1fr`,
+            `
+                  "a n" auto
+                  "a t" auto / auto 1fr`
+          ]}
+          columnGap={[1, 2]}
+          rowGap={[1, 1]}
+          alignItems="center"
+        >
           {/* token pair avatar */}
-          <TokenAvatarPair token1={baseToken} token2={quoteToken} size={['sm', 'smi']} />
-          <Flex flexDir="column" gap={1}>
-            {/* name */}
-            {pairName}
+          <GridItem area="a">
+            <TokenAvatarPair token1={baseToken} token2={quoteToken} size={['sm', 'smi']} />
+          </GridItem>
 
-            {/* tags */}
+          {/* name */}
+          <GridItem area="n">{pairName}</GridItem>
+
+          {/* tags */}
+          <GridItem area="t">
             <HStack align="center">
               <Tag size="sm" variant="rounded">
                 {formatToRawLocaleStr(toPercentString(pool.feeRate * 100))}
@@ -127,8 +145,8 @@ export const ColumnPoolName: React.FC<{ data: FormattedPoolInfoItem }> = ({ data
                 </Tooltip>
               )}
             </HStack>
-          </Flex>
-        </Flex>
+          </GridItem>
+        </Grid>
       </Tooltip>
     </Flex>
   )
