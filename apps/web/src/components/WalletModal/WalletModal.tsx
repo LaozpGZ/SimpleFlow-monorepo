@@ -166,7 +166,7 @@ const OptionBox = styled(Box)`
   border-radius: 24px;
   padding: 16px;
   width: 45%;
-  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+  border: 1px solid ${({ theme }) => (theme.isDark ? '#55496E' : '#D7CAEC')};
   text-align: center;
   cursor: pointer;
 `
@@ -222,6 +222,7 @@ export const WalletContent = ({
 
   // Get top tokens by value
   const topTokens = balances
+  const noAssets = topTokens.length === 0 && !isLoading
 
   return (
     <Box minWidth={isMobile ? '100%' : '357px'}>
@@ -241,13 +242,15 @@ export const WalletContent = ({
         <Text fontSize="20px" fontWeight="bold" mb="8px">
           {t('My Wallet')}
         </Text>
-        <FlexGap onClick={(e) => e.stopPropagation()}>
-          <StyledButtonMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth>
-            <StyledButtonMenuItem>{t('Assets')}</StyledButtonMenuItem>
-            <StyledButtonMenuItem>{t('Transactions')}</StyledButtonMenuItem>
-          </StyledButtonMenu>
-        </FlexGap>
-        {activeTab === 0 ? (
+        {!noAssets && (
+          <FlexGap onClick={(e) => e.stopPropagation()}>
+            <StyledButtonMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth>
+              <StyledButtonMenuItem>{t('Assets')}</StyledButtonMenuItem>
+              <StyledButtonMenuItem>{t('Transactions')}</StyledButtonMenuItem>
+            </StyledButtonMenu>
+          </FlexGap>
+        )}
+        {activeTab === 0 && !noAssets ? (
           <AssetList>
             {isLoading ? (
               <FlexGap justifyContent="center" padding="4px" flexDirection="column" gap="8px">
@@ -275,7 +278,7 @@ export const WalletContent = ({
                         <ChainIconWrapper>
                           <img
                             src={`${ASSETS_CDN}/web/chains/svg/${asset.chainId}.svg`}
-                            alt={getChainName(asset.chainId)}
+                            alt={`${getChainName(asset.chainId)}-logo`}
                             width="12px"
                             height="12px"
                           />
@@ -310,7 +313,7 @@ export const WalletContent = ({
                           </Text>
                         </FlexGap>
 
-                        <Text fontSize="12px" color="textSubtle" textTransform="uppercase">
+                        <Text fontSize="12px" color="textSubtle" textTransform="uppercase" bold>
                           {getChainName(asset.chainId)} {t('Chain')}
                         </Text>
                       </Box>
@@ -338,13 +341,15 @@ export const WalletContent = ({
             )}
           </AssetList>
         ) : (
-          <Box padding="16px 0" maxHeight="280px" overflow="auto">
-            <RecentTransactions />
-          </Box>
+          !noAssets && (
+            <Box padding="16px 0" maxHeight="280px" overflow="auto">
+              <RecentTransactions />
+            </Box>
+          )
         )}
       </Box>
-      {topTokens.length === 0 && !isLoading ? (
-        <Box padding="24px 16px">
+      {noAssets ? (
+        <Box padding="8px 16px">
           <Text color="textSubtle" textAlign="center" mb="16px">
             {t('This wallet looks new — choose an option below to add crypto and start trading')}
           </Text>
@@ -405,7 +410,7 @@ export const WalletContent = ({
                 router.push('/buy-crypto')
                 onDismiss()
               }}
-              variant="light"
+              variant="tertiary"
             >
               {t('Buy')}
             </ActionButton>
@@ -413,7 +418,7 @@ export const WalletContent = ({
               onClick={(e) => {
                 onReceiveClick()
               }}
-              variant="light"
+              variant="tertiary"
             >
               {t('Receive')}
             </ActionButton>
