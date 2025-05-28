@@ -21,7 +21,7 @@ import { ApiV3Token, FetchPoolParams, PoolFetchType } from '@raydium-io/raydium-
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation, Trans } from '@pancakeswap/localization'
 
-import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community'
+import { AllCommunityModule, ColDef, ModuleRegistry, themeQuartz } from 'ag-grid-community'
 import { AgGridReact } from 'ag-grid-react'
 import Button from '@/components/Button'
 import List, { ListPropController } from '@/components/List'
@@ -61,13 +61,9 @@ import PoolListItem from './components/PoolListItem'
 import TVLInfoPanel, { TVLInfoPanelMobile } from './components/TVLInfoPanel'
 import { useScrollTitleCollapse } from './useScrollTitleCollapse'
 import { getFavoritePoolCache, POOL_SORT_KEY } from './util'
+import { ColumnPoolName } from './components/PoolTableColumns/ColumnsPoolName'
 
 ModuleRegistry.registerModules([AllCommunityModule])
-
-const gridTheme = themeQuartz.withParams({
-  wrapperBorder: true,
-  wrapperBorderRadius: '24px'
-})
 
 export type PoolPageQuery = {
   token?: string
@@ -153,6 +149,19 @@ export default function Pools() {
   const isEN = currentLanguage.locale === 'en'
   const isMobile = useAppStore((s) => s.isMobile)
 
+  const gridTheme = useMemo(
+    () =>
+      themeQuartz.withParams({
+        wrapperBorder: true,
+        wrapperBorderRadius: '24px',
+        headerFontSize: '14px',
+        headerTextColor: colors.secondary,
+        headerFontWeight: 600,
+        rowHeight: 75
+      }),
+    [colors.secondary]
+  )
+
   const tabItems: PoolTabItem[] = useMemo(
     () => [
       {
@@ -234,6 +243,46 @@ export default function Pools() {
     fromUrl: (u) => u as TimeBase,
     toUrl: (v) => v
   })
+
+  const columnDefs: ColDef<FormattedPoolInfoItem>[] = useMemo(() => {
+    if (isMobile) {
+      return [
+        {
+          headerName: t('Pool'),
+          flex: 1,
+          field: 'poolName',
+          cellRenderer: ColumnPoolName
+        },
+        {
+          headerName: t('Volume/%timeBase% APR', { timeBase }),
+          flex: 1,
+          field: 'poolName',
+          resizable: false
+        }
+      ] satisfies ColDef<FormattedPoolInfoItem>[]
+    }
+    return [
+      {
+        headerName: t('Pool'),
+        headerStyle: {
+          paddingLeft: '56px'
+        },
+        flex: 1,
+        field: 'poolName',
+        cellRenderer: ColumnPoolName
+      },
+      { headerName: t('Liquidity'), field: 'tvl', flex: 1 },
+      { headerName: t('%timeBase% Volume', { timeBase }), flex: 1, field: `${FILED_KEY[timeBase]}.volume` },
+      { headerName: t('%timeBase% Fees', { timeBase }), flex: 1, field: `${FILED_KEY[timeBase]}.volumeFee` },
+      {
+        headerName: t('%timeBase% APR', { timeBase }),
+        flex: 1,
+        field: `${FILED_KEY[timeBase]}.apr`,
+        resizable: false
+      }
+    ] satisfies ColDef<FormattedPoolInfoItem>[]
+  }, [timeBase, isMobile])
+
   const [timeBaseIdx, handleTimeBaseChange] = useMemo(
     () => [
       Object.keys(FILED_KEY).indexOf(timeBase),
@@ -440,6 +489,9 @@ export default function Pools() {
 
   return (
     <>
+      <div style={{ height: '45vh' }}>
+        <AgGridReact theme={gridTheme} rowData={sortedData} columnDefs={columnDefs} noRowsOverlayComponent={EmptyRow} />
+      </div>
       <Flex flexDirection="column" height="100%" flexGrow={1} lineHeight={1.5} {...containerProps}>
         {/* Title Part */}
         <Box {...titleContainerProps} display={['none', 'block']} flexShrink={0}>
@@ -648,15 +700,13 @@ export default function Pools() {
           </Grid>
         </Box>
 
-        <AgGridReact theme={gridTheme} rowData={[]} columnDefs={[]} noRowsOverlayComponent={EmptyRow} />
-
         {/* List Header */}
         {currentLayoutStyle === 'list' && (
           <PoolListHeader order={order} timeBase={timeBase} sortKey={sortKey} handleClickSort={handleClickSort} />
         )}
 
         {/* List Content */}
-        {isNotFound || true ? (
+        {isNotFound ? (
           <Box {...listContainerStyle} flexGrow="1" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
             <img width={156} height={179} alt="empty placeholder" src={`${ASSET_CDN}/web/universalFarms/empty_list_bunny.png`} />
             <Text mt="4" fontSize="sm" color={colors.textSecondary}>
