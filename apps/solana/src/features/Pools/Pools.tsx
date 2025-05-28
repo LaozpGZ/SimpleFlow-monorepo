@@ -63,6 +63,7 @@ import { useScrollTitleCollapse } from './useScrollTitleCollapse'
 import { getFavoritePoolCache, POOL_SORT_KEY } from './util'
 import { ColumnPoolName } from './components/PoolTableColumns/ColumnsPoolName'
 import { ColumnPoolApr } from './components/PoolTableColumns/ColumnsPoolApr'
+import { ColumnsPoolActions } from './components/PoolTableColumns/ColumnsPoolActions'
 
 ModuleRegistry.registerModules([AllCommunityModule])
 
@@ -159,7 +160,8 @@ export default function Pools() {
         headerTextColor: colors.secondary,
         headerFontWeight: 600,
         rowHeight: 75,
-        dataFontSize: '18px'
+        dataFontSize: '18px',
+        pinnedColumnBorder: false
       }),
     [colors.secondary]
   )
@@ -246,6 +248,14 @@ export default function Pools() {
     toUrl: (v) => v
   })
 
+  const handleOpenChart = useCallback(
+    (info: FormattedPoolInfoItem) => {
+      openChart()
+      setChartPoolInfo(info)
+    },
+    [openChart]
+  )
+
   const columnDefs: ColDef<FormattedPoolInfoItem>[] = useMemo(() => {
     if (isMobile) {
       return [
@@ -298,11 +308,17 @@ export default function Pools() {
         cellRenderer: ColumnPoolApr,
         cellRendererParams: {
           timeBase
-        }
+        },
+        resizable: false
       },
       {
         colId: 'op',
-        resizable: false
+        resizable: false,
+        cellRenderer: ColumnsPoolActions,
+        pinned: 'right',
+        cellRendererParams: {
+          onOpenChart: handleOpenChart
+        }
       }
     ] satisfies ColDef<FormattedPoolInfoItem>[]
   }, [timeBase, isMobile])
@@ -465,13 +481,6 @@ export default function Pools() {
 
   const [tvl, volume] = infoData ? [infoData.tvl, infoData.volume24] : ['0', '0']
 
-  const handleOpenChart = useCallback(
-    (info: FormattedPoolInfoItem) => {
-      openChart()
-      setChartPoolInfo(info)
-    },
-    [openChart]
-  )
   const renderPoolListItem = useCallback(
     (info: FormattedPoolInfoItem) => (
       <PoolListItem
