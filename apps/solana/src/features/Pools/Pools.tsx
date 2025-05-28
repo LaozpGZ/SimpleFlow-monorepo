@@ -52,6 +52,7 @@ import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatte
 import { setUrlQuery, useRouteQuery } from '@/utils/routeTools'
 import { urlToMint, mintToUrl } from '@/utils/token'
 import { ASSET_CDN } from '@/utils/config/endpoint'
+import useResponsive from '@/hooks/useResponsive'
 import { useEffectWithUrl, useStateWithUrl } from '../../hooks/useStateWithUrl'
 import CreatePoolButton from './components/CreatePoolButton'
 import PoolChartModal from './components/PoolChart'
@@ -150,7 +151,7 @@ export default function Pools() {
   const currentQuery = useRef(query)
   currentQuery.current = query || {}
   const isEN = currentLanguage.locale === 'en'
-  const isMobile = useAppStore((s) => s.isMobile)
+  const { isTablet, isMobile } = useResponsive()
 
   const gridTheme = useMemo(
     () =>
@@ -267,13 +268,49 @@ export default function Pools() {
           cellRenderer: ColumnPoolName
         },
         {
-          headerName: t('Volume/%timeBase% APR', { timeBase }),
+          headerName: t('APR %timeBase%', { timeBase }),
           flex: 1,
           field: 'poolName',
           resizable: false,
           cellRenderer: ColumnPoolApr,
           cellRendererParams: {
             timeBase
+          }
+        }
+      ] satisfies ColDef<FormattedPoolInfoItem>[]
+    }
+
+    if (isTablet) {
+      return [
+        {
+          headerName: t('Pool'),
+          flex: 1,
+          field: 'poolName',
+          cellRenderer: ColumnPoolName
+        },
+        {
+          headerName: t('Volume %timeBase%', { timeBase }),
+          flex: 1,
+          field: `${FILED_KEY[timeBase]}.volume`,
+          valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 })
+        },
+        {
+          headerName: t('APR %timeBase% ', { timeBase }),
+          flex: 1,
+          field: 'poolName',
+          resizable: false,
+          cellRenderer: ColumnPoolApr,
+          cellRendererParams: {
+            timeBase
+          }
+        },
+        {
+          colId: 'op',
+          resizable: false,
+          cellRenderer: ColumnsPoolActions,
+          pinned: 'right',
+          cellRendererParams: {
+            onOpenChart: handleOpenChart
           }
         }
       ] satisfies ColDef<FormattedPoolInfoItem>[]
@@ -295,19 +332,19 @@ export default function Pools() {
         cellRenderer: ColumnsPoolLiquidity
       },
       {
-        headerName: t('%timeBase% Volume', { timeBase }),
+        headerName: t('Volume %timeBase%', { timeBase }),
         flex: 1,
         field: `${FILED_KEY[timeBase]}.volume`,
         valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 })
       },
       {
-        headerName: t('%timeBase% Fees', { timeBase }),
+        headerName: t('Fees %timeBase%', { timeBase }),
         flex: 1,
         field: `${FILED_KEY[timeBase]}.volumeFee`,
         valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 })
       },
       {
-        headerName: t('%timeBase% APR', { timeBase }),
+        headerName: t('APR %timeBase%', { timeBase }),
         flex: 1,
         field: `${FILED_KEY[timeBase]}.apr`,
         cellRenderer: ColumnPoolApr,
@@ -326,7 +363,7 @@ export default function Pools() {
         }
       }
     ] satisfies ColDef<FormattedPoolInfoItem>[]
-  }, [timeBase, isMobile])
+  }, [timeBase, isMobile, isTablet, handleOpenChart, t])
 
   const [timeBaseIdx, handleTimeBaseChange] = useMemo(
     () => [
