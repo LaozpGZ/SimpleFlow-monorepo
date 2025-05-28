@@ -126,21 +126,17 @@ const ActionButtonsContainer = styled(FlexGap)`
   padding: 8px 16px 16px 16px;
   justify-content: center;
   flex-direction: column;
-  gap: 16px;
+  gap: 8px;
 `
 
 const ActionButton = styled(Button)`
   width: 100%;
   border-radius: 16px;
   height: 48px;
-  background: ${({ theme, variant }) => (variant === 'tertiary' ? 'transparent' : theme.colors.primary)};
-  color: ${({ theme, variant }) => (variant === 'tertiary' ? theme.colors.primary : theme.colors.invertedContrast)};
   font-size: 16px;
   font-weight: 600;
-
-  &:hover {
-    opacity: 0.8;
-  }
+  color: ${({ theme }) => theme.colors.textSubtle};
+  background-color: ${({ theme }) => theme.colors.input};
 `
 
 const BridgeButton = styled(ActionButton)`
@@ -409,6 +405,7 @@ export const WalletContent = ({
                 router.push('/buy-crypto')
                 onDismiss()
               }}
+              variant="light"
             >
               {t('Buy')}
             </ActionButton>
@@ -416,6 +413,7 @@ export const WalletContent = ({
               onClick={(e) => {
                 onReceiveClick()
               }}
+              variant="light"
             >
               {t('Receive')}
             </ActionButton>
