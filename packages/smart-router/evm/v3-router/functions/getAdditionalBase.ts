@@ -37,8 +37,7 @@ const fetchConfig = memoize(
     }
   },
   () => {
-    // Memoize for 1 minute, this is mainly for API side
-    // For client side, when user reloads the page, it will fetch again
+    // Memoize for 1 minute
     return Math.floor(Date.now() / 60_1000)
   },
 )
