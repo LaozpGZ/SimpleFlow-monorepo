@@ -21,6 +21,8 @@ import { ApiV3Token, FetchPoolParams, PoolFetchType } from '@raydium-io/raydium-
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation, Trans } from '@pancakeswap/localization'
 
+import { AllCommunityModule, ModuleRegistry, themeQuartz } from 'ag-grid-community'
+import { AgGridReact } from 'ag-grid-react'
 import Button from '@/components/Button'
 import List, { ListPropController } from '@/components/List'
 import { Desktop, Mobile } from '@/components/MobileDesktop'
@@ -40,7 +42,6 @@ import GridIcon from '@/icons/misc/GridIcon'
 import ListIcon from '@/icons/misc/ListIcon'
 import SearchIcon from '@/icons/misc/SearchIcon'
 import MoreListControllers from '@/icons/misc/MoreListControllers'
-import NotFound from '@/icons/misc/NotFound'
 import OpenBookIcon from '@/icons/misc/OpenBookIcon'
 import { useAppStore, useTokenStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
@@ -50,6 +51,7 @@ import toPercentString from '@/utils/numberish/toPercentString'
 import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import { setUrlQuery, useRouteQuery } from '@/utils/routeTools'
 import { urlToMint, mintToUrl } from '@/utils/token'
+import { ASSET_CDN } from '@/utils/config/endpoint'
 import { useEffectWithUrl, useStateWithUrl } from '../../hooks/useStateWithUrl'
 import CreatePoolButton from './components/CreatePoolButton'
 import PoolChartModal from './components/PoolChart'
@@ -59,6 +61,13 @@ import PoolListItem from './components/PoolListItem'
 import TVLInfoPanel, { TVLInfoPanelMobile } from './components/TVLInfoPanel'
 import { useScrollTitleCollapse } from './useScrollTitleCollapse'
 import { getFavoritePoolCache, POOL_SORT_KEY } from './util'
+
+ModuleRegistry.registerModules([AllCommunityModule])
+
+const gridTheme = themeQuartz.withParams({
+  wrapperBorder: true,
+  wrapperBorderRadius: '24px'
+})
 
 export type PoolPageQuery = {
   token?: string
@@ -123,6 +132,18 @@ const LAYOUT_ITEMS = [
   { value: 'list', label: <ListIcon key="list-icon" /> },
   { value: 'grid', label: <GridIcon key="grid-icon" /> }
 ]
+
+const EmptyRow = () => {
+  const { t } = useTranslation()
+  return (
+    <Box flexGrow="1" display="flex" flexDirection="column" justifyContent="center" alignItems="center" role="presentation">
+      <img width={156} height={179} alt="empty placeholder" src={`${ASSET_CDN}/web/universalFarms/empty_list_bunny.png`} />
+      <Text mt="4" fontSize="sm" color={colors.textSecondary}>
+        {t('No pools found')}
+      </Text>
+    </Box>
+  )
+}
 
 export default function Pools() {
   const { t, currentLanguage } = useTranslation()
@@ -627,15 +648,17 @@ export default function Pools() {
           </Grid>
         </Box>
 
+        <AgGridReact theme={gridTheme} rowData={[]} columnDefs={[]} noRowsOverlayComponent={EmptyRow} />
+
         {/* List Header */}
         {currentLayoutStyle === 'list' && (
           <PoolListHeader order={order} timeBase={timeBase} sortKey={sortKey} handleClickSort={handleClickSort} />
         )}
 
         {/* List Content */}
-        {isNotFound ? (
+        {isNotFound || true ? (
           <Box {...listContainerStyle} flexGrow="1" display="flex" flexDirection="column" justifyContent="center" alignItems="center">
-            <NotFound />
+            <img width={156} height={179} alt="empty placeholder" src={`${ASSET_CDN}/web/universalFarms/empty_list_bunny.png`} />
             <Text mt="4" fontSize="sm" color={colors.textSecondary}>
               {t('No pools found')}
             </Text>
