@@ -33,6 +33,7 @@ interface WalletModalProps {
   account?: string
   onDismiss: () => void
   onReceiveClick: () => void
+  onDisconnect: () => void
 }
 
 const StyledModal = styled(Modal)`
@@ -176,7 +177,7 @@ const OptionBox = styled(Box)`
   cursor: pointer;
 `
 
-const WalletModal: React.FC<WalletModalProps> = ({ account, onDismiss, isOpen, onReceiveClick }) => {
+const WalletModal: React.FC<WalletModalProps> = ({ account, onDismiss, isOpen, onReceiveClick, onDisconnect }) => {
   // If no account is provided, show a message or redirect
   if (!account) {
     return null
@@ -184,7 +185,12 @@ const WalletModal: React.FC<WalletModalProps> = ({ account, onDismiss, isOpen, o
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
       <StyledModal title={undefined} onDismiss={onDismiss} hideCloseButton>
-        <WalletContent account={account} onDismiss={onDismiss} onReceiveClick={onReceiveClick} />
+        <WalletContent
+          account={account}
+          onDisconnect={onDisconnect}
+          onDismiss={onDismiss}
+          onReceiveClick={onReceiveClick}
+        />
       </StyledModal>
     </ModalV2>
   )
@@ -194,10 +200,12 @@ export const WalletContent = ({
   account,
   onDismiss,
   onReceiveClick,
+  onDisconnect,
 }: {
   account: string | undefined
   onDismiss: () => void
   onReceiveClick: () => void
+  onDisconnect: () => void
 }) => {
   const [activeTab, setActiveTab] = useState(0)
   const { t } = useTranslation()
@@ -222,16 +230,13 @@ export const WalletContent = ({
 
   // Get top tokens by value
   const topTokens = balances
-  const handleLogout = () => {
-    logout()
-    onDismiss()
-  }
+
   return (
     <Box minWidth="357px">
       <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px">
         <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
         <FlexGap>
-          <Button scale="sm" variant="tertiary" onClick={handleLogout}>
+          <Button scale="sm" variant="tertiary" onClick={onDisconnect}>
             {t('Disconnect')}
           </Button>
         </FlexGap>
@@ -253,11 +258,13 @@ export const WalletContent = ({
         {activeTab === 0 ? (
           <AssetList>
             {isLoading ? (
-              <FlexGap justifyContent="center" padding="40px" flexDirection="column" gap="8px">
-                <Skeleton height="80px" width="100%" />
-                <Skeleton height="80px" width="100%" />
-                <Skeleton height="80px" width="100%" />
-                <Skeleton height="80px" width="100%" />
+              <FlexGap justifyContent="center" padding="4px" flexDirection="column" gap="8px">
+                <Skeleton height="55px" width="100%" />
+                <Skeleton height="55px" width="100%" />
+                <Skeleton height="55px" width="100%" />
+                <Skeleton height="55px" width="100%" />
+                <Skeleton height="55px" width="100%" />
+                <Skeleton height="55px" width="100%" />
               </FlexGap>
             ) : topTokens.length === 0 ? null : (
               topTokens.map((asset) => {

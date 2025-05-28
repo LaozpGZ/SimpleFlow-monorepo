@@ -34,14 +34,22 @@ const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
     logout()
   }, [logout, connector?.name, account, chainId])
 
-  return <WalletContent account={account} onDismiss={() => {}} onReceiveClick={onReceiveClick} />
+  return (
+    <WalletContent
+      account={account}
+      onDismiss={() => {}}
+      onReceiveClick={onReceiveClick}
+      onDisconnect={handleClickDisconnect}
+    />
+  )
 }
 
 const UserMenu = () => {
   const { t } = useTranslation()
-  const { address: account } = useAccount()
+  const { address: account, connector } = useAccount()
+  const { chainId, isWrongNetwork } = useActiveChainId()
   const { domainName, avatar } = useDomainNameForAddress(account)
-  const { isWrongNetwork } = useActiveChainId()
+  const { logout } = useAuth()
   const { hasPendingTransactions, pendingNumber } = usePendingTransactions()
   const { profile } = useProfile()
   const avatarSrc = profile?.nft?.image?.thumbnail ?? avatar
@@ -61,6 +69,11 @@ const UserMenu = () => {
       setUserMenuVariable('default')
     }
   }, [hasPendingTransactions, pendingNumber, t])
+
+  const handleClickDisconnect = useCallback(() => {
+    logGTMDisconnectWalletEvent(chainId, connector?.name, account)
+    logout()
+  }, [logout, connector?.name, account, chainId])
 
   if (account) {
     return (
@@ -89,6 +102,7 @@ const UserMenu = () => {
           isOpen={showMobileWalletModal}
           account={account}
           onReceiveClick={() => setIsReceiveModalOpen(true)}
+          onDisconnect={handleClickDisconnect}
           onDismiss={() => setShowMobileWalletModal(false)}
         />
         {account && (
