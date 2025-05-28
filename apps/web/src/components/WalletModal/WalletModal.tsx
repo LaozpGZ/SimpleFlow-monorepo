@@ -76,15 +76,14 @@ const StyledButtonMenuItem = styled(ButtonMenuItem)`
 const AssetList = styled(Box)`
   max-height: 280px;
   overflow-y: auto;
-  padding: 0 4px;
+  padding: 0;
   ${({ theme }) => theme.mediaQueries.md} {
     max-height: 440px;
-    padding: 0 8px;
   }
 `
 
 const AssetItem = styled(FlexGap)`
-  padding: 4px 4px;
+  padding: 4px 0px;
   margin-bottom: 8px;
   align-items: center;
   justify-content: space-between;
@@ -123,10 +122,13 @@ const ChainIconWrapper = styled(Box)`
 `
 
 const ActionButtonsContainer = styled(FlexGap)`
-  padding: 8px 16px 16px 16px;
+  padding: 16px 0px;
   justify-content: center;
   flex-direction: column;
   gap: 8px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 16px;
+  }
 `
 
 const ActionButton = styled(Button)`
@@ -137,6 +139,7 @@ const ActionButton = styled(Button)`
   font-weight: 600;
   color: ${({ theme }) => theme.colors.textSubtle};
   background-color: ${({ theme }) => theme.colors.input};
+  box-shadow: 0px -2px 0px 0px #0000001a inset;
 `
 
 const BridgeButton = styled(ActionButton)`
@@ -149,13 +152,11 @@ const BridgeButton = styled(ActionButton)`
 `
 
 const DisconnectButton = styled(Button)`
-  width: 100%;
-  border-radius: 16px;
-  height: 48px;
-  background: transparent;
-  border: 2px solid #00ffff;
-  color: #00ffff;
-
+  border-radius: 8px;
+  height: 26px;
+  background-color: ${({ theme }) => theme.colors.tertiary};
+  color: ${({ theme }) => theme.colors.primary60};
+  border-bottom: 2px solid #0000001a;
   &:hover {
     opacity: 0.8;
   }
@@ -178,7 +179,7 @@ const WalletModal: React.FC<WalletModalProps> = ({ account, onDismiss, isOpen, o
   }
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-      <StyledModal title={undefined} onDismiss={onDismiss} hideCloseButton>
+      <StyledModal title={undefined} onDismiss={onDismiss} hideCloseButton bodyPadding="16px">
         <WalletContent
           account={account}
           onDisconnect={onDisconnect}
@@ -229,12 +230,12 @@ export const WalletContent = ({
       <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px">
         <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
         <FlexGap>
-          <Button scale="sm" variant="tertiary" onClick={onDisconnect}>
+          <DisconnectButton scale="xs" onClick={onDisconnect}>
             {t('Disconnect')}
-          </Button>
+          </DisconnectButton>
         </FlexGap>
       </FlexGap>
-      <Box padding={isMobile ? '0 8px 8px' : '0 16px 16px'}>
+      <Box padding={isMobile ? '0' : '0 16px 16px'}>
         <FlexGap alignItems="center" gap="3px">
           <TotalBalanceInteger>${balanceDisplay.integer}</TotalBalanceInteger>
           <TotalBalanceDecimal>.{balanceDisplay.decimal}</TotalBalanceDecimal>
