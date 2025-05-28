@@ -48,7 +48,7 @@ import { colors } from '@/theme/cssVariables'
 import { revertAppLayoutPaddingX } from '@/theme/detailConfig'
 import { isValidPublicKey } from '@/utils/publicKey'
 import toPercentString from '@/utils/numberish/toPercentString'
-import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import { setUrlQuery, useRouteQuery } from '@/utils/routeTools'
 import { urlToMint, mintToUrl } from '@/utils/token'
 import { ASSET_CDN } from '@/utils/config/endpoint'
@@ -62,6 +62,7 @@ import TVLInfoPanel, { TVLInfoPanelMobile } from './components/TVLInfoPanel'
 import { useScrollTitleCollapse } from './useScrollTitleCollapse'
 import { getFavoritePoolCache, POOL_SORT_KEY } from './util'
 import { ColumnPoolName } from './components/PoolTableColumns/ColumnsPoolName'
+import { ColumnPoolApr } from './components/PoolTableColumns/ColumnsPoolApr'
 
 ModuleRegistry.registerModules([AllCommunityModule])
 
@@ -157,7 +158,8 @@ export default function Pools() {
         headerFontSize: '14px',
         headerTextColor: colors.secondary,
         headerFontWeight: 600,
-        rowHeight: 75
+        rowHeight: 75,
+        dataFontSize: '18px'
       }),
     [colors.secondary]
   )
@@ -267,17 +269,39 @@ export default function Pools() {
         headerStyle: {
           paddingLeft: '56px'
         },
-        flex: 1,
+        flex: 2,
         field: 'poolName',
         cellRenderer: ColumnPoolName
       },
-      { headerName: t('Liquidity'), field: 'tvl', flex: 1 },
-      { headerName: t('%timeBase% Volume', { timeBase }), flex: 1, field: `${FILED_KEY[timeBase]}.volume` },
-      { headerName: t('%timeBase% Fees', { timeBase }), flex: 1, field: `${FILED_KEY[timeBase]}.volumeFee` },
+      {
+        headerName: t('Liquidity'),
+        field: 'tvl',
+        flex: 1,
+        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', abbreviated: isMobile, decimalPlaces: 0 })
+      },
+      {
+        headerName: t('%timeBase% Volume', { timeBase }),
+        flex: 1,
+        field: `${FILED_KEY[timeBase]}.volume`,
+        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 })
+      },
+      {
+        headerName: t('%timeBase% Fees', { timeBase }),
+        flex: 1,
+        field: `${FILED_KEY[timeBase]}.volumeFee`,
+        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 })
+      },
       {
         headerName: t('%timeBase% APR', { timeBase }),
         flex: 1,
         field: `${FILED_KEY[timeBase]}.apr`,
+        cellRenderer: ColumnPoolApr,
+        cellRendererParams: {
+          timeBase
+        }
+      },
+      {
+        colId: 'op',
         resizable: false
       }
     ] satisfies ColDef<FormattedPoolInfoItem>[]
