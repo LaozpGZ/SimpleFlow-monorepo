@@ -488,13 +488,7 @@ export default function Pools() {
 
   const renderPoolListItem = useCallback(
     (info: FormattedPoolInfoItem) => (
-      <PoolListItem
-        styleType={currentLayoutStyle}
-        timeBase={timeBase}
-        field={FILED_KEY[timeBase]}
-        pool={info}
-        onOpenChart={handleOpenChart}
-      />
+      <PoolListItem timeBase={timeBase} field={FILED_KEY[timeBase]} pool={info} onOpenChart={handleOpenChart} />
     ),
     [handleOpenChart, currentLayoutStyle, timeBase]
   )
@@ -509,20 +503,11 @@ export default function Pools() {
   })
 
   const listContainerStyle = useMemo(
-    () =>
-      currentLayoutStyle === 'list'
-        ? {
-            backgroundColor: colors.cardBg,
-            border: `1px solid ${colors.cardBorder01}`,
-            borderRadius: '0 0 24px 24px',
-            borderTopRadius: '0',
-            mb: [4, 10]
-          }
-        : {
-            pr: '5px',
-            mr: '-5px'
-          },
-    [currentLayoutStyle]
+    () => ({
+      pr: '5px',
+      mr: '-5px'
+    }),
+    []
   )
 
   return (
@@ -758,23 +743,24 @@ export default function Pools() {
               <>
                 {isLoading ? (
                   <Box {...listContainerStyle} px="24px" py="12px">
-                    <PoolItemLoadingSkeleton isGrid={currentLayoutStyle === 'grid'} />
+                    <PoolItemLoadingSkeleton isGrid />
                   </Box>
                 ) : (
                   <List
+                    id="iil-li"
                     controllerRef={listControllerRef}
                     {...scrollBodyProps}
                     increaseRenderCount={showFarms ? 100 : 50}
                     initRenderCount={30}
                     reachBottomMargin={showFarms ? 200 : 150}
                     preventResetOnChange={search === prevSearch}
-                    gridSlotCount={currentLayoutStyle === 'grid' && isMobile ? 1 : undefined}
-                    gridSlotItemMinWidth={currentLayoutStyle === 'grid' ? gridCardSize : undefined}
+                    gridSlotCount={isMobile ? 1 : undefined}
+                    gridSlotItemMinWidth={gridCardSize}
                     haveLoadAll={isLoadEnded}
                     onLoadMore={loadMore}
                     items={sortedData}
                     getItemKey={(item) => item.id}
-                    gap={currentLayoutStyle === 'grid' ? gridCardGap : undefined}
+                    gap={gridCardGap}
                     zIndex={1}
                     {...listContainerStyle}
                   >
