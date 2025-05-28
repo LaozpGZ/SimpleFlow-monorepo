@@ -6,6 +6,7 @@ import {
   Box,
   Button,
   ButtonMenu,
+  ButtonMenuItem,
   FlexGap,
   Modal,
   ModalHeader,
@@ -14,6 +15,7 @@ import {
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
+import { RecentTransactions } from 'components/App/Transactions/TransactionsModal'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 
 import { ASSETS_CDN } from 'config'
@@ -21,7 +23,7 @@ import { useAddressBalance } from 'hooks/useAddressBalance'
 import useAuth from 'hooks/useAuth'
 import useTheme from 'hooks/useTheme'
 import { useRouter } from 'next/router'
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { CopyAddress } from './WalletCopyButton'
@@ -57,11 +59,19 @@ const TotalBalanceDecimal = styled(Text)`
 
 const StyledButtonMenu = styled(ButtonMenu)`
   width: 100%;
-  background-color: #27262c; /* Dark background */
+  background-color: ${({ theme }) => theme.colors.input};
   border-radius: 16px;
   padding: 0;
-  margin: 0;
+  margin: 0 0 16px 0;
   border: none;
+`
+
+const StyledButtonMenuItem = styled(ButtonMenuItem)`
+  height: 40px;
+  border-radius: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  flex: 1;
 `
 
 const AssetList = styled(Box)`
@@ -189,6 +199,7 @@ export const WalletContent = ({
   onDismiss: () => void
   onReceiveClick: () => void
 }) => {
+  const [activeTab, setActiveTab] = useState(0)
   const { t } = useTranslation()
 
   const router = useRouter()
@@ -233,95 +244,105 @@ export const WalletContent = ({
         <Text fontSize="20px" textTransform="uppercase" fontWeight="bold" mb="8px">
           {t('My Wallet')}
         </Text>
-        <AssetList>
-          {isLoading ? (
-            <FlexGap justifyContent="center" padding="40px" flexDirection="column" gap="8px">
-              <Skeleton height="80px" width="100%" />
-              <Skeleton height="80px" width="100%" />
-              <Skeleton height="80px" width="100%" />
-              <Skeleton height="80px" width="100%" />
-            </FlexGap>
-          ) : topTokens.length === 0 ? null : (
-            topTokens.map((asset) => {
-              const token = new Token(
-                asset.chainId,
-                asset.token.address.startsWith('0x')
-                  ? (asset.token.address as `0x${string}`)
-                  : (`0x${asset.token.address}` as `0x${string}`),
-                asset.token.decimals,
-                asset.token.symbol,
-                asset.token.name,
-              )
-              return (
-                <AssetItem key={asset.id}>
-                  <FlexGap alignItems="center">
-                    <TokenIcon>
-                      <CurrencyLogo currency={token} src={asset.token.logoURI} size="40px" />
-                      <ChainIconWrapper>
-                        <img
-                          src={`${ASSETS_CDN}/web/chains/svg/${asset.chainId}.svg`}
-                          alt={getChainName(asset.chainId)}
-                          width="12px"
-                          height="12px"
-                        />
-                      </ChainIconWrapper>
-                    </TokenIcon>
-                    <Box>
-                      <FlexGap alignItems="center">
-                        <Text
-                          bold
-                          fontSize="16px"
-                          style={{
-                            maxWidth: '70px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          {asset.token.symbol}
-                        </Text>
-                        <Text
-                          ml="8px"
-                          color="textSubtle"
-                          fontSize="14px"
-                          style={{
-                            maxWidth: '60px',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            whiteSpace: 'nowrap',
-                          }}
-                        >
-                          {asset.token.name}
-                        </Text>
-                      </FlexGap>
+        <FlexGap onClick={(e) => e.stopPropagation()}>
+          <StyledButtonMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth>
+            <StyledButtonMenuItem>{t('Assets')}</StyledButtonMenuItem>
+            <StyledButtonMenuItem>{t('Transactions')}</StyledButtonMenuItem>
+          </StyledButtonMenu>
+        </FlexGap>
+        {activeTab === 0 ? (
+          <AssetList>
+            {isLoading ? (
+              <FlexGap justifyContent="center" padding="40px" flexDirection="column" gap="8px">
+                <Skeleton height="80px" width="100%" />
+                <Skeleton height="80px" width="100%" />
+                <Skeleton height="80px" width="100%" />
+                <Skeleton height="80px" width="100%" />
+              </FlexGap>
+            ) : topTokens.length === 0 ? null : (
+              topTokens.map((asset) => {
+                const token = new Token(
+                  asset.chainId,
+                  asset.token.address as `0x${string}`,
+                  asset.token.decimals,
+                  asset.token.symbol,
+                  asset.token.name,
+                )
+                return (
+                  <AssetItem key={asset.id}>
+                    <FlexGap alignItems="center">
+                      <TokenIcon>
+                        <CurrencyLogo currency={token} src={asset.token.logoURI} size="40px" />
+                        <ChainIconWrapper>
+                          <img
+                            src={`${ASSETS_CDN}/web/chains/svg/${asset.chainId}.svg`}
+                            alt={getChainName(asset.chainId)}
+                            width="12px"
+                            height="12px"
+                          />
+                        </ChainIconWrapper>
+                      </TokenIcon>
+                      <Box>
+                        <FlexGap alignItems="center">
+                          <Text
+                            bold
+                            fontSize="16px"
+                            style={{
+                              maxWidth: '70px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {asset.token.symbol}
+                          </Text>
+                          <Text
+                            ml="8px"
+                            color="textSubtle"
+                            fontSize="14px"
+                            style={{
+                              maxWidth: '60px',
+                              overflow: 'hidden',
+                              textOverflow: 'ellipsis',
+                              whiteSpace: 'nowrap',
+                            }}
+                          >
+                            {asset.token.name}
+                          </Text>
+                        </FlexGap>
 
-                      <Text fontSize="12px" color="textSubtle" textTransform="uppercase">
-                        {getChainName(asset.chainId)} {t('Chain')}
+                        <Text fontSize="12px" color="textSubtle" textTransform="uppercase">
+                          {getChainName(asset.chainId)} {t('Chain')}
+                        </Text>
+                      </Box>
+                    </FlexGap>
+                    <Box style={{ textAlign: 'right' }}>
+                      <Text bold fontSize="14px">
+                        {parseFloat(asset.quantity).toLocaleString(undefined, {
+                          maximumFractionDigits:
+                            asset?.price?.totalUsd !== undefined &&
+                            asset?.price?.totalUsd !== null &&
+                            asset?.price?.totalUsd > 0 &&
+                            asset?.price?.totalUsd < 1
+                              ? 10
+                              : 4,
+                          minimumFractionDigits: 2,
+                        })}
+                      </Text>
+                      <Text color="success" fontSize="14px">
+                        ${asset.price?.totalUsd ? formatAmount(asset.price.totalUsd) : '0.00'}
                       </Text>
                     </Box>
-                  </FlexGap>
-                  <Box style={{ textAlign: 'right' }}>
-                    <Text bold fontSize="14px">
-                      {parseFloat(asset.quantity).toLocaleString(undefined, {
-                        maximumFractionDigits:
-                          asset?.price?.totalUsd !== undefined &&
-                          asset?.price?.totalUsd !== null &&
-                          asset?.price?.totalUsd > 0 &&
-                          asset?.price?.totalUsd < 1
-                            ? 10
-                            : 4,
-                        minimumFractionDigits: 2,
-                      })}
-                    </Text>
-                    <Text color="success" fontSize="14px">
-                      ${asset.price?.totalUsd ? formatAmount(asset.price.totalUsd) : '0.00'}
-                    </Text>
-                  </Box>
-                </AssetItem>
-              )
-            })
-          )}
-        </AssetList>
+                  </AssetItem>
+                )
+              })
+            )}
+          </AssetList>
+        ) : (
+          <Box padding="16px 0" maxHeight="280px" overflow="auto">
+            <RecentTransactions />
+          </Box>
+        )}
       </Box>
       {topTokens.length === 0 && !isLoading ? (
         <Box padding="24px 16px">
