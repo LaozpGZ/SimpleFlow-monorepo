@@ -64,6 +64,7 @@ import { getFavoritePoolCache, POOL_SORT_KEY } from './util'
 import { ColumnPoolName } from './components/PoolTableColumns/ColumnsPoolName'
 import { ColumnPoolApr } from './components/PoolTableColumns/ColumnsPoolApr'
 import { ColumnsPoolActions } from './components/PoolTableColumns/ColumnsPoolActions'
+import { ColumnsPoolLiquidity } from './components/PoolTableColumns/ColumnsPoolLiquidity'
 
 ModuleRegistry.registerModules([AllCommunityModule])
 
@@ -287,6 +288,7 @@ export default function Pools() {
         headerName: t('Liquidity'),
         field: 'tvl',
         flex: 1,
+        cellRenderer: ColumnsPoolLiquidity,
         valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', abbreviated: isMobile, decimalPlaces: 0 })
       },
       {
