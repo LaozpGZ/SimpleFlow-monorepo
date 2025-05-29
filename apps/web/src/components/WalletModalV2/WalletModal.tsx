@@ -20,7 +20,7 @@ import { RecentTransactions } from 'components/App/Transactions/TransactionsModa
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 
 import { TabsComponent, WalletView } from 'components/Menu/UserMenu/WalletModal'
-import { ASSETS_CDN } from 'config'
+import { ASSET_CDN } from 'config/constants/endpoints'
 import { useAddressBalance } from 'hooks/useAddressBalance'
 import { useRouter } from 'next/router'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -293,7 +293,7 @@ export const WalletContent = ({
                         <CurrencyLogo currency={token} src={asset.token.logoURI} size="40px" />
                         <ChainIconWrapper>
                           <img
-                            src={`${ASSETS_CDN}/web/chains/${asset.chainId}.png`}
+                            src={`${ASSET_CDN}/web/chains/${asset.chainId}.png`}
                             alt={`${chainName}-logo`}
                             width="12px"
                             height="12px"
@@ -383,7 +383,7 @@ export const WalletContent = ({
               }}
             >
               <Box mb="16px" mx="auto" width="60px" height="60px">
-                <img src={`${ASSETS_CDN}/web/landing/trade-buy-crypto.png`} width="60px" alt="Buy Crypto" />
+                <img src={`${ASSET_CDN}/web/landing/trade-buy-crypto.png`} width="60px" alt="Buy Crypto" />
               </Box>
               <Text bold color="secondary" fontSize="16px" mb="8px">
                 {t('Buy')}
@@ -399,7 +399,7 @@ export const WalletContent = ({
               }}
             >
               <Box mb="16px" mx="auto" width="60px" height="60px">
-                <img src={`${ASSETS_CDN}/web/landing/earn-fixed-staking.png`} width="60px" alt="Receive Crypto" />
+                <img src={`${ASSET_CDN}/web/landing/earn-fixed-staking.png`} width="60px" alt="Receive Crypto" />
               </Box>
               <Text bold color="secondary" fontSize="16px" mb="8px">
                 {t('Receive')}
