@@ -25,7 +25,7 @@ export const viemClientsPublicNodes = CHAINS.reduce((prev, cur) => {
     [cur.id]: createPublicClient({
       chain: cur,
       transport: http(first(cur.rpcUrls.default.http), {
-        timeout: 15_000,
+        timeout: 3_000,
       }),
       batch: {
         multicall: {

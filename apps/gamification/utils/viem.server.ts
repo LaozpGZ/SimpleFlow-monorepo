@@ -11,7 +11,7 @@ export const viemServerClients = CHAINS.reduce((prev, cur) => {
       transport: fallback(
         SERVER_NODES[cur.id as ChainId].map((url) =>
           http(url, {
-            timeout: 15_000,
+            timeout: 3_000,
           }),
         ),
       ),
