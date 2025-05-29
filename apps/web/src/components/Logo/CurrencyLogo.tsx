@@ -47,10 +47,10 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
 
       if (currency instanceof WrappedTokenInfo) {
         if (!tokenLogoURL) return [...imageUrls, ...uriLocations, basicTokenImage]
-        return [...imageUrls, ...uriLocations, basicTokenImage, tokenLogoURL]
+        return [...imageUrls, ...uriLocations, tokenLogoURL, basicTokenImage]
       }
       if (!tokenLogoURL) return [...imageUrls, basicTokenImage]
-      return [...imageUrls, basicTokenImage, tokenLogoURL]
+      return [...imageUrls, tokenLogoURL, basicTokenImage]
     }
     return []
   }, [currency, uriLocations])
