@@ -4229,5 +4229,7 @@
   "Harvest Rewards": "Harvest Rewards",
   "Lock Position": "Lock Position",
   "Price Impact Warning": "Price Impact Warning",
-  "Low Price Impact": "Low Price Impact"
+  "Low Price Impact": "Low Price Impact",
+  "Setup": "Setup",
+  "Cleanup": "Cleanup"
 }
