@@ -158,9 +158,11 @@ export default function Pools() {
       themeQuartz.withParams({
         wrapperBorder: true,
         wrapperBorderRadius: '24px',
-        headerFontSize: '14px',
+        headerFontSize: '12px',
         headerTextColor: colors.secondary,
         headerFontWeight: 600,
+        headerBackgroundColor: colors.cardBg,
+        headerHeight: '43px',
         rowHeight: 75,
         dataFontSize: '18px',
         pinnedColumnBorder: false
@@ -258,6 +260,14 @@ export default function Pools() {
     [openChart]
   )
 
+  const defaultColumnDefs: ColDef<FormattedPoolInfoItem> = useMemo(() => {
+    return {
+      headerStyle: {
+        textTransform: 'uppercase'
+      }
+    }
+  }, [])
+
   const columnDefs: ColDef<FormattedPoolInfoItem>[] = useMemo(() => {
     if (isMobile) {
       return [
@@ -265,12 +275,18 @@ export default function Pools() {
           headerName: t('Pool'),
           flex: 1,
           field: 'poolName',
-          cellRenderer: ColumnPoolName
+          cellRenderer: ColumnPoolName,
+          headerStyle: {
+            textTransform: 'uppercase'
+          }
         },
         {
           headerName: t('APR %timeBase%', { timeBase }),
           flex: 1,
           field: 'poolName',
+          headerStyle: {
+            textTransform: 'uppercase'
+          },
           resizable: false,
           cellRenderer: ColumnPoolApr,
           cellRendererParams: {
@@ -319,9 +335,10 @@ export default function Pools() {
       {
         headerName: t('Pool'),
         headerStyle: {
-          paddingLeft: '56px'
+          paddingLeft: '56px',
+          paddingRight: '0'
         },
-        flex: 2.5,
+        flex: 2,
         field: 'poolName',
         cellRenderer: ColumnPoolName
       },
@@ -329,19 +346,40 @@ export default function Pools() {
         headerName: t('Liquidity'),
         field: 'tvl',
         flex: 1,
-        cellRenderer: ColumnsPoolLiquidity
+        cellRenderer: ColumnsPoolLiquidity,
+        headerStyle: {
+          paddingRight: '47px',
+          paddingLeft: '1px'
+        },
+        type: 'rightAligned'
       },
       {
         headerName: t('Volume %timeBase%', { timeBase }),
         flex: 1,
         field: `${FILED_KEY[timeBase]}.volume`,
-        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 })
+        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 }),
+        headerStyle: {
+          paddingRight: '47px',
+          paddingLeft: '1px'
+        },
+        cellStyle: {
+          paddingRight: '47px'
+        },
+        type: 'rightAligned'
       },
       {
         headerName: t('Fees %timeBase%', { timeBase }),
         flex: 1,
         field: `${FILED_KEY[timeBase]}.volumeFee`,
-        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 })
+        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 }),
+        headerStyle: {
+          paddingRight: '47px',
+          paddingLeft: '1px'
+        },
+        cellStyle: {
+          paddingRight: '47px'
+        },
+        type: 'rightAligned'
       },
       {
         headerName: t('APR %timeBase%', { timeBase }),
@@ -351,6 +389,14 @@ export default function Pools() {
         cellRendererParams: {
           timeBase
         },
+        headerStyle: {
+          paddingRight: '47px',
+          paddingLeft: '1px'
+        },
+        cellStyle: {
+          paddingRight: '47px'
+        },
+        type: 'rightAligned',
         resizable: false
       },
       {
@@ -764,6 +810,7 @@ export default function Pools() {
               theme={gridTheme}
               rowData={sortedData}
               columnDefs={columnDefs}
+              defaultColDef={defaultColumnDefs}
               noRowsOverlayComponent={EmptyRow}
             />
           </div>
