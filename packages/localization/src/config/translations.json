@@ -3744,5 +3744,12 @@
   "Wallets with MEV Protection": "Wallets with MEV Protection",
   "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.": "New pools with low liquidity can have bigger price swings, increasing the risk of losses. Please proceed carefully.",
   "Routing timeout, will retry in %seconds%s...": "Routing timeout, will retry in %seconds%s...",
-  "Manual Retry": "Manual Retry"
+  "Manual Retry": "Manual Retry",
+  "Receive crypto": "Receive crypto",
+  "My Wallet": "My Wallet",
+  "Assets": "Assets",
+  "This wallet looks new — choose an option below to add crypto and start trading": "This wallet looks new — choose an option below to add crypto and start trading",
+  "Purchase with credit card, Apple Pay, or Google Pay.": "Purchase with credit card, Apple Pay, or Google Pay.",
+  "Receive crypto from another wallet.": "Receive crypto from another wallet.",
+  "Bridge Crypto": "Bridge Crypto"
 }
