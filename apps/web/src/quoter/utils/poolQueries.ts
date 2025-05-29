@@ -14,6 +14,7 @@ import { getViemClients } from 'utils/viem'
 import { edgePoolQueryClient } from './edgePoolQueryClient'
 import { Protocol as EdgeProtocol } from './edgeQueries.util'
 import { PoolHashHelper } from './PoolHashHelper'
+import { getRoutingSettings } from './routingFlags'
 
 export const poolQueriesFactory = memoize((chainId: ChainId) => {
   const POOL_TTL = POOLS_FAST_REVALIDATE[chainId] || 10_000
@@ -190,6 +191,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
 export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOptions) => {
   const { chainId, currencyA, currencyB, blockNumber } = query
   const queries = poolQueriesFactory(chainId)
+  const flags = await getRoutingSettings()
   if (!currencyA || !currencyB || !chainId || !blockNumber) {
     return []
   }
@@ -208,9 +210,10 @@ export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOp
     return edgePoolQueryClient.getAllCandidates(currencyA, currencyB, chainId, blockNumber, protocols, options.signal)
   }
 
-  if (isTestnetChainId(chainId)) {
+  if (isTestnetChainId(chainId) || !flags.edgePool) {
     return fallbackQuery()
   }
+
   const call = createAsyncCallWithFallbacks(defaultQuery, {
     fallbacks: [fallbackQuery],
     fallbackTimeout: 1_500, // 1.5s waiting for fetch candidate pools remote
@@ -222,6 +225,7 @@ export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOp
 export const fetchCandidatePoolsLite = async (query: PoolQuery, options: PoolQueryOptions) => {
   const { chainId, currencyA, currencyB, blockNumber } = query
   const queries = poolQueriesFactory(chainId)
+  const flags = await getRoutingSettings()
   if (!currencyA || !currencyB || !chainId || !blockNumber) {
     return []
   }
@@ -239,6 +243,9 @@ export const fetchCandidatePoolsLite = async (query: PoolQuery, options: PoolQue
   const defaultQuery = async () => {
     const protocols = protocolsFromQuery(options)
     return edgePoolQueryClient.getAllCandidates(currencyA, currencyB, chainId, blockNumber, protocols)
+  }
+  if (!flags.edgePool) {
+    return fallbackQuery()
   }
 
   const call = createAsyncCallWithFallbacks(defaultQuery, {
