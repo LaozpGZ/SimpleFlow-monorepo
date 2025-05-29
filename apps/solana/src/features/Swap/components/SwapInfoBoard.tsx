@@ -50,7 +50,7 @@ export function SwapInfoBoard({
       <Box
         position="relative"
         boxShadow={isHighRiskPrice ? `0px 0px 12px 6px rgba(255, 78, 163, 0.15)` : 'none'}
-        bg={isHighRiskPrice ? 'rgba(255, 78, 163,0.1)' : colors.backgroundTransparent07}
+        bg={isHighRiskPrice ? 'rgba(255, 78, 163,0.1)' : undefined}
         borderWidth="1px"
         borderStyle="solid"
         borderColor={isHighRiskPrice ? colors.semanticError : colors.backgroundTransparent12}
@@ -182,14 +182,14 @@ function PriceDetector({
                 : formatCurrency(price, { decimalPlaces: tokenOutput?.decimals || 0 })}
             </Text>
           ) : (
-            <Skeleton width={`${12 * ((reverse ? tokenInput?.decimals : tokenOutput?.decimals) || 1)}px`} height="24px" />
+            <Skeleton rounded="2xl" width={`${12 * ((reverse ? tokenInput?.decimals : tokenOutput?.decimals) || 1)}px`} height="24px" />
           )}
           <Text as="div" fontSize="14px">
             {reverse ? tokenInput?.symbol : tokenOutput?.symbol}
           </Text>
         </Flex>
       </Text>
-      <Tooltip label={t(`swap.price_impact_${priceImpact}_tooltip`)}>
+      <Tooltip label={priceImpact === 'low' ? t('Low Price Impact') : t('Price Impact Warning')}>
         {priceImpact === 'low' ? (
           <CircleCheckBreaker />
         ) : priceImpact === 'warning' ? (
