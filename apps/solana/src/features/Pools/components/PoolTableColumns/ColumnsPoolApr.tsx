@@ -65,10 +65,10 @@ export const ColumnPoolApr: React.FC<{
         </HStack>
       </Desktop>
       <Mobile>
-        <Flex h="100%" align="center" justifyContent="flex-end">
+        <Flex h="100%" w="100%" align="center" justifyContent="center">
           <Tooltip usePortal variant="card" placement="top-end" label={aprToolTipLabel}>
-            <VStack justifyContent="space-between" h="100%">
-              <HStack gap={1} justifyContent="flex-end">
+            <VStack justifyContent="space-between" h="100%" w="100%">
+              <HStack gap={1} justifyContent="center">
                 {pool.burnPercent > 5 && (
                   <LockPercentCircle
                     value={pool.burnPercent}
@@ -85,7 +85,7 @@ export const ColumnPoolApr: React.FC<{
                   {formatCurrency(timeData.volume, { symbol: '$', decimalPlaces: 0 })}
                 </Text>
               </HStack>
-              <HStack gap={1} justifyContent="flex-end">
+              <HStack gap={1} justifyContent="center">
                 <Text fontSize="sm" whiteSpace="nowrap" align="revert" color={colors.textSubtle} lineHeight={1.5}>
                   {formatToRawLocaleStr(toAPRPercent(timeData.apr))}
                 </Text>

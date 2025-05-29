@@ -273,9 +273,12 @@ export default function Pools() {
       return [
         {
           headerName: t('Pool'),
-          flex: 1,
+          flex: 1.5,
           field: 'poolName',
           cellRenderer: ColumnPoolName,
+          cellRendererParams: {
+            timeBase
+          },
           headerStyle: {
             textTransform: 'uppercase'
           }
@@ -287,6 +290,7 @@ export default function Pools() {
           headerStyle: {
             textTransform: 'uppercase'
           },
+          type: 'centerAligned',
           resizable: false,
           cellRenderer: ColumnPoolApr,
           cellRendererParams: {
@@ -302,7 +306,10 @@ export default function Pools() {
           headerName: t('Pool'),
           flex: 1,
           field: 'poolName',
-          cellRenderer: ColumnPoolName
+          cellRenderer: ColumnPoolName,
+          cellRendererParams: {
+            timeBase
+          }
         },
         {
           headerName: t('Volume %timeBase%', { timeBase }),
@@ -313,12 +320,17 @@ export default function Pools() {
         {
           headerName: t('APR %timeBase% ', { timeBase }),
           flex: 1,
-          field: 'poolName',
+          field: `${FILED_KEY[timeBase]}.apr`,
           resizable: false,
           cellRenderer: ColumnPoolApr,
           cellRendererParams: {
             timeBase
-          }
+          },
+          headerStyle: {
+            paddingRight: '20px',
+            paddingLeft: '1px'
+          },
+          type: 'rightAligned'
         },
         {
           colId: 'op',
@@ -340,7 +352,10 @@ export default function Pools() {
         },
         flex: 2,
         field: 'poolName',
-        cellRenderer: ColumnPoolName
+        cellRenderer: ColumnPoolName,
+        cellRendererParams: {
+          timeBase
+        }
       },
       {
         headerName: t('Liquidity'),
