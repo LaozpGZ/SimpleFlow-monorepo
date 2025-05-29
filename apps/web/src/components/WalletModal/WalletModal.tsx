@@ -325,19 +325,25 @@ export const WalletContent = ({
                     </FlexGap>
                     <Box style={{ textAlign: 'right' }}>
                       <Text bold fontSize="14px">
-                        {parseFloat(asset.quantity).toLocaleString(undefined, {
-                          maximumFractionDigits:
-                            asset?.price?.totalUsd !== undefined &&
-                            asset?.price?.totalUsd !== null &&
-                            asset?.price?.totalUsd > 0 &&
-                            asset?.price?.totalUsd < 1
-                              ? 10
-                              : 4,
-                          minimumFractionDigits: 2,
-                        })}
+                        {parseFloat(asset.quantity) < 0.000001
+                          ? '<0.000001'
+                          : parseFloat(asset.quantity).toLocaleString(undefined, {
+                              maximumFractionDigits:
+                                asset?.price?.totalUsd !== undefined &&
+                                asset?.price?.totalUsd !== null &&
+                                asset?.price?.totalUsd > 0 &&
+                                asset?.price?.totalUsd < 1
+                                  ? 6
+                                  : 4,
+                              minimumFractionDigits: 2,
+                            })}
                       </Text>
                       <Text color="textSubtle" fontSize="14px">
-                        ${asset.price?.totalUsd ? formatAmount(asset.price.totalUsd) : '0.00'}
+                        {asset.price?.totalUsd
+                          ? asset.price?.totalUsd < 0.01
+                            ? '<$0.01'
+                            : `${formatAmount(asset.price.totalUsd)}`
+                          : '$0.00'}
                       </Text>
                     </Box>
                   </AssetItem>
