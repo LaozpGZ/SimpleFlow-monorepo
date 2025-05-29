@@ -58,6 +58,7 @@ const UserMenu = () => {
   const { isMobile } = useMatchBreakpoints()
   // State for mobile modal
   const [showMobileWalletModal, setShowMobileWalletModal] = useState(false)
+  const [showDesktopPopup] = useState(true)
   const [isReceiveModalOpen, setIsReceiveModalOpen] = useState(false)
 
   useEffect(() => {
@@ -94,7 +95,8 @@ const UserMenu = () => {
           }}
         >
           {!isMobile
-            ? ({ isOpen }) => isOpen && <UserMenuItems onReceiveClick={() => setIsReceiveModalOpen(true)} />
+            ? () =>
+                showDesktopPopup ? <UserMenuItems onReceiveClick={() => setIsReceiveModalOpen(true)} /> : undefined // ({ isOpen }) => isOpen ||showDesktopPopup && <UserMenuItems onReceiveClick={() => setIsReceiveModalOpen(true)} />
             : undefined}
         </UIKitUserMenu>
 
