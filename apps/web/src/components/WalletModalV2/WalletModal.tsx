@@ -19,10 +19,11 @@ import {
 import { RecentTransactions } from 'components/App/Transactions/TransactionsModal'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 
+import { TabsComponent, WalletView } from 'components/Menu/UserMenu/WalletModal'
 import { ASSETS_CDN } from 'config'
 import { useAddressBalance } from 'hooks/useAddressBalance'
 import { useRouter } from 'next/router'
-import React, { useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { CopyAddress } from './WalletCopyButton'
@@ -207,7 +208,7 @@ export const WalletContent = ({
   onReceiveClick: () => void
   onDisconnect: () => void
 }) => {
-  const [activeTab, setActiveTab] = useState(0)
+  const [view, setView] = useState(WalletView.WALLET_INFO)
   const { t } = useTranslation()
 
   const router = useRouter()
@@ -229,6 +230,9 @@ export const WalletContent = ({
   // Get top tokens by value
   const topTokens = balances
   const noAssets = topTokens.length === 0 && !isLoading
+  const handleClick = useCallback((newIndex: number) => {
+    setView(newIndex)
+  }, [])
 
   return (
     <Box
@@ -253,14 +257,13 @@ export const WalletContent = ({
           {t('My Wallet')}
         </Text>
         {!noAssets && (
-          <FlexGap onClick={(e) => e.stopPropagation()}>
-            <StyledButtonMenu activeIndex={activeTab} onItemClick={setActiveTab} fullWidth>
-              <StyledButtonMenuItem>{t('Assets')}</StyledButtonMenuItem>
-              <StyledButtonMenuItem>{t('Transactions')}</StyledButtonMenuItem>
-            </StyledButtonMenu>
-          </FlexGap>
+          <TabsComponent
+            view={view}
+            handleClick={handleClick}
+            style={{ backgroundColor: 'transparent', padding: '0', borderBottom: 'none' }}
+          />
         )}
-        {activeTab === 0 && !noAssets ? (
+        {view === WalletView.WALLET_INFO && !noAssets ? (
           <AssetList>
             {isLoading ? (
               <FlexGap justifyContent="center" padding="4px" flexDirection="column" gap="8px">
