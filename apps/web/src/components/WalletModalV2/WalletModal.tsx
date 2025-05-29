@@ -73,11 +73,15 @@ const StyledButtonMenuItem = styled(ButtonMenuItem)`
   font-weight: 600;
   flex: 1;
 `
+const SCROLLBAR_SHIFT_PX = 8
 
 const AssetList = styled(Box)`
   max-height: 280px;
   overflow-y: auto;
   padding: 0;
+  width: calc(100% + ${SCROLLBAR_SHIFT_PX}px);
+  margin-right: -${SCROLLBAR_SHIFT_PX}px;
+  padding-right: ${SCROLLBAR_SHIFT_PX}px;
   ${({ theme }) => theme.mediaQueries.md} {
     max-height: 340px;
   }
