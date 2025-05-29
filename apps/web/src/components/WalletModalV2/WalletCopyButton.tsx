@@ -1,12 +1,13 @@
 import { previouslyUsedWalletsAtom } from '@pancakeswap/ui-wallets'
 import { Box, CopyButton, Flex, FlexProps, Image, Text, WalletFilledV2Icon } from '@pancakeswap/uikit'
+import { useQuery } from '@tanstack/react-query'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { walletsConfig } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
-import { useAccount, useConnect } from 'wagmi'
+import { Connector, useAccount, useConnect } from 'wagmi'
 
 interface CopyAddressProps extends FlexProps {
   account: string | undefined
@@ -59,15 +60,22 @@ const DAPP_WALLET_ICON = {
   [DAPP_LIST[3]]: `${ASSET_CDN}/web/wallets/tokenpocket.png`,
 }
 
+const getDappIcon = async (connector?: Connector) => {
+  if (!connector || typeof connector.getProvider !== 'function') return undefined
+  const provider = (await connector?.getProvider()) as any
+  const isDappWallet = DAPP_LIST.some((d) => provider?.[d] === true)
+  if (!isDappWallet) return undefined
+  const walletName = DAPP_LIST.find((d) => provider?.[d] === true)
+  if (!walletName) return undefined
+  return DAPP_WALLET_ICON?.[walletName]
+}
+
 const useDappIcon = () => {
   const { connector } = useAccount()
-  const dappIcon = useMemo(() => {
-    const isDappWallet = DAPP_LIST.some((d) => connector?.provider?.[d] === true)
-    if (!isDappWallet) return undefined
-    const walletName = DAPP_LIST.find((d) => connector?.provider?.[d] === true)
-    if (!walletName) return undefined
-    return DAPP_WALLET_ICON?.[walletName]
-  }, [connector])
+  const { data: dappIcon } = useQuery({
+    queryKey: ['dappIcon', connector?.uid],
+    queryFn: () => getDappIcon(connector!),
+  })
   return { dappIcon }
 }
 
