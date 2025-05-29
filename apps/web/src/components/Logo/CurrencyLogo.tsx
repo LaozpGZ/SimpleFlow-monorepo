@@ -37,6 +37,8 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
   // @ts-ignore
   const imageUrls = getImageUrlsFromToken(currency)
+  const basicTokenImage = getBasicTokensImage(currency)
+
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative) return []
 
@@ -44,11 +46,11 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
       const tokenLogoURL = getTokenLogoURL(currency)
 
       if (currency instanceof WrappedTokenInfo) {
-        if (!tokenLogoURL) return [...imageUrls, ...uriLocations]
-        return [...imageUrls, ...uriLocations, tokenLogoURL]
+        if (!tokenLogoURL) return [...imageUrls, ...uriLocations, basicTokenImage]
+        return [...imageUrls, ...uriLocations, tokenLogoURL, basicTokenImage]
       }
       if (!tokenLogoURL) return []
-      return [...imageUrls, tokenLogoURL]
+      return [...imageUrls, tokenLogoURL, basicTokenImage]
     }
     return []
   }, [currency, uriLocations])
@@ -61,10 +63,6 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
       <StyledLogo size={size} srcs={[`${ASSET_CDN}/web/native/${currency.chainId}.png`]} width={size} style={style} />
     )
   }
-  // if (currency?.symbol === 'ZK') {
-  //   console.log(currency)
-  //   console.log(srcs, src, imageUrls)
-  // }
 
   return (
     <StyledLogo
@@ -74,4 +72,13 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
       style={style}
     />
   )
+}
+
+const basicTokensList = ['USDT', 'USDC', 'DAI', 'WBNB', 'WETH', 'WBTC', 'BNB', 'BUSD']
+
+export const getBasicTokensImage = (token: Currency | undefined) => {
+  if (!token) return ''
+  return basicTokensList.includes(token?.symbol)
+    ? `https://tokens.pancakeswap.finance/images/symbol/${token?.symbol.toLowerCase()}.png`
+    : ''
 }
