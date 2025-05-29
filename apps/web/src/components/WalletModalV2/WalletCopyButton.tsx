@@ -1,6 +1,11 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { previouslyUsedWalletsAtom } from '@pancakeswap/ui-wallets'
 import { Box, CopyButton, Flex, FlexProps, Image, Text } from '@pancakeswap/uikit'
+import { walletsConfig } from 'config/wallet'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useAtom } from 'jotai'
+import { useMemo } from 'react'
 import { styled } from 'styled-components'
+import { useConnect } from 'wagmi'
 
 interface CopyAddressProps extends FlexProps {
   account: string | undefined
@@ -20,6 +25,8 @@ const WalletIcon = styled(Box)`
   height: 32px;
   margin-right: 12px;
   flex-shrink: 0;
+  border-radius: 8px;
+  overflow: hidden;
 `
 
 const AddressBox = styled(Box)`
@@ -46,7 +53,14 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
   tooltipMessage,
   ...props
 }) => {
-  const { t } = useTranslation()
+  const { connectAsync } = useConnect()
+  const { chainId } = useActiveChainId()
+
+  const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
+
+  const walletConfig = walletsConfig({ chainId, connect: connectAsync })
+
+  const wallet = useMemo(() => walletConfig.find((w) => w.id === previouslyUsedWalletsId[0]), [walletConfig])
 
   // Format the address to show only the first 6 and last 4 characters
   const formatAddress = (address: string | undefined) => {
@@ -58,7 +72,7 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
     <Box position="relative" {...props} onClick={(e) => e.stopPropagation()}>
       <Wrapper>
         <WalletIcon>
-          <Image src="/images/wallets/metamask.png" width={40} height={40} alt="Wallet" />
+          <Image src={(wallet?.icon as string) || ''} width={40} height={40} alt="Wallet" />
         </WalletIcon>
         <AddressBox>
           <WalletAddress title={account}>{formatAddress(account)}</WalletAddress>

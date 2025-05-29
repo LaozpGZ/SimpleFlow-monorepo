@@ -15,6 +15,7 @@ import {
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
+
 import { RecentTransactions } from 'components/App/Transactions/TransactionsModal'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
 

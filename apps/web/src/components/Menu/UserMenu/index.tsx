@@ -3,8 +3,8 @@ import { Box, UserMenu as UIKitUserMenu, UserMenuVariant, useMatchBreakpoints } 
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import useAirdropModalStatus from 'components/GlobalCheckClaimStatus/hooks/useAirdropModalStatus'
 import Trans from 'components/Trans'
-import { WalletContent, WalletModal } from 'components/WalletModal'
-import ReceiveModal from 'components/WalletModal/ReceiveModal'
+import { WalletContent, WalletModalV2 } from 'components/WalletModalV2'
+import ReceiveModal from 'components/WalletModalV2/ReceiveModal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
 import { useDomainNameForAddress } from 'hooks/useDomain'
@@ -100,7 +100,7 @@ const UserMenu = () => {
             : undefined}
         </UIKitUserMenu>
 
-        <WalletModal
+        <WalletModalV2
           isOpen={showMobileWalletModal}
           account={account}
           onReceiveClick={() => setIsReceiveModalOpen(true)}
