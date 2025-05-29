@@ -257,11 +257,13 @@ export const WalletContent = ({
           {t('My Wallet')}
         </Text>
         {!noAssets && (
-          <TabsComponent
-            view={view}
-            handleClick={handleClick}
-            style={{ backgroundColor: 'transparent', padding: '0', borderBottom: 'none' }}
-          />
+          <Box mb="16px" onClick={(e) => e.stopPropagation()}>
+            <TabsComponent
+              view={view}
+              handleClick={handleClick}
+              style={{ backgroundColor: 'transparent', padding: '0', borderBottom: 'none' }}
+            />
+          </Box>
         )}
         {view === WalletView.WALLET_INFO && !noAssets ? (
           <AssetList>
