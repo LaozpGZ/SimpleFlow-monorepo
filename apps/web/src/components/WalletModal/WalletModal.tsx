@@ -1,4 +1,4 @@
-import { getChainName } from '@pancakeswap/chains'
+import { ChainId, getChainName } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Token } from '@pancakeswap/sdk'
 import {
@@ -275,6 +275,7 @@ export const WalletContent = ({
                   asset.token.symbol,
                   asset.token.name,
                 )
+                const chainName = asset.chainId === ChainId.BSC ? 'BNB' : getChainName(asset.chainId)
                 return (
                   <AssetItem key={asset.id}>
                     <FlexGap alignItems="center">
@@ -283,7 +284,7 @@ export const WalletContent = ({
                         <ChainIconWrapper>
                           <img
                             src={`${ASSETS_CDN}/web/chains/${asset.chainId}.png`}
-                            alt={`${getChainName(asset.chainId)}-logo`}
+                            alt={`${chainName}-logo`}
                             width="12px"
                             height="12px"
                           />
@@ -319,7 +320,7 @@ export const WalletContent = ({
                         </FlexGap>
 
                         <Text fontSize="12px" color="textSubtle" textTransform="uppercase" bold>
-                          {getChainName(asset.chainId)} {t('Chain')}
+                          {chainName} {t('Chain')}
                         </Text>
                       </Box>
                     </FlexGap>
