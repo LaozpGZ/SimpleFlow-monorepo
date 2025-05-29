@@ -78,7 +78,7 @@ const AssetList = styled(Box)`
   overflow-y: auto;
   padding: 0;
   ${({ theme }) => theme.mediaQueries.md} {
-    max-height: 440px;
+    max-height: 340px;
   }
 `
 
@@ -226,7 +226,11 @@ export const WalletContent = ({
   const noAssets = topTokens.length === 0 && !isLoading
 
   return (
-    <Box minWidth={isMobile ? '100%' : '357px'}>
+    <Box
+      minWidth={isMobile ? '100%' : '357px'}
+      maxHeight={isMobile ? 'auto' : 'calc(100vh - 80px)'}
+      overflowY={isMobile ? undefined : 'auto'}
+    >
       <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px">
         <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
         <FlexGap>
