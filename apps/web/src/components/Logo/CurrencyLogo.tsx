@@ -46,14 +46,14 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
       const tokenLogoURL = getTokenLogoURL(currency)
 
       if (currency instanceof WrappedTokenInfo) {
-        if (!tokenLogoURL) return [basicTokenImage, ...imageUrls, ...uriLocations]
-        return [basicTokenImage, ...imageUrls, ...uriLocations, tokenLogoURL]
+        if (!tokenLogoURL) return [...imageUrls, ...uriLocations, basicTokenImage]
+        return [...imageUrls, ...uriLocations, basicTokenImage, tokenLogoURL]
       }
-      if (!tokenLogoURL) return [basicTokenImage, ...imageUrls]
-      return [basicTokenImage, ...imageUrls, tokenLogoURL]
+      if (!tokenLogoURL) return [...imageUrls, basicTokenImage]
+      return [...imageUrls, basicTokenImage, tokenLogoURL]
     }
     return []
-  }, [currency, uriLocations, imageUrls, basicTokenImage])
+  }, [currency, uriLocations])
 
   if (currency?.isNative) {
     if (currency.chainId === ChainId.BSC) {
