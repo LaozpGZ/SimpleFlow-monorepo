@@ -282,7 +282,7 @@ export const WalletContent = ({
                         <CurrencyLogo currency={token} src={asset.token.logoURI} size="40px" />
                         <ChainIconWrapper>
                           <img
-                            src={`${ASSETS_CDN}/web/chains/svg/${asset.chainId}.svg`}
+                            src={`${ASSETS_CDN}/web/chains/${asset.chainId}.png`}
                             alt={`${getChainName(asset.chainId)}-logo`}
                             width="12px"
                             height="12px"
