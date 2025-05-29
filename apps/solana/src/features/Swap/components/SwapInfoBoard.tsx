@@ -371,7 +371,16 @@ function RoutingValue({ routePlan }: { routePlan: ApiSwapV1OutSuccess['data']['r
           <Tooltip label={<AddressChip address={inputMint} textProps={{ fontSize: 'xs' }} canExternalLink />}>
             <TokenAvatar tokenMint={inputMint} size="sm" />
           </Tooltip>
-          <Tooltip label={<AddressChip address={poolId} renderLabel="AMM ID:" textProps={{ fontSize: 'xs' }} canExternalLink />}>
+          <Tooltip
+            label={
+              <AddressChip
+                address={poolId}
+                renderLabel={<Text fontSize="xs">AMM ID:</Text>}
+                textProps={{ fontSize: 'xs' }}
+                canExternalLink
+              />
+            }
+          >
             <Text fontSize="2xs" color={colors.textSecondary}>
               {formatToRawLocaleStr(toPercentString(feeRate / 100))}
             </Text>
