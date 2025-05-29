@@ -51,7 +51,7 @@ const WalletAddress = styled(Text)`
 const CopyButtonWrapper = styled(Box)`
   margin-left: 8px;
 `
-const DAPP_LIST = ['isBinance', 'isCoinbaseWallet', 'isOkxWallet', 'isTokenpocket']
+const DAPP_LIST = ['isBinance', 'isCoinbaseWallet', 'isOkxWallet', 'isTokenPocket']
 const DAPP_WALLET_ICON = {
   [DAPP_LIST[0]]: `${ASSET_CDN}/web/wallets/binance-w3w.png`,
   [DAPP_LIST[1]]: `${ASSET_CDN}/web/wallets/coinbase.png`,
