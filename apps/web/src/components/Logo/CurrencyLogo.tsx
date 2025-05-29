@@ -46,14 +46,14 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
       const tokenLogoURL = getTokenLogoURL(currency)
 
       if (currency instanceof WrappedTokenInfo) {
-        if (!tokenLogoURL) return [...imageUrls, ...uriLocations, basicTokenImage]
-        return [...imageUrls, ...uriLocations, tokenLogoURL, basicTokenImage]
+        if (!tokenLogoURL) return [basicTokenImage, ...imageUrls, ...uriLocations]
+        return [basicTokenImage, ...imageUrls, ...uriLocations, tokenLogoURL]
       }
-      if (!tokenLogoURL) return []
-      return [...imageUrls, tokenLogoURL, basicTokenImage]
+      if (!tokenLogoURL) return [basicTokenImage, ...imageUrls]
+      return [basicTokenImage, ...imageUrls, tokenLogoURL]
     }
     return []
-  }, [currency, uriLocations])
+  }, [currency, uriLocations, imageUrls, basicTokenImage])
 
   if (currency?.isNative) {
     if (currency.chainId === ChainId.BSC) {
@@ -79,6 +79,6 @@ const basicTokensList = ['USDT', 'USDC', 'DAI', 'WBNB', 'WETH', 'WBTC', 'BNB', '
 export const getBasicTokensImage = (token: Currency | undefined) => {
   if (!token) return ''
   return basicTokensList.includes(token?.symbol)
-    ? `https://tokens.pancakeswap.finance/images/symbol/${token?.symbol.toLowerCase()}.png`
+    ? `https://tokens.pancakeswap.finance/images/symbol/${token?.symbol?.toLowerCase() ?? ''}.png`
     : ''
 }
