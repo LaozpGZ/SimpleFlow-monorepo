@@ -1,7 +1,7 @@
-import { useCallback, useMemo } from 'react'
+import { ChainId } from '@pancakeswap/chains'
 import { useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
-import { ChainId } from '@pancakeswap/chains'
+import { useCallback, useMemo } from 'react'
 
 export interface TokenData {
   address: string
@@ -35,7 +35,7 @@ interface UseAddressBalanceOptions {
   enabled?: boolean
 }
 
-const API_BASE_URL = 'https://wallet-api.pancakeswap.com/v0/balances'
+const API_BASE_URL = 'https://wallet-api.pancakeswap.com/v1/balances'
 
 /**
  * Hook to fetch and manage token balances for a specific address using React Query
