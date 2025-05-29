@@ -111,7 +111,7 @@ export function SwapInfoBoard({
         </Collapse>
         <HStack color={colors.textSecondary} fontSize="xs" spacing={0.5} justify="center" onClick={() => setShowMoreSwapInfo((b) => !b)}>
           <Text align="center" cursor="pointer" fontSize="14px" color={colors.textPrimary}>
-            {showMoreSwapInfo ? t('Less info') : t('More_info')}
+            {showMoreSwapInfo ? t('Less info') : t('More info')}
           </Text>
           {/* arrow */}
           <Box transform={`rotate(${showMoreSwapInfo ? `${180}deg` : 0})`} transition="300ms">
