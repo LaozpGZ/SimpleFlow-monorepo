@@ -165,7 +165,10 @@ export default function Pools() {
         headerHeight: '43px',
         rowHeight: 75,
         dataFontSize: '18px',
-        pinnedColumnBorder: false
+        pinnedColumnBorder: false,
+        borderColor: colors.cardBorder01,
+        backgroundColor: colors.cardBg,
+        foregroundColor: colors.textPrimary
       }),
     [colors.secondary]
   )
