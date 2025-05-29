@@ -96,10 +96,6 @@ const AssetItem = styled(FlexGap)`
   border-radius: 16px;
   cursor: pointer;
   overflow: hidden;
-  transition: background-color 0.2s;
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.background};
-  }
 `
 
 const TokenIcon = styled(Box)`
