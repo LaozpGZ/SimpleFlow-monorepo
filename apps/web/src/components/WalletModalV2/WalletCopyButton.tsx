@@ -52,19 +52,44 @@ const WalletAddress = styled(Text)`
 const CopyButtonWrapper = styled(Box)`
   margin-left: 8px;
 `
-const DAPP_LIST = ['isBinance', 'isCoinbaseWallet', 'isOkxWallet', 'isTokenPocket']
+const DAPP_LIST = [
+  'isBinance',
+  'isCoinbaseWallet',
+  'isOkxWallet',
+  'isTokenPocket',
+  'isSafePal',
+  'isTrust',
+  'isTrustWallet',
+  'isBraveWallet',
+  'isWalletConnect',
+  'isOpera',
+  'isRabby',
+  'isMathWallet',
+  'isCoin98',
+  'isBlocto',
+  'isCyberWallet',
+]
 const DAPP_WALLET_ICON = {
   [DAPP_LIST[0]]: `${ASSET_CDN}/web/wallets/binance-w3w.png`,
   [DAPP_LIST[1]]: `${ASSET_CDN}/web/wallets/coinbase.png`,
   [DAPP_LIST[2]]: `${ASSET_CDN}/web/wallets/okx-wallet.png`,
   [DAPP_LIST[3]]: `${ASSET_CDN}/web/wallets/tokenpocket.png`,
+  [DAPP_LIST[4]]: `${ASSET_CDN}/web/wallets/safepal.png`,
+  [DAPP_LIST[5]]: `${ASSET_CDN}/web/wallets/trust.png`,
+  [DAPP_LIST[6]]: `${ASSET_CDN}/web/wallets/trust.png`,
+  [DAPP_LIST[7]]: `${ASSET_CDN}/web/wallets/brave.png`,
+  [DAPP_LIST[8]]: `${ASSET_CDN}/web/wallets/walletconnect.png`,
+  [DAPP_LIST[9]]: `${ASSET_CDN}/web/wallets/opera.png`,
+  [DAPP_LIST[10]]: `${ASSET_CDN}/web/wallets/rabby.png`,
+  [DAPP_LIST[11]]: `${ASSET_CDN}/web/wallets/mathwallet.png`,
+  [DAPP_LIST[12]]: `${ASSET_CDN}/web/wallets/coin98.png`,
+  [DAPP_LIST[13]]: `${ASSET_CDN}/web/wallets/blocto.png`,
+  [DAPP_LIST[14]]: `${ASSET_CDN}/web/wallets/cyberwallet.png`,
 }
 
 const getDappIcon = async (connector?: Connector) => {
   if (!connector || typeof connector.getProvider !== 'function') return undefined
   const provider = (await connector?.getProvider()) as any
-  const isDappWallet = DAPP_LIST.some((d) => provider?.[d] === true)
-  if (!isDappWallet) return undefined
   const walletName = DAPP_LIST.find((d) => provider?.[d] === true)
   if (!walletName) return undefined
   return DAPP_WALLET_ICON?.[walletName]
