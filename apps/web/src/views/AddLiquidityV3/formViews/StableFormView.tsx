@@ -28,7 +28,7 @@ import { RowFixed } from 'components/Layout/Row'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { ReactElement } from 'react'
 import { formatAmount } from 'utils/formatInfoNumbers'
-import { MevProtectToggle } from 'views/Mev/MevProectToggle'
+import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { useAccount } from 'wagmi'
 import { HideMedium, MediumOnly, RightContainer } from './V3FormView'
 

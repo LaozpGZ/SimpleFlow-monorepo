@@ -30,7 +30,7 @@ import { LP2ChildrenProps } from 'views/AddLiquidity'
 import { InfoBox } from '@pancakeswap/widgets-internal'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiquidityTokens'
-import { MevProtectToggle } from 'views/Mev/MevProectToggle'
+import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { HideMedium, MediumOnly, RightContainer } from './V3FormView'
 import RangeSelector from './V3FormView/components/RangeSelector'
 
