@@ -1,4 +1,5 @@
 import { ChainId, isTestnetChainId } from '@pancakeswap/chains'
+import { Native, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { SmartRouter } from '@pancakeswap/smart-router'
 import { TokenInfo } from '@pancakeswap/token-lists'
 import { Loadable } from '@pancakeswap/utils/Loadable'
@@ -22,6 +23,7 @@ import { farmFilters } from 'state/farmsV4/search/filters'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { tokenBySymbolAtom } from 'state/lists/lists'
 import { userShowTestnetAtom } from 'state/user/hooks/useUserShowTestnet'
+import { Address } from 'viem/accounts'
 
 async function fetchFarmList(extend: boolean, protocols?: Protocol[], address?: string) {
   const queryStr = qs.stringify({
@@ -64,11 +66,15 @@ export const farmsSearchPagingAtom = atomFamily((_: FarmQuery) => {
 const IS_ADDRESS_REG = /^0x[a-fA-F0-9]{40,64}$/
 
 const getTokenBySymbolAtom = atomFamily((params: { chainId: ChainId; symbol: string }) => {
-  return atomWithLoadable<TokenInfo>(async (get) => {
+  return atomWithLoadable<Address>(async (get) => {
     const { chainId, symbol } = params
     let attempt = 0
 
     while (attempt < 5) {
+      const isNative = Native.onChain(chainId).symbol.toLowerCase() === symbol.toLowerCase()
+      if (isNative) {
+        return Loadable.Just(ZERO_ADDRESS)
+      }
       const token: TokenInfo | undefined = get(
         tokenBySymbolAtom({
           symbol,
@@ -76,7 +82,7 @@ const getTokenBySymbolAtom = atomFamily((params: { chainId: ChainId; symbol: str
         }),
       )
 
-      if (token !== undefined) return Loadable.Just(token)
+      if (token !== undefined) return Loadable.Just(token.address)
       attempt += 1
       // eslint-disable-next-line no-await-in-loop
       await new Promise((resolve) => setTimeout(resolve, 1000))
@@ -101,24 +107,23 @@ const searchAtom = atomFamily((query: FarmQuery) => {
       const firstKeywords = keywords.trim().split(/(\s+|,|\/)/)[0]
       // Extend Symbol if Required
       if (firstKeywords.trim()) {
-        const token = get(
+        const address = get(
           getTokenBySymbolAtom({
             symbol: firstKeywords.trim(),
             chainId: activeChainId,
           }),
         ).unwrapOr(undefined)
 
-        console.log(`[token]`, token)
-        if (token) {
-          lists.push(
-            get(
-              extendListAtom({
-                protocols,
-                chains: [activeChainId],
-                address: token.address as string,
-              }),
-            ),
+        if (address) {
+          const extendToken = get(
+            extendListAtom({
+              protocols,
+              chains: [activeChainId],
+              address,
+            }),
           )
+          console.log('extendToken', extendToken)
+          lists.push(extendToken)
         }
       }
 
