@@ -76,32 +76,34 @@ const searchAtom = atomFamily((query: FarmQuery) => {
 
     const lists = [get(farmListAtom)]
     if (activeChainId) {
-      const token: TokenInfo = get(
-        tokenBySymbolAtom({
-          symbol: keywords.trim(),
-          chainId: activeChainId,
-        }),
-      )
-      console.log(`[token]`, token)
-      lists.push(
-        get(
-          extendListAtom({
-            protocols,
-            chains: [activeChainId],
+      const firstKeywords = keywords.trim().split(/(\s+|,|\/)/)[0]
+      // Extend Symbol if Required
+      if (firstKeywords.trim()) {
+        const token: TokenInfo = get(
+          tokenBySymbolAtom({
+            symbol: firstKeywords.trim(),
+            chainId: activeChainId,
           }),
-        ),
-      )
-
-      if (token) {
+        )
         lists.push(
           get(
             extendListAtom({
               protocols,
               chains: [activeChainId],
-              address: token.address as string,
             }),
           ),
         )
+        if (token) {
+          lists.push(
+            get(
+              extendListAtom({
+                protocols,
+                chains: [activeChainId],
+                address: token.address as string,
+              }),
+            ),
+          )
+        }
       }
 
       if (IS_ADDRESS_REG.test(keywords.trim())) {
