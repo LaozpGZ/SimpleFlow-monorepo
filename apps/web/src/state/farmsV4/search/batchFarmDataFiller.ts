@@ -82,9 +82,9 @@ async function batchGetOtherCakeApr(pools: PoolInfo[]) {
   )
   return pools.map((pool, index) => {
     const farm = pool.farm!
-    const key = getFarmKey(farm)
     const result = aprs[index]
-    const apr = result[key] as CakeAprValue
+    const resultKey = Object.keys(result)[0]
+    const apr = result[resultKey] as CakeAprValue
     return {
       id: getFarmKey(farm),
       value: apr,
