@@ -25,11 +25,22 @@ import { tokenBySymbolAtom } from 'state/lists/lists'
 import { userShowTestnetAtom } from 'state/user/hooks/useUserShowTestnet'
 import { Address } from 'viem/accounts'
 
-async function fetchFarmList(extend: boolean, protocols?: Protocol[], address?: string) {
+async function fetchFarmList({
+  extend = false,
+  protocols,
+  address,
+  chains,
+}: {
+  extend?: boolean
+  protocols?: Protocol[]
+  address?: string
+  chains?: ChainId[]
+}) {
   const queryStr = qs.stringify({
     extend: extend ? 1 : undefined,
     protocols: protocols ? protocols.join(',') : undefined,
     address,
+    chains: chains?.join(','),
   })
   const url = `/api/farm/list?${queryStr}`
   const response = await fetch(url, {
@@ -49,13 +60,20 @@ async function fetchFarmList(extend: boolean, protocols?: Protocol[], address?: 
 }
 
 const farmListAtom = atomWithLoadable<SerializedFarmInfo[]>(async () => {
-  return fetchFarmList(false)
+  return fetchFarmList({
+    extend: false,
+  })
 })
 
 const extendListAtom = atomFamily((params: { protocols: Protocol[]; chains: ChainId[]; address?: string }) => {
-  const { protocols, address } = params
+  const { protocols, address, chains } = params
   return atomWithLoadable<SerializedFarmInfo[]>(async () => {
-    return fetchFarmList(true, protocols, address)
+    return fetchFarmList({
+      extend: true,
+      protocols,
+      address,
+      chains,
+    })
   })
 }, isEqual)
 
@@ -122,7 +140,6 @@ const searchAtom = atomFamily((query: FarmQuery) => {
               address,
             }),
           )
-          console.log('extendToken', extendToken)
           lists.push(extendToken)
         }
       }
@@ -138,6 +155,16 @@ const searchAtom = atomFamily((query: FarmQuery) => {
           ),
         )
       }
+
+      // default extend for active chain
+      lists.push(
+        get(
+          extendListAtom({
+            protocols,
+            chains: [activeChainId],
+          }),
+        ),
+      )
     }
 
     const farms = uniqBy(

@@ -111,6 +111,9 @@ export async function batchGetLpAprData(pools: PoolInfo[]) {
   const lpAprs = await Promise.allSettled(
     pools.map((pool) => {
       const farm = pool.farm!
+      if (farm.protocol === 'stable') {
+        return 0
+      }
 
       return cachedGetLpApr(
         {
