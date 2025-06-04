@@ -63,6 +63,28 @@ export const farmsSearchPagingAtom = atomFamily((_: FarmQuery) => {
 
 const IS_ADDRESS_REG = /^0x[a-fA-F0-9]{40,64}$/
 
+const getTokenBySymbolAtom = atomFamily((params: { chainId: ChainId; symbol: string }) => {
+  return atomWithLoadable<TokenInfo>(async (get) => {
+    const { chainId, symbol } = params
+    let attempt = 0
+
+    while (attempt < 5) {
+      const token: TokenInfo | undefined = get(
+        tokenBySymbolAtom({
+          symbol,
+          chainId,
+        }),
+      )
+
+      if (token !== undefined) return Loadable.Just(token)
+      attempt += 1
+      // eslint-disable-next-line no-await-in-loop
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+    }
+    return Loadable.Nothing()
+  })
+}, isEqual)
+
 const searchAtom = atomFamily((query: FarmQuery) => {
   return atom((get) => {
     const { protocols, chains: _chains, sortBy, activeChainId, keywords } = query
@@ -79,20 +101,14 @@ const searchAtom = atomFamily((query: FarmQuery) => {
       const firstKeywords = keywords.trim().split(/(\s+|,|\/)/)[0]
       // Extend Symbol if Required
       if (firstKeywords.trim()) {
-        const token: TokenInfo = get(
-          tokenBySymbolAtom({
+        const token = get(
+          getTokenBySymbolAtom({
             symbol: firstKeywords.trim(),
             chainId: activeChainId,
           }),
-        )
-        lists.push(
-          get(
-            extendListAtom({
-              protocols,
-              chains: [activeChainId],
-            }),
-          ),
-        )
+        ).unwrapOr(undefined)
+
+        console.log(`[token]`, token)
         if (token) {
           lists.push(
             get(
