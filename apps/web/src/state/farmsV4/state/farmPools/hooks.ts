@@ -232,7 +232,10 @@ export const useMultiChainV3PoolsStatus = (pools: UniversalFarmConfig[]) => {
           }
         }),
       )
-      return results.reduce((acc, result) => ({ ...acc, ...result }), {} as IPoolsStatusType)
+      return results.reduce((acc, result) => {
+        Object.assign(acc, result)
+        return acc
+      }, {} as IPoolsStatusType)
     },
     enabled: poolsEntries.length > 0,
     refetchOnMount: false,
