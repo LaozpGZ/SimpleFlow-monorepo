@@ -1,3 +1,4 @@
+import { FarmV4SupportedChainId } from '@pancakeswap/farms'
 import { NextRequest, NextResponse } from 'next/server'
 import edgeFarmQueries from 'state/farmsV4/search/edgeFarmQueries'
 import { parseFarmSearchQuery } from 'state/farmsV4/search/farm.util'
@@ -15,7 +16,7 @@ export default async function handler(req: NextRequest) {
       extend: query.extend,
       protocols: query.protocols || [],
       address: query.address,
-      chains: query.chains,
+      chains: query.chains as FarmV4SupportedChainId[],
     })
 
     return NextResponse.json(
