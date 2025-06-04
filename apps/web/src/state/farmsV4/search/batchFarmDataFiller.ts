@@ -77,6 +77,10 @@ async function batchGetOtherCakeApr(pools: PoolInfo[]) {
   const cakePrice = await getCakePrice()
   const aprs = await Promise.all(
     pools.map(async (pool) => {
+      if (!pool.farm?.pid) {
+        return {}
+      }
+
       return getCakeApr(pool!, cakePrice)
     }),
   )
