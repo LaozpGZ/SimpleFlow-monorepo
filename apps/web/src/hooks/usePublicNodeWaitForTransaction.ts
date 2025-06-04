@@ -34,7 +34,7 @@ export const getViemClientsPublicNodes = memoize((w3WConfig = false) => {
         transport:
           w3WConfig && typeof window !== 'undefined' && window.ethereum
             ? custom(window.ethereum as any)
-            : fallback([...PUBLIC_NODES[cur.id].map((url) => http(url, { timeout: 15_000 }))], { rank: false }),
+            : fallback([...PUBLIC_NODES[cur.id].map((url) => http(url, { timeout: 3_000 }))], { rank: false }),
         batch: {
           multicall: {
             batchSize: 1024 * 200,

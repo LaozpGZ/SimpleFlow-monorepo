@@ -19,7 +19,7 @@ export function createViemPublicClients({ transportSignal }: CreatePublicClientP
         transport: fallback(
           (PUBLIC_NODES[cur.id as ChainId] as string[]).map((url) =>
             http(url, {
-              timeout: 10_000,
+              timeout: 3_000,
               fetchOptions: {
                 signal: transportSignal,
               },

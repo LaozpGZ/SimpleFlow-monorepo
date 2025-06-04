@@ -11,9 +11,9 @@ const BSC_CUSTOM_NODE = 'https://bsc-dataseed.bnbchain.org'
 const gasPriceClients: Record<ChainId, PublicClient> = CHAINS.reduce((clients, chain) => {
   const transport =
     chain.id === ChainId.BSC
-      ? http(BSC_CUSTOM_NODE, { timeout: 15_000 })
+      ? http(BSC_CUSTOM_NODE, { timeout: 3_000 })
       : fallback(
-          PUBLIC_NODES[chain.id].map((url) => http(url, { timeout: 15_000 })),
+          PUBLIC_NODES[chain.id].map((url) => http(url, { timeout: 3_000 })),
           { rank: false },
         )
 
