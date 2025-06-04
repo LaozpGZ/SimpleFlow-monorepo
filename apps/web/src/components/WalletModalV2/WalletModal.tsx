@@ -225,7 +225,8 @@ export const WalletContent = ({
 
   // Get top tokens by value
   const topTokens = balances
-  const noAssets = topTokens.length === 0 && !isLoading
+  const noAssets = (topTokens.length === 0 || totalBalanceUsd === 0) && !isLoading
+  console.log('topTokens???', topTokens)
   const handleClick = useCallback((newIndex: number) => {
     setView(newIndex)
   }, [])
