@@ -139,7 +139,7 @@ export const socials = [
         href: "https://t.me/pancakeswap_INDIA",
       },
       {
-        label: "South Korea",
+        label: "한국어",
         href: "https://t.me/PancakeSwapSouthKorea",
       },
       {
