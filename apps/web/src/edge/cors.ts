@@ -5,7 +5,7 @@ const allowedOrigins: string[] = []
 export function getCorsHeaders(req: NextRequest) {
   const origin = req.headers.get('origin') || ''
 
-  if (allowedOrigins.includes(origin) || /^http:\/\/localhost(:\\d+)?$/.test(origin)) {
+  if (allowedOrigins.includes(origin) || /^http:\/\/localhost(:\d+)?$/.test(origin)) {
     return {
       'Access-Control-Allow-Origin': origin,
       'Access-Control-Allow-Methods': 'GET, OPTIONS',
