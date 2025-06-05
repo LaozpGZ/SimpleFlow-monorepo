@@ -21,11 +21,10 @@ const checkSwitchReloadNeeded = async (connector: Connector, chainId: number, ad
 
     return Boolean(
       provider &&
-        (provider.isTokenPocket ||
-          (Array.isArray(provider.session?.namespaces?.eip155?.accounts) &&
-            !provider.session.namespaces.eip155.accounts.some((account: string) =>
-              account?.includes(`${chainId}:${address}`),
-            ))),
+        Array.isArray(provider.session?.namespaces?.eip155?.accounts) &&
+        !provider.session.namespaces.eip155.accounts.some((account: string) =>
+          account?.includes(`${chainId}:${address}`),
+        ),
     )
   } catch (error) {
     console.error(error, 'Error detecting provider')
