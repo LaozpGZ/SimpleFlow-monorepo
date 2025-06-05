@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import { handleCors } from 'edge/cors'
+import { getCorsHeaders, handleCors } from 'edge/cors'
 import { NextRequest, NextResponse } from 'next/server'
 import { edgeQueries } from 'quoter/utils/edgePoolQueries'
 import { getEdgeChainName, parseTvQuery } from 'quoter/utils/edgeQueries.util'
@@ -31,6 +31,7 @@ export default async function handler(req: NextRequest) {
         headers: {
           'Cache-Control': `public, s-maxage=60, stale-while-revalidate=60`,
           'Content-Type': 'application/json',
+          ...getCorsHeaders(req),
         },
       },
     )

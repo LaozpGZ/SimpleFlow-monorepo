@@ -1,5 +1,5 @@
 import { FarmV4SupportedChainId } from '@pancakeswap/farms'
-import { handleCors } from 'edge/cors'
+import { getCorsHeaders, handleCors } from 'edge/cors'
 import { NextRequest, NextResponse } from 'next/server'
 import edgeFarmQueries from 'state/farmsV4/search/edgeFarmQueries'
 import { parseFarmSearchQuery } from 'state/farmsV4/search/farm.util'
@@ -34,6 +34,7 @@ export default async function handler(req: NextRequest) {
         headers: {
           'Cache-Control': `public, s-maxage=120, stale-while-revalidate=180`,
           'Content-Type': 'application/json',
+          ...getCorsHeaders(req),
         },
       },
     )

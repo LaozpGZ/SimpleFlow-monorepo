@@ -1,5 +1,5 @@
 import { POOLS_SLOW_REVALIDATE } from 'config/pools'
-import { handleCors } from 'edge/cors'
+import { getCorsHeaders, handleCors } from 'edge/cors'
 import { NextRequest, NextResponse } from 'next/server'
 import { edgeQueries } from 'quoter/utils/edgePoolQueries'
 import { parseCandidatesQuery } from 'quoter/utils/edgeQueries.util'
@@ -29,6 +29,7 @@ export default async function handler(req: NextRequest) {
         headers: {
           'Cache-Control': `public, s-maxage=${age}, stale-while-revalidate=${staleAge}`,
           'Content-Type': 'application/json',
+          ...getCorsHeaders(req),
         },
       },
     )
