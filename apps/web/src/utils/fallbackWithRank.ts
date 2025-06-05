@@ -30,7 +30,7 @@ type OnResponseFn = (
 export const fallbackWithRank = <const transports extends readonly Transport[]>(
   transports_: transports,
   config: Prettify<Omit<FallbackTransportConfig, 'rank'>> = {},
-) => {
+): FallbackTransport<transports> => {
   const { key = 'fallback', name = 'Fallback', retryCount, retryDelay } = config
   return (({ chain, timeout, ...rest }) => {
     let transports = transports_
@@ -123,7 +123,7 @@ export const fallbackWithRank = <const transports extends readonly Transport[]>(
   }) as FallbackTransport<transports>
 }
 
-const rankTransports = ({
+export const rankTransports = ({
   chain,
   onTransports,
   transports,
@@ -142,21 +142,21 @@ const rankTransports = ({
 
         const start = performance.now()
         let end: number
-        let success = 0
+        let success = Number.MAX_SAFE_INTEGER
         try {
           await transport_.request({ method: 'eth_chainId' })
           success = 1
-        } catch (error) {
-          console.error(`Transport ${transport_.config.key} failed:`, error)
+        } catch {
+          // ignore
         } finally {
           end = performance.now()
         }
 
-        return [success * (end - start), i]
+        return [success * (end - start), i, transport_.config.key] as const
       }),
     )
 
-    const rankedTransports = scores.sort((a, b) => b[0] - a[0]).map(([, i]) => transports[i])
+    const rankedTransports = scores.sort((a, b) => a[0] - b[0]).map(([, i]) => transports[i])
 
     onTransports(rankedTransports)
   }
