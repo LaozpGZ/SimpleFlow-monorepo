@@ -1,11 +1,11 @@
-import { BinPool, getCurrencyPriceFromId } from '@pancakeswap/infinity-sdk'
+import { BinPool } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Price } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, AutoColumn, Text, usePrompt } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import PageLoader from 'components/Loader/PageLoader'
 import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
+import { usePoolCurrentPrice } from 'hooks/infinity/usePoolCurrentPrice'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { usePermit2 } from 'hooks/usePermit2'
@@ -48,17 +48,7 @@ export const SubmitButton = () => {
   }, [pool])
 
   const currencies = useMemo(() => ({ CURRENCY_A: currencyA, CURRENCY_B: currencyB }), [currencyA, currencyB])
-  const poolCurrentPrice = useMemo(() => {
-    if (!pool) return undefined
-    if (pool.poolType === 'CL') {
-      return new Price(pool.token0, pool.token1, 2n ** 192n, pool.sqrtRatioX96 * pool.sqrtRatioX96)
-    }
-    if (pool.poolType === 'Bin') {
-      const pool_ = pool as BinPool
-      return getCurrencyPriceFromId(pool_.activeId, pool_.binStep, pool_.token0, pool_.token1)
-    }
-    return undefined
-  }, [pool])
+  const poolCurrentPrice = usePoolCurrentPrice(pool)
   const [, marketPriceSlippage] = usePoolMarketPriceSlippage(pool?.token0, pool?.token1, poolCurrentPrice)
   const [displayMarketPriceSlippageWarning, disableAddByHighSlippage] = useMemo(() => {
     if (marketPriceSlippage === undefined) return [false, false]
