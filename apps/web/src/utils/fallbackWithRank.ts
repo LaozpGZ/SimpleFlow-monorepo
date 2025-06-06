@@ -29,6 +29,10 @@ type OnResponseFn = (
 
 const disabledTransports = new Map<number, Set<number>>()
 
+export const resetDisabledTransports = () => {
+  disabledTransports.clear()
+}
+
 export const fallbackWithRank = <const transports extends readonly Transport[]>(
   transports_: transports,
   config: Prettify<Omit<FallbackTransportConfig, 'rank'>> = {},

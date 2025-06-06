@@ -3,7 +3,7 @@ import { AddressInfo } from 'node:net'
 import { http } from 'viem'
 import { bsc, bscTestnet } from 'viem/chains'
 import { Transport } from 'wagmi'
-import { fallbackWithRank, rankTransports } from './fallbackWithRank'
+import { fallbackWithRank, rankTransports, resetDisabledTransports } from './fallbackWithRank'
 
 function createHttpServer(handler: RequestListener): Promise<{ close: () => Promise<unknown>; url: string }> {
   const server = createServer(handler)
@@ -20,6 +20,10 @@ function createHttpServer(handler: RequestListener): Promise<{ close: () => Prom
 }
 
 describe('rankTransports', () => {
+  beforeEach(() => {
+    resetDisabledTransports()
+  })
+
   test('should not rank for testnet', async () => {
     const server = await createHttpServer((_req, res) => {
       res.writeHead(200, { 'Content-Type': 'application/json' })
@@ -95,6 +99,10 @@ describe('rankTransports', () => {
 })
 
 describe('fallbackWithRank', () => {
+  beforeEach(() => {
+    resetDisabledTransports()
+  })
+
   test('should fallback and re-rank after 429', async () => {
     let shouldRateLimit = false
     let server0Calls = 0
