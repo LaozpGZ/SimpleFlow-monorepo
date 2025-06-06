@@ -27,6 +27,8 @@ type OnResponseFn = (
   ),
 ) => void
 
+const disabledTransports = new Set<number>()
+
 export const fallbackWithRank = <const transports extends readonly Transport[]>(
   transports_: transports,
   config: Prettify<Omit<FallbackTransportConfig, 'rank'>> = {},
@@ -75,12 +77,18 @@ export const fallbackWithRank = <const transports extends readonly Transport[]>(
                 status: 'error',
               })
 
+              if (err instanceof HttpRequestError && err.status === 500) {
+                disabledTransports.add(i)
+              }
+
               // If we've reached the end of the fallbacks, throw the error.
               if (i === transports.length - 1) throw err
 
               // Check if at least one other transport includes the method
-              includes ??= transports.slice(i + 1).some((transport) => {
+              includes ??= transports.slice(i + 1).some((transport, j) => {
                 const { include, exclude } = transport({ chain }).config.methods || {}
+                const index = i + 1 + j
+                if (disabledTransports.has(index)) return false
                 if (include) return include.includes(method)
                 if (exclude) return !exclude.includes(method)
                 return true
@@ -136,8 +144,10 @@ export const rankTransports = ({
   if (!chain || Boolean(chain.testnet)) return
 
   const rankTransports_ = async () => {
+    const activeTransports = transports.filter((_, i) => !disabledTransports.has(i))
+
     const scores = await Promise.all(
-      transports.map(async (transport, i) => {
+      activeTransports.map(async (transport, i) => {
         const transport_ = transport({ chain, retryCount: 0, timeout: 1_000 })
 
         const start = performance.now()
