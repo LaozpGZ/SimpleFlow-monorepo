@@ -1,4 +1,4 @@
-import { ChainId, isTestnetChainId } from '@pancakeswap/chains'
+import { isTestnetChainId } from '@pancakeswap/chains'
 import { Protocol } from '@pancakeswap/farms'
 import { InfinityRouter, Pool, SmartRouter, V2Pool, V3Pool } from '@pancakeswap/smart-router'
 import { InfinityPoolTvlReferenceMap } from '@pancakeswap/smart-router/dist/evm/infinity-router/queries/getPoolTvl'
@@ -113,8 +113,10 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
 
   const fetchTvMap = cacheByLRU(
     async (protocol: EdgeProtocol[], chainId: ChainId) => {
-      const url = `/api/pools/tvlref?protocol=${protocol.join(',')}&chainId=${chainId}`
-      const res = await fetch(url, {
+      const api = `${process.env.NEXT_PUBLIC_EDGE_ENDPOINT || ''}/api/pools/tvlref?protocol=${protocol.join(
+        ',',
+      )}&chainId=${chainId}`
+      const res = await fetch(api, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
