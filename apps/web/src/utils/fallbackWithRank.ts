@@ -27,7 +27,7 @@ type OnResponseFn = (
   ),
 ) => void
 
-const disabledTransports = new Set<number>()
+const disabledTransports = new Map<number, Set<number>>()
 
 export const fallbackWithRank = <const transports extends readonly Transport[]>(
   transports_: transports,
@@ -47,15 +47,6 @@ export const fallbackWithRank = <const transports extends readonly Transport[]>(
           let includes: boolean | undefined
 
           const fetch = async (i = 0): Promise<any> => {
-            while (disabledTransports.has(i) && i < transports.length) {
-              // eslint-disable-next-line no-param-reassign
-              i++
-            }
-
-            if (i >= transports.length) {
-              throw new Error('No available transports left')
-            }
-
             const transport = transports[i]({
               ...rest,
               chain,
@@ -147,8 +138,13 @@ export const rankTransports = ({
   if (!chain || Boolean(chain.testnet)) return
 
   const rankTransports_ = async () => {
+    const chainId = chain?.id ?? 0
+    const disabledSet = disabledTransports.get(chainId) ?? new Set()
+
+    const activeTransports = transports.filter((_, i) => !disabledSet.has(i))
+
     const scoresRaw = await Promise.all(
-      transports.map(async (transport, i) => {
+      activeTransports.map(async (transport, i) => {
         const transport_ = transport({ chain, retryCount: 0, timeout: 1_000 })
 
         const start = performance.now()
@@ -159,7 +155,10 @@ export const rankTransports = ({
           success = 1
         } catch (err) {
           if (err instanceof HttpRequestError && err.status === 500) {
-            disabledTransports.add(i)
+            if (!disabledTransports.has(chain.id)) {
+              disabledTransports.set(chain.id, new Set())
+            }
+            disabledTransports.get(chain.id)!.add(i)
             return undefined
           }
         } finally {
