@@ -47,6 +47,15 @@ export const fallbackWithRank = <const transports extends readonly Transport[]>(
           let includes: boolean | undefined
 
           const fetch = async (i = 0): Promise<any> => {
+            while (disabledTransports.has(i) && i < transports.length) {
+              // eslint-disable-next-line no-param-reassign
+              i++
+            }
+
+            if (i >= transports.length) {
+              throw new Error('No available transports left')
+            }
+
             const transport = transports[i]({
               ...rest,
               chain,
@@ -77,18 +86,12 @@ export const fallbackWithRank = <const transports extends readonly Transport[]>(
                 status: 'error',
               })
 
-              if (err instanceof HttpRequestError && err.status === 500) {
-                disabledTransports.add(i)
-              }
-
               // If we've reached the end of the fallbacks, throw the error.
               if (i === transports.length - 1) throw err
 
               // Check if at least one other transport includes the method
-              includes ??= transports.slice(i + 1).some((transport, j) => {
+              includes ??= transports.slice(i + 1).some((transport) => {
                 const { include, exclude } = transport({ chain }).config.methods || {}
-                const index = i + 1 + j
-                if (disabledTransports.has(index)) return false
                 if (include) return include.includes(method)
                 if (exclude) return !exclude.includes(method)
                 return true
@@ -144,10 +147,8 @@ export const rankTransports = ({
   if (!chain || Boolean(chain.testnet)) return
 
   const rankTransports_ = async () => {
-    const activeTransports = transports.filter((_, i) => !disabledTransports.has(i))
-
-    const scores = await Promise.all(
-      activeTransports.map(async (transport, i) => {
+    const scoresRaw = await Promise.all(
+      transports.map(async (transport, i) => {
         const transport_ = transport({ chain, retryCount: 0, timeout: 1_000 })
 
         const start = performance.now()
@@ -156,8 +157,11 @@ export const rankTransports = ({
         try {
           await transport_.request({ method: 'eth_chainId' })
           success = 1
-        } catch {
-          // ignore
+        } catch (err) {
+          if (err instanceof HttpRequestError && err.status === 500) {
+            disabledTransports.add(i)
+            return undefined
+          }
         } finally {
           end = performance.now()
         }
@@ -165,6 +169,8 @@ export const rankTransports = ({
         return [success * (end - start), i, transport_.config.key] as const
       }),
     )
+
+    const scores = scoresRaw.filter((x): x is [number, number, string] => x !== undefined)
 
     const rankedTransports = scores.sort((a, b) => a[0] - b[0]).map(([, i]) => transports[i])
 
