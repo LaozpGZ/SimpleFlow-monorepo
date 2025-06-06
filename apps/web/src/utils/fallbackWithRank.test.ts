@@ -79,9 +79,9 @@ describe('rankTransports', () => {
     const transportFailed = http(serverFailed.url, { key: 'transportFailed' })
 
     const mockFn = vi.fn().mockImplementation((newTransports: Transport[]) => {
-      expect(newTransports).toHaveLength(3)
+      expect(newTransports).toHaveLength(2)
       const rankedKeys = newTransports.map((t) => t({ chain: undefined }).config.key)
-      expect(rankedKeys).toEqual(['transport1', 'transport100', 'transportFailed'])
+      expect(rankedKeys).toEqual(['transport1', 'transport100'])
     })
 
     rankTransports({
