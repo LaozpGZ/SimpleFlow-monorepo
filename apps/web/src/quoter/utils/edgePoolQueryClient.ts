@@ -1,5 +1,6 @@
 import { InfinityBinPool, InfinityClPool, SmartRouter, StablePool, V2Pool, V3Pool } from '@pancakeswap/smart-router'
 
+import { ChainId } from '@pancakeswap/chains'
 import { Currency, getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
 import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import qs from 'qs'
