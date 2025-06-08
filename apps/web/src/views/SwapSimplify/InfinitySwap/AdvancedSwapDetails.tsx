@@ -356,7 +356,7 @@ export const TradeSummary = memo(function TradeSummary({
       {expectedFillTimeSec && (
         <RowBetween mt="10px">
           <RowFixed>
-            <QuestionHelperV2 text={t('Estimated Time')}>
+            <QuestionHelperV2 text={t('Estimated time to complete this transaction')}>
               <DetailsTitle fontSize="14px" color="textSubtle">
                 {t('Est. Time')}
               </DetailsTitle>

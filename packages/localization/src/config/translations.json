@@ -3723,7 +3723,7 @@
   "Popular tokens": "Popular tokens",
   "Search name / address": "Search name / address",
   "Total Fee": "Total Fee",
-  "Estimated Time": "Estimated Time",
+  "Estimated time to complete this transaction": "Estimated time to complete this transaction",
   "Est. Time": "Est. Time",
   "Bridge transaction submitted": "Bridge transaction submitted",
   "Failed to generate bridge transaction": "Failed to generate bridge transaction",

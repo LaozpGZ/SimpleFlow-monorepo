@@ -278,7 +278,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
                 placement="top"
                 text={
                   <>
-                    <Text>{t('Estimated Time')}</Text>
+                    <Text>{t('Estimated time to complete this transaction')}</Text>
                   </>
                 }
               >
