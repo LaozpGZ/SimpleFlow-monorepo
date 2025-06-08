@@ -6,7 +6,6 @@ import { getTokenByAddress } from '@pancakeswap/tokens'
 import { memoizeAsync } from '@pancakeswap/utils/memoize'
 import { NextResponse } from 'next/server'
 import qs from 'qs'
-import { safeGetAddress } from 'utils'
 import { checksumAddress } from 'utils/checksumAddress'
 import { getViemClients } from 'utils/viem.server'
 import { type Address, erc20Abi } from 'viem'
@@ -44,7 +43,7 @@ export const mockCurrency = memoizeAsync(
   },
 )
 
-export async function getToken(address: string, chainId: ChainId): Promise<Currency | undefined> {
+export async function getToken(address: Address, chainId: ChainId): Promise<Currency | undefined> {
   const client = getViemClients({ chainId })
   const checksumAddress = safeGetAddress(address)
   if (!checksumAddress) {
@@ -174,3 +173,11 @@ export type APIChain =
   | 'polygon-zkevm'
   | 'linea'
   | 'arbitrum'
+
+export const safeGetAddress = (address: Address) => {
+  try {
+    return checksumAddress(address)
+  } catch (error) {
+    return undefined
+  }
+}
