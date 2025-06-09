@@ -2,7 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
 import { Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import { ReactNode, useCallback, useMemo } from 'react'
+import { ReactNode, Suspense, useCallback, useMemo } from 'react'
 
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { CommonBasesType } from 'components/SearchModal/types'
@@ -151,57 +151,61 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
   return (
     <FormContainer>
-      <CurrencyInputPanelSimplify
-        id="swap-currency-input"
-        showUSDPrice
-        showMaxButton
-        showCommonBases
-        inputLoading={!isWrapping && inputLoading}
-        currencyLoading={!loadedUrlParams}
-        label={!isTypingInput && !isWrapping ? t('From (estimated)') : t('From')}
-        defaultValue={isWrapping ? typedValue : inputValue}
-        maxAmount={maxAmountInput}
-        showQuickInputButton
-        currency={inputCurrency}
-        onUserInput={handleTypeInput}
-        onPercentInput={handlePercentInput}
-        onMax={handleMaxInput}
-        onCurrencySelect={handleInputSelect}
-        otherCurrency={outputCurrency}
-        commonBasesType={CommonBasesType.SWAP_LIMITORDER}
-        title={
-          <Text color="textSubtle" fontSize={12} bold>
-            {t('From')}
-          </Text>
-        }
-        isUserInsufficientBalance={isUserInsufficientBalance}
-        modalTitle={t('From')}
-        showSearchHeader
-      />
+      <Suspense>
+        <CurrencyInputPanelSimplify
+          id="swap-currency-input"
+          showUSDPrice
+          showMaxButton
+          showCommonBases
+          inputLoading={!isWrapping && inputLoading}
+          currencyLoading={!loadedUrlParams}
+          label={!isTypingInput && !isWrapping ? t('From (estimated)') : t('From')}
+          defaultValue={isWrapping ? typedValue : inputValue}
+          maxAmount={maxAmountInput}
+          showQuickInputButton
+          currency={inputCurrency}
+          onUserInput={handleTypeInput}
+          onPercentInput={handlePercentInput}
+          onMax={handleMaxInput}
+          onCurrencySelect={handleInputSelect}
+          otherCurrency={outputCurrency}
+          commonBasesType={CommonBasesType.SWAP_LIMITORDER}
+          title={
+            <Text color="textSubtle" fontSize={12} bold>
+              {t('From')}
+            </Text>
+          }
+          isUserInsufficientBalance={isUserInsufficientBalance}
+          modalTitle={t('From')}
+          showSearchHeader
+        />
+      </Suspense>
       <FlipButton />
-      <CurrencyInputPanelSimplify
-        disabled={isBridge}
-        id="swap-currency-output"
-        showUSDPrice
-        showCommonBases
-        showMaxButton={false}
-        inputLoading={!isWrapping && outputLoading}
-        currencyLoading={!loadedUrlParams}
-        label={isTypingInput && !isWrapping ? t('To (estimated)') : t('To')}
-        defaultValue={isWrapping ? typedValue : outputValue}
-        currency={outputCurrency}
-        onUserInput={handleTypeOutput}
-        onCurrencySelect={handleOutputSelect}
-        otherCurrency={inputCurrency}
-        commonBasesType={CommonBasesType.SWAP_LIMITORDER}
-        title={
-          <Text color="textSubtle" fontSize={12} bold>
-            {t('To')}
-          </Text>
-        }
-        modalTitle={t('To')}
-        showSearchHeader
-      />
+      <Suspense>
+        <CurrencyInputPanelSimplify
+          disabled={isBridge}
+          id="swap-currency-output"
+          showUSDPrice
+          showCommonBases
+          showMaxButton={false}
+          inputLoading={!isWrapping && outputLoading}
+          currencyLoading={!loadedUrlParams}
+          label={isTypingInput && !isWrapping ? t('To (estimated)') : t('To')}
+          defaultValue={isWrapping ? typedValue : outputValue}
+          currency={outputCurrency}
+          onUserInput={handleTypeOutput}
+          onCurrencySelect={handleOutputSelect}
+          otherCurrency={inputCurrency}
+          commonBasesType={CommonBasesType.SWAP_LIMITORDER}
+          title={
+            <Text color="textSubtle" fontSize={12} bold>
+              {t('To')}
+            </Text>
+          }
+          modalTitle={t('To')}
+          showSearchHeader
+        />
+      </Suspense>
       <AssignRecipientButton />
       <Recipient />
     </FormContainer>

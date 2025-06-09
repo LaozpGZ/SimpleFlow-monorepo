@@ -10,7 +10,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { usePaymaster } from 'hooks/usePaymaster'
 import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
-import { memo, useMemo } from 'react'
+import { memo, Suspense, useMemo } from 'react'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { MevSwapDetail } from 'views/Mev/MevSwapDetail'
@@ -100,38 +100,50 @@ export const InfinitySwapForm = memo(() => {
         }
         mevSlot={<MevSwapDetail />}
         pricingAndSlippage={
-          <FlexGap
-            alignItems="center"
-            flexWrap="wrap"
-            justifyContent="space-between"
-            width="calc(100% - 20px)"
-            gap="8px"
-          >
-            <FlexGap
-              onClick={(e) => {
-                e.stopPropagation()
-              }}
-              alignItems="center"
-              flexWrap="wrap"
-            >
-              <RefreshButton
-                onRefresh={refreshOrder}
-                refreshDisabled={refreshDisabled}
-                chainId={activeChianId}
-                loading={!tradeLoaded}
-              />
-              <PricingAndSlippage
-                priceLoading={!tradeLoaded}
-                price={executionPrice ?? undefined}
-                showSlippage={false}
-              />
-            </FlexGap>
-            <TradingFee loaded={tradeLoaded} order={bestOrder} />
-          </FlexGap>
+          <Suspense>
+            <>
+              <FlexGap
+                alignItems="center"
+                flexWrap="wrap"
+                justifyContent="space-between"
+                width="calc(100% - 20px)"
+                gap="8px"
+              >
+                <FlexGap
+                  onClick={(e) => {
+                    e.stopPropagation()
+                  }}
+                  alignItems="center"
+                  flexWrap="wrap"
+                >
+                  <RefreshButton
+                    onRefresh={refreshOrder}
+                    refreshDisabled={refreshDisabled}
+                    chainId={activeChianId}
+                    loading={!tradeLoaded}
+                  />
+                  <PricingAndSlippage
+                    priceLoading={!tradeLoaded}
+                    price={executionPrice ?? undefined}
+                    showSlippage={false}
+                  />
+                </FlexGap>
+                <TradingFee loaded={tradeLoaded} order={bestOrder} />
+              </FlexGap>
+            </>
+          </Suspense>
         }
-        tradeDetails={<TradeDetails loaded={tradeLoaded} order={bestOrder} />}
+        tradeDetails={
+          <Suspense>
+            <TradeDetails loaded={tradeLoaded} order={bestOrder} />
+          </Suspense>
+        }
         shouldRenderDetails={Boolean(executionPrice) && Boolean(bestOrder) && !isWrapping && !tradeError}
-        mevToggleSlot={<MevToggle />}
+        mevToggleSlot={
+          <Suspense>
+            <MevToggle />
+          </Suspense>
+        }
         gasTokenSelector={
           isPaymasterAvailable && <GasTokenSelector mt="8px" inputCurrency={inputCurrency || undefined} />
         }

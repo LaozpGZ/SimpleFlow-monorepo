@@ -1,10 +1,9 @@
-import { InfinityBinPool, InfinityClPool, RouteType, SmartRouter } from '@pancakeswap/smart-router'
+import { RouteType, SmartRouter } from '@pancakeswap/smart-router'
 import {
   AtomBox,
   AutoColumn,
   Box,
   ChevronDownIcon,
-  Column,
   Flex,
   FlexGap,
   Image,
@@ -16,17 +15,14 @@ import { ChainLogo, CurrencyLogo, LightCard, LightGreyCard } from '@pancakeswap/
 
 import { RoutingSettingsButton } from 'components/Menu/GlobalSettings/SettingsModalV2'
 
-import { parseProtocolFeesToNumbers } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Rounding } from '@pancakeswap/sdk'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { memo, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import styled from 'styled-components'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { RouterPoolBox, RouterTypeText } from 'views/Swap/components/RouterViewer'
 import { useHookDiscount } from 'views/SwapSimplify/hooks/useHookDiscount'
-import { v3FeeToPercent } from '../../utils/exchange'
-import { HookDiscountFeeDisplay } from './HookDiscountFeeDisplay'
+import { getPairNodes, Pair } from './pairNode'
 import { RouteDisplayEssentials } from './types'
 
 interface BridgeRoutesDisplayProps {
@@ -36,8 +32,6 @@ interface BridgeRoutesDisplayProps {
 interface BridgeRouteDisplayProps {
   route: RouteDisplayEssentials
 }
-
-type Pair = [Currency, Currency]
 
 const StyledRouterPoolBox = styled(RouterPoolBox)`
   background-color: ${({ theme }) => theme.colors.input} !important;
@@ -341,90 +335,15 @@ export const BridgeRouteDisplay = memo(function BridgeRouteDisplay({ route }: Br
     return currencyPairs
   }, [path])
 
-  const pairNodes =
-    pairs.length > 0
-      ? pairs.map((p, index) => {
-          const [input, output] = p
-          const pool = pools[index]
-          const isInfinityClPool = SmartRouter.isInfinityClPool(pool)
-          const isInfinityBinPool = SmartRouter.isInfinityBinPool(pool)
-          const isInfinityPool = isInfinityBinPool || isInfinityClPool
-          const useDiscountHooks = isInfinityPool && pool.hooks && hookDiscount[pool.hooks]
-          let infinityFee = 0
-          let infinityDiscountFee = 0
-          if (isInfinityPool) {
-            const protocolFee = parseProtocolFeesToNumbers(pool.protocolFee)?.[0] ?? 0
-            if (useDiscountHooks) {
-              const { discountFee, originalFee } = hookDiscount[pool.hooks!]
-              infinityFee = originalFee + protocolFee
-              infinityDiscountFee = discountFee + protocolFee
-            } else {
-              infinityFee = pool.fee + protocolFee
-              infinityDiscountFee = infinityFee
-            }
-          }
-          const isV3Pool = SmartRouter.isV3Pool(pool)
-          const isV2Pool = SmartRouter.isV2Pool(pool)
-          const key = isV2Pool
-            ? `v2_${pool.reserve0.currency.symbol}_${pool.reserve1.currency.symbol}`
-            : SmartRouter.isStablePool(pool) || isV3Pool
-            ? pool.address
-            : isInfinityPool
-            ? pool.id
-            : undefined
-          if (!key) return null
-          const feeDisplay =
-            isV3Pool || isInfinityPool
-              ? Number(
-                  v3FeeToPercent(isV3Pool ? pool.fee : infinityDiscountFee).toSignificant(
-                    3,
-                    {},
-                    Rounding.ROUND_HALF_UP,
-                  ),
-                ).toString()
-              : ''
-          const originalFeeDisplay = Number(
-            v3FeeToPercent(infinityFee).toSignificant(3, {}, Rounding.ROUND_HALF_UP),
-          ).toString()
-          const feeDisplayWithDiscount = (
-            <HookDiscountFeeDisplay
-              showIcon={route.pools.length === 1}
-              feeDisplay={feeDisplay}
-              originalFeeDisplay={originalFeeDisplay}
-              hookDiscount={hookDiscount[(pool as InfinityBinPool | InfinityClPool).hooks!]}
-              hookCategory={category}
-            />
-          )
-
-          const text = isV2Pool ? (
-            'V2'
-          ) : isV3Pool ? (
-            `V3 (${feeDisplay}%)`
-          ) : isInfinityClPool ? (
-            <Column alignItems="center">
-              <span>Infinity CL</span>
-              {useDiscountHooks ? feeDisplayWithDiscount : <span>({feeDisplay}%)</span>}
-            </Column>
-          ) : isInfinityBinPool ? (
-            <Column alignItems="center">
-              <span>Infinity Bin</span>
-              {useDiscountHooks ? feeDisplayWithDiscount : <span>({feeDisplay}%)</span>}
-            </Column>
-          ) : (
-            t('StableSwap')
-          )
-          const tooltipText = `${input.symbol}/${output.symbol}${isV3Pool || isInfinityPool ? ` (${feeDisplay}%)` : ''}`
-          return (
-            <PairNode
-              pair={p}
-              key={key}
-              text={text}
-              className={isInfinityPool || isV3Pool ? 'highlight' : ''}
-              tooltipText={tooltipText}
-            />
-          )
-        })
-      : null
+  const pairNodes = getPairNodes({
+    pairs,
+    pools,
+    routePoolsLength: route.pools.length,
+    hookDiscount,
+    category,
+    t,
+    PairNode,
+  })
 
   return (
     <LightCard borderRadius="24px" padding="0">
