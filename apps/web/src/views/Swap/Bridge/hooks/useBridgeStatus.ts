@@ -57,7 +57,13 @@ export const useBridgeStatus = (
 
     const bridgeFeesUSD = Number(data.data.find((item) => item.command === Command.BRIDGE)?.metadata?.fee) || 0
 
-    const swapNotReadyYet = data.data.some((item) => item.command === Command.SWAP && Number(item.metadata?.fee) === 0)
+    const swapNotReadyYet = data.data.some((item) => {
+      const fee = Number(item.metadata?.fee)
+
+      // NOTE: Swap command will return undefined fee if PENDING
+      // of return '0' (string) if not ready yet
+      return item.command === Command.SWAP && (Number.isNaN(fee) || fee === 0)
+    })
 
     const swapFeesUSD = swapNotReadyYet
       ? null
