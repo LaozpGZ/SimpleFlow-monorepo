@@ -18,7 +18,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
-import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { accountActiveChainAtom } from 'hooks/useAccountActiveChain'
 import { ReactNode, useMemo } from 'react'
@@ -51,7 +50,7 @@ function Description({
     <FlexGap alignItems="center">
       <Text small>
         <b>
-          {currencyAmount.toSignificant(DISPLAY_PRECISION)} {currencyAmount.currency.symbol}
+          {formatAmount(currencyAmount)} {currencyAmount.currency.symbol}
         </b>
         {description}
         <b>{getFullChainNameById(currencyAmount.currency.chainId)}</b>
@@ -237,7 +236,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
                       })
                     : status === BridgeStatus.FAILED
                     ? t('Your bridge transaction failed. You will be refunded shortly.')
-                    : t(' has been sent to  %address% on ', {
+                    : t(' has been sent to %address% on ', {
                         address: shortenAddress(recipientOnDestChain || ''),
                       })
                 }

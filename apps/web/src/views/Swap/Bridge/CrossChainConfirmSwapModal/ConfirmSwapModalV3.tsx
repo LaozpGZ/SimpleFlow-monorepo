@@ -36,7 +36,7 @@ import { useBridgeStatus } from '../hooks'
 import { customBridgeStatus } from '../utils'
 import { getBridgeTitle } from '../utils/bridgeTitle'
 import ConfirmSwapModalV3Container from './ConfirmSwapModalV3Container'
-import { OrderStatusModalContent } from './OrderStatus/OrderStatusModalContent'
+import { OrderResultModalContent } from './OrderStatus/OrderResultModalContent'
 import { TransactionConfirmSwapContentV3 } from './TransactionConfirmSwapContentV3'
 import { activeBridgeOrderMetadataAtom } from './state/orderDataState'
 
@@ -323,7 +323,7 @@ export const ConfirmSwapModalV3: React.FC<ConfirmSwapModalV3Props> = ({
       isBridgeOrder(order) &&
       isBridgeOrder(originalOrder)
     ) {
-      return <OrderStatusModalContent />
+      return <OrderResultModalContent />
     }
 
     if (confirmModalState === ConfirmModalState.COMPLETED && txHash) {
