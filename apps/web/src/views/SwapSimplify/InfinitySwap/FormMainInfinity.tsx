@@ -18,6 +18,7 @@ import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import currencyId from 'utils/currencyId'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
+import { getDefaultToken } from 'views/Swap/utils'
 import { useAccount } from 'wagmi'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
@@ -103,9 +104,9 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
             (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
           )
 
-        if (!isOutputChainSupported) {
+        if (!isOutputChainSupported && outputChainId) {
           // if output chain is not supported, reset output currency
-          onCurrencySelection(Field.OUTPUT, undefined)
+          onCurrencySelection(Field.OUTPUT, getDefaultToken(outputChainId))
         }
       }
 
@@ -122,7 +123,17 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
         chainOut: chainOut || null, // null to remove from URL if no need to apply
       })
     },
-    [onCurrencySelection, warningSwapHandler, canSwitch, switchNetwork, outputChainId, supportedBridgeChains],
+    [
+      onCurrencySelection,
+      warningSwapHandler,
+      canSwitch,
+      switchNetwork,
+      outputChainId,
+      supportedBridgeChains,
+      inputChainId,
+      inputCurrencyId,
+      outputCurrencyId,
+    ],
   )
   const handleInputSelect = useCallback(
     (newCurrency: Currency) =>

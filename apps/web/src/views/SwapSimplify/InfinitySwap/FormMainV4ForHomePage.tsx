@@ -11,7 +11,6 @@ import { Field, replaceSwapState } from 'state/swap/actions'
 import { queryParametersToSwapState, useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 
-import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
@@ -20,6 +19,7 @@ import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import { swapReducerAtom } from 'state/swap/reducer'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
+import { getDefaultToken } from 'views/Swap/utils'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { FlipButton } from './FlipButton'
@@ -67,9 +67,9 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading }:
             (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
           )
 
-        if (!isOutputChainSupported) {
+        if (!isOutputChainSupported && outputChainId) {
           // if output chain is not supported, reset output currency
-          onCurrencySelection(Field.OUTPUT, undefined)
+          onCurrencySelection(Field.OUTPUT, getDefaultToken(outputChainId))
         }
 
         if (canSwitch) {
@@ -172,11 +172,7 @@ function useDefaults(): { inputCurrencyId: string | undefined; outputCurrencyId:
   useEffect(() => {
     if (!chainId || !native || !isReady) return
 
-    const parsed = queryParametersToSwapState(
-      {},
-      native.symbol,
-      CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address,
-    )
+    const parsed = queryParametersToSwapState({}, native.symbol, getDefaultToken(chainId))
 
     dispatch(
       replaceSwapState({

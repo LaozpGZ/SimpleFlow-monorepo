@@ -1,6 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { BridgeOrder, ClassicOrder, OrderType, PriceOrder, XOrder } from '@pancakeswap/price-api-sdk'
 import { Currency, TradeType } from '@pancakeswap/swap-sdk-core'
+import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
 
 export const TWAP_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.ARBITRUM_ONE, ChainId.BASE, ChainId.LINEA]
 
@@ -26,4 +27,8 @@ export type InterfaceOrder<
 // Type to support commands property
 export type BridgeOrderWithCommands = BridgeOrder & {
   commands?: InterfaceOrder[]
+}
+
+export function getDefaultToken(chainId: number) {
+  return CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address
 }
