@@ -88,7 +88,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const debouncedAddress = useDebounce(address, 500)
   const [amount, setAmount] = useState('')
   const [addressError, setAddressError] = useState('')
-  const [activePercentage, setActivePercentage] = useState<number | null>(null)
   const [estimatedFee, setEstimatedFee] = useState<string | null>(null)
   const [estimatedFeeUsd, setEstimatedFeeUsd] = useState<string | null>(null)
   const [isInputFocus, setIsInputFocus] = useState(false)
@@ -220,7 +219,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
   const handleAmountChange = useCallback((value: string) => {
     setAmount(value)
-    setActivePercentage(null)
   }, [])
 
   const handleUserInputBlur = useCallback(() => {
