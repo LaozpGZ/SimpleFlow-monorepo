@@ -25,6 +25,7 @@ import { StablePair } from 'views/AddLiquidity/AddStableLiquidity/hooks/useStabl
 
 import { RiskInputPanelDisplay } from 'components/AccessRisk/SwapRevampRiskDisplay'
 import { FiatLogo } from 'components/Logo/CurrencyLogo'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
@@ -224,6 +225,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   const { address: account } = useAccount()
   // const value = useRef<string | undefined>(defaultValue)
   const [value, setValue] = useState<string | undefined>(defaultValue)
+  const { chainId } = useActiveChainId()
 
   const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
 
@@ -378,7 +380,15 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
                   )
                 ) : currencyLoading ? (
                   <Skeleton width="40px" height="40px" variant="circle" />
-                ) : null}
+                ) : (
+                  <CurrencyLogo
+                    imageRef={tokenImageRef}
+                    currency={{ chainId }}
+                    size={`${LOGO_SIZE.MAX}px`}
+                    containerStyle={{ marginRight: '8px' }}
+                    showChainLogo
+                  />
+                )}
                 {currencyLoading ? null : pair ? (
                   <Text id="pair" bold fontSize="24px">
                     {getTokenSymbolAlias(pair?.token0.wrapped?.address, pair?.token0.chainId, pair?.token0.symbol)}:
