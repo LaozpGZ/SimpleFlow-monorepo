@@ -178,6 +178,7 @@ export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
         justifyContent="space-between"
         flexDirection={['column', 'column', 'column', 'row']}
         alignItems={['center', 'center', 'center', 'flex-start']}
+        mb="8px"
       >
         <Box mt="24px" minWidth="42px">
           <CurrencyLogo currency={inputCurrency} size="42px" showChainLogo />
@@ -268,9 +269,11 @@ const BridgeChainRoutes = ({ routes }: { routes: RouteDisplayEssentials[] }) => 
         <Text color="invertedContrast" textAlign="center" bold>
           {getFullChainNameById(routes[0].inputAmount.currency.chainId)}
         </Text>
-        <Text color="cardBorder" textAlign="center" small>
-          {t('%split% Split', { split: routes.length })}
-        </Text>
+        {routes.length > 1 && (
+          <Text color="cardBorder" textAlign="center" small>
+            {t('%split% Split', { split: routes.length })}
+          </Text>
+        )}
       </Box>
       <LightGreyCard padding="16px 16px 24px 16px" borderRadius="0 0 24px 24px" width="100%">
         <PrimaryCard width="100%">
