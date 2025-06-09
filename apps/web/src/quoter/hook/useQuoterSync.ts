@@ -86,6 +86,7 @@ export const useQuoterSync = () => {
     for: 'main',
     gasLimit,
   }
+  const isCrossChain = inputCurrencyChainId !== outputCurrencyChainId
 
   const quoteQuery = createQuoteQuery(quoteQueryInit)
   const setPlaceholder = useSetAtom(updatePlaceholderAtom)
@@ -104,13 +105,14 @@ export const useQuoterSync = () => {
 
   useEffect(() => {
     let t = 0
+    const revalidateTime = isCrossChain ? QUOTE_REVALIDATE_TIME * 2 : QUOTE_REVALIDATE_TIME
     const interval = setInterval(() => {
-      const outdated = Date.now() - quoteQuery.createTime! > QUOTE_REVALIDATE_TIME
+      const outdated = Date.now() - quoteQuery.createTime! > revalidateTime
       if (paused || (!outdated && quoteResult.loading)) {
         return
       }
       if (t > 0) {
-        if (t % QUOTE_REVALIDATE_TIME === 0) {
+        if (t % revalidateTime === 0) {
           setNonce((v) => v + 1)
         }
       }
@@ -121,7 +123,7 @@ export const useQuoterSync = () => {
       clearInterval(interval)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quoteQuery.hash, paused, quoteResult.loading])
+  }, [quoteQuery.hash, paused, quoteResult.loading, isCrossChain])
 
   useEffect(() => {
     if (quoteResult.isJust() && !quoteResult.hasFlag('placeholder')) {

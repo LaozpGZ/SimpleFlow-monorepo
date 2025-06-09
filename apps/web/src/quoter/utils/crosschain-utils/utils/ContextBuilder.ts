@@ -85,13 +85,19 @@ export class ContextBuilder {
             gasLimit: isDestinationSwap && gasLimitDestinationChain ? gasLimitDestinationChain : _option.gasLimit,
             hash: '',
             placeholderHash: '',
-            infinitySwap: infinitySwap && INFINITY_SUPPORTED_CHAINS.includes(quoteCurrency.chainId),
+            infinitySwap,
             // Disable stable swap for cross chain swap
             // Due to stable swap and v3 swap are not compatiable in terms of amountIn and balanceOf
             stableSwap: false,
             xEnabled: false,
             ...swapOption,
           }
+          const swapChainId = customSwapOption.baseCurrency?.chainId
+          if (!swapChainId) {
+            throw new Error('Missing chainId in swap option')
+          }
+          customSwapOption.infinitySwap =
+            customSwapOption.infinitySwap && INFINITY_SUPPORTED_CHAINS.includes(swapChainId)
 
           const quoteQuery = createQuoteQuery(customSwapOption)
 
