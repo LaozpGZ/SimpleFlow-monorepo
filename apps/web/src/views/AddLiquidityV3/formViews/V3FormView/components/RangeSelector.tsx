@@ -55,7 +55,7 @@ export default function RangeSelector({
       return '0'
     }
 
-    return leftPrice?.toSignificant(5) ?? ''
+    return leftPrice?.greaterThan(1) ? leftPrice.toFixed(2) : leftPrice?.toSignificant(9) ?? ''
   }, [isSorted, leftPrice, tickSpaceLimits, ticksAtLimit])
 
   const rightValue = useMemo(() => {
@@ -77,7 +77,7 @@ export default function RangeSelector({
       return '∞'
     }
 
-    return rightPrice?.toSignificant(5) ?? ''
+    return rightPrice?.greaterThan(1) ? rightPrice.toFixed(2) : rightPrice?.toSignificant(9) ?? '0'
   }, [isSorted, rightPrice, tickSpaceLimits, ticksAtLimit])
 
   return (
