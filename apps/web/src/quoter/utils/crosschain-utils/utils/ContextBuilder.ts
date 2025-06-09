@@ -1,5 +1,4 @@
 import { ChainId } from '@pancakeswap/chains'
-import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import { TokenAddressMap } from '@pancakeswap/token-lists'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import { userSlippageAtomWithLocalStorage } from '@pancakeswap/utils/user/slippage'
@@ -92,12 +91,6 @@ export class ContextBuilder {
             xEnabled: false,
             ...swapOption,
           }
-          const swapChainId = customSwapOption.baseCurrency?.chainId
-          if (!swapChainId) {
-            throw new Error('Missing chainId in swap option')
-          }
-          customSwapOption.infinitySwap =
-            customSwapOption.infinitySwap && INFINITY_SUPPORTED_CHAINS.includes(swapChainId)
 
           const quoteQuery = createQuoteQuery(customSwapOption)
 

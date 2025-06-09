@@ -1,3 +1,4 @@
+import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import { PoolQuery, PoolQueryOptions, QuoteQuery } from 'quoter/quoter.types'
 import { createViemPublicClientGetter } from 'utils/viem'
 import { PoolHashHelper } from './PoolHashHelper'
@@ -36,7 +37,7 @@ export const createPoolQuery = (quoteQuery: QuoteQuery, controller?: AbortContro
   }
 
   const poolOptions: PoolQueryOptions = {
-    infinity: quoteQuery.infinitySwap,
+    infinity: quoteQuery.infinitySwap && INFINITY_SUPPORTED_CHAINS.includes(currency!.chainId),
     v2Pools: !!quoteQuery.v2Swap,
     v3Pools: !!quoteQuery.v3Swap,
     stableSwap: !!quoteQuery.stableSwap,
