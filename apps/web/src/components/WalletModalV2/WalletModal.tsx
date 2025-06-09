@@ -149,7 +149,7 @@ export const WalletContent = ({
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
     includeSpam: false,
-    onlyWithPrice: true,
+    onlyWithPrice: false,
   })
   const balanceDisplay = useMemo(() => {
     const display = formatAmount(totalBalanceUsd)?.split('.')
