@@ -209,7 +209,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     if (receipt?.status) {
       setTxHash(receipt.transactionHash)
       toastSuccess(
-        `${t('Transaction Successful')}!`,
+        `${t('Transaction Submitted')}!`,
         <ToastDescriptionWithTx txHash={receipt.transactionHash}>
           {t('Your %symbol% has been sent to %address%', {
             symbol: currency?.symbol,

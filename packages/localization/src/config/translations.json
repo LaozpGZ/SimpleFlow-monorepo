@@ -3758,5 +3758,6 @@
   "has been sent to": "has been sent to",
   "Sending tokens": "Sending tokens",
   "Assets": "Assets",
-  "Select Networks": "Select Networks"
+  "Select Networks": "Select Networks",
+  "Your %symbol% has been sent to %address%": "Your %symbol% has been sent to %address%"
 }
