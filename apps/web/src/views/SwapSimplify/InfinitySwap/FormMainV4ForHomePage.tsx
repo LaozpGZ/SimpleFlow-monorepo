@@ -56,8 +56,6 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading }:
 
   const { canSwitch, switchNetwork } = useSwitchNetwork()
 
-  const defaultOutputCurrency = useCurrency(outputChainId ? getDefaultToken(outputChainId) : undefined, outputChainId)
-
   const handleCurrencySelect = useCallback(
     (newCurrency: Currency, field: Field) => {
       const isInput = field === Field.INPUT
@@ -69,9 +67,12 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading }:
             (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
           )
 
-        if (!isOutputChainSupported && defaultOutputCurrency) {
+        if (!isOutputChainSupported) {
           // if output chain is not supported, reset output currency
-          onCurrencySelection(Field.OUTPUT, defaultOutputCurrency?.isNative ? undefined : defaultOutputCurrency)
+          onCurrencySelection(Field.OUTPUT, {
+            address: getDefaultToken(newCurrency.chainId),
+            chainId: newCurrency.chainId,
+          } as Currency)
         }
 
         if (canSwitch) {
@@ -82,15 +83,7 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading }:
       onCurrencySelection(field, newCurrency)
       warningSwapHandler(newCurrency)
     },
-    [
-      onCurrencySelection,
-      warningSwapHandler,
-      outputChainId,
-      supportedBridgeChains.data,
-      canSwitch,
-      switchNetwork,
-      defaultOutputCurrency,
-    ],
+    [onCurrencySelection, warningSwapHandler, outputChainId, supportedBridgeChains.data, canSwitch, switchNetwork],
   )
   const handleInputSelect = useCallback(
     (newCurrency: Currency) => handleCurrencySelect(newCurrency, Field.INPUT),
