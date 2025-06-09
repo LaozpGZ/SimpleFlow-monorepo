@@ -5,6 +5,7 @@ import type { HasRequiredKeys, PathsWithMethod } from 'openapi-typescript-helper
 import { createQueryKey } from 'utils/reactQuery'
 import type { paths } from './schema.d'
 
+// Preview
 const endpoints = process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT || 'http://localhost:4123'
 
 export const throwOnError: Middleware = {
