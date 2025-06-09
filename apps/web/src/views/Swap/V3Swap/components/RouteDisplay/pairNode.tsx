@@ -56,10 +56,18 @@ export function getPairNodes({
             infinityFee = pool.fee + protocolFee
             infinityDiscountFee = infinityFee
           }
-          if (infinityFee === 0 && pool.hooks) {
+          if (pool.hooks) {
             const hookData = findHook(pool.hooks, input.chainId)
-            infinityFee = hookData?.defaultFee || 0
+            if (hookData) {
+              const isDynamicHook = hookData.category?.includes(HOOK_CATEGORY.DynamicFees)
+              if (isDynamicHook) {
+                infinityFee = hookData.defaultFee || 0
+                infinityDiscountFee = infinityFee
+              }
+            }
+            console.log('[infi]', pool.hooks, hookData, input.chainId)
           }
+          // infinityFee = hookData?.defaultFee || 0
         }
         const isV3Pool = SmartRouter.isV3Pool(pool)
         const isV2Pool = SmartRouter.isV2Pool(pool)
