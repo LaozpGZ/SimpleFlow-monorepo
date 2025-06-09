@@ -29,6 +29,6 @@ export type BridgeOrderWithCommands = BridgeOrder & {
   commands?: InterfaceOrder[]
 }
 
-export function getDefaultToken(chainId: number) {
+export function getDefaultToken(chainId: number): string | undefined {
   return CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address
 }

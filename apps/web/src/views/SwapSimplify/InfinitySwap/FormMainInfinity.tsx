@@ -80,6 +80,8 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
   const supportedBridgeChains = useBridgeAvailableRoutes()
 
+  const defaultOutputCurrency = useCurrency(outputChainId ? getDefaultToken(outputChainId) : undefined, outputChainId)
+
   const handleCurrencySelect = useCallback(
     (
       newCurrency: Currency,
@@ -104,9 +106,9 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
             (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
           )
 
-        if (!isOutputChainSupported && outputChainId) {
+        if (!isOutputChainSupported && defaultOutputCurrency) {
           // if output chain is not supported, reset output currency
-          onCurrencySelection(Field.OUTPUT, getDefaultToken(outputChainId))
+          onCurrencySelection(Field.OUTPUT, defaultOutputCurrency?.isNative ? undefined : defaultOutputCurrency)
         }
       }
 
@@ -124,6 +126,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
       })
     },
     [
+      defaultOutputCurrency,
       onCurrencySelection,
       warningSwapHandler,
       canSwitch,
