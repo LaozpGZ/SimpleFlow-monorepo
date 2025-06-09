@@ -13,6 +13,6 @@ export const getBridgeTitle = (t: TranslateFunction, status?: BridgeStatus) => {
     case BridgeStatus.FAILED:
       return t('Unsuccessful')
     default:
-      return t('Order Details')
+      return t('Order Submitted')
   }
 }
