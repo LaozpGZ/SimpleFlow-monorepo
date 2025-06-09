@@ -5,18 +5,23 @@ import { CHAIN_IDS } from 'utils/wagmi'
 import SwapLayout from 'views/Swap/SwapLayout'
 
 const StyledSkeleton = styled(Skeleton)`
-  background: ${({ theme }) => theme.colors.bubblegum};
+  background: ${({ theme }) => theme.colors.backgroundBubblegum};
   opacity: 0.1;
 `
 const BgBox = styled(Box)`
-  background: ${({ theme }) => theme.colors.bubblegum};
+  background: ${({ theme }) => theme.colors.backgroundBubblegum};
 `
-const Swap = dynamic(() => import('views/SwapSimplify'), {
-  ssr: false,
-  loading: () => (
+const Container = styled.div<{ isMobile: boolean }>`
+  min-height: ${({ isMobile }) => (isMobile ? '100vh' : '100%')};
+  background: ${({ theme }) => theme.colors.backgroundBubblegum};
+`
+const SwapFallback = () => {
+  const { isMobile } = useMatchBreakpoints()
+
+  return (
     <BgBox
       style={{
-        height: '100vh',
+        minHeight: isMobile ? '100vh' : '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -26,11 +31,15 @@ const Swap = dynamic(() => import('views/SwapSimplify'), {
         variant="rect"
         animation="waves"
         style={{
-          height: '100vh',
+          minHeight: isMobile ? '100vh' : '100%',
         }}
       />
     </BgBox>
-  ),
+  )
+}
+const Swap = dynamic(() => import('views/SwapSimplify'), {
+  ssr: false,
+  loading: () => <SwapFallback />,
 })
 
 const SwapPage = () => {
@@ -38,13 +47,9 @@ const SwapPage = () => {
 
   return (
     <SwapLayout>
-      <div
-        style={{
-          minHeight: isMobile ? '100vh' : undefined,
-        }}
-      >
+      <Container isMobile={isMobile}>
         <Swap />
-      </div>
+      </Container>
     </SwapLayout>
   )
 }
