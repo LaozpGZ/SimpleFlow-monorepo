@@ -363,7 +363,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         <FlexGap alignItems="center" gap="8px" justifyContent="space-between" position="relative">
           <FlexGap alignItems="center" gap="8px" mb="8px">
             <AssetContainer>
-              <CurrencyLogo currency={currency} size="40px" />
+              <CurrencyLogo currency={currency} size="40px" src={asset.token.logoURI} />
               <ChainIconWrapper>
                 <img
                   src={`${ASSET_CDN}/web/chains/${asset.chainId}.png`}
