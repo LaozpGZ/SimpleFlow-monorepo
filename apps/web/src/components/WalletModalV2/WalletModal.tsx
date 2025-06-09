@@ -180,8 +180,8 @@ export const WalletContent = ({
 
   return (
     <Box
-      minWidth={isMobile ? '100%' : '357px'}
       maxHeight={isMobile ? 'auto' : 'calc(100vh - 80px)'}
+      maxWidth={isMobile ? '100%' : '357px'}
       overflowY={isMobile ? undefined : 'auto'}
     >
       <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px" mt="8px">
