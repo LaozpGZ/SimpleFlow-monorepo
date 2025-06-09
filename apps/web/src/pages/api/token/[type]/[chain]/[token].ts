@@ -76,11 +76,12 @@ async function _loadData(chain?: string, address?: string, type?: SupportedType)
     }
 
     case 'v3': {
+      const abort = AbortSignal.timeout(30_000) // 30 seconds timeout for the request
       const result = await Promise.allSettled([
-        fetchPoolsForToken(address, queryChainName),
-        fetchedTokenData(queryChainName, address),
-        fetchTokenTransactions(address, queryChainName),
-        fetchTokenChartData('v3', queryChainName, address),
+        fetchPoolsForToken(address, queryChainName, abort),
+        fetchedTokenData(queryChainName, address, abort),
+        fetchTokenTransactions(address, queryChainName, abort),
+        fetchTokenChartData('v3', queryChainName, address, abort),
       ])
       const poolsData = resultsOrUdef(result[0])
       const token = resultsOrUdef(result[1])
