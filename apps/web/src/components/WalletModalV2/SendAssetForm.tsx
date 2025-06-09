@@ -3,6 +3,7 @@ import { useDebounce } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Percent, Token } from '@pancakeswap/sdk'
 import {
+  AutoRenewIcon,
   BalanceInput,
   Box,
   Button,
@@ -13,12 +14,15 @@ import {
   LazyAnimatePresence,
   Text,
   domAnimation,
+  useToast,
 } from '@pancakeswap/uikit'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
+import { ToastDescriptionWithTx } from 'components/Toast'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { BalanceData } from 'hooks/useAddressBalance'
+import useCatchTxError from 'hooks/useCatchTxError'
 import { useERC20 } from 'hooks/useContract'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import useNativeCurrency from 'hooks/useNativeCurrency'
@@ -92,10 +96,11 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const [estimatedFeeUsd, setEstimatedFeeUsd] = useState<string | null>(null)
   const [isInputFocus, setIsInputFocus] = useState(false)
 
-  const [attemptingTxn, setAttemptingTxn] = useState(false)
   const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const { address: accountAddress } = useAccount()
   const publicClient = usePublicClient({ chainId: asset.chainId })
+  const { toastSuccess } = useToast()
+  const { fetchWithCatchTxError, loading: attemptingTxn } = useCatchTxError()
 
   // Get native currency for fee calculation
   const nativeCurrency = useNativeCurrency(asset.chainId)
@@ -111,7 +116,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
             asset.token.symbol,
             asset.token.name,
           ),
-    [asset],
+    [asset, nativeCurrency],
   )
 
   const tokenBalance = tryParseAmount(asset.quantity, currency)
@@ -124,23 +129,22 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const estimateTransactionFee = useCallback(async () => {
     if (!address || !amount || !publicClient || !accountAddress) return
 
-    const amounts = tryParseAmount(amount, currency)
-
     try {
-      let gasEstimate: bigint
+      let gasEstimate: bigint = 0n
 
       if (isNativeToken) {
-        // Estimate gas for native token transfer
-        gasEstimate = await publicClient.estimateGas({
-          account: accountAddress,
-          to: address as `0x${string}`,
-          value: amounts?.quotient ?? 0n,
-        })
+        // For native token, estimate gas for a simple transfer
+        gasEstimate =
+          (await publicClient.estimateGas({
+            account: accountAddress,
+            to: address as `0x${string}`,
+            value: tryParseAmount(amount, currency)?.quotient ?? 0n,
+          })) ?? 0n
       } else {
-        // Estimate gas for ERC20 token transfer
+        // For ERC20 tokens, estimate gas for a transfer call
         const transferData = {
           to: address as `0x${string}`,
-          amount: amounts?.quotient ?? 0n,
+          amount: tryParseAmount(amount, currency)?.quotient ?? 0n,
         }
         gasEstimate =
           (await erc20Contract?.estimateGas?.transfer([transferData.to, transferData.amount], {
@@ -171,32 +175,67 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       setEstimatedFee(null)
       setEstimatedFeeUsd(null)
     }
-  }, [address, amount, publicClient, accountAddress, isNativeToken, currency, asset.token.address, nativeCurrencyPrice])
+  }, [
+    address,
+    amount,
+    publicClient,
+    accountAddress,
+    isNativeToken,
+    currency,
+    asset.token.address,
+    nativeCurrencyPrice,
+    erc20Contract,
+  ])
 
   const sendAsset = useCallback(async () => {
     const amounts = tryParseAmount(amount, currency)
-    try {
-      let result
+
+    const receipt = await fetchWithCatchTxError(async () => {
       if (isNativeToken) {
         // Handle native token transfer
-        result = await sendTransactionAsync({
+        return sendTransactionAsync({
           to: address as `0x${string}`,
           value: amounts?.quotient ?? 0n,
           chainId: asset.chainId,
         })
-      } else {
-        // Handle ERC20 token transfer
-        result = await erc20Contract?.write?.transfer([address as `0x${string}`, amounts?.quotient ?? 0n], {
-          account: erc20Contract.account!,
-          chain: erc20Contract.chain!,
-        })
       }
-      setTxHash(result)
-      console.log(result)
-    } catch (error) {
-      console.error(error)
+      // Handle ERC20 token transfer
+      return erc20Contract?.write?.transfer([address as `0x${string}`, amounts?.quotient ?? 0n], {
+        account: erc20Contract.account!,
+        chain: erc20Contract.chain!,
+      })
+    })
+
+    if (receipt?.status) {
+      setTxHash(receipt.transactionHash)
+      toastSuccess(
+        `${t('Transaction Successful')}!`,
+        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+          {t('Your %symbol% has been sent to %address%', {
+            symbol: currency?.symbol,
+            address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
+          })}
+        </ToastDescriptionWithTx>,
+      )
+      // Reset form after successful transaction
+      setAmount('')
+      setAddress('')
     }
-  }, [address, amount, erc20Contract, isNativeToken, sendTransactionAsync, asset.chainId])
+
+    return receipt
+  }, [
+    address,
+    amount,
+    erc20Contract,
+    isNativeToken,
+    sendTransactionAsync,
+    asset.chainId,
+    asset.token.symbol,
+    fetchWithCatchTxError,
+    t,
+    toastSuccess,
+    currency,
+  ])
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -217,9 +256,12 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     setAddressError('')
   }
 
-  const handleAmountChange = useCallback((value: string) => {
-    setAmount(value)
-  }, [])
+  const handleAmountChange = useCallback(
+    (value: string) => {
+      setAmount(value)
+    },
+    [currency],
+  )
 
   const handleUserInputBlur = useCallback(() => {
     setTimeout(() => setIsInputFocus(false), 300)
@@ -228,7 +270,8 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const handlePercentInput = useCallback(
     (percent: number) => {
       if (maxAmountInput) {
-        handleAmountChange(maxAmountInput.multiply(new Percent(percent, 100)).toExact())
+        const { multiply } = maxAmountInput
+        handleAmountChange(multiply(new Percent(percent, 100)).toExact())
       }
     },
     [maxAmountInput, handleAmountChange],
@@ -268,11 +311,11 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         estimatedFee={estimatedFee}
         estimatedFeeUsd={estimatedFeeUsd}
         onConfirm={async () => {
-          // In a real implementation, this would be the actual transaction submission
-          setAttemptingTxn(true)
-          sendAsset().then(() => {
-            setAttemptingTxn(false)
-          })
+          // Submit the transaction using the improved error handling
+          const receipt = await sendAsset()
+          if (receipt?.status) {
+            onViewStateChange(ViewState.SEND_ASSETS)
+          }
         }}
       />
     )
@@ -379,9 +422,11 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           onClick={() => {
             onViewStateChange(ViewState.CONFIRM_TRANSACTION)
           }}
-          disabled={!address || !amount || !!addressError || isInsufficientBalance}
+          disabled={!address || !amount || !!addressError || isInsufficientBalance || attemptingTxn}
+          isLoading={attemptingTxn}
+          endIcon={attemptingTxn ? <AutoRenewIcon spin color="currentColor" /> : undefined}
         >
-          {t('Next')}
+          {attemptingTxn ? t('Confirming') : t('Next')}
         </Button>
       </FlexGap>
     </FormContainer>
