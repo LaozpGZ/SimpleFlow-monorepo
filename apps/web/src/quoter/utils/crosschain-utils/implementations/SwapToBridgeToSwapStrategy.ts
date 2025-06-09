@@ -2,7 +2,7 @@ import { SmartRouter } from '@pancakeswap/smart-router'
 import { InfinityTradeWithoutGraph } from '@pancakeswap/smart-router/dist/evm/infinity-router'
 import { TradeType } from '@pancakeswap/swap-sdk-core'
 import { Loadable } from '@pancakeswap/utils/Loadable'
-import { BridgeTradeError } from 'quoter/quoter.types'
+import { BridgeTradeError, NoValidRouteError } from 'quoter/quoter.types'
 import { basisPointsToPercent } from 'utils/exchange'
 import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import { generateSwapCommands } from 'views/Swap/Bridge/api'
@@ -25,7 +25,7 @@ export class SwapToBridgeToSwapStrategy extends CrossChainQuoteStrategy {
       .filter((quote): quote is InterfaceOrder => quote !== undefined)
 
     if (validOriginSwapOrders.length === 0) {
-      return Loadable.Fail<InterfaceOrder>(new BridgeTradeError('No valid origin swap quotes'))
+      return Loadable.Fail<InterfaceOrder>(new NoValidRouteError('No valid origin swap quotes'))
     }
 
     // 2. Find destination swap quotes from valid origin swap quotes

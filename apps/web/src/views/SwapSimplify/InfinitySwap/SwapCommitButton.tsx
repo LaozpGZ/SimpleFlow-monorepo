@@ -474,7 +474,14 @@ const ResetRoutesButton = () => {
               >
                 {t('Check your settings')}
               </RoutingSettingsButton>
-              <MessageText>{t('or')}</MessageText>
+              <MessageText
+                style={{
+                  position: 'relative',
+                  top: '-1px',
+                }}
+              >
+                {t('or')}
+              </MessageText>
               <Button variant="text" scale="xs" p="0" onClick={resetRoutingSetting}>
                 {t('Reset to default')}
               </Button>
