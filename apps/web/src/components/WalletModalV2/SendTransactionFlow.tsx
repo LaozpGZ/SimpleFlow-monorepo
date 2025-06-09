@@ -97,7 +97,7 @@ export function ConfirmTransactionContent({
             </Box>
           </FlexGap>
           <Box position="relative" mb="16px">
-            <CurrencyLogo currency={currency} size="80px" />
+            <CurrencyLogo currency={currency} size="80px" src={asset.token.logoURI} />
           </Box>
           <Text fontSize="32px" bold>
             {parseFloat(amount).toLocaleString(undefined, {
