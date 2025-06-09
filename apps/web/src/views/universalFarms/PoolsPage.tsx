@@ -5,10 +5,10 @@ import { Suspense, useCallback, useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 
 import { useTranslation } from '@pancakeswap/localization'
+import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { getFarmKey } from 'state/farmsV4/search/farm.util'
 import { PoolInfo } from 'state/farmsV4/state/type'
-import { useListStateReady } from 'state/lists/lists'
 import { farmsSearchAtom, farmsSearchPagingAtom } from './atom/farmsSearchAtom'
 import { searchQueryAtom, updateFilterAtom, updateSortAtom } from './atom/searchQueryAtom'
 import {
@@ -23,6 +23,7 @@ import {
 } from './components'
 import { AddLiquidityButton } from './components/AddLiquidityButton'
 import { FarmSearchContextProvider } from './hooks/useFarmSearchContext'
+import { ListUpdaterProvider } from './providers/ListUpdaterProvider'
 import { farmQueryToUrlParams, getIndexByProtocols } from './utils/queryParser'
 
 const PoolsContent = styled.div`
@@ -35,7 +36,6 @@ export const PoolsPage = () => {
 
   const updateFilter = useSetAtom(updateFilterAtom)
   const query = useAtomValue(searchQueryAtom)
-  const isReady = useListStateReady()
 
   useEffect(() => {
     const params = farmQueryToUrlParams(query)
@@ -62,22 +62,22 @@ export const PoolsPage = () => {
   )
 
   return (
-    <FarmSearchContextProvider>
-      <Card>
-        <CardHeader p={isMobile ? '16px' : undefined}>
-          <PoolsFilterPanel onChange={handleFilterChange} value={poolsFilter}>
-            {(isMobile || isMd) && <AddLiquidityButton height="40px" scale="sm" width="100%" />}
-          </PoolsFilterPanel>
-        </CardHeader>
-        <CardBody>
-          {isReady && (
+    <ListUpdaterProvider urls={DEFAULT_ACTIVE_LIST_URLS}>
+      <FarmSearchContextProvider>
+        <Card>
+          <CardHeader p={isMobile ? '16px' : undefined}>
+            <PoolsFilterPanel onChange={handleFilterChange} value={poolsFilter}>
+              {(isMobile || isMd) && <AddLiquidityButton height="40px" scale="sm" width="100%" />}
+            </PoolsFilterPanel>
+          </CardHeader>
+          <CardBody>
             <Suspense fallback={null}>
               <List />
             </Suspense>
-          )}
-        </CardBody>
-      </Card>
-    </FarmSearchContextProvider>
+          </CardBody>
+        </Card>
+      </FarmSearchContextProvider>
+    </ListUpdaterProvider>
   )
 }
 
