@@ -72,11 +72,15 @@ export class PoolHashHelper {
       placeholderHash,
       routeKey,
       nonce,
+      infinitySwap,
+      v2Swap,
+      v3Swap,
+      stableSwap,
     } = query
     const chainId = query.baseCurrency?.chainId
     // NOTE: Support for cross-chain quotes
     const destinationChainId = query.currency?.chainId
-    const rest = { slippage, nonce }
+    const rest = { slippage, nonce, infinitySwap, v2Swap, v3Swap, stableSwap }
     const restHash = keccak256(`0x${stringify(rest)}:${chainId}:${destinationChainId}`)
     const hashCurrencies = PoolHashHelper.hashCurrencies(amount?.currency, currency || undefined)
     const prts = [amount?.toExact(), hashCurrencies, restHash]
