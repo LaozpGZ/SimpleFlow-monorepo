@@ -1,3 +1,4 @@
+import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   ButtonMenu,
@@ -9,12 +10,10 @@ import {
   useTooltip,
 } from '@pancakeswap/uikit'
 import GlobalSettings from 'components/Menu/GlobalSettings'
-import RecentTransactionsButton from 'components/Menu/GlobalSettings/RecentTransactionsButton'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { styled } from 'styled-components'
-import { useTheme } from '@pancakeswap/hooks'
 import { SettingsMode } from '../../../components/Menu/GlobalSettings/types'
 import { SwapType } from '../../Swap/types'
 import { isTwapSupported } from '../../Swap/utils'
@@ -177,7 +176,7 @@ export const SwapSelection = ({
       )} */}
       {withToolkit && (
         <FlexGap alignItems="center" gap="4px">
-          <RecentTransactionsButton />
+          {/* <RecentTransactionsButton /> */}
           <GlobalSettings
             color="textSubtle"
             mr="0"
