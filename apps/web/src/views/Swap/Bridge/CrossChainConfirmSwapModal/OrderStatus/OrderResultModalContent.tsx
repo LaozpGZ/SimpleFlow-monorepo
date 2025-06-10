@@ -7,7 +7,7 @@ import {
   FlexGap,
   Message,
   Skeleton,
-  SwapLoading,
+  SwapSpinner,
   Text,
   WarningIcon,
 } from '@pancakeswap/uikit'
@@ -193,7 +193,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
         return (
           <IconContainer>
             <ArrowForwardIcon width="24px" ml="4px" color="textSubtle" />
-            <SwapLoading style={{ position: 'absolute', top: '2px', left: '7px', scale: '2.5' }} />
+            <SwapSpinner width="52px" height="52px" style={{ position: 'absolute', top: '-14px', left: '-10px' }} />
           </IconContainer>
         )
       default:

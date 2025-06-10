@@ -5,7 +5,7 @@ import {
   FlexGap,
   LinkExternal,
   ScanLink,
-  SwapLoading,
+  SwapSpinner,
   WarningIcon,
 } from '@pancakeswap/uikit'
 import { useCallback, useMemo, useRef } from 'react'
@@ -136,7 +136,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
       case 'failed':
         return <WarningIcon color="binance" />
       case 'inProgress':
-        return <SwapLoading />
+        return <SwapSpinner width="24px" height="24px" padding="3px" />
       case 'notStarted':
         return <CircleOutlineIcon color="textDisabled" />
       default:
