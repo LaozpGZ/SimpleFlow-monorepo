@@ -6,6 +6,7 @@ import styled from 'styled-components'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
+import { useTokenListPrepared } from 'hooks/useTokenListPrepared'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { getFarmKey } from 'state/farmsV4/search/farm.util'
 import { PoolInfo } from 'state/farmsV4/state/type'
@@ -23,7 +24,6 @@ import {
 } from './components'
 import { AddLiquidityButton } from './components/AddLiquidityButton'
 import { FarmSearchContextProvider } from './hooks/useFarmSearchContext'
-import { ListUpdaterProvider } from './providers/ListUpdaterProvider'
 import { farmQueryToUrlParams, getIndexByProtocols } from './utils/queryParser'
 
 const PoolsContent = styled.div`
@@ -62,22 +62,20 @@ export const PoolsPage = () => {
   )
 
   return (
-    <ListUpdaterProvider urls={DEFAULT_ACTIVE_LIST_URLS}>
-      <FarmSearchContextProvider>
-        <Card>
-          <CardHeader p={isMobile ? '16px' : undefined}>
-            <PoolsFilterPanel onChange={handleFilterChange} value={poolsFilter}>
-              {(isMobile || isMd) && <AddLiquidityButton height="40px" scale="sm" width="100%" />}
-            </PoolsFilterPanel>
-          </CardHeader>
-          <CardBody>
-            <Suspense fallback={null}>
-              <List />
-            </Suspense>
-          </CardBody>
-        </Card>
-      </FarmSearchContextProvider>
-    </ListUpdaterProvider>
+    <FarmSearchContextProvider>
+      <Card>
+        <CardHeader p={isMobile ? '16px' : undefined}>
+          <PoolsFilterPanel onChange={handleFilterChange} value={poolsFilter}>
+            {(isMobile || isMd) && <AddLiquidityButton height="40px" scale="sm" width="100%" />}
+          </PoolsFilterPanel>
+        </CardHeader>
+        <CardBody>
+          <Suspense fallback={null}>
+            <List />
+          </Suspense>
+        </CardBody>
+      </Card>
+    </FarmSearchContextProvider>
   )
 }
 
@@ -130,8 +128,10 @@ const List = () => {
     }
   }, [isIntersecting, setPaging])
 
+  const listPrepared = useTokenListPrepared(DEFAULT_ACTIVE_LIST_URLS)
+
   const list = _list.unwrapOr([])
-  const pending = _list.isPending() && list.length === 0
+  const pending = listPrepared.isPending() && _list.isPending() && list.length === 0
   const isExtending = _list.isPending() && list.length > 0
   const { t } = useTranslation()
 
