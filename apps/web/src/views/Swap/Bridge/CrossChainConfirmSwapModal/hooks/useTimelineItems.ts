@@ -207,8 +207,8 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
           if (step.command === Command.BRIDGE) {
             if (!step.metadata) return undefined
 
-            // If bridge is the first step, use origin chain and hash
-            if (i === 0) {
+            // If bridge is the first step (and other steps exist), use origin chain and hash
+            if (i === 0 && bridgeStatus?.data && bridgeStatus?.data.length > 1) {
               return {
                 hash: step.metadata.depositTxHash,
                 chainId: step.metadata.originChainId,
