@@ -354,7 +354,12 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
     if (isRecipientEmpty) return t('Enter a recipient')
     if (isRecipientError) return t('Invalid recipient')
-    if (tradeError instanceof BridgeTradeError) return tradeError.message
+    if (tradeError instanceof BridgeTradeError) {
+      if (tradeError.message.includes("doesn't have enough funds to support this deposit")) {
+        return t('Requested amount exceeds the available bridge liquidity. Please try again with a lower amount!')
+      }
+      return tradeError.message
+    }
     if (swapInputError) return swapInputError
 
     if (tradeLoading) return <Dots>{t('Searching For The Best Price')}</Dots>
