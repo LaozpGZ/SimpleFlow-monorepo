@@ -84,7 +84,9 @@ export function useStableDerivedBurnInfo(
     account ?? undefined,
     useMemo(() => [pair?.liquidityToken || undefined], [pair?.liquidityToken]),
   )
-  const userLiquidity: undefined | CurrencyAmount<Token> = relevantTokenBalances?.[pair?.liquidityToken?.address ?? '']
+  const userLiquidity: undefined | CurrencyAmount<Token> = pair?.liquidityToken
+    ? relevantTokenBalances?.[`${pair.liquidityToken.chainId}-${pair.liquidityToken.address}`]
+    : undefined
 
   let percentToRemove: Percent = new Percent('0', '100')
   // user specified a %

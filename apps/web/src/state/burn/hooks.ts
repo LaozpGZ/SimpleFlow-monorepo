@@ -40,7 +40,9 @@ export function useDerivedBurnInfo(
     account ?? undefined,
     useMemo(() => [pair?.liquidityToken], [pair?.liquidityToken]),
   )
-  const userLiquidity: undefined | CurrencyAmount<Token> = relevantTokenBalances?.[pair?.liquidityToken?.address ?? '']
+  const userLiquidity: undefined | CurrencyAmount<Token> = pair?.liquidityToken
+    ? relevantTokenBalances?.[`${pair.liquidityToken.chainId}-${pair.liquidityToken.address}`]
+    : undefined
 
   const [tokenA, tokenB] = [wrappedCurrency(currencyA, chainId), wrappedCurrency(currencyB, chainId)]
   const tokens = {

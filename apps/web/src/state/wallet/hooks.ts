@@ -64,7 +64,7 @@ export function useTokenBalancesWithLoadingIndicator(
             const value = balances?.[i]?.result as bigint | undefined
             const amount = typeof value !== 'undefined' ? BigInt(value.toString()) : undefined
             if (typeof amount !== 'undefined') {
-              memo[token.address] = CurrencyAmount.fromRawAmount(token, amount)
+              memo[`${token.chainId}-${token.address}`] = CurrencyAmount.fromRawAmount(token, amount)
             }
             return memo
           }, {})
@@ -82,7 +82,7 @@ export function useTokenBalance(account?: string, token?: Token): CurrencyAmount
     useMemo(() => [token], [token]),
   )
   if (!token) return undefined
-  return tokenBalances[token.address]
+  return tokenBalances[`${token.chainId}-${token.address}`]
 }
 
 export function useCurrencyBalances(
@@ -110,7 +110,7 @@ export function useCurrencyBalances(
     () =>
       currencies?.map((currency) => {
         if (!account || !currency) return undefined
-        if (currency?.isToken) return tokenBalances[currency.address]
+        if (currency?.isToken) return tokenBalances[`${currency.chainId}-${currency.address}`]
         if (currency?.isNative) return nativeBalance
         return undefined
       }) ?? [],
@@ -133,7 +133,13 @@ export function useAllTokenBalances(chainId?: number): { [tokenAddress: string]:
 
   const [tokenBalances] = useTokenBalancesWithLoadingIndicator(account, allTokensArray)
 
-  return tokenBalances
+  return Object.keys(tokenBalances).reduce((acc, key) => {
+    const [_, address] = key.split('-')
+    return {
+      ...acc,
+      [address]: tokenBalances[key],
+    }
+  }, {} as { [tokenAddress: string]: CurrencyAmount<Token> | undefined })
 }
 
 /**
