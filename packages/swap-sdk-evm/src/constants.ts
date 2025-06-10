@@ -184,7 +184,7 @@ export const WBNB = {
     18,
     'WBNB',
     'Wrapped BNB',
-    'https://www.binance.org',
+    'https://www.bnbchain.org',
   ),
   [ChainId.BSC]: new ERC20Token(
     ChainId.BSC,
@@ -192,7 +192,7 @@ export const WBNB = {
     18,
     'WBNB',
     'Wrapped BNB',
-    'https://www.binance.org',
+    'https://www.bnbchain.org',
   ),
   [ChainId.BSC_TESTNET]: new ERC20Token(
     ChainId.BSC_TESTNET,
@@ -200,7 +200,7 @@ export const WBNB = {
     18,
     'WBNB',
     'Wrapped BNB',
-    'https://www.binance.org',
+    'https://www.bnbchain.org',
   ),
   [ChainId.OPBNB_TESTNET]: new ERC20Token(
     ChainId.OPBNB_TESTNET,
@@ -208,7 +208,7 @@ export const WBNB = {
     18,
     'WBNB',
     'Wrapped BNB',
-    'https://www.binance.org',
+    'https://www.bnbchain.org',
   ),
   [ChainId.OPBNB]: new ERC20Token(
     ChainId.OPBNB,
@@ -216,7 +216,7 @@ export const WBNB = {
     18,
     'WBNB',
     'Wrapped BNB',
-    'https://www.binance.org',
+    'https://www.bnbchain.org',
   ),
 }
 

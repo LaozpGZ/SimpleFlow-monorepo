@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { getFarmsPrices, FarmWithPrices } from './farmPrices'
+import { describe, expect, it } from 'vitest'
+import { FarmWithPrices, getFarmsPrices } from './farmPrices'
 
 describe('getFarmPrices tests', () => {
   it('Should return farm with prices', async () => {
@@ -48,7 +48,7 @@ describe('getFarmPrices tests', () => {
           decimals: 18,
           symbol: 'WBNB',
           name: 'Wrapped BNB',
-          projectLink: 'https://www.binance.org',
+          projectLink: 'https://www.bnbchain.org',
         },
         lpSymbol: 'BUSD-BNB LP',
         tokenAmountTotal: '85097162.821685161673087371',
