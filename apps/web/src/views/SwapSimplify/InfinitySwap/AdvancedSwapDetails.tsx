@@ -179,9 +179,13 @@ export const TradeSummary = memo(function TradeSummary({
       <RowBetween>
         <RowFixed>
           <QuestionHelperV2
-            text={t(
-              'Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.',
-            )}
+            text={
+              isExactIn
+                ? t('Amount you are guaranteed to receive')
+                : t(
+                    'Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.',
+                  )
+            }
             placement="top"
           >
             <DetailsTitle>{isExactIn ? t('Minimum received') : t('Maximum sold')}</DetailsTitle>
@@ -239,20 +243,7 @@ export const TradeSummary = memo(function TradeSummary({
             <QuestionHelperV2
               text={
                 <>
-                  <Text>
-                    <Text bold display="inline-block">
-                      {t('AMM')}
-                    </Text>
-                    {`: ${t('The difference between the market price and estimated price due to trade size.')}`}
-                  </Text>
-                  <Text mt="10px">
-                    <Text bold display="inline-block">
-                      {t('X')}
-                    </Text>
-                    {`: ${t(
-                      'The difference between the latest quoted price and the minimum receiving amount set in the trade order.',
-                    )}`}
-                  </Text>
+                  <Text>{t('The change in pool price caused by your swap')}</Text>
                 </>
               }
               placement="top"
