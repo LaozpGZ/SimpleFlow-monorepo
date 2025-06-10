@@ -181,7 +181,7 @@ export const TradeSummary = memo(function TradeSummary({
           <QuestionHelperV2
             text={
               isExactIn
-                ? t('Amount you are guaranteed to receive')
+                ? t('Amount you are guaranteed to receive.')
                 : t(
                     'Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.',
                   )
@@ -207,7 +207,7 @@ export const TradeSummary = memo(function TradeSummary({
             <QuestionHelperV2
               text={
                 <>
-                  <Text>{t('Fees saved on PancakeSwap compared to major DEXs charging interface fees')}</Text>
+                  <Text>{t('Fees saved on PancakeSwap compared to major DEXs charging interface fees.')}</Text>
                 </>
               }
               placement="top"
@@ -243,7 +243,7 @@ export const TradeSummary = memo(function TradeSummary({
             <QuestionHelperV2
               text={
                 <>
-                  <Text>{t('The change in pool price caused by your swap')}</Text>
+                  <Text>{t('The change in pool price caused by your swap.')}</Text>
                 </>
               }
               placement="top"
@@ -347,7 +347,7 @@ export const TradeSummary = memo(function TradeSummary({
       {expectedFillTimeSec && (
         <RowBetween mt="10px">
           <RowFixed>
-            <QuestionHelperV2 text={t('Estimated time to complete this transaction')}>
+            <QuestionHelperV2 text={t('Estimated time to complete this transaction.')}>
               <DetailsTitle fontSize="14px" color="textSubtle">
                 {t('Est. Time')}
               </DetailsTitle>
