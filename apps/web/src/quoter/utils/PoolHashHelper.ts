@@ -84,7 +84,6 @@ export class PoolHashHelper {
     const restHash = keccak256(`0x${stringify(rest)}:${chainId}:${destinationChainId}`)
     const hashCurrencies = PoolHashHelper.hashCurrencies(amount?.currency, currency || undefined)
     const prts = [amount?.toExact(), hashCurrencies, restHash]
-    console.log(`[ph]`, prts)
     return keccak256(`0x${prts.join(':')}`)
   }
 
@@ -108,11 +107,7 @@ export const isEqualCurrency = (a: Currency | undefined, b: Currency | undefined
 }
 
 export const isEqualQuoteQuery = (a: QuoteQuery, b: QuoteQuery) => {
-  return (
-    a.hash === b.hash &&
-    PoolHashHelper.hashCurrencies(a.baseCurrency || undefined, a.currency || undefined) ===
-      PoolHashHelper.hashCurrencies(b.baseCurrency || undefined, b.currency || undefined)
-  )
+  return a.hash === b.hash
 }
 
 export const isEqualPoolQuery = (a: PoolQuery, b: PoolQuery) => {

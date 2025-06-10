@@ -88,8 +88,6 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
           perf.tracker.success(result.value)
         }
 
-        console.info(`[ph]`, 'bestCrossChainQuoteAtom hash', _option.placeholderHash)
-
         return result.setExtra('placeholderHash', _option.placeholderHash!)
       } finally {
         perf.tracker.report()
