@@ -7,8 +7,8 @@ import {
   Button,
   DottedHelpText,
   Flex,
-  InterchangeIcon,
   QuestionHelperV2,
+  SwapHorizIcon,
   Text,
   WarningIcon,
   useTooltip,
@@ -184,7 +184,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
           >
             {executionPriceDisplay}
             <StyledBalanceMaxMini onClick={() => setShowInverted(!showInverted)}>
-              <InterchangeIcon color="primary" width="20px" />
+              <SwapHorizIcon color="primary" width="20px" />
             </StyledBalanceMaxMini>
           </Text>
         </RowBetween>
@@ -200,7 +200,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
           </RowFixed>
           <FormattedPriceImpact isX={isXOrder(order)} priceImpact={getBridgeOrderPriceImpact(priceBreakdown)} />
         </RowBetween>
-        {!isXOrder(order) && !isBridgeOrder(order) && (
+        {!isXOrder(order) && (
           <RowBetween mb="8px">
             <RowFixed>
               <QuestionHelperV2
@@ -241,7 +241,6 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
             </Text>
           </RowFixed>
         </RowBetween>
-
         <RowBetween mt="2px">
           <RowFixed>
             <QuestionHelperV2 ml="4px" placement="top" text={<TotalFeeToolTip />}>
@@ -290,7 +289,6 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
             </Text>
           </RowBetween>
         )}
-
         {isXOrder(order) && (
           <RowBetween mt="8px">
             <RowFixed>
