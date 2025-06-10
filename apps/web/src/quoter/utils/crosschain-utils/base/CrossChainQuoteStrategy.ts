@@ -41,7 +41,6 @@ export abstract class CrossChainQuoteStrategy {
       throw new BridgeTradeError('No bridge quote found')
     }
 
-    const routes = commandsWithSlippage.map((command) => (!isXOrder(command) ? command.trade.routes : [])).flat()
     const noSlippageRoutes = noSlippageCommands
       ?.map((command) => (!isXOrder(command) ? command.trade.routes : []))
       .flat()
@@ -55,11 +54,9 @@ export abstract class CrossChainQuoteStrategy {
         inputAmount: first(commands)!.trade.inputAmount,
         // NOTE: Show output amount without slippage.
         // Minimum output received (with slippage) is different from ouputAmount
-        outputAmount: noSlippageRoutes?.length
-          ? last(noSlippageCommands)!.trade.outputAmount
-          : last(commands)!.trade.outputAmount,
+        outputAmount: last(noSlippageCommands)!.trade.outputAmount,
         tradeType: TradeType.EXACT_INPUT,
-        routes: noSlippageRoutes?.length ? noSlippageRoutes : routes,
+        routes: noSlippageRoutes,
       },
       noSlippageCommands,
       commands: commandsWithSlippage,
