@@ -3,11 +3,11 @@ import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
 import { SmartRouter } from '@pancakeswap/smart-router'
 import {
   AutoColumn,
-  BackForwardIcon,
   Box,
   Button,
   DottedHelpText,
   Flex,
+  InterchangeIcon,
   QuestionHelperV2,
   Text,
   WarningIcon,
@@ -184,7 +184,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
           >
             {executionPriceDisplay}
             <StyledBalanceMaxMini onClick={() => setShowInverted(!showInverted)}>
-              <BackForwardIcon color="primary" width="14px" />
+              <InterchangeIcon color="primary" width="20px" />
             </StyledBalanceMaxMini>
           </Text>
         </RowBetween>
@@ -358,8 +358,8 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
           width="100%"
         >
           {severity > 2 || (tradeType === TradeType.EXACT_OUTPUT && !isEnoughInputBalance)
-            ? t('Swap Anyway')
-            : t('Confirm Swap')}
+            ? t('Submit Order Anyway')
+            : t('Submit Order')}
         </Button>
 
         {swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}

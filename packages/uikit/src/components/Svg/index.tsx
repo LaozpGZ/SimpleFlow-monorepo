@@ -105,6 +105,7 @@ export { default as InfoIcon } from "./Icons/Info";
 export { default as InfoFilledIcon } from "./Icons/InfoFilled";
 export { default as InsertChartOutlinedIcon } from "./Icons/InsertChartOutlined";
 export { default as InstagramIcon } from "./Icons/Instagram";
+export { default as InterchangeIcon } from "./Icons/InterchangeIcon";
 export { default as LanguageIcon } from "./Icons/Language";
 export { default as LanguageCurrencyIcon } from "./Icons/LanguageCurrency";
 export { default as LaurelLeftIcon } from "./Icons/LaurelLeft";
