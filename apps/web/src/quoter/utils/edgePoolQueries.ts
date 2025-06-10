@@ -61,8 +61,7 @@ const fetchInfinityPools = async (addressA: Address, addressB: Address, chainId:
 }
 
 const fetchInfinityPoolsLight = async (addressA: Address, addressB: Address, chainId: ChainId) => {
-  const currencyA = mockCurrency(addressA, chainId)
-  const currencyB = mockCurrency(addressB, chainId)
+  const [currencyA, currencyB] = await Promise.all([mockCurrency(addressA, chainId), mockCurrency(addressB, chainId)])
   const chain = getChainName(chainId)
   const tvlMap = await poolTvlMap(['infinityBin', 'infinityCl'], chain as APIChain)
   const ref: InfinityRouter.InfinityPoolTvlReferenceMap = {}
