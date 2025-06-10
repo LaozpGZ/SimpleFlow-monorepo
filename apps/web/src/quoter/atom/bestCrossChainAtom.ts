@@ -6,7 +6,7 @@ import { BridgeTradeError, type QuoteQuery } from 'quoter/quoter.types'
 import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { logGTMBridgeQuoteQueryEvent } from 'utils/customGTMEventTracking'
 import { type InterfaceOrder } from 'views/Swap/utils'
-import { bestSameChainWithoutPlaceHolderAtom } from './bestSameChainAtom'
+import { bestSameChainAtom } from './bestSameChainAtom'
 import { placeholderAtom } from './placeholderAtom'
 
 import { CrossChainPatternClassifier } from '../utils/crosschain-utils/CrossChainPatternClassifier'
@@ -95,7 +95,7 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
         perf.tracker.report()
       }
     } else {
-      return get(bestSameChainWithoutPlaceHolderAtom(_option))
+      return get(bestSameChainAtom(_option))
     }
   })
 }, isEqualQuoteQuery)

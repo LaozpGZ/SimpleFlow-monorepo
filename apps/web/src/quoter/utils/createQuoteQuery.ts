@@ -17,7 +17,7 @@ export function createQuoteQuery(query: Omit<QuoteQuery, 'hash' | 'createTime'>)
   option1.hash = hash
   option1.createTime = Date.now()
   const placeholderNonce = Math.floor(Date.now() / PLACE_HOLDER_TIME)
-  option1.placeholderHash = PoolHashHelper.hashQuoteQuery({ ...option1, nonce: placeholderNonce })
+  option1.placeholderHash = PoolHashHelper.hashPlaceHolderQuoteQuery({ ...option1, nonce: placeholderNonce })
   const controller = new AbortController()
   option1.provider = createViemPublicClientGetter({
     transportSignal: controller.signal,
