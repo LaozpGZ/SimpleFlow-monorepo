@@ -132,7 +132,7 @@ export class SwapToBridgeToSwapStrategy extends CrossChainQuoteStrategy {
 
     const finalQuote = this.constructFinalQuote(
       [originSwapOrder, finalBridgeQuote, finalDestinationSwapOrder],
-      finalDestinationSwapOrderNoSlippage,
+      [originSwapOrder, bridgeQuoteNoSlippage, finalDestinationSwapOrderNoSlippage],
     )
 
     return Loadable.Just(finalQuote)

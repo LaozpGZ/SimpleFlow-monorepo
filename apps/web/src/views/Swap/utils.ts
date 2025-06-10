@@ -27,6 +27,7 @@ export type InterfaceOrder<
 // Type to support commands property
 export type BridgeOrderWithCommands = BridgeOrder & {
   commands?: InterfaceOrder[]
+  noSlippageCommands?: InterfaceOrder[]
 }
 
 export function getDefaultToken(chainId: number): string | undefined {

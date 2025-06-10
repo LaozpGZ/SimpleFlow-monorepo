@@ -61,7 +61,7 @@ export class SwapToBridgeStrategy extends CrossChainQuoteStrategy {
 
     const bridgeQuote = CrossChainQuoteStrategy.validateQuoteResult(bridgeQuoteLoadable, 'No bridge quote')
 
-    const finalQuote = this.constructFinalQuote([swapOrder, bridgeQuote], bridgeQuoteNoSlippage)
+    const finalQuote = this.constructFinalQuote([swapOrder, bridgeQuote], [swapOrder, bridgeQuoteNoSlippage])
 
     return Loadable.Just(finalQuote)
   }

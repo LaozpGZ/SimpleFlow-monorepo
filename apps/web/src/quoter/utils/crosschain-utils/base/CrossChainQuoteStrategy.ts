@@ -26,7 +26,7 @@ export abstract class CrossChainQuoteStrategy {
 
   protected constructFinalQuote(
     commands: InterfaceOrder[],
-    noSlippageCommand?: InterfaceOrder,
+    noSlippageCommands: InterfaceOrder[],
   ): BridgeOrderWithCommands {
     const commandsWithSlippage = commands.map((command) => {
       if (command.type === OrderType.PCS_BRIDGE) {
@@ -42,6 +42,9 @@ export abstract class CrossChainQuoteStrategy {
     }
 
     const routes = commandsWithSlippage.map((command) => (!isXOrder(command) ? command.trade.routes : [])).flat()
+    const noSlippageRoutes = noSlippageCommands
+      ?.map((command) => (!isXOrder(command) ? command.trade.routes : []))
+      .flat()
 
     return {
       bridgeTransactionData: bridgeQuote.bridgeTransactionData,
@@ -52,10 +55,13 @@ export abstract class CrossChainQuoteStrategy {
         inputAmount: first(commands)!.trade.inputAmount,
         // NOTE: Show output amount without slippage.
         // Minimum output received (with slippage) is different from ouputAmount
-        outputAmount: noSlippageCommand ? noSlippageCommand.trade.outputAmount : last(commands)!.trade.outputAmount,
+        outputAmount: noSlippageRoutes?.length
+          ? last(noSlippageCommands)!.trade.outputAmount
+          : last(commands)!.trade.outputAmount,
         tradeType: TradeType.EXACT_INPUT,
-        routes,
+        routes: noSlippageRoutes?.length ? noSlippageRoutes : routes,
       },
+      noSlippageCommands,
       commands: commandsWithSlippage,
     }
   }

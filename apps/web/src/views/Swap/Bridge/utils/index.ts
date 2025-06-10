@@ -30,7 +30,7 @@ export function getBridgeOrderPriceImpact(
 }
 
 export function computeBridgeOrderFee(order: BridgeOrderWithCommands): BridgeOrderFee | BridgeOrderFee[] {
-  if (!order.commands) {
+  if (!order.noSlippageCommands) {
     return {
       priceImpactWithoutFee: undefined,
       lpFeeAmount: undefined,
@@ -38,7 +38,7 @@ export function computeBridgeOrderFee(order: BridgeOrderWithCommands): BridgeOrd
     }
   }
 
-  return order.commands.map((command) => {
+  return order.noSlippageCommands.map((command) => {
     if (command.type === OrderType.PCS_BRIDGE) {
       return {
         // TODO: add price impact for bridge

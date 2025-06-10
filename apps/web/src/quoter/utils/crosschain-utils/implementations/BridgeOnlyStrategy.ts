@@ -21,7 +21,7 @@ export class BridgeOnlyStrategy extends CrossChainQuoteStrategy {
 
     const bridgeQuote = CrossChainQuoteStrategy.validateQuoteResult(bridgeQuoteLoadable, 'No bridge quote')
 
-    const finalQuote = this.constructFinalQuote([bridgeQuote])
+    const finalQuote = this.constructFinalQuote([bridgeQuote], [bridgeQuote])
 
     return Loadable.Just(finalQuote)
   }
