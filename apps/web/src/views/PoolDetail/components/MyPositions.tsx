@@ -419,7 +419,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
                 </Text>
                 <Row justifyContent="space-between">
                   <Text color="textSubtle" fontSize={14}>
-                    {t('My Liquidity Value12312')}
+                    {t('My Liquidity Value')}
                   </Text>
                   <Text>{formatDollarAmount(Number(totalLiquidityUSD))}</Text>
                 </Row>
