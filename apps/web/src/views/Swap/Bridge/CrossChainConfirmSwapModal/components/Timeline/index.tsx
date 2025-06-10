@@ -8,7 +8,7 @@ import {
   SwapSpinner,
   WarningIcon,
 } from '@pancakeswap/uikit'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 
@@ -127,6 +127,13 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
   isLast,
   tx,
 }) => {
+  const [, setShouldRecalculate] = useState(false)
+
+  useEffect(() => {
+    // Trigger a re-render after initial mount to recalculate heights
+    setShouldRecalculate(true)
+  }, [])
+
   const getDefaultIcon = useCallback(() => {
     switch (status) {
       case 'completed':
