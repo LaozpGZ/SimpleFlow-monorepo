@@ -61,6 +61,15 @@ export function computeBridgeOrderFee(order: BridgeOrderWithCommands): BridgeOrd
 export function customBridgeStatus(bridgeStatus: BridgeStatusData | undefined) {
   if (!bridgeStatus || !bridgeStatus?.data) return BridgeStatus.PENDING
 
+  // If any step is PENDING, return overall bridge status as PENDING
+  if (
+    bridgeStatus.data.some(
+      (command) => command.status.code === BridgeStatus.PENDING || command.status.code === BridgeStatus.BRIDGE_PENDING,
+    )
+  ) {
+    return BridgeStatus.PENDING
+  }
+
   // if bridgeStatus?.data.length <= 1, use bridgeStatus.status
   if (bridgeStatus.data.length <= 1) {
     return bridgeStatus.status
