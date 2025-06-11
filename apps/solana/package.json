@@ -115,6 +115,7 @@
     "@mercurial-finance/optimist": "0.4.0",
     "@pancakeswap/jupiter-terminal": "workspace:*",
     "@pancakeswap/utils": "workspace:*",
+    "@pancakeswap/solana-clmm-sdk": "workspace:*",
     "@popperjs/core": "^2.11.8",
     "@solana/spl-token-0.4": "npm:@solana/spl-token@0.4.0",
     "@solana/spl-token-registry": "~0.2.4574",
