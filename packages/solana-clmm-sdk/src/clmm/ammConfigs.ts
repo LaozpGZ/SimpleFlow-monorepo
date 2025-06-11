@@ -10,7 +10,7 @@ export type AmmConfig = {
   fundOwner: string
   description?: string
   defaultRange?: number
-  defaultRangePoint?: [number, number]
+  defaultRangePoint?: number[]
 }
 
 const mainnetAmmConfigs: Record<string, AmmConfig> = {}
@@ -24,6 +24,9 @@ const devnetAmmConfigs: Record<string, AmmConfig> = {
     tickSpacing: 200,
     fundFeeRate: 0,
     fundOwner: 'DmwXqqK5Zuj619au6q2Jx3TMr9ZV1837uxJcEwyvXVtV',
+    description: 'Best for exotic pairs',
+    defaultRange: 0.1,
+    defaultRangePoint: [0.01, 0.05, 0.1, 0.2, 0.5, 0.6, 0.7, 0.8, 0.9],
   },
   AEWHer5AqGwYMLwNUmVG3jpLK5p7PBLZF7B2EPT4PfYG: {
     id: 'AEWHer5AqGwYMLwNUmVG3jpLK5p7PBLZF7B2EPT4PfYG',
@@ -33,6 +36,9 @@ const devnetAmmConfigs: Record<string, AmmConfig> = {
     tickSpacing: 60,
     fundFeeRate: 0,
     fundOwner: 'DmwXqqK5Zuj619au6q2Jx3TMr9ZV1837uxJcEwyvXVtV',
+    description: 'Best for most pairs',
+    defaultRange: 0.1,
+    defaultRangePoint: [0.01, 0.05, 0.1, 0.2, 0.5],
   },
   Bu65sZ3Kq7iTFDBTSsptD4LkxWCo1q5BDogZDmC7xoUT: {
     id: 'Bu65sZ3Kq7iTFDBTSsptD4LkxWCo1q5BDogZDmC7xoUT',
@@ -42,6 +48,9 @@ const devnetAmmConfigs: Record<string, AmmConfig> = {
     tickSpacing: 10,
     fundFeeRate: 0,
     fundOwner: 'DmwXqqK5Zuj619au6q2Jx3TMr9ZV1837uxJcEwyvXVtV',
+    description: 'Best for stable pairs',
+    defaultRange: 0.1,
+    defaultRangePoint: [0.1, 0.2],
   },
 }
 
