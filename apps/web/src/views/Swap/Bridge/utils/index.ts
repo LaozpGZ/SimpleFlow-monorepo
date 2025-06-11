@@ -61,15 +61,6 @@ export function computeBridgeOrderFee(order: BridgeOrderWithCommands): BridgeOrd
 export function customBridgeStatus(bridgeStatus: BridgeStatusData | undefined) {
   if (!bridgeStatus || !bridgeStatus?.data) return BridgeStatus.PENDING
 
-  // If any step is PENDING, return overall bridge status as PENDING
-  if (
-    bridgeStatus.data.some(
-      (command) => command.status.code === BridgeStatus.PENDING || command.status.code === BridgeStatus.BRIDGE_PENDING,
-    )
-  ) {
-    return BridgeStatus.PENDING
-  }
-
   // if bridgeStatus?.data.length <= 1, use bridgeStatus.status
   if (bridgeStatus.data.length <= 1) {
     return bridgeStatus.status
@@ -78,6 +69,19 @@ export function customBridgeStatus(bridgeStatus: BridgeStatusData | undefined) {
   // if bridgeStatus?.data.length > 1,
   // bridge status will be the last command's status
   const lastCommand = bridgeStatus.data[bridgeStatus.data.length - 1]
+
+  if (lastCommand.status.code === BridgeStatus.SUCCESS) {
+    return BridgeStatus.SUCCESS
+  }
+
+  // If any step is PENDING, return overall bridge status as PENDING
+  if (
+    bridgeStatus.data.some(
+      (command) => command.status.code === BridgeStatus.PENDING || command.status.code === BridgeStatus.BRIDGE_PENDING,
+    )
+  ) {
+    return BridgeStatus.PENDING
+  }
 
   // if the last command is failed, and other commands are success, return PARTIAL_SUCCESS
   if (lastCommand.status.code === BridgeStatus.FAILED) {
