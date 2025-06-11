@@ -36,6 +36,7 @@ import { tokenInfoPageDataAtom } from 'edge/tokenInfoPageDataAtom'
 import { useAtomValue } from 'jotai'
 import { ChainLinkSupportChains, multiChainId, multiChainScan } from 'state/info/constant'
 import { useChainNameByQuery, useMultiChainPath, useStableSwapPath } from 'state/info/hooks'
+import { PoolDataForView } from 'state/info/types'
 import { styled } from 'styled-components'
 import { getTokenNameAlias, getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
@@ -105,7 +106,7 @@ const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, cha
   )
 
   const formatPoolData = useMemo(() => {
-    return poolDatas?.filter((pool) => !isUndefinedOrNull(pool)) ?? []
+    return (poolDatas?.filter((pool) => !isUndefinedOrNull(pool)) ?? []) as any as PoolDataForView[]
   }, [poolDatas])
 
   const formattedTvlData = useMemo(() => {
