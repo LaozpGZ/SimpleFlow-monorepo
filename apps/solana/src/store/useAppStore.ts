@@ -149,8 +149,8 @@ const appInitState = {
     userAdded: true
   },
   featureDisabled: {},
-  txVersion: TxVersion.V0,
   appVersion: 'V3.0.2',
+  txVersion: TxVersion.LEGACY,
   needRefresh: false,
   tokenAccLoaded: false,
   commitment: 'confirmed' as Commitment,
@@ -185,6 +185,7 @@ export const useAppStore = createStore<AppState>(
         logRequests: !isDev,
         disableFeatureCheck: true,
         loopMultiTxStatus: true,
+        cluster: 'devnet',
         blockhashCommitment: 'finalized'
       })
       useTokenStore.getState().extraLoadedTokenList.forEach((t) => {

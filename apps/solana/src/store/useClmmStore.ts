@@ -21,6 +21,7 @@ import {
   getTransferAmountFeeV2,
   ClmmLockAddress
 } from '@raydium-io/raydium-sdk-v2'
+import { ammConfigs, PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
 import { PublicKey, VersionedTransaction } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
@@ -854,7 +855,7 @@ export const useClmmStore = createStore<ClmmState>(
     },
 
     createClmmPool: async ({ token1, token2, config, price, execute, forerunCreate, getObserveState }) => {
-      const { raydium, publicKey, txVersion, programIdConfig } = useAppStore.getState()
+      const { raydium, publicKey, txVersion } = useAppStore.getState()
       if (!raydium || !publicKey) {
         toastSubject.next({ noRpc: true })
         return { txId: '' }
@@ -862,7 +863,7 @@ export const useClmmStore = createStore<ClmmState>(
       try {
         const computeBudgetConfig = forerunCreate ? undefined : await getComputeBudgetConfig()
         const buildData = await raydium.clmm.createPool({
-          programId: programIdConfig.CLMM_PROGRAM_ID,
+          programId: PancakeClmmProgramId.devnet,
           mint1: { ...token1, address: token1.address },
           mint2: { ...token2, address: token2.address },
           ammConfig: { ...config, id: new PublicKey(config.id), fundOwner: '', description: '' },
@@ -932,21 +933,22 @@ export const useClmmStore = createStore<ClmmState>(
     },
 
     fetchAmmConfigsAct: async () => {
-      const { raydium } = useAppStore.getState()
-      if (Object.keys(get().clmmFeeConfigs).length || !raydium) return
-      try {
-        const res = await raydium.api.getClmmConfigs()
-        const apiRes = res.reduce(
-          (acc, cur) => ({
-            ...acc,
-            [cur.id]: cur
-          }),
-          {}
-        )
-        set({ clmmFeeConfigs: apiRes || CLMM_FEE_CONFIGS }, false, { type: 'fetchAmmConfigsAct' })
-      } catch {
-        set({ clmmFeeConfigs: CLMM_FEE_CONFIGS }, false, { type: 'fetchAmmConfigsAct' })
-      }
+      // const { raydium } = useAppStore.getState()
+      // if (Object.keys(get().clmmFeeConfigs).length || !raydium) return
+      set({ clmmFeeConfigs: ammConfigs.devnet }, false, { type: 'fetchAmmConfigsAct' })
+      // try {
+      //   // const res = await raydium.api.getClmmConfigs()
+      //   // const apiRes = res.reduce(
+      //   //   (acc, cur) => ({
+      //   //     ...acc,
+      //   //     [cur.id]: cur
+      //   //   }),
+      //   //   {}
+      //   // )
+      //   set({ clmmFeeConfigs:  }, false, { type: 'fetchAmmConfigsAct' })
+      // } catch {
+      //   set({ clmmFeeConfigs: CLMM_FEE_CONFIGS }, false, { type: 'fetchAmmConfigsAct' })
+      // }
     },
 
     // store related utils

@@ -9,8 +9,8 @@ export type AmmConfig = {
   fundFeeRate: number
   fundOwner: string
   description?: string
-  defaultRange?: number
-  defaultRangePoint?: number[]
+  defaultRange: number
+  defaultRangePoint: number[]
 }
 
 const mainnetAmmConfigs: Record<string, AmmConfig> = {}
