@@ -1,5 +1,4 @@
 import { ChainId, getChainIdByChainName } from '@pancakeswap/chains'
-import { cacheByLRU } from '@pancakeswap/utils/cacheByLRU'
 import { NextApiHandler } from 'next'
 import {
   V2TokenDataQuery,
@@ -100,25 +99,11 @@ async function _loadData(chain?: string, address?: string, type?: SupportedType)
   }
 }
 
-const loadData = cacheByLRU(_loadData, {
-  ttl: 60_000,
-  maxCacheSize: 10000,
-  key: ([chain, token, type]) => `${chain}-${token?.toLowerCase()}-${type}`,
-  isValid: (result) => {
-    if (!result) return false
-    if (result.token?.address) {
-      return true
-    }
-    return false
-  },
-})
-
 const handler: NextApiHandler = async (req, res) => {
   const { chain, token, type } = req.query
 
-  // const result = await loadData(String(chain), String(token), type as SupportedType | undefined)
   const result = await _loadData(String(chain), String(token), type as SupportedType | undefined)
-  res.setHeader('Cache-Control', 's-maxage=60, max-age=30, stale-while-revalidate=300')
+  res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=3600')
 
   return res.status(200).json(result)
 }
