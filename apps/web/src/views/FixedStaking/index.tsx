@@ -27,7 +27,7 @@ const FixedStaking = () => {
 
   const stakedPositions = useStakedPositionsByUser(displayPoolsIndex)
 
-  // Groupd pools with same token
+  // Grouped pools with same token
   const groupPoolsByToken = useMemo<Record<string, FixedStakingPool[]>>(() => {
     return displayPools
       .filter((pool) => pool.token)
