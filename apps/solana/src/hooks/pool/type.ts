@@ -88,3 +88,14 @@ export type ReturnFormattedPoolType<T> = T extends typeof PoolFetchType.Standard
   : T extends typeof PoolFetchType.Concentrated
   ? FormattedPoolInfoConcentratedItem
   : FormattedPoolInfoItem
+
+type Pagination = {
+  page: number
+  limit: number
+  total: number
+  totalPages: number
+}
+export interface PoolsApiReturnType {
+  data: ApiV3PoolInfoItem[]
+  pagination: Pagination
+}

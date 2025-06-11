@@ -77,7 +77,10 @@ export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
   const dataMap = useMemo(() => resData.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {}), [resData]) as {
     [key: string]: T
   }
-  const formattedData = useMemo(() => (resData ? resData.map(formatPoolData) : undefined), [resData]) as ConditionalPoolType<T>[]
+  const formattedData = useMemo(
+    () => (resData ? resData.map((d) => formatPoolData(formatAprData(d))) : undefined),
+    [resData]
+  ) as ConditionalPoolType<T>[]
   const formattedDataMap = useMemo(() => formattedData.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {}), [formattedData]) as {
     [key: string]: ConditionalPoolType<T>
   }

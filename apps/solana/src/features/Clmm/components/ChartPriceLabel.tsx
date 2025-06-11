@@ -1,16 +1,28 @@
+import { useMemo } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Flex, Box, Text } from '@chakra-ui/react'
 import { colors } from '@/theme/cssVariables/colors'
+import { AprKey } from '@/hooks/pool/type'
 
 interface Props {
   currentPrice: string
   currentPriceLabel: string
   timePrice: string
-  timeBase: string
+  timeBase: AprKey
 }
 
 export default function ChartPriceLabel({ currentPrice, currentPriceLabel, timePrice, timeBase }: Props) {
   const { t } = useTranslation()
+
+  const timeLabel = useMemo(() => {
+    const TIME_MAP = {
+      [AprKey.Day]: t('24 hour'),
+      [AprKey.Week]: t('7 day'),
+      [AprKey.Month]: t('1 month')
+    }
+    return TIME_MAP[timeBase]
+  }, [t, timeBase])
+
   return (
     <Flex gap={[0, 2]} flexDirection="column" justifyContent="center">
       <Flex gap="2">
@@ -36,7 +48,7 @@ export default function ChartPriceLabel({ currentPrice, currentPriceLabel, timeP
             <Box width="8px" height="8px" bg={colors.textSubtle} rounded="full" />
             <Text fontSize="xs" color={colors.textSubtle}>
               {t('%time% Price Range', {
-                time: t(`clmm.timebasis_${timeBase}_label`)
+                time: timeLabel
               })}
             </Text>
           </Flex>

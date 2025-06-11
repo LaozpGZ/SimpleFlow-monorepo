@@ -7,19 +7,7 @@ import axios from '@/api/axios'
 import { useAppStore } from '@/store'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { formatPoolData, formatAprData } from './formatter'
-import { ReturnPoolType, ReturnFormattedPoolType } from './type'
-
-type Pagination = {
-  page: number
-  limit: number
-  total: number
-  totalPages: number
-}
-
-interface PoolsApiReturnType {
-  data: ApiV3PoolInfoItem[]
-  pagination: Pagination
-}
+import { ReturnPoolType, ReturnFormattedPoolType, PoolsApiReturnType } from './type'
 
 type FetcherReturnType = Awaited<ReturnType<typeof fetcher>>
 

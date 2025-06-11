@@ -18,7 +18,7 @@ const fetcher = ([url, data]: [string, { poolId: string }]) =>
   axios.get<{
     count: number
     line: PointData[]
-  }>(`${url  }?id=${data.poolId}`)
+  }>(`${url}?poolId=${data.poolId}`)
 
 export function useDensityChartData({ poolId, baseIn }: { poolId: string; baseIn: boolean }) {
   const urlConfigs = useAppStore((s) => s.urlConfigs)

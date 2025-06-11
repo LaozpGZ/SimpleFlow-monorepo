@@ -1,14 +1,20 @@
 import { useMemo, useCallback } from 'react'
-import { PoolsApiReturn, FetchPoolParams, solToWSol, ApiV3PoolInfoItem, PoolFetchType } from '@raydium-io/raydium-sdk-v2'
+import { FetchPoolParams, solToWSol, ApiV3PoolInfoItem, PoolFetchType } from '@raydium-io/raydium-sdk-v2'
 import { shallow } from 'zustand/shallow'
 import useSWRInfinite from 'swr/infinite'
 import { KeyedMutator } from 'swr'
-import { AxiosResponse } from 'axios'
 import axios from '@/api/axios'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { useAppStore } from '@/store'
 import { formatPoolData, formatAprData } from './formatter'
-import { ReturnPoolType, ReturnFormattedPoolType } from './type'
+import { ReturnPoolType, ReturnFormattedPoolType, PoolsApiReturnType } from './type'
+
+type FetcherReturnType = Awaited<ReturnType<typeof fetcher>>
+
+const fetcher = (url: string) =>
+  axios.get<PoolsApiReturnType, PoolsApiReturnType>(url, {
+    skipError: true
+  })
 
 export default function useFetchPoolByMint<T extends PoolFetchType>(
   props: {
@@ -28,7 +34,7 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
   isLoadEnded: boolean
   loadMore: () => void
   size: number
-  mutate: KeyedMutator<AxiosResponse<PoolsApiReturn, any>[]>
+  mutate: KeyedMutator<FetcherReturnType[]>
   isValidating: boolean
   isLoading: boolean
 } {
@@ -45,14 +51,6 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
     poolId
   } = props || {}
 
-  const fetcher = useCallback(
-    (url: string) =>
-      axios.get<PoolsApiReturn>(url, {
-        skipError: true
-      }),
-    []
-  )
-
   const [mint1, mint2] = [propMint1 ? solToWSol(propMint1).toBase58() : propMint1, propMint2 ? solToWSol(propMint2).toBase58() : propMint2]
   const [host, mintUrl] = useAppStore((s) => [s.urlConfigs.BASE_HOST, s.urlConfigs.POOL_LIST], shallow)
   const [baseMint, quoteMint] = mint2 && mint1 > mint2 ? [mint2, mint1] : [mint1, mint2]
@@ -61,7 +59,7 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
   const { data, setSize, error, ...swrProps } = useSWRInfinite(
     (index) =>
       url
-        ? `${url}?mint1=${baseMint}&mint2=${quoteMint}&poolType=${
+        ? `${url}?tokenMint0=${baseMint}&tokenMint1=${quoteMint}&poolType=${
             showFarms ? `${type}Farm` : type
           }&poolSortField=${sort}&sortType=${order}&pageSize=${pageSize}&page=${index + 1}`
         : url,
@@ -76,8 +74,7 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
   const loadMore = useCallback(() => setSize((s) => s + 1), [type, sort, order])
 
   const resData = useMemo(
-    () =>
-      (data || []).reduce((acc, cur) => acc.concat(cur?.data?.data || []).filter(Boolean), [] as ApiV3PoolInfoItem[]).map(formatAprData),
+    () => (data || []).reduce((acc, cur) => acc.concat(cur?.data || []).filter(Boolean), [] as ApiV3PoolInfoItem[]).map(formatAprData),
     [data]
   ) as ReturnPoolType<T>[]
   const formattedData = useMemo(() => resData.map((i) => formatPoolData(i)), [resData]) as ReturnFormattedPoolType<T>[]
