@@ -38,14 +38,6 @@ const fetchFeesEarned = ({
   tickUpper: number
   tokenId: bigint
 }) => {
-  console.log('chainId', chainId)
-  console.log('poolManager', poolManager)
-  console.log('poolId', poolId)
-  console.log('owner', owner)
-  console.log('tickLower', tickLower)
-  console.log('tickUpper', tickUpper)
-  console.log('tokenId', toHex(tokenId, { size: 32 }))
-
   return getViemClients({ chainId }).readContract({
     abi: FARMING_OFFCHAIN_CL_HELPER_ABI,
     address: INFI_CL_LP_FEES_HELPER_ADDRESSES[chainId],
