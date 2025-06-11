@@ -1000,6 +1000,9 @@ importers:
       '@pancakeswap/localization':
         specifier: workspace:*
         version: link:../../packages/localization
+      '@pancakeswap/solana-clmm-sdk':
+        specifier: workspace:*
+        version: link:../../packages/solana-clmm-sdk
       '@pancakeswap/uikit':
         specifier: workspace:*
         version: link:../../packages/uikit
@@ -2026,7 +2029,7 @@ importers:
         version: 1.30.0
       '@blocto/sdk':
         specifier: ^0.5.4
-        version: 0.5.5(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(aptos@1.21.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        version: 0.5.5(@solana/web3.js@1.98.2(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10))(aptos@1.21.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@msafe/aptos-wallet':
         specifier: ^3.0.6
         version: 3.0.6
@@ -3117,6 +3120,19 @@ importers:
         specifier: ^6.7.0
         version: 6.7.0(postcss@8.5.3)(ts-node@10.9.1(@types/node@22.7.5)(typescript@5.7.3))(typescript@5.7.3)
 
+  packages/solana-clmm-sdk:
+    dependencies:
+      '@solana/web3.js':
+        specifier: ^1.98.2
+        version: 1.98.2(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)
+    devDependencies:
+      '@pancakeswap/utils':
+        specifier: workspace:*
+        version: link:../utils
+      tsup:
+        specifier: ^6.7.0
+        version: 6.7.0(postcss@8.5.3)(ts-node@10.9.1(@types/node@22.7.5)(typescript@5.7.3))(typescript@5.7.3)
+
   packages/stable-swap-sdk:
     dependencies:
       '@pancakeswap/chains':
@@ -3718,7 +3734,7 @@ importers:
     devDependencies:
       '@blocto/sdk':
         specifier: ^0.5.4
-        version: 0.5.5(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(aptos@1.21.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+        version: 0.5.5(@solana/web3.js@1.98.2(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10))(aptos@1.21.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@pancakeswap/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
@@ -11196,8 +11212,8 @@ packages:
   '@solana/web3.js@1.95.8':
     resolution: {integrity: sha512-sBHzNh7dHMrmNS5xPD1d0Xa2QffW/RXaxu/OysRXBfwTp+LYqGGmMtCYYwrHPrN5rjAmJCsQRNAwv4FM0t3B6g==}
 
-  '@solana/web3.js@1.98.0':
-    resolution: {integrity: sha512-nz3Q5OeyGFpFCR+erX2f6JPt3sKhzhYcSycBCSPkWjzSVDh/Rr1FqTVMRe58FKO16/ivTUcuJjeS5MyBvpkbzA==}
+  '@solana/web3.js@1.98.2':
+    resolution: {integrity: sha512-BqVwEG+TaG2yCkBMbD3C4hdpustR4FpuUFRPUmqRZYYlPI9Hg4XMWxHWOWRzHE9Lkc9NDjzXFX7lDXSgzC7R1A==}
 
   '@solana/web3.js@2.0.0':
     resolution: {integrity: sha512-x+ZRB2/r5tVK/xw8QRbAfgPcX51G9f2ifEyAQ/J5npOO+6+MPeeCjtr5UxHNDAYs9Ypo0PN+YJATCO4vhzQJGg==}
@@ -21570,11 +21586,6 @@ packages:
     engines: {node: '>=10.0.0'}
     hasBin: true
 
-  rollup@3.29.4:
-    resolution: {integrity: sha512-oWzmBZwvYrU0iJHtDmhsm662rC15FRXmcjCk1xD771dFDx5jJ02ufAQQTn0etB2emNk4J9EZg/yWKpsn9BWGRw==}
-    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
-    hasBin: true
-
   rollup@3.29.5:
     resolution: {integrity: sha512-GVsDdsbJzzy4S/v3dqWPJ7EfvZJfCHiDqe80IyrF59LYuP+e6U1LJoUqeuqRbwAWoMNoXivMNeNAOf5E22VA1w==}
     engines: {node: '>=14.18.0', npm: '>=8.0.0'}
@@ -25008,7 +25019,7 @@ snapshots:
       '@babel/core': 7.23.9
       '@babel/helper-compilation-targets': 7.23.6
       '@babel/helper-plugin-utils': 7.24.0
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
       lodash.debounce: 4.0.8
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -25019,7 +25030,7 @@ snapshots:
       '@babel/core': 7.23.9
       '@babel/helper-compilation-targets': 7.23.6
       '@babel/helper-plugin-utils': 7.24.0
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
       lodash.debounce: 4.0.8
       resolve: 1.22.8
     transitivePeerDependencies:
@@ -25884,7 +25895,7 @@ snapshots:
       '@babel/helper-split-export-declaration': 7.22.6
       '@babel/parser': 7.23.3
       '@babel/types': 7.23.3
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
       globals: 11.12.0
     transitivePeerDependencies:
       - supports-color
@@ -26169,14 +26180,14 @@ snapshots:
       - debug
       - utf-8-validate
 
-  '@blocto/sdk@0.5.5(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(aptos@1.21.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
+  '@blocto/sdk@0.5.5(@solana/web3.js@1.98.2(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10))(aptos@1.21.0)(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
       bs58: 5.0.0
       buffer: 6.0.3
       eip1193-provider: 1.0.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       js-sha3: 0.8.0
     optionalDependencies:
-      '@solana/web3.js': 1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@solana/web3.js': 1.98.2(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)
       aptos: 1.21.0
     transitivePeerDependencies:
       - bufferutil
@@ -30537,7 +30548,7 @@ snapshots:
       '@metaplex-foundation/beet': 0.7.2
       '@solana/web3.js': 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       bs58: 5.0.0
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -30549,7 +30560,7 @@ snapshots:
       ansicolors: 0.3.2
       assert: 2.1.0
       bn.js: 5.2.1
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -35729,7 +35740,7 @@ snapshots:
   '@solana/spl-token@0.1.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
       '@babel/runtime': 7.26.7
-      '@solana/web3.js': 1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      '@solana/web3.js': 1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       bn.js: 5.2.1
       buffer: 6.0.3
       buffer-layout: 1.2.2
@@ -37042,14 +37053,14 @@ snapshots:
       - encoding
       - utf-8-validate
 
-  '@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
+  '@solana/web3.js@1.98.2(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)':
     dependencies:
       '@babel/runtime': 7.26.7
       '@noble/curves': 1.8.1
       '@noble/hashes': 1.7.1
       '@solana/buffer-layout': 4.0.1
+      '@solana/codecs-numbers': 2.1.0(typescript@5.7.3)
       agentkeepalive: 4.5.0
-      bigint-buffer: 1.1.5
       bn.js: 5.2.1
       borsh: 0.7.0
       bs58: 4.0.1
@@ -37062,6 +37073,7 @@ snapshots:
     transitivePeerDependencies:
       - bufferutil
       - encoding
+      - typescript
       - utf-8-validate
 
   '@solana/web3.js@2.0.0(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.2.2)(ws@8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
@@ -39632,7 +39644,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/visitor-keys': 5.62.0
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.7.1
@@ -39646,7 +39658,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/types': 5.62.0
       '@typescript-eslint/visitor-keys': 5.62.0
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
       globby: 11.1.0
       is-glob: 4.0.3
       semver: 7.7.1
@@ -44223,7 +44235,7 @@ snapshots:
 
   capnp-ts@0.7.0:
     dependencies:
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
       tslib: 2.8.1
     transitivePeerDependencies:
       - supports-color
@@ -45934,7 +45946,7 @@ snapshots:
 
   esbuild-register@3.5.0(esbuild@0.18.20):
     dependencies:
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
       esbuild: 0.18.20
     transitivePeerDependencies:
       - supports-color
@@ -48082,7 +48094,7 @@ snapshots:
   https-proxy-agent@7.0.4(supports-color@9.4.0):
     dependencies:
       agent-base: 7.1.0(supports-color@9.4.0)
-      debug: 4.3.4(supports-color@9.4.0)
+      debug: 4.4.0(supports-color@9.4.0)
     transitivePeerDependencies:
       - supports-color
 
@@ -49839,7 +49851,7 @@ snapshots:
 
   micromark@2.11.4:
     dependencies:
-      debug: 4.3.4(supports-color@8.1.1)
+      debug: 4.4.0(supports-color@9.4.0)
       parse-entities: 2.0.0
     transitivePeerDependencies:
       - supports-color
@@ -53059,10 +53071,6 @@ snapshots:
     optionalDependencies:
       fsevents: 2.3.3
 
-  rollup@3.29.4:
-    optionalDependencies:
-      fsevents: 2.3.3
-
   rollup@3.29.5:
     optionalDependencies:
       fsevents: 2.3.3
@@ -54209,9 +54217,9 @@ snapshots:
 
   sucrase@3.35.0:
     dependencies:
-      '@jridgewell/gen-mapping': 0.3.3
+      '@jridgewell/gen-mapping': 0.3.8
       commander: 4.1.1
-      glob: 10.3.10
+      glob: 10.4.5
       lines-and-columns: 1.2.4
       mz: 2.7.0
       pirates: 4.0.6
@@ -54907,17 +54915,17 @@ snapshots:
     dependencies:
       bundle-require: 4.0.2(esbuild@0.17.19)
       cac: 6.7.14
-      chokidar: 3.5.3
-      debug: 4.3.4(supports-color@8.1.1)
+      chokidar: 3.6.0
+      debug: 4.4.0(supports-color@9.4.0)
       esbuild: 0.17.19
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
       postcss-load-config: 3.1.4(postcss@8.5.3)(ts-node@10.9.1(@types/node@15.12.2)(typescript@5.7.3))
       resolve-from: 5.0.0
-      rollup: 3.29.4
+      rollup: 3.29.5
       source-map: 0.8.0-beta.0
-      sucrase: 3.34.0
+      sucrase: 3.35.0
       tree-kill: 1.2.2
     optionalDependencies:
       postcss: 8.5.3
@@ -54930,17 +54938,17 @@ snapshots:
     dependencies:
       bundle-require: 4.0.2(esbuild@0.17.19)
       cac: 6.7.14
-      chokidar: 3.5.3
-      debug: 4.3.4(supports-color@8.1.1)
+      chokidar: 3.6.0
+      debug: 4.4.0(supports-color@9.4.0)
       esbuild: 0.17.19
       execa: 5.1.1
       globby: 11.1.0
       joycon: 3.1.1
       postcss-load-config: 3.1.4(postcss@8.5.3)(ts-node@10.9.1(@types/node@22.7.5)(typescript@5.7.3))
       resolve-from: 5.0.0
-      rollup: 3.29.4
+      rollup: 3.29.5
       source-map: 0.8.0-beta.0
-      sucrase: 3.34.0
+      sucrase: 3.35.0
       tree-kill: 1.2.2
     optionalDependencies:
       postcss: 8.5.3
@@ -55292,21 +55300,21 @@ snapshots:
   unplugin@1.0.1:
     dependencies:
       acorn: 8.14.1
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       webpack-sources: 3.2.3
       webpack-virtual-modules: 0.5.0
 
   unplugin@1.5.0:
     dependencies:
       acorn: 8.14.1
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       webpack-sources: 3.2.3
       webpack-virtual-modules: 0.5.0
 
   unstorage@1.9.0(idb-keyval@6.2.1):
     dependencies:
       anymatch: 3.1.3
-      chokidar: 3.5.3
+      chokidar: 3.6.0
       destr: 2.0.2
       h3: 1.8.2
       ioredis: 5.3.2
