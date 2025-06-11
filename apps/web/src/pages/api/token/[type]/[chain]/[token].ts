@@ -1,5 +1,6 @@
 import { ChainId, getChainIdByChainName } from '@pancakeswap/chains'
-import { NextApiHandler } from 'next'
+import { getCorsHeaders, handleCors } from 'edge/cors'
+import { NextRequest, NextResponse } from 'next/server'
 import {
   V2TokenDataQuery,
   fetchV2ChartsTvlData,
@@ -99,13 +100,30 @@ async function _loadData(chain?: string, address?: string, type?: SupportedType)
   }
 }
 
-const handler: NextApiHandler = async (req, res) => {
-  const { chain, token, type } = req.query
-
-  const result = await _loadData(String(chain), String(token), type as SupportedType | undefined)
-  res.setHeader('Cache-Control', 's-maxage=60, stale-while-revalidate=3600')
-
-  return res.status(200).json(result)
+export const config = {
+  runtime: 'edge',
 }
 
-export default handler
+export default async function handler(req: NextRequest) {
+  const cors = handleCors(req)
+  if (cors) {
+    return cors
+  }
+
+  const { pathname } = new URL(req.url)
+  const parts = pathname.split('/').filter(Boolean)
+  const token = parts.pop()
+  const chain = parts.pop()
+  const type = parts.pop() as SupportedType | undefined
+
+  const result = await _loadData(chain, token, type)
+
+  return NextResponse.json(result, {
+    status: 200,
+    headers: {
+      'Cache-Control': `public, s-maxage=300, stale-while-revalidate=3600`,
+      'Content-Type': 'application/json',
+      ...getCorsHeaders(req),
+    },
+  })
+}
