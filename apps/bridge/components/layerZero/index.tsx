@@ -86,7 +86,7 @@ const LayerZero = ({ isCake }: { isCake?: boolean }) => {
         <Box width={['100%', null, '420px']} m="auto">
           <Message variant="warning" m={['16px', '16px', '16px 0']}>
             <MessageText>
-              CAKE bridging is currently unavailable. Updates will be shared on our X account
+              CAKE bridging on Polygon zkEVM is currently unavailable. Updates will be shared on our X account
               <br />
               <br />
               Outbound transfers from Polygon zkEVM are subject to a 7 days delay for block confirmations.

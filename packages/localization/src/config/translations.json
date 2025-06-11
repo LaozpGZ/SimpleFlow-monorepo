@@ -3802,5 +3802,5 @@
   "Estimated time to complete this transaction.": "Estimated time to complete this transaction.",
   "Requested amount exceeds the available bridge liquidity. Please try again with a lower amount!": "Requested amount exceeds the available bridge liquidity. Please try again with a lower amount!",
   "Developer Doc": "Developer Doc",
-  "CAKE bridging is currently unavailable. Updates will be shared on our X account.": "CAKE bridging is currently unavailable. Updates will be shared on our X account."
+  "CAKE bridging on Polygon zkEVM is currently unavailable. Updates will be shared on our X account.": "CAKE bridging on Polygon zkEVM is currently unavailable. Updates will be shared on our X account."
 }

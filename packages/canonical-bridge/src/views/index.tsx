@@ -93,7 +93,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       <CanonicalBridgeProvider config={config}>
         <Flex flexDirection="column" justifyContent="center" maxWidth="480px" width="100%">
           <Message variant="warning" mb="16px">
-            {t('CAKE bridging is currently unavailable. Updates will be shared on our X account.')}
+            {t('CAKE bridging on Polygon zkEVM is currently unavailable. Updates will be shared on our X account.')}
           </Message>
           <BridgeTransfer />
           <V1BridgeLink />
