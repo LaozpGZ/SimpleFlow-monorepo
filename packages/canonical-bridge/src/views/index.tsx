@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Flex, useToast } from '@pancakeswap/uikit'
+import { Flex, Message, useToast } from '@pancakeswap/uikit'
 import { useCallback, useMemo } from 'react'
 
 import {
@@ -32,7 +32,7 @@ export interface CanonicalBridgeProps {
 export const CanonicalBridge = (props: CanonicalBridgeProps) => {
   const { connectWalletButton, supportedChainIds } = props
 
-  const { currentLanguage } = useTranslation()
+  const { t, currentLanguage } = useTranslation()
   const theme = useTheme()
   const toast = useToast()
   const { connector } = useAccount()
@@ -92,6 +92,9 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       <GlobalStyle />
       <CanonicalBridgeProvider config={config}>
         <Flex flexDirection="column" justifyContent="center" maxWidth="480px" width="100%">
+          <Message variant="warning" mb="16px">
+            {t('CAKE bridging is currently unavailable. Updates will be shared on our X account.')}
+          </Message>
           <BridgeTransfer />
           <V1BridgeLink />
         </Flex>

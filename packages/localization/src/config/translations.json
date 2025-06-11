@@ -3801,5 +3801,6 @@
   "The change in pool price caused by your swap.": "The change in pool price caused by your swap.",
   "Estimated time to complete this transaction.": "Estimated time to complete this transaction.",
   "Requested amount exceeds the available bridge liquidity. Please try again with a lower amount!": "Requested amount exceeds the available bridge liquidity. Please try again with a lower amount!",
-  "Developer Doc": "Developer Doc"
+  "Developer Doc": "Developer Doc",
+  "CAKE bridging is currently unavailable. Updates will be shared on our X account.": "CAKE bridging is currently unavailable. Updates will be shared on our X account."
 }
