@@ -277,7 +277,8 @@ export function useDefaultsFromURLSearch():
       const isOutputChainSupported =
         isNotTwapOrLimitPath &&
         supportedBridgeChains?.some(
-          (route) => route.originChainId === finalInputChainId && route.destinationChainId === finalOutputChainId,
+          (route) =>
+            route.originChainId === (finalInputChainId || chainId) && route.destinationChainId === finalOutputChainId,
         )
 
       if (!isOutputChainSupported) {
