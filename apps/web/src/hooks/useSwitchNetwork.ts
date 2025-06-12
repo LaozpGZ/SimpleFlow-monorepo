@@ -67,7 +67,6 @@ export function useSwitchNetworkLocal() {
 
       router.replace(
         {
-          pathname: router.pathname,
           query: {
             ...(!removeQueriesFromPath && omittedQuery),
             chain: newChainQueryName,
