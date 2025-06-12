@@ -8,5 +8,7 @@ export const urlConfigs = {
   INFO: '/cached/v1/pools/stats/overview',
   POOL_SEARCH_BY_ID: '/cached/v1/pools/info/ids',
   POOL_POSITION_LINE: '/cached/v1/pools/line/position',
-  TOKEN_LIST: 'https://api-v3.raydium.io/mint/list'
+  // todo: switch to our own
+  TOKEN_LIST: 'https://api-v3.raydium.io/mint/list',
+  POOL_KEY_BY_ID: 'https://api-v3.raydium.io/pools/key/ids'
 }

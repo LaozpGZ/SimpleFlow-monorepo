@@ -26,6 +26,7 @@ import { PublicKey, VersionedTransaction } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
 import { TranslateFunction } from '@pancakeswap/localization'
+import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import createStore from '@/store/createStore'
 import { useAppStore, useTokenAccountStore, useLiquidityStore } from '@/store'
 import { isSolWSol, getMintSymbol, shortenAddress } from '@/utils/token'
@@ -304,7 +305,18 @@ export const useClmmStore = createStore<ClmmState>(
       try {
         const computeBudgetConfig = await getComputeBudgetConfig()
         const buildData = await raydium.clmm.openPositionFromBase({
-          poolInfo,
+          // todo:@eric mock program id to avoid failed, remove it after BE fixed
+          poolInfo: {
+            ...poolInfo,
+            mintA: {
+              ...poolInfo.mintA,
+              programId: TOKEN_PROGRAM_ID as any
+            },
+            mintB: {
+              ...poolInfo.mintB,
+              programId: TOKEN_PROGRAM_ID as any
+            }
+          },
           poolKeys,
           tickLower: Math.min(tickLower, tickUpper),
           tickUpper: Math.max(tickLower, tickUpper),
