@@ -240,20 +240,13 @@ export function useDefaultsFromURLSearch():
 
     const parsed = queryParametersToSwapState(query, native.symbol, defaultOutputCurrency)
 
-    const inputChain = query.chain
-    const outputChain = query.chainOut
-
-    const parsedInputChainId = typeof inputChain === 'string' ? getChainId(inputChain) : undefined
-    const parsedOutputChainId = typeof outputChain === 'string' ? getChainId(outputChain) : undefined
-
-    const parsedInputCurrency = safeGetAddress(query.inputCurrency)
     const parsedOutputCurrency = safeGetAddress(query.outputCurrency)
 
-    let finalInputCurrencyId = parsedInputCurrency || inputCurrencyId || (native.symbol ?? DEFAULT_INPUT_CURRENCY)
+    let finalInputCurrencyId = parsed[Field.INPUT].currencyId || inputCurrencyId
     let finalOutputCurrencyId = parsedOutputCurrency || outputCurrencyId || defaultOutputCurrency
 
-    let finalInputChainId = parsedInputChainId || inputChainId
-    let finalOutputChainId = parsedOutputChainId || outputChainId
+    let finalInputChainId = parsed[Field.INPUT].chainId || inputChainId
+    let finalOutputChainId = parsed[Field.OUTPUT].chainId || outputChainId
 
     const isNotTwapOrLimitPath = !['twap', 'limit'].some((p) => pathname.includes(p))
 
