@@ -250,11 +250,7 @@ export function useDefaultsFromURLSearch():
     const parsedOutputCurrency = safeGetAddress(query.outputCurrency)
 
     let finalInputCurrencyId = parsedInputCurrency || inputCurrencyId || (native.symbol ?? DEFAULT_INPUT_CURRENCY)
-    let finalOutputCurrencyId =
-      parsedOutputCurrency ||
-      outputCurrencyId ||
-      (outputChainId ? Native.onChain(outputChainId).symbol : native.symbol) ||
-      defaultOutputCurrency
+    let finalOutputCurrencyId = parsedOutputCurrency || outputCurrencyId || defaultOutputCurrency
 
     let finalInputChainId = parsedInputChainId || inputChainId
     let finalOutputChainId = parsedOutputChainId || outputChainId
