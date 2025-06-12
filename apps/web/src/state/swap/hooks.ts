@@ -240,11 +240,11 @@ export function useDefaultsFromURLSearch():
 
     const parsed = queryParametersToSwapState(query, native.symbol, defaultOutputCurrency)
 
-    let finalInputCurrencyId = inputCurrencyId || parsed[Field.INPUT].currencyId
-    let finalOutputCurrencyId = outputCurrencyId || parsed[Field.OUTPUT].currencyId
+    let finalInputCurrencyId = parsed[Field.INPUT].currencyId || inputCurrencyId
+    let finalOutputCurrencyId = parsed[Field.OUTPUT].currencyId || outputCurrencyId
 
-    let finalInputChainId = inputChainId || parsed[Field.INPUT].chainId
-    let finalOutputChainId = outputChainId || parsed[Field.OUTPUT].chainId
+    let finalInputChainId = parsed[Field.INPUT].chainId || inputChainId
+    let finalOutputChainId = parsed[Field.OUTPUT].chainId || outputChainId
 
     // Set input currency to default (native currency) if chain is changed by user
     // and input currency is on different chain
