@@ -133,13 +133,17 @@ export function useAllTokenBalances(chainId?: number): { [tokenAddress: string]:
 
   const [tokenBalances] = useTokenBalancesWithLoadingIndicator(account, allTokensArray)
 
-  return Object.keys(tokenBalances).reduce((acc, key) => {
-    const [_, address] = key.split('-')
-    return {
-      ...acc,
-      [address]: tokenBalances[key],
-    }
-  }, {} as { [tokenAddress: string]: CurrencyAmount<Token> | undefined })
+  return useMemo(
+    () =>
+      Object.keys(tokenBalances).reduce((acc, key) => {
+        const [_, address] = key.split('-')
+        return {
+          ...acc,
+          [address]: tokenBalances[key],
+        }
+      }, {} as { [tokenAddress: string]: CurrencyAmount<Token> | undefined }),
+    [tokenBalances],
+  )
 }
 
 /**
