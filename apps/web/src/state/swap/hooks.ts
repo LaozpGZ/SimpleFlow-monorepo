@@ -214,7 +214,7 @@ export function useDefaultsFromURLSearch():
   const { chainId } = useActiveChainId()
   const [, dispatch] = useAtom(swapReducerAtom)
   const native = useNativeCurrency()
-  const { query, isReady } = useRouter()
+  const { query, pathname, isReady } = useRouter()
   const [result, setResult] = useState<
     | {
         inputCurrencyId: string | undefined
@@ -246,6 +246,8 @@ export function useDefaultsFromURLSearch():
     let finalInputChainId = parsed[Field.INPUT].chainId || inputChainId
     let finalOutputChainId = parsed[Field.OUTPUT].chainId || outputChainId
 
+    const isNotTwapOrLimitPath = !['twap', 'limit'].some((p) => pathname.includes(p))
+
     // Set input currency to default (native currency) if chain is changed by user
     // and input currency is on different chain
     if (finalInputChainId && finalInputChainId !== chainId) {
@@ -254,6 +256,7 @@ export function useDefaultsFromURLSearch():
 
       const isOutputChainSupported =
         finalOutputChainId &&
+        isNotTwapOrLimitPath &&
         supportedBridgeChains?.some(
           (route) => route.originChainId === finalInputChainId && route.destinationChainId === finalOutputChainId,
         )
@@ -265,6 +268,19 @@ export function useDefaultsFromURLSearch():
         !isOutputChainSupported ||
         (finalOutputCurrencyId === finalInputCurrencyId && finalOutputChainId === finalInputChainId)
       ) {
+        finalOutputCurrencyId = defaultOutputCurrency
+        finalOutputChainId = chainId
+      }
+    }
+
+    if (finalOutputChainId && finalOutputChainId !== chainId) {
+      const isOutputChainSupported =
+        isNotTwapOrLimitPath &&
+        supportedBridgeChains?.some(
+          (route) => route.originChainId === finalInputChainId && route.destinationChainId === finalOutputChainId,
+        )
+
+      if (!isOutputChainSupported) {
         finalOutputCurrencyId = defaultOutputCurrency
         finalOutputChainId = chainId
       }
@@ -297,7 +313,7 @@ export function useDefaultsFromURLSearch():
       inputChainId: finalInputChainId || chainId,
       outputChainId: finalOutputChainId || chainId,
     })
-  }, [dispatch, chainId, query, native, isReady, supportedBridgeChains])
+  }, [dispatch, chainId, query, native, isReady, pathname, supportedBridgeChains])
 
   return result
 }
