@@ -2,8 +2,8 @@ import { ChainId, Currency, CurrencyAmount, Native, Token } from '@pancakeswap/s
 import { useQuery } from '@tanstack/react-query'
 import { multicallABI } from 'config/abi/Multicall'
 import { FAST_INTERVAL } from 'config/constants'
-import { useAllTokens } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import useAddressBalance from 'hooks/useAddressBalance'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import orderBy from 'lodash/orderBy'
 import { useMemo } from 'react'
@@ -125,25 +125,57 @@ export function useCurrencyBalance(account?: string, currency?: Currency | null)
   )[0]
 }
 
-// mimics useAllBalances
-export function useAllTokenBalances(chainId?: number): { [tokenAddress: string]: CurrencyAmount<Token> | undefined } {
+type BalanceAmount = {
+  [tokenAddress: string]: CurrencyAmount<Token> | undefined
+}
+
+// get all token balances for the current account by using api
+export function useAllTokenBalances(selectedChainId?: number): {
+  balances: BalanceAmount
+  isLoading: boolean
+} {
   const { address: account } = useAccount()
-  const allTokens = useAllTokens(chainId)
-  const allTokensArray = useMemo(() => Object.values(allTokens ?? {}), [allTokens])
 
-  const [tokenBalances] = useTokenBalancesWithLoadingIndicator(account, allTokensArray)
+  // Fetch balances using the hook we created
+  const { balances: apiBalances, isLoading: isLoadingBalance } = useAddressBalance(account, {
+    includeSpam: false,
+    onlyWithPrice: false,
+    filterByChainId: selectedChainId,
+  })
 
-  return useMemo(
-    () =>
-      Object.keys(tokenBalances).reduce((acc, key) => {
-        const [_, address] = key.split('-')
-        return {
-          ...acc,
-          [address]: tokenBalances[key],
+  return useMemo(() => {
+    /// [tokenAddress: string]: CurrencyAmount<Token> | undefined
+    const balances = apiBalances.reduce<{ [tokenAddress: string]: CurrencyAmount<Token> | undefined }>(
+      (acc, balance) => {
+        const [chainId, tokenAddress] = balance.id.split('-')
+
+        const checksummedTokenAddress = safeGetAddress(tokenAddress)
+
+        if (!checksummedTokenAddress) {
+          return acc
         }
-      }, {} as { [tokenAddress: string]: CurrencyAmount<Token> | undefined }),
-    [tokenBalances],
-  )
+        // eslint-disable-next-line no-param-reassign
+        acc[checksummedTokenAddress] = CurrencyAmount.fromRawAmount(
+          new Token(
+            Number(chainId),
+            checksummedTokenAddress,
+            balance.token.decimals,
+            balance.token.symbol,
+            balance.token.name,
+          ),
+          balance.value,
+        )
+
+        return acc
+      },
+      {} as { [tokenAddress: string]: CurrencyAmount<Token> | undefined },
+    )
+
+    return {
+      balances,
+      isLoading: isLoadingBalance,
+    }
+  }, [apiBalances, isLoadingBalance, selectedChainId])
 }
 
 /**
