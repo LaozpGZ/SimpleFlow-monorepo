@@ -395,7 +395,7 @@ export function SwapPanel({
               tokenInput={tokenInput}
               tokenOutput={tokenOutput}
               isComputing={isComputing && !isSending}
-              computedSwapResult={computeResult}
+              computedSwapResult={computeResult as any}
               onRefresh={handleRefresh}
             />
           </Box>
