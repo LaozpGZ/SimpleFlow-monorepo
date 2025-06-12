@@ -125,13 +125,9 @@ export function useCurrencyBalance(account?: string, currency?: Currency | null)
   )[0]
 }
 
-type BalanceAmount = {
-  [tokenAddress: string]: CurrencyAmount<Token> | undefined
-}
-
 // get all token balances for the current account by using api
 export function useAllTokenBalances(selectedChainId?: number): {
-  balances: BalanceAmount
+  balances: { [tokenAddress: string]: CurrencyAmount<Token> | undefined }
   isLoading: boolean
 } {
   const { address: account } = useAccount()
