@@ -1,4 +1,4 @@
-import { ChainId, Currency, CurrencyAmount, Native, Token } from '@pancakeswap/sdk'
+import { ChainId, Currency, CurrencyAmount, Native, Token, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { multicallABI } from 'config/abi/Multicall'
 import { FAST_INTERVAL } from 'config/constants'
@@ -151,7 +151,8 @@ export function useAllTokenBalances(selectedChainId?: number): {
 
         const checksummedTokenAddress = safeGetAddress(tokenAddress)
 
-        if (!checksummedTokenAddress) {
+        // Ignore native token because this hook is designed for tokens only, not native one
+        if (!checksummedTokenAddress || checksummedTokenAddress === ZERO_ADDRESS) {
           return acc
         }
         // eslint-disable-next-line no-param-reassign
