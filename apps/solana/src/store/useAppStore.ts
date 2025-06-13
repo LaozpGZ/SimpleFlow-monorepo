@@ -379,12 +379,12 @@ export const useAppStore = createStore<AppState>(
       set({ aprMode: mode })
     },
     checkAppVersionAct: async () => {
-      const { urlConfigs, appVersion } = get()
-      const res = await axios.get<{
-        latest: string
-        least: string
-      }>(`${urlConfigs.BASE_HOST}${urlConfigs.VERSION}`)
-      set({ needRefresh: compare(appVersion, res.data.latest, '<') })
+      // const { urlConfigs, appVersion } = get()
+      // const res = await axios.get<{
+      //   latest: string
+      //   least: string
+      // }>(`${urlConfigs.BASE_HOST}${urlConfigs.VERSION}`)
+      // set({ needRefresh: compare(appVersion, res.data.latest, '<') })
     },
 
     fetchPriorityFeeAct: async () => {
@@ -395,7 +395,7 @@ export const useAppStore = createStore<AppState>(
           m: number
           vh: number
         }
-      }>(`${urlConfigs.BASE_HOST}${urlConfigs.PRIORITY_FEE}`)
+      }>(`${API_URLS.BASE_HOST}${urlConfigs.PRIORITY_FEE}`)
       set({
         feeConfig: {
           [PriorityLevel.Fast]: data.default.m / 10 ** 9,
