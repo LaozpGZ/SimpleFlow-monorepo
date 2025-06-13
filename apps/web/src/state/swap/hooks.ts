@@ -335,19 +335,7 @@ export function useDefaultsFromURLSearch():
       inputChainId: finalInputChainId || chainId,
       outputChainId: finalOutputChainId || chainId,
     })
-  }, [
-    dispatch,
-    chainId,
-    query,
-    native,
-    isReady,
-    pathname,
-    supportedBridgeChains,
-    inputChainId,
-    inputCurrencyId,
-    outputChainId,
-    outputCurrencyId,
-  ])
+  }, [dispatch, chainId, query, native, isReady, pathname, supportedBridgeChains])
 
   return result
 }
