@@ -76,26 +76,27 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
     }
   }, [maxAmountInput, onUserInput])
 
-  const { canSwitch, switchNetwork } = useSwitchNetwork()
+  const { canSwitch, switchNetworkAsync } = useSwitchNetwork()
 
   const supportedBridgeChains = useBridgeAvailableRoutes()
 
   const handleCurrencySelect = useCallback(
-    (
+    async (
       newCurrency: Currency,
       field: Field,
       _currentInputCurrencyId: string | undefined,
       _currentOutputCurrencyId: string | undefined,
     ) => {
-      onCurrencySelection(field, newCurrency)
-
-      warningSwapHandler(newCurrency)
-
       const isInput = field === Field.INPUT
 
       if (isInput && canSwitch) {
-        switchNetwork(newCurrency.chainId)
+        const result = await switchNetworkAsync(newCurrency.chainId)
+        if (result === 'error') return
       }
+
+      onCurrencySelection(field, newCurrency)
+
+      warningSwapHandler(newCurrency)
 
       if (isInput && newCurrency.chainId !== outputChainId) {
         const isOutputChainSupported =
@@ -130,7 +131,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
       onCurrencySelection,
       warningSwapHandler,
       canSwitch,
-      switchNetwork,
+      switchNetworkAsync,
       outputChainId,
       supportedBridgeChains,
       inputChainId,

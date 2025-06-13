@@ -129,6 +129,7 @@ export function useSwitchNetwork() {
           .catch(() => {
             // TODO: review the error
             toastError(t('Error connecting, please retry and confirm in wallet!'))
+            return 'error'
           })
           .finally(() => setLoading(false))
       }
