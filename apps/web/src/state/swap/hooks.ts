@@ -241,26 +241,31 @@ export function useDefaultsFromURLSearch():
     const parsed = queryParametersToSwapState(query, native.symbol, defaultOutputCurrency)
 
     const parsedInputCurrency = safeGetAddress(query.inputCurrency)
+    let finalInputChainId: number | undefined
+    let finalOutputChainId: number | undefined
     let finalInputCurrencyId: string | undefined
     if (parsedInputCurrency && parsedInputCurrency !== inputCurrencyId) {
       finalInputCurrencyId = parsedInputCurrency
+      finalInputChainId = parsed[Field.INPUT].chainId
     } else if (inputCurrencyId) {
       finalInputCurrencyId = inputCurrencyId
+      finalInputChainId = inputChainId
     } else {
       finalInputCurrencyId = native.symbol ?? DEFAULT_INPUT_CURRENCY
+      finalInputChainId = chainId
     }
     const parsedOutputCurrency = safeGetAddress(query.outputCurrency)
     let finalOutputCurrencyId: string | undefined
     if (parsedOutputCurrency && parsedOutputCurrency !== outputCurrencyId) {
       finalOutputCurrencyId = parsedOutputCurrency
+      finalOutputChainId = parsed[Field.INPUT].chainId
     } else if (outputCurrencyId) {
       finalOutputCurrencyId = outputCurrencyId
+      finalOutputChainId = outputChainId
     } else {
       finalOutputCurrencyId = defaultOutputCurrency
+      finalOutputChainId = chainId
     }
-
-    let finalInputChainId = parsed[Field.INPUT].chainId || inputChainId
-    let finalOutputChainId = parsed[Field.OUTPUT].chainId || outputChainId
 
     const isNotTwapOrLimitPath = !['twap', 'limit'].some((p) => pathname.includes(p))
 
