@@ -249,7 +249,7 @@ export function useDefaultsFromURLSearch():
       finalInputChainId = parsed[Field.INPUT].chainId
     } else if (inputCurrencyId) {
       finalInputCurrencyId = inputCurrencyId
-      finalInputChainId = inputChainId || chainId
+      finalInputChainId = inputChainId
     } else {
       finalInputCurrencyId = native.symbol ?? DEFAULT_INPUT_CURRENCY
       finalInputChainId = chainId
@@ -261,7 +261,7 @@ export function useDefaultsFromURLSearch():
       finalOutputChainId = parsed[Field.OUTPUT].chainId
     } else if (outputCurrencyId) {
       finalOutputCurrencyId = outputCurrencyId
-      finalOutputChainId = outputChainId || chainId
+      finalOutputChainId = outputChainId
     } else {
       finalOutputCurrencyId = defaultOutputCurrency
       finalOutputChainId = chainId
@@ -335,7 +335,19 @@ export function useDefaultsFromURLSearch():
       inputChainId: finalInputChainId || chainId,
       outputChainId: finalOutputChainId || chainId,
     })
-  }, [dispatch, chainId, query, native, isReady, pathname, supportedBridgeChains])
+  }, [
+    dispatch,
+    chainId,
+    query,
+    native,
+    isReady,
+    pathname,
+    supportedBridgeChains,
+    inputChainId,
+    inputCurrencyId,
+    outputChainId,
+    outputCurrencyId,
+  ])
 
   return result
 }
