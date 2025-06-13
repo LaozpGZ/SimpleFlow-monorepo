@@ -119,7 +119,18 @@ export const FlipButton = memo(function FlipButton({
       })
     }
     setIsSwitching(false)
-  }, [onSwitchTokens, inputCurrencyId, outputCurrencyId, activeChainId, isLoading, setIsSwitching])
+  }, [
+    onSwitchTokens,
+    inputCurrencyId,
+    outputCurrencyId,
+    activeChainId,
+    isLoading,
+    setIsSwitching,
+    inputChainId,
+    outputChainId,
+    replaceBrowser,
+    switchNetworkAsync,
+  ])
 
   const handleAnimatedButtonClick = useCallback(() => {
     if (isSwitching) return

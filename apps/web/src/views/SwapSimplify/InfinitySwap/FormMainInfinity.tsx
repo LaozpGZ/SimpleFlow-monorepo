@@ -20,6 +20,7 @@ import currencyId from 'utils/currencyId'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
 import { getDefaultToken } from 'views/Swap/utils'
 import { useAccount } from 'wagmi'
+import { useRouter } from 'next/router'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { AssignRecipientButton, FlipButton } from './FlipButton'
@@ -80,6 +81,8 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
   const supportedBridgeChains = useBridgeAvailableRoutes()
 
+  const router = useRouter()
+
   const handleCurrencySelect = useCallback(
     async (
       newCurrency: Currency,
@@ -91,7 +94,25 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
       if (isInput && canSwitch) {
         const result = await switchNetworkAsync(newCurrency.chainId)
-        if (result === 'error') return
+        if (result === 'error') {
+          return
+        }
+        router.replace(
+          {
+            query: {
+              ...router.query,
+              inputCurrency: currencyId(newCurrency),
+              outputCurrency: _currentOutputCurrencyId,
+              chain: CHAIN_QUERY_NAME[newCurrency.chainId],
+              ...(outputChainId && { chainOut: CHAIN_QUERY_NAME[outputChainId] }),
+            },
+          },
+          undefined,
+          {
+            shallow: true,
+          },
+        )
+        return
       }
 
       onCurrencySelection(field, newCurrency)
@@ -137,6 +158,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
       inputChainId,
       inputCurrencyId,
       outputCurrencyId,
+      router,
     ],
   )
   const handleInputSelect = useCallback(
