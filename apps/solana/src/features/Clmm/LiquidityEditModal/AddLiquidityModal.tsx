@@ -190,7 +190,7 @@ export default function AddLiquidityModal({
         minWidth={[null, null, null, '512px']}
         maxWidth={['100%', '100%', '100%', '512px']}
         minHeight={isMobile ? '500px' : undefined}
-        headerPadding="2px 14px 0 24px"
+        headerPadding="12px 16px 12px 16px"
       >
         <div style={{ flex: 1 }}>
           <Text variant="subTitle" color={colors.textPrimary}>

@@ -14,7 +14,8 @@ export default function Content({ children, ...props }: PropsWithChildren) {
   // data related hooks
   useInitConnection(props)
   useTokenAccountInfo()
-  useRefreshChainTime()
+  // open it when implement farm part
+  // useRefreshChainTime()
   useTokenSetting()
   useLoadStorageData()
 

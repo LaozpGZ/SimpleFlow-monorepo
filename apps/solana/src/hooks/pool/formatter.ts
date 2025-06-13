@@ -9,26 +9,37 @@ import { trimTrailZero } from '@/utils/numberish/formatter'
 import { useAppStore } from '@/store/useAppStore'
 import { AprKey, TimeAprData, FormattedPoolInfoItem } from './type'
 
+const calcFeeApr = (fee: number, tvl: number, period: 'day' | 'week' | 'month' = 'day') => {
+  if (!fee || !tvl) {
+    return 0
+  }
+  const feePerYear = new Decimal(fee).mul(period === 'day' ? 365 : period === 'week' ? new Decimal(365).div(7) : 12)
+  return feePerYear.div(tvl).mul(100).toNumber()
+}
+
 export const formatAprData = (data: ApiV3PoolInfoItem): ApiV3PoolInfoItem => {
+  const dayFeeApr = data.day.feeApr ?? calcFeeApr(data.day.volumeFee, data.tvl, 'day')
+  const weekFeeApr = data.week.feeApr ?? calcFeeApr(data.week.volumeFee, data.tvl, 'week')
+  const monthFeeApr = data.week.feeApr ?? calcFeeApr(data.month.volumeFee, data.tvl, 'month')
   return {
     ...data,
     day: {
       ...data.day,
       rewardApr: data.day.rewardApr ?? [],
-      apr: data.day.apr ?? 0,
-      feeApr: data.day.feeApr ?? 0
+      apr: data.day.apr ?? dayFeeApr,
+      feeApr: dayFeeApr
     },
     week: {
       ...data.week,
       rewardApr: data.week.rewardApr ?? [],
-      apr: data.week.apr ?? 0,
-      feeApr: data.week.feeApr ?? 0
+      apr: data.week.apr ?? weekFeeApr,
+      feeApr: data.week.feeApr ?? weekFeeApr
     },
     month: {
       ...data.month,
       rewardApr: data.month.rewardApr ?? [],
-      apr: data.month.apr ?? 0,
-      feeApr: data.month.feeApr ?? 0
+      apr: data.month.apr ?? monthFeeApr,
+      feeApr: data.month.feeApr ?? monthFeeApr
     },
     rewardDefaultPoolInfos: data.rewardDefaultPoolInfos ?? 'Clmm',
     rewardDefaultInfos: data.rewardDefaultInfos ?? [],
