@@ -150,6 +150,7 @@ const appInitState = {
   },
   featureDisabled: {},
   appVersion: 'V3.0.2',
+  // todo:@eric switch to V0 after ALT supported
   txVersion: TxVersion.LEGACY,
   needRefresh: false,
   tokenAccLoaded: false,
@@ -185,7 +186,7 @@ export const useAppStore = createStore<AppState>(
         logRequests: !isDev,
         disableFeatureCheck: true,
         loopMultiTxStatus: true,
-        cluster: 'devnet',
+        // cluster: 'devnet',
         blockhashCommitment: 'finalized'
       })
       useTokenStore.getState().extraLoadedTokenList.forEach((t) => {
