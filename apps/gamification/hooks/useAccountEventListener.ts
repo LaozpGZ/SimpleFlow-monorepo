@@ -42,7 +42,7 @@ const useAddressListener = () => {
 }
 
 export const useAccountEventListener = () => {
-  useChainIdListener()
+  // useChainIdListener()
   useAddressListener()
   const { chainId } = useAccount()
   const dispatch = useAppDispatch()
