@@ -171,7 +171,7 @@ function logQuote(key?: string) {
   console.log(`%c[quote] with ${key}`, 'color: green; font-weight: bold;')
 }
 
-export const bestQuoteAtom = atomFamily((_option: QuoteQuery) => {
+export const bestSameChainAtom = atomFamily((_option: QuoteQuery) => {
   return atom((get) => {
     const result = get(bestSameChainWithoutPlaceHolderAtom(_option))
 
