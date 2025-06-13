@@ -1,3 +1,5 @@
+import { useAppStore } from '@/store/useAppStore'
+
 // birdeye api key
 export const birdeyHost = 'https://birdeye-proxy.raydium.io'
 
@@ -26,7 +28,10 @@ export const birdeyePairVolumeApiAddress = ({
   timeType: string
   timeFrom: number
   timeTo: number
-}) => `${birdeyHost}/defi/ohlcv/pair?address=${poolAddress}&type=${timeType}&time_from=${timeFrom}&time_to=${timeTo}`
+}) =>
+  `${
+    useAppStore.getState().urlConfigs.BASE_HOST
+  }/cached/v1/pools/ohlcv/pair?poolId=${poolAddress}&type=${timeType}&time_from=${timeFrom}&time_to=${timeTo}`
 
 export const birdeyePairPriceApiAddress = ({
   baseMint,

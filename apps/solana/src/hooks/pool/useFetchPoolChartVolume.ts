@@ -105,7 +105,7 @@ export default function useFetchPoolChartVolume({
     }
   )
 
-  const {
+  /* const {
     data: priceData,
     setSize: stePriceSize,
     error: priceError,
@@ -127,10 +127,10 @@ export default function useFetchPoolChartVolume({
       focusThrottleInterval: refreshInterval,
       refreshInterval
     }
-  )
+  ) */
 
-  const isLoading = isVolLoading || isPriceLoading
-  const error = volError || priceError
+  const isLoading = isVolLoading
+  const error = volError
 
   const isLoadEnded =
     !isLoading && !volSwrProps.isValidating
@@ -143,10 +143,10 @@ export default function useFetchPoolChartVolume({
     () => (volData || []).filter((data) => data.success).reduce((acc, cur) => cur.data.items.concat(acc), [] as RawVolumeDataItem[]),
     [volData]
   )
-  const allPricePoints = useMemo(
+  /* const allPricePoints = useMemo(
     () => (priceData || []).filter((data) => data.success).reduce((acc, cur) => cur.data.items.concat(acc), [] as PriceData[]),
     [priceData]
-  )
+  ) */
 
   const isEmptyResult = !isLoading && !(volData && !error)
 
@@ -154,7 +154,7 @@ export default function useFetchPoolChartVolume({
     throttle(() => {
       if (isLoading || volSwrProps.isValidating || isLoadEnded) return
       setVolSize((s) => s + 1)
-      stePriceSize((s) => s + 1)
+      // stePriceSize((s) => s + 1)
     }, 1000)
   )
 
@@ -168,10 +168,10 @@ export default function useFetchPoolChartVolume({
             low: p.l,
             close: p.c,
             time: p.unixTime,
-            value: allPricePoints[idx] ? p.v * allPricePoints[idx].value : p.v
+            value: p.v
           } as CandlestickData & { value: number })
       ),
-    [allPoints, allPricePoints]
+    [allPoints]
   )
   const lastData = formattedData[formattedData.length - 1]
   const prev24HData =
