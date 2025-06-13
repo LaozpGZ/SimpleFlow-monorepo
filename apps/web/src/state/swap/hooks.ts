@@ -249,7 +249,7 @@ export function useDefaultsFromURLSearch():
       finalInputChainId = parsed[Field.INPUT].chainId
     } else if (inputCurrencyId) {
       finalInputCurrencyId = inputCurrencyId
-      finalInputChainId = inputChainId
+      finalInputChainId = inputChainId || chainId
     } else {
       finalInputCurrencyId = native.symbol ?? DEFAULT_INPUT_CURRENCY
       finalInputChainId = chainId
@@ -261,7 +261,7 @@ export function useDefaultsFromURLSearch():
       finalOutputChainId = parsed[Field.OUTPUT].chainId
     } else if (outputCurrencyId) {
       finalOutputCurrencyId = outputCurrencyId
-      finalOutputChainId = outputChainId
+      finalOutputChainId = outputChainId || chainId
     } else {
       finalOutputCurrencyId = defaultOutputCurrency
       finalOutputChainId = chainId
