@@ -96,10 +96,6 @@ const whitelist = [
   "Your browser doesn't support iframe",
   'Try it now',
   'This Product is in beta.',
-  'Notice: ZKsync CAKE Bridging Maintenance',
-  'Bridging to/from ZKsync is currently unavailable until further notice.',
-  'Bridging on all other supported networks continues to function as normal.',
-  'Please refer to our X account for updates.',
 ]
 
 describe.concurrent('Check translations integrity', () => {
