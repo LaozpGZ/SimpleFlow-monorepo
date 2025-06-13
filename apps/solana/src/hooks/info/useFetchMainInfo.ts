@@ -4,7 +4,7 @@ import axios from '@/api/axios'
 import { useAppStore } from '@/store'
 
 interface OverviewResponse {
-  tvl: number
+  totalTvlUsd: number
   totalVolume24h: string
 }
 const fetcher = (url: string) => axios.get<OverviewResponse, OverviewResponse>(url, { skipError: true })
