@@ -93,25 +93,13 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
       const isInput = field === Field.INPUT
 
       if (isInput && canSwitch) {
-        const result = await switchNetworkAsync(newCurrency.chainId)
-        if (result === 'error') {
-          return
-        }
-        router.replace(
-          {
-            query: {
-              ...router.query,
-              inputCurrency: currencyId(newCurrency),
-              outputCurrency: _currentOutputCurrencyId,
-              chain: CHAIN_QUERY_NAME[newCurrency.chainId],
-              ...(outputChainId && { chainOut: CHAIN_QUERY_NAME[outputChainId] }),
-            },
-          },
-          undefined,
-          {
-            shallow: true,
-          },
-        )
+        await switchNetworkAsync(newCurrency.chainId, {
+          ...router.query,
+          inputCurrency: currencyId(newCurrency),
+          ...(outputCurrency && { outputCurrency: _currentOutputCurrencyId }),
+          chain: CHAIN_QUERY_NAME[newCurrency.chainId],
+          ...(outputChainId && { chainOut: CHAIN_QUERY_NAME[outputChainId] }),
+        })
         return
       }
 

@@ -48,7 +48,7 @@ export function useSwitchNetworkLocal() {
   }, [])
 
   return useCallback(
-    (newChainId: number) => {
+    (newChainId: number, redirectTo?: Record<string, string>) => {
       const { chain: queryChainName, chainId: queryChainId, persistChain } = router.query
       if (persistChain) return
       const newChainQueryName = CHAIN_QUERY_NAME[newChainId]
@@ -70,6 +70,7 @@ export function useSwitchNetworkLocal() {
           query: {
             ...(!removeQueriesFromPath && omittedQuery),
             chain: newChainQueryName,
+            ...redirectTo,
           },
           ...(uriHash && { hash: uriHash }),
         },
@@ -114,13 +115,13 @@ export function useSwitchNetwork() {
   const isLoading = _isLoading || loading
 
   const switchNetworkAsync = useCallback(
-    async (chainId: number) => {
+    async (chainId: number, redirectQuery?: Record<string, string>) => {
       if (isConnected && connector && typeof _switchNetworkAsync === 'function') {
         if (isLoading) return undefined
         setLoading(true)
         return _switchNetworkAsync({ chainId })
           .then(async (c) => {
-            switchNetworkLocal(chainId)
+            switchNetworkLocal(chainId, redirectQuery)
             if (await checkSwitchReloadNeeded(connector, chainId, address)) {
               await logout()
             }
@@ -129,7 +130,6 @@ export function useSwitchNetwork() {
           .catch(() => {
             // TODO: review the error
             toastError(t('Error connecting, please retry and confirm in wallet!'))
-            return 'error'
           })
           .finally(() => setLoading(false))
       }
