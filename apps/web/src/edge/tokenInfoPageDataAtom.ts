@@ -1,14 +1,10 @@
 /* eslint-disable no-nested-ternary */
 
-import dayjs from 'dayjs'
-import duration from 'dayjs/plugin/duration'
 import { atomFamily } from 'jotai/utils'
 import isEqual from 'lodash/isEqual'
 import { PoolData, TokenChartEntry, TokenData, Transaction, TvlChartEntry, VolumeChartEntry } from 'state/info/types'
 import { atomWithAsyncRetry } from 'utils/atomWithAsyncRetry'
 import { BasePerf, PerfTracker } from 'utils/PerfTracker'
-
-dayjs.extend(duration)
 
 interface TokenInfoParams {
   address: string
