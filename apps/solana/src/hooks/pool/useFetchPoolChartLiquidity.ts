@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import axios from '@/api/axios'
@@ -9,11 +10,42 @@ interface PointData {
   liquidity: string
 }
 
-const fetcher = (url: string) =>
-  axios.get<{
-    count: number
-    line: PointData[]
-  }>(url, { skipError: true })
+interface ChartData {
+  count: number
+  line: PointData[]
+}
+
+interface APIChartData {
+  success: boolean
+  data: [
+    {
+      date: string
+      timestamp: number
+      liquidity: number
+      dayId: number
+    }
+  ]
+  poolId: string
+  count: number
+}
+
+const fetcher = (url: string) => axios.get<APIChartData, APIChartData>(url, { skipError: true })
+
+const formatData = (data?: APIChartData): ChartData => {
+  if (!data?.data) {
+    return {
+      count: 0,
+      line: []
+    }
+  }
+  return {
+    count: data.count,
+    line: data.data.map((d) => ({
+      time: d.timestamp.toString(),
+      liquidity: d.liquidity.toString()
+    }))
+  }
+}
 
 export default function useFetchPoolChartLiquidity(props: {
   disable?: boolean
@@ -26,15 +58,17 @@ export default function useFetchPoolChartLiquidity(props: {
   const [host, lineUrl] = useAppStore((s) => [s.urlConfigs.BASE_HOST, s.urlConfigs.POOL_LIQUIDITY_LINE], shallow)
   const url = id && shouldFetch && isValidId && !disable ? host + lineUrl : null
 
-  const { data, isLoading, error, ...rest } = useSWR(url ? `${url}?id=${id}` : url, fetcher, {
+  const { data, isLoading, error, ...rest } = useSWR(url ? `${url}?poolId=${id}` : url, fetcher, {
     dedupingInterval: refreshInterval,
     focusThrottleInterval: refreshInterval,
     refreshInterval
   })
   const isEmptyResult = !!id && !isLoading && !(data && !error)
 
+  const formattedData = useMemo(() => formatData(data), [data])
+
   return {
-    data: data?.data.line || [],
+    data: formattedData.line || [],
     isLoading,
     error,
     isEmptyResult,
