@@ -250,9 +250,9 @@ export const useAppStore = createStore<AppState>(
         action
       )
 
-      setTimeout(() => {
+      /* setTimeout(() => {
         get().fetchChainTimeAct()
-      }, 1000)
+      }, 1000) */
     },
     fetchChainTimeAct: () => {
       const { urlConfigs } = get()
