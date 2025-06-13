@@ -258,7 +258,7 @@ export function useDefaultsFromURLSearch():
     let finalOutputCurrencyId: string | undefined
     if (parsedOutputCurrency && parsedOutputCurrency !== outputCurrencyId) {
       finalOutputCurrencyId = parsedOutputCurrency
-      finalOutputChainId = parsed[Field.INPUT].chainId
+      finalOutputChainId = parsed[Field.OUTPUT].chainId
     } else if (outputCurrencyId) {
       finalOutputCurrencyId = outputCurrencyId
       finalOutputChainId = outputChainId
