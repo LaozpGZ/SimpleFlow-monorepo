@@ -279,6 +279,8 @@ export function useDefaultsFromURLSearch():
       }
     }
 
+    console.log('finalOutputCurrencyId', finalOutputCurrencyId)
+
     dispatch(
       replaceSwapState({
         typedValue: parsed.typedValue,
@@ -297,7 +299,18 @@ export function useDefaultsFromURLSearch():
       inputChainId: finalInputChainId || chainId,
       outputChainId: finalOutputChainId || chainId,
     })
-  }, [dispatch, chainId, query, native, isReady, supportedBridgeChains])
+  }, [
+    dispatch,
+    chainId,
+    query,
+    native,
+    isReady,
+    supportedBridgeChains,
+    inputCurrencyId,
+    outputCurrencyId,
+    inputChainId,
+    outputChainId,
+  ])
 
   return result
 }
