@@ -240,10 +240,24 @@ export function useDefaultsFromURLSearch():
 
     const parsed = queryParametersToSwapState(query, native.symbol, defaultOutputCurrency)
 
+    const parsedInputCurrency = safeGetAddress(query.inputCurrency)
+    let finalInputCurrencyId: string | undefined
+    if (parsedInputCurrency && parsedInputCurrency !== inputCurrencyId) {
+      finalInputCurrencyId = parsedInputCurrency
+    } else if (inputCurrencyId) {
+      finalInputCurrencyId = inputCurrencyId
+    } else {
+      finalInputCurrencyId = native.symbol ?? DEFAULT_INPUT_CURRENCY
+    }
     const parsedOutputCurrency = safeGetAddress(query.outputCurrency)
-
-    let finalInputCurrencyId = parsed[Field.INPUT].currencyId || inputCurrencyId
-    let finalOutputCurrencyId = parsedOutputCurrency || outputCurrencyId || defaultOutputCurrency
+    let finalOutputCurrencyId: string | undefined
+    if (parsedOutputCurrency && parsedOutputCurrency !== outputCurrencyId) {
+      finalOutputCurrencyId = parsedOutputCurrency
+    } else if (outputCurrencyId) {
+      finalOutputCurrencyId = outputCurrencyId
+    } else {
+      finalOutputCurrencyId = defaultOutputCurrency
+    }
 
     let finalInputChainId = parsed[Field.INPUT].chainId || inputChainId
     let finalOutputChainId = parsed[Field.OUTPUT].chainId || outputChainId
