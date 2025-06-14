@@ -114,16 +114,16 @@ export function useSwitchNetwork() {
 
   const switchNetworkAsync = useCallback(
     async (chainId: number, redirectQuery?: Record<string, string>) => {
+      window.dispatchEvent(
+        new CustomEvent('switchNetwork#pcs', {
+          detail: {
+            newChainId: chainId,
+          },
+        }),
+      )
       if (isConnected && connector && typeof _switchNetworkAsync === 'function') {
         if (isLoading) return undefined
         setLoading(true)
-        window.dispatchEvent(
-          new CustomEvent('switchNetwork#pcs', {
-            detail: {
-              newChainId: chainId,
-            },
-          }),
-        )
         return _switchNetworkAsync({ chainId })
           .then(async (c) => {
             switchNetworkLocal(chainId, redirectQuery)
@@ -139,7 +139,7 @@ export function useSwitchNetwork() {
           .finally(() => setLoading(false))
       }
       return new Promise((resolve) => {
-        resolve(switchNetworkLocal(chainId))
+        resolve(switchNetworkLocal(chainId, redirectQuery))
       })
     },
     [
