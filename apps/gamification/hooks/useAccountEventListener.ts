@@ -1,6 +1,6 @@
 import { watchAccount } from '@wagmi/core'
 import { useSwitchNetworkLocal } from 'hooks/useSwitchNetwork'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect } from 'react'
 import { useAppDispatch } from 'state'
 import { clearUserStates } from 'utils/clearUserStates'
 import { useAccount, useAccountEffect, useConfig } from 'wagmi'
