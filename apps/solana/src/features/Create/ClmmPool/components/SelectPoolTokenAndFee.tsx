@@ -93,7 +93,7 @@ export default function SelectPoolTokenAndFee({ completed, initState, show, isLo
 
   useEffect(() => {
     if (isExistingLoading) return
-    const defaultConfig = Object.values(clmmFeeConfigs || {}).find((c) => c.tradeFeeRate === 3000)
+    const defaultConfig = Object.values(clmmFeeConfigs || {}).find((c) => c.tradeFeeRate === 2500)
     if (!new Set(existingPools.values()).has(defaultConfig?.id || '')) {
       if (defaultConfig) setCurrentConfig((preConfig) => preConfig || defaultConfig)
     }

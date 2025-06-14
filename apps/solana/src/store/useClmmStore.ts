@@ -305,18 +305,7 @@ export const useClmmStore = createStore<ClmmState>(
       try {
         const computeBudgetConfig = await getComputeBudgetConfig()
         const buildData = await raydium.clmm.openPositionFromBase({
-          // todo:@eric mock program id to avoid failed, remove it after BE fixed
-          poolInfo: {
-            ...poolInfo,
-            mintA: {
-              ...poolInfo.mintA,
-              programId: TOKEN_PROGRAM_ID as any
-            },
-            mintB: {
-              ...poolInfo.mintB,
-              programId: TOKEN_PROGRAM_ID as any
-            }
-          },
+          poolInfo,
           poolKeys,
           tickLower: Math.min(tickLower, tickUpper),
           tickUpper: Math.max(tickLower, tickUpper),
@@ -875,7 +864,7 @@ export const useClmmStore = createStore<ClmmState>(
       try {
         const computeBudgetConfig = forerunCreate ? undefined : await getComputeBudgetConfig()
         const buildData = await raydium.clmm.createPool({
-          programId: PancakeClmmProgramId.devnet,
+          programId: PancakeClmmProgramId['mainnet-beta'],
           mint1: { ...token1, address: token1.address },
           mint2: { ...token2, address: token2.address },
           ammConfig: { ...config, id: new PublicKey(config.id), fundOwner: '', description: '' },
@@ -947,7 +936,7 @@ export const useClmmStore = createStore<ClmmState>(
     fetchAmmConfigsAct: async () => {
       // const { raydium } = useAppStore.getState()
       // if (Object.keys(get().clmmFeeConfigs).length || !raydium) return
-      set({ clmmFeeConfigs: ammConfigs.devnet }, false, { type: 'fetchAmmConfigsAct' })
+      set({ clmmFeeConfigs: ammConfigs['mainnet-beta'] }, false, { type: 'fetchAmmConfigsAct' })
       // try {
       //   // const res = await raydium.api.getClmmConfigs()
       //   // const apiRes = res.reduce(
