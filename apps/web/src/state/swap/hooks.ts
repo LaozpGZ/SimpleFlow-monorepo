@@ -225,11 +225,6 @@ export function useDefaultsFromURLSearch():
     | undefined
   >()
 
-  const {
-    [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
-    [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
-  } = useSwapState()
-
   const { data: supportedBridgeChains } = useBridgeAvailableRoutes()
 
   useEffect(() => {
@@ -240,32 +235,11 @@ export function useDefaultsFromURLSearch():
 
     const parsed = queryParametersToSwapState(query, native.symbol, defaultOutputCurrency)
 
-    const parsedInputCurrency = safeGetAddress(query.inputCurrency)
-    let finalInputChainId: number | undefined
-    let finalOutputChainId: number | undefined
-    let finalInputCurrencyId: string | undefined
-    if (parsedInputCurrency && parsedInputCurrency !== inputCurrencyId) {
-      finalInputCurrencyId = parsedInputCurrency
-      finalInputChainId = parsed[Field.INPUT].chainId
-    } else if (inputCurrencyId) {
-      finalInputCurrencyId = inputCurrencyId
-      finalInputChainId = inputChainId
-    } else {
-      finalInputCurrencyId = native.symbol ?? DEFAULT_INPUT_CURRENCY
-      finalInputChainId = chainId
-    }
-    const parsedOutputCurrency = safeGetAddress(query.outputCurrency)
-    let finalOutputCurrencyId: string | undefined
-    if (parsedOutputCurrency && parsedOutputCurrency !== outputCurrencyId) {
-      finalOutputCurrencyId = parsedOutputCurrency
-      finalOutputChainId = parsed[Field.OUTPUT].chainId
-    } else if (outputCurrencyId) {
-      finalOutputCurrencyId = outputCurrencyId
-      finalOutputChainId = outputChainId
-    } else {
-      finalOutputCurrencyId = defaultOutputCurrency
-      finalOutputChainId = chainId
-    }
+    let finalInputCurrencyId = parsed[Field.INPUT].currencyId
+    let finalOutputCurrencyId = parsed[Field.OUTPUT].currencyId
+
+    let finalInputChainId = parsed[Field.INPUT].chainId
+    let finalOutputChainId = parsed[Field.OUTPUT].chainId
 
     const isNotTwapOrLimitPath = !['twap', 'limit'].some((p) => pathname.includes(p))
 
@@ -289,20 +263,6 @@ export function useDefaultsFromURLSearch():
         !isOutputChainSupported ||
         (finalOutputCurrencyId === finalInputCurrencyId && finalOutputChainId === finalInputChainId)
       ) {
-        finalOutputCurrencyId = defaultOutputCurrency
-        finalOutputChainId = chainId
-      }
-    }
-
-    if (finalOutputChainId && finalOutputChainId !== chainId) {
-      const isOutputChainSupported =
-        isNotTwapOrLimitPath &&
-        supportedBridgeChains?.some(
-          (route) =>
-            route.originChainId === (finalInputChainId || chainId) && route.destinationChainId === finalOutputChainId,
-        )
-
-      if (!isOutputChainSupported) {
         finalOutputCurrencyId = defaultOutputCurrency
         finalOutputChainId = chainId
       }
@@ -338,13 +298,6 @@ export function useDefaultsFromURLSearch():
   }, [dispatch, chainId, query, native, isReady, pathname, supportedBridgeChains])
 
   return result
-}
-
-export function useDefaultsFromURLSearchForHomePage() {
-  return {
-    inputCurrencyId: 'bnb',
-    outputCurrencyId: 'cake',
-  }
 }
 
 type useFetchPairPricesParams = {

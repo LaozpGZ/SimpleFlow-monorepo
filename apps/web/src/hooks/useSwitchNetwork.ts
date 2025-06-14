@@ -119,6 +119,13 @@ export function useSwitchNetwork() {
       if (isConnected && connector && typeof _switchNetworkAsync === 'function') {
         if (isLoading) return undefined
         setLoading(true)
+        window.dispatchEvent(
+          new CustomEvent('switchNetwork#pcs', {
+            detail: {
+              newChainId: chainId,
+            },
+          }),
+        )
         return _switchNetworkAsync({ chainId })
           .then(async (c) => {
             switchNetworkLocal(chainId, redirectQuery)
