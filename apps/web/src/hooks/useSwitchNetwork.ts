@@ -56,8 +56,6 @@ export function useSwitchNetworkLocal() {
       const removeQueriesFromPath =
         newChainQueryName !== chainQueryName &&
         EXCHANGE_PAGE_PATHS.some((item) => {
-          // Swap page (and root page) should not remove queries as they support cross-chain swap
-          if (item === '/swap' || item === '/') return false
           return router.pathname.startsWith(item)
         })
 

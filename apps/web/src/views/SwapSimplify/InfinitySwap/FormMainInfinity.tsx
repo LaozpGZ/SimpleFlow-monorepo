@@ -96,8 +96,8 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
         await switchNetworkAsync(newCurrency.chainId, {
           ...router.query,
           inputCurrency: currencyId(newCurrency),
-          ...(outputCurrency && { outputCurrency: _currentOutputCurrencyId }),
           chain: CHAIN_QUERY_NAME[newCurrency.chainId],
+          ...(outputCurrency && { outputCurrency: _currentOutputCurrencyId }),
           ...(outputChainId && { chainOut: CHAIN_QUERY_NAME[outputChainId] }),
         })
         return
