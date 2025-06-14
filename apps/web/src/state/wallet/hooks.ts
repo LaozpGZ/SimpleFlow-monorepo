@@ -20,7 +20,7 @@ import { useMultipleContractSingleDataWagmi } from '../multicall/hooks'
  */
 export function useNativeBalances(account?: Address, chainId?: ChainId): CurrencyAmount<Native> {
   const native = useNativeCurrency(chainId)
-  const latestBlockNumber = useCurrentBlock()
+  const latestBlockNumber = useCurrentBlock(native?.chainId)
 
   const { data: results, refetch } = useBalance({
     address: account,
