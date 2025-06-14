@@ -97,7 +97,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           ...router.query,
           inputCurrency: currencyId(newCurrency),
           chain: CHAIN_QUERY_NAME[newCurrency.chainId],
-          ...(outputCurrency && { outputCurrency: _currentOutputCurrencyId }),
+          ...(_currentOutputCurrencyId && { outputCurrency: _currentOutputCurrencyId }),
           ...(outputChainId && { chainOut: CHAIN_QUERY_NAME[outputChainId] }),
         })
         return

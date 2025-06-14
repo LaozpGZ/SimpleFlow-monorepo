@@ -20,6 +20,7 @@ import { LottieRefCurrentProps } from 'lottie-react'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useRouter } from 'next/router'
 import ArrowDark from '../../../../public/images/swap/arrow_dark.json' assert { type: 'json' }
 import ArrowLight from '../../../../public/images/swap/arrow_light.json' assert { type: 'json' }
 import { useAllowRecipient } from '../../Swap/V3Swap/hooks'
@@ -96,6 +97,8 @@ export const FlipButton = memo(function FlipButton({
     [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
   } = useSwapState()
 
+  const router = useRouter()
+
   const onFlip = useCallback(async () => {
     setIsSwitching(true)
     onSwitchTokens()
@@ -104,7 +107,14 @@ export const FlipButton = memo(function FlipButton({
       // If cross-chain swap, switch network to new Input Currency's chain
 
       if (outputChainId && activeChainId !== outputChainId && !isLoading) {
-        await switchNetworkAsync(outputChainId)
+        await switchNetworkAsync(outputChainId, {
+          ...router.query,
+          ...(outputCurrencyId && { inputCurrency: outputCurrencyId }),
+          ...(outputChainId && { chain: CHAIN_QUERY_NAME[outputChainId] }),
+          ...(inputCurrencyId && { outputCurrency: inputCurrencyId }),
+          ...(inputChainId && { chainOut: CHAIN_QUERY_NAME[inputChainId] }),
+        })
+        return
       }
 
       replaceBrowserHistoryMultiple({
@@ -130,6 +140,7 @@ export const FlipButton = memo(function FlipButton({
     outputChainId,
     replaceBrowser,
     switchNetworkAsync,
+    router,
   ])
 
   const handleAnimatedButtonClick = useCallback(() => {
