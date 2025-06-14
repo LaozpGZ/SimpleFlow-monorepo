@@ -27,11 +27,14 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@solana/web3.js": "^1.98.2"
+    "@solana/web3.js": "^1.98.2",
+    "openapi-fetch": "^0.14.0"
   },
   "devDependencies": {
     "tsup": "^6.7.0",
-    "@pancakeswap/utils": "workspace:*"
+    "@pancakeswap/utils": "workspace:*",
+    "openapi-typescript": "7.8.0",
+    "openapi-typescript-helpers": "0.0.15"
   },
   "engines": {
     "node": ">=10"
