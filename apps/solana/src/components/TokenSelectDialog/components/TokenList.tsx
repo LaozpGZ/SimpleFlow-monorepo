@@ -99,7 +99,7 @@ export default forwardRef<
     const sortedTokenList = sortItems(tokenList, {
       sortRules: [
         // { value: (i) => (i.address === SOLMint || i.address === RAYMint ? i.address : null) },
-        { value: (i) => (i.tags.includes('unknown') ? null : i.symbol.length), compareFn }
+        { value: (i) => (i.tags?.includes('unknown') ? null : i.symbol.length), compareFn }
       ]
     })
     const filteredList_ = search ? filterTokenFn(sortedTokenList, { searchStr: search }) : sortedTokenList

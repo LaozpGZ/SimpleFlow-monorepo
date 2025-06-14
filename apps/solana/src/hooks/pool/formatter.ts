@@ -2,6 +2,7 @@ import { PublicKey } from '@solana/web3.js'
 import { ApiV3PoolInfoItem, TickUtils, ApiV3PoolInfoConcentratedItem } from '@raydium-io/raydium-sdk-v2'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'
+import { PoolInfo } from '@pancakeswap/solana-clmm-sdk'
 import { getPoolName } from '@/features/Pools/util'
 import { wSolToSolString, getMintSymbol } from '@/utils/token'
 import { toTotalPercent } from '@/utils/numberish/toPercentString'
@@ -17,7 +18,7 @@ const calcFeeApr = (fee: number, tvl: number, period: 'day' | 'week' | 'month' =
   return feePerYear.div(tvl).mul(100).toNumber()
 }
 
-export const formatAprData = (data: ApiV3PoolInfoItem): ApiV3PoolInfoItem => {
+export const formatAprData = (data: PoolInfo): ApiV3PoolInfoItem => {
   const dayFeeApr = data.day.feeApr ?? calcFeeApr(data.day.volumeFee, data.tvl, 'day')
   const weekFeeApr = data.week.feeApr ?? calcFeeApr(data.week.volumeFee, data.tvl, 'week')
   const monthFeeApr = data.week.feeApr ?? calcFeeApr(data.month.volumeFee, data.tvl, 'month')

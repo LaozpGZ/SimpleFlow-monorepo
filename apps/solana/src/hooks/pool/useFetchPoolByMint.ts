@@ -2,7 +2,8 @@ import { useMemo, useCallback } from 'react'
 import { FetchPoolParams, solToWSol, ApiV3PoolInfoItem, PoolFetchType } from '@raydium-io/raydium-sdk-v2'
 import { shallow } from 'zustand/shallow'
 import useSWRInfinite from 'swr/infinite'
-import { KeyedMutator } from 'swr'
+import useSWR, { KeyedMutator } from 'swr'
+import { getPoolsByMints } from '@pancakeswap/solana-clmm-sdk'
 import axios from '@/api/axios'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { useAppStore } from '@/store'
@@ -32,9 +33,9 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
   formattedData: ReturnFormattedPoolType<T>[]
   formattedSelectedPool?: ReturnPoolType<T>
   isLoadEnded: boolean
-  loadMore: () => void
+  // loadMore: () => void
   size: number
-  mutate: KeyedMutator<FetcherReturnType[]>
+  // mutate: KeyedMutator<FetcherReturnType[]>
   isValidating: boolean
   isLoading: boolean
 } {
@@ -56,14 +57,14 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
   const [baseMint, quoteMint] = mint2 && mint1 > mint2 ? [mint2, mint1] : [mint1, mint2]
   const url = (!mint1 && !mint2) || !shouldFetch ? null : host + mintUrl
 
-  const { data, setSize, error, ...swrProps } = useSWRInfinite(
-    (index) =>
-      url
-        ? `${url}?tokenMint0=${baseMint}&tokenMint1=${quoteMint}&poolType=${
-            showFarms ? `${type}Farm` : type
-          }&poolSortField=${sort}&sortType=${order}&pageSize=${pageSize}&page=${index + 1}`
-        : url,
-    fetcher,
+  const { data, error, ...swrProps } = useSWR(
+    baseMint && quoteMint && shouldFetch
+      ? {
+          mintA: baseMint,
+          mintB: quoteMint
+        }
+      : null,
+    getPoolsByMints,
     {
       dedupingInterval: refreshInterval,
       focusThrottleInterval: refreshInterval,
@@ -71,10 +72,11 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
     }
   )
 
-  const loadMore = useCallback(() => setSize((s) => s + 1), [type, sort, order])
+  // const loadMore = useCallback(() => setSize((s) => s + 1), [type, sort, order])
 
   const resData = useMemo(
-    () => (data || []).reduce((acc, cur) => acc.concat(cur?.data || []).filter(Boolean), [] as ApiV3PoolInfoItem[]).map(formatAprData),
+    // () => (data || []).reduce((acc, cur) => acc.concat(cur?.data || []).filter(Boolean), [] as ApiV3PoolInfoItem[]).map(formatAprData),
+    () => (data?.data || []).map((pool) => formatAprData(pool)),
     [data]
   ) as ReturnPoolType<T>[]
   const formattedData = useMemo(() => resData.map((i) => formatPoolData(i)), [resData]) as ReturnFormattedPoolType<T>[]
@@ -84,10 +86,11 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
   return {
     selectedPool,
     data: resData,
+    size: data?.count ? Number(data.count) : 0,
     formattedData,
     formattedSelectedPool: selectedPool ? (formatPoolData(selectedPool as ApiV3PoolInfoItem) as ReturnFormattedPoolType<T>) : undefined,
     isLoadEnded,
-    loadMore,
+    // loadMore,
     ...swrProps
   }
 }

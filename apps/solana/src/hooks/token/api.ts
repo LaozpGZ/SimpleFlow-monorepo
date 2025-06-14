@@ -10,8 +10,7 @@ import {
   ExtensionType,
   MintLayout
 } from '@solana/spl-token'
-import axios from '@/api/axios'
-
+import { getMintMetaData } from '@pancakeswap/solana-clmm-sdk'
 import { useAppStore } from '@/store/useAppStore'
 
 export const TYPE_SIZE = 2
@@ -145,11 +144,8 @@ export const getTokenInfo = async ({
   let isOnlineFetched = false
 
   try {
-    const { data: dataList } = await axios.get<TokenInfo[]>(
-      `${useAppStore.getState().urlConfigs.BASE_HOST + useAppStore.getState().urlConfigs.MINT_INFO_ID}?mints=${mint.toString()}`,
-      { skipError: true }
-    )
-    const data = dataList?.[0]
+    const resp = await getMintMetaData(mint.toString())
+    const data = resp?.data as TokenInfo
 
     if (data) {
       data.priority = 2
