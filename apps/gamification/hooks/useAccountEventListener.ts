@@ -1,6 +1,6 @@
 import { watchAccount } from '@wagmi/core'
 import { useSwitchNetworkLocal } from 'hooks/useSwitchNetwork'
-import { useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useAppDispatch } from 'state'
 import { clearUserStates } from 'utils/clearUserStates'
 import { useAccount, useAccountEffect, useConfig } from 'wagmi'
@@ -42,7 +42,7 @@ const useAddressListener = () => {
 }
 
 export const useAccountEventListener = () => {
-  // useChainIdListener()
+  useChainIdListener()
   useAddressListener()
   const { chainId } = useAccount()
   const dispatch = useAppDispatch()
