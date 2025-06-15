@@ -14,6 +14,7 @@ import {
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import { Wallet } from '@solana/wallet-adapter-react'
 import { compare } from 'compare-versions'
+import { PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import axios from '@/api/axios'
 import { isValidUrl } from '@/utils/url'
@@ -141,7 +142,10 @@ const appInitState = {
   aprMode: 'M' as 'M' | 'D',
   rpcs: [],
   urlConfigs,
-  programIdConfig: ALL_PROGRAM_ID,
+  programIdConfig: {
+    ...ALL_PROGRAM_ID,
+    CLMM_PROGRAM_ID: PancakeClmmProgramId['mainnet-beta']
+  },
   jupTokenType: JupTokenType.Strict,
   displayTokenSettings: {
     official: true,

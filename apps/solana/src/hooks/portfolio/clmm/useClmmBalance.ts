@@ -87,7 +87,8 @@ export default function useClmmBalance({
     shallow
   )
   const clmmProgramId = programId || CLMM_PROGRAM_ID
-  const lockProgramId = clmmLockProgramId || CLMM_LOCK_PROGRAM_ID
+  // @ChefJerry ignore lock program id for now
+  const lockProgramId = '' // clmmLockProgramId || CLMM_LOCK_PROGRAM_ID
   const [tokenAccountRawInfos, refreshClmmPositionTag] = useTokenAccountStore(
     (s) => [s.tokenAccountRawInfos, s.refreshClmmPositionTag],
     shallow
@@ -98,17 +99,18 @@ export default function useClmmBalance({
     const { tokenMap } = useTokenStore.getState()
     return tokenAccountRawInfos.filter((acc) => acc.accountInfo.amount.eq(new BN(1)) && !tokenMap.has(acc.accountInfo.mint.toBase58()))
   }, [tokenAccountRawInfos])
+  console.debug('debug useClmmBalance balanceMints', balanceMints)
 
   const allLockMints = useMemo(
-    () =>
-      balanceMints.map((acc) =>
-        getPdaIdCache({
-          program: lockProgramId,
-          mint: acc.accountInfo.mint,
-          identifier: '-clLock',
-          pdaFunc: getPdaLockClPositionIdV2
-        })
-      ),
+    () => [],
+    // balanceMints.map((acc) =>
+    //   getPdaIdCache({
+    //     program: lockProgramId,
+    //     mint: acc.accountInfo.mint,
+    //     identifier: '-clLock',
+    //     pdaFunc: getPdaLockClPositionIdV2
+    //   })
+    // ),
     [balanceMints]
   )
   const { data: lockData, mutate: mutateLockInfo } = useSWR(tokenAccLoaded && connection ? [connection, allLockMints] : null, lockFetcher, {

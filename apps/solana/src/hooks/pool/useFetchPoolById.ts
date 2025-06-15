@@ -3,7 +3,7 @@ import { ApiV3PoolInfoItem, FetchPoolParams, PoolFetchType } from '@raydium-io/r
 import useSWR, { KeyedMutator } from 'swr'
 import { shallow } from 'zustand/shallow'
 import { AxiosResponse } from 'axios'
-import axios from '@/api/axios'
+import { getPoolsByIds } from '@pancakeswap/solana-clmm-sdk'
 import { isValidPublicKey } from '@/utils/publicKey'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { useAppStore, useTokenStore } from '@/store'
@@ -11,7 +11,7 @@ import { useAppStore, useTokenStore } from '@/store'
 import { ConditionalPoolType } from './type'
 import { formatPoolData, poolInfoCache, formatAprData } from './formatter'
 
-const fetcher = ([url]: [url: string]) => axios.get<ApiV3PoolInfoItem[]>(url, { skipError: true })
+const fetcher = ([ids]: [ids: string[]]) => getPoolsByIds(ids)
 
 export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
   props: {
@@ -60,7 +60,7 @@ export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
   // todo:@eric add host back
   const url = !readyIdList.length || readyIdList.length === cacheDataList.length || !shouldFetch ? null : searchIdUrl
 
-  const { data, isLoading, error, ...rest } = useSWR(url ? [`${url}?ids=${readyIdList}`, refreshTag] : null, fetcher, {
+  const { data, isLoading, error, ...rest } = useSWR(url ? [readyIdList, refreshTag] : null, fetcher, {
     dedupingInterval: refreshInterval,
     focusThrottleInterval: refreshInterval,
     refreshInterval,
