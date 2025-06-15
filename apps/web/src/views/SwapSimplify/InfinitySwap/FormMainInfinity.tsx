@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
-import { Text } from '@pancakeswap/uikit'
+import { Skeleton, Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { ReactNode, Suspense, useCallback, useMemo } from 'react'
 
@@ -176,7 +176,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
   return (
     <FormContainer>
-      <Suspense>
+      <Suspense fallback={<Skeleton animation="pulse" variant="round" width="100%" height="80px" />}>
         <CurrencyInputPanelSimplify
           id="swap-currency-input"
           showUSDPrice
@@ -206,7 +206,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
         />
       </Suspense>
       <FlipButton />
-      <Suspense>
+      <Suspense fallback={<Skeleton animation="pulse" variant="round" width="100%" height="80px" />}>
         <CurrencyInputPanelSimplify
           disabled={isBridge}
           id="swap-currency-output"
