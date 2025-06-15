@@ -4,7 +4,7 @@ import { paths } from '../schema'
 export type MintMetaData =
   paths['/cached/v1/tokens/metadata/{address}']['get']['responses']['200']['content']['application/json']['data']
 
-const getMintMetaFromDAS = async (mint: string) => {
+export const getMintMetaFromDAS = async (mint: string) => {
   if (!mint || !process.env.NEXT_PUBLIC_SOLANA_RPC) {
     return undefined
   }
