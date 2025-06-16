@@ -9,13 +9,11 @@ import { useCallback, useEffect } from 'react'
 
 import styled from 'styled-components'
 
-import { TerminalCard, TerminalWrapper } from '@/features/JupiterSwap/SwapForm'
+import { TARGET_ELE_ID, TerminalCard, TerminalWrapper } from '@/features/JupiterSwap/SwapForm'
 import useResponsive from '@/hooks/useResponsive'
 import { colors } from '@/theme/cssVariables'
 import { logGTMSwapTXSuccessEvent, logGTMWalletConnectedEvent } from '@/utils/report/curstomGTMEventTracking'
 import { logDDSwapTXSuccessEvent, logDDWalletConnectedEvent } from '@/utils/report/datadog'
-
-const TARGET_ELE_ID = 'integrated-terminal'
 
 const SwapPage = styled(AtomBox)`
   display: flex;

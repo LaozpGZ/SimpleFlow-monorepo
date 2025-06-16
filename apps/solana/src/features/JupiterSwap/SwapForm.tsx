@@ -2,6 +2,8 @@ import styled from 'styled-components'
 
 import { AtomBox, Card } from '@pancakeswap/uikit'
 
+export const TARGET_ELE_ID = 'integrated-terminal'
+
 export const TerminalWrapper = styled(AtomBox)`
   width: 100%;
   display: flex;
