@@ -286,8 +286,8 @@ const tokensMapAtom = atom((get) => {
   const records: Record<string, TokenInfo> = {}
   const symbols: Record<string, TokenInfo[]> = {}
 
-  function addToSymbolsMap(token: TokenInfo) {
-    const symbolKey = token.symbol.toLowerCase()
+  function addToSymbolsMap(token: TokenInfo, key?: string) {
+    const symbolKey = key || token.symbol.toLowerCase()
     if (!symbols[symbolKey]) {
       symbols[symbolKey] = []
     }
@@ -308,7 +308,9 @@ const tokensMapAtom = atom((get) => {
 
   for (const native of nativeTokens) {
     records[`${native.chainId}:${ZERO_ADDRESS}`.toLowerCase()] = native
+    const wrapped = Native.onChain(native.chainId).wrapped
     addToSymbolsMap(native)
+    addToSymbolsMap(native, wrapped.symbol.toLowerCase())
   }
   return {
     tokensMap: records,
