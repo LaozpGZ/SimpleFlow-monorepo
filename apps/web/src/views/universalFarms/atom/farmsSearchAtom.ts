@@ -1,6 +1,6 @@
 import { ChainId, isTestnetChainId } from '@pancakeswap/chains'
 import { supportedChainIdV4 } from '@pancakeswap/farms'
-import { getCurrencyAddress } from '@pancakeswap/sdk'
+import { getCurrencyAddress, Native, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { SmartRouter } from '@pancakeswap/smart-router'
 import { TokenInfo } from '@pancakeswap/token-lists'
 import { Loadable } from '@pancakeswap/utils/Loadable'
@@ -271,23 +271,45 @@ const filterTokens = (tokensMap: Record<string, TokenInfo>) => {
 const tokensMapAtom = atom((get) => {
   const state = get(listsAtom)
 
+  const nativeTokens = supportedChainIdV4
+    .map((x) => Native.onChain(x))
+    .map((native) => {
+      return {
+        chainId: native.chainId,
+        address: ZERO_ADDRESS,
+        symbol: native.symbol,
+        name: native.name,
+        decimals: native.decimals,
+      } as TokenInfo
+    })
+
   const records: Record<string, TokenInfo> = {}
   const symbols: Record<string, TokenInfo[]> = {}
+
+  function addToSymbolsMap(token: TokenInfo) {
+    const symbolKey = token.symbol.toLowerCase()
+    if (!symbols[symbolKey]) {
+      symbols[symbolKey] = []
+    }
+    if (!symbols[symbolKey].find((x) => x.chainId === token.chainId && x.address === token.address)) {
+      symbols[symbolKey].push(token)
+    }
+  }
+
   Object.keys(state.byUrl).forEach((url) => {
     const list = state.byUrl[url]
     if (list.current) {
       list.current.tokens.forEach((token) => {
         records[`${token.chainId}:${token.address}`.toLowerCase()] = token
-        if (!symbols[token.symbol.toLowerCase()]) {
-          symbols[token.symbol.toLowerCase()] = []
-        }
-        const tokens = symbols[token.symbol.toLowerCase()]
-        if (!tokens.find((x) => x.chainId === token.chainId && x.address === token.address)) {
-          tokens.push(token)
-        }
+        addToSymbolsMap(token)
       })
     }
   })
+
+  for (const native of nativeTokens) {
+    records[`${native.chainId}:${ZERO_ADDRESS}`.toLowerCase()] = native
+    addToSymbolsMap(native)
+  }
   return {
     tokensMap: records,
     symbolsMap: symbols,
