@@ -5,7 +5,6 @@ import { PairDataTimeWindowEnum } from '@pancakeswap/uikit'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useQuery } from '@tanstack/react-query'
 import { getChainId } from 'config/chains'
-import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import dayjs from 'dayjs'
 import { useTradeExactIn, useTradeExactOut } from 'hooks/Trades'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -21,6 +20,7 @@ import { isAddressEqual, safeGetAddress } from 'utils'
 import { computeSlippageAdjustedAmounts } from 'utils/exchange'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks'
 import { useAccount } from 'wagmi'
+import { DEFAULT_INPUT_CURRENCY } from 'config/constants/exchange'
 import { useCurrencyBalances } from '../wallet/hooks'
 import { Field, replaceSwapState } from './actions'
 import { SwapState, swapReducerAtom } from './reducer'
@@ -177,7 +177,9 @@ export function queryParametersToSwapState(
   const recipient = validatedRecipient(parsedQs.recipient)
 
   // Parse currencies
-  let inputCurrency = safeGetAddress(parsedQs.inputCurrency) || (nativeSymbol ?? DEFAULT_INPUT_CURRENCY)
+  let inputCurrency =
+    safeGetAddress(parsedQs.inputCurrency) ||
+    (inputChainId ? Native.onChain(inputChainId).symbol : nativeSymbol || DEFAULT_INPUT_CURRENCY)
   let outputCurrency =
     typeof parsedQs.outputCurrency === 'string'
       ? safeGetAddress(parsedQs.outputCurrency) || (outputChainId ? Native.onChain(outputChainId).symbol : nativeSymbol)
