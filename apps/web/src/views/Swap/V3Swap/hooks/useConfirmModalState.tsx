@@ -993,6 +993,7 @@ export const useConfirmModalState = (
         if (canCallBatch) {
           try {
             logGTMSwapTxSentEvent({
+              isBridge: isBridgeOrder(order),
               walletType: WalletType[walletType],
               txType: 'batch',
               chainId,
@@ -1014,6 +1015,7 @@ export const useConfirmModalState = (
         }
       }
       logGTMSwapTxSentEvent({
+        isBridge: isBridgeOrder(order),
         walletType: WalletType[walletType],
         txType: 'normal',
         chainId,
@@ -1028,7 +1030,7 @@ export const useConfirmModalState = (
         state: steps[0],
       })
     },
-    [canCallActionBatched, callActionBatched, actions, createSteps, performStep, swapPreflightCheck],
+    [canCallActionBatched, order, callActionBatched, actions, createSteps, performStep, swapPreflightCheck],
   )
 
   // auto perform the next step

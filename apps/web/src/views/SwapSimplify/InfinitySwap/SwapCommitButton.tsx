@@ -262,9 +262,9 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
   const onConfirm = useCallback(() => {
     beforeCommit?.()
-    logGTMClickSwapConfirmEvent()
+    logGTMClickSwapConfirmEvent(isBridgeOrder(order))
     callToAction()
-  }, [beforeCommit, callToAction])
+  }, [beforeCommit, callToAction, order])
 
   // modals
   const onSettingModalDismiss = useCallback(() => {
@@ -319,7 +319,8 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     }
 
     openConfirmSwapModal()
-    logGTMClickSwapEvent()
+
+    logGTMClickSwapEvent(isBridgeOrder(order))
   }, [isExpertMode, onConfirm, openConfirmSwapModal, resetState, order])
 
   useEffect(() => {

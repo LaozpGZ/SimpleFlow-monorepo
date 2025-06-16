@@ -48,6 +48,7 @@ export enum GTMEvent {
 }
 
 export enum GTMCategory {
+  CrosschainSwap = 'CrosschainSwap',
   TokenHighlight = 'TokenHighlight',
   Swap = 'Swap',
   AddLiquidity = 'AddLiquidity',
@@ -141,21 +142,21 @@ export const logGTMClickTokenHighLightTradeEvent = (label?: string) => {
   })
 }
 
-export const logGTMClickSwapEvent = () => {
+export const logGTMClickSwapEvent = (isBridge: boolean) => {
   console.info('---Swap---')
   window?.dataLayer?.push({
     event: GTMEvent.Swap,
     action: GTMAction.ClickSwapButton,
-    category: GTMCategory.Swap,
+    category: isBridge ? GTMCategory.CrosschainSwap : GTMCategory.Swap,
   })
 }
 
-export const logGTMClickSwapConfirmEvent = () => {
+export const logGTMClickSwapConfirmEvent = (isBridge: boolean) => {
   console.info('---SwapClickConfirm---')
   window?.dataLayer?.push({
     event: GTMEvent.SwapConfirmed,
     action: GTMAction.ClickSwapConfirmButton,
-    category: GTMCategory.Swap,
+    category: isBridge ? GTMCategory.CrosschainSwap : GTMCategory.Swap,
   })
 }
 
@@ -164,12 +165,13 @@ export const logGTMSwapTxSentEvent = (options?: {
   txType?: 'batch' | 'normal' | 'fallback'
   chainId?: number
   symbol?: string
+  isBridge?: boolean
 }) => {
   console.info('---SwapTxSent---')
   window?.dataLayer?.push({
     event: GTMEvent.SwapTxSent,
     action: GTMAction.SwapTransactionSent,
-    category: GTMCategory.Swap,
+    category: isBridge ? GTMCategory.CrosschainSwap : GTMCategory.Swap,
     walletType: options?.walletType,
     txType: options?.txType,
     chainId: options?.chainId,
