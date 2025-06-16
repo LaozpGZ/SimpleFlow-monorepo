@@ -305,7 +305,10 @@ export const useClmmStore = createStore<ClmmState>(
       try {
         const computeBudgetConfig = await getComputeBudgetConfig()
         const buildData = await raydium.clmm.openPositionFromBase({
-          poolInfo,
+          poolInfo: {
+            ...poolInfo,
+            programId: PancakeClmmProgramId['mainnet-beta'].toBase58()
+          },
           poolKeys,
           tickLower: Math.min(tickLower, tickUpper),
           tickUpper: Math.max(tickLower, tickUpper),
