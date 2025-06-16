@@ -31,7 +31,7 @@ export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
   error?: any
   isEmptyResult: boolean
   isValidating: boolean
-  mutate: KeyedMutator<AxiosResponse<ApiV3PoolInfoItem[], any>>
+  mutate: KeyedMutator<T[]>
 } {
   const {
     shouldFetch = true,
@@ -60,7 +60,7 @@ export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
   // todo:@eric add host back
   const url = !readyIdList.length || readyIdList.length === cacheDataList.length || !shouldFetch ? null : searchIdUrl
 
-  const { data, isLoading, error, ...rest } = useSWR(url ? [readyIdList, refreshTag] : null, fetcher, {
+  const { data, isLoading, error, mutate, ...rest } = useSWR(url ? [readyIdList, refreshTag] : null, fetcher, {
     dedupingInterval: refreshInterval,
     focusThrottleInterval: refreshInterval,
     refreshInterval,
@@ -99,6 +99,7 @@ export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
     isLoading,
     error,
     isEmptyResult,
+    mutate: mutate as any,
     ...rest
   }
 }
