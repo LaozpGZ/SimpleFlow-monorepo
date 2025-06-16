@@ -96,7 +96,8 @@
     "overrides": {
       "@solana/spl-token": "0.4.8",
       "@project-serum/serum>@solana/spl-token": "0.1.8",
-      "@jup-ag/terminal>@solana/spl-token": "0.1.8"
+      "@jup-ag/terminal>@solana/spl-token": "0.1.8",
+      "@jup-ag/common>@solana/spl-token": "0.1.8"
     }
   }
 }
