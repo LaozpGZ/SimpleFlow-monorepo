@@ -32,7 +32,7 @@ export function useNativeBalances(account?: Address, chainId?: ChainId): Currenc
 
   useEffect(() => {
     if (account && native?.chainId) {
-      refetch()
+      refetch({ cancelRefetch: false })
     }
   }, [latestBlockNumber, account, native?.chainId, refetch])
 
