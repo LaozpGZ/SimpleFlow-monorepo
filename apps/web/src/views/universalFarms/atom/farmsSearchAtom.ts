@@ -110,6 +110,17 @@ const searchAtom = atomFamily((query: FarmQuery) => {
         if (relatedTokens) {
           for (const token of relatedTokens) {
             if (supportedChainIdV4.includes(token.chainId)) {
+              if (token.address === ZERO_ADDRESS) {
+                const wrapped = Native.onChain(token.chainId).wrapped
+                const extendToken = get(
+                  extendListAtom({
+                    protocols,
+                    chains: [token.chainId],
+                    address: wrapped.address,
+                  }),
+                )
+                lists.push(extendToken)
+              }
               const extendToken = get(
                 extendListAtom({
                   protocols,
