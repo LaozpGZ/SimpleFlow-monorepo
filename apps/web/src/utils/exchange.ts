@@ -12,9 +12,9 @@ import {
 } from 'config/constants/exchange'
 import { StableTrade } from 'config/constants/types'
 
+import memoize from '@pancakeswap/utils/memoize'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useContract } from 'hooks/useContract'
-import memoize from 'lodash/memoize'
 import { Field } from '../state/swap/actions'
 
 // converts a basis points value to a sdk percent

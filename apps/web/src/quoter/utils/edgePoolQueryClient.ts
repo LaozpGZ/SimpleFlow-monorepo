@@ -14,6 +14,7 @@ const _fetchPools = async function <T>(
   protocols: Protocol[],
   type: 'light' | 'full' = 'full',
   signal?: AbortSignal,
+  endpoint?: string,
 ): Promise<T> {
   const addressA = getCurrencyAddress(currencyA)
   const addressB = getCurrencyAddress(currencyB)
@@ -26,7 +27,8 @@ const _fetchPools = async function <T>(
   })
 
   const queryApi = async () => {
-    const api = `${process.env.NEXT_PUBLIC_EDGE_ENDPOINT || ''}/api/pools/candidates?${query}`
+    const _endpoint = endpoint || process.env.NEXT_PUBLIC_EDGE_ENDPOINT
+    const api = `${_endpoint}/api/pools/candidates?${query}`
     const res = await fetch(api, {
       method: 'GET',
       headers: {
@@ -133,6 +135,7 @@ const getAllCandidates = async (
   protocols: string[],
   type: 'light' | 'full' = 'full',
   abortSignal?: AbortSignal,
+  endpoint?: string,
 ) => {
   const pools = await fetchPools<SmartRouter.Transformer.SerializedPool[]>(
     currencyA,
@@ -141,6 +144,7 @@ const getAllCandidates = async (
     protocols as Protocol[],
     type,
     abortSignal,
+    endpoint,
   )
   return pools.map((pool) => {
     return SmartRouter.Transformer.parsePool(chainId, pool)
