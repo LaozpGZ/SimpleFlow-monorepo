@@ -29,7 +29,7 @@
   "scripts": {
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf .next",
     "dev": "NODE_OPTIONS='--max-old-space-size=4096' next dev",
-    "build": "next info && next build --no-lint",
+    "build": "next info && next build",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --pretty --noEmit"
