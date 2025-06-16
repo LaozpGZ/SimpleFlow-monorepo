@@ -268,6 +268,19 @@ export function useDefaultsFromURLSearch():
       }
     }
 
+    if (finalOutputChainId && finalOutputChainId !== chainId) {
+      const isOutputChainSupported =
+        isNotTwapOrLimitPath &&
+        supportedBridgeChains?.some(
+          (route) => route.originChainId === finalInputChainId && route.destinationChainId === finalOutputChainId,
+        )
+
+      if (!isOutputChainSupported) {
+        finalOutputCurrencyId = defaultOutputCurrency
+        finalOutputChainId = chainId
+      }
+    }
+
     // If input and output currencies are the same, set output currency to native currency (other default currency)
     if (finalInputCurrencyId === finalOutputCurrencyId && finalOutputChainId === finalInputChainId) {
       if (finalOutputCurrencyId !== native.symbol) {
