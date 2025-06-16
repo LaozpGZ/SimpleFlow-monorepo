@@ -9,7 +9,7 @@ import {
   TransferFeeConfigLayout,
   ExtensionType,
   MintLayout
-} from '@solana/spl-token'
+} from '@solana/spl-token-0.4'
 import { getMintMetaData } from '@pancakeswap/solana-clmm-sdk'
 import { useAppStore } from '@/store/useAppStore'
 

@@ -15,7 +15,7 @@ import {
   createAssociatedTokenAccountInstruction,
   createCloseAccountInstruction,
   createTransferInstruction
-} from '@solana/spl-token'
+} from '@solana/spl-token-0.4'
 import Decimal from 'decimal.js'
 import BN from 'bn.js'
 import { formatLocaleStr, trimTailingZero } from '@/utils/numberish/formatter'
