@@ -96,13 +96,13 @@ export default function SectionOverview() {
               value: totalStandardPosition.toString(),
               percentage: 100,
               type: AssetType.STANDARD
-            },
-            {
+            }
+            /* {
               key: 'Staked RAY',
               value: stakedRayBalance.value,
               percentage: 100,
               type: AssetType.STAKEDRAY
-            }
+            } */
           ]}
           tokenAssets={tokenAssetsNew}
         />
