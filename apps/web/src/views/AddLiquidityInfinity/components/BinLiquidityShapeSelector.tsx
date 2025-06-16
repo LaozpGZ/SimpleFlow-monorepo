@@ -11,8 +11,12 @@ export const BinLiquidityShapeSelector = () => {
     <Box mt="24px">
       <RowBetween>
         <PreTitle>{t('Choose Liquidity Shape')}</PreTitle>
-        <ScanLink href="#" fontSize="12px">
-          {t('LEARN MORE')}
+        <ScanLink
+          href="https://docs.pancakeswap.finance/trade/pancakeswap-infinity/pool-types"
+          fontSize="12px"
+          textTransform="uppercase"
+        >
+          {t('Learn More')}
         </ScanLink>
       </RowBetween>
 
