@@ -1,5 +1,14 @@
+import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
-import { ButtonMenu, ButtonMenuItem, Text, TooltipText, useMatchBreakpoints, useTooltip } from '@pancakeswap/uikit'
+import {
+  ButtonMenu,
+  ButtonMenuItem,
+  FlexGap,
+  Text,
+  TooltipText,
+  useMatchBreakpoints,
+  useTooltip,
+} from '@pancakeswap/uikit'
 import GlobalSettings from 'components/Menu/GlobalSettings'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useRouter } from 'next/router'
@@ -107,6 +116,7 @@ export const SwapSelection = ({
   //   setIsChartDisplayed?.((currentIsChartDisplayed) => !currentIsChartDisplayed)
   // }
 
+  const { theme } = useTheme()
   const tSwapProps = useMemo(() => {
     const isTSwapSupported = isTwapSupported(chainId)
     return {
@@ -114,11 +124,11 @@ export const SwapSelection = ({
       style: {
         cursor: isTSwapSupported ? 'pointer' : 'not-allowed',
         pointerEvents: isTSwapSupported ? 'auto' : 'none',
-        color: !isTSwapSupported ? 'rgba(0, 0, 0, 0.15)' : undefined,
+        color: !isTSwapSupported ? theme.colors.textDisabled : undefined,
         userSelect: 'none',
       } as React.CSSProperties,
     }
-  }, [chainId])
+  }, [chainId, theme.colors.textDisabled])
 
   return (
     <SwapSelectionWrapper style={style}>
@@ -165,13 +175,16 @@ export const SwapSelection = ({
         </ColoredIconButton>
       )} */}
       {withToolkit && (
-        <GlobalSettings
-          color="textSubtle"
-          mr="0"
-          mode={SettingsMode.SWAP_LIQUIDITY}
-          data-dd-action-name="Swap settings button"
-          width="24px"
-        />
+        <FlexGap alignItems="center" gap="4px">
+          {/* <RecentTransactionsButton /> */}
+          <GlobalSettings
+            color="textSubtle"
+            mr="0"
+            mode={SettingsMode.SWAP_LIQUIDITY}
+            data-dd-action-name="Swap settings button"
+            width="24px"
+          />
+        </FlexGap>
       )}
     </SwapSelectionWrapper>
   )

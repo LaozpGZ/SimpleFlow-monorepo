@@ -1,4 +1,4 @@
-import { supportedChainIdV4 } from '@pancakeswap/farms'
+import { Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { masterChefV3ABI, pancakeV3PoolABI } from '@pancakeswap/v3-sdk'
 import { create, windowedFiniteBatchScheduler } from '@yornaath/batshit'
@@ -12,11 +12,12 @@ import set from 'lodash/set'
 import { chainIdToExplorerInfoChainName, explorerApiClient } from 'state/info/api/client'
 import { safeGetAddress } from 'utils'
 import { usdPriceBatcher } from 'utils/batcher'
-import { getMasterChefV3Contract, getV2SSBCakeWrapperContract } from 'utils/contractHelpers'
+import { getMasterChefV3Contract } from 'utils/contractHelpers'
 import { isInfinityProtocol } from 'utils/protocols'
 import { publicClient } from 'utils/wagmi'
 import { erc20Abi } from 'viem'
 
+import { ChainId } from '@pancakeswap/chains'
 import { InfinityPoolInfo, PoolInfo, StablePoolInfo, V2PoolInfo, V3PoolInfo } from '../type'
 import { CakeApr, MerklApr } from './atom'
 
@@ -37,7 +38,16 @@ export const getCakeApr = (pool: PoolInfo, cakePrice: BigNumber): Promise<CakeAp
 }
 
 // @todo @ChefJerry should directly fetch from poolInfo api, BE need update
-export const getLpApr = async (pool: PoolInfo, apr24h: boolean = false, signal?: AbortSignal): Promise<number> => {
+export const getLpApr = async (
+  pool: {
+    protocol: Protocol
+    chainId: ChainId
+    lpAddress?: `0x${string}`
+    poolId?: `0x${string}`
+  },
+  apr24h: boolean = false,
+  signal?: AbortSignal,
+): Promise<number> => {
   const { protocol } = pool
   const chainName = chainIdToExplorerInfoChainName[pool.chainId]
 
@@ -137,7 +147,7 @@ export const getAllNetworkMerklApr = async (signal?: AbortSignal) => {
   const resp = await fetch(
     `https://api.merkl.xyz/v4/opportunities/?chainId=${supportedChainIdV4.join(
       ',',
-    )}&test=false&status=LIVE&items=1000&action=POOL,HOLD`,
+    )}&test=false&mainProtocolId=pancake-swap&action=POOL,HOLD&status=LIVE`,
     { signal },
   )
   if (resp.ok) {
@@ -145,6 +155,7 @@ export const getAllNetworkMerklApr = async (signal?: AbortSignal) => {
     const pancakeResult = result?.filter(
       (opportunity) =>
         opportunity?.tokens?.[0]?.symbol?.toLowerCase().startsWith('cake-lp') ||
+        opportunity?.protocol?.id?.toLowerCase().startsWith('pancake-swap') ||
         opportunity?.protocol?.id?.toLowerCase().startsWith('pancakeswap'),
     )
     const aprs = await Promise.all(supportedChainIdV4.map((chainId) => getMerklApr(pancakeResult, chainId)))
@@ -160,7 +171,7 @@ const getV3PoolsCakeAprByChainId = async (pools: V3PoolInfo[], chainId: number, 
   if (!masterChefV3 || !client) return {}
 
   const validPools = pools.filter((pool) => {
-    return pool.pid && pool.chainId === chainId
+    return pool.pid && pool.chainId === chainId && pool.pid > 0
   })
 
   if (!validPools?.length) return {}

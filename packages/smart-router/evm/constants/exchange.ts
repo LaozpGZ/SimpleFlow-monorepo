@@ -136,13 +136,14 @@ export const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
 
 const czusd = new ERC20Token(ChainId.BSC, '0xE68b79e51bf826534Ff37AA9CeE71a3842ee9c70', 18, 'CZUSD', 'CZUSD')
 
+export type ADDITIONAL_BASES_TABLE = {
+  [chainId in ChainId]?: { [tokenAddress: string]: Token[] }
+}
 /**
  * Additional bases for specific tokens
  * @example { [WBTC.address]: [renBTC], [renBTC.address]: [WBTC] }
  */
-export const ADDITIONAL_BASES: {
-  [chainId in ChainId]?: { [tokenAddress: string]: Token[] }
-} = {
+export const ADDITIONAL_BASES: ADDITIONAL_BASES_TABLE = {
   [ChainId.BSC]: {
     // SNFTS-SFUND
     [bscTokens.snfts.address]: [bscTokens.sfund],
@@ -172,6 +173,7 @@ export const ADDITIONAL_BASES: {
     [bscTokens.olm.address]: [bscTokens.ora],
     [bscTokens.ora.address]: [bscTokens.olm, bscTokens.brm],
     [bscTokens.brm.address]: [bscTokens.ora],
+    [bscTokens.susdx.address]: [bscTokens.usdx],
 
     // pancakeswap/pancake-frontend#7909
     // LSDT

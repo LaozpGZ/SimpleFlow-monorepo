@@ -11,7 +11,7 @@ type MerklConfigPool = {
 
 export const chainIdToChainName = {
   1: 'ethereum',
-  56: 'bnb smart chain',
+  56: 'bsc',
   324: 'zksync',
   1101: 'polygon zkevm',
   8453: 'base',
@@ -23,7 +23,7 @@ const fetchAllMerklConfig = async (): Promise<any[]> => {
   const response = await fetch(
     `https://api.merkl.xyz/v4/opportunities/?chainId=${Object.keys(chainIdToChainName).join(
       ',',
-    )}&test=false&status=LIVE&items=1000&action=POOL,HOLD`,
+    )}&test=false&mainProtocolId=pancake-swap&action=POOL,HOLD&status=LIVE`,
   )
 
   if (!response.ok) {
@@ -44,6 +44,7 @@ const parseMerklConfig = (merklConfigResponse: any[]): MerklConfigPool[] => {
     .filter(
       (opportunity) =>
         (opportunity?.tokens?.[0]?.symbol?.toLowerCase().startsWith('cake-lp') ||
+          opportunity?.protocol?.id?.toLowerCase().startsWith('pancake-swap') ||
           opportunity?.protocol?.id?.toLowerCase().startsWith('pancakeswap')) &&
         opportunity?.apr > 0,
     )
@@ -51,9 +52,7 @@ const parseMerklConfig = (merklConfigResponse: any[]): MerklConfigPool[] => {
       chainId: pool.chainId,
       address: pool.identifier,
       link: encodeURI(
-        `https://merkl.angle.money/${chainIdToChainName[pool.chainId]}/pool/${pool.type === 'ERC20' ? 1 : 2}/${
-          pool.identifier
-        }`,
+        `https://app.merkl.xyz/opportunities/${chainIdToChainName[pool.chainId]}/${pool.type}/${pool.identifier}`,
       ),
     }))
 }

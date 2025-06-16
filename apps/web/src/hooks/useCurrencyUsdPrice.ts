@@ -1,3 +1,4 @@
+import { isTestnetChainId } from '@pancakeswap/chains'
 import { Currency, getCurrencyAddress } from '@pancakeswap/sdk'
 import { useQuery } from '@tanstack/react-query'
 
@@ -31,6 +32,9 @@ export const currencyUSDPriceAtom = atomFamily(
       if (!currency) {
         throw new Error('No currency provided')
       }
+      if (isTestnetChainId(currency?.chainId)) {
+        return 0
+      }
       return usdPriceBatcher.fetch(currency)
     })
   },
@@ -42,5 +46,22 @@ export const currencyUSDPriceAtom = atomFamily(
       return false
     }
     return getCurrencyAddress(a) === getCurrencyAddress(b)
+  },
+)
+
+export const currenciesUSDPriceAtom = atomFamily(
+  (currencies: Currency[]) => {
+    return atom(async (get) => {
+      return Promise.all(currencies.map((currency) => get(currencyUSDPriceAtom(currency))))
+    })
+  },
+  (a, b) => {
+    if (a === b) {
+      return true
+    }
+    if (a.length !== b.length) {
+      return false
+    }
+    return a.every((currency, index) => getCurrencyAddress(currency) === getCurrencyAddress(b[index]))
   },
 )

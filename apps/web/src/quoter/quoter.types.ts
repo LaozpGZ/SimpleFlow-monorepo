@@ -17,6 +17,13 @@ export type InfinityGetBestTradeReturnType = Omit<
   'graph'
 >
 
+export class BridgeTradeError extends Error {
+  constructor(message?: string) {
+    super(message)
+    this.name = 'BridgeTradeError'
+  }
+}
+
 export class NoValidRouteError extends Error {
   constructor(message?: string) {
     super(message)
@@ -77,15 +84,15 @@ export type QuoteQuery = Options & {
   slippage?: number
   address?: Address
   blockNumber: number
-  signal?: AbortSignal
+  destinationBlockNumber?: number
+  gasLimitDestinationChain?: bigint
   provider?: typeof getViemClients
-  controller?: AbortController
   nonce?: number
   placeholderHash?: string
   for?: string
   createTime: number
   routeKey?: string
-  gasLimit: bigint
+  gasLimit?: bigint
 }
 
 export interface StrategyQuery {

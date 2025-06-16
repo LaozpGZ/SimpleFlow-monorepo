@@ -195,6 +195,7 @@ export { default as SunIcon } from "./Icons/Sun";
 export { default as SwapIcon } from "./Icons/Swap";
 export { default as SwapFillIcon } from "./Icons/SwapFill";
 export { default as SwapHorizIcon } from "./Icons/SwapHoriz";
+export { default as SwapSpinner } from "./Icons/SwapSpinner";
 export { default as SwapVertIcon } from "./Icons/SwapVert";
 export { default as SyncAltIcon } from "./Icons/SyncAlt";
 export { default as TeamBattleIcon } from "./Icons/TeamBattle";
@@ -240,4 +241,5 @@ export { default as ZoomInIcon } from "./Icons/ZoomIn";
 export { default as ZoomOutIcon } from "./Icons/ZoomOut";
 export { default as WaterIcon } from "./Icons/Water";
 export { default as Svg } from "./Svg";
+
 export type { SvgProps } from "./types";
