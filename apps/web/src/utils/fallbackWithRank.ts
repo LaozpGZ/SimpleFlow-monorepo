@@ -1,3 +1,4 @@
+import { memoizeAsync } from '@pancakeswap/utils/memoize'
 import {
   Chain,
   createTransport,
@@ -26,6 +27,37 @@ type OnResponseFn = (
       }
   ),
 ) => void
+
+type OrderArgs = { chain?: Chain; transports: readonly Transport[] }
+
+const getTransportOrder = memoizeAsync(
+  async ({ chain, transports }: OrderArgs): Promise<number[]> => {
+    if (!chain || Boolean(chain.testnet)) return transports.map((_, i) => i)
+
+    const scores = await Promise.all(
+      transports.map(async (transport, i) => {
+        const transport_ = transport({ chain, retryCount: 0, timeout: 1_000 })
+
+        const start = performance.now()
+        let end: number
+        let success = Number.MAX_SAFE_INTEGER
+        try {
+          await transport_.request({ method: 'eth_chainId' })
+          success = 1
+        } catch {
+          // ignore
+        } finally {
+          end = performance.now()
+        }
+
+        return [success * (end - start), i] as const
+      }),
+    )
+
+    return scores.sort((a, b) => a[0] - b[0]).map(([, i]) => i)
+  },
+  { resolver: ({ chain }) => chain?.id },
+)
 
 export const fallbackWithRank = <const transports extends readonly Transport[]>(
   transports_: transports,
@@ -136,28 +168,8 @@ export const rankTransports = ({
   if (!chain || Boolean(chain.testnet)) return
 
   const rankTransports_ = async () => {
-    const scores = await Promise.all(
-      transports.map(async (transport, i) => {
-        const transport_ = transport({ chain, retryCount: 0, timeout: 1_000 })
-
-        const start = performance.now()
-        let end: number
-        let success = Number.MAX_SAFE_INTEGER
-        try {
-          await transport_.request({ method: 'eth_chainId' })
-          success = 1
-        } catch {
-          // ignore
-        } finally {
-          end = performance.now()
-        }
-
-        return [success * (end - start), i, transport_.config.key] as const
-      }),
-    )
-
-    const rankedTransports = scores.sort((a, b) => a[0] - b[0]).map(([, i]) => transports[i])
-
+    const order = await getTransportOrder({ chain, transports })
+    const rankedTransports = order.map((i) => transports[i])
     onTransports(rankedTransports)
   }
 
