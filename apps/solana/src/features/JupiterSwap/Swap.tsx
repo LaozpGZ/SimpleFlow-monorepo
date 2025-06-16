@@ -1,17 +1,19 @@
 import '@pancakeswap/jupiter-terminal/global.css'
 import '@pancakeswap/jupiter-terminal/index.css'
 
-import styled from 'styled-components'
-import { AtomBox } from '@pancakeswap/uikit'
-import { useCallback, useEffect } from 'react'
 import { init, syncProps } from '@pancakeswap/jupiter-terminal'
-import { useWalletModal } from '@solana/wallet-adapter-react-ui'
+import { AtomBox } from '@pancakeswap/uikit'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import { useWalletModal } from '@solana/wallet-adapter-react-ui'
+import { useCallback, useEffect } from 'react'
+
+import styled from 'styled-components'
+
 import { TerminalCard, TerminalWrapper } from '@/features/JupiterSwap/SwapForm'
+import useResponsive from '@/hooks/useResponsive'
+import { colors } from '@/theme/cssVariables'
 import { logGTMSwapTXSuccessEvent, logGTMWalletConnectedEvent } from '@/utils/report/curstomGTMEventTracking'
 import { logDDSwapTXSuccessEvent, logDDWalletConnectedEvent } from '@/utils/report/datadog'
-import { colors } from '@/theme/cssVariables'
-import useResponsive from '@/hooks/useResponsive'
 
 const TARGET_ELE_ID = 'integrated-terminal'
 

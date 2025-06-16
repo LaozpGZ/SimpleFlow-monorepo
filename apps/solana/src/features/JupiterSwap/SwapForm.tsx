@@ -1,5 +1,6 @@
-import { AtomBox, Card } from '@pancakeswap/uikit'
 import styled from 'styled-components'
+
+import { AtomBox, Card } from '@pancakeswap/uikit'
 
 export const TerminalWrapper = styled(AtomBox)`
   width: 100%;
@@ -7,14 +8,15 @@ export const TerminalWrapper = styled(AtomBox)`
   align-items: flex-start;
   justify-content: center;
   color: ${({ theme }) => theme.colors.textSubtle};
-  #jupiter-terminal {
+
+  #${TARGET_ELE_ID} {
     * {
       font-family: Kanit, sans-serif;
     }
     width: auto;
     ${({ theme }) => theme.mediaQueries.sm} {
       width: 480px;
-    }}
+    }
   }
 
   .focus-within\:shadow-swap-input-dark:focus-within {
