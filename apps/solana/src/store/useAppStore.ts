@@ -155,7 +155,7 @@ const appInitState = {
   featureDisabled: {},
   appVersion: 'V3.0.2',
   // todo:@eric switch to V0 after ALT supported
-  txVersion: TxVersion.LEGACY,
+  txVersion: TxVersion.V0,
   needRefresh: false,
   tokenAccLoaded: false,
   commitment: 'confirmed' as Commitment,

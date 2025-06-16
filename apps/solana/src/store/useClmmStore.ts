@@ -304,21 +304,9 @@ export const useClmmStore = createStore<ClmmState>(
       if (!poolInfo) return { txId: '' }
       try {
         const computeBudgetConfig = await getComputeBudgetConfig()
-        // eslint-disable-next-line
-        poolInfo.programId = PancakeClmmProgramId['mainnet-beta'].toBase58()
         const buildData = await raydium.clmm.openPositionFromBase({
           poolInfo,
-          poolKeys:
-            poolKeys ??
-            ({
-              mintA: poolInfo.mintA,
-              mintB: poolInfo.mintB,
-              config: poolInfo.config,
-              vault: (poolInfo as any).vault,
-              id: poolInfo.id,
-              programId: poolInfo.programId,
-              openTime: '1723037622'
-            } as any),
+          poolKeys,
           tickLower: Math.min(tickLower, tickUpper),
           tickUpper: Math.max(tickLower, tickUpper),
           base,
@@ -484,8 +472,6 @@ export const useClmmStore = createStore<ClmmState>(
 
       try {
         const computeBudgetConfig = await getComputeBudgetConfig()
-        // eslint-disable-next-line
-        poolInfo.programId = PancakeClmmProgramId['mainnet-beta'].toBase58()
         const { execute } = await raydium.clmm.decreaseLiquidity({
           poolInfo,
           ownerPosition: position,
