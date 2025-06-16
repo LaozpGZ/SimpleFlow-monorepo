@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Connection, PublicKey } from '@solana/web3.js'
-import { MintLayout, RawMint } from '@solana/spl-token'
+import { MintLayout, RawMint } from '@solana/spl-token-0.4'
 import { shallow } from 'zustand/shallow'
 import useSWR from 'swr'
 import Decimal from 'decimal.js'

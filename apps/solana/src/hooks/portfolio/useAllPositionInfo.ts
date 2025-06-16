@@ -3,7 +3,7 @@ import { AccountInfo, PublicKey } from '@solana/web3.js'
 import { FormatFarmInfoOutV6, ApiV3PoolInfoConcentratedItem, ApiV3Token, getATAAddress } from '@raydium-io/raydium-sdk-v2'
 
 import Decimal from 'decimal.js'
-import { AccountState, NATIVE_MINT } from '@solana/spl-token'
+import { AccountState, NATIVE_MINT } from '@solana/spl-token-0.4'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { useTokenAccountStore, useFarmStore, useClmmStore, useAppStore } from '@/store'

@@ -4,7 +4,7 @@ import Decimal from 'decimal.js'
 import dayjs from 'dayjs'
 import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
 import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
-import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
+import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token-0.4'
 
 interface Props {
   onlineCurrentDate: number

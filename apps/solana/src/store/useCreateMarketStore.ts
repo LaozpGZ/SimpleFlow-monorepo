@@ -8,7 +8,7 @@ import {
   MarketExtInfo
 } from '@raydium-io/raydium-sdk-v2'
 import { PublicKey, Transaction, VersionedTransaction, TransactionMessage, SystemProgram } from '@solana/web3.js'
-import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
+import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token-0.4'
 import BN from 'bn.js'
 import { v4 as uuidv4 } from 'uuid'
 import { TranslateFunction } from '@pancakeswap/localization'

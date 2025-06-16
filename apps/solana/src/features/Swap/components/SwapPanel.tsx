@@ -2,7 +2,7 @@ import { Box, Button, Tooltip as ChakraTip, CircularProgress, Collapse, Flex, HS
 import { mediaQueries } from '@pancakeswap/uikit'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { ApiV3Token, RAYMint, SOL_INFO, TokenInfo, TransferFeeDataBaseType } from '@raydium-io/raydium-sdk-v2'
-import { NATIVE_MINT } from '@solana/spl-token'
+import { NATIVE_MINT } from '@solana/spl-token-0.4'
 import { PublicKey } from '@solana/web3.js'
 import dayjs from 'dayjs'
 import Decimal from 'decimal.js'

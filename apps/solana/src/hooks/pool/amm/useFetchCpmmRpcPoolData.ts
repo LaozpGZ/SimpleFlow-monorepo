@@ -3,7 +3,7 @@ import { CpmmPoolInfoLayout } from '@raydium-io/raydium-sdk-v2'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import BN from 'bn.js'
-import { AccountLayout } from '@solana/spl-token'
+import { AccountLayout } from '@solana/spl-token-0.4'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { useAppStore } from '@/store'
 

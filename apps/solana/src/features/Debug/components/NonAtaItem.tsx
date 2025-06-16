@@ -1,6 +1,6 @@
 import { Flex } from '@chakra-ui/react'
 import { TokenAccount } from '@raydium-io/raydium-sdk-v2'
-import { getAssociatedTokenAddressSync } from '@solana/spl-token'
+import { getAssociatedTokenAddressSync } from '@solana/spl-token-0.4'
 
 import Decimal from 'decimal.js'
 import useTokenInfo from '@/hooks/token/useTokenInfo'

@@ -4,7 +4,7 @@ import { useTranslation, type TranslateFunction } from '@pancakeswap/localizatio
 import * as yup from 'yup'
 import { ApiCpmmConfigInfo, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
 import BN from 'bn.js'
-import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token'
+import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token-0.4'
 import { useTokenAccountStore } from '@/store/useTokenAccountStore'
 import { wSolToSol } from '@/utils/token'
 
