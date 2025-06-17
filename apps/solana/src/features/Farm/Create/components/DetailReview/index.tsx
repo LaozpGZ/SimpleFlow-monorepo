@@ -38,7 +38,9 @@ export default function DetailReview(props: {
       <Flex direction="column" w="full" gap={6}>
         <Box>
           <HStack mb={2}>
-            <Text>{t('Pool')}</Text>
+            <Text color={colors.textSubtle} fontWeight={600} fontSize="lg">
+              {t('Pool')}
+            </Text>
             <Spacer />
             <Box cursor="pointer" onClick={props.onJumpToStepSelect}>
               <EditIcon />
@@ -49,7 +51,9 @@ export default function DetailReview(props: {
 
         <Box>
           <HStack mb={2}>
-            <Text>{t('Farming rewards')}</Text>
+            <Text color={colors.textSubtle} fontWeight={600} fontSize="lg">
+              {t('Farming rewards')}
+            </Text>
             <Spacer />
             <Box cursor="pointer" onClick={props.onJumpToStepReward}>
               <EditIcon />
@@ -65,21 +69,27 @@ export default function DetailReview(props: {
 
         {/* alert text */}
         <Box fontSize="sm" fontWeight={500}>
-          <Text color={colors.semanticError} display="inline">
+          <Text color={colors.primary} display="inline" fontWeight={600}>
             {t('Please Note')}:{' '}
           </Text>
-          <Text color={colors.textTertiary} display="inline">
+          <Text color={colors.textSubtle} display="inline">
             {t(
-              'Rewards allocated to farms cannot be withdrawn after farming starts. Newly created farms generally appear on Raydium 10-30 minutes after creation, depending on Solana network status.'
+              'Rewards allocated to farms cannot be withdrawn after farming starts. Newly created farms generally appear on PancakeSwap 10-30 minutes after creation, depending on Solana network status.'
             )}
           </Text>
         </Box>
 
         <Flex justify="space-between" align="center" mt={7} gap={3}>
-          <Button size={['lg', 'md']} variant="outline" flexBasis="120px" onClick={props.onClickBackButton}>
+          <Button size={['lg', 'md']} variant="outline" width="100%" onClick={props.onClickBackButton}>
             {t('Back')}
           </Button>
-          <Button size={['lg', 'md']} flexBasis="300px" isLoading={props.isSending} onClick={props.onClickCreateFarmButton}>
+          <Button
+            size={['lg', 'md']}
+            width="100%"
+            isLoading={props.isSending}
+            borderBottom={!props.isSending ? '2px solid rgba(0, 0, 0, 0.2)' : 'none'}
+            onClick={props.onClickCreateFarmButton}
+          >
             {t('Create Farm')}
           </Button>
         </Flex>

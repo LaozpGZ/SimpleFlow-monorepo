@@ -6,11 +6,21 @@ import { formatCurrency } from '@/utils/numberish/formatter'
 export function RewardTotalValue(props: { total: number | string }) {
   const { t } = useTranslation()
   return (
-    <HStack mt={4} spacing={4} bg={colors.backgroundLight} rounded="md" py={4} px={[3, 10]} justify="end">
-      <Text fontSize="sm" fontWeight={500} color={colors.textSecondary}>
+    <HStack
+      mt={4}
+      spacing={4}
+      bg={colors.cardBg}
+      border="1px solid"
+      borderColor={colors.cardBorder01}
+      borderRadius="20px"
+      py={4}
+      px={[3, 10]}
+      justify="end"
+    >
+      <Text fontSize="sm" fontWeight={500} color={colors.textSubtle}>
         {t('Total value')}
       </Text>
-      <Text fontSize="md" fontWeight={500}>
+      <Text fontSize="md" fontWeight={600}>
         {formatCurrency(props.total, { symbol: '$', decimalPlaces: 2 })}
       </Text>
     </HStack>

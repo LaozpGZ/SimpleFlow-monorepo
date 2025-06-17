@@ -55,7 +55,12 @@ export default function RewardAddItem(props: {
         <Button variant="outline" width="100%" onClick={props.onClickBackButton}>
           {t('Back')}
         </Button>
-        <Button isDisabled={hasError} width="100%" onClick={props.onClickNextStepButton}>
+        <Button
+          isDisabled={hasError}
+          width="100%"
+          borderBottom={!hasError ? '2px solid rgba(0, 0, 0, 0.2)' : 'none'}
+          onClick={props.onClickNextStepButton}
+        >
           {t('Next Step')}
         </Button>
       </Flex>
