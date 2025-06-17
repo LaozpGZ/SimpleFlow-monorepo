@@ -27,6 +27,88 @@ import SelectPool from './components/SelectPool'
 import { TxSuccessModal } from './components/TxSuccessModal'
 import { NewRewardInfo } from './type'
 
+const MOCK_CLMM_POOL: ApiV3PoolInfoConcentratedItem = {
+  id: '5LbAHp...x8GN6',
+  type: 'Concentrated',
+  farmFinishedCount: 0,
+  farmOngoingCount: 0,
+  farmUpcomingCount: 0,
+  burnPercent: 0,
+  pooltype: [],
+  config: {
+    id: '5LbAHp...x8GN6',
+    index: 0,
+    protocolFeeRate: 0,
+    tradeFeeRate: 0,
+    tickSpacing: 0,
+    fundFeeRate: 0,
+    defaultRange: 0,
+    defaultRangePoint: [],
+    description: ''
+  },
+  mintA: {
+    chainId: 1,
+    address: '123',
+    programId: '123',
+    logoURI: '123',
+    symbol: 'SOL',
+    decimals: 9,
+    name: 'SOL',
+    tags: [],
+    extensions: {}
+  },
+  mintB: {
+    chainId: 1,
+    address: '123',
+    programId: '123',
+    logoURI: '123',
+    symbol: 'RAY',
+    decimals: 9,
+    name: 'RAY',
+    tags: [],
+    extensions: {}
+  },
+  tvl: 1000000000,
+  rewardDefaultInfos: [],
+  rewardDefaultPoolInfos: 'Clmm',
+  programId: '123',
+  price: 1,
+  mintAmountA: 1,
+  mintAmountB: 1,
+  feeRate: 1,
+  openTime: '1',
+  day: {
+    volume: 1,
+    volumeQuote: 1,
+    volumeFee: 1,
+    apr: 1,
+    feeApr: 1,
+    priceMin: 1,
+    priceMax: 1,
+    rewardApr: []
+  },
+  week: {
+    volume: 1,
+    volumeQuote: 1,
+    volumeFee: 1,
+    apr: 1,
+    feeApr: 1,
+    priceMin: 1,
+    priceMax: 1,
+    rewardApr: []
+  },
+  month: {
+    volume: 1,
+    volumeQuote: 1,
+    volumeFee: 1,
+    apr: 1,
+    feeApr: 1,
+    priceMin: 1,
+    priceMax: 1,
+    rewardApr: []
+  }
+}
+
 type QueryDetail = {
   step?: LiquidityFarmActionModeType
   ammId?: string
@@ -82,7 +164,10 @@ export default function CreateFarm() {
     () => formattedData?.filter((p) => p.id !== defaultPoolRef.current) || [],
     [formattedData]
   ) as ApiV3PoolInfoConcentratedItem[]
-  const createdPools = allCreatedPools.filter((p) => p.rewardDefaultInfos.length === 0)
+
+  // MOCK POOLS OWNED BY USER. TODO: REMOVE AFTER TESTING
+  // const createdPools = allCreatedPools.filter((p) => p.rewardDefaultInfos.length === 0)
+  const createdPools = [MOCK_CLMM_POOL]
 
   const handleCreateFarm = useEvent(() => {
     onSending()
@@ -275,10 +360,8 @@ export default function CreateFarm() {
           <SubPageNote
             title={t('Please Note')}
             description={
-              <Text fontSize="sm" color={isMobile ? colors.textSecondary : colors.textTertiary}>
-                {t(
-                  'A farm can be created for any pool that is already live. For detailed instructions, read the guide for CLMM or Standard farms.'
-                )}
+              <Text fontSize="sm" color={colors.textPrimary}>
+                {t('This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.')}
               </Text>
             }
           />
@@ -289,7 +372,7 @@ export default function CreateFarm() {
         {/* main header */}
         {currentStep === 'select' ? (
           <Box>
-            <Text w="fit-content" color={colors.textSecondary} fontWeight="500" fontSize="xl">
+            <Text w="fit-content" color={colors.textSecondary} fontWeight="600" fontSize="xl">
               {t('First, select a pool for farm rewards')}
             </Text>
           </Box>

@@ -76,7 +76,7 @@ export default function PoolSelectDialog(props: PoolSelectDialogProps) {
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{t('Search for a pair or paste AMM ID')}</ModalHeader>
+        <ModalHeader fontSize="lg">{t('Search for a pair or paste AMM ID')}</ModalHeader>
         <ModalCloseButton top="25px" />
         <ModalBody mt="10px">
           <Flex mb="16px" borderRadius="20px" w="full" py={2}>

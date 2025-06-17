@@ -1,20 +1,20 @@
 import { useMemo } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, HStack, Link, Spacer, Text, VStack, useDisclosure } from '@chakra-ui/react'
+import { Checkbox } from '@pancakeswap/uikit'
 import { ApiV3PoolInfoItem, ApiV3PoolInfoConcentratedItem, PoolFetchType } from '@raydium-io/raydium-sdk-v2'
 import NextLink from 'next/link'
 import Button from '@/components/Button'
+import PanelCard from '@/components/PanelCard'
 import PoolSelectDialog from '@/features/Farm/Create/components/PoolSelectDialog'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { useEvent } from '@/hooks/useEvent'
-import CircleCheck from '@/icons/misc/CircleCheck'
 import SearchIcon from '@/icons/misc/SearchIcon'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'
 import { getPoolName } from '@/features/Pools/util'
 
 import { Desktop } from '@/components/MobileDesktop'
-import { panelCard } from '@/theme/cssBlocks'
 import { CreateFarmType } from '@/features/Liquidity/Decrease/components/type'
 // import { QuestionToolTip } from '@/components/QuestionToolTip'
 
@@ -37,14 +37,14 @@ export default function SelectPool(props: SelectPoolProps) {
   })
 
   return (
-    <Flex {...panelCard} direction="column" borderRadius="20px" w="full" bg={colors.backgroundLight} p={[4, 6]}>
+    <PanelCard px={[4, 6]} py={[4, 6]}>
       <Desktop>
-        <Text mb={4} fontWeight="500" fontSize="xl">
+        <Text mb={6} fontWeight="600" fontSize="lg" color={colors.secondary}>
           {t('Select Pool')}
         </Text>
       </Desktop>
 
-      <HStack flexDirection={['column', 'row']} align={['stretch', 'center']} mb={4}>
+      <HStack flexDirection={['column', 'row']} align={['stretch', 'center']} mb={6} spacing={3}>
         <PoolTypeTabItem
           isActive={props.selectedPoolType === 'Concentrated'}
           name={t('Concentrated Liquidity')}
@@ -57,7 +57,7 @@ export default function SelectPool(props: SelectPoolProps) {
         />
       </HStack>
 
-      <Box mb={5}>
+      <Box mb={6}>
         {props.selectedPoolType === 'Concentrated' ? (
           <SelectPoolConcentratedContent
             createdClmmPools={props.createdClmmPools}
@@ -73,10 +73,19 @@ export default function SelectPool(props: SelectPoolProps) {
         )}
       </Box>
 
-      <Button isDisabled={!props.selectedPool} onClick={() => props.onClickContinue?.()}>
+      <Button
+        isDisabled={!props.selectedPool}
+        onClick={() => props.onClickContinue?.()}
+        size="md"
+        width="full"
+        variant="solid"
+        rounded="full"
+        borderBottom={props.selectedPool ? '2px solid rgba(0, 0, 0, 0.2)' : 'none'}
+        transition="all 0.4s ease"
+      >
         {t('Continue')}
       </Button>
-    </Flex>
+    </PanelCard>
   )
 }
 
@@ -84,21 +93,31 @@ function PoolTypeTabItem({ name, isActive, onSelect: onClickSelf }: { name: stri
   return (
     <HStack
       flexGrow={1}
-      color={isActive ? colors.secondary : colors.textTertiary}
-      bg={colors.backgroundTransparent12}
-      px={3}
-      py={1.5}
-      rounded="md"
+      justify="space-between"
+      color={isActive ? colors.textPrimary : colors.textDisabled}
+      bg={colors.inputBg}
+      borderTop={`1px solid ${isActive ? colors.inputSecondary : colors.inputBg}`}
+      borderRight={`1px solid ${isActive ? colors.inputSecondary : colors.inputBg}`}
+      borderBottom={`2px solid ${isActive ? colors.inputSecondary : colors.inputBg}`}
+      borderLeft={`1px solid ${isActive ? colors.inputSecondary : colors.inputBg}`}
+      px={4}
+      py={3}
+      rounded="16px"
       cursor="pointer"
+      position="relative"
       onClick={onClickSelf}
+      _hover={{
+        bg: isActive ? colors.inputBg : colors.backgroundAlt
+      }}
+      transition="all 0.2s"
     >
-      <Box display="grid" placeItems="center">
-        <Box gridRow={1} gridColumn={1} rounded="full" p="3px" bg={isActive ? colors.secondary : colors.textSecondary} />
-        <Box gridRow={1} gridColumn={1} rounded="full" p="8px" opacity={0.3} bg={isActive ? colors.secondary : colors.textSecondary} />
-      </Box>
-      <Text whiteSpace="nowrap" fontSize="sm">
+      <Text whiteSpace="nowrap" fontSize="sm" fontWeight="500">
         {name}
       </Text>
+
+      <Box>
+        <Checkbox scale="sm" checked={isActive} style={{ pointerEvents: 'none' }} readOnly />
+      </Box>
     </HStack>
   )
 }
@@ -115,7 +134,7 @@ function SelectPoolStandardContent(props: {
   })
   return (
     <Box>
-      <Box mb={5}>
+      <Box mb={4}>
         {props.selectedPool ? (
           <SelectPoolStandardContentSelectedPool pool={props.selectedPool} onDeleteStandardValue={props.onDeleteStandardValue} />
         ) : (
@@ -124,28 +143,29 @@ function SelectPoolStandardContent(props: {
             align="center"
             h="72px"
             bg={colors.backgroundDark}
-            py={3}
-            px={4}
-            color={colors.textSecondary}
-            borderRadius="12px"
-            gap={2}
+            border={`1px solid ${colors.cardBorder01}`}
+            py={4}
+            px={6}
+            color={colors.textTertiary}
+            borderRadius="16px"
+            gap={3}
             onClick={onSearchClick}
             cursor="pointer"
           >
             <>
-              <Text color={colors.textSecondary} fontSize="sm" opacity={0.5} cursor="pointer">
+              <Text color={colors.textTertiary} fontSize="sm" fontWeight="500" cursor="pointer">
                 {t('Search for a pair or enter AMM ID')}
               </Text>
-              <SearchIcon />
+              <SearchIcon color={colors.textTertiary} />
             </>
           </Flex>
         )}
       </Box>
 
-      <HStack fontSize="sm">
-        <Text color={colors.textTertiary}>{t("Can't find what you want?")}</Text>
+      <HStack fontSize="sm" color={colors.textTertiary}>
+        <Text>{t("Can't find what you want?")}</Text>
         <Link as={NextLink} href="/liquidity/create-pool">
-          <Text cursor="pointer" color={colors.textSeptenary} textDecoration="underline">
+          <Text cursor="pointer" color={colors.secondary} textDecoration="underline" fontWeight="500">
             {t('Create a new pool')}
           </Text>
         </Link>
@@ -165,34 +185,37 @@ function SelectPoolStandardContentSelectedPool({
   const { t } = useTranslation()
   const poolName = useMemo(() => `${pool.mintA.symbol}-${pool.mintB.symbol}`, [pool.id])
   return (
-    <VStack align="stretch">
+    <VStack align="stretch" spacing={3}>
       <HStack
         borderWidth="2px"
         borderStyle="solid"
         borderColor={colors.secondary}
         bg={colors.backgroundDark}
-        p={4}
-        pl={6}
-        rounded="md"
+        p={6}
+        rounded="16px"
         cursor="pointer"
+        _hover={{
+          bg: colors.backgroundLight
+        }}
+        transition="all 0.2s"
       >
         <TokenAvatarPair token1={pool.mintA} token2={pool.mintB} />
-        <Text whiteSpace="nowrap" fontSize="xl" fontWeight={500}>
+        <Text whiteSpace="nowrap" fontSize="xl" fontWeight="600">
           {poolName}
         </Text>
         <Spacer />
         <Box>
-          <Text fontSize="sm" color={colors.textSecondary} align="end">
+          <Text fontSize="sm" color={colors.textTertiary} align="end" fontWeight="500">
             {pool.id.slice(0, 6)}...{pool.id.slice(-6)}
           </Text>
-          <Text whiteSpace="nowrap" fontSize="sm" color={colors.textTertiary} align="end">
+          <Text whiteSpace="nowrap" fontSize="sm" color={colors.textSecondary} align="end">
             TVL: {formatCurrency(pool.tvl, { decimalPlaces: 2 })}
           </Text>
         </Box>
       </HStack>
 
-      <HStack fontSize="sm" alignSelf="end">
-        <Text cursor="pointer" color={colors.textSeptenary} textDecoration="underline" onClick={onDeleteStandardValue}>
+      <HStack fontSize="sm" justifyContent="flex-end">
+        <Text cursor="pointer" color={colors.secondary} textDecoration="underline" fontWeight="500" onClick={onDeleteStandardValue}>
           {t('Reset')}
         </Text>
       </HStack>
@@ -209,11 +232,12 @@ function SelectPoolConcentratedContent(props: {
   return (
     <Box>
       <HStack mb={4} color={colors.textSecondary} fontSize="sm">
-        <Text>{t('Select from your created pools')}:</Text>
+        <Text fontSize="lg" fontWeight="600">
+          {t('Select from your created pools')}:
+        </Text>
         {/* <QuestionToolTip label={t('The farm will be created for the selected pool')} iconProps={{ color: colors.textSecondary }} /> */}
       </HStack>
-
-      <VStack spacing={3} mb={[3, 5]} align="stretch">
+      <VStack spacing={3} mb={4} align="stretch">
         {props.createdClmmPools.map((pool) => (
           <CreatedPoolClmmItem
             key={pool.id}
@@ -223,11 +247,12 @@ function SelectPoolConcentratedContent(props: {
           />
         ))}
       </VStack>
-
-      <HStack fontSize="sm">
-        <Text color={colors.textTertiary}>{t("Can't find what you want?")}</Text>
+      <HStack fontSize="sm" color={colors.textTertiary}>
+        <Text>{t("Can't find what you want?")}</Text>
         <Link as={NextLink} href="/clmm/create-pool">
-          {t('Create a new pool')}
+          <Text cursor="pointer" color={colors.secondary} textDecoration="underline" fontWeight="500">
+            {t('Create a new pool')}
+          </Text>
         </Link>
       </HStack>
     </Box>
@@ -245,30 +270,32 @@ function CreatedPoolClmmItem({
 }) {
   return (
     <HStack
-      borderWidth="2px"
+      borderWidth="1px"
       borderStyle="solid"
       borderColor={isActive ? colors.secondary : 'transparent'}
-      bg={colors.backgroundDark}
+      bg={isActive ? colors.backgroundDark : colors.background}
       py={4}
-      px={[3, 6]}
-      rounded="md"
+      px={6}
+      rounded="16px"
       cursor="pointer"
       onClick={() => onSelect?.(pool)}
+      _hover={{
+        bg: isActive ? colors.backgroundLight : colors.inputBg,
+        borderColor: isActive ? colors.secondary : colors.cardBorder01
+      }}
+      transition="all 0.2s"
     >
       <TokenAvatarPair size={['28px', 'md']} token1={pool.mintA} token2={pool.mintB} />
-      <Text flex={1} fontSize={['lg', 'xl']} fontWeight={500}>
+      <Text flex={1} fontSize="lg" fontWeight="600" color={colors.textPrimary}>
         {getPoolName(pool)}
       </Text>
       <Box>
-        <Text fontSize={['xs', 'sm']} color={colors.textSecondary} align="end">
+        <Text fontSize={['xs', 'sm']} align="end" fontWeight="500">
           {pool.id.slice(0, 6)}...{pool.id.slice(-6)}
         </Text>
-        <Text whiteSpace="nowrap" fontSize={['xs', 'sm']} color={colors.textTertiary} align="end">
+        <Text whiteSpace="nowrap" fontSize={['xs', 'sm']} color={colors.textSubtle} align="end">
           TVL: {formatCurrency(pool.tvl, { decimalPlaces: 2 })}
         </Text>
-      </Box>
-      <Box display="grid" placeItems="center" color={colors.secondary}>
-        {isActive ? <CircleCheck /> : <Box width={4} height={4} />}
       </Box>
     </HStack>
   )
