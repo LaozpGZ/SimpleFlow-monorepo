@@ -73,11 +73,18 @@ export const getMintMetaData = async (mint: string) => {
       },
     })
 
-    if (resp.error) {
+    if (resp.error || !resp.data?.data) {
       throw new Error((resp as any).error.message || 'Failed to fetch mint metadata')
     }
 
-    return resp.data
+    return {
+      ...resp.data,
+      data: {
+        ...resp.data.data,
+        tags: (resp.data.data as any).tags ?? [],
+        extensions: (resp.data.data as any).extensions ?? {},
+      },
+    }
   } catch (error) {
     console.warn('Error fetching mint metadata:', error)
     // Fallback to fetching from DAS if the API call fails
