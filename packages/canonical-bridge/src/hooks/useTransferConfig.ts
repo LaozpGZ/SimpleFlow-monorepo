@@ -137,7 +137,6 @@ export function useTransferConfig(supportedChains: IChainConfig[]) {
                 '0x0000000000000000000000000000000000000000',
                 '0x9c7beba8f6ef6643abd725e45a4e8387ef260649',
               ],
-
               137: ['cUSDCv3'],
               42161: ['cUSDCv3'],
               43114: ['BNB'],
