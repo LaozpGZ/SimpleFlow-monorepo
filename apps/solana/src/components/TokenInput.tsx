@@ -249,14 +249,14 @@ function TokenInput(props: TokenInputProps) {
   })
 
   const isUnknownToken = useEvent((token_: TokenInfo) => {
-    const isUnknown = !token_.type || token_.type === 'unknown' || token_.tags.includes('unknown')
+    const isUnknown = !token_.type || token_.type === 'unknown' || token_.tags?.includes('unknown')
     const isTrusted = isUnknown && !!tokenMap.get(token_.address)?.userAdded
     const isUserAddedTokenEnable = displayTokenSettings.userAdded
     return isUnknown && (!isTrusted || !isUserAddedTokenEnable)
   })
 
   const isFreezeToken = useEvent((token_: TokenInfo | ApiV3Token) => {
-    return token_?.tags.includes('hasFreeze') && !whiteListMap.has(token_.address)
+    return token_?.tags?.includes('hasFreeze') && !whiteListMap.has(token_.address)
   })
 
   const handleSelectToken = useEvent((token_: TokenInfo) => {

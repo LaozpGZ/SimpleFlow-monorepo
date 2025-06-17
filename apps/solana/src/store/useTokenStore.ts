@@ -154,7 +154,7 @@ export const useTokenStore = createStore<TokenStore>(
           displayTokenList: get().tokenList.filter((token) => {
             return (
               (displayTokenSettings.official && get().mintGroup.official.has(token.address)) ||
-              (displayTokenSettings.jup && raydium.token.mintGroup.jup.has(token.address) && (isJupAll || !token.tags.includes('unknown')))
+              (displayTokenSettings.jup && raydium.token.mintGroup.jup.has(token.address) && (isJupAll || !token.tags?.includes('unknown')))
             )
           })
         },
@@ -228,7 +228,7 @@ export const useTokenStore = createStore<TokenStore>(
       const tokenData = tokenInfo ? undefined : await getChainTokenInfo(mint)
       if (!tokenData) return false
       const isWhiteList = useWhiteList && createMarketWhiteList.some((d) => d.mint === mint)
-      const isFreezed = !isWhiteList && (tokenInfo?.tags.includes('hasFreeze') || tokenData?.freezeAuthorityOption === 1)
+      const isFreezed = !isWhiteList && (tokenInfo?.tags?.includes('hasFreeze') || tokenData?.freezeAuthorityOption === 1)
 
       const isAPIToken = mintGroup.official.has(mintStr) || mintGroup.jup.has(mintStr)
       if (tokenData.decimals !== null && !isAPIToken && isFreezed) return false

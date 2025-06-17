@@ -294,7 +294,7 @@ function TokenRowItem({
   onRemoveUnknownTokenClick: (token: TokenInfo) => void
 }) {
   const { t } = useTranslation()
-  const isUnknown = !token.type || token.type === 'unknown' || token.tags.includes('unknown')
+  const isUnknown = !token.type || token.type === 'unknown' || token.tags?.includes('unknown')
   const isTrusted = isUnknown && !!useTokenStore.getState().tokenMap.get(token.address)?.userAdded
 
   return (

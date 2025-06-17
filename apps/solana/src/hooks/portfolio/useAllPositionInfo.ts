@@ -174,7 +174,7 @@ export default function useAllPositionInfo({ shouldFetch = true }: { shouldFetch
   const [allFarmRewardInfo, allStakingRewardInfo] = [new Map<string, RewardInfo>(), new Map<string, RewardInfo>()]
   allFarmBalances.forEach((b) => {
     const farm = stakedFarmMap.get(b?.id || '')
-    const isStaking = farm?.tags.includes('Stake')
+    const isStaking = farm?.tags?.includes('Stake')
     const hasReward = b?.pendingRewards.some((a) => !new Decimal(a || 0).isZero())
     if (isStaking) {
       hasStakingReward = hasStakingReward || hasReward
@@ -225,8 +225,8 @@ export default function useAllPositionInfo({ shouldFetch = true }: { shouldFetch
     else allFarmPendingReward = allFarmPendingReward.add(pendingReward)
   })
 
-  const standardFarmList = stakedFarmList.filter((f) => !f.tags.includes('Stake'))
-  const stakingFarmList = stakedFarmList.filter((f) => f.tags.includes('Stake'))
+  const standardFarmList = stakedFarmList.filter((f) => !f.tags?.includes('Stake'))
+  const stakingFarmList = stakedFarmList.filter((f) => f.tags?.includes('Stake'))
 
   const clmmRewardInfo = new Map<string, RewardInfo>()
   Array.from(clmmPendingYield.current.values())

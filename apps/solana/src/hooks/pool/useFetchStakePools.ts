@@ -22,7 +22,7 @@ export default function useFetchStakePools(
   const isEmptyResult = !isLoading && !(data && !error)
 
   const resData = data?.data.data
-  const activeStakePools = (data?.data.data || []).filter((d) => d.tags.includes('Stake'))
+  const activeStakePools = (data?.data.data || []).filter((d) => d.tags?.includes('Stake'))
 
   return {
     data: resData,
