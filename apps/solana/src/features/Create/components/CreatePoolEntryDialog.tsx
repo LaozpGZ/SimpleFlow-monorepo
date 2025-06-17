@@ -276,18 +276,20 @@ function CreateBlock(props: {
       overflow="hidden"
       style={{ height }}
     >
-      <Flex justify="space-between">
-        <Text fontSize="md" fontWeight="600">
-          {props.title}
-        </Text>
-        {props.selected && <CircleCheck width={16} height={16} fill={colors.secondary} />}
-      </Flex>
+      <Box ref={contentRef}>
+        <Flex justify="space-between">
+          <Text fontSize="md" fontWeight="600">
+            {props.title}
+          </Text>
+          {props.selected && <CircleCheck width={16} height={16} fill={colors.secondary} />}
+        </Flex>
 
-      <Box color={props.selected ? colors.textSecondary : colors.textTertiary} fontSize="sm">
-        {props.description}
+        <Box color={props.selected ? colors.textSecondary : colors.textTertiary} fontSize="sm">
+          {props.description}
+        </Box>
+
+        {props.renderPoolType && <Box mt={2}>{props.renderPoolType()}</Box>}
       </Box>
-
-      {props.renderPoolType && <Box mt={2}>{props.renderPoolType()}</Box>}
     </Box>
   )
 }
