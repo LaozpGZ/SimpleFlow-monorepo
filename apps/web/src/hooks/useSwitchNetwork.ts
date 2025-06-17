@@ -48,9 +48,9 @@ export function useSwitchNetworkLocal() {
   }, [])
 
   return useCallback(
-    (newChainId: number, redirectTo?: Record<string, string>) => {
+    (newChainId: number, skipReplace = false) => {
       const { chain: queryChainName, chainId: queryChainId, persistChain } = router.query
-      if (persistChain) return
+      if (persistChain || skipReplace) return
       const newChainQueryName = CHAIN_QUERY_NAME[newChainId]
       const chainQueryName = queryChainName || CHAIN_QUERY_NAME[queryChainId as string]
       const removeQueriesFromPath =
@@ -68,7 +68,6 @@ export function useSwitchNetworkLocal() {
           query: {
             ...(!removeQueriesFromPath && omittedQuery),
             chain: newChainQueryName,
-            ...redirectTo,
           },
           ...(uriHash && { hash: uriHash }),
         },
@@ -113,7 +112,7 @@ export function useSwitchNetwork() {
   const isLoading = _isLoading || loading
 
   const switchNetworkAsync = useCallback(
-    async (chainId: number, redirectQuery?: Record<string, string>) => {
+    async (chainId: number, skipReplace = false) => {
       if (isConnected && connector && typeof _switchNetworkAsync === 'function') {
         if (isLoading) return undefined
         setLoading(true)
@@ -126,7 +125,7 @@ export function useSwitchNetwork() {
         )
         return _switchNetworkAsync({ chainId })
           .then(async (c) => {
-            switchNetworkLocal(chainId, redirectQuery)
+            switchNetworkLocal(chainId, skipReplace)
             if (await checkSwitchReloadNeeded(connector, chainId, address)) {
               await logout()
             }
@@ -135,11 +134,12 @@ export function useSwitchNetwork() {
           .catch(() => {
             // TODO: review the error
             toastError(t('Error connecting, please retry and confirm in wallet!'))
+            return 'error'
           })
           .finally(() => setLoading(false))
       }
       return new Promise((resolve) => {
-        resolve(switchNetworkLocal(chainId, redirectQuery))
+        resolve(switchNetworkLocal(chainId, skipReplace))
       })
     },
     [

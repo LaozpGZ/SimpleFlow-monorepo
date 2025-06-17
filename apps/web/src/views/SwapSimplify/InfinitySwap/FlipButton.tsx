@@ -107,13 +107,24 @@ export const FlipButton = memo(function FlipButton({
       // If cross-chain swap, switch network to new Input Currency's chain
 
       if (outputChainId && activeChainId !== outputChainId && !isLoading) {
-        await switchNetworkAsync(outputChainId, {
-          ...router.query,
-          ...(outputCurrencyId && { inputCurrency: outputCurrencyId }),
-          ...(outputChainId && { chain: CHAIN_QUERY_NAME[outputChainId] }),
-          ...(inputCurrencyId && { outputCurrency: inputCurrencyId }),
-          ...(inputChainId && { chainOut: CHAIN_QUERY_NAME[inputChainId] }),
-        })
+        const result = await switchNetworkAsync(outputChainId, true)
+        if (result !== 'error') {
+          router.replace(
+            {
+              query: {
+                ...router.query,
+                ...(outputCurrencyId && { inputCurrency: outputCurrencyId }),
+                ...(outputChainId && { chain: CHAIN_QUERY_NAME[outputChainId] }),
+                ...(inputCurrencyId && { outputCurrency: inputCurrencyId }),
+                ...(inputChainId && { chainOut: CHAIN_QUERY_NAME[inputChainId] }),
+              },
+            },
+            undefined,
+            {
+              shallow: true,
+            },
+          )
+        }
         return
       }
 
