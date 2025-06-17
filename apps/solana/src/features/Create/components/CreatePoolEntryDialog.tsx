@@ -247,6 +247,18 @@ function CreateBlock(props: {
   detailLinkUrl?: string
   renderPoolType?: () => React.ReactNode
 }) {
+  const parentRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  const [height, setHeight] = useState(contentRef.current?.scrollHeight)
+
+  useEffect(() => {
+    const el = contentRef.current
+    if (el) {
+      setHeight(el.scrollHeight + 32)
+    }
+  }, [props.selected, props.renderPoolType])
+
   return (
     <Box
       backgroundColor={props.selected ? colors.inputBg : colors.cardSecondary}
@@ -258,19 +270,26 @@ function CreateBlock(props: {
       borderColor={props.selected ? colors.secondary : colors.cardBorder01}
       borderStyle="solid"
       onClick={props.onClick}
+      ref={parentRef}
+      transition="all 0.3s ease-out"
+      willChange="height"
+      overflow="hidden"
+      style={{ height }}
     >
-      <Flex justify="space-between">
-        <Text fontSize="md" fontWeight="600">
-          {props.title}
-        </Text>
-        {props.selected && <CircleCheck width={16} height={16} fill={colors.secondary} />}
-      </Flex>
+      <Box ref={contentRef}>
+        <Flex justify="space-between">
+          <Text fontSize="md" fontWeight="600">
+            {props.title}
+          </Text>
+          {props.selected && <CircleCheck width={16} height={16} fill={colors.secondary} />}
+        </Flex>
 
-      <Box color={props.selected ? colors.textSecondary : colors.textTertiary} fontSize="sm">
-        {props.description}
+        <Box color={props.selected ? colors.textSecondary : colors.textTertiary} fontSize="sm">
+          {props.description}
+        </Box>
+
+        {props.renderPoolType && <Box mt={2}>{props.renderPoolType()}</Box>}
       </Box>
-
-      {props.renderPoolType && <Box mt={2}>{props.renderPoolType()}</Box>}
     </Box>
   )
 }
