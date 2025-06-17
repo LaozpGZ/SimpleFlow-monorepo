@@ -164,7 +164,7 @@ function CreatePoolEntryMobileDrawer({
 export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarget; onChange: (val: CreateTarget) => void }) {
   const { t } = useTranslation()
   const isCreatePool = ['concentrated-liquidity', 'standard-amm', 'legacy-amm'].includes(type)
-  // const isCreateFarm = type === 'standard-farm'
+  const isCreateFarm = type === 'standard-farm'
 
   return (
     <Flex direction="column" gap={4}>
@@ -214,10 +214,10 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
               )
             : undefined
         }
-        // selected={isCreatePool}
+        selected={isCreatePool}
         onClick={() => onChange('concentrated-liquidity')}
       />
-      {/* <CreateBlock
+      <CreateBlock
         title={t('Create Farm')}
         description=""
         renderPoolType={
@@ -235,7 +235,7 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
         }
         selected={isCreateFarm}
         onClick={() => onChange('standard-farm')}
-      /> */}
+      />
     </Flex>
   )
 }
@@ -276,20 +276,18 @@ function CreateBlock(props: {
       overflow="hidden"
       style={{ height }}
     >
-      <Box ref={contentRef}>
-        <Flex justify="space-between">
-          <Text fontSize="md" fontWeight="600">
-            {props.title}
-          </Text>
-          {props.selected && <CircleCheck width={16} height={16} fill={colors.secondary} />}
-        </Flex>
+      <Flex justify="space-between">
+        <Text fontSize="md" fontWeight="600">
+          {props.title}
+        </Text>
+        {props.selected && <CircleCheck width={16} height={16} fill={colors.secondary} />}
+      </Flex>
 
-        <Box color={props.selected ? colors.textSecondary : colors.textTertiary} fontSize="sm">
-          {props.description}
-        </Box>
-
-        {props.renderPoolType && <Box mt={2}>{props.renderPoolType()}</Box>}
+      <Box color={props.selected ? colors.textSecondary : colors.textTertiary} fontSize="sm">
+        {props.description}
       </Box>
+
+      {props.renderPoolType && <Box mt={2}>{props.renderPoolType()}</Box>}
     </Box>
   )
 }
