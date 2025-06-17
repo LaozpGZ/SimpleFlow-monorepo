@@ -21,6 +21,7 @@ import CopyIcon from '@/icons/misc/CopyIcon'
 import ExternalLink from '@/icons/misc/ExternalLink'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import { useAppStore, supportedExplorers } from '@/store/useAppStore'
+import { pageRoutePathnames } from '@/utils/config/routers'
 
 export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nftAddress: string; isOpen: boolean; onClose: () => void }) {
   const router = useRouter()
@@ -42,7 +43,6 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
           <Text variant="title" color={colors.textPrimary} fontSize="sm" mb="6" fontWeight="400">
             {t('A new NFT representing your Concentrated Liquidity position is now in your wallet.')}
           </Text>
-          <Image w="260px" height="260px" m="0 auto" src="/images/clmm-nft.jpg" />
           <Flex
             m="0 auto"
             py="2"
@@ -88,7 +88,10 @@ export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nft
           </Text>
         </ModalBody>
         <ModalFooter px="0" py="0" mt="4" mb="2">
-          <Button onClick={() => router.push('/portfolio', { query: { tab: 'concentrated' }, hash: 'my-position' })} width="100%">
+          <Button
+            onClick={() => router.push(pageRoutePathnames.portfolio, { query: { tab: 'concentrated' }, hash: 'my-position' })}
+            width="100%"
+          >
             {t('View my positions')}
           </Button>
         </ModalFooter>
