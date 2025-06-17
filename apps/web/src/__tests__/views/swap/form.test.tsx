@@ -11,6 +11,8 @@ describe('handleCurrencySelect', () => {
     const replace = vi.fn()
     const replaceBrowserHistoryMultiple = vi.fn()
 
+    const newCurrency = baseTokens.usdt
+
     const mockContext = {
       onCurrencySelection: vi.fn(),
       warningSwapHandler: vi.fn(),
@@ -26,11 +28,11 @@ describe('handleCurrencySelect', () => {
         replace,
       },
       replaceBrowserHistoryMultiple,
+      newCurrency,
+      field: Field.INPUT,
     }
 
-    const newCurrency = baseTokens.usdt
-
-    await handleCurrencySelectFn(mockContext, newCurrency, Field.INPUT, bscTokens.cake.address, bscTokens.usdt.address)
+    await handleCurrencySelectFn(mockContext)
 
     expect(switchNetworkAsync).toHaveBeenCalledWith(ChainId.BASE, true)
     expect(replace).toHaveBeenCalledWith(
