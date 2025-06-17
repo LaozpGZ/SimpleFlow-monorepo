@@ -57,7 +57,7 @@ export function CreatePoolEntryDialog({
         to = '/clmm/create-pool'
         break
       case 'standard-farm':
-        to = '/farms/create'
+        to = '/liquidity/create-farm'
         break
       case 'clmm-lock':
         to = '/clmm/lock'
@@ -65,7 +65,6 @@ export function CreatePoolEntryDialog({
       case 'cpmm-lock':
         to = '/liquidity/lock'
         break
-
       default:
         break
     }
@@ -104,8 +103,8 @@ function CreatePoolEntryModal({ isOpen, onClose, onConfirm, children }: CreatePo
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent gap="24px" borderRadius="24px">
-        <ModalHeader pt="24px" fontSize="lg" fontWeight={600}>
+      <ModalContent gap="24px">
+        <ModalHeader py="24px" fontSize="16px" fontWeight={600}>
           {t('I want to...')}
           <ModalCloseButton />
         </ModalHeader>
@@ -164,8 +163,6 @@ function CreatePoolEntryMobileDrawer({
 export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarget; onChange: (val: CreateTarget) => void }) {
   const { t } = useTranslation()
   const isCreatePool = ['concentrated-liquidity', 'standard-amm', 'legacy-amm'].includes(type)
-  const isCreateFarm = type === 'standard-farm'
-
   return (
     <Flex direction="column" gap={4}>
       <CreateBlock
@@ -214,27 +211,7 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
               )
             : undefined
         }
-        selected={isCreatePool}
         onClick={() => onChange('concentrated-liquidity')}
-      />
-      <CreateBlock
-        title={t('Create Farm')}
-        description=""
-        renderPoolType={
-          isCreateFarm
-            ? () => (
-                <>
-                  <Stack flexDirection={['column']} mt={2} gap={5}>
-                    <Text whiteSpace="nowrap" fontSize="md" fontWeight={500} color={colors.textSubtle}>
-                      {t('Create a farm for any live pool')}
-                    </Text>
-                  </Stack>
-                </>
-              )
-            : undefined
-        }
-        selected={isCreateFarm}
-        onClick={() => onChange('standard-farm')}
       />
     </Flex>
   )
@@ -249,18 +226,18 @@ function CreateBlock(props: {
 }) {
   return (
     <Box
-      backgroundColor={props.selected ? colors.inputBg : colors.cardSecondary}
+      backgroundColor={colors.inputBg}
       p={4}
       borderRadius="3xl"
       position="relative"
       cursor="pointer"
       borderWidth="1px"
-      borderColor={props.selected ? colors.secondary : colors.cardBorder01}
+      borderColor={colors.secondary}
       borderStyle="solid"
       onClick={props.onClick}
     >
       <Flex justify="space-between">
-        <Text fontSize="md" fontWeight="600">
+        <Text fontSize="14px" fontWeight="600">
           {props.title}
         </Text>
         {props.selected && <CircleCheck width={16} height={16} fill={colors.secondary} />}
