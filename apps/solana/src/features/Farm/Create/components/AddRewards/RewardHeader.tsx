@@ -1,3 +1,5 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { Box, Flex, Grid, GridItem, HStack, Highlight, Text } from '@chakra-ui/react'
 import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
 import TokenAvatar from '@/components/TokenAvatar'
@@ -16,13 +18,15 @@ type RewardHeaderProps = {
 }
 
 export default function RewardHeader({ index, isOpen, onToggle, token, amount, perWeek, onDeleteReward }: RewardHeaderProps) {
+  const { t } = useTranslation()
+
   return (
     <Box onClick={onToggle} cursor="pointer">
       <Flex justify="space-between" align="center">
         <Grid gridTemplate={`"index token week"`} gridTemplateColumns="auto 1fr auto" alignItems="center" gap={['10px', '30px']}>
           <GridItem gridArea="index">
-            <Text fontWeight="medium" fontSize={['lg', 'xl']}>
-              Reward Token {index + 1}
+            <Text fontWeight="600" color={colors.textSecondary} fontSize={['lg', 'xl']}>
+              {t('Reward Token %index%', { index: index + 1 })}
             </Text>
           </GridItem>
           {!isOpen && (
@@ -30,7 +34,7 @@ export default function RewardHeader({ index, isOpen, onToggle, token, amount, p
               <GridItem gridArea="token" mr={3}>
                 <HStack spacing={1}>
                   <TokenAvatar token={token} size="sm" />
-                  <Text fontWeight="medium">{amount}</Text>
+                  <Text fontWeight="medium">{formatNumber(amount || 0, { maxDecimalDisplayDigits: 6 })}</Text>
                   <Text color={colors.textSecondary}>{token?.symbol}</Text>
                 </HStack>
               </GridItem>
@@ -38,7 +42,7 @@ export default function RewardHeader({ index, isOpen, onToggle, token, amount, p
                 <Text>
                   {perWeek ? (
                     <Highlight query="/week" styles={{ color: colors.textTertiary }}>
-                      {`${perWeek.toString()}/week`}
+                      {`${formatNumber(perWeek, { maxDecimalDisplayDigits: 2 })}/week`}
                     </Highlight>
                   ) : null}
                 </Text>
@@ -47,7 +51,7 @@ export default function RewardHeader({ index, isOpen, onToggle, token, amount, p
           )}
         </Grid>
         <Box onClick={isOpen ? onDeleteReward : onToggle} cursor="pointer">
-          {isOpen ? <DeleteIcon /> : <EditIcon />}
+          {isOpen ? <DeleteIcon fill={colors.textSubtle} /> : <EditIcon />}
         </Box>
       </Flex>
     </Box>

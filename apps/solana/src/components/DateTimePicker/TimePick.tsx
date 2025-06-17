@@ -36,9 +36,12 @@ export function HourPick({ sx = {}, contentSx = {}, placement, value, defaultVal
       placement={placement}
       variant="filledDark"
       sx={{
-        bg: colors.backgroundDark,
-        padding: '16px 20px',
-        fontSize: '20px',
+        color: colors.textPrimary,
+        bg: colors.inputBg,
+        border: '1px solid',
+        borderColor: colors.inputSecondary,
+        padding: '8px 16px',
+        fontSize: '16px',
         justifyContent: 'space-between',
         ...sx
       }}
@@ -64,9 +67,12 @@ export function MinutePick({ sx = {}, value, onChange, contentSx = {}, placement
       variant="filledDark"
       placement={placement}
       sx={{
-        bg: colors.backgroundDark,
-        padding: '16px 20px 16px 20px',
-        fontSize: '20px',
+        color: colors.textPrimary,
+        bg: colors.inputBg,
+        border: '1px solid',
+        borderColor: colors.inputSecondary,
+        padding: '8px 16px',
+        fontSize: '16px',
         justifyContent: 'space-between',
         ...sx
       }}

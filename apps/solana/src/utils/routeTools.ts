@@ -94,7 +94,11 @@ export function setUrlQuery<T extends ParsedUrlQuery>(additionalQuery: Partial<T
 }
 
 export const routeBack = () => {
-  router.back()
+  if (window.history?.length && window.history.length > 1) {
+    router.back()
+  } else {
+    router.push('/')
+  }
 }
 
 export function useRouteQuery<Query extends Record<string, any>>(): Query {

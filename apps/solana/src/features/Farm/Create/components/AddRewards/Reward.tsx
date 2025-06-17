@@ -52,7 +52,9 @@ export default function AddRewardItem({ isDefaultOpen, index, rewardInfo, tokenF
         if (ev.target === domRef.current) onToggle()
       }}
       borderRadius="20px"
-      bg={colors.backgroundLight}
+      bg={colors.cardBg}
+      border="1px solid"
+      borderColor={colors.cardBorder01}
       py={['18px', 7]}
       px={[4, 6]}
     >
@@ -68,7 +70,9 @@ export default function AddRewardItem({ isDefaultOpen, index, rewardInfo, tokenF
       <Collapse in={isOpen} animateOpacity>
         <RewardBody rewardInfo={rewardInfo} onChange={onRewardEdit} tokenFilterFn={tokenFilterFn} />
       </Collapse>
-      <Text color="red">{rewardInfo.error}</Text>
+      <Text color="red" fontSize="sm" fontWeight={300} mt={4}>
+        {rewardInfo.error}
+      </Text>
     </Box>
   )
 }

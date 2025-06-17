@@ -1,9 +1,10 @@
 import { Box, Flex, Grid, GridItem, HStack, NumberInput, NumberInputField, SimpleGrid, Text } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
+import { Input } from '@pancakeswap/uikit'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { SelectSingleEventHandler } from 'react-day-picker'
-import { useTranslation } from '@pancakeswap/localization'
 
 import Button from '@/components/Button'
 import { DatePick, HourPick, MinutePick } from '@/components/DateTimePicker'
@@ -72,7 +73,7 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
   }, [startDate])
 
   return (
-    <ResponsiveModal size="2xl" title={t('Farm period')} isOpen={isOpen} onClose={onClose}>
+    <ResponsiveModal size="2xl" title={t('Farm period')} isOpen={isOpen} onClose={onClose} propOfModalContent={{ borderRadius: '20px' }}>
       <Grid
         gridTemplate={[
           `
@@ -93,7 +94,7 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
         <GridItem area="calendar">
           <SimpleGrid autoFlow="row" gap={[4, 3]}>
             <Title value={t('Start on')} />
-            <Box bg={colors.backgroundDark} rounded="12px">
+            <Box>
               <DatePick mode="single" selected={startDate} onSelect={onDateSelect} required />
             </Box>
           </SimpleGrid>
@@ -103,8 +104,14 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
           <SimpleGrid autoFlow={['column', 'row']} templateColumns={['20% 1fr', 'unset']} gap={[4, 3]} alignItems="center">
             <Title value={t('Start at')} />
             <HStack spacing={3}>
-              <HourPick sx={{ flex: 1 }} value={startHour} defaultValues={hours} onChange={setStartHour} />
-              <MinutePick sx={{ flex: 1 }} value={startMinute} onChange={setStartMinute} />
+              <HourPick
+                sx={{ flex: 1 }}
+                value={startHour}
+                defaultValues={hours}
+                onChange={setStartHour}
+                contentSx={{ borderRadius: '16px' }}
+              />
+              <MinutePick sx={{ flex: 1 }} value={startMinute} onChange={setStartMinute} contentSx={{ borderRadius: '16px' }} />
             </HStack>
           </SimpleGrid>
         </GridItem>
@@ -112,12 +119,19 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
         <GridItem area="duration">
           <SimpleGrid autoFlow={['column', 'row']} templateColumns={['20% 1fr', 'unset']} gap={[4, 3]} alignItems="center">
             <Title value={t('Duration')} />
-            <Flex borderRadius="12px" bg={colors.backgroundDark} p="16px 20px 16px 20px">
-              <NumberInput variant="clean" min={7} max={90} step={1} value={durationDays} onChange={onDurationChange}>
-                <NumberInputField placeholder="7-90 Days" _placeholder={{ color: colors.textSecondary, fontSize: '20px', opacity: 0.5 }} />
-              </NumberInput>
-            </Flex>
+            <Input
+              value={durationDays}
+              onInput={(e) => onDurationChange(e.currentTarget.value, Number(e.currentTarget.value))}
+              placeholder="0.0"
+              min={7}
+              max={90}
+              step={1}
+              style={{ textAlign: 'right' }}
+            />
           </SimpleGrid>
+          <Text color={colors.textSubtle} fontSize="xs" mt={1} textAlign="right">
+            {t('Enter value between 7 and 90')}
+          </Text>
         </GridItem>
 
         <GridItem area="end">
@@ -125,9 +139,9 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
             h="full"
             justifyContent="center"
             alignItems="center"
-            border={`1px solid ${colors.textTertiary}`}
-            bg={colors.backgroundTransparent07}
-            borderRadius="12px"
+            border={`1px solid ${colors.cardBorder01}`}
+            bg={colors.cardSecondary}
+            borderRadius="20px"
             py={4}
             gap={1}
             columnGap={4}
@@ -143,13 +157,13 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
             `
             ]}
           >
-            <Text gridArea="label" textAlign="center" fontSize="sm" color={colors.textTertiary}>
+            <Text gridArea="label" textAlign="center" fontSize="sm" fontWeight={600}>
               {t('Farm will end at')}
             </Text>
-            <Text gridArea="date" width="max-content" textAlign={['right', 'center']}>
+            <Text gridArea="date" width="100%" textAlign={['right', 'center']} fontWeight={600}>
               {endDate}
             </Text>
-            <Text gridArea="time" textAlign="center" color={colors.textSecondary} fontWeight={400} fontSize="xs">
+            <Text gridArea="time" textAlign="center" color={colors.textSubtle} fontWeight={400} fontSize="sm">
               {dayjs(startDate)
                 .add(durationDays ? Number(durationDays) : 0, 'day')
                 .format('HH:mm')}{' '}
@@ -159,13 +173,12 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
         </GridItem>
       </Grid>
 
-      <Flex justifyContent="space-between" mt={8} mb={4} gap={3}>
-        <Button size={['lg', 'md']} onClick={onClose} variant="outline">
+      <Flex justifyContent="space-between" mt={8} gap={3}>
+        <Button width="100%" onClick={onClose} variant="outline">
           {t('Cancel')}
         </Button>
         <Button
-          flex={[1, 'unset']}
-          size={['lg', 'md']}
+          width="100%"
           isDisabled={
             Number.isNaN(Number(durationDays)) ||
             Number(durationDays) < 7 ||

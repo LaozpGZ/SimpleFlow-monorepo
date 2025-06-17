@@ -42,10 +42,10 @@ export default function RewardBody({ rewardInfo, tokenFilterFn, onChange }: Rewa
 
   return (
     <Box>
-      <Text fontWeight="500" fontSize={['sm', 'md']} color={colors.textTertiary} mt={[1, 2]}>
-        {t('You can add up to 3 reward tokens.')}
+      <Text fontWeight="500" fontSize={['sm', 'md']} color={colors.textSubtle} mt={[1, 2]}>
+        {t('You can add up to 2 reward tokens.')}
       </Text>
-      <Flex direction="column" gap={4} mt={[4, 7]}>
+      <Flex direction="column" gap={4} mt={4} px={1}>
         <TokenInput
           hideControlButton
           token={rewardInfo.token}
@@ -54,27 +54,28 @@ export default function RewardBody({ rewardInfo, tokenFilterFn, onChange }: Rewa
           onChange={onAmountChange}
           filterFn={tokenFilterFn}
         />
-        <Box borderRadius="12px" bg={colors.backgroundDark} py={3} px={[4, 6]}>
+        <Box borderRadius="20px" bg={colors.cardSecondary} py={4} px={[4, 5]} border="1px solid" borderColor={colors.cardBorder01}>
           {!rewardInfo.farmStart ? (
             <>
               <Flex justify="space-between" mb={2}>
-                <Text fontSize="xs" fontWeight={300} color={colors.textTertiary}>
+                <Text fontSize="xs" fontWeight={300} color={colors.textSubtle}>
                   {t('Farming starts')}
                 </Text>
-                <Text fontSize="xs" fontWeight={300} color={colors.textTertiary}>
+                <Text fontSize="xs" fontWeight={300} color={colors.textSubtle}>
                   {t('Farming ends')}
                 </Text>
               </Flex>
               <Flex
                 cursor="pointer"
                 onClick={onOpen}
-                bg={colors.backgroundTransparent07}
-                borderRadius="4px"
+                bg={colors.textSubtle}
+                borderRadius="20px"
                 justify="center"
                 align="center"
-                py={2}
+                py={1}
+                mt={4}
               >
-                <Text fontWeight="medium" fontSize="xl">
+                <Text fontWeight="medium" fontSize="md" color={colors.invertedContrast}>
                   {t('Select')}
                 </Text>
               </Flex>
@@ -82,20 +83,28 @@ export default function RewardBody({ rewardInfo, tokenFilterFn, onChange }: Rewa
           ) : (
             <HStack justifyContent="space-between">
               <Box cursor="pointer" onClick={onOpen}>
-                <Text fontSize="xs" fontWeight={300} color={colors.textTertiary}>
+                <Text fontSize="xs" fontWeight={300} color={colors.textSubtle}>
                   {t('Farming starts')}
                 </Text>
-                <Text fontSize="md" fontWeight={500} color={colors.textPrimary} my={1} mb={2}>
+                <Text fontSize="md" fontWeight={500} my={2}>
                   {`${farmStartTimeInfo.year}/${farmStartTimeInfo.month}/${farmStartTimeInfo.day}`}
                 </Text>
-                <Text fontSize="xs" color={colors.textSecondary}>
+                <Text fontSize="xs" color={colors.textSubtle}>
                   {`${farmStartTimeInfo.hour}:${farmStartTimeInfo.minutes} (UTC)`}
                 </Text>
               </Box>
               {rewardInfo.farmStart && rewardInfo.farmEnd ? (
                 <Flex flexGrow={1} align="center">
                   <Box flexGrow={1} height="1px" color={colors.backgroundLight} bg={colors.dividerDashGradient} />
-                  <Box rounded="md" bg={colors.backgroundLight} py={1.5} px={[4, 10]} cursor="pointer" onClick={onOpen}>
+                  <Box
+                    rounded="full"
+                    bg={colors.textSubtle}
+                    color={colors.invertedContrast}
+                    py={2}
+                    px={[4, 6]}
+                    cursor="pointer"
+                    onClick={onOpen}
+                  >
                     <Text fontWeight="500" fontSize="sm">
                       {(rewardInfo.farmEnd - rewardInfo.farmStart) / (60 * 60 * 24 * 1000)} {t('Days')}
                     </Text>
@@ -104,13 +113,13 @@ export default function RewardBody({ rewardInfo, tokenFilterFn, onChange }: Rewa
                 </Flex>
               ) : null}
               <Box textAlign="right">
-                <Text fontSize="xs" fontWeight={300} color={colors.textTertiary}>
+                <Text fontSize="xs" fontWeight={300} color={colors.textSubtle}>
                   {t('Farming ends')}
                 </Text>
-                <Text fontSize="md" fontWeight={500} color={colors.textSecondary} my={1} mb={2}>
+                <Text fontSize="md" fontWeight={500} my={2}>
                   {`${farmEndTimeInfo.year}/${farmEndTimeInfo.month}/${farmEndTimeInfo.day}`}
                 </Text>
-                <Text fontSize="xs" color={colors.textSecondary}>
+                <Text fontSize="xs" color={colors.textSubtle}>
                   {`${farmEndTimeInfo.hour}:${farmEndTimeInfo.minutes} (UTC)`}
                 </Text>
               </Box>
@@ -121,18 +130,19 @@ export default function RewardBody({ rewardInfo, tokenFilterFn, onChange }: Rewa
           flexDirection={['column', 'row']}
           align={['unset', 'center']}
           justify="space-between"
-          borderRadius="12px"
-          bg={colors.backgroundDark}
-          py={3}
-          px={[4, 6]}
+          borderRadius="20px"
+          bg={colors.cardSecondary}
+          border="1px solid"
+          borderColor={colors.cardBorder01}
+          p={4}
         >
-          <Text color={colors.textTertiary} fontSize="xs">
+          <Text color={colors.textSubtle} fontSize="xs">
             {t('Estimated rewards / week')}
           </Text>
-          <Text color={colors.textSecondary} fontSize="xl" fontWeight={500} mt={1}>
+          <Text fontSize="xl" fontWeight={600}>
             {formatToRawLocaleStr(
               new Decimal(rewardInfo.perWeek || 0).toDecimalPlaces(rewardInfo.token?.decimals || 6, Decimal.ROUND_FLOOR).toString()
-            )}
+            )}{' '}
             {rewardInfo.token?.symbol}
           </Text>
         </HStack>

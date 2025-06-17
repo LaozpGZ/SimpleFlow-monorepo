@@ -7,11 +7,11 @@ import { colors } from '@/theme/cssVariables'
 export function DatePick(props: DayPickerProps) {
   const css = `
   .rdp-button:hover:not([disabled]):not(.rdp-day_selected) {
-    background-color: white;
-    color: ${colors.backgroundDark};
+    background-color: ${colors.tertiary};
+    color: ${colors.textPrimary};
   }
   .rdp-button:not([disabled]){
-    color: ${colors.textSecondary}
+    color: ${colors.textPrimary}
   }
   .my-selected:not([disabled]) {
     color: ${colors.backgroundDark};
@@ -28,6 +28,19 @@ export function DatePick(props: DayPickerProps) {
   .my-disabled {
     color: ${colors.textSecondary};
     cursor: not-allowed;
+  }
+  
+  .rdp-head_row {
+    background-color: ${colors.tertiary};
+  }
+  .rdp-head_row th {
+    font-weight: 400;
+  }
+  .rdp-head_row th:first-of-type {
+    border-radius: 16px 0 0 16px !important;
+  }
+  .rdp-head_row th:last-of-type {
+    border-radius: 0 16px 16px 0 !important;
   }
 `
 

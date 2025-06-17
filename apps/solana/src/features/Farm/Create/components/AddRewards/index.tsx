@@ -52,10 +52,10 @@ export default function RewardAddItem(props: {
         </HStack>
       )}
       <Flex justify="space-between" align="center" gap={3}>
-        <Button variant="outline" flexBasis="120px" onClick={props.onClickBackButton}>
+        <Button variant="outline" width="100%" onClick={props.onClickBackButton}>
           {t('Back')}
         </Button>
-        <Button isDisabled={hasError} flexBasis="300px" onClick={props.onClickNextStepButton}>
+        <Button isDisabled={hasError} width="100%" onClick={props.onClickNextStepButton}>
           {t('Next Step')}
         </Button>
       </Flex>

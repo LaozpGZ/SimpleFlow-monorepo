@@ -378,7 +378,7 @@ export default function CreateFarm() {
           </Box>
         ) : currentStep === 'reward' ? (
           <Flex justify="space-between" w="full" align="center">
-            <Text w="fit-content" color={colors.textSecondary} fontWeight="500" fontSize="xl">
+            <Text w="fit-content" color={colors.textSecondary} fontWeight="600" fontSize="xl">
               {t('Next, enter rewards for the farm')}
             </Text>
             <HStack
@@ -392,8 +392,8 @@ export default function CreateFarm() {
                   : { cursor: 'pointer' }
               }
             >
-              <PlusCircleIcon width="14px" height="14px" />
-              <Text fontSize="16px" fontWeight="500">
+              <PlusCircleIcon width="14px" height="14px" color={colors.primary60} />
+              <Text color={colors.primary60} fontSize="16px" fontWeight="500">
                 {t('Add another')}
               </Text>
             </HStack>
