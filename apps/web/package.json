@@ -112,6 +112,7 @@
     "easymde": "2.16.1",
     "ethers": "^5.7.0",
     "fast-json-stable-stringify": "^2.1.0",
+    "firebase": "^11.6.0",
     "graphql": "^16.8.1",
     "graphql-request": "5.0.0",
     "jotai": "^2.4.3",

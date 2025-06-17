@@ -48,6 +48,9 @@ import GlobalStyle from '../style/Global'
 import { NextPageWithLayout } from '../utils/page.types'
 
 const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
+// const Web3AuthWithWagmiProvider = dynamic(() => import('../Providers').then((mod) => mod.Web3AuthWithWagmiProvider), {
+//   ssr: false,
+// })
 
 // This config is required for number formatting
 BigNumber.config({
@@ -105,6 +108,7 @@ function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>
       <DefaultSeo {...SEO} />
       {/* <LoadVConsole /> */}
       <Providers store={store} dehydratedState={pageProps.dehydratedState}>
+        {/* <Web3AuthWithWagmiProvider> */}
         <PageMeta />
         {(Component as NextPageWithLayout).Meta && (
           // @ts-ignore
@@ -118,6 +122,7 @@ function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>
           <Updaters />
           <App {...props} />
         </PersistGate>
+        {/* </Web3AuthWithWagmiProvider> */}
       </Providers>
       <Script
         strategy="afterInteractive"
