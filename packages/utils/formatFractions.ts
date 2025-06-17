@@ -65,7 +65,7 @@ export function smartRoundNumber(value: string, decimals: number): string {
   decPart = decPart.replace(/0+$/, '')
 
   if (decPart.length <= decimals) {
-    const roundRegex = new RegExp(`9{'${Math.min(2, decimals)}',}$`)
+    const roundRegex = new RegExp(`9{${Math.min(2, decimals)},}$`)
     if (roundRegex.test(decPart)) {
       const roundedNum = (num + parseFloat(`1e-${decPart.length}`)).toFixed(decPart.length)
       return parseFloat(roundedNum).toString()
