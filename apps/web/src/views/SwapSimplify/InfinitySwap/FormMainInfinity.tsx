@@ -93,8 +93,6 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
       const isInput = field === Field.INPUT
 
-      let resetOutputCurrency = false
-
       if (isInput && canSwitch) {
         switchNetwork(newCurrency.chainId)
       }
@@ -107,7 +105,6 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           )
 
         if (!isOutputChainSupported) {
-          resetOutputCurrency = true
           // if output chain is not supported, reset output currency
           onCurrencySelection(Field.OUTPUT, {
             address: getDefaultToken(newCurrency.chainId) as `0x${string}`,
@@ -123,14 +120,11 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
       const isSameCurrency = !chainOut && newCurrencyId === inputCurrencyId && newCurrencyId === outputCurrencyId
 
-      const routeParams = {
+      replaceBrowserHistoryMultiple({
         [isInput ? 'inputCurrency' : 'outputCurrency']: newCurrencyId,
         ...(isSameCurrency && { [isInput ? 'outputCurrency' : 'inputCurrency']: undefined }),
-        ...(resetOutputCurrency && { outputCurrency: undefined }),
         chainOut: chainOut || null, // null to remove from URL if no need to apply
-      }
-
-      replaceBrowserHistoryMultiple(routeParams)
+      })
     },
     [
       onCurrencySelection,
