@@ -228,10 +228,10 @@ export function useDefaultsFromURLSearch():
     | undefined
   >()
 
-  const { data: supportedBridgeChains } = useBridgeAvailableRoutes()
+  const { data: supportedBridgeChains, isPending } = useBridgeAvailableRoutes()
 
   useEffect(() => {
-    if (!chainId || !native || !isReady) return
+    if (!chainId || !native || !isReady || isPending) return
 
     const defaultOutputCurrency =
       CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address
@@ -326,7 +326,7 @@ export function useDefaultsFromURLSearch():
       inputChainId: finalInputChainId || chainId,
       outputChainId: finalOutputChainId || chainId,
     })
-  }, [dispatch, chainId, query, native, isReady, pathname, supportedBridgeChains])
+  }, [dispatch, chainId, query, native, isReady, pathname, supportedBridgeChains, isPending])
 
   return result
 }
