@@ -185,7 +185,7 @@ export function queryParametersToSwapState(
     typeof parsedQs.outputCurrency === 'string'
       ? safeGetAddress(parsedQs.outputCurrency) || (outputChainId ? Native.onChain(outputChainId).symbol : nativeSymbol)
       : defaultOutputCurrency
-  if (inputCurrency === outputCurrency) {
+  if (inputCurrency === outputCurrency && inputChainId === outputChainId) {
     if (typeof parsedQs.outputCurrency === 'string') {
       inputCurrency = ''
     } else {
@@ -282,6 +282,8 @@ export function useDefaultsFromURLSearch():
             route.originChainId === (finalInputChainId || chainId) && route.destinationChainId === finalOutputChainId,
         )
 
+      console.info(isOutputChainSupported)
+
       if (!isOutputChainSupported) {
         finalOutputCurrencyId = defaultOutputCurrency
         finalOutputChainId = chainId
@@ -298,6 +300,8 @@ export function useDefaultsFromURLSearch():
       }
       switchedToFallback = true
     }
+
+    console.info(finalInputCurrencyId)
 
     dispatch(
       replaceSwapState({
