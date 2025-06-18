@@ -30,7 +30,7 @@ import { useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useRoutingSettingChanged } from 'state/user/smartRouter'
 import { useCurrencyBalances } from 'state/wallet/hooks'
-import { logGTMClickSwapConfirmEvent, logGTMClickSwapEvent, logGTMQuoteQueryEvent } from 'utils/customGTMEventTracking'
+import { logGTMClickSwapConfirmEvent, logGTMClickSwapEvent } from 'utils/customGTMEventTracking'
 import { warningSeverity } from 'utils/exchange'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckApproval'
 import { computeBridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
@@ -45,6 +45,7 @@ import { useSwapCurrency } from '../../Swap/V3Swap/hooks/useSwapCurrency'
 import { CommitButtonProps } from '../../Swap/V3Swap/types'
 import { computeTradePriceBreakdown } from '../../Swap/V3Swap/utils/exchange'
 import { useIsRecipientError } from '../hooks/useIsRecipientError'
+import { useQuoteTrackingStateMachine } from '../hooks/useQuoteTrackingStateMachine'
 
 const SettingsModalWithCustomDismiss = withCustomOnDismiss(SettingsModalV2)
 
@@ -350,55 +351,20 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     }
   }, [confirmState, txHash, refreshBalances])
 
-  useEffect(() => {
-    if (!typedValue) return
-
-    if (!disabled && isValid) return
-
-    const errorMsg = tradeError?.message || swapInputError
-
-    if (errorMsg) {
-      logGTMQuoteQueryEvent('fail', {
-        originChainId: inputCurrency?.chainId,
-        destinationChainId: outputCurrency?.chainId,
-        originToken: inputCurrency?.symbol,
-        destinationToken: outputCurrency?.symbol,
-        amount: typedValue,
-        errorMessage: errorMsg,
-        time: Date.now(),
-      })
-    }
-  }, [tradeError, inputCurrency, outputCurrency, swapInputError, typedValue, disabled, isValid])
-
-  useEffect(() => {
-    // Track quote start when user input amount and no quote result
-    const haveEnoughData = inputCurrency?.chainId && outputCurrency?.chainId && typedValue
-    if (tradeLoading && haveEnoughData && !parsedAmounts[Field.OUTPUT]) {
-      logGTMQuoteQueryEvent('start', {
-        originChainId: inputCurrency?.chainId,
-        destinationChainId: outputCurrency?.chainId,
-        originToken: inputCurrency?.symbol,
-        destinationToken: outputCurrency?.symbol,
-        amount: typedValue,
-        time: Date.now(),
-      })
-    }
-  }, [tradeLoading, inputCurrency, outputCurrency, typedValue, order])
-
-  useEffect(() => {
-    // Track quote success when user input amount and swap is valid
-    if (order?.trade?.outputAmount?.greaterThan(BIG_INT_ZERO) && isValid && !disabled) {
-      logGTMQuoteQueryEvent('succ', {
-        originChainId: order?.trade?.inputAmount?.currency?.chainId,
-        destinationChainId: order?.trade?.outputAmount?.currency?.chainId,
-        originToken: order?.trade?.inputAmount?.currency?.symbol,
-        destinationToken: order?.trade?.outputAmount?.currency?.symbol,
-        amount: order?.trade?.inputAmount?.toExact(),
-        amountOut: order?.trade?.outputAmount?.toExact(),
-        time: Date.now(),
-      })
-    }
-  }, [order, isValid, disabled])
+  // Use quote tracking state machine hook to ensure proper order: start -> success/fail
+  // if any quote logic is changed, please update the hook
+  useQuoteTrackingStateMachine({
+    typedValue,
+    tradeLoading,
+    tradeError,
+    inputCurrency,
+    outputCurrency,
+    swapInputError,
+    parsedAmounts,
+    disabled,
+    isValid,
+    order,
+  })
 
   const buttonText = useMemo(() => {
     // NOTE: use if statement for readability
@@ -423,7 +389,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
     return t('Swap')
   }, [
-    order,
     isExpertMode,
     isRecipientEmpty,
     isRecipientError,
