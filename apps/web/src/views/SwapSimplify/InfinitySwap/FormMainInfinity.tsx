@@ -44,14 +44,11 @@ interface HandleCurrencySelectDeps {
   switchNetworkAsync: (chainId: number, skipReplace?: boolean) => Promise<unknown>
   outputChainId: number | undefined
   supportedBridgeChains: { data?: { originChainId: number; destinationChainId: number }[] }
-  inputChainId: number | undefined
-  inputCurrencyId: string | undefined
   outputCurrencyId: string | undefined
   router: {
     query: ParsedUrlQuery
     replace: (route: any, as?: any, opts?: { shallow: boolean }) => void
   }
-  replaceBrowserHistoryMultiple: (updates: Record<string, any>) => void
   newCurrency: any
   field: Field
 }
@@ -63,11 +60,8 @@ export const handleCurrencySelectFn = async ({
   switchNetworkAsync,
   outputChainId,
   supportedBridgeChains,
-  inputChainId,
-  inputCurrencyId,
   outputCurrencyId,
   router,
-  replaceBrowserHistoryMultiple,
   newCurrency,
   field,
 }: HandleCurrencySelectDeps): Promise<void> => {
@@ -114,19 +108,6 @@ export const handleCurrencySelectFn = async ({
       } as Currency)
     }
   }
-
-  const newCurrencyId = currencyId(newCurrency)
-
-  // Output chain name (undefined if no need to apply)
-  const chainOut = !isInput && inputChainId !== newCurrency.chainId && CHAIN_QUERY_NAME[newCurrency.chainId]
-
-  const isSameCurrency = !chainOut && newCurrencyId === inputCurrencyId && newCurrencyId === outputCurrencyId
-
-  replaceBrowserHistoryMultiple({
-    [isInput ? 'inputCurrency' : 'outputCurrency']: newCurrencyId,
-    ...(isSameCurrency && { [isInput ? 'outputCurrency' : 'inputCurrency']: undefined }),
-    chainOut: chainOut || null, // null to remove from URL if no need to apply
-  })
 }
 
 export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsufficientBalance }: Props) {
@@ -185,11 +166,8 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
         switchNetworkAsync,
         outputChainId,
         supportedBridgeChains,
-        inputChainId,
-        inputCurrencyId,
         outputCurrencyId,
         router,
-        replaceBrowserHistoryMultiple,
         newCurrency,
         field,
       })
@@ -201,8 +179,6 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
       switchNetworkAsync,
       outputChainId,
       supportedBridgeChains,
-      inputChainId,
-      inputCurrencyId,
       outputCurrencyId,
       router,
     ],
