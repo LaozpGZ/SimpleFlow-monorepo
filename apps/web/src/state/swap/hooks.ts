@@ -282,8 +282,6 @@ export function useDefaultsFromURLSearch():
             route.originChainId === (finalInputChainId || chainId) && route.destinationChainId === finalOutputChainId,
         )
 
-      console.info(isOutputChainSupported)
-
       if (!isOutputChainSupported) {
         finalOutputCurrencyId = defaultOutputCurrency
         finalOutputChainId = chainId
@@ -300,8 +298,6 @@ export function useDefaultsFromURLSearch():
       }
       switchedToFallback = true
     }
-
-    console.info(finalInputCurrencyId)
 
     dispatch(
       replaceSwapState({
