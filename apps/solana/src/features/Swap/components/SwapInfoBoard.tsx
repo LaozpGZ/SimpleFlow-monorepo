@@ -382,7 +382,7 @@ function RoutingValue({ routePlan }: { routePlan: ApiSwapV1OutSuccess['data']['r
             }
           >
             <Text fontSize="2xs" color={colors.textSecondary}>
-              {formatToRawLocaleStr(toPercentString(feeRate / 100))}
+              {formatToRawLocaleStr(toPercentString(feeRate / 10000))}
             </Text>
           </Tooltip>
 
