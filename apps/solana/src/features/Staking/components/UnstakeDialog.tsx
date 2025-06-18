@@ -1,5 +1,5 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react'
-import { ApiStakePool } from '@raydium-io/raydium-sdk-v2'
+import { ApiStakePool } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { useEffect, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'

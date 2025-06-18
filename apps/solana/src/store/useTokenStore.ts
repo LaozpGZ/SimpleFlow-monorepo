@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { MintLayout, RawMint } from '@solana/spl-token-0.4'
-import { TokenInfo, JupTokenType, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo, JupTokenType, ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { getStorageItem, setStorageItem } from '@/utils/localStorage'
 import logMessage from '@/utils/log'
 import createStore from './createStore'

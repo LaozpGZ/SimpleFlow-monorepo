@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Badge, Box, Flex, HStack, Text, useClipboard, useDisclosure, Tag } from '@chakra-ui/react'
-import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 
 import Button from '@/components/Button'
 import { Desktop, Mobile } from '@/components/MobileDesktop'

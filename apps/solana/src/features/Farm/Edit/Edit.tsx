@@ -9,7 +9,7 @@ import {
   solToWSolToken,
   FarmStateV6,
   FARM_PROGRAM_ID_V6
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useRouter } from 'next/router'
 import { shallow } from 'zustand/shallow'

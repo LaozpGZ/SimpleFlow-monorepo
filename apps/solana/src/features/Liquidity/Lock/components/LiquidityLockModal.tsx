@@ -14,7 +14,7 @@ import {
 import { useState } from 'react'
 import Decimal from 'decimal.js'
 import { useTranslation } from '@pancakeswap/localization'
-import { ApiV3PoolInfoStandardItemCpmm } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoStandardItemCpmm } from '@pancakeswap/solana-core-sdk'
 import BN from 'bn.js'
 import { colors } from '@/theme/cssVariables'
 import TokenAvatarPair from '@/components/TokenAvatarPair'

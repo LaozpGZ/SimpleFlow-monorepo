@@ -1,5 +1,5 @@
 import { Flex, HStack, Spacer, StyleProps, Text, useDisclosure } from '@chakra-ui/react'
-import { TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { ReactNode, useCallback } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { colors } from '@/theme/cssVariables'

@@ -1,5 +1,5 @@
 import { Box, Grid, GridItem, HStack, Text, VStack } from '@chakra-ui/react'
-import { ApiV3PoolInfoStandardItem, CREATE_CPMM_POOL_PROGRAM } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoStandardItem, CREATE_CPMM_POOL_PROGRAM } from '@pancakeswap/solana-core-sdk'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import Tabs from '@/components/Tabs'

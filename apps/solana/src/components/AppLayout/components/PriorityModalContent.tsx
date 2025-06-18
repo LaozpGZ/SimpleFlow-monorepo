@@ -1,6 +1,6 @@
 import { Collapse, Divider, Flex, HStack, VStack } from '@chakra-ui/react'
 import { Button, ButtonMenu, ButtonMenuItem, ModalV2, MotionModal, Text } from '@pancakeswap/uikit'
-import { SOLMint } from '@raydium-io/raydium-sdk-v2'
+import { SOLMint } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback, MouseEvent, KeyboardEvent, useRef, useDeferredValue, forwardRef } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, BoxProps, Flex, Text, Input, Popover, PopoverAnchor, PopoverContent, PopoverBody, HStack } from '@chakra-ui/react'
-import { ApiV3Token, solToWSol } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token, solToWSol } from '@pancakeswap/solana-core-sdk'
 import { shallow } from 'zustand/shallow'
 import AddressChip from '@/components/AddressChip'
 import Close from '@/icons/misc/Close'

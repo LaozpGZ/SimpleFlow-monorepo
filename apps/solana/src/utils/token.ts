@@ -1,4 +1,4 @@
-import { TOKEN_WSOL, WSOLMint, SOLMint, USDCMint, USDTMint, ApiV3Token, SOL_INFO, TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { TOKEN_WSOL, WSOLMint, SOLMint, USDCMint, USDTMint, ApiV3Token, SOL_INFO, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { sortItems } from '@/utils/sortItems'
 
@@ -81,8 +81,8 @@ export const filterTokenFn = (list: TokenInfo[], params?: { searchStr?: string; 
     })
     tokenGroup[1] = tokenGroup[1]
       ? sortItems(tokenGroup[1], {
-        sortRules: [{ value: (i) => i.type === 'raydium' }]
-      })
+          sortRules: [{ value: (i) => i.type === 'raydium' }]
+        })
       : tokenGroup[1]
     filteredList = tokenGroup.flat().filter(Boolean)
   }

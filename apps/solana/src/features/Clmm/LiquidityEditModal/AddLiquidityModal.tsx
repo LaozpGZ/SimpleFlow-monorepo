@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, ModalV2, MotionModal, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { Box, Badge, Collapse, Flex, Text, HStack } from '@chakra-ui/react'
-import { solToWSol } from '@raydium-io/raydium-sdk-v2'
+import { solToWSol } from '@pancakeswap/solana-core-sdk'
 import { shallow } from 'zustand/shallow'
 
 import Decimal from 'decimal.js'

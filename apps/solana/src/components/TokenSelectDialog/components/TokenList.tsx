@@ -1,6 +1,6 @@
 import { Box, Divider, Flex, SimpleGrid } from '@chakra-ui/react'
 import { Button, Input, InputGroup, SearchIcon, Text } from '@pancakeswap/uikit'
-import { TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import Decimal from 'decimal.js'
 import { ChangeEvent, forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'

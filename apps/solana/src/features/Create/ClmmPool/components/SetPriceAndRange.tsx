@@ -1,7 +1,7 @@
 import { Button } from '@pancakeswap/uikit'
 import { useState, useCallback, useRef, useEffect } from 'react'
 import { Minus, Plus } from 'react-feather'
-import { ApiV3PoolInfoConcentratedItem, ApiV3Token, solToWSol } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoConcentratedItem, ApiV3Token, solToWSol } from '@pancakeswap/solana-core-sdk'
 import { Box, Text, Flex, HStack, VStack, SimpleGrid, Skeleton } from '@chakra-ui/react'
 import { shallow } from 'zustand/shallow'
 import Decimal from 'decimal.js'

@@ -1,4 +1,4 @@
-import { isNumber, MayFunction } from '@raydium-io/raydium-sdk-v2'
+import { isNumber, MayFunction } from '@pancakeswap/solana-core-sdk'
 import { isObject, isString } from './judges/judgeType'
 import { shakeUndefindedItem } from './shakeUndefindedItem'
 import { shrinkToValue } from './shrinkToValue'
@@ -58,7 +58,7 @@ function extractItemBeSearchedText<T>(item: T): SearchConfigObj<T>[] {
 }
 
 function parseToMatchedInfos<T>(item: T, options: SearchOptions<T>) {
-  const {searchText} = options
+  const { searchText } = options
   const matchRules = options.matchRules ?? extractItemBeSearchedText(item)
   const splitor = options.splitor ?? /\s+|-/
   const searchKeyWords = searchText!.trim().split(splitor)

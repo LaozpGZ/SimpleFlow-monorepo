@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { getCpLockPda, CpmmLockInfo } from '@raydium-io/raydium-sdk-v2'
+import { getCpLockPda, CpmmLockInfo } from '@pancakeswap/solana-core-sdk'
 import { shallow } from 'zustand/shallow'
 import BN from 'bn.js'
 import useSWR from 'swr'

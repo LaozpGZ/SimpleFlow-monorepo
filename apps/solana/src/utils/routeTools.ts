@@ -1,7 +1,7 @@
 /**
  * for v2's experience, we need to use a function to generate the route path, so we can do some tricks when routing
  */
-import { MayFunction, TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { MayFunction, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import router, { useRouter } from 'next/router'
 
 import { ParsedUrlQuery } from 'querystring'

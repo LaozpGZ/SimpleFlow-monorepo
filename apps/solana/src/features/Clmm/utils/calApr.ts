@@ -1,4 +1,4 @@
-import { ApiV3PoolInfoConcentratedItem, PoolUtils, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoConcentratedItem, PoolUtils, ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import BN from 'bn.js'
 import { ClmmPosition } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { TokenPrice } from '@/hooks/token/useTokenPrice'

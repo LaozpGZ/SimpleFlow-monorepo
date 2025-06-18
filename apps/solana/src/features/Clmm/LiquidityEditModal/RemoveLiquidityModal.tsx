@@ -13,7 +13,7 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
-import { ApiV3PoolInfoConcentratedItem } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { useCallback, useEffect, useRef, useState, ChangeEvent, useMemo } from 'react'
 import { useTranslation } from '@pancakeswap/localization'

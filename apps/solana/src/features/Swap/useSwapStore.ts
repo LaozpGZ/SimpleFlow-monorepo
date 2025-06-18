@@ -1,5 +1,5 @@
 import { PublicKey, VersionedTransaction, Transaction, SignatureResult } from '@solana/web3.js'
-import { TxVersion, txToBase64, SOL_INFO } from '@raydium-io/raydium-sdk-v2'
+import { TxVersion, txToBase64, SOL_INFO } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
 import { TranslateFunction } from '@pancakeswap/localization'

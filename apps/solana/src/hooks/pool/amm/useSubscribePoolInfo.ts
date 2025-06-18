@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { PublicKey, GetProgramAccountsFilter } from '@solana/web3.js'
-import { ApiV3Token, liquidityStateV4Layout, liquidityStateV5Layout } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token, liquidityStateV4Layout, liquidityStateV5Layout } from '@pancakeswap/solana-core-sdk'
 
 import { Subject, throttleTime, filter, asyncScheduler } from 'rxjs'
 import { useAppStore } from '@/store'

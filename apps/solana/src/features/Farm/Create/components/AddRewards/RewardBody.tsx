@@ -1,5 +1,5 @@
 import { Box, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react'
-import { ApiV3Token, TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { useMemo } from 'react'
 import Decimal from 'decimal.js'
 import { useTranslation } from '@pancakeswap/localization'

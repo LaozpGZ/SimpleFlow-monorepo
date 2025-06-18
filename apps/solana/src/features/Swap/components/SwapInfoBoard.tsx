@@ -1,7 +1,7 @@
 import { ChevronDownIcon, IconButton, QuestionHelperV2, Svg, SvgProps, SwapHorizIcon, SwapLoading } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Box, Collapse, Flex, HStack, Skeleton, Text } from '@chakra-ui/react'
-import { TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'

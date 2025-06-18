@@ -1,5 +1,5 @@
 import { Box, Flex, Grid, GridItem, HStack, Highlight, Text } from '@chakra-ui/react'
-import { ApiV3Token, TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import DeleteIcon from '@/icons/misc/DeleteIcon'
 import EditIcon from '@/icons/misc/EditIcon'
 import TokenAvatar from '@/components/TokenAvatar'

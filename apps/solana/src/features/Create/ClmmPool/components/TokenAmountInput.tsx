@@ -1,7 +1,7 @@
 import { Button } from '@pancakeswap/uikit'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { HStack, Text, VStack } from '@chakra-ui/react'
-import { ApiV3PoolInfoConcentratedItem } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 
 import { useTranslation } from '@pancakeswap/localization'
 import BN from 'bn.js'

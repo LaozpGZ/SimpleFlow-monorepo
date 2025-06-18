@@ -1,5 +1,5 @@
 import { Box, Flex, Grid, GridItem, SimpleGrid, Text } from '@chakra-ui/react'
-import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { useMemo } from 'react'
 import { useTranslation } from '@pancakeswap/localization'

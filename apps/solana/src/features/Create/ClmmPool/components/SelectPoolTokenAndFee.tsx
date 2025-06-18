@@ -1,6 +1,6 @@
 import { ArrowDropDownIcon } from '@pancakeswap/uikit'
 import { Box, Flex, HStack, SystemStyleObject, Tag, Text, TextProps, useDisclosure } from '@chakra-ui/react'
-import { ApiClmmConfigInfo, ApiV3Token, PoolFetchType, TokenInfo, solToWSol } from '@raydium-io/raydium-sdk-v2'
+import { ApiClmmConfigInfo, ApiV3Token, PoolFetchType, TokenInfo, solToWSol } from '@pancakeswap/solana-core-sdk'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import { useTranslation } from '@pancakeswap/localization'

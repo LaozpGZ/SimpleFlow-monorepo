@@ -1,7 +1,7 @@
 import { Badge, Box, Button, Flex, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
 import Decimal from 'decimal.js'
 import { useTranslation } from '@pancakeswap/localization'
-import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import ExclaimationTriangle from '@/icons/misc/ExclaimationTriangle'
 import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
 import { colors } from '@/theme/cssVariables'

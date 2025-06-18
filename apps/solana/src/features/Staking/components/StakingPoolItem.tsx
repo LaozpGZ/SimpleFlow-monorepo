@@ -1,5 +1,5 @@
 import { Box, Collapse, HStack, SimpleGrid, Text, Tooltip, VStack, useDisclosure } from '@chakra-ui/react'
-import { ApiStakePool, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiStakePool, ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { useTranslation } from '@pancakeswap/localization'
 import { shallow } from 'zustand/shallow'

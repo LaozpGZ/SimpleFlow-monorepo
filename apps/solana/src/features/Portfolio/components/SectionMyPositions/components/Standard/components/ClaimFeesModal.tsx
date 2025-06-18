@@ -13,7 +13,7 @@ import {
 import Decimal from 'decimal.js'
 import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-import { ApiV3PoolInfoStandardItemCpmm } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoStandardItemCpmm } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 import AmountSlider from '@/components/AmountSlider'

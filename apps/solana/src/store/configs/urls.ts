@@ -1,4 +1,4 @@
-import { API_URLS } from '@raydium-io/raydium-sdk-v2'
+import { API_URLS } from '@pancakeswap/solana-core-sdk'
 
 export const urlConfigs = {
   ...API_URLS,

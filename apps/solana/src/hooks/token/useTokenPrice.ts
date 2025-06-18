@@ -1,4 +1,4 @@
-import { solToWSol, WSOLMint, RAYMint, USDCMint, USDTMint, mSOLMint } from '@raydium-io/raydium-sdk-v2'
+import { solToWSol, WSOLMint, RAYMint, USDCMint, USDTMint, mSOLMint } from '@pancakeswap/solana-core-sdk'
 import { NATIVE_MINT } from '@solana/spl-token-0.4'
 import { PublicKey } from '@solana/web3.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'

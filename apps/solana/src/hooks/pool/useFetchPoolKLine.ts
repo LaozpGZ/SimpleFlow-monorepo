@@ -1,4 +1,4 @@
-import { solToWSol } from '@raydium-io/raydium-sdk-v2'
+import { solToWSol } from '@pancakeswap/solana-core-sdk'
 import { CandlestickData } from 'lightweight-charts'
 import { useMemo } from 'react'
 import useSWRInfinite from 'swr/infinite'

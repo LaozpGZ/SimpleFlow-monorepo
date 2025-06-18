@@ -1,5 +1,5 @@
 import { useMemo, useState, useEffect } from 'react'
-import { ApiV3PoolInfoConcentratedItem, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoConcentratedItem, ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import useClmmBalance, { ClmmDataMap, ClmmPosition } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { useAppStore } from '@/store'

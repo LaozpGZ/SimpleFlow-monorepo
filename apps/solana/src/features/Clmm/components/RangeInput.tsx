@@ -1,4 +1,4 @@
-import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { ReactNode } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { SimpleGrid } from '@chakra-ui/react'

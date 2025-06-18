@@ -1,7 +1,7 @@
 import { Box, Divider } from '@chakra-ui/react'
 import { useHttpLocations } from '@pancakeswap/hooks'
 import { AutoColumn, Row, RowBetween, RowFixed, Text, Toggle, TokenLogo } from '@pancakeswap/uikit'
-import { JupTokenType } from '@raydium-io/raydium-sdk-v2'
+import { JupTokenType } from '@pancakeswap/solana-core-sdk'
 import { ReactNode } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'

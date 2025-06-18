@@ -7,7 +7,7 @@ import {
   ApiV3PoolInfoConcentratedItem,
   U64_IGNORE_RANGE,
   ApiV3Token
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { AccountInfo } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'

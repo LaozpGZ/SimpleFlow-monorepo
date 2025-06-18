@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useMemo } from 'react'
 import { PublicKey, Transaction, VersionedTransaction } from '@solana/web3.js'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
-import { TxVersion, validateAndParsePublicKey, txToBase64 } from '@raydium-io/raydium-sdk-v2'
+import { TxVersion, validateAndParsePublicKey, txToBase64 } from '@pancakeswap/solana-core-sdk'
 import { shallow } from 'zustand/shallow'
 import { parseUserAgent } from 'react-device-detect'
 import { useAppStore, defaultEndpoint } from '@/store/useAppStore'

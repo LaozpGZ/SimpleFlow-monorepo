@@ -17,7 +17,7 @@ import {
   useDisclosure,
   useUpdateEffect
 } from '@chakra-ui/react'
-import { ApiV3Token, FetchPoolParams, PoolFetchType } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token, FetchPoolParams, PoolFetchType } from '@pancakeswap/solana-core-sdk'
 import { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation, Trans } from '@pancakeswap/localization'
 

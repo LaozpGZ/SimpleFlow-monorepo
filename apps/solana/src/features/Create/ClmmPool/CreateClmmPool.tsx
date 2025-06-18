@@ -1,5 +1,5 @@
 import { Box, Flex, Grid, GridItem, HStack, Link, Text, useDisclosure } from '@chakra-ui/react'
-import { ApiClmmConfigInfo, ApiV3Token, solToWSol } from '@raydium-io/raydium-sdk-v2'
+import { ApiClmmConfigInfo, ApiV3Token, solToWSol } from '@pancakeswap/solana-core-sdk'
 import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { shallow } from 'zustand/shallow'

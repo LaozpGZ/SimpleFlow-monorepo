@@ -1,4 +1,4 @@
-import { TokenInfo, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo, ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { PublicKey, Connection, AccountInfo } from '@solana/web3.js'
 import {
   TOKEN_PROGRAM_ID,

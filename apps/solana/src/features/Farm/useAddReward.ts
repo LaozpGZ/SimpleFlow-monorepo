@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState, useRef } from 'react'
-import { TokenInfo, RewardType, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo, RewardType, ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import * as yup from 'yup'
 import { useFormik } from 'formik'
 import Decimal from 'decimal.js'

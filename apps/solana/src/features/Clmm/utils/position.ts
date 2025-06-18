@@ -1,4 +1,4 @@
-import { UserPositionAccount, Price } from '@raydium-io/raydium-sdk-v2'
+import { UserPositionAccount, Price } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 
 export const checkYielding = (tokenPrice: Record<string, Price>, position?: UserPositionAccount) => {

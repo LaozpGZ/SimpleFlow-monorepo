@@ -20,7 +20,7 @@ import {
   TxVersion,
   getTransferAmountFeeV2,
   ClmmLockAddress
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { ammConfigs, PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
 import { PublicKey, VersionedTransaction } from '@solana/web3.js'
 import BN from 'bn.js'

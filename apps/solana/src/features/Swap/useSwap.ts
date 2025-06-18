@@ -1,4 +1,4 @@
-import { solToWSol } from '@raydium-io/raydium-sdk-v2'
+import { solToWSol } from '@pancakeswap/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import { useCallback, useEffect, useMemo, useState } from 'react'

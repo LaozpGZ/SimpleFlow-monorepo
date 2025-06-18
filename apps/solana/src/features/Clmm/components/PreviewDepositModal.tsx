@@ -1,6 +1,6 @@
 import { Button } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { ApiV3PoolInfoConcentratedItem } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import {
   Box,
   Flex,

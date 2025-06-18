@@ -1,7 +1,7 @@
 import { AtomBox, FlexGap } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { VStack, useClipboard } from '@chakra-ui/react'
-import { RAYMint, SOLMint } from '@raydium-io/raydium-sdk-v2'
+import { RAYMint, SOLMint } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'

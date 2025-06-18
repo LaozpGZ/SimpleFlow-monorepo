@@ -1,5 +1,5 @@
 import { Box, Text, Tag, Flex } from '@chakra-ui/react'
-import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { colors } from '@/theme/cssVariables'
 import toApr from '@/utils/numberish/toApr'

@@ -28,7 +28,7 @@ import {
   PoolFetchType,
   TickUtils,
   getLiquidityFromAmounts
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { useEffect, useRef, useState } from 'react'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'

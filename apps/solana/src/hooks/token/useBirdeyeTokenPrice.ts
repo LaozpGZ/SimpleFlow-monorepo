@@ -1,4 +1,4 @@
-import { solToWSol, WSOLMint } from '@raydium-io/raydium-sdk-v2'
+import { solToWSol, WSOLMint } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 import useSWR from 'swr'

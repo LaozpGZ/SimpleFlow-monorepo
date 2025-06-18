@@ -1,7 +1,7 @@
 import { Box, Button, Flex, Link, Grid, GridItem, HStack, Skeleton, Text, useDisclosure } from '@chakra-ui/react'
 import { useState, useCallback, useEffect } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-import { ApiV3PoolInfoStandardItemCpmm, CpmmLockExtInfo } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoStandardItemCpmm, CpmmLockExtInfo } from '@pancakeswap/solana-core-sdk'
 import BN from 'bn.js'
 import { LinkExternal } from '@pancakeswap/uikit'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'

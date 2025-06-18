@@ -1,5 +1,5 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
-import { ApiV3PoolInfoItem } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoItem } from '@pancakeswap/solana-core-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { Desktop, Mobile } from '@/components/MobileDesktop'
 import { QuestionToolTip } from '@/components/QuestionToolTip'

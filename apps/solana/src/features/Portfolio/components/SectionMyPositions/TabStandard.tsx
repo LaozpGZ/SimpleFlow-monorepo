@@ -1,5 +1,5 @@
 import { Button } from '@pancakeswap/uikit'
-import { RAYMint } from '@raydium-io/raydium-sdk-v2'
+import { RAYMint } from '@pancakeswap/solana-core-sdk'
 import { Flex, Text, Link, Skeleton } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import { useMemo } from 'react'

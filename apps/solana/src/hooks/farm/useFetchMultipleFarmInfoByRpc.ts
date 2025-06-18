@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
-import { splAccountLayout } from '@raydium-io/raydium-sdk-v2'
+import { splAccountLayout } from '@pancakeswap/solana-core-sdk'
 import { Connection } from '@solana/web3.js'
 import ToPublicKey from '@/utils/publicKey'
 import { MINUTE_MILLISECONDS } from '@/utils/date'

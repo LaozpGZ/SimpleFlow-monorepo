@@ -1,4 +1,4 @@
-import { TokenInfo, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo, ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { Flex, Text, Box, Button, Modal, ModalBody, ModalContent, ModalOverlay } from '@chakra-ui/react'
 import { useEvent } from '@/hooks/useEvent'

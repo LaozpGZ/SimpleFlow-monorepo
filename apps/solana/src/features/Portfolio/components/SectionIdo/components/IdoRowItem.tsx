@@ -1,4 +1,4 @@
-import { IdoKeysData } from '@raydium-io/raydium-sdk-v2'
+import { IdoKeysData } from '@pancakeswap/solana-core-sdk'
 import { Box, Button, Divider, Flex, Grid, GridItem, HStack, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import Decimal from 'decimal.js'
 import { useTranslation } from '@pancakeswap/localization'

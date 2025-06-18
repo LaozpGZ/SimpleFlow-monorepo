@@ -1,6 +1,6 @@
 import { Box, Grid, GridItem, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react'
 import { ModalBackButton, Text } from '@pancakeswap/uikit'
-import { TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { forwardRef, useCallback, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { useEvent } from '@/hooks/useEvent'

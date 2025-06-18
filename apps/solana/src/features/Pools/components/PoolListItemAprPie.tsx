@@ -1,6 +1,6 @@
 import { Box } from '@chakra-ui/react'
 import { useMemo } from 'react'
-import { eq } from '@raydium-io/raydium-sdk-v2'
+import { eq } from '@pancakeswap/solana-core-sdk'
 import { AprData } from '@/features/Clmm/utils/calApr'
 import { aprColors, emptyAprColor } from './PoolListItemAprLine'
 
@@ -29,6 +29,6 @@ export function PoolListItemAprPie({ aprs, w = 16, h = 16 }: { aprs: AprData; w?
       width={w}
       height={h}
       borderRadius="999px"
-     />
+    />
   )
 }

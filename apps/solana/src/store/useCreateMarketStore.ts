@@ -6,7 +6,7 @@ import {
   LOOKUP_TABLE_CACHE,
   CreatePoolAddress,
   MarketExtInfo
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { PublicKey, Transaction, VersionedTransaction, TransactionMessage, SystemProgram } from '@solana/web3.js'
 import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token-0.4'
 import BN from 'bn.js'

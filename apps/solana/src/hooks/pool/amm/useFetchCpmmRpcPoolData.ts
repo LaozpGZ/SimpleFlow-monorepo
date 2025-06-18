@@ -1,5 +1,5 @@
 import { Connection, PublicKey } from '@solana/web3.js'
-import { CpmmPoolInfoLayout } from '@raydium-io/raydium-sdk-v2'
+import { CpmmPoolInfoLayout } from '@pancakeswap/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import BN from 'bn.js'

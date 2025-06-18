@@ -12,7 +12,7 @@ import {
   RewardInfoV6,
   Structure,
   SplAccount
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'

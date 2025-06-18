@@ -1,4 +1,4 @@
-import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { FormattedRewardInfoV6 } from '@/hooks/farm/type'
 import { FormattedPoolReward } from '@/hooks/pool/type'
 import { parseDateInfo } from '@/utils/date'
@@ -50,7 +50,7 @@ export function getRewardMeta(reward: EditReward) {
   const endTimeText = reward.endTime ? `${endTimeInfo.year}/${endTimeInfo.month}/${endTimeInfo.day}` : undefined
 
   const duration = parseDuration(reward.endTime - reward.openTime)
-  const durationText = `${duration.days  }D${  duration.hours ? ` ${  duration.hours  }H` : ''}`
+  const durationText = `${duration.days}D${duration.hours ? ` ${duration.hours}H` : ''}`
 
   return {
     startTimeText,

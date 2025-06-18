@@ -10,7 +10,7 @@ import {
   AvailabilityCheckAPI3,
   TxVersion,
   TokenInfo
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import { Wallet } from '@solana/wallet-adapter-react'
 import { compare } from 'compare-versions'

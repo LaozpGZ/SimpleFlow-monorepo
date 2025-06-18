@@ -8,7 +8,7 @@ import {
   FormatFarmInfoOutV6,
   RewardInfoV345,
   RewardInfoV6
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 
 export type FarmDecodeData =
   | ReturnType<typeof farmStateV3Layout.decode>

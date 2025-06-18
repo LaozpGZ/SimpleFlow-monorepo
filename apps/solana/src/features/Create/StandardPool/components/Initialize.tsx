@@ -15,7 +15,7 @@ import {
   solToWSol,
   CREATE_CPMM_POOL_PROGRAM,
   ApiV3PoolInfoStandardItemCpmm
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'

@@ -1,5 +1,5 @@
 import { parseUserAgent } from 'react-device-detect'
-import { updateReqHistory } from '@raydium-io/raydium-sdk-v2'
+import { updateReqHistory } from '@pancakeswap/solana-core-sdk'
 import axios from 'axios'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import { isLocal } from '@/utils/common'

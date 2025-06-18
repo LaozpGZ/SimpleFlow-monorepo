@@ -1,4 +1,4 @@
-import { TokenInfo, Price } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo, Price } from '@pancakeswap/solana-core-sdk'
 
 interface Props {
   tokenInput: TokenInfo

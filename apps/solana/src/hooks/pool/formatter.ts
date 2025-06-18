@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
-import { ApiV3PoolInfoItem, TickUtils, ApiV3PoolInfoConcentratedItem } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoItem, TickUtils, ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'
 import { PoolInfo } from '@pancakeswap/solana-clmm-sdk'

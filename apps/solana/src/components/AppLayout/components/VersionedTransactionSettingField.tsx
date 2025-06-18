@@ -1,5 +1,5 @@
 import { Toggle } from '@pancakeswap/uikit'
-import { TxVersion } from '@raydium-io/raydium-sdk-v2'
+import { TxVersion } from '@pancakeswap/solana-core-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { useAppStore } from '@/store/useAppStore'
 import { SettingField } from './SettingField'

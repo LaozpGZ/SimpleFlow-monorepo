@@ -1,5 +1,5 @@
 import { Flex } from '@chakra-ui/react'
-import { TokenAccount } from '@raydium-io/raydium-sdk-v2'
+import { TokenAccount } from '@pancakeswap/solana-core-sdk'
 import { getAssociatedTokenAddressSync } from '@solana/spl-token-0.4'
 
 import Decimal from 'decimal.js'

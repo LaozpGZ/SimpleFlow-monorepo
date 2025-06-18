@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import * as yup from 'yup'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'
-import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
 import { TOKEN_2022_PROGRAM_ID } from '@solana/spl-token-0.4'
 

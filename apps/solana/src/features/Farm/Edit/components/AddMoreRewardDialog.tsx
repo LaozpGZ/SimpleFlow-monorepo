@@ -15,7 +15,7 @@ import {
   VStack,
   useDisclosure
 } from '@chakra-ui/react'
-import { TokenInfo, ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { TokenInfo, ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 
 import dayjs from 'dayjs'

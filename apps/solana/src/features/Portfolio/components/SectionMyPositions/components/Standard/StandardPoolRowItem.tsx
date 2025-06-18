@@ -3,7 +3,7 @@ import { Box, Button, Collapse, Flex, GridItem, HStack, Text, VStack, useDisclos
 import Decimal from 'decimal.js'
 import { useTranslation } from '@pancakeswap/localization'
 import BN from 'bn.js'
-import { ApiV3Token } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import MigrateFromStandardDialog from '@/features/Clmm/MigrateClmmFromStandardDialog/Dialog'
 import { FormattedFarmInfoV6, FarmBalanceInfo } from '@/hooks/farm/type'
 import { FarmPositionInfo } from '@/hooks/portfolio/farm/useFarmPositions'

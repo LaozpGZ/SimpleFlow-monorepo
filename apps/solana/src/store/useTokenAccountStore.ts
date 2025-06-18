@@ -6,7 +6,7 @@ import {
   splAccountLayout,
   getATAAddress,
   TxBuilder
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { PublicKey, KeyedAccountInfo, Commitment, AccountInfo, RpcResponseAndContext, GetProgramAccountsResponse } from '@solana/web3.js'
 import {
   TOKEN_PROGRAM_ID,

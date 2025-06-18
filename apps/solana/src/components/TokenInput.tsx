@@ -11,7 +11,7 @@ import {
   WalletFilledV2Icon
 } from '@pancakeswap/uikit'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
-import { ApiV3Token, SOL_INFO, TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token, SOL_INFO, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { ReactNode, RefObject, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'

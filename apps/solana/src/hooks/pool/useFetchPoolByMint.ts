@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from 'react'
-import { FetchPoolParams, solToWSol, ApiV3PoolInfoItem, PoolFetchType } from '@raydium-io/raydium-sdk-v2'
+import { FetchPoolParams, solToWSol, ApiV3PoolInfoItem, PoolFetchType } from '@pancakeswap/solana-core-sdk'
 import { shallow } from 'zustand/shallow'
 import useSWRInfinite from 'swr/infinite'
 import useSWR, { KeyedMutator } from 'swr'

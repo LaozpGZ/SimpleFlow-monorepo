@@ -1,5 +1,5 @@
 import { useEffect, useState, MouseEvent, useCallback, useMemo } from 'react'
-import { STORAGE_KEY, ResHistory } from '@raydium-io/raydium-sdk-v2'
+import { STORAGE_KEY, ResHistory } from '@pancakeswap/solana-core-sdk'
 import { Flex, Box, Menu, MenuButton, MenuList, MenuItem, Button, Text } from '@chakra-ui/react'
 import { ChevronDown } from 'react-feather'
 import dayjs from 'dayjs'
@@ -13,12 +13,12 @@ export default function Logs() {
   const [width, setWidth] = useState('900px')
 
   useEffect(() => {
-    setWidth(`${window.innerWidth * 0.85  }px`)
+    setWidth(`${window.innerWidth * 0.85}px`)
     const data: ResHistory[] = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
     setSessions(new Set(data.map((log) => log.session)))
     setLogs(data)
 
-    const { cancel } = onWindowSizeChange(() => setWidth(`${window.innerWidth * 0.8  }px`))
+    const { cancel } = onWindowSizeChange(() => setWidth(`${window.innerWidth * 0.8}px`))
     return cancel
   }, [])
 

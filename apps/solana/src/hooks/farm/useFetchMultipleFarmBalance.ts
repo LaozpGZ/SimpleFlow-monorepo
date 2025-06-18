@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
-import { ApiV3Token, getAssociatedLedgerAccount } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3Token, getAssociatedLedgerAccount } from '@pancakeswap/solana-core-sdk'
 import { Connection, PublicKey } from '@solana/web3.js'
 
 import BN from 'bn.js'

@@ -1,4 +1,4 @@
-import { MayFunction, TokenInfo } from '@raydium-io/raydium-sdk-v2'
+import { MayFunction, TokenInfo } from '@pancakeswap/solana-core-sdk'
 
 import { ParsedUrlQuery } from 'querystring'
 import { PoolPageQuery } from '@/features/Pools/Pools'

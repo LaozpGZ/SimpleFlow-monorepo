@@ -11,7 +11,7 @@ import {
   ApiStakePool,
   CreateFarmExtInfo,
   IdoKeysData
-} from '@raydium-io/raydium-sdk-v2'
+} from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import Decimal from 'decimal.js'
 import BN from 'bn.js'

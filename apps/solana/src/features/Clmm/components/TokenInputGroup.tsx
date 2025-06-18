@@ -1,5 +1,5 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react'
-import { ApiV3PoolInfoConcentratedItem, WSOLMint } from '@raydium-io/raydium-sdk-v2'
+import { ApiV3PoolInfoConcentratedItem, WSOLMint } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useEffect } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
