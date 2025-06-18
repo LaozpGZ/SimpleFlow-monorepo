@@ -13,6 +13,7 @@ import {
   useTooltip,
 } from '@pancakeswap/uikit'
 
+import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 import { CurrencyLogo, NumericalInput, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { AutoRow } from 'components/Layout/Row'
@@ -37,6 +38,7 @@ import { useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { keyframes, styled } from 'styled-components'
+import currencyId from 'utils/currencyId'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useAccount } from 'wagmi'
 import ArrowDark from '../../../../public/images/swap/arrow_dark.json' assert { type: 'json' }
@@ -163,8 +165,16 @@ export function TWAPPanel({ limit }: { limit?: boolean }) {
     (isInput: boolean, newCurrency?: Currency) => {
       onCurrencySelection(isInput ? Field.INPUT : Field.OUTPUT, newCurrency)
       warningSwapHandler(newCurrency)
+
+      const oldCurrencyId = isInput ? inputCurrencyId : outputCurrencyId
+      const otherCurrencyId = isInput ? outputCurrencyId : inputCurrencyId
+      const newCurrencyId = newCurrency ? currencyId(newCurrency) : undefined
+      replaceBrowserHistoryMultiple({
+        ...(newCurrencyId === otherCurrencyId && { [isInput ? 'outputCurrency' : 'inputCurrency']: oldCurrencyId }),
+        [isInput ? 'inputCurrency' : 'outputCurrency']: newCurrencyId,
+      })
     },
-    [onCurrencySelection, warningSwapHandler],
+    [onCurrencySelection, warningSwapHandler, inputCurrencyId, outputCurrencyId],
   )
 
   const onSrcTokenSelected = useCallback(

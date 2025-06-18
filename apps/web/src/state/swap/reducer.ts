@@ -1,7 +1,5 @@
-import { createReducer, isAnyOf } from '@reduxjs/toolkit'
+import { createReducer } from '@reduxjs/toolkit'
 import { atomWithReducer } from 'jotai/utils'
-import { CHAIN_QUERY_NAME } from 'config/chains'
-import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 import {
   Field,
   replaceSwapState,
@@ -121,20 +119,6 @@ const reducer = createReducer<SwapState>(initialState, (builder) =>
         state.derivedPairDataById[pairId] = {}
       }
       state.derivedPairDataById[pairId][timeWindow] = pairData
-    })
-    .addMatcher(isAnyOf(replaceSwapState, switchCurrencies, selectCurrency), (state) => {
-      replaceBrowserHistoryMultiple({
-        ...(state.INPUT.currencyId && { inputCurrency: state.INPUT.currencyId }),
-        ...(state.OUTPUT.currencyId && { outputCurrency: state.OUTPUT.currencyId }),
-        ...(state.INPUT.chainId &&
-          CHAIN_QUERY_NAME[state.INPUT.chainId] && {
-            chain: CHAIN_QUERY_NAME[state.INPUT.chainId],
-          }),
-        ...(state.OUTPUT.chainId &&
-          CHAIN_QUERY_NAME[state.OUTPUT.chainId] && {
-            chainOut: CHAIN_QUERY_NAME[state.OUTPUT.chainId],
-          }),
-      })
     }),
 )
 

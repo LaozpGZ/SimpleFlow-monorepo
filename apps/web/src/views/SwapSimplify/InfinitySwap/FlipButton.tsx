@@ -4,6 +4,7 @@ import { CSSProperties, memo, useCallback, useMemo, useRef, useState } from 'rea
 import { AutoColumn, Button, useMatchBreakpoints } from '@pancakeswap/uikit'
 
 import { useTranslation } from '@pancakeswap/localization'
+import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 
 import { AutoRow } from 'components/Layout/Row'
 
@@ -126,6 +127,17 @@ export const FlipButton = memo(function FlipButton({
         }
         return
       }
+
+      replaceBrowserHistoryMultiple({
+        inputCurrency: outputCurrencyId,
+        outputCurrency: inputCurrencyId,
+        ...(inputChainId &&
+          outputChainId &&
+          inputChainId !== outputChainId && {
+            chainOut: CHAIN_QUERY_NAME[inputChainId],
+            chain: CHAIN_QUERY_NAME[outputChainId],
+          }),
+      })
     }
     setIsSwitching(false)
   }, [
