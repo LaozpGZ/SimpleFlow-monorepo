@@ -30,7 +30,7 @@ import { useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useRoutingSettingChanged } from 'state/user/smartRouter'
 import { useCurrencyBalances } from 'state/wallet/hooks'
-import { logGTMClickSwapConfirmEvent, logGTMClickSwapEvent } from 'utils/customGTMEventTracking'
+import { logGTMClickSwapConfirmEvent, logGTMClickSwapEvent, logGTMQuoteQueryEvent } from 'utils/customGTMEventTracking'
 import { warningSeverity } from 'utils/exchange'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckApproval'
 import { computeBridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
@@ -149,7 +149,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   const { t } = useTranslation()
   const chainId = useChainId()
   // form data
-  const { independentField } = useSwapState()
+  const { independentField, typedValue } = useSwapState()
   const [inputCurrency, outputCurrency] = useSwapCurrency()
   const { isExpertMode } = useSwapConfig()
   const { isRecipientEmpty, isRecipientError } = useIsRecipientError()
@@ -350,6 +350,20 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     }
   }, [confirmState, txHash, refreshBalances])
 
+  useEffect(() => {
+    if (tradeError) {
+      logGTMQuoteQueryEvent('fail', {
+        originChainId: inputCurrency?.chainId,
+        destinationChainId: outputCurrency?.chainId,
+        originToken: inputCurrency?.symbol,
+        destinationToken: outputCurrency?.symbol,
+        amount: typedValue,
+        errorMessage: tradeError.message,
+        time: Date.now(),
+      })
+    }
+  }, [tradeError, inputCurrency, outputCurrency, typedValue])
+
   const buttonText = useMemo(() => {
     // NOTE: use if statement for readability
 
@@ -370,8 +384,21 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
     if (priceImpactSeverity > 2) return t('Swap Anyway')
 
+    if (order?.trade?.outputAmount?.greaterThan(BIG_INT_ZERO)) {
+      logGTMQuoteQueryEvent('succ', {
+        originChainId: order?.trade?.inputAmount?.currency?.chainId,
+        destinationChainId: order?.trade?.outputAmount?.currency?.chainId,
+        originToken: order?.trade?.inputAmount?.currency?.symbol,
+        destinationToken: order?.trade?.outputAmount?.currency?.symbol,
+        amount: order?.trade?.inputAmount?.quotient.toString(),
+        amountOut: order?.trade?.outputAmount?.quotient.toString(),
+        time: Date.now(),
+      })
+    }
+
     return t('Swap')
   }, [
+    order,
     isExpertMode,
     isRecipientEmpty,
     isRecipientError,

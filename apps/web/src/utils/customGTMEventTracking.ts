@@ -1,6 +1,5 @@
 import { PoolIds } from '@pancakeswap/ifos'
 import { BetPosition } from '@pancakeswap/prediction'
-import { Currency, TradeType } from '@pancakeswap/swap-sdk-core'
 import { getChainFullName } from 'views/universalFarms/utils'
 
 export enum GTMEvent {
@@ -38,7 +37,8 @@ export enum GTMEvent {
 
   // Quote
   QUOTE_QRY = 'QUOTE_QRY',
-  BRIDGE_QUOTE_QRY = 'BRIDGE_QUOTE_QRY',
+  SWAP_QUOTE_RECEIVED = 'swap_quote_received',
+  SWAP_QUOTE_FAILED = 'swap_quote_failed',
 
   // wallet
   ConnectWallet = 'connectWallet',
@@ -455,49 +455,36 @@ export const logGTMIdoConnectWalletEvent = (preTGE: boolean) => {
 export const logGTMQuoteQueryEvent = (
   type: 'start' | 'succ' | 'fail',
   options: {
-    type: TradeType
-    chain?: number
-    currencyA?: Currency
-    currencyB?: Currency
-    time?: number
-  },
-) => {
-  const { chain, currencyA, currencyB, time } = options
-
-  window?.dataLayer?.push({
-    event: GTMEvent.QUOTE_QRY,
-    action: GTMAction.QuoterQuery,
-    category: GTMCategory.Swap,
-    chain,
-    currencyA: currencyA?.symbol || '',
-    currencyB: currencyB?.symbol || '',
-    type,
-    time,
-  })
-}
-
-export const logGTMBridgeQuoteQueryEvent = (
-  type: 'start' | 'succ' | 'fail',
-  options: {
     originChainId?: number
     destinationChainId?: number
     originToken?: string
     destinationToken?: string
     amount?: string
+    amountOut?: string
     time?: number
+    errorMessage?: string
   },
 ) => {
-  const { originChainId, destinationChainId, originToken, destinationToken, amount, time } = options
+  const { originChainId, destinationChainId, originToken, destinationToken, amount, amountOut, time } = options
+
+  const event = type === 'succ' ? GTMEvent.SWAP_QUOTE_RECEIVED : GTMEvent.SWAP_QUOTE_FAILED
+
+  if (type === 'fail') {
+    console.info('---QuoteFailed---', options)
+  } else {
+    console.info('---QuoteSuccess---', options)
+  }
 
   window?.dataLayer?.push({
-    event: GTMEvent.BRIDGE_QUOTE_QRY,
+    event,
     action: GTMAction.BridgeQuoterQuery,
-    category: GTMCategory.Swap,
-    originChainId,
-    destinationChainId,
-    originToken,
-    destinationToken,
+    category: GTMCategory.CrosschainSwap,
+    fromChain: originChainId,
+    toChain: destinationChainId,
+    fromToken: originToken,
+    toToken: destinationToken,
     amount,
+    amountOut,
     time,
     type,
   })
