@@ -313,8 +313,8 @@ export function useDefaultsFromURLSearch():
 
     if (switchedToFallback) {
       replaceBrowserHistoryMultiple({
-        inputCurrencyId: finalInputCurrencyId,
-        outputCurrencyId: finalOutputCurrencyId,
+        inputCurrency: finalInputCurrencyId,
+        outputCurrency: finalOutputCurrencyId,
         chain: CHAIN_QUERY_NAME[finalInputChainId || chainId],
         chainOut: CHAIN_QUERY_NAME[finalOutputChainId || chainId],
       })
