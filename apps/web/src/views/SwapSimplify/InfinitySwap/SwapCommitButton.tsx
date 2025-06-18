@@ -351,18 +351,54 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   }, [confirmState, txHash, refreshBalances])
 
   useEffect(() => {
-    if (tradeError) {
+    if (!typedValue) return
+
+    if (!disabled && isValid) return
+
+    const errorMsg = tradeError?.message || swapInputError
+
+    if (errorMsg) {
       logGTMQuoteQueryEvent('fail', {
         originChainId: inputCurrency?.chainId,
         destinationChainId: outputCurrency?.chainId,
         originToken: inputCurrency?.symbol,
         destinationToken: outputCurrency?.symbol,
         amount: typedValue,
-        errorMessage: tradeError.message,
+        errorMessage: errorMsg,
         time: Date.now(),
       })
     }
-  }, [tradeError, inputCurrency, outputCurrency, typedValue])
+  }, [tradeError, inputCurrency, outputCurrency, swapInputError, typedValue, disabled, isValid])
+
+  useEffect(() => {
+    // Track quote start when user input amount and no quote result
+    const haveEnoughData = inputCurrency?.chainId && outputCurrency?.chainId && typedValue
+    if (tradeLoading && haveEnoughData && !parsedAmounts[Field.OUTPUT]) {
+      logGTMQuoteQueryEvent('start', {
+        originChainId: inputCurrency?.chainId,
+        destinationChainId: outputCurrency?.chainId,
+        originToken: inputCurrency?.symbol,
+        destinationToken: outputCurrency?.symbol,
+        amount: typedValue,
+        time: Date.now(),
+      })
+    }
+  }, [tradeLoading, inputCurrency, outputCurrency, typedValue, order])
+
+  useEffect(() => {
+    // Track quote success when user input amount and swap is valid
+    if (order?.trade?.outputAmount?.greaterThan(BIG_INT_ZERO) && isValid && !disabled) {
+      logGTMQuoteQueryEvent('succ', {
+        originChainId: order?.trade?.inputAmount?.currency?.chainId,
+        destinationChainId: order?.trade?.outputAmount?.currency?.chainId,
+        originToken: order?.trade?.inputAmount?.currency?.symbol,
+        destinationToken: order?.trade?.outputAmount?.currency?.symbol,
+        amount: order?.trade?.inputAmount?.toExact(),
+        amountOut: order?.trade?.outputAmount?.toExact(),
+        time: Date.now(),
+      })
+    }
+  }, [order, isValid, disabled])
 
   const buttonText = useMemo(() => {
     // NOTE: use if statement for readability
@@ -378,23 +414,12 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     if (swapInputError) return swapInputError
 
     if (tradeLoading) return <Dots>{t('Searching For The Best Price')}</Dots>
+
     if (isBridgeCheckApprovalLoading) return <Dots>{t('Checking for approval')}</Dots>
 
     if (priceImpactSeverity > 3 && !isExpertMode) return t('Price Impact Too High')
 
     if (priceImpactSeverity > 2) return t('Swap Anyway')
-
-    if (order?.trade?.outputAmount?.greaterThan(BIG_INT_ZERO)) {
-      logGTMQuoteQueryEvent('succ', {
-        originChainId: order?.trade?.inputAmount?.currency?.chainId,
-        destinationChainId: order?.trade?.outputAmount?.currency?.chainId,
-        originToken: order?.trade?.inputAmount?.currency?.symbol,
-        destinationToken: order?.trade?.outputAmount?.currency?.symbol,
-        amount: order?.trade?.inputAmount?.quotient.toString(),
-        amountOut: order?.trade?.outputAmount?.quotient.toString(),
-        time: Date.now(),
-      })
-    }
 
     return t('Swap')
   }, [

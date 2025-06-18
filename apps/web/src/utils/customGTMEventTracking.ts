@@ -36,9 +36,9 @@ export enum GTMEvent {
   IdoConnectWallet = 'idoConnectWallet',
 
   // Quote
-  QUOTE_QRY = 'QUOTE_QRY',
-  SWAP_QUOTE_RECEIVED = 'swap_quote_received',
-  SWAP_QUOTE_FAILED = 'swap_quote_failed',
+  SWAP_QUOTE_START = 'swapQuoteStart',
+  SWAP_QUOTE_RECEIVED = 'swapQuoteReceived',
+  SWAP_QUOTE_FAILED = 'swapQuoteFailed',
 
   // wallet
   ConnectWallet = 'connectWallet',
@@ -107,7 +107,6 @@ export enum GTMAction {
 
   // Quote
   QuoterQuery = 'Query price from Quoter',
-  BridgeQuoterQuery = 'Query price from Bridge Quoter',
 
   // Wallet
   ClickWalletConnectButton = 'Click Wallet Connect and Connected', // deprecated
@@ -467,18 +466,27 @@ export const logGTMQuoteQueryEvent = (
 ) => {
   const { originChainId, destinationChainId, originToken, destinationToken, amount, amountOut, time } = options
 
-  const event = type === 'succ' ? GTMEvent.SWAP_QUOTE_RECEIVED : GTMEvent.SWAP_QUOTE_FAILED
+  const event =
+    type === 'succ'
+      ? GTMEvent.SWAP_QUOTE_RECEIVED
+      : type === 'start'
+      ? GTMEvent.SWAP_QUOTE_START
+      : GTMEvent.SWAP_QUOTE_FAILED
 
-  if (type === 'fail') {
-    console.info('---QuoteFailed---', options)
+  if (type === 'start') {
+    console.info('---QuoteStart---', options)
+  } else if (type === 'succ') {
+    console.info('---QuoteSuccess---', options, amountOut)
   } else {
-    console.info('---QuoteSuccess---', options)
+    console.info('---QuoteFailed---', options)
   }
+
+  const isCrossChain = destinationChainId && originChainId !== destinationChainId
 
   window?.dataLayer?.push({
     event,
-    action: GTMAction.BridgeQuoterQuery,
-    category: GTMCategory.CrosschainSwap,
+    action: GTMAction.QuoterQuery,
+    category: isCrossChain ? GTMCategory.CrosschainSwap : GTMCategory.Swap,
     fromChain: originChainId,
     toChain: destinationChainId,
     fromToken: originToken,
