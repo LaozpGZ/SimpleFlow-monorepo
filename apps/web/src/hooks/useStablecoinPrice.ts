@@ -40,19 +40,21 @@ const queryStablecoinPrice = async (currency: Currency, overrideChainId?: number
 interface StableCoinPriceParams {
   currency?: Currency
   chainId?: number
+  enabled?: boolean
 }
 const stableCoinPriceAtom = atomFamily(
   (params: StableCoinPriceParams) => {
     return atom(async () => {
-      if (!params.currency) {
+      const enabled = params.enabled ?? true
+      if (!params.currency || !enabled) {
         return undefined
       }
       return queryStablecoinPrice(params.currency, params.chainId)
     })
   },
   (a, b) => {
-    const hashA = `${a.currency ? getCurrencyAddress(a.currency) : ''}:${a.chainId}`
-    const hashB = `${b.currency ? getCurrencyAddress(b.currency) : ''}:${b.chainId}`
+    const hashA = `${a.currency ? getCurrencyAddress(a.currency) : ''}:${a.chainId}:${a.enabled}`
+    const hashB = `${b.currency ? getCurrencyAddress(b.currency) : ''}:${b.chainId}:${b.enabled}`
     return hashA === hashB
   },
 )
@@ -81,14 +83,15 @@ export function useStablecoinPrice(
     stableCoinPriceAtom({
       currency: currency || undefined,
       chainId,
+      enabled: shouldEnabled,
     }),
   )
 
   const price = useMemo(() => {
-    if (!priceUSD) {
-      return undefined
+    if (isStableCoin) {
+      return new Price(stableCoin, stableCoin, '1', '1')
     }
-    if (!currency || !stableCoin || !shouldEnabled) {
+    if (!priceUSD || !currency || !stableCoin || !shouldEnabled) {
       return undefined
     }
 
