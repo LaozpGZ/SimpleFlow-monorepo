@@ -34,11 +34,7 @@ const queryStablecoinPrice = async (currency: Currency, overrideChainId?: number
   }
   const res = await fetch(`/api/token/price?${params.toString()}`)
   if (!res.ok) {
-    // NOTE: comment this out to avoid prod crash for now.
-    // Fix root cause later.
-    // throw new Error('request failed')
-
-    return undefined
+    throw new Error('request failed')
   }
   const json = await res.json()
   return json.priceUSD as number | undefined
