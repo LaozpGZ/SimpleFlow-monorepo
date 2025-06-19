@@ -41,8 +41,12 @@ export default function AddRewardItem({ isDefaultOpen, index, rewardInfo, tokenF
   })
 
   const onRewardEdit = useEvent((rewardInfo: NewRewardInfo) => {
-    const error = validateReward(rewardInfo)
-    onChange({ ...rewardInfo, error, isValid: !error })
+    // TODO: Temporarily disable validation. Re-enable after integration of token balances
+
+    // const error = validateReward(rewardInfo)
+    // onChange({ ...rewardInfo, error, isValid: !error })
+
+    onChange({ ...rewardInfo, error: undefined, isValid: true })
   })
 
   return (

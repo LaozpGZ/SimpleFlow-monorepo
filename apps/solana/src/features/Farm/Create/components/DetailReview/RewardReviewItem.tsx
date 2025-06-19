@@ -31,10 +31,12 @@ export default function RewardReviewItem({ rewardInfo }: RewardReviewItemProps) 
           gap={4}
           fontWeight={500}
           rounded="md"
-          bg={colors.backgroundLight}
+          bg={colors.cardBg}
+          border="1px solid"
+          borderColor={colors.cardBorder01}
+          borderRadius="20px"
           justifyContent="space-between"
-          px={6}
-          py={3}
+          p={6}
         >
           <RewardItemHeadLabel rewardToken={rewardToken} />
           <AmountInfo rewardInfo={rewardInfo} />
@@ -42,21 +44,12 @@ export default function RewardReviewItem({ rewardInfo }: RewardReviewItemProps) 
         </SimpleGrid>
       </Desktop>
       <Mobile>
-        <Box rounded="md" overflow="hidden">
-          <SimpleGrid
-            gridAutoFlow="column"
-            gridTemplateColumns="1fr 2fr"
-            gap={4}
-            fontWeight={500}
-            bg={colors.backgroundLight}
-            justifyContent="space-between"
-            px={6}
-            py={3}
-          >
+        <Box rounded="md" overflow="hidden" bg={colors.cardBg} border="1px solid" borderColor={colors.cardBorder01} borderRadius="20px">
+          <SimpleGrid gridAutoFlow="column" gridTemplateColumns="1fr 2fr" gap={4} fontWeight={500} justifyContent="space-between" p={6}>
             <RewardItemHeadLabel rewardToken={rewardToken} />
             <AmountInfo rewardInfo={rewardInfo} />
           </SimpleGrid>
-          <HStack bg={colors.backgroundTransparent12} py={2} px={6} justify="center">
+          <HStack p={6} justify="center">
             <DurationInfo startT={startT} endT={endT} duration={duration} />
           </HStack>
         </Box>
@@ -68,7 +61,9 @@ function RewardItemHeadLabel(props: { rewardToken?: ApiV3Token }) {
   return (
     <HStack>
       <TokenAvatar token={props.rewardToken} />
-      <Text fontSize="xl">{props.rewardToken?.symbol}</Text>
+      <Text fontSize="lg" fontWeight={600}>
+        {props.rewardToken?.symbol}
+      </Text>
     </HStack>
   )
 }
@@ -76,10 +71,12 @@ function RewardItemHeadLabel(props: { rewardToken?: ApiV3Token }) {
 function AmountInfo(props: { rewardInfo: NewRewardInfo }) {
   return (
     <Box>
-      <Text>{formatCurrency(props.rewardInfo.amount, { decimalPlaces: 2 })}</Text>
+      <Text fontSize="md" fontWeight={600}>
+        {formatCurrency(props.rewardInfo.amount, { decimalPlaces: 2 })}
+      </Text>
       <HStack fontSize="sm">
-        <Text color={colors.textSecondary}>{formatCurrency(props.rewardInfo.perWeek, { decimalPlaces: 2 })}</Text>
-        <Text color={colors.textTertiary}>/week</Text>
+        <Text color={colors.textSubtle}>{formatCurrency(props.rewardInfo.perWeek, { decimalPlaces: 2 })}</Text>
+        <Text color={colors.textSubtle}>/week</Text>
       </HStack>
     </Box>
   )
@@ -92,7 +89,7 @@ function DurationInfo(props: { startT?: string; endT?: string; duration?: string
 
       {/* divider */}
       <Box fontSize="sm" position="relative">
-        <Text position="absolute" top={-2} left="50%" transform="translateX(-50%)" color={colors.textSecondary} whiteSpace="nowrap">
+        <Text position="absolute" top={-2} left="50%" transform="translateX(-50%)" color={colors.textSubtle} whiteSpace="nowrap">
           {props.duration}
         </Text>
         <Box height="1.5px" width={12} bg={colors.textTertiary} my={4} />
@@ -100,7 +97,7 @@ function DurationInfo(props: { startT?: string; endT?: string; duration?: string
 
       <HStack>
         <Text>{props.endT}</Text>
-        <Text fontSize="sm" color={colors.textSecondary}>
+        <Text fontSize="sm" color={colors.textSubtle}>
           (UTC)
         </Text>
       </HStack>

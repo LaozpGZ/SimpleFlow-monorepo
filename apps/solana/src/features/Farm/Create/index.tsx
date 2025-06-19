@@ -400,7 +400,7 @@ export default function CreateFarm() {
           </Flex>
         ) : (
           <Box>
-            <Text w="fit-content" color={colors.textSecondary} fontWeight="500" fontSize="xl">
+            <Text w="fit-content" color={colors.textSecondary} fontWeight="600" fontSize="xl">
               {t('Review Farm Detail')}
             </Text>
           </Box>

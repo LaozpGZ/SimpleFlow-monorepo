@@ -57,7 +57,7 @@ export function CreatePoolEntryDialog({
         to = '/clmm/create-pool'
         break
       case 'standard-farm':
-        to = '/liquidity/create-farm'
+        to = '/farms/create'
         break
       case 'clmm-lock':
         to = '/clmm/lock'
@@ -65,6 +65,7 @@ export function CreatePoolEntryDialog({
       case 'cpmm-lock':
         to = '/liquidity/lock'
         break
+
       default:
         break
     }
@@ -103,8 +104,8 @@ function CreatePoolEntryModal({ isOpen, onClose, onConfirm, children }: CreatePo
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent gap="24px">
-        <ModalHeader py="24px" fontSize="16px" fontWeight={600}>
+      <ModalContent gap="24px" borderRadius="24px">
+        <ModalHeader pt="24px" fontSize="lg" fontWeight={600}>
           {t('I want to...')}
           <ModalCloseButton />
         </ModalHeader>
@@ -163,6 +164,8 @@ function CreatePoolEntryMobileDrawer({
 export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarget; onChange: (val: CreateTarget) => void }) {
   const { t } = useTranslation()
   const isCreatePool = ['concentrated-liquidity', 'standard-amm', 'legacy-amm'].includes(type)
+  // const isCreateFarm = type === 'standard-farm'
+
   return (
     <Flex direction="column" gap={4}>
       <CreateBlock
@@ -211,8 +214,28 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
               )
             : undefined
         }
+        // selected={isCreatePool}
         onClick={() => onChange('concentrated-liquidity')}
       />
+      {/* <CreateBlock
+        title={t('Create Farm')}
+        description=""
+        renderPoolType={
+          isCreateFarm
+            ? () => (
+                <>
+                  <Stack flexDirection={['column']} mt={2} gap={5}>
+                    <Text whiteSpace="nowrap" fontSize="md" fontWeight={500} color={colors.textSubtle}>
+                      {t('Create a farm for any live pool')}
+                    </Text>
+                  </Stack>
+                </>
+              )
+            : undefined
+        }
+        selected={isCreateFarm}
+        onClick={() => onChange('standard-farm')}
+      /> */}
     </Flex>
   )
 }
@@ -224,30 +247,49 @@ function CreateBlock(props: {
   detailLinkUrl?: string
   renderPoolType?: () => React.ReactNode
 }) {
+  const parentRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
+
+  const [height, setHeight] = useState(contentRef.current?.scrollHeight)
+
+  useEffect(() => {
+    const el = contentRef.current
+    if (el) {
+      setHeight(el.scrollHeight + 32)
+    }
+  }, [props.selected, props.renderPoolType])
+
   return (
     <Box
-      backgroundColor={colors.inputBg}
+      backgroundColor={props.selected ? colors.inputBg : colors.cardSecondary}
       p={4}
       borderRadius="3xl"
       position="relative"
       cursor="pointer"
       borderWidth="1px"
-      borderColor={colors.secondary}
+      borderColor={props.selected ? colors.secondary : colors.cardBorder01}
       borderStyle="solid"
       onClick={props.onClick}
+      ref={parentRef}
+      transition="all 0.3s ease-out"
+      willChange="height"
+      overflow="hidden"
+      style={{ height }}
     >
-      <Flex justify="space-between">
-        <Text fontSize="14px" fontWeight="600">
-          {props.title}
-        </Text>
-        {props.selected && <CircleCheck width={16} height={16} fill={colors.secondary} />}
-      </Flex>
+      <Box ref={contentRef}>
+        <Flex justify="space-between">
+          <Text fontSize="md" fontWeight="600">
+            {props.title}
+          </Text>
+          {props.selected && <CircleCheck width={16} height={16} fill={colors.secondary} />}
+        </Flex>
 
-      <Box color={props.selected ? colors.textSecondary : colors.textTertiary} fontSize="sm">
-        {props.description}
+        <Box color={props.selected ? colors.textSecondary : colors.textTertiary} fontSize="sm">
+          {props.description}
+        </Box>
+
+        {props.renderPoolType && <Box mt={2}>{props.renderPoolType()}</Box>}
       </Box>
-
-      {props.renderPoolType && <Box mt={2}>{props.renderPoolType()}</Box>}
     </Box>
   )
 }
@@ -288,7 +330,7 @@ function PoolTypeItem({
       ref={domRef}
       flexGrow={1}
       color={isActive ? colors.textPrimary : colors.textSubtle}
-      bg={isActive ? colors.background : 'transparent'}
+      bg={isActive ? colors.backgroundAlt : 'transparent'}
       px={4}
       py={2}
       rounded="2xl"
