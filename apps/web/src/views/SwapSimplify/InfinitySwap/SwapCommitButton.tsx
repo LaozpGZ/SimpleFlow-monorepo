@@ -263,9 +263,17 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
   const onConfirm = useCallback(() => {
     beforeCommit?.()
-    logGTMClickSwapConfirmEvent(isBridgeOrder(order))
+    logGTMClickSwapConfirmEvent({
+      fromChain: order?.trade?.inputAmount?.currency?.chainId,
+      toChain: order?.trade?.outputAmount?.currency?.chainId,
+      fromToken: order?.trade?.inputAmount?.currency?.symbol,
+      toToken: order?.trade?.outputAmount?.currency?.symbol,
+      amount: order?.trade?.inputAmount?.toExact(),
+      amountOut: order?.trade?.outputAmount?.toExact(),
+      priceImpact: priceImpactSeverity,
+    })
     callToAction()
-  }, [beforeCommit, callToAction, order])
+  }, [beforeCommit, callToAction, priceImpactSeverity, order])
 
   // modals
   const onSettingModalDismiss = useCallback(() => {
@@ -321,8 +329,16 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
     openConfirmSwapModal()
 
-    logGTMClickSwapEvent(isBridgeOrder(order))
-  }, [isExpertMode, onConfirm, openConfirmSwapModal, resetState, order])
+    logGTMClickSwapEvent({
+      fromChain: order?.trade?.inputAmount?.currency?.chainId,
+      toChain: order?.trade?.outputAmount?.currency?.chainId,
+      fromToken: order?.trade?.inputAmount?.currency?.symbol,
+      toToken: order?.trade?.outputAmount?.currency?.symbol,
+      amount: order?.trade?.inputAmount?.toExact(),
+      amountOut: order?.trade?.outputAmount?.toExact(),
+      priceImpact: priceImpactSeverity,
+    })
+  }, [isExpertMode, onConfirm, openConfirmSwapModal, resetState, order, priceImpactSeverity])
 
   useEffect(() => {
     if (indirectlyOpenConfirmModalState) {

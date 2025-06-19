@@ -57,12 +57,11 @@ export const useQuoteTrackingStateMachine = ({
       // Only log start if we haven't started yet
       if (stateRef.current === QuoteState.IDLE) {
         logGTMQuoteQueryEvent('start', {
-          originChainId: inputCurrency?.chainId,
-          destinationChainId: outputCurrency?.chainId,
-          originToken: inputCurrency?.symbol,
-          destinationToken: outputCurrency?.symbol,
+          fromChain: inputCurrency?.chainId,
+          toChain: outputCurrency?.chainId,
+          fromToken: inputCurrency?.symbol,
+          toToken: outputCurrency?.symbol,
           amount: typedValue,
-          time: Date.now(),
         })
 
         // Transition to STARTED after logging start
@@ -81,13 +80,12 @@ export const useQuoteTrackingStateMachine = ({
     ) {
       // Only log success if we have started a quote session
       logGTMQuoteQueryEvent('succ', {
-        originChainId: order?.trade?.inputAmount?.currency?.chainId,
-        destinationChainId: order?.trade?.outputAmount?.currency?.chainId,
-        originToken: order?.trade?.inputAmount?.currency?.symbol,
-        destinationToken: order?.trade?.outputAmount?.currency?.symbol,
+        fromChain: order?.trade?.inputAmount?.currency?.chainId,
+        toChain: order?.trade?.outputAmount?.currency?.chainId,
+        fromToken: order?.trade?.inputAmount?.currency?.symbol,
+        toToken: order?.trade?.outputAmount?.currency?.symbol,
         amount: order?.trade?.inputAmount?.toExact(),
         amountOut: order?.trade?.outputAmount?.toExact(),
-        time: Date.now(),
       })
 
       // Transition to COMPLETED after logging success
@@ -107,13 +105,12 @@ export const useQuoteTrackingStateMachine = ({
 
     if (errorMsg) {
       logGTMQuoteQueryEvent('fail', {
-        originChainId: inputCurrency?.chainId,
-        destinationChainId: outputCurrency?.chainId,
-        originToken: inputCurrency?.symbol,
-        destinationToken: outputCurrency?.symbol,
+        fromChain: inputCurrency?.chainId,
+        toChain: outputCurrency?.chainId,
+        fromToken: inputCurrency?.symbol,
+        toToken: outputCurrency?.symbol,
         amount: typedValue,
         errorMessage: errorMsg,
-        time: Date.now(),
       })
 
       // Transition to COMPLETED after logging fail
