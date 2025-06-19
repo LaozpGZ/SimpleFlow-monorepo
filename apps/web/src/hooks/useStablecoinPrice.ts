@@ -2,6 +2,7 @@ import { ChainId } from '@pancakeswap/chains'
 import { Currency, getCurrencyAddress, Price } from '@pancakeswap/sdk'
 import { STABLE_COIN } from '@pancakeswap/tokens'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
+import { SLOW_INTERVAL } from 'config/constants'
 import { useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
@@ -42,6 +43,7 @@ interface StableCoinPriceParams {
   currency?: Currency
   chainId?: number
   enabled?: boolean
+  version: number
 }
 const stableCoinPriceAtom = atomFamily(
   (params: StableCoinPriceParams) => {
@@ -54,8 +56,8 @@ const stableCoinPriceAtom = atomFamily(
     })
   },
   (a, b) => {
-    const hashA = `${a.currency ? getCurrencyAddress(a.currency) : ''}:${a.chainId}:${a.enabled}`
-    const hashB = `${b.currency ? getCurrencyAddress(b.currency) : ''}:${b.chainId}:${b.enabled}`
+    const hashA = `${a.currency ? getCurrencyAddress(a.currency) : ''}:${a.chainId}:${a.enabled}:${a.version}`
+    const hashB = `${b.currency ? getCurrencyAddress(b.currency) : ''}:${b.chainId}:${b.enabled}:${b.version}`
     return hashA === hashB
   },
 )
@@ -80,6 +82,7 @@ export function useStablecoinPrice(
       currency: currency || undefined,
       chainId,
       enabled,
+      version: Date.now() % SLOW_INTERVAL,
     }),
   )
 
