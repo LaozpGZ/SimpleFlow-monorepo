@@ -1,9 +1,12 @@
 import { isStableFarm } from '@pancakeswap/farms'
 import { useCurrency } from 'hooks/Tokens'
+import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { useFarmV2PublicAPI } from 'state/farms/hooks'
 import { useFarmsV3Public } from 'state/farmsV3/hooks'
+import { isAddressEqual } from 'utils'
+import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import AddLiquidityV2FormProvider from 'views/AddLiquidity/AddLiquidityV2FormProvider'
 import { AddLiquidityV3Layout, UniversalAddLiquidity } from 'views/AddLiquidityV3'
@@ -11,8 +14,6 @@ import LiquidityFormProvider from 'views/AddLiquidityV3/formViews/V3FormView/for
 import { useCurrencyParams } from 'views/AddLiquidityV3/hooks/useCurrencyParams'
 import { SELECTOR_TYPE } from 'views/AddLiquidityV3/types'
 import { PageWithoutFAQ } from 'views/Page'
-import dynamic from 'next/dynamic'
-import { isAddressEqual } from 'utils'
 
 const AddLiquidityPage = () => {
   const router = useRouter()
@@ -89,11 +90,7 @@ const AddLiquidityPage = () => {
   )
 }
 
-AddLiquidityPage.chains = CHAIN_IDS
-AddLiquidityPage.screen = true
-AddLiquidityPage.Layout = PageWithoutFAQ
-
-const Page = dynamic(() => Promise.resolve(AddLiquidityPage), { ssr: false })
+const Page = dynamic(() => Promise.resolve(AddLiquidityPage), { ssr: false }) as NextPageWithLayout
 
 Page.chains = CHAIN_IDS
 Page.screen = true

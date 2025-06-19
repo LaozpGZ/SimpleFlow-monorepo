@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 
 const RemoveLiquidityView = dynamic(
@@ -24,7 +25,7 @@ const RemoveLiquidityPage = () => {
   return <RemoveLiquidityView />
 }
 
-const Page = dynamic(() => Promise.resolve(RemoveLiquidityPage), { ssr: false })
+const Page = dynamic(() => Promise.resolve(RemoveLiquidityPage), { ssr: false }) as NextPageWithLayout
 
 Page.chains = CHAIN_IDS
 Page.screen = true

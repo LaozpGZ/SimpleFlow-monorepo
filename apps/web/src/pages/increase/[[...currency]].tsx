@@ -5,6 +5,7 @@ import useNativeCurrency from 'hooks/useNativeCurrency'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import IncreaseLiquidityV3 from 'views/AddLiquidityV3/IncreaseLiquidityV3'
 import LiquidityFormProvider from 'views/AddLiquidityV3/formViews/V3FormView/form/LiquidityFormProvider'
@@ -53,13 +54,9 @@ const IncreaseLiquidityPage = () => {
     </LiquidityFormProvider>
   )
 }
-
-IncreaseLiquidityPage.chains = CHAIN_IDS
-IncreaseLiquidityPage.screen = true
-
 const OLD_PATH_STRUCTURE = /^(0x[a-fA-F0-9]{40}|BNB)-(0x[a-fA-F0-9]{40}|BNB)$/
 
-const Page = dynamic(() => Promise.resolve(IncreaseLiquidityPage), { ssr: false })
+const Page = dynamic(() => Promise.resolve(IncreaseLiquidityPage), { ssr: false }) as NextPageWithLayout
 
 Page.chains = CHAIN_IDS
 Page.screen = true

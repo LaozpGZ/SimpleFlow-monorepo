@@ -2,6 +2,7 @@ import { useCurrency } from 'hooks/Tokens'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect } from 'react'
+import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import RemoveLiquidity, { RemoveLiquidityV2Layout } from 'views/RemoveLiquidity'
 import RemoveLiquidityV2FormProvider from 'views/RemoveLiquidity/RemoveLiquidityV2FormProvider'
@@ -52,12 +53,9 @@ const RemoveLiquidityPage = () => {
   )
 }
 
-RemoveLiquidityPage.chains = CHAIN_IDS
-RemoveLiquidityPage.screen = true
-
 const OLD_PATH_STRUCTURE = /^(0x[a-fA-F0-9]{40})-(0x[a-fA-F0-9]{40})$/
 
-const Page = dynamic(() => Promise.resolve(RemoveLiquidityPage), { ssr: false })
+const Page = dynamic(() => Promise.resolve(RemoveLiquidityPage), { ssr: false }) as NextPageWithLayout
 
 Page.chains = CHAIN_IDS
 Page.screen = true
