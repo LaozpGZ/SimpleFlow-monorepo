@@ -73,24 +73,17 @@ export function useStablecoinPrice(
   const isCake = Boolean(chainId && currency && CAKE[chainId] && currency.wrapped.equals(CAKE[chainId]))
   const stableCoin = chainId && chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
 
-  const isStableCoin = currency && stableCoin && currency.wrapped.equals(stableCoin)
-
-  const shouldEnabled = Boolean(
-    currency && stableCoin && enabled && currentChainId === chainId && !isCake && !isStableCoin,
-  )
+  const shouldEnabled = Boolean(currency && enabled && currentChainId === chainId && !isCake)
 
   const priceUSD = useAtomValue(
     stableCoinPriceAtom({
       currency: currency || undefined,
       chainId,
-      enabled: shouldEnabled,
+      enabled,
     }),
   )
 
   const price = useMemo(() => {
-    if (isStableCoin) {
-      return new Price(stableCoin, stableCoin, '1', '1')
-    }
     if (!priceUSD || !currency || !stableCoin || !shouldEnabled) {
       return undefined
     }
