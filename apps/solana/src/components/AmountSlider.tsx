@@ -48,26 +48,26 @@ export default function AmountSlider({
     borderRadius: '8px',
     disabled: isDisabled
   }
-  const [percent, setPercent] = useSyncSignal({
+  /* const [percent, setPercent] = useSyncSignal({
     outsideValue: inputPercent ?? 0,
     onChange: (val) => {
       onChange?.(val)
     }
-  })
+  }) */
 
-  const [hotPercent, setHotPercent] = useState(percent)
+  // const [hotPercent, setHotPercent] = useState(percent)
 
-  useEffect(() => {
+  /* useEffect(() => {
     onHotChange?.(hotPercent)
-  }, [hotPercent, onHotChange])
+  }, [hotPercent, onHotChange]) */
 
-  useEffect(() => {
+  /* useEffect(() => {
     setHotPercent?.(inputPercent)
-  }, [inputPercent])
+  }, [inputPercent]) */
 
-  useImperativeHandle(actionRef, () => ({
+  /* useImperativeHandle(actionRef, () => ({
     changeValue: setHotPercent
-  }))
+  })) */
 
   return (
     <PanelCard bg={colors.background} gap={2} px="16px" py="12px" {...restBoxProps}>
@@ -79,7 +79,7 @@ export default function AmountSlider({
             </Text>
           )}
           <Text color={colors.textPrimary} fontSize={sizes.percentValueText} fontWeight={600}>
-            {toPercentString(hotPercent, { decimals: 0, alreadyPercented: true })}
+            {toPercentString(inputPercent, { decimals: 0, alreadyPercented: true })}
           </Text>
         </HStack>
 
@@ -92,8 +92,8 @@ export default function AmountSlider({
               variant="primary60"
               size="xs"
               onClick={() => {
-                setHotPercent(percent)
-                setPercent(percent)
+                // setHotPercent(percent)
+                onChange?.(percent)
               }}
             >
               {percent}%
@@ -107,9 +107,9 @@ export default function AmountSlider({
           disabled={isDisabled}
           min={0}
           max={100}
-          value={hotPercent}
+          value={inputPercent}
           onValueChanged={(percent_) => {
-            setHotPercent(percent_)
+            onHotChange?.(percent_)
           }}
         />
       </Box>

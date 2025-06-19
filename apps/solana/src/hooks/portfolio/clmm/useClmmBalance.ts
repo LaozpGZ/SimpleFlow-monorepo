@@ -99,7 +99,6 @@ export default function useClmmBalance({
     const { tokenMap } = useTokenStore.getState()
     return tokenAccountRawInfos.filter((acc) => acc.accountInfo.amount.eq(new BN(1)) && !tokenMap.has(acc.accountInfo.mint.toBase58()))
   }, [tokenAccountRawInfos])
-  console.debug('debug useClmmBalance balanceMints', balanceMints)
 
   const allLockMints = useMemo(
     () => [],

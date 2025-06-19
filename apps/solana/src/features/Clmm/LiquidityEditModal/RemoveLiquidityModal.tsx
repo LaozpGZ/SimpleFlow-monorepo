@@ -1,18 +1,5 @@
 import { Button, Checkbox, ModalV2, MotionModal } from '@pancakeswap/uikit'
-import {
-  Collapse,
-  Flex,
-  HStack,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  Text,
-  VStack
-} from '@chakra-ui/react'
+import { Collapse, Flex, HStack, Text, VStack } from '@chakra-ui/react'
 import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { useCallback, useEffect, useRef, useState, ChangeEvent, useMemo } from 'react'
@@ -159,8 +146,8 @@ export default function RemoveLiquidityModal({
 
   const handlePercentChange = useCallback(
     (val: number) => {
-      setPercent(val)
-      debounceCalculate(val / 100)
+      setPercent(Math.ceil(val))
+      debounceCalculate(Math.ceil(val) / 100)
     },
     [debounceCalculate]
   )
@@ -276,6 +263,7 @@ export default function RemoveLiquidityModal({
               actionRef={sliderRef}
               percent={percent}
               onChange={handlePercentChange}
+              onHotChange={handlePercentChange}
               isDisabled={position.liquidity.isZero()}
             />
             <Flex align="center" justify={closePositionOpen ? 'space-between' : 'flex-end'} gap={3}>
@@ -379,7 +367,7 @@ export default function RemoveLiquidityModal({
             onClick={handleConfirm}
           >
             {sending
-              ? `${t(position.liquidity.isZero() ? 'clmm.close_position' : 'liquidity.withdraw_liquidity')}...`
+              ? `${t(position.liquidity.isZero() ? 'Close Position' : 'Withdraw Liquidity')}...`
               : featureDisabled
               ? t('Disabled')
               : position.liquidity.isZero()
