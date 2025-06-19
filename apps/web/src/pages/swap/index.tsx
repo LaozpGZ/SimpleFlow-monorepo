@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import SwapLayout from 'views/Swap/SwapLayout'
+import SwapSimplify from 'views/SwapSimplify'
 
 const StyledSkeleton = styled(Skeleton)`
   background: ${({ theme }) => theme.colors.backgroundBubblegum};
@@ -39,19 +40,19 @@ const SwapFallback = () => {
   )
 }
 
-const Swap = () => {
+const View = () => {
   const { isMobile } = useMatchBreakpoints()
 
   return (
     <SwapLayout>
       <Container isMobile={isMobile}>
-        <Swap />
+        <SwapSimplify />
       </Container>
     </SwapLayout>
   )
 }
 
-const SwapPage = dynamic(() => Promise.resolve(Swap), {
+const SwapPage = dynamic(() => Promise.resolve(View), {
   ssr: false,
   loading: () => <SwapFallback />,
 }) as NextPageWithLayout
