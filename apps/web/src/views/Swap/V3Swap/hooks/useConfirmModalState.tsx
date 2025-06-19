@@ -33,7 +33,6 @@ import {
   createWalletClient,
   custom,
   erc20Abi,
-  hexToBigInt,
 } from 'viem'
 import { eip5792Actions } from 'viem/experimental'
 import { useWalletType } from 'views/Mev/hooks'
@@ -56,7 +55,7 @@ import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfi
 import { Permit2Schema } from 'views/Swap/Bridge/types'
 import { computeBridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { computeTradePriceBreakdown } from '../utils/exchange'
-import { isZero } from '../utils/isZero'
+import { BatchCall, getBatchedTransaction as getBatchedTransactionHelper } from './batchHelper'
 import { eip5792UserRejectUpgradeError, userRejectedError } from './useSendSwapTransaction'
 import { useSwapCallback } from './useSwapCallback'
 
@@ -65,12 +64,6 @@ export interface ConfirmAction {
   action: (nextStep?: ConfirmModalState) => Promise<void>
   showIndicator: boolean
   getCalldata?: <T = Calldata>() => T
-}
-
-interface Call {
-  to: Address
-  value: bigint
-  data: Hex
 }
 
 const getTokenAllowance = ({
@@ -822,66 +815,21 @@ export const useConfirmModalState = (
   const performEip5792Lock = useRef(false)
 
   const getBatchedTransaction = useCallback(
-    (steps: ConfirmModalState[]) => {
-      const calls: Call[] = []
-
-      for (const step of steps) {
-        const action = actions[step]
-        switch (step) {
-          case ConfirmModalState.APPROVING_TOKEN:
-            if (amountToApprove?.currency.isToken && action.getCalldata) {
-              const permitData = action.getCalldata()
-              if (permitData) {
-                calls.push({
-                  to: amountToApprove.currency.address as Address,
-                  value: 0n,
-                  data: permitData.calldata,
-                })
-              }
-            }
-            break
-          case ConfirmModalState.PERMITTING: {
-            if (action.getCalldata) {
-              const permit2Address = getPermit2Address(chainId)
-              const permitData = action.getCalldata()
-              if (permitData && permit2Address) {
-                calls.push({
-                  to: permit2Address,
-                  value: 0n,
-                  data: permitData.calldata,
-                })
-              }
-            }
-            break
-          }
-          case ConfirmModalState.PENDING_CONFIRMATION:
-            if (isClassicOrder(order) && action.getCalldata) {
-              let swapData = action.getCalldata<Calldata[]>()
-              if (!Array.isArray(swapData)) {
-                swapData = [swapData]
-              }
-              if (swapData) {
-                calls.push(
-                  ...swapData.map((d) => ({
-                    to: d.address,
-                    value: !d.value || isZero(d.value) ? 0n : hexToBigInt(d.value),
-                    data: d.calldata,
-                  })),
-                )
-              }
-            }
-            break
-          default:
-            break
-        }
-      }
-      return calls
-    },
-    [actions, amountToApprove?.currency.address, amountToApprove?.currency.isToken, chainId, order],
+    (steps: ConfirmModalState[]) =>
+      getBatchedTransactionHelper(steps, actions, chainId, amountToApprove, spender, order),
+    [
+      actions,
+      amountToApprove?.currency.address,
+      amountToApprove?.currency.isToken,
+      amountToApprove?.quotient,
+      chainId,
+      order,
+      spender,
+    ],
   )
 
   const sendBatchedTransaction = useCallback(
-    async (calls: Call[]) => {
+    async (calls: BatchCall[]) => {
       if (!walletClient?.transport || !spender) {
         console.error('Missing required parameters')
         return null
