@@ -82,7 +82,7 @@ export function useStablecoinPrice(
       currency: currency || undefined,
       chainId,
       enabled,
-      version: Date.now() % SLOW_INTERVAL,
+      version: Math.floor(Date.now() / SLOW_INTERVAL),
     }),
   )
 
