@@ -11,6 +11,7 @@ import LiquidityFormProvider from 'views/AddLiquidityV3/formViews/V3FormView/for
 import { useCurrencyParams } from 'views/AddLiquidityV3/hooks/useCurrencyParams'
 import { SELECTOR_TYPE } from 'views/AddLiquidityV3/types'
 import { PageWithoutFAQ } from 'views/Page'
+import dynamic from 'next/dynamic'
 import { isAddressEqual } from 'utils'
 
 const AddLiquidityPage = () => {
@@ -92,4 +93,10 @@ AddLiquidityPage.chains = CHAIN_IDS
 AddLiquidityPage.screen = true
 AddLiquidityPage.Layout = PageWithoutFAQ
 
-export default AddLiquidityPage
+const Page = dynamic(() => Promise.resolve(AddLiquidityPage), { ssr: false })
+
+Page.chains = CHAIN_IDS
+Page.screen = true
+Page.Layout = PageWithoutFAQ
+
+export default Page
