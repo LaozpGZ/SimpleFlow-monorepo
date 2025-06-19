@@ -27,4 +27,15 @@ export const styles = {
   //     fontWeight: '300'
   //   }
   // }
+  global: {
+    'iframe[src*="moongate"]': {
+      top: '0 !important',
+      right: '0 !important'
+    },
+    '@media (min-width: 1024px)': {
+      'iframe[src*="moongate"]': {
+        maxWidth: '400px'
+      }
+    }
+  }
 }
