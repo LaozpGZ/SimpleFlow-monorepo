@@ -73,7 +73,7 @@ export const handleCurrencySelectFn = async ({
 }: HandleCurrencySelectDeps): Promise<void> => {
   const isInput = field === Field.INPUT
 
-  if (isInput && canSwitch) {
+  if (isInput && canSwitch && newCurrency.chainId !== inputChainId) {
     const result = await switchNetworkAsync(newCurrency.chainId, true)
     if (result !== 'error') {
       router.replace(
