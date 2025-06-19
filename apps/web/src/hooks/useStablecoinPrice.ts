@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { Currency, getCurrencyAddress, Price } from '@pancakeswap/sdk'
-import { CAKE, STABLE_COIN } from '@pancakeswap/tokens'
+import { STABLE_COIN } from '@pancakeswap/tokens'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
 import { atom, useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
@@ -70,10 +70,9 @@ export function useStablecoinPrice(
   const chainId = currency?.chainId || activeChainId
   const { enabled, hideIfPriceImpactTooHigh } = { ...DEFAULT_CONFIG, ...config }
 
-  const isCake = Boolean(chainId && currency && CAKE[chainId] && currency.wrapped.equals(CAKE[chainId]))
   const stableCoin = chainId && chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
 
-  const shouldEnabled = Boolean(currency && enabled && currentChainId === chainId && !isCake)
+  const shouldEnabled = Boolean(currency && enabled && currentChainId === chainId)
 
   const priceUSD = useAtomValue(
     stableCoinPriceAtom({
