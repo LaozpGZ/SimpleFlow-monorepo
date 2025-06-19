@@ -932,7 +932,21 @@ export const useClmmStore = createStore<ClmmState>(
       if (!raydium || !publicKey) return ''
       const { execute } = await raydium.clmm.initRewards({
         poolInfo,
-        rewardInfos: rewardInfos.map((r) => ({ ...r, mint: solToWSolToken(r.mint) })),
+        poolKeys: {
+          mintA: poolInfo.mintA,
+          mintB: poolInfo.mintB,
+          // programId: poolInfo.programId || PancakeClmmProgramId,
+          config: poolInfo.config,
+          vault: (poolInfo as any).vault,
+          id: poolInfo.id,
+          programId: poolInfo.programId,
+          openTime: '1723037622'
+        } as any,
+        rewardInfos: rewardInfos.map((r) => ({
+          ...r,
+          mint: solToWSolToken(r.mint),
+          programId: PancakeClmmProgramId['mainnet-beta']
+        })),
         ownerInfo: {
           useSOLBalance: true
         },
