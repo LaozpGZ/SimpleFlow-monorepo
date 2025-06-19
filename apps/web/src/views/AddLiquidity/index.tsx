@@ -177,7 +177,7 @@ export default function AddLiquidity({
 
   const routerContract = useRouterContract()
 
-  async function onAdd() {
+  const onAdd = useCallback(async () => {
     logGTMClickAddLiquidityConfirmEvent()
     if (!chainId || !account || !routerContract || !walletClient) return
 
@@ -277,7 +277,25 @@ export default function AddLiquidity({
           txHash: undefined,
         })
       })
-  }
+  }, [
+    account,
+    addPair,
+    addTransaction,
+    allowedSlippage,
+    chainId,
+    currencies,
+    currencyA,
+    currencyB,
+    deadline,
+    gasPrice,
+    mintParsedAmounts,
+    noLiquidity,
+    pair,
+    parsedAmounts,
+    routerContract,
+    t,
+    walletClient,
+  ])
 
   const pendingText = t('Supplying %amountA% %symbolA% and %amountB% %symbolB%', {
     amountA: formatCurrencyAmount(parsedAmounts[Field.CURRENCY_A], 4, locale),

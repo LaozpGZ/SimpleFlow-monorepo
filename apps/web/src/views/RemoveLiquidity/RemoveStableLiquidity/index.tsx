@@ -150,7 +150,7 @@ export default function RemoveStableLiquidity({ currencyA, currencyB, currencyId
   // tx sending
   const addTransaction = useTransactionAdder()
 
-  async function onRemove() {
+  const onRemove = useCallback(async () => {
     const contract = needUnwrapped ? nativeHelperContract : stableSwapContract
 
     if (!chainId || !account || !contract) throw new Error('missing dependencies')
@@ -262,7 +262,24 @@ export default function RemoveStableLiquidity({ currencyA, currencyB, currencyId
           })
         })
     }
-  }
+  }, [
+    account,
+    addTransaction,
+    allowedSlippage,
+    approvalState,
+    chainId,
+    currencyA,
+    currencyB,
+    gasPrice,
+    nativeHelperContract,
+    needUnwrapped,
+    parsedAmounts,
+    stableSwapContract,
+    t,
+    toastError,
+    tokenA,
+    tokenB,
+  ])
 
   const pendingText = t('Removing %amountA% %symbolA% and %amountB% %symbolB%', {
     amountA: parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) ?? '',

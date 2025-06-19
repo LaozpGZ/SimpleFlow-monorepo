@@ -184,7 +184,7 @@ export default function AddStableLiquidity({
 
   const addTransaction = useTransactionAdder()
 
-  async function onAdd() {
+  const onAdd = useCallback(async () => {
     logGTMClickAddLiquidityConfirmEvent()
     const contract = needWrapped ? nativeHelperContract : stableSwapContract
 
@@ -302,7 +302,25 @@ export default function AddStableLiquidity({
           txHash: undefined,
         })
       })
-  }
+  }, [
+    account,
+    addTransaction,
+    allowedSlippage,
+    chainId,
+    currencies,
+    currencyB?.isNative,
+    error,
+    gasPrice,
+    liquidityMinted,
+    minLPOutput,
+    nativeHelperContract,
+    needWrapped,
+    noLiquidity,
+    parsedAmounts,
+    stableSwapConfig?.token0?.wrapped.address,
+    stableSwapContract,
+    t,
+  ])
 
   const pendingText = t('Supplying %amountA% %symbolA% and %amountB% %symbolB%', {
     amountA: formatCurrencyAmount(parsedAmounts[Field.CURRENCY_A], 4, locale),

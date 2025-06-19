@@ -435,24 +435,27 @@ export default function V3FormView({
       attemptingTxn={attemptingTxn}
       hash={txHash}
       errorMessage={txnErrorMessage}
-      content={() => (
-        <ConfirmationModalContent
-          topContent={() =>
-            position ? (
-              <PositionPreview
-                position={position}
-                inRange={!outOfRange}
-                ticksAtLimit={ticksAtLimit}
-                baseCurrencyDefault={baseCurrency}
-              />
-            ) : null
-          }
-          bottomContent={() => (
-            <Button width="100%" mt="16px" onClick={onAdd}>
-              {t('Add')}
-            </Button>
-          )}
-        />
+      content={useCallback(
+        () => (
+          <ConfirmationModalContent
+            topContent={() =>
+              position ? (
+                <PositionPreview
+                  position={position}
+                  inRange={!outOfRange}
+                  ticksAtLimit={ticksAtLimit}
+                  baseCurrencyDefault={baseCurrency}
+                />
+              ) : null
+            }
+            bottomContent={() => (
+              <Button width="100%" mt="16px" onClick={onAdd}>
+                {t('Add')}
+              </Button>
+            )}
+          />
+        ),
+        [baseCurrency, onAdd, outOfRange, position, t, ticksAtLimit],
       )}
       pendingText={pendingText}
     />,

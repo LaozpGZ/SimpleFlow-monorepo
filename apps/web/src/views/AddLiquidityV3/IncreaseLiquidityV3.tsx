@@ -355,24 +355,27 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
       attemptingTxn={attemptingTxn}
       errorMessage={txnErrorMessage}
       hash={txHash}
-      content={() => (
-        <ConfirmationModalContent
-          topContent={() =>
-            position ? (
-              <PositionPreview
-                position={position}
-                inRange={!outOfRange}
-                ticksAtLimit={ticksAtLimit}
-                baseCurrencyDefault={baseCurrency}
-              />
-            ) : null
-          }
-          bottomContent={() => (
-            <Button width="100%" mt="16px" onClick={onIncrease}>
-              {t('Increase')}
-            </Button>
-          )}
-        />
+      content={useCallback(
+        () => (
+          <ConfirmationModalContent
+            topContent={() =>
+              position ? (
+                <PositionPreview
+                  position={position}
+                  inRange={!outOfRange}
+                  baseCurrencyDefault={baseCurrency}
+                  ticksAtLimit={ticksAtLimit}
+                />
+              ) : null
+            }
+            bottomContent={() => (
+              <Button width="100%" mt="16px" onClick={onIncrease}>
+                {t('Increase')}
+              </Button>
+            )}
+          />
+        ),
+        [baseCurrency, onIncrease, outOfRange, position, t, ticksAtLimit],
       )}
       pendingText={pendingText}
     />,

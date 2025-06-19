@@ -20,7 +20,7 @@ import useActiveWeb3React from 'hooks/useActiveWeb3React'
 import { useQuestRewardContract } from 'hooks/useContract'
 import { useDashboardSiwe } from 'hooks/useDashboardSiwe'
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
 import { Address, encodePacked, keccak256, toHex } from 'viem'
 import { AddRewardModal } from 'views/DashboardQuestEdit/components/Reward/AddRewardModal'
@@ -55,37 +55,40 @@ export const SubmitAction = () => {
   const { fetchWithSiweAuth } = useDashboardSiwe()
   const rewardContract = useQuestRewardContract(state.chainId)
 
-  const handlePickedRewardToken = (currency: Currency, totalRewardAmount: string, amountOfWinners: number) => {
-    const tokenAddress = currency?.isNative ? ADDRESS_ZERO : currency?.address
-    const tokenChainId = currency?.chainId
+  const handlePickedRewardToken = useCallback(
+    (currency: Currency, totalRewardAmount: string, amountOfWinners: number) => {
+      const tokenAddress = currency?.isNative ? ADDRESS_ZERO : currency?.address
+      const tokenChainId = currency?.chainId
 
-    let rewardData: QuestRewardType = {
-      title: '',
-      description: '',
-      rewardType: RewardType.TOKEN,
-      currency: {
-        address: tokenAddress,
-        network: tokenChainId,
-      },
-      amountOfWinners,
-      totalRewardAmount,
-    }
-
-    if (state.reward) {
-      rewardData = {
-        ...state.reward,
-        totalRewardAmount,
-        amountOfWinners,
+      let rewardData: QuestRewardType = {
+        title: '',
+        description: '',
+        rewardType: RewardType.TOKEN,
         currency: {
           address: tokenAddress,
           network: tokenChainId,
         },
+        amountOfWinners,
+        totalRewardAmount,
       }
-    }
 
-    updateValue('reward', rewardData)
-    setOpenModal(true)
-  }
+      if (state.reward) {
+        rewardData = {
+          ...state.reward,
+          totalRewardAmount,
+          amountOfWinners,
+          currency: {
+            address: tokenAddress,
+            network: tokenChainId,
+          },
+        }
+      }
+
+      updateValue('reward', rewardData)
+      setOpenModal(true)
+    },
+    [state?.reward, updateValue],
+  )
 
   const [onPresentAddRewardModal] = useModal(
     <AddRewardModal state={state} handlePickedRewardToken={handlePickedRewardToken} />,

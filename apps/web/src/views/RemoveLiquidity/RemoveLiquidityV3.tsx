@@ -338,15 +338,18 @@ function Remove({ tokenId }: { tokenId?: bigint }) {
         minHeight: 'auto',
       }}
       errorMessage={errorMessage}
-      content={() => (
-        <ConfirmationModalContent
-          topContent={modalHeader}
-          bottomContent={() => (
-            <Button width="100%" mt="16px" onClick={onRemove}>
-              {t('Remove')}
-            </Button>
-          )}
-        />
+      content={useCallback(
+        () => (
+          <ConfirmationModalContent
+            topContent={modalHeader}
+            bottomContent={() => (
+              <Button width="100%" mt="16px" onClick={onRemove}>
+                {t('Remove')}
+              </Button>
+            )}
+          />
+        ),
+        [modalHeader, onRemove, t],
       )}
       pendingText={pendingText}
     />,

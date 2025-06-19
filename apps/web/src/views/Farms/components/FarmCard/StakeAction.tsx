@@ -99,130 +99,142 @@ const StakeAction: React.FC<React.PropsWithChildren<FarmCardActionsProps>> = ({
     return ['history', 'archived'].some((item) => router.pathname.includes(item)) || pendingFarm.length > 0
   }, [pendingFarm, router])
 
-  const handleStake = async (amount: string) => {
-    logGTMClickStakeFarmConfirmEvent()
-    if (vaultPid) {
-      await handleCrossChainStake(amount)
-      refreshFirstTime()
-    } else {
-      const receipt = await fetchWithCatchTxError(() => onStake(amount))
-      if (receipt?.status) {
+  const handleCrossChainStake = useCallback(
+    async (amountValue: string) => {
+      const receipt = await fetchTxResponse(() => onStake(amountValue))
+      const amountAsBigNumber = new BigNumber(amountValue).times(DEFAULT_TOKEN_DECIMAL)
+      const amount = formatLpBalance(new BigNumber(amountAsBigNumber), 18)
+
+      if (receipt) {
         logGTMStakeFarmTxSentEvent()
-        toastSuccess(
-          `${t('Staked')}!`,
-          <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-            {t('Your funds have been staked in the farm')}
-          </ToastDescriptionWithTx>,
-        )
+        addTransaction(receipt, {
+          type: 'cross-chain-farm',
+          translatableSummary: {
+            text: 'Stake %amount% %lpSymbol% Token',
+            data: { amount, lpSymbol },
+          },
+          crossChainFarm: {
+            type: CrossChainFarmStepType.STAKE,
+            status: FarmTransactionStatus.PENDING,
+            amount,
+            lpSymbol,
+            lpAddress,
+            steps: [
+              {
+                step: 1,
+                chainId: chainId!,
+                tx: receipt.hash,
+                isFirstTime,
+                status: FarmTransactionStatus.PENDING,
+              },
+              {
+                step: 2,
+                tx: '',
+                chainId: ChainId.BSC,
+                status: FarmTransactionStatus.PENDING,
+              },
+            ],
+          },
+        })
+
+        dispatch(pickFarmTransactionTx({ tx: receipt.hash, chainId: chainId! }))
         onDone()
       }
-    }
-  }
+    },
+    [addTransaction, chainId, dispatch, fetchTxResponse, isFirstTime, lpAddress, lpSymbol, onDone, onStake],
+  )
 
-  const handleCrossChainStake = async (amountValue: string) => {
-    const receipt = await fetchTxResponse(() => onStake(amountValue))
-    const amountAsBigNumber = new BigNumber(amountValue).times(DEFAULT_TOKEN_DECIMAL)
-    const amount = formatLpBalance(new BigNumber(amountAsBigNumber), 18)
+  const handleStake = useCallback(
+    async (amount: string) => {
+      logGTMClickStakeFarmConfirmEvent()
+      if (vaultPid) {
+        await handleCrossChainStake(amount)
+        refreshFirstTime()
+      } else {
+        const receipt = await fetchWithCatchTxError(() => onStake(amount))
+        if (receipt?.status) {
+          logGTMStakeFarmTxSentEvent()
+          toastSuccess(
+            `${t('Staked')}!`,
+            <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+              {t('Your funds have been staked in the farm')}
+            </ToastDescriptionWithTx>,
+          )
+          onDone()
+        }
+      }
+    },
+    [fetchWithCatchTxError, handleCrossChainStake, onDone, onStake, refreshFirstTime, t, toastSuccess, vaultPid],
+  )
 
-    if (receipt) {
-      logGTMStakeFarmTxSentEvent()
-      addTransaction(receipt, {
-        type: 'cross-chain-farm',
-        translatableSummary: {
-          text: 'Stake %amount% %lpSymbol% Token',
-          data: { amount, lpSymbol },
-        },
-        crossChainFarm: {
-          type: CrossChainFarmStepType.STAKE,
-          status: FarmTransactionStatus.PENDING,
-          amount,
-          lpSymbol,
-          lpAddress,
-          steps: [
-            {
-              step: 1,
-              chainId: chainId!,
-              tx: receipt.hash,
-              isFirstTime,
-              status: FarmTransactionStatus.PENDING,
-            },
-            {
-              step: 2,
-              tx: '',
-              chainId: ChainId.BSC,
-              status: FarmTransactionStatus.PENDING,
-            },
-          ],
-        },
-      })
+  const handleCrossChainUnStake = useCallback(
+    async (amountValue: string) => {
+      const receipt = await fetchTxResponse(() => onUnstake(amountValue))
+      const amountAsBigNumber = new BigNumber(amountValue).times(DEFAULT_TOKEN_DECIMAL)
+      const amount = formatLpBalance(new BigNumber(amountAsBigNumber), 18)
 
-      dispatch(pickFarmTransactionTx({ tx: receipt.hash, chainId: chainId! }))
-      onDone()
-    }
-  }
+      if (receipt) {
+        addTransaction(receipt, {
+          type: 'cross-chain-farm',
+          translatableSummary: {
+            text: 'Unstake %amount% %lpSymbol% Token',
+            data: { amount, lpSymbol },
+          },
+          crossChainFarm: {
+            type: CrossChainFarmStepType.UNSTAKE,
+            status: FarmTransactionStatus.PENDING,
+            amount,
+            lpSymbol,
+            lpAddress,
+            steps: [
+              {
+                step: 1,
+                chainId: chainId!,
+                tx: receipt.hash,
+                status: FarmTransactionStatus.PENDING,
+              },
+              {
+                step: 2,
+                chainId: ChainId.BSC,
+                tx: '',
+                status: FarmTransactionStatus.PENDING,
+              },
+              {
+                step: 3,
+                chainId: chainId!,
+                tx: '',
+                status: FarmTransactionStatus.PENDING,
+              },
+            ],
+          },
+        })
 
-  const handleUnstake = async (amount: string) => {
-    if (vaultPid) {
-      await handleCrossChainUnStake(amount)
-    } else {
-      const receipt = await fetchWithCatchTxError(() => onUnstake(amount))
-      if (receipt?.status) {
-        toastSuccess(
-          `${t('Unstaked')}!`,
-          <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-            {t('Your earnings have also been harvested to your wallet')}
-          </ToastDescriptionWithTx>,
-        )
+        dispatch(pickFarmTransactionTx({ tx: receipt.hash, chainId: chainId! }))
         onDone()
       }
-    }
-  }
+    },
+    [addTransaction, chainId, dispatch, fetchTxResponse, lpAddress, lpSymbol, onDone, onUnstake],
+  )
 
-  const handleCrossChainUnStake = async (amountValue: string) => {
-    const receipt = await fetchTxResponse(() => onUnstake(amountValue))
-    const amountAsBigNumber = new BigNumber(amountValue).times(DEFAULT_TOKEN_DECIMAL)
-    const amount = formatLpBalance(new BigNumber(amountAsBigNumber), 18)
-
-    if (receipt) {
-      addTransaction(receipt, {
-        type: 'cross-chain-farm',
-        translatableSummary: {
-          text: 'Unstake %amount% %lpSymbol% Token',
-          data: { amount, lpSymbol },
-        },
-        crossChainFarm: {
-          type: CrossChainFarmStepType.UNSTAKE,
-          status: FarmTransactionStatus.PENDING,
-          amount,
-          lpSymbol,
-          lpAddress,
-          steps: [
-            {
-              step: 1,
-              chainId: chainId!,
-              tx: receipt.hash,
-              status: FarmTransactionStatus.PENDING,
-            },
-            {
-              step: 2,
-              chainId: ChainId.BSC,
-              tx: '',
-              status: FarmTransactionStatus.PENDING,
-            },
-            {
-              step: 3,
-              chainId: chainId!,
-              tx: '',
-              status: FarmTransactionStatus.PENDING,
-            },
-          ],
-        },
-      })
-
-      dispatch(pickFarmTransactionTx({ tx: receipt.hash, chainId: chainId! }))
-      onDone()
-    }
-  }
+  const handleUnstake = useCallback(
+    async (amount: string) => {
+      if (vaultPid) {
+        await handleCrossChainUnStake(amount)
+      } else {
+        const receipt = await fetchWithCatchTxError(() => onUnstake(amount))
+        if (receipt?.status) {
+          toastSuccess(
+            `${t('Unstaked')}!`,
+            <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+              {t('Your earnings have also been harvested to your wallet')}
+            </ToastDescriptionWithTx>,
+          )
+          onDone()
+        }
+      }
+    },
+    [fetchWithCatchTxError, handleCrossChainUnStake, onDone, onUnstake, t, toastSuccess, vaultPid],
+  )
 
   const handleApprove = useCallback(async () => {
     const receipt = await fetchWithCatchTxError(() => {

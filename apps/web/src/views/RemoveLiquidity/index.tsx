@@ -232,7 +232,7 @@ export default function RemoveLiquidity({ currencyA, currencyB, currencyIdA, cur
 
   const routerContract = useRouterContract()
 
-  async function onRemove() {
+  const onRemove = useCallback(async () => {
     if (!chainId || !account || !deadline || !routerContract) throw new Error('missing dependencies')
     const { [Field.CURRENCY_A]: currencyAmountA, [Field.CURRENCY_B]: currencyAmountB } = parsedAmounts
     if (!currencyAmountA || !currencyAmountB) {
@@ -391,7 +391,24 @@ export default function RemoveLiquidity({ currencyA, currencyB, currencyIdA, cur
           })
         })
     }
-  }
+  }, [
+    account,
+    addTransaction,
+    allowedSlippage,
+    approvalState,
+    chainId,
+    currencyA,
+    currencyB,
+    deadline,
+    gasPrice,
+    parsedAmounts,
+    routerContract,
+    signatureData,
+    t,
+    toastError,
+    tokenA,
+    tokenB,
+  ])
 
   const pendingText = t('Removing %amountA% %symbolA% and %amountB% %symbolB%', {
     amountA: parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) ?? '',

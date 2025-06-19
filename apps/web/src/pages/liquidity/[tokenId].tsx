@@ -451,32 +451,35 @@ export default function PoolPage() {
       !collectMigrationHash,
   )
 
-  const modalHeader = () => (
-    <>
-      <LightGreyCard mb="16px">
-        <AutoRow justifyContent="space-between" mb="8px">
-          <Flex>
-            <CurrencyLogo currency={feeValueUpper?.currency} size="24px" />
-            <Text color="textSubtle" ml="4px">
-              {feeValueUpper?.currency?.symbol}
-            </Text>
-          </Flex>
-          <Text>{feeValueUpper ? formatCurrencyAmount(feeValueUpper, 4, locale) : '-'}</Text>
-        </AutoRow>
-        <AutoRow justifyContent="space-between">
-          <Flex>
-            <CurrencyLogo currency={feeValueLower?.currency} size="24px" />
-            <Text color="textSubtle" ml="4px">
-              {feeValueLower?.currency?.symbol}
-            </Text>
-          </Flex>
-          <Text>{feeValueLower ? formatCurrencyAmount(feeValueLower, 4, locale) : '-'}</Text>
-        </AutoRow>
-      </LightGreyCard>
-      <Text mb="16px" px="16px">
-        {t('Collecting fees will withdraw currently available fees for you')}
-      </Text>
-    </>
+  const modalHeader = useCallback(
+    () => (
+      <>
+        <LightGreyCard mb="16px">
+          <AutoRow justifyContent="space-between" mb="8px">
+            <Flex>
+              <CurrencyLogo currency={feeValueUpper?.currency} size="24px" />
+              <Text color="textSubtle" ml="4px">
+                {feeValueUpper?.currency?.symbol}
+              </Text>
+            </Flex>
+            <Text>{feeValueUpper ? formatCurrencyAmount(feeValueUpper, 4, locale) : '-'}</Text>
+          </AutoRow>
+          <AutoRow justifyContent="space-between">
+            <Flex>
+              <CurrencyLogo currency={feeValueLower?.currency} size="24px" />
+              <Text color="textSubtle" ml="4px">
+                {feeValueLower?.currency?.symbol}
+              </Text>
+            </Flex>
+            <Text>{feeValueLower ? formatCurrencyAmount(feeValueLower, 4, locale) : '-'}</Text>
+          </AutoRow>
+        </LightGreyCard>
+        <Text mb="16px" px="16px">
+          {t('Collecting fees will withdraw currently available fees for you')}
+        </Text>
+      </>
+    ),
+    [feeValueLower, feeValueUpper, locale, t],
   )
 
   const [onClaimFee] = useModal(
@@ -486,15 +489,18 @@ export default function PoolPage() {
       customOnDismiss={handleDismissConfirmation}
       hash={collectMigrationHash ?? ''}
       errorMessage={errorMessage}
-      content={() => (
-        <ConfirmationModalContent
-          topContent={modalHeader}
-          bottomContent={() => (
-            <Button width="100%" onClick={collect}>
-              {t('Collect')}
-            </Button>
-          )}
-        />
+      content={useCallback(
+        () => (
+          <ConfirmationModalContent
+            topContent={modalHeader}
+            bottomContent={() => (
+              <Button width="100%" onClick={collect}>
+                {t('Collect')}
+              </Button>
+            )}
+          />
+        ),
+        [collect, modalHeader, t],
       )}
       pendingText={t('Collecting fees')}
     />,
