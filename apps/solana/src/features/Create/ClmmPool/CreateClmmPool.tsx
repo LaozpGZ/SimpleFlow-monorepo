@@ -7,7 +7,6 @@ import BN from 'bn.js'
 import Decimal from 'decimal.js'
 
 import { useEvent } from '@/hooks/useEvent'
-import useBirdeyeTokenPrice from '@/hooks/token/useBirdeyeTokenPrice'
 import PanelCard from '@/components/PanelCard'
 import { StepsRef } from '@/components/Steps'
 import SubPageNote from '@/components/SubPageNote'
@@ -19,6 +18,7 @@ import { genCSS2GridTemplateColumns, genCSS3GridTemplateColumns } from '@/theme/
 import { debounce, exhaustCall } from '@/utils/functionMethods'
 import { routeBack } from '@/utils/routeTools'
 import { solToWSolToken } from '@/utils/token'
+import useTokenPrice from '@/hooks/token/useTokenPrice'
 
 import SelectPoolTokenAndFee from './components/SelectPoolTokenAndFee'
 import SetPriceAndRange from './components/SetPriceAndRange'
@@ -40,7 +40,7 @@ export default function CreateClmmPool() {
   const [isTxSending, setIsTxSending] = useState(false)
   const debounceSetBuildData = debounce((data: CreatePoolBuildData) => setCreatePoolData(data), 150)
 
-  const { data: tokenPrices, isLoading: isPriceLoading } = useBirdeyeTokenPrice({
+  const { data: tokenPrices, isLoading: isPriceLoading } = useTokenPrice({
     mintList: [createPoolData?.extInfo.mockPoolInfo.mintA.address, createPoolData?.extInfo.mockPoolInfo.mintB.address]
   })
 

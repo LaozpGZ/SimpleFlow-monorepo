@@ -21,7 +21,7 @@ const fetcher = ([url]: [url: string, refreshTag?: number]) => {
 const prepareFetchList = new Set<string>([
   WSOLMint.toBase58(),
   mSOLMint.toBase58(),
-  RAYMint.toBase58(),
+  // RAYMint.toBase58(),
   USDCMint.toBase58(),
   USDTMint.toBase58()
 ])
