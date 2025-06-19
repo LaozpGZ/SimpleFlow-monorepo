@@ -80,21 +80,27 @@ const fetchFarmPublicDataPkg = async ({
   )
 
   const farmAprs: Record<string, number> = {}
-  try {
-    const [farmsV2AvgInfo, farmsStableAvgInfo] = await Promise.all([
-      fetchV2FarmsAvgInfo(chainId),
-      fetchStableFarmsAvgInfo(chainId),
-    ])
+  const [v2Result, stableResult] = await Promise.allSettled([
+    fetchV2FarmsAvgInfo(chainId),
+    fetchStableFarmsAvgInfo(chainId),
+  ])
+  const farmsV2AvgInfo = v2Result.status === 'fulfilled' ? v2Result.value : {}
+  const farmsStableAvgInfo = stableResult.status === 'fulfilled' ? stableResult.value : {}
 
-    const mergedFarmsAvgInfo = { ...farmsV2AvgInfo, ...farmsStableAvgInfo }
-
-    Object.keys(mergedFarmsAvgInfo).forEach((key) => {
-      const tokenData = mergedFarmsAvgInfo[key]
-      farmAprs[key] = parseFloat(tokenData.apr7d.multipliedBy(100).toFixed(2))
-    })
-  } catch (e) {
-    console.error(e)
+  if (v2Result.status === 'rejected') {
+    console.error('Error fetching V2 farms info:', v2Result.reason)
   }
+  if (stableResult.status === 'rejected') {
+    console.error('Error fetching stable farms info:', stableResult.reason)
+  }
+
+  const mergedFarmsAvgInfo = { ...farmsV2AvgInfo, ...farmsStableAvgInfo }
+
+  Object.keys(mergedFarmsAvgInfo).forEach((key) => {
+    const tokenData = mergedFarmsAvgInfo[key]
+    farmAprs[key] = parseFloat(tokenData.apr7d.multipliedBy(100).toFixed(2))
+  })
+
   return [farmsWithPriceWithFallback, poolLength, regularCakePerBlock, totalRegularAllocPoint, farmAprs]
 }
 

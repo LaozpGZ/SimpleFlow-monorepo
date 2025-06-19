@@ -1,4 +1,4 @@
-import { isStableFarm } from '@pancakeswap/farms'
+import { Protocol } from '@pancakeswap/farms'
 import { useCurrency } from 'hooks/Tokens'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
@@ -12,6 +12,10 @@ import { useCurrencyParams } from 'views/AddLiquidityV3/hooks/useCurrencyParams'
 import { SELECTOR_TYPE } from 'views/AddLiquidityV3/types'
 import { PageWithoutFAQ } from 'views/Page'
 import { isAddressEqual } from 'utils'
+import BigNumber from 'bignumber.js'
+import { bscTokens } from '@pancakeswap/tokens'
+import { getBalanceAmount } from '@pancakeswap/utils/formatBalance'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 
 const AddLiquidityPage = () => {
   const router = useRouter()
@@ -41,16 +45,21 @@ const AddLiquidityPage = () => {
         feeAmount: hasV3Farm.feeAmount,
       }
 
-    const hasV2Farm = farmsV2Public?.find(
-      (farm) =>
-        farm.multiplier !== '0X' &&
-        ((isAddressEqual(farm.token.address, currencyA.wrapped.address) &&
-          isAddressEqual(farm.quoteToken.address, currencyB.wrapped.address)) ||
-          (isAddressEqual(farm.token.address, currencyB.wrapped.address) &&
-            isAddressEqual(farm.quoteToken.address, currencyA.wrapped.address))),
-    )
+    const hasV2Farm = farmsV2Public?.find((farm) => {
+      return (
+        (farm.isRewardInRange &&
+          isAddressEqual(farm.token0.address, currencyA.wrapped.address) &&
+          isAddressEqual(farm.token1.address, currencyB.wrapped.address)) ||
+        (isAddressEqual(farm.token0.address, currencyB.wrapped.address) &&
+          isAddressEqual(farm.token1.address, currencyA.wrapped.address) &&
+          getBalanceAmount(
+            farm.rewardPerSecond ? new BigNumber(Number(farm.rewardPerSecond)) : BIG_ZERO,
+            bscTokens.cake.decimals,
+          ).toNumber() > 0)
+      )
+    })
     return hasV2Farm
-      ? isStableFarm(hasV2Farm)
+      ? hasV2Farm.protocol === Protocol.STABLE
         ? { type: SELECTOR_TYPE.STABLE }
         : { type: SELECTOR_TYPE.V2 }
       : undefined

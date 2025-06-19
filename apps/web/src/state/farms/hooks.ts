@@ -1,8 +1,12 @@
 import {
   DeserializedFarmsState,
   DeserializedFarmUserData,
+  fetchUniversalFarms,
   getLegacyFarmConfig,
+  Protocol,
   supportedChainIdV2,
+  UniversalFarmConfigStableSwap,
+  UniversalFarmConfigV2,
 } from '@pancakeswap/farms'
 import { useQuery } from '@tanstack/react-query'
 import { SLOW_INTERVAL } from 'config/constants'
@@ -16,18 +20,20 @@ import { getMasterChefContract } from 'utils/contractHelpers'
 
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { V2FarmWithoutStakedValue, V3FarmWithoutStakedValue } from 'state/farms/types'
-import {
-  fetchBCakeWrapperDataAsync,
-  fetchBCakeWrapperUserDataAsync,
-  fetchFarmsPublicDataAsync,
-  fetchFarmUserDataAsync,
-} from '.'
+import { v2BCakeWrapperABI } from 'config/abi/v2BCakeWrapper'
+import { publicClient } from 'utils/viem'
 import {
   farmSelector,
   makeFarmFromPidSelector,
   makeLpTokenPriceFromLpSymbolSelector,
   makeUserFarmFromPidSelector,
 } from './selectors'
+import {
+  fetchBCakeWrapperDataAsync,
+  fetchBCakeWrapperUserDataAsync,
+  fetchFarmsPublicDataAsync,
+  fetchFarmUserDataAsync,
+} from '.'
 
 export function useFarmsLength({ enabled = true } = {}) {
   const { chainId } = useActiveChainId()
@@ -54,12 +60,81 @@ export function useFarmsLength({ enabled = true } = {}) {
 export function useFarmV2PublicAPI() {
   const { chainId } = useActiveChainId()
   return useQuery({
-    queryKey: ['farm-v2-pubic-api', chainId],
+    queryKey: ['farm-v2-public-api', chainId],
 
     queryFn: async () => {
-      return fetch(`https://farms-api.pancakeswap.com/${chainId}`)
-        .then((res) => res.json())
-        .then((res) => res.data)
+      const [v2Farms, stableFarms] = await Promise.all([
+        fetchUniversalFarms(chainId, Protocol.V2),
+        fetchUniversalFarms(chainId, Protocol.STABLE),
+      ])
+
+      const result = [...v2Farms, ...stableFarms].filter(
+        (farm): farm is UniversalFarmConfigStableSwap | UniversalFarmConfigV2 => {
+          switch (farm.protocol) {
+            case Protocol.STABLE:
+              return Boolean(farm.stableSwapAddress && farm.bCakeWrapperAddress)
+            case Protocol.V2:
+              return Boolean(farm.bCakeWrapperAddress)
+            default:
+              return false
+          }
+        },
+      )
+
+      const client = publicClient({ chainId })
+
+      const rewardPerSecondCalls = result.map((pool) => {
+        return {
+          address: pool.bCakeWrapperAddress!,
+          functionName: 'rewardPerSecond',
+          abi: v2BCakeWrapperABI,
+        } as const
+      })
+
+      const startTimestampCalls = result.map((pool) => {
+        return {
+          address: pool.bCakeWrapperAddress!,
+          functionName: 'startTimestamp',
+          abi: v2BCakeWrapperABI,
+        } as const
+      })
+
+      const endTimestampCalls = result.map((pool) => {
+        return {
+          address: pool.bCakeWrapperAddress!,
+          functionName: 'endTimestamp',
+          abi: v2BCakeWrapperABI,
+        } as const
+      })
+
+      const [rewardPerSecondResults, startTimestamps, endTimestamps] = await Promise.all([
+        client.multicall({
+          contracts: rewardPerSecondCalls,
+          allowFailure: false,
+        }),
+        client.multicall({
+          contracts: startTimestampCalls,
+          allowFailure: false,
+        }),
+        client.multicall({
+          contracts: endTimestampCalls,
+          allowFailure: false,
+        }),
+      ])
+
+      const now = Date.now() / 1000
+
+      return result.map((farm, index) => {
+        const startTimestamp = Number(startTimestamps[index] || 0)
+        const endTimestamp = Number(endTimestamps[index] || 0)
+        return {
+          ...farm,
+          rewardPerSecond: rewardPerSecondResults[index],
+          startTimestamp,
+          endTimestamp,
+          isRewardInRange: now >= startTimestamp && now < endTimestamp,
+        }
+      })
     },
 
     enabled: Boolean(chainId && supportedChainIdV2.includes(chainId)),
