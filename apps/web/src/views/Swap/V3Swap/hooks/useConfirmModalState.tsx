@@ -48,7 +48,6 @@ import { getViemClients } from 'utils/viem'
 import { getBridgeCalldata } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
 
-import { ChainId } from '@pancakeswap/chains'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useSwapState } from 'state/swap/hooks'
 import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
@@ -916,9 +915,6 @@ export const useConfirmModalState = (
 
   const canCallActionBatched = useCallback(
     (steps: ConfirmModalState[]) => {
-      if (chainId !== ChainId.BSC) {
-        return false
-      }
       if (!walletClient?.transport || !spender) {
         return false
       }
