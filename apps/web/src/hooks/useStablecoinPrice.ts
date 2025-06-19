@@ -2,13 +2,11 @@ import { ChainId } from '@pancakeswap/chains'
 import { Currency, getCurrencyAddress, Price } from '@pancakeswap/sdk'
 import { STABLE_COIN } from '@pancakeswap/tokens'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
-import { useAtom } from 'jotai'
+import { useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
+import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
 import { useMemo } from 'react'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { atomWithAsyncRetry } from 'utils/atomWithAsyncRetry'
-import { useQuery } from '@tanstack/react-query'
-import { SLOW_INTERVAL } from 'config/constants'
 import { useActiveChainId } from './useActiveChainId'
 
 type UseStablecoinPriceConfig = {
@@ -47,14 +45,12 @@ interface StableCoinPriceParams {
 }
 const stableCoinPriceAtom = atomFamily(
   (params: StableCoinPriceParams) => {
-    return atomWithAsyncRetry({
-      asyncFn: async () => {
-        const enabled = params.enabled ?? true
-        if (!params.currency || !enabled) {
-          return undefined
-        }
-        return queryStablecoinPrice(params.currency, params.chainId)
-      },
+    return atomWithLoadable(async () => {
+      const enabled = params.enabled ?? true
+      if (!params.currency || !enabled) {
+        return undefined
+      }
+      return queryStablecoinPrice(params.currency, params.chainId)
     })
   },
   (a, b) => {
@@ -79,7 +75,7 @@ export function useStablecoinPrice(
 
   const shouldEnabled = Boolean(currency && enabled && currentChainId === chainId)
 
-  const [priceUSD, refreshPrice] = useAtom(
+  const coinPrice = useAtomValue(
     stableCoinPriceAtom({
       currency: currency || undefined,
       chainId,
@@ -87,22 +83,11 @@ export function useStablecoinPrice(
     }),
   )
 
-  useQuery({
-    queryKey: ['stableCoinRefresh', currency?.chainId, currency?.wrapped?.address],
-    queryFn: async () => {
-      return refreshPrice()
-    },
-    enabled: Boolean(currency),
-    refetchInterval: SLOW_INTERVAL,
-    refetchOnMount: false,
-    refetchOnReconnect: false,
-    gcTime: 0,
-  })
-
   const price = useMemo(() => {
-    if (!priceUSD || !currency || !stableCoin || !shouldEnabled) {
+    if (!coinPrice.isJust() || !currency || !stableCoin || !shouldEnabled) {
       return undefined
     }
+    const priceUSD = coinPrice.unwrap()
 
     return new Price(
       currency,
@@ -110,7 +95,7 @@ export function useStablecoinPrice(
       1 * 10 ** currency.decimals,
       getFullDecimalMultiplier(stableCoin.decimals).times(priceUSD.toFixed(stableCoin.decimals)).toString(),
     )
-  }, [currency, stableCoin, shouldEnabled, priceUSD])
+  }, [coinPrice, currency, stableCoin, shouldEnabled])
 
   if (price?.denominator === 0n) {
     return undefined
