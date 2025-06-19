@@ -123,15 +123,15 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
               value={durationDays}
               onInput={(e) => onDurationChange(e.currentTarget.value, Number(e.currentTarget.value))}
               placeholder="0.0"
-              min={7}
-              max={90}
-              step={1}
+              // min={7}
+              // max={90}
+              // step={1}
               style={{ textAlign: 'right' }}
             />
           </SimpleGrid>
-          <Text color={colors.textSubtle} fontSize="xs" mt={1} textAlign="right">
+          {/* <Text color={colors.textSubtle} fontSize="xs" mt={1} textAlign="right">
             {t('Enter value between 7 and 90')}
-          </Text>
+          </Text> */}
         </GridItem>
 
         <GridItem area="end">
