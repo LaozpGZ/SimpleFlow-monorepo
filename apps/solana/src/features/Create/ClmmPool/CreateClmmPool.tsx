@@ -20,7 +20,7 @@ import { debounce, exhaustCall } from '@/utils/functionMethods'
 import { routeBack } from '@/utils/routeTools'
 import { solToWSolToken } from '@/utils/token'
 
-import SelectPoolToken from './components/SelectPoolTokenAndFee'
+import SelectPoolTokenAndFee from './components/SelectPoolTokenAndFee'
 import SetPriceAndRange from './components/SetPriceAndRange'
 import Stepper from './components/Stepper'
 import TokenAmountPairInputs from './components/TokenAmountInput'
@@ -252,7 +252,7 @@ export default function CreateClmmPool() {
 
         <GridItem area="panel">
           <Flex flexDirection="column" gap={3}>
-            <SelectPoolToken
+            <SelectPoolTokenAndFee
               isLoading={isLoading}
               show={needToShowSelectPoolToken}
               initState={currentCreateInfo.current}

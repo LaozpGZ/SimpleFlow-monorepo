@@ -4,6 +4,7 @@ import { ApiClmmConfigInfo, ApiV3Token, PoolFetchType, TokenInfo, solToWSol } fr
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { ChevronDown } from 'react-feather'
 import { useTranslation } from '@pancakeswap/localization'
+import uniqWith from 'lodash/uniqWith'
 import PanelCard from '@/components/PanelCard'
 import TokenAvatar from '@/components/TokenAvatar'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
@@ -48,7 +49,8 @@ export default function SelectPoolTokenAndFee({ completed, initState, show, isLo
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const clmmFeeConfigs = useClmmStore((s) => s.clmmFeeConfigs)
-  const clmmFeeOptions = Object.values(clmmFeeConfigs)
+  const clmmFeeOptions = uniqWith(Object.values(clmmFeeConfigs), (a, b) => a.tradeFeeRate === b.tradeFeeRate)
+
   const [tokens, setTokens] = useState<{
     token1?: ApiV3Token
     token2?: ApiV3Token
