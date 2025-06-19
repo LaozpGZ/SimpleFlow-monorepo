@@ -170,7 +170,7 @@ export const logGTMSwapTxSentEvent = (options?: {
   window?.dataLayer?.push({
     event: GTMEvent.SwapTxSent,
     action: GTMAction.SwapTransactionSent,
-    category: isBridge ? GTMCategory.CrosschainSwap : GTMCategory.Swap,
+    category: options?.isBridge ? GTMCategory.CrosschainSwap : GTMCategory.Swap,
     walletType: options?.walletType,
     txType: options?.txType,
     chainId: options?.chainId,
