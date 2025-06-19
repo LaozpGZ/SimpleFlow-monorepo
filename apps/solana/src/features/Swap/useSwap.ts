@@ -11,10 +11,7 @@ import { quoteApi } from '@/utils/config/endpoint'
 import { SwapType, QuoteRequest, QuoteResponse, ApiSuccessResponse } from './type'
 import { useSwapStore } from './useSwapStore'
 
-const fetcher =
-  (data: QuoteRequest) =>
-  async (url: string): Promise<QuoteResponse> =>
-    axios.post(url, data)
+const fetcher = async ([url, data]: [url: string, data: QuoteRequest]): Promise<QuoteResponse> => axios.post(url, data)
 
 export default function useSwap(props: {
   shouldFetch?: boolean
@@ -68,7 +65,7 @@ export default function useSwap(props: {
     updateAmount(propsAmount)
   }, [propsAmount, updateAmount])
 
-  const { data, error, ...swrProps } = useSWR(() => (disabled ? null : `${quoteApi}/api/quote`), fetcher(requestBody), {
+  const { data, error, ...swrProps } = useSWR(() => (disabled ? null : [`${quoteApi}/api/quote`, requestBody]), fetcher, {
     refreshInterval,
     focusThrottleInterval: refreshInterval,
     dedupingInterval: 30 * 1000

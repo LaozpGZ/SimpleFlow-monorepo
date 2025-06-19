@@ -41,9 +41,9 @@ export function SwapInfoBoard({
   const priceImpact = computedSwapResult?.priceImpactPct || 0
   const isHighRiskPrice = priceImpact > 5
 
-  useEffect(() => {
+  /* useEffect(() => {
     onRefresh()
-  }, [tokenInput?.address, tokenOutput?.address, amountIn])
+  }, [tokenInput?.address, tokenOutput?.address, amountIn]) */
 
   return (
     <>
