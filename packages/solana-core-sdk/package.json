@@ -3,11 +3,11 @@
   "version": "0.1.139-alpha",
   "description": "An SDK for building applications fork from Raydium.",
   "license": "GPL-3.0",
-  "main": "./lib/index.js",
-  "module": "./lib/index.mjs",
-  "types": "./lib/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
   "files": [
-    "./lib",
+    "./dist",
     "./src"
   ],
   "repository": {
@@ -16,7 +16,7 @@
     "directory": "packages/solana-core-sdk"
   },
   "publishConfig": {
-    "access": "public"
+    "access": "private"
   },
   "keywords": [
     "pancakeswap",
@@ -33,11 +33,11 @@
     "build-docs": "typedoc",
     "build-docs-watch": "typedoc --watch",
     "build-dist": "rm -rf dist && mkdir dist && pnpm build-docs",
-    "build-lib": "rm -rf lib && tsup src --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib --silent",
+    "build-lib": "rm -rf dist && tsup src --format cjs,esm --dts --sourcemap --no-splitting --minify -d dist --silent",
     "build-all": "pnpm build-dist && pnpm build-lib",
     "build": "pnpm build-lib",
     "push": "pnpm build && pnpm publish",
-    "dev": "rm -rf lib && tsup src --watch --format cjs,esm --dts --sourcemap --no-splitting --minify -d lib"
+    "dev": "rm -rf dist && tsup src --watch --format cjs,esm --dts --sourcemap --no-splitting --minify -d dist"
   },
   "dependencies": {
     "@noble/hashes": "^1.3.0",

@@ -119,8 +119,8 @@ export const useSwapStore = createStore<SwapStore>(
           data?: [{ transaction: string }]
         } = await axios.post(`${quoteApi}/api/swap`, {
           wallet: publicKey.toBase58(),
-          computeUnitPriceMicroLamports: new Decimal(computeData?.microLamports || 0).toFixed(0),
-          swapResponse,
+          computeUnitPriceMicroLamports: new Decimal(computeData?.microLamports || 0).toNumber(),
+          swapResponse: swapResponse.data,
           wrapSol: isInputSol,
           unwrapSol,
           inputAccount: isInputSol ? undefined : inputTokenAcc?.toBase58(),
