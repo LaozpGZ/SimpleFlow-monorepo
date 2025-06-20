@@ -49,7 +49,9 @@ export default function SelectPoolTokenAndFee({ completed, initState, show, isLo
   const { t } = useTranslation()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const clmmFeeConfigs = useClmmStore((s) => s.clmmFeeConfigs)
-  const clmmFeeOptions = uniqWith(Object.values(clmmFeeConfigs), (a, b) => a.tradeFeeRate === b.tradeFeeRate)
+  const clmmFeeOptions = uniqWith(Object.values(clmmFeeConfigs), (a, b) => a.tradeFeeRate === b.tradeFeeRate).toSorted(
+    (a, b) => a.tradeFeeRate - b.tradeFeeRate
+  )
 
   const [tokens, setTokens] = useState<{
     token1?: ApiV3Token
