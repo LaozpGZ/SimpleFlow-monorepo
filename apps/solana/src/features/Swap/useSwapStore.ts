@@ -16,7 +16,7 @@ import { handleMultiTxRetry } from '@/hooks/toast/retryTx'
 import { isSwapSlippageError } from '@/utils/tx/swapError'
 import { quoteApi } from '@/utils/config/endpoint'
 import { getTxMeta } from './swapMeta'
-import { ApiSuccessResponse, ApiSwapV1OutSuccess, QuoteResponseData } from './type'
+import { ApiSuccessResponse, QuoteResponseData } from './type'
 
 const getSwapComputePrice = async () => {
   const transactionFee = useAppStore.getState().getPriorityFee()
@@ -138,7 +138,8 @@ export const useSwapStore = createStore<SwapStore>(
 
         const swapTransactions = data || []
         const allTxBuf = swapTransactions.map((tx) => Buffer.from(tx.transaction, 'base64'))
-        const allTx = allTxBuf.map((txBuf) => Transaction.from(txBuf))
+        // const allTx = allTxBuf.map((txBuf) => Transaction.from(txBuf))
+        const allTx = allTxBuf.map((txBuf) => VersionedTransaction.deserialize(txBuf as any))
 
         const signedTxs = await signAllTransactions(allTx)
 
@@ -181,8 +182,8 @@ export const useSwapStore = createStore<SwapStore>(
         const checkSendTx = async (): Promise<void> => {
           if (!signedTxs[i]) return
           const tx = signedTxs[i]
-          const txId = await connection.sendRawTransaction(tx.serialize(), { skipPreflight: true, maxRetries: 0 })
-          // : await connection.sendTransaction(tx as VersionedTransaction, { skipPreflight: true, maxRetries: 0 })
+
+          const txId = await connection.sendTransaction(tx as VersionedTransaction, { skipPreflight: true, maxRetries: 0 })
           processedId.push({ txId, signedTx: tx, status: 'sent' })
 
           if (signedTxs.length === 1) {

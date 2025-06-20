@@ -44,6 +44,7 @@ export default function useSwap(props: {
   const disabled = useMemo(() => {
     return !inputMint || !outputMint || new Decimal(amount.trim() || 0).isZero() || inputMint === outputMint
   }, [inputMint, outputMint, amount])
+
   const requestBody: QuoteRequest = useMemo(() => {
     return {
       inputMint,
@@ -74,7 +75,7 @@ export default function useSwap(props: {
   return {
     response: error || !data?.success ? undefined : data,
     data: error || !data?.success ? undefined : data,
-    error: error?.message,
+    error: error?.message || data?.success ? undefined : 'Failed to get quote',
     // openTime: data?.openTime,
     ...swrProps
   }
