@@ -1,5 +1,5 @@
 import { PredictionsChartView } from '@pancakeswap/prediction'
-import { Box, useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
+import { useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
 import { useAccountLocalEventListener } from 'hooks/useAccountLocalEventListener'
 import { useEffect, useRef } from 'react'
 import { useChartView, useIsChartPaneOpen } from 'state/predictions/hooks'
@@ -59,7 +59,7 @@ function Warnings() {
 }
 
 const Predictions = () => {
-  const { isDesktop, isMobile } = useMatchBreakpoints()
+  const { isDesktop } = useMatchBreakpoints()
 
   useAccountLocalEventListener()
 
@@ -67,17 +67,7 @@ const Predictions = () => {
 
   return (
     <SwiperProvider>
-      <Box
-        width="100%"
-        maxWidth="800px"
-        style={{
-          marginTop: isMobile ? '-20px' : '0px',
-          padding: '10px',
-        }}
-        m="auto"
-      >
-        <SmartWalletWarning />
-      </Box>
+      <SmartWalletWarning />
       <Container>
         <Warnings />
 
