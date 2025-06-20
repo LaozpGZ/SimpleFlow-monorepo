@@ -118,12 +118,12 @@ export default function SetPriceAndRange({
   ]
 
   const onlinePrice =
-    tokenBase && tokenQuote && priceBase?.value && priceQuote?.value
+    tokenBase && tokenQuote && priceBase?.value >= 0 && priceQuote?.value >= 0
       ? new Decimal((priceReverse ? priceBase.value : priceQuote.value) || 0)
           .div((priceReverse ? priceQuote.value : priceBase.value) || 1)
           .toDecimalPlaces((priceReverse ? tokenQuote.decimals : tokenBase.decimals) || 6)
           .toString()
-      : '-- '
+      : '--'
 
   const tickPriceRef = useRef<TickData>({})
   const fullRangeTickRef = useRef<TickData>({})
@@ -383,7 +383,7 @@ export default function SetPriceAndRange({
           )}
         />
         <Text color={colors.textSubtle} fontWeight={600} fontSize="sm" display="flex" alignItems="center" gap="1">
-          {isPriceLoading ? <Skeleton width={16} height={4} /> : formatToRawLocaleStr(onlinePrice)}
+          {isPriceLoading ? <Skeleton width={16} height={4} /> : formatToRawLocaleStr(`${onlinePrice} `)}
           {t('%subA% per %subB%', {
             subA: wSolToSolString(priceReverse ? tokenQuote.symbol : tokenBase.symbol),
             subB: wSolToSolString(priceReverse ? tokenBase.symbol : tokenQuote.symbol)
