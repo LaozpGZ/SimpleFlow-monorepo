@@ -6,9 +6,23 @@ import { BridgeStatus } from '../../types'
 type OrderStatusState = 'idle' | 'pending' | 'completed'
 type OrderStatusEvent = 'START_TRACKING' | 'ORDER_SUCCESS' | 'ORDER_FAILED'
 
-export const useOrderStatusTrackingStateMachine = (status: BridgeStatus) => {
+export const useOrderStatusTrackingStateMachine = (status?: BridgeStatus) => {
+  // Don't track if status is undefined
+  const shouldTrack = status !== undefined
+
   // Create state machine configuration
   const stateMachineConfig: CreateStateMachine<OrderStatusState, OrderStatusEvent> = useMemo(() => {
+    if (!shouldTrack) {
+      return {
+        initialState: 'idle',
+        states: {
+          idle: {},
+          pending: {},
+          completed: {},
+        },
+      }
+    }
+
     return {
       initialState: 'idle',
       states: {
@@ -17,12 +31,14 @@ export const useOrderStatusTrackingStateMachine = (status: BridgeStatus) => {
             START_TRACKING: {
               target: 'pending',
               guard: () => {
-                // Start tracking when status is PENDING or BRIDGE_PENDING
+                // Start tracking when status is PENDING or BRIDGE_PENDING and status is defined
                 return status === BridgeStatus.PENDING || status === BridgeStatus.BRIDGE_PENDING
               },
               action: () => {
                 // Log the start of order status tracking
-                logGTMOrderStatusEvent(status)
+                if (status) {
+                  logGTMOrderStatusEvent(status)
+                }
               },
             },
           },
@@ -36,17 +52,21 @@ export const useOrderStatusTrackingStateMachine = (status: BridgeStatus) => {
                 return status === BridgeStatus.SUCCESS
               },
               action: () => {
-                logGTMOrderStatusEvent(status)
+                if (status) {
+                  logGTMOrderStatusEvent(status)
+                }
               },
             },
             ORDER_FAILED: {
               target: 'completed',
               guard: () => {
                 // Transition to failed when status is FAILED or PARTIAL_SUCCESS
-                return status === BridgeStatus.FAILED || status === BridgeStatus.PARTIAL_SUCCESS
+                return shouldTrack && (status === BridgeStatus.FAILED || status === BridgeStatus.PARTIAL_SUCCESS)
               },
               action: () => {
-                logGTMOrderStatusEvent(status)
+                if (status) {
+                  logGTMOrderStatusEvent(status)
+                }
               },
             },
           },
@@ -56,25 +76,27 @@ export const useOrderStatusTrackingStateMachine = (status: BridgeStatus) => {
         },
       },
     }
-  }, [status])
+  }, [status, shouldTrack])
 
   // Initialize state machine with auto-reset dependencies
   const stateMachine = useStateMachine(stateMachineConfig, [])
 
   // Trigger state transitions based on status changes
   useEffect(() => {
-    if (stateMachine.is('idle')) {
+    if (shouldTrack && stateMachine.is('idle')) {
       stateMachine.send('START_TRACKING')
     }
-  }, [status, stateMachine])
+  }, [status, stateMachine, shouldTrack])
 
   useEffect(() => {
-    if (stateMachine.is('pending')) {
+    if (shouldTrack && stateMachine.is('pending')) {
       if (status === BridgeStatus.SUCCESS || status === BridgeStatus.PARTIAL_SUCCESS) {
         stateMachine.send('ORDER_SUCCESS')
       } else if (status === BridgeStatus.FAILED) {
         stateMachine.send('ORDER_FAILED')
       }
     }
-  }, [status, stateMachine])
+  }, [status, stateMachine, shouldTrack])
+
+  return stateMachine
 }
