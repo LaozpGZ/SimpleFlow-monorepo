@@ -69,6 +69,7 @@ const Predictions = () => {
     <SwiperProvider>
       <Box
         width="100%"
+        maxWidth="800px"
         style={{
           marginTop: isMobile ? '-20px' : '0px',
           padding: '10px',
