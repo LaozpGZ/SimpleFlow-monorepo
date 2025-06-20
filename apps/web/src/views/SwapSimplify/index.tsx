@@ -3,10 +3,13 @@ import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 
 import { MobileCard } from 'components/AdPanel/MobileCard'
+import { useCurrency } from 'hooks/Tokens'
 import { AutoSlippageProvider } from 'hooks/useAutoSlippageWithFallback'
 import { useSwapHotTokenDisplay } from 'hooks/useSwapHotTokenDisplay'
 import dynamic from 'next/dynamic'
 import { QuoteProvider } from 'quoter/QuoteProvider'
+import { Field } from 'state/swap/actions'
+import { useSwapState } from 'state/swap/hooks'
 import { styled } from 'styled-components'
 import Page from '../Page'
 import { StyledSwapContainer } from '../Swap/styles'
@@ -29,6 +32,14 @@ const InfinitySwapInner = () => {
   const [isSwapHotTokenDisplay, setIsSwapHotTokenDisplay] = useSwapHotTokenDisplay()
   // const { t } = useTranslation()
   const [firstTime, setFirstTime] = useState(true)
+
+  const {
+    [Field.INPUT]: { currencyId: inputCurrencyId },
+    [Field.OUTPUT]: { currencyId: outputCurrencyId },
+  } = useSwapState()
+
+  const inputCurrency = useCurrency(inputCurrencyId)
+  const outputCurrency = useCurrency(outputCurrencyId)
 
   useEffect(() => {
     if (firstTime && query.showTradingReward) {
