@@ -177,7 +177,7 @@ const TokenPage: React.FC<React.PropsWithChildren<{ routeAddress: string }>> = (
               <TextWithSkeleton mr="16px" bold fontSize="24px" loading={loading} width={80}>
                 {tokenData ? `$${formatAmount(tokenData.priceUSD, { notation: 'standard' })}` : ''}
               </TextWithSkeleton>
-              {tokenData ? <Percent value={tokenData.priceUSDChange} fontWeight={600} /> : null}
+              {!loading ? <Percent value={tokenData?.priceUSDChange} fontWeight={600} /> : null}
             </Flex>
           </Flex>
           <Flex>
@@ -202,15 +202,15 @@ const TokenPage: React.FC<React.PropsWithChildren<{ routeAddress: string }>> = (
               <TextWithSkeleton bold fontSize="24px" width={80} loading={loading}>
                 {tokenData ? `$${formatAmount(tokenData.liquidityUSD)}` : ''}
               </TextWithSkeleton>
-              {tokenData ? <Percent value={tokenData.liquidityUSDChange} /> : null}
+              {!loading ? <Percent value={tokenData?.liquidityUSDChange} /> : null}
 
               <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
                 {t('Volume 24H')}
               </Text>
               <TextWithSkeleton bold fontSize="24px" textTransform="uppercase" width={80} loading={loading}>
-                {tokenData ? `$${formatAmount(tokenData.volumeUSD)}` : ''}
+                {!loading ? `$${formatAmount(tokenData?.volumeUSD)}` : ''}
               </TextWithSkeleton>
-              {tokenData ? <Percent value={tokenData.volumeUSDChange} /> : null}
+              {!loading ? <Percent value={tokenData?.volumeUSDChange} /> : null}
 
               <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
                 {t('Volume 7D')}
