@@ -1,5 +1,5 @@
 import { PredictionsChartView } from '@pancakeswap/prediction'
-import { useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
+import { Box, useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
 import { useAccountLocalEventListener } from 'hooks/useAccountLocalEventListener'
 import { useEffect, useRef } from 'react'
 import { useChartView, useIsChartPaneOpen } from 'state/predictions/hooks'
@@ -11,6 +11,7 @@ import ChartDisclaimer from './components/ChartDisclaimer'
 import CollectWinningsPopup from './components/CollectWinningsPopup'
 import Container from './components/Container'
 import RiskDisclaimer from './components/RiskDisclaimer'
+import SmartWalletWarning from './components/SmartWalletWarning'
 import { useConfig } from './context/ConfigProvider'
 import SwiperProvider from './context/SwiperProvider'
 import usePollPredictions from './hooks/usePollPredictions'
@@ -58,7 +59,7 @@ function Warnings() {
 }
 
 const Predictions = () => {
-  const { isDesktop } = useMatchBreakpoints()
+  const { isDesktop, isMobile } = useMatchBreakpoints()
 
   useAccountLocalEventListener()
 
@@ -66,8 +67,19 @@ const Predictions = () => {
 
   return (
     <SwiperProvider>
+      <Box
+        width="100%"
+        style={{
+          marginTop: isMobile ? '-20px' : '0px',
+          padding: '10px',
+        }}
+        m="auto"
+      >
+        <SmartWalletWarning />
+      </Box>
       <Container>
         <Warnings />
+
         <RiskDisclaimer />
         {isDesktop ? <Desktop /> : <Mobile />}
         <CollectWinningsPopup />
