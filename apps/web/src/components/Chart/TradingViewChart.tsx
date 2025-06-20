@@ -1,4 +1,6 @@
+import { Currency } from '@pancakeswap/sdk'
 import { tokens } from '@pancakeswap/uikit'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
 import React, { useEffect, useRef } from 'react'
 import { styled } from 'styled-components'
@@ -11,6 +13,8 @@ interface TradingViewChartProps {
   theme?: 'Light' | 'Dark'
   height?: string
   width?: string
+  currency0?: Currency
+  currency1?: Currency
 }
 
 const ChartContainer = styled.div`
@@ -23,18 +27,43 @@ const ChartContainer = styled.div`
   }
 `
 
-const TradingViewChart: React.FC<TradingViewChartProps> = ({ symbol = 'AAPL' }) => {
+const setSymbolInfo = (currency0: Currency, currency1: Currency, chainId: number) => {
+  window.TradingView.token0Address = currency0?.isToken ? currency0?.address : currency0?.wrapped?.address
+  window.TradingView.token1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
+  window.TradingView.chainId = chainId
+}
+
+const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency1 }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const widgetRef = useRef<TradingViewWidget | null>(null)
   const isInitialized = useRef(false)
+  const currentSymbol = useRef('')
   const { isDark, theme } = useTheme()
+  const symbol = currency0 && currency1 ? `${currency0?.symbol}/${currency1?.symbol}` : ''
+  const { chainId } = useActiveChainId()
+
+  useEffect(() => {
+    if (currency0 && currency1 && symbol !== currentSymbol.current && widgetRef.current) {
+      currentSymbol.current = symbol
+      setSymbolInfo(currency0, currency1, chainId)
+      widgetRef.current?.setSymbol(symbol, 'D', () => {})
+    }
+  }, [currency0, currency1, chainId])
 
   useEffect(() => {
     async function initChart() {
       try {
         await loadTradingViewLibrary()
 
-        if (containerRef.current && !widgetRef.current && !isInitialized.current) {
+        if (
+          containerRef.current &&
+          !widgetRef.current &&
+          !isInitialized.current &&
+          symbol &&
+          currency0 &&
+          currency1 &&
+          chainId
+        ) {
           const options: TradingViewWidgetOptions = {
             symbol,
             theme: isDark ? 'Dark' : 'Light',
@@ -106,7 +135,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ symbol = 'AAPL' }) 
             height: '100%',
             width: '100%',
           }
-
+          setSymbolInfo(currency0, currency1, chainId)
           widgetRef.current = createTradingViewWidget(containerRef.current, options)
           isInitialized.current = true
         }
@@ -116,7 +145,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ symbol = 'AAPL' }) 
     }
 
     initChart()
-  }, [symbol, isDark, theme])
+  }, [symbol, isDark, theme, currency0, currency1, chainId])
 
   useEffect(() => {
     console.log('isDark', isDark, widgetRef.current && isInitialized.current)

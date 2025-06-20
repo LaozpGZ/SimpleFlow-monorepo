@@ -1,7 +1,24 @@
 // Type definitions for PancakeSwap Charting Library
 // Project: https://github.com/pancakeswap/charting-library
 
+declare global {
+  interface Window {
+    TradingView: {
+      widget: new (options: TradingViewWidgetOptions) => TradingViewWidget;
+      [key: string]: any;
+      token0Address: string;
+      token1Address: string;
+      chainId: number;
+    };
+    Datafeeds: {
+      UDFCompatibleDatafeed: new (url: string, options?: any) => any;
+      [key: string]: any;
+    };
+  }
+}
+
 // TradingView widget options interface
+
 export interface TradingViewWidgetOptions {
   symbol?: string;
   interval?: string;
@@ -16,7 +33,7 @@ export interface TradingViewWidgetOptions {
   charts_storage_api_version?: string;
   client_id?: string;
   user_id?: string;
-  theme?: 'Light' | 'Dark';
+  theme?: "Light" | "Dark";
   [key: string]: any;
 }
 

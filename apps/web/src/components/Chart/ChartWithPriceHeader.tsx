@@ -1,6 +1,6 @@
 import { Currency } from '@pancakeswap/sdk'
 import { Box } from '@pancakeswap/uikit'
-import React from 'react'
+import React, { useState } from 'react'
 import { styled } from 'styled-components'
 import PriceHeader from './PriceHeader'
 import TradingViewChart from './TradingViewChart'
@@ -45,6 +45,7 @@ const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
   currency1,
   theme = 'Dark',
 }) => {
+  const [isReversed, setIsReversed] = useState(false)
   return (
     <Container>
       <PriceHeader
@@ -57,8 +58,14 @@ const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
         isPositive={isPositive}
         currency0={currency0}
         currency1={currency1}
+        isReversed={isReversed}
+        setIsReversed={setIsReversed}
       />
-      <TradingViewChart theme={theme} />
+      <TradingViewChart
+        theme={theme}
+        currency0={isReversed ? currency1 : currency0}
+        currency1={isReversed ? currency0 : currency1}
+      />
     </Container>
   )
 }

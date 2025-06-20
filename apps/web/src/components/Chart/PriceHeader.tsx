@@ -1,7 +1,7 @@
 import { Currency } from '@pancakeswap/sdk'
 import { Flex, FlexGap, SwapHorizIcon, Text } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
-import React, { useState } from 'react'
+import React from 'react'
 import { styled } from 'styled-components'
 
 interface PriceHeaderProps {
@@ -14,6 +14,8 @@ interface PriceHeaderProps {
   isPositive?: boolean
   currency0?: Currency
   currency1?: Currency
+  isReversed: boolean
+  setIsReversed: (isReversed: boolean) => void
 }
 
 const Container = styled(Flex)`
@@ -75,9 +77,9 @@ const PriceHeader: React.FC<PriceHeaderProps> = ({
   isPositive = false,
   currency0,
   currency1,
+  isReversed,
+  setIsReversed,
 }) => {
-  const [isReversed, setIsReversed] = useState(false)
-
   return (
     <Container>
       <FlexGap gap="8px">
