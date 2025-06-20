@@ -3,9 +3,9 @@ import { Currency, CurrencyAmount, MaxUint256, Token } from '@pancakeswap/swap-s
 import { Permit2Signature } from '@pancakeswap/universal-router-sdk'
 import { QueryObserverResult } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
-import { Address, encodeFunctionData, Hash, erc20Abi, Hex } from 'viem'
+import { Address, encodeFunctionData, erc20Abi, Hash, Hex } from 'viem'
 import useAccountActiveChain from './useAccountActiveChain'
-import { useApproveCallback } from './useApproveCallback'
+import { ApprovalState, useApproveCallback } from './useApproveCallback'
 import { Permit2Details, usePermit2Details } from './usePermit2Details'
 import { usePermit2Requires } from './usePermit2Requires'
 import { useWritePermit } from './useWritePermit'
@@ -99,11 +99,9 @@ export const usePermit2 = (
   } = usePermit2Requires(amount, spender, chainId)
 
   const [isPermitting, setIsPermitting] = useState(false)
-  const [isRevoking, setIsRevoking] = useState(false)
-  const [isApproving, setIsApproving] = useState(false)
 
   const writePermit = useWritePermit(amount?.currency, spender, permit2Details?.nonce, chainId)
-  const { approveNoCheck, revokeNoCheck } = useApproveCallback(amount, approveTarget, {
+  const { approveNoCheck, revokeNoCheck, approvalState } = useApproveCallback(amount, approveTarget, {
     enablePaymaster,
     overrideChainId: chainId,
   })
@@ -117,26 +115,6 @@ export const usePermit2 = (
 
     return signature
   }, [writePermit])
-
-  const approve = useCallback(async () => {
-    setIsApproving(true)
-    try {
-      const result = await approveNoCheck()
-      return result
-    } finally {
-      setIsApproving(false)
-    }
-  }, [approveNoCheck])
-
-  const revoke = useCallback(async () => {
-    setIsRevoking(true)
-    try {
-      const result = await revokeNoCheck()
-      return result
-    } finally {
-      setIsRevoking(false)
-    }
-  }, [revokeNoCheck])
 
   const getPermitCalldata = useCallback(() => {
     if (!amount?.currency || !permit2Details || !spender) return null
@@ -178,8 +156,8 @@ export const usePermit2 = (
     permit2Details,
 
     isPermitting,
-    isApproving,
-    isRevoking,
+    isApproving: approvalState === ApprovalState.PENDING,
+    isRevoking: approvalState === ApprovalState.PENDING,
 
     requireApprove,
     requirePermit,
@@ -187,8 +165,8 @@ export const usePermit2 = (
 
     refetch,
 
-    approve,
-    revoke,
+    approve: approveNoCheck,
+    revoke: revokeNoCheck,
     permit,
 
     getPermitCalldata,

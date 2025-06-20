@@ -24,6 +24,18 @@ export enum ApprovalState {
   APPROVED,
 }
 
+const withAsyncStatus =
+  <Args extends any[], R>(
+    fn: (...args: Args) => Promise<R>,
+    setFlag: (value: boolean) => void,
+  ): ((...args: Args) => Promise<R>) =>
+  (...args: Args) => {
+    setFlag(true)
+    return fn(...args).finally(() => {
+      setFlag(false)
+    })
+  }
+
 // returns a variable indicating the state of the approval and a function which approves if necessary or early returns
 export function useApproveCallback(
   amountToApprove?: CurrencyAmount<Currency>,
@@ -64,6 +76,7 @@ export function useApproveCallback(
 
   const [pending, setPending] = useState<boolean>(pendingApproval)
   const [isPendingError, setIsPendingError] = useState<boolean>(false)
+  const [isCallbackCalled, setIsCallbackCalled] = useState(false)
 
   useEffect(() => {
     if (pendingApproval) {
@@ -81,14 +94,14 @@ export function useApproveCallback(
     if (amountToApprove.currency?.isNative) return ApprovalState.APPROVED
     // we might not have enough data to know whether or not we need to approve
     if (!currentAllowance) return ApprovalState.UNKNOWN
-
+    if (isCallbackCalled) return ApprovalState.PENDING
     // amountToApprove will be defined if currentAllowance is
     return currentAllowance.lessThan(amountToApprove)
-      ? pending
+      ? pending || pendingApproval
         ? ApprovalState.PENDING
         : ApprovalState.NOT_APPROVED
       : ApprovalState.APPROVED
-  }, [amountToApprove, currentAllowance, pending, spender])
+  }, [amountToApprove, isCallbackCalled, currentAllowance, pending, pendingApproval, spender])
 
   const tokenContract = useTokenContract(token?.address, chainId)
   const addTransaction = useTransactionAdder(chainId)
@@ -232,23 +245,19 @@ export function useApproveCallback(
   )
 
   const approveNoCheck = useCallback(
-    async (overrideAmountApprove?: bigint) => {
-      return approve(overrideAmountApprove, false)
-    },
+    (overrideAmountApprove?: bigint) =>
+      withAsyncStatus(async () => approve(overrideAmountApprove, false), setIsCallbackCalled)(),
     [approve],
   )
 
-  const approveCallback = useCallback(() => {
-    return approve()
-  }, [approve])
+  const approveCallback = useCallback(() => withAsyncStatus(approve, setIsCallbackCalled)(), [approve])
 
-  const revokeCallback = useCallback(() => {
-    return approve(0n)
-  }, [approve])
+  const revokeCallback = useCallback(() => withAsyncStatus(() => approve(0n), setIsCallbackCalled)(), [approve])
 
-  const revokeNoCheck = useCallback(() => {
-    return approveNoCheck(0n)
-  }, [approveNoCheck])
+  const revokeNoCheck = useCallback(
+    () => withAsyncStatus(() => approveNoCheck(0n), setIsCallbackCalled)(),
+    [approveNoCheck],
+  )
 
   return {
     approvalState,
