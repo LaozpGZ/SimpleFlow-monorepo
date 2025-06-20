@@ -98,7 +98,7 @@ export default function SectionMyPositions() {
     handleRefreshAll()
   })
 
-  const enableFarm = false
+  const enableFarm = true
 
   return (
     <>
