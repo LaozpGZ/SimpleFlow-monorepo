@@ -474,6 +474,16 @@ export const useClmmStore = createStore<ClmmState>(
         const computeBudgetConfig = await getComputeBudgetConfig()
         const { execute } = await raydium.clmm.decreaseLiquidity({
           poolInfo,
+          // @todo: @ChefJerry ask BE implement rewardDefaultInfos
+          // poolInfo: {
+          //   ...poolInfo,
+          //   rewardDefaultInfos: [
+          //     {
+          //       mint: poolInfo.mintA,
+          //       perSecond: 0
+          //     }
+          //   ]
+          // },
           ownerPosition: position,
           poolKeys: {
             mintA: poolInfo.mintA,
@@ -484,6 +494,12 @@ export const useClmmStore = createStore<ClmmState>(
             id: poolInfo.id,
             programId: poolInfo.programId,
             openTime: '1723037622'
+            // @todo @ChefJerry ask BE implement getPoolKeys
+            // rewardInfos: [
+            //   {
+            //     vault: new PublicKey('4ZCaWWwDJ97J6QB51vvQSZjEifZDKVYDDajTzXm2Lcn7')
+            //   }
+            // ]
           } as any,
           ownerInfo: {
             useSOLBalance: true,
