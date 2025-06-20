@@ -209,7 +209,7 @@ class W {
         type: "token",
         session: "24x7",
         timezone: "Etc/UTC",
-        pricescale: 1e6,
+        pricescale: 100,
         // 價格精度，根據實際情況調整
         minmov: 1,
         format: "price",
