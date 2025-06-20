@@ -202,7 +202,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   const status = customBridgeStatus(bridgeStatus)
 
   // overrideActiveOrderMetadata is false, mean it's on the confirm modal
-  useOrderStatusTrackingStateMachine(!overrideActiveOrderMetadata && status)
+  useOrderStatusTrackingStateMachine(!overrideActiveOrderMetadata ? status : undefined)
 
   const middleIcon = useMemo(() => {
     switch (status) {
