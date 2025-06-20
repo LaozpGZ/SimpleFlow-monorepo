@@ -1,5 +1,6 @@
 import { PoolIds } from '@pancakeswap/ifos'
 import { BetPosition } from '@pancakeswap/prediction'
+import { BridgeStatus } from 'views/Swap/Bridge/types'
 import { getChainFullName } from 'views/universalFarms/utils'
 
 export enum GTMEvent {
@@ -40,6 +41,11 @@ export enum GTMEvent {
   SWAP_QUOTE_START = 'swapQuoteStart',
   SWAP_QUOTE_RECEIVED = 'swapQuoteReceived',
   SWAP_QUOTE_FAILED = 'swapQuoteFailed',
+
+  // Cross Chain
+  ORDER_STATUS_START = 'orderStatusStart',
+  ORDER_STATUS_SUCCESS = 'orderStatusSuccess',
+  ORDER_STATUS_FAILED = 'orderStatusFailed',
 
   // wallet
   ConnectWallet = 'connectWallet',
@@ -108,6 +114,9 @@ export enum GTMAction {
 
   // Quote
   QuoterQuery = 'Query price from Quoter',
+
+  // Cross Chain
+  UpdateOrderStatus = 'Update Order Status',
 
   // Wallet
   ClickWalletConnectButton = 'Click Wallet Connect and Connected', // deprecated
@@ -207,7 +216,8 @@ export const logGTMSwapTxSentEvent = (options?: {
   symbol?: string
 }) => {
   // NOTE: SwapTxSent is called when the confirm wallet is clicked, not when the tx is sent
-  // TODO: need to track when the tx is sent
+  // There is no txHash in this event.
+  // SwapTxSuccess is called when the txHash is confirmed.
   console.info('---SwapTxSent---')
   window?.dataLayer?.push({
     event: GTMEvent.SwapTxSent,
@@ -502,6 +512,16 @@ export const logGTMIdoConnectWalletEvent = (preTGE: boolean) => {
     event: GTMEvent.IdoConnectWallet,
     action: preTGE ? GTMAction.IDOConnectWalletPreTGE : GTMAction.IDOConnectWalletDuringTGE,
     category: GTMCategory.IDO,
+  })
+}
+
+export const logGTMOrderStatusEvent = (status: BridgeStatus) => {
+  console.info('---OrderStatus---', status)
+  const event = status === BridgeStatus.SUCCESS ? GTMEvent.ORDER_STATUS_SUCCESS : GTMEvent.ORDER_STATUS_FAILED
+
+  window?.dataLayer?.push({
+    event: GTMEvent.ORDER_STATUS_START,
+    action: GTMAction.UpdateOrderStatus,
   })
 }
 
