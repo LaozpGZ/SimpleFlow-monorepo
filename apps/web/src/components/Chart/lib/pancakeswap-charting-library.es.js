@@ -281,35 +281,32 @@ class W {
         let p = null, N = null;
         S.forEach((a, l) => {
           if (a.base && a.quote) {
-            const u = a.base.open / a.quote.open, b = a.base.high / a.quote.low, y = a.base.low / a.quote.high, g = a.base.close / a.quote.close, O = a.base.volume !== void 0 ? a.base.volume : 0, A = a.quote.volume !== void 0 ? a.quote.volume : 0, q = (O + A) / 2, M = Math.max(u, g) * 5, x = Math.min(u, g) / 5;
-            (b > M || y < x) && console.warn(
-              `[Datafeed]: Abnormal price range detected at ${new Date(l).toISOString()}:`,
-              {
-                symbol: e.name,
-                time: l,
-                timeUTC: new Date(l).toUTCString(),
-                open: u,
-                high: b,
-                low: y,
-                close: g,
-                highToOpenRatio: b / u,
-                highToCloseRatio: b / g,
-                lowToOpenRatio: y / u,
-                lowToCloseRatio: y / g,
-                baseToken: {
-                  open: a.base.open,
-                  high: a.base.high,
-                  low: a.base.low,
-                  close: a.base.close
-                },
-                quoteToken: {
-                  open: a.quote.open,
-                  high: a.quote.high,
-                  low: a.quote.low,
-                  close: a.quote.close
-                }
+            const u = a.base.open / a.quote.open, b = a.base.high / a.quote.high, y = a.base.low / a.quote.low, g = a.base.close / a.quote.close, O = a.base.volume !== void 0 ? a.base.volume : 0, A = a.quote.volume !== void 0 ? a.quote.volume : 0, q = (O + A) / 2, M = Math.max(u, g) * 5, x = Math.min(u, g) / 5;
+            (b > M || y < x) && console.warn(`[Datafeed]: Abnormal price range detected at ${new Date(l).toISOString()}:`, {
+              symbol: e.name,
+              time: l,
+              timeUTC: new Date(l).toUTCString(),
+              open: u,
+              high: b,
+              low: y,
+              close: g,
+              highToOpenRatio: b / u,
+              highToCloseRatio: b / g,
+              lowToOpenRatio: y / u,
+              lowToCloseRatio: y / g,
+              baseToken: {
+                open: a.base.open,
+                high: a.base.high,
+                low: a.base.low,
+                close: a.base.close
+              },
+              quoteToken: {
+                open: a.quote.open,
+                high: a.quote.high,
+                low: a.quote.low,
+                close: a.quote.close
               }
-            );
+            });
             const T = {
               time: l,
               open: u,
