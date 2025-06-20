@@ -12,7 +12,6 @@ import {
   Message,
   MessageText,
   ScanLink,
-  Skeleton,
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
@@ -20,6 +19,7 @@ import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 
 import Page from 'components/Layout/Page'
 import { TabToggle, TabToggleGroup } from 'components/TabToggle'
+import TextWithSkeleton from 'components/TextWithSkeleton'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import dayjs from 'dayjs'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -97,6 +97,7 @@ const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, cha
     pool: poolDatas,
     transactions,
     charts: chartData,
+    loading,
   } = useAtomValue(
     tokenInfoV3PageDataAtom({
       address,
@@ -214,12 +215,10 @@ const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, cha
                 </Text>
               </Flex>
               <Flex mt="8px" ml="46px" alignItems="center">
-                {tokenData?.priceUSD && (
-                  <Text mr="16px" bold fontSize="24px">
-                    ${formatAmount(tokenData.priceUSD, { notation: 'standard' })}
-                  </Text>
-                )}
-                {tokenData?.priceUSDChange && <Percent value={tokenData.priceUSDChange} fontWeight={600} />}
+                <TextWithSkeleton mr="16px" bold fontSize="24px" loading={loading} width={80}>
+                  {tokenData ? `$${formatAmount(tokenData.priceUSD, { notation: 'standard' })}` : ''}
+                </TextWithSkeleton>
+                {!loading && <Percent value={tokenData?.priceUSDChange} fontWeight={600} />}
               </Flex>
             </Flex>
             <Flex>
@@ -242,42 +241,39 @@ const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, cha
           </Message>
         )}
         <ContentLayout>
-          {tokenData && tokenData.tvlUSD && (
-            <Card>
-              <Box p="24px">
-                <Text bold small color="secondary" fontSize="12px" textTransform="uppercase">
-                  {t('TVL')}
-                </Text>
-                <Text bold fontSize="24px">
-                  ${formatAmount(tokenData.tvlUSD)}
-                </Text>
-                <Percent value={tokenData.tvlUSDChange} />
+          <Card>
+            <Box p="24px">
+              <Text bold small color="secondary" fontSize="12px" textTransform="uppercase">
+                {t('TVL')}
+              </Text>
+              <TextWithSkeleton bold fontSize="24px" width={80} loading={loading}>
+                {tokenData ? `$${formatAmount(tokenData.tvlUSD)}` : ''}
+              </TextWithSkeleton>
+              {!loading ? <Percent value={tokenData?.tvlUSDChange} /> : null}
 
-                <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
-                  {t('Volume 24H')}
-                </Text>
-                <Text bold fontSize="24px" textTransform="uppercase">
-                  ${formatAmount(tokenData.volumeUSD)}
-                </Text>
-                <Percent value={tokenData.volumeUSDChange} />
+              <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
+                {t('Volume 24H')}
+              </Text>
+              <TextWithSkeleton bold fontSize="24px" textTransform="uppercase" width={80} loading={loading}>
+                {tokenData ? `$${formatAmount(tokenData.volumeUSD)}` : ''}
+              </TextWithSkeleton>
+              {!loading ? <Percent value={tokenData?.volumeUSDChange} /> : null}
 
-                <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
-                  {t('Volume 7D')}
-                </Text>
-                <Text bold fontSize="24px">
-                  ${formatAmount(tokenData.volumeUSDWeek)}
-                </Text>
+              <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
+                {t('Volume 7D')}
+              </Text>
+              <TextWithSkeleton bold fontSize="24px" width={80} loading={loading}>
+                {tokenData ? `$${formatAmount(tokenData.volumeUSDWeek)}` : ''}
+              </TextWithSkeleton>
 
-                <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
-                  {t('Transactions 24H')}
-                </Text>
-                <Text bold fontSize="24px">
-                  {formatAmount(tokenData.txCount, { isInteger: true })}
-                </Text>
-              </Box>
-            </Card>
-          )}
-          {!tokenData?.tvlUSD && <Skeleton borderRadius="40px" />}
+              <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
+                {t('Transactions 24H')}
+              </Text>
+              <TextWithSkeleton bold fontSize="24px" width={80} loading={loading}>
+                {tokenData ? formatAmount(tokenData.txCount, { isInteger: true }) : ''}
+              </TextWithSkeleton>
+            </Box>
+          </Card>
           <Card>
             <TabToggleGroup>
               <TabToggle isActive={view === ChartView.VOL} onClick={() => setView(ChartView.VOL)}>

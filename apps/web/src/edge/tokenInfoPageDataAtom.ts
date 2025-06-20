@@ -184,6 +184,7 @@ export const tokenInfoV2PageDataAtom = atomFamily((params: TokenInfoParams) => {
       chartVolume,
       chartTvl,
       charts: undefined,
+      loading: !token.isJust(),
     }
   })
 }, isEqual)
@@ -201,6 +202,7 @@ export const tokenInfoV3PageDataAtom = atomFamily((params: TokenInfoParams) => {
       pool,
       transactions,
       charts,
+      loading: !token.isJust(),
     }
   })
 }, isEqual)
