@@ -116,19 +116,6 @@ export async function queryTokenPrice(params: {
       allowedPoolTypes: [PoolType.V2, PoolType.V3],
       quoterOptimization: false,
     })
-    console.log('output amount', trade?.inputAmount.toExact())
-    for (const route of trade?.routes || []) {
-      console.log(
-        'route pools',
-        route.pools
-          .map((pool) => {
-            const list = SmartRouter.getCurrenciesOfPool(pool)
-            return `PoolType[pool.type](${list[0].symbol}-${list[1].symbol})`
-          })
-          .join(' > '),
-      )
-    }
-
     if (!trade) {
       return undefined
     }
