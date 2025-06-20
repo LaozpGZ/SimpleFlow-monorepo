@@ -6,6 +6,7 @@ import { TextHighlight } from './TextHighlight'
 
 export const InfoStripeCommon = (props: { id: AdsIds }) => {
   const config = useAdsConfig(props.id).infoStripe
+  if (!config) return null
   return (
     <Box mr={['6px']}>
       {config.texts.map((text, index) => {
