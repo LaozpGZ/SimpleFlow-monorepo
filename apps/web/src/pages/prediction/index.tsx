@@ -1,10 +1,19 @@
 import { SUPPORTED_CHAIN_IDS } from '@pancakeswap/prediction'
+import dynamic from 'next/dynamic'
+import { NextPageWithLayout } from 'utils/page.types'
 import PredictionConfigProviders from '../../views/Predictions/context/PredictionConfigProviders'
 import Predictions from '../../views/Predictions'
 
-export default function Prediction() {
+function Prediction() {
   return <Predictions />
 }
 
-Prediction.Layout = PredictionConfigProviders
-Prediction.chains = SUPPORTED_CHAIN_IDS
+const PredictionPage = dynamic(() => Promise.resolve(Prediction), {
+  ssr: false,
+}) as NextPageWithLayout
+
+PredictionPage.Layout = PredictionConfigProviders
+PredictionPage.chains = SUPPORTED_CHAIN_IDS
+PredictionPage.screen = true
+
+export default PredictionPage
