@@ -6,6 +6,7 @@ export enum GTMEvent {
   EventTracking = 'eventTracking',
   Swap = 'swap',
   SwapTxSent = 'swapTxSent',
+  SwapTxSuccess = 'swapTxSuccess',
   SwapConfirmed = 'swapConfirmed',
   AddLiquidity = 'addLiquidity',
   AddLiquidityConfirmed = 'addLiquidityConfirmed',
@@ -71,6 +72,7 @@ export enum GTMAction {
   ClickSwapButton = 'Click Swap Button',
   ClickSwapConfirmButton = 'Click Swap Confirm Button',
   SwapTransactionSent = 'Swap Transaction Sent',
+  SwapTransactionSuccess = 'Swap Transaction Success',
   ClickAddLiquidityConfirmButton = 'Click Add Liquidity Confirm Button',
   AddLiquidityTransactionSent = 'Add Liquidity Transaction Sent',
   ClickAddLiquidityButton = 'Click Add Liquidity Button',
@@ -204,6 +206,8 @@ export const logGTMSwapTxSentEvent = (options?: {
   chainId?: number
   symbol?: string
 }) => {
+  // NOTE: SwapTxSent is called when the confirm wallet is clicked, not when the tx is sent
+  // TODO: need to track when the tx is sent
   console.info('---SwapTxSent---')
   window?.dataLayer?.push({
     event: GTMEvent.SwapTxSent,
@@ -213,6 +217,18 @@ export const logGTMSwapTxSentEvent = (options?: {
     txType: options?.txType,
     chainId: options?.chainId,
     symbol: options?.symbol,
+  })
+}
+
+export const logGTMSwapTxSuccessEvent = ({ txHash }: LogGTMClickSwapEventOptions & { txHash: string }) => {
+  console.info('---SwapTxSuccess---', {
+    txHash,
+  })
+  window?.dataLayer?.push({
+    event: GTMEvent.SwapTxSuccess,
+    action: GTMAction.SwapTransactionSuccess,
+    category: GTMCategory.Swap,
+    txHash,
   })
 }
 

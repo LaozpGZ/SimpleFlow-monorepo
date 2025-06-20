@@ -30,7 +30,11 @@ import { useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useRoutingSettingChanged } from 'state/user/smartRouter'
 import { useCurrencyBalances } from 'state/wallet/hooks'
-import { logGTMClickSwapConfirmEvent, logGTMClickSwapEvent } from 'utils/customGTMEventTracking'
+import {
+  logGTMClickSwapConfirmEvent,
+  logGTMClickSwapEvent,
+  logGTMSwapTxSuccessEvent,
+} from 'utils/customGTMEventTracking'
 import { warningSeverity } from 'utils/exchange'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckApproval'
 import { computeBridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
@@ -353,7 +357,16 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   // Watch for completed transactions and refresh balances
   useEffect(() => {
     // Only refresh when transaction is completed, txHash exists, and hasn't been processed yet
-    if (confirmState === ConfirmModalState.COMPLETED && txHash && !processedTxHashesRef.current.includes(txHash)) {
+    if (
+      [ConfirmModalState.COMPLETED, ConfirmModalState.ORDER_SUBMITTED].includes(confirmState) &&
+      txHash &&
+      !processedTxHashesRef.current.includes(txHash)
+    ) {
+      // track success txn
+      logGTMSwapTxSuccessEvent({
+        txHash: txHash ?? '',
+      })
+
       // Add this txHash to the processed list
       processedTxHashesRef.current.push(txHash)
 
