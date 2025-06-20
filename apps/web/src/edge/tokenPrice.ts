@@ -110,7 +110,7 @@ export async function queryTokenPrice(params: {
       gasPriceWei: gasPrice,
       poolProvider: SmartRouter.createStaticPoolProvider(pools),
       quoteProvider,
-      maxHops: 1,
+      maxHops: 3,
       maxSplits: 0,
       blockNumber: Number(blockNumber),
       allowedPoolTypes: [PoolType.V2, PoolType.V3],
