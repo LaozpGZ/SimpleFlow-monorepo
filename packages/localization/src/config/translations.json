@@ -2305,7 +2305,6 @@
   "For more information, please refer to Alchemix’s": "For more information, please refer to Alchemix’s",
   "and await further updates from the team": "and await further updates from the team",
   "Please exercise due caution when trading / providing liquidity for the alETH token. The protocol was recently affected by the": "Please exercise due caution when trading / providing liquidity for the alETH token. The protocol was recently affected by the",
-  "Some Risk": "Some Risk",
   "Significant Risk": "Significant Risk",
   "Provided by": "Provided by",
   "Learn more about risk rating": "Learn more about risk rating",
@@ -3803,5 +3802,6 @@
   "official blog post": "official blog post",
   "or view the": "or view the",
   "announcement on X": "announcement on X",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product."
+  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
+  "No Obvious Risk": "No Obvious Risk"
 }
