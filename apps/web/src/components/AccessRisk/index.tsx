@@ -45,7 +45,7 @@ export const TOKEN_RISK = {
 
 export const TOKEN_RISK_T = {
   [TOKEN_RISK.VERY_LOW]: <Trans>Very Low Risk</Trans>,
-  [TOKEN_RISK.SOME_RISK]: <Trans>Some Risk</Trans>,
+  [TOKEN_RISK.SOME_RISK]: <Trans>No Obvious Risk</Trans>,
   [TOKEN_RISK.LOW]: <Trans>Low Risk</Trans>,
   [TOKEN_RISK.MEDIUM]: <Trans>Medium Risk</Trans>,
   [TOKEN_RISK.HIGH]: <Trans>High Risk</Trans>,
@@ -121,6 +121,13 @@ const AccessRiskComponent: React.FC<AccessRiskProps> = ({ token }) => {
   const { t } = useTranslation()
 
   const { data, refetch } = useTokenRisk(token)
+
+  console.log('AccessRisk Debug:', {
+    token: token?.symbol,
+    data,
+    isDataLoading: !data || (data?.riskLevel === -1 && !data?.hasResult),
+    isError: data?.isError,
+  })
 
   useEffect(() => {
     if (data?.pollingInterval) {

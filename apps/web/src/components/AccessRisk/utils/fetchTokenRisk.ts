@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 import { ChainId } from '@pancakeswap/chains'
-import { ACCESS_RISK_API } from 'config/constants/endpoints'
+import { ACCESS_RISK_API, ACCESS_RISK_API_KEY } from 'config/constants/endpoints'
 
 export interface RiskTokenInfo {
   address: string
@@ -18,27 +18,63 @@ const fetchRiskApi = async (address: string, chainId: number) => {
     headers: {
       Accept: 'application/json',
       'Content-Type': 'application/json',
+      'X-API-KEY': ACCESS_RISK_API_KEY || '',
     },
     method: 'POST',
     body: JSON.stringify({
-      chain_id: chainId,
+      chainId: chainId.toString(),
       address,
     }),
   })
 
   const result = await response.json()
 
+  // Handle processing state
+  if (result.status === 'in progress') {
+    return {
+      ...result,
+      data: {
+        address,
+        chainId,
+        isError: false,
+        hasResult: false,
+        riskLevel: -1,
+        requestId: '',
+        riskLevelDescription: '',
+        pollingInterval: result.pollAfter,
+      },
+    }
+  }
+
+  // Handle final result
+  if (result.code === '0' && result.status === 'ok' && result.data) {
+    return {
+      ...result,
+      data: {
+        address,
+        chainId,
+        isError: false,
+        hasResult: true,
+        riskLevel: result.data.threat_intelligence.risk_level,
+        requestId: '',
+        riskLevelDescription: result.data.overall_risk_level,
+        pollingInterval: 0,
+      },
+    }
+  }
+
+  // Handle error
   return {
     ...result,
     data: {
       address,
       chainId,
-      isError: response.status !== 200,
-      hasResult: result.data.has_result,
-      riskLevel: result.data.risk_level,
-      requestId: result.data.request_id,
-      riskLevelDescription: result.data.risk_level_description,
-      pollingInterval: result.data?.polling_interval ?? 0,
+      isError: true,
+      hasResult: false,
+      riskLevel: -1,
+      requestId: '',
+      riskLevelDescription: '',
+      pollingInterval: 0,
     },
   }
 }
