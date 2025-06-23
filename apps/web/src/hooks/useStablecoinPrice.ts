@@ -2,7 +2,7 @@ import { ChainId } from '@pancakeswap/chains'
 import { Currency, getCurrencyAddress, Price } from '@pancakeswap/sdk'
 import { STABLE_COIN } from '@pancakeswap/tokens'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
-import { SLOW_INTERVAL } from 'config/constants'
+import { FAST_INTERVAL, SLOW_INTERVAL } from 'config/constants'
 import { atom, useAtom, useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
@@ -58,11 +58,8 @@ const stableCoinPriceAtom = atomFamily(
         if (!params.currency || !enabled) {
           return undefined
         }
-        const version = get(versionAtom(getKey(params)))
-        if (version) {
-          return queryStablecoinPrice(params.currency, params.chainId)
-        }
-        return undefined
+        get(versionAtom(getKey(params)))
+        return queryStablecoinPrice(params.currency, params.chainId)
       },
       {
         placeHolderBehavior: 'stale',
