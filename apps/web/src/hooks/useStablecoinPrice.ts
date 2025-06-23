@@ -19,7 +19,7 @@ const DEFAULT_CONFIG: UseStablecoinPriceConfig = {
   hideIfPriceImpactTooHigh: false,
 }
 
-const versionAtom = atomFamily((key: string) => atom(0))
+const versionAtom = atomFamily((_: string) => atom(0))
 
 const queryStablecoinPrice = async (currency: Currency, overrideChainId?: number) => {
   if (!currency) throw new Error('No currency')
@@ -86,29 +86,32 @@ export function useStablecoinPrice(
 
   const stableCoin = chainId && chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
 
-  const version = Math.floor(Date.now() / SLOW_INTERVAL)
-
   const shouldEnabled = Boolean(currency && enabled && currentChainId === chainId)
 
-  const atomParams = useMemo(() => {
-    return {
+  const atomParams = useMemo(
+    () => ({
       currency: currency || undefined,
       chainId,
       enabled,
-    }
-  }, [currency, chainId, enabled])
+    }),
+    [currency, chainId, enabled],
+  )
 
-  const atomKey = useMemo(() => {
-    return getKey(atomParams)
-  }, [atomParams])
+  const atomKey = useMemo(() => getKey(atomParams), [atomParams])
 
   const [, setVersion] = useAtom(versionAtom(atomKey))
 
   const coinPrice = useAtomValue(stableCoinPriceAtom(atomParams))
 
   useEffect(() => {
-    setVersion(version)
-  }, [version])
+    setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
+
+    const interval = setInterval(() => {
+      setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
+    }, SLOW_INTERVAL)
+
+    return () => clearInterval(interval)
+  }, [setVersion])
 
   const price = useMemo(() => {
     if (!coinPrice.isJust() || !currency || !stableCoin || !shouldEnabled) {
