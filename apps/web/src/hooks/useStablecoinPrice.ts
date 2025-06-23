@@ -3,10 +3,10 @@ import { Currency, getCurrencyAddress, Price } from '@pancakeswap/sdk'
 import { STABLE_COIN } from '@pancakeswap/tokens'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
 import { SLOW_INTERVAL } from 'config/constants'
-import { useAtomValue } from 'jotai'
+import { atom, useAtom, useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { useActiveChainId } from './useActiveChainId'
 
@@ -18,6 +18,8 @@ const DEFAULT_CONFIG: UseStablecoinPriceConfig = {
   enabled: true,
   hideIfPriceImpactTooHigh: false,
 }
+
+const versionAtom = atomFamily((key: string) => atom(0))
 
 const queryStablecoinPrice = async (currency: Currency, overrideChainId?: number) => {
   if (!currency) throw new Error('No currency')
@@ -43,23 +45,30 @@ interface StableCoinPriceParams {
   currency?: Currency
   chainId?: number
   enabled?: boolean
-  version: number
 }
+
+const getKey = (params: { currency?: Currency; chainId?: number; enabled?: boolean }) =>
+  `${params.currency ? getCurrencyAddress(params.currency) : ''}:${params.chainId}:${params.enabled}`
+
 const stableCoinPriceAtom = atomFamily(
   (params: StableCoinPriceParams) => {
-    return atomWithLoadable(async () => {
-      const enabled = params.enabled ?? true
-      if (!params.currency || !enabled) {
-        return undefined
-      }
-      return queryStablecoinPrice(params.currency, params.chainId)
-    })
+    return atomWithLoadable(
+      async (get) => {
+        const enabled = params.enabled ?? true
+        if (!params.currency || !enabled) {
+          return undefined
+        }
+        get(versionAtom(getKey(params)))
+        return queryStablecoinPrice(params.currency, params.chainId)
+      },
+      {
+        placeHolderBehavior: 'stale',
+      },
+    )
   },
   (a, b) => {
-    const enabledA = a.enabled ?? true
-    const enabledB = b.enabled ?? true
-    const hashA = `${a.currency ? getCurrencyAddress(a.currency) : ''}:${a.chainId}:${enabledA}:${a.version}`
-    const hashB = `${b.currency ? getCurrencyAddress(b.currency) : ''}:${b.chainId}:${enabledB}:${b.version}`
+    const hashA = getKey(a)
+    const hashB = getKey(b)
     return hashA === hashB
   },
 )
@@ -77,16 +86,27 @@ export function useStablecoinPrice(
 
   const stableCoin = chainId && chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
 
+  const version = Math.floor(Date.now() / SLOW_INTERVAL)
+
   const shouldEnabled = Boolean(currency && enabled && currentChainId === chainId)
+
+  const atomKey = useMemo(() => {
+    return getKey({ currency: currency || undefined, chainId, enabled })
+  }, [currency, chainId, enabled])
+
+  const [, setVersion] = useAtom(versionAtom(atomKey))
 
   const coinPrice = useAtomValue(
     stableCoinPriceAtom({
       currency: currency || undefined,
       chainId,
       enabled,
-      version: Math.floor(Date.now() / SLOW_INTERVAL),
     }),
   )
+
+  useEffect(() => {
+    setVersion(version)
+  }, [version])
 
   const price = useMemo(() => {
     if (!coinPrice.isJust() || !currency || !stableCoin || !shouldEnabled) {
