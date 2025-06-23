@@ -328,7 +328,7 @@ export class LiquidityMath {
 
     const numerator = amountA.mul(sqrtPriceX64A).mul(sqrtPriceX64B);
     const denominator = sqrtPriceX64B.sub(sqrtPriceX64A);
-    const result = numerator.div(denominator);
+    const result = denominator.isZero() ? new BN(0) : numerator.div(denominator);
 
     if (roundUp) {
       return MathUtil.mulDivRoundingUp(result, ONE, MaxU64);

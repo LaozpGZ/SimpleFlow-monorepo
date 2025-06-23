@@ -375,7 +375,7 @@ export default function Pools() {
         headerName: t('Volume %timeBase%', { timeBase }),
         flex: 1,
         field: `${FILED_KEY[timeBase]}.volume`,
-        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 }),
+        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', abbreviated: true, decimalPlaces: 3 }),
         headerStyle: {
           paddingRight: '47px',
           paddingLeft: '1px'
@@ -389,7 +389,7 @@ export default function Pools() {
         headerName: t('Fees %timeBase%', { timeBase }),
         flex: 1,
         field: `${FILED_KEY[timeBase]}.volumeFee`,
-        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', decimalPlaces: 0 }),
+        valueFormatter: ({ value }) => formatCurrency(value, { symbol: '$', abbreviated: true, decimalPlaces: 3 }),
         headerStyle: {
           paddingRight: '47px',
           paddingLeft: '1px'
