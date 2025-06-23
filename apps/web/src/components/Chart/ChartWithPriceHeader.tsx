@@ -28,8 +28,6 @@ const Container = styled(Box)`
 
   ${({ theme }) => theme.mediaQueries.md} {
     height: fit-content;
-    margin-left: 40px;
-    max-width: 685px;
   }
 `
 

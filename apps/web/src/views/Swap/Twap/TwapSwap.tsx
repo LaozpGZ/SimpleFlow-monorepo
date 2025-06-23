@@ -3,6 +3,7 @@ import { Currency } from '@pancakeswap/sdk'
 import { AutoRow, BottomDrawer, Box, Flex, StyledLink, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useCurrency } from 'hooks/Tokens'
 import { useSwapHotTokenDisplay } from 'hooks/useSwapHotTokenDisplay'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
@@ -15,9 +16,10 @@ import { QuoteProvider } from 'quoter/QuoteProvider'
 import { useSingleTokenSwapInfo } from 'quoter/hook/useSingleTokenSwapInfo'
 import { SwapSelection } from '../../SwapSimplify/InfinitySwap/SwapSelectionTab'
 import { SwapFeaturesContext } from '../SwapFeaturesContext'
-import PriceChartContainer from '../components/Chart/PriceChartContainer'
 import { SwapType } from '../types'
 import { OrderHistory, TWAPPanel } from './Twap'
+
+const ChartWithPriceHeader = dynamic(() => import('components/Chart/ChartWithPriceHeader'), { ssr: false })
 
 export default function TwapAndLimitSwap({ limit }: { limit?: boolean }) {
   return (
@@ -80,16 +82,11 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
       >
         {isDesktop && (
           <Flex width={isChartExpanded ? '100%' : '50%'} maxWidth="928px" flexDirection="column" style={{ gap: 20 }}>
-            <PriceChartContainer
-              inputCurrencyId={inputCurrencyId}
-              inputCurrency={currencies[Field.INPUT]}
-              outputCurrencyId={outputCurrencyId}
-              outputCurrency={currencies[Field.OUTPUT]}
-              isChartExpanded={isChartExpanded}
-              setIsChartExpanded={setIsChartExpanded}
-              isChartDisplayed={isChartDisplayed}
-              currentSwapPrice={singleTokenPrice}
-              isFullWidthContainer
+            <ChartWithPriceHeader
+              currency0={inputCurrency || undefined}
+              currency1={outputCurrency || undefined}
+              symbol={`${inputCurrency?.symbol}/${outputCurrency?.symbol}`}
+              theme="Dark"
             />
             <OrderHistory />
           </Flex>
@@ -97,17 +94,11 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
         {!isDesktop && isChartSupported && (
           <BottomDrawer
             content={
-              <PriceChartContainer
-                inputCurrencyId={inputCurrencyId}
-                inputCurrency={currencies[Field.INPUT]}
-                outputCurrencyId={outputCurrencyId}
-                outputCurrency={currencies[Field.OUTPUT]}
-                isChartExpanded={isChartExpanded}
-                setIsChartExpanded={setIsChartExpanded}
-                isChartDisplayed={isChartDisplayed}
-                currentSwapPrice={singleTokenPrice}
-                isFullWidthContainer
-                isMobile
+              <ChartWithPriceHeader
+                currency0={inputCurrency || undefined}
+                currency1={outputCurrency || undefined}
+                symbol={`${inputCurrency?.symbol}/${outputCurrency?.symbol}`}
+                theme="Dark"
               />
             }
             isOpen={isChartDisplayed}
