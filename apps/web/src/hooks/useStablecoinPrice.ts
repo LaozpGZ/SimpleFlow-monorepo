@@ -107,7 +107,7 @@ export function useStablecoinPrice(
     setVersion(0)
 
     const interval = setInterval(() => {
-      setVersion((prev) => prev + 1)
+      setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
     }, SLOW_INTERVAL)
 
     return () => clearInterval(interval)
