@@ -75,7 +75,10 @@ const config = {
     '@pancakeswap/utils',
     '@pancakeswap/widgets-internal',
     '@pancakeswap/ifos',
-    '@pancakeswap/uikit'
+    '@pancakeswap/uikit',
+    // https://github.com/TanStack/query/issues/6560#issuecomment-1975771676
+    '@tanstack/query-core',
+    '@pancakeswap/canonical-bridge',
   ],
   reactStrictMode: true,
   images: {
