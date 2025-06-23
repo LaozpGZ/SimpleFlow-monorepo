@@ -117,16 +117,16 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency
               'uppercase_instrument_names',
               'study_symbol_ticker_description',
               'auto_enable_symbol_labels',
-              // 禁用圖表上的標記 (earnings, dividends 等)
+              // disable marks on bars (earnings, dividends )
               'marks_on_bars',
               'show_event_marks',
               'show_earnings_marks',
               'show_dividend_marks',
               'show_splits_marks',
-              // 禁用時間軸上的標記
+              // disable timescale marks
               'timescale_marks',
               'timeframes_toolbar',
-              'legend_widget',
+              // 'legend_widget',
               'display_legend_on_all_charts',
               'two_character_bar_marks_labels',
             ],
