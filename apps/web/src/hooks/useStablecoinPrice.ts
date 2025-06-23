@@ -8,6 +8,7 @@ import { atomFamily } from 'jotai/utils'
 import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
 import { useEffect, useMemo } from 'react'
 import { multiplyPriceByAmount } from 'utils/prices'
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import { useActiveChainId } from './useActiveChainId'
 
 type UseStablecoinPriceConfig = {
@@ -131,13 +132,13 @@ export function useStablecoinPrice(
 
     const priceUSD = coinPrice.isJust() ? coinPrice.unwrap() : coinPrice.value
 
-    if (!priceUSD) return undefined
+    if (isUndefinedOrNull(priceUSD)) return undefined
 
     return new Price(
       currency,
       stableCoin,
       1 * 10 ** currency.decimals,
-      getFullDecimalMultiplier(stableCoin.decimals).times(priceUSD.toFixed(stableCoin.decimals)).toString(),
+      getFullDecimalMultiplier(stableCoin.decimals).times(priceUSD!.toFixed(stableCoin.decimals)).toString(),
     )
   }, [coinPrice, currency, stableCoin, shouldEnabled])
 
