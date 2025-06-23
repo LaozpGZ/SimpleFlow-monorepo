@@ -58,8 +58,11 @@ const stableCoinPriceAtom = atomFamily(
         if (!params.currency || !enabled) {
           return undefined
         }
-        get(versionAtom(getKey(params)))
-        return queryStablecoinPrice(params.currency, params.chainId)
+        const version = get(versionAtom(getKey(params)))
+        if (version) {
+          return queryStablecoinPrice(params.currency, params.chainId)
+        }
+        return undefined
       },
       {
         placeHolderBehavior: 'stale',
