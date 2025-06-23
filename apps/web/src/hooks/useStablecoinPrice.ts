@@ -104,19 +104,26 @@ export function useStablecoinPrice(
   const coinPrice = useAtomValue(stableCoinPriceAtom(atomParams))
 
   useEffect(() => {
-    setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
+    setVersion(0)
 
     const interval = setInterval(() => {
-      setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
+      setVersion((prev) => prev + 1)
     }, SLOW_INTERVAL)
 
     return () => clearInterval(interval)
   }, [setVersion])
 
   const price = useMemo(() => {
-    if (!coinPrice.isJust() || !currency || !stableCoin || !shouldEnabled) {
+    if (!coinPrice || !currency || !stableCoin || !shouldEnabled) {
       return undefined
     }
+
+    const isValidLoadable = (coinPrice.isJust() || coinPrice.isPending()) && typeof coinPrice.unwrap?.() !== 'undefined'
+
+    if (!isValidLoadable) {
+      return undefined
+    }
+
     const priceUSD = coinPrice.unwrap()
 
     return new Price(
