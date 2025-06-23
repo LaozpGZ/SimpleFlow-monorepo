@@ -17,6 +17,7 @@ import { getTickArrayAddress } from '@/hooks/pool/formatter'
 import { getPoolName } from '@/features/Pools/util'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { addAccChangeCbk, removeAccChangeCbk } from '@/hooks/app/useTokenAccountInfo'
+import logMessage from '@/utils/log'
 import useSubscribeClmmInfo, { RpcPoolData } from './useSubscribeClmmInfo'
 
 interface Props {
@@ -97,15 +98,12 @@ export default function useFetchClmmRewardInfo({
       })
       .reduce((acc, cur) => acc.add(cur), new Decimal(0))
 
-    setTotalPendingYield(
-      new Decimal(tokenFeeAmountA.toString())
-        .div(10 ** poolInfo.mintA.decimals)
-        .mul(tokenPrices[poolInfo.mintA.address]?.value || 0)
-        .add(
-          new Decimal(tokenFeeAmountB.toString()).div(10 ** poolInfo.mintB.decimals).mul(tokenPrices[poolInfo.mintB.address]?.value || 0)
-        )
-        .add(totalRewards)
-    )
+    const totalPendingYield = new Decimal(tokenFeeAmountA.toString())
+      .div(10 ** poolInfo.mintA.decimals)
+      .mul(tokenPrices[poolInfo.mintA.address]?.value || 0)
+      .add(new Decimal(tokenFeeAmountB.toString()).div(10 ** poolInfo.mintB.decimals).mul(tokenPrices[poolInfo.mintB.address]?.value || 0))
+      .add(totalRewards)
+    setTotalPendingYield(totalPendingYield)
 
     setIsEmptyReward(rewardInfos.filter((r) => r.gt(BN_ZERO)).length <= 0 && !tokenFeeAmountA.gt(BN_ZERO) && !tokenFeeAmountB.gt(BN_ZERO))
   }, [tickLowerData, tickUpperData, rpcPoolData, tokenPrices, position.tickSlot])
@@ -170,6 +168,7 @@ export default function useFetchClmmRewardInfo({
         amountUSD: usdValueB
       })
     }
+    logMessage('rewardToken', rewardToken)
     return rewardToken
   }, [tokenFees, rewards, tokenPrices, poolInfo?.id])
 
