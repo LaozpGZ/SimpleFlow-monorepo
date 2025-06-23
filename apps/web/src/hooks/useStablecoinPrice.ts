@@ -123,13 +123,15 @@ export function useStablecoinPrice(
       return undefined
     }
 
-    const isValidLoadable = (coinPrice.isJust() || coinPrice.isPending()) && typeof coinPrice.unwrap?.() !== 'undefined'
+    const isValidLoadable = coinPrice.isJust() || coinPrice.isPending()
 
     if (!isValidLoadable) {
       return undefined
     }
 
-    const priceUSD = coinPrice.unwrap()
+    const priceUSD = coinPrice.isJust() ? coinPrice.unwrap() : coinPrice.value
+
+    if (!priceUSD) return undefined
 
     return new Price(
       currency,
