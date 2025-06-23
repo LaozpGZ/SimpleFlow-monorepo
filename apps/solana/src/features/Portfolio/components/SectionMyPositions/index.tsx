@@ -147,7 +147,7 @@ export default function SectionMyPositions() {
               <HStack justify="space-between" gap={8}>
                 <Flex gap={[0, 2]} direction={['column', 'row']} fontSize={['xs', 'sm']} align={['start', 'center']}>
                   <HStack gap={1}>
-                    <Text whiteSpace="nowrap" color={colors.textSecondary}>
+                    <Text whiteSpace="nowrap" color={colors.textSubtle}>
                       {t('Pending Yield')}
                     </Text>
                     {isMobile && currentRewardState.rewardInfo.length > 0 && (
@@ -157,13 +157,13 @@ export default function SectionMyPositions() {
                             {currentRewardState.rewardInfo.map((r) => (
                               <Flex key={r.mint.address} alignItems="center" gap="1" my="2">
                                 <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
-                                <Text color={colors.textPrimary}>
+                                <Text color={colors.primary}>
                                   {formatCurrency(r.amount, {
                                     maximumDecimalTrailingZeroes: 5
                                   })}
                                 </Text>
                                 <Text>{getMintSymbol({ mint: r.mint, transformSol: true })}</Text>
-                                <Text color={colors.textPrimary}>({formatCurrency(r.amountUSD, { symbol: '$', decimalPlaces: 4 })})</Text>
+                                <Text color={colors.primary}>({formatCurrency(r.amountUSD, { symbol: '$', decimalPlaces: 4 })})</Text>
                               </Flex>
                             ))}
                           </>
@@ -174,8 +174,10 @@ export default function SectionMyPositions() {
                     )}
                   </HStack>
                   <HStack>
-                    <Flex gap="2" alignItems="center" whiteSpace="nowrap" color={colors.textPrimary} fontWeight={500}>
-                      {formatCurrency(currentRewardState.pendingReward, { symbol: '$', maximumDecimalTrailingZeroes: 4 })}
+                    <Flex gap="2" alignItems="center" whiteSpace="nowrap">
+                      <Text color={colors.primary} fontWeight={600}>
+                        {formatCurrency(currentRewardState.pendingReward, { symbol: '$', maximumDecimalTrailingZeroes: 4 })}
+                      </Text>
                       {!isMobile && currentRewardState.rewardInfo.length > 0 ? (
                         <QuestionToolTip
                           label={
@@ -183,13 +185,13 @@ export default function SectionMyPositions() {
                               {currentRewardState.rewardInfo.map((r) => (
                                 <Flex key={r.mint.address} alignItems="center" gap="1" my="2">
                                   <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
-                                  <Text color={colors.textPrimary}>
+                                  <Text color={colors.primary}>
                                     {formatCurrency(r.amount, {
                                       maximumDecimalTrailingZeroes: 5
                                     })}
                                   </Text>
                                   <Text>{getMintSymbol({ mint: r.mint, transformSol: true })}</Text>
-                                  <Text color={colors.textPrimary}>({formatCurrency(r.amountUSD, { symbol: '$', decimalPlaces: 4 })})</Text>
+                                  <Text color={colors.primary}>({formatCurrency(r.amountUSD, { symbol: '$', decimalPlaces: 4 })})</Text>
                                 </Flex>
                               ))}
                             </>
