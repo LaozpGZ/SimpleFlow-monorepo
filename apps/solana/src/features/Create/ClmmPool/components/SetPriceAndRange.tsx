@@ -291,17 +291,7 @@ export default function SetPriceAndRange({
               <Text variant="label" fontSize="sm" color={colors.textSubtle}>
                 {t('Price range')}:
               </Text>
-              <Text>
-                {isFullRange
-                  ? `${formatCurrency(new Decimal(fullRangeTickRef.current.priceLower || 0).toFixed(24), {
-                      maximumDecimalTrailingZeroes: 5,
-                      abbreviated: true
-                    })} - ${formatCurrency(new Decimal(fullRangeTickRef.current.priceUpper || 0).toFixed(24), {
-                      maximumDecimalTrailingZeroes: 5,
-                      abbreviated: true
-                    })}`
-                  : `${formatToRawLocaleStr(priceRange[0])} - ${formatToRawLocaleStr(priceRange[1])}`}
-              </Text>
+              <Text>{isFullRange ? '0 - ∞' : `${formatToRawLocaleStr(priceRange[0])} - ${formatToRawLocaleStr(priceRange[1])}`}</Text>
               <Text>
                 {t('%subA% per %subB%', {
                   subA: wSolToSolString(tempCreatedPool?.[baseIn ? 'mintB' : 'mintA'].symbol),
