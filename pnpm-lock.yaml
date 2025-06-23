@@ -1888,9 +1888,12 @@ importers:
 
   packages/canonical-bridge:
     dependencies:
+      '@bnb-chain/canonical-bridge-sdk':
+        specifier: 0.6.0
+        version: 0.6.0(@mayanfinance/swap-sdk@10.6.1(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10))(@solana/wallet-adapter-react@0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@6.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0))(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(axios@1.6.8)(viem@2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))
       '@bnb-chain/canonical-bridge-widget':
-        specifier: 0.6.1
-        version: 0.6.1(9ba8473c16bbf4e95da5c26593b816ec)
+        specifier: 0.9.0
+        version: 0.9.0(92e73b8fdc85909422084bc40b388d9d)
       '@emotion/react':
         specifier: ^11
         version: 11.11.4(@types/react@18.2.37)(react@18.2.0)
@@ -3690,6 +3693,20 @@ importers:
 
 packages:
 
+  '@0no-co/graphql.web@1.1.2':
+    resolution: {integrity: sha512-N2NGsU5FLBhT8NZ+3l2YrzZSHITjNXNuDhC4iDiikv0IujaJ0Xc6xIxQZ/Ek3Cb+rgPjnLHYyJm11tInuJn+cw==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    peerDependenciesMeta:
+      graphql:
+        optional: true
+
+  '@0no-co/graphqlsp@1.12.16':
+    resolution: {integrity: sha512-B5pyYVH93Etv7xjT6IfB7QtMBdaaC07yjbhN6v8H7KgFStMkPvi+oWYBTibMFRMY89qwc9H8YixXg8SXDVgYWw==}
+    peerDependencies:
+      graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
+      typescript: ^5.0.0
+
   '@0xsquid/sdk@1.14.8':
     resolution: {integrity: sha512-sgfCvO0jNFkdxjUkrZG3gaWW86/I1YpuXUAFSB3NC2qjkFcOeVubz1nNzExkzwhIqPPyfF8mFA1xRrFVwVWu/A==}
 
@@ -4798,16 +4815,19 @@ packages:
       aptos:
         optional: true
 
-  '@bnb-chain/canonical-bridge-sdk@0.5.0':
-    resolution: {integrity: sha512-cv9dFjE1WXYEu4qvyY5bv3UL/CEwajTeMSWlwtuCsytCwme+Wsejq15118ta0cnggpmpjY2q4kzLxyYqaVTADg==}
+  '@bnb-chain/canonical-bridge-sdk@0.6.0':
+    resolution: {integrity: sha512-kpHYQhlqYxNx1UhTHcQ+Y+o6BnuAc00otqh0IzlV85xlnl8FNfnQbn8Y1SQD+/VZL6nSIol2Hw28owWQ31nU2g==}
     peerDependencies:
+      '@mayanfinance/swap-sdk': ~10.6.1
+      '@solana/wallet-adapter-react': ^0
+      '@solana/web3.js': ^1
       axios: '>=1.7.4'
       viem: ^2
 
-  '@bnb-chain/canonical-bridge-widget@0.6.1':
-    resolution: {integrity: sha512-NYpvRNyyMEwjMOP1kP9urq+MpLAtbYsr1qh9ygvAXSyZxBYc66lJYD6Z50+H/Ohrd0e3Q3xPqyQDbVlLSpW31Q==}
+  '@bnb-chain/canonical-bridge-widget@0.9.0':
+    resolution: {integrity: sha512-o135Z1g5XvTRCG7OzbNGbtXhI0SdgtHdsYShrYcE8jhmdAzM7DIsM6c9JeeN6X8YvYF8TRfP+IdufTKtdrdygQ==}
     peerDependencies:
-      '@bnb-chain/canonical-bridge-sdk': ^0.5.0
+      '@bnb-chain/canonical-bridge-sdk': ^0.6.0
       '@emotion/react': ^11
       '@emotion/styled': ^11
       '@solana/spl-token': ^0
@@ -6142,6 +6162,26 @@ packages:
     resolution: {integrity: sha512-6P2uJMnhHcJeErd/t13ChH6sda+vUIOqcrcUDKyWCNXpcmMniPcZzkQxZ8cYz186gQFbslsHSjQ6twnh4yhXUw==}
     deprecated: Migrated to @safe-global/safe-gateway-typescript-sdk
 
+  '@gql.tada/cli-utils@1.6.3':
+    resolution: {integrity: sha512-jFFSY8OxYeBxdKi58UzeMXG1tdm4FVjXa8WHIi66Gzu9JWtCE6mqom3a8xkmSw+mVaybFW5EN2WXf1WztJVNyQ==}
+    peerDependencies:
+      '@0no-co/graphqlsp': ^1.12.13
+      '@gql.tada/svelte-support': 1.0.1
+      '@gql.tada/vue-support': 1.0.1
+      graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
+      typescript: ^5.0.0
+    peerDependenciesMeta:
+      '@gql.tada/svelte-support':
+        optional: true
+      '@gql.tada/vue-support':
+        optional: true
+
+  '@gql.tada/internal@1.0.8':
+    resolution: {integrity: sha512-XYdxJhtHC5WtZfdDqtKjcQ4d7R1s0d1rnlSs3OcBEUbYiPoJJfZU7tWsVXuv047Z6msvmr4ompJ7eLSK5Km57g==}
+    peerDependencies:
+      graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
+      typescript: ^5.0.0
+
   '@graphql-typed-document-node/core@3.2.0':
     resolution: {integrity: sha512-mB9oAsNCm9aM3/SOv4YtBMqZbYj10R7dkq8byBqxGY/ncFwhf2oQzMV+LCRlWoDSEBJ3COiR1yeDvMtsoOsuFQ==}
     peerDependencies:
@@ -6561,6 +6601,9 @@ packages:
       react: ^16.8.0 || ^17.0.0
       react-dom: ^16.8.0 || ^17.0.0
 
+  '@mayanfinance/swap-sdk@10.6.1':
+    resolution: {integrity: sha512-ILXRVVqRMFq7hdz6Mh8/ac7xX9f9JFAOOFBCnL9FFITGYK8VNqHOv2ygiiP2n2liCO24q9oht4d1M6Y0jMDSOA==}
+
   '@mdx-js/react@2.3.0':
     resolution: {integrity: sha512-zQH//gdOmuu7nt2oJR29vFhDv88oGPmVw6BggmrHeMI+xgEkp1B2dX9/bMBSYtK0dyLX/aOmesKS09g222K1/g==}
     peerDependencies:
@@ -6814,6 +6857,16 @@ packages:
     peerDependenciesMeta:
       '@types/react':
         optional: true
+
+  '@mysten/bcs@1.6.3':
+    resolution: {integrity: sha512-QQ6u0U7a4+/o6rZ9tALTeGYMdf6V5z/HkRI/mhD5/fSr80DJoGzOWpFszcN/fhJpKb36vBaSQUMpS7yNQ10xBQ==}
+
+  '@mysten/sui@1.34.0':
+    resolution: {integrity: sha512-Btf2Tq5VPXqABOXqtw9hV13DskepggP7MpeGb7OnRNF2grh1nHyWj9J0Y2UmkhZUEdTWpnVRnl/ufIZ6VmU1kg==}
+    engines: {node: '>=18'}
+
+  '@mysten/utils@0.1.0':
+    resolution: {integrity: sha512-nFxqArh4cr629elLsIk7UZmx5dFVshblwrfwaG7Dm2L/ii2C65bhK5tdTs6UiC3K0tCr8q8svrgzXyF9L0CN/A==}
 
   '@ndelangen/get-tarball@3.0.9':
     resolution: {integrity: sha512-9JKTEik4vq+yGosHYhZ1tiH/3WpUS0Nh0kej4Agndhox8pAdWhEx5knFVRcb/ya9knCRCs1rPxNrSXTDdfVqpA==}
@@ -15063,6 +15116,12 @@ packages:
     resolution: {integrity: sha512-hBv2ty9QN2RdbJJMK3hesmSkFTjVIHyIDDbssCKnSmq62edGgImJWD10Eb1k77TiV1bxloxqcFAVK8+9pkhOig==}
     engines: {node: '>=14.16'}
 
+  gql.tada@1.8.10:
+    resolution: {integrity: sha512-FrvSxgz838FYVPgZHGOSgbpOjhR+yq44rCzww3oOPJYi0OvBJjAgCiP6LEokZIYND2fUTXzQAyLgcvgw1yNP5A==}
+    hasBin: true
+    peerDependencies:
+      typescript: ^5.0.0
+
   graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
@@ -21000,6 +21059,9 @@ packages:
   v8-compile-cache@2.4.0:
     resolution: {integrity: sha512-ocyWc3bAHBB/guyqJQVI5o4BZkPhznPYUG2ea80Gond/BgNWpap8TOmLSeeQG7bnh2KMISxskdADG59j7zruhw==}
 
+  valibot@0.36.0:
+    resolution: {integrity: sha512-CjF1XN4sUce8sBK9TixrDqFM7RwNkuXdJu174/AwmQUB62QbCQADg5lLe8ldBalFgtj1uKj+pKwDJiNo4Mn+eQ==}
+
   validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}
 
@@ -21836,6 +21898,16 @@ packages:
     resolution: {integrity: sha512-V50KMwwzqJV0NpZIZFwfOD5/lyny3WlSzRiXgA0G7VUnRlqttta1L6UQIHzd6EuBY/cHGfwTIck7w1yH6Q5zUw==}
 
 snapshots:
+
+  '@0no-co/graphql.web@1.1.2(graphql@16.11.0)':
+    optionalDependencies:
+      graphql: 16.11.0
+
+  '@0no-co/graphqlsp@1.12.16(graphql@16.11.0)(typescript@5.7.3)':
+    dependencies:
+      '@gql.tada/internal': 1.0.8(graphql@16.11.0)(typescript@5.7.3)
+      graphql: 16.11.0
+      typescript: 5.7.3
 
   '@0xsquid/sdk@1.14.8(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
@@ -23649,16 +23721,20 @@ snapshots:
       - debug
       - utf-8-validate
 
-  '@bnb-chain/canonical-bridge-sdk@0.5.0(axios@1.6.8)(viem@2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))':
+  '@bnb-chain/canonical-bridge-sdk@0.6.0(@mayanfinance/swap-sdk@10.6.1(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10))(@solana/wallet-adapter-react@0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@6.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0))(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(axios@1.6.8)(viem@2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))':
     dependencies:
+      '@mayanfinance/swap-sdk': 10.6.1(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)
+      '@solana/wallet-adapter-react': 0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@6.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0)
+      '@solana/web3.js': 1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       axios: 1.6.8(debug@4.4.0)
       viem: 2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4)
 
-  '@bnb-chain/canonical-bridge-widget@0.6.1(9ba8473c16bbf4e95da5c26593b816ec)':
+  '@bnb-chain/canonical-bridge-widget@0.9.0(92e73b8fdc85909422084bc40b388d9d)':
     dependencies:
-      '@bnb-chain/canonical-bridge-sdk': 0.5.0(axios@1.6.8)(viem@2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))
+      '@bnb-chain/canonical-bridge-sdk': 0.6.0(@mayanfinance/swap-sdk@10.6.1(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10))(@solana/wallet-adapter-react@0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@6.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0))(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(axios@1.6.8)(viem@2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))
       '@emotion/react': 11.11.4(@types/react@18.2.37)(react@18.2.0)
       '@emotion/styled': 11.11.5(@emotion/react@11.11.4(@types/react@18.2.37)(react@18.2.0))(@types/react@18.2.37)(react@18.2.0)
+      '@mayanfinance/swap-sdk': 10.6.1(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@solana/spl-token': 0.4.9(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@solana/wallet-adapter-react': 0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@6.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0)
       '@solana/web3.js': 1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -23669,6 +23745,13 @@ snapshots:
       tronweb: 6.0.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       viem: 2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4)
       wagmi: 2.14.11(@react-native-async-storage/async-storage@1.24.0(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10)))(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.52.1(react@18.2.0))(@types/react@18.2.37)(bufferutil@4.0.8)(immer@9.0.21)(react@18.2.0)(typescript@5.7.3)(utf-8-validate@5.0.10)(viem@2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))(zod@3.22.4)
+    transitivePeerDependencies:
+      - '@gql.tada/svelte-support'
+      - '@gql.tada/vue-support'
+      - bufferutil
+      - encoding
+      - typescript
+      - utf-8-validate
 
   '@bytecodealliance/preview2-shim@0.17.2': {}
 
@@ -24274,10 +24357,10 @@ snapshots:
       web3: 1.10.4(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     optionalDependencies:
       '@defi.org/chai-bignumber': 3.0.2(bignumber.js@9.1.2)
-      '@nomiclabs/hardhat-etherscan': 3.1.8(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))
-      '@nomiclabs/hardhat-web3': 2.0.0(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))(web3@1.10.4(bufferutil@4.0.8)(utf-8-validate@5.0.10))
+      '@nomiclabs/hardhat-etherscan': 3.1.8(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))
+      '@nomiclabs/hardhat-web3': 2.0.0(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))(web3@1.10.4(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       '@openzeppelin/contracts': 4.9.6
-      '@typechain/hardhat': 6.1.6(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(@typechain/ethers-v5@10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.7.3))(typescript@5.7.3))(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.7.3))
+      '@typechain/hardhat': 6.1.6(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(@typechain/ethers-v5@10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.7.3))(typescript@5.7.3))(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.7.3))
       '@typechain/web3-v1': 6.0.7(typechain@8.3.2(typescript@5.7.3))(typescript@4.9.5)(web3-core@1.10.4)(web3-eth-contract@1.10.4)(web3@1.10.4(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       '@types/chai': 4.3.14
       '@types/fs-extra': 11.0.4
@@ -24287,10 +24370,10 @@ snapshots:
       chai: 4.3.10
       dotenv: 16.3.1
       fs-extra: 11.1.1
-      hardhat: 2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10)
-      hardhat-gas-reporter: 1.0.10(bufferutil@4.0.8)(debug@4.4.0)(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
-      hardhat-spdx-license-identifier: 2.2.0(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))
-      hardhat-tracer: 1.3.0(chalk@5.3.0)(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))
+      hardhat: 2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)
+      hardhat-gas-reporter: 1.0.10(bufferutil@4.0.8)(debug@4.4.0)(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10)
+      hardhat-spdx-license-identifier: 2.2.0(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))
+      hardhat-tracer: 1.3.0(chalk@5.3.0)(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))
       mocha: 10.4.0
       patch-package: 7.0.2
       prompts: 2.4.2
@@ -25294,6 +25377,19 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
+  '@gql.tada/cli-utils@1.6.3(@0no-co/graphqlsp@1.12.16(graphql@16.11.0)(typescript@5.7.3))(graphql@16.11.0)(typescript@5.7.3)':
+    dependencies:
+      '@0no-co/graphqlsp': 1.12.16(graphql@16.11.0)(typescript@5.7.3)
+      '@gql.tada/internal': 1.0.8(graphql@16.11.0)(typescript@5.7.3)
+      graphql: 16.11.0
+      typescript: 5.7.3
+
+  '@gql.tada/internal@1.0.8(graphql@16.11.0)(typescript@5.7.3)':
+    dependencies:
+      '@0no-co/graphql.web': 1.1.2(graphql@16.11.0)
+      graphql: 16.11.0
+      typescript: 5.7.3
+
   '@graphql-typed-document-node/core@3.2.0(graphql@16.11.0)':
     dependencies:
       graphql: 16.11.0
@@ -25999,6 +26095,24 @@ snapshots:
       react-dom: 18.2.0(react@18.2.0)
       react-is: 17.0.2
 
+  '@mayanfinance/swap-sdk@10.6.1(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)':
+    dependencies:
+      '@mysten/sui': 1.34.0(typescript@5.7.3)
+      '@solana/buffer-layout': 4.0.1
+      '@solana/web3.js': 1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      bs58: 6.0.0
+      cross-fetch: 3.1.8
+      ethers: 6.13.4(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      js-sha256: 0.9.0
+      js-sha3: 0.8.0
+    transitivePeerDependencies:
+      - '@gql.tada/svelte-support'
+      - '@gql.tada/vue-support'
+      - bufferutil
+      - encoding
+      - typescript
+      - utf-8-validate
+
   '@mdx-js/react@2.3.0(react@18.2.0)':
     dependencies:
       '@types/mdx': 2.0.10
@@ -26615,6 +26729,34 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.2.37
 
+  '@mysten/bcs@1.6.3':
+    dependencies:
+      '@mysten/utils': 0.1.0
+      '@scure/base': 1.2.6
+
+  '@mysten/sui@1.34.0(typescript@5.7.3)':
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.11.0)
+      '@mysten/bcs': 1.6.3
+      '@mysten/utils': 0.1.0
+      '@noble/curves': 1.9.2
+      '@noble/hashes': 1.8.0
+      '@scure/base': 1.2.6
+      '@scure/bip32': 1.7.0
+      '@scure/bip39': 1.6.0
+      gql.tada: 1.8.10(graphql@16.11.0)(typescript@5.7.3)
+      graphql: 16.11.0
+      poseidon-lite: 0.2.1
+      valibot: 0.36.0
+    transitivePeerDependencies:
+      - '@gql.tada/svelte-support'
+      - '@gql.tada/vue-support'
+      - typescript
+
+  '@mysten/utils@0.1.0':
+    dependencies:
+      '@scure/base': 1.2.6
+
   '@ndelangen/get-tarball@3.0.9':
     dependencies:
       gunzip-maybe: 1.4.2
@@ -26878,7 +27020,7 @@ snapshots:
       '@nomicfoundation/solidity-analyzer-win32-x64-msvc': 0.1.1
     optional: true
 
-  '@nomiclabs/hardhat-etherscan@3.1.8(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))':
+  '@nomiclabs/hardhat-etherscan@3.1.8(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))':
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@ethersproject/address': 5.7.0
@@ -26895,7 +27037,7 @@ snapshots:
       - supports-color
     optional: true
 
-  '@nomiclabs/hardhat-web3@2.0.0(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))(web3@1.10.4(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
+  '@nomiclabs/hardhat-web3@2.0.0(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))(web3@1.10.4(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
     dependencies:
       '@types/bignumber.js': 5.0.0
       hardhat: 2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)
@@ -33262,11 +33404,11 @@ snapshots:
       ethers: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       lodash: 4.17.21
       ts-essentials: 7.0.3(typescript@5.7.3)
-      typechain: 8.3.2(typescript@5.7.3)
+      typechain: 8.3.2(typescript@4.9.5)
       typescript: 5.7.3
     optional: true
 
-  '@typechain/hardhat@6.1.6(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(@typechain/ethers-v5@10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.7.3))(typescript@5.7.3))(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.7.3))':
+  '@typechain/hardhat@6.1.6(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(@typechain/ethers-v5@10.2.1(@ethersproject/abi@5.7.0)(@ethersproject/providers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.7.3))(typescript@5.7.3))(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))(typechain@8.3.2(typescript@5.7.3))':
     dependencies:
       '@ethersproject/abi': 5.7.0
       '@ethersproject/providers': 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -33274,14 +33416,14 @@ snapshots:
       ethers: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       fs-extra: 9.1.0
       hardhat: 2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)
-      typechain: 8.3.2(typescript@5.7.3)
+      typechain: 8.3.2(typescript@4.9.5)
     optional: true
 
   '@typechain/web3-v1@6.0.7(typechain@8.3.2(typescript@5.7.3))(typescript@4.9.5)(web3-core@1.10.4)(web3-eth-contract@1.10.4)(web3@1.10.4(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
     dependencies:
       lodash: 4.17.21
       ts-essentials: 7.0.3(typescript@4.9.5)
-      typechain: 8.3.2(typescript@5.7.3)
+      typechain: 8.3.2(typescript@4.9.5)
       web3: 1.10.4(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       web3-core: 1.10.4
       web3-eth-contract: 1.10.4
@@ -40409,6 +40551,18 @@ snapshots:
       p-cancelable: 3.0.0
       responselike: 2.0.1
 
+  gql.tada@1.8.10(graphql@16.11.0)(typescript@5.7.3):
+    dependencies:
+      '@0no-co/graphql.web': 1.1.2(graphql@16.11.0)
+      '@0no-co/graphqlsp': 1.12.16(graphql@16.11.0)(typescript@5.7.3)
+      '@gql.tada/cli-utils': 1.6.3(@0no-co/graphqlsp@1.12.16(graphql@16.11.0)(typescript@5.7.3))(graphql@16.11.0)(typescript@5.7.3)
+      '@gql.tada/internal': 1.0.8(graphql@16.11.0)(typescript@5.7.3)
+      typescript: 5.7.3
+    transitivePeerDependencies:
+      - '@gql.tada/svelte-support'
+      - '@gql.tada/vue-support'
+      - graphql
+
   graceful-fs@4.2.11: {}
 
   grapheme-splitter@1.0.4: {}
@@ -40503,7 +40657,7 @@ snapshots:
 
   hard-rejection@2.1.0: {}
 
-  hardhat-gas-reporter@1.0.10(bufferutil@4.0.8)(debug@4.4.0)(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10):
+  hardhat-gas-reporter@1.0.10(bufferutil@4.0.8)(debug@4.4.0)(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10))(utf-8-validate@5.0.10):
     dependencies:
       array-uniq: 1.0.3
       eth-gas-reporter: 0.2.27(bufferutil@4.0.8)(debug@4.4.0)(utf-8-validate@5.0.10)
@@ -40516,71 +40670,16 @@ snapshots:
       - utf-8-validate
     optional: true
 
-  hardhat-spdx-license-identifier@2.2.0(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)):
+  hardhat-spdx-license-identifier@2.2.0(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10)):
     dependencies:
       hardhat: 2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)
     optional: true
 
-  hardhat-tracer@1.3.0(chalk@5.3.0)(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)):
+  hardhat-tracer@1.3.0(chalk@5.3.0)(ethers@5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10))(hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10)):
     dependencies:
       chalk: 5.3.0
       ethers: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       hardhat: 2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10)
-    optional: true
-
-  hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@4.9.5)(utf-8-validate@5.0.10):
-    dependencies:
-      '@ethersproject/abi': 5.7.0
-      '@metamask/eth-sig-util': 4.0.1
-      '@nomicfoundation/edr': 0.3.3
-      '@nomicfoundation/ethereumjs-common': 4.0.4
-      '@nomicfoundation/ethereumjs-tx': 5.0.4
-      '@nomicfoundation/ethereumjs-util': 9.0.4
-      '@nomicfoundation/solidity-analyzer': 0.1.1
-      '@sentry/node': 5.30.0
-      '@types/bn.js': 5.1.5
-      '@types/lru-cache': 5.1.1
-      adm-zip: 0.4.16
-      aggregate-error: 3.1.0
-      ansi-escapes: 4.3.2
-      boxen: 5.1.2
-      chalk: 2.4.2
-      chokidar: 3.6.0
-      ci-info: 2.0.0
-      debug: 4.4.0(supports-color@9.4.0)
-      enquirer: 2.4.1
-      env-paths: 2.2.1
-      ethereum-cryptography: 1.2.0
-      ethereumjs-abi: 0.6.8
-      find-up: 2.1.0
-      fp-ts: 1.19.3
-      fs-extra: 7.0.1
-      glob: 7.2.0
-      immutable: 4.3.5
-      io-ts: 1.10.4
-      keccak: 3.0.4
-      lodash: 4.17.21
-      mnemonist: 0.38.5
-      mocha: 10.4.0
-      p-map: 4.0.0
-      raw-body: 2.5.1
-      resolve: 1.17.0
-      semver: 6.3.1
-      solc: 0.7.3(debug@4.4.0)
-      source-map-support: 0.5.21
-      stacktrace-parser: 0.1.10
-      tsort: 0.0.1
-      undici: 5.28.4
-      uuid: 8.3.2
-      ws: 7.5.10(bufferutil@4.0.8)(utf-8-validate@5.0.10)
-    optionalDependencies:
-      ts-node: 10.9.1(@types/node@18.19.75)(typescript@5.7.3)
-      typescript: 4.9.5
-    transitivePeerDependencies:
-      - bufferutil
-      - c-kzg
-      - supports-color
-      - utf-8-validate
     optional: true
 
   hardhat@2.22.2(bufferutil@4.0.8)(ts-node@10.9.1(@types/node@18.19.75)(typescript@5.7.3))(typescript@5.7.3)(utf-8-validate@5.0.10):
@@ -40629,7 +40728,7 @@ snapshots:
       uuid: 8.3.2
       ws: 7.5.10(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     optionalDependencies:
-      ts-node: 10.9.1(@types/node@18.19.75)(typescript@5.7.3)
+      ts-node: 10.9.1(@types/node@18.19.75)(typescript@4.9.5)
       typescript: 5.7.3
     transitivePeerDependencies:
       - bufferutil
@@ -43773,7 +43872,7 @@ snapshots:
       yaml: 2.3.4
     optionalDependencies:
       postcss: 8.5.3
-      ts-node: 10.9.1(@types/node@18.19.75)(typescript@5.7.3)
+      ts-node: 10.9.1(@types/node@18.19.75)(typescript@4.9.5)
 
   postcss-load-config@6.0.1(jiti@1.21.0)(postcss@8.5.3)(tsx@4.7.1):
     dependencies:
@@ -47258,23 +47357,6 @@ snapshots:
       - supports-color
     optional: true
 
-  typechain@8.3.2(typescript@5.7.3):
-    dependencies:
-      '@types/prettier': 2.7.3
-      debug: 4.4.0(supports-color@9.4.0)
-      fs-extra: 7.0.1
-      glob: 7.1.7
-      js-sha3: 0.8.0
-      lodash: 4.17.21
-      mkdirp: 1.0.4
-      prettier: 2.8.8
-      ts-command-line-args: 2.5.1
-      ts-essentials: 7.0.3(typescript@5.7.3)
-      typescript: 5.7.3
-    transitivePeerDependencies:
-      - supports-color
-    optional: true
-
   typed-array-buffer@1.0.0:
     dependencies:
       call-bind: 1.0.5
@@ -47601,6 +47683,8 @@ snapshots:
   v8-compile-cache-lib@3.0.1: {}
 
   v8-compile-cache@2.4.0: {}
+
+  valibot@0.36.0: {}
 
   validate-npm-package-license@3.0.4:
     dependencies:
