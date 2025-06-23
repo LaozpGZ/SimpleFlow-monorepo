@@ -20,7 +20,7 @@ const DEFAULT_CONFIG: UseStablecoinPriceConfig = {
   hideIfPriceImpactTooHigh: false,
 }
 
-const versionAtom = atomFamily((_: string) => atom(0))
+const versionAtom = atomFamily((_: string) => atom(Math.floor(Date.now() / SLOW_INTERVAL)))
 
 const queryStablecoinPrice = async (currency: Currency, overrideChainId?: number) => {
   if (!currency) throw new Error('No currency')
@@ -105,12 +105,7 @@ export function useStablecoinPrice(
   const coinPrice = useAtomValue(stableCoinPriceAtom(atomParams))
 
   useEffect(() => {
-    setVersion((prev) => {
-      if (!prev) {
-        return Math.floor(Date.now() / SLOW_INTERVAL)
-      }
-      return prev
-    })
+    setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
 
     const interval = setInterval(() => {
       setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
