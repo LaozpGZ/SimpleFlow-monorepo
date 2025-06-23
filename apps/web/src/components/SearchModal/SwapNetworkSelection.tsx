@@ -21,6 +21,8 @@ import { chains as evmChains } from 'utils/wagmi'
 import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks'
 import { BaseWrapper, ButtonWrapper, RowWrapper } from './CommonBases'
 
+const PRIORITIZED_CHAINS = [ChainId.BSC, ChainId.BASE, ChainId.ARBITRUM_ONE, ChainId.ETHEREUM]
+
 const NetworkMenuColumn = styled(Flex)`
   flex-direction: column;
   overflow: hidden;
@@ -37,7 +39,6 @@ const CONTAINER_MAX_WIDTH = 370
 const CHAIN_BUTTON_WIDTH = 42
 const CHAIN_BUTTON_MARGIN = 5
 const HIDDEN_CHAINS_BUTTON_WIDTH = CHAIN_BUTTON_WIDTH
-const CHAIN_LOGO_WIDTH = 24
 const CHAIN_BUTTON_HEIGHT = 40
 
 const ChainOption = styled(Flex)`
@@ -101,20 +102,17 @@ export default function SwapNetworkSelection({
     const availableWidth = containerWidth - HIDDEN_CHAINS_BUTTON_WIDTH - CHAIN_BUTTON_MARGIN
     const chainsToShow = Math.max(1, Math.floor(availableWidth / (CHAIN_BUTTON_WIDTH + CHAIN_BUTTON_MARGIN)))
 
-    // Prioritize BSC, BASE, and ARB chains
-    const prioritizedChains = [ChainId.BSC, ChainId.BASE, ChainId.ARBITRUM_ONE]
-
     // Sort the filtered chains to have priority chains first
     const sortedFiltered = [...filtered].sort((a, b) => {
-      const aIsPriority = prioritizedChains.includes(a.id)
-      const bIsPriority = prioritizedChains.includes(b.id)
+      const aIsPriority = PRIORITIZED_CHAINS.includes(a.id)
+      const bIsPriority = PRIORITIZED_CHAINS.includes(b.id)
 
       if (aIsPriority && !bIsPriority) return -1
       if (!aIsPriority && bIsPriority) return 1
 
       // If both are priority chains, sort by the order in prioritizedChains array
       if (aIsPriority && bIsPriority) {
-        return prioritizedChains.indexOf(a.id) - prioritizedChains.indexOf(b.id)
+        return PRIORITIZED_CHAINS.indexOf(a.id) - PRIORITIZED_CHAINS.indexOf(b.id)
       }
 
       return 0
