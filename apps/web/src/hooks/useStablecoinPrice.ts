@@ -104,10 +104,10 @@ export function useStablecoinPrice(
   const coinPrice = useAtomValue(stableCoinPriceAtom(atomParams))
 
   useEffect(() => {
-    setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
+    setVersion(0)
 
     const interval = setInterval(() => {
-      setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
+      setVersion((prev) => prev + 1)
     }, SLOW_INTERVAL)
 
     return () => clearInterval(interval)
