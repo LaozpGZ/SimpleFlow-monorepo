@@ -3,12 +3,13 @@ import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Decimal from 'decimal.js'
+import { useTranslation } from '@pancakeswap/localization'
 import axios from '@/api/axios'
 import { useAppStore } from '@/store'
 import { debounce } from '@/utils/functionMethods'
 import { isValidPublicKey } from '@/utils/publicKey'
 import { quoteApi } from '@/utils/config/endpoint'
-import { SwapType, QuoteRequest, QuoteResponse, ApiSuccessResponse } from './type'
+import { SwapType, QuoteRequest, QuoteResponse } from './type'
 import { useSwapStore } from './useSwapStore'
 
 const fetcher = async ([url, data]: [url: string, data: QuoteRequest]): Promise<QuoteResponse> => axios.post(url, data)
@@ -31,13 +32,13 @@ export default function useSwap(props: {
     refreshInterval = 30 * 1000
   } = props || {}
 
+  const { t } = useTranslation()
   const [amount, setAmount] = useState('')
   const [inputMint, outputMint] = [
     isValidPublicKey(propInputMint) ? solToWSol(propInputMint).toBase58() : propInputMint,
     isValidPublicKey(propOutputMint) ? solToWSol(propOutputMint).toBase58() : propOutputMint
   ]
 
-  const [txVersion, urlConfigs] = useAppStore((s) => [s.txVersion, s.urlConfigs], shallow)
   const slippage = useSwapStore((s) => s.slippage)
   const slippageBps = new Decimal(propsSlippage || slippage * 10000).toFixed(0)
 
@@ -75,8 +76,7 @@ export default function useSwap(props: {
   return {
     response: error || !data?.success ? undefined : data,
     data: error || !data?.success ? undefined : data,
-    error: error?.message || data?.success ? undefined : 'Failed to get quote',
-    // openTime: data?.openTime,
+    error: error?.message || (!data?.success && data?.msg) ? t('Insufficient liquidity for this trade.') : undefined,
     ...swrProps
   }
 }

@@ -4,9 +4,8 @@ import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { ApiV3Token, RAYMint, SOL_INFO, TokenInfo, TransferFeeDataBaseType } from '@pancakeswap/solana-core-sdk'
 import { NATIVE_MINT } from '@solana/spl-token-0.4'
 import { PublicKey } from '@solana/web3.js'
-import dayjs from 'dayjs'
 import Decimal from 'decimal.js'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
 import { shallow } from 'zustand/shallow'
@@ -26,7 +25,7 @@ import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatte
 import ToPublicKey, { isValidPublicKey } from '@/utils/publicKey'
 import { setUrlQuery, useRouteQuery } from '@/utils/routeTools'
 import { getMintPriority, getMintSymbol, isSolWSol, mintToUrl, urlToMint } from '@/utils/token'
-import { ApiSuccessResponse, ApiSwapV1OutSuccess, QuoteResponse, QuoteResponseData, SwapType } from '../type'
+import { ApiSuccessResponse, QuoteResponseData, SwapType } from '../type'
 import useSwap from '../useSwap'
 import { useSwapStore } from '../useSwapStore'
 import { getSwapPairCache, setSwapPairCache } from '../util'
@@ -265,9 +264,6 @@ export function SwapPanel({
   const balanceAmount = getTokenBalanceUiAmount({ mint: inputMint, decimals: tokenInput?.decimals }).amount
   const balanceNotEnough = balanceAmount.lt(inputAmount || 0) ? t('Insufficent balance') : undefined
   const isSolFeeNotEnough = inputAmount && isSolWSol(inputMint || '') && balanceAmount.sub(inputAmount || 0).lt(DEFAULT_SOL_RESERVER)
-  const swapError = error || balanceNotEnough
-  // const isPoolNotOpenError = !!swapError && !!openTime
-  const isPoolNotOpenError = !!swapError
 
   const handleHighRiskConfirm = useEvent(() => {
     offHightRiskOpen()
@@ -324,6 +320,25 @@ export function SwapPanel({
     return true
   })
 
+  const {
+    swapError,
+    loadingText,
+    disabled,
+    isLoading: isSwapLoading
+  } = useMemo(() => {
+    const emptyAmountIn = new Decimal(amountIn || 0).isZero()
+    const swapError = emptyAmountIn ? t('Enter an amount') : error || balanceNotEnough
+    const disabled = emptyAmountIn || !!swapError || needPriceUpdatedAlert || isPriceImpactTooHigh || swapDisabled
+    const isLoading = isComputing || isSending
+    const loadingText = <div>{isSending ? t('Transaction initiating') : isComputing ? t('Computing..') : ''}</div>
+    return {
+      swapError,
+      loadingText,
+      disabled,
+      isLoading
+    }
+  }, [amountIn, balanceNotEnough, error, isComputing, isPriceImpactTooHigh, isSending, needPriceUpdatedAlert, swapDisabled, t])
+
   return (
     <Wrapper height="100%">
       <SwapUIV2.InputPanelWrapper id="swap-page">
@@ -363,15 +378,12 @@ export function SwapPanel({
       </SwapUIV2.InputPanelWrapper>
       <ButtonAndDetailsPanel>
         <ConnectedButton
-          disabled={new Decimal(amountIn || 0).isZero() || !!swapError || needPriceUpdatedAlert || isPriceImpactTooHigh || swapDisabled}
-          isLoading={isComputing || isSending}
-          loadingText={<div>{isSending ? t('Transaction initiating') : isComputing ? t('Computing..') : ''}</div>}
+          disabled={disabled}
+          isLoading={isSwapLoading}
+          loadingText={loadingText}
           onClick={isHighRiskTx ? onHightRiskOpen : handleClickSwap}
         >
-          <Text>
-            {swapDisabled ? t('Disabled') : swapError || t('Swap')}
-            {/* {isPoolNotOpenError ? ` ${dayjs(Number(openTime) * 1000).format('YYYY/M/D HH:mm:ss')}` : null} */}
-          </Text>
+          <Text>{swapDisabled ? t('Disabled') : swapError || t('Swap')}</Text>
         </ConnectedButton>
         {isSolFeeNotEnough ? (
           <Flex
