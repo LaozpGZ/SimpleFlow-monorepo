@@ -57,7 +57,7 @@ export const RewardStatusDisplay: React.FC<RewardStatusDisplayProps> = ({ provid
         </Box>
         <Text as="span">
           {t(
-            "LPs earns Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
+            "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
           )}
         </Text>
         <FlexGap gap="4px" justifyContent="flex-start" display="inline-flex" alignItems="center" flexWrap="wrap">
