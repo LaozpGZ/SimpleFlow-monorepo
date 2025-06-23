@@ -118,7 +118,7 @@ export default function SetPriceAndRange({
   ]
 
   const onlinePrice =
-    tokenBase && tokenQuote && priceBase?.value >= 0 && priceQuote?.value >= 0
+    tokenBase && tokenQuote && priceBase?.value > 0 && priceQuote?.value > 0
       ? new Decimal((priceReverse ? priceBase.value : priceQuote.value) || 0)
           .div((priceReverse ? priceQuote.value : priceBase.value) || 1)
           .toDecimalPlaces((priceReverse ? tokenQuote.decimals : tokenBase.decimals) || 6)
