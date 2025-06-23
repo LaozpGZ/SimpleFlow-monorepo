@@ -9,6 +9,7 @@ declare global {
       token0Address: string;
       token1Address: string;
       chainId: number;
+      on24HrDataReady: (h: number, l: number, c: number, changes: number) => void;
     };
     Datafeeds: {
       UDFCompatibleDatafeed: new (url: string, options?: any) => any;

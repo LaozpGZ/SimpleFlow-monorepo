@@ -1,17 +1,13 @@
 import { Currency } from '@pancakeswap/sdk'
 import { Flex, FlexGap, SwapHorizIcon, Text } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
+import { useAtomValue } from 'jotai'
 import React from 'react'
 import { styled } from 'styled-components'
+import { chartPriceDataAtom } from './atom/chartPriceDataAtom'
 
 interface PriceHeaderProps {
   symbol?: string
-  price?: string
-  priceChange?: string
-  priceChangePercent?: string
-  high24h?: string
-  low24h?: string
-  isPositive?: boolean
   currency0?: Currency
   currency1?: Currency
   isReversed: boolean
@@ -69,17 +65,12 @@ const StatItem = styled(Flex)`
 
 const PriceHeader: React.FC<PriceHeaderProps> = ({
   symbol = 'CAKE/BNB',
-  price = '0.0052863',
-  priceChange = '-0.01',
-  priceChangePercent = '-0.01%',
-  high24h = '0.0053863',
-  low24h = '0.0051863',
-  isPositive = false,
   currency0,
   currency1,
   isReversed,
   setIsReversed,
 }) => {
+  const { price, priceChangePercent, high24h, low24h } = useAtomValue(chartPriceDataAtom)
   return (
     <Container>
       <FlexGap gap="8px">
@@ -110,23 +101,29 @@ const PriceHeader: React.FC<PriceHeaderProps> = ({
             <Text fontSize="12px" color="textSubtle">
               24h Change
             </Text>
-            <PriceChange isPositive={isPositive}>{priceChangePercent}</PriceChange>
+            <PriceChange isPositive={priceChangePercent > 0}>
+              {priceChangePercent.toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })}
+              %
+            </PriceChange>
           </StatItem>
           <StatItem>
             <Text fontSize="12px" color="textSubtle">
               24h High
             </Text>
-            <Text bold>{high24h}</Text>
+            <Text bold>{high24h.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</Text>
           </StatItem>
 
           <StatItem>
             <Text fontSize="12px" color="textSubtle">
               24h Low
             </Text>
-            <Text bold>{low24h}</Text>
+            <Text bold>{low24h.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</Text>
           </StatItem>
         </FlexGap>
-        <PriceText>{price}</PriceText>
+        <PriceText>{price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</PriceText>
       </PriceInfo>
     </Container>
   )

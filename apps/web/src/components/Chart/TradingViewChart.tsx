@@ -15,6 +15,7 @@ interface TradingViewChartProps {
   width?: string
   currency0?: Currency
   currency1?: Currency
+  on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void
 }
 
 const ChartContainer = styled.div`
@@ -27,13 +28,19 @@ const ChartContainer = styled.div`
   }
 `
 
-const setSymbolInfo = (currency0: Currency, currency1: Currency, chainId: number) => {
+const setSymbolInfo = (
+  currency0: Currency,
+  currency1: Currency,
+  chainId: number,
+  on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void,
+) => {
   window.TradingView.token0Address = currency0?.isToken ? currency0?.address : currency0?.wrapped?.address
   window.TradingView.token1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
   window.TradingView.chainId = chainId
+  window.TradingView.on24HrDataReady = on24HPriceDataChange
 }
 
-const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency1 }) => {
+const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency1, on24HPriceDataChange }) => {
   const containerRef = useRef<HTMLDivElement>(null)
   const widgetRef = useRef<TradingViewWidget | null>(null)
   const isInitialized = useRef(false)
@@ -45,7 +52,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency
   useEffect(() => {
     if (currency0 && currency1 && symbol !== currentSymbol.current && widgetRef.current) {
       currentSymbol.current = symbol
-      setSymbolInfo(currency0, currency1, chainId)
+      setSymbolInfo(currency0, currency1, chainId, on24HPriceDataChange)
       widgetRef.current?.activeChart()?.setSymbol(symbol)
     }
   }, [currency0, currency1, chainId])
@@ -135,7 +142,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({ currency0, currency
             height: '100%',
             width: '100%',
           }
-          setSymbolInfo(currency0, currency1, chainId)
+          setSymbolInfo(currency0, currency1, chainId, on24HPriceDataChange)
           widgetRef.current = createTradingViewWidget(containerRef.current, options)
           isInitialized.current = true
         }

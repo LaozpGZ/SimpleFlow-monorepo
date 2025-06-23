@@ -1,18 +1,14 @@
 import { Currency } from '@pancakeswap/sdk'
 import { Box } from '@pancakeswap/uikit'
-import React, { useState } from 'react'
+import { useSetAtom } from 'jotai'
+import React, { useCallback, useState } from 'react'
 import { styled } from 'styled-components'
+import { chartPriceDataAtom } from './atom/chartPriceDataAtom'
 import PriceHeader from './PriceHeader'
 import TradingViewChart from './TradingViewChart'
 
 interface ChartWithPriceHeaderProps {
   symbol?: string
-  price?: string
-  priceChange?: string
-  priceChangePercent?: string
-  high24h?: string
-  low24h?: string
-  isPositive?: boolean
   currency0?: Currency
   currency1?: Currency
   theme?: 'Light' | 'Dark'
@@ -33,27 +29,25 @@ const Container = styled(Box)`
 
 const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
   symbol = 'CAKE/BNB',
-  price = '0.0052863',
-  priceChange = '-0.01',
-  priceChangePercent = '-0.01%',
-  high24h = '0.0053863',
-  low24h = '0.0051863',
-  isPositive = false,
   currency0,
   currency1,
   theme = 'Dark',
 }) => {
   const [isReversed, setIsReversed] = useState(false)
+  const setPriceData = useSetAtom(chartPriceDataAtom)
+  const on24HPriceDataChange = useCallback((h: number, l: number, c: number, changes: number) => {
+    setPriceData({
+      price: c,
+      priceChangePercent: changes,
+      high24h: h,
+      low24h: l,
+    })
+  }, [])
+
   return (
     <Container>
       <PriceHeader
         symbol={symbol}
-        price={price}
-        priceChange={priceChange}
-        priceChangePercent={priceChangePercent}
-        high24h={high24h}
-        low24h={low24h}
-        isPositive={isPositive}
         currency0={currency0}
         currency1={currency1}
         isReversed={isReversed}
@@ -63,6 +57,7 @@ const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
         theme={theme}
         currency0={isReversed ? currency1 : currency0}
         currency1={isReversed ? currency0 : currency1}
+        on24HPriceDataChange={on24HPriceDataChange}
       />
     </Container>
   )
