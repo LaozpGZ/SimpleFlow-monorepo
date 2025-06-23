@@ -237,7 +237,7 @@ class J {
         type: "token",
         session: "24x7",
         timezone: "Etc/UTC",
-        pricescale: 100,
+        pricescale: 1e5,
         // 價格精度，根據實際情況調整
         minmov: 1,
         format: "price",
