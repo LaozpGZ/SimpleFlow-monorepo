@@ -90,19 +90,21 @@ export function useStablecoinPrice(
 
   const shouldEnabled = Boolean(currency && enabled && currentChainId === chainId)
 
-  const atomKey = useMemo(() => {
-    return getKey({ currency: currency || undefined, chainId, enabled })
-  }, [currency, chainId, enabled])
-
-  const [, setVersion] = useAtom(versionAtom(atomKey))
-
-  const coinPrice = useAtomValue(
-    stableCoinPriceAtom({
+  const atomParams = useMemo(() => {
+    return {
       currency: currency || undefined,
       chainId,
       enabled,
-    }),
-  )
+    }
+  }, [currency, chainId, enabled])
+
+  const atomKey = useMemo(() => {
+    return getKey(atomParams)
+  }, [atomParams])
+
+  const [, setVersion] = useAtom(versionAtom(atomKey))
+
+  const coinPrice = useAtomValue(stableCoinPriceAtom(atomParams))
 
   useEffect(() => {
     setVersion(version)
