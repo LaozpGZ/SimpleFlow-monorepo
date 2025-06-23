@@ -173,6 +173,7 @@ export function SwapPanel({
   const computeResult = needPriceUpdatedAlert ? sendingResult.current?.data : data?.data
   const isComputing = isLoading || isValidating
   const isHighRiskTx = (computeResult?.priceImpactPct || 0) > 5
+  const isPriceImpactTooHigh = (computeResult?.priceImpactPct || 0) > 10
 
   const inputAmount =
     computeResult && tokenInput
@@ -362,7 +363,7 @@ export function SwapPanel({
       </SwapUIV2.InputPanelWrapper>
       <ButtonAndDetailsPanel>
         <ConnectedButton
-          disabled={new Decimal(amountIn || 0).isZero() || !!swapError || needPriceUpdatedAlert || swapDisabled}
+          disabled={new Decimal(amountIn || 0).isZero() || !!swapError || needPriceUpdatedAlert || isPriceImpactTooHigh || swapDisabled}
           isLoading={isComputing || isSending}
           loadingText={<div>{isSending ? t('Transaction initiating') : isComputing ? t('Computing..') : ''}</div>}
           onClick={isHighRiskTx ? onHightRiskOpen : handleClickSwap}
