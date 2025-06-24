@@ -122,13 +122,6 @@ const AccessRiskComponent: React.FC<AccessRiskProps> = ({ token }) => {
 
   const { data, refetch } = useTokenRisk(token)
 
-  console.log('AccessRisk Debug:', {
-    token: token?.symbol,
-    data,
-    isDataLoading: !data || (data?.riskLevel === -1 && !data?.hasResult),
-    isError: data?.isError,
-  })
-
   useEffect(() => {
     if (data?.pollingInterval) {
       const refresh = setTimeout(() => refetch(), data?.pollingInterval)

@@ -13,6 +13,16 @@ export interface RiskTokenInfo {
   isError: boolean
 }
 
+// Map score to risk level based on the guide
+const mapScoreToRiskLevel = (score: number): number => {
+  if (score >= 86) return 1 // No Obvious Risk
+  if (score >= 70) return 2 // Low Risk
+  if (score >= 40) return 3 // Medium Risk
+  if (score >= 16) return 4 // High Risk
+  if (score >= 0) return 5 // Significant Risk
+  return -1 // Unknown
+}
+
 const fetchRiskApi = async (address: string, chainId: number) => {
   const response = await fetch(`${ACCESS_RISK_API}`, {
     headers: {
@@ -48,6 +58,9 @@ const fetchRiskApi = async (address: string, chainId: number) => {
 
   // Handle final result
   if (result.code === '0' && result.status === 'ok' && result.data) {
+    const score = parseInt(result.data.overall_score, 10)
+    const riskLevel = mapScoreToRiskLevel(score)
+
     return {
       ...result,
       data: {
@@ -55,7 +68,7 @@ const fetchRiskApi = async (address: string, chainId: number) => {
         chainId,
         isError: false,
         hasResult: true,
-        riskLevel: result.data.threat_intelligence.risk_level,
+        riskLevel,
         requestId: '',
         riskLevelDescription: result.data.overall_risk_level,
         pollingInterval: 0,
