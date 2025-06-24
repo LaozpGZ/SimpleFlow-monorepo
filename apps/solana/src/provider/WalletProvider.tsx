@@ -1,6 +1,5 @@
 import { FC, PropsWithChildren, useEffect, useMemo, useState } from 'react'
 
-// import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
 import { GlowWalletAdapter } from '@solana/wallet-adapter-glow'
@@ -11,7 +10,6 @@ import {
   PhantomWalletAdapter,
   TorusWalletAdapter,
   TrustWalletAdapter,
-  // LedgerWalletAdapter,
   MathWalletAdapter,
   TokenPocketWalletAdapter,
   CoinbaseWalletAdapter,
@@ -21,37 +19,19 @@ import {
   BitpieWalletAdapter,
   BitgetWalletAdapter
 } from '@solana/wallet-adapter-wallets'
-import { registerMoonGateWallet } from '@moongate/moongate-adapter'
-import { TipLinkWalletAdapter } from '@tiplink/wallet-adapter'
-// import { WalletConnectWalletAdapter } from '@walletconnect/solana-adapter'
 
 import { type Adapter, type WalletError } from '@solana/wallet-adapter-base'
 import { sendWalletEvent } from '@/api/event'
 import { useEvent } from '@/hooks/useEvent'
-import { LedgerWalletAdapter } from './Ledger/LedgerWalletAdapter'
-import { useAppStore, defaultNetWork, defaultEndpoint } from '../store/useAppStore'
+// import { LedgerWalletAdapter } from './Ledger/LedgerWalletAdapter'
+import { useAppStore, defaultEndpoint } from '../store/useAppStore'
 
 initialize()
 
 const App: FC<PropsWithChildren<any>> = ({ children }) => {
-  // const [network] = useState<WalletAdapterNetwork>(defaultNetWork)
   const rpcNodeUrl = useAppStore((s) => s.rpcNodeUrl)
   const wsNodeUrl = useAppStore((s) => s.wsNodeUrl)
-  // const [endpoint] = useState<string>(defaultEndpoint)
   const [endpoint, setEndpoint] = useState<string>(rpcNodeUrl || defaultEndpoint)
-
-  registerMoonGateWallet({
-    authMode: 'Ethereum',
-    position: 'top-right'
-  })
-  registerMoonGateWallet({
-    authMode: 'Google',
-    position: 'top-right'
-  })
-  registerMoonGateWallet({
-    authMode: 'Apple',
-    position: 'top-right'
-  })
 
   const wallets = useMemo(
     () => [
@@ -59,8 +39,7 @@ const App: FC<PropsWithChildren<any>> = ({ children }) => {
       new SolflareWalletAdapter(),
       new SlopeWalletAdapter({ endpoint }),
       new TorusWalletAdapter(),
-      new LedgerWalletAdapter(),
-      // ..._walletConnect,
+      // new LedgerWalletAdapter(),
       new GlowWalletAdapter(),
       new TrustWalletAdapter(),
       new MathWalletAdapter({ endpoint }),
@@ -71,12 +50,7 @@ const App: FC<PropsWithChildren<any>> = ({ children }) => {
       new SafePalWalletAdapter({ endpoint }),
       new BitpieWalletAdapter({ endpoint }),
       new BitgetWalletAdapter({ endpoint }),
-      new ExodusWalletAdapter({ endpoint }),
-      new TipLinkWalletAdapter({
-        clientId: process.env.NEXT_PUBLIC_WALLET_TIP_WALLET_KEY ?? '',
-        title: 'Raydium',
-        theme: 'system'
-      }) as unknown as Adapter
+      new ExodusWalletAdapter({ endpoint })
     ],
     [endpoint]
   )
