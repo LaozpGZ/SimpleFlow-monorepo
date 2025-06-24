@@ -113,6 +113,7 @@ export default function Swap() {
         mt={[0, getVHExpression([0, 800], [32, 1300])]}
         width={!isMobile && isPCChartShown ? 'min(100%, 1300px)' : undefined}
         height="100%"
+        overflow="auto"
       >
         <FlexGap
           gap="16px"
@@ -125,56 +126,6 @@ export default function Swap() {
         >
           <FlexGap justifyContent="flex-end" width="100%" alignItems="center" gap="10px">
             <SlippageAdjuster />
-            {/* <Tooltip
-              label={t('Copy your custom referral link and earn 1% rewards when it's used on Twitter with Blink!', {
-                symbol: outputMint === solMintAddress ? tokenMap.get(inputMint)?.symbol : tokenMap.get(outputMint)?.symbol
-              })}
-            >
-              <Box
-                cursor="pointer"
-                opacity={isBlinkReferralActive ? 1 : 0.6}
-                onClick={() => {
-                  if (isBlinkReferralActive) {
-                    onCopy()
-                    toastSubject.next({
-                      status: 'success',
-                      title: t('Copied successfully!')
-                    })
-                  }
-                }}
-              >
-                <LinkIcon />
-              </Box>
-            </Tooltip>
-
-            {!isMobile && isPCChartShown && (
-              <Box
-                cursor="pointer"
-                onClick={() => {
-                  setIsChartLeft((b) => !b)
-                }}
-              >
-                <SwapExchangeIcon />
-              </Box>
-            )}
-            <Box
-              cursor="pointer"
-              onClick={() => {
-                if (!isMobile) {
-                  setIsPCChartShown((b) => !b)
-                } else {
-                  setIsMobileChartShown(true)
-                }
-              }}
-            >
-              {isMobile || isPCChartShown ? (
-                <SwapChatIcon />
-              ) : (
-                <Box color={colors.textSecondary}>
-                  <SwapChatEmptyIcon />
-                </Box>
-              )}
-            </Box> */}
           </FlexGap>
           <AtomBox ref={swapPanelRef}>
             <SwapPanel
@@ -183,47 +134,6 @@ export default function Swap() {
               onDirectionNeedReverse={() => setIsDirectionNeedReverse((b) => !b)}
             />
           </AtomBox>
-
-          {/* <GridItem gridArea="kline" {...(isMobile ? { mb: 3 } : {})} overflow="hidden">
-            <PanelCard ref={klineRef} p={[3, 3]} gap={4} height="100%" {...(isMobile || !isPCChartShown ? { display: 'none' } : {})}>
-              <SwapKlinePanel
-                untilDate={untilDate.current}
-                baseToken={baseToken}
-                quoteToken={quoteToken}
-                timeType={selectedTimeType}
-                onDirectionToggle={() => setDirectionReverse((b) => !b)}
-                onTimeTypeChange={setSelectedTimeType}
-              />
-            </PanelCard>
-            {isMobile && (
-              <PanelCard
-                p={[3, 6]}
-                gap={0}
-                onClick={() => {
-                  setIsMobileChartShown(true)
-                }}
-                height="100%"
-              >
-                <SwapKlinePanelMobileThumbnail
-                  untilDate={untilDate.current}
-                  baseToken={baseToken}
-                  quoteToken={quoteToken}
-                  // onDirectionToggle={() => setDirectionReverse((b) => !b)}
-                  // onTimeTypeChange={setSelectedTimeType}
-                />
-                <SwapKlinePanelMobileDrawer
-                  untilDate={untilDate.current}
-                  isOpen={isMobileChartShown}
-                  onClose={() => setIsMobileChartShown(false)}
-                  baseToken={baseToken}
-                  quoteToken={quoteToken}
-                  timeType={selectedTimeType}
-                  onDirectionToggle={() => setDirectionReverse((b) => !b)}
-                  onTimeTypeChange={setSelectedTimeType}
-                />
-              </PanelCard>
-            )}
-          </GridItem> */}
         </FlexGap>
       </VStack>
     </SwapPage>
