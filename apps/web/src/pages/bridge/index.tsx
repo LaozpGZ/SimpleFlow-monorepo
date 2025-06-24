@@ -44,4 +44,4 @@ const BridgePage = dynamic(() => Promise.resolve(BridgeView), {
 BridgePage.chains = CHAIN_IDS
 BridgePage.screen = true
 
-export default Page
+export default BridgePage
