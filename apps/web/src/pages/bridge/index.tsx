@@ -2,11 +2,13 @@ import { CanonicalBridge } from '@pancakeswap/canonical-bridge'
 import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { PUBLIC_NODES } from 'config/nodes'
+import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
+import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
 import Page from 'views/Page'
 
-const BridgePage = () => {
+const BridgeView = () => {
   const { isMobile } = useMatchBreakpoints()
 
   return (
@@ -35,7 +37,11 @@ const BridgePage = () => {
   )
 }
 
+const BridgePage = dynamic(() => Promise.resolve(BridgeView), {
+  ssr: false,
+}) as NextPageWithLayout
+
 BridgePage.chains = CHAIN_IDS
 BridgePage.screen = true
 
-export default BridgePage
+export default Page
