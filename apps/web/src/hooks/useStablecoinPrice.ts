@@ -89,6 +89,8 @@ export function useStablecoinPrice(
 
   const shouldEnabled = Boolean(currency && enabled && currentChainId === chainId)
 
+  const version = Math.floor(Date.now() / SLOW_INTERVAL)
+
   const atomParams = useMemo(
     () => ({
       currency: currency || undefined,
@@ -105,14 +107,8 @@ export function useStablecoinPrice(
   const coinPrice = useAtomValue(stableCoinPriceAtom(atomParams))
 
   useEffect(() => {
-    setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
-
-    const interval = setInterval(() => {
-      setVersion(Math.floor(Date.now() / SLOW_INTERVAL))
-    }, SLOW_INTERVAL)
-
-    return () => clearInterval(interval)
-  }, [setVersion])
+    setVersion(version)
+  }, [version, setVersion])
 
   const price = useMemo(() => {
     if (!coinPrice || !currency || !stableCoin || !shouldEnabled) {
