@@ -63,12 +63,14 @@ const InfinitySwapInner = () => {
         p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
       >
         {isDesktop && isChartDisplayed && (
-          <ChartWithPriceHeader
-            currency0={inputCurrency || undefined}
-            currency1={outputCurrency || undefined}
-            symbol={`${inputCurrency?.symbol}/${outputCurrency?.symbol}`}
-            theme="Dark"
-          />
+          <Flex width={isChartExpanded ? '100%' : '50%'} maxWidth="928px" flexDirection="column" style={{ gap: 20 }}>
+            <ChartWithPriceHeader
+              currency0={inputCurrency || undefined}
+              currency1={outputCurrency || undefined}
+              symbol={`${inputCurrency?.symbol}/${outputCurrency?.symbol}`}
+              theme="Dark"
+            />
+          </Flex>
         )}
 
         {!isDesktop && isChartDisplayed && (
@@ -89,7 +91,7 @@ const InfinitySwapInner = () => {
           flexDirection="column"
           alignItems="center"
           height="100%"
-          width="100%"
+          width={isDesktop ? undefined : '100%'}
           mt={isChartExpanded && !isMobile ? '42px' : undefined}
           position="relative"
           zIndex={1}

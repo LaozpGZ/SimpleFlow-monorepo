@@ -80,7 +80,7 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
         mb={isMobile ? '40px' : '0'}
         style={{ zIndex: 1 }}
       >
-        {isDesktop && (
+        {isDesktop && isChartDisplayed && (
           <Flex width={isChartExpanded ? '100%' : '50%'} maxWidth="928px" flexDirection="column" style={{ gap: 20 }}>
             <ChartWithPriceHeader
               currency0={inputCurrency || undefined}
@@ -108,7 +108,11 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
         <Flex flexDirection="column" width={isDesktop ? undefined : '100%'}>
           <StyledSwapContainer $isChartExpanded={isChartExpanded}>
             <StyledInputCurrencyWrapper mt={isChartExpanded ? '24px' : '0'}>
-              <SwapSelection swapType={limit ? SwapType.LIMIT : SwapType.TWAP} style={{ marginBottom: 16 }} />
+              <SwapSelection
+                swapType={limit ? SwapType.LIMIT : SwapType.TWAP}
+                style={{ marginBottom: 16 }}
+                withToolkit
+              />
               <TWAPPanel limit={limit} />
               <Flex flexDirection={!isDesktop ? 'column-reverse' : 'column'}>
                 {limit && (
@@ -142,7 +146,7 @@ export const StyledSwapContainer = styled(Flex)<{ $isChartExpanded: boolean }>`
   }
 
   ${({ theme }) => theme.mediaQueries.xxl} {
-    ${({ $isChartExpanded }) => ($isChartExpanded ? 'padding:  0 0px 0px 16px' : 'padding: 0 0px 0px 16px')};
+    ${({ $isChartExpanded }) => ($isChartExpanded ? 'padding:  0 0px 0px 40px' : 'padding: 0 0px 0px 40px')};
   }
 `
 
