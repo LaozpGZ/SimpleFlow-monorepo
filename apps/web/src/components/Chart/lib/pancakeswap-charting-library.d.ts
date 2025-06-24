@@ -6,16 +6,19 @@ declare global {
     TradingView: {
       widget: new (options: TradingViewWidgetOptions) => TradingViewWidget;
       // [key: string]: any;
+    };
+    Datafeeds: {
+      UDFCompatibleDatafeed: new (url: string, options?: any) => any;
+      [key: string]: any;
+    };
+    pcsExtraData: {
       token0Address: string;
       token1Address: string;
       fromChainId: number;
       toChainId: number;
       on24HrDataReady: (h: number, l: number, c: number, changes: number) => void;
       onCurrentPriceUpdate: (c: number) => void;
-    };
-    Datafeeds: {
-      UDFCompatibleDatafeed: new (url: string, options?: any) => any;
-      [key: string]: any;
+      fetch24HrData?: () => Promise<{ high: number; low: number; close: number; changes: number } | null>;
     };
   }
 }

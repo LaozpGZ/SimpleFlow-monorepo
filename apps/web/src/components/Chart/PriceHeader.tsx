@@ -71,6 +71,7 @@ const PriceHeader: React.FC<PriceHeaderProps> = ({
   setIsReversed,
 }) => {
   const { price, priceChangePercent, high24h, low24h } = useAtomValue(chartPriceDataAtom)
+  const maxDecimalsDigit = price > 1 ? 2 : 6
   return (
     <Container>
       <FlexGap gap="8px">
@@ -113,17 +114,23 @@ const PriceHeader: React.FC<PriceHeaderProps> = ({
             <Text fontSize="12px" color="textSubtle">
               24h High
             </Text>
-            <Text bold>{high24h.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</Text>
+            <Text bold>
+              {high24h.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
+            </Text>
           </StatItem>
 
           <StatItem>
             <Text fontSize="12px" color="textSubtle">
               24h Low
             </Text>
-            <Text bold>{low24h.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</Text>
+            <Text bold>
+              {low24h.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
+            </Text>
           </StatItem>
         </FlexGap>
-        <PriceText>{price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</PriceText>
+        <PriceText>
+          {price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
+        </PriceText>
       </PriceInfo>
     </Container>
   )

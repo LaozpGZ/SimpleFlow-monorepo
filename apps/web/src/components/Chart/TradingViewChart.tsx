@@ -35,12 +35,19 @@ const setSymbolInfo = (
   on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void,
   onLiveDataChanges: (price: number) => void,
 ) => {
-  window.TradingView.token0Address = currency0?.isToken ? currency0?.address : currency0?.wrapped?.address
-  window.TradingView.token1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
-  window.TradingView.fromChainId = currency0?.chainId
-  window.TradingView.toChainId = currency1?.chainId
-  window.TradingView.on24HrDataReady = on24HPriceDataChange
-  window.TradingView.onCurrentPriceUpdate = onLiveDataChanges
+  window.pcsExtraData = window.pcsExtraData || {}
+  window.pcsExtraData.token0Address = currency0?.isToken ? currency0?.address : currency0?.wrapped?.address
+  window.pcsExtraData.token1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
+  window.pcsExtraData.fromChainId = currency0?.chainId
+  window.pcsExtraData.toChainId = currency1?.chainId
+
+  if (window?.pcsExtraData?.fetch24HrData) {
+    window.pcsExtraData.fetch24HrData().then((data) => {
+      if (data) {
+        on24HPriceDataChange(data.high, data.low, data.close, data.changes)
+      }
+    })
+  }
 }
 
 const TradingViewChart: React.FC<TradingViewChartProps> = ({
@@ -58,12 +65,12 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const { chainId } = useActiveChainId()
 
   useEffect(() => {
-    if (currency0 && currency1 && symbol !== currentSymbol.current && widgetRef.current) {
+    if (currency0 && currency1 && symbol !== currentSymbol.current && widgetRef.current && isInitialized.current) {
       currentSymbol.current = symbol
       setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
-      widgetRef.current?.activeChart()?.setSymbol(symbol)
+      widgetRef.current?.activeChart()?.setSymbol?.(symbol)
     }
-  }, [currency0, currency1, chainId])
+  }, [currency0, currency1, chainId, symbol])
 
   useEffect(() => {
     async function initChart() {
@@ -152,6 +159,13 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
           }
           setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
           widgetRef.current = createTradingViewWidget(containerRef.current, options)
+          if (window?.pcsExtraData?.fetch24HrData) {
+            window.pcsExtraData.fetch24HrData().then((data) => {
+              if (data) {
+                on24HPriceDataChange?.(data.high, data.low, data.close, data.changes)
+              }
+            })
+          }
           isInitialized.current = true
         }
       } catch (error) {
@@ -163,7 +177,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   }, [symbol, isDark, theme, currency0, currency1])
 
   useEffect(() => {
-    console.log('isDark', isDark, widgetRef.current && isInitialized.current)
     async function changeTheme() {
       if (widgetRef.current && isInitialized.current) {
         await widgetRef.current.changeTheme(isDark ? 'Dark' : 'Light')
