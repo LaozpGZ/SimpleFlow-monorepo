@@ -73,7 +73,7 @@ export default function SelectWalletModal({ wallets, isOpen, onSelectWallet, onC
       <ModalOverlay />
       <ModalContent color={colors.textPrimary} width={['unset', '36em']} rounded={[null, '3xl']}>
         <ModalHeader>
-          <Text bold>{t('Connect your wallet to Raydium')}</Text>
+          <Text bold>{t('Connect your wallet to PancakeSwap')}</Text>
         </ModalHeader>
         <ModalCloseButton />
         {isWalletNotInstalled ? (
@@ -262,7 +262,7 @@ function WalletItem({
           <QuestionToolTip
             label={
               <>
-                {t('Auto-confirm is now available for all transactions on Raydium.')}
+                {t('Auto-confirm is now available for all transactions on PancakeSwap.')}
                 <LinkExternal href="https://phantom.com/learn/blog/auto-confirm" color={colors.textPurple} fontWeight="bold">
                   {t('Learn more')}
                 </LinkExternal>
@@ -278,7 +278,7 @@ function WalletItem({
             {t('Auto Approve')}
           </Text>
           <QuestionToolTip
-            label={t('Auto-approve is now available for all transactions on Raydium.')}
+            label={t('Auto-approve is now available for all transactions on PancakeSwap.')}
             iconProps={{ color: colors.textPurple }}
           />
         </HStack>

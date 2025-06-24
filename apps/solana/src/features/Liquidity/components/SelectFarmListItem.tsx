@@ -38,7 +38,7 @@ export default function SelectFarmListItem({ farm, currentSelectedId }: SelectFa
         </Box>
         <Box>
           <Badge variant="crooked">
-            {farm.type === FarmType.Ecosystem ? t('Ecosystem') : farm.type === FarmType.Fusion ? t('Fusion') : t('Raydium')}
+            {farm.type === FarmType.Ecosystem ? t('Ecosystem') : farm.type === FarmType.Fusion ? t('Fusion') : t('PancakeSwap')}
           </Badge>
         </Box>
       </Box>

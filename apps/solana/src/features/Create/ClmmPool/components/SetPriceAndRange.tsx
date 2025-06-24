@@ -369,7 +369,7 @@ export default function SetPriceAndRange({
           iconProps={{ color: colors.primary60 }}
           iconType="question"
           label={t(
-            'This is the current price of an existing pool on Raydium. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.'
+            'This is the current price of an existing pool on PancakeSwap. You can still enter a different initial price but be aware this may lead to arbitrage if the price difference is large.'
           )}
         />
         <Text color={colors.textSubtle} fontWeight={600} fontSize="sm" display="flex" alignItems="center" gap="1">

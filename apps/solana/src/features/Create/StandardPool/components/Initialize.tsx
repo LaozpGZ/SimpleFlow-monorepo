@@ -223,7 +223,7 @@ export default function Initialize({ isAmmV4 }: { isAmmV4: boolean }) {
           <QuestionToolTip
             iconType="question"
             label={t(
-              'Initial price is set by the ratio of tokens deposited for initial liquidity. If the token is already trading on Raydium, initial price will be auto-filled with the current price.'
+              'Initial price is set by the ratio of tokens deposited for initial liquidity. If the token is already trading on PancakeSwap, initial price will be auto-filled with the current price.'
             )}
           />
         </HStack>
