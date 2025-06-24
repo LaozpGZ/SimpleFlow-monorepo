@@ -78,7 +78,6 @@ const config = {
     '@pancakeswap/uikit',
     // https://github.com/TanStack/query/issues/6560#issuecomment-1975771676
     '@tanstack/query-core',
-    '@pancakeswap/canonical-bridge',
     '@bnb-chain/canonical-bridge-widget',
     '@bnb-chain/canonical-bridge-sdk',
   ],
