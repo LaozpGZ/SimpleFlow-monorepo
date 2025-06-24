@@ -39,7 +39,7 @@ export const TC_MOD_SUBGRAPH = `${THE_GRAPH_PROXY_API}/trading-competition-v4`
 export const BIT_QUERY = 'https://graphql.bitquery.io'
 
 export const ACCESS_RISK_API = 'https://service.hashdit.io/v2/hashdit/token-security'
-export const ACCESS_RISK_API_KEY = process.env.NEXT_PUBLIC_HASHDIT_API_KEY || 'DqsRrculMxSrarMOmnaYYiKsgvdqkSPwKWcwkjhq'
+export const ACCESS_RISK_API_KEY = process.env.NEXT_PUBLIC_HASHDIT_API_KEY
 
 export const CELER_API = 'https://api.celerscan.com/scan'
 
