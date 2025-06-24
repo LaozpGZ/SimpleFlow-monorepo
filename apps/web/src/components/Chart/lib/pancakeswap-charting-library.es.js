@@ -1,10 +1,10 @@
 var x = Object.defineProperty;
 var R = (d, e, o) => e in d ? x(d, e, { enumerable: !0, configurable: !0, writable: !0, value: o }) : d[e] = o;
-var $ = (d, e, o) => R(d, typeof e != "symbol" ? e + "" : e, o);
+var B = (d, e, o) => R(d, typeof e != "symbol" ? e + "" : e, o);
 function L(d) {
   return d;
 }
-const V = {
+const U = {
   // BNB Smart Chain (BEP20)
   56: {
     id: 14,
@@ -150,11 +150,11 @@ const V = {
     scanUrl: "https://solscan.io"
   }
 };
-Object.values(V).reduce((d, e) => (d[e.id] = e, d), {});
-function I(d) {
-  return V[d];
+Object.values(U).reduce((d, e) => (d[e.id] = e, d), {});
+function C(d) {
+  return U[d];
 }
-const z = ["1", "5", "15", "30", "60", "240", "1D", "1W", "1M"], P = {
+const z = ["1", "5", "15", "30", "60", "240", "1D", "1W", "1M"], v = {
   1: "1m",
   "1m": "1m",
   5: "5m",
@@ -192,12 +192,12 @@ const z = ["1", "5", "15", "30", "60", "240", "1D", "1W", "1M"], P = {
 };
 class H {
   constructor(e = {}, o) {
-    $(this, "configuration");
-    $(this, "api");
-    $(this, "ws", null);
-    $(this, "wsUrl", "wss://dws.coinmarketcap.com/ws");
+    B(this, "configuration");
+    B(this, "api");
+    B(this, "ws", null);
+    B(this, "wsUrl", "wss://dws.coinmarketcap.com/ws");
     // "wss://pcs-ws.dquery.ai/ws";
-    $(this, "subscriptions", /* @__PURE__ */ new Map());
+    B(this, "subscriptions", /* @__PURE__ */ new Map());
     this.configuration = {
       ...J,
       ...e
@@ -219,18 +219,18 @@ class H {
   resolveSymbol(e, o, t) {
     console.log("[Datafeed]: resolveSymbol() called with", e);
     try {
-      const a = window.TradingView.token0Address, s = window.TradingView.token1Address, r = window.TradingView.fromChainId, c = window.TradingView.toChainId;
-      if (!a || !s || !r || !c) {
+      const a = window.TradingView.token0Address, s = window.TradingView.token1Address, r = window.TradingView.fromChainId, l = window.TradingView.toChainId;
+      if (!a || !s || !r || !l) {
         console.error("Missing token addresses or chainId in window.TradingView"), t("Missing token information");
         return;
       }
-      const i = I(Number(r));
+      const i = C(Number(r));
       i ? console.log(
         `Using chain: ${i.name} (${i.displayName}), Chain ID: ${i.chainId}`
       ) : console.warn(`Chain ID ${r} is not supported. Using default BNB Chain (56).`);
-      const l = I(Number(c));
-      l ? console.log(`Using chain: ${l.name} (${l.displayName}), Chain ID: ${l.chainId}`) : console.warn(`Chain ID ${c} is not supported. Using default BNB Chain (56).`);
-      const m = a.slice(-4), h = s.slice(-4), u = `${m}/${h}`, f = {
+      const c = C(Number(l));
+      c ? console.log(`Using chain: ${c.name} (${c.displayName}), Chain ID: ${c.chainId}`) : console.warn(`Chain ID ${l} is not supported. Using default BNB Chain (56).`);
+      const m = a.slice(-4), h = s.slice(-4), w = `${m}/${h}`, f = {
         name: e,
         // 原始名稱，用於內部識別
         description: e,
@@ -258,12 +258,12 @@ class H {
           baseToken: a,
           quoteToken: s,
           fromChainId: r,
-          toChainId: c,
-          displayName: u,
+          toChainId: l,
+          displayName: w,
           fromChainName: (i == null ? void 0 : i.name) || "BNB Smart Chain (BEP20)",
           fromChainDisplayName: (i == null ? void 0 : i.displayName) || "BSC",
-          toChainName: (l == null ? void 0 : l.name) || "BNB Smart Chain (BEP20)",
-          toChainDisplayName: (l == null ? void 0 : l.displayName) || "BSC"
+          toChainName: (c == null ? void 0 : c.name) || "BNB Smart Chain (BEP20)",
+          toChainDisplayName: (c == null ? void 0 : c.displayName) || "BSC"
         })
       };
       setTimeout(() => {
@@ -292,43 +292,43 @@ class H {
       countBack: t.countBack
     });
     try {
-      const r = JSON.parse(e.long_description || "{}"), { baseToken: c, quoteToken: i, fromChainId: l, toChainId: m } = r;
-      if (!c || !i || !l || !m) {
+      const r = JSON.parse(e.long_description || "{}"), { baseToken: l, quoteToken: i, fromChainId: c, toChainId: m } = r;
+      if (!l || !i || !c || !m) {
         console.error("[Datafeed]: Missing token information in symbolInfo", e), s("Missing token information in symbol");
         return;
       }
-      this.api.setPlatform(Number(l), "from"), this.api.setPlatform(Number(m), "to");
-      const { from: h, to: u, countBack: f } = t;
-      console.log(`[Datafeed]: Fetching prices for base token ${c} and quote token ${i}`), console.warn(`[Datafeed]: tv Resolution: ${o}, cmc Resolution: ${P[o]}`);
-      const _ = this.api.getBars("from", c, P[o], h, u, f), N = this.api.getBars("to", i, P[o], h, u, f);
-      Promise.all([_, N]).then(([b, T]) => {
-        if (!b || b.length === 0 || !T || T.length === 0) {
-          console.log(`[Datafeed]: No data for ${e.name} from=${h} to=${u}`), a([], { noData: !0 });
+      this.api.setPlatform(Number(c), "from"), this.api.setPlatform(Number(m), "to");
+      const { from: h, to: w, countBack: f } = t;
+      console.log(`[Datafeed]: Fetching prices for base token ${l} and quote token ${i}`), console.warn(`[Datafeed]: tv Resolution: ${o}, cmc Resolution: ${v[o]}`);
+      const $ = this.api.getBars("from", l, v[o], h, w, f), D = this.api.getBars("to", i, v[o], h, w, f);
+      Promise.all([$, D]).then(([g, T]) => {
+        if (!g || g.length === 0 || !T || T.length === 0) {
+          console.log(`[Datafeed]: No data for ${e.name} from=${h} to=${w}`), a([], { noData: !0 });
           return;
         }
-        const w = [], B = /* @__PURE__ */ new Map();
-        b.forEach((n) => {
-          B.set(n.time, { base: n });
+        const b = [], P = /* @__PURE__ */ new Map();
+        g.forEach((n) => {
+          P.set(n.time, { base: n });
         }), T.forEach((n) => {
-          const g = B.get(n.time);
-          g ? g.quote = n : B.set(n.time, { quote: n });
+          const u = P.get(n.time);
+          u ? u.quote = n : P.set(n.time, { quote: n });
         });
-        let D = null, p = null;
-        B.forEach((n, g) => {
+        let y = null, p = null;
+        P.forEach((n, u) => {
           if (n.base && n.quote) {
-            const y = n.base.open / n.quote.open, k = n.base.high / n.quote.high, C = n.base.low / n.quote.low, S = n.base.close / n.quote.close, v = n.base.volume !== void 0 ? n.base.volume : 0, U = n.quote.volume !== void 0 ? n.quote.volume : 0, q = (v + U) / 2, W = Math.max(y, S) * 5, A = Math.min(y, S) / 5;
-            (k > W || C < A) && console.warn(`[Datafeed]: Abnormal price range detected at ${new Date(g).toISOString()}:`, {
+            const S = n.base.open / n.quote.open, I = n.base.high / n.quote.high, N = n.base.low / n.quote.low, k = n.base.close / n.quote.close, _ = n.base.volume !== void 0 ? n.base.volume : 0, V = n.quote.volume !== void 0 ? n.quote.volume : 0, q = (_ + V) / 2, W = Math.max(S, k) * 5, A = Math.min(S, k) / 5;
+            (I > W || N < A) && console.warn(`[Datafeed]: Abnormal price range detected at ${new Date(u).toISOString()}:`, {
               symbol: e.name,
-              time: g,
-              timeUTC: new Date(g).toUTCString(),
-              open: y,
-              high: k,
-              low: C,
-              close: S,
-              highToOpenRatio: k / y,
-              highToCloseRatio: k / S,
-              lowToOpenRatio: C / y,
-              lowToCloseRatio: C / S,
+              time: u,
+              timeUTC: new Date(u).toUTCString(),
+              open: S,
+              high: I,
+              low: N,
+              close: k,
+              highToOpenRatio: I / S,
+              highToCloseRatio: I / k,
+              lowToOpenRatio: N / S,
+              lowToCloseRatio: N / k,
               baseToken: {
                 open: n.base.open,
                 high: n.base.high,
@@ -343,39 +343,39 @@ class H {
               }
             });
             const E = {
-              time: g,
-              open: y,
-              high: k,
-              low: C,
-              close: S,
+              time: u,
+              open: S,
+              high: I,
+              low: N,
+              close: k,
               volume: q
             };
-            if (D) {
-              const O = Math.abs(D.close - E.open), M = O / D.close * 100;
+            if (y) {
+              const O = Math.abs(y.close - E.open), M = O / y.close * 100;
               M > 1 && console.warn(
-                `[Datafeed]: Significant gap between bars at ${new Date(D.time).toISOString()} and ${new Date(
-                  g
+                `[Datafeed]: Significant gap between bars at ${new Date(y.time).toISOString()} and ${new Date(
+                  u
                 ).toISOString()}:`,
                 {
-                  prevClose: D.close,
+                  prevClose: y.close,
                   currentOpen: E.open,
                   difference: O,
                   differencePercent: `${M.toFixed(2)}%`,
-                  timeDiff: `${(g - D.time) / 1e3 / 60} minutes`,
+                  timeDiff: `${(u - y.time) / 1e3 / 60} minutes`,
                   resolution: o,
                   currentData: n,
                   prevData: p
                 }
               );
             }
-            w.push(E), D = E, p = n;
+            b.push(E), y = E, p = n;
           }
-        }), w.sort((n, g) => n.time - g.time), console.log(`[Datafeed]: Calculated ${w.length} bars for ${e.name}`, {
-          firstBar: w.length > 0 ? w[0] : null,
-          lastBar: w.length > 0 ? w[w.length - 1] : null
-        }), a(w, { noData: w.length === 0 });
-      }).catch((b) => {
-        console.error("[Datafeed]: Error fetching bars from API:", b), s(`Failed to fetch bars: ${b instanceof Error ? b.message : String(b)}`);
+        }), b.sort((n, u) => n.time - u.time), console.log(`[Datafeed]: Calculated ${b.length} bars for ${e.name}`, {
+          firstBar: b.length > 0 ? b[0] : null,
+          lastBar: b.length > 0 ? b[b.length - 1] : null
+        }), a(b, { noData: b.length === 0 });
+      }).catch((g) => {
+        console.error("[Datafeed]: Error fetching bars from API:", g), s(`Failed to fetch bars: ${g instanceof Error ? g.message : String(g)}`);
       });
     } catch (r) {
       console.error("[Datafeed]: Error in getBars method:", r), s(`Error processing request: ${r instanceof Error ? r.message : String(r)}`);
@@ -393,8 +393,8 @@ class H {
    */
   subscribeBars(e, o, t, a, s) {
     try {
-      const r = JSON.parse(e.long_description || "{}"), { baseToken: c, quoteToken: i, fromChainId: l, toChainId: m } = r;
-      if (!c || !i || !l || !m) {
+      const r = JSON.parse(e.long_description || "{}"), { baseToken: l, quoteToken: i, fromChainId: c, toChainId: m } = r;
+      if (!l || !i || !c || !m) {
         console.error("[Datafeed]: Missing token information in symbolInfo for WebSocket subscription", e);
         return;
       }
@@ -403,23 +403,23 @@ class H {
         resolution: o,
         onTick: t
       });
-      const h = I(Number(l));
+      const h = C(Number(c));
       if (!h) {
-        console.error(`[Datafeed]: Chain ID ${l} not supported for WebSocket subscription`);
+        console.error(`[Datafeed]: Chain ID ${c} not supported for WebSocket subscription`);
         return;
       }
-      const u = I(Number(m));
-      if (!u) {
+      const w = C(Number(m));
+      if (!w) {
         console.error(`[Datafeed]: Chain ID ${m} not supported for WebSocket subscription`);
         return;
       }
-      const f = h.id, _ = u.id;
+      const f = h.id, $ = w.id;
       this.initWebSocket();
-      const N = P[o], b = `datahub@kline@${f}@${c.toLowerCase()}@${N}`, T = `datahub@kline@${_}@${i.toLowerCase()}@${N}`;
+      const D = v[o], g = `datahub@kline@${f}@${l.toLowerCase()}@${D}`, T = `datahub@kline@${$}@${i.toLowerCase()}@${D}`;
       this.ws && this.ws.readyState === WebSocket.OPEN ? (this.ws.send(
         JSON.stringify({
           method: "SUBSCRIPTION",
-          params: [b]
+          params: [g]
         })
       ), this.ws.send(
         JSON.stringify({
@@ -473,26 +473,31 @@ class H {
     console.log(`[Datafeed]: Resubscribing to ${this.subscriptions.size} symbols`), this.subscriptions.forEach((e, o) => {
       const { symbolInfo: t, resolution: a } = e;
       try {
-        const s = JSON.parse(t.long_description || "{}"), { baseToken: r, quoteToken: c, chainId: i } = s;
-        if (!r || !c || !i) {
+        const s = JSON.parse(t.long_description || "{}"), { baseToken: r, quoteToken: l, fromChainId: i, toChainId: c } = s;
+        if (!r || !l || !i || !c) {
           console.error(`[Datafeed]: Missing token information for ${o}`);
           return;
         }
-        const l = I(Number(i));
-        if (!l) {
+        const m = C(Number(i));
+        if (!m) {
           console.error(`[Datafeed]: Chain ID ${i} not supported for ${o}`);
           return;
         }
-        const m = l.id, h = P[a], u = `datahub@kline@${m}@${r.toLowerCase()}@${h}`, f = `datahub@kline@${m}@${c.toLowerCase()}@${h}`;
+        const h = C(Number(c));
+        if (!h) {
+          console.error(`[Datafeed]: Chain ID ${c} not supported for ${o}`);
+          return;
+        }
+        const w = m.id, f = h.id, $ = v[a], D = `datahub@kline@${w}@${r.toLowerCase()}@${$}`, g = `datahub@kline@${f}@${l.toLowerCase()}@${$}`;
         this.ws.send(
           JSON.stringify({
             method: "SUBSCRIPTION",
-            params: [u]
+            params: [D]
           })
         ), this.ws.send(
           JSON.stringify({
             method: "SUBSCRIPTION",
-            params: [f]
+            params: [g]
           })
         );
       } catch (s) {
@@ -511,8 +516,8 @@ class H {
       const [t, a] = await Promise.all([
         this.api.get24HrData(e, "from"),
         this.api.get24HrData(o, "to")
-      ]), s = t.c / a.c, r = Math.max(Math.abs(t.h / t.c - 1), Math.abs(a.l / a.c - 1)) * 100, c = Math.max(Math.abs(t.l / t.c - 1), Math.abs(a.h / a.c - 1)) * 100, i = s * (1 + r / 100), l = s * (1 - c / 100), m = t.changes - a.changes;
-      console.log("[Datafeed]: 24hr data calculated:", { high: i, low: l, close: s, changes: m }), window.TradingView && typeof window.TradingView.on24HrDataReady == "function" ? (window.TradingView.on24HrDataReady(i, l, s, m), console.log("[Datafeed]: 24hr data callback executed")) : console.warn("[Datafeed]: 24hr data callback not available");
+      ]), s = t.c / a.c, r = Math.max(Math.abs(t.h / t.c - 1), Math.abs(a.l / a.c - 1)) * 100, l = Math.max(Math.abs(t.l / t.c - 1), Math.abs(a.h / a.c - 1)) * 100, i = s * (1 + r / 100), c = s * (1 - l / 100), m = t.changes - a.changes;
+      console.log("[Datafeed]: 24hr data calculated:", { high: i, low: c, close: s, changes: m }), window.TradingView && typeof window.TradingView.on24HrDataReady == "function" ? (window.TradingView.on24HrDataReady(i, c, s, m), console.log("[Datafeed]: 24hr data callback executed")) : console.warn("[Datafeed]: 24hr data callback not available");
     } catch (t) {
       console.error("[Datafeed]: Error fetching 24hr data:", t);
     }
@@ -550,62 +555,62 @@ class H {
       console.warn("[Datafeed]: Invalid price data format:", e.d);
       return;
     }
-    const s = e.d.u, r = parseFloat(s[0]), c = parseFloat(s[1]), i = parseFloat(s[2]), l = parseFloat(s[3]), m = parseFloat(s[4]);
+    const s = e.d.u, r = parseFloat(s[0]), l = parseFloat(s[1]), i = parseFloat(s[2]), c = parseFloat(s[3]), m = parseFloat(s[4]);
     let h = parseFloat(s[5]);
-    if (h < 1e10 && (h *= 1e3), isNaN(r) || isNaN(c) || isNaN(i) || isNaN(l) || isNaN(h)) {
+    if (h < 1e10 && (h *= 1e3), isNaN(r) || isNaN(l) || isNaN(i) || isNaN(c) || isNaN(h)) {
       console.warn("[Datafeed]: Invalid price values after parsing:", {
         open: r,
-        high: c,
+        high: l,
         low: i,
-        close: l,
+        close: c,
         volume: m,
         timestamp: h
       });
       return;
     }
-    const u = {
+    const w = {
       o: r,
-      h: c,
+      h: l,
       l: i,
-      c: l,
+      c,
       v: m,
       t: h
     };
     try {
-      this.subscriptions.forEach((f, _) => {
-        var D;
-        const { symbolInfo: N, onTick: b } = f, T = JSON.parse(N.long_description || "{}"), { baseToken: w, quoteToken: B } = T;
-        if ((t === w.toLowerCase() || t === B.toLowerCase()) && (t === w.toLowerCase() ? f.baseData = u : f.quoteData = u, f.baseData && f.quoteData)) {
+      this.subscriptions.forEach((f, $) => {
+        var y;
+        const { symbolInfo: D, onTick: g } = f, T = JSON.parse(D.long_description || "{}"), { baseToken: b, quoteToken: P } = T;
+        if ((t === b.toLowerCase() || t === P.toLowerCase()) && (t === b.toLowerCase() ? f.baseData = w : f.quoteData = w, f.baseData && f.quoteData)) {
           const p = f.baseData, n = f.quoteData;
           if (Math.abs(p.t - n.t) <= 1e3) {
             if (!isFinite(p.o) || p.o <= 0 || !isFinite(p.h) || p.h <= 0 || !isFinite(p.l) || p.l <= 0 || !isFinite(p.c) || p.c <= 0 || !isFinite(n.o) || n.o <= 0 || !isFinite(n.h) || n.h <= 0 || !isFinite(n.l) || n.l <= 0 || !isFinite(n.c) || n.c <= 0) {
-              console.error(`[Datafeed]: Invalid price data for ${N.name}, skipping update`);
+              console.error(`[Datafeed]: Invalid price data for ${D.name}, skipping update`);
               return;
             }
-            const g = p.o / n.o, y = p.h / n.h, k = p.l / n.l, C = p.c / n.c, S = (p.v + n.v) / 2;
-            if (!isFinite(g) || !isFinite(y) || !isFinite(k) || !isFinite(C) || !isFinite(S)) {
-              console.error(`[Datafeed]: Calculated invalid price ratio for ${N.name}:`, {
-                open: g,
-                high: y,
-                low: k,
-                close: C,
-                volume: S
+            const u = p.o / n.o, S = p.h / n.h, I = p.l / n.l, N = p.c / n.c, k = (p.v + n.v) / 2;
+            if (!isFinite(u) || !isFinite(S) || !isFinite(I) || !isFinite(N) || !isFinite(k)) {
+              console.error(`[Datafeed]: Calculated invalid price ratio for ${D.name}:`, {
+                open: u,
+                high: S,
+                low: I,
+                close: N,
+                volume: k
               });
               return;
             }
-            const v = {
+            const _ = {
               time: p.t,
-              open: g,
-              high: y,
-              low: k,
-              close: C,
-              volume: S
+              open: u,
+              high: S,
+              low: I,
+              close: N,
+              volume: k
             };
-            f.lastBar = v, b(v);
+            f.lastBar = _, g(_);
             try {
-              (D = window.TradingView) == null || D.onCurrentPriceUpdate(v.close);
-            } catch (U) {
-              console.error("[Datafeed]: Error onCurrentPriceUpdate:", U);
+              (y = window.TradingView) == null || y.onCurrentPriceUpdate(_.close);
+            } catch (V) {
+              console.error("[Datafeed]: Error onCurrentPriceUpdate:", V);
             }
           }
         }
@@ -642,7 +647,7 @@ class H {
 }
 class K {
   constructor(e = {}) {
-    $(this, "config");
+    B(this, "config");
     this.config = {
       baseUrl: "https://pcs.dquery.ai",
       fromPlatform: 14,
@@ -657,7 +662,7 @@ class K {
    * @param chainId - 區塊鏈的 chainId
    */
   setPlatform(e, o) {
-    const t = I(e);
+    const t = C(e);
     t ? (o === "from" ? this.config.fromPlatform = t.id : this.config.toPlatform = t.id, console.log(`set platform: ${t.name} (ID: ${t.id}, ChainId: ${e})`)) : (o === "from" ? this.config.fromPlatform = 14 : this.config.toPlatform = 14, console.warn(`set platform: can't find chainId ${e} platform, use default platform BNB Chain`));
   }
   /**
@@ -685,7 +690,7 @@ class K {
    */
   convertToTradingViewBars(e) {
     return e.map((o) => {
-      const [t, a, s, r, c, i] = o;
+      const [t, a, s, r, l, i] = o;
       return {
         time: i,
         // 時間戳 (毫秒)
@@ -693,7 +698,7 @@ class K {
         high: a,
         low: s,
         close: r,
-        volume: c
+        volume: l
       };
     });
   }
@@ -710,7 +715,7 @@ class K {
    * @param resolution - TradingView 解析度
    */
   convertResolution(e) {
-    const o = P[e];
+    const o = v[e];
     return o ? {
       "1m": "1min",
       "5m": "5min",
@@ -725,10 +730,10 @@ class K {
   }
   async getBars(e, o, t, a, s, r) {
     try {
-      const c = this.convertResolution(t), i = await this.getKLineData(
+      const l = this.convertResolution(t), i = await this.getKLineData(
         {
           address: o,
-          interval: c,
+          interval: l,
           from: a * 1e3,
           // 轉換為毫秒
           to: s * 1e3,
@@ -740,8 +745,8 @@ class K {
       if (i.status.error_code !== "0")
         throw new Error(`API error: ${i.status.error_message}`);
       return this.convertToTradingViewBars(i.data);
-    } catch (c) {
-      throw console.error("Failed to get bars:", c), c;
+    } catch (l) {
+      throw console.error("Failed to get bars:", l), l;
     }
   }
   /**
@@ -754,14 +759,14 @@ class K {
       const t = Math.floor(Date.now() / 1e3), a = t - 24 * 60 * 60, s = await this.getBars(o, e, "60", a, t);
       if (!s || s.length === 0)
         throw new Error(`No data available for token ${e}`);
-      let r = -1 / 0, c = 1 / 0;
+      let r = -1 / 0, l = 1 / 0;
       s.forEach((h) => {
-        h.high > r && (r = h.high), h.low < c && (c = h.low);
+        h.high > r && (r = h.high), h.low < l && (l = h.low);
       });
-      const i = s[s.length - 1].close, l = s[0].open, m = (i - l) / l * 100;
+      const i = s[s.length - 1].close, c = s[0].open, m = (i - c) / c * 100;
       return {
         h: r,
-        l: c,
+        l,
         c: i,
         changes: m
       };
@@ -781,11 +786,11 @@ function G(d, e = {}) {
       "TradingView or Datafeeds not found. Make sure to load the library scripts before using this function."
     ), null;
   window.TradingView = window.TradingView || {}, window.TradingView.token0Address = window.TradingView.token0Address || "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", window.TradingView.token1Address = window.TradingView.token1Address || "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82", window.TradingView.fromChainId = window.TradingView.fromChainId || 56, window.TradingView.toChainId = window.TradingView.toChainId || 56;
-  const o = window.TradingView.fromChainId, t = window.TradingView.toChainId, a = I(o), s = I(t);
+  const o = window.TradingView.fromChainId, t = window.TradingView.toChainId, a = C(o), s = C(t);
   a ? console.log(
     `Using blockchain: ${a.name} (${a.displayName}), Chain ID: ${a.chainId}`
   ) : console.warn(`Chain ID ${o} is not supported. Using default BNB Chain (56).`), s ? console.log(`Using blockchain: ${s.name} (${s.displayName}), Chain ID: ${s.chainId}`) : console.warn(`Chain ID ${t} is not supported. Using default BNB Chain (56).`);
-  const r = F(), l = {
+  const r = F(), c = {
     ...{
       symbol: "WBNB/CAKE",
       // 顯示名稱，實際數據來自 window.TradingView 中的代幣地址
@@ -806,7 +811,7 @@ function G(d, e = {}) {
     ...e,
     container: typeof d == "string" ? d : d.id
   };
-  return new window.TradingView.widget(l);
+  return new window.TradingView.widget(c);
 }
 function X(d = "https://assets.pcswap.org/web/charts/charting_library/", e = "https://assets.pcswap.org/web/charts/datafeeds/") {
   return new Promise((o, t) => {
@@ -830,8 +835,8 @@ const ee = {
   loadTradingViewLibrary: X,
   getTradingView: Q,
   getDatafeeds: Y,
-  CHAIN_ID_MAP: V,
-  getChainInfoByChainId: I
+  CHAIN_ID_MAP: U,
+  getChainInfoByChainId: C
 };
 export {
   G as createTradingViewWidget,
