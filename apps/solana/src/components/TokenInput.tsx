@@ -245,7 +245,7 @@ function TokenInput(props: TokenInputProps) {
     console.debug('debug handleClickPercent', percent)
     if (!maxString) return
     handleFocus()
-    onChange?.(getBalanceString(maxDecimal.mul(percent).div(100).toFixed(token?.decimals)))
+    onChange?.(getBalanceString(percent === 100 ? maxString : maxDecimal.mul(percent).div(100).toFixed(token?.decimals)))
   })
 
   const isUnknownToken = useEvent((token_: TokenInfo) => {
@@ -345,7 +345,7 @@ function TokenInput(props: TokenInputProps) {
         {/* balance */}
         <LazyAnimatePresence mode="wait" features={domAnimation}>
           {!hideBalance && maxString && !isFocus ? (
-            <SwapUIV2.WalletAssetDisplay isUserInsufficientBalance={false} balance={balanceInfo.text} onMax={handleClickMax} />
+            <SwapUIV2.WalletAssetDisplay isUserInsufficientBalance={false} balance={maxString} onMax={handleClickMax} />
           ) : (
             <SwapUIV2.AssetSettingButtonList onPercentInput={handleClickPercent} />
           )}
