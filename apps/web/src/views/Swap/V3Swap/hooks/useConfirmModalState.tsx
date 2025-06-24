@@ -541,7 +541,7 @@ const useConfirmActions = (
                   value: order.trade.inputAmount.currency.isNative
                     ? BigInt(order.trade.inputAmount.quotient.toString())
                     : undefined,
-                  gas: calculateGasMargin(gasLimit),
+                  gas: calculateGasMargin(gasLimit, 2000n),
                 })
               })
 
