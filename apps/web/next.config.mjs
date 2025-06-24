@@ -80,6 +80,7 @@ const config = {
     '@tanstack/query-core',
     '@bnb-chain/canonical-bridge-widget',
     '@bnb-chain/canonical-bridge-sdk',
+    '@pancakeswap/canonical-bridge', 
   ],
   reactStrictMode: true,
   images: {
