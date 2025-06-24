@@ -3,7 +3,7 @@ import { Box } from '@pancakeswap/uikit'
 import { useSetAtom } from 'jotai'
 import React, { useCallback, useState } from 'react'
 import { styled } from 'styled-components'
-import { chartPriceDataAtom } from './atom/chartPriceDataAtom'
+import { chartPriceDataAtom, livePriceDataAtom } from './atom/chartPriceDataAtom'
 import PriceHeader from './PriceHeader'
 import TradingViewChart from './TradingViewChart'
 
@@ -35,6 +35,8 @@ const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
 }) => {
   const [isReversed, setIsReversed] = useState(false)
   const setPriceData = useSetAtom(chartPriceDataAtom)
+  const setLivePriceData = useSetAtom(livePriceDataAtom)
+
   const on24HPriceDataChange = useCallback((h: number, l: number, c: number, changes: number) => {
     setPriceData({
       price: c,
@@ -42,6 +44,14 @@ const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
       high24h: h,
       low24h: l,
     })
+  }, [])
+  const onLiveDataChanges = useCallback((c: number, subscriptionId: string) => {
+    console.log('c', c)
+    console.log('subscriptionId', subscriptionId)
+    setLivePriceData((prev) => ({
+      ...prev,
+      [subscriptionId]: c,
+    }))
   }, [])
 
   return (
@@ -58,6 +68,8 @@ const ChartWithPriceHeader: React.FC<ChartWithPriceHeaderProps> = ({
         currency0={isReversed ? currency1 : currency0}
         currency1={isReversed ? currency0 : currency1}
         on24HPriceDataChange={on24HPriceDataChange}
+        // @ts-ignore
+        onLiveDataChanges={onLiveDataChanges}
       />
     </Container>
   )

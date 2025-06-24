@@ -13,3 +13,7 @@ export const chartPriceDataAtom = atom<ChartPriceData>({
   high24h: 0,
   low24h: 0,
 })
+
+export type LivePriceData = Record<string, number>
+
+export const livePriceDataAtom = atom<LivePriceData>({})

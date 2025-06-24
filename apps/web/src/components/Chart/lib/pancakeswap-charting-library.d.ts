@@ -5,11 +5,13 @@ declare global {
   interface Window {
     TradingView: {
       widget: new (options: TradingViewWidgetOptions) => TradingViewWidget;
-      [key: string]: any;
+      // [key: string]: any;
       token0Address: string;
       token1Address: string;
-      chainId: number;
+      fromChainId: number;
+      toChainId: number;
       on24HrDataReady: (h: number, l: number, c: number, changes: number) => void;
+      onCurrentPriceUpdate: (c: number) => void;
     };
     Datafeeds: {
       UDFCompatibleDatafeed: new (url: string, options?: any) => any;
