@@ -234,18 +234,18 @@ export default function ClmmPositionAccountItemDetail({
             <Flex flex={1} flexDirection="column" w="full" justifyContent="space-between">
               <Flex justifyContent="space-between">
                 <Text color={colors.textSubtle}> {t('Pool Liquidity')}</Text>
-                <Text color={colors.textPrimary}>{formatCurrency(poolInfo.tvl, { symbol: '$', abbreviated: true, decimalPlaces: 2 })}</Text>
+                <Text color={colors.textPrimary}>{formatCurrency(poolInfo.tvl, { symbol: '$', abbreviated: true, decimalPlaces: 3 })}</Text>
               </Flex>
               <Flex justifyContent="space-between">
                 <Text color={colors.textSubtle}>{t('24h Volume')}</Text>
                 <Text color={colors.textPrimary}>
-                  {formatCurrency(poolInfo.day.volume, { symbol: '$', abbreviated: true, decimalPlaces: 2 })}
+                  {formatCurrency(poolInfo.day.volume, { symbol: '$', abbreviated: true, decimalPlaces: 3 })}
                 </Text>
               </Flex>
               <Flex justifyContent="space-between">
                 <Text color={colors.textSubtle}>{t('24h Pool Fee')}</Text>
                 <Text color={colors.textPrimary}>
-                  {formatCurrency(poolInfo.day.volumeFee, { symbol: '$', abbreviated: true, decimalPlaces: 2 })}
+                  {formatCurrency(poolInfo.day.volumeFee, { symbol: '$', abbreviated: true, decimalPlaces: 3 })}
                 </Text>
               </Flex>
             </Flex>
