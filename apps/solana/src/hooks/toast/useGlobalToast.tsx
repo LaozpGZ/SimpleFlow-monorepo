@@ -1,4 +1,4 @@
-import { ToastId, ToastPosition, useToast, UseToastOptions } from '@chakra-ui/react'
+import { ToastId, ToastPosition, useToast, UseToastOptions, Text } from '@chakra-ui/react'
 import { ReactNode, useEffect } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Subject } from 'rxjs'
@@ -39,6 +39,8 @@ function useGlobalToast() {
 
   useEffect(() => {
     const sub = toastSubject.asObservable().subscribe(({ id, update, close, txError, noRpc, ...data }) => {
+      console.log('useGlobalToast', { id, update, close, txError, noRpc, ...data })
+
       // eslint-disable-next-line no-param-reassign
       id = id ?? uuid()
       const handleClose = (props: RenderProps) => {
@@ -74,6 +76,8 @@ function useGlobalToast() {
             ? 'Transaction cancelled\nThis wallet might not support Versioned Transaction, turn it off and try again.'
             : txError.message
 
+        console.log('toast errorMsg', { errorMsg, txError, data })
+
         toast({
           id,
           duration: data.duration || toastConfig.duration,
@@ -86,7 +90,13 @@ function useGlobalToast() {
                 state={{
                   ...toastConfig,
                   ...data,
-                  title: data.title ? `${data.title} ${t('Failed')}` : t('Failed'),
+                  title: data.title ? (
+                    <Text fontWeight={600}>
+                      {data.title} {t('Failed')}
+                    </Text>
+                  ) : (
+                    <Text fontWeight={600}>{t('Failed')}</Text>
+                  ),
                   description: errorMsg || data.description,
                   status: 'error'
                 }}

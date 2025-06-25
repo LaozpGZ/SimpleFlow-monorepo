@@ -57,9 +57,9 @@ type localeProps = Record<string, unknown>
 
 const CLMM_TX_MSG = {
   harvest: {
-    title: <Trans>harvest_rewards</Trans>,
+    title: <Trans>Harvest Rewards</Trans>,
     desc: () => <Trans>Harvest Clmm Rewards</Trans>,
-    txHistoryTitle: <Trans>harvest_rewards</Trans>,
+    txHistoryTitle: <Trans>Harvest Rewards</Trans>,
     txHistoryDesc: () => <Trans>Harvest Clmm Rewards</Trans>
   },
   openPosition: {
