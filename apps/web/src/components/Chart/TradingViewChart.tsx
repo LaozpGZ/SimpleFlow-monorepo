@@ -29,6 +29,23 @@ const ChartContainer = styled.div`
   }
 `
 
+const update24HPriceData = (
+  on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void,
+) => {
+  if (window?.pcsExtraData?.fetch24HrData) {
+    window.pcsExtraData
+      .fetch24HrData()
+      .then((data) => {
+        if (data) {
+          on24HPriceDataChange(data.high, data.low, data.close, data.changes)
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to fetch 24H price data:', error)
+      })
+  }
+}
+
 const setSymbolInfo = (
   currency0: Currency,
   currency1: Currency,
@@ -40,14 +57,7 @@ const setSymbolInfo = (
   window.pcsExtraData.token1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
   window.pcsExtraData.fromChainId = currency0?.chainId
   window.pcsExtraData.toChainId = currency1?.chainId
-
-  if (window?.pcsExtraData?.fetch24HrData) {
-    window.pcsExtraData.fetch24HrData().then((data) => {
-      if (data) {
-        on24HPriceDataChange(data.high, data.low, data.close, data.changes)
-      }
-    })
-  }
+  update24HPriceData(on24HPriceDataChange)
 }
 
 const TradingViewChart: React.FC<TradingViewChartProps> = ({
@@ -159,13 +169,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
           }
           setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
           widgetRef.current = createTradingViewWidget(containerRef.current, options)
-          if (window?.pcsExtraData?.fetch24HrData) {
-            window.pcsExtraData.fetch24HrData().then((data) => {
-              if (data) {
-                on24HPriceDataChange?.(data.high, data.low, data.close, data.changes)
-              }
-            })
-          }
+          update24HPriceData(on24HPriceDataChange)
           isInitialized.current = true
         }
       } catch (error) {
