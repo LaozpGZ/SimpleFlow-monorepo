@@ -124,10 +124,11 @@ export default function TokenAmountPairInputs({ tempCreatedPool, baseIn, onConfi
     return undefined
   }, [balanceA, balanceB, disabledInput, mintA, mintB, tokenAmount])
 
-  const [mintAVolume, mintBVolume] = [
-    new Decimal(tokenAmount[0] || 0).mul(tokenPrices[mintA.address]?.value || 0),
-    new Decimal(tokenAmount[1] || 0).mul(tokenPrices[mintB.address]?.value || 0)
-  ]
+  const priceA = tokenPrices[mintA.address]?.value
+  const priceB = tokenPrices[mintB.address]?.value
+  const validPriceA = priceA !== undefined && priceA >= 0 ? priceA : 0
+  const validPriceB = priceB !== undefined && priceB >= 0 ? priceB : 0
+  const [mintAVolume, mintBVolume] = [new Decimal(tokenAmount[0] || 0).mul(validPriceA), new Decimal(tokenAmount[1] || 0).mul(validPriceB)]
   const totalVolume = mintAVolume.add(mintBVolume)
   const { ratioA, ratioB } = calRatio({
     price: baseIn ? tempCreatedPool.price : 1 / tempCreatedPool.price,
