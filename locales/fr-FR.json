@@ -146,7 +146,7 @@
   "Set Profile Picture": "Définir l'image de profil",
   "Join Team": "Rejoindre une équipe",
   "Set Name": "Définir le nom",
-  "Failed to generate bridge transaction. Please adjust the slippage and try again.": "Failed to generate bridge transaction. Please adjust the slippage and try again.",
+  "Failed to generate bridge transaction. Please adjust the slippage and try again.": "Échec de la génération de la transaction de bridge. Veuillez ajuster le glissement et réessayer.",
   "This starter will also become your first profile picture.": "Ce starter deviendra également votre première photo de profil.",
   "Choose your Starter!": "Choisissez votre starter !",
   "Choose wisely: you can only ever make one starter collectible!": "Choisissez judicieusement : vous ne pouvez faire qu'un seul jeton non fongible !",
