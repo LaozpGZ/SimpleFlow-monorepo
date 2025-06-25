@@ -432,78 +432,78 @@ export class ClmmInstrument {
 
     const ins = nft2022
       ? this.openPositionFromLiquidityInstruction22(
-          programId,
-          ownerInfo.feePayer,
-          id,
-          ownerInfo.wallet,
-          nftMintAccount,
-          positionNftAccount,
-          protocolPosition,
-          tickArrayLower,
-          tickArrayUpper,
-          personalPosition,
-          ownerInfo.tokenAccountA,
-          ownerInfo.tokenAccountB,
-          new PublicKey(poolKeys.vault.A),
-          new PublicKey(poolKeys.vault.B),
-          new PublicKey(poolInfo.mintA.address),
-          new PublicKey(poolInfo.mintB.address),
+        programId,
+        ownerInfo.feePayer,
+        id,
+        ownerInfo.wallet,
+        nftMintAccount,
+        positionNftAccount,
+        protocolPosition,
+        tickArrayLower,
+        tickArrayUpper,
+        personalPosition,
+        ownerInfo.tokenAccountA,
+        ownerInfo.tokenAccountB,
+        new PublicKey(poolKeys.vault.A),
+        new PublicKey(poolKeys.vault.B),
+        new PublicKey(poolInfo.mintA.address),
+        new PublicKey(poolInfo.mintB.address),
 
-          tickLower,
-          tickUpper,
+        tickLower,
+        tickUpper,
+        tickArrayLowerStartIndex,
+        tickArrayUpperStartIndex,
+        liquidity,
+        amountMaxA,
+        amountMaxB,
+        withMetadata,
+        PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
           tickArrayLowerStartIndex,
           tickArrayUpperStartIndex,
-          liquidity,
-          amountMaxA,
-          amountMaxB,
-          withMetadata,
-          PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
-            tickArrayLowerStartIndex,
-            tickArrayUpperStartIndex,
-          ])
-            ? getPdaExBitmapAccount(programId, id).publicKey
-            : undefined,
-        )
+        ])
+          ? getPdaExBitmapAccount(programId, id).publicKey
+          : undefined,
+      )
       : this.openPositionFromLiquidityInstruction(
-          programId,
-          ownerInfo.feePayer,
-          id,
-          ownerInfo.wallet,
-          nftMintAccount,
-          positionNftAccount,
-          metadataAccount,
-          protocolPosition,
-          tickArrayLower,
-          tickArrayUpper,
-          personalPosition,
-          ownerInfo.tokenAccountA,
-          ownerInfo.tokenAccountB,
-          new PublicKey(poolKeys.vault.A),
-          new PublicKey(poolKeys.vault.B),
-          new PublicKey(poolInfo.mintA.address),
-          new PublicKey(poolInfo.mintB.address),
+        programId,
+        ownerInfo.feePayer,
+        id,
+        ownerInfo.wallet,
+        nftMintAccount,
+        positionNftAccount,
+        metadataAccount,
+        protocolPosition,
+        tickArrayLower,
+        tickArrayUpper,
+        personalPosition,
+        ownerInfo.tokenAccountA,
+        ownerInfo.tokenAccountB,
+        new PublicKey(poolKeys.vault.A),
+        new PublicKey(poolKeys.vault.B),
+        new PublicKey(poolInfo.mintA.address),
+        new PublicKey(poolInfo.mintB.address),
 
-          tickLower,
-          tickUpper,
+        tickLower,
+        tickUpper,
+        tickArrayLowerStartIndex,
+        tickArrayUpperStartIndex,
+        liquidity,
+        amountMaxA,
+        amountMaxB,
+        withMetadata,
+        PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
           tickArrayLowerStartIndex,
           tickArrayUpperStartIndex,
-          liquidity,
-          amountMaxA,
-          amountMaxB,
-          withMetadata,
-          PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
-            tickArrayLowerStartIndex,
-            tickArrayUpperStartIndex,
-          ])
-            ? getPdaExBitmapAccount(programId, id).publicKey
-            : undefined,
-        );
+        ])
+          ? getPdaExBitmapAccount(programId, id).publicKey
+          : undefined,
+      );
 
     return {
       signers,
       instructions: [ins],
       instructionTypes: [InstructionType.ClmmOpenPosition],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
       address: {
         nftMint: nftMintAccount,
         tickArrayLower,
@@ -576,78 +576,78 @@ export class ClmmInstrument {
 
     const ins = nft2022
       ? this.openPositionFromBaseInstruction22(
-          programId,
-          ownerInfo.feePayer,
-          id,
-          ownerInfo.wallet,
-          nftMintAccount,
-          positionNftAccount,
-          protocolPosition,
-          tickArrayLower,
-          tickArrayUpper,
-          personalPosition,
-          ownerInfo.tokenAccountA,
-          ownerInfo.tokenAccountB,
-          new PublicKey(poolKeys.vault.A),
-          new PublicKey(poolKeys.vault.B),
-          new PublicKey(poolInfo.mintA.address),
-          new PublicKey(poolInfo.mintB.address),
+        programId,
+        ownerInfo.feePayer,
+        id,
+        ownerInfo.wallet,
+        nftMintAccount,
+        positionNftAccount,
+        protocolPosition,
+        tickArrayLower,
+        tickArrayUpper,
+        personalPosition,
+        ownerInfo.tokenAccountA,
+        ownerInfo.tokenAccountB,
+        new PublicKey(poolKeys.vault.A),
+        new PublicKey(poolKeys.vault.B),
+        new PublicKey(poolInfo.mintA.address),
+        new PublicKey(poolInfo.mintB.address),
 
-          tickLower,
-          tickUpper,
+        tickLower,
+        tickUpper,
+        tickArrayLowerStartIndex,
+        tickArrayUpperStartIndex,
+
+        withMetadata,
+
+        base,
+        baseAmount,
+
+        otherAmountMax,
+        PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
           tickArrayLowerStartIndex,
           tickArrayUpperStartIndex,
-
-          withMetadata,
-
-          base,
-          baseAmount,
-
-          otherAmountMax,
-          PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
-            tickArrayLowerStartIndex,
-            tickArrayUpperStartIndex,
-          ])
-            ? getPdaExBitmapAccount(programId, id).publicKey
-            : undefined,
-        )
+        ])
+          ? getPdaExBitmapAccount(programId, id).publicKey
+          : undefined,
+      )
       : this.openPositionFromBaseInstruction(
-          programId,
-          ownerInfo.feePayer,
-          id,
-          ownerInfo.wallet,
-          nftMintAccount,
-          positionNftAccount,
-          metadataAccount,
-          protocolPosition,
-          tickArrayLower,
-          tickArrayUpper,
-          personalPosition,
-          ownerInfo.tokenAccountA,
-          ownerInfo.tokenAccountB,
-          new PublicKey(poolKeys.vault.A),
-          new PublicKey(poolKeys.vault.B),
-          new PublicKey(poolInfo.mintA.address),
-          new PublicKey(poolInfo.mintB.address),
+        programId,
+        ownerInfo.feePayer,
+        id,
+        ownerInfo.wallet,
+        nftMintAccount,
+        positionNftAccount,
+        metadataAccount,
+        protocolPosition,
+        tickArrayLower,
+        tickArrayUpper,
+        personalPosition,
+        ownerInfo.tokenAccountA,
+        ownerInfo.tokenAccountB,
+        new PublicKey(poolKeys.vault.A),
+        new PublicKey(poolKeys.vault.B),
+        new PublicKey(poolInfo.mintA.address),
+        new PublicKey(poolInfo.mintB.address),
 
-          tickLower,
-          tickUpper,
+        tickLower,
+        tickUpper,
+        tickArrayLowerStartIndex,
+        tickArrayUpperStartIndex,
+
+        withMetadata,
+
+        base,
+        baseAmount,
+
+        otherAmountMax,
+        PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
           tickArrayLowerStartIndex,
           tickArrayUpperStartIndex,
-
-          withMetadata,
-
-          base,
-          baseAmount,
-
-          otherAmountMax,
-          PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
-            tickArrayLowerStartIndex,
-            tickArrayUpperStartIndex,
-          ])
-            ? getPdaExBitmapAccount(programId, id).publicKey
-            : undefined,
-        );
+        ])
+          ? getPdaExBitmapAccount(programId, id).publicKey
+          : undefined,
+      );
 
     return {
       address: {
@@ -662,7 +662,7 @@ export class ClmmInstrument {
       instructions: [ins],
       signers,
       instructionTypes: [InstructionType.ClmmOpenPosition],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
     };
   }
 
@@ -928,72 +928,72 @@ export class ClmmInstrument {
 
     const ins = nft2022
       ? this.openPositionFromLiquidityInstruction22(
-          programId,
-          ownerInfo.wallet,
-          id,
-          ownerInfo.wallet,
-          nftMintAccount,
-          positionNftAccount,
-          protocolPosition,
-          tickArrayLower,
-          tickArrayUpper,
-          personalPosition,
-          ownerInfo.tokenAccountA,
-          ownerInfo.tokenAccountB,
-          new PublicKey(poolKeys.vault.A),
-          new PublicKey(poolKeys.vault.B),
-          new PublicKey(poolKeys.mintA.address),
-          new PublicKey(poolKeys.mintB.address),
+        programId,
+        ownerInfo.wallet,
+        id,
+        ownerInfo.wallet,
+        nftMintAccount,
+        positionNftAccount,
+        protocolPosition,
+        tickArrayLower,
+        tickArrayUpper,
+        personalPosition,
+        ownerInfo.tokenAccountA,
+        ownerInfo.tokenAccountB,
+        new PublicKey(poolKeys.vault.A),
+        new PublicKey(poolKeys.vault.B),
+        new PublicKey(poolKeys.mintA.address),
+        new PublicKey(poolKeys.mintB.address),
 
-          tickLower,
-          tickUpper,
+        tickLower,
+        tickUpper,
+        tickArrayLowerStartIndex,
+        tickArrayUpperStartIndex,
+        liquidity,
+        amountMaxA,
+        amountMaxB,
+        withMetadata,
+        PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
           tickArrayLowerStartIndex,
           tickArrayUpperStartIndex,
-          liquidity,
-          amountMaxA,
-          amountMaxB,
-          withMetadata,
-          PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
-            tickArrayLowerStartIndex,
-            tickArrayUpperStartIndex,
-          ])
-            ? getPdaExBitmapAccount(programId, id).publicKey
-            : undefined,
-        )
+        ])
+          ? getPdaExBitmapAccount(programId, id).publicKey
+          : undefined,
+      )
       : this.openPositionFromLiquidityInstruction(
-          programId,
-          ownerInfo.wallet,
-          id,
-          ownerInfo.wallet,
-          nftMintAccount,
-          positionNftAccount,
-          metadataAccount,
-          protocolPosition,
-          tickArrayLower,
-          tickArrayUpper,
-          personalPosition,
-          ownerInfo.tokenAccountA,
-          ownerInfo.tokenAccountB,
-          new PublicKey(poolKeys.vault.A),
-          new PublicKey(poolKeys.vault.B),
-          new PublicKey(poolKeys.mintA.address),
-          new PublicKey(poolKeys.mintB.address),
+        programId,
+        ownerInfo.wallet,
+        id,
+        ownerInfo.wallet,
+        nftMintAccount,
+        positionNftAccount,
+        metadataAccount,
+        protocolPosition,
+        tickArrayLower,
+        tickArrayUpper,
+        personalPosition,
+        ownerInfo.tokenAccountA,
+        ownerInfo.tokenAccountB,
+        new PublicKey(poolKeys.vault.A),
+        new PublicKey(poolKeys.vault.B),
+        new PublicKey(poolKeys.mintA.address),
+        new PublicKey(poolKeys.mintB.address),
 
-          tickLower,
-          tickUpper,
+        tickLower,
+        tickUpper,
+        tickArrayLowerStartIndex,
+        tickArrayUpperStartIndex,
+        liquidity,
+        amountMaxA,
+        amountMaxB,
+        withMetadata,
+        PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
           tickArrayLowerStartIndex,
           tickArrayUpperStartIndex,
-          liquidity,
-          amountMaxA,
-          amountMaxB,
-          withMetadata,
-          PoolUtils.isOverflowDefaultTickarrayBitmap(poolInfo.config.tickSpacing, [
-            tickArrayLowerStartIndex,
-            tickArrayUpperStartIndex,
-          ])
-            ? getPdaExBitmapAccount(programId, id).publicKey
-            : undefined,
-        );
+        ])
+          ? getPdaExBitmapAccount(programId, id).publicKey
+          : undefined,
+      );
 
     return {
       address: {
@@ -1008,7 +1008,7 @@ export class ClmmInstrument {
       instructions: [ins],
       signers,
       instructionTypes: [InstructionType.ClmmOpenPosition],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
     };
   }
 
@@ -1086,7 +1086,7 @@ export class ClmmInstrument {
       signers: [],
       instructions: ins,
       instructionTypes: [InstructionType.ClmmClosePosition],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
     };
   }
 
@@ -1256,7 +1256,7 @@ export class ClmmInstrument {
       signers: [],
       instructions: [ins],
       instructionTypes: [InstructionType.ClmmIncreasePosition],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
     };
   }
 
@@ -1350,7 +1350,7 @@ export class ClmmInstrument {
       ],
       signers: [],
       instructionTypes: [InstructionType.ClmmIncreasePosition],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
     };
   }
 
@@ -1621,7 +1621,7 @@ export class ClmmInstrument {
       signers: [],
       instructions: ins,
       instructionTypes: [InstructionType.ClmmDecreasePosition],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
     };
   }
 
@@ -1764,7 +1764,7 @@ export class ClmmInstrument {
       signers: [],
       instructions: ins,
       instructionTypes: [InstructionType.ClmmSwapBaseIn],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
       address: {},
     };
   }
@@ -1832,7 +1832,7 @@ export class ClmmInstrument {
       signers: [],
       instructions: ins,
       instructionTypes: [InstructionType.ClmmSwapBaseOut],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
       address: {},
     };
   }
@@ -1935,7 +1935,7 @@ export class ClmmInstrument {
       signers: [],
       instructions: ins,
       instructionTypes: [InstructionType.ClmmInitReward],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
     };
   }
 
@@ -2050,7 +2050,7 @@ export class ClmmInstrument {
       signers: [],
       instructions: ins,
       instructionTypes: [InstructionType.ClmmSetReward],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
     };
   }
 
@@ -2139,7 +2139,7 @@ export class ClmmInstrument {
       signers: [],
       instructions: ins,
       instructionTypes: [InstructionType.ClmmCollectReward],
-      lookupTableAddress: poolKeys.lookupTableAccount ? [poolKeys.lookupTableAccount] : [],
+      lookupTableAddress: poolKeys.alt ? [poolKeys.alt] : [],
     };
   }
 
