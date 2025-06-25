@@ -89,21 +89,12 @@ function DecimalInput(props: Props) {
 
   const handleParseVal = useCallback(
     (propVal: string) => {
-      const val = propVal.match(new RegExp(`[0-9${detectedSeparator}]`, 'gi'))?.join('') || ''
+      const val = propVal.match(new RegExp(`[0-9,.]`, 'gi'))?.join('') || ''
       if (!val) return ''
-      const splitArr = val.split(detectedSeparator)
-      if (splitArr.length > 2) return [splitArr[0], splitArr[1]].join('.')
-      if (typeof decimals === 'number' && decimals > -1 && splitArr[1] && splitArr[1].length > decimals) {
-        return [splitArr[0], splitArr[1].substring(0, decimals)].join('.')
-      }
-      return val === detectedSeparator ? '0.' : val.replace(detectedSeparator, '.')
-      // const splitArr = (val || '').split('.')
-      // if (splitArr.length > 2) return [splitArr[0], splitArr[1]].join('.')
-      // if (typeof decimals === 'number' && decimals > -1 && splitArr[1] && splitArr[1].length > decimals) {
-      //   //.replace(/([1-9]+(\.[0-9]+[1-9])?)(\.?0+$)/, '$1')
-      //   return [splitArr[0], splitArr[1].substring(0, decimals)].join('.')
-      // }
-      // return val === '.' ? '0.' : val
+      const valNumber = val.replace(',', '.')
+      const splits = valNumber.split('.')
+      if (splits.length > 2) return `${splits[0]}.${splits.slice(1).join('')}`
+      return valNumber === '.' ? '0.' : valNumber
     },
     [decimals]
   )
