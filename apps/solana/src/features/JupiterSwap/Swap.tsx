@@ -1,19 +1,19 @@
 import '@pancakeswap/jupiter-terminal/global.css'
 import '@pancakeswap/jupiter-terminal/index.css'
 
+import { useCallback, useEffect } from 'react'
+import styled from 'styled-components'
+
 import { init, syncProps } from '@pancakeswap/jupiter-terminal'
 import { AtomBox } from '@pancakeswap/uikit'
 import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
-import { useCallback, useEffect } from 'react'
-
-import styled from 'styled-components'
-
 import { TARGET_ELE_ID, TerminalCard, TerminalWrapper } from '@/features/JupiterSwap/SwapForm'
 import useResponsive from '@/hooks/useResponsive'
 import { colors } from '@/theme/cssVariables'
 import { logGTMSwapTXSuccessEvent, logGTMWalletConnectedEvent } from '@/utils/report/curstomGTMEventTracking'
 import { logDDSwapTXSuccessEvent, logDDWalletConnectedEvent } from '@/utils/report/datadog'
+import { useRouteQuery } from '@/utils/routeTools'
 
 const SwapPage = styled(AtomBox)`
   display: flex;
@@ -31,6 +31,7 @@ const JupiterTerminal = () => {
   const { connection } = useConnection()
   const passthroughWalletContextState = useWallet()
   const { setVisible } = useWalletModal()
+  const query = useRouteQuery<{ inputMint?: string; outputMint?: string }>()
 
   useEffect(() => {
     if (passthroughWalletContextState.wallet?.adapter.connected) {
@@ -56,6 +57,9 @@ const JupiterTerminal = () => {
   )
 
   useEffect(() => {
+    const formProps: any = {}
+    if (query.inputMint) formProps.initialInputMint = query.inputMint
+    if (query.outputMint) formProps.initialOutputMint = query.outputMint
     init({
       displayMode: 'integrated',
       integratedTargetId: TARGET_ELE_ID,
@@ -69,9 +73,10 @@ const JupiterTerminal = () => {
       onRequestConnectWallet: () => setVisible(true),
       onSuccess(result) {
         logSwapSucc(result)
-      }
+      },
+      ...(Object.keys(formProps).length ? { formProps } : {})
     })
-  }, [setVisible, logSwapSucc, connection.rpcEndpoint])
+  }, [setVisible, logSwapSucc, connection.rpcEndpoint, query.inputMint, query.outputMint])
 
   // Do not pass the passthroughWalletContextState into init.
   // Otherwise, the entire widget will refresh when the theme switches.
