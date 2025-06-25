@@ -25,7 +25,6 @@ const perPage = 30
 
 const USDCMint = 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'
 const SOLMint = PublicKey.default.toString()
-const RAYMint = '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R'
 const USDTMint = 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB'
 
 export interface TokenListHandles {
@@ -153,12 +152,11 @@ export default forwardRef<
 
   const USDC = useMemo(() => orgTokenMap.get(USDCMint), [orgTokenMap])
   const SOL = useMemo(() => orgTokenMap.get(SOLMint), [orgTokenMap])
-  const RAY = useMemo(() => orgTokenMap.get(RAYMint), [orgTokenMap])
   const USDT = useMemo(() => orgTokenMap.get(USDTMint), [orgTokenMap])
 
-  const [usdcDisabled, solDisabled, rayDisabled, usdtDisabled] = filterFn
-    ? [!USDC || !filterFn(USDC), !SOL || !filterFn(SOL), !RAY || !filterFn(RAY), !USDT || !filterFn(USDT)]
-    : [false, false, false, false]
+  const [usdcDisabled, solDisabled, usdtDisabled] = filterFn
+    ? [!USDC || !filterFn(USDC), !SOL || !filterFn(SOL), !USDT || !filterFn(USDT)]
+    : [false, false, false]
 
   const renderTokenItem = useCallback(
     (token: TokenInfo) => (
@@ -197,7 +195,6 @@ export default forwardRef<
         <SimpleGrid gridTemplateColumns="repeat(auto-fill, minmax(80px, 1fr))" gap={3}>
           <PopularTokenCell token={USDC} onClick={(token) => onChooseToken(token)} disabled={usdcDisabled} />
           <PopularTokenCell token={SOL} onClick={(token) => onChooseToken(token)} disabled={solDisabled} />
-          <PopularTokenCell token={RAY} onClick={(token) => onChooseToken(token)} disabled={rayDisabled} />
           <PopularTokenCell token={USDT} onClick={(token) => onChooseToken(token)} disabled={usdtDisabled} />
         </SimpleGrid>
       </Box>
