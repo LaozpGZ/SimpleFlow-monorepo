@@ -226,7 +226,20 @@ export default forwardRef(function TokenSearchInput(
     <Box {...boxProps}>
       <Popover isOpen={open} autoFocus={false} closeOnBlur={false} placement="bottom-start">
         <PopoverAnchor>
-          <HStack ref={anchorRef} {...inputCard} pl="2" pr="3" placeItems="center" borderRadius="100px" h={['34px', 10]}>
+          <HStack
+            ref={anchorRef}
+            {...inputCard}
+            pl="2"
+            pr="3"
+            placeItems="center"
+            borderRadius="100px"
+            h={['34px', 10]}
+            borderTop="1px solid"
+            borderLeft="1px solid"
+            borderRight="1px solid"
+            borderBottom="2px solid"
+            borderColor={colors.inputSecondary}
+          >
             {selectedList.length > 0 ? (
               <HStack flexShrink={0}>
                 {selectedList.map((token, idx) => (
