@@ -80,7 +80,10 @@ export default function PoolListItem({
   }, [pool])
 
   const onClickSwap = useCallback(() => {
-    const [inputMint, outputMint] = [wSolToSol(pool.mintA.address), wSolToSol(pool.mintB.address)]
+    const getMint = (address: string) => {
+      return pageRoutePathnames.swap.includes('jupiter') ? address : wSolToSol(address)
+    }
+    const [inputMint, outputMint] = [getMint(pool.mintA.address), getMint(pool.mintB.address)]
     router.push({
       pathname: pageRoutePathnames.swap,
       query: {

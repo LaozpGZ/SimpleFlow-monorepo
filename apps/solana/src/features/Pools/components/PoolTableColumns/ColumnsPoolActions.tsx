@@ -23,7 +23,10 @@ export const ColumnsPoolActions: React.FC<{
   const router = useRouter()
 
   const onClickSwap = useCallback(() => {
-    const [inputMint, outputMint] = [wSolToSol(pool.mintA.address), wSolToSol(pool.mintB.address)]
+    const getMint = (address: string) => {
+      return pageRoutePathnames.swap.includes('jupiter') ? address : wSolToSol(address)
+    }
+    const [inputMint, outputMint] = [getMint(pool.mintA.address), getMint(pool.mintB.address)]
     router.push({
       pathname: pageRoutePathnames.swap,
       query: {
@@ -31,7 +34,7 @@ export const ColumnsPoolActions: React.FC<{
         outputMint
       }
     })
-  }, [pool])
+  }, [pool, router])
 
   const onClickDeposit = useCallback(() => {
     const isStandard = pool.type === 'Standard'
@@ -42,7 +45,7 @@ export const ColumnsPoolActions: React.FC<{
         pool_id: pool.id
       }
     })
-  }, [pool])
+  }, [pool, router])
 
   return (
     <HStack justify="flex-end" h="100%">
