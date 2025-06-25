@@ -79,6 +79,8 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
         alignItems="flex-start"
         mb={isMobile ? '40px' : '0'}
         style={{ zIndex: 1 }}
+        mt={isChartExpanded ? undefined : isMobile ? '18px' : '42px'}
+        p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
       >
         {isDesktop && isChartDisplayed && (
           <Flex width={isChartExpanded ? '100%' : '50%'} maxWidth="928px" flexDirection="column" style={{ gap: 20 }}>
@@ -154,6 +156,6 @@ export const StyledInputCurrencyWrapper = styled(Box)`
   width: 100%;
 
   ${({ theme }) => theme.mediaQueries.md} {
-    width: 400px;
+    width: 480px;
   }
 `
