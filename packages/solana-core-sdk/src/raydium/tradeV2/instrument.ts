@@ -117,13 +117,13 @@ export function route1Instruction(
         { pubkey: poolKey.marketEventQueue, isSigner: false, isWritable: true },
         ...(poolKey.marketProgramId.toString() === "srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX"
           ? [
-              { pubkey: poolKey.marketBaseVault, isSigner: false, isWritable: true },
-              { pubkey: poolKey.marketQuoteVault, isSigner: false, isWritable: true },
-            ]
+            { pubkey: poolKey.marketBaseVault, isSigner: false, isWritable: true },
+            { pubkey: poolKey.marketQuoteVault, isSigner: false, isWritable: true },
+          ]
           : [
-              { pubkey: poolKey.id, isSigner: false, isWritable: true },
-              { pubkey: poolKey.id, isSigner: false, isWritable: true },
-            ]),
+            { pubkey: poolKey.id, isSigner: false, isWritable: true },
+            { pubkey: poolKey.id, isSigner: false, isWritable: true },
+          ]),
       ],
     );
   }
@@ -233,13 +233,13 @@ export function route2Instruction(
         { pubkey: poolKey.marketEventQueue, isSigner: false, isWritable: true },
         ...(poolKey.marketProgramId.toString() === "srmqPvymJeFKQ4zGQed1GFppgkRHL9kaELCbyksJtPX"
           ? [
-              { pubkey: poolKey.marketBaseVault, isSigner: false, isWritable: true },
-              { pubkey: poolKey.marketQuoteVault, isSigner: false, isWritable: true },
-            ]
+            { pubkey: poolKey.marketBaseVault, isSigner: false, isWritable: true },
+            { pubkey: poolKey.marketQuoteVault, isSigner: false, isWritable: true },
+          ]
           : [
-              { pubkey: poolKey.id, isSigner: false, isWritable: true },
-              { pubkey: poolKey.id, isSigner: false, isWritable: true },
-            ]),
+            { pubkey: poolKey.id, isSigner: false, isWritable: true },
+            { pubkey: poolKey.id, isSigner: false, isWritable: true },
+          ]),
       ],
     );
   }
@@ -676,7 +676,7 @@ export interface ApiSwapV1Out {
   openTime?: undefined;
   msg: undefined;
   data: {
-    swapType: "BaseIn" | "BaseOut";
+    swapType: "exactIn" | "exactOut";
     inputMint: string;
     inputAmount: string;
     outputMint: string;
