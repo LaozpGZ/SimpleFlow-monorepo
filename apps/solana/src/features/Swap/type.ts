@@ -73,7 +73,7 @@ export interface ApiSwapV1OutSuccess {
   openTime?: undefined
   msg: undefined
   data: {
-    swapType: 'BaseIn' | 'BaseOut'
+    swapType: SwapType
     inputMint: string
     inputAmount: string
     outputMint: string

@@ -387,9 +387,10 @@ function TokenInput(props: TokenInputProps) {
           <NumericFormat
             inputMode="decimal"
             decimalScale={token?.decimals}
+            pattern="^[0-9]*[.,]?[0-9]*$"
             value={typeof value === 'undefined' ? '' : value}
-            thousandSeparator={thousandSeparator}
-            decimalSeparator={detectedSeparator}
+            thousandSeparator=","
+            allowedDecimalSeparators={['.', ',']}
             allowNegative={false}
             valueIsNumericString
             placeholder="0.0"
@@ -400,10 +401,9 @@ function TokenInput(props: TokenInputProps) {
             min={0}
             id={id}
             onChange={(e) => {
-              const targetValue = e?.currentTarget?.value.replace(new RegExp(`\\${thousandSeparator}`, 'g'), '')
-              const rawValue = targetValue === detectedSeparator ? '0.' : targetValue.replace(detectedSeparator, '.')
-              if (Number.isNaN(rawValue)) return
-              onChange?.(rawValue)
+              const targetValue = e?.currentTarget?.value.replace(/,/g, '.')
+              if (Number.isNaN(targetValue)) return
+              onChange?.(targetValue)
             }}
             style={{
               textAlign: 'end',

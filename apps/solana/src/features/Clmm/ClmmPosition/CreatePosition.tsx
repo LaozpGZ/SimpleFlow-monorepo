@@ -487,7 +487,7 @@ export default function CreatePosition() {
             <Desktop>
               <Flex gap="24px" justifyContent="space-between" whiteSpace="nowrap">
                 {[
-                  { label: t('Liquidity'), value: currentPool?.tvl },
+                  { label: t('TVL'), value: currentPool?.tvl },
                   { label: t('Volume 24H'), value: currentPool?.day.volume },
                   { label: t('Fees 24H'), value: currentPool?.day.volumeFee }
                 ].map(({ label, value }) => (

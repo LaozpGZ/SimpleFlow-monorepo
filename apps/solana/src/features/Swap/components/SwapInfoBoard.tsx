@@ -37,7 +37,7 @@ export function SwapInfoBoard({
   const [showMoreSwapInfo, setShowMoreSwapInfo] = useState(false)
   const refreshCircleRef = useRef<IntervalCircleHandler>(null)
   const routeTokens = tokenInput && tokenOutput ? [tokenInput, tokenOutput] : undefined
-  const isBaseOut = computedSwapResult?.swapType === 'BaseOut'
+  const isBaseOut = computedSwapResult?.swapType === 'exactOut'
   const priceImpact = computedSwapResult?.priceImpactPct || 0
   const isHighRiskPrice = priceImpact > 5
 
@@ -71,7 +71,7 @@ export function SwapInfoBoard({
         </HStack>
         <HStack gap={4} py={1} justifyContent="space-between">
           <ItemLabel
-            name={isBaseOut ? t('Maximum Input') : t('Minimum Received')}
+            name={isBaseOut ? t('Maximum sold') : t('Minimum Received')}
             tooltip={
               isBaseOut
                 ? t('The maximum number of tokens you will input on this trade')

@@ -97,9 +97,7 @@ export function PriorityModalContent(props: {
         onDismiss={props.onClose}
       >
         <VStack gap={4}>
-          <Text fontSize="14px">
-            {t('Fee settings are applied across all PancakeSwap features, including Swap, Liquidity, and Staking.')}
-          </Text>
+          <Text fontSize="14px">{t('Fee settings are applied across all PancakeSwap features, including Swap, Liquidity.')}</Text>
           <Divider />
           <Collapse in={priorityMode === 0} animateOpacity style={{ width: '100%' }}>
             <VStack width="full" align="flex-start">
