@@ -101,8 +101,12 @@ export default function ClmmPositionAccountItemDetailMobileDrawer({
   )
 
   const [volumeA, volumeB, totalVolume] = useMemo(() => {
-    const volA = positionDetailInfo.amountA.mul(tokenPrices[poolInfo.mintA.address]?.value || 0)
-    const volB = positionDetailInfo.amountB.mul(tokenPrices[poolInfo.mintB.address]?.value || 0)
+    const priceA = tokenPrices[poolInfo.mintA.address]?.value
+    const priceB = tokenPrices[poolInfo.mintB.address]?.value
+    const validPriceA = priceA !== undefined && priceA >= 0 ? priceA : 0
+    const validPriceB = priceB !== undefined && priceB >= 0 ? priceB : 0
+    const volA = positionDetailInfo.amountA.mul(validPriceA)
+    const volB = positionDetailInfo.amountB.mul(validPriceB)
     return [volA, volB, volA.add(volB)]
   }, [poolInfo.mintA.address, poolInfo.mintB.address, positionDetailInfo.amountA, positionDetailInfo.amountB, tokenPrices])
 

@@ -181,7 +181,8 @@ function TokenInput(props: TokenInputProps) {
     [inputValue, token?.decimals]
   )
   const totalPrice = useMemo(() => {
-    const price = tokenPrice[token?.address || '']?.value
+    let price = tokenPrice[token?.address || '']?.value
+    price = price < 0 ? 0 : price
     return price && value ? new Decimal(price ?? 0).mul(value).toString() : ''
   }, [token?.address, tokenPrice, value])
 

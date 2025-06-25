@@ -141,8 +141,12 @@ export default function CreatePosition() {
     ? [new Decimal(currentPriceStr || 0).gte(priceRange[1] || 0), new Decimal(currentPriceStr || 0).lte(priceRange[0] || 0)]
     : [false, false]
 
-  const totalMintAValue = new Decimal(tokenAmount[0] || '0').mul(tokens.mintA ? tokenPrices[tokens.mintA.address]?.value || 0 : 0)
-  const totalMintBValue = new Decimal(tokenAmount[1] || '0').mul(tokens.mintB ? tokenPrices[tokens.mintB.address]?.value || 0 : 0)
+  const priceA = tokens.mintA ? tokenPrices[tokens.mintA.address]?.value : undefined
+  const priceB = tokens.mintB ? tokenPrices[tokens.mintB.address]?.value : undefined
+  const validPriceA = priceA !== undefined && priceA >= 0 ? priceA : 0
+  const validPriceB = priceB !== undefined && priceB >= 0 ? priceB : 0
+  const totalMintAValue = new Decimal(tokenAmount[0] || '0').mul(validPriceA)
+  const totalMintBValue = new Decimal(tokenAmount[1] || '0').mul(validPriceB)
   const totalPrice = totalMintAValue.add(totalMintBValue)
 
   const { ratioA, ratioB } = calRatio({

@@ -66,9 +66,11 @@ export default function ClmmPositionAccountItemFace({
   })
 
   const { priceLower, priceUpper, amountA, amountB } = getPriceAndAmount({ poolInfo, position })
-  const totalVolume = amountA
-    .mul(tokenPrices[poolInfo.mintA.address]?.value || 0)
-    .add(amountB.mul(tokenPrices[poolInfo.mintB.address]?.value || 0))
+  const priceA = tokenPrices[poolInfo.mintA.address]?.value
+  const priceB = tokenPrices[poolInfo.mintB.address]?.value
+  const validPriceA = priceA !== undefined && priceA >= 0 ? priceA : 0
+  const validPriceB = priceB !== undefined && priceB >= 0 ? priceB : 0
+  const totalVolume = amountA.mul(validPriceA).add(amountB.mul(validPriceB))
 
   const inRange = priceLower.price.lt(poolInfo.price) && priceUpper.price.gt(poolInfo.price)
 

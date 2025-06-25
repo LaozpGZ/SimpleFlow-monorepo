@@ -69,9 +69,11 @@ export default function PreviewDepositModal({
 
   const [price0Decimal, price1Decimal] = [getFirstNonZeroDecimal(priceRange[0]), getFirstNonZeroDecimal(priceRange[1])]
 
-  const totalDeposit = new Decimal(tokenAmount[0])
-    .mul(tokenPrices[pool.mintA.address]?.value || 0)
-    .add(new Decimal(tokenAmount[1]).mul(tokenPrices[pool.mintB.address]?.value || 0))
+  const priceA = tokenPrices[pool.mintA.address]?.value
+  const priceB = tokenPrices[pool.mintB.address]?.value
+  const validPriceA = priceA !== undefined && priceA >= 0 ? priceA : 0
+  const validPriceB = priceB !== undefined && priceB >= 0 ? priceB : 0
+  const totalDeposit = new Decimal(tokenAmount[0]).mul(validPriceA).add(new Decimal(tokenAmount[1]).mul(validPriceB))
 
   return (
     <Modal size="lg" isOpen={isOpen} onClose={onClose}>
