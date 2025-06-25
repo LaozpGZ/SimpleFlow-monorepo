@@ -3782,8 +3782,8 @@
   "or view the": "またはXでのお知らせを",
   "announcement on X": "ご覧ください",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "スマートコントラクトウォレットは現在「Prediction」ではサポートされていません。続行するには、サービスをご利用になる前にEOA（外部所有アカウント）ウォレットに切り替えてください。",
-  "Earn Falcon Miles!": "Earn Falcon Miles!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
-  "Trade Binance Alpha Tokens to Win $250,000.": "Trade Binance Alpha Tokens to Win $250,000.",
-  "Trade Alpha Tokens: Win $250K.": "Trade Alpha Tokens: Win $250K."
+  "Earn Falcon Miles!": "Falcon Milesを獲得しよう！",
+  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPは、プールに提供した合計TVLに基づき、40倍のFalcon's Milesを獲得します。Milesは、0.95～1.05の範囲内にあるポジションにのみ付与されます。",
+  "Trade Binance Alpha Tokens to Win $250,000.": "Binance Alphaトークンをトレードして、$250,000を勝ち取ろう。",
+  "Trade Alpha Tokens: Win $250K.": "Alphaトークンをトレードして、$250Kを勝ち取ろう。"
 }
