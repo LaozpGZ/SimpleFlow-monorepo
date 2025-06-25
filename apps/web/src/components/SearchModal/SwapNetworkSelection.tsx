@@ -22,6 +22,8 @@ import { chains as evmChains } from 'utils/wagmi'
 import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks'
 import { BaseWrapper, ButtonWrapper, RowWrapper } from './CommonBases'
 
+const PRIORITIZED_CHAINS = [ChainId.BSC, ChainId.BASE, ChainId.ARBITRUM_ONE, ChainId.ETHEREUM]
+
 const NetworkMenuColumn = styled(Flex)`
   flex-direction: column;
   overflow: hidden;
