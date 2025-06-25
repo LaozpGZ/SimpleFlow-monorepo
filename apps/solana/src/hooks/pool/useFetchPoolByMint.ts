@@ -6,7 +6,7 @@ import useSWR, { KeyedMutator } from 'swr'
 import { getPoolsByMints } from '@pancakeswap/solana-clmm-sdk'
 import axios from '@/api/axios'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
-import { useAppStore } from '@/store'
+import { useAppStore, useTokenStore } from '@/store'
 import { formatPoolData, formatAprData } from './formatter'
 import { ReturnPoolType, ReturnFormattedPoolType, PoolsApiReturnType } from './type'
 
@@ -79,7 +79,11 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
     () => (data?.data || []).map((pool) => formatAprData(pool)),
     [data]
   ) as ReturnPoolType<T>[]
-  const formattedData = useMemo(() => resData.map((i) => formatPoolData(i)), [resData]) as ReturnFormattedPoolType<T>[]
+  const orgTokenList = useTokenStore((s) => s.displayTokenList)
+  const formattedData = useMemo(
+    () => resData.map((i) => formatPoolData(i, orgTokenList)),
+    [resData, orgTokenList]
+  ) as ReturnFormattedPoolType<T>[]
   const selectedPool = resData && poolId ? (resData.find((d) => d.id === poolId) as ReturnPoolType<T>) : undefined
   const isLoadEnded = !swrProps.isLoading && (!resData.length || !!error)
 
@@ -88,7 +92,9 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
     data: resData,
     size: data?.count ? Number(data.count) : 0,
     formattedData,
-    formattedSelectedPool: selectedPool ? (formatPoolData(selectedPool as ApiV3PoolInfoItem) as ReturnFormattedPoolType<T>) : undefined,
+    formattedSelectedPool: selectedPool
+      ? (formatPoolData(selectedPool as ApiV3PoolInfoItem, orgTokenList) as ReturnFormattedPoolType<T>)
+      : undefined,
     isLoadEnded,
     // loadMore,
     ...swrProps

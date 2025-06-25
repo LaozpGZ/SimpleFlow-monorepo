@@ -11,6 +11,7 @@ import useLockCpmmBalance from '@/hooks/portfolio/cpmm/useLockCpmmBalance'
 import { formatPoolData } from '@/hooks/pool/formatter'
 import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
 import { panelCard } from '@/theme/cssBlocks'
+import { useTokenStore } from '@/store'
 import StandardPoolRowItem from './components/Standard/StandardPoolRowItem'
 
 const emptyPosition = {
@@ -58,8 +59,12 @@ export default function MyPositionTabStandard({
     lpOnlyList.forEach((l) => data.delete(l.address.toBase58()))
     return Array.from(data)
   }, [farmPositionList, lpOnlyList])
+  const orgTokenList = useTokenStore((s) => s.displayTokenList)
 
-  const allPoolData = [...(formattedData || []), ...allLockLp.map((d) => formatPoolData(d[1][0].poolInfo) as FormattedPoolInfoStandardItem)]
+  const allPoolData = [
+    ...(formattedData || []),
+    ...allLockLp.map((d) => formatPoolData(d[1][0].poolInfo, orgTokenList) as FormattedPoolInfoStandardItem)
+  ]
 
   const hasData = farmPositionList.length > 0 || lpOnlyList.length > 0 || allLockLp.length > 0
   const allData = [

@@ -44,6 +44,7 @@ export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
   } = props || {}
   const readyIdList = idList.filter((i) => i && isValidPublicKey(i) && !useTokenStore.getState().tokenMap.get(i)) as string[]
   const [host, searchIdUrl] = useAppStore((s) => [s.urlConfigs.BASE_HOST, s.urlConfigs.POOL_SEARCH_BY_ID], shallow)
+  const orgTokenList = useTokenStore((s) => s.displayTokenList)
 
   const cacheDataList = useMemo(
     () =>
@@ -79,8 +80,8 @@ export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
     [key: string]: T
   }
   const formattedData = useMemo(
-    () => (resData ? resData.map((d) => formatPoolData(formatAprData(d))) : undefined),
-    [resData]
+    () => (resData ? resData.map((d) => formatPoolData(formatAprData(d), orgTokenList)) : undefined),
+    [resData, orgTokenList]
   ) as ConditionalPoolType<T>[]
   const formattedDataMap = useMemo(() => formattedData.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {}), [formattedData]) as {
     [key: string]: ConditionalPoolType<T>

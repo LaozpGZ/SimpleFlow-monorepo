@@ -1,5 +1,5 @@
 import { PublicKey } from '@solana/web3.js'
-import { ApiV3PoolInfoItem, TickUtils, ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
+import { ApiV3PoolInfoItem, TickUtils, ApiV3PoolInfoConcentratedItem, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import dayjs from 'dayjs'
 import { PoolInfo } from '@pancakeswap/solana-clmm-sdk'
@@ -51,7 +51,7 @@ export const formatAprData = (data: PoolInfo): ApiV3PoolInfoItem => {
 // if reward expired more than 10 days, do not display
 const isRewardValid = (time?: number) => !time || Date.now() - time * 1000 < 864000000
 
-export function formatPoolData(pool: ApiV3PoolInfoItem): FormattedPoolInfoItem {
+export function formatPoolData(pool: ApiV3PoolInfoItem, tokenList?: TokenInfo[]): FormattedPoolInfoItem {
   const allApr: TimeAprData = Object.values(AprKey).reduce(
     (acc, cur) => {
       const aprData = pool[cur]
@@ -139,6 +139,22 @@ export function formatPoolData(pool: ApiV3PoolInfoItem): FormattedPoolInfoItem {
     if (valDecimal.gte(1000)) return 2
     if (valDecimal.gte(10)) return 4
     return poolDecimals
+  }
+
+  const mintAInTokenList = tokenList?.find((t) => t.address === pool.mintA.address)
+  const mintBInTokenList = tokenList?.find((t) => t.address === pool.mintB.address)
+  const { mintA } = pool
+  if (mintA && mintA?.symbol === 'UNKNOWN' && mintAInTokenList) {
+    mintA.symbol = mintAInTokenList?.symbol
+    mintA.decimals = mintAInTokenList?.decimals
+    mintA.name = mintAInTokenList?.name
+  }
+
+  const { mintB } = pool
+  if (mintB && mintB?.symbol === 'UNKNOWN' && mintBInTokenList) {
+    mintB.symbol = mintBInTokenList?.symbol
+    mintB.decimals = mintBInTokenList?.decimals
+    mintB.name = mintBInTokenList?.name
   }
 
   return {
