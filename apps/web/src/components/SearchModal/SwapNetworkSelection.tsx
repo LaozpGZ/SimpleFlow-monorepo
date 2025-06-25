@@ -14,14 +14,13 @@ import { ChainLogo } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import drop from 'lodash/drop'
 import take from 'lodash/take'
+import { CROSSCHAIN_SUPPORTED_CHAINS } from 'quoter/utils/crosschain-utils/config'
 import { useMemo, useRef } from 'react'
 import { styled } from 'styled-components'
 import { chainNameConverter } from 'utils/chainNameConverter'
 import { chains as evmChains } from 'utils/wagmi'
 import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks'
 import { BaseWrapper, ButtonWrapper, RowWrapper } from './CommonBases'
-
-const PRIORITIZED_CHAINS = [ChainId.BSC, ChainId.BASE, ChainId.ARBITRUM_ONE, ChainId.ETHEREUM]
 
 const NetworkMenuColumn = styled(Flex)`
   flex-direction: column;
@@ -104,15 +103,15 @@ export default function SwapNetworkSelection({
 
     // Sort the filtered chains to have priority chains first
     const sortedFiltered = [...filtered].sort((a, b) => {
-      const aIsPriority = PRIORITIZED_CHAINS.includes(a.id)
-      const bIsPriority = PRIORITIZED_CHAINS.includes(b.id)
+      const aIsPriority = CROSSCHAIN_SUPPORTED_CHAINS.includes(a.id)
+      const bIsPriority = CROSSCHAIN_SUPPORTED_CHAINS.includes(b.id)
 
       if (aIsPriority && !bIsPriority) return -1
       if (!aIsPriority && bIsPriority) return 1
 
       // If both are priority chains, sort by the order in prioritizedChains array
       if (aIsPriority && bIsPriority) {
-        return PRIORITIZED_CHAINS.indexOf(a.id) - PRIORITIZED_CHAINS.indexOf(b.id)
+        return CROSSCHAIN_SUPPORTED_CHAINS.indexOf(a.id) - CROSSCHAIN_SUPPORTED_CHAINS.indexOf(b.id)
       }
 
       return 0
