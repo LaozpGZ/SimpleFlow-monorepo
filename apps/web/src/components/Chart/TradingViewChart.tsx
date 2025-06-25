@@ -29,20 +29,18 @@ const ChartContainer = styled.div`
   }
 `
 
-const update24HPriceData = (
+const update24HPriceData = async (
   on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void,
 ) => {
   if (window?.pcsExtraData?.fetch24HrData) {
-    window.pcsExtraData
-      .fetch24HrData()
-      .then((data) => {
-        if (data) {
-          on24HPriceDataChange(data.high, data.low, data.close, data.changes)
-        }
-      })
-      .catch((error) => {
-        console.error('Failed to fetch 24H price data:', error)
-      })
+    try {
+      const data = await window.pcsExtraData.fetch24HrData()
+      if (data) {
+        on24HPriceDataChange(data.high, data.low, data.close, data.changes)
+      }
+    } catch (error) {
+      console.error('Failed to fetch 24H price data:', error)
+    }
   }
 }
 
