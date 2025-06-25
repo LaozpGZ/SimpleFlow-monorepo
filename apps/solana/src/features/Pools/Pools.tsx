@@ -361,7 +361,7 @@ export default function Pools() {
         }
       },
       {
-        headerName: t('Liquidity'),
+        headerName: t('TVL'),
         field: 'tvl',
         flex: 1,
         cellRenderer: ColumnsPoolLiquidity,

@@ -7,8 +7,10 @@ import { formatCurrency } from '@/utils/numberish/formatter'
 import { colors } from '@/theme/cssVariables'
 import { panelCard } from '@/theme/cssBlocks'
 
-export default function ChartTooltip({ active, payload, label, category }: TooltipProps<ValueType, NameType> & { category?: string }) {
-  const unit = 'USD'
+export type IChartTooltipProps = TooltipProps<ValueType, NameType> & { category?: string; symbol?: string; unit?: string }
+
+export default function ChartTooltip({ active, payload, label, category, symbol, unit = '' }: IChartTooltipProps) {
+  // const unit = 'USD'
   if (active && payload && payload.length) {
     return (
       <Box {...panelCard} px="4" py="2" lineHeight="1.5">
@@ -18,7 +20,7 @@ export default function ChartTooltip({ active, payload, label, category }: Toolt
         {payload.map((item, idx) => {
           return (
             <Box key={`payload-${item.name}-${idx}`} color={colors.textPrimary} fontSize="14px" fontWeight="600">
-              <Box>{`${formatCurrency(item.value as string, { symbol: '$', decimalPlaces: 2 })} ${unit}`}</Box>
+              <Box>{`${formatCurrency(item.value as string, { symbol, decimalPlaces: 2 })} ${unit}`}</Box>
             </Box>
           )
         })}

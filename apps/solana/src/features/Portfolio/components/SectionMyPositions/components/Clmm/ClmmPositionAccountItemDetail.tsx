@@ -233,7 +233,7 @@ export default function ClmmPositionAccountItemDetail({
             <Divider borderWidth="1px" borderColor={colors.textSubtle} opacity="0.2" />
             <Flex flex={1} flexDirection="column" w="full" justifyContent="space-between">
               <Flex justifyContent="space-between">
-                <Text color={colors.textSubtle}> {t('Pool Liquidity')}</Text>
+                <Text color={colors.textSubtle}> {t('TVL')}</Text>
                 <Text color={colors.textPrimary}>{formatCurrency(poolInfo.tvl, { symbol: '$', abbreviated: true, decimalPlaces: 3 })}</Text>
               </Flex>
               <Flex justifyContent="space-between">

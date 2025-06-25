@@ -6,6 +6,7 @@ import { useAppStore } from '@/store'
 import { shrinkToValue } from '@/utils/shrinkToValue'
 import Chart from './Chart'
 import { TimeType, availableTimeType } from './const'
+import ChartTooltip from './ChartTooltip'
 
 export default function PoolChartModal<T extends string>({
   poolAddress,
@@ -72,6 +73,13 @@ export function ChartWindow<T extends string>({
       currentCategoryLabel={currentCategoryLabel}
       xKey="time"
       yKey="v"
+      renderToolTip={
+        <ChartTooltip
+          symbol={currentCategory === 'volume' ? '$' : undefined}
+          unit={currentCategory === 'volume' ? 'USD' : undefined}
+          category={currentCategoryLabel}
+        />
+      }
       renderTimeTypeTabs={
         <Tabs
           style={{

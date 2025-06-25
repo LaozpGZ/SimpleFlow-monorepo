@@ -1,6 +1,7 @@
 import { AbsoluteCenter, Box, Center, HStack, Spinner, Text } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, TooltipProps } from 'recharts'
+import { NameType, ValueType } from 'recharts/src/component/DefaultTooltipContent'
 import { useTranslation } from '@pancakeswap/localization'
 import { useAppStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
@@ -17,7 +18,8 @@ export default function Chart<T = any>({
   xKey,
   yKey,
   renderTimeTypeTabs,
-  renderTabs
+  renderTabs,
+  renderToolTip
 }: {
   currentCategoryLabel: string
   data: T[]
@@ -27,6 +29,7 @@ export default function Chart<T = any>({
   yKey: string | ((utils: { category: T }) => string)
   renderTimeTypeTabs: ReactNode
   renderTabs?: ReactNode
+  renderToolTip?: JSX.Element | null
 }) {
   const { t } = useTranslation()
   const isMobile = useAppStore((s) => s.isMobile)
@@ -76,7 +79,7 @@ export default function Chart<T = any>({
                 )}
                 {/* <YAxis tickFormatter={yTickformats} /> */}
                 <Bar dataKey={yKey} fill={colors.primary} radius={200} maxBarSize={7} />
-                <Tooltip content={<ChartTooltip category={currentCategoryLabel} />} cursor={{ fill: 'transparent' }} />
+                <Tooltip content={renderToolTip ?? <ChartTooltip category={currentCategoryLabel} />} cursor={{ fill: 'transparent' }} />
               </BarChart>
             </ResponsiveContainer>
           </Box>

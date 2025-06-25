@@ -199,7 +199,7 @@ export default function ClmmPositionAccountItemDetailMobileDrawer({
                 {/* info head */}
                 <HStack fontSize="sm" justifyContent="space-between" mt={4} color={colors.textSubtle}>
                   <VStack alignItems="flex-start">
-                    <Text>{t('Pool Liquidity')}</Text>
+                    <Text>{t('TVL')}</Text>
                     <Text color={colors.textPrimary}>
                       {formatCurrency(poolInfo.tvl, { symbol: '$', abbreviated: true, decimalPlaces: 2 })}
                     </Text>
