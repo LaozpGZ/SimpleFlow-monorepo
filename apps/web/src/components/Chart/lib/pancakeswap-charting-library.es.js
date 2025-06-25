@@ -753,7 +753,7 @@ class j {
    */
   async get24HrData(e, o) {
     try {
-      const t = Math.floor(Date.now() / 1e3), n = t - 24 * 60 * 60, a = await this.getBars(o, e, "60", n, t);
+      const t = Math.floor(Date.now() / 1e3), n = t - 24 * 60 * 60, a = await this.getBars(o, e, "60", n, t, 24);
       if (!a || a.length === 0)
         throw new Error(`No data available for token ${e}`);
       let s = -1 / 0, c = 1 / 0;
