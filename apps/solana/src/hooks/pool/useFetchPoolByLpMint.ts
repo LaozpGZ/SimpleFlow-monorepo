@@ -6,7 +6,7 @@ import { AxiosResponse } from 'axios'
 import axios from '@/api/axios'
 import { isValidPublicKey } from '@/utils/publicKey'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
-import { useAppStore } from '@/store'
+import { useAppStore, useTokenStore } from '@/store'
 
 import { FormattedPoolInfoStandardItem } from './type'
 import { formatPoolData, poolInfoCache, formatAprData } from './formatter'
@@ -63,7 +63,11 @@ export default function useFetchPoolByLpMint(
   const dataMap = useMemo(() => resData.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {}), [resData]) as {
     [key: string]: ApiV3PoolInfoStandardItem
   }
-  const formattedData = useMemo(() => resData.map(formatPoolData), [resData]) as FormattedPoolInfoStandardItem[]
+  const orgTokenList = useTokenStore((s) => s.displayTokenList)
+  const formattedData = useMemo(
+    () => resData.map((d) => formatPoolData(d, orgTokenList)),
+    [resData, orgTokenList]
+  ) as FormattedPoolInfoStandardItem[]
   const formattedDataMap = useMemo(() => formattedData.reduce((acc, cur) => ({ ...acc, [cur.id]: cur }), {}), []) as {
     [key: string]: FormattedPoolInfoStandardItem
   }
