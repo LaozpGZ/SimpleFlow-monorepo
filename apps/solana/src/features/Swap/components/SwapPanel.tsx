@@ -119,8 +119,8 @@ export function SwapPanel({
       : {}
   )
   const [inputFeeConfig, outputFeeConfig] = [
-    tokenInput?.extensions.feeConfig || inputInfo?.extensions.feeConfig,
-    tokenOutput?.extensions.feeConfig || outputInfo?.extensions.feeConfig
+    tokenInput?.extensions?.feeConfig || inputInfo?.extensions?.feeConfig,
+    tokenOutput?.extensions?.feeConfig || outputInfo?.extensions?.feeConfig
   ]
 
   useEffect(() => {

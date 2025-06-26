@@ -640,8 +640,8 @@ export class PoolUtils {
     let sqrtPriceLimitX64: BN;
     const isBaseIn = baseMint.toBase58() === poolInfo.mintA.address;
     const [baseFeeConfig, outFeeConfig] = isBaseIn
-      ? [poolInfo.mintA.extensions.feeConfig, poolInfo.mintB.extensions.feeConfig]
-      : [poolInfo.mintB.extensions.feeConfig, poolInfo.mintA.extensions.feeConfig];
+      ? [poolInfo.mintA.extensions?.feeConfig, poolInfo.mintB.extensions?.feeConfig]
+      : [poolInfo.mintB.extensions?.feeConfig, poolInfo.mintA.extensions?.feeConfig];
 
     if (priceLimit.equals(new Decimal(0))) {
       sqrtPriceLimitX64 = isBaseIn ? MIN_SQRT_PRICE_X64.add(new BN(1)) : MAX_SQRT_PRICE_X64.sub(new BN(1));
@@ -829,8 +829,8 @@ export class PoolUtils {
   }): ReturnTypeComputeAmountOutBaseOut {
     const isBaseIn = baseMint.toBase58() === poolInfo.mintA.address;
     const feeConfigs = {
-      [poolInfo.mintA.address]: poolInfo.mintA.extensions.feeConfig,
-      [poolInfo.mintB.address]: poolInfo.mintB.extensions.feeConfig,
+      [poolInfo.mintA.address]: poolInfo.mintA.extensions?.feeConfig,
+      [poolInfo.mintB.address]: poolInfo.mintB.extensions?.feeConfig,
     };
 
     let sqrtPriceLimitX64: BN;
@@ -1108,7 +1108,7 @@ export class PoolUtils {
       !amountHasFee,
     );
     const _amount = new BN(
-      new Decimal(addFeeAmount.amount.sub(addFeeAmount.fee ?? ZERO).toString()).toFixed(0) // .mul(coefficient).toFixed(0),
+      new Decimal(addFeeAmount.amount.sub(addFeeAmount.fee ?? ZERO).toString()).toFixed(0), // .mul(coefficient).toFixed(0),
     );
 
     let liquidity: BN;
@@ -1142,7 +1142,7 @@ export class PoolUtils {
       amountSlippageA: inputA ? addFeeAmount : amountFromLiquidity.amountSlippageA,
       amountSlippageB: inputA ? amountFromLiquidity.amountSlippageB : addFeeAmount,
       expirationTime: amountFromLiquidity.expirationTime,
-    }
+    };
   }
 
   static async getAmountsFromLiquidity({

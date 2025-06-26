@@ -467,8 +467,8 @@ export const useClmmStore = createStore<ClmmState>(
         )
       ]
       const epochInfo = await getEpochInfo()
-      const { fee: feeA = new BN(0) } = getTransferAmountFeeV2(_amountMinA, poolInfo.mintA.extensions.feeConfig, epochInfo!, false)
-      const { fee: feeB = new BN(0) } = getTransferAmountFeeV2(_amountMinB, poolInfo.mintB.extensions.feeConfig, epochInfo!, false)
+      const { fee: feeA = new BN(0) } = getTransferAmountFeeV2(_amountMinA, poolInfo.mintA.extensions?.feeConfig, epochInfo!, false)
+      const { fee: feeB = new BN(0) } = getTransferAmountFeeV2(_amountMinB, poolInfo.mintB.extensions?.feeConfig, epochInfo!, false)
 
       try {
         const computeBudgetConfig = await getComputeBudgetConfig()
@@ -485,22 +485,6 @@ export const useClmmStore = createStore<ClmmState>(
           //   ]
           // },
           ownerPosition: position,
-          poolKeys: {
-            mintA: poolInfo.mintA,
-            mintB: poolInfo.mintB,
-            // programId: poolInfo.programId || PancakeClmmProgramId,
-            config: poolInfo.config,
-            vault: (poolInfo as any).vault,
-            id: poolInfo.id,
-            programId: poolInfo.programId,
-            openTime: '1723037622'
-            // @todo @ChefJerry ask BE implement getPoolKeys
-            // rewardInfos: [
-            //   {
-            //     vault: new PublicKey('4ZCaWWwDJ97J6QB51vvQSZjEifZDKVYDDajTzXm2Lcn7')
-            //   }
-            // ]
-          } as any,
           ownerInfo: {
             useSOLBalance: true,
             closePosition:

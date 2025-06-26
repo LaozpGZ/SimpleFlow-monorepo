@@ -49,7 +49,7 @@ export default class TokenModule extends ModuleBase {
         priority: 3,
         programId:
           token.programId ??
-          (token.tags.includes("token-2022") ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58()),
+          (token.tags?.includes("token-2022") ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58()),
       });
       this._mintGroup.official.add(token.address);
     });
@@ -62,7 +62,7 @@ export default class TokenModule extends ModuleBase {
         priority: 2,
         programId:
           token.programId ??
-          (token.tags.includes("token-2022") ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58()),
+          (token.tags?.includes("token-2022") ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58()),
       });
       this._mintGroup.raydium.add(token.address);
     });
@@ -75,7 +75,7 @@ export default class TokenModule extends ModuleBase {
         priority: 1,
         programId:
           token.programId ??
-          (token.tags.includes("token-2022") ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58()),
+          (token.tags?.includes("token-2022") ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58()),
         tags: token.freezeAuthority ? [...(token.tags || []), "hasFreeze"] : token.tags,
       });
       this._mintGroup.jup.add(token.address);
@@ -88,7 +88,7 @@ export default class TokenModule extends ModuleBase {
         type: "extra",
         priority: 1,
         programId:
-          token.programId || token.tags.includes("token-2022")
+          token.programId || token.tags?.includes("token-2022")
             ? TOKEN_2022_PROGRAM_ID.toBase58()
             : TOKEN_PROGRAM_ID.toBase58(),
       });
