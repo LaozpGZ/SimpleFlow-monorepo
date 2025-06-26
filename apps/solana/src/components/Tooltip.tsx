@@ -33,6 +33,7 @@ export default forwardRef(function Tooltip(
     isOpen,
     defaultIsOpen: defaultTooltipIsOpen,
     contentBoxProps,
+    placement = 'top',
     ...restPopoverProps
   }: {
     /** render content only when content is open */
@@ -43,6 +44,7 @@ export default forwardRef(function Tooltip(
     isOpen?: boolean
     defaultIsOpen?: boolean
     contentBoxProps?: BoxProps
+    placement?: PopoverProps['placement']
   } & Omit<PopoverProps, 'isOpen' | 'label' | 'defaultIsOpen'>,
   ref
 ) {
@@ -105,7 +107,7 @@ export default forwardRef(function Tooltip(
   }, [restPopoverProps.variant])
 
   return (
-    <Popover isOpen={isTooltipOpen} placement="top" defaultIsOpen={defaultIsOpen} isLazy={isLazy} {...restPopoverProps}>
+    <Popover isOpen={isTooltipOpen} placement={placement} defaultIsOpen={defaultIsOpen} isLazy={isLazy} {...restPopoverProps}>
       <PopoverTrigger>
         <Box
           ref={tooltipTriggerRef}

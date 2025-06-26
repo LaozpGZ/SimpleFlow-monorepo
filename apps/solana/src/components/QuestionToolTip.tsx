@@ -1,4 +1,4 @@
-import { Box, Text, TextProps } from '@chakra-ui/react'
+import { Box, PopoverProps, Text, TextProps } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
 import QuestionCircleIcon from '@/icons/misc/QuestionCircleIcon'
@@ -16,6 +16,7 @@ export function QuestionToolTip(props: {
   // iconSize?: string
   iconProps?: Omit<SvgIcon, 'ref'>
   textProps?: TextProps
+  placement?: PopoverProps['placement']
 }) {
   return (
     <Tooltip
@@ -24,6 +25,7 @@ export function QuestionToolTip(props: {
           {props.label}
         </Text>
       }
+      placement={props.placement}
     >
       <Box cursor={props.label ? 'pointer' : undefined}>
         {props.iconType === 'info' ? (

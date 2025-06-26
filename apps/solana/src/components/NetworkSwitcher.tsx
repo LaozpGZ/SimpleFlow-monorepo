@@ -69,6 +69,7 @@ export const NetworkSwitcher = () => {
           <Box display={['block', null, null, null, null, 'none']}>SOL</Box>
         </>
       }
+      zIndex={1}
     >
       {({ isOpen }) => (isOpen ? <NetworkSelect /> : null)}
     </UserMenu>

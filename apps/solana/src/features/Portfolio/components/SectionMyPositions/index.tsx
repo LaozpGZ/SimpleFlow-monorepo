@@ -114,8 +114,8 @@ export default function SectionMyPositions() {
           //   "action" auto / 1fr
           // `,
           `
-          "title title " auto
-          "tabs  action" auto / 1fr 1fr
+          "title action " auto
+          "tabs  tabs" auto / 1fr 1fr
         `
         ]}
         columnGap={3}
@@ -152,6 +152,7 @@ export default function SectionMyPositions() {
                     </Text>
                     {isMobile && currentRewardState.rewardInfo.length > 0 && (
                       <QuestionToolTip
+                        placement="left"
                         label={
                           <>
                             {currentRewardState.rewardInfo.map((r) => (

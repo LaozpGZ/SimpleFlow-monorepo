@@ -77,7 +77,20 @@ const PRESET_FARM_POOLS: any[] = [
       defaultRange: 0.1,
       defaultRangePoint: [0.01, 0.05, 0.1, 0.2, 0.5]
     },
-    poolType: 'concentrated'
+    poolType: 'concentrated',
+    rewardDefaultInfos: [
+      {
+        mint: {
+          address: 'sAjQ5LY7PKQa1CVgt9eNqK4y8Mqz6rmZTJD5djmaafF', // T0
+          programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+          decimals: 9
+        },
+        perSecond: 1e6,
+        startTime: 1750911220,
+        endTime: 1752011257
+      }
+    ],
+    rewardDefaultPoolInfos: 'Clmm' as const
   }
 ]
 
