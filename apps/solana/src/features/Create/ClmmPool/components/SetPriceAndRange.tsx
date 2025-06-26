@@ -70,6 +70,10 @@ interface Props {
   onSwitchBase: (baseIn: boolean) => void
 }
 
+Decimal.set({
+  toExpNeg: -10
+})
+
 export default function SetPriceAndRange({
   completed,
   initState,
