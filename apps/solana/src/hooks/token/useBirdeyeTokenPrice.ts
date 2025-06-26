@@ -1,11 +1,12 @@
+import { shallow } from 'zustand/shallow'
 import { solToWSol, WSOLMint } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 import useSWR from 'swr'
 import axios from '@/api/axios'
-import { birdeyePriceUrl } from '@/utils/config/birdeyeAPI'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { isValidPublicKey } from '@/utils/publicKey'
+import { useAppStore } from '@/store'
 
 export interface BirdEyeTokenPrice {
   value: number
@@ -18,15 +19,9 @@ const fetcher = ([url, mintList]: [string, string]): Promise<{
   success: boolean
   data: { [key: string]: BirdEyeTokenPrice }
 }> => {
-  return axios.post(
-    url,
-    {
-      list_address: mintList
-    },
-    {
-      skipError: true
-    }
-  )
+  return axios.get(`${url}?list_address=${mintList}`, {
+    skipError: true
+  })
 }
 
 export default function useBirdeyeTokenPrice(props: {
@@ -34,6 +29,7 @@ export default function useBirdeyeTokenPrice(props: {
   refreshInterval?: number
   timeout?: number
 }) {
+  const [host, birdeyePriceUrl] = useAppStore((s) => [s.urlConfigs.BASE_HOST, s.urlConfigs.BIRDEYE_TOKEN_PRICE], shallow)
   const { mintList, refreshInterval = 2 * MINUTE_MILLISECONDS } = props || {}
 
   const readyList = useMemo(
@@ -43,7 +39,7 @@ export default function useBirdeyeTokenPrice(props: {
 
   const shouldFetch = readyList.length > 0
 
-  const { data, isLoading, error, ...rest } = useSWR(shouldFetch ? [birdeyePriceUrl, readyList.join(',')] : null, fetcher, {
+  const { data, isLoading, error, ...rest } = useSWR(shouldFetch ? [`${host}${birdeyePriceUrl}`, readyList.join(',')] : null, fetcher, {
     refreshInterval,
     dedupingInterval: refreshInterval,
     focusThrottleInterval: refreshInterval

@@ -96,6 +96,7 @@ interface AppState {
     SWAP_HOST: string
     SWAP_COMPUTE: string
     SWAP_TX: string
+    BIRDEYE_TOKEN_PRICE: string
   }
   programIdConfig: typeof ALL_PROGRAM_ID
 
@@ -154,7 +155,6 @@ const appInitState = {
   },
   featureDisabled: {},
   appVersion: 'V3.0.2',
-  // todo:@eric switch to V0 after ALT supported
   txVersion: TxVersion.V0,
   needRefresh: false,
   tokenAccLoaded: false,

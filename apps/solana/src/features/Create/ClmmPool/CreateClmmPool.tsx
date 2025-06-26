@@ -18,7 +18,7 @@ import { genCSS2GridTemplateColumns, genCSS3GridTemplateColumns } from '@/theme/
 import { debounce, exhaustCall } from '@/utils/functionMethods'
 import { routeBack } from '@/utils/routeTools'
 import { solToWSolToken } from '@/utils/token'
-import useTokenPrice from '@/hooks/token/useTokenPrice'
+import useBirdeyeTokenPrice from '@/hooks/token/useBirdeyeTokenPrice'
 
 import SelectPoolTokenAndFee from './components/SelectPoolTokenAndFee'
 import SetPriceAndRange from './components/SetPriceAndRange'
@@ -40,7 +40,7 @@ export default function CreateClmmPool() {
   const [isTxSending, setIsTxSending] = useState(false)
   const debounceSetBuildData = debounce((data: CreatePoolBuildData) => setCreatePoolData(data), 150)
 
-  const { data: tokenPrices, isLoading: isPriceLoading } = useTokenPrice({
+  const { data: tokenPrices, isLoading: isPriceLoading } = useBirdeyeTokenPrice({
     mintList: [createPoolData?.extInfo.mockPoolInfo.mintA.address, createPoolData?.extInfo.mockPoolInfo.mintB.address]
   })
 

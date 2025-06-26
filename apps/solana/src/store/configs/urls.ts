@@ -10,8 +10,7 @@ export const urlConfigs = {
   POOL_POSITION_LINE: '/cached/v1/pools/line/position',
   POOL_LIQUIDITY_LINE: '/cached/v1/pools/line/liquidity',
   POOL_KEY_BY_ID: '/cached/v1/pools/info/ids',
-  // todo:@eric switch to our own until BE fixed issue
+  BIRDEYE_TOKEN_PRICE: '/cached/v1/tokens/birdeye/defi/multi_price',
   TOKEN_LIST: 'https://api-v3.raydium.io/mint/list',
-  // POOL_KEY_BY_ID: 'https://api-v3.raydium.io/pools/key/ids',
   POOL_SEARCH_BY_ID: 'https://api-v3.raydium.io/pools/info/ids'
 }

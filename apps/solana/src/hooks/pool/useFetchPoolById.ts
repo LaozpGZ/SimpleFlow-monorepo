@@ -58,7 +58,6 @@ export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
     [JSON.stringify(readyIdList)]
   ) as ApiV3PoolInfoItem[]
 
-  // todo:@eric add host back
   const url = !readyIdList.length || readyIdList.length === cacheDataList.length || !shouldFetch ? null : searchIdUrl
 
   const { data, isLoading, error, mutate, ...rest } = useSWR(url ? [readyIdList, refreshTag] : null, fetcher, {
