@@ -262,6 +262,7 @@ const config = {
         name: 'worker-chunks',
         reuseExistingChunk: true,
       }
+       webpackConfig.optimization.concatenateModules = false
     }
 
     return webpackConfig
