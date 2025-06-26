@@ -328,7 +328,7 @@ export function SwapPanel({
   } = useMemo(() => {
     const emptyAmountIn = new Decimal(amountIn || 0).isZero()
     const swapError = emptyAmountIn ? t('Enter an amount') : error || balanceNotEnough
-    const disabled = emptyAmountIn || !!swapError || needPriceUpdatedAlert || isPriceImpactTooHigh || swapDisabled
+    const disabled = emptyAmountIn || !!swapError || needPriceUpdatedAlert || swapDisabled
     const isLoading = isComputing || isSending
     const loadingText = <div>{isSending ? t('Transaction initiating') : isComputing ? t('Computing..') : ''}</div>
     return {
@@ -337,7 +337,14 @@ export function SwapPanel({
       disabled,
       isLoading
     }
-  }, [amountIn, balanceNotEnough, error, isComputing, isPriceImpactTooHigh, isSending, needPriceUpdatedAlert, swapDisabled, t])
+  }, [amountIn, balanceNotEnough, error, isComputing, isSending, needPriceUpdatedAlert, swapDisabled, t])
+
+  const buttonText = useMemo(() => {
+    if (swapDisabled) return t('Disabled')
+    if (swapError) return swapError
+    if (isHighRiskTx) return t('Swap Anyway')
+    return t('Swap')
+  }, [swapDisabled, swapError, isHighRiskTx, t, swapError])
 
   return (
     <Wrapper height="100%">
@@ -378,12 +385,13 @@ export function SwapPanel({
       </SwapUIV2.InputPanelWrapper>
       <ButtonAndDetailsPanel>
         <ConnectedButton
+          variant={isHighRiskTx ? 'danger' : 'primary'}
           disabled={disabled}
           isLoading={isSwapLoading}
           loadingText={loadingText}
           onClick={isHighRiskTx ? onHightRiskOpen : handleClickSwap}
         >
-          <Text>{swapDisabled ? t('Disabled') : swapError || t('Swap')}</Text>
+          <Text>{buttonText}</Text>
         </ConnectedButton>
         {isSolFeeNotEnough ? (
           <Flex
