@@ -1,4 +1,16 @@
-import { ChevronDownIcon, IconButton, QuestionHelperV2, Svg, SvgProps, SwapHorizIcon, SwapLoading } from '@pancakeswap/uikit'
+import {
+  ChevronDownIcon,
+  FlexGap,
+  IconButton,
+  InfoIcon,
+  ModalV2,
+  QuestionHelperV2,
+  Svg,
+  SvgProps,
+  SwapHorizIcon,
+  SwapLoading,
+  useModalV2
+} from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { Box, Collapse, Flex, HStack, Skeleton, Text } from '@chakra-ui/react'
 import { TokenInfo } from '@pancakeswap/solana-core-sdk'
@@ -16,7 +28,8 @@ import { colors } from '@/theme/cssVariables'
 import { formatCurrency, formatToRawLocaleStr, trimTrailZero } from '@/utils/numberish/formatter'
 import toPercentString from '@/utils/numberish/toPercentString'
 import { getMintSymbol } from '@/utils/token'
-import { ApiSwapV1OutSuccess } from '../type'
+import { ApiSwapV1OutSuccess, QuoteResponseData } from '../type'
+import { RoutesDisplayModal } from './RoutesDisplayModal'
 
 export function SwapInfoBoard({
   amountIn,
@@ -30,7 +43,7 @@ export function SwapInfoBoard({
   tokenInput?: TokenInfo
   tokenOutput?: TokenInfo
   isComputing: boolean
-  computedSwapResult?: ApiSwapV1OutSuccess['data']
+  computedSwapResult?: QuoteResponseData
   onRefresh: () => void
 }) {
   const { t } = useTranslation()
@@ -97,15 +110,13 @@ export function SwapInfoBoard({
         <Collapse in={showMoreSwapInfo} animateOpacity>
           <HStack gap={4} py={1} justifyContent="space-between">
             <ItemLabel name={t('Order Routing')} tooltip={t('This route gave the best price for your trade')} />
-            {routeTokens && <RoutingValue routePlan={computedSwapResult?.routePlan || []} />}
+            {routeTokens && <RoutingValue routeStats={computedSwapResult?.routeStats} routePlan={computedSwapResult?.routePlan || []} />}
           </HStack>
 
           <HStack gap={4} py={1} justifyContent="space-between">
             <ItemLabel name={t('Estimated Fees')} tooltip={t('Swap fees go to LPs, RAY buybacks, and treasury.')} />
             <Box textAlign="end" fontSize="xs" color={colors.textPrimary}>
-              {computedSwapResult?.routePlan.map((route) => (
-                <FeeItem key={route.poolId} route={route} />
-              ))}
+              <RouteFees routeStats={computedSwapResult?.routeStats} routePlan={computedSwapResult?.routePlan || []} />
             </Box>
           </HStack>
         </Collapse>
@@ -132,7 +143,7 @@ function PriceDetector({
   isComputing: boolean
   tokenInput?: TokenInfo
   tokenOutput?: TokenInfo
-  computedSwapResult?: ApiSwapV1OutSuccess['data']
+  computedSwapResult?: QuoteResponseData
 }) {
   const [reverse, setReverse] = useState(false)
   const { t } = useTranslation()
@@ -363,45 +374,80 @@ function MinimumReceiveValue({ tokenOutput, amount }: { tokenOutput?: TokenInfo;
   )
 }
 
-function RoutingValue({ routePlan }: { routePlan: ApiSwapV1OutSuccess['data']['routePlan'] }) {
-  return (
-    <HStack spacing={0.5} minH="32px">
-      {routePlan.map(({ inputMint, outputMint, feeRate, poolId }, idx) => (
-        <Fragment key={inputMint}>
-          <Tooltip label={<AddressChip address={inputMint} textProps={{ fontSize: 'xs' }} canExternalLink />}>
-            <TokenAvatar tokenMint={inputMint} size="sm" />
-          </Tooltip>
-          <Tooltip
-            label={
-              <AddressChip
-                address={poolId}
-                renderLabel={<Text fontSize="xs">AMM ID:</Text>}
-                textProps={{ fontSize: 'xs' }}
-                canExternalLink
-              />
-            }
-          >
-            <Text fontSize="2xs" color={colors.textSecondary}>
-              {formatToRawLocaleStr(toPercentString(feeRate / 10000))}
-            </Text>
-          </Tooltip>
+function RoutingValue({
+  routePlan,
+  routeStats
+}: {
+  routePlan: QuoteResponseData['routePlan'] | undefined
+  routeStats: QuoteResponseData['routeStats'] | undefined
+}) {
+  const { t } = useTranslation()
+  const { isOpen, setIsOpen, onDismiss } = useModalV2()
 
-          {idx !== routePlan.length - 1 && <Text color={colors.textTertiary}>▸</Text>}
-          {idx === routePlan.length - 1 && (
-            <>
-              <Text color={colors.textTertiary}>▸</Text>
-              <Tooltip label={<AddressChip address={outputMint} textProps={{ fontSize: 'xs' }} canExternalLink />}>
-                <TokenAvatar tokenMint={outputMint} size="sm" />
-              </Tooltip>
-            </>
-          )}
-        </Fragment>
-      ))}
-    </HStack>
+  if (!routePlan || !routeStats) return null
+
+  if (routeStats?.numSubRoutes === 1) {
+    return (
+      <HStack spacing={0.5} minH="32px">
+        {routePlan.map(({ inputMint, outputMint, feeRate, poolId }, idx) => (
+          <Fragment key={inputMint}>
+            <Tooltip label={<AddressChip address={inputMint} textProps={{ fontSize: 'xs' }} canExternalLink />}>
+              <TokenAvatar tokenMint={inputMint} size="sm" />
+            </Tooltip>
+            <Tooltip
+              label={
+                <AddressChip
+                  address={poolId}
+                  renderLabel={<Text fontSize="xs">AMM ID:</Text>}
+                  textProps={{ fontSize: 'xs' }}
+                  canExternalLink
+                />
+              }
+            >
+              <Text fontSize="2xs" color={colors.textSecondary}>
+                {formatToRawLocaleStr(toPercentString(feeRate / 10000))}
+              </Text>
+            </Tooltip>
+
+            {idx !== routePlan.length - 1 && <Text color={colors.textTertiary}>▸</Text>}
+            {idx === routePlan.length - 1 && (
+              <>
+                <Text color={colors.textTertiary}>▸</Text>
+                <Tooltip label={<AddressChip address={outputMint} textProps={{ fontSize: 'xs' }} canExternalLink />}>
+                  <TokenAvatar tokenMint={outputMint} size="sm" />
+                </Tooltip>
+              </>
+            )}
+          </Fragment>
+        ))}
+      </HStack>
+    )
+  }
+
+  return (
+    <>
+      <FlexGap alignItems="center" onClick={() => setIsOpen(true)} style={{ cursor: 'pointer' }}>
+        <Text color={colors.textPrimary}>{t('%count% Separate Routes', { count: routeStats?.numSubRoutes })}</Text>
+        <IconButton variant="text" color="primary60" scale="xs">
+          <InfoIcon width="16px" height="16px" color="primary60" />
+        </IconButton>
+      </FlexGap>
+      <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick maxWidth="320px" minHeight="500px">
+        <RoutesDisplayModal routePlan={routePlan} routeStats={routeStats} />
+      </ModalV2>
+    </>
   )
 }
 
-function FeeItem({ route }: { route: ApiSwapV1OutSuccess['data']['routePlan']['0'] }) {
+function FeeItem({
+  route
+}: {
+  route: {
+    feeMint: string
+    feeAmount: string
+    [key: string]: any
+  }
+}) {
   const { tokenInfo } = useTokenInfo({ mint: route.feeMint })
   if (!tokenInfo) return null
   return (
@@ -418,4 +464,38 @@ function FeeItem({ route }: { route: ApiSwapV1OutSuccess['data']['routePlan']['0
       <Text>{getMintSymbol({ mint: tokenInfo, transformSol: true })}</Text>
     </Flex>
   )
+}
+
+const RouteFees = ({
+  routePlan,
+  routeStats
+}: {
+  routePlan: QuoteResponseData['routePlan'] | undefined
+  routeStats: QuoteResponseData['routeStats'] | undefined
+}) => {
+  const { t } = useTranslation()
+
+  if (!routePlan || !routeStats) return null
+
+  if (routeStats.numSubRoutes === 1) {
+    return routePlan.map((route) => {
+      return <FeeItem key={route.poolId} route={route} />
+    })
+  }
+  /* eslint-disable no-param-reassign */
+  const feeMap = routePlan.reduce((acc, route) => {
+    if (acc[route.feeMint]) {
+      acc[route.feeMint] += Number(route.feeAmount)
+    } else {
+      acc[route.feeMint] = Number(route.feeAmount)
+    }
+    return acc
+  }, {} as Record<string, number>)
+  /* eslint-enable no-param-reassign */
+
+  const feeItems = Object.entries(feeMap).map(([feeMint, feeAmount]) => {
+    return <FeeItem key={feeMint} route={{ feeMint, feeAmount: feeAmount.toString() }} />
+  })
+
+  return <>{feeItems}</>
 }
