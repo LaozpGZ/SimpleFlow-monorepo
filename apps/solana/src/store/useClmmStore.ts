@@ -583,21 +583,8 @@ export const useClmmStore = createStore<ClmmState>(
       if (!raydium) return ''
       try {
         const computeBudgetConfig = await getComputeBudgetConfig()
-        // eslint-disable-next-line
-        poolInfo.programId = PancakeClmmProgramId['mainnet-beta'].toBase58()
         const { execute } = await raydium.clmm.increasePositionFromLiquidity({
           poolInfo,
-          // @todo: @ChefJerry ask BE implement getPoolKeys
-          poolKeys: {
-            mintA: poolInfo.mintA,
-            mintB: poolInfo.mintB,
-            // programId: poolInfo.programId || PancakeClmmProgramId,
-            config: poolInfo.config,
-            vault: (poolInfo as any).vault,
-            id: poolInfo.id,
-            programId: poolInfo.programId,
-            openTime: '1723037622'
-          } as any,
           ownerPosition: position,
           ownerInfo: {
             useSOLBalance: isSolWSol(poolInfo.mintA.address) || isSolWSol(poolInfo.mintB.address)
