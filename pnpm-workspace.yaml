@@ -21,3 +21,4 @@ catalog:
   '@next/eslint-plugin-next': 15.3.4
   jotai: ^2.4.3
   '@vanilla-extract/vite-plugin': ^4.0.2
+  '@swc/core': 1.12.7

@@ -434,16 +434,16 @@ importers:
         version: 5.52.1(react@18.2.0)
       '@vanilla-extract/next-plugin':
         specifier: ^2.3.0
-        version: 2.3.2(@types/node@18.0.4)(next@15.3.4(@babel/core@7.23.3)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.86.0))(sass@1.86.0)(stylus@0.59.0)(terser@5.39.0)(webpack@5.98.0(esbuild@0.17.19))
+        version: 2.3.2(@types/node@18.0.4)(next@15.3.4(@babel/core@7.23.9)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.86.0))(sass@1.86.0)(stylus@0.59.0)(terser@5.39.0)(webpack@5.98.0(esbuild@0.17.19))
       next:
         specifier: 'catalog:'
-        version: 15.3.4(@babel/core@7.23.3)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.86.0)
+        version: 15.3.4(@babel/core@7.23.9)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.86.0)
       next-seo:
         specifier: ^5.15.0
-        version: 5.15.0(next@15.3.4(@babel/core@7.23.3)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.86.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 5.15.0(next@15.3.4(@babel/core@7.23.9)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.86.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       next-themes:
         specifier: ^0.2.1
-        version: 0.2.1(next@15.3.4(@babel/core@7.23.3)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.86.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
+        version: 0.2.1(next@15.3.4(@babel/core@7.23.9)(@opentelemetry/api@1.9.0)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)(sass@1.86.0))(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
       qs:
         specifier: ^6.0.0
         version: 6.11.2
@@ -1888,9 +1888,6 @@ importers:
 
   packages/canonical-bridge:
     dependencies:
-      '@bnb-chain/canonical-bridge-sdk':
-        specifier: 0.6.0
-        version: 0.6.0(@mayanfinance/swap-sdk@10.6.1(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10))(@solana/wallet-adapter-react@0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bs58@6.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0))(@solana/web3.js@1.98.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(axios@1.6.8)(viem@2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.22.4))
       '@bnb-chain/canonical-bridge-widget':
         specifier: 0.9.0
         version: 0.9.0(92e73b8fdc85909422084bc40b388d9d)
@@ -28121,7 +28118,7 @@ snapshots:
       hermes-profile-transformer: 0.0.6
       node-stream-zip: 1.15.0
       ora: 5.4.1
-      semver: 7.7.1
+      semver: 7.7.2
       strip-ansi: 5.2.0
       wcwidth: 1.0.1
       yaml: 2.3.4
@@ -28187,7 +28184,7 @@ snapshots:
       node-fetch: 2.7.0
       open: 6.4.0
       ora: 5.4.1
-      semver: 7.7.1
+      semver: 7.7.2
       shell-quote: 1.8.1
       sudo-prompt: 9.2.1
     transitivePeerDependencies:
@@ -28216,7 +28213,7 @@ snapshots:
       fs-extra: 8.1.0
       graceful-fs: 4.2.11
       prompts: 2.4.2
-      semver: 7.7.1
+      semver: 7.7.2
     transitivePeerDependencies:
       - bufferutil
       - encoding
@@ -44246,7 +44243,7 @@ snapshots:
       '@nomicfoundation/slang': 1.1.0
       '@solidity-parser/parser': 0.20.1
       prettier: 2.8.8
-      semver: 7.7.1
+      semver: 7.7.2
 
   prettier@2.8.8: {}
 
@@ -45738,8 +45735,7 @@ snapshots:
 
   semver@7.7.1: {}
 
-  semver@7.7.2:
-    optional: true
+  semver@7.7.2: {}
 
   send@0.18.0:
     dependencies:
