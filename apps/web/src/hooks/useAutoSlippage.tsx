@@ -161,7 +161,9 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
     const nativeGasCost = calculateNativeGasCost(nativeGasPrice?.toString(), gasEstimate)
     return calculateGasCostAmount(nativeGasCost, nativeCurrency)
   }, [nativeGasPrice, gasEstimate, nativeCurrency])
-  const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount)
+  const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount, {
+    enabled: Boolean(trade?.outputAmount?.greaterThan(0)),
+  })
 
   // If valid estimate from API and using API trade, use gas estimate from API
   // NOTE - don't use gas estimate for L2s yet - need to verify accuracy
@@ -233,7 +235,9 @@ export function useInputBasedAutoSlippage(inputAmount?: CurrencyAmount<Currency>
     const nativeGasCost = calculateNativeGasCost(nativeGasPrice?.toString(), gasEstimate)
     return calculateGasCostAmount(nativeGasCost, nativeCurrency)
   }, [nativeGasPrice, nativeCurrency])
-  const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount)
+  const gasCostUSDValue = useStablecoinPriceAmount(nativeCurrency, gasCostAmount, {
+    enabled: Boolean(inputAmount?.greaterThan(0)),
+  })
 
   const { data } = useQuery({
     queryKey: [
