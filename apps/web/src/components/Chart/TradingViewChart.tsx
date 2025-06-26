@@ -40,6 +40,7 @@ const update24HPriceData = async (
       }
     } catch (error) {
       console.error('Failed to fetch 24H price data:', error)
+      on24HPriceDataChange(-1, -1, -1, -1)
     }
   }
 }
