@@ -301,6 +301,7 @@ export default function CreateClmmPool() {
           tokenPrices={tokenPrices || {}}
           isOpen={isOpen}
           isSending={isTxSending}
+          isFullRange={currentCreateInfo.current.isFullRange}
           isCreatePool
           pool={createPoolData.extInfo.mockPoolInfo}
           baseIn={baseIn}

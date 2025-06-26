@@ -44,6 +44,7 @@ interface Props {
   priceRange: [string, string]
   tokenPrices: Record<string, { value: number }>
   isCreatePool?: boolean
+  isFullRange?: boolean
 }
 
 export default function PreviewDepositModal({
@@ -54,6 +55,7 @@ export default function PreviewDepositModal({
   baseIn,
   isSending,
   isCreatePool,
+  isFullRange,
   isOpen,
   onConfirm,
   onClose
@@ -149,7 +151,9 @@ export default function PreviewDepositModal({
                 <Flex {...panelCard} flexDirection="column" justifyContent="center" px={[3, 6]} py="3" w="48%" textAlign="center">
                   <SubTitle color={colors.textSubtle}>{t('Min Price')}</SubTitle>
                   <Text fontSize={['md', 'xl']} fontWeight="600" color={colors.textPrimary}>
-                    {price0Decimal > decimals
+                    {isFullRange
+                      ? '0'
+                      : price0Decimal > decimals
                       ? formatCurrency(new Decimal(priceRange[0]).toFixed(24), { maximumDecimalTrailingZeroes: 5 })
                       : formatCurrency(new Decimal(priceRange[0]).toDecimalPlaces(decimals).toFixed(24), {
                           maximumDecimalTrailingZeroes: 5
@@ -166,7 +170,9 @@ export default function PreviewDepositModal({
                 <Flex {...panelCard} flexDirection="column" justifyContent="center" px={[3, 6]} py="3" w="48%" textAlign="center">
                   <SubTitle color={colors.textSubtle}>{t('Max Price')}</SubTitle>
                   <Text fontSize={['md', 'xl']} fontWeight="600" color={colors.textPrimary}>
-                    {price1Decimal > decimals
+                    {isFullRange
+                      ? '∞'
+                      : price1Decimal > decimals
                       ? formatCurrency(new Decimal(priceRange[1]).toFixed(24), { maximumDecimalTrailingZeroes: 5, abbreviated: true })
                       : formatCurrency(new Decimal(priceRange[1]).toDecimalPlaces(decimals).toFixed(24), {
                           maximumDecimalTrailingZeroes: 5,
