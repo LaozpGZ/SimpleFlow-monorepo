@@ -77,10 +77,7 @@ const config = {
     '@pancakeswap/ifos',
     '@pancakeswap/uikit',
     // https://github.com/TanStack/query/issues/6560#issuecomment-1975771676
-    '@tanstack/query-core',
-    '@bnb-chain/canonical-bridge-widget',
-    '@bnb-chain/canonical-bridge-sdk',
-    '@pancakeswap/canonical-bridge', 
+    '@tanstack/query-core'
   ],
   reactStrictMode: true,
   images: {
