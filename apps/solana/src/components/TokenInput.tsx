@@ -389,7 +389,7 @@ function TokenInput(props: TokenInputProps) {
             decimalScale={token?.decimals}
             pattern="^[0-9]*[.,]?[0-9]*$"
             value={typeof value === 'undefined' ? '' : value}
-            thousandSeparator=","
+            thousandSeparator={false}
             allowedDecimalSeparators={['.', ',']}
             allowNegative={false}
             valueIsNumericString
