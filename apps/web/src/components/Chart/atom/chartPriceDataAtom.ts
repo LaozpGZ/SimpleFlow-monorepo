@@ -8,10 +8,10 @@ export interface ChartPriceData {
 }
 
 export const chartPriceDataAtom = atom<ChartPriceData>({
-  price: 0,
-  priceChangePercent: 0,
-  high24h: 0,
-  low24h: 0,
+  price: -1,
+  priceChangePercent: -1,
+  high24h: -1,
+  low24h: -1,
 })
 
 export type LivePriceData = Record<string, number>

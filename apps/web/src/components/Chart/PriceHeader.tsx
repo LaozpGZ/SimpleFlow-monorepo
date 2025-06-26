@@ -1,5 +1,5 @@
 import { Currency } from '@pancakeswap/sdk'
-import { Flex, FlexGap, SwapHorizIcon, Text } from '@pancakeswap/uikit'
+import { Flex, FlexGap, SkeletonV2, SwapHorizIcon, Text } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useAtomValue } from 'jotai'
 import React from 'react'
@@ -83,9 +83,11 @@ const PriceHeader: React.FC<PriceHeaderProps> = ({
             margin
             innerMargin="-8px"
           />
-          <Text bold fontSize="18px">
-            {isReversed ? `${currency1?.symbol}/${currency0?.symbol}` : symbol}
-          </Text>
+          <SkeletonV2 height="24px" width="120px" isDataReady={Boolean(currency0 && currency1)}>
+            <Text bold fontSize="18px">
+              {isReversed ? `${currency1?.symbol}/${currency0?.symbol}` : symbol}
+            </Text>
+          </SkeletonV2>
         </TokenSymbol>
         <SwapHorizIcon
           color="primary"
@@ -102,35 +104,43 @@ const PriceHeader: React.FC<PriceHeaderProps> = ({
             <Text fontSize="12px" color="textSubtle">
               24h Change
             </Text>
-            <PriceChange isPositive={priceChangePercent > 0}>
-              {priceChangePercent.toLocaleString('en-US', {
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 2,
-              })}
-              %
-            </PriceChange>
+            <SkeletonV2 height="14px" minHeight="auto" width="40px" isDataReady={priceChangePercent !== -1}>
+              <PriceChange isPositive={priceChangePercent > 0}>
+                {priceChangePercent.toLocaleString('en-US', {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
+                %
+              </PriceChange>
+            </SkeletonV2>
           </StatItem>
           <StatItem>
             <Text fontSize="12px" color="textSubtle">
               24h High
             </Text>
-            <Text bold>
-              {high24h.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
-            </Text>
+            <SkeletonV2 height="14px" minHeight="auto" width="40px" isDataReady={high24h !== -1}>
+              <Text bold>
+                {high24h.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
+              </Text>
+            </SkeletonV2>
           </StatItem>
 
           <StatItem>
             <Text fontSize="12px" color="textSubtle">
               24h Low
             </Text>
-            <Text bold>
-              {low24h.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
-            </Text>
+            <SkeletonV2 height="14px" minHeight="auto" width="40px" isDataReady={low24h !== -1}>
+              <Text bold>
+                {low24h.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
+              </Text>
+            </SkeletonV2>
           </StatItem>
         </FlexGap>
-        <PriceText>
-          {price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
-        </PriceText>
+        <SkeletonV2 height="24px" minHeight="auto" width="90px" isDataReady={price !== -1}>
+          <PriceText>
+            {price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
+          </PriceText>
+        </SkeletonV2>
       </PriceInfo>
     </Container>
   )
