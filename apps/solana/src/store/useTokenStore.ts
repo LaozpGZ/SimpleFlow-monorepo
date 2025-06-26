@@ -24,7 +24,7 @@ export interface TokenStore {
       data?: TokenPrice
     }
   >
-  mintGroup: { official: Set<string>; jup: Set<string> }
+  mintGroup: { official: Set<string>; raydium: Set<string>; jup: Set<string> }
   extraLoadedTokenList: TokenInfo[]
   whiteListMap: Set<string>
 
@@ -38,13 +38,18 @@ export interface TokenStore {
   isVerifiedToken: (props: { mint: string | PublicKey; tokenInfo?: ApiV3Token; useWhiteList?: boolean }) => Promise<boolean>
 }
 
+export const getAllStorageToken = (): TokenInfo[] => {
+  const storageTokenList: (TokenInfo & { time?: number })[] = JSON.parse(getStorageItem(EXTRA_TOKEN_KEY) || '[]')
+  return storageTokenList
+}
+
 const initTokenSate = {
   tokenList: [],
   displayTokenList: [],
-  extraLoadedTokenList: [],
+  extraLoadedTokenList: getAllStorageToken(),
   tokenMap: new Map(),
   tokenPriceRecord: new Map(),
-  mintGroup: { official: new Set<string>(), jup: new Set<string>() },
+  mintGroup: { official: new Set<string>(), raydium: new Set<string>(), jup: new Set<string>() },
   whiteListMap: new Set<string>()
 }
 
@@ -109,7 +114,7 @@ export const useTokenStore = createStore<TokenStore>(
           if (!existed) {
             raydium.token.tokenList.push(t)
             raydium.token.tokenMap.set(t.address, t)
-            raydium.token.mintGroup.official.add(t.address)
+            raydium.token.mintGroup.raydium.add(t.address)
           }
         })
         const tokenMap = new Map(Array.from(raydium.token.tokenMap))
@@ -154,6 +159,7 @@ export const useTokenStore = createStore<TokenStore>(
           displayTokenList: get().tokenList.filter((token) => {
             return (
               (displayTokenSettings.official && get().mintGroup.official.has(token.address)) ||
+              (displayTokenSettings.raydium && get().mintGroup.raydium.has(token.address)) ||
               (displayTokenSettings.jup && raydium.token.mintGroup.jup.has(token.address) && (isJupAll || !token.tags?.includes('unknown')))
             )
           })
@@ -175,15 +181,15 @@ export const useTokenStore = createStore<TokenStore>(
           : [...tokenList, token],
         tokenMap: new Map(Array.from(tokenMap)),
         mintGroup: {
-          official: new Set(Array.from(mintGroup.official)),
-          jup: mintGroup.jup
+          ...mintGroup,
+          official: new Set(Array.from(mintGroup.official))
         },
         extraLoadedTokenList: extraLoadedTokenList.some((t) => t.address === token.address)
           ? extraLoadedTokenList.map((t) => (t.address === token.address ? token : t))
           : [...extraLoadedTokenList, token]
       })
       setDisplayTokenListAct()
-      if (addToStorage && token.type === 'unknown') setTokenToStorage(token)
+      if (addToStorage) setTokenToStorage(token)
     },
     unsetExtraTokenListAct: (token) => {
       const { tokenList, tokenMap, mintGroup, extraLoadedTokenList, setDisplayTokenListAct } = get()
@@ -193,8 +199,8 @@ export const useTokenStore = createStore<TokenStore>(
         tokenList: [...tokenList.map((t) => (t.address === token.address ? { ...token, userAdded: false } : t))],
         tokenMap: new Map(Array.from(tokenMap)),
         mintGroup: {
-          official: new Set(Array.from(mintGroup.official)),
-          jup: mintGroup.jup
+          ...mintGroup,
+          official: new Set(Array.from(mintGroup.official))
         },
         extraLoadedTokenList: extraLoadedTokenList.filter((t) => t.address !== token.address)
       })
@@ -230,7 +236,7 @@ export const useTokenStore = createStore<TokenStore>(
       const isWhiteList = useWhiteList && createMarketWhiteList.some((d) => d.mint === mint)
       const isFreezed = !isWhiteList && (tokenInfo?.tags?.includes('hasFreeze') || tokenData?.freezeAuthorityOption === 1)
 
-      const isAPIToken = mintGroup.official.has(mintStr) || mintGroup.jup.has(mintStr)
+      const isAPIToken = mintGroup.raydium.has(mintStr) || mintGroup.jup.has(mintStr)
       if (tokenData.decimals !== null && !isAPIToken && isFreezed) return false
 
       return true

@@ -22,6 +22,7 @@ export const API_URLS = {
   CHAIN_TIME: "/main/chain-time",
 
   TOKEN_LIST: "/mint/list",
+  PCS_TOKEN_LIST: "https://tokens.pancakeswap.finance/pancakeswap-solana-default.json",
   MINT_INFO_ID: "/mint/ids",
 
   JUP_TOKEN_LIST: "https://lite-api.jup.ag/tokens/v1/tagged/verified",

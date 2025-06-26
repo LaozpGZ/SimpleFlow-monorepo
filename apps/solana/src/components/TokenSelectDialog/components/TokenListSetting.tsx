@@ -14,11 +14,13 @@ export default function TokenListSetting({ onClick }: { onClick: () => void }) {
   const { t } = useTranslation()
   const mintGroup = useTokenStore((s) => s.mintGroup)
 
-  const isRaydiumTokenListSwitchOn = useAppStore((s) => s.displayTokenSettings.official)
+  const isOfficialTokenListSwitchOn = useAppStore((s) => s.displayTokenSettings.official)
+  const isRaydiumTokenListSwitchOn = useAppStore((s) => s.displayTokenSettings.raydium)
   const isJuiterTokenListSwitchOn = useAppStore((s) => s.displayTokenSettings.jup)
   const isUserAddedTokenListSwitchOn = useAppStore((s) => s.displayTokenSettings.userAdded)
 
-  const raydiumTokenListTokenCount = mintGroup.official.size
+  const officialTokenListTokenCount = mintGroup.official.size
+  const raydiumTokenListTokenCount = mintGroup.raydium.size
   const jupiterTokenListTokenCount = mintGroup.jup.size
   const userAddedTokenListTokenCount = useTokenStore.getState().extraLoadedTokenList.length
 
@@ -30,7 +32,7 @@ export default function TokenListSetting({ onClick }: { onClick: () => void }) {
     useTokenStore.getState().loadTokensAct(false, type)
   })
 
-  const handleSwitchChange = useEvent((name: 'official' | 'jup' | 'userAdded', turnOn: boolean) => {
+  const handleSwitchChange = useEvent((name: 'official' | 'raydium' | 'jup' | 'userAdded', turnOn: boolean) => {
     if (name === 'userAdded') setStorageItem(USER_ADDED_KEY, String(turnOn))
     useAppStore.setState((s) => ({ displayTokenSettings: { ...s.displayTokenSettings, [name]: turnOn } }))
   })
@@ -38,11 +40,21 @@ export default function TokenListSetting({ onClick }: { onClick: () => void }) {
   return (
     <Box height="50vh">
       <TokenListRowItem
+        name={`Official ${t('Token List')}`}
+        logoUrl="https://pancakeswap.finance/logo.png"
+        tokenCount={officialTokenListTokenCount}
+        isOpen={isOfficialTokenListSwitchOn}
+        onOpen={() => handleSwitchChange('official', true)}
+        onClose={() => handleSwitchChange('official', false)}
+      />
+      <Divider my="10px" color={colors.backgroundTransparent12} />
+      <TokenListRowItem
         name={`Raydium ${t('Token List')}`}
         logoUrl="https://img-v1.raydium.io/icon/4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R.png"
         tokenCount={raydiumTokenListTokenCount}
         isOpen={isRaydiumTokenListSwitchOn}
-        switchable={false}
+        onOpen={() => handleSwitchChange('raydium', true)}
+        onClose={() => handleSwitchChange('raydium', false)}
       />
       <Divider my="10px" color={colors.backgroundTransparent12} />
       <TokenListRowItem

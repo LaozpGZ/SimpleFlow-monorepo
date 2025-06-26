@@ -171,7 +171,13 @@ export class Api {
     return this.api.get(this.urlConfigs.RPCS || API_URLS.RPCS);
   }
 
-  async getTokenList(): Promise<{ mintList: ApiV3Token[]; blacklist: string[]; whiteList: string[] }> {
+  async getPCSTokenList(): Promise<{ tokens: ApiV3Token[] }> {
+    return await this.api.get<{ tokens: ApiV3Token[] }, { tokens: ApiV3Token[] }>(
+      this.urlConfigs.PCS_TOKEN_LIST || API_URLS.PCS_TOKEN_LIST,
+    );
+  }
+
+  async getRaydiumTokenList(): Promise<{ mintList: ApiV3Token[]; blacklist: string[]; whiteList: string[] }> {
     const res = await this.api.get(this.urlConfigs.TOKEN_LIST || API_URLS.TOKEN_LIST);
     return res.data;
   }

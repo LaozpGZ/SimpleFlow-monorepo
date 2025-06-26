@@ -12,8 +12,9 @@ export default class TokenModule extends ModuleBase {
   private _tokenList: TokenInfo[] = [];
   private _tokenMap: Map<string, TokenInfo> = new Map();
   private _blackTokenMap: Set<string> = new Set();
-  private _mintGroup: { official: Set<string>; jup: Set<string>; extra: Set<string> } = {
+  private _mintGroup: { official: Set<string>; raydium: Set<string>; jup: Set<string>; extra: Set<string> } = {
     official: new Set(),
+    raydium: new Set(),
     jup: new Set(),
     extra: new Set(),
   };
@@ -27,20 +28,34 @@ export default class TokenModule extends ModuleBase {
   public async load(params?: LoadParams & { type?: JupTokenType }): Promise<void> {
     this.checkDisabled();
     const { forceUpdate = false, type = JupTokenType.Strict } = params || {};
-    const { mintList, blacklist, whiteList } = await this.scope.fetchV3TokenList(forceUpdate);
+    const { mintList, blacklist, whiteList } = await this.scope.fetchRaydiumV3TokenList(forceUpdate);
+    const { tokens: PCSList } = await this.scope.fetchPCSV3TokenList(forceUpdate);
     const jup = await this.scope.fetchJupTokenList(forceUpdate);
     // reset all data
     this._tokenList = [];
     this._tokenMap = new Map();
     this._blackTokenMap = new Set(blacklist);
-    this._mintGroup = { official: new Set(), jup: new Set(), extra: new Set() };
+    this._mintGroup = { official: new Set(), raydium: new Set(), jup: new Set(), extra: new Set() };
     this._whiteMap = new Set(whiteList);
 
     this._tokenMap.set(SOL_INFO.address, SOL_INFO);
     this._mintGroup.official.add(SOL_INFO.address);
 
+    PCSList.forEach((token) => {
+      if (this._blackTokenMap.has(token.address) || this._tokenMap.has(token.address)) return;
+      this._tokenMap.set(token.address, {
+        ...token,
+        type: "pcs",
+        priority: 3,
+        programId:
+          token.programId ??
+          (token.tags.includes("token-2022") ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58()),
+      });
+      this._mintGroup.official.add(token.address);
+    });
+
     mintList.forEach((token) => {
-      if (this._blackTokenMap.has(token.address)) return;
+      if (this._blackTokenMap.has(token.address) || this._tokenMap.has(token.address)) return;
       this._tokenMap.set(token.address, {
         ...token,
         type: "raydium",
@@ -49,7 +64,7 @@ export default class TokenModule extends ModuleBase {
           token.programId ??
           (token.tags.includes("token-2022") ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58()),
       });
-      this._mintGroup.official.add(token.address);
+      this._mintGroup.raydium.add(token.address);
     });
 
     jup.forEach((token) => {
@@ -92,7 +107,7 @@ export default class TokenModule extends ModuleBase {
   get blackTokenMap(): Set<string> {
     return this._blackTokenMap;
   }
-  get mintGroup(): { official: Set<string>; jup: Set<string> } {
+  get mintGroup(): { raydium: Set<string>; official: Set<string>; jup: Set<string> } {
     return this._mintGroup;
   }
   get whiteListMap(): Set<string> {

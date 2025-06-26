@@ -1,7 +1,15 @@
 import { Connection, Keypair, PublicKey, EpochInfo, Commitment } from "@solana/web3.js";
 import { merge } from "lodash";
 
-import { Api, API_URL_CONFIG, ApiV3TokenRes, ApiV3Token, JupTokenType, AvailabilityCheckAPI3 } from "../api";
+import {
+  Api,
+  API_URL_CONFIG,
+  ApiV3TokenRes,
+  ApiV3Token,
+  JupTokenType,
+  AvailabilityCheckAPI3,
+  ApiV3PCSTokenRes,
+} from "../api";
 import { EMPTY_CONNECTION, EMPTY_OWNER } from "../common/error";
 import { createLogger, Logger } from "../common/logger";
 import { Owner } from "../common/owner";
@@ -63,7 +71,8 @@ interface ApiData {
   tokens?: DataBase<ApiV3Token[]>;
 
   // v3 data
-  tokenList?: DataBase<ApiV3TokenRes>;
+  pcsTokenList?: DataBase<ApiV3PCSTokenRes>;
+  raydiumTokenList?: DataBase<ApiV3TokenRes>;
   jupTokenList?: DataBase<ApiV3Token[]>;
 }
 
@@ -240,16 +249,36 @@ export class Raydium {
     }
   }
 
-  public async fetchV3TokenList(forceUpdate?: boolean): Promise<ApiV3TokenRes> {
-    if (this.apiData.tokenList && !this.isCacheInvalidate(this.apiData.tokenList.fetched) && !forceUpdate)
-      return this.apiData.tokenList.data;
+  public async fetchPCSV3TokenList(forceUpdate?: boolean): Promise<ApiV3PCSTokenRes> {
+    if (this.apiData.pcsTokenList && !this.isCacheInvalidate(this.apiData.pcsTokenList.fetched) && !forceUpdate)
+      return this.apiData.pcsTokenList.data;
     try {
-      const raydiumList = await this.api.getTokenList();
+      const pcsList = await this.api.getPCSTokenList();
+      const dataObject = {
+        fetched: Date.now(),
+        data: pcsList,
+      };
+      this.apiData.pcsTokenList = dataObject;
+
+      return dataObject.data;
+    } catch (e) {
+      console.error(e);
+      return {
+        tokens: [],
+      };
+    }
+  }
+
+  public async fetchRaydiumV3TokenList(forceUpdate?: boolean): Promise<ApiV3TokenRes> {
+    if (this.apiData.raydiumTokenList && !this.isCacheInvalidate(this.apiData.raydiumTokenList.fetched) && !forceUpdate)
+      return this.apiData.raydiumTokenList.data;
+    try {
+      const raydiumList = await this.api.getRaydiumTokenList();
       const dataObject = {
         fetched: Date.now(),
         data: raydiumList,
       };
-      this.apiData.tokenList = dataObject;
+      this.apiData.raydiumTokenList = dataObject;
 
       return dataObject.data;
     } catch (e) {

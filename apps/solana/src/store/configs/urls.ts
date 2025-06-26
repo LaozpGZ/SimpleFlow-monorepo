@@ -12,5 +12,6 @@ export const urlConfigs = {
   POOL_KEY_BY_ID: '/cached/v1/pools/info/ids',
   BIRDEYE_TOKEN_PRICE: '/cached/v1/tokens/birdeye/defi/multi_price',
   TOKEN_LIST: 'https://api-v3.raydium.io/mint/list',
+  PCS_TOKEN_LIST: 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json',
   POOL_SEARCH_BY_ID: 'https://api-v3.raydium.io/pools/info/ids'
 }

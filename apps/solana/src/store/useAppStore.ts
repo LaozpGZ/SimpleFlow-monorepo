@@ -101,7 +101,7 @@ interface AppState {
   programIdConfig: typeof ALL_PROGRAM_ID
 
   jupTokenType: JupTokenType
-  displayTokenSettings: { official: boolean; jup: boolean; userAdded: boolean }
+  displayTokenSettings: { official: boolean; raydium: boolean; jup: boolean; userAdded: boolean }
 
   featureDisabled: Partial<AvailabilityCheckAPI3>
 
@@ -150,6 +150,7 @@ const appInitState = {
   jupTokenType: JupTokenType.Strict,
   displayTokenSettings: {
     official: true,
+    raydium: true,
     jup: true,
     userAdded: true
   },
@@ -198,7 +199,7 @@ export const useAppStore = createStore<AppState>(
         if (!existed) {
           raydium.token.tokenList.push(t)
           raydium.token.tokenMap.set(t.address, t)
-          raydium.token.mintGroup.official.add(t.address)
+          raydium.token.mintGroup.raydium.add(t.address)
         }
       })
       const tokenMap = new Map(Array.from(raydium.token.tokenMap))
@@ -226,6 +227,7 @@ export const useAppStore = createStore<AppState>(
           displayTokenList: tokenList.filter((token) => {
             return (
               (displayTokenSettings.official && raydium.token.mintGroup.official.has(token.address)) ||
+              (displayTokenSettings.raydium && raydium.token.mintGroup.raydium.has(token.address)) ||
               (displayTokenSettings.jup && raydium.token.mintGroup.jup.has(token.address))
             )
           }),
