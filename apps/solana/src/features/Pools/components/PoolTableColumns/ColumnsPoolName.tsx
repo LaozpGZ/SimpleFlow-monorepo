@@ -210,9 +210,9 @@ export const ColumnPoolName: React.FC<{
           onClose={onPoolDetailClose}
           onDeposit={onClickDeposit}
           timeBase={timeBase}
-          volume={formatCurrency(timeData.volume, { symbol: '$', decimalPlaces: 0 })}
-          fees={formatCurrency(timeData.volumeFee, { symbol: '$', decimalPlaces: 0 })}
-          tvl={formatCurrency(pool.tvl, { symbol: '$', decimalPlaces: 0 })}
+          volume={formatCurrency(timeData.volume, { symbol: '$', decimalPlaces: 2 })}
+          fees={formatCurrency(timeData.volumeFee, { symbol: '$', decimalPlaces: 2 })}
+          tvl={formatCurrency(pool.tvl, { symbol: '$', decimalPlaces: 2 })}
           aprData={aprData}
           weeklyRewards={pool.weeklyRewards}
           isEcosystem={pool.rewardDefaultPoolInfos === 'Ecosystem'}
