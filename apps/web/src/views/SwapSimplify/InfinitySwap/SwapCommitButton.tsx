@@ -404,6 +404,11 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
       if (tradeError.message.includes("doesn't have enough funds to support this deposit")) {
         return t('Requested amount exceeds the available bridge liquidity. Please try again with a lower amount!')
       }
+
+      if (tradeError.message.includes('too low relative to fees')) {
+        return t('Input amount less than min. limit. Please try again with higher amount')
+      }
+
       return tradeError.message
     }
     if (swapInputError) return swapInputError
