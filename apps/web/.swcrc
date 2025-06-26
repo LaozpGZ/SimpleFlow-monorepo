@@ -1,0 +1,13 @@
+{
+  "minify": true,
+  "jsc": {
+    "minify": {
+      "compress": {
+        "inline": 0,
+        "collapse_vars": false,
+        "reduce_vars": false
+      },
+      "mangle": true
+    }
+  }
+}
