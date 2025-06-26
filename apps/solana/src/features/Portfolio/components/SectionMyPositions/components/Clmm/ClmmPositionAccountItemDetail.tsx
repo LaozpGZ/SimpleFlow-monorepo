@@ -63,8 +63,13 @@ export default function ClmmPositionAccountItemDetail({
   const timePriceMin = baseIn ? poolInfo.day.priceMin : poolInfo.day.priceMax ? new Decimal(1).div(poolInfo.day.priceMax).toNumber() : 0
   const timePriceMax = baseIn ? poolInfo.day.priceMax : poolInfo.day.priceMin ? new Decimal(1).div(poolInfo.day.priceMin).toNumber() : 0
 
-  const volumeA = positionDetailInfo.amountA.mul(tokenPrices[poolInfo.mintA.address]?.value || 0)
-  const volumeB = positionDetailInfo.amountB.mul(tokenPrices[poolInfo.mintB.address]?.value || 0)
+  const priceA = tokenPrices[poolInfo.mintA.address]?.value || 0
+  const priceB = tokenPrices[poolInfo.mintB.address]?.value || 0
+  const validPriceA = priceA !== undefined && priceA >= 0 ? priceA : 0
+  const validPriceB = priceB !== undefined && priceB >= 0 ? priceB : 0
+
+  const volumeA = positionDetailInfo.amountA.mul(validPriceA)
+  const volumeB = positionDetailInfo.amountB.mul(validPriceB)
 
   const [priceLower, priceUpper] = useMemo(() => {
     if (baseIn)
