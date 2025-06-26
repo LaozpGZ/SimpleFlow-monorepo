@@ -11,6 +11,7 @@ import { useCurrentBlock } from 'state/block/hooks'
 import { getTokenInfoPath } from 'state/info/utils'
 import { getBlockExploreLink } from 'utils'
 import { getPoolBlockInfo } from 'views/Pools/helpers'
+import { CAKE } from '@pancakeswap/tokens'
 import MaxStakeRow from './MaxStakeRow'
 import { AprInfo } from './Stat'
 
@@ -55,8 +56,17 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
     currentBlock,
   )
   const tokenInfoPath = useMemo(
-    () => (chainId ? getTokenInfoPath(chainId, earningToken.address) : ''),
-    [chainId, earningToken.address],
+    () =>
+      chainId
+        ? earningToken.equals(CAKE[chainId])
+          ? getTokenInfoPath(chainId, stakingToken.address)
+          : getTokenInfoPath(chainId, earningToken.address)
+        : '',
+    [chainId, earningToken, stakingToken.address],
+  )
+  const projectLink = useMemo(
+    () => (chainId ? (earningToken.equals(CAKE[chainId]) ? stakingToken.projectLink : earningToken.projectLink) : ''),
+    [chainId, earningToken, stakingToken.projectLink],
   )
 
   return (
@@ -110,7 +120,7 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
         </LinkExternal>
       </Flex>
       <Flex mb="2px" justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
-        <LinkExternal href={earningToken.projectLink} bold={false} small>
+        <LinkExternal href={projectLink} bold={false} small>
           {t('View Project Site')}
         </LinkExternal>
       </Flex>
