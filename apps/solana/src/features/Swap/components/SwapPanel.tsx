@@ -28,7 +28,7 @@ import { getMintPriority, getMintSymbol, isSolWSol, mintToUrl, urlToMint } from 
 import { ApiSuccessResponse, QuoteResponseData, SwapType } from '../type'
 import useSwap from '../useSwap'
 import { useSwapStore } from '../useSwapStore'
-import { getSwapPairCache, setSwapPairCache } from '../util'
+import { getSwapPairCache, isWSol, setSwapPairCache } from '../util'
 import { FlipButton } from './FlipButton'
 import HighRiskAlert from './HighRiskAlert'
 import { SwapInfoBoard } from './SwapInfoBoard'
@@ -421,7 +421,10 @@ export function SwapPanel({
           >
             <WarningIcon style={{ marginTop: '2px', marginRight: '4px' }} stroke={colors.semanticError} />
             <Text>
-              {t('You need at least %amount% SOL to pay for fees and deposits', { amount: formatToRawLocaleStr(DEFAULT_SOL_RESERVER) })}
+              {t('You need at least %amount% %symbol% to pay for fees and deposits', {
+                amount: formatToRawLocaleStr(DEFAULT_SOL_RESERVER),
+                symbol: isWSol(inputMint) ? 'WSOL' : 'SOL'
+              })}
             </Text>
           </Flex>
         ) : null}

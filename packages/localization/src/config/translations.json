@@ -4162,7 +4162,7 @@
   "swap.price_impact_${priceImpact}_tooltip": "swap.price_impact_${priceImpact}_tooltip",
   "Show chart": "Show chart",
   "Computing..": "Computing..",
-  "You need at least %amount% SOL to pay for fees and deposits": "You need at least %amount% SOL to pay for fees and deposits",
+  "You need at least %amount% %symbol% to pay for fees and deposits": "You need at least %amount% %symbol% to pay for fees and deposits",
   "Tax": "Tax",
   "Price updated": "Price updated",
   "Price has changed since your swap amount was entered.": "Price has changed since your swap amount was entered.",
