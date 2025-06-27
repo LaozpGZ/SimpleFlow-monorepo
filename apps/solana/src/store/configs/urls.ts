@@ -6,12 +6,11 @@ export const urlConfigs = {
   POOL_LIST: '/cached/v1/pools/info/list',
   MINT_PRICE: '/cached/v1/tokens/price',
   INFO: '/cached/v1/pools/stats/overview',
-  // POOL_SEARCH_BY_ID: '/cached/v1/pools/info/ids',
+  POOL_SEARCH_BY_ID: '/cached/v1/pools/info/ids',
   POOL_POSITION_LINE: '/cached/v1/pools/line/position',
   POOL_LIQUIDITY_LINE: '/cached/v1/pools/line/liquidity',
   POOL_KEY_BY_ID: '/cached/v1/pools/info/ids',
   BIRDEYE_TOKEN_PRICE: '/cached/v1/tokens/birdeye/defi/multi_price',
   TOKEN_LIST: 'https://api-v3.raydium.io/mint/list',
-  PCS_TOKEN_LIST: 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json',
-  POOL_SEARCH_BY_ID: 'https://api-v3.raydium.io/pools/info/ids'
+  PCS_TOKEN_LIST: 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json'
 }

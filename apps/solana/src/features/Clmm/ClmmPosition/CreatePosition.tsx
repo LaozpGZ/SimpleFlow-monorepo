@@ -728,7 +728,7 @@ export default function CreatePosition() {
               onOpen()
             }}
           >
-            {featureDisabled ? t('Disabled') : isIdPoolLoading ? t('Loading pool') : error || t('Create Position')}
+            {featureDisabled ? t('Disabled') : isIdPoolLoading ? t('Loading pool') : error || t('Add Liquidity')}
           </ConnectedButton>
         </Flex>
       </GridItem>

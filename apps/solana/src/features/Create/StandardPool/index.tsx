@@ -66,7 +66,7 @@ export default function CreatePool() {
             title={t('Please Note')}
             description={
               <Text fontSize="sm" color={isMobile ? colors.textSecondary : colors.textTertiary}>
-                {t('This tool is for advanced users. For detailed instructions, read the guide for CLMM or Standard pools.')}
+                {t('This tool is for advanced users. For detailed instructions, read the guide for Standard pools.')}
               </Text>
             }
           />

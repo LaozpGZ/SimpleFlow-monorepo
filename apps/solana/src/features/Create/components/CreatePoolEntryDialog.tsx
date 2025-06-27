@@ -204,7 +204,7 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
                             </Text>
                           </Flex>
                           <Text fontSize="xs" color={colors.textSubtle}>
-                            {t('Newest CPMM, cheaper, supports Token 2022')}
+                            {t('Newest CPMM, supports Token 2022')}
                           </Text>
                         </Box>
                       }

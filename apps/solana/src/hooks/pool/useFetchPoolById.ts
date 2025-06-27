@@ -2,16 +2,15 @@ import { useEffect, useMemo } from 'react'
 import { ApiV3PoolInfoItem, FetchPoolParams, PoolFetchType } from '@pancakeswap/solana-core-sdk'
 import useSWR, { KeyedMutator } from 'swr'
 import { shallow } from 'zustand/shallow'
-import { AxiosResponse } from 'axios'
-import { getPoolsByIds } from '@pancakeswap/solana-clmm-sdk'
 import { isValidPublicKey } from '@/utils/publicKey'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { useAppStore, useTokenStore } from '@/store'
+import axios from '@/api/axios'
 
 import { ConditionalPoolType } from './type'
 import { formatPoolData, poolInfoCache, formatAprData } from './formatter'
 
-const fetcher = ([ids]: [ids: string[]]) => getPoolsByIds(ids)
+const fetcher = ([url]: [url: string]) => axios.get<ApiV3PoolInfoItem[], { data: ApiV3PoolInfoItem[] }>(url, { skipError: true })
 
 export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
   props: {
@@ -58,9 +57,9 @@ export default function useFetchPoolById<T = ApiV3PoolInfoItem>(
     [JSON.stringify(readyIdList)]
   ) as ApiV3PoolInfoItem[]
 
-  const url = !readyIdList.length || readyIdList.length === cacheDataList.length || !shouldFetch ? null : searchIdUrl
+  const url = !readyIdList.length || readyIdList.length === cacheDataList.length || !shouldFetch ? null : host + searchIdUrl
 
-  const { data, isLoading, error, mutate, ...rest } = useSWR(url ? [readyIdList, refreshTag] : null, fetcher, {
+  const { data, isLoading, error, mutate, ...rest } = useSWR(url ? [`${url}?ids=${readyIdList.join(',')}`, refreshTag] : null, fetcher, {
     dedupingInterval: refreshInterval,
     focusThrottleInterval: refreshInterval,
     refreshInterval,

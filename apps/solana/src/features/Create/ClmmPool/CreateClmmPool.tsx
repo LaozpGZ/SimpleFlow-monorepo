@@ -237,7 +237,7 @@ export default function CreateClmmPool() {
               title={t('Please Note')}
               description={
                 <>
-                  <Text>{t('This tool is for advanced users. For detailed instructions, read the guide for CLMM and Standard')}</Text>
+                  <Text>{t('This tool is for advanced users. For detailed instructions, read the guide for CLMM pools')}</Text>
                 </>
               }
             />

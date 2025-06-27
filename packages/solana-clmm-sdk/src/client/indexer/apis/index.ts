@@ -1,5 +1,4 @@
 export * from './getPoolsByMints'
 export * from './getMintMetaData'
 export * from './getPools'
-export * from './getPoolsByIds'
 export * from './types'
