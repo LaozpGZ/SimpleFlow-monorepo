@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import { PublicClient, createPublicClient, http, Chain, Client, WalletClient, createWalletClient, fallback } from 'viem'
+import { Chain, Client, PublicClient, WalletClient, createPublicClient, createWalletClient, fallback, http } from 'viem'
 import { mnemonicToAccount } from 'viem/accounts'
 import { CHAINS } from './constants/chains'
 
@@ -10,7 +10,7 @@ const PUBLIC_NODES: Record<string, string[]> = {
     'https://bsc.publicnode.com',
     'https://binance.llamarpc.com',
     'https://bsc-dataseed1.defibit.io',
-    'https://bsc-dataseed1.binance.org',
+    'https://bsc-dataseed1.bnbchain.org',
   ],
   [ChainId.ARBITRUM_ONE]: ['https://arbitrum-one.publicnode.com', 'https://arbitrum.llamarpc.com'],
   [ChainId.ETHEREUM]: ['https://ethereum.publicnode.com', 'https://eth.llamarpc.com'],

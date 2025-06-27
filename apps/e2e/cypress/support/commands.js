@@ -4,9 +4,9 @@
 // https://on.cypress.io/custom-commands
 // ***********************************************
 
+import { Eip1193Bridge } from '@ethersproject/experimental/lib/eip1193-bridge'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { Wallet } from '@ethersproject/wallet'
-import { Eip1193Bridge } from '@ethersproject/experimental/lib/eip1193-bridge'
 
 /**
  * This is random key from https://asecuritysite.com/encryption/ethadd
@@ -83,7 +83,7 @@ Cypress.Commands.overwrite('visit', (original, url, options) => {
         options.onBeforeLoad(win)
       }
       win.localStorage.clear()
-      const provider = new JsonRpcProvider('https://bsc-dataseed.binance.org/', 56)
+      const provider = new JsonRpcProvider('https://bsc-dataseed.bnbchain.org/', 56)
       const signer = new Wallet(TEST_PRIVATE_KEY, provider)
       // eslint-disable-next-line no-param-reassign
       win.ethereum = new CustomizedBridge(signer, provider)
