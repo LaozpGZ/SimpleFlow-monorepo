@@ -93,7 +93,7 @@ export const FILED_KEY: Record<TimeBase, AprKey> = {
 const SORT_ITEMS = [
   {
     name: 'default',
-    label: <Trans>default</Trans>,
+    label: <Trans>Default</Trans>,
     value: 'default'
   },
   {
@@ -618,7 +618,7 @@ export default function Pools() {
         <Box {...titleContainerProps} display={['none', 'block']} flexShrink={0}>
           <Desktop>
             <HStack justify="space-between" w="full" py={8}>
-              <PageHeroTitle title={t('Liquidity Pools')} description={t('Provide liquidity, earn yield.') || ''} />
+              <PageHeroTitle title={t('Liquidity Pools')} description={t('Provide liquidity') || ''} />
               <TVLInfoPanel tvl={tvl} volume={volume} />
             </HStack>
           </Desktop>
