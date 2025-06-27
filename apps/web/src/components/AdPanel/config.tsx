@@ -7,6 +7,7 @@ import { AdCrossChain } from './Ads/AdCrossChain'
 import { AdIfo } from './Ads/AdIfo'
 import { AdPCSX } from './Ads/AdPCSX'
 import { AdSolana } from './Ads/AdSolana'
+import { AdSolanaLiquidity } from './Ads/AdSolanaLiquidity'
 import { AdSpringboard } from './Ads/AdSpringboard'
 import { commonLayoutWhitelistedPages } from './constants'
 import { ExpandableAd } from './Expandable/ExpandableAd'
@@ -47,14 +48,18 @@ export const useAdConfig = () => {
   const adList: Array<AdSlide> = useMemo(
     () => [
       {
-        id: 'ad-cross-chain',
-        component: <AdCrossChain />,
-      },
-      {
         id: 'expandable-ad',
         component: <ExpandableAd />,
         priority: Priority.FIRST_AD,
         shouldRender: [shouldRenderOnPage],
+      },
+      {
+        id: 'ad-solana-liquidity',
+        component: <AdSolanaLiquidity />,
+      },
+      {
+        id: 'ad-cross-chain',
+        component: <AdCrossChain />,
       },
       ...commonAdConfigs,
       {
