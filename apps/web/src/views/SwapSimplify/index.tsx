@@ -73,7 +73,7 @@ const InfinitySwapInner = () => {
           </Flex>
         )}
 
-        {!isDesktop && isChartDisplayed && (
+        {!isDesktop && (
           <BottomDrawer
             content={
               <ChartWithPriceHeader
@@ -85,6 +85,7 @@ const InfinitySwapInner = () => {
             }
             isOpen={isChartDisplayed}
             setIsOpen={(isOpen) => setIsChartDisplayed?.(isOpen)}
+            hideCloseButton
           />
         )}
         <Flex

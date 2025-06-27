@@ -19,11 +19,12 @@ const Container = styled(Box)`
   height: 100%;
   border-radius: 16px;
   background: ${({ theme }) => theme.card.background};
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   overflow: hidden;
-
+  padding-top: 24px;
   ${({ theme }) => theme.mediaQueries.md} {
     height: fit-content;
+    padding-top: 0;
   }
 `
 

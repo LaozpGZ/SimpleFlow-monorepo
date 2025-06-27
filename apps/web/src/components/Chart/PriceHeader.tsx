@@ -1,5 +1,5 @@
 import { Currency } from '@pancakeswap/sdk'
-import { Flex, FlexGap, SkeletonV2, SwapHorizIcon, Text } from '@pancakeswap/uikit'
+import { Flex, FlexGap, SkeletonV2, SwapHorizIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useAtomValue } from 'jotai'
 import React from 'react'
@@ -19,8 +19,16 @@ const Container = styled(Flex)`
   background: ${({ theme }) => theme.colors.backgroundAlt};
   border-radius: 16px 16px 0 0;
   padding: 12px 16px;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
+  flex-direction: column;
+  gap: 8px;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
+  }
 `
 
 const TokenSymbol = styled(Flex)`
@@ -29,22 +37,22 @@ const TokenSymbol = styled(Flex)`
 `
 
 const PriceInfo = styled(Flex)`
-  align-items: center;
-  gap: 16px;
+  flex-direction: column-reverse;
+  align-items: flex-start;
+  gap: 8px;
 
-  @media (max-width: 576px) {
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 4px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    flex-direction: row;
+    align-items: center;
+    gap: 16px;
   }
 `
 
 const PriceText = styled(Text)`
-  font-size: 24px;
+  font-size: 32px;
   font-weight: 600;
-
-  @media (max-width: 576px) {
-    font-size: 20px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    font-size: 24px;
   }
 `
 
@@ -57,10 +65,6 @@ const PriceChange = styled(Text)<{ isPositive: boolean }>`
 const StatItem = styled(Flex)`
   flex-direction: column;
   align-items: center;
-
-  @media (max-width: 768px) {
-    display: none;
-  }
 `
 
 const PriceHeader: React.FC<PriceHeaderProps> = ({
@@ -72,6 +76,7 @@ const PriceHeader: React.FC<PriceHeaderProps> = ({
 }) => {
   const { price, priceChangePercent, high24h, low24h } = useAtomValue(chartPriceDataAtom)
   const maxDecimalsDigit = price > 1 ? 2 : 6
+  const { isMobile } = useMatchBreakpoints()
   return (
     <Container>
       <FlexGap gap="8px">
@@ -79,13 +84,13 @@ const PriceHeader: React.FC<PriceHeaderProps> = ({
           <DoubleCurrencyLogo
             currency0={isReversed ? currency1 : currency0}
             currency1={isReversed ? currency0 : currency1}
-            size={24}
+            size={isMobile ? 32 : 24}
             margin
             innerMargin="-8px"
           />
           <SkeletonV2 height="24px" width="120px" isDataReady={Boolean(currency0 && currency1)}>
-            <Text bold fontSize="18px">
-              {isReversed ? `${currency1?.symbol}/${currency0?.symbol}` : symbol}
+            <Text bold fontSize={isMobile ? '20px' : '18px'}>
+              {isReversed ? `${currency1?.symbol} / ${currency0?.symbol}` : symbol}
             </Text>
           </SkeletonV2>
         </TokenSymbol>
@@ -136,7 +141,12 @@ const PriceHeader: React.FC<PriceHeaderProps> = ({
             </SkeletonV2>
           </StatItem>
         </FlexGap>
-        <SkeletonV2 height="24px" minHeight="auto" width="90px" isDataReady={price !== -1}>
+        <SkeletonV2
+          height={isMobile ? '32px' : '24px'}
+          minHeight="auto"
+          width={isMobile ? '120px' : '90px'}
+          isDataReady={price !== -1}
+        >
           <PriceText>
             {price.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: maxDecimalsDigit })}
           </PriceText>

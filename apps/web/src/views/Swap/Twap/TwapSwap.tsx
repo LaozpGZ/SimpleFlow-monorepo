@@ -93,7 +93,7 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
             <OrderHistory />
           </Flex>
         )}
-        {!isDesktop && isChartSupported && (
+        {!isDesktop && (
           <BottomDrawer
             content={
               <ChartWithPriceHeader
@@ -105,6 +105,7 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
             }
             isOpen={isChartDisplayed}
             setIsOpen={(isOpen) => setIsChartDisplayed?.(isOpen)}
+            hideCloseButton
           />
         )}
         <Flex flexDirection="column" width={isDesktop ? undefined : '100%'}>
