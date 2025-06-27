@@ -57,7 +57,7 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
   )
   const tokenInfoPath = useMemo(
     () =>
-      chainId
+      chainId && CAKE[chainId]
         ? earningToken.equals(CAKE[chainId])
           ? getTokenInfoPath(chainId, stakingToken.address)
           : getTokenInfoPath(chainId, earningToken.address)
@@ -65,7 +65,12 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
     [chainId, earningToken, stakingToken.address],
   )
   const projectLink = useMemo(
-    () => (chainId ? (earningToken.equals(CAKE[chainId]) ? stakingToken.projectLink : earningToken.projectLink) : ''),
+    () =>
+      chainId && CAKE[chainId]
+        ? earningToken.equals(CAKE[chainId])
+          ? stakingToken.projectLink
+          : earningToken.projectLink
+        : '',
     [chainId, earningToken, stakingToken.projectLink],
   )
 
