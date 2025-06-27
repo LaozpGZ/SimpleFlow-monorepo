@@ -1,4 +1,4 @@
-import { Button } from '@pancakeswap/uikit'
+import { Button, Dots } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import {
@@ -204,7 +204,14 @@ export default function PreviewDepositModal({
         </ModalBody>
         <ModalFooter px="0" py="0" mt="4" mb="2">
           <Button width="100%" onClick={onConfirm} isLoading={isSending}>
-            {isSending ? t('Transaction initiating') : t('Confirm Deposit')}
+            {isSending ? (
+              <>
+                {t('Transaction initiating')}
+                <Dots />
+              </>
+            ) : (
+              t('Confirm Deposit')
+            )}
           </Button>
         </ModalFooter>
       </ModalContent>
