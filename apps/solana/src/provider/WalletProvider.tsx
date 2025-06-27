@@ -19,19 +19,44 @@ import {
   BitpieWalletAdapter,
   BitgetWalletAdapter
 } from '@solana/wallet-adapter-wallets'
+import { WalletConnectWalletAdapter } from '@walletconnect/solana-adapter'
 
-import { type Adapter, type WalletError } from '@solana/wallet-adapter-base'
+import { WalletAdapterNetwork, type Adapter, type WalletError } from '@solana/wallet-adapter-base'
 import { sendWalletEvent } from '@/api/event'
 import { useEvent } from '@/hooks/useEvent'
 // import { LedgerWalletAdapter } from './Ledger/LedgerWalletAdapter'
-import { useAppStore, defaultEndpoint } from '../store/useAppStore'
+import { useAppStore, defaultEndpoint, defaultNetWork } from '../store/useAppStore'
 
 initialize()
 
 const App: FC<PropsWithChildren<any>> = ({ children }) => {
+  const [network] = useState<WalletAdapterNetwork>(defaultNetWork)
   const rpcNodeUrl = useAppStore((s) => s.rpcNodeUrl)
   const wsNodeUrl = useAppStore((s) => s.wsNodeUrl)
   const [endpoint, setEndpoint] = useState<string>(rpcNodeUrl || defaultEndpoint)
+
+  const _walletConnect = useMemo(() => {
+    const connectWallet: WalletConnectWalletAdapter[] = []
+    try {
+      connectWallet.push(
+        new WalletConnectWalletAdapter({
+          network: network as WalletAdapterNetwork.Mainnet,
+          options: {
+            projectId: process.env.NEXT_PUBLIC_WALLET_CONNECT_PJ_ID,
+            metadata: {
+              name: 'PancakeSwap',
+              description: 'Trade, earn, and own crypto on the all-in-one multichain DEX',
+              url: 'https://solana.pancakeswap.finance/swap',
+              icons: ['https://pancakeswap.finance/favicon.ico']
+            }
+          }
+        })
+      )
+    } catch (e) {
+      // console.error('WalletConnect error', e)
+    }
+    return connectWallet
+  }, [network])
 
   const wallets = useMemo(
     () => [
@@ -39,7 +64,7 @@ const App: FC<PropsWithChildren<any>> = ({ children }) => {
       new SolflareWalletAdapter(),
       new SlopeWalletAdapter({ endpoint }),
       new TorusWalletAdapter(),
-      // new LedgerWalletAdapter(),
+      ..._walletConnect,
       new GlowWalletAdapter(),
       new TrustWalletAdapter(),
       new MathWalletAdapter({ endpoint }),
@@ -52,7 +77,7 @@ const App: FC<PropsWithChildren<any>> = ({ children }) => {
       new BitgetWalletAdapter({ endpoint }),
       new ExodusWalletAdapter({ endpoint })
     ],
-    [endpoint]
+    [endpoint, _walletConnect]
   )
 
   useEffect(() => {

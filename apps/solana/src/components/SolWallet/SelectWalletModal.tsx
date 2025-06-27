@@ -156,7 +156,7 @@ export default function SelectWalletModal({ wallets, isOpen, onSelectWallet, onC
                   {t('disclaimer')}
                 </Link>
               </Box>
-              <Box mb={6} flex="1" overflowY="scroll">
+              <Box mb={6} flex="1" overflowY="auto" pr="10px">
                 <HStack justifyContent="space-between">
                   <Text fontSize="16px" color={colors.textPrimary} bold mb={2}>
                     {t('Choose wallet')}
