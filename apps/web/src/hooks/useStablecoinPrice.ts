@@ -49,7 +49,7 @@ interface StableCoinPriceParams {
 }
 
 const getKey = (params: { currency?: Currency; chainId?: number; enabled?: boolean }) =>
-  `${params.currency ? getCurrencyAddress(params.currency) : ''}:${params.chainId}:${params.enabled}`
+  `${params.currency ? getCurrencyAddress(params.currency) : ''}:${params.chainId}:${params.enabled ?? true}`
 
 const stableCoinPriceAtom = atomFamily(
   (params: StableCoinPriceParams) => {
