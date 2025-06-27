@@ -50,13 +50,13 @@ export default function PendingYield({ isLoading, hasReward, pendingYield, rewar
         </Button>
       </HStack>
 
-      <Flex display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={0} rowGap={2}>
+      <Flex display="grid" gridTemplateColumns="repeat(1, 1fr)" columnGap={0} rowGap={2}>
         {rewardInfos
           .filter((r) => {
             return Number(r.amount) !== 0
           })
           .map((r, index) => (
-            <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent={index % 2 === 0 ? 'start' : 'end'}>
+            <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent="start">
               <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
               <Text color={colors.textPrimary}>
                 {formatCurrency(r.amount, {
