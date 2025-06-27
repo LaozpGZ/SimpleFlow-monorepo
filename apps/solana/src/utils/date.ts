@@ -30,9 +30,9 @@ export function parseDateInfo(timestamp?: TimeStamp) {
     year: Number(year).toString(),
     month: Number(month).toString(),
     day: Number(day).toString(),
-    hour: Number(hour).toString(),
-    minutes: Number(minutes).toString(),
-    seconds: Number(seconds).toString()
+    hour: hour.toString(),
+    minutes: minutes.toString(),
+    seconds: seconds.toString()
   }
 }
 /**
@@ -81,7 +81,7 @@ export function formatDate(inputDate: Date, formatString: string) {
 export function formatDateToReadableString(inputDate: Date | string | number | undefined) {
   return formatDate(
     inputDate
-      ? new Date(typeof inputDate === 'string' ? `${inputDate  }000` : typeof inputDate === 'number' ? inputDate * 1000 : inputDate)
+      ? new Date(typeof inputDate === 'string' ? `${inputDate}000` : typeof inputDate === 'number' ? inputDate * 1000 : inputDate)
       : new Date(),
     'YYYY-MM-DD HH:mm:ss'
   )

@@ -1,4 +1,4 @@
-import { Box, Flex, Heading, ToastId, ToastPosition, UseToastOptions } from '@chakra-ui/react'
+import { ToastId, ToastPosition, UseToastOptions } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
 import { Alert, mediaQueries } from '@pancakeswap/uikit'
 import { Variants } from '@pancakeswap/uikit/components/Alert/types'

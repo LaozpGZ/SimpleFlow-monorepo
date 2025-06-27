@@ -25,7 +25,7 @@ export default function ChartTooltip({ active, payload, label, category, symbol,
           )
         })}
         <Box color={colors.textSubtle} fontSize="xs">
-          {toUTC(label, { showTime: false, showUTCBadge: false })}
+          {toUTC(label)}
         </Box>
       </Box>
     )
