@@ -36,7 +36,11 @@ export const SERVER_NODES = {
     'https://bsc-dataseed1.defibit.io',
     'https://bsc-dataseed1.bnbchain.org',
   ].filter(Boolean),
-  [ChainId.BSC_TESTNET]: ['https://data-seed-prebsc-1-s1.bnbchain.org:8545'],
+  [ChainId.BSC_TESTNET]: [
+    'https://bsc-testnet-dataseed.bnbchain.org',
+    'https://bsc-testnet.bnbchain.org',
+    'https://bsc-prebsc-dataseed.bnbchain.org',
+  ],
   [ChainId.ETHEREUM]: [
     getNodeRealUrl(ChainId.ETHEREUM, process.env.SERVER_NODE_REAL_API_ETH) || '',
     'https://ethereum.publicnode.com',
@@ -104,7 +108,9 @@ export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
   ].filter(Boolean),
   [ChainId.BSC_TESTNET]: [
     getNodeRealUrl(ChainId.BSC_TESTNET, process.env.SERVER_NODE_REAL_API_ETH) || '',
-    'https://data-seed-prebsc-1-s1.bnbchain.org:8545',
+    'https://bsc-testnet-dataseed.bnbchain.org',
+    'https://bsc-testnet.bnbchain.org',
+    'https://bsc-prebsc-dataseed.bnbchain.org',
   ].filter(Boolean),
   [ChainId.ETHEREUM]: [
     getNodeRealUrl(ChainId.ETHEREUM, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
