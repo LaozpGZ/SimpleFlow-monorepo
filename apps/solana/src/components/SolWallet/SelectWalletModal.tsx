@@ -288,7 +288,10 @@ function WalletItem({
 }
 
 function splitWallets(wallets: Wallet[]): { recommendedWallets: Wallet[]; notInstalledWallets: Wallet[] } {
-  const supportedWallets = wallets.filter((w) => w.readyState !== WalletReadyState.Unsupported)
+  // Deduplicate wallets by adapter name to prevent duplicates
+  const uniqueWallets = Array.from(new Map(wallets.map((wallet) => [wallet.adapter.name, wallet])).values())
+
+  const supportedWallets = uniqueWallets.filter((w) => w.readyState !== WalletReadyState.Unsupported)
   const recommendedWallets = supportedWallets.filter((w) => w.readyState !== WalletReadyState.NotDetected && w.adapter.name !== 'Sollet')
   const notInstalledWallets = supportedWallets.filter((w) => w.readyState === WalletReadyState.NotDetected && w.adapter.name !== 'Phantom')
   const solletWallet = supportedWallets.find((w) => w.adapter.name === 'Sollet')

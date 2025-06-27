@@ -1,5 +1,5 @@
 import { Box, Button, Tooltip as ChakraTip, CircularProgress, Collapse, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react'
-import { mediaQueries } from '@pancakeswap/uikit'
+import { Dots, mediaQueries } from '@pancakeswap/uikit'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { ApiV3Token, RAYMint, SOL_INFO, TokenInfo, TransferFeeDataBaseType } from '@pancakeswap/solana-core-sdk'
 import { NATIVE_MINT } from '@solana/spl-token-0.4'
@@ -330,7 +330,23 @@ export function SwapPanel({
     const swapError = emptyAmountIn ? t('Enter an amount') : error || balanceNotEnough
     const disabled = emptyAmountIn || !!swapError || needPriceUpdatedAlert || swapDisabled
     const isLoading = isComputing || isSending
-    const loadingText = <div>{isSending ? t('Transaction initiating') : isComputing ? t('Computing..') : ''}</div>
+    const loadingText = (
+      <div>
+        {isSending ? (
+          <>
+            {t('Transaction initiating')}
+            <Dots />
+          </>
+        ) : isComputing ? (
+          <>
+            {t('Computing')}
+            <Dots />
+          </>
+        ) : (
+          ''
+        )}
+      </div>
+    )
     return {
       swapError,
       loadingText,

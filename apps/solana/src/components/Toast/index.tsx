@@ -68,7 +68,6 @@ export function Toast({ state, onClose }: ToasterProps) {
   return (
     <StyledToast>
       <Alert variant={alertTypeMap[state.status] ?? 'info'} title={state.title as string} onClick={onClose}>
-        {' '}
         {state.description as string}
       </Alert>
     </StyledToast>
