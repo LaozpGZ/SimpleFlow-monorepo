@@ -40,7 +40,8 @@ const UserMenuItems: React.FC<{
 }
 
 export default function SolWallet() {
-  const { wallets, select, connected, connecting } = useWallet()
+  const { wallets, select, connected, connecting, wallet } = useWallet()
+
   const { t } = useTranslation()
   const publicKey = useAppStore((s) => s.publicKey)
   const { setVisible, visible } = useWalletModal()
@@ -68,7 +69,7 @@ export default function SolWallet() {
   if (connected)
     return (
       <>
-        <UserMenu text={accountText} account={publicKey?.toBase58()} variant="default">
+        <UserMenu avatarSrc={wallet ? wallet.adapter.icon : undefined} text={accountText} account={publicKey?.toBase58()} variant="default">
           {({ isOpen }) =>
             isOpen ? (
               <UserMenuItems
