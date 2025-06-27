@@ -63,6 +63,7 @@ function AppNavLayout({
         justifyContent="space-between"
         borderBottom={`1px solid ${colors.cardBorder01}`}
         bgColor={colors.cardBg}
+        zIndex={19}
       >
         {/* logo */}
         {isMobile || isTablet ? <LogoIcon className="mobile-icon" /> : <LogoWithTextIcon width="160px" className="desktop-icon" />}

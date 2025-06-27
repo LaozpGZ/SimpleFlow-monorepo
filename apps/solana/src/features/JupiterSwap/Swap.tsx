@@ -67,7 +67,8 @@ const JupiterTerminal = () => {
       refetchIntervalForTokenAccounts: 60000,
       containerStyles: {
         maxWidth: '480px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        zIndex: 18
       },
       enableWalletPassthrough: true,
       onRequestConnectWallet: () => setVisible(true),
