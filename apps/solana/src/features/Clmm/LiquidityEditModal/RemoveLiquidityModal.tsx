@@ -218,6 +218,14 @@ export default function RemoveLiquidityModal({
     [isMobile]
   )
 
+  const validRewards = useMemo(
+    () =>
+      allRewardInfos.filter((r) => {
+        return Number(r.amount) !== 0
+      }),
+    [allRewardInfos]
+  )
+
   return (
     <ModalV2 isOpen={isOpen} onDismiss={handleCloseModal} closeOnOverlayClick>
       <MotionModal
@@ -320,27 +328,20 @@ export default function RemoveLiquidityModal({
                 </HStack>
               </Flex>
 
-              <Flex {...innerCardStyle}>
-                <Flex alignItems="center" gap="2">
-                  <Text fontSize="sm" color={colors.textSubtle}>
-                    {t('Pending Yield')}
-                  </Text>
-                  <Flex>
-                    {allRewardInfos
-                      .filter((r) => {
-                        return Number(r.amount) !== 0
-                      })
-                      .map((r, idx) => (
+              {validRewards.length > 0 ? (
+                <Flex {...innerCardStyle}>
+                  <Flex alignItems="center" gap="2">
+                    <Text fontSize="sm" color={colors.textSubtle}>
+                      {t('Pending Yield')}
+                    </Text>
+                    <Flex>
+                      {validRewards.map((r, idx) => (
                         <TokenAvatar key={r.mint.address} mr="-1" size="smi" token={r.mint} ml={idx ? '-2px' : '0'} />
                       ))}
+                    </Flex>
                   </Flex>
-                </Flex>
-                <Flex fontSize="sm" gap="1">
-                  {allRewardInfos
-                    .filter((r) => {
-                      return Number(r.amount) !== 0
-                    })
-                    .map((r, idx) => {
+                  <Flex fontSize="sm" gap="1">
+                    {validRewards.map((r, idx) => {
                       return (
                         <HStack key={`reward-${r.mint.address}`} fontSize={['xs', 'sm']} gap="1">
                           {idx > 0 ? <Text>+</Text> : null}
@@ -354,8 +355,9 @@ export default function RemoveLiquidityModal({
                         </HStack>
                       )
                     })}
+                  </Flex>
                 </Flex>
-              </Flex>
+              ) : null}
             </Flex>
           </Flex>
         </Flex>
