@@ -61,6 +61,12 @@ export default function SelectPoolTokenAndFee({ completed, initState, show, isLo
   const [currentConfig, setCurrentConfig] = useState<ApiClmmConfigInfo | undefined>(initState?.config)
   const poolKey = `${token1?.address}-${token2?.address}`
   const selectRef = useRef<Side>('token1')
+  const isSolWSolPair = useMemo(() => {
+    return (
+      (token1?.address === '11111111111111111111111111111111' && token2?.address === 'So11111111111111111111111111111111111111112') ||
+      (token1?.address === 'So11111111111111111111111111111111111111112' && token2?.address === '11111111111111111111111111111111')
+    )
+  }, [token1, token2])
 
   useTokenPrice({
     mintList: token1 && token2 ? [token1.address, token2.address] : [],
@@ -235,8 +241,8 @@ export default function SelectPoolTokenAndFee({ completed, initState, show, isLo
       <Flex w="full" gap="2">
         <Select
           variant="filledDark"
-          items={clmmFeeOptions}
-          value={currentConfig}
+          items={isSolWSolPair ? [] : clmmFeeOptions}
+          value={isSolWSolPair ? undefined : currentConfig}
           renderItem={renderItem}
           renderTriggerItem={(v) =>
             v ? (
@@ -279,7 +285,12 @@ export default function SelectPoolTokenAndFee({ completed, initState, show, isLo
           }}
         />
       </Flex>
-      <ConnectedButton mt="2rem" disabled={!!error || !currentConfig} isLoading={isLoading || isExistingLoading} onClick={handleConfirm}>
+      <ConnectedButton
+        mt="2rem"
+        disabled={!!error || !currentConfig || isSolWSolPair}
+        isLoading={isLoading || isExistingLoading}
+        onClick={handleConfirm}
+      >
         {error ? `${t('Select')} ${t(error)}` : t('Continue')}
       </ConnectedButton>
     </PanelCard>
