@@ -401,8 +401,11 @@ function TokenInput(props: TokenInputProps) {
             min={0}
             id={id}
             onChange={(e) => {
-              const targetValue = e?.currentTarget?.value.replace(/,/g, '.')
-              if (Number.isNaN(targetValue)) return
+              let targetValue = e?.currentTarget?.value.replace(/,/g, '.')
+              if (targetValue === '.') {
+                targetValue = '0.'
+              }
+              if (Number.isNaN(parseFloat(targetValue))) return
               onChange?.(targetValue)
             }}
             style={{
