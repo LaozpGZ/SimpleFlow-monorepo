@@ -113,7 +113,6 @@ const CurrencyInputPanelV2 = memo(function CurrencyInputPanelV2({
     {
       hideIfPriceImpactTooHigh: true,
     },
-    chainId,
   )
 
   const [onPresentCurrencyModal] = useModal(
