@@ -40,7 +40,7 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
     endTimestamp,
     stakingLimit,
     stakingLimitEndTimestamp,
-    contractAddress,
+    contractAddress: poolContractAddress,
     profileRequirement,
     isFinished,
     userData: poolUserData,
@@ -48,32 +48,29 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
 
   const stakedBalance = poolUserData?.stakedBalance ? poolUserData.stakedBalance : BIG_ZERO
 
-  const tokenAddress = earningToken.address || ''
-  const poolContractAddress = contractAddress
-
   const { shouldShowBlockCountdown, timeUntilStart, timeRemaining, hasPoolStarted } = useMemo(
     () => getPoolBlockInfo(pool, currentBlock),
     [pool, currentBlock],
   )
 
-  const tokenInfoPath = useMemo(
-    () =>
-      chainId && CAKE[chainId]
-        ? earningToken.equals(CAKE[chainId])
-          ? getTokenInfoPath(chainId, stakingToken.address)
-          : getTokenInfoPath(chainId, earningToken.address)
-        : '',
-    [chainId, earningToken, stakingToken.address],
-  )
-  const projectLink = useMemo(
-    () =>
-      chainId && CAKE[chainId]
-        ? earningToken.equals(CAKE[chainId])
-          ? stakingToken.projectLink
-          : earningToken.projectLink
-        : '',
-    [chainId, earningToken, stakingToken.projectLink],
-  )
+  const { tokenAddressToAdd, tokenInfoPath, projectLink } = useMemo(() => {
+    if (chainId && CAKE[chainId] && earningToken && stakingToken) {
+      const isEarningCake = earningToken.equals(CAKE[chainId])
+      const token = isEarningCake ? stakingToken : earningToken
+
+      return {
+        tokenAddressToAdd: token.address || '',
+        tokenInfoPath: getTokenInfoPath(chainId, token.address),
+        projectLink: token.projectLink,
+      }
+    }
+
+    return {
+      tokenAddressToAdd: '',
+      tokenInfoPath: '',
+      projectLink: '',
+    }
+  }, [chainId, earningToken, stakingToken])
 
   return (
     <>
@@ -137,7 +134,7 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
           </ScanLink>
         </Flex>
       )}
-      {account && tokenAddress && (
+      {account && tokenAddressToAdd && (
         <Flex justifyContent={alignLinksToRight ? 'flex-end' : 'flex-start'}>
           <AddToWalletButton
             variant="text"
@@ -146,10 +143,10 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
             style={{ fontSize: '14px', fontWeight: '400', lineHeight: 'normal' }}
             marginTextBetweenLogo="4px"
             textOptions={AddToWalletTextOptions.TEXT}
-            tokenAddress={tokenAddress}
+            tokenAddress={tokenAddressToAdd}
             tokenSymbol={earningToken.symbol}
             tokenDecimals={earningToken.decimals}
-            tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddress}.png`}
+            tokenLogo={`https://tokens.pancakeswap.finance/images/${tokenAddressToAdd}.png`}
           />
         </Flex>
       )}
