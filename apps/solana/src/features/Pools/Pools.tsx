@@ -98,34 +98,44 @@ const SORT_ITEMS = [
   },
   {
     name: 'tvl_dsc',
-    label: <Trans>Trading Volume (dsc)</Trans>,
-    value: 'volume_desc'
+    label: <Trans>TVL (dsc)</Trans>,
+    value: 'tvl_desc'
   },
   {
     name: 'tvl_asc',
-    label: <Trans>Trading Volume (asc)</Trans>,
-    value: 'volume_asc'
+    label: <Trans>TVL (asc)</Trans>,
+    value: 'tvl_asc'
   },
   {
-    name: 'lp_dsc',
-    label: <Trans>Liquidity (dsc)</Trans>,
-    value: 'liquidity_desc'
+    name: 'volume_24h_dsc',
+    label: <Trans>Trading Volume (24h) (dsc)</Trans>,
+    value: 'volume_24h_desc'
   },
   {
-    name: 'lp_asc',
-    label: <Trans>Liquidity (asc)</Trans>,
-    value: 'liquidity_asc'
-  },
-  {
-    name: 'apr_dsc',
-    label: <Trans>Yield (dsc)</Trans>,
-    value: 'apr_desc'
-  },
-  {
-    name: 'apr_asc',
-    label: <Trans>Yield (asc)</Trans>,
-    value: 'apr_asc'
+    name: 'volume_24h_asc',
+    label: <Trans>Trading Volume (24h) (asc)</Trans>,
+    value: 'volume_24h_asc'
   }
+  // {
+  //   name: 'lp_dsc',
+  //   label: <Trans>Liquidity (dsc)</Trans>,
+  //   value: 'liquidity_desc'
+  // },
+  // {
+  //   name: 'lp_asc',
+  //   label: <Trans>Liquidity (asc)</Trans>,
+  //   value: 'liquidity_asc'
+  // },
+  // {
+  //   name: 'apr_dsc',
+  //   label: <Trans>Yield (dsc)</Trans>,
+  //   value: 'apr_desc'
+  // },
+  // {
+  //   name: 'apr_asc',
+  //   label: <Trans>Yield (asc)</Trans>,
+  //   value: 'apr_asc'
+  // }
 ]
 
 const LAYOUT_ITEMS = [
@@ -504,7 +514,8 @@ export default function Pools() {
     shouldFetch: !hasSearch,
     type: activeTabItem.value,
     order: order ? 'desc' : 'asc',
-    sort: sortKey !== 'liquidity' && sortKey !== 'default' ? `${sortKey}${timeBase}` : sortKey
+    // sort: sortKey !== 'liquidity' && sortKey !== 'default' ? `${sortKey}${timeBase}` : sortKey
+    sort: sortKey !== 'liquidity' && sortKey !== 'default' ? `${sortKey}` : sortKey
   })
 
   const {
@@ -806,7 +817,9 @@ export default function Pools() {
                             value={sortKey === 'default' ? t('default') : t(`${sortKey}_${order ? 'desc' : 'asc'}`)}
                             items={SORT_ITEMS}
                             onChange={(value) => {
-                              const [key, order_] = value.split('_')
+                              const parts = value.split('_')
+                              const order_ = parts[parts.length - 1]
+                              const key = parts.slice(0, -1).join('_')
                               onChangeSortData(key)
                               setOrder(order_ === 'desc' ? 1 : 0)
                             }}
