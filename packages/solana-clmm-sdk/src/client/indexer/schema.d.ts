@@ -774,9 +774,9 @@ export interface operations {
     parameters: {
       query: {
         /** @description First token mint address */
-        token0: string
+        token0?: string
         /** @description Second token mint address */
-        token1: string
+        token1?: string
       }
       header?: never
       path?: never
