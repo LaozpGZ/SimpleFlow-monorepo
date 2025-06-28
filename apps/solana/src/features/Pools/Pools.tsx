@@ -528,7 +528,8 @@ export default function Pools() {
     mint2: searchTokens[1]?.address,
     type: activeTabItem.value,
     order: order ? 'desc' : 'asc',
-    sort: (sortKey !== 'liquidity' && sortKey !== 'default' ? `${sortKey}${timeBase}` : sortKey) as FetchPoolParams['sort']
+    // sort: (sortKey !== 'liquidity' && sortKey !== 'default' ? `${sortKey}${timeBase}` : sortKey) as FetchPoolParams['sort']
+    sort: (sortKey !== 'liquidity' && sortKey !== 'default' ? `${sortKey}` : sortKey) as FetchPoolParams['sort']
   })
 
   const { formattedData: searchIdData, isLoading: isSearchIdLoading } = useFetchPoolById({
@@ -770,7 +771,7 @@ export default function Pools() {
                       </FormControl>
                     </Box>
 
-                    <Box>
+                    {/* <Box>
                       <FormControl display="flex" alignItems="center">
                         <FormLabel color={colors.textSubtle} minW={['80px', 'unset']}>
                           {t('Time base')}
@@ -788,7 +789,7 @@ export default function Pools() {
                             ))}
                         </ButtonMenu>
                       </FormControl>
-                    </Box>
+                    </Box> */}
 
                     <Flex alignItems="center">
                       <FormControl display="flex" alignItems="center">
