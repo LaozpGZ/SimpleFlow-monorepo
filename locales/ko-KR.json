@@ -2530,7 +2530,7 @@
   "lock overview": "잠금 개요",
   "Factor": "요소",
   "Migrate to get veCAKE": "veCAKE를 받으려면 마이그레이션하세요",
-  "Lock CAKE to get veCAKE": "veCAKE를 받으려면 CAKE을 잠그세요",
+  "Lock CAKE to get veCAKE": "veCAKE를 받으려면 CAKE를 잠그세요",
   "Increase your veCAKE": "내 veCAKE 늘리기",
   "Select lock duration": "잠금 기간 선택",
   "Unlock": "잠금 해제",
@@ -3784,7 +3784,7 @@
   "announcement on X": "X의 공지 사항",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Prediction에서는 스마트 계약 지갑이 현재 지원되지 않습니다. 계속하려면 제품과 상호 작용하기 전에 EOA(외부 소유 계정) 지갑으로 전환하세요.",
   "Earn Falcon Miles!": "Falcon Miles를 획득하세요!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
-  "Trade Binance Alpha Tokens to Win $250,000.": "Trade Binance Alpha Tokens to Win $250,000.",
-  "Trade Alpha Tokens: Win $250K.": "Trade Alpha Tokens: Win $250K."
+  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP는 풀에 기여한 총 TVL에 따라 Falcon's Miles의 40배를 획득합니다. Miles는 0.95 ~ 1.05 범위 내의 포지션에만 적립됩니다.",
+  "Trade Binance Alpha Tokens to Win $250,000.": "Binance Alpha 토큰을 거래하여 $250,000에 당첨되세요.",
+  "Trade Alpha Tokens: Win $250K.": "Alpha 토큰 거래: $250K에 당첨되세요."
 }
