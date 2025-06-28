@@ -51,10 +51,11 @@ const PoolStatsInfo: React.FC<React.PropsWithChildren<ExpandedFooterProps>> = ({
   const tokenAddress = earningToken.address || ''
   const poolContractAddress = contractAddress
 
-  const { shouldShowBlockCountdown, timeUntilStart, timeRemaining, hasPoolStarted } = getPoolBlockInfo(
-    pool,
-    currentBlock,
+  const { shouldShowBlockCountdown, timeUntilStart, timeRemaining, hasPoolStarted } = useMemo(
+    () => getPoolBlockInfo(pool, currentBlock),
+    [pool, currentBlock],
   )
+
   const tokenInfoPath = useMemo(
     () =>
       chainId && CAKE[chainId]

@@ -39,19 +39,16 @@ export const convertCakeToShares = (
   return { sharesAsNumberBalance, sharesAsBigNumber, sharesAsDisplayBalance }
 }
 
-export const getPoolBlockInfo = memoize(
-  (pool: Pool.DeserializedPool<Token>, currentBlock: number) => {
-    const { startTimestamp, endTimestamp, isFinished } = pool
-    const shouldShowBlockCountdown = Boolean(!isFinished && startTimestamp && endTimestamp)
-    const now = Math.floor(Date.now() / 1000)
-    const timeUntilStart = Math.max((startTimestamp || 0) - now, 0)
-    const timeRemaining = Math.max((endTimestamp || 0) - now, 0)
-    const hasPoolStarted = timeUntilStart <= 0 && timeRemaining > 0
-    const timeToDisplay = hasPoolStarted ? timeRemaining : timeUntilStart
-    return { shouldShowBlockCountdown, timeUntilStart, timeRemaining, hasPoolStarted, timeToDisplay, currentBlock }
-  },
-  (pool, currentBlock) => `${pool.startTimestamp}#${pool.endTimestamp}#${pool.isFinished}#${currentBlock}`,
-)
+export const getPoolBlockInfo = (pool: Pool.DeserializedPool<Token>, currentBlock: number) => {
+  const { startTimestamp, endTimestamp, isFinished } = pool
+  const shouldShowBlockCountdown = Boolean(!isFinished && startTimestamp && endTimestamp)
+  const now = Math.floor(Date.now() / 1000)
+  const timeUntilStart = Math.max((startTimestamp || 0) - now, 0)
+  const timeRemaining = Math.max((endTimestamp || 0) - now, 0)
+  const hasPoolStarted = timeUntilStart <= 0 && timeRemaining > 0
+  const timeToDisplay = hasPoolStarted ? timeRemaining : timeUntilStart
+  return { shouldShowBlockCountdown, timeUntilStart, timeRemaining, hasPoolStarted, timeToDisplay, currentBlock }
+}
 
 export const getICakeWeekDisplay = (ceiling: BigNumber) => {
   const weeks = new BigNumber(ceiling).div(60).div(60).div(24).div(7)

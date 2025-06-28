@@ -2,6 +2,7 @@ import { getBoostedPoolConfig } from '@pancakeswap/pools'
 import { Token } from '@pancakeswap/sdk'
 import { Pool } from '@pancakeswap/widgets-internal'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useMemo } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
 import { getPoolBlockInfo } from 'views/Pools/helpers'
 import { useBoostedPoolApr } from 'views/Pools/hooks/useBoostedPoolApr'
@@ -13,7 +14,10 @@ const withShownApr = (AprComp) => (props) => {
 
   const currentBlock = useCurrentBlock()
 
-  const { shouldShowBlockCountdown, hasPoolStarted } = getPoolBlockInfo(props.pool, currentBlock)
+  const { shouldShowBlockCountdown, hasPoolStarted } = useMemo(
+    () => getPoolBlockInfo(props.pool, currentBlock),
+    [props.pool, currentBlock],
+  )
 
   const boostedApr = useBoostedPoolApr({
     chainId,
