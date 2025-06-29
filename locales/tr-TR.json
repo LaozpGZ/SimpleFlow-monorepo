@@ -153,7 +153,7 @@
   "Next Step": "Sonraki Adım",
   "Confirming": "Doğrulanıyor",
   "Enabled": "Etkinleştirildi",
-  "Retry with higher input amount!": "Retry with higher input amount!",
+  "Retry with higher input amount!": "Daha yüksek bir giriş miktarı ile tekrar deneyin!",
   "Insufficient CAKE balance": "Yetersiz CAKE bakiyesi",
   "Choose collectible": "Toplanabilir öğe seçin",
   "Choose a profile picture from the eligible collectibles (NFT) in your wallet, shown below.": "Aşağıda gösterilen cüzdanınızdaki uygun toplanabilir öğelerden (NFT) bir profil resmi seçin.",
@@ -3772,7 +3772,7 @@
   "Fees saved on PancakeSwap compared to major DEXs charging interface fees.": "Arayüz ücretleri alan başlıca DEX'ler ile karşılaştırıldığında PancakeSwap'ta tasarruf edilen ücretler.",
   "The change in pool price caused by your swap.": "Dönüştürme işleminizin neden olduğu havuz fiyatı değişikliği.",
   "Estimated time to complete this transaction.": "Bu işlemin tamamlanması için tahminî süre.",
-  "Retry with lower input amount!": "Retry with lower input amount!",
+  "Retry with lower input amount!": "Daha düşük bir giriş miktarı ile tekrar deneyin!",
   "Developer Doc": "Geliştirici Dokümanı",
   "Position Managers Sunsetting — 21 June 2025, 08:00 UTC": "Pozisyon Yöneticileri İçin Son Tarih - 21 Haziran 2025, 08.00 (UTC)",
   "Action required: Withdraw all positions before this time.": "İşlem gerekiyor: Bu tarihten önce tüm pozisyonları çekin.",
@@ -3786,5 +3786,5 @@
   "Earn Falcon Miles!": "Falcon Milleri Kazanın!",
   "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "Trade Binance Alpha Tokens to Win $250,000.",
-  "Trade Alpha Tokens: Win $250K.": "Trade Alpha Tokens: Win $250K."
+  "Trade Alpha Tokens: Win $250K.": "Alpha Token'ları Yatırın: 250 bin dolar kazanın."
 }
