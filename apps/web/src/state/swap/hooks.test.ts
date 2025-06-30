@@ -1,17 +1,14 @@
-import { useEffect } from 'react'
-
-import { useCurrency } from 'hooks/Tokens'
-import { useAtom } from 'jotai'
-import { parse } from 'querystring'
-import { swapReducerAtom } from 'state/swap/reducer'
-import { createReduxWrapper } from 'testUtils'
-import { Mock, vi } from 'vitest'
-
 /* eslint-disable no-var */
 /* eslint-disable vars-on-top */
 import { Currency } from '@pancakeswap/swap-sdk-core'
 import { renderHook } from '@testing-library/react-hooks'
-
+import { useCurrency } from 'hooks/Tokens'
+import { useAtom } from 'jotai'
+import { parse } from 'querystring'
+import { useEffect } from 'react'
+import { swapReducerAtom } from 'state/swap/reducer'
+import { createReduxWrapper } from 'testUtils'
+import { Mock, vi } from 'vitest'
 import { Field, replaceSwapState } from './actions'
 import { queryParametersToSwapState, useDerivedSwapInfo, useSwapState } from './hooks'
 
