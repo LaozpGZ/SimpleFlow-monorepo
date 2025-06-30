@@ -8,7 +8,7 @@ import { useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
 import { useMemo } from 'react'
-import { isEqual } from 'utils/isEqual'
+import { HashMap, isEqual } from 'utils/hash'
 import { multiplyPriceByAmount } from 'utils/prices'
 
 type UseStablecoinPriceConfig = {
@@ -45,6 +45,7 @@ interface StableCoinPriceParams {
   version: number
 }
 
+const placeHolderMap = new HashMap<StableCoinPriceParams, Price<Currency, ERC20Token>>()
 const stableCoinPriceAtom = atomFamily((params: StableCoinPriceParams) => {
   return atomWithLoadable(
     async () => {
@@ -70,10 +71,12 @@ const stableCoinPriceAtom = atomFamily((params: StableCoinPriceParams) => {
       if (price?.denominator === 0n) {
         return undefined
       }
+      placeHolderMap.set({ ...params, version: 0 }, price)
       return price
     },
     {
       placeHolderBehavior: 'stale',
+      placeHolderValue: placeHolderMap.get({ ...params, version: 0 }),
     },
   )
 }, isEqual)
