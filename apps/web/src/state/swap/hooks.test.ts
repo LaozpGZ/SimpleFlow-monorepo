@@ -4,7 +4,7 @@ import { useCurrency } from 'hooks/Tokens'
 import { useAtom } from 'jotai'
 import { parse } from 'querystring'
 import { swapReducerAtom } from 'state/swap/reducer'
-import { createReduxWrapper, createWagmiReduxWrapper, createWagmiWrapper } from 'testUtils'
+import { createReduxWrapper } from 'testUtils'
 import { Mock, vi } from 'vitest'
 
 /* eslint-disable no-var */
@@ -148,7 +148,7 @@ describe('#useDerivedSwapInfo', () => {
           recipient || '',
         )
       },
-      { wrapper: createWagmiReduxWrapper() },
+      { wrapper: createReduxWrapper() },
     )
     expect(result.current.inputError).toBe('Connect Wallet')
 
@@ -193,7 +193,7 @@ describe('#useDerivedSwapInfo', () => {
         )
       },
       {
-        wrapper: createWagmiReduxWrapper(),
+        wrapper: createReduxWrapper(),
       },
     )
 
@@ -238,7 +238,7 @@ describe('#useDerivedSwapInfo', () => {
         }
       },
       {
-        wrapper: createWagmiReduxWrapper(),
+        wrapper: createReduxWrapper(),
       },
     )
 

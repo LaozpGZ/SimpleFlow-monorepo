@@ -19,7 +19,7 @@
   "deno.config": "./cli/aptos-codegen/deno.jsonc",
   "typescript.tsdk": "node_modules/typescript/lib",
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": "explicit"
+    "source.organizeImports": "explicit"
   },
   "editor.formatOnSave": true,
   "cSpell.words": [
