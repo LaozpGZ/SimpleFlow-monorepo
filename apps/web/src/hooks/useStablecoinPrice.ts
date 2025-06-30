@@ -1,41 +1,23 @@
 import { ChainId } from '@pancakeswap/chains'
-import { Currency, ERC20Token, Price } from '@pancakeswap/sdk'
+import { Currency, ERC20Token, getCurrencyAddress, Price } from '@pancakeswap/sdk'
 import { STABLE_COIN } from '@pancakeswap/tokens'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
 import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import { SLOW_INTERVAL } from 'config/constants'
+import { queryTokenPrice } from 'edge/tokenPrice'
 import { useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
 import { useMemo } from 'react'
 import { HashMap, isEqual } from 'utils/hash'
 import { multiplyPriceByAmount } from 'utils/prices'
+import { getViemClients } from 'utils/viem'
 
 type UseStablecoinPriceConfig = {
   enabled?: boolean
 }
 const DEFAULT_CONFIG: UseStablecoinPriceConfig = {
   enabled: true,
-}
-
-const queryStablecoinPrice = async (currency: Currency, overrideChainId?: number) => {
-  if (!currency) throw new Error('No currency')
-  const chainId = currency.chainId || overrideChainId
-  if (!chainId) throw new Error('No chainId provided')
-  const stableCoin = chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
-  if (!stableCoin) throw new Error('No stable coin')
-  const params = new URLSearchParams({ chainId: String(chainId) })
-  if (currency.isNative) {
-    params.set('native', 'true')
-  } else {
-    params.set('address', currency.wrapped.address)
-  }
-  const res = await fetch(`/api/token/price?${params.toString()}`)
-  if (!res.ok) {
-    throw new Error('request failed')
-  }
-  const json = await res.json()
-  return json.priceUSD as number | undefined
 }
 
 interface StableCoinPriceParams {
@@ -53,12 +35,21 @@ const stableCoinPriceAtom = atomFamily((params: StableCoinPriceParams) => {
       if (!params.currency || !enabled) {
         return undefined
       }
-      const { currency } = params
+      const { currency, chainId } = params
       const stableCoin = STABLE_COIN[currency.chainId as ChainId] as ERC20Token | undefined
-      if (!stableCoin) {
+      if (!stableCoin || !chainId) {
         return undefined
       }
-      const priceUSD = await queryStablecoinPrice(params.currency, params.chainId)
+      const result = await queryTokenPrice(
+        {
+          chainId,
+          address: getCurrencyAddress(currency),
+          isNative: currency.isNative,
+        },
+        getViemClients,
+      )
+      const priceUSD = result?.price
+      // const priceUSD = await queryStablecoinPrice(params.currency, params.chainId)
       if (isUndefinedOrNull(priceUSD)) {
         return undefined
       }

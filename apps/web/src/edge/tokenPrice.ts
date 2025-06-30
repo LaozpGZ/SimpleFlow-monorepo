@@ -11,7 +11,6 @@ import { edgeQueries } from 'quoter/utils/edgePoolQueries'
 import { getProvider } from 'quoter/utils/edgeQueries.util'
 import { computeTradePriceBreakdown, warningSeverity } from 'utils/compuateTradePriceBreakdown'
 import { mockCurrency } from 'utils/mockCurrency'
-import { getViemClients } from 'utils/viem.server'
 import { Address } from 'viem/accounts'
 import { formatUnits } from 'viem/utils'
 
@@ -30,7 +29,10 @@ function parseQueryParams(params: {
   return undefined
 }
 
-export async function queryTokenPrice(params: { chainId: ChainId; address?: Address; isNative?: boolean }) {
+export async function queryTokenPrice(
+  params: { chainId: ChainId; address?: Address; isNative?: boolean },
+  provider: OnChainProvider,
+) {
   const { chainId, address, isNative } = params
   const currencyParams = parseQueryParams(params)
 
@@ -49,7 +51,7 @@ export async function queryTokenPrice(params: { chainId: ChainId; address?: Addr
 
   const cake = CAKE[chainId]
   if (!isNative && address && cake && cake.address.toLowerCase() === address.toLowerCase()) {
-    const price = await getCakePriceFromOracle()
+    const price = await getCakePriceFromOracle(provider)
     return {
       price: Number(price),
       from: 'oracle',
@@ -83,10 +85,13 @@ export async function queryTokenPrice(params: { chainId: ChainId; address?: Addr
 
     const amountOut = CurrencyAmount.fromRawAmount(stableCoin, 5n * 10n ** BigInt(stableCoin.decimals))
 
-    const client = getViemClients({ chainId })
+    const client = provider({ chainId })
+    if (!client) {
+      throw new Error('Failed to get viem client')
+    }
     const [blockNumber, gasPrice] = await Promise.all([client.getBlockNumber(), client.getGasPrice()])
 
-    const gasLimit = await getMulticallGasLimit(getViemClients as OnChainProvider, chainId)
+    const gasLimit = await getMulticallGasLimit(provider, chainId)
     const candidatePools = await edgeQueries.fetchAllCandidatePools(
       stableCoin.address,
       getCurrencyAddress(token),
@@ -98,7 +103,7 @@ export async function queryTokenPrice(params: { chainId: ChainId; address?: Addr
     })
 
     const quoteProvider = SmartRouter.createQuoteProvider({
-      onChainProvider: getViemClients as OnChainProvider,
+      onChainProvider: provider as OnChainProvider,
       gasLimit: gasLimit * 1000n,
     })
 
@@ -136,9 +141,12 @@ export async function queryTokenPrice(params: { chainId: ChainId; address?: Addr
   }
 }
 
-const getCakePriceFromOracle = async () => {
+const getCakePriceFromOracle = async (provider: OnChainProvider) => {
   try {
-    const client = getViemClients({ chainId: ChainId.BSC })
+    const client = provider({ chainId: ChainId.BSC })
+    if (!client) {
+      throw new Error('Failed to get viem client')
+    }
     const data = await client.readContract({
       abi: chainlinkOracleABI,
       address: chainlinkOracleCAKE[ChainId.BSC],
