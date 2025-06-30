@@ -1,7 +1,7 @@
 export const isClient = () => typeof window !== 'undefined'
 export const isLocal = () => typeof window !== 'undefined' && window.location.host.includes('localhost')
 export const isDocumentVisible = () => isClient() && document.visibilityState === 'visible'
-export const isProdEnv = () => isClient() && window.location.host.includes('raydium.io')
+export const isProdEnv = () => isClient() && window.location.host.includes('pancakeswap.finance')
 
 export const encodeStr = (str?: string, showNum = 3, dotNum = 2) => {
   if (!str) return ''
