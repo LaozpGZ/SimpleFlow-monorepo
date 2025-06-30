@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { ReactNode } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 
-import PortfolioPageThumbnailIcon from '@/icons/pageNavigation/PortfolioPageThumbnailIcon'
+import BackpackIcon from '@/icons/pageNavigation/BackpackIcon'
 import { colors } from '@/theme/cssVariables'
 import { shrinkToValue } from '@/utils/shrinkToValue'
 import { pageRoutePathnames } from '@/utils/config/routers'
@@ -45,7 +45,7 @@ export function MobileBottomNavbar() {
       <BottomNavbarItem
         href={pageRoutePathnames.portfolio}
         text={t('My Positions')}
-        icon={(colorMode) => <PortfolioPageThumbnailIcon colorMode={colorMode} isActive={isPortfolioActive} />}
+        icon={() => <BackpackIcon color={isPortfolioActive ? colors.secondary : colors.textSubtle} />}
         isActive={isPortfolioActive}
       />
     </SimpleGrid>
