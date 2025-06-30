@@ -107,5 +107,19 @@ export const createWagmiWrapper =
     )
   }
 
+export const createWagmiReduxWrapper =
+  (initState = undefined) =>
+  ({ children }) => {
+    const queryClient = new QueryClient()
+
+    return (
+      <Provider store={makeStore(initState)} dehydratedState={{}}>
+        <WagmiProvider reconnectOnMount config={wagmiConfig}>
+          <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+        </WagmiProvider>
+      </Provider>
+    )
+  }
+
 // re-export everything
 export * from '@testing-library/react'
