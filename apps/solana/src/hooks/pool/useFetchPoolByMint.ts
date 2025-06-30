@@ -79,7 +79,7 @@ export default function useFetchPoolByMint<T extends PoolFetchType>(
 
   const resData = useMemo(
     // () => (data || []).reduce((acc, cur) => acc.concat(cur?.data || []).filter(Boolean), [] as ApiV3PoolInfoItem[]).map(formatAprData),
-    () => (data?.data || []).map((pool) => formatAprData(pool)),
+    () => ((data as ApiV3PoolInfoItem[]) || []).map((pool) => formatAprData(pool)),
     [data]
   ) as ReturnPoolType<T>[]
   const orgTokenList = useTokenStore((s) => s.displayTokenList)
