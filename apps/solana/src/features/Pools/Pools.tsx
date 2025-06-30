@@ -820,7 +820,7 @@ export default function Pools() {
                             onChange={(value) => {
                               const parts = value.split('_')
                               const order_ = parts[parts.length - 1]
-                              const key = parts.slice(0, -1).join('_')
+                              const key = value === 'default' ? 'default' : parts.slice(0, -1).join('_')
                               onChangeSortData(key)
                               setOrder(order_ === 'desc' ? 1 : 0)
                             }}
