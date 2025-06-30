@@ -33,7 +33,7 @@ export const getMerklLink = ({
 export const useMerklUserLink = (): string => {
   const { address: account } = useAccount()
   const link = useMemo(() => {
-    return `https://merkl.angle.money/user/${account ?? ''}`
+    return `https://app.merkl.xyz/users/${account ?? ''}`
   }, [account])
   return link
 }
