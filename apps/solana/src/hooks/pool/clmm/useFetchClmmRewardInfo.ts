@@ -181,7 +181,6 @@ export default function useFetchClmmRewardInfo({
         amountUSD: usdValueB
       })
     }
-    logMessage('rewardToken', rewardToken)
     return rewardToken
   }, [tokenFees, rewards, tokenPrices, poolInfo?.id])
 
