@@ -24,6 +24,11 @@ import { useEvent } from '@/hooks/useEvent'
 import { RpcPoolData } from '@/hooks/pool/clmm/useSubscribeClmmInfo'
 import { useDisclosure } from '@/hooks/useDelayDisclosure'
 import { panelCard } from '@/theme/cssBlocks'
+import {
+  logGTMPoolLiquiditySubCmfEvent,
+  logGTMPoolLiquiditySubSuccessEvent,
+  logGTMSolErrorLogEvent
+} from '@/utils/report/curstomGTMEventTracking'
 import { removeValidateSchema } from './validateSchema'
 
 export default function RemoveLiquidityModal({
@@ -45,6 +50,7 @@ export default function RemoveLiquidityModal({
 }) {
   const { t } = useTranslation()
   const isMobile = useAppStore((s) => s.isMobile)
+  const wallet = useAppStore((s) => s.wallet)
   const featureDisabled = useAppStore((s) => s.featureDisabled.removeConcentratedPosition)
   const removeLiquidityAct = useClmmStore((s) => s.removeLiquidityAct)
   const { getPriceAndAmount } = useClmmBalance({})
@@ -179,6 +185,7 @@ export default function RemoveLiquidityModal({
   useEffect(() => () => setClosePosition(true), [isOpen])
 
   const handleConfirm = useCallback(() => {
+    logGTMPoolLiquiditySubCmfEvent()
     setIsSending(true)
     removeLiquidityAct({
       poolInfo,
@@ -189,15 +196,36 @@ export default function RemoveLiquidityModal({
       needRefresh: percent <= 100,
       closePosition: percent === 100 ? closePosition : undefined,
       onSent: () => {
+        logGTMPoolLiquiditySubSuccessEvent({
+          walletAddress: wallet?.adapter.publicKey?.toString() ?? '',
+          token0: poolInfo.mintA.address,
+          token1: poolInfo.mintB.address,
+          token0Amt: minTokenAmount[0],
+          token1Amt: minTokenAmount[1],
+          feeTier: `${poolInfo.feeRate / 10000}%`
+        })
         setIsSending(false)
         setPercent(0)
         setTokenAmount(['', ''])
         setMinTokenAmount(['', ''])
         handleCloseModal()
       },
-      onError: () => setIsSending(false)
+      onError: (e) => {
+        let errorMsg = ''
+        try {
+          errorMsg = typeof e === 'string' ? e : 'msg' in e ? e.msg : e.toString()
+        } catch (e) {
+          //
+        }
+        logGTMSolErrorLogEvent({
+          action: 'Remove Liquidity Fail',
+          errorMsg,
+          errorCode: '0'
+        })
+        setIsSending(false)
+      }
     })
-  }, [closePosition, handleCloseModal, minTokenAmount, percent, poolInfo, position, removeLiquidityAct])
+  }, [closePosition, handleCloseModal, minTokenAmount, percent, poolInfo, position, removeLiquidityAct, wallet?.adapter.publicKey])
 
   const innerCardStyle = useMemo(
     () =>
