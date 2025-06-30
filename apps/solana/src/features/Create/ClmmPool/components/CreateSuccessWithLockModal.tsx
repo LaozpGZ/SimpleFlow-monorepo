@@ -18,7 +18,9 @@ export default function CreateSuccessWithLockModal({ isOpen, onClose }: { isOpen
               {t('Pool and position created successfully')}
             </Text>
             <Text color={colors.lightPurple} textAlign="center">
-              {t('Token creators can now burn/lock liquidity permanently while trading fees earned remain fully claimable.')}
+              {t(
+                'Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.'
+              )}
             </Text>
           </Flex>
         </ModalBody>
@@ -26,8 +28,8 @@ export default function CreateSuccessWithLockModal({ isOpen, onClose }: { isOpen
           <Button w="100%" onClick={() => routeToPage('pools')}>
             {t('Got it')}
           </Button>
-          <Button variant="ghost" w="100%" fontSize="sm" onClick={() => routeToPage('clmm-lock')}>
-            {t('Lock my liquidity')}
+          <Button variant="ghost" w="100%" fontSize="sm" onClick={() => routeToPage('positions')}>
+            {t('View my positions')}
           </Button>
         </ModalFooter>
       </ModalContent>

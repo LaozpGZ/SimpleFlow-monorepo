@@ -35,6 +35,10 @@ export type PageRouteConfigs = {
   'edit-farm': {
     queryProps?: MayFunction<EditFarmPageQuery, [{ currentPageQuery: ParsedUrlQuery }]>
   }
+  positions: {
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    queryProps?: MayFunction<{}, []>
+  }
   portfolio: {
     queryProps?: MayFunction<PortfolioPageQuery, [{ currentPageQuery: ParsedUrlQuery }]>
   }
@@ -68,7 +72,8 @@ const pageRoutePathnames: Record<keyof PageRouteConfigs, string> = {
   'increase-liquidity': '/liquidity/increase',
   'decrease-liquidity': '/liquidity/decrease',
   'create-farm': '/liquidity/create-farm',
-  'clmm-lock': '/clmm/lock'
+  'clmm-lock': '/clmm/lock',
+  positions: '/positions'
 }
 
 export type PageRouteName = keyof PageRouteConfigs
