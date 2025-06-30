@@ -70,7 +70,7 @@ function AppNavLayout({
 
         {/* nav routes */}
         <Desktop>
-          <HStack flexGrow={1} justify="start" overflow={['auto', 'visible']} gap={[0, 0, '15px']}>
+          <HStack flexGrow={1} justify="start" overflow={['auto', 'visible']} gap={[0, 0, '1vw']}>
             <RouteLink href={pageRoutePathnames.swap} isActive={pathname === pageRoutePathnames.swap} title={t('Swap')} />
             <RouteLink href={pageRoutePathnames.pools} isActive={pathname.includes(pageRoutePathnames.pools)} title={t('Liquidity')} />
             <RouteLink href={pageRoutePathnames.portfolio} isActive={pathname === pageRoutePathnames.portfolio} title={t('My Positions')} />
