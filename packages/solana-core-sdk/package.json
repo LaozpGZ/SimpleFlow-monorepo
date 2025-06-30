@@ -29,7 +29,7 @@
   },
   "scripts": {
     "lint": "eslint --config .eslintrc.js --no-eslintrc src/**/*.ts",
-    "test": "jest",
+    "test": "jest --passWithNoTests",
     "build-docs": "typedoc",
     "build-docs-watch": "typedoc --watch",
     "build-dist": "rm -rf dist && mkdir dist && pnpm build-docs",
