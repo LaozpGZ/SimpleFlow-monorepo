@@ -369,7 +369,7 @@ export default function RemoveLiquidityModal({
             onClick={handleConfirm}
           >
             {sending
-              ? `${t(position.liquidity.isZero() ? 'Close Position' : 'Withdraw Liquidity')}...`
+              ? `${position.liquidity.isZero() ? t('Close Position') : t('Withdraw Liquidity')}...`
               : featureDisabled
               ? t('Disabled')
               : position.liquidity.isZero()
