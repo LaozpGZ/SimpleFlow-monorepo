@@ -4281,5 +4281,6 @@
   "Fees ${timeBase}": "Fees ${timeBase}",
   "Please type the word \"confirm\" to continue with this swap.": "Please type the word \"confirm\" to continue with this swap.",
   "Computing": "Computing",
-  "Swap %amountA% %symbolA% for %amountB% %symbolB%.": "Swap %amountA% %symbolA% for %amountB% %symbolB%."
+  "Swap %amountA% %symbolA% for %amountB% %symbolB%.": "Swap %amountA% %symbolA% for %amountB% %symbolB%.",
+  "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool."
 }

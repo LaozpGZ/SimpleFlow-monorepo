@@ -7,6 +7,7 @@ import useResponsive from '@/hooks/useResponsive'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'
 import { getMintSymbol } from '@/utils/token'
+import Tooltip from '@/components/Tooltip'
 
 type PendingYieldProps = {
   pendingYield?: string
@@ -30,24 +31,32 @@ export default function PendingYield({ isLoading, hasReward, pendingYield, rewar
             ({pendingYield ?? '$0'})
           </Text>
         </HStack>
-        <Button
-          isLoading={isLoading}
-          isDisabled={!hasReward}
-          onClick={onHarvest}
-          width={['69px']}
-          height="9"
-          borderRadius="xl"
-          size="xs"
-          px={1}
-          fontSize="md"
-          variant="outline"
-          style={{
-            borderColor: colors.primary60,
-            color: colors.primary60
-          }}
+        <Tooltip
+          label={
+            hasReward
+              ? t('Harvest Rewards')
+              : t('No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.')
+          }
         >
-          {t('Harvest')}
-        </Button>
+          <Button
+            isLoading={isLoading}
+            isDisabled={!hasReward}
+            onClick={onHarvest}
+            width={['69px']}
+            height="9"
+            borderRadius="xl"
+            size="xs"
+            px={1}
+            fontSize="md"
+            variant="outline"
+            style={{
+              borderColor: colors.primary60,
+              color: colors.primary60
+            }}
+          >
+            {t('Harvest')}
+          </Button>
+        </Tooltip>
       </HStack>
 
       <Flex display="grid" gridTemplateColumns="repeat(1, 1fr)" columnGap={0} rowGap={2}>
