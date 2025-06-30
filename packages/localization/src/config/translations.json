@@ -4262,7 +4262,6 @@
   "Select quote token": "Select quote token",
   "Enter order size": "Enter order size",
   "Enter price tick": "Enter price tick",
-  "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.": "This tool is for advanced users. For detailed instructions, read the guide for Standard pools.",
   "Create a farm for any live pool": "Create a farm for any live pool",
   "You can add up to 2 reward tokens.": "You can add up to 2 reward tokens.",
   "Reward Token %index%": "Reward Token %index%",
@@ -4282,5 +4281,6 @@
   "Please type the word \"confirm\" to continue with this swap.": "Please type the word \"confirm\" to continue with this swap.",
   "Computing": "Computing",
   "Swap %amountA% %symbolA% for %amountB% %symbolB%.": "Swap %amountA% %symbolA% for %amountB% %symbolB%.",
-  "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool."
+  "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.",
+  "Create CLMM pool": "Create CLMM pool"
 }
