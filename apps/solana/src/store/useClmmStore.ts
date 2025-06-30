@@ -278,7 +278,7 @@ export const useClmmStore = createStore<ClmmState>(
             return { txId: '', buildData }
           })
           .catch((e) => {
-            txProps.onError?.()
+            txProps.onError?.(e)
             toastSubject.next({ ...meta, txError: e })
             return { txId: '' }
           })
@@ -350,7 +350,7 @@ export const useClmmStore = createStore<ClmmState>(
         const mintInfo = [poolInfo.mintA, poolInfo.mintB]
 
         if (!buildData) {
-          txProps.onError?.()
+          txProps.onError?.('build call data failed')
           return { txId: '' }
         }
 
@@ -405,7 +405,7 @@ export const useClmmStore = createStore<ClmmState>(
             })
             .catch((e) => {
               toastSubject.next({ txError: e, ...createPoolMeta })
-              txProps.onError?.()
+              txProps.onError?.(e)
               txProps.onFinally?.()
               return { txId: '' }
             })
@@ -428,13 +428,13 @@ export const useClmmStore = createStore<ClmmState>(
             return { txId, buildData }
           })
           .catch((e) => {
-            txProps.onError?.()
+            txProps.onError?.(e)
             toastSubject.next({ txError: e, ...meta })
             return { txId: '' }
           })
           .finally(txProps.onFinally)
       } catch (e: any) {
-        txProps.onError?.()
+        txProps.onError?.(e)
         txProps.onFinally?.()
         console.error(e.message)
         return { txId: '' }
@@ -562,14 +562,14 @@ export const useClmmStore = createStore<ClmmState>(
             return txId
           })
           .catch((e) => {
-            onError?.()
+            onError?.(e)
             toastSubject.next({ txError: e, ...meta })
             return ''
           })
           .finally(() => onFinally?.())
       } catch (err) {
         console.error(err)
-        onError?.()
+        onError?.(err)
         onFinally?.()
         return ''
       }
@@ -603,13 +603,13 @@ export const useClmmStore = createStore<ClmmState>(
             return txId
           })
           .catch((e) => {
-            txProps.onError?.()
+            txProps.onError?.(e)
             toastSubject.next({ txError: e, ...meta })
             return ''
           })
           .finally(txProps.onFinally)
-      } catch {
-        txProps.onError?.()
+      } catch (e) {
+        txProps.onError?.(e)
         txProps.onFinally?.()
         return ''
       }
@@ -670,14 +670,14 @@ export const useClmmStore = createStore<ClmmState>(
             return txId
           })
           .catch((e) => {
-            txProps.onError?.()
+            txProps.onError?.(e)
             toastSubject.next({ txError: e, ...meta })
             return ''
           })
           .finally(txProps.onFinally)
       } catch (err) {
         console.error(err)
-        txProps.onError?.()
+        txProps.onError?.(err)
         txProps.onFinally?.()
         return ''
       }
@@ -715,7 +715,7 @@ export const useClmmStore = createStore<ClmmState>(
           return txId
         })
         .catch((e) => {
-          txProps.onError?.()
+          txProps.onError?.(e)
           toastSubject.next({ txError: e, ...meta })
           return ''
         })
@@ -809,7 +809,7 @@ export const useClmmStore = createStore<ClmmState>(
           return txId
         })
         .catch((e) => {
-          txProps.onError?.()
+          txProps.onError?.(e)
           toastSubject.next({ txError: e, ...meta })
           return ''
         })
@@ -855,7 +855,7 @@ export const useClmmStore = createStore<ClmmState>(
               return txId
             })
             .catch((e) => {
-              txProps.onError?.()
+              txProps.onError?.(e)
               toastSubject.next({ txError: e, ...meta })
               return ''
             })
@@ -882,7 +882,7 @@ export const useClmmStore = createStore<ClmmState>(
               return txId
             })
             .catch((e) => {
-              txProps.onError?.()
+              txProps.onError?.(e)
               toastSubject.next({ txError: e, ...meta })
               return ''
             })
@@ -892,7 +892,7 @@ export const useClmmStore = createStore<ClmmState>(
       const builder0 = allBuildData[0].builder
       const res = await builder0.addInstruction(allBuildData[1].builder.AllTxData).build()
       if (!res) {
-        txProps.onError?.()
+        txProps.onError?.('build call data failed')
         txProps.onFinally?.()
         return ''
       }
@@ -908,7 +908,7 @@ export const useClmmStore = createStore<ClmmState>(
           return txId
         })
         .catch((e) => {
-          txProps.onError?.()
+          txProps.onError?.(e)
           toastSubject.next({ txError: e, ...meta })
           return ''
         })
@@ -1000,7 +1000,7 @@ export const useClmmStore = createStore<ClmmState>(
         })
         .catch((e) => {
           toastSubject.next({ txError: e, ...meta })
-          onError?.()
+          onError?.(e)
           return ''
         })
         .finally(onFinally)
