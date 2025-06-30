@@ -27,8 +27,8 @@ export function MobileBottomNavbar() {
       placeItems="center"
       height="54px"
       py={2}
-      bg={colors.backgroundLight}
-      borderTop={isLight ? `1px solid rgba(171, 196, 255, 0.2)` : `1px solid transparent`}
+      bg={colors.cardBg}
+      borderTop={`1px solid ${colors.cardBorder01}`}
     >
       <BottomNavbarItem
         href={pageRoutePathnames.swap}
