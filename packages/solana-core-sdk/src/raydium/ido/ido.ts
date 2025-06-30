@@ -92,33 +92,33 @@ export default class MarketV2 extends ModuleBase {
           instructions: [
             ...(hasUnClaimedProject
               ? [
-                makeClaimInstruction<"3">(
-                  { programId: poolConfigKey.programId },
-                  {
-                    idoId: poolConfigKey.id,
-                    authority: poolConfigKey.authority,
-                    poolTokenAccount: poolConfigKey.projectInfo.vault,
-                    userTokenAccount: userProjectTokenAccount!,
-                    userIdoInfo: new PublicKey(ownerInfo.userIdoInfo),
-                    userOwner: this.scope.ownerPubKey,
-                  },
-                ),
-              ]
+                  makeClaimInstruction<"3">(
+                    { programId: poolConfigKey.programId },
+                    {
+                      idoId: poolConfigKey.id,
+                      authority: poolConfigKey.authority,
+                      poolTokenAccount: poolConfigKey.projectInfo.vault,
+                      userTokenAccount: userProjectTokenAccount!,
+                      userIdoInfo: new PublicKey(ownerInfo.userIdoInfo),
+                      userOwner: this.scope.ownerPubKey,
+                    },
+                  ),
+                ]
               : []),
             ...(hasUnClaimedBuy
               ? [
-                makeClaimInstruction<"3">(
-                  { programId: new PublicKey(idoKeys.programId) },
-                  {
-                    idoId: poolConfigKey.id,
-                    authority: poolConfigKey.authority,
-                    poolTokenAccount: poolConfigKey.buyInfo.vault,
-                    userTokenAccount: userBuyTokenAccount!,
-                    userIdoInfo: new PublicKey(ownerInfo.userIdoInfo),
-                    userOwner: this.scope.ownerPubKey,
-                  },
-                ),
-              ]
+                  makeClaimInstruction<"3">(
+                    { programId: new PublicKey(idoKeys.programId) },
+                    {
+                      idoId: poolConfigKey.id,
+                      authority: poolConfigKey.authority,
+                      poolTokenAccount: poolConfigKey.buyInfo.vault,
+                      userTokenAccount: userBuyTokenAccount!,
+                      userIdoInfo: new PublicKey(ownerInfo.userIdoInfo),
+                      userOwner: this.scope.ownerPubKey,
+                    },
+                  ),
+                ]
               : []),
           ],
         })

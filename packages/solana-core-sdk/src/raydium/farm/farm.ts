@@ -538,8 +538,8 @@ export default class Farm extends ModuleBase {
       version === 6
         ? makeDepositInstructionV6(insParams)
         : version === 5
-          ? makeDepositInstructionV5(insParams)
-          : makeDepositInstructionV3(insParams);
+        ? makeDepositInstructionV5(insParams)
+        : makeDepositInstructionV3(insParams);
 
     const insType = {
       3: InstructionType.FarmV3Deposit,
@@ -726,10 +726,10 @@ export default class Farm extends ModuleBase {
       version === 6
         ? makeWithdrawInstructionV6(insParams)
         : version === 5
-          ? makeWithdrawInstructionV5(insParams)
-          : version === 4
-            ? makeWithdrawInstructionV4(insParams)
-            : makeWithdrawInstructionV3(insParams);
+        ? makeWithdrawInstructionV5(insParams)
+        : version === 4
+        ? makeWithdrawInstructionV4(insParams)
+        : makeWithdrawInstructionV3(insParams);
 
     const insType = {
       3: InstructionType.FarmV3Withdraw,
@@ -947,8 +947,8 @@ export default class Farm extends ModuleBase {
         version === 6
           ? makeWithdrawInstructionV6(insParams)
           : version === 5
-            ? makeWithdrawInstructionV5(insParams)
-            : makeWithdrawInstructionV3(insParams);
+          ? makeWithdrawInstructionV5(insParams)
+          : makeWithdrawInstructionV3(insParams);
 
       const insType = {
         3: InstructionType.FarmV3Withdraw,

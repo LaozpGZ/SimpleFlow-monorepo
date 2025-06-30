@@ -86,6 +86,6 @@ export const PlatformConfig = struct([
   seq(u8(), 64, "name"),
   seq(u8(), 256, "web"),
   seq(u8(), 256, "img"),
-  publicKey('cpConfigId'),
+  publicKey("cpConfigId"),
   seq(u8(), 224),
 ]);

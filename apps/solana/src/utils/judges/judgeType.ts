@@ -1,6 +1,6 @@
 export const isString = (v: unknown): v is string => typeof v === 'string'
 
-export const {isArray} = Array
+export const { isArray } = Array
 
 export function isFunction(value: unknown): value is (...args: any[]) => any {
   return typeof value === 'function'

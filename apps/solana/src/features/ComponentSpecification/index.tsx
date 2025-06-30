@@ -444,10 +444,10 @@ function SwitchExample() {
         <Switch id={componentId} defaultChecked />
       </FormControl>
       <FormControl display="flex" alignItems="center">
-        <FormLabel htmlFor={`${componentId  }1`} mb={0}>
+        <FormLabel htmlFor={`${componentId}1`} mb={0}>
           My Pools
         </FormLabel>
-        <Switch id={`${componentId  }1`} />
+        <Switch id={`${componentId}1`} />
       </FormControl>
     </ComponentExamplePanel>
   )

@@ -16,7 +16,7 @@ export interface SHOW_INFO {
   openTime: number;
   endTime: number;
 
-  project: typeof Utils1216.VERSION_PROJECT[number];
+  project: (typeof Utils1216.VERSION_PROJECT)[number];
 
   canClaim: boolean;
   canClaimErrorType: canClaimErrorType;

@@ -15,7 +15,7 @@ interface Props {
 
 const fetcher = ([connection, publicKeyList, name]: [Connection, string[], string]) => {
   logMessage('rpc: get multiple account info', name)
-  const {commitment} = useAppStore.getState()
+  const { commitment } = useAppStore.getState()
   return connection.getMultipleAccountsInfoAndContext(
     publicKeyList.map((publicKey) => ToPublicKey(publicKey)),
     { commitment }

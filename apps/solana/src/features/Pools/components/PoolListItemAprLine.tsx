@@ -17,7 +17,7 @@ export function PoolListItemAprLine({ aprData }: { aprData: AprData }) {
           <div
             key={idx}
             style={{
-              width: `${percent  }%`,
+              width: `${percent}%`,
               height: isMobile ? '6px' : '8px',
               borderRadius: '999px',
               backgroundColor: aprColors[idx]
@@ -34,7 +34,7 @@ export function PoolListItemAprLine({ aprData }: { aprData: AprData }) {
             backgroundColor: aprColors[0],
             filter: 'contrast(.6)'
           }}
-         />
+        />
       )}
     </Flex>
   )

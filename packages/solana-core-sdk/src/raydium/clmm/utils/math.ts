@@ -992,11 +992,11 @@ export abstract class SwapMath {
         reachTargetPrice && !baseInput
           ? swapStep.amountOut
           : LiquidityMath.getTokenAmountAFromLiquidity(
-            sqrtPriceX64Current,
-            swapStep.sqrtPriceX64Next,
-            liquidity,
-            false,
-          );
+              sqrtPriceX64Current,
+              swapStep.sqrtPriceX64Next,
+              liquidity,
+              false,
+            );
     }
 
     if (!baseInput && swapStep.amountOut.gt(amountRemaining.mul(NEGATIVE_ONE))) {

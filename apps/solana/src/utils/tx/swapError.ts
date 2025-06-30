@@ -5,9 +5,8 @@ export function isSwapSlippageError(result: SignatureResult): boolean {
     // @ts-expect-error force
     if ([38, 6022].includes(result.err?.InstructionError[1].Custom)) {
       return true
-    } 
-      return false
-    
+    }
+    return false
   } catch {
     return false
   }

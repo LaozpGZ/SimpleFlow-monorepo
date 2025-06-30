@@ -79,18 +79,18 @@ export type MakeSwapInstructionParam = {
 
   // ComputeAmountOutAmmLayout | ComputeAmountOutRouteLayout;
   swapInfo:
-  | (
-    | (Omit<ComputeAmountOutAmmLayout, "poolKey"> & {
-      poolKey: PoolKeys[];
-      poolInfo: ComputePoolType[];
-    })
-    | (Omit<ComputeAmountOutRouteLayout, "poolKey"> & {
-      poolKey: PoolKeys[];
-      poolInfo: ComputePoolType[];
-    })
-  ) & {
-    outputMint: PublicKey;
-  };
+    | (
+        | (Omit<ComputeAmountOutAmmLayout, "poolKey"> & {
+            poolKey: PoolKeys[];
+            poolInfo: ComputePoolType[];
+          })
+        | (Omit<ComputeAmountOutRouteLayout, "poolKey"> & {
+            poolKey: PoolKeys[];
+            poolInfo: ComputePoolType[];
+          })
+      ) & {
+        outputMint: PublicKey;
+      };
 };
 
 export interface PoolAccountInfoV4 {

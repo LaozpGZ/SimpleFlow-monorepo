@@ -105,7 +105,7 @@ export const farmStateV3Layout = new Proxy(
   {
     get(target, p, receiver): any {
       if (p === "decode")
-        return (...decodeParams: Parameters<typeof target["decode"]>) => {
+        return (...decodeParams: Parameters<(typeof target)["decode"]>) => {
           const originalResult = target.decode(...decodeParams);
           return {
             ...originalResult,
@@ -140,7 +140,7 @@ export const farmStateV5Layout = new Proxy(
   {
     get(target, p, receiver): any {
       if (p === "decode")
-        return (...decodeParams: Parameters<typeof target["decode"]>) => {
+        return (...decodeParams: Parameters<(typeof target)["decode"]>) => {
           const originalResult = target.decode(...decodeParams);
           return {
             ...originalResult,
@@ -190,7 +190,7 @@ export const farmStateV6Layout = new Proxy(
   {
     get(target, p, receiver): any {
       if (p === "decode")
-        return (...decodeParams: Parameters<typeof target["decode"]>) => {
+        return (...decodeParams: Parameters<(typeof target)["decode"]>) => {
           const originalResult = target.decode(...decodeParams);
           return {
             ...originalResult,

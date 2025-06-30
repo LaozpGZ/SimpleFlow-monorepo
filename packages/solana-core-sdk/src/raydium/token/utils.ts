@@ -118,19 +118,19 @@ export const toFeeConfig = (
 ): ExtensionsItem["feeConfig"] | undefined =>
   config
     ? {
-      ...config,
-      transferFeeConfigAuthority: config.transferFeeConfigAuthority.toBase58(),
-      withdrawWithheldAuthority: config.withdrawWithheldAuthority.toBase58(),
-      withheldAmount: config.withheldAmount.toString(),
-      olderTransferFee: {
-        ...config.olderTransferFee,
-        epoch: config.olderTransferFee.epoch.toString(),
-        maximumFee: config.olderTransferFee.maximumFee.toString(),
-      },
-      newerTransferFee: {
-        ...config.newerTransferFee,
-        epoch: config.newerTransferFee.epoch.toString(),
-        maximumFee: config.newerTransferFee.maximumFee.toString(),
-      },
-    }
+        ...config,
+        transferFeeConfigAuthority: config.transferFeeConfigAuthority.toBase58(),
+        withdrawWithheldAuthority: config.withdrawWithheldAuthority.toBase58(),
+        withheldAmount: config.withheldAmount.toString(),
+        olderTransferFee: {
+          ...config.olderTransferFee,
+          epoch: config.olderTransferFee.epoch.toString(),
+          maximumFee: config.olderTransferFee.maximumFee.toString(),
+        },
+        newerTransferFee: {
+          ...config.newerTransferFee,
+          epoch: config.newerTransferFee.epoch.toString(),
+          maximumFee: config.newerTransferFee.maximumFee.toString(),
+        },
+      }
     : undefined;

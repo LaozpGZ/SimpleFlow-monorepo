@@ -20,7 +20,7 @@ export function checkDocumentVisibility() {
     return isDocumentContentVisiable
   }
   const handleVisibilityChange = () => {
-    const {visibilityState} = document
+    const { visibilityState } = document
     isDocumentContentVisiable = visibilityState === 'visible'
   }
   document.addEventListener('visibilitychange', handleVisibilityChange, { passive: true })

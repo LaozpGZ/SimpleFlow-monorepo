@@ -255,8 +255,8 @@ export async function fetchMultipleFarmInfoAndUpdate({
         state.version === 6
           ? state.rewardMultiplier
           : state.rewardInfos.length === 1
-            ? tenBN.pow(new BN(9))
-            : tenBN.pow(new BN(15));
+          ? tenBN.pow(new BN(9))
+          : tenBN.pow(new BN(15));
 
       const pendingRewards = state.rewardInfos.map((rewardInfo, index) => {
         const rewardDebt = ledger.rewardDebts[index];

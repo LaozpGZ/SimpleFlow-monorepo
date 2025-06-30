@@ -172,15 +172,15 @@ export class PoolUtils {
       poolInfo.tickCurrent,
     ])
       ? TickArrayBitmapExtensionUtils.checkTickArrayIsInit(
-        TickQuery.getArrayStartIndex(poolInfo.tickCurrent, poolInfo.tickSpacing),
-        poolInfo.tickSpacing,
-        poolInfo.exBitmapInfo,
-      )
+          TickQuery.getArrayStartIndex(poolInfo.tickCurrent, poolInfo.tickSpacing),
+          poolInfo.tickSpacing,
+          poolInfo.exBitmapInfo,
+        )
       : TickUtils.checkTickArrayIsInitialized(
-        TickUtils.mergeTickArrayBitmap(poolInfo.tickArrayBitmap),
-        poolInfo.tickCurrent,
-        poolInfo.tickSpacing,
-      );
+          TickUtils.mergeTickArrayBitmap(poolInfo.tickArrayBitmap),
+          poolInfo.tickCurrent,
+          poolInfo.tickSpacing,
+        );
 
     if (isInitialized) {
       const { publicKey: address } = getPdaTickArrayAddress(poolInfo.programId, poolInfo.id, startIndex);
@@ -214,19 +214,19 @@ export class PoolUtils {
 
     const result: number[] = !zeroForOne
       ? TickUtils.searchLowBitFromStart(
-        poolInfo.tickArrayBitmap,
-        poolInfo.exBitmapInfo,
-        currentOffset - 1,
-        1,
-        poolInfo.tickSpacing,
-      )
+          poolInfo.tickArrayBitmap,
+          poolInfo.exBitmapInfo,
+          currentOffset - 1,
+          1,
+          poolInfo.tickSpacing,
+        )
       : TickUtils.searchHightBitFromStart(
-        poolInfo.tickArrayBitmap,
-        poolInfo.exBitmapInfo,
-        currentOffset + 1,
-        1,
-        poolInfo.tickSpacing,
-      );
+          poolInfo.tickArrayBitmap,
+          poolInfo.exBitmapInfo,
+          currentOffset + 1,
+          1,
+          poolInfo.tickSpacing,
+        );
 
     return result.length > 0 ? { isExist: true, nextStartIndex: result[0] } : { isExist: false, nextStartIndex: 0 };
   }
@@ -234,11 +234,11 @@ export class PoolUtils {
   public static nextInitializedTickArrayStartIndex(
     poolInfo:
       | {
-        tickCurrent: number;
-        tickSpacing: number;
-        tickArrayBitmap: BN[];
-        exBitmapInfo: TickArrayBitmapExtensionType;
-      }
+          tickCurrent: number;
+          tickSpacing: number;
+          tickArrayBitmap: BN[];
+          exBitmapInfo: TickArrayBitmapExtensionType;
+        }
       | ClmmPoolInfo,
     lastTickArrayStartIndex: number,
     zeroForOne: boolean,
