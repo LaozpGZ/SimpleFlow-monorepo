@@ -1,20 +1,15 @@
 import { ChainId } from '@pancakeswap/chains'
-import { Currency, CurrencyAmount, Price, TradeType } from '@pancakeswap/sdk'
-import { SmartRouterTrade } from '@pancakeswap/smart-router'
-import { CAKE, STABLE_COIN } from '@pancakeswap/tokens'
+import { Currency, getCurrencyAddress, Price } from '@pancakeswap/sdk'
+import { STABLE_COIN } from '@pancakeswap/tokens'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
-import { useCakePrice } from 'hooks/useCakePrice'
-import { useAtomValue } from 'jotai'
-import { bestAMMTradeFromQuoterWorkerAtom } from 'quoter/atom/bestAMMTradeFromQuoterWorkerAtom'
-import { multicallGasLimitAtom } from 'quoter/hook/useMulticallGasLimit'
-import { createQuoteQuery } from 'quoter/utils/createQuoteQuery'
-import { useMemo } from 'react'
-import { useCurrentBlock } from 'state/block/hooks'
-import { warningSeverity } from 'utils/exchange'
+import { SLOW_INTERVAL } from 'config/constants'
+import { atom, useAtom, useAtomValue } from 'jotai'
+import { atomFamily } from 'jotai/utils'
+import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
+import { useEffect, useMemo } from 'react'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { computeTradePriceBreakdown } from 'views/Swap/V3Swap/utils/exchange'
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import { useActiveChainId } from './useActiveChainId'
-import { useCurrencyUsdPrice } from './useCurrencyUsdPrice'
 
 type UseStablecoinPriceConfig = {
   enabled?: boolean
@@ -25,6 +20,60 @@ const DEFAULT_CONFIG: UseStablecoinPriceConfig = {
   hideIfPriceImpactTooHigh: false,
 }
 
+const versionAtom = atomFamily((_: string) => atom(Math.floor(Date.now() / SLOW_INTERVAL)))
+
+const queryStablecoinPrice = async (currency: Currency, overrideChainId?: number) => {
+  if (!currency) throw new Error('No currency')
+  const chainId = currency.chainId || overrideChainId
+  if (!chainId) throw new Error('No chainId provided')
+  const stableCoin = chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
+  if (!stableCoin) throw new Error('No stable coin')
+  const params = new URLSearchParams({ chainId: String(chainId) })
+  if (currency.isNative) {
+    params.set('native', 'true')
+  } else {
+    params.set('address', currency.wrapped.address)
+  }
+  const res = await fetch(`/api/token/price?${params.toString()}`)
+  if (!res.ok) {
+    throw new Error('request failed')
+  }
+  const json = await res.json()
+  return json.priceUSD as number | undefined
+}
+
+interface StableCoinPriceParams {
+  currency?: Currency
+  chainId?: number
+  enabled?: boolean
+}
+
+const getKey = (params: { currency?: Currency; chainId?: number; enabled?: boolean }) =>
+  `${params.currency ? getCurrencyAddress(params.currency) : ''}:${params.chainId}:${params.enabled ?? true}`
+
+const stableCoinPriceAtom = atomFamily(
+  (params: StableCoinPriceParams) => {
+    return atomWithLoadable(
+      async (get) => {
+        const enabled = params.enabled ?? true
+        if (!params.currency || !enabled) {
+          return undefined
+        }
+        get(versionAtom(getKey(params)))
+        return queryStablecoinPrice(params.currency, params.chainId)
+      },
+      {
+        placeHolderBehavior: 'stale',
+      },
+    )
+  },
+  (a, b) => {
+    const hashA = getKey(a)
+    const hashB = getKey(b)
+    return hashA === hashB
+  },
+)
+
 export function useStablecoinPrice(
   currency?: Currency | null,
   config: UseStablecoinPriceConfig = DEFAULT_CONFIG,
@@ -34,92 +83,55 @@ export function useStablecoinPrice(
   const currentChainId = overrideChainId || activeChainId
 
   const chainId = currency?.chainId || activeChainId
-  const { enabled, hideIfPriceImpactTooHigh } = { ...DEFAULT_CONFIG, ...config }
+  const { enabled } = { ...DEFAULT_CONFIG, ...config }
 
-  const isCake = Boolean(chainId && currency && CAKE[chainId] && currency.wrapped.equals(CAKE[chainId]))
-  const cakePrice = useCakePrice({ enabled: Boolean(isCake && enabled) })
   const stableCoin = chainId && chainId in ChainId ? STABLE_COIN[chainId as ChainId] : undefined
 
-  const isStableCoin = currency && stableCoin && currency.wrapped.equals(stableCoin)
+  const shouldEnabled = Boolean(currency && enabled && currentChainId === chainId)
 
-  const shouldEnabled = Boolean(
-    currency && stableCoin && enabled && currentChainId === chainId && !isCake && !isStableCoin,
+  const version = Math.floor(Date.now() / SLOW_INTERVAL)
+
+  const atomParams = useMemo(
+    () => ({
+      currency: currency || undefined,
+      chainId,
+      enabled,
+    }),
+    [currency, chainId, enabled],
   )
 
-  const { data: priceFromApi } = useCurrencyUsdPrice(currency, {
-    enabled: shouldEnabled,
-  })
+  const atomKey = useMemo(() => getKey(atomParams), [atomParams])
 
-  const amountOut = useMemo(
-    () => (stableCoin ? CurrencyAmount.fromRawAmount(stableCoin, 5 * 10 ** stableCoin.decimals) : undefined),
-    [stableCoin],
-  )
+  const [, setVersion] = useAtom(versionAtom(atomKey))
 
-  const blockNumber = useCurrentBlock()
-  const gasLimit = useAtomValue(multicallGasLimitAtom(activeChainId))
-  const priceQuoter = createQuoteQuery({
-    amount: amountOut,
-    currency: currency ?? undefined,
-    baseCurrency: stableCoin,
-    tradeType: TradeType.EXACT_OUTPUT,
-    maxSplits: 0,
-    v2Swap: true,
-    v3Swap: true,
-    xEnabled: false,
-    infinitySwap: false,
-    speedQuoteEnabled: true,
-    routeKey: 'stable-coin-price',
-    blockNumber,
-    gasLimit,
-  })
-  const quoteResult = useAtomValue(bestAMMTradeFromQuoterWorkerAtom(priceQuoter))
-  const trade = quoteResult.map((x) => x.trade).unwrapOr(undefined)
+  const coinPrice = useAtomValue(stableCoinPriceAtom(atomParams))
+
+  useEffect(() => {
+    setVersion(version)
+  }, [version, setVersion])
 
   const price = useMemo(() => {
-    if (!currency || !stableCoin || !enabled) {
+    if (!coinPrice || !currency || !stableCoin || !shouldEnabled) {
       return undefined
     }
 
-    if (isCake && cakePrice) {
-      return new Price(
-        currency,
-        stableCoin,
-        1 * 10 ** currency.decimals,
-        getFullDecimalMultiplier(stableCoin.decimals).times(cakePrice.toFixed(stableCoin.decimals)).toString(),
-      )
+    const isValidLoadable = coinPrice.isJust() || coinPrice.isPending()
+
+    if (!isValidLoadable) {
+      return undefined
     }
 
-    // handle stable coin
-    if (isStableCoin) {
-      return new Price(stableCoin, stableCoin, '1', '1')
-    }
+    const priceUSD = coinPrice.isJust() ? coinPrice.unwrap() : coinPrice.value
 
-    if (priceFromApi) {
-      return new Price(
-        currency,
-        stableCoin,
-        1 * 10 ** currency.decimals,
-        getFullDecimalMultiplier(stableCoin.decimals).times(priceFromApi.toFixed(stableCoin.decimals)).toString(),
-      )
-    }
+    if (isUndefinedOrNull(priceUSD)) return undefined
 
-    if (trade) {
-      const { inputAmount, outputAmount } = trade
-
-      // if price impact is too high, don't show price
-      if (hideIfPriceImpactTooHigh) {
-        const { priceImpactWithoutFee } = computeTradePriceBreakdown(trade as unknown as SmartRouterTrade<TradeType>)
-
-        if (!priceImpactWithoutFee || warningSeverity(priceImpactWithoutFee) > 2) {
-          return undefined
-        }
-      }
-
-      return new Price(currency, stableCoin, inputAmount.quotient, outputAmount.quotient)
-    }
-
-    return undefined
-  }, [currency, stableCoin, enabled, isCake, cakePrice, isStableCoin, priceFromApi, hideIfPriceImpactTooHigh, trade])
+    return new Price(
+      currency,
+      stableCoin,
+      1 * 10 ** currency.decimals,
+      getFullDecimalMultiplier(stableCoin.decimals).times(priceUSD!.toFixed(stableCoin.decimals)).toString(),
+    )
+  }, [coinPrice, currency, stableCoin, shouldEnabled])
 
   if (price?.denominator === 0n) {
     return undefined
@@ -134,7 +146,7 @@ export const useStablecoinPriceAmount = (
   config?: UseStablecoinPriceConfig,
   overrideChainId?: number,
 ): number | undefined => {
-  const stablePrice = useStablecoinPrice(currency, { enabled: !!currency, ...config }, overrideChainId)
+  const stablePrice = useStablecoinPrice(currency, { enabled: Boolean(currency && amount), ...config }, overrideChainId)
 
   return useMemo(() => {
     if (amount) {

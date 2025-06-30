@@ -28,6 +28,7 @@ import { shortenAddress } from 'views/V3Info/utils'
 import { useBridgeStatus } from '../../hooks/useBridgeStatus'
 import { ActiveBridgeOrderMetadata, BridgeResponseStatusData, BridgeStatus, Command } from '../../types'
 import { customBridgeStatus } from '../../utils/customBridgeStatus'
+import { useOrderStatusTrackingStateMachine } from '../hooks/useOrderStatusTrackingStateMachine'
 import { activeBridgeOrderMetadataAtom } from '../state/orderDataState'
 import { OrderDetailsPanel } from './OrderDetailsPanel'
 
@@ -151,7 +152,12 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
             resultAmount = lastExecutedCommand.metadata.inputAmount
           } else {
             resultTokenChainId = lastExecutedCommand.metadata.destinationChainId
-            resultTokenAddress = lastExecutedCommand.metadata.outputToken
+
+            // If last command is bridge, safely using bridgeStatus.outputToken
+            // instead of lastExecutedCommand.metadata.outputToken
+            // because in native bridge case, lastExecutedCommand.metadata.outputToken will be WETH
+            // while bridgeStatus.outputToken will be the native token
+            resultTokenAddress = bridgeStatus.outputToken
             resultAmount = lastExecutedCommand.metadata.outputAmount
           }
 
@@ -194,6 +200,9 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   }, [bridgeStatus, order?.trade.outputAmount])
 
   const status = customBridgeStatus(bridgeStatus)
+
+  // overrideActiveOrderMetadata is false, mean it's on the confirm modal
+  useOrderStatusTrackingStateMachine(!overrideActiveOrderMetadata ? status : undefined)
 
   const middleIcon = useMemo(() => {
     switch (status) {

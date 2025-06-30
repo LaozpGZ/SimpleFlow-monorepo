@@ -12,7 +12,6 @@ import {
   Message,
   MessageText,
   ScanLink,
-  Spinner,
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
@@ -20,6 +19,7 @@ import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 
 import Page from 'components/Layout/Page'
 import { TabToggle, TabToggleGroup } from 'components/TabToggle'
+import TextWithSkeleton from 'components/TextWithSkeleton'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import dayjs from 'dayjs'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -29,20 +29,18 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { getBlockExploreLink } from 'utils'
 import { formatAmount } from 'utils/formatInfoNumbers'
 
+import { chainNames } from '@pancakeswap/chains'
 import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import truncateHash from '@pancakeswap/utils/truncateHash'
+import { tokenInfoV3PageDataAtom } from 'edge/tokenInfoPageDataAtom'
 import { useAtomValue } from 'jotai'
-import { atomFamily } from 'jotai/utils'
-import isEqual from 'lodash/isEqual'
 import { ChainLinkSupportChains, multiChainId, multiChainScan } from 'state/info/constant'
 import { useChainNameByQuery, useMultiChainPath, useStableSwapPath } from 'state/info/hooks'
-import { PoolDataForView, TokenChartEntry, TokenDataForView, Transaction } from 'state/info/types'
+import { PoolDataForView } from 'state/info/types'
 import { styled } from 'styled-components'
 import { getTokenNameAlias, getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import useCMCLink from 'views/Info/hooks/useCMCLink'
-import { chainNames } from '@pancakeswap/chains'
-import { atomWithAsyncRetry } from 'utils/atomWithAsyncRetry'
 import BarChart from '../components/BarChart/alt'
 import { LocalLoader } from '../components/Loader'
 import Percent from '../components/Percent'
@@ -80,30 +78,6 @@ enum ChartView {
   PRICE,
 }
 
-interface TokenPageParams {
-  address: string
-  chain?: string
-}
-
-interface TokenQueryResponse {
-  token: TokenDataForView | undefined
-  pool: PoolDataForView[] | undefined
-  transactions: Transaction[] | undefined
-  charts: TokenChartEntry[] | undefined
-}
-
-const tokenPageDataAtom = atomFamily((params: TokenPageParams) => {
-  return atomWithAsyncRetry({
-    asyncFn: async () => {
-      const resp = await fetch(`/api/token/v3/${params.chain || 'bsc'}/${params.address}`)
-      if (!resp.ok) throw new Error('Fetch error')
-      const json = await resp.json()
-      return json as TokenQueryResponse
-    },
-    fallbackValue: { token: undefined, pool: undefined, transactions: undefined, charts: undefined },
-  })
-}, isEqual)
-
 const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, chain: _chain }) => {
   const { isXs, isSm } = useMatchBreakpoints()
   const { chainId } = useActiveChainId()
@@ -123,15 +97,17 @@ const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, cha
     pool: poolDatas,
     transactions,
     charts: chartData,
+    loading,
   } = useAtomValue(
-    tokenPageDataAtom({
+    tokenInfoV3PageDataAtom({
       address,
       chain,
+      type: 'v3',
     }),
   )
 
   const formatPoolData = useMemo(() => {
-    return poolDatas?.filter((pool) => !isUndefinedOrNull(pool)) ?? []
+    return (poolDatas?.filter((pool) => !isUndefinedOrNull(pool)) ?? []) as any as PoolDataForView[]
   }, [poolDatas])
 
   const formattedTvlData = useMemo(() => {
@@ -188,202 +164,178 @@ const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, cha
 
   return (
     <Page>
-      {tokenData ? (
-        !tokenData.exists ? (
+      <AutoColumn gap="32px">
+        <AutoColumn gap="32px">
+          <Flex justifyContent="space-between" mb="24px" flexDirection={['column', 'column', 'row']}>
+            <Breadcrumbs mb="32px">
+              <NextLinkFromReactRouter to={`/${v3InfoPath}${chainPath}${infoTypeParam}`}>
+                <Text color="primary">{t('Info')}</Text>
+              </NextLinkFromReactRouter>
+              <NextLinkFromReactRouter to={`/${v3InfoPath}${chainPath}/tokens${infoTypeParam}`}>
+                <Text color="primary">{t('Tokens')}</Text>
+              </NextLinkFromReactRouter>
+              <Flex>
+                <Text mr="8px">{tokenSymbol}</Text>
+                <Text>{`(${truncateHash(address)})`}</Text>
+              </Flex>
+            </Breadcrumbs>
+            <Flex justifyContent={[null, null, 'flex-end']} mt={['8px', '8px', 0]} alignItems="center">
+              <ScanLink
+                mr="8px"
+                color="primary"
+                useBscCoinFallback={ChainLinkSupportChains.includes(multiChainId[chainName])}
+                href={getBlockExploreLink(address, 'address', multiChainId[chainName])}
+              >
+                {t('View on %site%', { site: multiChainScan[chainName] })}
+              </ScanLink>
+              {cmcLink && (
+                <StyledCMCLink href={cmcLink} rel="noopener noreferrer nofollow" target="_blank" title="CoinMarketCap">
+                  <Image src="/images/CMC-logo.svg" height={22} width={22} alt={t('View token on CoinMarketCap')} />
+                </StyledCMCLink>
+              )}
+              <CopyButton text={address} tooltipMessage={t('Token address copied')} />
+              {/* <SaveIcon fill={watchlistTokens.includes(address)} onClick={() => addWatchlistToken(address)} /> */}
+            </Flex>
+          </Flex>
+          <Flex justifyContent="space-between" flexDirection={['column', 'column', 'column', 'row']}>
+            <Flex flexDirection="column" mb={['8px', null]}>
+              <Flex alignItems="center">
+                <CurrencyLogo size="32px" address={address} chainName={chainName} />
+                <Text
+                  ml="12px"
+                  bold
+                  lineHeight="0.7"
+                  fontSize={isXs || isSm ? '24px' : '40px'}
+                  id="info-token-name-title"
+                >
+                  {tokenName}
+                </Text>
+                <Text ml="12px" lineHeight="1" color="textSubtle" fontSize={isXs || isSm ? '14px' : '20px'}>
+                  ({tokenSymbol})
+                </Text>
+              </Flex>
+              <Flex mt="8px" ml="46px" alignItems="center">
+                <TextWithSkeleton mr="16px" bold fontSize="24px" loading={loading} width={80}>
+                  {tokenData ? `$${formatAmount(tokenData.priceUSD, { notation: 'standard' })}` : ''}
+                </TextWithSkeleton>
+                {!loading && <Percent value={tokenData?.priceUSDChange} fontWeight={600} />}
+              </Flex>
+            </Flex>
+            <Flex>
+              <NextLinkFromReactRouter to={`/add/${address}?chain=${CHAIN_QUERY_NAME[chainId!]}`}>
+                <Button mr="8px" variant="secondary">
+                  {t('Add Liquidity')}
+                </Button>
+              </NextLinkFromReactRouter>
+              <NextLinkFromReactRouter
+                to={`/swap?outputCurrency=${address}&chain=${CHAIN_QUERY_NAME[multiChainId[chainName]]}`}
+              >
+                <Button>{t('Trade')}</Button>
+              </NextLinkFromReactRouter>
+            </Flex>
+          </Flex>
+        </AutoColumn>
+        {tokenData && tokenData.tvlUSD <= 0 && (
+          <Message variant="warning">
+            <MessageText fontSize="16px">{t('TVL is currently too low to represent the data correctly')}</MessageText>
+          </Message>
+        )}
+        <ContentLayout>
           <Card>
-            <Box p="16px">
-              <Text>
-                {t('No pair has been created with this token yet. Create one')}
-                <NextLinkFromReactRouter style={{ display: 'inline', marginLeft: '6px' }} to={`/add/${address}`}>
-                  {t('here.')}
-                </NextLinkFromReactRouter>
+            <Box p="24px">
+              <Text bold small color="secondary" fontSize="12px" textTransform="uppercase">
+                {t('TVL')}
               </Text>
+              <TextWithSkeleton bold fontSize="24px" width={80} loading={loading}>
+                {tokenData ? `$${formatAmount(tokenData.tvlUSD)}` : ''}
+              </TextWithSkeleton>
+              {!loading ? <Percent value={tokenData?.tvlUSDChange} /> : null}
+
+              <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
+                {t('Volume 24H')}
+              </Text>
+              <TextWithSkeleton bold fontSize="24px" textTransform="uppercase" width={80} loading={loading}>
+                {tokenData ? `$${formatAmount(tokenData.volumeUSD)}` : ''}
+              </TextWithSkeleton>
+              {!loading ? <Percent value={tokenData?.volumeUSDChange} /> : null}
+
+              <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
+                {t('Volume 7D')}
+              </Text>
+              <TextWithSkeleton bold fontSize="24px" width={80} loading={loading}>
+                {tokenData ? `$${formatAmount(tokenData.volumeUSDWeek)}` : ''}
+              </TextWithSkeleton>
+
+              <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
+                {t('Transactions 24H')}
+              </Text>
+              <TextWithSkeleton bold fontSize="24px" width={80} loading={loading}>
+                {tokenData ? formatAmount(tokenData.txCount, { isInteger: true }) : ''}
+              </TextWithSkeleton>
             </Box>
           </Card>
-        ) : (
-          <AutoColumn gap="32px">
-            <AutoColumn gap="32px">
-              <Flex justifyContent="space-between" mb="24px" flexDirection={['column', 'column', 'row']}>
-                <Breadcrumbs mb="32px">
-                  <NextLinkFromReactRouter to={`/${v3InfoPath}${chainPath}${infoTypeParam}`}>
-                    <Text color="primary">{t('Info')}</Text>
-                  </NextLinkFromReactRouter>
-                  <NextLinkFromReactRouter to={`/${v3InfoPath}${chainPath}/tokens${infoTypeParam}`}>
-                    <Text color="primary">{t('Tokens')}</Text>
-                  </NextLinkFromReactRouter>
-                  <Flex>
-                    <Text mr="8px">{tokenSymbol}</Text>
-                    <Text>{`(${truncateHash(address)})`}</Text>
-                  </Flex>
-                </Breadcrumbs>
-                <Flex justifyContent={[null, null, 'flex-end']} mt={['8px', '8px', 0]} alignItems="center">
-                  <ScanLink
-                    mr="8px"
-                    color="primary"
-                    useBscCoinFallback={ChainLinkSupportChains.includes(multiChainId[chainName])}
-                    href={getBlockExploreLink(address, 'address', multiChainId[chainName])}
-                  >
-                    {t('View on %site%', { site: multiChainScan[chainName] })}
-                  </ScanLink>
-                  {cmcLink && (
-                    <StyledCMCLink
-                      href={cmcLink}
-                      rel="noopener noreferrer nofollow"
-                      target="_blank"
-                      title="CoinMarketCap"
-                    >
-                      <Image src="/images/CMC-logo.svg" height={22} width={22} alt={t('View token on CoinMarketCap')} />
-                    </StyledCMCLink>
+          <Card>
+            <TabToggleGroup>
+              <TabToggle isActive={view === ChartView.VOL} onClick={() => setView(ChartView.VOL)}>
+                <Text>{t('Volume')}</Text>
+              </TabToggle>
+              <TabToggle isActive={view === ChartView.TVL} onClick={() => setView(ChartView.TVL)}>
+                <Text>{t('Liquidity')}</Text>
+              </TabToggle>
+              <TabToggle isActive={view === ChartView.PRICE} onClick={() => setView(ChartView.PRICE)}>
+                <Text>{t('Price')}</Text>
+              </TabToggle>
+            </TabToggleGroup>
+            {tokenData && (
+              <Flex flexDirection="column" px="24px" pt="24px">
+                {latestValue
+                  ? formatDollarAmount(latestValue, 2)
+                  : view === ChartView.VOL
+                  ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
+                  : view === ChartView.TVL
+                  ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
+                  : formatDollarAmount(tokenData.priceUSD, 2)}
+                <Text small color="secondary">
+                  {valueLabel ? (
+                    <MonoSpace>{valueLabel}</MonoSpace>
+                  ) : (
+                    <MonoSpace>{dayjs.utc().format('MMM D, YYYY')}</MonoSpace>
                   )}
-                  <CopyButton text={address} tooltipMessage={t('Token address copied')} />
-                  {/* <SaveIcon fill={watchlistTokens.includes(address)} onClick={() => addWatchlistToken(address)} /> */}
-                </Flex>
+                </Text>
               </Flex>
-              <Flex justifyContent="space-between" flexDirection={['column', 'column', 'column', 'row']}>
-                <Flex flexDirection="column" mb={['8px', null]}>
-                  <Flex alignItems="center">
-                    <CurrencyLogo size="32px" address={address} chainName={chainName} />
-                    <Text
-                      ml="12px"
-                      bold
-                      lineHeight="0.7"
-                      fontSize={isXs || isSm ? '24px' : '40px'}
-                      id="info-token-name-title"
-                    >
-                      {tokenName}
-                    </Text>
-                    <Text ml="12px" lineHeight="1" color="textSubtle" fontSize={isXs || isSm ? '14px' : '20px'}>
-                      ({tokenSymbol})
-                    </Text>
-                  </Flex>
-                  <Flex mt="8px" ml="46px" alignItems="center">
-                    <Text mr="16px" bold fontSize="24px">
-                      ${formatAmount(tokenData.priceUSD, { notation: 'standard' })}
-                    </Text>
-                    <Percent value={tokenData.priceUSDChange} fontWeight={600} />
-                  </Flex>
-                </Flex>
-                <Flex>
-                  <NextLinkFromReactRouter to={`/add/${address}?chain=${CHAIN_QUERY_NAME[chainId!]}`}>
-                    <Button mr="8px" variant="secondary">
-                      {t('Add Liquidity')}
-                    </Button>
-                  </NextLinkFromReactRouter>
-                  <NextLinkFromReactRouter
-                    to={`/swap?outputCurrency=${address}&chain=${CHAIN_QUERY_NAME[multiChainId[chainName]]}`}
-                  >
-                    <Button>{t('Trade')}</Button>
-                  </NextLinkFromReactRouter>
-                </Flex>
-              </Flex>
-            </AutoColumn>
-            {tokenData.tvlUSD <= 0 && (
-              <Message variant="warning">
-                <MessageText fontSize="16px">
-                  {t('TVL is currently too low to represent the data correctly')}
-                </MessageText>
-              </Message>
             )}
-            <ContentLayout>
-              <Card>
-                <Box p="24px">
-                  <Text bold small color="secondary" fontSize="12px" textTransform="uppercase">
-                    {t('TVL')}
-                  </Text>
-                  <Text bold fontSize="24px">
-                    ${formatAmount(tokenData.tvlUSD)}
-                  </Text>
-                  <Percent value={tokenData.tvlUSDChange} />
-
-                  <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
-                    {t('Volume 24H')}
-                  </Text>
-                  <Text bold fontSize="24px" textTransform="uppercase">
-                    ${formatAmount(tokenData.volumeUSD)}
-                  </Text>
-                  <Percent value={tokenData.volumeUSDChange} />
-
-                  <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
-                    {t('Volume 7D')}
-                  </Text>
-                  <Text bold fontSize="24px">
-                    ${formatAmount(tokenData.volumeUSDWeek)}
-                  </Text>
-
-                  <Text mt="24px" bold color="secondary" fontSize="12px" textTransform="uppercase">
-                    {t('Transactions 24H')}
-                  </Text>
-                  <Text bold fontSize="24px">
-                    {formatAmount(tokenData.txCount, { isInteger: true })}
-                  </Text>
-                </Box>
-              </Card>
-              <Card>
-                <TabToggleGroup>
-                  <TabToggle isActive={view === ChartView.VOL} onClick={() => setView(ChartView.VOL)}>
-                    <Text>{t('Volume')}</Text>
-                  </TabToggle>
-                  <TabToggle isActive={view === ChartView.TVL} onClick={() => setView(ChartView.TVL)}>
-                    <Text>{t('Liquidity')}</Text>
-                  </TabToggle>
-                  <TabToggle isActive={view === ChartView.PRICE} onClick={() => setView(ChartView.PRICE)}>
-                    <Text>{t('Price')}</Text>
-                  </TabToggle>
-                </TabToggleGroup>
-                <Flex flexDirection="column" px="24px" pt="24px">
-                  {latestValue
-                    ? formatDollarAmount(latestValue, 2)
-                    : view === ChartView.VOL
-                    ? formatDollarAmount(formattedVolumeData[formattedVolumeData.length - 1]?.value)
-                    : view === ChartView.TVL
-                    ? formatDollarAmount(formattedTvlData[formattedTvlData.length - 1]?.value)
-                    : formatDollarAmount(tokenData.priceUSD, 2)}
-                  <Text small color="secondary">
-                    {valueLabel ? (
-                      <MonoSpace>{valueLabel}</MonoSpace>
-                    ) : (
-                      <MonoSpace>{dayjs.utc().format('MMM D, YYYY')}</MonoSpace>
-                    )}
-                  </Text>
-                </Flex>
-                <Box height="320px">
-                  {view === ChartView.TVL ? (
-                    <LineChart
-                      data={formattedTvlData}
-                      color={isDark ? '#9A6AFF' : '#7A6EAA'}
-                      minHeight={340}
-                      value={latestValue}
-                      label={valueLabel}
-                      setValue={setLatestValue}
-                      setLabel={setValueLabel}
-                    />
-                  ) : view === ChartView.VOL ? (
-                    <BarChart
-                      data={formattedVolumeData}
-                      color="#1FC7D4"
-                      minHeight={340}
-                      value={latestValue}
-                      label={valueLabel}
-                      setValue={setLatestValue}
-                      setLabel={setValueLabel}
-                    />
-                  ) : view === ChartView.PRICE ? (
-                    <CandleChart data={adjustedToCurrent} setValue={setLatestValue} setLabel={setValueLabel} />
-                  ) : null}
-                </Box>
-              </Card>
-            </ContentLayout>
-            <Heading>{t('Pairs')}</Heading>
-            <PoolTable poolDatas={formatPoolData} />
-            <Heading>{t('Transactions')}</Heading>
-            {transactions ? <TransactionTable transactions={transactions} /> : <LocalLoader fill={false} />}
-          </AutoColumn>
-        )
-      ) : (
-        <Flex mt="80px" justifyContent="center">
-          <Spinner />
-        </Flex>
-      )}
+            <Box height="320px">
+              {view === ChartView.TVL ? (
+                <LineChart
+                  data={formattedTvlData}
+                  color={isDark ? '#9A6AFF' : '#7A6EAA'}
+                  minHeight={340}
+                  value={latestValue}
+                  label={valueLabel}
+                  setValue={setLatestValue}
+                  setLabel={setValueLabel}
+                />
+              ) : view === ChartView.VOL ? (
+                <BarChart
+                  data={formattedVolumeData}
+                  color="#1FC7D4"
+                  minHeight={340}
+                  value={latestValue}
+                  label={valueLabel}
+                  setValue={setLatestValue}
+                  setLabel={setValueLabel}
+                />
+              ) : view === ChartView.PRICE ? (
+                <CandleChart data={adjustedToCurrent} setValue={setLatestValue} setLabel={setValueLabel} />
+              ) : null}
+            </Box>
+          </Card>
+        </ContentLayout>
+        <Heading>{t('Pairs')}</Heading>
+        <PoolTable poolDatas={formatPoolData} />
+        <Heading>{t('Transactions')}</Heading>
+        {transactions ? <TransactionTable transactions={transactions} /> : <LocalLoader fill={false} />}
+      </AutoColumn>
     </Page>
   )
 }

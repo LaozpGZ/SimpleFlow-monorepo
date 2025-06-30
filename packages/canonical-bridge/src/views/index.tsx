@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Flex, Message, MessageText, Text, useToast } from '@pancakeswap/uikit'
+import { Flex, useToast } from '@pancakeswap/uikit'
 import { useCallback, useMemo } from 'react'
 
 import {
@@ -7,11 +7,10 @@ import {
   BridgeTransfer,
   CanonicalBridgeProvider,
   CanonicalBridgeProviderProps,
-  EventData,
-  EventName,
+  // EventData,
+  // EventName,
   IChainConfig,
   ICustomizedBridgeConfig,
-  createGTMEventListener,
 } from '@bnb-chain/canonical-bridge-widget'
 import { useTheme } from 'styled-components'
 import { useAccount } from 'wagmi'
@@ -58,7 +57,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
     [toast],
   )
 
-  const gtmListener = createGTMEventListener()
+  // const gtmListener = createGTMEventListener()
 
   const config = useMemo<ICustomizedBridgeConfig>(
     () => ({
@@ -88,12 +87,12 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
         refreshingIcon: <RefreshingIcon />,
       },
 
-      analytics: {
-        enabled: true,
-        onEvent: (eventName: EventName, eventData: EventData<EventName>) => {
-          gtmListener(eventName, eventData)
-        },
-      },
+      // analytics: {
+      //   enabled: true,
+      //   onEvent: (eventName: EventName, eventData: EventData<EventName>) => {
+      //     gtmListener(eventName, eventData)
+      //   },
+      // },
 
       chains: supportedChains,
       onError: handleError,
@@ -106,19 +105,6 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       <GlobalStyle />
       <CanonicalBridgeProvider config={config}>
         <Flex flexDirection="column" justifyContent="center" maxWidth="480px" width="100%">
-          <Message variant="warning" mb="16px">
-            <MessageText>
-              <Text mb="8px" small bold>
-                {t('Notice: ZKsync CAKE Bridging Maintenance')}
-              </Text>
-              {t('Bridging to/from ZKsync is currently unavailable until further notice.')}
-              <br />
-              {t('Bridging on all other supported networks continues to function as normal.')}
-              <br />
-              <br />
-              {t('Please refer to our X account for updates.')}
-            </MessageText>
-          </Message>
           <BridgeTransfer />
           <V1BridgeLink />
         </Flex>

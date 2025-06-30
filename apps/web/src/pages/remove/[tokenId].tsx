@@ -1,43 +1,33 @@
-import { GetStaticPaths, GetStaticProps } from 'next'
+import dynamic from 'next/dynamic'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
+import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
-import RemoveLiquidityFormProvider from 'views/RemoveLiquidity/form/RemoveLiquidityFormProvider'
-import RemoveLiquidity from 'views/RemoveLiquidity/RemoveLiquidityV3'
 
+const RemoveLiquidityView = dynamic(
+  () => import('views/Liquidity/RemoveLiquidityView').then((mod) => mod.RemoveLiquidityView),
+  {
+    ssr: false,
+  },
+)
 const RemoveLiquidityPage = () => {
-  return (
-    <RemoveLiquidityFormProvider>
-      <RemoveLiquidity />
-    </RemoveLiquidityFormProvider>
-  )
-}
+  const router = useRouter()
+  const { tokenId } = router.query
 
-RemoveLiquidityPage.chains = CHAIN_IDS
-RemoveLiquidityPage.screen = true
+  useEffect(() => {
+    const isNumberReg = /^\d+$/
 
-export default RemoveLiquidityPage
-
-export const getStaticPaths: GetStaticPaths = () => {
-  return {
-    paths: [],
-    fallback: true,
-  }
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const tokenId = params?.tokenId
-
-  const isNumberReg = /^\d+$/
-
-  if (!(tokenId as string)?.match(isNumberReg)) {
-    return {
-      redirect: {
-        statusCode: 307,
-        destination: `/add`,
-      },
+    if (tokenId && typeof tokenId === 'string' && !tokenId.match(isNumberReg)) {
+      router.replace('/add')
     }
-  }
+  }, [tokenId, router])
 
-  return {
-    props: {},
-  }
+  return <RemoveLiquidityView />
 }
+
+const Page = dynamic(() => Promise.resolve(RemoveLiquidityPage), { ssr: false }) as NextPageWithLayout
+
+Page.chains = CHAIN_IDS
+Page.screen = true
+
+export default Page

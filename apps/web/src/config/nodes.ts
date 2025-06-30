@@ -34,14 +34,19 @@ export const SERVER_NODES = {
     'https://bsc.publicnode.com',
     'https://binance.llamarpc.com',
     'https://bsc-dataseed1.defibit.io',
-    'https://bsc-dataseed1.binance.org',
+    'https://bsc-dataseed1.bnbchain.org',
   ].filter(Boolean),
-  [ChainId.BSC_TESTNET]: ['https://data-seed-prebsc-1-s1.binance.org:8545'],
+  [ChainId.BSC_TESTNET]: [
+    'https://bsc-testnet-dataseed.bnbchain.org',
+    'https://bsc-testnet.bnbchain.org',
+    'https://bsc-prebsc-dataseed.bnbchain.org',
+  ],
   [ChainId.ETHEREUM]: [
     getNodeRealUrl(ChainId.ETHEREUM, process.env.SERVER_NODE_REAL_API_ETH) || '',
     'https://ethereum.publicnode.com',
     'https://eth.llamarpc.com',
-    'https://cloudflare-eth.com',
+    // Remove cloudflare-eth.com, seems it returns wrong gas_estimation for some reason
+    // 'https://cloudflare-eth.com',
   ],
   [ChainId.GOERLI]: [
     getNodeRealUrl(ChainId.GOERLI, process.env.SERVER_NODE_REAL_API_GOERLI) || '',
@@ -99,11 +104,13 @@ export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
     'https://bsc.publicnode.com',
     'https://binance.llamarpc.com',
     'https://bsc-dataseed1.defibit.io',
-    'https://bsc-dataseed1.binance.org',
+    'https://bsc-dataseed1.bnbchain.org',
   ].filter(Boolean),
   [ChainId.BSC_TESTNET]: [
     getNodeRealUrl(ChainId.BSC_TESTNET, process.env.SERVER_NODE_REAL_API_ETH) || '',
-    'https://data-seed-prebsc-1-s1.binance.org:8545',
+    'https://bsc-testnet-dataseed.bnbchain.org',
+    'https://bsc-testnet.bnbchain.org',
+    'https://bsc-prebsc-dataseed.bnbchain.org',
   ].filter(Boolean),
   [ChainId.ETHEREUM]: [
     getNodeRealUrl(ChainId.ETHEREUM, process.env.NEXT_PUBLIC_NODE_REAL_API_ETH) || '',
@@ -111,7 +118,9 @@ export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
     // getGroveUrl(ChainId.ETHEREUM, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
     'https://ethereum.publicnode.com',
     'https://eth.llamarpc.com',
-    'https://cloudflare-eth.com',
+    // Remove cloudflare-eth.com
+    // for cross-chain swap, it will use the wrong gas_estimation for some reason
+    // 'https://cloudflare-eth.com',
   ].filter(Boolean),
   [ChainId.GOERLI]: [
     getNodeRealUrl(ChainId.GOERLI, process.env.NEXT_PUBLIC_NODE_REAL_API_GOERLI) || '',
@@ -156,6 +165,8 @@ export const PUBLIC_NODES: Record<ChainId, string[] | readonly string[]> = {
     process.env.NEXT_PUBLIC_NODIES_BASE || '',
     // getGroveUrl(ChainId.BASE, process.env.NEXT_PUBLIC_GROVE_API_KEY) || '',
     // process.env.NEXT_PUBLIC_NODE_REAL_BASE_PRODUCTION,
+    'https://base.llamarpc.com',
+    'https://base.meowrpc.com',
     ...base.rpcUrls.default.http,
   ].filter(Boolean),
   [ChainId.BASE_TESTNET]: baseGoerli.rpcUrls.default.http,

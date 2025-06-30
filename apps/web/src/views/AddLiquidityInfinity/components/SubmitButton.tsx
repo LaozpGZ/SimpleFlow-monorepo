@@ -5,13 +5,11 @@ import BigNumber from 'bignumber.js'
 import PageLoader from 'components/Loader/PageLoader'
 import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
-import { useCLPriceIsFullRange } from 'hooks/infinity/useCLPriceIsFullRange'
 import { usePoolCurrentPrice } from 'hooks/infinity/usePoolCurrentPrice'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { usePermit2 } from 'hooks/usePermit2'
 import { usePoolMarketPriceSlippage } from 'hooks/usePoolMarketPriceSlippage'
-import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { usePoolInfo } from 'state/farmsV4/hooks'
 import { useInverted } from 'state/infinity/shared'
@@ -34,7 +32,6 @@ import { useBinIdRange } from '../hooks/useBinIdRange'
 import { usePool } from '../hooks/usePool'
 
 export const SubmitButton = () => {
-  const router = useRouter()
   const { t } = useTranslation()
   const { isWrongNetwork } = useActiveChainId()
   const { address: account } = useAccount()
@@ -51,17 +48,11 @@ export const SubmitButton = () => {
   const currencies = useMemo(() => ({ CURRENCY_A: currencyA, CURRENCY_B: currencyB }), [currencyA, currencyB])
   const poolCurrentPrice = usePoolCurrentPrice(pool)
   const [, marketPriceSlippage] = usePoolMarketPriceSlippage(pool?.token0, pool?.token1, poolCurrentPrice)
-  const [displayMarketPriceSlippageWarning, disableAddByHighSlippage] = useMemo(() => {
-    if (marketPriceSlippage === undefined) return [false, false]
+  const displayMarketPriceSlippageWarning = useMemo(() => {
+    if (marketPriceSlippage === undefined) return false
     const slippage = new BigNumber(marketPriceSlippage.toFixed(0)).abs()
-    return [
-      slippage.gt(5), // 5% slippage
-      slippage.gt(25), // 25% slippage
-    ]
+    return slippage.gt(5) // 5% slippage
   }, [marketPriceSlippage])
-  const isClFullRange = useCLPriceIsFullRange({
-    tickSpacing: pool?.poolType === 'CL' ? pool.tickSpacing : undefined,
-  })
   const addIsUnsupported = useIsTransactionUnsupported(currencyA, currencyB)
   const addIsWarning = useIsTransactionWarning(currencyA, currencyB)
 
@@ -213,16 +204,7 @@ export const SubmitButton = () => {
       return [t('Insufficient %symbol% balance', { symbol: currencyB?.symbol ?? 'Unknown' }), undefined]
     }
 
-    const disabledByPriceSlippage = isClFullRange ? false : disableAddByHighSlippage
-
-    return [
-      t('Add'),
-      <AddIcon
-        key="add-icon"
-        color={!enabled || disabledByPriceSlippage ? 'textDisabled' : 'invertedContrast'}
-        width="24px"
-      />,
-    ]
+    return [t('Add'), <AddIcon key="add-icon" color={!enabled ? 'textDisabled' : 'invertedContrast'} width="24px" />]
   }, [
     currency0Balance,
     currency1Balance,
@@ -231,8 +213,6 @@ export const SubmitButton = () => {
     depositCurrencyAmount0,
     depositCurrencyAmount1,
     enabled,
-    isClFullRange,
-    disableAddByHighSlippage,
     isDeposit0Enabled,
     isDeposit1Enabled,
     t,
@@ -261,7 +241,6 @@ export const SubmitButton = () => {
         />
       )}
       <V3SubmitButton
-        highMarketPriceSlippage={isClFullRange ? false : disableAddByHighSlippage}
         addIsUnsupported={addIsUnsupported}
         addIsWarning={addIsWarning}
         account={account ?? undefined}
