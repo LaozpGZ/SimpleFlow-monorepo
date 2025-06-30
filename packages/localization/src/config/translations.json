@@ -3898,8 +3898,6 @@
   "Got it": "Got it",
   "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.": "Your pool may take a few minutes before appearing in the pool list. Please kindly wait and refresh the page, and then search the pool list for your pool before attempting to create a farm.",
   "Pool and position created successfully": "Pool and position created successfully",
-  "Token creators can now burn/lock liquidity permanently while trading fees earned remain fully claimable.": "Token creators can now burn/lock liquidity permanently while trading fees earned remain fully claimable.",
-  "Lock my liquidity": "Lock my liquidity",
   "Quote token": "Quote token",
   "Base token": "Base token",
   "Initial price": "Initial price",
