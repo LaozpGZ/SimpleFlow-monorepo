@@ -110,9 +110,6 @@ const CurrencyInputPanelV2 = memo(function CurrencyInputPanelV2({
   const amountInDollar = useStablecoinPriceAmount(
     showUSDPrice ? currency ?? undefined : undefined,
     value !== undefined && Number.isFinite(+value) ? +value : undefined,
-    {
-      enabled: Boolean(value !== undefined && Number.isFinite(+value)),
-    },
   )
 
   const [onPresentCurrencyModal] = useModal(

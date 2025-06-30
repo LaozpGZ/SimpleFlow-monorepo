@@ -51,7 +51,7 @@ export const getHashKey = (obj: any): string => {
     .join('|')
 }
 
-export class HashMap<K, V> {
+export class DeepKeyMap<K, V> {
   private innerMap: Map<string, V>
 
   constructor() {

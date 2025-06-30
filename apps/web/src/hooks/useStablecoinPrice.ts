@@ -9,7 +9,7 @@ import { useAtomValue } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
 import { useMemo } from 'react'
-import { HashMap, isEqual } from 'utils/hash'
+import { DeepKeyMap, isEqual } from 'utils/hash'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { getViemClients } from 'utils/viem'
 
@@ -27,7 +27,7 @@ interface StableCoinPriceParams {
   version: number
 }
 
-const placeHolderMap = new HashMap<StableCoinPriceParams, Price<Currency, ERC20Token>>()
+const placeHolderMap = new DeepKeyMap<StableCoinPriceParams, Price<Currency, ERC20Token>>()
 const stableCoinPriceAtom = atomFamily((params: StableCoinPriceParams) => {
   return atomWithLoadable(
     async () => {
