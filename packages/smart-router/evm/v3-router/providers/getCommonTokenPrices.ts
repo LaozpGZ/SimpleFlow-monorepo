@@ -93,13 +93,13 @@ export const getTokenUsdPricesBySubgraph: GetTokenPrices<BySubgraphEssentials> =
 export const getCommonTokenPricesBySubgraph =
   createCommonTokenPriceProvider<BySubgraphEssentials>(getTokenUsdPricesBySubgraph)
 
-type LlamaTokenPriceFetcherFactoryOptions = {
+type TokenPriceFetcherFactoryOptions = {
   endpoint: string
 }
 
 const createGetTokenPriceFromLlmaWithCache = ({
   endpoint,
-}: LlamaTokenPriceFetcherFactoryOptions): GetTokenPrices<BySubgraphEssentials> => {
+}: TokenPriceFetcherFactoryOptions): GetTokenPrices<BySubgraphEssentials> => {
   // Add cache in case we reach the rate limit of llma api
   const cache = new Map<string, TokenUsdPrice>()
 
@@ -144,6 +144,26 @@ const createGetTokenPriceFromLlmaWithCache = ({
   }
 }
 
+const createGetTokenPriceFromWalletApi = ({
+  endpoint,
+}: TokenPriceFetcherFactoryOptions): GetTokenPrices<BySubgraphEssentials> => {
+  return async ({ addresses, chainId }) => {
+    if (!chainId || addresses.length === 0) {
+      return []
+    }
+
+    const list = addresses.map((address) => `${chainId}:${address.toLowerCase()}`).join(',')
+    const encodedList = encodeURIComponent(list)
+
+    const result: { [key: string]: number } = await fetch(`${endpoint}/${encodedList}`).then((res) => res.json())
+
+    return Object.entries(result).map(([key, price]) => {
+      const [, address] = key.split(':')
+      return { address, priceUSD: price.toString() }
+    })
+  }
+}
+
 export const getCommonTokenPricesByLlma = createCommonTokenPriceProvider<BySubgraphEssentials>(
   createGetTokenPriceFromLlmaWithCache({
     endpoint: 'https://coins.llama.fi/prices/current',
@@ -151,8 +171,8 @@ export const getCommonTokenPricesByLlma = createCommonTokenPriceProvider<BySubgr
 )
 
 export const getCommonTokenPricesByWalletApi = createCommonTokenPriceProvider<BySubgraphEssentials>(
-  createGetTokenPriceFromLlmaWithCache({
-    endpoint: 'https://wallet-api.pancakeswap.com/v1/prices',
+  createGetTokenPriceFromWalletApi({
+    endpoint: 'https://wallet-api.pancakeswap.com/v1/prices/list',
   }),
 )
 
