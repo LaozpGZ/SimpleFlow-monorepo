@@ -154,7 +154,7 @@ const OpenRoundCard: React.FC<React.PropsWithChildren<OpenRoundCardProps>> = ({
         logGTMPredictionBetPlacedEvent(positionDisplay, account)
         logger.info('bet-placed', {
           address: account,
-          position,
+          position: positionDisplay,
         })
 
         handleBack()
