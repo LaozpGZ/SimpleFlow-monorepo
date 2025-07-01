@@ -1,29 +1,21 @@
 import { isTestnetChainId } from '@pancakeswap/chains'
 import { Currency, getCurrencyAddress } from '@pancakeswap/sdk'
-import { useQuery } from '@tanstack/react-query'
-
-import { SLOW_INTERVAL } from 'config/constants'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { usdPriceBatcher } from 'utils/batcher'
+import { useMemo } from 'react'
+import { useStablecoinPrice } from './useStablecoinPrice'
 
 type Config = {
   enabled?: boolean
 }
 
-export function useCurrencyUsdPrice(currency: Currency | undefined | null, { enabled = true }: Config = {}) {
-  return useQuery<number>({
-    queryKey: ['currencyPrice', currency?.chainId, currency?.wrapped.address],
-    queryFn: async () => {
-      if (!currency) {
-        throw new Error('No currency provided')
-      }
-      return usdPriceBatcher.fetch(currency)
-    },
-    staleTime: SLOW_INTERVAL,
-    refetchInterval: SLOW_INTERVAL,
-    enabled: Boolean(enabled && currency),
-  })
+export function useCurrencyUsdPrice(currency: Currency | undefined | null, { enabled = true }: Config = {}): number {
+  const price = useStablecoinPrice(currency, { enabled })
+  return useMemo(() => {
+    if (!price) return 0
+    return parseFloat(price.greaterThan(1) ? price.toSignificant(6) : price.toSignificant(9))
+  }, [price])
 }
 
 export const currencyUSDPriceAtom = atomFamily(
