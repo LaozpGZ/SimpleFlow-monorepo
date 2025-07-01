@@ -3743,7 +3743,7 @@
   "Priority Mode": "Modo de prioridade",
   "Max Cap": "Limite máx.",
   "Exact Fee": "Taxa exata",
-  "PancakeSwap auto-optimizes priority fees for your transaction. Set a max cap to prevent overpaying.": "PancakeSwap auto-optimizes priority fees for your transaction. Set a max cap to prevent overpaying.",
+  "PancakeSwap auto-optimizes priority fees for your transaction. Set a max cap to prevent overpaying.": "A PancakeSwap otimiza automaticamente as taxas de prioridade para sua transação. Defina um limite máximo para evitar pagamentos excessivos.",
   "Transactions will use the exact fee set below.": "Transactions will use the exact fee set below.",
   "Set Max Cap": "Set Max Cap",
   "Enter custom value": "Enter custom value",
