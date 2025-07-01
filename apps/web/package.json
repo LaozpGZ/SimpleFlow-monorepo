@@ -83,7 +83,6 @@
     "@pancakeswap/wagmi": "workspace:*",
     "@pancakeswap/widgets-internal": "workspace:*",
     "@privy-io/react-auth": "^2.17.2",
-    "@privy-io/wagmi": "^1.0.4",
     "@pythnetwork/pyth-evm-js": "^1.29.2",
     "@reduxjs/toolkit": "^1.9.1",
     "@sentry/nextjs": "^9.6.0",
