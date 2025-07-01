@@ -13,7 +13,7 @@ type Config = {
 export function useCurrencyUsdPrice(
   currency: Currency | undefined | null,
   { enabled = true }: Config = {},
-): { data: number } {
+): { data: number | undefined; isLoading: boolean } {
   const price = useStablecoinPrice(currency, { enabled })
   return useMemo(() => {
     if (!price) return { data: undefined, isLoading: true }
