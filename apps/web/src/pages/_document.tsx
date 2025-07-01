@@ -56,7 +56,8 @@ class MyDocument extends Document {
               style={{ display: 'none', visibility: 'hidden' }}
             />
           </noscript>
-          <Main />
+
+          <Main data-no-ssr="true" />
           <NextScript />
           <div id="portal-root" />
         </body>

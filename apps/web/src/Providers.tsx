@@ -9,7 +9,10 @@ import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'ne
 import { useMemo } from 'react'
 import { Provider } from 'react-redux'
 import { createW3WWagmiConfig, createWagmiConfig } from 'utils/wagmi'
-import { WagmiProvider } from 'wagmi'
+import { FirebaseAuthProvider } from './contexts/privy/firebase'
+import { PrivyProvider } from './contexts/privy/privy'
+import { WagmiProvider as PrivyWagmiProvider } from './contexts/privy/wagmi/provider'
+
 // import { WagmiWeb3AuthProvider } from './contexts/Web3Auth/wagmiProvider'
 // import { Web3AuthProvider } from './contexts/Web3Auth/web3auth'
 // Create a client
@@ -36,40 +39,32 @@ const Providers: React.FC<
     [],
   )
   return (
-    <WagmiProvider config={wagmiConfig}>
-      <W3WConfigProvider value={isInBinance()}>
+    // <WagmiProvider config={wagmiConfig}>
+    <FirebaseAuthProvider>
+      <PrivyProvider>
         <QueryClientProvider client={queryClient}>
-          <HydrationBoundary state={dehydratedState}>
-            <Provider store={store}>
-              <NextThemeProvider>
-                <LanguageProvider>
-                  <StyledUIKitProvider>
-                    <HistoryManagerProvider>
-                      <ModalProvider portalProvider={DialogProvider}>{children}</ModalProvider>
-                    </HistoryManagerProvider>
-                  </StyledUIKitProvider>
-                </LanguageProvider>
-              </NextThemeProvider>
-            </Provider>
-          </HydrationBoundary>
+          <PrivyWagmiProvider config={wagmiConfig}>
+            <W3WConfigProvider value={isInBinance()}>
+              <HydrationBoundary state={dehydratedState}>
+                <Provider store={store}>
+                  <NextThemeProvider>
+                    <LanguageProvider>
+                      <StyledUIKitProvider>
+                        <HistoryManagerProvider>
+                          <ModalProvider portalProvider={DialogProvider}>{children}</ModalProvider>
+                        </HistoryManagerProvider>
+                      </StyledUIKitProvider>
+                    </LanguageProvider>
+                  </NextThemeProvider>
+                </Provider>
+              </HydrationBoundary>
+            </W3WConfigProvider>
+          </PrivyWagmiProvider>
         </QueryClientProvider>
-      </W3WConfigProvider>
-    </WagmiProvider>
+      </PrivyProvider>
+    </FirebaseAuthProvider>
+    // </WagmiProvider>
   )
 }
-
-// export const Web3AuthWithWagmiProvider = ({ children }: { children: React.ReactNode }) => {
-//   const wagmiConfig = useMemo(
-//     () => (typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()),
-//     [],
-//   )
-//   return (
-//     <Web3AuthProvider>
-//       <WagmiWeb3AuthProvider reconnectOnMount config={wagmiConfig}>
-//         {children}
-//       </WagmiWeb3AuthProvider>
-//     </Web3AuthProvider>
-//   )
-// }
 
 export default Providers
