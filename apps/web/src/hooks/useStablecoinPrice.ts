@@ -28,49 +28,58 @@ interface StableCoinPriceParams {
 }
 
 const placeHolderMap = new DeepKeyMap<StableCoinPriceParams, Price<Currency, ERC20Token>>()
-const stableCoinPriceAtom = atomFamily((params: StableCoinPriceParams) => {
-  return atomWithLoadable(
-    async () => {
-      const enabled = params.enabled ?? true
-      if (!params.currency || !enabled) {
-        return undefined
-      }
-      const { currency, chainId } = params
-      const stableCoin = STABLE_COIN[currency.chainId as ChainId] as ERC20Token | undefined
-      if (!stableCoin || !chainId) {
-        return undefined
-      }
-      const result = await queryTokenPrice(
-        {
-          chainId,
-          address: getCurrencyAddress(currency),
-          isNative: currency.isNative,
-        },
-        getViemClients,
-      )
-      const priceUSD = result?.price
-      // const priceUSD = await queryStablecoinPrice(params.currency, params.chainId)
-      if (isUndefinedOrNull(priceUSD)) {
-        return undefined
-      }
-      const price = new Price(
-        currency,
-        stableCoin,
-        1 * 10 ** currency.decimals,
-        getFullDecimalMultiplier(stableCoin.decimals).times(priceUSD!.toFixed(stableCoin.decimals)).toString(),
-      )
-      if (price?.denominator === 0n) {
-        return undefined
-      }
-      placeHolderMap.set({ ...params, version: 0 }, price)
-      return price
-    },
-    {
-      placeHolderBehavior: 'stale',
-      placeHolderValue: placeHolderMap.get({ ...params, version: 0 }),
-    },
-  )
-}, isEqual)
+const stableCoinPriceAtom = atomFamily(
+  (params: StableCoinPriceParams) => {
+    return atomWithLoadable(
+      async () => {
+        const enabled = params.enabled ?? true
+        if (!params.currency || !enabled) {
+          return undefined
+        }
+        const { currency, chainId } = params
+        const stableCoin = STABLE_COIN[currency.chainId as ChainId] as ERC20Token | undefined
+        if (!stableCoin || !chainId) {
+          return undefined
+        }
+        const result = await queryTokenPrice(
+          {
+            chainId,
+            address: getCurrencyAddress(currency),
+            isNative: currency.isNative,
+          },
+          getViemClients,
+        )
+        const priceUSD = result?.price
+        // const priceUSD = await queryStablecoinPrice(params.currency, params.chainId)
+        if (isUndefinedOrNull(priceUSD)) {
+          return undefined
+        }
+        const price = new Price(
+          currency,
+          stableCoin,
+          1 * 10 ** currency.decimals,
+          getFullDecimalMultiplier(stableCoin.decimals).times(priceUSD!.toFixed(stableCoin.decimals)).toString(),
+        )
+        if (price?.denominator === 0n) {
+          return undefined
+        }
+        placeHolderMap.set({ ...params, version: 0 }, price)
+        return price
+      },
+      {
+        placeHolderBehavior: 'stale',
+        placeHolderValue: placeHolderMap.get({ ...params, version: 0 }),
+      },
+    )
+  },
+  (a, b) => {
+    const normalizedA = a.currency ? (a.currency.isNative ? { ...a, currency: a.currency.wrapped } : a) : undefined
+
+    const normalizedB = b.currency ? (b.currency.isNative ? { ...b, currency: b.currency.wrapped } : b) : undefined
+
+    return isEqual(normalizedA, normalizedB)
+  },
+)
 
 export function useStablecoinPrice(
   currency?: Currency | null,
