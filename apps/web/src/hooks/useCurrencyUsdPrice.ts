@@ -10,11 +10,14 @@ type Config = {
   enabled?: boolean
 }
 
-export function useCurrencyUsdPrice(currency: Currency | undefined | null, { enabled = true }: Config = {}): number {
+export function useCurrencyUsdPrice(
+  currency: Currency | undefined | null,
+  { enabled = true }: Config = {},
+): { data: number } {
   const price = useStablecoinPrice(currency, { enabled })
   return useMemo(() => {
-    if (!price) return 0
-    return parseFloat(price.greaterThan(1) ? price.toSignificant(6) : price.toSignificant(9))
+    if (!price) return { data: 0 }
+    return { data: parseFloat(price.greaterThan(1) ? price.toSignificant(6) : price.toSignificant(9)) }
   }, [price])
 }
 
