@@ -1,5 +1,3 @@
-'use client'
-
 import { PrivyProvider as Provider } from '@privy-io/react-auth'
 import { SmartWalletsProvider } from '@privy-io/react-auth/smart-wallets'
 import { PropsWithChildren } from 'react'

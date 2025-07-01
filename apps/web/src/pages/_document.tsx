@@ -57,7 +57,7 @@ class MyDocument extends Document {
             />
           </noscript>
 
-          <Main data-no-ssr="true" />
+          <Main />
           <NextScript />
           <div id="portal-root" />
         </body>

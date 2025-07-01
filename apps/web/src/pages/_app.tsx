@@ -42,17 +42,12 @@ import { persistor, useStore } from 'state'
 import { usePollBlockNumber } from 'state/block/hooks'
 import { Blocklist, Updaters } from '..'
 import { SEO } from '../../next-seo.config'
-// import Providers from '../Providers'
+import Providers from '../Providers'
 import Menu, { SharedComponentWithOutMenu } from '../components/Menu'
 import GlobalStyle from '../style/Global'
 import { NextPageWithLayout } from '../utils/page.types'
 
-const PrivyWithWagmiProvider = dynamic(() => import('../Providers'), { ssr: false })
-
 const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
-// const Web3AuthWithWagmiProvider = dynamic(() => import('../Providers').then((mod) => mod.Web3AuthWithWagmiProvider), {
-//   ssr: false,
-// })
 
 // This config is required for number formatting
 BigNumber.config({
@@ -109,7 +104,7 @@ function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>
       </Head>
       <DefaultSeo {...SEO} />
       {/* <LoadVConsole /> */}
-      <PrivyWithWagmiProvider store={store} dehydratedState={pageProps.dehydratedState}>
+      <Providers store={store} dehydratedState={pageProps.dehydratedState}>
         <PageMeta />
         {(Component as NextPageWithLayout).Meta && (
           // @ts-ignore
@@ -123,7 +118,7 @@ function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>
           <Updaters />
           <App {...props} />
         </PersistGate>
-      </PrivyWithWagmiProvider>
+      </Providers>
       <Script
         strategy="afterInteractive"
         id="google-tag"
