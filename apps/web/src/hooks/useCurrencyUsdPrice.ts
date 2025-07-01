@@ -16,8 +16,11 @@ export function useCurrencyUsdPrice(
 ): { data: number } {
   const price = useStablecoinPrice(currency, { enabled })
   return useMemo(() => {
-    if (!price) return { data: 0 }
-    return { data: parseFloat(price.greaterThan(1) ? price.toSignificant(6) : price.toSignificant(9)) }
+    if (!price) return { data: 0, isLoading: true }
+    return {
+      data: parseFloat(price.greaterThan(1) ? price.toSignificant(6) : price.toSignificant(9)),
+      isLoading: false,
+    }
   }, [price])
 }
 
