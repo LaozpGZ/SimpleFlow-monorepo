@@ -114,7 +114,7 @@ export function SwapInfoBoard({
           </HStack>
 
           <HStack gap={4} py={1} justifyContent="space-between">
-            <ItemLabel name={t('Estimated Fees')} tooltip={t('Swap fees go to LPs, RAY buybacks, and treasury.')} />
+            <ItemLabel name={t('Estimated Fees')} tooltip={t('Swap fees go to LPs, CAKE burns, and treasury')} />
             <Box textAlign="end" fontSize="xs" color={colors.textPrimary}>
               <RouteFees routeStats={computedSwapResult?.routeStats} routePlan={computedSwapResult?.routePlan || []} />
             </Box>
