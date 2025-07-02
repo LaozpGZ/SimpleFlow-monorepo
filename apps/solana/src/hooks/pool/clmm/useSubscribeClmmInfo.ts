@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
+import { ApiClmmConfigV3, ApiV3Token, PoolInfoLayout, SqrtPriceMath } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
+import { useEffect, useState } from 'react'
 import { shallow } from 'zustand/shallow'
-import { PoolInfoLayout, SqrtPriceMath, ApiV3Token, ApiClmmConfigV3 } from '@pancakeswap/solana-core-sdk'
 
 import Decimal from 'decimal.js'
-import { Subject, throttleTime, filter, asyncScheduler } from 'rxjs'
+import { asyncScheduler, filter, Subject, throttleTime } from 'rxjs'
 import { useAppStore } from '@/store'
-import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { isDocumentVisible } from '@/utils/common'
+import { MINUTE_MILLISECONDS } from '@/utils/date'
 import useFetchRpcClmmInfo from './useFetchRpcClmmInfo'
 
 export interface RpcPoolData {
@@ -43,7 +43,11 @@ export default function useSubscribeClmmInfo({
 }: Props) {
   const [connection, CLMM_PROGRAM_ID] = useAppStore((s) => [s.connection, s.programIdConfig.CLMM_PROGRAM_ID], shallow)
   const [data, setData] = useState<RpcPoolData | undefined>()
-  const { data: rpcClmmData, mutate } = useFetchRpcClmmInfo({
+  const {
+    data: rpcClmmData,
+    mutate,
+    isLoading
+  } = useFetchRpcClmmInfo({
     shouldFetch: keepFetch || (initialFetch && !data),
     id: poolInfo?.id,
     refreshTag,
@@ -124,6 +128,7 @@ export default function useSubscribeClmmInfo({
 
   return {
     ...data,
+    isLoading,
     poolId: data ? new PublicKey(data?.poolId) : undefined,
     programId: poolInfo ? new PublicKey(poolInfo.programId) : undefined,
     mutateRpcData: mutate
