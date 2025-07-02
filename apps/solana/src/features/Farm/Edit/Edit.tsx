@@ -50,7 +50,9 @@ export default function FarmEdit() {
   const { t } = useTranslation()
   const { query } = useRouter()
   const { farmId, clmmId } = (query || {}) as QueryParams
+
   const [remainRewardsCount, setRemainRewardsCount] = useState(0)
+
   const editFarmRewardsAct = useFarmStore((s) => s.editFarmRewardsAct)
   const withdrawCreatorFarmRewardAct = useFarmStore((s) => s.withdrawCreatorFarmRewardAct)
   const [rewardWhiteListMints, setRewardsAct, collectRewardAct] = useClmmStore(
@@ -111,8 +113,11 @@ export default function FarmEdit() {
   })
 
   const isLoading = isFarmLoading || isPoolLoading
+
   const hasData = (farmId && !!farmData) || (clmmId && clmmData)
+
   const isValidData = farmData ? farmData.version === 6 : clmmData ? clmmData.type === 'Concentrated' : false
+
   const availableRewardCount = farmData ? 5 : clmmData ? 2 : 0
 
   const [token1, token2] = [farmData?.symbolMints[0] || clmmData?.mintA, farmData?.symbolMints[1] || clmmData?.mintB]
@@ -121,7 +126,9 @@ export default function FarmEdit() {
     farmData?.tvl || clmmData?.tvl,
     farmData?.apr || clmmData?.day.apr
   ]
+
   const id = farmData?.id || clmmData?.id
+
   const farmTVL = farmData?.tvl || clmmData?.tvl
 
   const rewardData = farmData
@@ -257,8 +264,8 @@ export default function FarmEdit() {
   })
 
   if (!isLoading) {
-    if (!hasData) return <div>{t('Farm not found')}</div>
-    if (!isValidData) return <div>{t('Farm is not editable')}</div>
+    if (!hasData) return <Box mt="24px">{t('Farm not found')}</Box>
+    if (!isValidData) return <Box mt="24px">{t('Farm is not editable')}</Box>
   }
 
   return (
@@ -280,7 +287,7 @@ export default function FarmEdit() {
           `,
         `
             "back    word           ." auto
-            "note    pool           ." auto
+            "note    pool           " auto
             "note    rewards        ." auto
             "note    action-buttons ." 1fr / ${genCSS3GridTemplateColumns({ rightLeft: 344, center: 468 })}
           `
@@ -288,10 +295,12 @@ export default function FarmEdit() {
       columnGap={[0, 24]}
       rowGap={[4, 4]}
       mt={[2, 8]}
+      mx={[0, 0, 0, 16]}
+      pb="48px"
     >
       <GridItem area="back">
         <Flex mb={[0, 4]}>
-          <HStack cursor="pointer" onClick={routeBack} color={colors.textTertiary} fontWeight="500" fontSize={['md', 'xl']}>
+          <HStack cursor="pointer" onClick={routeBack} color={colors.primary60} fontWeight="500" fontSize={['md', 'lg']}>
             <ChevronLeftIcon />
             <Text>{t('Back')}</Text>
           </HStack>
@@ -324,20 +333,22 @@ export default function FarmEdit() {
       <GridItem area="word">
         <Flex flexDirection="column" gap="2">
           <HStack gap={4}>
-            <Heading color={colors.textSecondary} fontSize="20px">
+            <Text fontWeight="600" color={colors.textSecondary} fontSize="20px">
               {t('Edit Farm')}
-            </Heading>
+            </Text>
             {id && (
-              <Text color={colors.textTertiary} fontSize="sm">
+              <Text color={colors.textSubtle} fontSize="sm">
                 {t('Farm id')}: {id?.slice(0, 6)}...{id.slice(-6)}
               </Text>
             )}
           </HStack>
-          <Text fontSize="sm" color={colors.textSecondary}>
+          <Text fontSize="sm" color={colors.textSubtle}>
             {t('Before creating a farm, make sure to check the')}{' '}
             <Link
-              href="https://docs.raydium.io/raydium/pool-creation/creating-a-constant-product-pool/creating-an-ecosystem-farm"
+              href="https://docs.pancakeswap.finance/" // TODO: Add docs link for farms
               isExternal
+              fontWeight="600"
+              color={colors.primary}
             >
               {t('detailed guide')}
             </Link>
@@ -347,7 +358,9 @@ export default function FarmEdit() {
 
       <GridItem area="pool">
         <VStack align="stretch">
-          <Heading fontSize="md">{t('Pool')}</Heading>
+          <Text fontWeight="600" color={colors.textSubtle} fontSize="xl">
+            {t('Pool')}
+          </Text>
           {isLoading ? (
             <Skeleton height="60px" />
           ) : (
@@ -356,18 +369,20 @@ export default function FarmEdit() {
         </VStack>
       </GridItem>
 
-      <GridItem area="rewards">
+      <GridItem mt="6" area="rewards">
         <VStack align="stretch">
           <HStack justifyContent="space-between">
-            <Heading fontSize="md">{t('Farm reward')}</Heading>
+            <Text fontWeight="600" color={colors.textSubtle} fontSize="xl">
+              {t('Farm rewards')}
+            </Text>
             <HStack
               align="center"
               opacity={remainRewardsCount ? 1 : 0.5}
               onClick={remainRewardsCount ? onOpenAddAnotherRewardDialog : undefined}
               cursor={remainRewardsCount ? 'pointer' : 'default'}
             >
-              <PlusCircleIcon width="14px" height="14px" />
-              <Text color={colors.priceFloatingUp} fontSize="16px" fontWeight="500">
+              <PlusCircleIcon width="14px" height="14px" color={colors.primary60} />
+              <Text color={colors.primary60} fontSize="16px" fontWeight="500">
                 {t('Add another')}
               </Text>
             </HStack>
@@ -398,13 +413,14 @@ export default function FarmEdit() {
       </GridItem>
 
       <GridItem area="action-buttons">
-        <Flex justifyContent="center" mt="15px" gap="4">
+        <Flex justifyContent="center" mt="15px" mb="12px" gap="4">
           <Button
             key={flag}
             mt="15px"
-            size="lg"
+            width="100%"
             minWidth="16em"
             maxWidth="unset"
+            borderBottom="2px solid rgb(0, 0, 0, 0.2)"
             isLoading={isSending}
             onClick={handleSubmitEdit}
             isDisabled={!hasRewardsData}

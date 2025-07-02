@@ -54,6 +54,7 @@ export default function ExistFarmingRewardItem({
   })
 
   const isNewRewards = currentStatus === 'new'
+
   const isUpdated = currentStatus === 'updated'
 
   const statusInfo = {
@@ -132,16 +133,18 @@ export default function ExistFarmingRewardItem({
               "duration duration" auto / 1fr 1fr
             `,
           `
-              "label per-week duration" 1fr 1.3fr 2fr
+              "label per-week duration duration" auto / 1fr 1.3fr 2fr
             `
         ]}
         fontWeight={500}
         rounded="xl"
-        bg={colors.backgroundLight}
+        bg={colors.cardBg}
+        border="1px solid"
+        borderColor={colors.cardBorder01}
+        borderRadius={isUpdated ? '24px 24px 0 0' : '24px'}
         justifyContent="space-between"
-        px={6}
-        py={3}
-        gap={4}
+        px={12}
+        py={6}
       >
         {currentStatus && statusInfo[currentStatus]?.indicators.includes('top-line') && (
           <GridItem area="top-line" position="absolute" top={0} left={0} right={0}>
@@ -153,28 +156,32 @@ export default function ExistFarmingRewardItem({
           <VStack alignItems="start" gap="1">
             <Flex gap="2" alignItems="center">
               <TokenAvatar size="sm" token={rewardToken} />
-              <Text fontSize="lg">{rewardToken?.symbol}</Text>
+              <Text fontSize="md" fontWeight="600">
+                {rewardToken?.symbol}
+              </Text>
+              {currentStatus === 'ongoing' && statusInfo[currentStatus]?.indicators.includes('badge') && (
+                <Badge variant="ok">{statusInfo[currentStatus].text}</Badge>
+              )}
+              {currentStatus === 'ended' && statusInfo[currentStatus]?.indicators.includes('badge') && (
+                <Badge variant="error">{statusInfo[currentStatus].text}</Badge>
+              )}
+              {currentStatus && statusInfo[currentStatus]?.indicators.includes('tag') && (
+                <Tag variant="parallelogram" bg={statusInfo[currentStatus].color}>
+                  {statusInfo[currentStatus].text}
+                </Tag>
+              )}
             </Flex>
-            {currentStatus === 'ongoing' && statusInfo[currentStatus]?.indicators.includes('badge') && (
-              <Badge variant="ok">{statusInfo[currentStatus].text}</Badge>
-            )}
-            {currentStatus === 'ended' && statusInfo[currentStatus]?.indicators.includes('badge') && (
-              <Badge variant="error">{statusInfo[currentStatus].text}</Badge>
-            )}
-            {currentStatus && statusInfo[currentStatus]?.indicators.includes('tag') && (
-              <Tag variant="parallelogram" bg={statusInfo[currentStatus].color}>
-                {statusInfo[currentStatus].text}
-              </Tag>
-            )}
           </VStack>
         </GridItem>
 
         <GridItem area="per-week">
           <Box opacity={isUpdated ? 0.5 : 1}>
-            <Text>{formatCurrency(reward.total, { decimalPlaces: 2 })}</Text>
+            <Text fontWeight="600">{formatCurrency(reward.total, { decimalPlaces: 2 })}</Text>
             <HStack fontSize="sm">
-              <Text color={colors.textSecondary}>{formatCurrency(reward.perWeek, { decimalPlaces: 2 })}</Text>
-              <Text color={colors.textTertiary}>{t('/week')}</Text>
+              <Text color={colors.textSubtle}>
+                {formatCurrency(reward.perWeek, { decimalPlaces: 2 })}
+                {t('/week')}
+              </Text>
             </HStack>
           </Box>
         </GridItem>
@@ -185,7 +192,7 @@ export default function ExistFarmingRewardItem({
 
             {/* divider */}
             <Box fontSize="sm" position="relative">
-              <Text position="absolute" top={-2} left="50%" transform="translateX(-50%)" color={colors.textSecondary} whiteSpace="nowrap">
+              <Text position="absolute" top={-2} left="50%" transform="translateX(-50%)" color={colors.textSubtle} whiteSpace="nowrap">
                 {durationText}
               </Text>
               <Box height="1.5px" width={12} bg={colors.textTertiary} my={4} />
@@ -193,7 +200,7 @@ export default function ExistFarmingRewardItem({
 
             <HStack>
               <Text>{endTimeText}</Text>
-              <Text fontSize="sm" color={colors.textSecondary}>
+              <Text fontSize="sm" color={colors.textSubtle}>
                 (UTC)
               </Text>
             </HStack>
@@ -210,7 +217,11 @@ export default function ExistFarmingRewardItem({
           fontWeight={500}
           roundedBottomLeft="xl"
           roundedBottomRight="xl"
-          bg={colors.backgroundLight}
+          bg={colors.cardBg}
+          border="1px solid"
+          borderColor={colors.cardBorder01}
+          borderTop="none"
+          borderRadius="0 0 24px 24px"
           justifyContent="space-between"
           px={6}
           py={3}
@@ -219,10 +230,12 @@ export default function ExistFarmingRewardItem({
           <VStack alignItems="start" gap="1" />
 
           <Box borderTop={`1px solid ${colors.backgroundTransparent12}`} pt="3">
-            <Text>{formatCurrency(currentReward.total, { decimalPlaces: 2 })}</Text>
+            <Text fontWeight="600">{formatCurrency(currentReward.total, { decimalPlaces: 2 })}</Text>
             <HStack fontSize="sm">
-              <Text color={colors.textSecondary}>{formatCurrency(currentReward.perWeek, { decimalPlaces: 2 })}</Text>
-              <Text color={colors.textTertiary}>{t('/week')}</Text>
+              <Text color={colors.textSubtle}>
+                {formatCurrency(currentReward.perWeek, { decimalPlaces: 2 })}
+                {t('/week')}
+              </Text>
             </HStack>
           </Box>
 
@@ -231,7 +244,7 @@ export default function ExistFarmingRewardItem({
 
             {/* divider */}
             <Box fontSize="sm" position="relative">
-              <Text position="absolute" top={-2} left="50%" transform="translateX(-50%)" color={colors.textSecondary} whiteSpace="nowrap">
+              <Text position="absolute" top={-2} left="50%" transform="translateX(-50%)" color={colors.textSubtle} whiteSpace="nowrap">
                 {newDurationText}
               </Text>
               <Box height="1.5px" width={12} bg={colors.textTertiary} my={4} />
@@ -239,7 +252,7 @@ export default function ExistFarmingRewardItem({
 
             <HStack>
               <Text>{newEndTimeText}</Text>
-              <Text fontSize="sm" color={colors.textSecondary}>
+              <Text fontSize="sm" color={colors.textSubtle}>
                 (UTC)
               </Text>
             </HStack>
@@ -253,25 +266,55 @@ export default function ExistFarmingRewardItem({
           <Button variant="outline" size="sm" isLoading={isOpen} onClick={onClaim}>
             <HStack>
               <Text>{t('Claim Unemmitted Rewards')}</Text>
-              <Text color={colors.textSecondary} fontSize="xs">
+              <Text color={colors.textSubtle} fontSize="xs">
                 {formatCurrency(claimableRewardAmount, { decimalPlaces: reward.mint.decimals })} {wSolToSolString(rewardToken.symbol)}
               </Text>
             </HStack>
           </Button>
         )}
         {isUpdated && (
-          <Button size="sm" variant="outline" onClick={onReset}>
+          <Button
+            size="sm"
+            variant="outline"
+            border="1px solid"
+            borderColor={colors.primary}
+            bg={colors.cardBg}
+            color={colors.primary60}
+            _hover={{
+              bg: colors.backgroundLight
+            }}
+            onClick={onReset}
+          >
             {t('Reset')}
           </Button>
         )}
         {!isRewardEnded && !isEcosystem && !isNewRewards && !isUpdated && (
           <>
-            <Button size="sm" isDisabled={!canAddMoreRewards} onClick={onOpenAdjustRewardDialog}>
+            <Button
+              size="sm"
+              isDisabled={!canAddMoreRewards}
+              onClick={onOpenAdjustRewardDialog}
+              border="1px solid"
+              borderColor={colors.primary}
+              bg={colors.cardBg}
+              color={colors.primary60}
+              _hover={{
+                bg: colors.backgroundLight
+              }}
+            >
               {t('Adjust rewards')}
             </Button>
             <AdjustRewardDialog
               key={rewardTag}
-              oldReward={reward}
+              oldReward={{
+                total: '1000',
+                perWeek: '100',
+                openTime: Date.now(),
+                endTime: Date.now() + 1000 * DAY_SECONDS * 7,
+                status: 'new',
+                apr: 100,
+                mint: rewardToken
+              }}
               farmTVL={farmTVL}
               isOpen={isAdjustRewardDialogOpen}
               onClose={onCloseAdjustRewardDialog}
@@ -279,10 +322,19 @@ export default function ExistFarmingRewardItem({
             />
           </>
         )}
-
         {(isRewardEnded || isEcoSystemAddMore) && !isUpdated && (
           <>
-            <Button size="sm" onClick={onOpenAddMoreRewardDialog}>
+            <Button
+              size="sm"
+              border="1px solid"
+              borderColor={colors.primary}
+              bg={colors.cardBg}
+              color={colors.primary60}
+              _hover={{
+                bg: colors.backgroundLight
+              }}
+              onClick={onOpenAddMoreRewardDialog}
+            >
               {t('Add More Rewards')}
             </Button>
             {isAddMoreRewardDialogOpen && (

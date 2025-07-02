@@ -124,7 +124,7 @@ export default function AdjustRewardDialog({
       size="2xl"
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent borderRadius="24px">
         <ModalHeader>{t('Adjust rewards')}</ModalHeader>
         <ModalCloseButton />
 
@@ -138,7 +138,7 @@ export default function AdjustRewardDialog({
             />
 
             <Box>
-              <Heading fontSize="md" color={colors.textSecondary} fontWeight={500} mb={3}>
+              <Heading fontSize="md" color={colors.textSubtle} fontWeight={600} mb={3}>
                 {t('Current rewards period')}
               </Heading>
               <RewardInfoItem
@@ -152,10 +152,10 @@ export default function AdjustRewardDialog({
             </Box>
 
             <Box>
-              <Heading fontSize="md" color={colors.textSecondary} fontWeight={500} mb={3}>
+              <Heading fontSize="md" color={colors.textSubtle} fontWeight={600} mb={3}>
                 {t('Rewards adjustment')}
               </Heading>
-              <HStack align="stretch">
+              <HStack align="stretch" spacing={6}>
                 <TokenInput
                   token={rewardToken}
                   disableSelectToken
@@ -163,8 +163,8 @@ export default function AdjustRewardDialog({
                   // onTokenChange={onTokenChange}
                   onChange={setMoreAmount}
                 />
-                <VStack bg={colors.backgroundDark} p={3} rounded="md" align="start">
-                  <Text fontSize="xs" color={colors.textTertiary}>
+                <VStack bg={colors.cardSecondary} border="1px solid" borderColor={colors.cardBorder01} rounded="24px" p={4} align="start">
+                  <Text fontSize="xs" color={colors.textSubtle}>
                     {t('Days Extends')}
                   </Text>
                   <Spacer />
@@ -174,6 +174,7 @@ export default function AdjustRewardDialog({
                         bg: 'transparent',
                         p: 0,
                         fontSize: 'lg',
+                        padding: '16px',
                         fontWeight: 500,
                         _hover: { bg: 'transparent' },
                         _active: { bg: 'transparent' },
@@ -186,7 +187,7 @@ export default function AdjustRewardDialog({
                       value={daysExtend}
                       onChange={setDaysExtend}
                     />
-                    <Text color={colors.textTertiary} fontSize="xs" fontWeight={700}>
+                    <Text color={colors.textSubtle} fontSize="xs" fontWeight={600}>
                       {t('Days')}
                     </Text>
                   </HStack>
@@ -239,14 +240,30 @@ function RewardInfoItem(props: {
   return (
     <Flex overflow="hidden" align="stretch" rounded="20px" fontSize="sm">
       <Flex direction="column" flexGrow={1}>
-        <Box bg={colors.backgroundDark} py={3} px={6}>
-          <Text color={colors.textTertiary}>{t('Remaining amount')}</Text>
+        <Box
+          bg={colors.cardSecondary}
+          border="1px solid"
+          borderRadius="20px 0 0 0"
+          borderBottom="none"
+          borderColor={colors.cardBorder01}
+          py={3}
+          px={6}
+        >
+          <Text color={colors.textSubtle}>{t('Remaining amount')}</Text>
         </Box>
-        <Box flexGrow={1} bg={colors.backgroundTransparent12} py={4} px={6}>
+        <Box
+          flexGrow={1}
+          bg={colors.cardSecondary}
+          border="1px solid"
+          borderRadius="0 0 0 20px"
+          borderColor={colors.cardBorder01}
+          py={4}
+          px={6}
+        >
           <Text fontSize="md" fontWeight={500} color={colors.textPrimary} mb={3}>
             {formatCurrency(props.amount, { decimalPlaces: props.mint.decimals })}
           </Text>
-          <Text fontSize="xs" color={colors.textSecondary}>
+          <Text fontSize="xs" color={colors.textSubtle}>
             {formatCurrency(new Decimal(props.amount).mul(props.tokenPrices[props.mint.address]?.value || 0).toString(), {
               symbol: '$',
               decimalPlaces: 2
@@ -255,31 +272,55 @@ function RewardInfoItem(props: {
         </Box>
       </Flex>
       <Flex direction="column" flexGrow={1}>
-        <Box bg={colors.backgroundDark} py={3} px={6}>
-          <Text color={colors.textTertiary}>{t('Farming ends')}</Text>
+        <Box bg={colors.cardSecondary} borderTop="1px solid" borderColor={colors.cardBorder01} py={3} px={6}>
+          <Text color={colors.textSubtle}>{t('Farming ends')}</Text>
         </Box>
-        <Box flexGrow={1} bg={colors.backgroundTransparent12} py={4} px={6}>
+        <Box
+          flexGrow={1}
+          bg={colors.cardSecondary}
+          borderTop="1px solid"
+          borderBottom="1px solid"
+          borderColor={colors.cardBorder01}
+          py={4}
+          px={6}
+        >
           <Text fontSize="md" fontWeight={500} color={colors.textPrimary} mb={3}>
             {toUTC(props.endTime)}
           </Text>
-          <Text fontSize="xs" color={colors.textSecondary}>
+          <Text fontSize="xs" color={colors.textSubtle}>
             {t('%days%D remaining', { days: parseDateInfo(getDuration(props.endTime, Date.now())).day })}
           </Text>
         </Box>
       </Flex>
       <Flex direction="column" flexGrow={1}>
-        <Box bg={colors.backgroundDark} py={3} px={6}>
-          <Text color={colors.textTertiary}>{t('Rate')}</Text>
+        <Box
+          bg={colors.cardSecondary}
+          border="1px solid"
+          borderRadius="0 20px 0 0"
+          borderBottom="none"
+          borderColor={colors.cardBorder01}
+          py={3}
+          px={6}
+        >
+          <Text color={colors.textSubtle}>{t('Rate')}</Text>
         </Box>
-        <Box flexGrow={1} bg={colors.backgroundTransparent12} py={4} px={6}>
+        <Box
+          flexGrow={1}
+          bg={colors.cardSecondary}
+          border="1px solid"
+          borderRadius="0 0 20px 0"
+          borderColor={colors.cardBorder01}
+          py={4}
+          px={6}
+        >
           <Text fontSize="md" fontWeight={500} color={colors.textPrimary} mb={3}>
             {formatCurrency(props.perWeek, { decimalPlaces: props.mint.decimals })}
-            <Text display="inline" ml="2" color={colors.textSecondary}>
+            <Text display="inline" ml="2" color={colors.textSubtle}>
               {wSolToSolString(props.mint.symbol)}
               {t('/week')}
             </Text>
           </Text>
-          <Text fontSize="xs" color={colors.textSecondary}>
+          <Text fontSize="xs" color={colors.textSubtle}>
             {formatToRawLocaleStr(toPercentString(props.apr))} {t('APR')}
           </Text>
         </Box>
