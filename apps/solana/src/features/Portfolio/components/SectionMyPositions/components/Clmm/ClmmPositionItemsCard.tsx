@@ -85,7 +85,7 @@ function ClmmPositionItemsCardComp({
   )
 
   if (!poolInfo || data?.isLoading) {
-    return isLoading ? <Skeleton w="full" height="140px" rounded="lg" /> : null
+    return <Skeleton w="full" height="140px" rounded="3xl" mb={4} />
   }
 
   return (
@@ -105,7 +105,7 @@ function ClmmPositionItemsCardComp({
       ]}
       py={[4, 3]}
       px={[3, 6]}
-      mb={4}
+      mb={[4, 0]}
       gap={[2, 4]}
       borderRadius="3xl"
       alignItems="center"
