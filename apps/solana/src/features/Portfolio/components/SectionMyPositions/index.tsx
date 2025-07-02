@@ -204,7 +204,7 @@ export default function SectionMyPositions() {
                     </Flex>
                   </HStack>
                 </Flex>
-                {/* <Button
+                <Button
                   size={['xs', 'md']}
                   minHeight={[7, 10]}
                   isLoading={isSending}
@@ -212,7 +212,7 @@ export default function SectionMyPositions() {
                   onClick={() => handleHarvest({ tab: currentTab as PositionTabValues, zeroClmmPos: noRewardClmmPos.current })}
                 >
                   {t('Harvest All')}
-                </Button> */}
+                </Button>
               </HStack>
             </Box>
           ) : null}
