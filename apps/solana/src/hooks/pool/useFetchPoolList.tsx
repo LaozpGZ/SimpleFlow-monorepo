@@ -53,7 +53,7 @@ const MOCK_POOL = {
         programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
         decimals: 9
       },
-      perSecond: 1e6,
+      perSecond: 3043712772162076016640,
       startTime: 1751431391,
       endTime: 1752468191
     }
