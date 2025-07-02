@@ -1,38 +1,38 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, Grid, GridItem, HStack, Heading, Link, Skeleton, Text, VStack, useDisclosure } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import {
   ApiV3PoolInfoConcentratedItem,
+  FARM_PROGRAM_ID_V6,
+  FarmStateV6,
   FormatFarmInfoOutV6,
   TokenInfo,
   solToWSol,
-  solToWSolToken,
-  FarmStateV6,
-  FARM_PROGRAM_ID_V6
+  solToWSolToken
 } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useRouter } from 'next/router'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { shallow } from 'zustand/shallow'
 
-import Decimal from 'decimal.js'
 import { BN } from 'bn.js'
+import Decimal from 'decimal.js'
 import Button from '@/components/Button'
 import useFetchFarmInfoById from '@/hooks/farm/useFetchFarmInfoById'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'
-import { refreshCreatedFarm } from '@/hooks/portfolio/farm/useCreatedFarmInfo'
 import { refreshPoolCache } from '@/hooks/pool/useFetchPoolList'
+import { refreshCreatedFarm } from '@/hooks/portfolio/farm/useCreatedFarmInfo'
 import { useEvent } from '@/hooks/useEvent'
 import PlusCircleIcon from '@/icons/misc/PlusCircleIcon'
 import { useAppStore, useClmmStore, useFarmStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 
 import SubPageNote from '@/components/SubPageNote'
+import useFetchFarmInfoByRpc from '@/hooks/farm/useFetchFarmInfoByRpc'
+import useFetchRpcClmmInfo from '@/hooks/pool/clmm/useFetchRpcClmmInfo'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { genCSS2GridTemplateColumns, genCSS3GridTemplateColumns } from '@/theme/detailConfig'
-import { routeBack, routeToPage } from '@/utils/routeTools'
-import useFetchRpcClmmInfo from '@/hooks/pool/clmm/useFetchRpcClmmInfo'
-import useFetchFarmInfoByRpc from '@/hooks/farm/useFetchFarmInfoByRpc'
 import { TxCallbackProps } from '@/types/tx'
+import { routeBack, routeToPage } from '@/utils/routeTools'
 import AddAnotherRewardDialog from './components/AddAnotherRewardDialog'
 import FarmInfoItem from './components/FarmInfoItem'
 import ExistFarmingRewards from './components/FarmingRewards'
@@ -81,7 +81,7 @@ export default function FarmEdit() {
   const clmmData = formattedPoolData?.[0]
   const clmmRewardWhiteListMints = useMemo(
     () => new Set([...rewardWhiteListMints.map((pub) => pub.toBase58()), clmmData?.mintA.address, clmmData?.mintB.address]),
-    [rewardWhiteListMints, clmmData?.id]
+    [rewardWhiteListMints, clmmData?.id, clmmData?.mintA.address, clmmData?.mintB.address]
   )
 
   const { data: rpcFarm, farmMutate } = useFetchFarmInfoByRpc({
@@ -106,7 +106,11 @@ export default function FarmEdit() {
           }))
       : []
 
-  const { ownerRemainingRewards, mutate: mutateClmmInfo } = useFetchRpcClmmInfo({
+  const {
+    ownerRemainingRewards,
+    data: rpcPoolInfo,
+    mutate: mutateClmmInfo
+  } = useFetchRpcClmmInfo({
     shouldFetch: !!clmmData,
     id: clmmId,
     apiPoolInfo: clmmData
@@ -152,17 +156,39 @@ export default function FarmEdit() {
   const handleSubmitEdit = useEvent(() => {
     onSending()
     if (clmmData) {
+      const rewardInfos = editedRewardRef.current.getRewards().map((r) => ({
+        mint: solToWSolToken({
+          ...r.mint,
+          programId: r.mint.address === clmmData.mintA?.address ? clmmData.mintA.programId : r.mint.programId
+        }),
+        openTime: Math.floor(Math.max(r.openTime, onlineCurrentDate) / 1000),
+        endTime: Math.floor(r.endTime / 1000),
+        perSecond: new Decimal(r.total)
+          .mul(10 ** r.mint.decimals)
+          .div(new Decimal(r.endTime).sub(Math.max(r.openTime, onlineCurrentDate)).div(1000))
+          .toDecimalPlaces(0, Decimal.ROUND_DOWN)
+      }))
       return setRewardsAct({
         poolInfo: clmmData,
-        rewardInfos: editedRewardRef.current.getRewards().map((r) => ({
-          mint: solToWSolToken(r.mint),
-          openTime: Math.floor(Math.max(r.openTime, onlineCurrentDate) / 1000),
-          endTime: Math.floor(r.endTime / 1000),
-          perSecond: new Decimal(r.total)
-            .mul(10 ** r.mint.decimals)
-            .div(new Decimal(r.endTime).sub(Math.max(r.openTime, onlineCurrentDate)).div(1000))
-            .toDecimalPlaces(0, Decimal.ROUND_DOWN)
-        })),
+        poolKeys: {
+          mintA: clmmData.mintA,
+          mintB: clmmData.mintB,
+          config: clmmData.config,
+          vault: (clmmData as any).vault,
+          id: clmmData.id,
+          openTime: '1723037622',
+          programId: clmmData.programId,
+          rewardInfos: (rpcPoolInfo?.rewardInfos || []).map((r, i) => ({
+            vault: r.tokenVault.toBase58(),
+            mint: rewardInfos[i]?.mint,
+            openTime: r.openTime,
+            endTime: r.endTime,
+            perSecond: rewardInfos[i]?.perSecond
+          })),
+          observationId: rpcPoolInfo?.observationId.toBase58() ?? '',
+          exBitmapAccount: ''
+        },
+        rewardInfos,
         newRewardInfos: newRewardRef.current.getRewards().map((r) => ({
           mint: solToWSolToken(r.mint),
           openTime: Math.floor(r.openTime / 1000),
@@ -176,7 +202,7 @@ export default function FarmEdit() {
         onConfirmed: () => {
           refreshCreatedFarm()
           refreshPoolCache()
-          routeToPage('portfolio')
+          routeToPage('pools')
         }
       })
     }

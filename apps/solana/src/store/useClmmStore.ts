@@ -1,45 +1,44 @@
+import { TranslateFunction } from '@pancakeswap/localization'
+import { ammConfigs, PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
 import {
-  TxBuildData,
-  TxV0BuildData,
-  MakeMultiTxData,
   ApiClmmConfigInfo,
-  ClmmPositionLayout,
-  InitRewardsParams,
-  Price,
-  TickUtils,
-  PoolUtils,
-  ReturnTypeGetPriceAndTick,
-  ApiV3Token,
-  SetRewardsParams,
-  ClmmKeys,
   ApiV3PoolInfoConcentratedItem,
+  ApiV3Token,
+  ClmmKeys,
+  ClmmLockAddress,
+  ClmmPositionLayout,
+  getTransferAmountFeeV2,
+  InitRewardsParams,
+  MakeMultiTxData,
   MakeTxData,
   OpenPositionFromBaseExtInfo,
-  toToken,
+  PoolUtils,
+  Price,
+  ReturnTypeGetPriceAndTick,
+  SetRewardsParams,
   solToWSolToken,
-  TxVersion,
-  getTransferAmountFeeV2,
-  ClmmLockAddress
+  TickUtils,
+  toToken,
+  TxBuildData,
+  TxV0BuildData,
+  TxVersion
 } from '@pancakeswap/solana-core-sdk'
-import { ammConfigs, PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
-import { PublicKey, VersionedTransaction } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
-import { TranslateFunction } from '@pancakeswap/localization'
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
-import createStore from '@/store/createStore'
-import { useAppStore, useTokenAccountStore, useLiquidityStore } from '@/store'
-import { isSolWSol, getMintSymbol, shortenAddress } from '@/utils/token'
+import { getDefaultToastData, handleMultiTxToast, transformProcessData } from '@/hooks/toast/multiToastUtil'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import { txStatusSubject } from '@/hooks/toast/useTxStatus'
-import { getDefaultToastData, transformProcessData, handleMultiTxToast } from '@/hooks/toast/multiToastUtil'
+import { useAppStore, useLiquidityStore, useTokenAccountStore } from '@/store'
+import createStore from '@/store/createStore'
+import { getMintSymbol, isSolWSol, shortenAddress } from '@/utils/token'
 import getEphemeralSigners from '@/utils/tx/getEphemeralSigners'
 
-import { getComputeBudgetConfig } from '@/utils/tx/computeBudget'
-import { handleMultiTxRetry } from '@/hooks/toast/retryTx'
 import { ClmmLockInfo } from '@/hooks/portfolio/clmm/useClmmBalance'
-import { CLMM_FEE_CONFIGS, getTxMeta } from './configs/clmm'
+import { handleMultiTxRetry } from '@/hooks/toast/retryTx'
+import { getComputeBudgetConfig } from '@/utils/tx/computeBudget'
 import { TxCallbackProps, TxCallbackPropsGeneric } from '../types/tx'
+import { getTxMeta } from './configs/clmm'
 
 export type CreatePoolBuildData =
   | TxBuildData<{ mockPoolInfo: ApiV3PoolInfoConcentratedItem; address: ClmmKeys }>
@@ -192,6 +191,7 @@ interface ClmmState {
   setRewardsAct: (
     props: {
       poolInfo: ApiV3PoolInfoConcentratedItem
+      poolKeys?: ClmmKeys
       rewardInfos: SetRewardsParams['rewardInfos']
       newRewardInfos: SetRewardsParams['rewardInfos']
     } & TxCallbackProps
@@ -775,7 +775,7 @@ export const useClmmStore = createStore<ClmmState>(
         .finally(txProps.onFinally)
     },
 
-    setRewardsAct: async ({ poolInfo, rewardInfos, newRewardInfos, onConfirmed, ...txProps }) => {
+    setRewardsAct: async ({ poolInfo, poolKeys, rewardInfos, newRewardInfos, onConfirmed, ...txProps }) => {
       const { raydium, txVersion } = useAppStore.getState()
       if (!raydium || rewardInfos.length + newRewardInfos.length < 1) return ''
       const allBuildData: (
@@ -797,6 +797,7 @@ export const useClmmStore = createStore<ClmmState>(
       if (rewardInfos.length) {
         const setRewardsBuildData = await raydium.clmm.setRewards({
           poolInfo,
+          poolKeys,
           ownerInfo: { useSOLBalance: true },
           rewardInfos,
           computeBudgetConfig,
