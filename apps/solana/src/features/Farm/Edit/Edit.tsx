@@ -122,7 +122,12 @@ export default function FarmEdit() {
 
   const isValidData = farmData ? farmData.version === 6 : clmmData ? clmmData.type === 'Concentrated' : false
 
-  const availableRewardCount = farmData ? 5 : clmmData ? 2 : 0
+  const operationOwners = useClmmStore((s) => s.operationOwners)
+  const publicKey = useAppStore((s) => s.publicKey)
+  const isOp = publicKey && operationOwners.map((r) => r.toBase58()).includes(publicKey.toBase58())
+  const maxRewardCount = isOp ? 3 : 2
+
+  const availableRewardCount = farmData ? 5 : clmmData ? maxRewardCount : 0
 
   const [token1, token2] = [farmData?.symbolMints[0] || clmmData?.mintA, farmData?.symbolMints[1] || clmmData?.mintB]
   const [name = '-', tvl = '0', apr = ''] = [

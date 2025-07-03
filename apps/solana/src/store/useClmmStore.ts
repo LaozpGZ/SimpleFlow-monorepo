@@ -51,6 +51,7 @@ interface ClmmState {
   currentPoolInfo?: ApiV3PoolInfoConcentratedItem
   currentPoolLoading: boolean
   rewardWhiteListMints: PublicKey[]
+  operationOwners: PublicKey[]
 
   harvestAllAct: (
     props: {
@@ -188,6 +189,7 @@ interface ClmmState {
   >
 
   loadAddRewardWhiteListAct: (props?: { checkFetch: boolean }) => void
+  loadOperationOwnersAct: (props?: { checkFetch: boolean }) => void
   setRewardsAct: (
     props: {
       poolInfo: ApiV3PoolInfoConcentratedItem
@@ -204,6 +206,7 @@ const clmmInitState = {
   currentPoolLoading: true,
   clmmFeeConfigs: {},
   rewardWhiteListMints: [],
+  operationOwners: [],
   slippage: 0.005
 }
 
@@ -1060,6 +1063,15 @@ export const useClmmStore = createStore<ClmmState>(
       if (checkFetch && get().rewardWhiteListMints.length > 0) return
       raydium.clmm.getWhiteListMint({ programId: useAppStore.getState().programIdConfig.CLMM_PROGRAM_ID }).then((data) => {
         set({ rewardWhiteListMints: data }, false, { type: 'loadAddRewardWhiteListAct' })
+      })
+    },
+    loadOperationOwnersAct: async (props) => {
+      const { raydium } = useAppStore.getState()
+      if (!raydium) return ''
+      const { checkFetch } = props || {}
+      if (checkFetch && get().operationOwners.length > 0) return
+      raydium.clmm.getOperationOwners({ programId: useAppStore.getState().programIdConfig.CLMM_PROGRAM_ID }).then((data) => {
+        set({ operationOwners: data }, false, { type: 'loadOperationOwnersAct' })
       })
     },
     reset: () => set(clmmInitState)

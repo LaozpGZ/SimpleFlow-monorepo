@@ -1850,6 +1850,13 @@ export class Clmm extends ModuleBase {
     return whitelistMintsInfo.whitelistMints.filter((i) => !i.equals(PublicKey.default));
   }
 
+  public async getOperationOwners({ programId }: { programId: PublicKey }): Promise<PublicKey[]> {
+    const accountInfo = await this.scope.connection.getAccountInfo(getPdaOperationAccount(programId).publicKey);
+    if (!accountInfo) return [];
+    const operationOwnersInfo = OperationLayout.decode(accountInfo.data);
+    return operationOwnersInfo.operationOwners.filter((i) => !i.equals(PublicKey.default));
+  }
+
   public async getOwnerPositionInfo({
     programId,
   }: {

@@ -4261,7 +4261,7 @@
   "Enter order size": "Enter order size",
   "Enter price tick": "Enter price tick",
   "Create a farm for any live pool": "Create a farm for any live pool",
-  "You can add up to 2 reward tokens.": "You can add up to 2 reward tokens.",
+  "You can add up to %count% reward tokens.": "You can add up to %count% reward tokens.",
   "Reward Token %index%": "Reward Token %index%",
   "Updated": "Updated",
   "Invalid amount": "Invalid amount",

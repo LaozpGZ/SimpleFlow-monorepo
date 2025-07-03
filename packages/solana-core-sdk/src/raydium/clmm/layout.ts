@@ -144,7 +144,12 @@ export const TickArrayLayout = struct([
   seq(u8(), 115, ""),
 ]);
 
-export const OperationLayout = struct([blob(329), seq(publicKey(), 100, "whitelistMints")]);
+export const OperationLayout = struct([
+  blob(8),
+  u8("bump"),
+  seq(publicKey(), 10, "operationOwners"),
+  seq(publicKey(), 100, "whitelistMints"),
+]);
 
 export const TickArrayBitmapExtensionLayout = struct([
   blob(8),
