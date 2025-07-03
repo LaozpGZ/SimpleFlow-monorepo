@@ -3758,7 +3758,7 @@
   "Set your slippage tolerance for swap transactions.": "I-set ang slippage tolerance mo para sa mga transaksyon ng pag-swap.",
   "Set tolerance for changes in the quote/base token deposit ratio.": "I-set ang tolerance para sa mga pagbabago sa quote/base ng ratio ng deposito ng token.",
   "Your transaction may be frontrun and result in an unfavorable trade": "Posibleng frontrun ang transaksyon mo at magresulta sa isang hindi kanais-nais na trade",
-  "Versioned Transaction": "Versioned Transaction",
+  "Versioned Transaction": "May Bersyon na Transaksyon",
   "Versioned Tx is a significant upgrade that allows for additional functionality, including advanced swap routing. Before turning on Vers. Tx, ensure that your wallet is compatible.": "Versioned Tx is a significant upgrade that allows for additional functionality, including advanced swap routing. Before turning on Vers. Tx, ensure that your wallet is compatible.",
   "New version available": "New version available",
   "Refresh the page to update and use the app.": "Refresh the page to update and use the app.",
