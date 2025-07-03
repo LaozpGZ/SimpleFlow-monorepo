@@ -4,12 +4,14 @@ import { DialogProvider, ModalProvider, UIKitProvider, dark, light } from '@panc
 import { Store } from '@reduxjs/toolkit'
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { HistoryManagerProvider } from 'contexts/HistoryContext'
+import { FirebaseAuthProvider } from 'contexts/Privy/firebase'
+import { PrivyProvider } from 'contexts/Privy/privy'
+import { WagmiWithPrivyProvider } from 'contexts/Privy/provider'
 import { W3WConfigProvider } from 'contexts/W3WConfigContext'
 import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
 import { useMemo } from 'react'
 import { Provider } from 'react-redux'
 import { createW3WWagmiConfig, createWagmiConfig } from 'utils/wagmi'
-import { WagmiProvider } from 'wagmi'
 
 // Create a client
 const queryClient = new QueryClient()
@@ -35,25 +37,29 @@ const Providers: React.FC<
     [],
   )
   return (
-    <WagmiProvider reconnectOnMount config={wagmiConfig}>
-      <W3WConfigProvider value={isInBinance()}>
+    <FirebaseAuthProvider>
+      <PrivyProvider>
         <QueryClientProvider client={queryClient}>
-          <HydrationBoundary state={dehydratedState}>
-            <Provider store={store}>
-              <NextThemeProvider>
-                <LanguageProvider>
-                  <StyledUIKitProvider>
-                    <HistoryManagerProvider>
-                      <ModalProvider portalProvider={DialogProvider}>{children}</ModalProvider>
-                    </HistoryManagerProvider>
-                  </StyledUIKitProvider>
-                </LanguageProvider>
-              </NextThemeProvider>
-            </Provider>
-          </HydrationBoundary>
+          <WagmiWithPrivyProvider reconnectOnMount config={wagmiConfig}>
+            <W3WConfigProvider value={isInBinance()}>
+              <HydrationBoundary state={dehydratedState}>
+                <Provider store={store}>
+                  <NextThemeProvider>
+                    <LanguageProvider>
+                      <StyledUIKitProvider>
+                        <HistoryManagerProvider>
+                          <ModalProvider portalProvider={DialogProvider}>{children}</ModalProvider>
+                        </HistoryManagerProvider>
+                      </StyledUIKitProvider>
+                    </LanguageProvider>
+                  </NextThemeProvider>
+                </Provider>
+              </HydrationBoundary>
+            </W3WConfigProvider>
+          </WagmiWithPrivyProvider>
         </QueryClientProvider>
-      </W3WConfigProvider>
-    </WagmiProvider>
+      </PrivyProvider>
+    </FirebaseAuthProvider>
   )
 }
 
