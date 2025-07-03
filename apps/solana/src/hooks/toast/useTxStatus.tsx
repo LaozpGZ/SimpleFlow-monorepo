@@ -263,7 +263,7 @@ function useTxStatus() {
             cancelRetryTx(txId)
             connection.removeSignatureListener(subId)
             toastSubject.next({
-              title: t('Send transaction timeout'),
+              title: t('Something went wrong. Request timed out'),
               description,
               status: 'warning',
               duration: 8 * 1000,
@@ -400,7 +400,7 @@ function useTxStatus() {
                 })
                 subTxIds.forEach(({ txId }) => cancelRetryTx(txId))
                 toastSubject.next({
-                  title: t('Send transaction timeout'),
+                  title: t('Something went wrong. Request timed out'),
                   detail: renderDetail(),
                   status: 'warning',
                   duration: 5 * 1000,
