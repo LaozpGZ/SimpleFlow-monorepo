@@ -14,7 +14,7 @@ import ResponsiveModal from './ResponsiveModal'
 
 dayjs.extend(utc)
 
-const MIN_DURATION_DAYS = 4
+const MIN_DURATION_DAYS = 1
 const MAX_DURATION_DAYS = 90
 
 export type FarmPeriodModalProps = {
