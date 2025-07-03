@@ -932,8 +932,7 @@ export const useClmmStore = createStore<ClmmState>(
         } as any,
         rewardInfos: rewardInfos.map((r) => ({
           ...r,
-          mint: solToWSolToken(r.mint),
-          programId: PancakeClmmProgramId['mainnet-beta']
+          mint: solToWSolToken(r.mint)
         })),
         ownerInfo: {
           useSOLBalance: true
