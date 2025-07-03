@@ -392,6 +392,8 @@ function useTxStatus() {
           // prepare for tx timeout
           const isTxOnChain = status === 'success' || status === 'error'
           if (!subscribeMap.has(toastId)) {
+            // adjust timeout based on the number of subTxIds
+            const adjustedTimeout = TOAST_DURATION + subTxIds.length * 2000
             window.setTimeout(() => {
               if (subscribeMap.get(toastId) !== true) {
                 toastSubject.next({
@@ -408,7 +410,7 @@ function useTxStatus() {
                 })
               }
               subscribeMap.delete(toastId)
-            }, TOAST_DURATION)
+            }, adjustedTimeout)
           }
           subscribeMap.set(toastId, isTxOnChain)
 
