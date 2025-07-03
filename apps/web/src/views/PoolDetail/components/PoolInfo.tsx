@@ -2,7 +2,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Percent, Token } from '@pancakeswap/swap-sdk-core'
 import {
   AutoColumn,
-  AutoRow,
   Box,
   Card,
   Flex,
@@ -15,13 +14,7 @@ import {
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
-import {
-  DoubleCurrencyLogo,
-  FeeTierTooltip,
-  LightGreyCard,
-  Liquidity,
-  NumberDisplay,
-} from '@pancakeswap/widgets-internal'
+import { DoubleCurrencyLogo, FeeTierTooltip, LightGreyCard, Liquidity } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { PoolFeatures } from 'components/PoolFeatures/PoolFeatures'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
@@ -31,6 +24,7 @@ import { useMemo, useState } from 'react'
 import { InfinityPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import styled from 'styled-components'
+import { formatAmount } from 'utils/formatInfoNumbers'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { isInfinityProtocol } from 'utils/protocols'
 import { zeroAddress } from 'viem'
@@ -39,7 +33,6 @@ import { usePoolInfoByQuery } from '../hooks/usePoolInfo'
 import { usePoolSymbol } from '../hooks/usePoolSymbol'
 import { MyPositions } from './MyPositions'
 import { PoolCharts } from './PoolCharts'
-import { PoolCurrencies } from './PoolCurrencies'
 import { PoolStatus } from './PoolStatus'
 import { PoolTvlWarning } from './PoolTvlWarning'
 import { Transactions } from './Transactions/Transactions'
@@ -167,14 +160,17 @@ export const PoolInfo = () => {
                 />
               </FlexGap>
               <FlexGap mt="2px" gap="8px" alignItems="center" width="100%">
-                <NumberDisplay
-                  value={flipCurrentPrice ? poolInfo.token1Price : poolInfo.token0Price}
-                  fontSize={28}
-                  width="max-content"
-                  maximumSignificantDigits={6}
-                  showFullDigitsTooltip={false}
-                  bold
-                />
+                <Text fontSize={28} bold width="max-content">
+                  {formatAmount(Number(flipCurrentPrice ? poolInfo.token1Price : poolInfo.token0Price), {
+                    notation: 'standard',
+                    displayThreshold: 0.001,
+                    tokenPrecision: poolInfo
+                      ? Math.abs(Number(poolInfo.token1Price) - Number(poolInfo.token0Price)) < 1
+                        ? 'enhanced'
+                        : 'normal'
+                      : 'normal',
+                  })}
+                </Text>
 
                 <Text fontSize={12} color="textSubtle" textTransform="uppercase" width="max-content">
                   {t(
@@ -204,6 +200,14 @@ export const PoolInfo = () => {
         </FlexGap>
       </Header>
 
+      <AutoColumn gap="lg">
+        <PoolTvlWarning poolInfo={poolInfo} />
+        <Grid gridGap="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '2fr 1fr']}>
+          <PoolCharts poolInfo={poolInfo} />
+          <PoolStatus poolInfo={poolInfo} />
+        </Grid>
+      </AutoColumn>
+
       {poolInfo ? <MyPositions poolInfo={poolInfo} /> : null}
 
       {hookData && (
@@ -214,21 +218,6 @@ export const PoolInfo = () => {
           <PoolFeatures hookData={hookData} />
         </AutoColumn>
       )}
-
-      <AutoColumn gap="lg">
-        <AutoRow gap="lg" flexWrap="wrap">
-          <Text as="h3" fontWeight={600} fontSize={24}>
-            {t('Pair info')}
-          </Text>
-          <PoolCurrencies poolInfo={poolInfo} />
-        </AutoRow>
-
-        <PoolTvlWarning poolInfo={poolInfo} />
-        <Grid gridGap="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr 2fr']}>
-          <PoolStatus poolInfo={poolInfo} />
-          <PoolCharts poolInfo={poolInfo} />
-        </Grid>
-      </AutoColumn>
 
       <Transactions protocol={poolInfo?.protocol} />
     </AutoColumn>
