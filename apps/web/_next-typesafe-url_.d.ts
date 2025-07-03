@@ -76,6 +76,7 @@ declare module "@@@next-typesafe-url" {
     "/liquidity/[tokenId]": StaticRoute;
     "/liquidity": StaticRoute;
     "/liquidity/pool/[chainName]/[id]": StaticRoute;
+    "/liquidity/pool-old/[chainName]/[id]": StaticRoute;
     "/liquidity/pools": StaticRoute;
     "/liquidity/positions": StaticRoute;
     "/lottery": StaticRoute;

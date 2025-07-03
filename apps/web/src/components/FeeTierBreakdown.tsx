@@ -78,6 +78,7 @@ export const InfinityFeeTierBreakdownDisplay = ({
         dynamic={pool?.dynamic}
         type={infinityFeeTier.type}
         percent={infinityFeeTier.percent}
+        showType={false}
       />
       {hookData?.category?.includes(HOOK_CATEGORY.DynamicFees) && infoIconVisible ? (
         <InfoIcon
