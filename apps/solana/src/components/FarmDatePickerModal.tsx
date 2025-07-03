@@ -14,6 +14,9 @@ import ResponsiveModal from './ResponsiveModal'
 
 dayjs.extend(utc)
 
+const MIN_DURATION_DAYS = 4
+const MAX_DURATION_DAYS = 90
+
 export type FarmPeriodModalProps = {
   isOpen: boolean
   onConfirm: (start: number, end: number) => void
@@ -22,7 +25,13 @@ export type FarmPeriodModalProps = {
   farmDuration?: number
 }
 
-export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmStart, farmDuration = 7 }: FarmPeriodModalProps) {
+export default function FarmDatePickerModal({
+  isOpen,
+  onConfirm,
+  onClose,
+  farmStart,
+  farmDuration = MIN_DURATION_DAYS
+}: FarmPeriodModalProps) {
   const { t } = useTranslation()
   const [startDate, setStartDate] = useState<Date>(dayjs(farmStart).toDate())
   const [startHour, setStartHour] = useState(dayjs(farmStart).hour())
@@ -53,7 +62,7 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
 
   const handleConfirm = useCallback(() => {
     const newDate = new Date(startDate.valueOf())
-    onConfirm(startDate.valueOf(), newDate.setDate(newDate.getDate() + (durationDays ? Number(durationDays) : 7)).valueOf())
+    onConfirm(startDate.valueOf(), newDate.setDate(newDate.getDate() + (durationDays ? Number(durationDays) : MIN_DURATION_DAYS)).valueOf())
   }, [startDate, durationDays])
 
   useEffect(() => {
@@ -123,15 +132,15 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
               value={durationDays}
               onInput={(e) => onDurationChange(e.currentTarget.value, Number(e.currentTarget.value))}
               placeholder="0.0"
-              // min={7}
-              // max={90}
-              // step={1}
+              min={MIN_DURATION_DAYS}
+              max={MAX_DURATION_DAYS}
+              step={1}
               style={{ textAlign: 'right' }}
             />
           </SimpleGrid>
-          {/* <Text color={colors.textSubtle} fontSize="xs" mt={1} textAlign="right">
-            {t('Enter value between 7 and 90')}
-          </Text> */}
+          <Text color={colors.textSubtle} fontSize="xs" mt={1} textAlign="right">
+            {t(`Enter value between %min% and %max%`, { min: MIN_DURATION_DAYS, max: MAX_DURATION_DAYS })}
+          </Text>
         </GridItem>
 
         <GridItem area="end">
@@ -181,8 +190,8 @@ export default function FarmDatePickerModal({ isOpen, onConfirm, onClose, farmSt
           width="100%"
           isDisabled={
             Number.isNaN(Number(durationDays)) ||
-            Number(durationDays) < 7 ||
-            Number(durationDays) > 90 ||
+            Number(durationDays) < MIN_DURATION_DAYS ||
+            Number(durationDays) > MAX_DURATION_DAYS ||
             dayjs(startDate).isBefore(dayjs(), 'minute')
           }
           onClick={handleConfirm}
