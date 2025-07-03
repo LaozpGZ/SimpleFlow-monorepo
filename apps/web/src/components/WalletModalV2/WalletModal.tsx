@@ -1,12 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
 import {
   ArrowBackIcon,
   ArrowForwardIcon,
   Box,
   Button,
-  ButtonMenu,
-  ButtonMenuItem,
   FlexGap,
   Modal,
   ModalHeader,
@@ -25,6 +22,12 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { formatAmount } from 'utils/formatInfoNumbers'
+import { CancelGiftConfirmView } from 'views/Gift/components/CancelGiftConfirmView'
+import { ClaimGiftConfirmView } from 'views/Gift/components/ClaimGiftConfirmView'
+import { ClaimGiftView } from 'views/Gift/components/ClaimGiftView'
+import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
+import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
+import { ClaimGiftProvider } from 'views/Gift/providers/ClaimGiftProvider'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssets } from './SendAssets'
@@ -59,23 +62,6 @@ const TotalBalanceDecimal = styled(Text)`
   font-size: 40px;
   font-weight: 600;
   color: ${({ theme }) => theme.colors.textSubtle};
-`
-
-const StyledButtonMenu = styled(ButtonMenu)`
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.input};
-  border-radius: 16px;
-  padding: 0;
-  margin: 0 0 16px 0;
-  border: none;
-`
-
-const StyledButtonMenuItem = styled(ButtonMenuItem)`
-  height: 40px;
-  border-radius: 16px;
-  font-size: 16px;
-  font-weight: 600;
-  flex: 1;
 `
 
 const ActionButtonsContainer = styled(FlexGap)`
@@ -164,19 +150,32 @@ export const WalletContent = ({
     setView(newIndex)
   }, [])
 
-  const tokenFilterData = useMemo(() => {
-    if (balances.length === 0) return []
+  const actionView = useMemo(() => {
+    if (viewState === ViewState.CANCEL_GIFT_CONFIRM) return <CancelGiftConfirmView />
 
-    return balances.map((asset) => {
-      return new Token(
-        asset.chainId,
-        asset.token.address as `0x${string}`,
-        asset.token.decimals,
-        asset.token.symbol,
-        asset.token.name,
+    // Claim Gift
+    if ([ViewState.CLAIM_GIFT, ViewState.CLAIM_GIFT_CONFIRM].includes(viewState)) {
+      return (
+        <ClaimGiftProvider>
+          {viewState === ViewState.CLAIM_GIFT ? (
+            <ClaimGiftView setViewState={setViewState} assets={balances} />
+          ) : (
+            <ClaimGiftConfirmView assets={balances} />
+          )}
+        </ClaimGiftProvider>
       )
-    })
-  }, [balances])
+    }
+
+    return (
+      <SendAssets
+        assets={balances}
+        isLoading={isLoading}
+        onViewStateChange={setViewState}
+        viewState={viewState}
+        onBack={() => setViewState(() => ViewState.WALLET_INFO)}
+      />
+    )
+  }, [viewState, balances, isLoading])
 
   return (
     <Box
@@ -191,7 +190,11 @@ export const WalletContent = ({
             variant="tertiary"
             style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
             onClick={() => {
-              setViewState((prevState) => prevState - 1)
+              setViewState((prevState) =>
+                [ViewState.CLAIM_GIFT, ViewState.CANCEL_GIFT_CONFIRM].includes(prevState)
+                  ? ViewState.WALLET_INFO
+                  : prevState - 1,
+              )
             }}
             ml={isMobile ? '8px' : '16px'}
           >
@@ -208,51 +211,49 @@ export const WalletContent = ({
           </FlexGap>
         )}
       </FlexGap>
-      <Box padding={isMobile ? '0' : '0 16px 16px'}>
-        {viewState >= ViewState.SEND_ASSETS ? (
-          <SendAssets
-            assets={balances}
-            isLoading={isLoading}
-            onViewStateChange={setViewState}
-            viewState={viewState}
-            onBack={() => setViewState((prevState) => ViewState.WALLET_INFO)}
-          />
-        ) : (
-          <>
-            <FlexGap alignItems="center" gap="3px">
-              <TotalBalanceInteger>${balanceDisplay.integer}</TotalBalanceInteger>
-              <TotalBalanceDecimal>.{balanceDisplay.decimal}</TotalBalanceDecimal>
-            </FlexGap>
-            <Text fontSize="20px" fontWeight="bold" mb="8px">
-              {t('My Wallet')}
-            </Text>
-            {!noAssets && (
-              <Box mb="16px" onClick={(e) => e.stopPropagation()}>
-                <TabsComponent
-                  view={view}
-                  handleClick={handleClick}
-                  style={{ backgroundColor: 'transparent', padding: '0', borderBottom: 'none' }}
-                />
-              </Box>
-            )}
-            {view === WalletView.WALLET_INFO && !noAssets ? (
-              <Box mt="16px">
-                <Text fontSize="14px" color="textSubtle">
-                  {t('Assets')}
-                </Text>
-
-                <AssetsList assets={balances} isLoading={isLoading} />
-              </Box>
-            ) : (
-              !noAssets && (
-                <Box padding="16px 0" maxHeight="280px" overflow="auto">
-                  <RecentTransactions />
+      <CancelGiftProvider>
+        <Box padding={isMobile ? '0' : '0 16px 16px'}>
+          {viewState >= ViewState.SEND_ASSETS ? (
+            actionView
+          ) : (
+            <>
+              <FlexGap alignItems="center" gap="3px">
+                <TotalBalanceInteger>${balanceDisplay.integer}</TotalBalanceInteger>
+                <TotalBalanceDecimal>.{balanceDisplay.decimal}</TotalBalanceDecimal>
+              </FlexGap>
+              <Text fontSize="20px" fontWeight="bold" mb="8px">
+                {t('My Wallet')}
+              </Text>
+              {!noAssets && (
+                <Box mb="16px" onClick={(e) => e.stopPropagation()}>
+                  <TabsComponent
+                    view={view}
+                    handleClick={handleClick}
+                    style={{ backgroundColor: 'transparent', padding: '0', borderBottom: 'none' }}
+                  />
                 </Box>
-              )
-            )}
-          </>
-        )}
-      </Box>
+              )}
+              {view === WalletView.GIFTS ? (
+                <GiftsDashboard assets={balances} setViewState={setViewState} />
+              ) : view === WalletView.WALLET_INFO && !noAssets ? (
+                <Box mt="16px">
+                  <Text fontSize="14px" color="textSubtle">
+                    {t('Assets')}
+                  </Text>
+
+                  <AssetsList assets={balances} isLoading={isLoading} />
+                </Box>
+              ) : (
+                !noAssets && (
+                  <Box padding="16px 0" maxHeight="280px" overflow="auto">
+                    <RecentTransactions />
+                  </Box>
+                )
+              )}
+            </>
+          )}
+        </Box>
+      </CancelGiftProvider>
       {viewState === ViewState.WALLET_INFO && (
         <>
           {noAssets ? (
@@ -309,7 +310,7 @@ export const WalletContent = ({
                 <ArrowForwardIcon color="primary" />
               </FlexGap>
             </Box>
-          ) : (
+          ) : view === WalletView.GIFTS ? null : (
             <ActionButtonsContainer>
               <FlexGap gap="8px" width="100%">
                 <ActionButton

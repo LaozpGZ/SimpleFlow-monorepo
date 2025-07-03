@@ -26,10 +26,13 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useERC20 } from 'hooks/useContract'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { formatUnits, isAddress, zeroAddress } from 'viem'
+import { SendGiftToggle } from 'views/Gift/components/SendGiftToggle'
+import { SendGiftView } from 'views/Gift/components/SendGiftView'
+import { SendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { useUserInsufficientBalanceLight } from 'views/SwapSimplify/hooks/useUserInsufficientBalance'
 import { useAccount, usePublicClient, useSendTransaction } from 'wagmi'
 import { ActionButton } from './ActionButton'
@@ -87,6 +90,8 @@ export interface SendAssetFormProps {
 }
 
 export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewStateChange, viewState }) => {
+  const { isSendGift } = useContext(SendGiftContext)
+
   const { t } = useTranslation()
   const [address, setAddress] = useState<string | null>(null)
   const debouncedAddress = useDebounce(address, 500)
@@ -175,17 +180,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       setEstimatedFee(null)
       setEstimatedFeeUsd(null)
     }
-  }, [
-    address,
-    amount,
-    publicClient,
-    accountAddress,
-    isNativeToken,
-    currency,
-    asset.token.address,
-    nativeCurrencyPrice,
-    erc20Contract,
-  ])
+  }, [address, amount, publicClient, accountAddress, isNativeToken, currency, nativeCurrencyPrice, erc20Contract])
 
   const sendAsset = useCallback(async () => {
     const amounts = tryParseAmount(amount, currency)
@@ -230,7 +225,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     isNativeToken,
     sendTransactionAsync,
     asset.chainId,
-    asset.token.symbol,
     fetchWithCatchTxError,
     t,
     toastSuccess,
@@ -238,7 +232,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   ])
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value
+    const { value } = e.target
     setAddress(value)
   }
 
@@ -256,12 +250,9 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     setAddressError('')
   }
 
-  const handleAmountChange = useCallback(
-    (value: string) => {
-      setAmount(value)
-    },
-    [currency],
-  )
+  const handleAmountChange = useCallback((value: string) => {
+    setAmount(value)
+  }, [])
 
   const handleUserInputBlur = useCallback(() => {
     setTimeout(() => setIsInputFocus(false), 300)
@@ -294,7 +285,18 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     }
   }, [address, amount, addressError, estimateTransactionFee])
 
-  const renderConfirmationModal = () => {
+  const isValidAddress = useMemo(() => {
+    // send gift doesn't need to check address
+    return isSendGift ? true : address && !addressError
+  }, [address, addressError, isSendGift])
+
+  if (viewState === ViewState.CONFIRM_TRANSACTION && isSendGift) {
+    const tokenAmount = tryParseAmount(amount, currency)
+
+    return <SendGiftView key={viewState} tokenAmount={tokenAmount} price={price} />
+  }
+
+  if (viewState >= ViewState.CONFIRM_TRANSACTION) {
     return (
       <SendTransactionFlow
         asset={asset}
@@ -320,43 +322,34 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     )
   }
 
-  if (viewState >= ViewState.CONFIRM_TRANSACTION) {
-    return renderConfirmationModal()
-  }
   return (
     <FormContainer>
-      <FlexGap alignItems="center" justifyContent="space-between">
-        <FlexGap alignItems="center" gap="8px" flexDirection="column">
-          <Text fontSize="20px" fontWeight="bold">
-            {t('Send')}
-          </Text>
-        </FlexGap>
-      </FlexGap>
-
-      <Box>
-        <AddressInputWrapper>
-          <Box position="relative">
-            <Input
-              value={address ?? ''}
-              onChange={handleAddressChange}
-              placeholder="Recipient address"
-              style={{ height: '64px' }}
-              isError={Boolean(addressError)}
-            />
-            {address && (
-              <ClearButton
-                scale="sm"
-                onClick={handleClearAddress}
-                style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' }}
-                variant="tertiary"
-              >
-                <CloseIcon color="textSubtle" />
-              </ClearButton>
-            )}
-          </Box>
-        </AddressInputWrapper>
-        {addressError && <ErrorMessage>{addressError}</ErrorMessage>}
-      </Box>
+      <SendGiftToggle>
+        <Box>
+          <AddressInputWrapper>
+            <Box position="relative">
+              <Input
+                value={address ?? ''}
+                onChange={handleAddressChange}
+                placeholder="Recipient address"
+                style={{ height: '64px' }}
+                isError={Boolean(addressError)}
+              />
+              {address && (
+                <ClearButton
+                  scale="sm"
+                  onClick={handleClearAddress}
+                  style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' }}
+                  variant="tertiary"
+                >
+                  <CloseIcon color="textSubtle" />
+                </ClearButton>
+              )}
+            </Box>
+          </AddressInputWrapper>
+          {addressError && <ErrorMessage>{addressError}</ErrorMessage>}
+        </Box>
+      </SendGiftToggle>
 
       <Box mb="16px">
         <FlexGap alignItems="center" gap="8px" justifyContent="space-between" position="relative">
@@ -421,7 +414,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           onClick={() => {
             onViewStateChange(ViewState.CONFIRM_TRANSACTION)
           }}
-          disabled={!address || !amount || !!addressError || isInsufficientBalance || attemptingTxn}
+          disabled={!isValidAddress || !amount || isInsufficientBalance || attemptingTxn}
           isLoading={attemptingTxn}
           endIcon={attemptingTxn ? <AutoRenewIcon spin color="currentColor" /> : undefined}
         >

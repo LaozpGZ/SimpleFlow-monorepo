@@ -22,6 +22,7 @@ import WalletWrongNetwork from './WalletWrongNetwork'
 export enum WalletView {
   WALLET_INFO,
   TRANSACTIONS,
+  GIFTS,
   WRONG_NETWORK,
 }
 
@@ -55,6 +56,7 @@ export const TabsComponent: React.FC<React.PropsWithChildren<TabsComponentProps>
       <ButtonMenu scale="sm" variant="subtle" onItemClick={handleClick} activeIndex={view} fullWidth>
         <ButtonMenuItem>{t('Wallet')}</ButtonMenuItem>
         <ButtonMenuItem>{t('Transactions')}</ButtonMenuItem>
+        <ButtonMenuItem>{t('Gifts')}</ButtonMenuItem>
       </ButtonMenu>
     </Tabs>
   )

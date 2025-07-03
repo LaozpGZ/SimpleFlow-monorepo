@@ -4,6 +4,7 @@ import { Box, FlexGap, SearchInput, Text } from '@pancakeswap/uikit'
 import { NetworkFilter } from '@pancakeswap/widgets-internal'
 import { BalanceData } from 'hooks/useAddressBalance'
 import { useCallback, useMemo, useState } from 'react'
+import { SendGiftProvider } from 'views/Gift/providers/SendGiftProvider'
 import { useAllChainsOpts } from 'views/universalFarms/hooks/useMultiChains'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
@@ -41,11 +42,6 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
 
   // Get unique networks from assets
   const allChainsOpts = useAllChainsOpts()
-  const networkFilterData = useMemo(() => {
-    if (assets.length === 0) return []
-    const uniqueChain = [...new Set(assets.map((asset) => asset.chainId))]
-    return allChainsOpts.filter((chain) => uniqueChain.includes(chain.value))
-  }, [assets])
 
   const filteredTokens = useMemo(() => {
     // First filter by networks if any are selected
@@ -64,8 +60,14 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
 
     return convertBalancesToAssets(searchFilteredBalances)
   }, [assets, selectedNetworks, searchQuery, convertBalancesToAssets])
+
   if (viewState >= ViewState.SEND_FORM && selectedAsset)
-    return <SendAssetForm asset={selectedAsset} onViewStateChange={onViewStateChange} viewState={viewState} />
+    return (
+      <SendGiftProvider>
+        <SendAssetForm asset={selectedAsset} onViewStateChange={onViewStateChange} viewState={viewState} />
+      </SendGiftProvider>
+    )
+
   return (
     <>
       <Text fontSize="20px" fontWeight="bold" mb="16px">
