@@ -37,6 +37,7 @@ import getEphemeralSigners from '@/utils/tx/getEphemeralSigners'
 import { ClmmLockInfo } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { handleMultiTxRetry } from '@/hooks/toast/retryTx'
 import { getComputeBudgetConfig } from '@/utils/tx/computeBudget'
+import { getClmmKeysFromPoolInfo } from '@/utils/getPoolKeysFromPoolInfo'
 import { TxCallbackProps, TxCallbackPropsGeneric } from '../types/tx'
 import { getTxMeta } from './configs/clmm'
 
@@ -477,16 +478,7 @@ export const useClmmStore = createStore<ClmmState>(
         const computeBudgetConfig = await getComputeBudgetConfig()
         const { execute } = await raydium.clmm.decreaseLiquidity({
           poolInfo,
-          // @todo: @ChefJerry ask BE implement rewardDefaultInfos
-          // poolInfo: {
-          //   ...poolInfo,
-          //   rewardDefaultInfos: [
-          //     {
-          //       mint: poolInfo.mintA,
-          //       perSecond: 0
-          //     }
-          //   ]
-          // },
+          poolKeys: getClmmKeysFromPoolInfo(poolInfo),
           ownerPosition: position,
           ownerInfo: {
             useSOLBalance: true,
