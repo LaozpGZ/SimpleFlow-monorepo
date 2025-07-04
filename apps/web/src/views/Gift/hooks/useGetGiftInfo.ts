@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { BalanceData } from 'hooks/useAddressBalance'
 import { useAccount } from 'wagmi'
-import { NEXT_PUBLIC_GIFT_API } from '../constants'
+import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
 import { GiftInfo, GiftInfoResponse } from '../types'
 import useGiftInfoSelector from './useGiftInfoSelector'
 
@@ -25,7 +25,7 @@ export const useGetGiftInfo = (assets: BalanceData[]) => {
   const selectGiftInfo = useGiftInfoSelector(assets)
 
   return useQuery({
-    queryKey: ['gift-info', chainId, account],
+    queryKey: [QUERY_KEY_GIFT_INFO, chainId, account],
     queryFn: async (): Promise<GiftInfoResponse[]> => {
       if (!chainId || !account) {
         throw new Error('Missing required parameters: chainId and account')
@@ -67,7 +67,7 @@ export const useGetGiftByCodeHash = ({ codeHash, assets }: { codeHash?: string; 
   const selectGiftInfo = useGiftInfoSelector(assets)
 
   return useQuery({
-    queryKey: ['gift-info', chainId, codeHash],
+    queryKey: [QUERY_KEY_GIFT_INFO, chainId, codeHash],
     queryFn: async (): Promise<GiftInfoResponse | undefined> => {
       if (!chainId) {
         throw new Error('Missing required parameters: chainId')

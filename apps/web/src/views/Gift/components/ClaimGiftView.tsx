@@ -23,9 +23,7 @@ export const ClaimGiftView = ({
 
   const { data: giftInfo, isLoading } = useGetGiftByCodeHash({ codeHash, assets })
 
-  const isInValid = Boolean(
-    code && (!giftInfo || ![GiftStatus.PENDING, GiftStatus.REQUESTED_CLAIM].includes(giftInfo.status)),
-  )
+  const isInValid = Boolean(code && (!giftInfo || giftInfo.status !== GiftStatus.PENDING))
 
   const buttonText = useMemo(() => {
     if (!code) {

@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAccount } from 'wagmi'
-import { NEXT_PUBLIC_GIFT_API } from '../constants'
+import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
 import { ClaimGiftParams, ClaimGiftRequest, ClaimGiftResponse, GiftApiResponse, GiftApiStatus } from '../types'
 
-export const useClaimGift = () => {
+export const useClaimGift = ({ onSuccess }: { onSuccess?: () => void }) => {
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
   const queryClient = useQueryClient()
@@ -53,7 +53,8 @@ export const useClaimGift = () => {
     },
     onSuccess: () => {
       // Invalidate gift-related queries to refresh the data
-      queryClient.invalidateQueries({ queryKey: ['gift-info'] })
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY_GIFT_INFO, chainId, account] })
+      onSuccess?.()
     },
   })
 }

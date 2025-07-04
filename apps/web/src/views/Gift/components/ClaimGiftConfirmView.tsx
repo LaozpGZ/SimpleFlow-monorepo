@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, ColumnCenter, Spinner, Text } from '@pancakeswap/uikit'
+import { Box, ColumnCenter, Spinner, Text, useToast } from '@pancakeswap/uikit'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { BalanceData } from 'hooks/useAddressBalance'
@@ -13,16 +13,32 @@ import { convertCodeHash } from '../utils/convertCodeHash'
 export const ClaimGiftConfirmView = ({ assets }: { assets: BalanceData[] }) => {
   const { code, setCode } = useContext(ClaimGiftContext)
   const { t } = useTranslation()
+  const { toastSuccess } = useToast()
 
   const { data: giftInfo, isLoading } = useGetGiftByCodeHash({
     codeHash: convertCodeHash(code),
     assets,
   })
 
-  const { mutate: claimGift, isPending, isError, error, data: claimGiftData } = useClaimGift()
+  const {
+    mutate: claimGift,
+    isPending,
+    isError,
+    error,
+    data: claimGiftData,
+  } = useClaimGift({
+    onSuccess: () => {
+      toastSuccess(t('Claim Gift Successfully'))
+    },
+  })
 
   useEffect(() => {
-    return () => setCode('')
+    if (code && claimGiftData?.status === GiftApiStatus.SUCCESS) {
+      // In case user click back button after claim gift, the code will be reset
+      return () => setCode('')
+    }
+
+    return () => {}
   }, [claimGiftData?.status, code, setCode])
 
   const handleClaim = () => {
