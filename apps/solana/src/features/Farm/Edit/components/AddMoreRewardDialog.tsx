@@ -66,6 +66,7 @@ export default function AddMoreRewardDialog({
           total: '',
           openTime: 0,
           endTime: 0,
+          perDay: isEcoSystemAddMore ? defaultRewardInfo.perDay : '',
           perWeek: isEcoSystemAddMore ? defaultRewardInfo.perWeek : '',
           apr: 0
         }
