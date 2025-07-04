@@ -5,10 +5,11 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
 
 import { ChainId } from '@pancakeswap/chains'
+import { WalletConfigV2 } from '@pancakeswap/ui-wallets/src/types'
+import { useFirebaseAuth } from 'contexts/Privy/firebase'
 import { useCallback, useMemo } from 'react'
 import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
 import { useConnect } from 'wagmi'
-import { WalletConfigV2 } from '@pancakeswap/ui-wallets/src/types'
 
 const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> = ({ isOpen, onDismiss }) => {
   const { login } = useAuth()
@@ -39,6 +40,18 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
     [chainId],
   )
 
+  const { loginWithGoogle, loginWithX, isLoading } = useFirebaseAuth()
+
+  const handleTelegramLogin = () => {
+    console.log('Telegram login clicked')
+    // still testing
+  }
+
+  const handleDiscordLogin = () => {
+    console.log('Discord login clicked')
+    //  still testing
+  }
+
   return (
     <WalletModalV2
       mevDocLink={mevDocLink}
@@ -50,6 +63,10 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
       login={login}
       onDismiss={onDismiss}
       onWalletConnectCallBack={handleWalletConnect}
+      onGoogleLogin={loginWithGoogle}
+      onXLogin={loginWithX}
+      onTelegramLogin={handleTelegramLogin}
+      onDiscordLogin={handleDiscordLogin}
     />
   )
 }

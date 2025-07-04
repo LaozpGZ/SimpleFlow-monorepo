@@ -1,4 +1,4 @@
-import { getAuth, GoogleAuthProvider, signInWithPopup, UserCredential } from 'firebase/auth'
+import { getAuth, GoogleAuthProvider, signInWithPopup, TwitterAuthProvider, UserCredential } from 'firebase/auth'
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
 
 import { firebaseApp } from './constants'
@@ -8,7 +8,8 @@ interface AuthContextType {
   token: string | undefined
   getToken: () => Promise<string | undefined>
   isLoading: boolean
-  login: () => Promise<void>
+  loginWithGoogle: () => Promise<void>
+  loginWithX: () => Promise<void>
 }
 
 // Create the context
@@ -35,10 +36,35 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     }
   }
 
-  const login = async () => {
+  const signInWithX = async (): Promise<UserCredential> => {
+    try {
+      const auth = getAuth(firebaseApp)
+      const twitterProvider = new TwitterAuthProvider()
+      const res = await signInWithPopup(auth, twitterProvider)
+      return res
+    } catch (err) {
+      alert(err)
+      throw err
+    }
+  }
+
+  const loginWithGoogle = async () => {
     try {
       setLoading(true)
       const loginRes = await signInWithGoogle()
+      const idToken = await loginRes.user.getIdToken(true)
+      setToken(idToken)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const loginWithX = async () => {
+    try {
+      setLoading(true)
+      const loginRes = await signInWithX()
       const idToken = await loginRes.user.getIdToken(true)
       setToken(idToken)
     } catch (err) {
@@ -75,7 +101,8 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     token,
     isLoading,
     getToken,
-    login,
+    loginWithGoogle,
+    loginWithX,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

@@ -1,5 +1,3 @@
-import { isMobile as isMobileDevice } from 'react-device-detect'
-import { styled } from 'styled-components'
 import { usePreloadImages, useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
@@ -7,8 +5,10 @@ import {
   Button,
   ButtonMenu,
   ButtonMenuItem,
+  ChevronRightIcon,
   CloseIcon,
   Column,
+  FlexGap,
   Heading,
   IconButton,
   Image,
@@ -25,7 +25,9 @@ import {
   WarningIcon,
 } from '@pancakeswap/uikit'
 import { useAtom } from 'jotai'
-import { MouseEvent, PropsWithChildren, Suspense, lazy, useCallback, useMemo, useState } from 'react'
+import { lazy, MouseEvent, PropsWithChildren, Suspense, useCallback, useMemo, useState } from 'react'
+import { isMobile as isMobileDevice } from 'react-device-detect'
+import { styled } from 'styled-components'
 import {
   desktopWalletSelectionClass,
   fullSizeModalWrapperClass,
@@ -37,9 +39,13 @@ import {
 import { errorAtom, lastUsedWalletNameAtom, previouslyUsedWalletsAtom, selectedWalletAtom } from './atom'
 import { ConnectData, LinkOfDevice, WalletConfigV2, WalletModalV2Props } from './types'
 
+export const ASSET_CDN = 'https://assets.pancakeswap.finance'
+
 const StepIntro = lazy(() => import('./components/Intro'))
 
 const Qrcode = lazy(() => import('./components/QRCode'))
+
+const SocialLoginModal = lazy(() => import('./components/SocialLoginModal'))
 
 export class WalletConnectorNotFoundError extends Error {}
 
@@ -53,6 +59,22 @@ export function useSelectedWallet<T>() {
 const StyledTab = styled(Tab)`
   height: 32px;
   padding: 4px 12px;
+`
+
+const SocialLoginIconBox = styled.div<{ $bg: string }>`
+  position: relative;
+  width: 21px;
+  height: 21px;
+  border-radius: 8px;
+  border: 2px solid ${({ theme }) => theme.colors.input};
+  &:not(:first-child) {
+    margin-left: -8px;
+  }
+  background-image: ${({ $bg }) => `url(${$bg})`};
+  background-size: cover;
+  background-position: center center;
+  background-color: white;
+  padding: 4px;
 `
 
 type TabContainerProps = PropsWithChildren<{
@@ -131,9 +153,11 @@ function MobileModal<T>({
   previouslyUsedWallets,
   connectWallet,
   mevDocLink,
+  onOpenSocialLoginModal,
 }: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText' | 'mevDocLink'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
+  onOpenSocialLoginModal: () => void
 }) {
   const [selected] = useSelectedWallet()
   const [error] = useAtom(errorAtom)
@@ -159,6 +183,8 @@ function MobileModal<T>({
   const topWalletsToShow: WalletConfigV2<T>[] = topWallets.filter(filterFn)
   const previouslyUsedWalletsToShow: WalletConfigV2<T>[] = previouslyUsedWallets.filter(filterFn)
 
+  const { t } = useTranslation()
+
   return (
     <AtomBox width="100%">
       {error ? (
@@ -177,8 +203,18 @@ function MobileModal<T>({
         </AtomBox>
       ) : null}
       <AtomBox display="flex" flexDirection="column" gap="16px" justifyContent="space-between">
+        <Button variant="tertiary" onClick={onOpenSocialLoginModal} width="100%" style={{ marginBottom: '8px' }}>
+          <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center">
+            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/google.jpg`} />
+            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/apple.png`} />
+            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/facebook.png`} />
+            <Text fontSize="12px">{t('Connect with social login')}</Text>
+            <ChevronRightIcon color="primary" />
+          </FlexGap>
+        </Button>
+
         <WalletSelect
-          style={{ height: `calc(100vh - 150px)` }}
+          style={{ height: `calc(100vh - 200px)` }}
           displayCount="all"
           wallets={walletsToShow}
           topWallets={topWalletsToShow}
@@ -371,10 +407,12 @@ function DesktopModal<T>({
   docLink,
   docText,
   mevDocLink,
+  onOpenSocialLoginModal,
 }: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText' | 'mevDocLink'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
   onWalletConnected: (wallet: WalletConfigV2<T>, connectData?: ConnectData) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
+  onOpenSocialLoginModal: () => void
 }) {
   const wallets: WalletConfigV2<T>[] = useMemo(
     () =>
@@ -439,6 +477,17 @@ function DesktopModal<T>({
         <Heading color="color" as="h4">
           {t('Connect Wallet')}
         </Heading>
+
+        <Button variant="tertiary" onClick={onOpenSocialLoginModal} width="100%">
+          <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center">
+            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/google.jpg`} />
+            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/apple.png`} />
+            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/facebook.png`} />
+            <Text fontSize="12px">{t('Connect with social login')}</Text>
+            <ChevronRightIcon color="primary" />
+          </FlexGap>
+        </Button>
+
         <WalletSelect
           wallets={wallets}
           topWallets={topWallets}
@@ -487,12 +536,14 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
     topWallets: topWallets_,
     login,
     docLink,
-    mevDocLink,
     docText,
     onWalletConnectCallBack,
     fullSize,
+    mevDocLink,
     ...rest
   } = props
+
+  const [isSocialLoginModalOpen, setIsSocialLoginModalOpen] = useState(false)
 
   const { isMobile } = useMatchBreakpoints()
   const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
@@ -573,41 +624,63 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
 
   const mobileContainerStyle: React.CSSProperties = isMobile ? { height: '100%', borderRadius: 0 } : {}
 
+  const handleOpenSocialLoginModal = () => {
+    setIsSocialLoginModalOpen(true)
+  }
+
+  const handleCloseSocialLoginModal = () => {
+    setIsSocialLoginModalOpen(false)
+  }
+
   return (
-    <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
-      <ModalWrapper
-        onDismiss={props.onDismiss}
-        containerStyle={{ border: 'none', ...mobileContainerStyle }}
-        style={{ overflow: 'visible', border: 'none', ...mobileContainerStyle }}
-      >
-        <AtomBox position="relative">
-          <TabContainer docLink={docLink} docText={docText} fullSize={fullSize} onDismiss={props.onDismiss}>
-            {isMobile ? (
-              <MobileModal
-                mevDocLink={mevDocLink}
-                connectWallet={connectWallet}
-                topWallets={topWallets}
-                previouslyUsedWallets={previouslyUsedWallets}
-                wallets={wallets}
-                docLink={docLink}
-                docText={docText}
-              />
-            ) : (
-              <DesktopModal
-                mevDocLink={mevDocLink}
-                connectWallet={connectWallet}
-                onWalletConnected={handleWalletConnected}
-                topWallets={topWallets}
-                previouslyUsedWallets={previouslyUsedWallets}
-                wallets={wallets}
-                docLink={docLink}
-                docText={docText}
-              />
-            )}
-          </TabContainer>
-        </AtomBox>
-      </ModalWrapper>
-    </ModalV2>
+    <>
+      <Suspense>
+        <SocialLoginModal
+          isOpen={isSocialLoginModalOpen}
+          onDismiss={handleCloseSocialLoginModal}
+          onGoogleLogin={props.onGoogleLogin}
+          onXLogin={props.onXLogin}
+          onTelegramLogin={props.onTelegramLogin}
+          onDiscordLogin={props.onDiscordLogin}
+        />
+      </Suspense>
+      <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
+        <ModalWrapper
+          onDismiss={props.onDismiss}
+          containerStyle={{ border: 'none', ...mobileContainerStyle }}
+          style={{ overflow: 'visible', border: 'none', ...mobileContainerStyle }}
+        >
+          <AtomBox position="relative">
+            <TabContainer docLink={docLink} docText={docText} fullSize={fullSize} onDismiss={props.onDismiss}>
+              {isMobile ? (
+                <MobileModal
+                  mevDocLink={mevDocLink}
+                  connectWallet={connectWallet}
+                  topWallets={topWallets}
+                  previouslyUsedWallets={previouslyUsedWallets}
+                  wallets={wallets}
+                  docLink={docLink}
+                  docText={docText}
+                  onOpenSocialLoginModal={handleOpenSocialLoginModal}
+                />
+              ) : (
+                <DesktopModal
+                  mevDocLink={mevDocLink}
+                  connectWallet={connectWallet}
+                  onWalletConnected={handleWalletConnected}
+                  topWallets={topWallets}
+                  previouslyUsedWallets={previouslyUsedWallets}
+                  wallets={wallets}
+                  docLink={docLink}
+                  docText={docText}
+                  onOpenSocialLoginModal={handleOpenSocialLoginModal}
+                />
+              )}
+            </TabContainer>
+          </AtomBox>
+        </ModalWrapper>
+      </ModalV2>
+    </>
   )
 }
 
