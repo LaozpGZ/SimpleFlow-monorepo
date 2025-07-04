@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import * as yup from 'yup'
 import Decimal from 'decimal.js'
 import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
+import { MAX_DURATION_DAYS, MIN_DURATION_DAYS } from '@/store/configs/farm'
 import { EditReward } from '../util'
 
 interface Props {
@@ -44,7 +45,9 @@ const schema = (t: TranslateFunction) =>
 
         return true
       }),
-    daysExtend: numberTransform.moreThan(6, ADJUST_REWARD_ERROR.DAYS_EXTEND).lessThan(91, ADJUST_REWARD_ERROR.DAYS_EXTEND)
+    daysExtend: numberTransform
+      .moreThan(MIN_DURATION_DAYS - 1, ADJUST_REWARD_ERROR.DAYS_EXTEND)
+      .lessThan(MAX_DURATION_DAYS + 1, ADJUST_REWARD_ERROR.DAYS_EXTEND)
   })
 
 export default function useAdjustRewardSchema(props: Props) {
@@ -57,7 +60,7 @@ export default function useAdjustRewardSchema(props: Props) {
     } catch (e: any) {
       setError(e.message as string)
     }
-  }, [props])
+  }, [props, t])
 
   return error
 }
