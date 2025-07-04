@@ -28,6 +28,7 @@ const useAuth = () => {
     async (connectorID: ConnectorNames) => {
       const findConnector = connectors.find((c) => c.id === connectorID)
       try {
+        console.log({ connectorID, findConnector, ready, authenticated, connectors })
         if (!findConnector) return undefined
 
         const connected = await connectAsync({ connector: findConnector, chainId })
