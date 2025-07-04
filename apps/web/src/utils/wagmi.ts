@@ -1,11 +1,12 @@
 import { getWagmiConnectorV2 } from '@binance/w3w-wagmi-connector-v2'
 import { cyberWalletConnector as createCyberWalletConnector, isCyberWallet } from '@cyberlab/cyber-app-sdk'
 import { blocto } from '@pancakeswap/wagmi/connectors/blocto'
+import { createConfig } from '@privy-io/wagmi'
 import { CHAINS } from 'config/chains'
 import { PUBLIC_NODES } from 'config/nodes'
 import memoize from 'lodash/memoize'
 import { Transport } from 'viem'
-import { createConfig, http } from 'wagmi'
+import { http } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 import { coinbaseWallet, injected, safe, walletConnect } from 'wagmi/connectors'
 import { fallbackWithRank } from './fallbackWithRank'
@@ -82,11 +83,10 @@ export const cyberWalletConnector = isCyberWallet()
 export function createWagmiConfig() {
   return createConfig({
     chains,
-    ssr: true,
+    ssr: false,
     syncConnectedChain: true,
     transports,
     ...CLIENT_CONFIG,
-
     connectors: [
       metaMaskConnector,
       injectedConnector,
@@ -97,7 +97,6 @@ export function createWagmiConfig() {
       // ledgerConnector,
       trustConnector,
       binanceWeb3WalletConnector(),
-
       ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
     ],
   })
