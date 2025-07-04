@@ -4152,7 +4152,7 @@
   "Enter upper price": "上限価格を入力してください",
   "Enter lower price": "下限価格を入力してください",
   "Enter current price": "現在価格を入力してください",
-  "Select pool fee tier": "プールの手数料率を選択してください",
+  "Select pool fee tier": "プールの手数料ティアを選択してください",
   "Select pool token 2": "プールトークン2を選択してください",
   "Select pool token 1": "プールトークン1を選択してください",
   "Enter min price": "下限価格を入力してください",
