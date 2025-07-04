@@ -1,12 +1,11 @@
 import { getWagmiConnectorV2 } from '@binance/w3w-wagmi-connector-v2'
 import { cyberWalletConnector as createCyberWalletConnector, isCyberWallet } from '@cyberlab/cyber-app-sdk'
 import { blocto } from '@pancakeswap/wagmi/connectors/blocto'
-import { createConfig } from '@privy-io/wagmi'
 import { CHAINS } from 'config/chains'
 import { PUBLIC_NODES } from 'config/nodes'
 import memoize from 'lodash/memoize'
 import { Transport } from 'viem'
-import { http } from 'wagmi'
+import { createConfig, http } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 import { coinbaseWallet, injected, safe, walletConnect } from 'wagmi/connectors'
 import { fallbackWithRank } from './fallbackWithRank'
@@ -81,25 +80,50 @@ export const cyberWalletConnector = isCyberWallet()
   : undefined
 
 export function createWagmiConfig() {
+  const isBrowser = typeof window !== 'undefined'
+  console.log({ isBrowser }, 'isBrowser')
+
+  const connectors = isBrowser
+    ? [
+        metaMaskConnector,
+        injectedConnector,
+        safe(),
+        coinbaseConnector,
+        walletConnectConnector,
+        bloctoConnector,
+        trustConnector,
+        binanceWeb3WalletConnector(),
+        ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
+      ]
+    : []
+
   return createConfig({
     chains,
     ssr: false,
     syncConnectedChain: true,
     transports,
     ...CLIENT_CONFIG,
-    connectors: [
-      metaMaskConnector,
-      injectedConnector,
-      safe(),
-      coinbaseConnector,
-      walletConnectConnector,
-      bloctoConnector,
-      // ledgerConnector,
-      trustConnector,
-      binanceWeb3WalletConnector(),
-      ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
-    ],
+    connectors,
   })
+  // return createConfig({
+  //   chains,
+  //   ssr: true,
+  //   syncConnectedChain: true,
+  //   transports,
+  //   ...CLIENT_CONFIG,
+  //   connectors: [
+  //     metaMaskConnector,
+  //     injectedConnector,
+  //     safe(),
+  //     coinbaseConnector,
+  //     walletConnectConnector,
+  //     bloctoConnector,
+  //     // ledgerConnector,
+  //     trustConnector,
+  //     binanceWeb3WalletConnector(),
+  //     ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
+  //   ],
+  // })
 }
 
 export const createW3WWagmiConfig = () => {
