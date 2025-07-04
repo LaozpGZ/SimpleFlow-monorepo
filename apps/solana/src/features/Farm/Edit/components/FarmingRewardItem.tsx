@@ -293,7 +293,6 @@ export default function ExistFarmingRewardItem({
           <>
             <Button
               size="sm"
-              isDisabled={!canAddMoreRewards}
               onClick={onOpenAdjustRewardDialog}
               border="1px solid"
               borderColor={colors.primary}
