@@ -40,25 +40,26 @@ const SocialLoginButton = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  padding: 12px 16px;
+  padding: 20px 16px;
   border-radius: 12px;
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   box-shadow: 0px 2px 0px 0px ${({ theme }) => theme.colors.cardBorder};
+`
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.background};
-  }
-
-  img {
-    margin-right: 12px;
-  }
+const SocialLoginButtonVertical = styled(SocialLoginButton)`
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 12px;
+  min-height: 100px;
 `
 
 const Divider = styled.div`
   height: 1px;
   background-color: ${({ theme }) => theme.colors.cardBorder};
   width: 100%;
+  margin: 16px 0;
 `
 
 const Web3WalletButton = styled(SocialLoginButton)`
@@ -131,24 +132,24 @@ const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
 
           <SocialLoginButton onClick={handleGoogleLogin}>
             <img src={`${ASSET_CDN}/web/wallets/social-login/google.jpg`} width="24" height="24" alt="Google" />
-            {t('Continue with Google')}
+            <Text>{t('Continue with Google')}</Text>
           </SocialLoginButton>
 
-          <Flex>
-            <SocialLoginButton onClick={handleXLogin}>
+          <Flex gap="8px">
+            <SocialLoginButtonVertical onClick={handleXLogin}>
               <img src={`${ASSET_CDN}/web/wallets/social-login/x.svg`} width="24" height="24" alt="X (Twitter)" />
-              {t('Continue with X')}
-            </SocialLoginButton>
+              <Text>{t('X Login')}</Text>
+            </SocialLoginButtonVertical>
 
-            <SocialLoginButton onClick={handleTelegramLogin}>
+            <SocialLoginButtonVertical onClick={handleTelegramLogin}>
               <img src={`${ASSET_CDN}/web/wallets/social-login/telegram.svg`} width="24" height="24" alt="Telegram" />
-              {t('Continue with Telegram')}
-            </SocialLoginButton>
+              <Text>{t('Telegram')}</Text>
+            </SocialLoginButtonVertical>
 
-            <SocialLoginButton onClick={handleDiscordLogin}>
+            <SocialLoginButtonVertical onClick={handleDiscordLogin}>
               <img src={`${ASSET_CDN}/web/wallets/social-login/discord.svg`} width="24" height="24" alt="Discord" />
-              {t('Continue with Discord')}
-            </SocialLoginButton>
+              <Text>{t('Discord')}</Text>
+            </SocialLoginButtonVertical>
           </Flex>
 
           <Divider />
