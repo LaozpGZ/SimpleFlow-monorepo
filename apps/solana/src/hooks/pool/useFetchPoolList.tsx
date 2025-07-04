@@ -163,14 +163,10 @@ export default function useFetchPoolList<T extends PoolFetchType>(props?: {
   )
 
   const issues = useMemo(() => {
-    return (
-      (data || [])
-        .reduce((acc, cur) => acc.concat(cur.data.data), [] as ApiV3PoolInfoItem[])
-        .filter(Boolean)
-        // @todo @ChefJerry remove this after BE support
-        .filter((i) => i.rewardDefaultInfos.length > 0)
-        .map(formatAprData) as ReturnPoolType<T>[]
-    )
+    return (data || [])
+      .reduce((acc, cur) => acc.concat(cur.data.data), [] as ApiV3PoolInfoItem[])
+      .filter(Boolean)
+      .map(formatAprData) as ReturnPoolType<T>[]
   }, [data, showFarms])
   const orgTokenList = useTokenStore((s) => s.displayTokenList)
 
