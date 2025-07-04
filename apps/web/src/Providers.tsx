@@ -12,7 +12,6 @@ import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'ne
 import { useMemo } from 'react'
 import { Provider } from 'react-redux'
 import { createWagmiConfig } from 'utils/wagmi'
-
 // Create a client
 const queryClient = new QueryClient()
 
