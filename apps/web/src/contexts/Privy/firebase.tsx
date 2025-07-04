@@ -3,6 +3,7 @@ import {
   GoogleAuthProvider,
   signInWithCustomToken,
   signInWithPopup,
+  signOut,
   TwitterAuthProvider,
   UserCredential,
 } from 'firebase/auth'
@@ -18,7 +19,7 @@ interface AuthContextType {
   loginWithGoogle: () => Promise<void>
   loginWithX: () => Promise<void>
   loginWithDiscord: () => Promise<void>
-  clearUserStates: () => void
+  signOutAndClearUserStates: () => void
 }
 
 // Create the context
@@ -152,7 +153,17 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     }
   }, [discordPopup])
 
-  const clearUserStates = useCallback(() => {
+  const signOutFirebase = useCallback(async () => {
+    const auth = getAuth(firebaseApp)
+    try {
+      await signOut(auth)
+    } catch (err) {
+      console.error(err)
+    }
+  }, [])
+
+  const signOutAndClearUserStates = useCallback(async () => {
+    await signOutFirebase()
     setToken(undefined)
     setLoading(false)
   }, [])
@@ -164,7 +175,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     loginWithGoogle,
     loginWithX,
     loginWithDiscord,
-    clearUserStates,
+    signOutAndClearUserStates,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
