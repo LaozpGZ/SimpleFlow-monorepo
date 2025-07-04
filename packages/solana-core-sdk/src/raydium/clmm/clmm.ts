@@ -1250,6 +1250,7 @@ export class Clmm extends ModuleBase {
 
   public async collectReward<T extends TxVersion>({
     poolInfo,
+    poolKeys: propsPoolKeys,
     ownerInfo,
     rewardMint,
     associatedOnly = true,
@@ -1282,7 +1283,7 @@ export class Clmm extends ModuleBase {
 
     if (!ownerRewardAccount)
       this.logAndCreateError("no money", "ownerRewardAccount", this.scope.account.tokenAccountRawInfos);
-    const poolKeys = await this.getClmmPoolKeys(poolInfo.id);
+    const poolKeys = propsPoolKeys ?? (await this.getClmmPoolKeys(poolInfo.id));
     const insInfo = ClmmInstrument.collectRewardInstructions({
       poolInfo,
       poolKeys,

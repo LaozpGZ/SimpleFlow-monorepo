@@ -647,6 +647,7 @@ export const useClmmStore = createStore<ClmmState>(
       const { execute } = await raydium.clmm.collectReward({
         ownerInfo: { useSOLBalance: true },
         poolInfo,
+        poolKeys: getClmmKeysFromPoolInfo(poolInfo),
         rewardMint,
         txVersion,
         computeBudgetConfig
