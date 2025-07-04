@@ -70,7 +70,7 @@ export default function EstimatedAprInfo({ aprData, value, onChange }: Props) {
               <Box w="7px" h="7px" bg={PORTFOLIO_PIE_COLORS[0]} rounded="full" />
               {t('Trade fees')}{' '}
               <Text color={colors.textPrimary} fontWeight="600">
-                {formatToRawLocaleStr(toPercentString(aprData.fee.apr || 0))}
+                {aprData.fee.apr === 0 ? 0 : formatToRawLocaleStr(toPercentString(aprData.fee.apr || 0))}
               </Text>
             </Flex>
           ) : null}
@@ -78,7 +78,7 @@ export default function EstimatedAprInfo({ aprData, value, onChange }: Props) {
             <Flex key={d.mint?.address || 'fees'} alignItems="center" gap="1" fontSize="sm" color={colors.textSubtle}>
               <Box w="7px" h="7px" bg={PORTFOLIO_PIE_COLORS[(idx + 1) % PORTFOLIO_PIE_COLORS.length]} rounded="full" />
               <Text color={colors.textPrimary} fontWeight="600">
-                {formatToRawLocaleStr(toPercentString(d.apr))}
+                {d.apr === 0 ? 0 : formatToRawLocaleStr(toPercentString(d.apr))}
               </Text>
             </Flex>
           ))}
