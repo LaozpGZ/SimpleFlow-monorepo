@@ -110,11 +110,10 @@ export default function ClmmPositionAccountItemDetail({
         borderTop="none"
         borderRadius="xl"
         borderTopRadius="none"
-        height="250px"
       >
         <Flex flexDirection={['column', 'row']} w="full" gap={[2, 4]} borderRadius="xl" justify="center">
           {/* chart */}
-          <Box {...panelCard} flex={[1, 1, 1.5]} py={2} px={4}>
+          <Flex flexDir="column" {...panelCard} flex={[1, 1, 1.5]} py={2} px={4} justify="center">
             <LiquidityChartRangeInput
               key={chartTag}
               poolId={poolInfo.id}
@@ -188,7 +187,7 @@ export default function ClmmPositionAccountItemDetail({
                 </HStack>
               </VStack>
             </Flex>
-          </Box>
+          </Flex>
           <Divider borderWidth="1px" borderColor={colors.textSubtle} opacity="0.2" orientation="vertical" />
           {/* info detail */}
           <VStack fontSize="sm" flex={[1, 1, 1]} spacing={3} py={[0, 0, 3]}>

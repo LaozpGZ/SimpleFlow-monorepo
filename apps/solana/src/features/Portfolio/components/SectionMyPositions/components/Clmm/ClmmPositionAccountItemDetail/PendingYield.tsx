@@ -59,7 +59,7 @@ export default function PendingYield({ isLoading, hasReward, pendingYield, rewar
         </Tooltip>
       </HStack>
 
-      <Flex display="grid" gridTemplateColumns="repeat(1, 1fr)" columnGap={0} rowGap={2}>
+      <Flex display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
         {rewardInfos
           .filter((r) => {
             return Number(r.amount) !== 0
