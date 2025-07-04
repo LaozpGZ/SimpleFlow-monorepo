@@ -1,0 +1,60 @@
+import { getAuth } from 'firebase-admin/auth'
+import { firebaseAdmin } from 'lib/firebase-admin'
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
+  const { code } = req.query
+
+  if (!code || typeof code !== 'string') {
+    res.status(400).json({ error: 'Invalid code' })
+    return
+  }
+
+  try {
+    // 1. Exchange authorization code for access token
+    const params = new URLSearchParams({
+      client_id: process.env.DISCORD_CLIENT_ID!,
+      client_secret: process.env.DISCORD_CLIENT_SECRET!,
+      grant_type: 'authorization_code',
+      code,
+      redirect_uri: process.env.DISCORD_REDIRECT_URI!,
+    })
+
+    const tokenRes = await fetch('https://discord.com/api/oauth2/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: params,
+    })
+
+    const tokenData = await tokenRes.json()
+    const { access_token: accessToken } = tokenData
+
+    // 2. Retrieve Discord user information
+    const userRes = await fetch('https://discord.com/api/users/@me', {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    })
+
+    const userData = await userRes.json()
+    const discordId = userData.id
+
+    // 3. Issue Firebase custom token
+    await firebaseAdmin() // Ensure Admin SDK is initialized
+    const customToken = await getAuth().createCustomToken(discordId)
+
+    // 4. Return token to frontend via postMessage
+    res.setHeader('Content-Type', 'text/html')
+    res.end(`
+      <script>
+        window.opener.postMessage({ customToken: "${customToken}" }, "${process.env.NEXTAUTH_URL || '*'}");
+        window.close();
+      </script>
+    `)
+  } catch (err) {
+    console.error('[Discord callback error]:', err)
+    res.status(500).json({ error: 'Discord authentication failed' })
+  }
+}
