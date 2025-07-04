@@ -57,6 +57,7 @@ import {
   getPdaProtocolPositionAddress,
   getPdaExBitmapAccount,
   getPdaMintExAccount,
+  getPdaPoolRewardVaulId,
 } from "./utils/pda";
 import { PoolUtils, clmmComputeInfoToApiInfo } from "./utils/pool";
 import { TickUtils } from "./utils/tick";
@@ -1626,6 +1627,7 @@ export class Clmm extends ModuleBase {
 
   public async harvestAllRewards<T extends TxVersion = TxVersion.LEGACY>({
     allPoolInfo,
+    poolKeys,
     allPositions,
     lockInfo,
     ownerInfo,
@@ -1739,7 +1741,7 @@ export class Clmm extends ModuleBase {
         rewardAccounts.push(ownerRewardAccount!);
       }
 
-      const poolKeys = await this.getClmmPoolKeys(poolInfo.id);
+      const poolKeys = this.getClmmKeysFromPoolInfo(poolInfo);
 
       const rewardAccountsFullInfo: {
         poolRewardVault: PublicKey;
@@ -1842,6 +1844,30 @@ export class Clmm extends ModuleBase {
     if (txVersion === TxVersion.V0)
       return txBuilder.sizeCheckBuildV0({ computeBudgetConfig }) as Promise<MakeMultiTxData<T>>;
     return txBuilder.sizeCheckBuild({ computeBudgetConfig }) as Promise<MakeMultiTxData<T>>;
+  }
+
+  getClmmKeysFromPoolInfo(poolInfo: ApiV3PoolInfoConcentratedItem): ClmmKeys {
+    return {
+      programId: poolInfo.programId,
+      id: poolInfo.id,
+      config: poolInfo.config,
+      mintA: poolInfo.mintA,
+      mintB: poolInfo.mintB,
+      // lookupTableAccount: poolInfo.lookupTableAccount
+      // alt: poolInfo.alt
+      openTime: poolInfo.openTime,
+      vault: (poolInfo as any).vault,
+      rewardInfos: poolInfo.rewardDefaultInfos.map((r) => ({
+        mint: r.mint,
+        vault: getPdaPoolRewardVaulId(
+          new PublicKey(poolInfo.programId),
+          new PublicKey(poolInfo.id),
+          new PublicKey(r.mint.address),
+        ).publicKey.toBase58(),
+      })),
+      observationId: "",
+      exBitmapAccount: "",
+    };
   }
 
   public async getWhiteListMint({ programId }: { programId: PublicKey }): Promise<PublicKey[]> {
