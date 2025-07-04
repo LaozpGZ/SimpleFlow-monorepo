@@ -11,7 +11,7 @@ import { W3WConfigProvider } from 'contexts/W3WConfigContext'
 import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
 import { useMemo } from 'react'
 import { Provider } from 'react-redux'
-import { createW3WWagmiConfig, createWagmiConfig } from 'utils/wagmi'
+import { createWagmiConfig } from 'utils/wagmi'
 
 // Create a client
 const queryClient = new QueryClient()
@@ -33,9 +33,12 @@ const Providers: React.FC<
   }>
 > = ({ children, store, dehydratedState }) => {
   const wagmiConfig = useMemo(
-    () => (typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()),
+    // () => (typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()),
+    () => createWagmiConfig(),
     [],
   )
+  console.log({ wagmiConfig }, '???')
+
   return (
     <FirebaseAuthProvider>
       <PrivyProvider>
