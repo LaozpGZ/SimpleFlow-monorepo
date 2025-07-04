@@ -22,7 +22,7 @@ const useAuth = () => {
   const { t } = useTranslation()
   const router = useRouter()
   const { logout: privyLogout, ready, authenticated } = usePrivy()
-  const { clearUserStates: clearFirebaseUserStates } = useFirebaseAuth()
+  const { signOutAndClearUserStates } = useFirebaseAuth()
 
   const login = useCallback(
     async (connectorID: ConnectorNames) => {
@@ -69,7 +69,7 @@ const useAuth = () => {
   const logout = useCallback(async () => {
     try {
       if (authenticated && ready) {
-        clearFirebaseUserStates()
+        await signOutAndClearUserStates()
         await privyLogout()
       } else await disconnectAsync()
     } catch (error) {
@@ -77,7 +77,7 @@ const useAuth = () => {
     } finally {
       clearUserStates(dispatch, { chainId: chain?.id })
     }
-  }, [disconnectAsync, dispatch, chain?.id])
+  }, [disconnectAsync, dispatch, chain?.id, authenticated, ready])
 
   return { login, logout }
 }
