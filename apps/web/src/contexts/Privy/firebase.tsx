@@ -18,6 +18,7 @@ interface AuthContextType {
   loginWithGoogle: () => Promise<void>
   loginWithX: () => Promise<void>
   loginWithDiscord: () => Promise<void>
+  clearUserStates: () => void
 }
 
 // Create the context
@@ -151,6 +152,11 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     }
   }, [discordPopup])
 
+  const clearUserStates = useCallback(() => {
+    setToken(undefined)
+    setLoading(false)
+  }, [])
+
   const value = {
     token,
     isLoading,
@@ -158,6 +164,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     loginWithGoogle,
     loginWithX,
     loginWithDiscord,
+    clearUserStates,
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
