@@ -8,6 +8,7 @@ import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 import { useAppDispatch } from 'state'
 import { ConnectorNotFoundError, SwitchChainNotSupportedError, useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useFirebaseAuth } from '../contexts/Privy/firebase'
 import { clearUserStates } from '../utils/clearUserStates'
 import { queryChainIdAtom, useActiveChainId } from './useActiveChainId'
 
@@ -21,6 +22,7 @@ const useAuth = () => {
   const { t } = useTranslation()
   const router = useRouter()
   const { logout: privyLogout, ready, authenticated } = usePrivy()
+  const { clearUserStates: clearFirebaseUserStates } = useFirebaseAuth()
 
   const login = useCallback(
     async (connectorID: ConnectorNames) => {
@@ -67,6 +69,7 @@ const useAuth = () => {
   const logout = useCallback(async () => {
     try {
       if (authenticated && ready) {
+        clearFirebaseUserStates()
         await privyLogout()
       } else await disconnectAsync()
     } catch (error) {
