@@ -5,11 +5,5 @@
       "path": "/api/burn-statistics/update",
       "schedule": "30 2 * * 2"
     }
-  ],
-  "build": {
-    "env": {
-      "VERCEL_SPEED_INSIGHTS_DISABLE": "1",
-      "VERCEL_ANALYTICS_ID": ""
-    }
-  }
+  ]
 }
