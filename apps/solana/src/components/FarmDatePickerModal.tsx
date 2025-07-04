@@ -1,4 +1,4 @@
-import { Box, Flex, Grid, GridItem, HStack, NumberInput, NumberInputField, SimpleGrid, Text } from '@chakra-ui/react'
+import { Box, Flex, Grid, GridItem, HStack, SimpleGrid, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Input } from '@pancakeswap/uikit'
 import dayjs from 'dayjs'
@@ -10,12 +10,10 @@ import Button from '@/components/Button'
 import { DatePick, HourPick, MinutePick } from '@/components/DateTimePicker'
 import { colors } from '@/theme/cssVariables'
 import { getUTCOffset } from '@/utils/date'
+import { MIN_DURATION_DAYS, MAX_DURATION_DAYS } from '@/store/configs/farm'
 import ResponsiveModal from './ResponsiveModal'
 
 dayjs.extend(utc)
-
-const MIN_DURATION_DAYS = 1
-const MAX_DURATION_DAYS = 90
 
 export type FarmPeriodModalProps = {
   isOpen: boolean
@@ -63,7 +61,7 @@ export default function FarmDatePickerModal({
   const handleConfirm = useCallback(() => {
     const newDate = new Date(startDate.valueOf())
     onConfirm(startDate.valueOf(), newDate.setDate(newDate.getDate() + (durationDays ? Number(durationDays) : MIN_DURATION_DAYS)).valueOf())
-  }, [startDate, durationDays])
+  }, [startDate, durationDays, onConfirm])
 
   useEffect(() => {
     setStartDate((val) => dayjs(val).hour(startHour).minute(startMinute).toDate())

@@ -31,6 +31,7 @@ import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatte
 import toPercentString from '@/utils/numberish/toPercentString'
 import { wSolToSolString } from '@/utils/token'
 import useTokenPrice, { TokenPrice } from '@/hooks/token/useTokenPrice'
+import { MAX_DURATION_DAYS, MIN_DURATION_DAYS } from '@/store/configs/farm'
 import { EditReward } from '../util'
 import useAdjustRewardSchema, { ADJUST_REWARD_ERROR } from '../schema/useAdjustRewardSchema'
 
@@ -145,8 +146,10 @@ export default function AdjustRewardDialog({
                 tokenPrices={tokenPrices}
                 mint={oldReward.mint}
                 amount={remainAmount.toString()}
+                openTime={oldReward.openTime}
                 endTime={oldReward.endTime}
                 perWeek={oldReward.perWeek}
+                perDay={oldReward.perDay}
                 apr={oldReward.apr}
               />
             </Box>
@@ -183,7 +186,7 @@ export default function AdjustRewardDialog({
                       inputGroupSx={{
                         px: 0
                       }}
-                      placeholder="7 - 90"
+                      placeholder={`${MIN_DURATION_DAYS} - ${MAX_DURATION_DAYS}`}
                       value={daysExtend}
                       onChange={setDaysExtend}
                     />
@@ -205,7 +208,9 @@ export default function AdjustRewardDialog({
                   mint={oldReward.mint}
                   amount={newTotal.toString()}
                   endTime={newEndTime}
+                  openTime={oldReward.openTime}
                   perWeek={newPerSecond.mul(WEEK_SECONDS).toString()}
+                  perDay={newPerSecond.mul(DAY_SECONDS).toString()}
                   apr={newApr}
                 />
               </Box>
@@ -231,12 +236,15 @@ export default function AdjustRewardDialog({
 function RewardInfoItem(props: {
   mint: ApiV3Token
   amount: string
+  openTime: number
   endTime: number
   perWeek: string
+  perDay: string
   apr: number
   tokenPrices: Record<string, TokenPrice>
 }) {
   const { t } = useTranslation()
+  const periodLessThanWeek = props.endTime - props.openTime <= 1000 * DAY_SECONDS * 7
   return (
     <Flex overflow="hidden" align="stretch" rounded="20px" fontSize="sm">
       <Flex direction="column" flexGrow={1}>
@@ -314,10 +322,10 @@ function RewardInfoItem(props: {
           px={6}
         >
           <Text fontSize="md" fontWeight={500} color={colors.textPrimary} mb={3}>
-            {formatCurrency(props.perWeek, { decimalPlaces: props.mint.decimals })}
+            {formatCurrency(periodLessThanWeek ? props.perDay : props.perWeek, { decimalPlaces: props.mint.decimals })}
             <Text display="inline" ml="2" color={colors.textSubtle}>
               {wSolToSolString(props.mint.symbol)}
-              {t('/week')}
+              {periodLessThanWeek ? t('/day') : t('/week')}
             </Text>
           </Text>
           <Text fontSize="xs" color={colors.textSubtle}>

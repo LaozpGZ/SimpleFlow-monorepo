@@ -307,15 +307,7 @@ export default function ExistFarmingRewardItem({
             </Button>
             <AdjustRewardDialog
               key={rewardTag}
-              oldReward={{
-                total: '1000',
-                perWeek: '100',
-                openTime: Date.now(),
-                endTime: Date.now() + 1000 * DAY_SECONDS * 7,
-                status: 'new',
-                apr: 100,
-                mint: rewardToken
-              }}
+              oldReward={reward}
               farmTVL={farmTVL}
               isOpen={isAdjustRewardDialogOpen}
               onClose={onCloseAdjustRewardDialog}
