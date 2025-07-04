@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { WalletConnectorNotFoundError, WalletSwitchChainError } from '@pancakeswap/ui-wallets'
+import { usePrivy } from '@privy-io/react-auth'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { ConnectorNames } from 'config/wallet'
 import { useAtom } from 'jotai'
@@ -19,6 +20,7 @@ const useAuth = () => {
   const [, setQueryChainId] = useAtom(queryChainIdAtom)
   const { t } = useTranslation()
   const router = useRouter()
+  const { logout: privyLogout, ready, authenticated } = usePrivy()
 
   const login = useCallback(
     async (connectorID: ConnectorNames) => {
@@ -64,7 +66,9 @@ const useAuth = () => {
 
   const logout = useCallback(async () => {
     try {
-      await disconnectAsync()
+      if (authenticated && ready) {
+        await privyLogout()
+      } else await disconnectAsync()
     } catch (error) {
       console.error(error)
     } finally {
