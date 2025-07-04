@@ -119,6 +119,10 @@ export function formatPoolData(pool: ApiV3PoolInfoItem, tokenList?: TokenInfo[])
           .mul(60 * 60 * 24 * 7)
           .div(10 ** r.mint.decimals)
           .toString(),
+        daily: new Decimal(r.perSecond || 0)
+          .mul(60 * 60 * 24)
+          .div(10 ** r.mint.decimals)
+          .toString(),
         periodString: `${openTime.format('YYYY/MM/DD')} - ${endTime.format('YYYY/MM/DD')}`,
         periodDays: endTime.diff(openTime, 'days'),
         unEmit: unEmitRewards,

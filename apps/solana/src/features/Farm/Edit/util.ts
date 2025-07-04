@@ -11,6 +11,7 @@ export interface EditReward {
   openTime: number
   endTime: number
   perWeek: string
+  perDay: string
   status: FarmStatus
   apr: number
 }
@@ -25,6 +26,7 @@ export function farmV6RewardToEditReward(reward: FormattedRewardInfoV6): EditRew
     openTime: Number(reward.openTime),
     endTime: Number(reward.endTime),
     perWeek: reward.weekly,
+    perDay: reward.daily,
     status: getFarmStatus(reward),
     apr: reward.apr
   }
@@ -37,6 +39,7 @@ export function poolRewardToEditReward(reward: FormattedPoolReward): EditReward 
     openTime: reward.startTime!,
     endTime: reward.endTime!,
     perWeek: reward.weekly,
+    perDay: reward.daily,
     status: getFarmStatus(reward),
     apr: reward.apr
   }

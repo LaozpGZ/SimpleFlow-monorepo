@@ -43,6 +43,7 @@ export default function ExistFarmingRewardItem({
   const [rewardTag, setRewardTag] = useState(Date.now())
 
   const rewardToken = reward.mint
+  const periodLessThanWeek = reward.endTime - reward.openTime <= 1000 * DAY_SECONDS * 7
   const { startTimeText, endTimeText, durationText } = getRewardMeta(reward)
   const { startTimeText: newStartTimeText, endTimeText: newEndTimeText, durationText: newDurationText } = getRewardMeta(currentReward)
 
@@ -179,8 +180,8 @@ export default function ExistFarmingRewardItem({
             <Text fontWeight="600">{formatCurrency(reward.total, { decimalPlaces: 2 })}</Text>
             <HStack fontSize="sm">
               <Text color={colors.textSubtle}>
-                {formatCurrency(reward.perWeek, { decimalPlaces: 2 })}
-                {t('/week')}
+                {formatCurrency(periodLessThanWeek ? reward.perDay : reward.perWeek, { decimalPlaces: 2 })}
+                {periodLessThanWeek ? t('/day') : t('/week')}
               </Text>
             </HStack>
           </Box>
