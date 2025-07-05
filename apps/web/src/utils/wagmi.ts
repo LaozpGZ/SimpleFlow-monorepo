@@ -81,7 +81,6 @@ export const cyberWalletConnector = isCyberWallet()
 
 export function createWagmiConfig() {
   const isBrowser = typeof window !== 'undefined'
-  console.log({ isBrowser }, 'isBrowser')
 
   const connectors = isBrowser
     ? [
@@ -99,7 +98,7 @@ export function createWagmiConfig() {
 
   return createConfig({
     chains,
-    ssr: false,
+    ssr: true,
     syncConnectedChain: true,
     transports,
     ...CLIENT_CONFIG,
