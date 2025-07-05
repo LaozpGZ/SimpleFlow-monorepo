@@ -7,5 +7,6 @@ export const ClaimGiftContext = createContext({
 
 export const ClaimGiftProvider = ({ children }: { children: React.ReactNode }) => {
   const [code, setCode] = useState('')
+
   return <ClaimGiftContext.Provider value={{ code, setCode }}>{children}</ClaimGiftContext.Provider>
 }

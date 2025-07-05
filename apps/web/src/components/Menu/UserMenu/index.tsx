@@ -13,6 +13,8 @@ import { useProfile } from 'state/profile/hooks'
 import { usePendingTransactions } from 'state/transactions/hooks'
 import styled from 'styled-components'
 import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
+import { useAutoFillCode } from 'views/Gift/hooks/useAutoFillCode'
+import { ClaimGiftProvider } from 'views/Gift/providers/ClaimGiftProvider'
 import { useAccount } from 'wagmi'
 
 const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
@@ -26,14 +28,12 @@ const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
   }, [logout, connector?.name, account, chainId])
 
   return (
-    <WalletModalV2ViewStateProvider>
-      <WalletContent
-        account={account}
-        onDismiss={() => {}}
-        onReceiveClick={onReceiveClick}
-        onDisconnect={handleClickDisconnect}
-      />
-    </WalletModalV2ViewStateProvider>
+    <WalletContent
+      account={account}
+      onDismiss={() => {}}
+      onReceiveClick={onReceiveClick}
+      onDisconnect={handleClickDisconnect}
+    />
   )
 }
 
@@ -77,6 +77,16 @@ const UserMenu = () => {
   // State for click-based menu
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+
+  useAutoFillCode({
+    onAutoFillCode: () => {
+      if (isMobile) {
+        setShowMobileWalletModal(true)
+      } else {
+        setIsMenuOpen(true)
+      }
+    },
+  })
 
   // Handle click outside to close menu
   useEffect(() => {
@@ -200,4 +210,14 @@ const UserMenu = () => {
   )
 }
 
-export default UserMenu
+const UserMenuContainer = (props) => {
+  return (
+    <WalletModalV2ViewStateProvider>
+      <ClaimGiftProvider>
+        <UserMenu {...props} />
+      </ClaimGiftProvider>
+    </WalletModalV2ViewStateProvider>
+  )
+}
+
+export default UserMenuContainer

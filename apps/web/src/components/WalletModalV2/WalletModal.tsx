@@ -27,13 +27,12 @@ import { ClaimGiftConfirmView } from 'views/Gift/components/ClaimGiftConfirmView
 import { ClaimGiftView } from 'views/Gift/components/ClaimGiftView'
 import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
 import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
-import { ClaimGiftProvider } from 'views/Gift/providers/ClaimGiftProvider'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssets } from './SendAssets'
 import { ViewState } from './type'
 import { CopyAddress } from './WalletCopyButton'
-import { useWalletModalV2ViewState, WalletModalV2ViewStateProvider } from './WalletModalV2ViewStateProvider'
+import { useWalletModalV2ViewState } from './WalletModalV2ViewStateProvider'
 
 interface WalletModalProps {
   isOpen: boolean
@@ -102,18 +101,16 @@ const WalletModal: React.FC<WalletModalProps> = ({ account, onDismiss, isOpen, o
     return null
   }
   return (
-    <WalletModalV2ViewStateProvider>
-      <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-        <StyledModal title={undefined} onDismiss={onDismiss} hideCloseButton bodyPadding="16px">
-          <WalletContent
-            account={account}
-            onDisconnect={onDisconnect}
-            onDismiss={onDismiss}
-            onReceiveClick={onReceiveClick}
-          />
-        </StyledModal>
-      </ModalV2>
-    </WalletModalV2ViewStateProvider>
+    <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
+      <StyledModal title={undefined} onDismiss={onDismiss} hideCloseButton bodyPadding="16px">
+        <WalletContent
+          account={account}
+          onDisconnect={onDisconnect}
+          onDismiss={onDismiss}
+          onReceiveClick={onReceiveClick}
+        />
+      </StyledModal>
+    </ModalV2>
   )
 }
 
@@ -161,13 +158,13 @@ export const WalletContent = ({
     // Claim Gift
     if ([ViewState.CLAIM_GIFT, ViewState.CLAIM_GIFT_CONFIRM].includes(viewState)) {
       return (
-        <ClaimGiftProvider>
+        <>
           {viewState === ViewState.CLAIM_GIFT ? (
             <ClaimGiftView setViewState={setViewState} assets={balances} />
           ) : (
             <ClaimGiftConfirmView assets={balances} />
           )}
-        </ClaimGiftProvider>
+        </>
       )
     }
 
