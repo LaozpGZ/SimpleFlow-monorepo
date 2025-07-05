@@ -1,7 +1,14 @@
+import { usePrivy } from '@privy-io/react-auth'
 import { WagmiProvider as Provider } from '@privy-io/wagmi'
 import { PropsWithChildren } from 'react'
-import { type WagmiProviderProps } from 'wagmi'
+import { type WagmiProviderProps, WagmiProvider } from 'wagmi'
 
 export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren<WagmiProviderProps>) {
-  return <Provider {...props}>{children}</Provider>
+  const { authenticated, ready } = usePrivy()
+
+  if (ready && authenticated) {
+    return <Provider {...props}>{children}</Provider>
+  }
+
+  return <WagmiProvider {...props}>{children}</WagmiProvider>
 }
