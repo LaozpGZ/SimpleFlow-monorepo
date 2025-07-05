@@ -31,8 +31,9 @@ import { ClaimGiftProvider } from 'views/Gift/providers/ClaimGiftProvider'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssets } from './SendAssets'
-import { CopyAddress } from './WalletCopyButton'
 import { ViewState } from './type'
+import { CopyAddress } from './WalletCopyButton'
+import { useWalletModalV2ViewState, WalletModalV2ViewStateProvider } from './WalletModalV2ViewStateProvider'
 
 interface WalletModalProps {
   isOpen: boolean
@@ -101,16 +102,18 @@ const WalletModal: React.FC<WalletModalProps> = ({ account, onDismiss, isOpen, o
     return null
   }
   return (
-    <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-      <StyledModal title={undefined} onDismiss={onDismiss} hideCloseButton bodyPadding="16px">
-        <WalletContent
-          account={account}
-          onDisconnect={onDisconnect}
-          onDismiss={onDismiss}
-          onReceiveClick={onReceiveClick}
-        />
-      </StyledModal>
-    </ModalV2>
+    <WalletModalV2ViewStateProvider>
+      <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
+        <StyledModal title={undefined} onDismiss={onDismiss} hideCloseButton bodyPadding="16px">
+          <WalletContent
+            account={account}
+            onDisconnect={onDisconnect}
+            onDismiss={onDismiss}
+            onReceiveClick={onReceiveClick}
+          />
+        </StyledModal>
+      </ModalV2>
+    </WalletModalV2ViewStateProvider>
   )
 }
 
@@ -129,8 +132,10 @@ export const WalletContent = ({
   const { t } = useTranslation()
   const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
-  const [viewState, setViewState] = useState(ViewState.WALLET_INFO)
+  const { viewState, setViewState, goBack } = useWalletModalV2ViewState()
   const { theme } = useTheme()
+
+  console.log('viewState', viewState, ViewState)
 
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
@@ -172,7 +177,7 @@ export const WalletContent = ({
         isLoading={isLoading}
         onViewStateChange={setViewState}
         viewState={viewState}
-        onBack={() => setViewState(() => ViewState.WALLET_INFO)}
+        onBack={goBack}
       />
     )
   }, [viewState, balances, isLoading])
@@ -189,13 +194,7 @@ export const WalletContent = ({
           <Button
             variant="tertiary"
             style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
-            onClick={() => {
-              setViewState((prevState) =>
-                [ViewState.CLAIM_GIFT, ViewState.CANCEL_GIFT_CONFIRM].includes(prevState)
-                  ? ViewState.WALLET_INFO
-                  : prevState - 1,
-              )
-            }}
+            onClick={goBack}
             ml={isMobile ? '8px' : '16px'}
           >
             <ArrowBackIcon fontSize="24px" color={theme.colors.primary60} />

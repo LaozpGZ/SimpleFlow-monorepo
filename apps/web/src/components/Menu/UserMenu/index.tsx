@@ -1,10 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, UserMenu as UIKitUserMenu, UserMenuVariant, useMatchBreakpoints } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import useAirdropModalStatus from 'components/GlobalCheckClaimStatus/hooks/useAirdropModalStatus'
 import Trans from 'components/Trans'
 import { WalletContent, WalletModalV2 } from 'components/WalletModalV2'
 import ReceiveModal from 'components/WalletModalV2/ReceiveModal'
+import { WalletModalV2ViewStateProvider } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
 import { useDomainNameForAddress } from 'hooks/useDomain'
@@ -16,19 +16,9 @@ import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useAccount } from 'wagmi'
 
 const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
-  const { t } = useTranslation()
-  const { chainId, isWrongNetwork } = useActiveChainId()
+  const { chainId } = useActiveChainId()
   const { logout } = useAuth()
   const { address: account, connector } = useAccount()
-  const { hasPendingTransactions } = usePendingTransactions()
-  const { isInitialized, isLoading, profile } = useProfile()
-  const { shouldShowModal } = useAirdropModalStatus()
-
-  const hasProfile = isInitialized && !!profile
-
-  // Use PancakeSwap's breakpoint system
-  const { isMobile } = useMatchBreakpoints()
-  const isMobileView = isMobile
 
   const handleClickDisconnect = useCallback(() => {
     logGTMDisconnectWalletEvent(chainId, connector?.name, account)
@@ -36,12 +26,14 @@ const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
   }, [logout, connector?.name, account, chainId])
 
   return (
-    <WalletContent
-      account={account}
-      onDismiss={() => {}}
-      onReceiveClick={onReceiveClick}
-      onDisconnect={handleClickDisconnect}
-    />
+    <WalletModalV2ViewStateProvider>
+      <WalletContent
+        account={account}
+        onDismiss={() => {}}
+        onReceiveClick={onReceiveClick}
+        onDisconnect={handleClickDisconnect}
+      />
+    </WalletModalV2ViewStateProvider>
   )
 }
 
