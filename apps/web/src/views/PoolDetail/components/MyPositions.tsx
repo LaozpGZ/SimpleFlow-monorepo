@@ -91,6 +91,8 @@ import { useV3Positions } from '../hooks/useV3Positions'
 import { MyPositionsProvider, useMyPositions } from './MyPositionsContext'
 import { V2PoolEarnings, V3PoolEarnings } from './PoolEarnings'
 
+import { PositionsTable } from './Tabs/PositionsTable'
+
 export enum PositionFilter {
   All = 0,
   Active = 1,
@@ -382,9 +384,14 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   }
   return (
     <AutoColumn gap="lg">
-      <Text as="h3" bold fontSize={24}>
-        {t('My Positions')}
-      </Text>
+      <PositionsTable
+        poolInfo={poolInfo}
+        totalLiquidityUSD={Number(totalLiquidityUSD)}
+        totalApr={totalAprValue}
+        handleHarvestAll={handleHarvestAll}
+        data={[]}
+      />
+
       <Grid gridGap={24} gridTemplateColumns={['1fr', '1fr', '1fr', '1fr', '1fr 2fr']}>
         <Box>
           <OverviewCard innerCardProps={{ p: [16, null, null, 24] }}>
@@ -503,7 +510,6 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
                 setHandleHarvestAll={setHandleHarvestAll}
               />
             ) : null}
-
             {count === 0 && (
               <StyledImage src="/images/decorations/3dpan.png" alt="Pancake illustration" width={120} height={103} />
             )}
@@ -745,6 +751,7 @@ const MyInfinityCLPPositions: React.FC<{
   const { data: price1Usd } = useCurrencyUsdPrice(poolInfo.token1, {
     enabled: !!poolInfo.token1,
   })
+
   const totalLiquidityUSD = useMemo(() => {
     if (!positionsInPool) {
       return '0'
@@ -821,6 +828,7 @@ const MyInfinityCLPPositions: React.FC<{
   if (!positions) {
     return null
   }
+
   return (
     <AutoColumn gap="lg">
       {[PositionFilter.All, PositionFilter.Active].includes(filter) && positions?.[PositionFilter.Active]?.length ? (

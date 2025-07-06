@@ -12,6 +12,8 @@ import {
   SearchIcon,
   Spinner,
   SwapHorizIcon,
+  Tab,
+  TabMenu,
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
@@ -36,7 +38,12 @@ import { MyPositions } from './MyPositions'
 import { PoolCharts } from './PoolCharts'
 import { PoolStatus } from './PoolStatus'
 import { PoolTvlWarning } from './PoolTvlWarning'
-import { Transactions } from './Transactions/Transactions'
+import { Transactions } from './Transactions'
+
+enum PoolDetailTab {
+  MyPositions = 0,
+  Transactions = 1,
+}
 
 const SearchButton = styled(IconButton).attrs({ variant: 'primary60' })`
   background-color: ${({ theme }) => theme.colors.input};
@@ -53,6 +60,7 @@ export const PoolInfo = () => {
   const isSmallScreen = isMobile || isTablet
 
   const [flipCurrentPrice, setFlipCurrentPrice] = useState(false)
+  const [tab, setTab] = useState(PoolDetailTab.MyPositions)
 
   const currency0 =
     useCurrencyByChainId(poolInfo?.token0.isNative ? zeroAddress : (poolInfo?.token0 as Token)?.address, chainId) ??
@@ -210,7 +218,29 @@ export const PoolInfo = () => {
         </Grid>
       </AutoColumn>
 
-      {poolInfo ? <MyPositions poolInfo={poolInfo} /> : null}
+      <Box>
+        <Box style={{ margin: '0 24px -3px' }}>
+          <TabMenu activeIndex={tab} onItemClick={setTab}>
+            <Tab
+              isActive={tab === PoolDetailTab.MyPositions}
+              onClick={() => setTab(PoolDetailTab.MyPositions)}
+              key="my-positions"
+            >
+              {t('My Positions')}
+            </Tab>
+            <Tab
+              isActive={tab === PoolDetailTab.Transactions}
+              onClick={() => setTab(PoolDetailTab.Transactions)}
+              key="transactions"
+            >
+              {t('Transactions')}
+            </Tab>
+          </TabMenu>
+        </Box>
+
+        {tab === PoolDetailTab.MyPositions ? <MyPositions poolInfo={poolInfo} /> : null}
+        {tab === PoolDetailTab.Transactions ? <Transactions protocol={poolInfo.protocol} /> : null}
+      </Box>
 
       {hookData && (
         <AutoColumn gap="lg">
@@ -220,8 +250,6 @@ export const PoolInfo = () => {
           <PoolFeatures hookData={hookData} />
         </AutoColumn>
       )}
-
-      <Transactions protocol={poolInfo?.protocol} />
     </AutoColumn>
   )
 }
