@@ -5,12 +5,14 @@ interface WalletModalV2ViewStateContextType {
   viewState: ViewState
   setViewState: (viewState: ViewState) => void
   goBack: () => void
+  reset: () => void
 }
 
 const WalletModalV2ViewStateContext = createContext<WalletModalV2ViewStateContextType>({
   viewState: ViewState.WALLET_INFO,
   setViewState: () => {},
   goBack: () => {},
+  reset: () => {},
 })
 
 export const useWalletModalV2ViewState = () => {
@@ -52,12 +54,17 @@ export const WalletModalV2ViewStateProvider: React.FC<WalletModalV2ViewStateProv
     [setViewState],
   )
 
+  const reset = useCallback(() => {
+    setViewState(ViewState.WALLET_INFO)
+  }, [])
+
   return (
     <WalletModalV2ViewStateContext.Provider
       value={{
         viewState,
         setViewState: handleSetViewState,
         goBack,
+        reset,
       }}
     >
       {children}

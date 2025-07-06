@@ -1,10 +1,13 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, UserMenu as UIKitUserMenu, UserMenuVariant, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, UserMenu as UIKitUserMenu, useMatchBreakpoints, UserMenuVariant } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Trans from 'components/Trans'
 import { WalletContent, WalletModalV2 } from 'components/WalletModalV2'
 import ReceiveModal from 'components/WalletModalV2/ReceiveModal'
-import { WalletModalV2ViewStateProvider } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
+import {
+  useWalletModalV2ViewState,
+  WalletModalV2ViewStateProvider,
+} from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
 import { useDomainNameForAddress } from 'hooks/useDomain'
@@ -74,6 +77,8 @@ const UserMenu = () => {
   const [showDesktopPopup] = useState(true)
   const [isReceiveModalOpen, setIsReceiveModalOpen] = useState(false)
 
+  const { reset: resetViewState } = useWalletModalV2ViewState()
+
   // State for click-based menu
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -99,6 +104,7 @@ const UserMenu = () => {
       // Only close if click is outside menu and not in portal-root
       if (menuRef.current && !menuRef.current.contains(event.target as Node) && !isClickInPortal) {
         setIsMenuOpen(false)
+        resetViewState()
       }
     }
 
@@ -162,7 +168,10 @@ const UserMenu = () => {
           account={account}
           onReceiveClick={() => setIsReceiveModalOpen(true)}
           onDisconnect={handleClickDisconnect}
-          onDismiss={() => setShowMobileWalletModal(false)}
+          onDismiss={() => {
+            setShowMobileWalletModal(false)
+            resetViewState()
+          }}
         />
         {account && (
           <ReceiveModal account={account} onDismiss={() => setIsReceiveModalOpen(false)} isOpen={isReceiveModalOpen} />
@@ -210,11 +219,11 @@ const UserMenu = () => {
   )
 }
 
-const UserMenuContainer = (props) => {
+const UserMenuContainer = () => {
   return (
     <WalletModalV2ViewStateProvider>
       <ClaimGiftProvider>
-        <UserMenu {...props} />
+        <UserMenu />
       </ClaimGiftProvider>
     </WalletModalV2ViewStateProvider>
   )
