@@ -6,10 +6,7 @@ import { withWebSecurityHeaders } from '@pancakeswap/next-config/withWebSecurity
 import smartRouterPkgs from '@pancakeswap/smart-router/package.json' with { type: 'json' }
 import { withSentryConfig } from '@sentry/nextjs'
 import { createVanillaExtractPlugin } from '@vanilla-extract/next-plugin'
-import vercelToolbarPlugin from '@vercel/toolbar/plugins/next'
 import { RetryChunkLoadPlugin } from 'webpack-retry-chunk-load-plugin'
-
-const withVercelToolbar = vercelToolbarPlugin()
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -29,7 +26,7 @@ const sentryWebpackPluginOptions =
       //   urlPrefix, include, ignore
       silent: true, // Logging when deploying to check if there is any problem
       validate: true,
-      hideSourceMaps: true,
+      hideSourceMaps: false,
       tryRun: true,
       disable: true
       // https://github.com/getsentry/sentry-webpack-plugin#options.
@@ -263,6 +260,4 @@ const config = {
   },
 }
 
-export default withVercelToolbar(
-  withBundleAnalyzer(withVanillaExtract(withSentryConfig(withWebSecurityHeaders(config)), sentryWebpackPluginOptions)),
-)
+export default withVanillaExtract(withSentryConfig(nextConfig, sentryWebpackPluginOptions))
