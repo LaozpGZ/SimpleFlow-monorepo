@@ -260,4 +260,4 @@ const config = {
   },
 }
 
-export default withVanillaExtract(withSentryConfig(nextConfig, sentryWebpackPluginOptions))
+export default withVanillaExtract(withSentryConfig(config, sentryWebpackPluginOptions))
