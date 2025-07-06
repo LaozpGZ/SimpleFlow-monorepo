@@ -3,15 +3,15 @@ import { Box, ColumnCenter, Spinner, Text, useToast } from '@pancakeswap/uikit'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { BalanceData } from 'hooks/useAddressBalance'
-import { useContext, useEffect } from 'react'
+import { useEffect } from 'react'
 import { useClaimGift } from '../hooks/useClaimGift'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
-import { ClaimGiftContext } from '../providers/ClaimGiftProvider'
+import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
 import { GiftApiStatus } from '../types'
 import { convertCodeHash } from '../utils/convertCodeHash'
 
 export const ClaimGiftConfirmView = ({ assets }: { assets: BalanceData[] }) => {
-  const { code, setCode } = useContext(ClaimGiftContext)
+  const { code, setCode } = useClaimGiftContext()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
 

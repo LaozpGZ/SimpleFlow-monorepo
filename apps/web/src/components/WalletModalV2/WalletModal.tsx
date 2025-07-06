@@ -132,8 +132,6 @@ export const WalletContent = ({
   const { viewState, setViewState, goBack } = useWalletModalV2ViewState()
   const { theme } = useTheme()
 
-  console.log('viewState', viewState, ViewState)
-
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
     includeSpam: false,
@@ -308,7 +306,7 @@ export const WalletContent = ({
             </Box>
           ) : view === WalletView.GIFTS ? null : (
             <ActionButtonsContainer>
-              <FlexGap gap="8px" width="100%">
+              <FlexGap px="16px" gap="8px" width="100%">
                 <ActionButton
                   onClick={() => {
                     router.push('/buy-crypto')

@@ -3,9 +3,9 @@ import { Box, Input, Text } from '@pancakeswap/uikit'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { ViewState } from 'components/WalletModalV2/type'
 import { BalanceData } from 'hooks/useAddressBalance'
-import { useContext, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
-import { ClaimGiftContext } from '../providers/ClaimGiftProvider'
+import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
 import { GiftStatus } from '../types'
 import { convertCodeHash } from '../utils/convertCodeHash'
 
@@ -17,7 +17,7 @@ export const ClaimGiftView = ({
   assets: BalanceData[]
 }) => {
   const { t } = useTranslation()
-  const { code, setCode } = useContext(ClaimGiftContext)
+  const { code, setCode } = useClaimGiftContext()
 
   const codeHash = convertCodeHash(code)
 

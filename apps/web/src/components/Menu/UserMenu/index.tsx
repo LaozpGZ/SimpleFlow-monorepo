@@ -17,7 +17,7 @@ import { usePendingTransactions } from 'state/transactions/hooks'
 import styled from 'styled-components'
 import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useAutoFillCode } from 'views/Gift/hooks/useAutoFillCode'
-import { ClaimGiftProvider } from 'views/Gift/providers/ClaimGiftProvider'
+import { ClaimGiftProvider, useClaimGiftContext } from 'views/Gift/providers/ClaimGiftProvider'
 import { useAccount } from 'wagmi'
 
 const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
@@ -78,6 +78,7 @@ const UserMenu = () => {
   const [isReceiveModalOpen, setIsReceiveModalOpen] = useState(false)
 
   const { reset: resetViewState } = useWalletModalV2ViewState()
+  const { setCode } = useClaimGiftContext()
 
   // State for click-based menu
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -104,7 +105,9 @@ const UserMenu = () => {
       // Only close if click is outside menu and not in portal-root
       if (menuRef.current && !menuRef.current.contains(event.target as Node) && !isClickInPortal) {
         setIsMenuOpen(false)
+        // reset view state and code
         resetViewState()
+        setCode('')
       }
     }
 

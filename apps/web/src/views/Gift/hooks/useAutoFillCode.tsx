@@ -12,12 +12,12 @@
 import { ViewState } from 'components/WalletModalV2/type'
 import { useWalletModalV2ViewState } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
 import { useRouter } from 'next/router'
-import { useContext, useEffect } from 'react'
-import { ClaimGiftContext } from '../providers/ClaimGiftProvider'
+import { useEffect } from 'react'
+import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
 
 export const useAutoFillCode = ({ onAutoFillCode }: { onAutoFillCode: () => void }) => {
   const { setViewState } = useWalletModalV2ViewState()
-  const { setCode } = useContext(ClaimGiftContext)
+  const { setCode } = useClaimGiftContext()
 
   const router = useRouter()
 
