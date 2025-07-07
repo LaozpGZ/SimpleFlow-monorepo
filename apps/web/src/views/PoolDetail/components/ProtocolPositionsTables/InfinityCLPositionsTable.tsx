@@ -253,19 +253,15 @@ const transformInfinityCLPositionToTableRow = (
     />
   )
 
+  const liquidityDetailUrl = getLiquidityDetailURL({
+    poolId: poolInfo.poolId,
+    chainId: poolInfo.chainId,
+    protocol: Protocol.InfinityCLAMM,
+  })
   const actions = (
     <FlexGap gap="8px" alignItems="center">
-      <ActionButton
-        as="a"
-        href={getLiquidityDetailURL({
-          poolId: poolInfo.poolId,
-          chainId: poolInfo.chainId,
-          protocol: Protocol.InfinityCLAMM,
-        })}
-        disabled={removed}
-        isIcon
-      >
-        <MinusIcon color="primary60" />
+      <ActionButton as="a" href={liquidityDetailUrl} disabled={removed || !liquidityDetailUrl} isIcon>
+        <MinusIcon />
       </ActionButton>
       <ActionButton
         as="a"
@@ -273,7 +269,7 @@ const transformInfinityCLPositionToTableRow = (
         disabled={removed}
         isIcon
       >
-        <AddIcon color="primary60" />
+        <AddIcon />
       </ActionButton>
     </FlexGap>
   )
