@@ -38,8 +38,6 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 
   const { switchNetworkIfNecessary } = useCheckShouldSwitchNetwork()
 
-  const { protocol } = poolInfo
-
   const [loading, setLoading] = useState(false)
 
   const handleHarvestAll = useCallback(async () => {

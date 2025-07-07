@@ -2,42 +2,37 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Flex, FlexGap, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 
-const PriceRangeBar = styled.div<{ position: number; outOfRange: boolean }>`
-  width: 80px;
-  height: 4px;
-  background: ${({ theme }) => theme.colors.input};
+const PriceRangeContainer = styled.div`
+  position: relative;
+  width: 180px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+`
+
+const PriceRangeBar = styled.div<{ outOfRange: boolean }>`
+  width: 100%;
+  height: 6px;
+  background: ${({ theme, outOfRange }) => (outOfRange ? theme.colors.failure : theme.colors.success)};
   border-radius: 2px;
   position: relative;
-  margin-top: 2px;
+`
 
-  &::after {
-    content: '';
-    position: absolute;
-    left: ${({ position }) => Math.max(0, Math.min(100, position))}%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: ${({ theme, outOfRange }) => (outOfRange ? theme.colors.failure : theme.colors.success)};
-    border: 2px solid ${({ theme }) => theme.colors.backgroundAlt};
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: ${({ position, outOfRange }) => (outOfRange ? '0%' : `${Math.max(0, Math.min(100, position))}%`)};
-    background: ${({ theme, outOfRange }) => (outOfRange ? 'transparent' : theme.colors.success)};
-    border-radius: 2px;
-  }
+const CurrentPriceLine = styled.div<{ position: number; outOfRange: boolean }>`
+  position: absolute;
+  left: ${({ position }) => Math.max(0, Math.min(100, position))}%;
+  top: 2px;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 16px;
+  background: ${({ theme, outOfRange }) => (outOfRange ? theme.colors.failure : theme.colors.success)};
+  border-radius: 1px;
+  z-index: 1;
 `
 
 const PercentageText = styled(Text)<{ isNegative?: boolean }>`
-  color: ${({ theme, isNegative }) => (isNegative ? theme.colors.failure : theme.colors.success)};
-  font-size: 11px;
+  color: ${({ theme }) => theme.colors.textSubtle};
+  font-size: 10px;
   font-weight: 400;
 `
 
@@ -81,48 +76,40 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
     )
   }
 
-  // Check if we have infinity values
-  const hasInfinity = minPrice.includes('∞') || maxPrice.includes('∞')
-
   return (
     <Flex flexDirection="column" alignItems="flex-start" width="100%">
-      <FlexGap alignItems="center" gap="8px" mb="4px">
-        <Text fontSize="16px" bold style={{ fontFamily: hasInfinity ? 'monospace' : 'inherit' }}>
-          {minPrice} - {maxPrice}
-        </Text>
-        {/* {outOfRange && (
-          <Text fontSize="12px" color="failure">
-            {t('Out of range')}
+      {/* Price range display */}
+      <FlexGap alignItems="center" gap="8px" mb="2px" width="100%" maxWidth="190px">
+        <Flex alignItems="center" justifyContent="space-between" width="100%">
+          <Text fontSize="16px" bold>
+            {minPrice}
           </Text>
-        )} */}
+          <Text fontSize="16px" bold>
+            -
+          </Text>
+          <Text fontSize="16px" bold>
+            {maxPrice}
+          </Text>
+        </Flex>
       </FlexGap>
 
-      {/* Progress bar with percentages - only show if not infinity and percentages exist */}
-      {showPercentages && minPercentage && maxPercentage && !hasInfinity && (
-        <FlexGap alignItems="center" gap="8px" width="100%" mb="4px">
-          <PercentageText isNegative={minPercentage.includes('-')}>{minPercentage}</PercentageText>
+      {/* Percentage display below prices */}
+      {showPercentages && minPercentage && maxPercentage && (
+        <>
+          <FlexGap alignItems="center" justifyContent="space-between" width="100%" maxWidth="190px" mb="4px">
+            <PercentageText>{minPercentage}</PercentageText>
+            <PercentageText>{maxPercentage}</PercentageText>
+          </FlexGap>
 
-          <PriceRangeBar position={rangePosition} outOfRange={outOfRange} />
-
-          <PercentageText isNegative={maxPercentage.includes('-')}>{maxPercentage}</PercentageText>
-        </FlexGap>
+          {/* Price range bar */}
+          <Flex width="100%" maxWidth="190px" justifyContent="center" mb="4px">
+            <PriceRangeContainer>
+              <PriceRangeBar outOfRange={outOfRange} />
+              <CurrentPriceLine position={rangePosition} outOfRange={outOfRange} />
+            </PriceRangeContainer>
+          </Flex>
+        </>
       )}
-
-      {/* Show special message for infinity ranges */}
-      {hasInfinity && (
-        <Text color="textSubtle" fontSize="12px" mb="4px">
-          {minPrice === '0' && maxPrice === '∞'
-            ? t('Full range')
-            : minPrice === '∞' && maxPrice === '∞'
-            ? t('Invalid range')
-            : t('Unbounded range')}
-        </Text>
-      )}
-
-      {/* Token pair label */}
-      <Text color="textSubtle" fontSize="12px">
-        {token0Symbol} per {token1Symbol}
-      </Text>
     </Flex>
   )
 }
