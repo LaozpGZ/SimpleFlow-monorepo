@@ -85,9 +85,25 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  // Helper function to sign in with custom token
+  const loginWithCustomToken = async (customToken: string) => {
+    try {
+      const auth = getAuth(firebaseApp)
+      const userCredential = await signInWithCustomToken(auth, customToken)
+      const idToken = await userCredential.user.getIdToken(true)
+      setToken(idToken)
+      console.log('Discord login success with token')
+      return true
+    } catch (error) {
+      console.error('Error signing in with custom token:', error)
+      return false
+    }
+  }
+
   const loginWithDiscord = async () => {
     try {
       setLoading(true)
+
       // Open Discord OAuth page
       const redirectUri = `${window.location.origin}/api/auth/discord-callback`
       const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID
@@ -100,22 +116,6 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       )
 
       setDiscordPopup(popup)
-
-      // Listen for messages from the popup window
-      const handleMessage = async (event: MessageEvent) => {
-        if (event.origin !== window.location.origin) return
-        if (event.data?.customToken) {
-          window.removeEventListener('message', handleMessage)
-
-          // Sign in to Firebase with custom token
-          const auth = getAuth(firebaseApp)
-          const userCredential = await signInWithCustomToken(auth, event.data.customToken)
-          const idToken = await userCredential.user.getIdToken(true)
-          setToken(idToken)
-        }
-      }
-
-      window.addEventListener('message', handleMessage)
     } catch (err) {
       console.error(err)
     } finally {
@@ -144,8 +144,38 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     auth.onIdTokenChanged((user) => {
       console.log('Auth on change', user)
     })
+  }, [])
 
-    // Clean up Discord popup window
+  // Discord login handler
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      if (event.origin !== window.location.origin) return
+      if (event.data?.customToken) {
+        await loginWithCustomToken(event.data.customToken)
+      }
+    }
+
+    // If postMessage is received
+    window.addEventListener('message', handleMessage)
+
+    // fallback: If postMessage is not received, actively take from localStorage
+    const checkLocalStorage = setInterval(() => {
+      const token = localStorage.getItem('discordAuthToken')
+      if (token) {
+        clearInterval(checkLocalStorage)
+        localStorage.removeItem('discordAuthToken')
+        loginWithCustomToken(token)
+      }
+    }, 1000)
+
+    return () => {
+      window.removeEventListener('message', handleMessage)
+      clearInterval(checkLocalStorage)
+    }
+  }, [])
+
+  // Clean up Discord popup window
+  useEffect(() => {
     return () => {
       if (discordPopup && !discordPopup.closed) {
         discordPopup.close()
