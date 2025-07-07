@@ -1,12 +1,12 @@
+import crypto from 'crypto'
 import { getAuth } from 'firebase-admin/auth'
 import { firebaseAdmin } from 'lib/firebase-admin'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import crypto from 'crypto'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   // Telegram sends auth data as query parameters
   const { query } = req
-
+  console.log({ query }, 'handler???')
   try {
     // 1. Verify the authentication data
     const { hash, ...authData } = query
