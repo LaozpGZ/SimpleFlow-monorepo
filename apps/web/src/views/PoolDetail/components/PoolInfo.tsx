@@ -9,7 +9,6 @@ import {
   FlexGap,
   Grid,
   IconButton,
-  SearchIcon,
   Spinner,
   SwapHorizIcon,
   Tab,
@@ -97,11 +96,11 @@ export const PoolInfo = () => {
               flexDirection={isSmallScreen ? 'row-reverse' : 'row'}
               width="100%"
             >
-              <Box>
+              {/* <Box>
                 <SearchButton>
                   <SearchIcon color="textSubtle" width={24} />
                 </SearchButton>
-              </Box>
+              </Box> */}
               <FlexGap flexDirection="column" gap="16px">
                 <FlexGap
                   gap="12px"

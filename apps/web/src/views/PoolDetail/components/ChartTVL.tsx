@@ -1,37 +1,102 @@
-import { Box, Flex, Text } from '@pancakeswap/uikit'
+import { useTheme } from '@pancakeswap/hooks'
+import { Flex, Text } from '@pancakeswap/uikit'
 import dayjs from 'dayjs'
 import { useState } from 'react'
-import { ResponsiveContainer } from 'recharts'
+import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { PoolInfo } from 'state/farmsV4/state/type'
-import LineChart from 'views/Info/components/InfoCharts/LineChart'
+import styled from 'styled-components'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { usePoolChartTVLData } from '../hooks/usePoolChartTVLData'
+
+const TooltipCard = styled.div`
+  background: ${({ theme }) => theme.colors.backgroundAlt};
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 200px;
+  z-index: 10;
+`
 
 type ChartTVLProps = {
   address?: string
   poolInfo?: PoolInfo | null
 }
 
+const CustomTooltip = ({ active, payload }: any) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload
+    return (
+      <TooltipCard>
+        <Text small color="textSubtle">
+          {dayjs(data.time).format('MMM D, YYYY, HH:mm A')} UTC
+        </Text>
+        <Text bold>{formatDollarAmount(data.value)}</Text>
+      </TooltipCard>
+    )
+  }
+  return null
+}
+
 export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo }) => {
   const { data } = usePoolChartTVLData(address, poolInfo?.protocol, '1Y')
   const [hoverValue, setHoverValue] = useState<number | undefined>()
   const [hoverDate, setHoverDate] = useState<string | undefined>()
+  const { theme } = useTheme()
+
+  // Transform data for recharts
+  const chartData =
+    data?.map((item) => ({
+      time: item.time,
+      value: item.value,
+      formattedTime: dayjs(item.time).format('MMM D'),
+    })) || []
 
   return (
     <>
-      <Flex flexDirection="column">
+      <Flex mb="24px" flexDirection="column">
         <Text bold fontSize={24}>
           {formatDollarAmount(hoverValue ?? data?.[data.length - 1]?.value)}
         </Text>
         <Text small color="secondary">
-          {`${dayjs(hoverDate ?? data?.[data.length - 1]?.time).format('MMM D, YYYY, HH:mm A')} (UTC)`}
+          {`${dayjs(hoverDate ?? data?.[data.length - 1]?.time).format('MMM D, YYYY A')} (UTC)`}
         </Text>
       </Flex>
-      <Box height="380px">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={data ?? []} setHoverDate={setHoverDate} setHoverValue={setHoverValue} dateFormat="DD" />
-        </ResponsiveContainer>
-      </Box>
+      <ResponsiveContainer width="100%" height={340}>
+        <BarChart
+          data={chartData}
+          margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+          onMouseMove={(state) => {
+            if (state?.activePayload?.[0]?.payload) {
+              setHoverValue(state.activePayload[0].payload.value)
+              setHoverDate(state.activePayload[0].payload.time)
+            }
+          }}
+          onMouseLeave={() => {
+            setHoverValue(undefined)
+            setHoverDate(undefined)
+          }}
+        >
+          <XAxis dataKey="formattedTime" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#9383B4' }} />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#9383B4' }}
+            tickFormatter={(value) => {
+              if (value >= 1000000) {
+                return `${(value / 1000000).toFixed(2)}M`
+              }
+              if (value >= 1000) {
+                return `${(value / 1000).toFixed(2)}K`
+              }
+              return formatDollarAmount(value)
+            }}
+            orientation="right"
+          />
+          <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
+          <Bar dataKey="value" fill={theme.colors.primary} radius={[16, 16, 16, 16]} maxBarSize={20} />
+        </BarChart>
+      </ResponsiveContainer>
     </>
   )
 }

@@ -1,6 +1,7 @@
+import { useTheme } from '@pancakeswap/hooks'
 import { Box, Flex, Spinner } from '@pancakeswap/uikit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Bar, BarChart, Cell, LabelList, ResponsiveContainer, Tooltip, XAxis } from 'recharts'
+import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { ChartToolTip } from './ChartToolTip'
 import { CurrentPriceLabel } from './CurrentPriceLabel'
 import { ActionButton, ControlsWrapper } from './styled'
@@ -23,7 +24,7 @@ const CustomBar = ({
 }) => {
   return (
     <g>
-      <rect x={x} y={y} fill={fill} width={width} height={height} rx="2" />
+      <rect x={x} y={y} fill={fill} width={width} height={height} rx="16" />
     </g>
   )
 }
@@ -31,6 +32,7 @@ const CustomBar = ({
 export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolInfo, liquidityChartData }) => {
   const [zoomLevel, setZoomLevel] = useState(0)
   const [zoomInDisabled, setZoomInDisabled] = useState(false)
+  const { theme } = useTheme()
 
   const handleZoomIn = useCallback(() => {
     if (!zoomInDisabled) {
@@ -72,17 +74,39 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
   }
 
   return (
-    <Box height="380px" mb="-20px">
+    <Box height="380px" mb="-20px" position="relative">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
           data={zoomedData}
           margin={{
-            top: 0,
-            right: 0,
-            left: 0,
+            top: 20,
+            right: 20,
+            left: 20,
             bottom: 60,
           }}
         >
+          <XAxis
+            dataKey="price0"
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#9383B4' }}
+            tickFormatter={(value) => value.toFixed(2)}
+          />
+          <YAxis
+            axisLine={false}
+            tickLine={false}
+            tick={{ fontSize: 12, fill: '#9383B4' }}
+            tickFormatter={(value) => {
+              if (value >= 1000000) {
+                return `${(value / 1000000).toFixed(2)}M`
+              }
+              if (value >= 1000) {
+                return `${(value / 1000).toFixed(2)}K`
+              }
+              return value.toFixed(2)
+            }}
+            orientation="right"
+          />
           <Tooltip
             content={(props) => (
               <ChartToolTip
@@ -90,31 +114,20 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
                 currentPrice={poolInfo?.token0Price}
                 currency0={poolInfo?.token0.wrapped}
                 currency1={poolInfo?.token1.wrapped}
+                activeLiquidity={props.payload?.[0]?.payload?.activeLiquidity}
+                isCurrent={props.payload?.[0]?.payload?.isCurrent}
               />
             )}
+            cursor={{ fill: 'transparent' }}
           />
-          <XAxis reversed tick={false} />
-          <Bar dataKey="activeLiquidity" fill="#2172E5" isAnimationActive={false} shape={CustomBar}>
+          <Bar dataKey="activeLiquidity" fill="#1FC7D4" isAnimationActive={false} shape={CustomBar}>
             {zoomedData?.map((entry) => {
-              return <Cell key={`cell-${entry.index}`} fill={entry.isCurrent ? '#ED4B9E' : '#31D0AA'} />
+              return <Cell key={`cell-${entry.index}`} fill={entry.isCurrent ? '#ED4B9E' : '#1FC7D4'} />
             })}
-            <LabelList
-              dataKey="activeLiquidity"
-              position="inside"
-              content={(props) => {
-                return poolInfo ? (
-                  <CurrentPriceLabel
-                    x={Number(props.x) ?? 0}
-                    index={(props as any).index}
-                    poolInfo={poolInfo}
-                    data={zoomedData}
-                  />
-                ) : null
-              }}
-            />
           </Bar>
         </BarChart>
       </ResponsiveContainer>
+      <CurrentPriceLabel data={zoomedData} poolInfo={poolInfo} />
       <ControlsWrapper>
         <ActionButton disabled={false} onClick={handleZoomOut}>
           -

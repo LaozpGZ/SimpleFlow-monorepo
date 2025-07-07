@@ -128,41 +128,6 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
         ]}
         data={data || []}
       />
-      {/* <TableWrapper>
-        <AutoColumn gap="16px">
-          <TableHeader>
-            <ClickableColumnHeader color="secondary" textTransform="uppercase">
-              {t('Liquidity')}
-              <SortButton scale="sm" variant="subtle">
-                <SortArrowIcon />
-              </SortButton>
-            </ClickableColumnHeader>
-            <ClickableColumnHeader color="secondary" textTransform="uppercase">
-              {t('Earnings')}
-              <SortButton scale="sm" variant="subtle">
-                <SortArrowIcon />
-              </SortButton>
-            </ClickableColumnHeader>
-            <ClickableColumnHeader color="secondary" textTransform="uppercase">
-              {t('APR')}
-              <SortButton scale="sm" variant="subtle">
-                <SortArrowIcon />
-              </SortButton>
-            </ClickableColumnHeader>
-            {isInfinityProtocol(protocol) || protocol === Protocol.V3 ? (
-              <ClickableColumnHeader color="secondary" textTransform="uppercase">
-                {t('Price Range (Min/Max)')}
-              </ClickableColumnHeader>
-            ) : null}
-            <ClickableColumnHeader color="secondary" textTransform="uppercase">
-              {t('Actions')}
-              <SortButton scale="sm" variant="subtle">
-                <SortArrowIcon />
-              </SortButton>
-            </ClickableColumnHeader>
-          </TableHeader>
-        </AutoColumn>
-      </TableWrapper> */}
     </LightCard>
   )
 }

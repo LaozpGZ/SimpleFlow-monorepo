@@ -86,16 +86,15 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
 
   return (
     <Flex flexDirection="column" alignItems="flex-start" width="100%">
-      {/* Price Range - Bold and separated */}
       <FlexGap alignItems="center" gap="8px" mb="4px">
         <Text fontSize="16px" bold style={{ fontFamily: hasInfinity ? 'monospace' : 'inherit' }}>
           {minPrice} - {maxPrice}
         </Text>
-        {outOfRange && (
+        {/* {outOfRange && (
           <Text fontSize="12px" color="failure">
             {t('Out of range')}
           </Text>
-        )}
+        )} */}
       </FlexGap>
 
       {/* Progress bar with percentages - only show if not infinity and percentages exist */}

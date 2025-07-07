@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, FlexGap, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
@@ -9,6 +10,7 @@ import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
+import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
@@ -128,15 +130,52 @@ const transformV3PositionToTableRow = (
 
   const liquidity = (
     <Flex flexDirection="column" alignItems="flex-start">
-      <Text bold fontSize="16px">
-        {formatDollarAmount(liquidityUSD)}
-      </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {positionData?.amount0.toSignificant(6)} {poolInfo.token0.wrapped?.symbol}
-      </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {positionData?.amount1.toSignificant(6)} {poolInfo.token1.wrapped?.symbol}
-      </Text>
+      <Tooltips
+        content={
+          <FlexGap flexDirection="column" alignItems="flex-start" gap="8px">
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                <FlexGap alignItems="center" gap="8px">
+                  <CurrencyLogo currency={poolInfo.token0.wrapped} size="16px" mb="-3px" />
+                  <Text fontSize="14px" bold>
+                    {poolInfo.token0.wrapped?.symbol}
+                  </Text>
+                </FlexGap>
+                <Text fontSize="14px" bold>
+                  {positionData?.amount0.toSignificant(6)}
+                </Text>
+              </FlexGap>
+              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                {positionData?.amount0 && price0Usd
+                  ? formatDollarAmount(new BigNumber(positionData.amount0.toExact()).times(price0Usd).toNumber())
+                  : '$0.00'}
+              </Text>
+            </FlexGap>
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                <FlexGap alignItems="center" gap="8px">
+                  <CurrencyLogo currency={poolInfo.token1.wrapped} size="16px" mb="-3px" />
+                  <Text fontSize="14px" bold>
+                    {poolInfo.token1.wrapped?.symbol}
+                  </Text>
+                </FlexGap>
+                <Text fontSize="14px" bold>
+                  {positionData?.amount1.toSignificant(6)}
+                </Text>
+              </FlexGap>
+              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                {positionData?.amount1 && price1Usd
+                  ? formatDollarAmount(new BigNumber(positionData.amount1.toExact()).times(price1Usd).toNumber())
+                  : '$0.00'}
+              </Text>
+            </FlexGap>
+          </FlexGap>
+        }
+      >
+        <Text bold fontSize="16px" style={{ cursor: 'default' }}>
+          {formatDollarAmount(liquidityUSD)}
+        </Text>
+      </Tooltips>
     </Flex>
   )
 

@@ -2,11 +2,13 @@ import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, FlexGap, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useMemo } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions/type'
 import { StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
+import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { PositionsTable } from '../Tabs/PositionsTable'
@@ -39,9 +41,48 @@ const transformV2PositionToTableRow = (
 
   const liquidity = (
     <Flex flexDirection="column" alignItems="flex-start">
-      <Text bold fontSize="16px">
-        {formatDollarAmount(liquidityUSD)}
-      </Text>
+      <Tooltips
+        content={
+          <FlexGap flexDirection="column" alignItems="flex-start" gap="8px">
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                <FlexGap alignItems="center" gap="8px">
+                  <CurrencyLogo currency={poolInfo.token0} size="16px" mb="-3px" />
+                  <Text fontSize="14px" bold>
+                    {poolInfo.token0?.symbol}
+                  </Text>
+                </FlexGap>
+                <Text fontSize="14px" bold>
+                  --
+                </Text>
+              </FlexGap>
+              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                $0.00
+              </Text>
+            </FlexGap>
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                <FlexGap alignItems="center" gap="8px">
+                  <CurrencyLogo currency={poolInfo.token1} size="16px" mb="-3px" />
+                  <Text fontSize="14px" bold>
+                    {poolInfo.token1?.symbol}
+                  </Text>
+                </FlexGap>
+                <Text fontSize="14px" bold>
+                  --
+                </Text>
+              </FlexGap>
+              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                $0.00
+              </Text>
+            </FlexGap>
+          </FlexGap>
+        }
+      >
+        <Text bold fontSize="16px" style={{ cursor: 'default' }}>
+          {formatDollarAmount(liquidityUSD)}
+        </Text>
+      </Tooltips>
       <Text color="textSubtle" fontSize="12px">
         {position.nativeBalance.toSignificant(6)} LP
       </Text>
