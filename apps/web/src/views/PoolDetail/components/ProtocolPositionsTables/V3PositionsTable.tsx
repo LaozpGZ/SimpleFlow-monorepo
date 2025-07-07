@@ -1,7 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, FlexGap, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
@@ -110,28 +109,20 @@ const transformV3PositionToTableRow = (
   }
 
   const tokenInfo = (
-    <FlexGap alignItems="center" gap="12px">
-      <DoubleCurrencyLogo
-        currency0={poolInfo.token0.wrapped}
-        currency1={poolInfo.token1.wrapped}
-        size={40}
-        innerMargin="-4px"
-      />
-      <FlexGap flexDirection="column" gap="4px">
-        <FlexGap alignItems="center" gap="8px">
-          <Text bold fontSize="16px">
-            {poolInfo.token0.wrapped?.symbol} / {poolInfo.token1.wrapped?.symbol}
-          </Text>
-          {position.isStaked && (
-            <Tag variant="primary60" scale="sm">
-              {t('Farming')}
-            </Tag>
-          )}
-        </FlexGap>
-        <Text color="textSubtle" fontSize="12px">
-          #{position.tokenId.toString()}
+    <FlexGap flexDirection="column" gap="4px">
+      <FlexGap alignItems="center" gap="8px">
+        <Text bold fontSize="16px">
+          {poolInfo.token0.wrapped?.symbol} / {poolInfo.token1.wrapped?.symbol}
         </Text>
+        {position.isStaked && (
+          <Tag variant="primary60" scale="sm">
+            {t('Farming')}
+          </Tag>
+        )}
       </FlexGap>
+      <Text color="textSubtle" fontSize="12px">
+        #{position.tokenId.toString()}
+      </Text>
     </FlexGap>
   )
 

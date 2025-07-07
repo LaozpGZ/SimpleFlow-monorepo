@@ -2,7 +2,6 @@ import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, FlexGap, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useMemo } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions/type'
@@ -28,16 +27,13 @@ const transformV2PositionToTableRow = (
   const liquidityUSD = 0 // TODO: Calculate actual liquidity USD
 
   const tokenInfo = (
-    <FlexGap alignItems="center" gap="12px">
-      <DoubleCurrencyLogo currency0={poolInfo.token0} currency1={poolInfo.token1} size={40} innerMargin="-4px" />
-      <FlexGap flexDirection="column" gap="4px">
-        <Text bold fontSize="16px">
-          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
-        </Text>
-        <Text color="textSubtle" fontSize="12px">
-          {poolInfo.protocol === 'v2' ? 'V2 LP' : 'Stable LP'}
-        </Text>
-      </FlexGap>
+    <FlexGap flexDirection="column" gap="4px">
+      <Text bold fontSize="16px">
+        {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
+      </Text>
+      <Text color="textSubtle" fontSize="12px">
+        {poolInfo.protocol === 'v2' ? 'V2 LP' : 'Stable LP'}
+      </Text>
     </FlexGap>
   )
 

@@ -4,7 +4,6 @@ import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { Button, Flex, FlexGap, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { PositionMath, TickMath } from '@pancakeswap/v3-sdk'
-import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
@@ -149,23 +148,20 @@ const transformInfinityCLPositionToTableRow = (
   }
 
   const tokenInfo = (
-    <FlexGap alignItems="center" gap="12px">
-      <DoubleCurrencyLogo currency0={poolInfo.token0} currency1={poolInfo.token1} size={40} innerMargin="-4px" />
-      <FlexGap flexDirection="column" gap="4px">
-        <FlexGap alignItems="center" gap="8px">
-          <Text bold fontSize="16px">
-            {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
-          </Text>
-          {position.isStaked && (
-            <Tag variant="primary60" scale="sm">
-              {t('Farming')}
-            </Tag>
-          )}
-        </FlexGap>
-        <Text color="textSubtle" fontSize="12px">
-          #{position.tokenId.toString()}
+    <FlexGap flexDirection="column" gap="4px">
+      <FlexGap alignItems="center" gap="8px">
+        <Text bold fontSize="16px">
+          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
         </Text>
+        {position.isStaked && (
+          <Tag variant="primary60" scale="sm">
+            {t('Farming')}
+          </Tag>
+        )}
       </FlexGap>
+      <Text color="textSubtle" fontSize="12px">
+        #{position.tokenId.toString()}
+      </Text>
     </FlexGap>
   )
 

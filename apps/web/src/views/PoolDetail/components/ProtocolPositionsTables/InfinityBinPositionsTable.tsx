@@ -3,7 +3,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { Button, Flex, FlexGap, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
 import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward'
 import { usePoolById } from 'hooks/infinity/usePool'
@@ -38,23 +37,20 @@ const InfinityBinPositionTableRow = (
   const hasLiquidity = amount0?.greaterThan('0') || amount1?.greaterThan('0')
 
   const tokenInfo = (
-    <FlexGap alignItems="center" gap="12px">
-      <DoubleCurrencyLogo currency0={poolInfo.token0} currency1={poolInfo.token1} size={40} />
-      <FlexGap flexDirection="column" gap="4px">
-        <FlexGap alignItems="center" gap="8px">
-          <Text bold fontSize="16px">
-            {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
-          </Text>
-          {position.isStaked && (
-            <Tag variant="primary60" scale="sm">
-              {t('Farming')}
-            </Tag>
-          )}
-        </FlexGap>
-        <Text color="textSubtle" fontSize="12px">
-          Bin Position
+    <FlexGap flexDirection="column" gap="4px">
+      <FlexGap alignItems="center" gap="8px">
+        <Text bold fontSize="16px">
+          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
         </Text>
+        {position.isStaked && (
+          <Tag variant="primary60" scale="sm">
+            {t('Farming')}
+          </Tag>
+        )}
       </FlexGap>
+      <Text color="textSubtle" fontSize="12px">
+        Bin Position
+      </Text>
     </FlexGap>
   )
 
