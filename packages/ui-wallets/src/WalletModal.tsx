@@ -1,11 +1,11 @@
 import { usePreloadImages, useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
+  ArrowForwardIcon,
   AtomBox,
   Button,
   ButtonMenu,
   ButtonMenuItem,
-  ChevronRightIcon,
   CloseIcon,
   Column,
   FlexGap,
@@ -68,13 +68,14 @@ const SocialLoginIconBox = styled.div<{ $bg: string }>`
   border-radius: 8px;
   border: 2px solid ${({ theme }) => theme.colors.input};
   &:not(:first-child) {
-    margin-left: -8px;
+    margin-left: -15px;
   }
   background-image: ${({ $bg }) => `url(${$bg})`};
   background-size: cover;
   background-position: center center;
   background-color: white;
   padding: 4px;
+  overflow: hidden;
 `
 
 type TabContainerProps = PropsWithChildren<{
@@ -203,13 +204,13 @@ function MobileModal<T>({
         </AtomBox>
       ) : null}
       <AtomBox display="flex" flexDirection="column" gap="16px" justifyContent="space-between">
-        <Button variant="tertiary" onClick={onOpenSocialLoginModal} width="100%" style={{ marginBottom: '8px' }}>
-          <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center">
+        <Button variant="light" onClick={onOpenSocialLoginModal} width="100%" style={{ marginBottom: '8px' }}>
+          <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center" padding="12px">
             <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/google.jpg`} />
             <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/apple.png`} />
             <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/facebook.png`} />
             <Text fontSize="12px">{t('Connect with social login')}</Text>
-            <ChevronRightIcon color="primary" />
+            <ArrowForwardIcon color="primary" />
           </FlexGap>
         </Button>
 
@@ -478,13 +479,13 @@ function DesktopModal<T>({
           {t('Connect Wallet')}
         </Heading>
 
-        <Button variant="tertiary" onClick={onOpenSocialLoginModal} width="100%">
+        <Button variant="light" onClick={onOpenSocialLoginModal} width="100%" padding="12px">
           <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center">
             <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/google.jpg`} />
             <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/apple.png`} />
             <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/facebook.png`} />
             <Text fontSize="12px">{t('Connect with social login')}</Text>
-            <ChevronRightIcon color="primary" />
+            <ArrowForwardIcon color="primary" />
           </FlexGap>
         </Button>
 
