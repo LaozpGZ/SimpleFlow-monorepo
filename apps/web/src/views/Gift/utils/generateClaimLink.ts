@@ -1,3 +1,3 @@
 export function generateClaimLink({ code }: { code: string }) {
-  return `https://${window.location.host}/invite/${code}`
+  return `${window.location.protocol}//${window.location.host}/invite/${code}`
 }

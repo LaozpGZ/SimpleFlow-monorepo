@@ -78,7 +78,7 @@ export const GiftsDashboard = ({
   assets: BalanceData[]
   setViewState: (viewState: ViewState) => void
 }) => {
-  const { data: giftInfo = [], isLoading, error } = useGetGiftInfo(assets)
+  const { data: giftInfo = [], isLoading } = useGetGiftInfo(assets)
   const { t } = useTranslation()
   const { setCodeHash } = useContext(CancelGiftContext)
 
@@ -90,67 +90,57 @@ export const GiftsDashboard = ({
     )
   }
 
-  if (error) {
-    return (
-      <Flex width="100%" justifyContent="center" alignItems="center">
-        <Text color="failure">Error loading gifts: {error.message}</Text>
-      </Flex>
-    )
-  }
-
-  if (giftInfo.length === 0) {
-    return (
-      <Flex width="100%" justifyContent="center" alignItems="center">
-        <Text color="textSubtle">No gifts found</Text>
-      </Flex>
-    )
-  }
-
   return (
     <>
       <Box mb="16px" padding="16px 0" maxHeight="280px" overflow="auto">
-        {giftInfo.map((gift) => (
-          <Box mb="16px" key={gift.codeHash}>
-            <FlexGap gap="8px" alignItems="center" mb="8px">
-              <Tag variant={getStatusVariant(gift.status)} scale="sm" outline>
-                {getStatusText(gift.status)}
-              </Tag>
+        {giftInfo.length === 0 ? (
+          <Flex width="100%" justifyContent="center" alignItems="center">
+            <Text color="textSubtle">No gifts found</Text>
+          </Flex>
+        ) : (
+          giftInfo.map((gift) => (
+            <Box mb="16px" key={gift.codeHash}>
+              <FlexGap gap="8px" alignItems="center" mb="8px">
+                <Tag variant={getStatusVariant(gift.status)} scale="sm" outline>
+                  {getStatusText(gift.status)}
+                </Tag>
 
-              {gift.status === GiftStatus.PENDING && (
-                <Text fontSize="12px" color="textSubtle">
-                  Expires: {getExpirationTime(gift.timestamp, gift.status)}
-                </Text>
-              )}
-            </FlexGap>
-
-            <Flex alignItems="center" width="100%" justifyContent="space-between">
-              <Flex>
-                <CurrencyLogo showChainLogo currency={gift.tokenInfo} size="40px" />
-                <Flex flexDirection="column" ml="8px">
-                  <Text fontWeight="600" fontSize="14px" color="text">
-                    {gift.nativeAmount.toSignificant(6)} {gift.tokenInfo.symbol}
-                  </Text>
+                {gift.status === GiftStatus.PENDING && (
                   <Text fontSize="12px" color="textSubtle">
-                    {formatTimestamp(new Date(gift.timestamp).getTime(), {
-                      precision: Precision.MINUTE,
-                    })}
+                    Expires: {getExpirationTime(gift.timestamp, gift.status)}
                   </Text>
+                )}
+              </FlexGap>
+
+              <Flex alignItems="center" width="100%" justifyContent="space-between">
+                <Flex>
+                  <CurrencyLogo showChainLogo currency={gift.tokenInfo} size="40px" />
+                  <Flex flexDirection="column" ml="8px">
+                    <Text fontWeight="600" fontSize="14px" color="text">
+                      {gift.nativeAmount.toSignificant(6)} {gift.tokenInfo.symbol}
+                    </Text>
+                    <Text fontSize="12px" color="textSubtle">
+                      {formatTimestamp(new Date(gift.timestamp).getTime(), {
+                        precision: Precision.MINUTE,
+                      })}
+                    </Text>
+                  </Flex>
                 </Flex>
+                {gift.status === GiftStatus.PENDING && (
+                  <IconButton
+                    variant="text"
+                    onClick={() => {
+                      setCodeHash(gift.codeHash)
+                      setViewState(ViewState.CANCEL_GIFT_CONFIRM)
+                    }}
+                  >
+                    <DeleteOutlineIcon color="textSubtle" />
+                  </IconButton>
+                )}
               </Flex>
-              {gift.status === GiftStatus.PENDING && (
-                <IconButton
-                  variant="text"
-                  onClick={() => {
-                    setCodeHash(gift.codeHash)
-                    setViewState(ViewState.CANCEL_GIFT_CONFIRM)
-                  }}
-                >
-                  <DeleteOutlineIcon color="textSubtle" />
-                </IconButton>
-              )}
-            </Flex>
-          </Box>
-        ))}
+            </Box>
+          ))
+        )}
       </Box>
 
       <FlexGap gap="8px" width="100%">
