@@ -69,12 +69,15 @@ export const ChartFee: React.FC<ChartVolumeProps> = ({ address, poolInfo }) => {
   }, [data])
 
   // Transform data for recharts
-  const chartData =
-    data?.map((item) => ({
-      time: item.time,
-      value: item.value,
-      formattedTime: dayjs(item.time).format('MMM D'),
-    })) || []
+  const chartData = useMemo(
+    () =>
+      data?.map((item) => ({
+        time: item.time,
+        value: item.value,
+        formattedTime: dayjs(item.time).format('MMM D'),
+      })) || [],
+    [data],
+  )
 
   return (
     <>

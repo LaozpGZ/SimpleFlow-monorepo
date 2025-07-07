@@ -244,7 +244,15 @@ const transformInfinityCLPositionToTableRow = (
   const earnings = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px">
-        <InfinityCLEarningsCell tokenId={position.tokenId} chainId={poolInfo.chainId} poolId={poolInfo.poolId} />
+        <InfinityCLEarningsCell
+          tokenId={position.tokenId}
+          chainId={poolInfo.chainId}
+          poolId={poolInfo.poolId}
+          currency0={poolInfo.token0}
+          currency1={poolInfo.token1}
+          tickLower={position.tickLower}
+          tickUpper={position.tickUpper}
+        />
       </Text>
     </Flex>
   )

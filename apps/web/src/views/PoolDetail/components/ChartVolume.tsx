@@ -47,7 +47,6 @@ export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, tim
 
   const { theme } = useTheme()
 
-  // Calculate total sum of all values
   const totalSum = useMemo(() => {
     if (!data || data.length === 0) return 0
     return data.reduce((sum, item) => sum + item.value, 0)
@@ -62,12 +61,16 @@ export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, tim
   }, [data])
 
   // Transform data for recharts
-  const chartData =
-    data?.map((item) => ({
-      time: item.time,
-      value: item.value,
-      formattedTime: timeFilter === TimeFilter.D ? dayjs(item.time).format('HH:mm') : dayjs(item.time).format('MMM D'),
-    })) || []
+  const chartData = useMemo(
+    () =>
+      data?.map((item) => ({
+        time: item.time,
+        value: item.value,
+        formattedTime:
+          timeFilter === TimeFilter.D ? dayjs(item.time).format('HH:mm') : dayjs(item.time).format('MMM D'),
+      })) || [],
+    [data, timeFilter],
+  )
 
   return (
     <>

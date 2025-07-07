@@ -61,12 +61,16 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
   }, [data])
 
   // Transform data for recharts
-  const chartData =
-    data?.map((item) => ({
-      time: item.time,
-      value: item.value,
-      formattedTime: timeFilter === TimeFilter.D ? dayjs(item.time).format('HH:mm') : dayjs(item.time).format('MMM D'),
-    })) || []
+  const chartData = useMemo(
+    () =>
+      data?.map((item) => ({
+        time: item.time,
+        value: item.value,
+        formattedTime:
+          timeFilter === TimeFilter.D ? dayjs(item.time).format('HH:mm') : dayjs(item.time).format('MMM D'),
+      })) || [],
+    [data, timeFilter],
+  )
 
   return (
     <>

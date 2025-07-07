@@ -112,17 +112,6 @@ const transformV2PositionToTableRow = (
     </Flex>
   )
 
-  const priceRange = (
-    <Flex flexDirection="column" alignItems="flex-start">
-      <Text bold fontSize="16px">
-        {t('Full Range')}
-      </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {poolInfo.token0?.symbol} per {poolInfo.token1?.symbol}
-      </Text>
-    </Flex>
-  )
-
   const actions = (
     <FlexGap gap="8px" alignItems="center">
       <ActionButton isIcon>
@@ -142,7 +131,6 @@ const transformV2PositionToTableRow = (
       liquidity,
       earnings,
       apr: aprDisplay,
-      priceRange,
       actions,
     },
     liquidityUSD,

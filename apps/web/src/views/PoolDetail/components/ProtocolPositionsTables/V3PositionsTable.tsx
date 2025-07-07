@@ -215,7 +215,13 @@ const transformV3PositionToTableRow = (
   const earnings = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px">
-        <V3EarningsCell tokenId={position.tokenId} chainId={poolInfo.chainId} />
+        <V3EarningsCell
+          tokenId={position.tokenId}
+          chainId={poolInfo.chainId}
+          pool={pool}
+          currency0={poolInfo.token0}
+          currency1={poolInfo.token1}
+        />
       </Text>
     </Flex>
   )
