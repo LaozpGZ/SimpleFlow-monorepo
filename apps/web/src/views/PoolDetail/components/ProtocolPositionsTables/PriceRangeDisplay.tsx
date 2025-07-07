@@ -32,7 +32,7 @@ const CurrentPriceLine = styled.div<{ position: number; outOfRange: boolean }>`
 
 const PercentageText = styled(Text)<{ isNegative?: boolean }>`
   color: ${({ theme }) => theme.colors.textSubtle};
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
 `
 

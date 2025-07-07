@@ -21,7 +21,16 @@ const TooltipCard = styled.div`
 type ChartVolumeProps = {
   address?: string
   poolInfo?: PoolInfo | null
+  timeFilter?: 'D' | 'W' | 'M' | 'Y' | 'All'
 }
+
+const TIME_FILTERS = {
+  D: '1D',
+  W: '1W',
+  M: '1M',
+  Y: '1Y',
+  All: '1Y',
+} as const
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -38,8 +47,8 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null
 }
 
-export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo }) => {
-  const { data } = usePoolChartVolumeData(address, poolInfo?.protocol, '1Y')
+export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, timeFilter }) => {
+  const { data } = usePoolChartVolumeData(address, poolInfo?.protocol, TIME_FILTERS[timeFilter ?? 'D'])
   const [latestValue, setLatestValue] = useState<number | undefined>()
   const [valueLabel, setValueLabel] = useState<string | undefined>()
 

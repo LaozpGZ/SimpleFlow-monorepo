@@ -18,9 +18,18 @@ const TooltipCard = styled.div`
   z-index: 10;
 `
 
+const TIME_FILTERS = {
+  D: '1D',
+  W: '1W',
+  M: '1M',
+  Y: '1Y',
+  All: '1Y',
+} as const
+
 type ChartTVLProps = {
   address?: string
   poolInfo?: PoolInfo | null
+  timeFilter?: 'D' | 'W' | 'M' | 'Y' | 'All'
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -38,8 +47,8 @@ const CustomTooltip = ({ active, payload }: any) => {
   return null
 }
 
-export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo }) => {
-  const { data } = usePoolChartTVLData(address, poolInfo?.protocol, '1Y')
+export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilter }) => {
+  const { data } = usePoolChartTVLData(address, poolInfo?.protocol, TIME_FILTERS[timeFilter ?? 'D'])
   const [hoverValue, setHoverValue] = useState<number | undefined>()
   const [hoverDate, setHoverDate] = useState<string | undefined>()
   const { theme } = useTheme()
@@ -59,7 +68,7 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo }) => {
           {formatDollarAmount(hoverValue ?? data?.[data.length - 1]?.value)}
         </Text>
         <Text small color="secondary">
-          {`${dayjs(hoverDate ?? data?.[data.length - 1]?.time).format('MMM D, YYYY A')} (UTC)`}
+          {`${dayjs(hoverDate ?? data?.[data.length - 1]?.time).format('MMM D, YYYY')} (UTC)`}
         </Text>
       </Flex>
       <ResponsiveContainer width="100%" height={340}>
