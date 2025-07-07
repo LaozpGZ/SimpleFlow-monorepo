@@ -104,7 +104,7 @@ export default function AdjustRewardDialog({
       ...oldReward,
       total: newTotal,
       openTime: Date.now() + chainTimeOffset + 30 * 1000, // 30 seconds as buffer
-      endTime: new Decimal(oldReward.endTime).add(new Decimal(daysExtend).mul(DAY_SECONDS * 1000)).toNumber(),
+      endTime: new Decimal(oldReward.endTime).add(new Decimal(daysExtend || 0).mul(DAY_SECONDS * 1000)).toNumber(),
       perWeek: newPerSecond.mul(WEEK_SECONDS).toString(),
       perDay: newPerSecond.mul(DAY_SECONDS).toString(),
       status: 'updated',
@@ -175,7 +175,7 @@ export default function AdjustRewardDialog({
                       inputGroupSx={{
                         px: 0
                       }}
-                      placeholder={`${MIN_DURATION_DAYS} - ${MAX_DURATION_DAYS}`}
+                      placeholder="0"
                       value={daysExtend}
                       onChange={setDaysExtend}
                     />
