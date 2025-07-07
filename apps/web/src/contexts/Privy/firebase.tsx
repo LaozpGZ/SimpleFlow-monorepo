@@ -19,6 +19,7 @@ interface AuthContextType {
   loginWithGoogle: () => Promise<void>
   loginWithX: () => Promise<void>
   loginWithDiscord: () => Promise<void>
+  loginWithTelegram: () => Promise<void>
   signOutAndClearUserStates: () => void
 }
 
@@ -34,6 +35,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   const [isLoading, setLoading] = useState(false)
   const [token, setToken] = useState<string | undefined>()
   const [discordPopup, setDiscordPopup] = useState<Window | null>(null)
+  const [telegramPopup, setTelegramPopup] = useState<Window | null>(null)
 
   const signInWithGoogle = async (): Promise<UserCredential> => {
     try {
@@ -123,6 +125,33 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  const loginWithTelegram = async () => {
+    try {
+      setLoading(true)
+
+      // Open Telegram Login Widget
+      const botName = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME
+      const redirectUri = `${window.location.origin}/api/auth/telegram-callback`
+
+      // Create a random auth_date to prevent caching issues
+      const authDate = Math.floor(Date.now() / 1000)
+
+      const popup = window.open(
+        `https://oauth.telegram.org/auth?bot_id=${botName}&origin=${encodeURIComponent(
+          window.location.origin,
+        )}&return_to=${encodeURIComponent(redirectUri)}&auth_date=${authDate}`,
+        '_blank',
+        'width=550,height=470',
+      )
+
+      setTelegramPopup(popup)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const getToken = useCallback(async () => {
     if (token) {
       return token
@@ -146,7 +175,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     })
   }, [])
 
-  // Discord login handler
+  // Social login handler (Discord & Telegram)
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return
@@ -160,11 +189,20 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
 
     // fallback: If postMessage is not received, actively take from localStorage
     const checkLocalStorage = setInterval(() => {
-      const token = localStorage.getItem('discordAuthToken')
-      if (token) {
+      // Check for Discord token
+      const discordToken = localStorage.getItem('discordAuthToken')
+      if (discordToken) {
         clearInterval(checkLocalStorage)
         localStorage.removeItem('discordAuthToken')
-        loginWithCustomToken(token)
+        loginWithCustomToken(discordToken)
+      }
+
+      // Check for Telegram token
+      const telegramToken = localStorage.getItem('telegramAuthToken')
+      if (telegramToken) {
+        clearInterval(checkLocalStorage)
+        localStorage.removeItem('telegramAuthToken')
+        loginWithCustomToken(telegramToken)
       }
     }, 1000)
 
@@ -205,6 +243,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     loginWithGoogle,
     loginWithX,
     loginWithDiscord,
+    loginWithTelegram,
     signOutAndClearUserStates,
   }
 
