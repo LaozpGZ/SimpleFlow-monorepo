@@ -4281,7 +4281,5 @@
   "No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.": "まだ収穫できる報酬はありません。後ほど再度ご確認ください。ユーザーがこのプールで取引するにつれて、収益は増加します。",
   "Your Pool will appear in the Pool List within approximately 5 minutes, and you can also view your added position under the My Position tab. This pool is represented by an NFT—please do not burn or transfer it, as it is required to retain ownership of the position.": "あなたのプールは約5分以内にプールリストに表示され、追加したポジションは「マイポジション」タブで確認できます。このプールはNFTによって表されます。ポジションの所有権を維持するために必要ですので、バーンしたり送金したりしないでください。",
   "Provide Liquidity on Solana PancakeSwap": "Solana PancakeSwapで流動性を提供する",
-  "Add LP Now": "今すぐLPを追加",
-  "Volume ${timeBase}": "出来高${timeBase}",
-  "Fees ${timeBase}": "手数料${timeBase}"
+  "Add LP Now": "今すぐLPを追加"
 }
