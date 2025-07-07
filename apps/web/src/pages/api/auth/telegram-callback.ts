@@ -18,7 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return
     }
 
-    // 排序後建立檢查字串
+    // sort the authData by key
     const dataCheckString = Object.keys(authData)
       .sort()
       .map((key) => `${key}=${authData[key]}`)
