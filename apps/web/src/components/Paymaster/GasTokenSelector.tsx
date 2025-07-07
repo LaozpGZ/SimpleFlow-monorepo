@@ -180,19 +180,22 @@ export const GasTokenSelector = ({ inputCurrency, ...props }: GasTokenSelectorPr
    * Sort tokens based on balances
    * Keeps the Native Token in the first position
    */
-  const tokenListSortComparator = (tokenA: Currency, tokenB: Currency) => {
-    if (tokenA.isNative || tokenB.isNative) return 1
+  const tokenListSortComparator = useCallback(
+    (tokenA: Currency, tokenB: Currency) => {
+      if (tokenA.isNative || tokenB.isNative) return 1
 
-    const balanceA = balances[getCurrencyKey(tokenA)]
-    const balanceB = balances[getCurrencyKey(tokenB)]
+      const balanceA = balances[getCurrencyKey(tokenA)]
+      const balanceB = balances[getCurrencyKey(tokenB)]
 
-    if (!balanceA || !balanceB) return 0
+      if (!balanceA || !balanceB) return 0
 
-    if (balanceA.greaterThan(balanceB)) return -1
-    if (balanceA.lessThan(balanceB)) return 1
+      if (balanceA.greaterThan(balanceB)) return -1
+      if (balanceA.lessThan(balanceB)) return 1
 
-    return 0
-  }
+      return 0
+    },
+    [balances],
+  )
 
   // Item Key for FixedSizeList
   const itemKey = useCallback((index: number, data: any) => `${data[index]}-${index}`, [])
