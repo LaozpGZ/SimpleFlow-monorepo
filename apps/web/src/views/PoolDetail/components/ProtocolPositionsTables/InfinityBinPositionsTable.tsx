@@ -19,6 +19,7 @@ import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
+import { InfinityBinEarningsCell } from './PoolEarningsCells'
 import { PositionFilter } from './types'
 
 interface InfinityBinPositionsTableProps {
@@ -107,10 +108,7 @@ const transformInfinityBinPositionToTableRow = (
   const earnings = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px">
-        $0.00
-      </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {t('Fees & Rewards')}
+        <InfinityBinEarningsCell chainId={poolInfo.chainId} poolId={poolInfo.poolId} />
       </Text>
     </Flex>
   )

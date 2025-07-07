@@ -21,6 +21,7 @@ import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
+import { InfinityCLEarningsCell } from './PoolEarningsCells'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 
@@ -244,7 +245,7 @@ const transformInfinityCLPositionToTableRow = (
   const earnings = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px">
-        $0.00
+        <InfinityCLEarningsCell tokenId={position.tokenId} chainId={poolInfo.chainId} poolId={poolInfo.poolId} />
       </Text>
     </Flex>
   )

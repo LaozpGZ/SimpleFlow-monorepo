@@ -18,6 +18,7 @@ import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
+import { V3EarningsCell } from './PoolEarningsCells'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 
@@ -214,10 +215,7 @@ const transformV3PositionToTableRow = (
   const earnings = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px">
-        {earningsData.earningsBusd ? formatDollarAmount(earningsData.earningsBusd) : '$0.00'}
-      </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {t('Fees & Rewards')}
+        <V3EarningsCell tokenId={position.tokenId} chainId={poolInfo.chainId} />
       </Text>
     </Flex>
   )
