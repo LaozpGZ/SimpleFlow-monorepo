@@ -241,8 +241,6 @@ const transformV3PositionToTableRow = (
       minPercentage={minPercentage}
       maxPercentage={maxPercentage}
       rangePosition={rangePosition}
-      token0Symbol={poolInfo.token0.wrapped?.symbol || ''}
-      token1Symbol={poolInfo.token1.wrapped?.symbol || ''}
       outOfRange={outOfRange}
       removed={removed}
       showPercentages={showPercentages}
@@ -252,10 +250,10 @@ const transformV3PositionToTableRow = (
   const actions = (
     <FlexGap gap="8px" alignItems="center">
       <ActionButton disabled={removed} isIcon>
-        <MinusIcon color="primary60" />
+        <MinusIcon />
       </ActionButton>
       <ActionButton disabled={removed} isIcon>
-        <AddIcon color="primary60" />
+        <AddIcon />
       </ActionButton>
       {position.isStaked && <ActionButton>{t('Harvest')}</ActionButton>}
       {!position.isStaked && !removed && !outOfRange && <ActionButton>{t('Stake')}</ActionButton>}

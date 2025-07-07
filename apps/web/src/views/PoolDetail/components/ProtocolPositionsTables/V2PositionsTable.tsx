@@ -128,10 +128,10 @@ const transformV2PositionToTableRow = (
   const actions = (
     <FlexGap gap="8px" alignItems="center">
       <ActionButton isIcon>
-        <AddIcon color="primary60" />
+        <AddIcon />
       </ActionButton>
       <ActionButton isIcon>
-        <MinusIcon color="primary60" />
+        <MinusIcon />
       </ActionButton>
       {poolInfo.protocol === 'v2' && <ActionButton>{t('Migrate')}</ActionButton>}
     </FlexGap>

@@ -3,10 +3,10 @@ import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { PositionMath, TickMath } from '@pancakeswap/v3-sdk'
+import { nearestUsableTick, PositionMath, TickMath } from '@pancakeswap/v3-sdk'
 import BigNumber from 'bignumber.js'
 
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { getAddInfinityLiquidityURL, getLiquidityDetailURL } from 'config/constants/liquidity'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
@@ -78,6 +78,7 @@ const transformInfinityCLPositionToTableRow = (
 ) => {
   // Calculate position amounts
   const { tickLower, tickUpper, liquidity } = position
+
   const amount0 = pool
     ? CurrencyAmount.fromRawAmount(
         pool.token0,
@@ -99,6 +100,19 @@ const transformInfinityCLPositionToTableRow = (
           .toNumber()
       : 0
 
+  // TickLimits
+  const ticksLimit: {
+    [bound in Bound]: number | undefined
+  } = {
+    [Bound.LOWER]: position.tickSpacing ? nearestUsableTick(TickMath.MIN_TICK, position.tickSpacing) : undefined,
+    [Bound.UPPER]: position.tickSpacing ? nearestUsableTick(TickMath.MAX_TICK, position.tickSpacing) : undefined,
+  }
+
+  const isTickAtLimit = {
+    [Bound.LOWER]: tickLower && ticksLimit.LOWER ? tickLower <= ticksLimit.LOWER : false,
+    [Bound.UPPER]: tickUpper && ticksLimit.UPPER ? tickUpper >= ticksLimit.UPPER : false,
+  }
+
   const outOfRange = pool && (pool.tickCurrent < position.tickLower || pool.tickCurrent >= position.tickUpper)
   const removed = position.liquidity === 0n
 
@@ -113,13 +127,19 @@ const transformInfinityCLPositionToTableRow = (
   let rangePosition = 50
   let showPercentages = false
 
-  // Only calculate percentages if prices are not at limits and pool exists
-  if (
+  // If position if full range, set range position to 50
+  if (!removed && isTickAtLimit.LOWER && isTickAtLimit.UPPER) {
+    rangePosition = 50
+    showPercentages = true
+    minPercentage = '0%'
+    maxPercentage = '100%'
+  } else if (
     pool?.token0Price &&
     !removed &&
     position.tickLower > TickMath.MIN_TICK &&
     position.tickUpper < TickMath.MAX_TICK
   ) {
+    // Only calculate percentages if prices are not at limits and pool exists
     try {
       const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
 
@@ -133,8 +153,8 @@ const transformInfinityCLPositionToTableRow = (
         const minPercent = ((minPrice - currentPrice) / currentPrice) * 100
         const maxPercent = ((maxPrice - currentPrice) / currentPrice) * 100
 
-        // Only show percentages if they're reasonable finite values
         if (
+          // Only show percentages if they're reasonable finite values
           Number.isFinite(minPercent) &&
           Number.isFinite(maxPercent) &&
           Math.abs(minPercent) < 10000 &&
@@ -245,8 +265,6 @@ const transformInfinityCLPositionToTableRow = (
       minPercentage={minPercentage}
       maxPercentage={maxPercentage}
       rangePosition={rangePosition}
-      token0Symbol={poolInfo.token0?.symbol || ''}
-      token1Symbol={poolInfo.token1?.symbol || ''}
       outOfRange={outOfRange}
       removed={removed}
       showPercentages={showPercentages}

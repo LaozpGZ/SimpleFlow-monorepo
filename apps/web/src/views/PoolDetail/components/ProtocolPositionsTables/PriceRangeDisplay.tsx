@@ -42,8 +42,6 @@ interface PriceRangeDisplayProps {
   minPercentage?: string
   maxPercentage?: string
   rangePosition?: number
-  token0Symbol: string
-  token1Symbol: string
   outOfRange?: boolean
   removed?: boolean
   showPercentages?: boolean
@@ -55,8 +53,6 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
   minPercentage,
   maxPercentage,
   rangePosition = 50,
-  token0Symbol,
-  token1Symbol,
   outOfRange = false,
   removed = false,
   showPercentages = false,

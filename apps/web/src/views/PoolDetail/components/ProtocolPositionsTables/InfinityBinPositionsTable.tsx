@@ -154,10 +154,10 @@ const transformInfinityBinPositionToTableRow = (
   const actions = (
     <FlexGap gap="8px" alignItems="center">
       <ActionButton disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED} isIcon>
-        <MinusIcon color="primary60" />
+        <MinusIcon />
       </ActionButton>
       <ActionButton disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED} isIcon>
-        <AddIcon color="primary60" />
+        <AddIcon />
       </ActionButton>
     </FlexGap>
   )
