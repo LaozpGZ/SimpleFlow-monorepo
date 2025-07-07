@@ -40,7 +40,7 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
     [chainId],
   )
 
-  const { loginWithGoogle, loginWithX, isLoading } = useFirebaseAuth()
+  const { loginWithGoogle, loginWithX, isLoading, loginWithDiscord } = useFirebaseAuth()
 
   const handleTelegramLogin = () => {
     console.log('Telegram login clicked')
@@ -49,7 +49,7 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
 
   const handleDiscordLogin = () => {
     console.log('Discord login clicked')
-    //  still testing
+    loginWithDiscord()
   }
 
   return (
