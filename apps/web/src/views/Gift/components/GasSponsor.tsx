@@ -4,7 +4,10 @@ import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { BulletList } from 'components/BulletList'
+import { multiplyPriceByAmount } from 'utils/prices'
+import { Currency, Price } from '@pancakeswap/sdk'
 
 const StyledRow = styled(RowBetween)`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -12,9 +15,19 @@ const StyledRow = styled(RowBetween)`
   border-radius: 16px;
 `
 
+// if amount usd is over 1000. show > 1000,
+const formatAmount = (amount: string, stablePrice: Price<Currency, Currency> | undefined) => {
+  const usd = multiplyPriceByAmount(stablePrice, parseFloat(amount))
+  if (usd > 1000) {
+    return `>1000`
+  }
+  return `~${usd.toFixed(2)}`
+}
+
 export const GasSponsor = () => {
   const [includeStarterGas, setIncludeStarterGas] = useState(false)
   const nativeCurrency = useNativeCurrency()
+  const stablePrice = useStablecoinPrice(nativeCurrency)
 
   const { t } = useTranslation()
 
@@ -76,7 +89,7 @@ export const GasSponsor = () => {
               value={amount}
               onUserInput={handleAmountChange}
               placeholder="0.0"
-              unit={undefined}
+              currencyValue={amount ? `${formatAmount(amount, stablePrice)} USD` : ''}
             />
           </StyledRow>
         )}

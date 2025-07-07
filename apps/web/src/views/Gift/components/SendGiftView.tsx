@@ -86,13 +86,19 @@ export const SendGiftView = ({
         <Box p="16px">
           <BulletList>
             <li>
-              <Text fontSize="12px">{t('Send without a wallet address.')}</Text>
+              <Text fontSize="12px" display="inline">
+                {t('Send without a wallet address.')}
+              </Text>
             </li>
             <li>
-              <Text fontSize="12px">{t('The gift remains safely on-chain, accessible only to the recipient.')}</Text>
+              <Text fontSize="12px" display="inline">
+                {t('The gift remains safely on-chain, accessible only to the recipient.')}
+              </Text>
             </li>
             <li>
-              <Text fontSize="12px">{t('Gifts expire after 7 days, unclaimed funds will be returned to you.')}</Text>
+              <Text fontSize="12px" display="inline">
+                {t('Gifts expire after 7 days, unclaimed funds will be returned to you.')}
+              </Text>
             </li>
           </BulletList>
         </Box>
