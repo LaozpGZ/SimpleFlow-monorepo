@@ -59,7 +59,6 @@ class MyDocument extends Document {
           <Main />
           <NextScript />
           <div id="portal-root" />
-          <div id="telegram-widget-root" />
         </body>
       </Html>
     )
