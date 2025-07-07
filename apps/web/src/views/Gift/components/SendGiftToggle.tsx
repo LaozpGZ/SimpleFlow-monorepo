@@ -2,8 +2,9 @@ import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text, Toggle } from '@pancakeswap/uikit'
 import { useContext } from 'react'
 import { SendGiftContext } from '../providers/SendGiftProvider'
+import { GasSponsor } from './GasSponsor'
 
-export const SendGiftToggle = ({ children }: { children: React.ReactNode }) => {
+export const SendGiftToggle = ({ children }: { children: (isSendGiftOn: boolean) => React.ReactNode }) => {
   const { t } = useTranslation()
   const { isSendGift, setIsSendGift } = useContext(SendGiftContext)
 
@@ -24,7 +25,8 @@ export const SendGiftToggle = ({ children }: { children: React.ReactNode }) => {
           }}
         />
       </FlexGap>
-      {isSendGift ? null : children}
+      {children(isSendGift)}
+      {isSendGift && <GasSponsor />}
     </>
   )
 }

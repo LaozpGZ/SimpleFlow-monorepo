@@ -151,7 +151,7 @@ export const WalletContent = ({
   }, [])
 
   const actionView = useMemo(() => {
-    if (viewState === ViewState.CANCEL_GIFT_CONFIRM) return <CancelGiftConfirmView />
+    if (viewState === ViewState.CANCEL_GIFT_CONFIRM) return <CancelGiftConfirmView assets={balances} />
 
     // Claim Gift
     if ([ViewState.CLAIM_GIFT, ViewState.CLAIM_GIFT_CONFIRM].includes(viewState)) {
@@ -306,7 +306,7 @@ export const WalletContent = ({
             </Box>
           ) : view === WalletView.GIFTS ? null : (
             <ActionButtonsContainer>
-              <FlexGap px="16px" gap="8px" width="100%">
+              <FlexGap gap="8px" width="100%">
                 <ActionButton
                   onClick={() => {
                     router.push('/buy-crypto')

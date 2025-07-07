@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { BalanceData } from 'hooks/useAddressBalance'
+import { FAST_INTERVAL } from 'config/constants'
 import { useAccount } from 'wagmi'
 import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
 import { GiftInfo, GiftInfoResponse } from '../types'
@@ -52,12 +53,13 @@ export const useGetGiftInfo = (assets: BalanceData[]) => {
       return result.data || []
     },
     select: (data): GiftInfo[] => {
-      return data.map(selectGiftInfo).filter((gift) => gift !== undefined)
+      return data.map(selectGiftInfo).filter((gift) => gift !== null)
     },
     enabled: Boolean(chainId && account),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    refetchOnMount: false,
+    refetchOnMount: true,
+    refetchInterval: FAST_INTERVAL,
   })
 }
 

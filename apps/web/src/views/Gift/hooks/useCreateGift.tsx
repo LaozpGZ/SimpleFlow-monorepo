@@ -5,9 +5,10 @@ import { ToastDescriptionWithTx } from 'components/Toast'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCallback, useMemo, useState } from 'react'
 import { zeroAddress } from 'viem'
-import { useReadContract, useWriteContract } from 'wagmi'
+import { useQueryClient } from '@tanstack/react-query'
+import { useAccount, useReadContract, useWriteContract } from 'wagmi'
 import { PancakeGiftV1Abi } from '../abis/PancakeGiftV1Abi'
-import { GIFT_PANCAKE_V1_ADDRESS } from '../constants'
+import { GIFT_PANCAKE_V1_ADDRESS, QUERY_KEY_GIFT_INFO } from '../constants'
 import { convertCodeHash } from '../utils/convertCodeHash'
 
 interface CreateGiftParams {
@@ -22,7 +23,10 @@ export const useCreateGift = () => {
   const [error, setError] = useState<Error | null>(null)
   const { toastSuccess } = useToast()
 
+  const { address: account } = useAccount()
+
   const { writeContractAsync, data: txHash, isPending } = useWriteContract()
+  const queryClient = useQueryClient()
 
   // Get GAS_PAYMENT from contract
   const { data: gasPayment } = useReadContract({
@@ -67,6 +71,8 @@ export const useCreateGift = () => {
         {
           onSuccess: (transactionHash) => {
             if (transactionHash) {
+              queryClient.invalidateQueries({ queryKey: [QUERY_KEY_GIFT_INFO, chainId, account] })
+
               toastSuccess(t('Create Gift Successfully'), <ToastDescriptionWithTx bscTrace txHash={transactionHash} />)
             }
           },

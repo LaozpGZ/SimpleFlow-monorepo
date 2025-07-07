@@ -325,85 +325,93 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   return (
     <FormContainer>
       <SendGiftToggle>
-        <Box>
-          <AddressInputWrapper>
-            <Box position="relative">
-              <Input
-                value={address ?? ''}
-                onChange={handleAddressChange}
-                placeholder="Recipient address"
-                style={{ height: '64px' }}
-                isError={Boolean(addressError)}
+        {(isSendGiftOn) => (
+          <>
+            {isSendGiftOn ? null : (
+              <Box>
+                <AddressInputWrapper>
+                  <Box position="relative">
+                    <Input
+                      value={address ?? ''}
+                      onChange={handleAddressChange}
+                      placeholder="Recipient address"
+                      style={{ height: '64px' }}
+                      isError={Boolean(addressError)}
+                    />
+                    {address && (
+                      <ClearButton
+                        scale="sm"
+                        onClick={handleClearAddress}
+                        style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' }}
+                        variant="tertiary"
+                      >
+                        <CloseIcon color="textSubtle" />
+                      </ClearButton>
+                    )}
+                  </Box>
+                </AddressInputWrapper>
+                {addressError && <ErrorMessage>{addressError}</ErrorMessage>}
+              </Box>
+            )}
+
+            <Box>
+              <FlexGap alignItems="center" gap="8px" justifyContent="space-between" position="relative">
+                <FlexGap alignItems="center" gap="8px" mb="8px">
+                  <AssetContainer>
+                    <CurrencyLogo currency={currency} size="40px" src={asset.token.logoURI} />
+                    <ChainIconWrapper>
+                      <img
+                        src={`${ASSET_CDN}/web/chains/${asset.chainId}.png`}
+                        alt={`${chainName}-logo`}
+                        width="12px"
+                        height="12px"
+                      />
+                    </ChainIconWrapper>
+                  </AssetContainer>
+                  <FlexGap flexDirection="column">
+                    <Text fontWeight="bold" fontSize="20px">
+                      {asset.token.symbol}
+                    </Text>
+                    <Text color="textSubtle" fontSize="12px" mt="-4px">{`${chainName.toUpperCase()} ${t(
+                      'Chain',
+                    )}`}</Text>
+                  </FlexGap>
+                </FlexGap>
+                <Box position="relative">
+                  <LazyAnimatePresence mode="wait" features={domAnimation}>
+                    {tokenBalance ? (
+                      !isInputFocus ? (
+                        <SwapUIV2.WalletAssetDisplay
+                          isUserInsufficientBalance={isInsufficientBalance}
+                          balance={tokenBalance.toSignificant(6)}
+                          onMax={handleMaxInput}
+                        />
+                      ) : (
+                        <SwapUIV2.AssetSettingButtonList onPercentInput={handlePercentInput} />
+                      )
+                    ) : null}
+                  </LazyAnimatePresence>
+                </Box>
+              </FlexGap>
+
+              <BalanceInput
+                value={amount}
+                onUserInput={handleAmountChange}
+                onFocus={() => setIsInputFocus(true)}
+                onBlur={handleUserInputBlur}
+                currencyValue={amount ? `~${(parseFloat(amount) * price).toFixed(2)} USD` : ''}
+                placeholder="0.0"
+                unit={asset.token.symbol}
               />
-              {address && (
-                <ClearButton
-                  scale="sm"
-                  onClick={handleClearAddress}
-                  style={{ position: 'absolute', right: '8px', top: '50%', transform: 'translateY(-50%)' }}
-                  variant="tertiary"
-                >
-                  <CloseIcon color="textSubtle" />
-                </ClearButton>
+              {isInsufficientBalance && amount && (
+                <Text color="failure" fontSize="14px" mt="8px">
+                  {t('Insufficient balance')}
+                </Text>
               )}
             </Box>
-          </AddressInputWrapper>
-          {addressError && <ErrorMessage>{addressError}</ErrorMessage>}
-        </Box>
-      </SendGiftToggle>
-
-      <Box mb="16px">
-        <FlexGap alignItems="center" gap="8px" justifyContent="space-between" position="relative">
-          <FlexGap alignItems="center" gap="8px" mb="8px">
-            <AssetContainer>
-              <CurrencyLogo currency={currency} size="40px" src={asset.token.logoURI} />
-              <ChainIconWrapper>
-                <img
-                  src={`${ASSET_CDN}/web/chains/${asset.chainId}.png`}
-                  alt={`${chainName}-logo`}
-                  width="12px"
-                  height="12px"
-                />
-              </ChainIconWrapper>
-            </AssetContainer>
-            <FlexGap flexDirection="column">
-              <Text fontWeight="bold" fontSize="20px">
-                {asset.token.symbol}
-              </Text>
-              <Text color="textSubtle" fontSize="12px" mt="-4px">{`${chainName.toUpperCase()} ${t('Chain')}`}</Text>
-            </FlexGap>
-          </FlexGap>
-          <Box position="relative">
-            <LazyAnimatePresence mode="wait" features={domAnimation}>
-              {tokenBalance ? (
-                !isInputFocus ? (
-                  <SwapUIV2.WalletAssetDisplay
-                    isUserInsufficientBalance={isInsufficientBalance}
-                    balance={tokenBalance.toSignificant(6)}
-                    onMax={handleMaxInput}
-                  />
-                ) : (
-                  <SwapUIV2.AssetSettingButtonList onPercentInput={handlePercentInput} />
-                )
-              ) : null}
-            </LazyAnimatePresence>
-          </Box>
-        </FlexGap>
-
-        <BalanceInput
-          value={amount}
-          onUserInput={handleAmountChange}
-          onFocus={() => setIsInputFocus(true)}
-          onBlur={handleUserInputBlur}
-          currencyValue={amount ? `~${(parseFloat(amount) * price).toFixed(2)} USD` : ''}
-          placeholder="0.0"
-          unit={asset.token.symbol}
-        />
-        {isInsufficientBalance && amount && (
-          <Text color="failure" fontSize="14px" mt="8px">
-            {t('Insufficient balance')}
-          </Text>
+          </>
         )}
-      </Box>
+      </SendGiftToggle>
 
       <FlexGap gap="16px" mt="16px">
         <ActionButton onClick={() => onViewStateChange(ViewState.SEND_ASSETS)} variant="tertiary">

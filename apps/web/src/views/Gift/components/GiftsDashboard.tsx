@@ -9,40 +9,7 @@ import { useContext } from 'react'
 import { useGetGiftInfo } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { GiftStatus } from '../types'
-
-const getStatusVariant = (status: GiftStatus) => {
-  switch (status) {
-    case GiftStatus.PENDING:
-      return 'warning'
-    case GiftStatus.CLAIMED:
-      return 'success'
-    case GiftStatus.CANCELLED:
-      return 'failure'
-    case GiftStatus.EXPIRED:
-      return 'textDisabled'
-    case GiftStatus.REQUESTED_CLAIM:
-      return 'warning'
-    default:
-      return 'primary'
-  }
-}
-
-const getStatusText = (status: GiftStatus) => {
-  switch (status) {
-    case GiftStatus.PENDING:
-      return 'Pending'
-    case GiftStatus.CLAIMED:
-      return 'Claimed'
-    case GiftStatus.CANCELLED:
-      return 'Cancelled'
-    case GiftStatus.EXPIRED:
-      return 'Expired'
-    case GiftStatus.REQUESTED_CLAIM:
-      return 'Requested'
-    default:
-      return status
-  }
-}
+import { GiftStatusTag } from './GiftStatusTag'
 
 const getExpirationTime = (timestamp: string, status: GiftStatus) => {
   // Assuming gifts expire 7 days after creation for pending/cancelled
@@ -101,9 +68,7 @@ export const GiftsDashboard = ({
           giftInfo.map((gift) => (
             <Box mb="16px" key={gift.codeHash}>
               <FlexGap gap="8px" alignItems="center" mb="8px">
-                <Tag variant={getStatusVariant(gift.status)} scale="sm" outline>
-                  {getStatusText(gift.status)}
-                </Tag>
+                <GiftStatusTag status={gift.status} />
 
                 {gift.status === GiftStatus.PENDING && (
                   <Text fontSize="12px" color="textSubtle">

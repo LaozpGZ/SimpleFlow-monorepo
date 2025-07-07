@@ -12,9 +12,13 @@ export default function useGiftInfoSelector(assets: BalanceData[]) {
   const native = useNativeCurrency(chainId)
 
   return useCallback(
-    (gift?: GiftInfoResponse): GiftInfo | undefined => {
+    (gift?: GiftInfoResponse): GiftInfo | null => {
+      // Why null?
+      // Because we want to differentiate between gift is not loaded and gift is invalid
+      // if gift is undefined, it means the gift is not loaded yet
+      // if gift is null, it means the gift is invalid
       if (!gift) {
-        return undefined
+        return null
       }
 
       const asset = assets.find(
@@ -22,7 +26,7 @@ export default function useGiftInfoSelector(assets: BalanceData[]) {
       )
 
       if (!asset) {
-        return undefined
+        return null
       }
 
       try {
@@ -46,7 +50,7 @@ export default function useGiftInfoSelector(assets: BalanceData[]) {
         }
       } catch (error) {
         console.error(error)
-        return undefined
+        return null
       }
     },
     [assets, chainId, native],

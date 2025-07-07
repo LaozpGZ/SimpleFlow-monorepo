@@ -48,7 +48,6 @@ export const WalletModalV2ViewStateProvider: React.FC<WalletModalV2ViewStateProv
 
   const handleSetViewState = useCallback(
     (viewState: ViewState) => {
-      console.log('handleSetViewState', viewState)
       setViewState(viewState)
     },
     [setViewState],
