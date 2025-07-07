@@ -1,14 +1,16 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { Box, Button, ButtonMenu, ButtonMenuItem, Card, ColumnCenter, Text } from '@pancakeswap/uikit'
+import { Box, Button, ButtonMenu, ButtonMenuItem, Card, ColumnCenter, FlexGap, Text } from '@pancakeswap/uikit'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { nanoid } from 'nanoid'
 import { BulletList } from 'components/BulletList'
 import { useCallback, useState } from 'react'
+import { useSendGiftContext } from '../providers/SendGiftProvider'
 import { GIFT_CODE_LENGTH } from '../constants'
 import { useCreateGift } from '../hooks/useCreateGift'
 import { QRView } from './ClaimQRView'
 import { SendLinkView } from './SendLinkView'
+import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 
 enum GIFT_VIEW {
   SEND_LINK = 0,
@@ -25,16 +27,17 @@ export const SendGiftView = ({
   const { t } = useTranslation()
   const [code, setCode] = useState<string | null>(null)
   const [selectedView, setSelectedView] = useState<GIFT_VIEW>(GIFT_VIEW.SEND_LINK)
+  const { nativeAmount, includeStarterGas } = useSendGiftContext()
 
   const { createGift, isLoading, txHash, error } = useCreateGift()
 
   const handleCreateGift = useCallback(() => {
     const randomCode = nanoid(GIFT_CODE_LENGTH)
     setCode(() => {
-      createGift({ tokenAmount: tokenAmount!, code: randomCode })
+      createGift({ tokenAmount: tokenAmount!, code: randomCode, nativeAmount })
       return randomCode
     })
-  }, [tokenAmount, createGift])
+  }, [tokenAmount, createGift, nativeAmount])
 
   const viewTabs = (
     <Box width="100%" mb="16px" onClick={(e) => e.stopPropagation()}>
@@ -77,10 +80,31 @@ export const SendGiftView = ({
     )
   }
 
+  const hasIncludeStarterGas = includeStarterGas && nativeAmount
+
   return (
     <ColumnCenter>
       {viewTabs}
-      <TokenAmountSection tokenAmount={tokenAmount} price={price} />
+
+      {hasIncludeStarterGas ? (
+        <FlexGap mb="16px" width="100%" flexDirection="column" gap="8px">
+          <Card>
+            <Box p="8px">
+              <CurrencyAmountGiftDisplay
+                currencyAmount={tokenAmount}
+                usdValue={parseFloat(tokenAmount.toExact()) * price}
+              />
+            </Box>
+          </Card>
+          <Card>
+            <Box p="8px">
+              <CurrencyAmountGiftDisplay currencyAmount={nativeAmount} usdValue={0} />
+            </Box>
+          </Card>
+        </FlexGap>
+      ) : (
+        <TokenAmountSection tokenAmount={tokenAmount} price={price} />
+      )}
 
       <Card mb="16px">
         <Box p="16px">

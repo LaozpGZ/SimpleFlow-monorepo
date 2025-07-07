@@ -55,8 +55,8 @@ export const useCreateGift = () => {
 
       // const isOnlyNative = tokenAmount?.currency.isNative && !nativeAmount
       const tokenAddress = tokenAmount.currency.isNative ? zeroAddress : tokenAmount.currency.address
-      const tokenAmountBigInt = 0n
-      const nativeAmountBigInt = tokenAmount.quotient
+      const tokenAmountBigInt = tokenAmount.currency.isNative ? 0n : tokenAmount.quotient
+      const nativeAmountBigInt = tokenAmount.currency.isNative ? tokenAmount.quotient : nativeAmount?.quotient ?? 0n
 
       const transactionValue = nativeAmountBigInt + gasPaymentBigInt
 

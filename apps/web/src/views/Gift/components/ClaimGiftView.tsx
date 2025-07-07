@@ -21,7 +21,7 @@ export const ClaimGiftView = ({
 
   const codeHash = convertCodeHash(code)
 
-  const { data: giftInfo, isLoading, isError } = useGetGiftByCodeHash({ codeHash, assets })
+  const { data: giftInfo, isLoading } = useGetGiftByCodeHash({ codeHash, assets })
 
   const isInValid = Boolean(code && (!giftInfo || (giftInfo?.status && giftInfo.status !== GiftStatus.PENDING)))
 

@@ -1,5 +1,5 @@
 import { BalanceInput, Card, Checkbox, Flex, Box, RowBetween, Text, FlexGap } from '@pancakeswap/uikit'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import useNativeCurrency from 'hooks/useNativeCurrency'
@@ -7,7 +7,8 @@ import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { BulletList } from 'components/BulletList'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { Currency, Price } from '@pancakeswap/sdk'
+import { Currency, Price, CurrencyAmount } from '@pancakeswap/sdk'
+import { useSendGiftContext } from '../providers/SendGiftProvider'
 
 const StyledRow = styled(RowBetween)`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -25,16 +26,40 @@ const formatAmount = (amount: string, stablePrice: Price<Currency, Currency> | u
 }
 
 export const GasSponsor = () => {
-  const [includeStarterGas, setIncludeStarterGas] = useState(false)
+  const { nativeAmount, setNativeAmount, includeStarterGas, setIncludeStarterGas } = useSendGiftContext()
   const nativeCurrency = useNativeCurrency()
   const stablePrice = useStablecoinPrice(nativeCurrency)
+  const [inputValue, setInputValue] = useState('')
 
   const { t } = useTranslation()
 
-  const [amount, setAmount] = useState('')
+  // Sync input value with context nativeAmount
+  useEffect(() => {
+    if (nativeAmount) {
+      setInputValue(nativeAmount.toExact())
+    } else {
+      setInputValue('')
+    }
+  }, [nativeAmount])
 
   const handleAmountChange = (value: string) => {
-    setAmount(value)
+    setInputValue(value)
+
+    if (!value || value === '0' || parseFloat(value) <= 0) {
+      setNativeAmount(undefined)
+      return
+    }
+
+    try {
+      const amount = CurrencyAmount.fromRawAmount(
+        nativeCurrency,
+        (parseFloat(value) * 10 ** nativeCurrency.decimals).toString(),
+      )
+      setNativeAmount(amount)
+    } catch (error) {
+      console.error('Invalid amount:', error)
+      setNativeAmount(undefined)
+    }
   }
 
   const msg = includeStarterGas ? (
@@ -68,7 +93,7 @@ export const GasSponsor = () => {
             name="confirmed"
             type="checkbox"
             checked={includeStarterGas}
-            onChange={() => setIncludeStarterGas((prev) => !prev)}
+            onChange={() => setIncludeStarterGas(!includeStarterGas)}
           />
           <Text ml="8px" fontSize="14px" fontWeight={600}>
             {t('Include Starter Gas')}
@@ -86,10 +111,10 @@ export const GasSponsor = () => {
 
             <BalanceInput
               width="120px"
-              value={amount}
+              value={inputValue}
               onUserInput={handleAmountChange}
               placeholder="0.0"
-              currencyValue={amount ? `${formatAmount(amount, stablePrice)} USD` : ''}
+              currencyValue={inputValue ? `${formatAmount(inputValue, stablePrice)} USD` : ''}
             />
           </StyledRow>
         )}
