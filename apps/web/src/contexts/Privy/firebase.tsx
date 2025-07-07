@@ -8,7 +8,7 @@ import {
   UserCredential,
 } from 'firebase/auth'
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
-import { loadTelegramLoginWidget } from './telegramLogin'
+import { loginWithTelegramViaScript } from './telegramLogin'
 
 import { firebaseApp } from './constants'
 
@@ -130,11 +130,9 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true)
 
-      loadTelegramLoginWidget('telegram-widget-root', (token) => {
+      loginWithTelegramViaScript((token) => {
         loginWithCustomToken(token)
       })
-      // @ts-ignore
-      TWidgetLogin.auth()
     } catch (err) {
       console.error(err)
     } finally {
