@@ -7,6 +7,7 @@ import { isInfinityProtocol } from 'utils/protocols'
 
 import { TabMenu } from 'views/BurnDashboard/components/TabMenu'
 import { useRouterQuery } from '../hooks/useRouterQuery'
+import { TimeFilter } from '../types'
 import { ChartFee } from './ChartFee'
 import { ChartLiquidity } from './ChartLiquidity'
 import { ChartTVL } from './ChartTVL'
@@ -59,7 +60,7 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo }) => {
   const isV3 = useMemo(() => poolInfo?.protocol === 'v3', [poolInfo])
   const [chart, setChart] = useState<PoolChart>(PoolChart.Volume)
 
-  const [timeFilter, setTimeFilter] = useState<'D' | 'W' | 'M' | 'Y' | 'All'>('D')
+  const [timeFilter, setTimeFilter] = useState<TimeFilter>(TimeFilter.D)
 
   return (
     <Card>
@@ -88,7 +89,11 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo }) => {
             </TabButton>
           </FlexGap>
           {(chart === PoolChart.Volume || chart === PoolChart.TVL) && (
-            <TabMenu tabs={['D', 'W', 'M', 'Y', 'All']} defaultTab="D" onTabChange={setTimeFilter} />
+            <TabMenu
+              tabs={['D', 'W', 'M', 'Y'] as TimeFilter[]}
+              defaultTab={TimeFilter.D}
+              onTabChange={(tab) => setTimeFilter(tab as TimeFilter)}
+            />
           )}
         </Flex>
       </TabsContainer>

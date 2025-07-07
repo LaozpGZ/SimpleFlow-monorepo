@@ -7,6 +7,7 @@ import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { usePoolChartVolumeData } from '../hooks/usePoolChartVolumeData'
+import { TIME_FILTERS_MAPPING, TimeFilter } from '../types'
 
 const TooltipCard = styled.div`
   background: ${({ theme }) => theme.colors.backgroundAlt};
@@ -21,16 +22,8 @@ const TooltipCard = styled.div`
 type ChartVolumeProps = {
   address?: string
   poolInfo?: PoolInfo | null
-  timeFilter?: 'D' | 'W' | 'M' | 'Y' | 'All'
+  timeFilter?: TimeFilter
 }
-
-const TIME_FILTERS = {
-  D: '1D',
-  W: '1W',
-  M: '1M',
-  Y: '1Y',
-  All: '1Y',
-} as const
 
 const CustomTooltip = ({ active, payload }: any) => {
   if (active && payload && payload.length) {
@@ -48,7 +41,7 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, timeFilter }) => {
-  const { data } = usePoolChartVolumeData(address, poolInfo?.protocol, TIME_FILTERS[timeFilter ?? 'D'])
+  const { data } = usePoolChartVolumeData(address, poolInfo?.protocol, TIME_FILTERS_MAPPING[timeFilter ?? TimeFilter.D])
   const [latestValue, setLatestValue] = useState<number | undefined>()
   const [valueLabel, setValueLabel] = useState<string | undefined>()
 
@@ -59,7 +52,7 @@ export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, tim
     data?.map((item) => ({
       time: item.time,
       value: item.value,
-      formattedTime: dayjs(item.time).format('MMM D'),
+      formattedTime: timeFilter === TimeFilter.D ? dayjs(item.time).format('HH:mm') : dayjs(item.time).format('MMM D'),
     })) || []
 
   return (

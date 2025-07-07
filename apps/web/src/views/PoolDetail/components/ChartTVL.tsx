@@ -7,6 +7,7 @@ import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { usePoolChartTVLData } from '../hooks/usePoolChartTVLData'
+import { TIME_FILTERS_MAPPING, TimeFilter } from '../types'
 
 const TooltipCard = styled.div`
   background: ${({ theme }) => theme.colors.backgroundAlt};
@@ -18,18 +19,10 @@ const TooltipCard = styled.div`
   z-index: 10;
 `
 
-const TIME_FILTERS = {
-  D: '1D',
-  W: '1W',
-  M: '1M',
-  Y: '1Y',
-  All: '1Y',
-} as const
-
 type ChartTVLProps = {
   address?: string
   poolInfo?: PoolInfo | null
-  timeFilter?: 'D' | 'W' | 'M' | 'Y' | 'All'
+  timeFilter?: TimeFilter
 }
 
 const CustomTooltip = ({ active, payload }: any) => {
@@ -48,7 +41,7 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilter }) => {
-  const { data } = usePoolChartTVLData(address, poolInfo?.protocol, TIME_FILTERS[timeFilter ?? 'D'])
+  const { data } = usePoolChartTVLData(address, poolInfo?.protocol, TIME_FILTERS_MAPPING[timeFilter ?? TimeFilter.D])
   const [hoverValue, setHoverValue] = useState<number | undefined>()
   const [hoverDate, setHoverDate] = useState<string | undefined>()
   const { theme } = useTheme()
@@ -58,7 +51,7 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
     data?.map((item) => ({
       time: item.time,
       value: item.value,
-      formattedTime: dayjs(item.time).format('MMM D'),
+      formattedTime: timeFilter === TimeFilter.D ? dayjs(item.time).format('HH:mm') : dayjs(item.time).format('MMM D'),
     })) || []
 
   return (
