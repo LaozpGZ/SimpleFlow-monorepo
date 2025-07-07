@@ -153,6 +153,7 @@ const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
             <SocialLoginButtonVertical onClick={handleTelegramLogin}>
               <img src={`${ASSET_CDN}/web/wallets/social-login/telegram.svg`} width="24" height="24" alt="Telegram" />
               <Text>{t('Telegram')}</Text>
+              <div id="telegram-widget-root" />
             </SocialLoginButtonVertical>
 
             <SocialLoginButtonVertical onClick={handleDiscordLogin}>
