@@ -19,7 +19,6 @@ import {
 } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FeeTierTooltip, LightGreyCard, Liquidity } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
-import { PoolFeatures } from 'components/PoolFeatures/PoolFeatures'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { NextSeo } from 'next-seo'
@@ -242,14 +241,14 @@ export const PoolInfo = () => {
         {tab === PoolDetailTab.Transactions ? <Transactions protocol={poolInfo.protocol} /> : null}
       </Box>
 
-      {hookData && (
+      {/* {hookData && (
         <AutoColumn gap="lg">
           <Text as="h3" fontWeight={600} fontSize={24}>
             {t('Pool Features (Hooks)')}
           </Text>
           <PoolFeatures hookData={hookData} />
         </AutoColumn>
-      )}
+      )} */}
     </AutoColumn>
   )
 }

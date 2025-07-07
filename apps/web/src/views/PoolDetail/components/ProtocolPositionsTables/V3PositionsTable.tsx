@@ -1,0 +1,311 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { Button, Flex, FlexGap, Tag, Text } from '@pancakeswap/uikit'
+import { displayApr } from '@pancakeswap/utils/displayApr'
+import { DoubleCurrencyLogo } from '@pancakeswap/widgets-internal'
+import BigNumber from 'bignumber.js'
+import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+import { usePoolByChainId } from 'hooks/v3/usePools'
+import { useMemo } from 'react'
+import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
+import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
+import { PoolInfo } from 'state/farmsV4/state/type'
+import { useChainIdByQuery } from 'state/info/hooks'
+import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { useAccount } from 'wagmi'
+import { PositionsTable } from '../Tabs/PositionsTable'
+import { PriceRangeDisplay } from './PriceRangeDisplay'
+import { PositionFilter } from './types'
+
+interface V3PositionsTableProps {
+  poolInfo: PoolInfo
+  filter: PositionFilter
+  handleHarvestAll: () => void
+}
+
+// Simple number formatting for prices
+const formatPriceNumber = (price: number): string => {
+  if (price === 0) return '0'
+  if (!Number.isFinite(price)) {
+    if (price === Infinity) return '∞'
+    if (price === -Infinity) return '-∞'
+    return 'NaN'
+  }
+
+  // Handle extremely small values (treat as 0)
+  if (price < 1e-18) return '0'
+
+  // Handle extremely large values (treat as infinity)
+  if (price > 1e30) return '∞'
+
+  if (price < 0.000001) return price.toExponential(2)
+  if (price < 0.01) return price.toFixed(6)
+  if (price < 1) return price.toFixed(4)
+  if (price < 1000) return price.toFixed(2)
+  return price.toLocaleString('en-US', { maximumFractionDigits: 2 })
+}
+
+const formatPercentage = (percentage: number): string => {
+  if (Math.abs(percentage) < 0.01) return '0%'
+  const sign = percentage >= 0 ? '+' : ''
+  return `${sign}${percentage.toFixed(1)}%`
+}
+
+// Helper function to transform position data for table - NO HOOKS ALLOWED
+const transformV3PositionToTableRow = (
+  position: PositionDetail,
+  poolInfo: PoolInfo,
+  positionsData: any[],
+  price0Usd: number | undefined,
+  price1Usd: number | undefined,
+  pool: any,
+  aprData: { lpApr: number; cakeApr: { value: number } | null; merklApr: number },
+  earningsData: { earningsBusd: number | null },
+  t: (key: string) => string,
+) => {
+  const positionData = positionsData?.find((p) => Number(p.tokenId) === Number(position.tokenId))
+
+  const liquidityUSD = positionData
+    ? new BigNumber(positionData.amount0.toExact())
+        .times(price0Usd?.toString() ?? 0)
+        .plus(new BigNumber(positionData.amount1.toExact()).times(price1Usd?.toString() ?? 0))
+        .toNumber()
+    : 0
+
+  const outOfRange = pool && (pool.tickCurrent < position.tickLower || pool.tickCurrent >= position.tickUpper)
+  const removed = position.liquidity === 0n
+
+  // Format price range data using custom formatting
+  let minPriceFormatted = '--'
+  let maxPriceFormatted = '--'
+  let minPercentage = ''
+  let maxPercentage = ''
+  let rangePosition = 50
+  let showPercentages = false
+
+  if (positionData && !removed) {
+    // Convert prices to numbers and format using custom function
+    const minPrice = parseFloat(positionData.token0PriceLower.toSignificant(6))
+    const maxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(6))
+
+    minPriceFormatted = formatPriceNumber(minPrice)
+    maxPriceFormatted = formatPriceNumber(maxPrice)
+
+    // Only calculate percentages if both prices are finite and we have a valid current price
+    if (pool?.token0Price && Number.isFinite(minPrice) && Number.isFinite(maxPrice)) {
+      const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
+
+      if (currentPrice > 0 && maxPrice > minPrice && Number.isFinite(currentPrice)) {
+        const minPercent = ((minPrice - currentPrice) / currentPrice) * 100
+        const maxPercent = ((maxPrice - currentPrice) / currentPrice) * 100
+
+        if (Number.isFinite(minPercent) && Number.isFinite(maxPercent)) {
+          minPercentage = formatPercentage(minPercent)
+          maxPercentage = formatPercentage(maxPercent)
+          rangePosition = ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100
+          showPercentages = true
+        }
+      }
+    }
+  }
+
+  const tokenInfo = (
+    <FlexGap alignItems="center" gap="12px">
+      <DoubleCurrencyLogo
+        currency0={poolInfo.token0.wrapped}
+        currency1={poolInfo.token1.wrapped}
+        size={40}
+        innerMargin="-4px"
+      />
+      <FlexGap flexDirection="column" gap="4px">
+        <FlexGap alignItems="center" gap="8px">
+          <Text bold fontSize="16px">
+            {poolInfo.token0.wrapped?.symbol} / {poolInfo.token1.wrapped?.symbol}
+          </Text>
+          {position.isStaked && (
+            <Tag variant="primary60" scale="sm">
+              {t('Farming')}
+            </Tag>
+          )}
+        </FlexGap>
+        <Text color="textSubtle" fontSize="12px">
+          #{position.tokenId.toString()}
+        </Text>
+      </FlexGap>
+    </FlexGap>
+  )
+
+  const liquidity = (
+    <Flex flexDirection="column" alignItems="flex-start">
+      <Text bold fontSize="16px">
+        {formatDollarAmount(liquidityUSD)}
+      </Text>
+      <Text color="textSubtle" fontSize="12px">
+        {positionData?.amount0.toSignificant(6)} {poolInfo.token0.wrapped?.symbol}
+      </Text>
+      <Text color="textSubtle" fontSize="12px">
+        {positionData?.amount1.toSignificant(6)} {poolInfo.token1.wrapped?.symbol}
+      </Text>
+    </Flex>
+  )
+
+  const earnings = (
+    <Flex flexDirection="column" alignItems="flex-start">
+      <Text bold fontSize="16px">
+        {earningsData.earningsBusd ? formatDollarAmount(earningsData.earningsBusd) : '$0.00'}
+      </Text>
+      <Text color="textSubtle" fontSize="12px">
+        {t('Fees & Rewards')}
+      </Text>
+    </Flex>
+  )
+
+  const totalApr = (aprData.lpApr || 0) + Number(aprData.cakeApr?.value || 0) + (aprData.merklApr || 0)
+  const aprDisplay = (
+    <Flex flexDirection="column" alignItems="flex-start">
+      <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
+        {displayApr(totalApr)}
+      </Text>
+      <Text color="textSubtle" fontSize="12px">
+        {t('Total APR')}
+      </Text>
+    </Flex>
+  )
+
+  const priceRange = (
+    <PriceRangeDisplay
+      minPrice={minPriceFormatted}
+      maxPrice={maxPriceFormatted}
+      minPercentage={minPercentage}
+      maxPercentage={maxPercentage}
+      rangePosition={rangePosition}
+      token0Symbol={poolInfo.token0.wrapped?.symbol || ''}
+      token1Symbol={poolInfo.token1.wrapped?.symbol || ''}
+      outOfRange={outOfRange}
+      removed={removed}
+      showPercentages={showPercentages}
+    />
+  )
+
+  const actions = (
+    <FlexGap gap="8px" alignItems="center">
+      <Button variant="tertiary" scale="sm" disabled={removed}>
+        -
+      </Button>
+      <Button variant="tertiary" scale="sm" disabled={removed}>
+        +
+      </Button>
+      {position.isStaked && (
+        <Button variant="primary" scale="sm">
+          {t('Harvest')}
+        </Button>
+      )}
+      {!position.isStaked && !removed && !outOfRange && (
+        <Button variant="tertiary" scale="sm">
+          {t('Stake')}
+        </Button>
+      )}
+    </FlexGap>
+  )
+
+  return {
+    tableRow: {
+      tokenInfo,
+      liquidity,
+      earnings,
+      apr: aprDisplay,
+      priceRange,
+      actions,
+    },
+    liquidityUSD,
+    totalApr,
+  }
+}
+
+export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo, filter, handleHarvestAll }) => {
+  const { t } = useTranslation()
+  const { address: account } = useAccount()
+  const chainId = useChainIdByQuery()
+  const [, pool] = usePoolByChainId(poolInfo.token0.wrapped, poolInfo.token1.wrapped, poolInfo.feeTier)
+  const { data: price0Usd } = useCurrencyUsdPrice(poolInfo.token0.wrapped, {
+    enabled: !!poolInfo.token0.wrapped,
+  })
+  const { data: price1Usd } = useCurrencyUsdPrice(poolInfo.token1.wrapped, {
+    enabled: !!poolInfo.token1.wrapped,
+  })
+
+  // Get position data from hooks
+  const { data: v3Data } = useAccountPositionDetailByPool(chainId, account, poolInfo)
+  const positionsData = useV3Positions(
+    chainId,
+    poolInfo.token0.wrapped.address,
+    poolInfo.token1.wrapped.address,
+    poolInfo.feeTier,
+    (v3Data as PositionDetail[])?.filter((position) => position.liquidity !== 0n),
+  )
+
+  // Transform positions for the table
+  const transformedPositions = useMemo(() => {
+    if (!v3Data || !positionsData) return []
+
+    return (v3Data as PositionDetail[]).map((position) => {
+      // Use default APR values for now
+      const aprData = {
+        lpApr: 0,
+        cakeApr: { value: 0 },
+        merklApr: 0,
+      }
+
+      // Use default earnings for now
+      const earningsData = {
+        earningsBusd: null,
+      }
+
+      return transformV3PositionToTableRow(
+        position,
+        poolInfo,
+        positionsData,
+        price0Usd,
+        price1Usd,
+        pool,
+        aprData,
+        earningsData,
+        t,
+      )
+    })
+  }, [v3Data, positionsData, poolInfo, price0Usd, price1Usd, pool, t])
+
+  const filteredPositions = useMemo(() => {
+    if (!transformedPositions) return []
+
+    return transformedPositions.filter((position) => {
+      const { totalApr, liquidityUSD } = position
+      const hasLiquidity = liquidityUSD > 0
+
+      switch (filter) {
+        case PositionFilter.Active:
+          return hasLiquidity && totalApr > 0
+        case PositionFilter.Inactive:
+          return hasLiquidity && totalApr === 0
+        case PositionFilter.Closed:
+          return !hasLiquidity
+        default:
+          return true
+      }
+    })
+  }, [transformedPositions, filter])
+
+  return (
+    <PositionsTable
+      poolInfo={poolInfo}
+      totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
+      totalApr={
+        filteredPositions.length > 0
+          ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
+          : 0
+      }
+      handleHarvestAll={handleHarvestAll}
+      data={filteredPositions.map((position) => position.tableRow)}
+    />
+  )
+}
