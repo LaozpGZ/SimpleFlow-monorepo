@@ -88,9 +88,7 @@ export default function ExistFarmingRewardItem({
   const canAddMoreRewards = reward.endTime - onlineCurrentDate <= 1000 * DAY_SECONDS * 3
   const remainingRewardAmount = new Decimal(remainingReward?.remaining || 0).div(10 ** reward.mint.decimals)
   const claimableRewardAmount: string | undefined =
-    onClaimRemaining && (isEcosystem ? isRewardEnded : canAddMoreRewards) && remainingReward && remainingRewardAmount.gt(0)
-      ? remainingRewardAmount.toString()
-      : undefined
+    onClaimRemaining && isRewardEnded && remainingReward && remainingRewardAmount.gt(0) ? remainingRewardAmount.toString() : undefined
 
   const { isOpen: isAdjustRewardDialogOpen, onOpen: onOpenAdjustRewardDialog, onClose: onCloseAdjustRewardDialog } = useDisclosure()
   const { isOpen: isAddMoreRewardDialogOpen, onOpen: onOpenAddMoreRewardDialog, onClose: onCloseAddMoreRewardDialog } = useDisclosure()

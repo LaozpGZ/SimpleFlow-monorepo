@@ -289,6 +289,10 @@ export class TxBuilder {
 
         printSimulate([transaction]);
         if (this.owner?.isKeyPair) {
+          if (params?.simulate) {
+            const simulation = await this.connection.simulateTransaction(transaction);
+            this.logSimulation(simulation);
+          }
           const txId = sendAndConfirm
             ? await sendAndConfirmTransaction(
                 this.connection,
@@ -306,6 +310,10 @@ export class TxBuilder {
           };
         }
         if (this.signAllTransactions) {
+          if (params?.simulate) {
+            const simulation = await this.connection.simulateTransaction(transaction);
+            this.logSimulation(simulation);
+          }
           const txs = await this.signAllTransactions([transaction]);
           if (this.signers.length) {
             for (const item of txs) {
