@@ -4,7 +4,13 @@ import { useContext } from 'react'
 import { SendGiftContext } from '../providers/SendGiftProvider'
 import { GasSponsor } from './GasSponsor'
 
-export const SendGiftToggle = ({ children }: { children: (isSendGiftOn: boolean) => React.ReactNode }) => {
+export const SendGiftToggle = ({
+  children,
+  isNativeToken,
+}: {
+  isNativeToken: boolean
+  children: (isSendGiftOn: boolean) => React.ReactNode
+}) => {
   const { t } = useTranslation()
   const { isSendGift, setIsSendGift } = useContext(SendGiftContext)
 
@@ -26,7 +32,7 @@ export const SendGiftToggle = ({ children }: { children: (isSendGiftOn: boolean)
         />
       </FlexGap>
       {children(isSendGift)}
-      {isSendGift && <GasSponsor />}
+      {isSendGift && !isNativeToken && <GasSponsor />}
     </>
   )
 }
