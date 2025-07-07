@@ -8,12 +8,13 @@ import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { InfinityBinPositionDetail, POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'
 import { InfinityBinPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { useInfinityBinPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
@@ -25,8 +26,8 @@ interface InfinityBinPositionsTableProps {
   handleHarvestAll: () => void
 }
 
-// Individual position component that calculates its own APR
-const InfinityBinPositionTableRow = (
+// Helper function to transform position data for table - NO HOOKS ALLOWED
+const transformInfinityBinPositionToTableRow = (
   position: InfinityBinPositionDetail,
   poolInfo: InfinityBinPoolInfo,
   pool: any,
@@ -162,17 +163,74 @@ const InfinityBinPositionTableRow = (
   )
 
   return {
-    tokenInfo,
-    liquidity,
-    earnings,
-    apr: aprDisplay,
-    priceRange,
-    actions,
-    // Return calculated values for aggregation
+    positionId: `${position.chainId}-${position.poolId}`,
+    tableRow: {
+      tokenInfo,
+      liquidity,
+      earnings,
+      apr: aprDisplay,
+      priceRange,
+      actions,
+    },
     liquidityUSD: totalTVLUsd,
     totalApr,
     hasLiquidity,
   }
+}
+
+// Individual position row component that calls the APR hook
+const InfinityBinPositionRow: React.FC<{
+  position: InfinityBinPositionDetail
+  poolInfo: InfinityBinPoolInfo
+  pool: any
+  onRowDataReady: (data: any) => void
+}> = ({ position, poolInfo, pool, onRowDataReady }) => {
+  const { t } = useTranslation()
+
+  // This is where the magic happens - individual APR hook call for each position
+  const aprData = useInfinityBinPositionApr(poolInfo, position)
+
+  // Calculate position amounts
+  const amount0 = useMemo(
+    () =>
+      position?.reserveX && pool?.token0 ? CurrencyAmount.fromRawAmount(pool.token0, position.reserveX) : undefined,
+    [position?.reserveX, pool?.token0],
+  )
+  const amount1 = useMemo(
+    () =>
+      position?.reserveY && pool?.token1 ? CurrencyAmount.fromRawAmount(pool.token1, position.reserveY) : undefined,
+    [position?.reserveY, pool?.token1],
+  )
+
+  // Transform the data with the fetched APR
+  const transformedData = useMemo(() => {
+    const convertedAprData = {
+      lpApr: parseFloat(aprData.lpApr || '0'),
+      cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
+      merklApr: aprData.merklApr || 0,
+    }
+
+    // For now, use 0 for TVL - we can implement proper calculation later
+    const totalTVLUsd = 0
+
+    return transformInfinityBinPositionToTableRow(
+      position,
+      poolInfo,
+      pool,
+      convertedAprData,
+      amount0,
+      amount1,
+      totalTVLUsd,
+      t,
+    )
+  }, [position, poolInfo, pool, aprData, amount0, amount1, t])
+
+  // Pass data back to parent whenever it changes
+  useEffect(() => {
+    onRowDataReady(transformedData)
+  }, [transformedData, onRowDataReady])
+
+  return null // This component doesn't render anything
 }
 
 export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
@@ -183,6 +241,7 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
   const { data: poolKey } = usePoolKeyByPoolId(poolInfo.poolId, chainId)
 
   const [filter, setFilter] = useState(PositionFilter.All)
+  const [transformedPositions, setTransformedPositions] = useState<any[]>([])
 
   const { data: infinityBinData, isLoading } = useAccountPositionDetailByPool<Protocol.InfinityBIN>(
     chainId,
@@ -231,119 +290,87 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     return positionData
   }, [infinityBinData, isLoading, isLoadingRewards, defaultPosition, rewardsAmount])
 
-  const filteredPositions = useMemo(() => {
+  // Handle data from individual position rows
+  const handleRowDataReady = useCallback((data: any) => {
+    setTransformedPositions((prev) => {
+      const existing = prev.find((p) => p.positionId === data.positionId)
+      if (existing) {
+        return prev.map((p) => (p.positionId === data.positionId ? data : p))
+      }
+      return [...prev, data]
+    })
+  }, [])
+
+  // Reset transformed positions when positions change
+  useEffect(() => {
+    setTransformedPositions([])
+  }, [positions])
+
+  // Create individual position row components that fetch APR data
+  const positionRowComponents = useMemo(() => {
     if (!positions.length) return []
 
-    return positions.filter((position: InfinityBinPositionDetail) => {
+    return positions.map((position, index) => (
+      <InfinityBinPositionRow
+        key={`${position.chainId}-${position.poolId}-${index}`}
+        position={position}
+        poolInfo={poolInfo}
+        pool={pool}
+        onRowDataReady={handleRowDataReady}
+      />
+    ))
+  }, [positions, poolInfo, pool, handleRowDataReady])
+
+  const filteredPositions = useMemo(() => {
+    if (!transformedPositions.length) return []
+
+    return transformedPositions.filter((position) => {
       if (filter === PositionFilter.All) return true
 
-      if ((position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED) {
+      // Use the position status from the original data for filtering
+      const originalPosition = positions.find((p) => `${p.chainId}-${p.poolId}` === position.positionId)
+      if (!originalPosition) return false
+
+      if ((originalPosition.status as POSITION_STATUS) === POSITION_STATUS.CLOSED) {
         return filter === PositionFilter.Closed
       }
 
-      if (filter === PositionFilter.Active) return (position.status as POSITION_STATUS) === POSITION_STATUS.ACTIVE
-      if (filter === PositionFilter.Inactive) return (position.status as POSITION_STATUS) === POSITION_STATUS.INACTIVE
-      if (filter === PositionFilter.Closed) return (position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED
+      if (filter === PositionFilter.Active)
+        return (originalPosition.status as POSITION_STATUS) === POSITION_STATUS.ACTIVE
+      if (filter === PositionFilter.Inactive)
+        return (originalPosition.status as POSITION_STATUS) === POSITION_STATUS.INACTIVE
+      if (filter === PositionFilter.Closed)
+        return (originalPosition.status as POSITION_STATUS) === POSITION_STATUS.CLOSED
 
       return false
     })
-  }, [positions, filter])
-
-  // Call hooks at the top level for all positions
-  const positionAprs = useMemo(() => {
-    if (!filteredPositions.length) return {}
-
-    const aprs: Record<string, { lpApr: number; cakeApr: { value: number } | null; merklApr: number }> = {}
-
-    filteredPositions.forEach((position, index) => {
-      // For now, return default values - we can implement proper APR calculation later
-      aprs[index.toString()] = {
-        lpApr: 0,
-        cakeApr: { value: 0 },
-        merklApr: 0,
-      }
-    })
-
-    return aprs
-  }, [filteredPositions])
-
-  // Calculate position amounts at top level
-  const positionAmounts = useMemo(() => {
-    if (!filteredPositions.length) return {}
-
-    const amounts: Record<
-      string,
-      { amount0: CurrencyAmount<any> | undefined; amount1: CurrencyAmount<any> | undefined; totalTVLUsd: number }
-    > = {}
-
-    filteredPositions.forEach((position, index) => {
-      const amount0 =
-        position?.reserveX && pool?.token0 ? CurrencyAmount.fromRawAmount(pool.token0, position.reserveX) : undefined
-      const amount1 =
-        position?.reserveY && pool?.token1 ? CurrencyAmount.fromRawAmount(pool.token1, position.reserveY) : undefined
-
-      // For now, return 0 for TVL - we can implement proper calculation later
-      amounts[index.toString()] = {
-        amount0,
-        amount1,
-        totalTVLUsd: 0,
-      }
-    })
-
-    return amounts
-  }, [filteredPositions, pool])
-
-  const { tableData, totalLiquidityUSD, totalApr } = useMemo(() => {
-    if (!filteredPositions.length) {
-      return { tableData: [], totalLiquidityUSD: 0, totalApr: 0 }
-    }
-
-    let totalLiquidity = 0
-    let totalAprWeighted = 0
-    let validPositions = 0
-
-    const data = filteredPositions.map((position, index) => {
-      const key = index.toString()
-      const aprData = positionAprs[key] || { lpApr: 0, cakeApr: { value: 0 }, merklApr: 0 }
-      const { amount0, amount1, totalTVLUsd } = positionAmounts[key] || {
-        amount0: undefined,
-        amount1: undefined,
-        totalTVLUsd: 0,
-      }
-
-      const row = InfinityBinPositionTableRow(position, poolInfo, pool, aprData, amount0, amount1, totalTVLUsd, t)
-
-      if (row.hasLiquidity) {
-        totalLiquidity += row.liquidityUSD || 0
-        totalAprWeighted += row.totalApr || 0
-        validPositions++
-      }
-
-      return row
-    })
-
-    return {
-      tableData: data,
-      totalLiquidityUSD: totalLiquidity,
-      totalApr: validPositions > 0 ? totalAprWeighted / validPositions : 0,
-    }
-  }, [filteredPositions, poolInfo, pool, positionAprs, positionAmounts, t])
+  }, [transformedPositions, filter, positions])
 
   if (isLoading) {
     return <div>{t('Loading...')}</div>
   }
 
   return (
-    <PositionsTable
-      poolInfo={poolInfo}
-      totalLiquidityUSD={totalLiquidityUSD}
-      totalApr={totalApr}
-      handleHarvestAll={handleHarvestAll}
-      data={tableData}
-      showInactiveOnly={filter === PositionFilter.Inactive}
-      toggleInactiveOnly={() =>
-        setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
-      }
-    />
+    <>
+      {/* Hidden components that handle APR fetching for each position */}
+      {positionRowComponents}
+
+      {/* The actual table component */}
+      <PositionsTable
+        poolInfo={poolInfo}
+        totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + (pos.liquidityUSD || 0), 0)}
+        totalApr={
+          filteredPositions.length > 0
+            ? filteredPositions.reduce((sum, pos) => sum + (pos.totalApr || 0), 0) / filteredPositions.length
+            : 0
+        }
+        handleHarvestAll={handleHarvestAll}
+        data={filteredPositions.map((position) => position.tableRow)}
+        showInactiveOnly={filter === PositionFilter.Inactive}
+        toggleInactiveOnly={() =>
+          setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
+        }
+      />
+    </>
   )
 }

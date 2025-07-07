@@ -3,12 +3,13 @@ import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Flex, FlexGap, MinusIcon, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions/type'
 import { StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { useV2PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
@@ -24,6 +25,7 @@ interface V2PositionsTableProps {
 const transformV2PositionToTableRow = (
   position: V2LPDetail | StableLPDetail,
   poolInfo: V2PoolInfo | StablePoolInfo,
+  aprData: { lpApr: number; cakeApr: { value: number } | null; merklApr: number },
   t: (key: string) => string,
 ) => {
   const liquidityUSD = 0 // TODO: Calculate actual liquidity USD
@@ -100,7 +102,7 @@ const transformV2PositionToTableRow = (
     </Flex>
   )
 
-  const totalApr = 0 // TODO: Calculate actual APR
+  const totalApr = (aprData.lpApr || 0) + Number(aprData.cakeApr?.value || 0) + (aprData.merklApr || 0)
   const aprDisplay = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
@@ -136,6 +138,7 @@ const transformV2PositionToTableRow = (
   )
 
   return {
+    positionId: `${poolInfo.chainId}-${poolInfo.lpAddress}`,
     tableRow: {
       tokenInfo,
       liquidity,
@@ -149,11 +152,43 @@ const transformV2PositionToTableRow = (
   }
 }
 
+// Individual position row component that calls the APR hook
+const V2PositionRow: React.FC<{
+  position: V2LPDetail | StableLPDetail
+  poolInfo: V2PoolInfo | StablePoolInfo
+  onRowDataReady: (data: any) => void
+}> = ({ position, poolInfo, onRowDataReady }) => {
+  const { t } = useTranslation()
+
+  // This is where the magic happens - individual APR hook call for each position
+  const aprData = useV2PositionApr(poolInfo, position)
+
+  // Transform the data with the fetched APR
+  const transformedData = useMemo(() => {
+    const convertedAprData = {
+      lpApr: aprData.lpApr || 0,
+      cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
+      merklApr: aprData.merklApr || 0,
+    }
+
+    return transformV2PositionToTableRow(position, poolInfo, convertedAprData, t)
+  }, [position, poolInfo, aprData, t])
+
+  // Pass data back to parent whenever it changes
+  useEffect(() => {
+    onRowDataReady(transformedData)
+  }, [transformedData, onRowDataReady])
+
+  return null // This component doesn't render anything
+}
+
 export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
   const [filter, setFilter] = useState(PositionFilter.All)
+  const [transformedPositions, setTransformedPositions] = useState<any[]>([])
+
   // Only fetch V2/Stable data
   const { data: v2OrStableData, isLoading } = useAccountPositionDetailByPool<Protocol.V2 | Protocol.STABLE>(
     chainId,
@@ -161,13 +196,35 @@ export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo, ha
     poolInfo,
   )
 
-  const transformedPositions = useMemo(() => {
+  // Handle data from individual position rows
+  const handleRowDataReady = useCallback((data: any) => {
+    setTransformedPositions((prev) => {
+      const existing = prev.find((p) => p.positionId === data.positionId)
+      if (existing) {
+        return prev.map((p) => (p.positionId === data.positionId ? data : p))
+      }
+      return [...prev, data]
+    })
+  }, [])
+
+  // Reset transformed positions when positions change
+  useEffect(() => {
+    setTransformedPositions([])
+  }, [v2OrStableData])
+
+  // Create individual position row components that fetch APR data
+  const positionRowComponents = useMemo(() => {
     if (!v2OrStableData) return []
 
-    const position = transformV2PositionToTableRow(v2OrStableData, poolInfo, t)
-
-    return [position]
-  }, [v2OrStableData, poolInfo, t])
+    return [
+      <V2PositionRow
+        key={`${poolInfo.chainId}-${poolInfo.lpAddress}`}
+        position={v2OrStableData}
+        poolInfo={poolInfo}
+        onRowDataReady={handleRowDataReady}
+      />,
+    ]
+  }, [v2OrStableData, poolInfo, handleRowDataReady])
 
   const filteredPositions = useMemo(() => {
     if (!transformedPositions) return []
@@ -194,20 +251,26 @@ export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo, ha
   }
 
   return (
-    <PositionsTable
-      poolInfo={poolInfo}
-      totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
-      totalApr={
-        filteredPositions.length > 0
-          ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
-          : 0
-      }
-      handleHarvestAll={handleHarvestAll}
-      data={filteredPositions.map((position) => position.tableRow)}
-      showInactiveOnly={filter === PositionFilter.Inactive}
-      toggleInactiveOnly={() =>
-        setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
-      }
-    />
+    <>
+      {/* Hidden components that handle APR fetching for each position */}
+      {positionRowComponents}
+
+      {/* The actual table component */}
+      <PositionsTable
+        poolInfo={poolInfo}
+        totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
+        totalApr={
+          filteredPositions.length > 0
+            ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
+            : 0
+        }
+        handleHarvestAll={handleHarvestAll}
+        data={filteredPositions.map((position) => position.tableRow)}
+        showInactiveOnly={filter === PositionFilter.Inactive}
+        toggleInactiveOnly={() =>
+          setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
+        }
+      />
+    </>
   )
 }
