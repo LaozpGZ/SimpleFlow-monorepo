@@ -1,14 +1,14 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { Button, Flex, FlexGap, Tag, Text } from '@pancakeswap/uikit'
+import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { InfinityBinPositionDetail, POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'
 import { InfinityBinPoolInfo } from 'state/farmsV4/state/type'
@@ -16,12 +16,12 @@ import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
+import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
 import { PositionFilter } from './types'
 
 interface InfinityBinPositionsTableProps {
   poolInfo: InfinityBinPoolInfo
-  filter: PositionFilter
   handleHarvestAll: () => void
 }
 
@@ -152,12 +152,12 @@ const InfinityBinPositionTableRow = (
 
   const actions = (
     <FlexGap gap="8px" alignItems="center">
-      <Button variant="tertiary" scale="sm" disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}>
-        -
-      </Button>
-      <Button variant="tertiary" scale="sm" disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}>
-        +
-      </Button>
+      <ActionButton disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED} isIcon>
+        <MinusIcon color="primary60" />
+      </ActionButton>
+      <ActionButton disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED} isIcon>
+        <AddIcon color="primary60" />
+      </ActionButton>
     </FlexGap>
   )
 
@@ -175,16 +175,14 @@ const InfinityBinPositionTableRow = (
   }
 }
 
-export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps> = ({
-  poolInfo,
-  filter,
-  handleHarvestAll,
-}) => {
+export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
   const [, pool] = usePoolById<'Bin'>(poolInfo.poolId as `0x${string}`, chainId)
   const { data: poolKey } = usePoolKeyByPoolId(poolInfo.poolId, chainId)
+
+  const [filter, setFilter] = useState(PositionFilter.All)
 
   const { data: infinityBinData, isLoading } = useAccountPositionDetailByPool<Protocol.InfinityBIN>(
     chainId,
@@ -342,6 +340,10 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
       totalApr={totalApr}
       handleHarvestAll={handleHarvestAll}
       data={tableData}
+      showInactiveOnly={filter === PositionFilter.Inactive}
+      toggleInactiveOnly={() =>
+        setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
+      }
     />
   )
 }

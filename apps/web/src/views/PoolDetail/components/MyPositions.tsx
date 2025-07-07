@@ -20,7 +20,6 @@ import {
   V2PositionsTable,
   V3PositionsTable,
 } from './ProtocolPositionsTables'
-import { PositionFilter } from './ProtocolPositionsTables/types'
 
 export const MyPositions: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
   return (
@@ -91,22 +90,15 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
       {(() => {
         switch (poolInfo.protocol) {
           case 'v3':
-            return (
-              <V3PositionsTable poolInfo={poolInfo} filter={PositionFilter.All} handleHarvestAll={handleHarvestAll} />
-            )
+            return <V3PositionsTable poolInfo={poolInfo} handleHarvestAll={handleHarvestAll} />
           case Protocol.InfinityCLAMM:
             return (
-              <InfinityCLPositionsTable
-                poolInfo={poolInfo as InfinityCLPoolInfo}
-                filter={PositionFilter.All}
-                handleHarvestAll={handleHarvestAll}
-              />
+              <InfinityCLPositionsTable poolInfo={poolInfo as InfinityCLPoolInfo} handleHarvestAll={handleHarvestAll} />
             )
           case Protocol.InfinityBIN:
             return (
               <InfinityBinPositionsTable
                 poolInfo={poolInfo as InfinityBinPoolInfo}
-                filter={PositionFilter.All}
                 handleHarvestAll={handleHarvestAll}
               />
             )
@@ -115,7 +107,6 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
             return (
               <V2PositionsTable
                 poolInfo={poolInfo as V2PoolInfo | StablePoolInfo}
-                filter={PositionFilter.All}
                 handleHarvestAll={handleHarvestAll}
               />
             )

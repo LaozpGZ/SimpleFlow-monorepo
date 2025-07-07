@@ -1,22 +1,25 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { Button, Flex, FlexGap, Tag, Text } from '@pancakeswap/uikit'
+import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { PositionMath, TickMath } from '@pancakeswap/v3-sdk'
 import BigNumber from 'bignumber.js'
 
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { getAddInfinityLiquidityURL, getLiquidityDetailURL } from 'config/constants/liquidity'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { InfinityCLPositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { InfinityCLPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { useInfinityCLPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
+import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
@@ -60,7 +63,6 @@ const formatPercentage = (percentage: number): string => {
 
 interface InfinityCLPositionsTableProps {
   poolInfo: InfinityCLPoolInfo
-  filter: PositionFilter
   handleHarvestAll: () => void
 }
 
@@ -233,9 +235,6 @@ const transformInfinityCLPositionToTableRow = (
       <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
         {displayApr(totalApr)}
       </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {t('Total APR')}
-      </Text>
     </Flex>
   )
 
@@ -256,16 +255,31 @@ const transformInfinityCLPositionToTableRow = (
 
   const actions = (
     <FlexGap gap="8px" alignItems="center">
-      <Button variant="tertiary" scale="sm" disabled={removed}>
-        -
-      </Button>
-      <Button variant="tertiary" scale="sm" disabled={removed}>
-        +
-      </Button>
+      <ActionButton
+        as="a"
+        href={getLiquidityDetailURL({
+          poolId: poolInfo.poolId,
+          chainId: poolInfo.chainId,
+          protocol: Protocol.InfinityCLAMM,
+        })}
+        disabled={removed}
+        isIcon
+      >
+        <MinusIcon color="primary60" />
+      </ActionButton>
+      <ActionButton
+        as="a"
+        href={getAddInfinityLiquidityURL({ poolId: poolInfo.poolId, chainId: poolInfo.chainId })}
+        disabled={removed}
+        isIcon
+      >
+        <AddIcon color="primary60" />
+      </ActionButton>
     </FlexGap>
   )
 
   return {
+    tokenId: position.tokenId.toString(),
     tableRow: {
       tokenInfo,
       liquidity: liquidityDisplay,
@@ -279,11 +293,40 @@ const transformInfinityCLPositionToTableRow = (
   }
 }
 
-export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> = ({
-  poolInfo,
-  filter,
-  handleHarvestAll,
-}) => {
+// Individual position row component that calls the APR hook
+const InfinityCLPositionRow: React.FC<{
+  position: InfinityCLPositionDetail
+  poolInfo: InfinityCLPoolInfo
+  pool: any
+  price0Usd: number | undefined
+  price1Usd: number | undefined
+  onRowDataReady: (data: any) => void
+}> = ({ position, poolInfo, pool, price0Usd, price1Usd, onRowDataReady }) => {
+  const { t } = useTranslation()
+
+  // This is where the magic happens - individual APR hook call for each position
+  const aprData = useInfinityCLPositionApr(poolInfo, position)
+
+  // Transform the data with the fetched APR
+  const transformedData = useMemo(() => {
+    const convertedAprData = {
+      lpApr: parseFloat(aprData.lpApr || '0'),
+      cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
+      merklApr: aprData.merklApr || 0,
+    }
+
+    return transformInfinityCLPositionToTableRow(position, poolInfo, pool, price0Usd, price1Usd, convertedAprData, t)
+  }, [position, poolInfo, pool, price0Usd, price1Usd, aprData, t])
+
+  // Pass data back to parent whenever it changes
+  useEffect(() => {
+    onRowDataReady(transformedData)
+  }, [transformedData, onRowDataReady])
+
+  return null // This component doesn't render anything
+}
+
+export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
@@ -295,24 +338,44 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
     enabled: !!poolInfo.token1,
   })
 
+  const [filter, setFilter] = useState(PositionFilter.All)
+  const [transformedPositions, setTransformedPositions] = useState<any[]>([])
+
   // Get position data from hooks
   const { data: positionsInPool } = useAccountPositionDetailByPool<Protocol.InfinityCLAMM>(chainId, account, poolInfo)
 
-  // Calculate APR and earnings for each position
-  const transformedPositions = useMemo(() => {
+  // Handle data from individual position rows
+  const handleRowDataReady = useCallback((data: any) => {
+    setTransformedPositions((prev) => {
+      const existing = prev.find((p) => p.tokenId === data.tokenId)
+      if (existing) {
+        return prev.map((p) => (p.tokenId === data.tokenId ? data : p))
+      }
+      return [...prev, data]
+    })
+  }, [])
+
+  // Reset transformed positions when positions change
+  useEffect(() => {
+    setTransformedPositions([])
+  }, [positionsInPool])
+
+  // Create individual position row components that fetch APR data
+  const positionRowComponents = useMemo(() => {
     if (!positionsInPool) return []
 
-    return positionsInPool.map((position) => {
-      // For now, use default APR values - implement proper APR calculation later
-      const aprData = {
-        lpApr: 0,
-        cakeApr: { value: 0 },
-        merklApr: 0,
-      }
-
-      return transformInfinityCLPositionToTableRow(position, poolInfo, pool, price0Usd, price1Usd, aprData, t)
-    })
-  }, [positionsInPool, poolInfo, pool, price0Usd, price1Usd, t])
+    return positionsInPool.map((position) => (
+      <InfinityCLPositionRow
+        key={position.tokenId.toString()}
+        position={position}
+        poolInfo={poolInfo}
+        pool={pool}
+        price0Usd={price0Usd}
+        price1Usd={price1Usd}
+        onRowDataReady={handleRowDataReady}
+      />
+    ))
+  }, [positionsInPool, poolInfo, pool, price0Usd, price1Usd, handleRowDataReady])
 
   const filteredPositions = useMemo(() => {
     if (!transformedPositions) return []
@@ -335,16 +398,26 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
   }, [transformedPositions, filter])
 
   return (
-    <PositionsTable
-      poolInfo={poolInfo}
-      totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
-      totalApr={
-        filteredPositions.length > 0
-          ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
-          : 0
-      }
-      handleHarvestAll={handleHarvestAll}
-      data={filteredPositions.map((position) => position.tableRow)}
-    />
+    <>
+      {/* Hidden components that handle APR fetching for each position */}
+      {positionRowComponents}
+
+      {/* The actual table component */}
+      <PositionsTable
+        poolInfo={poolInfo}
+        totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
+        totalApr={
+          filteredPositions.length > 0
+            ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
+            : 0
+        }
+        handleHarvestAll={handleHarvestAll}
+        data={filteredPositions.map((position) => position.tableRow)}
+        showInactiveOnly={filter === PositionFilter.Inactive}
+        toggleInactiveOnly={() =>
+          setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
+        }
+      />
+    </>
   )
 }

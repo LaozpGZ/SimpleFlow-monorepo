@@ -1,11 +1,11 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, Flex, FlexGap, Tag, Text } from '@pancakeswap/uikit'
+import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { PoolInfo } from 'state/farmsV4/state/type'
@@ -14,13 +14,13 @@ import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
+import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 
 interface V3PositionsTableProps {
   poolInfo: PoolInfo
-  filter: PositionFilter
   handleHarvestAll: () => void
 }
 
@@ -219,22 +219,14 @@ const transformV3PositionToTableRow = (
 
   const actions = (
     <FlexGap gap="8px" alignItems="center">
-      <Button variant="tertiary" scale="sm" disabled={removed}>
-        -
-      </Button>
-      <Button variant="tertiary" scale="sm" disabled={removed}>
-        +
-      </Button>
-      {position.isStaked && (
-        <Button variant="primary" scale="sm">
-          {t('Harvest')}
-        </Button>
-      )}
-      {!position.isStaked && !removed && !outOfRange && (
-        <Button variant="tertiary" scale="sm">
-          {t('Stake')}
-        </Button>
-      )}
+      <ActionButton disabled={removed} isIcon>
+        <MinusIcon color="primary60" />
+      </ActionButton>
+      <ActionButton disabled={removed} isIcon>
+        <AddIcon color="primary60" />
+      </ActionButton>
+      {position.isStaked && <ActionButton>{t('Harvest')}</ActionButton>}
+      {!position.isStaked && !removed && !outOfRange && <ActionButton>{t('Stake')}</ActionButton>}
     </FlexGap>
   )
 
@@ -252,7 +244,7 @@ const transformV3PositionToTableRow = (
   }
 }
 
-export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo, filter, handleHarvestAll }) => {
+export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
@@ -263,6 +255,8 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo, fi
   const { data: price1Usd } = useCurrencyUsdPrice(poolInfo.token1.wrapped, {
     enabled: !!poolInfo.token1.wrapped,
   })
+
+  const [filter, setFilter] = useState(PositionFilter.All)
 
   // Get position data from hooks
   const { data: v3Data } = useAccountPositionDetailByPool(chainId, account, poolInfo)
@@ -336,6 +330,10 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo, fi
       }
       handleHarvestAll={handleHarvestAll}
       data={filteredPositions.map((position) => position.tableRow)}
+      showInactiveOnly={filter === PositionFilter.Inactive}
+      toggleInactiveOnly={() =>
+        setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
+      }
     />
   )
 }

@@ -26,17 +26,21 @@ const StyledCardBody = styled(CardBody)`
 `
 
 interface PositionsTableProps {
+  data: any[]
   poolInfo?: PoolInfo | null
   totalLiquidityUSD: number
   totalApr: number
+  showInactiveOnly: boolean
+  toggleInactiveOnly: () => void
   handleHarvestAll: () => void
-  data: any[]
 }
 
 export const PositionsTable: React.FC<PositionsTableProps> = ({
   poolInfo,
   totalLiquidityUSD,
   totalApr,
+  showInactiveOnly,
+  toggleInactiveOnly,
   handleHarvestAll,
   data,
 }) => {
@@ -87,7 +91,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
             title: (
               <FlexGap gap="8px" alignItems="center">
                 <Text color="textSubtle">{t('Inactive Only')}</Text>
-                <Toggle checked={false} onChange={() => {}} scale="sm" />
+                <Toggle checked={showInactiveOnly} onChange={toggleInactiveOnly} scale="sm" />
               </FlexGap>
             ),
             dataIndex: 'tokenInfo',

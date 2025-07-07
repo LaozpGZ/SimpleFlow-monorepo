@@ -1,9 +1,9 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, Flex, FlexGap, Text } from '@pancakeswap/uikit'
+import { AddIcon, Flex, FlexGap, MinusIcon, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions/type'
 import { StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
@@ -11,12 +11,12 @@ import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
+import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
 import { PositionFilter } from './types'
 
 interface V2PositionsTableProps {
   poolInfo: V2PoolInfo | StablePoolInfo
-  filter: PositionFilter
   handleHarvestAll: () => void
 }
 
@@ -125,17 +125,13 @@ const transformV2PositionToTableRow = (
 
   const actions = (
     <FlexGap gap="8px" alignItems="center">
-      <Button variant="tertiary" scale="sm">
-        {t('Add')}
-      </Button>
-      <Button variant="tertiary" scale="sm">
-        {t('Remove')}
-      </Button>
-      {poolInfo.protocol === 'v2' && (
-        <Button variant="tertiary" scale="sm">
-          {t('Migrate')}
-        </Button>
-      )}
+      <ActionButton isIcon>
+        <AddIcon color="primary60" />
+      </ActionButton>
+      <ActionButton isIcon>
+        <MinusIcon color="primary60" />
+      </ActionButton>
+      {poolInfo.protocol === 'v2' && <ActionButton>{t('Migrate')}</ActionButton>}
     </FlexGap>
   )
 
@@ -153,11 +149,11 @@ const transformV2PositionToTableRow = (
   }
 }
 
-export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo, filter, handleHarvestAll }) => {
+export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
-
+  const [filter, setFilter] = useState(PositionFilter.All)
   // Only fetch V2/Stable data
   const { data: v2OrStableData, isLoading } = useAccountPositionDetailByPool<Protocol.V2 | Protocol.STABLE>(
     chainId,
@@ -208,6 +204,10 @@ export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo, fi
       }
       handleHarvestAll={handleHarvestAll}
       data={filteredPositions.map((position) => position.tableRow)}
+      showInactiveOnly={filter === PositionFilter.Inactive}
+      toggleInactiveOnly={() =>
+        setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
+      }
     />
   )
 }
