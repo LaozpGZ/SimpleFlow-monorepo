@@ -10,21 +10,21 @@ import { Address } from 'viem'
 import { useV2CakeEarning, useV3CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
 import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
 
-const Earnings = ({ earningsAmount, earningsBusd }: { earningsAmount: number; earningsBusd: number }) => {
+const EarningsUSD = ({ earningsBusd }: { earningsBusd: number }) => {
   return <div>~${formatNumber(earningsBusd)}</div>
 }
 
 export const V2EarningsCell = ({ pool }: { pool: PoolInfo | null | undefined }) => {
-  const { earningsAmount, earningsBusd } = useV2CakeEarning(pool)
-  return <Earnings earningsAmount={earningsAmount} earningsBusd={earningsBusd} />
+  const { earningsBusd } = useV2CakeEarning(pool)
+  return <EarningsUSD earningsBusd={earningsBusd} />
 }
 
 export const V3EarningsCell = ({ tokenId, chainId }: { tokenId?: bigint; chainId: number }) => {
-  const { earningsAmount, earningsBusd } = useV3CakeEarning(
+  const { earningsBusd } = useV3CakeEarning(
     useMemo(() => (tokenId ? [tokenId] : []), [tokenId]),
     chainId,
   )
-  return <Earnings earningsAmount={earningsAmount} earningsBusd={earningsBusd} />
+  return <EarningsUSD earningsBusd={earningsBusd} />
 }
 
 export const InfinityBinEarningsCell = ({ chainId, poolId }: { chainId?: number; poolId?: Address }) => {
@@ -51,7 +51,7 @@ export const InfinityBinEarningsCell = ({ chainId, poolId }: { chainId?: number;
     }
     updatePositionEarningAmount(chainId, poolId, amount)
   }, [amount, chainId, poolId, isLoading, updatePositionEarningAmount])
-  return <Earnings earningsAmount={amount} earningsBusd={rewardsUSD} />
+  return <EarningsUSD earningsBusd={rewardsUSD} />
 }
 
 export const InfinityCLEarningsCell = ({
@@ -88,5 +88,5 @@ export const InfinityCLEarningsCell = ({
     updatePositionEarningAmount(chainId, poolId, tokenId, amount)
   }, [amount, chainId, poolId, tokenId, isLoading, updatePositionEarningAmount])
 
-  return <Earnings earningsAmount={amount} earningsBusd={rewardsUSD} />
+  return <EarningsUSD earningsBusd={rewardsUSD} />
 }

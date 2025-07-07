@@ -34,6 +34,7 @@ interface PositionsTableProps {
   toggleInactiveOnly: () => void
   handleHarvestAll?: () => void // TODO: Remove this prop. replaced by harvestAllButton
   harvestAllButton?: React.ReactNode
+  totalEarnings?: string
 }
 
 export const PositionsTable: React.FC<PositionsTableProps> = ({
@@ -44,6 +45,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
   toggleInactiveOnly,
   harvestAllButton,
   handleHarvestAll,
+  totalEarnings,
   data,
 }) => {
   const { t } = useTranslation()
@@ -76,9 +78,10 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
               <Box>
                 <Text color="textSubtle">{t('Total Earnings')}</Text>
                 <Text fontSize="24px" bold>
-                  --
+                  {totalEarnings || '-'}
                 </Text>
               </Box>
+              {/* TODO: Update disable logic */}
               <HarvestButton variant="tertiary" onClick={handleHarvestAll} disabled>
                 {t('Harvest')}
               </HarvestButton>

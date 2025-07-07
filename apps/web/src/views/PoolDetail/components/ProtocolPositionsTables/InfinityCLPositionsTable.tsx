@@ -4,11 +4,12 @@ import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { nearestUsableTick, PositionMath, TickMath } from '@pancakeswap/v3-sdk'
-import BigNumber from 'bignumber.js'
 
 import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { BigNumber as BN } from 'bignumber.js'
 import { getAddInfinityLiquidityURL, getLiquidityDetailURL } from 'config/constants/liquidity'
 import { usePoolById } from 'hooks/infinity/usePool'
+import { useCakePrice } from 'hooks/useCakePrice'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
@@ -17,6 +18,7 @@ import { InfinityCLPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useInfinityCLPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
+import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
@@ -95,10 +97,7 @@ const transformInfinityCLPositionToTableRow = (
 
   const liquidityUSD =
     amount0 && amount1 && price0Usd && price1Usd
-      ? new BigNumber(amount0.toExact())
-          .times(price0Usd)
-          .plus(new BigNumber(amount1.toExact()).times(price1Usd))
-          .toNumber()
+      ? new BN(amount0.toExact()).times(price0Usd).plus(new BN(amount1.toExact()).times(price1Usd)).toNumber()
       : 0
 
   // TickLimits
@@ -210,7 +209,7 @@ const transformInfinityCLPositionToTableRow = (
               </FlexGap>
               <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
                 {amount0 && price0Usd
-                  ? formatDollarAmount(new BigNumber(amount0.toExact()).times(price0Usd).toNumber())
+                  ? formatDollarAmount(new BN(amount0.toExact()).times(price0Usd).toNumber())
                   : '$0.00'}
               </Text>
             </FlexGap>
@@ -228,7 +227,7 @@ const transformInfinityCLPositionToTableRow = (
               </FlexGap>
               <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
                 {amount1 && price1Usd
-                  ? formatDollarAmount(new BigNumber(amount1.toExact()).times(price1Usd).toNumber())
+                  ? formatDollarAmount(new BN(amount1.toExact()).times(price1Usd).toNumber())
                   : '$0.00'}
               </Text>
             </FlexGap>
@@ -303,6 +302,7 @@ const transformInfinityCLPositionToTableRow = (
       priceRange,
       actions,
     },
+    totalEarnings: earnings,
     liquidityUSD,
     totalApr,
   }
@@ -342,7 +342,6 @@ const InfinityCLPositionRow: React.FC<{
 }
 
 export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
-  const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
   const [, pool] = usePoolById<'CL'>(poolInfo.poolId as `0x${string}`, chainId)
@@ -376,7 +375,7 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
   }, [positionsInPool])
 
   // Create individual position row components that fetch APR data
-  const positionRowComponents = useMemo(() => {
+  const positionDataFetchComponents = useMemo(() => {
     if (!positionsInPool) return []
 
     return positionsInPool.map((position) => (
@@ -412,15 +411,23 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
     })
   }, [transformedPositions, filter])
 
+  const [positionEarningAmounts] = usePositionEarningAmount()
+  const cakePrice = useCakePrice()
+
+  const totalEarningsUSD = useMemo(() => {
+    const totalEarnings = filteredPositions.reduce(
+      (sum, pos) => sum + (positionEarningAmounts[poolInfo.chainId]?.[poolInfo.poolId]?.[pos.tokenId] || 0),
+      0,
+    )
+    return new BN(totalEarnings ?? 0).times(cakePrice.toString()).toNumber()
+  }, [filteredPositions, positionEarningAmounts, poolInfo.chainId, poolInfo.poolId])
+
   return (
     <>
-      {/* Hidden components that handle APR fetching for each position */}
-      {positionRowComponents}
-
-      {/* The actual table component */}
       <PositionsTable
         poolInfo={poolInfo}
         totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
+        totalEarnings={formatDollarAmount(totalEarningsUSD, 2, false)}
         totalApr={
           filteredPositions.length > 0
             ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
@@ -433,6 +440,9 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
           setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
         }
       />
+
+      {/* handles APR fetching for each position */}
+      {positionDataFetchComponents}
     </>
   )
 }
