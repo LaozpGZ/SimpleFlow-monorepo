@@ -33,6 +33,7 @@ import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { genCSS2GridTemplateColumns, genCSS3GridTemplateColumns } from '@/theme/detailConfig'
 import { TxCallbackProps } from '@/types/tx'
 import { routeBack, routeToPage } from '@/utils/routeTools'
+import { getClmmKeysFromPoolInfo } from '@/utils/getPoolKeysFromPoolInfo'
 import AddAnotherRewardDialog from './components/AddAnotherRewardDialog'
 import FarmInfoItem from './components/FarmInfoItem'
 import ExistFarmingRewards from './components/FarmingRewards'
@@ -175,28 +176,11 @@ export default function FarmEdit() {
       }))
       return setRewardsAct({
         poolInfo: clmmData,
-        poolKeys: {
-          mintA: clmmData.mintA,
-          mintB: clmmData.mintB,
-          config: clmmData.config,
-          vault: (clmmData as any).vault,
-          id: clmmData.id,
-          openTime: '1723037622',
-          programId: clmmData.programId,
-          rewardInfos: (rpcPoolInfo?.rewardInfos || []).map((r, i) => ({
-            vault: r.tokenVault.toBase58(),
-            mint: rewardInfos[i]?.mint,
-            openTime: r.openTime,
-            endTime: r.endTime,
-            perSecond: rewardInfos[i]?.perSecond
-          })),
-          observationId: rpcPoolInfo?.observationId.toBase58() ?? '',
-          exBitmapAccount: ''
-        },
+        poolKeys: getClmmKeysFromPoolInfo(clmmData),
         rewardInfos,
         newRewardInfos: newRewardRef.current.getRewards().map((r) => ({
           mint: solToWSolToken(r.mint),
-          openTime: Math.floor(r.openTime / 1000),
+          openTime: Math.ceil(r.openTime / 1000),
           endTime: Math.floor(r.endTime / 1000),
           perSecond: new Decimal(r.total)
             .mul(10 ** r.mint.decimals)
