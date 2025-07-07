@@ -111,6 +111,7 @@ export default function AdjustRewardDialog({
       openTime: onlineCurrentDate,
       endTime: new Decimal(oldReward.endTime).add(new Decimal(daysExtend).mul(DAY_SECONDS * 1000)).toNumber(),
       perWeek: newPerSecond.mul(WEEK_SECONDS).toString(),
+      perDay: newPerSecond.mul(DAY_SECONDS).toString(),
       status: 'updated',
       apr: newApr
     })
@@ -129,7 +130,7 @@ export default function AdjustRewardDialog({
         <ModalHeader>{t('Adjust rewards')}</ModalHeader>
         <ModalCloseButton />
 
-        <ModalBody mb={5} overflow="visible">
+        <ModalBody mb={5} overflow="scroll">
           <VStack spacing={4} align="stretch">
             <CalloutNote
               header={t('Please note')}
