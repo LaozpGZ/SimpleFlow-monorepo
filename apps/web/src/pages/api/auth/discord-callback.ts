@@ -44,14 +44,40 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // 3. Issue Firebase custom token
     await firebaseAdmin() // Ensure Admin SDK is initialized
     const customToken = await getAuth().createCustomToken(discordId)
+    console.log('Custom token:', customToken, discordId)
 
     // 4. Return token to frontend via postMessage
     res.setHeader('Content-Type', 'text/html')
     res.end(`
+      <!DOCTYPE html>
+  <html lang="zh-TW">
+    <head>
+      <meta charset="UTF-8" />
+      <title>Login success</title>
+    </head>
+    <body>
       <script>
-        window.opener.postMessage({ customToken: "${customToken}" }, "${process.env.NEXTAUTH_URL || '*'}");
-        window.close();
+        document.addEventListener('DOMContentLoaded', function () {
+          const token = "${customToken}";
+          const origin = "${process.env.NEXT_PUBLIC_FRONTEND_ORIGIN || '*'}";
+
+          if (window.opener) {
+            window.opener.postMessage({ customToken: token }, origin);
+            window.close();
+          } else {
+            // fallback
+            localStorage.setItem('discordAuthToken', token);
+            document.body.innerHTML =
+              '<div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; flex-direction: column;">' +
+              '<h2>login success</h2>' +
+              '<p>close window and return to PancakeSwap.</p>' +
+              '<button onclick="window.close()" style="padding: 10px 20px; background: #1FC7D4; color: white; border: none; border-radius: 16px; cursor: pointer; margin-top: 20px;">close window</button>' +
+              '</div>';
+          }
+        });
       </script>
+    </body>
+  </html>
     `)
   } catch (err) {
     console.error('[Discord callback error]:', err)
