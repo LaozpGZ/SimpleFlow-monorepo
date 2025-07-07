@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
+import { PositionMath } from '@pancakeswap/v3-sdk'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
@@ -67,12 +68,42 @@ const transformV3PositionToTableRow = (
 ) => {
   const positionData = positionsData?.find((p) => Number(p.tokenId) === Number(position.tokenId))
 
-  const liquidityUSD = positionData
-    ? new BigNumber(positionData.amount0.toExact())
-        .times(price0Usd?.toString() ?? 0)
-        .plus(new BigNumber(positionData.amount1.toExact()).times(price1Usd?.toString() ?? 0))
-        .toNumber()
-    : 0
+  let liquidityUSD = 0
+
+  if (positionData) {
+    // Method 1: Use Position object amounts (preferred)
+    liquidityUSD = new BigNumber(positionData.amount0.toExact())
+      .times(price0Usd?.toString() ?? 0)
+      .plus(new BigNumber(positionData.amount1.toExact()).times(price1Usd?.toString() ?? 0))
+      .toNumber()
+  } else if (position.liquidity > 0n && pool && price0Usd && price1Usd) {
+    // Method 2: Manual calculation fallback for when Position objects aren't available
+    try {
+      const tickCurrent = pool.tickCurrent
+      const amount0Raw = PositionMath.getToken0Amount(
+        tickCurrent,
+        position.tickLower,
+        position.tickUpper,
+        pool.sqrtRatioX96,
+        position.liquidity,
+      )
+      const amount1Raw = PositionMath.getToken1Amount(
+        tickCurrent,
+        position.tickLower,
+        position.tickUpper,
+        pool.sqrtRatioX96,
+        position.liquidity,
+      )
+
+      // Convert from raw amounts to readable amounts
+      const amount0 = new BigNumber(amount0Raw.toString()).div(10 ** (poolInfo.token0.wrapped?.decimals || 18))
+      const amount1 = new BigNumber(amount1Raw.toString()).div(10 ** (poolInfo.token1.wrapped?.decimals || 18))
+
+      liquidityUSD = amount0.times(price0Usd).plus(amount1.times(price1Usd)).toNumber()
+    } catch (error) {
+      console.error('Manual liquidity calculation failed:', error)
+    }
+  }
 
   const outOfRange = pool && (pool.tickCurrent < position.tickLower || pool.tickCurrent >= position.tickUpper)
   const removed = position.liquidity === 0n

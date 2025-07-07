@@ -15,7 +15,12 @@ export const ActionButton = styled(Button).attrs({
   border-radius: ${({ theme }) => theme.radii.default};
   color: ${({ theme }) => theme.colors.primary60};
   padding: 16px;
-  &:hover {
-    opacity: 0.8;
+  transition: opacity 0.2s ease;
+  &:disabled {
+    opacity: 0.1 !important;
+    cursor: not-allowed;
+  }
+  &:hover:not(:disabled) {
+    opacity: 0.6;
   }
 `

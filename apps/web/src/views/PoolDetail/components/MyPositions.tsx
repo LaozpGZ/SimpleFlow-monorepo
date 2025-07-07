@@ -70,9 +70,6 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
       <Grid gridGap="24px" gridTemplateColumns={['1fr', '1fr', '1fr', hasPoolReward ? '1fr 2fr' : '1fr']}>
         {hasPoolReward && <RewardInfoCard provider={provider} />}
         <Box>
-          <Text as="h3" fontWeight={600} fontSize={24}>
-            {t('My Positions')}
-          </Text>
           <Card>
             <CardBody>
               <FlexGap alignItems="center" justifyContent="center" flexDirection="column" gap="24px">

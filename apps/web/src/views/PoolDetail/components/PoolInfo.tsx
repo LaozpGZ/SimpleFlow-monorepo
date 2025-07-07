@@ -96,11 +96,11 @@ export const PoolInfo = () => {
               flexDirection={isSmallScreen ? 'row-reverse' : 'row'}
               width="100%"
             >
-              {/* <Box>
-                <SearchButton>
+              <Box>
+                {/* <SearchButton>
                   <SearchIcon color="textSubtle" width={24} />
-                </SearchButton>
-              </Box> */}
+                </SearchButton> */}
+              </Box>
               <FlexGap flexDirection="column" gap="16px">
                 <FlexGap
                   gap="12px"
