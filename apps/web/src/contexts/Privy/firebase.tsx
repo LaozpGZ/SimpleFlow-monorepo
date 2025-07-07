@@ -8,6 +8,7 @@ import {
   UserCredential,
 } from 'firebase/auth'
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import { loadTelegramLoginWidget } from './telegramLogin'
 
 import { firebaseApp } from './constants'
 
@@ -94,7 +95,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       const userCredential = await signInWithCustomToken(auth, customToken)
       const idToken = await userCredential.user.getIdToken(true)
       setToken(idToken)
-      console.log('Discord login success with token')
+      console.log('Discord/Telegram login success with token')
       return true
     } catch (error) {
       console.error('Error signing in with custom token:', error)
@@ -129,22 +130,11 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     try {
       setLoading(true)
 
-      // Open Telegram Login Widget
-      const botName = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME
-      const redirectUri = `${window.location.origin}/api/auth/telegram-callback`
-
-      // Create a random auth_date to prevent caching issues
-      const authDate = Math.floor(Date.now() / 1000)
-
-      const popup = window.open(
-        `https://oauth.telegram.org/auth?bot_id=${botName}&origin=${encodeURIComponent(
-          window.location.origin,
-        )}&return_to=${encodeURIComponent(redirectUri)}&auth_date=${authDate}`,
-        '_blank',
-        'width=550,height=470',
-      )
-
-      setTelegramPopup(popup)
+      loadTelegramLoginWidget('telegram-widget-root', (token) => {
+        loginWithCustomToken(token)
+      })
+      // @ts-ignore
+      TWidgetLogin.auth()
     } catch (err) {
       console.error(err)
     } finally {
