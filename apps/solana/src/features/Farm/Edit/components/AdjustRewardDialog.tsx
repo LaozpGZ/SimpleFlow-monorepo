@@ -68,15 +68,10 @@ export default function AdjustRewardDialog({
     mintList: [rewardToken.address]
   })
 
-  const newPerSecondA = new Decimal(moreAmount || 0).div(new Decimal(daysExtend || 1).mul(DAY_SECONDS))
-  const newPerSecondB = new Decimal(remainAmount).add(moreAmount || 0).div(new Decimal(daysExtend || 1).mul(DAY_SECONDS).add(remainSeconds))
-
-  const newPerSecond = newPerSecondA.lt(newPerSecondB) ? newPerSecondA : newPerSecondB
+  const newPerSecond = new Decimal(remainAmount).add(moreAmount || 0).div(new Decimal(daysExtend || 0).mul(DAY_SECONDS).add(remainSeconds))
   const isDecrease = newPerSecond.lt(oldPerSecond)
 
-  const newTotal = isDecrease
-    ? new Decimal(moreAmount || 0).add(newPerSecond.mul(remainSeconds)).toString()
-    : remainAmount.add(moreAmount || 0).toString()
+  const newTotal = remainAmount.add(moreAmount || 0).toString()
 
   const newEndTime = new Decimal(daysExtend || 0)
     .mul(DAY_SECONDS * 1000)
@@ -108,7 +103,7 @@ export default function AdjustRewardDialog({
     onSave({
       ...oldReward,
       total: newTotal,
-      openTime: onlineCurrentDate,
+      openTime: Date.now() + chainTimeOffset + 30 * 1000, // 30 seconds as buffer
       endTime: new Decimal(oldReward.endTime).add(new Decimal(daysExtend).mul(DAY_SECONDS * 1000)).toNumber(),
       perWeek: newPerSecond.mul(WEEK_SECONDS).toString(),
       perDay: newPerSecond.mul(DAY_SECONDS).toString(),
@@ -132,13 +127,6 @@ export default function AdjustRewardDialog({
 
         <ModalBody mb={5} overflow="scroll">
           <VStack spacing={4} align="stretch">
-            <CalloutNote
-              header={t('Please note')}
-              content={t(
-                'You can add more tokens and/or extend the farming period. Any action that will decrease the reward rate can only be done within 72 hours of current farm end time, and the period must be extended by at least 7 days.'
-              )}
-            />
-
             <Box>
               <Heading fontSize="md" color={colors.textSubtle} fontWeight={600} mb={3}>
                 {t('Current rewards period')}

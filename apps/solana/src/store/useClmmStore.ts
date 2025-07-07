@@ -803,7 +803,9 @@ export const useClmmStore = createStore<ClmmState>(
 
         if (!newRewardInfos.length)
           return setRewardsBuildData
-            .execute()
+            .execute({
+              simulate: true
+            })
             .then(({ txId, signedTx }) => {
               txStatusSubject.next({ txId, ...meta, signedTx, mintInfo: newRewardInfos.map((r) => r.mint), onConfirmed })
               return txId
@@ -828,7 +830,9 @@ export const useClmmStore = createStore<ClmmState>(
 
         if (!rewardInfos.length)
           return initRewardBuildData
-            .execute()
+            .execute({
+              simulate: true
+            })
             .then(({ txId }) => {
               txStatusSubject.next({ txId, ...meta, mintInfo: rewardInfos.map((r) => r.mint), onConfirmed })
               return txId
@@ -852,7 +856,9 @@ export const useClmmStore = createStore<ClmmState>(
       rewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
       newRewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
       return res
-        .execute()
+        .execute({
+          simulate: true
+        })
         .then(({ txId }) => {
           txStatusSubject.next({ txId, ...txProps, ...meta, mintInfo: Array.from(mints.values()) })
           return txId

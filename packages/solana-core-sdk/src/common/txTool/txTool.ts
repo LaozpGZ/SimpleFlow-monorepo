@@ -2,9 +2,11 @@ import {
   Commitment,
   Connection,
   PublicKey,
+  RpcResponseAndContext,
   sendAndConfirmTransaction,
   SignatureResult,
   Signer,
+  SimulatedTransactionResponse,
   SystemProgram,
   Transaction,
   TransactionInstruction,
@@ -199,6 +201,13 @@ export class TxBuilder {
       return true;
     }
     return false;
+  }
+
+  private logSimulation(simulation: RpcResponseAndContext<SimulatedTransactionResponse>): void {
+    console.log(`simulation ${simulation.value.err ? "❌" : "✅"}`, {
+      error: simulation.value.err,
+      logs: simulation.value.logs,
+    });
   }
 
   public addTipInstruction(tipConfig?: TxTipConfig): boolean {
@@ -559,7 +568,7 @@ export class TxBuilder {
               sigVerify: false,
               innerInstructions: true,
             });
-            console.log("simulation", simulation.value.err, simulation);
+            this.logSimulation(simulation);
           }
           const txId = await this.connection.sendTransaction(transaction, { skipPreflight });
           if (sendAndConfirm) {
@@ -572,6 +581,14 @@ export class TxBuilder {
           };
         }
         if (this.signAllTransactions) {
+          if (params?.simulate) {
+            const simulation = await this.connection.simulateTransaction(transaction, {
+              commitment: "confirmed",
+              innerInstructions: true,
+              sigVerify: false,
+            });
+            this.logSimulation(simulation);
+          }
           const txs = await this.signAllTransactions<VersionedTransaction>([transaction]);
           if (this.signers.length) {
             for (const item of txs) {
@@ -581,14 +598,6 @@ export class TxBuilder {
                 //
               }
             }
-          }
-          if (params?.simulate) {
-            const simulation = await this.connection.simulateTransaction(txs[0], {
-              commitment: "confirmed",
-              innerInstructions: true,
-              sigVerify: false,
-            });
-            console.log("simulation", simulation.value.err, simulation);
           }
           return {
             txId: notSendToRpc ? "" : await this.connection.sendTransaction(txs[0], { skipPreflight }),
@@ -1220,7 +1229,7 @@ export class TxBuilder {
                 innerInstructions: true,
                 sigVerify: false,
               });
-              console.log("simulation", simulation.value.err, simulation);
+              this.logSimulation(simulation);
             });
           }
           const needSignedTx = await this.signAllTransactions(
@@ -1314,7 +1323,7 @@ export class TxBuilder {
                   innerInstructions: true,
                   sigVerify: false,
                 });
-                console.log("simulation", simulation.value.err, simulation);
+                this.logSimulation(simulation);
               }
               const txId = await this.connection.sendTransaction(signedTxs[i], { skipPreflight });
               txIds.push(txId);
