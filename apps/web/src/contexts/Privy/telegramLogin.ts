@@ -15,47 +15,70 @@ type TelegramUser = {
 declare global {
   interface Window {
     onTelegramAuth: (user: TelegramUser) => Promise<void>
+    Telegram?: {
+      Login: {
+        auth: (
+          param: { bot_id: string; request_access: boolean; lang: string },
+          callback: (userData: TelegramUser) => void,
+        ) => void
+      }
+    }
   }
 }
 
-export function loadTelegramLoginWidget(
-  containerId: string = 'telegram-widget-root',
-  onLogin: (token: string) => void,
-) {
-  // Define the function in the global scope
-  window.onTelegramAuth = async function (user: TelegramUser) {
-    try {
-      console.log({ user }, 'telegram user')
-      const res = await fetch('/api/auth/telegram-callback', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-      })
+export async function loginWithTelegramViaScript(onLogin: (token: string) => void) {
+  await loadTelegramScript()
 
-      const data = await res.json()
-      if (data.customToken) {
-        onLogin(data.customToken)
-      } else {
-        alert('fail to login')
+  const botId = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!
+
+  if (!window.Telegram?.Login?.auth) return
+  window.Telegram.Login.auth(
+    {
+      bot_id: botId,
+      request_access: true,
+      lang: 'en',
+    },
+    async (userData) => {
+      if (!userData) {
+        alert('Login failed or cancelled.')
+        return
       }
-    } catch (err) {
-      console.error('Telegram login failed:', err)
+      console.log('✅ Telegram User:', userData)
+      try {
+        console.log({ userData }, 'telegram user')
+        const res = await fetch('/api/auth/telegram-callback', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
+        })
+
+        const data = await res.json()
+        if (data.customToken) {
+          onLogin(data.customToken)
+        } else {
+          alert('fail to login')
+        }
+      } catch (err) {
+        console.error('Telegram login failed:', err)
+      }
+    },
+  )
+}
+
+export function loadTelegramScript(): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (window.Telegram?.Login?.auth) {
+      resolve()
+      return
     }
-  }
 
-  // clear container, avoid duplicate insertion
-  const container = document.getElementById(containerId)
-  if (container) container.innerHTML = ''
-
-  const script = document.createElement('script')
-  script.src = 'https://telegram.org/js/telegram-widget.js?22'
-  script.async = true
-  script.setAttribute('data-telegram-login', 'pancake_social_login_dev_bot')
-  script.setAttribute('data-size', 'large')
-  script.setAttribute('data-userpic', 'false')
-  script.setAttribute('data-request-access', 'write')
-  script.setAttribute('data-onauth', 'onTelegramAuth(user)')
-  container?.appendChild(script)
+    const script = document.createElement('script')
+    script.src = 'https://telegram.org/js/telegram-widget.js?7'
+    script.async = true
+    script.onload = () => resolve()
+    script.onerror = reject
+    document.body.appendChild(script)
+  })
 }
