@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { Box, Button, ButtonMenu, ButtonMenuItem, Card, ColumnCenter } from '@pancakeswap/uikit'
+import { Box, Button, ButtonMenu, ButtonMenuItem, Card, ColumnCenter, Text } from '@pancakeswap/uikit'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { nanoid } from 'nanoid'
 import { BulletList } from 'components/BulletList'
@@ -83,11 +83,19 @@ export const SendGiftView = ({
       <TokenAmountSection tokenAmount={tokenAmount} price={price} />
 
       <Card mb="16px">
-        <BulletList>
-          <li>{t('Send without a wallet address.')}</li>
-          <li>{t('The gift remains safely on-chain, accessible only to the recipient.')}</li>
-          <li>{t('Gifts expire after 7 days, unclaimed funds will be returned to you.')}</li>
-        </BulletList>
+        <Box p="16px">
+          <BulletList>
+            <li>
+              <Text fontSize="12px">{t('Send without a wallet address.')}</Text>
+            </li>
+            <li>
+              <Text fontSize="12px">{t('The gift remains safely on-chain, accessible only to the recipient.')}</Text>
+            </li>
+            <li>
+              <Text fontSize="12px">{t('Gifts expire after 7 days, unclaimed funds will be returned to you.')}</Text>
+            </li>
+          </BulletList>
+        </Box>
       </Card>
 
       {error && <div>{error.message}</div>}
