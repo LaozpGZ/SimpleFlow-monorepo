@@ -1,7 +1,7 @@
 import { useTheme } from '@pancakeswap/hooks'
 import { Flex, Text } from '@pancakeswap/uikit'
 import dayjs from 'dayjs'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
@@ -46,6 +46,20 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
   const [hoverDate, setHoverDate] = useState<string | undefined>()
   const { theme } = useTheme()
 
+  // Calculate total sum of all values
+  const totalSum = useMemo(() => {
+    if (!data || data.length === 0) return 0
+    return data.reduce((sum, item) => sum + item.value, 0)
+  }, [data])
+
+  // Get date range for when not hovering
+  const dateRange = useMemo(() => {
+    if (!data || data.length === 0) return ''
+    const startDate = dayjs(data[0].time).format('MMM D, YYYY')
+    const endDate = dayjs(data[data.length - 1].time).format('MMM D, YYYY')
+    return startDate === endDate ? startDate : `${startDate} - ${endDate}`
+  }, [data])
+
   // Transform data for recharts
   const chartData =
     data?.map((item) => ({
@@ -58,10 +72,10 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
     <>
       <Flex mb="24px" flexDirection="column">
         <Text bold fontSize={24}>
-          {formatDollarAmount(hoverValue ?? data?.[data.length - 1]?.value)}
+          {formatDollarAmount(hoverValue ?? totalSum)}
         </Text>
         <Text small color="secondary">
-          {`${dayjs(hoverDate ?? data?.[data.length - 1]?.time).format('MMM D, YYYY')} (UTC)`}
+          {hoverValue ? `${dayjs(hoverDate).format('MMM D, YYYY')} (UTC)` : `${dateRange} (UTC)`}
         </Text>
       </Flex>
       <ResponsiveContainer width="100%" height={340}>
