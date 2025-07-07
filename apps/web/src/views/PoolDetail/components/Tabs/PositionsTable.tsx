@@ -32,7 +32,8 @@ interface PositionsTableProps {
   totalApr: number
   showInactiveOnly: boolean
   toggleInactiveOnly: () => void
-  handleHarvestAll: () => void
+  handleHarvestAll?: () => void // TODO: Remove this prop. replaced by harvestAllButton
+  harvestAllButton?: React.ReactNode
 }
 
 export const PositionsTable: React.FC<PositionsTableProps> = ({
@@ -41,6 +42,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
   totalApr,
   showInactiveOnly,
   toggleInactiveOnly,
+  harvestAllButton,
   handleHarvestAll,
   data,
 }) => {
@@ -77,9 +79,10 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
                   --
                 </Text>
               </Box>
-              <HarvestButton variant="tertiary" onClick={handleHarvestAll}>
+              <HarvestButton variant="tertiary" onClick={handleHarvestAll} disabled>
                 {t('Harvest')}
               </HarvestButton>
+              {/* {harvestAllButton} */}
             </FlexGap>
           </LightGreyCard>
         </Flex>
