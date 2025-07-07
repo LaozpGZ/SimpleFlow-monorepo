@@ -49,6 +49,7 @@ interface ExecuteParams {
   recentBlockHash?: string;
   sendAndConfirm?: boolean;
   notSendToRpc?: boolean;
+  simulate?: boolean;
 }
 
 interface TxBuilderInit {
@@ -552,6 +553,14 @@ export class TxBuilder {
         const { skipPreflight = true, sendAndConfirm, notSendToRpc } = params || {};
         printSimulate([transaction]);
         if (this.owner?.isKeyPair) {
+          if (params?.simulate) {
+            const simulation = await this.connection.simulateTransaction(transaction, {
+              commitment: "confirmed",
+              sigVerify: false,
+              innerInstructions: true,
+            });
+            console.log("simulation", simulation.value.err, simulation);
+          }
           const txId = await this.connection.sendTransaction(transaction, { skipPreflight });
           if (sendAndConfirm) {
             await confirmTransaction(this.connection, txId);
@@ -572,6 +581,14 @@ export class TxBuilder {
                 //
               }
             }
+          }
+          if (params?.simulate) {
+            const simulation = await this.connection.simulateTransaction(txs[0], {
+              commitment: "confirmed",
+              innerInstructions: true,
+              sigVerify: false,
+            });
+            console.log("simulation", simulation.value.err, simulation);
           }
           return {
             txId: notSendToRpc ? "" : await this.connection.sendTransaction(txs[0], { skipPreflight }),
@@ -1161,6 +1178,14 @@ export class TxBuilder {
                 txIds.push("tx skipped");
                 continue;
               }
+              if (executeParams?.simulate) {
+                const simulation = await this.connection.simulateTransaction(tx, {
+                  commitment: "confirmed",
+                  innerInstructions: true,
+                  sigVerify: false,
+                });
+                console.log("simulation", simulation);
+              }
               const txId = await this.connection.sendTransaction(tx, { skipPreflight });
               await confirmTransaction(this.connection, txId);
 
@@ -1173,6 +1198,14 @@ export class TxBuilder {
           return {
             txIds: await Promise.all(
               allTransactions.map(async (tx) => {
+                if (executeParams?.simulate) {
+                  const simulation = await this.connection.simulateTransaction(tx, {
+                    commitment: "confirmed",
+                    innerInstructions: true,
+                    sigVerify: false,
+                  });
+                  console.log("simulation", simulation);
+                }
                 return await this.connection.sendTransaction(tx, { skipPreflight });
               }),
             ),
@@ -1180,6 +1213,16 @@ export class TxBuilder {
           };
         }
         if (this.signAllTransactions) {
+          if (executeParams?.simulate) {
+            allTransactions.forEach(async (tx) => {
+              const simulation = await this.connection.simulateTransaction(tx, {
+                commitment: "confirmed",
+                innerInstructions: true,
+                sigVerify: false,
+              });
+              console.log("simulation", simulation.value.err, simulation);
+            });
+          }
           const needSignedTx = await this.signAllTransactions(
             allTransactions.slice(skipTxCount, allTransactions.length),
           );
@@ -1265,6 +1308,14 @@ export class TxBuilder {
           } else {
             const txIds: string[] = [];
             for (let i = 0; i < signedTxs.length; i += 1) {
+              if (executeParams?.simulate) {
+                const simulation = await this.connection.simulateTransaction(signedTxs[i], {
+                  commitment: "confirmed",
+                  innerInstructions: true,
+                  sigVerify: false,
+                });
+                console.log("simulation", simulation.value.err, simulation);
+              }
               const txId = await this.connection.sendTransaction(signedTxs[i], { skipPreflight });
               txIds.push(txId);
             }

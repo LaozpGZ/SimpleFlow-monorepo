@@ -1627,7 +1627,6 @@ export class Clmm extends ModuleBase {
 
   public async harvestAllRewards<T extends TxVersion = TxVersion.LEGACY>({
     allPoolInfo,
-    poolKeys,
     allPositions,
     lockInfo,
     ownerInfo,

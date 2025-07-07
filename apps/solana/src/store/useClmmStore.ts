@@ -249,6 +249,7 @@ export const useClmmStore = createStore<ClmmState>(
         buildData
           .execute({
             sequentially: true,
+            simulate: true,
             onTxUpdate: (data) => {
               handleMultiTxRetry(data)
               handleMultiTxToast({
