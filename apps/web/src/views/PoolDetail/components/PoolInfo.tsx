@@ -1,14 +1,19 @@
+import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { Percent, Token } from '@pancakeswap/swap-sdk-core'
 import {
   AutoColumn,
   Box,
+  BscScanIcon,
   Card,
   CardBody,
+  CopyButton,
   Flex,
   FlexGap,
   Grid,
   IconButton,
+  Link,
+  OpenNewIcon,
   Spinner,
   SwapHorizIcon,
   Tab,
@@ -16,7 +21,13 @@ import {
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
-import { DoubleCurrencyLogo, FeeTierTooltip, LightGreyCard, Liquidity } from '@pancakeswap/widgets-internal'
+import {
+  CurrencyLogo,
+  DoubleCurrencyLogo,
+  FeeTierTooltip,
+  LightGreyCard,
+  Liquidity,
+} from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { useCurrencyByChainId } from 'hooks/Tokens'
@@ -25,10 +36,12 @@ import { useMemo, useState } from 'react'
 import { InfinityPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import styled from 'styled-components'
+import { getBlockExploreLink } from 'utils'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { isInfinityProtocol } from 'utils/protocols'
 import { zeroAddress } from 'viem'
+import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprButtonV3'
 import { usePoolInfoByQuery } from '../hooks/usePoolInfo'
 import { usePoolSymbol } from '../hooks/usePoolSymbol'
@@ -53,6 +66,9 @@ export const PoolInfo = () => {
   const { poolSymbol } = usePoolSymbol()
 
   const poolInfo = usePoolInfoByQuery()
+
+  const protocol = poolInfo?.protocol
+
   const chainId = useChainIdByQuery()
 
   const isSmallScreen = isMobile || isTablet
@@ -108,8 +124,14 @@ export const PoolInfo = () => {
                   flexDirection={isSmallScreen ? 'column' : 'row'}
                 >
                   <Box>
-                    <Flex alignItems="center">
-                      <DoubleCurrencyLogo currency0={currency0} currency1={currency1} size={48} innerMargin="-8px" />
+                    <Flex alignItems="center" justifyContent="center" position="relative">
+                      <DoubleCurrencyLogo
+                        currency0={currency0}
+                        currency1={currency1}
+                        size={48}
+                        innerMargin="2px"
+                        showChainLogoCurrency1
+                      />
                     </Flex>
                   </Box>
                   <FlexGap gap="4px" alignItems="center">
@@ -125,6 +147,95 @@ export const PoolInfo = () => {
                       {getTokenSymbolAlias(currency1?.wrapped?.address, currency1?.chainId, currency1?.symbol)}
                     </Text>
                   </FlexGap>
+                  <Tooltips
+                    content={
+                      <FlexGap gap="4px" flexDirection="column" minWidth="150px">
+                        {protocol && ![Protocol.InfinityCLAMM, Protocol.InfinityBIN].includes(protocol) && (
+                          <FlexGap gap="16px" justifyContent="space-between" alignItems="center">
+                            <FlexGap gap="4px">
+                              <DoubleCurrencyLogo
+                                currency0={currency0}
+                                currency1={currency1}
+                                size={24}
+                                innerMargin="2px"
+                              />
+                              <Text>{poolSymbol}</Text>
+                            </FlexGap>
+
+                            <FlexGap gap="4px">
+                              <Link
+                                target="_blank"
+                                href={getBlockExploreLink(
+                                  protocol === Protocol.STABLE ? poolInfo.stableSwapAddress : poolInfo.lpAddress,
+                                  'address',
+                                  chainId,
+                                )}
+                              >
+                                <OpenNewIcon width={16} height={16} color="primary60" />
+                              </Link>
+                              <CopyButton
+                                text={
+                                  protocol === Protocol.STABLE
+                                    ? poolInfo.stableSwapAddress ?? ''
+                                    : poolInfo.lpAddress ?? ''
+                                }
+                                tooltipMessage={t('Token address copied')}
+                                width="16px"
+                                height="16px"
+                              />
+                            </FlexGap>
+                          </FlexGap>
+                        )}
+
+                        <FlexGap gap="16px" justifyContent="space-between" alignItems="center">
+                          <FlexGap gap="8px">
+                            <CurrencyLogo currency={currency0} size="24px" />
+                            <Text>{currency0?.symbol}</Text>
+                          </FlexGap>
+                          {currency0?.isToken && currency0?.wrapped?.address && (
+                            <FlexGap gap="4px">
+                              <Link
+                                target="_blank"
+                                href={getBlockExploreLink(currency0?.wrapped?.address, 'address', chainId)}
+                              >
+                                <OpenNewIcon width={16} height={16} color="primary60" />
+                              </Link>
+                              <CopyButton
+                                text={currency0?.wrapped?.address ?? ''}
+                                tooltipMessage={t('Token address copied')}
+                                width="16px"
+                                height="16px"
+                              />
+                            </FlexGap>
+                          )}
+                        </FlexGap>
+                        <FlexGap gap="16px" justifyContent="space-between" alignItems="center">
+                          <FlexGap gap="8px">
+                            <CurrencyLogo currency={currency1} size="24px" />
+                            <Text>{currency1?.symbol}</Text>
+                          </FlexGap>
+                          {currency1?.isToken && currency1?.wrapped?.address && (
+                            <FlexGap gap="4px">
+                              <Link
+                                target="_blank"
+                                href={getBlockExploreLink(currency1?.wrapped?.address, 'address', chainId)}
+                              >
+                                <OpenNewIcon width={16} height={16} color="primary60" />
+                              </Link>
+                              <CopyButton
+                                text={currency1?.wrapped?.address ?? ''}
+                                tooltipMessage={t('Token address copied')}
+                                width="16px"
+                                height="16px"
+                              />
+                            </FlexGap>
+                          )}
+                        </FlexGap>
+                      </FlexGap>
+                    }
+                  >
+                    <BscScanIcon width={24} height={24} color="textSubtle" style={{ cursor: 'pointer' }} />
+                  </Tooltips>
                 </FlexGap>
                 <FlexGap gap="16px" flexWrap="wrap" alignItems="center" alignContent="center">
                   {poolInfo?.protocol ? (
