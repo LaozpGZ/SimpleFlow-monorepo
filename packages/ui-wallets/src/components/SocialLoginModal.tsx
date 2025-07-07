@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import {
+  ArrowBackIcon,
   Button,
   CloseIcon,
   FlexGap as Flex,
@@ -45,6 +46,7 @@ const SocialLoginButton = styled(Button)`
   background-color: ${({ theme }) => theme.colors.backgroundAlt};
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   box-shadow: 0px 2px 0px 0px ${({ theme }) => theme.colors.cardBorder};
+  gap: 8px;
 `
 
 const SocialLoginButtonVertical = styled(SocialLoginButton)`
@@ -60,6 +62,7 @@ const Divider = styled.div`
   background-color: ${({ theme }) => theme.colors.cardBorder};
   width: 100%;
   margin: 16px 0;
+  text-align: center;
 `
 
 const Web3WalletButton = styled(SocialLoginButton)`
@@ -131,7 +134,13 @@ const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
           </Text>
 
           <SocialLoginButton onClick={handleGoogleLogin}>
-            <img src={`${ASSET_CDN}/web/wallets/social-login/google.jpg`} width="24" height="24" alt="Google" />
+            <img
+              src={`${ASSET_CDN}/web/wallets/social-login/google.jpg`}
+              width="24"
+              height="24"
+              alt="Google"
+              style={{ borderRadius: '8px' }}
+            />
             <Text>{t('Continue with Google')}</Text>
           </SocialLoginButton>
 
@@ -152,9 +161,14 @@ const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
             </SocialLoginButtonVertical>
           </Flex>
 
-          <Divider />
+          <Divider>
+            <Text style={{ transform: 'translateY(-12px)' }}>{t('or')}</Text>
+          </Divider>
 
-          <Web3WalletButton onClick={handleWeb3WalletLogin}>{t('Continue with Web3 Wallet')}</Web3WalletButton>
+          <Web3WalletButton onClick={handleWeb3WalletLogin}>
+            <ArrowBackIcon />
+            <Text>{t('Continue with Web3 Wallet')}</Text>
+          </Web3WalletButton>
         </StyledModalContainer>
       </StyledModalWrapper>
     </ModalV2>
