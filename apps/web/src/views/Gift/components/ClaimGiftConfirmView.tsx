@@ -14,6 +14,8 @@ import {
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { useEffect } from 'react'
 import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
+import { shortenAddress } from 'views/V3Info/utils'
+
 import { useClaimGift } from '../hooks/useClaimGift'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
 import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
@@ -69,6 +71,8 @@ export const ClaimGiftConfirmView = () => {
 
   const isOnlyNative = giftInfo.tokenAmount.equalTo(0)
 
+  console.log('giftInfo.timestamp', giftInfo.timestamp)
+
   return (
     <ColumnCenter>
       {hasIncludeStarterGas ? (
@@ -95,18 +99,40 @@ export const ClaimGiftConfirmView = () => {
       )}
 
       <Card mb="16px" style={{ width: '100%' }}>
-        <Box p="16px">
-          <RowBetween>
-            <Text color="textSubtle" small>
-              {t('Expires on:')}
-            </Text>
-            <Text small>
-              {formatTimestamp(new Date(giftInfo.timestamp).getTime(), {
-                precision: Precision.MINUTE,
-              })}
-            </Text>
-          </RowBetween>
-        </Box>
+        <FlexGap flexDirection="column" gap="4px" p="16px">
+          {giftInfo.creatorAddress && (
+            <RowBetween>
+              <Text color="textSubtle" small>
+                {t('Created by:')}
+              </Text>
+              <Text small>{shortenAddress(giftInfo.creatorAddress)}</Text>
+            </RowBetween>
+          )}
+          {giftInfo.timestamp && (
+            <RowBetween>
+              <Text color="textSubtle" small>
+                {t('Created at:')}
+              </Text>
+              <Text small>
+                {formatTimestamp(new Date(giftInfo.timestamp).getTime(), {
+                  precision: Precision.MINUTE,
+                })}
+              </Text>
+            </RowBetween>
+          )}
+          {giftInfo.expiryTimestamp && (
+            <RowBetween>
+              <Text color="textSubtle" small>
+                {t('Expires on:')}
+              </Text>
+              <Text small>
+                {formatTimestamp(new Date(giftInfo.expiryTimestamp).getTime(), {
+                  precision: Precision.MINUTE,
+                })}
+              </Text>
+            </RowBetween>
+          )}
+        </FlexGap>
       </Card>
 
       {claimGiftData?.status === GiftApiStatus.SUCCESS ? (

@@ -18,6 +18,8 @@ export interface GiftInfoResponse {
   claimerAddress: string | null
   actionTransactionHash: string | null // the transaction for CLAIMED/EXPIRED/CANCELLED
   timestamp: string // ISOString
+  expiryTimestamp: string // ISOString
+  creatorAddress: string
 }
 
 export interface GiftInfo extends Omit<GiftInfoResponse, 'tokenAmount' | 'nativeAmount'> {
