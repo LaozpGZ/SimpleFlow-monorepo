@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useState, useEffect, useMemo, useCallback } from 'react'
 import {
   TickUtils,
   PositionInfoLayout,
@@ -6,11 +6,15 @@ import {
   TickArrayLayout,
   ApiV3PoolInfoConcentratedItem,
   U64_IGNORE_RANGE,
-  ApiV3Token
+  ApiV3Token,
+  ZERO,
+  DecreaseLiquidityEventLayout
 } from '@pancakeswap/solana-core-sdk'
-import { AccountInfo } from '@solana/web3.js'
+import { AccountInfo, Transaction } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
+import { shallow } from 'zustand/shallow'
+import useSWR from 'swr'
 import useTokenPrice from '@/hooks/token/useTokenPrice'
 import useFetchMultipleAccountInfo from '@/hooks/info/useFetchMultipleAccountInfo'
 import { getTickArrayAddress } from '@/hooks/pool/formatter'
@@ -18,6 +22,7 @@ import { getPoolName } from '@/features/Pools/util'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { addAccChangeCbk, removeAccChangeCbk } from '@/hooks/app/useTokenAccountInfo'
 import logMessage from '@/utils/log'
+import { useAppStore, useClmmStore } from '@/store'
 import useSubscribeClmmInfo, { RpcPoolData } from './useSubscribeClmmInfo'
 
 interface Props {
@@ -171,6 +176,157 @@ export default function useFetchClmmRewardInfo({
     logMessage('rewardToken', rewardToken)
     return rewardToken
   }, [tokenFees, rewards, tokenPrices, poolInfo?.id])
+
+  return {
+    isEmptyReward,
+    ...tokenFees,
+    rewards,
+    totalPendingYield,
+    allRewardInfos
+  }
+}
+
+export function useClmmRewardInfoFromSimulation(props: Props) {
+  const { poolInfo, position, initRpcPoolData, tickLowerPrefetchData, tickUpperPrefetchData } = props
+  const rpcPoolData =
+    useSubscribeClmmInfo({ subscribe: false, poolInfo, throttle: MINUTE_MILLISECONDS, initialFetch: true })?.poolInfo ||
+    initRpcPoolData?.poolInfo
+  const { data: tokenPrices } = useTokenPrice({
+    mintList: [poolInfo?.mintA.address, poolInfo?.mintB.address, ...(poolInfo?.rewardDefaultInfos.map((r) => r.mint.address) || [])]
+  })
+  const removeLiquidityAct = useClmmStore((s) => s.removeLiquidityAct)
+
+  const simulation = useCallback(async () => {
+    const simulationResult = (await removeLiquidityAct({
+      simulateOnly: true,
+      poolInfo: poolInfo as ApiV3PoolInfoConcentratedItem,
+      position,
+      liquidity: ZERO,
+      amountMinA: ZERO,
+      amountMinB: ZERO,
+      harvest: true
+    })) as ReturnType<typeof DecreaseLiquidityEventLayout.decode>
+    return simulationResult
+  }, [poolInfo, position, removeLiquidityAct])
+
+  const shouldFetch = Boolean(tokenPrices && rpcPoolData && poolInfo)
+
+  const { data, error, mutate } = useSWR(
+    shouldFetch ? `clmm-reward-info-${poolInfo?.id}-${position.nftMint.toBase58()}` : null,
+    () => simulation(),
+    {
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      refreshInterval: 60 * 1000 * 1, // 1 minute
+      keepPreviousData: true
+    }
+  )
+
+  const tokenFees = data
+    ? {
+        tokenFeeAmountA: data.feeAmount0,
+        tokenFeeAmountB: data.feeAmount1
+      }
+    : {}
+
+  const rewards = data?.rewardAmounts ?? []
+
+  const totalRewards = useMemo(() => {
+    if (!poolInfo || !rpcPoolData) return new Decimal(0)
+    return rewards
+      .map((r, idx) => {
+        const rewardMint = poolInfo.rewardDefaultInfos[idx]?.mint
+        if (!rewardMint) return '0'
+        return new Decimal(r.toString())
+          .div(10 ** (rewardMint.decimals || 0))
+          .mul(tokenPrices[rewardMint.address]?.value || 0)
+          .toString()
+      })
+      .reduce((acc, cur) => acc.add(cur), new Decimal(0))
+  }, [poolInfo, rpcPoolData, rewards, tokenPrices])
+
+  const totalPendingYield = useMemo(() => {
+    if (!poolInfo || !tokenPrices) return new Decimal(0)
+    return new Decimal(tokenFees.tokenFeeAmountA?.toString() || 0)
+      .div(10 ** poolInfo.mintA.decimals)
+      .mul(tokenPrices[poolInfo.mintA.address]?.value || 0)
+      .add(
+        new Decimal(tokenFees.tokenFeeAmountB?.toString() || 0)
+          .div(10 ** poolInfo.mintB.decimals)
+          .mul(tokenPrices[poolInfo.mintB.address]?.value || 0)
+      )
+      .add(totalRewards)
+  }, [poolInfo, tokenPrices, totalRewards])
+
+  const isEmptyReward = useMemo(() => {
+    return (
+      rewards.filter((r) => r.gt(new BN(0))).length <= 0 &&
+      !tokenFees.tokenFeeAmountA?.gt(new BN(0)) &&
+      !tokenFees.tokenFeeAmountB?.gt(new BN(0))
+    )
+  }, [rewards, tokenFees])
+
+  const allRewardInfos = useMemo(() => {
+    if (!poolInfo || !rpcPoolData || !rewards || !rewards.length || !tokenPrices) return []
+
+    const rewardToken = rewards
+      .map((r, idx) => {
+        const rewardMint = poolInfo.rewardDefaultInfos[idx]?.mint
+        const amount = new Decimal(r?.toString() || 0).div(10 ** (rewardMint?.decimals ?? 0))
+        return {
+          mint: rewardMint,
+          amount: rewardMint ? amount.toFixed(rewardMint?.decimals ?? 6) : '0',
+          amountUSD: rewardMint ? amount.mul(tokenPrices[rewardMint?.address || '']?.value ?? 0).toFixed(4) : '0'
+        }
+      })
+      .filter((r) => !!r.mint) as {
+      mint: ApiV3Token
+      amount: string
+      amountUSD: string
+    }[]
+
+    const [feeAmountA, feeAmountB] = [
+      new Decimal(tokenFees.tokenFeeAmountA?.toString() || 0).div(10 ** poolInfo.mintA.decimals),
+      new Decimal(tokenFees.tokenFeeAmountB?.toString() || 0).div(10 ** poolInfo.mintB.decimals)
+    ]
+
+    const feeIndexA = rewardToken.findIndex((r) => r.mint.address === poolInfo.mintA.address)
+    const usdValueA = feeAmountA.mul(tokenPrices[poolInfo.mintA.address]?.value ?? 0).toFixed(4)
+    if (feeIndexA > -1) {
+      rewardToken[feeIndexA].amount = new Decimal(rewardToken[feeIndexA].amount)
+        .add(feeAmountA.toFixed(poolInfo.mintA.decimals))
+        .toFixed(poolInfo.mintA.decimals)
+      rewardToken[feeIndexA].amountUSD = new Decimal(rewardToken[feeIndexA].amountUSD).add(usdValueA).toFixed(4)
+    } else {
+      rewardToken.push({
+        mint: poolInfo.mintA,
+        amount: feeAmountA.toFixed(poolInfo.mintA.decimals),
+        amountUSD: usdValueA
+      })
+    }
+
+    const feeIndexB = rewardToken.findIndex((r) => r.mint.address === poolInfo.mintB.address)
+    const usdValueB = feeAmountB.mul(tokenPrices[poolInfo.mintB.address]?.value ?? 0).toFixed(4)
+    if (feeIndexB > -1) {
+      rewardToken[feeIndexB].amount = new Decimal(rewardToken[feeIndexB].amount)
+        .add(feeAmountB.toFixed(poolInfo.mintB.decimals))
+        .toFixed(poolInfo.mintB.decimals)
+      rewardToken[feeIndexB].amountUSD = new Decimal(rewardToken[feeIndexB].amountUSD).add(usdValueB).toFixed(4)
+    } else {
+      rewardToken.push({
+        mint: poolInfo.mintB,
+        amount: feeAmountB.toFixed(poolInfo.mintB.decimals),
+        amountUSD: usdValueB
+      })
+    }
+    // logMessage('rewardToken', rewardToken)
+    return rewardToken
+  }, [tokenFees, rewards, tokenPrices, poolInfo?.id])
+
+  useEffect(() => {
+    addAccChangeCbk(mutate)
+    return () => removeAccChangeCbk(mutate)
+  }, [mutate])
 
   return {
     isEmptyReward,

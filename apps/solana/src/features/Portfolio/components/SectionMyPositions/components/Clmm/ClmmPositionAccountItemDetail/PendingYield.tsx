@@ -59,33 +59,29 @@ export default function PendingYield({ isLoading, hasReward, pendingYield, rewar
       </HStack>
 
       <Flex display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
-        {rewardInfos
-          .filter((r) => {
-            return Number(r.amount) !== 0
-          })
-          .map((r, index) => (
-            <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent="start">
-              <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
-              <Text color={colors.textPrimary}>
-                {formatCurrency(r.amount, {
-                  abbreviated: true,
-                  maximumDecimalTrailingZeroes: 2
-                })}
-              </Text>
-              <Text color={colors.textSecondary} display={['block', 'none', 'block']}>
-                {getMintSymbol({ mint: r.mint, transformSol: true })}
-              </Text>
-              <Text color={colors.textPrimary}>
-                (
-                {formatCurrency(r.amountUSD, {
-                  symbol: '$',
-                  abbreviated: true,
-                  maximumDecimalTrailingZeroes: 2
-                })}
-                )
-              </Text>
-            </Flex>
-          ))}
+        {rewardInfos.map((r, index) => (
+          <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent="start">
+            <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
+            <Text color={colors.textPrimary}>
+              {formatCurrency(r.amount, {
+                abbreviated: true,
+                maximumDecimalTrailingZeroes: 2
+              })}
+            </Text>
+            <Text color={colors.textSecondary} display={['block', 'none', 'block']}>
+              {getMintSymbol({ mint: r.mint, transformSol: true })}
+            </Text>
+            <Text color={colors.textPrimary}>
+              (
+              {formatCurrency(r.amountUSD, {
+                symbol: '$',
+                abbreviated: true,
+                maximumDecimalTrailingZeroes: 2
+              })}
+              )
+            </Text>
+          </Flex>
+        ))}
       </Flex>
     </Flex>
   )

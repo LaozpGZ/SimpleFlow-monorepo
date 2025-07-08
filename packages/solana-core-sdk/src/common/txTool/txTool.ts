@@ -7,6 +7,7 @@ import {
   SignatureResult,
   Signer,
   SimulatedTransactionResponse,
+  SimulateTransactionConfig,
   SystemProgram,
   Transaction,
   TransactionInstruction,
@@ -81,6 +82,9 @@ export interface TxBuildData<T = Record<string, any>> {
   instructionTypes: string[];
   signers: Signer[];
   execute: (params?: ExecuteParams) => Promise<{ txId: string; signedTx: Transaction }>;
+  simulate: (
+    simulateConfig?: SimulateTransactionConfig,
+  ) => Promise<RpcResponseAndContext<SimulatedTransactionResponse>>;
   extInfo: T;
 }
 
@@ -330,6 +334,23 @@ export class TxBuilder {
           };
         }
         throw new Error("please provide owner in keypair format or signAllTransactions function");
+      },
+      simulate: async () => {
+        const recentBlockHash = await getRecentBlockHash(this.connection, this.blockhashCommitment);
+        transaction.recentBlockhash = recentBlockHash;
+        if (this.signers.length) transaction.sign(...this.signers);
+
+        printSimulate([transaction]);
+        if (this.owner?.isKeyPair) {
+          const simulation = await this.connection.simulateTransaction(transaction);
+          this.logSimulation(simulation);
+          return simulation;
+        }
+        if (this.signAllTransactions) {
+          const simulation = await this.connection.simulateTransaction(transaction);
+          this.logSimulation(simulation);
+        }
+        throw new Error("Failed to simulate transaction");
       },
       extInfo: extInfo || ({} as O),
     };
@@ -613,6 +634,30 @@ export class TxBuilder {
           };
         }
         throw new Error("please provide owner in keypair format or signAllTransactions function");
+      },
+      simulate: async (simulateConfig: SimulateTransactionConfig = {}) => {
+        printSimulate([transaction]);
+        if (this.owner?.isKeyPair) {
+          const simulation = await this.connection.simulateTransaction(transaction, {
+            commitment: "confirmed",
+            sigVerify: false,
+            innerInstructions: true,
+            ...simulateConfig,
+          });
+          this.logSimulation(simulation);
+          return simulation;
+        }
+        if (this.signAllTransactions) {
+          const simulation = await this.connection.simulateTransaction(transaction, {
+            commitment: "confirmed",
+            innerInstructions: true,
+            sigVerify: false,
+            ...simulateConfig,
+          });
+          this.logSimulation(simulation);
+          return simulation;
+        }
+        throw new Error("Failed to simulate transaction");
       },
       extInfo: (extInfo || {}) as O,
     };

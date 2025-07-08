@@ -11,7 +11,7 @@ import TokenInput from '@/components/TokenInput'
 import { QuestionToolTip } from '@/components/QuestionToolTip'
 import useClmmBalance from '@/hooks/portfolio/clmm/useClmmBalance'
 import { PositionWithUpdateFn } from '@/hooks/portfolio/useAllPositionInfo'
-import useFetchClmmRewardInfo from '@/hooks/pool/clmm/useFetchClmmRewardInfo'
+import { useClmmRewardInfoFromSimulation } from '@/hooks/pool/clmm/useFetchClmmRewardInfo'
 import { useAppStore, useClmmStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { debounce } from '@/utils/functionMethods'
@@ -76,7 +76,7 @@ export default function RemoveLiquidityModal({
   ]
   const [tokenAmount, setTokenAmount] = useState(['', ''])
   const [minTokenAmount, setMinTokenAmount] = useState(['', ''])
-  const { allRewardInfos } = useFetchClmmRewardInfo({
+  const { allRewardInfos } = useClmmRewardInfoFromSimulation({
     poolInfo,
     position,
     subscribe: false,

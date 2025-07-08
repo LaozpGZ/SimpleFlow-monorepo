@@ -7,6 +7,7 @@ import {
   ClmmKeys,
   ClmmLockAddress,
   ClmmPositionLayout,
+  DecreaseLiquidityEventLayout,
   getTransferAmountFeeV2,
   InitRewardsParams,
   MakeMultiTxData,
@@ -23,7 +24,7 @@ import {
   TxV0BuildData,
   TxVersion
 } from '@pancakeswap/solana-core-sdk'
-import { PublicKey } from '@solana/web3.js'
+import { PublicKey, RpcResponseAndContext, SimulatedTransactionResponse } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
 import { getDefaultToastData, handleMultiTxToast, transformProcessData } from '@/hooks/toast/multiToastUtil'
@@ -90,8 +91,9 @@ interface ClmmState {
       position: ClmmPositionLayout
     } & TxCallbackProps
   ) => Promise<string>
-  removeLiquidityAct: (
+  removeLiquidityAct: <TSimulate extends boolean = false>(
     props: {
+      simulateOnly?: TSimulate
       poolInfo: ApiV3PoolInfoConcentratedItem
       position: ClmmPositionLayout
       liquidity: number | string | BN
@@ -101,7 +103,7 @@ interface ClmmState {
       harvest?: boolean
       closePosition?: boolean
     } & TxCallbackProps
-  ) => Promise<string>
+  ) => Promise<ReturnType<typeof DecreaseLiquidityEventLayout.decode> | string>
   increaseLiquidityAct: (
     props: {
       poolInfo: ApiV3PoolInfoConcentratedItem
@@ -448,6 +450,7 @@ export const useClmmStore = createStore<ClmmState>(
       needRefresh,
       closePosition,
       harvest,
+      simulateOnly = false,
       onSent,
       onError,
       onFinally,
@@ -477,7 +480,7 @@ export const useClmmStore = createStore<ClmmState>(
 
       try {
         const computeBudgetConfig = await getComputeBudgetConfig()
-        const { execute } = await raydium.clmm.decreaseLiquidity({
+        const { execute, simulate } = await raydium.clmm.decreaseLiquidity({
           poolInfo,
           poolKeys: getClmmKeysFromPoolInfo(poolInfo),
           ownerPosition: position,
@@ -503,9 +506,46 @@ export const useClmmStore = createStore<ClmmState>(
           }
         })
 
-        return execute({
-          simulate: true
+        const simulateResult = await simulate({
+          accounts: {
+            encoding: 'base64',
+            addresses: poolInfo.rewardDefaultInfos.map((r) => r.mint.address)
+          }
         })
+        // console.log('simulateResult', simulateResult)
+
+        if (!simulateResult.value.logs || simulateResult.value.logs.length < 3) {
+          onError?.()
+          toastSubject.next({ txError: new Error('Simulation failed'), ...meta })
+          return ''
+        }
+        const disclaimerDigest = await crypto.subtle.digest('SHA-256', Buffer.from('event:DecreaseLiquidityEvent', 'utf-8'))
+        const disclaimer = Buffer.from(disclaimerDigest).toString('base64').slice(0, 8)
+
+        const data = simulateResult.value.logs.find((log) => log.startsWith(`Program data: ${disclaimer}`))?.slice(`Program data: `.length)
+        if (!data) {
+          onError?.()
+          toastSubject.next({ txError: new Error('DecreaseLiquidityEvent not found in logs'), ...meta })
+          return ''
+        }
+        const decreaseLiquidityEventData = DecreaseLiquidityEventLayout.decode(Buffer.from(data, 'base64'))
+
+        // console.log(
+        //   'debug decreaseLiquidityEventData',
+        //   Object.fromEntries(
+        //     Object.entries(decreaseLiquidityEventData).map(([key, value]) => [
+        //       key,
+        //       Array.isArray(value) ? value.map((v) => v.toString()) : value.toString()
+        //     ])
+        //   )
+        // )
+
+        if (simulateOnly) {
+          onFinally?.()
+          return decreaseLiquidityEventData
+        }
+
+        return execute()
           .then(({ txId, signedTx }) => {
             txStatusSubject.next({
               txId,
