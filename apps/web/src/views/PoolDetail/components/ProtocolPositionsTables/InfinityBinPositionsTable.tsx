@@ -10,7 +10,6 @@ import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
-import { useCakePrice } from 'hooks/useCakePrice'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { $path } from 'next-typesafe-url'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -21,7 +20,6 @@ import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityBinPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
-import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
@@ -52,7 +50,10 @@ const transformInfinityBinPositionToTableRow = (
     <FlexGap flexDirection="column" gap="4px">
       <FlexGap alignItems="center" gap="8px">
         <Text bold fontSize="16px">
-          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
+          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}{' '}
+          <Text as="span" color="textSubtle">
+            #{poolInfo.pid}
+          </Text>
         </Text>
         {position.isStaked && (
           <Tag variant="primary60" scale="sm">
@@ -60,9 +61,6 @@ const transformInfinityBinPositionToTableRow = (
           </Tag>
         )}
       </FlexGap>
-      <Text color="textSubtle" fontSize="12px">
-        Bin Position
-      </Text>
     </FlexGap>
   )
 
@@ -286,7 +284,7 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
   )
 
   const {
-    data: { rewardsAmount },
+    data: { rewardsAmount, rewardsUSD },
     isLoading: isLoadingRewards,
   } = useUnclaimedFarmRewardsUSDByPoolId({
     poolId: poolInfo.poolId,
@@ -382,18 +380,6 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     })
   }, [transformedPositions, filter, positions])
 
-  const [positionEarningAmounts] = usePositionEarningAmount()
-  const cakePrice = useCakePrice()
-
-  // TODO: Check if need to use rewardsAmount or other method
-  const totalEarningsUSD = useMemo(() => {
-    const totalEarnings = filteredPositions.reduce(
-      (sum, pos) => sum + (positionEarningAmounts[poolInfo.chainId]?.[poolInfo.poolId]?.[pos.tokenId] || 0),
-      0,
-    )
-    return new BN(totalEarnings ?? 0).times(cakePrice.toString()).toNumber()
-  }, [filteredPositions, positionEarningAmounts, poolInfo.chainId, poolInfo.poolId])
-
   if (isLoading) {
     return <div>{t('Loading...')}</div>
   }
@@ -412,13 +398,15 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
             ? filteredPositions.reduce((sum, pos) => sum + (pos.totalApr || 0), 0) / filteredPositions.length
             : 0
         }
-        totalEarnings={formatDollarAmount(totalEarningsUSD, 2, false)}
+        totalEarnings={formatDollarAmount(rewardsUSD, 2, false)}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>
           setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
         }
-        harvestAllButton={<InfinityPositionActions positionList={positions || []} showPositionFees={false} />}
+        harvestAllButton={
+          <InfinityPositionActions positionList={positions || []} showPositionFees={false} chainId={poolInfo.chainId} />
+        }
       />
     </>
   )

@@ -30,6 +30,7 @@ export const InfinityPositionActions = ({
   pos: pos_,
   positionList = [],
   showPositionFees = true,
+  chainId: chainId_,
 }: ActionPanelProps) => {
   const { t } = useTranslation()
   const [, setLatestTxReceipt] = useLatestTxReceipt()
@@ -37,7 +38,9 @@ export const InfinityPositionActions = ({
 
   const pos = pos_ ?? positionList?.[0] ?? {}
 
-  const { chainId, poolKey } = pos
+  const { chainId: chainIdPos, poolKey } = pos
+
+  const chainId = chainId_ ?? chainIdPos
 
   const {
     onHarvest,

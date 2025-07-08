@@ -8,8 +8,9 @@ import { nearestUsableTick, PositionMath, TickMath } from '@pancakeswap/v3-sdk'
 import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
 import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
+import dayjs from 'dayjs'
+import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward'
 import { usePoolById } from 'hooks/infinity/usePool'
-import { useCakePrice } from 'hooks/useCakePrice'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { $path } from 'next-typesafe-url'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -20,7 +21,6 @@ import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityCLPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
-import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
@@ -425,23 +425,32 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
     })
   }, [transformedPositions, filter])
 
-  const [positionEarningAmounts] = usePositionEarningAmount()
-  const cakePrice = useCakePrice()
+  // const [positionEarningAmounts] = usePositionEarningAmount()
+  // const cakePrice = useCakePrice()
 
-  const totalEarningsUSD = useMemo(() => {
-    const totalEarnings = filteredPositions.reduce(
-      (sum, pos) => sum + (positionEarningAmounts[poolInfo.chainId]?.[poolInfo.poolId]?.[pos.tokenId] || 0),
-      0,
-    )
-    return new BN(totalEarnings ?? 0).times(cakePrice.toString()).toNumber()
-  }, [filteredPositions, positionEarningAmounts, poolInfo.chainId, poolInfo.poolId])
+  // const totalEarningsUSD = useMemo(() => {
+  //   const totalEarnings = filteredPositions.reduce(
+  //     (sum, pos) => sum + (positionEarningAmounts[poolInfo.chainId]?.[poolInfo.poolId]?.[pos.tokenId] || 0),
+  //     0,
+  //   )
+  //   return new BN(totalEarnings ?? 0).times(cakePrice.toString()).toNumber()
+  // }, [filteredPositions, positionEarningAmounts, poolInfo.chainId, poolInfo.poolId])
+
+  const {
+    data: { rewardsUSD },
+  } = useUnclaimedFarmRewardsUSDByPoolId({
+    poolId: poolInfo.poolId,
+    chainId: poolInfo.chainId,
+    address: account,
+    timestamp: dayjs().startOf('hour').unix(),
+  })
 
   return (
     <>
       <PositionsTable
         poolInfo={poolInfo}
         totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
-        totalEarnings={formatDollarAmount(totalEarningsUSD, 2, false)}
+        totalEarnings={formatDollarAmount(rewardsUSD, 2, false)}
         totalApr={
           filteredPositions.length > 0
             ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
@@ -452,7 +461,13 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
         toggleInactiveOnly={() =>
           setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
         }
-        harvestAllButton={<InfinityPositionActions positionList={positionsInPool || []} showPositionFees={false} />}
+        harvestAllButton={
+          <InfinityPositionActions
+            positionList={positionsInPool || []}
+            showPositionFees={false}
+            chainId={poolInfo.chainId}
+          />
+        }
       />
 
       {/* handles APR fetching for each position */}

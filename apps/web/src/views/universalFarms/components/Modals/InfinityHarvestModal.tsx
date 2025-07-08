@@ -50,6 +50,7 @@ export type InfinityHarvestProps = {
   currency1: Currency
   positionList?: (InfinityCLPositionDetail | InfinityBinPositionDetail)[]
   showPositionFees?: boolean
+  chainId?: number
   onHarvest?: () => void
   onCollect?: () => void
 }
@@ -86,10 +87,13 @@ export const InfinityHarvestModal = ({
   onDismiss,
   onHarvest,
   onCollect,
+  chainId: chainId_,
 }: InfinityHarvestModalProps) => {
   const pos = pos_ ?? positionList?.[0]
 
-  const { protocol, chainId, poolKey } = pos ?? {}
+  const { protocol, chainId: chainIdPos, poolKey } = pos ?? {}
+
+  const chainId = chainId_ ?? chainIdPos
 
   const { t } = useTranslation()
   const { theme } = useTheme()
