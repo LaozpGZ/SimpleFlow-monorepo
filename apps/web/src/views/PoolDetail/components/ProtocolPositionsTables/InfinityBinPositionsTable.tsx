@@ -175,8 +175,22 @@ const transformInfinityBinPositionToTableRow = (
       : undefined
 
     if (minPrice && maxPrice) {
-      minPriceFormatted = formatPriceNumber(minPrice)
-      maxPriceFormatted = formatPriceNumber(maxPrice)
+      // Check for extreme values and format accordingly
+      const minPriceFloat = parseFloat(minPrice.toSignificant(6))
+      const maxPriceFloat = parseFloat(maxPrice.toSignificant(6))
+
+      // Show '0' for extremely low prices and '∞' for extremely high prices
+      if (minPriceFloat === 0 || !Number.isFinite(minPriceFloat)) {
+        minPriceFormatted = '0'
+      } else {
+        minPriceFormatted = formatPriceNumber(minPrice)
+      }
+
+      if (maxPriceFloat === Infinity || !Number.isFinite(maxPriceFloat)) {
+        maxPriceFormatted = '∞'
+      } else {
+        maxPriceFormatted = formatPriceNumber(maxPrice)
+      }
 
       // Calculate percentages if we have current price and position is not removed
       if (currentPrice && !removed) {

@@ -115,9 +115,9 @@ const transformInfinityCLPositionToTableRow = (
   const minPrice = getTickPrice(position.tickLower, poolInfo.token0, poolInfo.token1)
   const maxPrice = getTickPrice(position.tickUpper, poolInfo.token0, poolInfo.token1)
 
-  // Use utility function for price formatting
-  const minPriceFormatted = formatAmount(minPrice, { notation: 'standard' }) || '-'
-  const maxPriceFormatted = formatAmount(maxPrice, { notation: 'standard' }) || '-'
+  // Format prices with special handling for tick limits
+  const minPriceFormatted = isTickAtLimit.LOWER ? '0' : formatAmount(minPrice, { notation: 'standard' }) || '-'
+  const maxPriceFormatted = isTickAtLimit.UPPER ? '∞' : formatAmount(maxPrice, { notation: 'standard' }) || '-'
   let minPercentage = ''
   let maxPercentage = ''
   let rangePosition = 50
