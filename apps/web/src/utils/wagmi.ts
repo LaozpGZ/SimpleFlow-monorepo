@@ -80,49 +80,25 @@ export const cyberWalletConnector = isCyberWallet()
   : undefined
 
 export function createWagmiConfig() {
-  const isBrowser = typeof window !== 'undefined'
-
-  const connectors = isBrowser
-    ? [
-        metaMaskConnector,
-        injectedConnector,
-        safe(),
-        coinbaseConnector,
-        walletConnectConnector,
-        bloctoConnector,
-        trustConnector,
-        binanceWeb3WalletConnector(),
-        ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
-      ]
-    : []
-
   return createConfig({
     chains,
     ssr: true,
     syncConnectedChain: true,
     transports,
     ...CLIENT_CONFIG,
-    connectors,
+    connectors: [
+      metaMaskConnector,
+      injectedConnector,
+      safe(),
+      coinbaseConnector,
+      walletConnectConnector,
+      bloctoConnector,
+      // ledgerConnector,
+      trustConnector,
+      binanceWeb3WalletConnector(),
+      ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
+    ],
   })
-  // return createConfig({
-  //   chains,
-  //   ssr: true,
-  //   syncConnectedChain: true,
-  //   transports,
-  //   ...CLIENT_CONFIG,
-  //   connectors: [
-  //     metaMaskConnector,
-  //     injectedConnector,
-  //     safe(),
-  //     coinbaseConnector,
-  //     walletConnectConnector,
-  //     bloctoConnector,
-  //     // ledgerConnector,
-  //     trustConnector,
-  //     binanceWeb3WalletConnector(),
-  //     ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
-  //   ],
-  // })
 }
 
 export const createW3WWagmiConfig = () => {
