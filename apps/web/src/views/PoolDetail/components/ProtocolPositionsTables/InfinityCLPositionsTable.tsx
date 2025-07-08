@@ -13,6 +13,7 @@ import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward
 import { usePoolById } from 'hooks/infinity/usePool'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { $path } from 'next-typesafe-url'
+import router from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { InfinityCLPositionDetail } from 'state/farmsV4/state/accountPositions/type'
@@ -293,6 +294,7 @@ const transformInfinityCLPositionToTableRow = (
         })}
         disabled={removed}
         isIcon
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <MinusIcon />
       </ActionButton>
@@ -301,6 +303,7 @@ const transformInfinityCLPositionToTableRow = (
         href={getAddInfinityLiquidityURL({ poolId: poolInfo.poolId, chainId: poolInfo.chainId })}
         disabled={removed}
         isIcon
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <AddIcon />
       </ActionButton>
@@ -316,6 +319,9 @@ const transformInfinityCLPositionToTableRow = (
       apr: aprDisplay,
       priceRange,
       actions,
+      // Add raw data for onRowClick handler
+      protocol: Protocol.InfinityCLAMM,
+      tokenId: position.tokenId,
     },
     totalEarnings: earnings,
     liquidityUSD,
@@ -472,6 +478,15 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
             chainId={poolInfo.chainId}
           />
         }
+        // On row click, navigate to the position detail page
+        onRowClick={(position) => {
+          router.push(
+            $path({
+              route: '/liquidity/position/[[...positionId]]',
+              routeParams: { positionId: [position.protocol, new BN(position.tokenId).toNumber()] },
+            }),
+          )
+        }}
       />
 
       {/* handles APR fetching for each position */}

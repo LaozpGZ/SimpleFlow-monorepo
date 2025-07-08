@@ -12,6 +12,7 @@ import { usePoolById } from 'hooks/infinity/usePool'
 import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { $path } from 'next-typesafe-url'
+import router from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { InfinityBinPositionDetail, POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'
@@ -174,6 +175,7 @@ const transformInfinityBinPositionToTableRow = (
         })}
         disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}
         isIcon
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <MinusIcon />
       </ActionButton>
@@ -182,6 +184,7 @@ const transformInfinityBinPositionToTableRow = (
         href={getAddInfinityLiquidityURL({ poolId: poolInfo.poolId, chainId: poolInfo.chainId })}
         disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}
         isIcon
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <AddIcon />
       </ActionButton>
@@ -197,6 +200,9 @@ const transformInfinityBinPositionToTableRow = (
       apr: aprDisplay,
       priceRange,
       actions,
+      // Add raw data for onRowClick handler
+      protocol: Protocol.InfinityBIN,
+      poolId: position.poolId,
     },
     liquidityUSD,
     totalApr,
@@ -414,6 +420,15 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
         harvestAllButton={
           <InfinityPositionActions positionList={positions || []} showPositionFees={false} chainId={poolInfo.chainId} />
         }
+        // On row click, navigate to the position detail page
+        onRowClick={(position) => {
+          router.push(
+            $path({
+              route: '/liquidity/position/[[...positionId]]',
+              routeParams: { positionId: [position.protocol, position.poolId] },
+            }),
+          )
+        }}
       />
     </>
   )

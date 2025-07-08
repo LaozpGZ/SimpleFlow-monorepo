@@ -21,6 +21,7 @@ interface PositionsTableProps {
   toggleInactiveOnly?: () => void
   harvestAllButton?: React.ReactNode
   totalEarnings?: string
+  onRowClick?: (record: any) => void
 }
 
 export const PositionsTable: React.FC<PositionsTableProps> = ({
@@ -32,6 +33,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
   harvestAllButton,
   totalEarnings,
   data,
+  onRowClick,
 }) => {
   const { t } = useTranslation()
 
@@ -122,6 +124,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
           },
         ]}
         data={data || []}
+        onRowClick={onRowClick}
       />
     </LightCard>
   )

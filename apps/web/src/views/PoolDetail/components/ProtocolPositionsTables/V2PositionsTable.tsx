@@ -6,6 +6,7 @@ import { CurrencyLogo, NextLinkFromReactRouter } from '@pancakeswap/widgets-inte
 import { ToastDescriptionWithTx } from 'components/Toast'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+import router from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions/type'
@@ -142,19 +143,19 @@ const V2PositionWithApr: React.FC<{
     const actions = (
       <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
         <NextLinkFromReactRouter to={removeLiquidityUrl}>
-          <ActionButton isIcon>
+          <ActionButton isIcon onClick={(e: React.MouseEvent) => e.stopPropagation()}>
             <MinusIcon />
           </ActionButton>
         </NextLinkFromReactRouter>
         <NextLinkFromReactRouter to={addLiquidityUrl}>
-          <ActionButton isIcon>
+          <ActionButton isIcon onClick={(e: React.MouseEvent) => e.stopPropagation()}>
             <AddIcon />
           </ActionButton>
         </NextLinkFromReactRouter>
 
         {poolInfo.protocol === 'v2' && (
           <NextLinkFromReactRouter to={migrateUrl}>
-            <ActionButton>{t('Migrate')}</ActionButton>
+            <ActionButton onClick={(e: React.MouseEvent) => e.stopPropagation()}>{t('Migrate')}</ActionButton>
           </NextLinkFromReactRouter>
         )}
       </FlexGap>
@@ -181,6 +182,14 @@ const V2PositionWithApr: React.FC<{
       totalEarnings={formatDollarAmount(earningsBusd, 2, false)}
       data={[transformedPosition.tableRow]}
       harvestAllButton={harvestAllButton}
+      // On row click, navigate to the appropriate V2/Stable page
+      onRowClick={() => {
+        const token0Address = poolInfo.token0?.wrapped.address
+        const token1Address = poolInfo.token1?.wrapped.address
+        const baseUrl = poolInfo.protocol === 'v2' ? '/v2' : '/stable'
+        const detailUrl = `${baseUrl}/pair/${token0Address}/${token1Address}`
+        router.push(detailUrl)
+      }}
     />
   )
 }

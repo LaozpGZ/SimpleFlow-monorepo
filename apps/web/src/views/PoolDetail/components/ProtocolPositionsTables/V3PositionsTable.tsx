@@ -8,6 +8,7 @@ import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber } from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
+import router from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
@@ -368,7 +369,13 @@ const transformV3PositionToTableRow = (
 
   const actions = (
     <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
-      <ActionButton as="a" href={`/remove/${position.tokenId.toString()}`} disabled={removed} isIcon>
+      <ActionButton
+        as="a"
+        href={`/remove/${position.tokenId.toString()}`}
+        disabled={removed}
+        isIcon
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
+      >
         <MinusIcon />
       </ActionButton>
       <ActionButton
@@ -376,6 +383,7 @@ const transformV3PositionToTableRow = (
         href={`/add/${currencyKey(poolInfo.token0)}/${currencyKey(poolInfo.token1)}/${poolInfo.feeTier.toString()}`}
         disabled={removed}
         isIcon
+        onClick={(e: React.MouseEvent) => e.stopPropagation()}
       >
         <AddIcon />
       </ActionButton>
@@ -407,8 +415,12 @@ const transformV3PositionToTableRow = (
           />
         }
       />
-      {position.isStaked && <ActionButton>{t('Harvest')}</ActionButton>}
-      {!position.isStaked && !removed && !outOfRange && <ActionButton>{t('Stake')}</ActionButton>}
+      {position.isStaked && (
+        <ActionButton onClick={(e: React.MouseEvent) => e.stopPropagation()}>{t('Harvest')}</ActionButton>
+      )}
+      {!position.isStaked && !removed && !outOfRange && (
+        <ActionButton onClick={(e: React.MouseEvent) => e.stopPropagation()}>{t('Stake')}</ActionButton>
+      )}
     </FlexGap>
   )
 
@@ -421,6 +433,9 @@ const transformV3PositionToTableRow = (
       apr: aprDisplay,
       priceRange,
       actions,
+      // Add raw data for onRowClick handler
+      protocol: position.protocol,
+      tokenId: position.tokenId,
     },
     totalEarnings: earnings,
     liquidityUSD,
@@ -611,6 +626,10 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
             {loading ? t('Harvesting...') : t('Harvest All')}
           </PrimaryOutlineButton>
         }
+        // On row click, navigate to the position detail page
+        onRowClick={(position) => {
+          router.push(`/liquidity/${position.tokenId}`)
+        }}
       />
     </>
   )
