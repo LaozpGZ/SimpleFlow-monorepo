@@ -17,7 +17,7 @@ export function TokenAmountSection({ tokenAmount }: { tokenAmount?: CurrencyAmou
   return (
     <>
       <Box position="relative" mb="16px">
-        <CurrencyLogo currency={tokenAmount.currency} showChainLogo size="80px" />
+        <CurrencyLogo currency={tokenAmount.currency.wrapped} showChainLogo size="80px" />
       </Box>
       <Text fontSize="32px" bold>
         {parseFloat(amount).toLocaleString(undefined, {
