@@ -3768,7 +3768,7 @@
   "Estimated APR is calculated by the Multiplier Method. Click the ‘M’ icon to switch to the Delta Method or": "Szacowana APR jest obliczana metodą mnożnikową. Kliknij ikonę „M”, aby przełączyć się na metodę delta lub",
   "Switch": "Przełącz",
   "APR Calculation Method": "Metoda obliczania APR",
-  "Calculations are an estimate and only for reference.": "Calculations are an estimate and only for reference.",
+  "Calculations are an estimate and only for reference.": "Obliczenia mają charakter szacunkowy i służą wyłącznie jako odniesienie.",
   "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.": "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.",
   "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.": "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.",
   "Two methods for calculating estimated APR are available, based on historical trade fees and emissions. Only positions in range earn yield. Past performance is not indicative of future results.": "Two methods for calculating estimated APR are available, based on historical trade fees and emissions. Only positions in range earn yield. Past performance is not indicative of future results.",
