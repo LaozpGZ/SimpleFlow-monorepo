@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { NATIVE } from '@pancakeswap/sdk'
+import { Currency, NATIVE } from '@pancakeswap/sdk'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { nearestUsableTick, PositionMath, TickMath } from '@pancakeswap/v3-sdk'
@@ -7,7 +7,6 @@ import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
-import { $path } from 'next-typesafe-url'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
@@ -355,33 +354,19 @@ const transformV3PositionToTableRow = (
     />
   )
 
+  const currencyKey = (currency: Currency) => {
+    if (currency.isNative) return NATIVE[poolInfo.chainId].symbol
+    return currency.address
+  }
+
   const actions = (
     <FlexGap gap="8px" alignItems="center">
-      <ActionButton
-        as="a"
-        href={$path({
-          route: '/remove/[[...currency]]',
-          routeParams: {
-            currency: [position.tokenId.toString()],
-          },
-        })}
-        disabled={removed}
-        isIcon
-      >
+      <ActionButton as="a" href={`/remove/${position.tokenId.toString()}`} disabled={removed} isIcon>
         <MinusIcon />
       </ActionButton>
       <ActionButton
         as="a"
-        href={$path({
-          route: '/add/[[...currency]]',
-          routeParams: {
-            currency: [
-              poolInfo.token0.isNative ? NATIVE[poolInfo.chainId].symbol : poolInfo.token0.wrapped.address,
-              poolInfo.token1.isNative ? NATIVE[poolInfo.chainId].symbol : poolInfo.token1.wrapped.address,
-              poolInfo.feeTier.toString(),
-            ],
-          },
-        })}
+        href={`/add/${currencyKey(poolInfo.token0)}/${currencyKey(poolInfo.token1)}/${poolInfo.feeTier.toString()}`}
         disabled={removed}
         isIcon
       >
