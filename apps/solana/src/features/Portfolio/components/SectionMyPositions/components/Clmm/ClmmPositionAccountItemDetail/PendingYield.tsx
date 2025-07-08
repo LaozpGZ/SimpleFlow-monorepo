@@ -31,6 +31,8 @@ export default function PendingYield({
 }: PendingYieldProps) {
   const { t } = useTranslation()
   const rewardBreakdownMode = useAppStore((s) => s.rewardBreakdownMode)
+  const { isTablet } = useResponsive()
+  const column = 'repeat(auto-fit, minmax(min(100%, 155px), 1fr))'
   return (
     <Flex flex={1} justify="space-around" w="full" fontSize="sm" flexDirection="column" gap={3} p={[4, 0]}>
       <HStack justifyContent="space-between">
@@ -72,7 +74,7 @@ export default function PendingYield({
       </HStack>
 
       {rewardBreakdownMode === 'Aggr' ? (
-        <Flex display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
+        <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
           {rewardInfos.map((r, index) => (
             <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent="start">
               <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
@@ -100,7 +102,7 @@ export default function PendingYield({
       ) : (
         <>
           <Text>Trade Fees</Text>
-          <Flex display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
+          <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
             <Flex key={breakdownRewardInfo.fee.A.mint.address} alignItems="center" gap={1} justifyContent="start">
               <TokenAvatar key={`pool-reward-${breakdownRewardInfo.fee.A.mint.address}`} size="sm" token={breakdownRewardInfo.fee.A.mint} />
               <Text color={colors.textPrimary}>
@@ -145,7 +147,7 @@ export default function PendingYield({
             </Flex>
           </Flex>
           <Text>Farm Rewards</Text>
-          <Flex display="grid" gridTemplateColumns="repeat(2, 1fr)" columnGap={2} rowGap={2}>
+          <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
             {breakdownRewardInfo.rewards.map((r, index) => (
               <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent="start">
                 <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
