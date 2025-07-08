@@ -2,10 +2,10 @@ import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Flex, FlexGap, MinusIcon, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { CurrencyLogo, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+import { useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
-import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions/type'
 import { StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
@@ -21,240 +21,197 @@ interface V2PositionsTableProps {
   poolInfo: V2PoolInfo | StablePoolInfo
 }
 
-// Helper function to transform position data for table - NO HOOKS ALLOWED
-const transformV2PositionToTableRow = (
-  position: V2LPDetail | StableLPDetail,
-  poolInfo: V2PoolInfo | StablePoolInfo,
-  aprData: { lpApr: number; cakeApr: { value: number } | null; merklApr: number },
-  t: (key: string) => string,
-) => {
-  const liquidityUSD = 0 // TODO: Calculate actual liquidity USD
-
-  const tokenInfo = (
-    <FlexGap flexDirection="column" gap="4px">
-      <Text bold fontSize="16px">
-        {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
-      </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {poolInfo.protocol === 'v2' ? 'V2 LP' : 'Stable LP'}
-      </Text>
-    </FlexGap>
-  )
-
-  const liquidity = (
-    <Flex flexDirection="column" alignItems="flex-start">
-      <Tooltips
-        content={
-          <FlexGap flexDirection="column" alignItems="flex-start" gap="8px">
-            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
-              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
-                <FlexGap alignItems="center" gap="8px">
-                  <CurrencyLogo currency={poolInfo.token0} size="16px" mb="-3px" />
-                  <Text fontSize="14px" bold>
-                    {poolInfo.token0?.symbol}
-                  </Text>
-                </FlexGap>
-                <Text fontSize="14px" bold>
-                  --
-                </Text>
-              </FlexGap>
-              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
-                $0.00
-              </Text>
-            </FlexGap>
-            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
-              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
-                <FlexGap alignItems="center" gap="8px">
-                  <CurrencyLogo currency={poolInfo.token1} size="16px" mb="-3px" />
-                  <Text fontSize="14px" bold>
-                    {poolInfo.token1?.symbol}
-                  </Text>
-                </FlexGap>
-                <Text fontSize="14px" bold>
-                  --
-                </Text>
-              </FlexGap>
-              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
-                $0.00
-              </Text>
-            </FlexGap>
-          </FlexGap>
-        }
-      >
-        <Text bold fontSize="16px" style={{ cursor: 'default' }}>
-          {formatDollarAmount(liquidityUSD)}
-        </Text>
-      </Tooltips>
-      <Text color="textSubtle" fontSize="12px">
-        {position.nativeBalance.toSignificant(6)} LP
-      </Text>
-    </Flex>
-  )
-
-  const earnings = (
-    <Flex flexDirection="column" alignItems="flex-start">
-      <Text bold fontSize="16px">
-        <V2EarningsCell pool={poolInfo} />
-      </Text>
-    </Flex>
-  )
-
-  const totalApr = (aprData.lpApr || 0) + Number(aprData.cakeApr?.value || 0) + (aprData.merklApr || 0)
-  const aprDisplay = (
-    <Flex flexDirection="column" alignItems="flex-start">
-      <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
-        {displayApr(totalApr)}
-      </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {t('Total APR')}
-      </Text>
-    </Flex>
-  )
-
-  const actions = (
-    <FlexGap gap="8px" alignItems="center">
-      <ActionButton isIcon>
-        <AddIcon />
-      </ActionButton>
-      <ActionButton isIcon>
-        <MinusIcon />
-      </ActionButton>
-      {poolInfo.protocol === 'v2' && <ActionButton>{t('Migrate')}</ActionButton>}
-    </FlexGap>
-  )
-
-  return {
-    positionId: `${poolInfo.chainId}-${poolInfo.lpAddress}`,
-    tableRow: {
-      tokenInfo,
-      liquidity,
-      earnings,
-      apr: aprDisplay,
-      actions,
-    },
-    liquidityUSD,
-    totalApr,
-  }
-}
-
-// Individual position row component that calls the APR hook
-const V2PositionRow: React.FC<{
-  position: V2LPDetail | StableLPDetail
-  poolInfo: V2PoolInfo | StablePoolInfo
-  onRowDataReady: (data: any) => void
-}> = ({ position, poolInfo, onRowDataReady }) => {
-  const { t } = useTranslation()
-
-  // This is where the magic happens - individual APR hook call for each position
-  const aprData = useV2PositionApr(poolInfo, position)
-
-  // Transform the data with the fetched APR
-  const transformedData = useMemo(() => {
-    const convertedAprData = {
-      lpApr: aprData.lpApr || 0,
-      cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
-      merklApr: aprData.merklApr || 0,
-    }
-
-    return transformV2PositionToTableRow(position, poolInfo, convertedAprData, t)
-  }, [position, poolInfo, aprData, t])
-
-  // Pass data back to parent whenever it changes
-  useEffect(() => {
-    onRowDataReady(transformedData)
-  }, [transformedData, onRowDataReady])
-
-  return null // This component doesn't render anything
-}
-
 export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
   const [filter, setFilter] = useState(PositionFilter.All)
-  const [transformedPositions, setTransformedPositions] = useState<any[]>([])
 
-  // Only fetch V2/Stable data
   const { data: v2OrStableData, isLoading } = useAccountPositionDetailByPool<Protocol.V2 | Protocol.STABLE>(
     chainId,
     account,
     poolInfo,
   )
 
-  // Handle data from individual position rows
-  const handleRowDataReady = useCallback((data: any) => {
-    setTransformedPositions((prev) => {
-      const existing = prev.find((p) => p.positionId === data.positionId)
-      if (existing) {
-        return prev.map((p) => (p.positionId === data.positionId ? data : p))
-      }
-      return [...prev, data]
-    })
-  }, [])
+  // Get USD prices for both tokens
+  const { data: token0Price } = useCurrencyUsdPrice(poolInfo.token0?.wrapped, {
+    enabled: Boolean(poolInfo.token0),
+  })
+  const { data: token1Price } = useCurrencyUsdPrice(poolInfo.token1?.wrapped, {
+    enabled: Boolean(poolInfo.token1),
+  })
 
-  // Reset transformed positions when positions change
-  useEffect(() => {
-    setTransformedPositions([])
-  }, [v2OrStableData])
+  // Get APR data for the single position
+  const aprData = useV2PositionApr(poolInfo, v2OrStableData!)
 
-  // Create individual position row components that fetch APR data
-  const positionRowComponents = useMemo(() => {
-    if (!v2OrStableData) return []
+  const transformedPosition = useMemo(() => {
+    if (!v2OrStableData) return null
 
-    return [
-      <V2PositionRow
-        key={`${poolInfo.chainId}-${poolInfo.lpAddress}`}
-        position={v2OrStableData}
-        poolInfo={poolInfo}
-        onRowDataReady={handleRowDataReady}
-      />,
-    ]
-  }, [v2OrStableData, poolInfo, handleRowDataReady])
+    const amount0 = v2OrStableData.nativeDeposited0.add(v2OrStableData.farmingDeposited0)
+    const amount1 = v2OrStableData.nativeDeposited1.add(v2OrStableData.farmingDeposited1)
+
+    // Calculate USD values for individual tokens
+    const amount0Usd = Number(amount0.toExact()) * (token0Price ?? 0)
+    const amount1Usd = Number(amount1.toExact()) * (token1Price ?? 0)
+    const liquidityUSD = amount0Usd + amount1Usd
+
+    const tokenInfo = (
+      <FlexGap flexDirection="column" gap="4px">
+        <Text bold fontSize="16px">
+          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
+        </Text>
+        <Text color="textSubtle" fontSize="12px">
+          {poolInfo.protocol === 'v2' ? 'V2 LP' : 'Stable LP'}
+        </Text>
+      </FlexGap>
+    )
+
+    const liquidity = (
+      <Flex flexDirection="column" alignItems="flex-start">
+        <Tooltips
+          content={
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="8px">
+              <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+                <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                  <FlexGap alignItems="center" gap="8px">
+                    <CurrencyLogo currency={poolInfo.token0} size="16px" mb="-3px" />
+                    <Text fontSize="14px" bold>
+                      {poolInfo.token0?.symbol}
+                    </Text>
+                  </FlexGap>
+                  <Text fontSize="14px" bold>
+                    {amount0.toSignificant(6)}
+                  </Text>
+                </FlexGap>
+                <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                  {formatDollarAmount(amount0Usd)}
+                </Text>
+              </FlexGap>
+              <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+                <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                  <FlexGap alignItems="center" gap="8px">
+                    <CurrencyLogo currency={poolInfo.token1} size="16px" mb="-3px" />
+                    <Text fontSize="14px" bold>
+                      {poolInfo.token1?.symbol}
+                    </Text>
+                  </FlexGap>
+                  <Text fontSize="14px" bold>
+                    {amount1.toSignificant(6)}
+                  </Text>
+                </FlexGap>
+                <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                  {formatDollarAmount(amount1Usd)}
+                </Text>
+              </FlexGap>
+            </FlexGap>
+          }
+        >
+          <Text bold fontSize="16px" style={{ cursor: 'default' }}>
+            {formatDollarAmount(liquidityUSD)}
+          </Text>
+        </Tooltips>
+      </Flex>
+    )
+
+    const earnings = (
+      <Flex flexDirection="column" alignItems="flex-start">
+        <Text bold fontSize="16px">
+          <V2EarningsCell pool={poolInfo} />
+        </Text>
+      </Flex>
+    )
+
+    const totalApr = (aprData.lpApr || 0) + Number(aprData.cakeApr?.value || 0) + (aprData.merklApr || 0)
+    const aprDisplay = (
+      <Flex flexDirection="column" alignItems="flex-start">
+        <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
+          {displayApr(totalApr)}
+        </Text>
+      </Flex>
+    )
+
+    // Construct URLs for V2/Stable actions
+    const token0Address = poolInfo.token0?.wrapped.address
+    const token1Address = poolInfo.token1?.wrapped.address
+    const baseUrl = poolInfo.protocol === 'v2' ? '/v2' : '/stable'
+
+    const addLiquidityUrl = `${baseUrl}/add/${token0Address}/${token1Address}?increase=1`
+    const removeLiquidityUrl = `${baseUrl}/remove/${token0Address}/${token1Address}`
+    const migrateUrl = `/v2/migrate/${poolInfo.lpAddress}`
+
+    const actions = (
+      <FlexGap gap="8px" alignItems="center">
+        <NextLinkFromReactRouter to={addLiquidityUrl}>
+          <ActionButton isIcon>
+            <AddIcon />
+          </ActionButton>
+        </NextLinkFromReactRouter>
+        <NextLinkFromReactRouter to={removeLiquidityUrl}>
+          <ActionButton isIcon>
+            <MinusIcon />
+          </ActionButton>
+        </NextLinkFromReactRouter>
+        {poolInfo.protocol === 'v2' && (
+          <NextLinkFromReactRouter to={migrateUrl}>
+            <ActionButton>{t('Migrate')}</ActionButton>
+          </NextLinkFromReactRouter>
+        )}
+      </FlexGap>
+    )
+
+    return {
+      tableRow: {
+        tokenInfo,
+        liquidity,
+        earnings,
+        apr: aprDisplay,
+        actions,
+      },
+      liquidityUSD,
+      totalApr,
+    }
+  }, [v2OrStableData, poolInfo, aprData, t, token0Price, token1Price])
 
   const filteredPositions = useMemo(() => {
-    if (!transformedPositions) return []
+    if (!transformedPosition) return []
 
-    return transformedPositions.filter((position) => {
-      const { totalApr, liquidityUSD } = position
-      const hasLiquidity = liquidityUSD > 0
+    const { totalApr, liquidityUSD } = transformedPosition
+    const hasLiquidity = liquidityUSD > 0
 
-      switch (filter) {
-        case PositionFilter.Active:
-          return hasLiquidity && totalApr > 0
-        case PositionFilter.Inactive:
-          return hasLiquidity && totalApr === 0
-        case PositionFilter.Closed:
-          return !hasLiquidity
-        default:
-          return true
-      }
-    })
-  }, [transformedPositions, filter])
+    switch (filter) {
+      case PositionFilter.Active:
+        return hasLiquidity && totalApr > 0 ? [transformedPosition] : []
+      case PositionFilter.Inactive:
+        return hasLiquidity && totalApr === 0 ? [transformedPosition] : []
+      case PositionFilter.Closed:
+        return !hasLiquidity ? [transformedPosition] : []
+      default:
+        return [transformedPosition]
+    }
+  }, [transformedPosition, filter])
 
   if (isLoading) {
     return <div>{t('Loading...')}</div>
   }
 
-  return (
-    <>
-      {/* Hidden components that handle APR fetching for each position */}
-      {positionRowComponents}
+  if (!v2OrStableData) {
+    return <div>{t('No positions found')}</div>
+  }
 
-      {/* The actual table component */}
-      <PositionsTable
-        poolInfo={poolInfo}
-        totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
-        totalApr={
-          filteredPositions.length > 0
-            ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
-            : 0
-        }
-        data={filteredPositions.map((position) => position.tableRow)}
-        showInactiveOnly={filter === PositionFilter.Inactive}
-        toggleInactiveOnly={() =>
-          setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
-        }
-      />
-    </>
+  return (
+    <PositionsTable
+      poolInfo={poolInfo}
+      totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
+      totalApr={
+        filteredPositions.length > 0
+          ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
+          : 0
+      }
+      data={filteredPositions.map((position) => position.tableRow)}
+      showInactiveOnly={filter === PositionFilter.Inactive}
+      toggleInactiveOnly={() =>
+        setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
+      }
+    />
   )
 }
