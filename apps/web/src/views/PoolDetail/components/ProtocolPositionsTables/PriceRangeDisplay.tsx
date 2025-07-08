@@ -10,22 +10,24 @@ const PriceRangeContainer = styled.div`
   align-items: center;
 `
 
-const PriceRangeBar = styled.div<{ outOfRange: boolean }>`
+const PriceRangeBar = styled.div<{ outOfRange: boolean; disabled?: boolean }>`
   width: 100%;
   height: 6px;
-  background: ${({ theme, outOfRange }) => (outOfRange ? theme.colors.failure : theme.colors.success)};
+  background: ${({ theme, outOfRange, disabled }) =>
+    disabled ? theme.colors.disabled : outOfRange ? theme.colors.failure : theme.colors.success};
   border-radius: 2px;
   position: relative;
 `
 
-const CurrentPriceLine = styled.div<{ position: number; outOfRange: boolean }>`
+const CurrentPriceLine = styled.div<{ position: number; outOfRange: boolean; disabled?: boolean }>`
   position: absolute;
   left: ${({ position }) => Math.max(0, Math.min(100, position))}%;
   top: 2px;
   transform: translateX(-50%);
   width: 4px;
   height: 16px;
-  background: ${({ theme, outOfRange }) => (outOfRange ? theme.colors.failure : theme.colors.success)};
+  background: ${({ theme, outOfRange, disabled }) =>
+    disabled ? theme.colors.disabled : outOfRange ? theme.colors.failure : theme.colors.success};
   border-radius: 1px;
   z-index: 1;
 `
@@ -55,22 +57,9 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
   rangePosition = 50,
   outOfRange = false,
   removed = false,
-  showPercentages = false,
+  showPercentages = true,
 }) => {
   const { t } = useTranslation()
-
-  if (removed) {
-    return (
-      <Flex flexDirection="column" alignItems="flex-start">
-        <Text fontSize="16px" bold color="textSubtle">
-          --
-        </Text>
-        <Text color="textSubtle" fontSize="12px">
-          {t('Closed')}
-        </Text>
-      </Flex>
-    )
-  }
 
   return (
     <Flex flexDirection="column" alignItems="flex-start" width="100%">
@@ -90,7 +79,7 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
       </FlexGap>
 
       {/* Percentage display below prices */}
-      {showPercentages && minPercentage && maxPercentage && (
+      {showPercentages && (
         <>
           <FlexGap alignItems="center" justifyContent="space-between" width="100%" maxWidth="190px" mb="4px">
             <PercentageText>{minPercentage}</PercentageText>
@@ -100,8 +89,8 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
           {/* Price range bar */}
           <Flex width="100%" maxWidth="190px" justifyContent="center" mb="4px">
             <PriceRangeContainer>
-              <PriceRangeBar outOfRange={outOfRange} />
-              <CurrentPriceLine position={rangePosition} outOfRange={outOfRange} />
+              <PriceRangeBar outOfRange={outOfRange} disabled={removed} />
+              <CurrentPriceLine position={rangePosition} outOfRange={outOfRange} disabled={removed} />
             </PriceRangeContainer>
           </Flex>
         </>

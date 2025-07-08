@@ -168,92 +168,90 @@ const transformV3PositionToTableRow = (
   let rangePosition = 50
   let showPercentages = false
 
-  if (!removed) {
-    // Primary method: Use tick-based price calculation
-    const minPrice = tickToPrice(position.tickLower)
-    const maxPrice = tickToPrice(position.tickUpper)
+  // Primary method: Use tick-based price calculation
+  const minPrice = tickToPrice(position.tickLower)
+  const maxPrice = tickToPrice(position.tickUpper)
 
-    minPriceFormatted = formatPriceNumber(minPrice)
-    maxPriceFormatted = formatPriceNumber(maxPrice)
+  minPriceFormatted = formatPriceNumber(minPrice)
+  maxPriceFormatted = formatPriceNumber(maxPrice)
 
-    // If position is full range, set special handling
-    if (isTickAtLimit.LOWER && isTickAtLimit.UPPER) {
-      rangePosition = 50
-      showPercentages = true
-      minPercentage = '0%'
-      maxPercentage = '100%'
-    } else if (pool?.token0Price && position.tickLower > TickMath.MIN_TICK && position.tickUpper < TickMath.MAX_TICK) {
-      // Only calculate percentages if prices are not at limits and pool exists
-      try {
-        const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
+  // If position is full range, set special handling
+  if (isTickAtLimit.LOWER && isTickAtLimit.UPPER) {
+    rangePosition = 50
+    showPercentages = true
+    minPercentage = '0%'
+    maxPercentage = '100%'
+  } else if (pool?.token0Price && position.tickLower > TickMath.MIN_TICK && position.tickUpper < TickMath.MAX_TICK) {
+    // Only calculate percentages if prices are not at limits and pool exists
+    try {
+      const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
+
+      if (
+        currentPrice > 0 &&
+        maxPrice > minPrice &&
+        Number.isFinite(minPrice) &&
+        Number.isFinite(maxPrice) &&
+        Number.isFinite(currentPrice)
+      ) {
+        const minPercent = ((minPrice - currentPrice) / currentPrice) * 100
+        const maxPercent = ((maxPrice - currentPrice) / currentPrice) * 100
 
         if (
-          currentPrice > 0 &&
-          maxPrice > minPrice &&
-          Number.isFinite(minPrice) &&
-          Number.isFinite(maxPrice) &&
-          Number.isFinite(currentPrice)
+          // Only show percentages if they're reasonable finite values
+          Number.isFinite(minPercent) &&
+          Number.isFinite(maxPercent) &&
+          Math.abs(minPercent) < 10000 &&
+          Math.abs(maxPercent) < 10000
         ) {
-          const minPercent = ((minPrice - currentPrice) / currentPrice) * 100
-          const maxPercent = ((maxPrice - currentPrice) / currentPrice) * 100
-
-          if (
-            // Only show percentages if they're reasonable finite values
-            Number.isFinite(minPercent) &&
-            Number.isFinite(maxPercent) &&
-            Math.abs(minPercent) < 10000 &&
-            Math.abs(maxPercent) < 10000
-          ) {
-            minPercentage = formatPercentage(minPercent)
-            maxPercentage = formatPercentage(maxPercent)
-            rangePosition = Math.max(0, Math.min(100, ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100))
-            showPercentages = true
-          }
+          minPercentage = formatPercentage(minPercent)
+          maxPercentage = formatPercentage(maxPercent)
+          rangePosition = Math.max(0, Math.min(100, ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100))
+          showPercentages = true
         }
-      } catch (error) {
-        // If any calculation fails, just show the price range without percentages
-        console.warn('Price calculation error:', error)
       }
+    } catch (error) {
+      // If any calculation fails, just show the price range without percentages
+      console.warn('Price calculation error:', error)
     }
+  }
 
-    // Fallback: Use positionData prices if available and tick-based calculation seems unreliable
-    if (positionData && !showPercentages) {
-      try {
-        const positionMinPrice = parseFloat(positionData.token0PriceLower.toSignificant(6))
-        const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(6))
+  // Fallback: Use positionData prices if available and tick-based calculation seems unreliable
+  if (positionData && !showPercentages) {
+    try {
+      const positionMinPrice = parseFloat(positionData.token0PriceLower.toSignificant(6))
+      const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(6))
 
-        if (Number.isFinite(positionMinPrice) && Number.isFinite(positionMaxPrice)) {
-          minPriceFormatted = formatPriceNumber(positionMinPrice)
-          maxPriceFormatted = formatPriceNumber(positionMaxPrice)
+      if (Number.isFinite(positionMinPrice) && Number.isFinite(positionMaxPrice)) {
+        minPriceFormatted = formatPriceNumber(positionMinPrice)
+        maxPriceFormatted = formatPriceNumber(positionMaxPrice)
 
-          // Try percentage calculation with positionData prices
-          if (pool?.token0Price && positionMaxPrice > positionMinPrice) {
-            const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
+        // Try percentage calculation with positionData prices
+        if (pool?.token0Price && positionMaxPrice > positionMinPrice) {
+          const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
 
-            if (currentPrice > 0 && Number.isFinite(currentPrice)) {
-              const minPercent = ((positionMinPrice - currentPrice) / currentPrice) * 100
-              const maxPercent = ((positionMaxPrice - currentPrice) / currentPrice) * 100
+          if (currentPrice > 0 && Number.isFinite(currentPrice)) {
+            const minPercent = ((positionMinPrice - currentPrice) / currentPrice) * 100
+            const maxPercent = ((positionMaxPrice - currentPrice) / currentPrice) * 100
 
-              if (
-                Number.isFinite(minPercent) &&
-                Number.isFinite(maxPercent) &&
-                Math.abs(minPercent) < 10000 &&
-                Math.abs(maxPercent) < 10000
-              ) {
-                minPercentage = formatPercentage(minPercent)
-                maxPercentage = formatPercentage(maxPercent)
-                rangePosition = Math.max(
-                  0,
-                  Math.min(100, ((currentPrice - positionMinPrice) / (positionMaxPrice - positionMinPrice)) * 100),
-                )
-                showPercentages = true
-              }
+            if (
+              Number.isFinite(minPercent) &&
+              Number.isFinite(maxPercent) &&
+              Math.abs(minPercent) < 10000 &&
+              Math.abs(maxPercent) < 10000
+            ) {
+              minPercentage = formatPercentage(minPercent)
+              maxPercentage = formatPercentage(maxPercent)
+              rangePosition = Math.max(
+                0,
+                Math.min(100, ((currentPrice - positionMinPrice) / (positionMaxPrice - positionMinPrice)) * 100),
+              )
+              showPercentages = true
             }
           }
         }
-      } catch (error) {
-        console.warn('Position data price calculation error:', error)
       }
+    } catch (error) {
+      console.warn('Position data price calculation error:', error)
     }
   }
 
@@ -269,6 +267,11 @@ const transformV3PositionToTableRow = (
         {position.isStaked && (
           <Tag variant="primary60" scale="sm">
             {t('Farming')}
+          </Tag>
+        )}
+        {removed && (
+          <Tag variant="tertiary" scale="sm" px="8px">
+            {t('Closed')}
           </Tag>
         )}
       </FlexGap>
