@@ -106,7 +106,10 @@ export const SendGiftView = ({
           </Card>
           <Card>
             <Box p="8px">
-              <CurrencyAmountGiftDisplay currencyAmount={nativeAmount} usdValue={0} />
+              <CurrencyAmountGiftDisplay
+                currencyAmount={nativeAmount}
+                usdValue={parseFloat(nativeAmount.toExact()) * price}
+              />
             </Box>
           </Card>
         </FlexGap>
