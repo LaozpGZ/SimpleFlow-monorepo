@@ -1,25 +1,12 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, CardBody, Flex, FlexGap, TableView, Text, Toggle } from '@pancakeswap/uikit'
+import { Box, CardBody, Flex, FlexGap, TableView, Text, Toggle } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { LightCard, LightGreyCard } from '@pancakeswap/widgets-internal'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
-
-const HarvestButton = styled(Button)`
-  border: 2px solid ${({ theme }) => theme.colors.primary};
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.primary60};
-  font-weight: 600;
-  font-size: 16px;
-  padding: 8px 16px;
-  border-radius: 16px;
-  &:hover {
-    opacity: 0.8;
-  }
-`
 
 const StyledCardBody = styled(CardBody)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
@@ -32,7 +19,6 @@ interface PositionsTableProps {
   totalApr: number
   showInactiveOnly: boolean
   toggleInactiveOnly: () => void
-  handleHarvestAll?: () => void // TODO: Remove this prop. replaced by harvestAllButton
   harvestAllButton?: React.ReactNode
   totalEarnings?: string
 }
@@ -44,7 +30,6 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
   showInactiveOnly,
   toggleInactiveOnly,
   harvestAllButton,
-  handleHarvestAll,
   totalEarnings,
   data,
 }) => {
@@ -82,10 +67,10 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
                 </Text>
               </Box>
               {/* TODO: Update disable logic */}
-              <HarvestButton variant="tertiary" onClick={handleHarvestAll} disabled>
+              {/* <HarvestButton variant="tertiary" onClick={handleHarvestAll} disabled>
                 {t('Harvest')}
-              </HarvestButton>
-              {/* {harvestAllButton} */}
+              </HarvestButton> */}
+              {harvestAllButton}
             </FlexGap>
           </LightGreyCard>
         </Flex>

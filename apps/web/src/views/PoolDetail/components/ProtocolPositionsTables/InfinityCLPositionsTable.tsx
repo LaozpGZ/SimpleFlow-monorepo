@@ -7,16 +7,18 @@ import { nearestUsableTick, PositionMath, TickMath } from '@pancakeswap/v3-sdk'
 
 import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
-import { getAddInfinityLiquidityURL, getLiquidityDetailURL } from 'config/constants/liquidity'
+import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { useCakePrice } from 'hooks/useCakePrice'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+import { $path } from 'next-typesafe-url'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { InfinityCLPositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { InfinityCLPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityCLPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
@@ -66,7 +68,6 @@ const formatPercentage = (percentage: number): string => {
 
 interface InfinityCLPositionsTableProps {
   poolInfo: InfinityCLPoolInfo
-  handleHarvestAll: () => void
 }
 
 // Helper function to transform position data for table - NO HOOKS ALLOWED
@@ -176,7 +177,10 @@ const transformInfinityCLPositionToTableRow = (
     <FlexGap flexDirection="column" gap="4px">
       <FlexGap alignItems="center" gap="8px">
         <Text bold fontSize="16px">
-          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
+          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}{' '}
+          <Text as="span" color="textSubtle">
+            #{position.tokenId.toString()}
+          </Text>
         </Text>
         {position.isStaked && (
           <Tag variant="primary60" scale="sm">
@@ -184,9 +188,6 @@ const transformInfinityCLPositionToTableRow = (
           </Tag>
         )}
       </FlexGap>
-      <Text color="textSubtle" fontSize="12px">
-        #{position.tokenId.toString()}
-      </Text>
     </FlexGap>
   )
 
@@ -279,14 +280,19 @@ const transformInfinityCLPositionToTableRow = (
     />
   )
 
-  const liquidityDetailUrl = getLiquidityDetailURL({
-    poolId: poolInfo.poolId,
-    chainId: poolInfo.chainId,
-    protocol: Protocol.InfinityCLAMM,
-  })
   const actions = (
     <FlexGap gap="8px" alignItems="center">
-      <ActionButton as="a" href={liquidityDetailUrl} disabled={removed || !liquidityDetailUrl} isIcon>
+      <ActionButton
+        as="a"
+        href={$path({
+          route: '/liquidity/position/[[...positionId]]',
+          routeParams: {
+            positionId: [Protocol.InfinityCLAMM, Number(position.tokenId), 'decrease'],
+          },
+        })}
+        disabled={removed}
+        isIcon
+      >
         <MinusIcon />
       </ActionButton>
       <ActionButton
@@ -349,7 +355,9 @@ const InfinityCLPositionRow: React.FC<{
   return null // This component doesn't render anything
 }
 
-export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
+export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> = ({ poolInfo }) => {
+  const { t } = useTranslation()
+
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
   const [, pool] = usePoolById<'CL'>(poolInfo.poolId as `0x${string}`, chainId)
@@ -441,12 +449,12 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
             ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
             : 0
         }
-        handleHarvestAll={handleHarvestAll}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>
           setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
         }
+        harvestAllButton={<InfinityPositionActions positionList={positionsInPool || []} showPositionFees={false} />}
       />
 
       {/* handles APR fetching for each position */}
