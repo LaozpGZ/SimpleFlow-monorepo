@@ -1,4 +1,5 @@
 import { Protocol } from '@pancakeswap/farms'
+import { getCurrencyPriceFromId } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
@@ -26,6 +27,7 @@ import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
 import { InfinityBinEarningsCell } from './PoolEarningsCells'
+import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
@@ -139,28 +141,84 @@ const transformInfinityBinPositionToTableRow = (
     </Flex>
   )
 
-  // Bin positions show bin range instead of price range
+  // Calculate actual price range from bin IDs for LBAMM
+  const removed = (position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED
+  const outOfRange = (position.status as POSITION_STATUS) === POSITION_STATUS.INACTIVE
+
+  let minPriceFormatted = '-'
+  let maxPriceFormatted = '-'
+  let minPercentage = ''
+  let maxPercentage = ''
+  let rangePosition = 50
+  let showPercentages = false
+
+  if (position.minBinId && position.maxBinId && pool?.binStep && poolInfo.token0 && poolInfo.token1) {
+    const minPrice = getCurrencyPriceFromId(position.minBinId, pool.binStep, poolInfo.token0, poolInfo.token1)
+    const maxPrice = getCurrencyPriceFromId(position.maxBinId, pool.binStep, poolInfo.token0, poolInfo.token1)
+    const currentPrice = pool?.activeId
+      ? getCurrencyPriceFromId(pool.activeId, pool.binStep, poolInfo.token0, poolInfo.token1)
+      : undefined
+
+    if (minPrice && maxPrice) {
+      minPriceFormatted = formatPriceNumber(minPrice)
+      maxPriceFormatted = formatPriceNumber(maxPrice)
+
+      // Calculate percentages if we have current price and position is not removed
+      if (currentPrice && !removed) {
+        try {
+          const currentPriceFloat = parseFloat(currentPrice.toSignificant(6))
+          const minPriceFloat = parseFloat(minPrice.toSignificant(6))
+          const maxPriceFloat = parseFloat(maxPrice.toSignificant(6))
+
+          if (
+            currentPriceFloat > 0 &&
+            maxPriceFloat > minPriceFloat &&
+            Number.isFinite(minPriceFloat) &&
+            Number.isFinite(maxPriceFloat) &&
+            Number.isFinite(currentPriceFloat)
+          ) {
+            const minPercent = ((minPriceFloat - currentPriceFloat) / currentPriceFloat) * 100
+            const maxPercent = ((maxPriceFloat - currentPriceFloat) / currentPriceFloat) * 100
+
+            if (
+              Number.isFinite(minPercent) &&
+              Number.isFinite(maxPercent) &&
+              Math.abs(minPercent) < 10000 &&
+              Math.abs(maxPercent) < 10000
+            ) {
+              const formatPercentage = (percentage: number): string => {
+                if (Math.abs(percentage) < 0.01) return '0%'
+                const sign = percentage >= 0 ? '+' : ''
+                return `${sign}${percentage.toFixed(1)}%`
+              }
+
+              minPercentage = formatPercentage(minPercent)
+              maxPercentage = formatPercentage(maxPercent)
+              rangePosition = Math.max(
+                0,
+                Math.min(100, ((currentPriceFloat - minPriceFloat) / (maxPriceFloat - minPriceFloat)) * 100),
+              )
+              showPercentages = true
+            }
+          }
+        } catch (error) {
+          console.warn('Price calculation error:', error)
+        }
+      }
+    }
+  }
+
   const priceRange = (
-    <Flex flexDirection="column" alignItems="flex-start">
-      <FlexGap alignItems="center" gap="8px">
-        <Text fontSize="14px">
-          {position.minBinId && position.maxBinId ? `${position.minBinId} - ${position.maxBinId}` : '--'}
-        </Text>
-        {(position.status as POSITION_STATUS) === POSITION_STATUS.INACTIVE && (
-          <Text fontSize="12px" color="failure">
-            {t('Out of range')}
-          </Text>
-        )}
-        {(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED && (
-          <Text fontSize="12px" color="textSubtle">
-            {t('Closed')}
-          </Text>
-        )}
-      </FlexGap>
-      <Text color="textSubtle" fontSize="12px">
-        {t('Bin Range')}
-      </Text>
-    </Flex>
+    <PriceRangeDisplay
+      minPrice={minPriceFormatted}
+      maxPrice={maxPriceFormatted}
+      minPercentage={minPercentage}
+      maxPercentage={maxPercentage}
+      rangePosition={rangePosition}
+      outOfRange={outOfRange}
+      removed={removed}
+      showPercentages={showPercentages}
+    />
   )
 
   const actions = (
@@ -208,6 +266,31 @@ const transformInfinityBinPositionToTableRow = (
     totalApr,
     hasLiquidity,
   }
+}
+
+// Simple number formatting for prices (similar to CL positions table)
+const formatPriceNumber = (price: any): string => {
+  if (!price) return '0'
+
+  const priceFloat = parseFloat(price.toSignificant(6))
+
+  if (!Number.isFinite(priceFloat)) {
+    if (priceFloat === Infinity) return '∞'
+    if (priceFloat === -Infinity) return '-∞'
+    return 'NaN'
+  }
+
+  // Handle extremely small values (treat as 0)
+  if (priceFloat < 1e-18) return '0'
+
+  // Handle extremely large values (treat as infinity)
+  if (priceFloat > 1e30) return '∞'
+
+  if (priceFloat < 0.000001) return priceFloat.toExponential(2)
+  if (priceFloat < 0.01) return priceFloat.toFixed(6)
+  if (priceFloat < 1) return priceFloat.toFixed(4)
+  if (priceFloat < 1000) return priceFloat.toFixed(2)
+  return priceFloat.toLocaleString('en-US', { maximumFractionDigits: 3 })
 }
 
 // Individual position row component that calls the APR hook
