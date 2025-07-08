@@ -15,6 +15,7 @@ type AdsConfigMap = {
   [key in AdsIds]: AdsCampaignConfig
 }
 const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig[] => {
+  const now = Date.now()
   return [
     {
       id: AdsIds.BINANCE_ALPHA_V2,
@@ -38,6 +39,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           imagePadding: '20px',
         },
       },
+      deadline: 1753660799000,
     },
     {
       id: AdsIds.BINANCE_ALPHA,
@@ -60,6 +62,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           imagePadding: '20px',
         },
       },
+      deadline: 1752345599000,
     },
     {
       id: AdsIds.SOLANA_LIQUIDITY,
@@ -78,7 +81,10 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
         },
       },
     },
-  ]
+  ].filter((ad) => {
+    const deadline = ad?.deadline
+    return !deadline || deadline > now
+  })
 }
 
 export const useAdsConfigs = (): AdsConfigMap => {
