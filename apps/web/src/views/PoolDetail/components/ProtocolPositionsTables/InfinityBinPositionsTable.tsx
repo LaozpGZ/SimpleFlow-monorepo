@@ -324,14 +324,18 @@ const InfinityBinPositionRow: React.FC<{
     enabled: Boolean(pool?.token1 && amount1?.greaterThan('0')),
   })
 
-  // Transform the data with the fetched APR
-  const transformedData = useMemo(() => {
-    const convertedAprData = {
+  // Memoize the converted APR data separately to avoid recreating the object
+  const convertedAprData = useMemo(
+    () => ({
       lpApr: parseFloat(aprData.lpApr || '0'),
       cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
       merklApr: aprData.merklApr || 0,
-    }
+    }),
+    [aprData.lpApr, aprData.cakeApr?.value, aprData.merklApr],
+  )
 
+  // Transform the data with the fetched APR
+  const transformedData = useMemo(() => {
     // For now, use 0 for TVL - we can implement proper calculation later
     const totalTVLUsd = 0
 
@@ -347,7 +351,7 @@ const InfinityBinPositionRow: React.FC<{
       price1Usd,
       t,
     )
-  }, [position, poolInfo, pool, aprData, amount0, amount1, t, price0Usd, price1Usd])
+  }, [position, poolInfo, pool, convertedAprData, amount0, amount1, t, price0Usd, price1Usd])
 
   // Pass data back to parent whenever it changes
   useEffect(() => {

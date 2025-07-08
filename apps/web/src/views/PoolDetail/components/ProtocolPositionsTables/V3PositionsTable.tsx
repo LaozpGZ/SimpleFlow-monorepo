@@ -436,6 +436,7 @@ const transformV3PositionToTableRow = (
       // Add raw data for onRowClick handler
       protocol: position.protocol,
       tokenId: position.tokenId,
+      liquidityUSD,
     },
     totalEarnings: earnings,
     liquidityUSD,
@@ -457,13 +458,17 @@ const V3PositionRow: React.FC<{
 
   const aprData = useV3PositionApr(poolInfo, position)
 
-  const transformedData = useMemo(() => {
-    const convertedAprData = {
+  // Memoize the converted APR data separately to avoid recreating the object
+  const convertedAprData = useMemo(
+    () => ({
       lpApr: aprData.lpApr || 0,
       cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
       merklApr: aprData.merklApr || 0,
-    }
+    }),
+    [aprData.lpApr, aprData.cakeApr?.value, aprData.merklApr],
+  )
 
+  const transformedData = useMemo(() => {
     return transformV3PositionToTableRow(
       position,
       poolInfo,
@@ -474,7 +479,7 @@ const V3PositionRow: React.FC<{
       convertedAprData,
       t,
     )
-  }, [position, poolInfo, positionsData, price0Usd, price1Usd, pool, aprData, t])
+  }, [position, poolInfo, positionsData, price0Usd, price1Usd, pool, convertedAprData, t])
 
   // Pass data back to parent whenever it changes
   useEffect(() => {
@@ -501,12 +506,18 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
 
   // Get position data from hooks
   const { data: v3Data, isLoading } = useAccountPositionDetailByPool(chainId, account, poolInfo)
-  const positionsData: any[] = useV3Positions(
+
+  // Memoize the filtered v3Data to avoid recreating the array on every render
+  const filteredV3Data = useMemo(() => {
+    return (v3Data as PositionDetail[])?.filter((position) => position.liquidity !== 0n)
+  }, [v3Data])
+
+  const positionsData = useV3Positions(
     chainId,
     poolInfo.token0.wrapped.address,
     poolInfo.token1.wrapped.address,
     poolInfo.feeTier,
-    (v3Data as PositionDetail[])?.filter((position) => position.liquidity !== 0n),
+    filteredV3Data,
   )
 
   const [loading, setLoading] = useState(false)

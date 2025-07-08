@@ -343,16 +343,20 @@ const InfinityCLPositionRow: React.FC<{
   // This is where the magic happens - individual APR hook call for each position
   const aprData = useInfinityCLPositionApr(poolInfo, position)
 
-  // Transform the data with the fetched APR
-  const transformedData = useMemo(() => {
-    const convertedAprData = {
+  // Memoize the converted APR data separately to avoid recreating the object
+  const convertedAprData = useMemo(
+    () => ({
       lpApr: parseFloat(aprData.lpApr || '0'),
       cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
       merklApr: aprData.merklApr || 0,
-    }
+    }),
+    [aprData.lpApr, aprData.cakeApr?.value, aprData.merklApr],
+  )
 
+  // Transform the data with the fetched APR
+  const transformedData = useMemo(() => {
     return transformInfinityCLPositionToTableRow(position, poolInfo, pool, price0Usd, price1Usd, convertedAprData, t)
-  }, [position, poolInfo, pool, price0Usd, price1Usd, aprData, t])
+  }, [position, poolInfo, pool, price0Usd, price1Usd, convertedAprData, t])
 
   // Pass data back to parent whenever it changes
   useEffect(() => {

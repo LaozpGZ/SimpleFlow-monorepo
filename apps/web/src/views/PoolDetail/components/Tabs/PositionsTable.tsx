@@ -75,6 +75,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
       </StyledCardBody>
 
       <TableView
+        getRowKey={(row) => row.tokenId}
         columns={[
           {
             title: (
