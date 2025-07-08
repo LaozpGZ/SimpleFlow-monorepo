@@ -14,6 +14,8 @@ import { shouldRenderOnPages } from './renderConditions'
 import { AdSlide, Priority } from './types'
 import { useShouldRenderAdIfo } from './useShouldRenderAdIfo'
 
+const JULY_13_2025_TIMESTAMP = 1752364800000
+
 export const useAdConfig = () => {
   const { isDesktop } = useMatchBreakpoints()
   const shouldRenderOnPage = shouldRenderOnPages(commonLayoutWhitelistedPages)
@@ -36,13 +38,15 @@ export const useAdConfig = () => {
       .filter(Boolean) as { id: string; component: JSX.Element; priority?: number }[]
   }, [configs])
 
+  const shouldIncludeIsDesktop = useMemo(() => Date.now() < JULY_13_2025_TIMESTAMP, [])
+
   const adList: Array<AdSlide> = useMemo(
     () => [
       {
         id: 'expandable-ad',
         component: <ExpandableAd />,
         priority: Priority.FIRST_AD,
-        shouldRender: [shouldRenderOnPage],
+        shouldRender: [(shouldIncludeIsDesktop ? isDesktop : true) && shouldRenderOnPage],
       },
       {
         id: 'ad-cross-chain',
