@@ -1,7 +1,7 @@
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { Flex, Text } from '@pancakeswap/uikit'
+import { Flex, FlexProps, Text } from '@pancakeswap/uikit'
 
 export const CurrencyAmountGiftDisplay = ({
   currencyAmount,
@@ -10,7 +10,7 @@ export const CurrencyAmountGiftDisplay = ({
 }: {
   currencyAmount: CurrencyAmount<Token | NativeCurrency>
   usdValue: number
-}) => {
+} & FlexProps) => {
   return (
     <Flex {...props}>
       <CurrencyLogo showChainLogo currency={currencyAmount.currency} size="40px" />
