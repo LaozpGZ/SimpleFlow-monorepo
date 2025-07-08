@@ -4,6 +4,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import Trans from 'components/Trans'
 import { WalletContent, WalletModalV2 } from 'components/WalletModalV2'
 import ReceiveModal from 'components/WalletModalV2/ReceiveModal'
+import { ViewState } from 'components/WalletModalV2/type'
 import {
   useWalletModalV2ViewState,
   WalletModalV2ViewStateProvider,
@@ -77,7 +78,7 @@ const UserMenu = () => {
   const [showDesktopPopup] = useState(true)
   const [isReceiveModalOpen, setIsReceiveModalOpen] = useState(false)
 
-  const { reset: resetViewState } = useWalletModalV2ViewState()
+  const { reset: resetViewState, viewState } = useWalletModalV2ViewState()
   const { setCode } = useClaimGiftContext()
 
   // State for click-based menu
@@ -96,6 +97,11 @@ const UserMenu = () => {
 
   // Handle click outside to close menu
   useEffect(() => {
+    // Disable click outside to close menu when sending gift
+    if (viewState === ViewState.CONFIRM_TRANSACTION) {
+      return undefined
+    }
+
     const handleClickOutside = (event: MouseEvent) => {
       // Check if the click target is within portal-root
 
@@ -115,7 +121,7 @@ const UserMenu = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [menuRef])
+  }, [menuRef, viewState])
 
   useEffect(() => {
     if (hasPendingTransactions) {

@@ -3,6 +3,8 @@ export enum ViewState {
   SEND_ASSETS,
   SEND_FORM,
   CONFIRM_TRANSACTION,
+  // TODO: add confirm copy link
+  // CONFIRM_COPY_LINK,
   CLAIM_GIFT,
   CLAIM_GIFT_CONFIRM,
   CANCEL_GIFT_CONFIRM,

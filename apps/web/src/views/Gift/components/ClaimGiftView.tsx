@@ -22,7 +22,7 @@ export const ClaimGiftView = ({
 
   const { data: giftInfo, isLoading } = useGetGiftByCodeHash({ codeHash, assets })
 
-  const isInValid = Boolean(code && (!giftInfo || (giftInfo?.status && giftInfo.status !== GiftStatus.PENDING)))
+  const isValid = Boolean(giftInfo?.status === GiftStatus.PENDING)
 
   const buttonText = useMemo(() => {
     if (!code) {
@@ -55,17 +55,13 @@ export const ClaimGiftView = ({
           autoFocus
         />
       </Box>
-      {!isLoading && isInValid ? (
+      {!isLoading && giftInfo && !isValid ? (
         <Text color="textSubtle" mb="4px" fontSize="12px" bold>
           {t('The gift code you entered is invalid or expired. Please reach out to the gift creator for a new one.')}
         </Text>
       ) : null}
 
-      <Button
-        width="100%"
-        disabled={!code || isLoading || isInValid}
-        onClick={() => setViewState(ViewState.CLAIM_GIFT_CONFIRM)}
-      >
+      <Button width="100%" disabled={!isValid} onClick={() => setViewState(ViewState.CLAIM_GIFT_CONFIRM)}>
         {buttonText}
       </Button>
     </>
