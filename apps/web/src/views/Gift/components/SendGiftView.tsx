@@ -53,12 +53,29 @@ export const SendGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Tok
     return null
   }
 
+  const tokenDisplay = nativeAmount ? (
+    <FlexGap mb="16px" width="100%" flexDirection="column" gap="8px">
+      <Card>
+        <Box p="8px">
+          <CurrencyAmountGiftDisplay currencyAmount={tokenAmount} />
+        </Box>
+      </Card>
+      <Card>
+        <Box p="8px">
+          <CurrencyAmountGiftDisplay currencyAmount={nativeAmount} />
+        </Box>
+      </Card>
+    </FlexGap>
+  ) : (
+    <TokenAmountSection tokenAmount={tokenAmount} />
+  )
+
   if (code && txHash) {
     return (
       <ColumnCenter>
         {viewTabs}
 
-        {selectedView === GIFT_VIEW.SEND_LINK && <TokenAmountSection tokenAmount={tokenAmount} />}
+        {selectedView === GIFT_VIEW.SEND_LINK && tokenDisplay}
 
         <Card
           style={{
@@ -71,7 +88,7 @@ export const SendGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Tok
             {selectedView === GIFT_VIEW.SEND_LINK ? (
               <SendLinkView tokenAmount={tokenAmount} code={code} />
             ) : (
-              <QRView tokenAmount={tokenAmount} code={code} />
+              <QRView tokenAmount={tokenAmount} nativeAmount={nativeAmount} code={code} />
             )}
           </Box>
         </Card>
@@ -89,22 +106,7 @@ export const SendGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Tok
 
       {selectedView === GIFT_VIEW.SEND_QR && <GiftQRPlaceholder />}
 
-      {hasIncludeStarterGas ? (
-        <FlexGap mb="16px" width="100%" flexDirection="column" gap="8px">
-          <Card>
-            <Box p="8px">
-              <CurrencyAmountGiftDisplay currencyAmount={tokenAmount} />
-            </Box>
-          </Card>
-          <Card>
-            <Box p="8px">
-              <CurrencyAmountGiftDisplay currencyAmount={nativeAmount} />
-            </Box>
-          </Card>
-        </FlexGap>
-      ) : (
-        <TokenAmountSection tokenAmount={tokenAmount} />
-      )}
+      {tokenDisplay}
 
       <Card mb="16px">
         <Box p="16px">
