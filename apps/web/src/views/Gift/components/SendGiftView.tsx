@@ -44,8 +44,10 @@ export const SendGiftView = ({
 
   const handleCreateGift = useCallback(() => {
     const randomCode = nanoid(GIFT_CODE_LENGTH)
+
+    createGift({ tokenAmount: tokenAmount!, code: randomCode, nativeAmount })
+
     setCode(() => {
-      createGift({ tokenAmount: tokenAmount!, code: randomCode, nativeAmount })
       return randomCode
     })
   }, [tokenAmount, createGift, nativeAmount])
