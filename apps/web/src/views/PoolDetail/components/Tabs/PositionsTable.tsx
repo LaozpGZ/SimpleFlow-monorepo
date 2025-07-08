@@ -17,8 +17,8 @@ interface PositionsTableProps {
   poolInfo?: PoolInfo | null
   totalLiquidityUSD: number
   totalApr: number
-  showInactiveOnly: boolean
-  toggleInactiveOnly: () => void
+  showInactiveOnly?: boolean
+  toggleInactiveOnly?: () => void
   harvestAllButton?: React.ReactNode
   totalEarnings?: string
 }
@@ -66,10 +66,6 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
                   {totalEarnings || '-'}
                 </Text>
               </Box>
-              {/* TODO: Update disable logic */}
-              {/* <HarvestButton variant="tertiary" onClick={handleHarvestAll} disabled>
-                {t('Harvest')}
-              </HarvestButton> */}
               {harvestAllButton}
             </FlexGap>
           </LightGreyCard>
@@ -80,10 +76,14 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
         columns={[
           {
             title: (
-              <FlexGap gap="8px" alignItems="center">
-                <Text color="textSubtle">{t('Inactive Only')}</Text>
-                <Toggle checked={showInactiveOnly} onChange={toggleInactiveOnly} scale="sm" />
-              </FlexGap>
+              <>
+                {!!toggleInactiveOnly && (
+                  <FlexGap gap="8px" alignItems="center">
+                    <Text color="textSubtle">{t('Inactive Only')}</Text>
+                    <Toggle checked={showInactiveOnly} onChange={toggleInactiveOnly} scale="sm" />
+                  </FlexGap>
+                )}
+              </>
             ),
             dataIndex: 'tokenInfo',
             key: 'tokenInfo',

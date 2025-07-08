@@ -1,10 +1,11 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, NATIVE } from '@pancakeswap/sdk'
+import { NATIVE } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { nearestUsableTick, PositionMath, TickMath } from '@pancakeswap/v3-sdk'
 import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
-import BigNumber from 'bignumber.js'
+import { BigNumber } from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -27,6 +28,7 @@ import { PositionsTable } from '../Tabs/PositionsTable'
 import { V3EarningsCell } from './PoolEarningsCells'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
+import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
 interface V3PositionsTableProps {
   poolInfo: PoolInfo
@@ -54,10 +56,11 @@ const formatPriceNumber = (price: number): string => {
   return price.toLocaleString('en-US', { maximumFractionDigits: 2 })
 }
 
+// Helper function for percentage formatting with bounds checking
 const formatPercentage = (percentage: number): string => {
-  if (Math.abs(percentage) < 0.01) return '0%'
+  if (!Number.isFinite(percentage)) return '-%'
   const sign = percentage >= 0 ? '+' : ''
-  return `${sign}${percentage.toFixed(1)}%`
+  return `${sign}${percentage.toFixed(2)}%`
 }
 
 // Helper function to calculate price from tick using established patterns
@@ -69,8 +72,9 @@ const tickToPrice = (tick: number): number => {
   return 1.0001 ** tick
 }
 
-// Helper function to get tick spacing from fee tier
+// Get tick spacing for fee tier
 const getTickSpacing = (feeTier: number): number => {
+  // Standard V3 tick spacings
   switch (feeTier) {
     case 100:
       return 1
@@ -81,7 +85,7 @@ const getTickSpacing = (feeTier: number): number => {
     case 10000:
       return 200
     default:
-      return 60 // Default to 60 for 3000 fee tier
+      return 60
   }
 }
 
@@ -481,8 +485,8 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
   const [transformedPositions, setTransformedPositions] = useState<any[]>([])
 
   // Get position data from hooks
-  const { data: v3Data } = useAccountPositionDetailByPool(chainId, account, poolInfo)
-  const positionsData = useV3Positions(
+  const { data: v3Data, isLoading } = useAccountPositionDetailByPool(chainId, account, poolInfo)
+  const positionsData: any[] = useV3Positions(
     chainId,
     poolInfo.token0.wrapped.address,
     poolInfo.token1.wrapped.address,
@@ -571,6 +575,16 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
       }
     })
   }, [transformedPositions, filter])
+
+  // Show loading state
+  if (isLoading) {
+    return <LoadingCard />
+  }
+
+  // Show empty state when no positions exist
+  if (!v3Data || (v3Data as PositionDetail[]).length === 0) {
+    return <EmptyPositionCard />
+  }
 
   return (
     <>

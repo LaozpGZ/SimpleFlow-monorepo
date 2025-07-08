@@ -28,6 +28,7 @@ import { PositionsTable } from '../Tabs/PositionsTable'
 import { InfinityCLEarningsCell } from './PoolEarningsCells'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
+import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
 // Helper function to calculate price from tick using established patterns
 const tickToPrice = (tick: number): number => {
@@ -370,7 +371,11 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
   const [transformedPositions, setTransformedPositions] = useState<any[]>([])
 
   // Get position data from hooks
-  const { data: positionsInPool } = useAccountPositionDetailByPool<Protocol.InfinityCLAMM>(chainId, account, poolInfo)
+  const { data: positionsInPool, isLoading } = useAccountPositionDetailByPool<Protocol.InfinityCLAMM>(
+    chainId,
+    account,
+    poolInfo,
+  )
 
   // Handle data from individual position rows
   const handleRowDataReady = useCallback((data: any) => {
@@ -425,17 +430,6 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
     })
   }, [transformedPositions, filter])
 
-  // const [positionEarningAmounts] = usePositionEarningAmount()
-  // const cakePrice = useCakePrice()
-
-  // const totalEarningsUSD = useMemo(() => {
-  //   const totalEarnings = filteredPositions.reduce(
-  //     (sum, pos) => sum + (positionEarningAmounts[poolInfo.chainId]?.[poolInfo.poolId]?.[pos.tokenId] || 0),
-  //     0,
-  //   )
-  //   return new BN(totalEarnings ?? 0).times(cakePrice.toString()).toNumber()
-  // }, [filteredPositions, positionEarningAmounts, poolInfo.chainId, poolInfo.poolId])
-
   const {
     data: { rewardsUSD },
   } = useUnclaimedFarmRewardsUSDByPoolId({
@@ -444,6 +438,16 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
     address: account,
     timestamp: dayjs().startOf('hour').unix(),
   })
+
+  // Show loading state
+  if (isLoading) {
+    return <LoadingCard />
+  }
+
+  // Show empty state when no positions exist
+  if (!positionsInPool || positionsInPool.length === 0) {
+    return <EmptyPositionCard />
+  }
 
   return (
     <>

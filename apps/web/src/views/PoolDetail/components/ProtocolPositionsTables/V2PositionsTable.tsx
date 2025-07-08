@@ -4,8 +4,9 @@ import { AddIcon, Flex, FlexGap, MinusIcon, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
+import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions/type'
 import { StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
@@ -15,23 +16,18 @@ import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
 import { V2EarningsCell } from './PoolEarningsCells'
-import { PositionFilter } from './types'
+import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
 interface V2PositionsTableProps {
   poolInfo: V2PoolInfo | StablePoolInfo
 }
 
-export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) => {
+// Component that only renders when position data exists
+const V2PositionWithApr: React.FC<{
+  poolInfo: V2PoolInfo | StablePoolInfo
+  v2OrStableData: V2LPDetail | StableLPDetail
+}> = ({ poolInfo, v2OrStableData }) => {
   const { t } = useTranslation()
-  const { address: account } = useAccount()
-  const chainId = useChainIdByQuery()
-  const [filter, setFilter] = useState(PositionFilter.All)
-
-  const { data: v2OrStableData, isLoading } = useAccountPositionDetailByPool<Protocol.V2 | Protocol.STABLE>(
-    chainId,
-    account,
-    poolInfo,
-  )
 
   // Get USD prices for both tokens
   const { data: token0Price } = useCurrencyUsdPrice(poolInfo.token0?.wrapped, {
@@ -41,12 +37,10 @@ export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) 
     enabled: Boolean(poolInfo.token1),
   })
 
-  // Get APR data for the single position
-  const aprData = useV2PositionApr(poolInfo, v2OrStableData!)
+  // Get APR data for the single position - safe to call since v2OrStableData is guaranteed to exist
+  const aprData = useV2PositionApr(poolInfo, v2OrStableData)
 
   const transformedPosition = useMemo(() => {
-    if (!v2OrStableData) return null
-
     const amount0 = v2OrStableData.nativeDeposited0.add(v2OrStableData.farmingDeposited0)
     const amount1 = v2OrStableData.nativeDeposited1.add(v2OrStableData.farmingDeposited1)
 
@@ -59,9 +53,6 @@ export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) 
       <FlexGap flexDirection="column" gap="4px">
         <Text bold fontSize="16px">
           {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
-        </Text>
-        <Text color="textSubtle" fontSize="12px">
-          {poolInfo.protocol === 'v2' ? 'V2 LP' : 'Stable LP'}
         </Text>
       </FlexGap>
     )
@@ -172,46 +163,34 @@ export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) 
     }
   }, [v2OrStableData, poolInfo, aprData, t, token0Price, token1Price])
 
-  const filteredPositions = useMemo(() => {
-    if (!transformedPosition) return []
-
-    const { totalApr, liquidityUSD } = transformedPosition
-    const hasLiquidity = liquidityUSD > 0
-
-    switch (filter) {
-      case PositionFilter.Active:
-        return hasLiquidity && totalApr > 0 ? [transformedPosition] : []
-      case PositionFilter.Inactive:
-        return hasLiquidity && totalApr === 0 ? [transformedPosition] : []
-      case PositionFilter.Closed:
-        return !hasLiquidity ? [transformedPosition] : []
-      default:
-        return [transformedPosition]
-    }
-  }, [transformedPosition, filter])
-
-  if (isLoading) {
-    return <div>{t('Loading...')}</div>
-  }
-
-  if (!v2OrStableData) {
-    return <div>{t('No positions found')}</div>
-  }
-
   return (
     <PositionsTable
       poolInfo={poolInfo}
-      totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
-      totalApr={
-        filteredPositions.length > 0
-          ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
-          : 0
-      }
-      data={filteredPositions.map((position) => position.tableRow)}
-      showInactiveOnly={filter === PositionFilter.Inactive}
-      toggleInactiveOnly={() =>
-        setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
-      }
+      totalLiquidityUSD={transformedPosition.liquidityUSD}
+      totalApr={transformedPosition.totalApr}
+      data={[transformedPosition.tableRow]}
     />
   )
+}
+
+export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) => {
+  const { address: account } = useAccount()
+  const chainId = useChainIdByQuery()
+
+  const { data: v2OrStableData, isLoading } = useAccountPositionDetailByPool<Protocol.V2 | Protocol.STABLE>(
+    chainId,
+    account,
+    poolInfo,
+  )
+
+  if (isLoading) {
+    return <LoadingCard />
+  }
+
+  if (!v2OrStableData) {
+    return <EmptyPositionCard />
+  }
+
+  // Render the position component only when data exists
+  return <V2PositionWithApr poolInfo={poolInfo} v2OrStableData={v2OrStableData} />
 }

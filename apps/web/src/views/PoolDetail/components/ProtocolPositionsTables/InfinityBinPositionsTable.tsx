@@ -26,6 +26,7 @@ import { ActionButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
 import { InfinityBinEarningsCell } from './PoolEarningsCells'
 import { PositionFilter } from './types'
+import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
 interface InfinityBinPositionsTableProps {
   poolInfo: InfinityBinPoolInfo
@@ -380,8 +381,14 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     })
   }, [transformedPositions, filter, positions])
 
+  // Show loading state
   if (isLoading) {
-    return <div>{t('Loading...')}</div>
+    return <LoadingCard />
+  }
+
+  // Show empty state when no positions exist and no rewards
+  if (!infinityBinData?.length && (!rewardsAmount || !rewardsAmount.greaterThan('0'))) {
+    return <EmptyPositionCard />
   }
 
   return (
