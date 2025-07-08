@@ -19,7 +19,6 @@ type PendingYieldProps = {
 
 export default function PendingYield({ isLoading, hasReward, pendingYield, rewardInfos, onHarvest }: PendingYieldProps) {
   const { t } = useTranslation()
-  const { isMobile, isTablet } = useResponsive()
   return (
     <Flex flex={1} justify="space-around" w="full" fontSize="sm" flexDirection="column" gap={3} p={[4, 0]}>
       <HStack justifyContent="space-between">
@@ -70,7 +69,6 @@ export default function PendingYield({ isLoading, hasReward, pendingYield, rewar
               <Text color={colors.textPrimary}>
                 {formatCurrency(r.amount, {
                   abbreviated: true,
-                  decimalPlaces: isTablet ? 2 : 3,
                   maximumDecimalTrailingZeroes: 2
                 })}
               </Text>
@@ -82,7 +80,6 @@ export default function PendingYield({ isLoading, hasReward, pendingYield, rewar
                 {formatCurrency(r.amountUSD, {
                   symbol: '$',
                   abbreviated: true,
-                  decimalPlaces: isMobile ? 3 : 2,
                   maximumDecimalTrailingZeroes: 2
                 })}
                 )

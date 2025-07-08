@@ -503,7 +503,9 @@ export const useClmmStore = createStore<ClmmState>(
           }
         })
 
-        return execute()
+        return execute({
+          simulate: true
+        })
           .then(({ txId, signedTx }) => {
             txStatusSubject.next({
               txId,
