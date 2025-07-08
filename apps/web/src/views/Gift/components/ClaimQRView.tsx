@@ -1,9 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { Box, Card, Flex, LogoIcon, Text } from '@pancakeswap/uikit'
+import { Box, Card, Flex, LogoIcon, Text, Image } from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { QRCodeSVG } from 'qrcode.react'
 import styled from 'styled-components'
+import { SecondaryCard } from 'components/SecondaryCard'
 import { generateClaimLink } from '../utils/generateClaimLink'
 
 const GiftCodeContainer = styled(Box)`
@@ -70,5 +71,15 @@ export function QRView({
         </GiftCodeContainer>
       </Flex>
     </>
+  )
+}
+
+export function GiftQRPlaceholder() {
+  return (
+    <SecondaryCard mb="16px" style={{ width: '100%' }}>
+      <Flex background="" justifyContent="center" flexDirection="column" alignItems="center">
+        <Image src="/images/gifts/gift-qr-placeholder.png" alt="Gift QR Placeholder" width={170} height={143} />
+      </Flex>
+    </SecondaryCard>
   )
 }

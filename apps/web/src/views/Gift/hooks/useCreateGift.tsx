@@ -4,12 +4,13 @@ import { useToast } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCallback, useMemo, useState } from 'react'
-import { zeroAddress } from 'viem'
 import { useQueryClient } from '@tanstack/react-query'
-import { useAccount, useReadContract, useWriteContract } from 'wagmi'
+import { useAccount, useWriteContract } from 'wagmi'
 import { PancakeGiftV1Abi } from '../abis/PancakeGiftV1Abi'
 import { GIFT_PANCAKE_V1_ADDRESS, QUERY_KEY_GIFT_INFO } from '../constants'
 import { convertCodeHash } from '../utils/convertCodeHash'
+import { useReadGasPayment } from './useReadGasPayment'
+import { generateCreateGiftParams } from '../utils/generateCreateGiftParams'
 
 interface CreateGiftParams {
   tokenAmount: CurrencyAmount<Token | NativeCurrency>
@@ -29,12 +30,7 @@ export const useCreateGift = () => {
   const queryClient = useQueryClient()
 
   // Get GAS_PAYMENT from contract
-  const { data: gasPayment } = useReadContract({
-    address: GIFT_PANCAKE_V1_ADDRESS,
-    abi: PancakeGiftV1Abi,
-    functionName: 'GAS_PAYMENT',
-    chainId,
-  })
+  const gasPayment = useReadGasPayment()
 
   const createGift = useCallback(
     async ({ tokenAmount, nativeAmount, code }: CreateGiftParams) => {
@@ -53,12 +49,11 @@ export const useCreateGift = () => {
       // Calculate transaction value: nativeAmount + GAS_PAYMENT
       const gasPaymentBigInt = BigInt(gasPayment.toString())
 
-      // const isOnlyNative = tokenAmount?.currency.isNative && !nativeAmount
-      const tokenAddress = tokenAmount.currency.isNative ? zeroAddress : tokenAmount.currency.address
-      const tokenAmountBigInt = tokenAmount.currency.isNative ? 0n : tokenAmount.quotient
-      const nativeAmountBigInt = tokenAmount.currency.isNative ? tokenAmount.quotient : nativeAmount?.quotient ?? 0n
-
-      const transactionValue = nativeAmountBigInt + gasPaymentBigInt
+      const { tokenAddress, tokenAmountBigInt, nativeAmountBigInt, transactionValue } = generateCreateGiftParams({
+        tokenAmount,
+        nativeAmount,
+        gasPaymentBigInt,
+      })
 
       writeContractAsync(
         {
@@ -79,7 +74,7 @@ export const useCreateGift = () => {
         },
       )
     },
-    [gasPayment, t, writeContractAsync, toastSuccess],
+    [gasPayment, t, writeContractAsync, toastSuccess, queryClient, chainId, account],
   )
 
   return useMemo(

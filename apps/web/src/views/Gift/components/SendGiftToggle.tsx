@@ -1,8 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text, Toggle } from '@pancakeswap/uikit'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useContext } from 'react'
 import { SendGiftContext } from '../providers/SendGiftProvider'
 import { GasSponsor } from './GasSponsor'
+import { CHAINS_WITH_GIFT_CLAIM } from '../constants'
 
 export const SendGiftToggle = ({
   children,
@@ -13,6 +15,13 @@ export const SendGiftToggle = ({
 }) => {
   const { t } = useTranslation()
   const { isSendGift, setIsSendGift } = useContext(SendGiftContext)
+  const { chainId } = useActiveChainId()
+
+  const isSupportedChain = chainId && CHAINS_WITH_GIFT_CLAIM.includes(chainId)
+
+  if (!isSupportedChain) {
+    return children(false)
+  }
 
   return (
     <>

@@ -1,6 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Input, Text } from '@pancakeswap/uikit'
-import { ActionButton } from 'components/WalletModalV2/ActionButton'
+import { Box, Button, Input, Text } from '@pancakeswap/uikit'
 import { ViewState } from 'components/WalletModalV2/type'
 import { BalanceData } from 'hooks/useAddressBalance'
 import { useMemo } from 'react'
@@ -39,7 +38,13 @@ export const ClaimGiftView = ({
 
   return (
     <>
+      <Text fontSize="14px" mb="8px" color="textSubtle">
+        {t('If you have a gift code from a friend, enter it here to claim your gift token.')}
+      </Text>
       <Box mb="16px">
+        <Text fontWeight={600} mb="4px" fontSize="16px">
+          {t('Claim Gift')}
+        </Text>
         <Input
           id="claim-code"
           placeholder={t('Enter code')}
@@ -56,13 +61,13 @@ export const ClaimGiftView = ({
         </Text>
       ) : null}
 
-      <ActionButton
+      <Button
+        width="100%"
         disabled={!code || isLoading || isInValid}
         onClick={() => setViewState(ViewState.CLAIM_GIFT_CONFIRM)}
-        variant="tertiary"
       >
         {buttonText}
-      </ActionButton>
+      </Button>
     </>
   )
 }

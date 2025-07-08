@@ -324,7 +324,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
   return (
     <FormContainer>
-      <SendGiftToggle>
+      <SendGiftToggle isNativeToken={isNativeToken}>
         {(isSendGiftOn) => (
           <>
             {isSendGiftOn ? null : (

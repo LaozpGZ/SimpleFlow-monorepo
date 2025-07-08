@@ -1,9 +1,19 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, ColumnCenter, Spinner, Text, useToast } from '@pancakeswap/uikit'
+import {
+  Box,
+  Button,
+  Card,
+  CheckmarkCircleIcon,
+  ColumnCenter,
+  RowBetween,
+  Spinner,
+  Text,
+  useToast,
+} from '@pancakeswap/uikit'
 import { TokenAmountSection } from 'components/TokenAmountSection'
-import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { BalanceData } from 'hooks/useAddressBalance'
 import { useEffect } from 'react'
+import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { useClaimGift } from '../hooks/useClaimGift'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
 import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
@@ -64,12 +74,28 @@ export const ClaimGiftConfirmView = ({ assets }: { assets: BalanceData[] }) => {
           {error?.message || t('Failed to claim gift')}
         </Box>
       )}
+
+      <Card mb="16px" style={{ width: '100%' }}>
+        <Box p="16px">
+          <RowBetween>
+            <Text color="textSubtle" small>
+              {t('Expires on:')}
+            </Text>
+            <Text small>
+              {formatTimestamp(new Date(giftInfo.timestamp).getTime(), {
+                precision: Precision.MINUTE,
+              })}
+            </Text>
+          </RowBetween>
+        </Box>
+      </Card>
+
       {claimGiftData?.status === GiftApiStatus.SUCCESS ? (
-        <Text>{t('Claimed')}</Text>
+        <CheckmarkCircleIcon color="success" width="40px" />
       ) : (
-        <ActionButton onClick={handleClaim} variant="tertiary" disabled={!code || isPending} isLoading={isPending}>
+        <Button onClick={handleClaim} width="100%" disabled={!code || isPending} isLoading={isPending}>
           {t('Claim')}
-        </ActionButton>
+        </Button>
       )}
     </ColumnCenter>
   )

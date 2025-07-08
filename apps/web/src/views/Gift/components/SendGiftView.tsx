@@ -1,6 +1,16 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { Box, Button, ButtonMenu, ButtonMenuItem, Card, ColumnCenter, FlexGap, Text } from '@pancakeswap/uikit'
+import {
+  Box,
+  Button,
+  ButtonMenu,
+  ButtonMenuItem,
+  Card,
+  ColumnCenter,
+  FlexGap,
+  RowBetween,
+  Text,
+} from '@pancakeswap/uikit'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { nanoid } from 'nanoid'
 import { BulletList } from 'components/BulletList'
@@ -8,9 +18,10 @@ import { useCallback, useState } from 'react'
 import { useSendGiftContext } from '../providers/SendGiftProvider'
 import { GIFT_CODE_LENGTH } from '../constants'
 import { useCreateGift } from '../hooks/useCreateGift'
-import { QRView } from './ClaimQRView'
+import { GiftQRPlaceholder, QRView } from './ClaimQRView'
 import { SendLinkView } from './SendLinkView'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
+import { useReadGasPaymentAmount } from '../hooks/useReadGasPayment'
 
 enum GIFT_VIEW {
   SEND_LINK = 0,
@@ -47,6 +58,8 @@ export const SendGiftView = ({
       </ButtonMenu>
     </Box>
   )
+
+  const gasPaymentAmount = useReadGasPaymentAmount()
 
   if (!tokenAmount) {
     return null
@@ -85,6 +98,8 @@ export const SendGiftView = ({
   return (
     <ColumnCenter>
       {viewTabs}
+
+      {selectedView === GIFT_VIEW.SEND_QR && <GiftQRPlaceholder />}
 
       {hasIncludeStarterGas ? (
         <FlexGap mb="16px" width="100%" flexDirection="column" gap="8px">
@@ -128,9 +143,25 @@ export const SendGiftView = ({
         </Box>
       </Card>
 
+      {hasIncludeStarterGas && (
+        <RowBetween mb="8px">
+          <Text color="textSubtle">{t('Starter Gas for Recipient')}</Text>
+          <Text>
+            {nativeAmount?.toSignificant(6)} {nativeAmount?.currency.symbol}
+          </Text>
+        </RowBetween>
+      )}
+
+      <RowBetween mb="16px">
+        <Text color="textSubtle">{t('Gift Claim Gas Fee (Fixed)')}</Text>
+        <Text>
+          {gasPaymentAmount?.toSignificant(6)} {gasPaymentAmount?.currency.symbol}
+        </Text>
+      </RowBetween>
+
       {error && <div>{error.message}</div>}
       <Button disabled={isLoading} onClick={handleCreateGift} width="100%">
-        {isLoading ? t('Sending...') : t('Send')}
+        {isLoading ? t('Creating...') : t('Create gift')}
       </Button>
     </ColumnCenter>
   )
