@@ -35,6 +35,14 @@ interface Props {
   tickUpperPrefetchData?: AccountInfo<Buffer> | null
 }
 
+export type BreakdownRewardInfo = {
+  fee: {
+    A: { amount: string; amountUSD: string; mint: ApiV3Token }
+    B: { amount: string; amountUSD: string; mint: ApiV3Token }
+  }
+  rewards: { mint: ApiV3Token; amount: string; amountUSD: string }[]
+}
+
 export default function useFetchClmmRewardInfo({
   poolInfo,
   position,
@@ -330,9 +338,44 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
     return () => removeAccChangeCbk(mutate)
   }, [mutate])
 
+  const breakdownRewardInfo = useMemo(() => {
+    if (!poolInfo || !tokenPrices) return { fee: {}, rewards: [] }
+    return {
+      fee: {
+        A: {
+          mint: poolInfo.mintA,
+          amount: tokenFees.tokenFeeAmountA?.div(new BN(10 ** poolInfo.mintA.decimals)).toString() || '0',
+          amountUSD: new Decimal(tokenFees.tokenFeeAmountA?.toString() || 0)
+            .div(10 ** poolInfo.mintA.decimals)
+            .mul(tokenPrices[poolInfo.mintA.address]?.value || 0)
+            .toFixed(4)
+        },
+        B: {
+          mint: poolInfo.mintB,
+          amount: tokenFees.tokenFeeAmountB?.div(new BN(10 ** poolInfo.mintB.decimals)).toString() || '0',
+          amountUSD: new Decimal(tokenFees.tokenFeeAmountB?.toString() || 0)
+            .div(10 ** poolInfo.mintB.decimals)
+            .mul(tokenPrices[poolInfo.mintB.address]?.value || 0)
+            .toFixed(4)
+        }
+      },
+      rewards: rewards.map((r, idx) => {
+        const rewardMint = poolInfo.rewardDefaultInfos[idx]?.mint
+        if (!rewardMint) return { mint: null, amount: '0', amountUSD: '0' }
+        const amount = new Decimal(r.toString()).div(10 ** (rewardMint.decimals || 0))
+        return {
+          mint: rewardMint,
+          amount: amount.toFixed(rewardMint.decimals || 6),
+          amountUSD: amount.mul(tokenPrices[rewardMint.address]?.value || 0).toFixed(4)
+        }
+      })
+    }
+  }, [rewards, tokenFees])
+
   return {
     isEmptyReward,
     ...tokenFees,
+    breakdownRewardInfo,
     rewards,
     totalPendingYield,
     allRewardInfos

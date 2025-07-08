@@ -4284,5 +4284,9 @@
   "Insufficient sub balance": "Insufficient sub balance",
   "Decrease Reward Rate": "Decrease Reward Rate",
   "DAYS_EXTEND": "Add reward days",
-  "Amount and days cannot both be zero": "Amount and days cannot both be zero"
+  "Amount and days cannot both be zero": "Amount and days cannot both be zero",
+  "Split Display": "Split Display",
+  "Display rewards in a split view. Click this icon to switch to the Aggregate view.": "Display rewards in a split view. Click this icon to switch to the Aggregate view.",
+  "Aggregated Display": "Aggregated Display",
+  "Display rewards in an aggregate view. Click this icon to switch to the Split view.": "Display rewards in an aggregate view. Click this icon to switch to the Split view."
 }

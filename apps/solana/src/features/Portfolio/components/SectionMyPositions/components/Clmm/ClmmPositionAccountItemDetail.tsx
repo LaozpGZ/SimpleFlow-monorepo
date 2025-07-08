@@ -3,6 +3,7 @@ import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { useEffect, useMemo, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
+import BN from 'bn.js'
 import AddressChip from '@/components/AddressChip'
 import TokenAvatar from '@/components/TokenAvatar'
 import LiquidityChartRangeInput from '@/features/Clmm/components/LiquidityChartRangeInput'
@@ -16,6 +17,7 @@ import { onWindowSizeChange } from '@/utils/dom/onWindowSizeChange'
 import { debounce } from '@/utils/functionMethods'
 import { formatCurrency } from '@/utils/numberish/formatter'
 import { panelCard } from '@/theme/cssBlocks'
+import { BreakdownRewardInfo } from '@/hooks/pool/clmm/useFetchClmmRewardInfo'
 import EstimatedApr from './ClmmPositionAccountItemDetail/EstimatedApr'
 import PendingYield from './ClmmPositionAccountItemDetail/PendingYield'
 
@@ -32,6 +34,7 @@ type DetailProps = {
   hasReward: boolean
   rewardInfos: { mint: ApiV3Token; amount: string; amountUSD: string }[]
   onHarvest: (props: { onSend?: () => void; onFinally?: () => void }) => void
+  breakdownRewardInfo: BreakdownRewardInfo
 }
 
 const emptyObj = {}
@@ -48,7 +51,8 @@ export default function ClmmPositionAccountItemDetail({
   hasReward,
   rewardInfos,
   onTimeBasisChange,
-  onHarvest
+  onHarvest,
+  breakdownRewardInfo
 }: DetailProps) {
   const { isOpen: isLoading, onOpen: onSend, onClose: onFinally } = useDisclosure()
   const { t } = useTranslation()
@@ -268,6 +272,7 @@ export default function ClmmPositionAccountItemDetail({
               hasReward={hasReward}
               pendingYield={formatCurrency(totalPendingYield, { symbol: '$', decimalPlaces: 2 })}
               rewardInfos={rewardInfos}
+              breakdownRewardInfo={breakdownRewardInfo}
               onHarvest={handleHarvest}
             />
           </Flex>

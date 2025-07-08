@@ -29,6 +29,7 @@ import { urlConfigs } from './configs/urls'
 export const defaultNetWork = WalletAdapterNetwork.Mainnet // Can be set to 'devnet', 'testnet', or 'mainnet-beta'
 export const defaultEndpoint = clusterApiUrl(defaultNetWork) // You can also provide a custom RPC endpoint
 export const APR_MODE_KEY = '_r_apr_'
+export const REWARD_BREAKDOWN_MODE_KEY = '_r_reward_breakdown_mode_'
 export const EXPLORER_KEY = '_r_explorer_'
 export const supportedExplorers = [
   {
@@ -82,6 +83,7 @@ interface AppState {
   isMobile: boolean
   isDesktop: boolean
   aprMode: 'M' | 'D'
+  rewardBreakdownMode: 'Aggr' | 'Split'
   wallet?: Wallet
   initialing: boolean
   connected: boolean
@@ -127,6 +129,7 @@ interface AppState {
   setProgramIdConfigAct: (urls: ProgramIdConfig) => void
   setRpcUrlAct: (url: string, skipToast?: boolean, skipError?: boolean) => Promise<boolean>
   setAprModeAct: (mode: 'M' | 'D') => void
+  setRewardBreakdownModeAct: (mode: 'Aggr' | 'Split') => void
   checkAppVersionAct: () => Promise<void>
   fetchPriorityFeeAct: () => Promise<void>
 }
@@ -141,6 +144,7 @@ const appInitState = {
   isMobile: false,
   isDesktop: false,
   aprMode: 'M' as 'M' | 'D',
+  rewardBreakdownMode: 'Aggr' as 'Aggr' | 'Split',
   rpcs: [],
   urlConfigs,
   programIdConfig: {
@@ -384,6 +388,10 @@ export const useAppStore = createStore<AppState>(
     setAprModeAct: (mode) => {
       setStorageItem(APR_MODE_KEY, mode)
       set({ aprMode: mode })
+    },
+    setRewardBreakdownModeAct: (mode) => {
+      setStorageItem(REWARD_BREAKDOWN_MODE_KEY, mode)
+      set({ rewardBreakdownMode: mode })
     },
     checkAppVersionAct: async () => {
       // const { urlConfigs, appVersion } = get()
