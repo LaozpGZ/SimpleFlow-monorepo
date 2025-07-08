@@ -195,6 +195,7 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
     mintList: [poolInfo?.mintA.address, poolInfo?.mintB.address, ...(poolInfo?.rewardDefaultInfos.map((r) => r.mint.address) || [])]
   })
   const removeLiquidityAct = useClmmStore((s) => s.removeLiquidityAct)
+  const raydium = useAppStore((s) => s.raydium)
 
   const simulation = useCallback(async () => {
     const simulationResult = (await removeLiquidityAct({
@@ -206,10 +207,11 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
       amountMinB: ZERO,
       harvest: true
     })) as ReturnType<typeof DecreaseLiquidityEventLayout.decode>
+
     return simulationResult
   }, [poolInfo, position, removeLiquidityAct])
 
-  const shouldFetch = Boolean(tokenPrices && rpcPoolData && poolInfo)
+  const shouldFetch = Boolean(raydium && poolInfo && position)
 
   const { data, error, mutate } = useSWR(
     shouldFetch ? `clmm-reward-info-${poolInfo?.id}-${position.nftMint.toBase58()}` : null,
