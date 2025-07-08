@@ -4,6 +4,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
+import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
 import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
@@ -33,6 +34,20 @@ import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
 interface InfinityBinPositionsTableProps {
   poolInfo: InfinityBinPoolInfo
+}
+
+// Helper function for percentage formatting
+const formatPercentage = (percentage: number): string => {
+  if (Math.abs(percentage) < 0.01) return '0%'
+  const sign = percentage >= 0 ? '+' : ''
+  return `${sign}${percentage.toFixed(1)}%`
+}
+
+// Helper function to format prices using utility function
+const formatPriceNumber = (price: any): string => {
+  if (!price) return '0'
+  const priceFloat = parseFloat(price.toSignificant(6))
+  return formatAmount(priceFloat, { notation: 'standard' }) || '-'
 }
 
 // Helper function to transform position data for table - NO HOOKS ALLOWED
@@ -186,12 +201,6 @@ const transformInfinityBinPositionToTableRow = (
               Math.abs(minPercent) < 10000 &&
               Math.abs(maxPercent) < 10000
             ) {
-              const formatPercentage = (percentage: number): string => {
-                if (Math.abs(percentage) < 0.01) return '0%'
-                const sign = percentage >= 0 ? '+' : ''
-                return `${sign}${percentage.toFixed(1)}%`
-              }
-
               minPercentage = formatPercentage(minPercent)
               maxPercentage = formatPercentage(maxPercent)
               rangePosition = Math.max(
@@ -266,31 +275,6 @@ const transformInfinityBinPositionToTableRow = (
     totalApr,
     hasLiquidity,
   }
-}
-
-// Simple number formatting for prices (similar to CL positions table)
-const formatPriceNumber = (price: any): string => {
-  if (!price) return '0'
-
-  const priceFloat = parseFloat(price.toSignificant(6))
-
-  if (!Number.isFinite(priceFloat)) {
-    if (priceFloat === Infinity) return '∞'
-    if (priceFloat === -Infinity) return '-∞'
-    return 'NaN'
-  }
-
-  // Handle extremely small values (treat as 0)
-  if (priceFloat < 1e-18) return '0'
-
-  // Handle extremely large values (treat as infinity)
-  if (priceFloat > 1e30) return '∞'
-
-  if (priceFloat < 0.000001) return priceFloat.toExponential(2)
-  if (priceFloat < 0.01) return priceFloat.toFixed(6)
-  if (priceFloat < 1) return priceFloat.toFixed(4)
-  if (priceFloat < 1000) return priceFloat.toFixed(2)
-  return priceFloat.toLocaleString('en-US', { maximumFractionDigits: 3 })
 }
 
 // Individual position row component that calls the APR hook

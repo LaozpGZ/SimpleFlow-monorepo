@@ -1,9 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { NATIVE } from '@pancakeswap/sdk'
-import { Currency } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { nearestUsableTick, PositionMath, TickMath } from '@pancakeswap/v3-sdk'
+import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
+import { FeeAmount, nearestUsableTick, PositionMath, TICK_SPACINGS, TickMath, tickToPrice } from '@pancakeswap/v3-sdk'
 import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber } from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
@@ -14,6 +13,7 @@ import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
+import { currencyId } from 'utils/currencyId'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useFarmsV3BatchHarvest } from 'views/Farms/hooks/v3/useFarmV3Actions'
 import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
@@ -35,26 +35,25 @@ interface V3PositionsTableProps {
   poolInfo: PoolInfo
 }
 
-// Simple number formatting for prices
-const formatPriceNumber = (price: number): string => {
-  if (price === 0) return '0'
-  if (!Number.isFinite(price)) {
-    if (price === Infinity) return '∞'
-    if (price === -Infinity) return '-∞'
-    return 'NaN'
+// Helper function to safely convert tick to price using V3 SDK
+const getTickPrice = (tick: number, token0: any, token1: any): number => {
+  try {
+    // Use TickMath constants for bounds checking
+    if (tick >= TickMath.MAX_TICK) return Infinity
+    if (tick <= TickMath.MIN_TICK) return 0
+
+    // Use the V3 SDK's tickToPrice function for accurate calculation
+    if (token0 && token1) {
+      const price = tickToPrice(token0, token1, tick)
+      return parseFloat(price.toSignificant(10))
+    }
+
+    // Fallback
+    return 1.0001 ** tick
+  } catch (error) {
+    console.error('Error calculating tick price:', error)
+    return 1.0001 ** tick
   }
-
-  // Handle extremely small values (treat as 0)
-  if (price < 1e-18) return '0'
-
-  // Handle extremely large values (treat as infinity)
-  if (price > 1e30) return '∞'
-
-  if (price < 0.000001) return price.toExponential(2)
-  if (price < 0.01) return price.toFixed(6)
-  if (price < 1) return price.toFixed(4)
-  if (price < 1000) return price.toFixed(2)
-  return price.toLocaleString('en-US', { maximumFractionDigits: 2 })
 }
 
 // Helper function for percentage formatting with bounds checking
@@ -62,32 +61,6 @@ const formatPercentage = (percentage: number): string => {
   if (!Number.isFinite(percentage)) return '-%'
   const sign = percentage >= 0 ? '+' : ''
   return `${sign}${percentage.toFixed(2)}%`
-}
-
-// Helper function to calculate price from tick using established patterns
-const tickToPrice = (tick: number): number => {
-  // Use TickMath constants for bounds checking like existing code
-  if (tick >= TickMath.MAX_TICK) return Infinity
-  if (tick <= TickMath.MIN_TICK) return 0
-
-  return 1.0001 ** tick
-}
-
-// Get tick spacing for fee tier
-const getTickSpacing = (feeTier: number): number => {
-  // Standard V3 tick spacings
-  switch (feeTier) {
-    case 100:
-      return 1
-    case 500:
-      return 10
-    case 3000:
-      return 60
-    case 10000:
-      return 200
-    default:
-      return 60
-  }
 }
 
 // Helper function to transform position data for table - NO HOOKS ALLOWED
@@ -143,16 +116,15 @@ const transformV3PositionToTableRow = (
   const outOfRange = pool && (pool.tickCurrent < position.tickLower || pool.tickCurrent >= position.tickUpper)
   const removed = position.liquidity === 0n
 
+  // Get tick spacing - prefer from pool object, fallback to SDK constant
+  const tickSpacing = pool?.tickSpacing ?? (poolInfo.feeTier ? TICK_SPACINGS[poolInfo.feeTier as FeeAmount] : undefined)
+
   // Calculate tick limits for full range detection
   const ticksLimit: {
     [bound in Bound]: number | undefined
   } = {
-    [Bound.LOWER]: poolInfo.feeTier
-      ? nearestUsableTick(TickMath.MIN_TICK, getTickSpacing(poolInfo.feeTier))
-      : undefined,
-    [Bound.UPPER]: poolInfo.feeTier
-      ? nearestUsableTick(TickMath.MAX_TICK, getTickSpacing(poolInfo.feeTier))
-      : undefined,
+    [Bound.LOWER]: tickSpacing ? nearestUsableTick(TickMath.MIN_TICK, tickSpacing) : undefined,
+    [Bound.UPPER]: tickSpacing ? nearestUsableTick(TickMath.MAX_TICK, tickSpacing) : undefined,
   }
 
   const isTickAtLimit = {
@@ -168,12 +140,13 @@ const transformV3PositionToTableRow = (
   let rangePosition = 50
   let showPercentages = false
 
-  // Primary method: Use tick-based price calculation
-  const minPrice = tickToPrice(position.tickLower)
-  const maxPrice = tickToPrice(position.tickUpper)
+  // Primary method: Use tick-based price calculation with V3 SDK
+  const minPrice = getTickPrice(position.tickLower, poolInfo.token0.wrapped, poolInfo.token1.wrapped)
+  const maxPrice = getTickPrice(position.tickUpper, poolInfo.token0.wrapped, poolInfo.token1.wrapped)
 
-  minPriceFormatted = formatPriceNumber(minPrice)
-  maxPriceFormatted = formatPriceNumber(maxPrice)
+  // Use utility function for price formatting
+  minPriceFormatted = formatAmount(minPrice, { notation: 'standard' }) || '-'
+  maxPriceFormatted = formatAmount(maxPrice, { notation: 'standard' }) || '-'
 
   // If position is full range, set special handling
   if (isTickAtLimit.LOWER && isTickAtLimit.UPPER) {
@@ -203,6 +176,7 @@ const transformV3PositionToTableRow = (
           Math.abs(minPercent) < 10000 &&
           Math.abs(maxPercent) < 10000
         ) {
+          // Use utility function for percentage formatting
           minPercentage = formatPercentage(minPercent)
           maxPercentage = formatPercentage(maxPercent)
           rangePosition = Math.max(0, Math.min(100, ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100))
@@ -222,8 +196,8 @@ const transformV3PositionToTableRow = (
       const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(6))
 
       if (Number.isFinite(positionMinPrice) && Number.isFinite(positionMaxPrice)) {
-        minPriceFormatted = formatPriceNumber(positionMinPrice)
-        maxPriceFormatted = formatPriceNumber(positionMaxPrice)
+        minPriceFormatted = formatAmount(positionMinPrice, { notation: 'standard' }) || '-'
+        maxPriceFormatted = formatAmount(positionMaxPrice, { notation: 'standard' }) || '-'
 
         // Try percentage calculation with positionData prices
         if (pool?.token0Price && positionMaxPrice > positionMinPrice) {
@@ -365,11 +339,6 @@ const transformV3PositionToTableRow = (
     />
   )
 
-  const currencyKey = (currency: Currency) => {
-    if (currency.isNative) return NATIVE[poolInfo.chainId].symbol
-    return currency.address
-  }
-
   const actions = (
     <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
       <ActionButton
@@ -383,7 +352,9 @@ const transformV3PositionToTableRow = (
       </ActionButton>
       <ActionButton
         as="a"
-        href={`/add/${currencyKey(poolInfo.token0)}/${currencyKey(poolInfo.token1)}/${poolInfo.feeTier.toString()}`}
+        href={`/add/${currencyId(poolInfo.token0.wrapped)}/${currencyId(
+          poolInfo.token1.wrapped,
+        )}/${poolInfo.feeTier.toString()}`}
         disabled={removed}
         isIcon
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -418,12 +389,12 @@ const transformV3PositionToTableRow = (
           />
         }
       />
-      {position.isStaked && (
+      {/* {position.isStaked && (
         <ActionButton onClick={(e: React.MouseEvent) => e.stopPropagation()}>{t('Harvest')}</ActionButton>
       )}
       {!position.isStaked && !removed && !outOfRange && (
         <ActionButton onClick={(e: React.MouseEvent) => e.stopPropagation()}>{t('Stake')}</ActionButton>
-      )}
+      )} */}
     </FlexGap>
   )
 

@@ -3,7 +3,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { nearestUsableTick, PositionMath, TickMath } from '@pancakeswap/v3-sdk'
+import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
+import { nearestUsableTick, PositionMath, TickMath, tickToPrice } from '@pancakeswap/v3-sdk'
 
 import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
@@ -31,37 +32,28 @@ import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
-// Helper function to calculate price from tick using established patterns
-const tickToPrice = (tick: number): number => {
-  // Use TickMath constants for bounds checking like existing code
-  if (tick >= TickMath.MAX_TICK) return Infinity
-  if (tick <= TickMath.MIN_TICK) return 0
+// Helper function to safely convert tick to price using V3 SDK
+const getTickPrice = (tick: number, token0: any, token1: any): number => {
+  try {
+    // Use TickMath constants for bounds checking
+    if (tick >= TickMath.MAX_TICK) return Infinity
+    if (tick <= TickMath.MIN_TICK) return 0
 
-  return 1.0001 ** tick
-}
+    // Use the V3 SDK's tickToPrice function for accurate calculation
+    if (token0 && token1) {
+      const price = tickToPrice(token0, token1, tick)
+      return parseFloat(price.toSignificant(10))
+    }
 
-// Simple number formatting for prices
-const formatPriceNumber = (price: number): string => {
-  if (price === 0) return '0'
-  if (!Number.isFinite(price)) {
-    if (price === Infinity) return '∞'
-    if (price === -Infinity) return '-∞'
-    return 'NaN'
+    // Fallback
+    return 1.0001 ** tick
+  } catch (error) {
+    console.error('Error calculating tick price:', error)
+    return 1.0001 ** tick
   }
-
-  // Handle extremely small values (treat as 0)
-  if (price < 1e-18) return '0'
-
-  // Handle extremely large values (treat as infinity)
-  if (price > 1e30) return '∞'
-
-  if (price < 0.000001) return price.toExponential(2)
-  if (price < 0.01) return price.toFixed(6)
-  if (price < 1) return price.toFixed(4)
-  if (price < 1000) return price.toFixed(2)
-  return price.toLocaleString('en-US', { maximumFractionDigits: 2 })
 }
 
+// Helper function for percentage formatting with bounds checking
 const formatPercentage = (percentage: number): string => {
   if (Math.abs(percentage) < 0.01) return '0%'
   const sign = percentage >= 0 ? '+' : ''
@@ -119,12 +111,13 @@ const transformInfinityCLPositionToTableRow = (
   const outOfRange = pool && (pool.tickCurrent < position.tickLower || pool.tickCurrent >= position.tickUpper)
   const removed = position.liquidity === 0n
 
-  // Calculate and format price range using existing patterns
-  const minPrice = tickToPrice(position.tickLower)
-  const maxPrice = tickToPrice(position.tickUpper)
+  // Calculate and format price range using V3 SDK
+  const minPrice = getTickPrice(position.tickLower, poolInfo.token0, poolInfo.token1)
+  const maxPrice = getTickPrice(position.tickUpper, poolInfo.token0, poolInfo.token1)
 
-  const minPriceFormatted = formatPriceNumber(minPrice)
-  const maxPriceFormatted = formatPriceNumber(maxPrice)
+  // Use utility function for price formatting
+  const minPriceFormatted = formatAmount(minPrice, { notation: 'standard' }) || '-'
+  const maxPriceFormatted = formatAmount(maxPrice, { notation: 'standard' }) || '-'
   let minPercentage = ''
   let maxPercentage = ''
   let rangePosition = 50
