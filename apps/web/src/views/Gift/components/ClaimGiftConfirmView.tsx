@@ -113,7 +113,7 @@ export const ClaimGiftConfirmView = () => {
         <CheckmarkCircleIcon color="success" width="40px" />
       ) : (
         <Button onClick={handleClaim} width="100%" disabled={!code || isPending} isLoading={isPending}>
-          {t('Claim')}
+          {isPending ? t('Claiming...') : t('Claim')}
         </Button>
       )}
     </ColumnCenter>

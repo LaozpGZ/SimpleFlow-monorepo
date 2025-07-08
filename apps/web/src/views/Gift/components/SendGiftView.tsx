@@ -20,13 +20,7 @@ enum GIFT_VIEW {
   SEND_QR = 1,
 }
 
-export const SendGiftView = ({
-  tokenAmount,
-  price,
-}: {
-  tokenAmount?: CurrencyAmount<Token | NativeCurrency>
-  price: number
-}) => {
+export const SendGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Token | NativeCurrency> }) => {
   const { t } = useTranslation()
   const [code, setCode] = useState<string | null>(null)
   const [selectedView, setSelectedView] = useState<GIFT_VIEW>(GIFT_VIEW.SEND_LINK)
@@ -60,14 +54,11 @@ export const SendGiftView = ({
   }
 
   if (code && txHash) {
-    const amount = tokenAmount.toExact()
-    const usdValue = parseFloat(amount) * price
-
     return (
       <ColumnCenter>
         {viewTabs}
 
-        {selectedView === GIFT_VIEW.SEND_LINK && <TokenAmountSection tokenAmount={tokenAmount} price={price} />}
+        {selectedView === GIFT_VIEW.SEND_LINK && <TokenAmountSection tokenAmount={tokenAmount} />}
 
         <Card
           style={{
@@ -78,9 +69,9 @@ export const SendGiftView = ({
         >
           <Box padding="16px" width="100%">
             {selectedView === GIFT_VIEW.SEND_LINK ? (
-              <SendLinkView usdValue={usdValue} code={code} />
+              <SendLinkView tokenAmount={tokenAmount} code={code} />
             ) : (
-              <QRView tokenAmount={tokenAmount} usdValue={usdValue} code={code} />
+              <QRView tokenAmount={tokenAmount} code={code} />
             )}
           </Box>
         </Card>
@@ -112,7 +103,7 @@ export const SendGiftView = ({
           </Card>
         </FlexGap>
       ) : (
-        <TokenAmountSection tokenAmount={tokenAmount} price={price} />
+        <TokenAmountSection tokenAmount={tokenAmount} />
       )}
 
       <Card mb="16px">

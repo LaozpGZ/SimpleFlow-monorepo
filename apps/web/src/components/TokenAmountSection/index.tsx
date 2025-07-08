@@ -1,22 +1,18 @@
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
 import { Box, Text } from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
+import { multiplyPriceByAmount } from 'utils/prices'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
-export function TokenAmountSection({
-  tokenAmount,
-  price,
-}: {
-  tokenAmount?: CurrencyAmount<Token | NativeCurrency>
-  price: number
-}) {
+export function TokenAmountSection({ tokenAmount }: { tokenAmount?: CurrencyAmount<Token | NativeCurrency> }) {
+  const stablePrice = useStablecoinPrice(tokenAmount?.currency)
+
   if (!tokenAmount) {
     return null
   }
 
   const amount = tokenAmount.toExact()
-
-  const usdValue = parseFloat(amount) * price
 
   return (
     <>
@@ -31,7 +27,7 @@ export function TokenAmountSection({
         {tokenAmount.currency.symbol}
       </Text>
       <Text fontSize="16px" color="textSubtle" mb="24px">
-        {formatDollarAmount(usdValue)}
+        {formatDollarAmount(multiplyPriceByAmount(stablePrice, parseFloat(amount)))}
       </Text>
     </>
   )
