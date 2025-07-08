@@ -14,6 +14,7 @@ import { InfinityBinPositionDetail, POSITION_STATUS } from 'state/farmsV4/state/
 import { InfinityBinPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityBinPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
@@ -366,6 +367,7 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
         toggleInactiveOnly={() =>
           setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
         }
+        harvestAllButton={<InfinityPositionActions positionList={positions || []} showPositionFees={false} />}
       />
     </>
   )

@@ -13,13 +13,15 @@ import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { useFarmsV3BatchHarvest } from 'views/Farms/hooks/v3/useFarmV3Actions'
 import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
 import { V3PositionActions } from 'views/universalFarms/components/PositionActions/V3PositionActions'
 import { V3UnstakeModalContent } from 'views/universalFarms/components/PositionActions/V3UnstakeModalContent'
+import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 import { useV3PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
-import { ActionButton } from '../styles'
+import { ActionButton, PrimaryOutlineButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
 import { V3EarningsCell } from './PoolEarningsCells'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
@@ -486,6 +488,32 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
     (v3Data as PositionDetail[])?.filter((position) => position.liquidity !== 0n),
   )
 
+  const [loading, setLoading] = useState(false)
+  const { switchNetworkIfNecessary, isLoading: isSwitchingNetwork } = useCheckShouldSwitchNetwork()
+
+  const { onHarvestAll } = useFarmsV3BatchHarvest()
+
+  const handleHarvestAll = useCallback(async () => {
+    if (loading || !onHarvestAll || !v3Data) return
+
+    const shouldSwitch = await switchNetworkIfNecessary(chainId)
+    if (shouldSwitch) {
+      return
+    }
+    try {
+      setLoading(true)
+
+      const tokenIds = (v3Data as PositionDetail[])?.filter((p) => p.isStaked).map((p) => p.tokenId.toString())
+
+      await onHarvestAll(tokenIds)
+
+      setLoading(false)
+    } catch (error) {
+      console.error(error)
+      setLoading(false)
+    }
+  }, [loading, setLoading, chainId, switchNetworkIfNecessary, onHarvestAll, v3Data])
+
   // Handle data from individual position rows
   const handleRowDataReady = useCallback((data: any) => {
     setTransformedPositions((prev) => {
@@ -558,6 +586,11 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>
           setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
+        }
+        harvestAllButton={
+          <PrimaryOutlineButton onClick={handleHarvestAll} disabled={loading || isSwitchingNetwork}>
+            {loading ? t('Harvesting...') : t('Harvest All')}
+          </PrimaryOutlineButton>
         }
       />
     </>
