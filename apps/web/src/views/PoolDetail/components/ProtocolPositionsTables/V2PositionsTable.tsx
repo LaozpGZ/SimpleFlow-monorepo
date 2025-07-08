@@ -21,7 +21,6 @@ import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton, PrimaryOutlineButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
-import { V2EarningsCell } from './PoolEarningsCells'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
 interface V2PositionsTableProps {
@@ -114,14 +113,6 @@ const V2PositionWithApr: React.FC<{
       </Flex>
     )
 
-    const earnings = (
-      <Flex flexDirection="column" alignItems="flex-start">
-        <Text bold fontSize="16px">
-          <V2EarningsCell pool={poolInfo} />
-        </Text>
-      </Flex>
-    )
-
     const totalApr = (aprData.lpApr || 0) + Number(aprData.cakeApr?.value || 0) + (aprData.merklApr || 0)
     const aprDisplay = (
       <Flex flexDirection="column" alignItems="flex-start">
@@ -165,7 +156,6 @@ const V2PositionWithApr: React.FC<{
       tableRow: {
         tokenInfo,
         liquidity,
-        earnings,
         apr: aprDisplay,
         actions,
       },

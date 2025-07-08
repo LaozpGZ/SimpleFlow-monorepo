@@ -2,7 +2,6 @@ import { useEffect, useMemo } from 'react'
 
 import { useAccount } from 'wagmi'
 
-import { Protocol } from '@pancakeswap/farms'
 import { Currency } from '@pancakeswap/swap-sdk-core'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { Pool } from '@pancakeswap/v3-sdk'
@@ -11,10 +10,8 @@ import { useUnclaimedFarmRewardsUSDByPoolId, useUnclaimedFarmRewardsUSDByTokenId
 import { useFeesEarnedUSD } from 'hooks/infinity/useFeesEarned'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { useV3PositionFees } from 'hooks/v3/useV3PositionFees'
-import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
-import { PoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { Address } from 'viem'
-import { useV2CakeEarning, useV3CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
+import { useV3CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
 import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
 
 // Helper function to standardize number conversion
@@ -26,46 +23,6 @@ const safeParseFloat = (value: string | number | undefined): number => {
 
 const EarningsUSD = ({ earningsBusd }: { earningsBusd: number }) => {
   return <div>~${formatNumber(earningsBusd)}</div>
-}
-
-export const V2EarningsCell = ({ pool }: { pool: PoolInfo | null | undefined }) => {
-  const { address: account } = useAccount()
-  const { earningsBusd: cakeEarnings } = useV2CakeEarning(pool)
-
-  // Get user's V2 position data to calculate LP fees
-  const { data: v2Position } = useAccountPositionDetailByPool<Protocol.V2>(
-    pool?.chainId ?? 0,
-    account,
-    pool?.protocol === 'v2' ? (pool as V2PoolInfo) : undefined,
-  )
-
-  // Calculate uncollected V2 LP fees
-  // TODO: Re-check this logic, assuming 24h volume for earning calculation...
-  const lpFeesUSD = useMemo(() => {
-    if (!pool || !v2Position || pool.protocol !== 'v2') return 0
-
-    // Get recent pool volume to estimate uncollected fees
-    const volume24h = safeParseFloat(pool.vol24hUsd)
-
-    if (volume24h === 0) return 0
-
-    // Calculate user's share of the pool
-    const userTotalLPBalance = v2Position.nativeBalance.add(v2Position.farmingBalance)
-    const totalSupply = v2Position.totalSupply
-
-    if (userTotalLPBalance.equalTo(0) || totalSupply.equalTo(0)) return 0
-
-    // User's percentage of the pool
-    const userPoolPercentage = parseFloat(userTotalLPBalance.divide(totalSupply).toFixed(10))
-
-    // Estimate uncollected fees: user's share of recent trading volume * LP fee rate (0.17%)
-    const LP_FEE_RATE = 0.0017 // 0.17% goes to LPs
-    return volume24h * LP_FEE_RATE * userPoolPercentage
-  }, [pool, v2Position])
-
-  const totalEarnings = cakeEarnings + lpFeesUSD
-
-  return <EarningsUSD earningsBusd={totalEarnings} />
 }
 
 export const V3EarningsCell = ({

@@ -102,6 +102,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
             dataIndex: 'earnings',
             key: 'earnings',
             render: (earnings) => <div>{earnings}</div>,
+            display: protocol !== Protocol.V2 && protocol !== Protocol.STABLE,
           },
           {
             title: t('APR'),
