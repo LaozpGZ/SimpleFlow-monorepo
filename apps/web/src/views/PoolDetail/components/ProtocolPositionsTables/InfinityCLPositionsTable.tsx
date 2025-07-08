@@ -394,9 +394,25 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
     })
   }, [])
 
-  // Reset transformed positions when positions change
+  // Smart update of transformed positions - only reset when structure changes, not data updates
   useEffect(() => {
-    setTransformedPositions([])
+    setTransformedPositions((prev) => {
+      if (!positionsInPool) return prev
+
+      // Create position ID set for current positions
+      const currentPositionIds = new Set(positionsInPool.map((p) => p.tokenId.toString()))
+
+      // Remove transformed positions that no longer exist
+      const filteredPrev = prev.filter((tp) => currentPositionIds.has(tp.tokenId))
+
+      // If the filtered array has the same length as current positions, structure hasn't changed
+      if (filteredPrev.length === positionsInPool.length) {
+        return filteredPrev
+      }
+
+      // Structure changed, return filtered array and let individual rows populate new entries
+      return filteredPrev
+    })
   }, [positionsInPool])
 
   // Create individual position row components that fetch APR data

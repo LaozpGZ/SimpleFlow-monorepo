@@ -548,9 +548,25 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
     })
   }, [])
 
-  // Reset transformed positions when positions change
+  // Smart update of transformed positions - only reset when structure changes, not data updates
   useEffect(() => {
-    setTransformedPositions([])
+    setTransformedPositions((prev) => {
+      if (!v3Data) return prev
+
+      // Create position ID set for current positions
+      const currentPositionIds = new Set((v3Data as PositionDetail[]).map((p) => p.tokenId.toString()))
+
+      // Remove transformed positions that no longer exist
+      const filteredPrev = prev.filter((tp) => currentPositionIds.has(tp.tokenId))
+
+      // If the filtered array has the same length as current positions, structure hasn't changed
+      if (filteredPrev.length === (v3Data as PositionDetail[]).length) {
+        return filteredPrev
+      }
+
+      // Structure changed, return filtered array and let individual rows populate new entries
+      return filteredPrev
+    })
   }, [v3Data])
 
   // Create individual position row components that fetch APR data
