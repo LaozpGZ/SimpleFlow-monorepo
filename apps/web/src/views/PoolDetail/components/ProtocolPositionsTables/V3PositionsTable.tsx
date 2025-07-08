@@ -18,6 +18,7 @@ import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
 import { V3PositionActions } from 'views/universalFarms/components/PositionActions/V3PositionActions'
 import { V3UnstakeModalContent } from 'views/universalFarms/components/PositionActions/V3UnstakeModalContent'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
+import { useV3CakeEarningsByPool } from 'views/universalFarms/hooks/useCakeEarning'
 import { useV3PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
@@ -417,6 +418,7 @@ const transformV3PositionToTableRow = (
       priceRange,
       actions,
     },
+    totalEarnings: earnings,
     liquidityUSD,
     totalApr,
   }
@@ -489,6 +491,8 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
   )
 
   const [loading, setLoading] = useState(false)
+
+  const { earningsBusd, isLoading: isLoadingEarnings } = useV3CakeEarningsByPool(poolInfo)
   const { switchNetworkIfNecessary, isLoading: isSwitchingNetwork } = useCheckShouldSwitchNetwork()
 
   const { onHarvestAll } = useFarmsV3BatchHarvest()
@@ -582,6 +586,7 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
             ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
             : 0
         }
+        totalEarnings={formatDollarAmount(earningsBusd, 2, false)}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>

@@ -4,10 +4,15 @@ import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { BigNumber as BN } from 'bignumber.js'
+import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
 import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
+import { useCakePrice } from 'hooks/useCakePrice'
+import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+import { $path } from 'next-typesafe-url'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { InfinityBinPositionDetail, POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'
@@ -16,6 +21,7 @@ import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityBinPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
+import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
@@ -36,6 +42,8 @@ const transformInfinityBinPositionToTableRow = (
   amount0: CurrencyAmount<any> | undefined,
   amount1: CurrencyAmount<any> | undefined,
   totalTVLUsd: number,
+  price0Usd: number | undefined,
+  price1Usd: number | undefined,
   t: (key: string) => string,
 ) => {
   const hasLiquidity = amount0?.greaterThan('0') || amount1?.greaterThan('0')
@@ -58,6 +66,11 @@ const transformInfinityBinPositionToTableRow = (
     </FlexGap>
   )
 
+  const liquidityUSD = new BN(amount0?.toExact() ?? 0)
+    .times(price0Usd ?? 0)
+    .plus(new BN(amount1?.toExact() ?? 0).times(price1Usd ?? 0))
+    .toNumber()
+
   const liquidity = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Tooltips
@@ -76,7 +89,9 @@ const transformInfinityBinPositionToTableRow = (
                 </Text>
               </FlexGap>
               <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
-                $0.00
+                {amount0 && price0Usd
+                  ? formatDollarAmount(new BN(amount0.toExact()).times(price0Usd).toNumber())
+                  : '$0.00'}
               </Text>
             </FlexGap>
             <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
@@ -92,14 +107,16 @@ const transformInfinityBinPositionToTableRow = (
                 </Text>
               </FlexGap>
               <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
-                $0.00
+                {amount1 && price1Usd
+                  ? formatDollarAmount(new BN(amount1.toExact()).times(price1Usd).toNumber())
+                  : '$0.00'}
               </Text>
             </FlexGap>
           </FlexGap>
         }
       >
         <Text bold fontSize="16px" style={{ cursor: 'default' }}>
-          {formatDollarAmount(totalTVLUsd)}
+          {formatDollarAmount(liquidityUSD)}
         </Text>
       </Tooltips>
     </Flex>
@@ -118,9 +135,6 @@ const transformInfinityBinPositionToTableRow = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
         {displayApr(totalApr)}
-      </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {t('Total APR')}
       </Text>
     </Flex>
   )
@@ -151,10 +165,25 @@ const transformInfinityBinPositionToTableRow = (
 
   const actions = (
     <FlexGap gap="8px" alignItems="center">
-      <ActionButton disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED} isIcon>
+      <ActionButton
+        as="a"
+        href={$path({
+          route: '/liquidity/position/[[...positionId]]',
+          routeParams: {
+            positionId: [Protocol.InfinityBIN, position.poolId.toString(), 'decrease'],
+          },
+        })}
+        disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}
+        isIcon
+      >
         <MinusIcon />
       </ActionButton>
-      <ActionButton disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED} isIcon>
+      <ActionButton
+        as="a"
+        href={getAddInfinityLiquidityURL({ poolId: poolInfo.poolId, chainId: poolInfo.chainId })}
+        disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}
+        isIcon
+      >
         <AddIcon />
       </ActionButton>
     </FlexGap>
@@ -170,7 +199,7 @@ const transformInfinityBinPositionToTableRow = (
       priceRange,
       actions,
     },
-    liquidityUSD: totalTVLUsd,
+    liquidityUSD,
     totalApr,
     hasLiquidity,
   }
@@ -200,6 +229,13 @@ const InfinityBinPositionRow: React.FC<{
     [position?.reserveY, pool?.token1],
   )
 
+  const { data: price0Usd } = useCurrencyUsdPrice(pool?.token0 ?? undefined, {
+    enabled: Boolean(pool?.token0 && amount0?.greaterThan('0')),
+  })
+  const { data: price1Usd } = useCurrencyUsdPrice(pool?.token1 ?? undefined, {
+    enabled: Boolean(pool?.token1 && amount1?.greaterThan('0')),
+  })
+
   // Transform the data with the fetched APR
   const transformedData = useMemo(() => {
     const convertedAprData = {
@@ -219,9 +255,11 @@ const InfinityBinPositionRow: React.FC<{
       amount0,
       amount1,
       totalTVLUsd,
+      price0Usd,
+      price1Usd,
       t,
     )
-  }, [position, poolInfo, pool, aprData, amount0, amount1, t])
+  }, [position, poolInfo, pool, aprData, amount0, amount1, t, price0Usd, price1Usd])
 
   // Pass data back to parent whenever it changes
   useEffect(() => {
@@ -344,6 +382,18 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     })
   }, [transformedPositions, filter, positions])
 
+  const [positionEarningAmounts] = usePositionEarningAmount()
+  const cakePrice = useCakePrice()
+
+  // TODO: Check if need to use rewardsAmount or other method
+  const totalEarningsUSD = useMemo(() => {
+    const totalEarnings = filteredPositions.reduce(
+      (sum, pos) => sum + (positionEarningAmounts[poolInfo.chainId]?.[poolInfo.poolId]?.[pos.tokenId] || 0),
+      0,
+    )
+    return new BN(totalEarnings ?? 0).times(cakePrice.toString()).toNumber()
+  }, [filteredPositions, positionEarningAmounts, poolInfo.chainId, poolInfo.poolId])
+
   if (isLoading) {
     return <div>{t('Loading...')}</div>
   }
@@ -362,6 +412,7 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
             ? filteredPositions.reduce((sum, pos) => sum + (pos.totalApr || 0), 0) / filteredPositions.length
             : 0
         }
+        totalEarnings={formatDollarAmount(totalEarningsUSD, 2, false)}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>
