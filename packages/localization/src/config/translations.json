@@ -4289,5 +4289,7 @@
   "Split Display": "Split Display",
   "Display rewards in a split view. Click this icon to switch to the Aggregate view.": "Display rewards in a split view. Click this icon to switch to the Aggregate view.",
   "Aggregated Display": "Aggregated Display",
-  "Display rewards in an aggregate view. Click this icon to switch to the Split view.": "Display rewards in an aggregate view. Click this icon to switch to the Split view."
+  "Display rewards in an aggregate view. Click this icon to switch to the Split view.": "Display rewards in an aggregate view. Click this icon to switch to the Split view.",
+  "Provide Liquidity on Solana PancakeSwap": "Provide Liquidity on Solana PancakeSwap",
+  "Add LP Now": "Add LP Now"
 }
