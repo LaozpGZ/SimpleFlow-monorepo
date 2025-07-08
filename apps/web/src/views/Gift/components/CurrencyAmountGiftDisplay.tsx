@@ -6,12 +6,13 @@ import { Flex, Text } from '@pancakeswap/uikit'
 export const CurrencyAmountGiftDisplay = ({
   currencyAmount,
   usdValue,
+  ...props
 }: {
   currencyAmount: CurrencyAmount<Token | NativeCurrency>
   usdValue: number
 }) => {
   return (
-    <Flex>
+    <Flex {...props}>
       <CurrencyLogo showChainLogo currency={currencyAmount.currency} size="40px" />
       <Flex flexDirection="column" ml="8px">
         <Text fontWeight="600" fontSize="14px" color="text">

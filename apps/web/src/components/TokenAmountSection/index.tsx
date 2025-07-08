@@ -1,6 +1,7 @@
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
 import { Box, Text } from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
 export function TokenAmountSection({
   tokenAmount,
@@ -30,7 +31,7 @@ export function TokenAmountSection({
         {tokenAmount.currency.symbol}
       </Text>
       <Text fontSize="16px" color="textSubtle" mb="24px">
-        ~${usdValue.toFixed(6)} USD
+        {formatDollarAmount(usdValue)}
       </Text>
     </>
   )

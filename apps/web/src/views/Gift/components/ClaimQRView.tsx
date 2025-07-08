@@ -6,6 +6,7 @@ import { QRCodeSVG } from 'qrcode.react'
 import styled from 'styled-components'
 import { SecondaryCard } from 'components/SecondaryCard'
 import { generateClaimLink } from '../utils/generateClaimLink'
+import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 
 const GiftCodeContainer = styled(Box)`
   background-color: ${({ theme }) => theme.colors.input};
@@ -28,17 +29,7 @@ export function QRView({
   return (
     <>
       <Card mb="16px">
-        <Flex p="8px">
-          <CurrencyLogo showChainLogo currency={tokenAmount.currency} size="40px" />
-          <Flex flexDirection="column" ml="8px">
-            <Text fontWeight="600" fontSize="14px" color="text">
-              {tokenAmount.toSignificant(6)} {tokenAmount.currency.symbol}
-            </Text>
-            <Text fontSize="12px" color="textSubtle">
-              ~{usdValue.toFixed(2)} USD
-            </Text>
-          </Flex>
-        </Flex>
+        <CurrencyAmountGiftDisplay p="8px" currencyAmount={tokenAmount} usdValue={usdValue} />
       </Card>
       <Flex mb="16px" justifyContent="center" flexDirection="column" alignItems="center">
         <Box position="relative">
