@@ -13,6 +13,7 @@ import { SendLinkView } from './SendLinkView'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 import { useReadGasPaymentAmount } from '../hooks/useReadGasPayment'
 import { CreateGiftButton } from './CreateGiftButton'
+import { CopyLinkCheckBoxes } from './CopyLinkCheckBoxes'
 
 enum GIFT_VIEW {
   SEND_LINK = 0,
@@ -72,6 +73,7 @@ export const SendGiftView = ({
           style={{
             maxWidth: '100%',
             width: '100%',
+            marginBottom: '16px',
           }}
         >
           <Box padding="16px" width="100%">
@@ -82,6 +84,8 @@ export const SendGiftView = ({
             )}
           </Box>
         </Card>
+
+        <CopyLinkCheckBoxes />
       </ColumnCenter>
     )
   }
