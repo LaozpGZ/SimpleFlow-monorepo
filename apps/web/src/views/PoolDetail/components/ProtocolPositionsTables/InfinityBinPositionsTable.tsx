@@ -163,7 +163,7 @@ const transformInfinityBinPositionToTableRow = (
   )
 
   const actions = (
-    <FlexGap gap="8px" alignItems="center">
+    <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
       <ActionButton
         as="a"
         href={$path({

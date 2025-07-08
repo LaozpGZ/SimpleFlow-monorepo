@@ -367,7 +367,7 @@ const transformV3PositionToTableRow = (
   }
 
   const actions = (
-    <FlexGap gap="8px" alignItems="center">
+    <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
       <ActionButton as="a" href={`/remove/${position.tokenId.toString()}`} disabled={removed} isIcon>
         <MinusIcon />
       </ActionButton>

@@ -1,19 +1,24 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
-import { AddIcon, Flex, FlexGap, MinusIcon, Text } from '@pancakeswap/uikit'
+import { AddIcon, Flex, FlexGap, MinusIcon, Text, useToast } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { ToastDescriptionWithTx } from 'components/Toast'
+import useCatchTxError from 'hooks/useCatchTxError'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions/type'
 import { StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
+import { useV2CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
 import { useV2PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
+import { useV2FarmActions } from 'views/universalFarms/hooks/useV2FarmActions'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
-import { ActionButton } from '../styles'
+import { ActionButton, PrimaryOutlineButton } from '../styles'
 import { PositionsTable } from '../Tabs/PositionsTable'
 import { V2EarningsCell } from './PoolEarningsCells'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
@@ -26,7 +31,8 @@ interface V2PositionsTableProps {
 const V2PositionWithApr: React.FC<{
   poolInfo: V2PoolInfo | StablePoolInfo
   v2OrStableData: V2LPDetail | StableLPDetail
-}> = ({ poolInfo, v2OrStableData }) => {
+  harvestAllButton?: React.ReactNode
+}> = ({ poolInfo, v2OrStableData, harvestAllButton }) => {
   const { t } = useTranslation()
 
   // Get USD prices for both tokens
@@ -39,6 +45,9 @@ const V2PositionWithApr: React.FC<{
 
   // Get APR data for the single position - safe to call since v2OrStableData is guaranteed to exist
   const aprData = useV2PositionApr(poolInfo, v2OrStableData)
+
+  // V2 earnings for the table
+  const { earningsBusd } = useV2CakeEarning(poolInfo)
 
   const transformedPosition = useMemo(() => {
     const amount0 = v2OrStableData.nativeDeposited0.add(v2OrStableData.farmingDeposited0)
@@ -131,17 +140,18 @@ const V2PositionWithApr: React.FC<{
     const migrateUrl = `/v2/migrate/${poolInfo.lpAddress}`
 
     const actions = (
-      <FlexGap gap="8px" alignItems="center">
-        <NextLinkFromReactRouter to={addLiquidityUrl}>
-          <ActionButton isIcon>
-            <AddIcon />
-          </ActionButton>
-        </NextLinkFromReactRouter>
+      <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
         <NextLinkFromReactRouter to={removeLiquidityUrl}>
           <ActionButton isIcon>
             <MinusIcon />
           </ActionButton>
         </NextLinkFromReactRouter>
+        <NextLinkFromReactRouter to={addLiquidityUrl}>
+          <ActionButton isIcon>
+            <AddIcon />
+          </ActionButton>
+        </NextLinkFromReactRouter>
+
         {poolInfo.protocol === 'v2' && (
           <NextLinkFromReactRouter to={migrateUrl}>
             <ActionButton>{t('Migrate')}</ActionButton>
@@ -168,20 +178,53 @@ const V2PositionWithApr: React.FC<{
       poolInfo={poolInfo}
       totalLiquidityUSD={transformedPosition.liquidityUSD}
       totalApr={transformedPosition.totalApr}
+      totalEarnings={formatDollarAmount(earningsBusd, 2, false)}
       data={[transformedPosition.tableRow]}
+      harvestAllButton={harvestAllButton}
     />
   )
 }
 
 export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) => {
+  const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
+  const { toastSuccess } = useToast()
+  const { fetchWithCatchTxError, loading } = useCatchTxError()
+  const { switchNetworkIfNecessary, isLoading: isSwitchingNetwork } = useCheckShouldSwitchNetwork()
 
   const { data: v2OrStableData, isLoading } = useAccountPositionDetailByPool<Protocol.V2 | Protocol.STABLE>(
     chainId,
     account,
     poolInfo,
   )
+
+  // V2 farm actions and earnings
+  const { onHarvest } = useV2FarmActions(poolInfo.lpAddress, poolInfo.bCakeWrapperAddress)
+  const { earningsBusd } = useV2CakeEarning(poolInfo)
+
+  const handleHarvestAll = useCallback(async () => {
+    if (loading || !onHarvest || !earningsBusd) return
+
+    const shouldSwitch = await switchNetworkIfNecessary(chainId)
+    if (shouldSwitch) {
+      return
+    }
+
+    try {
+      const receipt = await fetchWithCatchTxError(() => onHarvest())
+      if (receipt?.status) {
+        toastSuccess(
+          `${t('Harvested')}!`,
+          <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+            {t('Your %symbol% earnings have been sent to your wallet!', { symbol: 'CAKE' })}
+          </ToastDescriptionWithTx>,
+        )
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }, [loading, onHarvest, earningsBusd, switchNetworkIfNecessary, chainId, fetchWithCatchTxError, toastSuccess, t])
 
   if (isLoading) {
     return <LoadingCard />
@@ -191,6 +234,13 @@ export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) 
     return <EmptyPositionCard />
   }
 
-  // Render the position component only when data exists
-  return <V2PositionWithApr poolInfo={poolInfo} v2OrStableData={v2OrStableData} />
+  // Create harvest all button
+  const harvestAllButton = (
+    <PrimaryOutlineButton onClick={handleHarvestAll} disabled={loading || isSwitchingNetwork || !earningsBusd}>
+      {loading ? t('Harvesting...') : t('Harvest All')}
+    </PrimaryOutlineButton>
+  )
+
+  // Render the position component with harvest all button
+  return <V2PositionWithApr poolInfo={poolInfo} v2OrStableData={v2OrStableData} harvestAllButton={harvestAllButton} />
 }
