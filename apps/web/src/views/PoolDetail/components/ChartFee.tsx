@@ -2,7 +2,7 @@ import { useTheme } from '@pancakeswap/hooks'
 import { Flex, Text } from '@pancakeswap/uikit'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
@@ -52,6 +52,7 @@ export const ChartFee: React.FC<ChartVolumeProps> = ({ address, poolInfo }) => {
   const { data } = usePoolChartFeeData(address, poolInfo?.protocol)
   const [latestValue, setLatestValue] = useState<number | undefined>()
   const [valueLabel, setValueLabel] = useState<string | undefined>()
+  const [activeIndex, setActiveIndex] = useState<number | undefined>()
   const { theme } = useTheme()
 
   // Calculate total sum of all values
@@ -97,11 +98,13 @@ export const ChartFee: React.FC<ChartVolumeProps> = ({ address, poolInfo }) => {
             if (state?.activePayload?.[0]?.payload) {
               setLatestValue(state.activePayload[0].payload.value)
               setValueLabel(state.activePayload[0].payload.time)
+              setActiveIndex(state.activeTooltipIndex)
             }
           }}
           onMouseLeave={() => {
             setLatestValue(undefined)
             setValueLabel(undefined)
+            setActiveIndex(undefined)
           }}
         >
           <XAxis dataKey="formattedTime" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#9383B4' }} />
@@ -121,7 +124,15 @@ export const ChartFee: React.FC<ChartVolumeProps> = ({ address, poolInfo }) => {
             orientation="right"
           />
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
-          <Bar dataKey="value" fill={theme.colors.primary} radius={[16, 16, 16, 16]} maxBarSize={20} />
+          <Bar dataKey="value" radius={[16, 16, 16, 16]} maxBarSize={20}>
+            {chartData.map((entry, index) => (
+              <Cell
+                key={`cell-${index}`}
+                fill={theme.colors.primary}
+                fillOpacity={activeIndex === undefined ? 1 : activeIndex === index ? 1 : 0.3}
+              />
+            ))}
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
     </>
