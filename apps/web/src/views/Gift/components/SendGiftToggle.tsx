@@ -8,16 +8,17 @@ import { CHAINS_WITH_GIFT_CLAIM } from '../constants'
 
 export const SendGiftToggle = ({
   children,
+  tokenChainId,
   isNativeToken,
 }: {
+  tokenChainId?: number
   isNativeToken: boolean
   children: (isSendGiftOn: boolean) => React.ReactNode
 }) => {
   const { t } = useTranslation()
   const { isSendGift, setIsSendGift } = useContext(SendGiftContext)
-  const { chainId } = useActiveChainId()
 
-  const isSupportedChain = chainId && CHAINS_WITH_GIFT_CLAIM.includes(chainId)
+  const isSupportedChain = tokenChainId && CHAINS_WITH_GIFT_CLAIM.includes(tokenChainId)
 
   if (!isSupportedChain) {
     return children(false)
