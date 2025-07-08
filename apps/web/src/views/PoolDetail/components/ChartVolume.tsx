@@ -108,6 +108,7 @@ export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, tim
                 key={`cell-${index}`}
                 fill={theme.colors.primary}
                 fillOpacity={activeIndex === undefined ? 1 : activeIndex === index ? 1 : 0.3}
+                style={{ transition: 'fill-opacity 0.2s ease' }}
               />
             ))}
           </Bar>

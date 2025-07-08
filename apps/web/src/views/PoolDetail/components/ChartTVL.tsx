@@ -2,7 +2,7 @@ import { useTheme } from '@pancakeswap/hooks'
 import { Flex, Text } from '@pancakeswap/uikit'
 import dayjs from 'dayjs'
 import { useMemo, useState } from 'react'
-import { Bar, BarChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
@@ -83,9 +83,9 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
         </Text>
       </Flex>
       <ResponsiveContainer width="100%" height={340}>
-        <BarChart
+        <AreaChart
           data={chartData}
-          margin={{ top: 20, right: 20, left: 20, bottom: 20 }}
+          margin={{ top: 20, right: 20, left: 20, bottom: 40 }}
           onMouseMove={(state) => {
             if (state?.activePayload?.[0]?.payload) {
               setHoverValue(state.activePayload[0].payload.value)
@@ -97,6 +97,12 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
             setHoverDate(undefined)
           }}
         >
+          <defs>
+            <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={theme.colors.primary} stopOpacity={0.8} />
+              <stop offset="100%" stopColor={theme.colors.primary} stopOpacity={0.1} />
+            </linearGradient>
+          </defs>
           <XAxis dataKey="formattedTime" axisLine={false} tickLine={false} tick={{ fontSize: 12, fill: '#9383B4' }} />
           <YAxis
             axisLine={false}
@@ -114,8 +120,14 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
             orientation="right"
           />
           <Tooltip content={<CustomTooltip />} cursor={{ fill: 'transparent' }} />
-          <Bar dataKey="value" fill={theme.colors.primary} radius={[16, 16, 16, 16]} maxBarSize={20} />
-        </BarChart>
+          <Area
+            type="monotone"
+            dataKey="value"
+            stroke={theme.colors.primary}
+            fill="url(#colorGradient)"
+            strokeWidth={3}
+          />
+        </AreaChart>
       </ResponsiveContainer>
     </>
   )
