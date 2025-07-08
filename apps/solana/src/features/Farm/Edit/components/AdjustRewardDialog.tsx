@@ -97,7 +97,7 @@ export default function AdjustRewardDialog({
     isDecrease
   })
 
-  const invalid = !!error && error !== ADJUST_REWARD_ERROR.DECREASE
+  const invalid = !!error && error !== (ADJUST_REWARD_ERROR.DECREASE as unknown as string)
 
   const handleSave = useEvent(() => {
     onSave({

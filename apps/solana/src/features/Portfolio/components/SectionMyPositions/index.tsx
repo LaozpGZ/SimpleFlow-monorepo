@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useRef, useState } from 'react'
-import { Box, Flex, Grid, GridItem, HStack, Heading, SimpleGrid, Text } from '@chakra-ui/react'
+import { Box, Button, Flex, Grid, GridItem, HStack, Heading, SimpleGrid, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import useAllPositionInfo, { PositionTabValues } from '@/hooks/portfolio/useAllPositionInfo'
 import { useEvent } from '@/hooks/useEvent'

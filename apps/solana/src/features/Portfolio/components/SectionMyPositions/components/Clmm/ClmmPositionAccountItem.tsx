@@ -5,7 +5,7 @@ import Decimal from 'decimal.js'
 import { AprKey, timeBasisOptions, FormattedPoolInfoConcentratedItem } from '@/hooks/pool/type'
 import AddLiquidityModal from '@/features/Clmm/LiquidityEditModal/AddLiquidityModal'
 import RemoveLiquidityModal from '@/features/Clmm/LiquidityEditModal/RemoveLiquidityModal'
-import { useClmmRewardInfoFromSimulation } from '@/hooks/pool/clmm/useFetchClmmRewardInfo'
+import { BreakdownRewardInfo, useClmmRewardInfoFromSimulation } from '@/hooks/pool/clmm/useFetchClmmRewardInfo'
 import { PositionWithUpdateFn } from '@/hooks/portfolio/useAllPositionInfo'
 import { getPositionAprCore } from '@/features/Clmm/utils/calApr'
 import useFetchRpcClmmInfo from '@/hooks/pool/clmm/useFetchRpcClmmInfo'
@@ -218,7 +218,7 @@ export default function ClmmPositionAccountItem({
           totalPendingYield={totalPendingYield.toString()}
           baseIn={baseIn}
           rewardInfos={allRewardInfos}
-          breakdownRewardInfo={breakdownRewardInfo}
+          breakdownRewardInfo={breakdownRewardInfo as BreakdownRewardInfo}
         />
       )}
       <RemoveLiquidityModal

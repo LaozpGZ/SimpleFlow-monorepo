@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import * as yup from 'yup'
 import Decimal from 'decimal.js'
-import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
+import { Trans, useTranslation, type TranslateFunction } from '@pancakeswap/localization'
 import { MAX_DURATION_DAYS, MIN_DURATION_DAYS } from '@/store/configs/farm'
 import { EditReward } from '../util'
 
@@ -16,10 +16,10 @@ interface Props {
 }
 
 export const ADJUST_REWARD_ERROR = {
-  BALANCE_INSUFFICIENT: 'Insufficient sub balance',
-  DECREASE: 'Decrease Reward Rate',
-  DECREASE_72h: 'Decrease reward within 72 hours',
-  DAYS_EXTEND: 'Add reward days'
+  BALANCE_INSUFFICIENT: <Trans>Insufficient sub balance</Trans>,
+  DECREASE: <Trans>Decrease Reward Rate</Trans>,
+  DECREASE_72h: <Trans>Decrease reward within 72 hours</Trans>,
+  DAYS_EXTEND: <Trans>Add reward days</Trans>
 }
 
 const numberTransform = yup.number().transform((value) => (Number.isNaN(value) ? 0 : value))

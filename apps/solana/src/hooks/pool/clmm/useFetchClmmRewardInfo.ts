@@ -338,7 +338,14 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
   }, [mutate])
 
   const breakdownRewardInfo = useMemo(() => {
-    if (!poolInfo || !tokenPrices) return { fee: {}, rewards: [] }
+    if (!poolInfo || !tokenPrices)
+      return {
+        fee: {
+          A: { mint: {}, amount: '0', amountUSD: '0' },
+          B: { mint: {}, amount: '0', amountUSD: '0' }
+        },
+        rewards: []
+      } as unknown as BreakdownRewardInfo
     return {
       fee: {
         A: {
