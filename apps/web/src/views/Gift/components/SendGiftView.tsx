@@ -86,7 +86,7 @@ export const SendGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Tok
         >
           <Box padding="16px" width="100%">
             {selectedView === GIFT_VIEW.SEND_LINK ? (
-              <SendLinkView tokenAmount={tokenAmount} code={code} />
+              <SendLinkView tokenAmount={tokenAmount} nativeAmount={nativeAmount} code={code} />
             ) : (
               <QRView tokenAmount={tokenAmount} nativeAmount={nativeAmount} code={code} />
             )}

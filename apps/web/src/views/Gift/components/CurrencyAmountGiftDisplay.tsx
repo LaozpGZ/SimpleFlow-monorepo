@@ -21,7 +21,7 @@ export const CurrencyAmountGiftDisplay = ({
           {currencyAmount.toSignificant(6)} {currencyAmount.currency.symbol}
         </Text>
         <Text fontSize="12px" color="textSubtle">
-          {formatDollarAmount(multiplyPriceByAmount(stablePrice, currencyAmount.toExact()))}
+          {formatDollarAmount(multiplyPriceByAmount(stablePrice, parseFloat(currencyAmount.toExact())))}
         </Text>
       </Flex>
     </Flex>

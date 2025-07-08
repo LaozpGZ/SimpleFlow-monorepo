@@ -10,9 +10,11 @@ import { generateClaimLink } from '../utils/generateClaimLink'
 
 export function SendLinkView({
   tokenAmount,
+  nativeAmount,
   code,
 }: {
   tokenAmount: CurrencyAmount<Token | NativeCurrency>
+  nativeAmount?: CurrencyAmount<NativeCurrency>
   code: string
 }) {
   const { t } = useTranslation()
@@ -20,15 +22,17 @@ export function SendLinkView({
   const { toastSuccess } = useToast()
 
   const stablePrice = useStablecoinPrice(tokenAmount?.currency)
+  const stableNativePrice = useStablecoinPrice(nativeAmount?.currency)
+
+  const tokenUsd = multiplyPriceByAmount(stablePrice, parseFloat(tokenAmount.toExact()))
+  const nativeUsd = multiplyPriceByAmount(stableNativePrice, parseFloat(nativeAmount?.toExact() || '0'))
+
+  const totalUsd = tokenUsd + nativeUsd
 
   return (
     <>
       <NoteContainer mb="16px" p="8px">
-        {t(
-          `Just sent you ${formatDollarAmount(
-            multiplyPriceByAmount(stablePrice, parseFloat(tokenAmount.toExact())),
-          )}! 🎉 Tap this link and to claim it: 👉 ${claimLink}`,
-        )}
+        {t(`Just sent you ${formatDollarAmount(totalUsd)}! 🎉 Tap this link and to claim it: 👉 ${claimLink}`)}
         <br />
         <br />
         {t(`Please connect your wallet to claim it!`)}
