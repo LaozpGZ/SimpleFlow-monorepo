@@ -1,16 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import {
-  Box,
-  Button,
-  ButtonMenu,
-  ButtonMenuItem,
-  Card,
-  ColumnCenter,
-  FlexGap,
-  RowBetween,
-  Text,
-} from '@pancakeswap/uikit'
+import { Box, ButtonMenu, ButtonMenuItem, Card, ColumnCenter, FlexGap, RowBetween, Text } from '@pancakeswap/uikit'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { nanoid } from 'nanoid'
 import { BulletList } from 'components/BulletList'
@@ -22,6 +12,7 @@ import { GiftQRPlaceholder, QRView } from './ClaimQRView'
 import { SendLinkView } from './SendLinkView'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 import { useReadGasPaymentAmount } from '../hooks/useReadGasPayment'
+import { CreateGiftButton } from './CreateGiftButton'
 
 enum GIFT_VIEW {
   SEND_LINK = 0,
@@ -162,9 +153,9 @@ export const SendGiftView = ({
       </RowBetween>
 
       {error && <div>{error.message}</div>}
-      <Button disabled={isLoading} onClick={handleCreateGift} width="100%">
-        {isLoading ? t('Creating...') : t('Create gift')}
-      </Button>
+      {tokenAmount && (
+        <CreateGiftButton isLoading={isLoading} handleCreateGift={handleCreateGift} tokenAmount={tokenAmount} />
+      )}
     </ColumnCenter>
   )
 }

@@ -3,7 +3,6 @@ import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { BalanceData } from 'hooks/useAddressBalance'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import lowerCase from 'lodash/lowerCase'
 import { useCallback } from 'react'
 import { GiftInfo, GiftInfoResponse } from '../types'
 
@@ -22,7 +21,7 @@ export default function useGiftInfoSelector(assets: BalanceData[]) {
       }
 
       const asset = assets.find(
-        (asset) => lowerCase(asset.token.address) === lowerCase(gift.token) && asset.chainId === chainId,
+        (asset) => asset.token.address.toLowerCase() === gift.token.toLowerCase() && asset.chainId === chainId,
       )
 
       if (!asset) {

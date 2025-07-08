@@ -1,5 +1,4 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
 import { useToast } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -11,12 +10,7 @@ import { GIFT_PANCAKE_V1_ADDRESS, QUERY_KEY_GIFT_INFO } from '../constants'
 import { convertCodeHash } from '../utils/convertCodeHash'
 import { useReadGasPayment } from './useReadGasPayment'
 import { generateCreateGiftParams } from '../utils/generateCreateGiftParams'
-
-interface CreateGiftParams {
-  tokenAmount: CurrencyAmount<Token | NativeCurrency>
-  code: string
-  nativeAmount?: CurrencyAmount<NativeCurrency>
-}
+import { CreateGiftParams } from '../types'
 
 export const useCreateGift = () => {
   const { t } = useTranslation()

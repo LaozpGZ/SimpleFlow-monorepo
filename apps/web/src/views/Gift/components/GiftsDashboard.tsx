@@ -82,7 +82,9 @@ export const GiftsDashboard = ({
                   <CurrencyLogo showChainLogo currency={gift.tokenInfo} size="40px" />
                   <Flex flexDirection="column" ml="8px">
                     <Text fontWeight="600" fontSize="14px" color="text">
-                      {gift.nativeAmount.toSignificant(6)} {gift.tokenInfo.symbol}
+                      {gift.tokenAmount.greaterThan(0)
+                        ? `${gift.tokenAmount.toSignificant(6)} ${gift.tokenInfo.symbol}`
+                        : `${gift.nativeAmount.toSignificant(6)} ${gift.nativeAmount.currency.symbol}`}
                     </Text>
                     <Text fontSize="12px" color="textSubtle">
                       {formatTimestamp(new Date(gift.timestamp).getTime(), {

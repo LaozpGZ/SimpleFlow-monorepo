@@ -5,6 +5,7 @@ import {
   Card,
   CheckmarkCircleIcon,
   ColumnCenter,
+  FlexGap,
   RowBetween,
   Spinner,
   Text,
@@ -19,6 +20,7 @@ import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
 import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
 import { GiftApiStatus } from '../types'
 import { convertCodeHash } from '../utils/convertCodeHash'
+import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 
 export const ClaimGiftConfirmView = ({ assets }: { assets: BalanceData[] }) => {
   const { code, setCode } = useClaimGiftContext()
@@ -65,9 +67,37 @@ export const ClaimGiftConfirmView = ({ assets }: { assets: BalanceData[] }) => {
     )
   }
 
+  const hasIncludeStarterGas = giftInfo.tokenAmount.greaterThan(0) && giftInfo.nativeAmount.greaterThan(0)
+
+  const isOnlyNative = giftInfo.tokenAmount.equalTo(0)
+
   return (
     <ColumnCenter>
-      <TokenAmountSection tokenAmount={giftInfo.nativeAmount} price={giftInfo.nativePrice} />
+      {hasIncludeStarterGas ? (
+        <FlexGap mb="16px" width="100%" flexDirection="column" gap="8px">
+          <Card>
+            <Box p="8px">
+              <CurrencyAmountGiftDisplay
+                currencyAmount={giftInfo.tokenAmount}
+                usdValue={parseFloat(giftInfo.tokenAmount.toExact()) * giftInfo.tokenPrice}
+              />
+            </Box>
+          </Card>
+          <Card>
+            <Box p="8px">
+              <CurrencyAmountGiftDisplay
+                currencyAmount={giftInfo.nativeAmount}
+                usdValue={parseFloat(giftInfo.nativeAmount.toExact()) * giftInfo.nativePrice}
+              />
+            </Box>
+          </Card>
+        </FlexGap>
+      ) : (
+        <TokenAmountSection
+          tokenAmount={isOnlyNative ? giftInfo.nativeAmount : giftInfo.tokenAmount}
+          price={isOnlyNative ? giftInfo.nativePrice : giftInfo.tokenPrice}
+        />
+      )}
 
       {isError && (
         <Box mb="16px" color="failure">

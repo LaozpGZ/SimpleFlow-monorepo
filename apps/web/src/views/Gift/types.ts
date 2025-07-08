@@ -55,3 +55,9 @@ export interface ClaimGiftResponse {
 export interface ClaimGiftParams {
   code: string
 }
+
+export interface CreateGiftParams {
+  tokenAmount: CurrencyAmount<Token | NativeCurrency>
+  code: string
+  nativeAmount?: CurrencyAmount<NativeCurrency>
+}
