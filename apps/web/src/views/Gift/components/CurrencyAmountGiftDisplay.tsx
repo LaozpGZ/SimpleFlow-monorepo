@@ -13,7 +13,7 @@ export const CurrencyAmountGiftDisplay = ({
 } & FlexProps) => {
   return (
     <Flex {...props}>
-      <CurrencyLogo showChainLogo currency={currencyAmount.currency} size="40px" />
+      <CurrencyLogo showChainLogo currency={currencyAmount.currency.wrapped} size="40px" />
       <Flex flexDirection="column" ml="8px">
         <Text fontWeight="600" fontSize="14px" color="text">
           {currencyAmount.toSignificant(6)} {currencyAmount.currency.symbol}

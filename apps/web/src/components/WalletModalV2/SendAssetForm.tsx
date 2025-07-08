@@ -1,7 +1,7 @@
 import { ChainId, getChainName } from '@pancakeswap/chains'
 import { useDebounce } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
-import { Percent, Token } from '@pancakeswap/sdk'
+import { Percent } from '@pancakeswap/sdk'
 import {
   AutoRenewIcon,
   BalanceInput,
@@ -28,8 +28,9 @@ import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
+import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
-import { formatUnits, isAddress, zeroAddress } from 'viem'
+import { checksumAddress, formatUnits, isAddress, zeroAddress } from 'viem'
 import { SendGiftToggle } from 'views/Gift/components/SendGiftToggle'
 import { SendGiftView } from 'views/Gift/components/SendGiftView'
 import { SendGiftContext } from 'views/Gift/providers/SendGiftProvider'
@@ -114,13 +115,14 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     () =>
       asset.token.address === zeroAddress
         ? nativeCurrency
-        : new Token(
-            asset.chainId,
-            asset.token.address as `0x${string}`,
-            asset.token.decimals,
-            asset.token.symbol,
-            asset.token.name,
-          ),
+        : new WrappedTokenInfo({
+            name: asset.token.name,
+            symbol: asset.token.symbol,
+            decimals: asset.token.decimals,
+            address: checksumAddress(asset.token.address as `0x${string}`),
+            chainId: asset.chainId,
+            logoURI: asset.token.logoURI,
+          }),
     [asset, nativeCurrency],
   )
 
