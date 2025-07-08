@@ -356,8 +356,6 @@ const InfinityCLPositionRow: React.FC<{
 }
 
 export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> = ({ poolInfo }) => {
-  const { t } = useTranslation()
-
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
   const [, pool] = usePoolById<'CL'>(poolInfo.poolId as `0x${string}`, chainId)

@@ -85,26 +85,14 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
       {(() => {
         switch (poolInfo.protocol) {
           case 'v3':
-            return <V3PositionsTable poolInfo={poolInfo} handleHarvestAll={handleHarvestAll} />
+            return <V3PositionsTable poolInfo={poolInfo} />
           case Protocol.InfinityCLAMM:
-            return (
-              <InfinityCLPositionsTable poolInfo={poolInfo as InfinityCLPoolInfo} handleHarvestAll={handleHarvestAll} />
-            )
+            return <InfinityCLPositionsTable poolInfo={poolInfo as InfinityCLPoolInfo} />
           case Protocol.InfinityBIN:
-            return (
-              <InfinityBinPositionsTable
-                poolInfo={poolInfo as InfinityBinPoolInfo}
-                handleHarvestAll={handleHarvestAll}
-              />
-            )
+            return <InfinityBinPositionsTable poolInfo={poolInfo as InfinityBinPoolInfo} />
           case 'v2':
           case 'stable':
-            return (
-              <V2PositionsTable
-                poolInfo={poolInfo as V2PoolInfo | StablePoolInfo}
-                handleHarvestAll={handleHarvestAll}
-              />
-            )
+            return <V2PositionsTable poolInfo={poolInfo as V2PoolInfo | StablePoolInfo} />
           default:
             return <div>{t('Unsupported protocol: %protocol%', { protocol: poolInfo.protocol })}</div>
         }

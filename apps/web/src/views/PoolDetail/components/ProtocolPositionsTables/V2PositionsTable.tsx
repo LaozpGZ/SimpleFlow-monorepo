@@ -19,7 +19,6 @@ import { PositionFilter } from './types'
 
 interface V2PositionsTableProps {
   poolInfo: V2PoolInfo | StablePoolInfo
-  handleHarvestAll: () => void
 }
 
 // Helper function to transform position data for table - NO HOOKS ALLOWED
@@ -168,7 +167,7 @@ const V2PositionRow: React.FC<{
   return null // This component doesn't render anything
 }
 
-export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
+export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
@@ -250,7 +249,6 @@ export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo, ha
             ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
             : 0
         }
-        handleHarvestAll={handleHarvestAll}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>

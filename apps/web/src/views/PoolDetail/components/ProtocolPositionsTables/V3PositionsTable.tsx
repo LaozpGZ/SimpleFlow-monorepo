@@ -1,11 +1,13 @@
 import { useTranslation } from '@pancakeswap/localization'
+import { NATIVE } from '@pancakeswap/sdk'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { PositionMath } from '@pancakeswap/v3-sdk'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { nearestUsableTick, PositionMath, TickMath } from '@pancakeswap/v3-sdk'
+import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
+import { $path } from 'next-typesafe-url'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
@@ -13,6 +15,8 @@ import { PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
+import { V3PositionActions } from 'views/universalFarms/components/PositionActions/V3PositionActions'
+import { V3UnstakeModalContent } from 'views/universalFarms/components/PositionActions/V3UnstakeModalContent'
 import { useV3PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
@@ -24,7 +28,6 @@ import { PositionFilter } from './types'
 
 interface V3PositionsTableProps {
   poolInfo: PoolInfo
-  handleHarvestAll: () => void
 }
 
 // Simple number formatting for prices
@@ -55,6 +58,31 @@ const formatPercentage = (percentage: number): string => {
   return `${sign}${percentage.toFixed(1)}%`
 }
 
+// Helper function to calculate price from tick using established patterns
+const tickToPrice = (tick: number): number => {
+  // Use TickMath constants for bounds checking like existing code
+  if (tick >= TickMath.MAX_TICK) return Infinity
+  if (tick <= TickMath.MIN_TICK) return 0
+
+  return 1.0001 ** tick
+}
+
+// Helper function to get tick spacing from fee tier
+const getTickSpacing = (feeTier: number): number => {
+  switch (feeTier) {
+    case 100:
+      return 1
+    case 500:
+      return 10
+    case 3000:
+      return 60
+    case 10000:
+      return 200
+    default:
+      return 60 // Default to 60 for 3000 fee tier
+  }
+}
+
 // Helper function to transform position data for table - NO HOOKS ALLOWED
 const transformV3PositionToTableRow = (
   position: PositionDetail,
@@ -64,7 +92,6 @@ const transformV3PositionToTableRow = (
   price1Usd: number | undefined,
   pool: any,
   aprData: { lpApr: number; cakeApr: { value: number } | null; merklApr: number },
-  earningsData: { earningsBusd: number | null },
   t: (key: string) => string,
 ) => {
   const positionData = positionsData?.find((p) => Number(p.tokenId) === Number(position.tokenId))
@@ -109,36 +136,116 @@ const transformV3PositionToTableRow = (
   const outOfRange = pool && (pool.tickCurrent < position.tickLower || pool.tickCurrent >= position.tickUpper)
   const removed = position.liquidity === 0n
 
-  // Format price range data using custom formatting
-  let minPriceFormatted = '--'
-  let maxPriceFormatted = '--'
+  // Calculate tick limits for full range detection
+  const ticksLimit: {
+    [bound in Bound]: number | undefined
+  } = {
+    [Bound.LOWER]: poolInfo.feeTier
+      ? nearestUsableTick(TickMath.MIN_TICK, getTickSpacing(poolInfo.feeTier))
+      : undefined,
+    [Bound.UPPER]: poolInfo.feeTier
+      ? nearestUsableTick(TickMath.MAX_TICK, getTickSpacing(poolInfo.feeTier))
+      : undefined,
+  }
+
+  const isTickAtLimit = {
+    [Bound.LOWER]: position.tickLower && ticksLimit.LOWER ? position.tickLower <= ticksLimit.LOWER : false,
+    [Bound.UPPER]: position.tickUpper && ticksLimit.UPPER ? position.tickUpper >= ticksLimit.UPPER : false,
+  }
+
+  // Format price range data using improved calculation
+  let minPriceFormatted = '-'
+  let maxPriceFormatted = '-'
   let minPercentage = ''
   let maxPercentage = ''
   let rangePosition = 50
   let showPercentages = false
 
-  if (positionData && !removed) {
-    // Convert prices to numbers and format using custom function
-    const minPrice = parseFloat(positionData.token0PriceLower.toSignificant(6))
-    const maxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(6))
+  if (!removed) {
+    // Primary method: Use tick-based price calculation
+    const minPrice = tickToPrice(position.tickLower)
+    const maxPrice = tickToPrice(position.tickUpper)
 
     minPriceFormatted = formatPriceNumber(minPrice)
     maxPriceFormatted = formatPriceNumber(maxPrice)
 
-    // Only calculate percentages if both prices are finite and we have a valid current price
-    if (pool?.token0Price && Number.isFinite(minPrice) && Number.isFinite(maxPrice)) {
-      const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
+    // If position is full range, set special handling
+    if (isTickAtLimit.LOWER && isTickAtLimit.UPPER) {
+      rangePosition = 50
+      showPercentages = true
+      minPercentage = '0%'
+      maxPercentage = '100%'
+    } else if (pool?.token0Price && position.tickLower > TickMath.MIN_TICK && position.tickUpper < TickMath.MAX_TICK) {
+      // Only calculate percentages if prices are not at limits and pool exists
+      try {
+        const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
 
-      if (currentPrice > 0 && maxPrice > minPrice && Number.isFinite(currentPrice)) {
-        const minPercent = ((minPrice - currentPrice) / currentPrice) * 100
-        const maxPercent = ((maxPrice - currentPrice) / currentPrice) * 100
+        if (
+          currentPrice > 0 &&
+          maxPrice > minPrice &&
+          Number.isFinite(minPrice) &&
+          Number.isFinite(maxPrice) &&
+          Number.isFinite(currentPrice)
+        ) {
+          const minPercent = ((minPrice - currentPrice) / currentPrice) * 100
+          const maxPercent = ((maxPrice - currentPrice) / currentPrice) * 100
 
-        if (Number.isFinite(minPercent) && Number.isFinite(maxPercent)) {
-          minPercentage = formatPercentage(minPercent)
-          maxPercentage = formatPercentage(maxPercent)
-          rangePosition = ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100
-          showPercentages = true
+          if (
+            // Only show percentages if they're reasonable finite values
+            Number.isFinite(minPercent) &&
+            Number.isFinite(maxPercent) &&
+            Math.abs(minPercent) < 10000 &&
+            Math.abs(maxPercent) < 10000
+          ) {
+            minPercentage = formatPercentage(minPercent)
+            maxPercentage = formatPercentage(maxPercent)
+            rangePosition = Math.max(0, Math.min(100, ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100))
+            showPercentages = true
+          }
         }
+      } catch (error) {
+        // If any calculation fails, just show the price range without percentages
+        console.warn('Price calculation error:', error)
+      }
+    }
+
+    // Fallback: Use positionData prices if available and tick-based calculation seems unreliable
+    if (positionData && !showPercentages) {
+      try {
+        const positionMinPrice = parseFloat(positionData.token0PriceLower.toSignificant(6))
+        const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(6))
+
+        if (Number.isFinite(positionMinPrice) && Number.isFinite(positionMaxPrice)) {
+          minPriceFormatted = formatPriceNumber(positionMinPrice)
+          maxPriceFormatted = formatPriceNumber(positionMaxPrice)
+
+          // Try percentage calculation with positionData prices
+          if (pool?.token0Price && positionMaxPrice > positionMinPrice) {
+            const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
+
+            if (currentPrice > 0 && Number.isFinite(currentPrice)) {
+              const minPercent = ((positionMinPrice - currentPrice) / currentPrice) * 100
+              const maxPercent = ((positionMaxPrice - currentPrice) / currentPrice) * 100
+
+              if (
+                Number.isFinite(minPercent) &&
+                Number.isFinite(maxPercent) &&
+                Math.abs(minPercent) < 10000 &&
+                Math.abs(maxPercent) < 10000
+              ) {
+                minPercentage = formatPercentage(minPercent)
+                maxPercentage = formatPercentage(maxPercent)
+                rangePosition = Math.max(
+                  0,
+                  Math.min(100, ((currentPrice - positionMinPrice) / (positionMaxPrice - positionMinPrice)) * 100),
+                )
+                showPercentages = true
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.warn('Position data price calculation error:', error)
       }
     }
   }
@@ -147,7 +254,10 @@ const transformV3PositionToTableRow = (
     <FlexGap flexDirection="column" gap="4px">
       <FlexGap alignItems="center" gap="8px">
         <Text bold fontSize="16px">
-          {poolInfo.token0.wrapped?.symbol} / {poolInfo.token1.wrapped?.symbol}
+          {poolInfo.token0.wrapped?.symbol} / {poolInfo.token1.wrapped?.symbol}{' '}
+          <Text as="span" color="textSubtle">
+            #{position.tokenId.toString()}
+          </Text>
         </Text>
         {position.isStaked && (
           <Tag variant="primary60" scale="sm">
@@ -155,9 +265,6 @@ const transformV3PositionToTableRow = (
           </Tag>
         )}
       </FlexGap>
-      <Text color="textSubtle" fontSize="12px">
-        #{position.tokenId.toString()}
-      </Text>
     </FlexGap>
   )
 
@@ -232,9 +339,6 @@ const transformV3PositionToTableRow = (
       <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
         {displayApr(totalApr)}
       </Text>
-      <Text color="textSubtle" fontSize="12px">
-        {t('Total APR')}
-      </Text>
     </Flex>
   )
 
@@ -253,12 +357,64 @@ const transformV3PositionToTableRow = (
 
   const actions = (
     <FlexGap gap="8px" alignItems="center">
-      <ActionButton disabled={removed} isIcon>
+      <ActionButton
+        as="a"
+        href={$path({
+          route: '/remove/[[...currency]]',
+          routeParams: {
+            currency: [position.tokenId.toString()],
+          },
+        })}
+        disabled={removed}
+        isIcon
+      >
         <MinusIcon />
       </ActionButton>
-      <ActionButton disabled={removed} isIcon>
+      <ActionButton
+        as="a"
+        href={$path({
+          route: '/add/[[...currency]]',
+          routeParams: {
+            currency: [
+              poolInfo.token0.isNative ? NATIVE[poolInfo.chainId].symbol : poolInfo.token0.wrapped.address,
+              poolInfo.token1.isNative ? NATIVE[poolInfo.chainId].symbol : poolInfo.token1.wrapped.address,
+              poolInfo.feeTier.toString(),
+            ],
+          },
+        })}
+        disabled={removed}
+        isIcon
+      >
         <AddIcon />
       </ActionButton>
+      <V3PositionActions
+        chainId={poolInfo.chainId}
+        isStaked={position.isStaked}
+        removed={removed}
+        outOfRange={outOfRange}
+        tokenId={position.tokenId}
+        modalContent={
+          <V3UnstakeModalContent
+            chainId={poolInfo.chainId}
+            userPosition={position}
+            link={`/liquidity/${position.tokenId}`}
+            pool={pool}
+            totalPriceUSD={liquidityUSD}
+            amount0={positionData?.amount0}
+            amount1={positionData?.amount1}
+            desc={t('Unstake')}
+            currency0={poolInfo.token0.wrapped}
+            currency1={poolInfo.token1.wrapped}
+            removed={removed}
+            outOfRange={outOfRange}
+            fee={position.fee}
+            protocol={position.protocol}
+            isStaked={position.isStaked}
+            tokenId={position.tokenId}
+            detailMode={false}
+          />
+        }
+      />
       {position.isStaked && <ActionButton>{t('Harvest')}</ActionButton>}
       {!position.isStaked && !removed && !outOfRange && <ActionButton>{t('Stake')}</ActionButton>}
     </FlexGap>
@@ -291,20 +447,13 @@ const V3PositionRow: React.FC<{
 }> = ({ position, poolInfo, positionsData, price0Usd, price1Usd, pool, onRowDataReady }) => {
   const { t } = useTranslation()
 
-  // This is where the magic happens - individual APR hook call for each position
   const aprData = useV3PositionApr(poolInfo, position)
 
-  // Transform the data with the fetched APR
   const transformedData = useMemo(() => {
     const convertedAprData = {
       lpApr: aprData.lpApr || 0,
       cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
       merklApr: aprData.merklApr || 0,
-    }
-
-    // Use default earnings for now
-    const earningsData = {
-      earningsBusd: null,
     }
 
     return transformV3PositionToTableRow(
@@ -315,7 +464,6 @@ const V3PositionRow: React.FC<{
       price1Usd,
       pool,
       convertedAprData,
-      earningsData,
       t,
     )
   }, [position, poolInfo, positionsData, price0Usd, price1Usd, pool, aprData, t])
@@ -328,7 +476,7 @@ const V3PositionRow: React.FC<{
   return null // This component doesn't render anything
 }
 
-export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo, handleHarvestAll }) => {
+export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
@@ -421,7 +569,6 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo, ha
             ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
             : 0
         }
-        handleHarvestAll={handleHarvestAll}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>
