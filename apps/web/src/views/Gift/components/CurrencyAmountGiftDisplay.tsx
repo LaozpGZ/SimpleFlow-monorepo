@@ -2,15 +2,17 @@ import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
 import { Flex, FlexProps, Text } from '@pancakeswap/uikit'
+import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
+import { multiplyPriceByAmount } from 'utils/prices'
 
 export const CurrencyAmountGiftDisplay = ({
   currencyAmount,
-  usdValue,
   ...props
 }: {
   currencyAmount: CurrencyAmount<Token | NativeCurrency>
-  usdValue: number
 } & FlexProps) => {
+  const stablePrice = useStablecoinPrice(currencyAmount.currency)
+
   return (
     <Flex {...props}>
       <CurrencyLogo showChainLogo currency={currencyAmount.currency.wrapped} size="40px" />
@@ -19,7 +21,7 @@ export const CurrencyAmountGiftDisplay = ({
           {currencyAmount.toSignificant(6)} {currencyAmount.currency.symbol}
         </Text>
         <Text fontSize="12px" color="textSubtle">
-          {formatDollarAmount(usdValue)}
+          {formatDollarAmount(multiplyPriceByAmount(stablePrice, currencyAmount.toExact()))}
         </Text>
       </Flex>
     </Flex>

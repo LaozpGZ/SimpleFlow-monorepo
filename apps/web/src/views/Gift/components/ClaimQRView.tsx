@@ -1,7 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { Box, Card, Flex, LogoIcon, Text, Image } from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { Box, Card, Flex, LogoIcon, Image } from '@pancakeswap/uikit'
 import { QRCodeSVG } from 'qrcode.react'
 import styled from 'styled-components'
 import { SecondaryCard } from 'components/SecondaryCard'
@@ -16,20 +15,12 @@ const GiftCodeContainer = styled(Box)`
   justify-content: center;
 `
 
-export function QRView({
-  tokenAmount,
-  usdValue,
-  code,
-}: {
-  tokenAmount: CurrencyAmount<Token | NativeCurrency>
-  usdValue: number
-  code: string
-}) {
+export function QRView({ tokenAmount, code }: { tokenAmount: CurrencyAmount<Token | NativeCurrency>; code: string }) {
   const { t } = useTranslation()
   return (
     <>
       <Card mb="16px">
-        <CurrencyAmountGiftDisplay p="8px" currencyAmount={tokenAmount} usdValue={usdValue} />
+        <CurrencyAmountGiftDisplay p="8px" currencyAmount={tokenAmount} />
       </Card>
       <Flex mb="16px" justifyContent="center" flexDirection="column" alignItems="center">
         <Box position="relative">

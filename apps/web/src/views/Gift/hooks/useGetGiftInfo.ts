@@ -3,6 +3,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { BalanceData } from 'hooks/useAddressBalance'
 import { FAST_INTERVAL } from 'config/constants'
 import { useAccount } from 'wagmi'
+import { useAllTokens } from 'hooks/Tokens'
 import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
 import { GiftInfo, GiftInfoResponse } from '../types'
 import useGiftInfoSelector from './useGiftInfoSelector'
@@ -22,6 +23,8 @@ interface GiftApiResponse<T> {
 export const useGetGiftInfo = (assets: BalanceData[]) => {
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
+
+  const allTokens = useAllTokens()
 
   const selectGiftInfo = useGiftInfoSelector(assets)
 
@@ -63,10 +66,10 @@ export const useGetGiftInfo = (assets: BalanceData[]) => {
   })
 }
 
-export const useGetGiftByCodeHash = ({ codeHash, assets }: { codeHash?: string; assets: BalanceData[] }) => {
+export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
   const { chainId } = useActiveChainId()
 
-  const selectGiftInfo = useGiftInfoSelector(assets)
+  const selectGiftInfo = useGiftInfoSelector()
 
   return useQuery({
     queryKey: [QUERY_KEY_GIFT_INFO, chainId, codeHash],

@@ -79,11 +79,11 @@ export const GiftsDashboard = ({
 
               <Flex alignItems="center" width="100%" justifyContent="space-between">
                 <Flex>
-                  <CurrencyLogo showChainLogo currency={gift.tokenInfo} size="40px" />
+                  <CurrencyLogo showChainLogo currency={gift.tokenAmount.currency.wrapped} size="40px" />
                   <Flex flexDirection="column" ml="8px">
                     <Text fontWeight="600" fontSize="14px" color="text">
                       {gift.tokenAmount.greaterThan(0)
-                        ? `${gift.tokenAmount.toSignificant(6)} ${gift.tokenInfo.symbol}`
+                        ? `${gift.tokenAmount.toSignificant(6)} ${gift.tokenAmount.currency.symbol}`
                         : `${gift.nativeAmount.toSignificant(6)} ${gift.nativeAmount.currency.symbol}`}
                     </Text>
                     <Text fontSize="12px" color="textSubtle">

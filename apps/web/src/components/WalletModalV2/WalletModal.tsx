@@ -151,16 +151,16 @@ export const WalletContent = ({
   }, [])
 
   const actionView = useMemo(() => {
-    if (viewState === ViewState.CANCEL_GIFT_CONFIRM) return <CancelGiftConfirmView assets={balances} />
+    if (viewState === ViewState.CANCEL_GIFT_CONFIRM) return <CancelGiftConfirmView />
 
     // Claim Gift
     if ([ViewState.CLAIM_GIFT, ViewState.CLAIM_GIFT_CONFIRM].includes(viewState)) {
       return (
         <>
           {viewState === ViewState.CLAIM_GIFT ? (
-            <ClaimGiftView setViewState={setViewState} assets={balances} />
+            <ClaimGiftView setViewState={setViewState} />
           ) : (
-            <ClaimGiftConfirmView assets={balances} />
+            <ClaimGiftConfirmView />
           )}
         </>
       )
@@ -175,7 +175,7 @@ export const WalletContent = ({
         onBack={goBack}
       />
     )
-  }, [viewState, balances, isLoading])
+  }, [viewState, balances, isLoading, goBack, setViewState])
 
   return (
     <Box

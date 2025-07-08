@@ -8,19 +8,13 @@ import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
 import { GiftStatus } from '../types'
 import { convertCodeHash } from '../utils/convertCodeHash'
 
-export const ClaimGiftView = ({
-  setViewState,
-  assets,
-}: {
-  setViewState: (viewState: ViewState) => void
-  assets: BalanceData[]
-}) => {
+export const ClaimGiftView = ({ setViewState }: { setViewState: (viewState: ViewState) => void }) => {
   const { t } = useTranslation()
   const { code, setCode } = useClaimGiftContext()
 
   const codeHash = convertCodeHash(code)
 
-  const { data: giftInfo, isLoading } = useGetGiftByCodeHash({ codeHash, assets })
+  const { data: giftInfo, isLoading } = useGetGiftByCodeHash({ codeHash })
 
   const isValid = Boolean(giftInfo?.status === GiftStatus.PENDING)
 

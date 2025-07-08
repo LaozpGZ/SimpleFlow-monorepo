@@ -12,7 +12,6 @@ import {
   useToast,
 } from '@pancakeswap/uikit'
 import { TokenAmountSection } from 'components/TokenAmountSection'
-import { BalanceData } from 'hooks/useAddressBalance'
 import { useEffect } from 'react'
 import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { useClaimGift } from '../hooks/useClaimGift'
@@ -22,14 +21,13 @@ import { GiftApiStatus } from '../types'
 import { convertCodeHash } from '../utils/convertCodeHash'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 
-export const ClaimGiftConfirmView = ({ assets }: { assets: BalanceData[] }) => {
+export const ClaimGiftConfirmView = () => {
   const { code, setCode } = useClaimGiftContext()
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
 
   const { data: giftInfo, isLoading } = useGetGiftByCodeHash({
     codeHash: convertCodeHash(code),
-    assets,
   })
 
   const {
@@ -77,26 +75,17 @@ export const ClaimGiftConfirmView = ({ assets }: { assets: BalanceData[] }) => {
         <FlexGap mb="16px" width="100%" flexDirection="column" gap="8px">
           <Card>
             <Box p="8px">
-              <CurrencyAmountGiftDisplay
-                currencyAmount={giftInfo.tokenAmount}
-                usdValue={parseFloat(giftInfo.tokenAmount.toExact()) * giftInfo.tokenPrice}
-              />
+              <CurrencyAmountGiftDisplay currencyAmount={giftInfo.tokenAmount} />
             </Box>
           </Card>
           <Card>
             <Box p="8px">
-              <CurrencyAmountGiftDisplay
-                currencyAmount={giftInfo.nativeAmount}
-                usdValue={parseFloat(giftInfo.nativeAmount.toExact()) * giftInfo.nativePrice}
-              />
+              <CurrencyAmountGiftDisplay currencyAmount={giftInfo.nativeAmount} />
             </Box>
           </Card>
         </FlexGap>
       ) : (
-        <TokenAmountSection
-          tokenAmount={isOnlyNative ? giftInfo.nativeAmount : giftInfo.tokenAmount}
-          price={isOnlyNative ? giftInfo.nativePrice : giftInfo.tokenPrice}
-        />
+        <TokenAmountSection tokenAmount={isOnlyNative ? giftInfo.nativeAmount : giftInfo.tokenAmount} />
       )}
 
       {isError && (

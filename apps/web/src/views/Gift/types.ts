@@ -1,5 +1,4 @@
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/swap-sdk-core'
-import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 
 export enum GiftStatus {
   PENDING = 'PENDING',
@@ -22,11 +21,8 @@ export interface GiftInfoResponse {
 }
 
 export interface GiftInfo extends Omit<GiftInfoResponse, 'tokenAmount' | 'nativeAmount'> {
-  tokenInfo: WrappedTokenInfo
   tokenAmount: CurrencyAmount<Token>
   nativeAmount: CurrencyAmount<NativeCurrency>
-  nativePrice: number
-  tokenPrice: number
 }
 
 export enum GiftApiStatus {
