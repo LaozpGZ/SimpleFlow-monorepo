@@ -208,13 +208,7 @@ export const FlipButton = memo(function FlipButton({
   ])
 
   return (
-    <AutoColumn
-      justify="space-between"
-      position="relative"
-      style={{
-        ...getCompactWrapperStyle(compact),
-      }}
-    >
+    <AutoColumn justify="space-between" position="relative" style={getCompactWrapperStyle(compact)}>
       {!compact && <Line />}
       <AutoRow
         justify="center"
