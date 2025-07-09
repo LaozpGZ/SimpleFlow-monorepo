@@ -172,7 +172,7 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
   // Check if current price is out of range
   const isOverflowLeft = currentPriceNum !== null && currentPriceNum < minPriceNum
   const isOverflowRight = currentPriceNum !== null && currentPriceNum > maxPriceNum
-  const hasOverflow = isOverflowLeft || isOverflowRight
+  const hasOverflow = outOfRange && (isOverflowLeft || isOverflowRight)
 
   // Calculate display values and positions
   const displayMinPrice =
