@@ -5,7 +5,6 @@ import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
-import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
 import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward'
 import { usePoolById } from 'hooks/infinity/usePool'
@@ -209,7 +208,12 @@ const transformInfinityBinPositionToTableRow = (
       </ActionButton>
       <ActionButton
         as="a"
-        href={getAddInfinityLiquidityURL({ poolId: poolInfo.poolId, chainId: poolInfo.chainId })}
+        href={$path({
+          route: '/liquidity/add/[[...poolId]]',
+          routeParams: {
+            poolId: [poolInfo.chainId, 'infinity', poolInfo.poolId.toString()],
+          },
+        })}
         disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}
         isIcon
         onClick={(e: React.MouseEvent) => e.stopPropagation()}

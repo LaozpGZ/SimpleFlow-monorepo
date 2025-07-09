@@ -7,7 +7,6 @@ import { PositionMath } from '@pancakeswap/v3-sdk'
 
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
-import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
 import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward'
 import { usePoolById } from 'hooks/infinity/usePool'
@@ -241,7 +240,12 @@ const transformInfinityCLPositionToTableRow = (
       </ActionButton>
       <ActionButton
         as="a"
-        href={getAddInfinityLiquidityURL({ poolId: poolInfo.poolId, chainId: poolInfo.chainId })}
+        href={$path({
+          route: '/liquidity/position/[[...positionId]]',
+          routeParams: {
+            positionId: [Protocol.InfinityCLAMM, Number(position.tokenId), 'increase'],
+          },
+        })}
         disabled={removed}
         isIcon
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
