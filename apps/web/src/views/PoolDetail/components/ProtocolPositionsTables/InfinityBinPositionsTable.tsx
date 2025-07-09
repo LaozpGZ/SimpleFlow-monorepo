@@ -34,6 +34,24 @@ import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
+// Interface for transformed Bin position data
+interface TransformedBinPosition {
+  positionId: string
+  tableRow: {
+    tokenInfo: React.ReactElement
+    liquidity: React.ReactElement
+    earnings: React.ReactElement
+    apr: React.ReactElement
+    priceRange: React.ReactElement
+    actions: React.ReactElement
+    protocol: Protocol
+    poolId: string
+  }
+  liquidityUSD: number
+  totalApr: number
+  hasLiquidity?: boolean
+}
+
 interface InfinityBinPositionsTableProps {
   poolInfo: InfinityBinPoolInfo
 }
@@ -298,7 +316,7 @@ const InfinityBinPositionRow: React.FC<{
   position: InfinityBinPositionDetail
   poolInfo: InfinityBinPoolInfo
   pool: any
-  onRowDataReady: (data: any) => void
+  onRowDataReady: (data: TransformedBinPosition) => void
 }> = ({ position, poolInfo, pool, onRowDataReady }) => {
   const { t } = useTranslation()
 
@@ -368,7 +386,7 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
   const { data: poolKey } = usePoolKeyByPoolId(poolInfo.poolId, chainId)
 
   const [filter, setFilter] = useState(PositionFilter.All)
-  const [transformedPositions, setTransformedPositions] = useState<any[]>([])
+  const [transformedPositions, setTransformedPositions] = useState<TransformedBinPosition[]>([])
 
   const { data: infinityBinData, isLoading } = useAccountPositionDetailByPool<Protocol.InfinityBIN>(
     chainId,
@@ -421,7 +439,7 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
   }, [infinityBinData, isLoading, isLoadingRewards, defaultPosition, rewardsAmount])
 
   // Handle data from individual position rows
-  const handleRowDataReady = useCallback((data: any) => {
+  const handleRowDataReady = useCallback((data: TransformedBinPosition) => {
     setTransformedPositions((prev) => {
       const existing = prev.find((p) => p.positionId === data.positionId)
       if (existing) {

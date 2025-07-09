@@ -1,3 +1,4 @@
+import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
@@ -32,6 +33,25 @@ import { PositionsTable } from './PositionsTable'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
+
+// Interface for transformed V3 position data
+interface TransformedV3Position {
+  tokenId: string
+  tableRow: {
+    tokenInfo: React.ReactElement
+    liquidity: React.ReactElement
+    earnings: React.ReactElement
+    apr: React.ReactElement
+    priceRange: React.ReactElement
+    actions: React.ReactElement
+    protocol: Protocol
+    tokenId: bigint
+    liquidityUSD: number
+  }
+  totalEarnings: React.ReactElement
+  liquidityUSD: number
+  totalApr: number
+}
 
 interface V3PositionsTableProps {
   poolInfo: PoolInfo
@@ -475,7 +495,7 @@ const V3PositionRow: React.FC<{
   price0Usd: number | undefined
   price1Usd: number | undefined
   pool: any
-  onRowDataReady: (data: any) => void
+  onRowDataReady: (data: TransformedV3Position) => void
 }> = ({ position, poolInfo, positionsData, price0Usd, price1Usd, pool, onRowDataReady }) => {
   const { t } = useTranslation()
 
@@ -525,7 +545,7 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
   })
 
   const [filter, setFilter] = useState(PositionFilter.All)
-  const [transformedPositions, setTransformedPositions] = useState<any[]>([])
+  const [transformedPositions, setTransformedPositions] = useState<TransformedV3Position[]>([])
 
   // Get position data from hooks
   const { data: v3Data, isLoading } = useAccountPositionDetailByPool(chainId, account, poolInfo)
@@ -572,7 +592,7 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
   }, [loading, setLoading, chainId, switchNetworkIfNecessary, onHarvestAll, v3Data])
 
   // Handle data from individual position rows
-  const handleRowDataReady = useCallback((data: any) => {
+  const handleRowDataReady = useCallback((data: TransformedV3Position) => {
     setTransformedPositions((prev) => {
       const existing = prev.find((p) => p.tokenId === data.tokenId)
       if (existing) {

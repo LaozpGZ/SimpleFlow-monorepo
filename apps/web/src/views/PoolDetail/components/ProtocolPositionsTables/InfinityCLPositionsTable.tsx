@@ -34,6 +34,23 @@ import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
+// Interface for transformed position data
+interface TransformedPosition {
+  tokenId: string
+  tableRow: {
+    tokenInfo: React.ReactElement
+    liquidity: React.ReactElement
+    earnings: React.ReactElement
+    apr: React.ReactElement
+    priceRange: React.ReactElement
+    actions: React.ReactElement
+    protocol: Protocol
+    tokenId: bigint
+  }
+  liquidityUSD: number
+  totalApr: number
+}
+
 // Helper function to safely convert tick to price using V3 SDK
 const getTickPrice = (tick: number, token0: any, token1: any): number => {
   try {
@@ -330,7 +347,7 @@ const InfinityCLPositionRow: React.FC<{
   pool: any
   price0Usd: number | undefined
   price1Usd: number | undefined
-  onRowDataReady: (data: any) => void
+  onRowDataReady: (data: TransformedPosition) => void
 }> = ({ position, poolInfo, pool, price0Usd, price1Usd, onRowDataReady }) => {
   const { t } = useTranslation()
 
@@ -372,7 +389,7 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
   })
 
   const [filter, setFilter] = useState(PositionFilter.All)
-  const [transformedPositions, setTransformedPositions] = useState<any[]>([])
+  const [transformedPositions, setTransformedPositions] = useState<TransformedPosition[]>([])
 
   // Get position data from hooks
   const { data: positionsInPool, isLoading } = useAccountPositionDetailByPool<Protocol.InfinityCLAMM>(
@@ -385,7 +402,7 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
   const { data: allInfinityPositions } = useInfinityPositions()
 
   // Handle data from individual position rows
-  const handleRowDataReady = useCallback((data: any) => {
+  const handleRowDataReady = useCallback((data: TransformedPosition) => {
     setTransformedPositions((prev) => {
       const existing = prev.find((p) => p.tokenId === data.tokenId)
       if (existing) {
@@ -436,21 +453,27 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
   const filteredPositions = useMemo(() => {
     if (!transformedPositions) return []
 
-    return transformedPositions.filter((position) => {
-      const { totalApr, liquidityUSD } = position
-      const hasLiquidity = liquidityUSD > 0
+    return transformedPositions
+      .toSorted((positionA, positionB) => {
+        const aLiquidity = positionA.liquidityUSD
+        const bLiquidity = positionB.liquidityUSD
+        return bLiquidity > aLiquidity ? -1 : 1
+      })
+      .filter((position) => {
+        const { totalApr, liquidityUSD } = position
+        const hasLiquidity = liquidityUSD > 0
 
-      switch (filter) {
-        case PositionFilter.Active:
-          return hasLiquidity && totalApr > 0
-        case PositionFilter.Inactive:
-          return hasLiquidity && totalApr === 0
-        case PositionFilter.Closed:
-          return !hasLiquidity
-        default:
-          return true
-      }
-    })
+        switch (filter) {
+          case PositionFilter.Active:
+            return hasLiquidity && totalApr > 0
+          case PositionFilter.Inactive:
+            return hasLiquidity && totalApr === 0
+          case PositionFilter.Closed:
+            return !hasLiquidity
+          default:
+            return true
+        }
+      })
   }, [transformedPositions, filter])
 
   const {

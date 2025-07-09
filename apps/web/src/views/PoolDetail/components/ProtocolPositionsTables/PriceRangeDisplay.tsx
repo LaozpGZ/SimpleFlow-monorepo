@@ -1,4 +1,3 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { Flex, FlexGap, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 
@@ -59,8 +58,6 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
   removed = false,
   showPercentages = true,
 }) => {
-  const { t } = useTranslation()
-
   return (
     <Flex flexDirection="column" alignItems="flex-start" width="100%">
       {/* Price range display */}
