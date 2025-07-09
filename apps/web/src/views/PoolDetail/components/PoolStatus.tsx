@@ -1,7 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, AutoRow, Button, Card, CardBody, Column, Flex, Text } from '@pancakeswap/uikit'
+import { AutoColumn, AutoRow, Button, Card, CardBody, CardProps, Column, Flex, Text } from '@pancakeswap/uikit'
 import BigNumber from 'bignumber.js'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { PERSIST_CHAIN_KEY } from 'config/constants'
@@ -21,8 +21,8 @@ import { PoolTokens } from './PoolTokens'
 
 type PoolStatusProps = {
   poolInfo?: PoolInfo | null
-}
-export const PoolStatus: React.FC<PoolStatusProps> = ({ poolInfo }) => {
+} & CardProps
+export const PoolStatus: React.FC<PoolStatusProps> = ({ poolInfo, ...props }) => {
   const { t } = useTranslation()
   const pairs = useStableSwapPairsByChainId(poolInfo?.chainId ?? ChainId.BSC, poolInfo?.protocol === 'stable')
 
@@ -100,7 +100,7 @@ export const PoolStatus: React.FC<PoolStatusProps> = ({ poolInfo }) => {
   }
 
   return (
-    <Card>
+    <Card {...props}>
       <CardBody style={{ height: '100%' }}>
         <Flex flexDirection="column" justifyContent="space-between" height="100%">
           <AutoColumn gap="lg">

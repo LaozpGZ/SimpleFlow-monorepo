@@ -11,7 +11,6 @@ import {
   Flex,
   FlexGap,
   Grid,
-  IconButton,
   Link,
   OpenNewIcon,
   Spinner,
@@ -35,7 +34,6 @@ import { NextSeo } from 'next-seo'
 import { useMemo, useState } from 'react'
 import { InfinityPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
-import styled from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
@@ -56,13 +54,13 @@ enum PoolDetailTab {
   Transactions = 1,
 }
 
-const SearchButton = styled(IconButton).attrs({ variant: 'primary60' })`
-  background-color: ${({ theme }) => theme.colors.input};
-`
+// const SearchButton = styled(IconButton).attrs({ variant: 'primary60' })`
+//   background-color: ${({ theme }) => theme.colors.input};
+// `
 
 export const PoolInfo = () => {
   const { t } = useTranslation()
-  const { isMobile, isTablet } = useMatchBreakpoints()
+  const { isMobile, isMd } = useMatchBreakpoints()
   const { poolSymbol } = usePoolSymbol()
 
   const poolInfo = usePoolInfoByQuery()
@@ -71,7 +69,7 @@ export const PoolInfo = () => {
 
   const chainId = useChainIdByQuery()
 
-  const isSmallScreen = isMobile || isTablet
+  const isSmallScreen = isMobile || isMd
 
   const [flipCurrentPrice, setFlipCurrentPrice] = useState(false)
   const [tab, setTab] = useState(PoolDetailTab.MyPositions)
@@ -265,7 +263,7 @@ export const PoolInfo = () => {
               </FlexGap>
             </FlexGap>
 
-            <FlexGap gap="32px">
+            <FlexGap gap="16px" flexDirection={['column', null, 'row']}>
               <Box p="8px 16px" width="100%">
                 <FlexGap gap="8px" alignItems="center">
                   <Text fontSize={12} bold color="textSubtle" textTransform="uppercase" style={{ userSelect: 'none' }}>
@@ -323,7 +321,7 @@ export const PoolInfo = () => {
         <PoolTvlWarning poolInfo={poolInfo} />
         <Grid gridGap="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '2fr 1fr']}>
           <PoolCharts poolInfo={poolInfo} />
-          <PoolStatus poolInfo={poolInfo} />
+          <PoolStatus poolInfo={poolInfo} style={{ order: isSmallScreen ? -1 : undefined }} />
         </Grid>
       </AutoColumn>
 

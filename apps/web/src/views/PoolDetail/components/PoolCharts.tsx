@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, Flex, FlexGap } from '@pancakeswap/uikit'
+import { Box, Card, CardProps, FlexGap } from '@pancakeswap/uikit'
 import { useMemo, useState } from 'react'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
@@ -52,8 +52,8 @@ const TabButton = styled.button<{ $active?: boolean; $enabled?: boolean }>`
 
 type PoolChartsProps = {
   poolInfo?: PoolInfo | null
-}
-export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo }) => {
+} & CardProps
+export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo, ...props }) => {
   const { t } = useTranslation()
   const { id } = useRouterQuery()
   const isInfinity = useMemo(() => isInfinityProtocol(poolInfo?.protocol), [poolInfo])
@@ -63,9 +63,14 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo }) => {
   const [timeFilter, setTimeFilter] = useState<TimeFilter>(TimeFilter.D)
 
   return (
-    <Card>
+    <Card {...props}>
       <TabsContainer>
-        <Flex justifyContent="space-between" alignItems="center">
+        <FlexGap
+          justifyContent="space-between"
+          alignItems="center"
+          flexDirection={['column', null, null, 'row']}
+          gap="16px"
+        >
           <FlexGap gap="32px" alignItems="center">
             <TabButton $active={chart === PoolChart.Volume} onClick={() => setChart(PoolChart.Volume)}>
               {t('Volume')}
@@ -95,7 +100,7 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo }) => {
               onTabChange={(tab) => setTimeFilter(tab as TimeFilter)}
             />
           )}
-        </Flex>
+        </FlexGap>
       </TabsContainer>
       <Box padding="0 24px 24px 24px">
         {chart === PoolChart.Volume ? <ChartVolume address={id} poolInfo={poolInfo} timeFilter={timeFilter} /> : null}
