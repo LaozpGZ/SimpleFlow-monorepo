@@ -542,7 +542,7 @@ export const useClmmStore = createStore<ClmmState>(
           } finally {
             onFinally?.()
           }
-          return {}
+          return {} as ReturnType<typeof DecreaseLiquidityEventLayout.decode>
         }
 
         return execute()
