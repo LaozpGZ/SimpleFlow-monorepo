@@ -269,7 +269,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           showSearchHeader
         />
       </Suspense>
-      <FlipButton />
+      <FlipButton disabled={!loadedUrlParams} />
       <Suspense fallback={<Skeleton animation="pulse" variant="round" width="100%" height="80px" />}>
         <CurrencyInputPanelSimplify
           disabled={isBridge}

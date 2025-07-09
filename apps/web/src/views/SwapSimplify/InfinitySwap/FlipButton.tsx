@@ -48,7 +48,7 @@ export const Line = styled.div`
   top: calc(50% + 6px);
 `
 
-const getCompactWapperStyle = (compact?: boolean): CSSProperties => {
+const getCompactWrapperStyle = (compact?: boolean): CSSProperties => {
   if (compact) {
     return {
       position: 'relative',
@@ -74,22 +74,78 @@ const getCompactStyle = (compact?: boolean): CSSProperties => {
   return {}
 }
 
+const DesktopFlipButton: React.FC<{ disabled?: boolean; onFlip: () => Promise<void>; isSwitching: boolean }> = ({
+  disabled = false,
+  onFlip,
+  isSwitching,
+}) => {
+  const lottieRef = useRef<any>(null)
+  const flipButtonRef = useRef<HTMLDivElement>(null)
+  const { isDark } = useTheme()
+  const animationData = useMemo(() => (isDark ? ArrowDark : ArrowLight), [isDark])
+
+  const handleAnimationEnd = useCallback(() => {
+    flipButtonRef.current?.classList.remove('switch-animation')
+  }, [])
+
+  const handleMouseEnter = useCallback(() => {
+    if (!disabled) {
+      lottieRef.current?.playSegments([7, 19], true)
+    }
+  }, [disabled])
+
+  const handleMouseLeave = useCallback(() => {
+    if (!disabled) {
+      handleAnimationEnd()
+      lottieRef.current?.playSegments([39, 54], true)
+    }
+  }, [disabled, handleAnimationEnd])
+
+  const handleAnimatedButtonClick = useCallback(() => {
+    if (isSwitching) return
+
+    onFlip()
+
+    if (flipButtonRef.current && !flipButtonRef.current.classList.contains('switch-animation')) {
+      flipButtonRef.current.classList.add('switch-animation')
+    }
+  }, [onFlip, isSwitching])
+
+  const handleClick = useCallback(() => {
+    if (!disabled) {
+      handleAnimatedButtonClick()
+    }
+  }, [disabled, handleAnimatedButtonClick])
+
+  return (
+    <FlipButtonWrapper ref={flipButtonRef} onAnimationEnd={handleAnimationEnd}>
+      <Lottie
+        lottieRef={lottieRef}
+        animationData={animationData}
+        style={{ height: '40px', cursor: 'pointer' }}
+        onClick={handleClick}
+        autoplay={false}
+        loop={false}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      />
+    </FlipButtonWrapper>
+  )
+}
+
 export const FlipButton = memo(function FlipButton({
   compact,
+  disabled = false,
   replaceBrowser = true,
 }: {
   compact?: boolean
+  disabled?: boolean
   replaceBrowser?: boolean
 }) {
-  const flipButtonRef = useRef<HTMLDivElement>(null)
-  const lottieRef = useRef<LottieRefCurrentProps | null>(null)
-  const { isDark } = useTheme()
   const { isDesktop } = useMatchBreakpoints()
   const { switchNetworkAsync, isLoading } = useSwitchNetwork()
   const { chainId: activeChainId } = useActiveChainId()
-
   const [isSwitching, setIsSwitching] = useState(false)
-  const animationData = useMemo(() => (isDark ? ArrowDark : ArrowLight), [isDark])
 
   const { onSwitchTokens } = useSwapActionHandlers()
   const {
@@ -101,7 +157,6 @@ export const FlipButton = memo(function FlipButton({
 
   const onFlip = useCallback(async () => {
     setIsSwitching(true)
-    onSwitchTokens()
 
     if (replaceBrowser) {
       // If cross-chain swap, switch network to new Input Currency's chain
@@ -128,6 +183,8 @@ export const FlipButton = memo(function FlipButton({
         return
       }
 
+      onSwitchTokens()
+
       replaceBrowserHistoryMultiple({
         inputCurrency: outputCurrencyId,
         outputCurrency: inputCurrencyId,
@@ -138,6 +195,8 @@ export const FlipButton = memo(function FlipButton({
             chain: CHAIN_QUERY_NAME[outputChainId],
           }),
       })
+    } else {
+      onSwitchTokens()
     }
     setIsSwitching(false)
   }, [
@@ -154,26 +213,12 @@ export const FlipButton = memo(function FlipButton({
     router,
   ])
 
-  const handleAnimatedButtonClick = useCallback(() => {
-    if (isSwitching) return
-
-    onFlip()
-
-    if (flipButtonRef.current && !flipButtonRef.current.classList.contains('switch-animation')) {
-      flipButtonRef.current.classList.add('switch-animation')
-    }
-  }, [onFlip, isSwitching])
-
-  const handleAnimationEnd = useCallback(() => {
-    flipButtonRef.current?.classList.remove('switch-animation')
-  }, [])
-
   return (
     <AutoColumn
       justify="space-between"
       position="relative"
       style={{
-        ...getCompactWapperStyle(compact),
+        ...getCompactWrapperStyle(compact),
       }}
     >
       {!compact && <Line />}
@@ -186,23 +231,9 @@ export const FlipButton = memo(function FlipButton({
         }}
       >
         {isDesktop ? (
-          <FlipButtonWrapper ref={flipButtonRef} onAnimationEnd={handleAnimationEnd}>
-            <Lottie
-              lottieRef={lottieRef}
-              animationData={animationData}
-              style={{ height: '40px', cursor: 'pointer' }}
-              onClick={handleAnimatedButtonClick}
-              autoplay={false}
-              loop={false}
-              onMouseEnter={() => lottieRef.current?.playSegments([7, 19], true)}
-              onMouseLeave={() => {
-                handleAnimationEnd()
-                lottieRef.current?.playSegments([39, 54], true)
-              }}
-            />
-          </FlipButtonWrapper>
+          <DesktopFlipButton onFlip={onFlip} disabled={disabled} isSwitching={isSwitching} />
         ) : (
-          <SwapUIV2.SwitchButtonV2 onClick={onFlip} />
+          <SwapUIV2.SwitchButtonV2 onClick={onFlip} disabled={disabled} />
         )}
       </AutoRow>
     </AutoColumn>
