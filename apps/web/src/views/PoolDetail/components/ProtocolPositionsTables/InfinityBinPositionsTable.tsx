@@ -23,6 +23,7 @@ import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
+import { useInfinityPositions } from 'views/universalFarms/hooks/useInfinityPositions'
 import { useInfinityBinPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
@@ -361,7 +362,6 @@ const InfinityBinPositionRow: React.FC<{
 }
 
 export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps> = ({ poolInfo }) => {
-  const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
   const [, pool] = usePoolById<'Bin'>(poolInfo.poolId as `0x${string}`, chainId)
@@ -375,6 +375,9 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     account,
     poolInfo,
   )
+
+  // Get all infinity positions for the harvest modal
+  const { data: allInfinityPositions } = useInfinityPositions()
 
   const {
     data: { rewardsAmount, rewardsUSD },
@@ -518,7 +521,11 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
           setFilter(filter === PositionFilter.Inactive ? PositionFilter.All : PositionFilter.Inactive)
         }
         harvestAllButton={
-          <InfinityPositionActions positionList={positions || []} showPositionFees={false} chainId={poolInfo.chainId} />
+          <InfinityPositionActions
+            positionList={allInfinityPositions || []}
+            showPositionFees={false}
+            chainId={poolInfo.chainId}
+          />
         }
         // On row click, navigate to the position detail page
         onRowClick={(position) => {

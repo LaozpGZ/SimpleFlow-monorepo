@@ -23,6 +23,7 @@ import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
+import { useInfinityPositions } from 'views/universalFarms/hooks/useInfinityPositions'
 import { useInfinityCLPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
@@ -380,6 +381,9 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
     poolInfo,
   )
 
+  // Get all infinity positions for the harvest modal
+  const { data: allInfinityPositions } = useInfinityPositions()
+
   // Handle data from individual position rows
   const handleRowDataReady = useCallback((data: any) => {
     setTransformedPositions((prev) => {
@@ -486,7 +490,7 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
         }
         harvestAllButton={
           <InfinityPositionActions
-            positionList={positionsInPool || []}
+            positionList={allInfinityPositions || []}
             showPositionFees={false}
             chainId={poolInfo.chainId}
           />

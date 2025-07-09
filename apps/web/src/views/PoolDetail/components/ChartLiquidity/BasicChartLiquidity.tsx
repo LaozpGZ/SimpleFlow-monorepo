@@ -1,5 +1,6 @@
 import { Box, Flex, Spinner } from '@pancakeswap/uikit'
 import { formatFiatNumber } from '@pancakeswap/utils/formatFiatNumber'
+import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { ChartToolTip } from './ChartToolTip'
@@ -99,7 +100,7 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: '#9383B4' }}
-            tickFormatter={(value) => value.toFixed(2)}
+            tickFormatter={(value) => formatAmount(value, { precision: 2 }) ?? ''}
           />
           <YAxis
             axisLine={false}
