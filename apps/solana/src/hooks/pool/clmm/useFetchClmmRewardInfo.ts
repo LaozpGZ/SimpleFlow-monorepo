@@ -37,8 +37,8 @@ interface Props {
 
 export type BreakdownRewardInfo = {
   fee: {
-    A: { amount: string; amountUSD: string; mint: ApiV3Token }
-    B: { amount: string; amountUSD: string; mint: ApiV3Token }
+    A?: { amount: string; amountUSD: string; mint: ApiV3Token }
+    B?: { amount: string; amountUSD: string; mint: ApiV3Token }
   }
   rewards: { mint: ApiV3Token; amount: string; amountUSD: string }[]
 }
@@ -341,11 +341,11 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
     if (!poolInfo || !tokenPrices)
       return {
         fee: {
-          A: { mint: {}, amount: '0', amountUSD: '0' },
-          B: { mint: {}, amount: '0', amountUSD: '0' }
+          A: undefined,
+          B: undefined
         },
         rewards: []
-      } as unknown as BreakdownRewardInfo
+      } as BreakdownRewardInfo
     return {
       fee: {
         A: {

@@ -101,52 +101,54 @@ export default function PendingYield({
         </Flex>
       ) : (
         <>
-          <Text>Trade Fees</Text>
-          <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
-            <Flex key={breakdownRewardInfo.fee.A.mint.address} alignItems="center" gap={1} justifyContent="start">
-              <TokenAvatar key={`pool-reward-${breakdownRewardInfo.fee.A.mint.address}`} size="sm" token={breakdownRewardInfo.fee.A.mint} />
-              <Text color={colors.textPrimary}>
-                {formatCurrency(breakdownRewardInfo.fee.A.amount, {
-                  abbreviated: true,
-                  maximumDecimalTrailingZeroes: 2
-                })}
-              </Text>
-              <Text color={colors.textSecondary} display={['block', 'none', 'block']}>
-                {getMintSymbol({ mint: breakdownRewardInfo.fee.A.mint, transformSol: true })}
-              </Text>
-              <Text color={colors.textPrimary}>
-                (
-                {formatCurrency(breakdownRewardInfo.fee.A.amountUSD, {
-                  symbol: '$',
-                  abbreviated: true,
-                  maximumDecimalTrailingZeroes: 2
-                })}
-                )
-              </Text>
+          <Text>{t('Trade Fees')}</Text>
+          {breakdownRewardInfo.fee.A?.mint && breakdownRewardInfo.fee.B?.mint ? (
+            <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
+              <Flex alignItems="center" gap={1} justifyContent="start">
+                <TokenAvatar size="sm" token={breakdownRewardInfo.fee.A.mint} />
+                <Text color={colors.textPrimary}>
+                  {formatCurrency(breakdownRewardInfo.fee.A.amount, {
+                    abbreviated: true,
+                    maximumDecimalTrailingZeroes: 2
+                  })}
+                </Text>
+                <Text color={colors.textSecondary} display={['block', 'none', 'block']}>
+                  {getMintSymbol({ mint: breakdownRewardInfo.fee.A.mint, transformSol: true })}
+                </Text>
+                <Text color={colors.textPrimary}>
+                  (
+                  {formatCurrency(breakdownRewardInfo.fee.A.amountUSD, {
+                    symbol: '$',
+                    abbreviated: true,
+                    maximumDecimalTrailingZeroes: 2
+                  })}
+                  )
+                </Text>
+              </Flex>
+              <Flex alignItems="center" gap={1} justifyContent="start">
+                <TokenAvatar size="sm" token={breakdownRewardInfo.fee.B.mint} />
+                <Text color={colors.textPrimary}>
+                  {formatCurrency(breakdownRewardInfo.fee.B.amount, {
+                    abbreviated: true,
+                    maximumDecimalTrailingZeroes: 2
+                  })}
+                </Text>
+                <Text color={colors.textSecondary} display={['block', 'none', 'block']}>
+                  {getMintSymbol({ mint: breakdownRewardInfo.fee.B.mint, transformSol: true })}
+                </Text>
+                <Text color={colors.textPrimary}>
+                  (
+                  {formatCurrency(breakdownRewardInfo.fee.B.amountUSD, {
+                    symbol: '$',
+                    abbreviated: true,
+                    maximumDecimalTrailingZeroes: 2
+                  })}
+                  )
+                </Text>
+              </Flex>
             </Flex>
-            <Flex key={breakdownRewardInfo.fee.B.mint.address} alignItems="center" gap={1} justifyContent="start">
-              <TokenAvatar key={`pool-reward-${breakdownRewardInfo.fee.B.mint.address}`} size="sm" token={breakdownRewardInfo.fee.B.mint} />
-              <Text color={colors.textPrimary}>
-                {formatCurrency(breakdownRewardInfo.fee.B.amount, {
-                  abbreviated: true,
-                  maximumDecimalTrailingZeroes: 2
-                })}
-              </Text>
-              <Text color={colors.textSecondary} display={['block', 'none', 'block']}>
-                {getMintSymbol({ mint: breakdownRewardInfo.fee.B.mint, transformSol: true })}
-              </Text>
-              <Text color={colors.textPrimary}>
-                (
-                {formatCurrency(breakdownRewardInfo.fee.B.amountUSD, {
-                  symbol: '$',
-                  abbreviated: true,
-                  maximumDecimalTrailingZeroes: 2
-                })}
-                )
-              </Text>
-            </Flex>
-          </Flex>
-          <Text>Farm Rewards</Text>
+          ) : null}
+          <Text>{t('Farm Rewards')}</Text>
           <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
             {breakdownRewardInfo.rewards.map((r, index) => (
               <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent="start">

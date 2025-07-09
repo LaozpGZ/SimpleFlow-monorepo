@@ -4289,5 +4289,7 @@
   "Insufficient sub balance": "Insufficient sub balance",
   "Decrease reward within 72 hours": "Decrease reward within 72 hours",
   "Add reward days": "Add reward days",
-  "Something went wrong. Request timed out": "Something went wrong. Request timed out"
+  "Something went wrong. Request timed out": "Something went wrong. Request timed out",
+  "Trade Fees": "Trade Fees",
+  "Farm Rewards": "Farm Rewards"
 }
