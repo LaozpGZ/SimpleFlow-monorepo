@@ -61,7 +61,7 @@ export const ColumnsPoolActions: React.FC<{
       e.stopPropagation()
       if (farmCreated) {
         router.push({
-          pathname: '/farm/edit',
+          pathname: '/farms/edit',
           query: {
             clmmId: pool.id
           }
