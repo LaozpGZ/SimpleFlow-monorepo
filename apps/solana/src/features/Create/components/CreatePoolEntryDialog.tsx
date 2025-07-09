@@ -220,25 +220,26 @@ export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarg
         selected={isCreatePool}
         onClick={() => onChange('concentrated-liquidity')}
       />
-      <CreateBlock
-        title={t('Create Farm')}
-        description=""
-        renderPoolType={
-          isCreateFarm
-            ? () => (
-                <>
-                  <Stack flexDirection={['column']} mt={2} gap={5}>
-                    <Text whiteSpace="nowrap" fontSize="md" fontWeight={500} color={colors.textSubtle}>
-                      {t('Create a farm for any live pool')}
-                    </Text>
-                  </Stack>
-                </>
-              )
-            : undefined
-        }
-        selected={isCreateFarm}
-        onClick={() => onChange('standard-farm')}
-      />
+
+      {/* <CreateBlock
+          title={t('Create Farm')}
+          description=""
+          renderPoolType={
+            isCreateFarm
+              ? () => (
+                  <>
+                    <Stack flexDirection={['column']} mt={2} gap={5}>
+                      <Text whiteSpace="nowrap" fontSize="md" fontWeight={500} color={colors.textSubtle}>
+                        {t('Create a farm for any live pool')}
+                      </Text>
+                    </Stack>
+                  </>
+                )
+              : undefined
+          }
+          selected={isCreateFarm}
+          onClick={() => onChange('standard-farm')}
+        /> */}
     </Flex>
   )
 }
