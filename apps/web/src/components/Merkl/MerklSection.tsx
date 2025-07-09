@@ -69,7 +69,7 @@ export function MerklSection({
 
   const { claimTokenReward, isClaiming, rewardsPerToken, hasMerkl } = useMerkl(poolAddress)
 
-  const merklLink = useMemo(() => getMerklLink({ chainId, lpAddress: poolAddress }), [chainId, poolAddress])
+  const merklLink = getMerklLink({ chainId, lpAddress: poolAddress })
 
   if (!rewardsPerToken.length || (!hasMerkl && rewardsPerToken.every((r) => r.equalTo('0')))) return null
 
