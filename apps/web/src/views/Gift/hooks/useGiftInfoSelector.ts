@@ -22,20 +22,23 @@ export default function useGiftInfoSelector() {
         return null
       }
 
-      const isNative = gift.token === zeroAddress
+      const tokenAddress = checksumAddress(gift.token as `0x${string}`)
+
+      const isNative = tokenAddress === zeroAddress
 
       let currencyAmount: CurrencyAmount<Token> | undefined | null
 
       if (isNative) {
         currencyAmount = null
       } else {
-        const token = allTokens[checksumAddress(gift.token as `0x${string}`)]
+        const token = allTokens[tokenAddress]
         currencyAmount = token ? CurrencyAmount.fromRawAmount(token, gift.tokenAmount) : undefined
       }
 
       try {
         return {
           ...gift,
+          token: tokenAddress,
           currencyAmount,
           nativeCurrencyAmount: CurrencyAmount.fromRawAmount(native, gift.nativeAmount),
         }

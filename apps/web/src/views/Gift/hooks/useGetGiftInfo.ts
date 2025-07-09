@@ -1,9 +1,10 @@
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
-import { useTokenByChainId } from 'hooks/Tokens'
+import { useTokenByChainId, useTokensByChainId } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useMemo } from 'react'
+import { zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
 import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
 import { GiftInfo, GiftInfoResponse } from '../types'
@@ -27,7 +28,7 @@ export const useGetGiftInfo = () => {
 
   const selectGiftInfo = useGiftInfoSelector()
 
-  return useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [QUERY_KEY_GIFT_INFO, chainId, account],
     queryFn: async (): Promise<GiftInfoResponse[]> => {
       if (!chainId || !account) {
@@ -55,13 +56,7 @@ export const useGetGiftInfo = () => {
       return result.data || []
     },
     select: (data): GiftInfo[] => {
-      return (
-        data
-          .map(selectGiftInfo)
-          .filter((gift) => gift !== null)
-          // REMOVE it when support search list of token addresses on chain
-          .filter((gift) => gift?.currencyAmount)
-      )
+      return data.map(selectGiftInfo).filter((gift) => gift !== null)
     },
     enabled: Boolean(chainId && account),
     refetchOnWindowFocus: false,
@@ -69,6 +64,43 @@ export const useGetGiftInfo = () => {
     refetchOnMount: true,
     refetchInterval: FAST_INTERVAL,
   })
+
+  const missingTokens = useMemo(() => data?.filter((gift) => gift?.currencyAmount === undefined) || [], [data])
+
+  const tokens = useTokensByChainId(
+    missingTokens.map((gift) => gift?.token),
+    chainId,
+  )
+
+  const newData = useMemo(() => {
+    return data?.map((gift) => {
+      if (gift?.currencyAmount === undefined) {
+        const isNative = gift.token === zeroAddress
+
+        if (isNative) {
+          return gift
+        }
+
+        const token = tokens[gift.token]
+        if (!token) {
+          return gift
+        }
+
+        return {
+          ...gift,
+          currencyAmount: CurrencyAmount.fromRawAmount(token, gift.tokenAmount),
+        }
+      }
+      return gift
+    })
+  }, [data, tokens])
+
+  return useMemo(() => {
+    return {
+      data: newData,
+      isLoading,
+    }
+  }, [newData, isLoading])
 }
 
 export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {

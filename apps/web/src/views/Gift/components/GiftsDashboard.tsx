@@ -32,48 +32,49 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
             <Text color="textSubtle">No gifts found</Text>
           </Flex>
         ) : (
-          giftInfo.map((gift) => (
-            <Box mb="16px" key={gift.codeHash}>
-              <FlexGap gap="8px" alignItems="center" mb="8px">
-                <GiftStatusTag status={gift.status} />
+          giftInfo.map((gift) => {
+            const displayCurrency = gift.currencyAmount ?? gift.nativeCurrencyAmount
+            return (
+              <Box mb="16px" key={gift.codeHash}>
+                <FlexGap gap="8px" alignItems="center" mb="8px">
+                  <GiftStatusTag status={gift.status} />
 
-                {gift.status === GiftStatus.PENDING && (
-                  <Text fontSize="12px" color="textSubtle">
-                    Expires: {formatDistanceToNow(new Date(gift.expiryTimestamp), { addSuffix: true })}
-                  </Text>
-                )}
-              </FlexGap>
-
-              <Flex alignItems="center" width="100%" justifyContent="space-between">
-                <Flex>
-                  <CurrencyLogo showChainLogo currency={gift.currencyAmount?.currency.wrapped} size="40px" />
-                  <Flex flexDirection="column" ml="8px">
-                    <Text fontWeight="600" fontSize="14px" color="text">
-                      {gift.currencyAmount
-                        ? `${gift.currencyAmount.toSignificant(6)} ${gift.currencyAmount.currency.symbol}`
-                        : `${gift.nativeCurrencyAmount.toSignificant(6)} ${gift.nativeCurrencyAmount.currency.symbol}`}
-                    </Text>
+                  {gift.status === GiftStatus.PENDING && (
                     <Text fontSize="12px" color="textSubtle">
-                      {formatTimestamp(new Date(gift.timestamp).getTime(), {
-                        precision: Precision.MINUTE,
-                      })}
+                      Expires: {formatDistanceToNow(new Date(gift.expiryTimestamp), { addSuffix: true })}
                     </Text>
+                  )}
+                </FlexGap>
+
+                <Flex alignItems="center" width="100%" justifyContent="space-between">
+                  <Flex>
+                    <CurrencyLogo showChainLogo currency={displayCurrency.currency.wrapped} size="40px" />
+                    <Flex flexDirection="column" ml="8px">
+                      <Text fontWeight="600" fontSize="14px" color="text">
+                        {`${displayCurrency.toSignificant(6)} ${displayCurrency.currency.symbol}`}
+                      </Text>
+                      <Text fontSize="12px" color="textSubtle">
+                        {formatTimestamp(new Date(gift.timestamp).getTime(), {
+                          precision: Precision.MINUTE,
+                        })}
+                      </Text>
+                    </Flex>
                   </Flex>
+                  {gift.status === GiftStatus.PENDING && (
+                    <IconButton
+                      variant="text"
+                      onClick={() => {
+                        setCodeHash(gift.codeHash)
+                        setViewState(ViewState.CANCEL_GIFT_CONFIRM)
+                      }}
+                    >
+                      <DeleteOutlineIcon color="textSubtle" />
+                    </IconButton>
+                  )}
                 </Flex>
-                {gift.status === GiftStatus.PENDING && (
-                  <IconButton
-                    variant="text"
-                    onClick={() => {
-                      setCodeHash(gift.codeHash)
-                      setViewState(ViewState.CANCEL_GIFT_CONFIRM)
-                    }}
-                  >
-                    <DeleteOutlineIcon color="textSubtle" />
-                  </IconButton>
-                )}
-              </Flex>
-            </Box>
-          ))
+              </Box>
+            )
+          })
         )}
       </Box>
 
