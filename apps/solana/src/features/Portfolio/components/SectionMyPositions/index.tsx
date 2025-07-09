@@ -205,20 +205,34 @@ export default function SectionMyPositions() {
                             {formatCurrency(currentRewardState.pendingReward, { symbol: '$', maximumDecimalTrailingZeroes: 4 })}
                           </Text>
                           <QuestionToolTip
+                            placement="bottom"
                             label={
                               <>
-                                {currentRewardState.rewardInfo.map((r) => (
-                                  <Flex key={r.mint.address} alignItems="center" gap="1" my="2">
-                                    <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
-                                    <Text color={colors.primary}>
-                                      {formatCurrency(r.amount, {
-                                        maximumDecimalTrailingZeroes: 5
-                                      })}
-                                    </Text>
-                                    <Text>{getMintSymbol({ mint: r.mint, transformSol: true })}</Text>
-                                    <Text color={colors.primary}>({formatCurrency(r.amountUSD, { symbol: '$', decimalPlaces: 4 })})</Text>
-                                  </Flex>
-                                ))}
+                                <Flex
+                                  direction="column"
+                                  maxHeight="450px"
+                                  overflowY="auto"
+                                  css={{
+                                    scrollSnapType: 'x mandatory',
+                                    scrollbarWidth: 'none',
+                                    '&::-webkit-scrollbar': {
+                                      display: 'none'
+                                    }
+                                  }}
+                                >
+                                  {currentRewardState.rewardInfo.map((r) => (
+                                    <Flex key={r.mint.address} alignItems="center" gap="1" my="2">
+                                      <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
+                                      <Text color={colors.primary}>
+                                        {formatCurrency(r.amount, {
+                                          maximumDecimalTrailingZeroes: 5
+                                        })}
+                                      </Text>
+                                      <Text>{getMintSymbol({ mint: r.mint, transformSol: true })}</Text>
+                                      <Text color={colors.primary}>({formatCurrency(r.amountUSD, { symbol: '$', decimalPlaces: 4 })})</Text>
+                                    </Flex>
+                                  ))}
+                                </Flex>
                               </>
                             }
                             iconType="info"

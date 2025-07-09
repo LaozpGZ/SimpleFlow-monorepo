@@ -27,6 +27,7 @@ import {
 import { PublicKey, RpcResponseAndContext, SimulatedTransactionResponse } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
+import throttle from 'lodash/throttle'
 import { getDefaultToastData, handleMultiTxToast, transformProcessData } from '@/hooks/toast/multiToastUtil'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import { txStatusSubject } from '@/hooks/toast/useTxStatus'
@@ -39,6 +40,7 @@ import { ClmmLockInfo } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { handleMultiTxRetry } from '@/hooks/toast/retryTx'
 import { getComputeBudgetConfig } from '@/utils/tx/computeBudget'
 import { getClmmKeysFromPoolInfo } from '@/utils/getPoolKeysFromPoolInfo'
+import { debounce, throbounce } from '@/utils/functionMethods'
 import { TxCallbackProps, TxCallbackPropsGeneric } from '../types/tx'
 import { getTxMeta } from './configs/clmm'
 
@@ -92,6 +94,19 @@ interface ClmmState {
     } & TxCallbackProps
   ) => Promise<string>
   removeLiquidityAct: <TSimulate extends boolean = false>(
+    props: {
+      simulateOnly?: TSimulate
+      poolInfo: ApiV3PoolInfoConcentratedItem
+      position: ClmmPositionLayout
+      liquidity: number | string | BN
+      amountMinA: number | string | BN
+      amountMinB: number | string | BN
+      needRefresh?: boolean
+      harvest?: boolean
+      closePosition?: boolean
+    } & TxCallbackProps
+  ) => Promise<ReturnType<typeof DecreaseLiquidityEventLayout.decode> | string>
+  removeLiquidityActThrottle: <TSimulate extends boolean = false>(
     props: {
       simulateOnly?: TSimulate
       poolInfo: ApiV3PoolInfoConcentratedItem
@@ -574,6 +589,16 @@ export const useClmmStore = createStore<ClmmState>(
         return ''
       }
     },
+
+    removeLiquidityActThrottle: throttle(
+      async (props) => {
+        return get().removeLiquidityAct(props)
+      },
+      1000 / 10,
+      {
+        leading: true
+      }
+    ),
 
     closePositionAct: async ({ poolInfo, position, ...txProps }) => {
       const { raydium, txVersion } = useAppStore.getState()

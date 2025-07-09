@@ -21,7 +21,6 @@ import { getTickArrayAddress } from '@/hooks/pool/formatter'
 import { getPoolName } from '@/features/Pools/util'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { addAccChangeCbk, removeAccChangeCbk } from '@/hooks/app/useTokenAccountInfo'
-import logMessage from '@/utils/log'
 import { useAppStore, useClmmStore } from '@/store'
 import useSubscribeClmmInfo, { RpcPoolData } from './useSubscribeClmmInfo'
 
@@ -201,11 +200,11 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
   const { data: tokenPrices } = useTokenPrice({
     mintList: [poolInfo?.mintA.address, poolInfo?.mintB.address, ...(poolInfo?.rewardDefaultInfos.map((r) => r.mint.address) || [])]
   })
-  const removeLiquidityAct = useClmmStore((s) => s.removeLiquidityAct)
+  const removeLiquidityActThrottle = useClmmStore((s) => s.removeLiquidityActThrottle)
   const raydium = useAppStore((s) => s.raydium)
 
   const simulation = useCallback(async () => {
-    const simulationResult = (await removeLiquidityAct({
+    const simulationResult = (await removeLiquidityActThrottle({
       simulateOnly: true,
       poolInfo: poolInfo as ApiV3PoolInfoConcentratedItem,
       position,
@@ -216,7 +215,7 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
     })) as ReturnType<typeof DecreaseLiquidityEventLayout.decode>
 
     return simulationResult
-  }, [poolInfo, position, removeLiquidityAct])
+  }, [poolInfo, position, removeLiquidityActThrottle])
 
   const shouldFetch = Boolean(raydium && poolInfo && position)
 
@@ -365,16 +364,18 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
             .toFixed(4)
         }
       },
-      rewards: rewards.map((r, idx) => {
-        const rewardMint = poolInfo.rewardDefaultInfos[idx]?.mint
-        if (!rewardMint) return { mint: null, amount: '0', amountUSD: '0' }
-        const amount = new Decimal(r.toString()).div(10 ** (rewardMint.decimals || 0))
-        return {
-          mint: rewardMint,
-          amount: amount.toFixed(rewardMint.decimals || 6),
-          amountUSD: amount.mul(tokenPrices[rewardMint.address]?.value || 0).toFixed(4)
-        }
-      })
+      rewards: rewards
+        .map((r, idx) => {
+          const rewardMint = poolInfo.rewardDefaultInfos[idx]?.mint
+          if (!rewardMint) return { mint: null, amount: '0', amountUSD: '0' }
+          const amount = new Decimal(r.toString()).div(10 ** (rewardMint.decimals || 0))
+          return {
+            mint: rewardMint,
+            amount: amount.toFixed(rewardMint.decimals || 6),
+            amountUSD: amount.mul(tokenPrices[rewardMint.address]?.value || 0).toFixed(4)
+          }
+        })
+        .filter((r) => !!r.mint)
     }
   }, [rewards, tokenFees])
 

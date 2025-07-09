@@ -43,7 +43,7 @@ export default function PendingYield({
           <Text color={colors.textPrimary} whiteSpace="nowrap">
             ({pendingYield ?? '$0'})
           </Text>
-          <RewardBreakdownSwitch />
+          {breakdownRewardInfo.rewards.length > 0 ? <RewardBreakdownSwitch /> : null}
         </HStack>
         <Tooltip
           label={
@@ -73,7 +73,7 @@ export default function PendingYield({
         </Tooltip>
       </HStack>
 
-      {rewardBreakdownMode === 'Aggr' ? (
+      {rewardBreakdownMode === 'Aggr' || !breakdownRewardInfo.rewards.length ? (
         <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
           {rewardInfos.map((r, index) => (
             <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent="start">
@@ -148,32 +148,36 @@ export default function PendingYield({
               </Flex>
             </Flex>
           ) : null}
-          <Text>{t('Farm Rewards')}</Text>
-          <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
-            {breakdownRewardInfo.rewards.map((r, index) => (
-              <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent="start">
-                <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
-                <Text color={colors.textPrimary}>
-                  {formatCurrency(r.amount, {
-                    abbreviated: true,
-                    maximumDecimalTrailingZeroes: 2
-                  })}
-                </Text>
-                <Text color={colors.textSecondary} display={['block', 'none', 'block']}>
-                  {getMintSymbol({ mint: r.mint, transformSol: true })}
-                </Text>
-                <Text color={colors.textPrimary}>
-                  (
-                  {formatCurrency(r.amountUSD, {
-                    symbol: '$',
-                    abbreviated: true,
-                    maximumDecimalTrailingZeroes: 2
-                  })}
-                  )
-                </Text>
+          {breakdownRewardInfo.rewards.length > 0 ? (
+            <>
+              <Text>{t('Farm Rewards')}</Text>
+              <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
+                {breakdownRewardInfo.rewards.map((r, index) => (
+                  <Flex key={r.mint.address} alignItems="center" gap={1} justifyContent="start">
+                    <TokenAvatar key={`pool-reward-${r.mint.address}`} size="sm" token={r.mint} />
+                    <Text color={colors.textPrimary}>
+                      {formatCurrency(r.amount, {
+                        abbreviated: true,
+                        maximumDecimalTrailingZeroes: 2
+                      })}
+                    </Text>
+                    <Text color={colors.textSecondary} display={['block', 'none', 'block']}>
+                      {getMintSymbol({ mint: r.mint, transformSol: true })}
+                    </Text>
+                    <Text color={colors.textPrimary}>
+                      (
+                      {formatCurrency(r.amountUSD, {
+                        symbol: '$',
+                        abbreviated: true,
+                        maximumDecimalTrailingZeroes: 2
+                      })}
+                      )
+                    </Text>
+                  </Flex>
+                ))}
               </Flex>
-            ))}
-          </Flex>
+            </>
+          ) : null}
         </>
       )}
     </Flex>
