@@ -125,7 +125,7 @@ const transformInfinityCLPositionToTableRow = (
           </Text>
         </Text>
         {position.isStaked && (
-          <Tag variant="primary60" scale="sm">
+          <Tag variant="primary60" scale="sm" px="6px">
             {t('Farming')}
           </Tag>
         )}

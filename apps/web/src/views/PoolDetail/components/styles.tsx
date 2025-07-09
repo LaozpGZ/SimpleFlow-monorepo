@@ -11,6 +11,7 @@ export const ActionButton = styled(Button).attrs({
   height: 48px;
   width: ${({ isIcon }) => (isIcon ? '48px' : '')};
   background-color: transparent;
+  color: ${({ theme }) => theme.colors.primary60};
   border: 2px solid ${({ theme, disabled }) => (disabled ? theme.colors.textDisabled : theme.colors.primary)};
   border-radius: ${({ theme }) => theme.radii.default};
   padding: 16px;

@@ -298,12 +298,12 @@ const transformV3PositionToTableRow = (
           </Text>
         </Text>
         {position.isStaked && (
-          <Tag variant="primary60" scale="sm">
+          <Tag variant="primary60" scale="sm" px="6px">
             {t('Farming')}
           </Tag>
         )}
         {removed && (
-          <Tag variant="tertiary" scale="sm" px="8px">
+          <Tag variant="tertiary" scale="sm" px="6px">
             {t('Closed')}
           </Tag>
         )}
