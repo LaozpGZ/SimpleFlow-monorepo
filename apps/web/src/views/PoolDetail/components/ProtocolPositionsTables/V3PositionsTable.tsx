@@ -9,9 +9,10 @@ import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
 import router from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAccountPositionDetailByPool } from 'state/farmsV4/hooks'
+import { useAccountPositionDetailByPool, useV3PoolsLength, useV3PoolStatus } from 'state/farmsV4/hooks'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { PoolInfo } from 'state/farmsV4/state/type'
+import { getPoolMultiplier } from 'state/farmsV4/state/utils'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { currencyId } from 'utils/currencyId'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
@@ -62,6 +63,99 @@ const formatPercentage = (percentage: number): string => {
   if (!Number.isFinite(percentage)) return '-%'
   const sign = percentage >= 0 ? '+' : ''
   return `${sign}${percentage.toFixed(2)}%`
+}
+
+const V3Actions = ({
+  position,
+  poolInfo,
+  liquidityUSD,
+  positionData,
+  removed,
+  outOfRange,
+}: {
+  position: PositionDetail
+  poolInfo: PoolInfo
+
+  liquidityUSD: number
+  positionData: any
+  removed: boolean
+  outOfRange: boolean
+}) => {
+  const { t } = useTranslation()
+
+  const { data: poolsLength } = useV3PoolsLength([poolInfo.chainId])
+  const [allocPoint] = useV3PoolStatus(poolInfo)
+  const poolMultiplier = getPoolMultiplier(allocPoint)
+
+  const poolLength = useMemo(() => poolsLength?.[poolInfo.chainId], [poolsLength, poolInfo.chainId])
+  const pid = useMemo(() => poolInfo?.pid, [poolInfo])
+  const isFarmLive = useMemo(
+    () => poolMultiplier !== `0X` && (!poolLength || !pid || pid <= poolLength),
+    [pid, poolLength, poolMultiplier],
+  )
+
+  const isStakeButtonActive = useMemo(() => {
+    return isFarmLive && !position.isStaked && !removed
+  }, [position.isStaked, removed, isFarmLive])
+
+  return (
+    <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
+      {(position.isStaked || !isStakeButtonActive) && (
+        <ActionButton
+          as="a"
+          href={`/remove/${position.tokenId.toString()}`}
+          disabled={removed}
+          isIcon
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        >
+          <MinusIcon />
+        </ActionButton>
+      )}
+
+      {!isFarmLive && (
+        <ActionButton
+          as="a"
+          href={`/add/${currencyId(poolInfo.token0.wrapped)}/${currencyId(
+            poolInfo.token1.wrapped,
+          )}/${poolInfo.feeTier.toString()}`}
+          disabled={removed}
+          isIcon
+          onClick={(e: React.MouseEvent) => e.stopPropagation()}
+        >
+          <AddIcon />
+        </ActionButton>
+      )}
+
+      <V3PositionActions
+        chainId={poolInfo.chainId}
+        isStaked={position.isStaked}
+        isFarmLive={isFarmLive}
+        removed={removed}
+        outOfRange={outOfRange}
+        tokenId={position.tokenId}
+        modalContent={
+          <V3UnstakeModalContent
+            chainId={poolInfo.chainId}
+            userPosition={position}
+            link={`/liquidity/${position.tokenId}`}
+            totalPriceUSD={liquidityUSD}
+            amount0={positionData?.amount0}
+            amount1={positionData?.amount1}
+            desc={t('Unstake')}
+            currency0={poolInfo.token0.wrapped}
+            currency1={poolInfo.token1.wrapped}
+            removed={removed}
+            outOfRange={outOfRange}
+            fee={position.fee}
+            protocol={position.protocol}
+            isStaked={position.isStaked}
+            tokenId={position.tokenId}
+            detailMode={false}
+          />
+        }
+      />
+    </FlexGap>
+  )
 }
 
 // Helper function to transform position data for table - NO HOOKS ALLOWED
@@ -152,9 +246,11 @@ const transformV3PositionToTableRow = (
   // If position is full range, set special handling
   if (isTickAtLimit.LOWER && isTickAtLimit.UPPER) {
     rangePosition = 50
-    showPercentages = true
     minPercentage = '0%'
     maxPercentage = '100%'
+    minPriceFormatted = '0'
+    maxPriceFormatted = '∞'
+    showPercentages = true
   } else if (pool?.token0Price && position.tickLower > TickMath.MIN_TICK && position.tickUpper < TickMath.MAX_TICK) {
     // Only calculate percentages if prices are not at limits and pool exists
     try {
@@ -341,62 +437,14 @@ const transformV3PositionToTableRow = (
   )
 
   const actions = (
-    <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
-      <ActionButton
-        as="a"
-        href={`/remove/${position.tokenId.toString()}`}
-        disabled={removed}
-        isIcon
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-      >
-        <MinusIcon />
-      </ActionButton>
-      <ActionButton
-        as="a"
-        href={`/add/${currencyId(poolInfo.token0.wrapped)}/${currencyId(
-          poolInfo.token1.wrapped,
-        )}/${poolInfo.feeTier.toString()}`}
-        disabled={removed}
-        isIcon
-        onClick={(e: React.MouseEvent) => e.stopPropagation()}
-      >
-        <AddIcon />
-      </ActionButton>
-      <V3PositionActions
-        chainId={poolInfo.chainId}
-        isStaked={position.isStaked}
-        removed={removed}
-        outOfRange={outOfRange}
-        tokenId={position.tokenId}
-        modalContent={
-          <V3UnstakeModalContent
-            chainId={poolInfo.chainId}
-            userPosition={position}
-            link={`/liquidity/${position.tokenId}`}
-            pool={pool}
-            totalPriceUSD={liquidityUSD}
-            amount0={positionData?.amount0}
-            amount1={positionData?.amount1}
-            desc={t('Unstake')}
-            currency0={poolInfo.token0.wrapped}
-            currency1={poolInfo.token1.wrapped}
-            removed={removed}
-            outOfRange={outOfRange}
-            fee={position.fee}
-            protocol={position.protocol}
-            isStaked={position.isStaked}
-            tokenId={position.tokenId}
-            detailMode={false}
-          />
-        }
-      />
-      {/* {position.isStaked && (
-        <ActionButton onClick={(e: React.MouseEvent) => e.stopPropagation()}>{t('Harvest')}</ActionButton>
-      )}
-      {!position.isStaked && !removed && !outOfRange && (
-        <ActionButton onClick={(e: React.MouseEvent) => e.stopPropagation()}>{t('Stake')}</ActionButton>
-      )} */}
-    </FlexGap>
+    <V3Actions
+      position={position}
+      poolInfo={poolInfo}
+      liquidityUSD={liquidityUSD}
+      positionData={positionData}
+      removed={removed}
+      outOfRange={outOfRange}
+    />
   )
 
   return {
