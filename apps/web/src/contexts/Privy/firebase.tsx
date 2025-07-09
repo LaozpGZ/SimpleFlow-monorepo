@@ -8,6 +8,7 @@ import {
   UserCredential,
 } from 'firebase/auth'
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import { usePrivySocialLoginAtom } from './atom'
 import { loginWithTelegramViaScript } from './telegramLogin'
 
 import { firebaseApp } from './constants'
@@ -37,6 +38,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   const [token, setToken] = useState<string | undefined>()
   const [discordPopup, setDiscordPopup] = useState<Window | null>(null)
   const [telegramPopup, setTelegramPopup] = useState<Window | null>(null)
+  const [, setPrivySocialLogin] = usePrivySocialLoginAtom()
 
   const signInWithGoogle = async (): Promise<UserCredential> => {
     try {
@@ -64,6 +66,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
 
   const loginWithGoogle = async () => {
     try {
+      setPrivySocialLogin(true)
       setLoading(true)
       const loginRes = await signInWithGoogle()
       const idToken = await loginRes.user.getIdToken(true)
@@ -77,6 +80,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
 
   const loginWithX = async () => {
     try {
+      setPrivySocialLogin(true)
       setLoading(true)
       const loginRes = await signInWithX()
       const idToken = await loginRes.user.getIdToken(true)
@@ -91,6 +95,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   // Helper function to sign in with custom token
   const loginWithCustomToken = async (customToken: string) => {
     try {
+      setPrivySocialLogin(true)
       const auth = getAuth(firebaseApp)
       const userCredential = await signInWithCustomToken(auth, customToken)
       const idToken = await userCredential.user.getIdToken(true)
@@ -105,6 +110,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
 
   const loginWithDiscord = async () => {
     try {
+      setPrivySocialLogin(true)
       setLoading(true)
 
       // Open Discord OAuth page
@@ -128,6 +134,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
 
   const loginWithTelegram = async () => {
     try {
+      setPrivySocialLogin(true)
       setLoading(true)
 
       loginWithTelegramViaScript((token) => {
