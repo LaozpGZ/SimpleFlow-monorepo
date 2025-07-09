@@ -2,10 +2,10 @@ import { Box } from '@chakra-ui/react'
 import { TooltipProps } from 'recharts'
 import { NameType, ValueType } from 'recharts/src/component/DefaultTooltipContent'
 
+import { panelCard } from '@/theme/cssBlocks'
+import { colors } from '@/theme/cssVariables'
 import { toUTC } from '@/utils/date'
 import { formatCurrency } from '@/utils/numberish/formatter'
-import { colors } from '@/theme/cssVariables'
-import { panelCard } from '@/theme/cssBlocks'
 
 export type IChartTooltipProps = TooltipProps<ValueType, NameType> & { category?: string; symbol?: string; unit?: string }
 

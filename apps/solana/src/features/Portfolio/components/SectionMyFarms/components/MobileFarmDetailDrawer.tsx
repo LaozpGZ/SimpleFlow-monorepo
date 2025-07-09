@@ -1,15 +1,17 @@
 import { Badge, Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Flex, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-import { colors } from '@/theme/cssVariables'
-import { FarmCategory } from '@/hooks/portfolio/farm/useCreatedFarmInfo'
-import TokenAvatarPair from '@/components/TokenAvatarPair'
-import TokenAvatar from '@/components/TokenAvatar'
+
 import AddressChip from '@/components/AddressChip'
+import TokenAvatar from '@/components/TokenAvatar'
+import TokenAvatarPair from '@/components/TokenAvatarPair'
+import { FarmCategory } from '@/hooks/portfolio/farm/useCreatedFarmInfo'
+import { colors } from '@/theme/cssVariables'
 import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import toApr from '@/utils/numberish/toApr'
-import { wSolToSolString } from '@/utils/token'
 import { routeToPage } from '@/utils/routeTools'
+import { wSolToSolString } from '@/utils/token'
+
 import { RewardInfo } from './type'
 
 export default function MobileFarmDetailDrawer({

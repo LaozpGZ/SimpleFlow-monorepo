@@ -1,7 +1,8 @@
+import { useTranslation } from '@pancakeswap/localization'
 import { Box, CopyIcon, copyText, Flex, FlexProps, IconButton, SvgProps, TooltipOptions, useTooltip } from '@pancakeswap/uikit'
 import React, { useCallback, useEffect, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
 import styled from 'styled-components'
+
 import { colors } from '@/theme/cssVariables'
 
 const Wrapper = styled(Flex)`

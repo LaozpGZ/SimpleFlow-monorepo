@@ -1,5 +1,6 @@
-import { RefObject } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
+import { RefObject } from 'react'
+
 import Steps, { StepsRef } from '@/components/Steps'
 import { useAppStore } from '@/store'
 

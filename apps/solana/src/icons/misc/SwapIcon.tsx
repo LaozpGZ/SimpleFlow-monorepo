@@ -1,5 +1,6 @@
-import { forwardRef } from 'react'
 import { useColorMode } from '@chakra-ui/react'
+import { forwardRef } from 'react'
+
 import { SvgIcon } from '../type'
 
 export default forwardRef(function SwapIcon(props: SvgIcon, ref: any) {

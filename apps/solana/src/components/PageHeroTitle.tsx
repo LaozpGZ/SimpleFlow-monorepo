@@ -3,6 +3,7 @@
  */
 
 import { Text, VStack } from '@chakra-ui/react'
+
 import { useAppStore } from '@/store'
 import { heroGridientColorCSSBlock } from '@/theme/cssBlocks'
 import { colors } from '@/theme/cssVariables'

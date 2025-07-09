@@ -1,5 +1,7 @@
 import { ColorMode } from '@chakra-ui/react'
+
 import { colors } from '@/theme/cssVariables'
+
 import { SvgIcon } from '../type'
 
 /** used in mobile nav bottom bar */

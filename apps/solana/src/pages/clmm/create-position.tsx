@@ -1,5 +1,6 @@
-import { useEffect } from 'react'
 import dynamic from 'next/dynamic'
+import { useEffect } from 'react'
+
 import { useClmmStore } from '@/store'
 
 const CreatePosition = dynamic(() => import('@/features/Clmm/ClmmPosition'))

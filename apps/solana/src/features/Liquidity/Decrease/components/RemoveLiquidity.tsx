@@ -1,23 +1,23 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
-import { useState, useRef } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-
-import Decimal from 'decimal.js'
 import { getTransferAmountFeeV2 } from '@pancakeswap/solana-core-sdk'
 import BN from 'bn.js'
-import Button from '@/components/Button'
+import Decimal from 'decimal.js'
+import { useState, useRef } from 'react'
+
 import AmountSlider from '@/components/AmountSlider'
-import TokenAvatarPair from '@/components/TokenAvatarPair'
-import { FormattedPoolInfoStandardItem, FormattedPoolInfoStandardItemCpmm } from '@/hooks/pool/type'
-import { useAppStore, useTokenAccountStore } from '@/store'
+import Button from '@/components/Button'
 import IntervalCircle, { IntervalCircleHandler } from '@/components/IntervalCircle'
 import { SlippageAdjuster } from '@/components/SlippageAdjuster'
-import { formatCurrency } from '@/utils/numberish/formatter'
-import { useLiquidityStore } from '@/store/useLiquidityStore'
+import TokenAvatarPair from '@/components/TokenAvatarPair'
+import { FormattedPoolInfoStandardItem, FormattedPoolInfoStandardItemCpmm } from '@/hooks/pool/type'
 import useTokenPrice from '@/hooks/token/useTokenPrice'
-import { colors } from '@/theme/cssVariables'
 import { useEvent } from '@/hooks/useEvent'
 import useRefreshEpochInfo from '@/hooks/useRefreshEpochInfo'
+import { useAppStore, useTokenAccountStore } from '@/store'
+import { useLiquidityStore } from '@/store/useLiquidityStore'
+import { colors } from '@/theme/cssVariables'
+import { formatCurrency } from '@/utils/numberish/formatter'
 
 const BN_ZERO = new BN(0)
 

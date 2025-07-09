@@ -1,7 +1,8 @@
+import { SimpleGrid } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { ReactNode } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
-import { SimpleGrid } from '@chakra-ui/react'
+
 import { PriceRangeInputBox, Side } from '@/features/Create/ClmmPool/components/SetPriceAndRange'
 
 interface Props {

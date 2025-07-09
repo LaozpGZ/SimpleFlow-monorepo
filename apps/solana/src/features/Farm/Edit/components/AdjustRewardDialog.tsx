@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
 import {
   Box,
   Flex,
@@ -16,23 +14,27 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token, wSolToSolToken } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
+import { useState } from 'react'
+
 import Button from '@/components/Button'
 import CalloutNote from '@/components/CalloutNote'
 import DecimalInput from '@/components/DecimalInput'
 import TokenInput from '@/components/TokenInput'
+import useTokenPrice, { TokenPrice } from '@/hooks/token/useTokenPrice'
+import { useEvent } from '@/hooks/useEvent'
 import { useAppStore, useTokenAccountStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
-import { useEvent } from '@/hooks/useEvent'
 import { parseDateInfo, toUTC, DAY_SECONDS, WEEK_SECONDS } from '@/utils/date'
 import { getDuration } from '@/utils/duration'
 import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import toPercentString from '@/utils/numberish/toPercentString'
 import { wSolToSolString } from '@/utils/token'
-import useTokenPrice, { TokenPrice } from '@/hooks/token/useTokenPrice'
-import { EditReward } from '../util'
+
 import useAdjustRewardSchema, { ADJUST_REWARD_ERROR } from '../schema/useAdjustRewardSchema'
+import { EditReward } from '../util'
 
 /**
  * used in [FarmingRewardItem](./FarmingRewardItem.tsx)

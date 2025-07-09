@@ -1,5 +1,7 @@
 import { ReactNode } from 'react'
+
 import { ToastStatus } from '@/types/tx'
+
 import { isClient } from '../common'
 
 const HISTORY_KEY = '_r_tx_history_'

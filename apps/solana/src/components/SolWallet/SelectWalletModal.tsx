@@ -18,11 +18,12 @@ import {
   UnorderedList,
   useColorMode
 } from '@chakra-ui/react'
+import { Trans, useTranslation } from '@pancakeswap/localization'
 import { LinkExternal, Text, Toggle, WalletFilledIcon } from '@pancakeswap/uikit'
 import { WalletReadyState } from '@solana/wallet-adapter-base'
 import { Wallet } from '@solana/wallet-adapter-react'
 import { useCallback, useState } from 'react'
-import { Trans, useTranslation } from '@pancakeswap/localization'
+
 // import TealCircleCheckBadge from '@/icons/misc/TealCircleCheckBadge'
 // import AvalancheNetworkIcon from '@/icons/networks/AvalancheNetworkIcon'
 // import BinanceNetworkIcon from '@/icons/networks/BinanceNetworkIcon'

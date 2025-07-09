@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
+
 import { useAppStore } from '@/store'
+
 import { useDeviceInfoDetector } from '../useMobileDetector'
 
 export default function useInitMobileDetector() {

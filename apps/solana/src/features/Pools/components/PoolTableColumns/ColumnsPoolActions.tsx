@@ -2,14 +2,15 @@ import { Box, Button, HStack } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
+
 import Tooltip from '@/components/Tooltip'
 import { FormattedPoolInfoItem } from '@/hooks/pool/type'
 import ChartInfoIcon from '@/icons/misc/ChartInfoIcon'
 import SwapPoolItemIcon from '@/icons/misc/SwapPoolItemIcon'
 import { colors } from '@/theme/cssVariables'
-import { wSolToSol } from '@/utils/token'
 import { pageRoutePathnames } from '@/utils/config/routers'
 import { logGTMDepositLiquidityEvent } from '@/utils/report/curstomGTMEventTracking'
+import { wSolToSol } from '@/utils/token'
 
 export const ColumnsPoolActions: React.FC<{
   data: FormattedPoolInfoItem

@@ -1,4 +1,5 @@
 import { DefaultSeoProps } from 'next-seo'
+
 import { ASSET_CDN } from '@/utils/config/endpoint'
 
 export const SEO: DefaultSeoProps = {

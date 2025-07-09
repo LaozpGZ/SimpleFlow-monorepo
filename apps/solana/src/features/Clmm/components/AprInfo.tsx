@@ -1,14 +1,15 @@
 import { Box, Flex, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Cell, Label, Pie, PieChart, ResponsiveContainer } from 'recharts'
+
 import AprMDSwitchWidget from '@/components/AprMDSwitchWidget'
 import Tabs from '@/components/Tabs'
+import { AprData } from '@/features/Clmm/utils/calApr'
 import { TimeBasisOptionType, timeBasisOptions } from '@/hooks/pool/type'
 import { useAppStore } from '@/store'
 import { colors } from '@/theme/cssVariables/colors'
-import toPercentString from '@/utils/numberish/toPercentString'
 import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
-import { AprData } from '@/features/Clmm/utils/calApr'
+import toPercentString from '@/utils/numberish/toPercentString'
 
 export const PORTFOLIO_PIE_COLORS = [colors.chart03, colors.chart04, colors.chart02, colors.chart05, colors.chart06]
 

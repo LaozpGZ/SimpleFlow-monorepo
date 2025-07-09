@@ -1,4 +1,5 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
+
 import LockPercentCircle from '@/components/LockPercentCircle'
 import { FormattedPoolInfoItem } from '@/hooks/pool/type'
 import { formatCurrency } from '@/utils/numberish/formatter'

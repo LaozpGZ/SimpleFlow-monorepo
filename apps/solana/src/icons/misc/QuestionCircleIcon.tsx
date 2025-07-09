@@ -1,4 +1,5 @@
 import { forwardRef } from 'react'
+
 import { SvgIcon } from '../type'
 
 export default forwardRef(function QuestionCircleIcon(props: SvgIcon, ref: any) {

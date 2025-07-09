@@ -1,12 +1,13 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import Decimal from 'decimal.js'
-import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
-import { colors } from '@/theme/cssVariables'
+
 import TokenAvatar from '@/components/TokenAvatar'
-import { formatCurrency, getFirstNonZeroDecimal } from '@/utils/numberish/formatter'
 import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
 import { CpmmLockData } from '@/hooks/portfolio/cpmm/useLockCpmmBalance'
+import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
+import { colors } from '@/theme/cssVariables'
+import { formatCurrency, getFirstNonZeroDecimal } from '@/utils/numberish/formatter'
 
 type PendingFeesProps = {
   pendingFee: number | string

@@ -1,7 +1,9 @@
 import { Box } from '@chakra-ui/react'
-import { useMemo } from 'react'
 import { eq } from '@pancakeswap/solana-core-sdk'
+import { useMemo } from 'react'
+
 import { AprData } from '@/features/Clmm/utils/calApr'
+
 import { aprColors, emptyAprColor } from './PoolListItemAprLine'
 
 export function PoolListItemAprPie({ aprs, w = 16, h = 16 }: { aprs: AprData; w?: number; h?: number }) {

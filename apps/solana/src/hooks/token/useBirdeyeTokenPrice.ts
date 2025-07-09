@@ -1,12 +1,13 @@
-import { shallow } from 'zustand/shallow'
 import { solToWSol, WSOLMint } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useMemo } from 'react'
 import useSWR from 'swr'
+import { shallow } from 'zustand/shallow'
+
 import axios from '@/api/axios'
+import { useAppStore } from '@/store'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { isValidPublicKey } from '@/utils/publicKey'
-import { useAppStore } from '@/store'
 
 export interface BirdEyeTokenPrice {
   value: number

@@ -1,12 +1,14 @@
 import { Flex, Input, InputGroup, InputRightElement, Spinner, useDisclosure } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { Button } from '@pancakeswap/uikit'
 import { KeyboardEvent, useEffect, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
 import { shallow } from 'zustand/shallow'
+
 import { useEvent } from '@/hooks/useEvent'
 import { useAppStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { isValidUrl } from '@/utils/url'
+
 import { SettingField } from './SettingField'
 import { SettingFieldToggleButton } from './SettingFieldToggleButton'
 

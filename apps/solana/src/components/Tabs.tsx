@@ -1,6 +1,6 @@
+import { TabListProps as CTabListProps, SystemStyleObject, TooltipProps } from '@chakra-ui/react'
 import { ButtonMenuProps, ButtonMenu, ButtonMenuItem, type ButtonMenuItemProps } from '@pancakeswap/uikit'
 import { Scale, Variant } from '@pancakeswap/uikit/components/Button/types'
-import { TabListProps as CTabListProps, SystemStyleObject, TooltipProps } from '@chakra-ui/react'
 import { ReactNode, useCallback, useEffect, useMemo, useState } from 'react'
 
 import { useEvent } from '@/hooks/useEvent'

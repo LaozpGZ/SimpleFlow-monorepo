@@ -1,13 +1,15 @@
 import { Flex, HStack, Text } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { useCallback } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+
 import Button from '@/components/Button'
 import PlusCircleIcon from '@/icons/misc/PlusCircleIcon'
 import { useAppStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
-import { NewRewardInfo } from '../../type'
+
 import AddRewardItem from './Reward'
+import { NewRewardInfo } from '../../type'
 
 export default function RewardAddItem(props: {
   maxRewardCount: number

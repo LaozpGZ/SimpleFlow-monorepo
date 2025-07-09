@@ -1,4 +1,3 @@
-import { useCallback } from 'react'
 import {
   Box,
   Flex,
@@ -16,22 +15,24 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import Decimal from 'decimal.js'
+import { useCallback } from 'react'
+
 import TokenAvatar from '@/components/TokenAvatar'
-import { aprColors, PoolListItemAprLine } from '@/features/Pools/components/PoolListItemAprLine'
 import { AprData } from '@/features/Clmm/utils/calApr'
+import { aprColors, PoolListItemAprLine } from '@/features/Pools/components/PoolListItemAprLine'
+import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
+import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import CopyIcon from '@/icons/misc/CopyIcon'
 import ExternalLinkLargeIcon from '@/icons/misc/ExternalLinkLargeIcon'
-import { colors } from '@/theme/cssVariables'
-import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
-import { wSolToSolString } from '@/utils/token'
-import { encodeStr } from '@/utils/common'
-import { toastSubject } from '@/hooks/toast/useGlobalToast'
-import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
-import { panelCard } from '@/theme/cssBlocks'
-import toPercentString from '@/utils/numberish/toPercentString'
 import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
-import { useAppStore, supportedExplorers } from '@/store/useAppStore'
 import LockIcon from '@/icons/misc/LockIcon'
+import { useAppStore, supportedExplorers } from '@/store/useAppStore'
+import { panelCard } from '@/theme/cssBlocks'
+import { colors } from '@/theme/cssVariables'
+import { encodeStr } from '@/utils/common'
+import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import toPercentString from '@/utils/numberish/toPercentString'
+import { wSolToSolString } from '@/utils/token'
 
 export default function PoolInfo({ pool, aprData }: { pool?: FormattedPoolInfoStandardItem; aprData: AprData }) {
   const { t } = useTranslation()

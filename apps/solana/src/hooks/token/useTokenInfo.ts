@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react'
 import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
-import { useTokenStore } from '@/store/useTokenStore'
+import { useState, useEffect } from 'react'
+
 import { useAppStore } from '@/store/useAppStore'
+import { useTokenStore } from '@/store/useTokenStore'
 import { getMintSymbol } from '@/utils/token'
+
 import { getTokenInfo } from './api'
 
 export default function useTokenInfo({

@@ -1,6 +1,3 @@
-import { Button, Dots } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
-import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import {
   Box,
   Flex,
@@ -15,17 +12,21 @@ import {
   ModalFooter,
   TextProps
 } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
+import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
+import { Button, Dots } from '@pancakeswap/uikit'
 import Decimal from 'decimal.js'
+
+import { Mobile } from '@/components/MobileDesktop'
+import PanelCard from '@/components/PanelCard'
 import TokenAvatar from '@/components/TokenAvatar'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
-import PanelCard from '@/components/PanelCard'
 import { getPoolName } from '@/features/Pools/util'
-import { getMintSymbol } from '@/utils/token'
-import { colors } from '@/theme/cssVariables/colors'
 import { panelCard } from '@/theme/cssBlocks'
-import toPercentString from '@/utils/numberish/toPercentString'
+import { colors } from '@/theme/cssVariables/colors'
 import { getFirstNonZeroDecimal, formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
-import { Mobile } from '@/components/MobileDesktop'
+import toPercentString from '@/utils/numberish/toPercentString'
+import { getMintSymbol } from '@/utils/token'
 
 const SubTitle: React.FC<React.PropsWithChildren<TextProps>> = ({ children, ...props }) => (
   <Text variant="subTitle" color={colors.textSecondary} fontSize="xs" textTransform="uppercase" {...props}>

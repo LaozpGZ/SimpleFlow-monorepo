@@ -1,6 +1,6 @@
 import { Box, Flex, useBoolean } from '@chakra-ui/react'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
 import throttle from 'lodash/throttle'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import ChevronRightIcon from '@/icons/misc/ChevronRightIcon'

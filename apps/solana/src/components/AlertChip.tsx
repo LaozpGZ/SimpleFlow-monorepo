@@ -1,8 +1,9 @@
 import { Box, Collapse, HStack, Spacer, useColorMode } from '@chakra-ui/react'
 import { ReactNode } from 'react'
 import { X } from 'react-feather'
-import { colors } from '@/theme/cssVariables'
+
 import WarningIcon from '@/icons/misc/WarningIcon'
+import { colors } from '@/theme/cssVariables'
 
 export function AlertChip(props: { isOpen?: boolean; onClose?: () => void; alertContent?: ReactNode }) {
   const { colorMode } = useColorMode()

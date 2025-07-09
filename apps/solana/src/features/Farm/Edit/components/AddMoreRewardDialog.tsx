@@ -1,5 +1,3 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
 import {
   Box,
   Flex,
@@ -15,21 +13,24 @@ import {
   VStack,
   useDisclosure
 } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { TokenInfo, ApiV3Token } from '@pancakeswap/solana-core-sdk'
-import Decimal from 'decimal.js'
-
 import dayjs from 'dayjs'
+import Decimal from 'decimal.js'
+import { useEffect, useMemo, useState } from 'react'
+
 import Button from '@/components/Button'
+import DatePickerModal from '@/components/FarmDatePickerModal'
 import TokenInput from '@/components/TokenInput'
 import { useEvent } from '@/hooks/useEvent'
+import { useAppStore, useTokenAccountStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { DAY_SECONDS, parseDateInfo, WEEK_SECONDS } from '@/utils/date'
-import { useAppStore, useTokenAccountStore } from '@/store'
-import DatePickerModal from '@/components/FarmDatePickerModal'
 import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import { wSolToSol, wsolToSolToken } from '@/utils/token'
-import { EditReward } from '../util'
+
 import useAddNewRewardSchema from '../schema/useAddNewRewardSchema'
+import { EditReward } from '../util'
 
 /**
  * used in [FarmingRewardItem](../FarmingRewardItem.tsx)

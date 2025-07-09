@@ -1,10 +1,12 @@
 import { CandlestickData } from 'lightweight-charts'
 import { useMemo } from 'react'
 import useSWRInfinite from 'swr/infinite'
+
 import axios from '@/api/axios'
 import { birdeyePairPriceApiAddress, birdeyePairVolumeApiAddress } from '@/utils/config/birdeyeAPI'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { throttle } from '@/utils/functionMethods'
+
 import { useEvent } from '../useEvent'
 
 export type TimeType = '15m' | '1H' | '4H' | '1D' | '1W'

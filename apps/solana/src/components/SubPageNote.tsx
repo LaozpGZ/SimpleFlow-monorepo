@@ -1,5 +1,6 @@
-import { ErrorIcon, Message, MessageText } from '@pancakeswap/uikit'
 import { Flex, HStack, Text } from '@chakra-ui/react'
+import { ErrorIcon, Message, MessageText } from '@pancakeswap/uikit'
+
 import { colors } from '@/theme/cssVariables'
 
 type SubPageNoteProps = {

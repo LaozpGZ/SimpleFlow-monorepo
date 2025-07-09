@@ -1,3 +1,6 @@
+import { Box, Collapse, Flex, HStack, Skeleton, Text } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import {
   ChevronDownIcon,
   FlexGap,
@@ -11,12 +14,10 @@ import {
   SwapLoading,
   useModalV2
 } from '@pancakeswap/uikit'
-import styled from 'styled-components'
-import { Box, Collapse, Flex, HStack, Skeleton, Text } from '@chakra-ui/react'
-import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { Fragment, useEffect, useRef, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import styled from 'styled-components'
+
 import AddressChip from '@/components/AddressChip'
 import { IntervalCircleHandler } from '@/components/IntervalCircle'
 import TokenAvatar from '@/components/TokenAvatar'
@@ -28,8 +29,9 @@ import { colors } from '@/theme/cssVariables'
 import { formatCurrency, formatToRawLocaleStr, trimTrailZero } from '@/utils/numberish/formatter'
 import toPercentString from '@/utils/numberish/toPercentString'
 import { getMintSymbol } from '@/utils/token'
-import { ApiSwapV1OutSuccess, QuoteResponseData } from '../type'
+
 import { RoutesDisplayModal } from './RoutesDisplayModal'
+import { ApiSwapV1OutSuccess, QuoteResponseData } from '../type'
 
 export function SwapInfoBoard({
   amountIn,

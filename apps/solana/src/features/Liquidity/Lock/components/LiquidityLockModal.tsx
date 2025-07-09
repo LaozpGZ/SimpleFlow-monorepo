@@ -11,19 +11,20 @@ import {
   Flex,
   Input
 } from '@chakra-ui/react'
-import { useState } from 'react'
-import Decimal from 'decimal.js'
 import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3PoolInfoStandardItemCpmm } from '@pancakeswap/solana-core-sdk'
 import BN from 'bn.js'
-import { colors } from '@/theme/cssVariables'
-import TokenAvatarPair from '@/components/TokenAvatarPair'
+import Decimal from 'decimal.js'
+import { useState } from 'react'
+
 import AmountSlider from '@/components/AmountSlider'
+import TokenAvatarPair from '@/components/TokenAvatarPair'
+import { LockCpmmPoolInfo } from '@/hooks/portfolio/cpmm/useLockableCpmmLp'
 import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
 import WarningIcon from '@/icons/misc/WarningIcon'
-import { LockCpmmPoolInfo } from '@/hooks/portfolio/cpmm/useLockableCpmmLp'
-import { formatCurrency } from '@/utils/numberish/formatter'
 import { useTokenAccountStore } from '@/store'
+import { colors } from '@/theme/cssVariables'
+import { formatCurrency } from '@/utils/numberish/formatter'
 
 function LiquidityLockModal({
   isOpen,

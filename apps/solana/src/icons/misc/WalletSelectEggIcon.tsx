@@ -1,4 +1,5 @@
 import { Box } from '@chakra-ui/react'
+
 import { SvgBoxIcon } from '../type'
 
 export default function WalletSelectEggIcon(props: SvgBoxIcon) {

@@ -3,10 +3,11 @@ import { NATIVE_MINT } from '@solana/spl-token-0.4'
 import { PublicKey } from '@solana/web3.js'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useSWR from 'swr'
+
+import axios from '@/api/axios'
 import { useTokenStore, TokenPrice, useAppStore } from '@/store'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { isValidPublicKey } from '@/utils/publicKey'
-import axios from '@/api/axios'
 
 export type { TokenPrice }
 

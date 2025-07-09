@@ -1,5 +1,7 @@
 import { Box } from '@chakra-ui/react'
+
 import { colors } from '@/theme/cssVariables'
+
 import { SvgBoxIcon } from '../type'
 
 /** use color semanticSuccess */

@@ -1,8 +1,9 @@
 import { Box, Flex, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3PoolInfoConcentratedItem, WSOLMint } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import { useEffect } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+
 import TokenInput from '@/components/TokenInput'
 import { useEvent } from '@/hooks/useEvent'
 import AddLiquidityPlus from '@/icons/misc/AddLiquidityPlus'

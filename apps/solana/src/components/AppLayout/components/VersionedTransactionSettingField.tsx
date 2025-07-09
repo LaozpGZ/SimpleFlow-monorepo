@@ -1,7 +1,9 @@
-import { Toggle } from '@pancakeswap/uikit'
-import { TxVersion } from '@pancakeswap/solana-core-sdk'
 import { useTranslation } from '@pancakeswap/localization'
+import { TxVersion } from '@pancakeswap/solana-core-sdk'
+import { Toggle } from '@pancakeswap/uikit'
+
 import { useAppStore } from '@/store/useAppStore'
+
 import { SettingField } from './SettingField'
 
 export function VersionedTransactionSettingField() {

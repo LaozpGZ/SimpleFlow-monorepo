@@ -1,8 +1,9 @@
-import { useMemo } from 'react'
 import Decimal from 'decimal.js'
-import { useTokenAccountStore, useTokenStore } from '@/store'
-import useTokenPrice from '@/hooks/token/useTokenPrice'
+import { useMemo } from 'react'
+
 import { IdleType } from '@/features/Portfolio/components/SectionOverview/components/PortfolioIdle'
+import useTokenPrice from '@/hooks/token/useTokenPrice'
+import { useTokenAccountStore, useTokenStore } from '@/store'
 
 const displayCount = 3
 

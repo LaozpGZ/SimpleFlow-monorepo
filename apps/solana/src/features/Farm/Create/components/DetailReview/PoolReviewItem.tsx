@@ -1,13 +1,14 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
-import { ApiV3PoolInfoItem } from '@pancakeswap/solana-core-sdk'
 import { useTranslation } from '@pancakeswap/localization'
+import { ApiV3PoolInfoItem } from '@pancakeswap/solana-core-sdk'
+
 import { Desktop, Mobile } from '@/components/MobileDesktop'
 import { QuestionToolTip } from '@/components/QuestionToolTip'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { getPoolName } from '@/features/Pools/util'
 import { colors } from '@/theme/cssVariables'
-import toPercentString from '@/utils/numberish/toPercentString'
 import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import toPercentString from '@/utils/numberish/toPercentString'
 
 type PoolReviewItemProps = {
   poolInfo: ApiV3PoolInfoItem

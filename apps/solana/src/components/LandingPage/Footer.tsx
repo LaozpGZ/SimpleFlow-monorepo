@@ -4,11 +4,11 @@ import FooterItem from './components/FooterItem'
 import FooterTitle from './components/FooterTitle'
 import Discord from './images/Discord'
 import ExpandArrowDown from './images/ExpandArrowDown'
-import FooterBg from './images/footer-bg.png'
 import Medium from './images/Medium'
 import Logo from './images/SecondaryLogo'
 import Telegram from './images/Telegram'
 import Twitter from './images/Twitter'
+import FooterBg from './images/footer-bg.png'
 
 export default function Footer() {
   const footerList = [

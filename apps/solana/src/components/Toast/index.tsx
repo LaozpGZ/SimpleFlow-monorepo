@@ -1,10 +1,11 @@
 import { Box, ToastId, ToastPosition, UseToastOptions } from '@chakra-ui/react'
-import { useEffect, useState } from 'react'
 import { Alert, mediaQueries, Text } from '@pancakeswap/uikit'
 import { Variants } from '@pancakeswap/uikit/components/Alert/types'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { ToastStatus } from '@/types/tx'
+
 import { colors } from '@/theme/cssVariables'
+import { ToastStatus } from '@/types/tx'
 
 const toastDefaultConfig: { duration: number; position: ToastPosition } = {
   duration: 5000,

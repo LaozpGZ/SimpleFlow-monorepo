@@ -1,9 +1,10 @@
-import { TokenInfo, ApiV3Token } from '@pancakeswap/solana-core-sdk'
-import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, Text, Modal, ModalBody, ModalContent, ModalOverlay } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
+import { TokenInfo, ApiV3Token } from '@pancakeswap/solana-core-sdk'
+
 import { useEvent } from '@/hooks/useEvent'
-import { colors } from '@/theme/cssVariables'
 import WarningIcon from '@/icons/misc/WarningIcon'
+import { colors } from '@/theme/cssVariables'
 
 export interface TokenFreezeDialogProps {
   onConfirm: (token: TokenInfo | ApiV3Token) => void

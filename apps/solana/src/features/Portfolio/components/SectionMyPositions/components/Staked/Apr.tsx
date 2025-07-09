@@ -1,7 +1,7 @@
 import { Flex, Spacer, Text } from '@chakra-ui/react'
-import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 
 import { colors } from '@/theme/cssVariables'
+import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 
 type AprProps = {
   apr: string

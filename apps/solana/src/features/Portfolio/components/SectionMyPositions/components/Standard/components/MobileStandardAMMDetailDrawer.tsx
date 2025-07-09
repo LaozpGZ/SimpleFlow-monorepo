@@ -15,19 +15,21 @@ import {
 } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+
+import TokenAvatarPair from '@/components/TokenAvatarPair'
+import { FarmBalanceInfo } from '@/hooks/farm/type'
 import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
 import { FarmPositionInfo } from '@/hooks/portfolio/farm/useFarmPositions'
 import { colors } from '@/theme/cssVariables'
-import { FarmBalanceInfo } from '@/hooks/farm/type'
-import TokenAvatarPair from '@/components/TokenAvatarPair'
-import ActionButtons from '../ItemDetail/ActionButtons'
-import PendingRewards from '../ItemDetail/PendingRewards'
-import StandardMyPosition from '../ItemDetail/StandardMyPosition'
-import TokenPooledInfo from '../ItemDetail/TokenInfo'
-import { FarmTitleBadge } from '../ItemDetail/FarmTitleBadge'
-import StandardPoolAPR from '../ItemDetail/StandardPoolAPR'
+
 import StandardPoolRowStakeFarmHoldItem from './StandardPoolRowStakeFarmHoldItem'
 import StandardPoolRowStakeFarmItem from './StandardPoolRowStakeFarmItem'
+import ActionButtons from '../ItemDetail/ActionButtons'
+import { FarmTitleBadge } from '../ItemDetail/FarmTitleBadge'
+import PendingRewards from '../ItemDetail/PendingRewards'
+import StandardMyPosition from '../ItemDetail/StandardMyPosition'
+import StandardPoolAPR from '../ItemDetail/StandardPoolAPR'
+import TokenPooledInfo from '../ItemDetail/TokenInfo'
 
 export default function MobileStandardAMMDetailDrawer({
   isOpen,

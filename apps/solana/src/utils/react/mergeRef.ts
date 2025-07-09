@@ -1,6 +1,7 @@
 import { MutableRefObject, RefCallback, RefObject } from 'react'
 
 import { createCallbackRef } from '@/hooks/useCallbackRef'
+
 import { isArray, isFunction, isNullish } from '../judges/judgeType'
 
 function loadRef(ref: RefCallback<any> | MutableRefObject<any> | null | undefined, el: any) {

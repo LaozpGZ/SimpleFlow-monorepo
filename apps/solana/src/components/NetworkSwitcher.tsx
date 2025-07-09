@@ -1,9 +1,10 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { useIsMounted } from '@pancakeswap/hooks'
+import { useTranslation } from '@pancakeswap/localization'
 import { Box, Text, UserMenu, UserMenuDivider, UserMenuItem } from '@pancakeswap/uikit'
 import Image from 'next/image'
-import { APEX_DOMAIN, ASSET_CDN } from '@/utils/config/endpoint'
+
 import { APTOS_MENU } from '@/utils/config/chains'
+import { APEX_DOMAIN, ASSET_CDN } from '@/utils/config/endpoint'
 
 const evmChains = [
   { id: 56, name: 'BNB Chain', chainName: 'bsc' },

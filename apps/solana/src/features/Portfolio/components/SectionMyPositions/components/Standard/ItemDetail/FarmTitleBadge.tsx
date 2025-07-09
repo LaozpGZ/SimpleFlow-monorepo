@@ -1,4 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
+
 import FarmRewardIcon from '@/icons/pool/FarmRewardIcon'
 import { colors } from '@/theme/cssVariables'
 

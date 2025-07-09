@@ -1,5 +1,5 @@
-import { useState, useEffect, createContext, useContext } from 'react'
 import { useBreakpointValue } from '@chakra-ui/react'
+import { useState, useEffect, createContext, useContext } from 'react'
 
 export const MatchBreakpointsContext = createContext<BreakpointChecks>({
   isMobile: false,

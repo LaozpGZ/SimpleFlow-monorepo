@@ -1,5 +1,6 @@
-import React, { ReactNode, MouseEvent } from 'react'
 import { Box } from '@chakra-ui/react'
+import React, { ReactNode, MouseEvent } from 'react'
+
 import { colors } from '@/theme/cssVariables'
 
 export interface PagerProps {

@@ -10,20 +10,21 @@ import {
   ModalOverlay,
   Text
 } from '@chakra-ui/react'
-import Decimal from 'decimal.js'
-import { useCallback, useEffect, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3PoolInfoStandardItemCpmm } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
+import Decimal from 'decimal.js'
+import { useCallback, useEffect, useState } from 'react'
+
 import AmountSlider from '@/components/AmountSlider'
 import Button from '@/components/Button'
 import TokenAvatar from '@/components/TokenAvatar'
+import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
+import { CpmmLockData } from '@/hooks/portfolio/cpmm/useLockCpmmBalance'
 import { useLiquidityStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency, getFirstNonZeroDecimal } from '@/utils/numberish/formatter'
-import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
-import { CpmmLockData } from '@/hooks/portfolio/cpmm/useLockCpmmBalance'
 
 export default function ClaimFeesModal({
   isOpen,

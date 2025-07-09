@@ -1,16 +1,15 @@
 import { Box, Grid, GridItem, HStack, Text } from '@chakra-ui/react'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-
 import { useTranslation } from '@pancakeswap/localization'
-import { useEffect, useRef } from 'react'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { ColorType, IChartApi, ISeriesApi, createChart } from 'lightweight-charts'
-import TokenAvatarPair from '@/components/TokenAvatarPair'
-import { colors } from '@/theme/cssVariables'
-import toPercentString from '@/utils/numberish/toPercentString'
-import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import { useEffect, useRef } from 'react'
 
+import TokenAvatarPair from '@/components/TokenAvatarPair'
 import useFetchPoolKLine from '@/hooks/pool/useFetchPoolKLine'
 import ExpandLeftTopIcon from '@/icons/misc/ExpandLeftTopIcon'
+import { colors } from '@/theme/cssVariables'
+import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import toPercentString from '@/utils/numberish/toPercentString'
 
 export function SwapKlinePanelMobileThumbnail({
   untilDate,

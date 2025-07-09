@@ -1,9 +1,11 @@
 import { Box, Heading, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import useFetchOwnerIdo from '@/hooks/portfolio/useFetchOwnerIdo'
+
 import useFetchIdoKeys from '@/hooks/portfolio/useFetchIdoKeys'
-import { colors } from '@/theme/cssVariables/colors'
+import useFetchOwnerIdo from '@/hooks/portfolio/useFetchOwnerIdo'
 import { useAppStore } from '@/store'
+import { colors } from '@/theme/cssVariables/colors'
+
 import IdoRowItem from './components/IdoRowItem'
 
 export default function SectionAcceleraytor() {

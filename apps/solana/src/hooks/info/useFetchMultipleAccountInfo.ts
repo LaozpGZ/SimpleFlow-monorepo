@@ -1,10 +1,11 @@
-import useSWR from 'swr'
 import { Connection, PublicKey, AccountInfo } from '@solana/web3.js'
 import { useMemo } from 'react'
+import useSWR from 'swr'
+
 import { useAppStore } from '@/store'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
-import ToPublicKey from '@/utils/publicKey'
 import logMessage from '@/utils/log'
+import ToPublicKey from '@/utils/publicKey'
 
 interface Props {
   name?: string

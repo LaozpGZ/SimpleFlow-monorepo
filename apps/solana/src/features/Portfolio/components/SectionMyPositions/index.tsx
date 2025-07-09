@@ -1,7 +1,11 @@
-import { useRouter } from 'next/router'
-import { useEffect, useRef, useState } from 'react'
 import { Box, Flex, Grid, GridItem, HStack, Heading, SimpleGrid, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
+import { useRouter } from 'next/router'
+import { useEffect, useRef, useState } from 'react'
+
+import IntervalCircle, { IntervalCircleHandler } from '@/components/IntervalCircle'
+import { QuestionToolTip } from '@/components/QuestionToolTip'
+import TokenAvatar from '@/components/TokenAvatar'
 import useAllPositionInfo, { PositionTabValues } from '@/hooks/portfolio/useAllPositionInfo'
 import { useEvent } from '@/hooks/useEvent'
 import { useStateWithUrl } from '@/hooks/useStateWithUrl'
@@ -12,12 +16,9 @@ import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'
 import { getMintSymbol } from '@/utils/token'
 
-import IntervalCircle, { IntervalCircleHandler } from '@/components/IntervalCircle'
-import { QuestionToolTip } from '@/components/QuestionToolTip'
-import TokenAvatar from '@/components/TokenAvatar'
+import { ClmmMyPositionTabContent } from './TabClmm'
 import MyPositionTabStaked from './TabStaked'
 import MyPositionTabStandard from './TabStandard'
-import { ClmmMyPositionTabContent } from './TabClmm'
 
 export default function SectionMyPositions() {
   const { t } = useTranslation()

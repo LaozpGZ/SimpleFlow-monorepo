@@ -1,5 +1,7 @@
 import { useEffect, useRef } from 'react'
+
 import { ElementRefs, getElementsFromRef } from '@/utils/react/getElementsFromRef'
+
 import { useEvent } from './useEvent'
 
 /**

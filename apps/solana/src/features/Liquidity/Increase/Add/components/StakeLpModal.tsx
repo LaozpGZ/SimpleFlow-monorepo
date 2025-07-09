@@ -1,6 +1,7 @@
 import { Text, Button, Modal, ModalBody, ModalContent, ModalHeader, ModalOverlay, ModalFooter } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
+import { useRouter } from 'next/router'
+
 import { routeToPage } from '@/utils/routeTools'
 
 export default function StakeLpModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {

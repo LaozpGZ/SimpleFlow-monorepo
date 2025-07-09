@@ -1,37 +1,37 @@
 import { Box, Flex, Grid, GridItem, HStack, Link, Text, useDisclosure } from '@chakra-ui/react'
-import { ApiClmmConfigInfo, ApiV3Token, solToWSol } from '@pancakeswap/solana-core-sdk'
-import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-import { shallow } from 'zustand/shallow'
+import { ApiClmmConfigInfo, ApiV3Token, solToWSol } from '@pancakeswap/solana-core-sdk'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
+import { useCallback, useRef, useState } from 'react'
+import { shallow } from 'zustand/shallow'
 
-import { useEvent } from '@/hooks/useEvent'
 import PanelCard from '@/components/PanelCard'
 import { StepsRef } from '@/components/Steps'
 import SubPageNote from '@/components/SubPageNote'
 import PreviewDepositModal from '@/features/Clmm/components/PreviewDepositModal'
+import useBirdeyeTokenPrice from '@/hooks/token/useBirdeyeTokenPrice'
+import { useEvent } from '@/hooks/useEvent'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { CreatePoolBuildData, useAppStore, useClmmStore } from '@/store'
 import { colors } from '@/theme/cssVariables/colors'
 import { genCSS2GridTemplateColumns, genCSS3GridTemplateColumns } from '@/theme/detailConfig'
 import { debounce, exhaustCall } from '@/utils/functionMethods'
-import { routeBack } from '@/utils/routeTools'
-import { solToWSolToken } from '@/utils/token'
-import useBirdeyeTokenPrice from '@/hooks/token/useBirdeyeTokenPrice'
 import {
   logGTMCreatelpCmfDepEvent,
   logGTMCreatelpSuccessEvent,
   logGTMSolErrorLogEvent,
   logGTMV3lpStepEvent
 } from '@/utils/report/curstomGTMEventTracking'
+import { routeBack } from '@/utils/routeTools'
+import { solToWSolToken } from '@/utils/token'
 
+import CreateSuccessModal from './components/CreateSuccessModal'
+import CreateSuccessWithLockModal from './components/CreateSuccessWithLockModal'
 import SelectPoolTokenAndFee from './components/SelectPoolTokenAndFee'
 import SetPriceAndRange from './components/SetPriceAndRange'
 import Stepper from './components/Stepper'
 import TokenAmountPairInputs from './components/TokenAmountInput'
-import CreateSuccessModal from './components/CreateSuccessModal'
-import CreateSuccessWithLockModal from './components/CreateSuccessWithLockModal'
 
 export default function CreateClmmPool() {
   const isMobile = useAppStore((s) => s.isMobile)

@@ -1,8 +1,10 @@
+import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, Flex, InjectedModalProps, ScanLink, Message, Skeleton, Text, AptosIcon } from '@pancakeswap/uikit'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { useTranslation } from '@pancakeswap/localization'
+
 import { useSolBalance } from '@/hooks/token/useSolBalance'
 import { useAppStore } from '@/store'
+
 import { WalletAddress } from './WalletAddress'
 
 interface WalletInfoProps {

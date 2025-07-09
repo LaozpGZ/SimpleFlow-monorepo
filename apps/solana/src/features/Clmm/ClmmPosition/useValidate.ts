@@ -1,6 +1,6 @@
+import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
 import Decimal from 'decimal.js'
 import { useEffect, useState } from 'react'
-import { useTranslation, type TranslateFunction } from '@pancakeswap/localization'
 import * as yup from 'yup'
 
 interface Props {

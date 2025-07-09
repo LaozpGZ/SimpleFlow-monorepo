@@ -1,8 +1,9 @@
 import { AnyFn, AnyObj, Primitive } from '@/types/tools'
+
+import mergeRef from './mergeRef'
 import { isArray, isFunction, isObject } from '../judges/judgeType'
 import { mergeFunction, _shallowMergeObjects } from '../merge'
 import parallelSwitch from '../parallelSwitch'
-import mergeRef from './mergeRef'
 
 /** prop may very deep like children */
 export type AnyProp = { [props: string]: any } | Primitive

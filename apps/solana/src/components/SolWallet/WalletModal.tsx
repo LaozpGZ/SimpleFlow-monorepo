@@ -1,9 +1,11 @@
+import { useTranslation } from '@pancakeswap/localization'
 import { ButtonMenu, ButtonMenuItem, InjectedModalProps, ModalHeader as UIKitModalHeader, MotionModal } from '@pancakeswap/uikit'
 import { useState, useCallback } from 'react'
 import { styled } from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
-import { colors } from '@/theme/cssVariables'
+
 import useResponsive from '@/hooks/useResponsive'
+import { colors } from '@/theme/cssVariables'
+
 import WalletInfo from './WalletInfo'
 
 export enum WalletView {

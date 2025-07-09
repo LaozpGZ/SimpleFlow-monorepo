@@ -3,10 +3,9 @@ import { useEffect, useState } from 'react'
 
 import useScroll from '@/hooks/useScroll'
 
-import Button from '../Button'
-
 import Logo from './images/Logo'
 import LogoLegacy from './images/LogoLegacy'
+import Button from '../Button'
 
 export default function Header() {
   const { pageYOffset, isScrollup } = useScroll()

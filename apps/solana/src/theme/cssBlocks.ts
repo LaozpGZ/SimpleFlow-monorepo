@@ -3,6 +3,7 @@
  */
 
 import { SystemProps } from '@chakra-ui/react'
+
 import { colors, sizes } from './cssVariables'
 
 export const heroGridientColorCSSBlock: SystemProps = {

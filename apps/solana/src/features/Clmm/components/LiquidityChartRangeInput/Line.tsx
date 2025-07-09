@@ -1,6 +1,6 @@
+import styled from '@emotion/styled'
 import { ScaleLinear } from 'd3'
 import React, { useMemo } from 'react'
-import styled from '@emotion/styled'
 
 const StyledLine = styled.line<{ color?: string }>`
   stroke-width: 2;

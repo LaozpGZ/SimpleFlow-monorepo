@@ -1,16 +1,18 @@
 import { Box, Flex, Grid, GridItem, SimpleGrid, Text } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { useMemo } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+
 import Button from '@/components/Button'
 import TokenAvatar from '@/components/TokenAvatar'
 import ChevronRightIcon from '@/icons/misc/ChevronRightIcon'
 import { useAppStore } from '@/store/useAppStore'
 import { panelCard } from '@/theme/cssBlocks'
 import { colors } from '@/theme/cssVariables'
-import { routeToPage } from '@/utils/routeTools'
 import { formatCurrency } from '@/utils/numberish/formatter'
+import { routeToPage } from '@/utils/routeTools'
+
 import PortfolioPieChart, { IDLE_TOKENS_COLORS } from './PortfolioPieChart'
 
 export type IdleType = {

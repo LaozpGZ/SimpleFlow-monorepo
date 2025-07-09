@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import {
   Flex,
   Image,
@@ -14,13 +13,15 @@ import {
   useClipboard
 } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import { colors } from '@/theme/cssVariables/colors'
-import { encodeStr } from '@/utils/common'
+import { useEffect } from 'react'
+
+import { PositionTabValues } from '@/hooks/portfolio/useAllPositionInfo'
+import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import CopyIcon from '@/icons/misc/CopyIcon'
 import ExternalLink from '@/icons/misc/ExternalLink'
-import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import { useAppStore, supportedExplorers } from '@/store/useAppStore'
-import { PositionTabValues } from '@/hooks/portfolio/useAllPositionInfo'
+import { colors } from '@/theme/cssVariables/colors'
+import { encodeStr } from '@/utils/common'
 import { routeToPage } from '@/utils/routeTools'
 
 export default function LockedNFTModal({
