@@ -237,8 +237,8 @@ const transformV3PositionToTableRow = (
   if (positionData && !priceRangeData.showPercentages) {
     try {
       // Use higher precision (18 significant digits) to avoid precision loss for small numbers
-      const positionMinPrice = parseFloat(positionData.token0PriceLower.toSignificant(18))
-      const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(18))
+      const positionMinPrice = parseFloat(positionData.token0PriceLower.toFixed(18))
+      const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toFixed(18))
 
       if (Number.isFinite(positionMinPrice) && Number.isFinite(positionMaxPrice)) {
         const updatedMinPriceFormatted = formatAmount(positionMinPrice, { notation: 'standard' }) || '-'
@@ -251,7 +251,7 @@ const transformV3PositionToTableRow = (
         // Try percentage calculation with positionData prices
         if (pool?.token0Price && positionMaxPrice > positionMinPrice) {
           // Use higher precision (18 significant digits) for current price calculation
-          const currentPrice = parseFloat(pool.token0Price.toSignificant(18))
+          const currentPrice = parseFloat(pool.token0Price.toFixed(18))
 
           if (currentPrice > 0 && Number.isFinite(currentPrice)) {
             const minPercent = ((positionMinPrice - currentPrice) / currentPrice) * 100
@@ -396,7 +396,7 @@ const transformV3PositionToTableRow = (
       rangePosition={priceRangeData.rangePosition}
       outOfRange={outOfRange}
       removed={removed}
-      currentPrice={priceRangeData.currentPrice || pool?.token0Price?.toSignificant(18)}
+      currentPrice={priceRangeData.currentPrice || pool?.token0Price?.toFixed(18)}
       showPercentages={priceRangeData.showPercentages}
     />
   )
