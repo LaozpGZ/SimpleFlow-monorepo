@@ -1,8 +1,10 @@
+import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
 import { Button } from '@pancakeswap/uikit'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
-import { useTranslation } from '@pancakeswap/localization'
-import { useCallback, useState } from 'react'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
+import { useCallback, useMemo, useState } from 'react'
 import { GIFT_PANCAKE_V1_ADDRESS } from '../constants'
 
 export const CreateGiftButton = ({
@@ -14,6 +16,11 @@ export const CreateGiftButton = ({
   handleCreateGift: () => void
   tokenAmount: CurrencyAmount<Token | NativeCurrency>
 }) => {
+  const { switchNetworkAsync } = useSwitchNetwork()
+  const { chainId } = useActiveChainId()
+
+  const isChainMatched = chainId === tokenAmount?.currency.chainId
+
   const [isApproving, setIsApproving] = useState(false)
   const { t } = useTranslation()
   // check whether the user has approved the router on the tokens
@@ -38,9 +45,39 @@ export const CreateGiftButton = ({
     handleCreateGift()
   }, [tokenAmount, approveGiftCallback, handleCreateGift])
 
+  const text = useMemo(() => {
+    if (!isChainMatched) {
+      return t('Switch network')
+    }
+
+    if (isLoading) {
+      return t('Creating...')
+    }
+
+    if (isApproving) {
+      return t('Approving...')
+    }
+
+    if (needApprove) {
+      return t('Approve & Create Gift')
+    }
+
+    return t('Create Gift')
+  }, [isChainMatched, t, isLoading, isApproving, needApprove])
+
   return (
-    <Button disabled={isLoading || isApproving} onClick={onCreateGiftClick} width="100%">
-      {isLoading ? t('Creating...') : isApproving ? t('Approving...') : t('Create gift')}
+    <Button
+      disabled={isLoading || isApproving}
+      onClick={() => {
+        if (!isChainMatched) {
+          switchNetworkAsync(tokenAmount.currency.chainId)
+        } else {
+          onCreateGiftClick()
+        }
+      }}
+      width="100%"
+    >
+      {text}
     </Button>
   )
 }

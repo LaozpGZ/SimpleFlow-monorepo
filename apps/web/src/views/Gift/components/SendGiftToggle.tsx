@@ -1,9 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text, Toggle } from '@pancakeswap/uikit'
 import { useContext } from 'react'
+import { CHAINS_WITH_GIFT_CLAIM } from '../constants'
 import { SendGiftContext } from '../providers/SendGiftProvider'
 import { GasSponsor } from './GasSponsor'
-import { CHAINS_WITH_GIFT_CLAIM } from '../constants'
 
 export const SendGiftToggle = ({
   children,
@@ -41,7 +41,7 @@ export const SendGiftToggle = ({
         />
       </FlexGap>
       {children(isSendGift)}
-      {isSendGift && !isNativeToken && <GasSponsor />}
+      {isSendGift && !isNativeToken && <GasSponsor tokenChainId={tokenChainId} />}
     </>
   )
 }

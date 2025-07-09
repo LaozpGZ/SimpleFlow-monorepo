@@ -1,25 +1,25 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { CurrencyAmount, Percent } from '@pancakeswap/sdk'
 import {
   BalanceInput,
+  Box,
   Card,
   Checkbox,
   Flex,
-  Box,
-  RowBetween,
-  Text,
   FlexGap,
   LazyAnimatePresence,
+  RowBetween,
+  Text,
   domAnimation,
 } from '@pancakeswap/uikit'
-import { useState, useEffect, useCallback } from 'react'
-import styled from 'styled-components'
-import { useTranslation } from '@pancakeswap/localization'
-import useNativeCurrency from 'hooks/useNativeCurrency'
-import { CurrencyLogo, SwapUIV2, truncateDecimals } from '@pancakeswap/widgets-internal'
-import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
-import { BulletList } from 'components/BulletList'
-import { CurrencyAmount, Percent } from '@pancakeswap/sdk'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { CurrencyLogo, SwapUIV2, truncateDecimals } from '@pancakeswap/widgets-internal'
+import { BulletList } from 'components/BulletList'
+import useNativeCurrency from 'hooks/useNativeCurrency'
+import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { useGetNativeTokenBalance } from 'hooks/useTokenBalance'
+import { useCallback, useEffect, useState } from 'react'
+import styled from 'styled-components'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useSendGiftContext } from '../providers/SendGiftProvider'
 
@@ -29,10 +29,10 @@ const StyledRow = styled(RowBetween)`
   border-radius: 16px;
 `
 
-function NativeAmountInput() {
+function NativeAmountInput({ tokenChainId }: { tokenChainId: number }) {
   const { setNativeAmount } = useSendGiftContext()
-  const nativeCurrency = useNativeCurrency()
-  const { balance: nativeCurrencyBalance } = useGetNativeTokenBalance()
+  const nativeCurrency = useNativeCurrency(tokenChainId)
+  const { balance: nativeCurrencyBalance } = useGetNativeTokenBalance(tokenChainId)
   const [inputValue, setInputValue] = useState('')
 
   // Sync input value with context nativeAmount
@@ -117,7 +117,7 @@ function NativeAmountInput() {
   )
 }
 
-export const GasSponsor = () => {
+export const GasSponsor = ({ tokenChainId }: { tokenChainId: number }) => {
   const { includeStarterGas, setIncludeStarterGas } = useSendGiftContext()
   const { t } = useTranslation()
 
@@ -160,7 +160,7 @@ export const GasSponsor = () => {
         </Flex>
         {msg}
 
-        {includeStarterGas && <NativeAmountInput />}
+        {includeStarterGas && <NativeAmountInput tokenChainId={tokenChainId} />}
       </Box>
     </Card>
   )
