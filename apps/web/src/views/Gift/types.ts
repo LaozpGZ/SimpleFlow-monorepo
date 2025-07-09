@@ -23,7 +23,8 @@ export interface GiftInfoResponse {
 }
 
 export interface GiftInfo extends Omit<GiftInfoResponse, 'tokenAmount' | 'nativeAmount'> {
-  tokenAmount: CurrencyAmount<Token>
+  // tokenAMount  is undefiend when the gift is for native token
+  tokenAmount?: CurrencyAmount<Token>
   nativeAmount: CurrencyAmount<NativeCurrency>
 }
 

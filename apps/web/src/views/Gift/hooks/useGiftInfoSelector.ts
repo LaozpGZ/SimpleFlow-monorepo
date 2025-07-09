@@ -1,9 +1,10 @@
-import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, Token } from '@pancakeswap/swap-sdk-core'
+import { useAllTokens } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useCallback } from 'react'
-import { useAllTokens } from 'hooks/Tokens'
 import { checksumAddress } from 'utils/checksumAddress'
+import { zeroAddress } from 'viem'
 import { GiftInfo, GiftInfoResponse } from '../types'
 
 export default function useGiftInfoSelector() {
@@ -22,16 +23,19 @@ export default function useGiftInfoSelector() {
         return null
       }
 
-      const token = allTokens[checksumAddress(gift.token as `0x${string}`)]
+      const isNative = gift.token === zeroAddress
 
-      if (!token) {
-        return null
+      let tokenAmount: CurrencyAmount<Token> | undefined
+
+      if (!isNative) {
+        const token = allTokens[checksumAddress(gift.token as `0x${string}`)]
+        tokenAmount = CurrencyAmount.fromRawAmount(token, gift.tokenAmount)
       }
 
       try {
         return {
           ...gift,
-          tokenAmount: CurrencyAmount.fromRawAmount(token, gift.tokenAmount),
+          tokenAmount,
           nativeAmount: CurrencyAmount.fromRawAmount(native, gift.nativeAmount),
         }
       } catch (error) {
@@ -39,6 +43,6 @@ export default function useGiftInfoSelector() {
         return null
       }
     },
-    [chainId, native, allTokens],
+    [native, allTokens],
   )
 }

@@ -11,9 +11,9 @@ import {
   Text,
   useToast,
 } from '@pancakeswap/uikit'
+import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { useEffect } from 'react'
-import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { shortenAddress } from 'views/V3Info/utils'
 
 import { useClaimGift } from '../hooks/useClaimGift'
@@ -67,21 +67,22 @@ export const ClaimGiftConfirmView = () => {
     )
   }
 
-  const hasIncludeStarterGas = giftInfo.tokenAmount.greaterThan(0) && giftInfo.nativeAmount.greaterThan(0)
+  const hasIncludeStarterGas =
+    giftInfo.tokenAmount && giftInfo.tokenAmount.greaterThan(0) && giftInfo.nativeAmount.greaterThan(0)
 
-  const isOnlyNative = giftInfo.tokenAmount.equalTo(0)
-
-  console.log('giftInfo.timestamp', giftInfo.timestamp)
+  const isOnlyNative = !giftInfo.tokenAmount && giftInfo.nativeAmount.greaterThan(0)
 
   return (
     <ColumnCenter>
       {hasIncludeStarterGas ? (
         <FlexGap mb="16px" width="100%" flexDirection="column" gap="8px">
-          <Card>
-            <Box p="8px">
-              <CurrencyAmountGiftDisplay currencyAmount={giftInfo.tokenAmount} />
-            </Box>
-          </Card>
+          {giftInfo.tokenAmount && (
+            <Card>
+              <Box p="8px">
+                <CurrencyAmountGiftDisplay currencyAmount={giftInfo.tokenAmount} />
+              </Box>
+            </Card>
+          )}
           <Card>
             <Box p="8px">
               <CurrencyAmountGiftDisplay currencyAmount={giftInfo.nativeAmount} />

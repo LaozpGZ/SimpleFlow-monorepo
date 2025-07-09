@@ -1,16 +1,16 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { useContext } from 'react'
-import { Card } from '@pancakeswap/widgets-internal'
 import { Box, Button, Flex, RowBetween, Spinner, Text } from '@pancakeswap/uikit'
 import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
-import { SecondaryCard } from 'components/SecondaryCard'
+import { Card } from '@pancakeswap/widgets-internal'
 import Divider from 'components/Divider'
+import { SecondaryCard } from 'components/SecondaryCard'
+import { useContext } from 'react'
 
 import { useCancelGift } from '../hooks/useCancelGift'
-import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
-import { GiftStatusTag } from './GiftStatusTag'
+import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
+import { GiftStatusTag } from './GiftStatusTag'
 
 export const CancelGiftConfirmView = () => {
   const { codeHash } = useContext(CancelGiftContext)
@@ -31,9 +31,11 @@ export const CancelGiftConfirmView = () => {
   return (
     <>
       <SecondaryCard mb="16px">
-        {giftInfo.tokenAmount.greaterThan(0) && <CurrencyAmountGiftDisplay currencyAmount={giftInfo.tokenAmount} />}
+        {giftInfo.tokenAmount && giftInfo.tokenAmount.greaterThan(0) && (
+          <CurrencyAmountGiftDisplay currencyAmount={giftInfo.tokenAmount} />
+        )}
 
-        {giftInfo.tokenAmount.greaterThan(0) && giftInfo.nativeAmount.greaterThan(0) && (
+        {giftInfo.tokenAmount && giftInfo.tokenAmount.greaterThan(0) && giftInfo.nativeAmount.greaterThan(0) && (
           <Divider thin style={{ margin: '0 -16px', width: 'calc(100% + 32px)' }} />
         )}
 

@@ -1,7 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, Input, Text } from '@pancakeswap/uikit'
 import { ViewState } from 'components/WalletModalV2/type'
-import { BalanceData } from 'hooks/useAddressBalance'
 import { useMemo } from 'react'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
 import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
