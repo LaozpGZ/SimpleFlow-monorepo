@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, UserMenu as UIKitUserMenu, useMatchBreakpoints, UserMenuVariant } from '@pancakeswap/uikit'
+import { usePrivy } from '@privy-io/react-auth'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import Trans from 'components/Trans'
 import { WalletContent, WalletModalV2 } from 'components/WalletModalV2'
@@ -67,6 +68,8 @@ const ClickablePopover = styled.div<{ isOpen: boolean }>`
 const UserMenu = () => {
   const { t } = useTranslation()
   const { address: account, connector } = useAccount()
+  const { ready, authenticated, user } = usePrivy()
+  console.log({ ready, authenticated, user, account }, 'PrivyInfo')
   const { chainId, isWrongNetwork } = useActiveChainId()
   const { domainName, avatar } = useDomainNameForAddress(account)
   const { logout } = useAuth()
