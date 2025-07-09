@@ -1,4 +1,3 @@
-import { useTheme } from '@pancakeswap/hooks'
 import { Box, Flex, Spinner } from '@pancakeswap/uikit'
 import { formatFiatNumber } from '@pancakeswap/utils/formatFiatNumber'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -9,6 +8,7 @@ import { ActionButton, ControlsWrapper } from './styled'
 import { BasicChartLiquidityProps } from './type'
 
 const ZOOM_INTERVAL = 20
+const DEFAULT_ZOOM_LEVEL = 14
 
 const CustomBar = ({
   x,
@@ -31,9 +31,9 @@ const CustomBar = ({
 }
 
 export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolInfo, liquidityChartData }) => {
-  const [zoomLevel, setZoomLevel] = useState(0)
+  const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM_LEVEL)
   const [zoomInDisabled, setZoomInDisabled] = useState(false)
-  const { theme } = useTheme()
+  const [activeIndex, setActiveIndex] = useState<number | undefined>()
 
   const handleZoomIn = useCallback(() => {
     if (!zoomInDisabled) {
@@ -85,6 +85,14 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
             left: 20,
             bottom: 60,
           }}
+          onMouseMove={(state) => {
+            if (state?.activePayload?.[0]?.payload) {
+              setActiveIndex(state.activeTooltipIndex)
+            }
+          }}
+          onMouseLeave={() => {
+            setActiveIndex(undefined)
+          }}
         >
           <XAxis
             dataKey="price0"
@@ -113,9 +121,16 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
             )}
             cursor={{ fill: 'transparent' }}
           />
-          <Bar dataKey="activeLiquidity" fill="#1FC7D4" isAnimationActive={false} shape={CustomBar}>
-            {zoomedData?.map((entry) => {
-              return <Cell key={`cell-${entry.index}`} fill={entry.isCurrent ? '#ED4B9E' : '#1FC7D4'} />
+          <Bar dataKey="activeLiquidity" fill="#1FC7D4" isAnimationActive={false} radius={16}>
+            {zoomedData?.map((entry, index) => {
+              return (
+                <Cell
+                  key={`cell-${entry.index}`}
+                  fill={entry.isCurrent ? '#ED4B9E' : '#1FC7D4'}
+                  fillOpacity={activeIndex === undefined ? 1 : activeIndex === index ? 1 : 0.3}
+                  style={{ transition: 'fill-opacity 0.2s ease' }}
+                />
+              )
             })}
           </Bar>
         </BarChart>
