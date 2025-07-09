@@ -64,7 +64,8 @@ export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, tim
   // Transform data for recharts
   const chartData = useMemo(
     () =>
-      data?.map((item) => ({
+      // NOTE: Remove first item due to API returning extraordinarily large value. See PAN-6994.
+      data?.slice(1)?.map((item) => ({
         time: item.time,
         value: item.value,
         formattedTime:

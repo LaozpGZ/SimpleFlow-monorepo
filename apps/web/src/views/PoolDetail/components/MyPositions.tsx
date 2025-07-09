@@ -17,7 +17,7 @@ import { MyPositionsProvider } from './MyPositionsContext'
 import {
   InfinityBinPositionsTable,
   InfinityCLPositionsTable,
-  V2PositionsTable,
+  V2OrSSPositionsTable,
   V3PositionsTable,
 } from './ProtocolPositionsTables'
 
@@ -92,7 +92,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
             return <InfinityBinPositionsTable poolInfo={poolInfo as InfinityBinPoolInfo} />
           case 'v2':
           case 'stable':
-            return <V2PositionsTable poolInfo={poolInfo as V2PoolInfo | StablePoolInfo} />
+            return <V2OrSSPositionsTable poolInfo={poolInfo as V2PoolInfo | StablePoolInfo} />
           default:
             return <div>{t('Unsupported protocol: %protocol%', { protocol: poolInfo.protocol })}</div>
         }

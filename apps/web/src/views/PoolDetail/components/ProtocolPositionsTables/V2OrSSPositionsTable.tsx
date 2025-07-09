@@ -199,7 +199,7 @@ const V2PositionWithApr: React.FC<{
   )
 }
 
-export const V2PositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) => {
+export const V2OrSSPositionsTable: React.FC<V2PositionsTableProps> = ({ poolInfo }) => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()

@@ -1,6 +1,5 @@
 /**
  * Calculates liquidity USD for V2/Stable positions
- * Extracted from V2PositionsTable
  */
 export const calculateV2LiquidityUSD = (
   nativeDeposited0: any,
