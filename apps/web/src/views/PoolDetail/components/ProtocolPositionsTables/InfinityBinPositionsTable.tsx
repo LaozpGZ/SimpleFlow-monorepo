@@ -74,6 +74,9 @@ const transformInfinityBinPositionToTableRow = (
   price1Usd: number | undefined,
   t: (key: string) => string,
 ) => {
+  // Calculate actual price range from bin IDs for LBAMM using utility function
+  const { removed, outOfRange } = getBinPositionStatus(position.status as POSITION_STATUS)
+
   const hasLiquidity = amount0?.greaterThan('0') || amount1?.greaterThan('0')
 
   const tokenInfo = (
@@ -166,9 +169,6 @@ const transformInfinityBinPositionToTableRow = (
       </Text>
     </Flex>
   )
-
-  // Calculate actual price range from bin IDs for LBAMM using utility function
-  const { removed, outOfRange } = getBinPositionStatus(position.status as POSITION_STATUS)
 
   // Use utility function for price range calculation
   const priceRangeData = calculateBinBasedPriceRange(
