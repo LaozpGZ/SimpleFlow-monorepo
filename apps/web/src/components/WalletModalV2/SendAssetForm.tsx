@@ -295,7 +295,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   if (viewState === ViewState.CONFIRM_TRANSACTION && isSendGift) {
     const tokenAmount = tryParseAmount(amount, currency)
 
-    return <SendGiftView key={viewState} tokenAmount={tokenAmount} price={price} />
+    return <SendGiftView key={viewState} tokenAmount={tokenAmount} />
   }
 
   if (viewState >= ViewState.CONFIRM_TRANSACTION) {
