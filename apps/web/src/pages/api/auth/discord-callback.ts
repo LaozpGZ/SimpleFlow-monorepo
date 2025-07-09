@@ -43,9 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // 3. Issue Firebase custom token
     await firebaseAdmin() // Ensure Admin SDK is initialized
-    // const customToken = await getAuth().createCustomToken(`discord:${discordId}`)
-    // TODO: fix this after ruby withdraw test funds assets
-    const customToken = await getAuth().createCustomToken(discordId)
+    const customToken = await getAuth().createCustomToken(`discord:${discordId}`)
     console.log('Custom token:', customToken, discordId, `discord:${discordId}`, userData)
 
     // 4. Return token to frontend via postMessage
