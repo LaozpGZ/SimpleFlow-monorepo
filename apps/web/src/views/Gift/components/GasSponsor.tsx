@@ -1,13 +1,26 @@
-import { BalanceInput, Card, Checkbox, Flex, Box, RowBetween, Text, FlexGap } from '@pancakeswap/uikit'
-import { useState, useEffect } from 'react'
+import {
+  BalanceInput,
+  Card,
+  Checkbox,
+  Flex,
+  Box,
+  RowBetween,
+  Text,
+  FlexGap,
+  LazyAnimatePresence,
+  domAnimation,
+} from '@pancakeswap/uikit'
+import { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
+import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { BulletList } from 'components/BulletList'
-import { multiplyPriceByAmount } from 'utils/prices'
-import { Currency, Price, CurrencyAmount } from '@pancakeswap/sdk'
+import { CurrencyAmount, Percent } from '@pancakeswap/sdk'
+import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { useGetNativeTokenBalance } from 'hooks/useTokenBalance'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useSendGiftContext } from '../providers/SendGiftProvider'
 
 const StyledRow = styled(RowBetween)`
@@ -16,54 +29,100 @@ const StyledRow = styled(RowBetween)`
   border-radius: 16px;
 `
 
-// if amount usd is over 1000. show > 1000,
-const formatAmount = (amount: string, stablePrice: Price<Currency, Currency> | undefined) => {
-  const usd = multiplyPriceByAmount(stablePrice, parseFloat(amount))
-  if (usd > 1000) {
-    return `>1000`
-  }
-  return `~${usd.toFixed(2)}`
-}
-
-export const GasSponsor = () => {
-  const { nativeAmount, setNativeAmount, includeStarterGas, setIncludeStarterGas } = useSendGiftContext()
+function NativeAmountInput() {
+  const { setNativeAmount } = useSendGiftContext()
   const nativeCurrency = useNativeCurrency()
-  const stablePrice = useStablecoinPrice(nativeCurrency)
+  const { balance: nativeCurrencyBalance } = useGetNativeTokenBalance()
   const [inputValue, setInputValue] = useState('')
-
-  const { t } = useTranslation()
 
   // Sync input value with context nativeAmount
   useEffect(() => {
-    if (nativeAmount) {
-      setInputValue(nativeAmount.toExact())
+    if (inputValue) {
+      const amount = tryParseAmount(inputValue, nativeCurrency)
+      setNativeAmount(amount)
     } else {
       setInputValue('')
     }
-  }, [nativeAmount])
+  }, [inputValue, setNativeAmount, nativeCurrency])
 
-  const handleAmountChange = (value: string) => {
+  const handleAmountChange = useCallback((value: string) => {
     setInputValue(value)
+  }, [])
 
-    if (!value || value === '0' || parseFloat(value) <= 0) {
-      setNativeAmount(undefined)
-      return
-    }
+  const tokenBalance = CurrencyAmount.fromRawAmount(nativeCurrency, nativeCurrencyBalance.toString())
 
-    try {
-      const amount = CurrencyAmount.fromRawAmount(
-        nativeCurrency,
-        (parseFloat(value) * 10 ** nativeCurrency.decimals).toString(),
-      )
-      setNativeAmount(amount)
-    } catch (error) {
-      console.error('Invalid amount:', error)
-      setNativeAmount(undefined)
-    }
-  }
+  // NOTE: Copy logic from SendAssetForm.tsx
+  const [isInputFocus, setIsInputFocus] = useState(false)
+  const isInsufficientBalance = false
+
+  const handleUserInputBlur = useCallback(() => {
+    setTimeout(() => setIsInputFocus(false), 300)
+  }, [])
+
+  const handleUserInputFocus = useCallback(() => {
+    setIsInputFocus(true)
+  }, [])
+
+  const handlePercentInput = useCallback(
+    (percent: number) => {
+      if (tokenBalance) {
+        handleAmountChange(tokenBalance.multiply(new Percent(percent, 100)).toExact())
+      }
+    },
+    [tokenBalance, handleAmountChange],
+  )
+
+  const handleMaxInput = useCallback(() => {
+    handlePercentInput(100)
+  }, [handlePercentInput])
+
+  const formattedUsdValue = useStablecoinPriceAmount(nativeCurrency, parseFloat(inputValue))
+
+  return (
+    <>
+      <Box position="relative" top="-24px">
+        <LazyAnimatePresence mode="wait" features={domAnimation}>
+          {tokenBalance ? (
+            !isInputFocus ? (
+              <SwapUIV2.WalletAssetDisplay
+                isUserInsufficientBalance={isInsufficientBalance}
+                balance={tokenBalance.toSignificant(6)}
+                onMax={handleMaxInput}
+              />
+            ) : (
+              <SwapUIV2.AssetSettingButtonList onPercentInput={handlePercentInput} />
+            )
+          ) : null}
+        </LazyAnimatePresence>
+      </Box>
+      <StyledRow>
+        <FlexGap alignItems="center" gap="8px">
+          <CurrencyLogo currency={nativeCurrency} size="40px" />
+          <Text fontSize="16px" fontWeight={600}>
+            {nativeCurrency.symbol}
+          </Text>
+        </FlexGap>
+
+        <BalanceInput
+          width="120px"
+          value={inputValue}
+          onUserInput={handleAmountChange}
+          onFocus={handleUserInputFocus}
+          onBlur={handleUserInputBlur}
+          placeholder="0.0"
+          currencyValue={formattedUsdValue ? `${formatDollarAmount(formattedUsdValue)}` : ''}
+        />
+      </StyledRow>
+    </>
+  )
+}
+
+export const GasSponsor = () => {
+  const { includeStarterGas, setIncludeStarterGas } = useSendGiftContext()
+  const { t } = useTranslation()
 
   const msg = includeStarterGas ? (
-    <Text mb="16px" fontSize="12px">
+    <Text mb="24px" fontSize="12px">
       {t(
         'Add a small amount of the native token to help your recipient begin their on-chain journey right after claiming.',
       )}
@@ -100,24 +159,8 @@ export const GasSponsor = () => {
           </Text>
         </Flex>
         {msg}
-        {includeStarterGas && (
-          <StyledRow>
-            <FlexGap alignItems="center" gap="8px">
-              <CurrencyLogo currency={nativeCurrency} size="40px" />
-              <Text fontSize="16px" fontWeight={600}>
-                {nativeCurrency.symbol}
-              </Text>
-            </FlexGap>
 
-            <BalanceInput
-              width="120px"
-              value={inputValue}
-              onUserInput={handleAmountChange}
-              placeholder="0.0"
-              currencyValue={inputValue ? `${formatAmount(inputValue, stablePrice)} USD` : ''}
-            />
-          </StyledRow>
-        )}
+        {includeStarterGas && <NativeAmountInput />}
       </Box>
     </Card>
   )

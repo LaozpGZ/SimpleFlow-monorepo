@@ -1,6 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text, Toggle } from '@pancakeswap/uikit'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useContext } from 'react'
 import { SendGiftContext } from '../providers/SendGiftProvider'
 import { GasSponsor } from './GasSponsor'
