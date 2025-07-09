@@ -41,10 +41,20 @@ const CustomTooltip = ({ active, payload }: any) => {
 }
 
 export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, timeFilter }) => {
-  const { data } = usePoolChartVolumeData(address, poolInfo?.protocol, TIME_FILTERS_MAPPING[timeFilter ?? TimeFilter.D])
+  const { data: initialData } = usePoolChartVolumeData(
+    address,
+    poolInfo?.protocol,
+    TIME_FILTERS_MAPPING[timeFilter ?? TimeFilter.D],
+  )
   const [latestValue, setLatestValue] = useState<number | undefined>()
   const [valueLabel, setValueLabel] = useState<string | undefined>()
   const [activeIndex, setActiveIndex] = useState<number | undefined>()
+
+  // NOTE: Remove first item due to API returning extraordinarily large value. See PAN-6994.
+  const data = useMemo(() => {
+    if (!initialData) return []
+    return initialData.slice(1)
+  }, [initialData])
 
   const { theme } = useTheme()
 
@@ -64,8 +74,7 @@ export const ChartVolume: React.FC<ChartVolumeProps> = ({ address, poolInfo, tim
   // Transform data for recharts
   const chartData = useMemo(
     () =>
-      // NOTE: Remove first item due to API returning extraordinarily large value. See PAN-6994.
-      data?.slice(1)?.map((item) => ({
+      data?.map((item) => ({
         time: item.time,
         value: item.value,
         formattedTime:
