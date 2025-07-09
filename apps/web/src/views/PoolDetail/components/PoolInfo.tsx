@@ -12,11 +12,13 @@ import {
   FlexGap,
   Grid,
   Link,
+  MiscellaneousIcon,
   OpenNewIcon,
   Spinner,
   SwapHorizIcon,
   Tab,
   TabMenu,
+  Tag,
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
@@ -45,6 +47,7 @@ import { usePoolInfoByQuery } from '../hooks/usePoolInfo'
 import { usePoolSymbol } from '../hooks/usePoolSymbol'
 import { MyPositions } from './MyPositions'
 import { PoolCharts } from './PoolCharts'
+import { PoolFeaturesModal } from './PoolFeaturesModal'
 import { PoolStatus } from './PoolStatus'
 import { PoolTvlWarning } from './PoolTvlWarning'
 import { Transactions } from './Transactions'
@@ -247,7 +250,12 @@ export const PoolInfo = () => {
                             infoIconVisible={false}
                           />
                         ) : (
-                          <FeeTierTooltip type={poolInfo.protocol} percent={fee} dynamic={poolInfo?.isDynamicFee} />
+                          <FeeTierTooltip
+                            type={poolInfo.protocol}
+                            percent={fee}
+                            dynamic={poolInfo?.isDynamicFee}
+                            showType={false}
+                          />
                         )}
                       </Box>
                     </AutoColumn>
@@ -255,10 +263,25 @@ export const PoolInfo = () => {
 
                   <Liquidity.PoolFeaturesBadge
                     showPoolType
+                    showPoolFeature={false}
+                    showPoolTypeInfo={false}
+                    showPoolFeatureInfo={false}
                     poolType={poolInfo.protocol}
                     hookData={hookData}
                     showLabel={false}
                   />
+
+                  {hookData && (
+                    <PoolFeaturesModal hookData={hookData}>
+                      <Tag
+                        variant="tertiary"
+                        startIcon={<MiscellaneousIcon width={16} height={16} color="textSubtle" />}
+                        endIcon={<>&nbsp;»</>}
+                      >
+                        {t('Pool Features')}
+                      </Tag>
+                    </PoolFeaturesModal>
+                  )}
                 </FlexGap>
               </FlexGap>
             </FlexGap>
