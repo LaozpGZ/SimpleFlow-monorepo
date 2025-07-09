@@ -135,15 +135,6 @@ export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<T
       </Card>
 
       <FlexGap flexDirection="column" gap="8px" mb="16px" width="100%">
-        {hasIncludeStarterGas && (
-          <RowBetween>
-            <Text color="textSubtle">{t('Starter Gas for Recipient')}</Text>
-            <Text>
-              {nativeAmount?.toSignificant(6)} {nativeAmount?.currency.symbol}
-            </Text>
-          </RowBetween>
-        )}
-
         <RowBetween>
           <Text color="textSubtle">{t('Gift Claim Gas Fee (Fixed)')}</Text>
           <Text>
