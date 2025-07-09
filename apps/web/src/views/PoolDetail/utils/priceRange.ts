@@ -1,5 +1,4 @@
 import { getCurrencyPriceFromId } from '@pancakeswap/infinity-sdk'
-import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { FeeAmount, nearestUsableTick, TICK_SPACINGS, TickMath, tickToPrice } from '@pancakeswap/v3-sdk'
 import { Bound } from '@pancakeswap/widgets-internal'
 import { formatPercentage } from './formatting'
@@ -200,13 +199,13 @@ export const calculateBinBasedPriceRange = (
       if (minPriceFloat === 0 || !Number.isFinite(minPriceFloat)) {
         minPriceFormatted = '0'
       } else {
-        minPriceFormatted = formatAmount(minPriceFloat, { notation: 'standard' }) || '-'
+        minPriceFormatted = minPrice.toFixed(18)
       }
 
       if (maxPriceFloat === Infinity || !Number.isFinite(maxPriceFloat)) {
         maxPriceFormatted = '∞'
       } else {
-        maxPriceFormatted = formatAmount(maxPriceFloat, { notation: 'standard' }) || '-'
+        maxPriceFormatted = maxPrice.toFixed(18)
       }
 
       // Calculate percentages if we have current price and position is not removed

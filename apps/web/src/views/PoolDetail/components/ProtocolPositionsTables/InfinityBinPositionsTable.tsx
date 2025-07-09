@@ -83,10 +83,7 @@ const transformInfinityBinPositionToTableRow = (
     <FlexGap flexDirection="column" gap="4px">
       <FlexGap alignItems="center" gap="8px">
         <Text bold fontSize="16px">
-          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}{' '}
-          <Text as="span" color="textSubtle">
-            #{poolInfo.pid}
-          </Text>
+          {poolInfo.token0?.symbol} / {poolInfo.token1?.symbol}
         </Text>
         {position.isStaked && !removed && !outOfRange && (
           <Tag variant="primary60" scale="sm">
