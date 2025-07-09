@@ -35,7 +35,14 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
           giftInfo.map((gift) => {
             const displayCurrency = gift.currencyAmount ?? gift.nativeCurrencyAmount
             return (
-              <Box mb="16px" key={gift.codeHash}>
+              <Box
+                mb="16px"
+                key={gift.codeHash}
+                onClick={() => {
+                  setCodeHash(gift.codeHash)
+                  setViewState(ViewState.CANCEL_GIFT_CONFIRM)
+                }}
+              >
                 <FlexGap gap="8px" alignItems="center" mb="8px">
                   <GiftStatusTag status={gift.status} />
 

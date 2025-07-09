@@ -14,7 +14,6 @@ import {
 import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { useEffect } from 'react'
-import { shortenAddress } from 'views/V3Info/utils'
 
 import { useClaimGift } from '../hooks/useClaimGift'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
@@ -22,6 +21,7 @@ import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
 import { GiftApiStatus } from '../types'
 import { convertCodeHash } from '../utils/convertCodeHash'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
+import { GiftInfoAddress } from './GiftInfoDetail'
 
 export const ClaimGiftConfirmView = () => {
   const { code, setCode } = useClaimGiftContext()
@@ -93,22 +93,9 @@ export const ClaimGiftConfirmView = () => {
         <TokenAmountSection tokenAmount={isOnlyNative ? giftInfo.nativeCurrencyAmount : giftInfo.currencyAmount!} />
       )}
 
-      {isError && (
-        <Box mb="16px" color="failure">
-          {error?.message || t('Failed to claim gift')}
-        </Box>
-      )}
-
       <Card mb="16px" style={{ width: '100%' }}>
         <FlexGap flexDirection="column" gap="4px" p="16px">
-          {giftInfo.creatorAddress && (
-            <RowBetween>
-              <Text color="textSubtle" small>
-                {t('Created by:')}
-              </Text>
-              <Text small>{shortenAddress(giftInfo.creatorAddress)}</Text>
-            </RowBetween>
-          )}
+          {giftInfo.creatorAddress && <GiftInfoAddress text={t('Created by:')} address={giftInfo.creatorAddress} />}
           {giftInfo.timestamp && (
             <RowBetween>
               <Text color="textSubtle" small>
@@ -135,6 +122,12 @@ export const ClaimGiftConfirmView = () => {
           )}
         </FlexGap>
       </Card>
+
+      {isError && (
+        <Box mb="16px" color="failure">
+          {error?.message || t('Failed to claim gift')}
+        </Box>
+      )}
 
       {claimGiftData?.status === GiftApiStatus.SUCCESS ? (
         <CheckmarkCircleIcon color="success" width="40px" />
