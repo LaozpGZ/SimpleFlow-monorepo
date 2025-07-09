@@ -102,8 +102,6 @@ export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<T
     )
   }
 
-  const hasIncludeStarterGas = includeStarterGas && nativeAmount
-
   return (
     <ColumnCenter>
       {viewTabs}

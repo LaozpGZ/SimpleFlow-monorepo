@@ -38,11 +38,16 @@ export const CreateGiftButton = ({
   const onCreateGiftClick = useCallback(async () => {
     if (needApprove) {
       setIsApproving(true)
-      await approveGiftCallback()
-      setIsApproving(false)
+      approveGiftCallback()
+        .then(() => {
+          handleCreateGift()
+        })
+        .finally(() => {
+          setIsApproving(false)
+        })
+    } else {
+      handleCreateGift()
     }
-
-    handleCreateGift()
   }, [tokenAmount, approveGiftCallback, handleCreateGift])
 
   const text = useMemo(() => {
