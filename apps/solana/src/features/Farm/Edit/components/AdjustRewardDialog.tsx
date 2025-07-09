@@ -311,10 +311,10 @@ function RewardInfoItem(props: {
           px={6}
         >
           <Text fontSize="md" fontWeight={500} color={colors.textPrimary} mb={3}>
-            {formatCurrency(periodLessThanWeek ? props.perDay : props.perWeek, { decimalPlaces: props.mint.decimals })}
+            {formatCurrency(props.perDay, { decimalPlaces: props.mint.decimals })}
             <Text display="inline" ml="2" color={colors.textSubtle}>
               {wSolToSolString(props.mint.symbol)}
-              {periodLessThanWeek ? t('/day') : t('/week')}
+              {t('/day')}
             </Text>
           </Text>
           <Text fontSize="xs" color={colors.textSubtle}>
