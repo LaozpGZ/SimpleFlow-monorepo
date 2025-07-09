@@ -237,8 +237,9 @@ const transformV3PositionToTableRow = (
   // V3-specific fallback: Use positionData prices if available and tick-based calculation didn't show percentages
   if (positionData && !priceRangeData.showPercentages) {
     try {
-      const positionMinPrice = parseFloat(positionData.token0PriceLower.toSignificant(6))
-      const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(6))
+      // Use higher precision (18 significant digits) to avoid precision loss for small numbers
+      const positionMinPrice = parseFloat(positionData.token0PriceLower.toSignificant(18))
+      const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(18))
 
       if (Number.isFinite(positionMinPrice) && Number.isFinite(positionMaxPrice)) {
         const updatedMinPriceFormatted = formatAmount(positionMinPrice, { notation: 'standard' }) || '-'
@@ -250,7 +251,8 @@ const transformV3PositionToTableRow = (
 
         // Try percentage calculation with positionData prices
         if (pool?.token0Price && positionMaxPrice > positionMinPrice) {
-          const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
+          // Use higher precision (18 significant digits) for current price calculation
+          const currentPrice = parseFloat(pool.token0Price.toSignificant(18))
 
           if (currentPrice > 0 && Number.isFinite(currentPrice)) {
             const minPercent = ((positionMinPrice - currentPrice) / currentPrice) * 100
@@ -273,7 +275,7 @@ const transformV3PositionToTableRow = (
           }
         }
 
-        // Update priceRangeData with fallback values
+        // Update priceRangeData with fallback values, preserving the original currentPrice
         priceRangeData = {
           minPriceFormatted: updatedMinPriceFormatted,
           maxPriceFormatted: updatedMaxPriceFormatted,
@@ -281,6 +283,7 @@ const transformV3PositionToTableRow = (
           maxPercentage: updatedMaxPercentage,
           rangePosition: updatedRangePosition,
           showPercentages: updatedShowPercentages,
+          currentPrice: priceRangeData.currentPrice, // Preserve the original calculated current price
         }
       }
     } catch (error) {
@@ -297,7 +300,7 @@ const transformV3PositionToTableRow = (
             #{position.tokenId.toString()}
           </Text>
         </Text>
-        {position.isStaked && (
+        {position.isStaked && !removed && (
           <Tag variant="primary60" scale="sm" px="6px">
             {t('Farming')}
           </Tag>
@@ -394,7 +397,7 @@ const transformV3PositionToTableRow = (
       rangePosition={priceRangeData.rangePosition}
       outOfRange={outOfRange}
       removed={removed}
-      currentPrice={pool?.token0Price?.toSignificant(6)}
+      currentPrice={priceRangeData.currentPrice || pool?.token0Price?.toSignificant(18)}
       showPercentages={priceRangeData.showPercentages}
     />
   )

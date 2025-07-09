@@ -5,7 +5,7 @@ import { Bound } from '@pancakeswap/widgets-internal'
 import { formatPercentage } from './formatting'
 
 /**
- * Safely converts tick to price using V3 SDK
+ * Safely converts tick to price using V3 SDK with maximum precision
  * Used in InfinityCL and V3 position tables
  */
 export const getTickPrice = (tick: number, token0: any, token1: any): number => {
@@ -17,7 +17,8 @@ export const getTickPrice = (tick: number, token0: any, token1: any): number => 
     // Use the V3 SDK's tickToPrice function for accurate calculation
     if (token0 && token1) {
       const price = tickToPrice(token0, token1, tick)
-      return parseFloat(price.toSignificant(10))
+      // Use higher precision (18 significant digits) to avoid precision loss for small numbers
+      return parseFloat(price.toSignificant(18))
     }
 
     // Fallback
@@ -76,6 +77,7 @@ export interface PriceRangeData {
   maxPercentage: string
   rangePosition: number
   showPercentages: boolean
+  currentPrice?: string // Add current price to the interface
 }
 
 /**
@@ -96,14 +98,15 @@ export const calculateTickBasedPriceRange = (
   let maxPercentage = ''
   let rangePosition = 50
   let showPercentages = false
+  let currentPriceString: string | undefined
 
   // Calculate prices using tick-to-price conversion
   const minPrice = getTickPrice(tickLower, token0, token1)
   const maxPrice = getTickPrice(tickUpper, token0, token1)
 
   // Format prices with special handling for tick limits
-  minPriceFormatted = isTickAtLimit.LOWER ? '0' : formatAmount(minPrice, { notation: 'standard' }) || '-'
-  maxPriceFormatted = isTickAtLimit.UPPER ? '∞' : formatAmount(maxPrice, { notation: 'standard' }) || '-'
+  minPriceFormatted = isTickAtLimit.LOWER ? '0' : formatAmount(minPrice) || '-'
+  maxPriceFormatted = isTickAtLimit.UPPER ? '∞' : formatAmount(maxPrice) || '-'
 
   // Handle full range positions
   if (isTickAtLimit.LOWER && isTickAtLimit.UPPER) {
@@ -116,7 +119,9 @@ export const calculateTickBasedPriceRange = (
   } else if (pool?.token0Price && tickLower > TickMath.MIN_TICK && tickUpper < TickMath.MAX_TICK) {
     // Calculate percentages only if prices are not at limits and pool exists
     try {
-      const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
+      // Use higher precision (18 significant digits) to avoid precision loss for small numbers
+      const currentPrice = parseFloat(pool.token0Price.toSignificant(18))
+      currentPriceString = pool.token0Price.toSignificant(18) // Store the current price string with higher precision
 
       if (
         currentPrice > 0 &&
@@ -154,6 +159,7 @@ export const calculateTickBasedPriceRange = (
     maxPercentage,
     rangePosition,
     showPercentages,
+    currentPrice: currentPriceString,
   }
 }
 
@@ -175,16 +181,17 @@ export const calculateBinBasedPriceRange = (
   let maxPercentage = ''
   let rangePosition = 50
   let showPercentages = false
+  let currentPrice: any
 
   if (minBinId && maxBinId && binStep && token0 && token1) {
     const minPrice = getCurrencyPriceFromId(minBinId, binStep, token0, token1)
     const maxPrice = getCurrencyPriceFromId(maxBinId, binStep, token0, token1)
-    const currentPrice = activeId ? getCurrencyPriceFromId(activeId, binStep, token0, token1) : undefined
+    currentPrice = activeId ? getCurrencyPriceFromId(activeId, binStep, token0, token1) : undefined
 
     if (minPrice && maxPrice) {
-      // Check for extreme values and format accordingly
-      const minPriceFloat = parseFloat(minPrice.toSignificant(6))
-      const maxPriceFloat = parseFloat(maxPrice.toSignificant(6))
+      // Check for extreme values and format accordingly - use higher precision for small numbers
+      const minPriceFloat = parseFloat(minPrice.toSignificant(18))
+      const maxPriceFloat = parseFloat(maxPrice.toSignificant(18))
 
       // Show '0' for extremely low prices and '∞' for extremely high prices
       if (minPriceFloat === 0 || !Number.isFinite(minPriceFloat)) {
@@ -202,9 +209,10 @@ export const calculateBinBasedPriceRange = (
       // Calculate percentages if we have current price and position is not removed
       if (currentPrice) {
         try {
-          const currentPriceFloat = parseFloat(currentPrice.toSignificant(6))
-          const minPriceFloat = parseFloat(minPrice.toSignificant(6))
-          const maxPriceFloat = parseFloat(maxPrice.toSignificant(6))
+          // Use higher precision (18 significant digits) to avoid precision loss for small numbers
+          const currentPriceFloat = parseFloat(currentPrice.toSignificant(18))
+          const minPriceFloat = parseFloat(minPrice.toSignificant(18))
+          const maxPriceFloat = parseFloat(maxPrice.toSignificant(18))
 
           if (
             currentPriceFloat > 0 &&
@@ -245,5 +253,6 @@ export const calculateBinBasedPriceRange = (
     maxPercentage,
     rangePosition,
     showPercentages,
+    currentPrice: currentPrice?.toSignificant(18), // Return the calculated current price with higher precision
   }
 }

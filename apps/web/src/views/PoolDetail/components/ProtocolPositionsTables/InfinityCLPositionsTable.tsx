@@ -124,7 +124,7 @@ const transformInfinityCLPositionToTableRow = (
             #{position.tokenId.toString()}
           </Text>
         </Text>
-        {position.isStaked && (
+        {position.isStaked && !removed && (
           <Tag variant="primary60" scale="sm" px="6px">
             {t('Farming')}
           </Tag>
@@ -218,7 +218,7 @@ const transformInfinityCLPositionToTableRow = (
       rangePosition={priceRangeData.rangePosition}
       outOfRange={outOfRange}
       removed={removed}
-      currentPrice={pool?.token0Price?.toSignificant(6)}
+      currentPrice={priceRangeData.currentPrice || pool?.token0Price?.toSignificant(18)}
       showPercentages={priceRangeData.showPercentages}
     />
   )

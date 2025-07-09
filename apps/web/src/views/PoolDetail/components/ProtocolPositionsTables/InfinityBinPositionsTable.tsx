@@ -85,7 +85,7 @@ const transformInfinityBinPositionToTableRow = (
             #{poolInfo.pid}
           </Text>
         </Text>
-        {position.isStaked && (
+        {position.isStaked && !removed && (
           <Tag variant="primary60" scale="sm">
             {t('Farming')}
           </Tag>
@@ -189,7 +189,7 @@ const transformInfinityBinPositionToTableRow = (
       rangePosition={priceRangeData.rangePosition}
       outOfRange={outOfRange}
       removed={removed}
-      currentPrice={pool?.token0Price?.toSignificant(6)}
+      currentPrice={priceRangeData.currentPrice || pool?.token0Price?.toSignificant(18)}
       showPercentages={priceRangeData.showPercentages}
     />
   )
