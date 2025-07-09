@@ -3,8 +3,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
-import { FeeAmount, nearestUsableTick, PositionMath, TICK_SPACINGS, TickMath, tickToPrice } from '@pancakeswap/v3-sdk'
-import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { PositionMath } from '@pancakeswap/v3-sdk'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber } from 'bignumber.js'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
@@ -19,7 +19,19 @@ import { currencyId } from 'utils/currencyId'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useFarmsV3BatchHarvest } from 'views/Farms/hooks/v3/useFarmV3Actions'
 import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
-import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
+import {
+  AprData,
+  calculateTickBasedPriceRange,
+  calculateTickLimits,
+  calculateTotalApr,
+  convertAprDataToNumbers,
+  formatPercentage,
+  formatPoolDetailFiatNumber,
+  getTickAtLimitStatus,
+  getTickSpacing,
+  isTickBasedPositionOutOfRange,
+  isTickBasedPositionRemoved,
+} from 'views/PoolDetail/utils'
 import { V3PositionActions } from 'views/universalFarms/components/PositionActions/V3PositionActions'
 import { V3UnstakeModalContent } from 'views/universalFarms/components/PositionActions/V3UnstakeModalContent'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
@@ -55,34 +67,6 @@ interface TransformedV3Position {
 
 interface V3PositionsTableProps {
   poolInfo: PoolInfo
-}
-
-// Helper function to safely convert tick to price using V3 SDK
-const getTickPrice = (tick: number, token0: any, token1: any): number => {
-  try {
-    // Use TickMath constants for bounds checking
-    if (tick >= TickMath.MAX_TICK) return Infinity
-    if (tick <= TickMath.MIN_TICK) return 0
-
-    // Use the V3 SDK's tickToPrice function for accurate calculation
-    if (token0 && token1) {
-      const price = tickToPrice(token0, token1, tick)
-      return parseFloat(price.toSignificant(10))
-    }
-
-    // Fallback
-    return 1.0001 ** tick
-  } catch (error) {
-    console.error('Error calculating tick price:', error)
-    return 1.0001 ** tick
-  }
-}
-
-// Helper function for percentage formatting with bounds checking
-const formatPercentage = (percentage: number): string => {
-  if (!Number.isFinite(percentage)) return '-%'
-  const sign = percentage >= 0 ? '+' : ''
-  return `${sign}${percentage.toFixed(2)}%`
 }
 
 const V3Actions = ({
@@ -186,7 +170,7 @@ const transformV3PositionToTableRow = (
   price0Usd: number | undefined,
   price1Usd: number | undefined,
   pool: any,
-  aprData: { lpApr: number; cakeApr: { value: number } | null; merklApr: number },
+  aprData: AprData,
   t: (key: string) => string,
 ) => {
   const positionData = positionsData?.find((p) => Number(p.tokenId) === Number(position.tokenId))
@@ -228,93 +212,41 @@ const transformV3PositionToTableRow = (
     }
   }
 
-  const outOfRange = pool && (pool.tickCurrent < position.tickLower || pool.tickCurrent >= position.tickUpper)
-  const removed = position.liquidity === 0n
+  const outOfRange = isTickBasedPositionOutOfRange(pool, position.tickLower, position.tickUpper)
+  const removed = isTickBasedPositionRemoved(position.liquidity)
 
-  // Get tick spacing - prefer from pool object, fallback to SDK constant
-  const tickSpacing = pool?.tickSpacing ?? (poolInfo.feeTier ? TICK_SPACINGS[poolInfo.feeTier as FeeAmount] : undefined)
+  // Get tick spacing using utility function
+  const tickSpacing = getTickSpacing(pool, poolInfo.feeTier)
 
-  // Calculate tick limits for full range detection
-  const ticksLimit: {
-    [bound in Bound]: number | undefined
-  } = {
-    [Bound.LOWER]: tickSpacing ? nearestUsableTick(TickMath.MIN_TICK, tickSpacing) : undefined,
-    [Bound.UPPER]: tickSpacing ? nearestUsableTick(TickMath.MAX_TICK, tickSpacing) : undefined,
-  }
+  // Calculate tick limits using utility function
+  const ticksLimit = calculateTickLimits(tickSpacing)
 
-  const isTickAtLimit = {
-    [Bound.LOWER]: position.tickLower && ticksLimit.LOWER ? position.tickLower <= ticksLimit.LOWER : false,
-    [Bound.UPPER]: position.tickUpper && ticksLimit.UPPER ? position.tickUpper >= ticksLimit.UPPER : false,
-  }
+  // Get tick at limit status using utility function
+  const isTickAtLimit = getTickAtLimitStatus(position.tickLower, position.tickUpper, ticksLimit)
 
-  // Format price range data using improved calculation
-  let minPriceFormatted = '-'
-  let maxPriceFormatted = '-'
-  let minPercentage = ''
-  let maxPercentage = ''
-  let rangePosition = 50
-  let showPercentages = false
+  // Use utility function for main price range calculation
+  let priceRangeData = calculateTickBasedPriceRange(
+    position.tickLower,
+    position.tickUpper,
+    poolInfo.token0.wrapped,
+    poolInfo.token1.wrapped,
+    pool,
+    isTickAtLimit,
+  )
 
-  // Primary method: Use tick-based price calculation with V3 SDK
-  const minPrice = getTickPrice(position.tickLower, poolInfo.token0.wrapped, poolInfo.token1.wrapped)
-  const maxPrice = getTickPrice(position.tickUpper, poolInfo.token0.wrapped, poolInfo.token1.wrapped)
-
-  // Use utility function for price formatting
-  minPriceFormatted = formatAmount(minPrice, { notation: 'standard' }) || '-'
-  maxPriceFormatted = formatAmount(maxPrice, { notation: 'standard' }) || '-'
-
-  // If position is full range, set special handling
-  if (isTickAtLimit.LOWER && isTickAtLimit.UPPER) {
-    rangePosition = 50
-    minPercentage = '0%'
-    maxPercentage = '100%'
-    minPriceFormatted = '0'
-    maxPriceFormatted = '∞'
-    showPercentages = true
-  } else if (pool?.token0Price && position.tickLower > TickMath.MIN_TICK && position.tickUpper < TickMath.MAX_TICK) {
-    // Only calculate percentages if prices are not at limits and pool exists
-    try {
-      const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
-
-      if (
-        currentPrice > 0 &&
-        maxPrice > minPrice &&
-        Number.isFinite(minPrice) &&
-        Number.isFinite(maxPrice) &&
-        Number.isFinite(currentPrice)
-      ) {
-        const minPercent = ((minPrice - currentPrice) / currentPrice) * 100
-        const maxPercent = ((maxPrice - currentPrice) / currentPrice) * 100
-
-        if (
-          // Only show percentages if they're reasonable finite values
-          Number.isFinite(minPercent) &&
-          Number.isFinite(maxPercent) &&
-          Math.abs(minPercent) < 10000 &&
-          Math.abs(maxPercent) < 10000
-        ) {
-          // Use utility function for percentage formatting
-          minPercentage = formatPercentage(minPercent)
-          maxPercentage = formatPercentage(maxPercent)
-          rangePosition = Math.max(0, Math.min(100, ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100))
-          showPercentages = true
-        }
-      }
-    } catch (error) {
-      // If any calculation fails, just show the price range without percentages
-      console.warn('Price calculation error:', error)
-    }
-  }
-
-  // Fallback: Use positionData prices if available and tick-based calculation seems unreliable
-  if (positionData && !showPercentages) {
+  // V3-specific fallback: Use positionData prices if available and tick-based calculation didn't show percentages
+  if (positionData && !priceRangeData.showPercentages) {
     try {
       const positionMinPrice = parseFloat(positionData.token0PriceLower.toSignificant(6))
       const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toSignificant(6))
 
       if (Number.isFinite(positionMinPrice) && Number.isFinite(positionMaxPrice)) {
-        minPriceFormatted = formatAmount(positionMinPrice, { notation: 'standard' }) || '-'
-        maxPriceFormatted = formatAmount(positionMaxPrice, { notation: 'standard' }) || '-'
+        const updatedMinPriceFormatted = formatAmount(positionMinPrice, { notation: 'standard' }) || '-'
+        const updatedMaxPriceFormatted = formatAmount(positionMaxPrice, { notation: 'standard' }) || '-'
+        let updatedMinPercentage = ''
+        let updatedMaxPercentage = ''
+        let updatedRangePosition = 50
+        let updatedShowPercentages = false
 
         // Try percentage calculation with positionData prices
         if (pool?.token0Price && positionMaxPrice > positionMinPrice) {
@@ -330,15 +262,25 @@ const transformV3PositionToTableRow = (
               Math.abs(minPercent) < 10000 &&
               Math.abs(maxPercent) < 10000
             ) {
-              minPercentage = formatPercentage(minPercent)
-              maxPercentage = formatPercentage(maxPercent)
-              rangePosition = Math.max(
+              updatedMinPercentage = formatPercentage(minPercent)
+              updatedMaxPercentage = formatPercentage(maxPercent)
+              updatedRangePosition = Math.max(
                 0,
                 Math.min(100, ((currentPrice - positionMinPrice) / (positionMaxPrice - positionMinPrice)) * 100),
               )
-              showPercentages = true
+              updatedShowPercentages = true
             }
           }
+        }
+
+        // Update priceRangeData with fallback values
+        priceRangeData = {
+          minPriceFormatted: updatedMinPriceFormatted,
+          maxPriceFormatted: updatedMaxPriceFormatted,
+          minPercentage: updatedMinPercentage,
+          maxPercentage: updatedMaxPercentage,
+          rangePosition: updatedRangePosition,
+          showPercentages: updatedShowPercentages,
         }
       }
     } catch (error) {
@@ -434,7 +376,7 @@ const transformV3PositionToTableRow = (
     </Flex>
   )
 
-  const totalApr = (aprData.lpApr || 0) + Number(aprData.cakeApr?.value || 0) + (aprData.merklApr || 0)
+  const totalApr = calculateTotalApr(convertAprDataToNumbers(aprData))
   const aprDisplay = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
@@ -445,14 +387,14 @@ const transformV3PositionToTableRow = (
 
   const priceRange = (
     <PriceRangeDisplay
-      minPrice={minPriceFormatted}
-      maxPrice={maxPriceFormatted}
-      minPercentage={minPercentage}
-      maxPercentage={maxPercentage}
-      rangePosition={rangePosition}
+      minPrice={priceRangeData.minPriceFormatted}
+      maxPrice={priceRangeData.maxPriceFormatted}
+      minPercentage={priceRangeData.minPercentage}
+      maxPercentage={priceRangeData.maxPercentage}
+      rangePosition={priceRangeData.rangePosition}
       outOfRange={outOfRange}
       removed={removed}
-      showPercentages={showPercentages}
+      showPercentages={priceRangeData.showPercentages}
     />
   )
 
@@ -501,15 +443,8 @@ const V3PositionRow: React.FC<{
 
   const aprData = useV3PositionApr(poolInfo, position)
 
-  // Memoize the converted APR data separately to avoid recreating the object
-  const convertedAprData = useMemo(
-    () => ({
-      lpApr: aprData.lpApr || 0,
-      cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
-      merklApr: aprData.merklApr || 0,
-    }),
-    [aprData.lpApr, aprData.cakeApr?.value, aprData.merklApr],
-  )
+  // Use utility function to convert APR data
+  const convertedAprData = useMemo(() => convertAprDataToNumbers(aprData), [aprData])
 
   const transformedData = useMemo(() => {
     return transformV3PositionToTableRow(
@@ -565,7 +500,7 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
 
   const [loading, setLoading] = useState(false)
 
-  const { earningsBusd, isLoading: isLoadingEarnings } = useV3CakeEarningsByPool(poolInfo)
+  const { earningsBusd } = useV3CakeEarningsByPool(poolInfo)
   const { switchNetworkIfNecessary, isLoading: isSwitchingNetwork } = useCheckShouldSwitchNetwork()
 
   const { onHarvestAll } = useFarmsV3BatchHarvest()

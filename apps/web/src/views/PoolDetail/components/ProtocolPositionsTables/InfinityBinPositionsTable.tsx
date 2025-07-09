@@ -1,10 +1,8 @@
 import { Protocol } from '@pancakeswap/farms'
-import { getCurrencyPriceFromId } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
 import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
@@ -21,7 +19,14 @@ import { InfinityBinPositionDetail, POSITION_STATUS } from 'state/farmsV4/state/
 import { InfinityBinPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
-import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
+import {
+  AprData,
+  calculateBinBasedPriceRange,
+  calculateTotalApr,
+  convertAprDataToNumbers,
+  formatPoolDetailFiatNumber,
+  getBinPositionStatus,
+} from 'views/PoolDetail/utils'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityPositions } from 'views/universalFarms/hooks/useInfinityPositions'
 import { useInfinityBinPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
@@ -56,26 +61,12 @@ interface InfinityBinPositionsTableProps {
   poolInfo: InfinityBinPoolInfo
 }
 
-// Helper function for percentage formatting
-const formatPercentage = (percentage: number): string => {
-  if (Math.abs(percentage) < 0.01) return '0%'
-  const sign = percentage >= 0 ? '+' : ''
-  return `${sign}${percentage.toFixed(1)}%`
-}
-
-// Helper function to format prices using utility function
-const formatPriceNumber = (price: any): string => {
-  if (!price) return '0'
-  const priceFloat = parseFloat(price.toSignificant(6))
-  return formatAmount(priceFloat, { notation: 'standard' }) || '-'
-}
-
 // Helper function to transform position data for table - NO HOOKS ALLOWED
 const transformInfinityBinPositionToTableRow = (
   position: InfinityBinPositionDetail,
   poolInfo: InfinityBinPoolInfo,
   pool: any,
-  aprData: { lpApr: number; cakeApr: { value: number } | null; merklApr: number },
+  aprData: AprData,
   amount0: CurrencyAmount<any> | undefined,
   amount1: CurrencyAmount<any> | undefined,
   totalTVLUsd: number,
@@ -167,7 +158,7 @@ const transformInfinityBinPositionToTableRow = (
     </Flex>
   )
 
-  const totalApr = Number(aprData.lpApr || 0) + Number(aprData.cakeApr?.value || 0) + (aprData.merklApr || 0)
+  const totalApr = calculateTotalApr(convertAprDataToNumbers(aprData))
   const aprDisplay = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
@@ -176,91 +167,29 @@ const transformInfinityBinPositionToTableRow = (
     </Flex>
   )
 
-  // Calculate actual price range from bin IDs for LBAMM
-  const removed = (position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED
-  const outOfRange = (position.status as POSITION_STATUS) === POSITION_STATUS.INACTIVE
+  // Calculate actual price range from bin IDs for LBAMM using utility function
+  const { removed, outOfRange } = getBinPositionStatus(position.status as POSITION_STATUS)
 
-  let minPriceFormatted = '-'
-  let maxPriceFormatted = '-'
-  let minPercentage = ''
-  let maxPercentage = ''
-  let rangePosition = 50
-  let showPercentages = false
-
-  if (position.minBinId && position.maxBinId && pool?.binStep && poolInfo.token0 && poolInfo.token1) {
-    const minPrice = getCurrencyPriceFromId(position.minBinId, pool.binStep, poolInfo.token0, poolInfo.token1)
-    const maxPrice = getCurrencyPriceFromId(position.maxBinId, pool.binStep, poolInfo.token0, poolInfo.token1)
-    const currentPrice = pool?.activeId
-      ? getCurrencyPriceFromId(pool.activeId, pool.binStep, poolInfo.token0, poolInfo.token1)
-      : undefined
-
-    if (minPrice && maxPrice) {
-      // Check for extreme values and format accordingly
-      const minPriceFloat = parseFloat(minPrice.toSignificant(6))
-      const maxPriceFloat = parseFloat(maxPrice.toSignificant(6))
-
-      // Show '0' for extremely low prices and '∞' for extremely high prices
-      if (minPriceFloat === 0 || !Number.isFinite(minPriceFloat)) {
-        minPriceFormatted = '0'
-      } else {
-        minPriceFormatted = formatPriceNumber(minPrice)
-      }
-
-      if (maxPriceFloat === Infinity || !Number.isFinite(maxPriceFloat)) {
-        maxPriceFormatted = '∞'
-      } else {
-        maxPriceFormatted = formatPriceNumber(maxPrice)
-      }
-
-      // Calculate percentages if we have current price and position is not removed
-      if (currentPrice && !removed) {
-        try {
-          const currentPriceFloat = parseFloat(currentPrice.toSignificant(6))
-          const minPriceFloat = parseFloat(minPrice.toSignificant(6))
-          const maxPriceFloat = parseFloat(maxPrice.toSignificant(6))
-
-          if (
-            currentPriceFloat > 0 &&
-            maxPriceFloat > minPriceFloat &&
-            Number.isFinite(minPriceFloat) &&
-            Number.isFinite(maxPriceFloat) &&
-            Number.isFinite(currentPriceFloat)
-          ) {
-            const minPercent = ((minPriceFloat - currentPriceFloat) / currentPriceFloat) * 100
-            const maxPercent = ((maxPriceFloat - currentPriceFloat) / currentPriceFloat) * 100
-
-            if (
-              Number.isFinite(minPercent) &&
-              Number.isFinite(maxPercent) &&
-              Math.abs(minPercent) < 10000 &&
-              Math.abs(maxPercent) < 10000
-            ) {
-              minPercentage = formatPercentage(minPercent)
-              maxPercentage = formatPercentage(maxPercent)
-              rangePosition = Math.max(
-                0,
-                Math.min(100, ((currentPriceFloat - minPriceFloat) / (maxPriceFloat - minPriceFloat)) * 100),
-              )
-              showPercentages = true
-            }
-          }
-        } catch (error) {
-          console.warn('Price calculation error:', error)
-        }
-      }
-    }
-  }
+  // Use utility function for price range calculation
+  const priceRangeData = calculateBinBasedPriceRange(
+    position.minBinId,
+    position.maxBinId,
+    pool?.binStep,
+    pool?.activeId,
+    poolInfo.token0,
+    poolInfo.token1,
+  )
 
   const priceRange = (
     <PriceRangeDisplay
-      minPrice={minPriceFormatted}
-      maxPrice={maxPriceFormatted}
-      minPercentage={minPercentage}
-      maxPercentage={maxPercentage}
-      rangePosition={rangePosition}
+      minPrice={priceRangeData.minPriceFormatted}
+      maxPrice={priceRangeData.maxPriceFormatted}
+      minPercentage={priceRangeData.minPercentage}
+      maxPercentage={priceRangeData.maxPercentage}
+      rangePosition={priceRangeData.rangePosition}
       outOfRange={outOfRange}
       removed={removed}
-      showPercentages={showPercentages}
+      showPercentages={priceRangeData.showPercentages}
     />
   )
 
@@ -342,15 +271,8 @@ const InfinityBinPositionRow: React.FC<{
     enabled: Boolean(pool?.token1 && amount1?.greaterThan('0')),
   })
 
-  // Memoize the converted APR data separately to avoid recreating the object
-  const convertedAprData = useMemo(
-    () => ({
-      lpApr: parseFloat(aprData.lpApr || '0'),
-      cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
-      merklApr: aprData.merklApr || 0,
-    }),
-    [aprData.lpApr, aprData.cakeApr?.value, aprData.merklApr],
-  )
+  // Use utility function to convert APR data
+  const convertedAprData = useMemo(() => convertAprDataToNumbers(aprData), [aprData])
 
   // Transform the data with the fetched APR
   const transformedData = useMemo(() => {

@@ -13,7 +13,12 @@ import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions
 import { StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
-import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
+import {
+  calculateTotalApr,
+  calculateV2LiquidityUSD,
+  convertAprDataToNumbers,
+  formatPoolDetailFiatNumber,
+} from 'views/PoolDetail/utils'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 import { useV2CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
 import { useV2PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
@@ -51,13 +56,21 @@ const V2PositionWithApr: React.FC<{
   const { earningsBusd } = useV2CakeEarning(poolInfo)
 
   const transformedPosition = useMemo(() => {
+    // Use utility function for V2 liquidity calculation
+    const liquidityUSD = calculateV2LiquidityUSD(
+      v2OrStableData.nativeDeposited0,
+      v2OrStableData.nativeDeposited1,
+      v2OrStableData.farmingDeposited0,
+      v2OrStableData.farmingDeposited1,
+      token0Price,
+      token1Price,
+    )
+
+    // Calculate individual amounts for display
     const amount0 = v2OrStableData.nativeDeposited0.add(v2OrStableData.farmingDeposited0)
     const amount1 = v2OrStableData.nativeDeposited1.add(v2OrStableData.farmingDeposited1)
-
-    // Calculate USD values for individual tokens
     const amount0Usd = Number(amount0.toExact()) * (token0Price ?? 0)
     const amount1Usd = Number(amount1.toExact()) * (token1Price ?? 0)
-    const liquidityUSD = amount0Usd + amount1Usd
 
     const tokenInfo = (
       <FlexGap flexDirection="column" gap="4px">
@@ -114,7 +127,8 @@ const V2PositionWithApr: React.FC<{
       </Flex>
     )
 
-    const totalApr = (aprData.lpApr || 0) + Number(aprData.cakeApr?.value || 0) + (aprData.merklApr || 0)
+    // Use utility function for APR calculation
+    const totalApr = calculateTotalApr(convertAprDataToNumbers(aprData))
     const aprDisplay = (
       <Flex flexDirection="column" alignItems="flex-start">
         <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>

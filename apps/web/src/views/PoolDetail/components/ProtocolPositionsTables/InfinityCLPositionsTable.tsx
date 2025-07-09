@@ -3,10 +3,9 @@ import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { displayApr } from '@pancakeswap/utils/displayApr'
-import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
-import { nearestUsableTick, PositionMath, TickMath, tickToPrice } from '@pancakeswap/v3-sdk'
+import { PositionMath } from '@pancakeswap/v3-sdk'
 
-import { Bound, CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
 import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
 import dayjs from 'dayjs'
@@ -21,7 +20,17 @@ import { InfinityCLPositionDetail } from 'state/farmsV4/state/accountPositions/t
 import { InfinityCLPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
-import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
+import {
+  AprData,
+  calculateTickBasedPriceRange,
+  calculateTickLimits,
+  calculateTotalApr,
+  convertAprDataToNumbers,
+  formatPoolDetailFiatNumber,
+  getTickAtLimitStatus,
+  isTickBasedPositionOutOfRange,
+  isTickBasedPositionRemoved,
+} from 'views/PoolDetail/utils'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityPositions } from 'views/universalFarms/hooks/useInfinityPositions'
 import { useInfinityCLPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
@@ -51,34 +60,6 @@ interface TransformedPosition {
   totalApr: number
 }
 
-// Helper function to safely convert tick to price using V3 SDK
-const getTickPrice = (tick: number, token0: any, token1: any): number => {
-  try {
-    // Use TickMath constants for bounds checking
-    if (tick >= TickMath.MAX_TICK) return Infinity
-    if (tick <= TickMath.MIN_TICK) return 0
-
-    // Use the V3 SDK's tickToPrice function for accurate calculation
-    if (token0 && token1) {
-      const price = tickToPrice(token0, token1, tick)
-      return parseFloat(price.toSignificant(10))
-    }
-
-    // Fallback
-    return 1.0001 ** tick
-  } catch (error) {
-    console.error('Error calculating tick price:', error)
-    return 1.0001 ** tick
-  }
-}
-
-// Helper function for percentage formatting with bounds checking
-const formatPercentage = (percentage: number): string => {
-  if (Math.abs(percentage) < 0.01) return '0%'
-  const sign = percentage >= 0 ? '+' : ''
-  return `${sign}${percentage.toFixed(1)}%`
-}
-
 interface InfinityCLPositionsTableProps {
   poolInfo: InfinityCLPoolInfo
 }
@@ -90,7 +71,7 @@ const transformInfinityCLPositionToTableRow = (
   pool: any,
   price0Usd: number | undefined,
   price1Usd: number | undefined,
-  aprData: { lpApr: number; cakeApr: { value: number } | null; merklApr: number },
+  aprData: AprData,
   t: (key: string) => string,
 ) => {
   // Calculate position amounts
@@ -114,78 +95,25 @@ const transformInfinityCLPositionToTableRow = (
       ? new BN(amount0.toExact()).times(price0Usd).plus(new BN(amount1.toExact()).times(price1Usd)).toNumber()
       : 0
 
-  // TickLimits
-  const ticksLimit: {
-    [bound in Bound]: number | undefined
-  } = {
-    [Bound.LOWER]: position.tickSpacing ? nearestUsableTick(TickMath.MIN_TICK, position.tickSpacing) : undefined,
-    [Bound.UPPER]: position.tickSpacing ? nearestUsableTick(TickMath.MAX_TICK, position.tickSpacing) : undefined,
-  }
+  // TickLimits using utility function
+  const ticksLimit = calculateTickLimits(position.tickSpacing)
 
-  const isTickAtLimit = {
-    [Bound.LOWER]: tickLower && ticksLimit.LOWER ? tickLower <= ticksLimit.LOWER : false,
-    [Bound.UPPER]: tickUpper && ticksLimit.UPPER ? tickUpper >= ticksLimit.UPPER : false,
-  }
+  // Get tick at limit status using utility function
+  const isTickAtLimit = getTickAtLimitStatus(position.tickLower, position.tickUpper, ticksLimit)
 
-  const outOfRange = pool && (pool.tickCurrent < position.tickLower || pool.tickCurrent >= position.tickUpper)
-  const removed = position.liquidity === 0n
+  // Position status using utility functions
+  const outOfRange = isTickBasedPositionOutOfRange(pool, position.tickLower, position.tickUpper)
+  const removed = isTickBasedPositionRemoved(position.liquidity)
 
-  // Calculate and format price range using V3 SDK
-  const minPrice = getTickPrice(position.tickLower, poolInfo.token0, poolInfo.token1)
-  const maxPrice = getTickPrice(position.tickUpper, poolInfo.token0, poolInfo.token1)
-
-  // Format prices with special handling for tick limits
-  const minPriceFormatted = isTickAtLimit.LOWER ? '0' : formatAmount(minPrice, { notation: 'standard' }) || '-'
-  const maxPriceFormatted = isTickAtLimit.UPPER ? '∞' : formatAmount(maxPrice, { notation: 'standard' }) || '-'
-  let minPercentage = ''
-  let maxPercentage = ''
-  let rangePosition = 50
-  let showPercentages = false
-
-  // If position if full range, set range position to 50
-  if (!removed && isTickAtLimit.LOWER && isTickAtLimit.UPPER) {
-    rangePosition = 50
-    showPercentages = true
-    minPercentage = '0%'
-    maxPercentage = '100%'
-  } else if (
-    pool?.token0Price &&
-    !removed &&
-    position.tickLower > TickMath.MIN_TICK &&
-    position.tickUpper < TickMath.MAX_TICK
-  ) {
-    // Only calculate percentages if prices are not at limits and pool exists
-    try {
-      const currentPrice = parseFloat(pool.token0Price.toSignificant(6))
-
-      if (
-        currentPrice > 0 &&
-        maxPrice > minPrice &&
-        Number.isFinite(minPrice) &&
-        Number.isFinite(maxPrice) &&
-        Number.isFinite(currentPrice)
-      ) {
-        const minPercent = ((minPrice - currentPrice) / currentPrice) * 100
-        const maxPercent = ((maxPrice - currentPrice) / currentPrice) * 100
-
-        if (
-          // Only show percentages if they're reasonable finite values
-          Number.isFinite(minPercent) &&
-          Number.isFinite(maxPercent) &&
-          Math.abs(minPercent) < 10000 &&
-          Math.abs(maxPercent) < 10000
-        ) {
-          minPercentage = formatPercentage(minPercent)
-          maxPercentage = formatPercentage(maxPercent)
-          rangePosition = Math.max(0, Math.min(100, ((currentPrice - minPrice) / (maxPrice - minPrice)) * 100))
-          showPercentages = true
-        }
-      }
-    } catch (error) {
-      // If any calculation fails, just show the price range without percentages
-      console.warn('Price calculation error:', error)
-    }
-  }
+  // Use utility function for price range calculation
+  const priceRangeData = calculateTickBasedPriceRange(
+    position.tickLower,
+    position.tickUpper,
+    poolInfo.token0,
+    poolInfo.token1,
+    pool,
+    isTickAtLimit,
+  )
 
   const tokenInfo = (
     <FlexGap flexDirection="column" gap="4px">
@@ -272,7 +200,7 @@ const transformInfinityCLPositionToTableRow = (
     </Flex>
   )
 
-  const totalApr = Number(aprData.lpApr || 0) + Number(aprData.cakeApr?.value || 0) + (aprData.merklApr || 0)
+  const totalApr = calculateTotalApr(convertAprDataToNumbers(aprData))
   const aprDisplay = (
     <Flex flexDirection="column" alignItems="flex-start">
       <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
@@ -283,14 +211,14 @@ const transformInfinityCLPositionToTableRow = (
 
   const priceRange = (
     <PriceRangeDisplay
-      minPrice={minPriceFormatted}
-      maxPrice={maxPriceFormatted}
-      minPercentage={minPercentage}
-      maxPercentage={maxPercentage}
-      rangePosition={rangePosition}
+      minPrice={priceRangeData.minPriceFormatted}
+      maxPrice={priceRangeData.maxPriceFormatted}
+      minPercentage={priceRangeData.minPercentage}
+      maxPercentage={priceRangeData.maxPercentage}
+      rangePosition={priceRangeData.rangePosition}
       outOfRange={outOfRange}
       removed={removed}
-      showPercentages={showPercentages}
+      showPercentages={priceRangeData.showPercentages}
     />
   )
 
@@ -354,15 +282,8 @@ const InfinityCLPositionRow: React.FC<{
   // This is where the magic happens - individual APR hook call for each position
   const aprData = useInfinityCLPositionApr(poolInfo, position)
 
-  // Memoize the converted APR data separately to avoid recreating the object
-  const convertedAprData = useMemo(
-    () => ({
-      lpApr: parseFloat(aprData.lpApr || '0'),
-      cakeApr: { value: parseFloat(aprData.cakeApr?.value || '0') },
-      merklApr: aprData.merklApr || 0,
-    }),
-    [aprData.lpApr, aprData.cakeApr?.value, aprData.merklApr],
-  )
+  // Use utility function to convert APR data
+  const convertedAprData = useMemo(() => convertAprDataToNumbers(aprData), [aprData])
 
   // Transform the data with the fetched APR
   const transformedData = useMemo(() => {
