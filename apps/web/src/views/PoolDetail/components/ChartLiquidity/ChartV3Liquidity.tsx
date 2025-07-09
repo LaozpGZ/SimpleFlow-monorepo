@@ -1,11 +1,11 @@
 import { useTheme } from '@pancakeswap/hooks'
 import { CurrencyAmount, Token } from '@pancakeswap/swap-sdk-core'
 import { Box, Flex, Spinner } from '@pancakeswap/uikit'
-import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { FeeAmount, Pool, TICK_SPACINGS, TickMath } from '@pancakeswap/v3-sdk'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 
+import { formatAmount } from 'utils/formatInfoNumbers'
 import { maxUint128 } from 'viem'
 import { TickProcessed } from 'views/V3Info/data/pool/tickData'
 import { usePoolTickData } from 'views/V3Info/hooks'
@@ -169,7 +169,7 @@ export const ChartV3Liquidity: React.FC<ChartLiquidityProps> = ({ address, poolI
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: '#9383B4' }}
-            tickFormatter={(value) => formatNumber(value, { maxDecimalDisplayDigits: 2 })}
+            tickFormatter={(value) => formatAmount(value, { precision: 6 }) ?? Intl.NumberFormat('en-US').format(value)}
           />
           <YAxis
             axisLine={false}
