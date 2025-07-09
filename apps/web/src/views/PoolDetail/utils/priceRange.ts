@@ -17,7 +17,7 @@ export const getTickPrice = (tick: number, token0: any, token1: any): number => 
     if (token0 && token1) {
       const price = tickToPrice(token0, token1, tick)
       // Use higher precision (18 significant digits) to avoid precision loss for small numbers
-      return parseFloat(price.toSignificant(18))
+      return parseFloat(price.toFixed(18))
     }
 
     // Fallback
@@ -103,8 +103,6 @@ export const calculateTickBasedPriceRange = (
   const minPrice = getTickPrice(tickLower, token0, token1)
   const maxPrice = getTickPrice(tickUpper, token0, token1)
 
-  console.log('minPrice, maxPrice', minPrice, maxPrice)
-
   // Format prices with special handling for tick limits
   // Use toString() to avoid precision loss, as PriceRangeDisplay will format inside the component
   minPriceFormatted = isTickAtLimit.LOWER ? '0' : minPrice.toString() || '-'
@@ -122,8 +120,8 @@ export const calculateTickBasedPriceRange = (
     // Calculate percentages only if prices are not at limits and pool exists
     try {
       // Use higher precision (18 significant digits) to avoid precision loss for small numbers
-      const currentPrice = parseFloat(pool.token0Price.toSignificant(18))
-      currentPriceString = pool.token0Price.toSignificant(18) // Store the current price string with higher precision
+      const currentPrice = parseFloat(pool.token0Price.toFixed(18))
+      currentPriceString = pool.token0Price.toFixed(18) // Store the current price string with higher precision
 
       if (
         currentPrice > 0 &&
@@ -192,8 +190,8 @@ export const calculateBinBasedPriceRange = (
 
     if (minPrice && maxPrice) {
       // Check for extreme values and format accordingly - use higher precision for small numbers
-      const minPriceFloat = parseFloat(minPrice.toSignificant(18))
-      const maxPriceFloat = parseFloat(maxPrice.toSignificant(18))
+      const minPriceFloat = parseFloat(minPrice.toFixed(18))
+      const maxPriceFloat = parseFloat(maxPrice.toFixed(18))
 
       // Show '0' for extremely low prices and '∞' for extremely high prices
       if (minPriceFloat === 0 || !Number.isFinite(minPriceFloat)) {
@@ -212,9 +210,9 @@ export const calculateBinBasedPriceRange = (
       if (currentPrice) {
         try {
           // Use higher precision (18 significant digits) to avoid precision loss for small numbers
-          const currentPriceFloat = parseFloat(currentPrice.toSignificant(18))
-          const minPriceFloat = parseFloat(minPrice.toSignificant(18))
-          const maxPriceFloat = parseFloat(maxPrice.toSignificant(18))
+          const currentPriceFloat = parseFloat(currentPrice.toFixed(18))
+          const minPriceFloat = parseFloat(minPrice.toFixed(18))
+          const maxPriceFloat = parseFloat(maxPrice.toFixed(18))
 
           if (
             currentPriceFloat > 0 &&
@@ -255,6 +253,6 @@ export const calculateBinBasedPriceRange = (
     maxPercentage,
     rangePosition,
     showPercentages,
-    currentPrice: currentPrice?.toSignificant(18), // Return the calculated current price with higher precision
+    currentPrice: currentPrice?.toFixed(18),
   }
 }
