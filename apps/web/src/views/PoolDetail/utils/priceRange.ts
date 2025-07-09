@@ -104,9 +104,12 @@ export const calculateTickBasedPriceRange = (
   const minPrice = getTickPrice(tickLower, token0, token1)
   const maxPrice = getTickPrice(tickUpper, token0, token1)
 
+  console.log('minPrice, maxPrice', minPrice, maxPrice)
+
   // Format prices with special handling for tick limits
-  minPriceFormatted = isTickAtLimit.LOWER ? '0' : formatAmount(minPrice) || '-'
-  maxPriceFormatted = isTickAtLimit.UPPER ? '∞' : formatAmount(maxPrice) || '-'
+  // Use toString() to avoid precision loss, as PriceRangeDisplay will format inside the component
+  minPriceFormatted = isTickAtLimit.LOWER ? '0' : minPrice.toString() || '-'
+  maxPriceFormatted = isTickAtLimit.UPPER ? '∞' : maxPrice.toString() || '-'
 
   // Handle full range positions
   if (isTickAtLimit.LOWER && isTickAtLimit.UPPER) {

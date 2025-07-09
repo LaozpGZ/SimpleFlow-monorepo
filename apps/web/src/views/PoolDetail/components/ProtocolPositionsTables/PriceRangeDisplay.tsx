@@ -1,4 +1,5 @@
 import { Flex, FlexGap, Text } from '@pancakeswap/uikit'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import styled from 'styled-components'
 
 const PriceRangeContainer = styled.div`
@@ -174,8 +175,8 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
   const hasOverflow = isOverflowLeft || isOverflowRight
 
   // Calculate display values and positions
-  let displayMinPrice = minPrice
-  let displayMaxPrice = maxPrice
+  const displayMinPrice = minPrice !== '0' ? formatNumber(minPrice, { maxDecimalDisplayDigits: 6 }) : '0'
+  const displayMaxPrice = maxPrice !== '∞' ? formatNumber(maxPrice, { maxDecimalDisplayDigits: 6 }) : '∞'
 
   let currentPriceLinePosition = rangePosition
   let percentageLeftPosition = 0
@@ -195,10 +196,6 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
 
   if (hasOverflow && currentPriceNum !== null) {
     if (isOverflowLeft) {
-      // Current price is left of min price
-      displayMinPrice = minPrice
-      displayMaxPrice = maxPrice
-
       const totalRange = maxPriceNum - currentPriceNum
       const graySegmentWidth = ((minPriceNum - currentPriceNum) / totalRange) * 100
 
@@ -229,10 +226,6 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
     }
 
     if (isOverflowRight) {
-      // Current price is right of max price
-      displayMinPrice = minPrice
-      displayMaxPrice = maxPrice
-
       const totalRange = currentPriceNum - minPriceNum
       const coloredSegmentWidth = ((maxPriceNum - minPriceNum) / totalRange) * 100
 

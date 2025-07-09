@@ -11,26 +11,6 @@ import { BasicChartLiquidityProps } from './type'
 const ZOOM_INTERVAL = 20
 const DEFAULT_ZOOM_LEVEL = 14
 
-const CustomBar = ({
-  x,
-  y,
-  width,
-  height,
-  fill,
-}: {
-  x: number
-  y: number
-  width: number
-  height: number
-  fill: string
-}) => {
-  return (
-    <g>
-      <rect x={x} y={y} fill={fill} width={width} height={height} rx="16" />
-    </g>
-  )
-}
-
 export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolInfo, liquidityChartData }) => {
   const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM_LEVEL)
   const [zoomInDisabled, setZoomInDisabled] = useState(false)
