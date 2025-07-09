@@ -1,8 +1,9 @@
 import { usePrivy } from '@privy-io/react-auth'
+import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi'
 import { useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
 import { PropsWithChildren, useEffect } from 'react'
-import { type WagmiProviderProps, WagmiProvider } from 'wagmi'
+import { type WagmiProviderProps } from 'wagmi'
 
 const lastWalletRecoveryAtom = atomWithStorage('lastWalletRecovery', 0)
 
@@ -15,19 +16,19 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
       createWallet()
     }
 
-    if (user?.wallet?.recoveryMethod === 'privy') {
-      const now = Date.now()
-      const oneWeek = 7 * 24 * 60 * 60 * 1000
+    // if (user?.wallet?.recoveryMethod === 'privy') {
+    //   const now = Date.now()
+    //   const oneWeek = 7 * 24 * 60 * 60 * 1000
 
-      if (now - lastRecovery > oneWeek) {
-        setWalletRecovery()
-        setLastRecovery(now)
-      }
-    }
+    //   if (now - lastRecovery > oneWeek) {
+    //     setWalletRecovery()
+    //     setLastRecovery(now)
+    //   }
+    // }
     // if (user?.mfaMethods?.length === 0) {
     //   enrollInMfa(true)
     // }
   }, [ready, user, authenticated, lastRecovery, setLastRecovery])
 
-  return <WagmiProvider {...props}>{children}</WagmiProvider>
+  return <PrivyWagmiProvider {...props}>{children}</PrivyWagmiProvider>
 }
