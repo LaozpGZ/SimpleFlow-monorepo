@@ -60,7 +60,6 @@ interface TransformedV3Position {
     tokenId: bigint
     liquidityUSD: number
   }
-  totalEarnings: React.ReactElement
   liquidityUSD: number
   totalApr: number
 }
@@ -174,7 +173,7 @@ const transformV3PositionToTableRow = (
   t: (key: string) => string,
 ) => {
   const positionData = positionsData?.find((p) => Number(p.tokenId) === Number(position.tokenId))
-
+  console.log('position vs positionData(singular)', position, positionData)
   let liquidityUSD = 0
 
   if (positionData) {
@@ -427,7 +426,6 @@ const transformV3PositionToTableRow = (
       tokenId: position.tokenId,
       liquidityUSD,
     },
-    totalEarnings: earnings,
     liquidityUSD,
     totalApr,
   }
@@ -501,6 +499,10 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
     poolInfo.feeTier,
     filteredV3Data,
   )
+
+  console.log('V3PositionsTable Original PositionsData', {
+    positionsData,
+  })
 
   const [loading, setLoading] = useState(false)
 

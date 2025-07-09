@@ -61,24 +61,14 @@ export const ChartToolTip: React.FC<CustomToolTipProps> = ({
     return token0Price * (tvlToken0 || 0) + token1Price * (tvlToken1 || 0)
   }, [token0Price, token1Price, tvlToken0, tvlToken1])
 
-  const token0USD = useMemo(() => {
-    if (!token0Price) return 0
-    return token0Price * (tvlToken0 || 0)
-  }, [token0Price, tvlToken0])
-
-  const token1USD = useMemo(() => {
-    if (!token1Price) return 0
-    return token1Price * (tvlToken1 || 0)
-  }, [token1Price, tvlToken1])
-
   // Safely convert currentPrice to number and handle edge cases
   const getDisplayPrice = () => {
     if (currentPrice && typeof currentPrice === 'number' && !Number.isNaN(currentPrice)) {
-      return formatAmount(currentPrice, { precision: 2 })
+      return formatAmount(currentPrice, { precision: 6 })
     }
     if (price0) {
       const numPrice = Number(price0)
-      return !Number.isNaN(numPrice) ? numPrice.toFixed(2) : '0'
+      return !Number.isNaN(numPrice) ? formatAmount(numPrice, { precision: 6 }) : '0'
     }
     return '0'
   }
@@ -105,7 +95,7 @@ export const ChartToolTip: React.FC<CustomToolTipProps> = ({
               {symbol0} {t('Locked')}
             </Text>
           </Flex>
-          <Text bold>{formatPoolDetailFiatNumber(token0USD)}</Text>
+          <Text bold>{formatAmount(tvlToken0)}</Text>
         </TooltipRow>
       ) : (
         <TooltipRow>
@@ -115,7 +105,7 @@ export const ChartToolTip: React.FC<CustomToolTipProps> = ({
               {symbol1} {t('Locked')}
             </Text>
           </Flex>
-          <Text bold>{formatPoolDetailFiatNumber(token1USD)}</Text>
+          <Text bold>{formatAmount(tvlToken1)}</Text>
         </TooltipRow>
       )}
     </TooltipCard>

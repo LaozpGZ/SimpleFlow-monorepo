@@ -1,9 +1,11 @@
 import { useTheme } from '@pancakeswap/hooks'
 import { CurrencyAmount, Token } from '@pancakeswap/swap-sdk-core'
 import { Box, Flex, Spinner } from '@pancakeswap/uikit'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { FeeAmount, Pool, TICK_SPACINGS, TickMath } from '@pancakeswap/v3-sdk'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+
 import { maxUint128 } from 'viem'
 import { TickProcessed } from 'views/V3Info/data/pool/tickData'
 import { usePoolTickData } from 'views/V3Info/hooks'
@@ -13,26 +15,7 @@ import { ActionButton, ControlsWrapper } from './styled'
 import type { ChartLiquidityProps, LiquidityChartData } from './type'
 
 const ZOOM_INTERVAL = 20
-
-const CustomBar = ({
-  x,
-  y,
-  width,
-  height,
-  fill,
-}: {
-  x: number
-  y: number
-  width: number
-  height: number
-  fill: string
-}) => {
-  return (
-    <g>
-      <rect x={x} y={y} fill={fill} width={width} height={height} rx="16" />
-    </g>
-  )
-}
+const DEFAULT_ZOOM_LEVEL = 14
 
 export const ChartV3Liquidity: React.FC<ChartLiquidityProps> = ({ address, poolInfo }) => {
   // tick data tracking
@@ -41,9 +24,11 @@ export const ChartV3Liquidity: React.FC<ChartLiquidityProps> = ({ address, poolI
   const { theme } = useTheme()
 
   const [loading, setLoading] = useState(false)
-  const [zoomLevel, setZoomLevel] = useState(0)
+  const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM_LEVEL)
   const [zoomInDisabled, setZoomInDisabled] = useState(false)
   const [formattedData, setFormattedData] = useState<LiquidityChartData[] | undefined>()
+
+  const [activeIndex, setActiveIndex] = useState<number | undefined>()
 
   const handleZoomIn = useCallback(() => {
     if (!zoomInDisabled) {
@@ -170,27 +155,32 @@ export const ChartV3Liquidity: React.FC<ChartLiquidityProps> = ({ address, poolI
             left: 20,
             bottom: 60,
           }}
+          onMouseMove={(state) => {
+            if (state?.activePayload?.[0]?.payload) {
+              setActiveIndex(state.activeTooltipIndex)
+            }
+          }}
+          onMouseLeave={() => {
+            setActiveIndex(undefined)
+          }}
         >
           <XAxis
             dataKey="price0"
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: '#9383B4' }}
-            tickFormatter={(value) => value.toFixed(2)}
+            tickFormatter={(value) => formatNumber(value, { maxDecimalDisplayDigits: 2 })}
           />
           <YAxis
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: '#9383B4' }}
-            tickFormatter={(value) => {
-              if (value >= 1000000) {
-                return `${(value / 1000000).toFixed(2)}M`
-              }
-              if (value >= 1000) {
-                return `${(value / 1000).toFixed(2)}K`
-              }
-              return value.toFixed(2)
-            }}
+            tickFormatter={(value) =>
+              Intl.NumberFormat('en-US', {
+                notation: 'compact',
+                compactDisplay: 'short',
+              }).format(value / 1e18)
+            }
             orientation="right"
           />
           <Tooltip
@@ -206,12 +196,14 @@ export const ChartV3Liquidity: React.FC<ChartLiquidityProps> = ({ address, poolI
             )}
             cursor={{ fill: 'transparent' }}
           />
-          <Bar dataKey="activeLiquidity" fill={theme.colors.primary} isAnimationActive={false} shape={CustomBar}>
-            {zoomedData?.map((entry) => {
+          <Bar dataKey="activeLiquidity" fill={theme.colors.primary} isAnimationActive={false} radius={16}>
+            {zoomedData?.map((entry, index) => {
               return (
                 <Cell
                   key={`cell-${entry.index}`}
                   fill={entry.isCurrent ? theme.colors.failure : theme.colors.primary}
+                  fillOpacity={activeIndex === undefined ? 1 : activeIndex === index ? 1 : 0.3}
+                  style={{ transition: 'fill-opacity 0.2s ease' }}
                 />
               )
             })}
