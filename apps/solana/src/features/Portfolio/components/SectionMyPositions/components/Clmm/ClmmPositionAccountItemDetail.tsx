@@ -35,6 +35,7 @@ type DetailProps = {
   rewardInfos: { mint: ApiV3Token; amount: string; amountUSD: string }[]
   onHarvest: (props: { onSend?: () => void; onFinally?: () => void }) => void
   breakdownRewardInfo: BreakdownRewardInfo
+  isRewardLoading: boolean
 }
 
 const emptyObj = {}
@@ -52,7 +53,8 @@ export default function ClmmPositionAccountItemDetail({
   rewardInfos,
   onTimeBasisChange,
   onHarvest,
-  breakdownRewardInfo
+  breakdownRewardInfo,
+  isRewardLoading
 }: DetailProps) {
   const { isOpen: isLoading, onOpen: onSend, onClose: onFinally } = useDisclosure()
   const { t } = useTranslation()
@@ -269,6 +271,7 @@ export default function ClmmPositionAccountItemDetail({
             />
             <PendingYield
               isLoading={isLoading}
+              isRewardLoading={isRewardLoading}
               hasReward={hasReward}
               pendingYield={formatCurrency(totalPendingYield, { symbol: '$', decimalPlaces: 2 })}
               rewardInfos={rewardInfos}

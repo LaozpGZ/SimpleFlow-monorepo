@@ -1,9 +1,9 @@
 import { Flex, HStack, Text } from '@chakra-ui/react'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { useTranslation } from '@pancakeswap/localization'
+import { Skeleton } from '@pancakeswap/uikit'
 import Button from '@/components/Button'
 import TokenAvatar from '@/components/TokenAvatar'
-import useResponsive from '@/hooks/useResponsive'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'
 import { getMintSymbol } from '@/utils/token'
@@ -18,6 +18,7 @@ type PendingYieldProps = {
   hasReward?: boolean
   rewardInfos: { mint: ApiV3Token; amount: string; amountUSD: string }[]
   breakdownRewardInfo: BreakdownRewardInfo
+  isRewardLoading?: boolean
   onHarvest: () => void
 }
 
@@ -27,52 +28,15 @@ export default function PendingYield({
   pendingYield,
   rewardInfos,
   breakdownRewardInfo,
+  isRewardLoading,
   onHarvest
 }: PendingYieldProps) {
   const { t } = useTranslation()
   const rewardBreakdownMode = useAppStore((s) => s.rewardBreakdownMode)
-  const { isTablet } = useResponsive()
   const column = 'repeat(auto-fit, minmax(min(100%, 155px), 1fr))'
-  return (
-    <Flex flex={1} justify="space-around" w="full" fontSize="sm" flexDirection="column" gap={3} p={[4, 0]}>
-      <HStack justifyContent="space-between">
-        <HStack>
-          <Text color={colors.textSecondary} whiteSpace="nowrap">
-            {t('Pending Yield')}
-          </Text>
-          <Text color={colors.textPrimary} whiteSpace="nowrap">
-            ({pendingYield ?? '$0'})
-          </Text>
-          {breakdownRewardInfo.rewards.length > 0 ? <RewardBreakdownSwitch /> : null}
-        </HStack>
-        <Tooltip
-          label={
-            hasReward
-              ? t('Harvest Rewards')
-              : t('No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.')
-          }
-        >
-          <Button
-            isLoading={isLoading}
-            isDisabled={!hasReward}
-            onClick={onHarvest}
-            width={['69px']}
-            height="9"
-            borderRadius="xl"
-            size="xs"
-            px={1}
-            fontSize="md"
-            variant="outline"
-            style={{
-              borderColor: colors.primary60,
-              color: colors.primary60
-            }}
-          >
-            {t('Harvest')}
-          </Button>
-        </Tooltip>
-      </HStack>
 
+  const rewards = (
+    <>
       {rewardBreakdownMode === 'Aggr' || !breakdownRewardInfo.rewards.length ? (
         <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
           {rewardInfos.map((r, index) => (
@@ -179,6 +143,56 @@ export default function PendingYield({
             </>
           ) : null}
         </>
+      )}
+    </>
+  )
+
+  return (
+    <Flex flex={1} justify="space-around" w="full" fontSize="sm" flexDirection="column" gap={3} p={[4, 0]}>
+      <HStack justifyContent="space-between">
+        <HStack>
+          <Text color={colors.textSecondary} whiteSpace="nowrap">
+            {t('Pending Yield')}
+          </Text>
+          <Text color={colors.textPrimary} whiteSpace="nowrap">
+            ({pendingYield ?? '$0'})
+          </Text>
+          {breakdownRewardInfo.rewards.length > 0 ? <RewardBreakdownSwitch /> : null}
+        </HStack>
+        <Tooltip
+          label={
+            hasReward
+              ? t('Harvest Rewards')
+              : t('No rewards to harvest yet. Check back later — your earnings will grow as users trade in this pool.')
+          }
+        >
+          <Button
+            isLoading={isLoading}
+            isDisabled={!hasReward}
+            onClick={onHarvest}
+            width={['69px']}
+            height="9"
+            borderRadius="xl"
+            size="xs"
+            px={1}
+            fontSize="md"
+            variant="outline"
+            style={{
+              borderColor: colors.primary60,
+              color: colors.primary60
+            }}
+          >
+            {t('Harvest')}
+          </Button>
+        </Tooltip>
+      </HStack>
+      {isRewardLoading ? (
+        <Flex display="grid" gridTemplateColumns={column} columnGap={2} rowGap={2}>
+          <Skeleton height="20px" width="100%" />
+          <Skeleton height="20px" width="100%" />
+        </Flex>
+      ) : (
+        rewards
       )}
     </Flex>
   )

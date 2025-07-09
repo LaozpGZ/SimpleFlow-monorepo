@@ -219,7 +219,7 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
 
   const shouldFetch = Boolean(raydium && poolInfo && position)
 
-  const { data, error, mutate } = useSWR(
+  const { data, error, mutate, isLoading } = useSWR(
     shouldFetch ? `clmm-reward-info-${poolInfo?.id}-${position.nftMint.toBase58()}` : null,
     () => simulation(),
     {
@@ -267,6 +267,9 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
   }, [poolInfo, tokenPrices, totalRewards])
 
   const isEmptyReward = useMemo(() => {
+    // loading
+    if (!rewards || !tokenFees || !tokenFees.tokenFeeAmountA || !tokenFees.tokenFeeAmountB) return false
+
     return (
       rewards.filter((r) => r.gt(new BN(0))).length <= 0 &&
       !tokenFees.tokenFeeAmountA?.gt(new BN(0)) &&
@@ -384,6 +387,7 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
     ...tokenFees,
     breakdownRewardInfo,
     rewards,
+    isLoading,
     totalPendingYield,
     allRewardInfos
   }

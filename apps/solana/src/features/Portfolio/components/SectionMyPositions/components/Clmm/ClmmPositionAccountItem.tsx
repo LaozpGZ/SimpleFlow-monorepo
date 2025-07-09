@@ -77,7 +77,7 @@ export default function ClmmPositionAccountItem({
     chainTimeOffsetMs: chainTimeOffset
   })
 
-  const { totalPendingYield, isEmptyReward, allRewardInfos, breakdownRewardInfo } = useClmmRewardInfoFromSimulation({
+  const { totalPendingYield, isEmptyReward, allRewardInfos, breakdownRewardInfo, isLoading } = useClmmRewardInfoFromSimulation({
     poolInfo,
     initRpcPoolData,
     position,
@@ -219,6 +219,7 @@ export default function ClmmPositionAccountItem({
           baseIn={baseIn}
           rewardInfos={allRewardInfos}
           breakdownRewardInfo={breakdownRewardInfo as BreakdownRewardInfo}
+          isRewardLoading={isLoading}
         />
       )}
       <RemoveLiquidityModal

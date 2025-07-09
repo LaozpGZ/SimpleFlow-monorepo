@@ -40,7 +40,6 @@ import { ClmmLockInfo } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { handleMultiTxRetry } from '@/hooks/toast/retryTx'
 import { getComputeBudgetConfig } from '@/utils/tx/computeBudget'
 import { getClmmKeysFromPoolInfo } from '@/utils/getPoolKeysFromPoolInfo'
-import { debounce, throbounce } from '@/utils/functionMethods'
 import { TxCallbackProps, TxCallbackPropsGeneric } from '../types/tx'
 import { getTxMeta } from './configs/clmm'
 
@@ -594,7 +593,7 @@ export const useClmmStore = createStore<ClmmState>(
       async (props) => {
         return get().removeLiquidityAct(props)
       },
-      1000 / 10,
+      1000 / 25,
       {
         leading: true
       }
