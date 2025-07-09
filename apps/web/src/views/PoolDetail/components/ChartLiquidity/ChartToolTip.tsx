@@ -58,8 +58,13 @@ export const ChartToolTip: React.FC<CustomToolTipProps> = ({
 
   const totalLiquidityUSD = useMemo(() => {
     if (!token0Price || !token1Price) return 0
-    return token0Price * (tvlToken0 || 0) + token1Price * (tvlToken1 || 0)
-  }, [token0Price, token1Price, tvlToken0, tvlToken1])
+
+    if (currentPrice && price0 && currentPrice > Number(price1)) {
+      return token0Price * (tvlToken0 || 0)
+    }
+
+    return token1Price * (tvlToken1 || 0)
+  }, [currentPrice, price0, price1, token0Price, token1Price, tvlToken0, tvlToken1])
 
   // Safely convert currentPrice to number and handle edge cases
   const getDisplayPrice = () => {
