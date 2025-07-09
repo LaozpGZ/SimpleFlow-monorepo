@@ -1,3 +1,4 @@
+import { ChainId } from '@pancakeswap/chains'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAccount } from 'wagmi'
@@ -22,7 +23,9 @@ export const useClaimGift = ({ onSuccess }: { onSuccess?: () => void }) => {
       const url = `${NEXT_PUBLIC_GIFT_API}/gift/claim`
 
       const requestBody: ClaimGiftRequest = {
-        chainId,
+        // NOTE: hardcode to bsc for now
+        // If support other chains, we need get chainId from API response before claim gift
+        chainId: ChainId.BSC,
         address: account,
         code,
       }

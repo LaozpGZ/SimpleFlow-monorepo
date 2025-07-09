@@ -132,7 +132,14 @@ export const ClaimGiftConfirmView = () => {
       {claimGiftData?.status === GiftApiStatus.SUCCESS ? (
         <CheckmarkCircleIcon color="success" width="40px" />
       ) : (
-        <Button onClick={handleClaim} width="100%" disabled={!code || isPending} isLoading={isPending}>
+        <Button
+          onClick={() => {
+            handleClaim()
+          }}
+          width="100%"
+          disabled={!code || isPending}
+          isLoading={isPending}
+        >
           {isPending ? t('Claiming...') : t('Claim')}
         </Button>
       )}

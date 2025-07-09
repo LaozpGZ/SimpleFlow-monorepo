@@ -1,3 +1,4 @@
+import { ChainId } from '@pancakeswap/chains'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
@@ -104,7 +105,8 @@ export const useGetGiftInfo = () => {
 }
 
 export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
-  const { chainId } = useActiveChainId()
+  // NOTE: hardcode to bsc for now
+  const chainId = ChainId.BSC
 
   const selectGiftInfo = useGiftInfoSelector()
 

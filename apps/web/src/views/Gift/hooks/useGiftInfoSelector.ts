@@ -1,6 +1,6 @@
+import { ChainId } from '@pancakeswap/chains'
 import { CurrencyAmount, Token } from '@pancakeswap/swap-sdk-core'
 import { useAllTokens } from 'hooks/Tokens'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useCallback } from 'react'
 import { checksumAddress } from 'utils/checksumAddress'
@@ -8,9 +8,9 @@ import { zeroAddress } from 'viem'
 import { GiftInfo, GiftInfoResponse } from '../types'
 
 export default function useGiftInfoSelector() {
-  const { chainId } = useActiveChainId()
+  const chainId = ChainId.BSC
   const native = useNativeCurrency(chainId)
-  const allTokens = useAllTokens()
+  const allTokens = useAllTokens(chainId)
 
   return useCallback(
     (gift?: GiftInfoResponse): GiftInfo | null => {
