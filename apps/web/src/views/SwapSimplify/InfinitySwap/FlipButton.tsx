@@ -15,6 +15,7 @@ import { keyframes, styled } from 'styled-components'
 
 import { useTheme } from '@pancakeswap/hooks'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { LottieRefCurrentProps } from 'lottie-react'
 
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -78,7 +79,7 @@ const DesktopFlipButton: React.FC<{ disabled?: boolean; onFlip: () => Promise<vo
   onFlip,
   isSwitching,
 }) => {
-  const lottieRef = useRef<any>(null)
+  const lottieRef = useRef<LottieRefCurrentProps | null>(null)
   const flipButtonRef = useRef<HTMLDivElement>(null)
   const { isDark } = useTheme()
   const animationData = useMemo(() => (isDark ? ArrowDark : ArrowLight), [isDark])
