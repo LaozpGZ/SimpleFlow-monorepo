@@ -21,13 +21,14 @@ import { InfinityBinPositionDetail, POSITION_STATUS } from 'state/farmsV4/state/
 import { InfinityBinPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityBinPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
-import { PositionsTable } from '../Tabs/PositionsTable'
 import { InfinityBinEarningsCell } from './PoolEarningsCells'
+import { PositionsTable } from './PositionsTable'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
@@ -510,7 +511,7 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
             ? filteredPositions.reduce((sum, pos) => sum + (pos.totalApr || 0), 0) / filteredPositions.length
             : 0
         }
-        totalEarnings={formatDollarAmount(rewardsUSD, 2, false)}
+        totalEarnings={formatPoolDetailFiatNumber(rewardsUSD)}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>

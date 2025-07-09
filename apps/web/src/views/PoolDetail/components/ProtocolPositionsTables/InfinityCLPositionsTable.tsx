@@ -21,13 +21,14 @@ import { InfinityCLPositionDetail } from 'state/farmsV4/state/accountPositions/t
 import { InfinityCLPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityCLPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton } from '../styles'
-import { PositionsTable } from '../Tabs/PositionsTable'
 import { InfinityCLEarningsCell } from './PoolEarningsCells'
+import { PositionsTable } from './PositionsTable'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
@@ -316,7 +317,6 @@ const transformInfinityCLPositionToTableRow = (
       protocol: Protocol.InfinityCLAMM,
       tokenId: position.tokenId,
     },
-    totalEarnings: earnings,
     liquidityUSD,
     totalApr,
   }
@@ -473,7 +473,7 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
       <PositionsTable
         poolInfo={poolInfo}
         totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
-        totalEarnings={formatDollarAmount(rewardsUSD, 2, false)}
+        totalEarnings={formatPoolDetailFiatNumber(rewardsUSD)}
         totalApr={
           filteredPositions.length > 0
             ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length

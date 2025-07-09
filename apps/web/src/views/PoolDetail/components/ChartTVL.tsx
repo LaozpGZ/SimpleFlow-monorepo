@@ -99,7 +99,7 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
         >
           <defs>
             <linearGradient id="colorGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor={theme.colors.primary} stopOpacity={0.8} />
+              <stop offset="0%" stopColor={theme.colors.primary} stopOpacity={1} />
               <stop offset="100%" stopColor={theme.colors.primary} stopOpacity={0.1} />
             </linearGradient>
           </defs>

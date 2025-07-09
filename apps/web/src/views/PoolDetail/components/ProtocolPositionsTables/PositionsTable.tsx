@@ -63,7 +63,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
           <LightGreyCard padding="8px 16px" width="max-content" borderRadius="24px">
             <FlexGap gap="16px" alignItems="center">
               <Box>
-                <Text color="textSubtle">{t('Total Earnings')}</Text>
+                <Text color="textSubtle">{t('Total Farm Earnings')}</Text>
                 <Text fontSize="24px" bold>
                   {totalEarnings || '-'}
                 </Text>

@@ -17,6 +17,7 @@ import { currencyId } from 'utils/currencyId'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useFarmsV3BatchHarvest } from 'views/Farms/hooks/v3/useFarmV3Actions'
 import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
+import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
 import { V3PositionActions } from 'views/universalFarms/components/PositionActions/V3PositionActions'
 import { V3UnstakeModalContent } from 'views/universalFarms/components/PositionActions/V3UnstakeModalContent'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
@@ -25,8 +26,8 @@ import { useV3PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton, PrimaryOutlineButton } from '../styles'
-import { PositionsTable } from '../Tabs/PositionsTable'
 import { V3EarningsCell } from './PoolEarningsCells'
+import { PositionsTable } from './PositionsTable'
 import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
@@ -616,7 +617,7 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
             ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
             : 0
         }
-        totalEarnings={formatDollarAmount(earningsBusd, 2, false)}
+        totalEarnings={formatPoolDetailFiatNumber(earningsBusd)}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>

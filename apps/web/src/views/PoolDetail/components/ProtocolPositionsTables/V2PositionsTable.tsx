@@ -13,6 +13,7 @@ import { StableLPDetail, V2LPDetail } from 'state/farmsV4/state/accountPositions
 import { StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { formatPoolDetailFiatNumber } from 'views/PoolDetail/utils'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 import { useV2CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
 import { useV2PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
@@ -20,7 +21,7 @@ import { useV2FarmActions } from 'views/universalFarms/hooks/useV2FarmActions'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton, PrimaryOutlineButton } from '../styles'
-import { PositionsTable } from '../Tabs/PositionsTable'
+import { PositionsTable } from './PositionsTable'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
 interface V2PositionsTableProps {
@@ -169,7 +170,7 @@ const V2PositionWithApr: React.FC<{
       poolInfo={poolInfo}
       totalLiquidityUSD={transformedPosition.liquidityUSD}
       totalApr={transformedPosition.totalApr}
-      totalEarnings={formatDollarAmount(earningsBusd, 2, false)}
+      totalEarnings={formatPoolDetailFiatNumber(earningsBusd)}
       data={[transformedPosition.tableRow]}
       harvestAllButton={harvestAllButton}
       // On row click, navigate to the appropriate V2/Stable page

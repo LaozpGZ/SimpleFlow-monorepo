@@ -106,7 +106,7 @@ export const PoolStatus: React.FC<PoolStatusProps> = ({ poolInfo }) => {
           <AutoColumn gap="lg">
             <Column>
               <Text color="textSubtle" textTransform="uppercase" small bold>
-                {t('total tokens locked (TVL)')}
+                {t('Total Value Locked (TVL)')}
               </Text>
               <AutoRow gap="sm" mt="1px">
                 <Text as="h3" fontSize="24px" fontWeight={600}>
