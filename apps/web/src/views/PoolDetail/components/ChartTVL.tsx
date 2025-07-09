@@ -46,10 +46,10 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
   const [hoverDate, setHoverDate] = useState<string | undefined>()
   const { theme } = useTheme()
 
-  // Calculate total sum of all values
-  const totalSum = useMemo(() => {
+  // Get the latest value
+  const latestValue = useMemo(() => {
     if (!data || data.length === 0) return 0
-    return data.reduce((sum, item) => sum + item.value, 0)
+    return data[data.length - 1].value
   }, [data])
 
   // Get date range for when not hovering
@@ -76,7 +76,7 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
     <>
       <Flex mb="24px" flexDirection="column">
         <Text bold fontSize={24}>
-          {formatDollarAmount(hoverValue ?? totalSum)}
+          {formatDollarAmount(hoverValue ?? latestValue)}
         </Text>
         <Text small color="secondary">
           {hoverValue ? `${dayjs(hoverDate).format('MMM D, YYYY')} (UTC)` : `${dateRange} (UTC)`}
