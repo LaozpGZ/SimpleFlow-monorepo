@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, Flex, RowBetween, Spinner, Text } from '@pancakeswap/uikit'
+import { Box, Button, CheckmarkCircleIcon, Flex, RowBetween, Spinner, Text } from '@pancakeswap/uikit'
 import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { Card } from '@pancakeswap/widgets-internal'
 import Divider from 'components/Divider'
@@ -9,6 +9,7 @@ import { useContext } from 'react'
 import { useCancelGift } from '../hooks/useCancelGift'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
+import { GiftStatus } from '../types'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 import { GiftStatusTag } from './GiftStatusTag'
 
@@ -16,9 +17,12 @@ export const CancelGiftConfirmView = () => {
   const { codeHash } = useContext(CancelGiftContext)
   const { t } = useTranslation()
 
-  const { cancelGift, isLoading: isLoadingCancelGift } = useCancelGift()
+  const { cancelGift, isLoading: isLoadingCancelGift, txHash, error } = useCancelGift()
 
   const { data: giftInfo, isLoading: isLoadingGiftInfo } = useGetGiftByCodeHash({ codeHash })
+
+  // Check if cancel was successful (transaction completed and has hash)
+  const isCancelSuccessful = !isLoadingCancelGift && !!txHash && !error
 
   if (!giftInfo || isLoadingGiftInfo) {
     return (
@@ -47,7 +51,7 @@ export const CancelGiftConfirmView = () => {
       </SecondaryCard>
       <Card mb="16px">
         <Box mb="16px">
-          <GiftStatusTag status={giftInfo?.status} />
+          <GiftStatusTag status={isCancelSuccessful ? GiftStatus.CANCELLED : giftInfo?.status} />
         </Box>
 
         <RowBetween>
@@ -62,15 +66,21 @@ export const CancelGiftConfirmView = () => {
         </RowBetween>
       </Card>
 
-      <Button
-        onClick={() => cancelGift({ codeHash })}
-        variant="danger"
-        width="100%"
-        disabled={!codeHash || isLoadingCancelGift}
-        isLoading={isLoadingCancelGift}
-      >
-        {isLoadingCancelGift ? t('Cancelling...') : t('Cancel')}
-      </Button>
+      {isCancelSuccessful ? (
+        <Flex width="100%" py="8px" justifyContent="center" alignItems="center">
+          <CheckmarkCircleIcon color="success" width="40px" />
+        </Flex>
+      ) : (
+        <Button
+          onClick={() => cancelGift({ codeHash })}
+          variant="danger"
+          width="100%"
+          disabled={!codeHash || isLoadingCancelGift}
+          isLoading={isLoadingCancelGift}
+        >
+          {isLoadingCancelGift ? t('Cancelling...') : t('Cancel')}
+        </Button>
+      )}
     </>
   )
 }
