@@ -15,7 +15,6 @@ import { keyframes, styled } from 'styled-components'
 
 import { useTheme } from '@pancakeswap/hooks'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
-import { LottieRefCurrentProps } from 'lottie-react'
 
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -109,7 +108,7 @@ const DesktopFlipButton: React.FC<{ disabled?: boolean; onFlip: () => Promise<vo
         flipButtonRef.current.classList.add('switch-animation')
       }
     }
-  }, [disabled, isSwitching])
+  }, [disabled, isSwitching, onFlip])
 
   return (
     <FlipButtonWrapper ref={flipButtonRef} onAnimationEnd={handleAnimationEnd}>
