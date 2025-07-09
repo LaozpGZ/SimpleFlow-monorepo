@@ -6,6 +6,8 @@ import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { PositionMath } from '@pancakeswap/v3-sdk'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber } from 'bignumber.js'
+import { CHAIN_QUERY_NAME } from 'config/chains'
+import { PERSIST_CHAIN_KEY } from 'config/constants'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
 import router from 'next/router'
@@ -639,7 +641,7 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
         }
         // On row click, navigate to the position detail page
         onRowClick={(position) => {
-          router.push(`/liquidity/${position.tokenId}`)
+          router.push(`/liquidity/${position.tokenId}?chain=${CHAIN_QUERY_NAME[chainId]}&${PERSIST_CHAIN_KEY}=1`)
         }}
       />
     </>
