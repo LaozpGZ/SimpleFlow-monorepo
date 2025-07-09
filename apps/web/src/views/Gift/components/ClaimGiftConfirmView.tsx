@@ -68,29 +68,29 @@ export const ClaimGiftConfirmView = () => {
   }
 
   const hasIncludeStarterGas =
-    giftInfo.tokenAmount && giftInfo.tokenAmount.greaterThan(0) && giftInfo.nativeAmount.greaterThan(0)
+    giftInfo.currencyAmount && giftInfo.currencyAmount.greaterThan(0) && giftInfo.nativeCurrencyAmount.greaterThan(0)
 
-  const isOnlyNative = !giftInfo.tokenAmount && giftInfo.nativeAmount.greaterThan(0)
+  const isOnlyNative = !giftInfo.currencyAmount && giftInfo.nativeCurrencyAmount.greaterThan(0)
 
   return (
     <ColumnCenter>
       {hasIncludeStarterGas ? (
         <FlexGap mb="16px" width="100%" flexDirection="column" gap="8px">
-          {giftInfo.tokenAmount && (
+          {giftInfo.currencyAmount && (
             <Card>
               <Box p="8px">
-                <CurrencyAmountGiftDisplay currencyAmount={giftInfo.tokenAmount} />
+                <CurrencyAmountGiftDisplay currencyAmount={giftInfo.currencyAmount} />
               </Box>
             </Card>
           )}
           <Card>
             <Box p="8px">
-              <CurrencyAmountGiftDisplay currencyAmount={giftInfo.nativeAmount} />
+              <CurrencyAmountGiftDisplay currencyAmount={giftInfo.nativeCurrencyAmount} />
             </Box>
           </Card>
         </FlexGap>
       ) : (
-        <TokenAmountSection tokenAmount={isOnlyNative ? giftInfo.nativeAmount : giftInfo.tokenAmount} />
+        <TokenAmountSection tokenAmount={isOnlyNative ? giftInfo.nativeCurrencyAmount : giftInfo.currencyAmount!} />
       )}
 
       {isError && (

@@ -31,15 +31,19 @@ export const CancelGiftConfirmView = () => {
   return (
     <>
       <SecondaryCard mb="16px">
-        {giftInfo.tokenAmount && giftInfo.tokenAmount.greaterThan(0) && (
-          <CurrencyAmountGiftDisplay currencyAmount={giftInfo.tokenAmount} />
+        {giftInfo.currencyAmount && giftInfo.currencyAmount.greaterThan(0) && (
+          <CurrencyAmountGiftDisplay currencyAmount={giftInfo.currencyAmount} />
         )}
 
-        {giftInfo.tokenAmount && giftInfo.tokenAmount.greaterThan(0) && giftInfo.nativeAmount.greaterThan(0) && (
-          <Divider thin style={{ margin: '0 -16px', width: 'calc(100% + 32px)' }} />
-        )}
+        {giftInfo.currencyAmount &&
+          giftInfo.currencyAmount.greaterThan(0) &&
+          giftInfo.nativeCurrencyAmount.greaterThan(0) && (
+            <Divider thin style={{ margin: '0 -16px', width: 'calc(100% + 32px)' }} />
+          )}
 
-        {giftInfo.nativeAmount.greaterThan(0) && <CurrencyAmountGiftDisplay currencyAmount={giftInfo.nativeAmount} />}
+        {giftInfo.nativeCurrencyAmount.greaterThan(0) && (
+          <CurrencyAmountGiftDisplay currencyAmount={giftInfo.nativeCurrencyAmount} />
+        )}
       </SecondaryCard>
       <Card mb="16px">
         <Box mb="16px">
