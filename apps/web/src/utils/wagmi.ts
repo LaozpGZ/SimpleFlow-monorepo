@@ -79,6 +79,19 @@ export const cyberWalletConnector = isCyberWallet()
     })
   : undefined
 
+export const CONNECTORS = [
+  metaMaskConnector,
+  injectedConnector,
+  safe(),
+  coinbaseConnector,
+  walletConnectConnector,
+  bloctoConnector,
+  // ledgerConnector,
+  trustConnector,
+  binanceWeb3WalletConnector(),
+  ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
+]
+
 export function createWagmiConfig() {
   return createConfig({
     chains,
@@ -86,18 +99,7 @@ export function createWagmiConfig() {
     syncConnectedChain: true,
     transports,
     ...CLIENT_CONFIG,
-    connectors: [
-      metaMaskConnector,
-      injectedConnector,
-      safe(),
-      coinbaseConnector,
-      walletConnectConnector,
-      bloctoConnector,
-      // ledgerConnector,
-      trustConnector,
-      binanceWeb3WalletConnector(),
-      ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
-    ],
+    connectors: [...CONNECTORS],
   })
 }
 
