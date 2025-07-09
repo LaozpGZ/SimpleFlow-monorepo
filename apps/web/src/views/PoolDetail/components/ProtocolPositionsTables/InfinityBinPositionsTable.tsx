@@ -189,6 +189,7 @@ const transformInfinityBinPositionToTableRow = (
       rangePosition={priceRangeData.rangePosition}
       outOfRange={outOfRange}
       removed={removed}
+      currentPrice={pool?.token0Price?.toSignificant(6)}
       showPercentages={priceRangeData.showPercentages}
     />
   )

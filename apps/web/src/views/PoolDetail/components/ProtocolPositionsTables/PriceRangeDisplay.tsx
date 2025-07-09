@@ -14,21 +14,79 @@ const PriceRangeBar = styled.div<{ outOfRange: boolean; disabled?: boolean }>`
   height: 6px;
   background: ${({ theme, outOfRange, disabled }) =>
     disabled ? theme.colors.disabled : outOfRange ? theme.colors.failure : theme.colors.success};
-  border-radius: 2px;
+  border-radius: 4px;
   position: relative;
 `
 
-const CurrentPriceLine = styled.div<{ position: number; outOfRange: boolean; disabled?: boolean }>`
+const ExtendedPriceRangeBar = styled.div`
+  width: 100%;
+  height: 6px;
+  border-radius: 4px;
+  position: relative;
+  display: flex;
+`
+
+const BarSegment = styled.div<{
+  width: number
+  isGray?: boolean
+  outOfRange?: boolean
+  disabled?: boolean
+}>`
+  height: 100%;
+  background: ${({ theme, isGray, outOfRange, disabled }) => {
+    if (disabled) return theme.colors.disabled
+    if (isGray) return theme.colors.tertiary // More visible gray color
+    return outOfRange ? theme.colors.failure : theme.colors.success
+  }};
+  ${({ width }) => `width: ${width}%;`}
+
+  &:first-child {
+    border-radius: 4px 0 0 4px;
+  }
+
+  &:last-child {
+    border-radius: 0 4px 4px 0;
+  }
+
+  &:only-child {
+    border-radius: 4px;
+  }
+`
+
+const CurrentPriceLine = styled.div<{
+  position: number
+  outOfRange: boolean
+  disabled?: boolean
+  isOverflow?: boolean
+}>`
   position: absolute;
   left: ${({ position }) => Math.max(0, Math.min(100, position))}%;
-  top: 2px;
+  top: -5px;
   transform: translateX(-50%);
   width: 4px;
   height: 16px;
-  background: ${({ theme, outOfRange, disabled }) =>
-    disabled ? theme.colors.disabled : outOfRange ? theme.colors.failure : theme.colors.success};
-  border-radius: 1px;
-  z-index: 1;
+  background: ${({ theme, outOfRange, disabled, isOverflow }) =>
+    disabled
+      ? theme.colors.disabled
+      : isOverflow
+      ? theme.colors.tertiary
+      : outOfRange
+      ? theme.colors.failure
+      : theme.colors.success};
+  border-radius: 3px;
+  z-index: 2;
+`
+
+const RangeMarker = styled.div<{ position: number; disabled?: boolean }>`
+  position: absolute;
+  left: ${({ position }) => Math.max(0, Math.min(100, position))}%;
+  top: -5px;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 16px;
+  background: ${({ theme, disabled }) => (disabled ? theme.colors.disabled : theme.colors.failure)};
+  border-radius: 3px;
+  z-index: 2;
 `
 
 const PercentageText = styled(Text)<{ isNegative?: boolean }>`
@@ -37,9 +95,50 @@ const PercentageText = styled(Text)<{ isNegative?: boolean }>`
   font-weight: 400;
 `
 
+const PercentageContainer = styled.div<{ leftPosition: number; rightPosition: number }>`
+  position: relative;
+  width: 100%;
+  max-width: 190px;
+  height: 16px;
+  margin-bottom: 4px;
+
+  .left-percentage {
+    position: absolute;
+    left: ${({ leftPosition }) => leftPosition}%;
+    transform: translateX(-50%);
+  }
+
+  .right-percentage {
+    position: absolute;
+    left: ${({ rightPosition }) => rightPosition}%;
+    transform: translateX(-50%);
+  }
+`
+
+const PriceContainer = styled.div<{ leftPosition: number; rightPosition: number }>`
+  position: relative;
+  width: 100%;
+  max-width: 190px;
+  height: 24px;
+  margin-bottom: 2px;
+
+  .left-price {
+    position: absolute;
+    left: ${({ leftPosition }) => leftPosition}%;
+    transform: translateX(-40%);
+  }
+
+  .right-price {
+    position: absolute;
+    left: ${({ rightPosition }) => rightPosition}%;
+    transform: translateX(-50%);
+  }
+`
+
 interface PriceRangeDisplayProps {
   minPrice: string
   maxPrice: string
+  currentPrice?: string
   minPercentage?: string
   maxPercentage?: string
   rangePosition?: number
@@ -51,6 +150,7 @@ interface PriceRangeDisplayProps {
 export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
   minPrice,
   maxPrice,
+  currentPrice,
   minPercentage,
   maxPercentage,
   rangePosition = 50,
@@ -58,39 +158,190 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
   removed = false,
   showPercentages = true,
 }) => {
+  // Convert prices to numbers for comparison
+  const currentPriceNum = currentPrice ? parseFloat(currentPrice) : null
+  const minPriceNum = parseFloat(minPrice)
+  const maxPriceNum = parseFloat(maxPrice)
+
+  // Validate price range
+  if (minPriceNum >= maxPriceNum) {
+    console.warn('Invalid price range: minPrice should be less than maxPrice')
+  }
+
+  // Check if current price is out of range
+  const isOverflowLeft = currentPriceNum !== null && currentPriceNum < minPriceNum
+  const isOverflowRight = currentPriceNum !== null && currentPriceNum > maxPriceNum
+  const hasOverflow = isOverflowLeft || isOverflowRight
+
+  // Calculate display values and positions
+  let displayMinPrice = minPrice
+  let displayMaxPrice = maxPrice
+  let currentPriceLinePosition = rangePosition
+  let percentageLeftPosition = 0
+  let percentageRightPosition = 100
+
+  if (hasOverflow && currentPriceNum !== null) {
+    if (isOverflowLeft) {
+      // Current price is left of min price
+      displayMinPrice = minPrice
+      displayMaxPrice = maxPrice
+
+      const totalRange = maxPriceNum - currentPriceNum
+      const graySegmentWidth = ((minPriceNum - currentPriceNum) / totalRange) * 100
+
+      currentPriceLinePosition = 0
+      // Position prices and percentages at the actual position range (colored segment)
+      percentageLeftPosition = graySegmentWidth
+      percentageRightPosition = 100
+    } else if (isOverflowRight) {
+      // Current price is right of max price
+      displayMinPrice = minPrice
+      displayMaxPrice = maxPrice
+
+      const totalRange = currentPriceNum - minPriceNum
+      const coloredSegmentWidth = ((maxPriceNum - minPriceNum) / totalRange) * 100
+
+      currentPriceLinePosition = 100
+      // Position prices and percentages at the actual position range (colored segment)
+      percentageLeftPosition = 0
+      percentageRightPosition = coloredSegmentWidth
+    }
+  }
+
+  const renderBar = () => {
+    if (!hasOverflow) {
+      // Original behavior - single colored bar
+      return (
+        <PriceRangeBar outOfRange={outOfRange} disabled={removed}>
+          <CurrentPriceLine position={currentPriceLinePosition} outOfRange={outOfRange} disabled={removed} />
+        </PriceRangeBar>
+      )
+    }
+
+    // Extended bar with segments
+    if (isOverflowLeft) {
+      const totalRange = maxPriceNum - currentPriceNum!
+      const graySegmentWidth = ((minPriceNum - currentPriceNum!) / totalRange) * 100
+      const coloredSegmentWidth = ((maxPriceNum - minPriceNum) / totalRange) * 100
+
+      return (
+        <ExtendedPriceRangeBar>
+          <BarSegment width={graySegmentWidth} isGray disabled={removed} />
+          <BarSegment width={coloredSegmentWidth} outOfRange={outOfRange} disabled={removed} />
+          <CurrentPriceLine
+            position={currentPriceLinePosition}
+            outOfRange={outOfRange}
+            disabled={removed}
+            isOverflow={hasOverflow}
+          />
+          {/* Range markers at the edges of the main range */}
+          <RangeMarker position={graySegmentWidth} disabled={removed} />
+          <RangeMarker position={100} disabled={removed} />
+        </ExtendedPriceRangeBar>
+      )
+    }
+
+    if (isOverflowRight) {
+      const totalRange = currentPriceNum! - minPriceNum
+      const coloredSegmentWidth = ((maxPriceNum - minPriceNum) / totalRange) * 100
+      const graySegmentWidth = ((currentPriceNum! - maxPriceNum) / totalRange) * 100
+
+      return (
+        <ExtendedPriceRangeBar>
+          <BarSegment width={coloredSegmentWidth} outOfRange={outOfRange} disabled={removed} />
+          <BarSegment width={graySegmentWidth} isGray disabled={removed} />
+          <CurrentPriceLine
+            position={currentPriceLinePosition}
+            outOfRange={outOfRange}
+            disabled={removed}
+            isOverflow={hasOverflow}
+          />
+          {/* Range markers at the edges of the main range */}
+          <RangeMarker position={0} disabled={removed} />
+          <RangeMarker position={coloredSegmentWidth} disabled={removed} />
+        </ExtendedPriceRangeBar>
+      )
+    }
+
+    return null
+  }
+
+  const renderPercentages = () => {
+    if (!showPercentages) return null
+
+    if (!hasOverflow) {
+      // Original behavior - percentages at the edges
+      return (
+        <FlexGap alignItems="center" justifyContent="space-between" width="100%" maxWidth="190px" mb="4px">
+          <PercentageText>{minPercentage}</PercentageText>
+          <PercentageText>{maxPercentage}</PercentageText>
+        </FlexGap>
+      )
+    }
+
+    // For overflow cases, position percentages under the actual position range
+    return (
+      <PercentageContainer leftPosition={percentageLeftPosition} rightPosition={percentageRightPosition}>
+        <div className="left-percentage">
+          <PercentageText>{minPercentage}</PercentageText>
+        </div>
+        <div className="right-percentage">
+          <PercentageText>{maxPercentage}</PercentageText>
+        </div>
+      </PercentageContainer>
+    )
+  }
+
+  const renderPrices = () => {
+    if (!hasOverflow) {
+      // Original behavior - prices at the edges with dash
+      return (
+        <FlexGap alignItems="center" gap="8px" mb="2px" width="100%" maxWidth="190px">
+          <Flex alignItems="center" justifyContent="space-between" width="100%">
+            <Text fontSize="16px" bold>
+              {displayMinPrice}
+            </Text>
+            <Text fontSize="16px" bold>
+              -
+            </Text>
+            <Text fontSize="16px" bold>
+              {displayMaxPrice}
+            </Text>
+          </Flex>
+        </FlexGap>
+      )
+    }
+
+    // For overflow cases, position prices at the actual position range
+    return (
+      <PriceContainer leftPosition={percentageLeftPosition} rightPosition={percentageRightPosition}>
+        <div className="left-price">
+          <Text fontSize="16px" bold>
+            {displayMinPrice}
+          </Text>
+        </div>
+        <div className="right-price">
+          <Text fontSize="16px" bold>
+            {displayMaxPrice}
+          </Text>
+        </div>
+      </PriceContainer>
+    )
+  }
+
   return (
     <Flex flexDirection="column" alignItems="flex-start" width="100%">
       {/* Price range display */}
-      <FlexGap alignItems="center" gap="8px" mb="2px" width="100%" maxWidth="190px">
-        <Flex alignItems="center" justifyContent="space-between" width="100%">
-          <Text fontSize="16px" bold>
-            {minPrice}
-          </Text>
-          <Text fontSize="16px" bold>
-            -
-          </Text>
-          <Text fontSize="16px" bold>
-            {maxPrice}
-          </Text>
-        </Flex>
-      </FlexGap>
+      {renderPrices()}
 
       {/* Percentage display below prices */}
-      {showPercentages && (
-        <>
-          <FlexGap alignItems="center" justifyContent="space-between" width="100%" maxWidth="190px" mb="4px">
-            <PercentageText>{minPercentage}</PercentageText>
-            <PercentageText>{maxPercentage}</PercentageText>
-          </FlexGap>
+      {renderPercentages()}
 
-          {/* Price range bar */}
-          <Flex width="100%" maxWidth="190px" justifyContent="center" mb="4px">
-            <PriceRangeContainer>
-              <PriceRangeBar outOfRange={outOfRange} disabled={removed} />
-              <CurrentPriceLine position={rangePosition} outOfRange={outOfRange} disabled={removed} />
-            </PriceRangeContainer>
-          </Flex>
-        </>
+      {/* Price range bar */}
+      {showPercentages && (
+        <Flex width="100%" maxWidth="190px" justifyContent="center" mb="4px">
+          <PriceRangeContainer>{renderBar()}</PriceRangeContainer>
+        </Flex>
       )}
     </Flex>
   )

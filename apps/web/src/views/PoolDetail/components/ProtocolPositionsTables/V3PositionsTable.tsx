@@ -186,7 +186,7 @@ const transformV3PositionToTableRow = (
   } else if (position.liquidity > 0n && pool && price0Usd && price1Usd) {
     // Method 2: Manual calculation fallback for when Position objects aren't available
     try {
-      const tickCurrent = pool.tickCurrent
+      const { tickCurrent } = pool
       const amount0Raw = PositionMath.getToken0Amount(
         tickCurrent,
         position.tickLower,
@@ -394,6 +394,7 @@ const transformV3PositionToTableRow = (
       rangePosition={priceRangeData.rangePosition}
       outOfRange={outOfRange}
       removed={removed}
+      currentPrice={pool?.token0Price?.toSignificant(6)}
       showPercentages={priceRangeData.showPercentages}
     />
   )
