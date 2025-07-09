@@ -300,7 +300,7 @@ const transformV3PositionToTableRow = (
             #{position.tokenId.toString()}
           </Text>
         </Text>
-        {position.isStaked && !removed && (
+        {position.isStaked && !removed && !outOfRange && (
           <Tag variant="primary60" scale="sm" px="6px">
             {t('Farming')}
           </Tag>

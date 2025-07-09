@@ -129,7 +129,7 @@ export const InfinityCLEarningsCell = ({
     timestamp: dayjs().startOf('hour').unix(),
   })
 
-  // Get LP fees - standardized approach
+  // Get LP fees
   const { totalFiatValue: lpFeesUSD } = useFeesEarnedUSD({
     currency0,
     currency1,
@@ -139,7 +139,6 @@ export const InfinityCLEarningsCell = ({
     tickUpper,
   })
 
-  // Standardized amount calculation
   const amount = useMemo(() => {
     if (!rewardsAmount) return 0
     const decimal = Math.min(rewardsAmount.currency.decimals ?? 18, 18)

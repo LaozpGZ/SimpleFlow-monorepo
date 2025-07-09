@@ -88,7 +88,7 @@ const transformInfinityBinPositionToTableRow = (
             #{poolInfo.pid}
           </Text>
         </Text>
-        {position.isStaked && !removed && (
+        {position.isStaked && !removed && !outOfRange && (
           <Tag variant="primary60" scale="sm">
             {t('Farming')}
           </Tag>
