@@ -196,7 +196,7 @@ export default function useFetchClmmRewardInfo({
 export function useClmmRewardInfoFromSimulation(props: Props) {
   const { poolInfo, position, initRpcPoolData, tickLowerPrefetchData, tickUpperPrefetchData } = props
   const rpcPoolData =
-    useSubscribeClmmInfo({ subscribe: false, poolInfo, throttle: MINUTE_MILLISECONDS, initialFetch: true })?.poolInfo ||
+    useSubscribeClmmInfo({ subscribe: false, poolInfo, throttle: MINUTE_MILLISECONDS, initialFetch: false })?.poolInfo ||
     initRpcPoolData?.poolInfo
   const { data: tokenPrices } = useTokenPrice({
     mintList: [poolInfo?.mintA.address, poolInfo?.mintB.address, ...(poolInfo?.rewardDefaultInfos.map((r) => r.mint.address) || [])]
