@@ -329,10 +329,13 @@ export const PoolInfo = () => {
               </Box>
               <LightGreyCard padding="8px 16px">
                 <AutoColumn rowGap="2px">
-                  <Text fontSize={12} bold color="textSubtle" textTransform="uppercase">
-                    {t('Est. APR')}
-                  </Text>
-                  {poolInfo ? <PoolGlobalAprButtonV3 pool={poolInfo} /> : null}
+                  <FlexGap>
+                    <Text fontSize={12} bold color="textSubtle" textTransform="uppercase">
+                      {t('Est. APR')}
+                    </Text>
+                    <PoolGlobalAprButtonV3 pool={poolInfo} showApyText={false} />
+                  </FlexGap>
+                  {poolInfo ? <PoolGlobalAprButtonV3 pool={poolInfo} showApyButton={false} /> : null}
                 </AutoColumn>
               </LightGreyCard>
             </FlexGap>

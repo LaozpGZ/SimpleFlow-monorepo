@@ -27,6 +27,7 @@ type PoolGlobalAprButtonProps = {
   userPosition?: PositionDetail | InfinityBinPositionDetail | InfinityCLPositionDetail
   onAPRTextClick?: () => void
   showApyButton?: boolean
+  showApyText?: boolean
 }
 
 export const PoolAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
@@ -37,6 +38,7 @@ export const PoolAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
   userPosition,
   onAPRTextClick,
   showApyButton,
+  showApyText,
 }) => {
   const baseApr = useMemo(() => {
     return sumApr(lpApr, cakeApr?.value, merklApr)
@@ -70,6 +72,7 @@ export const PoolAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
         onClick={modal.onOpen}
         onAPRTextClick={onAPRTextClick ?? modal.onOpen}
         showApyButton={showApyButton}
+        showApyText={showApyText}
       />
       {tooltipVisible && tooltip}
       {modal.isOpen && (
