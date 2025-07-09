@@ -27,7 +27,7 @@ import {
 import { PublicKey, RpcResponseAndContext, SimulatedTransactionResponse } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
-import throttle from 'lodash/throttle'
+import PQueue from 'p-queue'
 import { getDefaultToastData, handleMultiTxToast, transformProcessData } from '@/hooks/toast/multiToastUtil'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import { txStatusSubject } from '@/hooks/toast/useTxStatus'
@@ -43,6 +43,12 @@ import { getClmmKeysFromPoolInfo } from '@/utils/getPoolKeysFromPoolInfo'
 import { TxCallbackProps, TxCallbackPropsGeneric } from '../types/tx'
 import { getTxMeta } from './configs/clmm'
 
+const rewardsSimulateQueue = new PQueue({
+  // concurrency: 2,
+  interval: 1000,
+  intervalCap: 2
+})
+
 export type CreatePoolBuildData =
   | TxBuildData<{ mockPoolInfo: ApiV3PoolInfoConcentratedItem; address: ClmmKeys }>
   | TxV0BuildData<{ mockPoolInfo: ApiV3PoolInfoConcentratedItem; address: ClmmKeys }>
@@ -55,6 +61,8 @@ interface ClmmState {
   currentPoolLoading: boolean
   rewardWhiteListMints: PublicKey[]
   operationOwners: PublicKey[]
+
+  rewardsSimulateQueue: PQueue
 
   harvestAllAct: (
     props: {
@@ -224,7 +232,8 @@ const clmmInitState = {
   clmmFeeConfigs: {},
   rewardWhiteListMints: [],
   operationOwners: [],
-  slippage: 0.005
+  slippage: 0.005,
+  rewardsSimulateQueue
 }
 
 export const useClmmStore = createStore<ClmmState>(
@@ -589,15 +598,13 @@ export const useClmmStore = createStore<ClmmState>(
       }
     },
 
-    removeLiquidityActThrottle: throttle(
-      async (props) => {
-        return get().removeLiquidityAct(props)
-      },
-      1000 / 25,
-      {
-        leading: true
-      }
-    ),
+    removeLiquidityActThrottle: async (props) => {
+      const result = await get().rewardsSimulateQueue.add(async () => {
+        const result = await get().removeLiquidityAct(props)
+        return result
+      })
+      return result as ReturnType<typeof DecreaseLiquidityEventLayout.decode> | string
+    },
 
     closePositionAct: async ({ poolInfo, position, ...txProps }) => {
       const { raydium, txVersion } = useAppStore.getState()

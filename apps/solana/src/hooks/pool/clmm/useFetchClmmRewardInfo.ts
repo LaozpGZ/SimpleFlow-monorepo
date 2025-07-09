@@ -230,6 +230,13 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
     }
   )
 
+  const rewardsSimulateQueue = useClmmStore((s) => s.rewardsSimulateQueue)
+  useEffect(() => {
+    return () => {
+      rewardsSimulateQueue.clear()
+    }
+  }, [rewardsSimulateQueue])
+
   const tokenFees = data
     ? {
         tokenFeeAmountA: data?.feeAmount0,

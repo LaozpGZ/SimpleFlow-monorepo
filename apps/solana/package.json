@@ -127,7 +127,8 @@
     "viem": "^2.7.9",
     "yup": "^0.32.11",
     "zustand": "^4.1.1",
-    "virtua": "0.41.5"
+    "virtua": "0.41.5",
+    "p-queue": "8.1.0"
   },
   "devDependencies": {
     "@next/bundle-analyzer": "13.0.7",
