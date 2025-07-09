@@ -14,7 +14,7 @@ import { useState, useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import useNativeCurrency from 'hooks/useNativeCurrency'
-import { CurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
+import { CurrencyLogo, SwapUIV2, truncateDecimals } from '@pancakeswap/widgets-internal'
 import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { BulletList } from 'components/BulletList'
 import { CurrencyAmount, Percent } from '@pancakeswap/sdk'
@@ -46,7 +46,7 @@ function NativeAmountInput() {
   }, [inputValue, setNativeAmount, nativeCurrency])
 
   const handleAmountChange = useCallback((value: string) => {
-    setInputValue(value)
+    setInputValue(truncateDecimals(value))
   }, [])
 
   const tokenBalance = CurrencyAmount.fromRawAmount(nativeCurrency, nativeCurrencyBalance.toString())

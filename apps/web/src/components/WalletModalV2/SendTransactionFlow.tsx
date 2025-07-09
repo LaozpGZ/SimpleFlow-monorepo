@@ -104,7 +104,7 @@ export function ConfirmTransactionContent({
             </Box>
           </FlexGap>
 
-          <TokenAmountSection tokenAmount={tokenAmount} price={price} />
+          <TokenAmountSection tokenAmount={tokenAmount} />
 
           <Flex justifyContent="space-between" width="100%" mb="8px" alignItems="flex-start">
             <Text color="textSubtle">{t('To')}</Text>
