@@ -110,7 +110,7 @@ const config = {
         },
         {
           source: '/perp/:path*',
-          destination: 'https://perp.pancakeswap.finance/:path*',
+          destination: 'https://perp.pancakeswap.finance/perp/:path*',
         },
       ],
     }
