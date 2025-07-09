@@ -228,7 +228,7 @@ export const WalletContent = ({
                 </Box>
               )}
               {view === WalletView.GIFTS ? (
-                <GiftsDashboard assets={balances} setViewState={setViewState} />
+                <GiftsDashboard setViewState={setViewState} />
               ) : view === WalletView.WALLET_INFO && !noAssets ? (
                 <Box mt="16px">
                   <Text fontSize="14px" color="textSubtle">

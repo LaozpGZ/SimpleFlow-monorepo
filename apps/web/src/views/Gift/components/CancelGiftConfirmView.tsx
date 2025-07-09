@@ -49,7 +49,7 @@ export const CancelGiftConfirmView = () => {
             {t('Expires on:')}
           </Text>
           <Text small>
-            {formatTimestamp(new Date(giftInfo.timestamp).getTime(), {
+            {formatTimestamp(new Date(giftInfo.expiryTimestamp).getTime(), {
               precision: Precision.MINUTE,
             })}
           </Text>

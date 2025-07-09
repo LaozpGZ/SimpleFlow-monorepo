@@ -1,51 +1,18 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, DeleteOutlineIcon, Flex, FlexGap, IconButton, Spinner, Tag, Text } from '@pancakeswap/uikit'
+import { Box, DeleteOutlineIcon, Flex, FlexGap, IconButton, Spinner, Text } from '@pancakeswap/uikit'
 import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { ViewState } from 'components/WalletModalV2/type'
-import { BalanceData } from 'hooks/useAddressBalance'
 import { useContext } from 'react'
+import { formatDistanceToNow } from 'date-fns'
 import { useGetGiftInfo } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { GiftStatus } from '../types'
 import { GiftStatusTag } from './GiftStatusTag'
 
-const getExpirationTime = (timestamp: string, status: GiftStatus) => {
-  // Assuming gifts expire 7 days after creation for pending/cancelled
-  // and shorter times for claimed/expired based on the UI
-  const createdAt = new Date(timestamp)
-  const now = new Date()
-
-  let expirationDays: number
-  switch (status) {
-    case GiftStatus.PENDING:
-    case GiftStatus.CANCELLED:
-      expirationDays = 7
-      break
-    case GiftStatus.CLAIMED:
-    case GiftStatus.EXPIRED:
-      expirationDays = 4
-      break
-    default:
-      expirationDays = 7
-  }
-
-  const expirationDate = new Date(createdAt.getTime() + expirationDays * 24 * 60 * 60 * 1000)
-  const timeDiff = expirationDate.getTime() - now.getTime()
-  const daysRemaining = Math.ceil(timeDiff / (1000 * 60 * 60 * 24))
-
-  return daysRemaining > 0 ? `${daysRemaining} days` : '0 days'
-}
-
-export const GiftsDashboard = ({
-  assets,
-  setViewState,
-}: {
-  assets: BalanceData[]
-  setViewState: (viewState: ViewState) => void
-}) => {
-  const { data: giftInfo = [], isLoading } = useGetGiftInfo(assets)
+export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: ViewState) => void }) => {
+  const { data: giftInfo = [], isLoading } = useGetGiftInfo()
   const { t } = useTranslation()
   const { setCodeHash } = useContext(CancelGiftContext)
 
@@ -72,7 +39,7 @@ export const GiftsDashboard = ({
 
                 {gift.status === GiftStatus.PENDING && (
                   <Text fontSize="12px" color="textSubtle">
-                    Expires: {getExpirationTime(gift.timestamp, gift.status)}
+                    Expires: {formatDistanceToNow(new Date(gift.expiryTimestamp), { addSuffix: true })}
                   </Text>
                 )}
               </FlexGap>
