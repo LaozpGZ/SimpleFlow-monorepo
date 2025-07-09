@@ -1,11 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
+import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
 import { copyText, useToast } from '@pancakeswap/uikit'
 import { NoteContainer } from 'components/NoteContainer'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
-import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
-import { multiplyPriceByAmount } from 'utils/prices'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
-import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
+import { useCalculateTotalCostCreateGift } from '../hooks/useCalculateTotalCostCreateGift'
 import { generateClaimLink } from '../utils/generateClaimLink'
 
 export function SendLinkView({
@@ -21,13 +20,7 @@ export function SendLinkView({
   const claimLink = generateClaimLink({ code })
   const { toastSuccess } = useToast()
 
-  const stablePrice = useStablecoinPrice(tokenAmount?.currency)
-  const stableNativePrice = useStablecoinPrice(nativeAmount?.currency)
-
-  const tokenUsd = multiplyPriceByAmount(stablePrice, parseFloat(tokenAmount.toExact()))
-  const nativeUsd = multiplyPriceByAmount(stableNativePrice, parseFloat(nativeAmount?.toExact() || '0'))
-
-  const totalUsd = tokenUsd + nativeUsd
+  const totalUsd = useCalculateTotalCostCreateGift({ tokenAmount, nativeAmount })
 
   return (
     <>

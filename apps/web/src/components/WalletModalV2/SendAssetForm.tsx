@@ -2,6 +2,7 @@ import { ChainId, getChainName } from '@pancakeswap/chains'
 import { useDebounce } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Percent } from '@pancakeswap/sdk'
+import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import {
   AutoRenewIcon,
   BalanceInput,
@@ -28,11 +29,10 @@ import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { checksumAddress, formatUnits, isAddress, zeroAddress } from 'viem'
+import { CreateGiftView } from 'views/Gift/components/CreateGiftView'
 import { SendGiftToggle } from 'views/Gift/components/SendGiftToggle'
-import { SendGiftView } from 'views/Gift/components/SendGiftView'
 import { SendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { useUserInsufficientBalanceLight } from 'views/SwapSimplify/hooks/useUserInsufficientBalance'
 import { useAccount, usePublicClient, useSendTransaction } from 'wagmi'
@@ -295,7 +295,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   if (viewState === ViewState.CONFIRM_TRANSACTION && isSendGift) {
     const tokenAmount = tryParseAmount(amount, currency)
 
-    return <SendGiftView key={viewState} tokenAmount={tokenAmount} />
+    return <CreateGiftView key={viewState} tokenAmount={tokenAmount} />
   }
 
   if (viewState >= ViewState.CONFIRM_TRANSACTION) {

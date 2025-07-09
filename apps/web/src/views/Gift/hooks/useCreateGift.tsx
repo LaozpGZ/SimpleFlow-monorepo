@@ -1,22 +1,23 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { useToast } from '@pancakeswap/uikit'
+import { useQueryClient } from '@tanstack/react-query'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useCallback, useMemo, useState } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
-import { useAccount, useWriteContract } from 'wagmi'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { isUserRejected } from 'utils/sentry'
+import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { PancakeGiftV1Abi } from '../abis/PancakeGiftV1Abi'
 import { GIFT_PANCAKE_V1_ADDRESS, QUERY_KEY_GIFT_INFO } from '../constants'
-import { convertCodeHash } from '../utils/convertCodeHash'
-import { useReadGasPayment } from './useReadGasPayment'
-import { generateCreateGiftParams } from '../utils/generateCreateGiftParams'
 import { CreateGiftParams } from '../types'
+import { convertCodeHash } from '../utils/convertCodeHash'
+import { generateCreateGiftParams } from '../utils/generateCreateGiftParams'
+import { useReadGasPayment } from './useReadGasPayment'
 
 export const useCreateGift = () => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const [error, setError] = useState<Error | null>(null)
-  const { toastSuccess } = useToast()
+  const { toastSuccess, toastError } = useToast()
 
   const { address: account } = useAccount()
 
@@ -60,10 +61,17 @@ export const useCreateGift = () => {
         {
           onSuccess: (transactionHash) => {
             if (transactionHash) {
-              queryClient.invalidateQueries({ queryKey: [QUERY_KEY_GIFT_INFO, chainId, account] })
-
-              toastSuccess(t('Create Gift Successfully'), <ToastDescriptionWithTx bscTrace txHash={transactionHash} />)
+              toastSuccess(t('Create Gift Submitted'), <ToastDescriptionWithTx bscTrace txHash={transactionHash} />)
             }
+          },
+          onError: (error) => {
+            if (isUserRejected(error)) {
+              return
+            }
+
+            toastError(t('Create Gift Error'), error.message)
+
+            setError(new Error('Failed to create gift'))
           },
         },
       )
@@ -71,13 +79,37 @@ export const useCreateGift = () => {
     [gasPayment, t, writeContractAsync, toastSuccess, queryClient, chainId, account],
   )
 
+  const {
+    isLoading: isConfirming,
+    isSuccess: isConfirmed,
+    isError: isErrorConfirming,
+    error: errorConfirming,
+  } = useWaitForTransactionReceipt({
+    hash: txHash,
+  })
+
+  useEffect(() => {
+    if (isConfirmed && txHash) {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEY_GIFT_INFO, chainId, account] })
+    }
+  }, [isConfirmed, txHash])
+
+  useEffect(() => {
+    if (isErrorConfirming && errorConfirming && txHash) {
+      toastError(t('Create Gift Error'), <ToastDescriptionWithTx bscTrace txHash={txHash} />)
+    }
+  }, [isErrorConfirming, errorConfirming, txHash])
+
   return useMemo(
     () => ({
+      isErrorConfirming,
+      errorConfirming,
       createGift,
-      isLoading: isPending,
+      isLoading: isPending || isConfirming,
       error,
       txHash,
+      isConfirmed,
     }),
-    [createGift, isPending, txHash, error],
+    [createGift, isPending, isConfirming, txHash, error, isConfirmed, isErrorConfirming, errorConfirming],
   )
 }

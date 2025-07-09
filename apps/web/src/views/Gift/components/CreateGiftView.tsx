@@ -1,32 +1,34 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
 import { Box, ButtonMenu, ButtonMenuItem, Card, ColumnCenter, FlexGap, RowBetween, Text } from '@pancakeswap/uikit'
+import { BulletList } from 'components/BulletList'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { nanoid } from 'nanoid'
-import { BulletList } from 'components/BulletList'
 import { useCallback, useState } from 'react'
-import { useSendGiftContext } from '../providers/SendGiftProvider'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { GIFT_CODE_LENGTH } from '../constants'
+import { useCalculateTotalCostCreateGift } from '../hooks/useCalculateTotalCostCreateGift'
 import { useCreateGift } from '../hooks/useCreateGift'
-import { GiftQRPlaceholder, QRView } from './ClaimQRView'
-import { SendLinkView } from './SendLinkView'
-import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 import { useReadGasPaymentAmount } from '../hooks/useReadGasPayment'
-import { CreateGiftButton } from './CreateGiftButton'
+import { useSendGiftContext } from '../providers/SendGiftProvider'
+import { GiftQRPlaceholder, QRView } from './ClaimQRView'
 import { CopyLinkCheckBoxes } from './CopyLinkCheckBoxes'
+import { CreateGiftButton } from './CreateGiftButton'
+import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
+import { SendLinkView } from './SendLinkView'
 
 enum GIFT_VIEW {
   SEND_LINK = 0,
   SEND_QR = 1,
 }
 
-export const SendGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Token | NativeCurrency> }) => {
+export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Token | NativeCurrency> }) => {
   const { t } = useTranslation()
   const [code, setCode] = useState<string | null>(null)
   const [selectedView, setSelectedView] = useState<GIFT_VIEW>(GIFT_VIEW.SEND_LINK)
   const { nativeAmount, includeStarterGas } = useSendGiftContext()
 
-  const { createGift, isLoading, txHash, error } = useCreateGift()
+  const { createGift, isLoading, isConfirmed } = useCreateGift()
 
   const handleCreateGift = useCallback(() => {
     const randomCode = nanoid(GIFT_CODE_LENGTH)
@@ -49,6 +51,8 @@ export const SendGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Tok
 
   const gasPaymentAmount = useReadGasPaymentAmount()
 
+  const totalUsd = useCalculateTotalCostCreateGift({ tokenAmount, nativeAmount })
+
   if (!tokenAmount) {
     return null
   }
@@ -70,7 +74,7 @@ export const SendGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Tok
     <TokenAmountSection tokenAmount={tokenAmount} />
   )
 
-  if (code && txHash) {
+  if (code && isConfirmed) {
     return (
       <ColumnCenter>
         {viewTabs}
@@ -130,23 +134,29 @@ export const SendGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<Tok
         </Box>
       </Card>
 
-      {hasIncludeStarterGas && (
-        <RowBetween mb="8px">
-          <Text color="textSubtle">{t('Starter Gas for Recipient')}</Text>
+      <FlexGap flexDirection="column" gap="8px" mb="16px" width="100%">
+        {hasIncludeStarterGas && (
+          <RowBetween>
+            <Text color="textSubtle">{t('Starter Gas for Recipient')}</Text>
+            <Text>
+              {nativeAmount?.toSignificant(6)} {nativeAmount?.currency.symbol}
+            </Text>
+          </RowBetween>
+        )}
+
+        <RowBetween>
+          <Text color="textSubtle">{t('Gift Claim Gas Fee (Fixed)')}</Text>
           <Text>
-            {nativeAmount?.toSignificant(6)} {nativeAmount?.currency.symbol}
+            {gasPaymentAmount?.toSignificant(6)} {gasPaymentAmount?.currency.symbol}
           </Text>
         </RowBetween>
-      )}
 
-      <RowBetween mb="16px">
-        <Text color="textSubtle">{t('Gift Claim Gas Fee (Fixed)')}</Text>
-        <Text>
-          {gasPaymentAmount?.toSignificant(6)} {gasPaymentAmount?.currency.symbol}
-        </Text>
-      </RowBetween>
+        <RowBetween>
+          <Text color="textSubtle">{t('Total cost to Create Gift')}</Text>
+          <Text>{formatDollarAmount(totalUsd)}</Text>
+        </RowBetween>
+      </FlexGap>
 
-      {error && <div>{error.message}</div>}
       {tokenAmount && (
         <CreateGiftButton isLoading={isLoading} handleCreateGift={handleCreateGift} tokenAmount={tokenAmount} />
       )}

@@ -1,6 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Button, CheckmarkCircleIcon, Flex, RowBetween, Spinner, Text } from '@pancakeswap/uikit'
-import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
+import { Box, Button, CheckmarkCircleIcon, Flex, FlexGap, Spinner } from '@pancakeswap/uikit'
 import { Card } from '@pancakeswap/widgets-internal'
 import Divider from 'components/Divider'
 import { SecondaryCard } from 'components/SecondaryCard'
@@ -11,6 +10,7 @@ import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { GiftStatus } from '../types'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
+import { GiftInfoCreatedAt, GiftInfoExpireOn } from './GiftInfoDetail'
 import { GiftStatusTag } from './GiftStatusTag'
 
 export const CancelGiftConfirmView = () => {
@@ -54,16 +54,14 @@ export const CancelGiftConfirmView = () => {
           <GiftStatusTag status={isCancelSuccessful ? GiftStatus.CANCELLED : giftInfo?.status} />
         </Box>
 
-        <RowBetween>
-          <Text color="textSubtle" small>
-            {t('Expires on:')}
-          </Text>
-          <Text small>
-            {formatTimestamp(new Date(giftInfo.expiryTimestamp).getTime(), {
-              precision: Precision.MINUTE,
-            })}
-          </Text>
-        </RowBetween>
+        <FlexGap flexDirection="column" gap="8px">
+          <GiftInfoCreatedAt
+            txnHash={giftInfo.createTransactionHash}
+            chainId={giftInfo.nativeCurrencyAmount.currency.chainId}
+          />
+
+          <GiftInfoExpireOn expiryTimestamp={giftInfo.expiryTimestamp} />
+        </FlexGap>
       </Card>
 
       {isCancelSuccessful ? (
