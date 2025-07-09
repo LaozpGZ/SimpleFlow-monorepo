@@ -44,8 +44,14 @@ export default function ExistFarmingRewardItem({
 
   const rewardToken = reward.mint
   const periodLessThanWeek = reward.endTime - reward.openTime <= 1000 * DAY_SECONDS * 7
-  const { startTimeText, endTimeText, durationText } = getRewardMeta(reward)
-  const { startTimeText: newStartTimeText, endTimeText: newEndTimeText, durationText: newDurationText } = getRewardMeta(currentReward)
+  const { startDateText, startTimeText, endDateText, endTimeText, durationText } = getRewardMeta(reward)
+  const {
+    startDateText: newStartDateText,
+    startTimeText: newStartTimeText,
+    endDateText: newEndDateText,
+    endTimeText: newEndTimeText,
+    durationText: newDurationText
+  } = getRewardMeta(currentReward)
 
   const [currentStatus, setCurrentStatus] = useState<FarmStatus>(reward.status)
 
@@ -187,7 +193,10 @@ export default function ExistFarmingRewardItem({
 
         <GridItem area="duration">
           <HStack spacing={4} opacity={isUpdated ? 0.5 : 1}>
-            <Text>{startTimeText}</Text>
+            <VStack>
+              <Text>{startDateText}</Text>
+              <Text>{startTimeText}</Text>
+            </VStack>
 
             {/* divider */}
             <Box fontSize="sm" position="relative">
@@ -198,7 +207,10 @@ export default function ExistFarmingRewardItem({
             </Box>
 
             <HStack>
-              <Text>{endTimeText}</Text>
+              <VStack>
+                <Text>{endDateText}</Text>
+                <Text>{endTimeText}</Text>
+              </VStack>
               <Text fontSize="sm" color={colors.textSubtle}>
                 (UTC)
               </Text>
@@ -239,7 +251,10 @@ export default function ExistFarmingRewardItem({
           </Box>
 
           <HStack spacing={4} borderTop={`1px solid ${colors.backgroundTransparent12}`} pt="3">
-            <Text>{newStartTimeText}</Text>
+            <VStack>
+              <Text>{newStartDateText}</Text>
+              <Text>{newStartTimeText}</Text>
+            </VStack>
 
             {/* divider */}
             <Box fontSize="sm" position="relative">
@@ -250,6 +265,10 @@ export default function ExistFarmingRewardItem({
             </Box>
 
             <HStack>
+              <VStack>
+                <Text>{newEndDateText}</Text>
+                <Text>{newEndTimeText}</Text>
+              </VStack>
               <Text>{newEndTimeText}</Text>
               <Text fontSize="sm" color={colors.textSubtle}>
                 (UTC)

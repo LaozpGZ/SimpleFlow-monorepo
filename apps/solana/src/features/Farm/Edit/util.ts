@@ -47,16 +47,20 @@ export function poolRewardToEditReward(reward: FormattedPoolReward): EditReward 
 
 export function getRewardMeta(reward: EditReward) {
   const startTimeInfo = parseDateInfo(reward.openTime)
-  const startTimeText = reward.openTime ? `${startTimeInfo.year}/${startTimeInfo.month}/${startTimeInfo.day}` : undefined
+  const startDateText = reward.openTime ? `${startTimeInfo.year}/${startTimeInfo.month}/${startTimeInfo.day}` : undefined
+  const startTimeText = reward.openTime ? `${startTimeInfo.hour}:${startTimeInfo.minutes}` : undefined
 
   const endTimeInfo = parseDateInfo(reward.endTime)
-  const endTimeText = reward.endTime ? `${endTimeInfo.year}/${endTimeInfo.month}/${endTimeInfo.day}` : undefined
+  const endDateText = reward.endTime ? `${endTimeInfo.year}/${endTimeInfo.month}/${endTimeInfo.day}` : undefined
+  const endTimeText = reward.endTime ? `${endTimeInfo.hour}:${endTimeInfo.minutes}` : undefined
 
   const duration = parseDuration(reward.endTime - reward.openTime)
   const durationText = `${duration.days}D${duration.hours ? ` ${duration.hours}H` : ''}`
 
   return {
+    startDateText,
     startTimeText,
+    endDateText,
     endTimeText,
     durationText
   }
