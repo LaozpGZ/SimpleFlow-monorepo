@@ -48,12 +48,12 @@ const fetchFeesEarned = ({
 }
 
 export const useFeesEarned = (params: LPFeesParam) => {
-  const { poolId, tokenId, tickLower, tickUpper, currency0, currency1 } = params
+  const { poolId, tokenId, tickLower, tickUpper, currency0, currency1, enabled: _enabled } = params
   const chainId = currency0?.chainId
   const { data: poolKey } = usePoolKeyByPoolId(poolId, chainId)
   const { poolManager } = poolKey ?? {}
   const enabled =
-    params.enabled &&
+    (_enabled === undefined || _enabled === true) &&
     !!(poolManager && poolId && chainId && tokenId && !isUndefined(tickUpper) && !isUndefined(tickLower))
 
   const { data } = useQuery({
