@@ -175,11 +175,11 @@ export default function ExistFarmingRewardItem({
 
         <GridItem area="per-week">
           <Box opacity={isUpdated ? 0.5 : 1}>
-            <Text fontWeight="600">{formatCurrency(reward.total, { decimalPlaces: 2 })}</Text>
+            <Text fontWeight="600">{formatCurrency(reward.total, { decimalPlaces: 4 })}</Text>
             <HStack fontSize="sm">
               <Text color={colors.textSubtle}>
-                {formatCurrency(periodLessThanWeek ? reward.perDay : reward.perWeek, { decimalPlaces: 2 })}
-                {periodLessThanWeek ? t('/day') : t('/week')}
+                {formatCurrency(reward.perDay, { decimalPlaces: 4 })}
+                {t('/day')}
               </Text>
             </HStack>
           </Box>
