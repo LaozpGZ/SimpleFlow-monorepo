@@ -176,14 +176,22 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
   // Calculate display values and positions
   let displayMinPrice = minPrice
   let displayMaxPrice = maxPrice
+
   let currentPriceLinePosition = rangePosition
   let percentageLeftPosition = 0
   let percentageRightPosition = 100
 
+  // Accommodate longer numbers
+  const EXTRA_DISTANCE = Math.min(
+    displayMinPrice.length + displayMaxPrice.length > 12 ? (displayMinPrice.length + displayMaxPrice.length) / 2 : 0,
+    30, // Max extra distance 30%
+  )
+
   // Minimum distance between text positions (in percentage)
-  const MIN_TEXT_DISTANCE = 35
+  const MIN_TEXT_DISTANCE = 35 + EXTRA_DISTANCE
+
   // Minimum width for the main range (colored segment) in percentage
-  const MIN_RANGE_WIDTH = 25
+  const MIN_RANGE_WIDTH = 35 + EXTRA_DISTANCE
 
   if (hasOverflow && currentPriceNum !== null) {
     if (isOverflowLeft) {
