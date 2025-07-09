@@ -22,10 +22,11 @@ export interface GiftInfoResponse {
   creatorAddress: string
 }
 
-export interface GiftInfo extends Omit<GiftInfoResponse, 'tokenAmount' | 'nativeAmount'> {
-  // tokenAMount  is undefiend when the gift is for native token
-  tokenAmount?: CurrencyAmount<Token>
-  nativeAmount: CurrencyAmount<NativeCurrency>
+export interface GiftInfo extends GiftInfoResponse {
+  // currencyAmount is null when the gift is for native token and the token is not found
+  // currencyAmount  is undefined when token is not in allTokensList, means it need to be searched onchain
+  currencyAmount?: CurrencyAmount<Token> | null
+  nativeCurrencyAmount: CurrencyAmount<NativeCurrency>
 }
 
 export enum GiftApiStatus {

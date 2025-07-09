@@ -10,7 +10,6 @@ import { GiftInfo, GiftInfoResponse } from '../types'
 export default function useGiftInfoSelector() {
   const { chainId } = useActiveChainId()
   const native = useNativeCurrency(chainId)
-
   const allTokens = useAllTokens()
 
   return useCallback(
@@ -25,18 +24,20 @@ export default function useGiftInfoSelector() {
 
       const isNative = gift.token === zeroAddress
 
-      let tokenAmount: CurrencyAmount<Token> | undefined
+      let currencyAmount: CurrencyAmount<Token> | undefined | null
 
-      if (!isNative) {
+      if (isNative) {
+        currencyAmount = null
+      } else {
         const token = allTokens[checksumAddress(gift.token as `0x${string}`)]
-        tokenAmount = CurrencyAmount.fromRawAmount(token, gift.tokenAmount)
+        currencyAmount = token ? CurrencyAmount.fromRawAmount(token, gift.tokenAmount) : undefined
       }
 
       try {
         return {
           ...gift,
-          tokenAmount,
-          nativeAmount: CurrencyAmount.fromRawAmount(native, gift.nativeAmount),
+          currencyAmount,
+          nativeCurrencyAmount: CurrencyAmount.fromRawAmount(native, gift.nativeAmount),
         }
       } catch (error) {
         console.error(error)

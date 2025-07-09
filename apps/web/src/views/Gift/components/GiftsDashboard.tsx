@@ -4,8 +4,8 @@ import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { ViewState } from 'components/WalletModalV2/type'
-import { useContext } from 'react'
 import { formatDistanceToNow } from 'date-fns'
+import { useContext } from 'react'
 import { useGetGiftInfo } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { GiftStatus } from '../types'
@@ -46,12 +46,12 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
 
               <Flex alignItems="center" width="100%" justifyContent="space-between">
                 <Flex>
-                  <CurrencyLogo showChainLogo currency={gift.tokenAmount.currency.wrapped} size="40px" />
+                  <CurrencyLogo showChainLogo currency={gift.currencyAmount?.currency.wrapped} size="40px" />
                   <Flex flexDirection="column" ml="8px">
                     <Text fontWeight="600" fontSize="14px" color="text">
-                      {gift.tokenAmount.greaterThan(0)
-                        ? `${gift.tokenAmount.toSignificant(6)} ${gift.tokenAmount.currency.symbol}`
-                        : `${gift.nativeAmount.toSignificant(6)} ${gift.nativeAmount.currency.symbol}`}
+                      {gift.currencyAmount
+                        ? `${gift.currencyAmount.toSignificant(6)} ${gift.currencyAmount.currency.symbol}`
+                        : `${gift.nativeCurrencyAmount.toSignificant(6)} ${gift.nativeCurrencyAmount.currency.symbol}`}
                     </Text>
                     <Text fontSize="12px" color="textSubtle">
                       {formatTimestamp(new Date(gift.timestamp).getTime(), {

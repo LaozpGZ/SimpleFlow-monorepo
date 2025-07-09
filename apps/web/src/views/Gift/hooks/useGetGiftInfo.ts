@@ -1,6 +1,9 @@
+import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import { FAST_INTERVAL } from 'config/constants'
+import { useTokenByChainId } from 'hooks/Tokens'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
 import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
 import { GiftInfo, GiftInfoResponse } from '../types'
@@ -52,7 +55,13 @@ export const useGetGiftInfo = () => {
       return result.data || []
     },
     select: (data): GiftInfo[] => {
-      return data.map(selectGiftInfo).filter((gift) => gift !== null)
+      return (
+        data
+          .map(selectGiftInfo)
+          .filter((gift) => gift !== null)
+          // REMOVE it when support search list of token addresses on chain
+          .filter((gift) => gift?.currencyAmount)
+      )
     },
     enabled: Boolean(chainId && account),
     refetchOnWindowFocus: false,
@@ -67,7 +76,7 @@ export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
 
   const selectGiftInfo = useGiftInfoSelector()
 
-  return useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: [QUERY_KEY_GIFT_INFO, chainId, codeHash],
     queryFn: async (): Promise<GiftInfoResponse | undefined> => {
       if (!chainId) {
@@ -102,4 +111,17 @@ export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
     refetchOnReconnect: false,
     refetchOnMount: false,
   })
+
+  const searchToken = useTokenByChainId(data?.currencyAmount !== null ? data?.token : undefined, chainId)
+
+  if (data && searchToken) {
+    data.currencyAmount = CurrencyAmount.fromRawAmount(searchToken, data?.tokenAmount)
+  }
+
+  return useMemo(() => {
+    return {
+      data,
+      isLoading,
+    }
+  }, [data, isLoading])
 }
