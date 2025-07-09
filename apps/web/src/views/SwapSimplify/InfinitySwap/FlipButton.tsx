@@ -101,21 +101,15 @@ const DesktopFlipButton: React.FC<{ disabled?: boolean; onFlip: () => Promise<vo
     }
   }, [disabled, handleAnimationEnd])
 
-  const handleAnimatedButtonClick = useCallback(() => {
-    if (isSwitching) return
-
-    onFlip()
-
-    if (flipButtonRef.current && !flipButtonRef.current.classList.contains('switch-animation')) {
-      flipButtonRef.current.classList.add('switch-animation')
-    }
-  }, [onFlip, isSwitching])
-
   const handleClick = useCallback(() => {
-    if (!disabled) {
-      handleAnimatedButtonClick()
+    if (!disabled && !isSwitching) {
+      onFlip()
+
+      if (flipButtonRef.current && !flipButtonRef.current.classList.contains('switch-animation')) {
+        flipButtonRef.current.classList.add('switch-animation')
+      }
     }
-  }, [disabled, handleAnimatedButtonClick])
+  }, [disabled, isSwitching])
 
   return (
     <FlipButtonWrapper ref={flipButtonRef} onAnimationEnd={handleAnimationEnd}>
