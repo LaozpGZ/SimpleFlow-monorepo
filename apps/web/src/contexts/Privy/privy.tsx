@@ -12,7 +12,7 @@ export function PrivyProvider({ children }: PropsWithChildren) {
 
   return (
     <Provider
-      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID ?? 'z'}
+      appId={process.env.NEXT_PUBLIC_PRIVY_APP_ID ?? ''}
       clientId={process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID ?? ''}
       config={{
         defaultChain: CHAINS[0],
