@@ -180,6 +180,11 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
   let percentageLeftPosition = 0
   let percentageRightPosition = 100
 
+  // Minimum distance between text positions (in percentage)
+  const MIN_TEXT_DISTANCE = 35
+  // Minimum width for the main range (colored segment) in percentage
+  const MIN_RANGE_WIDTH = 25
+
   if (hasOverflow && currentPriceNum !== null) {
     if (isOverflowLeft) {
       // Current price is left of min price
@@ -190,10 +195,32 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
       const graySegmentWidth = ((minPriceNum - currentPriceNum) / totalRange) * 100
 
       currentPriceLinePosition = 0
-      // Position prices and percentages at the actual position range (colored segment)
-      percentageLeftPosition = graySegmentWidth
-      percentageRightPosition = 100
-    } else if (isOverflowRight) {
+
+      // Calculate ideal positions
+      let idealLeftPosition = graySegmentWidth
+      let idealRightPosition = 100
+
+      // Enforce minimum distance
+      const currentDistance = idealRightPosition - idealLeftPosition
+      if (currentDistance < MIN_TEXT_DISTANCE) {
+        // Expand the range to maintain minimum distance
+        const expansion = (MIN_TEXT_DISTANCE - currentDistance) / 2
+        idealLeftPosition = Math.max(0, idealLeftPosition - expansion)
+        idealRightPosition = Math.min(100, idealRightPosition + expansion)
+
+        // If we can't expand both sides equally, prioritize the side that can expand more
+        if (idealLeftPosition === 0) {
+          idealRightPosition = Math.min(100, idealLeftPosition + MIN_TEXT_DISTANCE)
+        } else if (idealRightPosition === 100) {
+          idealLeftPosition = Math.max(0, idealRightPosition - MIN_TEXT_DISTANCE)
+        }
+      }
+
+      percentageLeftPosition = idealLeftPosition
+      percentageRightPosition = idealRightPosition
+    }
+
+    if (isOverflowRight) {
       // Current price is right of max price
       displayMinPrice = minPrice
       displayMaxPrice = maxPrice
@@ -202,9 +229,29 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
       const coloredSegmentWidth = ((maxPriceNum - minPriceNum) / totalRange) * 100
 
       currentPriceLinePosition = 100
-      // Position prices and percentages at the actual position range (colored segment)
-      percentageLeftPosition = 0
-      percentageRightPosition = coloredSegmentWidth
+
+      // Calculate ideal positions
+      let idealLeftPosition = 0
+      let idealRightPosition = coloredSegmentWidth
+
+      // Enforce minimum distance
+      const currentDistance = idealRightPosition - idealLeftPosition
+      if (currentDistance < MIN_TEXT_DISTANCE) {
+        // Expand the range to maintain minimum distance
+        const expansion = (MIN_TEXT_DISTANCE - currentDistance) / 2
+        idealLeftPosition = Math.max(0, idealLeftPosition - expansion)
+        idealRightPosition = Math.min(100, idealRightPosition + expansion)
+
+        // If we can't expand both sides equally, prioritize the side that can expand more
+        if (idealLeftPosition === 0) {
+          idealRightPosition = Math.min(100, idealLeftPosition + MIN_TEXT_DISTANCE)
+        } else if (idealRightPosition === 100) {
+          idealLeftPosition = Math.max(0, idealRightPosition - MIN_TEXT_DISTANCE)
+        }
+      }
+
+      percentageLeftPosition = idealLeftPosition
+      percentageRightPosition = idealRightPosition
     }
   }
 
@@ -221,8 +268,14 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
     // Extended bar with segments
     if (isOverflowLeft) {
       const totalRange = maxPriceNum - currentPriceNum!
-      const graySegmentWidth = ((minPriceNum - currentPriceNum!) / totalRange) * 100
-      const coloredSegmentWidth = ((maxPriceNum - minPriceNum) / totalRange) * 100
+      let graySegmentWidth = ((minPriceNum - currentPriceNum!) / totalRange) * 100
+      let coloredSegmentWidth = ((maxPriceNum - minPriceNum) / totalRange) * 100
+
+      // Enforce minimum width for colored segment
+      if (coloredSegmentWidth < MIN_RANGE_WIDTH) {
+        coloredSegmentWidth = MIN_RANGE_WIDTH
+        graySegmentWidth = 100 - coloredSegmentWidth
+      }
 
       return (
         <ExtendedPriceRangeBar>
@@ -243,8 +296,14 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
 
     if (isOverflowRight) {
       const totalRange = currentPriceNum! - minPriceNum
-      const coloredSegmentWidth = ((maxPriceNum - minPriceNum) / totalRange) * 100
-      const graySegmentWidth = ((currentPriceNum! - maxPriceNum) / totalRange) * 100
+      let coloredSegmentWidth = ((maxPriceNum - minPriceNum) / totalRange) * 100
+      let graySegmentWidth = ((currentPriceNum! - maxPriceNum) / totalRange) * 100
+
+      // Enforce minimum width for colored segment
+      if (coloredSegmentWidth < MIN_RANGE_WIDTH) {
+        coloredSegmentWidth = MIN_RANGE_WIDTH
+        graySegmentWidth = 100 - coloredSegmentWidth
+      }
 
       return (
         <ExtendedPriceRangeBar>
