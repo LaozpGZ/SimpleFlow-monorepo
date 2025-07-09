@@ -7,6 +7,7 @@ import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 import { useAppDispatch } from 'state'
+import { CONNECTORS } from 'utils/wagmi'
 import { ConnectorNotFoundError, SwitchChainNotSupportedError, useAccount, useConnect, useDisconnect } from 'wagmi'
 import { useFirebaseAuth } from '../contexts/Privy/firebase'
 import { clearUserStates } from '../utils/clearUserStates'
@@ -26,9 +27,9 @@ const useAuth = () => {
 
   const login = useCallback(
     async (connectorID: ConnectorNames) => {
-      const findConnector = connectors.find((c) => c.id === connectorID)
+      const findConnector = CONNECTORS.find((c) => c.id === connectorID)
       try {
-        console.log({ connectorID, findConnector, ready, authenticated, connectors })
+        console.log({ connectorID, findConnector, ready, authenticated, connectors, CONNECTORS }, 'connctor???')
         if (!findConnector) return undefined
 
         const connected = await connectAsync({ connector: findConnector, chainId })
