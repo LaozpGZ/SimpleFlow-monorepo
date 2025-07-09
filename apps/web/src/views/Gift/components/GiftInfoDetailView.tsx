@@ -8,11 +8,12 @@ import { useCancelGift } from '../hooks/useCancelGift'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { GiftStatus } from '../types'
+import { isExpired } from '../utils/isExpired'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 import { GiftInfoAddress, GiftInfoDescription, GiftInfoTimestamp, GiftInfoTxn } from './GiftInfoDetail'
 import { GiftStatusTag } from './GiftStatusTag'
 
-export const CancelGiftConfirmView = () => {
+export const GiftInfoDetailView = () => {
   const { codeHash } = useContext(CancelGiftContext)
   const { t } = useTranslation()
 
@@ -31,11 +32,14 @@ export const CancelGiftConfirmView = () => {
     )
   }
 
-  const showNote = giftInfo.status === GiftStatus.CANCELLED || giftInfo.status === GiftStatus.EXPIRED
+  const status =
+    giftInfo.status === GiftStatus.PENDING && isExpired(giftInfo.expiryTimestamp) ? GiftStatus.EXPIRED : giftInfo.status
+
+  const showNote = status === GiftStatus.CANCELLED || status === GiftStatus.EXPIRED
 
   return (
     <>
-      {!showNote ? null : giftInfo.status === GiftStatus.EXPIRED ? (
+      {!showNote ? null : status === GiftStatus.EXPIRED ? (
         <GiftInfoDescription
           text={t('Gift Expired, Tokens Returned!')}
           description={t(
@@ -87,13 +91,13 @@ export const CancelGiftConfirmView = () => {
             </SecondaryCard>
           )}
           <Box mb="16px">
-            <GiftStatusTag status={isCancelSuccessful ? GiftStatus.CANCELLED : giftInfo?.status} />
+            <GiftStatusTag status={isCancelSuccessful ? GiftStatus.CANCELLED : status} />
           </Box>
 
           <FlexGap flexDirection="column" gap="8px">
             <GiftInfoTimestamp text={t('Created at:')} timestamp={giftInfo.timestamp} />
 
-            {giftInfo.status === GiftStatus.CLAIMED && giftInfo.actionTransactionHash && (
+            {status === GiftStatus.CLAIMED && giftInfo.actionTransactionHash && (
               <>
                 <GiftInfoTxn
                   text={t('Gift claimed:')}
@@ -104,7 +108,7 @@ export const CancelGiftConfirmView = () => {
               </>
             )}
 
-            {giftInfo.status === GiftStatus.CANCELLED && giftInfo.actionTransactionHash && (
+            {status === GiftStatus.CANCELLED && giftInfo.actionTransactionHash && (
               <GiftInfoTxn
                 text={t('Gift cancelled:')}
                 txnHash={giftInfo.actionTransactionHash}
@@ -112,7 +116,7 @@ export const CancelGiftConfirmView = () => {
               />
             )}
 
-            {[GiftStatus.PENDING, GiftStatus.EXPIRED].includes(giftInfo.status) && (
+            {[GiftStatus.PENDING, GiftStatus.EXPIRED].includes(status) && (
               <GiftInfoTimestamp text={t('Expires on:')} timestamp={giftInfo.expiryTimestamp} />
             )}
           </FlexGap>
@@ -124,6 +128,8 @@ export const CancelGiftConfirmView = () => {
           <CheckmarkCircleIcon color="success" width="40px" />
         </Flex>
       ) : (
+        // if status is pending and expiryTimestamp is in the past, it is expired
+        // but user might need to manually cancel the gift in case auto cancel is not working
         giftInfo.status === GiftStatus.PENDING && (
           <Button
             onClick={() => cancelGift({ codeHash })}

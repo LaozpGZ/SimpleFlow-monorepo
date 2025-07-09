@@ -22,9 +22,9 @@ import { useRouter } from 'next/router'
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { formatAmount } from 'utils/formatInfoNumbers'
-import { CancelGiftConfirmView } from 'views/Gift/components/CancelGiftConfirmView'
 import { ClaimGiftConfirmView } from 'views/Gift/components/ClaimGiftConfirmView'
 import { ClaimGiftView } from 'views/Gift/components/ClaimGiftView'
+import { GiftInfoDetailView } from 'views/Gift/components/GiftInfoDetailView'
 import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
 import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
 import { ActionButton } from './ActionButton'
@@ -151,7 +151,7 @@ export const WalletContent = ({
   }, [])
 
   const actionView = useMemo(() => {
-    if (viewState === ViewState.CANCEL_GIFT_CONFIRM) return <CancelGiftConfirmView />
+    if (viewState === ViewState.GIFT_INFO_DETAIL) return <GiftInfoDetailView />
 
     // Claim Gift
     if ([ViewState.CLAIM_GIFT, ViewState.CLAIM_GIFT_CONFIRM].includes(viewState)) {

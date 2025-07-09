@@ -6,6 +6,7 @@ import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
 import { useClaimGiftContext } from '../providers/ClaimGiftProvider'
 import { GiftStatus } from '../types'
 import { convertCodeHash } from '../utils/convertCodeHash'
+import { isExpired } from '../utils/isExpired'
 
 export const ClaimGiftView = ({ setViewState }: { setViewState: (viewState: ViewState) => void }) => {
   const { t } = useTranslation()
@@ -15,7 +16,8 @@ export const ClaimGiftView = ({ setViewState }: { setViewState: (viewState: View
 
   const { data: giftInfo, isLoading } = useGetGiftByCodeHash({ codeHash })
 
-  const isValid = Boolean(giftInfo?.status === GiftStatus.PENDING)
+  // Check if gift is valid: must be pending and not expired
+  const isValid = Boolean(giftInfo?.status === GiftStatus.PENDING && !isExpired(giftInfo.expiryTimestamp))
 
   const buttonText = useMemo(() => {
     if (!code) {

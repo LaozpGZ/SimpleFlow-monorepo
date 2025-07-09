@@ -9,6 +9,7 @@ import { useContext } from 'react'
 import { useGetGiftInfo } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { GiftStatus } from '../types'
+import { isExpired } from '../utils/isExpired'
 import { GiftStatusTag } from './GiftStatusTag'
 
 export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: ViewState) => void }) => {
@@ -34,23 +35,30 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
         ) : (
           giftInfo.map((gift) => {
             const displayCurrency = gift.currencyAmount ?? gift.nativeCurrencyAmount
+            // Check if the gift is expired (pending status but expiryTimestamp is in the past)
+            const isGiftExpired = gift.status === GiftStatus.PENDING && isExpired(gift.expiryTimestamp)
+            const displayStatus = isGiftExpired ? GiftStatus.EXPIRED : gift.status
+
             return (
               <Box
                 mb="16px"
                 key={gift.codeHash}
                 onClick={() => {
                   setCodeHash(gift.codeHash)
-                  setViewState(ViewState.CANCEL_GIFT_CONFIRM)
+                  setViewState(ViewState.GIFT_INFO_DETAIL)
                 }}
               >
                 <FlexGap gap="8px" alignItems="center" mb="8px">
-                  <GiftStatusTag status={gift.status} />
+                  <GiftStatusTag status={displayStatus} />
 
-                  {gift.status === GiftStatus.PENDING && (
-                    <Text fontSize="12px" color="textSubtle">
-                      Expires: {formatDistanceToNow(new Date(gift.expiryTimestamp), { addSuffix: true })}
-                    </Text>
-                  )}
+                  {
+                    // if status is pending and expiryTimestamp is in the past, show expired
+                    gift.status === GiftStatus.PENDING && !isGiftExpired && (
+                      <Text fontSize="12px" color="textSubtle">
+                        Expires: {formatDistanceToNow(new Date(gift.expiryTimestamp), { addSuffix: true })}
+                      </Text>
+                    )
+                  }
                 </FlexGap>
 
                 <Flex alignItems="center" width="100%" justifyContent="space-between">
@@ -72,7 +80,7 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
                       variant="text"
                       onClick={() => {
                         setCodeHash(gift.codeHash)
-                        setViewState(ViewState.CANCEL_GIFT_CONFIRM)
+                        setViewState(ViewState.GIFT_INFO_DETAIL)
                       }}
                     >
                       <DeleteOutlineIcon color="textSubtle" />
