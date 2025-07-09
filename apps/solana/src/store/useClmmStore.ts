@@ -506,43 +506,43 @@ export const useClmmStore = createStore<ClmmState>(
           }
         })
 
-        const simulateResult = await simulate({
-          accounts: {
-            encoding: 'base64',
-            addresses: poolInfo.rewardDefaultInfos.map((r) => r.mint.address)
-          }
-        })
-        // console.log('simulateResult', simulateResult)
-
-        if (!simulateResult.value.logs || simulateResult.value.logs.length < 3) {
-          onError?.()
-          toastSubject.next({ txError: new Error('Simulation failed'), ...meta })
-          return ''
-        }
-        const disclaimerDigest = await crypto.subtle.digest('SHA-256', Buffer.from('event:DecreaseLiquidityEvent', 'utf-8'))
-        const disclaimer = Buffer.from(disclaimerDigest).toString('base64').slice(0, 8)
-
-        const data = simulateResult.value.logs.find((log) => log.startsWith(`Program data: ${disclaimer}`))?.slice(`Program data: `.length)
-        if (!data) {
-          onError?.()
-          toastSubject.next({ txError: new Error('DecreaseLiquidityEvent not found in logs'), ...meta })
-          return ''
-        }
-        const decreaseLiquidityEventData = DecreaseLiquidityEventLayout.decode(Buffer.from(data, 'base64'))
-
-        // console.log(
-        //   'debug decreaseLiquidityEventData',
-        //   Object.fromEntries(
-        //     Object.entries(decreaseLiquidityEventData).map(([key, value]) => [
-        //       key,
-        //       Array.isArray(value) ? value.map((v) => v.toString()) : value.toString()
-        //     ])
-        //   )
-        // )
-
         if (simulateOnly) {
-          onFinally?.()
-          return decreaseLiquidityEventData
+          try {
+            const simulateResult = await simulate({
+              accounts: {
+                encoding: 'base64',
+                addresses: poolInfo.rewardDefaultInfos.map((r) => r.mint.address)
+              }
+            })
+            // console.log('simulateResult', simulateResult)
+
+            if (!simulateResult.value.logs || simulateResult.value.logs.length < 3) {
+              onError?.()
+              toastSubject.next({ txError: new Error('Simulation failed'), ...meta })
+              return ''
+            }
+            const disclaimerDigest = await crypto.subtle.digest('SHA-256', Buffer.from('event:DecreaseLiquidityEvent', 'utf-8'))
+            const disclaimer = Buffer.from(disclaimerDigest).toString('base64').slice(0, 8)
+
+            const data = simulateResult.value.logs
+              .find((log) => log.startsWith(`Program data: ${disclaimer}`))
+              ?.slice(`Program data: `.length)
+            if (!data) {
+              onError?.()
+              toastSubject.next({ txError: new Error('DecreaseLiquidityEvent not found in logs'), ...meta })
+              return ''
+            }
+            const decreaseLiquidityEventData = DecreaseLiquidityEventLayout.decode(Buffer.from(data, 'base64'))
+
+            onFinally?.()
+            return decreaseLiquidityEventData
+          } catch (e) {
+            console.error('Simulation error:', e)
+            onError?.(e)
+          } finally {
+            onFinally?.()
+          }
+          return {}
         }
 
         return execute()

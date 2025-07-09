@@ -333,7 +333,7 @@ export const useAppStore = createStore<AppState>(
       }
     },
     setRpcUrlAct: async (url, skipToast, skipError) => {
-      if (url === get().rpcNodeUrl) {
+      if (url === get().rpcNodeUrl && !skipToast) {
         toastSubject.next({
           status: 'info',
           title: 'Switch Rpc Node',
@@ -343,7 +343,7 @@ export const useAppStore = createStore<AppState>(
       }
       try {
         if (!isValidUrl(url)) throw new Error('invalid url')
-        if (isRpcLoading) {
+        if (isRpcLoading && !skipToast) {
           toastSubject.next({
             status: 'warning',
             title: 'Switch Rpc Node',

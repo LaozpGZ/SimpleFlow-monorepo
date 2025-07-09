@@ -233,8 +233,8 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
 
   const tokenFees = data
     ? {
-        tokenFeeAmountA: data.feeAmount0,
-        tokenFeeAmountB: data.feeAmount1
+        tokenFeeAmountA: data?.feeAmount0,
+        tokenFeeAmountB: data?.feeAmount1
       }
     : {}
 
