@@ -57,7 +57,7 @@ export const ColumnsPoolActions: React.FC<{
   }, [pool, router])
 
   const handleCreateOrEditFarm = useCallback(
-    (e) => {
+    (e: React.MouseEvent<HTMLDivElement>) => {
       e.stopPropagation()
       if (farmCreated) {
         router.push({
