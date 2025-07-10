@@ -1,8 +1,10 @@
-import { useReadContract } from 'wagmi'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { useMemo } from 'react'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
+import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
+import { useMemo } from 'react'
+import { multiplyPriceByAmount } from 'utils/prices'
+import { useReadContract } from 'wagmi'
 import { PancakeGiftV1Abi } from '../abis/PancakeGiftV1Abi'
 import { GIFT_PANCAKE_V1_ADDRESS } from '../constants'
 
@@ -22,9 +24,15 @@ export const useReadGasPayment = () => {
 export const useReadGasPaymentAmount = () => {
   const nativeCurrency = useNativeCurrency()
   const gasPayment = useReadGasPayment()
+  const stableNativePrice = useStablecoinPrice(nativeCurrency)
 
-  return useMemo(
-    () => (gasPayment ? CurrencyAmount.fromRawAmount(nativeCurrency, gasPayment) : undefined),
-    [gasPayment, nativeCurrency],
-  )
+  return useMemo(() => {
+    const gasPaymentAmount = gasPayment ? CurrencyAmount.fromRawAmount(nativeCurrency, gasPayment) : undefined
+    return {
+      gasPayment: gasPaymentAmount,
+      gasPaymentUsd: gasPaymentAmount
+        ? multiplyPriceByAmount(stableNativePrice, parseFloat(gasPaymentAmount.toExact()) || 0)
+        : 0,
+    }
+  }, [gasPayment, nativeCurrency, stableNativePrice])
 }

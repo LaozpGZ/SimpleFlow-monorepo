@@ -49,7 +49,7 @@ export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<T
     </Box>
   )
 
-  const gasPaymentAmount = useReadGasPaymentAmount()
+  const { gasPayment, gasPaymentUsd } = useReadGasPaymentAmount()
 
   const totalUsd = useCalculateTotalCostCreateGift({ tokenAmount, nativeAmount })
 
@@ -136,13 +136,13 @@ export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<T
         <RowBetween>
           <Text color="textSubtle">{t('Gift Claim Gas Fee (Fixed)')}</Text>
           <Text>
-            {gasPaymentAmount?.toSignificant(6)} {gasPaymentAmount?.currency.symbol}
+            {gasPayment?.toSignificant(6)} {gasPayment?.currency.symbol}
           </Text>
         </RowBetween>
 
         <RowBetween>
           <Text color="textSubtle">{t('Total cost to Create Gift')}</Text>
-          <Text>{formatDollarAmount(totalUsd)}</Text>
+          <Text>{formatDollarAmount(totalUsd + gasPaymentUsd)}</Text>
         </RowBetween>
       </FlexGap>
 
