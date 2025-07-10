@@ -98,9 +98,7 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo, ...props }) =>
               {t('TVL')}
             </TabButton>
           </FlexGap>
-          {(chart === PoolChart.Volume ||
-            chart === PoolChart.TVL ||
-            (chart === PoolChart.Liquidity && isV2OrStable)) && (
+          {(chart === PoolChart.Volume || chart === PoolChart.TVL) && (
             <TabMenu
               tabs={['D', 'W', 'M', 'Y'] as TimeFilter[]}
               defaultTab={TimeFilter.D}
