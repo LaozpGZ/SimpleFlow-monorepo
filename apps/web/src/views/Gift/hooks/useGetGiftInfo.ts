@@ -3,7 +3,6 @@ import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
 import { useTokenByChainId, useTokensByChainId } from 'hooks/Tokens'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useMemo } from 'react'
 import { zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
@@ -23,39 +22,65 @@ interface GiftApiResponse<T> {
   data?: T
 }
 
+export const fetchGiftInfo = async ({
+  chainId,
+  account,
+}: {
+  chainId?: number
+  account?: string
+}): Promise<GiftInfoResponse[]> => {
+  if (!chainId || !account) {
+    throw new Error('Missing required parameters: chainId and account')
+  }
+
+  if (!NEXT_PUBLIC_GIFT_API) {
+    throw new Error('API URL is not configured')
+  }
+
+  const urlSend = `${NEXT_PUBLIC_GIFT_API}/gift/list?chainId=${chainId}&address=${account}`
+  const urlReceive = `${NEXT_PUBLIC_GIFT_API}/gift/list?chainId=${chainId}&claimerAddress=${account}`
+
+  // promise all urlsend and urlreceive
+  const [responseSend, responseReceive] = await Promise.all([fetch(urlSend), fetch(urlReceive)])
+
+  if (!responseSend.ok || !responseReceive.ok) {
+    throw new Error(
+      `Failed to fetch gift info: ${responseSend.status} ${responseSend.statusText} ${responseReceive.status} ${responseReceive.statusText}`,
+    )
+  }
+
+  const resultSend: GiftApiResponse<GiftInfoResponse[]> = await responseSend.json()
+  const resultReceive: GiftApiResponse<GiftInfoResponse[]> = await responseReceive.json()
+
+  if (resultSend.status === GiftApiStatus.FAILED || resultReceive.status === GiftApiStatus.FAILED) {
+    throw new Error(resultSend.message || resultReceive.message || 'Failed to fetch gift information')
+  }
+
+  // ensure no duplicate gift codehash
+  const giftCodes = new Set()
+  const result = [...(resultSend.data || []), ...(resultReceive.data || [])]
+  return result.filter((gift) => {
+    if (giftCodes.has(gift.codeHash)) {
+      return false
+    }
+    giftCodes.add(gift.codeHash)
+    return true
+  })
+}
+
 export const useGetGiftInfo = () => {
   const { address: account } = useAccount()
-  const { chainId } = useActiveChainId()
+  const chainId = ChainId.BSC
 
   const selectGiftInfo = useGiftInfoSelector()
 
   const { data, isLoading } = useQuery({
     queryKey: [QUERY_KEY_GIFT_INFO, chainId, account],
-    queryFn: async (): Promise<GiftInfoResponse[]> => {
-      if (!chainId || !account) {
-        throw new Error('Missing required parameters: chainId and account')
-      }
-
-      if (!NEXT_PUBLIC_GIFT_API) {
-        throw new Error('NEXT_PUBLIC_GIFT_API environment variable is not configured')
-      }
-
-      const url = `${NEXT_PUBLIC_GIFT_API}/gift/list?chainId=${chainId}&address=${account}`
-
-      const response = await fetch(url)
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch gift info: ${response.status} ${response.statusText}`)
-      }
-
-      const result: GiftApiResponse<GiftInfoResponse[]> = await response.json()
-
-      if (result.status === GiftApiStatus.FAILED) {
-        throw new Error(result.message || 'Failed to fetch gift information')
-      }
-
-      return result.data || []
-    },
+    queryFn: () =>
+      fetchGiftInfo({
+        chainId,
+        account: account!,
+      }),
     select: (data): GiftInfo[] => {
       return data.map(selectGiftInfo).filter((gift) => gift !== null)
     },
