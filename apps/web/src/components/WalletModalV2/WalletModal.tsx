@@ -18,6 +18,7 @@ import {
 import { RecentTransactions } from 'components/App/Transactions/TransactionsModal'
 
 import { useTheme } from '@pancakeswap/hooks'
+import { usePrivy } from '@privy-io/react-auth'
 import { TabsComponent, WalletView } from 'components/Menu/UserMenu/WalletModal'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useAddressBalance } from 'hooks/useAddressBalance'
@@ -145,6 +146,7 @@ export const WalletContent = ({
   const { isMobile } = useMatchBreakpoints()
   const [viewState, setViewState] = useState(ViewState.WALLET_INFO)
   const { theme } = useTheme()
+  const { authenticated, ready, user, createWallet, setWalletRecovery, enrollInMfa } = usePrivy()
 
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
@@ -201,7 +203,17 @@ export const WalletContent = ({
 
         <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
         {viewState <= ViewState.SEND_ASSETS && (
-          <FlexGap>
+          <FlexGap gap="4px">
+            {authenticated && user?.wallet && (
+              <DisconnectButton scale="xs" onClick={() => setWalletRecovery()}>
+                {t('Recover')}
+              </DisconnectButton>
+            )}
+            {authenticated && user?.wallet && (
+              <DisconnectButton scale="xs" onClick={() => enrollInMfa(true)}>
+                {t('MFA')}
+              </DisconnectButton>
+            )}
             <DisconnectButton scale="xs" onClick={onDisconnect}>
               {t('Disconnect')}
             </DisconnectButton>
