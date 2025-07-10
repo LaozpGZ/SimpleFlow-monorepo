@@ -16,18 +16,15 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
       createWallet()
     }
 
-    // if (user?.wallet?.recoveryMethod === 'privy') {
-    //   const now = Date.now()
-    //   const oneWeek = 7 * 24 * 60 * 60 * 1000
+    if (user?.wallet?.recoveryMethod === 'privy' || true) {
+      const now = Date.now()
+      const oneWeek = 7 * 24 * 60 * 60 * 1000
 
-    //   if (now - lastRecovery > oneWeek) {
-    //     setWalletRecovery()
-    //     setLastRecovery(now)
-    //   }
-    // }
-    // if (user?.mfaMethods?.length === 0) {
-    //   enrollInMfa(true)
-    // }
+      if (now - lastRecovery > oneWeek) {
+        setWalletRecovery()
+        setLastRecovery(now)
+      }
+    }
   }, [ready, user, authenticated, lastRecovery, setLastRecovery])
 
   return <PrivyWagmiProvider {...props}>{children}</PrivyWagmiProvider>

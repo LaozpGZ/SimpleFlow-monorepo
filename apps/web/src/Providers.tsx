@@ -36,7 +36,6 @@ const Providers: React.FC<
     () => createWagmiConfig(),
     [],
   )
-  console.log({ wagmiConfig }, '???')
 
   return (
     <FirebaseAuthProvider>
