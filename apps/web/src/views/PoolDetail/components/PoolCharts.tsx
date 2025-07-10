@@ -5,6 +5,7 @@ import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
 
+import { Protocol } from '@pancakeswap/farms'
 import { TabMenu } from 'views/BurnDashboard/components/TabMenu'
 import { useRouterQuery } from '../hooks/useRouterQuery'
 import { TimeFilter } from '../types'
@@ -76,7 +77,7 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo, ...props }) =>
               {t('Volume')}
             </TabButton>
             <TabButton $active={chart === PoolChart.Liquidity} onClick={() => setChart(PoolChart.Liquidity)}>
-              {t('Liquidity')}
+              {poolInfo?.protocol === Protocol.V2 || poolInfo?.protocol === Protocol.STABLE ? t('TVL') : t('Liquidity')}
             </TabButton>
             <TabButton
               $active={chart === PoolChart.Fees}

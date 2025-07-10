@@ -52,7 +52,7 @@ export const CurrentPriceLabel: React.FC<CurrentPriceLabelProps> = ({ data, pool
           minimumSignificantDigits: 1,
           maximumSignificantDigits: 5,
         })}{' '}
-        {poolInfo.token0.symbol} per {poolInfo.token1.symbol}
+        {poolInfo.token1.symbol} per {poolInfo.token0.symbol}
       </Text>
     </Wrapper>
   )
