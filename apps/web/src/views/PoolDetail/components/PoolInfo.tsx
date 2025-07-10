@@ -249,6 +249,7 @@ export const PoolInfo = () => {
                             chainId={chainId}
                             hookData={hookData}
                             infoIconVisible={false}
+                            showType={false}
                           />
                         ) : (
                           <FeeTierTooltip
