@@ -4,7 +4,6 @@ import { Box, FlexGap, SearchInput, Text } from '@pancakeswap/uikit'
 import { NetworkFilter } from '@pancakeswap/widgets-internal'
 import { BalanceData } from 'hooks/useAddressBalance'
 import { useCallback, useMemo, useState } from 'react'
-import { SendGiftProvider } from 'views/Gift/providers/SendGiftProvider'
 import { useAllChainsOpts } from 'views/universalFarms/hooks/useMultiChains'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
@@ -62,11 +61,7 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
   }, [assets, selectedNetworks, searchQuery, convertBalancesToAssets])
 
   if (viewState >= ViewState.SEND_FORM && selectedAsset)
-    return (
-      <SendGiftProvider>
-        <SendAssetForm asset={selectedAsset} onViewStateChange={onViewStateChange} viewState={viewState} />
-      </SendGiftProvider>
-    )
+    return <SendAssetForm asset={selectedAsset} onViewStateChange={onViewStateChange} viewState={viewState} />
 
   return (
     <>

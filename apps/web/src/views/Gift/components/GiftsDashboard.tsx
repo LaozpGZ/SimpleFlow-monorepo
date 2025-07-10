@@ -8,6 +8,7 @@ import { formatDistanceToNow } from 'date-fns'
 import { useContext } from 'react'
 import { useGetGiftInfo } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
+import { SendGiftContext } from '../providers/SendGiftProvider'
 import { GiftStatus } from '../types'
 import { isExpired } from '../utils/isExpired'
 import { GiftStatusTag } from './GiftStatusTag'
@@ -16,6 +17,8 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
   const { data: giftInfo = [], isLoading } = useGetGiftInfo()
   const { t } = useTranslation()
   const { setCodeHash } = useContext(CancelGiftContext)
+
+  const { setIsSendGift } = useContext(SendGiftContext)
 
   if (isLoading) {
     return (
@@ -97,6 +100,7 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
         <ActionButton
           onClick={() => {
             setViewState(ViewState.SEND_ASSETS)
+            setIsSendGift(true)
           }}
           variant="tertiary"
         >

@@ -19,6 +19,7 @@ import styled from 'styled-components'
 import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useAutoFillCode } from 'views/Gift/hooks/useAutoFillCode'
 import { ClaimGiftProvider, useClaimGiftContext } from 'views/Gift/providers/ClaimGiftProvider'
+import { SendGiftProvider } from 'views/Gift/providers/SendGiftProvider'
 import { useAccount } from 'wagmi'
 import { MenuTabProvider } from './providers/MenuTabProvider'
 
@@ -233,9 +234,11 @@ const UserMenuContainer = () => {
   return (
     <WalletModalV2ViewStateProvider>
       <MenuTabProvider>
-        <ClaimGiftProvider>
-          <UserMenu />
-        </ClaimGiftProvider>
+        <SendGiftProvider>
+          <ClaimGiftProvider>
+            <UserMenu />
+          </ClaimGiftProvider>
+        </SendGiftProvider>
       </MenuTabProvider>
     </WalletModalV2ViewStateProvider>
   )
