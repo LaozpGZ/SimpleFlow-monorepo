@@ -59,6 +59,10 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo, ...props }) =>
   const { id } = useRouterQuery()
   const isInfinity = useMemo(() => isInfinityProtocol(poolInfo?.protocol), [poolInfo])
   const isV3 = useMemo(() => poolInfo?.protocol === 'v3', [poolInfo])
+  const isV2OrStable = useMemo(
+    () => poolInfo?.protocol === Protocol.V2 || poolInfo?.protocol === Protocol.STABLE,
+    [poolInfo],
+  )
   const [chart, setChart] = useState<PoolChart>(PoolChart.Volume)
 
   const [timeFilter, setTimeFilter] = useState<TimeFilter>(TimeFilter.D)
@@ -76,8 +80,12 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo, ...props }) =>
             <TabButton $active={chart === PoolChart.Volume} onClick={() => setChart(PoolChart.Volume)}>
               {t('Volume')}
             </TabButton>
-            <TabButton $active={chart === PoolChart.Liquidity} onClick={() => setChart(PoolChart.Liquidity)}>
-              {poolInfo?.protocol === Protocol.V2 || poolInfo?.protocol === Protocol.STABLE ? t('TVL') : t('Liquidity')}
+            <TabButton
+              $active={chart === PoolChart.Liquidity}
+              $enabled={!isV2OrStable}
+              onClick={() => setChart(PoolChart.Liquidity)}
+            >
+              {t('Liquidity')}
             </TabButton>
             <TabButton
               $active={chart === PoolChart.Fees}
@@ -86,15 +94,13 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo, ...props }) =>
             >
               {t('Fees')}
             </TabButton>
-            <TabButton
-              $active={chart === PoolChart.TVL}
-              $enabled={isV3 || isInfinity}
-              onClick={() => setChart(PoolChart.TVL)}
-            >
+            <TabButton $active={chart === PoolChart.TVL} onClick={() => setChart(PoolChart.TVL)}>
               {t('TVL')}
             </TabButton>
           </FlexGap>
-          {(chart === PoolChart.Volume || chart === PoolChart.TVL) && (
+          {(chart === PoolChart.Volume ||
+            chart === PoolChart.TVL ||
+            (chart === PoolChart.Liquidity && isV2OrStable)) && (
             <TabMenu
               tabs={['D', 'W', 'M', 'Y'] as TimeFilter[]}
               defaultTab={TimeFilter.D}
@@ -105,7 +111,13 @@ export const PoolCharts: React.FC<PoolChartsProps> = ({ poolInfo, ...props }) =>
       </TabsContainer>
       <Box padding="0 24px 24px 24px">
         {chart === PoolChart.Volume ? <ChartVolume address={id} poolInfo={poolInfo} timeFilter={timeFilter} /> : null}
-        {chart === PoolChart.Liquidity ? <ChartLiquidity address={id} poolInfo={poolInfo} /> : null}
+        {chart === PoolChart.Liquidity ? (
+          isV2OrStable ? (
+            <ChartTVL address={id} poolInfo={poolInfo} timeFilter={timeFilter} />
+          ) : (
+            <ChartLiquidity address={id} poolInfo={poolInfo} />
+          )
+        ) : null}
         {chart === PoolChart.Fees ? <ChartFee address={id} poolInfo={poolInfo} /> : null}
         {chart === PoolChart.TVL ? <ChartTVL address={id} poolInfo={poolInfo} timeFilter={timeFilter} /> : null}
       </Box>
