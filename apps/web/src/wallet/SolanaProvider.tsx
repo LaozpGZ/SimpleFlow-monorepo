@@ -25,7 +25,6 @@ import { WalletConnectWalletAdapter } from '@walletconnect/solana-adapter'
 import { accountActiveChainAtom } from 'hooks/useAccountActiveChain'
 import { useSetAtom } from 'jotai'
 import { defaultEndpoint, defaultNetWork } from './solana.config'
-import { SolanaWalletModal } from './SolanaWalletModal'
 import { BackpackWalletAdapter } from './walletAdapter/BackpackWalletAdapter'
 import { OKXWalletAdapter } from './walletAdapter/OKXWalletAdapter'
 
@@ -102,10 +101,7 @@ export const SolanaProvider: FC<PropsWithChildren<any>> = ({ children }) => {
     <ConnectionProvider endpoint={endpoint} config={{ disableRetryOnRateLimit: true }}>
       <WalletProvider wallets={wallets} onError={onWalletError} autoConnect>
         <SolanaWalletStateUpdater />
-        <WalletModalProvider>
-          {children}
-          <SolanaWalletModal />
-        </WalletModalProvider>
+        <WalletModalProvider>{children}</WalletModalProvider>
       </WalletProvider>
     </ConnectionProvider>
   )
