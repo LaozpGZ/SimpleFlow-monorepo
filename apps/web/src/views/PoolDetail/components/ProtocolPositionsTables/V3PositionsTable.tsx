@@ -36,6 +36,7 @@ import {
   isTickBasedPositionOutOfRange,
   isTickBasedPositionRemoved,
 } from 'views/PoolDetail/utils'
+import { AprTooltipContent } from 'views/universalFarms/components/PoolAprButtonV3/AprTooltipContent'
 import { V3PositionActions } from 'views/universalFarms/components/PositionActions/V3PositionActions'
 import { V3UnstakeModalContent } from 'views/universalFarms/components/PositionActions/V3UnstakeModalContent'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
@@ -388,7 +389,7 @@ const transformV3PositionToTableRow = (
   )
 
   const earnings = (
-    <Flex flexDirection="column" alignItems="flex-start">
+    <Flex flexDirection="column" alignItems="flex-start" style={{ cursor: 'default' }}>
       <Text bold fontSize="16px">
         <V3EarningsCell
           tokenId={position.tokenId}
@@ -404,10 +405,21 @@ const transformV3PositionToTableRow = (
 
   const totalApr = calculateTotalApr(convertAprDataToNumbers(aprData))
   const aprDisplay = (
-    <Flex flexDirection="column" alignItems="flex-start">
-      <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
-        {displayApr(totalApr)}
-      </Text>
+    <Flex flexDirection="column" alignItems="flex-start" style={{ cursor: 'default' }}>
+      <Tooltips
+        content={
+          <AprTooltipContent
+            combinedApr={totalApr}
+            lpFeeApr={Number(aprData.lpApr)}
+            cakeApr={aprData.cakeApr ? { value: Number(aprData.cakeApr.value) } : undefined}
+            merklApr={Number(aprData.merklApr)}
+          />
+        }
+      >
+        <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
+          {displayApr(totalApr)}
+        </Text>
+      </Tooltips>
     </Flex>
   )
 

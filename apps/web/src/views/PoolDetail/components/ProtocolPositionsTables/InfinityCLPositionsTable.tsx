@@ -34,6 +34,7 @@ import {
   isTickBasedPositionOutOfRange,
   isTickBasedPositionRemoved,
 } from 'views/PoolDetail/utils'
+import { AprTooltipContent } from 'views/universalFarms/components/PoolAprButtonV3/AprTooltipContent'
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityPositions } from 'views/universalFarms/hooks/useInfinityPositions'
 import { useInfinityCLPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
@@ -196,7 +197,7 @@ const transformInfinityCLPositionToTableRow = (
   )
 
   const earnings = (
-    <Flex flexDirection="column" alignItems="flex-start">
+    <Flex flexDirection="column" alignItems="flex-start" style={{ cursor: 'default' }}>
       <Text bold fontSize="16px">
         <InfinityCLEarningsCell
           tokenId={position.tokenId}
@@ -214,10 +215,21 @@ const transformInfinityCLPositionToTableRow = (
 
   const totalApr = calculateTotalApr(convertAprDataToNumbers(aprData))
   const aprDisplay = (
-    <Flex flexDirection="column" alignItems="flex-start">
-      <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
-        {displayApr(totalApr)}
-      </Text>
+    <Flex flexDirection="column" alignItems="flex-start" style={{ cursor: 'default' }}>
+      <Tooltips
+        content={
+          <AprTooltipContent
+            combinedApr={totalApr}
+            lpFeeApr={Number(aprData.lpApr)}
+            cakeApr={aprData.cakeApr ? { value: Number(aprData.cakeApr.value) } : undefined}
+            merklApr={Number(aprData.merklApr)}
+          />
+        }
+      >
+        <Text bold fontSize="16px" color={totalApr > 0 ? 'success' : 'text'}>
+          {displayApr(totalApr)}
+        </Text>
+      </Tooltips>
     </Flex>
   )
 
