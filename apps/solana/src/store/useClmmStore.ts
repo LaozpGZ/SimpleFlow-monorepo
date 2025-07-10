@@ -552,7 +552,7 @@ export const useClmmStore = createStore<ClmmState>(
               ?.slice(`Program data: `.length)
             if (!data) {
               onError?.()
-              toastSubject.next({ txError: new Error('DecreaseLiquidityEvent not found in logs'), ...meta })
+              // toastSubject.next({ txError: new Error('DecreaseLiquidityEvent not found in logs'), ...meta })
               return ''
             }
             const decreaseLiquidityEventData = DecreaseLiquidityEventLayout.decode(Buffer.from(data, 'base64'))
