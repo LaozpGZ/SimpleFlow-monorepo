@@ -16,7 +16,7 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
       createWallet()
     }
 
-    if (user?.wallet?.recoveryMethod === 'privy' || true) {
+    if (authenticated && ready && user?.wallet?.recoveryMethod === 'privy') {
       const now = Date.now()
       const oneWeek = 7 * 24 * 60 * 60 * 1000
 
