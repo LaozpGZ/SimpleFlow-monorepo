@@ -19,7 +19,7 @@ import styled from 'styled-components'
 import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useAutoFillCode } from 'views/Gift/hooks/useAutoFillCode'
 import { ClaimGiftProvider, useClaimGiftContext } from 'views/Gift/providers/ClaimGiftProvider'
-import { SendGiftProvider } from 'views/Gift/providers/SendGiftProvider'
+import { SendGiftProvider, useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { useAccount } from 'wagmi'
 import { MenuTabProvider } from './providers/MenuTabProvider'
 
@@ -82,7 +82,7 @@ const UserMenu = () => {
 
   const { reset: resetViewState, viewState } = useWalletModalV2ViewState()
   const { setCode } = useClaimGiftContext()
-
+  const { setIsSendGift } = useSendGiftContext()
   // State for click-based menu
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -96,6 +96,12 @@ const UserMenu = () => {
       }
     },
   })
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      setIsSendGift(false)
+    }
+  }, [isMenuOpen])
 
   // Handle click outside to close menu
   useEffect(() => {
