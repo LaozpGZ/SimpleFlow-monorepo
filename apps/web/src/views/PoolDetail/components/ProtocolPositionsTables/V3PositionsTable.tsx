@@ -394,6 +394,7 @@ const transformV3PositionToTableRow = (
           pool={pool}
           currency0={poolInfo.token0}
           currency1={poolInfo.token1}
+          positionClosed={removed}
         />
       </Text>
     </Flex>

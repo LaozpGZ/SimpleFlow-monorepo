@@ -3,16 +3,23 @@ import { useEffect, useMemo } from 'react'
 import { useAccount } from 'wagmi'
 
 import { Currency } from '@pancakeswap/swap-sdk-core'
+import { CAKE } from '@pancakeswap/tokens'
+import { FlexGap, Text } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
+import { formatAmount as formatCurrencyAmount } from '@pancakeswap/utils/formatFractions'
 import { Pool } from '@pancakeswap/v3-sdk'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId, useUnclaimedFarmRewardsUSDByTokenId } from 'hooks/infinity/useFarmReward'
 import { useFeesEarnedUSD } from 'hooks/infinity/useFeesEarned'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { useV3PositionFees } from 'hooks/v3/useV3PositionFees'
+import { formatAmount } from 'utils/formatInfoNumbers'
 import { Address } from 'viem'
+import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useV3CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
 import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
 // Helper function to standardize number conversion
 const safeParseFloat = (value: string | number | undefined): number => {
@@ -31,20 +38,28 @@ export const V3EarningsCell = ({
   pool,
   currency0,
   currency1,
+  positionClosed = false,
 }: {
   tokenId?: bigint
   chainId: number
   pool?: Pool
   currency0?: Currency
   currency1?: Currency
+  positionClosed?: boolean
 }) => {
-  const { earningsBusd: cakeEarnings } = useV3CakeEarning(
+  const { earningsAmount: cakeEarnings, earningsBusd: cakeEarningsUSD } = useV3CakeEarning(
     useMemo(() => (tokenId ? [tokenId] : []), [tokenId]),
     chainId,
   )
 
   // Get LP fees for V3 position
-  const [feeValue0, feeValue1] = useV3PositionFees(pool ?? undefined, tokenId, false)
+  const [feeValue0, feeValue1] = useV3PositionFees(
+    pool ?? undefined,
+    tokenId,
+    false,
+    // Don't fetch LP Fees if position is closed
+    !positionClosed,
+  )
 
   // Get USD prices for fee calculation (cached by the hook)
   const { data: price0Usd } = useCurrencyUsdPrice(currency0 ?? undefined, {
@@ -54,16 +69,84 @@ export const V3EarningsCell = ({
     enabled: Boolean(currency1 && feeValue1?.greaterThan(0)),
   })
 
-  // Standardized LP fee calculation
+  const feeValue0USD = useMemo(() => {
+    return price0Usd && feeValue0 ? safeParseFloat(formatCurrencyAmount(feeValue0)) * price0Usd : undefined
+  }, [price0Usd, feeValue0])
+
+  const feeValue1USD = useMemo(() => {
+    return price1Usd && feeValue1 ? safeParseFloat(formatCurrencyAmount(feeValue1)) * price1Usd : undefined
+  }, [price1Usd, feeValue1])
+
   const lpFeesUSD = useMemo(() => {
-    const fee0USD = price0Usd && feeValue0 ? safeParseFloat(feeValue0.toExact()) * price0Usd : 0
-    const fee1USD = price1Usd && feeValue1 ? safeParseFloat(feeValue1.toExact()) * price1Usd : 0
-    return fee0USD + fee1USD
+    return feeValue0USD && feeValue1USD ? feeValue0USD + feeValue1USD : undefined
   }, [price0Usd, price1Usd, feeValue0, feeValue1])
 
-  const totalEarnings = cakeEarnings + lpFeesUSD
+  const totalEarnings = cakeEarningsUSD + (lpFeesUSD ?? 0)
 
-  return <EarningsUSD earningsBusd={totalEarnings} />
+  if (positionClosed) {
+    return <EarningsUSD earningsBusd={totalEarnings} />
+  }
+
+  return (
+    <Tooltips
+      content={
+        <FlexGap flexDirection="column" alignItems="flex-start" gap="8px">
+          <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+            <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+              <FlexGap alignItems="center" gap="8px">
+                <CurrencyLogo currency={currency0} size="16px" mb="-3px" />
+                <Text fontSize="14px" bold>
+                  {currency0?.symbol}
+                </Text>
+              </FlexGap>
+              <Text fontSize="14px" bold>
+                {formatAmount(Number(feeValue0?.toExact()) ?? 0)}
+              </Text>
+            </FlexGap>
+            <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+              {feeValue0USD && price0Usd ? formatDollarAmount(feeValue0USD) : '$0.00'}
+            </Text>
+          </FlexGap>
+          <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+            <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+              <FlexGap alignItems="center" gap="8px">
+                <CurrencyLogo currency={currency1} size="16px" mb="-3px" />
+                <Text fontSize="14px" bold>
+                  {currency1?.symbol}
+                </Text>
+              </FlexGap>
+              <Text fontSize="14px" bold>
+                {formatAmount(Number(feeValue1?.toExact()) ?? 0)}
+              </Text>
+            </FlexGap>
+            <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+              {feeValue1USD && price1Usd ? formatDollarAmount(feeValue1USD) : '$0.00'}
+            </Text>
+          </FlexGap>
+          {cakeEarnings > 0 && (
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                <FlexGap alignItems="center" gap="8px">
+                  <CurrencyLogo currency={CAKE[chainId]} size="16px" mb="-3px" />
+                  <Text fontSize="14px" bold>
+                    CAKE
+                  </Text>
+                </FlexGap>
+                <Text fontSize="14px" bold>
+                  {formatAmount(cakeEarnings ?? 0)}
+                </Text>
+              </FlexGap>
+              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                {cakeEarningsUSD ? formatDollarAmount(cakeEarningsUSD) : '$0.00'}
+              </Text>
+            </FlexGap>
+          )}
+        </FlexGap>
+      }
+    >
+      <EarningsUSD earningsBusd={totalEarnings} />
+    </Tooltips>
+  )
 }
 
 export const InfinityBinEarningsCell = ({ chainId, poolId }: { chainId?: number; poolId?: Address }) => {
@@ -94,7 +177,7 @@ export const InfinityBinEarningsCell = ({ chainId, poolId }: { chainId?: number;
     updatePositionEarningAmount(chainId, poolId, amount)
   }, [amount, chainId, poolId, isLoading, updatePositionEarningAmount])
 
-  // TODO: Add Bin LP fees calculation when needed
+  // Note: No Bin LP fees calculation
   return <EarningsUSD earningsBusd={rewardsUSD} />
 }
 
@@ -106,6 +189,7 @@ export const InfinityCLEarningsCell = ({
   currency1,
   tickLower,
   tickUpper,
+  positionClosed = false,
 }: {
   tokenId?: bigint
   chainId?: number
@@ -114,6 +198,7 @@ export const InfinityCLEarningsCell = ({
   currency1?: Currency
   tickLower?: number
   tickUpper?: number
+  positionClosed?: boolean
 }) => {
   const { address } = useAccount()
 
@@ -137,6 +222,7 @@ export const InfinityCLEarningsCell = ({
     poolId,
     tickLower,
     tickUpper,
+    enabled: !positionClosed,
   })
 
   const amount = useMemo(() => {

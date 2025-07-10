@@ -201,6 +201,7 @@ const transformInfinityCLPositionToTableRow = (
           currency1={poolInfo.token1}
           tickLower={position.tickLower}
           tickUpper={position.tickUpper}
+          positionClosed={removed}
         />
       </Text>
     </Flex>
