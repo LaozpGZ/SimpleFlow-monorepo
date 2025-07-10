@@ -29,10 +29,11 @@ export type SimpleMenuProps = {
   linkComponent?: ElementType;
   localeSelector?: ReactNode;
   announcementBanner?: ReactElement;
+  brandLogo?: ReactElement;
+  homeHref?: string;
 
   rightSide?: ReactNode;
   links: Array<MenuItemsType>;
-  homeLink?: string;
   subLinks?: Array<SubMenuItemsType>;
   footerLinks: Array<FooterLinkType>;
   activeItem?: string;
@@ -56,15 +57,16 @@ export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
   linkComponent = "a",
   localeSelector,
   announcementBanner,
+  isDark,
+  brandLogo,
+  homeHref = "/",
 
   rightSide,
-  isDark,
   toggleTheme,
   currentLang,
   setLang,
   cakePriceUsd,
   links,
-  homeLink: homeLink_,
   subLinks,
   footerLinks,
   activeItem,
@@ -77,7 +79,6 @@ export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
   buyCakeLink,
   children,
   chainId,
-  logoComponent,
 }) => {
   const isMounted = useIsMounted();
   const [showMenu, setShowMenu] = useState(true);
@@ -124,9 +125,6 @@ export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
     };
   }, [totalTopMenuHeight]);
 
-  // Find the home link if provided
-  const homeLink = links.find((link) => link.label === "Home");
-
   const subLinksWithoutMobile = useMemo(() => subLinks?.filter((subLink) => !subLink.isMobileOnly), [subLinks]);
   const subLinksMobileOnly = useMemo(() => subLinks?.filter((subLink) => subLink.isMobileOnly), [subLinks]);
   const providerValue = useMemo(() => ({ linkComponent }), [linkComponent]);
@@ -144,7 +142,7 @@ export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
             {announcementBanner ? <div ref={announcementBannerRef}>{announcementBanner}</div> : null}
             <StyledNav id="nav">
               <Flex>
-                {logoComponent ?? <Logo href={homeLink_ ?? homeLink?.href ?? "/home"} />}
+                {brandLogo ?? <Logo href={homeHref} />}
                 <AtomBox display={{ xs: "none", lg: "block" }}>
                   <MenuItems
                     ml="24px"
