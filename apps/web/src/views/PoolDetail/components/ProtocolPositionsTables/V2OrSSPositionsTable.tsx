@@ -4,6 +4,8 @@ import { AddIcon, Flex, FlexGap, MinusIcon, Text, useToast } from '@pancakeswap/
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { ToastDescriptionWithTx } from 'components/Toast'
+import { CHAIN_QUERY_NAME } from 'config/chains'
+import { PERSIST_CHAIN_KEY } from 'config/constants'
 import useCatchTxError from 'hooks/useCatchTxError'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import router from 'next/router'
@@ -141,10 +143,11 @@ const V2PositionWithApr: React.FC<{
     const token0Address = poolInfo.token0?.wrapped.address
     const token1Address = poolInfo.token1?.wrapped.address
     const baseUrl = poolInfo.protocol === 'v2' ? '/v2' : '/stable'
+    const chainPersistQuery = `chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[PERSIST_CHAIN_KEY]}=1`
 
-    const addLiquidityUrl = `${baseUrl}/add/${token0Address}/${token1Address}?increase=1`
-    const removeLiquidityUrl = `${baseUrl}/remove/${token0Address}/${token1Address}`
-    const migrateUrl = `/v2/migrate/${poolInfo.lpAddress}`
+    const addLiquidityUrl = `${baseUrl}/add/${token0Address}/${token1Address}?increase=1&${chainPersistQuery}`
+    const removeLiquidityUrl = `${baseUrl}/remove/${token0Address}/${token1Address}?${chainPersistQuery}`
+    const migrateUrl = `/v2/migrate/${poolInfo.lpAddress}?${chainPersistQuery}`
 
     const actions = (
       <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
@@ -191,8 +194,9 @@ const V2PositionWithApr: React.FC<{
       onRowClick={() => {
         const token0Address = poolInfo.token0?.wrapped.address
         const token1Address = poolInfo.token1?.wrapped.address
-        const baseUrl = poolInfo.protocol === 'v2' ? '/v2' : '/stable'
-        const detailUrl = `${baseUrl}/pair/${token0Address}/${token1Address}`
+        const baseUrl =
+          poolInfo.protocol === 'v2' ? `/v2/pair/${token0Address}/${token1Address}` : `/stable/${poolInfo.lpAddress}`
+        const detailUrl = `${baseUrl}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[PERSIST_CHAIN_KEY]}=1`
         router.push(detailUrl)
       }}
     />
