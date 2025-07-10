@@ -51,8 +51,11 @@ export const TabsComponent: React.FC<React.PropsWithChildren<TabsComponentProps>
   )
 }
 
-const WalletModal: React.FC<React.PropsWithChildren<{ onDismiss?: () => void }>> = ({ onDismiss }) => {
-  const { view, setView } = useMenuTab()
+const WalletModal: React.FC<React.PropsWithChildren<{ onDismiss?: () => void; initialView?: WalletView }>> = ({
+  onDismiss,
+  initialView,
+}) => {
+  const { view, setView } = useMenuTab(initialView)
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { data, isFetched } = useBalance({ address: account })

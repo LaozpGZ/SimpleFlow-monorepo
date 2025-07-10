@@ -1,4 +1,4 @@
-import { createContext, ReactNode, useContext, useState } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useState } from 'react'
 
 export enum WalletView {
   WALLET_INFO,
@@ -30,10 +30,17 @@ export const MenuTabProvider: React.FC<MenuTabProviderProps> = ({ children, init
   return <MenuTabContext.Provider value={value}>{children}</MenuTabContext.Provider>
 }
 
-export const useMenuTab = (): MenuTabContextType => {
+export const useMenuTab = (initialView?: WalletView): MenuTabContextType => {
   const context = useContext(MenuTabContext)
   if (context === undefined) {
     throw new Error('useMenuTab must be used within a MenuTabProvider')
   }
+
+  useEffect(() => {
+    if (initialView) {
+      context.setView(initialView)
+    }
+  }, [])
+
   return context
 }
