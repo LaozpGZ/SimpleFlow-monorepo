@@ -75,7 +75,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
             <Box>
               <Text color="textSubtle">{t('Total APR')}</Text>
               <Text fontSize="24px" bold>
-                {displayApr(totalApr)}
+                {totalApr ? displayApr(totalApr) : '-'}
               </Text>
             </Box>
           </FlexGap>
