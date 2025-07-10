@@ -46,7 +46,6 @@ export const ChartTVL: React.FC<ChartTVLProps> = ({ address, poolInfo, timeFilte
   const [hoverDate, setHoverDate] = useState<string | undefined>()
   const { theme } = useTheme()
 
-  // Get the latest value
   const latestValue = useMemo(() => {
     if (!data || data.length === 0) return 0
     return data[data.length - 1].value

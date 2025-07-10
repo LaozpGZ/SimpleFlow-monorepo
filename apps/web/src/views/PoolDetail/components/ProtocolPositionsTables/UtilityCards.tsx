@@ -2,7 +2,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, CardBody, Flex, Spinner, Text } from '@pancakeswap/uikit'
 import { LightCard } from '@pancakeswap/widgets-internal'
 
-// Loading state card component
 export const LoadingCard: React.FC = () => {
   const { t } = useTranslation()
 
@@ -22,7 +21,6 @@ export const LoadingCard: React.FC = () => {
   )
 }
 
-// Empty state card component
 export const EmptyPositionCard: React.FC = () => {
   const { t } = useTranslation()
 

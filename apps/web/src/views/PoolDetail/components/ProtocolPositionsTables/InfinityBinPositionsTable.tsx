@@ -39,7 +39,6 @@ import { PriceRangeDisplay } from './PriceRangeDisplay'
 import { PositionFilter } from './types'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
 
-// Interface for transformed Bin position data
 interface TransformedBinPosition {
   positionId: string
   tableRow: {
@@ -234,7 +233,6 @@ const transformInfinityBinPositionToTableRow = (
       apr: aprDisplay,
       priceRange,
       actions,
-      // Add raw data for onRowClick handler
       protocol: Protocol.InfinityBIN,
       poolId: position.poolId,
     },
@@ -245,7 +243,6 @@ const transformInfinityBinPositionToTableRow = (
   }
 }
 
-// Individual position row component that calls the APR hook
 const InfinityBinPositionRow: React.FC<{
   position: InfinityBinPositionDetail
   poolInfo: InfinityBinPoolInfo
@@ -254,10 +251,8 @@ const InfinityBinPositionRow: React.FC<{
 }> = ({ position, poolInfo, pool, onRowDataReady }) => {
   const { t } = useTranslation()
 
-  // This is where the magic happens - individual APR hook call for each position
   const aprData = useInfinityBinPositionApr(poolInfo, position)
 
-  // Calculate position amounts
   const amount0 = useMemo(
     () =>
       position?.reserveX && pool?.token0 ? CurrencyAmount.fromRawAmount(pool.token0, position.reserveX) : undefined,
@@ -276,10 +271,8 @@ const InfinityBinPositionRow: React.FC<{
     enabled: Boolean(pool?.token1 && amount1?.greaterThan('0')),
   })
 
-  // Use utility function to convert APR data
   const convertedAprData = useMemo(() => convertAprDataToNumbers(aprData), [aprData])
 
-  // Transform the data with the fetched APR
   const transformedData = useMemo(() => {
     // For now, use 0 for TVL - we can implement proper calculation later
     const totalTVLUsd = 0
@@ -298,7 +291,6 @@ const InfinityBinPositionRow: React.FC<{
     )
   }, [position, poolInfo, pool, convertedAprData, amount0, amount1, t, price0Usd, price1Usd])
 
-  // Pass data back to parent whenever it changes
   useEffect(() => {
     onRowDataReady(transformedData)
   }, [transformedData, onRowDataReady])
@@ -321,7 +313,6 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     poolInfo,
   )
 
-  // Get all infinity positions for the harvest modal
   const { data: allInfinityPositions } = useInfinityPositions()
 
   const {
@@ -365,7 +356,6 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     return positionData
   }, [infinityBinData, isLoading, isLoadingRewards, defaultPosition, rewardsAmount])
 
-  // Handle data from individual position rows
   const handleRowDataReady = useCallback((data: TransformedBinPosition) => {
     setTransformedPositions((prev) => {
       const existing = prev.find((p) => p.positionId === data.positionId)
@@ -395,7 +385,6 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     })
   }, [positions])
 
-  // Create individual position row components that fetch APR data
   const positionRowComponents = useMemo(() => {
     if (!positions.length) return []
 
@@ -416,7 +405,6 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     return transformedPositions.filter((position) => {
       if (filter === PositionFilter.All) return true
 
-      // Use the position status from the original data for filtering
       const originalPosition = positions.find((p) => `${p.chainId}-${p.poolId}` === position.positionId)
       if (!originalPosition) return false
 
@@ -435,7 +423,6 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     })
   }, [transformedPositions, filter, positions])
 
-  // APR Calculation
   const [numerator, denominator] = useMemo(() => {
     return transformedPositions.reduce(
       (sum, pos) => {
@@ -453,12 +440,10 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     return denominator.isZero() ? 0 : numerator.div(denominator).toNumber()
   }, [numerator, denominator])
 
-  // Show loading state
   if (isLoading) {
     return <LoadingCard />
   }
 
-  // Show empty state when no positions exist and no rewards
   if (!infinityBinData?.length && (!rewardsAmount || !rewardsAmount.greaterThan('0'))) {
     return <EmptyPositionCard />
   }
@@ -486,7 +471,6 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
             chainId={poolInfo.chainId}
           />
         }
-        // On row click, navigate to the position detail page
         onRowClick={(position) => {
           router.push(
             $path({

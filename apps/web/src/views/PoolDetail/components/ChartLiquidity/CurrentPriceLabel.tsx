@@ -30,7 +30,6 @@ interface CurrentPriceLabelProps {
 export const CurrentPriceLabel: React.FC<CurrentPriceLabelProps> = ({ data, poolInfo }) => {
   const { t } = useTranslation()
 
-  // Find the current price data
   const currentPriceData = data?.find((entry) => entry.isCurrent)
 
   if (!currentPriceData || !poolInfo) {

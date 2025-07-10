@@ -148,7 +148,6 @@ const DEFAULT_FIELD_SORT_DIRECTION = {
 export const TransactionsTable: React.FC<TransactionTableProps> = ({ transactions, maxItems = 10 }) => {
   const { t } = useTranslation()
 
-  // for sorting
   const [sortField, setSortField] = useState(SortField.Timestamp)
   const [sortDirection, setSortDirection] = useState<SortDirection>(SortDirection.Descending)
   const fieldSortDirection = useMemo(() => {
@@ -158,7 +157,6 @@ export const TransactionsTable: React.FC<TransactionTableProps> = ({ transaction
     }
   }, [sortField, sortDirection])
 
-  // pagination
   const [page, setPage] = useState(1)
   const [maxPage, setMaxPage] = useState(1)
 

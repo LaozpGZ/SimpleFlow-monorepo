@@ -55,7 +55,6 @@ export const ChartFee: React.FC<ChartVolumeProps> = ({ address, poolInfo }) => {
   const [activeIndex, setActiveIndex] = useState<number | undefined>()
   const { theme } = useTheme()
 
-  // Calculate total sum of all values
   const totalSum = useMemo(() => {
     if (!data || data.length === 0) return 0
     return data.reduce((sum, item) => sum + item.value, 0)
