@@ -1,25 +1,62 @@
 import { useIsMounted } from "@pancakeswap/hooks";
+import { Language } from "@pancakeswap/localization";
 import throttle from "lodash/throttle";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  ElementType,
+  ReactElement,
+  ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { AtomBox } from "../../components/AtomBox";
 import BottomNav from "../../components/BottomNav";
-import { Box } from "../../components/Box";
 import Flex from "../../components/Box/Flex";
 import CakePrice from "../../components/CakePrice/CakePrice";
 import Footer from "../../components/Footer";
-import LangSelector from "../../components/LangSelector/LangSelector";
+import { FooterLinkType } from "../../components/Footer/types";
 import MenuItems from "../../components/MenuItems/MenuItems";
-import { SubMenuItems } from "../../components/SubMenuItems";
-import { useMatchBreakpoints } from "../../contexts";
-import Logo from "./components/Logo";
-import { MENU_HEIGHT, MOBILE_MENU_HEIGHT, TOP_BANNER_HEIGHT, TOP_BANNER_HEIGHT_MOBILE } from "./config";
-import { MenuContext } from "./context";
-import { BodyWrapper, FixedContainer, Inner, StyledNav, TopBannerContainer, Wrapper } from "./styled";
-import { NavProps } from "./types";
+import { MenuItemsType } from "../../components/MenuItems/types";
+import { SubMenuItems, SubMenuItemsType } from "../../components/SubMenuItems";
+import Logo from "../Menu/components/Logo";
+import { MENU_HEIGHT, MOBILE_MENU_HEIGHT } from "../Menu/config";
+import { MenuContext } from "../Menu/context";
+import { BodyWrapper, FixedContainer, Inner, StyledNav, Wrapper } from "../Menu/styled";
 
-const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
+export type SimpleMenuProps = {
+  linkComponent?: ElementType;
+  localeSelector?: ReactNode;
+  announcementBanner?: ReactElement;
+
+  rightSide?: ReactNode;
+  links: Array<MenuItemsType>;
+  homeLink?: string;
+  subLinks?: Array<SubMenuItemsType>;
+  footerLinks: Array<FooterLinkType>;
+  activeItem?: string;
+  activeSubItem?: string;
+  activeSubItemChildItem?: string;
+  isDark: boolean;
+  toggleTheme: (isDark: boolean) => void;
+  cakePriceUsd?: number;
+  currentLang: string;
+  buyCakeLabel: string;
+  buyCakeLink: string;
+  showCakePrice?: boolean;
+  showLangSelector?: boolean;
+  langs: Language[];
+  chainId: number;
+  setLang: (lang: Language) => void;
+  logoComponent?: ReactNode;
+};
+
+export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
   linkComponent = "a",
-  banner,
+  localeSelector,
+  announcementBanner,
+
   rightSide,
   isDark,
   toggleTheme,
@@ -42,14 +79,21 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
   chainId,
   logoComponent,
 }) => {
-  const { isMobile } = useMatchBreakpoints();
   const isMounted = useIsMounted();
   const [showMenu, setShowMenu] = useState(true);
   const refPrevOffset = useRef(typeof window === "undefined" ? 0 : window.pageYOffset);
 
-  const topBannerHeight = isMobile ? TOP_BANNER_HEIGHT_MOBILE : TOP_BANNER_HEIGHT;
+  const [totalTopMenuHeight, setTotalTopMenuHeight] = useState(MENU_HEIGHT);
+  const announcementBannerRef = useRef<HTMLDivElement>(null);
 
-  const totalTopMenuHeight = isMounted && banner ? MENU_HEIGHT + topBannerHeight : MENU_HEIGHT;
+  useLayoutEffect(() => {
+    if (isMounted && announcementBanner) {
+      const announcementBannerHeight = announcementBannerRef.current?.getBoundingClientRect().height || 0;
+      setTotalTopMenuHeight(MENU_HEIGHT + announcementBannerHeight);
+    } else {
+      setTotalTopMenuHeight(MENU_HEIGHT);
+    }
+  }, [isMounted, announcementBanner]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -97,7 +141,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
       >
         <Wrapper>
           <FixedContainer showMenu={showMenu} height={totalTopMenuHeight}>
-            {banner && isMounted && <TopBannerContainer height={topBannerHeight}>{banner}</TopBannerContainer>}
+            {announcementBanner ? <div ref={announcementBannerRef}>{announcementBanner}</div> : null}
             <StyledNav id="nav">
               <Flex>
                 {logoComponent ?? <Logo href={homeLink_ ?? homeLink?.href ?? "/home"} />}
@@ -115,18 +159,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
                 <AtomBox mr="12px" display={{ xs: "none", xxl: "block" }}>
                   <CakePrice chainId={chainId} showSkeleton={false} cakePriceUsd={cakePriceUsd} />
                 </AtomBox>
-                {showLangSelector && (
-                  <Box mt="4px">
-                    <LangSelector
-                      currentLang={currentLang}
-                      langs={langs}
-                      setLang={setLang}
-                      buttonScale="xs"
-                      color="textSubtle"
-                      hideLanguage
-                    />
-                  </Box>
-                )}
+                {localeSelector}
                 {rightSide}
               </Flex>
             </StyledNav>
@@ -177,5 +210,3 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
     </MenuContext.Provider>
   );
 };
-
-export default Menu;
