@@ -178,7 +178,34 @@ export const InfinityBinEarningsCell = ({ chainId, poolId }: { chainId?: number;
   }, [amount, chainId, poolId, isLoading, updatePositionEarningAmount])
 
   // Note: No Bin LP fees calculation
-  return <EarningsUSD earningsBusd={rewardsUSD} />
+  return (
+    <Tooltips
+      content={
+        <FlexGap flexDirection="column" alignItems="flex-start" gap="8px">
+          {rewardsAmount && rewardsAmount.greaterThan(0) && (
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                <FlexGap alignItems="center" gap="8px">
+                  <CurrencyLogo currency={rewardsAmount.currency} size="16px" mb="-3px" />
+                  <Text fontSize="14px" bold>
+                    {rewardsAmount.currency.symbol}
+                  </Text>
+                </FlexGap>
+                <Text fontSize="14px" bold>
+                  {formatAmount(amount)}
+                </Text>
+              </FlexGap>
+              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                {rewardsUSD ? formatDollarAmount(rewardsUSD) : '$0.00'}
+              </Text>
+            </FlexGap>
+          )}
+        </FlexGap>
+      }
+    >
+      <EarningsUSD earningsBusd={rewardsUSD} />
+    </Tooltips>
+  )
 }
 
 export const InfinityCLEarningsCell = ({
@@ -215,7 +242,13 @@ export const InfinityCLEarningsCell = ({
   })
 
   // Get LP fees
-  const { totalFiatValue: lpFeesUSD } = useFeesEarnedUSD({
+  const {
+    totalFiatValue: lpFeesUSD,
+    feeAmount0,
+    feeAmount1,
+    fiatValue0,
+    fiatValue1,
+  } = useFeesEarnedUSD({
     currency0,
     currency1,
     tokenId,
@@ -248,5 +281,72 @@ export const InfinityCLEarningsCell = ({
   // Combine farm rewards + LP fees
   const totalEarnings = rewardsUSD + lpFeesUSDValue
 
-  return <EarningsUSD earningsBusd={totalEarnings} />
+  if (positionClosed) {
+    return <EarningsUSD earningsBusd={totalEarnings} />
+  }
+
+  return (
+    <Tooltips
+      content={
+        <FlexGap flexDirection="column" alignItems="flex-start" gap="8px">
+          {feeAmount0 && feeAmount0.greaterThan(0) && (
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                <FlexGap alignItems="center" gap="8px">
+                  <CurrencyLogo currency={currency0} size="16px" mb="-3px" />
+                  <Text fontSize="14px" bold>
+                    {currency0?.symbol}
+                  </Text>
+                </FlexGap>
+                <Text fontSize="14px" bold>
+                  {formatAmount(Number(feeAmount0?.toExact()) ?? 0)}
+                </Text>
+              </FlexGap>
+              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                {fiatValue0 ? formatDollarAmount(safeParseFloat(fiatValue0.toExact())) : '$0.00'}
+              </Text>
+            </FlexGap>
+          )}
+          {feeAmount1 && feeAmount1.greaterThan(0) && (
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                <FlexGap alignItems="center" gap="8px">
+                  <CurrencyLogo currency={currency1} size="16px" mb="-3px" />
+                  <Text fontSize="14px" bold>
+                    {currency1?.symbol}
+                  </Text>
+                </FlexGap>
+                <Text fontSize="14px" bold>
+                  {formatAmount(Number(feeAmount1?.toExact()) ?? 0)}
+                </Text>
+              </FlexGap>
+              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                {fiatValue1 ? formatDollarAmount(safeParseFloat(fiatValue1.toExact())) : '$0.00'}
+              </Text>
+            </FlexGap>
+          )}
+          {rewardsAmount && rewardsAmount.greaterThan(0) && (
+            <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
+              <FlexGap alignItems="center" justifyContent="space-between" width="100%" gap="16px">
+                <FlexGap alignItems="center" gap="8px">
+                  <CurrencyLogo currency={rewardsAmount.currency} size="16px" mb="-3px" />
+                  <Text fontSize="14px" bold>
+                    {rewardsAmount.currency.symbol}
+                  </Text>
+                </FlexGap>
+                <Text fontSize="14px" bold>
+                  {formatAmount(amount)}
+                </Text>
+              </FlexGap>
+              <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
+                {rewardsUSD ? formatDollarAmount(rewardsUSD) : '$0.00'}
+              </Text>
+            </FlexGap>
+          )}
+        </FlexGap>
+      }
+    >
+      <EarningsUSD earningsBusd={totalEarnings} />
+    </Tooltips>
+  )
 }
