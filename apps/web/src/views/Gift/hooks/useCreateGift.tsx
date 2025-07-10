@@ -59,11 +59,6 @@ export const useCreateGift = () => {
           value: transactionValue,
         },
         {
-          onSuccess: (transactionHash) => {
-            if (transactionHash) {
-              toastSuccess(t('Create Gift Submitted'), <ToastDescriptionWithTx bscTrace txHash={transactionHash} />)
-            }
-          },
           onError: (error) => {
             if (isUserRejected(error)) {
               return
@@ -99,6 +94,12 @@ export const useCreateGift = () => {
       toastError(t('Create Gift Error'), <ToastDescriptionWithTx bscTrace txHash={txHash} />)
     }
   }, [isErrorConfirming, errorConfirming, txHash])
+
+  useEffect(() => {
+    if (isConfirmed && txHash) {
+      toastSuccess(t('Create Gift Successfully'), <ToastDescriptionWithTx bscTrace txHash={txHash} />)
+    }
+  }, [isConfirmed, txHash])
 
   return useMemo(
     () => ({
