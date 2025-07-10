@@ -178,16 +178,13 @@ const transformV3PositionToTableRow = (
 ) => {
   const positionData = positionsData?.find((p) => Number(p.tokenId) === Number(position.tokenId))
   console.log('position vs positionData(singular)', position, positionData)
-  let liquidityUSD = 0
 
-  if (positionData) {
-    // Method 1: Use Position object amounts (preferred)
-    liquidityUSD = new BigNumber(positionData.amount0.toExact())
-      .times(price0Usd?.toString() ?? 0)
-      .plus(new BigNumber(positionData.amount1.toExact()).times(price1Usd?.toString() ?? 0))
-      .toNumber()
-  } else if (position.liquidity > 0n && pool && price0Usd && price1Usd) {
-    // Method 2: Manual calculation fallback for when Position objects aren't available
+  let liquidityUSD = 0
+  let amount0 = BIG_ZERO
+  let amount1 = BIG_ZERO
+
+  // Calculate liquidityUSD using pool and position data
+  if (position.liquidity > 0n && pool) {
     try {
       const { tickCurrent } = pool
       const amount0Raw = PositionMath.getToken0Amount(
@@ -206,10 +203,12 @@ const transformV3PositionToTableRow = (
       )
 
       // Convert from raw amounts to readable amounts
-      const amount0 = new BigNumber(amount0Raw.toString()).div(10 ** (poolInfo.token0.wrapped?.decimals || 18))
-      const amount1 = new BigNumber(amount1Raw.toString()).div(10 ** (poolInfo.token1.wrapped?.decimals || 18))
+      amount0 = new BigNumber(amount0Raw.toString()).div(10 ** (poolInfo.token0.wrapped?.decimals || 18))
+      amount1 = new BigNumber(amount1Raw.toString()).div(10 ** (poolInfo.token1.wrapped?.decimals || 18))
 
-      liquidityUSD = amount0.times(price0Usd).plus(amount1.times(price1Usd)).toNumber()
+      if (price0Usd && price1Usd) {
+        liquidityUSD = amount0.times(price0Usd).plus(amount1.times(price1Usd)).toNumber()
+      }
     } catch (error) {
       console.error('Manual liquidity calculation failed:', error)
     }
@@ -331,13 +330,11 @@ const transformV3PositionToTableRow = (
                   </Text>
                 </FlexGap>
                 <Text fontSize="14px" bold>
-                  {positionData?.amount0.toSignificant(6)}
+                  {formatAmount(amount0.toNumber())}
                 </Text>
               </FlexGap>
               <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
-                {positionData?.amount0 && price0Usd
-                  ? formatDollarAmount(new BigNumber(positionData.amount0.toExact()).times(price0Usd).toNumber())
-                  : '$0.00'}
+                {amount0 && price0Usd ? formatDollarAmount(amount0.times(price0Usd).toNumber()) : '$0.00'}
               </Text>
             </FlexGap>
             <FlexGap flexDirection="column" alignItems="flex-start" gap="2px" width="100%">
@@ -349,13 +346,11 @@ const transformV3PositionToTableRow = (
                   </Text>
                 </FlexGap>
                 <Text fontSize="14px" bold>
-                  {positionData?.amount1.toSignificant(6)}
+                  {formatAmount(amount1.toNumber())}
                 </Text>
               </FlexGap>
               <Text color="textSubtle" fontSize="12px" textAlign="right" width="100%">
-                {positionData?.amount1 && price1Usd
-                  ? formatDollarAmount(new BigNumber(positionData.amount1.toExact()).times(price1Usd).toNumber())
-                  : '$0.00'}
+                {amount1 && price1Usd ? formatDollarAmount(amount1.times(price1Usd).toNumber()) : '$0.00'}
               </Text>
             </FlexGap>
           </FlexGap>
