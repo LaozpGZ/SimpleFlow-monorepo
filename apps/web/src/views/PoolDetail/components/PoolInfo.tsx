@@ -45,6 +45,7 @@ import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprButtonV3'
 import { usePoolInfoByQuery } from '../hooks/usePoolInfo'
 import { usePoolSymbol } from '../hooks/usePoolSymbol'
+import { useFlipCurrentPrice } from '../state/flipCurrentPrice'
 import { MyPositions } from './MyPositions'
 import { PoolCharts } from './PoolCharts'
 import { PoolFeaturesModal } from './PoolFeaturesModal'
@@ -74,7 +75,7 @@ export const PoolInfo = () => {
 
   const isSmallScreen = isMobile || isMd
 
-  const [flipCurrentPrice, setFlipCurrentPrice] = useState(false)
+  const [flipCurrentPrice, setFlipCurrentPrice] = useFlipCurrentPrice()
   const [tab, setTab] = useState(PoolDetailTab.MyPositions)
 
   const currency0 =

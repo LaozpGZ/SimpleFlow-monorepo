@@ -8,6 +8,8 @@ import { PositionMath } from '@pancakeswap/v3-sdk'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
+import { CHAIN_QUERY_NAME } from 'config/chains'
+import { PERSIST_CHAIN_KEY } from 'config/constants'
 import dayjs from 'dayjs'
 import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward'
 import { usePoolById } from 'hooks/infinity/usePool'
@@ -467,6 +469,11 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
             $path({
               route: '/liquidity/position/[[...positionId]]',
               routeParams: { positionId: [position.protocol, new BN(position.tokenId).toNumber()] },
+              // @ts-ignore
+              searchParams: {
+                chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+                [PERSIST_CHAIN_KEY]: '1',
+              },
             }),
           )
         }}

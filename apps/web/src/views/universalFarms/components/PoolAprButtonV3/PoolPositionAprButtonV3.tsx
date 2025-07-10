@@ -96,7 +96,7 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
 
   useEffect(() => {
     const key = `${pool.chainId}:${pool.lpAddress}:${'tokenId' in userPosition ? userPosition.tokenId : ''}`
-    updateTotalApr(key, numerator, denominator, lpApr, cakeApr)
+    if (!numerator.isZero()) updateTotalApr(key, numerator, denominator, lpApr, cakeApr)
   }, [denominator, numerator, pool.chainId, pool.lpAddress, updateTotalApr, userPosition, lpApr, cakeApr])
 
   useEffect(
