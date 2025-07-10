@@ -1,10 +1,12 @@
-/**
- * Common APR data structure used across position tables
- */
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
+import BigNumber from 'bignumber.js'
+
 export interface AprData {
-  lpApr: number | string
-  cakeApr: { value: number | string } | null
-  merklApr: number
+  lpApr?: number | string
+  cakeApr?: { value: number | string } | null
+  merklApr?: number
+  numerator: BigNumber
+  denominator: BigNumber
 }
 
 /**
@@ -15,11 +17,15 @@ export const convertAprDataToNumbers = (aprData: {
   lpApr?: number | string
   cakeApr?: { value: number | string } | null
   merklApr?: number
+  numerator?: BigNumber
+  denominator?: BigNumber
 }): AprData => {
   return {
     lpApr: parseFloat((aprData.lpApr || '0').toString()),
     cakeApr: aprData.cakeApr ? { value: parseFloat((aprData.cakeApr.value || '0').toString()) } : null,
     merklApr: aprData.merklApr || 0,
+    numerator: aprData.numerator || BIG_ZERO,
+    denominator: aprData.denominator || BIG_ZERO,
   }
 }
 

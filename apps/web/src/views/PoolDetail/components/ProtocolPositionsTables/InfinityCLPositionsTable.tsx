@@ -5,6 +5,7 @@ import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { PositionMath } from '@pancakeswap/v3-sdk'
 
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
 import dayjs from 'dayjs'
@@ -57,6 +58,7 @@ interface TransformedPosition {
   }
   liquidityUSD: number
   totalApr: number
+  aprData: AprData
 }
 
 interface InfinityCLPositionsTableProps {
@@ -270,6 +272,7 @@ const transformInfinityCLPositionToTableRow = (
     },
     liquidityUSD,
     totalApr,
+    aprData,
   }
 }
 
@@ -411,6 +414,23 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
     timestamp: dayjs().startOf('hour').unix(),
   })
 
+  // APR Calculation
+  const [numerator, denominator] = useMemo(() => {
+    return transformedPositions.reduce(
+      (sum, pos) => {
+        const { numerator, denominator } = convertAprDataToNumbers(pos.aprData)
+
+        // not checking numerator isZero for infinity
+        return [sum[0].plus(numerator), sum[1].plus(denominator)]
+      },
+      [BIG_ZERO, BIG_ZERO],
+    )
+  }, [transformedPositions])
+
+  const totalAprValue = useMemo(() => {
+    return denominator.isZero() ? 0 : numerator.div(denominator).toNumber()
+  }, [numerator, denominator])
+
   // Show loading state
   if (isLoading) {
     return <LoadingCard />
@@ -427,11 +447,7 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
         poolInfo={poolInfo}
         totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
         totalEarnings={formatPoolDetailFiatNumber(rewardsUSD)}
-        totalApr={
-          filteredPositions.length > 0
-            ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
-            : 0
-        }
+        totalApr={totalAprValue}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
         toggleInactiveOnly={() =>

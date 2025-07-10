@@ -1,6 +1,7 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
 import { PositionMath } from '@pancakeswap/v3-sdk'
@@ -64,6 +65,7 @@ interface TransformedV3Position {
   }
   liquidityUSD: number
   totalApr: number
+  aprData: AprData
 }
 
 interface V3PositionsTableProps {
@@ -428,8 +430,9 @@ const transformV3PositionToTableRow = (
       tokenId: position.tokenId,
       liquidityUSD,
     },
-    liquidityUSD,
     totalApr,
+    liquidityUSD,
+    aprData,
   }
 }
 
@@ -604,6 +607,24 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
     })
   }, [transformedPositions, filter])
 
+  // APR Calculation
+  const [numerator, denominator] = useMemo(() => {
+    return transformedPositions.reduce(
+      (sum, pos) => {
+        const { numerator, denominator } = convertAprDataToNumbers(pos.aprData)
+        if (numerator.isZero()) {
+          return sum
+        }
+        return [sum[0].plus(numerator), sum[1].plus(denominator)]
+      },
+      [BIG_ZERO, BIG_ZERO],
+    )
+  }, [transformedPositions])
+
+  const totalAprValue = useMemo(() => {
+    return denominator.isZero() ? 0 : numerator.div(denominator).toNumber()
+  }, [numerator, denominator])
+
   // Show loading state
   if (isLoading) {
     return <LoadingCard />
@@ -616,18 +637,13 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
 
   return (
     <>
-      {/* Hidden components that handle APR fetching for each position */}
+      {/* Components that handle APR fetching for each position */}
       {positionRowComponents}
 
-      {/* The actual table component */}
       <PositionsTable
         poolInfo={poolInfo}
         totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + pos.liquidityUSD, 0)}
-        totalApr={
-          filteredPositions.length > 0
-            ? filteredPositions.reduce((sum, pos) => sum + pos.totalApr, 0) / filteredPositions.length
-            : 0
-        }
+        totalApr={totalAprValue}
         totalEarnings={formatPoolDetailFiatNumber(earningsBusd)}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}

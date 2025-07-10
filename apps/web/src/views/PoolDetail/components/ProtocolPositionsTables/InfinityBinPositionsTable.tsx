@@ -2,6 +2,7 @@ import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { BigNumber as BN } from 'bignumber.js'
@@ -53,6 +54,7 @@ interface TransformedBinPosition {
   }
   liquidityUSD: number
   totalApr: number
+  aprData: AprData
   hasLiquidity?: boolean
 }
 
@@ -239,6 +241,7 @@ const transformInfinityBinPositionToTableRow = (
     liquidityUSD,
     totalApr,
     hasLiquidity,
+    aprData,
   }
 }
 
@@ -432,6 +435,23 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     })
   }, [transformedPositions, filter, positions])
 
+  // APR Calculation
+  const [numerator, denominator] = useMemo(() => {
+    return transformedPositions.reduce(
+      (sum, pos) => {
+        const { numerator, denominator } = convertAprDataToNumbers(pos.aprData)
+
+        // not checking numerator isZero for infinity
+        return [sum[0].plus(numerator), sum[1].plus(denominator)]
+      },
+      [BIG_ZERO, BIG_ZERO],
+    )
+  }, [transformedPositions])
+
+  const totalAprValue = useMemo(() => {
+    return denominator.isZero() ? 0 : numerator.div(denominator).toNumber()
+  }, [numerator, denominator])
+
   // Show loading state
   if (isLoading) {
     return <LoadingCard />
@@ -451,11 +471,7 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
       <PositionsTable
         poolInfo={poolInfo}
         totalLiquidityUSD={filteredPositions.reduce((sum, pos) => sum + (pos.liquidityUSD || 0), 0)}
-        totalApr={
-          filteredPositions.length > 0
-            ? filteredPositions.reduce((sum, pos) => sum + (pos.totalApr || 0), 0) / filteredPositions.length
-            : 0
-        }
+        totalApr={totalAprValue}
         totalEarnings={formatPoolDetailFiatNumber(rewardsUSD)}
         data={filteredPositions.map((position) => position.tableRow)}
         showInactiveOnly={filter === PositionFilter.Inactive}
