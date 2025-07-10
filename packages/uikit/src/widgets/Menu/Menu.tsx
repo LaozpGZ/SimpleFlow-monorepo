@@ -85,7 +85,15 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
 
   const subLinksWithoutMobile = useMemo(() => subLinks?.filter((subLink) => !subLink.isMobileOnly), [subLinks]);
   const subLinksMobileOnly = useMemo(() => subLinks?.filter((subLink) => subLink.isMobileOnly), [subLinks]);
-  const providerValue = useMemo(() => ({ linkComponent }), [linkComponent]);
+
+  const providerValue = useMemo(
+    () => ({
+      linkComponent,
+      totalTopMenuHeight,
+    }),
+    [linkComponent, totalTopMenuHeight]
+  );
+
   return (
     <MenuContext.Provider value={providerValue}>
       <AtomBox
