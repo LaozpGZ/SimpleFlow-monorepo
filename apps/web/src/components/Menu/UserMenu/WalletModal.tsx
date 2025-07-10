@@ -5,30 +5,19 @@ import {
   CloseIcon,
   Heading,
   IconButton,
-  InjectedModalProps,
   ModalBody,
   ModalTitle,
   ModalWrapper,
   ModalHeader as UIKitModalHeader,
 } from '@pancakeswap/uikit'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { styled } from 'styled-components'
 import { parseEther } from 'viem'
 import { useAccount, useBalance } from 'wagmi'
+import { useMenuTab, WalletView } from './providers/MenuTabProvider'
 import WalletInfo from './WalletInfo'
 import WalletTransactions from './WalletTransactions'
 import WalletWrongNetwork from './WalletWrongNetwork'
-
-export enum WalletView {
-  WALLET_INFO,
-  TRANSACTIONS,
-  GIFTS,
-  WRONG_NETWORK,
-}
-
-interface WalletModalProps extends InjectedModalProps {
-  initialView?: WalletView
-}
 
 export const LOW_NATIVE_BALANCE = parseEther('0.002', 'wei')
 
@@ -62,11 +51,8 @@ export const TabsComponent: React.FC<React.PropsWithChildren<TabsComponentProps>
   )
 }
 
-const WalletModal: React.FC<React.PropsWithChildren<WalletModalProps>> = ({
-  initialView = WalletView.WALLET_INFO,
-  onDismiss,
-}) => {
-  const [view, setView] = useState(initialView)
+const WalletModal: React.FC<React.PropsWithChildren<{ onDismiss?: () => void }>> = ({ onDismiss }) => {
+  const { view, setView } = useMenuTab()
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { data, isFetched } = useBalance({ address: account })

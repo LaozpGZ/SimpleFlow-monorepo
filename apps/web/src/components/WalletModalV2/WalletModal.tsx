@@ -15,7 +15,8 @@ import {
 import { RecentTransactions } from 'components/App/Transactions/TransactionsModal'
 
 import { useTheme } from '@pancakeswap/hooks'
-import { TabsComponent, WalletView } from 'components/Menu/UserMenu/WalletModal'
+import { WalletView } from 'components/Menu/UserMenu/providers/MenuTabProvider'
+import { TabsComponent } from 'components/Menu/UserMenu/WalletModal'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useAddressBalance } from 'hooks/useAddressBalance'
 import { useRouter } from 'next/router'

@@ -1,14 +1,16 @@
-import { Checkbox, Text, Button, Flex } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { useState } from 'react'
-import { useWalletModalV2ViewState } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
+import { Button, Checkbox, Flex, Text } from '@pancakeswap/uikit'
+import { useMenuTab, WalletView } from 'components/Menu/UserMenu/providers/MenuTabProvider'
 import { ViewState } from 'components/WalletModalV2/type'
+import { useWalletModalV2ViewState } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
+import { useState } from 'react'
 
 export const CopyLinkCheckBoxes = () => {
   const { t } = useTranslation()
   const [isCodeCopied, setIsCodeCopied] = useState(false)
   const [understandsRecovery, setUnderstandsRecovery] = useState(false)
 
+  const { setView } = useMenuTab()
   const allChecked = isCodeCopied && understandsRecovery
   const { setViewState } = useWalletModalV2ViewState()
 
@@ -30,6 +32,7 @@ export const CopyLinkCheckBoxes = () => {
         width="100%"
         disabled={!allChecked}
         onClick={() => {
+          setView(WalletView.GIFTS)
           setViewState(ViewState.WALLET_INFO)
         }}
       >

@@ -20,6 +20,7 @@ import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useAutoFillCode } from 'views/Gift/hooks/useAutoFillCode'
 import { ClaimGiftProvider, useClaimGiftContext } from 'views/Gift/providers/ClaimGiftProvider'
 import { useAccount } from 'wagmi'
+import { MenuTabProvider } from './providers/MenuTabProvider'
 
 const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
   const { chainId } = useActiveChainId()
@@ -231,9 +232,11 @@ const UserMenu = () => {
 const UserMenuContainer = () => {
   return (
     <WalletModalV2ViewStateProvider>
-      <ClaimGiftProvider>
-        <UserMenu />
-      </ClaimGiftProvider>
+      <MenuTabProvider>
+        <ClaimGiftProvider>
+          <UserMenu />
+        </ClaimGiftProvider>
+      </MenuTabProvider>
     </WalletModalV2ViewStateProvider>
   )
 }
