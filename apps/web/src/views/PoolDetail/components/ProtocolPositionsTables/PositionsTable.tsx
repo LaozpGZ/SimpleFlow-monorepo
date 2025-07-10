@@ -177,7 +177,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
                 )}
               </FlexGap>
 
-              {isInfinityProtocol(protocol) || (protocol === Protocol.V3 && <Box mt="24px">{row.priceRange}</Box>)}
+              {(isInfinityProtocol(protocol) || protocol === Protocol.V3) && <Box mt="24px">{row.priceRange}</Box>}
 
               <Box mt="24px">{row.actions}</Box>
             </StyledPositionCard>
