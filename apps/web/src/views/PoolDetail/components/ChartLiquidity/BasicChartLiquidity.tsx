@@ -1,6 +1,7 @@
 import { Box, Flex, Spinner } from '@pancakeswap/uikit'
 import { formatFiatNumber } from '@pancakeswap/utils/formatFiatNumber'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
+import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Bar, BarChart, Cell, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { ChartToolTip } from './ChartToolTip'
@@ -15,6 +16,9 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
   const [zoomLevel, setZoomLevel] = useState(DEFAULT_ZOOM_LEVEL)
   const [zoomInDisabled, setZoomInDisabled] = useState(false)
   const [activeIndex, setActiveIndex] = useState<number | undefined>()
+
+  const { data: token0Price } = useCurrencyUsdPrice(poolInfo?.token0.wrapped)
+  const { data: token1Price } = useCurrencyUsdPrice(poolInfo?.token1.wrapped)
 
   const handleZoomIn = useCallback(() => {
     if (!zoomInDisabled) {
@@ -34,6 +38,31 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
     }
     return undefined
   }, [liquidityChartData, zoomLevel])
+
+  const zoomedDataWithUSD = useMemo(() => {
+    if (!zoomedData) return zoomedData
+
+    return zoomedData.map((dataPoint) => {
+      let liquidityUSD = 0
+
+      if (token0Price && token1Price && poolInfo?.token0Price) {
+        // Use the same logic as ChartToolTip to determine which token to use
+        if (Number(poolInfo.token0Price) > dataPoint.price1) {
+          liquidityUSD = token0Price * dataPoint.tvlToken0
+        } else {
+          liquidityUSD = token1Price * dataPoint.tvlToken1
+        }
+      } else {
+        // Fallback to activeLiquidity if USD prices are not available
+        liquidityUSD = dataPoint.activeLiquidity
+      }
+
+      return {
+        ...dataPoint,
+        liquidityUSD,
+      }
+    })
+  }, [zoomedData, token0Price, token1Price, poolInfo?.token0Price])
 
   useEffect(() => {
     if (!liquidityChartData || !liquidityChartData.length) {
@@ -59,7 +88,7 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
     <Box height="380px" mb="-20px" position="relative">
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          data={zoomedData}
+          data={zoomedDataWithUSD}
           margin={{
             top: 20,
             right: 20,
@@ -86,7 +115,7 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
             axisLine={false}
             tickLine={false}
             tick={{ fontSize: 12, fill: '#9383B4' }}
-            tickFormatter={(value) => formatFiatNumber(value, '')}
+            tickFormatter={(value) => formatFiatNumber(value)}
             orientation="right"
           />
           <Tooltip
@@ -102,8 +131,8 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
             )}
             cursor={{ fill: 'transparent' }}
           />
-          <Bar dataKey="activeLiquidity" fill="#1FC7D4" isAnimationActive={false} radius={16}>
-            {zoomedData?.map((entry, index) => {
+          <Bar dataKey="liquidityUSD" fill="#1FC7D4" isAnimationActive={false} radius={16}>
+            {zoomedDataWithUSD?.map((entry, index) => {
               return (
                 <Cell
                   key={`cell-${entry.index}`}
@@ -116,7 +145,7 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
           </Bar>
         </BarChart>
       </ResponsiveContainer>
-      <CurrentPriceLabel data={zoomedData} poolInfo={poolInfo} />
+      <CurrentPriceLabel data={zoomedDataWithUSD} poolInfo={poolInfo} />
       <ControlsWrapper>
         <ActionButton disabled={false} onClick={handleZoomOut}>
           -
