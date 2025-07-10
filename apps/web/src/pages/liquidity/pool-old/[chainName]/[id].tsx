@@ -1,9 +1,9 @@
 import { SUPPORT_FARMS } from 'config/constants/supportChains'
 import dynamic from 'next/dynamic'
 import { NextPageWithLayout } from 'utils/page.types'
-import { PoolDetail } from 'views/PoolDetail'
+import { PoolDetailOld } from 'views/PoolDetail-Old'
 
-const PoolDetailPage = () => <PoolDetail />
+const PoolDetailPage = () => <PoolDetailOld />
 
 const Page = dynamic(() => Promise.resolve(PoolDetailPage), {
   ssr: false,
