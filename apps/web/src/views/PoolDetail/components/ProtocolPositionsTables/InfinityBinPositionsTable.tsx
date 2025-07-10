@@ -440,8 +440,9 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
     return transformedPositions.reduce(
       (sum, pos) => {
         const { numerator, denominator } = convertAprDataToNumbers(pos.aprData)
-
-        // not checking numerator isZero for infinity
+        if (numerator.isZero()) {
+          return sum
+        }
         return [sum[0].plus(numerator), sum[1].plus(denominator)]
       },
       [BIG_ZERO, BIG_ZERO],
