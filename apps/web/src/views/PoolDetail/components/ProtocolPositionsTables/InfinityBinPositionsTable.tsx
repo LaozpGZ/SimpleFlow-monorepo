@@ -73,7 +73,6 @@ const transformInfinityBinPositionToTableRow = (
   aprData: AprData,
   amount0: CurrencyAmount<any> | undefined,
   amount1: CurrencyAmount<any> | undefined,
-  totalTVLUsd: number,
   price0Usd: number | undefined,
   price1Usd: number | undefined,
   t: (key: string) => string,
@@ -93,6 +92,11 @@ const transformInfinityBinPositionToTableRow = (
         {position.isStaked && !removed && !outOfRange && (
           <Tag variant="primary60" scale="sm">
             {t('Farming')}
+          </Tag>
+        )}
+        {removed && (
+          <Tag variant="tertiary" scale="sm" px="6px">
+            {t('Closed')}
           </Tag>
         )}
       </FlexGap>
@@ -291,9 +295,6 @@ const InfinityBinPositionRow: React.FC<{
   const convertedAprData = useMemo(() => convertAprDataToNumbers(aprData), [aprData])
 
   const transformedData = useMemo(() => {
-    // For now, use 0 for TVL - we can implement proper calculation later
-    const totalTVLUsd = 0
-
     return transformInfinityBinPositionToTableRow(
       position,
       poolInfo,
@@ -301,7 +302,6 @@ const InfinityBinPositionRow: React.FC<{
       convertedAprData,
       amount0,
       amount1,
-      totalTVLUsd,
       price0Usd,
       price1Usd,
       t,

@@ -135,6 +135,11 @@ const transformInfinityCLPositionToTableRow = (
             {t('Farming')}
           </Tag>
         )}
+        {removed && (
+          <Tag variant="tertiary" scale="sm" px="6px">
+            {t('Closed')}
+          </Tag>
+        )}
       </FlexGap>
     </FlexGap>
   )
