@@ -40,6 +40,7 @@ import { useWeb3WalletView } from 'hooks/useWeb3WalletView'
 import { useInitGlobalWorker } from 'hooks/useWorker'
 import { persistor, useStore } from 'state'
 import { usePollBlockNumber } from 'state/block/hooks'
+import { SolanaWalletModal } from 'wallet/SolanaWalletModal'
 import { Blocklist, Updaters } from '..'
 import { SEO } from '../../next-seo.config'
 import Providers from '../Providers'
@@ -174,6 +175,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         <SimpleStakingSunsetModal />
         <VercelToolbar />
         <Cb1Membership />
+        <SolanaWalletModal />
       </Suspense>
     </ProductionErrorBoundary>
   )
