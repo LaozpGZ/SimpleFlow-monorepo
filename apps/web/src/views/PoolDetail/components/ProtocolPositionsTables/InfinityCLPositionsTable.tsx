@@ -22,6 +22,7 @@ import { InfinityCLPositionDetail } from 'state/farmsV4/state/accountPositions/t
 import { InfinityCLPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { useFlipCurrentPrice } from 'views/PoolDetail/state/flipCurrentPrice'
 import {
   AprData,
   calculateTickBasedPriceRange,
@@ -76,6 +77,7 @@ const transformInfinityCLPositionToTableRow = (
   price1Usd: number | undefined,
   aprData: AprData,
   t: (key: string) => string,
+  flipCurrentPrice?: boolean,
 ) => {
   // Calculate position amounts
   const { tickLower, tickUpper, liquidity } = position
@@ -116,6 +118,7 @@ const transformInfinityCLPositionToTableRow = (
     poolInfo.token1,
     pool,
     isTickAtLimit,
+    flipCurrentPrice,
   )
 
   const tokenInfo = (
@@ -285,11 +288,12 @@ const InfinityCLPositionRow: React.FC<{
   pool: any
   price0Usd: number | undefined
   price1Usd: number | undefined
+  flipCurrentPrice: boolean
   onRowDataReady: (data: TransformedPosition) => void
-}> = ({ position, poolInfo, pool, price0Usd, price1Usd, onRowDataReady }) => {
+}> = ({ position, poolInfo, pool, price0Usd, price1Usd, flipCurrentPrice, onRowDataReady }) => {
   const { t } = useTranslation()
 
-  // This is where the magic happens - individual APR hook call for each position
+  // Individual APR hook call for each position
   const aprData = useInfinityCLPositionApr(poolInfo, position)
 
   // Use utility function to convert APR data
@@ -297,8 +301,17 @@ const InfinityCLPositionRow: React.FC<{
 
   // Transform the data with the fetched APR
   const transformedData = useMemo(() => {
-    return transformInfinityCLPositionToTableRow(position, poolInfo, pool, price0Usd, price1Usd, convertedAprData, t)
-  }, [position, poolInfo, pool, price0Usd, price1Usd, convertedAprData, t])
+    return transformInfinityCLPositionToTableRow(
+      position,
+      poolInfo,
+      pool,
+      price0Usd,
+      price1Usd,
+      convertedAprData,
+      t,
+      flipCurrentPrice,
+    )
+  }, [position, poolInfo, pool, price0Usd, price1Usd, convertedAprData, t, flipCurrentPrice])
 
   // Pass data back to parent whenever it changes
   useEffect(() => {
@@ -311,6 +324,9 @@ const InfinityCLPositionRow: React.FC<{
 export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> = ({ poolInfo }) => {
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
+
+  const [flipCurrentPrice] = useFlipCurrentPrice()
+
   const [, pool] = usePoolById<'CL'>(poolInfo.poolId as `0x${string}`, chainId)
   const { data: price0Usd } = useCurrencyUsdPrice(poolInfo.token0, {
     enabled: !!poolInfo.token0,
@@ -376,10 +392,11 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
         pool={pool}
         price0Usd={price0Usd}
         price1Usd={price1Usd}
+        flipCurrentPrice={flipCurrentPrice}
         onRowDataReady={handleRowDataReady}
       />
     ))
-  }, [positionsInPool, poolInfo, pool, price0Usd, price1Usd, handleRowDataReady])
+  }, [positionsInPool, poolInfo, pool, price0Usd, price1Usd, flipCurrentPrice, handleRowDataReady])
 
   const filteredPositions = useMemo(() => {
     if (!transformedPositions) return []

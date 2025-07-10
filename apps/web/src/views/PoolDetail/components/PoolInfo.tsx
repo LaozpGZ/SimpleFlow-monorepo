@@ -301,7 +301,7 @@ export const PoolInfo = () => {
                 </FlexGap>
                 <FlexGap mt="2px" gap="8px" alignItems="center" width="100%">
                   <Text fontSize={28} bold width="max-content">
-                    {formatAmount(Number(flipCurrentPrice ? poolInfo.token1Price : poolInfo.token0Price), {
+                    {formatAmount(Number(flipCurrentPrice ? poolInfo.token0Price : poolInfo.token1Price), {
                       notation: 'standard',
                       displayThreshold: 0.001,
                       tokenPrecision: poolInfo
@@ -317,12 +317,12 @@ export const PoolInfo = () => {
                       '%symbol0% per %symbol1%',
                       flipCurrentPrice
                         ? {
-                            symbol0: currency1?.symbol,
-                            symbol1: currency0?.symbol,
-                          }
-                        : {
                             symbol0: currency0?.symbol,
                             symbol1: currency1?.symbol,
+                          }
+                        : {
+                            symbol0: currency1?.symbol,
+                            symbol1: currency0?.symbol,
                           },
                     )}
                   </Text>

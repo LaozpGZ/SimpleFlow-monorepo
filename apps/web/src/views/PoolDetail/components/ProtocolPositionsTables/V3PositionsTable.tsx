@@ -22,6 +22,7 @@ import { currencyId } from 'utils/currencyId'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { useFarmsV3BatchHarvest } from 'views/Farms/hooks/v3/useFarmV3Actions'
 import { useV3Positions } from 'views/PoolDetail/hooks/useV3Positions'
+import { useFlipCurrentPrice } from 'views/PoolDetail/state/flipCurrentPrice'
 import {
   AprData,
   calculateTickBasedPriceRange,
@@ -175,6 +176,7 @@ const transformV3PositionToTableRow = (
   pool: any,
   aprData: AprData,
   t: (key: string) => string,
+  flipCurrentPrice: boolean,
 ) => {
   const positionData = positionsData?.find((p) => Number(p.tokenId) === Number(position.tokenId))
   console.log('position vs positionData(singular)', position, positionData)
@@ -234,14 +236,23 @@ const transformV3PositionToTableRow = (
     poolInfo.token1.wrapped,
     pool,
     isTickAtLimit,
+    flipCurrentPrice,
   )
 
   // V3-specific fallback: Use positionData prices if available and tick-based calculation didn't show percentages
   if (positionData && !priceRangeData.showPercentages) {
     try {
       // Use higher precision (18 significant digits) to avoid precision loss for small numbers
-      const positionMinPrice = parseFloat(positionData.token0PriceLower.toFixed(18))
-      const positionMaxPrice = parseFloat(positionData.token0PriceUpper.toFixed(18))
+      let positionMinPrice = parseFloat(positionData.token0PriceLower.toFixed(18))
+      let positionMaxPrice = parseFloat(positionData.token0PriceUpper.toFixed(18))
+
+      // When flipped, invert prices and swap min/max
+      if (flipCurrentPrice) {
+        const invertedMin = 1 / positionMaxPrice
+        const invertedMax = 1 / positionMinPrice
+        positionMinPrice = invertedMin
+        positionMaxPrice = invertedMax
+      }
 
       if (Number.isFinite(positionMinPrice) && Number.isFinite(positionMaxPrice)) {
         const updatedMinPriceFormatted = formatAmount(positionMinPrice, { notation: 'standard' }) || '-'
@@ -253,26 +264,37 @@ const transformV3PositionToTableRow = (
 
         // Try percentage calculation with positionData prices
         if (pool?.token0Price && positionMaxPrice > positionMinPrice) {
-          // Use higher precision (18 significant digits) for current price calculation
-          const currentPrice = parseFloat(pool.token0Price.toFixed(18))
+          // Use the correct current price based on flip state
+          let basePrice
+          if (flipCurrentPrice) {
+            // Use token1Price if available, otherwise invert token0Price
+            basePrice = pool.token1Price || pool.token0Price?.invert?.()
+          } else {
+            basePrice = pool.token0Price
+          }
 
-          if (currentPrice > 0 && Number.isFinite(currentPrice)) {
-            const minPercent = ((positionMinPrice - currentPrice) / currentPrice) * 100
-            const maxPercent = ((positionMaxPrice - currentPrice) / currentPrice) * 100
+          if (basePrice) {
+            // Use higher precision (18 significant digits) for current price calculation
+            const currentPrice = parseFloat(basePrice.toFixed(18))
 
-            if (
-              Number.isFinite(minPercent) &&
-              Number.isFinite(maxPercent) &&
-              Math.abs(minPercent) < 10000 &&
-              Math.abs(maxPercent) < 10000
-            ) {
-              updatedMinPercentage = formatPercentage(minPercent)
-              updatedMaxPercentage = formatPercentage(maxPercent)
-              updatedRangePosition = Math.max(
-                0,
-                Math.min(100, ((currentPrice - positionMinPrice) / (positionMaxPrice - positionMinPrice)) * 100),
-              )
-              updatedShowPercentages = true
+            if (currentPrice > 0 && Number.isFinite(currentPrice)) {
+              const minPercent = ((positionMinPrice - currentPrice) / currentPrice) * 100
+              const maxPercent = ((positionMaxPrice - currentPrice) / currentPrice) * 100
+
+              if (
+                Number.isFinite(minPercent) &&
+                Number.isFinite(maxPercent) &&
+                Math.abs(minPercent) < 10000 &&
+                Math.abs(maxPercent) < 10000
+              ) {
+                updatedMinPercentage = formatPercentage(minPercent)
+                updatedMaxPercentage = formatPercentage(maxPercent)
+                updatedRangePosition = Math.max(
+                  0,
+                  Math.min(100, ((currentPrice - positionMinPrice) / (positionMaxPrice - positionMinPrice)) * 100),
+                )
+                updatedShowPercentages = true
+              }
             }
           }
         }
@@ -440,7 +462,8 @@ const V3PositionRow: React.FC<{
   price1Usd: number | undefined
   pool: any
   onRowDataReady: (data: TransformedV3Position) => void
-}> = ({ position, poolInfo, positionsData, price0Usd, price1Usd, pool, onRowDataReady }) => {
+  flipCurrentPrice: boolean
+}> = ({ position, poolInfo, positionsData, price0Usd, price1Usd, pool, onRowDataReady, flipCurrentPrice }) => {
   const { t } = useTranslation()
 
   const aprData = useV3PositionApr(poolInfo, position)
@@ -458,8 +481,9 @@ const V3PositionRow: React.FC<{
       pool,
       convertedAprData,
       t,
+      flipCurrentPrice,
     )
-  }, [position, poolInfo, positionsData, price0Usd, price1Usd, pool, convertedAprData, t])
+  }, [position, poolInfo, positionsData, price0Usd, price1Usd, pool, convertedAprData, t, flipCurrentPrice])
 
   // Pass data back to parent whenever it changes
   useEffect(() => {
@@ -473,6 +497,9 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
+
+  const [flipCurrentPrice] = useFlipCurrentPrice()
+
   const [, pool] = usePoolByChainId(poolInfo.token0.wrapped, poolInfo.token1.wrapped, poolInfo.feeTier)
   const { data: price0Usd } = useCurrencyUsdPrice(poolInfo.token0.wrapped, {
     enabled: !!poolInfo.token0.wrapped,
@@ -578,9 +605,10 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
         price1Usd={price1Usd}
         pool={pool}
         onRowDataReady={handleRowDataReady}
+        flipCurrentPrice={flipCurrentPrice}
       />
     ))
-  }, [v3Data, poolInfo, positionsData, price0Usd, price1Usd, pool, handleRowDataReady])
+  }, [v3Data, poolInfo, positionsData, price0Usd, price1Usd, pool, handleRowDataReady, flipCurrentPrice])
 
   const filteredPositions = useMemo(() => {
     if (!transformedPositions) return []

@@ -11,6 +11,7 @@ import { useUnclaimedFarmRewardsUSDByPoolId } from 'hooks/infinity/useFarmReward
 import { usePoolById } from 'hooks/infinity/usePool'
 import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+
 import { $path } from 'next-typesafe-url'
 import router from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -19,6 +20,7 @@ import { InfinityBinPositionDetail, POSITION_STATUS } from 'state/farmsV4/state/
 import { InfinityBinPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { useFlipCurrentPrice } from 'views/PoolDetail/state/flipCurrentPrice'
 import {
   AprData,
   calculateBinBasedPriceRange,
@@ -73,6 +75,7 @@ const transformInfinityBinPositionToTableRow = (
   price0Usd: number | undefined,
   price1Usd: number | undefined,
   t: (key: string) => string,
+  flipCurrentPrice: boolean,
 ) => {
   // Calculate actual price range from bin IDs for LBAMM using utility function
   const { removed, outOfRange } = getBinPositionStatus(position.status as POSITION_STATUS)
@@ -175,6 +178,7 @@ const transformInfinityBinPositionToTableRow = (
     pool?.activeId,
     poolInfo.token0,
     poolInfo.token1,
+    flipCurrentPrice,
   )
 
   const priceRange = (
@@ -248,7 +252,8 @@ const InfinityBinPositionRow: React.FC<{
   poolInfo: InfinityBinPoolInfo
   pool: any
   onRowDataReady: (data: TransformedBinPosition) => void
-}> = ({ position, poolInfo, pool, onRowDataReady }) => {
+  flipCurrentPrice: boolean
+}> = ({ position, poolInfo, pool, onRowDataReady, flipCurrentPrice }) => {
   const { t } = useTranslation()
 
   const aprData = useInfinityBinPositionApr(poolInfo, position)
@@ -288,8 +293,9 @@ const InfinityBinPositionRow: React.FC<{
       price0Usd,
       price1Usd,
       t,
+      flipCurrentPrice,
     )
-  }, [position, poolInfo, pool, convertedAprData, amount0, amount1, t, price0Usd, price1Usd])
+  }, [position, poolInfo, pool, convertedAprData, amount0, amount1, t, price0Usd, price1Usd, flipCurrentPrice])
 
   useEffect(() => {
     onRowDataReady(transformedData)
@@ -301,6 +307,9 @@ const InfinityBinPositionRow: React.FC<{
 export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps> = ({ poolInfo }) => {
   const { address: account } = useAccount()
   const chainId = useChainIdByQuery()
+
+  const [flipCurrentPrice] = useFlipCurrentPrice()
+
   const [, pool] = usePoolById<'Bin'>(poolInfo.poolId as `0x${string}`, chainId)
   const { data: poolKey } = usePoolKeyByPoolId(poolInfo.poolId, chainId)
 
@@ -395,9 +404,10 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
         poolInfo={poolInfo}
         pool={pool}
         onRowDataReady={handleRowDataReady}
+        flipCurrentPrice={flipCurrentPrice}
       />
     ))
-  }, [positions, poolInfo, pool, handleRowDataReady])
+  }, [positions, poolInfo, pool, handleRowDataReady, flipCurrentPrice])
 
   const filteredPositions = useMemo(() => {
     if (!transformedPositions.length) return []
