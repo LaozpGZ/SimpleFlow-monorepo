@@ -14,9 +14,18 @@ const StyledCardBody = styled(CardBody)`
 
 const StyledPositionCard = styled(Box)`
   padding: 16px;
+  transition: background 0.2s ease-in-out;
 
   &:not(:last-child) {
     border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  }
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.backgroundHover};
+  }
+
+  &:active {
+    background: ${({ theme }) => theme.colors.backgroundTapped};
   }
 `
 
@@ -149,7 +158,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
             </FlexGap>
           )}
           {data.map((row) => (
-            <StyledPositionCard key={row.tokenId}>
+            <StyledPositionCard key={row.tokenId} onClick={() => onRowClick?.(row)}>
               <Box>{row.tokenInfo}</Box>
               <FlexGap mt="24px" gap="4px" justifyContent="space-between" alignItems="center">
                 <Box>
@@ -160,13 +169,16 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
                   <Text color="textSubtle">{t('Liquidity')}</Text>
                   <Box>{row.liquidity}</Box>
                 </Box>
-                <Box>
-                  <Text color="textSubtle">{t('Earnings')}</Text>
-                  <Box>{row.earnings}</Box>
-                </Box>
+                {protocol !== Protocol.V2 && protocol !== Protocol.STABLE && (
+                  <Box>
+                    <Text color="textSubtle">{t('Earnings')}</Text>
+                    <Box>{row.earnings}</Box>
+                  </Box>
+                )}
               </FlexGap>
 
-              <Box mt="24px">{row.priceRange}</Box>
+              {isInfinityProtocol(protocol) || (protocol === Protocol.V3 && <Box mt="24px">{row.priceRange}</Box>)}
+
               <Box mt="24px">{row.actions}</Box>
             </StyledPositionCard>
           ))}
