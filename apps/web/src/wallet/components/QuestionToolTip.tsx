@@ -1,9 +1,10 @@
+import { QuestionHelper, Text } from '@pancakeswap/uikit'
 import React from 'react'
-import { Text, QuestionHelper, QuestionHelperProps } from '@pancakeswap/uikit'
 
-interface Props extends Pick<QuestionHelperProps, 'placement'> {
+interface Props {
   label?: React.ReactNode
   children?: React.ReactNode
+  placement?: 'top' | 'bottom' | 'left' | 'right'
 }
 
 const QuestionToolTip: React.FC<Props> = ({ label, placement, children }) => (

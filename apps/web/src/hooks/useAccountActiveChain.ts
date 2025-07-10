@@ -32,26 +32,26 @@ export const useLocalNetworkChain = () => {
   return useAtomValue(queryChainIdAtom)
 }
 
-export const useActiveChainId = () => {
+export const useActiveChainId = (checkChainId?: number) => {
   const { isNotMatched, isWrongNetwork, chainId } = useAccountActiveChain()
   return {
     chainId,
     isNotMatched,
-    isWrongNetwork,
+    isWrongNetwork: isWrongNetwork ? Boolean(checkChainId && checkChainId !== chainId) : false,
   }
 }
 
 interface AccountChainState {
   account?: `0x${string}`
   solanaAccount?: string | null
-  chainId: number | undefined
+  chainId: number
   isWrongNetwork: boolean
   isNotMatched: boolean
   status: 'connected' | 'disconnected' | 'connecting' | 'reconnecting' | null
 }
 
 const accountChainProxy = proxy<AccountChainState>({
-  chainId: undefined,
+  chainId: ChainId.BSC,
   isWrongNetwork: false,
   status: null,
   solanaAccount: null,
