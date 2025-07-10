@@ -1,7 +1,21 @@
 import { ChainId } from '@pancakeswap/chains'
 
+/**
+ * This config is used to manage the supported chains for crosschain swap:
+ * [] API is ready
+ * [] Supported token list is ready
+ * [] Update this config
+ */
+
 // Order will be decided for the Token Selection Modal
-export const CROSSCHAIN_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.BASE, ChainId.ARBITRUM_ONE, ChainId.ETHEREUM]
+export const CROSSCHAIN_SUPPORTED_CHAINS = [
+  ChainId.BSC,
+  ChainId.BASE,
+  ChainId.ARBITRUM_ONE,
+  ChainId.ETHEREUM,
+  ChainId.LINEA,
+  ChainId.ZKSYNC,
+]
 
 // OriginChainId -> TokenAddress[]
 export const WHITELIST_TOKEN_MAP = {
