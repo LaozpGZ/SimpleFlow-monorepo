@@ -1,7 +1,7 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { Button } from '@pancakeswap/uikit'
 import html2canvas from 'html2canvas'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { Button } from '@pancakeswap/uikit'
-import { useTranslation } from '@pancakeswap/localization'
 
 // implement QRDownloadImageButton with the following props:
 // - html id of the element to download
@@ -33,6 +33,8 @@ const QRDownloadImageButton: React.FC<QRDownloadImageButtonProps> = ({ elementId
         scale: 2, // higher resolution
         logging: false, // disable console logs
         useCORS: true, // handle cross-origin images
+        windowWidth: element.scrollWidth,
+        windowHeight: element.scrollHeight,
       })
 
       canvas.toBlob((blob) => {
