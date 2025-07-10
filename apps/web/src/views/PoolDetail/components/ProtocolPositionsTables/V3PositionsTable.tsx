@@ -111,7 +111,9 @@ const V3Actions = ({
       {(position.isStaked || !isStakeButtonActive) && (
         <ActionButton
           as="a"
-          href={`/remove/${position.tokenId.toString()}`}
+          href={`/remove/${position.tokenId.toString()}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[
+            PERSIST_CHAIN_KEY,
+          ]}=1`}
           disabled={removed}
           isIcon
           onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -125,7 +127,7 @@ const V3Actions = ({
           as="a"
           href={`/add/${currencyId(poolInfo.token0.wrapped)}/${currencyId(
             poolInfo.token1.wrapped,
-          )}/${poolInfo.feeTier.toString()}`}
+          )}/${poolInfo.feeTier.toString()}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[PERSIST_CHAIN_KEY]}=1`}
           disabled={removed}
           isIcon
           onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -145,7 +147,7 @@ const V3Actions = ({
           <V3UnstakeModalContent
             chainId={poolInfo.chainId}
             userPosition={position}
-            link={`/liquidity/${position.tokenId}`}
+            link={`/liquidity/${position.tokenId}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[PERSIST_CHAIN_KEY]}=1`}
             totalPriceUSD={liquidityUSD}
             amount0={positionData?.amount0}
             amount1={positionData?.amount1}

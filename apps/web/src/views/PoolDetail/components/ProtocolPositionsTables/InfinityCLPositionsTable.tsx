@@ -239,6 +239,11 @@ const transformInfinityCLPositionToTableRow = (
           routeParams: {
             positionId: [Protocol.InfinityCLAMM, Number(position.tokenId), 'decrease'],
           },
+          // @ts-ignore
+          searchParams: {
+            chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+            [PERSIST_CHAIN_KEY]: '1',
+          },
         })}
         disabled={removed}
         isIcon
@@ -252,6 +257,11 @@ const transformInfinityCLPositionToTableRow = (
           route: '/liquidity/position/[[...positionId]]',
           routeParams: {
             positionId: [Protocol.InfinityCLAMM, Number(position.tokenId), 'increase'],
+          },
+          // @ts-ignore
+          searchParams: {
+            chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+            [PERSIST_CHAIN_KEY]: '1',
           },
         })}
         disabled={removed}

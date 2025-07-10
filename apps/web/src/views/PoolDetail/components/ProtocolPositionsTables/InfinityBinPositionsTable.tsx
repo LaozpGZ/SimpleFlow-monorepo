@@ -12,6 +12,8 @@ import { usePoolById } from 'hooks/infinity/usePool'
 import { usePoolKeyByPoolId } from 'hooks/infinity/usePoolKeyByPoolId'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 
+import { CHAIN_QUERY_NAME } from 'config/chains'
+import { PERSIST_CHAIN_KEY } from 'config/constants'
 import { $path } from 'next-typesafe-url'
 import router from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -204,6 +206,11 @@ const transformInfinityBinPositionToTableRow = (
           routeParams: {
             positionId: [Protocol.InfinityBIN, position.poolId.toString(), 'decrease'],
           },
+          // @ts-ignore
+          searchParams: {
+            chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+            [PERSIST_CHAIN_KEY]: '1',
+          },
         })}
         disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}
         isIcon
@@ -217,6 +224,11 @@ const transformInfinityBinPositionToTableRow = (
           route: '/liquidity/add/[[...poolId]]',
           routeParams: {
             poolId: [poolInfo.chainId, 'infinity', poolInfo.poolId.toString()],
+          },
+          // @ts-ignore
+          searchParams: {
+            chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+            [PERSIST_CHAIN_KEY]: '1',
           },
         })}
         disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}
@@ -486,6 +498,11 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
             $path({
               route: '/liquidity/position/[[...positionId]]',
               routeParams: { positionId: [position.protocol, position.poolId] },
+              // @ts-ignore
+              searchParams: {
+                chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+                [PERSIST_CHAIN_KEY]: '1',
+              },
             }),
           )
         }}
