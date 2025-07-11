@@ -1,5 +1,5 @@
+import { ChainId } from '@pancakeswap/sdk'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { useMemo } from 'react'
@@ -9,7 +9,7 @@ import { PancakeGiftV1Abi } from '../abis/PancakeGiftV1Abi'
 import { GIFT_PANCAKE_V1_ADDRESS } from '../constants'
 
 export const useReadGasPayment = () => {
-  const { chainId } = useActiveChainId()
+  const chainId = ChainId.BSC
   const { data: gasPayment } = useReadContract({
     address: GIFT_PANCAKE_V1_ADDRESS,
     abi: PancakeGiftV1Abi,

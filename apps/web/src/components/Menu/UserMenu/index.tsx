@@ -82,7 +82,7 @@ const UserMenu = () => {
 
   const { reset: resetViewState, viewState } = useWalletModalV2ViewState()
   const { setCode } = useClaimGiftContext()
-  const { setIsSendGift } = useSendGiftContext()
+  const { setIsSendGift, setNativeAmount, setIncludeStarterGas } = useSendGiftContext()
   // State for click-based menu
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -102,6 +102,8 @@ const UserMenu = () => {
     if (isMenuOpen) {
       setView(WalletView.WALLET_INFO)
       setIsSendGift(false)
+      setNativeAmount(undefined)
+      setIncludeStarterGas(false)
     }
   }, [isMenuOpen])
 
