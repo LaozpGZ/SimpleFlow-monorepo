@@ -130,7 +130,7 @@ export const PositionsTable: React.FC<PositionsTableProps> = ({
               title: t('APR'),
               dataIndex: 'apr',
               key: 'apr',
-              render: (apr) => <div>{apr}</div>,
+              render: (apr) => <Box pr="8px">{apr}</Box>,
             },
             {
               title: t('Price Range (Min/Max)'),
