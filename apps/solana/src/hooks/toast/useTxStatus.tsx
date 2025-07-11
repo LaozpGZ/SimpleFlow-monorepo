@@ -317,7 +317,29 @@ function useTxStatus() {
             if (tx.status) txStatus[tx.txId] = tx.status
           })
 
+          const openAllTxDetails = () => {
+            subTxIds.forEach(({ txId }) => {
+              if (txId) window.open(`${explorerUrl}/tx/${txId}`)
+            })
+          }
+
           const renderDetail = () => {
+            return (
+              <>
+                <Box>
+                  {subTxIds.length} {t('Transaction')} {t('Sent')}
+                </Box>
+                <Box>
+                  <Flex gap="1" alignItems="center" onClick={openAllTxDetails} cursor="pointer" opacity={1}>
+                    {t('View transaction details')}
+                    <ExternalLink cursor="pointer" color={colors.primary60} />
+                  </Flex>
+                </Box>
+              </>
+            )
+          }
+
+          const renderDetail_ = () => {
             return (
               <Flex flexDirection="column" gap="3">
                 {subTxIds.map(({ txId, title = t('Transaction') }, idx) => (
@@ -380,7 +402,7 @@ function useTxStatus() {
 
           setTxRecord({
             status: status || 'info',
-            title: txHistoryTitle || 'transaction.title',
+            title: txHistoryTitle || `${t('Transaction')} ${t('Sent')}`,
             description: txHistoryDesc,
             txId: toastId,
             owner,
