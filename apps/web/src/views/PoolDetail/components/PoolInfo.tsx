@@ -22,6 +22,8 @@ import {
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
+
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import {
   CurrencyLogo,
   DoubleCurrencyLogo,
@@ -37,7 +39,6 @@ import { useMemo, useState } from 'react'
 import { InfinityPoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { getBlockExploreLink } from 'utils'
-import { formatAmount } from 'utils/formatInfoNumbers'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { isInfinityProtocol } from 'utils/protocols'
 import { zeroAddress } from 'viem'
@@ -302,14 +303,9 @@ export const PoolInfo = () => {
                 </FlexGap>
                 <FlexGap mt="2px" gap="8px" alignItems="center" width="100%">
                   <Text fontSize={28} bold width="max-content">
-                    {formatAmount(Number(flipCurrentPrice ? poolInfo.token0Price : poolInfo.token1Price), {
-                      notation: 'standard',
-                      displayThreshold: 0.001,
-                      tokenPrecision: poolInfo
-                        ? Math.abs(Number(poolInfo.token1Price) - Number(poolInfo.token0Price)) < 1
-                          ? 'enhanced'
-                          : 'normal'
-                        : 'normal',
+                    {formatNumber(Number(flipCurrentPrice ? poolInfo.token0Price : poolInfo.token1Price), {
+                      maximumSignificantDigits: 6,
+                      maxDecimalDisplayDigits: 6,
                     })}
                   </Text>
 
