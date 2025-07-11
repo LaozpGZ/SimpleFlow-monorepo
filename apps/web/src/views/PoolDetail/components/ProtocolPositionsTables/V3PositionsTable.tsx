@@ -103,38 +103,34 @@ const V3Actions = ({
     [pid, poolLength, poolMultiplier],
   )
 
-  const isStakeButtonActive = useMemo(() => {
-    return isFarmLive && !position.isStaked && !removed
-  }, [position.isStaked, removed, isFarmLive])
-
   return (
     <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
-      {(position.isStaked || !isStakeButtonActive) && (
-        <ActionButton
-          as="a"
-          href={`/remove/${position.tokenId.toString()}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[
-            PERSIST_CHAIN_KEY,
-          ]}=1`}
-          disabled={removed}
-          isIcon
-          onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        >
-          <MinusIcon />
-        </ActionButton>
-      )}
-
       {!isFarmLive && (
-        <ActionButton
-          as="a"
-          href={`/add/${currencyId(poolInfo.token0.wrapped)}/${currencyId(
-            poolInfo.token1.wrapped,
-          )}/${poolInfo.feeTier.toString()}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[PERSIST_CHAIN_KEY]}=1`}
-          disabled={removed}
-          isIcon
-          onClick={(e: React.MouseEvent) => e.stopPropagation()}
-        >
-          <AddIcon />
-        </ActionButton>
+        <>
+          <ActionButton
+            as="a"
+            href={`/remove/${position.tokenId.toString()}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[
+              PERSIST_CHAIN_KEY,
+            ]}=1`}
+            disabled={removed}
+            isIcon
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          >
+            <MinusIcon />
+          </ActionButton>
+
+          <ActionButton
+            as="a"
+            href={`/add/${currencyId(poolInfo.token0.wrapped)}/${currencyId(
+              poolInfo.token1.wrapped,
+            )}/${poolInfo.feeTier.toString()}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[PERSIST_CHAIN_KEY]}=1`}
+            disabled={removed}
+            isIcon
+            onClick={(e: React.MouseEvent) => e.stopPropagation()}
+          >
+            <AddIcon />
+          </ActionButton>
+        </>
       )}
 
       <V3PositionActions
@@ -144,6 +140,7 @@ const V3Actions = ({
         removed={removed}
         outOfRange={outOfRange}
         tokenId={position.tokenId}
+        detailMode
         modalContent={
           <V3UnstakeModalContent
             chainId={poolInfo.chainId}
