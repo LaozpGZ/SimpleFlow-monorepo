@@ -60,6 +60,19 @@ const SocialLoginButtonVertical = styled(SocialLoginButton)`
   min-height: 100px;
 `
 
+const IconWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 24px;
+  width: 24px;
+  margin-bottom: 8px;
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+`
+
 const Divider = styled.div`
   height: 1px;
   background-color: ${({ theme }) => theme.colors.cardBorder};
@@ -149,18 +162,23 @@ const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
 
           <Flex gap="8px">
             <SocialLoginButtonVertical onClick={handleXLogin}>
-              <SocialLoginXIcon />
+              <IconWrapper>
+                <SocialLoginXIcon />
+              </IconWrapper>
               <Text>{t('X Login')}</Text>
             </SocialLoginButtonVertical>
 
             <SocialLoginButtonVertical onClick={handleTelegramLogin}>
-              <SocialLoginTelegramIcon />
+              <IconWrapper>
+                <SocialLoginTelegramIcon />
+              </IconWrapper>
               <Text>{t('Telegram')}</Text>
-              <div id="telegram-widget-root" />
             </SocialLoginButtonVertical>
 
             <SocialLoginButtonVertical onClick={handleDiscordLogin}>
-              <SocialLoginDiscordIcon />
+              <IconWrapper>
+                <SocialLoginDiscordIcon />
+              </IconWrapper>
               <Text>{t('Discord')}</Text>
             </SocialLoginButtonVertical>
           </Flex>
