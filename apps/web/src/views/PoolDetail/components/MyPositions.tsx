@@ -6,7 +6,6 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { InfinityBinPoolInfo, InfinityCLPoolInfo, PoolInfo, StablePoolInfo, V2PoolInfo } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { getRewardProvider } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
-import { RewardInfoCard } from 'views/universalFarms/components/RewardInfoCard'
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 
 import { useAtom } from 'jotai'
@@ -65,8 +64,7 @@ const MyPositionsInner: React.FC<{ poolInfo: PoolInfo }> = ({ poolInfo }) => {
 
   if (!account) {
     return (
-      <Grid gridGap="24px" gridTemplateColumns={['1fr', '1fr', '1fr', hasPoolReward ? '1fr 2fr' : '1fr']}>
-        {hasPoolReward && <RewardInfoCard provider={provider} />}
+      <Grid gridGap="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '1fr']}>
         <Box>
           <Card>
             <CardBody>

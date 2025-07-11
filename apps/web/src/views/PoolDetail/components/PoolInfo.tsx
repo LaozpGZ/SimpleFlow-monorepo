@@ -36,14 +36,16 @@ import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { NextSeo } from 'next-seo'
 import { useMemo, useState } from 'react'
-import { InfinityPoolInfo } from 'state/farmsV4/state/type'
+import { InfinityPoolInfo, PoolInfo as PoolInfoType } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { getBlockExploreLink } from 'utils'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { isInfinityProtocol } from 'utils/protocols'
 import { zeroAddress } from 'viem'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
+import { getRewardProvider } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
 import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprButtonV3'
+import { RewardInfoCard } from 'views/universalFarms/components/RewardInfoCard'
 import { usePoolInfoByQuery } from '../hooks/usePoolInfo'
 import { usePoolSymbol } from '../hooks/usePoolSymbol'
 import { useFlipCurrentPrice } from '../state/flipCurrentPrice'
@@ -62,6 +64,15 @@ enum PoolDetailTab {
 // const SearchButton = styled(IconButton).attrs({ variant: 'primary60' })`
 //   background-color: ${({ theme }) => theme.colors.input};
 // `
+
+const RewardInfoCardContainer = ({ poolInfo }: { poolInfo: PoolInfoType }) => {
+  const provider = getRewardProvider(poolInfo.chainId, poolInfo.lpAddress)
+  const hasPoolReward = !!provider
+
+  if (!hasPoolReward) return null
+
+  return <RewardInfoCard provider={provider} />
+}
 
 export const PoolInfo = () => {
   const { t } = useTranslation()
@@ -371,6 +382,12 @@ export const PoolInfo = () => {
 
         {tab === PoolDetailTab.MyPositions ? <MyPositions poolInfo={poolInfo} /> : null}
         {tab === PoolDetailTab.Transactions ? <Transactions protocol={poolInfo.protocol} /> : null}
+
+        {poolInfo && (
+          <Box>
+            <RewardInfoCardContainer poolInfo={poolInfo} />
+          </Box>
+        )}
       </Box>
     </AutoColumn>
   )
