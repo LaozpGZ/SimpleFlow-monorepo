@@ -1471,7 +1471,7 @@
   "\"Fee on Transfer\" Tokens": "“内置转账费用” 代币（抽税）",
   "\"Fee on transfer\" tokens should not be used with Limit Orders (use at your own risk)": "“内置转账费用（抽税）” 代币不应用于限价单（使用后您需风险自负）",
   "Can't execute this order": "无法执行此订单",
-  "Limit": "旧版限价单",
+  "Limit": "限价单",
   "at market price": "以市价",
   "Error occurred, please try again later": "发生错误，请稍后再试",
   "Hold some CAKE in your wallet or on PancakeSwap at the snapshot block to get voting power for future proposals.": "在您的钱包中或快照区块的 PancakeSwap 上持有一些 CAKE，以获得未来提案的投票权。",
