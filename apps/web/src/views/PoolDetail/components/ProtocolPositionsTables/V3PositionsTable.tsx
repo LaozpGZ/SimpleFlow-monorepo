@@ -70,10 +70,12 @@ interface TransformedV3Position {
     protocol: Protocol
     tokenId: bigint
     liquidityUSD: number
+    isStaked: boolean
   }
   liquidityUSD: number
   totalApr: number
   aprData: AprData
+  isStaked: boolean
 }
 
 interface V3PositionsTableProps {
@@ -205,7 +207,6 @@ const transformV3PositionToTableRow = (
   flipCurrentPrice: boolean,
 ) => {
   const positionData = positionsData?.find((p) => Number(p.tokenId) === Number(position.tokenId))
-  console.log('position vs positionData(singular)', position, positionData)
 
   let liquidityUSD = 0
   let amount0 = BIG_ZERO
@@ -244,6 +245,7 @@ const transformV3PositionToTableRow = (
 
   const outOfRange = isTickBasedPositionOutOfRange(pool, position.tickLower, position.tickUpper)
   const removed = isTickBasedPositionRemoved(position.liquidity)
+  const isStaked = Boolean(position.isStaked)
 
   // Get tick spacing using utility function
   const tickSpacing = getTickSpacing(pool, poolInfo.feeTier)
@@ -350,7 +352,7 @@ const transformV3PositionToTableRow = (
             #{position.tokenId.toString()}
           </Text>
         </Text>
-        {position.isStaked && !removed && !outOfRange && (
+        {isStaked && !removed && !outOfRange && (
           <Tag variant="primary60" scale="sm" px="6px">
             {t('Farming')}
           </Tag>
@@ -475,10 +477,12 @@ const transformV3PositionToTableRow = (
       protocol: position.protocol,
       tokenId: position.tokenId,
       liquidityUSD,
+      isStaked,
     },
     totalApr,
     liquidityUSD,
     aprData,
+    isStaked,
   }
 }
 
@@ -555,10 +559,6 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
     poolInfo.feeTier,
     filteredV3Data,
   )
-
-  console.log('V3PositionsTable Original PositionsData', {
-    positionsData,
-  })
 
   const [loading, setLoading] = useState(false)
 
@@ -644,18 +644,20 @@ export const V3PositionsTable: React.FC<V3PositionsTableProps> = ({ poolInfo }) 
 
     // Helper function to determine position status priority for sorting
     const getPositionStatusPriority = (position: TransformedV3Position): number => {
-      const { totalApr, liquidityUSD } = position
+      const { totalApr, liquidityUSD, isStaked } = position
       const hasLiquidity = liquidityUSD > 0
 
-      if (hasLiquidity && totalApr > 0) return 1 // Active
-      if (hasLiquidity && totalApr === 0) return 2 // Inactive
-      if (!hasLiquidity) return 3 // Closed
-      return 4 // Fallback
+      if (hasLiquidity && totalApr > 0 && isStaked) return 1 // Active with farm
+      if (hasLiquidity && totalApr > 0) return 2 // Active without farm
+      if (hasLiquidity && totalApr === 0 && isStaked) return 3 // Inactive with farm
+      if (hasLiquidity && totalApr === 0) return 4 // Inactive without farm
+      if (!hasLiquidity) return 5 // Closed
+      return 6 // Fallback
     }
 
     return transformedPositions
       .toSorted((positionA, positionB) => {
-        // First sort by position status (Active, Inactive, Closed)
+        // First sort by position status (Active with farm, Active without farm, Inactive with farm, Inactive without farm, Closed)
         const aPriority = getPositionStatusPriority(positionA)
         const bPriority = getPositionStatusPriority(positionB)
 
