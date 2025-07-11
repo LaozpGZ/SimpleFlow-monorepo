@@ -15,12 +15,12 @@ import {
 import { RecentTransactions } from 'components/App/Transactions/TransactionsModal'
 
 import { useTheme } from '@pancakeswap/hooks'
-import { WalletView } from 'components/Menu/UserMenu/providers/MenuTabProvider'
+import { useMenuTab, WalletView } from 'components/Menu/UserMenu/providers/MenuTabProvider'
 import { TabsComponent } from 'components/Menu/UserMenu/WalletModal'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useAddressBalance } from 'hooks/useAddressBalance'
 import { useRouter } from 'next/router'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { ClaimGiftConfirmView } from 'views/Gift/components/ClaimGiftConfirmView'
@@ -28,6 +28,7 @@ import { ClaimGiftView } from 'views/Gift/components/ClaimGiftView'
 import { GiftInfoDetailView } from 'views/Gift/components/GiftInfoDetailView'
 import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
 import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
+import { useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssets } from './SendAssets'
@@ -126,12 +127,13 @@ export const WalletContent = ({
   onReceiveClick: () => void
   onDisconnect: () => void
 }) => {
-  const [view, setView] = useState(WalletView.WALLET_INFO)
+  const { view, setView } = useMenuTab()
   const { t } = useTranslation()
   const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
   const { viewState, setViewState, goBack } = useWalletModalV2ViewState()
   const { theme } = useTheme()
+  const { setIsSendGift } = useSendGiftContext()
 
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
@@ -319,6 +321,7 @@ export const WalletContent = ({
                 </ActionButton>
                 <ActionButton
                   onClick={() => {
+                    setIsSendGift(false)
                     setViewState(ViewState.SEND_ASSETS)
                   }}
                   variant="tertiary"

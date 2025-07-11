@@ -21,7 +21,7 @@ import { useAutoFillCode } from 'views/Gift/hooks/useAutoFillCode'
 import { ClaimGiftProvider, useClaimGiftContext } from 'views/Gift/providers/ClaimGiftProvider'
 import { SendGiftProvider, useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { useAccount } from 'wagmi'
-import { MenuTabProvider } from './providers/MenuTabProvider'
+import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
 const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
   const { chainId } = useActiveChainId()
@@ -86,6 +86,7 @@ const UserMenu = () => {
   // State for click-based menu
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
+  const { setView } = useMenuTab()
 
   useAutoFillCode({
     onAutoFillCode: () => {
@@ -99,6 +100,7 @@ const UserMenu = () => {
 
   useEffect(() => {
     if (isMenuOpen) {
+      setView(WalletView.WALLET_INFO)
       setIsSendGift(false)
     }
   }, [isMenuOpen])
