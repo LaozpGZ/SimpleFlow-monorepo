@@ -1276,14 +1276,14 @@ export class TxBuilder {
         }
         if (this.signAllTransactions) {
           if (executeParams?.simulate) {
-            allTransactions.forEach(async (tx) => {
+            for await (const tx of allTransactions) {
               const simulation = await this.connection.simulateTransaction(tx, {
                 commitment: "confirmed",
                 innerInstructions: true,
                 sigVerify: false,
               });
               this.logSimulation(simulation);
-            });
+            }
           }
           const needSignedTx = await this.signAllTransactions(
             allTransactions.slice(skipTxCount, allTransactions.length),
