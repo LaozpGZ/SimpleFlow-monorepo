@@ -1,14 +1,12 @@
 import { usePreloadImages, useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  ArrowForwardIcon,
   AtomBox,
   Button,
   ButtonMenu,
   ButtonMenuItem,
   CloseIcon,
   Column,
-  FlexGap,
   Heading,
   IconButton,
   Image,
@@ -37,6 +35,7 @@ import {
   walletSelectWrapperClass,
 } from './WalletModal.css'
 import { errorAtom, lastUsedWalletNameAtom, previouslyUsedWalletsAtom, selectedWalletAtom } from './atom'
+import SocialLoginButton from './components/SocialLoginButton'
 import { ConnectData, LinkOfDevice, WalletConfigV2, WalletModalV2Props } from './types'
 
 export const ASSET_CDN = 'https://assets.pancakeswap.finance'
@@ -59,23 +58,6 @@ export function useSelectedWallet<T>() {
 const StyledTab = styled(Tab)`
   height: 32px;
   padding: 4px 12px;
-`
-
-const SocialLoginIconBox = styled.div<{ $bg: string }>`
-  position: relative;
-  width: 21px;
-  height: 21px;
-  border-radius: 8px;
-  border: 2px solid ${({ theme }) => theme.colors.input};
-  &:not(:first-child) {
-    margin-left: -15px;
-  }
-  background-image: ${({ $bg }) => `url(${$bg})`};
-  background-size: cover;
-  background-position: center center;
-  background-color: white;
-  padding: 4px;
-  overflow: hidden;
 `
 
 type TabContainerProps = PropsWithChildren<{
@@ -184,8 +166,6 @@ function MobileModal<T>({
   const topWalletsToShow: WalletConfigV2<T>[] = topWallets.filter(filterFn)
   const previouslyUsedWalletsToShow: WalletConfigV2<T>[] = previouslyUsedWallets.filter(filterFn)
 
-  const { t } = useTranslation()
-
   return (
     <AtomBox width="100%">
       {error ? (
@@ -204,15 +184,7 @@ function MobileModal<T>({
         </AtomBox>
       ) : null}
       <AtomBox display="flex" flexDirection="column" gap="16px" justifyContent="space-between">
-        <Button variant="light" onClick={onOpenSocialLoginModal} width="100%" style={{ marginBottom: '8px' }}>
-          <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center" padding="12px">
-            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/google.jpg`} />
-            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/apple.png`} />
-            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/facebook.png`} />
-            <Text fontSize="12px">{t('Connect with social login')}</Text>
-            <ArrowForwardIcon color="primary" />
-          </FlexGap>
-        </Button>
+        <SocialLoginButton onClick={onOpenSocialLoginModal} assetCdn={ASSET_CDN} style={{ marginBottom: '8px' }} />
 
         <WalletSelect
           style={{ height: `calc(100vh - 200px)` }}
@@ -479,15 +451,7 @@ function DesktopModal<T>({
           {t('Connect Wallet')}
         </Heading>
 
-        <Button variant="light" onClick={onOpenSocialLoginModal} width="100%" padding="12px">
-          <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center">
-            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/google.jpg`} />
-            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/apple.png`} />
-            <SocialLoginIconBox $bg={`${ASSET_CDN}/web/wallets/social-login/facebook.png`} />
-            <Text fontSize="12px">{t('Connect with social login')}</Text>
-            <ArrowForwardIcon color="primary" />
-          </FlexGap>
-        </Button>
+        <SocialLoginButton onClick={onOpenSocialLoginModal} assetCdn={ASSET_CDN} />
 
         <WalletSelect
           wallets={wallets}
