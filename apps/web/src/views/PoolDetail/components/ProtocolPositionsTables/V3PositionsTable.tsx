@@ -132,7 +132,7 @@ const V3Actions = ({
 
   return (
     <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
-      {!isFarmLive && (
+      {((!isFarmLive && !position.isStaked) || removed) && (
         <>
           <ActionButton
             as="a"
