@@ -436,26 +436,48 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
   const filteredPositions = useMemo(() => {
     if (!transformedPositions.length) return []
 
-    return transformedPositions.filter((position) => {
-      if (filter === PositionFilter.All) return true
+    // Helper function to determine position status priority for sorting
+    const getPositionStatusPriority = (position: TransformedBinPosition): number => {
+      const { totalApr, liquidityUSD } = position
+      const hasLiquidity = liquidityUSD > 0
 
-      const originalPosition = positions.find((p) => `${p.chainId}-${p.poolId}` === position.positionId)
-      if (!originalPosition) return false
+      if (hasLiquidity && totalApr > 0) return 1 // Active
+      if (hasLiquidity && totalApr === 0) return 2 // Inactive
+      if (!hasLiquidity) return 3 // Closed
+      return 4 // Fallback
+    }
 
-      if ((originalPosition.status as POSITION_STATUS) === POSITION_STATUS.CLOSED) {
-        return filter === PositionFilter.Closed
-      }
+    return transformedPositions
+      .toSorted((positionA, positionB) => {
+        // First sort by position status (Active, Inactive, Closed)
+        const aPriority = getPositionStatusPriority(positionA)
+        const bPriority = getPositionStatusPriority(positionB)
 
-      if (filter === PositionFilter.Active)
-        return (originalPosition.status as POSITION_STATUS) === POSITION_STATUS.ACTIVE
-      if (filter === PositionFilter.Inactive)
-        return (originalPosition.status as POSITION_STATUS) === POSITION_STATUS.INACTIVE
-      if (filter === PositionFilter.Closed)
-        return (originalPosition.status as POSITION_STATUS) === POSITION_STATUS.CLOSED
+        if (aPriority !== bPriority) {
+          return aPriority - bPriority
+        }
 
-      return false
-    })
-  }, [transformedPositions, filter, positions])
+        // Then sort by liquidity within each status group (highest first)
+        const aLiquidity = positionA.liquidityUSD
+        const bLiquidity = positionB.liquidityUSD
+        return bLiquidity > aLiquidity ? 1 : -1
+      })
+      .filter((position) => {
+        const { totalApr, liquidityUSD } = position
+        const hasLiquidity = liquidityUSD > 0
+
+        switch (filter) {
+          case PositionFilter.Active:
+            return hasLiquidity && totalApr > 0
+          case PositionFilter.Inactive:
+            return hasLiquidity && totalApr === 0
+          case PositionFilter.Closed:
+            return !hasLiquidity
+          default:
+            return true
+        }
+      })
+  }, [transformedPositions, filter])
 
   const [numerator, denominator] = useMemo(() => {
     return transformedPositions.reduce(

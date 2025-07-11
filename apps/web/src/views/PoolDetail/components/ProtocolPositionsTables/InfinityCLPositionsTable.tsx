@@ -429,11 +429,31 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
   const filteredPositions = useMemo(() => {
     if (!transformedPositions) return []
 
+    // Helper function to determine position status priority for sorting
+    const getPositionStatusPriority = (position: TransformedPosition): number => {
+      const { totalApr, liquidityUSD } = position
+      const hasLiquidity = liquidityUSD > 0
+
+      if (hasLiquidity && totalApr > 0) return 1 // Active
+      if (hasLiquidity && totalApr === 0) return 2 // Inactive
+      if (!hasLiquidity) return 3 // Closed
+      return 4 // Fallback
+    }
+
     return transformedPositions
       .toSorted((positionA, positionB) => {
+        // First sort by position status (Active, Inactive, Closed)
+        const aPriority = getPositionStatusPriority(positionA)
+        const bPriority = getPositionStatusPriority(positionB)
+
+        if (aPriority !== bPriority) {
+          return aPriority - bPriority
+        }
+
+        // Then sort by liquidity within each status group (highest first)
         const aLiquidity = positionA.liquidityUSD
         const bLiquidity = positionB.liquidityUSD
-        return bLiquidity > aLiquidity ? -1 : 1
+        return bLiquidity > aLiquidity ? 1 : -1
       })
       .filter((position) => {
         const { totalApr, liquidityUSD } = position
