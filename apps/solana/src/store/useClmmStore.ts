@@ -851,14 +851,6 @@ export const useClmmStore = createStore<ClmmState>(
     setRewardsAct: async ({ poolInfo, poolKeys, rewardInfos, newRewardInfos, onConfirmed, ...txProps }) => {
       const { raydium, txVersion } = useAppStore.getState()
       if (!raydium || rewardInfos.length + newRewardInfos.length < 1) return ''
-      const allBuildData: (
-        | TxV0BuildData<{
-            address: Record<string, PublicKey>
-          }>
-        | TxBuildData<{
-            address: Record<string, PublicKey>
-          }>
-      )[] = []
 
       const meta = getTxMeta({
         action: 'updateRewards',
@@ -958,6 +950,7 @@ export const useClmmStore = createStore<ClmmState>(
           })
           .finally(txProps.onFinally)
       }
+      return ''
     },
 
     createClmmPool: async ({ token1, token2, config, price, execute, forerunCreate, getObserveState }) => {
