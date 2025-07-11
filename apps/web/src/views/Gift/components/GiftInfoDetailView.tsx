@@ -97,13 +97,9 @@ export const GiftInfoDetailView = () => {
           <FlexGap flexDirection="column" gap="8px">
             <GiftInfoTimestamp text={t('Created at:')} timestamp={giftInfo.timestamp} />
 
-            {status === GiftStatus.CLAIMED && giftInfo.actionTransactionHash && (
+            {status === GiftStatus.CLAIMED && giftInfo.claimTimeStamp && (
               <>
-                <GiftInfoTxn
-                  text={t('Gift claimed:')}
-                  txnHash={giftInfo.actionTransactionHash}
-                  chainId={giftInfo.nativeCurrencyAmount.currency.chainId}
-                />
+                <GiftInfoTimestamp text={t('Claimed at:')} timestamp={giftInfo.claimTimeStamp} />
                 <GiftInfoAddress text={t('Claimed by:')} address={giftInfo.claimerAddress} />
               </>
             )}

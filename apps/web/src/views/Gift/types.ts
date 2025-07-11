@@ -20,6 +20,7 @@ export interface GiftInfoResponse {
   timestamp: string // ISOString
   expiryTimestamp: string // ISOString
   creatorAddress: string
+  claimTimeStamp?: string
 }
 
 export interface GiftInfo extends GiftInfoResponse {

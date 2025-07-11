@@ -168,7 +168,7 @@ export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
     enabled: Boolean(chainId && codeHash),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    refetchOnMount: false,
+    refetchOnMount: true,
   })
 
   const searchToken = useTokenByChainId(data?.currencyAmount !== null ? data?.token : undefined, chainId)
