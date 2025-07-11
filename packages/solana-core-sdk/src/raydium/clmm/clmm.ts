@@ -1853,7 +1853,7 @@ export class Clmm extends ModuleBase {
       mintA: poolInfo.mintA,
       mintB: poolInfo.mintB,
       // lookupTableAccount: poolInfo.lookupTableAccount
-      // alt: poolInfo.alt
+      alt: poolInfo.alt,
       openTime: poolInfo.openTime,
       vault: (poolInfo as any).vault,
       rewardInfos: poolInfo.rewardDefaultInfos.map((r) => ({
