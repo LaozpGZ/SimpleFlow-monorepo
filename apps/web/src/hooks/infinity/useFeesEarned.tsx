@@ -93,38 +93,32 @@ export const useFeesEarnedUSD = (params: LPFeesParam) => {
   const price0 = useStablecoinPrice(currency0, { enabled: Boolean(feeAmount0?.greaterThan(0)) })
   const price1 = useStablecoinPrice(currency1, { enabled: Boolean(feeAmount1?.greaterThan(0)) })
 
+  const calculateFiatValue = (
+    price: any,
+    feeAmount: CurrencyAmount<Currency> | undefined,
+    currencyLabel: string,
+  ): CurrencyAmount<Currency> | undefined => {
+    try {
+      if (price && feeAmount) {
+        if (price.baseCurrency.equals(feeAmount.currency)) {
+          return price.quote(feeAmount)
+        }
+
+        if (price.baseCurrency.wrapped.address === feeAmount.currency.wrapped.address) {
+          // Create a new CurrencyAmount with the correct currency from price
+          const adjustedAmount = CurrencyAmount.fromRawAmount(price.baseCurrency, feeAmount.quotient)
+          return price.quote(adjustedAmount)
+        }
+      }
+    } catch (error) {
+      console.warn(`Error calculating fiat value for ${currencyLabel}:`, error)
+    }
+    return undefined
+  }
+
   const { totalFiatValue, fiatValue0, fiatValue1 } = useMemo(() => {
-    // Create fiat values with proper error handling
-    let fiatValue0_: CurrencyAmount<Currency> | undefined
-    let fiatValue1_: CurrencyAmount<Currency> | undefined
-
-    try {
-      if (price0 && feeAmount0) {
-        if (price0.baseCurrency.equals(feeAmount0.currency)) {
-          fiatValue0_ = price0.quote(feeAmount0)
-        } else if (price0.baseCurrency.wrapped.address === feeAmount0.currency.wrapped.address) {
-          // Create a new CurrencyAmount with the correct currency from price
-          const adjustedAmount = CurrencyAmount.fromRawAmount(price0.baseCurrency, feeAmount0.quotient)
-          fiatValue0_ = price0.quote(adjustedAmount)
-        }
-      }
-    } catch (error) {
-      console.warn('Error calculating fiat value for currency0:', error)
-    }
-
-    try {
-      if (price1 && feeAmount1) {
-        if (price1.baseCurrency.equals(feeAmount1.currency)) {
-          fiatValue1_ = price1.quote(feeAmount1)
-        } else if (price1.baseCurrency.wrapped.address === feeAmount1.currency.wrapped.address) {
-          // Create a new CurrencyAmount with the correct currency from price
-          const adjustedAmount = CurrencyAmount.fromRawAmount(price1.baseCurrency, feeAmount1.quotient)
-          fiatValue1_ = price1.quote(adjustedAmount)
-        }
-      }
-    } catch (error) {
-      console.warn('Error calculating fiat value for currency1:', error)
-    }
+    const fiatValue0_ = calculateFiatValue(price0, feeAmount0, 'currency0')
+    const fiatValue1_ = calculateFiatValue(price1, feeAmount1, 'currency1')
 
     return {
       fiatValue0: fiatValue0_,
