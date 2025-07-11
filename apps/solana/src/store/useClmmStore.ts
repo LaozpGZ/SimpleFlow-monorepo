@@ -274,22 +274,22 @@ export const useClmmStore = createStore<ClmmState>(
 
         buildData
           .execute({
-            sequentially: false,
-            simulate: true
-            // onTxUpdate: (data) => {
-            //   handleMultiTxRetry(data)
-            //   handleMultiTxToast({
-            //     t,
-            //     toastId,
-            //     processedId: transformProcessData({ processedId, data }),
-            //     txLength,
-            //     meta,
-            //     handler,
-            //     getSubTxTitle
-            //   })
-            // }
+            sequentially: true,
+            simulate: true,
+            onTxUpdate: (data) => {
+              handleMultiTxRetry(data)
+              handleMultiTxToast({
+                t,
+                toastId,
+                processedId: transformProcessData({ processedId, data }),
+                txLength,
+                meta,
+                handler,
+                getSubTxTitle
+              })
+            }
           })
-          .then(({ txIds }) => {
+          .then(() => {
             handleMultiTxToast({
               t,
               toastId,
