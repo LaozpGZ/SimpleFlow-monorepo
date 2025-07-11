@@ -91,7 +91,9 @@ export const useCreateGift = () => {
 
   useEffect(() => {
     if (isErrorConfirming && errorConfirming && txHash) {
-      toastError(t('Create Gift Error'), <ToastDescriptionWithTx bscTrace txHash={txHash} />)
+      const reason = errorConfirming?.message?.split('\n').find((line) => line.includes('Details'))
+
+      toastError(t(`Create Gift Error ${reason}`), <ToastDescriptionWithTx bscTrace txHash={txHash} />)
     }
   }, [isErrorConfirming, errorConfirming, txHash])
 

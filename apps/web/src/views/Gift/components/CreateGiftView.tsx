@@ -26,7 +26,7 @@ export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<T
   const { t } = useTranslation()
   const [code, setCode] = useState<string | null>(null)
   const [selectedView, setSelectedView] = useState<GIFT_VIEW>(GIFT_VIEW.SEND_LINK)
-  const { nativeAmount, includeStarterGas } = useSendGiftContext()
+  const { nativeAmount } = useSendGiftContext()
 
   const { createGift, isLoading, isConfirmed } = useCreateGift()
 
