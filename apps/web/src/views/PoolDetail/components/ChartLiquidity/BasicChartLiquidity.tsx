@@ -117,6 +117,8 @@ export const BasicChartLiquidity: React.FC<BasicChartLiquidityProps> = ({ poolIn
             tick={{ fontSize: 12, fill: '#9383B4' }}
             tickFormatter={(value) => formatFiatNumber(value)}
             orientation="right"
+            width={80}
+            tickMargin={10}
           />
           <Tooltip
             content={(props) => (

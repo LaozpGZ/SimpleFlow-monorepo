@@ -354,21 +354,21 @@ export const PoolInfo = () => {
       </AutoColumn>
 
       <Box>
-        <Box style={{ margin: '0 24px -3px' }}>
+        <Box style={{ margin: isSmallScreen ? '0 30px -3px' : '0 24px -3px' }}>
           <TabMenu activeIndex={tab} onItemClick={setTab}>
             <Tab
               isActive={tab === PoolDetailTab.MyPositions}
               onClick={() => setTab(PoolDetailTab.MyPositions)}
               key="my-positions"
             >
-              {t('My Positions')}
+              <span style={{ fontSize: isSmallScreen ? '12px' : '16px' }}>{t('My Positions')}</span>
             </Tab>
             <Tab
               isActive={tab === PoolDetailTab.Transactions}
               onClick={() => setTab(PoolDetailTab.Transactions)}
               key="transactions"
             >
-              {t('Transactions')}
+              <span style={{ fontSize: isSmallScreen ? '12px' : '16px' }}>{t('Transactions')}</span>
             </Tab>
           </TabMenu>
         </Box>
@@ -376,15 +376,6 @@ export const PoolInfo = () => {
         {tab === PoolDetailTab.MyPositions ? <MyPositions poolInfo={poolInfo} /> : null}
         {tab === PoolDetailTab.Transactions ? <Transactions protocol={poolInfo.protocol} /> : null}
       </Box>
-
-      {/* {hookData && (
-        <AutoColumn gap="lg">
-          <Text as="h3" fontWeight={600} fontSize={24}>
-            {t('Pool Features (Hooks)')}
-          </Text>
-          <PoolFeatures hookData={hookData} />
-        </AutoColumn>
-      )} */}
     </AutoColumn>
   )
 }
