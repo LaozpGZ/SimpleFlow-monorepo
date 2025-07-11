@@ -8,6 +8,9 @@ import {
   IconButton,
   ModalV2,
   ModalWrapper,
+  SocialLoginDiscordIcon,
+  SocialLoginTelegramIcon,
+  SocialLoginXIcon,
   Text,
 } from '@pancakeswap/uikit'
 import { MouseEvent } from 'react'
@@ -146,18 +149,18 @@ const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
 
           <Flex gap="8px">
             <SocialLoginButtonVertical onClick={handleXLogin}>
-              <img src={`${ASSET_CDN}/web/wallets/social-login/x.svg`} width="24" height="24" alt="X (Twitter)" />
+              <SocialLoginXIcon />
               <Text>{t('X Login')}</Text>
             </SocialLoginButtonVertical>
 
             <SocialLoginButtonVertical onClick={handleTelegramLogin}>
-              <img src={`${ASSET_CDN}/web/wallets/social-login/telegram.svg`} width="24" height="24" alt="Telegram" />
+              <SocialLoginTelegramIcon />
               <Text>{t('Telegram')}</Text>
               <div id="telegram-widget-root" />
             </SocialLoginButtonVertical>
 
             <SocialLoginButtonVertical onClick={handleDiscordLogin}>
-              <img src={`${ASSET_CDN}/web/wallets/social-login/discord.svg`} width="24" height="24" alt="Discord" />
+              <SocialLoginDiscordIcon />
               <Text>{t('Discord')}</Text>
             </SocialLoginButtonVertical>
           </Flex>
