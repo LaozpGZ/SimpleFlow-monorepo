@@ -1,7 +1,7 @@
-import { Flex, HStack, Text } from '@chakra-ui/react'
+import { Flex, HStack, Text, VStack } from '@chakra-ui/react'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Skeleton } from '@pancakeswap/uikit'
+import { Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Button from '@/components/Button'
 import TokenAvatar from '@/components/TokenAvatar'
 import { colors } from '@/theme/cssVariables'
@@ -11,6 +11,7 @@ import Tooltip from '@/components/Tooltip'
 import RewardBreakdownSwitch from '@/components/RewardBreakdownSwitch'
 import { useAppStore } from '@/store'
 import { BreakdownRewardInfo } from '@/hooks/pool/clmm/useFetchClmmRewardInfo'
+import { QuestionToolTip } from '@/components/QuestionToolTip'
 
 type PendingYieldProps = {
   pendingYield?: string
@@ -34,6 +35,7 @@ export default function PendingYield({
   const { t } = useTranslation()
   const rewardBreakdownMode = useAppStore((s) => s.rewardBreakdownMode)
   const column = 'repeat(auto-fit, minmax(min(100%, 155px), 1fr))'
+  const { isMobile } = useMatchBreakpoints()
 
   const rewards = (
     <>
@@ -150,15 +152,40 @@ export default function PendingYield({
   return (
     <Flex flex={1} justify="space-around" w="full" fontSize="sm" flexDirection="column" gap={3} p={[4, 0]}>
       <HStack justifyContent="space-between">
-        <HStack>
-          <Text color={colors.textSecondary} whiteSpace="nowrap">
-            {t('Pending Yield')}
-          </Text>
-          <Text color={colors.textPrimary} whiteSpace="nowrap">
-            ({pendingYield ?? '$0'})
-          </Text>
-          {breakdownRewardInfo.rewards.length > 0 ? <RewardBreakdownSwitch /> : null}
-        </HStack>
+        {isMobile ? (
+          <VStack alignItems="flex-start">
+            <HStack>
+              <Text color={colors.textSecondary} whiteSpace="nowrap">
+                {t('Pending Yield')}
+              </Text>
+              {breakdownRewardInfo.rewards.length > 0 ? <RewardBreakdownSwitch /> : null}
+            </HStack>
+            <HStack>
+              <Text fontSize="xl" whiteSpace="nowrap" color={colors.primary}>
+                {pendingYield ?? '$0'}
+              </Text>
+              <QuestionToolTip
+                label={t('Pending rewards are calculated based on the current pool size and the time since the last harvest.')}
+                iconType="info"
+                iconProps={{
+                  width: '18px',
+                  height: '18px',
+                  color: colors.textSubtle
+                }}
+              />
+            </HStack>
+          </VStack>
+        ) : (
+          <HStack>
+            <Text color={colors.textSecondary} whiteSpace="nowrap">
+              {t('Pending Yield')}
+            </Text>
+            <Text color={colors.textPrimary} whiteSpace="nowrap">
+              ({pendingYield ?? '$0'})
+            </Text>
+            {breakdownRewardInfo.rewards.length > 0 ? <RewardBreakdownSwitch /> : null}
+          </HStack>
+        )}
         <Tooltip
           label={
             hasReward
@@ -170,17 +197,12 @@ export default function PendingYield({
             isLoading={isLoading}
             isDisabled={!hasReward}
             onClick={onHarvest}
-            width={['69px']}
-            height="9"
-            borderRadius="xl"
-            size="xs"
-            px={1}
+            size="sm"
             fontSize="md"
             variant="outline"
-            style={{
-              borderColor: colors.primary60,
-              color: colors.primary60
-            }}
+            borderColor={colors.primary}
+            color={colors.primary60}
+            borderRadius="12px"
           >
             {t('Harvest')}
           </Button>

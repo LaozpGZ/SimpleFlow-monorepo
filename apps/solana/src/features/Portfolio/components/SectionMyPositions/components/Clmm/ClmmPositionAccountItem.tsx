@@ -194,10 +194,14 @@ export default function ClmmPositionAccountItem({
             poolInfo={poolInfo}
             position={position}
             aprData={aprData}
+            timeBasis={timeBasis}
             onTimeBasisChange={setTimeBasis}
             nftMint={position.nftMint.toString()}
             totalPendingYield={totalPendingYield.toString()}
             baseIn={baseIn}
+            isRewardLoading={isLoading}
+            rewardInfos={allRewardInfos}
+            breakdownRewardInfo={breakdownRewardInfo as BreakdownRewardInfo}
             onClickCloseButton={handleClosePosition}
             onClickMinusButton={handleRemoveOpen}
             onClickPlusButton={handleAddOpen}

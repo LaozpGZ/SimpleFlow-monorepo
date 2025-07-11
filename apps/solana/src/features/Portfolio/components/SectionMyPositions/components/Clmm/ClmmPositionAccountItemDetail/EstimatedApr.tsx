@@ -49,9 +49,11 @@ export default function EstimatedApr({ aprData, timeBasis, onTimeBasisChange, po
           </Flex>
         ))}
       </Flex>
-      <Flex alignItems={['center', 'start']} justifyContent={['center', 'start']}>
-        <Tabs value={timeBasis} items={timeBasisOptions} onChange={onTimeBasisChange} size="xs" variant="subtle" />
-      </Flex>
+      {onTimeBasisChange ? (
+        <Flex alignItems={['center', 'start']} justifyContent={['center', 'start']}>
+          <Tabs value={timeBasis} items={timeBasisOptions} onChange={onTimeBasisChange} size="xs" variant="subtle" />
+        </Flex>
+      ) : null}
     </HStack>
   )
 }
