@@ -40,6 +40,7 @@ import { ClmmLockInfo } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { handleMultiTxRetry } from '@/hooks/toast/retryTx'
 import { getComputeBudgetConfig } from '@/utils/tx/computeBudget'
 import { getClmmKeysFromPoolInfo } from '@/utils/getPoolKeysFromPoolInfo'
+import toPercentString from '@/utils/numberish/toPercentString'
 import { TxCallbackProps, TxCallbackPropsGeneric } from '../types/tx'
 import { getTxMeta } from './configs/clmm'
 
@@ -862,11 +863,57 @@ export const useClmmStore = createStore<ClmmState>(
       const meta = getTxMeta({
         action: 'updateRewards',
         values: {
-          pool: poolInfo.id.slice(0, 6)
+          pool: `${poolInfo.mintA.symbol}/${poolInfo.mintB.symbol} (${toPercentString(poolInfo.feeRate * 100)})`
         }
       })
       const computeBudgetConfig = await getComputeBudgetConfig()
-      if (rewardInfos.length) {
+
+      if (rewardInfos.length && newRewardInfos.length) {
+        const setRewardsBuildData = await raydium.clmm.setRewards({
+          poolInfo,
+          poolKeys,
+          ownerInfo: { useSOLBalance: true },
+          rewardInfos,
+          txVersion
+        })
+
+        const initRewardBuildData = await raydium.clmm.initRewards({
+          poolInfo,
+          ownerInfo: { useSOLBalance: true },
+          checkCreateATAOwner: true,
+          rewardInfos: newRewardInfos,
+          txVersion
+        })
+
+        const builder0 = setRewardsBuildData.builder
+        builder0.addInstruction(initRewardBuildData.builder.AllTxData)
+        builder0.addCustomComputeBudget(computeBudgetConfig)
+
+        const txBuild = await builder0.versionBuild({ txVersion })
+        if (!txBuild) {
+          txProps.onError?.('build call data failed')
+          txProps.onFinally?.()
+          return ''
+        }
+        const mints = new Map()
+        rewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
+        newRewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
+        return txBuild
+          .execute({
+            simulate: true
+          })
+          .then(({ txId }) => {
+            txStatusSubject.next({ txId, ...txProps, ...meta, mintInfo: Array.from(mints.values()) })
+            return txId
+          })
+          .catch((e) => {
+            txProps.onError?.(e)
+            toastSubject.next({ txError: e, ...meta })
+            return ''
+          })
+          .finally(txProps.onFinally)
+      }
+      if (rewardInfos.length && !newRewardInfos.length) {
         const setRewardsBuildData = await raydium.clmm.setRewards({
           poolInfo,
           poolKeys,
@@ -875,25 +922,20 @@ export const useClmmStore = createStore<ClmmState>(
           computeBudgetConfig,
           txVersion
         })
-
-        if (!newRewardInfos.length)
-          return setRewardsBuildData
-            .execute({
-              simulate: true
-            })
-            .then(({ txId, signedTx }) => {
-              txStatusSubject.next({ txId, ...meta, signedTx, mintInfo: newRewardInfos.map((r) => r.mint), onConfirmed })
-              return txId
-            })
-            .catch((e) => {
-              txProps.onError?.(e)
-              toastSubject.next({ txError: e, ...meta })
-              return ''
-            })
-            .finally(txProps.onFinally)
-        allBuildData.push(setRewardsBuildData)
+        return setRewardsBuildData
+          .execute()
+          .then(({ txId, signedTx }) => {
+            txStatusSubject.next({ txId, ...meta, signedTx, mintInfo: newRewardInfos.map((r) => r.mint), onConfirmed })
+            return txId
+          })
+          .catch((e) => {
+            txProps.onError?.(e)
+            toastSubject.next({ txError: e, ...meta })
+            return ''
+          })
+          .finally(txProps.onFinally)
       }
-      if (newRewardInfos.length) {
+      if (!rewardInfos.length && newRewardInfos.length) {
         const initRewardBuildData = await raydium.clmm.initRewards({
           poolInfo,
           ownerInfo: { useSOLBalance: true },
@@ -903,47 +945,19 @@ export const useClmmStore = createStore<ClmmState>(
           txVersion
         })
 
-        if (!rewardInfos.length)
-          return initRewardBuildData
-            .execute({
-              simulate: true
-            })
-            .then(({ txId }) => {
-              txStatusSubject.next({ txId, ...meta, mintInfo: rewardInfos.map((r) => r.mint), onConfirmed })
-              return txId
-            })
-            .catch((e) => {
-              txProps.onError?.(e)
-              toastSubject.next({ txError: e, ...meta })
-              return ''
-            })
-            .finally(txProps.onFinally)
-        allBuildData.push(initRewardBuildData)
+        return initRewardBuildData
+          .execute()
+          .then(({ txId }) => {
+            txStatusSubject.next({ txId, ...meta, mintInfo: rewardInfos.map((r) => r.mint), onConfirmed })
+            return txId
+          })
+          .catch((e) => {
+            txProps.onError?.(e)
+            toastSubject.next({ txError: e, ...meta })
+            return ''
+          })
+          .finally(txProps.onFinally)
       }
-      const builder0 = allBuildData[0].builder
-      const res = await builder0.addInstruction(allBuildData[1].builder.AllTxData).build()
-      if (!res) {
-        txProps.onError?.('build call data failed')
-        txProps.onFinally?.()
-        return ''
-      }
-      const mints = new Map()
-      rewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
-      newRewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
-      return res
-        .execute({
-          simulate: true
-        })
-        .then(({ txId }) => {
-          txStatusSubject.next({ txId, ...txProps, ...meta, mintInfo: Array.from(mints.values()) })
-          return txId
-        })
-        .catch((e) => {
-          txProps.onError?.(e)
-          toastSubject.next({ txError: e, ...meta })
-          return ''
-        })
-        .finally(txProps.onFinally)
     },
 
     createClmmPool: async ({ token1, token2, config, price, execute, forerunCreate, getObserveState }) => {
