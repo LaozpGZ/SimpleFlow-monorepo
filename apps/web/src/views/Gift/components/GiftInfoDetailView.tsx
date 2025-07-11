@@ -10,7 +10,7 @@ import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { GiftStatus } from '../types'
 import { isExpired } from '../utils/isExpired'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
-import { GiftInfoAddress, GiftInfoDescription, GiftInfoTimestamp, GiftInfoTxn } from './GiftInfoDetail'
+import { GiftInfoAddress, GiftInfoDescription, GiftInfoTimestamp } from './GiftInfoDetail'
 import { GiftStatusTag } from './GiftStatusTag'
 
 export const GiftInfoDetailView = () => {
@@ -104,12 +104,8 @@ export const GiftInfoDetailView = () => {
               </>
             )}
 
-            {status === GiftStatus.CANCELLED && giftInfo.actionTransactionHash && (
-              <GiftInfoTxn
-                text={t('Gift cancelled:')}
-                txnHash={giftInfo.actionTransactionHash}
-                chainId={giftInfo.nativeCurrencyAmount.currency.chainId}
-              />
+            {status === GiftStatus.CANCELLED && giftInfo.cancelTimeStamp && (
+              <GiftInfoTimestamp text={t('Cancelled at:')} timestamp={giftInfo.cancelTimeStamp} />
             )}
 
             {[GiftStatus.PENDING, GiftStatus.EXPIRED].includes(status) && (
