@@ -1,6 +1,6 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
-import { AddIcon, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
+import { AddIcon, Box, Flex, FlexGap, MinusIcon, Tag, Text } from '@pancakeswap/uikit'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { displayApr } from '@pancakeswap/utils/displayApr'
 import { formatAmount } from '@pancakeswap/utils/formatInfoNumbers'
@@ -13,7 +13,12 @@ import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { usePoolByChainId } from 'hooks/v3/usePools'
 import router from 'next/router'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useAccountPositionDetailByPool, useV3PoolsLength, useV3PoolStatus } from 'state/farmsV4/hooks'
+import {
+  useAccountPositionDetailByPool,
+  useExtraV3PositionInfo,
+  useV3PoolsLength,
+  useV3PoolStatus,
+} from 'state/farmsV4/hooks'
 import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { getPoolMultiplier } from 'state/farmsV4/state/utils'
@@ -36,6 +41,7 @@ import {
   isTickBasedPositionOutOfRange,
   isTickBasedPositionRemoved,
 } from 'views/PoolDetail/utils'
+import { PriceRange } from 'views/universalFarms/components'
 import { AprTooltipContent } from 'views/universalFarms/components/PoolAprButtonV3/AprTooltipContent'
 import { V3PositionActions } from 'views/universalFarms/components/PositionActions/V3PositionActions'
 import { V3UnstakeModalContent } from 'views/universalFarms/components/PositionActions/V3UnstakeModalContent'
@@ -78,19 +84,24 @@ const V3Actions = ({
   position,
   poolInfo,
   liquidityUSD,
-  positionData,
-  removed,
-  outOfRange,
 }: {
   position: PositionDetail
   poolInfo: PoolInfo
-
   liquidityUSD: number
-  positionData: any
-  removed: boolean
-  outOfRange: boolean
 }) => {
-  const { t } = useTranslation()
+  const {
+    quote,
+    base,
+    priceUpper,
+    priceLower,
+    tickAtLimit,
+    removed,
+    outOfRange,
+    position: positionInfo,
+  } = useExtraV3PositionInfo(position)
+
+  const amount0 = positionInfo?.amount0
+  const amount1 = positionInfo?.amount1
 
   const { data: poolsLength } = useV3PoolsLength([poolInfo.chainId])
   const [allocPoint] = useV3PoolStatus(poolInfo)
@@ -102,6 +113,20 @@ const V3Actions = ({
     () => poolMultiplier !== `0X` && (!poolLength || !pid || pid <= poolLength),
     [pid, poolLength, poolMultiplier],
   )
+
+  const desc = useMemo(() => {
+    return base && quote ? (
+      <Box mt="8px">
+        <PriceRange
+          base={base}
+          quote={quote}
+          priceLower={priceLower}
+          priceUpper={priceUpper}
+          tickAtLimit={tickAtLimit}
+        />
+      </Box>
+    ) : null
+  }, [base, quote, priceLower, priceUpper, tickAtLimit])
 
   return (
     <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
@@ -146,12 +171,13 @@ const V3Actions = ({
             chainId={poolInfo.chainId}
             userPosition={position}
             link={`/liquidity/${position.tokenId}?chain=${CHAIN_QUERY_NAME[poolInfo.chainId]}&${[PERSIST_CHAIN_KEY]}=1`}
+            pool={poolInfo}
             totalPriceUSD={liquidityUSD}
-            amount0={positionData?.amount0}
-            amount1={positionData?.amount1}
-            desc={t('Unstake')}
-            currency0={poolInfo.token0.wrapped}
-            currency1={poolInfo.token1.wrapped}
+            desc={desc}
+            amount0={amount0}
+            amount1={amount1}
+            currency0={poolInfo.token0}
+            currency1={poolInfo.token1}
             removed={removed}
             outOfRange={outOfRange}
             fee={position.fee}
@@ -434,16 +460,7 @@ const transformV3PositionToTableRow = (
     />
   )
 
-  const actions = (
-    <V3Actions
-      position={position}
-      poolInfo={poolInfo}
-      liquidityUSD={liquidityUSD}
-      positionData={positionData}
-      removed={removed}
-      outOfRange={outOfRange}
-    />
-  )
+  const actions = <V3Actions position={position} poolInfo={poolInfo} liquidityUSD={liquidityUSD} />
 
   return {
     tokenId: position.tokenId.toString(),
