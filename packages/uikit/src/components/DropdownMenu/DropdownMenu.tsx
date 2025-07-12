@@ -183,6 +183,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
   const isMenuShow = isOpen && ((isBottomNav && showItemsOnMobile) || !isBottomNav);
 
   useEffect(() => {
+    if (isBottomNav && !hasItems) return undefined;
     const showDropdownMenu = () => {
       setIsOpen(true);
       hideDropdownMenu.cancel();
@@ -207,7 +208,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
       });
       hideDropdownMenu.cancel();
     };
-  }, [setIsOpen, tooltipRef, targetRef, isBottomNav]);
+  }, [setIsOpen, tooltipRef, targetRef, isBottomNav, hasItems]);
 
   useEffect(() => {
     if (setMenuOpenByIndex && index !== undefined) {
@@ -222,13 +223,9 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
     }, [setIsOpen])
   );
 
-  const handlePointerDown = useCallback(() => {
-    setIsOpen((s) => !s);
-  }, []);
-
   return (
     <Box ref={setTargetRef} {...props}>
-      <Box onPointerDown={handlePointerDown}>{children}</Box>
+      <Box>{children}</Box>
       {hasItems && (
         <StyledDropdownMenu
           ref={setTooltipRef}

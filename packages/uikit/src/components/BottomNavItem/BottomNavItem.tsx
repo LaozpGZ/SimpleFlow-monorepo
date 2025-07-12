@@ -41,7 +41,7 @@ const BottomNavItem: React.FC<React.PropsWithChildren<BottomNavItemProps>> = ({
   );
 
   return showItemsOnMobile ? (
-    <StyledBottomNavItem style={{ opacity: disabled ? 0.5 : 1 }} type="button" onClick={onClick} {...props}>
+    <StyledBottomNavItem style={{ opacity: disabled ? 0.5 : 1 }} type="button" {...props}>
       {bottomNavItemContent}
     </StyledBottomNavItem>
   ) : (
