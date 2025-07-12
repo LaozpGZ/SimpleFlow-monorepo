@@ -216,7 +216,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
   }, [isMenuShow, setMenuOpenByIndex, index]);
 
   useOnClickOutside(
-    targetRef,
+    isOpen ? targetRef : null,
     useCallback(() => {
       setIsOpen(false);
     }, [setIsOpen])
