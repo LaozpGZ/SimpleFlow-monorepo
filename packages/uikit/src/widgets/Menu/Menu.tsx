@@ -134,7 +134,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
   }, [totalTopMenuHeight]);
 
   // Find the home link if provided
-  const homeLink = links.find((link) => link.label === "Home");
+  const homeLink = useMemo(() => links.find((link) => link.label === "Home"), [links]);
 
   const subLinksWithoutMobile = useMemo(() => subLinks?.filter((subLink) => !subLink.isMobileOnly), [subLinks]);
   const subLinksMobileOnly = useMemo(() => subLinks?.filter((subLink) => subLink.isMobileOnly), [subLinks]);

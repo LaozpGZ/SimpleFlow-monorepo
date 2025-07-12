@@ -1,4 +1,4 @@
-import React, { useState, memo } from "react";
+import React, { useState, memo, useMemo } from "react";
 import BottomNavItem from "../BottomNavItem";
 import StyledBottomNav from "./styles";
 import { Box } from "../Box";
@@ -15,7 +15,7 @@ const BottomNav: React.FC<React.PropsWithChildren<BottomNavProps>> = ({
   ...props
 }) => {
   const [menuOpenByIndex, setMenuOpenByIndex] = useState({});
-  const isBottomMenuOpen = Object.values(menuOpenByIndex).some((acc) => acc);
+  const isBottomMenuOpen = Object.keys(menuOpenByIndex).length > 0;
   return (
     <>
       {isBottomMenuOpen && <Overlay />}
