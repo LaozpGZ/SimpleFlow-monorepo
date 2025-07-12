@@ -1,4 +1,4 @@
-import React, { useState, memo, useMemo } from "react";
+import React, { useState, memo } from "react";
 import BottomNavItem from "../BottomNavItem";
 import StyledBottomNav from "./styles";
 import { Box } from "../Box";
@@ -36,6 +36,7 @@ const BottomNav: React.FC<React.PropsWithChildren<BottomNavProps>> = ({
             index
           ) => {
             const statusColor = findMenuItemsStatusColor(menuItems);
+            const hasItems = menuItems && menuItems.length > 0;
             return (
               showOnMobile && (
                 <DropdownMenu
@@ -47,7 +48,6 @@ const BottomNav: React.FC<React.PropsWithChildren<BottomNavProps>> = ({
                   setMenuOpenByIndex={setMenuOpenByIndex}
                   index={index}
                   isDisabled={disabled}
-                  onClick={onClick}
                 >
                   <Box>
                     <NotificationDot show={!!statusColor} color={statusColor}>
@@ -58,7 +58,8 @@ const BottomNav: React.FC<React.PropsWithChildren<BottomNavProps>> = ({
                         label={label}
                         icon={icon}
                         fillIcon={fillIcon}
-                        showItemsOnMobile={showItemsOnMobile}
+                        showItemsOnMobile={showItemsOnMobile && hasItems}
+                        onClick={onClick}
                       />
                     </NotificationDot>
                   </Box>

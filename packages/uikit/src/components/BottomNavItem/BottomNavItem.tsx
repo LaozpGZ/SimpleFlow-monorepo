@@ -13,6 +13,7 @@ const BottomNavItem: React.FC<React.PropsWithChildren<BottomNavItemProps>> = ({
   showItemsOnMobile = false,
   isActive = false,
   disabled = false,
+  onClick,
   ...props
 }) => {
   const { linkComponent } = useContext(MenuContext);
@@ -40,11 +41,17 @@ const BottomNavItem: React.FC<React.PropsWithChildren<BottomNavItemProps>> = ({
   );
 
   return showItemsOnMobile ? (
-    <StyledBottomNavItem style={{ opacity: disabled ? 0.5 : 1 }} type="button" {...props}>
+    <StyledBottomNavItem style={{ opacity: disabled ? 0.5 : 1 }} type="button" onClick={onClick} {...props}>
       {bottomNavItemContent}
     </StyledBottomNavItem>
   ) : (
-    <StyledBottomNavItem style={{ opacity: disabled ? 0.5 : 1 }} as={linkComponent} href={href} {...props}>
+    <StyledBottomNavItem
+      style={{ opacity: disabled ? 0.5 : 1 }}
+      as={linkComponent}
+      href={href}
+      onClick={onClick}
+      {...props}
+    >
       {bottomNavItemContent}
     </StyledBottomNavItem>
   );
