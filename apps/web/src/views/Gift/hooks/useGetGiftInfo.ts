@@ -37,21 +37,35 @@ export const fetchGiftInfo = async ({
     throw new Error('API URL is not configured')
   }
 
-  const url = `${NEXT_PUBLIC_GIFT_API}/gift/list?chainId=${chainId}&address=${account}&claimerAddress=${account}`
+  const urlSend = `${NEXT_PUBLIC_GIFT_API}/gift/list?chainId=${chainId}&address=${account}`
+  const urlReceive = `${NEXT_PUBLIC_GIFT_API}/gift/list?chainId=${chainId}&claimerAddress=${account}`
 
-  const response = await fetch(url)
+  // promise all urlsend and urlreceive
+  const [responseSend, responseReceive] = await Promise.all([fetch(urlSend), fetch(urlReceive)])
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch gift info: ${response.status} ${response.statusText}`)
+  if (!responseSend.ok || !responseReceive.ok) {
+    throw new Error(
+      `Failed to fetch gift info: ${responseSend.status} ${responseSend.statusText} ${responseReceive.status} ${responseReceive.statusText}`,
+    )
   }
 
-  const result: GiftApiResponse<GiftInfoResponse[]> = await response.json()
+  const resultSend: GiftApiResponse<GiftInfoResponse[]> = await responseSend.json()
+  const resultReceive: GiftApiResponse<GiftInfoResponse[]> = await responseReceive.json()
 
-  if (result.status === GiftApiStatus.FAILED) {
-    throw new Error(result.message || 'Failed to fetch gift information')
+  if (resultSend.status === GiftApiStatus.FAILED || resultReceive.status === GiftApiStatus.FAILED) {
+    throw new Error(resultSend.message || resultReceive.message || 'Failed to fetch gift information')
   }
 
-  return result.data || []
+  // ensure no duplicate gift codehash
+  const giftCodes = new Set()
+  const result = [...(resultSend.data || []), ...(resultReceive.data || [])]
+  return result.filter((gift) => {
+    if (giftCodes.has(gift.codeHash)) {
+      return false
+    }
+    giftCodes.add(gift.codeHash)
+    return true
+  })
 }
 
 export const useGetGiftInfo = () => {
