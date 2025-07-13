@@ -173,7 +173,11 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
   const { isMobile, isMd } = useMatchBreakpoints();
   const [targetRef, setTargetRef] = useState<HTMLDivElement | null>(null);
   const [tooltipRef, setTooltipRef] = useState<HTMLDivElement | null>(null);
-  const hasItems = items.length > 0;
+  const filteredItems = useMemo(
+    () => items.filter((item) => ((isMobile || isMd) && item.isMobileOnly) || !item.isMobileOnly),
+    [items]
+  );
+  const hasItems = filteredItems.length > 0;
   const { styles, attributes } = usePopper(targetRef, tooltipRef, {
     strategy: isBottomNav ? "absolute" : "fixed",
     placement: isBottomNav ? "top" : "bottom-start",
@@ -234,19 +238,17 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
           $isOpen={isMenuShow}
           {...attributes.popper}
         >
-          {items
-            .filter((item) => ((isMobile || isMd) && item.isMobileOnly) || !item.isMobileOnly)
-            .map((item) => (
-              <MenuItem
-                key={itemKey?.(item) ?? item?.label?.toString() ?? `delimiter${index}`}
-                item={item}
-                activeItem={activeItem}
-                activeSubItemChildItem={activeSubItemChildItem}
-                isDisabled={isDisabled}
-                linkComponent={linkComponent}
-                setIsOpen={setIsOpen}
-              />
-            ))}
+          {filteredItems.map((item) => (
+            <MenuItem
+              key={itemKey?.(item) ?? item?.label?.toString() ?? `delimiter${index}`}
+              item={item}
+              activeItem={activeItem}
+              activeSubItemChildItem={activeSubItemChildItem}
+              isDisabled={isDisabled}
+              linkComponent={linkComponent}
+              setIsOpen={setIsOpen}
+            />
+          ))}
         </StyledDropdownMenu>
       )}
     </Box>
