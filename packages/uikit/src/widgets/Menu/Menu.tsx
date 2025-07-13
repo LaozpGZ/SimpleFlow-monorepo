@@ -98,7 +98,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
   const { isMobile } = useMatchBreakpoints();
   const isMounted = useIsMounted();
   const [showMenu, setShowMenu] = useState(true);
-  const refPrevOffset = useRef(typeof window === "undefined" ? 0 : window.pageYOffset);
+  const refPrevOffset = useRef(typeof window === "undefined" ? 0 : window.scrollY);
 
   const topBannerHeight = isMobile ? TOP_BANNER_HEIGHT_MOBILE : TOP_BANNER_HEIGHT;
 
@@ -106,7 +106,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
 
   useEffect(() => {
     const handleScroll = () => {
-      const currentOffset = window.pageYOffset;
+      const currentOffset = window.scrollY;
       const isBottomOfPage = window.document.body.clientHeight === currentOffset + window.innerHeight;
       const isTopOfPage = currentOffset === 0;
       // Always show the menu when user reach the top
