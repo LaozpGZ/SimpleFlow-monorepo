@@ -175,7 +175,7 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
   const [tooltipRef, setTooltipRef] = useState<HTMLDivElement | null>(null);
   const filteredItems = useMemo(
     () => items.filter((item) => ((isMobile || isMd) && item.isMobileOnly) || !item.isMobileOnly),
-    [items]
+    [items, isMobile, isMd]
   );
   const hasItems = filteredItems.length > 0;
   const { styles, attributes } = usePopper(targetRef, tooltipRef, {
@@ -227,9 +227,14 @@ const DropdownMenu: React.FC<React.PropsWithChildren<DropdownMenuProps>> = ({
     }, [setIsOpen])
   );
 
+  const handlePointerDown = useCallback(() => {
+    if (isBottomNav && !hasItems) return;
+    setIsOpen((s) => !s);
+  }, [isBottomNav, hasItems]);
+
   return (
     <Box ref={setTargetRef} {...props}>
-      <Box>{children}</Box>
+      <Box onPointerDown={handlePointerDown}>{children}</Box>
       {hasItems && (
         <StyledDropdownMenu
           ref={setTooltipRef}
