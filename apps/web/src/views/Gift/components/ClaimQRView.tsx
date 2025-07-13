@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { generateClaimLink } from '../utils/generateClaimLink'
 import { CurrencyAmountGiftDisplay } from './CurrencyAmountGiftDisplay'
 import QRDownloadImageButton from './QRDownloadImageButton'
+import QRShareImageButton from './QRShareImageButton'
 
 const GiftCodeContainer = styled(Box)`
   background-color: ${({ theme }) => theme.colors.input};
@@ -74,7 +75,10 @@ function QRImageDownloadView({
           </SecondaryCard>
         </Flex>
       </QRCodeContainer>
-      <QRDownloadImageButton elementId="qr-code" />
+      <FlexGap flexDirection="row" gap="8px">
+        <QRShareImageButton elementId="qr-code" code={code} />
+        <QRDownloadImageButton elementId="qr-code" />
+      </FlexGap>
     </>
   )
 }
