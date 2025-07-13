@@ -1,8 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { copyText, FlexGap, useToast } from '@pancakeswap/uikit'
+import { Button, copyText, FlexGap, useToast } from '@pancakeswap/uikit'
 import { NoteContainer } from 'components/NoteContainer'
-import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useCalculateTotalCostCreateGift } from '../hooks/useCalculateTotalCostCreateGift'
 import { generateClaimLink } from '../utils/generateClaimLink'
@@ -41,15 +40,16 @@ Alternatively, you can manually enter the code ${code} on PancakeSwap wallet to 
       <FlexGap flexDirection="row" gap="8px">
         <ShareGiftLinkButton text={giftShareText} claimLink={claimLink} />
 
-        <ActionButton
+        <Button
           variant="danger"
+          width="100%"
           onClick={() => {
             copyText(giftShareText)
             toastSuccess(t('Claim code'), t('Copied!'))
           }}
         >
           {t('Copy')}
-        </ActionButton>
+        </Button>
       </FlexGap>
     </>
   )
