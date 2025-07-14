@@ -1,11 +1,12 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, SkeletonV2, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { DoubleCurrencyLogo, FiatNumberDisplay } from '@pancakeswap/widgets-internal'
+import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
+import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { FixedSizeList as List } from 'react-window'
-import { PoolInfo } from 'state/farmsV4/state/type'
+import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
+import { isInfinityProtocol } from 'utils/protocols'
 import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton'
-import { PoolFeatureTags } from './PoolFeatureTags'
 
 const TableContainer = styled.div`
   overflow-x: auto;
@@ -58,7 +59,7 @@ const PoolPairCell = styled(Flex)`
 `
 
 const TokenSymbols = styled(Flex)`
-  flex-direction: column;
+  align-items: center;
   gap: 4px;
 `
 
@@ -135,6 +136,12 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, loading }) => {
     const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
     const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
 
+    // Get hookData for Infinity pools
+    const hookData = useHookByPoolId(
+      pool.chainId,
+      isInfinityProtocol(pool.protocol) ? (pool as InfinityPoolInfo)?.poolId : undefined,
+    )
+
     if (!token0 || !token1 || !token0.chainId || !token1.chainId) {
       return null
     }
@@ -151,7 +158,14 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, loading }) => {
                     <SymbolText>
                       {token0.symbol} / {token1.symbol}
                     </SymbolText>
-                    <PoolFeatureTags pool={pool} />
+                    <Liquidity.PoolFeaturesBadge
+                      poolType={pool.protocol}
+                      hookData={hookData}
+                      showLabel={false}
+                      showPoolType
+                      showPoolFeature={!!hookData}
+                      short
+                    />
                   </TokenSymbols>
                 </PoolPairCell>
               </Td>
@@ -176,6 +190,12 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, loading }) => {
     const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
     const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
 
+    // Get hookData for Infinity pools
+    const hookData = useHookByPoolId(
+      pool.chainId,
+      isInfinityProtocol(pool.protocol) ? (pool as InfinityPoolInfo)?.poolId : undefined,
+    )
+
     if (!token0 || !token1 || !token0.chainId || !token1.chainId) {
       return null
     }
@@ -190,7 +210,14 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, loading }) => {
                 <SymbolText>
                   {token0.symbol} / {token1.symbol}
                 </SymbolText>
-                <PoolFeatureTags pool={pool} />
+                <Liquidity.PoolFeaturesBadge
+                  poolType={pool.protocol}
+                  hookData={hookData}
+                  showLabel={false}
+                  showPoolType
+                  showPoolFeature={!!hookData}
+                  short
+                />
               </TokenSymbols>
             </PoolPairCell>
           </MobileRow>
