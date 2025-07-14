@@ -23,7 +23,7 @@ export function SendLinkView({
   const totalUsd = useCalculateTotalCostCreateGift({ tokenAmount, nativeAmount })
 
   const giftShareText = t(
-    `Just sent you ${formatDollarAmount(totalUsd)}! 🎉 Tap this link and to claim it: 👉 ${claimLink}.
+    `Just sent you ${formatDollarAmount(totalUsd)}! 🎉 Tap this link and to claim it: 👉 ${claimLink}
 
 Please connect your wallet to claim it!
 
