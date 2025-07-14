@@ -1,6 +1,6 @@
 import { FarmV4SupportedChainId, Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Card, Flex, Input, InputGroup, SearchIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Card, Flex, Input, InputGroup, SearchIcon } from '@pancakeswap/uikit'
 import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
 import { useTokenListPrepared } from 'hooks/useTokenListPrepared'
 import debounce from 'lodash/debounce'
@@ -49,16 +49,12 @@ const PROTOCOL_FILTERS = [
 
 export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds }) => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
   const [searchQuery, setSearchQuery] = useState('')
   const [searchText, setSearchText] = useState('')
   const [activeProtocolTab, setActiveProtocolTab] = useState<string>('All')
-
-  // Pagination state (similar to universal farms)
   const [currentPage, setCurrentPage] = useState(1)
-  const [isLoadingMore, setIsLoadingMore] = useState(false)
 
-  // Debounced search function (same as main universal farms)
+  // Debounced search function
   const debouncedSetSearchQuery = useMemo(() => debounce((val: string) => setSearchQuery(val), 500), [])
 
   // Handle search input change with debouncing
@@ -86,15 +82,8 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
     return [filter.value]
   }, [activeProtocolTab])
 
-  // Fetch pools data with pagination
-  const {
-    pools,
-    isLoading,
-    error,
-    hasNextPage,
-    resetPagination,
-    currentPage: committedPage,
-  } = useMiniPoolsData({
+  // Fetch pools data using the simplified hook that leverages Universal Farms
+  const { pools, isLoading, error, hasNextPage, resetPagination } = useMiniPoolsData({
     chains,
     protocols: selectedProtocols,
     searchQuery,
@@ -102,7 +91,7 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
     pageSize: 10,
   })
 
-  // Prepare token lists (same as main universal farms)
+  // Prepare token lists (consistent with Universal Farms)
   const listPrepared = useTokenListPrepared(DEFAULT_ACTIVE_LIST_URLS)
 
   // Check if we're still loading (include token list preparation)
@@ -110,13 +99,11 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
 
   // Reset pagination when filters change
   useEffect(() => {
-    console.log('Filters changed, resetting pagination state')
     setCurrentPage(1)
-    setIsLoadingMore(false) // Reset loading state as well
     resetPagination()
   }, [selectedProtocols, searchQuery, chains, resetPagination])
 
-  // Sync searchText with searchQuery (same as main universal farms)
+  // Sync searchText with searchQuery
   useEffect(() => {
     setSearchText(searchQuery)
   }, [searchQuery])
@@ -128,95 +115,43 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
     }
   }, [debouncedSetSearchQuery])
 
-  // Handle load more functionality (similar to universal farms)
+  // Handle load more functionality
   const handleLoadMore = useCallback(async () => {
-    if (isLoadingMore || !hasNextPage) {
-      console.log(`Skipping load more: isLoadingMore=${isLoadingMore}, hasNextPage=${hasNextPage}`)
-      return
-    }
-
-    console.log(`Starting load more: current page ${currentPage} -> ${currentPage + 1}`)
-    setIsLoadingMore(true)
-    try {
-      // Use functional update to ensure we get the latest state
-      setCurrentPage((prev) => {
-        const nextPage = prev + 1
-        console.log(`Load more: updating page ${prev} -> ${nextPage}`)
-        return nextPage
-      })
-
-      // Add a small delay to prevent rapid successive calls
-      await new Promise((resolve) => setTimeout(resolve, 200))
-    } catch (error) {
-      console.error('Error during load more:', error)
-    } finally {
-      // Only reset loading state after we're confident the operation is done
-      setTimeout(() => {
-        setIsLoadingMore(false)
-      }, 500)
-    }
-  }, [isLoadingMore, hasNextPage, currentPage])
+    if (!hasNextPage) return
+    setCurrentPage((prev) => prev + 1)
+  }, [hasNextPage])
 
   // Handle protocol tab change
   const handleProtocolTabChange = useCallback((tab: string) => {
     setActiveProtocolTab(tab)
   }, [])
 
-  // Show error state if there's an error
-  if (error) {
-    return (
-      <Container>
-        <Card>
-          <Box p={isMobile ? '16px' : '24px'}>
-            <Flex
-              justifyContent="center"
-              alignItems="center"
-              minHeight="200px"
-              flexDirection="column"
-              style={{ gap: '8px' }}
-            >
-              <Text color="failure" fontSize="16px" fontWeight="600">
-                {t('Error loading pools')}
-              </Text>
-              <Text color="textSubtle" fontSize="14px" textAlign="center">
-                {t('There was an error loading pool data. Please try again later.')}
-              </Text>
-            </Flex>
-          </Box>
-        </Card>
-      </Container>
-    )
-  }
+  // Prepare tabs for the TabMenu
+  const protocolTabs = useMemo(() => PROTOCOL_FILTERS.map((filter) => filter.label), [])
 
   return (
     <Container>
       <Card>
-        <Box p={isMobile ? '16px' : '24px'}>
-          <SearchWrapper>
+        <Box p="24px">
+          <SearchWrapper mb="24px">
             <SearchInputWrapper>
               <InputGroup startIcon={<SearchIcon color="textSubtle" />}>
-                <Input
-                  placeholder={t('Search by token, pool address')}
-                  value={searchText}
-                  onChange={handleSearchChange}
-                />
+                <Input placeholder={t('Search pools...')} value={searchText} onChange={handleSearchChange} />
               </InputGroup>
             </SearchInputWrapper>
-            <TabMenu
-              tabs={PROTOCOL_FILTERS.map((filter) => filter.label)}
-              defaultTab="All"
-              onTabChange={handleProtocolTabChange}
-            />
-          </SearchWrapper>
-        </Box>
 
-        <PoolsTable
-          pools={pools}
-          loading={isPending}
-          isExtending={isLoadingMore}
-          hasNextPage={hasNextPage}
-          onLoadMore={handleLoadMore}
-        />
+            <Box minWidth="200px">
+              <TabMenu tabs={protocolTabs} defaultTab="All" onTabChange={handleProtocolTabChange} />
+            </Box>
+          </SearchWrapper>
+
+          <PoolsTable
+            pools={pools}
+            isLoading={isPending}
+            error={error}
+            onLoadMore={hasNextPage ? handleLoadMore : undefined}
+          />
+        </Box>
       </Card>
     </Container>
   )

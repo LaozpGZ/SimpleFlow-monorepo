@@ -3,7 +3,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, FlexGap, Loading, Skeleton, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { useCallback, useEffect, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
@@ -89,9 +89,8 @@ const EmptyStateContainer = styled.div`
 
 interface PoolsTableProps {
   pools: PoolInfo[]
-  loading: boolean
-  isExtending?: boolean
-  hasNextPage?: boolean
+  isLoading: boolean
+  error?: Error | null
   onLoadMore?: () => void
 }
 
@@ -216,21 +215,11 @@ const MobileListView = ({ pools }: { pools: PoolInfo[] }) => {
   )
 }
 
-export const PoolsTable: React.FC<PoolsTableProps> = ({
-  pools,
-  loading,
-  isExtending = false,
-  hasNextPage = false,
-  onLoadMore,
-}) => {
+export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, error, onLoadMore }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
-  // Debounce intersection observer to prevent rapid triggers
-  const loadMoreTimeoutRef = useRef<NodeJS.Timeout | null>(null)
-  const isLoadingRef = useRef<boolean>(false)
-
-  // IntersectionObserver for pagination with custom root for internal scrolling
+  // IntersectionObserver for pagination
   const { observerRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.1,
     rootMargin: '50px',
@@ -266,64 +255,27 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
 
   const getRowKey = useCallback((item: PoolInfo) => `${item.chainId}-${item.lpAddress}`, [])
 
-  // Debounced load more function
-  const debouncedLoadMore = useCallback(() => {
-    if (loadMoreTimeoutRef.current) {
-      clearTimeout(loadMoreTimeoutRef.current)
-    }
-
-    loadMoreTimeoutRef.current = setTimeout(() => {
-      if (!isLoadingRef.current && hasNextPage && onLoadMore && !isExtending) {
-        console.log('Intersection observer triggering load more')
-        isLoadingRef.current = true
-        onLoadMore()
-
-        // Reset loading flag after a reasonable delay
-        setTimeout(() => {
-          isLoadingRef.current = false
-        }, 2000) // Increased to 2 seconds to give more time for data to settle
-      } else {
-        console.log(
-          `Intersection observer skipped: isLoading=${isLoadingRef.current}, hasNextPage=${hasNextPage}, isExtending=${isExtending}`,
-        )
-      }
-    }, 500) // Increased debounce to 500ms for more stability
-  }, [hasNextPage, onLoadMore, isExtending])
-
-  // Handle intersection observer pagination for internal scrolling
+  // Handle intersection observer pagination
   useEffect(() => {
-    if (isIntersecting) {
-      debouncedLoadMore()
+    if (isIntersecting && onLoadMore && !isLoading) {
+      onLoadMore()
     }
-  }, [isIntersecting, debouncedLoadMore])
+  }, [isIntersecting, onLoadMore, isLoading])
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (loadMoreTimeoutRef.current) {
-        clearTimeout(loadMoreTimeoutRef.current)
-      }
-    }
-  }, [])
+  if (error) {
+    return (
+      <TableContainer>
+        <EmptyStateContainer>
+          <Text color="failure">{t('Error loading pools')}</Text>
+          <Text color="textSubtle" fontSize="14px">
+            {error.message}
+          </Text>
+        </EmptyStateContainer>
+      </TableContainer>
+    )
+  }
 
-  // Reset loading flag when isExtending changes or when pools data changes
-  useEffect(() => {
-    if (!isExtending) {
-      isLoadingRef.current = false
-    }
-  }, [isExtending])
-
-  // Reset loading flag when pools length increases (indicating successful load)
-  useEffect(() => {
-    if (pools.length > 0) {
-      // Reset loading flag when we get new data
-      setTimeout(() => {
-        isLoadingRef.current = false
-      }, 1000)
-    }
-  }, [pools.length])
-
-  if (loading) {
+  if (isLoading && pools.length === 0) {
     return (
       <TableContainer>
         {[...Array(5)].map((_: unknown, index) => (
@@ -345,7 +297,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
     )
   }
 
-  if (pools.length === 0) {
+  if (pools.length === 0 && !isLoading) {
     return (
       <TableContainer>
         <EmptyStateContainer>
@@ -359,9 +311,8 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
     <TableContainer>
       {/* Use TableView with sticky header */}
       {isMobile ? <MobileListView pools={pools} /> : <TableView getRowKey={getRowKey} columns={columns} data={pools} />}
-
-      {/* Loading indicator for extending search */}
-      {isExtending && (
+      {/* Loading indicator when loading more */}
+      {isLoading && pools.length > 0 && (
         <Flex
           justifyContent="center"
           alignItems="center"
@@ -374,9 +325,8 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
           <Text color="textSubtle">{t('Loading more pools...')}</Text>
         </Flex>
       )}
-
       {/* Intersection observer element for pagination */}
-      {pools.length > 0 && hasNextPage && !isExtending && <LoadMoreTrigger ref={observerRef} />}
+      {pools.length > 0 && onLoadMore && <LoadMoreTrigger ref={observerRef} />}
     </TableContainer>
   )
 }
