@@ -30,11 +30,11 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ onClick, assetCdn
   const { t } = useTranslation()
 
   // Fixed 4 social icons
-  const socialIcons = ['google.jpg', 'telegram.svg', 'discord.svg']
+  const socialIcons = ['google.jpg', 'x.svg', 'telegram.svg', 'discord.svg']
 
   return (
-    <Button variant="light" onClick={onClick} width="100%" style={style}>
-      <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center" padding="12px">
+    <Button variant="light" onClick={onClick} width="100%" style={style} padding="0px">
+      <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center">
         {socialIcons.map((icon, index) => (
           <SocialLoginIconBox key={index} $bg={`${assetCdn}/web/wallets/social-login/${icon}`} />
         ))}
