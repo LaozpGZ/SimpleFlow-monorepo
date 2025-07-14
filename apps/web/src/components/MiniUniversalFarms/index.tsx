@@ -1,7 +1,10 @@
 import { FarmV4SupportedChainId, Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Card, Flex, Input, InputGroup, SearchIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useCallback, useMemo, useState } from 'react'
+import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
+import { useTokenListPrepared } from 'hooks/useTokenListPrepared'
+import debounce from 'lodash/debounce'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { TabMenu } from '../../views/BurnDashboard/components/TabMenu'
 import { PoolsTable } from './components/PoolsTable'
@@ -49,7 +52,24 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const [searchQuery, setSearchQuery] = useState('')
+  const [searchText, setSearchText] = useState('')
   const [activeProtocolTab, setActiveProtocolTab] = useState<string>('All')
+
+  // Pagination state (similar to universal farms)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+
+  // Debounced search function (same as main universal farms)
+  const debouncedSetSearchQuery = useMemo(() => debounce((val: string) => setSearchQuery(val), 500), [])
+
+  // Handle search input change with debouncing
+  const handleSearchChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchText(e.target.value)
+      debouncedSetSearchQuery(e.target.value)
+    },
+    [debouncedSetSearchQuery],
+  )
 
   // Determine which chains to use
   const chains = useMemo(() => {
@@ -67,15 +87,54 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
     return [filter.value]
   }, [activeProtocolTab])
 
-  // Fetch pools data
-  const { pools, isLoading, error } = useMiniPoolsData({
+  // Fetch pools data with pagination
+  const { pools, isLoading, error, hasNextPage, totalPools } = useMiniPoolsData({
     chains,
     protocols: selectedProtocols,
     searchQuery,
+    page: currentPage,
+    pageSize: 20,
   })
 
-  const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value)
+  // Prepare token lists (same as main universal farms)
+  const listPrepared = useTokenListPrepared(DEFAULT_ACTIVE_LIST_URLS)
+
+  // Check if we're still loading (include token list preparation)
+  const isPending = listPrepared.isPending() && isLoading && pools.length === 0
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setCurrentPage(1)
+  }, [selectedProtocols, searchQuery, chains])
+
+  // Sync searchText with searchQuery (same as main universal farms)
+  useEffect(() => {
+    setSearchText(searchQuery)
+  }, [searchQuery])
+
+  // Cleanup debounce function on unmount
+  useEffect(() => {
+    return () => {
+      debouncedSetSearchQuery.cancel()
+    }
+  }, [debouncedSetSearchQuery])
+
+  // Handle load more functionality (similar to universal farms)
+  const handleLoadMore = useCallback(async () => {
+    if (isLoadingMore || !hasNextPage) return
+
+    setIsLoadingMore(true)
+    try {
+      // Increment page to load more pools
+      setCurrentPage((prev) => prev + 1)
+    } finally {
+      setIsLoadingMore(false)
+    }
+  }, [isLoadingMore, hasNextPage])
+
+  // Handle protocol tab change
+  const handleProtocolTabChange = useCallback((tab: string) => {
+    setActiveProtocolTab(tab)
   }, [])
 
   // Show error state if there's an error
@@ -113,7 +172,7 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
               <InputGroup startIcon={<SearchIcon color="textSubtle" />}>
                 <Input
                   placeholder={t('Search by token, pool address')}
-                  value={searchQuery}
+                  value={searchText}
                   onChange={handleSearchChange}
                 />
               </InputGroup>
@@ -121,12 +180,25 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
             <TabMenu
               tabs={PROTOCOL_FILTERS.map((filter) => filter.label)}
               defaultTab="All"
-              onTabChange={setActiveProtocolTab}
+              onTabChange={handleProtocolTabChange}
             />
           </SearchWrapper>
+
+          {/* Show total pools count */}
+          {!isPending && totalPools > 0 && (
+            <Text color="textSubtle" fontSize="14px" mb="16px">
+              {t('Showing')} {pools.length} {t('of')} {totalPools} {t('pools')}
+            </Text>
+          )}
         </Box>
 
-        <PoolsTable pools={pools} loading={isLoading} />
+        <PoolsTable
+          pools={pools}
+          loading={isPending}
+          isExtending={isLoadingMore}
+          hasNextPage={hasNextPage}
+          onLoadMore={handleLoadMore}
+        />
       </Card>
     </Container>
   )

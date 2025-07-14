@@ -1,69 +1,13 @@
+import { useIntersectionObserver } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, SkeletonV2, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Flex, Loading, SkeletonV2, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { memo, useCallback, useMemo } from 'react'
-import { FixedSizeList as List } from 'react-window'
+import { useEffect, useMemo } from 'react'
 import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
-import { MyPositionsProvider } from 'views/PoolDetail/components/MyPositionsContext'
 import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton'
-
-const TableContainer = styled.div`
-  overflow-x: auto;
-  width: 100%;
-
-  &::-webkit-scrollbar {
-    height: 6px;
-  }
-
-  &::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.colors.input};
-    border-radius: 3px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.colors.textSubtle};
-    border-radius: 3px;
-  }
-`
-
-// CSS Grid based table structure for better virtualization
-const GridTable = styled.div`
-  width: 100%;
-  min-width: 600px;
-`
-
-const GridHeader = styled.div`
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 12px;
-`
-
-const GridHeaderCell = styled.div<{ $align?: string }>`
-  padding: 12px;
-  text-align: ${({ $align }) => $align || 'left'};
-  color: ${({ theme }) => theme.colors.secondary};
-  font-weight: 600;
-  font-size: 12px;
-  text-transform: uppercase;
-`
-
-const GridRow = styled.div`
-  display: grid;
-  grid-template-columns: 1fr auto auto;
-  gap: 12px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
-`
-
-const GridCell = styled.div<{ $align?: string }>`
-  padding: 16px 12px;
-  text-align: ${({ $align }) => $align || 'left'};
-  display: flex;
-  align-items: center;
-  justify-content: ${({ $align }) => ($align === 'right' ? 'flex-end' : 'flex-start')};
-`
 
 const PoolPairCell = styled(Flex)`
   align-items: center;
@@ -99,27 +43,23 @@ const MobileRow = styled(Flex)`
   }
 `
 
-const VirtualizedContainer = styled.div`
-  border-radius: 8px;
-  overflow: hidden;
-`
-
-const AprContainer = styled(Flex)`
-  justify-content: flex-start;
-  align-items: center;
-  width: 100%;
+// Container for pools content (similar to universal farms)
+const PoolsContent = styled.div`
+  min-height: 200px;
 `
 
 interface PoolsTableProps {
   pools: PoolInfo[]
   loading: boolean
+  isExtending?: boolean
+  hasNextPage?: boolean
+  onLoadMore?: () => void
 }
 
 // Helper function to prepare token data for DoubleCurrencyLogo
 const prepareTokenForLogo = (token: any, poolChainId: number) => {
   if (!token) return null
 
-  // Ensure the token has all required Currency properties for DoubleCurrencyLogo
   return {
     chainId: token.chainId || poolChainId,
     address: token.address || token.wrapped?.address,
@@ -139,14 +79,46 @@ const prepareTokenForLogo = (token: any, poolChainId: number) => {
   }
 }
 
-// Memoized desktop row component
-const DesktopRow = memo(({ index, style, data }: { index: number; style: React.CSSProperties; data: PoolInfo[] }) => {
-  const pool = data[index]
+// Pool Token Overview Component (similar to universal farms)
+const PoolTokenOverview = ({ data }: { data: PoolInfo }) => {
+  const token0 = useMemo(() => prepareTokenForLogo(data.token0, data.chainId), [data.token0, data.chainId])
+  const token1 = useMemo(() => prepareTokenForLogo(data.token1, data.chainId), [data.token1, data.chainId])
 
-  const token0 = useMemo(() => prepareTokenForLogo(pool.token0, pool.chainId), [pool.token0, pool.chainId])
-  const token1 = useMemo(() => prepareTokenForLogo(pool.token1, pool.chainId), [pool.token1, pool.chainId])
+  const hookData = useHookByPoolId(
+    data.chainId,
+    isInfinityProtocol(data.protocol) ? (data as InfinityPoolInfo)?.poolId : undefined,
+  )
 
-  // Get hookData for Infinity pools
+  if (!token0 || !token1) {
+    return null
+  }
+
+  return (
+    <PoolPairCell>
+      <DoubleCurrencyLogo currency0={token0} currency1={token1} size={40} showChainLogoCurrency1 />
+      <TokenSymbols>
+        <SymbolText>
+          {token0.symbol} / {token1.symbol}
+        </SymbolText>
+        <Liquidity.PoolFeaturesBadge
+          poolType={data.protocol}
+          hookData={hookData}
+          showLabel={false}
+          showPoolType
+          showPoolFeature={!!hookData}
+          short
+        />
+      </TokenSymbols>
+    </PoolPairCell>
+  )
+}
+
+// Mobile Pool Item Component (to fix React Hook error)
+const MobilePoolItem = ({ pool }: { pool: PoolInfo }) => {
+  const { t } = useTranslation()
+  const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
+  const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
+
   const hookData = useHookByPoolId(
     pool.chainId,
     isInfinityProtocol(pool.protocol) ? (pool as InfinityPoolInfo)?.poolId : undefined,
@@ -157,120 +129,103 @@ const DesktopRow = memo(({ index, style, data }: { index: number; style: React.C
   }
 
   return (
-    <div style={style}>
-      <GridRow>
-        <GridCell>
-          <PoolPairCell>
-            <DoubleCurrencyLogo currency0={token0} currency1={token1} size={40} showChainLogoCurrency1 />
-            <TokenSymbols>
-              <SymbolText>
-                {token0.symbol} / {token1.symbol}
-              </SymbolText>
-              <Liquidity.PoolFeaturesBadge
-                poolType={pool.protocol}
-                hookData={hookData}
-                showLabel={false}
-                showPoolType
-                showPoolFeature={!!hookData}
-                short
-              />
-            </TokenSymbols>
-          </PoolPairCell>
-        </GridCell>
-        <GridCell $align="right">
-          <AprContainer>
-            <PoolGlobalAprButton pool={pool} />
-          </AprContainer>
-        </GridCell>
-        <GridCell $align="right">
-          <FiatNumberDisplay value={pool.tvlUsd || 0} showFullDigitsTooltip={false} />
-        </GridCell>
-      </GridRow>
-    </div>
+    <MobileCard key={`${pool.chainId}-${pool.lpAddress}`}>
+      <MobileRow>
+        <PoolPairCell>
+          <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} showChainLogoCurrency1 />
+          <TokenSymbols>
+            <SymbolText>
+              {token0.symbol} / {token1.symbol}
+            </SymbolText>
+            <Liquidity.PoolFeaturesBadge
+              poolType={pool.protocol}
+              hookData={hookData}
+              showLabel={false}
+              showPoolType
+              showPoolFeature={!!hookData}
+              short
+            />
+          </TokenSymbols>
+        </PoolPairCell>
+      </MobileRow>
+
+      <MobileRow>
+        <Text color="textSubtle" fontSize="14px">
+          {t('APR')}
+        </Text>
+        <PoolGlobalAprButton pool={pool} />
+      </MobileRow>
+
+      <MobileRow>
+        <Text color="textSubtle" fontSize="14px">
+          {t('TVL')}
+        </Text>
+        <FiatNumberDisplay value={pool.tvlUsd || 0} showFullDigitsTooltip={false} fontSize="16px" />
+      </MobileRow>
+    </MobileCard>
   )
-})
+}
 
-DesktopRow.displayName = 'DesktopRow'
+// Mobile ListView Component
+const MobileListView = ({ pools }: { pools: PoolInfo[] }) => {
+  return (
+    <Box>
+      {pools.map((pool) => (
+        <MobilePoolItem key={`${pool.chainId}-${pool.lpAddress}`} pool={pool} />
+      ))}
+    </Box>
+  )
+}
 
-// Memoized mobile row component
-const MobileRowRenderer = memo(
-  ({ index, style, data }: { index: number; style: React.CSSProperties; data: PoolInfo[] }) => {
-    const { t } = useTranslation()
-    const pool = data[index]
-
-    const token0 = useMemo(() => prepareTokenForLogo(pool.token0, pool.chainId), [pool.token0, pool.chainId])
-    const token1 = useMemo(() => prepareTokenForLogo(pool.token1, pool.chainId), [pool.token1, pool.chainId])
-
-    // Get hookData for Infinity pools
-    const hookData = useHookByPoolId(
-      pool.chainId,
-      isInfinityProtocol(pool.protocol) ? (pool as InfinityPoolInfo)?.poolId : undefined,
-    )
-
-    if (!token0 || !token1) {
-      return null
-    }
-
-    return (
-      <div style={style}>
-        <MobileCard>
-          <MobileRow>
-            <PoolPairCell>
-              <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} showChainLogoCurrency1 />
-              <TokenSymbols>
-                <SymbolText>
-                  {token0.symbol} / {token1.symbol}
-                </SymbolText>
-                <Liquidity.PoolFeaturesBadge
-                  poolType={pool.protocol}
-                  hookData={hookData}
-                  showLabel={false}
-                  showPoolType
-                  showPoolFeature={!!hookData}
-                  short
-                />
-              </TokenSymbols>
-            </PoolPairCell>
-          </MobileRow>
-
-          <MobileRow>
-            <Text color="textSubtle" fontSize="14px">
-              {t('APR')}
-            </Text>
-            <AprContainer>
-              <PoolGlobalAprButton pool={pool} />
-            </AprContainer>
-          </MobileRow>
-
-          <MobileRow>
-            <Text color="textSubtle" fontSize="14px">
-              {t('TVL')}
-            </Text>
-            <FiatNumberDisplay value={pool.tvlUsd || 0} showFullDigitsTooltip={false} fontSize="16px" />
-          </MobileRow>
-        </MobileCard>
-      </div>
-    )
-  },
-)
-
-MobileRowRenderer.displayName = 'MobileRowRenderer'
-
-export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, loading }) => {
+export const PoolsTable: React.FC<PoolsTableProps> = ({
+  pools,
+  loading,
+  isExtending = false,
+  hasNextPage = false,
+  onLoadMore,
+}) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
-  // Constants for virtual scrolling
-  const DESKTOP_ITEM_HEIGHT = 72
-  const MOBILE_ITEM_HEIGHT = 120
-  const VISIBLE_ITEMS = 5
-  const itemHeight = isMobile ? MOBILE_ITEM_HEIGHT : DESKTOP_ITEM_HEIGHT
-  const containerHeight = itemHeight * VISIBLE_ITEMS
+  // IntersectionObserver for pagination (same as universal farms)
+  const { observerRef, isIntersecting } = useIntersectionObserver()
 
-  // Memoize the row renderers to prevent re-creation
-  const desktopRowRenderer = useCallback((props: any) => <DesktopRow {...props} data={pools} />, [pools])
+  // Column configuration (similar to useColumnConfig in universal farms)
+  const columns = useMemo(
+    () => [
+      {
+        title: t('Pairs'),
+        dataIndex: null as keyof PoolInfo | null,
+        key: 'pairs',
+        minWidth: '210px',
+        render: (_, item: PoolInfo) => <PoolTokenOverview data={item} />,
+      },
+      {
+        title: t('APR'),
+        dataIndex: null as keyof PoolInfo | null,
+        key: 'apr',
+        minWidth: '125px',
+        render: (_, item: PoolInfo) => <PoolGlobalAprButton pool={item} />,
+      },
+      {
+        title: t('TVL'),
+        dataIndex: 'tvlUsd' as keyof PoolInfo,
+        key: 'tvl',
+        minWidth: '125px',
+        render: (value: number) => <FiatNumberDisplay value={value || 0} showFullDigitsTooltip={false} />,
+      },
+    ],
+    [t],
+  )
 
-  const mobileRowRenderer = useCallback((props: any) => <MobileRowRenderer {...props} data={pools} />, [pools])
+  const getRowKey = (item: PoolInfo) => `${item.chainId}-${item.lpAddress}`
+
+  // Handle intersection observer pagination (same logic as universal farms)
+  useEffect(() => {
+    if (isIntersecting && hasNextPage && onLoadMore) {
+      onLoadMore()
+    }
+  }, [isIntersecting, hasNextPage, onLoadMore])
 
   if (loading) {
     return (
@@ -293,40 +248,28 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, loading }) => {
     )
   }
 
-  // Wrap the entire table with MyPositionsProvider for proper APR button functionality
   return (
-    <MyPositionsProvider>
-      {isMobile ? (
-        <VirtualizedContainer>
-          <List height={containerHeight} width="100%" itemCount={pools.length} itemSize={itemHeight} itemData={pools}>
-            {mobileRowRenderer}
-          </List>
-        </VirtualizedContainer>
-      ) : (
-        <TableContainer>
-          <GridTable>
-            {/* Grid header */}
-            <GridHeader>
-              <GridHeaderCell>{t('Pairs')}</GridHeaderCell>
-              <GridHeaderCell $align="right">{t('APR')}</GridHeaderCell>
-              <GridHeaderCell $align="right">{t('TVL')}</GridHeaderCell>
-            </GridHeader>
-
-            {/* Virtualized rows */}
-            <VirtualizedContainer>
-              <List
-                height={containerHeight}
-                width="100%"
-                itemCount={pools.length}
-                itemSize={itemHeight}
-                itemData={pools}
-              >
-                {desktopRowRenderer}
-              </List>
-            </VirtualizedContainer>
-          </GridTable>
-        </TableContainer>
+    <PoolsContent>
+      {/* Loading indicator for extending search (same as universal farms) */}
+      {isExtending && (
+        <Flex
+          justifyContent="center"
+          alignItems="center"
+          width="100%"
+          style={{
+            height: '40px',
+          }}
+        >
+          {t('Loading more pools...')}
+          <Loading ml="8px" />
+        </Flex>
       )}
-    </MyPositionsProvider>
+
+      {/* Table/List content */}
+      {isMobile ? <MobileListView pools={pools} /> : <TableView getRowKey={getRowKey} columns={columns} data={pools} />}
+
+      {/* Intersection observer element for pagination (same as universal farms) */}
+      {pools.length > 0 && hasNextPage && <div ref={observerRef} />}
+    </PoolsContent>
   )
 }

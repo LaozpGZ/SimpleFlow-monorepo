@@ -23,6 +23,7 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 
+import { ChainId } from '@pancakeswap/chains'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import {
   CurrencyLogo,
@@ -116,7 +117,7 @@ export const PoolInfo = () => {
       <LiquiditySunsetWarning overrideChainId={poolInfo?.chainId} />
 
       <NextSeo title={poolSymbol} />
-      <MiniUniversalFarms />
+      <MiniUniversalFarms chainIds={[ChainId.ETHEREUM]} />
       <Card>
         <CardBody>
           <FlexGap
