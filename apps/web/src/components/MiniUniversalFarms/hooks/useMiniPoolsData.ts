@@ -8,7 +8,7 @@ import { useQuery } from '@tanstack/react-query'
 import { atom, useAtomValue } from 'jotai'
 import keyBy from 'lodash/keyBy'
 import qs from 'qs'
-import { useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   batchGetCakeApr,
   batchGetLpAprData,
@@ -37,6 +37,7 @@ interface UseMiniPoolsDataReturn {
   totalPools: number
   hasNextPage: boolean
   currentPage: number
+  resetPagination: () => void
 }
 
 const DEFAULT_PROTOCOLS = [Protocol.InfinityCLAMM, Protocol.InfinityBIN, Protocol.V3, Protocol.V2, Protocol.STABLE]
@@ -93,6 +94,22 @@ export const useMiniPoolsData = ({
   const useShowTestnet = useAtomValue(userShowTestnetAtom)
   const { tokensMap, symbolsMap } = useAtomValue(tokensMapAtom)
 
+  // Committed data state - this represents the stable data we show to users
+  const [committedPools, setCommittedPools] = useState<PoolInfo[]>([])
+  const [committedPage, setCommittedPage] = useState<number>(1)
+
+  // Store previous query parameters to detect filter changes
+  const previousQueryRef = useRef<string>('')
+
+  // Generate query signature for detecting filter changes
+  const querySignature = useMemo(() => {
+    return JSON.stringify({
+      chains: chains.sort(),
+      protocols: protocols?.sort(),
+      searchQuery: searchQuery?.trim(),
+    })
+  }, [chains, protocols, searchQuery])
+
   // Filter chains for testnet
   const filteredChains = useMemo(() => {
     return chains.filter((chain) => {
@@ -108,6 +125,8 @@ export const useMiniPoolsData = ({
     data: allPools = [],
     isLoading,
     error,
+    isFetching,
+    dataUpdatedAt,
   } = useQuery<PoolInfo[], Error>({
     queryKey: ['miniPoolsDataEdge', filteredChains, protocols || DEFAULT_PROTOCOLS, searchQuery],
     queryFn: async (): Promise<PoolInfo[]> => {
@@ -237,7 +256,7 @@ export const useMiniPoolsData = ({
         const aggLpAprs = keyBy(lpAprs.status === 'fulfilled' ? lpAprs.value : [], (x) => x.id.toLowerCase())
         const aggMerklAprs = keyBy(merklAprs.status === 'fulfilled' ? merklAprs.value : [], (x) => x.id.toLowerCase())
 
-        return poolInfos.map((poolInfo) => {
+        const finalPools = poolInfos.map((poolInfo) => {
           const { farm, ...others } = poolInfo
           const id = `${farm?.chainId}:${farm?.lpAddress}`.toLowerCase()
           const cakeApr = aggCakeAprs[id]?.value || '0'
@@ -255,36 +274,67 @@ export const useMiniPoolsData = ({
             lpApr,
           } as PoolInfo
         })
+
+        return finalPools
       } catch (err) {
         console.error('Error fetching pools:', err)
         throw err instanceof Error ? err : new Error('Failed to fetch pools')
       }
     },
-    staleTime: 1000 * 60 * 2, // 2 minutes (faster refresh for mini component)
-    refetchInterval: 1000 * 60 * 2, // 2 minutes
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    refetchInterval: false, // Disable automatic refetching
     retry: 2,
     retryDelay: (attemptIndex) => Math.min(1000 * 2 ** attemptIndex, 30000),
   })
 
-  // Paginated pools
-  const paginatedPools = useMemo((): PoolInfo[] => {
-    const startIndex = 0
-    const endIndex = page * pageSize
-    return allPools.slice(startIndex, endIndex)
-  }, [allPools, page, pageSize])
+  // Detect filter changes and reset committed data
+  useEffect(() => {
+    if (previousQueryRef.current !== querySignature) {
+      console.log('Filter change detected, resetting committed data')
+      setCommittedPools([])
+      setCommittedPage(1)
+      previousQueryRef.current = querySignature
+    }
+  }, [querySignature])
 
-  // Check if there are more pages
+  // Commit new data only when it's stable and larger than current
+  useEffect(() => {
+    if (!isLoading && !isFetching && allPools.length > 0) {
+      const targetItems = page * pageSize
+      const availableItems = Math.min(allPools.length, targetItems)
+      const newData = allPools.slice(0, availableItems)
+
+      // Only commit if we have more data than before, or if it's a fresh start
+      if (newData.length >= committedPools.length || committedPools.length === 0) {
+        console.log(`Committing data: ${committedPools.length} -> ${newData.length} items (page ${page})`)
+        setCommittedPools(newData)
+        setCommittedPage(page)
+      } else {
+        console.log(`Keeping committed data: ${committedPools.length} items (new data would be ${newData.length})`)
+      }
+    }
+  }, [allPools, isLoading, isFetching, page, pageSize, committedPools.length, dataUpdatedAt])
+
+  // Check if there are more pages based on committed data and fresh data
   const hasNextPage = useMemo((): boolean => {
-    return allPools.length > page * pageSize
-  }, [allPools.length, page, pageSize])
+    return allPools.length > committedPools.length || allPools.length > page * pageSize
+  }, [allPools.length, committedPools.length, page, pageSize])
+
+  // Reset function
+  const resetPagination = useCallback(() => {
+    console.log('Resetting pagination')
+    setCommittedPools([])
+    setCommittedPage(1)
+  }, [])
 
   return {
-    pools: paginatedPools,
+    pools: committedPools,
     isLoading,
     error: error || null,
     totalPools: allPools.length,
     hasNextPage,
-    currentPage: page,
+    currentPage: committedPage,
+    resetPagination,
   }
 }
 

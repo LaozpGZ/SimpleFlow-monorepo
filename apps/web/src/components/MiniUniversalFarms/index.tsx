@@ -87,7 +87,14 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
   }, [activeProtocolTab])
 
   // Fetch pools data with pagination
-  const { pools, isLoading, error, hasNextPage } = useMiniPoolsData({
+  const {
+    pools,
+    isLoading,
+    error,
+    hasNextPage,
+    resetPagination,
+    currentPage: committedPage,
+  } = useMiniPoolsData({
     chains,
     protocols: selectedProtocols,
     searchQuery,
@@ -103,8 +110,11 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
 
   // Reset pagination when filters change
   useEffect(() => {
+    console.log('Filters changed, resetting pagination state')
     setCurrentPage(1)
-  }, [selectedProtocols, searchQuery, chains])
+    setIsLoadingMore(false) // Reset loading state as well
+    resetPagination()
+  }, [selectedProtocols, searchQuery, chains, resetPagination])
 
   // Sync searchText with searchQuery (same as main universal farms)
   useEffect(() => {
@@ -120,16 +130,32 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
 
   // Handle load more functionality (similar to universal farms)
   const handleLoadMore = useCallback(async () => {
-    if (isLoadingMore || !hasNextPage) return
+    if (isLoadingMore || !hasNextPage) {
+      console.log(`Skipping load more: isLoadingMore=${isLoadingMore}, hasNextPage=${hasNextPage}`)
+      return
+    }
 
+    console.log(`Starting load more: current page ${currentPage} -> ${currentPage + 1}`)
     setIsLoadingMore(true)
     try {
-      // Increment page to load more pools
-      setCurrentPage((prev) => prev + 1)
+      // Use functional update to ensure we get the latest state
+      setCurrentPage((prev) => {
+        const nextPage = prev + 1
+        console.log(`Load more: updating page ${prev} -> ${nextPage}`)
+        return nextPage
+      })
+
+      // Add a small delay to prevent rapid successive calls
+      await new Promise((resolve) => setTimeout(resolve, 200))
+    } catch (error) {
+      console.error('Error during load more:', error)
     } finally {
-      setIsLoadingMore(false)
+      // Only reset loading state after we're confident the operation is done
+      setTimeout(() => {
+        setIsLoadingMore(false)
+      }, 500)
     }
-  }, [isLoadingMore, hasNextPage])
+  }, [isLoadingMore, hasNextPage, currentPage])
 
   // Handle protocol tab change
   const handleProtocolTabChange = useCallback((tab: string) => {

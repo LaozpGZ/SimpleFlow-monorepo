@@ -3,7 +3,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, FlexGap, Loading, Skeleton, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
@@ -61,7 +61,10 @@ const TableContainer = styled.div`
 
     th {
       background: ${({ theme }) => theme.colors.backgroundAlt};
-      border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
+    }
+
+    tr {
+      border-top: none;
     }
   }
 
@@ -223,6 +226,10 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
+  // Debounce intersection observer to prevent rapid triggers
+  const loadMoreTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const isLoadingRef = useRef<boolean>(false)
+
   // IntersectionObserver for pagination with custom root for internal scrolling
   const { observerRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.1,
@@ -259,12 +266,62 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
 
   const getRowKey = useCallback((item: PoolInfo) => `${item.chainId}-${item.lpAddress}`, [])
 
+  // Debounced load more function
+  const debouncedLoadMore = useCallback(() => {
+    if (loadMoreTimeoutRef.current) {
+      clearTimeout(loadMoreTimeoutRef.current)
+    }
+
+    loadMoreTimeoutRef.current = setTimeout(() => {
+      if (!isLoadingRef.current && hasNextPage && onLoadMore && !isExtending) {
+        console.log('Intersection observer triggering load more')
+        isLoadingRef.current = true
+        onLoadMore()
+
+        // Reset loading flag after a reasonable delay
+        setTimeout(() => {
+          isLoadingRef.current = false
+        }, 2000) // Increased to 2 seconds to give more time for data to settle
+      } else {
+        console.log(
+          `Intersection observer skipped: isLoading=${isLoadingRef.current}, hasNextPage=${hasNextPage}, isExtending=${isExtending}`,
+        )
+      }
+    }, 500) // Increased debounce to 500ms for more stability
+  }, [hasNextPage, onLoadMore, isExtending])
+
   // Handle intersection observer pagination for internal scrolling
   useEffect(() => {
-    if (isIntersecting && hasNextPage && onLoadMore && !isExtending) {
-      onLoadMore()
+    if (isIntersecting) {
+      debouncedLoadMore()
     }
-  }, [isIntersecting, hasNextPage, onLoadMore, isExtending])
+  }, [isIntersecting, debouncedLoadMore])
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (loadMoreTimeoutRef.current) {
+        clearTimeout(loadMoreTimeoutRef.current)
+      }
+    }
+  }, [])
+
+  // Reset loading flag when isExtending changes or when pools data changes
+  useEffect(() => {
+    if (!isExtending) {
+      isLoadingRef.current = false
+    }
+  }, [isExtending])
+
+  // Reset loading flag when pools length increases (indicating successful load)
+  useEffect(() => {
+    if (pools.length > 0) {
+      // Reset loading flag when we get new data
+      setTimeout(() => {
+        isLoadingRef.current = false
+      }, 1000)
+    }
+  }, [pools.length])
 
   if (loading) {
     return (
