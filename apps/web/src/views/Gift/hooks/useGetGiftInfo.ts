@@ -1,13 +1,13 @@
 import { ChainId } from '@pancakeswap/chains'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { useQuery } from '@tanstack/react-query'
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
 import { useTokenByChainId, useTokensByChainId } from 'hooks/Tokens'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
 import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
-import { GiftInfo, GiftInfoResponse, GiftListApiQueryParams } from '../types'
+import { GiftInfoResponse, GiftListApiQueryParams } from '../types'
 import { giftApiAdapter } from '../utils/ApiAdapter'
 import useGiftInfoSelector from './useGiftInfoSelector'
 
@@ -16,53 +16,60 @@ enum GiftApiStatus {
   FAILED = 'failed',
 }
 
+const DEFAULT_PAGE_SIZE = 20
+
 // API Response Types based on the API specification
 interface GiftApiResponse<T> {
   status: GiftApiStatus
   message?: string // if status is failed
+  hasNext?: boolean
   data?: T
 }
 
-export const fetchGiftInfo = async ({
+export const fetchGiftList = async ({
   chainId,
   account,
+  cursor,
+  type,
 }: {
   chainId?: number
   account?: string
-}): Promise<GiftInfoResponse[]> => {
+  cursor?: string
+  type: 'send' | 'receive'
+}): Promise<{ list: GiftInfoResponse[]; hasNext: boolean; nextCursor?: string }> => {
   if (!chainId || !account) {
     throw new Error('Missing required parameters: chainId and account')
   }
 
-  const sendQueryParams: GiftListApiQueryParams = {
+  const queryParams: GiftListApiQueryParams = {
     chainId,
-    address: account,
-  }
-  const receiveQueryParams: GiftListApiQueryParams = {
-    chainId,
-    claimerAddress: account,
+    pageSize: DEFAULT_PAGE_SIZE,
+    ...(cursor && { cursor }),
+    ...(type === 'send' ? { address: account } : { claimerAddress: account }),
   }
 
-  // promise all urlsend and urlreceive
-  const [resultSend, resultReceive] = await Promise.all([
-    giftApiAdapter.get<GiftApiResponse<GiftInfoResponse[]>, GiftListApiQueryParams>('/gift/list', sendQueryParams),
-    giftApiAdapter.get<GiftApiResponse<GiftInfoResponse[]>, GiftListApiQueryParams>('/gift/list', receiveQueryParams),
-  ])
+  const result = await giftApiAdapter.get<GiftApiResponse<GiftInfoResponse[]>, GiftListApiQueryParams>(
+    '/gift/list',
+    queryParams,
+  )
 
-  if (resultSend.status === GiftApiStatus.FAILED || resultReceive.status === GiftApiStatus.FAILED) {
-    throw new Error(resultSend.message || resultReceive.message || 'Failed to fetch gift information')
+  if (result.status === GiftApiStatus.FAILED) {
+    throw new Error(result.message || 'Failed to fetch gift information')
   }
 
-  // ensure no duplicate gift codehash
-  const giftCodes = new Set()
-  const result = [...(resultSend.data || []), ...(resultReceive.data || [])]
-  return result.filter((gift) => {
-    if (giftCodes.has(gift.codeHash)) {
-      return false
-    }
-    giftCodes.add(gift.codeHash)
-    return true
-  })
+  const list = result.data || []
+
+  // Sort by timestamp to get the latest item for next cursor
+  const sortedList = list.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+
+  // Get next cursor from the oldest item in this page (for timestamp-based cursor pagination)
+  const nextCursor = sortedList.length > 0 ? sortedList[sortedList.length - 1].timestamp : undefined
+
+  return {
+    list: sortedList,
+    hasNext: Boolean(result.hasNext),
+    nextCursor,
+  }
 }
 
 export const useGetGiftInfo = () => {
@@ -71,15 +78,28 @@ export const useGetGiftInfo = () => {
 
   const selectGiftInfo = useGiftInfoSelector()
 
-  const { data, isLoading } = useQuery({
-    queryKey: [QUERY_KEY_GIFT_INFO, chainId, account],
-    queryFn: () =>
-      fetchGiftInfo({
+  // Fetch receive list with pagination
+  const {
+    data: receiveData,
+    isLoading: isLoadingReceive,
+    fetchNextPage: fetchNextReceivePage,
+    hasNextPage: hasNextReceivePage,
+    isFetchingNextPage: isFetchingReceiveNextPage,
+  } = useInfiniteQuery({
+    queryKey: [QUERY_KEY_GIFT_INFO, 'receive', chainId, account],
+    queryFn: ({ pageParam }) =>
+      fetchGiftList({
         chainId,
         account: account!,
+        cursor: pageParam,
+        type: 'receive',
       }),
-    select: (data): GiftInfo[] => {
-      return data.map(selectGiftInfo).filter((gift) => gift !== null)
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.hasNext && lastPage.nextCursor) {
+        return lastPage.nextCursor
+      }
+      return undefined
     },
     enabled: Boolean(chainId && account),
     refetchOnWindowFocus: false,
@@ -88,15 +108,75 @@ export const useGetGiftInfo = () => {
     refetchInterval: FAST_INTERVAL,
   })
 
-  const missingTokens = useMemo(() => data?.filter((gift) => gift?.currencyAmount === undefined) || [], [data])
+  // Fetch send list with pagination
+  const {
+    data: sendData,
+    isLoading: isLoadingSend,
+    fetchNextPage: fetchNextSendPage,
+    hasNextPage: hasNextSendPage,
+    isFetchingNextPage: isFetchingSendNextPage,
+  } = useInfiniteQuery({
+    queryKey: [QUERY_KEY_GIFT_INFO, 'send', chainId, account],
+    queryFn: ({ pageParam }) =>
+      fetchGiftList({
+        chainId,
+        account: account!,
+        cursor: pageParam,
+        type: 'send',
+      }),
+    initialPageParam: undefined as string | undefined,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.hasNext && lastPage.nextCursor) {
+        return lastPage.nextCursor
+      }
+      return undefined
+    },
+    enabled: Boolean(chainId && account),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+    refetchOnMount: true,
+    refetchInterval: FAST_INTERVAL,
+  })
+
+  // Combine and deduplicate all data
+  const combinedData = useMemo(() => {
+    if (!sendData && !receiveData) return null
+
+    // Flatten all send pages
+    const allSendGifts = sendData?.pages.flatMap((page) => page.list) || []
+    const allReceiveGifts = receiveData?.pages.flatMap((page) => page.list) || []
+
+    // Ensure no duplicate gift codehash
+    const giftCodes = new Set()
+    const result = [...allSendGifts, ...allReceiveGifts]
+    const list = result.filter((gift) => {
+      if (giftCodes.has(gift.codeHash)) {
+        return false
+      }
+      giftCodes.add(gift.codeHash)
+      return true
+    })
+
+    // Process with selector
+    const processedList = list.map(selectGiftInfo).filter((gift) => gift !== null)
+
+    return {
+      list: processedList,
+    }
+  }, [sendData, receiveData, selectGiftInfo])
+
+  const missingTokens = useMemo(
+    () => combinedData?.list?.filter((gift) => gift?.currencyAmount === undefined) || [],
+    [combinedData],
+  )
 
   const tokens = useTokensByChainId(
     missingTokens.map((gift) => gift?.token),
     chainId,
   )
 
-  const newData = useMemo(() => {
-    return data?.map((gift) => {
+  const data = useMemo(() => {
+    return combinedData?.list?.map((gift) => {
       if (gift?.currencyAmount === undefined) {
         const isNative = gift.token === zeroAddress
 
@@ -116,14 +196,42 @@ export const useGetGiftInfo = () => {
       }
       return gift
     })
-  }, [data, tokens])
+  }, [combinedData, tokens])
+
+  const handleLoadMore = useCallback(() => {
+    if (hasNextReceivePage && !isFetchingReceiveNextPage) {
+      fetchNextReceivePage()
+    }
+    if (hasNextSendPage && !isFetchingSendNextPage) {
+      fetchNextSendPage()
+    }
+  }, [
+    hasNextReceivePage,
+    isFetchingReceiveNextPage,
+    fetchNextReceivePage,
+    hasNextSendPage,
+    isFetchingSendNextPage,
+    fetchNextSendPage,
+  ])
 
   return useMemo(() => {
     return {
-      data: newData,
-      isLoading,
+      data,
+      hasNextPage: hasNextReceivePage || hasNextSendPage,
+      isLoading: isLoadingReceive || isLoadingSend,
+      isFetchingNextPage: isFetchingReceiveNextPage || isFetchingSendNextPage,
+      handleLoadMore,
     }
-  }, [newData, isLoading])
+  }, [
+    data,
+    hasNextReceivePage,
+    hasNextSendPage,
+    isLoadingReceive,
+    isLoadingSend,
+    isFetchingReceiveNextPage,
+    isFetchingSendNextPage,
+    handleLoadMore,
+  ])
 }
 
 export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {

@@ -1,5 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, DeleteOutlineIcon, Flex, FlexGap, IconButton, Spinner, Text } from '@pancakeswap/uikit'
+import {
+  AutoRenewIcon,
+  Box,
+  Button,
+  DeleteOutlineIcon,
+  Flex,
+  FlexGap,
+  IconButton,
+  Spinner,
+  Text,
+} from '@pancakeswap/uikit'
 import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
@@ -14,13 +24,13 @@ import { isExpired } from '../utils/isExpired'
 import { GiftStatusTag } from './GiftStatusTag'
 
 export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: ViewState) => void }) => {
-  const { data: giftInfo = [], isLoading } = useGetGiftInfo()
+  const { data: giftInfo = [], isLoading, hasNextPage, handleLoadMore } = useGetGiftInfo()
   const { t } = useTranslation()
   const { setCodeHash } = useContext(CancelGiftContext)
 
   const { setIsSendGift } = useContext(SendGiftContext)
 
-  if (isLoading) {
+  if (isLoading && !giftInfo.length) {
     return (
       <Flex width="100%" py="24px" justifyContent="center" alignItems="center">
         <Spinner />
@@ -93,6 +103,20 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
               </Box>
             )
           })
+        )}
+        {giftInfo.length > 0 && (
+          <Flex mt="16px" justifyContent="center">
+            {hasNextPage && (
+              <Button
+                onClick={handleLoadMore}
+                scale="sm"
+                disabled={isLoading}
+                endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
+              >
+                {isLoading ? t('Loading') : t('Load more')}
+              </Button>
+            )}
+          </Flex>
         )}
       </Box>
 
