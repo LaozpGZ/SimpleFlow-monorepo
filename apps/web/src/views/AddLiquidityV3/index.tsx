@@ -30,6 +30,7 @@ import { usePreviousValue } from '@pancakeswap/hooks'
 import { useCurrency } from 'hooks/Tokens'
 import AddLiquidity from 'views/AddLiquidity'
 import AddStableLiquidity from 'views/AddLiquidity/AddStableLiquidity'
+import useWarningLiquidity from 'views/AddLiquidity/hooks/useWarningLiquidity'
 import useStableConfig, { StableConfigContext } from 'views/Swap/hooks/useStableConfig'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -148,6 +149,7 @@ export function UniversalAddLiquidity({
 
   const handleCurrencyASelect = useCallback(
     (currencyANew: Currency) => {
+      warningHandler(currencyANew)
       const [idA, idB] = handleCurrencySelect(currencyANew, currencyIdB)
       const newPathname = router.pathname.replace('/v2', '').replace('/stable', '')
       const { minPrice: _minPrice, maxPrice: _maxPrice, ...rest } = router.query
@@ -182,6 +184,7 @@ export function UniversalAddLiquidity({
 
   const handleCurrencyBSelect = useCallback(
     (currencyBNew: Currency) => {
+      warningHandler(currencyBNew)
       const [idB, idA] = handleCurrencySelect(currencyBNew, currencyIdA)
       const newPathname = router.pathname.replace('/v2', '').replace('/stable', '')
       const { minPrice: _minPrice, maxPrice: _maxPrice, ...rest } = router.query
@@ -398,6 +401,7 @@ export function AddLiquidityV3Layout({
   const { isMobile } = useMatchBreakpoints()
   const baseCurrency = useCurrency(currencyIdA)
   const quoteCurrency = useCurrency(currencyIdB)
+  const warningHandler = useWarningLiquidity(currencyIdA, currencyIdB)
   const poolAddress = useMemo(
     () =>
       baseCurrency?.wrapped && quoteCurrency?.wrapped && feeAmount
