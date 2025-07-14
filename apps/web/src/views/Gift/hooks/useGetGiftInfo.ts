@@ -151,7 +151,7 @@ export const useGetGiftInfo = () => {
     // Filter sendData if unclaimedOnly is true
     if (unclaimedOnly) {
       allSendGifts = allSendGifts.filter((gift) => {
-        return gift.status !== GiftStatus.CLAIMED && gift.status !== GiftStatus.REQUESTED_CLAIM
+        return ![GiftStatus.CLAIMED, GiftStatus.REQUESTED_CLAIM].includes(gift.status)
       })
     }
 
