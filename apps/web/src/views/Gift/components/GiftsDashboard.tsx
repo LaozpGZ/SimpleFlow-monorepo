@@ -17,10 +17,11 @@ import { SecondaryCard } from 'components/SecondaryCard'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { ViewState } from 'components/WalletModalV2/type'
 import { formatDistanceToNow } from 'date-fns'
-import { useContext, useState } from 'react'
+import { useContext } from 'react'
 import { useGetGiftInfo } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { SendGiftContext } from '../providers/SendGiftProvider'
+import { useUnclaimedOnlyContext } from '../providers/UnclaimedOnlyProvider'
 import { GiftStatus } from '../types'
 import { isExpired } from '../utils/isExpired'
 import { GiftStatusTag } from './GiftStatusTag'
@@ -32,7 +33,7 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
 
   const { setIsSendGift } = useContext(SendGiftContext)
 
-  const [unclaimedOnly, setUnclaimedOnly] = useState(false)
+  const { unclaimedOnly, setUnclaimedOnly } = useUnclaimedOnlyContext()
 
   if (isLoading && !giftInfo.length) {
     return (

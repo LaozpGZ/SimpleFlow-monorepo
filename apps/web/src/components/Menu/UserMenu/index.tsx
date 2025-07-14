@@ -20,6 +20,7 @@ import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useAutoFillCode } from 'views/Gift/hooks/useAutoFillCode'
 import { ClaimGiftProvider, useClaimGiftContext } from 'views/Gift/providers/ClaimGiftProvider'
 import { SendGiftProvider, useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
+import { UnclaimedOnlyProvider } from 'views/Gift/providers/UnclaimedOnlyProvider'
 import { useAccount } from 'wagmi'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
@@ -246,7 +247,9 @@ const UserMenuContainer = () => {
       <MenuTabProvider>
         <SendGiftProvider>
           <ClaimGiftProvider>
-            <UserMenu />
+            <UnclaimedOnlyProvider>
+              <UserMenu />
+            </UnclaimedOnlyProvider>
           </ClaimGiftProvider>
         </SendGiftProvider>
       </MenuTabProvider>

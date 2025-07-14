@@ -7,7 +7,8 @@ import { useCallback, useMemo } from 'react'
 import { zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
 import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
-import { GiftInfoResponse, GiftListApiQueryParams } from '../types'
+import { useUnclaimedOnlyContext } from '../providers/UnclaimedOnlyProvider'
+import { GiftInfoResponse, GiftListApiQueryParams, GiftStatus } from '../types'
 import { giftApiAdapter } from '../utils/ApiAdapter'
 import useGiftInfoSelector from './useGiftInfoSelector'
 
@@ -75,6 +76,7 @@ export const fetchGiftList = async ({
 export const useGetGiftInfo = () => {
   const { address: account } = useAccount()
   const chainId = ChainId.BSC
+  const { unclaimedOnly } = useUnclaimedOnlyContext()
 
   const selectGiftInfo = useGiftInfoSelector()
 
@@ -101,7 +103,7 @@ export const useGetGiftInfo = () => {
       }
       return undefined
     },
-    enabled: Boolean(chainId && account),
+    enabled: Boolean(chainId && account && !unclaimedOnly), // Disable when unclaimedOnly is true
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: true,
@@ -116,7 +118,7 @@ export const useGetGiftInfo = () => {
     hasNextPage: hasNextSendPage,
     isFetchingNextPage: isFetchingSendNextPage,
   } = useInfiniteQuery({
-    queryKey: [QUERY_KEY_GIFT_INFO, 'send', chainId, account],
+    queryKey: [QUERY_KEY_GIFT_INFO, 'send', chainId, account, unclaimedOnly],
     queryFn: ({ pageParam }) =>
       fetchGiftList({
         chainId,
@@ -143,8 +145,15 @@ export const useGetGiftInfo = () => {
     if (!sendData && !receiveData) return null
 
     // Flatten all send pages
-    const allSendGifts = sendData?.pages.flatMap((page) => page.list) || []
-    const allReceiveGifts = receiveData?.pages.flatMap((page) => page.list) || []
+    let allSendGifts = sendData?.pages.flatMap((page) => page.list) || []
+    const allReceiveGifts = (!unclaimedOnly && receiveData?.pages.flatMap((page) => page.list)) || []
+
+    // Filter sendData if unclaimedOnly is true
+    if (unclaimedOnly) {
+      allSendGifts = allSendGifts.filter((gift) => {
+        return gift.status !== GiftStatus.CLAIMED && gift.status !== GiftStatus.REQUESTED_CLAIM
+      })
+    }
 
     // Ensure no duplicate gift codehash
     const giftCodes = new Set()
@@ -163,7 +172,7 @@ export const useGetGiftInfo = () => {
     return {
       list: processedList,
     }
-  }, [sendData, receiveData, selectGiftInfo])
+  }, [sendData, receiveData, selectGiftInfo, unclaimedOnly])
 
   const missingTokens = useMemo(
     () => combinedData?.list?.filter((gift) => gift?.currencyAmount === undefined) || [],
