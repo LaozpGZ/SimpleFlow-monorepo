@@ -1,4 +1,5 @@
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/swap-sdk-core'
+import { QueryParams } from './utils/ApiAdapter'
 
 export enum GiftStatus {
   PENDING = 'PENDING',
@@ -62,4 +63,14 @@ export interface CreateGiftParams {
   tokenAmount: CurrencyAmount<Token | NativeCurrency>
   code: string
   nativeAmount?: CurrencyAmount<NativeCurrency>
+}
+
+// Specific query parameters for gift list API - now type-safe with abstract QueryParams
+export interface GiftListApiQueryParams extends QueryParams {
+  chainId: number
+  address?: string
+  claimerAddress?: string
+  hasNative?: boolean
+  cursor?: string // 2025-07-05T20:42:06.000Z
+  pageSize?: number
 }

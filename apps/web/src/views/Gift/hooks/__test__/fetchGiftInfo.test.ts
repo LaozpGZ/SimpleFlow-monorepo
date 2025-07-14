@@ -66,6 +66,7 @@ describe('fetchGiftInfo', () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ 'content-type': 'application/json' }),
         json: async () => ({
           status: 'success',
           data: mockSentGifts,
@@ -73,6 +74,7 @@ describe('fetchGiftInfo', () => {
       })
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ 'content-type': 'application/json' }),
         json: async () => ({
           status: 'success',
           data: mockReceivedGifts,
@@ -91,9 +93,23 @@ describe('fetchGiftInfo', () => {
     expect(mockFetch).toHaveBeenCalledTimes(2)
     expect(mockFetch).toHaveBeenCalledWith(
       `https://api.example.com/gift/list?chainId=${mockChainId}&address=${mockAccount}`,
+      expect.objectContaining({
+        method: 'GET',
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+        }),
+        signal: expect.any(AbortSignal),
+      }),
     )
     expect(mockFetch).toHaveBeenCalledWith(
       `https://api.example.com/gift/list?chainId=${mockChainId}&claimerAddress=${mockAccount}`,
+      expect.objectContaining({
+        method: 'GET',
+        headers: expect.objectContaining({
+          'Content-Type': 'application/json',
+        }),
+        signal: expect.any(AbortSignal),
+      }),
     )
   })
 
@@ -118,6 +134,7 @@ describe('fetchGiftInfo', () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ 'content-type': 'application/json' }),
         json: async () => ({
           status: 'success',
           data: mockSentGifts,
@@ -125,6 +142,7 @@ describe('fetchGiftInfo', () => {
       })
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ 'content-type': 'application/json' }),
         json: async () => ({
           status: 'success',
           data: mockReceivedGifts,
@@ -145,6 +163,7 @@ describe('fetchGiftInfo', () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ 'content-type': 'application/json' }),
         json: async () => ({
           status: 'success',
           data: [],
@@ -152,6 +171,7 @@ describe('fetchGiftInfo', () => {
       })
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ 'content-type': 'application/json' }),
         json: async () => ({
           status: 'success',
           data: [],
@@ -170,6 +190,7 @@ describe('fetchGiftInfo', () => {
     mockFetch
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ 'content-type': 'application/json' }),
         json: async () => ({
           status: 'success',
           // No data field
@@ -177,6 +198,7 @@ describe('fetchGiftInfo', () => {
       })
       .mockResolvedValueOnce({
         ok: true,
+        headers: new Headers({ 'content-type': 'application/json' }),
         json: async () => ({
           status: 'success',
           // No data field

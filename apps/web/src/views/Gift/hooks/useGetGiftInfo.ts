@@ -7,7 +7,8 @@ import { useMemo } from 'react'
 import { zeroAddress } from 'viem'
 import { useAccount } from 'wagmi'
 import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
-import { GiftInfo, GiftInfoResponse } from '../types'
+import { GiftInfo, GiftInfoResponse, GiftListApiQueryParams } from '../types'
+import { giftApiAdapter } from '../utils/ApiAdapter'
 import useGiftInfoSelector from './useGiftInfoSelector'
 
 enum GiftApiStatus {
@@ -33,24 +34,20 @@ export const fetchGiftInfo = async ({
     throw new Error('Missing required parameters: chainId and account')
   }
 
-  if (!NEXT_PUBLIC_GIFT_API) {
-    throw new Error('API URL is not configured')
+  const sendQueryParams: GiftListApiQueryParams = {
+    chainId,
+    address: account,
   }
-
-  const urlSend = `${NEXT_PUBLIC_GIFT_API}/gift/list?chainId=${chainId}&address=${account}`
-  const urlReceive = `${NEXT_PUBLIC_GIFT_API}/gift/list?chainId=${chainId}&claimerAddress=${account}`
+  const receiveQueryParams: GiftListApiQueryParams = {
+    chainId,
+    claimerAddress: account,
+  }
 
   // promise all urlsend and urlreceive
-  const [responseSend, responseReceive] = await Promise.all([fetch(urlSend), fetch(urlReceive)])
-
-  if (!responseSend.ok || !responseReceive.ok) {
-    throw new Error(
-      `Failed to fetch gift info: ${responseSend.status} ${responseSend.statusText} ${responseReceive.status} ${responseReceive.statusText}`,
-    )
-  }
-
-  const resultSend: GiftApiResponse<GiftInfoResponse[]> = await responseSend.json()
-  const resultReceive: GiftApiResponse<GiftInfoResponse[]> = await responseReceive.json()
+  const [resultSend, resultReceive] = await Promise.all([
+    giftApiAdapter.get<GiftApiResponse<GiftInfoResponse[]>, GiftListApiQueryParams>('/gift/list', sendQueryParams),
+    giftApiAdapter.get<GiftApiResponse<GiftInfoResponse[]>, GiftListApiQueryParams>('/gift/list', receiveQueryParams),
+  ])
 
   if (resultSend.status === GiftApiStatus.FAILED || resultReceive.status === GiftApiStatus.FAILED) {
     throw new Error(resultSend.message || resultReceive.message || 'Failed to fetch gift information')
