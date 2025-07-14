@@ -32,6 +32,7 @@ import {
   Liquidity,
 } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
+import { MiniUniversalFarms } from 'components/MiniUniversalFarms'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { NextSeo } from 'next-seo'
@@ -115,6 +116,7 @@ export const PoolInfo = () => {
       <LiquiditySunsetWarning overrideChainId={poolInfo?.chainId} />
 
       <NextSeo title={poolSymbol} />
+      <MiniUniversalFarms />
       <Card>
         <CardBody>
           <FlexGap
