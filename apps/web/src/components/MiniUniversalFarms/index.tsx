@@ -1,19 +1,9 @@
 import { FarmV4SupportedChainId, Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
-import {
-  Box,
-  Card,
-  Flex,
-  Input,
-  InputGroup,
-  SearchIcon,
-  Tab,
-  TabMenu,
-  Text,
-  useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+import { Box, Card, Flex, Input, InputGroup, SearchIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
+import { TabMenu } from '../../views/BurnDashboard/components/TabMenu'
 import { PoolsTable } from './components/PoolsTable'
 import { useMiniPoolsData } from './hooks/useMiniPoolsData'
 
@@ -27,6 +17,7 @@ const SearchWrapper = styled(Flex)`
   gap: 16px;
   margin-bottom: 16px;
   flex-wrap: wrap;
+  align-items: center;
 
   ${({ theme }) => theme.mediaQueries.sm} {
     flex-wrap: nowrap;
@@ -40,12 +31,6 @@ const SearchInputWrapper = styled.div`
   ${({ theme }) => theme.mediaQueries.sm} {
     min-width: 300px;
   }
-`
-
-const StyledTabMenu = styled(TabMenu)`
-  background: ${({ theme }) => theme.colors.input};
-  border-radius: 16px;
-  padding: 4px;
 `
 
 interface MiniUniversalFarmsProps {
@@ -64,7 +49,7 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
   const [searchQuery, setSearchQuery] = useState('')
-  const [activeProtocolIndex, setActiveProtocolIndex] = useState(0)
+  const [activeProtocolTab, setActiveProtocolTab] = useState<string>('All')
 
   // Determine which chains to use
   const chains = useMemo(() => {
@@ -74,13 +59,13 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
 
   // Get the selected protocol filter
   const selectedProtocols = useMemo(() => {
-    const filter = PROTOCOL_FILTERS[activeProtocolIndex]
-    if (!filter.value) return undefined
+    const filter = PROTOCOL_FILTERS.find((f) => f.label === activeProtocolTab)
+    if (!filter || !filter.value) return undefined
     if (filter.value === 'infinity') {
       return [Protocol.InfinityCLAMM, Protocol.InfinityBIN]
     }
     return [filter.value]
-  }, [activeProtocolIndex])
+  }, [activeProtocolTab])
 
   // Fetch pools data
   const { pools, isLoading, error } = useMiniPoolsData({
@@ -133,11 +118,11 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
                 />
               </InputGroup>
             </SearchInputWrapper>
-            <StyledTabMenu activeIndex={activeProtocolIndex} onItemClick={setActiveProtocolIndex}>
-              {PROTOCOL_FILTERS.map((filter) => (
-                <Tab key={filter.label}>{filter.label}</Tab>
-              ))}
-            </StyledTabMenu>
+            <TabMenu
+              tabs={PROTOCOL_FILTERS.map((filter) => filter.label)}
+              defaultTab="All"
+              onTabChange={setActiveProtocolTab}
+            />
           </SearchWrapper>
 
           <PoolsTable pools={pools} loading={isLoading} />
