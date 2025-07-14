@@ -18,7 +18,6 @@ const Container = styled(Box)`
 
 const SearchWrapper = styled(Flex)`
   gap: 16px;
-  margin-bottom: 16px;
   flex-wrap: wrap;
   align-items: center;
 
@@ -88,19 +87,19 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
   }, [activeProtocolTab])
 
   // Fetch pools data with pagination
-  const { pools, isLoading, error, hasNextPage, totalPools } = useMiniPoolsData({
+  const { pools, isLoading, error, hasNextPage } = useMiniPoolsData({
     chains,
     protocols: selectedProtocols,
     searchQuery,
     page: currentPage,
-    pageSize: 20,
+    pageSize: 10,
   })
 
   // Prepare token lists (same as main universal farms)
   const listPrepared = useTokenListPrepared(DEFAULT_ACTIVE_LIST_URLS)
 
   // Check if we're still loading (include token list preparation)
-  const isPending = listPrepared.isPending() && isLoading && pools.length === 0
+  const isPending = listPrepared.isPending() || isLoading
 
   // Reset pagination when filters change
   useEffect(() => {
@@ -183,13 +182,6 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
               onTabChange={handleProtocolTabChange}
             />
           </SearchWrapper>
-
-          {/* Show total pools count */}
-          {!isPending && totalPools > 0 && (
-            <Text color="textSubtle" fontSize="14px" mb="16px">
-              {t('Showing')} {pools.length} {t('of')} {totalPools} {t('pools')}
-            </Text>
-          )}
         </Box>
 
         <PoolsTable

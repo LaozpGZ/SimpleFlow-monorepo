@@ -1,6 +1,6 @@
 import { useIntersectionObserver } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Loading, SkeletonV2, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Flex, FlexGap, Loading, Skeleton, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { useEffect, useMemo } from 'react'
@@ -198,14 +198,14 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
         dataIndex: null as keyof PoolInfo | null,
         key: 'pairs',
         minWidth: '210px',
-        render: (_, item: PoolInfo) => <PoolTokenOverview data={item} />,
+        render: (_: unknown, item: PoolInfo) => <PoolTokenOverview data={item} />,
       },
       {
         title: t('APR'),
         dataIndex: null as keyof PoolInfo | null,
         key: 'apr',
         minWidth: '125px',
-        render: (_, item: PoolInfo) => <PoolGlobalAprButton pool={item} />,
+        render: (_: unknown, item: PoolInfo) => <PoolGlobalAprButton pool={item} />,
       },
       {
         title: t('TVL'),
@@ -230,10 +230,19 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
   if (loading) {
     return (
       <Box>
-        {[...Array(5)].map((_, index) => (
+        {[...Array(5)].map((_: unknown, index) => (
           <Box key={index} p="16px" borderBottom="1px solid" borderColor="cardBorder">
-            <SkeletonV2 variant="rect" height={40} mb="8px" />
-            <SkeletonV2 variant="rect" height={20} width="60%" />
+            <FlexGap gap="16px" justifyContent="space-between" alignItems="center">
+              <FlexGap gap="8px" alignItems="center">
+                <Skeleton variant="circle" height={36} width={36} />
+                <Skeleton variant="circle" height={36} width={36} />
+              </FlexGap>
+
+              <Skeleton height={40} width="100%" />
+
+              <Skeleton height={40} width="20%" />
+              <Skeleton height={40} width="30%" />
+            </FlexGap>
           </Box>
         ))}
       </Box>
