@@ -1,7 +1,7 @@
 // Create a provider for the SendGiftView
 
-import { createContext, useContext, useState } from 'react'
 import { CurrencyAmount, NativeCurrency } from '@pancakeswap/sdk'
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 interface SendGiftContextType {
   isSendGift: boolean
@@ -34,18 +34,27 @@ export const SendGiftProvider = ({ children }: { children: React.ReactNode }) =>
   const [nativeAmount, setNativeAmount] = useState<CurrencyAmount<NativeCurrency> | undefined>(undefined)
   const [includeStarterGas, setIncludeStarterGas] = useState(false)
 
-  return (
-    <SendGiftContext.Provider
-      value={{
-        isSendGift,
-        setIsSendGift,
-        nativeAmount,
-        setNativeAmount,
-        includeStarterGas,
-        setIncludeStarterGas,
-      }}
-    >
-      {children}
-    </SendGiftContext.Provider>
+  const handleToggleIncludeStarterGas = useCallback(
+    (value: boolean) => {
+      setIncludeStarterGas(value)
+      if (!value) {
+        setNativeAmount(undefined)
+      }
+    },
+    [includeStarterGas, setNativeAmount],
   )
+
+  const value = useMemo(
+    () => ({
+      isSendGift,
+      setIsSendGift,
+      nativeAmount,
+      setNativeAmount,
+      includeStarterGas,
+      setIncludeStarterGas: handleToggleIncludeStarterGas,
+    }),
+    [isSendGift, setIsSendGift, nativeAmount, setNativeAmount, includeStarterGas, handleToggleIncludeStarterGas],
+  )
+
+  return <SendGiftContext.Provider value={value}>{children}</SendGiftContext.Provider>
 }
