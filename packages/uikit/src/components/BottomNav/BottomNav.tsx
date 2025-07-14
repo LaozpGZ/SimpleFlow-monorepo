@@ -37,11 +37,6 @@ const BottomNav: React.FC<React.PropsWithChildren<BottomNavProps>> = ({
                   setMenuOpenByIndex={setMenuOpenByIndex}
                   index={index}
                   isDisabled={disabled}
-                  onClick={() => {
-                    if (!menuItems) {
-                      window.location.href = href;
-                    }
-                  }}
                 >
                   <Box>
                     <NotificationDot show={!!statusColor} color={statusColor}>
@@ -52,7 +47,7 @@ const BottomNav: React.FC<React.PropsWithChildren<BottomNavProps>> = ({
                         label={label}
                         icon={icon}
                         fillIcon={fillIcon}
-                        showItemsOnMobile={showItemsOnMobile}
+                        showItemsOnMobile={Boolean(menuItems)}
                       />
                     </NotificationDot>
                   </Box>
