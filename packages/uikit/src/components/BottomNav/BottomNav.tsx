@@ -1,12 +1,12 @@
-import React, { memo, useState } from "react";
-import { findMenuItemsStatusColor } from "../../util/findMenuItemsStatusColor";
+import React, { useState, memo } from "react";
 import BottomNavItem from "../BottomNavItem";
+import StyledBottomNav from "./styles";
 import { Box } from "../Box";
 import DropdownMenu from "../DropdownMenu/DropdownMenu";
+import { BottomNavProps } from "./types";
 import { NotificationDot } from "../NotificationDot";
 import { Overlay } from "../Overlay";
-import StyledBottomNav from "./styles";
-import { BottomNavProps } from "./types";
+import { findMenuItemsStatusColor } from "../../util/findMenuItemsStatusColor";
 
 const BottomNav: React.FC<React.PropsWithChildren<BottomNavProps>> = ({
   items = [],
@@ -47,7 +47,7 @@ const BottomNav: React.FC<React.PropsWithChildren<BottomNavProps>> = ({
                         label={label}
                         icon={icon}
                         fillIcon={fillIcon}
-                        showItemsOnMobile={Boolean(menuItems)}
+                        showItemsOnMobile={showItemsOnMobile}
                       />
                     </NotificationDot>
                   </Box>
