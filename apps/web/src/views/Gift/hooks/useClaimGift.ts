@@ -39,7 +39,7 @@ export const useClaimGift = ({ onSuccess }: { onSuccess?: () => void }) => {
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to claim gift: ${response.status} ${response.statusText}`)
+        throw new Error(`Failed to request claim gift`)
       }
 
       const result: GiftApiResponse<ClaimGiftResponse> = await response.json()
