@@ -98,8 +98,10 @@ const OptionBox = styled(Box)`
 `
 
 const WalletModal: React.FC<WalletModalProps> = ({ account, onDismiss, isOpen, onReceiveClick, onDisconnect }) => {
+  const { viewState } = useWalletModalV2ViewState()
+
   // If no account is provided, show a message or redirect
-  if (!account) {
+  if (!account && viewState !== ViewState.CLAIM_GIFT) {
     return null
   }
   return (
