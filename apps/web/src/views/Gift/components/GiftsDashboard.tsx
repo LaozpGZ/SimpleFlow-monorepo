@@ -9,13 +9,15 @@ import {
   IconButton,
   Spinner,
   Text,
+  Toggle,
 } from '@pancakeswap/uikit'
 import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { SecondaryCard } from 'components/SecondaryCard'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { ViewState } from 'components/WalletModalV2/type'
 import { formatDistanceToNow } from 'date-fns'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { useGetGiftInfo } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { SendGiftContext } from '../providers/SendGiftProvider'
@@ -30,6 +32,8 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
 
   const { setIsSendGift } = useContext(SendGiftContext)
 
+  const [unclaimedOnly, setUnclaimedOnly] = useState(false)
+
   if (isLoading && !giftInfo.length) {
     return (
       <Flex width="100%" py="24px" justifyContent="center" alignItems="center">
@@ -40,7 +44,23 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
 
   return (
     <>
-      <Box mb="16px" padding="16px 0" maxHeight="280px" overflow="auto">
+      <Box mb="16px" pb="16px" maxHeight="280px" overflow="auto">
+        <SecondaryCard mb="16px">
+          <Text fontSize="20px" fontWeight="bold" mb="8px">
+            {t('My Gifts History')}
+          </Text>
+          <FlexGap alignItems="center" gap="16px">
+            <Text fontSize="12px">{t('Show unclaimed only')}</Text>
+            <Toggle
+              id="toggle-show-testnet"
+              checked={unclaimedOnly}
+              scale="sm"
+              onChange={() => {
+                setUnclaimedOnly(!unclaimedOnly)
+              }}
+            />
+          </FlexGap>
+        </SecondaryCard>
         {giftInfo.length === 0 ? (
           <Flex width="100%" justifyContent="center" alignItems="center">
             <Text color="textSubtle">No gifts found</Text>
