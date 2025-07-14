@@ -23,7 +23,9 @@ export enum ChainId {
 }
 
 export enum NonEVMChainId {
-  SOLANA = 8000001001,
+  // SOLANA = 8000001001,
+  // todo:@eric
+  SOLANA = 1000001,
   APTOS = 8000002000,
 }
 

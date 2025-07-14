@@ -24,6 +24,7 @@ import { useAllLists } from 'state/lists/hooks'
 import { useListState } from 'state/lists/lists'
 import { styled } from 'styled-components'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
+import { NonEVMChainId } from '@pancakeswap/chains'
 import CurrencySearch from './CurrencySearch'
 import ImportToken from './ImportToken'
 import Manage from './Manage'
@@ -87,7 +88,7 @@ export default function CurrencySearchModal({
   mode,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.search)
-  const [selectedChainId, setSelectedChainId] = useState<ChainId | undefined>(selectedCurrency?.chainId)
+  const [selectedChainId, setSelectedChainId] = useState<ChainId | NonEVMChainId | undefined>(selectedCurrency?.chainId)
 
   const handleCurrencySelect = useCallback(
     (currency: Currency) => {

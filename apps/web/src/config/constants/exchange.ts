@@ -1,18 +1,16 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { Percent, Token, WNATIVE } from '@pancakeswap/sdk'
+import { Token as SolanaToken } from '@pancakeswap/solana-core-sdk'
 import {
-  BUSD,
-  USDC,
-  USDT,
-  WBTC_ETH,
-  arbSepoliaTokens,
   arbitrumGoerliTokens,
   arbitrumTokens,
+  arbSepoliaTokens,
   baseSepoliaTokens,
   baseTestnetTokens,
   baseTokens,
   bscTestnetTokens,
   bscTokens,
+  BUSD,
   lineaTestnetTokens,
   lineaTokens,
   monadTestnetTokens,
@@ -22,10 +20,32 @@ import {
   polygonZkEvmTokens,
   scrollSepoliaTokens,
   sepoliaTokens,
+  USDC,
+  USDT,
+  WBTC_ETH,
   zkSyncTestnetTokens,
   zksyncTokens,
 } from '@pancakeswap/tokens'
+
 import { ChainTokenList } from './types'
+
+// Utility to convert a Solana Token to TokenInfo/ApiV3Token structure
+function toSolanaTokenInfo(token: SolanaToken, opts: Partial<any> = {}): any {
+  return {
+    chainId: 101,
+    address: token.mint.toBase58(),
+    programId: '', // Fill with actual programId if available
+    logoURI: '', // Fill with actual logo if available
+    symbol: token.symbol || '',
+    name: token.name || '',
+    decimals: token.decimals,
+    tags: [],
+    extensions: {},
+    priority: 1,
+    type: 'custom',
+    ...opts,
+  }
+}
 
 export {
   ADDITIONAL_BASES,
@@ -86,6 +106,54 @@ export const SUGGESTED_BASES: ChainTokenList = {
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc, arbSepoliaTokens.weth],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
   [ChainId.MONAD_TESTNET]: [monadTestnetTokens.wmon, monadTestnetTokens.usdc, monadTestnetTokens.usdt],
+  [NonEVMChainId.SOLANA]: [
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+        decimals: 6,
+        symbol: 'USDC',
+        name: 'USD Coin',
+      }),
+      { priority: 100 },
+    ),
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+        decimals: 6,
+        symbol: 'USDT',
+        name: 'Tether USD',
+      }),
+      { priority: 90 },
+    ),
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: 'So11111111111111111111111111111111111111112',
+        decimals: 9,
+        symbol: 'WSOL',
+        name: 'Wrapped SOL',
+      }),
+      { priority: 80 },
+    ),
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R',
+        decimals: 6,
+        symbol: 'RAY',
+        name: 'Raydium',
+      }),
+      { priority: 70 },
+    ),
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: 'mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So',
+        decimals: 9,
+        symbol: 'mSOL',
+        name: 'Marinade Staked SOL',
+      }),
+      { priority: 60 },
+    ),
+  ],
+  [NonEVMChainId.APTOS]: [],
 }
 
 // used to construct the list of all pairs we consider by default in the frontend
@@ -111,6 +179,54 @@ export const BASES_TO_TRACK_LIQUIDITY_FOR: ChainTokenList = {
   [ChainId.ARBITRUM_SEPOLIA]: [arbSepoliaTokens.usdc, arbSepoliaTokens.weth],
   [ChainId.BASE_SEPOLIA]: [baseSepoliaTokens.usdc, baseSepoliaTokens.weth],
   [ChainId.MONAD_TESTNET]: [monadTestnetTokens.usdc, monadTestnetTokens.busd],
+  [NonEVMChainId.SOLANA]: [
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+        decimals: 6,
+        symbol: 'USDC',
+        name: 'USD Coin',
+      }),
+      { priority: 100 },
+    ),
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+        decimals: 6,
+        symbol: 'USDT',
+        name: 'Tether USD',
+      }),
+      { priority: 90 },
+    ),
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: 'So11111111111111111111111111111111111111112',
+        decimals: 9,
+        symbol: 'WSOL',
+        name: 'Wrapped SOL',
+      }),
+      { priority: 80 },
+    ),
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R',
+        decimals: 6,
+        symbol: 'RAY',
+        name: 'Raydium',
+      }),
+      { priority: 70 },
+    ),
+    toSolanaTokenInfo(
+      new SolanaToken({
+        mint: 'mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So',
+        decimals: 9,
+        symbol: 'mSOL',
+        name: 'Marinade Staked SOL',
+      }),
+      { priority: 60 },
+    ),
+  ],
+  [NonEVMChainId.APTOS]: [],
 }
 
 export const PINNED_PAIRS: { readonly [chainId in ChainId]?: [Token, Token][] } = {

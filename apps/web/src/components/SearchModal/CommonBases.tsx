@@ -1,12 +1,14 @@
-import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Token } from '@pancakeswap/sdk'
-import { AutoColumn, QuestionHelper, Text } from '@pancakeswap/uikit'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { SUGGESTED_BASES } from 'config/constants/exchange'
+import { CrossChainToken, toCurrencyCompatible } from 'config/constants/types'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { styled } from 'styled-components'
 
-import { SUGGESTED_BASES } from 'config/constants/exchange'
+import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { useTranslation } from '@pancakeswap/localization'
+import { Currency } from '@pancakeswap/sdk'
+import { AutoColumn, QuestionHelper, Text } from '@pancakeswap/uikit'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+
 import { AutoRow } from '../Layout/Row'
 import { CommonBasesType } from './types'
 
@@ -52,13 +54,13 @@ export default function CommonBases({
   commonBasesType,
   supportCrossChain,
 }: {
-  chainId?: ChainId
+  chainId?: ChainId | NonEVMChainId
   commonBasesType
   selectedCurrency?: Currency | null
   onSelect: (currency: Currency) => void
   supportCrossChain?: boolean
 }) {
-  const native = useNativeCurrency(chainId)
+  const native = useNativeCurrency(chainId as ChainId)
   const { t } = useTranslation()
   const pinTokenDescText = commonBasesType === CommonBasesType.SWAP_LIMITORDER ? t('Popular tokens') : t('Common bases')
 
@@ -97,14 +99,15 @@ export default function CommonBases({
             </Text>
           </BaseWrapper>
         </ButtonWrapper>
-        {(chainId ? SUGGESTED_BASES[chainId] || [] : []).map((token: Token) => {
-          const selected = selectedCurrency?.equals(token)
+        {(chainId ? SUGGESTED_BASES[chainId] || [] : []).map((token: CrossChainToken) => {
+          const compatToken = toCurrencyCompatible(token)
+          const selected = selectedCurrency?.equals?.(compatToken)
           return (
-            <ButtonWrapper key={`buttonBase#${token.address}`}>
-              <BaseWrapper onClick={() => !selected && onSelect(token)} disable={selected}>
+            <ButtonWrapper key={`buttonBase#${compatToken.address}`}>
+              <BaseWrapper onClick={() => !selected && onSelect(compatToken)} disable={selected}>
                 <CurrencyLogo
                   showChainLogo={supportCrossChain}
-                  currency={token}
+                  currency={compatToken}
                   style={{ borderRadius: '50%' }}
                   containerStyle={{
                     position: 'relative',
@@ -112,7 +115,7 @@ export default function CommonBases({
                   }}
                 />
                 <Text px="4px" color="inherit">
-                  {token.symbol}
+                  {compatToken.symbol}
                 </Text>
               </BaseWrapper>
             </ButtonWrapper>
