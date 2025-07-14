@@ -82,7 +82,7 @@ const UserMenu = () => {
   const [isReceiveModalOpen, setIsReceiveModalOpen] = useState(false)
 
   const { reset: resetViewState, viewState } = useWalletModalV2ViewState()
-  const { setCode } = useClaimGiftContext()
+  const { setCode, code: giftCode } = useClaimGiftContext()
   const { setIsSendGift, setNativeAmount, setIncludeStarterGas } = useSendGiftContext()
   // State for click-based menu
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -151,7 +151,7 @@ const UserMenu = () => {
     logout()
   }, [logout, connector?.name, account, chainId])
 
-  if (account) {
+  if (account || giftCode) {
     return (
       <>
         <ClickableUserMenu ref={menuRef}>

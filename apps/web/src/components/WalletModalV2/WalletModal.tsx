@@ -187,27 +187,30 @@ export const WalletContent = ({
       maxWidth={isMobile ? '100%' : '377px'}
       overflowY={isMobile ? undefined : 'auto'}
     >
-      <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px" mt="8px">
-        {viewState > ViewState.SEND_ASSETS && (
-          <Button
-            variant="tertiary"
-            style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
-            onClick={goBack}
-            ml={isMobile ? '8px' : '16px'}
-          >
-            <ArrowBackIcon fontSize="24px" color={theme.colors.primary60} />
-          </Button>
-        )}
+      {account ? (
+        <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px" mt="8px">
+          {viewState > ViewState.SEND_ASSETS && (
+            <Button
+              variant="tertiary"
+              style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
+              onClick={goBack}
+              ml={isMobile ? '8px' : '16px'}
+            >
+              <ArrowBackIcon fontSize="24px" color={theme.colors.primary60} />
+            </Button>
+          )}
 
-        <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
-        {viewState <= ViewState.SEND_ASSETS && (
-          <FlexGap>
-            <DisconnectButton scale="xs" onClick={onDisconnect}>
-              {t('Disconnect')}
-            </DisconnectButton>
-          </FlexGap>
-        )}
-      </FlexGap>
+          <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
+          {viewState <= ViewState.SEND_ASSETS && (
+            <FlexGap>
+              <DisconnectButton scale="xs" onClick={onDisconnect}>
+                {t('Disconnect')}
+              </DisconnectButton>
+            </FlexGap>
+          )}
+        </FlexGap>
+      ) : null}
+
       <CancelGiftProvider>
         <Box padding={isMobile ? '0' : '0 16px 16px'}>
           {viewState >= ViewState.SEND_ASSETS ? (
