@@ -3,7 +3,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, FlexGap, Loading, Skeleton, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
@@ -43,9 +43,45 @@ const MobileRow = styled(Flex)`
   }
 `
 
-// Container for pools content (similar to universal farms)
-const PoolsContent = styled.div`
-  min-height: 200px;
+// Table container with sticky header
+const TableContainer = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-radius: 16px;
+  background: ${({ theme }) => theme.colors.backgroundAlt};
+  overflow: hidden;
+  max-height: 400px;
+  overflow-y: auto;
+
+  /* Make table header sticky */
+  table thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background: ${({ theme }) => theme.colors.backgroundAlt};
+
+    th {
+      background: ${({ theme }) => theme.colors.backgroundAlt};
+      border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
+    }
+  }
+
+  /* Add border to last row when not at bottom */
+  table tbody tr:last-child td {
+    border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  }
+`
+
+const LoadMoreTrigger = styled.div`
+  height: 20px;
+  width: 100%;
+`
+
+const EmptyStateContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  width: 100%;
 `
 
 interface PoolsTableProps {
@@ -187,8 +223,11 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
-  // IntersectionObserver for pagination (same as universal farms)
-  const { observerRef, isIntersecting } = useIntersectionObserver()
+  // IntersectionObserver for pagination with custom root for internal scrolling
+  const { observerRef, isIntersecting } = useIntersectionObserver({
+    threshold: 0.1,
+    rootMargin: '50px',
+  })
 
   // Column configuration (similar to useColumnConfig in universal farms)
   const columns = useMemo(
@@ -218,18 +257,18 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
     [t],
   )
 
-  const getRowKey = (item: PoolInfo) => `${item.chainId}-${item.lpAddress}`
+  const getRowKey = useCallback((item: PoolInfo) => `${item.chainId}-${item.lpAddress}`, [])
 
-  // Handle intersection observer pagination (same logic as universal farms)
+  // Handle intersection observer pagination for internal scrolling
   useEffect(() => {
-    if (isIntersecting && hasNextPage && onLoadMore) {
+    if (isIntersecting && hasNextPage && onLoadMore && !isExtending) {
       onLoadMore()
     }
-  }, [isIntersecting, hasNextPage, onLoadMore])
+  }, [isIntersecting, hasNextPage, onLoadMore, isExtending])
 
   if (loading) {
     return (
-      <Box>
+      <TableContainer>
         {[...Array(5)].map((_: unknown, index) => (
           <Box key={index} p="16px" borderBottom="1px solid" borderColor="cardBorder">
             <FlexGap gap="16px" justifyContent="space-between" alignItems="center">
@@ -245,40 +284,42 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({
             </FlexGap>
           </Box>
         ))}
-      </Box>
+      </TableContainer>
     )
   }
 
   if (pools.length === 0) {
     return (
-      <Flex justifyContent="center" alignItems="center" minHeight="200px">
-        <Text color="textSubtle">{t('No pools found')}</Text>
-      </Flex>
+      <TableContainer>
+        <EmptyStateContainer>
+          <Text color="textSubtle">{t('No pools found')}</Text>
+        </EmptyStateContainer>
+      </TableContainer>
     )
   }
 
   return (
-    <PoolsContent>
-      {/* Loading indicator for extending search (same as universal farms) */}
+    <TableContainer>
+      {/* Use TableView with sticky header */}
+      {isMobile ? <MobileListView pools={pools} /> : <TableView getRowKey={getRowKey} columns={columns} data={pools} />}
+
+      {/* Loading indicator for extending search */}
       {isExtending && (
         <Flex
           justifyContent="center"
           alignItems="center"
           width="100%"
-          style={{
-            height: '40px',
-          }}
+          p="16px"
+          borderTop="1px solid"
+          borderColor="cardBorder"
         >
-          {t('Loading more pools...')}
-          <Loading ml="8px" />
+          <Loading mr="8px" />
+          <Text color="textSubtle">{t('Loading more pools...')}</Text>
         </Flex>
       )}
 
-      {/* Table/List content */}
-      {isMobile ? <MobileListView pools={pools} /> : <TableView getRowKey={getRowKey} columns={columns} data={pools} />}
-
-      {/* Intersection observer element for pagination (same as universal farms) */}
-      {pools.length > 0 && hasNextPage && <div ref={observerRef} />}
-    </PoolsContent>
+      {/* Intersection observer element for pagination */}
+      {pools.length > 0 && hasNextPage && !isExtending && <LoadMoreTrigger ref={observerRef} />}
+    </TableContainer>
   )
 }

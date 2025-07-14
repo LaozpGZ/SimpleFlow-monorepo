@@ -117,7 +117,7 @@ export const PoolInfo = () => {
       <LiquiditySunsetWarning overrideChainId={poolInfo?.chainId} />
 
       <NextSeo title={poolSymbol} />
-      <MiniUniversalFarms chainIds={[ChainId.ETHEREUM]} />
+      <MiniUniversalFarms chainIds={[ChainId.BSC]} />
       <Card>
         <CardBody>
           <FlexGap
