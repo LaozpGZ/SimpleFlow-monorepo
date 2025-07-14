@@ -1,9 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, Flex, Skeleton, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Flex, SkeletonV2, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay } from '@pancakeswap/widgets-internal'
+import { FixedSizeList as List } from 'react-window'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
-import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprButtonV3'
+import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton'
 import { PoolFeatureTags } from './PoolFeatureTags'
 
 const TableContainer = styled.div`
@@ -85,6 +86,18 @@ const MobileRow = styled(Flex)`
   }
 `
 
+const VirtualizedContainer = styled.div`
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-radius: 8px;
+  overflow: hidden;
+`
+
+const AprContainer = styled(Flex)`
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+`
+
 interface PoolsTableProps {
   pools: PoolInfo[]
   loading: boolean
@@ -109,13 +122,106 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, loading }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
+  // Constants for virtual scrolling
+  const DESKTOP_ITEM_HEIGHT = 72
+  const MOBILE_ITEM_HEIGHT = 120
+  const VISIBLE_ITEMS = 5
+  const itemHeight = isMobile ? MOBILE_ITEM_HEIGHT : DESKTOP_ITEM_HEIGHT
+  const containerHeight = itemHeight * VISIBLE_ITEMS
+
+  // Desktop row renderer
+  const DesktopRow = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+    const pool = pools[index]
+    const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
+    const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
+
+    if (!token0 || !token1 || !token0.chainId || !token1.chainId) {
+      return null
+    }
+
+    return (
+      <div style={style}>
+        <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
+          <tbody>
+            <tr>
+              <Td>
+                <PoolPairCell>
+                  <DoubleCurrencyLogo currency0={token0} currency1={token1} size={40} showChainLogoCurrency1 />
+                  <TokenSymbols>
+                    <SymbolText>
+                      {token0.symbol} / {token1.symbol}
+                    </SymbolText>
+                    <PoolFeatureTags pool={pool} />
+                  </TokenSymbols>
+                </PoolPairCell>
+              </Td>
+              <Td $align="right">
+                <AprContainer>
+                  <PoolGlobalAprButton pool={pool} />
+                </AprContainer>
+              </Td>
+              <Td $align="right">
+                <FiatNumberDisplay value={pool.tvlUsd || 0} showFullDigitsTooltip={false} />
+              </Td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+
+  // Mobile row renderer
+  const MobileRowRenderer = ({ index, style }: { index: number; style: React.CSSProperties }) => {
+    const pool = pools[index]
+    const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
+    const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
+
+    if (!token0 || !token1 || !token0.chainId || !token1.chainId) {
+      return null
+    }
+
+    return (
+      <div style={style}>
+        <MobileCard>
+          <MobileRow>
+            <PoolPairCell>
+              <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} showChainLogoCurrency1 />
+              <TokenSymbols>
+                <SymbolText>
+                  {token0.symbol} / {token1.symbol}
+                </SymbolText>
+                <PoolFeatureTags pool={pool} />
+              </TokenSymbols>
+            </PoolPairCell>
+          </MobileRow>
+
+          <MobileRow>
+            <Text color="textSubtle" fontSize="14px">
+              {t('APR')}
+            </Text>
+            <AprContainer>
+              <PoolGlobalAprButton pool={pool} />
+            </AprContainer>
+          </MobileRow>
+
+          <MobileRow>
+            <Text color="textSubtle" fontSize="14px">
+              {t('TVL')}
+            </Text>
+            <FiatNumberDisplay value={pool.tvlUsd || 0} showFullDigitsTooltip={false} fontSize="16px" />
+          </MobileRow>
+        </MobileCard>
+      </div>
+    )
+  }
+
   if (loading) {
     return (
       <Box>
         {[...Array(5)].map((_, index) => (
           <Box key={index} p="16px" borderBottom="1px solid" borderColor="cardBorder">
-            <Skeleton height={40} mb="8px" />
-            <Skeleton height={20} width="60%" />
+            <SkeletonV2 variant="rect" height={40} mb="8px" />
+            <SkeletonV2 variant="rect" height={20} width="60%" />
           </Box>
         ))}
       </Box>
@@ -132,92 +238,33 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, loading }) => {
 
   if (isMobile) {
     return (
-      <Box>
-        {pools.map((pool) => {
-          const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
-          const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
-
-          if (!token0 || !token1 || !token0.chainId || !token1.chainId) {
-            return null
-          }
-
-          return (
-            <MobileCard key={`${pool.chainId}-${pool.lpAddress}`}>
-              <MobileRow>
-                <PoolPairCell>
-                  <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} showChainLogoCurrency1 />
-                  <TokenSymbols>
-                    <SymbolText>
-                      {token0.symbol} / {token1.symbol}
-                    </SymbolText>
-                    <PoolFeatureTags pool={pool} />
-                  </TokenSymbols>
-                </PoolPairCell>
-              </MobileRow>
-
-              <MobileRow>
-                <Text color="textSubtle" fontSize="14px">
-                  {t('APR')}
-                </Text>
-                <PoolGlobalAprButtonV3 pool={pool} />
-              </MobileRow>
-
-              <MobileRow>
-                <Text color="textSubtle" fontSize="14px">
-                  {t('TVL')}
-                </Text>
-                <FiatNumberDisplay value={pool.tvlUsd || 0} showFullDigitsTooltip={false} fontSize="16px" />
-              </MobileRow>
-            </MobileCard>
-          )
-        })}
-      </Box>
+      <VirtualizedContainer>
+        <List height={containerHeight} width="100%" itemCount={pools.length} itemSize={itemHeight} itemData={pools}>
+          {MobileRowRenderer}
+        </List>
+      </VirtualizedContainer>
     )
   }
 
   return (
     <TableContainer>
-      <Table>
-        <thead>
-          <tr>
-            <Th>{t('Pairs')}</Th>
-            <Th>{t('APR')}</Th>
-            <Th>{t('TVL')}</Th>
-          </tr>
-        </thead>
-        <tbody>
-          {pools.map((pool) => {
-            const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
-            const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
+      <VirtualizedContainer>
+        {/* Table header */}
+        <Table>
+          <thead>
+            <tr>
+              <Th>{t('Pairs')}</Th>
+              <Th $align="right">{t('APR')}</Th>
+              <Th $align="right">{t('TVL')}</Th>
+            </tr>
+          </thead>
+        </Table>
 
-            if (!token0 || !token1 || !token0.chainId || !token1.chainId) {
-              return null
-            }
-
-            return (
-              <tr key={`${pool.chainId}-${pool.lpAddress}`}>
-                <Td>
-                  <PoolPairCell>
-                    <DoubleCurrencyLogo currency0={token0} currency1={token1} size={40} showChainLogoCurrency1 />
-                    <TokenSymbols>
-                      <SymbolText>
-                        {token0.symbol} / {token1.symbol}
-                      </SymbolText>
-                      <PoolFeatureTags pool={pool} />
-                    </TokenSymbols>
-                  </PoolPairCell>
-                </Td>
-                <Td $align="right">
-                  <PoolGlobalAprButtonV3 pool={pool} />
-                </Td>
-                <Td $align="right">
-                  <FiatNumberDisplay value={pool.tvlUsd || 0} showFullDigitsTooltip={false} />
-                </Td>
-              </tr>
-            )
-          })}
-        </tbody>
-      </Table>
+        {/* Virtualized rows */}
+        <List height={containerHeight} width="100%" itemCount={pools.length} itemSize={itemHeight} itemData={pools}>
+          {DesktopRow}
+        </List>
+      </VirtualizedContainer>
     </TableContainer>
   )
 }

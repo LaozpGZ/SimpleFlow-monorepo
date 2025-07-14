@@ -18,6 +18,7 @@ type PoolGlobalAprButtonProps = {
   aprInfo?: AprInfo
   showApyText?: boolean
   showApyButton?: boolean
+  fontSize?: string
 }
 
 export const PoolGlobalAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
@@ -26,6 +27,7 @@ export const PoolGlobalAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
   aprInfo,
   showApyText,
   showApyButton,
+  fontSize,
 }) => {
   const key = useMemo(() => `${pool.chainId}:${pool.lpAddress}` as const, [pool.chainId, pool.lpAddress])
 
@@ -67,6 +69,7 @@ export const PoolGlobalAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
         merklApr={parseFloat(merklApr) ?? 0}
         showApyText={showApyText}
         showApyButton={showApyButton}
+        fontSize={fontSize}
       />
     )
   }
@@ -81,6 +84,7 @@ export const PoolGlobalAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
         onAPRTextClick={APRBreakdownModalState.onOpen}
         showApyButton={false}
         showApyText={showApyText}
+        fontSize={fontSize}
       />
       {APRBreakdownModalState.isOpen ? (
         <APRBreakdownModal

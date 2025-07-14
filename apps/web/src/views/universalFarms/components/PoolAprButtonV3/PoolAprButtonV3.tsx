@@ -28,6 +28,7 @@ type PoolGlobalAprButtonProps = {
   onAPRTextClick?: () => void
   showApyButton?: boolean
   showApyText?: boolean
+  fontSize?: string
 }
 
 export const PoolAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
@@ -39,6 +40,7 @@ export const PoolAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
   onAPRTextClick,
   showApyButton,
   showApyText,
+  fontSize,
 }) => {
   const baseApr = useMemo(() => {
     return sumApr(lpApr, cakeApr?.value, merklApr)
@@ -73,6 +75,7 @@ export const PoolAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
         onAPRTextClick={onAPRTextClick ?? modal.onOpen}
         showApyButton={showApyButton}
         showApyText={showApyText}
+        fontSize={fontSize}
       />
       {tooltipVisible && tooltip}
       {modal.isOpen && (
