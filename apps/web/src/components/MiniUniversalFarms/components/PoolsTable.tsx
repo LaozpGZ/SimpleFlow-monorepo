@@ -29,30 +29,40 @@ const TableContainer = styled.div`
   }
 `
 
-const Table = styled.table`
+// CSS Grid based table structure for better virtualization
+const GridTable = styled.div`
   width: 100%;
-  border-collapse: collapse;
   min-width: 600px;
 `
 
-const Th = styled.th<{ $align?: string }>`
+const GridHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
+`
+
+const GridHeaderCell = styled.div<{ $align?: string }>`
   padding: 12px;
   text-align: ${({ $align }) => $align || 'left'};
   color: ${({ theme }) => theme.colors.secondary};
   font-weight: 600;
   font-size: 12px;
   text-transform: uppercase;
+`
+
+const GridRow = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 12px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
 `
 
-const Td = styled.td<{ $align?: string }>`
+const GridCell = styled.div<{ $align?: string }>`
   padding: 16px 12px;
   text-align: ${({ $align }) => $align || 'left'};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
-
-  &:last-child {
-    border-right: none;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: ${({ $align }) => ($align === 'right' ? 'flex-end' : 'flex-start')};
 `
 
 const PoolPairCell = styled(Flex)`
@@ -90,7 +100,6 @@ const MobileRow = styled(Flex)`
 `
 
 const VirtualizedContainer = styled.div`
-  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   border-radius: 8px;
   overflow: hidden;
 `
@@ -132,7 +141,6 @@ const prepareTokenForLogo = (token: any, poolChainId: number) => {
 
 // Memoized desktop row component
 const DesktopRow = memo(({ index, style, data }: { index: number; style: React.CSSProperties; data: PoolInfo[] }) => {
-  const { t } = useTranslation()
   const pool = data[index]
 
   const token0 = useMemo(() => prepareTokenForLogo(pool.token0, pool.chainId), [pool.token0, pool.chainId])
@@ -150,38 +158,34 @@ const DesktopRow = memo(({ index, style, data }: { index: number; style: React.C
 
   return (
     <div style={style}>
-      <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '600px' }}>
-        <tbody>
-          <tr>
-            <Td>
-              <PoolPairCell>
-                <DoubleCurrencyLogo currency0={token0} currency1={token1} size={40} showChainLogoCurrency1 />
-                <TokenSymbols>
-                  <SymbolText>
-                    {token0.symbol} / {token1.symbol}
-                  </SymbolText>
-                  <Liquidity.PoolFeaturesBadge
-                    poolType={pool.protocol}
-                    hookData={hookData}
-                    showLabel={false}
-                    showPoolType
-                    showPoolFeature={!!hookData}
-                    short
-                  />
-                </TokenSymbols>
-              </PoolPairCell>
-            </Td>
-            <Td $align="right">
-              <AprContainer>
-                <PoolGlobalAprButton pool={pool} />
-              </AprContainer>
-            </Td>
-            <Td $align="right">
-              <FiatNumberDisplay value={pool.tvlUsd || 0} showFullDigitsTooltip={false} />
-            </Td>
-          </tr>
-        </tbody>
-      </table>
+      <GridRow>
+        <GridCell>
+          <PoolPairCell>
+            <DoubleCurrencyLogo currency0={token0} currency1={token1} size={40} showChainLogoCurrency1 />
+            <TokenSymbols>
+              <SymbolText>
+                {token0.symbol} / {token1.symbol}
+              </SymbolText>
+              <Liquidity.PoolFeaturesBadge
+                poolType={pool.protocol}
+                hookData={hookData}
+                showLabel={false}
+                showPoolType
+                showPoolFeature={!!hookData}
+                short
+              />
+            </TokenSymbols>
+          </PoolPairCell>
+        </GridCell>
+        <GridCell $align="right">
+          <AprContainer>
+            <PoolGlobalAprButton pool={pool} />
+          </AprContainer>
+        </GridCell>
+        <GridCell $align="right">
+          <FiatNumberDisplay value={pool.tvlUsd || 0} showFullDigitsTooltip={false} />
+        </GridCell>
+      </GridRow>
     </div>
   )
 })
@@ -300,23 +304,27 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, loading }) => {
         </VirtualizedContainer>
       ) : (
         <TableContainer>
-          <VirtualizedContainer>
-            {/* Table header */}
-            <Table>
-              <thead>
-                <tr>
-                  <Th>{t('Pairs')}</Th>
-                  <Th $align="right">{t('APR')}</Th>
-                  <Th $align="right">{t('TVL')}</Th>
-                </tr>
-              </thead>
-            </Table>
+          <GridTable>
+            {/* Grid header */}
+            <GridHeader>
+              <GridHeaderCell>{t('Pairs')}</GridHeaderCell>
+              <GridHeaderCell $align="right">{t('APR')}</GridHeaderCell>
+              <GridHeaderCell $align="right">{t('TVL')}</GridHeaderCell>
+            </GridHeader>
 
             {/* Virtualized rows */}
-            <List height={containerHeight} width="100%" itemCount={pools.length} itemSize={itemHeight} itemData={pools}>
-              {desktopRowRenderer}
-            </List>
-          </VirtualizedContainer>
+            <VirtualizedContainer>
+              <List
+                height={containerHeight}
+                width="100%"
+                itemCount={pools.length}
+                itemSize={itemHeight}
+                itemData={pools}
+              >
+                {desktopRowRenderer}
+              </List>
+            </VirtualizedContainer>
+          </GridTable>
         </TableContainer>
       )}
     </MyPositionsProvider>

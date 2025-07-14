@@ -8,9 +8,9 @@ import { PoolsTable } from './components/PoolsTable'
 import { useMiniPoolsData } from './hooks/useMiniPoolsData'
 
 const Container = styled(Box)`
-  max-width: 1200px;
+  max-width: 800px;
+  width: 100%;
   margin: 0 auto;
-  padding: 16px;
 `
 
 const SearchWrapper = styled(Flex)`
@@ -124,9 +124,9 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
               onTabChange={setActiveProtocolTab}
             />
           </SearchWrapper>
-
-          <PoolsTable pools={pools} loading={isLoading} />
         </Box>
+
+        <PoolsTable pools={pools} loading={isLoading} />
       </Card>
     </Container>
   )
