@@ -101,6 +101,7 @@ export function UniversalAddLiquidity({
   const router = useRouter()
   const baseCurrency = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
+  const warningHandler = useWarningLiquidity(currencyIdA, currencyIdB)
 
   const stableConfig = useStableConfig({
     tokenA: baseCurrency,
@@ -401,7 +402,6 @@ export function AddLiquidityV3Layout({
   const { isMobile } = useMatchBreakpoints()
   const baseCurrency = useCurrency(currencyIdA)
   const quoteCurrency = useCurrency(currencyIdB)
-  const warningHandler = useWarningLiquidity(currencyIdA, currencyIdB)
   const poolAddress = useMemo(
     () =>
       baseCurrency?.wrapped && quoteCurrency?.wrapped && feeAmount
