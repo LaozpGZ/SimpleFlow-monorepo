@@ -11,10 +11,10 @@ import {
   GameIcon,
   MenuItemsType,
   MoreIcon,
-  TradeIcon,
-  TradeFilledIcon,
   SwapFillIcon,
   SwapIcon,
+  TradeFilledIcon,
+  TradeIcon,
 } from '@pancakeswap/uikit'
 import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
 import { getPerpetualUrl } from 'utils/getPerpetualUrl'
@@ -78,7 +78,9 @@ const config: (
         isDark,
       }),
       hideSubNav: true,
+      type: DropdownMenuItemType.EXTERNAL_LINK,
       confirmModalId: 'perpConfirmModal',
+      showItemsOnMobile: false,
     },
     {
       label: t('Earn'),
