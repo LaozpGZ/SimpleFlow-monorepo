@@ -2,6 +2,7 @@
 
 import { PrivyProvider as Provider } from '@privy-io/react-auth'
 import { SmartWalletsProvider } from '@privy-io/react-auth/smart-wallets'
+import { useRouter } from 'next/router'
 import { PropsWithChildren } from 'react'
 
 import { CHAINS } from 'config/chains'
@@ -9,6 +10,10 @@ import { useFirebaseAuth } from './firebase'
 
 export function PrivyProvider({ children }: PropsWithChildren) {
   const { isLoading, getToken } = useFirebaseAuth()
+  const router = useRouter()
+
+  // Show wallet UIs only on bridge pages
+  const showWalletUIs = router.pathname.includes('/bridge')
 
   return (
     <Provider
@@ -36,7 +41,7 @@ export function PrivyProvider({ children }: PropsWithChildren) {
         },
         embeddedWallets: {
           requireUserPasswordOnCreate: true,
-          showWalletUIs: false,
+          showWalletUIs,
           ethereum: {
             createOnLogin: 'users-without-wallets',
           },
