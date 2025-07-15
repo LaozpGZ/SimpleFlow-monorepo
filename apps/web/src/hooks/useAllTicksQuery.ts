@@ -124,9 +124,6 @@ export async function getPoolTicks({
 
   // eslint-disable-next-line no-constant-condition
   while (true) {
-    if (max <= 0) {
-      break
-    }
     if (!after && max < 10) {
       break
     }
