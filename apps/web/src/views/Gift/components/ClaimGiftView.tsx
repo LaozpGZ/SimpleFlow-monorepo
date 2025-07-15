@@ -16,7 +16,9 @@ export const AuthRequiredClaimGiftView = ({ setViewState }: { setViewState: (vie
 
   const codeHash = convertCodeHash(code)
 
-  const { data: giftInfo, isLoading } = useGetGiftByCodeHash({ codeHash })
+  const codeCannotConvertToHash = code && !codeHash
+
+  const { data: giftInfo, isLoading, isError } = useGetGiftByCodeHash({ codeHash })
 
   // Check if gift is valid: must be pending and not expired
   const isValid = Boolean(giftInfo?.status === GiftStatus.PENDING && !isExpired(giftInfo.expiryTimestamp))
@@ -52,7 +54,7 @@ export const AuthRequiredClaimGiftView = ({ setViewState }: { setViewState: (vie
           autoFocus
         />
       </Box>
-      {!isLoading && giftInfo && !isValid ? (
+      {codeCannotConvertToHash || (!isLoading && (isError || !isValid)) ? (
         <Text color="textSubtle" mb="4px" fontSize="12px" bold>
           {t('The gift code you entered is invalid or expired. Please reach out to the gift creator for a new one.')}
         </Text>

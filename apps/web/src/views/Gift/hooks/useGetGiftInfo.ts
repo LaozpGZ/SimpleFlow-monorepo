@@ -178,7 +178,7 @@ export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
 
   const selectGiftInfo = useGiftInfoSelector()
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: [QUERY_KEY_GIFT_INFO, chainId, codeHash],
     queryFn: async (): Promise<GiftInfoResponse | undefined> => {
       if (!chainId) {
@@ -224,6 +224,7 @@ export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
     return {
       data,
       isLoading,
+      isError,
     }
-  }, [data, isLoading])
+  }, [data, isLoading, isError])
 }
