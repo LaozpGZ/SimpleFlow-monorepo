@@ -1,6 +1,8 @@
 import {
   Commitment,
   Connection,
+  Keypair,
+  NonceAccount,
   PublicKey,
   sendAndConfirmTransaction,
   SignatureResult,
@@ -49,6 +51,12 @@ interface ExecuteParams {
   recentBlockHash?: string;
   sendAndConfirm?: boolean;
   notSendToRpc?: boolean;
+  /**
+   * Use durable nonce for transaction signing instead of recent blockhash.
+   * When enabled, the transaction will be valid indefinitely until submitted.
+   * Requires a nonce account to be created beforehand.
+   */
+  useDurableNonce?: boolean;
 }
 
 interface TxBuilderInit {
@@ -131,6 +139,27 @@ export type MakeTxData<T = TxVersion.LEGACY, O = Record<string, any>> = T extend
 
 const LOOP_INTERVAL = 2000;
 
+class NonceAccountCache {
+  private cache: Map<string, string> = new Map();
+
+  constructor() {
+    if (typeof window !== "undefined") {
+      this.cache = new Map(JSON.parse(localStorage.getItem("_r_nonce_account") ?? "[]"));
+    }
+  }
+
+  get(key: string) {
+    return this.cache.get(key);
+  }
+
+  set(key: string, value: string) {
+    this.cache.set(key, value);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("_r_nonce_account", JSON.stringify(Array.from(this.cache.entries())));
+    }
+  }
+}
+
 export class TxBuilder {
   private connection: Connection;
   private owner?: Owner;
@@ -145,6 +174,7 @@ export class TxBuilder {
   private signAllTransactions?: SignAllTransactions;
   private blockhashCommitment?: Commitment;
   private loopMultiTxStatus: boolean;
+  private nonceAccountCache: NonceAccountCache;
 
   constructor(params: TxBuilderInit) {
     this.connection = params.connection;
@@ -154,6 +184,58 @@ export class TxBuilder {
     this.cluster = params.cluster;
     this.blockhashCommitment = params.blockhashCommitment;
     this.loopMultiTxStatus = !!params.loopMultiTxStatus;
+
+    this.nonceAccountCache = new NonceAccountCache();
+  }
+
+  private async getOrCreateNonceAccountAddress(): Promise<PublicKey | null> {
+    if (!this.owner?.publicKey) return null;
+
+    const cacheKey = `${this.cluster}_${this.owner?.publicKey.toBase58()}`;
+    if (this.nonceAccountCache.get(cacheKey)) {
+      return new PublicKey(this.nonceAccountCache.get(cacheKey)!);
+    }
+
+    const nonceAccount = Keypair.generate();
+    const nonceAccountAddress = nonceAccount.publicKey;
+
+    const tx = new Transaction();
+    tx.feePayer = this.owner.publicKey;
+    tx.recentBlockhash = await getRecentBlockHash(this.connection);
+
+    tx.add(
+      SystemProgram.createAccount({
+        fromPubkey: this.owner.publicKey,
+        newAccountPubkey: nonceAccountAddress,
+        lamports: await this.connection.getMinimumBalanceForRentExemption(80),
+        space: 80,
+        programId: SystemProgram.programId,
+      }),
+      SystemProgram.nonceInitialize({
+        noncePubkey: nonceAccountAddress,
+        authorizedPubkey: this.owner.publicKey,
+      }),
+    );
+
+    if (this.owner.signer) {
+      tx.sign(...this.signers, nonceAccount);
+      const txId = await this.connection.sendRawTransaction(tx.serialize());
+      await confirmTransaction(this.connection, txId);
+      this.nonceAccountCache.set(cacheKey, nonceAccountAddress.toBase58());
+      return nonceAccountAddress;
+    }
+
+    if (this.signAllTransactions) {
+      tx.partialSign(nonceAccount);
+      const signedTxs = await this.signAllTransactions([tx]);
+      // signedTxs[0].sign(nonceAccount);
+      const txId = await this.connection.sendRawTransaction(signedTxs[0].serialize());
+      await confirmTransaction(this.connection, txId);
+      this.nonceAccountCache.set(cacheKey, nonceAccountAddress.toBase58());
+      return nonceAccountAddress;
+    }
+
+    return null;
   }
 
   get AllTxData(): {
@@ -215,6 +297,36 @@ export class TxBuilder {
     return false;
   }
 
+  // Helper method to handle durable nonce setup
+  private async setupDurableNonce() {
+    if (!this.owner?.publicKey) {
+      throw new Error("Owner public key is required for durable nonce setup");
+    }
+    const nonceAccountAddress = await this.getOrCreateNonceAccountAddress();
+    if (!nonceAccountAddress) {
+      throw new Error("Nonce account not found");
+    }
+
+    const info = await this.connection.getAccountInfo(nonceAccountAddress, {
+      commitment: "processed",
+    });
+    if (!info) {
+      throw new Error("Nonce account not found");
+    }
+    const nonceAccountInfo = NonceAccount.fromAccountData(info.data);
+
+    const advanceInstruction = SystemProgram.nonceAdvance({
+      noncePubkey: nonceAccountAddress,
+      authorizedPubkey: this.owner.publicKey,
+    });
+
+    return {
+      nonceAccount: nonceAccountAddress,
+      nonce: nonceAccountInfo.nonce,
+      advanceInstruction,
+    };
+  }
+
   public async calComputeBudget({
     config: propConfig,
     defaultIns,
@@ -272,9 +384,31 @@ export class TxBuilder {
       signers: this.signers,
       instructionTypes: [...this.instructionTypes, ...this.endInstructionTypes],
       execute: async (params) => {
-        const { recentBlockHash: propBlockHash, skipPreflight = true, sendAndConfirm, notSendToRpc } = params || {};
-        const recentBlockHash = propBlockHash ?? (await getRecentBlockHash(this.connection, this.blockhashCommitment));
-        transaction.recentBlockhash = recentBlockHash;
+        const {
+          recentBlockHash: propBlockHash,
+          skipPreflight = true,
+          sendAndConfirm,
+          notSendToRpc,
+          useDurableNonce,
+        } = params || {};
+
+        if (useDurableNonce) {
+          // Use durable nonce
+          const { nonce, advanceInstruction } = await this.setupDurableNonce();
+
+          // Add advance nonce instruction as the first instruction
+          transaction.instructions.unshift(advanceInstruction);
+          this.instructionTypes.unshift(InstructionType.AdvanceNonce);
+
+          // Use nonce as recent blockhash
+          transaction.recentBlockhash = nonce;
+        } else {
+          // Use regular recent blockhash
+          const recentBlockHash =
+            propBlockHash ?? (await getRecentBlockHash(this.connection, this.blockhashCommitment));
+          transaction.recentBlockhash = recentBlockHash;
+        }
+
         if (this.signers.length) transaction.sign(...this.signers);
 
         printSimulate([transaction]);
@@ -549,21 +683,40 @@ export class TxBuilder {
       signers: this.signers,
       instructionTypes: [...this.instructionTypes, ...this.endInstructionTypes],
       execute: async (params) => {
-        const { skipPreflight = true, sendAndConfirm, notSendToRpc } = params || {};
-        printSimulate([transaction]);
+        const { skipPreflight = true, sendAndConfirm, notSendToRpc, useDurableNonce } = params || {};
+
+        let finalTransaction = transaction;
+
+        if (useDurableNonce) {
+          // Use durable nonce for V0 transaction
+          const { nonceAccount, nonce, advanceInstruction } = await this.setupDurableNonce();
+
+          // Create new transaction with nonce
+          const instructions = [advanceInstruction, ...this.allInstructions];
+          const messageV0 = new TransactionMessage({
+            payerKey: this.feePayer,
+            recentBlockhash: nonce,
+            instructions,
+          }).compileToV0Message(Object.values(lookupTableAddressAccount));
+
+          finalTransaction = new VersionedTransaction(messageV0);
+          finalTransaction.sign(this.signers);
+        }
+
+        printSimulate([finalTransaction]);
         if (this.owner?.isKeyPair) {
-          const txId = await this.connection.sendTransaction(transaction, { skipPreflight });
+          const txId = await this.connection.sendTransaction(finalTransaction, { skipPreflight });
           if (sendAndConfirm) {
             await confirmTransaction(this.connection, txId);
           }
 
           return {
             txId,
-            signedTx: transaction,
+            signedTx: finalTransaction,
           };
         }
         if (this.signAllTransactions) {
-          const txs = await this.signAllTransactions<VersionedTransaction>([transaction]);
+          const txs = await this.signAllTransactions<VersionedTransaction>([finalTransaction]);
           if (this.signers.length) {
             for (const item of txs) {
               try {

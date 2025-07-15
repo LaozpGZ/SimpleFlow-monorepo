@@ -1,45 +1,44 @@
+import { TranslateFunction } from '@pancakeswap/localization'
+import { ammConfigs, PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
 import {
-  TxBuildData,
-  TxV0BuildData,
-  MakeMultiTxData,
   ApiClmmConfigInfo,
-  ClmmPositionLayout,
-  InitRewardsParams,
-  Price,
-  TickUtils,
-  PoolUtils,
-  ReturnTypeGetPriceAndTick,
-  ApiV3Token,
-  SetRewardsParams,
-  ClmmKeys,
   ApiV3PoolInfoConcentratedItem,
+  ApiV3Token,
+  ClmmKeys,
+  ClmmLockAddress,
+  ClmmPositionLayout,
+  getTransferAmountFeeV2,
+  InitRewardsParams,
+  MakeMultiTxData,
   MakeTxData,
   OpenPositionFromBaseExtInfo,
-  toToken,
+  PoolUtils,
+  Price,
+  ReturnTypeGetPriceAndTick,
+  SetRewardsParams,
   solToWSolToken,
-  TxVersion,
-  getTransferAmountFeeV2,
-  ClmmLockAddress
+  TickUtils,
+  toToken,
+  TxBuildData,
+  TxV0BuildData,
+  TxVersion
 } from '@pancakeswap/solana-core-sdk'
-import { ammConfigs, PancakeClmmProgramId } from '@pancakeswap/solana-clmm-sdk'
-import { PublicKey, VersionedTransaction } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
-import { TranslateFunction } from '@pancakeswap/localization'
-import { TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
-import createStore from '@/store/createStore'
-import { useAppStore, useTokenAccountStore, useLiquidityStore } from '@/store'
-import { isSolWSol, getMintSymbol, shortenAddress } from '@/utils/token'
+import { getDefaultToastData, handleMultiTxToast, transformProcessData } from '@/hooks/toast/multiToastUtil'
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import { txStatusSubject } from '@/hooks/toast/useTxStatus'
-import { getDefaultToastData, transformProcessData, handleMultiTxToast } from '@/hooks/toast/multiToastUtil'
+import { useAppStore, useLiquidityStore, useTokenAccountStore } from '@/store'
+import createStore from '@/store/createStore'
+import { getMintSymbol, isSolWSol, shortenAddress } from '@/utils/token'
 import getEphemeralSigners from '@/utils/tx/getEphemeralSigners'
 
-import { getComputeBudgetConfig } from '@/utils/tx/computeBudget'
-import { handleMultiTxRetry } from '@/hooks/toast/retryTx'
 import { ClmmLockInfo } from '@/hooks/portfolio/clmm/useClmmBalance'
-import { CLMM_FEE_CONFIGS, getTxMeta } from './configs/clmm'
+import { handleMultiTxRetry } from '@/hooks/toast/retryTx'
+import { getComputeBudgetConfig } from '@/utils/tx/computeBudget'
 import { TxCallbackProps, TxCallbackPropsGeneric } from '../types/tx'
+import { getTxMeta } from './configs/clmm'
 
 export type CreatePoolBuildData =
   | TxBuildData<{ mockPoolInfo: ApiV3PoolInfoConcentratedItem; address: ClmmKeys }>
@@ -296,7 +295,7 @@ export const useClmmStore = createStore<ClmmState>(
       onCloseToast,
       ...txProps
     }) => {
-      const { raydium, wallet, txVersion } = useAppStore.getState()
+      const { raydium, wallet, txVersion, useDurableNonce } = useAppStore.getState()
       if (!raydium) {
         toastSubject.next({ noRpc: true })
         return { txId: '' }
@@ -371,6 +370,7 @@ export const useClmmStore = createStore<ClmmState>(
 
           return execute({
             sequentially: true,
+            // useDurableNonce,
             onTxUpdate: (data) => {
               handleMultiTxRetry(data)
               handleMultiTxToast({
@@ -406,7 +406,9 @@ export const useClmmStore = createStore<ClmmState>(
         }
 
         return buildData
-          .execute()
+          .execute({
+            useDurableNonce
+          })
           .then(({ txId, signedTx }) => {
             txStatusSubject.next({
               txId,
@@ -448,7 +450,7 @@ export const useClmmStore = createStore<ClmmState>(
       onFinally,
       onConfirmed
     }) => {
-      const { raydium, txVersion, getEpochInfo } = useAppStore.getState()
+      const { raydium, txVersion, getEpochInfo, useDurableNonce } = useAppStore.getState()
       const { slippage } = useLiquidityStore.getState()
       if (!raydium) return ''
 
@@ -507,7 +509,9 @@ export const useClmmStore = createStore<ClmmState>(
           }
         })
 
-        return execute()
+        return execute({
+          useDurableNonce
+        })
           .then(({ txId, signedTx }) => {
             txStatusSubject.next({
               txId,
@@ -538,7 +542,7 @@ export const useClmmStore = createStore<ClmmState>(
     },
 
     closePositionAct: async ({ poolInfo, position, ...txProps }) => {
-      const { raydium, txVersion } = useAppStore.getState()
+      const { raydium, txVersion, useDurableNonce } = useAppStore.getState()
       if (!raydium) return ''
       try {
         const { execute } = await raydium.clmm.closePosition({
@@ -554,7 +558,9 @@ export const useClmmStore = createStore<ClmmState>(
           }
         })
 
-        return execute()
+        return execute({
+          useDurableNonce
+        })
           .then(({ txId, signedTx }) => {
             txStatusSubject.next({
               txId,
@@ -578,7 +584,7 @@ export const useClmmStore = createStore<ClmmState>(
     },
 
     increaseLiquidityAct: async ({ poolInfo, position, liquidity, amountMaxA, amountMaxB, ...txProps }) => {
-      const { raydium, txVersion } = useAppStore.getState()
+      const { raydium, txVersion, useDurableNonce } = useAppStore.getState()
       const { slippage } = useLiquidityStore.getState()
       if (!raydium) return ''
       try {
@@ -613,7 +619,9 @@ export const useClmmStore = createStore<ClmmState>(
           }
         })
 
-        return execute()
+        return execute({
+          useDurableNonce
+        })
           .then(({ txId, signedTx }) => {
             txStatusSubject.next({
               txId,
@@ -646,7 +654,7 @@ export const useClmmStore = createStore<ClmmState>(
     },
 
     collectRewardAct: async ({ poolInfo, rewardMint, ...txProps }) => {
-      const { raydium, txVersion } = useAppStore.getState()
+      const { raydium, txVersion, useDurableNonce } = useAppStore.getState()
       if (!raydium) return ''
       const computeBudgetConfig = await getComputeBudgetConfig()
       const { execute } = await raydium.clmm.collectReward({
@@ -662,7 +670,9 @@ export const useClmmStore = createStore<ClmmState>(
         values: {}
       })
 
-      return execute()
+      return execute({
+        useDurableNonce
+      })
         .then(({ txId, signedTx }) => {
           txStatusSubject.next({
             txId,
@@ -776,7 +786,7 @@ export const useClmmStore = createStore<ClmmState>(
     },
 
     setRewardsAct: async ({ poolInfo, rewardInfos, newRewardInfos, onConfirmed, ...txProps }) => {
-      const { raydium, txVersion } = useAppStore.getState()
+      const { raydium, txVersion, useDurableNonce } = useAppStore.getState()
       if (!raydium || rewardInfos.length + newRewardInfos.length < 1) return ''
       const allBuildData: (
         | TxV0BuildData<{
@@ -805,7 +815,9 @@ export const useClmmStore = createStore<ClmmState>(
 
         if (!newRewardInfos.length)
           return setRewardsBuildData
-            .execute()
+            .execute({
+              useDurableNonce
+            })
             .then(({ txId, signedTx }) => {
               txStatusSubject.next({ txId, ...meta, signedTx, mintInfo: newRewardInfos.map((r) => r.mint), onConfirmed })
               return txId
@@ -830,7 +842,9 @@ export const useClmmStore = createStore<ClmmState>(
 
         if (!rewardInfos.length)
           return initRewardBuildData
-            .execute()
+            .execute({
+              useDurableNonce
+            })
             .then(({ txId }) => {
               txStatusSubject.next({ txId, ...meta, mintInfo: rewardInfos.map((r) => r.mint), onConfirmed })
               return txId
@@ -854,7 +868,9 @@ export const useClmmStore = createStore<ClmmState>(
       rewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
       newRewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
       return res
-        .execute()
+        .execute({
+          useDurableNonce
+        })
         .then(({ txId }) => {
           txStatusSubject.next({ txId, ...txProps, ...meta, mintInfo: Array.from(mints.values()) })
           return txId
@@ -868,7 +884,7 @@ export const useClmmStore = createStore<ClmmState>(
     },
 
     createClmmPool: async ({ token1, token2, config, price, execute, forerunCreate, getObserveState }) => {
-      const { raydium, publicKey, txVersion } = useAppStore.getState()
+      const { raydium, publicKey, txVersion, useDurableNonce } = useAppStore.getState()
       if (!raydium || !publicKey) {
         toastSubject.next({ noRpc: true })
         return { txId: '' }
@@ -893,7 +909,9 @@ export const useClmmStore = createStore<ClmmState>(
             values: {}
           })
 
-          return executeTx()
+          return executeTx({
+            useDurableNonce
+          })
             .then(({ txId, signedTx }) => {
               txStatusSubject.next({ txId, ...meta, signedTx, mintInfo: [token1, token2] })
               return { txId, buildData }
