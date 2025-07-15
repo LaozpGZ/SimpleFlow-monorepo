@@ -994,7 +994,7 @@ export class PoolUtils {
     const mintDecimalsA = poolInfo.mintA.decimals;
     const mintDecimalsB = poolInfo.mintB.decimals;
 
-    if (!aprInfo || !mintPriceA || !mintPriceB || mintPriceA.value === 0 || mintPriceB.value === 0)
+    if (!aprInfo || !mintPriceA || !mintPriceB || (mintPriceA.value === 0 && mintPriceB.value === 0))
       return { feeApr: 0, rewardsApr: [0, 0, 0], apr: 0 };
 
     const sqrtPriceX64 = SqrtPriceMath.priceToSqrtPriceX64(
