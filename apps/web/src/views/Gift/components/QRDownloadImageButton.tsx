@@ -10,7 +10,6 @@ interface QRDownloadImageButtonProps {
 
 const QRDownloadImageButton: React.FC<QRDownloadImageButtonProps> = ({ elementId }) => {
   const { t } = useTranslation()
-  const downloadInitiatedRef = useRef(false)
   const { convertToCanvasWithLoading, isLoading } = useElementToCanvas()
 
   const downloadImage = useCallback(async () => {
@@ -22,17 +21,7 @@ const QRDownloadImageButton: React.FC<QRDownloadImageButtonProps> = ({ elementId
       link.click()
       URL.revokeObjectURL(link.href)
     }
-    downloadInitiatedRef.current = false
   }, [elementId])
-
-  useEffect(() => {
-    if (isLoading && !downloadInitiatedRef.current) {
-      downloadInitiatedRef.current = true
-      setTimeout(() => {
-        downloadImage()
-      }, 0)
-    }
-  }, [isLoading])
 
   return (
     <Button
