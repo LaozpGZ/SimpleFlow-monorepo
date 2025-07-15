@@ -27,7 +27,7 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
   const [selectedNetworks, setSelectedNetworks] = useState<number[]>([])
   const [selectedAsset, setSelectedAsset] = useState<BalanceData | null>(null)
   const { t } = useTranslation()
-  const { setIsSendGift } = useSendGiftContext()
+  const { setIsSendGift, setNativeAmount, setIncludeStarterGas } = useSendGiftContext()
   const { sendEntry } = useWalletModalV2ViewState()
   const convertBalancesToAssets = useCallback((balanceItems): BalanceData[] => {
     return balanceItems.map((item) => ({
@@ -99,6 +99,9 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
           } else {
             setIsSendGift(false)
           }
+          // reset the native amount and include starter gas
+          setNativeAmount(undefined)
+          setIncludeStarterGas(false)
         }}
       />
       <FlexGap gap="16px" mt="16px">
