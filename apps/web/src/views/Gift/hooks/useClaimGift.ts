@@ -39,17 +39,17 @@ export const useClaimGift = ({ onSuccess }: { onSuccess?: () => void }) => {
       })
 
       if (!response.ok) {
-        throw new Error(`Failed to request claim gift`)
+        throw new Error(`Check the gift status before trying again.`)
       }
 
       const result: GiftApiResponse<ClaimGiftResponse> = await response.json()
 
       if (result.status === GiftApiStatus.FAILED) {
-        throw new Error(result.message || 'Failed to claim gift')
+        throw new Error(result.message || 'Claim gift Status is failed.')
       }
 
       if (!result.data) {
-        throw new Error('No data returned from claim gift API')
+        throw new Error('No data returned from claim gift API.')
       }
 
       return result
