@@ -55,6 +55,7 @@ let isRpcLoading = false
 export const FEE_KEY = '_r_fee_'
 export const PRIORITY_LEVEL_KEY = '_r_fee_level_'
 export const PRIORITY_MODE_KEY = '_r_fee_mode_'
+export const DURABLE_NONCE_KEY = '_r_durable_nonce_'
 export const USER_ADDED_KEY = '_r_u_added_'
 export enum PriorityLevel {
   Fast,
@@ -109,6 +110,7 @@ interface AppState {
 
   epochInfo?: EpochInfo
   txVersion: TxVersion
+  useDurableNonce: boolean
   tokenAccLoaded: boolean
 
   appVersion: string
@@ -159,6 +161,7 @@ const appInitState = {
   featureDisabled: {},
   appVersion: 'V3.0.2',
   txVersion: TxVersion.V0,
+  useDurableNonce: false,
   needRefresh: false,
   tokenAccLoaded: false,
   commitment: 'confirmed' as Commitment,

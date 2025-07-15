@@ -14,7 +14,7 @@ export function SettingField({
 }: {
   isCollapseDefaultOpen?: boolean
   fieldName?: string | null
-  tooltip?: string | null
+  tooltip?: string | ReactNode | null
   renderWidgetContent?: ReactNode
   /** if provide, setting field can collapse */
   renderToggleButton?: ((isOpen: boolean) => ReactNode) | ReactNode
