@@ -68,18 +68,34 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const containerRef = useRef<HTMLDivElement>(null)
   const widgetRef = useRef<TradingViewWidget | null>(null)
   const isInitialized = useRef(false)
+  const isWidgetReady = useRef(false)
   const currentSymbol = useRef('')
   const { isDark, theme } = useTheme()
   const symbol = currency0 && currency1 ? `${currency0?.symbol}/${currency1?.symbol}` : ''
   const { chainId } = useActiveChainId()
 
   useEffect(() => {
-    if (currency0 && currency1 && symbol !== currentSymbol.current && widgetRef.current && isInitialized.current) {
+    if (
+      currency0 &&
+      currency1 &&
+      symbol !== currentSymbol.current &&
+      widgetRef.current &&
+      isInitialized.current &&
+      isWidgetReady.current
+    ) {
       currentSymbol.current = symbol
       setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
-      const activeChart = widgetRef.current?.activeChart?.()
-      if (activeChart && activeChart.setSymbol) {
-        activeChart.setSymbol(symbol)
+
+      try {
+        // Check if widget has activeChart method
+        if (widgetRef.current && typeof widgetRef.current.activeChart === 'function') {
+          const activeChart = widgetRef.current.activeChart()
+          if (activeChart && typeof activeChart.setSymbol === 'function') {
+            activeChart.setSymbol(symbol)
+          }
+        }
+      } catch (error) {
+        console.error('Error setting symbol:', error)
       }
     }
   }, [currency0, currency1, chainId, symbol])
@@ -202,6 +218,19 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
           }
           setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
           widgetRef.current = createTradingViewWidget(containerRef.current, options)
+
+          // Wait for widget to be ready
+          if (widgetRef.current && widgetRef.current.onChartReady) {
+            widgetRef.current.onChartReady(() => {
+              isWidgetReady.current = true
+            })
+          } else {
+            // If no onChartReady method, set as ready after delay
+            setTimeout(() => {
+              isWidgetReady.current = true
+            }, 1000)
+          }
+
           update24HPriceData(on24HPriceDataChange)
           isInitialized.current = true
         }
@@ -215,34 +244,40 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
   useEffect(() => {
     async function changeTheme() {
-      if (widgetRef.current && isInitialized.current) {
-        await widgetRef.current.changeTheme(isDark ? 'Dark' : 'Light')
-        widgetRef.current.applyOverrides({
-          'mainSeriesProperties.candleStyle.upColor': isDark ? tokens.colors.dark.success : tokens.colors.light.success,
-          'mainSeriesProperties.candleStyle.downColor': isDark
-            ? tokens.colors.dark.destructive
-            : tokens.colors.light.destructive,
-          'mainSeriesProperties.candleStyle.borderUpColor': isDark
-            ? tokens.colors.dark.success
-            : tokens.colors.light.success,
-          'mainSeriesProperties.candleStyle.borderDownColor': isDark
-            ? tokens.colors.dark.destructive
-            : tokens.colors.light.destructive,
-          'mainSeriesProperties.candleStyle.wickUpColor': isDark
-            ? tokens.colors.dark.success
-            : tokens.colors.light.success,
-          'mainSeriesProperties.candleStyle.wickDownColor': isDark
-            ? tokens.colors.dark.destructive
-            : tokens.colors.light.destructive,
-          'paneProperties.background': isDark ? tokens.colors.dark.card : tokens.colors.light.card,
-          'paneProperties.backgroundType': 'solid',
-          'paneProperties.grid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
-          'paneProperties.grid.style': 0,
-          'paneProperties.vertGrid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
-          'paneProperties.vertGrid.style': 0,
-          'paneProperties.horzGrid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
-          'paneProperties.horzGrid.style': 0,
-        })
+      if (widgetRef.current && isInitialized.current && isWidgetReady.current) {
+        try {
+          await widgetRef.current.changeTheme(isDark ? 'Dark' : 'Light')
+          widgetRef.current.applyOverrides({
+            'mainSeriesProperties.candleStyle.upColor': isDark
+              ? tokens.colors.dark.success
+              : tokens.colors.light.success,
+            'mainSeriesProperties.candleStyle.downColor': isDark
+              ? tokens.colors.dark.destructive
+              : tokens.colors.light.destructive,
+            'mainSeriesProperties.candleStyle.borderUpColor': isDark
+              ? tokens.colors.dark.success
+              : tokens.colors.light.success,
+            'mainSeriesProperties.candleStyle.borderDownColor': isDark
+              ? tokens.colors.dark.destructive
+              : tokens.colors.light.destructive,
+            'mainSeriesProperties.candleStyle.wickUpColor': isDark
+              ? tokens.colors.dark.success
+              : tokens.colors.light.success,
+            'mainSeriesProperties.candleStyle.wickDownColor': isDark
+              ? tokens.colors.dark.destructive
+              : tokens.colors.light.destructive,
+            'paneProperties.background': isDark ? tokens.colors.dark.card : tokens.colors.light.card,
+            'paneProperties.backgroundType': 'solid',
+            'paneProperties.grid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
+            'paneProperties.grid.style': 0,
+            'paneProperties.vertGrid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
+            'paneProperties.vertGrid.style': 0,
+            'paneProperties.horzGrid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
+            'paneProperties.horzGrid.style': 0,
+          })
+        } catch (error) {
+          console.error('Error changing theme:', error)
+        }
       }
     }
     changeTheme()
