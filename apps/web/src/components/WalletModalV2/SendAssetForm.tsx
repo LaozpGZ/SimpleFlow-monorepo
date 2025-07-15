@@ -33,7 +33,7 @@ import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { checksumAddress, formatUnits, isAddress, zeroAddress } from 'viem'
 import { CreateGiftView } from 'views/Gift/components/CreateGiftView'
 import { SendGiftToggle } from 'views/Gift/components/SendGiftToggle'
-import { SendGiftContext } from 'views/Gift/providers/SendGiftProvider'
+import { SendGiftContext, useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { useUserInsufficientBalanceLight } from 'views/SwapSimplify/hooks/useUserInsufficientBalance'
 import { useAccount, usePublicClient, useSendTransaction } from 'wagmi'
 import { ActionButton } from './ActionButton'
@@ -107,6 +107,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const publicClient = usePublicClient({ chainId: asset.chainId })
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: attemptingTxn } = useCatchTxError()
+  const { includeStarterGas, nativeAmount, isUserInsufficientBalance } = useSendGiftContext()
 
   // Get native currency for fee calculation
   const nativeCurrency = useNativeCurrency(asset.chainId)
@@ -324,6 +325,8 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     )
   }
 
+  const isValidGasSponsor = includeStarterGas ? nativeAmount?.greaterThan(0) && !isUserInsufficientBalance : true
+
   return (
     <FormContainer>
       <SendGiftToggle isNativeToken={isNativeToken} tokenChainId={asset.chainId}>
@@ -424,7 +427,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           onClick={() => {
             onViewStateChange(ViewState.CONFIRM_TRANSACTION)
           }}
-          disabled={!isValidAddress || !amount || isInsufficientBalance || attemptingTxn}
+          disabled={!isValidAddress || !amount || isInsufficientBalance || attemptingTxn || !isValidGasSponsor}
           isLoading={attemptingTxn}
           endIcon={attemptingTxn ? <AutoRenewIcon spin color="currentColor" /> : undefined}
         >

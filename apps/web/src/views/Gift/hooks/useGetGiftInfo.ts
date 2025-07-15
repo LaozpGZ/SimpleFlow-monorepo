@@ -115,7 +115,7 @@ export const useGetGiftInfo = () => {
         .map(selectGiftInfo)
         .filter((gift) => gift !== null)
     },
-    enabled: Boolean(chainId && account), // Disable when unclaimedOnly is true
+    enabled: Boolean(chainId && account),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: true,

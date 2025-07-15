@@ -30,10 +30,12 @@ const StyledRow = styled(RowBetween)`
 `
 
 function NativeAmountInput({ tokenChainId }: { tokenChainId: number }) {
-  const { setNativeAmount } = useSendGiftContext()
+  const { setNativeAmount, nativeAmount, isUserInsufficientBalance } = useSendGiftContext()
   const nativeCurrency = useNativeCurrency(tokenChainId)
   const { balance: nativeCurrencyBalance } = useGetNativeTokenBalance(tokenChainId)
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(nativeAmount?.toExact() || '')
+
+  const { t } = useTranslation()
 
   // Sync input value with context nativeAmount
   useEffect(() => {
@@ -42,6 +44,7 @@ function NativeAmountInput({ tokenChainId }: { tokenChainId: number }) {
       setNativeAmount(amount)
     } else {
       setInputValue('')
+      setNativeAmount(undefined)
     }
   }, [inputValue, setNativeAmount, nativeCurrency])
 
@@ -112,6 +115,14 @@ function NativeAmountInput({ tokenChainId }: { tokenChainId: number }) {
           placeholder="0.0"
           currencyValue={formattedUsdValue ? `${formatDollarAmount(formattedUsdValue)}` : ''}
         />
+
+        {isUserInsufficientBalance && (
+          <Flex justifyContent="flex-end" width="100%">
+            <Text fontSize="12px" color="textSubtle">
+              {t('Insufficient balance')}
+            </Text>
+          </Flex>
+        )}
       </StyledRow>
     </>
   )

@@ -1,6 +1,7 @@
 // Create a provider for the SendGiftView
 
-import { CurrencyAmount, NativeCurrency } from '@pancakeswap/sdk'
+import { ChainId, CurrencyAmount, NativeCurrency } from '@pancakeswap/sdk'
+import { useGetNativeTokenBalance } from 'hooks/useTokenBalance'
 import { createContext, useCallback, useContext, useMemo, useState } from 'react'
 
 interface SendGiftContextType {
@@ -10,6 +11,7 @@ interface SendGiftContextType {
   setNativeAmount: (amount: CurrencyAmount<NativeCurrency> | undefined) => void
   includeStarterGas: boolean
   setIncludeStarterGas: (include: boolean) => void
+  isUserInsufficientBalance: boolean
 }
 
 export const SendGiftContext = createContext<SendGiftContextType>({
@@ -19,6 +21,7 @@ export const SendGiftContext = createContext<SendGiftContextType>({
   setNativeAmount: (_amount: CurrencyAmount<NativeCurrency> | undefined) => {},
   includeStarterGas: false,
   setIncludeStarterGas: (_include: boolean) => {},
+  isUserInsufficientBalance: false,
 })
 
 export const useSendGiftContext = () => {
@@ -33,6 +36,11 @@ export const SendGiftProvider = ({ children }: { children: React.ReactNode }) =>
   const [isSendGift, setIsSendGift] = useState(false)
   const [nativeAmount, setNativeAmount] = useState<CurrencyAmount<NativeCurrency> | undefined>(undefined)
   const [includeStarterGas, setIncludeStarterGas] = useState(false)
+  const { balance: nativeCurrencyBalance } = useGetNativeTokenBalance(ChainId.BSC)
+
+  const isUserInsufficientBalance = useMemo(() => {
+    return Boolean(nativeAmount?.greaterThan(nativeCurrencyBalance))
+  }, [nativeAmount, nativeCurrencyBalance])
 
   const handleToggleIncludeStarterGas = useCallback(
     (value: boolean) => {
@@ -52,8 +60,17 @@ export const SendGiftProvider = ({ children }: { children: React.ReactNode }) =>
       setNativeAmount,
       includeStarterGas,
       setIncludeStarterGas: handleToggleIncludeStarterGas,
+      isUserInsufficientBalance,
     }),
-    [isSendGift, setIsSendGift, nativeAmount, setNativeAmount, includeStarterGas, handleToggleIncludeStarterGas],
+    [
+      isSendGift,
+      isUserInsufficientBalance,
+      setIsSendGift,
+      nativeAmount,
+      setNativeAmount,
+      includeStarterGas,
+      handleToggleIncludeStarterGas,
+    ],
   )
 
   return <SendGiftContext.Provider value={value}>{children}</SendGiftContext.Provider>
