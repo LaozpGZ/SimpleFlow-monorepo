@@ -77,7 +77,10 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     if (currency0 && currency1 && symbol !== currentSymbol.current && widgetRef.current && isInitialized.current) {
       currentSymbol.current = symbol
       setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
-      widgetRef.current?.activeChart()?.setSymbol?.(symbol)
+      const activeChart = widgetRef.current?.activeChart?.()
+      if (activeChart && activeChart.setSymbol) {
+        activeChart.setSymbol(symbol)
+      }
     }
   }, [currency0, currency1, chainId, symbol])
 
