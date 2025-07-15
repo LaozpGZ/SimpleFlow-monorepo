@@ -275,7 +275,6 @@ export const useClmmStore = createStore<ClmmState>(
         buildData
           .execute({
             sequentially: true,
-            simulate: true,
             onTxUpdate: (data) => {
               handleMultiTxRetry(data)
               handleMultiTxToast({
@@ -733,9 +732,7 @@ export const useClmmStore = createStore<ClmmState>(
         values: {}
       })
 
-      return execute({
-        simulate: true
-      })
+      return execute()
         .then(({ txId, signedTx }) => {
           txStatusSubject.next({
             txId,
@@ -891,9 +888,7 @@ export const useClmmStore = createStore<ClmmState>(
         rewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
         newRewardInfos.forEach((r) => mints.set(r.mint.address, r.mint))
         return txBuild
-          .execute({
-            simulate: true
-          })
+          .execute()
           .then(({ txId }) => {
             txStatusSubject.next({ txId, ...txProps, ...meta, mintInfo: Array.from(mints.values()) })
             return txId
