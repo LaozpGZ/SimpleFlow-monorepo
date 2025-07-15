@@ -1,7 +1,3 @@
-import { PublicKey } from "@solana/web3.js";
-import BN from "bn.js";
-import Decimal from "decimal.js";
-import { ApiV3PoolInfoConcentratedItem, ClmmKeys } from "../../api/type";
 import {
   CLMM_LOCK_AUTH_ID,
   CLMM_LOCK_PROGRAM_ID,
@@ -12,9 +8,13 @@ import {
   getATAAddress,
   getMultipleAccountsInfoWithCustomFlags,
 } from "@/common";
-import { AccountLayout, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { MakeMultiTxData, MakeTxData } from "@/common/txTool/txTool";
 import { TxVersion } from "@/common/txTool/txType";
+import { AccountLayout, TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { PublicKey } from "@solana/web3.js";
+import BN from "bn.js";
+import Decimal from "decimal.js";
+import { ApiV3PoolInfoConcentratedItem, ClmmKeys } from "../../api/type";
 import { toApiV3Token, toFeeConfig } from "../../raydium/token/utils";
 import { ComputeBudgetConfig, ReturnTypeFetchMultipleMintInfos, TxTipConfig } from "../../raydium/type";
 import ModuleBase, { ModuleBaseProps } from "../moduleBase";
@@ -22,6 +22,7 @@ import { MakeTransaction } from "../type";
 import { ClmmInstrument } from "./instrument";
 import { ClmmConfigLayout, ClmmPositionLayout, OperationLayout, PoolInfoLayout, PositionInfoLayout } from "./layout";
 import {
+  ClmmLockAddress,
   ClmmRpcData,
   ClosePositionExtInfo,
   CollectRewardParams,
@@ -45,18 +46,18 @@ import {
   ReturnTypeFetchMultiplePoolTickArrays,
   SetRewardParams,
   SetRewardsParams,
-  ClmmLockAddress,
 } from "./type";
-import { MAX_SQRT_PRICE_X64, MIN_SQRT_PRICE_X64, mockV3CreatePoolInfo, ZERO } from "./utils/constants";
+import { MAX_SQRT_PRICE_X64, MIN_SQRT_PRICE_X64, mockV3CreatePoolInfo } from "./utils/constants";
 import { MathUtil, SqrtPriceMath } from "./utils/math";
 import {
+  getPdaExBitmapAccount,
+  getPdaLockClPositionIdV2,
+  getPdaMintExAccount,
   getPdaOperationAccount,
   getPdaPersonalPositionAddress,
-  getPdaLockClPositionIdV2,
-  getPdaTickArrayAddress,
+  getPdaPoolRewardVaulId,
   getPdaProtocolPositionAddress,
-  getPdaExBitmapAccount,
-  getPdaMintExAccount,
+  getPdaTickArrayAddress,
 } from "./utils/pda";
 import { PoolUtils, clmmComputeInfoToApiInfo } from "./utils/pool";
 import { TickUtils } from "./utils/tick";
@@ -68,6 +69,30 @@ export class Clmm extends ModuleBase {
 
   public async getClmmPoolKeys(poolId: string): Promise<ClmmKeys> {
     return ((await this.scope.api.fetchPoolKeysById({ idList: [poolId] })) as ClmmKeys[])[0];
+  }
+
+  public getClmmKeysFromPoolInfo(poolInfo: ApiV3PoolInfoConcentratedItem): ClmmKeys {
+    return {
+      programId: poolInfo.programId,
+      id: poolInfo.id,
+      config: poolInfo.config,
+      mintA: poolInfo.mintA,
+      mintB: poolInfo.mintB,
+      // lookupTableAccount: poolInfo.lookupTableAccount
+      alt: (poolInfo as any).alt,
+      openTime: poolInfo.openTime,
+      vault: (poolInfo as any).vault,
+      rewardInfos: poolInfo.rewardDefaultInfos.map((r) => ({
+        mint: r.mint,
+        vault: getPdaPoolRewardVaulId(
+          new PublicKey(poolInfo.programId),
+          new PublicKey(poolInfo.id),
+          new PublicKey(r.mint.address),
+        ).publicKey.toBase58(),
+      })),
+      observationId: "",
+      exBitmapAccount: "",
+    };
   }
 
   public async createPool<T extends TxVersion>(
@@ -262,7 +287,7 @@ export class Clmm extends ModuleBase {
         ownerTokenAccountB: ownerTokenAccountB?.toBase58(),
       });
 
-    const poolKeys = propPoolKeys || (await this.getClmmPoolKeys(poolInfo.id));
+    const poolKeys = propPoolKeys || this.getClmmKeysFromPoolInfo(poolInfo);
     const insInfo = await ClmmInstrument.openPositionFromBaseInstructions({
       poolInfo,
       poolKeys,
@@ -366,7 +391,7 @@ export class Clmm extends ModuleBase {
     if (ownerTokenAccountA === undefined || ownerTokenAccountB === undefined)
       this.logAndCreateError("cannot found target token accounts", "tokenAccounts", this.scope.account.tokenAccounts);
 
-    const poolKeys = propPoolKeys || (await this.getClmmPoolKeys(poolInfo.id));
+    const poolKeys = propPoolKeys || this.getClmmKeysFromPoolInfo(poolInfo);
 
     const makeOpenPositionInstructions = await ClmmInstrument.openPositionFromLiquidityInstructions({
       poolInfo,
@@ -462,7 +487,7 @@ export class Clmm extends ModuleBase {
 
     if (!ownerTokenAccountA && !ownerTokenAccountB)
       this.logAndCreateError("cannot found target token accounts", "tokenAccounts", this.scope.account.tokenAccounts);
-    const poolKeys = propPoolKeys ?? (await this.getClmmPoolKeys(poolInfo.id));
+    const poolKeys = propPoolKeys ?? this.getClmmKeysFromPoolInfo(poolInfo);
     const ins = ClmmInstrument.increasePositionFromLiquidityInstructions({
       poolInfo,
       poolKeys,
@@ -554,7 +579,7 @@ export class Clmm extends ModuleBase {
     if (!ownerTokenAccountA && !ownerTokenAccountB)
       this.logAndCreateError("cannot found target token accounts", "tokenAccounts", this.scope.account.tokenAccounts);
 
-    const poolKeys = await this.getClmmPoolKeys(poolInfo.id);
+    const poolKeys = this.getClmmKeysFromPoolInfo(poolInfo);
     const ins = ClmmInstrument.increasePositionFromBaseInstructions({
       poolInfo,
       poolKeys,
@@ -676,7 +701,7 @@ export class Clmm extends ModuleBase {
         this.scope.account.tokenAccountRawInfos,
       );
 
-    const poolKeys = propPoolKeys ?? (await this.getClmmPoolKeys(poolInfo.id));
+    const poolKeys = propPoolKeys ?? this.getClmmKeysFromPoolInfo(poolInfo);
     const nft2022 = (await this.scope.connection.getAccountInfo(ownerPosition.nftMint))?.owner.equals(
       TOKEN_2022_PROGRAM_ID,
     );
@@ -942,7 +967,7 @@ export class Clmm extends ModuleBase {
     if (this.scope.availability.removeConcentratedPosition === false)
       this.logAndCreateError("remove position feature disabled in your region");
     const txBuilder = this.createTxBuilder(feePayer);
-    const poolKeys = propPoolKeys ?? (await this.getClmmPoolKeys(poolInfo.id));
+    const poolKeys = propPoolKeys ?? this.getClmmKeysFromPoolInfo(poolInfo);
     const ins = ClmmInstrument.closePositionInstructions({
       poolInfo,
       poolKeys,
@@ -1219,7 +1244,7 @@ export class Clmm extends ModuleBase {
       ownerRewardIns && txBuilder.addInstruction(ownerRewardIns);
       if (!ownerRewardAccount)
         this.logAndCreateError("no money", "ownerRewardAccount", this.scope.account.tokenAccountRawInfos);
-      const poolKeys = propPoolKeys ?? (await this.getClmmPoolKeys(poolInfo.id));
+      const poolKeys = propPoolKeys ?? this.getClmmKeysFromPoolInfo(poolInfo);
       const insInfo = ClmmInstrument.setRewardInstructions({
         poolInfo,
         poolKeys,
@@ -1282,7 +1307,7 @@ export class Clmm extends ModuleBase {
 
     if (!ownerRewardAccount)
       this.logAndCreateError("no money", "ownerRewardAccount", this.scope.account.tokenAccountRawInfos);
-    const poolKeys = await this.getClmmPoolKeys(poolInfo.id);
+    const poolKeys = this.getClmmKeysFromPoolInfo(poolInfo);
     const insInfo = ClmmInstrument.collectRewardInstructions({
       poolInfo,
       poolKeys,
@@ -1339,7 +1364,7 @@ export class Clmm extends ModuleBase {
       if (!ownerRewardAccount)
         this.logAndCreateError("no money", "ownerRewardAccount", this.scope.account.tokenAccountRawInfos);
       ownerRewardIns && txBuilder.addInstruction(ownerRewardIns);
-      const poolKeys = await this.getClmmPoolKeys(poolInfo.id);
+      const poolKeys = this.getClmmKeysFromPoolInfo(poolInfo);
       const insInfo = ClmmInstrument.collectRewardInstructions({
         poolInfo,
         poolKeys,
@@ -1465,7 +1490,7 @@ export class Clmm extends ModuleBase {
         associatedOnly,
       });
 
-    const poolKeys = propPoolKeys ?? (await this.getClmmPoolKeys(poolInfo.id));
+    const poolKeys = propPoolKeys ?? this.getClmmKeysFromPoolInfo(poolInfo);
     txBuilder.addInstruction(
       ClmmInstrument.makeSwapBaseInInstructions({
         poolInfo,
@@ -1599,7 +1624,7 @@ export class Clmm extends ModuleBase {
         associatedOnly,
       });
 
-    const poolKeys = propPoolKeys ?? (await this.getClmmPoolKeys(poolInfo.id));
+    const poolKeys = propPoolKeys ?? this.getClmmKeysFromPoolInfo(poolInfo);
     txBuilder.addInstruction(
       ClmmInstrument.makeSwapBaseOutInstructions({
         poolInfo,
@@ -1738,7 +1763,7 @@ export class Clmm extends ModuleBase {
         rewardAccounts.push(ownerRewardAccount!);
       }
 
-      const poolKeys = await this.getClmmPoolKeys(poolInfo.id);
+      const poolKeys = this.getClmmKeysFromPoolInfo(poolInfo);
 
       const rewardAccountsFullInfo: {
         poolRewardVault: PublicKey;
