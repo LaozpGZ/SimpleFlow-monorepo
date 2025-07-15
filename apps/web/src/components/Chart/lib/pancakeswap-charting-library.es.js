@@ -504,7 +504,7 @@ class V {
       const n = await this.api.get24HrData(e, "from"), r = await this.api.get24HrData(o, "to");
       if (!n || !r)
         return console.error("[Datafeed]: Failed to fetch 24hr data"), null;
-      const c = n.h / r.h, i = n.l / r.l, l = n.c / r.c, m = n.changes - r.changes;
+      const c = n.h / r.l, i = n.l / r.h, l = n.c / r.c, m = n.changes - r.changes;
       return console.log("[Datafeed]: 24hr data calculated:", { high: c, low: i, close: l, changes: m }), { high: c, low: i, close: l, changes: m };
     } catch (e) {
       return console.error("[Datafeed]: Error fetching 24hr data:", e), null;
