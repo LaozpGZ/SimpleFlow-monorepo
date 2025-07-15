@@ -1,71 +1,62 @@
 import html2canvas from 'html2canvas'
 import { useCallback, useMemo, useState } from 'react'
 
-interface UseElementToCanvasOptions {
-  backgroundColor?: string
-  scale?: number
-  filename?: string
+export const OPTIONS = {
+  backgroundColor: 'transparent',
+  scale: 2,
+  filename: 'pancake-gift',
 }
 
-export const useElementToCanvas = (options: UseElementToCanvasOptions = {}) => {
-  const { backgroundColor = 'transparent', scale = 2, filename = 'qr-code' } = options
+async function convertToCanvas(elementId: string): Promise<Blob | null> {
+  const element = document.getElementById(elementId)
+  if (!element) {
+    console.error(`Element with id "${elementId}" not found`)
+    return null
+  }
+
+  try {
+    const canvas = await html2canvas(element, {
+      backgroundColor: OPTIONS.backgroundColor,
+      scale: OPTIONS.scale,
+      logging: false,
+      useCORS: true,
+      windowWidth: element.scrollWidth,
+      windowHeight: element.scrollHeight,
+    })
+
+    return new Promise((resolve) => {
+      canvas.toBlob((blob) => {
+        resolve(blob)
+      }, 'image/png')
+    })
+  } catch (error) {
+    console.error('Failed to capture element:', error)
+    return null
+  }
+}
+
+export const useElementToCanvas = () => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const convertToCanvas = useCallback(
-    async (elementId: string): Promise<Blob | null> => {
-      const element = document.getElementById(elementId)
-      if (!element) {
-        console.error(`Element with id "${elementId}" not found`)
-        return null
-      }
-
-      try {
-        const canvas = await html2canvas(element, {
-          backgroundColor,
-          scale,
-          logging: false,
-          useCORS: true,
-          windowWidth: element.scrollWidth,
-          windowHeight: element.scrollHeight,
-        })
-
-        return new Promise((resolve) => {
-          canvas.toBlob((blob) => {
-            resolve(blob)
-          }, 'image/png')
-        })
-      } catch (error) {
-        console.error('Failed to capture element:', error)
-        return null
-      }
-    },
-    [backgroundColor, scale],
-  )
-
-  const convertToCanvasWithLoading = useCallback(
-    async (elementId: string): Promise<Blob | null> => {
-      try {
-        setIsLoading(true)
-        const blob = await convertToCanvas(elementId)
-        setIsLoading(false)
-        return blob
-      } catch (error) {
-        console.error('Failed to capture element:', error)
-        return null
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [convertToCanvas],
-  )
+  const convertToCanvasWithLoading = useCallback(async (elementId: string): Promise<Blob | null> => {
+    try {
+      setIsLoading(true)
+      const blob = await convertToCanvas(elementId)
+      setIsLoading(false)
+      return blob
+    } catch (error) {
+      console.error('Failed to capture element:', error)
+      return null
+    } finally {
+      setIsLoading(false)
+    }
+  }, [])
 
   return useMemo(
     () => ({
-      convertToCanvas,
       convertToCanvasWithLoading,
       isLoading,
-      filename,
     }),
-    [convertToCanvas, convertToCanvasWithLoading, isLoading, filename],
+    [convertToCanvasWithLoading, isLoading],
   )
 }

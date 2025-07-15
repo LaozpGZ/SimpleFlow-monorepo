@@ -1,19 +1,18 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, copyText, useToast } from '@pancakeswap/uikit'
-import { useElementToCanvas } from 'hooks/useElementToCanvas'
+import { OPTIONS, useElementToCanvas } from 'hooks/useElementToCanvas'
 import { useCallback } from 'react'
 import { generateClaimLink } from '../utils/generateClaimLink'
 
 interface QRShareImageButtonProps {
   elementId: string
   code: string
-  filename?: string
 }
 
-const QRShareImageButton: React.FC<QRShareImageButtonProps> = ({ elementId, code, filename = 'qr-code' }) => {
+const QRShareImageButton: React.FC<QRShareImageButtonProps> = ({ elementId, code }) => {
   const { t } = useTranslation()
   const { toastSuccess } = useToast()
-  const { convertToCanvasWithLoading, isLoading } = useElementToCanvas({ filename })
+  const { convertToCanvasWithLoading, isLoading } = useElementToCanvas()
 
   const handleLinkFallback = useCallback(() => {
     const claimLink = generateClaimLink({ code })
@@ -43,7 +42,7 @@ const QRShareImageButton: React.FC<QRShareImageButtonProps> = ({ elementId, code
       const shareData = {
         title: t('Gift from PancakeSwap!'),
         text: t('Scan the QR code to claim your gift! Code: %code%', { code }),
-        files: [new File([blob], `${filename}.png`, { type: 'image/png' })],
+        files: [new File([blob], `${OPTIONS.filename}.png`, { type: 'image/png' })],
       }
 
       // Check if Web Share API supports files
@@ -61,7 +60,7 @@ const QRShareImageButton: React.FC<QRShareImageButtonProps> = ({ elementId, code
     } else {
       handleLinkFallback()
     }
-  }, [elementId, code, filename, convertToCanvasWithLoading, handleLinkFallback, t])
+  }, [elementId, code, handleLinkFallback, t])
 
   return (
     <Button onClick={shareImage} variant="secondary" width="100%" disabled={isLoading} isLoading={isLoading}>
