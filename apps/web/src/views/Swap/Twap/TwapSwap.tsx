@@ -82,14 +82,16 @@ const TwapAndLimitSwapInner = ({ limit }: { limit?: boolean }) => {
         mt={isChartExpanded ? undefined : isMobile ? '18px' : '42px'}
         p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
       >
-        {isDesktop && isChartDisplayed && (
+        {isDesktop && (
           <Flex width={isChartExpanded ? '100%' : '50%'} maxWidth="928px" flexDirection="column" style={{ gap: 20 }}>
-            <ChartWithPriceHeader
-              currency0={inputCurrency || undefined}
-              currency1={outputCurrency || undefined}
-              symbol={`${inputCurrency?.symbol}/${outputCurrency?.symbol}`}
-              theme="Dark"
-            />
+            {isChartDisplayed && (
+              <ChartWithPriceHeader
+                currency0={inputCurrency || undefined}
+                currency1={outputCurrency || undefined}
+                symbol={`${inputCurrency?.symbol}/${outputCurrency?.symbol}`}
+                theme="Dark"
+              />
+            )}
             <OrderHistory />
           </Flex>
         )}
