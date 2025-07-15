@@ -93,6 +93,10 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
                       </Text>
                     )
                   }
+
+                  <Text fontSize="12px" color="textSubtle">
+                    {gift.codeHash.slice(0, 6)}...{gift.codeHash.slice(-4)}
+                  </Text>
                 </FlexGap>
 
                 <Flex alignItems="center" width="100%" justifyContent="space-between">

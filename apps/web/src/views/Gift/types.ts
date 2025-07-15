@@ -74,4 +74,5 @@ export interface GiftListApiQueryParams extends QueryParams {
   cursor?: string // 2025-07-05T20:42:06.000Z
   // only from 1 -> 20
   pageSize?: number
+  operand?: 'AND' | 'OR'
 }

@@ -31,12 +31,12 @@ export const fetchGiftList = async ({
   chainId,
   account,
   cursor,
-  type,
+  unclaimedOnly,
 }: {
   chainId?: number
   account?: string
   cursor?: string
-  type: 'send' | 'receive'
+  unclaimedOnly?: boolean
 }): Promise<{ list: GiftInfoResponse[]; hasNext: boolean; nextCursor?: string }> => {
   if (!chainId || !account) {
     throw new Error('Missing required parameters: chainId and account')
@@ -46,7 +46,9 @@ export const fetchGiftList = async ({
     chainId,
     pageSize: DEFAULT_PAGE_SIZE,
     ...(cursor && { cursor }),
-    ...(type === 'send' ? { address: account } : { claimerAddress: account }),
+    address: account,
+    claimerAddress: account,
+    operand: 'OR',
   }
 
   const result = await giftApiAdapter.get<GiftApiResponse<GiftInfoResponse[]>, GiftListApiQueryParams>(
@@ -58,7 +60,11 @@ export const fetchGiftList = async ({
     throw new Error(result.message || 'Failed to fetch gift information')
   }
 
-  const list = result.data || []
+  let list = result.data || []
+
+  if (unclaimedOnly) {
+    list = list.filter((gift) => gift.status === GiftStatus.PENDING)
+  }
 
   // Sort by timestamp to get the latest item for next cursor
   const sortedList = list.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
@@ -82,19 +88,19 @@ export const useGetGiftInfo = () => {
 
   // Fetch receive list with pagination
   const {
-    data: receiveData,
-    isLoading: isLoadingReceive,
-    fetchNextPage: fetchNextReceivePage,
-    hasNextPage: hasNextReceivePage,
-    isFetchingNextPage: isFetchingReceiveNextPage,
+    data: combinedData,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: [QUERY_KEY_GIFT_INFO, 'receive', chainId, account],
+    queryKey: [QUERY_KEY_GIFT_INFO, chainId, account, unclaimedOnly],
     queryFn: ({ pageParam }) =>
       fetchGiftList({
         chainId,
         account: account!,
         cursor: pageParam,
-        type: 'receive',
+        unclaimedOnly,
       }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => {
@@ -103,79 +109,21 @@ export const useGetGiftInfo = () => {
       }
       return undefined
     },
-    enabled: Boolean(chainId && account && !unclaimedOnly), // Disable when unclaimedOnly is true
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchOnMount: true,
-    refetchInterval: FAST_INTERVAL,
-  })
-
-  // Fetch send list with pagination
-  const {
-    data: sendData,
-    isLoading: isLoadingSend,
-    fetchNextPage: fetchNextSendPage,
-    hasNextPage: hasNextSendPage,
-    isFetchingNextPage: isFetchingSendNextPage,
-  } = useInfiniteQuery({
-    queryKey: [QUERY_KEY_GIFT_INFO, 'send', chainId, account, unclaimedOnly],
-    queryFn: ({ pageParam }) =>
-      fetchGiftList({
-        chainId,
-        account: account!,
-        cursor: pageParam,
-        type: 'send',
-      }),
-    initialPageParam: undefined as string | undefined,
-    getNextPageParam: (lastPage) => {
-      if (lastPage.hasNext && lastPage.nextCursor) {
-        return lastPage.nextCursor
-      }
-      return undefined
+    select: (data) => {
+      return data.pages
+        .flatMap((page) => page.list)
+        .map(selectGiftInfo)
+        .filter((gift) => gift !== null)
     },
-    enabled: Boolean(chainId && account),
+    enabled: Boolean(chainId && account), // Disable when unclaimedOnly is true
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     refetchOnMount: true,
     refetchInterval: FAST_INTERVAL,
   })
-
-  // Combine and deduplicate all data
-  const combinedData = useMemo(() => {
-    if (!sendData && !receiveData) return null
-
-    // Flatten all send pages
-    let allSendGifts = sendData?.pages.flatMap((page) => page.list) || []
-    const allReceiveGifts = (!unclaimedOnly && receiveData?.pages.flatMap((page) => page.list)) || []
-
-    // Filter sendData if unclaimedOnly is true
-    if (unclaimedOnly) {
-      allSendGifts = allSendGifts.filter((gift) => {
-        return gift.status === GiftStatus.PENDING
-      })
-    }
-
-    // Ensure no duplicate gift codehash
-    const giftCodes = new Set()
-    const result = [...allSendGifts, ...allReceiveGifts]
-    const list = result.filter((gift) => {
-      if (giftCodes.has(gift.codeHash)) {
-        return false
-      }
-      giftCodes.add(gift.codeHash)
-      return true
-    })
-
-    // Process with selector
-    const processedList = list.map(selectGiftInfo).filter((gift) => gift !== null)
-
-    return {
-      list: processedList,
-    }
-  }, [sendData, receiveData, selectGiftInfo, unclaimedOnly])
 
   const missingTokens = useMemo(
-    () => combinedData?.list?.filter((gift) => gift?.currencyAmount === undefined) || [],
+    () => combinedData?.filter((gift) => gift?.currencyAmount === undefined) || [],
     [combinedData],
   )
 
@@ -185,7 +133,7 @@ export const useGetGiftInfo = () => {
   )
 
   const data = useMemo(() => {
-    return combinedData?.list?.map((gift) => {
+    return combinedData?.map((gift) => {
       if (gift?.currencyAmount === undefined) {
         const isNative = gift.token === zeroAddress
 
@@ -208,39 +156,20 @@ export const useGetGiftInfo = () => {
   }, [combinedData, tokens])
 
   const handleLoadMore = useCallback(() => {
-    if (hasNextReceivePage && !isFetchingReceiveNextPage) {
-      fetchNextReceivePage()
+    if (hasNextPage && !isFetchingNextPage) {
+      fetchNextPage()
     }
-    if (hasNextSendPage && !isFetchingSendNextPage) {
-      fetchNextSendPage()
-    }
-  }, [
-    hasNextReceivePage,
-    isFetchingReceiveNextPage,
-    fetchNextReceivePage,
-    hasNextSendPage,
-    isFetchingSendNextPage,
-    fetchNextSendPage,
-  ])
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   return useMemo(() => {
     return {
       data,
-      hasNextPage: hasNextReceivePage || hasNextSendPage,
-      isLoading: isLoadingReceive || isLoadingSend,
-      isFetchingNextPage: isFetchingReceiveNextPage || isFetchingSendNextPage,
+      hasNextPage,
+      isLoading,
+      isFetchingNextPage,
       handleLoadMore,
     }
-  }, [
-    data,
-    hasNextReceivePage,
-    hasNextSendPage,
-    isLoadingReceive,
-    isLoadingSend,
-    isFetchingReceiveNextPage,
-    isFetchingSendNextPage,
-    handleLoadMore,
-  ])
+  }, [data, hasNextPage, isLoading, isFetchingNextPage, handleLoadMore])
 }
 
 export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
