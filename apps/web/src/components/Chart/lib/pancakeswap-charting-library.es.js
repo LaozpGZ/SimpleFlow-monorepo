@@ -317,7 +317,7 @@ class V {
         B.forEach((t, g) => {
           if (t.base && t.quote) {
             let D = t.base.open / t.quote.open;
-            const C = t.base.high / t.quote.high, I = t.base.low / t.quote.low, y = t.base.close / t.quote.close;
+            const C = t.base.high / t.quote.low, I = t.base.low / t.quote.high, y = t.base.close / t.quote.close;
             p && (D = p.close, console.log(`[Datafeed]: Applied last close = new open logic. Previous close: ${p.close}, Original open: ${t.base.open / t.quote.open}`));
             const T = t.base.volume !== void 0 ? t.base.volume : 0, U = t.quote.volume !== void 0 ? t.quote.volume : 0, O = (T + U) / 2, F = Math.max(D, y) * 5, q = Math.min(D, y) / 5;
             (C > F || I < q) && console.warn(`[Datafeed]: Abnormal price range detected at ${new Date(g).toISOString()}:`, {
@@ -575,7 +575,7 @@ class V {
               return;
             }
             let g = p.o / t.o;
-            const D = p.h / t.h, C = p.l / t.l, I = p.c / t.c, y = (p.v + t.v) / 2;
+            const D = p.h / t.l, C = p.l / t.h, I = p.c / t.c, y = (p.v + t.v) / 2;
             if (h.lastBar && (g = h.lastBar.close, console.log(`[Datafeed]: Applied last close = new open logic for WebSocket. Previous close: ${h.lastBar.close}, Original open: ${p.o / t.o}`)), !isFinite(g) || !isFinite(D) || !isFinite(C) || !isFinite(I) || !isFinite(y)) {
               console.error(`[Datafeed]: Calculated invalid price ratio for ${k.name}:`, {
                 open: g,
