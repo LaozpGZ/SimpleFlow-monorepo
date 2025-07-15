@@ -1,6 +1,17 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { Box, ButtonMenu, ButtonMenuItem, Card, ColumnCenter, FlexGap, RowBetween, Text } from '@pancakeswap/uikit'
+import {
+  Box,
+  ButtonMenu,
+  ButtonMenuItem,
+  Card,
+  ColumnCenter,
+  FlexGap,
+  QuestionHelperV2,
+  RowBetween,
+  Text,
+  TextWithUnderline,
+} from '@pancakeswap/uikit'
 import { BulletList } from 'components/BulletList'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { nanoid } from 'nanoid'
@@ -134,14 +145,34 @@ export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<T
 
       <FlexGap flexDirection="column" gap="8px" mb="16px" width="100%">
         <RowBetween>
-          <Text color="textSubtle">{t('Gift Claim Gas Fee (Fixed)')}</Text>
+          <QuestionHelperV2
+            text={
+              <Text>
+                {t('Covers the gas required when the recipient claims the gift — even during high network activity.')}
+              </Text>
+            }
+            placement="top"
+          >
+            <TextWithUnderline color="textSubtle">{t('Gift Claim Gas Fee (Fixed)')}</TextWithUnderline>
+          </QuestionHelperV2>
           <Text>
             {gasPayment?.toSignificant(6)} {gasPayment?.currency.symbol}
           </Text>
         </RowBetween>
 
         <RowBetween>
-          <Text color="textSubtle">{t('Total cost to Create Gift')}</Text>
+          <QuestionHelperV2
+            text={
+              <Text>
+                {t(`The full amount you'll pay — includes %tokensymbol% and gift claim gas fee.`, {
+                  tokensymbol: tokenAmount?.currency.symbol,
+                })}
+              </Text>
+            }
+            placement="top"
+          >
+            <TextWithUnderline color="textSubtle">{t('Total cost to Create Gift')}</TextWithUnderline>
+          </QuestionHelperV2>
           <Text>{formatDollarAmount(totalUsd + gasPaymentUsd)}</Text>
         </RowBetween>
       </FlexGap>
