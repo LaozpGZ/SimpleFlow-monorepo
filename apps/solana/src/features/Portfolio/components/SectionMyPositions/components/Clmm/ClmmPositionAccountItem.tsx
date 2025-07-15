@@ -82,7 +82,7 @@ export default function ClmmPositionAccountItem({
     initRpcPoolData,
     position,
     subscribe: false,
-    shouldFetch: false,
+    shouldFetch: !isOpen && !isRemoveOpen && !isAddOpen && !isSending,
     tickLowerPrefetchData: position.tickLowerRpcData,
     tickUpperPrefetchData: position.tickUpperRpcData
   })

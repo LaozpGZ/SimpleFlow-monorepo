@@ -193,7 +193,7 @@ export default function useFetchClmmRewardInfo({
 }
 
 export function useClmmRewardInfoFromSimulation(props: Props) {
-  const { poolInfo, position, initRpcPoolData, tickLowerPrefetchData, tickUpperPrefetchData } = props
+  const { poolInfo, position, initRpcPoolData, shouldFetch: propsShouldFetch, tickLowerPrefetchData, tickUpperPrefetchData } = props
   const rpcPoolData =
     useSubscribeClmmInfo({ subscribe: false, poolInfo, throttle: MINUTE_MILLISECONDS, initialFetch: false })?.poolInfo ||
     initRpcPoolData?.poolInfo
@@ -217,7 +217,7 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
     return simulationResult
   }, [poolInfo, position, removeLiquidityActThrottle])
 
-  const shouldFetch = Boolean(raydium && poolInfo && position)
+  const shouldFetch = Boolean(propsShouldFetch && raydium && poolInfo && position)
 
   const { data, error, mutate, isLoading } = useSWR(
     shouldFetch ? `clmm-reward-info-${poolInfo?.id}-${position.nftMint.toBase58()}` : null,
