@@ -15,9 +15,10 @@ import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { SecondaryCard } from 'components/SecondaryCard'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
-import { ViewState } from 'components/WalletModalV2/type'
+import { SEND_ENTRY, ViewState } from 'components/WalletModalV2/type'
 import { formatDistanceToNow } from 'date-fns'
 import { useContext } from 'react'
+import { useWalletModalV2ViewState } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
 import { useGetGiftInfo } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
 import { SendGiftContext } from '../providers/SendGiftProvider'
@@ -31,6 +32,7 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
   const { t } = useTranslation()
   const { setCodeHash } = useContext(CancelGiftContext)
 
+  const { setSendEntry } = useWalletModalV2ViewState()
   const { setIsSendGift } = useContext(SendGiftContext)
 
   const { unclaimedOnly, setUnclaimedOnly } = useUnclaimedOnlyContext()
@@ -149,7 +151,9 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
         <ActionButton
           onClick={() => {
             setViewState(ViewState.SEND_ASSETS)
-            setIsSendGift(true)
+            // set the send entry to create gift
+            // it will automatically set isSendGift to true
+            setSendEntry(SEND_ENTRY.CREATE_GIFT)
           }}
           variant="tertiary"
         >

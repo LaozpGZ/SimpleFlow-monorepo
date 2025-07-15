@@ -5,10 +5,12 @@ import { NetworkFilter } from '@pancakeswap/widgets-internal'
 import { BalanceData } from 'hooks/useAddressBalance'
 import { useCallback, useMemo, useState } from 'react'
 import { useAllChainsOpts } from 'views/universalFarms/hooks/useMultiChains'
+import { useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssetForm } from './SendAssetForm'
-import { ViewState } from './type'
+import { SEND_ENTRY, ViewState } from './type'
+import { useWalletModalV2ViewState } from './WalletModalV2ViewStateProvider'
 
 interface SendAssetsProps {
   assets: BalanceData[]
@@ -25,7 +27,8 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
   const [selectedNetworks, setSelectedNetworks] = useState<number[]>([])
   const [selectedAsset, setSelectedAsset] = useState<BalanceData | null>(null)
   const { t } = useTranslation()
-
+  const { setIsSendGift } = useSendGiftContext()
+  const { sendEntry } = useWalletModalV2ViewState()
   const convertBalancesToAssets = useCallback((balanceItems): BalanceData[] => {
     return balanceItems.map((item) => ({
       id: item.id,
@@ -91,6 +94,11 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
         onRowClick={(asset) => {
           setSelectedAsset(asset)
           onViewStateChange(ViewState.SEND_FORM)
+          if (sendEntry === SEND_ENTRY.CREATE_GIFT) {
+            setIsSendGift(true)
+          } else {
+            setIsSendGift(false)
+          }
         }}
       />
       <FlexGap gap="16px" mt="16px">

@@ -28,11 +28,10 @@ import { ClaimGiftView } from 'views/Gift/components/ClaimGiftView'
 import { GiftInfoDetailView } from 'views/Gift/components/GiftInfoDetailView'
 import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
 import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
-import { useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssets } from './SendAssets'
-import { ViewState } from './type'
+import { SEND_ENTRY, ViewState } from './type'
 import { CopyAddress } from './WalletCopyButton'
 import { useWalletModalV2ViewState } from './WalletModalV2ViewStateProvider'
 
@@ -133,9 +132,8 @@ export const WalletContent = ({
   const { t } = useTranslation()
   const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
-  const { viewState, setViewState, goBack } = useWalletModalV2ViewState()
+  const { viewState, setViewState, goBack, setSendEntry } = useWalletModalV2ViewState()
   const { theme } = useTheme()
-  const { setIsSendGift } = useSendGiftContext()
 
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
@@ -151,9 +149,12 @@ export const WalletContent = ({
   }, [totalBalanceUsd])
 
   const noAssets = (balances.length === 0 || totalBalanceUsd === 0) && !isLoading
-  const handleClick = useCallback((newIndex: number) => {
-    setView(newIndex)
-  }, [])
+  const handleClick = useCallback(
+    (newIndex: number) => {
+      setView(newIndex)
+    },
+    [setView],
+  )
 
   const actionView = useMemo(() => {
     if (viewState === ViewState.GIFT_INFO_DETAIL) return <GiftInfoDetailView />
@@ -326,8 +327,8 @@ export const WalletContent = ({
                 </ActionButton>
                 <ActionButton
                   onClick={() => {
-                    setIsSendGift(false)
                     setViewState(ViewState.SEND_ASSETS)
+                    setSendEntry(SEND_ENTRY.SEND_ONLY)
                   }}
                   variant="tertiary"
                 >

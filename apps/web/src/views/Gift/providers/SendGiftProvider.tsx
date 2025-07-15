@@ -52,7 +52,7 @@ export const SendGiftProvider = ({ children }: { children: React.ReactNode }) =>
     (value: boolean) => {
       setIncludeStarterGas(value)
     },
-    [includeStarterGas, setNativeAmount],
+    [setIncludeStarterGas],
   )
 
   const value = useMemo(

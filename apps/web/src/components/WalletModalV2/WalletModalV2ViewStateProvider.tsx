@@ -1,11 +1,13 @@
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
-import { ViewState } from './type'
+import { createContext, ReactNode, useCallback, useContext, useMemo, useState } from 'react'
+import { SEND_ENTRY, ViewState } from './type'
 
 interface WalletModalV2ViewStateContextType {
   viewState: ViewState
   setViewState: (viewState: ViewState) => void
   goBack: () => void
   reset: () => void
+  setSendEntry: (sendEntry: SEND_ENTRY) => void
+  sendEntry: SEND_ENTRY
 }
 
 const WalletModalV2ViewStateContext = createContext<WalletModalV2ViewStateContextType>({
@@ -13,6 +15,8 @@ const WalletModalV2ViewStateContext = createContext<WalletModalV2ViewStateContex
   setViewState: () => {},
   goBack: () => {},
   reset: () => {},
+  setSendEntry: () => {},
+  sendEntry: SEND_ENTRY.SEND_ONLY,
 })
 
 export const useWalletModalV2ViewState = () => {
@@ -29,6 +33,8 @@ interface WalletModalV2ViewStateProviderProps {
 
 export const WalletModalV2ViewStateProvider: React.FC<WalletModalV2ViewStateProviderProps> = ({ children }) => {
   const [viewState, setViewState] = useState<ViewState>(ViewState.WALLET_INFO)
+
+  const [sendEntry, setSendEntry] = useState<SEND_ENTRY>(SEND_ENTRY.SEND_ONLY)
 
   const goBack = useCallback(() => {
     setViewState((prevState) => {
@@ -57,16 +63,17 @@ export const WalletModalV2ViewStateProvider: React.FC<WalletModalV2ViewStateProv
     setViewState(ViewState.WALLET_INFO)
   }, [])
 
-  return (
-    <WalletModalV2ViewStateContext.Provider
-      value={{
-        viewState,
-        setViewState: handleSetViewState,
-        goBack,
-        reset,
-      }}
-    >
-      {children}
-    </WalletModalV2ViewStateContext.Provider>
+  const value = useMemo(
+    () => ({
+      viewState,
+      setViewState: handleSetViewState,
+      goBack,
+      reset,
+      setSendEntry,
+      sendEntry,
+    }),
+    [viewState, handleSetViewState, goBack, reset, sendEntry],
   )
+
+  return <WalletModalV2ViewStateContext.Provider value={value}>{children}</WalletModalV2ViewStateContext.Provider>
 }

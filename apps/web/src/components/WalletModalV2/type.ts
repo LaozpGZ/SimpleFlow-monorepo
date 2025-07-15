@@ -9,3 +9,8 @@ export enum ViewState {
   CLAIM_GIFT_CONFIRM,
   GIFT_INFO_DETAIL,
 }
+
+export enum SEND_ENTRY {
+  CREATE_GIFT,
+  SEND_ONLY,
+}

@@ -83,7 +83,7 @@ const UserMenu = () => {
 
   const { reset: resetViewState, viewState } = useWalletModalV2ViewState()
   const { setCode, code: giftCode } = useClaimGiftContext()
-  const { setIsSendGift, setNativeAmount, setIncludeStarterGas } = useSendGiftContext()
+  const { setNativeAmount, setIncludeStarterGas } = useSendGiftContext()
   // State for click-based menu
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const menuRef = useRef<HTMLDivElement>(null)
@@ -102,11 +102,10 @@ const UserMenu = () => {
   useEffect(() => {
     if (isMenuOpen) {
       setView(WalletView.WALLET_INFO)
-      setIsSendGift(false)
       setNativeAmount(undefined)
       setIncludeStarterGas(false)
     }
-  }, [isMenuOpen])
+  }, [isMenuOpen, setView, setNativeAmount, setIncludeStarterGas])
 
   // Handle click outside to close menu
   useEffect(() => {
@@ -134,7 +133,7 @@ const UserMenu = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
-  }, [menuRef, viewState])
+  }, [menuRef, viewState, resetViewState, setCode])
 
   useEffect(() => {
     if (hasPendingTransactions) {
