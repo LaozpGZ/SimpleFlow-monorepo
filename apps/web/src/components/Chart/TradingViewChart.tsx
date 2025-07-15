@@ -22,6 +22,7 @@ interface TradingViewChartProps {
 const ChartContainer = styled.div`
   width: 100%;
   height: calc(100% - 60px);
+  font-family: 'Kanit', sans-serif;
   ${({ theme }) => theme.mediaQueries.md} {
     padding: 0;
     width: 100%;
@@ -146,6 +147,8 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
               'paneProperties.horzGrid.style': 0,
               headerToolbarBg: isDark ? tokens.colors.dark.backgroundAlt : tokens.colors.light.backgroundAlt,
               custom_font_family: `'Kanit', sans-serif`,
+              'scalesProperties.fontFamily': `'Kanit', sans-serif`,
+              'scalesProperties.fontSize': 12,
             },
             disabled_features: [
               'left_toolbar',
@@ -274,6 +277,8 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
             'paneProperties.vertGrid.style': 0,
             'paneProperties.horzGrid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
             'paneProperties.horzGrid.style': 0,
+            'scalesProperties.fontFamily': `'Kanit', sans-serif`,
+            'scalesProperties.fontSize': 12,
           })
         } catch (error) {
           console.error('Error changing theme:', error)
