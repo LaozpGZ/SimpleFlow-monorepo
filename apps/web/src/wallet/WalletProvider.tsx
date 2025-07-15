@@ -1,12 +1,11 @@
 import { isInBinance } from '@binance/w3w-utils'
-import { useSyncWalletState } from 'hooks/useAccountActiveChain'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo, useState } from 'react'
 import { createW3WWagmiConfig, createWagmiConfig } from 'utils/wagmi'
 import { WagmiProvider } from 'wagmi'
+import { W3WConfigProvider } from 'contexts/W3WConfigContext'
 import { SOLANA_SUPPORTED_PATH } from './solana.config'
-import { W3WConfigProvider } from './W3WConfigContext'
 
 interface WalletProviderProps {
   reconnectOnMount?: boolean
@@ -23,7 +22,7 @@ export const WalletProvider = (props: WalletProviderProps) => {
   const router = useRouter()
   const wagmiConfig = useMemo(
     () => (typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()),
-    [ready],
+    [],
   )
 
   useEffect(() => {
@@ -36,6 +35,7 @@ export const WalletProvider = (props: WalletProviderProps) => {
       setReady(true)
     })
   }, [])
+
   if (!ready) {
     return null // or a loading spinner
   }
@@ -45,14 +45,8 @@ export const WalletProvider = (props: WalletProviderProps) => {
   return (
     <WagmiProvider reconnectOnMount config={wagmiConfig}>
       <W3WConfigProvider value={isInBinance()}>
-        <Sync />
         {needSolanaProvider ? <SolanaProviders>{children}</SolanaProviders> : children}
       </W3WConfigProvider>
     </WagmiProvider>
   )
-}
-
-const Sync = () => {
-  useSyncWalletState()
-  return null
 }

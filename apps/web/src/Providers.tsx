@@ -1,13 +1,10 @@
-import { isInBinance } from '@binance/w3w-utils'
 import { LanguageProvider } from '@pancakeswap/localization'
 import { DialogProvider, ModalProvider, UIKitProvider, dark, light } from '@pancakeswap/uikit'
 import { Store } from '@reduxjs/toolkit'
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { HistoryManagerProvider } from 'contexts/HistoryContext'
 import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
-import { useMemo } from 'react'
 import { Provider } from 'react-redux'
-import { createW3WWagmiConfig, createWagmiConfig } from 'utils/wagmi'
 import { WalletProvider } from 'wallet/WalletProvider'
 
 // Create a client
@@ -29,28 +26,25 @@ const Providers: React.FC<
     dehydratedState: any
   }>
 > = ({ children, store, dehydratedState }) => {
-  const wagmiConfig = useMemo(
-    () => (typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()),
-    [],
-  )
   return (
-    <LanguageProvider>
-      <Provider store={store}>
-        <WalletProvider>
-          <QueryClientProvider client={queryClient}>
-            <HydrationBoundary state={dehydratedState}>
-              <NextThemeProvider>
+    <WalletProvider>
+      <QueryClientProvider client={queryClient}>
+        <HydrationBoundary state={dehydratedState}>
+          SolanaProviders
+          <Provider store={store}>
+            <NextThemeProvider>
+              <LanguageProvider>
                 <StyledUIKitProvider>
                   <HistoryManagerProvider>
-                    <ModalProvider portalProvider={DialogProvider}>{children}</ModalProvider>
+                    <ModalProvider portalProvider={DialogProvider}> {children}</ModalProvider>
                   </HistoryManagerProvider>
                 </StyledUIKitProvider>
-              </NextThemeProvider>
-            </HydrationBoundary>
-          </QueryClientProvider>
-        </WalletProvider>
-      </Provider>
-    </LanguageProvider>
+              </LanguageProvider>
+            </NextThemeProvider>
+          </Provider>
+        </HydrationBoundary>
+      </QueryClientProvider>
+    </WalletProvider>
   )
 }
 

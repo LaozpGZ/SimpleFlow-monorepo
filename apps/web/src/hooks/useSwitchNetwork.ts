@@ -3,7 +3,9 @@ import { useToast } from '@pancakeswap/uikit'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { EXCHANGE_PAGE_PATHS } from 'config/constants/exchange'
 import { ExtendEthereum } from 'global'
+import { queryChainIdAtom } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
+import { useAtom } from 'jotai/index'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { useAppDispatch } from 'state'
@@ -32,6 +34,7 @@ const checkSwitchReloadNeeded = async (connector: Connector, chainId: number, ad
 }
 
 export function useSwitchNetworkLocal() {
+  const [, setQueryChainId] = useAtom(queryChainIdAtom)
   const dispatch = useAppDispatch()
   const router = useRouter()
 
@@ -74,13 +77,15 @@ export function useSwitchNetworkLocal() {
         },
       )
 
+      setQueryChainId(newChainId)
+
       // Blocto in-app browser throws change event when no account change which causes user state reset therefore
       // this event should not be handled to avoid unexpected behaviour.
       if (!isBloctoMobileApp) {
         clearUserStates(dispatch, { chainId: newChainId, newChainId })
       }
     },
-    [dispatch, isBloctoMobileApp, router],
+    [dispatch, isBloctoMobileApp, setQueryChainId, router],
   )
 }
 
@@ -99,7 +104,6 @@ export function useSwitchNetwork() {
 
   const { toastError } = useToast()
   const { isConnected, connector, address } = useAccount()
-  console.log(`[wallet]`, isConnected)
 
   const { logout } = useAuth()
 

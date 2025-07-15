@@ -13,7 +13,7 @@ export default function WalletTest() {
       <p>activeChainId: {chainId}</p>
       <p>account: {account}</p>
       <p>solanaAccount: {solanaAccount}</p>
-      <p>isWrongNetowork: {Boolean(isWrongNetwork)}</p>
+      <p>isWrongNetwork: {Boolean(isWrongNetwork)}</p>
       <FlexGap gap="16px">
         <ConnectWalletButton>Connect EVM Wallet</ConnectWalletButton>
         <SolanaConnectButton>Connect Solana</SolanaConnectButton>

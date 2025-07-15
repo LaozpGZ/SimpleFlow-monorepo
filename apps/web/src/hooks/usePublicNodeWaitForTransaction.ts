@@ -4,6 +4,7 @@ import { useFetchBlockData } from '@pancakeswap/wagmi'
 import { BSC_BLOCK_TIME } from 'config'
 import { CHAINS } from 'config/chains'
 import { PUBLIC_NODES } from 'config/nodes'
+import { useW3WConfig } from 'contexts/W3WConfigContext'
 import memoize from 'lodash/memoize'
 import { useCallback } from 'react'
 import { RetryableError, retry } from 'state/multicall/retry'
@@ -22,7 +23,6 @@ import {
   http,
 } from 'viem'
 import { usePublicClient } from 'wagmi'
-import { useW3WConfig } from 'wallet/W3WConfigContext'
 import { useActiveChainId } from './useActiveChainId'
 
 export const getViemClientsPublicNodes = memoize((w3WConfig = false) => {
@@ -56,6 +56,7 @@ export function usePublicNodeWaitForTransaction(chainId_?: number) {
   const chainId = chainId_ ?? activeChainId
   const provider = usePublicClient({ chainId })
   const w3WConfig = useW3WConfig()
+
   const refetchBlockData = useFetchBlockData(chainId)
 
   const waitForTransaction_ = useCallback(

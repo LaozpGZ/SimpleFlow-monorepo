@@ -37,7 +37,7 @@ const SolanaWalletStateUpdater = () => {
   const setWalletState = useSetAtom(accountActiveChainAtom)
 
   useEffect(() => {
-    const solanaAccount = publicKey?.toBase58() || null
+    const solanaAccount = publicKey?.toBase58() || undefined
     setWalletState((prev) => {
       return { ...prev, solanaAccount }
     })
@@ -90,7 +90,7 @@ export const SolanaProvider: FC<PropsWithChildren<any>> = ({ children }) => {
       new OKXWalletAdapter(),
       new BackpackWalletAdapter(),
     ],
-    [endpoint, _walletConnect],
+    [_walletConnect],
   )
 
   const onWalletError = (error: WalletError, adapter?: Adapter) => {
