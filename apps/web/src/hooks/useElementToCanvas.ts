@@ -38,19 +38,26 @@ async function convertToCanvas(elementId: string): Promise<Blob | null> {
 export const useElementToCanvas = () => {
   const [isLoading, setIsLoading] = useState(false)
 
-  const convertToCanvasWithLoading = useCallback(async (elementId: string): Promise<Blob | null> => {
-    try {
-      setIsLoading(true)
-      const blob = await convertToCanvas(elementId)
-      setIsLoading(false)
-      return blob
-    } catch (error) {
-      console.error('Failed to capture element:', error)
-      return null
-    } finally {
-      setIsLoading(false)
-    }
-  }, [])
+  const convertToCanvasWithLoading = useCallback(
+    async (elementId: string): Promise<Blob | null> => {
+      if (isLoading) {
+        return null
+      }
+
+      try {
+        setIsLoading(true)
+
+        const blob = await convertToCanvas(elementId)
+        return blob
+      } catch (error) {
+        console.error('Failed to capture element:', error)
+        return null
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [isLoading],
+  )
 
   return useMemo(
     () => ({
