@@ -1,5 +1,5 @@
 import html2canvas from 'html2canvas'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 interface UseElementToCanvasOptions {
   backgroundColor?: string
@@ -44,18 +44,28 @@ export const useElementToCanvas = (options: UseElementToCanvasOptions = {}) => {
 
   const convertToCanvasWithLoading = useCallback(
     async (elementId: string): Promise<Blob | null> => {
-      setIsLoading(true)
-      const blob = await convertToCanvas(elementId)
-      setIsLoading(false)
-      return blob
+      try {
+        setIsLoading(true)
+        const blob = await convertToCanvas(elementId)
+        setIsLoading(false)
+        return blob
+      } catch (error) {
+        console.error('Failed to capture element:', error)
+        return null
+      } finally {
+        setIsLoading(false)
+      }
     },
     [convertToCanvas],
   )
 
-  return {
-    convertToCanvas,
-    convertToCanvasWithLoading,
-    isLoading,
-    filename,
-  }
+  return useMemo(
+    () => ({
+      convertToCanvas,
+      convertToCanvasWithLoading,
+      isLoading,
+      filename,
+    }),
+    [convertToCanvas, convertToCanvasWithLoading, isLoading, filename],
+  )
 }

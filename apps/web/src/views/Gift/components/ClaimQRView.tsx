@@ -24,6 +24,8 @@ const QRCodeContainer = styled(Box)`
   left: -9999px; /* moves it offscreen */
 `
 
+const ELEMENT_ID = 'qr-code'
+
 function QRImageDownloadView({
   qrCodeElement,
   code,
@@ -40,7 +42,7 @@ function QRImageDownloadView({
   return (
     <>
       <QRCodeContainer>
-        <Flex id="qr-code" p="8px" justifyContent="center" flexDirection="column" alignItems="center">
+        <Flex id={ELEMENT_ID} p="8px" justifyContent="center" flexDirection="column" alignItems="center">
           <Text mb="16px" bold>
             {t('Unlock Your Gift!')}
           </Text>
@@ -76,8 +78,8 @@ function QRImageDownloadView({
         </Flex>
       </QRCodeContainer>
       <FlexGap flexDirection="row" gap="8px">
-        <QRShareImageButton elementId="qr-code" code={code} />
-        <QRDownloadImageButton elementId="qr-code" />
+        <QRShareImageButton elementId={ELEMENT_ID} code={code} />
+        <QRDownloadImageButton elementId={ELEMENT_ID} />
       </FlexGap>
     </>
   )
