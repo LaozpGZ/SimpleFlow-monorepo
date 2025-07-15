@@ -43,7 +43,7 @@ export const GiftInfoDetailView = () => {
         <GiftInfoDescription
           text={t('Gift Expired, Tokens Returned!')}
           description={t(
-            'The starter fee is not refundable, but the full gift amount and any added claim gas will be returned to your wallet.',
+            'The gift has expired. The full amount, minus the claim gas fee, has been returned to your wallet.',
           )}
         />
       ) : (
