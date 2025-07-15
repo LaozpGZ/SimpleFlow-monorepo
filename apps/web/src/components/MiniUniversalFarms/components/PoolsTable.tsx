@@ -90,7 +90,6 @@ const EmptyStateContainer = styled.div`
 interface PoolsTableProps {
   pools: PoolInfo[]
   isLoading: boolean
-  error?: Error | null
   onLoadMore?: () => void
 }
 
@@ -215,11 +214,11 @@ const MobileListView = ({ pools }: { pools: PoolInfo[] }) => {
   )
 }
 
-export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, error, onLoadMore }) => {
+export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, onLoadMore }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
-  // IntersectionObserver for pagination
+  // IntersectionObserver for scroll-to-end pagination
   const { observerRef, isIntersecting } = useIntersectionObserver({
     threshold: 0.1,
     rootMargin: '50px',
@@ -262,19 +261,6 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, error,
     }
   }, [isIntersecting, onLoadMore, isLoading])
 
-  if (error) {
-    return (
-      <TableContainer>
-        <EmptyStateContainer>
-          <Text color="failure">{t('Error loading pools')}</Text>
-          <Text color="textSubtle" fontSize="14px">
-            {error.message}
-          </Text>
-        </EmptyStateContainer>
-      </TableContainer>
-    )
-  }
-
   if (isLoading && pools.length === 0) {
     return (
       <TableContainer>
@@ -308,25 +294,31 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, error,
   }
 
   return (
-    <TableContainer>
-      {/* Use TableView with sticky header */}
-      {isMobile ? <MobileListView pools={pools} /> : <TableView getRowKey={getRowKey} columns={columns} data={pools} />}
-      {/* Loading indicator when loading more */}
-      {isLoading && pools.length > 0 && (
-        <Flex
-          justifyContent="center"
-          alignItems="center"
-          width="100%"
-          p="16px"
-          borderTop="1px solid"
-          borderColor="cardBorder"
-        >
-          <Loading mr="8px" />
-          <Text color="textSubtle">{t('Loading more pools...')}</Text>
-        </Flex>
-      )}
-      {/* Intersection observer element for pagination */}
-      {pools.length > 0 && onLoadMore && <LoadMoreTrigger ref={observerRef} />}
-    </TableContainer>
+    <>
+      <TableContainer>
+        {/* Use TableView with sticky header */}
+        {isMobile ? (
+          <MobileListView pools={pools} />
+        ) : (
+          <TableView getRowKey={getRowKey} columns={columns} data={pools} />
+        )}
+        {/* Loading indicator when loading more */}
+        {isLoading && pools.length > 0 && (
+          <Flex
+            justifyContent="center"
+            alignItems="center"
+            width="100%"
+            p="16px"
+            borderTop="1px solid"
+            borderColor="cardBorder"
+          >
+            <Loading mr="8px" />
+            <Text color="textSubtle">{t('Loading more pools...')}</Text>
+          </Flex>
+        )}
+        {/* Intersection observer element for pagination */}
+        {pools.length > 0 && onLoadMore && !isLoading && <LoadMoreTrigger ref={observerRef} />}
+      </TableContainer>
+    </>
   )
 }

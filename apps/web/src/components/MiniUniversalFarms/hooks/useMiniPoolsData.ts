@@ -1,96 +1,68 @@
 import { FarmV4SupportedChainId, Protocol } from '@pancakeswap/farms'
-import { useAtomValue, useSetAtom } from 'jotai'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
+import { atomFamily } from 'jotai/utils'
+import isEqual from 'lodash/isEqual'
+import { useCallback, useEffect, useMemo } from 'react'
 import { FarmQuery } from 'state/farmsV4/search/edgeFarmQueries'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { farmsSearchAtom, farmsSearchPagingAtom } from 'views/universalFarms/atom/farmsSearchAtom'
 
+const poolsDataAtom = atomFamily((_: FarmQuery) => atom<PoolInfo[]>([]), isEqual)
+
 interface UseMiniPoolsDataParams {
-  chains: FarmV4SupportedChainId[]
+  chainId: FarmV4SupportedChainId
   protocols?: Protocol[]
   searchQuery?: string
-  page?: number
-  pageSize?: number
 }
 
 interface UseMiniPoolsDataReturn {
   pools: PoolInfo[]
   isLoading: boolean
-  error: Error | null
-  totalPools: number
-  hasNextPage: boolean
-  currentPage: number
-  resetPagination: () => void
+  loadMore: () => void
 }
 
 const DEFAULT_PROTOCOLS = [Protocol.InfinityCLAMM, Protocol.InfinityBIN, Protocol.V3, Protocol.V2, Protocol.STABLE]
-const DEFAULT_PAGE_SIZE = 20
 
 export const useMiniPoolsData = ({
-  chains,
+  chainId,
   protocols = DEFAULT_PROTOCOLS,
   searchQuery = '',
-  page = 1,
-  pageSize = DEFAULT_PAGE_SIZE,
 }: UseMiniPoolsDataParams): UseMiniPoolsDataReturn => {
   // Create query object for Universal Farms
   const query: FarmQuery = useMemo(
     () => ({
       keywords: searchQuery,
-      chains,
+      chains: [chainId],
       protocols,
       sortBy: null, // Default sorting
       sortOrder: 0, // No specific sort order
-      activeChainId: chains[0], // Use first chain as active
+      activeChainId: chainId, // Use first chain as active
     }),
-    [searchQuery, chains, protocols],
+    [searchQuery, chainId, protocols],
   )
 
   // Use existing Universal Farms atoms
   const farmSearchResult = useAtomValue(farmsSearchAtom(query))
   const setPaging = useSetAtom(farmsSearchPagingAtom(query))
 
-  // Track local pagination state
-  const [requestedPage, setRequestedPage] = useState(page)
+  const [pools, setPools] = useAtom(poolsDataAtom(query))
 
-  // Update pagination when page changes
   useEffect(() => {
-    const targetPaging = Math.ceil((requestedPage * pageSize) / 20) - 1 // Universal Farms uses 20 items per page
-    setPaging(targetPaging)
-  }, [requestedPage, pageSize, setPaging])
+    const farmsList = farmSearchResult.unwrapOr([])
+    if (farmsList.length > 0) {
+      setPools(farmsList)
+    }
+  }, [farmSearchResult])
 
-  // Update local page when prop changes
-  useEffect(() => {
-    setRequestedPage(page)
-  }, [page])
+  const isLoading = useMemo(() => pools.length === 0 && farmSearchResult.isPending(), [pools, farmSearchResult])
 
-  // Extract data from the Universal Farms result
-  const pools = useMemo(() => {
-    const allPools = farmSearchResult.unwrapOr([])
-    const startIndex = (requestedPage - 1) * pageSize
-    const endIndex = startIndex + pageSize
-    return allPools.slice(startIndex, endIndex)
-  }, [farmSearchResult, requestedPage, pageSize])
-
-  // Calculate loading and pagination state
-  const isLoading = farmSearchResult.isPending()
-  const allPools = farmSearchResult.unwrapOr([])
-  const totalPools = allPools.length
-  const hasNextPage = requestedPage * pageSize < totalPools
-
-  // Reset pagination function
-  const resetPagination = useCallback(() => {
-    setRequestedPage(1)
-    setPaging(0)
+  const loadMore = useCallback(() => {
+    setPaging((prev) => (prev ?? 0) + 1)
   }, [setPaging])
 
   return {
     pools,
     isLoading,
-    error: null, // Universal Farms atoms handle errors internally
-    totalPools,
-    hasNextPage,
-    currentPage: requestedPage,
-    resetPagination,
+    loadMore,
   }
 }

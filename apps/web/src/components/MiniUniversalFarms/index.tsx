@@ -1,4 +1,4 @@
-import { FarmV4SupportedChainId, Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
+import { FarmV4SupportedChainId, Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Card, Flex, Input, InputGroup, SearchIcon } from '@pancakeswap/uikit'
 import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
@@ -36,7 +36,7 @@ const SearchInputWrapper = styled.div`
 `
 
 interface MiniUniversalFarmsProps {
-  chainIds?: FarmV4SupportedChainId[]
+  chainId: FarmV4SupportedChainId
 }
 
 const PROTOCOL_FILTERS = [
@@ -47,12 +47,11 @@ const PROTOCOL_FILTERS = [
   { label: 'StableSwap', value: Protocol.STABLE },
 ] as const
 
-export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds }) => {
+export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainId }) => {
   const { t } = useTranslation()
   const [searchQuery, setSearchQuery] = useState('')
   const [searchText, setSearchText] = useState('')
   const [activeProtocolTab, setActiveProtocolTab] = useState<string>('All')
-  const [currentPage, setCurrentPage] = useState(1)
 
   // Debounced search function
   const debouncedSetSearchQuery = useMemo(() => debounce((val: string) => setSearchQuery(val), 500), [])
@@ -66,12 +65,6 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
     [debouncedSetSearchQuery],
   )
 
-  // Determine which chains to use
-  const chains = useMemo(() => {
-    if (chainIds && chainIds.length > 0) return chainIds
-    return [...supportedChainIdV4]
-  }, [chainIds])
-
   // Get the selected protocol filter
   const selectedProtocols = useMemo(() => {
     const filter = PROTOCOL_FILTERS.find((f) => f.label === activeProtocolTab)
@@ -82,13 +75,11 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
     return [filter.value]
   }, [activeProtocolTab])
 
-  // Fetch pools data using the simplified hook that leverages Universal Farms
-  const { pools, isLoading, error, hasNextPage, resetPagination } = useMiniPoolsData({
-    chains,
+  // Fetch pools data using the hook with simple pagination
+  const { pools, isLoading, loadMore } = useMiniPoolsData({
+    chainId,
     protocols: selectedProtocols,
     searchQuery,
-    page: currentPage,
-    pageSize: 10,
   })
 
   // Prepare token lists (consistent with Universal Farms)
@@ -96,12 +87,6 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
 
   // Check if we're still loading (include token list preparation)
   const isPending = listPrepared.isPending() || isLoading
-
-  // Reset pagination when filters change
-  useEffect(() => {
-    setCurrentPage(1)
-    resetPagination()
-  }, [selectedProtocols, searchQuery, chains, resetPagination])
 
   // Sync searchText with searchQuery
   useEffect(() => {
@@ -114,12 +99,6 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
       debouncedSetSearchQuery.cancel()
     }
   }, [debouncedSetSearchQuery])
-
-  // Handle load more functionality
-  const handleLoadMore = useCallback(async () => {
-    if (!hasNextPage) return
-    setCurrentPage((prev) => prev + 1)
-  }, [hasNextPage])
 
   // Handle protocol tab change
   const handleProtocolTabChange = useCallback((tab: string) => {
@@ -144,13 +123,7 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ chainIds
               <TabMenu tabs={protocolTabs} defaultTab="All" onTabChange={handleProtocolTabChange} />
             </Box>
           </SearchWrapper>
-
-          <PoolsTable
-            pools={pools}
-            isLoading={isPending}
-            error={error}
-            onLoadMore={hasNextPage ? handleLoadMore : undefined}
-          />
+          <PoolsTable pools={pools} isLoading={isPending} onLoadMore={loadMore} />
         </Box>
       </Card>
     </Container>
