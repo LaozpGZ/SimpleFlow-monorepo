@@ -25,7 +25,7 @@ const ChartContainer = styled.div`
   ${({ theme }) => theme.mediaQueries.md} {
     padding: 0;
     width: 100%;
-    height: 495px;
+    height: 450px;
   }
 `
 
