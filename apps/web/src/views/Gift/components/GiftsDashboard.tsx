@@ -33,17 +33,8 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
   const { setCodeHash } = useContext(CancelGiftContext)
 
   const { setSendEntry } = useWalletModalV2ViewState()
-  const { setIsSendGift } = useContext(SendGiftContext)
 
   const { unclaimedOnly, setUnclaimedOnly } = useUnclaimedOnlyContext()
-
-  if (isLoading && !giftInfo.length) {
-    return (
-      <Flex width="100%" py="24px" justifyContent="center" alignItems="center">
-        <Spinner />
-      </Flex>
-    )
-  }
 
   return (
     <>
@@ -65,9 +56,15 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
           </FlexGap>
         </SecondaryCard>
         {giftInfo.length === 0 ? (
-          <Flex width="100%" justifyContent="center" alignItems="center">
-            <Text color="textSubtle">No gifts found</Text>
-          </Flex>
+          isLoading ? (
+            <Flex width="100%" justifyContent="center" alignItems="center">
+              <Spinner />
+            </Flex>
+          ) : (
+            <Flex width="100%" justifyContent="center" alignItems="center">
+              <Text color="textSubtle">No gifts found</Text>
+            </Flex>
+          )
         ) : (
           giftInfo.map((gift) => {
             const displayCurrency = gift.currencyAmount ?? gift.nativeCurrencyAmount
