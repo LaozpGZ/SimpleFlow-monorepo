@@ -2,7 +2,7 @@
 
 import { ChainId, CurrencyAmount, NativeCurrency } from '@pancakeswap/sdk'
 import { useGetNativeTokenBalance } from 'hooks/useTokenBalance'
-import { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 interface SendGiftContextType {
   isSendGift: boolean
@@ -42,12 +42,15 @@ export const SendGiftProvider = ({ children }: { children: React.ReactNode }) =>
     return Boolean(nativeAmount?.greaterThan(nativeCurrencyBalance))
   }, [nativeAmount, nativeCurrencyBalance])
 
+  useEffect(() => {
+    if (!includeStarterGas) {
+      setNativeAmount(undefined)
+    }
+  }, [includeStarterGas])
+
   const handleToggleIncludeStarterGas = useCallback(
     (value: boolean) => {
       setIncludeStarterGas(value)
-      if (!value) {
-        setNativeAmount(undefined)
-      }
     },
     [includeStarterGas, setNativeAmount],
   )

@@ -1,8 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text, Toggle } from '@pancakeswap/uikit'
-import { useContext } from 'react'
+import { useEffect } from 'react'
 import { CHAINS_WITH_GIFT_CLAIM } from '../constants'
-import { SendGiftContext } from '../providers/SendGiftProvider'
+import { useSendGiftContext } from '../providers/SendGiftProvider'
 import { GasSponsor } from './GasSponsor'
 
 export const SendGiftToggle = ({
@@ -15,9 +15,16 @@ export const SendGiftToggle = ({
   children: (isSendGiftOn: boolean) => React.ReactNode
 }) => {
   const { t } = useTranslation()
-  const { isSendGift, setIsSendGift } = useContext(SendGiftContext)
+  const { includeStarterGas, setIncludeStarterGas, setIsSendGift, isSendGift } = useSendGiftContext()
 
   const isSupportedChain = tokenChainId && CHAINS_WITH_GIFT_CLAIM.includes(tokenChainId)
+
+  // if the token is native token, disable the include starter gas
+  useEffect(() => {
+    if (isNativeToken && includeStarterGas) {
+      setIncludeStarterGas(false)
+    }
+  }, [isNativeToken, includeStarterGas])
 
   if (!isSupportedChain) {
     return children(false)
