@@ -43,6 +43,12 @@ export const SendGiftProvider = ({ children }: { children: React.ReactNode }) =>
   }, [nativeAmount, nativeCurrencyBalance])
 
   useEffect(() => {
+    if (!isSendGift) {
+      setIncludeStarterGas(false)
+    }
+  }, [isSendGift, setIncludeStarterGas])
+
+  useEffect(() => {
     if (!includeStarterGas) {
       setNativeAmount(undefined)
     }
