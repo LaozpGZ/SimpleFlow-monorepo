@@ -54,12 +54,12 @@ function QRImageDownloadView({
             <FlexGap flexDirection="column" gap="8px">
               {tokenAmount.greaterThan(0) && (
                 <Card>
-                  <CurrencyAmountGiftDisplay p="8px" currencyAmount={tokenAmount} />
+                  <CurrencyAmountGiftDisplay showChainLogo={false} p="8px" currencyAmount={tokenAmount} />
                 </Card>
               )}
               {nativeAmount && nativeAmount.greaterThan(0) && (
                 <Card>
-                  <CurrencyAmountGiftDisplay p="8px" currencyAmount={nativeAmount} />
+                  <CurrencyAmountGiftDisplay showChainLogo={false} p="8px" currencyAmount={nativeAmount} />
                 </Card>
               )}
             </FlexGap>

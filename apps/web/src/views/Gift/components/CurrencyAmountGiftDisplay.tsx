@@ -7,9 +7,11 @@ import { multiplyPriceByAmount } from 'utils/prices'
 
 export const CurrencyAmountGiftDisplay = ({
   currencyAmount,
+  showChainLogo = true,
   ...props
 }: {
   currencyAmount: CurrencyAmount<Token | NativeCurrency>
+  showChainLogo?: boolean
 } & FlexProps) => {
   const stablePrice = useStablecoinPrice(currencyAmount.currency)
 
