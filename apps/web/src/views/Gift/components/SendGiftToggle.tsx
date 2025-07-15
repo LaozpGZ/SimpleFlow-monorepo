@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text, Toggle } from '@pancakeswap/uikit'
 import { useEffect } from 'react'
+import { SecondaryCard } from 'components/SecondaryCard'
 import { CHAINS_WITH_GIFT_CLAIM } from '../constants'
 import { useSendGiftContext } from '../providers/SendGiftProvider'
 import { GasSponsor } from './GasSponsor'
@@ -24,7 +25,7 @@ export const SendGiftToggle = ({
     if (isNativeToken && includeStarterGas) {
       setIncludeStarterGas(false)
     }
-  }, [isNativeToken, includeStarterGas])
+  }, [isNativeToken, setIncludeStarterGas, includeStarterGas])
 
   if (!isSupportedChain) {
     return children(false)
@@ -32,21 +33,23 @@ export const SendGiftToggle = ({
 
   return (
     <>
-      <FlexGap alignItems="center" justifyContent="space-between">
-        <FlexGap alignItems="center" gap="8px" flexDirection="column">
-          <Text fontSize="20px" fontWeight="bold">
-            {t('Send as a gift')}
-          </Text>
+      <SecondaryCard>
+        <FlexGap alignItems="center" justifyContent="space-between">
+          <FlexGap alignItems="center" gap="8px" flexDirection="column">
+            <Text fontSize="20px" fontWeight="bold">
+              {t('Send as a gift')}
+            </Text>
+          </FlexGap>
+          <Toggle
+            id="toggle-show-testnet"
+            checked={isSendGift}
+            scale="md"
+            onChange={() => {
+              setIsSendGift(!isSendGift)
+            }}
+          />
         </FlexGap>
-        <Toggle
-          id="toggle-show-testnet"
-          checked={isSendGift}
-          scale="md"
-          onChange={() => {
-            setIsSendGift(!isSendGift)
-          }}
-        />
-      </FlexGap>
+      </SecondaryCard>
       {children(isSendGift)}
       {isSendGift && !isNativeToken && <GasSponsor tokenChainId={tokenChainId} />}
     </>
