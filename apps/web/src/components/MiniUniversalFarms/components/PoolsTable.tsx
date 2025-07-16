@@ -1,4 +1,3 @@
-import { useIntersectionObserver } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, FlexGap, Loading, Skeleton, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
@@ -240,12 +239,6 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
 
   const query = useAtomValue(searchQueryAtom)
 
-  // IntersectionObserver for scroll-to-end pagination
-  const { observerRef, isIntersecting } = useIntersectionObserver({
-    threshold: 0.1,
-    rootMargin: '50px',
-  })
-
   // Column configuration (similar to useColumnConfig in universal farms)
   const columns = useMemo(
     () => [
@@ -286,15 +279,39 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
   const getRowKey = useCallback((item: PoolInfo) => `${item.chainId}-${item.lpAddress}`, [])
 
   const handleLoadMore = useCallback(() => {
-    loadMore?.()
+    loadMore()
   }, [loadMore])
 
-  // Handle intersection observer pagination
+  // Handle scroll-based pagination (alternative to avoid using intersection observer with infinite loop issue)
   useEffect(() => {
-    if (isIntersecting && !isLoading) {
-      handleLoadMore()
+    const container = scrollableContainerRef.current
+    if (!container) return () => {}
+
+    const handleScroll = () => {
+      if (isLoading) return
+
+      const { scrollTop, scrollHeight, clientHeight } = container
+      const scrollPercentage = (scrollTop + clientHeight) / scrollHeight
+
+      // Trigger load more when user has scrolled 95% of the content
+      if (scrollPercentage > 0.95) {
+        handleLoadMore()
+      }
     }
-  }, [isIntersecting, isLoading, handleLoadMore])
+
+    let timeoutId: NodeJS.Timeout
+    const debouncedHandleScroll = () => {
+      clearTimeout(timeoutId)
+      timeoutId = setTimeout(handleScroll, 100)
+    }
+
+    container.addEventListener('scroll', debouncedHandleScroll)
+
+    return () => {
+      container.removeEventListener('scroll', debouncedHandleScroll)
+      clearTimeout(timeoutId)
+    }
+  }, [isLoading, handleLoadMore])
 
   // Scroll to the top of the table when the protocol changes
   useEffect(() => {
@@ -363,9 +380,6 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
             <Text color="textSubtle">{t('Loading more pools...')}</Text>
           </Flex>
         )}
-
-        {/* Intersection observer for pagination */}
-        {pools.length > 0 && <div ref={observerRef} />}
       </TableContainer>
     </>
   )
