@@ -83,45 +83,65 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const isWidgetReady = useRef(false)
   const currentSymbol = useRef('')
   const currentChainId = useRef<number | undefined>(undefined)
+  const currentCurrency0Address = useRef<string | undefined>(undefined)
+  const currentCurrency1Address = useRef<string | undefined>(undefined)
+  const initializationTimeout = useRef<NodeJS.Timeout | null>(null)
   const { isDark, theme } = useTheme()
   const symbol = currency0 && currency1 ? `${currency0?.symbol}/${currency1?.symbol}` : ''
   const { chainId } = useActiveChainId()
 
+
   useEffect(() => {
     const chainChanged = chainId !== currentChainId.current
     const symbolChanged = symbol !== currentSymbol.current
+    const currency0Address = currency0?.isToken ? currency0?.address : currency0?.wrapped?.address
+    const currency1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
+    const currency0AddressChanged = currency0Address !== currentCurrency0Address.current
+    const currency1AddressChanged = currency1Address !== currentCurrency1Address.current
+    
 
     if (
       currency0 &&
       currency1 &&
-      (symbolChanged || chainChanged) &&
-      widgetRef.current &&
-      isInitialized.current &&
-      isWidgetReady.current
+      (symbolChanged || chainChanged || currency0AddressChanged || currency1AddressChanged)
     ) {
       currentSymbol.current = symbol
       currentChainId.current = chainId
+      currentCurrency0Address.current = currency0Address
+      currentCurrency1Address.current = currency1Address
 
-      // If chain changed, force widget recreation by clearing refs
-      if (chainChanged) {
-        console.log('Chain changed, will recreate widget')
+      // If chain changed or currency addresses changed, force widget recreation
+      if (chainChanged || currency0AddressChanged || currency1AddressChanged) {
+        if (widgetRef.current) {
+          try {
+            if (widgetRef.current.remove) {
+              widgetRef.current.remove()
+            }
+          } catch (error) {
+            console.error('Error removing widget:', error)
+          }
+          widgetRef.current = null
+        }
         isInitialized.current = false
         isWidgetReady.current = false
         return // Let the main effect handle recreation
       }
 
-      setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
+      // Only try to update existing widget if we have one and it's ready
+      if (widgetRef.current && isInitialized.current && isWidgetReady.current) {
+        setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
 
-      try {
-        // Check if widget has activeChart method
-        if (widgetRef.current && typeof widgetRef.current.activeChart === 'function') {
-          const activeChart = widgetRef.current.activeChart()
-          if (activeChart && typeof activeChart.setSymbol === 'function') {
-            activeChart.setSymbol(symbol)
+        try {
+          // Check if widget has activeChart method
+          if (widgetRef.current && typeof widgetRef.current.activeChart === 'function') {
+            const activeChart = widgetRef.current.activeChart()
+            if (activeChart && typeof activeChart.setSymbol === 'function') {
+              activeChart.setSymbol(symbol)
+            }
           }
+        } catch (error) {
+          console.error('Error setting symbol:', error)
         }
-      } catch (error) {
-        console.error('Error setting symbol:', error)
       }
     }
   }, [currency0, currency1, chainId, symbol])
@@ -159,8 +179,19 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
           isWidgetReady.current = false
         }
 
-        if (containerRef.current && !widgetRef.current && symbol && currency0 && currency1 && chainId) {
-          const options: TradingViewWidgetOptions = {
+        // Clear any pending initialization
+        if (initializationTimeout.current) {
+          clearTimeout(initializationTimeout.current)
+          initializationTimeout.current = null
+        }
+
+        // Add delay to wait for currency updates when chain changes
+        const shouldDelay = chainId !== currentChainId.current && (!currency0 || !currency1)
+        
+        const doInitialization = () => {
+          if (containerRef.current && !widgetRef.current && symbol && currency0 && currency1 && chainId) {
+            
+            const options: TradingViewWidgetOptions = {
             symbol,
             theme: isDark ? 'Dark' : 'Light',
             overrides: {
@@ -284,6 +315,13 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
           update24HPriceData(on24HPriceDataChange)
           isInitialized.current = true
+          }
+        }
+
+        if (shouldDelay) {
+          initializationTimeout.current = setTimeout(doInitialization, 100)
+        } else {
+          doInitialization()
         }
       } catch (error) {
         console.error('Failed to initialize chart:', error)
@@ -341,6 +379,13 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
   useEffect(() => {
     return () => {
+      // Clear initialization timeout
+      if (initializationTimeout.current) {
+        clearTimeout(initializationTimeout.current)
+        initializationTimeout.current = null
+      }
+      
+      // Clean up widget
       if (widgetRef.current?.remove) {
         widgetRef.current.remove()
       }
