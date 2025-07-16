@@ -109,13 +109,29 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     const currency1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
     const currency0AddressChanged = currency0Address !== currentCurrency0Address.current
     const currency1AddressChanged = currency1Address !== currentCurrency1Address.current
-    
+
+    console.log('[Chart Debug] Change detection:', {
+      chainChanged,
+      symbolChanged,
+      currency0AddressChanged,
+      currency1AddressChanged,
+      hasWidget: !!widgetRef.current,
+      isInitialized: isInitialized.current,
+      isWidgetReady: isWidgetReady.current,
+    })
 
     if (
       currency0 &&
       currency1 &&
       (symbolChanged || chainChanged || currency0AddressChanged || currency1AddressChanged)
     ) {
+      console.log('[Chart Debug] Processing change:', {
+        action: chainChanged || currency0AddressChanged || currency1AddressChanged ? 'recreate' : 'update',
+        chainChanged,
+        currency0AddressChanged,
+        currency1AddressChanged,
+      })
+
       currentSymbol.current = symbol
       currentChainId.current = chainId
       currentCurrency0Address.current = currency0Address
@@ -123,6 +139,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
       // If chain changed or currency addresses changed, force widget recreation
       if (chainChanged || currency0AddressChanged || currency1AddressChanged) {
+        console.log('[Chart Debug] Forcing widget recreation')
         if (widgetRef.current) {
           try {
             if (widgetRef.current.remove) {
@@ -135,6 +152,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         }
         isInitialized.current = false
         isWidgetReady.current = false
+        console.log('[Chart Debug] Widget refs cleared, should trigger recreation')
         return // Let the main effect handle recreation
       }
 
@@ -198,134 +216,152 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
         // Add delay to wait for currency updates when chain changes
         const shouldDelay = chainId !== currentChainId.current && (!currency0 || !currency1)
-        
+
         const doInitialization = () => {
-          if (containerRef.current && !widgetRef.current && symbol && currency0 && currency1 && chainId) {
-            
-            const options: TradingViewWidgetOptions = {
+          console.log('[Chart Debug] doInitialization called:', {
+            hasContainer: !!containerRef.current,
+            hasWidget: !!widgetRef.current,
             symbol,
-            theme: isDark ? 'Dark' : 'Light',
-            overrides: {
-              'mainSeriesProperties.candleStyle.upColor': isDark
-                ? tokens.colors.dark.success
-                : tokens.colors.light.success,
-              'mainSeriesProperties.candleStyle.downColor': isDark
-                ? tokens.colors.dark.destructive
-                : tokens.colors.light.destructive,
-              'mainSeriesProperties.candleStyle.borderUpColor': isDark
-                ? tokens.colors.dark.success
-                : tokens.colors.light.success,
-              'mainSeriesProperties.candleStyle.borderDownColor': isDark
-                ? tokens.colors.dark.destructive
-                : tokens.colors.light.destructive,
-              'mainSeriesProperties.candleStyle.wickUpColor': isDark
-                ? tokens.colors.dark.success
-                : tokens.colors.light.success,
-              'mainSeriesProperties.candleStyle.wickDownColor': isDark
-                ? tokens.colors.dark.destructive
-                : tokens.colors.light.destructive,
-              'paneProperties.background': isDark ? tokens.colors.dark.card : tokens.colors.light.card,
-              'paneProperties.backgroundType': 'solid',
-              'paneProperties.grid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
-              'paneProperties.grid.style': 0,
-              'paneProperties.vertGrid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
-              'paneProperties.vertGrid.style': 0,
-              'paneProperties.horzGrid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
-              'paneProperties.horzGrid.style': 0,
-              headerToolbarBg: isDark ? tokens.colors.dark.backgroundAlt : tokens.colors.light.backgroundAlt,
-              custom_font_family: `'Kanit', sans-serif`,
-              'scalesProperties.fontFamily': `'Kanit', sans-serif`,
-              'scalesProperties.fontSize': 12,
-              'scalesProperties.textColor': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
-              'legendProperties.fontFamily': `'Kanit', sans-serif`,
-              'legendProperties.fontSize': 12,
-            },
-            disabled_features: [
-              'left_toolbar',
-              // 'header_widget',
-              'symbol_info',
-              'header_symbol_search',
-              'create_volume_indicator_by_default',
-              'create_volume_indicator_by_default_once',
-              'volume_force_overlay',
-              'symbol_info_price_source',
-              'allow_arbitrary_symbol_search_input',
-              'symbol_search_hot_key',
-              'header_compare',
-              'compare_symbol_search_spread_operators',
-              'studies_symbol_search_spread_operators',
-              'symbol_info_long_description',
-              'show_symbol_logos',
-              'show_symbol_logo_in_legend',
-              'show_symbol_logo_for_compare_studies',
-              'uppercase_instrument_names',
-              'study_symbol_ticker_description',
-              'auto_enable_symbol_labels',
-              // disable marks on bars (earnings, dividends )
-              'marks_on_bars',
-              'show_event_marks',
-              'show_earnings_marks',
-              'show_dividend_marks',
-              'show_splits_marks',
-              // disable timescale marks
-              'timescale_marks',
-              'timeframes_toolbar',
-              // 'legend_widget',
-              'display_legend_on_all_charts',
-              'two_character_bar_marks_labels',
-              // Hide most toolbar buttons except the ones we want to keep
-              'header_saveload',
-              'header_undo_redo',
-              'header_settings',
-              'header_screenshot',
-              'header_widget_dom_node',
-              'header_compare',
-              'control_bar',
-              'edit_buttons_in_legend',
-              'border_around_the_chart',
-              'show_interval_dialog_on_key_press',
-              'property_pages',
-              'save_chart_properties_to_local_storage',
-              'use_localstorage_for_settings',
-              'border_around_the_chart',
-              'toolbar_button_newtab',
-              'toolbar_button_compare',
-              'toolbar_button_properties',
-              'toolbar_button_text',
-              'toolbar_button_shapes',
-              'toolbar_button_line_tools',
-              'toolbar_button_measure',
-              'toolbar_button_zoom_in',
-              'toolbar_button_zoom_out',
-              'toolbar_button_undo',
-              'toolbar_button_redo',
-              'toolbar_button_saveload',
-              'toolbar_button_settings',
-              'toolbar_button_screenshot',
-              'toolbar_button_hotlist',
-            ],
-            enabled_features: ['hide_left_toolbar_by_default'],
-            autosize: true,
-            height: '100%',
-            width: '100%',
-          }
-          setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
-          widgetRef.current = createTradingViewWidget(containerRef.current, options)
+            hasCurrency0: !!currency0,
+            hasCurrency1: !!currency1,
+            chainId,
+            shouldInitialize: !!(
+              containerRef.current &&
+              !widgetRef.current &&
+              symbol &&
+              currency0 &&
+              currency1 &&
+              chainId
+            ),
+          })
 
-          // Wait for widget to be ready
-          if (widgetRef.current && widgetRef.current.onChartReady) {
-            widgetRef.current.onChartReady(() => {
-              isWidgetReady.current = true
-            })
-          } else {
-            // If no onChartReady method, set as ready after delay
-            setTimeout(() => {
-              isWidgetReady.current = true
-            }, 1000)
-          }
+          if (containerRef.current && !widgetRef.current && symbol && currency0 && currency1 && chainId) {
+            console.log('[Chart Debug] Starting widget initialization')
 
-          update24HPriceData(on24HPriceDataChange)
-          isInitialized.current = true
+            const options: TradingViewWidgetOptions = {
+              symbol,
+              theme: isDark ? 'Dark' : 'Light',
+              overrides: {
+                'mainSeriesProperties.candleStyle.upColor': isDark
+                  ? tokens.colors.dark.success
+                  : tokens.colors.light.success,
+                'mainSeriesProperties.candleStyle.downColor': isDark
+                  ? tokens.colors.dark.destructive
+                  : tokens.colors.light.destructive,
+                'mainSeriesProperties.candleStyle.borderUpColor': isDark
+                  ? tokens.colors.dark.success
+                  : tokens.colors.light.success,
+                'mainSeriesProperties.candleStyle.borderDownColor': isDark
+                  ? tokens.colors.dark.destructive
+                  : tokens.colors.light.destructive,
+                'mainSeriesProperties.candleStyle.wickUpColor': isDark
+                  ? tokens.colors.dark.success
+                  : tokens.colors.light.success,
+                'mainSeriesProperties.candleStyle.wickDownColor': isDark
+                  ? tokens.colors.dark.destructive
+                  : tokens.colors.light.destructive,
+                'paneProperties.background': isDark ? tokens.colors.dark.card : tokens.colors.light.card,
+                'paneProperties.backgroundType': 'solid',
+                'paneProperties.grid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
+                'paneProperties.grid.style': 0,
+                'paneProperties.vertGrid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
+                'paneProperties.vertGrid.style': 0,
+                'paneProperties.horzGrid.color': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
+                'paneProperties.horzGrid.style': 0,
+                headerToolbarBg: isDark ? tokens.colors.dark.backgroundAlt : tokens.colors.light.backgroundAlt,
+                custom_font_family: `'Kanit', sans-serif`,
+                'scalesProperties.fontFamily': `'Kanit', sans-serif`,
+                'scalesProperties.fontSize': 12,
+                'scalesProperties.textColor': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
+                'legendProperties.fontFamily': `'Kanit', sans-serif`,
+                'legendProperties.fontSize': 12,
+              },
+              disabled_features: [
+                'left_toolbar',
+                // 'header_widget',
+                'symbol_info',
+                'header_symbol_search',
+                'create_volume_indicator_by_default',
+                'create_volume_indicator_by_default_once',
+                'volume_force_overlay',
+                'symbol_info_price_source',
+                'allow_arbitrary_symbol_search_input',
+                'symbol_search_hot_key',
+                'header_compare',
+                'compare_symbol_search_spread_operators',
+                'studies_symbol_search_spread_operators',
+                'symbol_info_long_description',
+                'show_symbol_logos',
+                'show_symbol_logo_in_legend',
+                'show_symbol_logo_for_compare_studies',
+                'uppercase_instrument_names',
+                'study_symbol_ticker_description',
+                'auto_enable_symbol_labels',
+                // disable marks on bars (earnings, dividends )
+                'marks_on_bars',
+                'show_event_marks',
+                'show_earnings_marks',
+                'show_dividend_marks',
+                'show_splits_marks',
+                // disable timescale marks
+                'timescale_marks',
+                'timeframes_toolbar',
+                // 'legend_widget',
+                'display_legend_on_all_charts',
+                'two_character_bar_marks_labels',
+                // Hide most toolbar buttons except the ones we want to keep
+                'header_saveload',
+                'header_undo_redo',
+                'header_settings',
+                'header_screenshot',
+                'header_widget_dom_node',
+                'header_compare',
+                'control_bar',
+                'edit_buttons_in_legend',
+                'border_around_the_chart',
+                'show_interval_dialog_on_key_press',
+                'property_pages',
+                'save_chart_properties_to_local_storage',
+                'use_localstorage_for_settings',
+                'border_around_the_chart',
+                'toolbar_button_newtab',
+                'toolbar_button_compare',
+                'toolbar_button_properties',
+                'toolbar_button_text',
+                'toolbar_button_shapes',
+                'toolbar_button_line_tools',
+                'toolbar_button_measure',
+                'toolbar_button_zoom_in',
+                'toolbar_button_zoom_out',
+                'toolbar_button_undo',
+                'toolbar_button_redo',
+                'toolbar_button_saveload',
+                'toolbar_button_settings',
+                'toolbar_button_screenshot',
+                'toolbar_button_hotlist',
+              ],
+              enabled_features: ['hide_left_toolbar_by_default'],
+              autosize: true,
+              height: '100%',
+              width: '100%',
+            }
+            setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
+            widgetRef.current = createTradingViewWidget(containerRef.current, options)
+
+            // Wait for widget to be ready
+            if (widgetRef.current && widgetRef.current.onChartReady) {
+              widgetRef.current.onChartReady(() => {
+                isWidgetReady.current = true
+              })
+            } else {
+              // If no onChartReady method, set as ready after delay
+              setTimeout(() => {
+                isWidgetReady.current = true
+              }, 1000)
+            }
+
+            update24HPriceData(on24HPriceDataChange)
+            isInitialized.current = true
           }
         }
 
@@ -395,7 +431,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         clearTimeout(initializationTimeout.current)
         initializationTimeout.current = null
       }
-      
+
       // Clean up widget
       if (widgetRef.current?.remove) {
         widgetRef.current.remove()
