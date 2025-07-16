@@ -1,68 +1,64 @@
-import { FarmV4SupportedChainId, Protocol } from '@pancakeswap/farms'
-import { atom, useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { atomFamily } from 'jotai/utils'
-import isEqual from 'lodash/isEqual'
-import { useCallback, useEffect, useMemo } from 'react'
-import { FarmQuery } from 'state/farmsV4/search/edgeFarmQueries'
+import { ISortOrder } from '@pancakeswap/uikit'
+import { DEFAULT_ACTIVE_LIST_URLS } from 'config/constants/lists'
+import { useTokenListPrepared } from 'hooks/useTokenListPrepared'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { useCallback, useMemo } from 'react'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { farmsSearchAtom, farmsSearchPagingAtom } from 'views/universalFarms/atom/farmsSearchAtom'
-
-const poolsDataAtom = atomFamily((_: FarmQuery) => atom<PoolInfo[]>([]), isEqual)
-
-interface UseMiniPoolsDataParams {
-  chainId: FarmV4SupportedChainId
-  protocols?: Protocol[]
-  searchQuery?: string
-}
+import { searchQueryAtom, updateSortAtom } from 'views/universalFarms/atom/searchQueryAtom'
 
 interface UseMiniPoolsDataReturn {
   pools: PoolInfo[]
   isLoading: boolean
   loadMore: () => void
+  handleSort: (sort: { order: ISortOrder; dataIndex: string | null }) => void
 }
 
-const DEFAULT_PROTOCOLS = [Protocol.InfinityCLAMM, Protocol.InfinityBIN, Protocol.V3, Protocol.V2, Protocol.STABLE]
+export const useMiniPoolsData = (): UseMiniPoolsDataReturn => {
+  // Prepare token lists
+  const listPrepared = useTokenListPrepared(DEFAULT_ACTIVE_LIST_URLS)
 
-export const useMiniPoolsData = ({
-  chainId,
-  protocols = DEFAULT_PROTOCOLS,
-  searchQuery = '',
-}: UseMiniPoolsDataParams): UseMiniPoolsDataReturn => {
-  // Create query object for Universal Farms
-  const query: FarmQuery = useMemo(
-    () => ({
-      keywords: searchQuery,
-      chains: [chainId],
-      protocols,
-      sortBy: null, // Default sorting
-      sortOrder: 0, // No specific sort order
-      activeChainId: chainId, // Use first chain as active
-    }),
-    [searchQuery, chainId, protocols],
-  )
+  const query = useAtomValue(searchQueryAtom)
 
   // Use existing Universal Farms atoms
   const farmSearchResult = useAtomValue(farmsSearchAtom(query))
   const setPaging = useSetAtom(farmsSearchPagingAtom(query))
 
-  const [pools, setPools] = useAtom(poolsDataAtom(query))
+  const pools = useMemo(() => farmSearchResult.unwrapOr([]), [farmSearchResult])
 
-  useEffect(() => {
-    const farmsList = farmSearchResult.unwrapOr([])
-    if (farmsList.length > 0) {
-      setPools(farmsList)
-    }
-  }, [farmSearchResult])
+  const updateSort = useSetAtom(updateSortAtom)
 
-  const isLoading = useMemo(() => pools.length === 0 && farmSearchResult.isPending(), [pools, farmSearchResult])
+  const isLoading = useMemo(
+    () => pools.length === 0 && (farmSearchResult.isPending() || listPrepared.isPending()),
+    [pools, farmSearchResult, listPrepared],
+  )
+
+  console.log('useMiniPoolsData', {
+    isLoading,
+    isFarmSearchResultPending: farmSearchResult.isPending(),
+    isListPreparedPending: listPrepared.isPending(),
+    poolsLength: pools.length,
+    pools,
+  })
 
   const loadMore = useCallback(() => {
     setPaging((prev) => (prev ?? 0) + 1)
   }, [setPaging])
 
+  const handleSort = useCallback(
+    ({ order, dataIndex }) => {
+      updateSort({
+        order,
+        dataIndex,
+      })
+    },
+    [query],
+  )
+
   return {
     pools,
     isLoading,
     loadMore,
+    handleSort,
   }
 }

@@ -8,15 +8,18 @@ import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
 import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton'
+import { FeeTierComponent } from 'views/universalFarms/components/useColumnConfig'
+import { useMiniPoolsData } from '../hooks'
 
 const PoolPairCell = styled(Flex)`
   align-items: center;
+  flex-wrap: wrap;
   gap: 12px;
 `
 
 const TokenSymbols = styled(Flex)`
   align-items: center;
-  gap: 4px;
+  gap: 8px;
 `
 
 const SymbolText = styled(Text)`
@@ -87,12 +90,6 @@ const EmptyStateContainer = styled.div`
   width: 100%;
 `
 
-interface PoolsTableProps {
-  pools: PoolInfo[]
-  isLoading: boolean
-  onLoadMore?: () => void
-}
-
 // Helper function to prepare token data for DoubleCurrencyLogo
 const prepareTokenForLogo = (token: any, poolChainId: number) => {
   if (!token) return null
@@ -121,11 +118,6 @@ const PoolTokenOverview = ({ data }: { data: PoolInfo }) => {
   const token0 = useMemo(() => prepareTokenForLogo(data.token0, data.chainId), [data.token0, data.chainId])
   const token1 = useMemo(() => prepareTokenForLogo(data.token1, data.chainId), [data.token1, data.chainId])
 
-  const hookData = useHookByPoolId(
-    data.chainId,
-    isInfinityProtocol(data.protocol) ? (data as InfinityPoolInfo)?.poolId : undefined,
-  )
-
   if (!token0 || !token1) {
     return null
   }
@@ -137,16 +129,29 @@ const PoolTokenOverview = ({ data }: { data: PoolInfo }) => {
         <SymbolText>
           {token0.symbol} / {token1.symbol}
         </SymbolText>
-        <Liquidity.PoolFeaturesBadge
-          poolType={data.protocol}
-          hookData={hookData}
-          showLabel={false}
-          showPoolType
-          showPoolFeature={!!hookData}
-          short
-        />
       </TokenSymbols>
     </PoolPairCell>
+  )
+}
+
+const PoolFeatures = ({ data }: { data: PoolInfo }) => {
+  const hookData = useHookByPoolId(
+    data.chainId,
+    isInfinityProtocol(data.protocol) ? (data as InfinityPoolInfo)?.poolId : undefined,
+  )
+
+  return (
+    <FlexGap gap="8px">
+      <FeeTierComponent dynamic={data?.isDynamicFee ?? false} fee={data.feeTier} item={data} />
+      <Liquidity.PoolFeaturesBadge
+        poolType={data.protocol}
+        hookData={hookData}
+        showLabel={false}
+        showPoolType={false}
+        showPoolFeature={!!hookData}
+        short
+      />
+    </FlexGap>
   )
 }
 
@@ -170,10 +175,11 @@ const MobilePoolItem = ({ pool }: { pool: PoolInfo }) => {
       <MobileRow>
         <PoolPairCell>
           <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} showChainLogoCurrency1 />
+          <SymbolText>
+            {token0.symbol} / {token1.symbol}
+          </SymbolText>
           <TokenSymbols>
-            <SymbolText>
-              {token0.symbol} / {token1.symbol}
-            </SymbolText>
+            <FeeTierComponent dynamic={pool?.isDynamicFee ?? false} fee={pool.feeTier} item={pool} />
             <Liquidity.PoolFeaturesBadge
               poolType={pool.protocol}
               hookData={hookData}
@@ -214,9 +220,12 @@ const MobileListView = ({ pools }: { pools: PoolInfo[] }) => {
   )
 }
 
-export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, onLoadMore }) => {
+export const PoolsTable: React.FC = () => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
+
+  // Fetch pools data using the hook with simple pagination
+  const { pools, isLoading, loadMore, handleSort } = useMiniPoolsData()
 
   // IntersectionObserver for scroll-to-end pagination
   const { observerRef, isIntersecting } = useIntersectionObserver({
@@ -231,14 +240,22 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, onLoad
         title: t('Pairs'),
         dataIndex: null as keyof PoolInfo | null,
         key: 'pairs',
-        minWidth: '210px',
+        minWidth: '110px',
         render: (_: unknown, item: PoolInfo) => <PoolTokenOverview data={item} />,
       },
       {
-        title: t('APR'),
+        title: null,
         dataIndex: null as keyof PoolInfo | null,
+        key: 'pairs',
+        minWidth: '110px',
+        render: (_: unknown, item: PoolInfo) => <PoolFeatures data={item} />,
+      },
+      {
+        title: t('APR'),
+        dataIndex: 'lpApr' as keyof PoolInfo,
         key: 'apr',
         minWidth: '125px',
+        sorter: true,
         render: (_: unknown, item: PoolInfo) => <PoolGlobalAprButton pool={item} />,
       },
       {
@@ -246,6 +263,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, onLoad
         dataIndex: 'tvlUsd' as keyof PoolInfo,
         key: 'tvl',
         minWidth: '125px',
+        sorter: true,
         render: (value: number) => <FiatNumberDisplay value={value || 0} showFullDigitsTooltip={false} />,
       },
     ],
@@ -254,12 +272,16 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, onLoad
 
   const getRowKey = useCallback((item: PoolInfo) => `${item.chainId}-${item.lpAddress}`, [])
 
+  const handleLoadMore = useCallback(() => {
+    loadMore?.()
+  }, [loadMore])
+
   // Handle intersection observer pagination
   useEffect(() => {
-    if (isIntersecting && onLoadMore && !isLoading) {
-      onLoadMore()
+    if (isIntersecting && !isLoading) {
+      handleLoadMore()
     }
-  }, [isIntersecting, onLoadMore, isLoading])
+  }, [isIntersecting, isLoading, handleLoadMore])
 
   if (isLoading && pools.length === 0) {
     return (
@@ -300,7 +322,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, onLoad
         {isMobile ? (
           <MobileListView pools={pools} />
         ) : (
-          <TableView getRowKey={getRowKey} columns={columns} data={pools} />
+          <TableView getRowKey={getRowKey} columns={columns} data={pools} onSort={handleSort} />
         )}
         {/* Loading indicator when loading more */}
         {isLoading && pools.length > 0 && (
@@ -317,7 +339,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ pools, isLoading, onLoad
           </Flex>
         )}
         {/* Intersection observer element for pagination */}
-        {pools.length > 0 && onLoadMore && !isLoading && <LoadMoreTrigger ref={observerRef} />}
+        {pools.length > 0 && !isLoading && <LoadMoreTrigger ref={observerRef} />}
       </TableContainer>
     </>
   )
