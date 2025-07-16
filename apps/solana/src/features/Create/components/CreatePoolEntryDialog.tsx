@@ -167,7 +167,7 @@ function CreatePoolEntryMobileDrawer({
 export function CreatePoolEntryDialogBody({ type, onChange }: { type: CreateTarget; onChange: (val: CreateTarget) => void }) {
   const { t } = useTranslation()
   const isCreatePool = ['concentrated-liquidity', 'standard-amm', 'legacy-amm'].includes(type)
-  const isCreateFarm = type === 'standard-farm'
+  // const isCreateFarm = type === 'standard-farm'
 
   return (
     <Flex direction="column" gap={4}>

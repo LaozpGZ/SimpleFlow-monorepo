@@ -99,6 +99,7 @@ interface AppState {
     SWAP_COMPUTE: string
     SWAP_TX: string
     BIRDEYE_TOKEN_PRICE: string
+    POOL_TVL_LINE: string
   }
   programIdConfig: typeof ALL_PROGRAM_ID
 

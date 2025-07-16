@@ -61,7 +61,6 @@ export default function ExistFarmingRewardItem({
   })
 
   const isNewRewards = currentStatus === 'new'
-
   const isUpdated = currentStatus === 'updated'
 
   const statusInfo = {

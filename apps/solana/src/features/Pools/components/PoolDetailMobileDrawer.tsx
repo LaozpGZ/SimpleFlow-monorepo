@@ -218,7 +218,8 @@ export default function PoolDetailMobileDrawer({
                 baseMint={baseToken?.address}
                 categories={[
                   { label: 'Volume', value: 'volume' },
-                  { label: 'Liquidity', value: 'liquidity' }
+                  { label: 'Liquidity', value: 'liquidity' },
+                  { label: 'TVL', value: 'tvl' }
                 ]}
               />
             </Box>
