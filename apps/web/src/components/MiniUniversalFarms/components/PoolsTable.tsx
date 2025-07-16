@@ -3,10 +3,12 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, FlexGap, Loading, Skeleton, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useAtomValue } from 'jotai'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
+import { searchQueryAtom } from 'views/universalFarms/atom/searchQueryAtom'
 import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton'
 import { FeeTierComponent } from 'views/universalFarms/components/useColumnConfig'
 import { useMiniPoolsData } from '../hooks'
@@ -224,8 +226,12 @@ export const PoolsTable: React.FC = () => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
+  const scrollableContainerRef = useRef<HTMLDivElement>(null)
+
   // Fetch pools data using the hook with simple pagination
   const { pools, isLoading, loadMore, handleSort } = useMiniPoolsData()
+
+  const query = useAtomValue(searchQueryAtom)
 
   // IntersectionObserver for scroll-to-end pagination
   const { observerRef, isIntersecting } = useIntersectionObserver({
@@ -246,7 +252,7 @@ export const PoolsTable: React.FC = () => {
       {
         title: null,
         dataIndex: null as keyof PoolInfo | null,
-        key: 'pairs',
+        key: 'features',
         minWidth: '110px',
         render: (_: unknown, item: PoolInfo) => <PoolFeatures data={item} />,
       },
@@ -283,6 +289,13 @@ export const PoolsTable: React.FC = () => {
     }
   }, [isIntersecting, isLoading, handleLoadMore])
 
+  // Scroll to the top of the table when the protocol changes
+  useEffect(() => {
+    if (scrollableContainerRef.current) {
+      scrollableContainerRef.current.scrollTop = 0
+    }
+  }, [query.protocols, query.activeChainId])
+
   if (isLoading && pools.length === 0) {
     return (
       <TableContainer>
@@ -317,7 +330,7 @@ export const PoolsTable: React.FC = () => {
 
   return (
     <>
-      <TableContainer>
+      <TableContainer ref={scrollableContainerRef}>
         {/* Use TableView with sticky header */}
         {isMobile ? (
           <MobileListView pools={pools} />
