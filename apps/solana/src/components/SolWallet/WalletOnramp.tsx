@@ -1,13 +1,15 @@
-import { useCallback } from 'react'
 import { Box, Button } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { Wallet, useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
-import { useTranslation } from '@pancakeswap/localization'
-import { useEvent } from '@/hooks/useEvent'
-import { colors } from '@/theme/cssVariables'
+import { useCallback } from 'react'
+
 import { MoonpayBuy } from '@/components/Moonpay'
-import MoonPayIcon from '@/icons/misc/MoonPayIcon'
 import { WALLET_STORAGE_KEY } from '@/hooks/app/useInitConnection'
+import { useEvent } from '@/hooks/useEvent'
+import MoonPayIcon from '@/icons/misc/MoonPayIcon'
+import { colors } from '@/theme/cssVariables'
+
 import SelectWalletModal from './SelectWalletModal'
 
 export default function WalletOnramp() {

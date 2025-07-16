@@ -1,13 +1,14 @@
 import { Button, Drawer, DrawerBody, DrawerContent, DrawerFooter, DrawerOverlay, Flex, HStack, Spacer, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-import { colors } from '@/theme/cssVariables'
-import TokenAvatar from '@/components/TokenAvatar'
+
 import { QuestionToolTip } from '@/components/QuestionToolTip'
-import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
-import { routeToPage } from '@/utils/routeTools'
+import TokenAvatar from '@/components/TokenAvatar'
 import MinusIcon from '@/icons/misc/MinusIcon'
 import PlusIcon from '@/icons/misc/PlusIcon'
+import { colors } from '@/theme/cssVariables'
+import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import { routeToPage } from '@/utils/routeTools'
 
 export default function MobileStakeDetailDrawer({
   isOpen,

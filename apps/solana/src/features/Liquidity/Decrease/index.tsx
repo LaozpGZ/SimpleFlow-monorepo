@@ -1,21 +1,23 @@
 import { Box, Grid, GridItem, HStack, Text, VStack } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3PoolInfoStandardItem, CREATE_CPMM_POOL_PROGRAM } from '@pancakeswap/solana-core-sdk'
 import { useCallback, useEffect, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+
 import Tabs from '@/components/Tabs'
+import useFetchCpmmRpcPoolData from '@/hooks/pool/amm/useFetchCpmmRpcPoolData'
+import useFetchRpcPoolData from '@/hooks/pool/amm/useFetchRpcPoolData'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'
 import { useEvent } from '@/hooks/useEvent'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { useTokenAccountStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { routeBack, setUrlQuery, useRouteQuery } from '@/utils/routeTools'
-import useFetchRpcPoolData from '@/hooks/pool/amm/useFetchRpcPoolData'
-import useFetchCpmmRpcPoolData from '@/hooks/pool/amm/useFetchCpmmRpcPoolData'
-import { tabValueModeMapping } from '../utils'
+
 import BalanceInfo from './components/BalanceInfo'
 import RemoveLiquidity from './components/RemoveLiquidity'
 import UnStakeLiquidity from './components/UnStakeLiquidity'
 import { DecreaseLiquidityPageQuery, DecreaseTabOptionType } from './components/type'
+import { tabValueModeMapping } from '../utils'
 
 /**
  * unstake/remove liquidity

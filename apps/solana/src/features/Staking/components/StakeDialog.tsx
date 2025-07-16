@@ -1,14 +1,15 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiStakePool } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { useEffect, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+
 import TokenInput from '@/components/TokenInput'
+import { useEvent } from '@/hooks/useEvent'
+import { useAppStore } from '@/store/useAppStore'
 import { useFarmStore } from '@/store/useFarmStore'
 import { useTokenAccountStore } from '@/store/useTokenAccountStore'
-import { useAppStore } from '@/store/useAppStore'
 import { wSolToSolString } from '@/utils/token'
-import { useEvent } from '@/hooks/useEvent'
 
 interface Props {
   isOpen: boolean

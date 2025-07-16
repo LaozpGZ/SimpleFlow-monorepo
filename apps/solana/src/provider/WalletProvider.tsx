@@ -1,5 +1,3 @@
-import { FC, PropsWithChildren, useEffect, useMemo, useState } from 'react'
-
 import { type Adapter, type WalletError } from '@solana/wallet-adapter-base'
 import { ExodusWalletAdapter } from '@solana/wallet-adapter-exodus'
 import { GlowWalletAdapter } from '@solana/wallet-adapter-glow'
@@ -21,12 +19,14 @@ import {
 } from '@solana/wallet-adapter-wallets'
 import { initialize, SolflareWalletAdapter } from '@solflare-wallet/wallet-adapter'
 import { WalletConnectWalletAdapter } from '@walletconnect/solana-adapter'
+import { FC, PropsWithChildren, useEffect, useMemo, useState } from 'react'
+
 import { useEvent } from '@/hooks/useEvent'
 import { logGTMSolErrorLogEvent } from '@/utils/report/curstomGTMEventTracking'
 
-import { defaultEndpoint, defaultNetWork, useAppStore } from '../store/useAppStore'
 import { BackpackWalletAdapter } from './walletAdapter/BackpackWalletAdapter'
 import { OKXWalletAdapter } from './walletAdapter/OKXWalletAdapter'
+import { defaultEndpoint, defaultNetWork, useAppStore } from '../store/useAppStore'
 
 initialize()
 

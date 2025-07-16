@@ -1,7 +1,8 @@
 import { Box, Flex, Grid, GridItem, Heading, HStack, Text, useDisclosure } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { Button } from '@pancakeswap/uikit'
 import { useMemo } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+
 import { Desktop, Mobile } from '@/components/MobileDesktop'
 import { CreatePoolEntryDialog } from '@/features/Create/components/CreatePoolEntryDialog'
 import useFetchFarmInfoById from '@/hooks/farm/useFetchFarmInfoById'
@@ -10,6 +11,7 @@ import useCreatedFarmInfo, { FarmCategory } from '@/hooks/portfolio/farm/useCrea
 import { useStateWithUrl } from '@/hooks/useStateWithUrl'
 import { useAppStore } from '@/store/useAppStore'
 import { colors } from '@/theme/cssVariables'
+
 import FarmItem from './components/FarmItem'
 
 export type CreateFarmTabValues = FarmCategory

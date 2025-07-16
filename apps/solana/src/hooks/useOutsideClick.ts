@@ -1,5 +1,6 @@
 import { useOutsideClick as _useOutsideClick } from '@chakra-ui/react'
 import { useEffect } from 'react'
+
 import { ElementRefs, getElementsFromRef } from '@/utils/react/getElementsFromRef'
 
 /** like {@link _useOutsideClick} but can accept multi refs */

@@ -1,8 +1,9 @@
+import Decimal from 'decimal.js'
 import { useMemo } from 'react'
 import useSwr from 'swr'
-import Decimal from 'decimal.js'
-import { useAppStore } from '@/store/useAppStore'
+
 import axios from '@/api/axios'
+import { useAppStore } from '@/store/useAppStore'
 
 export interface ChartEntry {
   activeLiquidity: number

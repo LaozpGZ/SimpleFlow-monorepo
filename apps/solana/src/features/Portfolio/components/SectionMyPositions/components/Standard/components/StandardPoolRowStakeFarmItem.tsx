@@ -1,19 +1,20 @@
-import { useEffect, useMemo } from 'react'
 import { Badge, Box, Button, Divider, Flex, Grid, GridItem, HStack, SimpleGrid, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import Decimal from 'decimal.js'
 import { ApiV3Token, ApiV3PoolInfoConcentratedItem, PoolFetchType } from '@pancakeswap/solana-core-sdk'
+import Decimal from 'decimal.js'
+import { useEffect, useMemo } from 'react'
+
+import { Desktop, Mobile } from '@/components/MobileDesktop'
 import TokenAvatar from '@/components/TokenAvatar'
+import { toAPRPercent } from '@/features/Pools/util'
+import { FarmBalanceInfo } from '@/hooks/farm/type'
 import useFetchFarmInfoById from '@/hooks/farm/useFetchFarmInfoById'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'
+import useTokenPrice from '@/hooks/token/useTokenPrice'
 import FarmRewardIcon from '@/icons/pool/FarmRewardIcon'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import { routeToPage } from '@/utils/routeTools'
-import { toAPRPercent } from '@/features/Pools/util'
-import useTokenPrice from '@/hooks/token/useTokenPrice'
-import { FarmBalanceInfo } from '@/hooks/farm/type'
-import { Desktop, Mobile } from '@/components/MobileDesktop'
 
 /** subItem of standard Pool */
 export default function StandardPoolRowStakeFarmItem({

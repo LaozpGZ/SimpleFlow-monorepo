@@ -1,8 +1,10 @@
+import styled from '@emotion/styled'
 import { BrushBehavior, brushX, D3BrushEvent, ScaleLinear, select } from 'd3'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import styled from '@emotion/styled'
-import { colors } from '@/theme/cssVariables'
+
 import usePrevious from '@/hooks/usePrevious'
+import { colors } from '@/theme/cssVariables'
+
 import { brushHandleAccentPath, brushHandlePath, OffScreenHandle } from './svg'
 
 const Handle = styled.path<{ color: string }>`

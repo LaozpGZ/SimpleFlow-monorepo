@@ -1,10 +1,11 @@
+import { Buffer } from 'buffer'
+
 // eslint-disable-next-line import/no-named-default
 import type { default as Transport } from '@ledgerhq/hw-transport'
 import { StatusCodes, TransportStatusError } from '@ledgerhq/hw-transport'
 import { isVersionedTransaction } from '@solana/wallet-adapter-base'
 import type { Transaction, VersionedTransaction } from '@solana/web3.js'
 import { PublicKey } from '@solana/web3.js'
-import { Buffer } from 'buffer'
 import './polyfill'
 
 export function getDerivationPath(account?: number, change?: number): Buffer {

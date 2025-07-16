@@ -1,5 +1,6 @@
 import { Box, BoxProps } from '@chakra-ui/react'
 import { ReactNode } from 'react'
+
 import { colors, sizes } from '@/theme/cssVariables'
 
 export default function Tag(props: { children?: ReactNode } & BoxProps) {

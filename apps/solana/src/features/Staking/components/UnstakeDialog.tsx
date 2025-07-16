@@ -1,9 +1,10 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiStakePool } from '@pancakeswap/solana-core-sdk'
+import { BN } from 'bn.js'
 import Decimal from 'decimal.js'
 import { useEffect, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
-import { BN } from 'bn.js'
+
 import AmountSlider from '@/components/AmountSlider'
 import TokenInput from '@/components/TokenInput'
 import { useEvent } from '@/hooks/useEvent'

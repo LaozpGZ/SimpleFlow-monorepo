@@ -1,4 +1,5 @@
 import { colors } from '@/theme/cssVariables'
+
 import { SvgIcon } from '../type'
 
 export default function MenuHamburgerNavIcon(props: SvgIcon) {

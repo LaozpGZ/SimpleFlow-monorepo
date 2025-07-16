@@ -1,4 +1,6 @@
 import { Box, BoxProps, Grid, GridItem, StackProps, SystemStyleObject, useDisclosure } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
+import { ApiV3Token, SOL_INFO, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import {
   AtomBox,
   Button,
@@ -11,12 +13,11 @@ import {
   WalletFilledV2Icon
 } from '@pancakeswap/uikit'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
-import { ApiV3Token, SOL_INFO, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import { ReactNode, RefObject, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
 import { NumericFormat } from 'react-number-format'
 import styled from 'styled-components'
+
 import useTokenPrice from '@/hooks/token/useTokenPrice'
 import { useEvent } from '@/hooks/useEvent'
 import useResponsive from '@/hooks/useResponsive'
@@ -24,6 +25,7 @@ import { useAppStore, useTokenAccountStore, useTokenStore } from '@/store'
 import { inputCard, inputFocusStyle, inputShadowInsetStyle } from '@/theme/cssBlocks'
 import { colors } from '@/theme/cssVariables'
 import { detectedSeparator, formatCurrency, trimTrailZero } from '@/utils/numberish/formatter'
+
 import TokenAvatar from './TokenAvatar'
 import TokenSelectDialog, { TokenSelectDialogProps } from './TokenSelectDialog'
 import TokenFreezeDialog from './TokenSelectDialog/components/TokenFreezeDialog'

@@ -2,8 +2,8 @@ import { Grid, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 
 import ExclaimationOctagon from '@/icons/misc/ExclaimationOctagon'
-import { colors } from '@/theme/cssVariables'
 import { panelCard } from '@/theme/cssBlocks'
+import { colors } from '@/theme/cssVariables'
 
 export default function StakeableHint() {
   const { t } = useTranslation()

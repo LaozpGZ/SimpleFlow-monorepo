@@ -1,5 +1,6 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { HStack, Text } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
+
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'
 

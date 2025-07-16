@@ -1,13 +1,14 @@
 import { Badge, Box, HStack, Tag, Text, VStack } from '@chakra-ui/react'
-import Decimal from 'decimal.js'
 import { useTranslation } from '@pancakeswap/localization'
+import Decimal from 'decimal.js'
+
+import { Mobile } from '@/components/MobileDesktop'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { FormattedPoolInfoConcentratedItem } from '@/hooks/pool/type'
 import useClmmBalance, { ClmmPosition } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { colors } from '@/theme/cssVariables'
-import toPercentString from '@/utils/numberish/toPercentString'
 import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
-import { Mobile } from '@/components/MobileDesktop'
+import toPercentString from '@/utils/numberish/toPercentString'
 
 export default function PoolInfoDrawerFace({
   poolInfo,

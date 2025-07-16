@@ -1,15 +1,17 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { max, scaleLinear, ZoomTransform } from 'd3'
 import partition from 'lodash/partition'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
 import { useEvent } from '@/hooks/useEvent'
 import { colors } from '@/theme/cssVariables'
+
 import { Area } from './Area'
 import { AxisBottom } from './AxisBottom'
 import { Brush } from './Brush'
 import { FeeAmount } from './FeeAmount'
 import { Line } from './Line'
-import { ChartEntry, LiquidityChartRangeInputProps } from './types'
 import Zoom, { ZoomOverlay } from './Zoom'
+import { ChartEntry, LiquidityChartRangeInputProps } from './types'
 
 export const xAccessor = (d: ChartEntry) => d.price0
 export const yAccessor = (d: ChartEntry) => d.activeLiquidity

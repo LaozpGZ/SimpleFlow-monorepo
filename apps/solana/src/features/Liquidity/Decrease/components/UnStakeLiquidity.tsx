@@ -1,28 +1,28 @@
 import { Box, Flex, HStack, SimpleGrid, Text, useDisclosure } from '@chakra-ui/react'
-import { useEffect, useState, useRef } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
-
 import Decimal from 'decimal.js'
-import { Select } from '@/components/Select'
-import Button from '@/components/Button'
+import { useEffect, useState, useRef } from 'react'
+
 import AmountSlider from '@/components/AmountSlider'
+import Button from '@/components/Button'
+import IntervalCircle, { IntervalCircleHandler } from '@/components/IntervalCircle'
+import { Select } from '@/components/Select'
+import { SlippageAdjuster } from '@/components/SlippageAdjuster'
 import TokenAvatar from '@/components/TokenAvatar'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
-
-import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
 import { FormattedFarmInfo } from '@/hooks/farm/type'
-import useFetchFarmByLpMint from '@/hooks/farm/useFetchFarmByLpMint'
 import useFetchFarmBalance from '@/hooks/farm/useFetchFarmBalance'
+import useFetchFarmByLpMint from '@/hooks/farm/useFetchFarmByLpMint'
+import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
 import useFarmPositions from '@/hooks/portfolio/farm/useFarmPositions'
-import { useAppStore, useFarmStore, useTokenAccountStore } from '@/store'
 import useTokenPrice from '@/hooks/token/useTokenPrice'
-import { formatCurrency } from '@/utils/numberish/formatter'
-import IntervalCircle, { IntervalCircleHandler } from '@/components/IntervalCircle'
-import { colors } from '@/theme/cssVariables'
 import { useEvent } from '@/hooks/useEvent'
-import { SlippageAdjuster } from '@/components/SlippageAdjuster'
-import SelectedFarm from '../../components/SelectedFarm'
+import { useAppStore, useFarmStore, useTokenAccountStore } from '@/store'
+import { colors } from '@/theme/cssVariables'
+import { formatCurrency } from '@/utils/numberish/formatter'
+
 import SelectFarmListItem from '../../components/SelectFarmListItem'
+import SelectedFarm from '../../components/SelectedFarm'
 
 export default function UnStakeLiquidity({
   poolInfo,

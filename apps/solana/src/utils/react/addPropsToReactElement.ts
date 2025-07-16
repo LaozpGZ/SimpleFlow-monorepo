@@ -1,8 +1,9 @@
 import { cloneElement, isValidElement as isValidReactElement } from 'react'
+
 import { MayFunction } from '@/types/tools'
 
-import { shrinkToValue } from '../shrinkToValue'
 import mergeProps from './mergeProps'
+import { shrinkToValue } from '../shrinkToValue'
 
 export default function addPropsToReactElement<AvailableProps = { [key: string]: any }>(
   element: any,

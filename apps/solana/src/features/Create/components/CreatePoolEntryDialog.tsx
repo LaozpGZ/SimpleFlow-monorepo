@@ -1,4 +1,3 @@
-import { Button } from '@pancakeswap/uikit'
 import {
   Badge,
   Box,
@@ -22,12 +21,14 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
+import { Button } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
-import { colors } from '@/theme/cssVariables'
-import CircleCheck from '@/icons/misc/CircleCheck'
+
 import { Desktop, Mobile } from '@/components/MobileDesktop'
+import CircleCheck from '@/icons/misc/CircleCheck'
+import { colors } from '@/theme/cssVariables'
 import { logGTMPoolFarmVersionEvent } from '@/utils/report/curstomGTMEventTracking'
 
 type CreateTarget = 'legacy-amm' | 'standard-amm' | 'concentrated-liquidity' | 'standard-farm' | 'clmm-lock' | 'cpmm-lock'

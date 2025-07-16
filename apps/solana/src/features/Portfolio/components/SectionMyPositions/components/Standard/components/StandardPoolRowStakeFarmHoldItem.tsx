@@ -1,11 +1,12 @@
 import { Box, HStack, Text } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
-import { useTranslation } from '@pancakeswap/localization'
-import { colors } from '@/theme/cssVariables'
-import toPercentString from '@/utils/numberish/toPercentString'
-import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+
 import { useTokenAccountStore } from '@/store'
+import { colors } from '@/theme/cssVariables'
+import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import toPercentString from '@/utils/numberish/toPercentString'
 
 export default function StandardPoolRowStakeFarmHoldItem({
   apr,

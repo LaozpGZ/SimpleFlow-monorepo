@@ -1,10 +1,11 @@
 import { Flex, FlexProps, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
+
 import TokenAvatar from '@/components/TokenAvatar'
 import { colors } from '@/theme/cssVariables'
-
-import { wSolToSolString } from '@/utils/token'
 import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import { wSolToSolString } from '@/utils/token'
+
 import { RewardInfo } from './type'
 
 type UnemmittedProps = FlexProps & {

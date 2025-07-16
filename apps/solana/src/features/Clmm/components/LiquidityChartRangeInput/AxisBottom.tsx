@@ -1,6 +1,7 @@
+import styled from '@emotion/styled'
 import { Axis as d3Axis, axisBottom, NumberValue, ScaleLinear, select } from 'd3'
 import { useMemo } from 'react'
-import styled from '@emotion/styled'
+
 import { colors } from '@/theme/cssVariables'
 
 const StyledGroup = styled.g`

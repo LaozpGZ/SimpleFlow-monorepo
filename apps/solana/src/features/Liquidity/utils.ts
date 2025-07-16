@@ -1,4 +1,5 @@
 import { isClient } from '@/utils/common'
+
 import { LiquidityActionModeType, LiquidityTabOptionType } from './Decrease/components/type'
 
 export const SIDE = {

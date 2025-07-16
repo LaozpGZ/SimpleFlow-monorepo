@@ -1,15 +1,17 @@
-import { useCallback, useEffect, useRef, useMemo } from 'react'
-import { PublicKey, Transaction, VersionedTransaction } from '@solana/web3.js'
-import { useConnection, useWallet } from '@solana/wallet-adapter-react'
 import { TxVersion, validateAndParsePublicKey, txToBase64 } from '@pancakeswap/solana-core-sdk'
-import { shallow } from 'zustand/shallow'
+import { useConnection, useWallet } from '@solana/wallet-adapter-react'
+import { PublicKey, Transaction, VersionedTransaction } from '@solana/web3.js'
+import { useCallback, useEffect, useRef, useMemo } from 'react'
 import { parseUserAgent } from 'react-device-detect'
-import { useAppStore, defaultEndpoint } from '@/store/useAppStore'
+import { shallow } from 'zustand/shallow'
+
+import { validateTxData, extendTxData } from '@/api/txService'
 import usePrevious from '@/hooks/usePrevious'
+import { useAppStore, defaultEndpoint } from '@/store/useAppStore'
 import { isLocal, cancelAllRetry } from '@/utils/common'
 import { getDevOnlyStorage } from '@/utils/localStorage'
-import { validateTxData, extendTxData } from '@/api/txService'
 import { logGTMWalletConnectedEvent } from '@/utils/report/curstomGTMEventTracking'
+
 import { SSRData } from '../../type'
 import { toastSubject } from '../toast/useGlobalToast'
 

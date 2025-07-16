@@ -1,6 +1,5 @@
-import styled from 'styled-components'
-
 import { AtomBox, Card } from '@pancakeswap/uikit'
+import styled from 'styled-components'
 
 export const TARGET_ELE_ID = 'integrated-terminal'
 

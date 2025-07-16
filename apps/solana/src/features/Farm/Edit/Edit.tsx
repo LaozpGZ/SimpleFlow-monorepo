@@ -1,6 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, Grid, GridItem, HStack, Heading, Link, Skeleton, Text, VStack, useDisclosure } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import {
   ApiV3PoolInfoConcentratedItem,
   FormatFarmInfoOutV6,
@@ -11,28 +10,29 @@ import {
   FARM_PROGRAM_ID_V6
 } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
+import { BN } from 'bn.js'
+import Decimal from 'decimal.js'
 import { useRouter } from 'next/router'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { shallow } from 'zustand/shallow'
 
-import Decimal from 'decimal.js'
-import { BN } from 'bn.js'
 import Button from '@/components/Button'
+import SubPageNote from '@/components/SubPageNote'
 import useFetchFarmInfoById from '@/hooks/farm/useFetchFarmInfoById'
+import useFetchFarmInfoByRpc from '@/hooks/farm/useFetchFarmInfoByRpc'
+import useFetchRpcClmmInfo from '@/hooks/pool/clmm/useFetchRpcClmmInfo'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'
-import { refreshCreatedFarm } from '@/hooks/portfolio/farm/useCreatedFarmInfo'
 import { refreshPoolCache } from '@/hooks/pool/useFetchPoolList'
+import { refreshCreatedFarm } from '@/hooks/portfolio/farm/useCreatedFarmInfo'
 import { useEvent } from '@/hooks/useEvent'
+import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import PlusCircleIcon from '@/icons/misc/PlusCircleIcon'
 import { useAppStore, useClmmStore, useFarmStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
-
-import SubPageNote from '@/components/SubPageNote'
-import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { genCSS2GridTemplateColumns, genCSS3GridTemplateColumns } from '@/theme/detailConfig'
-import { routeBack, routeToPage } from '@/utils/routeTools'
-import useFetchRpcClmmInfo from '@/hooks/pool/clmm/useFetchRpcClmmInfo'
-import useFetchFarmInfoByRpc from '@/hooks/farm/useFetchFarmInfoByRpc'
 import { TxCallbackProps } from '@/types/tx'
+import { routeBack, routeToPage } from '@/utils/routeTools'
+
 import AddAnotherRewardDialog from './components/AddAnotherRewardDialog'
 import FarmInfoItem from './components/FarmInfoItem'
 import ExistFarmingRewards from './components/FarmingRewards'

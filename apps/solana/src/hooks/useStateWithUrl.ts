@@ -1,5 +1,6 @@
 import { useUpdateEffect } from '@chakra-ui/react'
 import { useEffect, useMemo, useState } from 'react'
+
 import { setUrlQuery, useRouteQuery } from '@/utils/routeTools'
 
 /** the same return interface as original {@link useState} */

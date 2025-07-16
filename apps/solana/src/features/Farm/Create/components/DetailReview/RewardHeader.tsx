@@ -1,8 +1,9 @@
 import { Box, Flex, Grid, GridItem, HStack, Highlight, Text } from '@chakra-ui/react'
 import { ApiV3Token, TokenInfo } from '@pancakeswap/solana-core-sdk'
+
+import TokenAvatar from '@/components/TokenAvatar'
 import DeleteIcon from '@/icons/misc/DeleteIcon'
 import EditIcon from '@/icons/misc/EditIcon'
-import TokenAvatar from '@/components/TokenAvatar'
 import { colors } from '@/theme/cssVariables'
 
 type RewardHeaderProps = {

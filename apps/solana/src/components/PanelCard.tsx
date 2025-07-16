@@ -1,5 +1,6 @@
-import React from 'react'
 import { Box, BoxProps } from '@chakra-ui/react'
+import React from 'react'
+
 import { inputCard, panelCard } from '@/theme/cssBlocks'
 
 export interface PanelCardProps extends BoxProps {

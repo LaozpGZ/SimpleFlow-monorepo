@@ -1,10 +1,10 @@
 import { Flex, HStack, Text } from '@chakra-ui/react'
-
 import { useTranslation } from '@pancakeswap/localization'
+
 import { QuestionToolTip } from '@/components/QuestionToolTip'
 import { colors } from '@/theme/cssVariables'
-import toApr from '@/utils/numberish/toApr'
 import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import toApr from '@/utils/numberish/toApr'
 
 type MyPositionProps = {
   positionAPR: number | string

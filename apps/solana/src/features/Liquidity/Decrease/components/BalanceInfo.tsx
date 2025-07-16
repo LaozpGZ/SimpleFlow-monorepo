@@ -1,8 +1,9 @@
 import { Flex, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import { formatCurrency } from '@/utils/numberish/formatter'
 
 import { colors } from '@/theme/cssVariables'
+import { formatCurrency } from '@/utils/numberish/formatter'
+
 import { DecreaseTabOptionType } from './type'
 
 type BalanceInfoProps = {

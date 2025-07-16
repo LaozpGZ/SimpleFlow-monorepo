@@ -1,15 +1,16 @@
 import { Box, Flex, HStack, Tag, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import { FormattedPoolInfoConcentratedItem } from '@/hooks/pool/type'
-import { colors } from '@/theme/cssVariables'
+
+import { Desktop, Mobile } from '@/components/MobileDesktop'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
+import { FormattedPoolInfoConcentratedItem } from '@/hooks/pool/type'
+import useClmmBalance, { ClmmPosition } from '@/hooks/portfolio/clmm/useClmmBalance'
+import { TokenPrice } from '@/hooks/token/useTokenPrice'
 import CircleCheck from '@/icons/misc/CircleCheck'
+import { colors } from '@/theme/cssVariables'
 import { formatToRawLocaleStr, formatCurrency } from '@/utils/numberish/formatter'
 import toPercentString from '@/utils/numberish/toPercentString'
 import { shortenAddress } from '@/utils/token'
-import useClmmBalance, { ClmmPosition } from '@/hooks/portfolio/clmm/useClmmBalance'
-import { TokenPrice } from '@/hooks/token/useTokenPrice'
-import { Desktop, Mobile } from '@/components/MobileDesktop'
 
 export default function LiquidityItem({
   position,

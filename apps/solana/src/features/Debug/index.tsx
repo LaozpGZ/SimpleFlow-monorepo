@@ -1,5 +1,7 @@
 import { Box } from '@chakra-ui/react'
+
 import { useTokenAccountStore } from '@/store'
+
 import NonAtaItem from './components/NonAtaItem'
 
 export default function Debug() {

@@ -1,5 +1,6 @@
-import React, { ReactNode, ReactElement, useEffect, useState, useRef, forwardRef, ForwardedRef } from 'react'
 import { Box } from '@chakra-ui/react'
+import React, { ReactNode, ReactElement, useEffect, useState, useRef, forwardRef, ForwardedRef } from 'react'
+
 import PageItem, { StepType, StepPager } from './Item'
 import { PaginationProps } from './interface'
 

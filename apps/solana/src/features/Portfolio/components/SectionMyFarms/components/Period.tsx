@@ -1,6 +1,8 @@
 import { Flex, FlexProps, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
+
 import { colors } from '@/theme/cssVariables'
+
 import { RewardInfo } from './type'
 
 type PeriodProps = FlexProps & {

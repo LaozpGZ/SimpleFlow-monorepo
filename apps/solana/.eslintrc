@@ -9,20 +9,17 @@
     "import/order": [
       "error",
       {
-        "groups": ["external", "builtin", "internal"],
-        "newlines-between": "ignore",
+        "groups": ["builtin", "external", "internal"],
+        "newlines-between": "always",
         "pathGroups": [
           {
             "pattern": "@/**",
-            "group": "builtin",
+            "group": "internal",
             "position": "after"
-          },
-          {
-            "pattern": "@**",
-            "group": "builtin",
-            "position": "before"
           }
-        ]
+        ],
+        "pathGroupsExcludedImportTypes": ["builtin"],
+        "alphabetize": { "order": "asc" }
       }
     ],
     "no-empty-function": 0,

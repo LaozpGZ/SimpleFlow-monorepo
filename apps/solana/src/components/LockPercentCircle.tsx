@@ -1,11 +1,12 @@
 import { CircularProgress, CircularProgressLabel, CircularProgressProps } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
+
 import Tooltip from '@/components/Tooltip'
 import LiquidityLockIcon from '@/icons/misc/LiquidityLockIcon'
+import { SvgIcon } from '@/icons/type'
 import { colors } from '@/theme/cssVariables'
 import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import toPercentString from '@/utils/numberish/toPercentString'
-import { SvgIcon } from '@/icons/type'
 
 export default function LockPercentCircle({
   value,

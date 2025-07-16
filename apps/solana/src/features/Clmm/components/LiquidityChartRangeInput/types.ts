@@ -1,4 +1,5 @@
 import { SystemCSSProperties } from '@chakra-ui/react'
+
 import { Bound } from './Bound'
 import { FeeAmount } from './FeeAmount'
 

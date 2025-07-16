@@ -1,8 +1,9 @@
-import { useMemo } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
 import { Flex, Box, Text } from '@chakra-ui/react'
-import { colors } from '@/theme/cssVariables/colors'
+import { useTranslation } from '@pancakeswap/localization'
+import { useMemo } from 'react'
+
 import { AprKey } from '@/hooks/pool/type'
+import { colors } from '@/theme/cssVariables/colors'
 
 interface Props {
   currentPrice: string

@@ -1,4 +1,5 @@
 import { defineStyle, defineStyleConfig, Tooltip as _Tooltip } from '@chakra-ui/react'
+
 import { colors } from '../cssVariables'
 
 const baseStyle = defineStyle({

@@ -1,15 +1,17 @@
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import { useMemo } from 'react'
+
+import LockPercentCircle from '@/components/LockPercentCircle'
 import { Desktop, Mobile } from '@/components/MobileDesktop'
 import Tooltip from '@/components/Tooltip'
-import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import { FormattedPoolInfoItem } from '@/hooks/pool/type'
-import LockPercentCircle from '@/components/LockPercentCircle'
 import { colors } from '@/theme/cssVariables'
+import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+
 import { FILED_KEY, TimeBase, toAPRPercent } from '../../util'
-import { PoolListItemAprLine } from '../PoolListItemAprLine'
 import PoolListItemAprDetailPopoverContent from '../PoolListItemAprDetailPopoverContent'
+import { PoolListItemAprLine } from '../PoolListItemAprLine'
 
 export const ColumnPoolApr: React.FC<{
   data: FormattedPoolInfoItem

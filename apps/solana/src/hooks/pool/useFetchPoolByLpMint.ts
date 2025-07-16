@@ -1,15 +1,16 @@
-import { useEffect, useMemo } from 'react'
 import { ApiV3PoolInfoStandardItem, FetchPoolParams } from '@pancakeswap/solana-core-sdk'
+import { AxiosResponse } from 'axios'
+import { useEffect, useMemo } from 'react'
 import useSWR, { KeyedMutator } from 'swr'
 import { shallow } from 'zustand/shallow'
-import { AxiosResponse } from 'axios'
-import axios from '@/api/axios'
-import { isValidPublicKey } from '@/utils/publicKey'
-import { MINUTE_MILLISECONDS } from '@/utils/date'
-import { useAppStore, useTokenStore } from '@/store'
 
-import { FormattedPoolInfoStandardItem } from './type'
+import axios from '@/api/axios'
+import { useAppStore, useTokenStore } from '@/store'
+import { MINUTE_MILLISECONDS } from '@/utils/date'
+import { isValidPublicKey } from '@/utils/publicKey'
+
 import { formatPoolData, poolInfoCache, formatAprData } from './formatter'
+import { FormattedPoolInfoStandardItem } from './type'
 
 const fetcher = async ([url]: [url: string]) => {
   const [host, query = ''] = url.split('?')

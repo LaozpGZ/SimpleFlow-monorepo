@@ -1,11 +1,13 @@
 import { Box, Grid, GridItem, Heading, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay } from '@chakra-ui/react'
-import { ModalBackButton, Text } from '@pancakeswap/uikit'
-import { TokenInfo } from '@pancakeswap/solana-core-sdk'
-import { forwardRef, useCallback, useState } from 'react'
 import { useTranslation } from '@pancakeswap/localization'
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { ModalBackButton, Text } from '@pancakeswap/uikit'
+import { forwardRef, useCallback, useState } from 'react'
+
 import { useEvent } from '@/hooks/useEvent'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { colors } from '@/theme/cssVariables'
+
 import TokenList, { TokenListHandles } from './components/TokenList'
 import TokenListSetting from './components/TokenListSetting'
 import TokenListUnknown from './components/TokenListUnknown'

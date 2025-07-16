@@ -5,7 +5,6 @@ import { AdPlayerProps } from '@pancakeswap/widgets-internal'
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'
 import { AdCard } from '../Card'
-
 import { getImageUrl } from '../utils'
 
 const learnMoreLink = 'https://blog.pancakeswap.finance/articles/expanding-solana-s-accessibility'

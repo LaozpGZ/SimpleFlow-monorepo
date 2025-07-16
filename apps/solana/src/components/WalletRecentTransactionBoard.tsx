@@ -1,5 +1,3 @@
-import { ReactNode } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
 import {
   Box,
   Collapse,
@@ -19,30 +17,33 @@ import {
   VStack,
   useDisclosure
 } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { Wallet } from '@solana/wallet-adapter-react'
 import dayjs from 'dayjs'
+import { ReactNode } from 'react'
 
-import CircleSuccess from '@/icons/misc/CircleSuccess'
-import CircleWarning from '@/icons/misc/CircleWarning'
-import CircleError from '@/icons/misc/CircleError'
-import MoonPayIconWithText from '@/icons/misc/MoonPayIconWithText'
-import { colors } from '@/theme/cssVariables'
-import { toUTC } from '@/utils/date'
-import SolanaNetworkIcon from '@/icons/networks/SolanaNetworkIcon'
-import EthereumNetworkIcon from '@/icons/networks/EthereumNetworkIcon'
-import BinanceNetworkIcon from '@/icons/networks/BinanceNetworkIcon'
-import PolygonNetworkIcon from '@/icons/networks/PolygonNetworkIcon'
-import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
-import ChevronRightIcon from '@/icons/misc/ChevronRightIcon'
-import ExternalLinkLargeIcon from '@/icons/misc/ExternalLinkLargeIcon'
-import { useAppStore } from '@/store'
-import { ToastStatus } from '@/types/tx'
-import { getTxAllRecord } from '@/utils/tx/historyTxStatus'
 import { MoonpaySell } from '@/components/Moonpay'
 import { useEvent } from '@/hooks/useEvent'
+import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
+import ChevronRightIcon from '@/icons/misc/ChevronRightIcon'
+import CircleError from '@/icons/misc/CircleError'
+import CircleSuccess from '@/icons/misc/CircleSuccess'
+import CircleWarning from '@/icons/misc/CircleWarning'
+import ExternalLinkLargeIcon from '@/icons/misc/ExternalLinkLargeIcon'
+import MoonPayIconWithText from '@/icons/misc/MoonPayIconWithText'
+import BinanceNetworkIcon from '@/icons/networks/BinanceNetworkIcon'
+import EthereumNetworkIcon from '@/icons/networks/EthereumNetworkIcon'
+import PolygonNetworkIcon from '@/icons/networks/PolygonNetworkIcon'
+import SolanaNetworkIcon from '@/icons/networks/SolanaNetworkIcon'
+import { useAppStore } from '@/store'
+import { colors } from '@/theme/cssVariables'
+import { ToastStatus } from '@/types/tx'
+import { toUTC } from '@/utils/date'
 import { logGTMWalletDisconnectedEvent } from '@/utils/report/curstomGTMEventTracking'
-import ChevronUpDownArrow from './ChevronUpDownArrow'
+import { getTxAllRecord } from '@/utils/tx/historyTxStatus'
+
 import AddressChip from './AddressChip'
+import ChevronUpDownArrow from './ChevronUpDownArrow'
 import TokenAvatar from './TokenAvatar'
 
 interface WalletMenuProps {

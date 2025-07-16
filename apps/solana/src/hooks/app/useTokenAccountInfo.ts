@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { shallow } from 'zustand/shallow'
+
 import { useAppStore } from '@/store'
 import { useTokenAccountStore } from '@/store/useTokenAccountStore'
 import { isDocumentVisible } from '@/utils/common'

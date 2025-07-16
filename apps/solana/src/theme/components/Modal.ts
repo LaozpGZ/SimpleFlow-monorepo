@@ -1,5 +1,6 @@
 import { modalAnatomy } from '@chakra-ui/anatomy'
 import { Modal as _Modal, createMultiStyleConfigHelpers } from '@chakra-ui/react'
+
 import { colors } from '../cssVariables'
 
 const { definePartsStyle, defineMultiStyleConfig } = createMultiStyleConfigHelpers(modalAnatomy.keys)

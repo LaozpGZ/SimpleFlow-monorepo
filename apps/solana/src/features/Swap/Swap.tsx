@@ -1,10 +1,10 @@
-import { AtomBox, FlexGap } from '@pancakeswap/uikit'
-import styled from 'styled-components'
 import { VStack, useClipboard } from '@chakra-ui/react'
+import { useTranslation } from '@pancakeswap/localization'
 import { RAYMint, SOLMint } from '@pancakeswap/solana-core-sdk'
+import { AtomBox, FlexGap } from '@pancakeswap/uikit'
 import { PublicKey } from '@solana/web3.js'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useTranslation } from '@pancakeswap/localization'
+import styled from 'styled-components'
 
 import { SlippageAdjuster } from '@/components/SlippageAdjuster'
 import { TimeType } from '@/hooks/pool/useFetchPoolKLine'
@@ -13,9 +13,10 @@ import useResponsive from '@/hooks/useResponsive'
 import { useAppStore, useTokenStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { getMintPriority } from '@/utils/token'
-import { getVHExpression } from '../../theme/cssValue/getViewportExpression'
+
 import { SwapPanel } from './components/SwapPanel'
 import { getSwapPairCache, setSwapPairCache } from './util'
+import { getVHExpression } from '../../theme/cssValue/getViewportExpression'
 
 const SwapPage = styled(AtomBox)`
   display: flex;

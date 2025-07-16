@@ -1,12 +1,14 @@
 import { Box, Flex, Grid, GridItem, HStack, Link, Text, VStack } from '@chakra-ui/react'
-import { useRouter } from 'next/router'
 import { useTranslation } from '@pancakeswap/localization'
-import { colors } from '@/theme/cssVariables'
+import { useRouter } from 'next/router'
+
 import PanelCard from '@/components/PanelCard'
 import ChevronLeftIcon from '@/icons/misc/ChevronLeftIcon'
 import { useAppStore } from '@/store'
+import { colors } from '@/theme/cssVariables'
 import { genCSS2GridTemplateColumns, genCSS3GridTemplateColumns } from '@/theme/detailConfig'
 import { useRouteQuery } from '@/utils/routeTools'
+
 import Initialize from './components/Initialize'
 import { SubPageNote } from '../../../components/SubPageNote'
 

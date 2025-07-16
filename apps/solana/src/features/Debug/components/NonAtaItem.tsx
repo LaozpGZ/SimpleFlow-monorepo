@@ -1,8 +1,8 @@
 import { Flex } from '@chakra-ui/react'
 import { TokenAccount } from '@pancakeswap/solana-core-sdk'
 import { getAssociatedTokenAddressSync } from '@solana/spl-token-0.4'
-
 import Decimal from 'decimal.js'
+
 import useTokenInfo from '@/hooks/token/useTokenInfo'
 import { useAppStore } from '@/store'
 

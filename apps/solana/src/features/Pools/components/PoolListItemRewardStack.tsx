@@ -1,13 +1,14 @@
 import { Badge, Flex, Grid, GridItem, HStack, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import Decimal from 'decimal.js'
+
 import AddressChip from '@/components/AddressChip'
 import TokenAvatar from '@/components/TokenAvatar'
 import Tooltip from '@/components/Tooltip'
 import { WeeklyRewardData } from '@/hooks/pool/type'
+import useTokenPrice from '@/hooks/token/useTokenPrice'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'
-import useTokenPrice from '@/hooks/token/useTokenPrice'
 
 export function PoolListItemRewardStack(props: { rewards: WeeklyRewardData }) {
   const { t } = useTranslation()

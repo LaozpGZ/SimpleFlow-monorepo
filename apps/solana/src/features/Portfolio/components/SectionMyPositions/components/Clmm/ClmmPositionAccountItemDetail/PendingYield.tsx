@@ -1,13 +1,14 @@
 import { Flex, HStack, Text } from '@chakra-ui/react'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { useTranslation } from '@pancakeswap/localization'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
+
 import Button from '@/components/Button'
 import TokenAvatar from '@/components/TokenAvatar'
+import Tooltip from '@/components/Tooltip'
 import useResponsive from '@/hooks/useResponsive'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'
 import { getMintSymbol } from '@/utils/token'
-import Tooltip from '@/components/Tooltip'
 
 type PendingYieldProps = {
   pendingYield?: string

@@ -1,8 +1,10 @@
+import { Box, Flex, Skeleton, useColorMode } from '@chakra-ui/react'
 import { WormholeConnectConfig, WormholeConnectPartialTheme } from '@wormhole-foundation/wormhole-connect'
 import dynamic from 'next/dynamic'
 import { useEffect, useState, useMemo } from 'react'
-import { Box, Flex, Skeleton, useColorMode } from '@chakra-ui/react'
+
 import { useAppStore } from '@/store'
+
 import { Themes } from './theme'
 
 interface WormholeConnectProps {

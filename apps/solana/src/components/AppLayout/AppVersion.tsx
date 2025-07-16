@@ -1,5 +1,6 @@
 import { Flex, Text } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
+
 import { useAppStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { toUTC } from '@/utils/date'

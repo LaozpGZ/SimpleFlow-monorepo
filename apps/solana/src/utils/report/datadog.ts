@@ -1,4 +1,5 @@
 import { datadogLogs, LogsInitConfiguration } from '@datadog/browser-logs'
+
 import { GTMAction, GTMCategory, GTMEvent } from './curstomGTMEventTracking'
 
 try {

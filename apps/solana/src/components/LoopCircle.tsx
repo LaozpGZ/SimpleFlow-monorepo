@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback, MouseEvent } from 'react'
 import { CircularProgress } from '@chakra-ui/react'
+import { useState, useEffect, useCallback, MouseEvent } from 'react'
 
 interface Props {
   replay: number

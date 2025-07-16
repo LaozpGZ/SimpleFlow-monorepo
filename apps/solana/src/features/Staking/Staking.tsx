@@ -1,9 +1,10 @@
 import { Box, Skeleton } from '@chakra-ui/react'
-
 import { useTranslation } from '@pancakeswap/localization'
+
 import PageHeroTitle from '@/components/PageHeroTitle'
 import useFetchStakePools from '@/hooks/pool/useFetchStakePools'
 import useFarmPositions from '@/hooks/portfolio/farm/useFarmPositions'
+
 import StakingPoolItem from './components/StakingPoolItem'
 
 export default function Staking() {

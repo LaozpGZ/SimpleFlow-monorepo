@@ -1,10 +1,10 @@
 import { Flex, Text, HStack } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 
+import LockPercentCircle from '@/components/LockPercentCircle'
+import { QuestionToolTip } from '@/components/QuestionToolTip'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'
-import { QuestionToolTip } from '@/components/QuestionToolTip'
-import LockPercentCircle from '@/components/LockPercentCircle'
 
 type MyPositionProps = {
   positionUsd: number | string

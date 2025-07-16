@@ -2,10 +2,12 @@ import { solToWSol } from '@pancakeswap/solana-core-sdk'
 import { CandlestickData } from 'lightweight-charts'
 import { useMemo } from 'react'
 import useSWRInfinite from 'swr/infinite'
+
 import axios from '@/api/axios'
 import { birdeyeKlineApiAddress } from '@/utils/config/birdeyeAPI'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
 import { throttle } from '@/utils/functionMethods'
+
 import { useEvent } from '../useEvent'
 import usePrevious from '../usePrevious'
 
