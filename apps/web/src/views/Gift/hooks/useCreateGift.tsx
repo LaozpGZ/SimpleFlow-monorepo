@@ -41,7 +41,7 @@ export const useCreateGift = ({
 
   const createGift = useCallback(
     async ({ code }: { code: string }) => {
-      if (!tokenAmount || !nativeAmount) {
+      if (!tokenAmount) {
         setError(new Error('Amount is not found'))
         return
       }
