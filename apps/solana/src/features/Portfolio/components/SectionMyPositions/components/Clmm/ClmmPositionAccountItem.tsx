@@ -236,10 +236,10 @@ export default function ClmmPositionAccountItem({
         isOpen={isRemoveOpen}
         onClose={onRemoveClose}
         onSyncSending={handleSyncSending}
-        initRpcPoolData={initRpcPoolData}
         poolInfo={rpcData.data ? { ...poolInfo, price: rpcData.data.currentPrice.toNumber() } : poolInfo}
         onRefresh={rpcData.mutate}
         position={position}
+        allRewardInfos={allRewardInfos}
       />
       {isAddOpen ? (
         <AddLiquidityModal

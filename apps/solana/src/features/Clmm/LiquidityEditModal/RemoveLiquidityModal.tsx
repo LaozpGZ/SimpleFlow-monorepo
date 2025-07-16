@@ -39,7 +39,7 @@ export default function RemoveLiquidityModal({
   onRefresh,
   poolInfo,
   position,
-  initRpcPoolData
+  allRewardInfos
 }: {
   isOpen: boolean
   onClose: () => void
@@ -47,7 +47,7 @@ export default function RemoveLiquidityModal({
   onSyncSending: (val: boolean) => void
   poolInfo: ApiV3PoolInfoConcentratedItem
   position: PositionWithUpdateFn
-  initRpcPoolData?: RpcPoolData
+  allRewardInfos: any[]
 }) {
   const { t } = useTranslation()
   const isMobile = useAppStore((s) => s.isMobile)
@@ -83,15 +83,6 @@ export default function RemoveLiquidityModal({
   ]
   const [tokenAmount, setTokenAmount] = useState(['', ''])
   const [minTokenAmount, setMinTokenAmount] = useState(['', ''])
-  const { allRewardInfos } = useClmmRewardInfoFromSimulation({
-    poolInfo,
-    position,
-    subscribe: false,
-    shouldFetch: false,
-    initRpcPoolData,
-    tickLowerPrefetchData: position.tickLowerRpcData,
-    tickUpperPrefetchData: position.tickUpperRpcData
-  })
 
   const handleFocusA = useCallback(() => {
     focusARef.current = true
