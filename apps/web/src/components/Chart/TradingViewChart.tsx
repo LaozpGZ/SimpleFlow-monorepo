@@ -90,6 +90,17 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const symbol = currency0 && currency1 ? `${currency0?.symbol}/${currency1?.symbol}` : ''
   const { chainId } = useActiveChainId()
 
+  // Debug logging for currency and chain updates
+  useEffect(() => {
+    console.log('[Chart Debug] Currency/Chain update:', {
+      chainId,
+      currency0: currency0?.symbol,
+      currency1: currency1?.symbol,
+      symbol,
+      currency0Address: currency0?.isToken ? currency0?.address : currency0?.wrapped?.address,
+      currency1Address: currency1?.isToken ? currency1?.address : currency1?.wrapped?.address,
+    })
+  }, [chainId, currency0, currency1, symbol])
 
   useEffect(() => {
     const chainChanged = chainId !== currentChainId.current

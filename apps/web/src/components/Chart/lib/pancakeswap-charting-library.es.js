@@ -1,8 +1,8 @@
-var A = Object.defineProperty;
-var M = (d, e, o) => e in d ? A(d, e, { enumerable: !0, configurable: !0, writable: !0, value: o }) : d[e] = o;
-var $ = (d, e, o) => M(d, typeof e != "symbol" ? e + "" : e, o);
-function W(d) {
-  return d;
+var M = Object.defineProperty;
+var W = (h, e, o) => e in h ? M(h, e, { enumerable: !0, configurable: !0, writable: !0, value: o }) : h[e] = o;
+var P = (h, e, o) => W(h, typeof e != "symbol" ? e + "" : e, o);
+function L(h) {
+  return h;
 }
 const v = {
   // BNB Smart Chain (BEP20)
@@ -150,11 +150,11 @@ const v = {
     scanUrl: "https://solscan.io"
   }
 };
-Object.values(v).reduce((d, e) => (d[e.id] = e, d), {});
-function S(d) {
-  return v[d];
+Object.values(v).reduce((h, e) => (h[e.id] = e, h), {});
+function S(h) {
+  return v[h];
 }
-const L = ["1", "5", "15", "30", "60", "240", "1D", "1W", "1M"], P = {
+const R = ["1", "5", "15", "30", "60", "1D"], T = {
   1: "1m",
   "1m": "1m",
   5: "5m",
@@ -171,8 +171,8 @@ const L = ["1", "5", "15", "30", "60", "240", "1D", "1W", "1M"], P = {
   "1d": "1d",
   "1W": "1w",
   "1M": "1M"
-}, R = {
-  supported_resolutions: L.map(W),
+}, V = {
+  supported_resolutions: R.map(L),
   supports_marks: !1,
   supports_timescale_marks: !1,
   supports_time: !0,
@@ -190,16 +190,16 @@ const L = ["1", "5", "15", "30", "60", "240", "1D", "1W", "1M"], P = {
     }
   ]
 };
-class V {
+class z {
   constructor(e = {}, o) {
-    $(this, "configuration");
-    $(this, "api");
-    $(this, "ws", null);
-    $(this, "wsUrl", "wss://dws.coinmarketcap.com/ws");
+    P(this, "configuration");
+    P(this, "api");
+    P(this, "ws", null);
+    P(this, "wsUrl", "wss://dws.coinmarketcap.com/ws");
     // "wss://pcs-ws.dquery.ai/ws";
-    $(this, "subscriptions", /* @__PURE__ */ new Map());
+    P(this, "subscriptions", /* @__PURE__ */ new Map());
     this.configuration = {
-      ...R,
+      ...V,
       ...e
     }, this.api = o, window.pcsExtraData ? (window.pcsExtraData.fetch24HrData = this.fetch24HrData.bind(this), console.log("[Datafeed]: Injected fetch24HrData method into window.pcsExtraData")) : console.warn("[Datafeed]: window.pcsExtraData is not defined, cannot inject fetch24HrData method");
   }
@@ -219,8 +219,8 @@ class V {
   resolveSymbol(e, o, t) {
     console.log("[Datafeed]: resolveSymbol() called with", e);
     try {
-      const s = window.pcsExtraData.token0Address, a = window.pcsExtraData.token1Address, r = window.pcsExtraData.fromChainId, c = window.pcsExtraData.toChainId;
-      if (!s || !a || !r || !c) {
+      const n = window.pcsExtraData.token0Address, a = window.pcsExtraData.token1Address, r = window.pcsExtraData.fromChainId, c = window.pcsExtraData.toChainId;
+      if (!n || !a || !r || !c) {
         console.error("Missing token addresses or chainId in window.pcsExtraData"), t("Missing token information");
         return;
       }
@@ -230,7 +230,7 @@ class V {
       ) : console.warn(`Chain ID ${r} is not supported. Using default BNB Chain (56).`);
       const l = S(Number(c));
       l ? console.log(`Using chain: ${l.name} (${l.displayName}), Chain ID: ${l.chainId}`) : console.warn(`Chain ID ${c} is not supported. Using default BNB Chain (56).`);
-      const m = s.slice(-4), f = a.slice(-4), g = `${m}/${f}`, h = {
+      const g = n.slice(-4), m = a.slice(-4), y = `${g}/${m}`, f = {
         name: e,
         // Original name for internal identification
         description: e,
@@ -255,11 +255,11 @@ class V {
         original_currency_code: "USD",
         // Use long_description field to store additional information
         long_description: JSON.stringify({
-          baseToken: s,
+          baseToken: n,
           quoteToken: a,
           fromChainId: r,
           toChainId: c,
-          displayName: g,
+          displayName: y,
           fromChainName: (i == null ? void 0 : i.name) || "BNB Smart Chain (BEP20)",
           fromChainDisplayName: (i == null ? void 0 : i.displayName.toLowerCase()) || "BSC",
           toChainName: (l == null ? void 0 : l.name) || "BNB Smart Chain (BEP20)",
@@ -267,10 +267,10 @@ class V {
         })
       };
       setTimeout(() => {
-        o(h);
+        o(f);
       }, 0);
-    } catch (s) {
-      console.error("Error in resolveSymbol:", s), t("Failed to resolve symbol");
+    } catch (n) {
+      console.error("Error in resolveSymbol:", n), t("Failed to resolve symbol");
     }
   }
   /**
@@ -283,7 +283,7 @@ class V {
    * @param onResult - Success callback function to return K-line data
    * @param onError - Error callback function
    */
-  getBars(e, o, t, s, a) {
+  getBars(e, o, t, n, a) {
     console.log("[Datafeed]: getBars() called with", {
       symbol: e.name,
       resolution: o,
@@ -292,75 +292,82 @@ class V {
       countBack: t.countBack
     });
     try {
-      const r = JSON.parse(e.long_description || "{}"), { baseToken: c, quoteToken: i, fromChainId: l, toChainId: m } = r;
-      if (!c || !i || !l || !m) {
+      const r = JSON.parse(e.long_description || "{}"), { baseToken: c, quoteToken: i, fromChainId: l, toChainId: g } = r;
+      if (!c || !i || !l || !g) {
         console.error("[Datafeed]: Missing token information in symbolInfo", e), a("Missing token information in symbol");
         return;
       }
-      this.api.setPlatform(Number(l), "from"), this.api.setPlatform(Number(m), "to");
-      const { from: f, to: g, countBack: h } = t;
-      console.log(`[Datafeed]: Fetching prices for base token ${c} and quote token ${i}`), console.warn(`[Datafeed]: tv Resolution: ${o}, cmc Resolution: ${P[o]}`);
-      const N = this.api.getBars("from", c, P[o], f, g, h), k = this.api.getBars("to", i, P[o], f, g, h);
-      Promise.all([N, k]).then(([u, E]) => {
-        if (!u || u.length === 0 || !E || E.length === 0) {
-          console.log(`[Datafeed]: No data for ${e.name} from=${f} to=${g}`), s([], { noData: !0 });
+      this.api.setPlatform(Number(l), "from"), this.api.setPlatform(Number(g), "to");
+      const { from: m, to: y, countBack: f } = t;
+      console.log(`[Datafeed]: Fetching prices for base token ${c} and quote token ${i}`), console.warn(`[Datafeed]: tv Resolution: ${o}, cmc Resolution: ${T[o]}`);
+      const $ = this.api.getBars("from", c, T[o], m, y, f), k = this.api.getBars("to", i, T[o], m, y, f);
+      Promise.all([$, k]).then(([D, E]) => {
+        if (!D || D.length === 0 || !E || E.length === 0) {
+          console.log(`[Datafeed]: No data for ${e.name} from=${m} to=${y}`), n([], { noData: !0 });
           return;
         }
         const b = [], B = /* @__PURE__ */ new Map();
-        u.forEach((n) => {
-          B.set(n.time, { base: n });
-        }), E.forEach((n) => {
-          const w = B.get(n.time);
-          w ? w.quote = n : B.set(n.time, { quote: n });
+        D.forEach((d) => {
+          B.set(d.time, { base: d });
+        }), E.forEach((d) => {
+          const s = B.get(d.time);
+          s ? s.quote = d : B.set(d.time, { quote: d });
         });
-        let p = null;
-        B.forEach((n, w) => {
-          if (n.base && n.quote) {
-            let D = n.base.open / n.quote.open;
-            const C = n.base.high / n.quote.low, I = n.base.low / n.quote.high, y = n.base.close / n.quote.close;
-            p && (D = p.close);
-            const T = n.base.volume !== void 0 ? n.base.volume : 0, U = n.quote.volume !== void 0 ? n.quote.volume : 0, F = (T + U) / 2, O = Math.max(D, y) * 5, q = Math.min(D, y) / 5;
-            (C > O || I < q) && console.warn(`[Datafeed]: Abnormal price range detected at ${new Date(w).toISOString()}:`, {
+        const w = Array.from(B.keys()).sort((d, s) => d - s);
+        let u = null;
+        w.forEach((d) => {
+          const s = B.get(d);
+          if (s.base && s.quote) {
+            let p = s.base.open / s.quote.open;
+            const C = s.base.high / s.quote.low, I = s.base.low / s.quote.high, N = s.base.close / s.quote.close;
+            u && (p = u.close, console.log(`[Datafeed]: Applied price continuity. Previous close: ${u.close}, Original open: ${s.base.open / s.quote.open}, Time gap: ${d - u.time}ms`));
+            const U = s.base.volume !== void 0 ? s.base.volume : 0, F = s.quote.volume !== void 0 ? s.quote.volume : 0, O = (U + F) / 2, q = Math.max(p, N) * 5, A = Math.min(p, N) / 5;
+            (C > q || I < A) && console.warn(`[Datafeed]: Abnormal price range detected at ${new Date(d).toISOString()}:`, {
               symbol: e.name,
-              time: w,
-              timeUTC: new Date(w).toUTCString(),
-              open: D,
+              time: d,
+              timeUTC: new Date(d).toUTCString(),
+              open: p,
               high: C,
               low: I,
-              close: y,
-              highToOpenRatio: C / D,
-              highToCloseRatio: C / y,
-              lowToOpenRatio: I / D,
-              lowToCloseRatio: I / y,
+              close: N,
+              highToOpenRatio: C / p,
+              highToCloseRatio: C / N,
+              lowToOpenRatio: I / p,
+              lowToCloseRatio: I / N,
               baseToken: {
-                open: n.base.open,
-                high: n.base.high,
-                low: n.base.low,
-                close: n.base.close
+                open: s.base.open,
+                high: s.base.high,
+                low: s.base.low,
+                close: s.base.close
               },
               quoteToken: {
-                open: n.quote.open,
-                high: n.quote.high,
-                low: n.quote.low,
-                close: n.quote.close
+                open: s.quote.open,
+                high: s.quote.high,
+                low: s.quote.low,
+                close: s.quote.close
               }
             });
             const _ = {
-              time: w,
-              open: D,
+              time: d,
+              open: p,
               high: C,
               low: I,
-              close: y,
-              volume: F
+              close: N,
+              volume: O
             };
-            b.push(_), p = _;
+            b.push(_), u = _;
           }
-        }), b.sort((n, w) => n.time - w.time), console.log(`[Datafeed]: Calculated ${b.length} bars for ${e.name}`, {
+        }), b.sort((d, s) => d.time - s.time);
+        for (let d = 1; d < b.length; d++) {
+          const s = b[d - 1], p = b[d];
+          p.open !== s.close && (console.log(`[Datafeed]: Final price continuity fix. Bar ${d}: ${p.open} -> ${s.close}, Time gap: ${p.time - s.time}ms`), p.open = s.close, p.high = Math.max(p.open, p.high, p.close), p.low = Math.min(p.open, p.low, p.close));
+        }
+        console.log(`[Datafeed]: Calculated ${b.length} bars for ${e.name}`, {
           firstBar: b.length > 0 ? b[0] : null,
           lastBar: b.length > 0 ? b[b.length - 1] : null
-        }), s(b, { noData: b.length === 0 });
-      }).catch((u) => {
-        console.error("[Datafeed]: Error fetching bars from API:", u), a(`Failed to fetch bars: ${u instanceof Error ? u.message : String(u)}`);
+        }), n(b, { noData: b.length === 0 });
+      }).catch((D) => {
+        console.error("[Datafeed]: Error fetching bars from API:", D), a(`Failed to fetch bars: ${D instanceof Error ? D.message : String(D)}`);
       });
     } catch (r) {
       console.error("[Datafeed]: Error in getBars method:", r), a(`Error processing request: ${r instanceof Error ? r.message : String(r)}`);
@@ -376,35 +383,35 @@ class V {
    * @param subscriberUID - Unique subscriber identifier
    * @param onResetCacheNeededCallback - Reset cache callback function
    */
-  subscribeBars(e, o, t, s, a) {
+  subscribeBars(e, o, t, n, a) {
     try {
-      const r = JSON.parse(e.long_description || "{}"), { baseToken: c, quoteToken: i, fromChainId: l, toChainId: m } = r;
-      if (!c || !i || !l || !m) {
+      const r = JSON.parse(e.long_description || "{}"), { baseToken: c, quoteToken: i, fromChainId: l, toChainId: g } = r;
+      if (!c || !i || !l || !g) {
         console.error("[Datafeed]: Missing token information in symbolInfo for WebSocket subscription", e);
         return;
       }
-      this.subscriptions.set(s, {
+      this.subscriptions.set(n, {
         symbolInfo: e,
         resolution: o,
         onTick: t
       });
-      const f = S(Number(l));
-      if (!f) {
+      const m = S(Number(l));
+      if (!m) {
         console.error(`[Datafeed]: Chain ID ${l} not supported for WebSocket subscription`);
         return;
       }
-      const g = S(Number(m));
-      if (!g) {
-        console.error(`[Datafeed]: Chain ID ${m} not supported for WebSocket subscription`);
+      const y = S(Number(g));
+      if (!y) {
+        console.error(`[Datafeed]: Chain ID ${g} not supported for WebSocket subscription`);
         return;
       }
-      const h = f.id, N = g.id;
+      const f = m.id, $ = y.id;
       this.initWebSocket();
-      const k = P[o], u = `datahub@kline@${h}@${c.toLowerCase()}@${k}`, E = `datahub@kline@${N}@${i.toLowerCase()}@${k}`;
+      const k = T[o], D = `datahub@kline@${f}@${c.toLowerCase()}@${k}`, E = `datahub@kline@${$}@${i.toLowerCase()}@${k}`;
       this.ws && this.ws.readyState === WebSocket.OPEN ? (this.ws.send(
         JSON.stringify({
           method: "SUBSCRIPTION",
-          params: [u]
+          params: [D]
         })
       ), this.ws.send(
         JSON.stringify({
@@ -456,24 +463,24 @@ class V {
       return;
     }
     console.log(`[Datafeed]: Resubscribing to ${this.subscriptions.size} symbols`), this.subscriptions.forEach((e, o) => {
-      const { symbolInfo: t, resolution: s } = e;
+      const { symbolInfo: t, resolution: n } = e;
       try {
         const a = JSON.parse(t.long_description || "{}"), { baseToken: r, quoteToken: c, fromChainId: i, toChainId: l } = a;
         if (!r || !c || !i || !l) {
           console.error(`[Datafeed]: Missing token information for ${o}`);
           return;
         }
-        const m = S(Number(i));
-        if (!m) {
+        const g = S(Number(i));
+        if (!g) {
           console.error(`[Datafeed]: Chain ID ${i} not supported for ${o}`);
           return;
         }
-        const f = S(Number(l));
-        if (!f) {
+        const m = S(Number(l));
+        if (!m) {
           console.error(`[Datafeed]: Chain ID ${l} not supported for ${o}`);
           return;
         }
-        const g = m.id, h = f.id, N = P[s], k = `datahub@kline@${g}@${r.toLowerCase()}@${N}`, u = `datahub@kline@${h}@${c.toLowerCase()}@${N}`;
+        const y = g.id, f = m.id, $ = T[n], k = `datahub@kline@${y}@${r.toLowerCase()}@${$}`, D = `datahub@kline@${f}@${c.toLowerCase()}@${$}`;
         this.ws.send(
           JSON.stringify({
             method: "SUBSCRIPTION",
@@ -482,7 +489,7 @@ class V {
         ), this.ws.send(
           JSON.stringify({
             method: "SUBSCRIPTION",
-            params: [u]
+            params: [D]
           })
         );
       } catch (a) {
@@ -497,15 +504,15 @@ class V {
    */
   async fetch24HrData() {
     try {
-      const e = window.pcsExtraData.token0Address, o = window.pcsExtraData.token1Address, t = window.pcsExtraData.fromChainId, s = window.pcsExtraData.toChainId;
+      const e = window.pcsExtraData.token0Address, o = window.pcsExtraData.token1Address, t = window.pcsExtraData.fromChainId, n = window.pcsExtraData.toChainId;
       if (!e || !o)
         return console.error("[fetch24HrData]: Missing token addresses"), null;
-      console.log(`[Datafeed]: Fetching 24hr data for ${e}/${o}`), this.api.setPlatform(Number(t), "from"), this.api.setPlatform(Number(s), "to");
+      console.log(`[Datafeed]: Fetching 24hr data for ${e}/${o}`), this.api.setPlatform(Number(t), "from"), this.api.setPlatform(Number(n), "to");
       const a = await this.api.get24HrData(e, "from"), r = await this.api.get24HrData(o, "to");
       if (!a || !r)
         return console.error("[Datafeed]: Failed to fetch 24hr data"), null;
-      const c = a.h / r.l, i = a.l / r.h, l = a.c / r.c, m = a.changes - r.changes;
-      return console.log("[Datafeed]: 24hr data calculated:", { high: c, low: i, close: l, changes: m }), { high: c, low: i, close: l, changes: m };
+      const c = a.h / r.l, i = a.l / r.h, l = a.c / r.c, g = a.changes - r.changes;
+      return console.log("[Datafeed]: 24hr data calculated:", { high: c, low: i, close: l, changes: g }), { high: c, low: i, close: l, changes: g };
     } catch (e) {
       return console.error("[Datafeed]: Error fetching 24hr data:", e), null;
     }
@@ -518,8 +525,8 @@ class V {
     if (typeof e == "string")
       try {
         e = JSON.parse(e);
-      } catch (h) {
-        console.error("[Datafeed]: Error parsing WebSocket message:", h);
+      } catch (f) {
+        console.error("[Datafeed]: Error parsing WebSocket message:", f);
         return;
       }
     if (!e) {
@@ -532,9 +539,9 @@ class V {
     }
     const o = e.c;
     let t = "";
-    const s = o.split("@");
-    if (s.length >= 4)
-      t = s[3].toLowerCase();
+    const n = o.split("@");
+    if (n.length >= 4)
+      t = n[3].toLowerCase();
     else {
       console.error(`[Datafeed]: Could not extract token address from subscription string: ${o}`);
       return;
@@ -543,63 +550,63 @@ class V {
       console.warn("[Datafeed]: Invalid price data format:", e.d);
       return;
     }
-    const a = e.d.u, r = parseFloat(a[0]), c = parseFloat(a[1]), i = parseFloat(a[2]), l = parseFloat(a[3]), m = parseFloat(a[4]);
-    let f = parseFloat(a[5]);
-    if (f < 1e10 && (f *= 1e3), isNaN(r) || isNaN(c) || isNaN(i) || isNaN(l) || isNaN(f)) {
+    const a = e.d.u, r = parseFloat(a[0]), c = parseFloat(a[1]), i = parseFloat(a[2]), l = parseFloat(a[3]), g = parseFloat(a[4]);
+    let m = parseFloat(a[5]);
+    if (m < 1e10 && (m *= 1e3), isNaN(r) || isNaN(c) || isNaN(i) || isNaN(l) || isNaN(m)) {
       console.warn("[Datafeed]: Invalid price values after parsing:", {
         open: r,
         high: c,
         low: i,
         close: l,
-        volume: m,
-        timestamp: f
+        volume: g,
+        timestamp: m
       });
       return;
     }
-    const g = {
+    const y = {
       o: r,
       h: c,
       l: i,
       c: l,
-      v: m,
-      t: f
+      v: g,
+      t: m
     };
     try {
-      this.subscriptions.forEach((h, N) => {
-        const { symbolInfo: k, onTick: u } = h, E = JSON.parse(k.long_description || "{}"), { baseToken: b, quoteToken: B } = E;
-        if ((t === b.toLowerCase() || t === B.toLowerCase()) && (t === b.toLowerCase() ? h.baseData = g : h.quoteData = g, h.baseData && h.quoteData)) {
-          const p = h.baseData, n = h.quoteData;
-          if (Math.abs(p.t - n.t) <= 1e3) {
-            if (!isFinite(p.o) || p.o <= 0 || !isFinite(p.h) || p.h <= 0 || !isFinite(p.l) || p.l <= 0 || !isFinite(p.c) || p.c <= 0 || !isFinite(n.o) || n.o <= 0 || !isFinite(n.h) || n.h <= 0 || !isFinite(n.l) || n.l <= 0 || !isFinite(n.c) || n.c <= 0) {
+      this.subscriptions.forEach((f, $) => {
+        const { symbolInfo: k, onTick: D } = f, E = JSON.parse(k.long_description || "{}"), { baseToken: b, quoteToken: B } = E;
+        if ((t === b.toLowerCase() || t === B.toLowerCase()) && (t === b.toLowerCase() ? f.baseData = y : f.quoteData = y, f.baseData && f.quoteData)) {
+          const w = f.baseData, u = f.quoteData;
+          if (Math.abs(w.t - u.t) <= 1e3) {
+            if (!isFinite(w.o) || w.o <= 0 || !isFinite(w.h) || w.h <= 0 || !isFinite(w.l) || w.l <= 0 || !isFinite(w.c) || w.c <= 0 || !isFinite(u.o) || u.o <= 0 || !isFinite(u.h) || u.h <= 0 || !isFinite(u.l) || u.l <= 0 || !isFinite(u.c) || u.c <= 0) {
               console.error(`[Datafeed]: Invalid price data for ${k.name}, skipping update`);
               return;
             }
-            let w = p.o / n.o;
-            const D = p.h / n.l, C = p.l / n.h, I = p.c / n.c, y = (p.v + n.v) / 2;
-            if (h.lastBar && (w = h.lastBar.close), !isFinite(w) || !isFinite(D) || !isFinite(C) || !isFinite(I) || !isFinite(y)) {
+            let d = w.o / u.o;
+            const s = w.h / u.l, p = w.l / u.h, C = w.c / u.c, I = (w.v + u.v) / 2;
+            if (f.lastBar && (d = f.lastBar.close, console.log(`[Datafeed]: Applied last close = new open logic for WebSocket. Previous close: ${f.lastBar.close}, Original open: ${w.o / u.o}`)), !isFinite(d) || !isFinite(s) || !isFinite(p) || !isFinite(C) || !isFinite(I)) {
               console.error(`[Datafeed]: Calculated invalid price ratio for ${k.name}:`, {
-                open: w,
-                high: D,
-                low: C,
-                close: I,
-                volume: y
+                open: d,
+                high: s,
+                low: p,
+                close: C,
+                volume: I
               });
               return;
             }
-            const T = {
-              time: p.t,
-              open: w,
-              high: D,
-              low: C,
-              close: I,
-              volume: y
+            const N = {
+              time: w.t,
+              open: d,
+              high: s,
+              low: p,
+              close: C,
+              volume: I
             };
-            h.lastBar = T, u(T);
+            f.lastBar = N, D(N);
           }
         }
       });
-    } catch (h) {
-      console.error("[Datafeed]: Error processing WebSocket kline data:", h);
+    } catch (f) {
+      console.error("[Datafeed]: Error processing WebSocket kline data:", f);
     }
   }
   /**
@@ -628,9 +635,9 @@ class V {
     console.log("[Datafeed]: searchSymbols() called");
   }
 }
-class z {
+class J {
   constructor(e = {}) {
-    $(this, "config");
+    P(this, "config");
     this.config = {
       baseUrl: "https://pcs.dquery.ai",
       fromPlatform: "bsc",
@@ -659,12 +666,12 @@ class z {
       o === "from" ? this.config.fromPlatform.toString() : this.config.toPlatform.toString()
     ), t.searchParams.append("address", e.address), t.searchParams.append("interval", e.interval), e.limit && t.searchParams.append("limit", e.limit.toString()), e.from && t.searchParams.append("from", e.from.toString()), e.to && t.searchParams.append("to", e.to.toString());
     try {
-      const s = await fetch(t.toString());
-      if (!s.ok)
-        throw new Error(`API error: ${s.status}`);
-      return await s.json();
-    } catch (s) {
-      throw console.error("Failed to fetch K-line data:", s), s;
+      const n = await fetch(t.toString());
+      if (!n.ok)
+        throw new Error(`API error: ${n.status}`);
+      return await n.json();
+    } catch (n) {
+      throw console.error("Failed to fetch K-line data:", n), n;
     }
   }
   /**
@@ -673,12 +680,12 @@ class z {
    */
   convertToTradingViewBars(e) {
     return e.map((o) => {
-      const [t, s, a, r, c, i] = o;
+      const [t, n, a, r, c, i] = o;
       return {
         time: i,
         // 時間戳 (毫秒)
         open: t,
-        high: s,
+        high: n,
         low: a,
         close: r,
         volume: c
@@ -698,7 +705,7 @@ class z {
    * @param resolution - TradingView 解析度
    */
   convertResolution(e) {
-    const o = P[e];
+    const o = T[e];
     return o ? {
       "1m": "1min",
       "5m": "5min",
@@ -711,13 +718,13 @@ class z {
       "1M": "1M"
     }[o] || "5min" : (console.warn(`未知的解析度: ${e}，使用默認值 5min`), "5min");
   }
-  async getBars(e, o, t, s, a, r) {
+  async getBars(e, o, t, n, a, r) {
     try {
       const c = this.convertResolution(t), i = await this.getKLineData(
         {
           address: o,
           interval: c,
-          from: s * 1e3,
+          from: n * 1e3,
           // 轉換為毫秒
           to: a * 1e3,
           // 轉換為毫秒
@@ -739,39 +746,39 @@ class z {
    */
   async get24HrData(e, o) {
     try {
-      const t = Math.floor(Date.now() / 1e3), s = t - 24 * 60 * 60, a = await this.getBars(o, e, "60", s, t, 24);
+      const t = Math.floor(Date.now() / 1e3), n = t - 24 * 60 * 60, a = await this.getBars(o, e, "60", n, t, 24);
       if (!a || a.length === 0)
         throw new Error(`No data available for token ${e}`);
       let r = -1 / 0, c = 1 / 0;
-      a.forEach((f) => {
-        f.high > r && (r = f.high), f.low < c && (c = f.low);
+      a.forEach((m) => {
+        m.high > r && (r = m.high), m.low < c && (c = m.low);
       });
-      const i = a[a.length - 1].close, l = a[0].open, m = (i - l) / l * 100;
+      const i = a[a.length - 1].close, l = a[0].open, g = (i - l) / l * 100;
       return {
         h: r,
         l: c,
         c: i,
-        changes: m
+        changes: g
       };
     } catch (t) {
       throw console.error("Failed to get 24hr data:", t), t;
     }
   }
 }
-const x = (d) => new z(d);
-function J(d, e) {
+const x = (h) => new J(h);
+function H(h, e) {
   const o = e || x();
-  return new V(d, o);
+  return new z(h, o);
 }
-function H(d, e = {}) {
+function j(h, e = {}) {
   if (!window.TradingView || !window.Datafeeds)
     return console.error(
       "TradingView or Datafeeds not found. Make sure to load the library scripts before using this function."
     ), null;
   window.pcsExtraData = window.pcsExtraData || {}, window.pcsExtraData.token0Address = window.pcsExtraData.token0Address || "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c", window.pcsExtraData.token1Address = window.pcsExtraData.token1Address || "0x0E09FaBB73Bd3Ade0a17ECC321fD13a19e81cE82", window.pcsExtraData.fromChainId = window.pcsExtraData.fromChainId || 56, window.pcsExtraData.toChainId = window.pcsExtraData.toChainId || 56;
-  const o = window.pcsExtraData.fromChainId, t = window.pcsExtraData.toChainId, s = S(o), a = S(t);
-  s ? console.log(
-    `Using blockchain: ${s.name} (${s.displayName}), Chain ID: ${s.chainId}`
+  const o = window.pcsExtraData.fromChainId, t = window.pcsExtraData.toChainId, n = S(o), a = S(t);
+  n ? console.log(
+    `Using blockchain: ${n.name} (${n.displayName}), Chain ID: ${n.chainId}`
   ) : console.warn(`Chain ID ${o} is not supported. Using default BNB Chain (56).`), a ? console.log(`Using blockchain: ${a.name} (${a.displayName}), Chain ID: ${a.chainId}`) : console.warn(`Chain ID ${t} is not supported. Using default BNB Chain (56).`);
   const r = x(), l = {
     ...{
@@ -781,7 +788,7 @@ function H(d, e = {}) {
       fullscreen: !1,
       library_path: "https://assets.pcswap.org/web/charts/charting_library/",
       locale: "en",
-      datafeed: J({}, r),
+      datafeed: H({}, r),
       // 使用我們自己的 datafeed
       disabled_features: ["use_localstorage_for_settings"],
       enabled_features: ["study_templates"],
@@ -792,40 +799,40 @@ function H(d, e = {}) {
       theme: "Light"
     },
     ...e,
-    container: typeof d == "string" ? d : d.id
+    container: typeof h == "string" ? h : h.id
   };
   return new window.TradingView.widget(l);
 }
-function j(d = "https://assets.pcswap.org/web/charts/charting_library/", e = "https://assets.pcswap.org/web/charts/datafeeds/") {
+function K(h = "https://assets.pcswap.org/web/charts/charting_library/", e = "https://assets.pcswap.org/web/charts/datafeeds/") {
   return new Promise((o, t) => {
-    const s = document.createElement("script");
-    s.src = `${d}charting_library.standalone.js`, s.async = !0, s.onload = () => {
+    const n = document.createElement("script");
+    n.src = `${h}charting_library.standalone.js`, n.async = !0, n.onload = () => {
       const a = document.createElement("script");
       a.src = `${e}bundle.288f9ba8dc6bb464c778b5c0c8e15d41.js`, a.async = !0, a.onload = () => {
         o({ TradingView: window.TradingView, Datafeeds: window.Datafeeds });
       }, a.onerror = () => t(new Error("Failed to load Datafeeds library")), document.head.appendChild(a);
-    }, s.onerror = () => t(new Error("Failed to load TradingView library")), document.head.appendChild(s);
+    }, n.onerror = () => t(new Error("Failed to load TradingView library")), document.head.appendChild(n);
   });
 }
-function K() {
+function G() {
   return window.TradingView;
 }
-function G() {
+function X() {
   return window.Datafeeds;
 }
-const Q = {
-  createTradingViewWidget: H,
-  loadTradingViewLibrary: j,
-  getTradingView: K,
-  getDatafeeds: G,
+const Y = {
+  createTradingViewWidget: j,
+  loadTradingViewLibrary: K,
+  getTradingView: G,
+  getDatafeeds: X,
   CHAIN_ID_MAP: v,
   getChainInfoByChainId: S
 };
 export {
-  H as createTradingViewWidget,
-  Q as default,
-  G as getDatafeeds,
-  K as getTradingView,
-  j as loadTradingViewLibrary
+  j as createTradingViewWidget,
+  Y as default,
+  X as getDatafeeds,
+  G as getTradingView,
+  K as loadTradingViewLibrary
 };
 //# sourceMappingURL=pancakeswap-charting-library.es.js.map
