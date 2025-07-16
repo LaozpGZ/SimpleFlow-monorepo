@@ -1,34 +1,51 @@
 import { useTranslation } from '@pancakeswap/localization'
+import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/swap-sdk-core'
 import { useToast } from '@pancakeswap/uikit'
 import { useQueryClient } from '@tanstack/react-query'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import { logGTMGiftCreateSuccessEvent } from 'utils/customGTMEventTracking'
 import { isUserRejected } from 'utils/sentry'
 import { useAccount, useWaitForTransactionReceipt, useWriteContract } from 'wagmi'
 import { PancakeGiftV1Abi } from '../abis/PancakeGiftV1Abi'
 import { GIFT_PANCAKE_V1_ADDRESS, QUERY_KEY_GIFT_INFO } from '../constants'
-import { CreateGiftParams } from '../types'
+import { useSendGiftContext } from '../providers/SendGiftProvider'
 import { convertCodeHash } from '../utils/convertCodeHash'
 import { generateCreateGiftParams } from '../utils/generateCreateGiftParams'
+import { useCalculateTotalCostCreateGift } from './useCalculateTotalCostCreateGift'
 import { useReadGasPayment } from './useReadGasPayment'
 
-export const useCreateGift = () => {
+export const useCreateGift = ({
+  tokenAmount,
+  nativeAmount,
+}: {
+  tokenAmount?: CurrencyAmount<Token | NativeCurrency>
+  nativeAmount?: CurrencyAmount<NativeCurrency>
+}) => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const [error, setError] = useState<Error | null>(null)
   const { toastSuccess, toastError } = useToast()
+  const { includeStarterGas } = useSendGiftContext()
 
   const { address: account } = useAccount()
 
   const { writeContractAsync, data: txHash, isPending } = useWriteContract()
   const queryClient = useQueryClient()
 
+  const totalUsd = useCalculateTotalCostCreateGift({ tokenAmount, nativeAmount })
+
   // Get GAS_PAYMENT from contract
   const gasPayment = useReadGasPayment()
 
   const createGift = useCallback(
-    async ({ tokenAmount, nativeAmount, code }: CreateGiftParams) => {
+    async ({ code }: { code: string }) => {
+      if (!tokenAmount || !nativeAmount) {
+        setError(new Error('Amount is not found'))
+        return
+      }
+
       if (!gasPayment) {
         setError(new Error('Gas payment not found'))
         return
@@ -59,6 +76,10 @@ export const useCreateGift = () => {
           value: transactionValue,
         },
         {
+          onSuccess: () => {
+            // Track gift creation success with USD amount
+            logGTMGiftCreateSuccessEvent(chainId, totalUsd.toString(), includeStarterGas ? 'link' : 'qr')
+          },
           onError: (error) => {
             if (isUserRejected(error)) {
               return
@@ -71,7 +92,18 @@ export const useCreateGift = () => {
         },
       )
     },
-    [gasPayment, t, writeContractAsync, toastSuccess, queryClient, chainId, account],
+    [
+      gasPayment,
+      t,
+      writeContractAsync,
+      toastSuccess,
+      queryClient,
+      chainId,
+      account,
+      includeStarterGas,
+      tokenAmount,
+      nativeAmount,
+    ],
   )
 
   const {

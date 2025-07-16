@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Text, Toggle } from '@pancakeswap/uikit'
 import { SecondaryCard } from 'components/SecondaryCard'
 import { useEffect } from 'react'
+import { logGTMToggleSendGiftEvent } from 'utils/customGTMEventTracking'
 import { CHAINS_WITH_GIFT_CLAIM } from '../constants'
 import { useSendGiftContext } from '../providers/SendGiftProvider'
 import { GasSponsor } from './GasSponsor'
@@ -41,11 +42,13 @@ export const SendGiftToggle = ({
             </Text>
           </FlexGap>
           <Toggle
-            id="toggle-show-testnet"
+            id="toggle-send-gift"
             checked={isSendGift}
             scale="md"
             onChange={() => {
-              setIsSendGift(!isSendGift)
+              const newSendGiftState = !isSendGift
+              setIsSendGift(newSendGiftState)
+              logGTMToggleSendGiftEvent(newSendGiftState, tokenChainId)
             }}
           />
         </FlexGap>

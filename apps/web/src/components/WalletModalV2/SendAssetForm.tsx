@@ -29,6 +29,7 @@ import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
+import { logGTMGiftPreviewEvent } from 'utils/customGTMEventTracking'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { checksumAddress, formatUnits, isAddress, zeroAddress } from 'viem'
 import { CreateGiftView } from 'views/Gift/components/CreateGiftView'
@@ -443,8 +444,12 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           {t('Close')}
         </ActionButton>
         <Button
+          id="send-gift-confirm-button"
           width="100%"
           onClick={() => {
+            if (isSendGift) {
+              logGTMGiftPreviewEvent(asset.chainId)
+            }
             onViewStateChange(ViewState.CONFIRM_TRANSACTION)
           }}
           disabled={

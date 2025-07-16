@@ -5,6 +5,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useCallback, useMemo, useState } from 'react'
+import { logGTMGiftCreateEvent } from 'utils/customGTMEventTracking'
 import { GIFT_PANCAKE_V1_ADDRESS } from '../constants'
 
 export const CreateGiftButton = ({
@@ -36,6 +37,8 @@ export const CreateGiftButton = ({
     currentAllowanceGift?.lessThan(tokenAmount)
 
   const onCreateGiftClick = useCallback(async () => {
+    logGTMGiftCreateEvent(tokenAmount.currency.chainId)
+
     if (needApprove) {
       setIsApproving(true)
       approveGiftCallback()
@@ -72,6 +75,7 @@ export const CreateGiftButton = ({
 
   return (
     <Button
+      id="create-gift-button"
       disabled={isLoading || isApproving}
       onClick={() => {
         if (!isChainMatched) {

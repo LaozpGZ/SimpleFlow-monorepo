@@ -39,17 +39,20 @@ export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<T
   const [selectedView, setSelectedView] = useState<GIFT_VIEW>(GIFT_VIEW.SEND_LINK)
   const { nativeAmount } = useSendGiftContext()
 
-  const { createGift, isLoading, isConfirmed } = useCreateGift()
+  const { createGift, isLoading, isConfirmed } = useCreateGift({
+    tokenAmount,
+    nativeAmount,
+  })
 
   const handleCreateGift = useCallback(() => {
     const randomCode = nanoid(GIFT_CODE_LENGTH)
 
-    createGift({ tokenAmount: tokenAmount!, code: randomCode, nativeAmount })
+    createGift({ code: randomCode })
 
     setCode(() => {
       return randomCode
     })
-  }, [tokenAmount, createGift, nativeAmount])
+  }, [createGift, code])
 
   const viewTabs = (
     <Box width="100%" mb="16px" onClick={(e) => e.stopPropagation()}>

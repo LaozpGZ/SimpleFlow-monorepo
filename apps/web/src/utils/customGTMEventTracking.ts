@@ -71,6 +71,7 @@ export enum GTMCategory {
   Prediction = 'Prediction',
   IFO = 'IFO',
   IDO = 'IDO',
+  Gift = 'Gift',
 }
 
 export enum GTMAction {
@@ -123,6 +124,12 @@ export enum GTMAction {
   ClickOnWalletBtn = 'click on the connect wallet button',
   WalletConnectSucc = 'wallet connected successfully',
   ClickOnDisconnectedBtn = 'click on the disconnected wallet button',
+
+  // Gift
+  ToggleSendGift = 'toggle Send Gift',
+  GiftPreview = 'click Gift Preview button',
+  GiftCreate = 'click Gift Create button',
+  GiftCreateSuccess = 'show Gift Create Success',
 }
 
 interface CustomGTMDataLayer {
@@ -514,6 +521,49 @@ export const logGTMIdoConnectWalletEvent = (preTGE: boolean) => {
     event: GTMEvent.IdoConnectWallet,
     action: preTGE ? GTMAction.IDOConnectWalletPreTGE : GTMAction.IDOConnectWalletDuringTGE,
     category: GTMCategory.IDO,
+  })
+}
+
+export const logGTMToggleSendGiftEvent = (isSendGiftOn: boolean, chainId?: number) => {
+  console.info('---ToggleSendGift---', { isSendGiftOn, chainId })
+  window?.dataLayer?.push({
+    event: GTMEvent.EventTracking,
+    action: GTMAction.ToggleSendGift,
+    category: GTMCategory.Gift,
+    label: isSendGiftOn ? 'on' : 'off',
+    chainId,
+  })
+}
+
+export const logGTMGiftPreviewEvent = (chainId?: number) => {
+  console.info('---GiftPreview---', { chainId })
+  window?.dataLayer?.push({
+    event: GTMEvent.EventTracking,
+    action: GTMAction.GiftPreview,
+    category: GTMCategory.Gift,
+    chainId,
+  })
+}
+
+export const logGTMGiftCreateEvent = (chainId?: number) => {
+  console.info('---GiftCreate---', { chainId })
+  window?.dataLayer?.push({
+    event: GTMEvent.EventTracking,
+    action: GTMAction.GiftCreate,
+    category: GTMCategory.Gift,
+    chainId,
+  })
+}
+
+export const logGTMGiftCreateSuccessEvent = (chainId?: number, amount?: string, giftTokenType?: 'link' | 'qr') => {
+  console.info('---GiftCreateSuccess---', { chainId, amount, giftTokenType })
+  window?.dataLayer?.push({
+    event: GTMEvent.EventTracking,
+    action: GTMAction.GiftCreateSuccess,
+    category: GTMCategory.Gift,
+    chainId,
+    amount,
+    giftTokenType,
   })
 }
 
