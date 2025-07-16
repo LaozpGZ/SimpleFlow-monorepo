@@ -92,7 +92,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const isInitialized = useRef(false)
   const isWidgetReady = useRef(false)
   const currentSymbol = useRef('')
-  const currentChainId = useRef<number | undefined>(undefined)
   const currentCurrency0Address = useRef<string | undefined>(undefined)
   const currentCurrency1Address = useRef<string | undefined>(undefined)
   const initializationTimeout = useRef<NodeJS.Timeout | null>(null)
@@ -105,10 +104,9 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const symbol =
     debouncedCurrency0 && debouncedCurrency1 ? `${debouncedCurrency0?.symbol}/${debouncedCurrency1?.symbol}` : ''
 
-  // Debug logging for currency and chain updates
+  // Debug logging for currency updates
   useEffect(() => {
-    console.log('[Chart Debug] Currency/Chain update:', {
-      chainId,
+    console.log('[Chart Debug] Currency update:', {
       currency0: debouncedCurrency0?.symbol,
       currency1: debouncedCurrency1?.symbol,
       symbol,
@@ -119,10 +117,9 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         ? debouncedCurrency1?.address
         : debouncedCurrency1?.wrapped?.address,
     })
-  }, [chainId, debouncedCurrency0, debouncedCurrency1, symbol])
+  }, [debouncedCurrency0, debouncedCurrency1, symbol])
 
   useEffect(() => {
-    const chainChanged = chainId !== currentChainId.current
     const symbolChanged = symbol !== currentSymbol.current
     const currency0Address = debouncedCurrency0?.isToken
       ? debouncedCurrency0?.address
@@ -134,7 +131,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     const currency1AddressChanged = currency1Address !== currentCurrency1Address.current
 
     console.log('[Chart Debug] Change detection:', {
-      chainChanged,
       symbolChanged,
       currency0AddressChanged,
       currency1AddressChanged,
@@ -146,22 +142,20 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     if (
       debouncedCurrency0 &&
       debouncedCurrency1 &&
-      (symbolChanged || chainChanged || currency0AddressChanged || currency1AddressChanged)
+      (symbolChanged || currency0AddressChanged || currency1AddressChanged)
     ) {
       console.log('[Chart Debug] Processing change:', {
-        action: chainChanged || currency0AddressChanged || currency1AddressChanged ? 'recreate' : 'update',
-        chainChanged,
+        action: currency0AddressChanged || currency1AddressChanged ? 'recreate' : 'update',
         currency0AddressChanged,
         currency1AddressChanged,
       })
 
       currentSymbol.current = symbol
-      currentChainId.current = chainId
       currentCurrency0Address.current = currency0Address
       currentCurrency1Address.current = currency1Address
 
-      // If chain changed or currency addresses changed, force widget recreation
-      if (chainChanged || currency0AddressChanged || currency1AddressChanged) {
+      // If currency addresses changed, force widget recreation
+      if (currency0AddressChanged || currency1AddressChanged) {
         console.log('[Chart Debug] Forcing widget recreation')
         if (widgetRef.current) {
           try {
@@ -196,7 +190,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         }
       }
     }
-  }, [debouncedCurrency0, debouncedCurrency1, chainId, symbol])
+  }, [debouncedCurrency0, debouncedCurrency1, symbol])
 
   useEffect(() => {
     async function initChart() {
@@ -237,8 +231,8 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
           initializationTimeout.current = null
         }
 
-        // Add delay to wait for currency updates when chain changes
-        const shouldDelay = chainId !== currentChainId.current && (!debouncedCurrency0 || !debouncedCurrency1)
+        // Add delay to wait for currency updates
+        const shouldDelay = !debouncedCurrency0 || !debouncedCurrency1
 
         const doInitialization = () => {
           console.log('[Chart Debug] doInitialization called:', {
@@ -422,7 +416,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     }
 
     initChart()
-  }, [symbol, isDark, theme, debouncedCurrency0, debouncedCurrency1, chainId])
+  }, [symbol, isDark, theme, debouncedCurrency0, debouncedCurrency1])
 
   useEffect(() => {
     async function changeTheme() {
