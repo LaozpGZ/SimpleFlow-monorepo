@@ -7,5 +7,5 @@ export const NoteContainer = styled(Box)`
   border-radius: 16px;
   flex-grow: 1;
   flex-basis: 0;
-  overflow-x: auto;
+  word-wrap: break-word;
 `
