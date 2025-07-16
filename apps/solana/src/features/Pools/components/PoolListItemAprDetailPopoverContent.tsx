@@ -62,6 +62,8 @@ export default function PoolListItemAprDetailPopoverContent({
               {aprData.rewards.map(({ apr, mint }, idx) => {
                 const reward = weeklyRewards.find((r) => r.token.address === mint.address)
                 if (!reward || reward.amount === '0') return null
+                const isRewardEnded = reward.endTime ? reward.endTime * 1000 < Date.now() : true
+                if (isRewardEnded) return null
                 return (
                   <Flex w="full" gap={4} key={`reward-${mint?.symbol}-${idx}`} justify="space-between" align="center">
                     <Flex fontSize={sizes.textXS} fontWeight="normal" color={colors.textSubtle} justify="flex-start" align="center">
@@ -96,6 +98,8 @@ export default function PoolListItemAprDetailPopoverContent({
             const { endTime } = reward
             const isRewardStarted = startTime ? startTime * 1000 < Date.now() : true
             const isRewardEnded = endTime ? endTime * 1000 < Date.now() : true
+
+            if (isRewardEnded) return null
             return (
               <Flex gap={4} w="full" key={String(reward.token?.address)} justify="space-between" align="center" fontSize="12px" mt="8px">
                 <HStack fontWeight="normal" color={colors.textSubtle} spacing="5px">
