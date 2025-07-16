@@ -2,6 +2,7 @@ import { Box } from '@pancakeswap/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
+import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { searchQueryAtom, updateFilterAtom } from 'views/universalFarms/atom/searchQueryAtom'
 import { PoolsFilterPanel } from 'views/universalFarms/components/PoolsFilterPanel'
@@ -13,9 +14,11 @@ const Container = styled(Box)`
   margin: 0 auto;
 `
 
-interface MiniUniversalFarmsProps {}
+interface MiniUniversalFarmsProps {
+  onPoolClick?: (pool: PoolInfo) => void
+}
 
-export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = () => {
+export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = ({ onPoolClick }) => {
   const { chainId } = useActiveChainId()
 
   const query = useAtomValue(searchQueryAtom)
@@ -40,7 +43,7 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = () => {
         <PoolsFilterPanel value={poolsFilter} onChange={updateFilter} showNetworkFilter={false} />
       </Box>
 
-      <PoolsTable />
+      <PoolsTable onPoolClick={onPoolClick} />
     </Container>
   )
 }

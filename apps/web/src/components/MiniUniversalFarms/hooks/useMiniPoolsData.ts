@@ -33,14 +33,6 @@ export const useMiniPoolsData = (): UseMiniPoolsDataReturn => {
     [pools, farmSearchResult, listPrepared],
   )
 
-  console.log('useMiniPoolsData', {
-    isLoading,
-    isFarmSearchResultPending: farmSearchResult.isPending(),
-    isListPreparedPending: listPrepared.isPending(),
-    poolsLength: pools.length,
-    pools,
-  })
-
   const loadMore = useCallback(() => {
     setPaging((prev) => (prev ?? 0) + 1)
   }, [setPaging])

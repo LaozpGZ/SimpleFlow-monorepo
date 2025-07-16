@@ -36,6 +36,14 @@ const MobileCard = styled(Box)`
   &:last-child {
     border-bottom: none;
   }
+
+  &:hover {
+    background: ${({ theme }) => theme.colors.backgroundHover};
+  }
+
+  &:active {
+    background: ${({ theme }) => theme.colors.backgroundTapped};
+  }
 `
 
 const MobileRow = styled(Flex)`
@@ -77,11 +85,6 @@ const TableContainer = styled.div`
   table tbody tr:last-child td {
     border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
   }
-`
-
-const LoadMoreTrigger = styled.div`
-  height: 20px;
-  width: 100%;
 `
 
 const EmptyStateContainer = styled.div`
@@ -158,7 +161,7 @@ const PoolFeatures = ({ data }: { data: PoolInfo }) => {
 }
 
 // Mobile Pool Item Component
-const ListItem = ({ pool }: { pool: PoolInfo }) => {
+const ListItem = ({ pool, onPoolClick }: { pool: PoolInfo; onPoolClick?: (pool: PoolInfo) => void }) => {
   const { t } = useTranslation()
   const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
   const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
@@ -173,7 +176,7 @@ const ListItem = ({ pool }: { pool: PoolInfo }) => {
   }
 
   return (
-    <MobileCard key={`${pool.chainId}-${pool.lpAddress}`}>
+    <MobileCard key={`${pool.chainId}-${pool.lpAddress}`} onClick={() => onPoolClick?.(pool)}>
       <MobileRow>
         <PoolPairCell>
           <DoubleCurrencyLogo currency0={token0} currency1={token1} size={32} showChainLogoCurrency1 />
@@ -212,17 +215,21 @@ const ListItem = ({ pool }: { pool: PoolInfo }) => {
 }
 
 // Mobile ListView Component
-const ListView = ({ pools }: { pools: PoolInfo[] }) => {
+const ListView = ({ pools, onPoolClick }: { pools: PoolInfo[]; onPoolClick?: (pool: PoolInfo) => void }) => {
   return (
     <Box>
       {pools.map((pool) => (
-        <ListItem key={`${pool.chainId}-${pool.lpAddress}`} pool={pool} />
+        <ListItem key={`${pool.chainId}-${pool.lpAddress}`} pool={pool} onPoolClick={onPoolClick} />
       ))}
     </Box>
   )
 }
 
-export const PoolsTable: React.FC = () => {
+interface PoolsTableProps {
+  onPoolClick?: (pool: PoolInfo) => void
+}
+
+export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
@@ -333,9 +340,15 @@ export const PoolsTable: React.FC = () => {
       <TableContainer ref={scrollableContainerRef}>
         {/* Use TableView with sticky header */}
         {isMobile ? (
-          <ListView pools={pools} />
+          <ListView pools={pools} onPoolClick={onPoolClick} />
         ) : (
-          <TableView getRowKey={getRowKey} columns={columns} data={pools} onSort={handleSort} />
+          <TableView
+            getRowKey={getRowKey}
+            columns={columns}
+            data={pools}
+            onSort={handleSort}
+            onRowClick={(pool) => onPoolClick?.(pool)}
+          />
         )}
         {/* Loading indicator when loading more */}
         {isLoading && pools.length > 0 && (
@@ -352,7 +365,7 @@ export const PoolsTable: React.FC = () => {
           </Flex>
         )}
         {/* Intersection observer element for pagination */}
-        {pools.length > 0 && !isLoading && <LoadMoreTrigger ref={observerRef} />}
+        {pools.length > 0 && <div ref={observerRef} />}
       </TableContainer>
     </>
   )

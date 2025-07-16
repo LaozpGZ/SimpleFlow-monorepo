@@ -15,6 +15,7 @@ import { Suspense, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 
 import dynamic from 'next/dynamic'
+import { PoolInfo } from 'state/farmsV4/state/type'
 
 const SearchButton = styled(IconButton).attrs({ variant: 'primary60' })`
   background-color: ${({ theme }) => theme.colors.input};
@@ -33,20 +34,21 @@ const MiniUniversalFarms = dynamic(() => import('./index').then((mod) => mod.Min
 
 interface MiniUniversalFarmsOverlayProps {
   children?: React.ReactNode
-  type?: any // TODO: Implement for Pool Detail, Add Liquidity, etc. (unified liquidity links)
+  onPoolClick?: (pool: PoolInfo) => void
 }
 
-export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps> = ({ children }) => {
+export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps> = ({ children, onPoolClick }) => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
+  const isSmallScreen = isMobile || isTablet
 
   const modalV2Props = useModalV2()
 
   const handleClick = useCallback(() => {
-    if (isMobile) {
+    if (isSmallScreen) {
       modalV2Props.onOpen()
     }
-  }, [isMobile, modalV2Props])
+  }, [isSmallScreen, modalV2Props])
 
   const triggerButton = useMemo(() => {
     return (
@@ -60,13 +62,13 @@ export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps>
 
   return (
     <Box>
-      {isMobile ? (
+      {isSmallScreen ? (
         <>
           <UnstyledButton onClick={handleClick}>{triggerButton}</UnstyledButton>
           <ModalV2 {...modalV2Props} closeOnOverlayClick>
             <MotionModal title={t('Search Pools')} onDismiss={modalV2Props.onDismiss}>
               <Suspense>
-                <MiniUniversalFarms />
+                <MiniUniversalFarms onPoolClick={onPoolClick} />
               </Suspense>
             </MotionModal>
           </ModalV2>
@@ -84,7 +86,7 @@ export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps>
             <Card style={{ minWidth: '780px' }} onClick={(e) => e.stopPropagation()}>
               <CardBody>
                 <Suspense>
-                  <MiniUniversalFarms />
+                  <MiniUniversalFarms onPoolClick={onPoolClick} />
                 </Suspense>
               </CardBody>
             </Card>
