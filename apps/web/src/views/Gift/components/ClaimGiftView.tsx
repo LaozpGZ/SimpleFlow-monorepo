@@ -55,7 +55,7 @@ export const AuthRequiredClaimGiftView = ({ setViewState }: { setViewState: (vie
         />
       </Box>
       {codeCannotConvertToHash || (!isLoading && (isError || !isValid)) ? (
-        <Text color="textSubtle" mb="4px" fontSize="12px" bold>
+        <Text color="destructive" mb="4px" fontSize="12px" bold>
           {t('The gift code you entered is invalid or expired. Please reach out to the gift creator for a new one.')}
         </Text>
       ) : null}
