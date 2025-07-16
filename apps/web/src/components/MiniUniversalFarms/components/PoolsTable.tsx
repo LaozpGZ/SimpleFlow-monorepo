@@ -231,7 +231,8 @@ interface PoolsTableProps {
 
 export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
+  const { isMobile, isTablet } = useMatchBreakpoints()
+  const isSmallScreen = isMobile || isTablet
 
   const scrollableContainerRef = useRef<HTMLDivElement>(null)
 
@@ -339,7 +340,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
     <>
       <TableContainer ref={scrollableContainerRef}>
         {/* Use TableView with sticky header */}
-        {isMobile ? (
+        {isSmallScreen ? (
           <ListView pools={pools} onPoolClick={onPoolClick} />
         ) : (
           <TableView
