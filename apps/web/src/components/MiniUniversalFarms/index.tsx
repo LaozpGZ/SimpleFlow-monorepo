@@ -1,4 +1,4 @@
-import { Box, Card } from '@pancakeswap/uikit'
+import { Box } from '@pancakeswap/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useMemo } from 'react'
@@ -37,15 +37,11 @@ export const MiniUniversalFarms: React.FC<MiniUniversalFarmsProps> = () => {
 
   return (
     <Container>
-      <Card>
-        <Box p="24px">
-          <Box mb="24px">
-            <PoolsFilterPanel value={poolsFilter} onChange={updateFilter} showNetworkFilter={false} />
-          </Box>
+      <Box mb="24px">
+        <PoolsFilterPanel value={poolsFilter} onChange={updateFilter} showNetworkFilter={false} />
+      </Box>
 
-          <PoolsTable />
-        </Box>
-      </Card>
+      <PoolsTable />
     </Container>
   )
 }

@@ -32,7 +32,7 @@ import {
   Liquidity,
 } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
-import { MiniUniversalFarms } from 'components/MiniUniversalFarms'
+import { MiniUniversalFarmsOverlay } from 'components/MiniUniversalFarms/MiniUniversalFarmsOverlay'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { NextSeo } from 'next-seo'
@@ -62,10 +62,6 @@ enum PoolDetailTab {
   MyPositions = 0,
   Transactions = 1,
 }
-
-// const SearchButton = styled(IconButton).attrs({ variant: 'primary60' })`
-//   background-color: ${({ theme }) => theme.colors.input};
-// `
 
 const RewardInfoCardContainer = ({ poolInfo }: { poolInfo: PoolInfoType }) => {
   const provider = getRewardProvider(poolInfo.chainId, poolInfo.lpAddress)
@@ -116,7 +112,6 @@ export const PoolInfo = () => {
       <LiquiditySunsetWarning overrideChainId={poolInfo?.chainId} />
 
       <NextSeo title={poolSymbol} />
-      <MiniUniversalFarms />
       <Card>
         <CardBody>
           <FlexGap
@@ -132,9 +127,7 @@ export const PoolInfo = () => {
               width="100%"
             >
               <Box>
-                {/* <SearchButton>
-                  <SearchIcon color="textSubtle" width={24} />
-                </SearchButton> */}
+                <MiniUniversalFarmsOverlay />
               </Box>
               <FlexGap flexDirection="column" gap="16px">
                 <FlexGap
