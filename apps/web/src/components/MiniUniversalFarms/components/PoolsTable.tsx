@@ -149,7 +149,7 @@ const PoolFeatures = ({ data }: { data: PoolInfo }) => {
         poolType={data.protocol}
         hookData={hookData}
         showLabel={false}
-        showPoolType={false}
+        showPoolType={isInfinityProtocol(data.protocol)}
         showPoolFeature={!!hookData}
         short
       />
@@ -157,8 +157,8 @@ const PoolFeatures = ({ data }: { data: PoolInfo }) => {
   )
 }
 
-// Mobile Pool Item Component (to fix React Hook error)
-const MobilePoolItem = ({ pool }: { pool: PoolInfo }) => {
+// Mobile Pool Item Component
+const ListItem = ({ pool }: { pool: PoolInfo }) => {
   const { t } = useTranslation()
   const token0 = prepareTokenForLogo(pool.token0, pool.chainId)
   const token1 = prepareTokenForLogo(pool.token1, pool.chainId)
@@ -186,7 +186,7 @@ const MobilePoolItem = ({ pool }: { pool: PoolInfo }) => {
               poolType={pool.protocol}
               hookData={hookData}
               showLabel={false}
-              showPoolType
+              showPoolType={isInfinityProtocol(pool.protocol)}
               showPoolFeature={!!hookData}
               short
             />
@@ -212,11 +212,11 @@ const MobilePoolItem = ({ pool }: { pool: PoolInfo }) => {
 }
 
 // Mobile ListView Component
-const MobileListView = ({ pools }: { pools: PoolInfo[] }) => {
+const ListView = ({ pools }: { pools: PoolInfo[] }) => {
   return (
     <Box>
       {pools.map((pool) => (
-        <MobilePoolItem key={`${pool.chainId}-${pool.lpAddress}`} pool={pool} />
+        <ListItem key={`${pool.chainId}-${pool.lpAddress}`} pool={pool} />
       ))}
     </Box>
   )
@@ -333,7 +333,7 @@ export const PoolsTable: React.FC = () => {
       <TableContainer ref={scrollableContainerRef}>
         {/* Use TableView with sticky header */}
         {isMobile ? (
-          <MobileListView pools={pools} />
+          <ListView pools={pools} />
         ) : (
           <TableView getRowKey={getRowKey} columns={columns} data={pools} onSort={handleSort} />
         )}

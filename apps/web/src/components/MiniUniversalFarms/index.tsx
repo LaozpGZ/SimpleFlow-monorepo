@@ -9,7 +9,6 @@ import { getIndexByProtocols } from 'views/universalFarms/utils/queryParser'
 import { PoolsTable } from './components/PoolsTable'
 
 const Container = styled(Box)`
-  max-width: 820px;
   width: 100%;
   margin: 0 auto;
 `

@@ -5,15 +5,16 @@ import {
   Card,
   CardBody,
   IconButton,
-  Modal,
   ModalV2,
+  MotionModal,
   SearchIcon,
   useMatchBreakpoints,
   useModalV2,
 } from '@pancakeswap/uikit'
-import { useCallback, useMemo } from 'react'
+import { Suspense, useCallback, useMemo } from 'react'
 import styled from 'styled-components'
-import { MiniUniversalFarms } from '.'
+
+import dynamic from 'next/dynamic'
 
 const SearchButton = styled(IconButton).attrs({ variant: 'primary60' })`
   background-color: ${({ theme }) => theme.colors.input};
@@ -25,6 +26,10 @@ const UnstyledButton = styled.button`
   padding: 0;
   cursor: pointer;
 `
+
+const MiniUniversalFarms = dynamic(() => import('./index').then((mod) => mod.MiniUniversalFarms), {
+  ssr: false,
+})
 
 interface MiniUniversalFarmsOverlayProps {
   children?: React.ReactNode
@@ -59,9 +64,11 @@ export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps>
         <>
           <UnstyledButton onClick={handleClick}>{triggerButton}</UnstyledButton>
           <ModalV2 {...modalV2Props} closeOnOverlayClick>
-            <Modal title={t('Search Pools')} onDismiss={modalV2Props.onDismiss}>
-              <MiniUniversalFarms />
-            </Modal>
+            <MotionModal title={t('Search Pools')} onDismiss={modalV2Props.onDismiss}>
+              <Suspense>
+                <MiniUniversalFarms />
+              </Suspense>
+            </MotionModal>
           </ModalV2>
         </>
       ) : (
@@ -76,7 +83,9 @@ export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps>
           {() => (
             <Card style={{ minWidth: '780px' }} onClick={(e) => e.stopPropagation()}>
               <CardBody>
-                <MiniUniversalFarms />
+                <Suspense>
+                  <MiniUniversalFarms />
+                </Suspense>
               </CardBody>
             </Card>
           )}
