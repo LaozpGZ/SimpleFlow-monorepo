@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
-import { Box, Card, Flex, FlexGap, Image, LogoIcon, Text } from '@pancakeswap/uikit'
+import { Box, Card, Flex, FlexGap, Image, LogoIcon, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { SecondaryCard } from 'components/SecondaryCard'
 import { QRCodeSVG } from 'qrcode.react'
 import styled from 'styled-components'
@@ -38,6 +38,8 @@ function QRImageDownloadView({
   nativeAmount?: CurrencyAmount<NativeCurrency>
 }) {
   const { t } = useTranslation()
+
+  const { isMobile, isTablet } = useMatchBreakpoints()
 
   return (
     <>
@@ -79,7 +81,7 @@ function QRImageDownloadView({
       </QRCodeContainer>
       <FlexGap flexDirection="row" gap="8px">
         <QRShareImageButton elementId={ELEMENT_ID} code={code} />
-        <QRDownloadImageButton elementId={ELEMENT_ID} />
+        {isMobile || isTablet ? null : <QRDownloadImageButton elementId={ELEMENT_ID} />}
       </FlexGap>
     </>
   )

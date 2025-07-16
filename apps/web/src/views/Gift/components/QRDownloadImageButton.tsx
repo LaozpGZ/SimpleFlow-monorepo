@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Button } from '@pancakeswap/uikit'
 import { OPTIONS, useElementToCanvas } from 'hooks/useElementToCanvas'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback } from 'react'
 
 interface QRDownloadImageButtonProps {
   elementId: string
