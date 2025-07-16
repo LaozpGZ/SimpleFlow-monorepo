@@ -14,7 +14,7 @@ import { useEvent } from '@/hooks/useEvent'
 import { useAppStore } from '@/store'
 import { useClmmStore } from '@/store/useClmmStore'
 import { RpcPoolData } from '@/hooks/pool/clmm/useSubscribeClmmInfo'
-import { ClmmLockInfo } from '@/hooks/portfolio/clmm/useClmmBalance'
+import useClmmBalance, { ClmmLockInfo } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { logGTMAddPoolLiquidityEvent, logGTMSubPoolLiquidityEvent } from '@/utils/report/curstomGTMEventTracking'
 import ClmmPositionAccountItemDetail from './ClmmPositionAccountItemDetail'
 import ClmmPositionAccountItemDetailMobileDrawer from './ClmmPositionAccountItemDetailMobileDrawer'
@@ -48,6 +48,7 @@ export default function ClmmPositionAccountItem({
   const removeLiquidityAct = useClmmStore((s) => s.removeLiquidityAct)
   const harvestLockPositionAct = useClmmStore((s) => s.harvestLockPositionAct)
   const closePositionAct = useClmmStore((s) => s.closePositionAct)
+  const { getPriceAndAmount } = useClmmBalance({})
 
   const { isOpen, onToggle } = useDisclosure({ defaultIsOpen: !!openCache.get(position.nftMint.toBase58()) })
   const { isOpen: isRemoveOpen, onClose: onRemoveClose, onOpen: onRemoveOpen } = useDisclosure()
@@ -67,6 +68,9 @@ export default function ClmmPositionAccountItem({
   })
 
   const chainTimeOffset = useAppStore((s) => s.chainTimeOffset)
+
+  const { priceLower, priceUpper } = getPriceAndAmount({ poolInfo, position })
+  const inRange = priceLower.price.lt(poolInfo.price) && priceUpper.price.gt(poolInfo.price)
   const aprData = getPositionAprCore({
     poolInfo,
     positionAccount: position,
@@ -74,7 +78,8 @@ export default function ClmmPositionAccountItem({
     tokenPrices,
     timeBasis,
     planType: 'D',
-    chainTimeOffsetMs: chainTimeOffset
+    chainTimeOffsetMs: chainTimeOffset,
+    inRange
   })
 
   const { totalPendingYield, isEmptyReward, allRewardInfos, breakdownRewardInfo, isLoading } = useClmmRewardInfoFromSimulation({
@@ -84,7 +89,8 @@ export default function ClmmPositionAccountItem({
     subscribe: false,
     shouldFetch: !isOpen && !isRemoveOpen && !isAddOpen && !isSending,
     tickLowerPrefetchData: position.tickLowerRpcData,
-    tickUpperPrefetchData: position.tickUpperRpcData
+    tickUpperPrefetchData: position.tickUpperRpcData,
+    inRange
   })
 
   useEffect(() => {

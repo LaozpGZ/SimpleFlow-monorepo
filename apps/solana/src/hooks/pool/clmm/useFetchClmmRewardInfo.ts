@@ -32,6 +32,7 @@ interface Props {
   subscribe?: boolean
   tickLowerPrefetchData?: AccountInfo<Buffer> | null
   tickUpperPrefetchData?: AccountInfo<Buffer> | null
+  inRange?: boolean
 }
 
 export type BreakdownRewardInfo = {
@@ -193,7 +194,15 @@ export default function useFetchClmmRewardInfo({
 }
 
 export function useClmmRewardInfoFromSimulation(props: Props) {
-  const { poolInfo, position, initRpcPoolData, shouldFetch: propsShouldFetch, tickLowerPrefetchData, tickUpperPrefetchData } = props
+  const {
+    poolInfo,
+    position,
+    initRpcPoolData,
+    shouldFetch: propsShouldFetch,
+    tickLowerPrefetchData,
+    tickUpperPrefetchData,
+    inRange = true
+  } = props
   const rpcPoolData =
     useSubscribeClmmInfo({ subscribe: false, poolInfo, throttle: MINUTE_MILLISECONDS, initialFetch: false })?.poolInfo ||
     initRpcPoolData?.poolInfo
@@ -222,12 +231,19 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
   const { data, error, mutate, isLoading } = useSWR(
     shouldFetch ? `clmm-reward-info-${poolInfo?.id}-${position.nftMint.toBase58()}` : null,
     () => simulation(),
-    {
-      revalidateOnFocus: true,
-      revalidateOnReconnect: true,
-      refreshInterval: 60 * 1000 * 1, // 1 minute
-      keepPreviousData: true
-    }
+    inRange
+      ? {
+          revalidateOnFocus: true,
+          revalidateOnReconnect: true,
+          refreshInterval: 60 * 1000 * 1, // 1 minute
+          keepPreviousData: true
+        }
+      : {
+          revalidateOnFocus: false,
+          revalidateOnReconnect: false,
+          refreshInterval: 0,
+          keepPreviousData: true
+        }
   )
 
   const rewardsSimulateQueue = useClmmStore((s) => s.rewardsSimulateQueue)

@@ -107,9 +107,10 @@ export default function ClmmPositionAccountItemFace({
         tokenPrices,
         timeBasis: AprKey.Day,
         planType: aprMode,
-        chainTimeOffsetMs: chainTimeOffset
+        chainTimeOffsetMs: chainTimeOffset,
+        inRange
       }),
-    [poolInfo, position, poolLiquidity, tokenPrices, aprMode, chainTimeOffset]
+    [poolInfo, position, poolLiquidity, tokenPrices, aprMode, chainTimeOffset, inRange]
   )
   return (
     <>
