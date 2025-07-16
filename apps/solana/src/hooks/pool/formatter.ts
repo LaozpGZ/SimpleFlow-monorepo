@@ -168,6 +168,15 @@ export function formatPoolData(pool: ApiV3PoolInfoItem, tokenList?: TokenInfo[])
     mintB.name = mintBInTokenList?.name
   }
 
+  const rewardMints = pool.rewardDefaultInfos.map((r) => r.mint)
+  const rewardMintsInTokenList = tokenList?.filter((t) => rewardMints.some((r) => r.address === t.address))
+  rewardMintsInTokenList?.forEach((t) => {
+    const rewardMint = pool.rewardDefaultInfos.find((r) => r.mint.address === t.address)
+    if (rewardMint) {
+      rewardMint.mint.logoURI = t.logoURI
+    }
+  })
+
   return {
     ...formatAprData(pool),
     poolName: getPoolName(pool),
