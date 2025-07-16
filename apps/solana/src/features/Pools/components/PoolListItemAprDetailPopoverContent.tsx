@@ -106,28 +106,9 @@ export default function PoolListItemAprDetailPopoverContent({
                   {isRewardStarted ? (
                     <TokenAvatar size="xs" token={reward.token} />
                   ) : (
-                    <Box position="relative">
-                      <Box
-                        position="absolute"
-                        top="0"
-                        right="0"
-                        bottom="0"
-                        left="0"
-                        bg={colors.tokenAvatarBg}
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        border={isLight ? `1px solid ${colors.primary}` : 'none'}
-                        borderRadius="50%"
-                        mx={0.5}
-                        gap={0.5}
-                      >
-                        <Box width={0.5} height={0.5} borderRadius="50%" backgroundColor={colors.lightPurple} />
-                        <Box width={0.5} height={0.5} borderRadius="50%" backgroundColor={colors.lightPurple} />
-                        <Box width={0.5} height={0.5} borderRadius="50%" backgroundColor={colors.lightPurple} />
-                      </Box>
+                    <div style={{ filter: 'grayscale(100%)' }}>
                       <TokenAvatar size="xs" token={reward.token} />
-                    </Box>
+                    </div>
                   )}
                   <Box color={colors.success}>{formatCurrency(reward.amount, { decimalPlaces: 1, abbreviated: true })}</Box>
                   <Box color={colors.textPrimary}>{wSolToSolString(reward.token?.symbol)}</Box>

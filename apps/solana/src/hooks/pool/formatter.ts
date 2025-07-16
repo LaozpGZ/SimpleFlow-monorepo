@@ -80,18 +80,6 @@ export function formatPoolData(pool: ApiV3PoolInfoItem, tokenList?: TokenInfo[])
     }
   )
 
-  const weeklyRewards = pool.rewardDefaultInfos
-    .filter((r) => isRewardValid(r.endTime))
-    .map((r) => {
-      const amount = new Decimal(r.perSecond || 0).mul(60 * 60 * 24 * 7).div(10 ** r.mint.decimals)
-      return {
-        orgAmount: amount.toString(),
-        amount: trimTrailZero(amount.toFixed(r.mint.decimals)) as string,
-        token: r.mint,
-        startTime: r.startTime,
-        endTime: r.endTime
-      }
-    })
   const formattedRewardInfos = pool.rewardDefaultInfos
     .filter((r) => isRewardValid(r.endTime))
     .map((r) => {
@@ -176,6 +164,19 @@ export function formatPoolData(pool: ApiV3PoolInfoItem, tokenList?: TokenInfo[])
       rewardMint.mint.logoURI = t.logoURI
     }
   })
+
+  const weeklyRewards = pool.rewardDefaultInfos
+    .filter((r) => isRewardValid(r.endTime))
+    .map((r) => {
+      const amount = new Decimal(r.perSecond || 0).mul(60 * 60 * 24 * 7).div(10 ** r.mint.decimals)
+      return {
+        orgAmount: amount.toString(),
+        amount: trimTrailZero(amount.toFixed(r.mint.decimals)) as string,
+        token: r.mint,
+        startTime: r.startTime,
+        endTime: r.endTime
+      }
+    })
 
   return {
     ...formatAprData(pool),
