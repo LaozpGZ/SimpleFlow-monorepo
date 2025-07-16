@@ -68,7 +68,12 @@ export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps>
           <ModalV2 {...modalV2Props} closeOnOverlayClick>
             <MotionModal title={t('Search Pools')} onDismiss={modalV2Props.onDismiss}>
               <Suspense>
-                <MiniUniversalFarms onPoolClick={onPoolClick} />
+                <MiniUniversalFarms
+                  onPoolClick={(pool) => {
+                    onPoolClick?.(pool)
+                    modalV2Props.onDismiss?.()
+                  }}
+                />
               </Suspense>
             </MotionModal>
           </ModalV2>
