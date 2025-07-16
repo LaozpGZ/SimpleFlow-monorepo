@@ -81,7 +81,7 @@ export function ClaimGiftView(props) {
 
         <Text mb="16px">
           {t(
-            'Someone just sent you a gift! Connect your wallet to get it, you’re only one click away from claiming what’s yours.',
+            `Someone just sent you a gift! Connect your wallet to get it, you're only one click away from claiming what’s yours.`,
           )}
         </Text>
 

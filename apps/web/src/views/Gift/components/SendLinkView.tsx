@@ -23,12 +23,16 @@ export function SendLinkView({
   const totalUsd = useCalculateTotalCostCreateGift({ tokenAmount, nativeAmount })
 
   const giftShareText = t(
-    `Just sent you ${formatDollarAmount(totalUsd)}! 🎉 Tap this link and to claim it: 👉 ${claimLink}
+    `Just sent you %totalUsd%! 🎉 Tap this link and to claim it: 👉 %claimLink%
 
 Please connect your wallet to claim it!
 
-Alternatively, you can manually enter the code ${code} on PancakeSwap wallet to claim.
-  `,
+Alternatively, you can manually enter the code %code% on PancakeSwap wallet to claim.`,
+    {
+      code,
+      claimLink,
+      totalUsd: formatDollarAmount(totalUsd),
+    },
   )
 
   return (

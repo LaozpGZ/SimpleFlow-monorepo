@@ -50,7 +50,7 @@ export const GiftInfoDetailView = () => {
         <GiftInfoDescription
           text={t('Gift Cancelled')}
           description={t(
-            `You’ve cancelled this gift. The full amount, including the added gas fee, has been returned to your wallet.`,
+            `You've cancelled this gift. The full amount, including the added gas fee, has been returned to your wallet.`,
           )}
         />
       )}
