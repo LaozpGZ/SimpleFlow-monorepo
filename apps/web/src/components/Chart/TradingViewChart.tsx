@@ -23,6 +23,17 @@ const ChartContainer = styled.div`
   width: 100%;
   height: calc(100% - 60px);
   font-family: 'Kanit', sans-serif;
+
+  /* Force TradingView to use Kanit font */
+  * {
+    font-family: 'Kanit', sans-serif !important;
+  }
+
+  /* Specific TradingView elements */
+  iframe {
+    font-family: 'Kanit', sans-serif !important;
+  }
+
   ${({ theme }) => theme.mediaQueries.md} {
     padding: 0;
     width: 100%;
@@ -71,20 +82,34 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const isInitialized = useRef(false)
   const isWidgetReady = useRef(false)
   const currentSymbol = useRef('')
+  const currentChainId = useRef<number | undefined>(undefined)
   const { isDark, theme } = useTheme()
   const symbol = currency0 && currency1 ? `${currency0?.symbol}/${currency1?.symbol}` : ''
   const { chainId } = useActiveChainId()
 
   useEffect(() => {
+    const chainChanged = chainId !== currentChainId.current
+    const symbolChanged = symbol !== currentSymbol.current
+
     if (
       currency0 &&
       currency1 &&
-      symbol !== currentSymbol.current &&
+      (symbolChanged || chainChanged) &&
       widgetRef.current &&
       isInitialized.current &&
       isWidgetReady.current
     ) {
       currentSymbol.current = symbol
+      currentChainId.current = chainId
+
+      // If chain changed, force widget recreation by clearing refs
+      if (chainChanged) {
+        console.log('Chain changed, will recreate widget')
+        isInitialized.current = false
+        isWidgetReady.current = false
+        return // Let the main effect handle recreation
+      }
+
       setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
 
       try {
@@ -106,15 +131,35 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
       try {
         await loadTradingViewLibrary()
 
-        if (
-          containerRef.current &&
-          !widgetRef.current &&
-          !isInitialized.current &&
-          symbol &&
-          currency0 &&
-          currency1 &&
-          chainId
-        ) {
+        // Inject global CSS for TradingView font
+        const style = document.createElement('style')
+        style.textContent = `
+          .tv-chart-container *,
+          .tradingview-widget-container *,
+          div[data-name="legend-series-item"] *,
+          div[class*="price-axis"] *,
+          div[class*="time-axis"] *,
+          div[class*="legend"] * {
+            font-family: 'Kanit', sans-serif !important;
+          }
+        `
+        document.head.appendChild(style)
+
+        // Clean up existing widget if chain changed
+        if (widgetRef.current && isInitialized.current) {
+          try {
+            if (widgetRef.current.remove) {
+              widgetRef.current.remove()
+            }
+          } catch (error) {
+            console.error('Error removing existing widget:', error)
+          }
+          widgetRef.current = null
+          isInitialized.current = false
+          isWidgetReady.current = false
+        }
+
+        if (containerRef.current && !widgetRef.current && symbol && currency0 && currency1 && chainId) {
           const options: TradingViewWidgetOptions = {
             symbol,
             theme: isDark ? 'Dark' : 'Light',
@@ -149,6 +194,9 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
               custom_font_family: `'Kanit', sans-serif`,
               'scalesProperties.fontFamily': `'Kanit', sans-serif`,
               'scalesProperties.fontSize': 12,
+              'scalesProperties.textColor': isDark ? '#ffffff' : tokens.colors.light.cardBorder,
+              'legendProperties.fontFamily': `'Kanit', sans-serif`,
+              'legendProperties.fontSize': 12,
             },
             disabled_features: [
               'left_toolbar',
@@ -243,7 +291,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     }
 
     initChart()
-  }, [symbol, isDark, theme, currency0, currency1])
+  }, [symbol, isDark, theme, currency0, currency1, chainId])
 
   useEffect(() => {
     async function changeTheme() {
@@ -279,6 +327,9 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
             'paneProperties.horzGrid.style': 0,
             'scalesProperties.fontFamily': `'Kanit', sans-serif`,
             'scalesProperties.fontSize': 12,
+            'scalesProperties.textColor': isDark ? '#ffffff' : '#000000',
+            'legendProperties.fontFamily': `'Kanit', sans-serif`,
+            'legendProperties.fontSize': 12,
           })
         } catch (error) {
           console.error('Error changing theme:', error)
