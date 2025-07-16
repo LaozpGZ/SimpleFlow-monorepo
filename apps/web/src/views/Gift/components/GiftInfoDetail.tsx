@@ -1,16 +1,32 @@
-import { Box, RowBetween, ScanLink, Text } from '@pancakeswap/uikit'
+import { Box, QuestionHelperV2, RowBetween, ScanLink, Text, TextWithUnderline } from '@pancakeswap/uikit'
 import { formatTimestamp, Precision } from '@pancakeswap/utils/formatTimestamp'
 import { ChainLinkSupportChains } from 'state/info/constant'
 import { getBlockExploreLink } from 'utils'
 import { isAddress } from 'viem/utils'
 import { shortenAddress } from 'views/V3Info/utils'
 
-export function GiftInfoTimestamp({ text, timestamp }: { text: string; timestamp: string }) {
+export function GiftInfoTimestamp({
+  text,
+  timestamp,
+  toolipText,
+}: {
+  text: string
+  timestamp: string
+  toolipText?: string
+}) {
   return (
     <RowBetween>
-      <Text color="textSubtle" small>
-        {text}
-      </Text>
+      {toolipText ? (
+        <QuestionHelperV2 text={toolipText} placement="top">
+          <TextWithUnderline color="textSubtle" small>
+            {text}
+          </TextWithUnderline>
+        </QuestionHelperV2>
+      ) : (
+        <Text color="textSubtle" small>
+          {text}
+        </Text>
+      )}
       <Text small>
         {formatTimestamp(new Date(timestamp).getTime(), {
           precision: Precision.MINUTE,
@@ -34,13 +50,35 @@ export function GiftInfoTxn({ text, txnHash, chainId }: { text: string; txnHash:
   )
 }
 
-export function GiftInfoAddress({ text, address }: { text: string; address?: string | null }) {
+export function GiftInfoAddress({
+  text,
+  address,
+  toolipText,
+}: {
+  text: string
+  address?: string | null
+  toolipText?: string
+}) {
   return (
     <RowBetween>
-      <Text color="textSubtle" small>
-        {text}
-      </Text>
-      <Text small>{address && isAddress(address) ? shortenAddress(address) : '-'}</Text>
+      {toolipText ? (
+        <QuestionHelperV2 text={toolipText} placement="top">
+          <TextWithUnderline color="textSubtle" small>
+            {text}
+          </TextWithUnderline>
+        </QuestionHelperV2>
+      ) : (
+        <Text color="textSubtle" small>
+          {text}
+        </Text>
+      )}
+      {address && isAddress(address) ? (
+        <QuestionHelperV2 text={address} placement="top">
+          <Text small>{address && isAddress(address) ? shortenAddress(address) : '-'}</Text>
+        </QuestionHelperV2>
+      ) : (
+        <Text small>-</Text>
+      )}
     </RowBetween>
   )
 }

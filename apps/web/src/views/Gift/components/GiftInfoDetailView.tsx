@@ -95,21 +95,37 @@ export const GiftInfoDetailView = () => {
           </Box>
 
           <FlexGap flexDirection="column" gap="8px">
-            <GiftInfoTimestamp text={t('Created at:')} timestamp={giftInfo.timestamp} />
+            <GiftInfoTimestamp
+              text={t('Gift created:')}
+              timestamp={giftInfo.timestamp}
+              toolipText={t('Date and time when gift was generated.')}
+            />
 
             {status === GiftStatus.CLAIMED && giftInfo.claimTimeStamp && (
               <>
-                <GiftInfoTimestamp text={t('Claimed at:')} timestamp={giftInfo.claimTimeStamp} />
-                <GiftInfoAddress text={t('Claimed by:')} address={giftInfo.claimerAddress} />
+                <GiftInfoTimestamp
+                  text={t('Gift claimed:')}
+                  timestamp={giftInfo.claimTimeStamp}
+                  toolipText={t('Date and time when gift was claimed.')}
+                />
+                <GiftInfoAddress
+                  text={t('Claimed by:')}
+                  address={giftInfo.claimerAddress}
+                  toolipText={t('Wallet address of user who claimed gift.')}
+                />
               </>
             )}
 
             {status === GiftStatus.CANCELLED && giftInfo.cancelTimeStamp && (
-              <GiftInfoTimestamp text={t('Cancelled at:')} timestamp={giftInfo.cancelTimeStamp} />
+              <GiftInfoTimestamp text={t('Gift cancelled:')} timestamp={giftInfo.cancelTimeStamp} />
             )}
 
             {[GiftStatus.PENDING, GiftStatus.EXPIRED].includes(status) && (
-              <GiftInfoTimestamp text={t('Expires on:')} timestamp={giftInfo.expiryTimestamp} />
+              <GiftInfoTimestamp
+                text={status === GiftStatus.EXPIRED ? t('Gift expired:') : t('Gift expires:')}
+                toolipText={t('Date and time when gift will expire (default is 7 days).')}
+                timestamp={giftInfo.expiryTimestamp}
+              />
             )}
           </FlexGap>
         </Box>
