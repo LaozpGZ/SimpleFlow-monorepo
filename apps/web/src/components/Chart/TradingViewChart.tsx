@@ -2,6 +2,7 @@ import { Currency } from '@pancakeswap/sdk'
 import { tokens } from '@pancakeswap/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
+import { useDebounce } from '@pancakeswap/hooks'
 import React, { useEffect, useRef } from 'react'
 import { styled } from 'styled-components'
 import type { TradingViewWidget, TradingViewWidgetOptions } from './lib/pancakeswap-charting-library.d.ts'
@@ -96,26 +97,39 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const currentCurrency1Address = useRef<string | undefined>(undefined)
   const initializationTimeout = useRef<NodeJS.Timeout | null>(null)
   const { isDark, theme } = useTheme()
-  const symbol = currency0 && currency1 ? `${currency0?.symbol}/${currency1?.symbol}` : ''
   const { chainId } = useActiveChainId()
+
+  // Debounce currency changes to prevent frequent widget recreation
+  const debouncedCurrency0 = useDebounce(currency0, 300)
+  const debouncedCurrency1 = useDebounce(currency1, 300)
+  const symbol =
+    debouncedCurrency0 && debouncedCurrency1 ? `${debouncedCurrency0?.symbol}/${debouncedCurrency1?.symbol}` : ''
 
   // Debug logging for currency and chain updates
   useEffect(() => {
     console.log('[Chart Debug] Currency/Chain update:', {
       chainId,
-      currency0: currency0?.symbol,
-      currency1: currency1?.symbol,
+      currency0: debouncedCurrency0?.symbol,
+      currency1: debouncedCurrency1?.symbol,
       symbol,
-      currency0Address: currency0?.isToken ? currency0?.address : currency0?.wrapped?.address,
-      currency1Address: currency1?.isToken ? currency1?.address : currency1?.wrapped?.address,
+      currency0Address: debouncedCurrency0?.isToken
+        ? debouncedCurrency0?.address
+        : debouncedCurrency0?.wrapped?.address,
+      currency1Address: debouncedCurrency1?.isToken
+        ? debouncedCurrency1?.address
+        : debouncedCurrency1?.wrapped?.address,
     })
-  }, [chainId, currency0, currency1, symbol])
+  }, [chainId, debouncedCurrency0, debouncedCurrency1, symbol])
 
   useEffect(() => {
     const chainChanged = chainId !== currentChainId.current
     const symbolChanged = symbol !== currentSymbol.current
-    const currency0Address = currency0?.isToken ? currency0?.address : currency0?.wrapped?.address
-    const currency1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
+    const currency0Address = debouncedCurrency0?.isToken
+      ? debouncedCurrency0?.address
+      : debouncedCurrency0?.wrapped?.address
+    const currency1Address = debouncedCurrency1?.isToken
+      ? debouncedCurrency1?.address
+      : debouncedCurrency1?.wrapped?.address
     const currency0AddressChanged = currency0Address !== currentCurrency0Address.current
     const currency1AddressChanged = currency1Address !== currentCurrency1Address.current
 
@@ -130,8 +144,8 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     })
 
     if (
-      currency0 &&
-      currency1 &&
+      debouncedCurrency0 &&
+      debouncedCurrency1 &&
       (symbolChanged || chainChanged || currency0AddressChanged || currency1AddressChanged)
     ) {
       console.log('[Chart Debug] Processing change:', {
@@ -167,7 +181,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
       // Only try to update existing widget if we have one and it's ready
       if (widgetRef.current && isInitialized.current && isWidgetReady.current) {
-        setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
+        setSymbolInfo(debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange, onLiveDataChanges)
 
         try {
           // Check if widget has activeChart method
@@ -182,7 +196,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         }
       }
     }
-  }, [currency0, currency1, chainId, symbol])
+  }, [debouncedCurrency0, debouncedCurrency1, chainId, symbol])
 
   useEffect(() => {
     async function initChart() {
@@ -224,27 +238,34 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         }
 
         // Add delay to wait for currency updates when chain changes
-        const shouldDelay = chainId !== currentChainId.current && (!currency0 || !currency1)
+        const shouldDelay = chainId !== currentChainId.current && (!debouncedCurrency0 || !debouncedCurrency1)
 
         const doInitialization = () => {
           console.log('[Chart Debug] doInitialization called:', {
             hasContainer: !!containerRef.current,
             hasWidget: !!widgetRef.current,
             symbol,
-            hasCurrency0: !!currency0,
-            hasCurrency1: !!currency1,
+            hasCurrency0: !!debouncedCurrency0,
+            hasCurrency1: !!debouncedCurrency1,
             chainId,
             shouldInitialize: !!(
               containerRef.current &&
               !widgetRef.current &&
               symbol &&
-              currency0 &&
-              currency1 &&
+              debouncedCurrency0 &&
+              debouncedCurrency1 &&
               chainId
             ),
           })
 
-          if (containerRef.current && !widgetRef.current && symbol && currency0 && currency1 && chainId) {
+          if (
+            containerRef.current &&
+            !widgetRef.current &&
+            symbol &&
+            debouncedCurrency0 &&
+            debouncedCurrency1 &&
+            chainId
+          ) {
             console.log('[Chart Debug] Starting widget initialization')
 
             const options: TradingViewWidgetOptions = {
@@ -355,12 +376,16 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
               width: '100%',
             }
             console.log('[Chart Debug] Setting symbol info for:', {
-              currency0: currency0?.symbol,
-              currency1: currency1?.symbol,
-              currency0Address: currency0?.isToken ? currency0?.address : currency0?.wrapped?.address,
-              currency1Address: currency1?.isToken ? currency1?.address : currency1?.wrapped?.address,
+              currency0: debouncedCurrency0?.symbol,
+              currency1: debouncedCurrency1?.symbol,
+              currency0Address: debouncedCurrency0?.isToken
+                ? debouncedCurrency0?.address
+                : debouncedCurrency0?.wrapped?.address,
+              currency1Address: debouncedCurrency1?.isToken
+                ? debouncedCurrency1?.address
+                : debouncedCurrency1?.wrapped?.address,
             })
-            setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
+            setSymbolInfo(debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange, onLiveDataChanges)
 
             console.log('[Chart Debug] Creating TradingView widget...')
             widgetRef.current = createTradingViewWidget(containerRef.current, options)
@@ -397,7 +422,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     }
 
     initChart()
-  }, [symbol, isDark, theme, currency0, currency1, chainId])
+  }, [symbol, isDark, theme, debouncedCurrency0, debouncedCurrency1, chainId])
 
   useEffect(() => {
     async function changeTheme() {
