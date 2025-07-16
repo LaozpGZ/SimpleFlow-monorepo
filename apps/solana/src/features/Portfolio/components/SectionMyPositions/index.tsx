@@ -86,7 +86,7 @@ export default function SectionMyPositions() {
     isFarmLoading,
     rewardState,
     isSending
-  } = useAllPositionInfo({})
+  } = useAllPositionInfo({ noRewardClmmPos: noRewardClmmPos.current })
 
   const currentRewardState = rewardState[currentTab as PositionTabValues]
 
