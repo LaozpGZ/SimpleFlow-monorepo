@@ -16,8 +16,8 @@ import { createLogger } from "../logger";
 import { CacheLTA } from "./lookupTable";
 import { InstructionType } from "./txType";
 
-import { ComputeBudgetConfig } from "../../raydium/type";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
+import { ComputeBudgetConfig } from "../../raydium/type";
 
 const logger = createLogger("Raydium_txUtil");
 
@@ -330,7 +330,7 @@ export function printSimulate(transactions: Transaction[] | VersionedTransaction
     }
     allBase64.push(txToBase64(transaction));
   });
-  console.log("simulate tx string:", allBase64);
+  console.log("debug simulate tx string:", allBase64);
 
   return allBase64;
 }

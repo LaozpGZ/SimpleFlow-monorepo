@@ -357,7 +357,9 @@ export const useClmmStore = createStore<ClmmState>(
           })
           createPoolBuildData.builder.addCustomComputeBudget(computeBudgetConfig)
 
-          const { transactions, execute } = await createPoolBuildData.builder.sizeCheckBuildV0()
+          const { transactions, execute } = await createPoolBuildData.builder.sizeCheckBuildV0({
+            useDurableNonce
+          })
 
           const txLength = transactions.length
           const { toastId, processedId, handler } = getDefaultToastData({
@@ -370,7 +372,7 @@ export const useClmmStore = createStore<ClmmState>(
 
           return execute({
             sequentially: true,
-            // useDurableNonce,
+            useDurableNonce,
             onTxUpdate: (data) => {
               handleMultiTxRetry(data)
               handleMultiTxToast({

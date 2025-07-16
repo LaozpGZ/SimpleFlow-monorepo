@@ -393,6 +393,7 @@ export class TxBuilder {
         } = params || {};
 
         if (useDurableNonce) {
+          console.log("Using durable nonce for transaction signing");
           // Use durable nonce
           const { nonce, advanceInstruction } = await this.setupDurableNonce();
 
@@ -892,9 +893,13 @@ export class TxBuilder {
   }
 
   public async sizeCheckBuild(
-    props?: Record<string, any> & { computeBudgetConfig?: ComputeBudgetConfig; splitIns?: TransactionInstruction[] },
+    props?: Record<string, any> & {
+      computeBudgetConfig?: ComputeBudgetConfig;
+      splitIns?: TransactionInstruction[];
+      useDurableNonce?: boolean;
+    },
   ): Promise<MultiTxBuildData> {
-    const { splitIns = [], computeBudgetConfig, ...extInfo } = props || {};
+    const { splitIns = [], computeBudgetConfig, useDurableNonce, ...extInfo } = props || {};
     const computeBudgetData: { instructions: TransactionInstruction[]; instructionTypes: string[] } =
       computeBudgetConfig
         ? addComputeBudget(computeBudgetConfig)
@@ -913,8 +918,13 @@ export class TxBuilder {
 
     let instructionQueue: TransactionInstruction[] = [];
     let splitInsIdx = 0;
+    let advanceNonceIx: TransactionInstruction | undefined;
+    if (useDurableNonce) {
+      const { advanceInstruction } = await this.setupDurableNonce();
+      advanceNonceIx = advanceInstruction;
+    }
     this.allInstructions.forEach((item) => {
-      const _itemIns = [...instructionQueue, item];
+      const _itemIns = [...instructionQueue, item, ...(advanceNonceIx ? [advanceNonceIx] : [])];
       const _itemInsWithCompute = computeBudgetConfig ? [...computeBudgetData.instructions, ..._itemIns] : _itemIns;
       const _signerStrs = new Set<string>(
         _itemIns.map((i) => i.keys.filter((ii) => ii.isSigner).map((ii) => ii.pubkey.toString())).flat(),
@@ -1008,6 +1018,9 @@ export class TxBuilder {
         });
         printSimulate(allTransactions);
         if (this.owner?.isKeyPair) {
+          if (allTransactions.length > 1 && !sequentially) {
+            throw new Error("multi tx only support sequentially send");
+          }
           if (sequentially) {
             let i = 0;
             const txIds: string[] = [];
@@ -1017,6 +1030,15 @@ export class TxBuilder {
                 txIds.push("tx skipped");
                 continue;
               }
+
+              if (useDurableNonce) {
+                const { nonce } = await this.setupDurableNonce();
+                tx.recentBlockhash = nonce;
+                if (allSigners[i].length) {
+                  tx.partialSign(...allSigners[i]);
+                }
+              }
+
               const txId = await sendAndConfirmTransaction(
                 this.connection,
                 tx,
@@ -1058,6 +1080,13 @@ export class TxBuilder {
                 onTxUpdate?.([...processedTxs]);
                 i++;
                 checkSendTx();
+              }
+              if (useDurableNonce) {
+                const { nonce } = await this.setupDurableNonce();
+                signedTxs[i].recentBlockhash = nonce;
+                if (allSigners[i].length) {
+                  signedTxs[i].partialSign(...allSigners[i]);
+                }
               }
               const txId = await this.connection.sendRawTransaction(signedTxs[i].serialize(), { skipPreflight });
               processedTxs.push({ txId, status: "sent", signedTx: signedTxs[i] });
@@ -1145,6 +1174,7 @@ export class TxBuilder {
       lookupTableCache?: CacheLTA;
       lookupTableAddress?: string[];
       splitIns?: TransactionInstruction[];
+      useDurableNonce?: boolean;
     },
   ): Promise<MultiTxV0BuildData> {
     const {
@@ -1185,8 +1215,16 @@ export class TxBuilder {
 
     let instructionQueue: TransactionInstruction[] = [];
     let splitInsIdx = 0;
+    let advanceIx: TransactionInstruction | undefined;
+    if (props?.useDurableNonce) {
+      console.log("use durable nonce for v0 tx");
+      const { advanceInstruction } = await this.setupDurableNonce();
+      advanceIx = advanceInstruction;
+    }
     this.allInstructions.forEach((item) => {
-      const _itemIns = [...instructionQueue, item];
+      const _itemIns = [...instructionQueue, item, advanceIx].filter(
+        (i) => i !== undefined,
+      ) as TransactionInstruction[];
       const _itemInsWithCompute = computeBudgetConfig ? [...computeBudgetData.instructions, ..._itemIns] : _itemIns;
       if (
         item !== splitIns[splitInsIdx] &&
@@ -1297,6 +1335,7 @@ export class TxBuilder {
           skipTxCount = 0,
           recentBlockHash: propBlockHash,
           skipPreflight = true,
+          useDurableNonce = false,
         } = executeParams || {};
         allTransactions.map(async (tx, idx) => {
           if (allSigners[idx].length) tx.sign(allSigners[idx]);
@@ -1304,6 +1343,9 @@ export class TxBuilder {
         });
         printSimulate(allTransactions);
         if (this.owner?.isKeyPair) {
+          if (allTransactions.length > 1 && useDurableNonce && !sequentially) {
+            throw new Error("useDurableNonce only support sequentially send txs");
+          }
           if (sequentially) {
             let i = 0;
             const txIds: string[] = [];
@@ -1314,6 +1356,14 @@ export class TxBuilder {
                 txIds.push("tx skipped");
                 continue;
               }
+              if (useDurableNonce) {
+                const { nonce } = await this.setupDurableNonce();
+                tx.message.recentBlockhash = nonce;
+                if (allSigners[i].length) {
+                  tx.sign(allSigners[i]);
+                }
+              }
+              printSimulate([tx]);
               const txId = await this.connection.sendTransaction(tx, { skipPreflight });
               await confirmTransaction(this.connection, txId);
 
@@ -1330,6 +1380,102 @@ export class TxBuilder {
               }),
             ),
             signedTxs: allTransactions,
+          };
+        }
+        if (useDurableNonce && sequentially && this.signAllTransactions) {
+          const signers = allSigners.slice(skipTxCount, allSigners.length);
+          let i = 0;
+          const processedTxs: TxUpdateParams[] = [];
+          const signedTxs: VersionedTransaction[] = [];
+          for await (const tx of allTransactions.slice(skipTxCount, allTransactions.length)) {
+            const { nonce, nonceAccount, advanceInstruction } = await this.setupDurableNonce();
+            console.log("use durable nonce for tx:", nonceAccount.toBase58());
+            const messageV0 = TransactionMessage.decompile(tx.message, {
+              addressLookupTableAccounts: Object.values(lookupTableAddressAccount),
+            });
+            messageV0.recentBlockhash = nonce;
+            messageV0.instructions = [advanceInstruction, ...messageV0.instructions];
+            const newTx = new VersionedTransaction(
+              messageV0.compileToV0Message(Object.values(lookupTableAddressAccount)),
+            );
+            if (signers[i].length) {
+              newTx.sign(signers[i]);
+            }
+
+            printSimulate([newTx]);
+            console.log(
+              await this.connection.simulateTransaction(newTx, {
+                commitment: this.blockhashCommitment,
+                replaceRecentBlockhash: true,
+              }),
+            );
+            const txs = await this.signAllTransactions([newTx]);
+            signedTxs.push(txs[0]);
+
+            const checkSendTx = async (): Promise<void> => {
+              printSimulate(txs);
+              const txId = await this.connection.sendTransaction(txs[0], { skipPreflight });
+              processedTxs.push({ txId, status: "sent", signedTx: txs[0] });
+              onTxUpdate?.([...processedTxs]);
+              i++;
+              let confirmed = false;
+              let intervalId: NodeJS.Timer | null = null;
+              let subSignatureId: number | null = null;
+              const cbk = (signatureResult: SignatureResult): void => {
+                const targetTxIdx = processedTxs.findIndex((tx) => tx.txId === txId);
+                if (targetTxIdx > -1) {
+                  if (processedTxs[targetTxIdx].status === "error" || processedTxs[targetTxIdx].status === "success")
+                    return;
+                  processedTxs[targetTxIdx].status = signatureResult.err ? "error" : "success";
+                }
+                onTxUpdate?.([...processedTxs]);
+                if (!signatureResult.err) checkSendTx();
+              };
+
+              if (this.loopMultiTxStatus)
+                intervalId = setInterval(async () => {
+                  if (confirmed) {
+                    clearInterval(intervalId!);
+                    return;
+                  }
+                  try {
+                    const r = await this.connection.getTransaction(txId, {
+                      commitment: "confirmed",
+                      maxSupportedTransactionVersion: TxVersion.V0,
+                    });
+                    if (r) {
+                      confirmed = true;
+                      clearInterval(intervalId!);
+                      cbk({ err: r.meta?.err || null });
+                      console.log("tx status from getTransaction:", txId);
+                    }
+                  } catch (e) {
+                    confirmed = true;
+                    clearInterval(intervalId!);
+                    console.error("getTransaction timeout:", e, txId);
+                  }
+                }, LOOP_INTERVAL);
+
+              subSignatureId = this.connection.onSignature(
+                txId,
+                (result) => {
+                  if (confirmed) {
+                    this.connection.removeSignatureListener(subSignatureId!);
+                    return;
+                  }
+                  confirmed = true;
+                  cbk(result);
+                },
+                "confirmed",
+              );
+              this.connection.getSignatureStatus(txId);
+            };
+
+            await checkSendTx();
+          }
+          return {
+            txIds: processedTxs.map((d) => d.txId),
+            signedTxs,
           };
         }
         if (this.signAllTransactions) {
@@ -1350,6 +1496,14 @@ export class TxBuilder {
                 checkSendTx();
                 return;
               }
+              if (useDurableNonce) {
+                const { nonce } = await this.setupDurableNonce();
+                signedTxs[i].message.recentBlockhash = nonce;
+                if (allSigners[i].length) {
+                  signedTxs[i].sign(allSigners[i]);
+                }
+              }
+              printSimulate([signedTxs[i]]);
               const txId = await this.connection.sendTransaction(signedTxs[i], { skipPreflight });
               processedTxs.push({ txId, status: "sent", signedTx: signedTxs[i] });
               onTxUpdate?.([...processedTxs]);
