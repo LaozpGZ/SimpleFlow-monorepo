@@ -52,6 +52,9 @@ export enum GTMEvent {
   DisconnectWallet = 'disconnectWallet',
   WalletConnected = 'walletConnected',
   WalletConnect = 'walletConnect', // deprecated
+
+  // Gift
+  GiftEvent = 'giftEvent',
 }
 
 export enum GTMCategory {
@@ -527,7 +530,7 @@ export const logGTMIdoConnectWalletEvent = (preTGE: boolean) => {
 export const logGTMToggleSendGiftEvent = (isSendGiftOn: boolean, chainId?: number) => {
   console.info('---ToggleSendGift---', { isSendGiftOn, chainId })
   window?.dataLayer?.push({
-    event: GTMEvent.EventTracking,
+    event: GTMEvent.GiftEvent,
     action: GTMAction.ToggleSendGift,
     category: GTMCategory.Gift,
     label: isSendGiftOn ? 'on' : 'off',
@@ -538,7 +541,7 @@ export const logGTMToggleSendGiftEvent = (isSendGiftOn: boolean, chainId?: numbe
 export const logGTMGiftPreviewEvent = (chainId?: number) => {
   console.info('---GiftPreview---', { chainId })
   window?.dataLayer?.push({
-    event: GTMEvent.EventTracking,
+    event: GTMEvent.GiftEvent,
     action: GTMAction.GiftPreview,
     category: GTMCategory.Gift,
     chainId,
@@ -548,7 +551,7 @@ export const logGTMGiftPreviewEvent = (chainId?: number) => {
 export const logGTMGiftCreateEvent = (chainId?: number) => {
   console.info('---GiftCreate---', { chainId })
   window?.dataLayer?.push({
-    event: GTMEvent.EventTracking,
+    event: GTMEvent.GiftEvent,
     action: GTMAction.GiftCreate,
     category: GTMCategory.Gift,
     chainId,
@@ -558,7 +561,7 @@ export const logGTMGiftCreateEvent = (chainId?: number) => {
 export const logGTMGiftCreateSuccessEvent = (chainId?: number, amount?: string, giftTokenType?: 'link' | 'qr') => {
   console.info('---GiftCreateSuccess---', { chainId, amount, giftTokenType })
   window?.dataLayer?.push({
-    event: GTMEvent.EventTracking,
+    event: GTMEvent.GiftEvent,
     action: GTMAction.GiftCreateSuccess,
     category: GTMCategory.Gift,
     chainId,
@@ -572,7 +575,7 @@ export const logGTMOrderStatusEvent = (status: BridgeStatus) => {
   const event = status === BridgeStatus.SUCCESS ? GTMEvent.ORDER_STATUS_SUCCESS : GTMEvent.ORDER_STATUS_FAILED
 
   window?.dataLayer?.push({
-    event: GTMEvent.ORDER_STATUS_START,
+    event: [BridgeStatus.SUCCESS, BridgeStatus.PARTIAL_SUCCESS].includes(status) ? event : GTMEvent.ORDER_STATUS_START,
     action: GTMAction.UpdateOrderStatus,
   })
 }
