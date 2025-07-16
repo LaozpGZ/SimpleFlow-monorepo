@@ -77,6 +77,7 @@ export default function EstimatedAprInfo({ aprData, value, onChange }: Props) {
           {aprData?.rewards.map((d, idx) => (
             <Flex key={d.mint?.address || 'fees'} alignItems="center" gap="1" fontSize="sm" color={colors.textSubtle}>
               <Box w="7px" h="7px" bg={PORTFOLIO_PIE_COLORS[(idx + 1) % PORTFOLIO_PIE_COLORS.length]} rounded="full" />
+              <Text color={colors.textSubtle}>{d.mint?.symbol}</Text>
               <Text color={colors.textPrimary} fontWeight="600">
                 {d.apr === 0 ? 0 : formatToRawLocaleStr(toPercentString(d.apr))}
               </Text>
