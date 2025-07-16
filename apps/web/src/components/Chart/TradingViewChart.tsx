@@ -63,11 +63,20 @@ const setSymbolInfo = (
   on24HPriceDataChange: (low24h: number, high24h: number, priceChangePercent: number, price: number) => void,
   onLiveDataChanges: (price: number) => void,
 ) => {
+  // Clear any existing data to prevent caching issues and ensure clean state
   window.pcsExtraData = window.pcsExtraData || {}
   window.pcsExtraData.token0Address = currency0?.isToken ? currency0?.address : currency0?.wrapped?.address
   window.pcsExtraData.token1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
   window.pcsExtraData.fromChainId = currency0?.chainId
   window.pcsExtraData.toChainId = currency1?.chainId
+
+  console.log('[Chart Debug] setSymbolInfo called with:', {
+    token0Address: window.pcsExtraData.token0Address,
+    token1Address: window.pcsExtraData.token1Address,
+    fromChainId: window.pcsExtraData.fromChainId,
+    toChainId: window.pcsExtraData.toChainId,
+  })
+
   update24HPriceData(on24HPriceDataChange)
 }
 
