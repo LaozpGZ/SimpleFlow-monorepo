@@ -52,6 +52,9 @@ export const useClaimGift = ({ onSuccess }: { onSuccess?: () => void }) => {
         throw new Error('No data returned from claim gift API.')
       }
 
+      // wait for 4 seconds so API can update the gift status
+      await new Promise((resolve) => setTimeout(resolve, 4000))
+
       return result
     },
     onSuccess: () => {
