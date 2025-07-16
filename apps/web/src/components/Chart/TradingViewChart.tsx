@@ -345,16 +345,27 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
               height: '100%',
               width: '100%',
             }
+            console.log('[Chart Debug] Setting symbol info for:', {
+              currency0: currency0?.symbol,
+              currency1: currency1?.symbol,
+              currency0Address: currency0?.isToken ? currency0?.address : currency0?.wrapped?.address,
+              currency1Address: currency1?.isToken ? currency1?.address : currency1?.wrapped?.address,
+            })
             setSymbolInfo(currency0, currency1, on24HPriceDataChange, onLiveDataChanges)
+
+            console.log('[Chart Debug] Creating TradingView widget...')
             widgetRef.current = createTradingViewWidget(containerRef.current, options)
+            console.log('[Chart Debug] Widget created:', !!widgetRef.current)
 
             // Wait for widget to be ready
             if (widgetRef.current && widgetRef.current.onChartReady) {
               widgetRef.current.onChartReady(() => {
+                console.log('[Chart Debug] Widget ready via onChartReady')
                 isWidgetReady.current = true
               })
             } else {
               // If no onChartReady method, set as ready after delay
+              console.log('[Chart Debug] Widget ready via timeout')
               setTimeout(() => {
                 isWidgetReady.current = true
               }, 1000)
@@ -362,6 +373,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
             update24HPriceData(on24HPriceDataChange)
             isInitialized.current = true
+            console.log('[Chart Debug] Widget initialization completed')
           }
         }
 
