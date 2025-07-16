@@ -31,12 +31,10 @@ export const fetchGiftList = async ({
   chainId,
   account,
   cursor,
-  unclaimedOnly,
 }: {
   chainId?: number
   account?: string
   cursor?: string
-  unclaimedOnly?: boolean
 }): Promise<{ list: GiftInfoResponse[]; hasNext: boolean; nextCursor?: string }> => {
   if (!chainId || !account) {
     throw new Error('Missing required parameters: chainId and account')
@@ -60,11 +58,7 @@ export const fetchGiftList = async ({
     throw new Error(result.message || 'Failed to fetch gift information')
   }
 
-  let list = result.data || []
-
-  if (unclaimedOnly) {
-    list = list.filter((gift) => gift.status === GiftStatus.PENDING)
-  }
+  const list = result.data || []
 
   // Sort by timestamp to get the latest item for next cursor
   const sortedList = list.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
@@ -90,17 +84,17 @@ export const useGetGiftInfo = () => {
   const {
     data: combinedData,
     isLoading,
+    isRefetching,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: [QUERY_KEY_GIFT_INFO, chainId, account, unclaimedOnly],
+    queryKey: [QUERY_KEY_GIFT_INFO, chainId, account],
     queryFn: ({ pageParam }) =>
       fetchGiftList({
         chainId,
         account: account!,
         cursor: pageParam,
-        unclaimedOnly,
       }),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => {
@@ -114,6 +108,12 @@ export const useGetGiftInfo = () => {
         .flatMap((page) => page.list)
         .map(selectGiftInfo)
         .filter((gift) => gift !== null)
+        .filter((gift) => {
+          if (unclaimedOnly) {
+            return gift.status === GiftStatus.PENDING
+          }
+          return true
+        })
     },
     enabled: Boolean(chainId && account),
     refetchOnWindowFocus: false,
@@ -168,8 +168,9 @@ export const useGetGiftInfo = () => {
       isLoading,
       isFetchingNextPage,
       handleLoadMore,
+      isRefetching,
     }
-  }, [data, hasNextPage, isLoading, isFetchingNextPage, handleLoadMore])
+  }, [data, hasNextPage, isLoading, isFetchingNextPage, handleLoadMore, isRefetching])
 }
 
 export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {

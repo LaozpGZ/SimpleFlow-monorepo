@@ -16,19 +16,18 @@ import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { SecondaryCard } from 'components/SecondaryCard'
 import { ActionButton } from 'components/WalletModalV2/ActionButton'
 import { SEND_ENTRY, ViewState } from 'components/WalletModalV2/type'
+import { useWalletModalV2ViewState } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
 import { formatDistanceToNow } from 'date-fns'
 import { useContext } from 'react'
-import { useWalletModalV2ViewState } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
 import { useGetGiftInfo } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
-import { SendGiftContext } from '../providers/SendGiftProvider'
 import { useUnclaimedOnlyContext } from '../providers/UnclaimedOnlyProvider'
 import { GiftStatus } from '../types'
 import { isExpired } from '../utils/isExpired'
 import { GiftStatusTag } from './GiftStatusTag'
 
 export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: ViewState) => void }) => {
-  const { data: giftInfo = [], isLoading, hasNextPage, handleLoadMore } = useGetGiftInfo()
+  const { data: giftInfo = [], isLoading, hasNextPage, handleLoadMore, isFetchingNextPage } = useGetGiftInfo()
   const { t } = useTranslation()
   const { setCodeHash } = useContext(CancelGiftContext)
 
@@ -130,10 +129,10 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
               <Button
                 onClick={handleLoadMore}
                 scale="sm"
-                disabled={isLoading}
-                endIcon={isLoading ? <AutoRenewIcon spin color="currentColor" /> : undefined}
+                disabled={isFetchingNextPage}
+                endIcon={isFetchingNextPage ? <AutoRenewIcon spin color="currentColor" /> : undefined}
               >
-                {isLoading ? t('Loading') : t('Load more')}
+                {isFetchingNextPage ? t('Loading') : t('Load more')}
               </Button>
             )}
           </Flex>
