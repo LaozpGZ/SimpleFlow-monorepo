@@ -17,7 +17,7 @@ interface ChartWithPriceHeaderProps {
 const Container = styled(Box)`
   width: 100%;
   height: 100%;
-  border-radius: 16px;
+  border-radius: 16px 16px 0 0;
   background: ${({ theme }) => theme.card.background};
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   overflow: hidden;
@@ -25,6 +25,7 @@ const Container = styled(Box)`
   ${({ theme }) => theme.mediaQueries.md} {
     height: fit-content;
     padding-top: 0;
+    border-radius: 16px;
   }
 `
 

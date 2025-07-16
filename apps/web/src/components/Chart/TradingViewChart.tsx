@@ -1,8 +1,8 @@
+import { useDebounce } from '@pancakeswap/hooks'
 import { Currency } from '@pancakeswap/sdk'
 import { tokens } from '@pancakeswap/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
-import { useDebounce } from '@pancakeswap/hooks'
 import React, { useEffect, useRef } from 'react'
 import { styled } from 'styled-components'
 import type { TradingViewWidget, TradingViewWidgetOptions } from './lib/pancakeswap-charting-library.d.ts'
@@ -22,7 +22,7 @@ interface TradingViewChartProps {
 
 const ChartContainer = styled.div`
   width: 100%;
-  height: calc(100% - 60px);
+  height: calc(100% - 165px);
   font-family: 'Kanit', sans-serif;
 
   /* Force TradingView to use Kanit font */
@@ -70,14 +70,6 @@ const setSymbolInfo = (
   window.pcsExtraData.token1Address = currency1?.isToken ? currency1?.address : currency1?.wrapped?.address
   window.pcsExtraData.fromChainId = currency0?.chainId
   window.pcsExtraData.toChainId = currency1?.chainId
-
-  console.log('[Chart Debug] setSymbolInfo called with:', {
-    token0Address: window.pcsExtraData.token0Address,
-    token1Address: window.pcsExtraData.token1Address,
-    fromChainId: window.pcsExtraData.fromChainId,
-    toChainId: window.pcsExtraData.toChainId,
-  })
-
   update24HPriceData(on24HPriceDataChange)
 }
 
@@ -104,21 +96,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
   const symbol =
     debouncedCurrency0 && debouncedCurrency1 ? `${debouncedCurrency0?.symbol}/${debouncedCurrency1?.symbol}` : ''
 
-  // Debug logging for currency updates
-  useEffect(() => {
-    console.log('[Chart Debug] Currency update:', {
-      currency0: debouncedCurrency0?.symbol,
-      currency1: debouncedCurrency1?.symbol,
-      symbol,
-      currency0Address: debouncedCurrency0?.isToken
-        ? debouncedCurrency0?.address
-        : debouncedCurrency0?.wrapped?.address,
-      currency1Address: debouncedCurrency1?.isToken
-        ? debouncedCurrency1?.address
-        : debouncedCurrency1?.wrapped?.address,
-    })
-  }, [debouncedCurrency0, debouncedCurrency1, symbol])
-
   useEffect(() => {
     const symbolChanged = symbol !== currentSymbol.current
     const currency0Address = debouncedCurrency0?.isToken
@@ -130,33 +107,17 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     const currency0AddressChanged = currency0Address !== currentCurrency0Address.current
     const currency1AddressChanged = currency1Address !== currentCurrency1Address.current
 
-    console.log('[Chart Debug] Change detection:', {
-      symbolChanged,
-      currency0AddressChanged,
-      currency1AddressChanged,
-      hasWidget: !!widgetRef.current,
-      isInitialized: isInitialized.current,
-      isWidgetReady: isWidgetReady.current,
-    })
-
     if (
       debouncedCurrency0 &&
       debouncedCurrency1 &&
       (symbolChanged || currency0AddressChanged || currency1AddressChanged)
     ) {
-      console.log('[Chart Debug] Processing change:', {
-        action: currency0AddressChanged || currency1AddressChanged ? 'recreate' : 'update',
-        currency0AddressChanged,
-        currency1AddressChanged,
-      })
-
       currentSymbol.current = symbol
       currentCurrency0Address.current = currency0Address
       currentCurrency1Address.current = currency1Address
 
       // If currency addresses changed, force widget recreation
       if (currency0AddressChanged || currency1AddressChanged) {
-        console.log('[Chart Debug] Forcing widget recreation')
         if (widgetRef.current) {
           try {
             if (widgetRef.current.remove) {
@@ -169,7 +130,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         }
         isInitialized.current = false
         isWidgetReady.current = false
-        console.log('[Chart Debug] Widget refs cleared, should trigger recreation')
         return // Let the main effect handle recreation
       }
 
@@ -235,23 +195,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         const shouldDelay = !debouncedCurrency0 || !debouncedCurrency1
 
         const doInitialization = () => {
-          console.log('[Chart Debug] doInitialization called:', {
-            hasContainer: !!containerRef.current,
-            hasWidget: !!widgetRef.current,
-            symbol,
-            hasCurrency0: !!debouncedCurrency0,
-            hasCurrency1: !!debouncedCurrency1,
-            chainId,
-            shouldInitialize: !!(
-              containerRef.current &&
-              !widgetRef.current &&
-              symbol &&
-              debouncedCurrency0 &&
-              debouncedCurrency1 &&
-              chainId
-            ),
-          })
-
           if (
             containerRef.current &&
             !widgetRef.current &&
@@ -260,8 +203,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
             debouncedCurrency1 &&
             chainId
           ) {
-            console.log('[Chart Debug] Starting widget initialization')
-
             const options: TradingViewWidgetOptions = {
               symbol,
               theme: isDark ? 'Dark' : 'Light',
@@ -368,32 +309,25 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
               autosize: true,
               height: '100%',
               width: '100%',
+              time_frames: [
+                { text: '1m', resolution: '1' },
+                { text: '5m', resolution: '5' },
+                { text: '15m', resolution: '15' },
+                { text: '30m', resolution: '30' },
+                { text: '1h', resolution: '60' },
+                { text: '1d', resolution: '1D' },
+              ],
             }
-            console.log('[Chart Debug] Setting symbol info for:', {
-              currency0: debouncedCurrency0?.symbol,
-              currency1: debouncedCurrency1?.symbol,
-              currency0Address: debouncedCurrency0?.isToken
-                ? debouncedCurrency0?.address
-                : debouncedCurrency0?.wrapped?.address,
-              currency1Address: debouncedCurrency1?.isToken
-                ? debouncedCurrency1?.address
-                : debouncedCurrency1?.wrapped?.address,
-            })
             setSymbolInfo(debouncedCurrency0, debouncedCurrency1, on24HPriceDataChange, onLiveDataChanges)
-
-            console.log('[Chart Debug] Creating TradingView widget...')
             widgetRef.current = createTradingViewWidget(containerRef.current, options)
-            console.log('[Chart Debug] Widget created:', !!widgetRef.current)
 
             // Wait for widget to be ready
             if (widgetRef.current && widgetRef.current.onChartReady) {
               widgetRef.current.onChartReady(() => {
-                console.log('[Chart Debug] Widget ready via onChartReady')
                 isWidgetReady.current = true
               })
             } else {
               // If no onChartReady method, set as ready after delay
-              console.log('[Chart Debug] Widget ready via timeout')
               setTimeout(() => {
                 isWidgetReady.current = true
               }, 1000)
@@ -401,7 +335,6 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
 
             update24HPriceData(on24HPriceDataChange)
             isInitialized.current = true
-            console.log('[Chart Debug] Widget initialization completed')
           }
         }
 
