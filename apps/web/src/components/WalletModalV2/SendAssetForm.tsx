@@ -278,6 +278,22 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
   const chainName = asset.chainId === ChainId.BSC ? 'BNB' : getChainName(asset.chainId)
   const price = asset.price?.usd ?? 0
+  const tokenAmount = tryParseAmount(amount, currency)
+
+  // if gift, tokenAmount must be greater than $1
+  const isGiftTokenAmountValid = useMemo(() => {
+    if (isSendGift && amount && !isInsufficientBalance) {
+      const valueInUsd = parseFloat(amount) * price
+      // NOTE: user can only send gift with amount greater than $1
+      const LIMIT_AMOUNT_USD = 1
+
+      // if value is 0, user is not inputting any amount, so make it valid
+      // avoid showing error message when user is not inputting any amount
+      return valueInUsd === 0 || valueInUsd >= LIMIT_AMOUNT_USD
+    }
+
+    return true
+  }, [isSendGift, amount, isInsufficientBalance, price])
 
   // Effect to estimate fee when address and amount are valid
   useEffect(() => {
@@ -294,8 +310,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   }, [address, addressError, isSendGift])
 
   if (viewState === ViewState.CONFIRM_TRANSACTION && isSendGift) {
-    const tokenAmount = tryParseAmount(amount, currency)
-
     return <CreateGiftView key={viewState} tokenAmount={tokenAmount} />
   }
 
@@ -413,6 +427,12 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
                   {t('Insufficient balance')}
                 </Text>
               )}
+
+              {!isGiftTokenAmountValid && (
+                <Text color="failure" fontSize="14px" mt="8px">
+                  {t('Gift amount must be greater than $1')}
+                </Text>
+              )}
             </Box>
           </>
         )}
@@ -427,7 +447,15 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           onClick={() => {
             onViewStateChange(ViewState.CONFIRM_TRANSACTION)
           }}
-          disabled={!isValidAddress || !amount || isInsufficientBalance || attemptingTxn || !isValidGasSponsor}
+          disabled={
+            !isValidAddress ||
+            !amount ||
+            parseFloat(amount) === 0 ||
+            isInsufficientBalance ||
+            attemptingTxn ||
+            !isValidGasSponsor ||
+            !isGiftTokenAmountValid
+          }
           isLoading={attemptingTxn}
           endIcon={attemptingTxn ? <AutoRenewIcon spin color="currentColor" /> : undefined}
         >
