@@ -44,7 +44,7 @@ export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps>
 
   const modalV2Props = useModalV2()
 
-  const handleClick = useCallback(() => {
+  const handleOpenModal = useCallback(() => {
     if (isSmallScreen) {
       modalV2Props.onOpen()
     }
@@ -64,7 +64,7 @@ export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps>
     <Box>
       {isSmallScreen ? (
         <>
-          <UnstyledButton onClick={handleClick}>{triggerButton}</UnstyledButton>
+          <UnstyledButton onClick={handleOpenModal}>{triggerButton}</UnstyledButton>
           <ModalV2 {...modalV2Props} closeOnOverlayClick>
             <MotionModal title={t('Search Pools')} onDismiss={modalV2Props.onDismiss}>
               <Suspense>
@@ -82,11 +82,16 @@ export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps>
             padding: { left: 16, right: 16 },
           }}
         >
-          {() => (
+          {({ close }) => (
             <Card style={{ minWidth: '780px' }} onClick={(e) => e.stopPropagation()}>
               <CardBody>
                 <Suspense>
-                  <MiniUniversalFarms onPoolClick={onPoolClick} />
+                  <MiniUniversalFarms
+                    onPoolClick={(pool) => {
+                      onPoolClick?.(pool)
+                      close()
+                    }}
+                  />
                 </Suspense>
               </CardBody>
             </Card>

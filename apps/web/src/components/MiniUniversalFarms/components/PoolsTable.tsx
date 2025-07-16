@@ -236,7 +236,6 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
 
   const scrollableContainerRef = useRef<HTMLDivElement>(null)
 
-  // Fetch pools data using the hook with simple pagination
   const { pools, isLoading, loadMore, handleSort } = useMiniPoolsData()
 
   const query = useAtomValue(searchQueryAtom)
@@ -339,7 +338,6 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
   return (
     <>
       <TableContainer ref={scrollableContainerRef}>
-        {/* Use TableView with sticky header */}
         {isSmallScreen ? (
           <ListView pools={pools} onPoolClick={onPoolClick} />
         ) : (
@@ -351,7 +349,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
             onRowClick={(pool) => onPoolClick?.(pool)}
           />
         )}
-        {/* Loading indicator when loading more */}
+
         {isLoading && pools.length > 0 && (
           <Flex
             justifyContent="center"
@@ -365,7 +363,8 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
             <Text color="textSubtle">{t('Loading more pools...')}</Text>
           </Flex>
         )}
-        {/* Intersection observer element for pagination */}
+
+        {/* Intersection observer for pagination */}
         {pools.length > 0 && <div ref={observerRef} />}
       </TableContainer>
     </>
