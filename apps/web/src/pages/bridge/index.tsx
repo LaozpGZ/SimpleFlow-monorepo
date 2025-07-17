@@ -1,9 +1,11 @@
+import { chainNames, NonEVMChainId } from '@pancakeswap/chains'
 import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { PUBLIC_NODES } from 'config/nodes'
 import { lazy, Suspense } from 'react'
 import { CHAIN_IDS } from 'utils/wagmi'
 import Page from 'views/Page'
+import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 
 const CanonicalBridge = lazy(() =>
   import('@pancakeswap/canonical-bridge').then((module) => ({ default: module.CanonicalBridge })),
@@ -27,7 +29,10 @@ const BridgePage = () => {
       >
         <Suspense>
           <CanonicalBridge
-            connectWalletButton={<ConnectWalletButton width="100%" />}
+            connectWalletButtons={{
+              default: <ConnectWalletButton width="100%" />,
+              [chainNames[NonEVMChainId.SOLANA]]: <SolanaConnectButton width="100%" />,
+            }}
             supportedChainIds={CHAIN_IDS}
             // @ts-ignore
             rpcConfig={PUBLIC_NODES}
