@@ -20,6 +20,12 @@ const SocialLoginIconBox = styled.div<{ $bg: string }>`
   overflow: hidden;
 `
 
+const StyledButton = styled(Button)`
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-bottom: 2px solid ${({ theme }) => theme.colors.cardBorder};
+  padding: 12px;
+`
+
 interface SocialLoginButtonProps {
   onClick: () => void
   assetCdn: string
@@ -33,7 +39,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ onClick, assetCdn
   const socialIcons = ['google.jpg', 'x.svg', 'telegram.svg', 'discord.svg']
 
   return (
-    <Button variant="light" onClick={onClick} width="100%" style={style} padding="0px">
+    <StyledButton variant="text" onClick={onClick} width="100%" style={style} padding="0px">
       <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center">
         {socialIcons.map((icon, index) => (
           <SocialLoginIconBox key={index} $bg={`${assetCdn}/web/wallets/social-login/${icon}`} />
@@ -41,7 +47,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ onClick, assetCdn
         <Text fontSize="12px">{t('Connect with social login')}</Text>
         <ArrowForwardIcon color="primary" />
       </FlexGap>
-    </Button>
+    </StyledButton>
   )
 }
 

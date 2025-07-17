@@ -591,6 +591,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
 
   const handleOpenSocialLoginModal = () => {
     setIsSocialLoginModalOpen(true)
+    props.onDismiss?.()
   }
 
   const handleCloseSocialLoginModal = () => {

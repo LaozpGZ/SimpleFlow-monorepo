@@ -82,13 +82,8 @@ const Divider = styled.div`
 `
 
 const Web3WalletButton = styled(SocialLoginButton)`
-  background-color: ${({ theme }) => theme.colors.tertiary};
+  background-color: ${({ theme }) => theme.colors.cardSecondary};
   border: none;
-  box-shadow: 0px 2px 0px 0px ${({ theme }) => (theme.isDark ? '#383241' : '#D7CAEC')};
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.backgroundAlt};
-  }
 `
 
 const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
