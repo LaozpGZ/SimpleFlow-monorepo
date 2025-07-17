@@ -136,7 +136,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
     }),
     [currentLanguage.code, theme.isDark, transferConfig, supportedChains, props.rpcConfig, handleError, fromChain],
   )
-  /*  */
+
   return (
     <BridgeWalletProvider>
       <GlobalStyle />
