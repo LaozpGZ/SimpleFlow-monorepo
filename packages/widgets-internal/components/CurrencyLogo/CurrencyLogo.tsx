@@ -103,6 +103,7 @@ export function CurrencyLogo({
         srcs={srcs}
         alt={`${currency?.symbol ?? "token"} logo`}
         style={style}
+        crossOrigin="anonymous"
         {...props}
       />
     );
