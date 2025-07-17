@@ -1,12 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 
+import { light, UIKitProvider } from '@pancakeswap/uikit'
 import { PancakeSwapHeader } from './PancakeSwapHeader'
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
   title: 'PancakeSwapHeader',
   component: PancakeSwapHeader,
-  // component: () => <div>1</div>,
+  decorators: [
+    (Story) => (
+      <UIKitProvider theme={light}>
+        <Story />
+      </UIKitProvider>
+    ),
+  ],
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     // layout: 'centered',
@@ -29,6 +36,22 @@ export const Default: Story = {
   args: {
     // primary: true,
     // label: 'Button',
-    children: <div>Hello</div>,
+    children: <div>Website Content</div>,
+  },
+}
+
+export const WithAnnouncementBanner: Story = {
+  args: {
+    announcementBanner: (
+      <div
+        style={{
+          backgroundImage: 'https://assets.pancakeswap.finance/web/banners/competition.png',
+        }}
+      >
+        <div>Hello</div>
+        <div>Hello</div>
+      </div>
+    ),
+    children: <div>Website Content</div>,
   },
 }

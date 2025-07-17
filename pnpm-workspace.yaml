@@ -1,6 +1,7 @@
 packages:
   - 'packages/*'
   - 'packages/routing-sdk/**'
+  - 'packages/widgets/examples'
   - 'apps/*'
   - 'apis/*'
   - 'examples/*'
