@@ -15,6 +15,9 @@
       "require": "./dist/index.cjs"
     }
   },
+  "sideEffects": [
+    "*.css.ts"
+  ],
   "dependencies": {
     "@pancakeswap/hooks": "workspace:*",
     "@pancakeswap/localization": "workspace:*",

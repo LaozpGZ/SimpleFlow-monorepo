@@ -1,6 +1,5 @@
-import { AnnouncementBanner, LocaleSelector, Navigation, SimpleMenu } from '@pancakeswap/uikit'
-
-export const PancakeSwapHeader = SimpleMenu
+import { AnnouncementBanner, LocaleSelector, Navigation } from '@pancakeswap/uikit'
+import { PancakeSwapHeader } from './PancakeSwapHeader'
 
 PancakeSwapHeader.displayName = 'PancakeSwapHeader'
 
@@ -12,3 +11,5 @@ export type PancakeSwapHeaderComponentType = typeof PancakeSwapHeader & {
 ;(PancakeSwapHeader as PancakeSwapHeaderComponentType).AnnouncementBanner = AnnouncementBanner
 ;(PancakeSwapHeader as PancakeSwapHeaderComponentType).LocaleSelector = LocaleSelector
 ;(PancakeSwapHeader as PancakeSwapHeaderComponentType).Navigation = Navigation
+
+export { PancakeSwapHeader }
