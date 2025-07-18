@@ -16,6 +16,7 @@ export type SimpleMenuProps = {
   homeHref?: string;
   navigation?: ReactNode;
   subNavigation?: ReactNode;
+  bottomNavigation?: ReactNode;
   rightSlot?: ReactNode;
 };
 
@@ -26,6 +27,7 @@ export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
   homeHref = "/",
   navigation,
   subNavigation,
+  bottomNavigation,
   rightSlot,
   children,
 }) => {
@@ -125,6 +127,7 @@ export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
           </BodyWrapper>
         </Wrapper>
       </AtomBox>
+      {bottomNavigation}
     </MenuContext.Provider>
   );
 };

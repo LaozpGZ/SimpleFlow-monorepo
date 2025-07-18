@@ -1,9 +1,10 @@
 import { SimpleMenu } from '@pancakeswap/uikit'
-import { ReactElement } from 'react'
+import { ReactNode } from 'react'
 
 export type PancakeSwapHeaderProps = React.PropsWithChildren<{
-  announcementBanner?: ReactElement
-  navigation?: ReactElement
+  announcementBanner?: ReactNode
+  navigation?: ReactNode
+  bottomNavigation?: ReactNode
   [key: string]: any
 }>
 
@@ -11,10 +12,16 @@ export const PancakeSwapHeader: React.FC<PancakeSwapHeaderProps> = ({
   children,
   announcementBanner,
   navigation,
+  bottomNavigation,
   ...props
 }) => {
   return (
-    <SimpleMenu announcementBanner={announcementBanner} navigation={navigation} {...props}>
+    <SimpleMenu
+      announcementBanner={announcementBanner}
+      navigation={navigation}
+      bottomNavigation={bottomNavigation}
+      {...props}
+    >
       {children}
     </SimpleMenu>
   )
