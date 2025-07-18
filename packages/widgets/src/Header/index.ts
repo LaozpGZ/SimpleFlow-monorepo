@@ -1,7 +1,7 @@
-import { AnnouncementBanner, LocaleSelector, CakePriceWidget } from '@pancakeswap/uikit'
-import { PancakeSwapHeader } from './PancakeSwapHeader'
+import { AnnouncementBanner, CakePriceWidget, LocaleSelector } from '@pancakeswap/uikit'
 import { PancakeSwapBottomNavigation } from './components/PancakeSwapBottomNavigation'
 import { PancakeSwapNavigation } from './components/PancakeSwapNavigation'
+import { PancakeSwapHeader } from './PancakeSwapHeader'
 
 PancakeSwapHeader.displayName = 'PancakeSwapHeader'
 
