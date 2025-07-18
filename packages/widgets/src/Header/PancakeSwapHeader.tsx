@@ -5,6 +5,7 @@ export type PancakeSwapHeaderProps = React.PropsWithChildren<{
   announcementBanner?: ReactNode
   navigation?: ReactNode
   bottomNavigation?: ReactNode
+  rightSlot?: ReactNode
   [key: string]: any
 }>
 
@@ -13,6 +14,7 @@ export const PancakeSwapHeader: React.FC<PancakeSwapHeaderProps> = ({
   announcementBanner,
   navigation,
   bottomNavigation,
+  rightSlot,
   ...props
 }) => {
   return (
@@ -20,6 +22,7 @@ export const PancakeSwapHeader: React.FC<PancakeSwapHeaderProps> = ({
       announcementBanner={announcementBanner}
       navigation={navigation}
       bottomNavigation={bottomNavigation}
+      rightSlot={rightSlot}
       {...props}
     >
       {children}
