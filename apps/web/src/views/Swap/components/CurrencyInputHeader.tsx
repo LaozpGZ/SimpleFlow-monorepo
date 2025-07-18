@@ -29,7 +29,6 @@ import { isMobile } from 'react-device-detect'
 import { useRoutingSettingChanged } from 'state/user/smartRouter'
 import { styled } from 'styled-components'
 import atomWithStorageWithErrorCatch from 'utils/atomWithStorageWithErrorCatch'
-import { chartDisplayAtom } from 'views/SwapSimplify/InfinitySwap/atoms'
 import BuyCryptoIcon from '../../../../public/images/moneyBangs.svg'
 import { SettingsMode } from '../../../components/Menu/GlobalSettings/types'
 import { SwapFeaturesContext } from '../SwapFeaturesContext'
@@ -74,12 +73,12 @@ const CurrencyInputHeader: React.FC<React.PropsWithChildren<Props>> = memo(
       ...(isMobile && { manualVisible: mobileTooltipShow }),
     })
 
-    const { isChartSupported, isHotTokenSupported } = useContext(SwapFeaturesContext)
-    const [isChartDisplayed, setIsChartDisplayed] = useAtom(chartDisplayAtom)
+    const { isChartSupported, isChartDisplayed, setIsChartDisplayed, isHotTokenSupported } =
+      useContext(SwapFeaturesContext)
     const [expertMode] = useExpertMode()
     const [isRoutingSettingChange] = useRoutingSettingChanged()
     const toggleChartDisplayed = () => {
-      setIsChartDisplayed((currentIsChartDisplayed) => !currentIsChartDisplayed)
+      setIsChartDisplayed?.((currentIsChartDisplayed) => !currentIsChartDisplayed)
     }
     const [onPresentTransactionsModal] = useModal(<TransactionsModal />)
     const [isSwapHotTokenDisplay, setIsSwapHotTokenDisplay] = useSwapHotTokenDisplay()

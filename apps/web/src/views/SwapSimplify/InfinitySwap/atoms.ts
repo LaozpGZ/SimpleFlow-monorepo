@@ -5,4 +5,4 @@ import { atomWithStorage } from 'jotai/utils'
 export const swapDetailsCollapseAtom = atom(false)
 
 // Atom to manage chart display state with localStorage persistence
-export const chartDisplayAtom = atomWithStorage('isChartDisplayed', false)
+export const chartDisplayAtom = atomWithStorage('pcs:tradingViewChartDisplay', false)
