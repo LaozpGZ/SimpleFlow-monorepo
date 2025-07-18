@@ -12,4 +12,7 @@ export type PancakeSwapHeaderComponentType = typeof PancakeSwapHeader & {
 ;(PancakeSwapHeader as PancakeSwapHeaderComponentType).LocaleSelector = LocaleSelector
 ;(PancakeSwapHeader as PancakeSwapHeaderComponentType).Navigation = Navigation
 
-export { PancakeSwapHeader }
+export type { AnnouncementBannerProps, LocaleSelectorProps, NavigationProps } from '@pancakeswap/uikit'
+export type { PancakeSwapHeaderProps } from './PancakeSwapHeader'
+
+export default PancakeSwapHeader as PancakeSwapHeaderComponentType
