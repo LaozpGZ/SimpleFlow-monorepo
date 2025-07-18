@@ -1,11 +1,11 @@
 import { SUGGESTED_BASES } from 'config/constants/exchange'
-import { CrossChainToken, toCurrencyCompatible } from 'config/constants/types'
-import useNativeCurrency from 'hooks/useNativeCurrency'
+import { toCurrencyCompatible } from 'config/constants/types'
+import { useUnifiedNativeCurrency } from 'hooks/useNativeCurrency'
 import { styled } from 'styled-components'
 
 import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency } from '@pancakeswap/sdk'
+import { UnifiedCurrency } from '@pancakeswap/sdk'
 import { AutoColumn, QuestionHelper, Text } from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 
@@ -55,12 +55,12 @@ export default function CommonBases({
   supportCrossChain,
 }: {
   chainId?: ChainId | NonEVMChainId
-  commonBasesType
-  selectedCurrency?: Currency | null
-  onSelect: (currency: Currency) => void
+  commonBasesType?: CommonBasesType
+  selectedCurrency?: UnifiedCurrency | null
+  onSelect: (currency: UnifiedCurrency) => void
   supportCrossChain?: boolean
 }) {
-  const native = useNativeCurrency(chainId as ChainId)
+  const native = useUnifiedNativeCurrency(chainId)
   const { t } = useTranslation()
   const pinTokenDescText = commonBasesType === CommonBasesType.SWAP_LIMITORDER ? t('Popular tokens') : t('Common bases')
 
@@ -99,7 +99,7 @@ export default function CommonBases({
             </Text>
           </BaseWrapper>
         </ButtonWrapper>
-        {(chainId ? SUGGESTED_BASES[chainId] || [] : []).map((token: CrossChainToken) => {
+        {(chainId ? SUGGESTED_BASES[chainId] || [] : []).map((token: UnifiedCurrency) => {
           const compatToken = toCurrencyCompatible(token)
           const selected = selectedCurrency?.equals?.(compatToken)
           return (

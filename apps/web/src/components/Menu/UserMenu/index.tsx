@@ -1,6 +1,5 @@
-import { NonEVMChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, UserMenu as UIKitUserMenu, UserMenuVariant, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import useAirdropModalStatus from 'components/GlobalCheckClaimStatus/hooks/useAirdropModalStatus'
 import Trans from 'components/Trans'
@@ -9,12 +8,16 @@ import ReceiveModal from 'components/WalletModalV2/ReceiveModal'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useAuth from 'hooks/useAuth'
 import { useDomainNameForAddress } from 'hooks/useDomain'
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { useProfile } from 'state/profile/hooks'
 import { usePendingTransactions } from 'state/transactions/hooks'
 import styled from 'styled-components'
 import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useAccount } from 'wagmi'
+import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
+
+import { NonEVMChainId } from '@pancakeswap/chains'
+import { useTranslation } from '@pancakeswap/localization'
+import { Box, FlexGap, UserMenu as UIKitUserMenu, useMatchBreakpoints, UserMenuVariant } from '@pancakeswap/uikit'
 
 const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
   const { t } = useTranslation()
@@ -204,14 +207,24 @@ const UserMenu = () => {
   }
 
   return (
-    <ConnectWalletButton scale="sm">
-      <Box display={['none', null, null, 'block']}>
-        <Trans>Connect Wallet</Trans>
-      </Box>
-      <Box display={['block', null, null, 'none']}>
-        <Trans>Connect</Trans>
-      </Box>
-    </ConnectWalletButton>
+    <FlexGap gap="8px">
+      <ConnectWalletButton scale="sm">
+        <Box display={['none', null, null, 'block']}>
+          <Trans>Connect Wallet</Trans>
+        </Box>
+        <Box display={['block', null, null, 'none']}>
+          <Trans>Connect</Trans>
+        </Box>
+      </ConnectWalletButton>
+      <SolanaConnectButton scale="sm">
+        <Box display={['none', null, null, 'block']}>
+          <Trans>Solana Connect</Trans>
+        </Box>
+        <Box display={['block', null, null, 'none']}>
+          <Trans>SOL</Trans>
+        </Box>
+      </SolanaConnectButton>
+    </FlexGap>
   )
 }
 

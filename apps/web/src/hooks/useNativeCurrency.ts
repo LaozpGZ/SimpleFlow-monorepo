@@ -1,18 +1,17 @@
 import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
-import { Native, NativeCurrency } from '@pancakeswap/sdk'
+import { Native, NativeCurrency, SPLToken, UnifiedNativeCurrency } from '@pancakeswap/sdk'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { useMemo } from 'react'
-import { SOL_INFO, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { useActiveChainId } from './useActiveChainId'
 
-export function useUnifiedNativeCurrency(overrideChainId?: ChainId | NonEVMChainId): NativeCurrency | TokenInfo {
+export function useUnifiedNativeCurrency(overrideChainId?: ChainId | NonEVMChainId): UnifiedNativeCurrency {
   const { chainId: chainId_ } = useActiveChainId()
   const chainId = overrideChainId ?? chainId_
   return useMemo(() => {
     try {
       if (chainId === NonEVMChainId.SOLANA) {
-        return SOL_INFO
+        return SPLToken.SOL
       }
       return Native.onChain(overrideChainId ?? chainId ?? ChainId.BSC)
     } catch (e) {

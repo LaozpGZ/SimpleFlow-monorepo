@@ -5,21 +5,16 @@ import { Campaign, CampaignType, TranslatableText } from '@pancakeswap/achieveme
 import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import type { FarmConfigBaseProps, SerializedFarmConfig, SerializedFarmPublicData } from '@pancakeswap/farms'
 import { LegacyTradeWithStableSwap as TradeWithStableSwap } from '@pancakeswap/smart-router/legacy-router'
-import type { TokenInfo as SolanaTokenInfo } from '@pancakeswap/solana-core-sdk'
-// --- StableTrade and related types for swap callback compatibility ---
-import type { Currency, CurrencyAmount, Percent, Price, Token } from '@pancakeswap/swap-sdk-core'
+import type { Currency, CurrencyAmount, Percent, Price, Token, UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
 import { TradeType } from '@pancakeswap/swap-sdk-core'
 import type { Trade } from '@pancakeswap/v2-sdk'
-
-// Cross-chain token type: EVM Token or Solana TokenInfo
-export type CrossChainToken = Token | SolanaTokenInfo
 
 // a list of tokens by chain
 export type ChainMap<T> = {
   readonly [chainId in ChainId | NonEVMChainId]: T
 }
 
-export type ChainTokenList = ChainMap<CrossChainToken[]>
+export type ChainTokenList = ChainMap<UnifiedCurrency[]>
 
 export interface Addresses {
   56: Address
@@ -148,23 +143,51 @@ export enum Bound {
 
 export type UnsafeCurrency = Currency | null | undefined
 
-// Polyfill for SolanaTokenInfo to behave like Currency
-export function toCurrencyCompatible(token: CrossChainToken): any {
+// Polyfill for SolanaToken or TokenInfo to behave like Currency with address and chainId (for UI only)
+export function toCurrencyCompatible(token: UnifiedCurrency): any {
   if ('equals' in token && typeof token.equals === 'function') {
-    // Already a Currency (EVM)
+    // Already a Currency (EVM or Solana class)
     return token
   }
-  // Polyfill for SolanaTokenInfo
+  // Polyfill for Solana TokenInfo
   return {
     ...token,
     isToken: true,
     isNative: false,
-    address: token.address,
-    chainId: token.chainId ?? 101,
-    symbol: token.symbol,
-    name: token.name,
-    decimals: token.decimals,
-    equals: (other: any) => other && other.address === token.address && other.chainId === (token.chainId ?? 101),
+    address: (token as any).address,
+    chainId: 101,
+    symbol: (token as any).symbol,
+    name: (token as any).name,
+    decimals: (token as any).decimals,
+    equals: (other: any) => other && other.address === (token as any).address && other.chainId === 101,
     wrapped: token,
   }
+}
+
+// Polyfill for SolanaToken or TokenInfo to behave like UnifiedCurrency with address and chainId
+export function toUnifiedCurrencyWithAddress(
+  token: UnifiedCurrency,
+): UnifiedCurrency & { address: string; chainId: number } {
+  if ('address' in token && 'chainId' in token) return token as any
+  if ('mint' in token) {
+    // Solana Token class
+    return {
+      address: (token as any).mint?.toBase58?.() || (token as any).mint || '',
+      chainId: 101,
+      symbol: (token as any).symbol,
+      name: (token as any).name,
+      decimals: (token as any).decimals,
+      isToken2022: (token as any).isToken2022,
+      mint: (token as any).mint,
+      equals: (token as any).equals,
+    } as any
+  }
+  // TokenInfo
+  return {
+    address: (token as any).address,
+    chainId: 101,
+    symbol: (token as any).symbol,
+    name: (token as any).name,
+    decimals: (token as any).decimals,
+  } as any
 }

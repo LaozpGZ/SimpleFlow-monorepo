@@ -1,6 +1,7 @@
 import invariant from 'tiny-invariant'
 import { BaseCurrency } from './baseCurrency'
 import { Currency } from './currency'
+import { type NativeCurrency } from './nativeCurrency'
 
 export interface SerializedToken {
   chainId: number
@@ -14,7 +15,7 @@ export interface SerializedToken {
 /**
  * Represents an ERC20 token with a unique address and some metadata.
  */
-export class Token extends BaseCurrency {
+export class Token extends BaseCurrency<Token, NativeCurrency | Token> {
   public readonly isNative: false = false as const
 
   public readonly isToken: true = true as const

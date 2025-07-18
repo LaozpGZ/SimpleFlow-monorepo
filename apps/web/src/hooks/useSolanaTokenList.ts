@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
-
 import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { SPLToken } from '@pancakeswap/swap-sdk-core'
+import { useQuery } from '@tanstack/react-query'
+import { useMemo, useState } from 'react'
 
 const PCS_TOKEN_LIST_URL = 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json'
 const RAYDIUM_TOKEN_LIST_URL = 'https://api-v3.raydium.io/mint/list'
 const JUPITER_TOKEN_LIST_URL = 'https://lite-api.jup.ag/tokens/v1/tagged/verified'
-
 const USER_ADDED_KEY = 'solana-user-added-tokens'
 
 function getUserAddedTokens(): TokenInfo[] {
@@ -21,67 +21,87 @@ function saveUserAddedTokens(tokens: TokenInfo[]) {
 }
 
 export function useSolanaTokenList() {
-  const [tokenList, setTokenList] = useState<TokenInfo[]>([])
   const [userTokens, setUserTokens] = useState<TokenInfo[]>(getUserAddedTokens())
-  const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    let cancelled = false
-    async function fetchAll() {
-      setLoading(true)
-      try {
-        // Fetch all lists in parallel
-        const [pcsRes, raydiumRes, jupRes] = await Promise.all([
-          fetch(PCS_TOKEN_LIST_URL).then((r) => r.json()),
-          fetch(RAYDIUM_TOKEN_LIST_URL).then((r) => r.json()),
-          fetch(JUPITER_TOKEN_LIST_URL).then((r) => r.json()),
-        ])
-        // PCS: { tokens: TokenInfo[] }
-        // Raydium: { mintList: TokenInfo[], blacklist: string[], whiteList: string[] }
-        // Jupiter: TokenInfo[]
-        const pcsList: TokenInfo[] = pcsRes.tokens || []
-        const raydiumList: TokenInfo[] = raydiumRes.mintList || []
-        const blacklist: string[] = raydiumRes.blacklist || []
-        const whitelist: string[] = raydiumRes.whiteList || []
-        const jupList: TokenInfo[] = Array.isArray(jupRes) ? jupRes : jupRes.tokens || []
+  // PCS
+  const pcsQuery = useQuery({
+    queryKey: ['solana-pcs-list'],
+    queryFn: async () => {
+      const res = await fetch(PCS_TOKEN_LIST_URL)
+      if (!res.ok) throw new Error('PCS list fetch failed')
+      const tokens = (await res.json()).tokens as TokenInfo[]
+      return tokens ?? []
+    },
+    retry: 3,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  })
 
-        // Merge logic
-        const tokenMap = new Map<string, TokenInfo>()
-        const addToken = (token: TokenInfo, type: string, priority: number) => {
-          if (blacklist.includes(token.address)) return
-          if (tokenMap.has(token.address)) return
-          tokenMap.set(token.address, { ...token, type, priority })
-        }
-
-        // Always add SOL (if present in PCS or Raydium)
-        const solToken = pcsList.find((t) => t.symbol === 'SOL') || raydiumList.find((t) => t.symbol === 'SOL')
-        if (solToken) addToken(solToken, 'raydium', 2)
-
-        // PCS tokens (priority 3)
-        for (const t of pcsList) addToken(t, 'pcs', 3)
-        // Raydium tokens (priority 2)
-        for (const t of raydiumList) addToken(t, 'raydium', 2)
-        // Jupiter tokens (priority 1)
-        for (const t of jupList) addToken(t, 'jupiter', 1)
-        // User-added tokens (priority 1, type extra)
-        for (const t of userTokens) addToken(t, 'extra', 1)
-
-        // Final list
-        const merged = Array.from(tokenMap.values())
-        if (!cancelled) setTokenList(merged)
-      } catch (e) {
-        if (!cancelled) setTokenList([])
-      } finally {
-        if (!cancelled) setLoading(false)
+  // Raydium
+  const raydiumQuery = useQuery({
+    queryKey: ['solana-raydium-list'],
+    queryFn: async () => {
+      const res = await fetch(RAYDIUM_TOKEN_LIST_URL)
+      if (!res.ok) throw new Error('Raydium list fetch failed')
+      const { data } = await res.json()
+      return {
+        tokens: (data.mintList ?? []) as TokenInfo[],
+        blacklist: (data.blacklist ?? []) as string[],
+        whitelist: (data.whiteList ?? []) as string[],
       }
-    }
-    fetchAll()
-    return () => {
-      cancelled = true
-    }
-  }, [userTokens])
+    },
+    retry: 3,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  })
 
-  // Add a user token
+  // Jupiter
+  const jupiterQuery = useQuery({
+    queryKey: ['solana-jupiter-list'],
+    queryFn: async () => {
+      const res = await fetch(JUPITER_TOKEN_LIST_URL)
+      if (!res.ok) throw new Error('Jupiter list fetch failed')
+      const data = await res.json()
+      return Array.isArray(data) ? (data as TokenInfo[]) : (data.tokens as TokenInfo[])
+    },
+    retry: 3,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  })
+
+  // Merge tokens as soon as any list is available
+  const tokenList = useMemo(() => {
+    const tokenMap = new Map<string, SPLToken>()
+    const addToken = (token: TokenInfo, type: string, priority: number, blacklist: string[] = []) => {
+      if (blacklist.includes(token.address)) return
+      if (tokenMap.has(token.address)) return
+      tokenMap.set(token.address, new SPLToken(token))
+    }
+
+    // Raydium tokens (with blacklist/whitelist)
+    if (raydiumQuery.data) {
+      for (const t of raydiumQuery.data.tokens) addToken(t, 'raydium', 2, raydiumQuery.data.blacklist)
+      // Always add SOL if present
+      const solToken = raydiumQuery.data.tokens.find((t) => t.symbol === 'SOL')
+      if (solToken) addToken(solToken, 'raydium', 2, raydiumQuery.data.blacklist)
+    }
+
+    // PCS tokens
+    if (pcsQuery.data) for (const t of pcsQuery.data) addToken(t, 'pcs', 3)
+
+    // Jupiter tokens
+    if (jupiterQuery.data) for (const t of jupiterQuery.data) addToken(t, 'jupiter', 1)
+
+    // User-added tokens
+    for (const t of userTokens) addToken(t, 'extra', 1)
+
+    return Array.from(tokenMap.values())
+  }, [pcsQuery.data, raydiumQuery.data, jupiterQuery.data, userTokens])
+
+  // Loading state: true if all queries are still loading
+  const loading = pcsQuery.isLoading && raydiumQuery.isLoading && jupiterQuery.isLoading
+
+  // Add/remove user tokens as before
   const addUserToken = (token: TokenInfo) => {
     setUserTokens((prev) => {
       const next = prev.some((t) => t.address === token.address) ? prev : [...prev, token]
@@ -89,8 +109,6 @@ export function useSolanaTokenList() {
       return next
     })
   }
-
-  // Remove a user token
   const removeUserToken = (address: string) => {
     setUserTokens((prev) => {
       const next = prev.filter((t) => t.address !== address)

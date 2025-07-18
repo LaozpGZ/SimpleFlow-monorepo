@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Percent, UnifiedCurrency } from '@pancakeswap/sdk'
 import { Skeleton, Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { ReactNode, Suspense, useCallback, useMemo } from 'react'
@@ -185,7 +185,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
   const router = useRouter()
 
   const handleCurrencySelect = useCallback(
-    async (newCurrency: Currency, field: Field) => {
+    async (newCurrency: UnifiedCurrency, field: Field) => {
       return handleCurrencySelectFn({
         onCurrencySelection,
         warningSwapHandler,
@@ -216,11 +216,11 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
     ],
   )
   const handleInputSelect = useCallback(
-    (newCurrency: Currency) => handleCurrencySelect(newCurrency, Field.INPUT),
+    (newCurrency: UnifiedCurrency) => handleCurrencySelect(newCurrency, Field.INPUT),
     [handleCurrencySelect],
   )
   const handleOutputSelect = useCallback(
-    (newCurrency: Currency) => handleCurrencySelect(newCurrency, Field.OUTPUT),
+    (newCurrency: UnifiedCurrency) => handleCurrencySelect(newCurrency, Field.OUTPUT),
     [handleCurrencySelect],
   )
 

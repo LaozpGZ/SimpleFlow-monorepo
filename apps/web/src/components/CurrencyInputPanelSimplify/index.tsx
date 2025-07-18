@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Pair, Token } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Pair, Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import {
   Box,
   Button,
@@ -30,6 +30,7 @@ import { useCurrencyBalance } from 'state/wallet/hooks'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { useAccount } from 'wagmi'
+import { CommonBasesType } from 'components/SearchModal/types'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import { FONT_SIZE, LOGO_SIZE, useFontSize } from './state'
 
@@ -162,7 +163,7 @@ interface CurrencyInputPanelProps {
   maxAmount?: CurrencyAmount<Currency>
   lpPercent?: string
   label?: string
-  onCurrencySelect?: (currency: Currency) => void
+  onCurrencySelect?: (currency: UnifiedCurrency) => void
   currency?: Currency | null
   disableCurrencySelect?: boolean
   hideBalance?: boolean
@@ -170,7 +171,7 @@ interface CurrencyInputPanelProps {
   otherCurrency?: Currency | null
   id: string
   showCommonBases?: boolean
-  commonBasesType?: string
+  commonBasesType?: CommonBasesType
   showSearchInput?: boolean
   beforeButton?: React.ReactNode
   isDependent?: boolean

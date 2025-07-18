@@ -1,6 +1,7 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
-import { CrossChainToken, toCurrencyCompatible } from 'config/constants/types'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { toCurrencyCompatible } from 'config/constants/types'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useUnifiedNativeCurrency } from 'hooks/useNativeCurrency'
 import { useSolanaTokenList } from 'hooks/useSolanaTokenList'
@@ -17,8 +18,7 @@ import { NonEVMChainId } from '@pancakeswap/chains'
 import { useDebounce, useSortedTokensByQuery } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 /* eslint-disable no-restricted-syntax */
-import { ChainId, Currency, getTokenComparator, Token } from '@pancakeswap/sdk'
-import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { ChainId, getTokenComparator, Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import { createFilterToken, WrappedTokenInfo } from '@pancakeswap/token-lists'
 import {
   AutoColumn,
@@ -34,6 +34,7 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { useAudioPlay } from '@pancakeswap/utils/user'
+import { useSolanaTokenBalances } from 'state/token/solanaTokenBalances'
 
 import { useAllTokens, useIsUserAddedToken, useToken } from '../../hooks/Tokens'
 import Row from '../Layout/Row'
@@ -43,14 +44,15 @@ import { CurrencySearchInput } from './CurrencySearchInput'
 import ImportRow from './ImportRow'
 import SwapNetworkSelection from './SwapNetworkSelection'
 import { getSwapSound } from './swapSound'
+import { CommonBasesType } from './types'
 
 interface CurrencySearchProps {
-  selectedCurrency?: Currency | null
-  onCurrencySelect: (currency: Currency) => void
-  otherSelectedCurrency?: Currency | null
+  selectedCurrency?: UnifiedCurrency | null
+  onCurrencySelect: (currency: UnifiedCurrency) => void
+  otherSelectedCurrency?: UnifiedCurrency | null
   showSearchInput?: boolean
   showCommonBases?: boolean
-  commonBasesType?: string
+  commonBasesType?: CommonBasesType
   showImportView: () => void
   setImportToken: (token: Token) => void
   height?: number
@@ -148,8 +150,13 @@ function CurrencySearch({
   // Use Solana token list if Solana is selected
   const isSolana = selectedChainId === NonEVMChainId.SOLANA
   const allTokens = useAllTokens(selectedChainId)
-  const { tokenList: solanaTokens, loading: solanaLoading } = useSolanaTokenList()
+  const { tokenList: solanaTokens } = useSolanaTokenList()
   const native = useUnifiedNativeCurrency(selectedChainId)
+
+  const { solanaAccount } = useAccountActiveChain() // useAccount is already imported and works for all chains
+  const tokenAddresses = useMemo(() => solanaTokens.map((t) => t.address), [solanaTokens])
+  // Solana balances integration
+  const solanaBalances = useSolanaTokenBalances(solanaAccount, tokenAddresses)
 
   const searchToken = useToken(debouncedQuery, selectedChainId)
 
@@ -174,7 +181,7 @@ function CurrencySearch({
       return solanaTokens.filter(
         (token) =>
           token.symbol.toLowerCase().includes(s) ||
-          token.name.toLowerCase().includes(s) ||
+          token.name?.toLowerCase().includes(s) ||
           token.address.toLowerCase() === s,
       )
     }
@@ -187,19 +194,20 @@ function CurrencySearch({
 
   const { balances, isLoading: isLoadingBalances } = useAllTokenBalances(selectedChainId)
 
-  const filteredSortedTokens: CrossChainToken[] = useMemo(() => {
+  const filteredSortedTokens: UnifiedCurrency[] = useMemo(() => {
     if (isSolana) {
-      // No balance sorting for now, just return the filtered list
-      return filteredTokens as TokenInfo[]
+      return [...filteredTokens].sort((a, b) => {
+        const balA = solanaBalances.balances.get(a.address) ?? 0
+        const balB = solanaBalances.balances.get(b.address) ?? 0
+        return Number(balB) - Number(balA)
+      })
     }
     const tokenComparator = getTokenComparator(balances ?? {})
     return [...(queryTokens as Token[])].sort(tokenComparator)
-  }, [filteredTokens, queryTokens, balances, isSolana])
-
-  const compatTokens = useMemo(() => filteredSortedTokens.map(toCurrencyCompatible), [filteredSortedTokens])
+  }, [filteredTokens, queryTokens, balances, isSolana, solanaBalances.balances])
 
   const handleCurrencySelect = useCallback(
-    (currency: Currency) => {
+    (currency: UnifiedCurrency) => {
       onCurrencySelect(currency)
       if (audioPlay) {
         getSwapSound().play()
@@ -227,14 +235,14 @@ function CurrencySearch({
       if (e.key === 'Enter') {
         const s = debouncedQuery.toLowerCase().trim()
         if (!isSolana && s === native.symbol.toLowerCase().trim()) {
-          handleCurrencySelect(toCurrencyCompatible(native))
+          handleCurrencySelect(native)
         } else if (filteredSortedTokens.length > 0) {
           if (
             isSolana ||
             filteredSortedTokens[0].symbol?.toLowerCase() === debouncedQuery.trim().toLowerCase() ||
             filteredSortedTokens.length === 1
           ) {
-            handleCurrencySelect(toCurrencyCompatible(filteredSortedTokens[0]))
+            handleCurrencySelect(isSolana ? (filteredSortedTokens[0] as any) : filteredSortedTokens[0])
           }
         }
       }
@@ -264,14 +272,20 @@ function CurrencySearch({
         <CurrencyList
           height={isMobile ? (showCommonBases ? height || 250 : height ? height + 80 : 350) : 340}
           showNative={showNative}
-          currencies={compatTokens}
-          inactiveCurrencies={filteredInactiveTokens.map(toCurrencyCompatible)}
+          currencies={filteredSortedTokens}
+          inactiveCurrencies={
+            isSolana
+              ? filteredInactiveTokens.map(toCurrencyCompatible)
+              : filteredInactiveTokens.filter(
+                  (t) => t && typeof t === 'object' && 'equals' in t && typeof t.equals === 'function',
+                )
+          }
           breakIndex={
             Boolean(filteredInactiveTokens?.length) && filteredSortedTokens ? filteredSortedTokens.length : undefined
           }
           onCurrencySelect={handleCurrencySelect}
-          otherCurrency={otherSelectedCurrency ? toCurrencyCompatible(otherSelectedCurrency as any) : undefined}
-          selectedCurrency={selectedCurrency ? toCurrencyCompatible(selectedCurrency as any) : undefined}
+          otherCurrency={otherSelectedCurrency}
+          selectedCurrency={selectedCurrency}
           fixedListRef={fixedList}
           showImportView={showImportView}
           setImportToken={setImportToken}
@@ -305,7 +319,7 @@ function CurrencySearch({
     height,
     showChainLogo,
     selectedChainId,
-    compatTokens,
+    isSolana,
   ])
 
   return (

@@ -1,7 +1,6 @@
 import invariant from 'tiny-invariant'
 import { BaseCurrency } from './baseCurrency'
-import { Currency } from './currency'
-import { Token } from './token'
+import { SOL_INFO } from './solana/const'
 
 export interface SerializedSPLToken {
   chainId: number
@@ -16,7 +15,7 @@ export interface SerializedSPLToken {
 /**
  * Represents an SPL token on Solana or other non-EVM chains.
  */
-export class SPLToken extends BaseCurrency {
+export class SPLToken extends BaseCurrency<SPLToken> {
   public readonly isNative: false = false as const
 
   public readonly isToken: true = true as const
@@ -27,16 +26,28 @@ export class SPLToken extends BaseCurrency {
 
   public readonly projectLink?: string
 
-  public constructor(
-    chainId: number,
-    programId: string,
-    decimals: number,
-    symbol: string,
-    name?: string,
+  public static readonly SOL: SPLToken = new SPLToken({ ...SOL_INFO, isNative: true })
+
+  public constructor({
+    chainId,
+    programId,
+    address,
+    decimals,
+    symbol,
+    name,
+    projectLink,
+  }: {
+    chainId: number
+    programId: string
+    address: string
+    decimals: number
+    symbol: string
+    name?: string
     projectLink?: string
-  ) {
+    isNative?: boolean
+  }) {
     super(chainId, decimals, symbol, name)
-    this.address = programId
+    this.address = address
     this.programId = programId
     this.projectLink = projectLink
   }
@@ -45,7 +56,7 @@ export class SPLToken extends BaseCurrency {
    * Returns true if the two tokens are equivalent, i.e. have the same chainId and programId.
    * @param other other token to compare
    */
-  public equals(other: Currency): boolean {
+  public equals(other: SPLToken): boolean {
     return 'programId' in other && this.chainId === other.chainId && this.programId === (other as SPLToken).programId
   }
 
@@ -56,8 +67,8 @@ export class SPLToken extends BaseCurrency {
   }
 
   /* For compatibility */
-  public get wrapped(): Token {
-    return this as any as Token
+  public get wrapped(): SPLToken {
+    return this
   }
 
   public get serialize(): SerializedSPLToken {

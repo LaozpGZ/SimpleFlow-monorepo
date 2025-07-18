@@ -1,4 +1,4 @@
-import { ChainId, Currency, CurrencyAmount, Native, Token, ZERO_ADDRESS } from '@pancakeswap/sdk'
+import { ChainId, Currency, CurrencyAmount, Native, Token, UnifiedCurrency, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { multicallABI } from 'config/abi/Multicall'
 import { FAST_INTERVAL } from 'config/constants'
@@ -98,7 +98,7 @@ export function useTokenBalance(account?: string, token?: Token): CurrencyAmount
 
 export function useCurrencyBalances(
   account?: string,
-  currencies?: (Currency | undefined | null)[],
+  currencies?: (UnifiedCurrency | undefined | null)[],
 ): (CurrencyAmount<Currency> | undefined)[] {
   const tokens = useMemo(
     () => currencies?.filter((currency): currency is Token => Boolean(currency?.isToken)) ?? [],
@@ -107,7 +107,7 @@ export function useCurrencyBalances(
 
   const [tokenBalances] = useTokenBalancesWithLoadingIndicator(account, tokens)
 
-  const containsNative: Currency | null = useMemo(
+  const containsNative: UnifiedCurrency | null = useMemo(
     () => currencies?.find((currency) => currency?.isNative) ?? null,
     [currencies],
   )
@@ -129,7 +129,10 @@ export function useCurrencyBalances(
   )
 }
 
-export function useCurrencyBalance(account?: string, currency?: Currency | null): CurrencyAmount<Currency> | undefined {
+export function useCurrencyBalance(
+  account?: string,
+  currency?: UnifiedCurrency | null,
+): CurrencyAmount<Currency> | undefined {
   return useCurrencyBalances(
     account,
     useMemo(() => [currency], [currency]),

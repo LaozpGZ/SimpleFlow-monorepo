@@ -51,7 +51,8 @@ export function CurrencyLogo({
   containerStyle,
   ...props
 }: {
-  currency?: CurrencyInfo & {
+  currency?: Omit<CurrencyInfo, "address"> & {
+    address?: string;
     logoURI?: string | undefined;
   };
   size?: string;
