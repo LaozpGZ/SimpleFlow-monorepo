@@ -12,11 +12,22 @@ type ApyButtonProps = {
   onAPRTextClick?: () => void
   baseApr?: number
   fontSize?: string
+  color?: string
 }
 
 export const AprButtonV3 = forwardRef<HTMLElement, ApyButtonProps>(
   (
-    { showApyButton = true, showApyText = true, loading, onClick, onAPRTextClick, baseApr, hasFarm, fontSize = '28px' },
+    {
+      showApyButton = true,
+      showApyText = true,
+      loading,
+      onClick,
+      onAPRTextClick,
+      baseApr,
+      hasFarm,
+      fontSize = '28px',
+      color,
+    },
     ref,
   ) => {
     const handleClick = useCallback(
@@ -38,7 +49,14 @@ export const AprButtonV3 = forwardRef<HTMLElement, ApyButtonProps>(
       <FlexGap alignItems="center">
         {showApyButton && <FarmWidget.FarmApyButton variant="text-and-button" handleClickButton={handleClick} />}
         {showApyText && (
-          <AprButtonText hasFarm={hasFarm} baseApr={baseApr} fontSize={fontSize} ref={ref} onClick={onAPRTextClick} />
+          <AprButtonText
+            hasFarm={hasFarm}
+            baseApr={baseApr}
+            fontSize={fontSize}
+            ref={ref}
+            onClick={onAPRTextClick}
+            color={color}
+          />
         )}
       </FlexGap>
     )
@@ -47,10 +65,11 @@ export const AprButtonV3 = forwardRef<HTMLElement, ApyButtonProps>(
 
 type AprButtonTextProps = Pick<ApyButtonProps, 'baseApr' | 'hasFarm' | 'fontSize'> & {
   onClick?: () => void
+  color?: string
 }
 
 const AprButtonText = forwardRef<HTMLElement, AprButtonTextProps>(
-  ({ baseApr, hasFarm, fontSize = '28px', onClick }, ref) => {
+  ({ baseApr, hasFarm, fontSize = '28px', onClick, color }, ref) => {
     const isZeroApr = baseApr === 0
 
     const ZeroApr = useMemo(
@@ -64,18 +83,18 @@ const AprButtonText = forwardRef<HTMLElement, AprButtonTextProps>(
 
     const commonApr = useMemo(
       () => (
-        <FlexGap style={{ cursor: 'pointer' }}>
+        <FlexGap>
           {hasFarm ? (
-            <Text fontSize={fontSize} color="v2Primary50" bold>
+            <Text fontSize={fontSize} color={color} bold>
               🌿
             </Text>
           ) : null}
-          <TooltipText ml="4px" fontSize={fontSize} color="secondary" bold>
+          <TooltipText ml="4px" fontSize={fontSize} color={color} bold>
             {baseApr ? displayApr(baseApr) : null}
           </TooltipText>
         </FlexGap>
       ),
-      [baseApr, hasFarm, fontSize],
+      [baseApr, hasFarm, fontSize, color],
     )
 
     if (typeof baseApr === 'undefined') {
