@@ -3,7 +3,7 @@ import { useAtomValue } from 'jotai'
 import { useContext } from 'react'
 import styled from 'styled-components'
 import { SwapFeaturesContext } from 'views/Swap/SwapFeaturesContext'
-import { swapDetailsCollapseAtom } from 'views/SwapSimplify/InfinitySwap/atoms'
+import { swapDetailsCollapseAtom, chartDisplayAtom } from 'views/SwapSimplify/InfinitySwap/atoms'
 import { AdPlayer } from './AdPlayer'
 import { AdPlayerProps } from './types'
 import { useShowAdPanel } from './useShowAdPanel'
@@ -22,7 +22,7 @@ export const DesktopCard = ({
 }: DesktopCardProps) => {
   const { isDesktop } = useMatchBreakpoints()
   const [show] = useShowAdPanel()
-  const { isChartDisplayed } = useContext(SwapFeaturesContext) || {}
+  const isChartDisplayed = useAtomValue(chartDisplayAtom)
   const isSwapDetailsOpen = useAtomValue(swapDetailsCollapseAtom)
 
   // Apply left class when chart is displayed and swap details are open

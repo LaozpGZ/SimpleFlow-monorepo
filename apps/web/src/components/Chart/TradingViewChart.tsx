@@ -179,7 +179,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         }
       }
     }
-  }, [debouncedCurrency0, debouncedCurrency1, symbol, on24HPriceDataChange, _onLiveDataChanges])
+  }, [debouncedCurrency0, debouncedCurrency1, symbol])
 
   useEffect(() => {
     async function initChart() {
@@ -224,14 +224,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
         const shouldDelay = !debouncedCurrency0 || !debouncedCurrency1
 
         const doInitialization = () => {
-          if (
-            containerRef.current &&
-            !widgetRef.current &&
-            symbol &&
-            debouncedCurrency0 &&
-            debouncedCurrency1 &&
-            chainId
-          ) {
+          if (containerRef.current && !widgetRef.current && symbol && debouncedCurrency0 && debouncedCurrency1) {
             const options: TradingViewWidgetOptions = {
               symbol,
               theme: isDark ? 'Dark' : 'Light',
@@ -386,17 +379,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
     }
 
     initChart()
-  }, [
-    symbol,
-    isDark,
-    theme,
-    debouncedCurrency0,
-    debouncedCurrency1,
-    chainId,
-    createCustomButton,
-    on24HPriceDataChange,
-    _onLiveDataChanges,
-  ])
+  }, [symbol, isDark, theme, debouncedCurrency0, debouncedCurrency1])
 
   useEffect(() => {
     async function changeTheme() {
