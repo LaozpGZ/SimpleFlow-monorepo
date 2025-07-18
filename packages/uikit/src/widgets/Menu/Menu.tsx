@@ -2,7 +2,7 @@ import { useIsMounted } from "@pancakeswap/hooks";
 import throttle from "lodash/throttle";
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AtomBox } from "../../components/AtomBox";
-import BottomNav from "../../components/BottomNav";
+import { BottomNav } from "../../components/BottomNav";
 import { Box } from "../../components/Box";
 import Flex from "../../components/Box/Flex";
 import CakePrice from "../../components/CakePrice/CakePrice";

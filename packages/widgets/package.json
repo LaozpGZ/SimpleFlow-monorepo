@@ -52,6 +52,7 @@
   "scripts": {
     "storybook": "storybook dev -p 6006 --debug --loglevel silly --force-build-preview",
     "build-storybook": "storybook build",
+    "clean": " rm -rf .turbo && rm -rf dist && rm -rf node_modules",
     "build": "tsup",
     "dev": "tsup --watch"
   }
