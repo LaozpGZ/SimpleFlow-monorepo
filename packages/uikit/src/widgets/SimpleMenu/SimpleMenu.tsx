@@ -94,7 +94,7 @@ export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
         }}
       >
         <Wrapper>
-          <FixedContainer showMenu={showMenu} height={totalTopMenuHeight}>
+          <FixedContainer showMenu={showMenu} $height={totalTopMenuHeight}>
             {announcementBanner ? <div ref={announcementBannerRef}>{announcementBanner}</div> : null}
             <StyledNav id="nav">
               <Flex>

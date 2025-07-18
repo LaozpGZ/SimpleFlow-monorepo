@@ -1,6 +1,8 @@
 {
   "extends": "@pancakeswap/tsconfig/react-library",
   "compilerOptions": {
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "outDir": "dist",
+    "resolveJsonModule": true
   }
 }

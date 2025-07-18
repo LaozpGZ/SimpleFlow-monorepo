@@ -20,6 +20,7 @@
     "dev:gamification": "pnpm turbo run dev --filter=gamification... --concurrency=50",
     "dev:jupiter": "pnpm turbo run dev --filter=solana-web... --concurrency=50",
     "dev:solana": "turbo run dev --filter=solana-frontend... --concurrency=50",
+    "dev:widgets": "turbo run dev --filter=widgets-examples... --concurrency=50",
     "storybook": "turbo run start --filter=@pancakeswap/uikit...",
     "build:storybook": "turbo run build:storybook --filter=@pancakeswap/uikit...",
     "build": "turbo run build --filter=web...",

@@ -41,6 +41,11 @@
       "cache": false,
       "persistent": true
     },
+    "dev:widgets": {
+      "dependsOn": ["^@pancakeswap/next-config#build", "^@pancakeswap/uikit#dev"],
+      "cache": false,
+      "persistent": true
+    },
     "start": {
       "cache": false
     },
