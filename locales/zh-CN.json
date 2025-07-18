@@ -4371,5 +4371,8 @@
   "Create Gift Successfully": "成功创建礼物",
   "Just sent you %totalUsd%! 🎉 Tap this link and to claim it: 👉 %claimLink%\n\nPlease connect your wallet to claim it!\n\nAlternatively, you can manually enter the code %code% on PancakeSwap wallet to claim.": "刚刚向您发送了 %totalUsd%！🎉 点按此链接来领取：👉 %claimLink%\n\n请连接您的钱包来领取！\n\n或者，您也可以在 PancakeSwap 钱包上手动输入代码 %code% 来领取。",
   "Introducing Pancake Gifts.": "隆重推出 Pancake 礼物。",
-  "Gift Now": "立即赠送礼物"
+  "Gift Now": "立即赠送礼物",
+  "Chart Information": "Chart Information",
+  "The price data displayed is for reference only and may not reflect exact trading prices.": "The price data displayed is for reference only and may not reflect exact trading prices.",
+  "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ.": "This chart shows aggregated price data from multiple sources. Actual output amounts for a swap request or prices from a specific PancakeSwap pool may differ."
 }
