@@ -5,7 +5,7 @@ import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
 import { usePoolType } from '../hooks/usePoolType'
 import { BinPriceRangePanel } from './BinPriceRangePanel'
 import { CLPriceRangePanel } from './CLPriceRangePanel'
-import { InfoPanel } from './InfoPanel'
+import { InfinityDepositPanel } from './InfinityDepositPanel'
 import { ResponsiveColumns } from './styles'
 import { SubmitButton } from './SubmitButton'
 
@@ -19,8 +19,6 @@ export const AddLiquidityInfinityForm = () => {
 
   return (
     <ResponsiveColumns>
-      <InfoPanel poolId={poolId} chainId={chainId} />
-
       <StyledCard style={{ overflow: 'visible', width: '100%' }}>
         <CardBody>
           {poolType === 'CL' && <CLPriceRangePanel />}
@@ -28,6 +26,8 @@ export const AddLiquidityInfinityForm = () => {
           <SubmitButton />
         </CardBody>
       </StyledCard>
+
+      <InfinityDepositPanel poolId={poolId} chainId={chainId} />
     </ResponsiveColumns>
   )
 }
