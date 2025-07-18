@@ -1,2 +1,9 @@
 export * from './contexts/WidgetProvider'
-export * from './widgets/index'
+export { default as PancakeSwapHeader } from './Header'
+export type {
+  AnnouncementBannerProps,
+  LocaleSelectorProps,
+  NavigationProps,
+  PancakeSwapHeaderComponentType,
+  PancakeSwapHeaderProps,
+} from './Header'

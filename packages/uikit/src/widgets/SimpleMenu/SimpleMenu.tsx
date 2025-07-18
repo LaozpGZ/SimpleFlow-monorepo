@@ -11,7 +11,7 @@ import { useIsomorphicLayoutEffect } from "./hooks/useIsomorphicLayoutEffect";
 
 export type SimpleMenuProps = {
   linkComponent?: ElementType;
-  announcementBanner?: ReactElement;
+  announcementBanner?: ReactNode;
   brandLogo?: ReactElement;
   homeHref?: string;
   navigation?: ReactNode;
