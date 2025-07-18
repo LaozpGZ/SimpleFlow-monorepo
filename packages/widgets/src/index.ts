@@ -1,3 +1,4 @@
+export * from './ConnectButton'
 export * from './contexts/WidgetProvider'
 export { default as PancakeSwapHeader } from './Header'
 export type {

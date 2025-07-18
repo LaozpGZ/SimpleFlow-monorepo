@@ -40,7 +40,7 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
   const foundChain = useMemo(() => evmChains.find((c) => c.id === chainId), [chainId])
   const symbol =
     (foundChain?.id
-      ? SHORT_SYMBOL[foundChain.id as keyof typeof SHORT_SYMBOL] ?? NATIVE[foundChain.id]?.symbol
+      ? SHORT_SYMBOL[foundChain.id as keyof typeof SHORT_SYMBOL] ?? NATIVE[foundChain.id as keyof typeof NATIVE]?.symbol
       : undefined) ?? foundChain?.nativeCurrency?.symbol
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t('Unable to switch network. Please try it on your wallet'),
