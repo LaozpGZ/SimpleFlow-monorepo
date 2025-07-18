@@ -13,12 +13,13 @@ export type NetworkSelectorProps = {
   isWrongNetwork?: boolean
   cannotChangeNetwork?: boolean
   isNotMatched?: boolean
-  switchNetwork?: (chainId: number) => void | Promise<void>
+  switchNetwork?: (chainId: number | 'Solana' | 'Aptos') => void | Promise<void>
+
+  chains?: Array<number | 'Solana' | 'Aptos'>
 
   cdnUrl?: string
 }
 
-// @TODO @ChefJerry pass networks from props, remove custom chains logic
 export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
   chainId,
   isLoading,
@@ -26,6 +27,8 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
   cannotChangeNetwork,
   isNotMatched,
   switchNetwork,
+
+  chains = [],
 
   cdnUrl = 'https://assets.pancakeswap.finance/',
 }) => {
@@ -84,6 +87,7 @@ export const NetworkSelector: React.FC<NetworkSelectorProps> = ({
         isOpen={isOpen}
         setIsOpen={setIsOpen}
         chainId={chainId}
+        chains={chains}
         isNotMatched={isNotMatched}
         isWrongNetwork={isWrongNetwork}
         switchNetwork={switchNetwork}
