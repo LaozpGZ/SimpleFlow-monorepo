@@ -20,14 +20,16 @@ import { WrongNetworkSelect } from './WrongNetworkSelect'
 export type NetworkSelectProps = {
   showTestnet?: boolean
   chainId?: number
+  chains?: Array<number | 'Solana' | 'Aptos'>
   isWrongNetwork?: boolean
-  switchNetwork?: (chainId: number) => void | Promise<void>
+  switchNetwork?: (chainId: number | 'Solana' | 'Aptos') => void | Promise<void>
   onDismiss?: () => void
 }
 
 const NetworkSelect: React.FC<NetworkSelectProps> = ({
   showTestnet,
   chainId,
+  chains = [],
   switchNetwork,
   onDismiss,
   isWrongNetwork,
@@ -35,7 +37,12 @@ const NetworkSelect: React.FC<NetworkSelectProps> = ({
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
-  const networks = useMemo(() => getSortedChains(chainId, showTestnet), [chainId, showTestnet])
+  const networks = useMemo(() => {
+    const defaultChains = getSortedChains(chainId, showTestnet)
+    return chains.length > 0
+      ? defaultChains.filter((chain) => chains.includes(chain.id) || chains.includes(chain.name as 'Solana' | 'Aptos'))
+      : defaultChains
+  }, [chainId, showTestnet])
 
   return (
     <Box borderRadius={isMobile ? '32px' : '32px 32px 0 0'} overflow="hidden">
@@ -75,9 +82,12 @@ const NetworkSelect: React.FC<NetworkSelectProps> = ({
             // non-EVM item: external link
             <UserMenuItem
               key={`non-evm-${net.id}`}
-              as="a"
-              href={net.link}
-              target="_blank"
+              onClick={() => {
+                if (net.id !== chainId || isWrongNetwork) {
+                  switchNetwork?.(net.name as 'Solana' | 'Aptos')
+                }
+                onDismiss?.()
+              }}
               style={{ justifyContent: 'flex-start', cursor: 'pointer', padding: '0px 24px' }}
             >
               <img src={net.image} width={24} height={24} alt={net.name} />
@@ -94,9 +104,10 @@ const NetworkSelect: React.FC<NetworkSelectProps> = ({
 
 export type NetworkSelectorModalProps = {
   chainId?: number
+  chains?: Array<number | 'Solana' | 'Aptos'>
   isNotMatched?: boolean
   isWrongNetwork?: boolean
-  switchNetwork?: (chainId: number) => void | Promise<void>
+  switchNetwork?: (chainId: number | 'Solana' | 'Aptos') => void | Promise<void>
 
   isOpen?: boolean
   setIsOpen?: (isOpen: boolean) => void
@@ -104,6 +115,7 @@ export type NetworkSelectorModalProps = {
 
 export const NetworkSelectorModal: React.FC<NetworkSelectorModalProps> = ({
   chainId,
+  chains,
   isWrongNetwork = false,
   isNotMatched = false,
   switchNetwork,
@@ -121,6 +133,7 @@ export const NetworkSelectorModal: React.FC<NetworkSelectorModalProps> = ({
           <WrongNetworkSelect switchNetwork={switchNetwork} chainId={chainId} onDismiss={handleDismiss} />
         ) : (
           <NetworkSelect
+            chains={chains}
             switchNetwork={switchNetwork}
             chainId={chainId}
             isWrongNetwork={isWrongNetwork}
