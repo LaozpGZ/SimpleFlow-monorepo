@@ -27,7 +27,9 @@
     "@pancakeswap/pools": "workspace:*",
     "@pancakeswap/position-managers": "workspace:*",
     "@pancakeswap/prediction": "workspace:*",
-    "lodash": "^4.17.20"
+    "@pancakeswap/sdk": "workspace:*",
+    "lodash": "^4.17.20",
+    "viem": "catalog:"
   },
   "peerDependencies": {
     "@types/react": "^18.2.21",

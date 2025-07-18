@@ -7,3 +7,4 @@ export type {
   PancakeSwapHeaderComponentType,
   PancakeSwapHeaderProps,
 } from './Header'
+export * from './NetworkSelector'
