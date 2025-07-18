@@ -350,7 +350,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
                 // Create custom button after widget is ready
                 setTimeout(() => {
                   createCustomButton()
-                }, 100)
+                }, 300)
               })
             } else {
               // If no onChartReady method, set as ready after delay
@@ -359,7 +359,7 @@ const TradingViewChart: React.FC<TradingViewChartProps> = ({
                 // Create custom button after widget is ready
                 setTimeout(() => {
                   createCustomButton()
-                }, 100)
+                }, 300)
               }, 1000)
             }
 
