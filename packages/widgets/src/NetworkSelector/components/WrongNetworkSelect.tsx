@@ -95,7 +95,7 @@ export const WrongNetworkSelect = ({
         my="8px"
         scale="sm"
         onClick={() => {
-          switchNetwork(localChainId)
+          switchNetwork?.(localChainId)
           onDismiss()
         }}
       >
