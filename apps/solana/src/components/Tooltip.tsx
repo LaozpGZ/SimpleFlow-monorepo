@@ -21,7 +21,7 @@ function PopoverContentWrapper({ usePortal: usePortal_, children: children_ }: {
 
 let prevTooltipHandler: TooltipHandles | undefined
 /**
- * build-in chakra's Tooltip is **NOT** interactive.Popover is too comlicated, even your usage is just show a text sentences.
+ * build-in chakra's Tooltip is **NOT** interactive.Popover is too complicated, even your usage is just show a text sentences.
  * so have to build a custom tooltip to match the V3's usage
  */
 export default forwardRef(function Tooltip(

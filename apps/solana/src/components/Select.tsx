@@ -84,7 +84,7 @@ export function Select<T>({
   disabled?: boolean
   onChange?(item: T): void
   renderItem?(item?: T, idx?: number): ReactNode
-  /** if not spcified use renderItem */
+  /** if not specified use renderItem */
   renderTriggerItem?(item?: T): ReactNode
   placeholder?: ReactNode
   hasDivider?: boolean
