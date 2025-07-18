@@ -104,7 +104,7 @@ const Menu: React.FC<React.PropsWithChildren<NavProps>> = ({
         }}
       >
         <Wrapper>
-          <FixedContainer showMenu={showMenu} height={totalTopMenuHeight}>
+          <FixedContainer showMenu={showMenu} $height={totalTopMenuHeight}>
             {banner && isMounted && <TopBannerContainer height={topBannerHeight}>{banner}</TopBannerContainer>}
             <StyledNav id="nav">
               <Flex>

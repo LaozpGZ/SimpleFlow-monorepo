@@ -25,12 +25,12 @@ export const StyledNav = styled.nav`
 
 export const FixedContainer = styled("div").withConfig({
   shouldForwardProp: (props) => !["showMenu"].includes(props),
-})<{ showMenu: boolean; height: number }>`
+})<{ showMenu: boolean; $height: number }>`
   position: fixed;
-  top: ${({ showMenu, height }) => (showMenu ? 0 : `-${height}px`)};
+  top: ${({ showMenu, $height }) => (showMenu ? 0 : `-${$height}px`)};
   left: 0;
   transition: top 0.2s;
-  height: ${({ height }) => `${height}px`};
+  height: ${({ $height }) => `${$height}px`};
   width: 100%;
   z-index: 20;
 `;
