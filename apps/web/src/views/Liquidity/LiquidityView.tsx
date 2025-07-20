@@ -606,7 +606,10 @@ export const LiquidityView = () => {
                     <NextLinkFromReactRouter
                       to={`/increase/${currencyId(currencyBase)}/${currencyId(currencyQuote)}/${feeAmount}/${tokenId}`}
                     >
-                      <Button disabled={!isOwnNFT || DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)} width="100%">
+                      <Button
+                        disabled={!isOwnNFT || Boolean(chainId && DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId))}
+                        width="100%"
+                      >
                         {t('Add')}
                       </Button>
                     </NextLinkFromReactRouter>
@@ -628,7 +631,7 @@ export const LiquidityView = () => {
                     to={`/increase/${currencyId(currencyBase)}/${currencyId(currencyQuote)}/${feeAmount}/${tokenId}`}
                   >
                     <Button
-                      disabled={!isOwnNFT || DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)}
+                      disabled={!isOwnNFT || Boolean(chainId && DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId))}
                       width="100%"
                       mb="8px"
                     >
