@@ -47,6 +47,7 @@ import PoolTable from 'views/Info/components/InfoTables/PoolsTable'
 import TransactionTable from 'views/Info/components/InfoTables/TransactionsTable'
 import Percent from 'views/Info/components/Percent'
 import useCMCLink from 'views/Info/hooks/useCMCLink'
+import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
 
 dayjs.extend(duration)
 
@@ -182,7 +183,7 @@ const TokenPage: React.FC<React.PropsWithChildren<{ routeAddress: string }>> = (
           </Flex>
           <Flex>
             <NextLinkFromReactRouter to={`/add/${address}?chain=${CHAIN_QUERY_NAME[chainId]}`}>
-              <Button mr="8px" variant="secondary">
+              <Button mr="8px" variant="secondary" disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)}>
                 {t('Add Liquidity')}
               </Button>
             </NextLinkFromReactRouter>
