@@ -81,6 +81,7 @@ const BridgePage = () => {
             supportedChainIds={CHAIN_IDS}
             // @ts-ignore
             rpcConfig={PUBLIC_NODES}
+            disabledToChains={[1101]}
           />
         </Suspense>
       </Flex>
