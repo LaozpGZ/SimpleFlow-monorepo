@@ -1,5 +1,5 @@
 import EventEmitter from 'events'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import type { EIP1193Parameters, EIP1193RequestFn } from 'viem'
 import { getAddress, hexToBigInt } from 'viem'
 import { useChainId, useConfig, useConnectors, useReconnect } from 'wagmi'
@@ -24,40 +24,79 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
   const { client: isReady, getClientForChain } = useSmartWallets()
   const { reconnect } = useReconnect()
 
+  // Add state management to track smart wallet ready status
+  const [isSmartWalletReady, setIsSmartWalletReady] = useState(false)
+  const [isSettingUp, setIsSettingUp] = useState(false)
+
   useEffect(() => {
     const setupSmartAccountConnector = async () => {
       const existingSmartAccountConnector = connectors.find((connector) => connector.id === 'io.privy.smart_wallet')
-      if (existingSmartAccountConnector) return
 
-      // If no client exists, do not run this logic
-      if (!isReady) return
+      // If smart account connector already exists, mark as ready
+      if (existingSmartAccountConnector) {
+        setIsSmartWalletReady(true)
+        setIsSettingUp(false)
+        return
+      }
 
-      const client = await getClientForChain({ id })
+      // If no smart wallet client, mark as ready (use embedded wallet)
+      if (!isReady) {
+        setIsSmartWalletReady(true)
+        setIsSettingUp(false)
+        return
+      }
 
-      if (!client || !getClientForChain) return
+      // Start setting up smart account connector
+      setIsSettingUp(true)
 
-      const smartAccountProvider = new SmartWalletEIP1193Provider(client, getClientForChain)
+      try {
+        const client = await getClientForChain({ id })
 
-      const smartAccountConnectorConstructor = injected({
-        target: {
-          // @ts-expect-error ignore type
-          provider: smartAccountProvider,
-          id: 'io.privy.smart_wallet',
-          name: 'io.privy.smart_wallet',
-          icon: '',
-        },
-      })
+        if (!client || !getClientForChain) {
+          // If unable to get client, fallback to embedded wallet
+          setIsSmartWalletReady(true)
+          setIsSettingUp(false)
+          return
+        }
 
-      // If a user uses an embedded wallet with a smart account, we will currently set it up as the only connector
-      // for wagmi for the smoothest integration experience.
-      const smartAccountConnector = config._internal.connectors.setup(smartAccountConnectorConstructor)
-      config._internal.connectors.setState([smartAccountConnector])
-      await config.storage?.setItem('recentConnectorId', smartAccountConnector.id)
-      reconnect()
+        const smartAccountProvider = new SmartWalletEIP1193Provider(client, getClientForChain)
+
+        const smartAccountConnectorConstructor = injected({
+          target: {
+            // @ts-expect-error ignore type
+            provider: smartAccountProvider,
+            id: 'io.privy.smart_wallet',
+            name: 'io.privy.smart_wallet',
+            icon: '',
+          },
+        })
+
+        // If a user uses an embedded wallet with a smart account, we will currently set it up as the only connector
+        // for wagmi for the smoothest integration experience.
+        const smartAccountConnector = config._internal.connectors.setup(smartAccountConnectorConstructor)
+        config._internal.connectors.setState([smartAccountConnector])
+        await config.storage?.setItem('recentConnectorId', smartAccountConnector.id)
+
+        // After setup is complete, mark as ready and reconnect
+        setIsSmartWalletReady(true)
+        setIsSettingUp(false)
+        reconnect()
+      } catch (error) {
+        console.error('Failed to setup smart account connector:', error)
+        // On setup failure, fallback to embedded wallet
+        setIsSmartWalletReady(true)
+        setIsSettingUp(false)
+      }
     }
 
     setupSmartAccountConnector()
   }, [config, connectors, getClientForChain, id, isReady, reconnect])
+
+  // Return state for other components to use
+  return {
+    isSmartWalletReady,
+    isSettingUp,
+  }
 }
 
 class SmartWalletEIP1193Provider extends EventEmitter {
