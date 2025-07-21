@@ -12,6 +12,7 @@ import { availableBridgeRoutesAtom } from '../../../atom/availableBridgeRoutesAt
 import { bestSameChainWithoutPlaceHolderAtom } from '../../../atom/bestSameChainAtom'
 import { bridgeOnlyQuoteAtom } from '../../../atom/bridgeOnlyQuoteAtom'
 import { type BridgeQuoteParams, type QuoteContext } from '../types'
+import { CROSSCHAIN_INFINITY_SWAP_SUPPORTED_CHAINS } from '../config'
 
 interface AtomGetterFunction {
   <T>(atom: any): T
@@ -91,7 +92,11 @@ export class ContextBuilder {
           }
 
           // Only support swap to bridge for bsc chain
-          if (customSwapOption.infinitySwap && customSwapOption.baseCurrency?.chainId !== ChainId.BSC) {
+          if (
+            customSwapOption.infinitySwap &&
+            customSwapOption.baseCurrency?.chainId &&
+            !CROSSCHAIN_INFINITY_SWAP_SUPPORTED_CHAINS.includes(customSwapOption.baseCurrency?.chainId)
+          ) {
             customSwapOption.infinitySwap = false
           }
 
