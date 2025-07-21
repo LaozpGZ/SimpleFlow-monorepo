@@ -9,7 +9,6 @@ import type { PoolInfo } from 'state/farmsV4/state/type'
 import styled, { css } from 'styled-components'
 import { useAccount } from 'wagmi'
 import { getPoolAddLiquidityLink, getPoolDetailPageLink, getPoolInfoPageLink } from 'utils/getPoolLink'
-import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
 
 const BaseButtonStyle = css`
   color: ${({ theme }) => theme.colors.text};
@@ -87,7 +86,7 @@ export const ActionItems = ({ pool, icon }: { pool: PoolInfo; icon?: React.React
         <StyledConnectWalletButton scale="sm" variant="text" />
       ) : (
         <NextLinkFromReactRouter to={addLiquidityLink}>
-          <StyledButton scale="sm" variant="text" disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(pool.chainId)}>
+          <StyledButton scale="sm" variant="text">
             {t('Add Liquidity')}
             {icon}
           </StyledButton>
