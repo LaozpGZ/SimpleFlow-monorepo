@@ -47,6 +47,7 @@ export const InfinityPoolInfoHeader = () => {
         onInvertPrices={() => setInverted(!inverted)}
         hookData={hookData}
         onOverlayPoolClick={(pool) => {
+          // TODO: Update to account for all protocol's add liquidity pages
           router.push(getAddInfinityLiquidityURL({ chainId: pool.chainId, poolId: pool.lpAddress }))
         }}
         overrideAprDisplay={{

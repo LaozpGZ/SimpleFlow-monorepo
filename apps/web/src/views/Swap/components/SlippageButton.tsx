@@ -27,18 +27,7 @@ const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: s
   color: ${({ $color }) => $color};
 `
 
-const AutoSlippageText = styled(Text)`
-  font-size: 12px;
-  margin-top: 4px;
-  color: ${({ theme }) => theme.colors.textSubtle};
-`
-
-interface SlippageButtonProps {
-  slippage?: number | ReactElement
-  trade?: SmartRouterTrade<TradeType> | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
-}
-
-export const SlippageButton = ({ slippage }: SlippageButtonProps) => {
+export const SlippageButton = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
@@ -47,7 +36,6 @@ export const SlippageButton = ({ slippage }: SlippageButtonProps) => {
   const { slippageTolerance, isAuto } = useAutoSlippageWithFallback()
 
   const isRiskyLow = slippageTolerance < 50
-
   const isRiskyHigh = slippageTolerance > 100
   const isRiskyVeryHigh = slippageTolerance > 2000
 
@@ -89,9 +77,9 @@ export const SlippageButton = ({ slippage }: SlippageButtonProps) => {
               >
                 {isAuto && slippageTolerance
                   ? `${t('Auto')}: ${basisPointsToPercent(slippageTolerance).toFixed(2)}%`
-                  : typeof slippage === 'number'
-                  ? `${basisPointsToPercent(slippage).toFixed(2)}%`
-                  : slippage}
+                  : typeof slippageTolerance === 'number'
+                  ? `${basisPointsToPercent(slippageTolerance).toFixed(2)}%`
+                  : slippageTolerance}
               </TertiaryButton>
             </div>
 
