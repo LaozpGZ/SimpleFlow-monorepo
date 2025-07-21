@@ -239,10 +239,8 @@ describe('PancakeSwap Universal Mixed Router Command Generation Test', () => {
       const options = swapOptions({})
       const { calldata, value } = PancakeSwapUniversalRouter.swapERC20CallParameters(trade, options)
       const minAmountOut = SmartRouter.minimumAmountOut(trade, options.slippageTolerance).quotient
-      const maximumAmountIn = SmartRouter.maximumAmountIn(trade, options.slippageTolerance).quotient
 
       expect(BigInt(value)).toEqual(0n)
-      expect(calldata).toMatchSnapshot()
       expect(calldata).toMatchSnapshot()
 
       const decodedCommands = decodeUniversalCalldata(calldata)
@@ -296,7 +294,6 @@ describe('PancakeSwap Universal Mixed Router Command Generation Test', () => {
       const maximumAmountIn = SmartRouter.maximumAmountIn(trade, options.slippageTolerance).quotient
 
       expect(BigInt(value)).toEqual(0n)
-      expect(calldata).toMatchSnapshot()
       expect(calldata).toMatchSnapshot()
 
       const decodedCommands = decodeUniversalCalldata(calldata)
