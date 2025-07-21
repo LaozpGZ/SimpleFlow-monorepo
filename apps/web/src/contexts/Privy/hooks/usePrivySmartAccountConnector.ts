@@ -1,12 +1,12 @@
-import EventEmitter from 'events'
+import { EventEmitter } from 'events'
 import { useEffect, useState } from 'react'
-import type { EIP1193Parameters, EIP1193RequestFn } from 'viem'
 import { getAddress, hexToBigInt } from 'viem'
 import { useChainId, useConfig, useConnectors, useReconnect } from 'wagmi'
 import { injected } from 'wagmi/connectors'
+import { useAtom } from 'jotai'
 
-import type { SmartWalletClientType } from '@privy-io/react-auth/smart-wallets'
 import { useSmartWallets } from '@privy-io/react-auth/smart-wallets'
+import { forceEmbeddedWalletAtom } from '../atoms/testSettings'
 
 /**
  * Registers a smart account connector in wagmi for the Privy embedded smart wallet.
@@ -24,6 +24,10 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
   const { client: isReady, getClientForChain } = useSmartWallets()
   const { reconnect } = useReconnect()
 
+  // TODO: remove after QA - Test setting to disable AA
+  // @ts-ignore
+  const [forceEmbeddedWallet] = useAtom(forceEmbeddedWalletAtom)
+
   // Add state management to track smart wallet ready status
   const [isSmartWalletReady, setIsSmartWalletReady] = useState(false)
   const [isSettingUp, setIsSettingUp] = useState(false)
@@ -32,7 +36,23 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
     const setupSmartAccountConnector = async () => {
       const existingSmartAccountConnector = connectors.find((connector) => connector.id === 'io.privy.smart_wallet')
 
-      // If smart account connector already exists, mark as ready
+      // TODO: remove after QA - If forced to use embedded wallet, remove smart wallet connector
+      if (forceEmbeddedWallet) {
+        if (existingSmartAccountConnector) {
+          // Remove smart wallet connector and restore original connectors
+          const nonSmartConnectors = connectors.filter((connector) => connector.id !== 'io.privy.smart_wallet')
+          // @ts-ignore
+          config._internal.connectors.setState(nonSmartConnectors)
+          // Clear recent connector if it was the smart wallet
+          // @ts-ignore
+          await config.storage?.removeItem('recentConnectorId')
+        }
+        setIsSmartWalletReady(true)
+        setIsSettingUp(false)
+        return
+      }
+
+      // If smart account connector already exists and not forced to embedded, mark as ready
       if (existingSmartAccountConnector) {
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
@@ -50,6 +70,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
       setIsSettingUp(true)
 
       try {
+        // @ts-ignore
         const client = await getClientForChain({ id })
 
         if (!client || !getClientForChain) {
@@ -63,8 +84,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
 
         const smartAccountConnectorConstructor = injected({
           target: {
-            // @ts-expect-error ignore type
-            provider: smartAccountProvider,
+            provider: smartAccountProvider as any,
             id: 'io.privy.smart_wallet',
             name: 'io.privy.smart_wallet',
             icon: '',
@@ -73,13 +93,17 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
 
         // If a user uses an embedded wallet with a smart account, we will currently set it up as the only connector
         // for wagmi for the smoothest integration experience.
+        // @ts-ignore
         const smartAccountConnector = config._internal.connectors.setup(smartAccountConnectorConstructor)
+        // @ts-ignore
         config._internal.connectors.setState([smartAccountConnector])
+        // @ts-ignore
         await config.storage?.setItem('recentConnectorId', smartAccountConnector.id)
 
         // After setup is complete, mark as ready and reconnect
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
+        // @ts-ignore
         reconnect()
       } catch (error) {
         console.error('Failed to setup smart account connector:', error)
@@ -90,7 +114,8 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
     }
 
     setupSmartAccountConnector()
-  }, [config, connectors, getClientForChain, id, isReady, reconnect])
+    // @ts-ignore
+  }, [config, connectors, getClientForChain, id, isReady, reconnect, forceEmbeddedWallet])
 
   // Return state for other components to use
   return {
@@ -100,20 +125,18 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
 }
 
 class SmartWalletEIP1193Provider extends EventEmitter {
-  private smartWalletClient: SmartWalletClientType
+  private smartWalletClient: any
 
-  private readonly getClientForChain: (params: { id: number }) => Promise<SmartWalletClientType | undefined>
+  private readonly getClientForChain: (params: { id: number }) => Promise<any>
 
-  constructor(
-    client: SmartWalletClientType,
-    getClientForChain: (params: { id: number }) => Promise<SmartWalletClientType | undefined>,
-  ) {
+  constructor(client: any, getClientForChain: (params: { id: number }) => Promise<any>) {
     super()
     this.smartWalletClient = client
     this.getClientForChain = getClientForChain
   }
 
-  async request({ method, params = [] }: EIP1193Parameters): ReturnType<EIP1193RequestFn> {
+  async request(args: any): Promise<any> {
+    const { method, params = [] } = args
     switch (method) {
       case 'eth_requestAccounts':
       case 'eth_accounts':
@@ -143,7 +166,7 @@ class SmartWalletEIP1193Provider extends EventEmitter {
         return null
       }
       default:
-        return this.smartWalletClient?.transport.request({ method, params })
+        return this.smartWalletClient?.transport.request({ method, params } as any)
     }
   }
 
