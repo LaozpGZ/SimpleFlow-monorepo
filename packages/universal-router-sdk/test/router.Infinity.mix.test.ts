@@ -239,8 +239,10 @@ describe('PancakeSwap Universal Mixed Router Command Generation Test', () => {
       const options = swapOptions({})
       const { calldata, value } = PancakeSwapUniversalRouter.swapERC20CallParameters(trade, options)
       const minAmountOut = SmartRouter.minimumAmountOut(trade, options.slippageTolerance).quotient
+      const maximumAmountIn = SmartRouter.maximumAmountIn(trade, options.slippageTolerance).quotient
 
       expect(BigInt(value)).toEqual(0n)
+      expect(calldata).toMatchSnapshot()
       expect(calldata).toMatchSnapshot()
 
       const decodedCommands = decodeUniversalCalldata(calldata)
@@ -278,7 +280,7 @@ describe('PancakeSwap Universal Mixed Router Command Generation Test', () => {
       expect(decodedCommands[2].args[4].value).toEqual(false)
     })
 
-    it('should encode CAKE->USDC through mixed swaps Infinity(ETH-CAKE) -> v3(WETH-USDC) payerIsUser=false', async () => {
+    it('label: should encode CAKE->USDC through mixed swaps Infinity(ETH-CAKE) -> v3(WETH-USDC) payerIsUser=false', async () => {
       const inputAmount = CurrencyAmount.fromRawAmount(CAKE, 50n)
       const outputAmount = CurrencyAmount.fromRawAmount(USDC, 10000n)
       const trade = await buildMixedRouteTradeInfinity(inputAmount, outputAmount, TradeType.EXACT_INPUT, [
@@ -294,6 +296,7 @@ describe('PancakeSwap Universal Mixed Router Command Generation Test', () => {
       const maximumAmountIn = SmartRouter.maximumAmountIn(trade, options.slippageTolerance).quotient
 
       expect(BigInt(value)).toEqual(0n)
+      expect(calldata).toMatchSnapshot()
       expect(calldata).toMatchSnapshot()
 
       const decodedCommands = decodeUniversalCalldata(calldata)
