@@ -280,7 +280,7 @@ describe('PancakeSwap Universal Mixed Router Command Generation Test', () => {
       expect(decodedCommands[2].args[4].value).toEqual(false)
     })
 
-    it('label: should encode CAKE->USDC through mixed swaps Infinity(ETH-CAKE) -> v3(WETH-USDC) payerIsUser=false', async () => {
+    it('should encode CAKE->USDC through mixed swaps Infinity(ETH-CAKE) -> v3(WETH-USDC) payerIsUser=false', async () => {
       const inputAmount = CurrencyAmount.fromRawAmount(CAKE, 50n)
       const outputAmount = CurrencyAmount.fromRawAmount(USDC, 10000n)
       const trade = await buildMixedRouteTradeInfinity(inputAmount, outputAmount, TradeType.EXACT_INPUT, [

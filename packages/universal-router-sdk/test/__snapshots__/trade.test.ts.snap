@@ -276,6 +276,96 @@ exports[`PancakeSwap StableSwap Through Universal Router, BSC Network Only > mix
 ]
 `;
 
+exports[`PancakeSwap StableSwap Through Universal Router, BSC Network Only > mixed > should encodes a mixed exactInput USDT-stable->USDC-v3->BNB swap 1`] = `
+[
+  {
+    "command": "STABLE_SWAP_EXACT_IN",
+    "args": [
+      {
+        "type": "address",
+        "name": "recipient",
+        "value": "0x0000000000000000000000000000000000000002"
+      },
+      {
+        "type": "uint256",
+        "name": "amountIn",
+        "value": "1000000000"
+      },
+      {
+        "type": "uint256",
+        "name": "amountOutMin",
+        "value": "0"
+      },
+      {
+        "type": "address[]",
+        "name": "path",
+        "value": [
+          "0x55d398326f99059fF775485246999027B3197955",
+          "0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d"
+        ]
+      },
+      {
+        "type": "uint256[]",
+        "name": "flag",
+        "value": [
+          "2"
+        ]
+      },
+      {
+        "type": "bool",
+        "name": "payerIsUser",
+        "value": true
+      }
+    ]
+  },
+  {
+    "command": "V3_SWAP_EXACT_IN",
+    "args": [
+      {
+        "type": "address",
+        "name": "recipient",
+        "value": "0x0000000000000000000000000000000000000002"
+      },
+      {
+        "type": "uint256",
+        "name": "amountIn",
+        "value": "57896044618658097711785492504343953926634992332820282019728792003956564819968"
+      },
+      {
+        "type": "uint256",
+        "name": "amountOutMin",
+        "value": "949904999"
+      },
+      {
+        "type": "bytes",
+        "name": "path",
+        "value": "0x8ac76a51cc950d9822d68b83fe1ad97b32cd580d0009c4bb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c"
+      },
+      {
+        "type": "bool",
+        "name": "payerIsUser",
+        "value": false
+      }
+    ]
+  },
+  {
+    "command": "UNWRAP_WETH",
+    "args": [
+      {
+        "type": "address",
+        "name": "recipient",
+        "value": "0x0000000000000000000000000000000000000001"
+      },
+      {
+        "type": "uint256",
+        "name": "amountMin",
+        "value": "949904999"
+      }
+    ]
+  }
+]
+`;
+
 exports[`PancakeSwap StableSwap Through Universal Router, BSC Network Only > multi-route > should encode a multi-route exactInput v2 USDT-USDC & v3 USDT-USDC & stable USDT-USDC 1`] = `
 [
   {
