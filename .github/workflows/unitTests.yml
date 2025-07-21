@@ -28,4 +28,9 @@ jobs:
         uses: './.github/actions/install-deps'
 
       - name: Run tests
-        run: pnpm test:ci
+        run: |
+          if git diff --name-only HEAD^1 | grep -q '^apps/web/'; then
+          pnpm test:ci
+          else
+          pnpm turbo run test:translations --filter=web
+          fi
