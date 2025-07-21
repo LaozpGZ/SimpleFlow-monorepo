@@ -5,7 +5,7 @@ import { AutoColumn, AutoRow, Button, Card, CardBody, CardProps, Column, Flex, T
 import BigNumber from 'bignumber.js'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { PERSIST_CHAIN_KEY } from 'config/constants'
-import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
+import { DISABLED_ADD_LIQUIDITY_CHAINS, getAddInfinityLiquidityURL } from 'config/constants/liquidity'
 import { useMemo } from 'react'
 import { useStableSwapPairsByChainId } from 'state/farmsV4/state/accountPositions/hooks'
 import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
@@ -136,7 +136,12 @@ export const PoolStatus: React.FC<PoolStatusProps> = ({ poolInfo, ...props }) =>
               </Text>
             </Column>
           </AutoColumn>
-          <Button as="a" href={addLiquidityLink} width="100%">
+          <Button
+            as="a"
+            href={addLiquidityLink}
+            width="100%"
+            disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(poolInfo.chainId)}
+          >
             {t('Add Liquidity')}
           </Button>
         </Flex>
