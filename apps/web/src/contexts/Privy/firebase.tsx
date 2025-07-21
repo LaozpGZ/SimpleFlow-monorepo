@@ -46,8 +46,16 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       const googleProvider = new GoogleAuthProvider()
       const res = await signInWithPopup(auth, googleProvider)
       return res
-    } catch (err) {
-      alert(err)
+    } catch (err: any) {
+      // Handle popup cancellation gracefully
+      if (err?.code === 'auth/cancelled-popup-request' || err?.code === 'auth/popup-closed-by-user') {
+        console.log('Google login popup was cancelled by user')
+        // Don't show alert for user cancellation, just throw silently
+        throw new Error('LOGIN_CANCELLED')
+      }
+      // For other errors, still show alert
+      console.error('Google login error:', err)
+      alert(`Google login failed: ${err?.message || err}`)
       throw err
     }
   }
@@ -58,8 +66,16 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       const twitterProvider = new TwitterAuthProvider()
       const res = await signInWithPopup(auth, twitterProvider)
       return res
-    } catch (err) {
-      alert(err)
+    } catch (err: any) {
+      // Handle popup cancellation gracefully
+      if (err?.code === 'auth/cancelled-popup-request' || err?.code === 'auth/popup-closed-by-user') {
+        console.log('X login popup was cancelled by user')
+        // Don't show alert for user cancellation, just throw silently
+        throw new Error('LOGIN_CANCELLED')
+      }
+      // For other errors, still show alert
+      console.error('X login error:', err)
+      alert(`X login failed: ${err?.message || err}`)
       throw err
     }
   }
@@ -71,8 +87,14 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       const loginRes = await signInWithGoogle()
       const idToken = await loginRes.user.getIdToken(true)
       setToken(idToken)
-    } catch (err) {
-      console.error(err)
+    } catch (err: any) {
+      // Handle cancelled login silently
+      if (err?.message === 'LOGIN_CANCELLED') {
+        console.log('Google login was cancelled by user')
+        setPrivySocialLogin(false)
+        return
+      }
+      console.error('Google login error:', err)
     } finally {
       setLoading(false)
     }
@@ -85,8 +107,14 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       const loginRes = await signInWithX()
       const idToken = await loginRes.user.getIdToken(true)
       setToken(idToken)
-    } catch (err) {
-      console.error(err)
+    } catch (err: any) {
+      // Handle cancelled login silently
+      if (err?.message === 'LOGIN_CANCELLED') {
+        console.log('X login was cancelled by user')
+        setPrivySocialLogin(false)
+        return
+      }
+      console.error('X login error:', err)
     } finally {
       setLoading(false)
     }
