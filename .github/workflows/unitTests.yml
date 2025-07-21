@@ -29,8 +29,7 @@ jobs:
 
       - name: Run tests
         run: |
-          if git diff --name-only HEAD^1 | grep -q '^apps/web/'; then
           pnpm test:ci
-          else
-          pnpm turbo run test:translations --filter=web
+          if git diff --name-only HEAD^1 | grep -q '^apps/' && ! git diff --name-only HEAD^1 | grep -q '^apps/web/'; then
+            pnpm turbo run test:translations --filter=web
           fi
