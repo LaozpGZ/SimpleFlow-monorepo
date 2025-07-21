@@ -16,6 +16,7 @@ import { getPercentChange } from 'utils/infoDataHelpers'
 import { isInfinityProtocol } from 'utils/protocols'
 import { Address } from 'viem'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { ChangePercent } from './ChangePercent'
 import { PoolTokens } from './PoolTokens'
 
@@ -136,14 +137,11 @@ export const PoolStatus: React.FC<PoolStatusProps> = ({ poolInfo, ...props }) =>
               </Text>
             </Column>
           </AutoColumn>
-          <Button
-            as="a"
-            href={addLiquidityLink}
-            width="100%"
-            disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(poolInfo.chainId)}
-          >
-            {t('Add Liquidity')}
-          </Button>
+          <NextLinkFromReactRouter to={addLiquidityLink}>
+            <Button width="100%" disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(poolInfo.chainId)}>
+              {t('Add Liquidity')}
+            </Button>
+          </NextLinkFromReactRouter>
         </Flex>
       </CardBody>
     </Card>
