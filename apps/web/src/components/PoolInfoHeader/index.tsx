@@ -296,7 +296,7 @@ export const PoolInfoHeader = ({
               <Box padding="8px 16px">
                 <AutoColumn rowGap="2px">
                   <FlexGap>
-                    <Text fontSize={12} bold color="textSubtle" textTransform="uppercase">
+                    <Text fontSize={12} bold color="textSubtle" textTransform="uppercase" width="max-content">
                       {t('Est. APR')}
                     </Text>
                     {overrideAprDisplay?.roiCalculator ||

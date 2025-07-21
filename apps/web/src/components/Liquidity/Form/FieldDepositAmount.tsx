@@ -126,60 +126,6 @@ export const FieldDepositAmount: React.FC<FieldDepositAmountProps> = ({
           }
           disableCurrencySelect
         />
-        {/* <CurrencyInputPanelV2
-          id="infinity-add-liquidity-input-base-currency"
-          chainId={chainId}
-          onUserInput={handleUserInputBaseCurrency}
-          value={
-            isDepositEnabled
-              ? isDepositBaseEnabled
-                ? inputValueBase ?? ''
-                : addOnly
-                ? t('The price range is outside current pool price')
-                : t('The starting price is outside the specified price range')
-              : addOnly
-              ? t('Set price range first')
-              : t('Set starting price and price range first')
-          }
-          currency={baseCurrency}
-          onPercentInput={(percent) =>
-            handleUserInputBaseCurrency(maxAmountBase?.multiply(new Percent(percent, 100))?.toExact() ?? '')
-          }
-          maxAmount={maxAmountBase}
-          onMax={() => handleUserInputBaseCurrency(maxAmountBase?.toExact() ?? '')}
-          showUSDPrice
-          showMaxButton
-          showQuickInputButton
-          disableCurrencySelect
-          disabled={!isDepositEnabled || !isDepositBaseEnabled}
-        />
-        <CurrencyInputPanelV2
-          id="infinity-add-liquidity-input-quote-currency"
-          chainId={chainId}
-          onUserInput={handleUserInputQuoteCurrency}
-          value={
-            isDepositEnabled
-              ? isDepositQuoteEnabled
-                ? inputValueQuote ?? ''
-                : addOnly
-                ? t('The price range is outside current pool price')
-                : t('The starting price is outside the specified price range')
-              : addOnly
-              ? t('Set price range first')
-              : t('Set starting price and price range first')
-          }
-          currency={quoteCurrency}
-          onPercentInput={(percent) =>
-            handleUserInputQuoteCurrency(maxAmountQuote?.multiply(new Percent(percent, 100))?.toExact() ?? '')
-          }
-          maxAmount={maxAmountQuote}
-          onMax={() => handleUserInputQuoteCurrency(maxAmountQuote?.toExact() ?? '')}
-          showUSDPrice
-          showMaxButton
-          showQuickInputButton
-          disableCurrencySelect
-          disabled={!isDepositEnabled || !isDepositQuoteEnabled}
-        /> */}
       </AutoColumn>
     </Box>
   )

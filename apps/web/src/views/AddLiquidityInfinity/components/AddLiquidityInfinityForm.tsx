@@ -23,7 +23,6 @@ export const AddLiquidityInfinityForm = () => {
         <CardBody>
           {poolType === 'CL' && <CLPriceRangePanel />}
           {poolType === 'Bin' && <BinPriceRangePanel />}
-          <SubmitButton />
         </CardBody>
       </StyledCard>
 

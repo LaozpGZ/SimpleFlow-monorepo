@@ -1,4 +1,4 @@
-import { Card, CardBody } from '@pancakeswap/uikit'
+import { Box, Card, CardBody, Column, Row, RowBetween, Text } from '@pancakeswap/uikit'
 import { useCurrencyByPoolId } from 'hooks/infinity/useCurrencyByPoolId'
 import { useMemo } from 'react'
 import { useInverted } from 'state/infinity/shared'
@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { Address } from 'viem'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { FieldAddDepositAmount } from './FieldAddDepositAmount'
+import { SubmitButton } from './SubmitButton'
 
 const StyledCard = styled(Card)`
   height: fit-content;
@@ -27,7 +28,11 @@ export const InfinityDepositPanel = ({ poolId, chainId }: InfinityDepositPanelPr
     <StyledCard>
       <CardBody>
         <FieldAddDepositAmount baseCurrency={currency0} quoteCurrency={currency1} />
-        <MevProtectToggle size="sm" />
+
+        <Box mt="16px">
+          <MevProtectToggle size="sm" />
+        </Box>
+        <SubmitButton mt="16px" />
       </CardBody>
     </StyledCard>
   )
