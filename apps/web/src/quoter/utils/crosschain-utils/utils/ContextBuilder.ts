@@ -87,8 +87,12 @@ export class ContextBuilder {
             infinitySwap,
             // Disable xSwap is not supported for cross chain swap
             xEnabled: false,
-
             ...swapOption,
+          }
+
+          // Only support swap to bridge for bsc chain
+          if (customSwapOption.infinitySwap && customSwapOption.baseCurrency?.chainId !== ChainId.BSC) {
+            customSwapOption.infinitySwap = false
           }
 
           const quoteQuery = createQuoteQuery(customSwapOption)
