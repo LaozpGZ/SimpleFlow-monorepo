@@ -430,6 +430,7 @@ describe('PancakeSwap Universal Router Infinity-Cl Pool Command Generation Test'
 
       const options = swapOptions({})
       const { calldata, value } = PancakeSwapUniversalRouter.swapERC20CallParameters(trade, options)
+      expect(calldata).toMatchSnapshot()
       const maxIn = SmartRouter.maximumAmountIn(trade, options.slippageTolerance).quotient
 
       expect(BigInt(value)).toEqual(0n)
