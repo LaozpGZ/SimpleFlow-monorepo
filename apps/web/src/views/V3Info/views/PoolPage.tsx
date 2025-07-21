@@ -234,7 +234,11 @@ const PoolPage: React.FC<{ address: string }> = ({ address }) => {
                     CHAIN_QUERY_NAME[multiChainId[chainName]]
                   }`}
                 >
-                  <Button mr="8px" variant="secondary" disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)}>
+                  <Button
+                    mr="8px"
+                    variant="secondary"
+                    disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(multiChainId[chainName])}
+                  >
                     {t('Add Liquidity')}
                   </Button>
                 </NextLinkFromReactRouter>

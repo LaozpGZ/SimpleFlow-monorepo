@@ -607,7 +607,10 @@ export const LiquidityView = () => {
                       to={`/increase/${currencyId(currencyBase)}/${currencyId(currencyQuote)}/${feeAmount}/${tokenId}`}
                     >
                       <Button
-                        disabled={!isOwnNFT || Boolean(chainId && DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId))}
+                        disabled={
+                          !isOwnNFT ||
+                          Boolean(poolInfo?.chainId && DISABLED_ADD_LIQUIDITY_CHAINS.includes(poolInfo?.chainId))
+                        }
                         width="100%"
                       >
                         {t('Add')}
@@ -631,7 +634,10 @@ export const LiquidityView = () => {
                     to={`/increase/${currencyId(currencyBase)}/${currencyId(currencyQuote)}/${feeAmount}/${tokenId}`}
                   >
                     <Button
-                      disabled={!isOwnNFT || Boolean(chainId && DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId))}
+                      disabled={
+                        !isOwnNFT ||
+                        Boolean(poolInfo?.chainId && DISABLED_ADD_LIQUIDITY_CHAINS.includes(poolInfo?.chainId))
+                      }
                       width="100%"
                       mb="8px"
                     >
