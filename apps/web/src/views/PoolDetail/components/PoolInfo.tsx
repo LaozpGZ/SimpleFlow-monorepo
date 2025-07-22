@@ -33,12 +33,9 @@ import {
 } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { MiniUniversalFarmsOverlay } from 'components/MiniUniversalFarms/MiniUniversalFarmsOverlay'
-import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { NextSeo } from 'next-seo'
-import { $path } from 'next-typesafe-url'
-import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { InfinityPoolInfo, PoolInfo as PoolInfoType } from 'state/farmsV4/state/type'
 import { useChainIdByQuery } from 'state/info/hooks'
@@ -79,7 +76,6 @@ export const PoolInfo = () => {
   const { t } = useTranslation()
   const { isMobile, isMd } = useMatchBreakpoints()
   const { poolSymbol } = usePoolSymbol()
-  const router = useRouter()
 
   const poolInfo = usePoolInfoByQuery()
 
@@ -131,24 +127,7 @@ export const PoolInfo = () => {
               width="100%"
             >
               <Box>
-                <MiniUniversalFarmsOverlay
-                  onPoolClick={(pool) => {
-                    router.push(
-                      $path({
-                        route: '/liquidity/pool/[chainName]/[id]',
-                        // @ts-ignore
-                        routeParams: {
-                          chainName: CHAIN_QUERY_NAME[pool.chainId],
-                          id:
-                            pool.protocol === Protocol.STABLE
-                              ? // @ts-ignore
-                                pool.farm?.id || pool.farm?.pool!.address
-                              : pool.lpAddress,
-                        },
-                      }),
-                    )
-                  }}
-                />
+                <MiniUniversalFarmsOverlay linkType="poolDetail" />
               </Box>
               <FlexGap flexDirection="column" gap="16px">
                 <FlexGap

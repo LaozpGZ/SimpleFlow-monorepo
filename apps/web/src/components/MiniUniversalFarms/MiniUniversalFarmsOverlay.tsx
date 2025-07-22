@@ -16,6 +16,8 @@ import styled from 'styled-components'
 
 import dynamic from 'next/dynamic'
 import { PoolInfo } from 'state/farmsV4/state/type'
+import { useRouter } from 'next/router'
+import { getPoolAddLiquidityLink, getPoolDetailPageLink } from 'utils/getPoolLink'
 
 const SearchButton = styled(IconButton).attrs({ variant: 'primary60' })`
   background-color: ${({ theme }) => theme.colors.input};
@@ -32,13 +34,16 @@ const MiniUniversalFarms = dynamic(() => import('./index').then((mod) => mod.Min
   ssr: false,
 })
 
+export type LinkType = 'poolDetail' | 'addLiquidity'
+
 interface MiniUniversalFarmsOverlayProps {
   children?: React.ReactNode
-  onPoolClick?: (pool: PoolInfo) => void
+  linkType?: LinkType
 }
 
-export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps> = ({ children, onPoolClick }) => {
+export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps> = ({ children, linkType }) => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { isMobile, isTablet } = useMatchBreakpoints()
   const isSmallScreen = isMobile || isTablet
 
@@ -49,6 +54,17 @@ export const MiniUniversalFarmsOverlay: React.FC<MiniUniversalFarmsOverlayProps>
       modalV2Props.onOpen()
     }
   }, [isSmallScreen, modalV2Props])
+
+  const onPoolClick = useCallback(
+    async (pool: PoolInfo) => {
+      if (linkType === 'addLiquidity') {
+        router.push(getPoolAddLiquidityLink(pool))
+      } else {
+        router.push(await getPoolDetailPageLink(pool))
+      }
+    },
+    [linkType, router],
+  )
 
   const triggerButton = useMemo(() => {
     return (

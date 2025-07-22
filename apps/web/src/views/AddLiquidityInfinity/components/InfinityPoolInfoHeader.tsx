@@ -1,6 +1,5 @@
 import { Protocol } from '@pancakeswap/farms'
 import { PoolInfoHeader } from 'components/PoolInfoHeader'
-import { getAddInfinityLiquidityURL } from 'config/constants/liquidity'
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
 import { useCurrencyByPoolId } from 'hooks/infinity/useCurrencyByPoolId'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
@@ -46,10 +45,7 @@ export const InfinityPoolInfoHeader = () => {
         isInverted={Boolean(inverted)}
         onInvertPrices={() => setInverted(!inverted)}
         hookData={hookData}
-        onOverlayPoolClick={(pool) => {
-          // TODO: Update to account for all protocol's add liquidity pages
-          router.push(getAddInfinityLiquidityURL({ chainId: pool.chainId, poolId: pool.lpAddress }))
-        }}
+        linkType="addLiquidity"
         overrideAprDisplay={{
           aprDisplay: poolInfo ? (
             poolInfo.protocol === Protocol.InfinityCLAMM ? (

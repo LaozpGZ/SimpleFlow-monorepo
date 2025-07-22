@@ -22,7 +22,7 @@ import {
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { CurrencyLogo, DoubleCurrencyLogo, FeeTierTooltip, Liquidity } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
-import { MiniUniversalFarmsOverlay } from 'components/MiniUniversalFarms/MiniUniversalFarmsOverlay'
+import { LinkType, MiniUniversalFarmsOverlay } from 'components/MiniUniversalFarms/MiniUniversalFarmsOverlay'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { getBlockExploreLink } from 'utils'
 import { isInfinityProtocol } from 'utils/protocols'
@@ -45,8 +45,8 @@ interface PoolInfoHeaderProps {
     aprDisplay?: React.ReactNode
     roiCalculator?: React.ReactNode
   }
+  linkType?: LinkType
   onInvertPrices?: () => void
-  onOverlayPoolClick?: (pool: PoolInfo) => void
 }
 export const PoolInfoHeader = ({
   poolInfo,
@@ -59,8 +59,8 @@ export const PoolInfoHeader = ({
   hookData,
   isInverted,
   onInvertPrices,
-  onOverlayPoolClick,
   overrideAprDisplay,
+  linkType,
 }: PoolInfoHeaderProps) => {
   const { t } = useTranslation()
 
@@ -86,7 +86,7 @@ export const PoolInfoHeader = ({
               width="100%"
             >
               <Box>
-                <MiniUniversalFarmsOverlay onPoolClick={onOverlayPoolClick} />
+                <MiniUniversalFarmsOverlay linkType={linkType} />
               </Box>
               <FlexGap flexDirection="column" gap="16px">
                 <FlexGap
