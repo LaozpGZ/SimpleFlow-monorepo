@@ -10,7 +10,6 @@ import { FixedSizeList } from 'react-window'
 import { styled } from 'styled-components'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
-import { useAccount } from 'wagmi'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { ChainId, Currency, CurrencyAmount, Token, UnifiedCurrency } from '@pancakeswap/sdk'
@@ -19,6 +18,8 @@ import { ArrowForwardIcon, AutoColumn, Column, CopyButton, FlexGap, QuestionHelp
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useUnifiedTokenUsdPrice } from 'hooks/useUnifiedTokenUsdPrice'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { NonEVMChainId } from '@pancakeswap/chains'
 
 import { useIsUserAddedToken } from '../../hooks/Tokens'
 import { useCombinedActiveList } from '../../state/lists/hooks'
@@ -46,7 +47,7 @@ const FixedContentRow = styled.div`
   align-items: center;
 `
 
-function Balance({ balance }: { balance: CurrencyAmount<Currency> }) {
+function Balance({ balance }: { balance: CurrencyAmount<UnifiedCurrency> }) {
   return (
     <StyledBalanceText title={balance.toExact()} bold>
       {formatAmount(balance, 4)}
@@ -162,7 +163,7 @@ function CurrencyRow({
   style: CSSProperties
   showChainLogo?: boolean
 }) {
-  const { address: account } = useAccount()
+  const { account: evmAccount, solanaAccount } = useAccountActiveChain()
   const { t } = useTranslation()
   const key = currencyKey(currency)
   const selectedTokenList = useCombinedActiveList()
@@ -170,12 +171,18 @@ function CurrencyRow({
   const customAdded = useIsUserAddedToken(currency)
   const [isHovered, setIsHovered] = useState(false)
 
-  const displayBalance = useUnifiedCurrencyBalance(currency)
-  const currencyUsdPrice = useUnifiedTokenUsdPrice(currency, Boolean(displayBalance && displayBalance.amount))
+  const balanceAmount = useUnifiedCurrencyBalance(currency)
+  const currencyUsdPrice = useUnifiedTokenUsdPrice(currency, Boolean(balanceAmount && balanceAmount.amount))
   const balanceUSD = useMemo(() => {
-    if (!displayBalance || !currencyUsdPrice.data) return undefined
-    return new BN(displayBalance.amount).times(currencyUsdPrice.data).toFixed(2)
-  }, [displayBalance, currencyUsdPrice])
+    if (!balanceAmount || !currencyUsdPrice.data) return undefined
+    return new BN(balanceAmount.amount.toExact()).times(currencyUsdPrice.data).toFixed(2)
+  }, [balanceAmount, currencyUsdPrice])
+
+  const isConnected = useMemo(
+    () =>
+      currency.chainId in ChainId ? evmAccount : currency.chainId === NonEVMChainId.SOLANA ? solanaAccount : evmAccount,
+    [evmAccount, solanaAccount, currency.chainId],
+  )
 
   const setIsHoveredCallback = useCallback(() => {
     setIsHovered(true)
@@ -207,9 +214,9 @@ function CurrencyRow({
           </Text>
         </Column>
         <RowFixed style={{ justifySelf: 'flex-end' }}>
-          {displayBalance && !displayBalance.raw?.isZero() ? (
+          {balanceAmount ? (
             <AutoColumn justify="flex-end">
-              <Text>{displayBalance.amount}</Text>
+              <Balance balance={balanceAmount.amount} />
               <div>
                 {balanceUSD && Number(balanceUSD) > 0 && (
                   <Text color="textSubtle" small ellipsis maxWidth="200px">
@@ -218,7 +225,7 @@ function CurrencyRow({
                 )}
               </div>
             </AutoColumn>
-          ) : account ? (
+          ) : isConnected ? (
             <CircleLoader />
           ) : (
             <ArrowForwardIcon />

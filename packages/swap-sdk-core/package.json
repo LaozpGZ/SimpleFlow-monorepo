@@ -33,6 +33,7 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
+    "@pancakeswap/chains": "workspace:*",
     "@solana/spl-token": "0.4.8",
     "@solana/web3.js": "~1.95.3",
     "big.js": "^5.2.2",

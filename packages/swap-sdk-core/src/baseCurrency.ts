@@ -5,10 +5,7 @@ import invariant from 'tiny-invariant'
 /**
  * A currency is any fungible financial instrument, including Ether, all ERC20 tokens, and other chain-native currencies
  */
-export abstract class BaseCurrency<
-  T extends BaseCurrency<any, any> = BaseCurrency<any, any>,
-  U extends BaseCurrency<any, any> = BaseCurrency<any, any>
-> {
+export abstract class BaseCurrency<T extends BaseCurrency<any> = BaseCurrency<any>> {
   /**
    * Returns whether the currency is native to the chain and must be wrapped (e.g. Ether)
    */
@@ -61,7 +58,7 @@ export abstract class BaseCurrency<
    * Returns whether this currency is functionally equivalent to the other currency
    * @param other the other currency
    */
-  public abstract equals(other: U): boolean
+  public abstract equals(other: BaseCurrency<any>): boolean
 
   /**
    * Return the wrapped version of this currency that can be used with the PancakeSwap contracts. Currencies must

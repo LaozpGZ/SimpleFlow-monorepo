@@ -1,7 +1,13 @@
+import { useEffect, useMemo, useState } from 'react'
+
+import { useAtomValue, useSetAtom } from 'jotai'
+import { solanaTokenListAtom } from 'state/token/solanaTokenAtoms'
+
 import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { SPLToken } from '@pancakeswap/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
-import { useMemo, useState } from 'react'
+import { NonEVMChainId } from '@pancakeswap/chains'
+import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
 
 const PCS_TOKEN_LIST_URL = 'https://tokens.pancakeswap.finance/pancakeswap-solana-default.json'
 const RAYDIUM_TOKEN_LIST_URL = 'https://api-v3.raydium.io/mint/list'
@@ -22,8 +28,10 @@ function saveUserAddedTokens(tokens: TokenInfo[]) {
 
 export function useSolanaTokenList() {
   const [userTokens, setUserTokens] = useState<TokenInfo[]>(getUserAddedTokens())
+  const setTokenList = useSetAtom(solanaTokenListAtom)
+  const tokenList = useAtomValue(solanaTokenListAtom)
 
-  // PCS
+  // Fetch PCS token list
   const pcsQuery = useQuery({
     queryKey: ['solana-pcs-list'],
     queryFn: async () => {
@@ -37,7 +45,7 @@ export function useSolanaTokenList() {
     refetchOnReconnect: false,
   })
 
-  // Raydium
+  // Fetch Raydium token list
   const raydiumQuery = useQuery({
     queryKey: ['solana-raydium-list'],
     queryFn: async () => {
@@ -55,7 +63,7 @@ export function useSolanaTokenList() {
     refetchOnReconnect: false,
   })
 
-  // Jupiter
+  // Fetch Jupiter token list
   const jupiterQuery = useQuery({
     queryKey: ['solana-jupiter-list'],
     queryFn: async () => {
@@ -69,39 +77,44 @@ export function useSolanaTokenList() {
     refetchOnReconnect: false,
   })
 
-  // Merge tokens as soon as any list is available
-  const tokenList = useMemo(() => {
-    const tokenMap = new Map<string, SPLToken>()
-    const addToken = (token: TokenInfo, type: string, priority: number, blacklist: string[] = []) => {
+  // Helper to merge and deduplicate tokens
+  const mergedTokens = useMemo(() => {
+    const addresses = new Set<string>()
+    const tokens: SPLToken[] = []
+    const addToken = (token: TokenInfo, blacklist: string[] = []) => {
       if (blacklist.includes(token.address)) return
-      if (tokenMap.has(token.address)) return
-      tokenMap.set(token.address, new SPLToken(token))
+      if (addresses.has(token.address)) return
+      addresses.add(token.address)
+      tokens.push(
+        new SPLToken({
+          ...token,
+          chainId: NonEVMChainId.SOLANA,
+          programId:
+            token.programId ??
+            (token.tags?.includes('token-2022') ? TOKEN_2022_PROGRAM_ID.toBase58() : TOKEN_PROGRAM_ID.toBase58()),
+        }),
+      )
     }
-
-    // Raydium tokens (with blacklist/whitelist)
     if (raydiumQuery.data) {
-      for (const t of raydiumQuery.data.tokens) addToken(t, 'raydium', 2, raydiumQuery.data.blacklist)
-      // Always add SOL if present
+      for (const t of raydiumQuery.data.tokens) addToken(t, raydiumQuery.data.blacklist)
       const solToken = raydiumQuery.data.tokens.find((t) => t.symbol === 'SOL')
-      if (solToken) addToken(solToken, 'raydium', 2, raydiumQuery.data.blacklist)
+      if (solToken) addToken(solToken, raydiumQuery.data.blacklist)
     }
-
-    // PCS tokens
-    if (pcsQuery.data) for (const t of pcsQuery.data) addToken(t, 'pcs', 3)
-
-    // Jupiter tokens
-    if (jupiterQuery.data) for (const t of jupiterQuery.data) addToken(t, 'jupiter', 1)
-
-    // User-added tokens
-    for (const t of userTokens) addToken(t, 'extra', 1)
-
-    return Array.from(tokenMap.values())
+    if (pcsQuery.data) for (const t of pcsQuery.data) addToken(t)
+    if (jupiterQuery.data) for (const t of jupiterQuery.data) addToken(t)
+    for (const t of userTokens) addToken(t)
+    return tokens
   }, [pcsQuery.data, raydiumQuery.data, jupiterQuery.data, userTokens])
 
-  // Loading state: true if all queries are still loading
-  const loading = pcsQuery.isLoading && raydiumQuery.isLoading && jupiterQuery.isLoading
+  // Store the token list in atom and atom family after fetched
+  useEffect(() => {
+    setTokenList(mergedTokens)
+  }, [mergedTokens, setTokenList])
 
-  // Add/remove user tokens as before
+  // Loading state: true if any query is still loading
+  const loading = pcsQuery.isLoading || raydiumQuery.isLoading || jupiterQuery.isLoading
+
+  // Add a user token and persist
   const addUserToken = (token: TokenInfo) => {
     setUserTokens((prev) => {
       const next = prev.some((t) => t.address === token.address) ? prev : [...prev, token]
@@ -109,6 +122,8 @@ export function useSolanaTokenList() {
       return next
     })
   }
+
+  // Remove a user token and persist
   const removeUserToken = (address: string) => {
     setUserTokens((prev) => {
       const next = prev.filter((t) => t.address !== address)

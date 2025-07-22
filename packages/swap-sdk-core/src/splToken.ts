@@ -1,6 +1,7 @@
 import invariant from 'tiny-invariant'
 import { BaseCurrency } from './baseCurrency'
 import { SOL_INFO } from './solana/const'
+import { type UnifiedCurrency } from './currency'
 
 export interface SerializedSPLToken {
   chainId: number
@@ -24,9 +25,15 @@ export class SPLToken extends BaseCurrency<SPLToken> {
 
   public readonly programId: string
 
+  public readonly logoURI: string
+
   public readonly projectLink?: string
 
   public static readonly SOL: SPLToken = new SPLToken({ ...SOL_INFO, isNative: true })
+
+  public static isSPLToken(token: UnifiedCurrency) {
+    return 'programId' in token
+  }
 
   public constructor({
     chainId,
@@ -34,6 +41,7 @@ export class SPLToken extends BaseCurrency<SPLToken> {
     address,
     decimals,
     symbol,
+    logoURI,
     name,
     projectLink,
   }: {
@@ -42,6 +50,7 @@ export class SPLToken extends BaseCurrency<SPLToken> {
     address: string
     decimals: number
     symbol: string
+    logoURI: string
     name?: string
     projectLink?: string
     isNative?: boolean
@@ -49,6 +58,7 @@ export class SPLToken extends BaseCurrency<SPLToken> {
     super(chainId, decimals, symbol, name)
     this.address = address
     this.programId = programId
+    this.logoURI = logoURI
     this.projectLink = projectLink
   }
 
@@ -56,8 +66,12 @@ export class SPLToken extends BaseCurrency<SPLToken> {
    * Returns true if the two tokens are equivalent, i.e. have the same chainId and programId.
    * @param other other token to compare
    */
-  public equals(other: SPLToken): boolean {
-    return 'programId' in other && this.chainId === other.chainId && this.programId === (other as SPLToken).programId
+  public equals(other: BaseCurrency): boolean {
+    return (
+      'programId' in other &&
+      this.chainId === other.chainId &&
+      this.programId === (other as unknown as SPLToken).programId
+    )
   }
 
   public sortsBefore(other: SPLToken): boolean {

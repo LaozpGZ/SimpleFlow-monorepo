@@ -1,11 +1,10 @@
 import { SUGGESTED_BASES } from 'config/constants/exchange'
-import { toCurrencyCompatible } from 'config/constants/types'
 import { useUnifiedNativeCurrency } from 'hooks/useNativeCurrency'
 import { styled } from 'styled-components'
 
 import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { UnifiedCurrency } from '@pancakeswap/sdk'
+import { UnifiedCurrency, UnifiedToken } from '@pancakeswap/sdk'
 import { AutoColumn, QuestionHelper, Text } from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 
@@ -99,15 +98,14 @@ export default function CommonBases({
             </Text>
           </BaseWrapper>
         </ButtonWrapper>
-        {(chainId ? SUGGESTED_BASES[chainId] || [] : []).map((token: UnifiedCurrency) => {
-          const compatToken = toCurrencyCompatible(token)
-          const selected = selectedCurrency?.equals?.(compatToken)
+        {(chainId ? SUGGESTED_BASES[chainId] || [] : []).map((token: UnifiedToken) => {
+          const selected = selectedCurrency?.equals?.(token)
           return (
-            <ButtonWrapper key={`buttonBase#${compatToken.address}`}>
-              <BaseWrapper onClick={() => !selected && onSelect(compatToken)} disable={selected}>
+            <ButtonWrapper key={`buttonBase#${token.address}`}>
+              <BaseWrapper onClick={() => !selected && onSelect(token)} disable={selected}>
                 <CurrencyLogo
                   showChainLogo={supportCrossChain}
-                  currency={compatToken}
+                  currency={token}
                   style={{ borderRadius: '50%' }}
                   containerStyle={{
                     position: 'relative',
@@ -115,7 +113,7 @@ export default function CommonBases({
                   }}
                 />
                 <Text px="4px" color="inherit">
-                  {compatToken.symbol}
+                  {token.symbol}
                 </Text>
               </BaseWrapper>
             </ButtonWrapper>

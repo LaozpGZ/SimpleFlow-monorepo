@@ -2,15 +2,16 @@ import _Big from 'big.js'
 import invariant from 'tiny-invariant'
 // @ts-ignore
 import toFormat from 'toformat'
-import { Currency } from '../currency'
+import { UnifiedCurrency } from '../currency'
 import { Token } from '../token'
 import { Fraction } from './fraction'
 
 import { BigintIsh, MaxUint256, Rounding } from '../constants'
+import { SPLToken } from '../splToken'
 
 const Big = toFormat(_Big)
 
-export class CurrencyAmount<T extends Currency> extends Fraction {
+export class CurrencyAmount<T extends UnifiedCurrency> extends Fraction {
   public readonly currency: T
 
   public readonly decimalScale: bigint
@@ -20,7 +21,7 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
    * @param currency the currency in the amount
    * @param rawAmount the raw token or ether amount
    */
-  public static fromRawAmount<T extends Currency>(currency: T, rawAmount: BigintIsh): CurrencyAmount<T> {
+  public static fromRawAmount<T extends UnifiedCurrency>(currency: T, rawAmount: BigintIsh): CurrencyAmount<T> {
     return new CurrencyAmount(currency, rawAmount)
   }
 
@@ -30,7 +31,7 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
    * @param numerator the numerator of the fractional token amount
    * @param denominator the denominator of the fractional token amount
    */
-  public static fromFractionalAmount<T extends Currency>(
+  public static fromFractionalAmount<T extends UnifiedCurrency>(
     currency: T,
     numerator: BigintIsh,
     denominator: BigintIsh
@@ -46,7 +47,13 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
   }
 
   public add(other: CurrencyAmount<T>): CurrencyAmount<T> {
-    invariant(this.currency.equals(other.currency), 'CURRENCY')
+    if (SPLToken.isSPLToken(this.currency) && SPLToken.isSPLToken(other.currency)) {
+      invariant(this.currency.equals(other.currency), 'CURRENCY')
+    } else if (!SPLToken.isSPLToken(this.currency) && !SPLToken.isSPLToken(other.currency)) {
+      invariant(this.currency.equals(other.currency), 'CURRENCY')
+    } else {
+      throw new Error('Cannot add amounts of different currency types')
+    }
     const added = super.add(other)
     return CurrencyAmount.fromFractionalAmount(this.currency, added.numerator, added.denominator)
   }
@@ -64,7 +71,13 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
       )
     }
 
-    invariant(this.currency.equals(value.currency), 'CURRENCY')
+    if (SPLToken.isSPLToken(this.currency) && SPLToken.isSPLToken(value.currency)) {
+      invariant(this.currency.equals(value.currency), 'CURRENCY')
+    } else if (!SPLToken.isSPLToken(this.currency) && !SPLToken.isSPLToken(value.currency)) {
+      invariant(this.currency.equals(value.currency), 'CURRENCY')
+    } else {
+      throw new Error('Cannot subtract amounts of different currency types')
+    }
     const subtracted = super.subtract(value)
     return CurrencyAmount.fromFractionalAmount(this.currency, subtracted.numerator, subtracted.denominator)
   }

@@ -1,34 +1,24 @@
-import { Token as SolanaToken } from '@pancakeswap/solana-core-sdk'
+import { NonEVMChainId } from '@pancakeswap/chains'
+import { SPLToken, TOKEN_WSOL } from '@pancakeswap/sdk'
 
 export const solanaTokens = {
-  usdc: new SolanaToken({
-    mint: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
-    decimals: 6,
+  usdc: new SPLToken({
+    chainId: NonEVMChainId.SOLANA,
+    address: 'EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v',
+    programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+    logoURI: 'https://img-v1.raydium.io/icon/EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v.png',
     symbol: 'USDC',
     name: 'USD Coin',
-  }),
-  usdt: new SolanaToken({
-    mint: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
     decimals: 6,
+  }),
+  usdt: new SPLToken({
+    chainId: NonEVMChainId.SOLANA,
+    address: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+    programId: 'TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA',
+    logoURI: 'https://img-v1.raydium.io/icon/Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB.png',
     symbol: 'USDT',
-    name: 'Tether USD',
-  }),
-  wsol: new SolanaToken({
-    mint: 'So11111111111111111111111111111111111111112',
-    decimals: 9,
-    symbol: 'WSOL',
-    name: 'Wrapped SOL',
-  }),
-  ray: new SolanaToken({
-    mint: '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R',
+    name: 'USDT',
     decimals: 6,
-    symbol: 'RAY',
-    name: 'Raydium',
   }),
-  msol: new SolanaToken({
-    mint: 'mSoLzYCxHdYgdzU16g5QSh3i5K3z3KZK7ytfqcJm7So',
-    decimals: 9,
-    symbol: 'mSOL',
-    name: 'Marinade Staked SOL',
-  }),
+  wsol: new SPLToken(TOKEN_WSOL),
 }

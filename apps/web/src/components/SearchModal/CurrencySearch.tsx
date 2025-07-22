@@ -1,7 +1,6 @@
 import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { toCurrencyCompatible } from 'config/constants/types'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useUnifiedNativeCurrency } from 'hooks/useNativeCurrency'
 import { useSolanaTokenList } from 'hooks/useSolanaTokenList'
@@ -275,7 +274,7 @@ function CurrencySearch({
           currencies={filteredSortedTokens}
           inactiveCurrencies={
             isSolana
-              ? filteredInactiveTokens.map(toCurrencyCompatible)
+              ? filteredInactiveTokens
               : filteredInactiveTokens.filter(
                   (t) => t && typeof t === 'object' && 'equals' in t && typeof t.equals === 'function',
                 )

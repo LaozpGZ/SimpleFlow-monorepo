@@ -3379,6 +3379,9 @@ importers:
 
   packages/swap-sdk-core:
     dependencies:
+      '@pancakeswap/chains':
+        specifier: workspace:*
+        version: link:../chains
       '@solana/spl-token':
         specifier: 0.4.8
         version: 0.4.8(@solana/web3.js@1.95.8(bufferutil@4.0.8)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.7.3)(utf-8-validate@5.0.10)
