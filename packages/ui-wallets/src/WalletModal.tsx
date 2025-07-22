@@ -596,6 +596,13 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
 
   const handleCloseSocialLoginModal = () => {
     setIsSocialLoginModalOpen(false)
+
+    // Fix body overflow issue: manually clean up body styles when social login modal closes
+    // This is needed because nested modals can interfere with the BodyLock cleanup
+    if (typeof document !== 'undefined' && document.body.style.overflow === 'hidden') {
+      document.body.style.overflow = 'overlay'
+      document.body.style.paddingRight = ''
+    }
   }
 
   return (
