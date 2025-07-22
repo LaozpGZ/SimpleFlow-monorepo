@@ -269,11 +269,9 @@ export const farmsSearchAtom = atomFamily((query) => {
     }
 
     if (withFilledData.isPending()) {
-      return sliced
-      // return sliced.map(filterHidden)
+      return sliced.map(filterHidden)
     }
-    return withFilledData
-    // return withFilledData.map(filterHidden)
+    return withFilledData.map(filterHidden)
   })
 }, isEqual)
 
