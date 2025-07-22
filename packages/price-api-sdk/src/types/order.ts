@@ -1,5 +1,5 @@
 import type { ExclusiveDutchOrderInfoJSON, ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
-import type { InfinityRouter, Route, RouteType } from '@pancakeswap/smart-router'
+import type { InfinityRouter, Route } from '@pancakeswap/smart-router'
 import type { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import type { AMMOrder } from './amm'
 import { Hex } from './common'
@@ -29,44 +29,29 @@ export type Order =
       order: BridgeOrder
     }
 
-export type XOrder<
-  input extends Currency = Currency,
-  output extends Currency = Currency,
-  tradeType extends TradeType = TradeType,
-> = {
-  type: OrderType.DUTCH_LIMIT
-  trade: ExclusiveDutchOrderTrade<input, output>
-  ammTrade?: InfinityRouter.InfinityTradeWithoutGraph<tradeType>
+export type BridgeTrade<tradeType extends TradeType = TradeType> = {
+  inputAmount: CurrencyAmount<Currency>
+  outputAmount: CurrencyAmount<Currency>
+  tradeType: tradeType
+  routes: Route[]
 }
+
+export type BridgeTransactionData = Record<string, any>
 
 export type ClassicOrder<tradeType extends TradeType = TradeType> = {
   type: OrderType.PCS_CLASSIC
   trade: InfinityRouter.InfinityTradeWithoutGraph<tradeType>
 }
 
-export type BridgeRoute = {
-  path: [Currency, Currency]
-  inputAmount: CurrencyAmount<Currency>
-  outputAmount: CurrencyAmount<Currency>
-  type: RouteType.BRIDGE
-}
-
-export interface BridgeTrade<tradeType extends TradeType = TradeType> {
-  inputAmount: CurrencyAmount<Currency>
-  outputAmount: CurrencyAmount<Currency>
-  routes: (BridgeRoute | Route)[]
-  tradeType: tradeType
-  quoteQueryHash?: string
-}
-
-export type BridgeTransactionData = {
-  exclusiveRelayer: string
-  exclusivityDeadline: number
-  fillDeadline: number
-  outputAmount: string
-  quoteTimestamp: number
-  relayerFeePct: string
-  totalRelayFee: string
+export type XOrder<
+  input extends Currency = Currency,
+  output extends Currency = Currency,
+  tradeType extends TradeType = TradeType,
+> = {
+  type: OrderType.DUTCH_LIMIT
+  ammTrade?: InfinityRouter.InfinityTradeWithoutGraph<tradeType>
+  trade: ExclusiveDutchOrderTrade<input, output>
+  get bestQuote(): ExclusiveDutchOrderTrade<input, output> | InfinityRouter.InfinityTradeWithoutGraph<tradeType> | null
 }
 
 export type BridgeOrder<tradeType extends TradeType = TradeType> = {
@@ -77,8 +62,48 @@ export type BridgeOrder<tradeType extends TradeType = TradeType> = {
   bridgeTransactionData: BridgeTransactionData
 }
 
+// SVM Order types
+export interface SVMPool {
+  type: 'SVM'
+  id: string
+  feeAmount: string
+  feeRate: number
+}
+
+export interface SVMRoute {
+  type: 'SVM'
+  inputAmount: CurrencyAmount<Currency>
+  outputAmount: CurrencyAmount<Currency>
+  pools: SVMPool[]
+  path: Currency[]
+  percent: number
+  amount: CurrencyAmount<Currency>
+  routeIndex: number
+}
+
+export interface RouteStats {
+  numSubRoutes: number
+  totalHops: number
+  avgHopsPerRoute: number
+}
+
+export interface SVMOrderTrade<T extends TradeType = TradeType> {
+  tradeType: T
+  inputAmount: CurrencyAmount<Currency>
+  outputAmount: CurrencyAmount<Currency>
+  priceImpact: null
+  routes: SVMRoute[]
+  routeStats: RouteStats
+  quoteQueryHash?: string
+}
+
+export type SVMOrder<tradeType extends TradeType = TradeType> = {
+  type: OrderType.PCS_SVM
+  trade: SVMOrderTrade<tradeType>
+}
+
 export type PriceOrder<
   input extends Currency = Currency,
   output extends Currency = Currency,
   tradeType extends TradeType = TradeType,
-> = ClassicOrder<tradeType> | XOrder<input, output, tradeType> | BridgeOrder<tradeType>
+> = ClassicOrder<tradeType> | XOrder<input, output, tradeType> | BridgeOrder<tradeType> | SVMOrder<tradeType>

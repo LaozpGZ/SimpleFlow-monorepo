@@ -1,3 +1,4 @@
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { TradeType } from '@pancakeswap/swap-sdk-core'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import { TimeoutError } from '@pancakeswap/utils/withTimeout'
@@ -11,8 +12,9 @@ import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 import { computeTradePriceBreakdown } from 'views/Swap/V3Swap/utils/exchange'
 import { NoValidRouteError, QuoteQuery } from '../quoter.types'
 import { activeQuoteHashAtom } from './abortControlAtoms'
+import { bestSVMOrderAtom } from './bestSVMOrderAtom'
 import { placeholderAtom } from './placeholderAtom'
-import { StrategyRoute, routingStrategyAtom } from './routingStrategy'
+import { routingStrategyAtom, StrategyRoute } from './routingStrategy'
 
 function getFailReason(errors: any[]) {
   const someTimeout = errors.find((x) => x instanceof TimeoutError)
@@ -99,7 +101,12 @@ export const bestSameChainWithoutPlaceHolderAtom = atomFamily((_option: QuoteQue
     }
 
     const option: QuoteQuery = { enabled: true, type: 'quoter', tradeType: TradeType.EXACT_INPUT, ..._option }
+
     try {
+      if (option.baseCurrency?.chainId === NonEVMChainId.SOLANA) {
+        return get(bestSVMOrderAtom(option))
+      }
+
       const isWrapping = getIsWrapping(option.amount?.currency, option.currency || undefined, option.currency?.chainId)
       if (isWrapping || !option.enabled) {
         return Loadable.Nothing<InterfaceOrder>()

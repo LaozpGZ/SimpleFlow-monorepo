@@ -12,6 +12,7 @@ export enum RouteType {
   InfinityCL,
   InfinityBIN,
   BRIDGE,
+  SVM,
 }
 
 export interface BaseRoute {

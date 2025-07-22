@@ -8,6 +8,7 @@ export enum PoolType {
   STABLE,
   InfinityCL,
   InfinityBIN,
+  SVM,
 }
 
 export interface BasePool {

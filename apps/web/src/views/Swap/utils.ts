@@ -18,6 +18,8 @@ export const isClassicOrder = (order: InterfaceOrder | undefined | null): order 
 export const isBridgeOrder = (order: InterfaceOrder | undefined | null): order is BridgeOrder =>
   order?.type === OrderType.PCS_BRIDGE
 
+export const isSVMOrder = (order: any): boolean => order?.type === 'PCS_SVM'
+
 export type InterfaceOrder<
   input extends Currency = Currency,
   output extends Currency = Currency,
