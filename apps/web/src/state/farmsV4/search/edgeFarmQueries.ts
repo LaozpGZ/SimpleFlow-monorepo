@@ -119,7 +119,7 @@ async function fetchFarms(query: {
   const chainIds = chains.length > 0 ? chains : supportedChainIdV4
   if (!extend) {
     const farmPools = await fetchExplorerFarmPools(protocols, Array.from(chainIds))
-    const explorerPools = await fetchAllExplorerPools(protocols, Array.from(chainIds))
+    const explorerPools = await fetchAllExplorerPools(protocols, Array.from(chainIds), 3)
     return [...farmPools, ...explorerPools]
   }
   if (address) {
@@ -191,12 +191,12 @@ async function queryFarms(query: {
   }
 }
 
-async function fetchAllExplorerPools(protocols: Protocol[], chains: FarmV4SupportedChainId[]) {
+async function fetchAllExplorerPools(protocols: Protocol[], chains: FarmV4SupportedChainId[], page = 1) {
   const queries = protocols.map((protocol) => ({
     baseUrl: `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/list`,
     protocols: [protocol],
     chains: chains.map((chain) => getEdgeChainName(chain)),
-    maxPages: 1, // Max check 3 pages for random extending
+    maxPages: page, // Max check 3 pages for random extending
     orderBy: 'volumeUSD24h' as const,
   }))
   const poolQueries = queries.map((query) => edgeQueries.fetchAllPools(query))

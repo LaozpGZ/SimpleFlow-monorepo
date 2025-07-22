@@ -32,7 +32,7 @@ export default async function handler(req: NextRequest) {
       {
         status: 200,
         headers: {
-          'Cache-Control': `public, s-maxage=120, stale-while-revalidate=180`,
+          'Cache-Control': `public, s-maxage=240, stale-while-revalidate=360`,
           'Content-Type': 'application/json',
           ...getCorsHeaders(req),
         },
