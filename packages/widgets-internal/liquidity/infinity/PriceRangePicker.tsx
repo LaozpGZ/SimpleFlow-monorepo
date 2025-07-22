@@ -1,10 +1,15 @@
 import { usePreviousValue } from "@pancakeswap/hooks";
 import { useTranslation } from "@pancakeswap/localization";
-import { Box, Button, FlexGap, FlexGapProps, Message, Text } from "@pancakeswap/uikit";
+import { Box, Button, FlexGap, FlexGapProps, Input, Message, Text } from "@pancakeswap/uikit";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import styled from "styled-components";
 import { ZoomLevels } from "./constants";
-import { getQuickActionConfigs, getZoomLevelConfigs } from "./utils";
+import {
+  getQuickActionConfigs,
+  getZoomLevelConfigs,
+  getCustomZoomLevelFromPercentage,
+  isValidCustomPercentage,
+} from "./utils";
 
 const ButtonsContainer = styled(FlexGap).attrs({ gap: "5px" })`
   background-color: ${({ theme }) => theme.colors.input};
@@ -24,6 +29,42 @@ const StyledButton = styled(Button).attrs(({ $isActive }) => ({
   font-size: 16px;
   padding: 0 12px;
   font-weight: ${({ $isActive }) => ($isActive ? 600 : 400)};
+`;
+
+const CustomInputContainer = styled(Box)`
+  position: relative;
+  height: 56px;
+`;
+
+const StyledInput = styled(Input)<{ $isValid?: boolean; $isActive?: boolean }>`
+  height: 56px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: ${({ $isActive }) => ($isActive ? 600 : 400)};
+  border: ${({ theme, $isValid }) =>
+    !$isValid ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.inputSecondary}`};
+  background: ${({ theme }) => theme.colors.input};
+
+  &:focus {
+    box-shadow: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+const PercentageLabel = styled(Text)`
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: ${({ theme }) => theme.colors.textSubtle};
+  font-size: 16px;
+  pointer-events: none;
+`;
+
+const VerticalLine = styled.div`
+  width: 1px;
+  height: 100%;
+  background-color: ${({ theme }) => theme.colors.inputSecondary};
 `;
 
 interface PriceRangePickerProps extends Omit<FlexGapProps, "onChange"> {
@@ -64,6 +105,9 @@ const CapitalEfficiencyWarning = ({
 export const PriceRangePicker = ({ onChange, value, tickSpacing, ...props }: PriceRangePickerProps) => {
   const { t } = useTranslation();
   const [showCapitalEfficiencyWarning, setShowCapitalEfficiencyWarning] = useState<boolean>(false);
+  const [customPercentage, setCustomPercentage] = useState<string>("");
+  const [isCustomInputFocused, setIsCustomInputFocused] = useState<boolean>(false);
+  const [isUserTyping, setIsUserTyping] = useState<boolean>(false);
   const prevTickSpacing = usePreviousValue(tickSpacing);
 
   const handleClick = useCallback(
@@ -73,23 +117,89 @@ export const PriceRangePicker = ({ onChange, value, tickSpacing, ...props }: Pri
       } else {
         onChange?.(action, zoomLevel);
       }
+      // Clear custom input when preset button is clicked
+      setCustomPercentage("");
+      setIsUserTyping(false);
     },
     [onChange, value, tickSpacing]
   );
 
   const config = useMemo(() => getQuickActionConfigs(tickSpacing), [tickSpacing]);
+
   const setFullRange = useCallback(() => {
     onChange?.(100, getZoomLevelConfigs(tickSpacing));
+    setCustomPercentage("");
+    setIsUserTyping(false);
   }, [onChange, tickSpacing]);
+
   const resetRange = useCallback(() => {
     onChange?.(null, getZoomLevelConfigs(tickSpacing));
+    setCustomPercentage("");
+    setIsUserTyping(false);
   }, [onChange, tickSpacing]);
+
+  // Handle custom percentage input
+  const handleCustomPercentageChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      const inputValue = event.target.value;
+      setCustomPercentage(inputValue);
+      setIsUserTyping(true);
+
+      const numericValue = parseFloat(inputValue);
+
+      // Only trigger onChange if we have a complete, valid number
+      // This prevents clearing the input while typing intermediate values
+      if (
+        !Number.isNaN(numericValue) &&
+        inputValue.trim() !== "" &&
+        isValidCustomPercentage(numericValue, tickSpacing)
+      ) {
+        const customZoomLevel = getCustomZoomLevelFromPercentage(numericValue, tickSpacing);
+        onChange?.(numericValue, customZoomLevel);
+      }
+    },
+    [onChange, tickSpacing]
+  );
+
+  const handleCustomInputFocus = useCallback(() => {
+    setIsCustomInputFocused(true);
+    setIsUserTyping(true);
+  }, []);
+
+  const handleCustomInputBlur = useCallback(() => {
+    setIsCustomInputFocused(false);
+    setIsUserTyping(false);
+  }, []);
+
+  const isCustomPercentageValid = useMemo(() => {
+    if (!customPercentage) return true;
+    const numericValue = parseFloat(customPercentage);
+    return !Number.isNaN(numericValue) && isValidCustomPercentage(numericValue, tickSpacing);
+  }, [customPercentage, tickSpacing]);
+
+  const isCustomInputActive = useMemo(() => {
+    if (!customPercentage) return false;
+    const numericValue = parseFloat(customPercentage);
+    return !Number.isNaN(numericValue) && numericValue === value;
+  }, [customPercentage, value]);
 
   useEffect(() => {
     if (prevTickSpacing !== tickSpacing && value) {
       resetRange();
     }
   }, [tickSpacing, value, onChange, resetRange, prevTickSpacing]);
+
+  // Update custom percentage when value changes from external source
+  // useEffect(() => {
+  //   // Don't update the input if the user is actively typing
+  //   if (isUserTyping) return;
+
+  //   if (value && !config[value] && value !== 100) {
+  //     setCustomPercentage(value.toString());
+  //   } else if (!value || config[value] || value === 100) {
+  //     setCustomPercentage("");
+  //   }
+  // }, [value, config, isUserTyping]);
 
   if (!tickSpacing) return null;
 
@@ -113,8 +223,9 @@ export const PriceRangePicker = ({ onChange, value, tickSpacing, ...props }: Pri
             {quickAction}%
           </StyledButton>
         ))}
+
       <StyledButton
-        width="200%"
+        width="100%"
         onClick={() => {
           if (value === 100) {
             handleClick(100, getZoomLevelConfigs(tickSpacing));
@@ -127,6 +238,26 @@ export const PriceRangePicker = ({ onChange, value, tickSpacing, ...props }: Pri
       >
         {t("Full Range")}
       </StyledButton>
+
+      {/* Custom Percentage Input */}
+      <CustomInputContainer width="100%">
+        <StyledInput
+          value={customPercentage}
+          onChange={handleCustomPercentageChange}
+          onFocus={handleCustomInputFocus}
+          onBlur={handleCustomInputBlur}
+          placeholder={t("Custom")}
+          $isValid={isCustomPercentageValid}
+          $isActive={isCustomInputActive || isCustomInputFocused}
+          type="number"
+          min="0"
+          max="100"
+          step="0.01"
+        />
+        <PercentageLabel>
+          <VerticalLine />%
+        </PercentageLabel>
+      </CustomInputContainer>
     </ButtonsContainer>
   );
 };
