@@ -69,4 +69,5 @@ export interface WalletModalV2Props<T = unknown> extends ModalV2Props {
   onXLogin?: () => void
   onTelegramLogin?: () => void
   onDiscordLogin?: () => void
+  onReopenWalletModal?: () => void
 }

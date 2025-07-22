@@ -591,20 +591,18 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
 
   const handleOpenSocialLoginModal = () => {
     setIsSocialLoginModalOpen(true)
-    // Don't dismiss the main modal immediately to avoid BodyLock cleanup issues
-    // props.onDismiss?.()
+    // Keep the main modal open to maintain BodyLock
   }
 
   const handleCloseSocialLoginModal = () => {
     setIsSocialLoginModalOpen(false)
-    // Main modal will automatically show again due to isOpen={rest.isOpen && !isSocialLoginModalOpen}
-    // This maintains the BodyLock chain properly
+    // Main modal content will automatically show again due to conditional display: none
+    // This maintains the BodyLock properly
   }
 
   const handleBackToWeb3Wallet = () => {
-    // Close social login modal and show main wallet modal again
+    // Close social login modal to return to wallet modal
     setIsSocialLoginModalOpen(false)
-    // The main modal will automatically show due to isOpen={rest.isOpen && !isSocialLoginModalOpen}
   }
 
   // Wrap social login callbacks to ensure proper modal cleanup
@@ -616,14 +614,6 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
 
       // Execute the original callback
       originalCallback?.()
-
-      // Clean up body styles to fix overflow issue
-      setTimeout(() => {
-        if (typeof document !== 'undefined' && document.body.style.overflow === 'hidden') {
-          document.body.style.overflow = 'overlay'
-          document.body.style.paddingRight = ''
-        }
-      }, 100)
     }
   }
 
@@ -640,16 +630,16 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
           onBackToWeb3Wallet={handleBackToWeb3Wallet}
         />
       </Suspense>
-      <ModalV2
-        closeOnOverlayClick
-        disableOutsidePointerEvents={false}
-        {...rest}
-        isOpen={rest.isOpen && !isSocialLoginModalOpen}
-      >
+      <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
         <ModalWrapper
           onDismiss={props.onDismiss}
           containerStyle={{ border: 'none', ...mobileContainerStyle }}
-          style={{ overflow: 'visible', border: 'none', ...mobileContainerStyle }}
+          style={{
+            overflow: 'visible',
+            border: 'none',
+            ...mobileContainerStyle,
+            ...(isSocialLoginModalOpen ? { display: 'none' } : {}),
+          }}
         >
           <AtomBox position="relative">
             <TabContainer docLink={docLink} docText={docText} fullSize={fullSize} onDismiss={props.onDismiss}>
