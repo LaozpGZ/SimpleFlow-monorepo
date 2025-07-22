@@ -25,6 +25,7 @@ interface SocialLoginModalProps {
   onXLogin?: () => void
   onTelegramLogin?: () => void
   onDiscordLogin?: () => void
+  onBackToWeb3Wallet?: () => void
 }
 
 const StyledModalWrapper = styled(ModalWrapper)`
@@ -93,6 +94,7 @@ const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
   onXLogin,
   onTelegramLogin,
   onDiscordLogin,
+  onBackToWeb3Wallet,
 }) => {
   const { t } = useTranslation()
 
@@ -118,8 +120,8 @@ const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
 
   const handleWeb3WalletLogin = () => {
     console.log('Web3 wallet login clicked')
-    onDismiss()
-    // Return to wallet selection
+    // Use the callback to return to wallet selection instead of just dismissing
+    onBackToWeb3Wallet?.()
   }
 
   return (

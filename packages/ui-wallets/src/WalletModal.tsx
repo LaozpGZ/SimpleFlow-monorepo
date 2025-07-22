@@ -601,6 +601,12 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
     // This maintains the BodyLock chain properly
   }
 
+  const handleBackToWeb3Wallet = () => {
+    // Close social login modal and show main wallet modal again
+    setIsSocialLoginModalOpen(false)
+    // The main modal will automatically show due to isOpen={rest.isOpen && !isSocialLoginModalOpen}
+  }
+
   // Wrap social login callbacks to ensure proper modal cleanup
   const handleSocialLoginWithCleanup = (originalCallback?: () => void) => {
     return () => {
@@ -631,6 +637,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
           onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
           onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
           onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
+          onBackToWeb3Wallet={handleBackToWeb3Wallet}
         />
       </Suspense>
       <ModalV2
