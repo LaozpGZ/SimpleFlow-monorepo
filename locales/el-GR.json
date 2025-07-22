@@ -3722,7 +3722,7 @@
   "Switch": "Αλλαγή",
   "APR Calculation Method": "Μέθοδος υπολογισμού APR",
   "Calculations are an estimate and only for reference.": "Οι υπολογισμοί είναι ενδεικτικοί και μόνο για λόγους αναφοράς.",
-  "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.": "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.",
+  "This method uses the implied change (delta) in pool liquidity, as determined by the user’s price range and position size, to calculate estimated APR.": "Αυτή η μέθοδος χρησιμοποιεί την υπονοούμενη μεταβολή (δέλτα) στη ρευστότητα της δεξαμενής, όπως καθορίζεται από το εύρος τιμών και το μέγεθος της θέσης του χρήστη, για τον υπολογισμό του εκτιμώμενου APR.",
   "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.": "This method applies a multiplier, determined by the intersection of user price range and the historical price range of the pool, to calculate estimated APR.",
   "Two methods for calculating estimated APR are available, based on historical trade fees and emissions. Only positions in range earn yield. Past performance is not indicative of future results.": "Two methods for calculating estimated APR are available, based on historical trade fees and emissions. Only positions in range earn yield. Past performance is not indicative of future results.",
   "Farm period": "Farm period",
