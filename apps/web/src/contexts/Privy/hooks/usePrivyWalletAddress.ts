@@ -25,6 +25,7 @@ export const usePrivyWalletAddress = () => {
   const [finalAddress, setFinalAddress] = useState<string | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
   const [addressType, setAddressType] = useState<'embedded' | 'smart' | null>(null)
+  const [hasWaitedForSmartWallet, setHasWaitedForSmartWallet] = useState(false)
 
   useEffect(() => {
     const determineAddress = async () => {
@@ -67,18 +68,34 @@ export const usePrivyWalletAddress = () => {
         return
       }
 
-      // Normal logic: prefer smart wallet if available
+      // Normal logic: prefer smart wallet if available, but wait for final setup
       const smartAccountConnector = connectors.find((c) => c.id === 'io.privy.smart_wallet')
 
-      if (smartAccountConnector && connector?.id === 'io.privy.smart_wallet') {
-        // Use smart wallet address
-        if (wagmiAddress) {
+      // If smart wallet connector exists, wait for it to be properly connected
+      if (smartAccountConnector) {
+        if (connector?.id === 'io.privy.smart_wallet' && wagmiAddress) {
+          // Successfully connected to smart wallet
           setFinalAddress(wagmiAddress)
           setAddressType('smart')
           setIsLoading(false)
+          setHasWaitedForSmartWallet(false)
+        } else if (!hasWaitedForSmartWallet) {
+          // Smart wallet exists but not yet connected, keep loading to avoid flicker
+          setIsLoading(true)
+          // Set timeout to fallback to embedded wallet if smart wallet takes too long
+          setTimeout(() => {
+            setHasWaitedForSmartWallet(true)
+          }, 2000) // 2 second timeout
+        } else if (user?.wallet && wagmiAddress) {
+          // Timeout reached, fallback to embedded wallet if available
+          setFinalAddress(wagmiAddress)
+          setAddressType('embedded')
+          setIsLoading(false)
+        } else {
+          setIsLoading(true)
         }
       } else if (user?.wallet && wagmiAddress) {
-        // Use embedded wallet address
+        // No smart wallet available, use embedded wallet address
         setFinalAddress(wagmiAddress)
         setAddressType('embedded')
         setIsLoading(false)
@@ -105,6 +122,7 @@ export const usePrivyWalletAddress = () => {
     isSmartWalletReady,
     isSettingUp,
     forceEmbeddedWallet,
+    hasWaitedForSmartWallet,
   ])
 
   return {
