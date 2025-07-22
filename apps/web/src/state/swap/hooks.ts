@@ -1,4 +1,4 @@
-import { Currency, Native, Trade, TradeType } from '@pancakeswap/sdk'
+import { Currency, Native, SOL, Trade, TradeType } from '@pancakeswap/sdk'
 import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
 import { PairDataTimeWindowEnum } from '@pancakeswap/uikit'
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
@@ -14,6 +14,7 @@ import { ParsedUrlQuery } from 'querystring'
 import { useCallback, useEffect, useState } from 'react'
 import { ChartPeriod, chainIdToExplorerInfoChainName, explorerApiClient } from 'state/info/api/client'
 import { isAddressEqual, safeGetAddress } from 'utils'
+import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks'
 import { Field, replaceSwapState } from './actions'
 import { SwapState, swapReducerAtom } from './reducer'
@@ -61,6 +62,16 @@ function validatedRecipient(recipient: any): string | null {
   return null
 }
 
+function getNativeCurrency(chainId?: ChainId | NonEVMChainId) {
+  if (!chainId) {
+    return undefined
+  }
+  if (chainId === NonEVMChainId.SOLANA) {
+    return SOL
+  }
+  return Native.onChain(chainId)
+}
+
 export function queryParametersToSwapState(
   parsedQs: ParsedUrlQuery,
   nativeSymbol?: string,
@@ -78,10 +89,12 @@ export function queryParametersToSwapState(
   // Parse currencies
   let inputCurrency =
     safeGetAddress(parsedQs.inputCurrency) ||
-    (inputChainId ? Native.onChain(inputChainId).symbol : nativeSymbol || DEFAULT_INPUT_CURRENCY)
+    getNativeCurrency(inputChainId)?.symbol ||
+    nativeSymbol ||
+    DEFAULT_INPUT_CURRENCY
   let outputCurrency =
     typeof parsedQs.outputCurrency === 'string'
-      ? safeGetAddress(parsedQs.outputCurrency) || (outputChainId ? Native.onChain(outputChainId).symbol : nativeSymbol)
+      ? safeGetAddress(parsedQs.outputCurrency) || getNativeCurrency(outputChainId)?.symbol || nativeSymbol
       : defaultOutputCurrency
   if (inputCurrency === outputCurrency && inputChainId === outputChainId) {
     if (typeof parsedQs.outputCurrency === 'string') {
