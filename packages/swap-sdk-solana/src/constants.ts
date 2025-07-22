@@ -1,6 +1,7 @@
 import { NonEVMChainId } from '@pancakeswap/chains'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import { PublicKey } from '@solana/web3.js'
+import { SPLToken } from '@pancakeswap/swap-sdk-core'
 import { TokenInfo } from './types'
 
 export const WSOLMint = new PublicKey('So11111111111111111111111111111111111111112')
@@ -37,3 +38,5 @@ export const TOKEN_WSOL: TokenInfo = {
     coingeckoId: 'solana',
   },
 }
+
+export const WSOL: SPLToken = new SPLToken(TOKEN_WSOL)

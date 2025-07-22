@@ -22,6 +22,7 @@ import { getDefaultToken } from 'views/Swap/utils'
 import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
+import { ChainId } from '@pancakeswap/chains'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { AssignRecipientButton, FlipButton } from './FlipButton'
@@ -74,8 +75,10 @@ export const handleCurrencySelectFn = async ({
   const isInput = field === Field.INPUT
 
   if (isInput && canSwitch && newCurrency.chainId !== inputChainId) {
-    const result = await switchNetworkAsync(newCurrency.chainId, true)
-    if (result === 'error') return
+    if (newCurrency.chainId in ChainId) {
+      const result = await switchNetworkAsync(newCurrency.chainId, true)
+      if (result === 'error') return
+    }
 
     const isSameAsOutput = currencyId(newCurrency) === outputCurrencyId && newCurrency.chainId === outputChainId
 

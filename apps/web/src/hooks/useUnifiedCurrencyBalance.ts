@@ -1,12 +1,12 @@
 import BN from 'bignumber.js'
-import { Currency, CurrencyAmount, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 
 import { useSolanaTokenBalance } from 'state/token/solanaTokenBalances'
 import { useCurrencyBalance } from '../state/wallet/hooks'
 import useAccountActiveChain from './useAccountActiveChain'
 
 export interface UnifiedBalance {
-  amount: CurrencyAmount<UnifiedCurrency>
+  amount: CurrencyAmount<Currency> | UnifiedCurrencyAmount<UnifiedCurrency>
   raw?: BN
 }
 
@@ -19,7 +19,7 @@ export function useUnifiedCurrencyBalance(currency: UnifiedCurrency): UnifiedBal
 
   if (isSolana && solanaBalance) {
     return {
-      amount: CurrencyAmount.fromRawAmount(currency, solanaBalance.balance.toString()),
+      amount: UnifiedCurrencyAmount.fromRawAmount(currency, solanaBalance.balance.toString()),
       raw: solanaBalance.balance,
     }
   }

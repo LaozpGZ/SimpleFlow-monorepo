@@ -2,7 +2,7 @@ import _Big from 'big.js'
 import invariant from 'tiny-invariant'
 // @ts-ignore
 import toFormat from 'toformat'
-import { Currency } from '../currency'
+import { UnifiedCurrency, UnifiedToken } from '../currency'
 import { Token } from '../token'
 import { Fraction } from './fraction'
 
@@ -10,7 +10,7 @@ import { BigintIsh, MaxUint256, Rounding } from '../constants'
 
 const Big = toFormat(_Big)
 
-export class CurrencyAmount<T extends Currency> extends Fraction {
+export class UnifiedCurrencyAmount<T extends UnifiedCurrency> extends Fraction {
   public readonly currency: T
 
   public readonly decimalScale: bigint
@@ -20,8 +20,8 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
    * @param currency the currency in the amount
    * @param rawAmount the raw token or ether amount
    */
-  public static fromRawAmount<T extends Currency>(currency: T, rawAmount: BigintIsh): CurrencyAmount<T> {
-    return new CurrencyAmount(currency, rawAmount)
+  public static fromRawAmount<T extends UnifiedCurrency>(currency: T, rawAmount: BigintIsh): UnifiedCurrencyAmount<T> {
+    return new UnifiedCurrencyAmount(currency, rawAmount)
   }
 
   /**
@@ -30,12 +30,12 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
    * @param numerator the numerator of the fractional token amount
    * @param denominator the denominator of the fractional token amount
    */
-  public static fromFractionalAmount<T extends Currency>(
+  public static fromFractionalAmount<T extends UnifiedCurrency>(
     currency: T,
     numerator: BigintIsh,
     denominator: BigintIsh
-  ): CurrencyAmount<T> {
-    return new CurrencyAmount(currency, numerator, denominator)
+  ): UnifiedCurrencyAmount<T> {
+    return new UnifiedCurrencyAmount(currency, numerator, denominator)
   }
 
   protected constructor(currency: T, numerator: BigintIsh, denominator?: BigintIsh) {
@@ -45,19 +45,19 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     this.decimalScale = 10n ** BigInt(currency.decimals)
   }
 
-  public add(other: CurrencyAmount<T>): CurrencyAmount<T> {
+  public add(other: UnifiedCurrencyAmount<T>): UnifiedCurrencyAmount<T> {
     invariant(this.currency.equals(other.currency), 'CURRENCY')
     const added = super.add(other)
-    return CurrencyAmount.fromFractionalAmount(this.currency, added.numerator, added.denominator)
+    return UnifiedCurrencyAmount.fromFractionalAmount(this.currency, added.numerator, added.denominator)
   }
 
-  public subtract(value: bigint): CurrencyAmount<T>
+  public subtract(value: bigint): UnifiedCurrencyAmount<T>
 
-  public subtract(other: CurrencyAmount<T>): CurrencyAmount<T>
+  public subtract(other: UnifiedCurrencyAmount<T>): UnifiedCurrencyAmount<T>
 
-  public subtract(value: CurrencyAmount<T> | bigint): CurrencyAmount<T> {
+  public subtract(value: UnifiedCurrencyAmount<T> | bigint): UnifiedCurrencyAmount<T> {
     if (typeof value === 'bigint') {
-      return CurrencyAmount.fromFractionalAmount(
+      return UnifiedCurrencyAmount.fromFractionalAmount(
         this.currency,
         this.numerator - value * this.denominator,
         this.denominator
@@ -66,17 +66,17 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
 
     invariant(this.currency.equals(value.currency), 'CURRENCY')
     const subtracted = super.subtract(value)
-    return CurrencyAmount.fromFractionalAmount(this.currency, subtracted.numerator, subtracted.denominator)
+    return UnifiedCurrencyAmount.fromFractionalAmount(this.currency, subtracted.numerator, subtracted.denominator)
   }
 
-  public multiply(other: Fraction | BigintIsh): CurrencyAmount<T> {
+  public multiply(other: Fraction | BigintIsh): UnifiedCurrencyAmount<T> {
     const multiplied = super.multiply(other)
-    return CurrencyAmount.fromFractionalAmount(this.currency, multiplied.numerator, multiplied.denominator)
+    return UnifiedCurrencyAmount.fromFractionalAmount(this.currency, multiplied.numerator, multiplied.denominator)
   }
 
-  public divide(other: Fraction | BigintIsh): CurrencyAmount<T> {
+  public divide(other: Fraction | BigintIsh): UnifiedCurrencyAmount<T> {
     const divided = super.divide(other)
-    return CurrencyAmount.fromFractionalAmount(this.currency, divided.numerator, divided.denominator)
+    return UnifiedCurrencyAmount.fromFractionalAmount(this.currency, divided.numerator, divided.denominator)
   }
 
   public toSignificant(significantDigits = 6, format?: object, rounding: Rounding = Rounding.ROUND_DOWN): string {
@@ -97,9 +97,9 @@ export class CurrencyAmount<T extends Currency> extends Fraction {
     return new Big(this.quotient.toString()).div(this.decimalScale.toString()).toFormat(format)
   }
 
-  public get wrapped(): CurrencyAmount<Token> {
-    if (this.currency.isToken) return this as CurrencyAmount<Token>
-    return CurrencyAmount.fromFractionalAmount(this.currency.wrapped, this.numerator, this.denominator)
+  public get wrapped(): UnifiedCurrencyAmount<UnifiedToken> {
+    if (this.currency.isToken) return this as UnifiedCurrencyAmount<Token>
+    return UnifiedCurrencyAmount.fromFractionalAmount(this.currency.wrapped, this.numerator, this.denominator)
   }
 
   public info() {

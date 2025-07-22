@@ -1,6 +1,5 @@
 import invariant from 'tiny-invariant'
 import { BaseCurrency } from './baseCurrency'
-import { SOL_INFO } from './solana/const'
 import { type UnifiedCurrency } from './currency'
 
 export interface SerializedSPLToken {
@@ -28,8 +27,6 @@ export class SPLToken extends BaseCurrency<SPLToken> {
   public readonly logoURI: string
 
   public readonly projectLink?: string
-
-  public static readonly SOL: SPLToken = new SPLToken({ ...SOL_INFO, isNative: true })
 
   public static isSPLToken(token: UnifiedCurrency) {
     return 'programId' in token

@@ -12,7 +12,7 @@ import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 
 import { useTranslation } from '@pancakeswap/localization'
-import { ChainId, Currency, CurrencyAmount, Token, UnifiedCurrency } from '@pancakeswap/sdk'
+import { ChainId, Currency, Token, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { ArrowForwardIcon, AutoColumn, Column, CopyButton, FlexGap, QuestionHelper, Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
@@ -47,7 +47,7 @@ const FixedContentRow = styled.div`
   align-items: center;
 `
 
-function Balance({ balance }: { balance: CurrencyAmount<UnifiedCurrency> }) {
+function Balance({ balance }: { balance: UnifiedCurrencyAmount<UnifiedCurrency> }) {
   return (
     <StyledBalanceText title={balance.toExact()} bold>
       {formatAmount(balance, 4)}

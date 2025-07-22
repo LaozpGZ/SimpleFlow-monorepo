@@ -1,6 +1,6 @@
 import { PublicKey } from '@solana/web3.js'
 import { PublicKeyish } from './types'
-import { SOLMint, WSOLMint } from './const'
+import { SOLMint, WSOLMint } from './constants'
 
 export function tryParsePublicKey(v: string): PublicKey | string {
   try {

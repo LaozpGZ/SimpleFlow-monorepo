@@ -7,6 +7,7 @@ import {
   Price,
   Rounding,
   UnifiedCurrency,
+  UnifiedCurrencyAmount,
 } from '@pancakeswap/swap-sdk-core'
 
 export function formatPercent(percent?: Percent, precision?: number) {
@@ -35,7 +36,7 @@ export function formatPrice(price?: Price<Currency, Currency> | null | undefined
 }
 
 export function formatAmount(
-  amount?: CurrencyAmount<UnifiedCurrency> | null | undefined,
+  amount?: CurrencyAmount<Currency> | UnifiedCurrencyAmount<UnifiedCurrency> | null | undefined,
   precision?: number | undefined,
 ) {
   if (!amount) {

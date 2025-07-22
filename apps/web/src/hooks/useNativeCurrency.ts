@@ -1,5 +1,5 @@
 import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
-import { Native, NativeCurrency, SPLToken, UnifiedNativeCurrency } from '@pancakeswap/sdk'
+import { Native, NativeCurrency, SOL, UnifiedNativeCurrency } from '@pancakeswap/sdk'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import { useMemo } from 'react'
@@ -11,7 +11,7 @@ export function useUnifiedNativeCurrency(overrideChainId?: ChainId | NonEVMChain
   return useMemo(() => {
     try {
       if (chainId === NonEVMChainId.SOLANA) {
-        return SPLToken.SOL
+        return SOL
       }
       return Native.onChain(overrideChainId ?? chainId ?? ChainId.BSC)
     } catch (e) {
