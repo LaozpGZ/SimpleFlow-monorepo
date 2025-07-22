@@ -591,17 +591,33 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
 
   const handleOpenSocialLoginModal = () => {
     setIsSocialLoginModalOpen(true)
-    props.onDismiss?.()
+    // Don't dismiss the main modal immediately to avoid BodyLock cleanup issues
+    // props.onDismiss?.()
   }
 
   const handleCloseSocialLoginModal = () => {
     setIsSocialLoginModalOpen(false)
+    // Main modal will automatically show again due to isOpen={rest.isOpen && !isSocialLoginModalOpen}
+    // This maintains the BodyLock chain properly
+  }
 
-    // Fix body overflow issue: manually clean up body styles when social login modal closes
-    // This is needed because nested modals can interfere with the BodyLock cleanup
-    if (typeof document !== 'undefined' && document.body.style.overflow === 'hidden') {
-      document.body.style.overflow = 'overlay'
-      document.body.style.paddingRight = ''
+  // Wrap social login callbacks to ensure proper modal cleanup
+  const handleSocialLoginWithCleanup = (originalCallback?: () => void) => {
+    return () => {
+      // Close both modals when social login is initiated
+      setIsSocialLoginModalOpen(false)
+      props.onDismiss?.()
+
+      // Execute the original callback
+      originalCallback?.()
+
+      // Clean up body styles to fix overflow issue
+      setTimeout(() => {
+        if (typeof document !== 'undefined' && document.body.style.overflow === 'hidden') {
+          document.body.style.overflow = 'overlay'
+          document.body.style.paddingRight = ''
+        }
+      }, 100)
     }
   }
 
@@ -611,13 +627,18 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
         <SocialLoginModal
           isOpen={isSocialLoginModalOpen}
           onDismiss={handleCloseSocialLoginModal}
-          onGoogleLogin={props.onGoogleLogin}
-          onXLogin={props.onXLogin}
-          onTelegramLogin={props.onTelegramLogin}
-          onDiscordLogin={props.onDiscordLogin}
+          onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
+          onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
+          onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
+          onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
         />
       </Suspense>
-      <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
+      <ModalV2
+        closeOnOverlayClick
+        disableOutsidePointerEvents={false}
+        {...rest}
+        isOpen={rest.isOpen && !isSocialLoginModalOpen}
+      >
         <ModalWrapper
           onDismiss={props.onDismiss}
           containerStyle={{ border: 'none', ...mobileContainerStyle }}
