@@ -5,6 +5,7 @@ import { SmartRouter } from '@pancakeswap/smart-router'
 import { TokenInfo } from '@pancakeswap/token-lists'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import uniqBy from '@pancakeswap/utils/uniqBy'
+import { HIDE_POOLS } from 'config/constants/hidePools'
 import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 import isEqual from 'lodash/isEqual'
@@ -262,10 +263,19 @@ export const farmsSearchAtom = atomFamily((query) => {
     const sliced = get(farmsWithPagingAtom(query))
     const withFilledData = get(farmsWithFilledDataAtom(query))
 
-    if (withFilledData.isPending()) {
-      return sliced
+    const filterHidden = (pools?: PoolInfo[]) => {
+      if (!pools) return []
+      return pools.filter((pool) => {
+        const list = HIDE_POOLS[pool.chainId]
+        const poolId = pool.farm?.id.toLocaleLowerCase()
+        if (!list || !poolId) return true
+        return !list.includes(poolId)
+      })
     }
-    return withFilledData
+    if (withFilledData.isPending()) {
+      return sliced.map(filterHidden)
+    }
+    return withFilledData.map(filterHidden)
   })
 }, isEqual)
 
