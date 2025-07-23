@@ -80,16 +80,6 @@ const UserMenu: React.FC<UserMenuProps> = ({
         <LabelText title={address}>{address}</LabelText>
         {!disabled && <ChevronDownIcon color="text" width="24px" />}
       </StyledUserMenu>
-      {/* {!disabled && children && (
-          <Menu
-            style={{ ...styles.popper, ...popperStyle }}
-            ref={setTooltipRef}
-            {...attributes.popper}
-            $isOpen={isOpen}
-          >
-            <Box onClick={() => setIsOpen(false)}>{children?.({ isOpen })}</Box>
-          </Menu>
-        )} */}
     </Flex>
   );
 };
