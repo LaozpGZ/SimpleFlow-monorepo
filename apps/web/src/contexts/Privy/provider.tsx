@@ -32,6 +32,7 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
       user?.smartWallet?.address &&
       attemptedWalletCreation.current === false
     ) {
+      console.log('Wallet recovery for authenticated user called!@!!?!?!?!?')
       handleWalletRecovery()
     }
   }, [ready, authenticated, user?.wallet])
@@ -42,12 +43,12 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
         attemptedWalletCreation.current = true
         console.log('Creating wallet for authenticated user without wallet')
         try {
-          await createWallet()
           console.log('Wallet created successfully')
           // Set lastRecovery to current time when wallet is created
           // This prevents immediate wallet recovery call and sets the timer for next week
           const now = Date.now()
           setLastRecovery(now)
+          await createWallet()
           console.log('Last recovery time set to:', new Date(now).toISOString())
         } catch (error) {
           console.error('Failed to create wallet:', error)
