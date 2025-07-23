@@ -64,7 +64,7 @@ export const ResponsiveTwoColumns = styled.div<{ $singleColumn?: boolean }>`
   grid-auto-flow: row;
 
   ${({ theme }) => theme.mediaQueries.md} {
-    grid-template-columns: ${({ $singleColumn }) => ($singleColumn ? '1fr' : '1fr 1fr')};
+    grid-template-columns: ${({ $singleColumn }) => ($singleColumn ? '1fr' : '3fr 2fr')};
   }
 `
 
@@ -243,45 +243,45 @@ export function UniversalAddLiquidity({
     stableConfig.stableSwapConfig,
   ])
 
-  const handleFeePoolSelect = useCallback<HandleFeePoolSelectFn>(
-    ({ type, feeAmount: newFeeAmount }) => {
-      setSelectorType(type)
-      if (type === SELECTOR_TYPE.V3) {
-        const newPathname = router.pathname.replace('/stable', '').replace('/v2', '')
-        router.replace(
-          {
-            pathname: newPathname,
-            query: {
-              ...router.query,
-              currency: newFeeAmount
-                ? [currencyIdA!, currencyIdB!, newFeeAmount.toString()]
-                : [currencyIdA!, currencyIdB!],
-            },
-          },
-          undefined,
-          { shallow: true },
-        )
-      } else {
-        router.replace(
-          {
-            pathname: router.pathname,
-            query: router.query,
-          },
-          type === SELECTOR_TYPE.STABLE
-            ? `/stable/add/${currencyIdA}/${currencyIdB}`
-            : `/v2/add/${currencyIdA}/${currencyIdB}`,
-          { shallow: true },
-        )
-      }
-    },
-    [currencyIdA, currencyIdB, router, setSelectorType],
-  )
+  // const handleFeePoolSelect = useCallback<HandleFeePoolSelectFn>(
+  //   ({ type, feeAmount: newFeeAmount }) => {
+  //     setSelectorType(type)
+  //     if (type === SELECTOR_TYPE.V3) {
+  //       const newPathname = router.pathname.replace('/stable', '').replace('/v2', '')
+  //       router.replace(
+  //         {
+  //           pathname: newPathname,
+  //           query: {
+  //             ...router.query,
+  //             currency: newFeeAmount
+  //               ? [currencyIdA!, currencyIdB!, newFeeAmount.toString()]
+  //               : [currencyIdA!, currencyIdB!],
+  //           },
+  //         },
+  //         undefined,
+  //         { shallow: true },
+  //       )
+  //     } else {
+  //       router.replace(
+  //         {
+  //           pathname: router.pathname,
+  //           query: router.query,
+  //         },
+  //         type === SELECTOR_TYPE.STABLE
+  //           ? `/stable/add/${currencyIdA}/${currencyIdB}`
+  //           : `/v2/add/${currencyIdA}/${currencyIdB}`,
+  //         { shallow: true },
+  //       )
+  //     }
+  //   },
+  //   [currencyIdA, currencyIdB, router, setSelectorType],
+  // )
 
-  useEffect(() => {
-    if (preferredFeeAmount && !feeAmountFromUrl && selectorType === SELECTOR_TYPE.V3) {
-      handleFeePoolSelect({ type: selectorType, feeAmount: preferredFeeAmount })
-    }
-  }, [preferredFeeAmount, feeAmountFromUrl, handleFeePoolSelect, selectorType])
+  // useEffect(() => {
+  //   if (preferredFeeAmount && !feeAmountFromUrl && selectorType === SELECTOR_TYPE.V3) {
+  //     handleFeePoolSelect({ type: selectorType, feeAmount: preferredFeeAmount })
+  //   }
+  // }, [preferredFeeAmount, feeAmountFromUrl, handleFeePoolSelect, selectorType])
 
   return (
     <>
@@ -289,64 +289,6 @@ export function UniversalAddLiquidity({
         <ResponsiveTwoColumns
           $singleColumn={selectorType === SELECTOR_TYPE.V2 || selectorType === SELECTOR_TYPE.STABLE}
         >
-          <AutoColumn>
-            {/* <PreTitle mb="8px">{t('Choose Token Pair')}</PreTitle>
-            <FlexGap gap="4px" width="100%" mb="8px" alignItems="center">
-              <CurrencySelect
-                id="add-liquidity-select-tokena"
-                selectedCurrency={baseCurrency}
-                onCurrencySelect={handleCurrencyASelect}
-                showCommonBases
-                commonBasesType={CommonBasesType.LIQUIDITY}
-                hideBalance
-              />
-              <AddIcon color="textSubtle" />
-              <CurrencySelect
-                id="add-liquidity-select-tokenb"
-                selectedCurrency={quoteCurrency}
-                onCurrencySelect={handleCurrencyBSelect}
-                showCommonBases
-                commonBasesType={CommonBasesType.LIQUIDITY}
-                hideBalance
-              />
-            </FlexGap> */}
-            <DynamicSection disabled={!baseCurrency || !currencyB}>
-              {preferredSelectType !== SELECTOR_TYPE.V2 &&
-                stableConfig.stableSwapConfig &&
-                [SELECTOR_TYPE.STABLE, SELECTOR_TYPE.V3].includes(selectorType) && (
-                  <StableV3Selector
-                    currencyA={baseCurrency ?? undefined}
-                    currencyB={quoteCurrency ?? undefined}
-                    feeAmount={feeAmount}
-                    selectorType={selectorType}
-                    handleFeePoolSelect={handleFeePoolSelect}
-                  />
-                )}
-
-              {((preferredSelectType === SELECTOR_TYPE.V2 && selectorType !== SELECTOR_TYPE.V3) ||
-                selectorType === SELECTOR_TYPE.V2) && (
-                <V2Selector
-                  isStable={Boolean(stableConfig.stableSwapConfig)}
-                  selectorType={selectorType}
-                  handleFeePoolSelect={({ type }) => {
-                    // keep using state instead of replacing url in UniversalLiquidity
-                    handleFeePoolSelect({ type })
-                  }}
-                />
-              )}
-
-              {!stableConfig.stableSwapConfig && selectorType === SELECTOR_TYPE.V3 && (
-                <FeeSelector
-                  currencyA={baseCurrency ?? undefined}
-                  currencyB={quoteCurrency ?? undefined}
-                  handleFeePoolSelect={handleFeePoolSelect}
-                  feeAmount={feeAmount}
-                  handleSelectV2={() => handleFeePoolSelect({ type: SELECTOR_TYPE.V2 })}
-                />
-              )}
-            </DynamicSection>
-          </AutoColumn>
-
           {selectorType === SELECTOR_TYPE.V3 && (
             <V3FormView
               feeAmount={feeAmount}
@@ -433,6 +375,7 @@ export function AddLiquidityV3Layout({
         chainId={chainId}
         currency0={pool?.token0 ?? undefined}
         currency1={pool?.token1 ?? undefined}
+        isInverted={inverted}
         poolId={poolAddress}
         overrideAprDisplay={
           selectType === SELECTOR_TYPE.V3

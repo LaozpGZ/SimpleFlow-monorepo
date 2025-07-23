@@ -6,6 +6,8 @@ import {
   AutoRow,
   Box,
   Button,
+  Card,
+  CardBody,
   DynamicSection,
   Flex,
   Message,
@@ -33,7 +35,7 @@ import {
 
 import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
 import { FeeAmount, NonfungiblePositionManager, Pool } from '@pancakeswap/v3-sdk'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
+
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
 import useV3DerivedInfo from 'hooks/v3/useV3DerivedInfo'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -57,27 +59,29 @@ import { isUserRejected } from 'utils/sentry'
 import { getViemClients } from 'utils/viem'
 import { hexToBigInt } from 'viem'
 import { V3SubmitButton } from 'views/AddLiquidityV3/components/V3SubmitButton'
-import { QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV3/types'
+import { HandleFeePoolSelectFn, QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV3/types'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 
 import { Price } from '@pancakeswap/swap-sdk-core'
 import BigNumber from 'bignumber.js'
 import { ZapLiquidityWidget } from 'components/ZapLiquidityWidget'
 import { ZAP_V3_POOL_ADDRESSES } from 'config/constants/zapV3'
+import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { usePoolMarketPriceSlippage } from 'hooks/usePoolMarketPriceSlippage'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { useDensityChartData } from 'views/AddLiquidityV3/hooks/useDensityChartData'
 import { MarketPriceSlippageWarning } from 'views/CreateLiquidityPool/components/SubmitCreateButton'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
-import LockedDeposit from './components/LockedDeposit'
 import { PositionPreview } from './components/PositionPreview'
 import RangeSelector from './components/RangeSelector'
-import RateToggle from './components/RateToggle'
+
 import { useInitialRange } from './form/hooks/useInitialRange'
 import { useRangeHopCallbacks } from './form/hooks/useRangeHopCallbacks'
 import { useV3MintActionHandlers } from './form/hooks/useV3MintActionHandlers'
 import { useV3FormAddLiquidityCallback, useV3FormState } from './form/reducer'
+import FeeSelector from './components/FeeSelector'
+import LockedDeposit from './components/LockedDeposit'
 
 const StyledInput = styled(NumericalInput)`
   background-color: ${({ theme }) => theme.colors.input};
@@ -277,6 +281,26 @@ export default function V3FormView({
   } = useApproveCallback(parsedAmounts[Field.CURRENCY_B], nftPositionManagerAddress)
 
   const [allowedSlippage] = useUserSlippage() // custom from users
+
+  const handleFeePoolSelect = useCallback<HandleFeePoolSelectFn>(
+    ({ feeAmount: newFeeAmount }) => {
+      const newPathname = router.pathname.replace('/stable', '').replace('/v2', '')
+      router.replace(
+        {
+          pathname: newPathname,
+          query: {
+            ...router.query,
+            currency: newFeeAmount
+              ? [currencyIdA!, currencyIdB!, newFeeAmount.toString()]
+              : [currencyIdA!, currencyIdB!],
+          },
+        },
+        undefined,
+        { shallow: true },
+      )
+    },
+    [currencyIdA, currencyIdB, router],
+  )
 
   const onAdd = useCallback(async () => {
     logGTMClickAddLiquidityConfirmEvent()
@@ -559,301 +583,310 @@ export default function V3FormView({
   return (
     <>
       <LeftContainer>
-        <AutoColumn gap="16px">
-          {noLiquidity && (
-            <Box>
-              <PreTitle mb="8px">{t('Set Starting Price')}</PreTitle>
-              <Message variant="warning" mb="8px">
-                <MessageText>
-                  {t(
-                    'This pool must be initialized before you can add liquidity. To initialize, select a starting price for the pool. Then, enter your liquidity price range and deposit amount. Gas fees will be higher than usual due to the initialization transaction.',
-                  )}
-                  <br />
-                  <br />
+        <Card>
+          <CardBody>
+            <AutoColumn gap="16px">
+              {noLiquidity && (
+                <Box>
+                  <PreTitle mb="8px">{t('Set Starting Price')}</PreTitle>
+                  <Message variant="warning" mb="8px">
+                    <MessageText>
+                      {t(
+                        'This pool must be initialized before you can add liquidity. To initialize, select a starting price for the pool. Then, enter your liquidity price range and deposit amount. Gas fees will be higher than usual due to the initialization transaction.',
+                      )}
+                      <br />
+                      <br />
 
-                  <b>{t('Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.')}</b>
-                </MessageText>
-              </Message>
-              <StyledInput className="start-price-input" value={startPriceTypedValue} onUserInput={onStartPriceInput} />
-              <AutoRow justifyContent="space-between" mb="24px">
-                <Text>{t('Current %symbol% Price', { symbol: baseCurrency?.symbol })}:</Text>
-                <Text>
-                  {price ? (invertPrice ? price?.invert()?.toSignificant(5) : price?.toSignificant(5)) : '-'}
-                  <span style={{ marginLeft: '4px' }}>{quoteCurrency?.symbol}</span>
-                </Text>
-              </AutoRow>
-            </Box>
-          )}
-          <DynamicSection disabled={!feeAmount || invalidPool}>
-            <RowBetween mb="8px">
-              <PreTitle>{t('Set Price Range')}</PreTitle>
-              <Liquidity.RateToggle
-                currencyA={baseCurrency}
-                handleRateToggle={() => {
-                  if (!ticksAtLimit[Bound.LOWER] && !ticksAtLimit[Bound.UPPER]) {
-                    onLeftRangeInput((invertPrice ? priceLower : priceUpper?.invert()) ?? undefined)
-                    onRightRangeInput((invertPrice ? priceUpper : priceLower?.invert()) ?? undefined)
-                    onFieldAInput(formattedAmounts[Field.CURRENCY_B] ?? '')
-                  }
-
-                  router.replace(
-                    {
-                      pathname: router.pathname,
-                      query: {
-                        ...router.query,
-                        currency: [currencyIdB!, currencyIdA!, feeAmount ? feeAmount.toString() : ''],
-                      },
-                    },
-                    undefined,
-                    {
-                      shallow: true,
-                    },
-                  )
-                }}
-              />
-            </RowBetween>
-
-            {!noLiquidity && (
-              <>
-                {price && baseCurrency && quoteCurrency && !noLiquidity && (
-                  <AutoRow
-                    gap="4px"
-                    marginBottom={['24px', '0px']}
-                    justifyContent="center"
-                    style={{ marginTop: '0.5rem' }}
-                  >
-                    <Text fontWeight={500} textAlign="center" fontSize={12} color="text1">
-                      {t('Current Price')}:
-                    </Text>
-                    <Text fontWeight={500} textAlign="center" fontSize={12} color="text1">
-                      {invertPrice ? price.invert().toSignificant(6) : price.toSignificant(6)}
-                    </Text>
-                    <Text color="text2" fontSize={12}>
-                      {t('%assetA% per %assetB%', {
-                        assetA: quoteCurrency?.symbol ?? '',
-                        assetB: baseCurrency.symbol ?? '',
-                      })}
+                      <b>{t('Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.')}</b>
+                    </MessageText>
+                  </Message>
+                  <StyledInput
+                    className="start-price-input"
+                    value={startPriceTypedValue}
+                    onUserInput={onStartPriceInput}
+                  />
+                  <AutoRow justifyContent="space-between" mb="24px">
+                    <Text>{t('Current %symbol% Price', { symbol: baseCurrency?.symbol })}:</Text>
+                    <Text>
+                      {price ? (invertPrice ? price?.invert()?.toSignificant(5) : price?.toSignificant(5)) : '-'}
+                      <span style={{ marginLeft: '4px' }}>{quoteCurrency?.symbol}</span>
                     </Text>
                   </AutoRow>
+                </Box>
+              )}
+              <DynamicSection disabled={!feeAmount || invalidPool}>
+                <RowBetween mb="8px">
+                  <PreTitle>{t('Set Price Range')}</PreTitle>
+                  <Liquidity.RateToggle
+                    currencyA={baseCurrency}
+                    handleRateToggle={() => {
+                      if (!ticksAtLimit[Bound.LOWER] && !ticksAtLimit[Bound.UPPER]) {
+                        onLeftRangeInput((invertPrice ? priceLower : priceUpper?.invert()) ?? undefined)
+                        onRightRangeInput((invertPrice ? priceUpper : priceLower?.invert()) ?? undefined)
+                        onFieldAInput(formattedAmounts[Field.CURRENCY_B] ?? '')
+                      }
+
+                      router.replace(
+                        {
+                          pathname: router.pathname,
+                          query: {
+                            ...router.query,
+                            currency: [currencyIdB!, currencyIdA!, feeAmount ? feeAmount.toString() : ''],
+                          },
+                        },
+                        undefined,
+                        {
+                          shallow: true,
+                        },
+                      )
+                    }}
+                  />
+                </RowBetween>
+
+                {!noLiquidity && (
+                  <>
+                    {price && baseCurrency && quoteCurrency && !noLiquidity && (
+                      <AutoRow
+                        gap="4px"
+                        marginBottom={['24px', '0px']}
+                        justifyContent="center"
+                        style={{ marginTop: '0.5rem' }}
+                      >
+                        <Text fontWeight={500} textAlign="center" fontSize={12} color="text1">
+                          {t('Current Price')}:
+                        </Text>
+                        <Text fontWeight={500} textAlign="center" fontSize={12} color="text1">
+                          {invertPrice ? price.invert().toSignificant(6) : price.toSignificant(6)}
+                        </Text>
+                        <Text color="text2" fontSize={12}>
+                          {t('%assetA% per %assetB%', {
+                            assetA: quoteCurrency?.symbol ?? '',
+                            assetB: baseCurrency.symbol ?? '',
+                          })}
+                        </Text>
+                      </AutoRow>
+                    )}
+                    <LiquidityChartRangeInput
+                      zoomLevel={
+                        activeQuickAction && feeAmount
+                          ? QUICK_ACTION_CONFIGS?.[feeAmount]?.[activeQuickAction]
+                          : undefined
+                      }
+                      key={baseCurrency?.wrapped?.address}
+                      currencyA={baseCurrency ?? undefined}
+                      currencyB={quoteCurrency ?? undefined}
+                      feeAmount={feeAmount}
+                      ticksAtLimit={ticksAtLimit}
+                      tickUpper={tickUpper}
+                      tickLower={tickLower}
+                      tickCurrent={pool?.tickCurrent}
+                      price={price ? parseFloat((invertPrice ? price.invert() : price).toSignificant(8)) : undefined}
+                      priceLower={priceLower}
+                      priceUpper={priceUpper}
+                      onBothRangeInput={onBothRangePriceInput}
+                      onLeftRangeInput={onLeftRangePriceInput}
+                      onRightRangeInput={onRightRangePriceInput}
+                      formattedData={formattedData}
+                      isLoading={isChartDataLoading}
+                      error={chartDataError}
+                      interactive
+                    />
+                  </>
                 )}
-                <LiquidityChartRangeInput
-                  zoomLevel={
-                    activeQuickAction && feeAmount ? QUICK_ACTION_CONFIGS?.[feeAmount]?.[activeQuickAction] : undefined
-                  }
-                  key={baseCurrency?.wrapped?.address}
-                  currencyA={baseCurrency ?? undefined}
-                  currencyB={quoteCurrency ?? undefined}
-                  feeAmount={feeAmount}
-                  ticksAtLimit={ticksAtLimit}
-                  tickUpper={tickUpper}
-                  tickLower={tickLower}
-                  tickCurrent={pool?.tickCurrent}
-                  price={price ? parseFloat((invertPrice ? price.invert() : price).toSignificant(8)) : undefined}
+              </DynamicSection>
+
+              <DynamicSection disabled={!feeAmount || invalidPool || (noLiquidity && !startPriceTypedValue)} gap="16px">
+                <RangeSelector
                   priceLower={priceLower}
                   priceUpper={priceUpper}
-                  onBothRangeInput={onBothRangePriceInput}
-                  onLeftRangeInput={onLeftRangePriceInput}
-                  onRightRangeInput={onRightRangePriceInput}
-                  formattedData={formattedData}
-                  isLoading={isChartDataLoading}
-                  error={chartDataError}
-                  interactive
+                  getDecrementLower={getDecrementLower}
+                  getIncrementLower={getIncrementLower}
+                  getDecrementUpper={getDecrementUpper}
+                  getIncrementUpper={getIncrementUpper}
+                  onLeftRangeInput={onLeftRangeInput}
+                  onRightRangeInput={onRightRangeInput}
+                  currencyA={baseCurrency}
+                  currencyB={quoteCurrency}
+                  feeAmount={feeAmount}
+                  ticksAtLimit={ticksAtLimit}
+                  tickSpaceLimits={tickSpaceLimits}
                 />
-              </>
-            )}
-          </DynamicSection>
+                {showCapitalEfficiencyWarning ? (
+                  <Message variant="warning">
+                    <Box>
+                      <Text fontSize="16px">{t('Efficiency Comparison')}</Text>
+                      <Text color="textSubtle">
+                        {t('Full range positions may earn less fees than concentrated positions.')}
+                      </Text>
+                      <Button
+                        mt="16px"
+                        onClick={() => {
+                          setShowCapitalEfficiencyWarning(false)
+                          getSetFullRange()
+                        }}
+                        scale="md"
+                        variant="danger"
+                      >
+                        {t('I understand')}
+                      </Button>
+                    </Box>
+                  </Message>
+                ) : (
+                  <Flex justifyContent="space-between" width="100%" style={{ gap: '8px' }}>
+                    {feeAmount &&
+                      QUICK_ACTION_CONFIGS[feeAmount] &&
+                      Object.entries<ZoomLevels>(QUICK_ACTION_CONFIGS[feeAmount])
+                        ?.sort(([a], [b]) => +a - +b)
+                        .map(([quickAction, zoomLevel]) => {
+                          return (
+                            <Button
+                              width="100%"
+                              key={`quickActions${quickAction}`}
+                              onClick={() => {
+                                if (+quickAction === activeQuickAction) {
+                                  handleRefresh(ZOOM_LEVELS[feeAmount])
+                                  return
+                                }
+                                handleRefresh(zoomLevel)
 
-          <DynamicSection disabled={!feeAmount || invalidPool || (noLiquidity && !startPriceTypedValue)} gap="16px">
-            <RangeSelector
-              priceLower={priceLower}
-              priceUpper={priceUpper}
-              getDecrementLower={getDecrementLower}
-              getIncrementLower={getIncrementLower}
-              getDecrementUpper={getDecrementUpper}
-              getIncrementUpper={getIncrementUpper}
-              onLeftRangeInput={onLeftRangeInput}
-              onRightRangeInput={onRightRangeInput}
-              currencyA={baseCurrency}
-              currencyB={quoteCurrency}
-              feeAmount={feeAmount}
-              ticksAtLimit={ticksAtLimit}
-              tickSpaceLimits={tickSpaceLimits}
-            />
-            {showCapitalEfficiencyWarning ? (
-              <Message variant="warning">
-                <Box>
-                  <Text fontSize="16px">{t('Efficiency Comparison')}</Text>
-                  <Text color="textSubtle">
-                    {t('Full range positions may earn less fees than concentrated positions.')}
-                  </Text>
-                  <Button
-                    mt="16px"
-                    onClick={() => {
-                      setShowCapitalEfficiencyWarning(false)
-                      getSetFullRange()
-                    }}
-                    scale="md"
-                    variant="danger"
-                  >
-                    {t('I understand')}
-                  </Button>
-                </Box>
-              </Message>
-            ) : (
-              <Flex justifyContent="space-between" width="100%" style={{ gap: '8px' }}>
-                {feeAmount &&
-                  QUICK_ACTION_CONFIGS[feeAmount] &&
-                  Object.entries<ZoomLevels>(QUICK_ACTION_CONFIGS[feeAmount])
-                    ?.sort(([a], [b]) => +a - +b)
-                    .map(([quickAction, zoomLevel]) => {
-                      return (
-                        <Button
-                          width="100%"
-                          key={`quickActions${quickAction}`}
-                          onClick={() => {
-                            if (+quickAction === activeQuickAction) {
-                              handleRefresh(ZOOM_LEVELS[feeAmount])
-                              return
-                            }
-                            handleRefresh(zoomLevel)
+                                setActiveQuickAction(+quickAction)
+                                isQuickButtonUsed.current = true
+                              }}
+                              variant={+quickAction === activeQuickAction ? 'primary' : 'secondary'}
+                              scale="sm"
+                            >
+                              {quickAction}%
+                            </Button>
+                          )
+                        })}
+                    <Button
+                      width="200%"
+                      onClick={() => {
+                        if (activeQuickAction === 100) {
+                          handleRefresh()
+                          return
+                        }
+                        setShowCapitalEfficiencyWarning(true)
+                        setActiveQuickAction(100)
+                        isQuickButtonUsed.current = true
+                      }}
+                      variant={activeQuickAction === 100 ? 'primary' : 'secondary'}
+                      scale="sm"
+                    >
+                      {t('Full Range')}
+                    </Button>
+                  </Flex>
+                )}
 
-                            setActiveQuickAction(+quickAction)
-                            isQuickButtonUsed.current = true
-                          }}
-                          variant={+quickAction === activeQuickAction ? 'primary' : 'secondary'}
-                          scale="sm"
-                        >
-                          {quickAction}%
-                        </Button>
-                      )
-                    })}
-                <Button
-                  width="200%"
-                  onClick={() => {
-                    if (activeQuickAction === 100) {
-                      handleRefresh()
-                      return
-                    }
-                    setShowCapitalEfficiencyWarning(true)
-                    setActiveQuickAction(100)
-                    isQuickButtonUsed.current = true
-                  }}
-                  variant={activeQuickAction === 100 ? 'primary' : 'secondary'}
-                  scale="sm"
-                >
-                  {t('Full Range')}
-                </Button>
-              </Flex>
-            )}
+                {displayMarketPriceSlippageWarning ? (
+                  <MarketPriceSlippageWarning slippage={`${marketPriceSlippage?.toFixed(0)} %`} />
+                ) : null}
 
-            {displayMarketPriceSlippageWarning ? (
-              <MarketPriceSlippageWarning slippage={`${marketPriceSlippage?.toFixed(0)} %`} />
-            ) : null}
-
-            {outOfRange ? (
-              <Message variant="warning">
-                <RowBetween>
-                  <Text ml="12px" fontSize="12px">
-                    {t(
-                      'Your position will not earn fees or be used in trades until the market price moves into your range.',
-                    )}
-                  </Text>
-                </RowBetween>
-              </Message>
-            ) : null}
-            {invalidRange ? (
-              <Message variant="warning">
-                <MessageText>
-                  {t('Invalid range selected. The min price must be lower than the max price.')}
-                </MessageText>
-              </Message>
-            ) : null}
-          </DynamicSection>
-          <MediumOnly style={{ gap: 16, flexDirection: 'column' }}>
-            {buttons}
-            {hasZapV3Pool && hasInsufficentBalance && (
-              <ZapLiquidityWidget
-                tickLower={tickLower}
-                tickUpper={tickUpper}
-                pool={pool}
-                baseCurrency={baseCurrency}
-                baseCurrencyAmount={formattedAmounts[Field.CURRENCY_A]}
-                quoteCurrency={quoteCurrency}
-                quoteCurrencyAmount={formattedAmounts[Field.CURRENCY_B]}
-                onSubmit={handleOnZapSubmit}
-              />
-            )}
-          </MediumOnly>
-        </AutoColumn>
+                {outOfRange ? (
+                  <Message variant="warning">
+                    <RowBetween>
+                      <Text ml="12px" fontSize="12px">
+                        {t(
+                          'Your position will not earn fees or be used in trades until the market price moves into your range.',
+                        )}
+                      </Text>
+                    </RowBetween>
+                  </Message>
+                ) : null}
+                {invalidRange ? (
+                  <Message variant="warning">
+                    <MessageText>
+                      {t('Invalid range selected. The min price must be lower than the max price.')}
+                    </MessageText>
+                  </Message>
+                ) : null}
+              </DynamicSection>
+            </AutoColumn>
+          </CardBody>
+        </Card>
       </LeftContainer>
-      <DynamicSection
-        style={{
-          gridAutoRows: 'max-content',
-          gridAutoColumns: '100%',
-        }}
-        gap="8px"
-        disabled={!feeAmount || invalidPool || (noLiquidity && !startPriceTypedValue) || (!priceLower && !priceUpper)}
-      >
-        <PreTitle>{t('Deposit Amount')}</PreTitle>
-
-        <LockedDeposit locked={depositADisabled}>
-          <Box mb="8px">
-            <CurrencyInputPanel
-              showUSDPrice
-              maxAmount={maxAmounts[Field.CURRENCY_A]}
-              onMax={() => onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')}
-              onPercentInput={(percent) =>
-                onFieldAInput(maxAmounts[Field.CURRENCY_A]?.multiply(new Percent(percent, 100))?.toExact() ?? '')
-              }
-              disableCurrencySelect
-              value={formattedAmounts[Field.CURRENCY_A] ?? '0'}
-              onUserInput={onFieldAInput}
-              showQuickInputButton
-              showMaxButton
-              currency={currencies[Field.CURRENCY_A]}
-              id="add-liquidity-input-tokena"
-              showCommonBases
-              commonBasesType={CommonBasesType.LIQUIDITY}
+      <Card>
+        <CardBody>
+          <DynamicSection disabled={!baseCurrency || !quoteCurrency}>
+            <FeeSelector
+              currencyA={baseCurrency ?? undefined}
+              currencyB={quoteCurrency ?? undefined}
+              handleFeePoolSelect={handleFeePoolSelect}
+              feeAmount={feeAmount}
             />
-          </Box>
-        </LockedDeposit>
-
-        <LockedDeposit locked={depositBDisabled}>
-          <CurrencyInputPanel
-            showUSDPrice
-            maxAmount={maxAmounts[Field.CURRENCY_B]}
-            onMax={() => onFieldBInput(maxAmounts[Field.CURRENCY_B]?.toExact() ?? '')}
-            onPercentInput={(percent) =>
-              onFieldBInput(maxAmounts[Field.CURRENCY_B]?.multiply(new Percent(percent, 100))?.toExact() ?? '')
+          </DynamicSection>
+          <DynamicSection
+            mt="16px"
+            style={{
+              gridAutoRows: 'max-content',
+              gridAutoColumns: '100%',
+            }}
+            gap="8px"
+            disabled={
+              !feeAmount || invalidPool || (noLiquidity && !startPriceTypedValue) || (!priceLower && !priceUpper)
             }
-            disableCurrencySelect
-            value={formattedAmounts[Field.CURRENCY_B] ?? '0'}
-            onUserInput={onFieldBInput}
-            showQuickInputButton
-            showMaxButton
-            currency={currencies[Field.CURRENCY_B]}
-            id="add-liquidity-input-tokenb"
-            showCommonBases
-            commonBasesType={CommonBasesType.LIQUIDITY}
-          />
-        </LockedDeposit>
-        <MevProtectToggle size="sm" />
-      </DynamicSection>
-      <HideMedium style={{ gap: 16, flexDirection: 'column' }}>
-        {buttons}
-        {hasZapV3Pool && hasInsufficentBalance && (
-          <ZapLiquidityWidget
-            tickLower={tickLower}
-            tickUpper={tickUpper}
-            pool={pool}
-            baseCurrency={baseCurrency}
-            baseCurrencyAmount={formattedAmounts[Field.CURRENCY_A]}
-            quoteCurrency={quoteCurrency}
-            quoteCurrencyAmount={formattedAmounts[Field.CURRENCY_B]}
-            onSubmit={handleOnZapSubmit}
-          />
-        )}
-      </HideMedium>
+          >
+            {hasZapV3Pool && hasInsufficentBalance && (
+              <Box mb="8px">
+                <ZapLiquidityWidget
+                  tickLower={tickLower}
+                  tickUpper={tickUpper}
+                  pool={pool}
+                  baseCurrency={baseCurrency}
+                  baseCurrencyAmount={formattedAmounts[Field.CURRENCY_A]}
+                  quoteCurrency={quoteCurrency}
+                  quoteCurrencyAmount={formattedAmounts[Field.CURRENCY_B]}
+                  onSubmit={handleOnZapSubmit}
+                />
+              </Box>
+            )}
+
+            <LockedDeposit locked={depositADisabled}>
+              <Box mb="8px">
+                <CurrencyInputPanelSimplify
+                  showUSDPrice
+                  maxAmount={maxAmounts[Field.CURRENCY_A]}
+                  onMax={() => onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')}
+                  onPercentInput={(percent) =>
+                    onFieldAInput(maxAmounts[Field.CURRENCY_A]?.multiply(new Percent(percent, 100))?.toExact() ?? '')
+                  }
+                  disableCurrencySelect
+                  defaultValue={formattedAmounts[Field.CURRENCY_A] ?? '0'}
+                  onUserInput={onFieldAInput}
+                  showQuickInputButton
+                  showMaxButton
+                  currency={currencies[Field.CURRENCY_A]}
+                  id="add-liquidity-input-tokena"
+                  title={<PreTitle>{t('Deposit Amount')}</PreTitle>}
+                />
+              </Box>
+            </LockedDeposit>
+
+            <LockedDeposit locked={depositBDisabled}>
+              <CurrencyInputPanelSimplify
+                showUSDPrice
+                maxAmount={maxAmounts[Field.CURRENCY_B]}
+                onMax={() => onFieldBInput(maxAmounts[Field.CURRENCY_B]?.toExact() ?? '')}
+                onPercentInput={(percent) =>
+                  onFieldBInput(maxAmounts[Field.CURRENCY_B]?.multiply(new Percent(percent, 100))?.toExact() ?? '')
+                }
+                disableCurrencySelect
+                defaultValue={formattedAmounts[Field.CURRENCY_B] ?? '0'}
+                onUserInput={onFieldBInput}
+                showQuickInputButton
+                showMaxButton
+                currency={currencies[Field.CURRENCY_B]}
+                id="add-liquidity-input-tokenb"
+                showCommonBases
+                commonBasesType={CommonBasesType.LIQUIDITY}
+                title={<>&nbsp;</>}
+              />
+            </LockedDeposit>
+            <MevProtectToggle size="sm" />
+            <Box mt="8px">{buttons}</Box>
+          </DynamicSection>
+        </CardBody>
+      </Card>
     </>
   )
 }
