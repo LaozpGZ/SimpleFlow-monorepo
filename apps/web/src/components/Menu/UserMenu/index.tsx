@@ -26,7 +26,7 @@ import { UnclaimedOnlyProvider } from 'views/Gift/providers/UnclaimedOnlyProvide
 import { useAccount } from 'wagmi'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
-const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void; account: string | undefined }) => {
+const UserMenuItems = ({ onReceiveClick, account }: { onReceiveClick: () => void; account: string | undefined }) => {
   const { chainId } = useActiveChainId()
   const { logout } = useAuth()
   const { connector } = useAccount()
