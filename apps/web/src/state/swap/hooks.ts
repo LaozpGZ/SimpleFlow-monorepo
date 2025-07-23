@@ -16,6 +16,7 @@ import { ChartPeriod, chainIdToExplorerInfoChainName, explorerApiClient } from '
 import { isAddressEqual, safeGetAddress } from 'utils'
 import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { Field, replaceSwapState } from './actions'
 import { SwapState, swapReducerAtom } from './reducer'
 
@@ -125,7 +126,7 @@ export function queryParametersToSwapState(
 export function useDefaultsFromURLSearch():
   | { inputCurrencyId: string | undefined; outputCurrencyId: string | undefined }
   | undefined {
-  const { chainId } = useActiveChainId()
+  const { chainId } = useAccountActiveChain()
   const [, dispatch] = useAtom(swapReducerAtom)
   const native = useNativeCurrency()
   const { query, pathname, isReady } = useRouter()

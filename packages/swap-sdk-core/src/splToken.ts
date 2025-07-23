@@ -64,11 +64,7 @@ export class SPLToken extends BaseCurrency<SPLToken> {
    * @param other other token to compare
    */
   public equals(other: BaseCurrency): boolean {
-    return (
-      'programId' in other &&
-      this.chainId === other.chainId &&
-      this.programId === (other as unknown as SPLToken).programId
-    )
+    return this.chainId === other.chainId && this.address === (other as SPLToken).address
   }
 
   public sortsBefore(other: SPLToken): boolean {

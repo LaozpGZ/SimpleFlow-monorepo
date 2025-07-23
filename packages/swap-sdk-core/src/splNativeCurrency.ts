@@ -8,4 +8,6 @@ export abstract class SPLNativeCurrency extends BaseCurrency<SPLToken> {
   public readonly isNative = true as const
 
   public readonly isToken = false as const
+
+  public readonly address: string = ''
 }

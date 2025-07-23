@@ -6,7 +6,7 @@ import { ReactNode, Suspense, useCallback, useMemo } from 'react'
 
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { CommonBasesType } from 'components/SearchModal/types'
-import { useCurrency } from 'hooks/Tokens'
+import { useUnifiedCurrency } from 'hooks/Tokens'
 import { Field } from 'state/swap/actions'
 import { useDefaultsFromURLSearch, useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
@@ -156,8 +156,8 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
   const isWrapping = useIsWrapping()
   const loadedUrlParams = useDefaultsFromURLSearch()
 
-  const inputCurrency = useCurrency(inputCurrencyId, inputChainId)
-  const outputCurrency = useCurrency(outputCurrencyId, outputChainId)
+  const inputCurrency = useUnifiedCurrency(inputCurrencyId, inputChainId)
+  const outputCurrency = useUnifiedCurrency(outputCurrencyId, outputChainId)
 
   const [inputBalance] = useCurrencyBalances(account, [inputCurrency, outputCurrency])
 

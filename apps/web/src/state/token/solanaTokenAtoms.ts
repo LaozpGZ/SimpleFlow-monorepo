@@ -7,6 +7,6 @@ import { SPLToken } from '@pancakeswap/swap-sdk-core'
 export const solanaTokenListAtom = atom<SPLToken[]>([])
 
 // AtomFamily to get a token by address from the list
-export const solanaTokenAtomFamily = atomFamily((address: string) =>
-  atom((get) => get(solanaTokenListAtom).find((token) => token.address === address)),
+export const solanaTokenAtomFamily = atomFamily((address?: string) =>
+  atom((get) => (address ? get(solanaTokenListAtom).find((token) => token.address === address) : undefined)),
 )
