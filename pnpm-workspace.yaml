@@ -23,4 +23,4 @@ catalog:
   jotai: ^2.4.3
   "@vanilla-extract/vite-plugin": ^4.0.2
   "@solana/web3.js": 1.95.8
-  zod: ^4.0.5
+  zod: ^3.25.67
