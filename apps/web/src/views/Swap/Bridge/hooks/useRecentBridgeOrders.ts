@@ -11,14 +11,44 @@ interface UseRecentBridgeOrdersParameters {
 }
 
 export const useRecentBridgeOrders = ({ address }: UseRecentBridgeOrdersParameters) => {
+  console.log('🔗 useRecentBridgeOrders called with:', {
+    address,
+    addressType: typeof address,
+    hasAddress: !!address,
+  })
+
   return useInfiniteQuery({
     queryKey: getRecentBridgeOrdersQueryKey([address!]),
     queryFn: ({ pageParam }) => {
       if (!address) {
+        console.error('❌ useRecentBridgeOrders: No address provided')
         throw new Error("No address provided for user's bridge orders")
       }
 
+      console.log('🌐 Calling getUserBridgeOrders API with:', {
+        address,
+        pageParam,
+      })
+
       return getUserBridgeOrders(address, pageParam)
+        .then((result) => {
+          console.log('📡 getUserBridgeOrders API response:', {
+            address,
+            pageParam,
+            result,
+            rowsCount: result?.rows?.length || 0,
+            hasNextPage: result?.hasNextPage,
+          })
+          return result
+        })
+        .catch((error) => {
+          console.error('❌ getUserBridgeOrders API error:', {
+            address,
+            pageParam,
+            error,
+          })
+          throw error
+        })
     },
     enabled: !!address,
     initialPageParam: undefined,
