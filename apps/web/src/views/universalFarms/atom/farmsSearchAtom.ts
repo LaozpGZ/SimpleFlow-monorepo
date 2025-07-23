@@ -94,7 +94,7 @@ const searchAtom = atomFamily((query: FarmQuery) => {
       }
       return true
     })
-    if (queryChains.length && activeChainId) {
+    if (queryChains.length === 0 && activeChainId) {
       queryChains.push(activeChainId)
     }
 
