@@ -190,12 +190,54 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
 
   useEffect(() => {
     const auth = getAuth(firebaseApp)
-    auth.onAuthStateChanged((user) => {
-      console.log('Auth state changed')
+
+    // Handle auth state changes and set token
+    const unsubscribeAuthState = auth.onAuthStateChanged(async (user) => {
+      console.log('Firebase auth state changed, user:', user ? 'exists' : 'null')
+
+      if (user) {
+        try {
+          const idToken = await user.getIdToken(true)
+          setToken(idToken)
+          console.log('Token set from Firebase auth state change')
+        } catch (error) {
+          console.error('Failed to get token on auth state change:', error)
+        }
+      } else {
+        setToken(undefined)
+        console.log('Firebase user signed out, token cleared')
+      }
+
+      setLoading(false) // Set loading to false after initial check
     })
-    auth.onIdTokenChanged((user) => {
-      console.log('Auth on change', user)
+
+    // Handle token changes
+    const unsubscribeTokenChange = auth.onIdTokenChanged((user) => {
+      console.log('Firebase token changed, user:', user ? 'exists' : 'null')
     })
+
+    // Listen for manual retrigger events
+    const handleRetrigger = (event: CustomEvent) => {
+      const { token: newToken } = event.detail
+      console.log('Received Firebase retrigger event, updating token...')
+
+      // Clear current token first to force Privy to re-authenticate
+      setToken(undefined)
+
+      // Then set new token after a small delay to trigger Privy re-auth
+      setTimeout(() => {
+        setToken(newToken)
+        console.log('Token updated for Privy re-authentication')
+      }, 100)
+    }
+
+    window.addEventListener('firebase-auth-retrigger', handleRetrigger as EventListener)
+
+    return () => {
+      unsubscribeAuthState()
+      unsubscribeTokenChange()
+      window.removeEventListener('firebase-auth-retrigger', handleRetrigger as EventListener)
+    }
   }, [])
 
   // Social login handler (Discord & Telegram)
@@ -280,4 +322,41 @@ export function useFirebaseAuth() {
     throw new Error('useAuth must be used within an AuthProvider')
   }
   return context
+}
+
+// Function to retrigger Firebase auth for Privy
+export async function retriggerFirebaseAuth() {
+  try {
+    const auth = getAuth(firebaseApp)
+    const currentUser = auth.currentUser
+
+    if (!currentUser) {
+      console.log('No Firebase user found, cannot retrigger auth')
+      return false
+    }
+
+    console.log('Current Firebase user exists, retriggering token...')
+
+    // Get fresh token to trigger Privy re-authentication
+    const freshToken = await currentUser.getIdToken(true) // force refresh
+    console.log('Fresh Firebase token obtained, length:', freshToken.length)
+    console.log(`Token preview: ${freshToken.substring(0, 20)}...${freshToken.substring(freshToken.length - 20)}`)
+
+    // Trigger auth state change event manually
+    // This should cause Privy's getCustomAccessToken to be called again
+    const event = new CustomEvent('firebase-auth-retrigger', {
+      detail: { token: freshToken },
+    })
+
+    console.log('Dispatching Firebase retrigger event...')
+    window.dispatchEvent(event)
+
+    // Wait a moment for the retrigger to take effect
+    await new Promise((resolve) => setTimeout(resolve, 500))
+
+    return true
+  } catch (error) {
+    console.error('Failed to retrigger Firebase auth:', error)
+    return false
+  }
 }

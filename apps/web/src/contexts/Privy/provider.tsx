@@ -8,7 +8,7 @@ import { type WagmiProviderProps } from 'wagmi'
 const lastWalletRecoveryAtom = atomWithStorage('lastWalletRecovery', 0)
 
 export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren<WagmiProviderProps>) {
-  const { authenticated, ready, user, createWallet, setWalletRecovery, enrollInMfa } = usePrivy()
+  const { authenticated, ready, user, createWallet, setWalletRecovery, logout: privyLogout, login } = usePrivy()
   const [lastRecovery, setLastRecovery] = useAtom(lastWalletRecoveryAtom)
   const attemptedWalletCreation = useRef(false)
 
@@ -40,8 +40,34 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
           await createWallet()
           console.log('Wallet created successfully')
         } catch (error) {
-          console.error('Failed to create wallet:', error)
-          // Reset flag to allow retry
+          console.error('Failed to create wallet, retriggering auth lifecycle:', error)
+
+          try {
+            console.log('Attempting to retrigger Privy authentication...')
+
+            // Clear only Privy-related localStorage items
+            const keysToRemove = []
+            for (let i = 0; i < localStorage.length; i++) {
+              const key = localStorage.key(i)
+              if (key && key.startsWith('privy:')) {
+                // @ts-ignore
+                keysToRemove.push(key)
+              }
+            }
+            keysToRemove.forEach((key) => {
+              localStorage.removeItem(key)
+              console.log('Cleared Privy localStorage:', key)
+            })
+
+            // Import Firebase auth context to retrigger token
+            const { retriggerFirebaseAuth } = await import('./firebase')
+            await retriggerFirebaseAuth()
+            console.log('Firebase auth retriggered')
+          } catch (logoutError) {
+            console.error('Failed to retrigger auth:', logoutError)
+          }
+
+          // Reset flag to allow retry after re-authentication
           attemptedWalletCreation.current = false
         }
       }
