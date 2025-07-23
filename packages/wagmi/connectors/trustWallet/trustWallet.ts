@@ -3,7 +3,7 @@
 /* eslint-disable class-methods-use-this */
 import { type EthereumProvider } from '@walletconnect/ethereum-provider'
 import { getAddress } from 'viem'
-import { createConnector, normalizeChainId } from '@wagmi/core'
+import { createConnector, normalizeChainId } from 'wagmi'
 
 declare global {
   interface Window {

@@ -4,7 +4,7 @@ import type {
 } from '@blocto/sdk'
 import BloctoSDK from '@blocto/sdk'
 import { RpcError, SwitchChainError, UserRejectedRequestError, getAddress, numberToHex } from 'viem'
-import { createConnector, normalizeChainId } from '@wagmi/core'
+import { createConnector, normalizeChainId } from 'wagmi'
 
 export type BloctoParameters = {
   /**

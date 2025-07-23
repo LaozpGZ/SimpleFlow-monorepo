@@ -63,7 +63,6 @@
     }
   },
   "dependencies": {
-    "@wagmi/core": "^2.18.0",
     "@walletconnect/ethereum-provider": "^2.14.0"
   }
 }
