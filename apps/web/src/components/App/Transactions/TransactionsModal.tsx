@@ -136,6 +136,10 @@ export function RecentTransactions() {
     })),
   })
 
+  const { t } = useTranslation()
+
+  const hasTransactions = !isEmpty(sortedRecentTransactions)
+
   console.log('📊 Final Transaction Summary:', {
     ammTransactions: ammTransactions.length,
     xOrders: xOrders.length,
@@ -144,10 +148,6 @@ export function RecentTransactions() {
     hasTransactions,
     showingTransactions: xOrders.length > 0 || hasTransactions || recentCrossChainOrders.length > 0,
   })
-
-  const { t } = useTranslation()
-
-  const hasTransactions = !isEmpty(sortedRecentTransactions)
 
   const clearAllTransactionsCallback = useCallback(() => {
     dispatch(clearAllTransactions())
