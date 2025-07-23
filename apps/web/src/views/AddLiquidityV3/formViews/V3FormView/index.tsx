@@ -10,6 +10,7 @@ import {
   CardBody,
   DynamicSection,
   Flex,
+  FlexGap,
   Message,
   MessageText,
   PreTitle,
@@ -93,18 +94,24 @@ const StyledInput = styled(NumericalInput)`
   margin-bottom: 16px;
 `
 
-export const HideMedium = styled.div`
-  display: flex;
-  ${({ theme }) => theme.mediaQueries.md} {
-    display: none;
-  }
+const QuickActionButtonsContainer = styled(FlexGap)`
+  background-color: ${({ theme }) => theme.colors.input};
+  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+  border-radius: ${({ theme }) => theme.radii.default};
+
+  box-shadow: ${({ theme }) => theme.shadows.inset2};
 `
 
-export const MediumOnly = styled.div`
-  display: none;
-  ${({ theme }) => theme.mediaQueries.md} {
-    display: flex;
-  }
+const QuickActionButton = styled(Button).attrs(({ $isActive }) => ({
+  scale: 'xs',
+  variant: $isActive ? 'subtle' : 'light',
+}))<{
+  $isActive?: boolean
+}>`
+  height: 56px;
+  font-size: 16px;
+  padding: 0 12px;
+  font-weight: ${({ $isActive }) => ($isActive ? 600 : 400)};
 `
 
 export const LeftContainer = styled(AutoColumn)`
@@ -732,14 +739,15 @@ export default function V3FormView({
                     </Box>
                   </Message>
                 ) : (
-                  <Flex justifyContent="space-between" width="100%" style={{ gap: '8px' }}>
+                  <QuickActionButtonsContainer justifyContent="space-between" width="100%" gap="8px">
                     {feeAmount &&
                       QUICK_ACTION_CONFIGS[feeAmount] &&
                       Object.entries<ZoomLevels>(QUICK_ACTION_CONFIGS[feeAmount])
                         ?.sort(([a], [b]) => +a - +b)
                         .map(([quickAction, zoomLevel]) => {
                           return (
-                            <Button
+                            <QuickActionButton
+                              $isActive={+quickAction === activeQuickAction}
                               width="100%"
                               key={`quickActions${quickAction}`}
                               onClick={() => {
@@ -756,10 +764,10 @@ export default function V3FormView({
                               scale="sm"
                             >
                               {quickAction}%
-                            </Button>
+                            </QuickActionButton>
                           )
                         })}
-                    <Button
+                    <QuickActionButton
                       width="200%"
                       onClick={() => {
                         if (activeQuickAction === 100) {
@@ -774,8 +782,8 @@ export default function V3FormView({
                       scale="sm"
                     >
                       {t('Full Range')}
-                    </Button>
-                  </Flex>
+                    </QuickActionButton>
+                  </QuickActionButtonsContainer>
                 )}
 
                 {displayMarketPriceSlippageWarning ? (

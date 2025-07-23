@@ -26,7 +26,7 @@ export const LightGreyCard = styled(Card)`
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
-export const LightSecondaryCard = styled(Card)<{ $active: boolean }>`
+export const LightSecondaryCard = styled(Card)<{ $active?: boolean }>`
   border-radius: 16px;
   border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
   background-color: ${({ theme, $active }) => ($active ? theme.colors.textSubtle : theme.colors.input)};

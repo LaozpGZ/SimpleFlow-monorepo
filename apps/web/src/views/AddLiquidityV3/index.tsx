@@ -285,7 +285,7 @@ export function UniversalAddLiquidity({
 
   return (
     <>
-      <CardBody>
+      <Box mt="24px">
         <ResponsiveTwoColumns
           $singleColumn={selectorType === SELECTOR_TYPE.V2 || selectorType === SELECTOR_TYPE.STABLE}
         >
@@ -313,7 +313,7 @@ export function UniversalAddLiquidity({
             </StableConfigContext.Provider>
           )}
         </ResponsiveTwoColumns>
-      </CardBody>
+      </Box>
     </>
   )
 }
