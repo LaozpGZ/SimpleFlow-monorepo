@@ -30,7 +30,10 @@ export const FieldAddDepositAmount: React.FC<FieldDepositAmountProps> = ({
   const input1 = useMemo(() => (inverted ? inputValue0 : inputValue1), [inverted, inputValue0, inputValue1])
 
   const totalUsdValue = useMemo(() => {
-    return (currency0Price ?? 0) * Number(input0 ?? 0) + (currency1Price ?? 0) * Number(input1 ?? 0)
+    const usdValueA = currency0Price ? Number(input0 ?? 0) * currency0Price : 0
+    const usdValueB = currency1Price ? Number(input1 ?? 0) * currency1Price : 0
+    const result = (usdValueA || 0) + (usdValueB || 0)
+    return Number.isNaN(result) ? 0 : result
   }, [currency0Price, currency1Price, input0, input1])
 
   return (

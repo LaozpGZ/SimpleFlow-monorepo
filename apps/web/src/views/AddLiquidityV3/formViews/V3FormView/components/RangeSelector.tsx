@@ -94,7 +94,7 @@ export default function RangeSelector({
         feeAmount={feeAmount}
         label={leftPrice ? `${currencyB?.symbol}` : '-'}
         title={
-          <Text color="secondary" small>
+          <Text color="secondary" textTransform="uppercase" small bold>
             {t('Min Price')}
           </Text>
         }
@@ -114,7 +114,7 @@ export default function RangeSelector({
         tokenA={currencyA}
         tokenB={currencyB}
         title={
-          <Text color="secondary" small>
+          <Text color="secondary" textTransform="uppercase" small bold>
             {t('Max Price')}
           </Text>
         }

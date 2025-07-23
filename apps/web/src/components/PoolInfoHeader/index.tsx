@@ -92,17 +92,16 @@ export const PoolInfoHeader = ({
                   alignItems={isSmallScreen ? 'flex-start' : 'center'}
                   flexDirection={isSmallScreen ? 'column' : 'row'}
                 >
-                  <Box>
-                    <Flex alignItems="center" justifyContent="center" position="relative">
-                      <DoubleCurrencyLogo
-                        currency0={currency0}
-                        currency1={currency1}
-                        size={48}
-                        innerMargin="2px"
-                        showChainLogoCurrency1
-                      />
-                    </Flex>
-                  </Box>
+                  <Flex alignItems="center" justifyContent="center" position="relative">
+                    <DoubleCurrencyLogo
+                      currency0={currency0}
+                      currency1={currency1}
+                      size={48}
+                      innerMargin="2px"
+                      showChainLogoCurrency1
+                    />
+                  </Flex>
+
                   <FlexGap gap="4px" alignItems="center">
                     <Text bold fontSize={32} style={{ lineHeight: '1' }}>
                       {currency0?.symbol}
@@ -206,31 +205,31 @@ export const PoolInfoHeader = ({
                     <BscScanIcon width={24} height={24} color="textSubtle" style={{ cursor: 'pointer' }} />
                   </Tooltips>
                 </FlexGap>
-                <FlexGap gap="16px" flexWrap="wrap" alignItems="center" alignContent="center">
-                  {poolInfo?.protocol ? (
-                    <AutoColumn rowGap="4px">
-                      <Box>
-                        {isInfinityProtocol(poolInfo.protocol) ? (
-                          <InfinityFeeTierBreakdown
-                            poolId={poolId}
-                            chainId={chainId}
-                            hookData={hookData}
-                            infoIconVisible={false}
-                            showType={false}
-                          />
-                        ) : (
-                          <FeeTierTooltip
-                            type={poolInfo.protocol}
-                            percent={new Percent(poolInfo?.feeTier ?? 0n, poolInfo?.feeTierBase)}
-                            dynamic={poolInfo?.isDynamicFee}
-                            showType={false}
-                          />
-                        )}
-                      </Box>
-                    </AutoColumn>
-                  ) : null}
+                {poolInfo && (
+                  <FlexGap gap="16px" flexWrap="wrap" alignItems="center" alignContent="center">
+                    {poolInfo?.protocol ? (
+                      <AutoColumn rowGap="4px">
+                        <Box>
+                          {isInfinityProtocol(poolInfo.protocol) ? (
+                            <InfinityFeeTierBreakdown
+                              poolId={poolId}
+                              chainId={chainId}
+                              hookData={hookData}
+                              infoIconVisible={false}
+                              showType={false}
+                            />
+                          ) : (
+                            <FeeTierTooltip
+                              type={poolInfo.protocol}
+                              percent={new Percent(poolInfo?.feeTier ?? 0n, poolInfo?.feeTierBase)}
+                              dynamic={poolInfo?.isDynamicFee}
+                              showType={false}
+                            />
+                          )}
+                        </Box>
+                      </AutoColumn>
+                    ) : null}
 
-                  {poolInfo && (
                     <Liquidity.PoolFeaturesBadge
                       showPoolType
                       showPoolFeature={false}
@@ -240,71 +239,81 @@ export const PoolInfoHeader = ({
                       hookData={hookData}
                       showLabel={false}
                     />
-                  )}
 
-                  {hookData && (
-                    <PoolFeaturesModal hookData={hookData}>
-                      <Tag
-                        variant="tertiary"
-                        startIcon={<MiscellaneousIcon width={16} height={16} color="textSubtle" />}
-                        endIcon={<>&nbsp;»</>}
-                      >
-                        {t('Pool Features')}
-                      </Tag>
-                    </PoolFeaturesModal>
-                  )}
-                </FlexGap>
+                    {hookData && (
+                      <PoolFeaturesModal hookData={hookData}>
+                        <Tag
+                          variant="tertiary"
+                          startIcon={<MiscellaneousIcon width={16} height={16} color="textSubtle" />}
+                          endIcon={<>&nbsp;»</>}
+                        >
+                          {t('Pool Features')}
+                        </Tag>
+                      </PoolFeaturesModal>
+                    )}
+                  </FlexGap>
+                )}
               </FlexGap>
             </FlexGap>
-
-            <FlexGap gap="16px" flexDirection={['column', null, 'row']}>
-              <Box p="8px 16px" width="100%">
-                <FlexGap gap="8px" alignItems="center">
-                  <Text fontSize={12} bold color="textSubtle" textTransform="uppercase" style={{ userSelect: 'none' }}>
-                    {t('Current Price')}
-                  </Text>
-                  <SwapHorizIcon color="primary60" onClick={onInvertPrices} style={{ cursor: 'pointer' }} />
-                </FlexGap>
-                <FlexGap mt="2px" gap="8px" alignItems="center" width="100%">
-                  {poolInfo && (
-                    <Text fontSize={28} bold width="max-content">
-                      {formatNumber(Number(isInverted ? poolInfo.token0Price : poolInfo.token1Price), {
-                        maximumSignificantDigits: 6,
-                        maxDecimalDisplayDigits: 6,
-                      })}
+            {poolInfo && (
+              <FlexGap gap="16px" flexDirection={['column', null, 'row']}>
+                <Box p="8px 16px" width="100%">
+                  <FlexGap gap="8px" alignItems="center">
+                    <Text
+                      fontSize={12}
+                      color="textSubtle"
+                      textTransform="uppercase"
+                      minWidth="max-content"
+                      style={{ userSelect: 'none' }}
+                      bold
+                    >
+                      {t('Current Price')}
                     </Text>
-                  )}
-
-                  <Text fontSize={12} color="textSubtle" textTransform="uppercase" width="max-content">
-                    {t(
-                      '%symbol0% per %symbol1%',
-                      isInverted
-                        ? {
-                            symbol0: currency0?.symbol,
-                            symbol1: currency1?.symbol,
-                          }
-                        : {
-                            symbol0: currency1?.symbol,
-                            symbol1: currency0?.symbol,
-                          },
-                    )}
-                  </Text>
-                </FlexGap>
-              </Box>
-              <Box padding="8px 16px">
-                <AutoColumn rowGap="2px">
-                  <FlexGap>
-                    <Text fontSize={12} bold color="textSubtle" textTransform="uppercase" width="max-content">
-                      {t('Est. APR')}
-                    </Text>
-                    {overrideAprDisplay?.roiCalculator ||
-                      (poolInfo && <PoolGlobalAprButtonV3 pool={poolInfo} showApyText={false} color="text" />)}
+                    <SwapHorizIcon color="primary60" onClick={onInvertPrices} style={{ cursor: 'pointer' }} />
                   </FlexGap>
-                  {overrideAprDisplay?.aprDisplay ||
-                    (poolInfo && <PoolGlobalAprButtonV3 pool={poolInfo} showApyButton={false} color="text" />)}
-                </AutoColumn>
-              </Box>
-            </FlexGap>
+                  <FlexGap mt="2px" gap="8px" alignItems="center" width="100%">
+                    {poolInfo && (
+                      <Text fontSize={28} bold width="max-content">
+                        {formatNumber(Number(isInverted ? poolInfo.token0Price : poolInfo.token1Price), {
+                          maximumSignificantDigits: 6,
+                          maxDecimalDisplayDigits: 6,
+                        })}
+                      </Text>
+                    )}
+
+                    <Text fontSize={12} color="textSubtle" textTransform="uppercase" width="max-content">
+                      {t(
+                        '%symbol0% per %symbol1%',
+                        isInverted
+                          ? {
+                              symbol0: currency0?.symbol,
+                              symbol1: currency1?.symbol,
+                            }
+                          : {
+                              symbol0: currency1?.symbol,
+                              symbol1: currency0?.symbol,
+                            },
+                      )}
+                    </Text>
+                  </FlexGap>
+                </Box>
+                <Box padding="8px 16px">
+                  <AutoColumn rowGap="2px">
+                    <FlexGap>
+                      <Text fontSize={12} bold color="textSubtle" textTransform="uppercase" width="max-content">
+                        {t('Est. APR')}
+                      </Text>
+                      {overrideAprDisplay?.roiCalculator || (
+                        <PoolGlobalAprButtonV3 pool={poolInfo} showApyText={false} color="text" />
+                      )}
+                    </FlexGap>
+                    {overrideAprDisplay?.aprDisplay || (
+                      <PoolGlobalAprButtonV3 pool={poolInfo} showApyButton={false} color="text" />
+                    )}
+                  </AutoColumn>
+                </Box>
+              </FlexGap>
+            )}
           </FlexGap>
         </CardBody>
       </Card>

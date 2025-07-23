@@ -70,9 +70,9 @@ export default function V2FormView({
   const { data: currencyAPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_A])
   const { data: currencyBPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_B])
   const totalUsdValue = useMemo(() => {
-    const result =
-      (currencyAPrice ?? 0) * Number(formattedAmounts[Field.CURRENCY_A]) +
-      (currencyBPrice ?? 0) * Number(formattedAmounts[Field.CURRENCY_B])
+    const usdValueA = currencyAPrice ? Number(formattedAmounts[Field.CURRENCY_A]) * currencyAPrice : 0
+    const usdValueB = currencyBPrice ? Number(formattedAmounts[Field.CURRENCY_B]) * currencyBPrice : 0
+    const result = (usdValueA || 0) + (usdValueB || 0)
     return Number.isNaN(result) ? 0 : result
   }, [currencyAPrice, currencyBPrice, formattedAmounts])
 

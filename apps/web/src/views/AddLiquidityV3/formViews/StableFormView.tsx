@@ -30,7 +30,7 @@ import { ReactElement } from 'react'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { useAccount } from 'wagmi'
-import { HideMedium, MediumOnly, LeftContainer } from './V3FormView'
+import { LeftContainer } from './V3FormView'
 
 export default function StableFormView({
   formattedAmounts,
@@ -183,9 +183,11 @@ export default function StableFormView({
           showCommonBases
           commonBasesType={CommonBasesType.LIQUIDITY}
         />
-        <MevProtectToggle size="sm" />
+        <Box mt="8px">
+          <MevProtectToggle size="sm" />
+        </Box>
+        <Box mt="16px">{buttons}</Box>
       </AutoColumn>
-      <HideMedium>{buttons}</HideMedium>
 
       <LeftContainer>
         <AutoColumn>
@@ -280,7 +282,6 @@ export default function StableFormView({
               />
             </AutoRow>
           </Box>
-          <MediumOnly>{buttons}</MediumOnly>
         </AutoColumn>
       </LeftContainer>
     </>

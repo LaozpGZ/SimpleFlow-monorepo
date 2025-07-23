@@ -373,8 +373,8 @@ export function AddLiquidityV3Layout({
         linkType="addLiquidity"
         poolInfo={pool}
         chainId={chainId}
-        currency0={pool?.token0 ?? undefined}
-        currency1={pool?.token1 ?? undefined}
+        currency0={pool?.token0 ?? baseCurrency ?? undefined}
+        currency1={pool?.token1 ?? quoteCurrency ?? undefined}
         isInverted={inverted}
         poolId={poolAddress}
         overrideAprDisplay={
