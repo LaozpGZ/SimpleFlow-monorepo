@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Pair, Token, UnifiedCurrency } from '@pancakeswap/sdk'
+import { Pair, Token, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import {
   Box,
   Button,
@@ -20,16 +20,16 @@ import { styled } from 'styled-components'
 
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
-import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
+import { useUnifiedUSDPriceAmount } from 'hooks/useStablecoinPrice'
 import { StablePair } from 'views/AddLiquidity/AddStableLiquidity/hooks/useStableLPDerivedMintInfo'
 
 import { RiskInputPanelDisplay } from 'components/AccessRisk/SwapRevampRiskDisplay'
 import { FiatLogo } from 'components/Logo/CurrencyLogo'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useCurrencyBalance } from 'state/wallet/hooks'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { useAccount } from 'wagmi'
+import { useUnifiedCurrencyBalance } from 'hooks/useUnifiedCurrencyBalance'
 import { CommonBasesType } from 'components/SearchModal/types'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import { FONT_SIZE, LOGO_SIZE, useFontSize } from './state'
@@ -160,15 +160,15 @@ interface CurrencyInputPanelProps {
   onMax?: () => void
   showQuickInputButton?: boolean
   showMaxButton: boolean
-  maxAmount?: CurrencyAmount<Currency>
+  maxAmount?: UnifiedCurrencyAmount<UnifiedCurrency>
   lpPercent?: string
   label?: string
   onCurrencySelect?: (currency: UnifiedCurrency) => void
-  currency?: Currency | null
+  currency?: UnifiedCurrency | null
   disableCurrencySelect?: boolean
   hideBalance?: boolean
   pair?: Pair | StablePair | null
-  otherCurrency?: Currency | null
+  otherCurrency?: UnifiedCurrency | null
   id: string
   showCommonBases?: boolean
   commonBasesType?: CommonBasesType
@@ -228,15 +228,15 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   const [value, setValue] = useState<string | undefined>(defaultValue)
   const { chainId } = useActiveChainId()
 
-  const selectedCurrencyBalance = useCurrencyBalance(account ?? undefined, currency ?? undefined)
+  const selectedCurrencyBalance = useUnifiedCurrencyBalance(currency ?? undefined)
 
   const { t } = useTranslation()
 
   const mode = id
-  const token = pair ? pair.liquidityToken : currency?.isToken ? currency : null
+  const token = pair ? pair.liquidityToken : currency?.isToken && currency instanceof Token ? currency : null
   const [isInputFocus, setIsInputFocus] = useState(false)
 
-  const amountInDollar = useStablecoinPriceAmount(
+  const amountInDollar = useUnifiedUSDPriceAmount(
     showUSDPrice ? currency ?? undefined : undefined,
     value !== undefined && Number.isFinite(+value) ? +value : undefined,
   )

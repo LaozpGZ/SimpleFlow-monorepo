@@ -172,10 +172,10 @@ function CurrencyRow({
   const [isHovered, setIsHovered] = useState(false)
 
   const balanceAmount = useUnifiedCurrencyBalance(currency)
-  const currencyUsdPrice = useUnifiedTokenUsdPrice(currency, Boolean(balanceAmount && balanceAmount.amount))
+  const currencyUsdPrice = useUnifiedTokenUsdPrice(currency, Boolean(balanceAmount))
   const balanceUSD = useMemo(() => {
     if (!balanceAmount || !currencyUsdPrice.data) return undefined
-    return new BN(balanceAmount.amount.toExact()).times(currencyUsdPrice.data).toFixed(2)
+    return new BN(balanceAmount.toExact()).times(currencyUsdPrice.data).toFixed(2)
   }, [balanceAmount, currencyUsdPrice])
 
   const isConnected = useMemo(
@@ -216,7 +216,7 @@ function CurrencyRow({
         <RowFixed style={{ justifySelf: 'flex-end' }}>
           {balanceAmount ? (
             <AutoColumn justify="flex-end">
-              <Balance balance={balanceAmount.amount} />
+              <Balance balance={balanceAmount} />
               <div>
                 {balanceUSD && Number(balanceUSD) > 0 && (
                   <Text color="textSubtle" small ellipsis maxWidth="200px">

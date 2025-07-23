@@ -10,8 +10,7 @@ import { useUnifiedCurrency } from 'hooks/Tokens'
 import { Field } from 'state/swap/actions'
 import { useDefaultsFromURLSearch, useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
-import { useCurrencyBalances } from 'state/wallet/hooks'
-import { maxAmountSpend } from 'utils/maxAmountSpend'
+import { maxUnifiedAmountSpend } from 'utils/maxAmountSpend'
 
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
 import { CHAIN_QUERY_NAME } from 'config/chains'
@@ -19,10 +18,10 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import currencyId from 'utils/currencyId'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
 import { getDefaultToken } from 'views/Swap/utils'
-import { useAccount } from 'wagmi'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import { ChainId } from '@pancakeswap/chains'
+import { useUnifiedCurrencyBalance } from 'hooks/useUnifiedCurrencyBalance'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { AssignRecipientButton, FlipButton } from './FlipButton'
@@ -142,7 +141,6 @@ export const handleCurrencySelectFn = async ({
 
 export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsufficientBalance }: Props) {
   const { t } = useTranslation()
-  const { address: account } = useAccount()
   const warningSwapHandler = useWarningImport()
 
   const {
@@ -159,9 +157,9 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
   const inputCurrency = useUnifiedCurrency(inputCurrencyId, inputChainId)
   const outputCurrency = useUnifiedCurrency(outputCurrencyId, outputChainId)
 
-  const [inputBalance] = useCurrencyBalances(account, [inputCurrency, outputCurrency])
+  const inputBalance = useUnifiedCurrencyBalance(inputCurrency)
 
-  const maxAmountInput = useMemo(() => maxAmountSpend(inputBalance), [inputBalance])
+  const maxAmountInput = useMemo(() => maxUnifiedAmountSpend(inputBalance), [inputBalance])
 
   const handleTypeInput = useCallback((value: string) => onUserInput(Field.INPUT, value), [onUserInput])
   const handleTypeOutput = useCallback((value: string) => onUserInput(Field.OUTPUT, value), [onUserInput])

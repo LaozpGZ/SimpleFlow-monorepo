@@ -166,6 +166,7 @@ export const BLOCKED_PRICE_IMPACT_NON_EXPERT: Percent = new Percent(1500n, BIPS_
 
 // used to ensure the user doesn't send so much BNB so they end up with <.01
 export const MIN_BNB: bigint = BIG_INT_TEN ** 15n // .001 BNB
+export const MIN_SOL_RESERVER: bigint = BIG_INT_TEN ** 7n // 0.01 SOL
 export const BETTER_TRADE_LESS_HOPS_THRESHOLD = new Percent(50n, BIPS_BASE)
 
 export const ZERO_PERCENT = new Percent('0')
