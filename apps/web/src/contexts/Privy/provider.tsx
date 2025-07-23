@@ -25,15 +25,39 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
   }, [ready, user, authenticated, lastRecovery, setWalletRecovery])
 
   useEffect(() => {
+    if (
+      ready &&
+      authenticated &&
+      user?.wallet?.address &&
+      user?.smartWallet?.address &&
+      attemptedWalletCreation.current === false
+    ) {
+      handleWalletRecovery()
+    }
+  }, [ready, authenticated, user?.wallet])
+
+  useEffect(() => {
     const createWalletWithUserManagedRecovery = async () => {
       if (ready && authenticated && !user?.wallet && !attemptedWalletCreation.current) {
         attemptedWalletCreation.current = true
-        await createWallet()
-        handleWalletRecovery()
+        console.log('Creating wallet for authenticated user without wallet')
+        try {
+          await createWallet()
+          console.log('Wallet created successfully')
+          // Set lastRecovery to current time when wallet is created
+          // This prevents immediate wallet recovery call and sets the timer for next week
+          const now = Date.now()
+          setLastRecovery(now)
+          console.log('Last recovery time set to:', new Date(now).toISOString())
+        } catch (error) {
+          console.error('Failed to create wallet:', error)
+          // Reset flag to allow retry
+          attemptedWalletCreation.current = false
+        }
       }
     }
     createWalletWithUserManagedRecovery()
-  }, [ready, user, authenticated, createWallet])
+  }, [ready, user, authenticated, createWallet, setLastRecovery])
 
   return <PrivyWagmiProvider {...props}>{children}</PrivyWagmiProvider>
 }
