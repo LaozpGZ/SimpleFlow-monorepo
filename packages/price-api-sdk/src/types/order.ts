@@ -1,5 +1,5 @@
 import type { ExclusiveDutchOrderInfoJSON, ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
-import type { InfinityRouter, Route } from '@pancakeswap/smart-router'
+import type { InfinityRouter, PoolType, Route, RouteType } from '@pancakeswap/smart-router'
 import type { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
 import type { AMMOrder } from './amm'
 import { Hex } from './common'
@@ -64,14 +64,14 @@ export type BridgeOrder<tradeType extends TradeType = TradeType> = {
 
 // SVM Order types
 export interface SVMPool {
-  type: 'SVM'
+  type: PoolType.SVM
   id: string
   feeAmount: string
   feeRate: number
 }
 
 export interface SVMRoute {
-  type: 'SVM'
+  type: RouteType.SVM
   inputAmount: CurrencyAmount<Currency>
   outputAmount: CurrencyAmount<Currency>
   pools: SVMPool[]

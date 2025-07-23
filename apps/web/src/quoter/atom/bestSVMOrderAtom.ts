@@ -1,80 +1,116 @@
 import { NonEVMChainId } from '@pancakeswap/chains'
+import { OrderType } from '@pancakeswap/price-api-sdk'
+import { Loadable } from '@pancakeswap/utils/Loadable'
 import { withTimeout } from '@pancakeswap/utils/withTimeout'
 import { atomFamily } from 'jotai/utils'
 import { QUOTE_TIMEOUT } from 'quoter/consts'
-import { quoteTraceAtom } from 'quoter/perf/quoteTracker'
-import type { InterfaceOrder } from 'views/Swap/utils'
+import { translateQuoteQueryToSVMRequest } from 'quoter/utils/svm-utils/translateQuoteQueryToSVMRequest'
+import { type InterfaceOrder, isSVMOrder } from 'views/Swap/utils'
 import type { QuoteQuery } from '../quoter.types'
-import { parseSVMQuoteResponse } from '../utils/svmResponseParser'
-import { translateQuoteQueryToSVMRequest } from '../utils/svmUtils'
+import { parseSVMQuoteResponse } from '../utils/svm-utils/svmResponseParser'
 import { atomWithLoadable } from './atomWithLoadable'
 
-const SVM_QUOTER_ENDPOINT = 'https://sol-quoter-api-dev-pcs-svihc.ondigitalocean.app/api/quote'
+const SVM_QUOTER_ENDPOINT = process.env.NEXT_PUBLIC_SVM_QUOTER_ENDPOINT || ''
 
-export const bestSVMOrderAtom = atomFamily((_option: QuoteQuery) => {
-  return atomWithLoadable(async (get) => {
-    const { enabled, baseCurrency, currency, amount } = _option
+export const bestSVMOrderAtom = atomFamily(
+  (_option: QuoteQuery) => {
+    return atomWithLoadable(async () => {
+      const { enabled, baseCurrency, currency, amount } = _option
 
-    // Early validation
-    if (!enabled || !baseCurrency || !currency || !amount) {
-      return undefined
-    }
+      console.log('start bestSVMOrderAtom')
 
-    // Only process Solana chain
-    if (baseCurrency.chainId !== NonEVMChainId.SOLANA) {
-      return undefined
-    }
+      // Early validation
+      if (!enabled || !baseCurrency || !currency || !amount) {
+        return undefined
+      }
 
-    const controller = new AbortController()
-    const perf = get(quoteTraceAtom(_option))
-    perf.tracker.track('start')
+      // Only process Solana chain
+      if (baseCurrency.chainId !== NonEVMChainId.SOLANA) {
+        return undefined
+      }
 
-    try {
-      const query = withTimeout(
-        async () => {
-          // Translate QuoteQuery to SVM request format
-          const requestBody = translateQuoteQueryToSVMRequest(_option)
+      console.log('bestSVMOrderAtom options:', _option)
 
-          // Fetch quote from SVM quoter service
-          const response = await fetch(SVM_QUOTER_ENDPOINT, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-            signal: controller.signal,
-          })
+      const controller = new AbortController()
+      // const perf = get(quoteTraceAtom(_option))
+      // perf.tracker.track('start')
 
-          if (!response.ok) {
-            throw new Error(`SVM quoter API error: ${response.statusText}`)
-          }
+      try {
+        const query = withTimeout(
+          async () => {
+            if (!SVM_QUOTER_ENDPOINT) {
+              throw new Error('SVM quoter endpoint is not set')
+            }
 
-          const responseJson = await response.json()
+            // Translate QuoteQuery to SVM request format
+            const requestBody = translateQuoteQueryToSVMRequest(_option)
 
-          if (!responseJson.success) {
-            throw new Error(responseJson.msg || 'SVM quoter request failed')
-          }
+            console.log('requestBody', requestBody)
 
-          // Parse response to SVM order format
-          const svmOrder = parseSVMQuoteResponse(responseJson.data, _option)
+            // Fetch quote from SVM quoter service
+            const response = await fetch(`${SVM_QUOTER_ENDPOINT}/quote`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(requestBody),
+              signal: controller.signal,
+            })
 
-          perf.tracker.success(svmOrder)
-          return svmOrder as InterfaceOrder
-        },
-        {
-          ms: QUOTE_TIMEOUT,
-          abort: () => {
-            controller.abort()
+            if (!response.ok) {
+              throw new Error(`SVM quoter API error: ${response.statusText}`)
+            }
+
+            const responseJson = await response.json()
+
+            console.log('responseJson', responseJson)
+
+            if (!responseJson.success) {
+              throw new Error(responseJson.msg || 'SVM quoter request failed')
+            }
+
+            // Parse response to SVM order format
+            const svmOrder = parseSVMQuoteResponse(responseJson.data, _option)
+
+            //   perf.tracker.success(svmOrder)
+            return svmOrder
           },
-        },
-      )
+          {
+            ms: QUOTE_TIMEOUT,
+            abort: () => {
+              controller.abort()
+            },
+          },
+        )
 
-      return await query
-    } catch (error) {
-      perf.tracker.fail(error)
-      throw error
-    } finally {
-      perf.tracker.report()
-    }
-  })
-})
+        let bestOrder: InterfaceOrder | undefined
+
+        const result = await query()
+
+        console.log('result', result)
+
+        // if result.type is SVMOrder, can safely cast to InterfaceOrder
+        if (result?.type === OrderType.PCS_SVM && isSVMOrder(result as unknown as InterfaceOrder)) {
+          bestOrder = result
+        }
+
+        if (!bestOrder) {
+          return Loadable.Nothing<InterfaceOrder>()
+        }
+
+        return Loadable.Just<InterfaceOrder>(bestOrder)
+      } catch (error) {
+        console.log('error', error)
+
+        return Loadable.Fail<InterfaceOrder>(error)
+        //   perf.tracker.fail(error)
+      } finally {
+        //   perf.tracker.report()
+      }
+    })
+  },
+  (a, b) =>
+    a.baseCurrency?.wrapped?.address === b.baseCurrency?.wrapped?.address &&
+    a.currency?.wrapped?.address === b.currency?.wrapped?.address &&
+    a.amount?.toExact() === b.amount?.toExact(),
+)

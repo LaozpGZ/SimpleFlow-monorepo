@@ -36,6 +36,7 @@ export const useQuoterSync = () => {
   const dependentCurrency = isExactIn ? outputCurrency : inputCurrency
   const tradeType = isExactIn ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
   const amount = tryParseAmount(typedValue, independentCurrency ?? undefined)
+
   const {
     singleHopOnly,
     split,

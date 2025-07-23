@@ -1,8 +1,14 @@
-import { OrderType } from '@pancakeswap/price-api-sdk'
+import {
+  OrderType,
+  type RouteStats,
+  type SVMOrder,
+  type SVMOrderTrade,
+  type SVMPool,
+  type SVMRoute,
+} from '@pancakeswap/price-api-sdk'
 import { PoolType, RouteType } from '@pancakeswap/smart-router'
 import { CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
-import { QuoteQuery } from '../quoter.types'
-import { RouteStats, SVMOrder, SVMOrderTrade, SVMPool, SVMRoute } from '../types/svm'
+import type { SVMSwapType } from './types'
 
 // SVM Quote Response types (matching Solana app structure)
 interface RoutePlanItem {
@@ -17,7 +23,7 @@ interface RoutePlanItem {
 }
 
 interface QuoteResponseData {
-  swapType: 'exactIn' | 'exactOut'
+  swapType: SVMSwapType
   inputMint: string
   inputAmount: string
   outputMint: string
@@ -57,7 +63,7 @@ export function parseSVMQuoteResponse(responseData: QuoteResponseData, query: Qu
     }
 
     // Add pool to route
-    const route = routeMap.get(routeItem.routeIndex)!
+    const route = routeMap.get(routeItem.routeIndex)
     const pool: SVMPool = {
       type: PoolType.SVM,
       id: routeItem.poolId,
