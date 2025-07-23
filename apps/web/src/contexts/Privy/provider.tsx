@@ -33,7 +33,7 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
 
   useEffect(() => {
     const createWalletWithUserManagedRecovery = async () => {
-      if (ready && authenticated && !user?.wallet && !attemptedWalletCreation.current) {
+      if (ready && authenticated && user?.wallet === undefined && attemptedWalletCreation.current === false) {
         attemptedWalletCreation.current = true
         console.log('Creating wallet for authenticated user without wallet')
         try {
