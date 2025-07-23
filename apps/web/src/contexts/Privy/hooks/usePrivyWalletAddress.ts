@@ -1,6 +1,7 @@
 import { usePrivy } from '@privy-io/react-auth'
 import { useSmartWallets } from '@privy-io/react-auth/smart-wallets'
 import { useEffect, useState } from 'react'
+import { Address } from 'viem'
 import { useAccount, useConnectors } from 'wagmi'
 import { useEmbeddedSmartAccountConnectorV2 } from './usePrivySmartAccountConnector'
 
@@ -99,7 +100,7 @@ export const usePrivyWalletAddress = () => {
   ])
 
   return {
-    address: finalAddress,
+    address: finalAddress as Address | undefined,
     isLoading,
     addressType,
     // Additional status information
