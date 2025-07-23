@@ -5,24 +5,61 @@ import { atomWithStorage } from 'jotai/utils'
 import { PropsWithChildren, useCallback, useEffect, useRef } from 'react'
 import { type WagmiProviderProps } from 'wagmi'
 
-const lastWalletRecoveryAtom = atomWithStorage('lastWalletRecovery', 0)
+// Store recovery times per smart wallet address
+const walletRecoveryRecordsAtom = atomWithStorage<Record<string, number>>('pcs:socialLogin:walletRecoveryRecords', {})
 
 export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren<WagmiProviderProps>) {
   const { authenticated, ready, user, createWallet, setWalletRecovery, logout: privyLogout, login } = usePrivy()
-  const [lastRecovery, setLastRecovery] = useAtom(lastWalletRecoveryAtom)
+  const [recoveryRecords, setRecoveryRecords] = useAtom(walletRecoveryRecordsAtom)
   const attemptedWalletCreation = useRef(false)
 
   const handleWalletRecovery = useCallback(() => {
-    if (authenticated && ready && user?.wallet?.recoveryMethod === 'privy' && user?.smartWallet) {
+    const smartWalletAddress = user?.smartWallet?.address
+    const lastRecoveryForThisWallet = smartWalletAddress ? recoveryRecords[smartWalletAddress] || 0 : 0
+
+    console.log('handleWalletRecovery called with conditions:', {
+      authenticated,
+      ready,
+      recoveryMethod: user?.wallet?.recoveryMethod,
+      hasSmartWallet: !!user?.smartWallet,
+      smartWalletAddress,
+      lastRecoveryForThisWallet: new Date(lastRecoveryForThisWallet).toISOString(),
+      timeSinceLastRecovery: Date.now() - lastRecoveryForThisWallet,
+      oneWeekInMs: 7 * 24 * 60 * 60 * 1000,
+    })
+
+    if (authenticated && ready && user?.wallet?.recoveryMethod === 'privy' && user?.smartWallet && smartWalletAddress) {
       const now = Date.now()
       const oneWeek = 7 * 24 * 60 * 60 * 1000
+      const timeSinceLastRecovery = now - lastRecoveryForThisWallet
 
-      if (now - lastRecovery > oneWeek) {
+      console.log('Recovery time check:', {
+        smartWalletAddress,
+        timeSinceLastRecovery,
+        oneWeek,
+        shouldTriggerRecovery: timeSinceLastRecovery > oneWeek,
+      })
+
+      // TODO: For testing - remove this bypass in production
+      const shouldTriggerRecovery = timeSinceLastRecovery > oneWeek // Always trigger for testing
+
+      if (shouldTriggerRecovery) {
+        console.log('Triggering wallet recovery for address:', smartWalletAddress)
         setWalletRecovery()
-        setLastRecovery(now)
+
+        // Update recovery record for this specific wallet address
+        setRecoveryRecords((prev) => ({
+          ...prev,
+          [smartWalletAddress]: now,
+        }))
+        console.log('Updated recovery time for wallet:', smartWalletAddress)
+      } else {
+        console.log('Recovery not triggered - less than one week since last recovery for this wallet')
       }
+    } else {
+      console.log('Recovery conditions not met')
     }
-  }, [ready, user, authenticated, lastRecovery, setWalletRecovery])
+  }, [ready, user, authenticated, recoveryRecords])
 
   useEffect(() => {
     if (ready && authenticated && user?.wallet?.address && user?.smartWallet?.address) {
@@ -73,7 +110,7 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
       }
     }
     createWalletWithUserManagedRecovery()
-  }, [ready, user, authenticated, createWallet, setLastRecovery])
+  }, [ready, user, authenticated, createWallet])
 
   return <PrivyWagmiProvider {...props}>{children}</PrivyWagmiProvider>
 }
