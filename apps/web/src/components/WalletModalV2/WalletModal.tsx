@@ -10,7 +10,6 @@ import {
   ModalV2,
   Text,
   useMatchBreakpoints,
-  Toggle,
 } from '@pancakeswap/uikit'
 
 import { RecentTransactions } from 'components/App/Transactions/TransactionsModal'
@@ -30,8 +29,6 @@ import { ClaimGiftView } from 'views/Gift/components/ClaimGiftView'
 import { GiftInfoDetailView } from 'views/Gift/components/GiftInfoDetailView'
 import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
 import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
-import { useAtom } from 'jotai'
-import { forceEmbeddedWalletAtom } from 'contexts/Privy/atoms/testSettings'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssets } from './SendAssets'
@@ -139,7 +136,6 @@ export const WalletContent = ({
   const { viewState, setViewState, goBack, setSendEntry } = useWalletModalV2ViewState()
   const { theme } = useTheme()
   const { authenticated, ready, user, createWallet, setWalletRecovery, enrollInMfa } = usePrivy()
-  const [forceEmbeddedWallet, setForceEmbeddedWallet] = useAtom(forceEmbeddedWalletAtom)
 
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {

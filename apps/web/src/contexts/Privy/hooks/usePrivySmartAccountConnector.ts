@@ -3,10 +3,7 @@ import { useEffect, useState } from 'react'
 import { getAddress, hexToBigInt } from 'viem'
 import { useChainId, useConfig, useConnectors, useReconnect } from 'wagmi'
 import { injected } from 'wagmi/connectors'
-import { useAtom } from 'jotai'
-
 import { useSmartWallets } from '@privy-io/react-auth/smart-wallets'
-import { forceEmbeddedWalletAtom } from '../atoms/testSettings'
 
 /**
  * Registers a smart account connector in wagmi for the Privy embedded smart wallet.
@@ -24,10 +21,6 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
   const { client: isReady, getClientForChain } = useSmartWallets()
   const { reconnect } = useReconnect()
 
-  // TODO: remove after QA - Test setting to disable AA
-  // @ts-ignore
-  const [forceEmbeddedWallet] = useAtom(forceEmbeddedWalletAtom)
-
   // Add state management to track smart wallet ready status
   const [isSmartWalletReady, setIsSmartWalletReady] = useState(false)
   const [isSettingUp, setIsSettingUp] = useState(false)
@@ -36,23 +29,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
     const setupSmartAccountConnector = async () => {
       const existingSmartAccountConnector = connectors.find((connector) => connector.id === 'io.privy.smart_wallet')
 
-      // TODO: remove after QA - If forced to use embedded wallet, remove smart wallet connector
-      if (forceEmbeddedWallet) {
-        if (existingSmartAccountConnector) {
-          // Remove smart wallet connector and restore original connectors
-          const nonSmartConnectors = connectors.filter((connector) => connector.id !== 'io.privy.smart_wallet')
-          // @ts-ignore
-          config._internal.connectors.setState(nonSmartConnectors)
-          // Clear recent connector if it was the smart wallet
-          // @ts-ignore
-          await config.storage?.removeItem('recentConnectorId')
-        }
-        setIsSmartWalletReady(true)
-        setIsSettingUp(false)
-        return
-      }
-
-      // If smart account connector already exists and not forced to embedded, mark as ready
+      // If smart account connector already exists, mark as ready
       if (existingSmartAccountConnector) {
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
@@ -114,8 +91,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
     }
 
     setupSmartAccountConnector()
-    // @ts-ignore
-  }, [config, connectors, getClientForChain, id, isReady, reconnect, forceEmbeddedWallet])
+  }, [config, connectors, getClientForChain, id, isReady, reconnect])
 
   // Return state for other components to use
   return {

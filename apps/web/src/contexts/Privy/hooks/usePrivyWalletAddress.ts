@@ -1,16 +1,12 @@
 import { usePrivy } from '@privy-io/react-auth'
 import { useSmartWallets } from '@privy-io/react-auth/smart-wallets'
-import { useAtom } from 'jotai'
 import { useEffect, useState } from 'react'
 import { useAccount, useConnectors } from 'wagmi'
-import { forceEmbeddedWalletAtom } from '../atoms/testSettings'
 import { useEmbeddedSmartAccountConnectorV2 } from './usePrivySmartAccountConnector'
 
 /**
  * Unified hook for managing Privy wallet address display
  * Prevents flickering between embedded wallet and smart wallet addresses
- *
- * TODO: remove after QA - This hook was created for testing purposes
  */
 export const usePrivyWalletAddress = () => {
   const { address: wagmiAddress, connector } = useAccount()
@@ -18,9 +14,6 @@ export const usePrivyWalletAddress = () => {
   const { ready, authenticated, user } = usePrivy()
   const connectors = useConnectors()
   const { isSmartWalletReady, isSettingUp } = useEmbeddedSmartAccountConnectorV2()
-
-  // TODO: remove after QA - Developer test setting to force embedded wallet usage
-  const [forceEmbeddedWallet] = useAtom(forceEmbeddedWalletAtom)
 
   const [finalAddress, setFinalAddress] = useState<string | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
@@ -49,26 +42,7 @@ export const usePrivyWalletAddress = () => {
         return
       }
 
-      // TODO: remove after QA - Check if we should force embedded wallet (for testing)
-      if (forceEmbeddedWallet) {
-        if (user?.wallet && wagmiAddress) {
-          // Force use embedded wallet address
-          setFinalAddress(wagmiAddress)
-          setAddressType('embedded')
-          setIsLoading(false)
-        } else if (user?.wallet) {
-          // Has embedded wallet but wagmi address is not ready yet
-          setIsLoading(true)
-        } else {
-          // No wallet
-          setFinalAddress(undefined)
-          setAddressType(null)
-          setIsLoading(false)
-        }
-        return
-      }
-
-      // Normal logic: prefer smart wallet if available, but wait for final setup
+      // Prefer smart wallet if available, but wait for final setup
       const smartAccountConnector = connectors.find((c) => c.id === 'io.privy.smart_wallet')
 
       // If smart wallet connector exists, wait for it to be properly connected
@@ -121,7 +95,6 @@ export const usePrivyWalletAddress = () => {
     connectors,
     isSmartWalletReady,
     isSettingUp,
-    forceEmbeddedWallet,
     hasWaitedForSmartWallet,
   ])
 
@@ -133,7 +106,5 @@ export const usePrivyWalletAddress = () => {
     hasSmartWallet: !!smartWalletClient,
     isSmartWalletReady,
     isSettingUp,
-    // TODO: remove after QA - Test settings
-    forceEmbeddedWallet,
   }
 }
