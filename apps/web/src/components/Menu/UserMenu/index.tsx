@@ -26,10 +26,10 @@ import { UnclaimedOnlyProvider } from 'views/Gift/providers/UnclaimedOnlyProvide
 import { useAccount } from 'wagmi'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
-const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
+const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void; account: string | undefined }) => {
   const { chainId } = useActiveChainId()
   const { logout } = useAuth()
-  const { address: account, connector } = useAccount()
+  const { connector } = useAccount()
 
   const handleClickDisconnect = useCallback(() => {
     logGTMDisconnectWalletEvent(chainId, connector?.name, account)
