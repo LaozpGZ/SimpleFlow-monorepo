@@ -1,5 +1,3 @@
-import { CommonBasesType } from 'components/SearchModal/types'
-
 import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
 import {
   AutoColumn,
@@ -8,8 +6,8 @@ import {
   Button,
   Card,
   CardBody,
+  Column,
   DynamicSection,
-  Flex,
   FlexGap,
   Message,
   MessageText,
@@ -26,26 +24,24 @@ import {
   ZOOM_LEVELS,
   ZoomLevels,
 } from '@pancakeswap/widgets-internal'
-
 import { tryParsePrice } from 'hooks/v3/utils'
 import {
   logGTMAddLiquidityTxSentEvent,
   logGTMClickAddLiquidityConfirmEvent,
   logGTMClickAddLiquidityEvent,
 } from 'utils/customGTMEventTracking'
-
 import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
 import { FeeAmount, NonfungiblePositionManager, Pool } from '@pancakeswap/v3-sdk'
-
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
 import useV3DerivedInfo from 'hooks/v3/useV3DerivedInfo'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-
+import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { basisPointsToPercent } from 'utils/exchange'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { CurrencyField as Field } from 'utils/types'
-
 import { useTranslation } from '@pancakeswap/localization'
 import TransactionConfirmationModal from 'components/TransactionConfirmationModal'
 import { Bound } from 'config/constants/types'
@@ -62,7 +58,6 @@ import { hexToBigInt } from 'viem'
 import { V3SubmitButton } from 'views/AddLiquidityV3/components/V3SubmitButton'
 import { HandleFeePoolSelectFn, QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV3/types'
 import { useSendTransaction, useWalletClient } from 'wagmi'
-
 import { Price } from '@pancakeswap/swap-sdk-core'
 import BigNumber from 'bignumber.js'
 import { ZapLiquidityWidget } from 'components/ZapLiquidityWidget'
@@ -74,15 +69,14 @@ import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToU
 import { useDensityChartData } from 'views/AddLiquidityV3/hooks/useDensityChartData'
 import { MarketPriceSlippageWarning } from 'views/CreateLiquidityPool/components/SubmitCreateButton'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
-import { PositionPreview } from './components/PositionPreview'
 import RangeSelector from './components/RangeSelector'
-
 import { useInitialRange } from './form/hooks/useInitialRange'
 import { useRangeHopCallbacks } from './form/hooks/useRangeHopCallbacks'
 import { useV3MintActionHandlers } from './form/hooks/useV3MintActionHandlers'
 import { useV3FormAddLiquidityCallback, useV3FormState } from './form/reducer'
 import FeeSelector from './components/FeeSelector'
 import LockedDeposit from './components/LockedDeposit'
+import { PositionPreview } from './components/PositionPreview'
 
 const StyledInput = styled(NumericalInput)`
   background-color: ${({ theme }) => theme.colors.input};
@@ -254,11 +248,22 @@ export default function V3FormView({
   // txn values
   const [deadline] = useTransactionDeadline() // custom from users settings
   const [txHash, setTxHash] = useState<string>('')
+
   // get formatted amounts
   const formattedAmounts = {
     [independentField]: typedValue,
     [dependentField]: parsedAmounts[dependentField]?.toSignificant(6) ?? '',
   }
+
+  // Calculate Total USD Value of input amounts
+  const { data: currencyAPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_A])
+  const { data: currencyBPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_B])
+  const totalUsdValue = useMemo(() => {
+    const result =
+      (currencyAPrice ?? 0) * Number(formatAmount(parsedAmounts[Field.CURRENCY_A])) +
+      (currencyBPrice ?? 0) * Number(formatAmount(parsedAmounts[Field.CURRENCY_B]))
+    return Number.isNaN(result) ? 0 : result
+  }, [currencyAPrice, currencyBPrice, parsedAmounts])
 
   // Get the max amounts user can add
   const maxAmounts: { [field in Field]?: CurrencyAmount<Currency> } = useMemo(
@@ -885,11 +890,19 @@ export default function V3FormView({
                 showMaxButton
                 currency={currencies[Field.CURRENCY_B]}
                 id="add-liquidity-input-tokenb"
-                showCommonBases
-                commonBasesType={CommonBasesType.LIQUIDITY}
                 title={<>&nbsp;</>}
               />
             </LockedDeposit>
+            <Column mt="16px" gap="16px">
+              <RowBetween>
+                <Text color="textSubtle">Total</Text>
+                <Text>~${totalUsdValue.toFixed(2)}</Text>
+              </RowBetween>
+              <RowBetween>
+                <Text color="textSubtle">Slippage Tolerance</Text>
+                <SlippageButton />
+              </RowBetween>
+            </Column>
             <MevProtectToggle size="sm" />
             <Box mt="8px">{buttons}</Box>
           </DynamicSection>
