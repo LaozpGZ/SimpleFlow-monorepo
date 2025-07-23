@@ -36,8 +36,7 @@ interface PoolInfoHeaderProps {
   poolInfo: PoolInfo | null | undefined
   currency0?: Currency
   currency1?: Currency
-  symbol0?: string
-  symbol1?: string
+
   chainId?: number
   isInverted?: boolean
   hookData?: HookData
@@ -52,8 +51,7 @@ export const PoolInfoHeader = ({
   poolInfo,
   currency0,
   currency1,
-  symbol0,
-  symbol1,
+
   chainId,
   poolId,
   hookData,
@@ -107,13 +105,13 @@ export const PoolInfoHeader = ({
                   </Box>
                   <FlexGap gap="4px" alignItems="center">
                     <Text bold fontSize={32} style={{ lineHeight: '1' }}>
-                      {symbol0}
+                      {currency0?.symbol}
                     </Text>
                     <Text color="textSubtle" bold fontSize={32} style={{ lineHeight: '1' }}>
                       /
                     </Text>
                     <Text bold fontSize={32} style={{ lineHeight: '1' }}>
-                      {symbol1}
+                      {currency1?.symbol}
                     </Text>
                   </FlexGap>
                   <Tooltips
@@ -129,7 +127,7 @@ export const PoolInfoHeader = ({
                                 innerMargin="2px"
                               />
                               <Text>
-                                {symbol0} / {symbol1}
+                                {currency0?.symbol} / {currency1?.symbol}
                               </Text>
                             </FlexGap>
 

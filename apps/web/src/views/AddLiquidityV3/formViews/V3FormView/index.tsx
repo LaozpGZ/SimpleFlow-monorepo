@@ -17,6 +17,7 @@ import {
 } from '@pancakeswap/uikit'
 import {
   ConfirmationModalContent,
+  Liquidity,
   LiquidityChartRangeInput,
   NumericalInput,
   ZOOM_LEVELS,
@@ -102,7 +103,7 @@ export const MediumOnly = styled.div`
   }
 `
 
-export const RightContainer = styled(AutoColumn)`
+export const LeftContainer = styled(AutoColumn)`
   height: fit-content;
 
   grid-row: 2 / 3;
@@ -110,7 +111,7 @@ export const RightContainer = styled(AutoColumn)`
 
   ${({ theme }) => theme.mediaQueries.md} {
     grid-row: 1 / 3;
-    grid-column: 2;
+    grid-column: 1;
   }
 `
 
@@ -557,76 +558,7 @@ export default function V3FormView({
 
   return (
     <>
-      <DynamicSection
-        style={{
-          gridAutoRows: 'max-content',
-          gridAutoColumns: '100%',
-        }}
-        gap="8px"
-        disabled={!feeAmount || invalidPool || (noLiquidity && !startPriceTypedValue) || (!priceLower && !priceUpper)}
-      >
-        <PreTitle>{t('Deposit Amount')}</PreTitle>
-
-        <LockedDeposit locked={depositADisabled}>
-          <Box mb="8px">
-            <CurrencyInputPanel
-              showUSDPrice
-              maxAmount={maxAmounts[Field.CURRENCY_A]}
-              onMax={() => onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')}
-              onPercentInput={(percent) =>
-                onFieldAInput(maxAmounts[Field.CURRENCY_A]?.multiply(new Percent(percent, 100))?.toExact() ?? '')
-              }
-              disableCurrencySelect
-              value={formattedAmounts[Field.CURRENCY_A] ?? '0'}
-              onUserInput={onFieldAInput}
-              showQuickInputButton
-              showMaxButton
-              currency={currencies[Field.CURRENCY_A]}
-              id="add-liquidity-input-tokena"
-              showCommonBases
-              commonBasesType={CommonBasesType.LIQUIDITY}
-            />
-          </Box>
-        </LockedDeposit>
-
-        <LockedDeposit locked={depositBDisabled}>
-          <CurrencyInputPanel
-            showUSDPrice
-            maxAmount={maxAmounts[Field.CURRENCY_B]}
-            onMax={() => onFieldBInput(maxAmounts[Field.CURRENCY_B]?.toExact() ?? '')}
-            onPercentInput={(percent) =>
-              onFieldBInput(maxAmounts[Field.CURRENCY_B]?.multiply(new Percent(percent, 100))?.toExact() ?? '')
-            }
-            disableCurrencySelect
-            value={formattedAmounts[Field.CURRENCY_B] ?? '0'}
-            onUserInput={onFieldBInput}
-            showQuickInputButton
-            showMaxButton
-            currency={currencies[Field.CURRENCY_B]}
-            id="add-liquidity-input-tokenb"
-            showCommonBases
-            commonBasesType={CommonBasesType.LIQUIDITY}
-          />
-        </LockedDeposit>
-        <MevProtectToggle size="sm" />
-      </DynamicSection>
-      <HideMedium style={{ gap: 16, flexDirection: 'column' }}>
-        {buttons}
-        {hasZapV3Pool && hasInsufficentBalance && (
-          <ZapLiquidityWidget
-            tickLower={tickLower}
-            tickUpper={tickUpper}
-            pool={pool}
-            baseCurrency={baseCurrency}
-            baseCurrencyAmount={formattedAmounts[Field.CURRENCY_A]}
-            quoteCurrency={quoteCurrency}
-            quoteCurrencyAmount={formattedAmounts[Field.CURRENCY_B]}
-            onSubmit={handleOnZapSubmit}
-          />
-        )}
-      </HideMedium>
-
-      <RightContainer>
+      <LeftContainer>
         <AutoColumn gap="16px">
           {noLiquidity && (
             <Box>
@@ -655,7 +587,7 @@ export default function V3FormView({
           <DynamicSection disabled={!feeAmount || invalidPool}>
             <RowBetween mb="8px">
               <PreTitle>{t('Set Price Range')}</PreTitle>
-              <RateToggle
+              <Liquidity.RateToggle
                 currencyA={baseCurrency}
                 handleRateToggle={() => {
                   if (!ticksAtLimit[Bound.LOWER] && !ticksAtLimit[Bound.UPPER]) {
@@ -853,7 +785,75 @@ export default function V3FormView({
             )}
           </MediumOnly>
         </AutoColumn>
-      </RightContainer>
+      </LeftContainer>
+      <DynamicSection
+        style={{
+          gridAutoRows: 'max-content',
+          gridAutoColumns: '100%',
+        }}
+        gap="8px"
+        disabled={!feeAmount || invalidPool || (noLiquidity && !startPriceTypedValue) || (!priceLower && !priceUpper)}
+      >
+        <PreTitle>{t('Deposit Amount')}</PreTitle>
+
+        <LockedDeposit locked={depositADisabled}>
+          <Box mb="8px">
+            <CurrencyInputPanel
+              showUSDPrice
+              maxAmount={maxAmounts[Field.CURRENCY_A]}
+              onMax={() => onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')}
+              onPercentInput={(percent) =>
+                onFieldAInput(maxAmounts[Field.CURRENCY_A]?.multiply(new Percent(percent, 100))?.toExact() ?? '')
+              }
+              disableCurrencySelect
+              value={formattedAmounts[Field.CURRENCY_A] ?? '0'}
+              onUserInput={onFieldAInput}
+              showQuickInputButton
+              showMaxButton
+              currency={currencies[Field.CURRENCY_A]}
+              id="add-liquidity-input-tokena"
+              showCommonBases
+              commonBasesType={CommonBasesType.LIQUIDITY}
+            />
+          </Box>
+        </LockedDeposit>
+
+        <LockedDeposit locked={depositBDisabled}>
+          <CurrencyInputPanel
+            showUSDPrice
+            maxAmount={maxAmounts[Field.CURRENCY_B]}
+            onMax={() => onFieldBInput(maxAmounts[Field.CURRENCY_B]?.toExact() ?? '')}
+            onPercentInput={(percent) =>
+              onFieldBInput(maxAmounts[Field.CURRENCY_B]?.multiply(new Percent(percent, 100))?.toExact() ?? '')
+            }
+            disableCurrencySelect
+            value={formattedAmounts[Field.CURRENCY_B] ?? '0'}
+            onUserInput={onFieldBInput}
+            showQuickInputButton
+            showMaxButton
+            currency={currencies[Field.CURRENCY_B]}
+            id="add-liquidity-input-tokenb"
+            showCommonBases
+            commonBasesType={CommonBasesType.LIQUIDITY}
+          />
+        </LockedDeposit>
+        <MevProtectToggle size="sm" />
+      </DynamicSection>
+      <HideMedium style={{ gap: 16, flexDirection: 'column' }}>
+        {buttons}
+        {hasZapV3Pool && hasInsufficentBalance && (
+          <ZapLiquidityWidget
+            tickLower={tickLower}
+            tickUpper={tickUpper}
+            pool={pool}
+            baseCurrency={baseCurrency}
+            baseCurrencyAmount={formattedAmounts[Field.CURRENCY_A]}
+            quoteCurrency={quoteCurrency}
+            quoteCurrencyAmount={formattedAmounts[Field.CURRENCY_B]}
+            onSubmit={handleOnZapSubmit}
+          />
+        )}
+      </HideMedium>
     </>
   )
 }

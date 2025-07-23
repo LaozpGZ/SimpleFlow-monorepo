@@ -45,6 +45,8 @@ const StyledInput = styled(Input)<{ $isValid?: boolean; $isActive?: boolean }>`
     !$isValid ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.inputSecondary}`};
   background: ${({ theme }) => theme.colors.input};
 
+  transition: all 0.2s ease-in-out;
+
   &:focus {
     box-shadow: none;
     border-color: ${({ theme }) => theme.colors.primary};

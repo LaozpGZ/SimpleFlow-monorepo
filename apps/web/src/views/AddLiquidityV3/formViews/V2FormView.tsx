@@ -31,7 +31,7 @@ import { InfoBox } from '@pancakeswap/widgets-internal'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiquidityTokens'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
-import { HideMedium, MediumOnly, RightContainer } from './V3FormView'
+import { HideMedium, MediumOnly, LeftContainer } from './V3FormView'
 import RangeSelector from './V3FormView/components/RangeSelector'
 
 export default function V2FormView({
@@ -193,7 +193,7 @@ export default function V2FormView({
       </AutoColumn>
       <HideMedium>{buttons}</HideMedium>
 
-      <RightContainer>
+      {/* <LeftContainer>
         <AutoColumn pt="12px" gap="24px">
           <DynamicSection disabled gap="12px">
             <InfoBox message={t('Your position will appear here.')} icon={<BunnyKnownPlaceholder />} />
@@ -215,7 +215,7 @@ export default function V2FormView({
           </DynamicSection>
           <MediumOnly>{buttons}</MediumOnly>
         </AutoColumn>
-      </RightContainer>
+      </LeftContainer> */}
     </>
   )
 }

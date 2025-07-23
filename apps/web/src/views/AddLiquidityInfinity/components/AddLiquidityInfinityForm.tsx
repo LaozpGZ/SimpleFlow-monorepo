@@ -7,7 +7,6 @@ import { BinPriceRangePanel } from './BinPriceRangePanel'
 import { CLPriceRangePanel } from './CLPriceRangePanel'
 import { InfinityDepositPanel } from './InfinityDepositPanel'
 import { ResponsiveColumns } from './styles'
-import { SubmitButton } from './SubmitButton'
 
 const StyledCard = styled(Card)`
   width: 100%;

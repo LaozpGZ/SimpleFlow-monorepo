@@ -1,12 +1,14 @@
 import { CurrencySelect } from 'components/CurrencySelect'
 import { CommonBasesType } from 'components/SearchModal/types'
 
-import { Currency, NATIVE, WNATIVE } from '@pancakeswap/sdk'
+import { Currency, NATIVE, Pair, WNATIVE } from '@pancakeswap/sdk'
 import {
   AddIcon,
   AutoColumn,
+  Box,
   Card,
   CardBody,
+  Container,
   DynamicSection,
   FlexGap,
   IconButton,
@@ -39,7 +41,7 @@ import { usePoolInfo } from 'state/farmsV4/state/extendPools/hooks'
 import { resetMintState } from 'state/mint/actions'
 import { useAddLiquidityV2FormDispatch } from 'state/mint/reducer'
 import { safeGetAddress } from 'utils'
-import FeeSelector from './formViews/V3FormView/components/FeeSelector'
+import { PoolInfoHeader } from 'components/PoolInfoHeader'
 
 import { AprCalculatorV2 } from './components/AprCalculatorV2'
 import { StableV3Selector } from './components/StableV3Selector'
@@ -49,16 +51,10 @@ import V2FormView from './formViews/V2FormView'
 import V3FormView from './formViews/V3FormView'
 import { useCurrencyParams } from './hooks/useCurrencyParams'
 import { HandleFeePoolSelectFn, SELECTOR_TYPE } from './types'
-
-export const BodyWrapper = styled(Card)`
-  border-radius: 24px;
-  max-width: 858px;
-  width: 100%;
-  z-index: 1;
-`
+import FeeSelector from './formViews/V3FormView/components/FeeSelector'
 
 /* two-column layout where DepositAmount is moved at the very end on mobile. */
-export const ResponsiveTwoColumns = styled.div`
+export const ResponsiveTwoColumns = styled.div<{ $singleColumn?: boolean }>`
   display: grid;
   grid-column-gap: 32px;
   grid-row-gap: 16px;
@@ -68,7 +64,7 @@ export const ResponsiveTwoColumns = styled.div`
   grid-auto-flow: row;
 
   ${({ theme }) => theme.mediaQueries.md} {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: ${({ $singleColumn }) => ($singleColumn ? '1fr' : '1fr 1fr')};
   }
 `
 
@@ -290,9 +286,11 @@ export function UniversalAddLiquidity({
   return (
     <>
       <CardBody>
-        <ResponsiveTwoColumns>
-          <AutoColumn alignSelf="stretch">
-            <PreTitle mb="8px">{t('Choose Token Pair')}</PreTitle>
+        <ResponsiveTwoColumns
+          $singleColumn={selectorType === SELECTOR_TYPE.V2 || selectorType === SELECTOR_TYPE.STABLE}
+        >
+          <AutoColumn>
+            {/* <PreTitle mb="8px">{t('Choose Token Pair')}</PreTitle>
             <FlexGap gap="4px" width="100%" mb="8px" alignItems="center">
               <CurrencySelect
                 id="add-liquidity-select-tokena"
@@ -311,7 +309,7 @@ export function UniversalAddLiquidity({
                 commonBasesType={CommonBasesType.LIQUIDITY}
                 hideBalance
               />
-            </FlexGap>
+            </FlexGap> */}
             <DynamicSection disabled={!baseCurrency || !currencyB}>
               {preferredSelectType !== SELECTOR_TYPE.V2 &&
                 stableConfig.stableSwapConfig &&
@@ -349,15 +347,6 @@ export function UniversalAddLiquidity({
             </DynamicSection>
           </AutoColumn>
 
-          {selectorType === SELECTOR_TYPE.STABLE && (
-            <StableConfigContext.Provider value={stableConfig}>
-              <AddStableLiquidity currencyA={baseCurrency} currencyB={quoteCurrency}>
-                {(props) => (
-                  <StableFormView {...props} stableTotalFee={stableConfig?.stableSwapConfig?.stableTotalFee} />
-                )}
-              </AddStableLiquidity>
-            </StableConfigContext.Provider>
-          )}
           {selectorType === SELECTOR_TYPE.V3 && (
             <V3FormView
               feeAmount={feeAmount}
@@ -372,17 +361,20 @@ export function UniversalAddLiquidity({
               {(props) => <V2FormView {...props} />}
             </AddLiquidity>
           )}
+          {selectorType === SELECTOR_TYPE.STABLE && (
+            <StableConfigContext.Provider value={stableConfig}>
+              <AddStableLiquidity currencyA={baseCurrency} currencyB={quoteCurrency}>
+                {(props) => (
+                  <StableFormView {...props} stableTotalFee={stableConfig?.stableSwapConfig?.stableTotalFee} />
+                )}
+              </AddStableLiquidity>
+            </StableConfigContext.Provider>
+          )}
         </ResponsiveTwoColumns>
       </CardBody>
     </>
   )
 }
-
-const SELECTOR_TYPE_T = {
-  [SELECTOR_TYPE.STABLE]: <Trans>Add Stable Liquidity</Trans>,
-  [SELECTOR_TYPE.V2]: <Trans>Add V2 Liquidity</Trans>,
-  [SELECTOR_TYPE.V3]: <Trans>Add V3 Liquidity</Trans>,
-} as const satisfies Record<SELECTOR_TYPE, ReactNode>
 
 export function AddLiquidityV3Layout({
   showRefreshButton = false,
@@ -393,24 +385,32 @@ export function AddLiquidityV3Layout({
   handleRefresh?: () => void
   children: React.ReactNode
 }) {
-  const { t } = useTranslation()
   const { chainId } = useActiveChainId()
-  const router = useRouter()
 
   const [selectType] = useAtom(selectTypeAtom)
   const { currencyIdA, currencyIdB, feeAmount } = useCurrencyParams()
-  const { isMobile } = useMatchBreakpoints()
+
   const baseCurrency = useCurrency(currencyIdA)
   const quoteCurrency = useCurrency(currencyIdB)
+
+  const stableConfig = useStableConfig({
+    tokenA: baseCurrency,
+    tokenB: quoteCurrency,
+  })
+
   const poolAddress = useMemo(
     () =>
-      baseCurrency?.wrapped && quoteCurrency?.wrapped && feeAmount
-        ? Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, feeAmount)
+      baseCurrency?.wrapped && quoteCurrency?.wrapped
+        ? selectType === SELECTOR_TYPE.V3 && feeAmount
+          ? Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, feeAmount)
+          : selectType === SELECTOR_TYPE.V2
+          ? Pair.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped)
+          : selectType === SELECTOR_TYPE.STABLE
+          ? stableConfig.stableSwapConfig?.stableSwapAddress
+          : undefined
         : undefined,
-    [baseCurrency?.wrapped, feeAmount, quoteCurrency?.wrapped],
+    [baseCurrency?.wrapped, feeAmount, quoteCurrency?.wrapped, selectType],
   )
-
-  const title = SELECTOR_TYPE_T[selectType] || t('Add Liquidity')
 
   const pool = usePoolInfo({ poolAddress, chainId })
 
@@ -426,22 +426,29 @@ export function AddLiquidityV3Layout({
   )
 
   return (
-    <BodyWrapper mb={isMobile ? '40px' : '0px'}>
-      <AppHeader
-        title={title}
-        backTo={router.back ?? '/liquidity/positions'}
-        IconSlot={
-          <>
-            {selectType === SELECTOR_TYPE.V3 && <AprCalculatorV2 derived pool={pool} inverted={inverted} />}
-            {showRefreshButton && (
-              <IconButton variant="text" scale="sm">
-                <RefreshIcon onClick={handleRefresh || noop} color="textSubtle" height={24} width={24} />
-              </IconButton>
-            )}
-          </>
+    <Container mx="auto" my="24px" maxWidth="1200px">
+      <PoolInfoHeader
+        linkType="addLiquidity"
+        poolInfo={pool}
+        chainId={chainId}
+        currency0={pool?.token0 ?? undefined}
+        currency1={pool?.token1 ?? undefined}
+        poolId={poolAddress}
+        overrideAprDisplay={
+          selectType === SELECTOR_TYPE.V3
+            ? {
+                aprDisplay: (
+                  <AprCalculatorV2 pool={pool} inverted={inverted} showTitle={false} derived showApyButton={false} />
+                ),
+                roiCalculator: (
+                  <AprCalculatorV2 pool={pool} inverted={inverted} showTitle={false} derived showApyText={false} />
+                ),
+              }
+            : undefined
         }
       />
+
       {children}
-    </BodyWrapper>
+    </Container>
   )
 }

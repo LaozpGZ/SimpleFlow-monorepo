@@ -30,7 +30,7 @@ import { ReactElement } from 'react'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { useAccount } from 'wagmi'
-import { HideMedium, MediumOnly, RightContainer } from './V3FormView'
+import { HideMedium, MediumOnly, LeftContainer } from './V3FormView'
 
 export default function StableFormView({
   formattedAmounts,
@@ -187,7 +187,7 @@ export default function StableFormView({
       </AutoColumn>
       <HideMedium>{buttons}</HideMedium>
 
-      <RightContainer>
+      <LeftContainer>
         <AutoColumn>
           <Box>
             <Text mb="8px" bold fontSize="12px" textTransform="uppercase" color="secondary">
@@ -282,7 +282,7 @@ export default function StableFormView({
           </Box>
           <MediumOnly>{buttons}</MediumOnly>
         </AutoColumn>
-      </RightContainer>
+      </LeftContainer>
     </>
   )
 }

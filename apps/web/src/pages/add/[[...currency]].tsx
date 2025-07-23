@@ -58,26 +58,23 @@ const AddLiquidityPage = () => {
       : undefined
   }, [farmsV2Public, farmV3Public?.farmsWithPrice, currencyA, currencyB, router])
 
-  const handleRefresh = useCallback(() => {
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          currency: [currencyIdA!, currencyIdB!],
-        },
-      },
-      undefined,
-      { shallow: true },
-    )
-  }, [router, currencyIdA, currencyIdB])
+  // const handleRefresh = useCallback(() => {
+  //   router.replace(
+  //     {
+  //       pathname: router.pathname,
+  //       query: {
+  //         currency: [currencyIdA!, currencyIdB!],
+  //       },
+  //     },
+  //     undefined,
+  //     { shallow: true },
+  //   )
+  // }, [router, currencyIdA, currencyIdB])
 
   return (
     <AddLiquidityV2FormProvider>
       <LiquidityFormProvider>
-        <AddLiquidityV3Layout
-          handleRefresh={handleRefresh}
-          showRefreshButton={preferFarmType?.type === SELECTOR_TYPE.V3 && preferFarmType?.feeAmount !== feeAmount}
-        >
+        <AddLiquidityV3Layout>
           <UniversalAddLiquidity
             currencyIdA={currencyIdA}
             currencyIdB={currencyIdB}
@@ -94,6 +91,5 @@ const Page = dynamic(() => Promise.resolve(AddLiquidityPage), { ssr: false }) as
 
 Page.chains = CHAIN_IDS
 Page.screen = true
-Page.Layout = PageWithoutFAQ
 
 export default Page

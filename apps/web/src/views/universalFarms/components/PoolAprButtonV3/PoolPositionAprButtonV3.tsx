@@ -31,6 +31,8 @@ type PoolPositionAprButtonProps<TPosition, TPoolInfo = PoolInfo> = {
   pool: TPoolInfo
   userPosition: TPosition
   inverted?: boolean
+  showApyText?: boolean
+  showApyButton?: boolean
 }
 
 export const V2PoolPositionAprButton: React.FC<PoolPositionAprButtonProps<StableLPDetail | V2LPDetail>> = ({
@@ -143,10 +145,21 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
 export const V3PoolDerivedAprButton: React.FC<Omit<PoolPositionAprButtonProps<PositionDetail>, 'userPosition'>> = ({
   pool,
   inverted,
+  showApyText,
+  showApyButton,
 }) => {
   const { lpApr, cakeApr, merklApr } = useV3FormDerivedApr(pool, inverted)
 
-  return <PoolAprButtonV3 pool={pool} lpApr={lpApr} cakeApr={cakeApr} merklApr={merklApr} />
+  return (
+    <PoolAprButtonV3
+      pool={pool}
+      lpApr={lpApr}
+      cakeApr={cakeApr}
+      merklApr={merklApr}
+      showApyText={showApyText}
+      showApyButton={showApyButton}
+    />
+  )
 }
 
 export const InfinityCLPoolDerivedAprButton: React.FC<{ pool: InfinityCLPoolInfo }> = ({ pool }) => {
