@@ -64,4 +64,37 @@ const Providers: React.FC<
   )
 }
 
+// Test-only Provider that excludes PrivyProvider and FirebaseAuthProvider
+export const TestProviders: React.FC<
+  React.PropsWithChildren<{
+    store: Store
+    children: React.ReactNode
+    dehydratedState: any
+  }>
+> = ({ children, store, dehydratedState }) => {
+  const wagmiConfig = useMemo(() => createWagmiConfig(), [])
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <WagmiWithPrivyProvider config={wagmiConfig}>
+        <W3WConfigProvider value={false}>
+          <HydrationBoundary state={dehydratedState}>
+            <Provider store={store}>
+              <NextThemeProvider>
+                <LanguageProvider>
+                  <StyledUIKitProvider>
+                    <HistoryManagerProvider>
+                      <ModalProvider portalProvider={DialogProvider}>{children}</ModalProvider>
+                    </HistoryManagerProvider>
+                  </StyledUIKitProvider>
+                </LanguageProvider>
+              </NextThemeProvider>
+            </Provider>
+          </HydrationBoundary>
+        </W3WConfigProvider>
+      </WagmiWithPrivyProvider>
+    </QueryClientProvider>
+  )
+}
+
 export default Providers
