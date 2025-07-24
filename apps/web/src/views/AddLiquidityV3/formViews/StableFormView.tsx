@@ -1,9 +1,6 @@
-import { CommonBasesType } from 'components/SearchModal/types'
-
-import { AutoColumn, AutoRow, Box, Button, Dots, Flex, QuestionHelper, RowBetween, Text } from '@pancakeswap/uikit'
+import { AutoColumn, Box, Button, Card, CardBody, Dots, PreTitle, RowBetween } from '@pancakeswap/uikit'
 
 import { CommitButton } from 'components/CommitButton'
-import CurrencyInputPanel from 'components/CurrencyInputPanel'
 
 import { ApprovalState } from 'hooks/useApproveCallback'
 import { logGTMClickAddLiquidityEvent } from 'utils/customGTMEventTracking'
@@ -11,26 +8,21 @@ import { CurrencyField as Field } from 'utils/types'
 
 import { useTranslation } from '@pancakeswap/localization'
 import { useIsExpertMode } from '@pancakeswap/utils/user'
-import { LightGreyCard } from 'components/Card'
+
 import ConnectWalletButton from 'components/ConnectWalletButton'
 
 import { CurrencyAmount, Percent } from '@pancakeswap/sdk'
-import { BIG_ONE_HUNDRED } from '@pancakeswap/utils/bigNumber'
-import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount/FormattedCurrencyAmount'
-import { CurrencyLogo } from 'components/Logo'
+
 import { useTotalUSDValue } from 'components/PositionCard'
 import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
 import { AddStableChildrenProps } from 'views/AddLiquidity/AddStableLiquidity'
-import { FormattedSlippage } from 'views/AddLiquidity/AddStableLiquidity/components/FormattedSlippage'
-
-import { RowFixed } from 'components/Layout/Row'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { ReactElement } from 'react'
-import { formatAmount } from 'utils/formatInfoNumbers'
+
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { useAccount } from 'wagmi'
-import { LeftContainer } from './V3FormView'
+import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 
 export default function StableFormView({
   formattedAmounts,
@@ -138,58 +130,54 @@ export default function StableFormView({
       : [currencies?.[Field.CURRENCY_B], currencies?.[Field.CURRENCY_A]]
 
   return (
-    <>
-      <AutoColumn>
-        <Text mb="8px" bold fontSize="12px" textTransform="uppercase" color="secondary">
-          {t('Deposit Amount')}
-        </Text>
+    <Box mx="auto" pb="16px" width="100%" maxWidth={[null, null, null, null, '480px']}>
+      <Card>
+        <CardBody>
+          <AutoColumn>
+            <CurrencyInputPanelSimplify
+              showUSDPrice
+              maxAmount={maxAmounts[Field.CURRENCY_A]}
+              onMax={() => onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')}
+              onPercentInput={(percent) => {
+                if (maxAmounts[Field.CURRENCY_A]) {
+                  onFieldAInput(maxAmounts[Field.CURRENCY_A]?.multiply(new Percent(percent, 100)).toExact() ?? '')
+                }
+              }}
+              disableCurrencySelect
+              defaultValue={formattedAmounts[Field.CURRENCY_A]}
+              onUserInput={onFieldAInput}
+              showQuickInputButton
+              showMaxButton
+              currency={currencies[Field.CURRENCY_A]}
+              id="stable-add-liquidity-input-tokena"
+              title={<PreTitle>{t('Deposit Amount')}</PreTitle>}
+            />
+            <Box my="4px" />
+            <CurrencyInputPanelSimplify
+              showUSDPrice
+              disableCurrencySelect
+              maxAmount={maxAmounts[Field.CURRENCY_B]}
+              onPercentInput={(percent) => {
+                if (maxAmounts[Field.CURRENCY_B]) {
+                  onFieldBInput(maxAmounts[Field.CURRENCY_B]?.multiply(new Percent(percent, 100)).toExact() ?? '')
+                }
+              }}
+              onMax={() => onFieldBInput(maxAmounts[Field.CURRENCY_B]?.toExact() ?? '')}
+              defaultValue={formattedAmounts[Field.CURRENCY_B]}
+              onUserInput={onFieldBInput}
+              showQuickInputButton
+              showMaxButton
+              currency={currencies[Field.CURRENCY_B]}
+              id="stable-add-liquidity-input-tokenb"
+              title={<>&nbsp;</>}
+            />
+            <Box mt="8px">
+              <MevProtectToggle size="sm" />
+            </Box>
+            <Box mt="16px">{buttons}</Box>
+          </AutoColumn>
 
-        <CurrencyInputPanel
-          showUSDPrice
-          maxAmount={maxAmounts[Field.CURRENCY_A]}
-          onMax={() => onFieldAInput(maxAmounts[Field.CURRENCY_A]?.toExact() ?? '')}
-          onPercentInput={(percent) => {
-            if (maxAmounts[Field.CURRENCY_A]) {
-              onFieldAInput(maxAmounts[Field.CURRENCY_A]?.multiply(new Percent(percent, 100)).toExact() ?? '')
-            }
-          }}
-          disableCurrencySelect
-          value={formattedAmounts[Field.CURRENCY_A]}
-          onUserInput={onFieldAInput}
-          showQuickInputButton
-          showMaxButton
-          currency={currencies[Field.CURRENCY_A]}
-          id="add-liquidity-input-tokena"
-          showCommonBases
-          commonBasesType={CommonBasesType.LIQUIDITY}
-        />
-
-        <CurrencyInputPanel
-          showUSDPrice
-          disableCurrencySelect
-          maxAmount={maxAmounts[Field.CURRENCY_B]}
-          onPercentInput={(percent) => {
-            if (maxAmounts[Field.CURRENCY_B]) {
-              onFieldBInput(maxAmounts[Field.CURRENCY_B]?.multiply(new Percent(percent, 100)).toExact() ?? '')
-            }
-          }}
-          onMax={() => onFieldBInput(maxAmounts[Field.CURRENCY_B]?.toExact() ?? '')}
-          value={formattedAmounts[Field.CURRENCY_B]}
-          onUserInput={onFieldBInput}
-          showQuickInputButton
-          showMaxButton
-          currency={currencies[Field.CURRENCY_B]}
-          id="add-liquidity-input-tokenb"
-          showCommonBases
-          commonBasesType={CommonBasesType.LIQUIDITY}
-        />
-        <Box mt="8px">
-          <MevProtectToggle size="sm" />
-        </Box>
-        <Box mt="16px">{buttons}</Box>
-      </AutoColumn>
-
-      <LeftContainer>
+          {/* <LeftContainer>
         <AutoColumn>
           <Box>
             <Text mb="8px" bold fontSize="12px" textTransform="uppercase" color="secondary">
@@ -283,7 +271,9 @@ export default function StableFormView({
             </AutoRow>
           </Box>
         </AutoColumn>
-      </LeftContainer>
-    </>
+      </LeftContainer> */}
+        </CardBody>
+      </Card>
+    </Box>
   )
 }

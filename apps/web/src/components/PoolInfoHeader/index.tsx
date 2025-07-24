@@ -32,12 +32,9 @@ import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprBu
 
 interface PoolInfoHeaderProps {
   poolId?: `0x${string}`
-
   poolInfo: PoolInfo | null | undefined
   currency0?: Currency
   currency1?: Currency
-  symbol0?: string
-  symbol1?: string
   chainId?: number
   isInverted?: boolean
   hookData?: HookData
@@ -47,6 +44,11 @@ interface PoolInfoHeaderProps {
   }
   linkType?: LinkType
   onInvertPrices?: () => void
+
+  /** Optional override for currency0.symbol */
+  symbol0?: string
+  /** Optional override for currency1.symbol */
+  symbol1?: string
 }
 export const PoolInfoHeader = ({
   poolInfo,

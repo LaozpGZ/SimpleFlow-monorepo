@@ -3,7 +3,6 @@ import { PoolInfoHeader } from 'components/PoolInfoHeader'
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
 import { useCurrencyByPoolId } from 'hooks/infinity/useCurrencyByPoolId'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { usePoolInfo } from 'state/farmsV4/hooks'
 import { useInverted } from 'state/infinity/shared'
@@ -14,7 +13,6 @@ import {
 } from 'views/universalFarms/components/PoolAprButtonV3/PoolPositionAprButtonV3'
 
 export const InfinityPoolInfoHeader = () => {
-  const router = useRouter()
   const { chainId, poolId } = useInfinityPoolIdRouteParams()
 
   const poolInfo = usePoolInfo({ poolAddress: poolId, chainId })

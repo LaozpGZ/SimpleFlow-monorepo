@@ -1,30 +1,11 @@
-import { CurrencySelect } from 'components/CurrencySelect'
-import { CommonBasesType } from 'components/SearchModal/types'
-
-import { Currency, NATIVE, Pair, WNATIVE } from '@pancakeswap/sdk'
-import {
-  AddIcon,
-  AutoColumn,
-  Box,
-  Card,
-  CardBody,
-  Container,
-  DynamicSection,
-  FlexGap,
-  IconButton,
-  PreTitle,
-  RefreshIcon,
-  useMatchBreakpoints,
-} from '@pancakeswap/uikit'
+import { Pair } from '@pancakeswap/sdk'
+import { Box, Container } from '@pancakeswap/uikit'
 
 import { FeeAmount, Pool } from '@pancakeswap/v3-sdk'
-import React, { ReactNode, useCallback, useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
-import { Trans, useTranslation } from '@pancakeswap/localization'
 import { useRouter } from 'next/router'
-import currencyId from 'utils/currencyId'
 
-import { AppHeader } from 'components/App'
 import { atom, useAtom } from 'jotai'
 import { styled } from 'styled-components'
 
@@ -36,22 +17,18 @@ import useWarningLiquidity from 'views/AddLiquidity/hooks/useWarningLiquidity'
 import useStableConfig, { StableConfigContext } from 'views/Swap/hooks/useStableConfig'
 
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import noop from 'lodash/noop'
 import { usePoolInfo } from 'state/farmsV4/state/extendPools/hooks'
 import { resetMintState } from 'state/mint/actions'
 import { useAddLiquidityV2FormDispatch } from 'state/mint/reducer'
-import { safeGetAddress } from 'utils'
 import { PoolInfoHeader } from 'components/PoolInfoHeader'
 
 import { AprCalculatorV2 } from './components/AprCalculatorV2'
-import { StableV3Selector } from './components/StableV3Selector'
-import { V2Selector } from './components/V2Selector'
+
 import StableFormView from './formViews/StableFormView'
 import V2FormView from './formViews/V2FormView'
 import V3FormView from './formViews/V3FormView'
 import { useCurrencyParams } from './hooks/useCurrencyParams'
-import { HandleFeePoolSelectFn, SELECTOR_TYPE } from './types'
-import FeeSelector from './formViews/V3FormView/components/FeeSelector'
+import { SELECTOR_TYPE } from './types'
 
 /* two-column layout where DepositAmount is moved at the very end on mobile. */
 export const ResponsiveTwoColumns = styled.div<{ $singleColumn?: boolean }>`
@@ -83,9 +60,6 @@ export function UniversalAddLiquidity({
   preferredSelectType,
   preferredFeeAmount,
 }: UniversalAddLiquidityPropsType) {
-  const { chainId } = useActiveChainId()
-  const { t } = useTranslation()
-
   const dispatch = useAddLiquidityV2FormDispatch()
 
   useEffect(() => {
@@ -97,7 +71,7 @@ export function UniversalAddLiquidity({
   const router = useRouter()
   const baseCurrency = useCurrency(currencyIdA)
   const currencyB = useCurrency(currencyIdB)
-  const warningHandler = useWarningLiquidity(currencyIdA, currencyIdB)
+  useWarningLiquidity(currencyIdA, currencyIdB)
 
   const stableConfig = useStableConfig({
     tokenA: baseCurrency,
@@ -118,101 +92,6 @@ export function UniversalAddLiquidity({
         : undefined)
     )
   }, [preferredFeeAmount, feeAmountFromUrl])
-
-  const handleCurrencySelect = useCallback(
-    (currencyNew: Currency, currencyIdOther?: string): (string | undefined)[] => {
-      const currencyIdNew = currencyId(currencyNew)
-
-      if (currencyIdNew === currencyIdOther) {
-        // not ideal, but for now clobber the other if the currency ids are equal
-        return [currencyIdNew, undefined]
-      }
-      // prevent wnative + native
-      const isNATIVEOrWNATIVENew =
-        currencyNew?.isNative || (chainId !== undefined && currencyIdNew === WNATIVE[chainId]?.address)
-      const isNATIVEOrWNATIVEOther =
-        currencyIdOther !== undefined &&
-        ((chainId && currencyIdOther === NATIVE[chainId]?.symbol) ||
-          (chainId !== undefined && safeGetAddress(currencyIdOther) === WNATIVE[chainId]?.address))
-
-      if (isNATIVEOrWNATIVENew && isNATIVEOrWNATIVEOther) {
-        return [currencyIdNew, undefined]
-      }
-
-      return [currencyIdNew, currencyIdOther]
-    },
-    [chainId],
-  )
-
-  const handleCurrencyASelect = useCallback(
-    (currencyANew: Currency) => {
-      warningHandler(currencyANew)
-      const [idA, idB] = handleCurrencySelect(currencyANew, currencyIdB)
-      const newPathname = router.pathname.replace('/v2', '').replace('/stable', '')
-      const { minPrice: _minPrice, maxPrice: _maxPrice, ...rest } = router.query
-      if (idB === undefined) {
-        router.replace(
-          {
-            pathname: newPathname,
-            query: {
-              ...rest,
-              currency: [idA!],
-            },
-          },
-          undefined,
-          { shallow: true },
-        )
-      } else {
-        router.replace(
-          {
-            pathname: newPathname,
-            query: {
-              ...rest,
-              currency: [idA!, idB!],
-            },
-          },
-          undefined,
-          { shallow: true },
-        )
-      }
-    },
-    [handleCurrencySelect, currencyIdB, router],
-  )
-
-  const handleCurrencyBSelect = useCallback(
-    (currencyBNew: Currency) => {
-      warningHandler(currencyBNew)
-      const [idB, idA] = handleCurrencySelect(currencyBNew, currencyIdA)
-      const newPathname = router.pathname.replace('/v2', '').replace('/stable', '')
-      const { minPrice: _minPrice, maxPrice: _maxPrice, ...rest } = router.query
-      if (idA === undefined) {
-        router.replace(
-          {
-            pathname: newPathname,
-            query: {
-              ...rest,
-              currency: [idB!],
-            },
-          },
-          undefined,
-          { shallow: true },
-        )
-      } else {
-        router.replace(
-          {
-            pathname: newPathname,
-            query: {
-              ...rest,
-              currency: [idA!, idB!],
-            },
-          },
-          undefined,
-          { shallow: true },
-        )
-      }
-    },
-    [handleCurrencySelect, currencyIdA, router],
-  )
 
   const [selectorType, setSelectorType] = useAtom(selectTypeAtom)
 
@@ -242,46 +121,6 @@ export function UniversalAddLiquidity({
     setSelectorType,
     stableConfig.stableSwapConfig,
   ])
-
-  // const handleFeePoolSelect = useCallback<HandleFeePoolSelectFn>(
-  //   ({ type, feeAmount: newFeeAmount }) => {
-  //     setSelectorType(type)
-  //     if (type === SELECTOR_TYPE.V3) {
-  //       const newPathname = router.pathname.replace('/stable', '').replace('/v2', '')
-  //       router.replace(
-  //         {
-  //           pathname: newPathname,
-  //           query: {
-  //             ...router.query,
-  //             currency: newFeeAmount
-  //               ? [currencyIdA!, currencyIdB!, newFeeAmount.toString()]
-  //               : [currencyIdA!, currencyIdB!],
-  //           },
-  //         },
-  //         undefined,
-  //         { shallow: true },
-  //       )
-  //     } else {
-  //       router.replace(
-  //         {
-  //           pathname: router.pathname,
-  //           query: router.query,
-  //         },
-  //         type === SELECTOR_TYPE.STABLE
-  //           ? `/stable/add/${currencyIdA}/${currencyIdB}`
-  //           : `/v2/add/${currencyIdA}/${currencyIdB}`,
-  //         { shallow: true },
-  //       )
-  //     }
-  //   },
-  //   [currencyIdA, currencyIdB, router, setSelectorType],
-  // )
-
-  // useEffect(() => {
-  //   if (preferredFeeAmount && !feeAmountFromUrl && selectorType === SELECTOR_TYPE.V3) {
-  //     handleFeePoolSelect({ type: selectorType, feeAmount: preferredFeeAmount })
-  //   }
-  // }, [preferredFeeAmount, feeAmountFromUrl, handleFeePoolSelect, selectorType])
 
   return (
     <>
