@@ -12,7 +12,7 @@ import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'ne
 import { useMemo } from 'react'
 import { Provider } from 'react-redux'
 import { WagmiProvider } from 'wagmi'
-import { createWagmiConfig } from 'utils/wagmi'
+import { createWagmiConfig, createW3WWagmiConfig } from 'utils/wagmi'
 // Create a client
 const queryClient = new QueryClient()
 
@@ -33,8 +33,7 @@ const Providers: React.FC<
   }>
 > = ({ children, store, dehydratedState }) => {
   const wagmiConfig = useMemo(
-    // () => (typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()),
-    () => createWagmiConfig(),
+    () => (typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()),
     [],
   )
 
