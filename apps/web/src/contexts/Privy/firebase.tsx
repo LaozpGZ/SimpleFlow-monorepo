@@ -8,7 +8,7 @@ import {
   UserCredential,
 } from 'firebase/auth'
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
-import { usePrivySocialLoginAtom } from './atom'
+import { usePrivySocialLoginAtom, useSocialLoginProviderAtom } from './atom'
 import { loginWithTelegramViaScript } from './telegramLogin'
 
 import { firebaseApp } from './constants'
@@ -39,6 +39,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   const [discordPopup, setDiscordPopup] = useState<Window | null>(null)
   const [telegramPopup, setTelegramPopup] = useState<Window | null>(null)
   const [, setPrivySocialLogin] = usePrivySocialLoginAtom()
+  const [, setSocialProvider] = useSocialLoginProviderAtom()
 
   const signInWithGoogle = async (): Promise<UserCredential> => {
     try {
@@ -83,6 +84,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   const loginWithGoogle = async () => {
     try {
       setPrivySocialLogin(true)
+      setSocialProvider('google')
       setLoading(true)
       const loginRes = await signInWithGoogle()
       const idToken = await loginRes.user.getIdToken(true)
@@ -92,6 +94,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       if (err?.message === 'LOGIN_CANCELLED') {
         console.info('Google login was cancelled by user')
         setPrivySocialLogin(false)
+        setSocialProvider(null)
         return
       }
       console.error('Google login error:', err)
@@ -103,6 +106,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   const loginWithX = async () => {
     try {
       setPrivySocialLogin(true)
+      setSocialProvider('x')
       setLoading(true)
       const loginRes = await signInWithX()
       const idToken = await loginRes.user.getIdToken(true)
@@ -112,6 +116,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       if (err?.message === 'LOGIN_CANCELLED') {
         console.info('X login was cancelled by user')
         setPrivySocialLogin(false)
+        setSocialProvider(null)
         return
       }
       console.error('X login error:', err)
@@ -138,6 +143,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   const loginWithDiscord = async () => {
     try {
       setPrivySocialLogin(true)
+      setSocialProvider('discord')
       setLoading(true)
 
       // Open Discord OAuth page
@@ -162,6 +168,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
   const loginWithTelegram = async () => {
     try {
       setPrivySocialLogin(true)
+      setSocialProvider('telegram')
       setLoading(true)
 
       loginWithTelegramViaScript((token) => {
@@ -258,6 +265,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       if (discordToken) {
         clearInterval(checkLocalStorage)
         localStorage.removeItem('discordAuthToken')
+        setSocialProvider('discord')
         loginWithCustomToken(discordToken)
       }
 
@@ -266,6 +274,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       if (telegramToken) {
         clearInterval(checkLocalStorage)
         localStorage.removeItem('telegramAuthToken')
+        setSocialProvider('telegram')
         loginWithCustomToken(telegramToken)
       }
     }, 1000)
@@ -298,6 +307,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     await signOutFirebase()
     setToken(undefined)
     setLoading(false)
+    setSocialProvider(null)
   }, [])
 
   const value = {

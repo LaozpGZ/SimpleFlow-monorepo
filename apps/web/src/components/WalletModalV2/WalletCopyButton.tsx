@@ -8,6 +8,7 @@ import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
 import { Connector, useAccount, useConnect } from 'wagmi'
+import { useSocialLoginProviderAtom } from '../../contexts/Privy/atom'
 
 interface CopyAddressProps extends FlexProps {
   account: string | undefined
@@ -104,6 +105,13 @@ const useDappIcon = () => {
   return { dappIcon }
 }
 
+const SOCIAL_LOGIN_ICONS = {
+  google: `${ASSET_CDN}/web/wallets/social-login/google.jpg`,
+  x: `${ASSET_CDN}/web/wallets/social-login/x.svg`,
+  telegram: `${ASSET_CDN}/web/wallets/social-login/telegram.svg`,
+  discord: `${ASSET_CDN}/web/wallets/social-login/discord.svg`,
+}
+
 export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = ({
   account,
   tooltipMessage,
@@ -113,11 +121,16 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
   const { chainId } = useActiveChainId()
 
   const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
+  const [socialProvider] = useSocialLoginProviderAtom()
 
   const walletConfig = walletsConfig({ chainId, connect: connectAsync })
 
   const wallet = useMemo(() => walletConfig.find((w) => w.id === previouslyUsedWalletsId[0]), [walletConfig])
   const { dappIcon } = useDappIcon()
+
+  const socialIcon = useMemo(() => {
+    return socialProvider ? SOCIAL_LOGIN_ICONS[socialProvider] : null
+  }, [socialProvider])
 
   // Format the address to show only the first 6 and last 4 characters
   const formatAddress = (address: string | undefined) => {
@@ -129,7 +142,9 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
     <Box position="relative" {...props} onClick={(e) => e.stopPropagation()}>
       <Wrapper>
         <WalletIcon>
-          {wallet?.icon || dappIcon ? (
+          {socialIcon ? (
+            <Image src={socialIcon} width={40} height={40} alt="Social Login" />
+          ) : wallet?.icon || dappIcon ? (
             <Image src={(wallet?.icon as string) || dappIcon} width={40} height={40} alt="Wallet" />
           ) : (
             <WalletFilledV2Icon width={28} height={28} color="primary" />
