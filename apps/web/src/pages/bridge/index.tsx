@@ -18,8 +18,6 @@ function usePortalConflictFix() {
       const chakraPortals = document.querySelectorAll('[class*="chakra-portal"]')
 
       if (headlessuiPortals.length > 0 && chakraPortals.length > 0) {
-        // eslint-disable-next-line no-console
-        console.log('Portal conflict detected, fixing...')
         // Temporarily hide chakra portals when headlessui modal is active
         chakraPortals.forEach((portal) => {
           const portalElement = portal as HTMLElement

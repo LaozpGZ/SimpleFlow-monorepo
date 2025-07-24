@@ -102,28 +102,22 @@ const SocialLoginModal: React.FC<SocialLoginModalProps> = ({
   const { t } = useTranslation()
 
   const handleGoogleLogin = () => {
-    console.log('Google login clicked')
     onGoogleLogin?.()
   }
 
   const handleXLogin = () => {
-    console.log('X (Twitter) login clicked')
     onXLogin?.()
   }
 
   const handleTelegramLogin = () => {
-    console.log('Telegram login clicked')
     onTelegramLogin?.()
   }
 
   const handleDiscordLogin = () => {
-    console.log('Discord login clicked')
     onDiscordLogin?.()
   }
 
   const handleWeb3WalletLogin = () => {
-    console.log('Web3 wallet login clicked')
-    // Use the callback to return to wallet selection instead of just dismissing
     onBackToWeb3Wallet?.()
   }
 

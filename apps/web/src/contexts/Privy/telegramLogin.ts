@@ -43,9 +43,7 @@ export async function loginWithTelegramViaScript(onLogin: (token: string) => voi
         alert('Login failed or cancelled.')
         return
       }
-      console.log('✅ Telegram User:', userData)
       try {
-        console.log({ userData }, 'telegram user')
         const res = await fetch('/api/auth/telegram-callback', {
           method: 'POST',
           headers: {

@@ -41,7 +41,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     await firebaseAdmin()
-    console.log({ authData }, 'authData')
     const customToken = await getAuth().createCustomToken(`telegram:${telegramId}`, {
       telegramUsername: authData.username,
     })
