@@ -38,7 +38,7 @@ const Providers: React.FC<
     <FirebaseAuthProvider>
       <PrivyProvider>
         <QueryClientProvider client={queryClient}>
-          <WagmiWithPrivyProvider config={wagmiConfig}>
+          <WagmiWithPrivyProvider reconnectOnMount={false} config={wagmiConfig}>
             <W3WConfigProvider value={isInBinance()}>
               <HydrationBoundary state={dehydratedState}>
                 <Provider store={store}>
