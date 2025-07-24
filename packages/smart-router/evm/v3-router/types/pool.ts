@@ -21,6 +21,7 @@ export interface SVMPool extends BasePool {
   type: PoolType.SVM
   id: string
   fee?: number
+  feeAmount?: CurrencyAmount<Currency>
 }
 
 export interface V2Pool extends BasePool {

@@ -45,6 +45,10 @@ export function parseSVMTradeIntoSVMOrder(svmTrade: SolRouterTrade, query: Quote
         type: PoolType.SVM,
         id: plan.swapInfo.ammKey.toString(),
         fee: plan.bps,
+        feeAmount: UnifiedCurrencyAmount.fromRawAmount(
+          svmTrade.inputAmount.currency as Currency,
+          plan.swapInfo.feeAmount,
+        ),
       }))
 
       // Build path: start with input currency, end with output currency
