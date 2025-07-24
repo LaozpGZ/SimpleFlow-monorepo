@@ -11,6 +11,7 @@ import { W3WConfigProvider } from 'contexts/W3WConfigContext'
 import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
 import { useMemo } from 'react'
 import { Provider } from 'react-redux'
+import { WagmiProvider } from 'wagmi'
 import { createWagmiConfig } from 'utils/wagmi'
 // Create a client
 const queryClient = new QueryClient()
@@ -76,7 +77,7 @@ export const TestProviders: React.FC<
 
   return (
     <QueryClientProvider client={queryClient}>
-      <WagmiWithPrivyProvider config={wagmiConfig}>
+      <WagmiProvider config={wagmiConfig}>
         <W3WConfigProvider value={false}>
           <HydrationBoundary state={dehydratedState}>
             <Provider store={store}>
@@ -92,7 +93,7 @@ export const TestProviders: React.FC<
             </Provider>
           </HydrationBoundary>
         </W3WConfigProvider>
-      </WagmiWithPrivyProvider>
+      </WagmiProvider>
     </QueryClientProvider>
   )
 }
