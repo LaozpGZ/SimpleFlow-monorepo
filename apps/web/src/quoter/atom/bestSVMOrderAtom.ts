@@ -1,31 +1,21 @@
-import { NonEVMChainId } from '@pancakeswap/chains'
-import { OrderType } from '@pancakeswap/price-api-sdk'
+import { getBestSolanaTrade } from '@pancakeswap/solana-router-sdk'
+import { TradeType } from '@pancakeswap/swap-sdk-core'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import { withTimeout } from '@pancakeswap/utils/withTimeout'
 import { atomFamily } from 'jotai/utils'
 import { QUOTE_TIMEOUT } from 'quoter/consts'
-import { translateQuoteQueryToSVMRequest } from 'quoter/utils/svm-utils/translateQuoteQueryToSVMRequest'
-import { type InterfaceOrder, isSVMOrder } from 'views/Swap/utils'
+import { parseSVMTradeIntoSVMOrder } from 'quoter/utils/svm-utils/parseSVMTradeIntoSVMOrder'
+import { type InterfaceOrder } from 'views/Swap/utils'
 import type { QuoteQuery } from '../quoter.types'
-import { parseSVMQuoteResponse } from '../utils/svm-utils/svmResponseParser'
 import { atomWithLoadable } from './atomWithLoadable'
-
-const SVM_QUOTER_ENDPOINT = process.env.NEXT_PUBLIC_SVM_QUOTER_ENDPOINT || ''
 
 export const bestSVMOrderAtom = atomFamily(
   (_option: QuoteQuery) => {
     return atomWithLoadable(async () => {
-      const { enabled, baseCurrency, currency, amount } = _option
-
-      console.log('start bestSVMOrderAtom')
+      const { baseCurrency, currency, amount, tradeType, slippage } = _option
 
       // Early validation
-      if (!enabled || !baseCurrency || !currency || !amount) {
-        return undefined
-      }
-
-      // Only process Solana chain
-      if (baseCurrency.chainId !== NonEVMChainId.SOLANA) {
+      if (!baseCurrency || !currency || !amount || tradeType === undefined) {
         return undefined
       }
 
@@ -38,42 +28,18 @@ export const bestSVMOrderAtom = atomFamily(
       try {
         const query = withTimeout(
           async () => {
-            if (!SVM_QUOTER_ENDPOINT) {
-              throw new Error('SVM quoter endpoint is not set')
-            }
-
-            // Translate QuoteQuery to SVM request format
-            const requestBody = translateQuoteQueryToSVMRequest(_option)
-
-            console.log('requestBody', requestBody)
-
-            // Fetch quote from SVM quoter service
-            const response = await fetch(`${SVM_QUOTER_ENDPOINT}/quote`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(requestBody),
-              signal: controller.signal,
+            console.log('calling getBestSolanaTrade')
+            // Parse response to SVM order format
+            const solTradeRoute = await getBestSolanaTrade({
+              inputCurrency: baseCurrency,
+              outputCurrency: currency,
+              amount,
+              tradeType: tradeType as TradeType,
+              slippageBps: slippage,
             })
 
-            if (!response.ok) {
-              throw new Error(`SVM quoter API error: ${response.statusText}`)
-            }
-
-            const responseJson = await response.json()
-
-            console.log('responseJson', responseJson)
-
-            if (!responseJson.success) {
-              throw new Error(responseJson.msg || 'SVM quoter request failed')
-            }
-
-            // Parse response to SVM order format
-            const svmOrder = parseSVMQuoteResponse(responseJson.data, _option)
-
             //   perf.tracker.success(svmOrder)
-            return svmOrder
+            return solTradeRoute
           },
           {
             ms: QUOTE_TIMEOUT,
@@ -85,18 +51,18 @@ export const bestSVMOrderAtom = atomFamily(
 
         let bestOrder: InterfaceOrder | undefined
 
-        const result = await query()
-
-        console.log('result', result)
+        const trade = await query()
 
         // if result.type is SVMOrder, can safely cast to InterfaceOrder
-        if (result?.type === OrderType.PCS_SVM && isSVMOrder(result as unknown as InterfaceOrder)) {
-          bestOrder = result
+        if (trade) {
+          bestOrder = parseSVMTradeIntoSVMOrder(trade, _option)
         }
 
         if (!bestOrder) {
           return Loadable.Nothing<InterfaceOrder>()
         }
+
+        console.log('bestOrder', bestOrder)
 
         return Loadable.Just<InterfaceOrder>(bestOrder)
       } catch (error) {
@@ -112,5 +78,6 @@ export const bestSVMOrderAtom = atomFamily(
   (a, b) =>
     a.baseCurrency?.wrapped?.address === b.baseCurrency?.wrapped?.address &&
     a.currency?.wrapped?.address === b.currency?.wrapped?.address &&
-    a.amount?.toExact() === b.amount?.toExact(),
+    a.amount?.toExact() === b.amount?.toExact() &&
+    a.tradeType === b.tradeType,
 )

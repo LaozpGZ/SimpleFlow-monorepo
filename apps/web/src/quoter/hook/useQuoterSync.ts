@@ -98,6 +98,8 @@ export const useQuoterSync = () => {
 
   const quoteResult = useAtomValue(bestCrossChainQuoteAtom(quoteQuery))
 
+  console.log('quoteResult', quoteResult)
+
   useEffect(() => {
     let t = 0
     const revalidateTime = isCrossChain ? QUOTE_REVALIDATE_TIME * 2 : QUOTE_REVALIDATE_TIME

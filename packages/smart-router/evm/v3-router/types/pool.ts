@@ -15,6 +15,14 @@ export interface BasePool {
   type: PoolType
 }
 
+// NOTE: Should not put SVM pool in Smart Router evm
+// but don't know how to put it so leave it here for now
+export interface SVMPool extends BasePool {
+  type: PoolType.SVM
+  id: string
+  feeAmount: string
+}
+
 export interface V2Pool extends BasePool {
   type: PoolType.V2
   reserve0: CurrencyAmount<Currency>
@@ -89,7 +97,7 @@ export type InfinityBinPool = BaseInfinityPool & {
   reserveOfBin?: Record<ActiveId, Reserve>
 }
 
-export type Pool = V2Pool | V3Pool | StablePool | InfinityBinPool | InfinityClPool
+export type Pool = V2Pool | V3Pool | StablePool | InfinityBinPool | InfinityClPool | SVMPool
 
 export interface WithTvl {
   tvlUSD: bigint

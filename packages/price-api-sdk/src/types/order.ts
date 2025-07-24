@@ -1,6 +1,6 @@
 import type { ExclusiveDutchOrderInfoJSON, ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
-import type { InfinityRouter, PoolType, Route, RouteType } from '@pancakeswap/smart-router'
-import type { Currency, CurrencyAmount, TradeType } from '@pancakeswap/swap-sdk-core'
+import type { InfinityRouter, Route } from '@pancakeswap/smart-router'
+import type { Currency, CurrencyAmount, SPLToken, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import type { AMMOrder } from './amm'
 import { Hex } from './common'
 import { OrderType } from './orderType'
@@ -62,44 +62,20 @@ export type BridgeOrder<tradeType extends TradeType = TradeType> = {
   bridgeTransactionData: BridgeTransactionData
 }
 
-// SVM Order types
-export interface SVMPool {
-  type: PoolType.SVM
-  id: string
-  feeAmount: string
-  feeRate: number
-}
-
-export interface SVMRoute {
-  type: RouteType.SVM
-  inputAmount: CurrencyAmount<Currency>
-  outputAmount: CurrencyAmount<Currency>
-  pools: SVMPool[]
-  path: Currency[]
-  percent: number
-  amount: CurrencyAmount<Currency>
-  routeIndex: number
-}
-
-export interface RouteStats {
-  numSubRoutes: number
-  totalHops: number
-  avgHopsPerRoute: number
-}
-
-export interface SVMOrderTrade<T extends TradeType = TradeType> {
+export interface SVMTrade<T extends TradeType = TradeType> {
   tradeType: T
-  inputAmount: CurrencyAmount<Currency>
-  outputAmount: CurrencyAmount<Currency>
-  priceImpact: null
-  routes: SVMRoute[]
-  routeStats: RouteStats
+  inputAmount: UnifiedCurrencyAmount<SPLToken>
+  outputAmount: UnifiedCurrencyAmount<SPLToken>
+  priceImpactPct: string
+  routes: Route[]
   quoteQueryHash?: string
+  transaction: string | null
+  otherAmountThreshold: string
 }
 
-export type SVMOrder<tradeType extends TradeType = TradeType> = {
+export type SVMOrder<T extends TradeType = TradeType> = {
   type: OrderType.PCS_SVM
-  trade: SVMOrderTrade<tradeType>
+  trade: SVMTrade<T>
 }
 
 export type PriceOrder<
