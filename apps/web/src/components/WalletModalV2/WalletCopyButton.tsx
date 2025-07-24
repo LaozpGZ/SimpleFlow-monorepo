@@ -35,6 +35,17 @@ const WalletIcon = styled(Box)`
   overflow: hidden;
 `
 
+const SocialIconWrapper = styled.div<{ $needsWhiteBg?: boolean }>`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  background-color: ${({ $needsWhiteBg }) => ($needsWhiteBg ? 'white' : 'transparent')};
+  padding: ${({ $needsWhiteBg }) => ($needsWhiteBg ? '4px' : '0')};
+`
+
 const AddressBox = styled(Box)`
   display: flex;
   flex-direction: column;
@@ -132,6 +143,10 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
     return socialProvider ? SOCIAL_LOGIN_ICONS[socialProvider] : null
   }, [socialProvider])
 
+  const needsWhiteBackground = useMemo(() => {
+    return Boolean(socialProvider && ['x', 'discord', 'telegram'].includes(socialProvider))
+  }, [socialProvider])
+
   // Format the address to show only the first 6 and last 4 characters
   const formatAddress = (address: string | undefined) => {
     if (!address) return ''
@@ -143,7 +158,9 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
       <Wrapper>
         <WalletIcon>
           {socialIcon ? (
-            <Image src={socialIcon} width={40} height={40} alt="Social Login" />
+            <SocialIconWrapper $needsWhiteBg={needsWhiteBackground}>
+              <Image src={socialIcon} width={32} height={32} alt="Social Login" />
+            </SocialIconWrapper>
           ) : wallet?.icon || dappIcon ? (
             <Image src={(wallet?.icon as string) || dappIcon} width={40} height={40} alt="Wallet" />
           ) : (
