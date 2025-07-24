@@ -42,16 +42,6 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
 
   const { loginWithGoogle, loginWithX, isLoading, loginWithDiscord, loginWithTelegram } = useFirebaseAuth()
 
-  const handleTelegramLogin = () => {
-    console.log('Telegram login clicked')
-    loginWithTelegram()
-  }
-
-  const handleDiscordLogin = () => {
-    console.log('Discord login clicked')
-    loginWithDiscord()
-  }
-
   return (
     <WalletModalV2
       mevDocLink={mevDocLink}
@@ -65,8 +55,8 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
       onWalletConnectCallBack={handleWalletConnect}
       onGoogleLogin={loginWithGoogle}
       onXLogin={loginWithX}
-      onTelegramLogin={handleTelegramLogin}
-      onDiscordLogin={handleDiscordLogin}
+      onTelegramLogin={loginWithTelegram}
+      onDiscordLogin={loginWithDiscord}
     />
   )
 }

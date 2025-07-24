@@ -77,21 +77,6 @@ const UserMenu = () => {
   // Determine which address to use: if Privy login use privyAddress, otherwise use account
   const finalAddress = ready && authenticated && user ? privyAddress : account
   const shouldShowLoading = ready && authenticated && user ? isPrivyAddressLoading : false
-
-  console.log(
-    {
-      ready,
-      authenticated,
-      user,
-      account,
-      privyAddress,
-      isPrivyAddressLoading,
-      addressType,
-      finalAddress,
-    },
-    'PrivyInfo',
-  )
-
   const { chainId, isWrongNetwork } = useActiveChainId()
   const { domainName, avatar } = useDomainNameForAddress(finalAddress)
   const { logout } = useAuth()

@@ -49,7 +49,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     } catch (err: any) {
       // Handle popup cancellation gracefully
       if (err?.code === 'auth/cancelled-popup-request' || err?.code === 'auth/popup-closed-by-user') {
-        console.log('Google login popup was cancelled by user')
+        console.info('Google login popup was cancelled by user')
         // Don't show alert for user cancellation, just throw silently
         throw new Error('LOGIN_CANCELLED')
       }
@@ -69,7 +69,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     } catch (err: any) {
       // Handle popup cancellation gracefully
       if (err?.code === 'auth/cancelled-popup-request' || err?.code === 'auth/popup-closed-by-user') {
-        console.log('X login popup was cancelled by user')
+        console.info('X login popup was cancelled by user')
         // Don't show alert for user cancellation, just throw silently
         throw new Error('LOGIN_CANCELLED')
       }
@@ -90,7 +90,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     } catch (err: any) {
       // Handle cancelled login silently
       if (err?.message === 'LOGIN_CANCELLED') {
-        console.log('Google login was cancelled by user')
+        console.info('Google login was cancelled by user')
         setPrivySocialLogin(false)
         return
       }
@@ -110,7 +110,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     } catch (err: any) {
       // Handle cancelled login silently
       if (err?.message === 'LOGIN_CANCELLED') {
-        console.log('X login was cancelled by user')
+        console.info('X login was cancelled by user')
         setPrivySocialLogin(false)
         return
       }
@@ -128,7 +128,6 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       const userCredential = await signInWithCustomToken(auth, customToken)
       const idToken = await userCredential.user.getIdToken(true)
       setToken(idToken)
-      console.log('Discord/Telegram login success with token')
       return true
     } catch (error) {
       console.error('Error signing in with custom token:', error)
@@ -193,19 +192,19 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
 
     // Handle auth state changes and set token
     const unsubscribeAuthState = auth.onAuthStateChanged(async (user) => {
-      console.log('Firebase auth state changed, user:', user ? 'exists' : 'null')
+      console.info('Firebase auth state changed, user:', user ? 'exists' : 'null')
 
       if (user) {
         try {
           const idToken = await user.getIdToken(true)
           setToken(idToken)
-          console.log('Token set from Firebase auth state change')
+          console.info('Token set from Firebase auth state change')
         } catch (error) {
           console.error('Failed to get token on auth state change:', error)
         }
       } else {
         setToken(undefined)
-        console.log('Firebase user signed out, token cleared')
+        console.info('Firebase user signed out, token cleared')
       }
 
       setLoading(false) // Set loading to false after initial check
@@ -213,13 +212,13 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
 
     // Handle token changes
     const unsubscribeTokenChange = auth.onIdTokenChanged((user) => {
-      console.log('Firebase token changed, user:', user ? 'exists' : 'null')
+      console.info('Firebase token changed, user:', user ? 'exists' : 'null')
     })
 
     // Listen for manual retrigger events
     const handleRetrigger = (event: CustomEvent) => {
       const { token: newToken } = event.detail
-      console.log('Received Firebase retrigger event, updating token...')
+      console.info('Received Firebase retrigger event, updating token...')
 
       // Clear current token first to force Privy to re-authenticate
       setToken(undefined)
@@ -227,7 +226,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       // Then set new token after a small delay to trigger Privy re-auth
       setTimeout(() => {
         setToken(newToken)
-        console.log('Token updated for Privy re-authentication')
+        console.info('Token updated for Privy re-authentication')
       }, 100)
     }
 
@@ -331,16 +330,13 @@ export async function retriggerFirebaseAuth() {
     const currentUser = auth.currentUser
 
     if (!currentUser) {
-      console.log('No Firebase user found, cannot retrigger auth')
       return false
     }
 
-    console.log('Current Firebase user exists, retriggering token...')
+    console.info('Current Firebase user exists, retriggering token...')
 
     // Get fresh token to trigger Privy re-authentication
     const freshToken = await currentUser.getIdToken(true) // force refresh
-    console.log('Fresh Firebase token obtained, length:', freshToken.length)
-    console.log(`Token preview: ${freshToken.substring(0, 20)}...${freshToken.substring(freshToken.length - 20)}`)
 
     // Trigger auth state change event manually
     // This should cause Privy's getCustomAccessToken to be called again
@@ -348,7 +344,6 @@ export async function retriggerFirebaseAuth() {
       detail: { token: freshToken },
     })
 
-    console.log('Dispatching Firebase retrigger event...')
     window.dispatchEvent(event)
 
     // Wait a moment for the retrigger to take effect

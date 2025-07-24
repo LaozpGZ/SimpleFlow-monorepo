@@ -43,14 +43,6 @@ export function RecentTransactions() {
   const { address: finalAddress, addressType, hasSmartWallet } = usePrivyWalletAddress()
   const dispatch = useAppDispatch()
 
-  console.log('🔍 TransactionsModal Debug Info:', {
-    wagmiAddress,
-    finalAddress,
-    addressType,
-    hasSmartWallet,
-    chainId,
-  })
-
   const { data: recentXOrders } = useRecentXOrders({
     chainId,
     address: finalAddress,
@@ -64,14 +56,6 @@ export function RecentTransactions() {
     fetchNextPage,
   } = useRecentBridgeOrders({
     address: finalAddress,
-  })
-
-  console.log('🌉 Cross Chain Orders Debug:', {
-    address: finalAddress,
-    crossChainOrdersResponse,
-    isLoading: isRecentBridgeOrdersLoading,
-    hasData: !!crossChainOrdersResponse?.pages?.length,
-    totalOrders: crossChainOrdersResponse?.pages?.reduce((total, page) => total + (page?.rows?.length || 0), 0) || 0,
   })
 
   const hasMoreCrossChainOrders = Boolean(
@@ -89,17 +73,6 @@ export function RecentTransactions() {
         ) ?? [],
     ) ?? []
 
-  console.log('📋 Processed Cross Chain Orders:', {
-    count: recentCrossChainOrders.length,
-    orders: recentCrossChainOrders.map((item) => ({
-      orderId: item.order.orderId,
-      timestamp: item.order.timestamp,
-      status: item.order.status,
-      inputToken: item.order.inputToken,
-      outputToken: item.order.outputToken,
-    })),
-  })
-
   const sortedRecentTransactions = useAllSortedRecentTransactions()
   const ammTransactions: AmmTransactionItem[] = useMemo(
     () =>
@@ -113,41 +86,14 @@ export function RecentTransactions() {
     [sortedRecentTransactions],
   )
 
-  console.log('💸 Regular AMM Transactions:', {
-    count: ammTransactions.length,
-    transactions: ammTransactions.map((tx) => ({
-      hash: tx.item.hash,
-      from: tx.item.from,
-      addedTime: tx.item.addedTime,
-      chainId: tx.chainId,
-    })),
-  })
-
   const xOrders: XTransactionItem[] = useMemo(
     () => recentXOrders?.orders.reverse().map((order) => ({ type: 'xOrder', item: order })) ?? [],
     [recentXOrders],
   )
 
-  console.log('🔄 X Orders:', {
-    count: xOrders.length,
-    orders: xOrders.map((x) => ({
-      hash: x.item.hash,
-      createdAt: x.item.createdAt,
-    })),
-  })
-
   const { t } = useTranslation()
 
   const hasTransactions = !isEmpty(sortedRecentTransactions)
-
-  console.log('📊 Final Transaction Summary:', {
-    ammTransactions: ammTransactions.length,
-    xOrders: xOrders.length,
-    crossChainOrders: recentCrossChainOrders.length,
-    totalDisplayed: ammTransactions.length + xOrders.length + recentCrossChainOrders.length,
-    hasTransactions,
-    showingTransactions: xOrders.length > 0 || hasTransactions || recentCrossChainOrders.length > 0,
-  })
 
   const clearAllTransactionsCallback = useCallback(() => {
     dispatch(clearAllTransactions())
