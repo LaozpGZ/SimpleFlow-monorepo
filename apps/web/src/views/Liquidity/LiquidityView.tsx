@@ -608,8 +608,7 @@ export const LiquidityView = () => {
                     >
                       <Button
                         disabled={
-                          !isOwnNFT ||
-                          Boolean(poolInfo?.chainId && DISABLED_ADD_LIQUIDITY_CHAINS.includes(poolInfo?.chainId))
+                          !isOwnNFT || Boolean(poolInfo?.chainId && DISABLED_ADD_LIQUIDITY_CHAINS[poolInfo?.chainId])
                         }
                         width="100%"
                       >
@@ -635,8 +634,7 @@ export const LiquidityView = () => {
                   >
                     <Button
                       disabled={
-                        !isOwnNFT ||
-                        Boolean(poolInfo?.chainId && DISABLED_ADD_LIQUIDITY_CHAINS.includes(poolInfo?.chainId))
+                        !isOwnNFT || Boolean(poolInfo?.chainId && DISABLED_ADD_LIQUIDITY_CHAINS[poolInfo?.chainId])
                       }
                       width="100%"
                       mb="8px"
