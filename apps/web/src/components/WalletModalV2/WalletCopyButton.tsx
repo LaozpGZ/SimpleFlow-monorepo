@@ -33,6 +33,7 @@ const WalletIcon = styled(Box)`
   flex-shrink: 0;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1);
 `
 
 const SocialIconWrapper = styled.div<{ $needsWhiteBg?: boolean }>`
@@ -44,7 +45,6 @@ const SocialIconWrapper = styled.div<{ $needsWhiteBg?: boolean }>`
   border-radius: 8px;
   background-color: ${({ $needsWhiteBg }) => ($needsWhiteBg ? 'white' : 'transparent')};
   padding: ${({ $needsWhiteBg }) => ($needsWhiteBg ? '4px' : '0')};
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 `
 
 const AddressBox = styled(Box)`
