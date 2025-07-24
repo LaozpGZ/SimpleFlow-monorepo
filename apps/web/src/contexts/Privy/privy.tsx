@@ -12,6 +12,14 @@ export function PrivyProvider({ children }: PropsWithChildren) {
   const { isLoading, getToken } = useFirebaseAuth()
   const router = useRouter()
 
+  // Validate required environment variables
+  const appId = process.env.NEXT_PUBLIC_PRIVY_APP_ID
+  const clientId = process.env.NEXT_PUBLIC_PRIVY_CLIENT_ID
+
+  if (!appId || !clientId) {
+    console.error('Missing required Privy environment variables')
+  }
+
   // Show wallet UIs only on bridge pages
   const showWalletUIs = router.pathname.includes('/bridge')
 
@@ -36,11 +44,11 @@ export function PrivyProvider({ children }: PropsWithChildren) {
         },
         fundingMethodConfig: {
           moonpay: {
-            useSandbox: true,
+            useSandbox: process.env.NODE_ENV !== 'production',
           },
         },
         embeddedWallets: {
-          requireUserPasswordOnCreate: false, // we will trigger it by ourself
+          requireUserPasswordOnCreate: false, // we will trigger it by ourself when create wallet
           showWalletUIs,
           ethereum: {
             createOnLogin: 'users-without-wallets',
