@@ -36,7 +36,7 @@ export const walletConnectNoQrCodeConnector = walletConnect({
 })
 
 export const metaMaskConnector = injected({ target: 'metaMask', shimDisconnect: false })
-export const trustConnector = injected({ target: 'trust', shimDisconnect: false })
+export const trustConnector = injected({ target: 'trust', shimDisconnect: true })
 
 const bloctoConnector = blocto({
   appId: 'e2f2f0cd-3ceb-4dec-b293-bb555f2ed5af',

@@ -77,8 +77,13 @@ const useAuth = () => {
       console.error(error)
     } finally {
       clearUserStates(dispatch, { chainId: chain?.id })
+      // Clear wagmi storage to prevent auto-reconnect for wallets like Trust Wallet
+      if (typeof window !== 'undefined' && window.localStorage) {
+        window.localStorage.removeItem('wagmi.recentConnectorId')
+        window.localStorage.removeItem('wagmi.store')
+      }
     }
-  }, [disconnectAsync, dispatch, chain?.id, authenticated, ready])
+  }, [disconnectAsync, dispatch, chain?.id, authenticated, ready, signOutAndClearUserStates, privyLogout])
 
   return { login, logout }
 }
