@@ -373,22 +373,29 @@ export default function AddStableLiquidity({
 
   const shouldShowApprovalGroup = (showFieldAApproval || showFieldBApproval) && isValid
 
-  // Calculate total USD value
-  const { data: currencyAUsdPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_A], {
-    enabled: Boolean(currencies[Field.CURRENCY_A]),
-  })
-  const { data: currencyBUsdPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_B], {
-    enabled: Boolean(currencies[Field.CURRENCY_B]),
-  })
+  // Get USD prices
+  const { data: currencyAUsdPrice, isLoading: currencyAUsdPriceLoading } = useCurrencyUsdPrice(
+    currencies[Field.CURRENCY_A],
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_A]),
+    },
+  )
+  const { data: currencyBUsdPrice, isLoading: currencyBUsdPriceLoading } = useCurrencyUsdPrice(
+    currencies[Field.CURRENCY_B],
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_B]),
+    },
+  )
 
   // Fallback to stable prices
   const stablePriceA = useStablecoinPriceAmount(currencies[Field.CURRENCY_A], Number(formatAmount(parsedAmountA, 18)), {
-    enabled: Boolean(currencies[Field.CURRENCY_A]) && !currencyAUsdPrice,
+    enabled: Boolean(currencies[Field.CURRENCY_A]) && !currencyAUsdPrice && !currencyAUsdPriceLoading,
   })
   const stablePriceB = useStablecoinPriceAmount(currencies[Field.CURRENCY_B], Number(formatAmount(parsedAmountB, 18)), {
-    enabled: Boolean(currencies[Field.CURRENCY_B]) && !currencyBUsdPrice,
+    enabled: Boolean(currencies[Field.CURRENCY_B]) && !currencyBUsdPrice && !currencyBUsdPriceLoading,
   })
 
+  // Calculate total USD value
   const inputAmountsTotalUsdValue = useMemo(() => {
     const amountA = stablePriceA ?? Number(formatAmount(parsedAmountA, 18) ?? 0) * (currencyAUsdPrice ?? 0)
     const amountB = stablePriceB ?? Number(formatAmount(parsedAmountB, 18) ?? 0) * (currencyBUsdPrice ?? 0)

@@ -33,6 +33,8 @@ import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+import { formatAmount, formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 
 export default function V2FormView({
   formattedAmounts,
@@ -67,14 +69,43 @@ export default function V2FormView({
   let buttons: ReactNode = null
 
   // Calculate Total USD Value of input amounts
-  const { data: currencyAPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_A])
-  const { data: currencyBPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_B])
+  const { data: currencyAUsdPrice, isLoading: currencyAUsdPriceLoading } = useCurrencyUsdPrice(
+    currencies[Field.CURRENCY_A],
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_A]),
+    },
+  )
+  const { data: currencyBUsdPrice, isLoading: currencyBUsdPriceLoading } = useCurrencyUsdPrice(
+    currencies[Field.CURRENCY_B],
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_B]),
+    },
+  )
+
+  // Fallback to stable prices
+  const stablePriceA = useStablecoinPriceAmount(
+    currencies[Field.CURRENCY_A],
+    Number(formatAmount(Number(formattedAmounts[Field.CURRENCY_A]), 18)),
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_A]) && !currencyAUsdPrice && !currencyAUsdPriceLoading,
+    },
+  )
+  const stablePriceB = useStablecoinPriceAmount(
+    currencies[Field.CURRENCY_B],
+    Number(formatAmount(Number(formattedAmounts[Field.CURRENCY_B]), 18)),
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_B]) && !currencyBUsdPrice && !currencyBUsdPriceLoading,
+    },
+  )
+
   const totalUsdValue = useMemo(() => {
-    const usdValueA = currencyAPrice ? Number(formattedAmounts[Field.CURRENCY_A]) * currencyAPrice : 0
-    const usdValueB = currencyBPrice ? Number(formattedAmounts[Field.CURRENCY_B]) * currencyBPrice : 0
+    const usdValueA =
+      stablePriceA ?? Number(formatAmount(Number(formattedAmounts[Field.CURRENCY_A]), 18)) * (currencyAUsdPrice ?? 0)
+    const usdValueB =
+      stablePriceB ?? Number(formatAmount(Number(formattedAmounts[Field.CURRENCY_B]), 18)) * (currencyBUsdPrice ?? 0)
     const result = (usdValueA || 0) + (usdValueB || 0)
     return Number.isNaN(result) ? 0 : result
-  }, [currencyAPrice, currencyBPrice, formattedAmounts])
+  }, [currencyAUsdPrice, currencyBUsdPrice, formattedAmounts, stablePriceA, stablePriceB])
 
   const pairExplorerLink = useMemo(
     () => (pair && getBlockExploreLink(Pair.getAddress(pair.token0, pair.token1), 'address', chainId)) || undefined,
@@ -198,7 +229,7 @@ export default function V2FormView({
             <Column mt="16px" gap="16px">
               <RowBetween>
                 <Text color="textSubtle">Total</Text>
-                <Text>~${totalUsdValue.toFixed(2)}</Text>
+                <Text>~{formatDollarAmount(totalUsdValue, 2, false)}</Text>
               </RowBetween>
               <RowBetween>
                 <Text color="textSubtle">Slippage Tolerance</Text>

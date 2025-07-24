@@ -30,6 +30,8 @@ import {
   logGTMClickAddLiquidityConfirmEvent,
   logGTMClickAddLiquidityEvent,
 } from 'utils/customGTMEventTracking'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
 import { FeeAmount, NonfungiblePositionManager, Pool } from '@pancakeswap/v3-sdk'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
@@ -256,14 +258,45 @@ export default function V3FormView({
   }
 
   // Calculate Total USD Value of input amounts
-  const { data: currencyAPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_A])
-  const { data: currencyBPrice } = useCurrencyUsdPrice(currencies[Field.CURRENCY_B])
+  const { data: currencyAUsdPrice, isLoading: currencyAUsdPriceLoading } = useCurrencyUsdPrice(
+    currencies[Field.CURRENCY_A],
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_A]),
+    },
+  )
+  const { data: currencyBUsdPrice, isLoading: currencyBUsdPriceLoading } = useCurrencyUsdPrice(
+    currencies[Field.CURRENCY_B],
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_B]),
+    },
+  )
+
+  // Fallback to stable prices
+  const stablePriceA = useStablecoinPriceAmount(
+    currencies[Field.CURRENCY_A],
+    Number(formatAmount(parsedAmounts[Field.CURRENCY_A], 18)),
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_A]) && !currencyAUsdPrice && !currencyAUsdPriceLoading,
+    },
+  )
+  const stablePriceB = useStablecoinPriceAmount(
+    currencies[Field.CURRENCY_B],
+    Number(formatAmount(parsedAmounts[Field.CURRENCY_B], 18)),
+    {
+      enabled: Boolean(currencies[Field.CURRENCY_B]) && !currencyBUsdPrice && !currencyBUsdPriceLoading,
+    },
+  )
+
   const totalUsdValue = useMemo(() => {
-    const usdValueA = currencyAPrice ? Number(formatAmount(parsedAmounts[Field.CURRENCY_A])) * currencyAPrice : 0
-    const usdValueB = currencyBPrice ? Number(formatAmount(parsedAmounts[Field.CURRENCY_B])) * currencyBPrice : 0
+    const usdValueA =
+      stablePriceA ?? Number(formatAmount(parsedAmounts[Field.CURRENCY_A], 18)) * (currencyAUsdPrice ?? 0)
+    const usdValueB =
+      stablePriceB ?? Number(formatAmount(parsedAmounts[Field.CURRENCY_B], 18)) * (currencyBUsdPrice ?? 0)
+
     const result = (usdValueA || 0) + (usdValueB || 0)
+
     return Number.isNaN(result) ? 0 : result
-  }, [currencyAPrice, currencyBPrice, parsedAmounts])
+  }, [currencyAUsdPrice, currencyBUsdPrice, parsedAmounts, stablePriceA, stablePriceB])
 
   // Get the max amounts user can add
   const maxAmounts: { [field in Field]?: CurrencyAmount<Currency> } = useMemo(
@@ -898,7 +931,7 @@ export default function V3FormView({
             <Column mt="16px" gap="16px">
               <RowBetween>
                 <Text color="textSubtle">Total</Text>
-                <Text>~${totalUsdValue.toFixed(2)}</Text>
+                <Text>~{formatDollarAmount(totalUsdValue, 2, false)}</Text>
               </RowBetween>
               <RowBetween>
                 <Text color="textSubtle">Slippage Tolerance</Text>

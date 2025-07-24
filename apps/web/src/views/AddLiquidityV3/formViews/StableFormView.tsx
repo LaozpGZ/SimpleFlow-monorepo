@@ -23,6 +23,7 @@ import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { useAccount } from 'wagmi'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
 export default function StableFormView({
   formattedAmounts,
@@ -158,7 +159,7 @@ export default function StableFormView({
             <Column mt="16px" gap="16px">
               <RowBetween>
                 <Text color="textSubtle">Total</Text>
-                <Text>~${inputAmountsTotalUsdValue?.toFixed(2)}</Text>
+                <Text>~{formatDollarAmount(inputAmountsTotalUsdValue, 2, false)}</Text>
               </RowBetween>
               <RowBetween>
                 <Text color="textSubtle">Slippage Tolerance</Text>
