@@ -1,6 +1,13 @@
 import type { ExclusiveDutchOrderInfoJSON, ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import type { InfinityRouter, Route } from '@pancakeswap/smart-router'
-import type { Currency, CurrencyAmount, SPLToken, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import type {
+  Currency,
+  CurrencyAmount,
+  Percent,
+  SPLToken,
+  TradeType,
+  UnifiedCurrencyAmount,
+} from '@pancakeswap/swap-sdk-core'
 import type { AMMOrder } from './amm'
 import { Hex } from './common'
 import { OrderType } from './orderType'
@@ -66,11 +73,12 @@ export interface SVMTrade<T extends TradeType = TradeType> {
   tradeType: T
   inputAmount: UnifiedCurrencyAmount<SPLToken>
   outputAmount: UnifiedCurrencyAmount<SPLToken>
-  priceImpactPct: string
+  priceImpactPct: Percent
   routes: Route[]
   quoteQueryHash?: string
   transaction: string | null
-  otherAmountThreshold: string
+  maximumAmountIn?: UnifiedCurrencyAmount<SPLToken>
+  minimumAmountOut?: UnifiedCurrencyAmount<SPLToken>
 }
 
 export type SVMOrder<T extends TradeType = TradeType> = {

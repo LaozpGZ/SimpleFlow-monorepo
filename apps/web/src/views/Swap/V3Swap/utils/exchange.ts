@@ -33,7 +33,7 @@ export function computeSlippageAdjustedAmounts(
   order: InterfaceOrder | undefined | null,
   allowedSlippage: number,
 ): SlippageAdjustedAmounts {
-  if (order?.type === OrderType.DUTCH_LIMIT) {
+  if (order?.type === OrderType.DUTCH_LIMIT || order?.type === OrderType.PCS_SVM) {
     return {
       [Field.INPUT]: order.trade.maximumAmountIn,
       [Field.OUTPUT]: order.trade.minimumAmountOut,

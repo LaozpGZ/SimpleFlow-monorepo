@@ -7,12 +7,12 @@ import useAddressBalance from 'hooks/useAddressBalance'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import orderBy from 'lodash/orderBy'
 import { useEffect, useMemo } from 'react'
+import { useCurrentBlock } from 'state/block/hooks'
 import { safeGetAddress } from 'utils'
 import { getMulticallAddress } from 'utils/addressHelpers'
 import { publicClient } from 'utils/viem'
 import { Address, erc20Abi, getAddress, isAddress } from 'viem'
 import { useAccount, useBalance } from 'wagmi'
-import { useCurrentBlock } from 'state/block/hooks'
 import { useMultipleContractSingleDataWagmi } from '../multicall/hooks'
 
 /**

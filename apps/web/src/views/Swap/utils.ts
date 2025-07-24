@@ -9,6 +9,8 @@ import {
 } from '@pancakeswap/price-api-sdk'
 import type { Currency, TradeType } from '@pancakeswap/swap-sdk-core'
 import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
+import { BridgeOrderFee, computeBridgeOrderFee } from './Bridge/utils'
+import { computeTradePriceBreakdown, TradePriceBreakdown } from './V3Swap/utils/exchange'
 
 export const TWAP_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.ARBITRUM_ONE, ChainId.BASE, ChainId.LINEA]
 
@@ -42,4 +44,19 @@ export type BridgeOrderWithCommands = BridgeOrder & {
 
 export function getDefaultToken(chainId: number): string | undefined {
   return CAKE[chainId]?.address ?? STABLE_COIN[chainId]?.address ?? USDC[chainId]?.address ?? USDT[chainId]?.address
+}
+
+export function getPriceBreakdown(order?: PriceOrder): TradePriceBreakdown | BridgeOrderFee | BridgeOrderFee[] {
+  if (isSVMOrder(order)) {
+    return {
+      priceImpactWithoutFee: undefined,
+      lpFeeAmount: null,
+    }
+  }
+
+  if (isBridgeOrder(order)) {
+    return computeBridgeOrderFee(order)
+  }
+
+  return computeTradePriceBreakdown(isXOrder(order) ? order.ammTrade : order?.trade)
 }

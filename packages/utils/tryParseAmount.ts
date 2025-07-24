@@ -1,8 +1,11 @@
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { parseUnits } from './viem/parseUnits'
 
 // try to parse a user entered amount for a given token
-function tryParseAmount<T extends Currency>(value?: string, currency?: T | null): CurrencyAmount<T> | undefined {
+function tryParseAmount<T extends UnifiedCurrency>(
+  value?: string,
+  currency?: T | null,
+): UnifiedCurrencyAmount<T> | undefined {
   if (!value || !currency) {
     return undefined
   }
@@ -10,7 +13,7 @@ function tryParseAmount<T extends Currency>(value?: string, currency?: T | null)
     const typedValueParsed = parseUnits(value as `${number}`, currency.decimals).toString()
 
     if (typedValueParsed !== '0') {
-      return CurrencyAmount.fromRawAmount(currency, BigInt(typedValueParsed))
+      return UnifiedCurrencyAmount.fromRawAmount(currency, BigInt(typedValueParsed))
     }
   } catch (error) {
     // should fail if the user specifies too many decimal places of precision (or maybe exceed max uint?)

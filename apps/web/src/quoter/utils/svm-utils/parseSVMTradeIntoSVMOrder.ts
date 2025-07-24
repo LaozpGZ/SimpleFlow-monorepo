@@ -1,7 +1,7 @@
 import { type SVMOrder, OrderType, SVMTrade } from '@pancakeswap/price-api-sdk'
 import { PoolType, Route, RouteType, SVMPool } from '@pancakeswap/smart-router'
 import { SolRouterTrade } from '@pancakeswap/solana-router-sdk'
-import { TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { Currency, Percent, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { QuoteQuery } from 'quoter/quoter.types'
 
 /**
@@ -10,56 +10,94 @@ import { QuoteQuery } from 'quoter/quoter.types'
  * ├── tradeType (from query.tradeType)
  * ├── inputAmount ✓ (direct copy)
  * ├── outputAmount ✓ (direct copy)
- * ├── routes: RouterPlan[] → Route[] (convert each RouterPlan)
- * |───────|RouterPlan → Route
+ * ├── routes: RouterPlan[] → Route[] (convert each RouterPlan with grouping)
+ * |───────|Group RouterPlans until outputMint matches final outputAmount address
  * |───────|RouterPlan.swapInfo.ammKey → SVMPool.id
  * |───────|RouterPlan.swapInfo.feeAmount → SVMPool.feeAmount
- * |───────|RouterPlan.percent → Route.percent
- * |───────|RouterPlan.swapInfo.inAmount → Route.inputAmount (convert to CurrencyAmount)
- * |───────|RouterPlan.swapInfo.outAmount → Route.outputAmount (convert to CurrencyAmount)
+ * |───────|RouterPlan.percent → Route.percent (from first plan in group)
+ * |───────|RouterPlan.swapInfo.inAmount → Route.inputAmount (from first plan)
+ * |───────|RouterPlan.swapInfo.outAmount → Route.outputAmount (from last plan)
  * ├── priceImpactPct → priceImpactPct ✓ (direct copy)
  * ├── transaction ✓ (direct copy)
- * ├── otherAmountThreshold ✓ (direct copy)
+ * ├── maximumAmountIn → maximumAmountIn ✓ (direct copy)
+ * ├── minimumAmountOut → minimumAmountOut ✓ (direct copy)
  * └── + quoteQueryHash (from query.hash)
  */
 export function parseSVMTradeIntoSVMOrder(svmTrade: SolRouterTrade, query: QuoteQuery): SVMOrder<TradeType> {
-  // Convert RouterPlan[] to Route[]
-  const routes: Route[] = svmTrade.routes.map((routerPlan) => {
-    // Create SVMPool from RouterPlan.swapInfo
-    const svmPool: SVMPool = {
-      type: PoolType.SVM,
-      id: routerPlan.swapInfo.ammKey.toString(),
-      feeAmount: routerPlan.swapInfo.feeAmount,
-    }
+  console.log('svmTrade', svmTrade)
 
-    // Convert string amounts to CurrencyAmount objects
-    const inputAmount = UnifiedCurrencyAmount.fromRawAmount(svmTrade.inputAmount.currency, routerPlan.swapInfo.inAmount)
-    const outputAmount = UnifiedCurrencyAmount.fromRawAmount(
-      svmTrade.outputAmount.currency,
-      routerPlan.swapInfo.outAmount,
-    )
+  // Convert RouterPlan[] to Route[] with grouping logic
+  const routes: Route[] = []
+  let currentGroup: typeof svmTrade.routes = []
 
-    // Create Route object
-    return {
-      type: RouteType.SVM,
-      pools: [svmPool],
-      path: [svmTrade.inputAmount.currency, svmTrade.outputAmount.currency],
-      inputAmount,
-      outputAmount,
-      percent: routerPlan.percent,
+  for (let i = 0; i < svmTrade.routes.length; i++) {
+    const routerPlan = svmTrade.routes[i]
+    currentGroup.push(routerPlan)
+
+    // Check if this RouterPlan's outputMint matches the final outputAmount address
+    // or if this is the last plan in the array
+    const isEndOfRoute =
+      routerPlan.swapInfo.outputMint === svmTrade.outputAmount.currency.address || i === svmTrade.routes.length - 1
+
+    if (isEndOfRoute) {
+      // Process the current group into a single Route
+      const pools: SVMPool[] = currentGroup.map((plan) => ({
+        type: PoolType.SVM,
+        id: plan.swapInfo.ammKey.toString(),
+        fee: plan.bps,
+      }))
+
+      // Build path: start with input currency, end with output currency
+      // For multi-hop routes, we use the start and end currencies
+      // (intermediate tokens would require additional token resolution)
+      const path = [svmTrade.inputAmount.currency as Currency, svmTrade.outputAmount.currency as Currency]
+
+      // Use amounts from first and last plans in the group
+      const firstPlan = currentGroup[0]
+      const lastPlan = currentGroup[currentGroup.length - 1]
+
+      const inputAmount = UnifiedCurrencyAmount.fromRawAmount(
+        svmTrade.inputAmount.currency as Currency,
+        firstPlan.swapInfo.inAmount,
+      )
+      const outputAmount = UnifiedCurrencyAmount.fromRawAmount(
+        svmTrade.outputAmount.currency as Currency,
+        lastPlan.swapInfo.outAmount,
+      )
+
+      routes.push({
+        type: RouteType.SVM,
+        pools,
+        path,
+        inputAmount,
+        outputAmount,
+        percent: firstPlan.percent, // Use percent from first plan in group
+      })
+
+      // Reset for next group
+      currentGroup = []
     }
-  })
+  }
+
+  const PCT_MULTIPLIER = 1_000_000
+
+  // Truncate decimal part (e.g. 123.232 -> 123)
+  const priceNumber = Math.trunc(Number(svmTrade.priceImpactPct) * PCT_MULTIPLIER)
 
   // Create SVMTrade
   const svmTradeData: SVMTrade<TradeType> = {
     tradeType: query.tradeType || svmTrade.tradeType,
     inputAmount: svmTrade.inputAmount,
     outputAmount: svmTrade.outputAmount,
-    priceImpactPct: svmTrade.priceImpactPct,
+    priceImpactPct: priceNumber > 0 ? new Percent(priceNumber, PCT_MULTIPLIER) : new Percent(0, PCT_MULTIPLIER),
     routes,
     quoteQueryHash: query.hash,
     transaction: svmTrade.transaction,
-    otherAmountThreshold: svmTrade.otherAmountThreshold,
+    maximumAmountIn: UnifiedCurrencyAmount.fromRawAmount(svmTrade.inputAmount.currency, svmTrade.otherAmountThreshold),
+    minimumAmountOut: UnifiedCurrencyAmount.fromRawAmount(
+      svmTrade.outputAmount.currency,
+      svmTrade.otherAmountThreshold,
+    ),
   }
 
   // Create SVMOrder

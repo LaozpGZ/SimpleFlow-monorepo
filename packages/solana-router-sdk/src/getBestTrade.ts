@@ -37,6 +37,8 @@ interface RouterPlan {
     feeAmount: string
     feeMint: PublicKey
   }
+  // 10000 = 0.01%, 15000 = 0.15%
+  bps?: number
   percent: number
 }
 

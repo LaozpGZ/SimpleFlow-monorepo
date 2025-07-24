@@ -37,9 +37,9 @@ import {
 } from 'utils/customGTMEventTracking'
 import { warningSeverity } from 'utils/exchange'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckApproval'
-import { computeBridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
+import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModalV2'
-import { isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
+import { getPriceBreakdown, isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
 import { useAccount, useChainId } from 'wagmi'
 import { ConfirmSwapModalV3 } from '../../Swap/Bridge/CrossChainConfirmSwapModal/ConfirmSwapModalV3'
 import { useParsedAmounts, useSlippageAdjustedAmounts, useSwapInputError } from '../../Swap/V3Swap/hooks'
@@ -47,7 +47,6 @@ import { useConfirmModalState } from '../../Swap/V3Swap/hooks/useConfirmModalSta
 import { useSwapConfig } from '../../Swap/V3Swap/hooks/useSwapConfig'
 import { useSwapCurrency } from '../../Swap/V3Swap/hooks/useSwapCurrency'
 import { CommitButtonProps } from '../../Swap/V3Swap/types'
-import { computeTradePriceBreakdown } from '../../Swap/V3Swap/utils/exchange'
 import { useIsRecipientError } from '../hooks/useIsRecipientError'
 import { useQuoteTrackingStateMachine } from '../hooks/useQuoteTrackingStateMachine'
 
@@ -159,13 +158,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   const { isExpertMode } = useSwapConfig()
   const { isRecipientEmpty, isRecipientError } = useIsRecipientError()
 
-  const tradePriceBreakdown = useMemo(
-    () =>
-      isBridgeOrder(order)
-        ? computeBridgeOrderFee(order)
-        : computeTradePriceBreakdown(isXOrder(order) ? undefined : order?.trade),
-    [order],
-  )
+  const tradePriceBreakdown = useMemo(() => getPriceBreakdown(order), [order])
 
   // warnings on slippage
   const priceImpactSeverity = warningSeverity(

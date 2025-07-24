@@ -9,7 +9,6 @@ import { isAddressEqual, safeGetAddress } from 'utils'
 import { ClassicOrder, PriceOrder } from '@pancakeswap/price-api-sdk'
 import { isClassicOrder } from 'views/Swap/utils'
 import { useAccount } from 'wagmi'
-import { useSlippageAdjustedAmounts } from './useSlippageAdjustedAmounts'
 
 interface Balances {
   [Field.INPUT]?: CurrencyAmount<Currency>
@@ -41,13 +40,17 @@ export function useSwapInputError(order: PriceOrder | undefined, currencyBalance
   const { independentField, typedValue } = useSwapState()
   const inputCurrency = currencyBalances[Field.INPUT]?.currency
   const outputCurrency = currencyBalances[Field.OUTPUT]?.currency
-  const slippageAdjustedAmounts = useSlippageAdjustedAmounts(order)
 
   const to: string | null = account || null
 
   const isExactIn: boolean = independentField === Field.INPUT
   const independentCurrency = isExactIn ? inputCurrency : outputCurrency
+
+  console.log('independentCurrency', independentCurrency)
+  console.log('typedValue', typedValue)
   const parsedAmount = tryParseAmount(typedValue, independentCurrency ?? undefined)
+
+  console.log('parsedAmount', parsedAmount)
 
   let inputError: string | undefined
   if (!account) {

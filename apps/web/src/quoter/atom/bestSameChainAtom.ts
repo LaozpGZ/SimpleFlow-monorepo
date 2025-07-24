@@ -1,5 +1,5 @@
 import { NonEVMChainId } from '@pancakeswap/chains'
-import { TradeType } from '@pancakeswap/swap-sdk-core'
+import { Percent, TradeType } from '@pancakeswap/swap-sdk-core'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import { TimeoutError } from '@pancakeswap/utils/withTimeout'
 import { getIsWrapping } from 'hooks/useWrapCallback'
@@ -8,8 +8,8 @@ import { atomFamily } from 'jotai/utils'
 import { isBetterQuoteTrade } from 'quoter/utils/getBetterQuote'
 import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { warningSeverity } from 'utils/exchange'
-import { InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
-import { computeTradePriceBreakdown } from 'views/Swap/V3Swap/utils/exchange'
+import { getPriceBreakdown, InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
+import { TradePriceBreakdown } from 'views/Swap/V3Swap/utils/exchange'
 import { NoValidRouteError, QuoteQuery } from '../quoter.types'
 import { activeQuoteHashAtom } from './abortControlAtoms'
 import { bestSVMOrderAtom } from './bestSVMOrderAtom'
@@ -138,7 +138,9 @@ export const bestSameChainWithoutPlaceHolderAtom = atomFamily((_option: QuoteQue
           }
 
           if (i !== tests.length - 1) {
-            const { priceImpactWithoutFee } = computeTradePriceBreakdown(isXOrder(order) ? order.ammTrade : order.trade)
+            // NOTE: has isBridgeOrder check to avoid type error, safe to cast as TradePriceBreakdown
+            const priceImpactWithoutFee = (getPriceBreakdown(order) as TradePriceBreakdown)
+              .priceImpactWithoutFee as Percent
             const isHighImpact = warningSeverity(priceImpactWithoutFee) >= 3
             if (isHighImpact) {
               continue
