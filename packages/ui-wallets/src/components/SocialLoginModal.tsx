@@ -30,8 +30,11 @@ interface SocialLoginModalProps {
 
 const StyledModalWrapper = styled(ModalWrapper)`
   width: 100%;
-  max-width: 360px;
+
   z-index: 1401;
+  ${({ theme }) => theme.mediaQueries.md} {
+    max-width: 360px;
+  }
 `
 
 const StyledModalContainer = styled(Flex)`
