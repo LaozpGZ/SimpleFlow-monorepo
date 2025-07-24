@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       .map((key) => `${key}=${authData[key]}`)
       .join('\n')
 
-    const secretKey = crypto.createHash('sha256').update(process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN!).digest()
+    const secretKey = crypto.createHash('sha256').update(process.env.TELEGRAM_BOT_TOKEN!).digest()
 
     const calculatedHash = crypto.createHmac('sha256', secretKey).update(dataCheckString).digest('hex')
 
