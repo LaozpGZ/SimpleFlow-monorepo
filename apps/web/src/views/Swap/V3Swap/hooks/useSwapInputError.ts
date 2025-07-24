@@ -46,11 +46,7 @@ export function useSwapInputError(order: PriceOrder | undefined, currencyBalance
   const isExactIn: boolean = independentField === Field.INPUT
   const independentCurrency = isExactIn ? inputCurrency : outputCurrency
 
-  console.log('independentCurrency', independentCurrency)
-  console.log('typedValue', typedValue)
   const parsedAmount = tryParseAmount(typedValue, independentCurrency ?? undefined)
-
-  console.log('parsedAmount', parsedAmount)
 
   let inputError: string | undefined
   if (!account) {

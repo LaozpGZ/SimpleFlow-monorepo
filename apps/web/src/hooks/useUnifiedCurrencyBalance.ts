@@ -1,7 +1,8 @@
-import { Currency, CurrencyAmount, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, SPLToken, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 
-import { useSolanaTokenBalance } from 'state/token/solanaTokenBalances'
-import { useCurrencyBalance } from '../state/wallet/hooks'
+import { useMemo } from 'react'
+import { useSolanaTokenBalance, useSolanaTokenBalances } from 'state/token/solanaTokenBalances'
+import { useCurrencyBalance, useCurrencyBalances } from '../state/wallet/hooks'
 import useAccountActiveChain from './useAccountActiveChain'
 
 export type UnifiedBalance = CurrencyAmount<Currency> | UnifiedCurrencyAmount<UnifiedCurrency>
@@ -20,4 +21,37 @@ export function useUnifiedCurrencyBalance(currency?: UnifiedCurrency | null): Un
     return evmBalance
   }
   return undefined
+}
+
+export function useUnifiedCurrencyBalances(
+  currencies?: (UnifiedCurrency | undefined)[],
+): (UnifiedBalance | undefined)[] {
+  const { account: evmAccount, solanaAccount } = useAccountActiveChain()
+  const isSolana = currencies?.some((currency) => currency && SPLToken.isSPLToken(currency))
+  const solanaBalances = useSolanaTokenBalances(
+    solanaAccount,
+    isSolana ? currencies?.map((currency) => currency?.address) : undefined,
+  )
+  const evmBalances = useCurrencyBalances(evmAccount, currencies as Currency[])
+
+  return useMemo(() => {
+    if (!currencies) {
+      return []
+    }
+
+    if (isSolana && solanaBalances) {
+      return currencies.map((currency) => {
+        if (currency && SPLToken.isSPLToken(currency)) {
+          const balance = solanaBalances.balances.get(currency.address)
+
+          if (balance) {
+            return UnifiedCurrencyAmount.fromRawAmount(currency, balance.toString())
+          }
+        }
+        return undefined
+      })
+    }
+
+    return evmBalances
+  }, [currencies, isSolana, solanaBalances, evmBalances])
 }

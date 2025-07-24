@@ -21,6 +21,7 @@ import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { BIG_INT_ZERO } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
+import { useUnifiedCurrencyBalances } from 'hooks/useUnifiedCurrencyBalance'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { useAtomValue } from 'jotai'
 import { baseAllTypeBestTradeAtom } from 'quoter/atom/bestTradeUISyncAtom'
@@ -29,7 +30,6 @@ import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useRoutingSettingChanged } from 'state/user/smartRouter'
-import { useCurrencyBalances } from 'state/wallet/hooks'
 import {
   logGTMClickSwapConfirmEvent,
   logGTMClickSwapEvent,
@@ -170,10 +170,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
       : undefined,
   )
 
-  const relevantTokenBalances = useCurrencyBalances(account ?? undefined, [
-    inputCurrency ?? undefined,
-    outputCurrency ?? undefined,
-  ])
+  const relevantTokenBalances = useUnifiedCurrencyBalances([inputCurrency ?? undefined, outputCurrency ?? undefined])
   const currencyBalances = useMemo(
     () => ({
       [Field.INPUT]: relevantTokenBalances[0],
