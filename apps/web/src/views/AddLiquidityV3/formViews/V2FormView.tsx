@@ -32,9 +32,9 @@ import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiqui
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
-import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
-import { formatAmount, formatDollarAmount } from 'views/V3Info/utils/numbers'
-import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
+import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { useTotalUsdValue } from '../../AddLiquidity/hooks/useTotalUsdValue'
 
 export default function V2FormView({
   formattedAmounts,
@@ -68,44 +68,21 @@ export default function V2FormView({
 
   let buttons: ReactNode = null
 
-  // Calculate Total USD Value of input amounts
-  const { data: currencyAUsdPrice, isLoading: currencyAUsdPriceLoading } = useCurrencyUsdPrice(
-    currencies[Field.CURRENCY_A],
-    {
-      enabled: Boolean(currencies[Field.CURRENCY_A]),
-    },
+  // Parse formatted amounts to CurrencyAmount objects
+  const parsedAmountA = useMemo(
+    () => tryParseAmount(formattedAmounts[Field.CURRENCY_A], currencies[Field.CURRENCY_A]),
+    [formattedAmounts, currencies],
   )
-  const { data: currencyBUsdPrice, isLoading: currencyBUsdPriceLoading } = useCurrencyUsdPrice(
-    currencies[Field.CURRENCY_B],
-    {
-      enabled: Boolean(currencies[Field.CURRENCY_B]),
-    },
+  const parsedAmountB = useMemo(
+    () => tryParseAmount(formattedAmounts[Field.CURRENCY_B], currencies[Field.CURRENCY_B]),
+    [formattedAmounts, currencies],
   )
 
-  // Fallback to stable prices
-  const stablePriceA = useStablecoinPriceAmount(
-    currencies[Field.CURRENCY_A],
-    Number(formatAmount(Number(formattedAmounts[Field.CURRENCY_A]), 18)),
-    {
-      enabled: Boolean(currencies[Field.CURRENCY_A]) && !currencyAUsdPrice && !currencyAUsdPriceLoading,
-    },
-  )
-  const stablePriceB = useStablecoinPriceAmount(
-    currencies[Field.CURRENCY_B],
-    Number(formatAmount(Number(formattedAmounts[Field.CURRENCY_B]), 18)),
-    {
-      enabled: Boolean(currencies[Field.CURRENCY_B]) && !currencyBUsdPrice && !currencyBUsdPriceLoading,
-    },
-  )
-
-  const totalUsdValue = useMemo(() => {
-    const usdValueA =
-      stablePriceA ?? Number(formatAmount(Number(formattedAmounts[Field.CURRENCY_A]), 18)) * (currencyAUsdPrice ?? 0)
-    const usdValueB =
-      stablePriceB ?? Number(formatAmount(Number(formattedAmounts[Field.CURRENCY_B]), 18)) * (currencyBUsdPrice ?? 0)
-    const result = (usdValueA || 0) + (usdValueB || 0)
-    return Number.isNaN(result) ? 0 : result
-  }, [currencyAUsdPrice, currencyBUsdPrice, formattedAmounts, stablePriceA, stablePriceB])
+  // Get total USD Value of input amounts
+  const { totalUsdValue } = useTotalUsdValue({
+    parsedAmountA,
+    parsedAmountB,
+  })
 
   const pairExplorerLink = useMemo(
     () => (pair && getBlockExploreLink(Pair.getAddress(pair.token0, pair.token1), 'address', chainId)) || undefined,
