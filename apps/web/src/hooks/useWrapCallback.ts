@@ -6,9 +6,9 @@ import { useMemo } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Hash } from 'viem'
-import { useAccount } from 'wagmi'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
 import { useWNativeContract } from './useContract'
+import { useIsSmartAccount } from './useIsSmartAccount'
 
 export enum WrapType {
   NOT_APPLICABLE,
@@ -30,7 +30,6 @@ export default function useWrapCallback(
 ): { wrapType: WrapType; execute?: undefined | (() => Promise<{ hash?: Hash } | undefined>); inputError?: string } {
   const { t } = useTranslation()
   const { account, chainId } = useAccountActiveChain()
-  const { connector } = useAccount()
   const { callWithGasPrice } = useCallWithGasPrice()
   const wbnbContract = useWNativeContract()
   const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
@@ -39,7 +38,7 @@ export default function useWrapCallback(
   const addTransaction = useTransactionAdder()
 
   // Check if using smart account (AA wallet) to skip simulation
-  const isSmartAccount = connector?.id === 'io.privy.smart_wallet'
+  const isSmartAccount = useIsSmartAccount()
 
   return useMemo(() => {
     if (
