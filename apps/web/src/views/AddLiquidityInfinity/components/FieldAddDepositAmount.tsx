@@ -5,7 +5,9 @@ import { FieldDepositAmount } from 'components/Liquidity/Form/FieldDepositAmount
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
 import { useInverted } from 'state/infinity/shared'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
-import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
+import { useTotalUsdValue } from 'views/AddLiquidity/hooks/useTotalUsdValue'
+import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAddDepositAmounts, useAddDepositAmountsEnabled } from '../hooks/useAddDepositAmounts'
 
 type FieldDepositAmountProps = BoxProps & {
@@ -23,18 +25,16 @@ export const FieldAddDepositAmount: React.FC<FieldDepositAmountProps> = ({
   const { isDepositEnabled, isDeposit0Enabled, isDeposit1Enabled } = useAddDepositAmountsEnabled()
   const [inverted] = useInverted()
 
-  const { data: currency0Price } = useCurrencyUsdPrice(baseCurrency)
-  const { data: currency1Price } = useCurrencyUsdPrice(quoteCurrency)
-
   const input0 = useMemo(() => (inverted ? inputValue1 : inputValue0), [inverted, inputValue0, inputValue1])
   const input1 = useMemo(() => (inverted ? inputValue0 : inputValue1), [inverted, inputValue0, inputValue1])
 
-  const totalUsdValue = useMemo(() => {
-    const usdValueA = currency0Price ? Number(input0 ?? 0) * currency0Price : 0
-    const usdValueB = currency1Price ? Number(input1 ?? 0) * currency1Price : 0
-    const result = (usdValueA || 0) + (usdValueB || 0)
-    return Number.isNaN(result) ? 0 : result
-  }, [currency0Price, currency1Price, input0, input1])
+  const parsedAmountA = useMemo(() => tryParseAmount(input0, baseCurrency), [input0, baseCurrency])
+  const parsedAmountB = useMemo(() => tryParseAmount(input1, quoteCurrency), [input1, quoteCurrency])
+
+  const { totalUsdValue } = useTotalUsdValue({
+    parsedAmountA,
+    parsedAmountB,
+  })
 
   return (
     <>
@@ -54,7 +54,7 @@ export const FieldAddDepositAmount: React.FC<FieldDepositAmountProps> = ({
       <Column mt="16px" gap="16px">
         <RowBetween>
           <Text color="textSubtle">Total</Text>
-          <Text>~${totalUsdValue.toFixed(2)}</Text>
+          <Text>~{formatDollarAmount(totalUsdValue, 2, false)}</Text>
         </RowBetween>
         <RowBetween>
           <Text color="textSubtle">Slippage Tolerance</Text>
