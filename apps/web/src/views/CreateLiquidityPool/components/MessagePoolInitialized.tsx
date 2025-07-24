@@ -39,7 +39,7 @@ export const MessagePoolInitialized = () => {
           width="100%"
           onClick={redirectToAddLiquidityPage}
           endIcon={isXs ? <AddIcon color="invertedContrast" width="24px" /> : null}
-          disabled={Boolean(chainId && !!DISABLED_ADD_LIQUIDITY_CHAINS[chainId])}
+          disabled={Boolean(chainId && DISABLED_ADD_LIQUIDITY_CHAINS[chainId])}
         >
           {t('Add Liquidity')}
         </Button>
