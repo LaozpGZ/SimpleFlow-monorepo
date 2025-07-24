@@ -184,7 +184,7 @@ function MobileModal<T>({
         </AtomBox>
       ) : null}
       <AtomBox display="flex" flexDirection="column" gap="16px" justifyContent="space-between">
-        {/* <SocialLoginButton onClick={onOpenSocialLoginModal} assetCdn={ASSET_CDN} style={{ marginBottom: '8px' }} /> */}
+        <SocialLoginButton onClick={onOpenSocialLoginModal} assetCdn={ASSET_CDN} style={{ marginBottom: '8px' }} />
 
         <WalletSelect
           style={{ height: `calc(100vh - 200px)` }}
