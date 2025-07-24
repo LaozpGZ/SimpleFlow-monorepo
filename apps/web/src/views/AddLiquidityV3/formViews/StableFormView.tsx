@@ -1,4 +1,4 @@
-import { AutoColumn, Box, Button, Card, CardBody, Dots, PreTitle, RowBetween } from '@pancakeswap/uikit'
+import { AutoColumn, Box, Button, Card, CardBody, Column, Dots, PreTitle, RowBetween, Text } from '@pancakeswap/uikit'
 
 import { CommitButton } from 'components/CommitButton'
 
@@ -11,9 +11,8 @@ import { useIsExpertMode } from '@pancakeswap/utils/user'
 
 import ConnectWalletButton from 'components/ConnectWalletButton'
 
-import { CurrencyAmount, Percent } from '@pancakeswap/sdk'
+import { Percent } from '@pancakeswap/sdk'
 
-import { useTotalUSDValue } from 'components/PositionCard'
 import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
 import { AddStableChildrenProps } from 'views/AddLiquidity/AddStableLiquidity'
 
@@ -23,6 +22,7 @@ import { ReactElement } from 'react'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { useAccount } from 'wagmi'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
+import { SlippageButton } from 'views/Swap/components/SlippageButton'
 
 export default function StableFormView({
   formattedAmounts,
@@ -50,26 +50,17 @@ export default function StableFormView({
   infoLoading,
   price,
   maxAmounts,
+  inputAmountsTotalUsdValue,
 }: AddStableChildrenProps & {
   stableTotalFee?: number
 }) {
   const addIsUnsupported = useIsTransactionUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
   const addIsWarning = useIsTransactionWarning(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
+  const { t } = useTranslation()
   const { isWrongNetwork } = useActiveChainId()
   const { address: account } = useAccount()
-  const { t } = useTranslation()
   const expertMode = useIsExpertMode()
-
-  const reservedToken0 = pair?.token0 ? CurrencyAmount.fromRawAmount(pair.token0, reserves[0].toString()) : undefined
-  const reservedToken1 = pair?.token1 ? CurrencyAmount.fromRawAmount(pair.token1, reserves[1].toString()) : undefined
-
-  const totalLiquidityUSD = useTotalUSDValue({
-    currency0: pair?.token0,
-    currency1: pair?.token1,
-    token0Deposited: reservedToken0,
-    token1Deposited: reservedToken1,
-  })
 
   let buttons: ReactElement
   if (addIsUnsupported || addIsWarning) {
@@ -122,13 +113,6 @@ export default function StableFormView({
     )
   }
 
-  const [currency0, currency1] =
-    currencies?.[Field.CURRENCY_A] &&
-    currencies?.[Field.CURRENCY_B] &&
-    currencies?.[Field.CURRENCY_A]?.wrapped?.sortsBefore(currencies?.[Field.CURRENCY_B]?.wrapped)
-      ? [currencies?.[Field.CURRENCY_A], currencies?.[Field.CURRENCY_B]]
-      : [currencies?.[Field.CURRENCY_B], currencies?.[Field.CURRENCY_A]]
-
   return (
     <Box mx="auto" pb="16px" width="100%" maxWidth={[null, null, null, null, '480px']}>
       <Card>
@@ -171,107 +155,21 @@ export default function StableFormView({
               id="stable-add-liquidity-input-tokenb"
               title={<>&nbsp;</>}
             />
+            <Column mt="16px" gap="16px">
+              <RowBetween>
+                <Text color="textSubtle">Total</Text>
+                <Text>~${inputAmountsTotalUsdValue?.toFixed(2)}</Text>
+              </RowBetween>
+              <RowBetween>
+                <Text color="textSubtle">Slippage Tolerance</Text>
+                <SlippageButton />
+              </RowBetween>
+            </Column>
             <Box mt="8px">
               <MevProtectToggle size="sm" />
             </Box>
             <Box mt="16px">{buttons}</Box>
           </AutoColumn>
-
-          {/* <LeftContainer>
-        <AutoColumn>
-          <Box>
-            <Text mb="8px" bold fontSize="12px" textTransform="uppercase" color="secondary">
-              {t('Pool Reserves')}
-            </Text>
-            <Text fontSize="24px" fontWeight={500} mb="8px">
-              $
-              {totalLiquidityUSD
-                ? totalLiquidityUSD.toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })
-                : '-'}
-            </Text>
-            <LightGreyCard mr="4px" mb="8px">
-              <AutoRow justifyContent="space-between" mb="8px">
-                <Flex>
-                  <CurrencyLogo currency={currency0} />
-                  <Text small color="textSubtle" id="remove-liquidity-tokenb-symbol" ml="4px">
-                    {currency0?.symbol}
-                  </Text>
-                </Flex>
-                <Flex justifyContent="center">
-                  <Text mr="4px">
-                    <FormattedCurrencyAmount currencyAmount={reservedToken0} />
-                  </Text>
-                </Flex>
-              </AutoRow>
-              <AutoRow justifyContent="space-between">
-                <Flex>
-                  <CurrencyLogo currency={currency1} />
-                  <Text small color="textSubtle" id="remove-liquidity-tokenb-symbol" ml="4px">
-                    {currency1?.symbol}
-                  </Text>
-                </Flex>
-                <Flex justifyContent="center">
-                  <Text mr="4px">
-                    <FormattedCurrencyAmount currencyAmount={reservedToken1} />
-                  </Text>
-                </Flex>
-              </AutoRow>
-            </LightGreyCard>
-
-            <AutoRow justifyContent="space-between" mb="4px">
-              <Text color="textSubtle">{t('Price')}: </Text>
-
-              <Text>
-                {price?.toSignificant(6) ?? '-'}{' '}
-                {t('%assetA% per %assetB%', {
-                  assetB: currencies[Field.CURRENCY_B]?.symbol ?? '',
-                  assetA: currencies[Field.CURRENCY_A]?.symbol ?? '',
-                })}
-              </Text>
-            </AutoRow>
-
-            <AutoRow justifyContent="space-between" mb="4px">
-              <Text color="textSubtle">{t('Your share in pool')}: </Text>
-
-              <Text>{poolTokenPercentage ? poolTokenPercentage?.toSignificant(4) : '-'}%</Text>
-            </AutoRow>
-
-            <AutoRow justifyContent="space-between" mb="4px">
-              <Text color="textSubtle">{t('Fee rate')}: </Text>
-
-              <Text>{stableTotalFee ? BIG_ONE_HUNDRED.times(stableTotalFee).toNumber() : '-'}%</Text>
-            </AutoRow>
-
-            <AutoRow justifyContent="space-between" mb="4px">
-              <Text color="textSubtle">{t('LP reward APR')}: </Text>
-
-              <Text>{stableAPR ? formatAmount(stableAPR) : '-'}%</Text>
-            </AutoRow>
-
-            <AutoRow justifyContent="space-between" mb="16px">
-              <RowFixed>
-                <Text color="textSubtle">{t('Slippage')}</Text>
-                <QuestionHelper
-                  text={t(
-                    'Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected',
-                  )}
-                  size="14px"
-                  ml="4px"
-                  placement="top-start"
-                />
-              </RowFixed>
-
-              <FormattedSlippage
-                slippage={executionSlippage}
-                loading={!executionSlippage && (loading || infoLoading)}
-              />
-            </AutoRow>
-          </Box>
-        </AutoColumn>
-      </LeftContainer> */}
         </CardBody>
       </Card>
     </Box>
