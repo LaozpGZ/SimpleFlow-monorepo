@@ -1,3 +1,5 @@
+'use client'
+
 // lib/telegramLogin.ts
 
 // Define the onTelegramAuth function in the global scope
