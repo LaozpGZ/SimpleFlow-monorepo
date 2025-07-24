@@ -28,6 +28,9 @@ jobs:
         uses: './.github/actions/install-deps'
 
       - name: Run tests
+        env:
+          NEXT_PUBLIC_PRIVY_APP_ID: test-app-id
+          NEXT_PUBLIC_PRIVY_CLIENT_ID: test-client-id
         run: |
           pnpm test:ci
           if git diff --name-only HEAD^1 | grep -q '^apps/' && ! git diff --name-only HEAD^1 | grep -q '^apps/web/'; then
