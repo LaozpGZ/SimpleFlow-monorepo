@@ -205,7 +205,7 @@ const PoolPage: React.FC<React.PropsWithChildren<{ address: string }>> = ({ addr
                 <NextLinkFromReactRouter
                   to={`/add/${poolData.token0.address}/${poolData.token1.address}?chain=${CHAIN_QUERY_NAME[chainId]}`}
                 >
-                  <Button mr="8px" variant="secondary" disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)}>
+                  <Button mr="8px" variant="secondary" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
                     {t('Add Liquidity')}
                   </Button>
                 </NextLinkFromReactRouter>

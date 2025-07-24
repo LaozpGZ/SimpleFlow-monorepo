@@ -122,7 +122,7 @@ export function V3SubmitButton({
             attemptingTxn ||
             (approvalA !== ApprovalState.APPROVED && !depositADisabled) ||
             (approvalB !== ApprovalState.APPROVED && !depositBDisabled) ||
-            DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)
+            !!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]
           }
         >
           {errorMessage || buttonText}

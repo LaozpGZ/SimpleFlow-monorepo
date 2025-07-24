@@ -73,22 +73,6 @@ const StyledCMCLink = styled(UIKitLink)`
 `
 const DEFAULT_TIME_WINDOW = dayjs.duration(1, 'weeks')
 
-interface TokenInfoParams {
-  address: string
-  chain: string
-  type: 'swap' | 'stableSwap'
-}
-
-interface TokenQueryResponse {
-  token: TokenData | undefined
-  pool: PoolData[] | undefined
-  transactions: Transaction[] | undefined
-  chartVolume: VolumeChartEntry[] | undefined
-  chartTvl: TvlChartEntry[] | undefined
-}
-
-interface TokenTraceData extends BasePerf {}
-
 const TokenPage: React.FC<React.PropsWithChildren<{ routeAddress: string }>> = ({ routeAddress }) => {
   const { isXs, isSm } = useMatchBreakpoints()
   const { t } = useTranslation()
@@ -183,7 +167,7 @@ const TokenPage: React.FC<React.PropsWithChildren<{ routeAddress: string }>> = (
           </Flex>
           <Flex>
             <NextLinkFromReactRouter to={`/add/${address}?chain=${CHAIN_QUERY_NAME[chainId]}`}>
-              <Button mr="8px" variant="secondary" disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)}>
+              <Button mr="8px" variant="secondary" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
                 {t('Add Liquidity')}
               </Button>
             </NextLinkFromReactRouter>

@@ -27,7 +27,7 @@ export const NetworkSelector = ({
   const chainList = useMemo(
     () =>
       chains
-        .filter((chain) => !DISABLED_ADD_LIQUIDITY_CHAINS.includes(chain.id))
+        .filter((chain) => !DISABLED_ADD_LIQUIDITY_CHAINS[chain.id])
         .filter((chain) => version !== 'infinity' || INFINITY_SUPPORTED_CHAINS.includes(chain.id))
         .filter((chain) => version !== 'stableSwap' || isStableSwapSupported(chain.id))
         .filter((chain) => {

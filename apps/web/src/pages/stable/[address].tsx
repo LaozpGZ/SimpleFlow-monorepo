@@ -166,7 +166,7 @@ function StablePoolPage() {
             !isMobile && (
               <>
                 <NextLinkFromReactRouter to={`/stable/add/${currencyIdA}/${currencyIdB}`}>
-                  <Button width="100%" disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)}>
+                  <Button width="100%" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
                     {t('Add')}
                   </Button>
                 </NextLinkFromReactRouter>
@@ -183,7 +183,7 @@ function StablePoolPage() {
           {isMobile && (
             <>
               <NextLinkFromReactRouter to={`/stable/add/${currencyIdA}/${currencyIdB}`}>
-                <Button mb="8px" width="100%" disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)}>
+                <Button mb="8px" width="100%" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
                   {t('Add')}
                 </Button>
               </NextLinkFromReactRouter>

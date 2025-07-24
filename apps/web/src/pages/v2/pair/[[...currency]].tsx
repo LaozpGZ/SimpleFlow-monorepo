@@ -158,7 +158,7 @@ export default function PoolV2Page() {
             !isMobile && (
               <>
                 <NextLinkFromReactRouter to={`/v2/add/${pair?.token0.address}/${pair?.token1.address}?increase=1`}>
-                  <Button width="100%" disabled={!pair || DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)}>
+                  <Button width="100%" disabled={!pair || !!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
                     {t('Add')}
                   </Button>
                 </NextLinkFromReactRouter>
@@ -185,7 +185,7 @@ export default function PoolV2Page() {
           {isMobile && (
             <>
               <NextLinkFromReactRouter to={`/v2/add/${pair?.token0.address}/${pair?.token1.address}?increase=1`}>
-                <Button width="100%" mb="8px" disabled={!pair || DISABLED_ADD_LIQUIDITY_CHAINS.includes(chainId)}>
+                <Button width="100%" mb="8px" disabled={!pair || !!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
                   {t('Add')}
                 </Button>
               </NextLinkFromReactRouter>

@@ -13,7 +13,15 @@ export const LIQUIDITY_PAGES = {
   POSITIONS: '/liquidity/positions',
 }
 
-export const DISABLED_ADD_LIQUIDITY_CHAINS = [ChainId.POLYGON_ZKEVM]
+export const DISABLED_ADD_LIQUIDITY_CHAINS: {
+  [chainId in ChainId]?: {
+    sunsetDate: number
+  }
+} = {
+  [ChainId.POLYGON_ZKEVM]: {
+    sunsetDate: 1759183200,
+  },
+}
 
 export const getCreateInfinityPoolPageURL = ({
   chainId,

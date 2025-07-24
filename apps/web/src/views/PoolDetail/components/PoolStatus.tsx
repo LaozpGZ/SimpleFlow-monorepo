@@ -138,7 +138,7 @@ export const PoolStatus: React.FC<PoolStatusProps> = ({ poolInfo, ...props }) =>
             </Column>
           </AutoColumn>
           <NextLinkFromReactRouter to={addLiquidityLink}>
-            <Button width="100%" disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(poolInfo.chainId)}>
+            <Button width="100%" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[poolInfo.chainId]}>
               {t('Add Liquidity')}
             </Button>
           </NextLinkFromReactRouter>

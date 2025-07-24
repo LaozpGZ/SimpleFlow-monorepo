@@ -237,7 +237,7 @@ const PoolPage: React.FC<{ address: string }> = ({ address }) => {
                   <Button
                     mr="8px"
                     variant="secondary"
-                    disabled={DISABLED_ADD_LIQUIDITY_CHAINS.includes(multiChainId[chainName])}
+                    disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[multiChainId[chainName]]}
                   >
                     {t('Add Liquidity')}
                   </Button>
