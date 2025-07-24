@@ -6,6 +6,7 @@ import { useMemo } from 'react'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { Hash } from 'viem'
+import { useAccount } from 'wagmi'
 import { useCallWithGasPrice } from './useCallWithGasPrice'
 import { useWNativeContract } from './useContract'
 
@@ -29,12 +30,16 @@ export default function useWrapCallback(
 ): { wrapType: WrapType; execute?: undefined | (() => Promise<{ hash?: Hash } | undefined>); inputError?: string } {
   const { t } = useTranslation()
   const { account, chainId } = useAccountActiveChain()
+  const { connector } = useAccount()
   const { callWithGasPrice } = useCallWithGasPrice()
   const wbnbContract = useWNativeContract()
   const balance = useCurrencyBalance(account ?? undefined, inputCurrency)
   // we can always parse the amount typed as the input currency, since wrapping is 1:1
   const inputAmount = useMemo(() => tryParseAmount(typedValue, inputCurrency), [inputCurrency, typedValue])
   const addTransaction = useTransactionAdder()
+
+  // Check if using smart account (AA wallet) to skip simulation
+  const isSmartAccount = connector?.id === 'io.privy.smart_wallet'
 
   return useMemo(() => {
     if (
@@ -88,7 +93,9 @@ export default function useWrapCallback(
             ? // eslint-disable-next-line consistent-return
               async () => {
                 try {
-                  const txReceipt = await callWithGasPrice(wbnbContract, 'withdraw', [inputAmount.quotient])
+                  const txReceipt = await callWithGasPrice(wbnbContract, 'withdraw', [inputAmount.quotient], {
+                    skipSimulate: isSmartAccount,
+                  })
                   const amount = inputAmount.toSignificant(6)
                   const wrap = WNATIVE[chainId].symbol
                   const native = outputCurrency.symbol
@@ -110,7 +117,18 @@ export default function useWrapCallback(
       }
     }
     return NOT_APPLICABLE
-  }, [wbnbContract, chainId, inputCurrency, outputCurrency, t, inputAmount, balance, addTransaction, callWithGasPrice])
+  }, [
+    wbnbContract,
+    chainId,
+    inputCurrency,
+    outputCurrency,
+    t,
+    inputAmount,
+    balance,
+    addTransaction,
+    callWithGasPrice,
+    isSmartAccount,
+  ])
 }
 
 export function useIsWrapping(
