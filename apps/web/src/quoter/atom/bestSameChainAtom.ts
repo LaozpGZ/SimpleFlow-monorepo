@@ -1,5 +1,4 @@
-import { NonEVMChainId } from '@pancakeswap/chains'
-import { Percent, TradeType } from '@pancakeswap/swap-sdk-core'
+import { Currency, Percent, SPLToken, TradeType } from '@pancakeswap/swap-sdk-core'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import { TimeoutError } from '@pancakeswap/utils/withTimeout'
 import { getIsWrapping } from 'hooks/useWrapCallback'
@@ -29,7 +28,6 @@ export const bestSameChainWithoutPlaceHolderAtom = atomFamily((_option: QuoteQue
     function executeRoutes(
       strategies: StrategyRoute[],
       option: QuoteQuery,
-      level: number,
     ): {
       quote: Loadable<InterfaceOrder>
       anyShadowFail?: boolean
@@ -103,11 +101,33 @@ export const bestSameChainWithoutPlaceHolderAtom = atomFamily((_option: QuoteQue
     const option: QuoteQuery = { enabled: true, type: 'quoter', tradeType: TradeType.EXACT_INPUT, ..._option }
 
     try {
-      if (option.baseCurrency?.chainId === NonEVMChainId.SOLANA && option.currency?.chainId === NonEVMChainId.SOLANA) {
+      const amountCurrency = option.amount?.currency
+
+      if (
+        option.baseCurrency &&
+        option.currency &&
+        SPLToken.isSPLToken(option.baseCurrency) &&
+        SPLToken.isSPLToken(option.currency) &&
+        amountCurrency &&
+        SPLToken.isSPLToken(amountCurrency)
+      ) {
         return get(bestSVMOrderAtom(option))
       }
 
-      const isWrapping = getIsWrapping(option.amount?.currency, option.currency || undefined, option.currency?.chainId)
+      if (
+        !option.currency ||
+        !amountCurrency ||
+        SPLToken.isSPLToken(amountCurrency) ||
+        SPLToken.isSPLToken(option.currency)
+      ) {
+        return Loadable.Nothing<InterfaceOrder>()
+      }
+
+      const isWrapping = getIsWrapping(
+        amountCurrency as Currency,
+        option.currency as Currency | undefined,
+        option.currency?.chainId,
+      )
       if (isWrapping || !option.enabled) {
         return Loadable.Nothing<InterfaceOrder>()
       }

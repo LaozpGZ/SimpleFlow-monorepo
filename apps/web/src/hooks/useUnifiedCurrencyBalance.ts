@@ -1,4 +1,11 @@
-import { Currency, CurrencyAmount, SPLToken, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import {
+  Currency,
+  CurrencyAmount,
+  SPLNativeCurrency,
+  SPLToken,
+  UnifiedCurrency,
+  UnifiedCurrencyAmount,
+} from '@pancakeswap/sdk'
 
 import { useMemo } from 'react'
 import { useSolanaTokenBalance, useSolanaTokenBalances } from 'state/token/solanaTokenBalances'
@@ -30,7 +37,7 @@ export function useUnifiedCurrencyBalances(
   const isSolana = currencies?.some((currency) => currency && SPLToken.isSPLToken(currency))
   const solanaBalances = useSolanaTokenBalances(
     solanaAccount,
-    isSolana ? currencies?.map((currency) => currency?.address) : undefined,
+    isSolana ? currencies?.map((currency) => (currency as SPLToken | SPLNativeCurrency)?.address) : undefined,
   )
   const evmBalances = useCurrencyBalances(evmAccount, currencies as Currency[])
 
