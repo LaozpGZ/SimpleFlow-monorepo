@@ -4364,11 +4364,11 @@
   "solana.harvested_symbol": "Na-harvest: %symbol%",
   "solana.lock_position": "I-lock ang Posisyon",
   "solana.position_locked": "Na-lock ang %position% na posisyon",
-  "Connect with social login": "Connect with social login",
+  "Connect with social login": "Kumonekta gamit ang social login",
   "Social Login": "Social Login",
-  "Connect with your social account for a seamless experience": "Connect with your social account for a seamless experience",
-  "Continue with Google": "Continue with Google",
+  "Connect with your social account for a seamless experience": "Kumonekta gamit ang iyong social account para sa isang seamless na karanasan",
+  "Continue with Google": "Magpatuloy gamit ang Google",
   "X Login": "X Login",
-  "Continue with Web3 Wallet": "Continue with Web3 Wallet",
-  "TWAP and Limit orders are currently not supported for Smart Account wallets.": "TWAP and Limit orders are currently not supported for Smart Account wallets."
+  "Continue with Web3 Wallet": "Magpatuloy gamit ang Web3 Wallet",
+  "TWAP and Limit orders are currently not supported for Smart Account wallets.": "Kasalukuyang hindi sinusuportahan ang TWAP at Limitahan ang mga order para sa mga wallet ng Smart Account."
 }
