@@ -4364,11 +4364,12 @@
   "solana.harvested_symbol": "Zebrano: %symbol%",
   "solana.lock_position": "Zablokuj pozycję",
   "solana.position_locked": "Zablokowano pozycję %position%",
-  "Connect with social login": "Connect with social login",
-  "Social Login": "Social Login",
-  "Connect with your social account for a seamless experience": "Connect with your social account for a seamless experience",
-  "Continue with Google": "Continue with Google",
-  "X Login": "X Login",
-  "Continue with Web3 Wallet": "Continue with Web3 Wallet",
-  "TWAP and Limit orders are currently not supported for Smart Account wallets.": "TWAP and Limit orders are currently not supported for Smart Account wallets."
+  "Connect with social login": "Zaloguj się za pomocą serwisu społecznościowego",
+  "Social Login": "Logowanie przez serwisy społecznościowe",
+  "Connect with your social account for a seamless experience": "Połącz się za pomocą konta serwisu społecznościowego, aby cieszyć się płynnym działaniem",
+  "Continue with Google": "Kontynuuj przez Google",
+  "X Login": "Zaloguj się przez X",
+  "Continue with Web3 Wallet": "Kontynuuj przez portfel Web3",
+  "TWAP and Limit orders are currently not supported for Smart Account wallets.": "Zlecenia TWAP i zlecenia z limitem nie są obecnie obsługiwane w portfelach kont Smart Account.",
+  "Create your Wallet with Social Login": "Create your Wallet with Social Login"
 }
