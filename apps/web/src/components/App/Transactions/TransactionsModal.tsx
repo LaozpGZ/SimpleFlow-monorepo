@@ -10,7 +10,6 @@ import { useRecentXOrders } from 'views/Swap/x/useRecentXOders'
 import { clearAllTransactions } from 'state/transactions/actions'
 import { useRecentBridgeOrders } from 'views/Swap/Bridge/hooks/useRecentBridgeOrders'
 import { useAccount } from 'wagmi'
-import { usePrivyWalletAddress } from 'contexts/Privy/hooks'
 
 import ConnectWalletButton from '../../ConnectWalletButton'
 import { AutoRow } from '../../Layout/Row'
@@ -39,13 +38,13 @@ function sortByTransactionTime(a: TransactionItem, b: TransactionItem) {
 }
 
 export function RecentTransactions() {
-  const { address: wagmiAddress, chainId } = useAccount()
-  const { address: finalAddress, addressType, hasSmartWallet } = usePrivyWalletAddress()
+  const { address, chainId } = useAccount()
+
   const dispatch = useAppDispatch()
 
   const { data: recentXOrders } = useRecentXOrders({
     chainId,
-    address: finalAddress,
+    address,
     refetchInterval: 10_000,
   })
 
@@ -55,7 +54,7 @@ export function RecentTransactions() {
     isFetching: isRecentBridgeOrdersLoading,
     fetchNextPage,
   } = useRecentBridgeOrders({
-    address: finalAddress,
+    address,
   })
 
   const hasMoreCrossChainOrders = Boolean(
@@ -112,7 +111,7 @@ export function RecentTransactions() {
 
   return (
     <Box onClick={(e) => e.stopPropagation()}>
-      {finalAddress ? (
+      {address ? (
         xOrders.length > 0 || hasTransactions || recentCrossChainOrders.length > 0 ? (
           <>
             <AutoRow mb="1rem" style={{ justifyContent: 'space-between' }}>
