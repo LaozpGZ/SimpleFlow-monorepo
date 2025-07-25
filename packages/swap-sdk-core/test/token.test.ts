@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { Token, SPLToken, isSPL } from '../src'
+import { SPLToken, Token } from '../src'
 
 enum ChainId {
   ETHEREUM = 1,
@@ -64,6 +64,6 @@ describe('SPLToken', () => {
 
   it('detects SPL with type guard', () => {
     const token = new SPLToken(1, PROGRAM_ONE, 6, 'SPL')
-    expect(isSPL(token)).toBe(true)
+    expect(SPLToken.isSPLToken(token)).toBe(true)
   })
 })
