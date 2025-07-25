@@ -28,7 +28,6 @@ const useAuth = () => {
   const login = useCallback(
     async (connectorID: ConnectorNames) => {
       const findConnector = CONNECTOR_MAP[connectorID] || undefined
-      console.log('findConnector', { findConnector })
       try {
         if (!findConnector) return undefined
 
