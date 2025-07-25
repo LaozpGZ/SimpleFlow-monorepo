@@ -48,7 +48,7 @@ export const useConnectTelegram = ({ userInfo, refresh }: UseConnectTelegramProp
     // Telegram login button click handler
     window.Telegram.Login.auth(
       {
-        bot_id: process.env.TELEGRAM_BOT_TOKEN, // Replace with your bot's ID
+        bot_id: process.env.NEXT_PUBLIC_TELEGRAM_BOT_TOKEN, // Replace with your bot's ID
         request_access: true,
       },
       async (user: TelegramResponse) => {
