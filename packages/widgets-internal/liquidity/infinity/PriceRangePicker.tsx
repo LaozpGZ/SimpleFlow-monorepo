@@ -255,6 +255,7 @@ export const PriceRangePicker = ({ onChange, value, tickSpacing, ...props }: Pri
           min="0"
           max="100"
           step="0.01"
+          paddingRight="12px"
         />
         <PercentageLabel>
           <VerticalLine />%
