@@ -44,7 +44,7 @@ const SwapFallback = () => {
 const View = () => {
   const { isMobile } = useMatchBreakpoints()
   const { wallets } = useWallets()
-  console.log(wallets, 'show wallets')
+  console.info(wallets, 'wallets')
   return (
     <SwapLayout>
       <Container isMobile={isMobile}>
