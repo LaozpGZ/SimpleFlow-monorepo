@@ -147,7 +147,7 @@ export const bestSameChainWithoutPlaceHolderAtom = atomFamily((_option: QuoteQue
       const tests = [p1, p2]
       for (let i = 0; i < tests.length; i++) {
         const strategy = tests[i]
-        const { quote, anyShadowFail, anyTimeout, key } = executeRoutes(strategy, option, i)
+        const { quote, anyShadowFail, anyTimeout, key } = executeRoutes(strategy, option)
 
         if (quote.isJust()) {
           const order = quote.unwrap()
