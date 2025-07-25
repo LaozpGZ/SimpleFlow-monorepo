@@ -33,6 +33,7 @@ const SwapInfo = type({
 const RoutePlanStep = type({
   swapInfo: SwapInfo,
   percent: number(),
+  bps: optional(number()),
 })
 const RoutePlanWithMetadata = array(RoutePlanStep)
 

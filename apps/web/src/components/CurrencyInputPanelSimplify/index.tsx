@@ -13,24 +13,22 @@ import {
   useMatchBreakpoints,
   useModal,
 } from '@pancakeswap/uikit'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import { CurrencyLogo, DoubleCurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { styled } from 'styled-components'
-
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
+import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
-import { useUnifiedUSDPriceAmount } from 'hooks/useStablecoinPrice'
-import { StablePair } from 'views/AddLiquidity/AddStableLiquidity/hooks/useStableLPDerivedMintInfo'
-
+import { CurrencyLogo, DoubleCurrencyLogo, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { RiskInputPanelDisplay } from 'components/AccessRisk/SwapRevampRiskDisplay'
 import { FiatLogo } from 'components/Logo/CurrencyLogo'
+import { CommonBasesType } from 'components/SearchModal/types'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useUnifiedUSDPriceAmount } from 'hooks/useStablecoinPrice'
+import { useUnifiedCurrencyBalance } from 'hooks/useUnifiedCurrencyBalance'
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { styled } from 'styled-components'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
+import { StablePair } from 'views/AddLiquidity/AddStableLiquidity/hooks/useStableLPDerivedMintInfo'
 import { useAccount } from 'wagmi'
-import { useUnifiedCurrencyBalance } from 'hooks/useUnifiedCurrencyBalance'
-import { CommonBasesType } from 'components/SearchModal/types'
 import CurrencySearchModal from '../SearchModal/CurrencySearchModal'
 import { FONT_SIZE, LOGO_SIZE, useFontSize } from './state'
 
