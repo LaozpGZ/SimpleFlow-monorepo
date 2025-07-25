@@ -40,7 +40,6 @@ export function PrivyProvider({ children }: PropsWithChildren) {
           showWalletLoginFirst: false,
           logo: 'https://auth.privy.io/logos/privy-logo-dark.png',
           walletChainType: 'ethereum-only',
-          walletList: ['detected_wallets', 'metamask'],
         },
         fundingMethodConfig: {
           moonpay: {
@@ -60,7 +59,11 @@ export function PrivyProvider({ children }: PropsWithChildren) {
         mfa: {
           noPromptOnMfaRequired: false,
         },
-        externalWallets: {},
+        externalWallets: {
+          walletConnect: {
+            enabled: false,
+          },
+        },
       }}
     >
       <SmartWalletsProvider>{children}</SmartWalletsProvider>
