@@ -99,7 +99,7 @@ export function parseSVMTradeIntoSVMOrder(svmTrade: SolRouterTrade, query: Quote
     tradeType: query.tradeType || svmTrade.tradeType,
     inputAmount: svmTrade.inputAmount,
     outputAmount: svmTrade.outputAmount,
-    priceImpactPct: priceNumber > 0 ? new Percent(priceNumber, PCT_MULTIPLIER) : new Percent(0, PCT_MULTIPLIER),
+    priceImpactPct: priceNumber > 0 ? new Percent(priceNumber, PCT_MULTIPLIER) : new Percent(0, PCT_MULTIPLIER / 100),
     routes,
     quoteQueryHash: query.hash,
     transaction: svmTrade.transaction,

@@ -1,6 +1,12 @@
 import { ChainId } from '@pancakeswap/chains'
 import type { InfinityRouter, SmartRouter, SmartRouterTrade } from '@pancakeswap/smart-router'
-import type { Currency, TradeType, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import type {
+  Currency,
+  CurrencyAmount,
+  TradeType,
+  UnifiedCurrency,
+  UnifiedCurrencyAmount,
+} from '@pancakeswap/swap-sdk-core'
 import type { AbortControl } from '@pancakeswap/utils/abortControl'
 import type { getViemClients } from 'utils/viem'
 import { Address } from 'viem/accounts'
@@ -36,9 +42,9 @@ export type UseBetterQuoteOptions = {
 }
 
 export interface Options {
-  amount?: UnifiedCurrencyAmount<UnifiedCurrency>
-  baseCurrency?: UnifiedCurrency | null
-  currency?: UnifiedCurrency | null
+  amount?: CurrencyAmount<Currency> | UnifiedCurrencyAmount<UnifiedCurrency>
+  baseCurrency?: Currency | UnifiedCurrency | null
+  currency?: Currency | UnifiedCurrency | null
   tradeType?: TradeType
   maxHops?: number
   maxSplits?: number

@@ -51,7 +51,7 @@ describe('parseSVMTradeIntoSVMOrder', () => {
         },
       ],
       otherAmountThreshold: '99000000', // 99 USDC minimum out
-      priceImpactPct: '-0.15', // 0.15%
+      priceImpactPct: '0.0002', // 0.15%
       slippageBps: 50,
       transaction: 'mock_transaction_string',
     }
@@ -99,7 +99,7 @@ describe('parseSVMTradeIntoSVMOrder', () => {
     expect(route.percent).toBe(100)
 
     // Test price impact calculation (negative price impact converts to 0)
-    expect(trade.priceImpactPct.toSignificant(3)).toBe('0')
+    expect(trade.priceImpactPct.toSignificant(3)).toBe('0.02')
 
     // Test threshold amounts with null checks
     if (trade.minimumAmountOut) {

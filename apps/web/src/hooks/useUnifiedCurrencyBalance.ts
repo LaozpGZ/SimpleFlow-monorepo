@@ -49,7 +49,7 @@ export function useUnifiedCurrencyBalances(
     if (isSolana && solanaBalances) {
       return currencies.map((currency) => {
         if (currency && SPLToken.isSPLToken(currency)) {
-          const balance = solanaBalances.balances.get(currency.address)
+          const balance = solanaBalances.balances.get((currency as SPLToken | SPLNativeCurrency).address)
 
           if (balance) {
             return UnifiedCurrencyAmount.fromRawAmount(currency, balance.toString())
