@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Percent, SPLToken, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { FeeAmount, Tick } from '@pancakeswap/v3-sdk'
 import { Address, Hex } from 'viem'
 
@@ -21,7 +21,7 @@ export interface SVMPool extends BasePool {
   type: PoolType.SVM
   id: string
   fee?: number
-  feeAmount?: CurrencyAmount<Currency>
+  feeAmount?: UnifiedCurrencyAmount<SPLToken>
 }
 
 export interface V2Pool extends BasePool {

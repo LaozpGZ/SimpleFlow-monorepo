@@ -1,7 +1,7 @@
 import { type SVMOrder, OrderType, SVMTrade } from '@pancakeswap/price-api-sdk'
 import { PoolType, Route, RouteType, SVMPool } from '@pancakeswap/smart-router'
 import { SolRouterTrade } from '@pancakeswap/solana-router-sdk'
-import { Currency, Percent, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, Percent, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { QuoteQuery } from 'quoter/quoter.types'
 
 /**
@@ -41,15 +41,18 @@ export function parseSVMTradeIntoSVMOrder(svmTrade: SolRouterTrade, query: Quote
 
     if (isEndOfRoute) {
       // Process the current group into a single Route
-      const pools: SVMPool[] = currentGroup.map((plan) => ({
-        type: PoolType.SVM,
-        id: plan.swapInfo.ammKey.toString(),
-        fee: plan.bps,
-        feeAmount: UnifiedCurrencyAmount.fromRawAmount(
-          svmTrade.inputAmount.currency as Currency,
-          plan.swapInfo.feeAmount,
-        ),
-      }))
+      const pools = currentGroup.map((plan) => {
+        const feeAmount = UnifiedCurrencyAmount.fromRawAmount(svmTrade.inputAmount.currency, plan.swapInfo.feeAmount)
+
+        const pool: SVMPool = {
+          type: PoolType.SVM,
+          id: plan.swapInfo.ammKey.toString(),
+          fee: plan.bps,
+          feeAmount,
+        }
+
+        return pool
+      })
 
       // Build path: start with input currency, end with output currency
       // For multi-hop routes, we use the start and end currencies
@@ -73,8 +76,11 @@ export function parseSVMTradeIntoSVMOrder(svmTrade: SolRouterTrade, query: Quote
         type: RouteType.SVM,
         pools,
         path,
-        inputAmount,
-        outputAmount,
+        // NOTE: it's dangerous to cast UnifiedCurrencyAmount to CurrencyAmount
+        // but can't add UnifiedCurrencyAmount to Route[] becuase it's only for EVM
+        // Need to find a better way to handle this
+        inputAmount: inputAmount as CurrencyAmount<Currency>,
+        outputAmount: outputAmount as CurrencyAmount<Currency>,
         percent: firstPlan.percent, // Use percent from first plan in group
       })
 

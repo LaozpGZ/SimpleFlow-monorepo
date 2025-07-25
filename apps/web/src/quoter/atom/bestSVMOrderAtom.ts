@@ -1,5 +1,5 @@
 import { getBestSolanaTrade } from '@pancakeswap/solana-router-sdk'
-import { TradeType } from '@pancakeswap/swap-sdk-core'
+import { SPLToken, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import { withTimeout } from '@pancakeswap/utils/withTimeout'
 import { atomFamily } from 'jotai/utils'
@@ -16,10 +16,8 @@ export const bestSVMOrderAtom = atomFamily(
 
       // Early validation
       if (!baseCurrency || !currency || !amount || tradeType === undefined) {
-        return undefined
+        return Loadable.Nothing<InterfaceOrder>()
       }
-
-      console.log('bestSVMOrderAtom options:', _option)
 
       const controller = new AbortController()
       // const perf = get(quoteTraceAtom(_option))
@@ -28,12 +26,12 @@ export const bestSVMOrderAtom = atomFamily(
       try {
         const query = withTimeout(
           async () => {
-            console.log('calling getBestSolanaTrade')
             // Parse response to SVM order format
             const solTradeRoute = await getBestSolanaTrade({
-              inputCurrency: baseCurrency,
-              outputCurrency: currency,
-              amount,
+              // TODO: need to remove as SPLToken
+              inputCurrency: baseCurrency as SPLToken,
+              outputCurrency: currency as SPLToken,
+              amount: amount as UnifiedCurrencyAmount<SPLToken>,
               tradeType: tradeType as TradeType,
               slippageBps: slippage,
             })

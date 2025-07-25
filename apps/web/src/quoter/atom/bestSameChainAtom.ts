@@ -103,7 +103,7 @@ export const bestSameChainWithoutPlaceHolderAtom = atomFamily((_option: QuoteQue
     const option: QuoteQuery = { enabled: true, type: 'quoter', tradeType: TradeType.EXACT_INPUT, ..._option }
 
     try {
-      if (option.baseCurrency?.chainId === NonEVMChainId.SOLANA) {
+      if (option.baseCurrency?.chainId === NonEVMChainId.SOLANA && option.currency?.chainId === NonEVMChainId.SOLANA) {
         return get(bestSVMOrderAtom(option))
       }
 
