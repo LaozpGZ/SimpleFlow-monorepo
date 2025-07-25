@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
+import { UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 
 import { Field } from 'state/swap/actions'
@@ -11,8 +11,8 @@ import { isClassicOrder } from 'views/Swap/utils'
 import { useAccount } from 'wagmi'
 
 interface Balances {
-  [Field.INPUT]?: CurrencyAmount<Currency>
-  [Field.OUTPUT]?: CurrencyAmount<Currency>
+  [Field.INPUT]?: UnifiedCurrencyAmount<UnifiedCurrency>
+  [Field.OUTPUT]?: UnifiedCurrencyAmount<UnifiedCurrency>
 }
 
 /**

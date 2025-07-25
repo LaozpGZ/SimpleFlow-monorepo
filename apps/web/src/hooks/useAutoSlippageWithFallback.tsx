@@ -1,4 +1,4 @@
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { atom, useAtom } from 'jotai'
 import { atomWithStorage } from 'jotai/utils'
@@ -50,7 +50,7 @@ export function useAutoSlippageWithFallback(): {
   }, [isAutoSlippageEnabled, autoSlippageTolerance, userSlippageTolerance])
 }
 
-export const useInputBasedAutoSlippageWithFallback = (inputAmount?: CurrencyAmount<Currency>) => {
+export const useInputBasedAutoSlippageWithFallback = (inputAmount?: UnifiedCurrencyAmount<UnifiedCurrency>) => {
   const [isAutoSlippageEnabled] = useAutoSlippageEnabled()
   const [userSlippageTolerance] = useUserSlippage()
   const { inputBasedSlippage } = useInputBasedAutoSlippage(inputAmount)

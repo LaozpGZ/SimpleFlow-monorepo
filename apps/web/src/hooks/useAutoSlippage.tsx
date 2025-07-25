@@ -2,13 +2,13 @@ import { ChainId } from '@pancakeswap/chains'
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { Percent, TradeType } from '@pancakeswap/sdk'
 import { InfinityRouter, SmartRouterTrade } from '@pancakeswap/smart-router'
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { Currency, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { BigNumber } from 'bignumber.js'
 import { L2_CHAIN_IDS } from 'config/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useMemo } from 'react'
 
-import { BridgeTrade } from '@pancakeswap/price-api-sdk'
+import { BridgeTrade, SVMTrade } from '@pancakeswap/price-api-sdk'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import { useGasPrice } from 'state/user/hooks'
 import useNativeCurrency from './useNativeCurrency'
@@ -136,6 +136,7 @@ type SupportedTrade =
   | InfinityRouter.InfinityTradeWithoutGraph<TradeType>
   | ExclusiveDutchOrderTrade<Currency, Currency>
   | BridgeTrade
+  | SVMTrade
 
 export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade): Percent {
   const { chainId } = useActiveChainId()
@@ -217,7 +218,7 @@ export default function useClassicAutoSlippageTolerance(trade?: SupportedTrade):
 }
 
 // Calculate slippage based on input dollar value
-export function useInputBasedAutoSlippage(inputAmount?: CurrencyAmount<Currency>): {
+export function useInputBasedAutoSlippage(inputAmount?: UnifiedCurrencyAmount<UnifiedCurrency>): {
   inputBasedSlippage: Percent
   inputDollarValue: number | undefined
 } {
