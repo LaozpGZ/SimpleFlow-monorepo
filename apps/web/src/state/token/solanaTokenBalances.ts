@@ -4,6 +4,7 @@ import BN from 'bignumber.js'
 import { atom, useAtomValue } from 'jotai'
 import { atomFamily, loadable } from 'jotai/utils'
 import { TokenAccount } from '@pancakeswap/solana-core-sdk'
+import { rpcUrlAtom } from '@pancakeswap/utils/user'
 
 import { fetchSolanaTokenBalances } from './solanaBalanceFetcher'
 
@@ -13,9 +14,10 @@ import { fetchSolanaTokenBalances } from './solanaBalanceFetcher'
  */
 const walletBalancesAtomFamily = atomFamily((walletAddress: string | null | undefined) =>
   loadable(
-    atom(async () => {
+    atom(async (get) => {
       if (!walletAddress) return new Map<string, TokenAccount[]>()
-      return fetchSolanaTokenBalances(walletAddress)
+      const rpc = get(rpcUrlAtom)
+      return fetchSolanaTokenBalances(walletAddress, rpc)
     }),
   ),
 )

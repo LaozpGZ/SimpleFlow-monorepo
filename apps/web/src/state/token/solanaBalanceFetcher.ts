@@ -2,10 +2,11 @@ import { parseTokenAccountResp, TokenAccount } from '@pancakeswap/solana-core-sd
 import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
 import { Connection, PublicKey } from '@solana/web3.js'
 
-const SOLANA_RPC_ENDPOINT = process.env.NEXT_PUBLIC_SOLANA_RPC || 'https://api.mainnet-beta.solana.com'
-
-export async function fetchSolanaTokenBalances(walletAddress: string): Promise<Map<string, TokenAccount[]>> {
-  const connection = new Connection(SOLANA_RPC_ENDPOINT)
+export async function fetchSolanaTokenBalances(
+  walletAddress: string,
+  rpc: string,
+): Promise<Map<string, TokenAccount[]>> {
+  const connection = new Connection(rpc)
   const owner = new PublicKey(walletAddress)
   const [solAccountResp, tokenAccountResp, token2022Req] = await Promise.all([
     connection.getAccountInfo(owner),
