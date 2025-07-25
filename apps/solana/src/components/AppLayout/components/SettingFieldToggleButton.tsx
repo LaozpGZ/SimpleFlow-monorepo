@@ -1,10 +1,9 @@
 import { Box, Flex, HStack } from '@chakra-ui/react'
-import { ArrowDropDownIcon } from '@pancakeswap/uikit'
 import { ReactNode } from 'react'
 import { ChevronUp, ChevronDown } from 'react-feather'
-
-import { inputShadowInsetStyle } from '@/theme/cssBlocks'
+import { ArrowDropDownIcon } from '@pancakeswap/uikit'
 import { colors } from '@/theme/cssVariables'
+import { inputShadowInsetStyle } from '@/theme/cssBlocks'
 
 export function SettingFieldToggleButton(props: { isOpen?: boolean; renderContent?: ReactNode }) {
   return (

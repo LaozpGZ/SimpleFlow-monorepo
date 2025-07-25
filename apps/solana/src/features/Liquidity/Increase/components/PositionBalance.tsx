@@ -1,9 +1,9 @@
 import { Flex, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-
-import { panelCard } from '@/theme/cssBlocks'
-import { colors } from '@/theme/cssVariables'
 import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+
+import { colors } from '@/theme/cssVariables'
+import { panelCard } from '@/theme/cssBlocks'
 
 type PositionBalanceProps = {
   myPosition: string | number

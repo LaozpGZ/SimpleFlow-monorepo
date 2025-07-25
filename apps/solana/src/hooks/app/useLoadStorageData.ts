@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
-
-import { useSwapStore, SWAP_SLIPPAGE_KEY } from '@/features/Swap/useSwapStore'
 import { useAppStore, EXPLORER_KEY, APR_MODE_KEY, USER_ADDED_KEY, FEE_KEY } from '@/store/useAppStore'
 import { useLiquidityStore, LIQUIDITY_SLIPPAGE_KEY } from '@/store/useLiquidityStore'
+import { useSwapStore, SWAP_SLIPPAGE_KEY } from '@/features/Swap/useSwapStore'
 import { getStorageItem } from '@/utils/localStorage'
 
 export default function useLoadStorageData() {

@@ -1,6 +1,5 @@
 import { Button, HStack, Modal, ModalBody, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Text, VStack } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-
 import CircleError from '@/icons/misc/CircleError'
 import { colors } from '@/theme/cssVariables'
 

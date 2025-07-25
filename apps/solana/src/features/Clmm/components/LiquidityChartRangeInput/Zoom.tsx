@@ -3,9 +3,7 @@ import styled from '@emotion/styled'
 import { ScaleLinear, select, zoom, ZoomBehavior, zoomIdentity, ZoomTransform } from 'd3'
 import { useEffect, useMemo, useRef } from 'react'
 import { RefreshCcw, ZoomIn, ZoomOut } from 'react-feather'
-
 import { colors } from '@/theme/cssVariables'
-
 import { FeeAmount } from './FeeAmount'
 import { ZoomLevels } from './types'
 

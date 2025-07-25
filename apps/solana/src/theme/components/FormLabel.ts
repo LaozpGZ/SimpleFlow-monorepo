@@ -1,5 +1,4 @@
 import { defineStyle, defineStyleConfig } from '@chakra-ui/react'
-
 import { colors } from '../cssVariables'
 
 export const FormLabel = defineStyleConfig({

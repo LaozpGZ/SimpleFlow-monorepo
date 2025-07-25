@@ -1,5 +1,4 @@
 import { forwardRef } from 'react'
-
 import { SvgIcon } from '../type'
 
 export default forwardRef(function SwapPoolItemIcon(props: SvgIcon, ref: any) {

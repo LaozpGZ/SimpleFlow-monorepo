@@ -1,8 +1,6 @@
 import axios, { AxiosInstance } from "axios";
 
-import { PublicKey } from "@solana/web3.js";
-import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { createLogger, sleep, solToWSol } from "../common";
+import { createLogger, sleep } from "../common";
 import { Cluster } from "../solana";
 
 import {
@@ -17,10 +15,14 @@ import {
   FormatFarmKeyOut,
   AvailabilityCheckAPI3,
   PoolFetchType,
+  ExtensionsItem,
   JupToken,
 } from "./type";
 import { API_URLS, API_URL_CONFIG } from "./url";
 import { updateReqHistory } from "./utils";
+import { PublicKey } from "@solana/web3.js";
+import { solToWSol } from "../common";
+import { TOKEN_2022_PROGRAM_ID, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 
 const logger = createLogger("Raydium_Api");
 const poolKeysCache: Map<string, PoolKeys> = new Map();
@@ -53,7 +55,6 @@ export class Api {
   public cluster: Cluster;
 
   public api: AxiosInstance;
-
   public logCount: number;
 
   public urlConfigs: API_URL_CONFIG;
@@ -201,7 +202,7 @@ export class Api {
 
   async getTokenInfo(mint: (string | PublicKey)[]): Promise<ApiV3Token[]> {
     const res = await this.api.get(
-      `${this.urlConfigs.MINT_INFO_ID || API_URLS.MINT_INFO_ID}?mints=${mint.map((m) => m.toString()).join(",")}`,
+      (this.urlConfigs.MINT_INFO_ID || API_URLS.MINT_INFO_ID) + `?mints=${mint.map((m) => m.toString()).join(",")}`,
     );
     return res.data;
   }
@@ -209,16 +210,15 @@ export class Api {
   async getPoolList(props: FetchPoolParams = {}): Promise<PoolsApiReturn> {
     const { type = "all", sort = "liquidity", order = "desc", page = 0, pageSize = 100 } = props;
     const res = await this.api.get<PoolsApiReturn>(
-      `${
-        this.urlConfigs.POOL_LIST || API_URLS.POOL_LIST
-      }?poolType=${type}&poolSortField=${sort}&sortType=${order}&page=${page}&pageSize=${pageSize}`,
+      (this.urlConfigs.POOL_LIST || API_URLS.POOL_LIST) +
+        `?poolType=${type}&poolSortField=${sort}&sortType=${order}&page=${page}&pageSize=${pageSize}`,
     );
     return res.data;
   }
 
   async fetchPoolById(props: { ids: string }): Promise<ApiV3PoolInfoItem[]> {
     const { ids } = props;
-    const res = await this.api.get(`${this.urlConfigs.POOL_SEARCH_BY_ID || API_URLS.POOL_SEARCH_BY_ID}?ids=${ids}`);
+    const res = await this.api.get((this.urlConfigs.POOL_SEARCH_BY_ID || API_URLS.POOL_SEARCH_BY_ID) + `?ids=${ids}`);
     return res.data;
   }
 
@@ -238,7 +238,7 @@ export class Api {
     let data: PoolKeys[] = [];
     if (readyList.length) {
       const res = await this.api.get<PoolKeys[]>(
-        `${this.urlConfigs.POOL_KEY_BY_ID || API_URLS.POOL_KEY_BY_ID}?ids=${readyList.join(",")}`,
+        (this.urlConfigs.POOL_KEY_BY_ID || API_URLS.POOL_KEY_BY_ID) + `?ids=${readyList.join(",")}`,
       );
       data = res.data.filter(Boolean);
       data.forEach((poolKey) => {
@@ -271,9 +271,8 @@ export class Api {
     const [baseMint, quoteMint] = mint2 && mint1 > mint2 ? [mint2, mint1] : [mint1, mint2];
 
     const res = await this.api.get(
-      `${
-        this.urlConfigs.POOL_SEARCH_MINT || API_URLS.POOL_SEARCH_MINT
-      }?mint1=${baseMint}&mint2=${quoteMint}&poolType=${type}&poolSortField=${sort}&sortType=${order}&pageSize=100&page=${page}`,
+      (this.urlConfigs.POOL_SEARCH_MINT || API_URLS.POOL_SEARCH_MINT) +
+        `?mint1=${baseMint}&mint2=${quoteMint}&poolType=${type}&poolSortField=${sort}&sortType=${order}&pageSize=100&page=${page}`,
     );
     return res.data;
   }
@@ -282,7 +281,7 @@ export class Api {
     const { ids } = props;
 
     const res = await this.api.get<FormatFarmInfoOut[]>(
-      `${this.urlConfigs.FARM_INFO || API_URLS.FARM_INFO}?ids=${ids}`,
+      (this.urlConfigs.FARM_INFO || API_URLS.FARM_INFO) + `?ids=${ids}`,
     );
     return res.data;
   }
@@ -290,7 +289,9 @@ export class Api {
   async fetchFarmKeysById(props: { ids: string }): Promise<FormatFarmKeyOut[]> {
     const { ids } = props;
 
-    const res = await this.api.get<FormatFarmKeyOut[]>(`${this.urlConfigs.FARM_KEYS || API_URLS.FARM_KEYS}?ids=${ids}`);
+    const res = await this.api.get<FormatFarmKeyOut[]>(
+      (this.urlConfigs.FARM_KEYS || API_URLS.FARM_KEYS) + `?ids=${ids}`,
+    );
     return res.data;
   }
 

@@ -1,14 +1,12 @@
 import { Box, Grid, GridItem, HStack } from '@chakra-ui/react'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { FlexGap, SwapHorizIcon, Text } from '@pancakeswap/uikit'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import dayjs from 'dayjs'
 import { useState } from 'react'
-
 import Tabs from '@/components/Tabs'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { TimeType } from '@/hooks/pool/useFetchPoolKLine'
 import { colors } from '@/theme/cssVariables'
-
 import CandleChart from './CandleChart'
 
 export function SwapKlinePanel({

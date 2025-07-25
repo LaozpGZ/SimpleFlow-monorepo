@@ -1,14 +1,13 @@
+import { useRef } from 'react'
 import { Box, Collapse, useDisclosure, Text } from '@chakra-ui/react'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-import { useRef } from 'react'
-
 import { useEvent } from '@/hooks/useEvent'
-import { useTokenAccountStore } from '@/store/useTokenAccountStore'
 import { colors } from '@/theme/cssVariables'
+import { useTokenAccountStore } from '@/store/useTokenAccountStore'
 
+import { NewRewardInfo } from '../../type'
 import RewardBody from './RewardBody'
 import RewardHeader from './RewardHeader'
-import { NewRewardInfo } from '../../type'
 import useRewardSchema from '../useRewardSchema'
 
 export type AddRewardItemProps = {

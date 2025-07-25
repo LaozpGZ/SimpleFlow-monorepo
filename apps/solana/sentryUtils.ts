@@ -38,8 +38,9 @@ export function beforeSend(event: ErrorEvent, hint: EventHint) {
 
   if (Math.random() <= sampleRate) {
     return event
+  } else {
+    return null
   }
-  return null
 }
 
 export function beforeSendSpan(span: any) {
@@ -51,6 +52,7 @@ export function beforeSendSpan(span: any) {
 
   if (Math.random() <= sampleRate) {
     return span
+  } else {
+    return null
   }
-  return null
 }

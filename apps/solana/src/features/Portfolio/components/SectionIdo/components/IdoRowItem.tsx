@@ -1,8 +1,7 @@
-import { Box, Button, Divider, Flex, Grid, GridItem, HStack, Stack, Text, useDisclosure } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { IdoKeysData } from '@pancakeswap/solana-core-sdk'
+import { Box, Button, Divider, Flex, Grid, GridItem, HStack, Stack, Text, useDisclosure } from '@chakra-ui/react'
 import Decimal from 'decimal.js'
-
+import { useTranslation } from '@pancakeswap/localization'
 import { Desktop } from '@/components/MobileDesktop'
 import TokenAvatar from '@/components/TokenAvatar'
 import { OwnerFullData } from '@/hooks/portfolio/useFetchOwnerIdo'

@@ -1,9 +1,7 @@
 import styled from '@emotion/styled'
-import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { FlexGap, Text } from '@pancakeswap/uikit'
-
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { colors } from '@/theme/cssVariables'
-
 import TokenAvatar from '../../TokenAvatar'
 
 export interface TokenSelectDialogProps {

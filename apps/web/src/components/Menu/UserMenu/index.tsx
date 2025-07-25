@@ -1,25 +1,30 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { Box, UserMenu as UIKitUserMenu, UserMenuVariant, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useCallback, useEffect, useRef, useState } from 'react'
+
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import useAirdropModalStatus from 'components/GlobalCheckClaimStatus/hooks/useAirdropModalStatus'
 import Trans from 'components/Trans'
 import { WalletContent, WalletModalV2 } from 'components/WalletModalV2'
 import ReceiveModal from 'components/WalletModalV2/ReceiveModal'
-import { useActiveChainId } from 'hooks/useActiveChainId'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useAuth from 'hooks/useAuth'
 import { useDomainNameForAddress } from 'hooks/useDomain'
-import { useCallback, useEffect, useRef, useState } from 'react'
 import { useProfile } from 'state/profile/hooks'
 import { usePendingTransactions } from 'state/transactions/hooks'
 import styled from 'styled-components'
 import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useAccount } from 'wagmi'
+import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
+
+import { NonEVMChainId } from '@pancakeswap/chains'
+import { useTranslation } from '@pancakeswap/localization'
+import { Box, FlexGap, UserMenu as UIKitUserMenu, useMatchBreakpoints, UserMenuVariant } from '@pancakeswap/uikit'
 
 const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
   const { t } = useTranslation()
-  const { chainId, isWrongNetwork } = useActiveChainId()
+  const { chainId, isWrongNetwork, account: evmAccount, solanaAccount } = useAccountActiveChain()
   const { logout } = useAuth()
-  const { address: account, connector } = useAccount()
+  const { connector } = useAccount()
+  const account = chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : evmAccount
   const { hasPendingTransactions } = usePendingTransactions()
   const { isInitialized, isLoading, profile } = useProfile()
   const { shouldShowModal } = useAirdropModalStatus()
@@ -67,9 +72,10 @@ const ClickablePopover = styled.div<{ isOpen: boolean }>`
 
 const UserMenu = () => {
   const { t } = useTranslation()
-  const { address: account, connector } = useAccount()
-  const { chainId, isWrongNetwork } = useActiveChainId()
-  const { domainName, avatar } = useDomainNameForAddress(account)
+  const { connector } = useAccount()
+  const { chainId, isWrongNetwork, account: evmAccount, solanaAccount } = useAccountActiveChain()
+  const currentAccount = chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : evmAccount
+  const { domainName, avatar } = useDomainNameForAddress(chainId === NonEVMChainId.SOLANA ? undefined : currentAccount)
   const { logout } = useAuth()
   const { hasPendingTransactions, pendingNumber } = usePendingTransactions()
   const { profile } = useProfile()
@@ -117,16 +123,16 @@ const UserMenu = () => {
   }, [hasPendingTransactions, pendingNumber, t])
 
   const handleClickDisconnect = useCallback(() => {
-    logGTMDisconnectWalletEvent(chainId, connector?.name, account)
+    logGTMDisconnectWalletEvent(chainId, connector?.name, currentAccount)
     logout()
-  }, [logout, connector?.name, account, chainId])
+  }, [logout, connector?.name, currentAccount, chainId])
 
-  if (account) {
+  if (currentAccount) {
     return (
       <>
         <ClickableUserMenu ref={menuRef}>
           <UIKitUserMenu
-            account={domainName || account}
+            account={domainName || currentAccount}
             ellipsis={!domainName}
             avatarSrc={avatarSrc}
             text={userMenuText}
@@ -157,13 +163,17 @@ const UserMenu = () => {
 
         <WalletModalV2
           isOpen={showMobileWalletModal}
-          account={account}
+          account={currentAccount}
           onReceiveClick={() => setIsReceiveModalOpen(true)}
           onDisconnect={handleClickDisconnect}
           onDismiss={() => setShowMobileWalletModal(false)}
         />
-        {account && (
-          <ReceiveModal account={account} onDismiss={() => setIsReceiveModalOpen(false)} isOpen={isReceiveModalOpen} />
+        {currentAccount && (
+          <ReceiveModal
+            account={currentAccount}
+            onDismiss={() => setIsReceiveModalOpen(false)}
+            isOpen={isReceiveModalOpen}
+          />
         )}
       </>
     )
@@ -197,14 +207,24 @@ const UserMenu = () => {
   }
 
   return (
-    <ConnectWalletButton scale="sm">
-      <Box display={['none', null, null, 'block']}>
-        <Trans>Connect Wallet</Trans>
-      </Box>
-      <Box display={['block', null, null, 'none']}>
-        <Trans>Connect</Trans>
-      </Box>
-    </ConnectWalletButton>
+    <FlexGap gap="8px">
+      <ConnectWalletButton scale="sm">
+        <Box display={['none', null, null, 'block']}>
+          <Trans>Connect Wallet</Trans>
+        </Box>
+        <Box display={['block', null, null, 'none']}>
+          <Trans>Connect</Trans>
+        </Box>
+      </ConnectWalletButton>
+      <SolanaConnectButton scale="sm">
+        <Box display={['none', null, null, 'block']}>
+          <Trans>Solana Connect</Trans>
+        </Box>
+        <Box display={['block', null, null, 'none']}>
+          <Trans>SOL</Trans>
+        </Box>
+      </SolanaConnectButton>
+    </FlexGap>
   )
 }
 

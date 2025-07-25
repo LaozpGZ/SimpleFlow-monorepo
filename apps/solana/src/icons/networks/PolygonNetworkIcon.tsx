@@ -1,5 +1,4 @@
 import { Box } from '@chakra-ui/react'
-
 import { SvgBoxIcon } from '../type'
 
 export default function PolygonNetworkIcon(props: SvgBoxIcon) {

@@ -1,15 +1,14 @@
 import { SystemCSSProperties, Text } from '@chakra-ui/react'
 import styled from '@emotion/styled'
-import { useTranslation } from '@pancakeswap/localization'
 import { format } from 'd3'
 import { CSSProperties, ReactNode, useCallback, useMemo, useRef } from 'react'
 import { BarChart2, CloudOff, Inbox } from 'react-feather'
+import { useTranslation } from '@pancakeswap/localization'
 
 import Loader from '@/components/Loader'
 import useElementSizeRectDetector from '@/hooks/useElementSizeRectDetector'
 import { colors } from '@/theme/cssVariables'
 import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
-
 import { Bound } from './Bound'
 import { Chart } from './Chart'
 import { FeeAmount } from './FeeAmount'

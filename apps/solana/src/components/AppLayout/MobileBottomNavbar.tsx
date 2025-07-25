@@ -1,14 +1,14 @@
-import { Box, ColorMode, SimpleGrid, Text, VStack, useColorMode } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { SwapHorizIcon, WaterIcon } from '@pancakeswap/uikit'
+import { Box, ColorMode, SimpleGrid, Text, VStack, useColorMode } from '@chakra-ui/react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { ReactNode } from 'react'
+import { useTranslation } from '@pancakeswap/localization'
 
 import BackpackIcon from '@/icons/pageNavigation/BackpackIcon'
 import { colors } from '@/theme/cssVariables'
-import { pageRoutePathnames } from '@/utils/config/routers'
 import { shrinkToValue } from '@/utils/shrinkToValue'
+import { pageRoutePathnames } from '@/utils/config/routers'
 
 /** only used is Mobile */
 export function MobileBottomNavbar() {

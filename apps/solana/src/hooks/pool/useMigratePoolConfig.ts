@@ -1,8 +1,7 @@
 import useSWR from 'swr'
-
 import axios from '@/api/axios'
-import { useAppStore } from '@/store'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
+import { useAppStore } from '@/store'
 
 export interface MigrateClmmConfig {
   ammId: string

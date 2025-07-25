@@ -1,7 +1,6 @@
+import { useCallback, useEffect } from 'react'
 import { Modal, ModalBody, ModalOverlay, ModalHeader, ModalContent, ModalFooter, Button } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import { useCallback, useEffect } from 'react'
-
 import { useAppStore, PRIORITY_LEVEL_KEY, PRIORITY_MODE_KEY, PriorityLevel, PriorityMode } from '@/store/useAppStore'
 import { getStorageItem } from '@/utils/localStorage'
 

@@ -1,5 +1,5 @@
-import { getMintMetaData } from '@pancakeswap/solana-clmm-sdk'
 import { TokenInfo, ApiV3Token } from '@pancakeswap/solana-core-sdk'
+import { PublicKey, Connection, AccountInfo } from '@solana/web3.js'
 import {
   TOKEN_PROGRAM_ID,
   TOKEN_2022_PROGRAM_ID,
@@ -10,8 +10,7 @@ import {
   ExtensionType,
   MintLayout
 } from '@solana/spl-token-0.4'
-import { PublicKey, Connection, AccountInfo } from '@solana/web3.js'
-
+import { getMintMetaData } from '@pancakeswap/solana-clmm-sdk'
 import { useAppStore } from '@/store/useAppStore'
 
 export const TYPE_SIZE = 2

@@ -1,5 +1,4 @@
 import { colors } from '@/theme/cssVariables'
-
 import { SvgIcon } from '../type'
 
 export default function SwapButtonTwoTurnIcon(props: SvgIcon) {

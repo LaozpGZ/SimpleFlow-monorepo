@@ -1,5 +1,4 @@
 import { Flex, FlexProps, Text } from '@chakra-ui/react'
-
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'
 

@@ -1,13 +1,12 @@
 import { Flex } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-
 import Button from '@/components/Button'
-import useResponsive from '@/hooks/useResponsive'
 import FullExpandIcon from '@/icons/misc/FullExpandIcon'
 import MinusIcon from '@/icons/misc/MinusIcon'
 import PlusIcon from '@/icons/misc/PlusIcon'
 import { colors } from '@/theme/cssVariables'
 import { routeToPage } from '@/utils/routeTools'
+import useResponsive from '@/hooks/useResponsive'
 
 type ActionButtonsProps = {
   variant?: 'drawer-face'

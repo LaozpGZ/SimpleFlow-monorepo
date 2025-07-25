@@ -1,11 +1,10 @@
 import { Box, Divider, Flex, SimpleGrid } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
-import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { Button, Input, InputGroup, SearchIcon, Text } from '@pancakeswap/uikit'
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { PublicKey } from '@solana/web3.js'
 import Decimal from 'decimal.js'
 import { ChangeEvent, forwardRef, useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
-
+import { useTranslation } from '@pancakeswap/localization'
 import AddressChip from '@/components/AddressChip'
 import List, { ListPropController } from '@/components/List'
 import TokenAvatar from '@/components/TokenAvatar'
@@ -20,7 +19,6 @@ import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import { isValidPublicKey } from '@/utils/publicKey'
 import { sortItems } from '@/utils/sortItems'
 import { filterTokenFn } from '@/utils/token'
-
 import PopularTokenCell from './PopularTokenCell'
 
 const perPage = 30

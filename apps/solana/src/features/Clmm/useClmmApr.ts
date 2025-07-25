@@ -1,11 +1,9 @@
 import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import BN from 'bn.js'
 import { useMemo } from 'react'
-
 import { AprKey } from '@/hooks/pool/type'
 import useTokenPrice from '@/hooks/token/useTokenPrice'
 import { useAppStore } from '@/store'
-
 import { getPoolTickAprCore } from './utils/calApr'
 
 export default function useClmmApr({

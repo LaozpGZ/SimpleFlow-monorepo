@@ -1,19 +1,17 @@
 /**
  * for v2's experience, we need to use a function to generate the route path, so we can do some tricks when routing
  */
-import { ParsedUrlQuery } from 'querystring'
-
 import { MayFunction, TokenInfo } from '@pancakeswap/solana-core-sdk'
 import router, { useRouter } from 'next/router'
 
-import { DecreaseLiquidityPageQuery, IncreaseLiquidityPageQuery } from '@/features/Liquidity/Decrease/components/type'
+import { ParsedUrlQuery } from 'querystring'
 import { PoolPageQuery } from '@/features/Pools/Pools'
 import { PortfolioPageQuery } from '@/features/Portfolio'
-import { StakingPageQuery } from '@/features/Staking/type'
 import { isClient } from '@/utils/common'
-
-import { shakeObjectUndefinedItems } from './objectTools'
+import { StakingPageQuery } from '@/features/Staking/type'
+import { DecreaseLiquidityPageQuery, IncreaseLiquidityPageQuery } from '@/features/Liquidity/Decrease/components/type'
 import { shrinkToValue } from './shrinkToValue'
+import { shakeObjectUndefinedItems } from './objectTools'
 
 type EditFarmPageQuery = {
   farmId?: string

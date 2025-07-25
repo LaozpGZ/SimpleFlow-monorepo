@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic'
 import { useEffect } from 'react'
-
 import { useLiquidityStore, useAppStore } from '@/store'
 
 const CreatePool = dynamic(() => import('@/features/Create/StandardPool'), { ssr: false })

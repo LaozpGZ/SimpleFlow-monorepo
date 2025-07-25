@@ -1,7 +1,6 @@
 import { Box, Flex, HStack, SimpleGrid, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
 import { Cell, Pie, PieChart, ResponsiveContainer } from 'recharts'
-
 import AprMDSwitchWidget from '@/components/AprMDSwitchWidget'
 import Tabs from '@/components/Tabs'
 import { toAPRPercent } from '@/features/Pools/util'

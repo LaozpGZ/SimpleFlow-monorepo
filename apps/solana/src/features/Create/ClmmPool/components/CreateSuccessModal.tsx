@@ -1,10 +1,9 @@
 import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, Flex, Text } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-
-import Button from '@/components/Button'
-import CircleCheck from '@/icons/misc/CircleCheck'
-import { colors } from '@/theme/cssVariables'
 import { routeToPage } from '@/utils/routeTools'
+import Button from '@/components/Button'
+import { colors } from '@/theme/cssVariables'
+import CircleCheck from '@/icons/misc/CircleCheck'
 
 export default function CreateSuccessModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { t } = useTranslation()

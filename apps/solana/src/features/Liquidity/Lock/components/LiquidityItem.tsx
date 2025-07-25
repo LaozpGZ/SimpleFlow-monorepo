@@ -1,13 +1,12 @@
 import { Box, Flex, HStack, Tag, Text } from '@chakra-ui/react'
-
-import { Desktop, Mobile } from '@/components/MobileDesktop'
-import TokenAvatarPair from '@/components/TokenAvatarPair'
-import { LockCpmmPoolInfo } from '@/hooks/portfolio/cpmm/useLockableCpmmLp'
-import CircleCheck from '@/icons/misc/CircleCheck'
-import { useTokenAccountStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
+import TokenAvatarPair from '@/components/TokenAvatarPair'
+import CircleCheck from '@/icons/misc/CircleCheck'
 import { formatToRawLocaleStr, formatCurrency } from '@/utils/numberish/formatter'
 import toPercentString from '@/utils/numberish/toPercentString'
+import { LockCpmmPoolInfo } from '@/hooks/portfolio/cpmm/useLockableCpmmLp'
+import { useTokenAccountStore } from '@/store'
+import { Desktop, Mobile } from '@/components/MobileDesktop'
 
 export default function LiquidityItem({
   poolInfo,

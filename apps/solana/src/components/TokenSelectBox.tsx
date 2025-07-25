@@ -1,11 +1,9 @@
 import { Flex, HStack, Spacer, StyleProps, Text, useDisclosure } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { ReactNode, useCallback } from 'react'
-
-import ChevronDownIcon from '@/icons/misc/ChevronDownIcon'
+import { useTranslation } from '@pancakeswap/localization'
 import { colors } from '@/theme/cssVariables'
-
+import ChevronDownIcon from '@/icons/misc/ChevronDownIcon'
 import TokenAvatar from './TokenAvatar'
 import TokenSelectDialog from './TokenSelectDialog'
 

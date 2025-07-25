@@ -1,19 +1,18 @@
+import React, { useMemo } from 'react'
 import { Box, Flex, Image, Text, useColorMode, useMediaQuery } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import { WalletReadyState } from '@solana/wallet-adapter-base'
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
-import React, { useMemo } from 'react'
-
+import { WalletReadyState } from '@solana/wallet-adapter-base'
+import RaydiumLogo from '@/icons/RaydiumLogo'
+import MoonPayIcon from '@/icons/misc/MoonPayIcon'
+import Plus from '@/icons/misc/Plus'
+import Phantom from '@/icons/misc/Phantom'
+import SolGrey from '@/icons/misc/SolGrey'
+import Cart from '@/icons/misc/Cart'
 import AppNavLayout from '@/components/AppLayout/AppNavLayout'
 import WalletOnramp from '@/components/SolWallet/WalletOnramp'
-import useResponsive from '@/hooks/useResponsive'
-import RaydiumLogo from '@/icons/RaydiumLogo'
-import Cart from '@/icons/misc/Cart'
-import MoonPayIcon from '@/icons/misc/MoonPayIcon'
-import Phantom from '@/icons/misc/Phantom'
-import Plus from '@/icons/misc/Plus'
-import SolGrey from '@/icons/misc/SolGrey'
 import { colors } from '@/theme/cssVariables'
+import useResponsive from '@/hooks/useResponsive'
 
 export default function MoonpayPage() {
   const { t } = useTranslation()

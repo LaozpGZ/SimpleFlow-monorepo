@@ -1,11 +1,10 @@
-import { ParsedUrlQuery } from 'querystring'
-
 import { MayFunction, TokenInfo } from '@pancakeswap/solana-core-sdk'
 
-import { DecreaseLiquidityPageQuery, IncreaseLiquidityPageQuery } from '@/features/Liquidity/Decrease/components/type'
+import { ParsedUrlQuery } from 'querystring'
 import { PoolPageQuery } from '@/features/Pools/Pools'
 import { PortfolioPageQuery } from '@/features/Portfolio'
 import { StakingPageQuery } from '@/features/Staking/type'
+import { DecreaseLiquidityPageQuery, IncreaseLiquidityPageQuery } from '@/features/Liquidity/Decrease/components/type'
 
 type EditFarmPageQuery = {
   farmId?: string

@@ -1,21 +1,21 @@
-import { Badge, Box, Button, Flex, Grid, GridItem, HStack, SimpleGrid, Tag, Text, VStack, useDisclosure } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
-import { TokenInfo } from '@pancakeswap/solana-core-sdk'
-import Decimal from 'decimal.js'
 import { useState } from 'react'
+import { Badge, Box, Button, Flex, Grid, GridItem, HStack, SimpleGrid, Tag, Text, VStack, useDisclosure } from '@chakra-ui/react'
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 
+import { useTranslation } from '@pancakeswap/localization'
+import Decimal from 'decimal.js'
 import TokenAvatar from '@/components/TokenAvatar'
 import { useEvent } from '@/hooks/useEvent'
 import { useAppStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
-import { TxCallbackProps } from '@/types/tx'
 import { DAY_SECONDS } from '@/utils/date'
 import { formatCurrency } from '@/utils/numberish/formatter'
 import { wSolToSolString } from '@/utils/token'
+import { TxCallbackProps } from '@/types/tx'
 
+import { EditReward, FarmStatus, getRewardMeta } from '../util'
 import AddMoreRewardDialog from './AddMoreRewardDialog'
 import AdjustRewardDialog from './AdjustRewardDialog'
-import { EditReward, FarmStatus, getRewardMeta } from '../util'
 
 export default function ExistFarmingRewardItem({
   reward,

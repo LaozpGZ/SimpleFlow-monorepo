@@ -1,5 +1,4 @@
 import { useEffect } from 'react'
-
 import { useAppStore } from '@/store/useAppStore'
 
 function useRefreshChainTime() {

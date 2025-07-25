@@ -20,7 +20,6 @@ import {
   Text,
   VStack
 } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import {
   ApiV3PoolInfoConcentratedItem,
   ApiV3PoolInfoStandardItem,
@@ -30,30 +29,31 @@ import {
   TickUtils,
   getLiquidityFromAmounts
 } from '@pancakeswap/solana-core-sdk'
-import { PublicKey } from '@solana/web3.js'
+import { useEffect, useRef, useState } from 'react'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
-import { useEffect, useRef, useState } from 'react'
+import { useTranslation } from '@pancakeswap/localization'
+import { PublicKey } from '@solana/web3.js'
+import { AprKey } from '@/hooks/pool/type'
 
+import { useAppStore, useClmmStore, useLiquidityStore } from '@/store'
 import IntervalCircle, { IntervalCircleHandler } from '@/components/IntervalCircle'
 import TokenAvatar from '@/components/TokenAvatar'
 import useRefreshEpochInfo from '@/hooks/app/useRefreshEpochInfo'
 import useSubscribeClmmInfo from '@/hooks/pool/clmm/useSubscribeClmmInfo'
-import { AprKey } from '@/hooks/pool/type'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'
-import { MigrateClmmConfig } from '@/hooks/pool/useMigratePoolConfig'
 import { useEvent } from '@/hooks/useEvent'
-import CircleArrowDown from '@/icons/misc/CircleArrowDown'
 import CircleArrowRight from '@/icons/misc/CircleArrowRight'
 import CircleCheck from '@/icons/misc/CircleCheck'
 import CirclePlus from '@/icons/misc/CirclePlus'
-import { useAppStore, useClmmStore, useLiquidityStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
-import toPercentString from '@/utils/numberish/toPercentString'
 import { routeToPage } from '@/utils/routeTools'
-import { wSolToSolString } from '@/utils/token'
 
+import CircleArrowDown from '@/icons/misc/CircleArrowDown'
+import toPercentString from '@/utils/numberish/toPercentString'
+import { wSolToSolString } from '@/utils/token'
+import { MigrateClmmConfig } from '@/hooks/pool/useMigratePoolConfig'
 import EstimatedAprInfo from './AprInfo'
 import RangeInput from './RangeInput'
 import useValidateSchema from './useValidateSchema'

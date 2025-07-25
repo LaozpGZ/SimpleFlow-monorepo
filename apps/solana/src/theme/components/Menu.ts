@@ -1,6 +1,5 @@
 import { menuAnatomy } from '@chakra-ui/anatomy'
 import { createMultiStyleConfigHelpers } from '@chakra-ui/react'
-
 import {} from '@chakra-ui/theme-tools'
 import { colors, shadows } from '../cssVariables'
 

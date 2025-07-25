@@ -13,18 +13,16 @@ import {
   Text
 } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-
-import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
-import { CpmmLockData } from '@/hooks/portfolio/cpmm/useLockCpmmBalance'
-import LockIcon from '@/icons/misc/LockIcon'
 import { colors } from '@/theme/cssVariables'
+import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { formatCurrency } from '@/utils/numberish/formatter'
-
-import { FarmTitleBadge } from '../ItemDetail/FarmTitleBadge'
+import LockIcon from '@/icons/misc/LockIcon'
+import { CpmmLockData } from '@/hooks/portfolio/cpmm/useLockCpmmBalance'
 import PendingFees from '../ItemDetail/PendingFees'
-import StandardPoolAPR from '../ItemDetail/StandardPoolAPR'
 import TokenPooledInfo from '../ItemDetail/TokenInfo'
+import { FarmTitleBadge } from '../ItemDetail/FarmTitleBadge'
+import StandardPoolAPR from '../ItemDetail/StandardPoolAPR'
 
 export default function MobileLockedAMMDetailDrawer({
   isOpen,

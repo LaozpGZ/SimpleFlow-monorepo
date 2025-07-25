@@ -1,5 +1,4 @@
 import { forwardRef } from '@chakra-ui/react'
-
 import { SvgIcon } from '../type'
 
 /** use currentColor */

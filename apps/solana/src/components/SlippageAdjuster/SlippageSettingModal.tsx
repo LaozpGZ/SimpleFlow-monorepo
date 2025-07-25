@@ -1,9 +1,8 @@
 import { Flex, HStack, VStack } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, Message, ModalV2, MotionModal, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Decimal from 'decimal.js'
 import { KeyboardEvent, useCallback, useEffect, useState } from 'react'
-
+import { useTranslation } from '@pancakeswap/localization'
 import DecimalInput from '@/components/DecimalInput'
 import { QuestionToolTip } from '@/components/QuestionToolTip'
 import { SWAP_SLIPPAGE_KEY, useSwapStore } from '@/features/Swap/useSwapStore'

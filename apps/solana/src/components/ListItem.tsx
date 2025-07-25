@@ -1,9 +1,7 @@
 import { Box } from '@chakra-ui/react'
 import { ReactNode, useContext, useEffect, useMemo, useRef, useState } from 'react'
-
-import { ListContext } from '@/provider'
 import { shrinkToValue } from '@/utils/shrinkToValue'
-
+import { ListContext } from '@/provider'
 import VirtualBox from './VirtualBox'
 
 type ListItemStatus = {

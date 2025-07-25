@@ -12,19 +12,18 @@ import {
   HStack,
   Input
 } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { useState } from 'react'
-
+import { useTranslation } from '@pancakeswap/localization'
+import { colors } from '@/theme/cssVariables'
 import TokenAvatar from '@/components/TokenAvatar'
+import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
+import WarningIcon from '@/icons/misc/WarningIcon'
+import { shortenAddress, getMintSymbol } from '@/utils/token'
+import { formatCurrency } from '@/utils/numberish/formatter'
 import { FormattedPoolInfoConcentratedItem } from '@/hooks/pool/type'
 import useClmmBalance, { ClmmPosition } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { TokenPrice } from '@/hooks/token/useTokenPrice'
-import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
-import WarningIcon from '@/icons/misc/WarningIcon'
 import { useClmmStore } from '@/store'
-import { colors } from '@/theme/cssVariables'
-import { formatCurrency } from '@/utils/numberish/formatter'
-import { shortenAddress, getMintSymbol } from '@/utils/token'
 
 function LiquidityLockModal({
   isOpen,

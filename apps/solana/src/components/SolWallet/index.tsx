@@ -1,14 +1,12 @@
 import { Box } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { Button, Flex, LogoutIcon, ModalV2, useModalV2, UserMenu, UserMenuDivider, UserMenuItem } from '@pancakeswap/uikit'
 import { Wallet, useWallet } from '@solana/wallet-adapter-react'
 import { useWalletModal } from '@solana/wallet-adapter-react-ui'
 import { useCallback, useMemo } from 'react'
-
+import { useTranslation } from '@pancakeswap/localization'
 import { WALLET_STORAGE_KEY } from '@/hooks/app/useInitConnection'
 import { useEvent } from '@/hooks/useEvent'
 import { useAppStore } from '@/store/useAppStore'
-
 import SelectWalletModal from './SelectWalletModal'
 import WalletModal, { WalletView } from './WalletModal'
 

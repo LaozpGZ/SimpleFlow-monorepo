@@ -1,9 +1,9 @@
-import { useTranslation } from '@pancakeswap/localization'
+import * as yup from 'yup'
+import Decimal from 'decimal.js'
+import dayjs from 'dayjs'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token-0.4'
-import dayjs from 'dayjs'
-import Decimal from 'decimal.js'
-import * as yup from 'yup'
+import { useTranslation } from '@pancakeswap/localization'
 
 export default function useRewardSchema() {
   const { t } = useTranslation()

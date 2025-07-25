@@ -1,5 +1,4 @@
 import { RefObject, useEffect, useRef } from 'react'
-
 import { useEvent } from './useEvent'
 
 export type UseScrollDegreeDetectorOptions = {

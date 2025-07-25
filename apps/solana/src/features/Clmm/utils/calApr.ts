@@ -1,9 +1,8 @@
 import { ApiV3PoolInfoConcentratedItem, PoolUtils, ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import BN from 'bn.js'
-
-import { AprKey } from '@/hooks/pool/type'
 import { ClmmPosition } from '@/hooks/portfolio/clmm/useClmmBalance'
 import { TokenPrice } from '@/hooks/token/useTokenPrice'
+import { AprKey } from '@/hooks/pool/type'
 
 export interface AprData {
   fee: {

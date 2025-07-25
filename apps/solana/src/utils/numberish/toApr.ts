@@ -1,5 +1,4 @@
 import Decimal from 'decimal.js'
-
 import { getFirstNonZeroDecimal, formatLocaleStr } from './formatter'
 
 export default function toApr({ val, multiply = true, decimal }: { val: string | number; multiply?: boolean; decimal?: number }) {

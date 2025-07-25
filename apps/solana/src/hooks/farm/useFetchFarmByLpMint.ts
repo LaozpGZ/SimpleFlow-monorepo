@@ -1,13 +1,12 @@
-import { FormatFarmInfoOut, FetchPoolParams } from '@pancakeswap/solana-core-sdk'
-import { PublicKey } from '@solana/web3.js'
 import { useEffect, useMemo } from 'react'
+import { PublicKey } from '@solana/web3.js'
+import { FormatFarmInfoOut, FetchPoolParams } from '@pancakeswap/solana-core-sdk'
 import useSWR from 'swr'
 import { shallow } from 'zustand/shallow'
-
 import axios from '@/api/axios'
+
 import { useAppStore } from '@/store'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
-
 import { formatFarmData, farmInfoCache } from './farmUtils'
 
 const fetcher = (url: string) => axios.get(url, { skipError: true })

@@ -1,12 +1,10 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { AtomBox, AutoColumn, Flex, FlexGap, Modal, QuestionHelper, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@pancakeswap/localization'
 import { useMemo } from 'react'
 import styled from 'styled-components'
-
-import TokenAvatar from '@/components/TokenAvatar'
 import { colors } from '@/theme/cssVariables'
+import TokenAvatar from '@/components/TokenAvatar'
 import toPercentString from '@/utils/numberish/toPercentString'
-
 import { QuoteResponseData } from '../type'
 
 export const RoutesDisplayModal: React.FC<{

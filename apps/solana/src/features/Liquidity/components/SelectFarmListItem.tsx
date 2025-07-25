@@ -1,13 +1,13 @@
 import { Badge, Box, Flex, HStack, SimpleGrid, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
-import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import { useEffect, useState } from 'react'
+import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 
+import { useTranslation } from '@pancakeswap/localization'
 import TokenAvatar from '@/components/TokenAvatar'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
-import { FarmType, FormattedFarmInfo } from '@/hooks/farm/type'
 import CircleCheckFill from '@/icons/misc/CircleCheckFill'
 import { colors } from '@/theme/cssVariables'
+import { FarmType, FormattedFarmInfo } from '@/hooks/farm/type'
 import { formatCurrency } from '@/utils/numberish/formatter'
 
 type SelectFarmListItemProps = {

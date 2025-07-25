@@ -1,12 +1,11 @@
 import { Box, HStack, SimpleGrid, Text } from '@chakra-ui/react'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-
-import { Desktop, Mobile } from '@/components/MobileDesktop'
 import TokenAvatar from '@/components/TokenAvatar'
-import { NewRewardInfo } from '@/features/Farm/Create/type'
 import { colors } from '@/theme/cssVariables'
 import { parseDateInfo } from '@/utils/date'
 import { formatCurrency } from '@/utils/numberish/formatter'
+import { NewRewardInfo } from '@/features/Farm/Create/type'
+import { Desktop, Mobile } from '@/components/MobileDesktop'
 
 type RewardReviewItemProps = {
   rewardInfo: NewRewardInfo

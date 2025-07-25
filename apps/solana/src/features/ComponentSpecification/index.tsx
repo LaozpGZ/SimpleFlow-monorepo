@@ -30,7 +30,6 @@ import {
   Tooltip
 } from '@chakra-ui/react'
 import { useId, useState } from 'react'
-
 import CalloutMessageSlip from '@/components/CalloutMessageSlip'
 import MessageBox from '@/components/MessageBox'
 import { Select } from '@/components/Select'
@@ -48,7 +47,6 @@ import SliderThumbIcon from '@/icons/misc/SliderThumb'
 import { useTokenStore } from '@/store/useTokenStore'
 import { colors } from '@/theme/cssVariables'
 import toPercentString from '@/utils/numberish/toPercentString'
-
 import { ComponentExampleGroup, ComponentExamplePanel } from './components/ComponentExamplePanel'
 
 export default function ComponentSpecification() {

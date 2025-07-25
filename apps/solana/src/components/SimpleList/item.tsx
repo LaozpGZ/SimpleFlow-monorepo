@@ -1,6 +1,5 @@
-import { Box } from '@chakra-ui/react'
 import React, { forwardRef, ForwardedRef, ReactElement } from 'react'
-
+import { Box } from '@chakra-ui/react'
 import { ListItemProps } from './interface'
 
 const defaultProps: Partial<ListItemProps> = {}

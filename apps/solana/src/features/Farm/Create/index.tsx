@@ -1,14 +1,13 @@
 import { Box, Flex, Grid, GridItem, HStack, Link, Text, useDisclosure } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3PoolInfoConcentratedItem, ApiV3PoolInfoItem, ApiV3PoolInfoStandardItem } from '@pancakeswap/solana-core-sdk'
-import { PublicKey } from '@solana/web3.js'
-import Decimal from 'decimal.js'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
+import { PublicKey } from '@solana/web3.js'
+import Decimal from 'decimal.js'
+import { useTranslation } from '@pancakeswap/localization'
 import Steps, { StepsRef } from '@/components/Steps'
 import SubPageNote from '@/components/SubPageNote'
-import { CreateFarmType, LiquidityFarmActionModeType } from '@/features/Liquidity/Decrease/components/type'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'
 import useCreatedFarmInfo from '@/hooks/portfolio/farm/useCreatedFarmInfo'
 import { useEvent } from '@/hooks/useEvent'
@@ -20,13 +19,13 @@ import { genCSS2GridTemplateColumns, genCSS3GridTemplateColumns } from '@/theme/
 import { WEEK_SECONDS } from '@/utils/date'
 import { routeBack, setUrlQuery, useRouteQuery } from '@/utils/routeTools'
 import { RAY_TOKEN_INFO } from '@/utils/token'
-
+import { CreateFarmType, LiquidityFarmActionModeType } from '@/features/Liquidity/Decrease/components/type'
+import { TxErrorModal } from '../../../components/Modal/TxErrorModal'
 import RewardAddItem from './components/AddRewards'
 import ReviewDetail from './components/DetailReview'
 import SelectPool from './components/SelectPool'
 import { TxSuccessModal } from './components/TxSuccessModal'
 import { NewRewardInfo } from './type'
-import { TxErrorModal } from '../../../components/Modal/TxErrorModal'
 
 type QueryDetail = {
   step?: LiquidityFarmActionModeType

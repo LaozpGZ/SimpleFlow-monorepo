@@ -1,5 +1,4 @@
 import { Box, Flex, HStack, Text } from '@chakra-ui/react'
-import { languageList, useTranslation } from '@pancakeswap/localization'
 import {
   CogIcon,
   LangSelector,
@@ -14,12 +13,15 @@ import {
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { ReactNode } from 'react'
-
-import useResponsive from '@/hooks/useResponsive'
+import { languageList, useTranslation } from '@pancakeswap/localization'
 import { colors } from '@/theme/cssVariables'
 import { appLayoutPaddingX } from '@/theme/detailConfig'
 import { pageRoutePathnames } from '@/utils/config/routers'
+import useResponsive from '@/hooks/useResponsive'
 
+import { Desktop, Mobile } from '../MobileDesktop'
+import { NetworkSwitcher } from '../NetworkSwitcher'
+import SolWallet from '../SolWallet'
 import { MobileBottomNavbar } from './MobileBottomNavbar'
 import { ColorThemeSettingField } from './components/ColorThemeSettingField'
 import { DefaultExplorerSettingField } from './components/DefaultExplorerSettingField'
@@ -29,9 +31,6 @@ import { RPCConnectionSettingField } from './components/RPCConnectionSettingFiel
 import { Divider } from './components/SettingFieldDivider'
 import { SlippageToleranceSettingField } from './components/SlippageToleranceSettingField'
 import { VersionedTransactionSettingField } from './components/VersionedTransactionSettingField'
-import { Desktop, Mobile } from '../MobileDesktop'
-import { NetworkSwitcher } from '../NetworkSwitcher'
-import SolWallet from '../SolWallet'
 
 export interface NavSettings {
   // colorTheme: 'dark' | 'light'

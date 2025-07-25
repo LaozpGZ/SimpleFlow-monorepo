@@ -1,5 +1,4 @@
 import { useEffect, useState, useMemo } from 'react'
-
 import { debounce } from '@/utils/functionMethods'
 
 export default function useWindowResize(delay?: number) {

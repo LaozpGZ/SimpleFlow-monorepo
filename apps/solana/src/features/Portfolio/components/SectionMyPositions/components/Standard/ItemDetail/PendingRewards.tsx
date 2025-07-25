@@ -1,12 +1,11 @@
 import { Badge, Box, Button, Flex, HStack, Text, Tooltip, VStack } from '@chakra-ui/react'
+import Decimal from 'decimal.js'
 import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-import Decimal from 'decimal.js'
-
-import TokenAvatar from '@/components/TokenAvatar'
 import ExclaimationTriangle from '@/icons/misc/ExclaimationTriangle'
 import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
 import { colors } from '@/theme/cssVariables'
+import TokenAvatar from '@/components/TokenAvatar'
 import { formatCurrency } from '@/utils/numberish/formatter'
 import { getMintSymbol } from '@/utils/token'
 

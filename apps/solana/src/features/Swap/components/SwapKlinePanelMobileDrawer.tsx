@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Drawer,
   DrawerBody,
@@ -12,17 +13,15 @@ import {
   Box
 } from '@chakra-ui/react'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-import dayjs from 'dayjs'
-import { useState } from 'react'
 
+import dayjs from 'dayjs'
 import Tabs from '@/components/Tabs'
 import TokenAvatarPair from '@/components/TokenAvatarPair'
-import { TimeType } from '@/hooks/pool/useFetchPoolKLine'
-import SwapMobileIcon from '@/icons/misc/SwapMobileIcon'
 import { colors } from '@/theme/cssVariables'
-import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import { TimeType } from '@/hooks/pool/useFetchPoolKLine'
 import toPercentString from '@/utils/numberish/toPercentString'
-
+import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import SwapMobileIcon from '@/icons/misc/SwapMobileIcon'
 import CandleChart from './CandleChart'
 
 function SwapKlinePanelMobileDrawerContent({

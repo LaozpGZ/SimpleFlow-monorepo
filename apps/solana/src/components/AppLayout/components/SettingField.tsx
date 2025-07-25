@@ -1,7 +1,6 @@
 import { Box, Collapse, Flex, HStack, Spacer, useDisclosure } from '@chakra-ui/react'
 import { Text } from '@pancakeswap/uikit'
 import { ReactNode } from 'react'
-
 import { QuestionToolTip } from '@/components/QuestionToolTip'
 import { colors } from '@/theme/cssVariables'
 import { shrinkToValue } from '@/utils/shrinkToValue'

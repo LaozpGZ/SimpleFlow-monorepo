@@ -1,6 +1,6 @@
-import styled from '@emotion/styled'
 import { area, curveStepAfter, curveStepBefore, ScaleLinear } from 'd3'
 import { useMemo } from 'react'
+import styled from '@emotion/styled'
 
 import { ChartEntry } from './types'
 

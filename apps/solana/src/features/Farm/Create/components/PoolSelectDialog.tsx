@@ -14,13 +14,14 @@ import {
   Skeleton,
   Text
 } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token, PoolFetchType } from '@pancakeswap/solana-core-sdk'
 import { useCallback, useState } from 'react'
 
+import { useTranslation } from '@pancakeswap/localization'
 import { FormattedPoolInfoItem } from '@/hooks/pool/type'
 import useFetchPoolById from '@/hooks/pool/useFetchPoolById'
 import useFetchPoolByMint from '@/hooks/pool/useFetchPoolByMint'
+
 import { colors } from '@/theme/cssVariables'
 import { formatLocaleStr } from '@/utils/numberish/formatter'
 

@@ -1,5 +1,4 @@
 import { NotFunctionValue, Primitive } from '@/types/tools'
-
 import { shrinkToValue } from './shrinkToValue'
 
 // TODO: It's type generic is not correct

@@ -1,10 +1,8 @@
 import { BoxProps } from '@chakra-ui/react'
 import { ClassAttributes, useRef } from 'react'
-
 import useCallbackRef from '@/hooks/useCallbackRef'
 import { useEvent } from '@/hooks/useEvent'
 import { onWindowSizeChange } from '@/utils/dom/onWindowSizeChange'
-
 import { onNodeChildrenChange } from '../../utils/dom/onNodeChildrenChange'
 
 /**
