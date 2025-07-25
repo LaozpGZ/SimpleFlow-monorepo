@@ -1,4 +1,5 @@
-import { Box, Skeleton, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTranslation, Trans } from '@pancakeswap/localization'
+import { Box, Skeleton, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import dynamic from 'next/dynamic'
 import styled from 'styled-components'
 import { NextPageWithLayout } from 'utils/page.types'
@@ -42,9 +43,28 @@ const SwapFallback = () => {
 
 const View = () => {
   const { isMobile } = useMatchBreakpoints()
+  const { t } = useTranslation()
 
   return (
     <SwapLayout>
+      <Trans
+        i18nKey="solana.removed_liquidity_desc"
+        values={{
+          amountA: '123',
+          symbolA: 'SOL',
+          amountB: '456',
+          symbolB: 'USDC',
+        }}
+      />
+      <Text>
+        {t(
+          'This swap has a price impact of at least %amount%%. Please type the word "%word%" to continue with this swap.',
+          {
+            amount: 123,
+            word: 'confirm',
+          },
+        )}
+      </Text>
       <Container isMobile={isMobile}>
         <SwapSimplify />
       </Container>
