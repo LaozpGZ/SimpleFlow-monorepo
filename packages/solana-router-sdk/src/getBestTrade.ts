@@ -1,9 +1,8 @@
-import { PublicKey } from '@solana/web3.js'
 import { SOLMint, SPLToken, TradeType, UnifiedCurrencyAmount, WSOLMint } from '@pancakeswap/sdk'
+import { PublicKey } from '@solana/web3.js'
 import { create } from 'superstruct'
-
-import { ultraSwapService } from './UltraSwapService'
 import { FormattedUltraQuoteResponse } from './FormattedUltraQuoteResponse'
+import { ultraSwapService } from './UltraSwapService'
 
 interface SolanaQuoteRequest {
   inputMint: string
@@ -38,10 +37,12 @@ interface RouterPlan {
     feeAmount: string
     feeMint: PublicKey
   }
+  // 10000 = 0.01%, 15000 = 0.15%
+  bps?: number
   percent: number
 }
 
-interface SolRouterTrade {
+export interface SolRouterTrade {
   tradeType: TradeType
   inputAmount: UnifiedCurrencyAmount<SPLToken>
   outputAmount: UnifiedCurrencyAmount<SPLToken>

@@ -28,8 +28,10 @@ export class SPLToken extends BaseCurrency<SPLToken> {
 
   public readonly projectLink?: string
 
-  public static isSPLToken(token: UnifiedCurrency) {
-    return 'programId' in token
+  public static isSPLToken(token?: UnifiedCurrency) {
+    if (!token) return false
+
+    return 'programId' in token || token.wrapped instanceof SPLToken
   }
 
   public constructor({
