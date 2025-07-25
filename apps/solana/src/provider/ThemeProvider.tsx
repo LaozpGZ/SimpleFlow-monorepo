@@ -1,11 +1,9 @@
 import { ChakraProvider } from '@chakra-ui/react'
 import { Global } from '@emotion/react'
 import { dark, light, UIKitProvider } from '@pancakeswap/uikit'
-import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
 import { type FC, type ReactNode } from 'react'
-
+import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
 import { colors } from '@/theme/cssVariables'
-
 import { theme } from '../theme'
 
 const StyledUIKitProvider: React.FC<React.PropsWithChildren> = ({ children, ...props }) => {

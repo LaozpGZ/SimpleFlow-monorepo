@@ -1,13 +1,13 @@
 import { Box, Flex, Highlight, Image, Text, useClipboard, VStack } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 
+import { useTranslation } from '@pancakeswap/localization'
 import Button from '@/components/Button'
-import { LiquidityActionModeType } from '@/features/Liquidity/Decrease/components/type'
 import CopyIcon from '@/icons/misc/CopyIcon'
 import { colors } from '@/theme/cssVariables'
 import { routeToPage } from '@/utils/routeTools'
+import { LiquidityActionModeType } from '@/features/Liquidity/Decrease/components/type'
 
 export default function Done() {
   const { t } = useTranslation()

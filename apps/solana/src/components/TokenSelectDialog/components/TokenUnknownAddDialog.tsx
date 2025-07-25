@@ -1,13 +1,12 @@
-import { Flex, Text, Box, Button, Modal, ModalBody, ModalContent, ModalOverlay } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { TokenInfo, ApiV3Token } from '@pancakeswap/solana-core-sdk'
-
+import { useTranslation } from '@pancakeswap/localization'
+import { Flex, Text, Box, Button, Modal, ModalBody, ModalContent, ModalOverlay } from '@chakra-ui/react'
+import { useEvent } from '@/hooks/useEvent'
+import { colors } from '@/theme/cssVariables'
+import WarningIcon from '@/icons/misc/WarningIcon'
 import AddressChip from '@/components/AddressChip'
 import TokenAvatar from '@/components/TokenAvatar'
-import { useEvent } from '@/hooks/useEvent'
-import WarningIcon from '@/icons/misc/WarningIcon'
 import { getStorageToken } from '@/store/useTokenStore'
-import { colors } from '@/theme/cssVariables'
 
 export interface TokenUnknownAddDialogProps {
   onConfirm: (token: TokenInfo | ApiV3Token) => void

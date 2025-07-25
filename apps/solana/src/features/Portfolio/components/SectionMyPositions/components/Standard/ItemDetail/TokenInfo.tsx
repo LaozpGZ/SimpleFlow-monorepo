@@ -1,8 +1,8 @@
 import { Flex, HStack, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-import Decimal from 'decimal.js'
 
+import { useTranslation } from '@pancakeswap/localization'
+import Decimal from 'decimal.js'
 import TokenAvatar from '@/components/TokenAvatar'
 import { colors } from '@/theme/cssVariables'
 import { formatCurrency } from '@/utils/numberish/formatter'

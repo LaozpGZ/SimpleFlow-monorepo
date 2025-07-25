@@ -1,13 +1,11 @@
 import { FlexProps, Grid, forwardRef } from '@chakra-ui/react'
 import { ReactNode, useCallback, useDeferredValue, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react'
-
 import { useRecordedEffect } from '@/hooks/useRecordedEffect'
 import { useScrollDegreeDetector } from '@/hooks/useScrollDegreeDetector'
-import { ListContext } from '@/provider'
 import mergeRef from '@/utils/react/mergeRef'
-
-import ListItem from './ListItem'
+import { ListContext } from '@/provider'
 import { useIntersectionObserver } from '../hooks/useIntersectionObserver'
+import ListItem from './ListItem'
 
 /**
  * if ref is already stand as a domRef, there should be another ref for component methods

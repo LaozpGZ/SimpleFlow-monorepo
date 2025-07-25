@@ -1,3 +1,5 @@
+import { useEffect } from 'react'
+import { Button } from '@pancakeswap/uikit'
 import {
   Flex,
   Image,
@@ -11,17 +13,14 @@ import {
   ModalFooter,
   useClipboard
 } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
-import { Button } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-
-import { toastSubject } from '@/hooks/toast/useGlobalToast'
-import CopyIcon from '@/icons/misc/CopyIcon'
-import ExternalLink from '@/icons/misc/ExternalLink'
-import { useAppStore, supportedExplorers } from '@/store/useAppStore'
+import { useTranslation } from '@pancakeswap/localization'
 import { colors } from '@/theme/cssVariables/colors'
 import { encodeStr } from '@/utils/common'
+import CopyIcon from '@/icons/misc/CopyIcon'
+import ExternalLink from '@/icons/misc/ExternalLink'
+import { toastSubject } from '@/hooks/toast/useGlobalToast'
+import { useAppStore, supportedExplorers } from '@/store/useAppStore'
 import { pageRoutePathnames } from '@/utils/config/routers'
 
 export default function DepositedNFTModal({ nftAddress, isOpen, onClose }: { nftAddress: string; isOpen: boolean; onClose: () => void }) {

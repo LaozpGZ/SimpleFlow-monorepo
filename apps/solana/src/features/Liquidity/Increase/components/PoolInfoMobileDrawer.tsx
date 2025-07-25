@@ -1,10 +1,8 @@
+import React from 'react'
 import { Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerOverlay, Text, Flex } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import React from 'react'
-
-import { AprData } from '@/features/Clmm/utils/calApr'
 import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
-
+import { AprData } from '@/features/Clmm/utils/calApr'
 import PoolInfo from './PoolInfo'
 import PositionBalance from './PositionBalance'
 

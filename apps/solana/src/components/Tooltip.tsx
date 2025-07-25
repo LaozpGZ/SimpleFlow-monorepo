@@ -1,12 +1,10 @@
 import { Box, BoxProps, Popover, PopoverArrow, PopoverContent, PopoverProps, PopoverTrigger, Portal, forwardRef } from '@chakra-ui/react'
 import { ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
-
 import { useHover } from '@/hooks/useHover'
 import { useOutsideClick } from '@/hooks/useOutsideClick'
-import { useAppStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { shrinkToValue } from '@/utils/shrinkToValue'
-
+import { useAppStore } from '@/store'
 import { useDisclosure } from '../hooks/useDelayDisclosure'
 
 export type TooltipHandles = {

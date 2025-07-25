@@ -1,10 +1,9 @@
 import { Flex, InputGroup, NumberInput, NumberInputField, SystemStyleObject, Text } from '@chakra-ui/react'
-import Decimal from 'decimal.js'
 import React, { MouseEvent, KeyboardEvent, ReactNode, useCallback, useEffect, useMemo, useRef } from 'react'
-
-import { inputCard } from '@/theme/cssBlocks'
+import Decimal from 'decimal.js'
 import { formatToRawLocaleStr, detectedSeparator } from '@/utils/numberish/formatter'
 import { numberRegExp, extractNumberOnly } from '@/utils/numberish/regex'
+import { inputCard } from '@/theme/cssBlocks'
 
 interface Props {
   id?: string

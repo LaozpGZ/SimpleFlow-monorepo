@@ -1,10 +1,11 @@
 import { Box, Center, Flex, Heading, Text, useBreakpointValue } from '@chakra-ui/react'
 import Link from 'next/link'
 
+import Button from '../Button'
+
 import BuildOnSolana from './images/BuildOnSolana'
 import Doc from './images/Doc'
 import EntryPic from './images/entry.png'
-import Button from '../Button'
 
 export default function Entry() {
   const newLine = useBreakpointValue({ base: '', sm: <br /> })

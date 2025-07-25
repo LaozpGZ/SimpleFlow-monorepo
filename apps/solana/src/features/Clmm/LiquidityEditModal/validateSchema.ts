@@ -1,6 +1,6 @@
-import { type TranslateFunction } from '@pancakeswap/localization'
-import Decimal from 'decimal.js'
 import * as yup from 'yup'
+import Decimal from 'decimal.js'
+import { type TranslateFunction } from '@pancakeswap/localization'
 
 const numberTransform = yup.number().transform((value) => (Number.isNaN(value) ? 0 : value))
 

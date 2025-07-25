@@ -1,5 +1,4 @@
 import { Tabs, TabList, Tab } from '@chakra-ui/react'
-
 import { sizes } from '@/theme/cssVariables'
 
 /**

@@ -1,10 +1,9 @@
 import { Box, Flex } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-
-import { Desktop, Mobile } from '@/components/MobileDesktop'
 import SortUpDownArrow from '@/components/SortUpDownArrow'
-import useResponsive from '@/hooks/useResponsive'
 import { colors } from '@/theme/cssVariables'
+import { Desktop, Mobile } from '@/components/MobileDesktop'
+import useResponsive from '@/hooks/useResponsive'
 
 import { poolListGrid } from '../cssBlocks'
 import { TimeBase, POOL_SORT_KEY } from '../util'

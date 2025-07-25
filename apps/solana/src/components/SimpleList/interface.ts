@@ -1,6 +1,5 @@
-import { GridProps, GridItemProps } from '@chakra-ui/react'
 import { HTMLAttributes, MutableRefObject, ReactNode } from 'react'
-
+import { GridProps, GridItemProps } from '@chakra-ui/react'
 import { PaginationProps } from '../Pagination/interface'
 
 type ListGridProps = {

@@ -1,10 +1,9 @@
 import { Collapse, Divider, Flex, HStack, VStack } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
-import { SOLMint } from '@pancakeswap/solana-core-sdk'
 import { Button, ButtonMenu, ButtonMenuItem, ModalV2, MotionModal, Text } from '@pancakeswap/uikit'
+import { SOLMint } from '@pancakeswap/solana-core-sdk'
 import Decimal from 'decimal.js'
 import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react'
-
+import { useTranslation } from '@pancakeswap/localization'
 import DecimalInput from '@/components/DecimalInput'
 import { QuestionToolTip } from '@/components/QuestionToolTip'
 import useTokenPrice from '@/hooks/token/useTokenPrice'

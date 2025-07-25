@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-
 import { useEvent } from './useEvent'
 
 type Signal<T> = [state: T, setState: (value: T | ((prev: T) => T)) => void, get: () => T]

@@ -1,10 +1,8 @@
 import { Box, PopoverProps, Text, TextProps } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-
 import InfoCircleIcon from '@/icons/misc/InfoCircleIcon'
 import QuestionCircleIcon from '@/icons/misc/QuestionCircleIcon'
 import { SvgIcon } from '@/icons/type'
-
 import Tooltip from './Tooltip'
 
 /**

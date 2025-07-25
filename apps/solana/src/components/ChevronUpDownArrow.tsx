@@ -1,5 +1,4 @@
 import { Box } from '@chakra-ui/react'
-
 import ChevronDownIcon from '@/icons/misc/ChevronDownIcon'
 import { SvgBoxIcon } from '@/icons/type'
 

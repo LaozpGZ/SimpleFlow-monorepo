@@ -1,12 +1,11 @@
-import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, Flex, Text, useDisclosure, useClipboard } from '@chakra-ui/react'
 import { useEffect } from 'react'
-
+import { Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, Flex, Text, useDisclosure, useClipboard } from '@chakra-ui/react'
+import { routeToPage } from '@/utils/routeTools'
 import Button from '@/components/Button'
-import { toastSubject } from '@/hooks/toast/useGlobalToast'
+import { colors } from '@/theme/cssVariables'
 import CircleCheck from '@/icons/misc/CircleCheck'
 import CopyIcon from '@/icons/misc/CopyIcon'
-import { colors } from '@/theme/cssVariables'
-import { routeToPage } from '@/utils/routeTools'
+import { toastSubject } from '@/hooks/toast/useGlobalToast'
 
 interface Props {
   ammId: string

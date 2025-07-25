@@ -1,5 +1,4 @@
 import { AbsoluteCenter, Box, GridItem, Spinner, Text, useColorMode } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
 import dayjs from 'dayjs'
 import {
@@ -13,7 +12,7 @@ import {
   createChart
 } from 'lightweight-charts'
 import { useEffect, useRef } from 'react'
-
+import { useTranslation } from '@pancakeswap/localization'
 import useFetchPoolKLine, { TimeType } from '@/hooks/pool/useFetchPoolKLine'
 import { colors } from '@/theme/cssVariables/colors'
 import { formatCurrency } from '@/utils/numberish/formatter'

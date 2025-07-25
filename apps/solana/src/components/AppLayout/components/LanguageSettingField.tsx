@@ -1,7 +1,6 @@
+import { Select } from '@pancakeswap/uikit'
 import { languageList, useTranslation } from '@pancakeswap/localization'
 import { EN } from '@pancakeswap/localization/src/config/languages'
-import { Select } from '@pancakeswap/uikit'
-
 import { SettingField } from './SettingField'
 
 const langOptions = languageList.map((v) => ({

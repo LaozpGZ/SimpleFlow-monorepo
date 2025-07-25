@@ -1,5 +1,4 @@
 import { AdSlide, Priority } from '@pancakeswap/widgets-internal'
-
 import { pageRoutePathnames } from '@/utils/config/routers'
 
 import { AdPCSxSolana } from './ads/AdPCSxSolana'

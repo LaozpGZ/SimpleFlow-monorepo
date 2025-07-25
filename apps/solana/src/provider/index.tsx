@@ -1,14 +1,12 @@
-import { LanguageProvider } from '@pancakeswap/localization'
 import { ReactNode } from 'react'
 import { SWRConfig } from 'swr'
-
+import { LanguageProvider } from '@pancakeswap/localization'
 import { skipRetryStatus } from '@/api/axios'
-
+import WalletProvider from './WalletProvider'
+import ThemeProvider from './ThemeProvider'
 import GlobalColorProvider from './GlobalColorProvider'
 import { ListContext } from './ListProvider'
 import { QueryClientProvider } from './QueryClientProvider'
-import ThemeProvider from './ThemeProvider'
-import WalletProvider from './WalletProvider'
 
 export { WalletProvider, ThemeProvider, GlobalColorProvider, ListContext }
 

@@ -1,10 +1,9 @@
 import { Box, Text, Tag, Flex } from '@chakra-ui/react'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-
 import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { colors } from '@/theme/cssVariables'
-import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import toApr from '@/utils/numberish/toApr'
+import { formatCurrency, formatToRawLocaleStr } from '@/utils/numberish/formatter'
 
 interface FarmInfoItemProps {
   name: string

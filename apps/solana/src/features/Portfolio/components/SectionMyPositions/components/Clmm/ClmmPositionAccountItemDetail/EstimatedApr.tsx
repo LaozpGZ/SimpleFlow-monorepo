@@ -1,7 +1,6 @@
 import { Box, Flex, HStack, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token } from '@pancakeswap/solana-core-sdk'
-
+import { useTranslation } from '@pancakeswap/localization'
 import Tabs from '@/components/Tabs'
 import { AprData } from '@/features/Clmm/utils/calApr'
 import { aprColors } from '@/features/Pools/components/PoolListItemAprLine'

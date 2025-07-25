@@ -1,7 +1,5 @@
 import { useState } from 'react'
-
 import { ElementSingle, getSingleElement } from '@/utils/react/getElementsFromRef'
-
 import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
 import useResizeObserver from './useResizeObserver'
 

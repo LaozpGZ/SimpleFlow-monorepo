@@ -1,6 +1,5 @@
 // import { useBreakpointValue } from '@chakra-ui/react'
 import { useEffect, useState } from 'react'
-
 import { useIsomorphicLayoutEffect } from '@/hooks/useIsomorphicLayoutEffect'
 import { isClient } from '@/utils/common'
 

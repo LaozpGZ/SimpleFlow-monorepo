@@ -1,5 +1,4 @@
 import { Box } from '@chakra-ui/react'
-
 import SortDownIcon from '@/icons/misc/SortDownIcon'
 import { SvgBoxIcon } from '@/icons/type'
 

@@ -1,9 +1,7 @@
+import { v4 as uuid } from 'uuid'
 import { TranslateFunction } from '@pancakeswap/localization'
 import { ReactNode } from 'react'
-import { v4 as uuid } from 'uuid'
-
 import { ToastStatus, TxCallbackProps } from '@/types/tx'
-
 import { txStatusSubject, multiTxStatusSubject } from './useTxStatus'
 
 const toastStatusSet = new Set<string>(['success', 'error', 'info'])

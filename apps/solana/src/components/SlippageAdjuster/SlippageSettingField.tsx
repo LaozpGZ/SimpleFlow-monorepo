@@ -1,20 +1,18 @@
+import { Button } from '@pancakeswap/uikit'
 import { Flex, Text, HStack, Spacer } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-import { Button } from '@pancakeswap/uikit'
-import Decimal from 'decimal.js'
 import { KeyboardEvent, useCallback, useState } from 'react'
-
+import Decimal from 'decimal.js'
 import DecimalInput from '@/components/DecimalInput'
-import { QuestionToolTip } from '@/components/QuestionToolTip'
-import { useSwapStore, SWAP_SLIPPAGE_KEY } from '@/features/Swap/useSwapStore'
-import { useEvent } from '@/hooks/useEvent'
 import Close from '@/icons/misc/Close'
+import { useEvent } from '@/hooks/useEvent'
 import { useLiquidityStore, LIQUIDITY_SLIPPAGE_KEY } from '@/store'
+import { useSwapStore, SWAP_SLIPPAGE_KEY } from '@/features/Swap/useSwapStore'
 import { colors } from '@/theme/cssVariables'
-import { setStorageItem } from '@/utils/localStorage'
-import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import toPercentString from '@/utils/numberish/toPercentString'
-
+import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
+import { setStorageItem } from '@/utils/localStorage'
+import { QuestionToolTip } from '@/components/QuestionToolTip'
 import PanelCard from '../PanelCard'
 
 export function SlippageSettingField({ variant = 'liquidity', onClose }: { variant?: 'swap' | 'liquidity'; onClose?: () => void }) {

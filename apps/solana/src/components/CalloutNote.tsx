@@ -1,6 +1,5 @@
 import { Box, Text } from '@chakra-ui/react'
 import { ReactNode } from 'react'
-
 import { colors } from '@/theme/cssVariables'
 
 export interface CalloutNoteProps {

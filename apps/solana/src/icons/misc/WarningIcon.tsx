@@ -1,7 +1,5 @@
 import { forwardRef } from '@chakra-ui/react'
-
 import { colors } from '@/theme/cssVariables'
-
 import { SvgIcon } from '../type'
 
 export default forwardRef(function WarningIcon(props: SvgIcon, ref) {

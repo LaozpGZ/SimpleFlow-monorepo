@@ -1,6 +1,5 @@
-import { useColorMode } from '@chakra-ui/react'
 import { forwardRef } from 'react'
-
+import { useColorMode } from '@chakra-ui/react'
 import { SvgIcon } from '../type'
 
 export default forwardRef(function SwapMobileIcon(props: SvgIcon, ref: any) {

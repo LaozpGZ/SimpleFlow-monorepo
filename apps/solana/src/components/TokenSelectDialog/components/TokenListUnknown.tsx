@@ -1,14 +1,13 @@
 import { Box, Flex, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
-import { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import { useState, useCallback, useEffect } from 'react'
-
-import AddressChip from '@/components/AddressChip'
-import List from '@/components/List'
-import TokenAvatar from '@/components/TokenAvatar'
-import RemoveTokenIcon from '@/icons/misc/RemoveTokenIcon'
+import { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import { useTranslation } from '@pancakeswap/localization'
 import { useTokenAccountStore, useTokenStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
+import List from '@/components/List'
+import AddressChip from '@/components/AddressChip'
+import TokenAvatar from '@/components/TokenAvatar'
+import RemoveTokenIcon from '@/icons/misc/RemoveTokenIcon'
 import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 
 export default function TokenListSetting() {

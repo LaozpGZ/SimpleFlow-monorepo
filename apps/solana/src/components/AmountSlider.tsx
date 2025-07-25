@@ -1,13 +1,11 @@
-import { Button, Box, BoxProps, HStack, Text } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { Slider } from '@pancakeswap/uikit'
+import { Button, Box, BoxProps, HStack, Text } from '@chakra-ui/react'
 import { ReactNode, RefObject, useEffect, useState, useImperativeHandle } from 'react'
-
-import { Desktop, Mobile } from '@/components/MobileDesktop'
-import { useSyncSignal } from '@/hooks/useSyncSignalState'
-import { colors } from '@/theme/cssVariables'
+import { useTranslation } from '@pancakeswap/localization'
 import toPercentString from '@/utils/numberish/toPercentString'
-
+import { colors } from '@/theme/cssVariables'
+import { useSyncSignal } from '@/hooks/useSyncSignalState'
+import { Desktop, Mobile } from '@/components/MobileDesktop'
 import PanelCard from './PanelCard'
 
 export type AmountSliderProps = {

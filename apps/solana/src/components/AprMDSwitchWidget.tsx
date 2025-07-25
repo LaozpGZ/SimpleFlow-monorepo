@@ -1,15 +1,13 @@
 import { Box, Button, HStack, SimpleGrid, Text, VStack } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { SwapHorizIcon } from '@pancakeswap/uikit'
 import { useEffect, useState } from 'react'
-
+import { useTranslation } from '@pancakeswap/localization'
 import CircleCheck from '@/icons/misc/CircleCheck'
 import SquareDIcon from '@/icons/misc/SquareDIcon'
 import SquareMIcon from '@/icons/misc/SquareMIcon'
 import { SvgIcon } from '@/icons/type'
 import { useAppStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
-
 import ResponsiveModal from './ResponsiveModal'
 import Tooltip from './Tooltip'
 

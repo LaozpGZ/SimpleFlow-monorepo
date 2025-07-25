@@ -15,8 +15,9 @@ import {
   WalletSignMessageError,
   WalletSignTransactionError
 } from '@solana/wallet-adapter-base'
-import type { EventEmitter, SendTransactionOptions, WalletName } from '@solana/wallet-adapter-base'
 import { PublicKey } from '@solana/web3.js'
+
+import type { EventEmitter, SendTransactionOptions, WalletName } from '@solana/wallet-adapter-base'
 import type { Connection, SendOptions, Transaction, TransactionSignature, TransactionVersion, VersionedTransaction } from '@solana/web3.js'
 
 interface OKXWalletEvents {

@@ -1,6 +1,5 @@
 import { Box } from '@chakra-ui/react'
 import { ReactNode, useRef } from 'react'
-
 import { useRecordedLayoutEffect } from '@/hooks/useRecordedEffect'
 
 export function VisualSlider(props: {

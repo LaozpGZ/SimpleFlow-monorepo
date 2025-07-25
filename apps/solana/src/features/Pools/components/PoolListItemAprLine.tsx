@@ -1,8 +1,7 @@
 import { Flex } from '@chakra-ui/react'
-
+import { colors } from '@/theme/cssVariables'
 import { AprData } from '@/features/Clmm/utils/calApr'
 import { useAppStore } from '@/store'
-import { colors } from '@/theme/cssVariables'
 
 export const aprColors = [colors.chart03 /* fee color */, colors.chart02, colors.chart04, colors.chart05, colors.chart06, colors.chart07]
 export const emptyAprColor = aprColors[0]

@@ -1,17 +1,17 @@
 import { Box, Flex, HStack, Spacer, Text, VStack } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3PoolInfoItem, solToWSol } from '@pancakeswap/solana-core-sdk'
-import Decimal from 'decimal.js'
 
+import Decimal from 'decimal.js'
+import { useTranslation } from '@pancakeswap/localization'
 import Button from '@/components/Button'
-import useTokenPrice from '@/hooks/token/useTokenPrice'
 import EditIcon from '@/icons/misc/EditIcon'
 import { colors } from '@/theme/cssVariables'
+import useTokenPrice from '@/hooks/token/useTokenPrice'
 
 import PoolReviewItem from './PoolReviewItem'
 import RewardReviewItem from './RewardReviewItem'
-import { RewardTotalValue } from './RewardTotalValue'
 import { NewRewardInfo } from '../../type'
+import { RewardTotalValue } from './RewardTotalValue'
 
 export default function DetailReview(props: {
   rewardInfos: NewRewardInfo[]

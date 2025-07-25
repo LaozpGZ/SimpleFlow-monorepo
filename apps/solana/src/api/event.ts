@@ -1,8 +1,6 @@
 import { parseUserAgent } from 'react-device-detect'
-
 import { useAppStore } from '@/store/useAppStore'
 import { isLocal } from '@/utils/common'
-
 import axios from './axios'
 
 interface EventTypeConnectWallet {

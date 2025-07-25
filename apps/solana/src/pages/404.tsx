@@ -1,6 +1,6 @@
 import { NotFound } from '@pancakeswap/uikit'
-import Link from 'next/link'
 import { NextSeo } from 'next-seo'
+import Link from 'next/link'
 
 const NotFoundPage = () => (
   <NotFound LinkComp={Link}>

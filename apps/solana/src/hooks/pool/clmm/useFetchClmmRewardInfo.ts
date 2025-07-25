@@ -1,3 +1,4 @@
+import { useState, useEffect, useMemo } from 'react'
 import {
   TickUtils,
   PositionInfoLayout,
@@ -10,16 +11,13 @@ import {
 import { AccountInfo } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
-import { useState, useEffect, useMemo } from 'react'
-
-import { getPoolName } from '@/features/Pools/util'
-import { addAccChangeCbk, removeAccChangeCbk } from '@/hooks/app/useTokenAccountInfo'
+import useTokenPrice from '@/hooks/token/useTokenPrice'
 import useFetchMultipleAccountInfo from '@/hooks/info/useFetchMultipleAccountInfo'
 import { getTickArrayAddress } from '@/hooks/pool/formatter'
-import useTokenPrice from '@/hooks/token/useTokenPrice'
+import { getPoolName } from '@/features/Pools/util'
 import { MINUTE_MILLISECONDS } from '@/utils/date'
+import { addAccChangeCbk, removeAccChangeCbk } from '@/hooks/app/useTokenAccountInfo'
 import logMessage from '@/utils/log'
-
 import useSubscribeClmmInfo, { RpcPoolData } from './useSubscribeClmmInfo'
 
 interface Props {

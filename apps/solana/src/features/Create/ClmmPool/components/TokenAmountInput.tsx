@@ -1,22 +1,21 @@
-import { HStack, Text, VStack } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
-import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
 import { Button } from '@pancakeswap/uikit'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { HStack, Text, VStack } from '@chakra-ui/react'
+import { ApiV3PoolInfoConcentratedItem } from '@pancakeswap/solana-core-sdk'
+
+import { useTranslation } from '@pancakeswap/localization'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-
 import TokenAvatar from '@/components/TokenAvatar'
 import CLMMTokenInputGroup, { InputSide } from '@/features/Clmm/components/TokenInputGroup'
-import { calRatio } from '@/features/Clmm/utils/math'
-import useTokenPrice from '@/hooks/token/useTokenPrice'
 import { useAppStore, useClmmStore, useTokenAccountStore } from '@/store'
 import { colors } from '@/theme/cssVariables'
 import { debounce } from '@/utils/functionMethods'
-import { formatCurrency, formatToRawLocaleStr, trimTrailZero } from '@/utils/numberish/formatter'
 import toPercentString from '@/utils/numberish/toPercentString'
+import { formatCurrency, formatToRawLocaleStr, trimTrailZero } from '@/utils/numberish/formatter'
 import { getMintSymbol, wSolToSol, wsolToSolToken } from '@/utils/token'
-
+import useTokenPrice from '@/hooks/token/useTokenPrice'
+import { calRatio } from '@/features/Clmm/utils/math'
 import { TickData } from './type'
 
 interface Props extends Required<TickData> {

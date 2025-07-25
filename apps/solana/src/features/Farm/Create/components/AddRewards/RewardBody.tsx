@@ -1,16 +1,15 @@
 import { Box, Flex, HStack, Text, useDisclosure } from '@chakra-ui/react'
-import { useTranslation } from '@pancakeswap/localization'
 import { ApiV3Token, TokenInfo } from '@pancakeswap/solana-core-sdk'
-import Decimal from 'decimal.js'
 import { useMemo } from 'react'
-
-import FarmDatePickerModal from '@/components/FarmDatePickerModal'
+import Decimal from 'decimal.js'
+import { useTranslation } from '@pancakeswap/localization'
 import TokenInput from '@/components/TokenInput'
-import { useEvent } from '@/hooks/useEvent'
 import { colors } from '@/theme/cssVariables'
-import { parseDateInfo } from '@/utils/date'
-import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 
+import { useEvent } from '@/hooks/useEvent'
+import { parseDateInfo } from '@/utils/date'
+import FarmDatePickerModal from '@/components/FarmDatePickerModal'
+import { formatToRawLocaleStr } from '@/utils/numberish/formatter'
 import { NewRewardInfo } from '../../type'
 
 type RewardBodyProps = {

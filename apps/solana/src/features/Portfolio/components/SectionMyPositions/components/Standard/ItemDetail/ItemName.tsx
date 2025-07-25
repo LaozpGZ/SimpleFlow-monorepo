@@ -1,9 +1,7 @@
 import { Box, Flex, HStack } from '@chakra-ui/react'
-
 import TokenAvatarPair from '@/components/TokenAvatarPair'
 import { FormattedPoolInfoStandardItem } from '@/hooks/pool/type'
 import { colors } from '@/theme/cssVariables'
-
 import { FarmTitleBadge } from './FarmTitleBadge'
 
 export default function ItemName(props: {

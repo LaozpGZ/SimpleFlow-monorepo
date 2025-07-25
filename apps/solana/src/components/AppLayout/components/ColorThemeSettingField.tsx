@@ -3,7 +3,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { ThemeSwitcher } from '@pancakeswap/uikit'
 import { useTheme } from 'next-themes'
 import { useCallback } from 'react'
-
 import { SettingField } from './SettingField'
 
 export function ColorThemeSettingField() {

@@ -1,6 +1,5 @@
 import { UseDisclosureProps, useDisclosure as _useDisclosure } from '@chakra-ui/react'
 import { useRef } from 'react'
-
 import { useEvent } from './useEvent'
 
 /** like {@link _useDisclosure} but onOpen/onClose can also accept delay  */

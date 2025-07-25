@@ -1,8 +1,7 @@
+import { useEffect } from 'react'
 import { Flex } from '@chakra-ui/react'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-
 import { pageRoutePathnames } from '@/utils/config/routers'
 
 const Home: NextPage = () => {

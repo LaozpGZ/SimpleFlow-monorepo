@@ -1,11 +1,10 @@
 import { Flex, HStack, Link, Text, useClipboard } from '@chakra-ui/react'
 import { useTranslation } from '@pancakeswap/localization'
-
 import { toastSubject } from '@/hooks/toast/useGlobalToast'
 import CopyIcon from '@/icons/misc/CopyIcon'
 import ExternalLinkLargeIcon from '@/icons/misc/ExternalLinkLargeIcon'
-import { useAppStore, supportedExplorers } from '@/store/useAppStore'
 import { colors } from '@/theme/cssVariables'
+import { useAppStore, supportedExplorers } from '@/store/useAppStore'
 
 type NftMintAddressProps = {
   nftMintAddress?: string
