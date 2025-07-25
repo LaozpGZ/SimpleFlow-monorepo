@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { walletsConfig } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useIsSmartAccount } from 'hooks/useIsSmartAccount'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
@@ -131,6 +132,7 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
 }) => {
   const { connectAsync } = useConnect()
   const { chainId } = useActiveChainId()
+  const isSmartAccount = useIsSmartAccount()
 
   const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
   const [socialProvider] = useSocialLoginProviderAtom()
@@ -141,12 +143,12 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
   const { dappIcon } = useDappIcon()
 
   const socialIcon = useMemo(() => {
-    return socialProvider ? SOCIAL_LOGIN_ICONS[socialProvider] : null
-  }, [socialProvider])
+    return socialProvider && isSmartAccount ? SOCIAL_LOGIN_ICONS[socialProvider] : null
+  }, [socialProvider, isSmartAccount])
 
   const needsWhiteBackground = useMemo(() => {
-    return Boolean(socialProvider && ['x', 'discord', 'telegram'].includes(socialProvider))
-  }, [socialProvider])
+    return Boolean(socialProvider && isSmartAccount && ['x', 'discord', 'telegram'].includes(socialProvider))
+  }, [socialProvider, isSmartAccount])
 
   // Format the address to show only the first 6 and last 4 characters
   const formatAddress = (address: string | undefined) => {
@@ -162,8 +164,10 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
             <SocialIconWrapper $needsWhiteBg={needsWhiteBackground}>
               <Image src={socialIcon} width={32} height={32} alt="Social Login" />
             </SocialIconWrapper>
-          ) : wallet?.icon || dappIcon ? (
-            <Image src={(wallet?.icon as string) || dappIcon} width={40} height={40} alt="Wallet" />
+          ) : wallet?.icon ? (
+            <Image src={wallet?.icon as string} width={40} height={40} alt="Wallet" />
+          ) : dappIcon ? (
+            <Image src={dappIcon} width={40} height={40} alt="Wallet" />
           ) : (
             <WalletFilledV2Icon width={28} height={28} color="primary" />
           )}
