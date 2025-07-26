@@ -68,7 +68,7 @@ interface OnRampCurrencySelectPopOverProps {
   isError: boolean
   setSelectedQuote: (quote: OnRampProviderQuote) => void
   setShowProvidersPopOver: Dispatch<SetStateAction<boolean>>
-  showProivdersPopOver: boolean
+  showProvidersPopOver: boolean
 }
 type InputEvent = ChangeEvent<HTMLInputElement>
 
@@ -80,7 +80,7 @@ export function BuyCryptoForm({ providerAvailabilities }: { providerAvailabiliti
   const theme = useTheme()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
-  const [showProivdersPopOver, setShowProvidersPopOver] = useState<boolean>(false)
+  const [showProvidersPopOver, setShowProvidersPopOver] = useState<boolean>(false)
   const [showNotificationsPopOver, setShowNotificationsPopOver] = useState<boolean>(false)
   const [selectedQuote, setSelectedQuote] = useState<OnRampProviderQuote | undefined>(undefined)
   const [unit, setUnit] = useState<OnRampUnit>(OnRampUnit.Fiat)
@@ -174,7 +174,7 @@ export function BuyCryptoForm({ providerAvailabilities }: { providerAvailabiliti
         isFetching={isLoading}
         setSelectedQuote={setSelectedQuote}
         setShowProvidersPopOver={setShowProvidersPopOver}
-        showProivdersPopOver={showProivdersPopOver}
+        showProvidersPopOver={showProvidersPopOver}
       />
       <NotificationsOnboardPopover
         setShowNotificationsPopOver={setShowNotificationsPopOver}
@@ -305,7 +305,7 @@ const OnRampCurrencySelectPopOver = ({
   isError,
   setSelectedQuote,
   setShowProvidersPopOver,
-  showProivdersPopOver,
+  showProvidersPopOver: showProivdersPopOver,
 }: OnRampCurrencySelectPopOverProps) => {
   const { t } = useTranslation()
 
