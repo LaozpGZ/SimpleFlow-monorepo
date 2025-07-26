@@ -52,7 +52,7 @@ function useDisableToChains(disabledToChainIds?: number[]) {
     }
 
     const disableExchangeIconIfNeeded = () => {
-      const fromChainElement = document.querySelector('.bccb-widget-from-network p.chakra-text') // adjust selector if needed
+      const fromChainElement = document.querySelector('.bccb-widget-network-from p.chakra-text')
       const fromChainName = fromChainElement?.textContent?.toLowerCase()
 
       const exchangeIcon = document.querySelector('.bccb-widget-exchange-chain-icon') as HTMLElement | null
