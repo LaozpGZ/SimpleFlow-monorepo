@@ -195,9 +195,9 @@ export function BuyCryptoForm({ providerAvailabilities }: { providerAvailabiliti
           disableInput={false}
           unit={unit}
         />
-        <Box width="100%" position="absolute" zIndex="100" left="45%" top="53px">
+        <Flex width="100%" zIndex="100" justifyContent="center" alignItems="center">
           <SwapUI.SwitchButton onClick={onFlip} />
-        </Box>
+        </Flex>
         <BuyCryptoSelector
           id={isFiat(unit) ? 'onramp-crypto' : 'onramp-fiat'}
           inputLoading={Boolean(isLoading || inputError || quotesError)}
