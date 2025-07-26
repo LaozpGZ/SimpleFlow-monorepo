@@ -38,7 +38,7 @@ function useDisableToChains(disabledToChainIds?: number[]) {
 
     const chainNamesToDisable = disabledToChainIds
       .map((id) => chains.find((c) => c.id === id)?.name?.toLowerCase())
-      .filter(Boolean)
+      .filter(Boolean) as string[]
 
     const hideToChains = () => {
       const items = document.querySelectorAll('.bccb-widget-to-network-virtual-list .bccb-widget-to-network-list-item')
@@ -51,9 +51,33 @@ function useDisableToChains(disabledToChainIds?: number[]) {
       })
     }
 
-    hideToChains()
+    const disableExchangeIconIfNeeded = () => {
+      const fromChainElement = document.querySelector('.bccb-widget-from-network p.chakra-text') // adjust selector if needed
+      const fromChainName = fromChainElement?.textContent?.toLowerCase()
 
-    const observer = new MutationObserver(hideToChains)
+      const exchangeIcon = document.querySelector('.bccb-widget-exchange-chain-icon') as HTMLElement | null
+
+      if (exchangeIcon) {
+        if (fromChainName && chainNamesToDisable.includes(fromChainName)) {
+          exchangeIcon.style.pointerEvents = 'none'
+          exchangeIcon.style.opacity = '0.4'
+          exchangeIcon.style.cursor = 'not-allowed'
+        } else {
+          exchangeIcon.style.pointerEvents = ''
+          exchangeIcon.style.opacity = ''
+          exchangeIcon.style.cursor = ''
+        }
+      }
+    }
+
+    hideToChains()
+    disableExchangeIconIfNeeded()
+
+    const observer = new MutationObserver(() => {
+      hideToChains()
+      disableExchangeIconIfNeeded()
+    })
+
     observer.observe(document.body, {
       childList: true,
       subtree: true,
