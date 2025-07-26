@@ -305,7 +305,7 @@ const OnRampCurrencySelectPopOver = ({
   isError,
   setSelectedQuote,
   setShowProvidersPopOver,
-  showProvidersPopOver: showProivdersPopOver,
+  showProvidersPopOver,
 }: OnRampCurrencySelectPopOverProps) => {
   const { t } = useTranslation()
 
@@ -321,7 +321,7 @@ const OnRampCurrencySelectPopOver = ({
     [showProvidersOnClick, setSelectedQuote],
   )
   return (
-    <PopOverScreenContainer showPopover={showProivdersPopOver} onClick={showProvidersOnClick}>
+    <PopOverScreenContainer showPopover={showProvidersPopOver} onClick={showProvidersOnClick}>
       <AutoRow borderBottom="1" borderColor="cardBorder" paddingX="24px" py="16px">
         <Text fontSize="20px" fontWeight="600">
           {t('Choose a provider')}
