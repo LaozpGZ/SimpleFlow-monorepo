@@ -7,11 +7,11 @@ import { solanaUserSlippageAtomWithLocalStorage } from '@pancakeswap/utils/user'
 import { QUOTE_TIMEOUT } from 'quoter/consts'
 import { parseSVMTradeIntoSVMOrder } from 'quoter/utils/svm-utils/parseSVMTradeIntoSVMOrder'
 import { type InterfaceOrder } from 'views/Swap/utils'
-import type { QuoteQuery } from '../quoter.types'
+import type { SVMQuoteQuery } from '../quoter.types'
 import { atomWithLoadable } from './atomWithLoadable'
 
 export const bestSVMOrderAtom = atomFamily(
-  (_option: QuoteQuery) => {
+  (_option: SVMQuoteQuery) => {
     return atomWithLoadable(async (get) => {
       const { baseCurrency, currency, amount, tradeType, address } = _option
       const userSlippageTolerance = get(solanaUserSlippageAtomWithLocalStorage)
