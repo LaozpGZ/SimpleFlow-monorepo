@@ -21,7 +21,7 @@ const useTranslation = () => {
         return cache.get(cacheKey) || ''
       }
       function getTranslationValue() {
-        const value = full[key] || ''
+        const value = (full as Record<string, string>)[key] || ''
         if (!lang) {
           return value
         }
@@ -36,7 +36,7 @@ const useTranslation = () => {
 
       const interpolated = value.replace(/%([a-zA-Z0-9-_]+)%/g, (match, p1) => {
         const replacement = data?.[p1] || ''
-        return replacement === undefined ? match : replacement
+        return (replacement === undefined ? match : replacement) as string
       })
       cache.set(cacheKey, interpolated)
       return interpolated
