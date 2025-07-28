@@ -1,3 +1,4 @@
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, UserMenu as UIKitUserMenu, useMatchBreakpoints, UserMenuVariant } from '@pancakeswap/uikit'
 import { usePrivy } from '@privy-io/react-auth'
@@ -12,6 +13,7 @@ import {
 } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
 import { usePrivyWalletAddress } from 'contexts/Privy/hooks'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useAuth from 'hooks/useAuth'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -26,10 +28,11 @@ import { UnclaimedOnlyProvider } from 'views/Gift/providers/UnclaimedOnlyProvide
 import { useAccount } from 'wagmi'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
-const UserMenuItems = ({ onReceiveClick, account }: { onReceiveClick: () => void; account: string | undefined }) => {
-  const { chainId } = useActiveChainId()
+const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void }) => {
+  const { chainId, account: evmAccount, solanaAccount } = useAccountActiveChain()
   const { logout } = useAuth()
   const { connector } = useAccount()
+  const account = chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : evmAccount
 
   const handleClickDisconnect = useCallback(() => {
     logGTMDisconnectWalletEvent(chainId, connector?.name, account)
@@ -68,17 +71,18 @@ const ClickablePopover = styled.div<{ isOpen: boolean }>`
 
 const UserMenu = () => {
   const { t } = useTranslation()
-  const { address: account, connector } = useAccount()
+  const { chainId, isWrongNetwork, account: evmAccount, solanaAccount } = useAccountActiveChain()
+  const { connector } = useAccount()
   const { ready, authenticated, user } = usePrivy()
 
   // Use new Privy wallet address hook to prevent flickering
   const { address: privyAddress, isLoading: isPrivyAddressLoading, addressType } = usePrivyWalletAddress()
 
   // Determine which address to use: if Privy login use privyAddress, otherwise use account
-  const finalAddress = ready && authenticated && user ? privyAddress : account
+  const finalAddress = ready && authenticated && user ? privyAddress : evmAccount
   const shouldShowLoading = ready && authenticated && user ? isPrivyAddressLoading : false
-  const { chainId, isWrongNetwork } = useActiveChainId()
-  const { domainName, avatar } = useDomainNameForAddress(finalAddress)
+  const currentAccount = chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : evmAccount
+  const { domainName, avatar } = useDomainNameForAddress(chainId === NonEVMChainId.SOLANA ? undefined : currentAccount)
   const { logout } = useAuth()
   const { hasPendingTransactions, pendingNumber } = usePendingTransactions()
   const { profile } = useProfile()
@@ -211,9 +215,7 @@ const UserMenu = () => {
           {/* Custom click-based menu for desktop */}
           {!isMobile && (
             <ClickablePopover isOpen={isMenuOpen}>
-              {isMenuOpen && showDesktopPopup && (
-                <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveModalOpen(true)} />
-              )}
+              {isMenuOpen && showDesktopPopup && <UserMenuItems onReceiveClick={() => setIsReceiveModalOpen(true)} />}
             </ClickablePopover>
           )}
         </ClickableUserMenu>
@@ -252,15 +254,14 @@ const UserMenu = () => {
           }}
         >
           {!isMobile && !isMenuOpen
-            ? ({ isOpen }) =>
-                isOpen && <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveModalOpen(true)} />
+            ? ({ isOpen }) => isOpen && <UserMenuItems onReceiveClick={() => setIsReceiveModalOpen(true)} />
             : undefined}
         </UIKitUserMenu>
 
         {/* Custom click-based menu for desktop */}
         {!isMobile && (
           <ClickablePopover isOpen={isMenuOpen}>
-            {isMenuOpen && <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveModalOpen(true)} />}
+            {isMenuOpen && <UserMenuItems onReceiveClick={() => setIsReceiveModalOpen(true)} />}
           </ClickablePopover>
         )}
       </ClickableUserMenu>

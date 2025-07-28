@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Flex, useToast } from '@pancakeswap/uikit'
-import { useCallback, useEffect, useMemo } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import {
   BridgeRoutes,
@@ -26,7 +26,11 @@ import { light } from '../theme/light'
 import GlobalStyle from './GlobalStyle'
 
 export interface CanonicalBridgeProps {
-  connectWalletButton: CanonicalBridgeProviderProps['config']['connectWalletButton']
+  connectWalletButtons: {
+    default: CanonicalBridgeProviderProps['config']['connectWalletButton']
+  } & {
+    [key: string]: CanonicalBridgeProviderProps['config']['connectWalletButton']
+  }
   supportedChainIds: number[]
   rpcConfig: Record<number, string[]>
   disabledToChains?: number[]
@@ -89,22 +93,55 @@ function useDisableToChains(disabledToChainIds?: number[]) {
   }, [disabledToChainIds])
 }
 
+function useFromChainFromWidget() {
+  const [fromChain, setFromChain] = useState<string | null>('')
+
+  useEffect(() => {
+    const findText = () => {
+      const container = document.querySelector('.bccb-widget-network-from .bccb-widget-network-name')
+      if (container) {
+        const pElement = container.querySelector('p.chakra-text')
+        if (pElement) {
+          setFromChain(pElement.textContent)
+        }
+      }
+    }
+
+    findText()
+
+    const observer = new MutationObserver(findText)
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    })
+
+    return () => observer.disconnect()
+  }, [])
+
+  return fromChain?.toLowerCase()
+}
+
 export const CanonicalBridge = (props: CanonicalBridgeProps) => {
   const { connectWalletButton, supportedChainIds, disabledToChains } = props
   useDisableToChains(disabledToChains)
 
   const { currentLanguage } = useTranslation()
+  const fromChain = useFromChainFromWidget()
   const theme = useTheme()
   const toast = useToast()
   const { connector } = useAccount()
   const supportedChains = useMemo<IChainConfig[]>(() => {
-    return chains
-      .filter((e) => supportedChainIds.includes(e.id))
-      .filter((e) => !(connector?.id === 'BinanceW3WSDK' && e.id === 1101))
-      .map((chain) => ({
-        ...chain,
-        rpcUrls: { default: { http: props.rpcConfig?.[chain.id] ?? chain.rpcUrls.default.http } },
-      }))
+    return (
+      chains
+        // enable Solana
+        .filter((e) => [...supportedChainIds, 7565164].includes(e.id))
+        .filter((e) => !(connector?.id === 'BinanceW3WSDK' && e.id === 1101))
+        .map((chain) => ({
+          ...chain,
+          rpcUrls: { default: { http: props.rpcConfig?.[chain.id] ?? chain.rpcUrls.default.http } },
+        }))
+    )
   }, [supportedChainIds, connector?.id, props.rpcConfig])
   const transferConfig = useTransferConfig(supportedChains)
   const handleError = useCallback(
@@ -142,7 +179,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       },
       transfer: transferConfig,
       components: {
-        connectWalletButton,
+        connectWalletButton: connectWalletButtons[fromChain || 'default'],
         refreshingIcon: <RefreshingIcon />,
       },
 
@@ -156,7 +193,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       chains: supportedChains,
       onError: handleError,
     }),
-    [currentLanguage.code, theme.isDark, transferConfig, supportedChains, handleError, connectWalletButton],
+    [currentLanguage.code, theme.isDark, transferConfig, supportedChains, handleError, fromChain, connectWalletButtons],
   )
 
   return (

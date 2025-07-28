@@ -1,7 +1,7 @@
 import { useUserWhiteListData, useZksyncAirDropData } from 'components/ClaimZksyncAirdropModal/hooks'
 import { useAtom } from 'jotai'
-import { atomWithStorage } from 'jotai/utils'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import { atomWithStorage } from 'jotai/utils'
 import { useAccount } from 'wagmi'
 
 const zksyncAutoPopup = atomWithStorage<{ [account: string]: boolean }>(
