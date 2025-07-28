@@ -1,8 +1,18 @@
 import { usePreviousValue } from "@pancakeswap/hooks";
 import { useTranslation } from "@pancakeswap/localization";
-import { Box, Button, FlexGap, FlexGapProps, Input, Message, Text } from "@pancakeswap/uikit";
+import {
+  Box,
+  Button,
+  FlexGap,
+  FlexGapProps,
+  Input,
+  Message,
+  RowBetween,
+  Text,
+  useMatchBreakpoints,
+} from "@pancakeswap/uikit";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { ZoomLevels } from "./constants";
 import {
   getQuickActionConfigs,
@@ -31,26 +41,33 @@ const StyledButton = styled(Button).attrs(({ $isActive }) => ({
   font-weight: ${({ $isActive }) => ($isActive ? 600 : 400)};
 `;
 
-const CustomInputContainer = styled(Box)`
+const CustomInputContainer = styled(Box)<{ $small?: boolean }>`
   position: relative;
-  height: 56px;
+  max-width: 120px;
+
+  ${({ $small }) =>
+    $small
+      ? css`
+          height: 40px;
+        `
+      : css`
+          height: 56px;
+        `}
 `;
 
 const StyledInput = styled(Input)<{ $isValid?: boolean; $isActive?: boolean }>`
-  height: 56px;
+  height: 100%;
   font-size: 16px;
   text-align: center;
-  font-weight: ${({ $isActive }) => ($isActive ? 600 : 400)};
+
+  padding-left: 0px !important;
+  padding-right: 12px !important;
+
   border: ${({ theme, $isValid }) =>
     !$isValid ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.inputSecondary}`};
   background: ${({ theme }) => theme.colors.input};
 
   transition: all 0.2s ease-in-out;
-
-  &:focus {
-    box-shadow: none;
-    border-color: ${({ theme }) => theme.colors.primary};
-  }
 `;
 
 const PercentageLabel = styled(Text)`
@@ -61,11 +78,15 @@ const PercentageLabel = styled(Text)`
   color: ${({ theme }) => theme.colors.textSubtle};
   font-size: 16px;
   pointer-events: none;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
 `;
 
 const VerticalLine = styled.div`
-  width: 1px;
-  height: 100%;
+  width: 2px;
+  height: 16px;
   background-color: ${({ theme }) => theme.colors.inputSecondary};
 `;
 
@@ -106,6 +127,9 @@ const CapitalEfficiencyWarning = ({
 
 export const PriceRangePicker = ({ onChange, value, tickSpacing, ...props }: PriceRangePickerProps) => {
   const { t } = useTranslation();
+  const { isMobile, isTablet } = useMatchBreakpoints();
+  const isSmallScreen = isMobile || isTablet;
+
   const [showCapitalEfficiencyWarning, setShowCapitalEfficiencyWarning] = useState<boolean>(false);
   const [customPercentage, setCustomPercentage] = useState<string>("");
   const [isCustomInputFocused, setIsCustomInputFocused] = useState<boolean>(false);
@@ -144,10 +168,20 @@ export const PriceRangePicker = ({ onChange, value, tickSpacing, ...props }: Pri
   const handleCustomPercentageChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       const inputValue = event.target.value;
+      const numericValue = parseFloat(inputValue);
+
+      if (!numericValue) {
+        setCustomPercentage("");
+        setIsUserTyping(false);
+        return;
+      }
+
+      if (numericValue < 0 || numericValue > 100) {
+        return;
+      }
+
       setCustomPercentage(inputValue);
       setIsUserTyping(true);
-
-      const numericValue = parseFloat(inputValue);
 
       // Only trigger onChange if we have a complete, valid number
       // This prevents clearing the input while typing intermediate values
@@ -211,56 +245,83 @@ export const PriceRangePicker = ({ onChange, value, tickSpacing, ...props }: Pri
       setFullRange={setFullRange}
     />
   ) : (
-    <ButtonsContainer {...props}>
-      {Object.entries(config)
-        ?.sort(([a], [b]) => +a - +b)
-        .map(([quickAction, zoomLevel]) => (
-          <StyledButton
-            key={quickAction}
-            onClick={() => handleClick(+quickAction, zoomLevel)}
-            $isActive={+quickAction === value}
-            width="100%"
-            py="14px"
-          >
-            {quickAction}%
-          </StyledButton>
-        ))}
+    <>
+      <ButtonsContainer {...props}>
+        {Object.entries(config)
+          ?.sort(([a], [b]) => +a - +b)
+          .map(([quickAction, zoomLevel]) => (
+            <StyledButton
+              key={quickAction}
+              onClick={() => handleClick(+quickAction, zoomLevel)}
+              $isActive={+quickAction === value}
+              width="100%"
+              py="14px"
+            >
+              {quickAction}%
+            </StyledButton>
+          ))}
 
-      <StyledButton
-        width="100%"
-        onClick={() => {
-          if (value === 100) {
-            handleClick(100, getZoomLevelConfigs(tickSpacing));
-            return;
-          }
-          setShowCapitalEfficiencyWarning(true);
-        }}
-        $isActive={value === 100}
-        py="14px"
-      >
-        {t("Full Range")}
-      </StyledButton>
+        <StyledButton
+          width="100%"
+          minWidth="max-content"
+          onClick={() => {
+            if (value === 100) {
+              handleClick(100, getZoomLevelConfigs(tickSpacing));
+              return;
+            }
+            setShowCapitalEfficiencyWarning(true);
+          }}
+          $isActive={value === 100}
+          py="14px"
+        >
+          {t("Full Range")}
+        </StyledButton>
 
-      {/* Custom Percentage Input */}
-      <CustomInputContainer width="100%">
-        <StyledInput
-          value={customPercentage}
-          onChange={handleCustomPercentageChange}
-          onFocus={handleCustomInputFocus}
-          onBlur={handleCustomInputBlur}
-          placeholder={t("Custom")}
-          $isValid={isCustomPercentageValid}
-          $isActive={isCustomInputActive || isCustomInputFocused}
-          type="number"
-          min="0"
-          max="100"
-          step="0.01"
-          paddingRight="12px"
-        />
-        <PercentageLabel>
-          <VerticalLine />%
-        </PercentageLabel>
-      </CustomInputContainer>
-    </ButtonsContainer>
+        {/* Custom Percentage Input */}
+        {!isSmallScreen && (
+          <CustomInputContainer width="100%">
+            <StyledInput
+              value={customPercentage}
+              onChange={handleCustomPercentageChange}
+              onFocus={handleCustomInputFocus}
+              onBlur={handleCustomInputBlur}
+              placeholder={t("Custom")}
+              $isValid={isCustomPercentageValid}
+              $isActive={isCustomInputActive || isCustomInputFocused}
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+            />
+            <PercentageLabel>
+              <VerticalLine />%
+            </PercentageLabel>
+          </CustomInputContainer>
+        )}
+      </ButtonsContainer>
+      {isSmallScreen && (
+        <RowBetween mt="8px" alignItems="center">
+          <Text>{t("Custom")}</Text>
+          <CustomInputContainer width="30%" $small>
+            <StyledInput
+              value={customPercentage}
+              onChange={handleCustomPercentageChange}
+              onFocus={handleCustomInputFocus}
+              onBlur={handleCustomInputBlur}
+              placeholder="2.5"
+              $isValid={isCustomPercentageValid}
+              $isActive={isCustomInputActive || isCustomInputFocused}
+              type="number"
+              min="0"
+              max="100"
+              step="0.01"
+            />
+            <PercentageLabel>
+              <VerticalLine />%
+            </PercentageLabel>
+          </CustomInputContainer>
+        </RowBetween>
+      )}
+    </>
   );
 };
