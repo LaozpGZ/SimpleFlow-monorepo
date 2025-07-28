@@ -54,7 +54,14 @@ export const FieldAddDepositAmount: React.FC<FieldDepositAmountProps> = ({
       <Column mt="16px" gap="16px">
         <RowBetween>
           <Text color="textSubtle">Total</Text>
-          <Text>~{formatDollarAmount(totalUsdValue, 2, false)}</Text>
+          <Text>
+            ~
+            {formatDollarAmount(
+              isDepositEnabled && (isDeposit0Enabled || isDeposit1Enabled) ? totalUsdValue : 0,
+              2,
+              false,
+            )}
+          </Text>
         </RowBetween>
         <RowBetween>
           <Text color="textSubtle">Slippage Tolerance</Text>
