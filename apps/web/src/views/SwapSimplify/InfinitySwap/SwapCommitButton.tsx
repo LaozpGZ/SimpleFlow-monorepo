@@ -1,4 +1,4 @@
-import { Currency } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { AutoColumn, Box, Button, Dots, Message, MessageText, Text, useModal } from '@pancakeswap/uikit'
 import { useAddressBalance } from 'hooks/useAddressBalance'
 import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -284,7 +284,10 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         confirmModalState={confirmState}
         pendingModalSteps={confirmActions ?? []}
         swapErrorMessage={errorMessage}
-        currencyBalances={currencyBalances}
+        currencyBalances={
+          // NOTE: since Bridge not support Solana yet, can safely cast to CurrencyAmount<Currency>
+          currencyBalances as { [field in Field]?: CurrencyAmount<Currency> | undefined }
+        }
         onAcceptChanges={handleAcceptChanges}
         onConfirm={onConfirm}
         openSettingModal={openSettingModal}
