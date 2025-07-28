@@ -7,7 +7,13 @@ import first from 'lodash/first'
 import last from 'lodash/last'
 import { BridgeTradeError } from 'quoter/quoter.types'
 import { basisPointsToPercent } from 'utils/exchange'
-import { isSVMOrder, isXOrder, type BridgeOrderWithCommands, type InterfaceOrder } from 'views/Swap/utils'
+import {
+  EVMInterfaceOrder,
+  isSVMOrder,
+  isXOrder,
+  type BridgeOrderWithCommands,
+  type InterfaceOrder,
+} from 'views/Swap/utils'
 import { WHITELIST_TOKEN_MAP } from '../config'
 import { type QuoteContext } from '../types'
 
@@ -60,8 +66,8 @@ export abstract class CrossChainQuoteStrategy {
         tradeType: TradeType.EXACT_INPUT,
         routes: noSlippageRoutes,
       },
-      noSlippageCommands,
-      commands: commandsWithSlippage,
+      noSlippageCommands: noSlippageCommands as EVMInterfaceOrder[],
+      commands: commandsWithSlippage as EVMInterfaceOrder[],
     }
   }
 
