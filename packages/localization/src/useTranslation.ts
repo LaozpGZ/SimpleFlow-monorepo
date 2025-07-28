@@ -34,7 +34,7 @@ const useTranslation = () => {
 
       const value = getTranslationValue()
 
-      const interpolated = value.replace(/%([a-zA-Z9-9-_]+)%/g, (match, p1) => {
+      const interpolated = value.replace(/%([a-zA-Z0-9-_]+)%/g, (match, p1) => {
         const replacement = data?.[p1] || ''
         return replacement === undefined ? match : replacement
       })
