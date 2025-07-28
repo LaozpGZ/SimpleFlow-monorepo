@@ -43,8 +43,8 @@ export type UseBetterQuoteOptions = {
 
 export interface Options {
   amount?: CurrencyAmount<Currency>
-  baseCurrency?: Currency | UnifiedCurrency | null
-  currency?: Currency | UnifiedCurrency | null
+  baseCurrency?: Currency | null
+  currency?: Currency | null
   tradeType?: TradeType
   maxHops?: number
   maxSplits?: number
