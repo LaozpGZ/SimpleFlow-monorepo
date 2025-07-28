@@ -69,7 +69,7 @@ import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToU
 import { useDensityChartData } from 'views/AddLiquidityV3/hooks/useDensityChartData'
 import { MarketPriceSlippageWarning } from 'views/CreateLiquidityPool/components/SubmitCreateButton'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
-import RangeSelector from './components/RangeSelector'
+import V3RangeSelector from './components/V3RangeSelector'
 import { useInitialRange } from './form/hooks/useInitialRange'
 import { useRangeHopCallbacks } from './form/hooks/useRangeHopCallbacks'
 import { useV3MintActionHandlers } from './form/hooks/useV3MintActionHandlers'
@@ -87,26 +87,6 @@ const StyledInput = styled(NumericalInput)`
   font-size: 16px;
   width: 100%;
   margin-bottom: 16px;
-`
-
-const QuickActionButtonsContainer = styled(FlexGap)`
-  background-color: ${({ theme }) => theme.colors.input};
-  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
-  border-radius: ${({ theme }) => theme.radii.default};
-
-  box-shadow: ${({ theme }) => theme.shadows.inset2};
-`
-
-const QuickActionButton = styled(Button).attrs(({ $isActive }) => ({
-  scale: 'xs',
-  variant: $isActive ? 'subtle' : 'light',
-}))<{
-  $isActive?: boolean
-}>`
-  height: 56px;
-  font-size: 16px;
-  padding: 0 12px;
-  font-weight: ${({ $isActive }) => ($isActive ? 600 : 400)};
 `
 
 export const LeftContainer = styled(AutoColumn)`
@@ -460,6 +440,8 @@ export default function V3FormView({
 
   const [activeQuickAction, setActiveQuickAction] = useState<number>()
   const isQuickButtonUsed = useRef(false)
+  const [quickAction, setQuickAction] = useState<number | null>(null)
+  const [customZoomLevel, setCustomZoomLevel] = useState<ZoomLevels | undefined>(undefined)
 
   const [onPresentAddLiquidityModal] = useModal(
     <TransactionConfirmationModal
@@ -544,6 +526,8 @@ export default function V3FormView({
   useEffect(() => {
     if (!isQuickButtonUsed.current && activeQuickAction) {
       setActiveQuickAction(undefined)
+      setQuickAction(null)
+      setCustomZoomLevel(undefined)
     } else if (isQuickButtonUsed.current) {
       isQuickButtonUsed.current = false
     }
@@ -552,6 +536,9 @@ export default function V3FormView({
   const handleRefresh = useCallback(
     (zoomLevel?: ZoomLevels) => {
       setActiveQuickAction(undefined)
+      if (!zoomLevel) {
+        setCustomZoomLevel(undefined)
+      }
       const currentPrice = price ? parseFloat((invertPrice ? price.invert() : price).toSignificant(8)) : undefined
       if (currentPrice) {
         onBothRangeInput({
@@ -573,6 +560,54 @@ export default function V3FormView({
       }
     },
     [price, feeAmount, invertPrice, onBothRangeInput, baseCurrency, quoteCurrency],
+  )
+
+  const handleQuickAction = useCallback(
+    (value: number | null, zoomLevel: ZoomLevels) => {
+      setQuickAction(value)
+      if (value !== null) {
+        // Check if it's a full range action (100)
+        if (value === 100) {
+          setCustomZoomLevel(undefined)
+          setShowCapitalEfficiencyWarning(true)
+          setActiveQuickAction(100)
+          isQuickButtonUsed.current = true
+        } else {
+          // Trust the zoom level calculated by PriceRangePicker widget
+          // It handles both predefined and custom percentages correctly
+
+          // For predefined quick actions, use undefined to let chart use default zoom
+          const isPredefinedAction = feeAmount && QUICK_ACTION_CONFIGS[feeAmount]?.[value]
+
+          if (isPredefinedAction) {
+            setCustomZoomLevel(undefined)
+            if (value === activeQuickAction) {
+              handleRefresh(ZOOM_LEVELS[feeAmount])
+            } else {
+              handleRefresh(QUICK_ACTION_CONFIGS[feeAmount][value])
+              setActiveQuickAction(value)
+              isQuickButtonUsed.current = true
+            }
+          } else {
+            // For custom percentages, use the zoom level calculated by the widget
+            // but add padding to ensure the range is visible on chart
+            const paddedZoomLevel: ZoomLevels = {
+              ...zoomLevel,
+              min: Math.max(0.00001, zoomLevel.initialMin * 0.8), // 20% padding below
+              max: Math.min(
+                zoomLevel.initialMax * 1.2, // 20% padding above
+                feeAmount === FeeAmount.MEDIUM || feeAmount === FeeAmount.HIGH ? 20 : 1.5,
+              ),
+            }
+            setCustomZoomLevel(paddedZoomLevel)
+            handleRefresh(paddedZoomLevel)
+            setActiveQuickAction(value)
+            isQuickButtonUsed.current = true
+          }
+        }
+      }
+    },
+    [activeQuickAction, feeAmount, handleRefresh, setShowCapitalEfficiencyWarning],
   )
 
   const handleOnZapSubmit = useCallback(() => {
@@ -679,9 +714,10 @@ export default function V3FormView({
                     )}
                     <LiquidityChartRangeInput
                       zoomLevel={
-                        activeQuickAction && feeAmount
+                        customZoomLevel ||
+                        (activeQuickAction && feeAmount
                           ? QUICK_ACTION_CONFIGS?.[feeAmount]?.[activeQuickAction]
-                          : undefined
+                          : undefined)
                       }
                       key={baseCurrency?.wrapped?.address}
                       currencyA={baseCurrency ?? undefined}
@@ -707,7 +743,7 @@ export default function V3FormView({
               </DynamicSection>
 
               <DynamicSection disabled={!feeAmount || invalidPool || (noLiquidity && !startPriceTypedValue)} gap="16px">
-                <RangeSelector
+                <V3RangeSelector
                   priceLower={priceLower}
                   priceUpper={priceUpper}
                   getDecrementLower={getDecrementLower}
@@ -721,8 +757,10 @@ export default function V3FormView({
                   feeAmount={feeAmount}
                   ticksAtLimit={ticksAtLimit}
                   tickSpaceLimits={tickSpaceLimits}
+                  quickAction={quickAction}
+                  handleQuickAction={handleQuickAction}
                 />
-                {showCapitalEfficiencyWarning ? (
+                {showCapitalEfficiencyWarning && (
                   <Message variant="warning">
                     <Box>
                       <Text fontSize="16px">{t('Efficiency Comparison')}</Text>
@@ -742,52 +780,6 @@ export default function V3FormView({
                       </Button>
                     </Box>
                   </Message>
-                ) : (
-                  <QuickActionButtonsContainer justifyContent="space-between" width="100%" gap="8px">
-                    {feeAmount &&
-                      QUICK_ACTION_CONFIGS[feeAmount] &&
-                      Object.entries<ZoomLevels>(QUICK_ACTION_CONFIGS[feeAmount])
-                        ?.sort(([a], [b]) => +a - +b)
-                        .map(([quickAction, zoomLevel]) => {
-                          return (
-                            <QuickActionButton
-                              $isActive={+quickAction === activeQuickAction}
-                              width="100%"
-                              key={`quickActions${quickAction}`}
-                              onClick={() => {
-                                if (+quickAction === activeQuickAction) {
-                                  handleRefresh(ZOOM_LEVELS[feeAmount])
-                                  return
-                                }
-                                handleRefresh(zoomLevel)
-
-                                setActiveQuickAction(+quickAction)
-                                isQuickButtonUsed.current = true
-                              }}
-                              variant={+quickAction === activeQuickAction ? 'primary' : 'secondary'}
-                              scale="sm"
-                            >
-                              {quickAction}%
-                            </QuickActionButton>
-                          )
-                        })}
-                    <QuickActionButton
-                      width="200%"
-                      onClick={() => {
-                        if (activeQuickAction === 100) {
-                          handleRefresh()
-                          return
-                        }
-                        setShowCapitalEfficiencyWarning(true)
-                        setActiveQuickAction(100)
-                        isQuickButtonUsed.current = true
-                      }}
-                      variant={activeQuickAction === 100 ? 'primary' : 'secondary'}
-                      scale="sm"
-                    >
-                      {t('Full Range')}
-                    </QuickActionButton>
-                  </QuickActionButtonsContainer>
                 )}
 
                 {displayMarketPriceSlippageWarning ? (
