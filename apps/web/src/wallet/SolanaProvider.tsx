@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useEffect, useMemo } from 'react'
+import { FC, lazy, PropsWithChildren, useEffect, useMemo } from 'react'
 
 import { type Adapter, type WalletError } from '@solana/wallet-adapter-base'
 import { ExodusWalletAdapter } from '@solana/wallet-adapter-exodus'
@@ -30,7 +30,7 @@ import { OKXWalletAdapter } from './walletAdapter/OKXWalletAdapter'
 
 initialize()
 
-const endpoint = defaultEndpoint
+const endpoint = 'https://solana-rpc.debridge.finance'
 
 const SolanaWalletStateUpdater = () => {
   const { connected, connecting, publicKey } = useWallet()
