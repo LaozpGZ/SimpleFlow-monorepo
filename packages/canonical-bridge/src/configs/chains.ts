@@ -846,17 +846,19 @@ export const chains: IChainConfig[] = [
   //   chainType: 'tron',
   // },
   {
+    chainType: 'solana',
     id: 7565164,
     name: 'Solana',
-    nativeCurrency: {
-      name: 'SOL',
-      symbol: 'SOL',
-      decimals: 9,
+    nativeCurrency: { name: 'SOL', symbol: 'SOL', decimals: 9 },
+    rpcUrls: {
+      default: { http: ['https://solana-rpc.debridge.finance'] },
     },
-    rpcUrls: { default: { http: ['https://solana-rpc.debridge.finance'] } },
     blockExplorers: {
-      default: { name: 'Solana explorer', url: 'https://explorer.solana.com' },
+      default: {
+        name: 'Solana explorer',
+        url: 'https://explorer.solana.com',
+        tokenUrlPattern: 'https://explorer.solana.com/address/{0}',
+      },
     },
-    chainType: 'solana',
   },
 ]
