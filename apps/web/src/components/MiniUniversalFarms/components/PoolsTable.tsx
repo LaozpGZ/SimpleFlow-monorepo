@@ -364,6 +364,8 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
             data={pools}
             onSort={handleSort}
             onRowClick={(pool) => onPoolClick?.(pool)}
+            sortOrder={query.sortOrder}
+            sortField={query.sortBy}
           />
         )}
 
