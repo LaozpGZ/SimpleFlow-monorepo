@@ -4283,5 +4283,6 @@
   "Price Range (Min/Max)": "Price Range (Min/Max)",
   "No positions found": "No positions found",
   "Harvesting...": "Harvesting...",
-  "Pool feature": "Pool feature"
+  "Pool feature": "Pool feature",
+  "You can provide a custom nonce account address, or leave it empty to auto-create one.": "You can provide a custom nonce account address, or leave it empty to auto-create one."
 }

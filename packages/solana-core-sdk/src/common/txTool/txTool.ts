@@ -57,6 +57,11 @@ interface ExecuteParams {
    * Requires a nonce account to be created beforehand.
    */
   useDurableNonce?: boolean;
+  /**
+   * Custom nonce account address to use for durable nonce.
+   * If not provided, a nonce account will be automatically created and cached.
+   */
+  customNonceAccount?: string;
 }
 
 interface TxBuilderInit {
@@ -144,7 +149,7 @@ class NonceAccountCache {
 
   constructor() {
     if (typeof window !== "undefined") {
-      this.cache = new Map(JSON.parse(localStorage.getItem("_r_nonce_account") ?? "[]"));
+      this.cache = new Map(JSON.parse(localStorage.getItem("_r_nonce_account") || "[]"));
     }
   }
 
@@ -298,13 +303,27 @@ export class TxBuilder {
   }
 
   // Helper method to handle durable nonce setup
-  private async setupDurableNonce() {
+  private async setupDurableNonce(customNonceAccount?: string) {
     if (!this.owner?.publicKey) {
       throw new Error("Owner public key is required for durable nonce setup");
     }
-    const nonceAccountAddress = await this.getOrCreateNonceAccountAddress();
-    if (!nonceAccountAddress) {
-      throw new Error("Nonce account not found");
+
+    let nonceAccountAddress: PublicKey;
+
+    if (customNonceAccount) {
+      // Use custom nonce account address
+      try {
+        nonceAccountAddress = new PublicKey(customNonceAccount);
+      } catch (error) {
+        throw new Error(`Invalid custom nonce account address: ${customNonceAccount}`);
+      }
+    } else {
+      // Auto-create or use cached nonce account
+      const autoNonceAccount = await this.getOrCreateNonceAccountAddress();
+      if (!autoNonceAccount) {
+        throw new Error("Nonce account not found");
+      }
+      nonceAccountAddress = autoNonceAccount;
     }
 
     const info = await this.connection.getAccountInfo(nonceAccountAddress, {
@@ -390,12 +409,13 @@ export class TxBuilder {
           sendAndConfirm,
           notSendToRpc,
           useDurableNonce,
+          customNonceAccount,
         } = params || {};
 
         if (useDurableNonce) {
           console.log("Using durable nonce for transaction signing");
           // Use durable nonce
-          const { nonce, advanceInstruction } = await this.setupDurableNonce();
+          const { nonce, advanceInstruction } = await this.setupDurableNonce(customNonceAccount);
 
           // Add advance nonce instruction as the first instruction
           transaction.instructions.unshift(advanceInstruction);
@@ -684,13 +704,19 @@ export class TxBuilder {
       signers: this.signers,
       instructionTypes: [...this.instructionTypes, ...this.endInstructionTypes],
       execute: async (params) => {
-        const { skipPreflight = true, sendAndConfirm, notSendToRpc, useDurableNonce } = params || {};
+        const {
+          skipPreflight = true,
+          sendAndConfirm,
+          notSendToRpc,
+          useDurableNonce,
+          customNonceAccount,
+        } = params || {};
 
         let finalTransaction = transaction;
 
         if (useDurableNonce) {
           // Use durable nonce for V0 transaction
-          const { nonceAccount, nonce, advanceInstruction } = await this.setupDurableNonce();
+          const { nonceAccount, nonce, advanceInstruction } = await this.setupDurableNonce(customNonceAccount);
 
           // Create new transaction with nonce
           const instructions = [advanceInstruction, ...this.allInstructions];
@@ -897,9 +923,10 @@ export class TxBuilder {
       computeBudgetConfig?: ComputeBudgetConfig;
       splitIns?: TransactionInstruction[];
       useDurableNonce?: boolean;
+      customNonceAccount?: string;
     },
   ): Promise<MultiTxBuildData> {
-    const { splitIns = [], computeBudgetConfig, useDurableNonce, ...extInfo } = props || {};
+    const { splitIns = [], computeBudgetConfig, useDurableNonce, customNonceAccount, ...extInfo } = props || {};
     const computeBudgetData: { instructions: TransactionInstruction[]; instructionTypes: string[] } =
       computeBudgetConfig
         ? addComputeBudget(computeBudgetConfig)
@@ -920,7 +947,7 @@ export class TxBuilder {
     let splitInsIdx = 0;
     let advanceNonceIx: TransactionInstruction | undefined;
     if (useDurableNonce) {
-      const { advanceInstruction } = await this.setupDurableNonce();
+      const { advanceInstruction } = await this.setupDurableNonce(customNonceAccount);
       advanceNonceIx = advanceInstruction;
     }
     this.allInstructions.forEach((item) => {
@@ -1032,7 +1059,7 @@ export class TxBuilder {
               }
 
               if (useDurableNonce) {
-                const { nonce } = await this.setupDurableNonce();
+                const { nonce } = await this.setupDurableNonce(customNonceAccount);
                 tx.recentBlockhash = nonce;
                 if (allSigners[i].length) {
                   tx.partialSign(...allSigners[i]);
@@ -1082,7 +1109,7 @@ export class TxBuilder {
                 checkSendTx();
               }
               if (useDurableNonce) {
-                const { nonce } = await this.setupDurableNonce();
+                const { nonce } = await this.setupDurableNonce(customNonceAccount);
                 signedTxs[i].recentBlockhash = nonce;
                 if (allSigners[i].length) {
                   signedTxs[i].partialSign(...allSigners[i]);
@@ -1175,6 +1202,7 @@ export class TxBuilder {
       lookupTableAddress?: string[];
       splitIns?: TransactionInstruction[];
       useDurableNonce?: boolean;
+      customNonceAccount?: string;
     },
   ): Promise<MultiTxV0BuildData> {
     const {
@@ -1218,7 +1246,7 @@ export class TxBuilder {
     let advanceIx: TransactionInstruction | undefined;
     if (props?.useDurableNonce) {
       console.log("use durable nonce for v0 tx");
-      const { advanceInstruction } = await this.setupDurableNonce();
+      const { advanceInstruction } = await this.setupDurableNonce(props?.customNonceAccount);
       advanceIx = advanceInstruction;
     }
     this.allInstructions.forEach((item) => {
@@ -1336,6 +1364,7 @@ export class TxBuilder {
           recentBlockHash: propBlockHash,
           skipPreflight = true,
           useDurableNonce = false,
+          customNonceAccount,
         } = executeParams || {};
         allTransactions.map(async (tx, idx) => {
           if (allSigners[idx].length) tx.sign(allSigners[idx]);
@@ -1357,7 +1386,7 @@ export class TxBuilder {
                 continue;
               }
               if (useDurableNonce) {
-                const { nonce } = await this.setupDurableNonce();
+                const { nonce } = await this.setupDurableNonce(customNonceAccount);
                 tx.message.recentBlockhash = nonce;
                 if (allSigners[i].length) {
                   tx.sign(allSigners[i]);
@@ -1388,7 +1417,7 @@ export class TxBuilder {
           const processedTxs: TxUpdateParams[] = [];
           const signedTxs: VersionedTransaction[] = [];
           for await (const tx of allTransactions.slice(skipTxCount, allTransactions.length)) {
-            const { nonce, nonceAccount, advanceInstruction } = await this.setupDurableNonce();
+            const { nonce, nonceAccount, advanceInstruction } = await this.setupDurableNonce(customNonceAccount);
             console.log("use durable nonce for tx:", nonceAccount.toBase58());
             const messageV0 = TransactionMessage.decompile(tx.message, {
               addressLookupTableAccounts: Object.values(lookupTableAddressAccount),
@@ -1497,7 +1526,7 @@ export class TxBuilder {
                 return;
               }
               if (useDurableNonce) {
-                const { nonce } = await this.setupDurableNonce();
+                const { nonce } = await this.setupDurableNonce(customNonceAccount);
                 signedTxs[i].message.recentBlockhash = nonce;
                 if (allSigners[i].length) {
                   signedTxs[i].sign(allSigners[i]);
