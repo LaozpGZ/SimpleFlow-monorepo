@@ -1,3 +1,4 @@
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { usePreviousValue } from "@pancakeswap/hooks";
 import { useTranslation } from "@pancakeswap/localization";
 import {
@@ -11,7 +12,7 @@ import {
   Text,
   useMatchBreakpoints,
 } from "@pancakeswap/uikit";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import isUndefinedOrNull from "@pancakeswap/utils/isUndefinedOrNull";
 import styled, { css } from "styled-components";
 import { ZoomLevels } from "./constants";
 import {
@@ -52,6 +53,7 @@ const CustomInputContainer = styled(Box)<{ $small?: boolean }>`
         `
       : css`
           height: 56px;
+          min-width: 120px;
         `}
 `;
 
@@ -170,7 +172,7 @@ export const PriceRangePicker = ({ onChange, value, tickSpacing, ...props }: Pri
       const inputValue = event.target.value;
       const numericValue = parseFloat(inputValue);
 
-      if (!numericValue) {
+      if (isUndefinedOrNull(numericValue)) {
         setCustomPercentage("");
         setIsUserTyping(false);
         return;
