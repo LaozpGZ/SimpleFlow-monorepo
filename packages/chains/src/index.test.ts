@@ -6,6 +6,7 @@ test('exports', () => {
     [
       "AVERAGE_CHAIN_BLOCK_TIMES",
       "ChainId",
+      "NonEVMChainId",
       "testnetChainIds",
       "chainNames",
       "chainFullNames",

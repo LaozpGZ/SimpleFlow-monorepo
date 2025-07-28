@@ -56,6 +56,7 @@ export function usePublicNodeWaitForTransaction(chainId_?: number) {
   const chainId = chainId_ ?? activeChainId
   const provider = usePublicClient({ chainId })
   const w3WConfig = useW3WConfig()
+
   const refetchBlockData = useFetchBlockData(chainId)
 
   const waitForTransaction_ = useCallback(
