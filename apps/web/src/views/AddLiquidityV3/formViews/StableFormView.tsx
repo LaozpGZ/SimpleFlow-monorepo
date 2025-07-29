@@ -165,6 +165,10 @@ export default function StableFormView({
                 <Text color="textSubtle">Slippage Tolerance</Text>
                 <SlippageButton />
               </RowBetween>
+              <RowBetween>
+                <Text color="textSubtle">Your share in pool</Text>
+                <Text>{poolTokenPercentage ? `${poolTokenPercentage?.toSignificant(4)}%` : '-'}</Text>
+              </RowBetween>
             </Column>
             <Box mt="8px">
               <MevProtectToggle size="sm" />
