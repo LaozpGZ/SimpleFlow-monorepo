@@ -36,6 +36,7 @@ import { useCurrencyParams } from './hooks/useCurrencyParams'
 import { SELECTOR_TYPE } from './types'
 
 import { AprCalculatorV2 } from './components/AprCalculatorV2'
+import { useHeaderInvertCurrencies } from './hooks/useHeaderInvertCurrencies'
 
 const LinkText = styled(Text)`
   color: ${({ theme }) => theme.colors.primary60};
@@ -243,16 +244,7 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
     [pool, baseCurrency],
   )
 
-  const handleInvertCurrencies = useCallback(() => {
-    if (currencyIdA && currencyIdB) {
-      router.push({
-        pathname: router.pathname,
-        query: {
-          currency: feeAmount ? [currencyIdB!, currencyIdA!, feeAmount?.toString()] : [currencyIdB!, currencyIdA!],
-        },
-      })
-    }
-  }, [currencyIdA, currencyIdB, feeAmount, router])
+  const { handleInvertCurrencies } = useHeaderInvertCurrencies({ currencyIdA, currencyIdB, feeAmount })
 
   const { data: poolDetailLink } = useQuery({
     queryKey: ['poolDetailLink', chainId, pool],

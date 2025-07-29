@@ -25,6 +25,7 @@ import {
   ZoomLevels,
 } from '@pancakeswap/widgets-internal'
 import { tryParsePrice } from 'hooks/v3/utils'
+import { useCurrencyInversionEvent } from 'views/AddLiquidityV3/hooks/useHeaderInvertCurrencies'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import {
   logGTMAddLiquidityTxSentEvent,
@@ -619,6 +620,34 @@ export default function V3FormView({
     router.push('/liquidity/positions')
   }, [router])
 
+  const invertRange = useCallback(() => {
+    if (!ticksAtLimit[Bound.LOWER] && !ticksAtLimit[Bound.UPPER]) {
+      onLeftRangeInput((invertPrice ? priceLower : priceUpper?.invert()) ?? undefined)
+      onRightRangeInput((invertPrice ? priceUpper : priceLower?.invert()) ?? undefined)
+      onFieldAInput(formattedAmounts[Field.CURRENCY_B] ?? '')
+    }
+  }, [
+    ticksAtLimit,
+    onLeftRangeInput,
+    onRightRangeInput,
+    onFieldAInput,
+    invertPrice,
+    priceLower,
+    priceUpper,
+    formattedAmounts,
+  ])
+
+  const inversionEvent = useCurrencyInversionEvent()
+
+  useEffect(() => {
+    if (inversionEvent) {
+      const { currencyIdA: newCurrencyIdA, currencyIdB: newCurrencyIdB } = inversionEvent
+      if (newCurrencyIdA && newCurrencyIdB && newCurrencyIdA !== currencyIdA && newCurrencyIdB !== currencyIdB) {
+        invertRange()
+      }
+    }
+  }, [inversionEvent])
+
   const {
     isLoading: isChartDataLoading,
     error: chartDataError,
@@ -671,11 +700,7 @@ export default function V3FormView({
                   <Liquidity.RateToggle
                     currencyA={baseCurrency}
                     handleRateToggle={() => {
-                      if (!ticksAtLimit[Bound.LOWER] && !ticksAtLimit[Bound.UPPER]) {
-                        onLeftRangeInput((invertPrice ? priceLower : priceUpper?.invert()) ?? undefined)
-                        onRightRangeInput((invertPrice ? priceUpper : priceLower?.invert()) ?? undefined)
-                        onFieldAInput(formattedAmounts[Field.CURRENCY_B] ?? '')
-                      }
+                      invertRange()
 
                       router.replace(
                         {
