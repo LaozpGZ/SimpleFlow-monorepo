@@ -9,6 +9,7 @@ import { useRouter } from 'next/router'
 import { atom, useAtom } from 'jotai'
 import { styled } from 'styled-components'
 
+import { useFeeTierDistribution } from 'hooks/v3/useFeeTierDistribution'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useTranslation } from '@pancakeswap/localization'
 import { getPoolDetailPageLink } from 'utils/getPoolLink'
@@ -185,18 +186,32 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
     tokenB: quoteCurrency,
   })
 
+  // Fetch latest fee tier for V3 pool
+  const { largestUsageFeeTier } = useFeeTierDistribution(baseCurrency, quoteCurrency)
+
   const poolAddress = useMemo(
     () =>
       baseCurrency?.wrapped && quoteCurrency?.wrapped
-        ? selectType === SELECTOR_TYPE.V3 && feeAmount
-          ? Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, feeAmount)
+        ? selectType === SELECTOR_TYPE.V3
+          ? feeAmount
+            ? Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, feeAmount)
+            : largestUsageFeeTier
+            ? Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, largestUsageFeeTier)
+            : undefined
           : selectType === SELECTOR_TYPE.V2
           ? Pair.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped)
           : selectType === SELECTOR_TYPE.STABLE
           ? stableConfig.stableSwapConfig?.stableSwapAddress
           : undefined
         : undefined,
-    [baseCurrency?.wrapped, feeAmount, quoteCurrency?.wrapped, selectType, stableConfig.stableSwapConfig],
+    [
+      baseCurrency?.wrapped,
+      feeAmount,
+      quoteCurrency?.wrapped,
+      selectType,
+      stableConfig.stableSwapConfig,
+      largestUsageFeeTier,
+    ],
   )
 
   const pool = usePoolInfo({ poolAddress, chainId })
