@@ -1,5 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
-import { chainNames, NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId, chainNames, NonEVMChainId } from '@pancakeswap/chains'
 import { Flex, useMatchBreakpoints } from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { PUBLIC_NODES } from 'config/nodes'
