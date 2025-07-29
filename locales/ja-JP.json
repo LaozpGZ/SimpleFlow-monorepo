@@ -4347,7 +4347,7 @@
   "Please exercise due caution when trading / providing liquidity for the alETH token. The protocol was recently affected by the <0>Curve exploit.</0> For more information, please refer to Alchemix’s <1>Twitter</1> and await further updates from the team": "alETHトークンの取引や 流動性提供を行う際は十分にご注意ください。プロトコルは最近<0>Curveエクスプロイト</0>の影響を受けました。詳細については、Alchemixの<1>Twitter</1>をご参照いただき、チームからのさらなる更新をお待ちください",
   "Overnight has temporarily paused USD+ operations on zkSync due to the recent Velocore exploit.Swap, approve, and add / remove liquidity functions are currently unavailable. More information can be found on Overnight's <0>twitter page</0>.": "OvernightはVelocoreエクスプロイトの影響により、zkSync上でのUSD+オペレーションを一時的に停止しています。スワップ、承認、流動性の追加・削除の機能は現在利用できません。詳細情報はOvernightの<0>Twitterページ</0>でご確認いただけます。",
   "%symbol% Chart by <0>%by%</0>": "<0>%by%</0>が提供の%symbol%チャート",
-  "solana.add_liquidity": "Add Liquidity",
+  "solana.add_liquidity": "Added %amountA% %symbolA% and %amountB% %symbolB%.",
   "solana.harvest_rewards": "Harvest Rewards",
   "solana.harvest_clmm_rewards": "Harvest CLMM Rewards",
   "solana.added_liquidity_desc": "Added %amountA% %symbolA% and %amountB% %symbolB%.",
@@ -4371,5 +4371,7 @@
   "X Login": "X Login",
   "Continue with Web3 Wallet": "Continue with Web3 Wallet",
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "TWAP and Limit orders are currently not supported for Smart Account wallets.",
-  "Create your Wallet with Social Login": "Create your Wallet with Social Login"
+  "Create your Wallet with Social Login": "Create your Wallet with Social Login",
+  "Important Notice: %chain% Sunset": "Important Notice: %chain% Sunset",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline."
 }
