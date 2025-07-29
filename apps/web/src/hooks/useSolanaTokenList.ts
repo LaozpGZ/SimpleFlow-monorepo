@@ -4,6 +4,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { solanaTokenListAtom, solanaListSettingsAtom } from 'state/token/solanaTokenAtoms'
 
 import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
+import type { SPLToken } from '@pancakeswap/swap-sdk-core'
 
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -62,10 +63,26 @@ export function useSolanaTokenList() {
   const { data: jupiterTokens, isLoading: jupiterLoading } = useTokenListQuery(TokenListKey.JUPITER)
 
   const mergedTokens = useMemo(() => {
-    // TODO: avoid duplicates when merging
-    const userSPLTokens = userTokens.map(convertRawTokenInfoIntoSPLToken)
+    const seen = new Set<string>()
+    const result: SPLToken[] = []
 
-    return [...(pcsTokens ?? []), ...(raydiumTokens ?? []), ...(jupiterTokens ?? []), ...userSPLTokens]
+    const addTokens = (tokens: SPLToken[] | undefined) => {
+      if (!tokens) return
+      for (const token of tokens) {
+        if (!seen.has(token.address)) {
+          seen.add(token.address)
+          result.push(token)
+        }
+      }
+    }
+
+    // Process in priority order
+    addTokens(pcsTokens)
+    addTokens(userTokens.map(convertRawTokenInfoIntoSPLToken))
+    addTokens(raydiumTokens)
+    addTokens(jupiterTokens)
+
+    return result
   }, [pcsTokens, raydiumTokens, jupiterTokens, userTokens])
 
   useEffect(() => {
