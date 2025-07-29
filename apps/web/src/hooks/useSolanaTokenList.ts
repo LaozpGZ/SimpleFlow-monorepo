@@ -7,17 +7,12 @@ import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
 import type { SPLToken } from '@pancakeswap/swap-sdk-core'
 
 import { useQuery } from '@tanstack/react-query'
-import {
-  SOLANA_LISTS_CONFIG,
-  TokenListKey,
-  SolanaTokenListConfig,
-  USER_ADDED_KEY,
-  convertRawTokenInfoIntoSPLToken,
-} from 'config/solana-list'
+import { SOLANA_LISTS_CONFIG, TokenListKey, USER_ADDED_KEY, convertRawTokenInfoIntoSPLToken } from 'config/solana-list'
 
 // Custom hook for individual token list queries
 function useTokenListQuery(listKey: TokenListKey) {
   const listSettings = useAtomValue(solanaListSettingsAtom)
+  // PancakeSwap list is always enabled
   const isEnabled = listKey === TokenListKey.PANCAKESWAP ? true : listSettings[listKey]
   const listConfig = SOLANA_LISTS_CONFIG[listKey]
 
@@ -58,7 +53,7 @@ export function useSolanaTokenList() {
   const setTokenList = useSetAtom(solanaTokenListAtom)
 
   // Create individual queries for each token list using the custom hook
-  const { data: pcsTokens, isLoading: pcsLoading } = useTokenListQuery(TokenListKey.PANCAKESWAP) // Always enabled
+  const { data: pcsTokens, isLoading: pcsLoading } = useTokenListQuery(TokenListKey.PANCAKESWAP)
   const { data: raydiumTokens, isLoading: raydiumLoading } = useTokenListQuery(TokenListKey.RAYDIUM)
   const { data: jupiterTokens, isLoading: jupiterLoading } = useTokenListQuery(TokenListKey.JUPITER)
 
