@@ -81,7 +81,7 @@ export function useStateMachine<TState extends string, TEvent extends string>(
 
   const reset = useCallback(() => {
     const currentState = stateRef.current
-    const initialState = configRef.current.initialState
+    const { initialState } = configRef.current
 
     if (currentState !== initialState) {
       // Execute exit action of current state
@@ -119,7 +119,7 @@ export function useStateMachine<TState extends string, TEvent extends string>(
       reset,
       is,
     }),
-    [send, reset, is],
+    [send, reset, is, stateRef.current],
   )
 }
 
