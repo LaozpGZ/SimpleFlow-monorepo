@@ -47,7 +47,7 @@ export default function Manage({
       )}
       {showLists ? (
         chainId === NonEVMChainId.SOLANA ? (
-          <SolanaManageList setModalView={setModalView} setImportList={setImportList} setListUrl={setListUrl} />
+          <SolanaManageList />
         ) : (
           <ManageLists
             setModalView={setModalView}

@@ -4,9 +4,10 @@ import { ListLogo } from '@pancakeswap/widgets-internal'
 
 import { useAtom } from 'jotai'
 import { memo, useCallback } from 'react'
+import { SOLANA_LISTS, TokenListKey } from 'config/solana-list'
 
 import { solanaListSettingsAtom } from '../../state/token/solanaTokenAtoms'
-import { SOLANA_LISTS, TokenListKey, useSolanaTokenList } from '../../hooks/useSolanaTokenList'
+import { useSolanaTokenList } from '../../hooks/useSolanaTokenList'
 
 import Row, { RowFixed } from '../Layout/Row'
 import { CurrencyModalView } from './types'
@@ -52,15 +53,7 @@ const SolanaListRow = memo(function SolanaListRow({
   )
 })
 
-function SolanaManageList({
-  setModalView,
-  setImportList,
-  setListUrl,
-}: {
-  setModalView: (view: CurrencyModalView) => void
-  setImportList: (list: any) => void
-  setListUrl: (url: string) => void
-}) {
+function SolanaManageList() {
   return (
     <Wrapper>
       <ListContainer>
