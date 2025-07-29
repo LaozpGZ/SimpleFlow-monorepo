@@ -12,7 +12,7 @@ import StepCounter from './StepCounter'
 
 const CustomInputContainer = styled(Box)<{ $small?: boolean }>`
   position: relative;
-  max-width: 120px;
+  max-width: 160px;
 
   ${({ $small }) =>
     $small
@@ -22,7 +22,7 @@ const CustomInputContainer = styled(Box)<{ $small?: boolean }>`
         `
       : `
           height: 56px;
-          width: 100%;
+          width: 120%;
         `}
 `
 
@@ -30,10 +30,10 @@ const StyledInput = styled(Input)<{ $isValid?: boolean }>`
   height: 100%;
   font-size: 16px;
   text-align: center;
-  padding-left: 0px !important;
+  padding-left: 8px !important;
   padding-right: 32px !important;
   border: ${({ theme, $isValid }) =>
-    !$isValid ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.inputSecondary}`};
+    $isValid === false ? `1px solid ${theme.colors.failure}` : `1px solid ${theme.colors.inputSecondary}`};
 `
 
 const PercentageLabel = styled.div`
@@ -145,7 +145,7 @@ export default function V3RangeSelector({
     return formatRangeSelectorPrice(rightPrice)
   }, [isSorted, rightPrice, tickSpaceLimits, ticksAtLimit])
 
-  const _haveRange = useMemo(() => priceLower !== undefined && priceUpper !== undefined, [priceLower, priceUpper])
+  // const haveRange = useMemo(() => priceLower !== undefined && priceUpper !== undefined, [priceLower, priceUpper])
 
   // Get quick action configs for current fee tier - reuse existing configs
   const quickActionConfigs = useMemo(() => {
@@ -158,27 +158,11 @@ export default function V3RangeSelector({
 
   // Calculate zoom level based purely on percentage - ensure range is always visible
   const calculateZoomLevel = useCallback((percentage: number): ZoomLevels => {
-    // Pure percentage calculation: X% means (100-X)% to (100+X)% of current price
     const initialMin = 1 - percentage / 100
     const initialMax = 1 + percentage / 100
 
-    // Use aggressive padding to guarantee the range is always visible in chart
-    // For small ranges, be extra generous to avoid cramped view
-    let paddingMultiplier: number
-    if (percentage <= 5) {
-      paddingMultiplier = 2.0 // 200% padding for very tight ranges
-    } else if (percentage <= 20) {
-      paddingMultiplier = 1.5 // 150% padding for small ranges
-    } else {
-      paddingMultiplier = 1.2 // 120% padding for larger ranges
-    }
-
-    // Calculate padding as a percentage of the range width
-    const rangeWidth = initialMax - initialMin
-    const paddingAmount = rangeWidth * paddingMultiplier
-
-    const expandedMin = Math.max(0.00001, initialMin - paddingAmount)
-    const expandedMax = Math.min(initialMax + paddingAmount, 20) // Cap at 2000% for sanity
+    const expandedMin = Math.max(0.00001, initialMin)
+    const expandedMax = Math.min(initialMax, 10) // Cap at 1000% for edge cases
 
     return {
       initialMin,
@@ -191,6 +175,9 @@ export default function V3RangeSelector({
   // Handle predefined quick action clicks
   const handleQuickActionClick = useCallback(
     (percentage: number) => {
+      // Ignore if current quick action is the same as the clicked one
+      if (quickAction === percentage) return
+
       const zoomLevel = calculateZoomLevel(percentage)
       handleQuickAction(percentage, zoomLevel)
       setCustomInput('') // Clear custom input when using quick action
@@ -210,21 +197,20 @@ export default function V3RangeSelector({
 
     // Only allow numbers, decimal points, and prevent invalid values
     if (!/^\d*\.?\d*$/.test(value)) {
-      return // Block non-numeric input
+      return
     }
 
     const numericValue = parseFloat(value)
 
     // Allow partial typing (like "1" while typing "10") but block out-of-range completed numbers
     if (!Number.isNaN(numericValue) && (numericValue < 0 || numericValue > 100)) {
-      return // Block out-of-range values
+      return
     }
 
-    // Allow partial decimals (like "1." or "10.") for better UX
     setCustomInput(value)
   }, [])
 
-  // Apply custom zoom - input is guaranteed to be valid
+  // Apply custom input's zoom
   const applyCustomZoom = useCallback(() => {
     const numericValue = parseFloat(customInput)
     if (!Number.isNaN(numericValue)) {
@@ -232,12 +218,6 @@ export default function V3RangeSelector({
       handleQuickAction(numericValue, zoomLevel)
     }
   }, [customInput, calculateZoomLevel, handleQuickAction])
-
-  // Simple validation - always true since we prevent invalid input
-  const isCustomInputValid = useMemo(() => {
-    // Input is always valid since we block invalid values in onChange
-    return true
-  }, [])
 
   // Handle Full Range - simplified without fee tier logic
   const handleFullRange = useCallback(() => {
@@ -317,14 +297,13 @@ export default function V3RangeSelector({
         </QuickActionButton>
 
         {!isSmallScreen && (
-          <CustomInputContainer>
+          <CustomInputContainer width="120%">
             <StyledInput
               value={customInput}
               onChange={handleCustomInputChange}
               onBlur={applyCustomZoom}
               onKeyDown={(e) => e.key === 'Enter' && applyCustomZoom()}
               placeholder={t('Custom')}
-              $isValid={isCustomInputValid}
               type="text"
               inputMode="decimal"
             />
@@ -343,7 +322,6 @@ export default function V3RangeSelector({
               onBlur={applyCustomZoom}
               onKeyDown={(e) => e.key === 'Enter' && applyCustomZoom()}
               placeholder="2.5"
-              $isValid={isCustomInputValid}
               type="text"
               inputMode="decimal"
             />

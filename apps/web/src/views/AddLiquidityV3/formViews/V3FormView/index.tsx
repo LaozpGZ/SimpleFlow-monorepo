@@ -579,10 +579,8 @@ export default function V3FormView({
           setActiveQuickAction(100)
           isQuickButtonUsed.current = true
         } else {
-          // Trust the zoom level calculated by PriceRangePicker widget
-          // It handles both predefined and custom percentages correctly
+          setShowCapitalEfficiencyWarning(false)
 
-          // For predefined quick actions, use undefined to let chart use default zoom
           const isPredefinedAction = feeAmount && QUICK_ACTION_CONFIGS[feeAmount]?.[value]
 
           if (isPredefinedAction) {
@@ -595,18 +593,8 @@ export default function V3FormView({
               isQuickButtonUsed.current = true
             }
           } else {
-            // For custom percentages, use the zoom level calculated by the widget
-            // but add padding to ensure the range is visible on chart
-            const paddedZoomLevel: ZoomLevels = {
-              ...zoomLevel,
-              min: Math.max(0.00001, zoomLevel.initialMin * 0.8), // 20% padding below
-              max: Math.min(
-                zoomLevel.initialMax * 1.2, // 20% padding above
-                feeAmount === FeeAmount.MEDIUM || feeAmount === FeeAmount.HIGH ? 20 : 1.5,
-              ),
-            }
-            setCustomZoomLevel(paddedZoomLevel)
-            handleRefresh(paddedZoomLevel)
+            setCustomZoomLevel(zoomLevel)
+            handleRefresh(zoomLevel)
             setActiveQuickAction(value)
             isQuickButtonUsed.current = true
           }
