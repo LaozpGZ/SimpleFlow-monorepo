@@ -161,14 +161,14 @@ export default function V3RangeSelector({
     const initialMin = 1 - percentage / 100
     const initialMax = 1 + percentage / 100
 
-    const expandedMin = Math.max(0.00001, initialMin)
-    const expandedMax = Math.min(initialMax, 10) // Cap at 1000% for edge cases
+    const min = feeAmount ? Object.values(QUICK_ACTION_CONFIGS[feeAmount])[0]?.min : 0.00001
+    const max = feeAmount ? Object.values(QUICK_ACTION_CONFIGS[feeAmount])[0]?.max : 20
 
     return {
       initialMin,
       initialMax,
-      min: expandedMin,
-      max: expandedMax,
+      min,
+      max,
     }
   }, [])
 
@@ -179,6 +179,7 @@ export default function V3RangeSelector({
       if (quickAction === percentage) return
 
       const zoomLevel = calculateZoomLevel(percentage)
+
       handleQuickAction(percentage, zoomLevel)
       setCustomInput('') // Clear custom input when using quick action
     },

@@ -579,19 +579,17 @@ export default function V3FormView({
           setActiveQuickAction(100)
           isQuickButtonUsed.current = true
         } else {
-          setShowCapitalEfficiencyWarning(false)
-
           const isPredefinedAction = feeAmount && QUICK_ACTION_CONFIGS[feeAmount]?.[value]
 
           if (isPredefinedAction) {
             setCustomZoomLevel(undefined)
-            if (value === activeQuickAction) {
-              handleRefresh(ZOOM_LEVELS[feeAmount])
-            } else {
-              handleRefresh(QUICK_ACTION_CONFIGS[feeAmount][value])
-              setActiveQuickAction(value)
-              isQuickButtonUsed.current = true
-            }
+            // if (value === activeQuickAction) {
+            //   handleRefresh(ZOOM_LEVELS[feeAmount])
+            // } else
+
+            handleRefresh(QUICK_ACTION_CONFIGS[feeAmount][value])
+            setActiveQuickAction(value)
+            isQuickButtonUsed.current = true
           } else {
             setCustomZoomLevel(zoomLevel)
             handleRefresh(zoomLevel)
@@ -761,23 +759,26 @@ export default function V3FormView({
               </DynamicSection>
 
               <DynamicSection disabled={!feeAmount || invalidPool || (noLiquidity && !startPriceTypedValue)} gap="16px">
-                <V3RangeSelector
-                  priceLower={priceLower}
-                  priceUpper={priceUpper}
-                  getDecrementLower={getDecrementLower}
-                  getIncrementLower={getIncrementLower}
-                  getDecrementUpper={getDecrementUpper}
-                  getIncrementUpper={getIncrementUpper}
-                  onLeftRangeInput={onLeftRangeInput}
-                  onRightRangeInput={onRightRangeInput}
-                  currencyA={baseCurrency}
-                  currencyB={quoteCurrency}
-                  feeAmount={feeAmount}
-                  ticksAtLimit={ticksAtLimit}
-                  tickSpaceLimits={tickSpaceLimits}
-                  quickAction={quickAction}
-                  handleQuickAction={handleQuickAction}
-                />
+                {!showCapitalEfficiencyWarning && (
+                  <V3RangeSelector
+                    priceLower={priceLower}
+                    priceUpper={priceUpper}
+                    getDecrementLower={getDecrementLower}
+                    getIncrementLower={getIncrementLower}
+                    getDecrementUpper={getDecrementUpper}
+                    getIncrementUpper={getIncrementUpper}
+                    onLeftRangeInput={onLeftRangeInput}
+                    onRightRangeInput={onRightRangeInput}
+                    currencyA={baseCurrency}
+                    currencyB={quoteCurrency}
+                    feeAmount={feeAmount}
+                    ticksAtLimit={ticksAtLimit}
+                    tickSpaceLimits={tickSpaceLimits}
+                    quickAction={quickAction}
+                    handleQuickAction={handleQuickAction}
+                  />
+                )}
+
                 {showCapitalEfficiencyWarning && (
                   <Message variant="warning">
                     <Box>
@@ -827,7 +828,7 @@ export default function V3FormView({
           </CardBody>
         </Card>
       </LeftContainer>
-      <Card>
+      <Card style={{ height: 'fit-content' }}>
         <CardBody>
           <DynamicSection disabled={!baseCurrency || !quoteCurrency}>
             <FeeSelector
