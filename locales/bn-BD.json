@@ -4347,7 +4347,7 @@
   "Please exercise due caution when trading / providing liquidity for the alETH token. The protocol was recently affected by the <0>Curve exploit.</0> For more information, please refer to Alchemix’s <1>Twitter</1> and await further updates from the team": "alETH টোকেনের জন্য লেনদেন / তারল্য প্রদানের সময় অনুগ্রহ করে যথাযথ সতর্কতা অবলম্বন করুন। এই প্রোটোকল সম্প্রতি <0>কার্ভ এক্সপ্লাইট</0> দ্বারা প্রভাবিত হয়েছে। আরও তথ্যের জন্য অনুগ্রহ করে Alchemix-এর <1>টুইটার</1> দেখুন এবং টিমের কাছ থেকে আরও আপডেটের জন্য অপেক্ষা করুন।",
   "Overnight has temporarily paused USD+ operations on zkSync due to the recent Velocore exploit.Swap, approve, and add / remove liquidity functions are currently unavailable. More information can be found on Overnight's <0>twitter page</0>.": "সাম্প্রতিক ভেলোকোর এক্সপ্লাইট-এর কারণে ওভারনাইট zkSync-এ USD+ কার্যক্রম সাময়িকভাবে স্থগিত করেছে। বর্তমানে সোয়াপ, অনুমোদন এবং তারল্য যোগ/অপসারণ ফাংশন নেই। আরও তথ্য ওভারনাইট-এর <0>টুইটার পেইজ</0>-এ পাওয়া যাবে।",
   "%symbol% Chart by <0>%by%</0>": "<0>%by%</0> কর্তৃক %symbol% চার্ট",
-  "solana.add_liquidity": "Add Liquidity",
+  "solana.add_liquidity": "Added %amountA% %symbolA% and %amountB% %symbolB%.",
   "solana.harvest_rewards": "Harvest Rewards",
   "solana.harvest_clmm_rewards": "Harvest CLMM Rewards",
   "solana.added_liquidity_desc": "Added %amountA% %symbolA% and %amountB% %symbolB%.",
@@ -4371,5 +4371,7 @@
   "X Login": "X Login",
   "Continue with Web3 Wallet": "Continue with Web3 Wallet",
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "TWAP and Limit orders are currently not supported for Smart Account wallets.",
-  "Create your Wallet with Social Login": "Create your Wallet with Social Login"
+  "Create your Wallet with Social Login": "Create your Wallet with Social Login",
+  "Important Notice: %chain% Sunset": "Important Notice: %chain% Sunset",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline."
 }
