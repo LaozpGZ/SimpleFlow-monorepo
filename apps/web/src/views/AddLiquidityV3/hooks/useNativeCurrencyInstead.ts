@@ -58,15 +58,18 @@ export const useNativeCurrencyInstead = ({ baseCurrency, quoteCurrency, feeAmoun
           },
         })
       } else {
+        const newCurrencyQuery = [baseCurrency?.wrapped.address ?? '', quoteCurrency?.wrapped.address ?? '']
+
+        if (feeAmount) {
+          // @ts-ignore
+          newCurrencyQuery.push(feeAmount.toString())
+        }
+
         // Turn Native to Wrapped Currency
         router.replace({
           query: {
             ...router.query,
-            currency: [
-              baseCurrency?.wrapped.address ?? '',
-              quoteCurrency?.wrapped.address ?? '',
-              feeAmount?.toString() ?? '',
-            ],
+            currency: newCurrencyQuery,
           },
         })
       }
