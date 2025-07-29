@@ -15,10 +15,12 @@ import {
   RowBetween,
   ScanLink,
   Text,
+  Toggle,
 } from '@pancakeswap/uikit'
 import { useIsExpertMode } from '@pancakeswap/utils/user'
 import { ReactNode, useMemo } from 'react'
 import { ChainLinkSupportChains } from 'state/info/constant'
+import useNativeCurrency from 'hooks/useNativeCurrency'
 
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
@@ -35,6 +37,7 @@ import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useTotalUsdValue } from '../../AddLiquidity/hooks/useTotalUsdValue'
+import { useNativeCurrencyInstead } from '../hooks/useNativeCurrencyInstead'
 
 export default function V2FormView({
   formattedAmounts,
@@ -66,6 +69,8 @@ export default function V2FormView({
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const expertMode = useIsExpertMode()
 
+  const native = useNativeCurrency()
+
   let buttons: ReactNode = null
 
   // Parse formatted amounts to CurrencyAmount objects
@@ -77,6 +82,12 @@ export default function V2FormView({
     () => tryParseAmount(formattedAmounts[Field.CURRENCY_B], currencies[Field.CURRENCY_B]),
     [formattedAmounts, currencies],
   )
+
+  const { canUseNativeCurrency, handleUseNative, useNativeInstead } = useNativeCurrencyInstead({
+    baseCurrency: currencies[Field.CURRENCY_A],
+    quoteCurrency: currencies[Field.CURRENCY_B],
+    feeAmount: 0,
+  })
 
   // Get total USD Value of input amounts
   const { totalUsdValue } = useTotalUsdValue({
@@ -204,6 +215,12 @@ export default function V2FormView({
               title={<>&nbsp;</>}
             />
             <Column mt="16px" gap="16px">
+              {canUseNativeCurrency && (
+                <RowBetween>
+                  <Text color="textSubtle">Use {native.symbol} instead</Text>
+                  <Toggle scale="sm" checked={useNativeInstead} onChange={handleUseNative} />
+                </RowBetween>
+              )}
               <RowBetween>
                 <Text color="textSubtle">Total</Text>
                 <Text>~{formatDollarAmount(totalUsdValue, 2, false)}</Text>

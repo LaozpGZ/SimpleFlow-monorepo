@@ -13,6 +13,7 @@ import {
   PreTitle,
   RowBetween,
   Text,
+  Toggle,
   useModal,
 } from '@pancakeswap/uikit'
 import {
@@ -24,13 +25,14 @@ import {
   ZoomLevels,
 } from '@pancakeswap/widgets-internal'
 import { tryParsePrice } from 'hooks/v3/utils'
+import useNativeCurrency from 'hooks/useNativeCurrency'
 import {
   logGTMAddLiquidityTxSentEvent,
   logGTMClickAddLiquidityConfirmEvent,
   logGTMClickAddLiquidityEvent,
 } from 'utils/customGTMEventTracking'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
-
+import { useNativeCurrencyInstead } from 'views/AddLiquidityV3/hooks/useNativeCurrencyInstead'
 import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
 import { FeeAmount, NonfungiblePositionManager, Pool } from '@pancakeswap/v3-sdk'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
@@ -118,6 +120,8 @@ export default function V3FormView({
   const router = useRouter()
   const { data: signer } = useWalletClient()
   const { sendTransactionAsync } = useSendTransaction()
+  const native = useNativeCurrency()
+
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false) // clicked confirm
   const [txnErrorMessage, setTxnErrorMessage] = useState<string | undefined>()
 
@@ -126,6 +130,12 @@ export default function V3FormView({
     currentLanguage: { locale },
   } = useTranslation()
   const expertMode = useIsExpertMode()
+
+  const { canUseNativeCurrency, handleUseNative, useNativeInstead } = useNativeCurrencyInstead({
+    baseCurrency,
+    quoteCurrency,
+    feeAmount,
+  })
 
   const positionManager = useV3NFTPositionManagerContract()
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
@@ -886,6 +896,12 @@ export default function V3FormView({
               />
             </LockedDeposit>
             <Column mt="16px" gap="16px">
+              {canUseNativeCurrency && (
+                <RowBetween>
+                  <Text color="textSubtle">Use {native.symbol} instead</Text>
+                  <Toggle scale="sm" checked={useNativeInstead} onChange={handleUseNative} />
+                </RowBetween>
+              )}
               <RowBetween>
                 <Text color="textSubtle">Total</Text>
                 <Text>~{formatDollarAmount(totalUsdValue, 2, false)}</Text>

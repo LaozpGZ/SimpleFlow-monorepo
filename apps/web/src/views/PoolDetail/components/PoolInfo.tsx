@@ -42,7 +42,6 @@ import { useChainIdByQuery } from 'state/info/hooks'
 import { getBlockExploreLink } from 'utils'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { isInfinityProtocol } from 'utils/protocols'
-import { zeroAddress } from 'viem'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
 import { getRewardProvider } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
 import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprButtonV3'
@@ -337,7 +336,7 @@ export const PoolInfo = () => {
               <LightGreyCard padding="8px 16px">
                 <AutoColumn rowGap="2px">
                   <FlexGap>
-                    <Text fontSize={12} bold color="textSubtle" textTransform="uppercase">
+                    <Text fontSize={12} bold color="textSubtle" textTransform="uppercase" minWidth="max-content">
                       {t('Est. APR')}
                     </Text>
                     <PoolGlobalAprButtonV3 pool={poolInfo} showApyText={false} />

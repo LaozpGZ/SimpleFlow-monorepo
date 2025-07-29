@@ -166,7 +166,7 @@ export default function StableFormView({
                 <SlippageButton />
               </RowBetween>
               <RowBetween>
-                <Text color="textSubtle">Your share in pool</Text>
+                <Text color="textSubtle">{t('Your share in pool')}</Text>
                 <Text>{poolTokenPercentage ? `${poolTokenPercentage?.toSignificant(4)}%` : '-'}</Text>
               </RowBetween>
             </Column>
