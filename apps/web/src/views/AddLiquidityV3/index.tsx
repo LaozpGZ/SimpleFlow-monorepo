@@ -5,6 +5,7 @@ import { FeeAmount, Pool } from '@pancakeswap/v3-sdk'
 import React, { useCallback, useEffect, useMemo } from 'react'
 
 import { useRouter } from 'next/router'
+import { useV3FarmAPI } from 'hooks/useV3FarmAPI'
 
 import { atom, useAtom } from 'jotai'
 import { styled } from 'styled-components'
@@ -186,6 +187,18 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
     tokenB: quoteCurrency,
   })
 
+  // V3 Pool Farm Config
+  const { farms: farmV3Config } = useV3FarmAPI(chainId)
+
+  const farmV3 = useMemo(() => {
+    if (baseCurrency && quoteCurrency) {
+      const [tokenA, tokenB] = [baseCurrency.wrapped, quoteCurrency.wrapped]
+      const [token0, token1] = tokenA.sortsBefore(tokenB) ? [tokenA, tokenB] : [tokenB, tokenA]
+      return farmV3Config?.find((f) => f.token.equals(token0) && f.quoteToken.equals(token1))
+    }
+    return null
+  }, [baseCurrency, quoteCurrency, farmV3Config])
+
   // Fetch latest fee tier for V3 pool
   const { largestUsageFeeTier } = useFeeTierDistribution(baseCurrency, quoteCurrency)
 
@@ -195,6 +208,8 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
         ? selectType === SELECTOR_TYPE.V3
           ? feeAmount
             ? Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, feeAmount)
+            : farmV3
+            ? Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, farmV3.feeAmount)
             : largestUsageFeeTier
             ? Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, largestUsageFeeTier)
             : undefined
@@ -211,6 +226,7 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
       selectType,
       stableConfig.stableSwapConfig,
       largestUsageFeeTier,
+      farmV3,
     ],
   )
 
