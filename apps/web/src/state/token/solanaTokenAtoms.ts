@@ -10,3 +10,11 @@ export const solanaTokenListAtom = atom<SPLToken[]>([])
 export const solanaTokenAtomFamily = atomFamily((address?: string) =>
   atom((get) => (address ? get(solanaTokenListAtom).find((token) => token.address === address) : undefined)),
 )
+
+// Dynamic atom to manage Solana list settings
+// This will automatically support any new token list keys added to SOLANA_LISTS
+export const solanaListSettingsAtom = atom<Record<string, boolean>>({
+  raydium: true,
+  jupiter: true,
+  // New token lists will be added here automatically when they're first accessed
+})

@@ -1,78 +1,56 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { TokenList } from '@pancakeswap/token-lists'
-import { disableList, enableList } from '@pancakeswap/token-lists/react'
 import { AutoColumn, Column, Text, Toggle } from '@pancakeswap/uikit'
 import { ListLogo } from '@pancakeswap/widgets-internal'
 
-import { useAtomValue } from 'jotai'
+import { useAtom } from 'jotai'
 import { memo, useCallback } from 'react'
-import { useListState } from 'state/lists/lists'
 
-import { selectorByUrlsAtom } from '../../state/lists/hooks'
+import { solanaListSettingsAtom } from '../../state/token/solanaTokenAtoms'
+import { SOLANA_LISTS, TokenListKey, useSolanaTokenList } from '../../hooks/useSolanaTokenList'
 
 import Row, { RowFixed } from '../Layout/Row'
 import { CurrencyModalView } from './types'
 import { ListContainer, RowWrapper, Wrapper } from './ManageLists'
 
-const SolanaListRow = memo(function SolanaListRow({ listUrl }: { listUrl: string }) {
+const SolanaListRow = memo(function SolanaListRow({
+  listKey,
+  name,
+  logoURI,
+}: {
+  listKey: TokenListKey
+  name: string
+  logoURI: string
+}) {
   const { t } = useTranslation()
-  // TODO: add useIsListActiveBySolana
-  //   const isActive = useIsListActiveByChainId(listUrl, chainId)
-  const isActive = false
+  const [listSettings, setListSettings] = useAtom(solanaListSettingsAtom)
+  const { tokenCountsByList } = useSolanaTokenList()
 
-  const listsByUrl = useAtomValue(selectorByUrlsAtom)
-  const [, dispatch] = useListState()
-  const { current: list, pendingUpdate: pending } = listsByUrl[listUrl]
+  const isActive = listSettings[listKey]
 
-  const handleEnableList = useCallback(() => {
-    dispatch(enableList(listUrl))
-  }, [dispatch, listUrl])
+  // Count tokens from this specific list (simplified - in reality you'd need to track per list)
+  const tokenCount = tokenCountsByList[listKey]
 
-  const handleDisableList = useCallback(() => {
-    dispatch(disableList(listUrl))
-  }, [dispatch, listUrl])
-
-  if (!list) return null
-
-  const logoURI = ''
+  const handleToggle = useCallback(() => {
+    setListSettings((prev) => ({ ...prev, [listKey]: !prev[listKey] }))
+  }, [listKey, setListSettings])
 
   return (
-    <RowWrapper
-      active={isActive}
-      hasActiveTokens={false}
-      key={listUrl}
-      id={`solana-list-row-${listUrl.replace(/\./g, '-')}`}
-    >
-      {logoURI ? (
-        <ListLogo size="40px" style={{ marginRight: '1rem' }} logoURI={logoURI} alt={`${list.name} list logo`} />
-      ) : (
-        <div style={{ width: '24px', height: '24px', marginRight: '1rem' }} />
-      )}
+    <RowWrapper active={isActive} hasActiveTokens={isActive} key={listKey} id={`solana-list-row-${listKey}`}>
+      <ListLogo size="40px" style={{ marginRight: '1rem' }} logoURI={logoURI} alt={`${name} list logo`} />
       <Column style={{ flex: '1' }}>
         <Row>
-          <Text bold>{list.name}</Text>
+          <Text bold>{name}</Text>
         </Row>
         <RowFixed mt="4px">
           <Text fontSize="12px" mr="6px" textTransform="lowercase">
-            {list.tokens.length} {t('Tokens')}
+            {tokenCount} {t('Tokens')}
           </Text>
         </RowFixed>
       </Column>
-      <Toggle
-        checked={isActive}
-        onChange={() => {
-          if (isActive) {
-            handleDisableList()
-          } else {
-            handleEnableList()
-          }
-        }}
-      />
+      <Toggle checked={isActive} onChange={handleToggle} />
     </RowWrapper>
   )
 })
-
-const sortedLists = []
 
 function SolanaManageList({
   setModalView,
@@ -80,16 +58,15 @@ function SolanaManageList({
   setListUrl,
 }: {
   setModalView: (view: CurrencyModalView) => void
-  setImportList: (list: TokenList) => void
+  setImportList: (list: any) => void
   setListUrl: (url: string) => void
 }) {
   return (
     <Wrapper>
-      <h1>Solana</h1>
       <ListContainer>
         <AutoColumn gap="md">
-          {sortedLists.map((listUrl) => (
-            <SolanaListRow key={listUrl} listUrl={listUrl} />
+          {SOLANA_LISTS.map((list) => (
+            <SolanaListRow key={list.key} listKey={list.key} name={list.name} logoURI={list.logoURI} />
           ))}
         </AutoColumn>
       </ListContainer>
