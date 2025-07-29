@@ -4347,7 +4347,7 @@
   "Please exercise due caution when trading / providing liquidity for the alETH token. The protocol was recently affected by the <0>Curve exploit.</0> For more information, please refer to Alchemix’s <1>Twitter</1> and await further updates from the team": "Noudata varovaisuutta käydessäsi kauppaa tai tarjotessasi likviditeettiä aIETH-poletilla. Protokollassa on ollut hiljattain <0>Curve-haavoittuvaisuus</0>. Lisätietoja saat Alchemixin <1>Twitteristä</1>, ja odota uusia päivityksiä tiimiltä.",
   "Overnight has temporarily paused USD+ operations on zkSync due to the recent Velocore exploit.Swap, approve, and add / remove liquidity functions are currently unavailable. More information can be found on Overnight's <0>twitter page</0>.": "Overnight on keskeyttänyt tilapäisesti USD+ -operaatiot zkSyncissä viimeaikaisen Velocore-haavoittuvuuden takia. Likviditeetin vaihtaminen, hyväksyminen, lisääminen ja poistaminen eivät ole tällä hetkellä käytettävissä. Lisätietoja antaa Overnightin <0>Twitter-sivu</0>.",
   "%symbol% Chart by <0>%by%</0>": "%symbol%-kaavion tarjoaa <0>%by%</0>",
-  "solana.add_liquidity": "Lisää likviditeettiä",
+  "solana.add_liquidity": "Added %amountA% %symbolA% and %amountB% %symbolB%.",
   "solana.harvest_rewards": "Korjaa palkkioita",
   "solana.harvest_clmm_rewards": "Korjaa CLMM-palkkioita",
   "solana.added_liquidity_desc": "Lisätty %amountA% %symbolA% ja %amountB% %symbolB%.",
@@ -4371,5 +4371,7 @@
   "X Login": "X Login",
   "Continue with Web3 Wallet": "Continue with Web3 Wallet",
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "TWAP and Limit orders are currently not supported for Smart Account wallets.",
-  "Create your Wallet with Social Login": "Create your Wallet with Social Login"
+  "Create your Wallet with Social Login": "Create your Wallet with Social Login",
+  "Important Notice: %chain% Sunset": "Important Notice: %chain% Sunset",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline."
 }
