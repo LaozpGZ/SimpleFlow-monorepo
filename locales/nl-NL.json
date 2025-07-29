@@ -4373,5 +4373,5 @@
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "TWAP- en limietorders worden momenteel niet ondersteund voor Smart Account-wallets.",
   "Create your Wallet with Social Login": "Maak je wallet met social login",
   "Important Notice: %chain% Sunset": "Belangrijke mededeling: %chain% wordt stopgezet",
-  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline."
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% wordt stopgezet op %date%. Verwijder je liquiditeit uit alle pools vóór deze datum."
 }
