@@ -264,10 +264,24 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
           selectType === SELECTOR_TYPE.V3
             ? {
                 aprDisplay: (
-                  <AprCalculatorV2 pool={pool} inverted={inverted} showTitle={false} derived showApyButton={false} />
+                  <AprCalculatorV2
+                    pool={pool}
+                    inverted={inverted}
+                    showTitle={false}
+                    derived
+                    showApyButton={false}
+                    fontSize="24px"
+                  />
                 ),
                 roiCalculator: (
-                  <AprCalculatorV2 pool={pool} inverted={inverted} showTitle={false} derived showApyText={false} />
+                  <AprCalculatorV2
+                    pool={pool}
+                    inverted={inverted}
+                    showTitle={false}
+                    derived
+                    showApyText={false}
+                    fontSize="24px"
+                  />
                 ),
               }
             : undefined

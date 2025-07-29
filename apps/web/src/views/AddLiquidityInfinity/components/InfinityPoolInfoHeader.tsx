@@ -47,9 +47,9 @@ export const InfinityPoolInfoHeader = () => {
         overrideAprDisplay={{
           aprDisplay: poolInfo ? (
             poolInfo.protocol === Protocol.InfinityCLAMM ? (
-              <InfinityCLPoolDerivedAprButton pool={poolInfo} />
+              <InfinityCLPoolDerivedAprButton pool={poolInfo} fontSize="24px" />
             ) : poolInfo.protocol === Protocol.InfinityBIN ? (
-              <InfinityBinPoolDerivedAprButton pool={poolInfo} />
+              <InfinityBinPoolDerivedAprButton pool={poolInfo} fontSize="24px" />
             ) : (
               '-'
             )

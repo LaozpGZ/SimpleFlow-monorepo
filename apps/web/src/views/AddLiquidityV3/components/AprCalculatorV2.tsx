@@ -15,6 +15,7 @@ interface AprCalculatorV2Props {
   showTitle?: boolean
   showApyText?: boolean
   showApyButton?: boolean
+  fontSize?: string
 }
 
 const WithTitle = ({ children, pool }: { children: React.ReactNode; pool: PoolInfo }) => {
@@ -40,6 +41,7 @@ export function AprCalculatorV2({
   inverted,
   showApyText,
   showApyButton,
+  fontSize,
 }: AprCalculatorV2Props) {
   if (derived) {
     return (
@@ -49,6 +51,7 @@ export function AprCalculatorV2({
         inverted={inverted}
         showApyText={showApyText}
         showApyButton={showApyButton}
+        fontSize={fontSize}
       />
     )
   }
@@ -79,6 +82,7 @@ const DerivedAprCalculator: React.FC<AprCalculatorV2Props> = ({
   showTitle,
   showApyText,
   showApyButton,
+  fontSize,
 }) => {
   if (!pool) {
     return <Skeleton height="40px" />
@@ -86,10 +90,22 @@ const DerivedAprCalculator: React.FC<AprCalculatorV2Props> = ({
 
   return showTitle ? (
     <WithTitle pool={pool}>
-      <V3PoolDerivedAprButton pool={pool} inverted={inverted} showApyText={showApyText} showApyButton={showApyButton} />
+      <V3PoolDerivedAprButton
+        pool={pool}
+        inverted={inverted}
+        showApyText={showApyText}
+        showApyButton={showApyButton}
+        fontSize={fontSize}
+      />
     </WithTitle>
   ) : (
-    <V3PoolDerivedAprButton pool={pool} inverted={inverted} showApyText={showApyText} showApyButton={showApyButton} />
+    <V3PoolDerivedAprButton
+      pool={pool}
+      inverted={inverted}
+      showApyText={showApyText}
+      showApyButton={showApyButton}
+      fontSize={fontSize}
+    />
   )
 }
 
