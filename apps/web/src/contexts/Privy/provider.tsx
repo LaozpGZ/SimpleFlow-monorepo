@@ -33,13 +33,13 @@ export function WagmiWithPrivyProvider({ children, ...props }: PropsWithChildren
         }))
       }
     }
-  }, [ready, user, authenticated, recoveryRecords])
+  }, [ready, user, authenticated, recoveryRecords, setRecoveryRecords, setWalletRecovery])
 
   useEffect(() => {
     if (ready && authenticated && user?.wallet?.address && user?.smartWallet?.address) {
       handleWalletRecovery()
     }
-  }, [ready, authenticated, user?.wallet])
+  }, [ready, authenticated, user?.wallet, handleWalletRecovery, user?.smartWallet?.address])
 
   useEffect(() => {
     const createWalletWithUserManagedRecovery = async () => {

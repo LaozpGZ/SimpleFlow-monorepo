@@ -105,12 +105,12 @@ export function useStateMachine<TState extends string, TEvent extends string>(
   // Execute initial entry action
   useEffect(() => {
     configRef.current.states[config.initialState].entry?.()
-  }, [])
+  }, [config.initialState])
 
   // Auto-reset when dependencies change
   useEffect(() => {
     reset()
-  }, [...dependencies, config])
+  }, [...dependencies, config, reset])
 
   return useMemo(
     () => ({
@@ -119,7 +119,7 @@ export function useStateMachine<TState extends string, TEvent extends string>(
       reset,
       is,
     }),
-    [send, reset, is, stateRef.current],
+    [send, reset, is],
   )
 }
 

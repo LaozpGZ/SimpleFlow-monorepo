@@ -254,6 +254,7 @@ export const useAddCLPoolAndPosition = (
       addTransaction,
       onError,
       t,
+      onPresentErrorModal,
     ],
   )
   return { addCLLiquidity, txHash, attemptingTx, txnErrorMessage }
