@@ -15,7 +15,11 @@ import {
 } from 'config/solana-list'
 
 // Custom hook for individual token list queries
-function useTokenListQuery(listConfig: SolanaTokenListConfig, isEnabled: boolean) {
+function useTokenListQuery(listKey: TokenListKey) {
+  const listSettings = useAtomValue(solanaListSettingsAtom)
+  const isEnabled = listKey === TokenListKey.PANCAKESWAP ? true : listSettings[listKey]
+  const listConfig = SOLANA_LISTS_CONFIG[listKey]
+
   return useQuery({
     queryKey: ['solana-token-list', listConfig.key],
     queryFn: async () => {
@@ -51,21 +55,11 @@ function saveUserAddedTokens(tokens: TokenInfo[]) {
 export function useSolanaTokenList() {
   const [userTokens, setUserTokens] = useState<TokenInfo[]>(getUserAddedTokens())
   const setTokenList = useSetAtom(solanaTokenListAtom)
-  const listSettings = useAtomValue(solanaListSettingsAtom)
 
   // Create individual queries for each token list using the custom hook
-  const { data: pcsTokens, isLoading: pcsLoading } = useTokenListQuery(
-    SOLANA_LISTS_CONFIG[TokenListKey.PANCAKESWAP],
-    true,
-  ) // Always enabled
-  const { data: raydiumTokens, isLoading: raydiumLoading } = useTokenListQuery(
-    SOLANA_LISTS_CONFIG[TokenListKey.RAYDIUM],
-    listSettings.raydium,
-  )
-  const { data: jupiterTokens, isLoading: jupiterLoading } = useTokenListQuery(
-    SOLANA_LISTS_CONFIG[TokenListKey.JUPITER],
-    listSettings.jupiter,
-  )
+  const { data: pcsTokens, isLoading: pcsLoading } = useTokenListQuery(TokenListKey.PANCAKESWAP) // Always enabled
+  const { data: raydiumTokens, isLoading: raydiumLoading } = useTokenListQuery(TokenListKey.RAYDIUM)
+  const { data: jupiterTokens, isLoading: jupiterLoading } = useTokenListQuery(TokenListKey.JUPITER)
 
   const mergedTokens = useMemo(() => {
     // TODO: avoid duplicates when merging
@@ -79,9 +73,6 @@ export function useSolanaTokenList() {
   }, [mergedTokens, setTokenList])
 
   // Loading state: true if any enabled query is still loading
-  const loading = useMemo(() => {
-    return pcsLoading || (listSettings.raydium && raydiumLoading) || (listSettings.jupiter && jupiterLoading)
-  }, [pcsLoading, raydiumLoading, jupiterLoading, listSettings])
 
   // Add a user token and persist
   const addUserToken = useCallback((token: TokenInfo) => {
@@ -107,10 +98,16 @@ export function useSolanaTokenList() {
       [TokenListKey.RAYDIUM]: raydiumTokens?.length ?? 0,
       [TokenListKey.JUPITER]: jupiterTokens?.length ?? 0,
     }
-  }, [pcsTokens, raydiumTokens, jupiterTokens])
+  }, [pcsTokens?.length, raydiumTokens?.length, jupiterTokens?.length])
 
   return useMemo(
-    () => ({ tokenList: mergedTokens, loading, addUserToken, removeUserToken, tokenCountsByList }),
-    [mergedTokens, loading, addUserToken, removeUserToken, tokenCountsByList],
+    () => ({
+      tokenList: mergedTokens,
+      loading: pcsLoading || raydiumLoading || jupiterLoading,
+      addUserToken,
+      removeUserToken,
+      tokenCountsByList,
+    }),
+    [mergedTokens, pcsLoading, raydiumLoading, jupiterLoading, addUserToken, removeUserToken, tokenCountsByList],
   )
 }

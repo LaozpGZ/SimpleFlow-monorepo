@@ -2,6 +2,7 @@ import { atom } from 'jotai'
 import { atomFamily } from 'jotai/utils'
 
 import { SPLToken } from '@pancakeswap/swap-sdk-core'
+import { TokenListKey } from 'config/solana-list'
 
 // Atom to store the list of SPLToken
 export const solanaTokenListAtom = atom<SPLToken[]>([])
@@ -13,8 +14,7 @@ export const solanaTokenAtomFamily = atomFamily((address?: string) =>
 
 // Dynamic atom to manage Solana list settings
 // This will automatically support any new token list keys added to SOLANA_LISTS
-export const solanaListSettingsAtom = atom<Record<string, boolean>>({
-  raydium: true,
-  jupiter: true,
-  // New token lists will be added here automatically when they're first accessed
+export const solanaListSettingsAtom = atom<Record<Exclude<TokenListKey, TokenListKey.PANCAKESWAP>, boolean>>({
+  [TokenListKey.RAYDIUM]: true,
+  [TokenListKey.JUPITER]: true,
 })
