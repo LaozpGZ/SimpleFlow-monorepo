@@ -78,11 +78,28 @@ const isMetamaskInstalled = () => {
 
 function isBinanceWeb3WalletInstalled() {
   try {
-    return Boolean((safeGetWindow() as ExtendEthereum)?.isBinance)
+    return (
+      Boolean((safeGetWindow() as ExtendEthereum)?.isBinance) ||
+      Boolean((safeGetWindow() as ExtendEthereum)?.binancew3w)
+    )
   } catch (error) {
     console.error('Error checking Binance Web3 Wallet:', error)
     return false
   }
+}
+
+function getBinanceConnectorId() {
+  const globalWindow = safeGetWindow()
+
+  if (!globalWindow) return ConnectorNames.BinanceW3W
+
+  // use Binance App
+  if ((globalWindow as ExtendEthereum).isBinance) return ConnectorNames.Injected
+
+  // use Binance Web3 Wallet Extension
+  if ((globalWindow as ExtendEthereum).binancew3w) return ConnectorNames.BinanceW3W
+
+  return ConnectorNames.BinanceW3W
 }
 
 export const TOP_WALLET_MAP: { [chainId: number]: WalletIds[] } = {
@@ -157,7 +174,7 @@ export const walletsConfig = <config extends Config = Config, context = unknown>
       id: WalletIds.BinanceW3W,
       title: 'Binance Wallet',
       icon: `${ASSET_CDN}/web/wallets/binance-w3w.png`,
-      connectorId: isBinanceWeb3WalletInstalled() ? ConnectorNames.Injected : ConnectorNames.BinanceW3W,
+      connectorId: getBinanceConnectorId(),
       get installed() {
         if (isBinanceWeb3WalletInstalled()) {
           return true
