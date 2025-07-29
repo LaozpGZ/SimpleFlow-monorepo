@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoRow, Button, ChevronDownIcon, Text, useIsomorphicEffect } from '@pancakeswap/uikit'
+import { AutoRow, Button, ChevronDownIcon, Text, useIsomorphicEffect, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { LightGreyCard } from 'components/Card'
 import { Dispatch, ReactNode, SetStateAction, useRef } from 'react'
 import styled from 'styled-components'
@@ -38,6 +38,8 @@ export default function HideShowSelectorSection({
 }: HideShowSelectorSectionPropsType) {
   const { t } = useTranslation()
 
+  const { isXs } = useMatchBreakpoints()
+
   const parentRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef<HTMLDivElement>(null)
   const contentRef = useRef<HTMLDivElement>(null)
@@ -66,7 +68,7 @@ export default function HideShowSelectorSection({
         {heading ?? <div />}
         {noHideButton || (
           <Button
-            scale="sm"
+            scale={isXs ? 'xs' : 'sm'}
             onClick={() => setShowOptions((prev) => !prev)}
             variant="text"
             endIcon={
@@ -80,7 +82,7 @@ export default function HideShowSelectorSection({
               />
             }
           >
-            <Text color="primary60" bold>
+            <Text color="primary60" fontSize={['12px', '16px']} bold>
               {showOptions ? t('Hide') : t('More')}
             </Text>
           </Button>

@@ -93,13 +93,7 @@ const StyledInput = styled(NumericalInput)`
 export const LeftContainer = styled(AutoColumn)`
   height: fit-content;
 
-  grid-row: 2 / 3;
   grid-column: 1;
-
-  ${({ theme }) => theme.mediaQueries.md} {
-    grid-row: 1 / 3;
-    grid-column: 1;
-  }
 `
 
 interface V3FormViewPropsType {

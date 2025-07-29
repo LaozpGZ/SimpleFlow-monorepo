@@ -175,8 +175,8 @@ export default function FeeSelector({
       heading={
         feeAmount ? (
           <AutoColumn gap="8px">
-            <FlexGap gap="4px">
-              <Text>
+            <FlexGap gap="4px" alignItems="center">
+              <Text fontSize={['12px', '16px']}>
                 {FEE_AMOUNT_DETAIL[feeAmount].label}% {t('fee tier')}
               </Text>
               {distributions && (
