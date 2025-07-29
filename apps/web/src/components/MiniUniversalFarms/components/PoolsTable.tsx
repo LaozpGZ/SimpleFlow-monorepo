@@ -19,8 +19,9 @@ const PoolPairCell = styled(Flex)`
 `
 
 const TokenSymbols = styled(Flex)`
-  align-items: center;
   gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
 `
 
 const SymbolText = styled(Text)`
