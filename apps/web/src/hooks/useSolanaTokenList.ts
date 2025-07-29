@@ -17,7 +17,7 @@ function useTokenListQuery(listKey: TokenListKey) {
   const listConfig = SOLANA_LISTS_CONFIG[listKey]
 
   return useQuery({
-    queryKey: ['solana-token-list', listConfig.key],
+    queryKey: ['solana-token-list', listConfig.key, isEnabled],
     queryFn: async () => {
       const res = await fetch(listConfig.apiUrl)
       if (!res.ok) {
