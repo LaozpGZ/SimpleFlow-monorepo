@@ -8,7 +8,6 @@ import {
   CardBody,
   Column,
   DynamicSection,
-  FlexGap,
   Message,
   MessageText,
   PreTitle,
@@ -273,10 +272,12 @@ export default function V3FormView({
 
   const handleFeePoolSelect = useCallback<HandleFeePoolSelectFn>(
     ({ feeAmount: newFeeAmount }) => {
-      const newPathname = router.pathname.replace('/stable', '').replace('/v2', '')
+      // Avoid replacing stable and v2 due to navigation issues when using universal farms overlay
+      if (!newFeeAmount || router.pathname.includes('stable') || router.pathname.includes('v2')) {
+        return
+      }
       router.replace(
         {
-          pathname: newPathname,
           query: {
             ...router.query,
             currency: newFeeAmount

@@ -104,8 +104,6 @@ export function UniversalAddLiquidity({
       return
     }
 
-    // if fee selection from url, don't change the selector type to avoid keep selecting stable when url changes, e.g. toggle rate
-    if (!stableConfig.stableSwapConfig && feeAmountFromUrl) return
     if (preferredSelectType === SELECTOR_TYPE.STABLE && stableConfig.stableSwapConfig) {
       setSelectorType(SELECTOR_TYPE.STABLE)
     } else {
@@ -157,15 +155,7 @@ export function UniversalAddLiquidity({
   )
 }
 
-export function AddLiquidityV3Layout({
-  showRefreshButton = false,
-  handleRefresh,
-  children,
-}: {
-  showRefreshButton?: boolean
-  handleRefresh?: () => void
-  children: React.ReactNode
-}) {
+export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }) {
   const { chainId } = useActiveChainId()
   const router = useRouter()
 
@@ -191,7 +181,7 @@ export function AddLiquidityV3Layout({
           ? stableConfig.stableSwapConfig?.stableSwapAddress
           : undefined
         : undefined,
-    [baseCurrency?.wrapped, feeAmount, quoteCurrency?.wrapped, selectType],
+    [baseCurrency?.wrapped, feeAmount, quoteCurrency?.wrapped, selectType, stableConfig.stableSwapConfig],
   )
 
   const pool = usePoolInfo({ poolAddress, chainId })
@@ -242,7 +232,6 @@ export function AddLiquidityV3Layout({
             : undefined
         }
       />
-
       {children}
     </Container>
   )
