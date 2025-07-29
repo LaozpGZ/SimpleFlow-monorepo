@@ -1,8 +1,9 @@
+import { useAtomValue } from 'jotai'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, FlexGap, Loading, Skeleton, TableView, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DoubleCurrencyLogo, FiatNumberDisplay, Liquidity } from '@pancakeswap/widgets-internal'
 import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { useAtomValue } from 'jotai'
+import { getFarmAprInfo } from 'state/farmsV4/search/farm.util'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
@@ -201,7 +202,7 @@ const ListItem = ({ pool, onPoolClick }: { pool: PoolInfo; onPoolClick?: (pool: 
         <Text color="textSubtle" fontSize="14px">
           {t('APR')}
         </Text>
-        <PoolGlobalAprButton pool={pool} />
+        <PoolGlobalAprButton pool={pool} aprInfo={getFarmAprInfo(pool.farm)} />
       </MobileRow>
 
       <MobileRow>
@@ -263,7 +264,7 @@ export const PoolsTable: React.FC<PoolsTableProps> = ({ onPoolClick }) => {
         key: 'apr',
         minWidth: '125px',
         sorter: true,
-        render: (_: unknown, item: PoolInfo) => <PoolGlobalAprButton pool={item} />,
+        render: (_: unknown, item: PoolInfo) => <PoolGlobalAprButton pool={item} aprInfo={getFarmAprInfo(item.farm)} />,
       },
       {
         title: t('TVL'),

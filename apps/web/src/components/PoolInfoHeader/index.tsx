@@ -23,6 +23,7 @@ import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { CurrencyLogo, DoubleCurrencyLogo, FeeTierTooltip, Liquidity } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { LinkType, MiniUniversalFarmsOverlay } from 'components/MiniUniversalFarms/MiniUniversalFarmsOverlay'
+import { getFarmAprInfo } from 'state/farmsV4/search/farm.util'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { getBlockExploreLink } from 'utils'
 import { isInfinityProtocol } from 'utils/protocols'
@@ -308,11 +309,21 @@ export const PoolInfoHeader = ({
                         {t('Est. APR')}
                       </Text>
                       {overrideAprDisplay?.roiCalculator || (
-                        <PoolGlobalAprButtonV3 pool={poolInfo} showApyText={false} color="text" />
+                        <PoolGlobalAprButtonV3
+                          pool={poolInfo}
+                          showApyText={false}
+                          color="text"
+                          aprInfo={getFarmAprInfo(poolInfo.farm)}
+                        />
                       )}
                     </FlexGap>
                     {overrideAprDisplay?.aprDisplay || (
-                      <PoolGlobalAprButtonV3 pool={poolInfo} showApyButton={false} color="text" />
+                      <PoolGlobalAprButtonV3
+                        pool={poolInfo}
+                        showApyButton={false}
+                        color="text"
+                        aprInfo={getFarmAprInfo(poolInfo.farm)}
+                      />
                     )}
                   </AutoColumn>
                 </Box>
