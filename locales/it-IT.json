@@ -4347,7 +4347,7 @@
   "Please exercise due caution when trading / providing liquidity for the alETH token. The protocol was recently affected by the <0>Curve exploit.</0> For more information, please refer to Alchemix’s <1>Twitter</1> and await further updates from the team": "Si prega di prestare la massima attenzione quando si negozia/fornisce liquidità per il token alETH. Il protocollo è stato recentemente interessato dall'<0>exploit Curve</0>. Per ulteriori informazioni, consulta il <1>Twitter</1> di Alchemix e attendi ulteriori aggiornamenti dal team",
   "Overnight has temporarily paused USD+ operations on zkSync due to the recent Velocore exploit.Swap, approve, and add / remove liquidity functions are currently unavailable. More information can be found on Overnight's <0>twitter page</0>.": "Overnight ha temporaneamente sospeso le operazioni USD+ su zkSync a causa del recente exploit Velocore. Le funzioni di trading, approvazione e aggiunta/rimozione di liquidità non sono attualmente disponibili. Maggiori informazioni possono essere trovate sulla <0>pagina twitter</0> di Overnight.",
   "%symbol% Chart by <0>%by%</0>": "Grafico %symbol% di <0>%by%</0>",
-  "solana.add_liquidity": "Aggiungi liquidità",
+  "solana.add_liquidity": "Added %amountA% %symbolA% and %amountB% %symbolB%.",
   "solana.harvest_rewards": "Ricompense del raccolto",
   "solana.harvest_clmm_rewards": "Ricompense del raccolto CLMM",
   "solana.added_liquidity_desc": "Aggiunti %amountA% %symbolA% e %amountB% %symbolB%.",
@@ -4371,5 +4371,7 @@
   "X Login": "Accesso con X",
   "Continue with Web3 Wallet": "Continua con Web3 Wallet",
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "Gli ordini TWAP e Limite non sono attualmente supportati per i wallet Smart Account.",
-  "Create your Wallet with Social Login": "Crea il tuo wallet con accesso social"
+  "Create your Wallet with Social Login": "Crea il tuo wallet con accesso social",
+  "Important Notice: %chain% Sunset": "Important Notice: %chain% Sunset",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline."
 }
