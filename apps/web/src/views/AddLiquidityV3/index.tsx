@@ -1,5 +1,5 @@
 import { Pair } from '@pancakeswap/sdk'
-import { Box, Container } from '@pancakeswap/uikit'
+import { Box, Breadcrumbs, Container, FlexGap, Text } from '@pancakeswap/uikit'
 
 import { FeeAmount, Pool } from '@pancakeswap/v3-sdk'
 import React, { useCallback, useEffect, useMemo } from 'react'
@@ -8,6 +8,11 @@ import { useRouter } from 'next/router'
 
 import { atom, useAtom } from 'jotai'
 import { styled } from 'styled-components'
+
+import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@pancakeswap/localization'
+import { getPoolDetailPageLink } from 'utils/getPoolLink'
+import { useQuery } from '@tanstack/react-query'
 
 import { usePreviousValue } from '@pancakeswap/hooks'
 import { useCurrency } from 'hooks/Tokens'
@@ -22,13 +27,22 @@ import { resetMintState } from 'state/mint/actions'
 import { useAddLiquidityV2FormDispatch } from 'state/mint/reducer'
 import { PoolInfoHeader } from 'components/PoolInfoHeader'
 
-import { AprCalculatorV2 } from './components/AprCalculatorV2'
-
 import StableFormView from './formViews/StableFormView'
 import V2FormView from './formViews/V2FormView'
 import V3FormView from './formViews/V3FormView'
 import { useCurrencyParams } from './hooks/useCurrencyParams'
 import { SELECTOR_TYPE } from './types'
+
+import { AprCalculatorV2 } from './components/AprCalculatorV2'
+
+const LinkText = styled(Text)`
+  color: ${({ theme }) => theme.colors.primary60};
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.8;
+  }
+`
 
 /* two-column layout where DepositAmount is moved at the very end on mobile. */
 export const ResponsiveTwoColumns = styled.div<{ $singleColumn?: boolean }>`
@@ -156,6 +170,7 @@ export function UniversalAddLiquidity({
 }
 
 export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }) {
+  const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const router = useRouter()
 
@@ -208,8 +223,34 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
     }
   }, [currencyIdA, currencyIdB, feeAmount, router])
 
+  const { data: poolDetailLink } = useQuery({
+    queryKey: ['poolDetailLink', chainId, pool],
+    queryFn: () => {
+      if (chainId && pool) {
+        return getPoolDetailPageLink(pool)
+      }
+      return null
+    },
+    enabled: !!chainId && !!pool,
+  })
+
   return (
     <Container mx="auto" my="24px" maxWidth="1200px">
+      <Box mb="24px">
+        <Breadcrumbs>
+          <NextLinkFromReactRouter to="/liquidity/pools">
+            <LinkText>{t('Farms')}</LinkText>
+          </NextLinkFromReactRouter>
+          {chainId && pool && poolDetailLink && (
+            <NextLinkFromReactRouter to={poolDetailLink}>
+              <LinkText>{t('Pool Detail')}</LinkText>
+            </NextLinkFromReactRouter>
+          )}
+          <FlexGap alignItems="center" gap="4px">
+            <Text>{t('Add Liquidity')}</Text>
+          </FlexGap>
+        </Breadcrumbs>
+      </Box>
       <PoolInfoHeader
         linkType="addLiquidity"
         poolInfo={pool}
