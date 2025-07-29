@@ -1,10 +1,9 @@
 import { Currency } from '@pancakeswap/sdk'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import currencyId from 'utils/currencyId'
-import { useIsMounted } from '@pancakeswap/hooks'
 
 interface UseNativeCurrencyInsteadProps {
   baseCurrency: Currency | null | undefined
@@ -16,15 +15,14 @@ export const useNativeCurrencyInstead = ({ baseCurrency, quoteCurrency, feeAmoun
   const router = useRouter()
   const native = useNativeCurrency()
 
-  const runOnce = useRef(false)
+  const useNativeInstead = useMemo(() => {
+    if (!router.isReady) return false
 
-  const [useNativeInstead, setUseNativeInstead] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (runOnce.current || !router.isReady) return
-    runOnce.current = true
-
-    setUseNativeInstead(router.query.currency?.includes(native.symbol) || false)
+    return (
+      router.query.currency?.includes(native.symbol) ||
+      router.query.currency?.includes(native.symbol.toLowerCase()) ||
+      false
+    )
   }, [router.query.currency, native.symbol, router.isReady])
 
   const canUseNativeCurrency = useMemo(() => {
@@ -72,8 +70,6 @@ export const useNativeCurrencyInstead = ({ baseCurrency, quoteCurrency, feeAmoun
           },
         })
       }
-
-      setUseNativeInstead(event.target.checked)
     },
     [baseCurrency, currencyId, feeAmount, native, quoteCurrency, router],
   )
