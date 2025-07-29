@@ -2,7 +2,7 @@ import { Pair } from '@pancakeswap/sdk'
 import { Box, Container } from '@pancakeswap/uikit'
 
 import { FeeAmount, Pool } from '@pancakeswap/v3-sdk'
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 
 import { useRouter } from 'next/router'
 
@@ -167,6 +167,7 @@ export function AddLiquidityV3Layout({
   children: React.ReactNode
 }) {
   const { chainId } = useActiveChainId()
+  const router = useRouter()
 
   const [selectType] = useAtom(selectTypeAtom)
   const { currencyIdA, currencyIdB, feeAmount } = useCurrencyParams()
@@ -206,6 +207,17 @@ export function AddLiquidityV3Layout({
     [pool, baseCurrency],
   )
 
+  const handleInvertCurrencies = useCallback(() => {
+    if (currencyIdA && currencyIdB) {
+      router.push({
+        pathname: router.pathname,
+        query: {
+          currency: feeAmount ? [currencyIdB!, currencyIdA!, feeAmount?.toString()] : [currencyIdB!, currencyIdA!],
+        },
+      })
+    }
+  }, [currencyIdA, currencyIdB, feeAmount, router])
+
   return (
     <Container mx="auto" my="24px" maxWidth="1200px">
       <PoolInfoHeader
@@ -215,6 +227,7 @@ export function AddLiquidityV3Layout({
         currency0={pool?.token0 ?? baseCurrency ?? undefined}
         currency1={pool?.token1 ?? quoteCurrency ?? undefined}
         isInverted={inverted}
+        onInvertPrices={handleInvertCurrencies}
         poolId={poolAddress}
         overrideAprDisplay={
           selectType === SELECTOR_TYPE.V3
