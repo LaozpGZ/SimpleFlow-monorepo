@@ -4365,9 +4365,9 @@
   "Create your Wallet with Social Login": "Crie sua carteira usando Login Social",
   "Important Notice: %chain% Sunset": "Aviso importante: Descontinuação da %chain%",
   "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% será descontinuada em %date%. Certifique-se de remover sua liquidez de todas as pools antes do prazo.",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
-  "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "Slippage setting": "Configuração de derrapagem",
+  "Liquidity Slippage": "Derrapagem de liquidez",
+  "Loading more pools...": "Carregando mais pools...",
+  "Try Zap": "Experimente o Zap",
+  "to automatically balance and provide V3 liquidity in one click.": "para equilibrar automaticamente e fornecer liquidez V3 em um clique."
 }
