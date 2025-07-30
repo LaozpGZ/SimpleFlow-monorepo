@@ -54,7 +54,7 @@ export const useAddressBalance = (address?: string, options: UseAddressBalanceOp
 
   const isListedToken = useCallback(
     (chainId: ChainId, tokenAddress: string): boolean => {
-      return isNative(tokenAddress) || Boolean(list[chainId]?.[safeGetAddress(tokenAddress)])
+      return isNative(tokenAddress) || Boolean(list[chainId]?.[safeGetAddress(tokenAddress) ?? ''])
     },
     [list],
   )
