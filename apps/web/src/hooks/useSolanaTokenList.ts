@@ -96,9 +96,10 @@ export function useSolanaTokenList(enabled = true) {
   }, [])
 
   // Remove a user token and persist
-  const removeUserToken = useCallback((address: string) => {
+  const removeUserToken = useCallback((addresses: string[] | string) => {
     setUserTokens((prev) => {
-      const next = prev.filter((t) => t.address !== address)
+      const addressesToRemove = Array.isArray(addresses) ? addresses : [addresses]
+      const next = prev.filter((t) => !addressesToRemove.includes(t.address))
       saveUserAddedTokens(next)
       return next
     })
@@ -119,7 +120,17 @@ export function useSolanaTokenList(enabled = true) {
       addUserToken,
       removeUserToken,
       tokenCountsByList,
+      userTokens,
     }),
-    [mergedTokens, pcsLoading, raydiumLoading, jupiterLoading, addUserToken, removeUserToken, tokenCountsByList],
+    [
+      mergedTokens,
+      userTokens,
+      pcsLoading,
+      raydiumLoading,
+      jupiterLoading,
+      addUserToken,
+      removeUserToken,
+      tokenCountsByList,
+    ],
   )
 }

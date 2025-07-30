@@ -10,7 +10,7 @@ import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { UnifiedChainId } from '@pancakeswap/chains'
 import { usePreviousValue } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
-import { Token, UnifiedCurrency } from '@pancakeswap/sdk'
+import { SPLToken, Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import { TokenList, WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { enableList, removeList, useFetchListCallback } from '@pancakeswap/token-lists/react'
 import {
@@ -105,7 +105,7 @@ export default function CurrencySearchModal({
   const prevView = usePreviousValue(modalView)
 
   // used for import token flow
-  const [importToken, setImportToken] = useState<Token | undefined>()
+  const [importToken, setImportToken] = useState<Token | SPLToken | undefined>()
 
   // used for import list
   const [importList, setImportList] = useState<TokenList | undefined>()
@@ -258,7 +258,9 @@ export default function CurrencySearchModal({
             selectedChainId={selectedChainId}
           />
         ) : modalView === CurrencyModalView.importToken && importToken ? (
-          <ImportToken tokens={[importToken]} handleCurrencySelect={handleCurrencySelect} />
+          importToken instanceof SPLToken ? null : (
+            <ImportToken tokens={[importToken]} handleCurrencySelect={handleCurrencySelect} />
+          )
         ) : modalView === CurrencyModalView.importList && importList && listURL ? (
           <ImportList
             onAddList={handleAddList}
