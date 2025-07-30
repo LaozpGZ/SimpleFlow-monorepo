@@ -4009,7 +4009,7 @@
   "Pending rewards are calculated based on the current pool size and the time since the last harvest.": "Recompensele în așteptare se calculează pe baza dimensiunii portofoliului curent și a timpului de la ultima colectare.",
   "Base/quote tokens have been switched to simplify data display.": "Jetoanele de bază/de cotație au fost schimbate pentru a simplifica afișarea datelor.",
   "Create New Position": "Creează o poziție nouă",
-  "Locked positions": "Locked positions",
+  "Locked positions": "Poziții blocate",
   "Load More": "Încarcă mai multe",
   "You previously permanently locked the NFT for this position, however trading fees earned are still fully claimable.": "You previously permanently locked the NFT for this position, however trading fees earned are still fully claimable.",
   "Staked RAY": "Staked RAY",
