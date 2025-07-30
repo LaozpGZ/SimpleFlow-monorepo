@@ -31,32 +31,30 @@ export const InfinityPoolInfoHeader = () => {
   )
 
   return (
-    <>
-      <PoolInfoHeader
-        poolId={poolId}
-        poolInfo={poolInfo}
-        currency0={currency0}
-        currency1={currency1}
-        symbol0={symbol0}
-        symbol1={symbol1}
-        chainId={chainId}
-        isInverted={Boolean(inverted)}
-        onInvertPrices={() => setInverted(!inverted)}
-        hookData={hookData}
-        linkType="addLiquidity"
-        overrideAprDisplay={{
-          aprDisplay: poolInfo ? (
-            poolInfo.protocol === Protocol.InfinityCLAMM ? (
-              <InfinityCLPoolDerivedAprButton pool={poolInfo} fontSize="24px" />
-            ) : poolInfo.protocol === Protocol.InfinityBIN ? (
-              <InfinityBinPoolDerivedAprButton pool={poolInfo} fontSize="24px" />
-            ) : (
-              '-'
-            )
-          ) : null,
-          roiCalculator: <></>,
-        }}
-      />
-    </>
+    <PoolInfoHeader
+      poolId={poolId}
+      poolInfo={poolInfo}
+      currency0={currency0}
+      currency1={currency1}
+      symbol0={symbol0}
+      symbol1={symbol1}
+      chainId={chainId}
+      isInverted={Boolean(inverted)}
+      onInvertPrices={() => setInverted(!inverted)}
+      hookData={hookData}
+      linkType="addLiquidity"
+      overrideAprDisplay={{
+        aprDisplay: poolInfo ? (
+          poolInfo.protocol === Protocol.InfinityCLAMM ? (
+            <InfinityCLPoolDerivedAprButton pool={poolInfo} fontSize="24px" />
+          ) : poolInfo.protocol === Protocol.InfinityBIN ? (
+            <InfinityBinPoolDerivedAprButton pool={poolInfo} fontSize="24px" />
+          ) : (
+            '-'
+          )
+        ) : null,
+        roiCalculator: <></>,
+      }}
+    />
   )
 }

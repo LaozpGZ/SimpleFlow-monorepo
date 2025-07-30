@@ -1,5 +1,5 @@
 import '@kyberswap/pancake-liquidity-widgets/dist/style.css'
-import { Trans, useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@pancakeswap/localization'
 import { Currency } from '@pancakeswap/sdk'
 import {
   Flex,
@@ -213,19 +213,17 @@ export const ZapLiquidityWidget: React.FC<ZapLiquidityProps> = ({
       <Message variant="primary60" padding="8px" icon={<InfoFilledIcon color="#02919D" />}>
         <Flex flexDirection="column" style={{ gap: 8 }}>
           <MessageText lineHeight="120%" fontSize={16} style={{ lineHeight: '1.5' }}>
-            <Trans>
-              <ActionText
-                as="span"
-                color="#02919D"
-                onClick={handleOnClick}
-                role="presentation"
-                data-dd-action-name="Zap V3 Liquidity"
-                bold
-              >
-                Try Zap{' '}
-              </ActionText>
-              to automatically balance and provide V3 liquidity in one click.
-            </Trans>
+            <ActionText
+              as="span"
+              color="#02919D"
+              onClick={handleOnClick}
+              role="presentation"
+              data-dd-action-name="Zap V3 Liquidity"
+              bold
+            >
+              {t('Try Zap')}{' '}
+            </ActionText>
+            {t('to automatically balance and provide V3 liquidity in one click.')}
           </MessageText>
         </Flex>
       </Message>

@@ -57,19 +57,6 @@ const AddLiquidityPage = () => {
       : undefined
   }, [farmsV2Public, farmV3Public?.farmsWithPrice, currencyA, currencyB, router])
 
-  // const handleRefresh = useCallback(() => {
-  //   router.replace(
-  //     {
-  //       pathname: router.pathname,
-  //       query: {
-  //         currency: [currencyIdA!, currencyIdB!],
-  //       },
-  //     },
-  //     undefined,
-  //     { shallow: true },
-  //   )
-  // }, [router, currencyIdA, currencyIdB])
-
   return (
     <AddLiquidityV2FormProvider>
       <LiquidityFormProvider>

@@ -11,6 +11,10 @@ interface UseNativeCurrencyInsteadProps {
   feeAmount: number | undefined
 }
 
+/**
+ * For V3 & V2 Add Liquidity pages, we need to handle the case where the user wants to use the native currency instead of the wrapped currency.
+ * This is because the universal farms overlay shows only Wrapped Native pairs, but user should be able to deposit in native currency.
+ */
 export const useNativeCurrencyInstead = ({ baseCurrency, quoteCurrency, feeAmount }: UseNativeCurrencyInsteadProps) => {
   const router = useRouter()
   const native = useNativeCurrency()
