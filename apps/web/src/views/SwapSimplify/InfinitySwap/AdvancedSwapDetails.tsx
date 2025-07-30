@@ -276,7 +276,7 @@ export const TradeSummary = memo(function TradeSummary({
               <DetailsTitle>{t('Slippage Tolerance')}</DetailsTitle>
             </QuestionHelperV2>
           </RowFixed>
-          <SlippageButton />
+          <SlippageButton enableAutoSlippage />
         </RowBetween>
       )}
 
