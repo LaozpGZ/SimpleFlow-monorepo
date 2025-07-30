@@ -237,8 +237,8 @@ export default function StableFormView({
               <Text>
                 {price?.toSignificant(6) ?? '-'}{' '}
                 {t('%assetA% per %assetB%', {
-                  assetB: currencies[Field.CURRENCY_B]?.symbol ?? '',
-                  assetA: currencies[Field.CURRENCY_A]?.symbol ?? '',
+                  assetA: currencies[Field.CURRENCY_B]?.symbol ?? '',
+                  assetB: currencies[Field.CURRENCY_A]?.symbol ?? '',
                 })}
               </Text>
             </AutoRow>
