@@ -1,4 +1,3 @@
-import { getAddress } from 'viem'
 import { ChainId, getChainName } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, FlexGap, Skeleton, Text } from '@pancakeswap/uikit'
@@ -7,7 +6,9 @@ import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
 import { BalanceData } from 'hooks/useAddressBalance'
 import React from 'react'
 import styled from 'styled-components'
+
 import { formatAmount } from 'utils/formatInfoNumbers'
+import { safeGetAddress } from 'utils/safeGetAddress'
 
 const SCROLLBAR_SHIFT_PX = 8
 
@@ -67,12 +68,7 @@ export const AssetsList: React.FC<AssetsListProps> = ({ assets, isLoading, onRow
         </FlexGap>
       ) : assets.length === 0 ? null : (
         assets.map((asset) => {
-          let address = asset.token.address as `0x${string}`
-          try {
-            address = getAddress(address)
-          } catch (e) {
-            // Skip if invalid
-          }
+          const address = safeGetAddress(asset.token.address)
           const isNative = address === ZERO_ADDRESS
           const tokenInfo = {
             chainId: asset.chainId,

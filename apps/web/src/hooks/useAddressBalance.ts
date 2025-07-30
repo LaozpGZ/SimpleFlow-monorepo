@@ -2,9 +2,10 @@ import { ChainId } from '@pancakeswap/chains'
 import { ZERO_ADDRESS } from '@pancakeswap/swap-sdk-core'
 import { useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
-import { getAddress } from 'viem'
 import { useCallback, useMemo } from 'react'
+
 import { useCombinedActiveList } from 'state/lists/hooks'
+import { safeGetAddress } from 'utils/safeGetAddress'
 
 export interface TokenData {
   address: string
@@ -42,15 +43,6 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_WALLET_API_BASE_URL || 'https://wal
 
 function isNative(address: string): boolean {
   return address === ZERO_ADDRESS
-}
-
-function safeGetAddress(address: string): string {
-  try {
-    return getAddress(address)
-  } catch (e) {
-    console.error(`Invalid address: ${address}`, e)
-    return ''
-  }
 }
 
 /**
@@ -126,9 +118,6 @@ export const useAddressBalance = (address?: string, options: UseAddressBalanceOp
       .sort((a, b) => {
         const aListed = isListedToken(a.chainId, a.token.address)
         const bListed = isListedToken(b.chainId, b.token.address)
-        if (aListed && bListed) {
-          return (b.price?.totalUsd ?? 0) - (a.price?.totalUsd ?? 0)
-        }
         if (aListed && !bListed) return -1
         if (!aListed && bListed) return 1
         return (b.price?.totalUsd ?? 0) - (a.price?.totalUsd ?? 0)
