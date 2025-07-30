@@ -9,6 +9,8 @@ import { NextPageWithLayout } from 'utils/page.types'
 import NextLink from 'next/link'
 import { CHAIN_IDS } from 'utils/wagmi'
 import { PoolList } from 'views/AddLiquidityInfinity/components/PoolList'
+import { useClearAllQueryStates } from 'state/infinity/shared'
+import { useEffect } from 'react'
 
 export type RouteType = typeof SelectIdRoute
 
@@ -16,6 +18,15 @@ const PoolListPage = () => {
   const { routeParams } = useSelectIdRoute()
   const { t } = useTranslation()
   useDefaultSelectIdRoute()
+
+  const clearQueryStates = useClearAllQueryStates()
+
+  useEffect(() => {
+    return () => {
+      clearQueryStates()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (!routeParams) {
     return <PageLoader />

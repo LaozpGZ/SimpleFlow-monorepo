@@ -1,4 +1,5 @@
 import { parseAsBoolean, parseAsInteger, parseAsStringLiteral, useQueryState, useQueryStates } from 'nuqs'
+import { useCallback } from 'react'
 
 export const useInverted = () => {
   return useQueryState(
@@ -37,4 +38,20 @@ export const useLiquidityShapeQueryState = () => {
       .withDefault('Spot')
       .withOptions({ shallow: true }),
   )
+}
+
+export const useClearAllQueryStates = () => {
+  const [, setInverted] = useInverted()
+  const [, setNumBin] = useBinNumQueryState()
+  const [, setLiquidityShape] = useLiquidityShapeQueryState()
+  const [, setBinRange] = useBinRangeQueryState()
+  const [, setClRange] = useClRangeQueryState()
+
+  return useCallback(() => {
+    setInverted(null)
+    setNumBin(null)
+    setLiquidityShape(null)
+    setBinRange({ lowerBinId: null, upperBinId: null })
+    setClRange({ lowerTick: null, upperTick: null })
+  }, [setInverted, setNumBin, setLiquidityShape, setBinRange, setClRange])
 }
