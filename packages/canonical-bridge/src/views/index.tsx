@@ -179,7 +179,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       },
       transfer: transferConfig,
       components: {
-        connectWalletButton: connectWalletButtons[fromChain || 'default'],
+        connectWalletButton: (fromChain && connectWalletButtons[fromChain]) ?? connectWalletButtons.default,
         refreshingIcon: <RefreshingIcon />,
       },
 
