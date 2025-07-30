@@ -4365,9 +4365,9 @@
   "Create your Wallet with Social Login": "Maak je wallet met social login",
   "Important Notice: %chain% Sunset": "Belangrijke mededeling: %chain% wordt stopgezet",
   "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% wordt stopgezet op %date%. Verwijder je liquiditeit uit alle pools vóór deze datum.",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
-  "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "Slippage setting": "Instellingen voor slippage",
+  "Liquidity Slippage": "Liquiditeitsslippage",
+  "Loading more pools...": "Meer pools laden ...",
+  "Try Zap": "Probeer Zap",
+  "to automatically balance and provide V3 liquidity in one click.": "om met één klik automatisch je tokens in balans te brengen en V3-liquiditeit te verstrekken."
 }
