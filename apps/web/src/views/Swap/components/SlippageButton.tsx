@@ -165,7 +165,7 @@ const SlippageSettingsModal = ({ isOpen, onDismiss }: { isOpen: boolean; onDismi
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
       <MotionModal title={t('Slippage setting')} onDismiss={onDismiss} minHeight="100px">
-        <FlexGap gap="16px" justifyContent="space-between" alignItems="center">
+        <FlexGap gap="16px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
           <Box>
             <PreTitle>{t('Liquidity Slippage')}</PreTitle>
             <ButtonsContainer style={{ flexWrap: isMobile ? 'nowrap' : 'wrap' }}>
