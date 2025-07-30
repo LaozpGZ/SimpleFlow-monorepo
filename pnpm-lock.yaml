@@ -19,8 +19,8 @@ catalogs:
       specifier: 2.0.0
       version: 2.0.0
     jotai:
-      specifier: ^2.4.3
-      version: 2.5.1
+      specifier: 2.12.5
+      version: 2.12.5
     next:
       specifier: 15.2.3
       version: 15.2.3
@@ -356,7 +356,7 @@ importers:
         version: 1.11.10
       jotai:
         specifier: 'catalog:'
-        version: 2.5.1(@types/react@18.2.37)(react@18.2.0)
+        version: 2.12.5(@types/react@18.2.37)(react@18.2.0)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -550,7 +550,7 @@ importers:
         version: 5.7.2(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       jotai:
         specifier: 'catalog:'
-        version: 2.5.1(@types/react@18.2.37)(react@18.2.0)
+        version: 2.12.5(@types/react@18.2.37)(react@18.2.0)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -820,7 +820,7 @@ importers:
         version: 5.0.0(encoding@0.1.13)(graphql@16.8.1)
       jotai:
         specifier: 'catalog:'
-        version: 2.5.1(@types/react@18.2.37)(react@18.2.0)
+        version: 2.12.5(@types/react@18.2.37)(react@18.2.0)
       js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
@@ -1148,7 +1148,7 @@ importers:
         version: 9.0.21
       jotai:
         specifier: 'catalog:'
-        version: 2.5.1(@types/react@18.2.37)(react@18.2.0)
+        version: 2.12.5(@types/react@18.2.37)(react@18.2.0)
       js-cookie:
         specifier: ^3.0.1
         version: 3.0.5
@@ -1738,10 +1738,10 @@ importers:
         version: 1.4.1
       jotai:
         specifier: 'catalog:'
-        version: 2.5.1(@types/react@18.2.37)(react@18.2.0)
+        version: 2.12.5(@types/react@18.2.37)(react@18.2.0)
       jotai-valtio:
         specifier: ^0.6.0
-        version: 0.6.0(jotai@2.5.1(@types/react@18.2.37)(react@18.2.0))(valtio@2.1.4(@types/react@18.2.37)(react@18.2.0))
+        version: 0.6.0(jotai@2.12.5(@types/react@18.2.37)(react@18.2.0))(valtio@2.1.4(@types/react@18.2.37)(react@18.2.0))
       js-cookie:
         specifier: ^3.0.1
         version: 3.0.5
@@ -2158,7 +2158,7 @@ importers:
     dependencies:
       '@bnb-chain/canonical-bridge-widget':
         specifier: 0.6.1
-        version: 0.6.1(4f75fff7439687b0e4903bbd204af31e)
+        version: 0.6.1(24e1c541dc298701bbee010161d1036b)
       '@emotion/react':
         specifier: ^11
         version: 11.11.4(@types/react@18.2.37)(react@18.2.0)
@@ -2170,7 +2170,7 @@ importers:
         version: 0.4.9(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.7.3)(utf-8-validate@5.0.10)
       '@solana/wallet-adapter-react':
         specifier: ^0
-        version: 0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@5.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(encoding@0.1.13)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0)
+        version: 0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@6.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(encoding@0.1.13)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0)
       '@solana/web3.js':
         specifier: ^1.87.6
         version: 1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -2516,7 +2516,7 @@ importers:
         version: 1.5.0
       jotai:
         specifier: 'catalog:'
-        version: 2.5.1(@types/react@18.0.23)(react@18.2.0)
+        version: 2.12.5(@types/react@18.0.23)(react@18.2.0)
       jsbi:
         specifier: 4.3.0
         version: 4.3.0
@@ -3475,7 +3475,7 @@ importers:
         version: 18.2.37
       jotai:
         specifier: 'catalog:'
-        version: 2.5.1(@types/react@18.2.37)(react@18.2.0)
+        version: 2.12.5(@types/react@18.2.37)(react@18.2.0)
       localforage:
         specifier: ^1.10.0
         version: 1.10.0
@@ -3848,7 +3848,7 @@ importers:
         version: 9.1.2
       jotai:
         specifier: 'catalog:'
-        version: 2.5.1(@types/react@18.2.37)(react@18.2.0)
+        version: 2.12.5(@types/react@18.2.37)(react@18.2.0)
       styled-components:
         specifier: 6.0.7
         version: 6.0.7(babel-plugin-styled-components@1.13.3)(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -4004,7 +4004,7 @@ importers:
         version: 1.11.10
       jotai:
         specifier: 'catalog:'
-        version: 2.5.1(@types/react@18.2.37)(react@18.2.0)
+        version: 2.12.5(@types/react@18.2.37)(react@18.2.0)
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -19594,6 +19594,18 @@ packages:
       jotai: '>=2.0.0'
       valtio: '>=2.0.0'
 
+  jotai@2.12.5:
+    resolution: {integrity: sha512-G8m32HW3lSmcz/4mbqx0hgJIQ0ekndKWiYP7kWVKi0p6saLXdSoye+FZiOFyonnd7Q482LCzm8sMDl7Ar1NWDw==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=17.0.0'
+      react: '>=17.0.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      react:
+        optional: true
+
   jotai@2.5.1:
     resolution: {integrity: sha512-vanPCCSuHczUXNbVh/iUunuMfrWRL4FdBtAbTRmrfqezJcKb8ybBTg8iivyYuUHapjcDETyJe1E4inlo26bVHA==}
     engines: {node: '>=12.20.0'}
@@ -28144,13 +28156,13 @@ snapshots:
       axios: 1.6.8(debug@4.4.0)
       viem: 2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.67)
 
-  '@bnb-chain/canonical-bridge-widget@0.6.1(4f75fff7439687b0e4903bbd204af31e)':
+  '@bnb-chain/canonical-bridge-widget@0.6.1(24e1c541dc298701bbee010161d1036b)':
     dependencies:
       '@bnb-chain/canonical-bridge-sdk': 0.5.0(axios@1.6.8)(viem@2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@5.0.10)(zod@3.25.67))
       '@emotion/react': 11.11.4(@types/react@18.2.37)(react@18.2.0)
       '@emotion/styled': 11.11.5(@emotion/react@11.11.4(@types/react@18.2.37)(react@18.2.0))(@types/react@18.2.37)(react@18.2.0)
       '@solana/spl-token': 0.4.9(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bufferutil@4.0.8)(encoding@0.1.13)(fastestsmallesttextencoderdecoder@1.0.22)(typescript@5.7.3)(utf-8-validate@5.0.10)
-      '@solana/wallet-adapter-react': 0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@5.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(encoding@0.1.13)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0)
+      '@solana/wallet-adapter-react': 0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@6.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(encoding@0.1.13)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0)
       '@solana/web3.js': 1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
       '@tanstack/react-query': 5.52.1(react@18.2.0)
       '@tronweb3/tronwallet-adapter-react-hooks': 1.1.9(react-dom@18.2.0(react@18.2.0))(react@18.2.0)
@@ -40790,11 +40802,11 @@ snapshots:
       - bs58
       - react-native
 
-  '@solana/wallet-adapter-react@0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@5.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(encoding@0.1.13)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0)':
+  '@solana/wallet-adapter-react@0.15.36(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@6.0.0)(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(encoding@0.1.13)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0)':
     dependencies:
       '@solana-mobile/wallet-adapter-mobile': 2.1.4(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(react-native@0.73.6(@babel/core@7.23.9)(@babel/preset-env@7.23.3(@babel/core@7.23.9))(bufferutil@4.0.8)(encoding@0.1.13)(react@18.2.0)(utf-8-validate@5.0.10))(react@18.2.0)
       '@solana/wallet-adapter-base': 0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
-      '@solana/wallet-standard-wallet-adapter-react': 1.1.2(@solana/wallet-adapter-base@0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)))(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@5.0.0)(react@18.2.0)
+      '@solana/wallet-standard-wallet-adapter-react': 1.1.2(@solana/wallet-adapter-base@0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)))(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@6.0.0)(react@18.2.0)
       '@solana/web3.js': 1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
       react: 18.2.0
     transitivePeerDependencies:
@@ -41490,6 +41502,19 @@ snapshots:
       '@wallet-standard/wallet': 1.1.0
       bs58: 5.0.0
 
+  '@solana/wallet-standard-wallet-adapter-base@1.1.2(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@6.0.0)':
+    dependencies:
+      '@solana/wallet-adapter-base': 0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
+      '@solana/wallet-standard-chains': 1.1.0
+      '@solana/wallet-standard-features': 1.2.0
+      '@solana/wallet-standard-util': 1.1.1
+      '@solana/web3.js': 1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      '@wallet-standard/app': 1.1.0
+      '@wallet-standard/base': 1.1.0
+      '@wallet-standard/features': 1.1.0
+      '@wallet-standard/wallet': 1.1.0
+      bs58: 6.0.0
+
   '@solana/wallet-standard-wallet-adapter-base@1.1.2(@solana/web3.js@1.98.2(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.7.3)(utf-8-validate@5.0.10))(bs58@5.0.0)':
     dependencies:
       '@solana/wallet-adapter-base': 0.9.24(@solana/web3.js@1.98.2(bufferutil@4.0.8)(encoding@0.1.13)(typescript@5.7.3)(utf-8-validate@5.0.10))
@@ -41551,6 +41576,17 @@ snapshots:
     dependencies:
       '@solana/wallet-adapter-base': 0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
       '@solana/wallet-standard-wallet-adapter-base': 1.1.2(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@5.0.0)
+      '@wallet-standard/app': 1.1.0
+      '@wallet-standard/base': 1.1.0
+      react: 18.2.0
+    transitivePeerDependencies:
+      - '@solana/web3.js'
+      - bs58
+
+  '@solana/wallet-standard-wallet-adapter-react@1.1.2(@solana/wallet-adapter-base@0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)))(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@6.0.0)(react@18.2.0)':
+    dependencies:
+      '@solana/wallet-adapter-base': 0.9.24(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
+      '@solana/wallet-standard-wallet-adapter-base': 1.1.2(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))(bs58@6.0.0)
       '@wallet-standard/app': 1.1.0
       '@wallet-standard/base': 1.1.0
       react: 18.2.0
@@ -55340,14 +55376,19 @@ snapshots:
 
   jose@5.2.1: {}
 
-  jotai-valtio@0.6.0(jotai@2.5.1(@types/react@18.2.37)(react@18.2.0))(valtio@2.1.4(@types/react@18.2.37)(react@18.2.0)):
+  jotai-valtio@0.6.0(jotai@2.12.5(@types/react@18.2.37)(react@18.2.0))(valtio@2.1.4(@types/react@18.2.37)(react@18.2.0)):
     dependencies:
-      jotai: 2.5.1(@types/react@18.2.37)(react@18.2.0)
+      jotai: 2.12.5(@types/react@18.2.37)(react@18.2.0)
       valtio: 2.1.4(@types/react@18.2.37)(react@18.2.0)
 
-  jotai@2.5.1(@types/react@18.0.23)(react@18.2.0):
+  jotai@2.12.5(@types/react@18.0.23)(react@18.2.0):
     optionalDependencies:
       '@types/react': 18.0.23
+      react: 18.2.0
+
+  jotai@2.12.5(@types/react@18.2.37)(react@18.2.0):
+    optionalDependencies:
+      '@types/react': 18.2.37
       react: 18.2.0
 
   jotai@2.5.1(@types/react@18.2.37)(react@18.2.0):

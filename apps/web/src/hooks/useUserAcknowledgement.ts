@@ -4,7 +4,7 @@ import { useCallback, useMemo } from 'react'
 import { useAccount } from 'wagmi'
 
 const userAckAtomFamily = atomFamily((key: string) =>
-  atomWithStorage<boolean>(`pcs_user_ack_${key}`, false, undefined, { unstable_getOnInit: true }),
+  atomWithStorage<boolean>(`pcs_user_ack_${key}`, false, undefined, { getOnInit: true }),
 )
 
 export function useUserAcknowledgement(id: string) {
