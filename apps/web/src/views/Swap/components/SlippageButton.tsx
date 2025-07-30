@@ -1,21 +1,31 @@
 import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
-import { TradeType } from '@pancakeswap/sdk'
-import { InfinityRouter, SmartRouterTrade } from '@pancakeswap/smart-router'
 import {
+  Box,
   Button,
+  Flex,
+  FlexGap,
+  Input,
+  Message,
+  ModalV2,
+  MotionModal,
   PencilIcon,
+  PreTitle,
   RiskAlertIcon,
   Text,
   useMatchBreakpoints,
+  useModalV2,
   useTooltip,
   WarningIcon,
 } from '@pancakeswap/uikit'
-import GlobalSettings from 'components/Menu/GlobalSettings'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
-import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
-import { ReactElement } from 'react'
+import { useUserSlippage } from '@pancakeswap/utils/user'
+import { VerticalDivider } from '@pancakeswap/widgets-internal'
+import { DEFAULT_SLIPPAGE_TOLERANCE, SlippageError } from 'components/Menu/GlobalSettings/TransactionSettings'
+
+import { useAutoSlippageEnabled, useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
+import { useCallback, useState } from 'react'
 import styled from 'styled-components'
+import { escapeRegExp } from 'utils'
 import { basisPointsToPercent } from 'utils/exchange'
 
 const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: string }>`
@@ -27,10 +37,33 @@ const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: s
   color: ${({ $color }) => $color};
 `
 
+const ButtonsContainer = styled(FlexGap).attrs({ flexWrap: 'wrap', gap: '4px' })`
+  background-color: ${({ theme }) => theme.colors.input};
+  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+  border-radius: 16px;
+  width: fit-content;
+
+  box-shadow: ${({ theme }) => theme.shadows.inset};
+`
+
+const StyledButton = styled(Button)`
+  height: 40px;
+  padding: 0 8px;
+  ${({ theme }) => theme.mediaQueries.md} {
+    padding: 0 16px;
+  }
+`
+
+const StyledVerticalDivider = styled(VerticalDivider).attrs(({ theme }) => ({ bg: theme.colors.inputSecondary }))`
+  margin: 0 4px;
+`
+
 export const SlippageButton = () => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
+
+  const { isOpen, onOpen, onDismiss } = useModalV2()
 
   // Calculate auto slippage
   const { slippageTolerance, isAuto } = useAutoSlippageWithFallback()
@@ -56,37 +89,209 @@ export const SlippageButton = () => {
 
   return (
     <>
-      <GlobalSettings
-        id="slippage_btn_global_settings"
-        key="slippage_btn_global_settings"
-        mode={SettingsMode.SWAP_LIQUIDITY}
-        overrideButton={(onClick) => (
-          <div style={{ textAlign: 'center' }}>
-            <div ref={!isMobile ? targetRef : undefined}>
-              <TertiaryButton
-                $color={color}
-                startIcon={
-                  isRiskyVeryHigh ? (
-                    <RiskAlertIcon color={color} width={16} />
-                  ) : isRiskyLow || isRiskyHigh ? (
-                    <WarningIcon color={color} width={16} />
-                  ) : undefined
-                }
-                endIcon={<PencilIcon color={color} width={12} />}
-                onClick={onClick}
-              >
-                {isAuto && slippageTolerance
-                  ? `${t('Auto')}: ${basisPointsToPercent(slippageTolerance).toFixed(2)}%`
-                  : typeof slippageTolerance === 'number'
-                  ? `${basisPointsToPercent(slippageTolerance).toFixed(2)}%`
-                  : slippageTolerance}
-              </TertiaryButton>
-            </div>
+      <div style={{ textAlign: 'center' }}>
+        <div ref={!isMobile ? targetRef : undefined}>
+          <TertiaryButton
+            $color={color}
+            startIcon={
+              isRiskyVeryHigh ? (
+                <RiskAlertIcon color={color} width={16} />
+              ) : isRiskyLow || isRiskyHigh ? (
+                <WarningIcon color={color} width={16} />
+              ) : undefined
+            }
+            endIcon={<PencilIcon color={color} width={12} />}
+            onClick={onOpen}
+          >
+            {isAuto && slippageTolerance
+              ? `${t('Auto')}: ${basisPointsToPercent(slippageTolerance).toFixed(2)}%`
+              : typeof slippageTolerance === 'number'
+              ? `${basisPointsToPercent(slippageTolerance).toFixed(2)}%`
+              : slippageTolerance}
+          </TertiaryButton>
+        </div>
 
-            {(isRiskyLow || isRiskyHigh) && tooltipVisible && tooltip}
-          </div>
-        )}
-      />
+        {(isRiskyLow || isRiskyHigh) && tooltipVisible && tooltip}
+      </div>
+      <SlippageSettingsModal isOpen={isOpen} onDismiss={onDismiss} />
     </>
+  )
+}
+
+const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
+
+const SlippageSettingsModal = ({ isOpen, onDismiss }: { isOpen: boolean; onDismiss: () => void }) => {
+  const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
+  const [isAutoSlippageEnabled, setIsAutoSlippageEnabled] = useAutoSlippageEnabled()
+  const [userSlippageTolerance, setUserSlippageTolerance] = useUserSlippage()
+
+  const [slippageInput, setSlippageInput] = useState('')
+
+  const slippageInputIsValid =
+    slippageInput === '' || (userSlippageTolerance / 100).toFixed(2) === Number.parseFloat(slippageInput).toFixed(2)
+
+  let slippageError: SlippageError | undefined
+  if (slippageInput !== '' && !slippageInputIsValid) {
+    slippageError = SlippageError.InvalidInput
+  } else if (slippageInputIsValid && userSlippageTolerance < 50) {
+    // Slippage < 0.5%
+    slippageError = SlippageError.RiskyLow
+  } else if (slippageInputIsValid && userSlippageTolerance > 2000) {
+    // Slippage > 20%
+    slippageError = SlippageError.RiskyVeryHigh
+  } else if (slippageInputIsValid && userSlippageTolerance > 100) {
+    // Slippage > 1%
+    slippageError = SlippageError.RiskyHigh
+  } else {
+    slippageError = undefined
+  }
+
+  const parseCustomSlippage = useCallback((value: string) => {
+    if (value === '' || inputRegex.test(escapeRegExp(value))) {
+      setSlippageInput(value)
+
+      try {
+        const valueAsIntFromRoundedFloat = Number.parseInt((Number.parseFloat(value) * 100).toString())
+        if (!Number.isNaN(valueAsIntFromRoundedFloat) && valueAsIntFromRoundedFloat < 5000) {
+          setUserSlippageTolerance(valueAsIntFromRoundedFloat)
+        }
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }, [])
+
+  return (
+    <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
+      <MotionModal title={t('Slippage setting')} onDismiss={onDismiss} minHeight="100px">
+        <FlexGap gap="16px" justifyContent="space-between" alignItems="center">
+          <Box>
+            <PreTitle>{t('Liquidity Slippage')}</PreTitle>
+            <ButtonsContainer style={{ flexWrap: isMobile ? 'nowrap' : 'wrap' }}>
+              <StyledButton
+                scale="sm"
+                onClick={() => {
+                  setSlippageInput('')
+                  setIsAutoSlippageEnabled(true)
+                }}
+                variant={isAutoSlippageEnabled ? 'subtle' : 'light'}
+              >
+                {t('Auto')}
+              </StyledButton>
+              <StyledButton
+                scale="sm"
+                onClick={() => {
+                  setSlippageInput('')
+                  setUserSlippageTolerance(10)
+                  setIsAutoSlippageEnabled(false)
+                }}
+                variant={userSlippageTolerance === 10 && !isAutoSlippageEnabled ? 'subtle' : 'light'}
+              >
+                0.1%
+              </StyledButton>
+              <StyledButton
+                scale="sm"
+                onClick={() => {
+                  setSlippageInput('')
+                  setUserSlippageTolerance(50)
+                  setIsAutoSlippageEnabled(false)
+                }}
+                variant={userSlippageTolerance === 50 && !isAutoSlippageEnabled ? 'subtle' : 'light'}
+              >
+                0.5%
+              </StyledButton>
+              <StyledButton
+                scale="sm"
+                onClick={() => {
+                  setSlippageInput('')
+                  setUserSlippageTolerance(100)
+                  setIsAutoSlippageEnabled(false)
+                }}
+                variant={userSlippageTolerance === 100 && !isAutoSlippageEnabled ? 'subtle' : 'light'}
+              >
+                1.0%
+              </StyledButton>
+            </ButtonsContainer>
+          </Box>
+
+          <FlexGap gap="8px" alignItems="center">
+            <Text color="textSubtle">{t('Custom')}</Text>
+            <Box position="relative" width="82px">
+              <Input
+                scale="lg"
+                inputMode="decimal"
+                pattern="^[0-9]*[.,]?[0-9]{0,2}$"
+                placeholder={isAutoSlippageEnabled ? 'Auto' : (userSlippageTolerance / 100).toFixed(2)}
+                value={slippageInput}
+                onBlur={() => {
+                  parseCustomSlippage((userSlippageTolerance / 100).toFixed(2))
+                }}
+                onChange={(event) => {
+                  if (isAutoSlippageEnabled) {
+                    setIsAutoSlippageEnabled(false)
+                  }
+                  if (event.currentTarget.validity.valid) {
+                    parseCustomSlippage(event.target.value.replace(/,/g, '.'))
+                  }
+                }}
+                isWarning={!slippageInputIsValid}
+                isSuccess={![10, 50, 100].includes(userSlippageTolerance)}
+                style={{
+                  paddingLeft: '12px',
+                  height: '40px',
+                }}
+              />
+              <Flex position="absolute" right="8px" top="8px" alignItems="center">
+                <StyledVerticalDivider />
+                <Text color="textSubtle"> %</Text>
+              </Flex>
+            </Box>
+          </FlexGap>
+        </FlexGap>
+
+        {!isAutoSlippageEnabled && !!slippageError && (
+          <Message
+            mt="8px"
+            variant={
+              slippageError === SlippageError.InvalidInput
+                ? 'primary'
+                : slippageError === SlippageError.RiskyLow || slippageError === SlippageError.RiskyHigh
+                ? 'warning'
+                : 'danger'
+            }
+          >
+            <Text>
+              {slippageError === SlippageError.InvalidInput
+                ? t('Enter a valid slippage percentage')
+                : slippageError === SlippageError.RiskyLow
+                ? t('Your transaction may fail')
+                : t('Your transaction may be frontrun')}
+              .<br />
+              <Text
+                as="button"
+                role="button"
+                onClick={() => {
+                  setSlippageInput('')
+                  setUserSlippageTolerance(DEFAULT_SLIPPAGE_TOLERANCE)
+                }}
+                style={{
+                  textDecoration: 'underline',
+                  cursor: 'pointer',
+                  display: 'inline-block',
+                  background: 'none',
+                  border: 'none',
+                  padding: 0,
+                }}
+                bold
+              >
+                {t('Reset slippage settings')}
+              </Text>{' '}
+              {t('to avoid potential loss')}.
+            </Text>
+          </Message>
+        )}
+      </MotionModal>
+    </ModalV2>
   )
 }
