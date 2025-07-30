@@ -1,6 +1,7 @@
 import { Protocol } from '@pancakeswap/farms'
+import { HookData } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Percent, Token, getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
+import { Currency, Percent } from '@pancakeswap/sdk'
 import {
   AutoColumn,
   Box,
@@ -10,154 +11,111 @@ import {
   CopyButton,
   Flex,
   FlexGap,
-  Grid,
   Link,
   MiscellaneousIcon,
   OpenNewIcon,
-  Spinner,
   SwapHorizIcon,
-  Tab,
-  TabMenu,
   Tag,
   Text,
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
-
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
-import {
-  CurrencyLogo,
-  DoubleCurrencyLogo,
-  FeeTierTooltip,
-  LightGreyCard,
-  Liquidity,
-} from '@pancakeswap/widgets-internal'
+import { CurrencyLogo, DoubleCurrencyLogo, FeeTierTooltip, Liquidity } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
-import { MiniUniversalFarmsOverlay } from 'components/MiniUniversalFarms/MiniUniversalFarmsOverlay'
-import { useHookByPoolId } from 'hooks/infinity/useHooksList'
-import { useCurrencyByChainId } from 'hooks/Tokens'
-import { NextSeo } from 'next-seo'
-import { useMemo, useState } from 'react'
-import { InfinityPoolInfo, PoolInfo as PoolInfoType } from 'state/farmsV4/state/type'
-import { useChainIdByQuery } from 'state/info/hooks'
+import { LinkType, MiniUniversalFarmsOverlay } from 'components/MiniUniversalFarms/MiniUniversalFarmsOverlay'
+import { getFarmAprInfo } from 'state/farmsV4/search/farm.util'
+import { PoolInfo } from 'state/farmsV4/state/type'
 import { getBlockExploreLink } from 'utils'
-import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { isInfinityProtocol } from 'utils/protocols'
 import { Tooltips } from 'views/CakeStaking/components/Tooltips'
-import { getRewardProvider } from 'views/universalFarms/components/FarmStatusDisplay/hooks'
+import { PoolFeaturesModal } from 'views/PoolDetail/components/PoolFeaturesModal'
 import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprButtonV3'
-import { RewardInfoCard } from 'views/universalFarms/components/RewardInfoCard'
-import LiquiditySunsetWarning from 'components/Liquidity/LiquiditySunsetWarning'
-import { usePoolInfoByQuery } from '../hooks/usePoolInfo'
-import { usePoolSymbol } from '../hooks/usePoolSymbol'
-import { useFlipCurrentPrice } from '../state/flipCurrentPrice'
-import { MyPositions } from './MyPositions'
-import { PoolCharts } from './PoolCharts'
-import { PoolFeaturesModal } from './PoolFeaturesModal'
-import { PoolStatus } from './PoolStatus'
-import { PoolTvlWarning } from './PoolTvlWarning'
-import { Transactions } from './Transactions'
 
-enum PoolDetailTab {
-  MyPositions = 0,
-  Transactions = 1,
+interface PoolInfoHeaderProps {
+  poolId?: `0x${string}`
+  poolInfo: PoolInfo | null | undefined
+  currency0?: Currency
+  currency1?: Currency
+  chainId?: number
+  isInverted?: boolean
+  hookData?: HookData
+  overrideAprDisplay?: {
+    aprDisplay?: React.ReactNode
+    roiCalculator?: React.ReactNode
+  }
+  linkType?: LinkType
+  onInvertPrices?: () => void
+
+  /** Optional override for currency0.symbol */
+  symbol0?: string
+  /** Optional override for currency1.symbol */
+  symbol1?: string
 }
-
-const RewardInfoCardContainer = ({ poolInfo }: { poolInfo: PoolInfoType }) => {
-  const provider = getRewardProvider(poolInfo.chainId, poolInfo.lpAddress)
-  const hasPoolReward = !!provider
-
-  if (!hasPoolReward) return null
-
-  return <RewardInfoCard provider={provider} />
-}
-
-export const PoolInfo = () => {
+export const PoolInfoHeader = ({
+  poolInfo,
+  currency0,
+  currency1,
+  symbol0,
+  symbol1,
+  chainId,
+  poolId,
+  hookData,
+  isInverted,
+  onInvertPrices,
+  overrideAprDisplay,
+  linkType,
+}: PoolInfoHeaderProps) => {
   const { t } = useTranslation()
-  const { isMobile, isMd } = useMatchBreakpoints()
-  const { poolSymbol } = usePoolSymbol()
 
-  const poolInfo = usePoolInfoByQuery()
+  const { isMobile, isTablet } = useMatchBreakpoints()
+  const isSmallScreen = isMobile || isTablet
 
   const protocol = poolInfo?.protocol
 
-  const chainId = useChainIdByQuery()
-
-  const isSmallScreen = isMobile || isMd
-
-  const [flipCurrentPrice, setFlipCurrentPrice] = useFlipCurrentPrice()
-  const [tab, setTab] = useState(PoolDetailTab.MyPositions)
-
-  const currency0 =
-    useCurrencyByChainId(poolInfo?.token0 ? getCurrencyAddress(poolInfo.token0) : undefined, chainId) ?? undefined
-  const currency1 =
-    useCurrencyByChainId(poolInfo?.token1 ? getCurrencyAddress(poolInfo.token1) : undefined, chainId) ?? undefined
-
-  const fee = useMemo(() => {
-    return new Percent(poolInfo?.feeTier ?? 0n, poolInfo?.feeTierBase)
-  }, [poolInfo?.feeTier, poolInfo?.feeTierBase])
-
-  const poolId = (poolInfo as InfinityPoolInfo)?.poolId
-  const hookData = useHookByPoolId(chainId, poolId)
-
-  if (!poolInfo)
-    return (
-      <Flex mt="80px" justifyContent="center">
-        <Spinner />
-      </Flex>
-    )
-
   return (
-    <AutoColumn gap={['16px', null, null, '48px']}>
-      <LiquiditySunsetWarning overrideChainId={poolInfo?.chainId} />
-
-      <NextSeo title={poolSymbol} />
-      <Card>
-        <CardBody>
+    <>
+      <Card innerCardProps={{ p: ['16px', '16px', '16px', '16px', '16px', '8px 24px'] }}>
+        <FlexGap
+          justifyContent="space-between"
+          alignItems={isSmallScreen ? 'flex-start' : 'center'}
+          flexDirection={isSmallScreen ? 'column' : 'row'}
+          gap="16px"
+        >
           <FlexGap
-            justifyContent="space-between"
-            alignItems={isSmallScreen ? 'flex-start' : 'center'}
-            flexDirection={isSmallScreen ? 'column' : 'row'}
             gap="16px"
+            justifyContent={isSmallScreen ? 'space-between' : 'flex-start'}
+            flexDirection={isSmallScreen ? 'row-reverse' : 'row'}
+            width="100%"
           >
-            <FlexGap
-              gap="16px"
-              justifyContent={isSmallScreen ? 'space-between' : 'flex-start'}
-              flexDirection={isSmallScreen ? 'row-reverse' : 'row'}
-              width="100%"
-            >
-              <Box>
-                <MiniUniversalFarmsOverlay linkType="poolDetail" />
-              </Box>
-              <FlexGap flexDirection="column" gap="16px">
-                <FlexGap
-                  gap="12px"
-                  alignItems={isSmallScreen ? 'flex-start' : 'center'}
-                  flexDirection={isSmallScreen ? 'column' : 'row'}
-                >
-                  <Box>
-                    <Flex alignItems="center" justifyContent="center" position="relative">
-                      <DoubleCurrencyLogo
-                        currency0={currency0}
-                        currency1={currency1}
-                        size={48}
-                        innerMargin="2px"
-                        showChainLogoCurrency1
-                      />
-                    </Flex>
-                  </Box>
-                  <FlexGap gap="4px" alignItems="center">
-                    <Text bold fontSize={32} style={{ lineHeight: '1' }}>
-                      {currency0?.isNative
-                        ? currency0?.symbol
-                        : getTokenSymbolAlias(currency0?.wrapped?.address, currency0?.chainId, currency0?.symbol)}
-                    </Text>
-                    <Text color="textSubtle" bold fontSize={32} style={{ lineHeight: '1' }}>
-                      /
-                    </Text>
-                    <Text bold fontSize={32} style={{ lineHeight: '1' }}>
-                      {getTokenSymbolAlias(currency1?.wrapped?.address, currency1?.chainId, currency1?.symbol)}
-                    </Text>
-                  </FlexGap>
+            <Box>
+              <MiniUniversalFarmsOverlay linkType={linkType} />
+            </Box>
+            <FlexGap flexDirection={['column', 'column', 'column', 'row']} flexWrap="wrap" gap="16px">
+              <FlexGap
+                gap="12px"
+                alignItems={isSmallScreen ? 'flex-start' : 'center'}
+                flexDirection={isSmallScreen ? 'column' : 'row'}
+              >
+                <Flex alignItems="center" justifyContent="center" position="relative">
+                  <DoubleCurrencyLogo
+                    currency0={currency0}
+                    currency1={currency1}
+                    size={36}
+                    innerMargin="2px"
+                    showChainLogoCurrency1
+                  />
+                </Flex>
+
+                <FlexGap gap="4px" alignItems="center">
+                  <Text bold fontSize={24} style={{ lineHeight: '1' }}>
+                    {symbol0 ?? currency0?.symbol}
+                  </Text>
+                  <Text color="textSubtle" bold fontSize={24} style={{ lineHeight: '1' }}>
+                    /
+                  </Text>
+                  <Text bold fontSize={24} style={{ lineHeight: '1' }}>
+                    {symbol1 ?? currency1?.symbol}
+                  </Text>
                   <Tooltips
                     content={
                       <FlexGap gap="4px" flexDirection="column" minWidth="150px">
@@ -170,7 +128,9 @@ export const PoolInfo = () => {
                                 size={24}
                                 innerMargin="2px"
                               />
-                              <Text>{poolSymbol}</Text>
+                              <Text>
+                                {currency0?.symbol} / {currency1?.symbol}
+                              </Text>
                             </FlexGap>
 
                             <FlexGap gap="4px">
@@ -248,6 +208,8 @@ export const PoolInfo = () => {
                     <BscScanIcon width={24} height={24} color="textSubtle" style={{ cursor: 'pointer' }} />
                   </Tooltips>
                 </FlexGap>
+              </FlexGap>
+              {poolInfo && (
                 <FlexGap gap="16px" flexWrap="wrap" alignItems="center" alignContent="center">
                   {poolInfo?.protocol ? (
                     <AutoColumn rowGap="4px">
@@ -263,7 +225,7 @@ export const PoolInfo = () => {
                         ) : (
                           <FeeTierTooltip
                             type={poolInfo.protocol}
-                            percent={fee}
+                            percent={new Percent(poolInfo?.feeTier ?? 0n, poolInfo?.feeTierBase)}
                             dynamic={poolInfo?.isDynamicFee}
                             showType={false}
                           />
@@ -294,33 +256,39 @@ export const PoolInfo = () => {
                     </PoolFeaturesModal>
                   )}
                 </FlexGap>
-              </FlexGap>
+              )}
             </FlexGap>
-
+          </FlexGap>
+          {poolInfo && (
             <FlexGap gap="16px" flexDirection={['column', null, 'row']}>
               <Box p="8px 16px" width="100%">
-                <FlexGap gap="8px" alignItems="center">
-                  <Text fontSize={12} bold color="textSubtle" textTransform="uppercase" style={{ userSelect: 'none' }}>
+                <FlexGap gap="2px" alignItems="center">
+                  <Text
+                    fontSize={12}
+                    color="textSubtle"
+                    textTransform="uppercase"
+                    minWidth="max-content"
+                    style={{ userSelect: 'none' }}
+                    bold
+                  >
                     {t('Current Price')}
                   </Text>
-                  <SwapHorizIcon
-                    color="primary60"
-                    onClick={() => setFlipCurrentPrice(!flipCurrentPrice)}
-                    style={{ cursor: 'pointer' }}
-                  />
+                  <SwapHorizIcon color="primary60" onClick={onInvertPrices} style={{ cursor: 'pointer' }} />
                 </FlexGap>
-                <FlexGap mt="2px" gap="8px" alignItems="center" width="100%">
-                  <Text fontSize={28} bold width="max-content">
-                    {formatNumber(Number(flipCurrentPrice ? poolInfo.token0Price : poolInfo.token1Price), {
-                      maximumSignificantDigits: 6,
-                      maxDecimalDisplayDigits: 6,
-                    })}
-                  </Text>
+                <FlexGap gap="8px" alignItems="center" width="100%">
+                  {poolInfo && (
+                    <Text fontSize={24} bold width="max-content">
+                      {formatNumber(Number(isInverted ? poolInfo.token0Price : poolInfo.token1Price), {
+                        maximumSignificantDigits: 6,
+                        maxDecimalDisplayDigits: 6,
+                      })}
+                    </Text>
+                  )}
 
-                  <Text fontSize={12} color="textSubtle" textTransform="uppercase" width="max-content">
+                  <Text fontSize={10} color="textSubtle" textTransform="uppercase" width="max-content">
                     {t(
                       '%symbol0% per %symbol1%',
-                      flipCurrentPrice
+                      isInverted
                         ? {
                             symbol0: currency0?.symbol,
                             symbol1: currency1?.symbol,
@@ -333,59 +301,37 @@ export const PoolInfo = () => {
                   </Text>
                 </FlexGap>
               </Box>
-              <LightGreyCard padding="8px 16px">
+              <Box padding="8px 16px">
                 <AutoColumn rowGap="2px">
                   <FlexGap>
-                    <Text fontSize={12} bold color="textSubtle" textTransform="uppercase" minWidth="max-content">
+                    <Text fontSize={12} bold color="textSubtle" textTransform="uppercase" width="max-content">
                       {t('Est. APR')}
                     </Text>
-                    <PoolGlobalAprButtonV3 pool={poolInfo} showApyText={false} />
+                    {overrideAprDisplay?.roiCalculator || (
+                      <PoolGlobalAprButtonV3
+                        pool={poolInfo}
+                        showApyText={false}
+                        color="text"
+                        aprInfo={getFarmAprInfo(poolInfo.farm)}
+                        fontSize="24px"
+                      />
+                    )}
                   </FlexGap>
-                  {poolInfo ? <PoolGlobalAprButtonV3 pool={poolInfo} showApyButton={false} /> : null}
+                  {overrideAprDisplay?.aprDisplay || (
+                    <PoolGlobalAprButtonV3
+                      pool={poolInfo}
+                      showApyButton={false}
+                      color="text"
+                      aprInfo={getFarmAprInfo(poolInfo.farm)}
+                      fontSize="24px"
+                    />
+                  )}
                 </AutoColumn>
-              </LightGreyCard>
+              </Box>
             </FlexGap>
-          </FlexGap>
-        </CardBody>
+          )}
+        </FlexGap>
       </Card>
-
-      <AutoColumn gap="lg">
-        <PoolTvlWarning poolInfo={poolInfo} />
-        <Grid gridGap="24px" gridTemplateColumns={['1fr', '1fr', '1fr', '2fr 1fr']}>
-          <PoolCharts poolInfo={poolInfo} />
-          <PoolStatus poolInfo={poolInfo} style={{ order: isSmallScreen ? -1 : undefined }} />
-        </Grid>
-      </AutoColumn>
-
-      <Box>
-        <Box style={{ margin: isSmallScreen ? '0 30px -3px' : '0 24px -3px' }}>
-          <TabMenu activeIndex={tab} onItemClick={setTab}>
-            <Tab
-              isActive={tab === PoolDetailTab.MyPositions}
-              onClick={() => setTab(PoolDetailTab.MyPositions)}
-              key="my-positions"
-            >
-              <span style={{ fontSize: isSmallScreen ? '12px' : '16px' }}>{t('My Positions')}</span>
-            </Tab>
-            <Tab
-              isActive={tab === PoolDetailTab.Transactions}
-              onClick={() => setTab(PoolDetailTab.Transactions)}
-              key="transactions"
-            >
-              <span style={{ fontSize: isSmallScreen ? '12px' : '16px' }}>{t('Transactions')}</span>
-            </Tab>
-          </TabMenu>
-        </Box>
-
-        {tab === PoolDetailTab.MyPositions ? <MyPositions poolInfo={poolInfo} /> : null}
-        {tab === PoolDetailTab.Transactions ? <Transactions protocol={poolInfo.protocol} /> : null}
-
-        {poolInfo && (
-          <Box>
-            <RewardInfoCardContainer poolInfo={poolInfo} />
-          </Box>
-        )}
-      </Box>
-    </AutoColumn>
+    </>
   )
 }
