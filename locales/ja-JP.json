@@ -4365,9 +4365,9 @@
   "Create your Wallet with Social Login": "ソーシャルログインでウォレットを作成",
   "Important Notice: %chain% Sunset": "重要なお知らせ：%chain%サービス終了",
   "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain%は%date%にサービスを終了します。期限までに必ずすべてのプールから流動性を削除してください。",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
-  "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "Slippage setting": "スリッページ設定",
+  "Liquidity Slippage": "流動性スリッページ",
+  "Loading more pools...": "プールをさらに読み込み中...",
+  "Try Zap": "Zapを試して",
+  "to automatically balance and provide V3 liquidity in one click.": "ワンクリックで自動的にトークン比率を調整し、V3流動性を提供できます。"
 }
