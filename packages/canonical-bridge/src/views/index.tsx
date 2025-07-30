@@ -123,7 +123,7 @@ function useFromChainFromWidget() {
 }
 
 export const CanonicalBridge = (props: CanonicalBridgeProps) => {
-  const { connectWalletButton, supportedChainIds, disabledToChains } = props
+  const { connectWalletButtons, supportedChainIds, disabledToChains } = props
   useDisableToChains(disabledToChains)
 
   const { currentLanguage } = useTranslation()
