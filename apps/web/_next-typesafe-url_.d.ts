@@ -34,6 +34,8 @@ declare module "@@@next-typesafe-url" {
     "/farms": StaticRoute;
     "/find": StaticRoute;
     "/gauges-voting": StaticRoute;
+    "/header/default": StaticRoute;
+    "/header/with-announcement-banner": StaticRoute;
     "/home": StaticRoute;
     "/ido/[ido]": StaticRoute;
     "/ido": StaticRoute;

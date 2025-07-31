@@ -75,7 +75,9 @@ const config = {
     '@pancakeswap/utils',
     '@pancakeswap/widgets-internal',
     '@pancakeswap/ifos',
-    '@pancakeswap/uikit'
+    '@pancakeswap/wagmi',
+    '@pancakeswap/uikit',
+    "@pancakeswap/widgets"
   ],
   reactStrictMode: true,
   images: {
