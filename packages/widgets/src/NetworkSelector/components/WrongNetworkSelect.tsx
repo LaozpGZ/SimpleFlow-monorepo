@@ -13,8 +13,8 @@ import {
   useTooltip,
 } from '@pancakeswap/uikit'
 import { useState } from 'react'
-import { ChainLogo } from 'src/ChainLogo'
 import { Chain } from 'viem'
+import { ChainLogo } from '../../ChainLogo'
 import { chainNameConverter } from '../utils/chainNameConverter'
 import { evmChains } from '../utils/chains'
 

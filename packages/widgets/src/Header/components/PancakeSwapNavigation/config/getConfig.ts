@@ -1,4 +1,3 @@
-import { ChainId } from '@pancakeswap/chains'
 import {
   BridgeIcon,
   DropdownMenuItems,
@@ -10,6 +9,8 @@ import {
   MoreIcon,
   SwapFillIcon,
   SwapIcon,
+  TradeFilledIcon,
+  TradeIcon,
 } from '@pancakeswap/uikit'
 import { getPerpetualUrl } from '../utils/getPerpetualUrl'
 import {
@@ -17,6 +18,7 @@ import {
   POSITION_MANAGERS_SUPPORTED_CHAINS,
   PREDICTION_SUPPORTED_CHAINS,
   SUPPORT_FARMS,
+  SUPPORT_ONLY_BSC,
 } from './supportChains'
 
 type GetNavigationConfigParameters = {
@@ -76,20 +78,22 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
           href: '/swap',
         },
         {
-          label: t('Perps'),
-          href: getPerpetualUrl({
-            chainId,
-            languageCode,
-            isDark,
-          }),
-          confirmModalId: 'perpConfirmModal',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
-        },
-        {
           label: t('Buy Crypto'),
           href: '/buy-crypto',
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
+    },
+    {
+      label: t('Perps'),
+      icon: TradeIcon,
+      fillIcon: TradeFilledIcon,
+      href: getPerpetualUrl({
+        chainId,
+        languageCode,
+        isDark,
+      }),
+      hideSubNav: true,
+      confirmModalId: 'perpConfirmModal',
     },
     {
       label: t('Earn'),
@@ -223,11 +227,11 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
           label: t('Voting'),
           image: '/images/voting/voting-bunny.png',
           href: '/voting',
-          supportChainIds: [ChainId.BSC],
+          supportChainIds: SUPPORT_ONLY_BSC,
         },
         {
           type: DropdownMenuItemType.DIVIDER,
-        } as unknown as NavigationItem,
+        },
         {
           label: t('Blog'),
           href: 'https://blog.pancakeswap.finance',
@@ -238,7 +242,7 @@ export function getNavigationConfig({ t, isDark = false, languageCode, chainId }
           href: 'https://docs.pancakeswap.finance',
           type: DropdownMenuItemType.EXTERNAL_LINK,
         },
-      ].map((item) => addMenuItemSupported(item, chainId)),
+      ].map((item) => addMenuItemSupported(item as NavigationItem, chainId)),
     },
   ].map((item) => addMenuItemSupported(item, chainId))
 }

@@ -1,5 +1,6 @@
 import { PancakeSwapHeader } from '@pancakeswap/widgets'
 
+const { Navigation } = PancakeSwapHeader
 const AnnouncementBanner = () => {
   return (
     <PancakeSwapHeader.AnnouncementBanner>
@@ -28,7 +29,7 @@ const AnnouncementBanner = () => {
 const Home = () => {
   return (
     <>
-      <PancakeSwapHeader announcementBanner={<AnnouncementBanner />}>
+      <PancakeSwapHeader navigation={<Navigation />} announcementBanner={<AnnouncementBanner />}>
         <div style={{ padding: '20px', textAlign: 'center', height: '130vh' }}>
           <div>Welcome to PancakeSwap Widgets Playground</div>
           <div>Explore our widgets and customize your experience!</div>

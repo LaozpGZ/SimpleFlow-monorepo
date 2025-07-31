@@ -3,11 +3,21 @@
   "license": "MIT",
   "version": "6.0.4",
   "description": "A minimal internationalization library",
-  "main": "./src/index.tsx",
   "types": "./src/index.tsx",
   "sideEffects": false,
   "private": true,
-  "scripts": {},
+  "main": "dist/index.cjs",
+  "type": "module",
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "scripts": {
+    "build": "vite build"
+  },
   "dependencies": {
     "tslib": "^2.2.0",
     "lodash": "^4.17.21",
@@ -17,6 +27,9 @@
   },
   "devDependencies": {
     "@types/react": "^18.2.21",
-    "@types/lodash": "^4.14.178"
+    "@types/lodash": "^4.14.178",
+    "tslib": "^2.2.0",
+    "vite": "5.0.12",
+    "vite-plugin-dts": "^3.5.3"
   }
 }

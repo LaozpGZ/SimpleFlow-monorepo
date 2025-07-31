@@ -1,13 +1,13 @@
 import React from "react";
-import Text from "../Text/Text";
-import Dropdown from "../Dropdown/Dropdown";
-import Button from "../Button/Button";
-import LanguageIcon from "../Svg/Icons/Language";
-import MenuButton from "./MenuButton";
 import { Colors } from "../../theme";
-import { Language } from "./types";
+import Button from "../Button/Button";
+import { Scale } from "../Button/types";
+import Dropdown from "../Dropdown/Dropdown";
 import { Position } from "../Dropdown/types";
-import { ButtonProps, Scale } from "../Button/types";
+import LanguageIcon from "../Svg/Icons/Language";
+import Text from "../Text/Text";
+import MenuButton from "./MenuButton";
+import { Language } from "./types";
 
 interface Props {
   currentLang: string;
@@ -48,6 +48,8 @@ const LangSelector: React.FC<React.PropsWithChildren<Props>> = ({
         onClick={() => setLang(lang)}
         // Safari fix
         style={{ minHeight: "32px", height: "auto" }}
+        variant="text"
+        size="sm"
       >
         {lang.language}
       </MenuButton>

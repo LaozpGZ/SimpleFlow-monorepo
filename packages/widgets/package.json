@@ -1,40 +1,32 @@
 {
-  "name": "@pancakeswap/widgets",
-  "version": "0.0.0",
+  "name": "ryan-test-header",
+  "version": "0.0.50",
   "repository": {
     "type": "git",
     "url": "https://github.com/pancakeswap/pancake-frontend.git",
     "directory": "packages/widgets"
   },
-  "main": "src/index.ts",
+  "main": "dist/index.cjs",
   "type": "module",
   "exports": {
     "./package.json": "./package.json",
     ".": {
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    }
+    },
+    "./styles.css": "./dist/style.css"
   },
   "sideEffects": [
     "*.css.ts"
   ],
   "dependencies": {
-    "@pancakeswap/hooks": "workspace:*",
-    "@pancakeswap/localization": "workspace:*",
-    "@pancakeswap/chains": "workspace:*",
-    "@pancakeswap/farms": "workspace:*",
-    "@pancakeswap/uikit": "workspace:*",
-    "@pancakeswap/pools": "workspace:*",
-    "@pancakeswap/position-managers": "workspace:*",
-    "@pancakeswap/prediction": "workspace:*",
-    "@pancakeswap/sdk": "workspace:*",
-    "lodash": "^4.17.20",
-    "viem": "catalog:"
+    "lodash": "^4.17.20"
   },
   "peerDependencies": {
-    "@types/react": "^18.2.21",
     "react": "^18.2.0",
-    "styled-components": "^6.0.7"
+    "react-dom": "^18.2.0",
+    "viem": "*",
+    "styled-components": "*"
   },
   "eslintConfig": {
     "extends": [
@@ -42,20 +34,36 @@
     ]
   },
   "devDependencies": {
+    "@types/react": "^18.2.21",
+    "@pancakeswap/hooks": "workspace:*",
     "@storybook/addon-docs": "^9.0.17",
     "@storybook/addon-onboarding": "^9.0.17",
     "@storybook/react-vite": "^9.0.17",
     "eslint-plugin-storybook": "^9.0.17",
     "storybook": "^9.0.17",
     "tsup": "^6.7.0",
-    "vite": "7.0.5",
-    "@types/lodash": "^4.17.20"
+    "vite": "5.0.12",
+    "@types/lodash": "^4.17.20",
+    "@vanilla-extract/vite-plugin": "^3.8.0",
+    "@vitejs/plugin-react": "4.2.1",
+    "vite-plugin-dts": "^3.5.3",
+    "@pancakeswap/localization": "workspace:*",
+    "@pancakeswap/chains": "workspace:*",
+    "@pancakeswap/farms": "workspace:*",
+    "@pancakeswap/uikit": "workspace:*",
+    "@pancakeswap/pools": "workspace:*",
+    "@pancakeswap/position-managers": "workspace:*",
+    "@pancakeswap/prediction": "workspace:*",
+    "@pancakeswap/sdk": "workspace:*"
   },
   "scripts": {
     "storybook": "storybook dev -p 6006 --debug --loglevel silly --force-build-preview",
     "build-storybook": "storybook build",
     "clean": " rm -rf .turbo && rm -rf dist && rm -rf node_modules",
-    "build": "tsup",
+    "build:widgets": "vite build",
     "dev": "tsup --watch"
-  }
+  },
+  "files": [
+    "dist"
+  ]
 }

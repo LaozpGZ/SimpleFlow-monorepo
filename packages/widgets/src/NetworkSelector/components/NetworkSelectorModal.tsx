@@ -12,7 +12,7 @@ import {
   UserMenuItem,
 } from '@pancakeswap/uikit'
 import { useCallback, useMemo } from 'react'
-import { ChainLogo } from 'src/ChainLogo'
+import { ChainLogo } from '../../ChainLogo'
 import { chainNameConverter } from '../utils/chainNameConverter'
 import { getSortedChains } from '../utils/getSortedChains'
 import { WrongNetworkSelect } from './WrongNetworkSelect'

@@ -1,3 +1,5 @@
+'use client'
+
 import { SimpleMenu } from '@pancakeswap/uikit'
 import { ReactNode } from 'react'
 

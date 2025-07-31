@@ -1,11 +1,8 @@
+export { LanguageProvider } from '@pancakeswap/localization'
+export { AnnouncementBanner, dark, light, UIKitProvider } from '@pancakeswap/uikit'
+export type { AnnouncementBannerProps, NavigationProps } from '@pancakeswap/uikit'
+
 export * from './ConnectButton'
 export * from './contexts/WidgetProvider'
-export { default as PancakeSwapHeader } from './Header'
-export type {
-  AnnouncementBannerProps,
-  LocaleSelectorProps,
-  NavigationProps,
-  PancakeSwapHeaderComponentType,
-  PancakeSwapHeaderProps,
-} from './Header'
+export * from './Header'
 export * from './NetworkSelector'
