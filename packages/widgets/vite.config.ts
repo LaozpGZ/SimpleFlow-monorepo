@@ -12,6 +12,7 @@ const externals = [...Object.keys(pkg.peerDependencies), ...Object.keys(pkg.depe
 console.log(externals)
 export default defineConfig({
   build: {
+    emptyOutDir: true,
     lib: {
       entry: 'src/index.ts',
       fileName: 'index',
@@ -24,6 +25,9 @@ export default defineConfig({
       },
     },
     outDir: 'dist',
+  },
+  optimizeDeps: {
+    include: ['@pancakeswap/localization'],
   },
   plugins: [
     vanillaExtractPlugin({
