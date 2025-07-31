@@ -59,11 +59,11 @@ export default function TokenAmountPairInputs({ tempCreatedPool, baseIn, onConfi
           setTokenAmount((preValue) => {
             if (baseIn)
               return focusPoolARef.current
-                ? [preValue[0], props.amount ? trimTrailZero(res.amountSlippageB.toFixed(mintB.decimals))! : '']
-                : [props.amount ? trimTrailZero(res.amountSlippageA.toFixed(mintA.decimals))! : '', preValue[1]]
+                ? [preValue[0], props.amount ? trimTrailZero(res.amountB.toFixed(mintB.decimals))! : '']
+                : [props.amount ? trimTrailZero(res.amountA.toFixed(mintA.decimals))! : '', preValue[1]]
             return focusPoolARef.current
-              ? [props.amount ? trimTrailZero(res.amountSlippageB.toFixed(mintB.decimals))! : '', preValue[1]]
-              : [preValue[0], props.amount ? trimTrailZero(res.amountSlippageA.toFixed(mintA.decimals))! : '']
+              ? [props.amount ? trimTrailZero(res.amountB.toFixed(mintB.decimals))! : '', preValue[1]]
+              : [preValue[0], props.amount ? trimTrailZero(res.amountA.toFixed(mintA.decimals))! : '']
           })
         }
       })
