@@ -5,13 +5,12 @@ import { AutoColumn, Button, Column, DeleteOutlineIcon, IconButton, Input, Link,
 import Row, { RowBetween, RowFixed } from 'components/Layout/Row'
 import { useSolanaTokenList } from 'hooks/useSolanaTokenList'
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react'
-import { PublicKey } from '@solana/web3.js'
+import { Connection, PublicKey } from '@solana/web3.js'
 import { convertRawTokenInfoIntoSPLToken } from 'config/solana-list'
-import { useConnection } from '@solana/wallet-adapter-react'
 import { MintLayout } from '@solana/spl-token-0.4'
 import { useQuery } from '@tanstack/react-query'
-import { useAtom } from 'jotai'
-import { solanaExplorerAtom } from '@pancakeswap/utils/user'
+import { useAtom, useAtomValue } from 'jotai'
+import { rpcUrlAtom, solanaExplorerAtom } from '@pancakeswap/utils/user'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { NonEVMChainId } from '@pancakeswap/chains'
 
@@ -32,8 +31,16 @@ const isValidSolanaAddress = (address: string): boolean => {
   }
 }
 
+const useConnectionWithRpc = () => {
+  const rpc = useAtomValue(rpcUrlAtom)
+
+  return useMemo(() => {
+    return new Connection(rpc)
+  }, [rpc])
+}
+
 function useGetTokenInfo(address?: string) {
-  const { connection } = useConnection()
+  const connection = useConnectionWithRpc()
   return useQuery({
     queryKey: ['solana-token-info', address],
     queryFn: async () => {
@@ -46,7 +53,7 @@ function useGetTokenInfo(address?: string) {
         const data = MintLayout.decode(onlineInfo.data)
         const mintSymbol = address.toString().substring(0, 6)
         const tokenInfo = {
-          chainId: 101,
+          chainId: NonEVMChainId.SOLANA,
           address,
           programId: onlineInfo.owner.toBase58(),
           logoURI: '',
