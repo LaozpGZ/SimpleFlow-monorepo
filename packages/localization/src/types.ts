@@ -21,8 +21,37 @@ export type TranslationKey = keyof typeof translations | (string & MaybeObject)
 
 export type TranslateFunction = (key: TranslationKey, data?: ContextData) => string
 
+export type LanguageCode =
+  | 'ar'
+  | 'bn'
+  | 'en'
+  | 'de'
+  | 'el'
+  | 'es-ES'
+  | 'fi'
+  | 'fil'
+  | 'fr'
+  | 'hi'
+  | 'hu'
+  | 'id'
+  | 'it'
+  | 'ja'
+  | 'ko'
+  | 'nl'
+  | 'pl'
+  | 'pt-br'
+  | 'pt-pt'
+  | 'ro'
+  | 'ru'
+  | 'sv'
+  | 'ta'
+  | 'uk'
+  | 'vi'
+  | 'zh-cn'
+  | 'zh-tw'
+
 export interface Language {
-  code: string
+  code: LanguageCode
   language: string
   locale: string
 }
