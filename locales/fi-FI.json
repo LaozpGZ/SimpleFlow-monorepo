@@ -4365,9 +4365,9 @@
   "Create your Wallet with Social Login": "Luo lompakkosi yhteisökirjautumisella",
   "Important Notice: %chain% Sunset": "Tärkeä ilmoitus: %chain% poistetaan käytöstä",
   "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% poistetaan käytöstä %date%. Varmista, että poistat likviditeettisi kaikista pooleista ennen määräaikaa.",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
-  "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "Slippage setting": "Luisuma-asetus",
+  "Liquidity Slippage": "Likviditeettiluisuma",
+  "Loading more pools...": "Ladataan lisää pooleja...",
+  "Try Zap": "Kokeile Zapia",
+  "to automatically balance and provide V3 liquidity in one click.": "tasapainottaaksesi ja tarjotaksesi V3-likviditeettiä yhdellä napsautuksella."
 }
