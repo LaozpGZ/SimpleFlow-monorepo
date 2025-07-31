@@ -18,6 +18,7 @@ export type SimpleMenuProps = {
   subNavigation?: ReactNode;
   bottomNavigation?: ReactNode;
   rightSlot?: ReactNode;
+  asContainer?: boolean;
 };
 
 export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
@@ -30,6 +31,7 @@ export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
   bottomNavigation,
   rightSlot,
   children,
+  asContainer = true,
 }) => {
   const isMounted = useIsMounted();
   const [showMenu, setShowMenu] = useState(true);
@@ -98,6 +100,32 @@ export const SimpleMenu: React.FC<React.PropsWithChildren<SimpleMenuProps>> = ({
   }, [totalTopMenuHeight, announcementBanner]);
 
   const providerValue = useMemo(() => ({ linkComponent, totalTopMenuHeight }), [linkComponent, totalTopMenuHeight]);
+
+  if (!asContainer) {
+    return (
+      <MenuContext.Provider value={providerValue}>
+        <Wrapper>
+          <FixedContainer showMenu={showMenu} $height={totalTopMenuHeight}>
+            {announcementBanner ? <div ref={announcementBannerRef}>{announcementBanner}</div> : null}
+            <StyledNav id="nav">
+              <Flex>
+                {brandLogo ?? <Logo href={homeHref} />}
+                {navigation}
+              </Flex>
+              <Flex alignItems="center" height="100%">
+                {rightSlot}
+              </Flex>
+            </StyledNav>
+          </FixedContainer>
+          {subNavigation}
+          <BodyWrapper mt={!subNavigation ? `${totalTopMenuHeight + 1}px` : "0"}>
+            <Inner>{children}</Inner>
+          </BodyWrapper>
+        </Wrapper>
+        {bottomNavigation}
+      </MenuContext.Provider>
+    );
+  }
 
   return (
     <MenuContext.Provider value={providerValue}>

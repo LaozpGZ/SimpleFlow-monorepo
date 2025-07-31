@@ -11,8 +11,9 @@ import { PancakeSwapHeader } from './PancakeSwapHeader'
 interface Props {
   theme: 'dark' | 'light'
   rightSlot?: React.ReactNode
+  asContainer?: boolean
 }
-export const ExternalHeader: React.FC<Props> = ({ theme, rightSlot }) => {
+export const ExternalHeader: React.FC<Props> = ({ theme, rightSlot, asContainer = true }) => {
   const themeData = theme === 'dark' ? dark : light
   return (
     <Container>
@@ -21,6 +22,7 @@ export const ExternalHeader: React.FC<Props> = ({ theme, rightSlot }) => {
           <PancakeSwapHeader
             navigation={<PancakeSwapNavigation />}
             bottomNavigation={<PancakeSwapBottomNavigation />}
+            asContainer={asContainer}
             rightSlot={rightSlot}
           />
         </LanguageProvider>

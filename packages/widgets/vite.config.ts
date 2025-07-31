@@ -26,9 +26,6 @@ export default defineConfig({
     },
     outDir: 'dist',
   },
-  optimizeDeps: {
-    include: ['@pancakeswap/localization'],
-  },
   plugins: [
     vanillaExtractPlugin({
       identifiers: 'short',
