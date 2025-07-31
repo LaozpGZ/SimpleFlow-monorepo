@@ -4338,7 +4338,7 @@
   "Please exercise due caution when trading / providing liquidity for the alETH token. The protocol was recently affected by the <0>Curve exploit.</0> For more information, please refer to Alchemix’s <1>Twitter</1> and await further updates from the team": "Mag-ingat kapag nagte-trade / nagbibigay ng liquidity para sa token ng aIETH. Kamakailang naapektuhan ang protocol ng <0>Curve exploit.</0> Para sa karagdagang impormasyon, sumangguni sa <1>X</1> ng Alchemix at maghintay para sa mga karagdagang update mula sa team",
   "Overnight has temporarily paused USD+ operations on zkSync due to the recent Velocore exploit.Swap, approve, and add / remove liquidity functions are currently unavailable. More information can be found on Overnight's <0>twitter page</0>.": "Pansamantalang na-pause ng Overnight ang USD+ na mga operation sa zkSync dahil sa kamakailang exploit ng Velocore. Kasalukuyang hindi available ang mga liquidity function na i-swap, aprubahan, at idagdag / alisin. Makikita ang higit pang impormasyon sa <0>X page</0>ng Overnight.",
   "%symbol% Chart by <0>%by%</0>": "%symbol% Chart ng <0>%by%</0>",
-  "solana.add_liquidity": "Added %amountA% %symbolA% and %amountB% %symbolB%.",
+  "solana.add_liquidity": "Nagdagdag ng %amountA% %symbolA% at %amountB% %symbolB%.",
   "solana.harvest_rewards": "I-harvest ang Mga Reward",
   "solana.harvest_clmm_rewards": "I-harvest ang Mga Reward ng CLMM",
   "solana.added_liquidity_desc": "Nagdagdag ng %amountA% %symbolA% at %amountB% %symbolB%.",
@@ -4363,11 +4363,11 @@
   "Continue with Web3 Wallet": "Magpatuloy gamit ang Web3 Wallet",
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "Kasalukuyang hindi sinusuportahan ang TWAP at Limitahan ang mga order para sa mga wallet ng Smart Account.",
   "Create your Wallet with Social Login": "Gawin ang Wallet mo gamit ang Social Login",
-  "Important Notice: %chain% Sunset": "Important Notice: %chain% Sunset",
-  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
-  "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "Important Notice: %chain% Sunset": "Mahalagang Notice: Sunset ng %chain%",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "Ihihinto na ang %chain% sa %date%. Pakitiyak na aalisin ang iyong liquidity sa lahat ng pool bago ang deadline.",
+  "Slippage setting": "Setting ng slippage",
+  "Liquidity Slippage": "Slippage ng Liquidity",
+  "Loading more pools...": "Naglo-load ng higit pang mga pool...",
+  "Try Zap": "Subukan ang Zap",
+  "to automatically balance and provide V3 liquidity in one click.": "para awtomatikong magbalanse at magbigay ng V3 liquidity sa isang click."
 }
