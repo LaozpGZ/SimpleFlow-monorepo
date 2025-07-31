@@ -4365,9 +4365,9 @@
   "Create your Wallet with Social Login": "Créez votre portefeuille avec une connexion via un réseau social",
   "Important Notice: %chain% Sunset": "Avis important : fin de prise en charge de %chain%",
   "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% ne sera plus pris en charge à partir du %date%. Veuillez retirer votre liquidité de tous les pools avant cette date limite.",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
-  "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "Slippage setting": "Paramètre de glissement",
+  "Liquidity Slippage": "Glissement de liquidité",
+  "Loading more pools...": "Chargement d'autres pools...",
+  "Try Zap": "Essayer Zap",
+  "to automatically balance and provide V3 liquidity in one click.": "pour équilibrer automatiquement et fournir de la liquidité V3 en un seul clic."
 }
