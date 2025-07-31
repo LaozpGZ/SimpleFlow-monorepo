@@ -4365,9 +4365,9 @@
   "Create your Wallet with Social Login": "소셜 로그인으로 지갑 만들기",
   "Important Notice: %chain% Sunset": "중요 공지: %chain% 서비스 종료",
   "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain%에서는 %date%에 서비스를 종료합니다. 기한 전에 모든 풀에서 유동성을 제거하세요.",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
-  "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "Slippage setting": "슬리피지 설정",
+  "Liquidity Slippage": "유동성 슬리피지",
+  "Loading more pools...": "추가 풀 로드 중...",
+  "Try Zap": "Zap을 사용하여",
+  "to automatically balance and provide V3 liquidity in one click.": "클릭 한 번으로 자동으로 균형을 맞추고 V3 유동성을 제공하세요."
 }
