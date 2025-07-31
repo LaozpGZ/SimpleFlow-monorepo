@@ -4365,9 +4365,9 @@
   "Create your Wallet with Social Login": "Tạo Ví của bạn với Đăng nhập bằng mạng xã hội",
   "Important Notice: %chain% Sunset": "Lưu ý quan trọng: Đóng cửa %chain%",
   "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% sẽ bị đóng cửa vào ngày %date%. Vui lòng đảm bảo bạn đã xóa thanh khoản của mình khỏi tất cả các quỹ trước hạn chót.",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
-  "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "Slippage setting": "Cài đặt trượt giá",
+  "Liquidity Slippage": "Trượt giá thanh khoản",
+  "Loading more pools...": "Đang tải thêm quỹ...",
+  "Try Zap": "Thử Zap",
+  "to automatically balance and provide V3 liquidity in one click.": "để tự động cân bằng và cung cấp thanh khoản V3 chỉ trong một nhấp chuột."
 }
