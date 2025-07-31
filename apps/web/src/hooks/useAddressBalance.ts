@@ -49,9 +49,7 @@ export const useAddressBalance = (address?: string, options: UseAddressBalanceOp
   const fetchBalances = useCallback(async (): Promise<BalanceData[]> => {
     if (!address) return []
 
-    const response = await fetch(
-      `${API_BASE_URL}/${chainId === NonEVMChainId.SOLANA ? '/sol' : ''}/balances/${address}`,
-    )
+    const response = await fetch(`${API_BASE_URL}${chainId === NonEVMChainId.SOLANA ? '/sol' : ''}/balances/${address}`)
 
     if (!response.ok) {
       throw new Error(`Error fetching balances: ${response.statusText}`)
