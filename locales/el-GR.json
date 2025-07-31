@@ -4338,7 +4338,7 @@
   "Please exercise due caution when trading / providing liquidity for the alETH token. The protocol was recently affected by the <0>Curve exploit.</0> For more information, please refer to Alchemix’s <1>Twitter</1> and await further updates from the team": "Να είστε προσεκτικοί κατά τις συναλλαγές / παροχή ρευστότητας για τα νομίσματα alETH. Το πρωτόκολλο επηρεάστηκε πρόσφατα από την <0>Παραβίαση του Curve.</0> Για περισσότερες πληροφορίες, ανατρέξτε στο <1>Χ</1> της Alchemix και έχετε το νου σας για περαιτέρω ενημερώσεις από την ομάδα",
   "Overnight has temporarily paused USD+ operations on zkSync due to the recent Velocore exploit.Swap, approve, and add / remove liquidity functions are currently unavailable. More information can be found on Overnight's <0>twitter page</0>.": "Η Overnight έχει διακόψει προσωρινά τις λειτουργίες USD+ στο zkSync λόγω της πρόσφατης παραβίασης του Velocore. Οι λειτουργίες ανταλλαγής, έγκρισης και προσθήκης/αφαίρεσης ρευστότητας δεν είναι επί του παρόντος διαθέσιμες. Περισσότερες πληροφορίες μπορείτε να βρείτε στη <0>σελίδα Χ</0> της Overnight.",
   "%symbol% Chart by <0>%by%</0>": "%symbol% Διάγραμμα <0>%by%</0>",
-  "solana.add_liquidity": "Added %amountA% %symbolA% and %amountB% %symbolB%.",
+  "solana.add_liquidity": "Προστέθηκε %amountA% %symbolA% και %amountB% %symbolB%.",
   "solana.harvest_rewards": "Συγκομιδή ανταμοιβών",
   "solana.harvest_clmm_rewards": "Συγκομιδή ανταμοιβών CLMM",
   "solana.added_liquidity_desc": "Προστέθηκε %amountA% %symbolA% και %amountB% %symbolB%.",
@@ -4363,11 +4363,11 @@
   "Continue with Web3 Wallet": "Συνέχεια με πορτοφόλι Web3",
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "Οι εντολές TWAP και οι εντολές ορίου δεν υποστηρίζονται αυτήν τη στιγμή για πορτοφόλια έξυπνου λογαριασμού.",
   "Create your Wallet with Social Login": "Δημιουργήστε το πορτοφόλι σας με σύνδεση με μέσα κοινωνικής δικτύωσης",
-  "Important Notice: %chain% Sunset": "Important Notice: %chain% Sunset",
-  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
-  "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "Important Notice: %chain% Sunset": "Σημαντική ειδοποίηση: Διακοπή %chain%",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "Η %chain% θα διακοπεί στις %date%. Αφαιρέστε τη ρευστότητά σας από όλες τις δεξαμενές πριν από την προθεσμία.",
+  "Slippage setting": "Ρύθμιση απόκλισης",
+  "Liquidity Slippage": "Απόκλιση ρευστότητας",
+  "Loading more pools...": "Φόρτωση περισσότερων δεξαμενών...",
+  "Try Zap": "Δοκιμάστε το Zap",
+  "to automatically balance and provide V3 liquidity in one click.": "για αυτόματη εξισορρόπηση και παροχή ρευστότητας V3 με ένα κλικ."
 }
