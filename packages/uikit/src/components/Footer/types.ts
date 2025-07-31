@@ -1,4 +1,4 @@
-import { Language } from "../LangSelector/types";
+import { Language } from "@pancakeswap/localization";
 import { FlexProps } from "../Box";
 
 export type FooterLinkType = {

@@ -1,3 +1,4 @@
+import { Language } from "@pancakeswap/localization";
 import React from "react";
 import { Colors } from "../../theme";
 import Button from "../Button/Button";
@@ -7,7 +8,6 @@ import { Position } from "../Dropdown/types";
 import LanguageIcon from "../Svg/Icons/Language";
 import Text from "../Text/Text";
 import MenuButton from "./MenuButton";
-import { Language } from "./types";
 
 interface Props {
   currentLang: string;
