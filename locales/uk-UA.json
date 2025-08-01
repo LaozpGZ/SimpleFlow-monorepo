@@ -3623,7 +3623,7 @@
   "Peak Supply": "Пікова пропозиція",
   "Total CAKE Supply": "Загальна пропозиція CAKE",
   "Burned CAKE Supply": "Спалена пропозиція CAKE",
-  "Last updated on: ${lastUpdatedAt}": "Останнє оновлення: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Під час отримання даних сталася помилка. Спробуйте пізніше.",
   "Real-Time Burn History": "Історія спалення в реальному часі",
   "Powered by Brevis, this hook enables swap fee discounts": "Цей хук, що працює на базі Brevis, активує знижки на комісію за обмін",
