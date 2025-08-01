@@ -3623,7 +3623,7 @@
   "Peak Supply": "Lượng cung đỉnh",
   "Total CAKE Supply": "Tổng lượng cung CAKE",
   "Burned CAKE Supply": "Lượng cung CAKE đã đốt cháy",
-  "Last updated on: ${lastUpdatedAt}": "Ngày cập nhật gần nhất: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Đã xảy ra lỗi khi truy xuất dữ liệu. Vui lòng thử lại sau.",
   "Real-Time Burn History": "Lịch sử đốt cháy trong thời gian thực",
   "Powered by Brevis, this hook enables swap fee discounts": "Được cung cấp bởi Brevis, hook này hỗ trợ giảm giá phí hoán đổi",
