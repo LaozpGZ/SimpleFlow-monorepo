@@ -3623,7 +3623,7 @@
   "Peak Supply": "Aport de vârf",
   "Total CAKE Supply": "Aport total CAKE",
   "Burned CAKE Supply": "Aport CAKE consumat",
-  "Last updated on: ${lastUpdatedAt}": "Ultima actualizare pe: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "S-a produs o eroare în timpul recuperării datelor. Încearcă din nou mai târziu.",
   "Real-Time Burn History": "Istoric consum în timp real",
   "Powered by Brevis, this hook enables swap fee discounts": "Oferit de Brevis, acest hook permite reduceri la comisionul de swap",
