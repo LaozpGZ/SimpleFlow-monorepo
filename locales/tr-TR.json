@@ -3623,7 +3623,7 @@
   "Peak Supply": "Zirve Arz",
   "Total CAKE Supply": "Toplam CAKE Arzı",
   "Burned CAKE Supply": "Yakılan CAKE Arzı",
-  "Last updated on: ${lastUpdatedAt}": "Son güncellenme: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Veriler alınırken bir hata oluştu. Lütfen daha sonra tekrar deneyin.",
   "Real-Time Burn History": "Gerçek Zamanlı Yakma Geçmişi",
   "Powered by Brevis, this hook enables swap fee discounts": "Brevis tarafından desteklenen bu kanca, dönüştürme ücreti indirimlerine olanak tanır",
