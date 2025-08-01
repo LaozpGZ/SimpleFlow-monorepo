@@ -3623,7 +3623,7 @@
   "Peak Supply": "पीक सप्लाई",
   "Total CAKE Supply": "कुल CAKE सप्लाई",
   "Burned CAKE Supply": "बर्न की गई CAKE सप्लाई",
-  "Last updated on: ${lastUpdatedAt}": "पिछली बार इस पर अपडेट किया गया: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "डेटा फ़ेच करते हुए गड़बड़ी हुई। कृपया बाद में फिर कोशिश करें।",
   "Real-Time Burn History": "रीयल-टाइम बर्न हिस्ट्री",
   "Powered by Brevis, this hook enables swap fee discounts": "Brevis से संचालित होने वाला यह हुक स्वैप फ़ीस डिस्काउंट को सक्षम करता है",
