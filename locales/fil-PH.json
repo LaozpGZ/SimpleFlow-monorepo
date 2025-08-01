@@ -3623,7 +3623,7 @@
   "Peak Supply": "Peak na Supply",
   "Total CAKE Supply": "Kabuuang supply ng CAKE",
   "Burned CAKE Supply": "Na-burn na Supply ng CAKE",
-  "Last updated on: ${lastUpdatedAt}": "Huling na-update noong: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Nagka-error habang kinukuha ang data. Pakisubukan ulit sa ibang pagkakataon.",
   "Real-Time Burn History": "Real-Time na History ng Burn",
   "Powered by Brevis, this hook enables swap fee discounts": "Pinapatakbo ng Brevis, ine-enable ng hook na ito ang mga discount sa swap fee",
