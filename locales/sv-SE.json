@@ -3623,7 +3623,7 @@
   "Peak Supply": "Högsta mängd",
   "Total CAKE Supply": "Total CAKE-mängd",
   "Burned CAKE Supply": "Bränd CAKE-mängd",
-  "Last updated on: ${lastUpdatedAt}": "Senast uppdaterad den: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Ett fel inträffade vid hämtning av data. Försök igen senare.",
   "Real-Time Burn History": "Bränningshistorik i realtid",
   "Powered by Brevis, this hook enables swap fee discounts": "Denna krok drivs av Brevis och möjliggör rabatter på växlingsavgifter",
