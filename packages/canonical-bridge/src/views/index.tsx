@@ -7,10 +7,11 @@ import {
   BridgeTransfer,
   CanonicalBridgeProvider,
   CanonicalBridgeProviderProps,
-  // EventData,
-  // EventName,
+  EventData,
+  EventName,
   IChainConfig,
   ICustomizedBridgeConfig,
+  createGTMEventListener,
 } from '@bnb-chain/canonical-bridge-widget'
 import { useTheme } from 'styled-components'
 import { useAccount } from 'wagmi'
@@ -37,6 +38,8 @@ export interface CanonicalBridgeProps {
   rpcConfig: Record<number, string[]>
   disabledToChains?: number[]
 }
+
+const gtmListener = createGTMEventListener()
 
 export const CanonicalBridge = (props: CanonicalBridgeProps) => {
   const { connectWalletButtons, supportedChainIds, disabledToChains } = props
@@ -69,8 +72,6 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
     [toast],
   )
 
-  // const gtmListener = createGTMEventListener()
-
   const config = useMemo<ICustomizedBridgeConfig>(
     () => ({
       appName: 'canonical-bridge',
@@ -99,12 +100,12 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
         refreshingIcon: <RefreshingIcon />,
       },
 
-      // analytics: {
-      //   enabled: true,
-      //   onEvent: (eventName: EventName, eventData: EventData<EventName>) => {
-      //     gtmListener(eventName, eventData)
-      //   },
-      // },
+      analytics: {
+        enabled: true,
+        onEvent: (eventName: EventName, eventData: EventData<EventName>) => {
+          gtmListener(eventName, eventData)
+        },
+      },
 
       chains: supportedChains,
       onError: handleError,
