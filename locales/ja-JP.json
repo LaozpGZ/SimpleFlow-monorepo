@@ -3623,7 +3623,7 @@
   "Peak Supply": "最大供給量",
   "Total CAKE Supply": "総CAKE供給量",
   "Burned CAKE Supply": "バーン済みCAKE供給量",
-  "Last updated on: ${lastUpdatedAt}": "最終更新：${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "データの取得中にエラーが発生しました。後でもう一度お試しください。",
   "Real-Time Burn History": "リアルタイムバーン履歴",
   "Powered by Brevis, this hook enables swap fee discounts": "Brevisを活用したこのフックにより、スワップ手数料の割引が可能になります",
