@@ -9,6 +9,7 @@ import { useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
 import { PublicKey } from '@solana/web3.js'
 import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
+import { getAssociatedTokenAddress } from '@solana/spl-token-0.4'
 
 import { fetchSolanaTokenBalances } from './solanaBalanceFetcher'
 
@@ -48,7 +49,7 @@ export function useSolanaTokenBalance(
     isLoading,
     error,
   } = useQuery({
-    queryKey: ['useSolanaTokenBalance', walletAddress],
+    queryKey: ['useSolanaTokenBalance', walletAddress, mintAddress],
     queryFn: async () => {
       if (!walletAddress || !mintAddress) return new BN(0)
       try {
@@ -58,7 +59,13 @@ export function useSolanaTokenBalance(
           return new BN(balance.toString())
         }
 
-        const balance = await connection.getTokenAccountBalance(new PublicKey(mintAddress))
+        const mintPub = new PublicKey(mintAddress)
+        const owner = new PublicKey(walletAddress)
+
+        // TODO: can cache this ATA address
+        const ata = await getAssociatedTokenAddress(mintPub, owner)
+
+        const balance = await connection.getTokenAccountBalance(ata)
 
         return new BN(balance.value.amount.toString())
       } catch (error) {
@@ -66,7 +73,7 @@ export function useSolanaTokenBalance(
         return new BN(0)
       }
     },
-    enabled: Boolean(walletAddress),
+    enabled: Boolean(walletAddress && mintAddress),
     staleTime: FAST_INTERVAL,
     refetchOnWindowFocus: false,
     refetchInterval: FAST_INTERVAL,
