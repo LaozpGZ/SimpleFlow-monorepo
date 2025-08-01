@@ -3623,7 +3623,7 @@
   "Peak Supply": "Μέγιστη διάθεση",
   "Total CAKE Supply": "Συνολικός αριθμός CAKE",
   "Burned CAKE Supply": "Καμένη ποσότητα CAKE",
-  "Last updated on: ${lastUpdatedAt}": "Τελευταία ενημέρωση: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Παρουσιάστηκε σφάλμα κατά τη λήψη των δεδομένων. Προσπαθήστε ξανά αργότερα.",
   "Real-Time Burn History": "Ιστορικό καύσης σε πραγματικό χρόνο",
   "Powered by Brevis, this hook enables swap fee discounts": "Με την υποστήριξη της Brevis, αυτό το hook επιτρέπει εκπτώσεις στα τέλη ανταλλαγής",
