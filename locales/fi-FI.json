@@ -3623,7 +3623,7 @@
   "Peak Supply": "Huippuvaranto",
   "Total CAKE Supply": "CAKE-varanto yhteensä",
   "Burned CAKE Supply": "Poltettu CAKE-varanto",
-  "Last updated on: ${lastUpdatedAt}": "Päivitetty viimeksi: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Virhe noudettaessa tietoja. Yritä myöhemmin uudelleen.",
   "Real-Time Burn History": "Reaaliaikainen polttohistoria",
   "Powered by Brevis, this hook enables swap fee discounts": "Tämä Brevisin tarjoama hook mahdollistaa vaihtomaksualennukset",
