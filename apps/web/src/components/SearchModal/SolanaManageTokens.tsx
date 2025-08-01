@@ -1,18 +1,29 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { SPLToken } from '@pancakeswap/swap-sdk-core'
 import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
-import { AutoColumn, Button, Column, DeleteOutlineIcon, IconButton, Input, Link, Text } from '@pancakeswap/uikit'
+import {
+  AutoColumn,
+  BscScanIcon,
+  Button,
+  Column,
+  DeleteOutlineIcon,
+  IconButton,
+  Input,
+  Link,
+  Text,
+} from '@pancakeswap/uikit'
 import Row, { RowBetween, RowFixed } from 'components/Layout/Row'
 import { useSolanaTokenList } from 'hooks/useSolanaTokenList'
 import { RefObject, useCallback, useMemo, useRef, useState } from 'react'
-import { Connection, PublicKey } from '@solana/web3.js'
+import { PublicKey } from '@solana/web3.js'
 import { convertRawTokenInfoIntoSPLToken } from 'config/solana-list'
 import { MintLayout } from '@solana/spl-token-0.4'
 import { useQuery } from '@tanstack/react-query'
-import { useAtom, useAtomValue } from 'jotai'
-import { rpcUrlAtom, solanaExplorerAtom } from '@pancakeswap/utils/user'
-import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { useAtom } from 'jotai'
+import { solanaExplorerAtom } from '@pancakeswap/utils/user'
+import { CheckIcon, CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { NonEVMChainId } from '@pancakeswap/chains'
+import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
 
 import { Footer, Wrapper } from './ManageTokens'
 
@@ -31,18 +42,11 @@ const isValidSolanaAddress = (address: string): boolean => {
   }
 }
 
-const useConnectionWithRpc = () => {
-  const rpc = useAtomValue(rpcUrlAtom)
-
-  return useMemo(() => {
-    return new Connection(rpc)
-  }, [rpc])
-}
-
 function useGetTokenInfo(address?: string) {
-  const connection = useConnectionWithRpc()
+  const connection = useSolanaConnectionWithRpcAtom()
+
   return useQuery({
-    queryKey: ['solana-token-info', address],
+    queryKey: ['solana-useGetTokenInfo', address],
     queryFn: async () => {
       if (!address) return null
 
@@ -96,7 +100,7 @@ export default function SolanaManageTokens({
   }, [])
 
   // if they input an address, use it
-  const { data: searchToken, isLoading: isLoadingSearchToken } = useGetTokenInfo(searchQuery)
+  const { data: searchToken, isError: isErrorSearchToken } = useGetTokenInfo(searchQuery)
 
   const handleRemoveAll = useCallback(() => {
     removeUserToken([])
@@ -123,15 +127,14 @@ export default function SolanaManageTokens({
       // Check if token already exists
       const exists = userTokens.some((token) => token.address === tokenInfo.address)
       if (!exists) {
-        addUserToken(tokenInfo)
+        setImportToken(convertRawTokenInfoIntoSPLToken(tokenInfo))
+        setModalView(CurrencyModalView.importToken)
       }
 
       // Clear search and trigger import
       setSearchQuery('')
-      //   setImportToken(searchToken)
-      setModalView(CurrencyModalView.importToken)
     }
-  }, [searchToken, userTokens, addUserToken, setImportToken, setModalView])
+  }, [searchToken, userTokens, setImportToken, setModalView])
 
   const tokenList = useMemo(() => {
     return userTokens.map((token) => (
@@ -142,11 +145,7 @@ export default function SolanaManageTokens({
             {token.symbol}
           </Link>
           <a href={`${currentExplorer.host}/token/${token.address}`} target="_blank" rel="noreferrer noopener">
-            <IconButton variant="text" scale="sm">
-              <Text fontSize="12px" color="textSubtle">
-                📊
-              </Text>
-            </IconButton>
+            <BscScanIcon width="20px" color="textSubtle" />
           </a>
         </RowFixed>
         <RowFixed>
@@ -156,7 +155,7 @@ export default function SolanaManageTokens({
         </RowFixed>
       </RowBetween>
     ))
-  }, [userTokens, removeUserToken])
+  }, [userTokens, removeUserToken, currentExplorer.host])
 
   const isAddressValid = searchQuery === '' || isValidSolanaAddress(searchQuery)
 
@@ -178,11 +177,11 @@ export default function SolanaManageTokens({
           </Row>
           {!isAddressValid ? (
             <Text color="failure">{t('Enter valid token address')}</Text>
-          ) : isLoadingSearchToken ? (
+          ) : isErrorSearchToken ? (
             <Text color="failure">{t('Token address not found')}</Text>
           ) : null}
           {searchToken && (
-            <RowBetween width="100%" style={{ padding: '8px 0' }}>
+            <RowBetween width="100%" style={{ padding: '4px 20px' }}>
               <RowFixed>
                 <CurrencyLogo currency={searchToken} size="24px" />
                 <Column style={{ marginLeft: '12px' }}>
@@ -192,13 +191,20 @@ export default function SolanaManageTokens({
                   </Text>
                 </Column>
               </RowFixed>
-              <Button
-                scale="sm"
-                onClick={handleAddToken}
-                disabled={userTokens.some((token) => token.address === searchToken.address)}
-              >
-                {userTokens.some((token) => token.address === searchToken.address) ? t('Added') : t('Import')}
-              </Button>
+              {userTokens.some((token) => token.address === searchToken.address) ? (
+                <RowFixed style={{ minWidth: 'fit-content' }}>
+                  <CheckIcon />
+                  <Text color="success">{t('Active')}</Text>
+                </RowFixed>
+              ) : (
+                <Button
+                  scale="sm"
+                  onClick={handleAddToken}
+                  disabled={userTokens.some((token) => token.address === searchToken.address)}
+                >
+                  {userTokens.some((token) => token.address === searchToken.address) ? t('Added') : t('Import')}
+                </Button>
+              )}
             </RowBetween>
           )}
         </AutoColumn>

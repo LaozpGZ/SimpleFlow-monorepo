@@ -90,6 +90,7 @@ export function useSolanaTokenList(enabled = true) {
   const addUserToken = useCallback((token: TokenInfo) => {
     setUserTokens((prev) => {
       const next = prev.some((t) => t.address === token.address) ? prev : [...prev, token]
+      console.log('saveUserAddedTokens', saveUserAddedTokens)
       saveUserAddedTokens(next)
       return next
     })
