@@ -24,8 +24,6 @@ type CurrencyTab = 'CAKE' | 'USD'
 
 // Memoized tooltip component
 const CustomTooltip = ({ active, payload, isUSD }: { active?: boolean; payload?: any[]; isUSD: boolean }) => {
-  const { t } = useTranslation()
-
   if (!active || !payload?.length) return null
 
   const total = payload.reduce((acc, entry) => acc + entry.value, 0)
