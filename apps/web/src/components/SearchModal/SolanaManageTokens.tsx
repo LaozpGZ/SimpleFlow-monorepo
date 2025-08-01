@@ -87,7 +87,7 @@ export default function SolanaManageTokens({
   setImportToken: (token: SPLToken) => void
 }) {
   const { t } = useTranslation()
-  const { addUserToken, userTokens, removeUserToken } = useSolanaTokenList()
+  const { userTokens, tokenList, removeUserToken, removeAllUserTokens } = useSolanaTokenList()
 
   const [searchQuery, setSearchQuery] = useState<string>('')
   const [currentExplorer] = useAtom(solanaExplorerAtom)
@@ -101,10 +101,6 @@ export default function SolanaManageTokens({
 
   // if they input an address, use it
   const { data: searchToken, isError: isErrorSearchToken } = useGetTokenInfo(searchQuery)
-
-  const handleRemoveAll = useCallback(() => {
-    removeUserToken([])
-  }, [])
 
   // Add token functionality
   const handleAddToken = useCallback(() => {
@@ -136,7 +132,7 @@ export default function SolanaManageTokens({
     }
   }, [searchToken, userTokens, setImportToken, setModalView])
 
-  const tokenList = useMemo(() => {
+  const tokenListComponent = useMemo(() => {
     return userTokens.map((token) => (
       <RowBetween key={token.address} width="100%">
         <RowFixed>
@@ -191,30 +187,26 @@ export default function SolanaManageTokens({
                   </Text>
                 </Column>
               </RowFixed>
-              {userTokens.some((token) => token.address === searchToken.address) ? (
+              {tokenList.some((token) => token.address === searchToken.address) ? (
                 <RowFixed style={{ minWidth: 'fit-content' }}>
                   <CheckIcon />
                   <Text color="success">{t('Active')}</Text>
                 </RowFixed>
               ) : (
-                <Button
-                  scale="sm"
-                  onClick={handleAddToken}
-                  disabled={userTokens.some((token) => token.address === searchToken.address)}
-                >
-                  {userTokens.some((token) => token.address === searchToken.address) ? t('Added') : t('Import')}
+                <Button scale="sm" onClick={handleAddToken}>
+                  {t('Import')}
                 </Button>
               )}
             </RowBetween>
           )}
         </AutoColumn>
-        {tokenList}
+        {tokenListComponent}
         <Footer>
           <Text bold color="textSubtle">
             {userTokens?.length} {userTokens.length === 1 ? t('Imported Token') : t('Imported Tokens')}
           </Text>
           {userTokens.length > 0 && (
-            <Button variant="tertiary" onClick={handleRemoveAll}>
+            <Button variant="tertiary" onClick={removeAllUserTokens}>
               {t('Clear all')}
             </Button>
           )}

@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useCallback } from 'react'
 
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { solanaTokenListAtom, solanaListSettingsAtom } from 'state/token/solanaTokenAtoms'
 
 import type { TokenInfo } from '@pancakeswap/solana-core-sdk'
@@ -8,6 +8,7 @@ import type { SPLToken } from '@pancakeswap/swap-sdk-core'
 
 import { useQuery } from '@tanstack/react-query'
 import { SOLANA_LISTS_CONFIG, TokenListKey, USER_ADDED_KEY, convertRawTokenInfoIntoSPLToken } from 'config/solana-list'
+import { atomWithStorage } from 'jotai/utils'
 
 // Custom hook for individual token list queries
 function useTokenListQuery(listKey: TokenListKey, enabled: boolean) {
@@ -36,20 +37,10 @@ function useTokenListQuery(listKey: TokenListKey, enabled: boolean) {
   })
 }
 
-function getUserAddedTokens(): TokenInfo[] {
-  try {
-    return JSON.parse(localStorage.getItem(USER_ADDED_KEY) || '[]')
-  } catch {
-    return []
-  }
-}
-
-function saveUserAddedTokens(tokens: TokenInfo[]) {
-  localStorage.setItem(USER_ADDED_KEY, JSON.stringify(tokens))
-}
+const userTokensAtom = atomWithStorage<TokenInfo[]>(USER_ADDED_KEY, [])
 
 export function useSolanaTokenList(enabled = true) {
-  const [userTokens, setUserTokens] = useState<TokenInfo[]>(getUserAddedTokens())
+  const [userTokens, setUserTokens] = useAtom(userTokensAtom)
   const setTokenList = useSetAtom(solanaTokenListAtom)
 
   // Create individual queries for each token list using the custom hook
@@ -90,8 +81,7 @@ export function useSolanaTokenList(enabled = true) {
   const addUserToken = useCallback((token: TokenInfo) => {
     setUserTokens((prev) => {
       const next = prev.some((t) => t.address === token.address) ? prev : [...prev, token]
-      console.log('saveUserAddedTokens', saveUserAddedTokens)
-      saveUserAddedTokens(next)
+
       return next
     })
   }, [])
@@ -101,10 +91,15 @@ export function useSolanaTokenList(enabled = true) {
     setUserTokens((prev) => {
       const addressesToRemove = Array.isArray(addresses) ? addresses : [addresses]
       const next = prev.filter((t) => !addressesToRemove.includes(t.address))
-      saveUserAddedTokens(next)
       return next
     })
   }, [])
+
+  const removeAllUserTokens = useCallback(() => {
+    if (userTokens.length > 0) {
+      setUserTokens([])
+    }
+  }, [userTokens])
 
   const tokenCountsByList = useMemo(() => {
     return {
@@ -122,6 +117,7 @@ export function useSolanaTokenList(enabled = true) {
       removeUserToken,
       tokenCountsByList,
       userTokens,
+      removeAllUserTokens,
     }),
     [
       mergedTokens,
@@ -132,6 +128,7 @@ export function useSolanaTokenList(enabled = true) {
       addUserToken,
       removeUserToken,
       tokenCountsByList,
+      removeAllUserTokens,
     ],
   )
 }
