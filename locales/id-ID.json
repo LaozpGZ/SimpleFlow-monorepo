@@ -3623,7 +3623,7 @@
   "Peak Supply": "Suplai Puncak",
   "Total CAKE Supply": "Total Suplai CAKE",
   "Burned CAKE Supply": "Suplai CAKE Hangus",
-  "Last updated on: ${lastUpdatedAt}": "Terakhir diperbarui pada: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Ada eror saat mengambil data. Silakan coba lagi nanti.",
   "Real-Time Burn History": "Riwayat Hangus dalam Waktu Nyata",
   "Powered by Brevis, this hook enables swap fee discounts": "Didukung oleh Brevis, hook ini memungkinkan diskon biaya pertukaran",
