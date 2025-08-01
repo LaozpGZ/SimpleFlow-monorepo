@@ -3623,7 +3623,7 @@
   "Peak Supply": "Picco di fornitura",
   "Total CAKE Supply": "Fornitura totale CAKE",
   "Burned CAKE Supply": "Fornitura di CAKE bruciata",
-  "Last updated on: ${lastUpdatedAt}": "Ultimo aggiornamento: ${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Si è verificato un errore durante il recupero dei dati. Riprova più tardi.",
   "Real-Time Burn History": "Cronologia di bruciatura in tempo reale",
   "Powered by Brevis, this hook enables swap fee discounts": "Grazie al supporto di Brevis, questo hook consente sconti sulle commissioni di scambio",
