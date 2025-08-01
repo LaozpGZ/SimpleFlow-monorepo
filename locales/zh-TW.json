@@ -3623,7 +3623,7 @@
   "Peak Supply": "供應高峰值",
   "Total CAKE Supply": "CAKE 總供應量",
   "Burned CAKE Supply": "CAKE 總銷毀量",
-  "Last updated on: ${lastUpdatedAt}": "最後更新時間：${lastUpdatedAt}",
+  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "擷取資料時發生錯誤。請稍後再試一次。",
   "Real-Time Burn History": "即時銷毀歷程記錄",
   "Powered by Brevis, this hook enables swap fee discounts": "由 Brevis 提供支援，此 hook 可啟用交換手續費折扣",
