@@ -19,7 +19,6 @@ import { V1BridgeLink } from '../components/V1BridgeLink'
 import { chains, env } from '../configs'
 import { useTransferConfig } from '../hooks/useTransferConfig'
 import { locales } from '../modules/i18n/locales'
-import { BridgeWalletProvider } from '../modules/wallet/BridgeWalletProvider'
 import { breakpoints } from '../theme/breakpoints'
 import { dark } from '../theme/dark'
 import { light } from '../theme/light'
@@ -114,7 +113,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
   )
 
   return (
-    <BridgeWalletProvider>
+    <>
       <GlobalStyle />
       <CanonicalBridgeProvider config={config}>
         <Flex flexDirection="column" justifyContent="center" maxWidth="480px" width="100%">
@@ -124,6 +123,6 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
         </Flex>
         <BridgeRoutes />
       </CanonicalBridgeProvider>
-    </BridgeWalletProvider>
+    </>
   )
 }
