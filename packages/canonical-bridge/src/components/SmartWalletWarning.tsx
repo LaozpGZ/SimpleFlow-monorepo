@@ -1,6 +1,7 @@
 import { useBytecode } from 'wagmi'
 import { useTranslation } from '@pancakeswap/localization'
 import { Message, MessageText } from '@pancakeswap/uikit'
+import { useMemo } from 'react'
 import { useChainFromWidget } from '../hooks/useChainFromWidget'
 import { chains } from '../configs'
 import { useInputObserver } from '../hooks/useInputObserver'
@@ -12,9 +13,11 @@ export const SmartWalletWarning = () => {
 
   const { t } = useTranslation()
 
-  const selectedChainName = fromChain === 'solana' ? toChain : fromChain
+  const chainId = useMemo(() => {
+    const selectedChainName = fromChain === 'solana' ? toChain : fromChain
 
-  const chainId = chains.find((chain) => chain.name.toLowerCase() === selectedChainName?.toLowerCase())?.id
+    return chains.find((chain) => chain.name.toLowerCase() === selectedChainName?.toLowerCase())?.id
+  }, [fromChain, toChain])
 
   const { data: evmBytecode } = useBytecode({
     address: accountValue as `0x${string}`,
