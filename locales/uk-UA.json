@@ -3623,7 +3623,7 @@
   "Peak Supply": "Пікова пропозиція",
   "Total CAKE Supply": "Загальна пропозиція CAKE",
   "Burned CAKE Supply": "Спалена пропозиція CAKE",
-  "Last updated on: %lastUpdatedAt%": "Last updated on: %lastUpdatedAt%",
+  "Last updated on: %lastUpdatedAt%": "Останнє оновлення: %lastUpdatedAt%",
   "An error occurred while fetching the data. Please try again later.": "Під час отримання даних сталася помилка. Спробуйте пізніше.",
   "Real-Time Burn History": "Історія спалення в реальному часі",
   "Powered by Brevis, this hook enables swap fee discounts": "Цей хук, що працює на базі Brevis, активує знижки на комісію за обмін",
@@ -4359,11 +4359,11 @@
   "Continue with Web3 Wallet": "Продовжити через гаманець Web3",
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "TWAP і лімітні ордери наразі не підтримуються для гаманців на основі смартконтрактів.",
   "Create your Wallet with Social Login": "Створіть гаманець з авторизацією через соцмережу",
-  "Important Notice: %chain% Sunset": "Important Notice: %chain% Sunset",
-  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.",
-  "Slippage setting": "Slippage setting",
-  "Liquidity Slippage": "Liquidity Slippage",
-  "Loading more pools...": "Loading more pools...",
+  "Important Notice: %chain% Sunset": "Важливе повідомлення: припинення підтримки %chain%",
+  "%chain% will be sunset on %date%. Please make sure to remove your liquidity from all pools before deadline.": "Підтримку %chain% буде припинено %date%. Вилучіть ліквідність з усіх пулів до цієї дати.",
+  "Slippage setting": "Налаштування прослизання",
+  "Liquidity Slippage": "Прослизання ліквідності",
+  "Loading more pools...": "Завантажуємо більше пулів...",
   "Try Zap": "Try Zap",
-  "to automatically balance and provide V3 liquidity in one click.": "to automatically balance and provide V3 liquidity in one click."
+  "to automatically balance and provide V3 liquidity in one click.": "для автоматичного балансування та забезпечення ліквідності V3 в один клац."
 }
