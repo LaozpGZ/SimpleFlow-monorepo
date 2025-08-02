@@ -3742,7 +3742,7 @@
   "User Added Token List": "Список токенів, доданих користувачем",
   "Freeze Authority Warning": "Попередження: токен може бути заморожений емітентом",
   "This token has freeze authority enabled and could prevent you from transferring or trading the token later.": "У цього токена ввімкнено право заморожування. У майбутньому це може завадити вам переказувати або продавати токен.",
-  "I understand, confirm": "Зрозуміло, підтвердити",
+  "I understand, confirm": "Зрозуміло, підтверджую",
   "Search by token or paste address": "Введіть назву токена або вставте адресу",
   "Popular tokens": "Популярні токени",
   "input a symbol for this token": "введіть символ для цього токена",
