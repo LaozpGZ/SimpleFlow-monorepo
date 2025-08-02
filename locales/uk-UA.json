@@ -3829,7 +3829,7 @@
   "Pool liquidity will appear here.": "Ліквідність пулу з'явиться тут.",
   "Preview Deposit": "Переглянути внесок",
   "Transaction initiating": "Ініціалізація транзакції",
-  "The market price is outside your specified price range. Single asset deposit only.": "Ринкова ціна поза межами вказаного вами діапазону. Можна внести лише один актив.",
+  "The market price is outside your specified price range. Single asset deposit only.": "Ринкова ціна поза межами вказаного вами цінового діапазону. Можна внести лише один актив.",
   "First, select tokens & fee tier": "Спочатку виберіть токени та рівень комісії",
   "Next, set initial token price & position price range": "Далі встановіть початкову ціну токена та ціновий діапазон позиції",
   "Last, please enter token deposit amount": "І нарешті, укажіть кількість токенів для внеску",
