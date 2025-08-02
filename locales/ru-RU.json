@@ -3709,7 +3709,7 @@
   "Delta Method": "Дельта-метод",
   "Estimated APR is calculated by the Delta Method. Click the ‘D’ icon to switch to the Multiplier Method or": "Примерная APR рассчитана по дельта-методу. Нажмите на иконку «D», чтобы переключиться на метод множителя или",
   "Multiplier Method": "Метод множителя",
-  "Estimated APR is calculated by the Multiplier Method. Click the ‘M’ icon to switch to the Delta Method or": "Примерная APR рассчитана по методу множителя. Нажмите иконку «M», чтобы переключиться на дельта-метод или",
+  "Estimated APR is calculated by the Multiplier Method. Click the ‘M’ icon to switch to the Delta Method or": "Примерная APR рассчитана по методу множителя. Нажмите на иконку «M», чтобы переключиться на дельта-метод или",
   "Switch": "Переключить",
   "APR Calculation Method": "Метод вычисления APR",
   "Calculations are an estimate and only for reference.": "Расчеты являются примерными и приведены только для ознакомления.",
