@@ -3686,7 +3686,7 @@
   "Priority Mode": "Режим пріоритету",
   "Max Cap": "Максимальний ліміт",
   "Exact Fee": "Точна комісія",
-  "PancakeSwap auto-optimizes priority fees for your transaction. Set a max cap to prevent overpaying.": "PancakeSwap автоматично оптимізує комісію за пріоритет для вашої транзакції.\nУстановіть максимальний ліміт, щоб уникнути переплат.",
+  "PancakeSwap auto-optimizes priority fees for your transaction. Set a max cap to prevent overpaying.": "PancakeSwap автоматично оптимізує комісію за пріоритет для вашої транзакції. Установіть максимальний ліміт, щоб уникнути переплат.",
   "Transactions will use the exact fee set below.": "Для транзакцій застосовуватиметься точна комісія, указана нижче.",
   "Set Max Cap": "Установіть макс. ліміт",
   "Enter custom value": "Введіть власне значення",
@@ -4364,6 +4364,6 @@
   "Slippage setting": "Налаштування прослизання",
   "Liquidity Slippage": "Прослизання ліквідності",
   "Loading more pools...": "Завантажуємо більше пулів...",
-  "Try Zap": "Try Zap",
+  "Try Zap": "Спробуйте функцію Zap",
   "to automatically balance and provide V3 liquidity in one click.": "для автоматичного балансування та забезпечення ліквідності V3 в один клац."
 }
