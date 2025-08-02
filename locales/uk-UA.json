@@ -3709,7 +3709,7 @@
   "Delta Method": "Дельта-метод",
   "Estimated APR is calculated by the Delta Method. Click the ‘D’ icon to switch to the Multiplier Method or": "Орієнтовну річну відсоткову ставку (РВС) розраховано за дельта-методом. Натисніть на іконку «D», щоб перемкнутися на метод множника або",
   "Multiplier Method": "Метод множника",
-  "Estimated APR is calculated by the Multiplier Method. Click the ‘M’ icon to switch to the Delta Method or": "Орієнтовну річну відсоткову ставку (РВС) розраховано за методом множника. Натисніть іконку «M», щоб перемкнутися на дельта-метод або",
+  "Estimated APR is calculated by the Multiplier Method. Click the ‘M’ icon to switch to the Delta Method or": "Орієнтовну річну відсоткову ставку (РВС) розраховано за методом множника. Натисніть на іконку «M», щоб перемкнутися на дельта-метод або",
   "Switch": "Перемкнути",
   "APR Calculation Method": "Метод обчислення РВС",
   "Calculations are an estimate and only for reference.": "Розрахунки є орієнтовними та наведені лише для ознайомлення.",
