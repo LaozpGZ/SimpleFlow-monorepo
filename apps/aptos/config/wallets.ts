@@ -50,7 +50,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: WalletIds.TrustWallet,
+    id: WalletIds.Trust,
     title: 'Trust Wallet',
     icon: 'https://pancakeswap.finance/images/wallets/trust.png',
     get installed() {
