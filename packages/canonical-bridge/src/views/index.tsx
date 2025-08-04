@@ -6,13 +6,15 @@ import {
   BridgeRoutes,
   BridgeTransfer,
   CanonicalBridgeProvider,
-  CanonicalBridgeProviderProps,
   EventData,
   EventName,
   IChainConfig,
   ICustomizedBridgeConfig,
   createGTMEventListener,
+  EventTypes,
+  IBridgeConfig,
 } from '@bnb-chain/canonical-bridge-widget'
+import { useLastUpdated } from '@pancakeswap/hooks'
 import { useTheme } from 'styled-components'
 import { useAccount } from 'wagmi'
 import { RefreshingIcon } from '../components/RefreshingIcon'
@@ -30,9 +32,9 @@ import { SmartWalletWarning } from '../components/SmartWalletWarning'
 
 export interface CanonicalBridgeProps {
   connectWalletButtons: {
-    default: CanonicalBridgeProviderProps['config']['connectWalletButton']
+    default: IBridgeConfig['components']['connectWalletButton']
   } & {
-    [key: string]: CanonicalBridgeProviderProps['config']['connectWalletButton']
+    [key: string]: IBridgeConfig['components']['connectWalletButton']
   }
   supportedChainIds: number[]
   rpcConfig: Record<number, string[]>
@@ -43,6 +45,7 @@ const gtmListener = createGTMEventListener()
 
 export const CanonicalBridge = (props: CanonicalBridgeProps) => {
   const { connectWalletButtons, supportedChainIds, disabledToChains } = props
+  const { lastUpdated, setLastUpdated: refresh } = useLastUpdated()
   useDisableToChains(disabledToChains)
 
   const { currentLanguage } = useTranslation()
@@ -104,13 +107,25 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
         enabled: true,
         onEvent: (eventName: EventName, eventData: EventData<EventName>) => {
           gtmListener(eventName, eventData)
+          if (eventName === EventTypes.CLICK_BRIDGE_GOAL) {
+            refresh()
+          }
         },
       },
 
       chains: supportedChains,
       onError: handleError,
     }),
-    [currentLanguage.code, theme.isDark, transferConfig, supportedChains, handleError, fromChain, connectWalletButtons],
+    [
+      currentLanguage.code,
+      theme.isDark,
+      transferConfig,
+      supportedChains,
+      handleError,
+      fromChain,
+      connectWalletButtons,
+      lastUpdated,
+    ],
   )
 
   return (
