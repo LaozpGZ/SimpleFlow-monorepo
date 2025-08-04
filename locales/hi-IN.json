@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "रिमाइंडर: यूज़र अपनी पोजीशन को मैनेज करने और इससे निकालने के लिए जिम्मेदार होते है। PancakeSwap ऐसी पोजीशन से होने वाले किसी भी नुकसान को रिकवर करने या रोकने में सक्षम नहीं होगा जिसे बिना मैनेज किए हुए रखा गया है।",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "स्मार्ट कॉन्ट्रैक्ट वॉलेट इस समय Prediction पर सपोर्टेड नहीं हैं। जारी रखने के लिए कृपया प्रॉडक्ट से इंटरैक्ट करने से पहले EOA (एक्सटर्नली ओन्ड अकाउंट) वॉलेट में वापस स्विच करें।",
   "Earn Falcon Miles!": "Falcon Miles जीतें!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "पूल में योगदान किए गए कुल TVL के आधार पर, LP को Falcon के माइल्स का 40 गुना मिलता है। माइल्स केवल 0.95 से 1.05 की सीमा के भीतर की पोजीशन पर ही मिलते हैं।",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "$250,000 जीतने के लिए Binance Alpha टोकन को ट्रेड करें।",
   "Trade Alpha Tokens: Win $250K.": "Alpha टोकन को ट्रेड करें: $250K जीतें।",
   "Enter value between %min% and %max%": "%min% और %max% के बीच वैल्यू डालें",
