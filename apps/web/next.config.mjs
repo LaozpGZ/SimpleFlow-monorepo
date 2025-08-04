@@ -236,6 +236,11 @@ const config = {
       'node_modules',
       '@solana/wallet-adapter-react'
     )
+    webpackConfig.resolve.alias['wagmi'] = path.resolve(
+  __dirname,
+  'node_modules',
+  'wagmi'
+);
     webpackConfig.infrastructureLogging = {
       level: 'info', // or 'verbose' for more detail
     };
