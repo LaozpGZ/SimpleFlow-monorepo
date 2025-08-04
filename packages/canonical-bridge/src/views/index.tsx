@@ -105,7 +105,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
 
       analytics: {
         enabled: true,
-        onEvent: (eventName: EventName, eventData: EventData<EventName>) => {
+        onEvent: (eventName: EventName, eventData: EventData<any>) => {
           gtmListener(eventName, eventData)
           if (eventName === EventTypes.CLICK_BRIDGE_GOAL) {
             refresh()
