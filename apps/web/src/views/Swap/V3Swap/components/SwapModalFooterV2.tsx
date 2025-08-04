@@ -126,9 +126,9 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
   const executionPriceDisplay = useMemo(() => {
     const price =
       SmartRouter.getExecutionPrice({
-        // TODO: to remove as UnifiedCurrencyAmount, SmartRouter will be updated to use UnifiedCurrencyAmount
-        inputAmount: order?.trade?.inputAmount as UnifiedCurrencyAmount<Currency>,
-        outputAmount: order?.trade?.outputAmount as UnifiedCurrencyAmount<Currency>,
+        // TODO: to remove as CurrencyAmount, SmartRouter will be updated to use UnifiedCurrencyAmount
+        inputAmount: order?.trade?.inputAmount as CurrencyAmount<Currency>,
+        outputAmount: order?.trade?.outputAmount as CurrencyAmount<Currency>,
       }) ?? undefined
     return formatExecutionPrice(price, inputAmount, outputAmount, showInverted)
   }, [order, inputAmount, outputAmount, showInverted])
