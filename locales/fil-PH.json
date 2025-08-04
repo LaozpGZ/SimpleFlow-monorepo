@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "Paalala: Pananagutan ng mga user ang pag-manage at pag-withdraw ng kanilang mga position. Hindi mare-recover o mahahadlangan ng PancakeSwap ang anumang pagkalugi sa mga position na hindi na-manage.",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Kasalukuyang hindi sinusuportahan ang mga smart contract wallet sa Hula. Para magpatuloy, lumipat sa EOA (Externally Owned Account) na wallet bago makipag-interact sa produkto.",
   "Earn Falcon Miles!": "Makakuha ng Mga Falcon Mile!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Makakakuha ang mga LP ng 40x na Falcon's Miles batay sa kabuuang TVL na naiambag sa pool. Maiipon lang ang Miles sa mga position na nasa 0.95 hanggang 1.05 range.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "Mag-trade ng Binance Alpha Tokens para Manalo ng $250,000.",
   "Trade Alpha Tokens: Win $250K.": "Mag-trade ng Mga Alpha Token: Manalo ng $250K.",
   "Enter value between %min% and %max%": "Maglagay ng value sa pagitan ng %min% at %max%",
