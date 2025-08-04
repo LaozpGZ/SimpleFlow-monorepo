@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "Emlékeztető: a felhasználók felelősek a pozícióik kezeléséért és visszavonásáért. A PancakeSwap nem tudja behajtani vagy megakadályozni a kezeletlenül hagyott pozíciókból származó veszteségeket.",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Az okoskontraktushoz tartozó tárcák jelenleg nem támogatottak a Predictionben. A folytatáshoz kérjük, válts vissza egy EOA (Externally Owned Account) tárcára, mielőtt kapcsolatba lépnél a termékkel.",
   "Earn Falcon Miles!": "Juss Falcon Miles-hoz!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Az összevont alapok 40x-es Falcon mérföldekhez jutnak az alaphoz való teljes TVL hozzájárulás alapján. A mérföldek csak a 0,95 és 1,05 közötti tartományban lévő pozíciókért járnak.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "Kereskedj Binance Alpha Tokenekkel és nyerj 250 000 USD-t.",
   "Trade Alpha Tokens: Win $250K.": "Kereskedj Alpha tokenekkel: nyerj 250 ezer USD-t.",
   "Enter value between %min% and %max%": "Adj meg egy %min% és %max% közötti értéket",
