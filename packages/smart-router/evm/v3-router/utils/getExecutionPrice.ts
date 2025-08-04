@@ -1,12 +1,17 @@
 import { Currency, Price, UnifiedCurrencyAmount, ZERO } from '@pancakeswap/sdk'
 
-export function getExecutionPrice({
-  inputAmount,
-  outputAmount,
-}: {
+interface GetExecutionPriceParams {
   inputAmount?: UnifiedCurrencyAmount<Currency>
   outputAmount?: UnifiedCurrencyAmount<Currency>
-}): Price<Currency, Currency> | undefined {
+}
+
+export function getExecutionPrice(params?: GetExecutionPriceParams): Price<Currency, Currency> | undefined {
+  if (!params) {
+    return undefined
+  }
+
+  const { inputAmount, outputAmount } = params
+
   if (!inputAmount || !outputAmount) {
     return undefined
   }
