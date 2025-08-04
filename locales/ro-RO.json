@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "Memento: Utilizatorii sunt responsabili pentru gestionarea și retragerea pozițiilor lor. PancakeSwap nu va putea recupera sau împiedica eventuale pierderi din poziții lăsate negestionate.",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Portofelele de contracte inteligente nu sunt acceptate momentan pe Prediction. Pentru a continua, schimbă înapoi la un portofel EOA (cont deținut extern) înainte de a interacționa cu produsul.",
   "Earn Falcon Miles!": "Câștigă mile Falcon!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP câștigă 40× Falcon Miles în funcție de TVL total adus de portofoliu. Milele se acumulează doar în poziții din intervalul cuprins între 0,95 și 1,05.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "Tranzacționează jetoane Binance Alpha pentru a câștiga 250.000 USD.",
   "Trade Alpha Tokens: Win $250K.": "Tranzacționează jetoane Alpha: câștigă 250.000 USD.",
   "Enter value between %min% and %max%": "Introdu o valoare între %min% și %max%",
