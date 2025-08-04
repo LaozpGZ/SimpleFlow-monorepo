@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "Muistutus: Käyttäjät ovat vastuussa positioidensa hallinnasta ja nostamisesta. PancakeSwap ei voi palauttaa tai estää menetyksiä hallinnoimatta jätetyistä positioista.",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Älykkäitä sopimuslompakoita ei tueta tällä hetkellä Ennusteessa. Jotta voit jatkaa, vaihda takaisin EOA-lompakkoon (ulkoisesti omistettu tili) ennen vuorovaikutusta tuotteen kanssa.",
   "Earn Falcon Miles!": "Ansaitse Falcon-maileja!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP:t ansaitsevat 40-kertaiset Falcon-mailit perustuen pooliin panostettuun kokonais-TVL:ään. Maileja kertyy vain positioihin välillä 0,95–1,05.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "Käy kauppaa Binance Alpha -poleteilla ja voita 250 000 $.",
   "Trade Alpha Tokens: Win $250K.": "Käy kauppaa Alpha-poleteilla: voita 250 000 $.",
   "Enter value between %min% and %max%": "Anna arvo välillä %min%–%max%",
