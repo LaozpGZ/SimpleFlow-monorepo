@@ -171,6 +171,7 @@ export const getCommonTokenPrices: CommonTokenPriceProvider<{ v3SubgraphProvider
   if (v3SubgraphProvider) {
     calls.push({
       asyncFn: () => getCommonTokenPricesBySubgraph({ currencyA, currencyB, provider: v3SubgraphProvider }),
+      timeout: 3000,
     })
   }
 
