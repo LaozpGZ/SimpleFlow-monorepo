@@ -11,10 +11,8 @@ import {
   IChainConfig,
   ICustomizedBridgeConfig,
   createGTMEventListener,
-  EventTypes,
   IBridgeConfig,
 } from '@bnb-chain/canonical-bridge-widget'
-import { useLastUpdated } from '@pancakeswap/hooks'
 import { useTheme } from 'styled-components'
 import { useAccount } from 'wagmi'
 import { RefreshingIcon } from '../components/RefreshingIcon'
@@ -45,7 +43,6 @@ const gtmListener = createGTMEventListener()
 
 export const CanonicalBridge = (props: CanonicalBridgeProps) => {
   const { connectWalletButtons, supportedChainIds, disabledToChains } = props
-  const { lastUpdated, setLastUpdated: refresh } = useLastUpdated()
   useDisableToChains(disabledToChains)
 
   const { currentLanguage } = useTranslation()
@@ -107,25 +104,13 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
         enabled: true,
         onEvent: (eventName: EventName, eventData: EventData<any>) => {
           gtmListener(eventName, eventData)
-          if (eventName === EventTypes.CLICK_BRIDGE_GOAL) {
-            refresh()
-          }
         },
       },
 
       chains: supportedChains,
       onError: handleError,
     }),
-    [
-      currentLanguage.code,
-      theme.isDark,
-      transferConfig,
-      supportedChains,
-      handleError,
-      fromChain,
-      connectWalletButtons,
-      lastUpdated,
-    ],
+    [currentLanguage.code, theme.isDark, transferConfig, supportedChains, handleError, fromChain, connectWalletButtons],
   )
 
   return (
