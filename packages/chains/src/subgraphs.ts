@@ -22,7 +22,7 @@ export function getStableSwapSubgraphs({ theGraphApiKey }: Pick<SubgraphParams, 
   } as const
 }
 
-export function getV3Subgraphs({ noderealApiKey, theGraphApiKey }: SubgraphParams) {
+export function getV3Subgraphs({ theGraphApiKey }: SubgraphParams) {
   return {
     [ChainId.ETHEREUM]: `https://gateway-arbitrum.network.thegraph.com/api/${theGraphApiKey}/subgraphs/id/CJYGNhb7RvnhfBDjqpRnD3oxgyhibzc7fkAMa38YV3oS`,
     [ChainId.GOERLI]: 'https://api.thegraph.com/subgraphs/name/pancakeswap/exchange-v3-goerli',
