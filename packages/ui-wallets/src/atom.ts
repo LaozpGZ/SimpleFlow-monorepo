@@ -3,7 +3,7 @@ import { WalletConfigV2, WalletIds } from './types'
 
 const MAXIMUM_STORE_NUM = 3
 
-export const errorAtom = atom<string>('')
+export const errorAtom = atom<[string, string]>(['', ''])
 
 export const selectedWalletAtom = atom<WalletConfigV2<unknown> | null>(null)
 

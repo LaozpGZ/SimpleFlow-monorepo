@@ -143,7 +143,9 @@ function MobileModal<T>({
   onOpenSocialLoginModal: () => void
 }) {
   const [selected] = useSelectedWallet()
-  const [error] = useAtom(errorAtom)
+  const [[evmError, solanaError]] = useAtom(errorAtom)
+  // TODO @ChefJerry, display evmError and solanaError separately
+  const error = evmError || solanaError
 
   const installedWallets: WalletConfigV2<T>[] = useMemo(
     () => [...wallets, ...topWallets, ...previouslyUsedWallets].filter((w) => w.installed),
@@ -412,7 +414,8 @@ function DesktopModal<T>({
   )
 
   const [selected] = useSelectedWallet<T>()
-  const [error] = useAtom(errorAtom)
+  const [[evmError, solanaError]] = useAtom(errorAtom)
+  const error = evmError || solanaError
   const [qrCode, setQrCode] = useState<string | undefined>(undefined)
   const { t } = useTranslation()
 
@@ -565,7 +568,8 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
   const connectWallet = useCallback(
     (wallet: WalletConfigV2<T>) => {
       setSelected(wallet)
-      setError('')
+      // TODO @ChefJerry, set evmError and solanaError separately
+      setError(['', ''])
       if (wallet.installed !== false) {
         login(wallet.connectorId)
           .then((v) => {
@@ -575,11 +579,11 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
           })
           .catch((err) => {
             if (err instanceof WalletConnectorNotFoundError) {
-              setError(t('no provider found'))
+              setError([t('no provider found'), ''])
             } else if (err instanceof WalletSwitchChainError) {
-              setError(err.message)
+              setError([err.message, ''])
             } else {
-              setError(t('Error connecting, please authorize wallet to access.'))
+              setError([t('Error connecting, please authorize wallet to access.'), ''])
             }
           })
       }
