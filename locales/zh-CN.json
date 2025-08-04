@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "提醒：用户有责任管理和提取其持仓。PancakeSwap 无法恢复或防止因持仓未加管理而造成的任何损失。",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Prediction 目前不支持智能合约钱包。要继续，请先切换回 EOA（外部拥有账户）钱包，然后再与产品交互。",
   "Earn Falcon Miles!": "赚取 Falcon 里程！",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "根据对糖浆池贡献的总 TVL，LP 可以赚取 40 倍 Falcon 里程。里程累积仅限 0.95 至 1.05 区间内的持仓。",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "交易币安 Alpha 代币，赢取 250,000 美元。",
   "Trade Alpha Tokens: Win $250K.": "交易 Alpha 代币：赢取 25 万美元。",
   "Enter value between %min% and %max%": "输入介于 %min% 和 %max% 之间的值",
