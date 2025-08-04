@@ -130,18 +130,19 @@ export function createGetV3CandidatePools<T = any>(
 
 export async function getV3CandidatePools(params: DefaultParams) {
   const { subgraphFallback = true, staticFallback = true, fallbackTimeout, ...rest } = params
+  const { subgraphProvider } = rest
 
   const fallbacks: GetV3Pools[] = []
 
-  if (subgraphFallback) {
+  if (subgraphFallback && subgraphProvider) {
     // Fallback to get pools from on chain and ref tvl by subgraph
     fallbacks.push(getV3PoolsWithTvlFromOnChain)
 
     // Fallback to get all pools info from subgraph
     fallbacks.push(async (p) => {
-      const { currencyA, currencyB, pairs: providedPairs, subgraphProvider } = p
+      const { currencyA, currencyB, pairs: providedPairs, subgraphProvider: provider } = p
       const pairs = providedPairs || (await getPairCombinations(currencyA, currencyB))
-      return getV3PoolSubgraph({ provider: subgraphProvider, pairs })
+      return getV3PoolSubgraph({ provider, pairs })
     })
   }
 

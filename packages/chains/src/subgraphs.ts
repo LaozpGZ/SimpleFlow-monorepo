@@ -39,7 +39,7 @@ export function getV3Subgraphs({ noderealApiKey, theGraphApiKey }: SubgraphParam
       'https://thegraph.goerli.zkevm.consensys.net/subgraphs/name/pancakeswap/exchange-v3-linea-goerli',
     [ChainId.BASE]: `https://gateway-arbitrum.network.thegraph.com/api/${theGraphApiKey}/subgraphs/id/5YYKGBcRkJs6tmDfB3RpHdbK2R5KBACHQebXVgbUcYQp`,
     [ChainId.BASE_TESTNET]: 'https://api.studio.thegraph.com/query/45376/exchange-v3-base-testnet/version/latest',
-    [ChainId.OPBNB]: `https://open-platform-ap.nodereal.io/${noderealApiKey}/opbnb-mainnet-graph-query/subgraphs/name/pancakeswap/exchange-v3`,
+    [ChainId.OPBNB]: null,
     [ChainId.OPBNB_TESTNET]: null,
     [ChainId.SCROLL_SEPOLIA]: 'https://api.studio.thegraph.com/query/45376/exchange-v3-scroll-sepolia/version/latest',
     [ChainId.SEPOLIA]: null,
@@ -51,7 +51,7 @@ export function getV3Subgraphs({ noderealApiKey, theGraphApiKey }: SubgraphParam
 
 export function getV2Subgraphs({ noderealApiKey, theGraphApiKey }: SubgraphParams) {
   return {
-    [ChainId.BSC]: 'https://proxy-worker-api.pancakeswap.com/bsc-exchange',
+    [ChainId.BSC]: null,
     [ChainId.ETHEREUM]: `https://gateway-arbitrum.network.thegraph.com/api/${theGraphApiKey}/subgraphs/id/9opY17WnEPD4REcC43yHycQthSeUMQE26wyoeMjZTLEx`,
     [ChainId.POLYGON_ZKEVM]: `https://gateway-arbitrum.network.thegraph.com/api/${theGraphApiKey}/subgraphs/id/37WmH5kBu6QQytRpMwLJMGPRbXvHgpuZsWqswW4Finc2`,
     [ChainId.ZKSYNC_TESTNET]: 'https://api.studio.thegraph.com/query/45376/exchange-v2-zksync-testnet/version/latest',

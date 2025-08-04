@@ -6,7 +6,7 @@ import { V2_SUBGRAPH_URLS } from '../config/constants/endpoints'
 
 export const infoClient = new GraphQLClient(V2_SUBGRAPH_URLS[ChainId.BSC])
 
-export const v3Clients = {
+export const v3Clients: Partial<Record<ChainId, GraphQLClient>> = {
   [ChainId.ETHEREUM]: new GraphQLClient(V3_SUBGRAPH_URLS[ChainId.ETHEREUM]),
   [ChainId.GOERLI]: new GraphQLClient(V3_SUBGRAPH_URLS[ChainId.GOERLI]),
   [ChainId.BSC]: new GraphQLClient(V3_SUBGRAPH_URLS[ChainId.BSC]),
@@ -21,7 +21,6 @@ export const v3Clients = {
   [ChainId.BASE]: new GraphQLClient(V3_SUBGRAPH_URLS[ChainId.BASE]),
   [ChainId.BASE_TESTNET]: new GraphQLClient(V3_SUBGRAPH_URLS[ChainId.BASE_TESTNET]),
   [ChainId.SCROLL_SEPOLIA]: new GraphQLClient(V3_SUBGRAPH_URLS[ChainId.SCROLL_SEPOLIA]),
-  [ChainId.OPBNB]: new GraphQLClient(V3_SUBGRAPH_URLS[ChainId.OPBNB]),
 }
 
 export const v3InfoClients = { ...v3Clients, [ChainId.BSC]: new GraphQLClient(V3_BSC_INFO_CLIENT) }

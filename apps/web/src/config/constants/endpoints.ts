@@ -68,7 +68,6 @@ export const V3_SUBGRAPH_URLS = {
   [ChainId.ARBITRUM_ONE]: `${THE_GRAPH_PROXY_API}/exchange-v3-arb`,
   [ChainId.ZKSYNC]: `${THE_GRAPH_PROXY_API}/exchange-v3-zksync`,
   [ChainId.LINEA]: `${THE_GRAPH_PROXY_API}/exchange-v3-linea`,
-  [ChainId.OPBNB]: `${THE_GRAPH_PROXY_API}/exchange-v3-opbnb`,
 }
 
 export const STABLESWAP_SUBGRAPHS_URLS = {
