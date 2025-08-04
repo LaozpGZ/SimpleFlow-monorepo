@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "Υπενθύμιση: Οι χρήστες είναι υπεύθυνοι για τη διαχείριση και την ανάκληση των θέσεων τους. Το PancakeSwap δεν θα είναι σε θέση να ανακτήσει ή να αποτρέψει τυχόν απώλειες από θέσεις που δεν διαχειρίζονται.",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Τα πορτοφόλια έξυπνων συμβολαίων δεν υποστηρίζονται προς το παρόν στο Prediction. Για να συνεχίσετε, επιστρέψτε σε ένα πορτοφόλι EOA (Λογαριασμός εξωτερικής ιδιοκτησίας) πριν αλληλεπιδράσετε με το προϊόν.",
   "Earn Falcon Miles!": "Κερδίστε μίλια Falcon!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Οι LP κερδίζουν 40 φορές τα μίλια του Falcon με βάση το συνολικό TVL που συνεισφέρεται στο σύνολο. Τα μίλια συσσωρεύονται μόνο σε θέσεις εντός του εύρους 0,95 έως 1,05.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "Κάντε συναλλαγές με νομίσματα Binance Alpha και κερδίστε 250.000 $.",
   "Trade Alpha Tokens: Win $250K.": "Κάντε συναλλαγές με νομίσματα Alpha: κΚερδίστε 250.000 $.",
   "Enter value between %min% and %max%": "Εισαγάγετε τιμή μεταξύ %min% και %max%",
