@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "Lời nhắc: Người dùng có trách nhiệm quản lý và rút tất cả vị thế của họ. PancakeSwap sẽ không thể phục hồi hay ngăn chặn bất kỳ thua lỗ nào từ các vị thế vẫn không được quản lý.",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Các ví hợp đồng thông minh hiện không được hỗ trợ trên Dự báo. Để tiếp tục, hãy chuyển lại một ví EOA (Tài khoản thuộc sở hữu bên ngoài) trước khi tương tác với sản phẩm.",
   "Earn Falcon Miles!": "Kiếm Dặm Falcon!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP kiếm được 40x Dặm Falcon dựa trên tổng số TVL đóng góp cho quỹ. Số dặm chỉ được tích lũy cho các vị thế trong khoảng 0,95 đến 1,05.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "Giao dịch token Binance Alpha để thắng 250.000 USD.",
   "Trade Alpha Tokens: Win $250K.": "Giao dịch các token alpha: Thắng 250K USD.",
   "Enter value between %min% and %max%": "Điền giá trị từ %min% đến %max%",
