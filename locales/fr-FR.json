@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "Rappel : les utilisateurs sont responsables de la gestion et du retrait de leurs positions. PancakeSwap ne pourra pas récupérer ou prévenir les pertes liées aux positions non gérées.",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Les portefeuilles à contrat intelligent ne sont actuellement pas pris en charge sur Prediction. Pour continuer, veuillez revenir à un portefeuille EOA (compte possédé par l'utilisateur) avant d'interagir avec le produit.",
   "Earn Falcon Miles!": "Gagnez des Falcon Miles !",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Les fournisseurs de liquidité gagnent 40× les Falcon Miles en fonction du TVL total apporté au pool. Les Miles ne sont crédités que sur les positions comprises entre 0,95 et 1,05.",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "Échangez des jetons Binance Alpha pour gagner 250 000 $.",
   "Trade Alpha Tokens: Win $250K.": "Échangez des jetons Alpha : gagnez 250 000 $.",
   "Enter value between %min% and %max%": "Saisissez une valeur entre %min% et %max%",
