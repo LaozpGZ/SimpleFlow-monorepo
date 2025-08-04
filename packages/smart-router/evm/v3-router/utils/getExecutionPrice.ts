@@ -1,16 +1,15 @@
-import { Currency, Price, UnifiedCurrencyAmount, ZERO } from '@pancakeswap/sdk'
+import { Currency, Price, TradeType, ZERO } from '@pancakeswap/sdk'
 
-interface GetExecutionPriceParams {
-  inputAmount?: UnifiedCurrencyAmount<Currency>
-  outputAmount?: UnifiedCurrencyAmount<Currency>
-}
+import { SmartRouterTrade } from '../types'
 
-export function getExecutionPrice(params?: GetExecutionPriceParams): Price<Currency, Currency> | undefined {
-  if (!params) {
+export function getExecutionPrice(
+  trade: Pick<SmartRouterTrade<TradeType>, 'inputAmount' | 'outputAmount'> | undefined | null,
+): Price<Currency, Currency> | undefined {
+  if (!trade) {
     return undefined
   }
 
-  const { inputAmount, outputAmount } = params
+  const { inputAmount, outputAmount } = trade
 
   if (!inputAmount || !outputAmount) {
     return undefined
@@ -19,6 +18,5 @@ export function getExecutionPrice(params?: GetExecutionPriceParams): Price<Curre
   if (inputAmount.quotient === ZERO || outputAmount.quotient === ZERO) {
     return undefined
   }
-
   return new Price(inputAmount.currency, outputAmount.currency, inputAmount.quotient, outputAmount.quotient)
 }
