@@ -75,6 +75,7 @@ export const bestSVMOrderAtom = atomFamily(
     })
   },
   (a, b) =>
+    a.nonce === b.nonce &&
     a.baseCurrency?.wrapped?.address === b.baseCurrency?.wrapped?.address &&
     a.currency?.wrapped?.address === b.currency?.wrapped?.address &&
     a.amount?.toExact() === b.amount?.toExact() &&
