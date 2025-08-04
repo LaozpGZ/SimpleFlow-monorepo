@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Percent, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Percent, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { SmartRouter } from '@pancakeswap/smart-router'
 import {
   AutoColumn,
@@ -124,7 +124,11 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
   const severity = warningSeverity(priceImpactWithoutFee)
 
   const executionPriceDisplay = useMemo(() => {
-    const price = isSVMOrder(order) ? undefined : SmartRouter.getExecutionPrice(order?.trade) ?? undefined
+    const price =
+      SmartRouter.getExecutionPrice({
+        inputAmount: order?.trade?.inputAmount as UnifiedCurrencyAmount<Currency>,
+        outputAmount: order?.trade?.outputAmount as UnifiedCurrencyAmount<Currency>,
+      }) ?? undefined
     return formatExecutionPrice(price, inputAmount, outputAmount, showInverted)
   }, [order, inputAmount, outputAmount, showInverted])
 
