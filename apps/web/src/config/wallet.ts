@@ -1,5 +1,5 @@
 import { isCyberWallet } from '@cyberlab/cyber-app-sdk'
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { WalletConfigV2, WalletIds } from '@pancakeswap/ui-wallets'
 import { WalletFilledIcon } from '@pancakeswap/uikit'
 import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
@@ -94,6 +94,13 @@ export const TOP_WALLET_MAP: { [chainId: number]: WalletIds[] } = {
   [ChainId.LINEA]: [WalletIds.Metamask, WalletIds.Trust, WalletIds.Okx],
   [ChainId.OPBNB]: [WalletIds.Metamask, WalletIds.Trust, WalletIds.Okx, WalletIds.BinanceW3W],
   [ChainId.POLYGON_ZKEVM]: [WalletIds.Metamask, WalletIds.Trust, WalletIds.Okx],
+  [NonEVMChainId.SOLANA]: [WalletIds.Phantom, WalletIds.Solflare, WalletIds.Backpack],
+}
+
+export const TOP_WALLET_MAP_V2 = {
+  MultiChain: [WalletIds.Metamask, WalletIds.BinanceW3W],
+  Evm: [WalletIds.Metamask, WalletIds.BinanceW3W, WalletIds.Okx],
+  Solana: [WalletIds.Phantom, WalletIds.Solflare, WalletIds.Backpack],
 }
 
 export const walletsConfig = <config extends Config = Config, context = unknown>({
