@@ -103,6 +103,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       analytics: {
         enabled: true,
         onEvent: (eventName: EventName, eventData: EventData<EventName>) => {
+          console.info(eventName)
           gtmListener(eventName, eventData)
         },
       },
