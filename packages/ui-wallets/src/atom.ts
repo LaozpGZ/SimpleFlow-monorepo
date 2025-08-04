@@ -3,9 +3,15 @@ import { WalletConfigV2, WalletIds } from './types'
 
 const MAXIMUM_STORE_NUM = 3
 
-export const errorAtom = atom<[string, string]>(['', ''])
+export const errorAtom = atom<
+  [
+    string, // EVM
+    string, // Solana
+  ]
+>(['', ''])
 
-export const selectedWalletAtom = atom<WalletConfigV2<unknown> | null>(null)
+export const selectedEvmWalletAtom = atom<WalletConfigV2<unknown> | null>(null)
+export const selectedSolanaWalletAtom = atom<WalletConfigV2<unknown> | null>(null)
 
 export const lastUsedWalletNameAtom = atom('', (get, set, update: string) => {
   const list = get(previouslyUsedWalletsAtom)

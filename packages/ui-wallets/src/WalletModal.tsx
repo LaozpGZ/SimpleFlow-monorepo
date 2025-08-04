@@ -34,7 +34,13 @@ import {
   walletIconClass,
   walletSelectWrapperClass,
 } from './WalletModal.css'
-import { errorAtom, lastUsedWalletNameAtom, previouslyUsedWalletsAtom, selectedWalletAtom } from './atom'
+import {
+  errorAtom,
+  lastUsedWalletNameAtom,
+  previouslyUsedWalletsAtom,
+  selectedEvmWalletAtom,
+  selectedSolanaWalletAtom,
+} from './atom'
 import SocialLoginButton from './components/SocialLoginButton'
 import { ConnectData, LinkOfDevice, WalletConfigV2, WalletModalV2Props } from './types'
 
@@ -50,9 +56,19 @@ export class WalletConnectorNotFoundError extends Error {}
 
 export class WalletSwitchChainError extends Error {}
 
-export function useSelectedWallet<T>() {
-  // @ts-ignore
-  return useAtom<WalletConfigV2<T> | null>(selectedWalletAtom)
+// @deprecated use useSelectedEvmWallet or useSelectedSolanaWallet instead
+// TODO @ChefJerry, remove this function after all usages are migrated to useSelectedEvmWallet or useSelectedSolanaWallet
+export function useSelectedWallet() {
+  // return useAtom<[WalletConfigV2<unknown> | null, WalletConfigV2<unknown> | null]>(selectedWalletAtom)
+  return useSelectedEvmWallet()
+}
+
+export function useSelectedEvmWallet() {
+  return useAtom<WalletConfigV2<unknown> | null>(selectedEvmWalletAtom)
+}
+
+export function useSelectedSolanaWallet() {
+  return useAtom<WalletConfigV2<unknown> | null>(selectedSolanaWalletAtom)
 }
 
 const StyledTab = styled(Tab)`
