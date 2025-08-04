@@ -4177,7 +4177,7 @@
   "Reminder: Users are responsible for managing and withdrawing their positions. PancakeSwap will not be able to recover or prevent any losses from positions left unmanaged.": "অনুস্মারক: ব্যবহারকারীরা তাদের পজিশন পরিচালনা এবং প্রত্যাহারের জন্য দায়ী।  ব্যবস্থাপনার বাইরের PancakeSwap পজিশন থেকে কোনো ক্ষতি পুনরুদ্ধার বা প্রতিরোধ করা সম্ভব হবে না।",
   "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "স্মার্ট কন্ট্রাক্ট ওয়ালেট বর্তমানে পূর্বাভাসের সাথে সামঞ্জস্যপূর্ণ নয়। চালিয়ে যেতে পণ্যের সাথে ইন্টারঅ্যাক্ট করার আগে অনুগ্রহ করে কোনো EOA (বহিস্থঃ মালিকানাধীন অ্যাকাউন্ট) ওয়ালেটে ফিরে যান।",
   "Earn Falcon Miles!": "ফ্যালকন মাইলস অর্জন করুন!",
-  "LPs earns 40x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "পুলে মোট TVL-এর অবদানের উপর ভিত্তি করে LPs, 40x ফ্যালকন-এর মাইলস অর্জন করে। মাইলস শুধুমাত্র 0.95 থেকে 1.05 সীমার মধ্যে অবস্থানে জমা হয়।",
+  "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade Binance Alpha Tokens to Win $250,000.": "$250,000 জিততে Binance আলফা টোকেন ট্রেড করুন।",
   "Trade Alpha Tokens: Win $250K.": "আলফা টোকেন ট্রেড করুন: $250K জিতে নিন।",
   "Enter value between %min% and %max%": "%min% এবং %max% এর মধ্যে মান লিখুন",
