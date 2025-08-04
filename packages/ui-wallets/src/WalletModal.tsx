@@ -36,8 +36,8 @@ import {
 } from './WalletModal.css'
 import {
   errorAtom,
-  lastUsedWalletNameAtom,
-  previouslyUsedWalletsAtom,
+  lastUsedEvmWalletNameAtom,
+  previouslyUsedEvmWalletsAtom,
   selectedEvmWalletAtom,
   selectedSolanaWalletAtom,
 } from './atom'
@@ -63,12 +63,14 @@ export function useSelectedWallet() {
   return useSelectedEvmWallet()
 }
 
-export function useSelectedEvmWallet() {
-  return useAtom<WalletConfigV2<unknown> | null>(selectedEvmWalletAtom)
+export function useSelectedEvmWallet<T = unknown>() {
+  // @ts-ignore
+  return useAtom<WalletConfigV2<T> | null>(selectedEvmWalletAtom)
 }
 
-export function useSelectedSolanaWallet() {
-  return useAtom<WalletConfigV2<unknown> | null>(selectedSolanaWalletAtom)
+export function useSelectedSolanaWallet<T = unknown>() {
+  // @ts-ignore
+  return useAtom<WalletConfigV2<T> | null>(selectedSolanaWalletAtom)
 }
 
 const StyledTab = styled(Tab)`
@@ -530,31 +532,33 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
   const [isSocialLoginModalOpen, setIsSocialLoginModalOpen] = useState(false)
 
   const { isMobile } = useMatchBreakpoints()
-  const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
-  const previouslyUsedWallets = useMemo(
+  // TODO @ChefJerry, add previouslyUsedSolanaWalletsAtom support
+  const [previouslyUsedEvmWalletsId] = useAtom(previouslyUsedEvmWalletsAtom)
+  const previouslyUsedEvmWallets = useMemo(
     () =>
-      previouslyUsedWalletsId
+      previouslyUsedEvmWalletsId
         .map((id) => wallets_.find((w) => w.id === id))
         .filter<WalletConfigV2<T>>((w): w is WalletConfigV2<T> => Boolean(w)),
-    [wallets_, previouslyUsedWalletsId],
+    [wallets_, previouslyUsedEvmWalletsId],
   )
 
   const topWallets = useMemo(
-    () => topWallets_.filter((w) => !previouslyUsedWalletsId.includes(w.id)),
-    [previouslyUsedWalletsId, topWallets_],
+    () => topWallets_.filter((w) => !previouslyUsedEvmWalletsId.includes(w.id)),
+    [previouslyUsedEvmWalletsId, topWallets_],
   )
 
   const wallets = useMemo(
     () =>
       sortWallets(
-        wallets_.filter((i) => !topWallets.some((t) => t.id === i.id) && !previouslyUsedWalletsId.includes(i.id)),
+        wallets_.filter((i) => !topWallets.some((t) => t.id === i.id) && !previouslyUsedEvmWalletsId.includes(i.id)),
         null,
       ),
-    [wallets_, topWallets, previouslyUsedWalletsId],
+    [wallets_, topWallets, previouslyUsedEvmWalletsId],
   )
 
-  const [, setSelected] = useSelectedWallet()
-  const [, setLastUsedWallet] = useAtom(lastUsedWalletNameAtom)
+  // TODO @ChefJerry, add previouslyUsedSolanaWalletsAtom support
+  const [, setSelectedEvmWallet] = useSelectedEvmWallet()
+  const [, setLastUsedEvmWallet] = useAtom(lastUsedEvmWalletNameAtom)
   const [, setError] = useAtom(errorAtom)
   const { t } = useTranslation()
 
@@ -571,19 +575,19 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
 
   const handleWalletConnected = useCallback(
     (wallet: WalletConfigV2<T>, connectData?: ConnectData) => {
-      setLastUsedWallet(wallet.id)
+      setLastUsedEvmWallet(wallet.id)
       try {
         onWalletConnectCallBack?.(wallet.title, connectData?.accounts?.[0])
       } catch (e) {
         console.error(wallet.title, e)
       }
     },
-    [onWalletConnectCallBack, setLastUsedWallet],
+    [onWalletConnectCallBack, setLastUsedEvmWallet],
   )
 
   const connectWallet = useCallback(
     (wallet: WalletConfigV2<T>) => {
-      setSelected(wallet)
+      setSelectedEvmWallet(wallet)
       // TODO @ChefJerry, set evmError and solanaError separately
       setError(['', ''])
       if (wallet.installed !== false) {
@@ -604,7 +608,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
           })
       }
     },
-    [handleWalletConnected, login, setError, setSelected, t],
+    [handleWalletConnected, login, setError, setSelectedEvmWallet, t],
   )
 
   const mobileContainerStyle: React.CSSProperties = isMobile ? { height: '100%', borderRadius: 0 } : {}
@@ -668,7 +672,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
                   mevDocLink={mevDocLink}
                   connectWallet={connectWallet}
                   topWallets={topWallets}
-                  previouslyUsedWallets={previouslyUsedWallets}
+                  previouslyUsedWallets={previouslyUsedEvmWallets}
                   wallets={wallets}
                   docLink={docLink}
                   docText={docText}
@@ -680,7 +684,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
                   connectWallet={connectWallet}
                   onWalletConnected={handleWalletConnected}
                   topWallets={topWallets}
-                  previouslyUsedWallets={previouslyUsedWallets}
+                  previouslyUsedWallets={previouslyUsedEvmWallets}
                   wallets={wallets}
                   docLink={docLink}
                   docText={docText}
