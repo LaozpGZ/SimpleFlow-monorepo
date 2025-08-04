@@ -72,6 +72,8 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
     [toast],
   )
 
+  const useDefaultConnect = useMemo(() => {}, [])
+
   const config = useMemo<ICustomizedBridgeConfig>(
     () => ({
       appName: 'canonical-bridge',
@@ -96,7 +98,8 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       },
       transfer: transferConfig,
       components: {
-        connectWalletButton: (fromChain && connectWalletButtons[fromChain]) ?? connectWalletButtons.default,
+        // connectWalletButton: (fromChain && connectWalletButtons[fromChain]) ?? connectWalletButtons.default,
+        connectWalletButton: connectWalletButtons.default,
         refreshingIcon: <RefreshingIcon />,
       },
 
@@ -111,7 +114,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       chains: supportedChains,
       onError: handleError,
     }),
-    [currentLanguage.code, theme.isDark, transferConfig, supportedChains, handleError, fromChain, connectWalletButtons],
+    [currentLanguage.code, theme.isDark, transferConfig, supportedChains, handleError, connectWalletButtons],
   )
 
   return (
