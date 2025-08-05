@@ -21,7 +21,7 @@ import type { AppProps } from 'next/app'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Script from 'next/script'
-import { Fragment, Suspense, useMemo } from 'react'
+import { Fragment, Suspense } from 'react'
 import { PersistGate } from 'redux-persist/integration/react'
 import 'utils/abortcontroller-polyfill'
 
