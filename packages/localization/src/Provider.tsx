@@ -11,7 +11,7 @@ export const LanguageContext = createContext<ContextApi | undefined>(undefined)
 const cache = new Map<string, string>()
 
 export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { lang, bundle, ver, refresh } = useLocaleBundle()
+  const { lang, bundle, ver, refresh, isFetching } = useLocaleBundle()
 
   const setLanguage = useCallback(
     async (language: Language) => {
@@ -24,6 +24,9 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
 
   const translate: TranslateFunction = useCallback(
     (key, data) => {
+      if (isFetching) {
+        return ''
+      }
       const cacheKey = `${lang}:${ver}:${key}-${JSON.stringify(data)}`
       if (cache.has(cacheKey)) {
         return cache.get(cacheKey) || ''
@@ -41,7 +44,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
       cache.set(cacheKey, interpolated)
       return interpolated
     },
-    [bundle, lang, ver],
+    [bundle, lang, ver, isFetching],
   )
 
   const providerValue = useMemo(() => {

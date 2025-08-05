@@ -4,23 +4,27 @@ import full from '../config/translations.json'
 import i18n from '../i18n'
 
 export const useLocaleBundle = () => {
+  const lang = getLanguageCodeFromLS()
   const [state, setState] = useState<{
     bundle: Record<string, string>
     ver: number
+    isFetching: boolean
   }>({
     bundle: full,
     ver: 0,
+    isFetching: !i18n.hasResourceBundle(lang, 'translation'),
   })
-  const lang = getLanguageCodeFromLS()
   const switchBundle = useCallback(
     async (lang: string) => {
       if (!i18n.hasResourceBundle(lang, 'translation')) {
+        setState((prev) => ({ ...prev, isFetching: true }))
         const localeData = await fetchLocale(lang)
         if (localeData) {
           i18n.addResourceBundle(lang, 'translation', localeData, true, true)
           setState((prev) => ({
             bundle: localeData,
             ver: prev.ver + 1,
+            isFetching: false,
           }))
           return
         }
@@ -28,6 +32,7 @@ export const useLocaleBundle = () => {
       setState({
         bundle: i18n.getResourceBundle(lang, 'translation') || full,
         ver: state.ver + 1,
+        isFetching: false,
       })
     },
     [state],
@@ -37,6 +42,6 @@ export const useLocaleBundle = () => {
     switchBundle(lang)
   }, [lang, switchBundle])
 
-  const { bundle, ver } = state
-  return { lang, bundle, ver, refresh: () => setState((p) => ({ ...p, ver: p.ver + 1 })) }
+  const { bundle, ver, isFetching } = state
+  return { lang, bundle, ver, isFetching, refresh: () => setState((p) => ({ ...p, ver: p.ver + 1 })) }
 }
