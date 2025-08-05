@@ -35,14 +35,14 @@ export interface CanonicalBridgeProps {
     [key: string]: IBridgeConfig['components']['connectWalletButton']
   }
   supportedChainIds: number[]
-  rpcConfig: Record<number, string[]>
+  rpcConfig: Record<number, readonly string[]>
   disabledToChains?: number[]
 }
 
 const gtmListener = createGTMEventListener()
 
 export const CanonicalBridge = (props: CanonicalBridgeProps) => {
-  const { connectWalletButtons, supportedChainIds, disabledToChains } = props
+  const { connectWalletButtons, supportedChainIds, disabledToChains, rpcConfig } = props
   useDisableToChains(disabledToChains)
 
   const { currentLanguage, t } = useTranslation()
@@ -58,10 +58,10 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
         .filter((e) => !(connector?.id === 'BinanceW3WSDK' && e.id === 1101))
         .map((chain) => ({
           ...chain,
-          rpcUrls: { default: { http: props.rpcConfig?.[chain.id] ?? chain.rpcUrls.default.http } },
+          rpcUrls: { default: { http: rpcConfig?.[chain.id] ?? chain.rpcUrls.default.http } },
         }))
     )
-  }, [supportedChainIds, connector?.id, props.rpcConfig])
+  }, [supportedChainIds, connector?.id, rpcConfig])
   const transferConfig = useTransferConfig(supportedChains)
   const handleError = useCallback(
     (params: { type: string; message?: string | undefined; error?: Error | undefined }) => {
@@ -71,6 +71,8 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
     },
     [toast],
   )
+
+  console.info((fromChain && connectWalletButtons[fromChain]) ?? connectWalletButtons.default)
 
   const config = useMemo<ICustomizedBridgeConfig>(
     () => ({
