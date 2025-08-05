@@ -909,6 +909,9 @@ function PositionHistory_({
     queryKey: ['positionHistory', chainId, tokenId],
 
     queryFn: async () => {
+      if (!client) {
+        throw new Error('GraphQL client is not available')
+      }
       const result = await client.request<PositionHistoryResult>(
         gql`
           query positionHistory($tokenId: String!) {
