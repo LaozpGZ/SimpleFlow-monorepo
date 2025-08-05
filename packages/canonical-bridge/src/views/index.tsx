@@ -49,7 +49,8 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
   const fromChain = useChainFromWidget('from')
   const theme = useTheme()
   const toast = useToast()
-  const { connector } = useAccount()
+  const { connector, chain } = useAccount()
+  console.info(chain)
   const supportedChains = useMemo<IChainConfig[]>(() => {
     return (
       chains
