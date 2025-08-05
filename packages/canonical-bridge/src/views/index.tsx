@@ -45,12 +45,11 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
   const { connectWalletButtons, supportedChainIds, disabledToChains } = props
   useDisableToChains(disabledToChains)
 
-  const { currentLanguage } = useTranslation()
+  const { currentLanguage, t } = useTranslation()
   const fromChain = useChainFromWidget('from')
   const theme = useTheme()
   const toast = useToast()
-  const { connector, chain } = useAccount()
-  console.info(chain)
+  const { connector } = useAccount()
   const supportedChains = useMemo<IChainConfig[]>(() => {
     return (
       chains
@@ -77,7 +76,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
     () => ({
       appName: 'canonical-bridge',
       assetPrefix: env.ASSET_PREFIX,
-      bridgeTitle: 'Bridge',
+      bridgeTitle: t('Bridge'),
       theme: {
         colorMode: theme.isDark ? 'dark' : 'light',
         breakpoints,
@@ -111,7 +110,16 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       chains: supportedChains,
       onError: handleError,
     }),
-    [currentLanguage.code, theme.isDark, transferConfig, supportedChains, handleError, fromChain, connectWalletButtons],
+    [
+      currentLanguage.code,
+      t,
+      theme.isDark,
+      transferConfig,
+      supportedChains,
+      handleError,
+      fromChain,
+      connectWalletButtons,
+    ],
   )
 
   return (
