@@ -38,7 +38,9 @@ const useTranslation = () => {
         const replacement = data?.[p1] || ''
         return (replacement === undefined ? match : replacement) as string
       })
-      cache.set(cacheKey, interpolated)
+      if (languageMap.has(lang)) {
+        cache.set(cacheKey, interpolated)
+      }
       return interpolated
     },
     [languageContext.currentLanguage.locale, i18n],

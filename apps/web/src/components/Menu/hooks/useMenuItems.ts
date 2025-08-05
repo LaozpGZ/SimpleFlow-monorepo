@@ -1,9 +1,9 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useTheme } from '@pancakeswap/hooks'
-import { useTranslation } from '@pancakeswap/localization'
+import { LanguageContext, useTranslation } from '@pancakeswap/localization'
 import { DropdownMenuItems } from '@pancakeswap/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import React, { useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { multiChainPaths } from 'state/info/constant'
 import { logMenuClick } from 'utils/customGTMEventTracking'
 
@@ -19,11 +19,16 @@ export const useMenuItems = ({ onClick }: UseMenuItemsParams = {}): ConfigMenuIt
     t,
     currentLanguage: { code: languageCode },
   } = useTranslation()
+  const { isFetching } = useContext(LanguageContext) ?? { isFetching: true }
   const { chainId } = useActiveChainId()
   const { isDark } = useTheme()
   const menuItemsStatus = useMenuItemsStatus()
 
-  const menuItems = useMemo(() => config(t, isDark, languageCode, chainId), [t, isDark, languageCode, chainId])
+  const menuItems = useMemo(
+    () => config(t, isDark, languageCode, chainId),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [t, isDark, languageCode, chainId, isFetching],
+  )
 
   return useMemo(() => {
     const traverseItems = <T extends ConfigMenuItemsType | ConfigMenuDropDownItemsType>(
