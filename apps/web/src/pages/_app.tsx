@@ -21,7 +21,7 @@ import type { AppProps } from 'next/app'
 import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import Script from 'next/script'
-import { Fragment, Suspense } from 'react'
+import { Fragment, Suspense, useMemo } from 'react'
 import { PersistGate } from 'redux-persist/integration/react'
 import 'utils/abortcontroller-polyfill'
 
@@ -165,6 +165,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const ShowMenu = Component.mp ? SharedComponentWithOutMenu : Menu
   const isShowScrollToTopButton = Component.isShowScrollToTopButton || true
   const shouldScreenWallet = Component.screen || false
+  const isBridge = typeof window !== 'undefined' && window.location.pathname.includes('/bridge')
 
   return (
     <ProductionErrorBoundary>
@@ -187,7 +188,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         <SimpleStakingSunsetModal />
         <VercelToolbar />
         <Cb1Membership />
-        {chainId === NonEVMChainId.SOLANA && <SolanaWalletModal />}
+        {(chainId === NonEVMChainId.SOLANA || isBridge) && <SolanaWalletModal />}
       </Suspense>
     </ProductionErrorBoundary>
   )
