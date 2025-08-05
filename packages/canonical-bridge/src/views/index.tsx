@@ -72,8 +72,6 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
     [toast],
   )
 
-  console.info((fromChain && connectWalletButtons[fromChain]) ?? connectWalletButtons.default)
-
   const config = useMemo<ICustomizedBridgeConfig>(
     () => ({
       appName: 'canonical-bridge',
