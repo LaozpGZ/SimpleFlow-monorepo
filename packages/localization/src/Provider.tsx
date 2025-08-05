@@ -48,9 +48,9 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
   )
 
   const providerValue = useMemo(() => {
-    const currentLanguage = languages[i18n.language] || EN
+    const currentLanguage = languages[lang] || EN
     return { currentLanguage, setLanguage, t: translate, isFetching: false }
-  }, [setLanguage, translate])
+  }, [setLanguage, translate, lang])
 
   return (
     <I18nextProvider i18n={i18n}>
