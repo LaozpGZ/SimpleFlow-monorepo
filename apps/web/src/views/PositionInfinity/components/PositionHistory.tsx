@@ -209,6 +209,9 @@ const PositionHistoryComponent = ({
 
     queryFn: async () => {
       // @TODO: Implement the query with infinity
+      if (!client) {
+        throw new Error('GraphQL client is not available')
+      }
       const result: PositionHistoryResult = await client.request<PositionHistoryResult>(
         gql`
           query positionHistory($tokenId: String!) {
