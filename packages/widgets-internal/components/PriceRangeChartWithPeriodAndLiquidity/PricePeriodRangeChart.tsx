@@ -82,6 +82,12 @@ export function PricePeriodRangeChart({
 
   const onBrushDomainChangeEnded = useCallback(
     (domain: BrushDomainType, mode: string | undefined) => {
+      // Don't trigger parent callbacks for automatic domain changes (when mode is undefined)
+      // This prevents double inversion when currencies change due to route updates
+      if (mode === undefined) {
+        return;
+      }
+
       const { min, max } = brushDomain || {};
       const newMinPrice = domain.min <= 0 ? 1 / 10 ** 6 : domain.min;
       const newMaxPrice = domain.max;
