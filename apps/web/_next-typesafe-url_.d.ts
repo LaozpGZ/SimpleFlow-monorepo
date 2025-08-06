@@ -33,7 +33,6 @@ declare module "@@@next-typesafe-url" {
     "/farms/history": StaticRoute;
     "/farms": StaticRoute;
     "/find": StaticRoute;
-    "/gauges-voting": StaticRoute;
     "/home": StaticRoute;
     "/ido/[ido]": StaticRoute;
     "/ido": StaticRoute;
