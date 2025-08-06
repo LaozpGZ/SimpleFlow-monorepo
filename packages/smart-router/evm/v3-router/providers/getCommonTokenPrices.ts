@@ -26,6 +26,10 @@ interface BySubgraphEssentials {
   provider?: SubgraphProvider
 }
 
+type ParamsWithFallback = GetCommonTokenPricesParams & {
+  v3SubgraphProvider?: SubgraphProvider
+}
+
 export type TokenUsdPrice = {
   address: string
   priceUSD: string
@@ -152,26 +156,18 @@ export const getCommonTokenPricesByWalletApi = createCommonTokenPriceProvider<By
   }),
 )
 
-export const getCommonTokenPrices: CommonTokenPriceProvider<{ v3SubgraphProvider?: SubgraphProvider }> = async ({
-  currencyA,
-  currencyB,
-  v3SubgraphProvider,
-}) => {
-  const calls = [
-    {
-      asyncFn: () => getCommonTokenPricesByLlma({ currencyA, currencyB }),
-      timeout: 3000,
-    },
-    {
-      asyncFn: () => getCommonTokenPricesByWalletApi({ currencyA, currencyB }),
-      timeout: 3000,
-    },
-    {
-      asyncFn: () => getCommonTokenPricesBySubgraph({ currencyA, currencyB, provider: v3SubgraphProvider }),
-      timeout: 3000,
-    },
-  ]
-
-  const call = withFallback(calls)
-  return call()
-}
+export const getCommonTokenPrices = withFallback([
+  {
+    asyncFn: ({ currencyA, currencyB }: ParamsWithFallback) => getCommonTokenPricesByLlma({ currencyA, currencyB }),
+    timeout: 3000,
+  },
+  {
+    asyncFn: ({ currencyA, currencyB }: ParamsWithFallback) =>
+      getCommonTokenPricesByWalletApi({ currencyA, currencyB }),
+    timeout: 3000,
+  },
+  {
+    asyncFn: ({ currencyA, currencyB, v3SubgraphProvider }: ParamsWithFallback) =>
+      getCommonTokenPricesBySubgraph({ currencyA, currencyB, provider: v3SubgraphProvider }),
+  },
+])
