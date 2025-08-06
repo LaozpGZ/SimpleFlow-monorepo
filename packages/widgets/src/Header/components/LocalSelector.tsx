@@ -44,6 +44,8 @@ export const LocaleSelector: React.FC<LocaleSelectorProps> = ({ currentLang, lan
     : (langs_ as Language[])
 
   useEffect(() => {
+    if (typeof window === 'undefined') return
+
     if (initialized) return
     const language = langs.find((lang) => lang.code === currentLang)
     if (!ctx?.isFetching && currentLang && language) {
