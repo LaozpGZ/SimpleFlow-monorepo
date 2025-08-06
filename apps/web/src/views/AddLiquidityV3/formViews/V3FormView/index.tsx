@@ -139,6 +139,14 @@ export default function V3FormView({
     feeAmount,
   })
 
+  // Negate the effect of useNativeCurrencyInstead when we need actual WNATIVE currency
+  const baseCurrencyWithoutNative = useMemo(() => {
+    return baseCurrency?.isNative ? (baseCurrency.wrapped as Currency) : baseCurrency
+  }, [baseCurrency])
+  const quoteCurrencyWithoutNative = useMemo(() => {
+    return quoteCurrency?.isNative ? (quoteCurrency.wrapped as Currency) : quoteCurrency
+  }, [quoteCurrency])
+
   const positionManager = useV3NFTPositionManagerContract()
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const addTransaction = useTransactionAdder()
@@ -678,8 +686,8 @@ export default function V3FormView({
   const { data: rateData } = useTokenRateData({
     period: pricePeriod.value,
     protocol: Protocol.V3,
-    baseCurrency: baseCurrency ?? undefined,
-    quoteCurrency: quoteCurrency ?? undefined,
+    baseCurrency: baseCurrencyWithoutNative ?? undefined,
+    quoteCurrency: quoteCurrencyWithoutNative ?? undefined,
     chainId: baseCurrency?.chainId,
     poolId: pool ? Pool.getAddress(pool.token0, pool.token1, pool.fee) : undefined,
   })
@@ -767,8 +775,8 @@ export default function V3FormView({
                             ? QUICK_ACTION_CONFIGS?.[feeAmount]?.[activeQuickAction]
                             : undefined)
                         }
-                        baseCurrency={baseCurrency}
-                        quoteCurrency={quoteCurrency}
+                        baseCurrency={baseCurrencyWithoutNative}
+                        quoteCurrency={quoteCurrencyWithoutNative}
                         ticksAtLimit={ticksAtLimit}
                         price={price ? parseFloat((invertPrice ? price.invert() : price).toSignificant(8)) : undefined}
                         priceLower={priceLower}
