@@ -2,29 +2,9 @@ import { type SVMOrder, OrderType, SVMTrade } from '@pancakeswap/price-api-sdk'
 import { PoolType, Route, RouteType, SVMPool } from '@pancakeswap/smart-router'
 import { SolRouterTrade } from '@pancakeswap/solana-router-sdk'
 import { Currency, CurrencyAmount, Percent, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { QuoteQuery, SVMQuoteQuery } from 'quoter/quoter.types'
+import { SVMQuoteQuery } from 'quoter/quoter.types'
 
-/**
- * SVM Trade to SVM Order mapping
- * SolRouterTrade → SVMOrder
- * ├── tradeType (from query.tradeType)
- * ├── inputAmount ✓ (direct copy)
- * ├── outputAmount ✓ (direct copy)
- * ├── routes: RouterPlan[] → Route[] (convert each RouterPlan with grouping)
- * |───────|Group RouterPlans until outputMint matches final outputAmount address
- * |───────|RouterPlan.swapInfo.ammKey → SVMPool.id
- * |───────|RouterPlan.swapInfo.feeAmount → SVMPool.feeAmount
- * |───────|RouterPlan.percent → Route.percent (from first plan in group)
- * |───────|RouterPlan.swapInfo.inAmount → Route.inputAmount (from first plan)
- * |───────|RouterPlan.swapInfo.outAmount → Route.outputAmount (from last plan)
- * ├── priceImpactPct → priceImpactPct ✓ (direct copy)
- * ├── transaction ✓ (direct copy)
- * ├── maximumAmountIn → maximumAmountIn ✓ (direct copy)
- * ├── minimumAmountOut → minimumAmountOut ✓ (direct copy)
- * └── + quoteQueryHash (from query.hash)
- */
-export function parseSVMTradeIntoSVMOrder(svmTrade: SolRouterTrade, query: SVMQuoteQuery): SVMOrder<TradeType> {
-  // Convert RouterPlan[] to Route[] with grouping logic
+export function parseRoutePlansToRoutes(svmTrade: SolRouterTrade): Route[] {
   const routes: Route[] = []
   let currentGroup: typeof svmTrade.routes = []
 
@@ -86,6 +66,32 @@ export function parseSVMTradeIntoSVMOrder(svmTrade: SolRouterTrade, query: SVMQu
       currentGroup = []
     }
   }
+
+  return routes
+}
+
+/**
+ * SVM Trade to SVM Order mapping
+ * SolRouterTrade → SVMOrder
+ * ├── tradeType (from query.tradeType)
+ * ├── inputAmount ✓ (direct copy)
+ * ├── outputAmount ✓ (direct copy)
+ * ├── routes: RouterPlan[] → Route[] (convert each RouterPlan with grouping)
+ * |───────|Group RouterPlans until outputMint matches final outputAmount address
+ * |───────|RouterPlan.swapInfo.ammKey → SVMPool.id
+ * |───────|RouterPlan.swapInfo.feeAmount → SVMPool.feeAmount
+ * |───────|RouterPlan.percent → Route.percent (from first plan in group)
+ * |───────|RouterPlan.swapInfo.inAmount → Route.inputAmount (from first plan)
+ * |───────|RouterPlan.swapInfo.outAmount → Route.outputAmount (from last plan)
+ * ├── priceImpactPct → priceImpactPct ✓ (direct copy)
+ * ├── transaction ✓ (direct copy)
+ * ├── maximumAmountIn → maximumAmountIn ✓ (direct copy)
+ * ├── minimumAmountOut → minimumAmountOut ✓ (direct copy)
+ * └── + quoteQueryHash (from query.hash)
+ */
+export function parseSVMTradeIntoSVMOrder(svmTrade: SolRouterTrade, query: SVMQuoteQuery): SVMOrder<TradeType> {
+  // Convert RouterPlan[] to Route[] with grouping logic
+  const routes: Route[] = parseRoutePlansToRoutes(svmTrade)
 
   const PCT_MULTIPLIER = 1_000_000
 
