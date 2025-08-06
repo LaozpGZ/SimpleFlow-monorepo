@@ -22,9 +22,6 @@ export const useMenuItemsStatus = (): Record<string, string> => {
       ...(isUserLocked && {
         '/pools': 'lock_end',
       }),
-      ...(tradingRewardStatus && {
-        '/trading-reward': tradingRewardStatus,
-      }),
     }
   }, [competitionStatus, ifoStatus, votingStatus, isUserLocked, tradingRewardStatus])
 }
