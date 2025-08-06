@@ -166,14 +166,11 @@ export const getCommonTokenPrices: CommonTokenPriceProvider<{ v3SubgraphProvider
       asyncFn: () => getCommonTokenPricesByWalletApi({ currencyA, currencyB }),
       timeout: 3000,
     },
-  ]
-
-  if (v3SubgraphProvider) {
-    calls.push({
+    {
       asyncFn: () => getCommonTokenPricesBySubgraph({ currencyA, currencyB, provider: v3SubgraphProvider }),
       timeout: 3000,
-    })
-  }
+    },
+  ]
 
   const call = withFallback(calls)
   return call()
