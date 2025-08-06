@@ -1,6 +1,7 @@
 import { useTheme } from "@pancakeswap/hooks";
 import { useMatchBreakpoints } from "@pancakeswap/uikit";
 import { axisLeft, Axis as d3Axis, NumberValue, ScaleLinear, select } from "d3";
+import { useCallback } from "react";
 import { styled } from "styled-components";
 
 const StyledGroup = styled.g<{ $isMobile: boolean }>`
@@ -19,18 +20,30 @@ const StyledGroup = styled.g<{ $isMobile: boolean }>`
 const Axis = ({
   axisGenerator,
   highlightValue,
-  highlightSecondaryValues,
+  selectedMin,
+  selectedMax,
+  yScale,
 }: {
   axisGenerator: d3Axis<NumberValue>;
   highlightValue?: number;
-  highlightSecondaryValues?: number[];
+  selectedMin?: number;
+  selectedMax?: number;
+  yScale: ScaleLinear<number, number>;
 }) => {
   const { theme } = useTheme();
+
+  const min = yScale.domain()[0];
+  const max = yScale.domain()[1];
+
   const axisRef = (axis: SVGGElement) => {
     if (!axis) return;
     const axisGroup = select(axis);
 
     axisGroup.call(axisGenerator).call((g) => g.select(".domain").remove());
+
+    const isValueNearEdge = (value: number) => {
+      return value < min + (max - min) * 0.05 || value > max - (max - min) * 0.05;
+    };
 
     // Highlight current value if provided
     if (highlightValue !== undefined) {
@@ -46,27 +59,50 @@ const Axis = ({
           select((this as SVGTextElement).parentElement)
             .insert("rect", "text")
             .attr("x", bbox.x - 4)
-            .attr("y", bbox.y)
+            .attr("y", isValueNearEdge(highlightValue) ? bbox.y - 4 : bbox.y)
             .attr("width", bbox.width + 4)
             .attr("height", bbox.height)
             .attr("rx", 4)
             .attr("fill", theme.colors.primary);
         });
 
-      if (highlightSecondaryValues) {
+      // Highlight selectedMax if provided
+      if (selectedMax !== undefined) {
         axisGroup
           .selectAll(".tick")
-          .filter((d) => highlightSecondaryValues.includes(d as number))
+          .filter((d) => d === selectedMax)
           .select("text")
           .style("fill", theme.colors.v2Default)
           .style("z-index", 10)
-          .attr("transform", "translate(-2, 0)")
+          .attr("transform", isValueNearEdge(selectedMax) ? "translate(-2, 8)" : "translate(-2, 0)")
           .each(function iter() {
             const bbox = (this as SVGTextElement).getBBox();
             select((this as SVGTextElement).parentElement)
               .insert("rect", "text")
               .attr("x", bbox.x - 4)
-              .attr("y", bbox.y)
+              .attr("y", isValueNearEdge(selectedMax) ? bbox.y + 8 : bbox.y)
+              .attr("width", bbox.width + 4)
+              .attr("height", bbox.height)
+              .attr("rx", 4)
+              .attr("fill", theme.colors.secondary);
+          });
+      }
+
+      // Highlight selectedMin if provided
+      if (selectedMin !== undefined) {
+        axisGroup
+          .selectAll(".tick")
+          .filter((d) => d === selectedMin)
+          .select("text")
+          .style("fill", theme.colors.v2Default)
+          .style("z-index", 10)
+          .attr("transform", isValueNearEdge(selectedMin) ? "translate(-2, -8)" : "translate(-2, 0)")
+          .each(function iter() {
+            const bbox = (this as SVGTextElement).getBBox();
+            select((this as SVGTextElement).parentElement)
+              .insert("rect", "text")
+              .attr("x", bbox.x - 4)
+              .attr("y", isValueNearEdge(selectedMin) ? bbox.y - 8 : bbox.y)
               .attr("width", bbox.width + 4)
               .attr("height", bbox.height)
               .attr("rx", 4)
@@ -85,11 +121,13 @@ export const AxisRight = ({
   offset = 0,
   ticks = 6,
   highlightValue,
-  highlightSecondaryValues,
+  selectedMin,
+  selectedMax,
   onAxisMount,
 }: {
   highlightValue?: number;
-  highlightSecondaryValues?: number[];
+  selectedMin?: number;
+  selectedMax?: number;
   yScale: ScaleLinear<number, number>;
   innerWidth: number;
   offset?: number;
@@ -109,21 +147,20 @@ export const AxisRight = ({
     finalTicks = finalTicks.map((tick) => (tick === closestTick ? highlightValue : tick));
   }
 
-  // If highlightSecondaryValues array is defined, replace the closest ticks with highlightSecondaryValues
-  if (highlightSecondaryValues) {
-    const closestTicks = highlightSecondaryValues.map((value) => {
-      const closestTick = finalTicks.reduce((prev, curr) =>
-        Math.abs(curr - value) < Math.abs(prev - value) ? curr : prev
-      );
-      return closestTick;
-    });
-    finalTicks = finalTicks.map((tick) => {
-      const closestTickIndex = closestTicks.indexOf(tick);
-      if (closestTickIndex !== -1) {
-        return highlightSecondaryValues[closestTickIndex];
-      }
-      return tick;
-    });
+  // If selectedMin is defined, replace the closest tick with selectedMin
+  if (selectedMin !== undefined) {
+    const closestTick = finalTicks.reduce((prev, curr) =>
+      Math.abs(curr - selectedMin) < Math.abs(prev - selectedMin) ? curr : prev
+    );
+    finalTicks = finalTicks.map((tick) => (tick === closestTick ? selectedMin : tick));
+  }
+
+  // If selectedMax is defined, replace the closest tick with selectedMax
+  if (selectedMax !== undefined) {
+    const closestTick = finalTicks.reduce((prev, curr) =>
+      Math.abs(curr - selectedMax) < Math.abs(prev - selectedMax) ? curr : prev
+    );
+    finalTicks = finalTicks.map((tick) => (tick === closestTick ? selectedMax : tick));
   }
 
   return (
@@ -136,7 +173,9 @@ export const AxisRight = ({
       <Axis
         axisGenerator={axisLeft(yScale).tickValues(finalTicks).tickSize(0)}
         highlightValue={highlightValue}
-        highlightSecondaryValues={highlightSecondaryValues}
+        selectedMin={selectedMin}
+        selectedMax={selectedMax}
+        yScale={yScale}
       />
     </StyledGroup>
   );

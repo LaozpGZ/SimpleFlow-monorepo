@@ -297,11 +297,8 @@ export function Chart({
             yScale={priceScale}
             innerWidth={width}
             highlightValue={current}
-            highlightSecondaryValues={
-              localBrushExtent
-                ? [Number(localBrushExtent.min.toFixed(12)), Number(localBrushExtent.max.toFixed(12))]
-                : undefined
-            }
+            selectedMin={localBrushExtent ? Number(localBrushExtent.min.toFixed(12)) : undefined}
+            selectedMax={localBrushExtent ? Number(localBrushExtent.max.toFixed(12)) : undefined}
             ticks={isMobile ? 4 : 6}
             offset={1}
             onAxisMount={handleAxisMount}
