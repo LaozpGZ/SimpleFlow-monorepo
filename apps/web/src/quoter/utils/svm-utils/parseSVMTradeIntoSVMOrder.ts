@@ -62,6 +62,8 @@ export function parseRoutePlansToRoutes(svmTrade: SolRouterTrade): Route[] {
           // For intermediate tokens that don't match input/output currencies,
           // create a proper SPLToken instance
           // In a real implementation, this would come from a token registry or metadata service
+          // TODO: need to get real token info from token registry.
+          // cannot use inputAmount.currency because it's not a correct currency
           intermediateCurrency = new SPLToken({
             address: outputMintAddress,
             chainId: svmTrade.inputAmount.currency.chainId,
