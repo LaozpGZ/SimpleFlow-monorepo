@@ -268,6 +268,100 @@ describe('split-routes', () => {
     expect(route2.path[1]).toBe(MOCK_USDC)
   })
 
+  it('should work with multi-hop in first', () => {
+    const mockSolRouterTrade: SolRouterTrade = {
+      requestId: 'mock_request_id',
+      tradeType: TradeType.EXACT_INPUT,
+      otherAmountThreshold: '16780', // 99 USDC minimum out
+      priceImpactPct: '0',
+      slippageBps: 50,
+      transaction: 'mock_transaction_string',
+      inputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_SOL, '100000'),
+      outputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_USDC, '16862'),
+
+      routes: [
+        {
+          swapInfo: {
+            ammKey: new PublicKey('HToiT8XK8GHgAT4N3oGXadc7opdApPwsbCL9tFRYa3Rg'),
+            label: 'Meteora DLMM',
+            inputMint: MOCK_SOL.address,
+            outputMint: MOCK_TOKEN_1.address,
+            inAmount: '52000',
+            outAmount: '8771',
+            feeAmount: '17',
+            feeMint: new PublicKey(MOCK_SOL.address),
+          },
+          percent: 50,
+          bps: 5200,
+        },
+        {
+          swapInfo: {
+            ammKey: new PublicKey('3YnYpQMUnUFxd9D1GSx6k1sNM9XcYLy2T68ymuu1WutH'),
+            label: 'Stabble Stable Swap',
+            inputMint: MOCK_TOKEN_1.address,
+            outputMint: MOCK_USDC.address,
+            inAmount: '8771',
+            outAmount: '8772',
+            feeAmount: '0',
+            feeMint: new PublicKey(MOCK_USDC.address),
+          },
+          percent: 100,
+          bps: 10000,
+        },
+        {
+          swapInfo: {
+            ammKey: new PublicKey('81MPQqJY58rgT83sy99MkRHs2g3dyy6uWKHD24twV62F'),
+            label: 'Meteora DLMM',
+            inputMint: MOCK_SOL.address,
+            outputMint: MOCK_USDC.address,
+            inAmount: '6000',
+            outAmount: '1014',
+            feeAmount: '2',
+            feeMint: new PublicKey(MOCK_SOL.address),
+          },
+          percent: 20,
+          bps: 600,
+        },
+        {
+          swapInfo: {
+            ammKey: new PublicKey('81MPQqJY58rgT83sy99MkRHs2g3dyy6uWKHD24twV62F'),
+            label: 'Meteora DLMM',
+            inputMint: MOCK_SOL.address,
+            outputMint: MOCK_USDC.address,
+            inAmount: '6000',
+            outAmount: '1014',
+            feeAmount: '2',
+            feeMint: new PublicKey(MOCK_SOL.address),
+          },
+          percent: 30,
+          bps: 600,
+        },
+      ],
+    }
+
+    const routes = parseRoutePlansToRoutes(mockSolRouterTrade)
+
+    expect(routes).toHaveLength(3)
+
+    const [route1, route2, route3] = routes
+
+    expect(route1.pools).toHaveLength(2)
+    expect(route1.percent).toBe(50)
+    expect(route1.path[0]).toBe(MOCK_SOL)
+    expect(route1.path[1].wrapped.address).toBe(MOCK_TOKEN_1.address)
+    expect(route1.path[2]).toBe(MOCK_USDC)
+
+    expect(route2.pools).toHaveLength(1)
+    expect(route2.percent).toBe(20)
+    expect(route2.path[0]).toBe(MOCK_SOL)
+    expect(route2.path[1]).toBe(MOCK_USDC)
+
+    expect(route3.pools).toHaveLength(1)
+    expect(route3.percent).toBe(30)
+    expect(route3.path[0]).toBe(MOCK_SOL)
+    expect(route3.path[1]).toBe(MOCK_USDC)
+  })
+
   it('should work with multi-hop in middle', () => {
     const mockSolRouterTrade: SolRouterTrade = {
       requestId: 'mock_request_id',
@@ -461,6 +555,99 @@ describe('split-routes', () => {
     expect(route2.path.length).toBe(3)
     expect(route2.path[0]).toBe(MOCK_SOL)
     expect(route2.path[1].wrapped.address).toBe(MOCK_TOKEN_1.address)
+    expect(route2.path[2]).toBe(MOCK_USDC)
+  })
+
+  it('should work with all multi-hop', () => {
+    const mockSolRouterTrade: SolRouterTrade = {
+      requestId: 'mock_request_id',
+      tradeType: TradeType.EXACT_INPUT,
+      otherAmountThreshold: '99000000', // 99 USDC minimum out
+      priceImpactPct: '0.0002', // 0.15%
+      slippageBps: 50,
+      transaction: 'mock_transaction_string',
+      inputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_SOL, '1000000'),
+      outputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_USDC, '289245979504'),
+      routes: [
+        {
+          swapInfo: {
+            ammKey: new PublicKey('DbuvwPuLvH8uy2B1sKuu18aCd2QpCvfZdfDtdRZztBd2'),
+            label: '1DEX',
+            inputMint: MOCK_SOL.address,
+            outputMint: MOCK_TOKEN_1.address,
+            inAmount: '570000',
+            outAmount: '96043',
+            feeAmount: '57',
+            feeMint: new PublicKey(MOCK_SOL.address),
+          },
+          percent: 30,
+          bps: 5700,
+        },
+        {
+          swapInfo: {
+            ammKey: new PublicKey('81MPQqJY58rgT83sy99MkRHs2g3dyy6uWKHD24twV62F'),
+            label: 'Meteora DLMM',
+            inputMint: MOCK_TOKEN_1.address,
+            outputMint: MOCK_USDC.address,
+            inAmount: '430000',
+            outAmount: '73121',
+            feeAmount: '67',
+            feeMint: new PublicKey(MOCK_SOL.address),
+          },
+          percent: 100,
+          bps: 4300,
+        },
+        {
+          swapInfo: {
+            ammKey: new PublicKey('F4i12x6vu71dhHpWBrpRjPYGnNFqH4emVPrsPZydB5c9'),
+            label: 'Raydium',
+            inputMint: MOCK_SOL.address,
+            outputMint: MOCK_TOKEN_2.address,
+            inAmount: '169164',
+            outAmount: '290730861722',
+            feeAmount: '161',
+            feeMint: new PublicKey(MOCK_USDC.address),
+          },
+          percent: 70,
+          bps: 10000,
+        },
+        {
+          swapInfo: {
+            ammKey: new PublicKey('F4i12x6vu71dhHpWBrpRjPYGnNFqH4emVPrsPZydB5c9'),
+            label: 'Raydium',
+            inputMint: MOCK_TOKEN_2.address,
+            outputMint: MOCK_USDC.address,
+            inAmount: '169164',
+            outAmount: '290730861722',
+            feeAmount: '161',
+            feeMint: new PublicKey(MOCK_USDC.address),
+          },
+          percent: 100,
+          bps: 10000,
+        },
+      ],
+    }
+
+    const routes = parseRoutePlansToRoutes(mockSolRouterTrade)
+
+    expect(routes).toHaveLength(2)
+
+    const [route1, route2] = routes
+
+    expect(route1.pools).toHaveLength(2)
+    expect(route1.percent).toBe(30)
+
+    expect(route1.path.length).toBe(3)
+    expect(route1.path[0]).toBe(MOCK_SOL)
+    expect(route1.path[1].wrapped.address).toBe(MOCK_TOKEN_1.address)
+    expect(route1.path[2]).toBe(MOCK_USDC)
+
+    expect(route2.pools).toHaveLength(2)
+    expect(route2.percent).toBe(70)
+
+    expect(route2.path.length).toBe(3)
+    expect(route2.path[0]).toBe(MOCK_SOL)
+    expect(route2.path[1].wrapped.address).toBe(MOCK_TOKEN_2.address)
     expect(route2.path[2]).toBe(MOCK_USDC)
   })
 })
