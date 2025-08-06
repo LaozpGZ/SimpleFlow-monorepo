@@ -12,8 +12,8 @@ export default defineConfig({
     },
     rollupOptions: {
       external: [
-        ...Object.keys(pkg.peerDependencies),
-        ...Object.keys(pkg.dependencies),
+        ...Object.keys(pkg.peerDependencies ?? {}),
+        ...Object.keys(pkg.dependencies ?? {}),
         'crypto',
         'react/jsx-runtime',
         'react/jsx-dev-runtime',
