@@ -1,7 +1,14 @@
 import { type SVMOrder, OrderType, SVMTrade } from '@pancakeswap/price-api-sdk'
 import { PoolType, Route, RouteType, SVMPool } from '@pancakeswap/smart-router'
 import { SolRouterTrade } from '@pancakeswap/solana-router-sdk'
-import { Currency, CurrencyAmount, Percent, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import {
+  Currency,
+  CurrencyAmount,
+  Percent,
+  TradeType,
+  UnifiedCurrencyAmount,
+  SPLToken,
+} from '@pancakeswap/swap-sdk-core'
 import { SVMQuoteQuery } from 'quoter/quoter.types'
 
 export function parseRoutePlansToRoutes(svmTrade: SolRouterTrade): Route[] {
@@ -32,13 +39,49 @@ export function parseRoutePlansToRoutes(svmTrade: SolRouterTrade): Route[] {
         return pool
       })
 
-      // Build path: start with input currency, end with output currency
-      // For multi-hop routes, we use the start and end currencies
-      // (intermediate tokens would require additional token resolution)
-      const path = [svmTrade.inputAmount.currency as Currency, svmTrade.outputAmount.currency as Currency]
+      // Build path: start with input currency, include all intermediate currencies, end with output currency
+      // For multi-hop routes, path will be [inputCurrency, intermediate1, intermediate2, ..., outputCurrency]
+      const path: Currency[] = []
+
+      // Add the input currency (from the first plan)
+      const firstPlan = currentGroup[0]
+      path.push(svmTrade.inputAmount.currency as Currency)
+
+      // Add intermediate currencies (outputMint of each plan except the last one becomes an intermediate currency)
+      for (let j = 0; j < currentGroup.length - 1; j++) {
+        const plan = currentGroup[j]
+        const outputMintAddress = plan.swapInfo.outputMint
+
+        // Find the currency for this outputMint
+        let intermediateCurrency: SPLToken
+        if (outputMintAddress === svmTrade.inputAmount.currency.address) {
+          intermediateCurrency = svmTrade.inputAmount.currency
+        } else if (outputMintAddress === svmTrade.outputAmount.currency.address) {
+          intermediateCurrency = svmTrade.outputAmount.currency
+        } else {
+          // For intermediate tokens that don't match input/output currencies,
+          // create a proper SPLToken instance
+          // In a real implementation, this would come from a token registry or metadata service
+          intermediateCurrency = new SPLToken({
+            address: outputMintAddress,
+            chainId: svmTrade.inputAmount.currency.chainId,
+            programId: svmTrade.inputAmount.currency.programId,
+            decimals: svmTrade.inputAmount.currency.decimals,
+            symbol: svmTrade.inputAmount.currency.symbol,
+            name: svmTrade.inputAmount.currency.name,
+            logoURI: '',
+          })
+        }
+
+        // NOTE: cast to Currency to avoid type error
+        // Fix it later
+        path.push(intermediateCurrency as Currency)
+      }
+
+      // Add the final output currency
+      path.push(svmTrade.outputAmount.currency as Currency)
 
       // Use amounts from first and last plans in the group
-      const firstPlan = currentGroup[0]
       const lastPlan = currentGroup[currentGroup.length - 1]
 
       const inputAmount = UnifiedCurrencyAmount.fromRawAmount(
