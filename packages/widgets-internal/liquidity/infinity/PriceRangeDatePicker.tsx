@@ -1,5 +1,4 @@
-import { useTranslation } from "@pancakeswap/localization";
-import { Button, ButtonMenuItem, FlexGap, Text } from "@pancakeswap/uikit";
+import { Button, ButtonMenu, ButtonMenuItem, FlexGap, Text, useMatchBreakpoints } from "@pancakeswap/uikit";
 import { useCallback, useMemo } from "react";
 import styled from "styled-components";
 
@@ -40,7 +39,7 @@ export const PriceRangeDatePicker = ({
   height,
   onChange,
 }: PriceRangeDatePickerProps) => {
-  const { t } = useTranslation();
+  const { isMobile } = useMatchBreakpoints();
 
   const activeIndex = useMemo(() => PRESET_RANGE_ITEMS.findIndex((item) => item.value === value.value), [value]);
 
@@ -52,20 +51,35 @@ export const PriceRangeDatePicker = ({
   );
   return (
     <FlexGap columnGap="12px" gap="12px" alignItems="center">
-      <ButtonGroup>
-        {PRESET_RANGE_ITEMS.map((item, index) => (
-          <StyledButton
-            variant="text"
-            scale="xs"
-            height={height || "24px"}
-            key={item.value}
-            onClick={() => onItemSelect(index)}
-            $isActive={activeIndex === index}
-          >
-            {item.label}
-          </StyledButton>
-        ))}
-      </ButtonGroup>
+      {isMobile ? (
+        <ButtonMenu
+          variant="subtle"
+          style={{ borderRadius: 30, width: "100%" }}
+          activeIndex={activeIndex}
+          onItemClick={onItemSelect}
+        >
+          {PRESET_RANGE_ITEMS.map((item) => (
+            <ButtonMenuItem key={item.value} height={height || "36px"} px="16px" style={{ borderRadius: 30 }}>
+              {item.label}
+            </ButtonMenuItem>
+          ))}
+        </ButtonMenu>
+      ) : (
+        <ButtonGroup>
+          {PRESET_RANGE_ITEMS.map((item, index) => (
+            <StyledButton
+              variant="text"
+              scale="xs"
+              height={height || "24px"}
+              key={item.value}
+              onClick={() => onItemSelect(index)}
+              $isActive={activeIndex === index}
+            >
+              {item.label}
+            </StyledButton>
+          ))}
+        </ButtonGroup>
+      )}
     </FlexGap>
   );
 };

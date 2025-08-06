@@ -24,7 +24,7 @@ export const CLPriceRangePanel = () => {
   const { poolId, chainId } = useInfinityPoolIdRouteParams()
   const { currency0, currency1, baseCurrency, quoteCurrency } = useCurrencyByPoolId({ poolId, chainId })
   const pool = usePool<'CL'>()
-  const [inverted, setIsInverted] = useInverted()
+  const [inverted] = useInverted()
   const [pricePeriod, setPricePeriod] = useState<Liquidity.PresetRangeItem>(Liquidity.PRESET_RANGE_ITEMS[0])
   const { lowerPrice, upperPrice } = useCLPriceRange(currency0, currency1, pool?.tickSpacing ?? undefined)
 
@@ -160,13 +160,6 @@ export const CLPriceRangePanel = () => {
           gap="16px"
         >
           <Liquidity.PriceRangeDatePicker onChange={setPricePeriod} value={pricePeriod} />
-          <Liquidity.RateToggle
-            currencyA={inverted ? currency1 : currency0}
-            handleRateToggle={() => {
-              setIsInverted(!inverted)
-            }}
-            showReset={false}
-          />
         </FlexGap>
 
         <Box mt="16px">

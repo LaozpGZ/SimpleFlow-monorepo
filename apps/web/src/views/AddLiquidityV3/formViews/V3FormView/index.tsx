@@ -641,26 +641,6 @@ export default function V3FormView({
     formattedAmounts,
   ])
 
-  const handleRateToggle = useCallback(() => {
-    if (!router.isReady || !currencyIdA || !currencyIdB) return
-
-    invertRange()
-
-    router.replace(
-      {
-        pathname: router.pathname,
-        query: {
-          ...router.query,
-          currency: [currencyIdB!, currencyIdA!, feeAmount ? feeAmount.toString() : ''],
-        },
-      },
-      undefined,
-      {
-        shallow: true,
-      },
-    )
-  }, [invertRange, currencyIdA, currencyIdB, feeAmount, router, invertPrice, priceLower, priceUpper])
-
   const inversionEvent = useCurrencyInversionEvent()
 
   useEffect(() => {
@@ -761,7 +741,6 @@ export default function V3FormView({
                     mb="24px"
                   >
                     <Liquidity.PriceRangeDatePicker onChange={setPricePeriod} value={pricePeriod} />
-                    <Liquidity.RateToggle currencyA={baseCurrency} handleRateToggle={handleRateToggle} />
                   </FlexGap>
 
                   {!noLiquidity && (
