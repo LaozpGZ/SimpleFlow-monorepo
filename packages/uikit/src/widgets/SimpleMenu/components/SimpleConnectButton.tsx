@@ -1,4 +1,4 @@
-import { Trans } from "@pancakeswap/localization";
+import { useTranslation } from "@pancakeswap/localization";
 import { Box, Button, ChevronDownIcon, Flex, FlexGap } from "../../../components";
 import { LabelText, StyledUserMenu } from "../../Menu/components/UserMenu";
 import MenuIcon from "../../Menu/components/UserMenu/MenuIcon";
@@ -24,6 +24,7 @@ export const SimpleConnectButton: React.FC<ConnectButtonProps> = ({
   disabled = false,
   ...props
 }) => {
+  const { t } = useTranslation();
   if (account) {
     return (
       <UserMenu
@@ -41,12 +42,8 @@ export const SimpleConnectButton: React.FC<ConnectButtonProps> = ({
   return (
     <Button onClick={onClickConnect} scale="sm" {...props}>
       <FlexGap gap="8px" justifyContent="center" alignItems="center">
-        <Box display={["none", null, null, "block"]}>
-          <Trans>Connect Wallet</Trans>
-        </Box>
-        <Box display={["block", null, null, "none"]}>
-          <Trans>Connect</Trans>
-        </Box>
+        <Box display={["none", null, null, "block"]}>{t("Connect Wallet")}</Box>
+        <Box display={["block", null, null, "none"]}>{t("Connect")}</Box>
       </FlexGap>
     </Button>
   );

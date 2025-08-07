@@ -40,13 +40,15 @@ export const LocaleSelector: React.FC<LocaleSelectorProps> = ({ currentLang, lan
   const ctx = useContext(LanguageContext)
   const [initialized, setInitialized] = useState(false)
   const langs = langs_?.every((lang) => typeof lang === 'string')
-    ? (langs_.map((lang) => languageList.find((l) => l.code === lang)).filter(Boolean) as Language[])
+    ? (langs_
+        .map((lang) => languageList.find((l) => l.code.toLowerCase() === lang.toLowerCase()))
+        .filter(Boolean) as Language[])
     : (langs_ as Language[])
 
   useEffect(() => {
-    if (typeof window === 'undefined' || initialized || !langs) return
+    if (typeof window === 'undefined' || initialized || !langs || !currentLang) return
 
-    const language = langs.find((lang) => lang.code === currentLang)
+    const language = languageList.find((lang) => lang.code.toLowerCase() === currentLang?.toLowerCase())
     console.debug('debug language:', language)
     if (!ctx?.isFetching && currentLang && language) {
       ctx?.setLanguage(language)
