@@ -82,7 +82,7 @@ export function PricePeriodRangeChart({
 
   const onBrushDomainChangeEnded = useCallback(
     (domain: BrushDomainType, mode: string | undefined) => {
-      // This prevents double inversion when currencies change due to route updates,
+      // This prevents double inversion in V3's Add Liquidity when currencies change due to route updates,
       // while still allowing to set the initial domain on load
       if (mode === undefined && brushDomain) {
         return;
