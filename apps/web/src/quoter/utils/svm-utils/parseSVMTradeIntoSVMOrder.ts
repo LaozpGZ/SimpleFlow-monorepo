@@ -60,7 +60,31 @@ export function parseRoutePlansToRoutes(svmTrade: ExtendedSolRouterTrade): Route
 
       // Add the input currency (from the first plan)
       const firstPlan = currentGroup[0]
-      path.push(svmTrade.inputAmount.currency as Currency)
+      const firstPlanInputMint = firstPlan.swapInfo.inputMint
+
+      // Determine the actual input currency for this route group
+      let routeInputCurrency: Currency
+      if (firstPlanInputMint === svmTrade.inputAmount.currency.wrapped.address) {
+        routeInputCurrency = svmTrade.inputAmount.currency as Currency
+      } else if (firstPlanInputMint === svmTrade.outputAmount.currency.wrapped.address) {
+        routeInputCurrency = svmTrade.outputAmount.currency as Currency
+      } else {
+        // Create currency for route input token
+        routeInputCurrency = new SPLToken({
+          address: firstPlanInputMint,
+          chainId: svmTrade.inputAmount.currency.chainId,
+          // NOTE: this is only for mock data so routeInputCurrency can be passed around without any problem
+          // before using path, we need to use useUnifiedCurrency to get actual token info.
+          // DON'T use this info, it's only for mock data.
+          programId: svmTrade.inputAmount.currency.programId,
+          decimals: svmTrade.inputAmount.currency.decimals,
+          symbol: svmTrade.inputAmount.currency.symbol,
+          name: svmTrade.inputAmount.currency.name,
+          logoURI: '',
+        }) as Currency
+      }
+
+      path.push(routeInputCurrency)
 
       // Add intermediate currencies (outputMint of each plan except the last one becomes an intermediate currency)
       for (let j = 0; j < currentGroup.length - 1; j++) {
@@ -96,16 +120,33 @@ export function parseRoutePlansToRoutes(svmTrade: ExtendedSolRouterTrade): Route
 
       // Determine final output currency based on last plan in group
       const lastPlan = currentGroup[currentGroup.length - 1]
+      const finalOutputMintAddress = lastPlan.swapInfo.outputMint
 
-      const finalOutputCurrency = svmTrade.outputAmount.currency as Currency
+      let finalOutputCurrency: Currency
+      if (finalOutputMintAddress === svmTrade.inputAmount.currency.wrapped.address) {
+        finalOutputCurrency = svmTrade.inputAmount.currency as Currency
+      } else if (finalOutputMintAddress === svmTrade.outputAmount.currency.wrapped.address) {
+        finalOutputCurrency = svmTrade.outputAmount.currency as Currency
+      } else {
+        // Create currency for final output token
+        finalOutputCurrency = new SPLToken({
+          address: finalOutputMintAddress,
+          chainId: svmTrade.inputAmount.currency.chainId,
+          // NOTE: this is only for mock data so finalOutputCurrency can be passed around without any problem
+          // before using path, we need to use useUnifiedCurrency to get actual token info.
+          // DON'T use this info, it's only for mock data.
+          programId: svmTrade.inputAmount.currency.programId,
+          decimals: svmTrade.inputAmount.currency.decimals,
+          symbol: svmTrade.inputAmount.currency.symbol,
+          name: svmTrade.inputAmount.currency.name,
+          logoURI: '',
+        }) as Currency
+      }
 
       // Add the final output currency
       path.push(finalOutputCurrency)
 
-      const inputAmount = UnifiedCurrencyAmount.fromRawAmount(
-        svmTrade.inputAmount.currency as Currency,
-        firstPlan.swapInfo.inAmount,
-      )
+      const inputAmount = UnifiedCurrencyAmount.fromRawAmount(routeInputCurrency, firstPlan.swapInfo.inAmount)
       const outputAmount = UnifiedCurrencyAmount.fromRawAmount(finalOutputCurrency, lastPlan.swapInfo.outAmount)
 
       routes.push({

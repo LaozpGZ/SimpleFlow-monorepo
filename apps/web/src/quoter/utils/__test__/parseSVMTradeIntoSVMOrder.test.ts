@@ -747,4 +747,103 @@ describe('split-routes', () => {
     expect(route2.path[1].wrapped.address).toBe('674PmuiDtgKx3uKuJ1B16f9m5L84eFvNwj3xDMvHcbo7')
     expect(route2.path[2]).toBe(MOCK_USDC)
   })
+
+  it('should work with split-routes at the end', () => {
+    const mockSolRouterTrade = {
+      requestId: 'mock_request_id',
+      tradeType: TradeType.EXACT_INPUT,
+      otherAmountThreshold: '16780', // 99 USDC minimum out
+      priceImpactPct: '0',
+      slippageBps: 50,
+      transaction: 'mock_transaction_string',
+      inputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_TOKEN_1, '1000000'),
+      outputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_TOKEN_2, '289245979504'),
+      routes: [
+        {
+          swapInfo: {
+            ammKey: new PublicKey('AxHocY4moH8roYQXMQWqoehtW5piMtTJQYmfL4wQ83D8'),
+            label: 'SolFi',
+            inputMint: MOCK_TOKEN_1.address,
+            outputMint: MOCK_USDC.address,
+            inAmount: '2000000',
+            outAmount: '2000421',
+            feeAmount: '0',
+            feeMint: new PublicKey('Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB'),
+          },
+          percent: 100,
+          bps: 10000,
+        },
+        {
+          swapInfo: {
+            ammKey: new PublicKey('6n9VhCwQ7EwK6NqFDjnHPzEk6wZdRBTfh43RFgHQWHuQ'),
+            label: 'HumidiFi',
+            inputMint: MOCK_USDC.address,
+            outputMint: 'So11111111111111111111111111111111111111112',
+            inAmount: '2000421',
+            outAmount: '11754402',
+            feeAmount: '0',
+            feeMint: new PublicKey('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v'),
+          },
+          percent: 100,
+          bps: 10000,
+        },
+        {
+          swapInfo: {
+            ammKey: new PublicKey('Ax8bLZsJBEHifTKqqajnXgaLZXTG11hUJjWdg3Ytyz9L'),
+            label: 'Whirlpool',
+            inputMint: 'So11111111111111111111111111111111111111112',
+            outputMint: MOCK_TOKEN_2.address,
+            inAmount: '2115794',
+            outAmount: '738679',
+            feeAmount: '572',
+            feeMint: new PublicKey('So11111111111111111111111111111111111111112'),
+          },
+          percent: 18,
+          bps: 1800,
+        },
+        {
+          swapInfo: {
+            ammKey: new PublicKey('HJuipW7pcVq6kPQWJ4hovubwcu3gg8Vd2hmkR5bHh1Vs'),
+            label: 'PancakeSwap',
+            inputMint: 'So11111111111111111111111111111111111111112',
+            outputMint: MOCK_TOKEN_2.address,
+            inAmount: '9638608',
+            outAmount: '3365297',
+            feeAmount: '3042',
+            feeMint: new PublicKey('So11111111111111111111111111111111111111112'),
+          },
+          percent: 82,
+          bps: 8200,
+        },
+      ],
+    }
+
+    const routes = parseRoutePlansToRoutes(mockSolRouterTrade)
+
+    expect(routes).toHaveLength(3)
+
+    const [route1, route2, route3] = routes
+
+    expect(route1.pools).toHaveLength(2)
+    expect(route1.percent).toBe(100)
+
+    expect(route1.path.length).toBe(3)
+    expect(route1.path[0]).toBe(MOCK_TOKEN_1)
+    expect(route1.path[1].wrapped.address).toBe(MOCK_USDC.address)
+    expect(route1.path[2].wrapped.address).toBe('So11111111111111111111111111111111111111112')
+
+    expect(route2.pools).toHaveLength(1)
+    expect(route2.percent).toBe(18)
+
+    expect(route2.path.length).toBe(2)
+    expect(route2.path[0].wrapped.address).toBe('So11111111111111111111111111111111111111112')
+    expect(route2.path[1]).toBe(MOCK_TOKEN_2)
+
+    expect(route3.pools).toHaveLength(1)
+    expect(route3.percent).toBe(82)
+
+    expect(route3.path.length).toBe(2)
+    expect(route3.path[0].wrapped.address).toBe('So11111111111111111111111111111111111111112')
+    expect(route3.path[1]).toBe(MOCK_TOKEN_2)
+  })
 })
