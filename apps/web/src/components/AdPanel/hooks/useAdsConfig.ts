@@ -17,7 +17,7 @@ type AdsConfigMap = {
 }
 const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig[] => {
   const now = Date.now()
-  return [
+  const config: AdsCampaignConfig[] = [
     {
       id: AdsIds.PANCAKE_SOCIAL_LOGIN,
       priority: Priority.HIGH,
@@ -94,7 +94,8 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
         },
       },
     },
-  ].filter((ad) => {
+  ]
+  return config.filter((ad) => {
     const deadline = ad?.deadline
     return !deadline || deadline > now
   })
