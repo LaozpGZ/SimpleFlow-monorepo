@@ -34,32 +34,42 @@ export function parseRoutePlansToRoutes(svmTrade: ExtendedSolRouterTrade): Route
   const routes: Route[] = []
   let currentGroup: typeof svmTrade.routes = []
 
+  // Identify convergence points: plans where multiple prior plans output to its input
+  const convergenceIndices = new Set<number>()
+  for (let i = 0; i < svmTrade.routes.length; i++) {
+    const plan = svmTrade.routes[i]
+    if (plan.percent === 100) {
+      // Count how many previous plans output to this plan's input
+      let contributingPlans = 0
+      for (let j = 0; j < i; j++) {
+        if (svmTrade.routes[j].swapInfo.outputMint === plan.swapInfo.inputMint) {
+          contributingPlans++
+        }
+      }
+      // If multiple plans contribute to this plan's input, it's a convergence point
+      if (contributingPlans >= 2) {
+        convergenceIndices.add(i)
+      }
+    }
+  }
+
   for (let i = 0; i < svmTrade.routes.length; i++) {
     const routerPlan = svmTrade.routes[i]
-
-    // Detect clear split-then-converge pattern for the specific convergence case
-    const isConvergencePattern = detectConvergencePattern(svmTrade.routes, i)
-
-    // A plan with percent < 100 indicates the start of a new route
-    // If we have a currentGroup and encounter a plan with percent < 100,
-    // we need to finish the current route first
-    if (routerPlan.percent < 100 && currentGroup.length > 0) {
-      // Finish the current route first
-      const finishedRoute = createRoute(currentGroup, svmTrade)
-      routes.push(finishedRoute)
-      currentGroup = []
-    }
-
     currentGroup.push(routerPlan)
 
-    // End route if:
-    // 1. This is the last plan, OR
-    // 2. Next plan has percent < 100 (starts new split), OR
-    // 3. We detect a convergence pattern where next plan should be separate
     const isLastPlan = i === svmTrade.routes.length - 1
     const nextPlan = isLastPlan ? null : svmTrade.routes[i + 1]
+    const nextIsConvergence = nextPlan && convergenceIndices.has(i + 1)
 
-    const isEndOfRoute = isLastPlan || (nextPlan && nextPlan.percent < 100) || isConvergencePattern
+    // Check if current plan connects to next plan (output of current = input of next)
+    const currentConnectsToNext =
+      nextPlan && !isLastPlan && routerPlan.swapInfo.outputMint === nextPlan.swapInfo.inputMint
+
+    const isEndOfRoute =
+      isLastPlan ||
+      (nextPlan && nextPlan.percent < 100) ||
+      nextIsConvergence ||
+      (!currentConnectsToNext && nextPlan && nextPlan.percent === 100)
 
     if (isEndOfRoute) {
       const route = createRoute(currentGroup, svmTrade)
@@ -69,36 +79,6 @@ export function parseRoutePlansToRoutes(svmTrade: ExtendedSolRouterTrade): Route
   }
 
   return routes
-}
-
-function detectConvergencePattern(plans: RouterPlan[], currentIndex: number): boolean {
-  // TOKEN_1 → SOL (100%) | SOL → USDC (84%) | SOL → USDC (16%) | USDC → TOKEN_2 (100%)
-  // Where the last plan converges the outputs from multiple split routes
-
-  const currentPlan = plans[currentIndex]
-  const nextPlan = currentIndex + 1 < plans.length ? plans[currentIndex + 1] : null
-
-  // Pattern:
-  // 1. Current plan has percent < 100 (split plan)
-  // 2. Next plan has percent = 100 (convergence plan)
-  // 3. There are multiple split plans that output to the same token as convergence input
-  if (currentPlan.percent < 100 && nextPlan && nextPlan.percent === 100) {
-    // Count how many recent plans output the same token that the next plan takes as input
-    let convergingPlans = 0
-    const convergenceInputMint = nextPlan.swapInfo.inputMint
-
-    // Look at the last few plans (including current) to see if multiple output the convergence input
-    for (let j = Math.max(0, currentIndex - 1); j <= currentIndex; j++) {
-      if (plans[j].percent < 100 && plans[j].swapInfo.outputMint === convergenceInputMint) {
-        convergingPlans++
-      }
-    }
-
-    // If multiple split plans output to the same token that the next plan consumes, it's convergence
-    return convergingPlans >= 2
-  }
-
-  return false
 }
 
 function createRoute(currentGroup: RouterPlan[], svmTrade: ExtendedSolRouterTrade): Route {

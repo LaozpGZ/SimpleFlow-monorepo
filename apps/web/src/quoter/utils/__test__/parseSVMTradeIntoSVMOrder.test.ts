@@ -894,7 +894,7 @@ describe('split-routes', () => {
     expect(route3.path[1]).toBe(MOCK_TOKEN_2)
   })
 
-  it('should work with split-routes in the middle', () => {
+  it('should work with split-routes in the middle with multiple hops', () => {
     const mockSolRouterTrade = createMockSolRouterTrade({
       inputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_TOKEN_1, '1000000'),
       outputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_TOKEN_2, '289245979504'),
@@ -986,5 +986,94 @@ describe('split-routes', () => {
     expect(route4.path.length).toBe(2)
     expect(route4.path[0].wrapped.address).toBe('EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v')
     expect(route4.path[1]).toBe(MOCK_TOKEN_2)
+  })
+
+  it('should work with split-routes in the middle with single hop', () => {
+    const mockSolRouterTrade = createMockSolRouterTrade({
+      inputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_TOKEN_1, '1000000'),
+      outputAmount: UnifiedCurrencyAmount.fromRawAmount(MOCK_TOKEN_2, '289245979504'),
+      otherAmountThreshold: '16780',
+      priceImpactPct: '0',
+      routes: [
+        {
+          swapInfo: createSwapInfo({
+            ammKey: '27ZbVdmoUhG639CfqG6kW8a4VXZeGBi8Dd4HUXjVDxeS',
+            label: 'Whirlpool',
+            inputMint: MOCK_TOKEN_1.address,
+            outputMint: '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R',
+            inAmount: '180000',
+            outAmount: '11237',
+            feeAmount: '57',
+            feeMint: 'So11111111111111111111111111111111111111112',
+          }),
+          percent: 18,
+          bps: 1800,
+        },
+        {
+          swapInfo: createSwapInfo({
+            ammKey: '2zMAVBZjA55CejUUBUHRYDqS3CN39n1QLdKn5ZgytdYz',
+            label: 'Raydium CLMM',
+            inputMint: '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R',
+            outputMint: MOCK_USDC.address,
+            inAmount: '11237',
+            outAmount: '30479',
+            feeAmount: '13',
+            feeMint: '4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R',
+          }),
+          percent: 100,
+          bps: 10000,
+        },
+        {
+          swapInfo: createSwapInfo({
+            ammKey: 'HyGVf4UhoQ4ux9ueZgTCf6aJwCcvWqeWf258ZtbeRteV',
+            label: 'Lifinity V2',
+            inputMint: MOCK_TOKEN_1.address,
+            outputMint: MOCK_USDC.address,
+            inAmount: '820000',
+            outAmount: '138775',
+            feeAmount: '65',
+            feeMint: 'So11111111111111111111111111111111111111112',
+          }),
+          percent: 82,
+          bps: 8200,
+        },
+        {
+          swapInfo: createSwapInfo({
+            ammKey: '5455YeNwDtgXrAhWZjE4epAbuKVpbGH2yhUrqJ4EYGMw',
+            label: 'PancakeSwap',
+            inputMint: MOCK_USDC.address,
+            outputMint: MOCK_TOKEN_2.address,
+            inAmount: '169254',
+            outAmount: '62226412',
+            feeAmount: '51',
+            feeMint: 'Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB',
+          }),
+          percent: 100,
+          bps: 10000,
+        },
+      ],
+    })
+
+    const routes = parseRoutePlansToRoutes(mockSolRouterTrade)
+
+    expect(routes).toHaveLength(3)
+
+    const [route1, route2, route3] = routes
+
+    expect(route1.percent).toBe(18)
+    expect(route1.path.length).toBe(3)
+    expect(route1.path[0]).toBe(MOCK_TOKEN_1)
+    expect(route1.path[1].wrapped.address).toBe('4k3Dyjzvzp8eMZWUXbBCjEvwSkkk59S5iCNLY3QrkX6R')
+    expect(route1.path[2].wrapped.address).toBe(MOCK_USDC.address)
+
+    expect(route2.percent).toBe(82)
+    expect(route2.path.length).toBe(2)
+    expect(route2.path[0].wrapped.address).toBe(MOCK_TOKEN_1.address)
+    expect(route2.path[1].wrapped.address).toBe(MOCK_USDC.address)
+
+    expect(route3.percent).toBe(100)
+    expect(route3.path.length).toBe(2)
+    expect(route3.path[0].wrapped.address).toBe(MOCK_USDC.address)
+    expect(route3.path[1]).toBe(MOCK_TOKEN_2)
   })
 })
