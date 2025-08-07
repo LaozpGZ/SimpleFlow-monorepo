@@ -1,5 +1,5 @@
 ---
-'@pancakeswap/smart-router': patch
+'@pancakeswap/smart-router': minor
 '@pancakeswap/chains': patch
 ---
 
