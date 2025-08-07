@@ -72,7 +72,6 @@ export function parseRoutePlansToRoutes(svmTrade: ExtendedSolRouterTrade): Route
 }
 
 function detectConvergencePattern(plans: RouterPlan[], currentIndex: number): boolean {
-  // Detect the convergence pattern from "split-routes in the middle" test:
   // TOKEN_1 → SOL (100%) | SOL → USDC (84%) | SOL → USDC (16%) | USDC → TOKEN_2 (100%)
   // Where the last plan converges the outputs from multiple split routes
 
@@ -102,7 +101,7 @@ function detectConvergencePattern(plans: RouterPlan[], currentIndex: number): bo
   return false
 }
 
-function createRoute(currentGroup: typeof svmTrade.routes, svmTrade: ExtendedSolRouterTrade): Route {
+function createRoute(currentGroup: RouterPlan[], svmTrade: ExtendedSolRouterTrade): Route {
   // Process the current group into a single Route
   // TODO: need to update feeAmount. It's not correct.
   const pools = currentGroup.map((plan) => {
