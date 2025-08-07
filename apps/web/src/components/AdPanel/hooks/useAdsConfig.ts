@@ -63,19 +63,20 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
         img: getImageUrl(!isMobile ? 'alpha-comp-v3' : 'alpha-comp-mobile-v3'),
         texts: [
           {
-            text: !isMobile ? t('Trade Binance Alpha Tokens to Win $300,000.') : t('Trade Alpha Tokens: Win $300K.'),
+            text: t('Trade for a Chance to Win %amount%.', { amount: '$300K' }),
           },
           {
             text: t('Trade Now'),
-            link: 'https://pancakeswap.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=AlphaTokens&utm_id=TradingCompetition',
+            link: 'https://pancakeswap.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=Swap&utm_id=TradingCompetition',
           },
         ],
         btn: {
           text: t('Learn More'),
-          link: 'https://blog.pancakeswap.finance/articles/binance-alpha-trading-competition-3?utm_source=Website&utm_medium=banner&utm_campaign=AlphaTokens&utm_id=TradingCompetition',
+          link: 'https://blog.pancakeswap.finance/articles/trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=Swap&utm_id=TradingCompetition',
           mt: !isMobile ? '8px' : undefined,
         },
       },
+      deadline: 1756684800000,
     },
     {
       id: AdsIds.SOLANA_LIQUIDITY,
