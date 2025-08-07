@@ -43,7 +43,7 @@ export function Chart({
   const [zoom, setZoom] = useState<ZoomTransform | null>(null);
   const [axisRightWidth, setAxisRightWidth] = useState<number>(0);
 
-  // Handle axis mount and measure its width
+  // Need axis width to calculate price scale range (width of candlestick chart)
   const handleAxisMount = useCallback((element: SVGGElement | null) => {
     if (element) {
       // Use a small delay to ensure the axis is fully rendered

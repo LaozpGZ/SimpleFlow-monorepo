@@ -1,5 +1,8 @@
 export const brushHandlePath = (width: number) =>
   `M 3 0 h ${width} m 0 1 H 0 M 0 0 L 0 0 h 17 v 7 q 0 4 -4 4 h -9 q -4 0 -4 -4 z`;
+
+export const brushHandlePathMobile = (width: number) =>
+  `M 3.5 0 h ${width} m 0 1.2 H 0 M 0 0 L 0 0 h 23 v 9 q 0 5 -5 5 h -13 q -5 0 -5 -5 z`;
 /*
  * https://medium.com/@dennismphil/one-side-rounded-rectangle-using-svg-fb31cf318d90
  */
@@ -25,6 +28,8 @@ export const brushHandlePath = (width: number) =>
 //   ].join(" ");
 
 export const brushHandleAccentPath = () => "m 5 7 h 7 M 0 0 m 5 4 h 7 z";
+
+export const brushHandleAccentPathMobile = () => "m 6.5 9 h 10 M 0 0 m 6.5 5.5 h 10 z";
 // export const brushHandleAccentPath = () =>
 // "M 4 0 h 16 a 4 4 0 0 1 4 4 v 7 a 4 4 0 0 1 -4 4 h -16 a 4 4 0 0 1 -4 -4 v -7 a 4 4 0 0 1 4 -4";
 

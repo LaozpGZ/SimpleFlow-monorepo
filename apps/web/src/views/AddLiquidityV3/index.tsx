@@ -1,4 +1,4 @@
-import { Box, Breadcrumbs, Container, FlexGap, Text } from '@pancakeswap/uikit'
+import { Box, Breadcrumbs, Container, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 
 import { Pair } from '@pancakeswap/sdk'
 import { FeeAmount, Pool } from '@pancakeswap/v3-sdk'
@@ -175,6 +175,7 @@ export function UniversalAddLiquidity({
 export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
+  const { isMobile } = useMatchBreakpoints()
 
   const [selectType] = useAtom(selectTypeAtom)
   const { currencyIdA, currencyIdB, feeAmount } = useCurrencyParams()
@@ -292,7 +293,7 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
                     showTitle={false}
                     derived
                     showApyButton={false}
-                    fontSize="24px"
+                    fontSize={isMobile ? '20px' : '24px'}
                   />
                 ),
                 roiCalculator: (
@@ -302,7 +303,7 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
                     showTitle={false}
                     derived
                     showApyText={false}
-                    fontSize="24px"
+                    fontSize={isMobile ? '20px' : '24px'}
                   />
                 ),
               }
