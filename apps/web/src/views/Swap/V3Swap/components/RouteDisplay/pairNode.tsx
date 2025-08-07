@@ -5,8 +5,8 @@ import { Column } from '@pancakeswap/uikit'
 import React from 'react'
 import { v3FeeToPercent } from '../../utils/exchange'
 import { HookDiscountFeeDisplay } from './HookDiscountFeeDisplay'
-
-export type Pair = [Currency, Currency]
+import { PairNode } from '../PairNode'
+import { Pair } from './types'
 
 export interface PairNodeProps {
   pair: Pair
@@ -15,8 +15,6 @@ export interface PairNodeProps {
   tooltipText: string
 }
 
-export type PairNodeComponent = React.ComponentType<PairNodeProps>
-
 interface Params {
   pairs: Pair[]
   pools: any[]
@@ -24,17 +22,15 @@ interface Params {
   hookDiscount: Record<string, { discountFee: number; originalFee: number }>
   category?: HOOK_CATEGORY.BrevisDiscount | HOOK_CATEGORY.PrimusDiscount
   t: (key: string) => string
-  PairNode: PairNodeComponent
 }
 
-export function getPairNodes({
+export function EVMPairNodes({
   pairs,
   pools,
   routePoolsLength,
   hookDiscount,
   category,
   t,
-  PairNode,
 }: Params): React.ReactNode[] | null {
   return pairs.length > 0
     ? pairs.map((p, index) => {
@@ -65,6 +61,7 @@ export function getPairNodes({
                 infinityDiscountFee = infinityFee
               }
             }
+            // eslint-disable-next-line no-console
             console.log('[infi]', pool.hooks, hookData, input.chainId)
           }
           // infinityFee = hookData?.defaultFee || 0
