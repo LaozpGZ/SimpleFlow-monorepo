@@ -9,6 +9,7 @@ import {
   UnifiedCurrencyAmount,
   SPLToken,
 } from '@pancakeswap/swap-sdk-core'
+import { SOLANA_NATIVE_TOKEN_ADDRESS } from 'quoter/consts'
 import { SVMQuoteQuery } from 'quoter/quoter.types'
 
 export function parseRoutePlansToRoutes(svmTrade: SolRouterTrade): Route[] {
@@ -22,7 +23,8 @@ export function parseRoutePlansToRoutes(svmTrade: SolRouterTrade): Route[] {
     // Check if this RouterPlan's outputMint matches the final outputAmount address
     // or if this is the last plan in the array
     const isEndOfRoute =
-      routerPlan.swapInfo.outputMint === svmTrade.outputAmount.currency.address || i === svmTrade.routes.length - 1
+      routerPlan.swapInfo.outputMint === svmTrade.outputAmount.currency.wrapped.address ||
+      i === svmTrade.routes.length - 1
 
     if (isEndOfRoute) {
       // Process the current group into a single Route
@@ -54,9 +56,9 @@ export function parseRoutePlansToRoutes(svmTrade: SolRouterTrade): Route[] {
 
         // Find the currency for this outputMint
         let intermediateCurrency: SPLToken
-        if (outputMintAddress === svmTrade.inputAmount.currency.address) {
+        if (outputMintAddress === svmTrade.inputAmount.currency.wrapped.address) {
           intermediateCurrency = svmTrade.inputAmount.currency
-        } else if (outputMintAddress === svmTrade.outputAmount.currency.address) {
+        } else if (outputMintAddress === svmTrade.outputAmount.currency.wrapped.address) {
           intermediateCurrency = svmTrade.outputAmount.currency
         } else {
           // For intermediate tokens that don't match input/output currencies,
