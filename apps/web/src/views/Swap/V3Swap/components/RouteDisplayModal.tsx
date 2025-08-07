@@ -60,7 +60,6 @@ interface RouteDisplayProps {
 
 export const RouteDisplay = memo(function RouteDisplay({ route }: RouteDisplayProps) {
   const { hookDiscount, category } = useHookDiscount(route.pools)
-  const { t } = useTranslation()
   const { path, pools, inputAmount, outputAmount } = route
   const { currency: inputCurrency } = inputAmount
   const { currency: outputCurrency } = outputAmount
@@ -98,7 +97,6 @@ export const RouteDisplay = memo(function RouteDisplay({ route }: RouteDisplayPr
         routePoolsLength={route.pools.length}
         hookDiscount={hookDiscount}
         category={category}
-        t={t}
       />
     )
 

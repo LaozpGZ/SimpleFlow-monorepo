@@ -1,8 +1,9 @@
 import { findHook, HOOK_CATEGORY, parseProtocolFeesToNumbers } from '@pancakeswap/infinity-sdk'
-import { Currency, Rounding } from '@pancakeswap/sdk'
+import { Rounding } from '@pancakeswap/sdk'
 import { InfinityBinPool, InfinityClPool, SmartRouter } from '@pancakeswap/smart-router'
 import { Column } from '@pancakeswap/uikit'
-import React from 'react'
+import { useTranslation } from '@pancakeswap/localization'
+import React, { Fragment } from 'react'
 import { v3FeeToPercent } from '../../utils/exchange'
 import { HookDiscountFeeDisplay } from './HookDiscountFeeDisplay'
 import { PairNode } from '../PairNode'
@@ -21,7 +22,7 @@ interface Params {
   routePoolsLength: number
   hookDiscount: Record<string, { discountFee: number; originalFee: number }>
   category?: HOOK_CATEGORY.BrevisDiscount | HOOK_CATEGORY.PrimusDiscount
-  t: (key: string) => string
+  pairNode?: (props: PairNodeProps) => React.ReactNode
 }
 
 export function EVMPairNodes({
@@ -30,8 +31,10 @@ export function EVMPairNodes({
   routePoolsLength,
   hookDiscount,
   category,
-  t,
+  pairNode,
 }: Params): React.ReactNode[] | null {
+  const { t } = useTranslation()
+
   return pairs.length > 0
     ? pairs.map((p, index) => {
         const [input, output] = p
@@ -113,6 +116,20 @@ export function EVMPairNodes({
           t('StableSwap')
         )
         const tooltipText = `${input.symbol}/${output.symbol}${isV3Pool || isInfinityPool ? ` (${feeDisplay}%)` : ''}`
+
+        if (pairNode) {
+          return (
+            <Fragment key={key}>
+              {pairNode({
+                pair: p,
+                text,
+                className: isInfinityPool || isV3Pool ? 'highlight' : '',
+                tooltipText,
+              })}
+            </Fragment>
+          )
+        }
+
         return (
           <PairNode
             pair={p}
