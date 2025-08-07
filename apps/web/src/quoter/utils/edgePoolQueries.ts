@@ -111,8 +111,8 @@ const fetchV2Pools = async (addressA: Address, addressB: Address, chainId: Chain
     currencyA,
     currencyB,
     onChainProvider: getProvider(),
-    v3SubgraphProvider: v3Clients[chainId],
-    v2SubgraphProvider: v2Clients[chainId],
+    v3SubgraphProvider: ({ chainId }) => (chainId ? v3Clients[chainId] : undefined),
+    v2SubgraphProvider: ({ chainId }) => (chainId ? v2Clients[chainId] : undefined),
     fallbackTimeout: 5_000,
   })
   return pools

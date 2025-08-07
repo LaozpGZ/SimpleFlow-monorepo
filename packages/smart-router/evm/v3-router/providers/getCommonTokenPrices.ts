@@ -16,7 +16,7 @@ const tokenPriceQuery = gql`
   }
 `
 
-export type GetCommonTokenPricesParams = {
+type GetCommonTokenPricesParams = {
   currencyA?: Currency
   currencyB?: Currency
 }
@@ -30,20 +30,18 @@ type ParamsWithFallback = GetCommonTokenPricesParams & {
   v3SubgraphProvider?: SubgraphProvider
 }
 
-export type TokenUsdPrice = {
+type TokenUsdPrice = {
   address: string
   priceUSD: string
 }
 
-export type GetTokenPrices<T> = (params: { addresses: string[]; chainId?: ChainId } & T) => Promise<TokenUsdPrice[]>
+type GetTokenPrices<T> = (params: { addresses: string[]; chainId?: ChainId } & T) => Promise<TokenUsdPrice[]>
 
 export type CommonTokenPriceProvider<T> = (
   params: GetCommonTokenPricesParams & T,
 ) => Promise<Map<Address, number> | null>
 
-export function createCommonTokenPriceProvider<T = any>(
-  getTokenPrices: GetTokenPrices<T>,
-): CommonTokenPriceProvider<T> {
+function createCommonTokenPriceProvider<T = any>(getTokenPrices: GetTokenPrices<T>): CommonTokenPriceProvider<T> {
   return async function getCommonTokenPrices({ currencyA, currencyB, ...rest }: GetCommonTokenPricesParams & T) {
     const baseTokens: Token[] = await getCheckAgainstBaseTokens(currencyA, currencyB)
     if (!baseTokens) {
@@ -68,11 +66,7 @@ export function createCommonTokenPriceProvider<T = any>(
   }
 }
 
-export const getTokenUsdPricesBySubgraph: GetTokenPrices<BySubgraphEssentials> = async ({
-  addresses,
-  chainId,
-  provider,
-}) => {
+const getTokenUsdPricesBySubgraph: GetTokenPrices<BySubgraphEssentials> = async ({ addresses, chainId, provider }) => {
   const client = provider?.({ chainId })
   if (!client) {
     throw new Error('No valid subgraph data provider')
@@ -90,16 +84,15 @@ export const getTokenUsdPricesBySubgraph: GetTokenPrices<BySubgraphEssentials> =
   }))
 }
 
-export const getCommonTokenPricesBySubgraph =
-  createCommonTokenPriceProvider<BySubgraphEssentials>(getTokenUsdPricesBySubgraph)
+const getCommonTokenPricesBySubgraph = createCommonTokenPriceProvider<BySubgraphEssentials>(getTokenUsdPricesBySubgraph)
 
-type LlamaTokenPriceFetcherFactoryOptions = {
+type TokenPriceFetcherFactoryOptions = {
   endpoint: string
 }
 
 const createGetTokenPriceFromLlmaWithCache = ({
   endpoint,
-}: LlamaTokenPriceFetcherFactoryOptions): GetTokenPrices<BySubgraphEssentials> => {
+}: TokenPriceFetcherFactoryOptions): GetTokenPrices<BySubgraphEssentials> => {
   // Add cache in case we reach the rate limit of llma api
   const cache = new Map<string, TokenUsdPrice>()
 
@@ -144,6 +137,26 @@ const createGetTokenPriceFromLlmaWithCache = ({
   }
 }
 
+const createGetTokenPriceFromWalletApi = ({
+  endpoint,
+}: TokenPriceFetcherFactoryOptions): GetTokenPrices<BySubgraphEssentials> => {
+  return async ({ addresses, chainId }) => {
+    if (!chainId || addresses.length === 0) {
+      return []
+    }
+
+    const list = addresses.map((address) => `${chainId}:${address.toLowerCase()}`).join(',')
+    const encodedList = encodeURIComponent(list)
+
+    const result: { [key: string]: number } = await fetch(`${endpoint}/${encodedList}`).then((res) => res.json())
+
+    return Object.entries(result).map(([key, price]) => {
+      const [, address] = key.split(':')
+      return { address, priceUSD: price.toString() }
+    })
+  }
+}
+
 export const getCommonTokenPricesByLlma = createCommonTokenPriceProvider<BySubgraphEssentials>(
   createGetTokenPriceFromLlmaWithCache({
     endpoint: 'https://coins.llama.fi/prices/current',
@@ -151,8 +164,8 @@ export const getCommonTokenPricesByLlma = createCommonTokenPriceProvider<BySubgr
 )
 
 export const getCommonTokenPricesByWalletApi = createCommonTokenPriceProvider<BySubgraphEssentials>(
-  createGetTokenPriceFromLlmaWithCache({
-    endpoint: 'https://wallet-api.pancakeswap.com/v1/prices',
+  createGetTokenPriceFromWalletApi({
+    endpoint: 'https://wallet-api.pancakeswap.com/v1/prices/list',
   }),
 )
 
