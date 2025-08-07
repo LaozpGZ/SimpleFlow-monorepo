@@ -665,10 +665,10 @@ export default function V3FormView({
   // Price Rate Data
   const { data: rateData } = useTokenRateData({
     period: pricePeriod.value,
-    protocol: Protocol.V3,
     baseCurrency: baseCurrencyWithoutNative ?? undefined,
     quoteCurrency: quoteCurrencyWithoutNative ?? undefined,
     chainId: baseCurrency?.chainId,
+    protocol: Protocol.V3,
     poolId: pool ? Pool.getAddress(pool.token0, pool.token1, pool.fee) : undefined,
   })
 
