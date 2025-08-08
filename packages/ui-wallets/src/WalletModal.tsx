@@ -7,6 +7,7 @@ import {
   ButtonMenuItem,
   CloseIcon,
   Column,
+  FlexGap,
   Heading,
   IconButton,
   Image,
@@ -15,6 +16,7 @@ import {
   ModalWrapper,
   MoreHorizontalIcon,
   Row,
+  RowBetween,
   ShieldCheckIcon,
   Tab,
   TabMenu,
@@ -42,7 +44,7 @@ import {
   selectedSolanaWalletAtom,
 } from './atom'
 import SocialLoginButton from './components/SocialLoginButton'
-import { ConnectData, LinkOfDevice, WalletConfigV2, WalletModalV2Props } from './types'
+import { ConnectData, LinkOfDevice, WalletConfigV2, WalletConfigV3, WalletModalV2Props } from './types'
 import { ASSET_CDN } from './config/url'
 
 const StepIntro = lazy(() => import('./components/Intro'))
@@ -460,12 +462,13 @@ function DesktopModal<T>({
         display="flex"
         flexDirection="column"
         bg="backgroundAlt"
-        py="32px"
-        px="48px"
+        px="16px"
+        py="16px"
+        pt="24px"
         zIndex="modal"
         borderRadius="card"
         className={desktopWalletSelectionClass}
-        gap="20px"
+        gap="1rem"
       >
         <Heading color="color" as="h4">
           {t('Connect Wallet')}

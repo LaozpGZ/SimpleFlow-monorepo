@@ -1,16 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { ArrowForwardIcon, Button, FlexGap, Text } from '@pancakeswap/uikit'
+import { ArrowDropDownIcon, AutoRow, Button, Flex, FlexGap, Text } from '@pancakeswap/uikit'
 import React from 'react'
 import { styled } from 'styled-components'
 
 const SocialLoginIconBox = styled.div<{ $bg: string }>`
   position: relative;
-  width: 21px;
-  height: 21px;
+  width: 24px;
+  height: 24px;
   border-radius: 8px;
-  border: 2px solid ${({ theme }) => theme.colors.input};
   &:not(:first-child) {
-    margin-left: -15px;
+    margin-left: -10px;
   }
   background-image: ${({ $bg }) => `url(${$bg})`};
   background-size: cover;
@@ -36,17 +35,23 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ onClick, assetCdn
   const { t } = useTranslation()
 
   // Fixed 4 social icons
-  const socialIcons = ['google.jpg', 'x.svg', 'telegram.svg', 'discord.svg']
+  const socialIcons = ['google-colors.svg', 'x-colors.svg', 'telegram-colors.png', 'discord-colors.svg']
 
   return (
     <StyledButton variant="text" onClick={onClick} width="100%" style={style} padding="0px">
-      <FlexGap gap="8px" width="100%" justifyContent="center" alignItems="center">
-        {socialIcons.map((icon, index) => (
-          <SocialLoginIconBox key={index} $bg={`${assetCdn}/web/wallets/social-login/${icon}`} />
-        ))}
-        <Text fontSize="12px">{t('Connect with social login')}</Text>
-        <ArrowForwardIcon color="primary" />
-      </FlexGap>
+      <Flex justifyContent="space-between" width="100%" alignItems="center">
+        <FlexGap gap="8px" alignItems="center">
+          {socialIcons.map((icon, index) => (
+            <SocialLoginIconBox key={index} $bg={`${assetCdn}/web/wallets/social-login/${icon}`} />
+          ))}
+        </FlexGap>
+        <AutoRow width="fit-content" gap="8px" alignItems="center">
+          <Text fontSize="12px" color="secondary">
+            {t('Social Login')}
+          </Text>
+          <ArrowDropDownIcon width="24px" height="24px" color="secondary" style={{ rotate: '-90deg' }} />
+        </AutoRow>
+      </Flex>
     </StyledButton>
   )
 }
