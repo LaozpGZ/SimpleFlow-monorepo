@@ -75,8 +75,7 @@ const config = {
     '@pancakeswap/utils',
     '@pancakeswap/widgets-internal',
     '@pancakeswap/ifos',
-    '@pancakeswap/uikit',
-    '@pancakeswap/canonical-bridge'
+    '@pancakeswap/uikit'
   ],
   reactStrictMode: true,
   images: {
