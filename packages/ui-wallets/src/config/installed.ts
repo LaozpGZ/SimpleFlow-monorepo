@@ -71,3 +71,10 @@ export const isCoin98Installed = () => {
 export const isCyberWalletInstalled = () => {
   return Boolean(safeGetWindow() && isCyberWallet())
 }
+
+export const isPhantomWalletInstalled = () => {
+  return Boolean(
+    // safeGetWindow()?.ethereum?.isPhantom  // evm not we supported now
+    safeGetWindow()?.phantom?.solana?.isPhantom,
+  )
+}

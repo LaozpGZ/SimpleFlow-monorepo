@@ -33,6 +33,8 @@ declare global {
       switchNetwork?: (networkId: string) => Promise<string>
     } & Ethereum
     tokenpocket?: any
+
+    phantom?: any
   }
 
   namespace JSX {

@@ -12,6 +12,7 @@
     "@pancakeswap/uikit": "workspace:*",
     "@pancakeswap/utils": "workspace:*",
     "@pancakeswap/wagmi": "workspace:*",
+    "wagmi": "catalog:",
     "qrcode.react": "^3.1.0"
   },
   "peerDependencies": {
@@ -22,7 +23,8 @@
     "styled-components": "6.0.7",
     "react-device-detect": "^2.1.2",
     "jotai": "^2.2.2",
-    "@cyberlab/cyber-app-sdk": "catalog:"
+    "@cyberlab/cyber-app-sdk": "catalog:",
+    "@solana/wallet-adapter-wallets": "catalog:"
   },
   "devDependencies": {
     "styled-components": "6.0.7"
