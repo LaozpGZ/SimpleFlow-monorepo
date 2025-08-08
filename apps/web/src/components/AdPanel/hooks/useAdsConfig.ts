@@ -75,6 +75,11 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           link: 'https://blog.pancakeswap.finance/articles/trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=Swap&utm_id=TradingCompetition',
           mt: !isMobile ? '8px' : undefined,
         },
+        ...(isMobile && {
+          options: {
+            imageMargin: '25px',
+          },
+        }),
       },
       deadline: 1756684800000,
     },
