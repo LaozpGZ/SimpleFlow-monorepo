@@ -72,7 +72,7 @@ export const InfinitySwapForm = memo(() => {
   const shouldRiskPanelDisplay = useShouldRiskPanelDisplay(inputCurrency?.wrapped, outputCurrency?.wrapped)
   const isExactOutWarning = useMemo(
     () =>
-      (independentField === Field.OUTPUT && isSolana(activeChianId) && typedValue) ||
+      (independentField === Field.OUTPUT && isSolana(activeChianId) && !!typedValue) ||
       (bestOrder?.type === OrderType.PCS_SVM && bestOrder.trade.tradeType === TradeType.EXACT_OUTPUT),
     [bestOrder?.trade.tradeType, bestOrder?.type, independentField, activeChianId, typedValue],
   )
