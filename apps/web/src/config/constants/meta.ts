@@ -78,7 +78,6 @@ const getPathList = memoize((t: ContextApi['t']): PathList => {
       '/profile': { basePath: true, title: t('Profile') },
       '/pancake-squad': { basePath: true, title: t('Pancake Squad') },
       '/pottery': { basePath: true, title: t('Pottery'), image: `${ASSET_CDN}/web/og/pottery.jpg` },
-      '/position-manager': { basePath: true, title: t('Position Manager') },
       '/cake-staking': { basePath: true, title: t('CAKE Staking') },
       '/buy-crypto': { basePath: true, title: t('Buy Crypto') },
       '/burn-dashboard': {

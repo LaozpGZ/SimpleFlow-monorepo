@@ -206,10 +206,6 @@ export const getRevenueSharingVeCakeAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.revenueSharingVeCake, chainId)
 }
 
-export const getRevenueSharingVeCakeAddressNoFallback = (chainId?: number) => {
-  return getAddressFromMapNoFallback(addresses.revenueSharingVeCake, chainId)
-}
-
 export const getRevenueSharingPoolGatewayAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.revenueSharingPoolGateway, chainId)
 }

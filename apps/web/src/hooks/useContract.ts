@@ -40,8 +40,6 @@ import {
   getPancakeVeSenderV2Contract,
   getPointCenterIfoContract,
   getPositionManagerAdapterContract,
-  getPositionManagerBCakeWrapperContract,
-  getPositionManagerWrapperContract,
   getPotteryDrawContract,
   getPotteryVaultContract,
   getPredictionsV1Contract,
@@ -411,37 +409,10 @@ export const useInfinityBinPositionManagerContract = (targetChainId: ChainId) =>
   )
 }
 
-export function usePositionManagerWrapperContract(address: Address) {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(
-    () => getPositionManagerWrapperContract(address, signer ?? undefined, chainId),
-    [signer, chainId, address],
-  )
-}
-
-export function usePositionManagerBCakeWrapperContract(address: Address) {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(
-    () => getPositionManagerBCakeWrapperContract(address, signer ?? undefined, chainId),
-    [signer, chainId, address],
-  )
-}
-
 export function useV2SSBCakeWrapperContract(address: Address) {
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()
   return useMemo(() => getV2SSBCakeWrapperContract(address, signer ?? undefined, chainId), [signer, chainId, address])
-}
-
-export function usePositionManagerAdapterContract(address: Address) {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(
-    () => getPositionManagerAdapterContract(address, signer ?? undefined, chainId),
-    [signer, chainId, address],
-  )
 }
 
 export function useBCakeFarmBoosterProxyFactoryContract() {

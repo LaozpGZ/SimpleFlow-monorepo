@@ -51,7 +51,6 @@ const workerDeps = Object.keys(smartRouterPkgs.dependencies)
 const prodTranspiles = [
     'next-typesafe-url',
     '@pancakeswap/farms',
-    '@pancakeswap/position-managers',
     '@pancakeswap/localization',
     '@pancakeswap/hooks',
     '@pancakeswap/utils',

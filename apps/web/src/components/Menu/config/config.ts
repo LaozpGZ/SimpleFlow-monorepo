@@ -1,7 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
-import { SUPPORTED_CHAIN_IDS as POSITION_MANAGERS_SUPPORTED_CHAINS } from '@pancakeswap/position-managers'
 import { SUPPORTED_CHAIN_IDS as PREDICTION_SUPPORTED_CHAINS } from '@pancakeswap/prediction'
 import {
   BridgeIcon,
@@ -103,11 +102,6 @@ const config: (
           supportChainIds: SUPPORT_FARMS,
         },
         {
-          label: t('Position Manager'),
-          href: '/position-managers',
-          supportChainIds: POSITION_MANAGERS_SUPPORTED_CHAINS,
-        },
-        {
           label: t('veCake Redeem'),
           href: '/cake-staking/redeem',
           supportChainIds: POOL_SUPPORTED_CHAINS,
@@ -124,11 +118,6 @@ const config: (
           href: '/liquidity/pools',
           matchHrefs: ['/liquidity/positions', '/farms'],
           supportChainIds: SUPPORT_FARMS,
-        },
-        {
-          label: t('Position Manager'),
-          href: '/position-managers',
-          supportChainIds: POSITION_MANAGERS_SUPPORTED_CHAINS,
         },
         {
           label: t('Staking'),

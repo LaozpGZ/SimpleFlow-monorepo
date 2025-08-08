@@ -1521,9 +1521,6 @@ importers:
       '@pancakeswap/pools':
         specifier: workspace:*
         version: link:../../packages/pools
-      '@pancakeswap/position-managers':
-        specifier: workspace:*
-        version: link:../../packages/position-managers
       '@pancakeswap/prediction':
         specifier: workspace:*
         version: link:../../packages/prediction
@@ -2817,43 +2814,6 @@ importers:
       tsup:
         specifier: ^6.7.0
         version: 6.7.0(postcss@8.5.3)(ts-node@10.9.1(@types/node@22.16.0)(typescript@5.7.3))(typescript@5.7.3)
-
-  packages/position-managers:
-    dependencies:
-      '@pancakeswap/chains':
-        specifier: workspace:*
-        version: link:../chains
-      '@pancakeswap/sdk':
-        specifier: workspace:*
-        version: link:../swap-sdk
-      '@pancakeswap/token-lists':
-        specifier: workspace:*
-        version: link:../token-lists
-      '@pancakeswap/tokens':
-        specifier: workspace:*
-        version: link:../tokens
-      '@pancakeswap/v3-sdk':
-        specifier: workspace:*
-        version: link:../v3-sdk
-      bignumber.js:
-        specifier: ^9.0.0
-        version: 9.1.2
-      lodash:
-        specifier: ^4.17.21
-        version: 4.17.21
-      viem:
-        specifier: 'catalog:'
-        version: 2.31.3(bufferutil@4.0.8)(typescript@5.7.3)(utf-8-validate@6.0.3)(zod@3.25.67)
-    devDependencies:
-      '@pancakeswap/tsconfig':
-        specifier: workspace:*
-        version: link:../tsconfig
-      '@pancakeswap/utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@types/lodash':
-        specifier: ^4.14.168
-        version: 4.14.201
 
   packages/prediction:
     dependencies:

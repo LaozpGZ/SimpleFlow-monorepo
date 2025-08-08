@@ -71,11 +71,6 @@ import { bCakeFarmBoosterVeCakeABI } from '@pancakeswap/farms/constants/v3/abi/b
 import { bCakeFarmWrapperBoosterVeCakeABI } from '@pancakeswap/farms/constants/v3/abi/bCakeFarmWrapperBoosterVeCake'
 import { getIfoCreditAddressContract as getIfoCreditAddressContract_ } from '@pancakeswap/ifos'
 import { cakeFlexibleSideVaultV2ABI, cakeVaultV1ABI, cakeVaultV2ABI } from '@pancakeswap/pools'
-import {
-  positionManagerAdapterABI,
-  positionManagerVeBCakeWrapperABI,
-  positionManagerWrapperABI,
-} from '@pancakeswap/position-managers'
 import { masterChefV3ABI } from '@pancakeswap/v3-sdk'
 import { sidABI } from 'config/abi/SID'
 import { SIDResolverABI } from 'config/abi/SIDResolver'
@@ -356,36 +351,9 @@ export const getInfinityBinPositionManagerContract = (signer?: WalletClient, cha
   })
 }
 
-export const getPositionManagerWrapperContract = (address: `0x${string}`, signer?: WalletClient, chainId?: number) => {
-  return getContract({
-    abi: positionManagerWrapperABI,
-    address,
-    signer,
-    chainId,
-  })
-}
-
-export const getPositionManagerBCakeWrapperContract = (address: Address, signer?: WalletClient, chainId?: number) => {
-  return getContract({
-    abi: positionManagerVeBCakeWrapperABI,
-    address,
-    signer,
-    chainId,
-  })
-}
-
 export const getV2SSBCakeWrapperContract = (address: Address, signer?: WalletClient, chainId?: number) => {
   return getContract({
     abi: v2BCakeWrapperABI,
-    address,
-    signer,
-    chainId,
-  })
-}
-
-export const getPositionManagerAdapterContract = (address: `0x${string}`, signer?: WalletClient, chainId?: number) => {
-  return getContract({
-    abi: positionManagerAdapterABI,
     address,
     signer,
     chainId,
