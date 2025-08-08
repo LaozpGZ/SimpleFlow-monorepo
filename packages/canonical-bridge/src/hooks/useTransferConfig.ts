@@ -1,4 +1,5 @@
 import {
+  cBridge,
   deBridge,
   ICBridgeTransferConfig,
   IChainConfig,
@@ -9,6 +10,7 @@ import {
   layerZero,
   meson,
   stargate,
+  mayan,
 } from '@bnb-chain/canonical-bridge-widget'
 import { useEffect, useState } from 'react'
 
@@ -26,6 +28,7 @@ export function useTransferConfig(supportedChains: IChainConfig[]): ICustomizedB
         axios.get<{ data: IDeBridgeTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/debridge`),
         axios.get<{ data: IStargateTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/stargate`),
         axios.get<{ data: IMesonTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/meson`),
+        axios.get<{ data: IMesonTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/mayan`),
       ])
 
       const cBridgeConfig = cBridgeRes.data.data
@@ -164,6 +167,11 @@ export function useTransferConfig(supportedChains: IChainConfig[]): ICustomizedB
             excludedTokens: {
               42161: ['SOL'],
             },
+          }),
+          meson({
+            config: mesonConfig,
+            excludedChains: [],
+            excludedTokens: {},
           }),
         ],
       }
