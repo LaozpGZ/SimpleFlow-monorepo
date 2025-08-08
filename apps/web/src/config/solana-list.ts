@@ -96,4 +96,4 @@ export const SOLANA_LISTS_CONFIG: Record<TokenListKey, SolanaTokenListConfig> = 
 }
 
 // Filter out PancakeSwap list since it's always enabled
-export const SOLANA_LISTS = Object.values(SOLANA_LISTS_CONFIG).filter((list) => list.key !== TokenListKey.PANCAKESWAP)
+export const SOLANA_LISTS = Object.values(SOLANA_LISTS_CONFIG)

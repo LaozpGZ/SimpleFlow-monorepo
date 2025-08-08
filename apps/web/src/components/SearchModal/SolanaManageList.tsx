@@ -25,7 +25,7 @@ const SolanaListRow = memo(function SolanaListRow({
   const [listSettings, setListSettings] = useAtom(solanaListSettingsAtom)
   const { tokenCountsByList } = useSolanaTokenList()
 
-  const isActive = listSettings[listKey]
+  const isActive = listKey === TokenListKey.PANCAKESWAP ? true : listSettings[listKey]
 
   // Count tokens from this specific list (simplified - in reality you'd need to track per list)
   const tokenCount = tokenCountsByList[listKey]
@@ -47,7 +47,7 @@ const SolanaListRow = memo(function SolanaListRow({
           </Text>
         </RowFixed>
       </Column>
-      <Toggle checked={isActive} onChange={handleToggle} />
+      {listKey !== TokenListKey.PANCAKESWAP && <Toggle checked={isActive} onChange={handleToggle} />}
     </RowWrapper>
   )
 })
