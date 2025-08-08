@@ -39,7 +39,6 @@ import {
   getNftSaleContract,
   getPancakeVeSenderV2Contract,
   getPointCenterIfoContract,
-  getPositionManagerAdapterContract,
   getPotteryDrawContract,
   getPotteryVaultContract,
   getPredictionsV1Contract,
