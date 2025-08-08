@@ -9,6 +9,11 @@ type DeviceLink = {
 
 export type LinkOfDevice = string | DeviceLink
 
+export enum WalletAdaptedNetwork {
+  EVM = 'evm',
+  Solana = 'solana',
+}
+
 export enum WalletIds {
   Injected = 'injected',
 
@@ -65,6 +70,10 @@ export type WalletConfigV2<T = unknown> = {
   MEVSupported?: boolean
 }
 
+export type WalletConfigV3<T = unknown> = WalletConfigV2<T> & {
+  networks: Array<WalletAdaptedNetwork>
+}
+
 export type ConnectData = {
   accounts: readonly [string, ...string[]]
   chainId: number | string | undefined
@@ -73,6 +82,22 @@ export type ConnectData = {
 export interface WalletModalV2Props<T = unknown> extends ModalV2Props {
   wallets: WalletConfigV2<T>[]
   topWallets: WalletConfigV2<T>[]
+  login: (connectorID: T) => Promise<ConnectData | undefined>
+  docLink: string
+  docText: string
+  mevDocLink: string | null
+  onWalletConnectCallBack?: (walletTitle?: string, address?: string) => void
+  fullSize?: boolean
+  onGoogleLogin?: () => void
+  onXLogin?: () => void
+  onTelegramLogin?: () => void
+  onDiscordLogin?: () => void
+  onReopenWalletModal?: () => void
+}
+
+export interface WalletModalV3Props<T = unknown> extends ModalV2Props {
+  wallets: WalletConfigV3<T>[]
+  topWallets: WalletConfigV3<T>[]
   login: (connectorID: T) => Promise<ConnectData | undefined>
   docLink: string
   docText: string

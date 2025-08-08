@@ -23,3 +23,4 @@ catalog:
   jotai: 2.12.5
   '@vanilla-extract/vite-plugin': ^4.0.2
   '@solana/web3.js': 1.95.3
+  '@cyberlab/cyber-app-sdk': 3.0.0-beta.5

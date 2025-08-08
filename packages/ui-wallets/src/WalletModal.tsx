@@ -43,8 +43,7 @@ import {
 } from './atom'
 import SocialLoginButton from './components/SocialLoginButton'
 import { ConnectData, LinkOfDevice, WalletConfigV2, WalletModalV2Props } from './types'
-
-export const ASSET_CDN = 'https://assets.pancakeswap.finance'
+import { ASSET_CDN } from './config/url'
 
 const StepIntro = lazy(() => import('./components/Intro'))
 

@@ -244,7 +244,7 @@ export const walletsConfig = <config extends Config = Config, context = unknown>
       qrCode,
     },
     {
-      id: WalletIds.Safepal,
+      id: WalletIds.SafePal,
       title: 'SafePal',
       icon: `${ASSET_CDN}/web/wallets/safepal.png`,
       connectorId: ConnectorNames.Injected,
@@ -264,20 +264,21 @@ export const walletsConfig = <config extends Config = Config, context = unknown>
       },
       qrCode,
     },
-    {
-      id: WalletIds.Blocto,
-      title: 'Blocto',
-      icon: `${ASSET_CDN}/web/wallets/blocto.png`,
-      connectorId: ConnectorNames.Blocto,
-      get installed() {
-        try {
-          return (safeGetWindow()?.ethereum as ExtendEthereum)?.isBlocto ? true : undefined // undefined to show SDK
-        } catch (error) {
-          console.error('Error checking Blocto installation:', error)
-          return undefined
-        }
-      },
-    },
+    // Sunset: https://x.com/BloctoApp/status/1920025815976444378
+    // {
+    //   id: WalletIds.Blocto,
+    //   title: 'Blocto',
+    //   icon: `${ASSET_CDN}/web/wallets/blocto.png`,
+    //   connectorId: ConnectorNames.Blocto,
+    //   get installed() {
+    //     try {
+    //       return (safeGetWindow()?.ethereum as ExtendEthereum)?.isBlocto ? true : undefined // undefined to show SDK
+    //     } catch (error) {
+    //       console.error('Error checking Blocto installation:', error)
+    //       return undefined
+    //     }
+    //   },
+    // },
     {
       id: WalletIds.Cyberwallet,
       title: 'CyberWallet',

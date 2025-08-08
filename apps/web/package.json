@@ -39,7 +39,7 @@
     "@binance/w3w-wagmi-connector-v2": "^1.2.3",
     "@bnb-chain/canonical-bridge-widget": "0.9.0",
     "@bnb-chain/canonical-bridge-sdk": "0.6.0",
-    "@cyberlab/cyber-app-sdk": "v3.0.0-beta.5",
+    "@cyberlab/cyber-app-sdk": "catalog:",
     "@datadog/browser-logs": "^5.8.0",
     "@datadog/browser-rum": "^5.8.0",
     "@gelatonetwork/limit-orders-lib": "^4.1.0",

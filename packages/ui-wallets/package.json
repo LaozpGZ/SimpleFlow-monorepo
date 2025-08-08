@@ -10,6 +10,8 @@
     "@pancakeswap/hooks": "workspace:*",
     "@pancakeswap/localization": "workspace:*",
     "@pancakeswap/uikit": "workspace:*",
+    "@pancakeswap/utils": "workspace:*",
+    "@pancakeswap/wagmi": "workspace:*",
     "qrcode.react": "^3.1.0"
   },
   "peerDependencies": {
@@ -19,7 +21,8 @@
     "swiper": "*",
     "styled-components": "6.0.7",
     "react-device-detect": "^2.1.2",
-    "jotai": "^2.2.2"
+    "jotai": "^2.2.2",
+    "@cyberlab/cyber-app-sdk": "catalog:"
   },
   "devDependencies": {
     "styled-components": "6.0.7"
