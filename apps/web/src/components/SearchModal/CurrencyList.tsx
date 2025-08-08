@@ -114,21 +114,23 @@ function ComplementSection({
             ml="8px"
             tooltipPlacement="top"
           />
-          <AddToWalletButton
-            data-dd-action-name="Add to wallet"
-            variant="text"
-            p="0"
-            ml="12px"
-            height="auto"
-            width="fit-content"
-            tokenAddress={selectedCurrency.wrapped.address}
-            tokenSymbol={selectedCurrency.symbol}
-            tokenDecimals={selectedCurrency.decimals}
-            tokenLogo={
-              selectedCurrency.wrapped instanceof WrappedTokenInfo ? selectedCurrency.wrapped.logoURI : undefined
-            }
-            tooltipPlacement="top"
-          />
+          {selectedCurrency.chainId === NonEVMChainId.SOLANA ? null : (
+            <AddToWalletButton
+              data-dd-action-name="Add to wallet"
+              variant="text"
+              p="0"
+              ml="12px"
+              height="auto"
+              width="fit-content"
+              tokenAddress={selectedCurrency.wrapped.address}
+              tokenSymbol={selectedCurrency.symbol}
+              tokenDecimals={selectedCurrency.decimals}
+              tokenLogo={
+                selectedCurrency.wrapped instanceof WrappedTokenInfo ? selectedCurrency.wrapped.logoURI : undefined
+              }
+              tooltipPlacement="top"
+            />
+          )}
         </>
       ) : (
         showActions && (
