@@ -29,11 +29,11 @@
     "styled-components": "6.0.7",
     "tronweb": "^6",
     "viem": "catalog:",
-    "wagmi": "catalog:"
+    "wagmi": "catalog:",
+    "@bnb-chain/canonical-bridge-sdk": "0.7.2",
+    "@bnb-chain/canonical-bridge-widget": "0.10.3"
   },
   "dependencies": {
-    "@bnb-chain/canonical-bridge-sdk": "0.7.2",
-    "@bnb-chain/canonical-bridge-widget": "0.10.3",
     "axios": "~1.6.8",
     "polished": "^4.2.2"
   },

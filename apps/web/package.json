@@ -169,7 +169,9 @@
     "@solana/web3.js": "catalog:",
     "@solana/spl-token": "^0",
     "@solana/wallet-adapter-react": "^0",
-    "tronweb": "^6"
+    "tronweb": "^6",
+    "@bnb-chain/canonical-bridge-sdk": "0.7.2",
+    "@bnb-chain/canonical-bridge-widget": "0.10.3"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "14.2.3",
