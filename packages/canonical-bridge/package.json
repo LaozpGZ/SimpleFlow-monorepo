@@ -51,6 +51,7 @@
     "viem": "catalog:",
     "vite": "5.0.12",
     "vite-plugin-dts": "^3.5.3",
+    "vite-plugin-node-polyfills": "~0.24.0",
     "wagmi": "catalog:"
   },
   "exports": {

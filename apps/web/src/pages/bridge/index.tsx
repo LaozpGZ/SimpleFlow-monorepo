@@ -81,7 +81,7 @@ const BridgePage = () => {
         <Suspense>
           <CanonicalBridge
             connectWalletButton={<ConnectWalletButton width="100%" />}
-            supportedChainIds={CHAIN_IDS}
+            supportedChainIds={[...CHAIN_IDS, 7565164]}
             // @ts-ignore
             rpcConfig={PUBLIC_NODES}
             disabledToChains={DISABLED_TO_CHAINS}
