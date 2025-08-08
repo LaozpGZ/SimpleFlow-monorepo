@@ -7,7 +7,7 @@ import {
   type SVMOrder,
   type XOrder,
 } from '@pancakeswap/price-api-sdk'
-import { UnifiedCurrencyAmount, type Currency, type TradeType } from '@pancakeswap/swap-sdk-core'
+import { type Currency, type TradeType } from '@pancakeswap/swap-sdk-core'
 import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
 import { BridgeOrderFee, computeBridgeOrderFee } from './Bridge/utils'
 import { computeTradePriceBreakdown, SVMTradePriceBreakdown, TradePriceBreakdown } from './V3Swap/utils/exchange'
@@ -56,8 +56,8 @@ export function getDefaultToken(chainId: number): string | undefined {
 function computeSvmOrderFee(order: SVMOrder): SVMTradePriceBreakdown {
   return {
     priceImpactWithoutFee: order.trade.priceImpactPct,
-    // TODO: get lp fee amount
-    lpFeeAmount: UnifiedCurrencyAmount.fromRawAmount(order.trade.inputAmount.currency, 0),
+    // NOTE: lpFeeAmount will be computed in different place
+    lpFeeAmount: undefined,
   }
 }
 

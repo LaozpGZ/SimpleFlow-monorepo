@@ -5,12 +5,13 @@ import { memo, useMemo } from 'react'
 import { styled } from 'styled-components'
 
 import { PriceOrder } from '@pancakeswap/price-api-sdk'
-import { getPriceBreakdown, isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
+import { isBridgeOrder, isClassicOrder, isXOrder } from 'views/Swap/utils'
 import { RouteDisplayEssentials } from 'views/Swap/V3Swap/components/RouteDisplayModal'
 import { useIsWrapping, useSlippageAdjustedAmounts } from '../../Swap/V3Swap/hooks'
 import { useHasDynamicHook } from '../hooks/useHasDynamicHook'
 import { TradeSummary } from './AdvancedSwapDetails'
 import { RoutesBreakdown, XRoutesBreakdown } from './RoutesBreakdown'
+import { usePriceBreakdown } from '../hooks/usePriceBreakdown'
 
 export const AdvancedDetailsFooter = styled.div.withConfig({
   shouldForwardProp: (prop) => !['show'].includes(prop),
@@ -33,7 +34,7 @@ interface Props {
 export const TradeDetails = memo(function TradeDetails({ loaded, order }: Props) {
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(order)
   const isWrapping = useIsWrapping()
-  const priceBreakdown = useMemo(() => getPriceBreakdown(order), [order])
+  const priceBreakdown = usePriceBreakdown(order)
   const hasStablePool = useMemo(
     () =>
       isClassicOrder(order)
