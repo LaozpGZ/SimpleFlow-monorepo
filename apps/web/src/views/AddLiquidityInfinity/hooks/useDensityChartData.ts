@@ -9,13 +9,11 @@ function parsePrice(baseCurrency?: Currency, quoteCurrency?: Currency, priceValu
   const isSorted = baseCurrency && quoteCurrency && isCurrencySorted(baseCurrency, quoteCurrency)
   const basePrice = tryParsePrice(baseCurrency, quoteCurrency, priceValue)
 
-  const isNativePair = baseCurrency?.isNative || quoteCurrency?.isNative
-
   let price = isSorted ? basePrice : basePrice?.invert()
 
   // Patch fix for native pairs' niche issue with token ordering
   // https://linear.app/pancakeswap/issue/PAN-7555/cannot-see-liquidity-depth-chart
-  if (protocol === Protocol.InfinityCLAMM && isNativePair) {
+  if (protocol === Protocol.InfinityCLAMM && (baseCurrency?.isNative || quoteCurrency?.isNative)) {
     price = isSorted ? basePrice?.invert() : basePrice
   }
 
