@@ -17,8 +17,6 @@ import { useStablecoinPrice, useStablecoinPriceAmount } from './useStablecoinPri
 export const MIN_DEFAULT_SLIPPAGE_NUMERATOR = 50
 export const MAX_SLIPPAGE_NUMERATOR = 500
 export const DEFAULT_AUTO_SLIPPAGE = new Percent(MIN_DEFAULT_SLIPPAGE_NUMERATOR, 10_000) // 0.5%
-export const MIN_AUTO_SLIPPAGE_TOLERANCE = new Percent(MIN_DEFAULT_SLIPPAGE_NUMERATOR, 10_000) // 0.5%
-export const MAX_AUTO_SLIPPAGE_TOLERANCE = new Percent(MAX_SLIPPAGE_NUMERATOR, 10_000) // 5%
 export const PCSX_AUTO_SLIPPAGE_TOLERANCE = new Percent(10, 10_000) // 0.1%
 
 // Helper functions
