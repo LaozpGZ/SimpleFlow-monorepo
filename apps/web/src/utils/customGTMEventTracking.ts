@@ -20,7 +20,6 @@ export enum GTMEvent {
   Web3WalletView = 'Web3WalletView',
   MenuClick = 'menuClick',
   StakePool = 'stakePool',
-  PositionManagerAddLiquidity = 'positionManagerAddLiquidity',
   LockCake = 'lockCake',
   BuyLotteryTickets = 'buyLotteryTickets',
   FiatOnRampModalOpened = 'fiatOnRampModalOpened',
@@ -67,7 +66,6 @@ export enum GTMCategory {
   WalletConnect = 'WalletConnect',
   Web3WalletView = 'Web3WalletView',
   Pool = 'Pool',
-  PositionManager = 'PositionManager',
   CakeStaking = 'CakeStaking',
   Lottery = 'Lottery',
   FiatOnRamp = 'FiatOnRamp',
@@ -95,7 +93,6 @@ export enum GTMAction {
   ClickStakePoolButton = 'Click Stake Pool Button',
   ClickEnablePoolButton = 'Click Enable Pool Button',
   ClickUnstakePoolButton = 'Click Unstake Pool Button',
-  ClickAddLiquidityPositionManagerButton = 'Click Add Liquidity Position Manager Button',
   ClickLockCakeButton = 'Click Lock CAKE Button',
   ClickBuyLotteryTicketsButton = 'Click Buy Lottery Tickets Button',
   ClickFiatOnRampModalButton = 'Click Fiat On-Ramp Modal Button',
@@ -410,16 +407,6 @@ export const logGTMClickUnstakePoolEvent = (poolName?: string) => {
     action: GTMAction.ClickUnstakePoolButton,
     category: GTMCategory.Pool,
     label: poolName,
-  })
-}
-
-export const logGTMClickPositionManagerAddLiquidityEvent = (tokenPairAndVault?: string) => {
-  console.info('---PositionManagerAddLiquidity---')
-  window?.dataLayer?.push({
-    event: GTMEvent.PositionManagerAddLiquidity,
-    action: GTMAction.ClickAddLiquidityPositionManagerButton,
-    category: GTMCategory.PositionManager,
-    label: tokenPairAndVault,
   })
 }
 
