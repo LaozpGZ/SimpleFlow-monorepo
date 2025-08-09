@@ -1,8 +1,6 @@
 import { Box, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
-import { useContext } from 'react'
 import styled from 'styled-components'
-import { SwapFeaturesContext } from 'views/Swap/SwapFeaturesContext'
 import { swapDetailsCollapseAtom, chartDisplayAtom } from 'views/SwapSimplify/InfinitySwap/atoms'
 import { AdPlayer } from './AdPlayer'
 import { AdPlayerProps } from './types'
