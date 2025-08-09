@@ -24,23 +24,6 @@ export type HomePagePartner = {
   name: string
 }
 
-export type HomePagePairConfig = {
-  id: `0x${string}`
-  chainId: ChainId
-}
-
-export type CakeRelatedFigures = {
-  totalApr: number
-  totalCakeDistributed: number
-  burned: number
-  cakeStats: {
-    cakeSupply: number
-    burnedBalance: number
-    circulatingSupply: number
-  }
-  weeklyReward: number
-}
-
 export type SiteStats = {
   totalUsers: number
   totalTrades: number
@@ -74,25 +57,9 @@ export type HomePageData = {
   pools: HomePagePoolInfo[]
   currencies: HomePageCurrency[]
   chains: HomepageChain[]
-  cakeRelated: CakeRelatedFigures
   stats: SiteStats
   partners: HomePagePartner[]
   topWinner: HomePageUser
 }
 
 // Supporting types (you may need to adjust according to your actual implementation)
-
-export type ExplorerFarmPoolInfo = {
-  id: string
-  chainId: ChainId
-  totalStakedUSD: number
-  apr: number
-  rewardToken: {
-    id: string
-    symbol: string
-  }
-  tokens: {
-    token: string
-    symbol: string
-  }[]
-}
