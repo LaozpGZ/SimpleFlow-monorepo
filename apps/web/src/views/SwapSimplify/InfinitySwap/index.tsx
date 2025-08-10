@@ -100,7 +100,7 @@ export const InfinitySwapForm = memo(() => {
         <RiskDetailsPanel
           isPriceImpactTooHigh={isPriceImpactTooHigh}
           isSlippageTooHigh={isSlippageTooHigh}
-          isExactOutWarning={isExactOutWarning}
+          isExactOutWarning={Boolean(isExactOutWarning)}
           token0={inputCurrency?.wrapped}
           token1={outputCurrency?.wrapped}
           token0RiskLevelDescription={token0Risk.data?.riskLevelDescription}
