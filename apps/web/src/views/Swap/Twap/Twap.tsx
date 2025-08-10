@@ -7,6 +7,7 @@ import {
   Button,
   domAnimation,
   LazyAnimatePresence,
+  ReactMarkdown,
   useMatchBreakpoints,
   useModal,
   useToast,
@@ -46,6 +47,10 @@ import ArrowLight from '../../../../public/images/swap/arrow_light.json' assert 
 import { Wrapper } from '../components/styleds'
 import { SwapTransactionErrorContent } from '../components/SwapTransactionErrorContent'
 import useWarningImport from '../hooks/useWarningImport'
+
+import en from './en-US.json'
+import es from './es-ES.json'
+import { useTranslation } from '@pancakeswap/localization'
 
 const Lottie = dynamic(() => import('lottie-react'), { ssr: false })
 
@@ -154,6 +159,23 @@ const useTwapToast = () => {
   )
 }
 
+const Markdown = ({ children }: { children: string }) => {
+  return (
+    <ReactMarkdown
+      components={{
+        p: ({ children }) => <p style={{ lineHeight: 'normal' }}>{children}</p>,
+        a: ({ href, children }) => (
+          <a href={href} target="_blank" rel="noopener noreferrer">
+            {children}
+          </a>
+        ),
+      }}
+    >
+      {children}
+    </ReactMarkdown>
+  )
+}
+
 export function TWAPPanel({ limit }: { limit?: boolean }) {
   const { isDesktop } = useMatchBreakpoints()
   const { chainId } = useActiveChainId()
@@ -202,6 +224,12 @@ export function TWAPPanel({ limit }: { limit?: boolean }) {
   const inputCurrency = useCurrency(inputCurrencyId)
   const outputCurrency = useCurrency(outputCurrencyId)
 
+  const { currentLanguage } = useTranslation()
+
+  const translations = useMemo(() => {
+    return currentLanguage.code === 'es-ES' ? es : en
+  }, [currentLanguage])
+
   return (
     <QuoteProvider>
       <PancakeTWAP
@@ -219,6 +247,7 @@ export function TWAPPanel({ limit }: { limit?: boolean }) {
         onSrcTokenSelected={onSrcTokenSelected}
         onDstTokenSelected={onDstTokenSelected}
         isMobile={!isDesktop}
+        translations={translations}
         nativeToken={native}
         connector={connector}
         useTooltip={useTooltip}
@@ -229,6 +258,7 @@ export function TWAPPanel({ limit }: { limit?: boolean }) {
         Input={Input}
         CurrencyLogo={TokenLogo}
         Balance={Balance}
+        ReactMarkdown={Markdown}
       />
     </QuoteProvider>
   )
