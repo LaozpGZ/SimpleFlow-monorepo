@@ -47,9 +47,9 @@ export function NetworkSwitcherModal({
     if (!supportedChains?.length) {
       return
     }
+    const succ = await switchNetwork(supportedChains[0])
     try {
-      const result = await switchNetwork(supportedChains[0])
-      if (result) {
+      if (succ) {
         onSwitchNetworkSuccess?.()
       }
     } catch (e) {

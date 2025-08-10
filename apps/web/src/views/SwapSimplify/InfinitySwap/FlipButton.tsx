@@ -107,8 +107,11 @@ export const FlipButton = memo(function FlipButton({
       // If cross-chain swap, switch network to new Input Currency's chain
 
       if (outputChainId && activeChainId !== outputChainId && !isLoading) {
-        const result = await switchNetwork(outputChainId, true)
-        if (result !== 'error') {
+        const result = await switchNetwork(outputChainId, {
+          replaceUrl: false,
+          from: 'switch',
+        })
+        if (result) {
           router.replace(
             {
               query: {

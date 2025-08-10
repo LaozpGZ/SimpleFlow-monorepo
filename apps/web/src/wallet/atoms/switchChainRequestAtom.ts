@@ -9,12 +9,7 @@ export interface SwitchChainRequest {
   wagmiConnector?: Connector // Connector used to switch chain
   evmAddress?: `0x${string}` // EVM address used to check session sync
   from: 'wagmi' | 'url' | 'switch'
+  path: string
 }
 
 export const switchChainUpdatingAtom = atom(false)
-
-export const switchChainRequestAtom = atom<SwitchChainRequest>({
-  chainId: getQueryChainId(), // Mount with initial chain ID
-  replaceUrl: false,
-  from: 'url',
-})

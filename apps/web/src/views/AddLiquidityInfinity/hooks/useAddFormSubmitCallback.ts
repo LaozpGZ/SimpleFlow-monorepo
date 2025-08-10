@@ -104,7 +104,7 @@ export const useAddFormSubmitCallback = () => {
 
     if (activeChainId !== chainId) {
       const result = await switchNetwork(chainId)
-      if (!result) return // User denied switching the network
+      if (!result) return // Switch network fail
     }
 
     try {
