@@ -1,4 +1,4 @@
-import { BLOCKS_SUBGRAPHS, ChainId, STABLESWAP_SUBGRAPHS, V2_SUBGRAPHS, V3_SUBGRAPHS } from '@pancakeswap/chains'
+import { ChainId, STABLESWAP_SUBGRAPHS, V2_SUBGRAPHS, V3_SUBGRAPHS } from '@pancakeswap/chains'
 
 export const THE_GRAPH_PROXY_API = 'https://thegraph.pancakeswap.com'
 
@@ -9,12 +9,9 @@ export const SNAPSHOT_BASE_URL = process.env.NEXT_PUBLIC_SNAPSHOT_BASE_URL
 export const API_PROFILE = 'https://profile.pancakeswap.com'
 export const API_NFT = 'https://nft.pancakeswap.com/api/v1'
 export const SNAPSHOT_API = `${SNAPSHOT_BASE_URL}/graphql`
-export const SNAPSHOT_HUB_API = `${SNAPSHOT_BASE_URL}/api/message`
 export const GRAPH_API_POTTERY = `${THE_GRAPH_PROXY_API}/pottery`
 // export const ONRAMP_API_BASE_URL = 'https://monkfish-app-s4mda.ondigitalocean.app'
 export const ONRAMP_API_BASE_URL = 'https://onramp2-api.pancakeswap.com'
-export const TRANSAK_API_BASE_URL = 'https://api-stg.transak.com/api/v1'
-export const MOONPAY_BASE_URL = 'https://api.moonpay.com'
 export const NOTIFICATION_HUB_BASE_URL = 'https://notification-hub.pancakeswap.com'
 /**
  * V1 will be deprecated but is still used to claim old rounds
@@ -24,11 +21,6 @@ export const GRAPH_API_PREDICTION_V1 = `${THE_GRAPH_PROXY_API}/prediction-v1-bsc
 export const V3_BSC_INFO_CLIENT = `https://open-platform.nodereal.io/${
   process.env.NEXT_PUBLIC_NODE_REAL_API_INFO || process.env.NEXT_PUBLIC_NODE_REAL_API_ETH
 }/pancakeswap-v3/graphql`
-
-const BLOCKS_SUBGRAPH_URLS = {
-  ...BLOCKS_SUBGRAPHS,
-  [ChainId.OPBNB]: `${THE_GRAPH_PROXY_API}/blocks-opbnb`,
-}
 
 export const GRAPH_API_NFTMARKET = `${THE_GRAPH_PROXY_API}/nft-marketplace-bsc`
 export const GRAPH_HEALTH = 'https://indexer.upgrade.thegraph.com/status'
@@ -53,9 +45,6 @@ export const V2_SUBGRAPH_URLS = {
   [ChainId.LINEA]: `${THE_GRAPH_PROXY_API}/exchange-v2-linea`,
   [ChainId.OPBNB]: `${THE_GRAPH_PROXY_API}/exchange-v2-opbnb`,
 }
-export const INFO_CLIENT_ETH = V2_SUBGRAPH_URLS[ChainId.ETHEREUM]
-
-export const BLOCKS_CLIENT_WITH_CHAIN = BLOCKS_SUBGRAPH_URLS
 
 export const ASSET_CDN = process.env.NEXT_PUBLIC_ASSET_CDN || 'https://assets.pancakeswap.finance'
 
@@ -78,8 +67,6 @@ export const STABLESWAP_SUBGRAPHS_URLS = {
   [ChainId.ETHEREUM]: `${THE_GRAPH_PROXY_API}/exchange-stableswap-eth`,
 }
 
-export const TRADING_REWARD_API = 'https://trading-reward.pancakeswap.com/api/v1'
-
 export const X_API_ENDPOINT = process.env.NEXT_PUBLIC_QUOTING_API
 
 export const BRIDGE_API_ENDPOINT = process.env.NEXT_PUBLIC_BRIDGE_API
@@ -90,12 +77,6 @@ export const QUOTING_API = `${QUOTING_API_PREFIX}/get-price`
 
 export const FARMS_API = 'https://farms-api.pancakeswap.com'
 export const FARMS_API_V2 = 'https://v3-farm-api-prod-6ulht.ondigitalocean.app/api'
-
-export const MERCURYO_WIDGET_ID = process.env.NEXT_PUBLIC_MERCURYO_WIDGET_ID || '64d1f9f9-85ee-4558-8168-1dc0e7057ce6'
-
-export const MOONPAY_API_KEY = process.env.NEXT_PUBLIC_MOONPAY_LIVE_KEY || 'pk_test_1Ibe44lMglFVL8COOYO7SEKnIBrzrp54'
-
-export const TRANSAK_API_KEY = process.env.NEXT_PUBLIC_TRANSAK_LIVE_KEY || 'bf960e79-6d98-4fd0-823d-8409d290c346'
 
 export const WALLET_API = 'https://wallet-api.pancakeswap.com'
 

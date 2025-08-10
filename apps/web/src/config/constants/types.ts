@@ -8,6 +8,7 @@ import { LegacyTradeWithStableSwap as TradeWithStableSwap } from '@pancakeswap/s
 import type { Currency, CurrencyAmount, Percent, Price, Token, UnifiedToken } from '@pancakeswap/swap-sdk-core'
 import { TradeType } from '@pancakeswap/swap-sdk-core'
 import type { Trade } from '@pancakeswap/v2-sdk'
+import BigNumber from 'bignumber.js'
 
 // a list of tokens by chain
 export type ChainMap<T> = {
@@ -15,11 +16,6 @@ export type ChainMap<T> = {
 }
 
 export type ChainTokenList = ChainMap<UnifiedToken[]>
-
-export interface Addresses {
-  56: Address
-  [chainId: number]: Address
-}
 
 export enum PoolCategory {
   'COMMUNITY' = 'Community',
@@ -89,19 +85,6 @@ export interface LotteryTicketClaimData {
   roundId: string
 }
 
-// Farm Auction
-export interface FarmAuctionBidderConfig {
-  account: string
-  farmName: string
-  tokenAddress: string
-  quoteToken: Token
-  tokenName: string
-  projectSite?: string
-  lpAddress?: string
-}
-
-// Note: this status is slightly different compared to 'status' config
-// from Farm Auction smart contract
 export const FetchStatus = {
   Idle: 'idle',
   Fetching: 'pending',
