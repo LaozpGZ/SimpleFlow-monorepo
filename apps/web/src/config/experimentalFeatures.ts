@@ -6,10 +6,6 @@ export enum EXPERIMENTAL_FEATURES {
   OPTIMIZED_AMM_TRADE = 'optimized-amm-trade',
 }
 
-export type EnumValues<T> = T extends { [key: string]: infer U } ? U : never
-
-export type FeatureKeys = EnumValues<typeof EXPERIMENTAL_FEATURES>[]
-
 export const getCookieKey = (key: EXPERIMENTAL_FEATURES) => `p_exp_${key.toLowerCase()}`
 
 export type FeatureRollOutConfig = {
