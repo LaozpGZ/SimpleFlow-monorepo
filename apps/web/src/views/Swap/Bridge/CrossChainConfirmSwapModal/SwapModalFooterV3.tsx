@@ -142,7 +142,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
 
   const chainId = useChainId()
 
-  const { switchNetworkAsync } = useSwitchNetwork()
+  const { switchNetwork } = useSwitchNetwork()
 
   const [gasToken] = useGasToken()
   const { isPaymasterAvailable, isPaymasterTokenActive } = usePaymaster()
@@ -367,7 +367,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
           variant={severity > 2 ? 'danger' : 'primary'}
           onClick={() => {
             if (isWrongNetwork && order?.trade?.inputAmount?.currency?.chainId) {
-              switchNetworkAsync(order?.trade?.inputAmount?.currency?.chainId)
+              switchNetwork(order?.trade?.inputAmount?.currency?.chainId)
             } else {
               onConfirm()
             }

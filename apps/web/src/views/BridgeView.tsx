@@ -59,7 +59,7 @@ function usePortalConflictFix() {
 }
 
 const BridgeChainSync = () => {
-  const { switchNetworkAsync: switchNetwork } = useSwitchNetwork()
+  const { switchNetwork } = useSwitchNetwork()
 
   useEffect(() => {
     const handleNetworkSelect = async (event: Event) => {

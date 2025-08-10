@@ -134,14 +134,14 @@ export const AddLiquiditySelector = () => {
     return noCurrency || networkNoSupport
   }, [baseCurrency, chainId, protocol, quoteCurrency])
 
-  const { switchNetworkAsync } = useSwitchNetwork()
+  const { switchNetwork } = useSwitchNetwork()
 
   const handleNetworkChange = useCallback(
     async (chain: Chain) => {
-      await switchNetworkAsync?.(chain.id)
+      await switchNetwork?.(chain.id)
       updateParams({ chainId: chain.id })
     },
-    [switchNetworkAsync, updateParams],
+    [switchNetwork, updateParams],
   )
 
   useEffect(() => {
