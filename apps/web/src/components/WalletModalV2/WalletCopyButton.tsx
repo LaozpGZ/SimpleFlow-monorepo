@@ -139,7 +139,10 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
 
   const walletConfig = walletsConfig({ chainId, connect: connectAsync })
 
-  const wallet = useMemo(() => walletConfig.find((w) => w.id === previouslyUsedWalletsId[0]), [walletConfig])
+  const wallet = useMemo(
+    () => walletConfig.find((w) => w.id === previouslyUsedWalletsId[0]),
+    [walletConfig, previouslyUsedWalletsId],
+  )
   const { dappIcon } = useDappIcon()
 
   const socialIcon = useMemo(() => {

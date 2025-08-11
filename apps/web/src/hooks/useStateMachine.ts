@@ -81,7 +81,7 @@ export function useStateMachine<TState extends string, TEvent extends string>(
 
   const reset = useCallback(() => {
     const currentState = stateRef.current
-    const initialState = configRef.current.initialState
+    const { initialState } = configRef.current
 
     if (currentState !== initialState) {
       // Execute exit action of current state
@@ -105,12 +105,12 @@ export function useStateMachine<TState extends string, TEvent extends string>(
   // Execute initial entry action
   useEffect(() => {
     configRef.current.states[config.initialState].entry?.()
-  }, [])
+  }, [config.initialState])
 
   // Auto-reset when dependencies change
   useEffect(() => {
     reset()
-  }, [...dependencies, config])
+  }, [...dependencies, config, reset])
 
   return useMemo(
     () => ({

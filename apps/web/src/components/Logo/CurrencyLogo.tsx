@@ -36,7 +36,7 @@ export function FiatLogo({ currency, size = '24px', style }: LogoProps) {
 export default function CurrencyLogo({ currency, size = '24px', style, src }: LogoProps) {
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
   // @ts-ignore
-  const imageUrls = getImageUrlsFromToken(currency)
+  const imageUrls = useMemo(() => getImageUrlsFromToken(currency), [currency])
   const basicTokenImage = getBasicTokensImage(currency)
 
   const srcs: string[] = useMemo(() => {
@@ -53,7 +53,7 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
       return [...imageUrls, tokenLogoURL, basicTokenImage]
     }
     return []
-  }, [currency, uriLocations])
+  }, [currency, uriLocations, basicTokenImage, imageUrls])
 
   if (currency?.isNative) {
     if (currency.chainId === ChainId.BSC) {
