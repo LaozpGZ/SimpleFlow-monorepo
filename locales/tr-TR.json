@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "Pozisyonunuz burada görünecek.",
   "Liquidity data not available.": "Likidite verileri mevcut değil.",
   "There is no liquidity data.": "Likidite verisi yok.",
-  "Current %symbol% Price": "Mevcut %symbol% Fiyatı",
   "Choose Token Pair": "Token Çifti Seçin",
   "Fee Tier": "Ücret Serisi",
   "Selected Range": "Seçilen Aralık",
@@ -4059,5 +4058,7 @@
   "Price Range": "Fiyat Aralığı",
   "price range": "fiyat aralığı",
   "Price range": "Fiyat aralığı",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
