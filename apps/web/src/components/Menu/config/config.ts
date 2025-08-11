@@ -15,8 +15,6 @@ export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & {
 }
 
 export const addMenuItemSupported = (item, chainId) => {
-  console.info(item)
-  console.info(chainId)
   if (!chainId || !item.supportChainIds) {
     return item
   }
