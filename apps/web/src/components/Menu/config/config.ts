@@ -15,6 +15,8 @@ export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & {
 }
 
 export const addMenuItemSupported = (item, chainId) => {
+  console.info(item)
+  console.info(chainId)
   if (!chainId || !item.supportChainIds) {
     return item
   }
@@ -32,7 +34,7 @@ const config: (
   isDark: boolean,
   languageCode?: string,
   chainId?: number,
-) => ConfigMenuItemsType[] = (t, chainId) =>
+) => ConfigMenuItemsType[] = (t, isDark, languageCode, chainId) =>
   [
     {
       label: t('Earn'),
