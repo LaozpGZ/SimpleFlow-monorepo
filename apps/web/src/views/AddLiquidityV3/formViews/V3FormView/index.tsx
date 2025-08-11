@@ -268,7 +268,14 @@ export default function V3FormView({
   const baseCurrencyCurrentPrice = useStablecoinPrice(baseCurrency)
   const quoteCurrencyCurrentPrice = useStablecoinPrice(quoteCurrency)
   const currentPrice = useMemo(() => {
-    if (!baseCurrencyCurrentPrice || !quoteCurrencyCurrentPrice || !baseCurrency || !quoteCurrency) return undefined
+    if (
+      !baseCurrencyCurrentPrice ||
+      !quoteCurrencyCurrentPrice ||
+      !baseCurrency ||
+      !quoteCurrency ||
+      quoteCurrencyCurrentPrice.numerator === 0n
+    )
+      return undefined
     return baseCurrencyCurrentPrice.divide(quoteCurrencyCurrentPrice)
   }, [baseCurrency, quoteCurrency, baseCurrencyCurrentPrice, quoteCurrencyCurrentPrice])
 
