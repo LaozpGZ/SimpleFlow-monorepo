@@ -1,7 +1,6 @@
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POSITION_MANAGERS_SUPPORTED_CHAINS } from '@pancakeswap/position-managers'
 import { DropdownMenuItems, EarnFillIcon, EarnIcon, MenuItemsType } from '@pancakeswap/uikit'
-import { SUPPORT_FARMS } from 'config/constants/supportChains'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & {
   hideSubNav?: boolean
@@ -41,7 +40,7 @@ const config: (
       icon: EarnIcon,
       fillIcon: EarnFillIcon,
       image: '/images/decorations/pe2.png',
-      supportChainIds: SUPPORT_FARMS,
+      supportChainIds: POSITION_MANAGERS_SUPPORTED_CHAINS,
       overrideSubNavItems: [
         {
           label: t('Position Manager'),
