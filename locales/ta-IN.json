@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "உங்கள் பொசிஷன் இங்கே தோன்றும்.",
   "Liquidity data not available.": "லிக்விடிட்டி தரவு கிடைக்கவில்லை.",
   "There is no liquidity data.": "லிக்விடிட்டி தரவு இல்லை.",
-  "Current %symbol% Price": "தற்போதைய %symbol% விலை",
   "Choose Token Pair": "டோக்கன் ஜோடியைத் தேர்ந்தெடுக்கவும்",
   "Fee Tier": "கட்டண அடுக்கு",
   "Selected Range": "தேர்ந்தெடுத்த வரம்பு",
@@ -4059,5 +4058,7 @@
   "Price Range": "விலை வரம்பு",
   "price range": "விலை வரம்பு",
   "Price range": "விலை வரம்பு",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
