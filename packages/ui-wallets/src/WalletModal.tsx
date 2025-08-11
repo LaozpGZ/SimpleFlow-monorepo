@@ -21,6 +21,7 @@ import {
   Tab,
   TabMenu,
   Text,
+  Toggle,
   useMatchBreakpoints,
   WarningIcon,
 } from '@pancakeswap/uikit'
@@ -46,6 +47,8 @@ import {
 import SocialLoginButton from './components/SocialLoginButton'
 import { ConnectData, LinkOfDevice, WalletConfigV2, WalletConfigV3, WalletModalV2Props } from './types'
 import { ASSET_CDN } from './config/url'
+import { getWalletsConfig } from './config/wallets'
+import { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'
 
 const StepIntro = lazy(() => import('./components/Intro'))
 
@@ -470,9 +473,17 @@ function DesktopModal<T>({
         className={desktopWalletSelectionClass}
         gap="1rem"
       >
-        <Heading color="color" as="h4">
-          {t('Connect Wallet')}
-        </Heading>
+        <RowBetween>
+          <Heading color="color" as="h4">
+            {t('Connect Wallet')}
+          </Heading>
+          <FlexGap gap="8px" alignItems="center" as="label" htmlFor="wallet-modal-network-toggle">
+            <Text textTransform="uppercase" fontWeight="600" color="secondary" fontSize="12px">
+              {t('Solana Only')}
+            </Text>
+            <Toggle scale="md" id="wallet-modal-network-toggle" />
+          </FlexGap>
+        </RowBetween>
 
         <SocialLoginButton onClick={onOpenSocialLoginModal} assetCdn={ASSET_CDN} />
 
@@ -520,7 +531,7 @@ function DesktopModal<T>({
 
 export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
   const {
-    wallets: wallets_,
+    wallets: walletsTemp1,
     topWallets: topWallets_,
     login,
     docLink,
@@ -530,6 +541,7 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
     mevDocLink,
     ...rest
   } = props
+  const wallets_ = getWalletsConfig()
 
   const [isSocialLoginModalOpen, setIsSocialLoginModalOpen] = useState(false)
 
@@ -540,7 +552,9 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
     () =>
       previouslyUsedEvmWalletsId
         .map((id) => wallets_.find((w) => w.id === id))
-        .filter<WalletConfigV2<T>>((w): w is WalletConfigV2<T> => Boolean(w)),
+        .filter<WalletConfigV3<EvmConnectorNames | SolanaConnectorNames>>(
+          (w): w is WalletConfigV3<EvmConnectorNames | SolanaConnectorNames> => Boolean(w),
+        ),
     [wallets_, previouslyUsedEvmWalletsId],
   )
 
