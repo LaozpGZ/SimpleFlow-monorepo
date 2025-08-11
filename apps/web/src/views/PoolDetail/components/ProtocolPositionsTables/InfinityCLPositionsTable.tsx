@@ -251,17 +251,17 @@ const transformInfinityCLPositionToTableRow = (
     <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
       <ActionButton
         as="a"
-        href={$path({
-          route: '/liquidity/position/[[...positionId]]',
-          routeParams: {
-            positionId: [Protocol.InfinityCLAMM, Number(position.tokenId), 'decrease'],
-          },
-          // @ts-ignore
-          searchParams: {
-            chain: CHAIN_QUERY_NAME[poolInfo.chainId],
-            [PERSIST_CHAIN_KEY]: '1',
-          },
-        })}
+        // href={$path({
+        //   route: '/liquidity/position/[[...positionId]]',
+        //   routeParams: {
+        //     positionId: [Protocol.InfinityCLAMM, Number(position.tokenId), 'decrease'],
+        //   },
+        //   // @ts-ignore
+        //   searchParams: {
+        //     chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+        //     [PERSIST_CHAIN_KEY]: '1',
+        //   },
+        // })}
         disabled={removed}
         isIcon
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -270,17 +270,17 @@ const transformInfinityCLPositionToTableRow = (
       </ActionButton>
       <ActionButton
         as="a"
-        href={$path({
-          route: '/liquidity/position/[[...positionId]]',
-          routeParams: {
-            positionId: [Protocol.InfinityCLAMM, Number(position.tokenId), 'increase'],
-          },
-          // @ts-ignore
-          searchParams: {
-            chain: CHAIN_QUERY_NAME[poolInfo.chainId],
-            [PERSIST_CHAIN_KEY]: '1',
-          },
-        })}
+        // href={$path({
+        //   route: '/liquidity/position/[[...positionId]]',
+        //   routeParams: {
+        //     positionId: [Protocol.InfinityCLAMM, Number(position.tokenId), 'increase'],
+        //   },
+        //   // @ts-ignore
+        //   searchParams: {
+        //     chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+        //     [PERSIST_CHAIN_KEY]: '1',
+        //   },
+        // })}
         disabled={removed}
         isIcon
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -529,19 +529,19 @@ export const InfinityCLPositionsTable: React.FC<InfinityCLPositionsTableProps> =
           />
         }
         // On row click, navigate to the position detail page
-        onRowClick={(position) => {
-          router.push(
-            $path({
-              route: '/liquidity/position/[[...positionId]]',
-              routeParams: { positionId: [position.protocol, new BN(position.tokenId).toNumber()] },
-              // @ts-ignore
-              searchParams: {
-                chain: CHAIN_QUERY_NAME[poolInfo.chainId],
-                [PERSIST_CHAIN_KEY]: '1',
-              },
-            }),
-          )
-        }}
+        // onRowClick={(position) => {
+        //   router.push(
+        //     $path({
+        //       route: '/liquidity/position/[[...positionId]]',
+        //       routeParams: { positionId: [position.protocol, new BN(position.tokenId).toNumber()] },
+        //       // @ts-ignore
+        //       searchParams: {
+        //         chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+        //         [PERSIST_CHAIN_KEY]: '1',
+        //       },
+        //     }),
+        //   )
+        // }}
       />
 
       {/* handles APR fetching for each position */}

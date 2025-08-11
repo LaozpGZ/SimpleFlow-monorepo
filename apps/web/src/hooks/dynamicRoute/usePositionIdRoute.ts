@@ -87,25 +87,23 @@ export const useInfinityClammPositionIdRouteParams = () => {
 
   const updateParams = useCallback(
     (p: Partial<z.infer<typeof zInfinityClammPositionIdObject>>) => {
-      if (!params || !Object.values(params).every((v) => v !== undefined)) return
-
-      const path = $path({
-        route: router.route as RouteWithPositionId,
-        routeParams: {
-          positionId: params.action
-            ? [p.protocol ?? params.protocol, p.tokenId ?? params.tokenId, params.action]
-            : [p.protocol ?? params.protocol, p.tokenId ?? params.tokenId],
-        },
-      })
-
-      router.replace(
-        {
-          pathname: path,
-          query: router.query,
-        },
-        undefined,
-        { shallow: true },
-      )
+      // if (!params || !Object.values(params).every((v) => v !== undefined)) return
+      // const path = $path({
+      //   route: router.route as RouteWithPositionId,
+      //   routeParams: {
+      //     positionId: params.action
+      //       ? [p.protocol ?? params.protocol, p.tokenId ?? params.tokenId, params.action]
+      //       : [p.protocol ?? params.protocol, p.tokenId ?? params.tokenId],
+      //   },
+      // })
+      // router.replace(
+      //   {
+      //     pathname: path,
+      //     query: router.query,
+      //   },
+      //   undefined,
+      //   { shallow: true },
+      // )
     },
     [params, router],
   )
