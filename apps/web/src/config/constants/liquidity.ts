@@ -71,23 +71,23 @@ export const getLiquidityDetailURL = ({
     return undefined
   }
 
-  if (protocol === Protocol.InfinityBIN && poolId) {
-    return $path({
-      route: '/liquidity/position/[[...positionId]]',
-      routeParams: {
-        positionId: [Protocol.InfinityBIN, poolId],
-      },
-    })
-  }
+  // if (protocol === Protocol.InfinityBIN && poolId) {
+  //   return $path({
+  //     route: '/liquidity/position/[[...positionId]]',
+  //     routeParams: {
+  //       positionId: [Protocol.InfinityBIN, poolId],
+  //     },
+  //   })
+  // }
 
-  if (protocol === Protocol.InfinityCLAMM && tokenId) {
-    return $path({
-      route: '/liquidity/position/[[...positionId]]',
-      routeParams: {
-        positionId: [Protocol.InfinityCLAMM, tokenId as number],
-      },
-    })
-  }
+  // if (protocol === Protocol.InfinityCLAMM && tokenId) {
+  //   return $path({
+  //     route: '/liquidity/position/[[...positionId]]',
+  //     routeParams: {
+  //       positionId: [Protocol.InfinityCLAMM, tokenId as number],
+  //     },
+  //   })
+  // }
   return undefined
 }
 
@@ -105,10 +105,5 @@ export const getSelectInfinityLiquidityURL = ({
   if (!chainId || !protocol || !currency0 || !currency1) {
     return LIQUIDITY_PAGES.infinity.ADD_LIQUIDITY_SELECT
   }
-  return $path({
-    route: '/liquidity/select/pools/[[...selectId]]',
-    routeParams: {
-      selectId: [chainId, protocol, currency0, currency1],
-    },
-  })
+  return undefined
 }

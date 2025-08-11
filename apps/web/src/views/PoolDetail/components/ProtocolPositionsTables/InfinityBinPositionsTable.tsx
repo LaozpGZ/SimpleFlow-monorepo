@@ -217,17 +217,17 @@ const transformInfinityBinPositionToTableRow = (
     <FlexGap gap="8px" alignItems="center" justifyContent="flex-end">
       <ActionButton
         as="a"
-        href={$path({
-          route: '/liquidity/position/[[...positionId]]',
-          routeParams: {
-            positionId: [Protocol.InfinityBIN, position.poolId.toString(), 'decrease'],
-          },
-          // @ts-ignore
-          searchParams: {
-            chain: CHAIN_QUERY_NAME[poolInfo.chainId],
-            [PERSIST_CHAIN_KEY]: '1',
-          },
-        })}
+        // href={$path({
+        //   route: '/liquidity/position/[[...positionId]]',
+        //   routeParams: {
+        //     positionId: [Protocol.InfinityBIN, position.poolId.toString(), 'decrease'],
+        //   },
+        //   // @ts-ignore
+        //   searchParams: {
+        //     chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+        //     [PERSIST_CHAIN_KEY]: '1',
+        //   },
+        // })}
         disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}
         isIcon
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -236,17 +236,17 @@ const transformInfinityBinPositionToTableRow = (
       </ActionButton>
       <ActionButton
         as="a"
-        href={$path({
-          route: '/liquidity/add/[[...poolId]]',
-          routeParams: {
-            poolId: [poolInfo.chainId, 'infinity', poolInfo.poolId.toString()],
-          },
-          // @ts-ignore
-          searchParams: {
-            chain: CHAIN_QUERY_NAME[poolInfo.chainId],
-            [PERSIST_CHAIN_KEY]: '1',
-          },
-        })}
+        // href={$path({
+        //   route: '/liquidity/add/[[...poolId]]',
+        //   routeParams: {
+        //     poolId: [poolInfo.chainId, 'infinity', poolInfo.poolId.toString()],
+        //   },
+        //   // @ts-ignore
+        //   searchParams: {
+        //     chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+        //     [PERSIST_CHAIN_KEY]: '1',
+        //   },
+        // })}
         disabled={(position.status as POSITION_STATUS) === POSITION_STATUS.CLOSED}
         isIcon
         onClick={(e: React.MouseEvent) => e.stopPropagation()}
@@ -527,19 +527,19 @@ export const InfinityBinPositionsTable: React.FC<InfinityBinPositionsTableProps>
             chainId={poolInfo.chainId}
           />
         }
-        onRowClick={(position) => {
-          router.push(
-            $path({
-              route: '/liquidity/position/[[...positionId]]',
-              routeParams: { positionId: [position.protocol, position.poolId] },
-              // @ts-ignore
-              searchParams: {
-                chain: CHAIN_QUERY_NAME[poolInfo.chainId],
-                [PERSIST_CHAIN_KEY]: '1',
-              },
-            }),
-          )
-        }}
+        // onRowClick={(position) => {
+        //   router.push(
+        //     $path({
+        //       route: '/liquidity/position/[[...positionId]]',
+        //       routeParams: { positionId: [position.protocol, position.poolId] },
+        //       // @ts-ignore
+        //       searchParams: {
+        //         chain: CHAIN_QUERY_NAME[poolInfo.chainId],
+        //         [PERSIST_CHAIN_KEY]: '1',
+        //       },
+        //     }),
+        //   )
+        // }}
       />
     </>
   )

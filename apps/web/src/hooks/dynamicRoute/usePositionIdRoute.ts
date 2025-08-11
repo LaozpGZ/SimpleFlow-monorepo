@@ -50,25 +50,23 @@ export const useInfinityBinPositionIdRouteParams = () => {
 
   const updateParams = useCallback(
     (p: Partial<z.infer<typeof zInfinityBinPositionIdObject>>) => {
-      if (!params || !Object.values(params).every((v) => v !== undefined)) return
-
-      const path = $path({
-        route: router.route as RouteWithPositionId,
-        routeParams: {
-          positionId: params.action
-            ? [p.protocol ?? params.protocol, p.poolId ?? params.poolId, params.action]
-            : [p.protocol ?? params.protocol, p.poolId ?? params.poolId],
-        },
-      })
-
-      router.replace(
-        {
-          pathname: path,
-          query: router.query,
-        },
-        undefined,
-        { shallow: true },
-      )
+      // if (!params || !Object.values(params).every((v) => v !== undefined)) return
+      // const path = $path({
+      //   route: router.route as RouteWithPositionId,
+      //   routeParams: {
+      //     positionId: params.action
+      //       ? [p.protocol ?? params.protocol, p.poolId ?? params.poolId, params.action]
+      //       : [p.protocol ?? params.protocol, p.poolId ?? params.poolId],
+      //   },
+      // })
+      // router.replace(
+      //   {
+      //     pathname: path,
+      //     query: router.query,
+      //   },
+      //   undefined,
+      //   { shallow: true },
+      // )
     },
     [params, router],
   )

@@ -28,16 +28,16 @@ export const NavBreadcrumbs: React.FC<React.PropsWithChildren<NavBreadcrumbsProp
 
   const prevUrlPath = useMemo(() => {
     if (!routeParams || !routeParams.positionId) return ''
-
-    return $path({
-      route: router.route as RouteWithPositionId,
-      routeParams: {
-        positionId:
-          protocol === Protocol.InfinityBIN
-            ? [protocol, routeParams?.positionId[1] as string]
-            : [protocol!, routeParams?.positionId[1] as number],
-      },
-    })
+    return ''
+    // return $path({
+    //   route: router.route as RouteWithPositionId,
+    //   routeParams: {
+    //     positionId:
+    //       protocol === Protocol.InfinityBIN
+    //         ? [protocol, routeParams?.positionId[1] as string]
+    //         : [protocol!, routeParams?.positionId[1] as number],
+    //   },
+    // })
   }, [protocol, routeParams, router.route])
 
   const compacted = useMemo(() => {

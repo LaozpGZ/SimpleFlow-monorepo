@@ -37,44 +37,44 @@ export const PositionHeader: React.FC<PositionHeaderProps> = ({
 
   const addPath = useMemo(() => {
     if (!poolId) return ''
-    if (protocol === Protocol.InfinityBIN) {
-      return $path({
-        route: '/liquidity/add/[[...poolId]]',
-        routeParams: {
-          poolId: [chainId, 'infinity', poolId],
-        },
-      })
-    }
+    // if (protocol === Protocol.InfinityBIN) {
+    //   return $path({
+    //     route: '/liquidity/add/[[...poolId]]',
+    //     routeParams: {
+    //       poolId: [chainId, 'infinity', poolId],
+    //     },
+    //   })
+    // }
 
-    if (protocol === Protocol.InfinityCLAMM && tokenId) {
-      return $path({
-        route: '/liquidity/position/[[...positionId]]',
-        routeParams: {
-          positionId: [Protocol.InfinityCLAMM, Number(tokenId), 'increase'],
-        },
-      })
-    }
+    // if (protocol === Protocol.InfinityCLAMM && tokenId) {
+    //   return $path({
+    //     route: '/liquidity/position/[[...positionId]]',
+    //     routeParams: {
+    //       positionId: [Protocol.InfinityCLAMM, Number(tokenId), 'increase'],
+    //     },
+    //   })
+    // }
     return ''
   }, [chainId, poolId, protocol, tokenId])
 
   const removePath = useMemo(() => {
     if (!poolId) return ''
-    if (protocol === Protocol.InfinityBIN) {
-      return $path({
-        route: '/liquidity/position/[[...positionId]]',
-        routeParams: {
-          positionId: [Protocol.InfinityBIN, poolId, 'decrease'],
-        },
-      })
-    }
-    if (protocol === Protocol.InfinityCLAMM && tokenId) {
-      return $path({
-        route: '/liquidity/position/[[...positionId]]',
-        routeParams: {
-          positionId: [Protocol.InfinityCLAMM, Number(tokenId), 'decrease'],
-        },
-      })
-    }
+    // if (protocol === Protocol.InfinityBIN) {
+    //   return $path({
+    //     route: '/liquidity/position/[[...positionId]]',
+    //     routeParams: {
+    //       positionId: [Protocol.InfinityBIN, poolId, 'decrease'],
+    //     },
+    //   })
+    // }
+    // if (protocol === Protocol.InfinityCLAMM && tokenId) {
+    //   return $path({
+    //     route: '/liquidity/position/[[...positionId]]',
+    //     routeParams: {
+    //       positionId: [Protocol.InfinityCLAMM, Number(tokenId), 'decrease'],
+    //     },
+    //   })
+    // }
     return ''
   }, [poolId, protocol, tokenId])
 

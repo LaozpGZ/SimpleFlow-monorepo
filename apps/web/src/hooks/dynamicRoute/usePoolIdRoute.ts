@@ -32,23 +32,21 @@ export const useInfinityPoolIdRouteParams = () => {
 
   const updateParams = useCallback(
     (p: Partial<z.infer<typeof zInfinityPoolIdObject>>) => {
-      if (!params || !Object.values(params).every((v) => v !== undefined)) return
-
-      const path = $path({
-        route: router.route as RouteWithPoolId,
-        routeParams: {
-          poolId: [p.chainId ?? params.chainId, p.protocol ?? params.protocol, p.poolId ?? params.poolId],
-        },
-      })
-
-      router.replace(
-        {
-          pathname: path,
-          query: router.query,
-        },
-        undefined,
-        { shallow: true },
-      )
+      // if (!params || !Object.values(params).every((v) => v !== undefined)) return
+      // const path = $path({
+      //   route: router.route as RouteWithPoolId,
+      //   routeParams: {
+      //     poolId: [p.chainId ?? params.chainId, p.protocol ?? params.protocol, p.poolId ?? params.poolId],
+      //   },
+      // })
+      // router.replace(
+      //   {
+      //     pathname: path,
+      //     query: router.query,
+      //   },
+      //   undefined,
+      //   { shallow: true },
+      // )
     },
     [params, router],
   )
