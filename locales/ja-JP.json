@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "あなたのポジションはここに表示されます。",
   "Liquidity data not available.": "流動性データはありません。",
   "There is no liquidity data.": "流動性データはありません。",
-  "Current %symbol% Price": "現在の%symbol%の価格",
   "Choose Token Pair": "トークンペアを選択",
   "Fee Tier": "手数料ティア",
   "Selected Range": "選択範囲",
@@ -4059,5 +4058,7 @@
   "Price Range": "価格範囲",
   "price range": "価格範囲",
   "Price range": "価格範囲",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
