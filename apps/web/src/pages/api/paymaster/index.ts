@@ -4,6 +4,7 @@ import {
   ZYFI_SPONSORED_PAYMASTER_URL,
   paymasterInfo,
 } from 'config/paymaster'
+import '@/edge/net'
 import stringify from 'fast-json-stable-stringify'
 import { NextApiHandler } from 'next'
 import { calculateGasMargin } from 'utils'
