@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "A pozíciója itt jelenik meg.",
   "Liquidity data not available.": "Likviditási adatok nem állnak rendelkezésre.",
   "There is no liquidity data.": "Nincsenek likviditási adatok.",
-  "Current %symbol% Price": "Aktuális %symbol% ár",
   "Choose Token Pair": "Zsetonpár kiválasztása",
   "Fee Tier": "Díjszint",
   "Selected Range": "Kiválasztott tartomány",
@@ -4059,5 +4058,7 @@
   "Price Range": "Ártartomány",
   "price range": "ártartomány",
   "Price range": "Ártartomány",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
