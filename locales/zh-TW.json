@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "您的部位將出現在此處。",
   "Liquidity data not available.": "流動性資料無法使用。",
   "There is no liquidity data.": "沒有流動性資料。",
-  "Current %symbol% Price": "目前的 %symbol% 價格",
   "Choose Token Pair": "選擇代幣對",
   "Fee Tier": "手續費級別",
   "Selected Range": "已選擇區間",
@@ -4059,5 +4058,7 @@
   "Price Range": "價格區間",
   "price range": "價格區間",
   "Price range": "價格區間",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
