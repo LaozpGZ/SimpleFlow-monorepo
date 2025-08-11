@@ -1,6 +1,6 @@
 {
   "name": "ryan-test-header",
-  "version": "0.0.58",
+  "version": "0.0.63",
   "repository": {
     "type": "git",
     "url": "https://github.com/pancakeswap/pancake-frontend.git",
@@ -61,7 +61,7 @@
     "build-storybook": "storybook build",
     "clean": " rm -rf .turbo && rm -rf dist && rm -rf node_modules",
     "build:widgets": "vite build",
-    "dev": "tsup --watch"
+    "dev": "vite dev"
   },
   "files": [
     "dist"
