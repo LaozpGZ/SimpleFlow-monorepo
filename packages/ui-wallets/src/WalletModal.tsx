@@ -3,8 +3,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import {
   AtomBox,
   Button,
-  ButtonMenu,
-  ButtonMenuItem,
   CloseIcon,
   Column,
   FlexGap,
@@ -18,8 +16,6 @@ import {
   Row,
   RowBetween,
   ShieldCheckIcon,
-  Tab,
-  TabMenu,
   Text,
   Toggle,
   useMatchBreakpoints,
@@ -28,7 +24,6 @@ import {
 import { useAtom } from 'jotai'
 import { lazy, MouseEvent, PropsWithChildren, Suspense, useCallback, useMemo, useState } from 'react'
 import { isMobile as isMobileDevice } from 'react-device-detect'
-import { styled } from 'styled-components'
 import {
   desktopWalletSelectionClass,
   fullSizeModalWrapperClass,
@@ -77,11 +72,6 @@ export function useSelectedSolanaWallet<T = unknown>() {
   return useAtom<WalletConfigV2<T> | null>(selectedSolanaWalletAtom)
 }
 
-const StyledTab = styled(Tab)`
-  height: 32px;
-  padding: 4px 12px;
-`
-
 type TabContainerProps = PropsWithChildren<{
   docLink: string
   docText: string
@@ -90,20 +80,11 @@ type TabContainerProps = PropsWithChildren<{
 }>
 
 const TabContainer = ({ children, docLink, docText, fullSize = true, onDismiss }: TabContainerProps) => {
-  const [index, setIndex] = useState(0)
   const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
   return (
     <AtomBox position="relative" zIndex="modal" className={fullSize ? fullSizeModalWrapperClass : modalWrapperClass}>
-      {isMobile ? null : (
-        <AtomBox position="absolute" style={{ top: '-48px', left: '10px' }}>
-          <TabMenu activeIndex={index} onItemClick={setIndex} gap="16px" isColorInverse isShowBorderBottom={false}>
-            <StyledTab>{t('Connect Wallet')}</StyledTab>
-            <StyledTab>{t('What’s a Web3 Wallet?')}</StyledTab>
-          </TabMenu>
-        </AtomBox>
-      )}
       <AtomBox
         display="flex"
         position="relative"
@@ -121,11 +102,6 @@ const TabContainer = ({ children, docLink, docText, fullSize = true, onDismiss }
       >
         {isMobile ? (
           <Row mb="16px" gap="16px">
-            <ButtonMenu scale="md" activeIndex={index} onItemClick={setIndex} variant="subtle">
-              <ButtonMenuItem>{t('Connect Wallet')}</ButtonMenuItem>
-              <ButtonMenuItem minWidth="57%">{t('What’s a Web3 Wallet?')}</ButtonMenuItem>
-            </ButtonMenu>
-
             <IconButton
               mr="-6px"
               variant="text"
@@ -139,12 +115,7 @@ const TabContainer = ({ children, docLink, docText, fullSize = true, onDismiss }
             </IconButton>
           </Row>
         ) : null}
-        {index === 0 && children}
-        {index === 1 && (
-          <Suspense>
-            <StepIntro docLink={docLink} docText={docText} />
-          </Suspense>
-        )}
+        {children}
       </AtomBox>
     </AtomBox>
   )
