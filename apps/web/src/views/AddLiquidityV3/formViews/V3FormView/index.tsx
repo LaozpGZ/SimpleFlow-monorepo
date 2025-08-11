@@ -12,6 +12,7 @@ import {
   Column,
   DynamicSection,
   FlexGap,
+  InfoIcon,
   Message,
   MessageText,
   PreTitle,
@@ -21,6 +22,7 @@ import {
   Toggle,
   useMatchBreakpoints,
   useModal,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
 import { FeeAmount, NonfungiblePositionManager, Pool } from '@pancakeswap/v3-sdk'
@@ -113,6 +115,10 @@ const CurrentPriceButton = styled(Button).attrs({ scale: 'xs', variant: 'text' }
   font-size: 12px;
   font-weight: 600;
   border-radius: 8px;
+
+  display: flex;
+  align-items: center;
+  gap: 4px;
 
   background: transparent;
   border: 2px solid ${({ theme }) => theme.colors.primary};
@@ -719,6 +725,14 @@ export default function V3FormView({
     onStartPriceInput(currentPrice?.toSignificant(18) ?? '')
   }, [currentPrice, onStartPriceInput])
 
+  const {
+    tooltip: currentPriceTooltip,
+    tooltipVisible: currentPriceTooltipVisible,
+    targetRef: currentPriceTargetRef,
+  } = useTooltip(t('The price is an estimation of the current market price. Please verify before using it.'), {
+    placement: 'bottom',
+  })
+
   return (
     <>
       <LeftContainer>
@@ -734,9 +748,13 @@ export default function V3FormView({
                       <FlexGap mb="8px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
                         <div />
                         <FlexGap gap="4px" alignItems="center" flexWrap="wrap">
-                          <CurrentPriceButton onClick={handleUseCurrentPrice}>
-                            {t('Use Current Price')}
-                          </CurrentPriceButton>
+                          <div ref={currentPriceTargetRef}>
+                            <CurrentPriceButton onClick={handleUseCurrentPrice}>
+                              <span>{t('Use Current Price')}</span>
+                              <InfoIcon color="primary60" width="18px" />
+                            </CurrentPriceButton>
+                            {currentPriceTooltipVisible && currentPriceTooltip}
+                          </div>
                           <Text color="textSubtle" small>
                             {currentPrice.toSignificant(8)} {quoteCurrency?.symbol} per {baseCurrency?.symbol}
                           </Text>
