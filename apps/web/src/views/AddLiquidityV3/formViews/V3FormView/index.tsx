@@ -1,10 +1,10 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
+import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { Price } from '@pancakeswap/swap-sdk-core'
 import {
   AutoColumn,
-  AutoRow,
   Box,
   Button,
   Card,
@@ -16,6 +16,7 @@ import {
   MessageText,
   PreTitle,
   RowBetween,
+  SwapHorizIcon,
   Text,
   Toggle,
   useMatchBreakpoints,
@@ -68,7 +69,10 @@ import { useTokenRateData } from 'views/AddLiquidityInfinity/components/useToken
 import { getAxisTicks } from 'views/AddLiquidityInfinity/utils'
 import { V3SubmitButton } from 'views/AddLiquidityV3/components/V3SubmitButton'
 import { useDensityChartData } from 'views/AddLiquidityV3/hooks/useDensityChartData'
-import { useCurrencyInversionEvent } from 'views/AddLiquidityV3/hooks/useHeaderInvertCurrencies'
+import {
+  useCurrencyInversionEvent,
+  useHeaderInvertCurrencies,
+} from 'views/AddLiquidityV3/hooks/useHeaderInvertCurrencies'
 import { useNativeCurrencyInstead } from 'views/AddLiquidityV3/hooks/useNativeCurrencyInstead'
 import { HandleFeePoolSelectFn, QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV3/types'
 import { MarketPriceSlippageWarning } from 'views/CreateLiquidityPool/components/SubmitCreateButton'
@@ -101,6 +105,18 @@ export const LeftContainer = styled(AutoColumn)`
   height: fit-content;
 
   grid-column: 1;
+`
+
+const CurrentPriceButton = styled(Button).attrs({ scale: 'xs', variant: 'text' })`
+  height: 24px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
+
+  background: transparent;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primary60};
 `
 
 interface V3FormViewPropsType {
@@ -247,6 +263,14 @@ export default function V3FormView({
   }, [feeAmount])
 
   const onAddLiquidityCallback = useV3FormAddLiquidityCallback()
+
+  // Current token prices
+  const baseCurrencyCurrentPrice = useStablecoinPrice(baseCurrency)
+  const quoteCurrencyCurrentPrice = useStablecoinPrice(quoteCurrency)
+  const currentPrice = useMemo(() => {
+    if (!baseCurrencyCurrentPrice || !quoteCurrencyCurrentPrice || !baseCurrency || !quoteCurrency) return undefined
+    return baseCurrencyCurrentPrice.divide(quoteCurrencyCurrentPrice)
+  }, [baseCurrency, quoteCurrency, baseCurrencyCurrentPrice, quoteCurrencyCurrentPrice])
 
   // txn values
   const [deadline] = useTransactionDeadline() // custom from users settings
@@ -641,7 +665,14 @@ export default function V3FormView({
     formattedAmounts,
   ])
 
+  // Currency Inversion
   const inversionEvent = useCurrencyInversionEvent()
+
+  const { handleInvertCurrencies } = useHeaderInvertCurrencies({
+    currencyIdA,
+    currencyIdB,
+    feeAmount,
+  })
 
   useEffect(() => {
     if (inversionEvent) {
@@ -651,6 +682,11 @@ export default function V3FormView({
       }
     }
   }, [inversionEvent])
+
+  const handleInvertStartPriceCurrencies = useCallback(() => {
+    handleInvertCurrencies()
+    onStartPriceInput(price?.invert()?.toSignificant(8) ?? '')
+  }, [price, onStartPriceInput, handleInvertCurrencies])
 
   const {
     isLoading: isChartDataLoading,
@@ -672,6 +708,10 @@ export default function V3FormView({
     poolId: pool ? Pool.getAddress(pool.token0, pool.token1, pool.fee) : undefined,
   })
 
+  const handleUseCurrentPrice = useCallback(() => {
+    onStartPriceInput(currentPrice?.toSignificant(18) ?? '')
+  }, [currentPrice, onStartPriceInput])
+
   return (
     <>
       <LeftContainer>
@@ -680,8 +720,35 @@ export default function V3FormView({
             <AutoColumn gap="16px">
               {noLiquidity && (
                 <Box>
-                  <PreTitle mb="8px">{t('Set Starting Price')}</PreTitle>
-                  <Message variant="warning" mb="8px">
+                  <FlexGap gap="8px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+                    <PreTitle mb="8px">{t('Set Starting Price')}</PreTitle>
+
+                    {currentPrice ? (
+                      <FlexGap mb="8px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+                        <div />
+                        <FlexGap gap="4px" alignItems="center" flexWrap="wrap">
+                          <CurrentPriceButton onClick={handleUseCurrentPrice}>
+                            {t('Use Current Price')}
+                          </CurrentPriceButton>
+                          <Text color="textSubtle" small>
+                            {currentPrice.toSignificant(8)} {quoteCurrency?.symbol} per {baseCurrency?.symbol}
+                          </Text>
+                          <SwapHorizIcon
+                            role="button"
+                            color="primary60"
+                            onClick={handleInvertStartPriceCurrencies}
+                            style={{ cursor: 'pointer' }}
+                          />
+                        </FlexGap>
+                      </FlexGap>
+                    ) : (
+                      <Liquidity.RateToggle
+                        currencyA={baseCurrency}
+                        handleRateToggle={handleInvertStartPriceCurrencies}
+                      />
+                    )}
+                  </FlexGap>
+                  <Message variant="warning" my="8px">
                     <MessageText>
                       {t(
                         'This pool must be initialized before you can add liquidity. To initialize, select a starting price for the pool. Then, enter your liquidity price range and deposit amount. Gas fees will be higher than usual due to the initialization transaction.',
@@ -694,57 +761,55 @@ export default function V3FormView({
                       </span>
                     </MessageText>
                   </Message>
-                  <StyledInput
-                    className="start-price-input"
-                    value={startPriceTypedValue}
-                    onUserInput={onStartPriceInput}
-                  />
-                  <AutoRow justifyContent="space-between" mb="24px">
-                    <Text>{t('Current %symbol% Price', { symbol: baseCurrency?.symbol })}:</Text>
-                    <Text>
-                      {price ? (invertPrice ? price?.invert()?.toSignificant(5) : price?.toSignificant(5)) : '-'}
-                      <span style={{ marginLeft: '4px' }}>{quoteCurrency?.symbol}</span>
-                    </Text>
-                  </AutoRow>
+                  <FlexGap gap="8px" alignItems="baseline" justifyContent="space-between">
+                    <StyledInput
+                      className="start-price-input"
+                      value={startPriceTypedValue}
+                      onUserInput={onStartPriceInput}
+                    />
+                    <Text color="textSubtle">{quoteCurrency?.symbol}</Text>
+                  </FlexGap>
                 </Box>
               )}
               <DynamicSection disabled={!feeAmount || invalidPool}>
                 <FlexGap gap="8px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
                   <PreTitle>{t('Set position range')}</PreTitle>
-                  <FlexGap gap="8px" alignItems="center" flexWrap="wrap">
-                    <FlexGap gap="8px" alignItems="center">
-                      <Dot color="primary" show />
-                      <Text color="textSubtle" small>
-                        {t('Current Price')}
-                      </Text>
+                  {!noLiquidity && (
+                    <FlexGap gap="8px" alignItems="center" flexWrap="wrap">
+                      <FlexGap gap="8px" alignItems="center">
+                        <Dot color="primary" show />
+                        <Text color="textSubtle" small>
+                          {t('Current Price')}
+                        </Text>
+                      </FlexGap>
+                      <FlexGap gap="8px" alignItems="center">
+                        <Dot color="secondary" show />
+                        <Text color="textSubtle" small>
+                          {t('Position Range')}
+                        </Text>
+                      </FlexGap>
+                      <FlexGap gap="8px" alignItems="center">
+                        <Dot color="input" show />
+                        <Text color="textSubtle" small>
+                          {t('Liquidity Depth')}
+                        </Text>
+                      </FlexGap>
                     </FlexGap>
-                    <FlexGap gap="8px" alignItems="center">
-                      <Dot color="secondary" show />
-                      <Text color="textSubtle" small>
-                        {t('Position Range')}
-                      </Text>
-                    </FlexGap>
-                    <FlexGap gap="8px" alignItems="center">
-                      <Dot color="input" show />
-                      <Text color="textSubtle" small>
-                        {t('Liquidity Depth')}
-                      </Text>
-                    </FlexGap>
-                  </FlexGap>
+                  )}
                 </FlexGap>
 
-                <Box mt="22px" border="1px solid" borderColor="cardBorder" borderRadius="24px" p="8px">
-                  <FlexGap
-                    flexDirection={isMobile ? 'column' : 'row'}
-                    justifyContent={isMobile ? 'flex-start' : 'space-between'}
-                    gap="16px"
-                    mb="24px"
-                  >
-                    <Liquidity.PriceRangeDatePicker onChange={setPricePeriod} value={pricePeriod} />
-                  </FlexGap>
+                {!noLiquidity && (
+                  <>
+                    <Box mt="22px" border="1px solid" borderColor="cardBorder" borderRadius="24px" p="8px">
+                      <FlexGap
+                        flexDirection={isMobile ? 'column' : 'row'}
+                        justifyContent={isMobile ? 'flex-start' : 'space-between'}
+                        gap="16px"
+                        mb="24px"
+                      >
+                        <Liquidity.PriceRangeDatePicker onChange={setPricePeriod} value={pricePeriod} />
+                      </FlexGap>
 
-                  {!noLiquidity && (
-                    <>
                       <PricePeriodRangeChart
                         isLoading={isChartDataLoading}
                         key={baseCurrency?.wrapped.address}
@@ -769,9 +834,9 @@ export default function V3FormView({
                         error={chartDataError}
                         interactive
                       />
-                    </>
-                  )}
-                </Box>
+                    </Box>
+                  </>
+                )}
               </DynamicSection>
 
               <DynamicSection disabled={!feeAmount || invalidPool || (noLiquidity && !startPriceTypedValue)} gap="16px">
