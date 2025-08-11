@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "Your position will appear here.",
   "Liquidity data not available.": "Liquidity data not available.",
   "There is no liquidity data.": "There is no liquidity data.",
-  "Current %symbol% Price": "Current %symbol% Price",
   "Choose Token Pair": "Choose Token Pair",
   "Fee Tier": "Fee Tier",
   "Selected Range": "Selected Range",
@@ -4059,5 +4058,7 @@
   "Price Range": "Price Range",
   "price range": "price range",
   "Price range": "Price range",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
