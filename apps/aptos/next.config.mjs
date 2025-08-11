@@ -32,7 +32,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/swap',
+        destination: '/position-manager',
         permanent: false,
       },
     ]
