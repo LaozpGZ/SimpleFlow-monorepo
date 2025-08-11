@@ -692,7 +692,7 @@ export default function V3FormView({
 
   const handleInvertStartPriceCurrencies = useCallback(() => {
     handleInvertCurrencies()
-    onStartPriceInput(price?.invert()?.toSignificant(8) ?? '')
+    onStartPriceInput(price?.invert()?.toSignificant(18) ?? '')
   }, [price, onStartPriceInput, handleInvertCurrencies])
 
   const {
