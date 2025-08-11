@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "Din position kommer att visas här.",
   "Liquidity data not available.": "Inga likviditetsdata tillgängliga.",
   "There is no liquidity data.": "Likviditetsdata saknas.",
-  "Current %symbol% Price": "Nuvarande %symbol% pris",
   "Choose Token Pair": "Välj tokenpar",
   "Fee Tier": "Avgiftsnivå",
   "Selected Range": "Valt intervall",
@@ -4059,5 +4058,7 @@
   "Price Range": "Prisintervall",
   "price range": "prisintervall",
   "Price range": "Prisintervall",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
