@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "Vị thế của bạn sẽ xuất hiện ở đây.",
   "Liquidity data not available.": "Dữ liệu thanh khoản không có sẵn.",
   "There is no liquidity data.": "Không có dữ liệu thanh khoản.",
-  "Current %symbol% Price": "Giá %symbol% hiện tại",
   "Choose Token Pair": "Chọn cặp token",
   "Fee Tier": "Bậc phí",
   "Selected Range": "Khoảng đã chọn",
@@ -4059,5 +4058,7 @@
   "Price Range": "Khoảng giá",
   "price range": "khoảng giá",
   "Price range": "Khoảng giá",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
