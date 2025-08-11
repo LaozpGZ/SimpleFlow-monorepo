@@ -7,7 +7,7 @@ export const visitorRedirectMiddleware: MiddlewareFactory = (next: NextMiddlewar
 
     if (visited) {
       if (request.nextUrl.pathname === '/') {
-        return NextResponse.redirect(new URL('/position-manager', request.url))
+        return NextResponse.redirect(new URL('/position-managers', request.url))
       }
     } else {
       const response = NextResponse.next()
