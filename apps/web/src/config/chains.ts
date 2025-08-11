@@ -33,10 +33,26 @@ const CHAIN_QUERY_NAME_TO_ID = Object.entries(CHAIN_QUERY_NAME).reduce((acc, [ch
   }
 }, {} as Record<string, ChainId>)
 
-export const getChainId = memoize((chainName: string) => {
-  if (!chainName) return undefined
-  return CHAIN_QUERY_NAME_TO_ID[chainName.toLowerCase()] ? +CHAIN_QUERY_NAME_TO_ID[chainName.toLowerCase()] : undefined
-})
+export const getChainId = memoize(
+  (chainName: string | string[] | undefined) => {
+    if (!chainName) return undefined
+    let _chainName: string
+    if (Array.isArray(chainName)) {
+      _chainName = chainName[0]
+    } else {
+      _chainName = chainName
+    }
+    return CHAIN_QUERY_NAME_TO_ID[_chainName.toLowerCase()]
+      ? +CHAIN_QUERY_NAME_TO_ID[_chainName.toLowerCase()]
+      : undefined
+  },
+  (chainName) => {
+    if (Array.isArray(chainName)) {
+      return chainName[0]
+    }
+    return chainName
+  },
+)
 
 const bsc = {
   ...bsc_,

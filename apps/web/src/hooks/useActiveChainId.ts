@@ -31,7 +31,7 @@ export function useLocalNetworkChain() {
   const [queryChainId, setQueryChainId] = useAtom(queryChainIdAtom)
 
   const { query } = useRouter()
-  const chainId = +(getChainId(query.chain as string) || queryChainId)
+  const chainId = +(getChainId(query.chain) || queryChainId)
 
   useEffect(() => {
     if (chainId) {
