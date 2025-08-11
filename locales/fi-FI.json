@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "Positiosi tulee näkyviin täällä.",
   "Liquidity data not available.": "Likviditeettitietoja ei ole saatavilla.",
   "There is no liquidity data.": "Likviditeettitietoja ei ole.",
-  "Current %symbol% Price": "Nykyinen %symbol%-hinta",
   "Choose Token Pair": "Valitse polettipari",
   "Fee Tier": "Maksutaso",
   "Selected Range": "Valittu väli",
@@ -4059,5 +4058,7 @@
   "Price Range": "Hintaväli",
   "price range": "hintaväli",
   "Price range": "Hintaväli",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
