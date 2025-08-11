@@ -2,7 +2,10 @@ import { usePreloadImages, useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   AtomBox,
+  AutoRow,
   Button,
+  Card,
+  CardBody,
   CloseIcon,
   Column,
   FlexGap,
@@ -478,8 +481,8 @@ function DesktopModal<T>({
         flexDirection="column"
         alignItems="center"
       >
-        <AtomBox display="flex" flexDirection="column" alignItems="center" style={{ gap: '24px' }} textAlign="center">
-          {!selected && <Intro docLink={docLink} docText={docText} />}
+        <AtomBox display="flex" flexDirection="column" alignItems="center" style={{ gap: '12px' }} textAlign="center">
+          {!selected && <Intro docLink={docLink} />}
           {selected && selected.installed !== false && (
             <>
               {typeof selected.icon === 'string' && <Image src={selected.icon} width={108} height={108} />}
@@ -686,17 +689,37 @@ export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
   )
 }
 
-const Intro = ({ docLink, docText }: { docLink: string; docText: string }) => {
+const Intro = ({ docLink }: { docLink: string }) => {
   const { t } = useTranslation()
   return (
     <>
-      <Heading as="h1" fontSize="20px" color="secondary">
-        {t('Haven’t got a wallet yet?')}
-      </Heading>
-      <Image src="https://cdn.pancakeswap.com/wallets/wallet_intro.png" width={198} height={178} />
-      <Button as={LinkExternal} color="backgroundAlt" variant="subtle" href={docLink}>
-        {docText}
-      </Button>
+      <Image src={`${ASSET_CDN}/web/wallet-ui/intro.png`} width={150} height={228.72} />
+      <Card>
+        <CardBody p="16px">
+          <Text color="textSubtle" fontSize="12px">
+            {t('Manage and store your private keys and assets securely.')}
+          </Text>
+
+          <AutoRow gap="8px" mt="4px">
+            <Button as="a" color="backgroundAlt" variant="text" href={docLink} scale="xs" p="0">
+              {t('How to connect')}
+            </Button>
+            <Text color="disabled" fontSize="12px">
+              |
+            </Text>
+            <Button
+              as="a"
+              color="backgroundAlt"
+              variant="text"
+              href="https://pancakeswap.finance/terms-of-service"
+              scale="xs"
+              p="0"
+            >
+              {t('Disclaimer')}
+            </Button>
+          </AutoRow>
+        </CardBody>
+      </Card>
     </>
   )
 }
