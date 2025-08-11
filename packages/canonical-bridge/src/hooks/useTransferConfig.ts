@@ -10,6 +10,7 @@ import {
   layerZero,
   meson,
   stargate,
+  mayan,
 } from '@bnb-chain/canonical-bridge-widget'
 import { useEffect, useState } from 'react'
 
@@ -17,7 +18,7 @@ import axios from 'axios'
 import { env } from '../configs/env'
 import layerZeroConfig from '../token-config/mainnet/layerZero/config.json'
 
-export function useTransferConfig(supportedChains: IChainConfig[]) {
+export function useTransferConfig(supportedChains: IChainConfig[]): ICustomizedBridgeConfig['transfer'] | undefined {
   const [transferConfig, setTransferConfig] = useState<ICustomizedBridgeConfig['transfer']>()
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export function useTransferConfig(supportedChains: IChainConfig[]) {
         axios.get<{ data: IDeBridgeTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/debridge`),
         axios.get<{ data: IStargateTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/stargate`),
         axios.get<{ data: IMesonTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/meson`),
+        axios.get<{ data: IMesonTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/mayan`),
       ])
 
       const cBridgeConfig = cBridgeRes.data.data
@@ -165,6 +167,11 @@ export function useTransferConfig(supportedChains: IChainConfig[]) {
             excludedTokens: {
               42161: ['SOL'],
             },
+          }),
+          meson({
+            config: mesonConfig,
+            excludedChains: [],
+            excludedTokens: {},
           }),
         ],
       }
