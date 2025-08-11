@@ -2077,7 +2077,6 @@
   "Your position will appear here.": "Ihre Position wird hier angezeigt.",
   "Liquidity data not available.": "Keine Liquiditätsdaten verfügbar.",
   "There is no liquidity data.": "Es gibt keine Liquiditätsdaten.",
-  "Current %symbol% Price": "Aktueller %symbol%-Preis",
   "Choose Token Pair": "Token-Paar auswählen",
   "Fee Tier": "Gebührenstufe",
   "Selected Range": "Ausgewählte Spanne",
@@ -4059,5 +4058,7 @@
   "Price Range": "Preisspanne",
   "price range": "Preisspanne",
   "Price range": "Preisspanne",
-  "Liquidity Depth": "Liquidity Depth"
+  "Liquidity Depth": "Liquidity Depth",
+  "Use Current Price": "Use Current Price",
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
 }
