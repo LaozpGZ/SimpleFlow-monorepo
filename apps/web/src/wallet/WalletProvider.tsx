@@ -4,11 +4,13 @@ import { useRouter } from 'next/router'
 import { useAtom } from 'jotai'
 import { usePrivy } from '@privy-io/react-auth'
 import { atomWithStorage } from 'jotai/utils'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi'
 import { W3WConfigProvider } from './W3WConfigContext'
 import { useSyncWagmiState } from './hook/useSyncWagmiState'
 import { useWagmiConfig } from './hook/useWagmiConfig'
+import { useSyncPersistChain } from './hook/useSyncPersistChain'
+
 import { SOLANA_SUPPORTED_PATH } from './network.switch.config'
 
 interface WalletProviderProps {
@@ -123,5 +125,6 @@ export const WalletProvider = (props: WalletProviderProps) => {
 
 const Sync = () => {
   useSyncWagmiState()
+  useSyncPersistChain()
   return null
 }
