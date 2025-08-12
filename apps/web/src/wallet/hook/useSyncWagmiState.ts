@@ -1,4 +1,4 @@
-import { useAtom, useAtomValue } from 'jotai'
+import { useAtomValue, useSetAtom } from 'jotai'
 import { useEffect, useRef } from 'react'
 
 import { getQueryChainId } from 'wallet/util/getQueryChainId'
@@ -9,7 +9,7 @@ import { wagmiConfigAtom } from './useWagmiConfig'
 
 export function useSyncWagmiState() {
   const { chainId: wagmiChainId, address: evmAccount, connector } = useAccount()
-  const [{ isWrongNetwork }, updAccountState] = useAtom(accountActiveChainAtom)
+  const updAccountState = useSetAtom(accountActiveChainAtom)
   const { switchNetwork } = useSwitchNetworkV2()
 
   const oldWagmiChainId = useRef(wagmiChainId)
@@ -17,6 +17,13 @@ export function useSyncWagmiState() {
 
   useEffect(() => {
     const verifyWalletChainId = async () => {
+      if (!oldWagmiChainId.current && wagmiChainId) {
+        const urlChain = getQueryChainId()
+        switchNetwork(urlChain || wagmiChainId, {
+          from: 'connect',
+          replaceUrl: true,
+        })
+      }
       if (wagmiChainId && oldWagmiChainId.current && oldWagmiChainId.current !== wagmiChainId) {
         switchNetwork(wagmiChainId, {
           replaceUrl: true,
@@ -27,29 +34,6 @@ export function useSyncWagmiState() {
     verifyWalletChainId()
     oldWagmiChainId.current = wagmiChainId
   }, [wagmiChainId])
-
-  useAccountEffect({
-    config: wagmiConfig,
-    onConnect: (data) => {
-      const { chainId, isReconnected } = data
-
-      if (!isReconnected) {
-        switchNetwork(chainId, {
-          from: 'wagmi',
-          replaceUrl: true,
-        })
-      } else {
-        const urlChain = getQueryChainId()
-        // if wrongnetwork, keep in current state
-        if (urlChain && urlChain !== chainId && !isWrongNetwork) {
-          switchNetwork(urlChain, {
-            from: 'url',
-            replaceUrl: true,
-          })
-        }
-      }
-    },
-  })
 
   useEffect(() => {
     updAccountState((prev) => ({

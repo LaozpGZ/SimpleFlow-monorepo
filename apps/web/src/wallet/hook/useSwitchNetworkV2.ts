@@ -10,9 +10,10 @@ import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 import { SwitchChainRequest, switchChainUpdatingAtom } from 'wallet/atoms/switchChainRequestAtom'
 import { SOLANA_SUPPORTED_PATH } from 'wallet/network.switch.config'
 
+type SwitchFrom = 'wagmi' | 'url' | 'switch' | 'connect'
 export interface SwitchChainOption {
   replaceUrl?: boolean
-  from: 'wagmi' | 'url' | 'switch'
+  from: SwitchFrom
 }
 export const useSwitchNetworkV2 = () => {
   const { isConnected } = useAccount()
@@ -173,10 +174,7 @@ const useProcessSwitchChainRequest = () => {
       const { from, chainId: requestChainId } = request
       const activeChainId = activeChainIdRef.current
 
-      // Check request chain ID && active Chain ID
-      // For url type, wagmi state may not sync with the active chain ID
-      if (requestChainId === activeChainId && from !== 'url') {
-        // No need to switch
+      if (requestChainId === activeChainId && !['url', 'connect'].includes(from)) {
         return false
       }
 
