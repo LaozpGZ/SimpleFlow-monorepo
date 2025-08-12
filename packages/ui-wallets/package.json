@@ -12,6 +12,7 @@
     "@pancakeswap/uikit": "workspace:*",
     "@pancakeswap/utils": "workspace:*",
     "@pancakeswap/wagmi": "workspace:*",
+    "@pancakeswap/chains": "workspace:*",
     "wagmi": "catalog:",
     "qrcode.react": "^3.1.0"
   },

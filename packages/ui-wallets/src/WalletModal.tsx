@@ -53,6 +53,7 @@ import { ASSET_CDN } from './config/url'
 import { getWalletsConfig, TOP_WALLETS_ID_CONFIG } from './config/wallets'
 import { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'
 import { MoreWalletSection } from './components/MoreWalletSection'
+import { WalletChainSelect } from './components'
 
 const StepIntro = lazy(() => import('./components/Intro'))
 
@@ -309,7 +310,8 @@ function DesktopModal<T>({
   docText,
   mevDocLink,
   onOpenSocialLoginModal,
-  showSocialLogin,
+  displaySection,
+  setDisplaySection,
   onBackToWeb3Wallet,
   onGoogleLogin,
   onXLogin,
@@ -320,7 +322,8 @@ function DesktopModal<T>({
   onWalletConnected: (wallet: WalletConfigV2<T>, connectData?: ConnectData) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
   onOpenSocialLoginModal: () => void
-  showSocialLogin: boolean
+  displaySection: DisplaySection
+  setDisplaySection: (section: DisplaySection) => void
   onBackToWeb3Wallet: () => void
   onGoogleLogin?: () => void
   onXLogin?: () => void
@@ -357,8 +360,15 @@ function DesktopModal<T>({
   const [qrCode, setQrCode] = useState<string | undefined>(undefined)
   const { t } = useTranslation()
 
+  const [selectedMultiChainWallet, setSelectedMultiChainWallet] = useState<WalletConfigV3<T> | null>(null)
+
   const onWalletSelected = useCallback(
-    (w: WalletConfigV2<T>) => {
+    (w: WalletConfigV3<T>) => {
+      if (w.networks.length > 1) {
+        setSelectedMultiChainWallet(w)
+        setDisplaySection(DisplaySection.ChainSelect)
+        return
+      }
       connectWallet(w)
       setQrCode(undefined)
       if (w.qrCode) {
@@ -415,6 +425,7 @@ function DesktopModal<T>({
       <AtomBox
         flex={1}
         px="16px"
+        py="56px"
         display={{
           xs: 'none',
           sm: 'flex',
@@ -423,14 +434,7 @@ function DesktopModal<T>({
         flexDirection="column"
         alignItems="center"
       >
-        {showSocialLogin ? (
-          <SocialLogin
-            onGoogleLogin={onGoogleLogin}
-            onXLogin={onXLogin}
-            onTelegramLogin={onTelegramLogin}
-            onDiscordLogin={onDiscordLogin}
-          />
-        ) : (
+        {displaySection === DisplaySection.Intro && (
           <AtomBox
             display="flex"
             flexDirection="column"
@@ -456,9 +460,24 @@ function DesktopModal<T>({
             {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />}
           </AtomBox>
         )}
+        {displaySection === DisplaySection.SocialLogin && (
+          <SocialLogin
+            onGoogleLogin={onGoogleLogin}
+            onXLogin={onXLogin}
+            onTelegramLogin={onTelegramLogin}
+            onDiscordLogin={onDiscordLogin}
+          />
+        )}
+        {displaySection === DisplaySection.ChainSelect && <WalletChainSelect wallet={selectedMultiChainWallet} />}
       </AtomBox>
     </Grid>
   )
+}
+
+const enum DisplaySection {
+  Intro = 'intro',
+  ChainSelect = 'chainSelect',
+  SocialLogin = 'socialLogin',
 }
 
 export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(props: WalletModalV2Props<T>) {
@@ -476,7 +495,7 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
   const wallets_ = getWalletsConfig()
   const topWallets_ = TOP_WALLETS_ID_CONFIG.MultiChain.map((id) => wallets_.find((w) => w.id === id))
 
-  const [showSocialLogin, setShowSocialLogin] = useState(false)
+  const [displaySection, setDisplaySection] = useState<DisplaySection>(DisplaySection.Intro)
 
   const { isMobile } = useMatchBreakpoints()
   // TODO @ChefJerry, add previouslyUsedSolanaWalletsAtom support
@@ -563,11 +582,11 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
   const mobileContainerStyle: React.CSSProperties = isMobile ? { height: '100%', borderRadius: 0 } : {}
 
   const handleOpenSocialLogin = () => {
-    setShowSocialLogin(true)
+    setDisplaySection(DisplaySection.SocialLogin)
   }
 
   const handleBackToWeb3Wallet = () => {
-    setShowSocialLogin(false)
+    setDisplaySection(DisplaySection.Intro)
   }
 
   // Wrap social login callbacks to ensure proper modal cleanup
@@ -616,7 +635,8 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
                 docLink={docLink}
                 docText={docText}
                 onOpenSocialLoginModal={handleOpenSocialLogin}
-                showSocialLogin={showSocialLogin}
+                displaySection={displaySection}
+                setDisplaySection={setDisplaySection}
                 onBackToWeb3Wallet={handleBackToWeb3Wallet}
                 onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
                 onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
