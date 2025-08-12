@@ -61,7 +61,7 @@ export const SVMTradingFee = memo(
     const { tokenMap, missingMints } = useMemo(() => {
       const map = new Map<string, SPLToken>()
       const uniqueMintsSet = new Set(uniqueMints.map((mint) => mint.toLowerCase()))
-      const missing: string[] = []
+      const missing: SPLToken[] = []
 
       for (const token of tokenList) {
         // Early exit if we've found all tokens we need
@@ -72,7 +72,7 @@ export const SVMTradingFee = memo(
           map.set(tokenAddressLower, token)
 
           if (priceMap[tokenAddressLower] === undefined) {
-            missing.push(tokenAddressLower)
+            missing.push(token)
           }
 
           uniqueMintsSet.delete(tokenAddressLower) // Remove from set once found
@@ -82,7 +82,7 @@ export const SVMTradingFee = memo(
       return { tokenMap: map, missingMints: missing }
     }, [tokenList, uniqueMints, priceMap])
 
-    const { fallbackPriceMap, isFallbackLoading } = useDirectBestSolanaTrade({ missingMints, tokenMap })
+    const { fallbackPriceMap, isFallbackLoading } = useDirectBestSolanaTrade(missingMints)
 
     const combinedPriceMap = useMemo(
       () => ({ ...(priceMap || {}), ...(fallbackPriceMap || {}) }),

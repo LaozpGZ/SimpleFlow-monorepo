@@ -4,9 +4,9 @@ import { useQuery } from '@tanstack/react-query'
 import { TradeType, SPLToken, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import BigNumber from 'bignumber.js'
 import { useMemo } from 'react'
+import toNumber from 'lodash/toNumber'
 
-export function useDirectBestSolanaTrade(params: { missingMints: string[]; tokenMap: Map<string, SPLToken> }) {
-  const { missingMints, tokenMap } = params
+export function useDirectBestSolanaTrade(missingMints: SPLToken[]) {
   const { data, isLoading } = useQuery({
     queryKey: ['svm-fallback-prices', missingMints.slice().sort().join(',')],
     enabled: missingMints.length > 0,
@@ -14,10 +14,10 @@ export function useDirectBestSolanaTrade(params: { missingMints: string[]; token
       const { usdc } = solanaTokens
       const usdcDecimals = usdc.decimals
       const tasks = missingMints
-        .map(async (mint) => {
-          const inputCurrency = tokenMap.get(mint.toLowerCase())
-
+        .map(async (inputCurrency) => {
           if (!inputCurrency) return undefined
+
+          if (inputCurrency.address === usdc.address) return undefined
 
           const inputRaw = new BigNumber(10).pow(inputCurrency.decimals).toFixed(0)
 
@@ -28,10 +28,11 @@ export function useDirectBestSolanaTrade(params: { missingMints: string[]; token
               amount: UnifiedCurrencyAmount.fromRawAmount(inputCurrency, inputRaw),
               tradeType: TradeType.EXACT_INPUT,
             })
-            const outRaw = trade?.outputAmount?.quotient?.toString?.() ?? trade?.outputAmount?.quotient ?? '0'
-            const priceInUsdc = new BigNumber(outRaw).div(new BigNumber(10).pow(usdcDecimals)).toNumber()
 
-            return { mint: mint.toLowerCase(), price: priceInUsdc }
+            return {
+              mint: inputCurrency.address.toLowerCase(),
+              price: toNumber(trade?.outputAmount.toSignificant(6)) ?? 0,
+            }
           } catch (error) {
             return undefined
           }
