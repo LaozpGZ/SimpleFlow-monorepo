@@ -11,7 +11,7 @@ declare module "@@@next-typesafe-url" {
   
   interface DynamicRouter {
     "/liquidity/add/[[...poolId]]": InferRoute<import("./src/pages/liquidity/add/[[...poolId]]").RouteType>;
-    "/liquidity/create/[[...selectId]]": InferRoute<import("./src/pages/liquidity/create/[[...selectId]]").RouteType>;
+    "/liquidity/create/[...selectId]": InferRoute<import("./src/pages/liquidity/create/[...selectId]").RouteType>;
     "/liquidity/position/[[...positionId]]": InferRoute<import("./src/pages/liquidity/position/[[...positionId]]").RouteType>;
     "/liquidity/select/[[...selectId]]": InferRoute<import("./src/pages/liquidity/select/[[...selectId]]").RouteType>;
     "/liquidity/select/pools/[[...selectId]]": InferRoute<import("./src/pages/liquidity/select/pools/[[...selectId]]").RouteType>;
@@ -73,6 +73,7 @@ declare module "@@@next-typesafe-url" {
     "/liquid-staking": StaticRoute;
     "/liquid-staking/request-withdraw/[contract]": StaticRoute;
     "/liquidity/[tokenId]": StaticRoute;
+    "/liquidity/create": StaticRoute;
     "/liquidity": StaticRoute;
     "/liquidity/pool/[chainName]/[id]": StaticRoute;
     "/liquidity/pools": StaticRoute;

@@ -11,6 +11,7 @@ export const scales = {
 export const variants = {
   PRIMARY: "primary",
   PRIMARY60: "primary60",
+  PRIMARY60_OUTLINE: "primary60Outline",
   SECONDARY: "secondary",
   TERTIARY: "tertiary",
   TEXT: "text",

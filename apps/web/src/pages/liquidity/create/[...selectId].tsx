@@ -5,7 +5,7 @@ import { useDefaultSelectIdRoute, useSelectIdRoute } from 'hooks/dynamicRoute/us
 import dynamic from 'next/dynamic'
 import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
-import { CreateLiquidityInfinityForm } from 'views/CreateLiquidityPool'
+import { CreateLiquidityInfinityForm } from 'views/CreateLiquidityPool/Infinity/CreateLiquidityInfinityForm'
 
 export type RouteType = typeof SelectIdRoute
 

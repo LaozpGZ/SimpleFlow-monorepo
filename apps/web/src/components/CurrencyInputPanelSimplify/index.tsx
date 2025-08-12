@@ -35,8 +35,13 @@ const CurrencySelectButton = styled(Button).attrs({ variant: 'text', scale: 'sm'
   padding: 24px 8px 22px;
   margin-top: 2px;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: ${({ theme }) => theme.colors.invertedContrast};
+  }
+
+  &:disabled {
+    cursor: default;
+    background: transparent;
   }
 `
 const SymbolText = styled(Text)`
@@ -353,6 +358,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
               data-dd-action-name="Select currency"
               selected={!!currency}
               onClick={onCurrencySelectClick}
+              disabled={disableCurrencySelect}
             >
               <Flex alignItems="center" justifyContent="space-between">
                 {pair ? (

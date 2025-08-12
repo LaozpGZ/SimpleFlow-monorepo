@@ -14,6 +14,7 @@ const StyledLogo = styled(TokenLogo)<{ size: string }>`
   width: ${({ size }) => size};
   height: ${({ size }) => size};
   min-width: ${({ size }) => size};
+  min-height: ${({ size }) => size};
   border-radius: 50%;
   ${space}
 `;
@@ -92,6 +93,7 @@ export function CurrencyLogo({
           size={size}
           srcs={[`${ASSET_CDN}/web/native/${currency.chainId}.png`]}
           width={size}
+          height={size}
           imageRef={imageRef}
           style={style}
           {...props}

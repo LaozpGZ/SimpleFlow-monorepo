@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Button, FlexGap, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Box, Button, FlexGap, Tab, TabMenu, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import Page_ from 'components/Layout/Page'
 import { useRouter } from 'next/router'
@@ -9,6 +9,7 @@ import { PoolsBanner } from './components'
 import { AddLiquidityButton } from './components/AddLiquidityButton'
 import { PoolsPage } from './PoolsPage'
 import { PositionPage } from './PositionPage'
+import { CreatePoolButton } from './components/CreatePoolButton'
 
 const StyledTab = styled(Tab)`
   padding: 0;
@@ -17,7 +18,9 @@ const StyledTab = styled(Tab)`
   }
 `
 
-const ButtonContainer = styled.div`
+const ButtonContainer = styled(Box)`
+  display: flex;
+  gap: 8px;
   @media (max-width: 967px) {
     min-width: 200px;
     button {
@@ -114,8 +117,9 @@ export const UniversalFarms: React.FC<PropsWithChildren> = () => {
             {Object.values(tabsConfig).map(({ menu }) => menu())}
           </TabMenu>
           {!isMobile && !isMd && (
-            <ButtonContainer>
-              <AddLiquidityButton scale="md" mb="12px" />
+            <ButtonContainer mb="12px">
+              <CreatePoolButton scale="md" />
+              <AddLiquidityButton scale="md" />
             </ButtonContainer>
           )}
         </FlexGap>
