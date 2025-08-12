@@ -10,6 +10,7 @@ import { getPoolTicks } from 'hooks/useAllTicksQuery'
 import memoize from 'lodash/memoize'
 import { PoolQuery, PoolQueryOptions } from 'quoter/quoter.types'
 import { v3Clients } from 'utils/graphql'
+import { POOL_EDGE_API_FETCH_TIMEOUT } from 'quoter/consts'
 import { getViemClients } from 'utils/viem'
 import { edgePoolQueryClient } from './edgePoolQueryClient'
 import { Protocol as EdgeProtocol } from './edgeQueries.util'
@@ -31,11 +32,11 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     key: getCacheKey,
     isValid,
     maxAge: 30_000,
-    requestTimeout: 3_000,
+    requestTimeout: POOL_EDGE_API_FETCH_TIMEOUT,
   }
 
   const getV2CandidatePools = cacheByLRU(async (query: PoolQuery, options: PoolQueryOptions) => {
-    const { currencyA, currencyB, blockNumber } = query
+    const { currencyA, currencyB } = query
 
     const queryFunc = async () => {
       const provider = options.provider ?? getViemClients
@@ -76,7 +77,6 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
   }, cacheOption)
 
   const getV3PoolsWithTicksOnChain = cacheByLRU(async (query: PoolQuery, options: PoolQueryOptions) => {
-    const { currencyA, currencyB, blockNumber } = query
     const queryFunc = async () => {
       const provider = options.provider ?? getViemClients
 
@@ -132,7 +132,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
   )
 
   const getInfinityCandidatePoolsLight = cacheByLRU(async (query: PoolQuery, options: PoolQueryOptions) => {
-    const { currencyA, currencyB, blockNumber } = query
+    const { currencyA, currencyB } = query
     const queryFunc = async () => {
       const provider = options.provider ?? getViemClients
       const tvMap = await fetchTvMap(['infinityBin', 'infinityCl'], query.chainId)
@@ -149,7 +149,7 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
   }, cacheOption)
 
   const getInfinityCandidatePools = cacheByLRU(async (query: PoolQuery, options: PoolQueryOptions) => {
-    const { currencyA, currencyB, blockNumber } = query
+    const { currencyA, currencyB } = query
 
     const queryFunc = async () => {
       const provider = options.provider ?? getViemClients
@@ -223,7 +223,7 @@ export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOp
   }
   const call = createAsyncCallWithFallbacks(defaultQuery, {
     fallbacks: [fallbackQuery],
-    fallbackTimeout: 1_500, // 1.5s waiting for fetch candidate pools remote
+    fallbackTimeout: POOL_EDGE_API_FETCH_TIMEOUT,
   })
 
   return call()
@@ -253,7 +253,7 @@ export const fetchCandidatePoolsLite = async (query: PoolQuery, options: PoolQue
 
   const call = createAsyncCallWithFallbacks(defaultQuery, {
     fallbacks: [fallbackQuery],
-    fallbackTimeout: 3_000,
+    fallbackTimeout: POOL_EDGE_API_FETCH_TIMEOUT,
   })
 
   return call()
