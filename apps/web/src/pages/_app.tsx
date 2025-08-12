@@ -116,7 +116,9 @@ function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>
           // @ts-ignore
           <Component.Meta {...pageProps} />
         )}
-        <GlobalHooks />
+        <Suspense>
+          <GlobalHooks />
+        </Suspense>
         <ResetCSS />
         <GlobalStyle />
         <GlobalCheckClaimStatus excludeLocations={[]} />

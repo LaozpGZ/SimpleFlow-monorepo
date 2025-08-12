@@ -19,6 +19,10 @@ const withBundleAnalyzer = BundleAnalyzer({
 
 const withVanillaExtract = createVanillaExtractPlugin()
 
+const isProd = process.env.VERCEL_ENV === 'production' || 
+  process.env.NODE_ENV === 'production' || 
+  process.env.VERCEL_ENV === 'preview'
+
 const sentryWebpackPluginOptions =
   process.env.VERCEL_ENV === 'production'
     ? {
@@ -44,6 +48,22 @@ const workerDeps = Object.keys(smartRouterPkgs.dependencies)
   .map((d) => d.replace('@pancakeswap/', 'packages/'))
   .concat(['/packages/smart-router/', '/packages/swap-sdk/', '/packages/token-lists/'])
 
+const prodTranspiles = [
+    'next-typesafe-url',
+    '@pancakeswap/farms',
+    '@pancakeswap/position-managers',
+    '@pancakeswap/localization',
+    '@pancakeswap/hooks',
+    '@pancakeswap/utils',
+    '@pancakeswap/widgets-internal',
+    '@pancakeswap/ifos',
+    '@pancakeswap/uikit'
+  ]
+
+const basicTranspiles = [
+  'next-typesafe-url',
+  '@pancakeswap/localization', 
+]
 /** @type {import('next').NextConfig} */
 const config = {
   typescript: {
@@ -61,25 +81,14 @@ const config = {
     // without throwing `import-esm-externals` errors
     esmExternals: 'loose',
     webpackBuildWorker: true,
-    bundlePagesExternals: true
   },
-  bundlePagesRouterDependencies: true,
+  bundlePagesRouterDependencies:  isProd,
   outputFileTracingRoot: path.join(__dirname, '../../'),
   outputFileTracingExcludes: {
     '*': [],
   },
-  transpilePackages: [
-    'next-typesafe-url',
-    '@pancakeswap/farms',
-    '@pancakeswap/position-managers',
-    '@pancakeswap/localization',
-    '@pancakeswap/hooks',
-    '@pancakeswap/utils',
-    '@pancakeswap/widgets-internal',
-    '@pancakeswap/ifos',
-    '@pancakeswap/uikit'
-  ],
-  reactStrictMode: true,
+  transpilePackages: isProd ? prodTranspiles: basicTranspiles,
+  reactStrictMode: isProd,
   images: {
     contentDispositionType: 'attachment',
     remotePatterns: [
@@ -252,23 +261,26 @@ const config = {
       level: 'info', // or 'verbose' for more detail
     };
     // tree shake sentry tracing
-    webpackConfig.plugins.push(
-      new webpack.DefinePlugin({
-        __SENTRY_DEBUG__: false,
-        __SENTRY_TRACING__: false,
-      }),
-    )
-    webpackConfig.plugins.push(
-      new RetryChunkLoadPlugin({
-        cacheBust: `function() {
-          return 'cache-bust=' + Date.now();
-        }`,
-        retryDelay: `function(retryAttempt) {
-          return 2 ** (retryAttempt - 1) * 500;
-        }`,
-        maxRetries: 5,
-      }),
-    )
+    if(isProd) {
+      webpackConfig.plugins.push(
+        new webpack.DefinePlugin({
+          __SENTRY_DEBUG__: false,
+          __SENTRY_TRACING__: false,
+        }),
+      )
+
+      webpackConfig.plugins.push(
+        new RetryChunkLoadPlugin({
+          cacheBust: `function() {
+            return 'cache-bust=' + Date.now();
+          }`,
+          retryDelay: `function(retryAttempt) {
+            return 2 ** (retryAttempt - 1) * 500;
+          }`,
+          maxRetries: 5,
+        }),
+      )
+    }
     if (!isServer && webpackConfig.optimization.splitChunks) {
       // webpack doesn't understand worker deps on quote worker, so we need to manually add them
       // https://github.com/webpack/webpack/issues/16895
@@ -291,6 +303,20 @@ const config = {
   },
 }
 
-export default withVercelToolbar(
-  withBundleAnalyzer(withVanillaExtract(withSentryConfig(withWebSecurityHeaders(config)), sentryWebpackPluginOptions)),
-)
+const withTooling = (cfg) =>
+ isProd 
+    ? withVercelToolbar(
+        withBundleAnalyzer(
+          withVanillaExtract(
+            withSentryConfig(withWebSecurityHeaders(cfg), sentryWebpackPluginOptions)
+          )
+        )
+      )
+    : withWebSecurityHeaders(
+        withBundleAnalyzer( // still allow ANALYZE=true locally when needed
+          withVanillaExtract(cfg)
+        )
+      )
+
+export default withTooling(config)
+
