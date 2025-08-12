@@ -54,7 +54,7 @@ export const fullSizeModalWrapperClass = style([
       height: '690px',
     },
     lg: {
-      width: '792px',
+      width: '720px',
     },
   }),
 ])

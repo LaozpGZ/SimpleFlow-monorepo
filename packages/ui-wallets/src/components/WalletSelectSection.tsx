@@ -13,7 +13,7 @@ export type WalletSelectSectionProps = React.PropsWithChildren<{
 export const WalletSelectSection: React.FC<WalletSelectSectionProps> = ({ label, children }) => {
   return (
     <Column gap="6px">
-      <Text fontSize="14px" color="textSubtle" lineHeight={1.5}>
+      <Text textTransform="uppercase" fontSize="12px" fontWeight="600" color="textSubtle" lineHeight={1.5}>
         {label}
       </Text>
       <AtomBox display="grid" overflowY="auto" overflowX="hidden" className={walletSelectWrapperClass}>

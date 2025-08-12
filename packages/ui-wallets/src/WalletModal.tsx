@@ -25,6 +25,7 @@ import {
   WarningIcon,
 } from '@pancakeswap/uikit'
 import { useAtom } from 'jotai'
+import styled from 'styled-components'
 import { lazy, MouseEvent, PropsWithChildren, Suspense, useCallback, useMemo, useState } from 'react'
 import { isMobile as isMobileDevice } from 'react-device-detect'
 import {
@@ -239,7 +240,7 @@ function WalletSelect<T>({
       overflowY="auto"
       overflowX="hidden"
       gap="16px"
-      style={{ paddingRight: '28px', marginRight: '-40px', ...style }}
+      style={{ paddingRight: '16px', marginRight: '-24px', ...style }}
       className={scrollbarClass}
     >
       {sections.map(({ label, items, isMore }) =>
@@ -399,7 +400,7 @@ function DesktopModal<T>({
             {t('Connect Wallet')}
           </Heading>
           <FlexGap gap="8px" alignItems="center" as="label" htmlFor="wallet-modal-network-toggle">
-            <Text textTransform="uppercase" fontWeight="600" color="secondary" fontSize="12px">
+            <Text textTransform="uppercase" fontWeight="600" color="textSubtle" fontSize="12px">
               {t('Solana Only')}
             </Text>
             <Toggle scale="md" id="wallet-modal-network-toggle" />
@@ -419,7 +420,7 @@ function DesktopModal<T>({
       </AtomBox>
       <AtomBox
         flex={1}
-        mx="24px"
+        px="16px"
         display={{
           xs: 'none',
           sm: 'flex',
@@ -428,7 +429,14 @@ function DesktopModal<T>({
         flexDirection="column"
         alignItems="center"
       >
-        <AtomBox display="flex" flexDirection="column" alignItems="center" style={{ gap: '12px' }} textAlign="center">
+        <AtomBox
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          style={{ gap: '12px' }}
+          textAlign="center"
+          width="100%"
+        >
           {!selected && <Intro docLink={docLink} />}
           {selected && selected.installed !== false && (
             <>
@@ -604,7 +612,7 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
           }}
         >
           <AtomBox position="relative">
-            <TabContainer docLink={docLink} docText={docText} fullSize={fullSize} onDismiss={props.onDismiss}>
+            <TabContainer fullSize={fullSize} onDismiss={props.onDismiss}>
               {isMobile ? (
                 <MobileModal
                   mevDocLink={mevDocLink}
@@ -637,14 +645,18 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
   )
 }
 
+const StyledIntroCard = styled(Card)`
+  width: 100%;
+`
+
 const Intro = ({ docLink }: { docLink: string }) => {
   const { t } = useTranslation()
   return (
     <>
       <Image src={`${ASSET_CDN}/web/wallet-ui/intro.png`} width={150} height={228.72} />
-      <Card>
+      <StyledIntroCard>
         <CardBody p="16px">
-          <Text color="textSubtle" fontSize="12px">
+          <Text textAlign="left" color="textSubtle" fontSize="12px">
             {t('Manage and store your private keys and assets securely.')}
           </Text>
 
@@ -667,7 +679,7 @@ const Intro = ({ docLink }: { docLink: string }) => {
             </Button>
           </AutoRow>
         </CardBody>
-      </Card>
+      </StyledIntroCard>
     </>
   )
 }
