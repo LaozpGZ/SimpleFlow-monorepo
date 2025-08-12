@@ -51,7 +51,7 @@ export const fullSizeModalWrapperClass = style([
       marginBottom: 0,
     },
     md: {
-      height: '690px',
+      maxHeight: '690px',
     },
     lg: {
       width: '720px',
@@ -92,12 +92,15 @@ export const walletSelectWrapperClass = style(
 )
 
 export const walletIconClass = style({
-  width: '48px',
-  height: '48px',
+  width: '40px',
+  height: '40px',
   borderRadius: '12px',
 })
 
 export const scrollbarClass = style({
+  maxHeight: '400px',
+  overflowY: 'auto',
+
   '::-webkit-scrollbar': {
     width: '6px',
   },

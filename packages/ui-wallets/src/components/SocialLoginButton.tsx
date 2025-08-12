@@ -46,10 +46,10 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({ onClick, assetCdn
           ))}
         </FlexGap>
         <AutoRow width="fit-content" gap="8px" alignItems="center">
-          <Text fontSize="12px" color="secondary">
+          <Text fontSize="12px" color="textSubtle">
             {t('Social Login')}
           </Text>
-          <ArrowDropDownIcon width="24px" height="24px" color="secondary" style={{ rotate: '-90deg' }} />
+          <ArrowDropDownIcon width="24px" height="24px" color="textSubtle" style={{ rotate: '-90deg' }} />
         </AutoRow>
       </Flex>
     </StyledButton>

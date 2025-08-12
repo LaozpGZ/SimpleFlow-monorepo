@@ -2,6 +2,7 @@ import { usePreloadImages, useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   AtomBox,
+  AutoColumn,
   AutoRow,
   Button,
   Card,
@@ -9,6 +10,7 @@ import {
   CloseIcon,
   Column,
   FlexGap,
+  Grid,
   Heading,
   IconButton,
   Image,
@@ -48,6 +50,7 @@ import { ConnectData, LinkOfDevice, WalletConfigV2, WalletConfigV3, WalletModalV
 import { ASSET_CDN } from './config/url'
 import { getWalletsConfig, TOP_WALLETS_ID_CONFIG } from './config/wallets'
 import { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'
+import { MoreWalletSection } from './components/MoreWalletSection'
 
 const StepIntro = lazy(() => import('./components/Intro'))
 
@@ -231,7 +234,7 @@ function WalletSelect<T>({
     () => [
       { label: t('Previously used'), items: previouslyUsedWallets },
       { label: t('Top Wallets'), items: topWallets },
-      { label: t('More Wallets'), items: walletsToShow, isMore: true },
+      // { label: t('More Wallets'), items: walletsToShow, isMore: true },
     ],
     [t, walletsToShow, topWallets, previouslyUsedWallets],
   )
@@ -243,39 +246,16 @@ function WalletSelect<T>({
       style={{ paddingRight: '16px', marginRight: '-24px', ...style }}
       className={scrollbarClass}
     >
-      {sections.map(({ label, items, isMore }) =>
+      {sections.map(({ label, items }) =>
         items.length > 0 ? (
           <WalletSelectSection key={label} label={label}>
             {items.map((wallet) => (
-              <WalletSelectItem key={wallet.id} wallet={wallet} onClick={onClick} />
+              <WalletSelectItem key={wallet.id} wallet={wallet as WalletConfigV3<T>} onClick={onClick} />
             ))}
-            {isMore && !showMore && wallets.length > walletDisplayCount && (
-              <AtomBox display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-                <Button
-                  height="auto"
-                  variant="text"
-                  as={AtomBox}
-                  flexDirection="column"
-                  onClick={() => setShowMore(true)}
-                >
-                  <AtomBox
-                    className={walletIconClass}
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    bgc="dropdown"
-                  >
-                    <MoreHorizontalIcon color="text" />
-                  </AtomBox>
-                  <Text fontSize="12px" textAlign="center" mt="4px">
-                    {t('More')}
-                  </Text>
-                </Button>
-              </AtomBox>
-            )}
           </WalletSelectSection>
         ) : null,
       )}
+      <MoreWalletSection onClick={onClick} wallets={walletsToShow as WalletConfigV3<T>[]} />
     </Column>
   )
 }
@@ -382,7 +362,7 @@ function DesktopModal<T>({
   )
 
   return (
-    <>
+    <Grid gridTemplateColumns="1fr 1fr">
       <AtomBox
         display="flex"
         flexDirection="column"
@@ -416,7 +396,7 @@ function DesktopModal<T>({
           displayCount="all"
           onClick={onWalletSelected}
         />
-        {mevDocLink ? <MEVSection mevDocLink={mevDocLink} /> : null}
+        {/* {mevDocLink ? <MEVSection mevDocLink={mevDocLink} /> : null} */}
       </AtomBox>
       <AtomBox
         flex={1}
@@ -454,7 +434,7 @@ function DesktopModal<T>({
           {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />}
         </AtomBox>
       </AtomBox>
-    </>
+    </Grid>
   )
 }
 

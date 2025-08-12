@@ -7,7 +7,7 @@ import { walletIconClass, walletSelectWrapperClass } from '../WalletModal.css'
 import { ASSET_CDN } from '../config/url'
 
 export type WalletSelectSectionProps = React.PropsWithChildren<{
-  label: string
+  label: React.ReactNode
 }>
 
 export const WalletSelectSection: React.FC<WalletSelectSectionProps> = ({ label, children }) => {
@@ -33,7 +33,7 @@ export const WalletSelectItem = <T,>({ wallet, onClick }: WalletSelectItemProps<
   const Icon = wallet.icon
 
   return (
-    <AtomBox border="1" borderRadius="default" p="12px" style={{ maxWidth: '106px' }}>
+    <AtomBox border="1" borderRadius="default" p="8px" style={{ maxWidth: '106px' }}>
       <Button
         key={wallet.id}
         variant="text"
@@ -54,11 +54,11 @@ export const WalletSelectItem = <T,>({ wallet, onClick }: WalletSelectItemProps<
             justifyContent="center"
             alignItems="center"
             className={walletIconClass}
-            style={{ borderRadius: '13px' }}
+            style={{ borderRadius: '12px' }}
             overflow="hidden"
           >
             {isImage ? (
-              <Image src={Icon as string} width={48} height={48} />
+              <Image src={Icon as string} width={40} height={40} />
             ) : (
               <Icon width={24} height={24} color="textSubtle" />
             )}
