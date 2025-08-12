@@ -7,7 +7,7 @@ export interface SwitchChainRequest {
   replaceUrl: boolean // Replace url with chainId if succ
   wagmiConnector?: Connector // Connector used to switch chain
   evmAddress?: `0x${string}` // EVM address used to check session sync
-  from: 'wagmi' | 'url' | 'switch'
+  from: 'wagmi' | 'url' | 'switch' | 'connect'
   path: string
 }
 
