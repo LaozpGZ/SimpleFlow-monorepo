@@ -45,7 +45,7 @@ export const addMenuItemSupported = (item, chainId: number | undefined) => {
   if (item?.href) {
     return {
       ...item,
-      href: `${item.href}?chain=${CHAIN_QUERY_NAME[ChainId.BSC]}`,
+      href: `${item.href}?chain=${CHAIN_QUERY_NAME[ChainId.BSC]}&persistChain=1`,
     }
   }
   return item
