@@ -22,7 +22,7 @@ import { SendGiftProvider, useSendGiftContext } from 'views/Gift/providers/SendG
 import { UnclaimedOnlyProvider } from 'views/Gift/providers/UnclaimedOnlyProvider'
 import { useAccount } from 'wagmi'
 import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
@@ -75,7 +75,7 @@ const ClickablePopover = styled.div<{ isOpen: boolean }>`
 
 const UserMenu = () => {
   const { t } = useTranslation()
-  const { chainId, isWrongNetwork, account: evmAccount, solanaAccount } = useAccountActiveChain()
+  const { chainId, account: evmAccount, solanaAccount } = useAccountActiveChain()
   const { connector } = useAccount()
   const { ready, authenticated, user } = usePrivy()
 
@@ -262,34 +262,6 @@ const UserMenu = () => {
           />
         )}
       </>
-    )
-  }
-
-  if (isWrongNetwork) {
-    return (
-      <ClickableUserMenu ref={menuRef}>
-        <UIKitUserMenu
-          text={t('Network')}
-          variant="danger"
-          onClick={() => {
-            if (!isMobile) {
-              setIsMenuOpen((prev) => !prev)
-            }
-          }}
-        >
-          {!isMobile && !isMenuOpen
-            ? ({ isOpen }) =>
-                isOpen && <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveModalOpen(true)} />
-            : undefined}
-        </UIKitUserMenu>
-
-        {/* Custom click-based menu for desktop */}
-        {!isMobile && (
-          <ClickablePopover isOpen={isMenuOpen}>
-            {isMenuOpen && <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveModalOpen(true)} />}
-          </ClickablePopover>
-        )}
-      </ClickableUserMenu>
     )
   }
 

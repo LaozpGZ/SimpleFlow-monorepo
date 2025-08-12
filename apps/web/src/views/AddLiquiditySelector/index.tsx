@@ -31,6 +31,7 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { COMPACT_LIQUIDITY_TYPES, LIQUIDITY_TYPES, LiquidityType } from 'utils/types'
 import { Chain } from 'viem/chains'
 import { bscTokens } from '@pancakeswap/tokens'
+import { PERSIST_CHAIN_KEY } from 'config/constants'
 import { usePoolTypeQuery } from './hooks/usePoolTypeQuery'
 
 const StyledCard = styled(Card)`
@@ -95,6 +96,7 @@ export const AddLiquiditySelector = () => {
     const queries = {
       poolType: poolTypeQuery,
       chain: queryChainName,
+      [PERSIST_CHAIN_KEY]: 1,
     }
 
     const queryParams = new URLSearchParams()
@@ -116,9 +118,9 @@ export const AddLiquiditySelector = () => {
 
     return {
       infinity: `/liquidity/select/pools/${chainId}/infinity/${tokenParams}?${queryParams.toString()}`,
-      v3: `/add/${baseToken}/${quoteToken}?chain=${queryChainName}`,
-      v2: `/v2/add/${baseToken}/${quoteToken}?chain=${queryChainName}`,
-      stableSwap: `/stable/add/${baseToken}/${quoteToken}?chain=${queryChainName}`,
+      v3: `/add/${baseToken}/${quoteToken}?${queryParams.toString()}`,
+      v2: `/v2/add/${baseToken}/${quoteToken}?${queryParams.toString()}`,
+      stableSwap: `/stable/add/${baseToken}/${quoteToken}?${queryParams.toString()}`,
     } satisfies Record<LiquidityType, string>
   }, [baseCurrency, quoteCurrency, poolTypeQuery, chainId, queryChainName])
 
