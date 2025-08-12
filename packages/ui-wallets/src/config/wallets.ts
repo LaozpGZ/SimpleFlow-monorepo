@@ -224,3 +224,9 @@ export const getWalletsConfig = (): WalletConfigV3<EvmConnectorNames | SolanaCon
     },
   ]
 }
+
+export const TOP_WALLETS_ID_CONFIG = {
+  MultiChain: [WalletIds.Metamask, WalletIds.BinanceW3W],
+  Evm: [WalletIds.Metamask, WalletIds.BinanceW3W, WalletIds.Okx],
+  Solana: [WalletIds.Phantom, WalletIds.Solflare, WalletIds.Backpack],
+}
