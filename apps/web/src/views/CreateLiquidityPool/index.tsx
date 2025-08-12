@@ -3,13 +3,15 @@ import styled from 'styled-components'
 import { ArrowForwardIcon, Box, Card, CardBody, Container, FlexGap, LinkExternal, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { LightGreyCard, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { getChainName } from '@pancakeswap/chains'
 import { BreadcrumbNav } from './components/BreadcrumbNav'
 
 const StyledCard = styled(LightGreyCard)`
   border-radius: 24px;
   border-color: ${({ theme }) => theme.colors.inputSecondary};
 
-  padding: 8px 16px;
+  padding: 12px 16px;
 
   display: flex;
   gap: 16px;
@@ -39,6 +41,8 @@ const StyledCard = styled(LightGreyCard)`
 
 export const CreateLiquiditySelector = () => {
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
+  const chainName = getChainName(chainId)
 
   return (
     <Page>
@@ -53,7 +57,7 @@ export const CreateLiquiditySelector = () => {
               </LinkExternal>
             </FlexGap>
 
-            <NextLinkFromReactRouter to="/liquidity/create/infinity">
+            <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/infinity`}>
               <StyledCard mt="16px">
                 <Box>
                   <Text fontSize="20px" color="secondary" bold>
@@ -71,7 +75,7 @@ export const CreateLiquiditySelector = () => {
               </StyledCard>
             </NextLinkFromReactRouter>
 
-            <NextLinkFromReactRouter to="/liquidity/create/v3">
+            <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v3`}>
               <StyledCard mt="16px">
                 <Box>
                   <Text fontSize="20px" color="secondary" bold>
@@ -89,7 +93,7 @@ export const CreateLiquiditySelector = () => {
               </StyledCard>
             </NextLinkFromReactRouter>
 
-            <NextLinkFromReactRouter to="/liquidity/create/v2">
+            <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v2`}>
               <StyledCard mt="16px">
                 <Box>
                   <Text fontSize="20px" color="secondary" bold>

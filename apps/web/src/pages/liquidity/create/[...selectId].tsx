@@ -1,16 +1,18 @@
-import { Box } from '@pancakeswap/uikit'
 import PageLoader from 'components/Loader/PageLoader'
 import { SelectIdRoute } from 'dynamicRoute'
 import { useDefaultSelectIdRoute, useSelectIdRoute } from 'hooks/dynamicRoute/useSelectIdRoute'
 import dynamic from 'next/dynamic'
 import { NextPageWithLayout } from 'utils/page.types'
 import { CHAIN_IDS } from 'utils/wagmi'
+import { BreadcrumbNav } from 'views/CreateLiquidityPool/components/BreadcrumbNav'
 import { CreateLiquidityInfinityForm } from 'views/CreateLiquidityPool/Infinity/CreateLiquidityInfinityForm'
+import { CreateLiquidityV3Form } from 'views/CreateLiquidityPool/V3/CreateLiquidityV3Form'
+import PageLayout from 'components/Layout/Page'
 
 export type RouteType = typeof SelectIdRoute
 
 const CreateLiquidityPage = () => {
-  const { routeParams } = useSelectIdRoute()
+  const { routeParams, protocolName } = useSelectIdRoute()
   useDefaultSelectIdRoute()
 
   if (!routeParams) {
@@ -18,9 +20,14 @@ const CreateLiquidityPage = () => {
   }
 
   return (
-    <Box my="24px">
-      <CreateLiquidityInfinityForm />
-    </Box>
+    <PageLayout>
+      <BreadcrumbNav />
+      {protocolName === 'infinity' ? (
+        <CreateLiquidityInfinityForm />
+      ) : protocolName === 'v3' ? (
+        <CreateLiquidityV3Form />
+      ) : null}
+    </PageLayout>
   )
 }
 

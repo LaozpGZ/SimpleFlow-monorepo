@@ -1,4 +1,5 @@
 import { chainNames, getChainName } from '@pancakeswap/chains'
+import { Protocol } from '@pancakeswap/farms'
 import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import { Native } from '@pancakeswap/sdk'
 import { CAKE, USDC } from '@pancakeswap/tokens'
@@ -8,6 +9,7 @@ import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useRouteParams } from 'next-typesafe-url/pages'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo } from 'react'
+import { isSupportedProtocol } from 'utils/protocols'
 import { z } from 'zod'
 
 export const useSelectIdRoute = () => {
@@ -17,11 +19,24 @@ export const useSelectIdRoute = () => {
 
   const { data: routeParams, error: routeError, isLoading } = useRouteParams(SelectIdRoute.routeParams)
 
+  const protocolName = useMemo(() => {
+    const protocolFromQuery = router.query.selectId?.[1] || ''
+
+    return (
+      protocolFromQuery === 'infinity' && INFINITY_SUPPORTED_CHAINS.includes(activeChainId)
+        ? 'infinity'
+        : isSupportedProtocol(protocolFromQuery as Protocol)
+        ? protocolFromQuery
+        : 'v3'
+    ) as 'infinity' | 'v3' | 'v2' | 'stable'
+  }, [activeChainId, router.query])
+
   const replaceWithDefaultRoute = useCallback(() => {
     if (!activeChainId || !router.isReady) return
+
     const chainName = getChainName(activeChainId)
     console.debug('debug chainName', { chainName, activeChainId })
-    const protocolName = INFINITY_SUPPORTED_CHAINS.includes(activeChainId) ? 'infinity' : 'v3'
+
     const currencyA = native.symbol
     const currencyB: string = CAKE[activeChainId]?.address ?? USDC[activeChainId]?.address ?? ''
 
@@ -36,9 +51,10 @@ export const useSelectIdRoute = () => {
       undefined,
       { shallow: true },
     )
-  }, [activeChainId, native.symbol, router])
+  }, [activeChainId, native.symbol, router, protocolName])
 
   return {
+    protocolName,
     replaceWithDefaultRoute,
     routeParams,
     routeError,

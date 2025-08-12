@@ -1,6 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Card, CardBody, DynamicSection, Grid, Heading, Spinner } from '@pancakeswap/uikit'
-import Page from 'components/Layout/Page'
 import { FieldLiquidityShape } from 'components/Liquidity/Form/FieldLiquidityShape'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { FieldBinStep } from 'views/CreateLiquidityPool/components/FieldBinStep'
@@ -10,7 +9,6 @@ import { FieldFeeTierSetting } from 'views/CreateLiquidityPool/components/FieldF
 import { FieldHookSettings } from 'views/CreateLiquidityPool/components/FieldHookSettings'
 import { FieldSelectCurrencies } from 'views/CreateLiquidityPool/components/FieldSelectCurrencies'
 import { FieldStartingPrice } from 'views/CreateLiquidityPool/components/FieldStartingPrice'
-import { BreadcrumbNav } from '../components/BreadcrumbNav'
 import { FieldCreateDepositAmount } from '../components/FieldCreateDepositAmount'
 import { FieldPoolType } from '../components/FieldPoolType'
 import { FieldPriceRange } from '../components/FieldPriceRange'
@@ -38,8 +36,7 @@ export const CreateLiquidityInfinityForm = () => {
   }
 
   return (
-    <Page>
-      <BreadcrumbNav />
+    <>
       <Heading as="h3" scale="lg" mb="24px" mt="40px">
         {t('Create Infinity Liquidity Pool')}
       </Heading>
@@ -76,6 +73,6 @@ export const CreateLiquidityInfinityForm = () => {
           </CardBody>
         </Card>
       </Grid>
-    </Page>
+    </>
   )
 }

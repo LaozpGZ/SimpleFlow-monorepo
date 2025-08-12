@@ -1,33 +1,53 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Breadcrumbs, Link, Text } from '@pancakeswap/uikit'
-import { Protocol } from '@pancakeswap/farms'
+import { Box, Breadcrumbs, Link, Text } from '@pancakeswap/uikit'
+import { useRouter } from 'next/router'
+import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useSelectIdRoute } from 'hooks/dynamicRoute/useSelectIdRoute'
+import { useCallback } from 'react'
+import styled from 'styled-components'
+import { TabMenu } from 'views/BurnDashboard/components/TabMenu'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useMemo } from 'react'
-import { isInfinityProtocol } from 'utils/protocols'
 
-export type BreadcrumbNavProps = {
-  protocol?: Protocol
-}
+const StyledLink = styled(NextLinkFromReactRouter)`
+  &:hover {
+    text-decoration: underline;
+  }
+`
 
 // @todo @ChefJerry UI no match with design
-export const BreadcrumbNav: React.FC<BreadcrumbNavProps> = ({ protocol }) => {
+export const BreadcrumbNav: React.FC = () => {
+  const router = useRouter()
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
 
-  const text = useMemo(() => {
-    if (!protocol) return ''
-    return isInfinityProtocol(protocol) ? t('Infinity') : protocol === Protocol.V3 ? t('V3') : t('V2')
-  }, [protocol, t])
+  const { protocolName, routeParams } = useSelectIdRoute()
+
+  const handleProtocolChange = useCallback(
+    (protocol: 'infinity' | 'v3' | 'v2') => {
+      const currencyIdA = routeParams?.selectId?.[2]
+      const currencyIdB = routeParams?.selectId?.[3]
+      if (currencyIdA && currencyIdB) {
+        router.push(`/liquidity/create/${chainId}/${protocol}/${currencyIdA}/${currencyIdB}`)
+      } else router.push(`/liquidity/create/${chainId}/${protocol}`)
+    },
+    [router, chainId, routeParams],
+  )
 
   return (
     <Breadcrumbs mb="32px">
       <Link href="/liquidity/pools">
-        <Text color="primary60" bold={false}>
-          {t('Farms')}
-        </Text>
+        <Text color="primary60">{t('Farms')}</Text>
       </Link>
-      {protocol && <Link href={`/liquidity/create/${chainId}/${protocol}`}>{text}</Link>}
-      <Text>{!protocol ? t('Create Liquidity Pool') : t('Create %protocol% Pool', { protocol: text })}</Text>
+      <StyledLink to="/liquidity/create">
+        <Text color="primary60">{t('Create Liquidity Pool')}</Text>
+      </StyledLink>
+      <Box>
+        <TabMenu
+          tabs={['infinity', 'v3', 'v2']}
+          defaultTab={protocolName as 'infinity' | 'v3' | 'v2'}
+          onTabChange={handleProtocolChange}
+        />
+      </Box>
     </Breadcrumbs>
   )
 }
