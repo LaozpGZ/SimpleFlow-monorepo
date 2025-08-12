@@ -30,6 +30,7 @@ export interface AdTextConfig {
   highlights?: string[]
   link?: string
   subTitle?: boolean
+  inline?: boolean
 }
 export interface BtnConfig {
   text: string
