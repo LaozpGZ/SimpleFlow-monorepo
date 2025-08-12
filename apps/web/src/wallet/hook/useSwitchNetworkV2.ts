@@ -14,6 +14,7 @@ type SwitchFrom = 'wagmi' | 'url' | 'switch' | 'connect'
 export interface SwitchChainOption {
   replaceUrl?: boolean
   from: SwitchFrom
+  force?: boolean
 }
 export const useSwitchNetworkV2 = () => {
   const { isConnected } = useAccount()
@@ -29,9 +30,10 @@ export const useSwitchNetworkV2 = () => {
       option: SwitchChainOption = {
         replaceUrl: true,
         from: 'switch',
+        force: false,
       },
     ) => {
-      const { replaceUrl, from } = option
+      const { replaceUrl, from, force } = option
       const { query } = router
 
       const request: SwitchChainRequest = {
@@ -42,6 +44,7 @@ export const useSwitchNetworkV2 = () => {
         path: window.location.pathname,
         from,
         persistChain: Boolean(query.persistChain),
+        force,
       }
 
       return processSwitching(request)
@@ -126,10 +129,12 @@ const useProcessSwitchChainRequest = () => {
             // from = wagmi -> no need call switch again
             await switchNetworkWagmiAsync({ chainId: requestChainId })
           }
+          const isWrongNetwork = persistChain && CHAIN_QUERY_NAME[requestChainId] !== router.query.chain
           updateAccountState((prev) => ({
             ...prev,
-            chainId: requestChainId,
-            isWrongNetwork: persistChain && CHAIN_QUERY_NAME[requestChainId] !== router.query.chain,
+            chainId: isWrongNetwork ? prev.chainId : requestChainId,
+            isWrongNetwork,
+            isNotMatched: isWrongNetwork,
           }))
           if (replaceUrl && !persistChain) {
             const chain = getChainName(requestChainId)
@@ -171,10 +176,10 @@ const useProcessSwitchChainRequest = () => {
 
   const handleRequestChainIdChange = useCallback(
     async (request: SwitchChainRequest) => {
-      const { from, chainId: requestChainId } = request
+      const { from, chainId: requestChainId, force } = request
       const activeChainId = activeChainIdRef.current
 
-      if (requestChainId === activeChainId && !['url', 'connect'].includes(from)) {
+      if (requestChainId === activeChainId && !['url', 'connect'].includes(from) && !force) {
         return false
       }
 

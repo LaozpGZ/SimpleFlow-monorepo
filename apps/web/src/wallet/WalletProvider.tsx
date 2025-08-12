@@ -10,7 +10,6 @@ import { W3WConfigProvider } from './W3WConfigContext'
 import { useSyncWagmiState } from './hook/useSyncWagmiState'
 import { useWagmiConfig } from './hook/useWagmiConfig'
 import { SOLANA_SUPPORTED_PATH } from './network.switch.config'
-import { useSyncPersistChain } from './hook/useSyncPersistChain'
 
 interface WalletProviderProps {
   reconnectOnMount?: boolean
@@ -124,6 +123,5 @@ export const WalletProvider = (props: WalletProviderProps) => {
 
 const Sync = () => {
   useSyncWagmiState()
-  useSyncPersistChain()
   return null
 }
