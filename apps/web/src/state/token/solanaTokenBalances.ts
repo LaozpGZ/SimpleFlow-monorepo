@@ -68,7 +68,7 @@ export function useSolanaTokenBalances(
         filtered.set(mint, new BN(data.get(mint)?.[0].amount.toString() ?? 0))
       })
     } else {
-      data.entries().forEach(([key]) => {
+      data.forEach((_, key) => {
         filtered.set(key, new BN(data.get(key)?.[0].amount.toString() ?? 0))
       })
     }
