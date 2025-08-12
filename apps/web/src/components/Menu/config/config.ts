@@ -18,6 +18,7 @@ import {
   SwapIcon,
 } from '@pancakeswap/uikit'
 import { CHAIN_QUERY_NAME } from 'config/chains'
+import { PERSIST_CHAIN_KEY } from 'config/constants'
 import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
 import { getPerpetualUrl } from 'utils/getPerpetualUrl'
 import { EVM_CHAIN_IDS } from 'utils/wagmi'
@@ -45,7 +46,7 @@ export const addMenuItemSupported = (item, chainId: number | undefined) => {
   if (item?.href) {
     return {
       ...item,
-      href: `${item.href}?chain=${CHAIN_QUERY_NAME[ChainId.BSC]}&persistChain=1`,
+      href: `${item.href}?chain=${CHAIN_QUERY_NAME[ChainId.BSC]}`,
     }
   }
   return item

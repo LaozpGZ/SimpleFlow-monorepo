@@ -15,7 +15,6 @@ export const useSyncPersistChain = () => {
       const chainId = allCasesNameToChainId[chain]
       if (chainId) {
         switchNetwork(chainId)
-        router.replace({ query: { ...router.query, persistChain: '' } }, undefined, { shallow: true })
       }
     }
   }, [chain, persistChain])

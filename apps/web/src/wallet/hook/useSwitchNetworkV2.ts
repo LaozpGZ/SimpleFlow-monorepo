@@ -1,4 +1,5 @@
 import { getChainName, isEvm } from '@pancakeswap/chains'
+import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useActiveChainIdRef } from 'hooks/useAccountActiveChain'
 import useAuth from 'hooks/useAuth'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -19,6 +20,7 @@ export const useSwitchNetworkV2 = () => {
   const switching = useAtomValue(switchChainUpdatingAtom)
   const { address: evmAddress, connector: wagmiConnector } = useAccount()
   const processSwitching = useProcessSwitchChainRequest()
+  const router = useRouter()
 
   const switchChain = useCallback(
     (
@@ -29,6 +31,8 @@ export const useSwitchNetworkV2 = () => {
       },
     ) => {
       const { replaceUrl, from } = option
+      const { query } = router
+
       const request: SwitchChainRequest = {
         chainId,
         replaceUrl: Boolean(replaceUrl),
@@ -36,11 +40,12 @@ export const useSwitchNetworkV2 = () => {
         wagmiConnector,
         path: window.location.pathname,
         from,
+        persistChain: Boolean(query.persistChain),
       }
 
       return processSwitching(request)
     },
-    [evmAddress, wagmiConnector, processSwitching, isConnected],
+    [router, evmAddress, wagmiConnector, processSwitching],
   )
 
   const canSwitch = useMemo(
@@ -106,7 +111,7 @@ const useProcessSwitchChainRequest = () => {
   const activeChainIdRef = useActiveChainIdRef()
   const processSwitching = useCallback(
     async (request: SwitchChainRequest) => {
-      const { from, wagmiConnector, evmAddress, replaceUrl, chainId: requestChainId, path } = request
+      const { from, wagmiConnector, evmAddress, replaceUrl, chainId: requestChainId, path, persistChain } = request
       if (lock.current) {
         return false
       }
@@ -123,8 +128,9 @@ const useProcessSwitchChainRequest = () => {
           updateAccountState((prev) => ({
             ...prev,
             chainId: requestChainId,
+            isWrongNetwork: persistChain && CHAIN_QUERY_NAME[requestChainId] !== router.query.chain,
           }))
-          if (replaceUrl) {
+          if (replaceUrl && !persistChain) {
             const chain = getChainName(requestChainId)
             console.log(`[route]`, router.pathname)
             router.replace({ pathname: router.pathname, query: { ...router.query, chain } }, undefined, {

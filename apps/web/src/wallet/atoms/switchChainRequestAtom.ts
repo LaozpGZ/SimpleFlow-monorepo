@@ -2,6 +2,7 @@ import { atom } from 'jotai'
 import { Connector } from 'wagmi'
 
 export interface SwitchChainRequest {
+  persistChain: boolean
   chainId: number
   replaceUrl: boolean // Replace url with chainId if succ
   wagmiConnector?: Connector // Connector used to switch chain
