@@ -1,4 +1,4 @@
-import { ChainId, getChainName } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId, UnifiedChainId, getChainName } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Token } from '@pancakeswap/sdk'
 import {
@@ -16,6 +16,7 @@ import {
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { ConfirmationPendingContent } from '@pancakeswap/widgets-internal'
 import { ChainLogo } from 'components/Logo/ChainLogo'
+import CurrencyLogo from 'components/Logo/CurrencyLogo'
 import { TokenAmountSection } from 'components/TokenAmountSection'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { BalanceData } from 'hooks/useAddressBalance'
@@ -24,6 +25,7 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useCallback, useMemo } from 'react'
 import { styled } from 'styled-components'
 import { getBlockExploreLink, getBlockExploreName } from 'utils'
+import { useWallet } from '@solana/wallet-adapter-react'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -48,7 +50,7 @@ interface SendTransactionModalProps {
   errorMessage?: string
   onConfirm: () => void
   currency?: Currency
-  chainId?: ChainId
+  chainId?: UnifiedChainId
   estimatedFee?: string | null
   estimatedFeeUsd?: string | null
 }
@@ -72,15 +74,46 @@ export function ConfirmTransactionContent({
 }) {
   const { t } = useTranslation()
 
-  const chainName = (asset.chainId === ChainId.BSC ? 'BNB' : getChainName(asset.chainId)).toUpperCase()
+  const { connected: isSolanaConnected, connect: connectSolanaWallet } = useWallet()
+
+  const chainName = useMemo(() => {
+    if (asset.chainId === NonEVMChainId.SOLANA) {
+      return 'SOLANA'
+    }
+    return (asset.chainId === ChainId.BSC ? 'BNB' : getChainName(asset.chainId)).toUpperCase()
+  }, [asset.chainId])
+
   const { chainId } = useActiveChainId()
-  const isChainMatched = chainId === asset.chainId
-  const nativeCurrency = useNativeCurrency(asset.chainId)
+  const isChainMatched = useMemo(() => {
+    if (asset.chainId === NonEVMChainId.SOLANA) {
+      return isSolanaConnected
+    }
+    return chainId === asset.chainId
+  }, [chainId, asset.chainId, isSolanaConnected])
+
+  const evmNativeCurrency = useNativeCurrency(asset.chainId)
+  const nativeCurrency = useMemo(() => {
+    if (asset.chainId === NonEVMChainId.SOLANA) {
+      return { symbol: 'SOL', decimals: 9 }
+    }
+    return evmNativeCurrency
+  }, [asset.chainId, evmNativeCurrency])
+
   const { switchNetwork } = useSwitchNetwork()
 
-  const price = asset.price?.usd ?? 0
-
   const tokenAmount = useMemo(() => {
+    if (asset.chainId === NonEVMChainId.SOLANA) {
+      // Solana token handling
+      return {
+        toSignificant: (decimals: number) => parseFloat(amount || '0').toFixed(decimals),
+        currency: {
+          symbol: asset.token.symbol,
+          decimals: asset.token.decimals,
+        },
+      }
+    }
+
+    // Original EVM logic
     const currency = new Token(
       asset.chainId,
       asset.token.address as `0x${string}`,
@@ -104,7 +137,25 @@ export function ConfirmTransactionContent({
             </Box>
           </FlexGap>
 
-          <TokenAmountSection tokenAmount={tokenAmount} />
+          {asset.chainId === NonEVMChainId.SOLANA ? (
+            <>
+              <Box position="relative" mb="16px">
+                <CurrencyLogo size="80px" src={asset.token.logoURI} />
+              </Box>
+              <Text fontSize="32px" bold>
+                {parseFloat(amount || '0').toLocaleString(undefined, {
+                  maximumFractionDigits: 6,
+                  minimumFractionDigits: 0,
+                })}{' '}
+                {asset.token.symbol}
+              </Text>
+              <Text fontSize="16px" color="textSubtle" mb="24px">
+                {asset.price?.usd ? `$${(parseFloat(amount || '0') * asset.price.usd).toFixed(2)}` : '-'}
+              </Text>
+            </>
+          ) : (
+            <TokenAmountSection tokenAmount={tokenAmount as any} />
+          )}
 
           <Flex justifyContent="space-between" width="100%" mb="8px" alignItems="flex-start">
             <Text color="textSubtle">{t('To')}</Text>
@@ -135,8 +186,30 @@ export function ConfirmTransactionContent({
             </Box>
           </Flex>
 
-          <Button onClick={isChainMatched ? onConfirm : () => switchNetwork(asset.chainId)} width="100%">
-            {isChainMatched ? t('Send') : t('Switch Network')}
+          <Button
+            onClick={
+              isChainMatched
+                ? onConfirm
+                : async () => {
+                    if (asset.chainId === NonEVMChainId.SOLANA) {
+                      // Trigger Solana wallet connection
+                      try {
+                        await connectSolanaWallet()
+                      } catch (error) {
+                        console.error('Failed to connect Solana wallet:', error)
+                      }
+                    } else {
+                      switchNetwork(asset.chainId)
+                    }
+                  }
+            }
+            width="100%"
+          >
+            {isChainMatched
+              ? t('Send')
+              : asset.chainId === NonEVMChainId.SOLANA
+              ? t('Connect Solana Wallet')
+              : t('Switch Network')}
           </Button>
         </ColumnCenter>
       </Section>
@@ -152,9 +225,25 @@ export function TransactionSubmittedContent({
 }: {
   onDismiss?: () => void
   hash: string | undefined
-  chainId?: ChainId
+  chainId?: UnifiedChainId
 }) {
   const { t } = useTranslation()
+
+  const getExplorerLink = () => {
+    if (!chainId || !hash) return undefined
+
+    if (chainId === NonEVMChainId.SOLANA) {
+      return `https://explorer.solana.com/tx/${hash}`
+    }
+    return getBlockExploreLink(hash, 'transaction', chainId as ChainId)
+  }
+
+  const getExplorerName = () => {
+    if (chainId === NonEVMChainId.SOLANA) {
+      return 'Solana Explorer'
+    }
+    return getBlockExploreName(chainId as ChainId)
+  }
 
   return (
     <Wrapper>
@@ -165,9 +254,9 @@ export function TransactionSubmittedContent({
         <AutoColumn gap="12px" justify="center">
           <Text fontSize="20px">{t('Transaction submitted')}</Text>
           {chainId && hash && (
-            <Link external small href={getBlockExploreLink(hash, 'transaction', chainId)}>
+            <Link external small href={getExplorerLink()}>
               {t('View on %site%', {
-                site: getBlockExploreName(chainId),
+                site: getExplorerName(),
               })}
             </Link>
           )}
@@ -193,12 +282,28 @@ export function TransactionCompletedContent({
 }: {
   onDismiss?: () => void
   hash: string | undefined
-  chainId?: ChainId
+  chainId?: UnifiedChainId
   asset: BalanceData
   amount: string
   recipient: string
 }) {
   const { t } = useTranslation()
+
+  const getExplorerLink = () => {
+    if (!chainId || !hash) return undefined
+
+    if (chainId === NonEVMChainId.SOLANA) {
+      return `https://explorer.solana.com/tx/${hash}`
+    }
+    return getBlockExploreLink(hash, 'transaction', chainId as ChainId)
+  }
+
+  const getExplorerName = () => {
+    if (chainId === NonEVMChainId.SOLANA) {
+      return 'Solana Explorer'
+    }
+    return getBlockExploreName(chainId as ChainId)
+  }
 
   return (
     <Wrapper>
@@ -218,9 +323,9 @@ export function TransactionCompletedContent({
             </Text>
           </Box>
           {chainId && hash && (
-            <Link external small href={getBlockExploreLink(hash, 'transaction', chainId)}>
+            <Link external small href={getExplorerLink()}>
               {t('View on %site%', {
-                site: getBlockExploreName(chainId),
+                site: getExplorerName(),
               })}
             </Link>
           )}
