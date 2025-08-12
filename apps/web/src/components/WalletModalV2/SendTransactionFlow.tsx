@@ -1,4 +1,4 @@
-import { ChainId, NonEVMChainId, getChainName } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId, UnifiedChainId, getChainName } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Token } from '@pancakeswap/sdk'
 import {
@@ -50,7 +50,7 @@ interface SendTransactionModalProps {
   errorMessage?: string
   onConfirm: () => void
   currency?: Currency
-  chainId?: ChainId
+  chainId?: UnifiedChainId
   estimatedFee?: string | null
   estimatedFeeUsd?: string | null
 }
@@ -74,7 +74,7 @@ export function ConfirmTransactionContent({
 }) {
   const { t } = useTranslation()
 
-  const { connected: isSolanaConnected } = useWallet()
+  const { connected: isSolanaConnected, connect: connectSolanaWallet } = useWallet()
 
   const chainName = useMemo(() => {
     if (asset.chainId === NonEVMChainId.SOLANA) {
@@ -103,7 +103,7 @@ export function ConfirmTransactionContent({
 
   const tokenAmount = useMemo(() => {
     if (asset.chainId === NonEVMChainId.SOLANA) {
-      // Solana token 處理
+      // Solana token handling
       return {
         toSignificant: (decimals: number) => parseFloat(amount || '0').toFixed(decimals),
         currency: {
@@ -113,7 +113,7 @@ export function ConfirmTransactionContent({
       }
     }
 
-    // 原有 EVM 邏輯
+    // Original EVM logic
     const currency = new Token(
       asset.chainId,
       asset.token.address as `0x${string}`,
@@ -190,10 +190,14 @@ export function ConfirmTransactionContent({
             onClick={
               isChainMatched
                 ? onConfirm
-                : () => {
+                : async () => {
                     if (asset.chainId === NonEVMChainId.SOLANA) {
-                      // 對於 Solana，如果沒有連接則顯示連接提示
-                      // 這裡可以觸發 Solana 錢包連接
+                      // Trigger Solana wallet connection
+                      try {
+                        await connectSolanaWallet()
+                      } catch (error) {
+                        console.error('Failed to connect Solana wallet:', error)
+                      }
                     } else {
                       switchNetwork(asset.chainId)
                     }
@@ -221,9 +225,25 @@ export function TransactionSubmittedContent({
 }: {
   onDismiss?: () => void
   hash: string | undefined
-  chainId?: ChainId
+  chainId?: UnifiedChainId
 }) {
   const { t } = useTranslation()
+
+  const getExplorerLink = () => {
+    if (!chainId || !hash) return undefined
+
+    if (chainId === NonEVMChainId.SOLANA) {
+      return `https://explorer.solana.com/tx/${hash}`
+    }
+    return getBlockExploreLink(hash, 'transaction', chainId as ChainId)
+  }
+
+  const getExplorerName = () => {
+    if (chainId === NonEVMChainId.SOLANA) {
+      return 'Solana Explorer'
+    }
+    return getBlockExploreName(chainId as ChainId)
+  }
 
   return (
     <Wrapper>
@@ -234,9 +254,9 @@ export function TransactionSubmittedContent({
         <AutoColumn gap="12px" justify="center">
           <Text fontSize="20px">{t('Transaction submitted')}</Text>
           {chainId && hash && (
-            <Link external small href={getBlockExploreLink(hash, 'transaction', chainId)}>
+            <Link external small href={getExplorerLink()}>
               {t('View on %site%', {
-                site: getBlockExploreName(chainId),
+                site: getExplorerName(),
               })}
             </Link>
           )}
@@ -262,12 +282,28 @@ export function TransactionCompletedContent({
 }: {
   onDismiss?: () => void
   hash: string | undefined
-  chainId?: ChainId
+  chainId?: UnifiedChainId
   asset: BalanceData
   amount: string
   recipient: string
 }) {
   const { t } = useTranslation()
+
+  const getExplorerLink = () => {
+    if (!chainId || !hash) return undefined
+
+    if (chainId === NonEVMChainId.SOLANA) {
+      return `https://explorer.solana.com/tx/${hash}`
+    }
+    return getBlockExploreLink(hash, 'transaction', chainId as ChainId)
+  }
+
+  const getExplorerName = () => {
+    if (chainId === NonEVMChainId.SOLANA) {
+      return 'Solana Explorer'
+    }
+    return getBlockExploreName(chainId as ChainId)
+  }
 
   return (
     <Wrapper>
@@ -287,9 +323,9 @@ export function TransactionCompletedContent({
             </Text>
           </Box>
           {chainId && hash && (
-            <Link external small href={getBlockExploreLink(hash, 'transaction', chainId)}>
+            <Link external small href={getExplorerLink()}>
               {t('View on %site%', {
-                site: getBlockExploreName(chainId),
+                site: getExplorerName(),
               })}
             </Link>
           )}
