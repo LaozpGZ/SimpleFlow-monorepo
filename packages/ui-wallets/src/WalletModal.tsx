@@ -4,6 +4,7 @@ import {
   AtomBox,
   AutoColumn,
   AutoRow,
+  ArrowBackIcon,
   Button,
   Card,
   CardBody,
@@ -45,6 +46,7 @@ import {
   selectedSolanaWalletAtom,
 } from './atom'
 import SocialLoginButton from './components/SocialLoginButton'
+import SocialLogin from './components/SocialLogin'
 import { WalletSelectSection, WalletSelectItem } from './components/WalletSelectSection'
 import { ConnectData, LinkOfDevice, WalletConfigV2, WalletConfigV3, WalletModalV2Props } from './types'
 import { ASSET_CDN } from './config/url'
@@ -307,11 +309,23 @@ function DesktopModal<T>({
   docText,
   mevDocLink,
   onOpenSocialLoginModal,
+  showSocialLogin,
+  onBackToWeb3Wallet,
+  onGoogleLogin,
+  onXLogin,
+  onTelegramLogin,
+  onDiscordLogin,
 }: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText' | 'mevDocLink'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
   onWalletConnected: (wallet: WalletConfigV2<T>, connectData?: ConnectData) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
   onOpenSocialLoginModal: () => void
+  showSocialLogin: boolean
+  onBackToWeb3Wallet: () => void
+  onGoogleLogin?: () => void
+  onXLogin?: () => void
+  onTelegramLogin?: () => void
+  onDiscordLogin?: () => void
 }) {
   const wallets: WalletConfigV2<T>[] = useMemo(
     () =>
@@ -362,7 +376,7 @@ function DesktopModal<T>({
   )
 
   return (
-    <Grid gridTemplateColumns="1fr 1fr">
+    <Grid gridTemplateColumns="1fr 1fr" width="100%">
       <AtomBox
         display="flex"
         flexDirection="column"
@@ -409,30 +423,39 @@ function DesktopModal<T>({
         flexDirection="column"
         alignItems="center"
       >
-        <AtomBox
-          display="flex"
-          flexDirection="column"
-          alignItems="center"
-          style={{ gap: '12px' }}
-          textAlign="center"
-          width="100%"
-        >
-          {!selected && <Intro docLink={docLink} />}
-          {selected && selected.installed !== false && (
-            <>
-              {typeof selected.icon === 'string' && <Image src={selected.icon} width={108} height={108} />}
-              <Heading as="h1" fontSize="20px" color="secondary">
-                {t('Opening')} {selected.title}
-              </Heading>
-              {error ? (
-                <ErrorContent message={error} onRetry={() => connectWallet(selected)} />
-              ) : (
-                <Text>{t('Please confirm in %wallet%', { wallet: selected.title })}</Text>
-              )}
-            </>
-          )}
-          {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />}
-        </AtomBox>
+        {showSocialLogin ? (
+          <SocialLogin
+            onGoogleLogin={onGoogleLogin}
+            onXLogin={onXLogin}
+            onTelegramLogin={onTelegramLogin}
+            onDiscordLogin={onDiscordLogin}
+          />
+        ) : (
+          <AtomBox
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            style={{ gap: '12px' }}
+            textAlign="center"
+            width="100%"
+          >
+            {!selected && <Intro docLink={docLink} />}
+            {selected && selected.installed !== false && (
+              <>
+                {typeof selected.icon === 'string' && <Image src={selected.icon} width={108} height={108} />}
+                <Heading as="h1" fontSize="20px" color="secondary">
+                  {t('Opening')} {selected.title}
+                </Heading>
+                {error ? (
+                  <ErrorContent message={error} onRetry={() => connectWallet(selected)} />
+                ) : (
+                  <Text>{t('Please confirm in %wallet%', { wallet: selected.title })}</Text>
+                )}
+              </>
+            )}
+            {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />}
+          </AtomBox>
+        )}
       </AtomBox>
     </Grid>
   )
@@ -453,7 +476,7 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
   const wallets_ = getWalletsConfig()
   const topWallets_ = TOP_WALLETS_ID_CONFIG.MultiChain.map((id) => wallets_.find((w) => w.id === id))
 
-  const [isSocialLoginModalOpen, setIsSocialLoginModalOpen] = useState(false)
+  const [showSocialLogin, setShowSocialLogin] = useState(false)
 
   const { isMobile } = useMatchBreakpoints()
   // TODO @ChefJerry, add previouslyUsedSolanaWalletsAtom support
@@ -539,27 +562,18 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
 
   const mobileContainerStyle: React.CSSProperties = isMobile ? { height: '100%', borderRadius: 0 } : {}
 
-  const handleOpenSocialLoginModal = () => {
-    setIsSocialLoginModalOpen(true)
-    // Keep the main modal open to maintain BodyLock
-  }
-
-  const handleCloseSocialLoginModal = () => {
-    setIsSocialLoginModalOpen(false)
-    // Main modal content will automatically show again due to conditional display: none
-    // This maintains the BodyLock properly
+  const handleOpenSocialLogin = () => {
+    setShowSocialLogin(true)
   }
 
   const handleBackToWeb3Wallet = () => {
-    // Close social login modal to return to wallet modal
-    setIsSocialLoginModalOpen(false)
+    setShowSocialLogin(false)
   }
 
   // Wrap social login callbacks to ensure proper modal cleanup
   const handleSocialLoginWithCleanup = (originalCallback?: () => void) => {
     return () => {
-      // Close both modals when social login is initiated
-      setIsSocialLoginModalOpen(false)
+      // Close modal when social login is initiated
       props.onDismiss?.()
 
       // Execute the original callback
@@ -568,60 +582,52 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
   }
 
   return (
-    <>
-      <Suspense>
-        <SocialLoginModal
-          isOpen={isSocialLoginModalOpen}
-          onDismiss={handleCloseSocialLoginModal}
-          onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
-          onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
-          onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
-          onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
-          onBackToWeb3Wallet={handleBackToWeb3Wallet}
-        />
-      </Suspense>
-      <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
-        <ModalWrapper
-          onDismiss={props.onDismiss}
-          containerStyle={{ border: 'none', ...mobileContainerStyle }}
-          style={{
-            overflow: 'visible',
-            border: 'none',
-            ...mobileContainerStyle,
-            ...(isSocialLoginModalOpen ? { display: 'none' } : {}),
-          }}
-        >
-          <AtomBox position="relative">
-            <TabContainer fullSize={fullSize} onDismiss={props.onDismiss}>
-              {isMobile ? (
-                <MobileModal
-                  mevDocLink={mevDocLink}
-                  connectWallet={connectWallet}
-                  topWallets={topWallets as WalletConfigV3<T>[]}
-                  previouslyUsedWallets={previouslyUsedEvmWallets as WalletConfigV2<T>[]}
-                  wallets={wallets as WalletConfigV2<T>[]}
-                  docLink={docLink}
-                  docText={docText}
-                  onOpenSocialLoginModal={handleOpenSocialLoginModal}
-                />
-              ) : (
-                <DesktopModal
-                  mevDocLink={mevDocLink}
-                  connectWallet={connectWallet}
-                  onWalletConnected={handleWalletConnected}
-                  topWallets={topWallets as WalletConfigV3<T>[]}
-                  previouslyUsedWallets={previouslyUsedEvmWallets as WalletConfigV2<T>[]}
-                  wallets={wallets as WalletConfigV2<T>[]}
-                  docLink={docLink}
-                  docText={docText}
-                  onOpenSocialLoginModal={handleOpenSocialLoginModal}
-                />
-              )}
-            </TabContainer>
-          </AtomBox>
-        </ModalWrapper>
-      </ModalV2>
-    </>
+    <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
+      <ModalWrapper
+        onDismiss={props.onDismiss}
+        containerStyle={{ border: 'none', ...mobileContainerStyle }}
+        style={{
+          overflow: 'visible',
+          border: 'none',
+          ...mobileContainerStyle,
+        }}
+      >
+        <AtomBox position="relative">
+          <TabContainer fullSize={fullSize} onDismiss={props.onDismiss}>
+            {isMobile ? (
+              <MobileModal
+                mevDocLink={mevDocLink}
+                connectWallet={connectWallet}
+                topWallets={topWallets as WalletConfigV3<T>[]}
+                previouslyUsedWallets={previouslyUsedEvmWallets as WalletConfigV2<T>[]}
+                wallets={wallets as WalletConfigV2<T>[]}
+                docLink={docLink}
+                docText={docText}
+                onOpenSocialLoginModal={handleOpenSocialLogin}
+              />
+            ) : (
+              <DesktopModal
+                mevDocLink={mevDocLink}
+                connectWallet={connectWallet}
+                onWalletConnected={handleWalletConnected}
+                topWallets={topWallets as WalletConfigV3<T>[]}
+                previouslyUsedWallets={previouslyUsedEvmWallets as WalletConfigV2<T>[]}
+                wallets={wallets as WalletConfigV2<T>[]}
+                docLink={docLink}
+                docText={docText}
+                onOpenSocialLoginModal={handleOpenSocialLogin}
+                showSocialLogin={showSocialLogin}
+                onBackToWeb3Wallet={handleBackToWeb3Wallet}
+                onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
+                onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
+                onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
+                onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
+              />
+            )}
+          </TabContainer>
+        </AtomBox>
+      </ModalWrapper>
+    </ModalV2>
   )
 }
 
