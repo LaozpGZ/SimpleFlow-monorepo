@@ -1,4 +1,4 @@
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useEffect, useRef } from 'react'
 
 import { getQueryChainId } from 'wallet/util/getQueryChainId'
@@ -9,7 +9,7 @@ import { wagmiConfigAtom } from './useWagmiConfig'
 
 export function useSyncWagmiState() {
   const { chainId: wagmiChainId, address: evmAccount, connector } = useAccount()
-  const updAccountState = useSetAtom(accountActiveChainAtom)
+  const [{ isWrongNetwork }, updAccountState] = useAtom(accountActiveChainAtom)
   const { switchNetwork } = useSwitchNetworkV2()
 
   const oldWagmiChainId = useRef(wagmiChainId)
@@ -40,7 +40,8 @@ export function useSyncWagmiState() {
         })
       } else {
         const urlChain = getQueryChainId()
-        if (urlChain && urlChain !== chainId) {
+        // if wrongnetwork, keep in current state
+        if (urlChain && urlChain !== chainId && !isWrongNetwork) {
           switchNetwork(urlChain, {
             from: 'url',
             replaceUrl: true,
