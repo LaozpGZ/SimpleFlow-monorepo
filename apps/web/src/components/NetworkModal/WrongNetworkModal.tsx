@@ -32,7 +32,7 @@ export function WrongNetworkModal({ currentChain, onDismiss }: { currentChain: C
 
   const handleSwitchNetwork = useCallback(() => {
     if (canSwitch) {
-      switchNetwork(chainId)
+      switchNetwork(chainId, { from: 'switch', force: true })
     }
   }, [canSwitch, chainId, switchNetwork])
 

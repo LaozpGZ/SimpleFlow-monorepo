@@ -2,6 +2,7 @@ import { ChainId, chainNames } from '@pancakeswap/chains'
 import { Protocol } from '@pancakeswap/farms'
 import { $path } from 'next-typesafe-url'
 import { Address, Hex } from 'viem'
+import { PERSIST_CHAIN_KEY } from '.'
 
 export const LIQUIDITY_PAGES = {
   infinity: {
@@ -53,7 +54,8 @@ export const getAddInfinityLiquidityURL = ({
   if (!(chainId || chainName) || !poolId) {
     return LIQUIDITY_PAGES.infinity.ADD_LIQUIDITY_SELECT
   }
-  return `${LIQUIDITY_PAGES.infinity.ADD_LIQUIDITY}/${chainId ? chainNames[chainId] : chainName}/infinity/${poolId}`
+  const chain = chainId ? chainNames[chainId] : chainName
+  return `${LIQUIDITY_PAGES.infinity.ADD_LIQUIDITY}/${chain}/infinity/${poolId}?chain=${chain}&${PERSIST_CHAIN_KEY}=1`
 }
 
 export const getLiquidityDetailURL = ({

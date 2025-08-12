@@ -22,12 +22,13 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useHover } from 'hooks/useHover'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import useTheme from 'hooks/useTheme'
-import { atom, useAtom, useSetAtom } from 'jotai'
+import { atom, useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
 import { useAccount } from 'wagmi'
 import { getQueryChainId } from 'wallet/util/getQueryChainId'
+import { type SwitchChainOption } from 'wallet/hook/useSwitchNetworkV2'
 import { ChainLogo } from './Logo/ChainLogo'
 
 type ChainSpecificBehavior = {
@@ -138,7 +139,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
 }
 
 interface WrongNetworkSelectProps {
-  switchNetwork: (chainId: number) => void
+  switchNetwork: (chainId: number, opt?: SwitchChainOption) => void
   chainId: number
   onDismiss: () => void
 }
@@ -188,7 +189,7 @@ const WrongNetworkSelect = ({ switchNetwork, chainId, onDismiss }: WrongNetworkS
       </Box>
       <UserMenuItem
         onClick={() => {
-          switchNetwork(localChainId)
+          switchNetwork(localChainId, { from: 'switch', force: true })
           onDismiss()
         }}
         style={{ justifyContent: 'flex-start' }}
@@ -201,7 +202,7 @@ const WrongNetworkSelect = ({ switchNetwork, chainId, onDismiss }: WrongNetworkS
         my="8px"
         scale="sm"
         onClick={() => {
-          switchNetwork(localChainId)
+          switchNetwork(localChainId, { from: 'switch', force: true })
           onDismiss()
         }}
       >
