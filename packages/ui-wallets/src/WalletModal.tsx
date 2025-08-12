@@ -53,9 +53,8 @@ import { ASSET_CDN } from './config/url'
 import { getWalletsConfig, TOP_WALLETS_ID_CONFIG } from './config/wallets'
 import { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'
 import { MoreWalletSection } from './components/MoreWalletSection'
-import { WalletChainSelect } from './components'
-
-const StepIntro = lazy(() => import('./components/Intro'))
+import { WalletChainSelect } from './components/WalletChainSelect'
+import { PreviewSection, PreviewStatus } from './components/PreviewSection'
 
 const Qrcode = lazy(() => import('./components/QRCode'))
 
@@ -310,8 +309,8 @@ function DesktopModal<T>({
   docText,
   mevDocLink,
   onOpenSocialLoginModal,
-  displaySection,
-  setDisplaySection,
+  previewStatus,
+  setPreviewStatus,
   onBackToWeb3Wallet,
   onGoogleLogin,
   onXLogin,
@@ -322,8 +321,8 @@ function DesktopModal<T>({
   onWalletConnected: (wallet: WalletConfigV2<T>, connectData?: ConnectData) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
   onOpenSocialLoginModal: () => void
-  displaySection: DisplaySection
-  setDisplaySection: (section: DisplaySection) => void
+  previewStatus: PreviewStatus
+  setPreviewStatus: (section: PreviewStatus) => void
   onBackToWeb3Wallet: () => void
   onGoogleLogin?: () => void
   onXLogin?: () => void
@@ -366,7 +365,7 @@ function DesktopModal<T>({
     (w: WalletConfigV3<T>) => {
       if (w.networks.length > 1) {
         setSelectedMultiChainWallet(w)
-        setDisplaySection(DisplaySection.ChainSelect)
+        setPreviewStatus(PreviewStatus.ChainSelect)
         return
       }
       connectWallet(w)
@@ -434,7 +433,7 @@ function DesktopModal<T>({
         flexDirection="column"
         alignItems="center"
       >
-        {displaySection === DisplaySection.Intro && (
+        {previewStatus === PreviewStatus.Intro && (
           <AtomBox
             display="flex"
             flexDirection="column"
@@ -443,7 +442,7 @@ function DesktopModal<T>({
             textAlign="center"
             width="100%"
           >
-            {!selected && <Intro docLink={docLink} />}
+            {!selected && <PreviewSection.Intro docLink={docLink} />}
             {selected && selected.installed !== false && (
               <>
                 {typeof selected.icon === 'string' && <Image src={selected.icon} width={108} height={108} />}
@@ -460,7 +459,7 @@ function DesktopModal<T>({
             {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />}
           </AtomBox>
         )}
-        {displaySection === DisplaySection.SocialLogin && (
+        {previewStatus === PreviewStatus.SocialLogin && (
           <SocialLogin
             onGoogleLogin={onGoogleLogin}
             onXLogin={onXLogin}
@@ -468,16 +467,10 @@ function DesktopModal<T>({
             onDiscordLogin={onDiscordLogin}
           />
         )}
-        {displaySection === DisplaySection.ChainSelect && <WalletChainSelect wallet={selectedMultiChainWallet} />}
+        {previewStatus === PreviewStatus.ChainSelect && <WalletChainSelect wallet={selectedMultiChainWallet} />}
       </AtomBox>
     </Grid>
   )
-}
-
-const enum DisplaySection {
-  Intro = 'intro',
-  ChainSelect = 'chainSelect',
-  SocialLogin = 'socialLogin',
 }
 
 export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(props: WalletModalV2Props<T>) {
@@ -495,7 +488,7 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
   const wallets_ = getWalletsConfig()
   const topWallets_ = TOP_WALLETS_ID_CONFIG.MultiChain.map((id) => wallets_.find((w) => w.id === id))
 
-  const [displaySection, setDisplaySection] = useState<DisplaySection>(DisplaySection.Intro)
+  const [previewStatus, setPreviewStatus] = useState<PreviewStatus>(PreviewStatus.Intro)
 
   const { isMobile } = useMatchBreakpoints()
   // TODO @ChefJerry, add previouslyUsedSolanaWalletsAtom support
@@ -582,11 +575,11 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
   const mobileContainerStyle: React.CSSProperties = isMobile ? { height: '100%', borderRadius: 0 } : {}
 
   const handleOpenSocialLogin = () => {
-    setDisplaySection(DisplaySection.SocialLogin)
+    setPreviewStatus(PreviewStatus.SocialLogin)
   }
 
   const handleBackToWeb3Wallet = () => {
-    setDisplaySection(DisplaySection.Intro)
+    setPreviewStatus(PreviewStatus.Intro)
   }
 
   // Wrap social login callbacks to ensure proper modal cleanup
@@ -600,10 +593,15 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
     }
   }
 
+  const handleDismiss = () => {
+    props.onDismiss?.()
+    setPreviewStatus(PreviewStatus.Intro)
+  }
+
   return (
-    <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
+    <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest} onDismiss={handleDismiss}>
       <ModalWrapper
-        onDismiss={props.onDismiss}
+        onDismiss={handleDismiss}
         containerStyle={{ border: 'none', ...mobileContainerStyle }}
         style={{
           overflow: 'visible',
@@ -612,7 +610,7 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
         }}
       >
         <AtomBox position="relative">
-          <TabContainer fullSize={fullSize} onDismiss={props.onDismiss}>
+          <TabContainer fullSize={fullSize} onDismiss={handleDismiss}>
             {isMobile ? (
               <MobileModal
                 mevDocLink={mevDocLink}
@@ -635,8 +633,8 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
                 docLink={docLink}
                 docText={docText}
                 onOpenSocialLoginModal={handleOpenSocialLogin}
-                displaySection={displaySection}
-                setDisplaySection={setDisplaySection}
+                previewStatus={previewStatus}
+                setPreviewStatus={setPreviewStatus}
                 onBackToWeb3Wallet={handleBackToWeb3Wallet}
                 onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
                 onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
@@ -648,45 +646,6 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
         </AtomBox>
       </ModalWrapper>
     </ModalV2>
-  )
-}
-
-const StyledIntroCard = styled(Card)`
-  width: 100%;
-`
-
-const Intro = ({ docLink }: { docLink: string }) => {
-  const { t } = useTranslation()
-  return (
-    <>
-      <Image src={`${ASSET_CDN}/web/wallet-ui/intro.png`} width={150} height={228.72} />
-      <StyledIntroCard>
-        <CardBody p="16px">
-          <Text textAlign="left" color="textSubtle" fontSize="12px">
-            {t('Manage and store your private keys and assets securely.')}
-          </Text>
-
-          <AutoRow gap="8px" mt="4px">
-            <Button as="a" color="backgroundAlt" variant="text" href={docLink} scale="xs" p="0">
-              {t('How to connect')}
-            </Button>
-            <Text color="disabled" fontSize="12px">
-              |
-            </Text>
-            <Button
-              as="a"
-              color="backgroundAlt"
-              variant="text"
-              href="https://pancakeswap.finance/terms-of-service"
-              scale="xs"
-              p="0"
-            >
-              {t('Disclaimer')}
-            </Button>
-          </AutoRow>
-        </CardBody>
-      </StyledIntroCard>
-    </>
   )
 }
 
