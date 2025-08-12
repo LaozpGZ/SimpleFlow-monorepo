@@ -12,6 +12,7 @@ import {
   ICustomizedBridgeConfig,
   createGTMEventListener,
   IBridgeConfig,
+  EventTypes,
 } from '@bnb-chain/canonical-bridge-widget'
 import { allCasesNameToChainId } from '@pancakeswap/chains'
 import { useTheme } from 'styled-components'
@@ -105,8 +106,11 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       analytics: {
         enabled: true,
         onEvent: (eventName: EventName, eventData: EventData<any>) => {
-          if (eventName === 'select_bridge_fromDropdown' || eventName === 'click_bridge_switchNetwork') {
-            const networkName = eventName === 'select_bridge_fromDropdown' ? eventData?.fromNetwork : toChain
+          if (
+            eventName === EventTypes.SELECT_BRIDGE_FROM_DROPDOWN ||
+            eventName === EventTypes.CLICK_BRIDGE_SWITCH_NETWORK
+          ) {
+            const networkName = eventName === EventTypes.SELECT_BRIDGE_FROM_DROPDOWN ? eventData?.fromNetwork : toChain
 
             if (networkName) {
               const matchedChainId = allCasesNameToChainId[networkName]
