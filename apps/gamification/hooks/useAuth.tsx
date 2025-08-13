@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { WalletConnectorNotFoundError, WalletSwitchChainError } from '@pancakeswap/ui-wallets'
+import { LegacyWalletConfig, WalletConnectorNotFoundError, WalletSwitchChainError } from '@pancakeswap/ui-wallets'
 import replaceBrowserHistory from '@pancakeswap/utils/replaceBrowserHistory'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { ConnectorNames } from 'config/wallet'
@@ -17,8 +17,8 @@ const useAuth = () => {
   const { t } = useTranslation()
 
   const login = useCallback(
-    async (connectorID: ConnectorNames) => {
-      const findConnector = connectors.find((c) => c.id === connectorID)
+    async (wallet: LegacyWalletConfig<ConnectorNames>) => {
+      const findConnector = connectors.find((c) => c.id === wallet.connectorId)
       try {
         if (!findConnector) return undefined
 

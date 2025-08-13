@@ -6,12 +6,7 @@ export const previouslyUsedEvmWalletsKey = 'previous-used-evm-wallets'
 export const previouslyUsedSolanaWalletsKey = 'previous-used-solana-wallets'
 const previouslyUsedWalletsStoreSeparator = ','
 
-export const errorAtom = atom<
-  [
-    string, // EVM
-    string, // Solana
-  ]
->(['', ''])
+export const errorAtom = atom<string>('')
 
 export const selectedEvmWalletAtom = atom<WalletConfigV2<unknown> | null>(null)
 export const selectedSolanaWalletAtom = atom<WalletConfigV2<unknown> | null>(null)

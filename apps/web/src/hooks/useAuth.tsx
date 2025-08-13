@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { WalletConnectorNotFoundError, WalletSwitchChainError } from '@pancakeswap/ui-wallets'
+import { LegacyWalletConfig, WalletConnectorNotFoundError, WalletSwitchChainError } from '@pancakeswap/ui-wallets'
 import { usePrivy } from '@privy-io/react-auth'
 import { ConnectorNames } from 'config/wallet'
 import { useRouter } from 'next/router'
@@ -23,8 +23,8 @@ const useAuth = () => {
   const { signOutAndClearUserStates } = useFirebaseAuth()
 
   const login = useCallback(
-    async (connectorID: ConnectorNames) => {
-      const findConnector = CONNECTOR_MAP[connectorID] || undefined
+    async (wallet: LegacyWalletConfig<ConnectorNames>) => {
+      const findConnector = CONNECTOR_MAP[wallet.connectorId] || undefined
       try {
         if (!findConnector) return undefined
         return await connectAsync({ connector: findConnector, chainId })

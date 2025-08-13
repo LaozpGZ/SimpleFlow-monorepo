@@ -1,11 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { WalletModalV2 } from '@pancakeswap/ui-wallets'
+import { LegacyWalletModal, LegacyWalletConfig } from '@pancakeswap/ui-wallets'
 import { ConnectorNames, createWallets, getDocLink, mevDocLink, TOP_WALLET_MAP } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
 
 import { ChainId } from '@pancakeswap/chains'
-import { WalletConfigV2 } from '@pancakeswap/ui-wallets/src/types'
 import { useFirebaseAuth } from 'contexts/Privy/firebase'
 import { useCallback, useMemo } from 'react'
 import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
@@ -28,7 +27,7 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
       TOP_WALLET_MAP[chainId]
         ? TOP_WALLET_MAP[chainId]
             .map((id) => wallets.find((w) => w.id === id))
-            .filter<WalletConfigV2<ConnectorNames>>((w): w is WalletConfigV2<ConnectorNames> => Boolean(w))
+            .filter<LegacyWalletConfig<ConnectorNames>>((w): w is LegacyWalletConfig<ConnectorNames> => Boolean(w))
         : [],
     [wallets, chainId],
   )
@@ -43,7 +42,7 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
   const { loginWithGoogle, loginWithX, isLoading, loginWithDiscord, loginWithTelegram } = useFirebaseAuth()
 
   return (
-    <WalletModalV2
+    <LegacyWalletModal
       mevDocLink={mevDocLink}
       docText={t('Learn How to Connect')}
       docLink={docLink}

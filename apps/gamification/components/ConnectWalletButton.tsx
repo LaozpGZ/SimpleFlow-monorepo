@@ -1,5 +1,5 @@
 import { Trans, useTranslation } from '@pancakeswap/localization'
-import { WalletConfigV2, WalletModalV2 } from '@pancakeswap/ui-wallets'
+import { LegacyWalletConfig, LegacyWalletModal } from '@pancakeswap/ui-wallets'
 import { Button, ButtonProps } from '@pancakeswap/uikit'
 import { ConnectorNames, createWallets, getDocLink, TOP_WALLET_MAP } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -33,7 +33,7 @@ const ConnectWalletButton = ({ children, ...props }: ButtonProps) => {
       TOP_WALLET_MAP[chainId]
         ? TOP_WALLET_MAP[chainId]
             .map((id) => wallets.find((w) => w.id === id))
-            .filter<WalletConfigV2<ConnectorNames>>((w): w is WalletConfigV2<ConnectorNames> => Boolean(w))
+            .filter<LegacyWalletConfig<ConnectorNames>>((w): w is LegacyWalletConfig<ConnectorNames> => Boolean(w))
         : [],
     [wallets, chainId],
   )
@@ -50,7 +50,7 @@ const ConnectWalletButton = ({ children, ...props }: ButtonProps) => {
           z-index: 99;
         }
       `}</style>
-      <WalletModalV2
+      <LegacyWalletModal
         topWallets={topWallets}
         mevDocLink={null}
         docText={t('Learn How to Connect')}

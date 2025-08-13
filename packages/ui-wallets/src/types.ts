@@ -1,4 +1,5 @@
-import { ModalV2Props, SvgProps } from '@pancakeswap/uikit'
+import { SvgProps } from '@pancakeswap/uikit'
+import { WalletIds as LegacyWalletIds } from './components/LegacyWalletModal/legacyWalletIds'
 
 type LinkOfTextAndLink = string | { text: string; url: string }
 
@@ -56,7 +57,7 @@ export enum WalletIds {
 }
 
 export type WalletConfigV2<T = unknown> = {
-  id: WalletIds
+  id: LegacyWalletIds
   title: string
   icon: string | React.FC<React.PropsWithChildren<SvgProps>>
   connectorId: T
@@ -77,36 +78,4 @@ export type WalletConfigV3<T = unknown> = WalletConfigV2<T> & {
 export type ConnectData = {
   accounts: readonly [string, ...string[]]
   chainId: number | string | undefined
-}
-
-export interface WalletModalV2Props<T = unknown> extends ModalV2Props {
-  wallets: WalletConfigV2<T>[]
-  topWallets: WalletConfigV2<T>[]
-  login: (connectorID: T) => Promise<ConnectData | undefined>
-  docLink: string
-  docText: string
-  mevDocLink: string | null
-  onWalletConnectCallBack?: (walletTitle?: string, address?: string) => void
-  fullSize?: boolean
-  onGoogleLogin?: () => void
-  onXLogin?: () => void
-  onTelegramLogin?: () => void
-  onDiscordLogin?: () => void
-  onReopenWalletModal?: () => void
-}
-
-export interface WalletModalV3Props<T = unknown> extends ModalV2Props {
-  wallets: WalletConfigV3<T>[]
-  topWallets: WalletConfigV3<T>[]
-  login: (connectorID: T) => Promise<ConnectData | undefined>
-  docLink: string
-  docText: string
-  mevDocLink: string | null
-  onWalletConnectCallBack?: (walletTitle?: string, address?: string) => void
-  fullSize?: boolean
-  onGoogleLogin?: () => void
-  onXLogin?: () => void
-  onTelegramLogin?: () => void
-  onDiscordLogin?: () => void
-  onReopenWalletModal?: () => void
 }

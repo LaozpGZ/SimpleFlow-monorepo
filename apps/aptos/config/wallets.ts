@@ -1,4 +1,4 @@
-import { WalletConfigV2, WalletIds } from '@pancakeswap/ui-wallets'
+import { LegacyWalletConfig, LegacyWalletIds } from '@pancakeswap/ui-wallets'
 
 export enum ConnectorNames {
   Petra = 'petra',
@@ -12,9 +12,9 @@ export enum ConnectorNames {
   Msafe = 'msafe',
 }
 
-export const wallets: WalletConfigV2<ConnectorNames>[] = [
+export const wallets: LegacyWalletConfig<ConnectorNames>[] = [
   {
-    id: WalletIds.Petra,
+    id: LegacyWalletIds.Petra,
     title: 'Petra',
     icon: '/images/wallets/petra.png',
     get installed() {
@@ -26,7 +26,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: WalletIds.Martian,
+    id: LegacyWalletIds.Martian,
     title: 'Martian',
     icon: '/images/wallets/martian.png',
     get installed() {
@@ -38,7 +38,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: WalletIds.Pontem,
+    id: LegacyWalletIds.Pontem,
     title: 'Pontem',
     icon: '/images/wallets/pontem.png',
     get installed() {
@@ -50,7 +50,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: WalletIds.Trust,
+    id: LegacyWalletIds.Trust,
     title: 'Trust Wallet',
     icon: 'https://pancakeswap.finance/images/wallets/trust.png',
     get installed() {
@@ -60,7 +60,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     connectorId: ConnectorNames.TrustWallet,
   },
   {
-    id: WalletIds.SafePal,
+    id: LegacyWalletIds.SafePal,
     title: 'SafePal',
     icon: 'https://pancakeswap.finance/images/wallets/safepal.png',
     get installed() {
@@ -72,7 +72,7 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
     },
   },
   {
-    id: WalletIds.Msafe,
+    id: LegacyWalletIds.Msafe,
     title: 'Msafe',
     icon: '/images/wallets/msafe.png',
     get installed() {
@@ -94,6 +94,6 @@ export const wallets: WalletConfigV2<ConnectorNames>[] = [
   },
 ]
 
-export const TOP_WALLET_MAP: WalletConfigV2<ConnectorNames>[] = [WalletIds.Pontem, WalletIds.Petra]
+export const TOP_WALLET_MAP: LegacyWalletConfig<ConnectorNames>[] = [LegacyWalletIds.Pontem, LegacyWalletIds.Petra]
   .map((id) => wallets.find((w) => w.id === id))
-  .filter((w): w is WalletConfigV2<ConnectorNames> => Boolean(w))
+  .filter((w): w is LegacyWalletConfig<ConnectorNames> => Boolean(w))

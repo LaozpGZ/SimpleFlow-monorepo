@@ -2,16 +2,11 @@ import { usePreloadImages, useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   AtomBox,
-  AutoColumn,
-  AutoRow,
-  ArrowBackIcon,
   Button,
-  Card,
-  CardBody,
+  ButtonMenu,
+  ButtonMenuItem,
   CloseIcon,
   Column,
-  FlexGap,
-  Grid,
   Heading,
   IconButton,
   Image,
@@ -20,77 +15,71 @@ import {
   ModalWrapper,
   MoreHorizontalIcon,
   Row,
-  RowBetween,
   ShieldCheckIcon,
+  Tab,
+  TabMenu,
   Text,
-  Toggle,
   useMatchBreakpoints,
   WarningIcon,
 } from '@pancakeswap/uikit'
 import { useAtom } from 'jotai'
-import styled from 'styled-components'
 import { lazy, MouseEvent, PropsWithChildren, Suspense, useCallback, useMemo, useState } from 'react'
 import { isMobile as isMobileDevice } from 'react-device-detect'
+import { styled } from 'styled-components'
 import {
   desktopWalletSelectionClass,
   fullSizeModalWrapperClass,
   modalWrapperClass,
   scrollbarClass,
   walletIconClass,
-} from './WalletModal.css'
-import {
-  errorAtom,
-  lastUsedEvmWalletNameAtom,
-  previouslyUsedEvmWalletsAtom,
-  selectedEvmWalletAtom,
-  selectedSolanaWalletAtom,
-} from './atom'
-import SocialLoginButton from './components/SocialLoginButton'
-import SocialLogin from './components/SocialLogin'
-import { WalletSelectSection, WalletSelectItem } from './components/WalletSelectSection'
-import { ConnectData, LinkOfDevice, WalletConfigV2, WalletConfigV3, WalletModalV2Props } from './types'
-import { ASSET_CDN } from './config/url'
-import { getWalletsConfig, TOP_WALLETS_ID_CONFIG } from './config/wallets'
-import { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'
-import { MoreWalletSection } from './components/MoreWalletSection'
-import { WalletChainSelect } from './components/WalletChainSelect'
-import { PreviewSection, PreviewStatus } from './components/PreviewSection'
+  walletSelectWrapperClass,
+} from '../WalletModal.css'
+import { errorAtom, lastUsedWalletNameAtom, previouslyUsedWalletsAtom, selectedWalletAtom } from './atom'
+import SocialLoginButton from '../SocialLoginButton'
+import { ConnectData, LinkOfDevice, WalletConfigV2 } from '../../types'
+import { WalletModalV2Props } from './types'
+import { WalletConnectorNotFoundError, WalletSwitchChainError } from '../../error'
 
-const Qrcode = lazy(() => import('./components/QRCode'))
+export const ASSET_CDN = 'https://assets.pancakeswap.finance'
+
+const StepIntro = lazy(() => import('./components/Intro'))
+
+const Qrcode = lazy(() => import('../QRCode'))
 
 const SocialLoginModal = lazy(() => import('./components/SocialLoginModal'))
 
-export class WalletConnectorNotFoundError extends Error {}
-
-export class WalletSwitchChainError extends Error {}
-
-// @deprecated use useSelectedEvmWallet or useSelectedSolanaWallet instead
-// TODO @ChefJerry, remove this function after all usages are migrated to useSelectedEvmWallet or useSelectedSolanaWallet
-export function useSelectedWallet() {
-  // return useAtom<[WalletConfigV2<unknown> | null, WalletConfigV2<unknown> | null]>(selectedWalletAtom)
-  return useSelectedEvmWallet()
-}
-
-export function useSelectedEvmWallet<T = unknown>() {
+export function useSelectedWallet<T>() {
   // @ts-ignore
-  return useAtom<WalletConfigV2<T> | null>(selectedEvmWalletAtom)
+  return useAtom<WalletConfigV2<T> | null>(selectedWalletAtom)
 }
 
-export function useSelectedSolanaWallet<T = unknown>() {
-  // @ts-ignore
-  return useAtom<WalletConfigV2<T> | null>(selectedSolanaWalletAtom)
-}
+const StyledTab = styled(Tab)`
+  height: 32px;
+  padding: 4px 12px;
+`
 
 type TabContainerProps = PropsWithChildren<{
+  docLink: string
+  docText: string
   fullSize?: boolean
   onDismiss?: () => void
 }>
 
-const TabContainer = ({ children, fullSize = true, onDismiss }: TabContainerProps) => {
+const TabContainer = ({ children, docLink, docText, fullSize = true, onDismiss }: TabContainerProps) => {
+  const [index, setIndex] = useState(0)
+  const { t } = useTranslation()
   const { isMobile } = useMatchBreakpoints()
 
   return (
     <AtomBox position="relative" zIndex="modal" className={fullSize ? fullSizeModalWrapperClass : modalWrapperClass}>
+      {isMobile ? null : (
+        <AtomBox position="absolute" style={{ top: '-48px', left: '10px' }}>
+          <TabMenu activeIndex={index} onItemClick={setIndex} gap="16px" isColorInverse isShowBorderBottom={false}>
+            <StyledTab>{t('Connect Wallet')}</StyledTab>
+            <StyledTab>{t('What’s a Web3 Wallet?')}</StyledTab>
+          </TabMenu>
+        </AtomBox>
+      )}
       <AtomBox
         display="flex"
         position="relative"
@@ -108,6 +97,11 @@ const TabContainer = ({ children, fullSize = true, onDismiss }: TabContainerProp
       >
         {isMobile ? (
           <Row mb="16px" gap="16px">
+            <ButtonMenu scale="md" activeIndex={index} onItemClick={setIndex} variant="subtle">
+              <ButtonMenuItem>{t('Connect Wallet')}</ButtonMenuItem>
+              <ButtonMenuItem minWidth="57%">{t('What’s a Web3 Wallet?')}</ButtonMenuItem>
+            </ButtonMenu>
+
             <IconButton
               mr="-6px"
               variant="text"
@@ -121,7 +115,12 @@ const TabContainer = ({ children, fullSize = true, onDismiss }: TabContainerProp
             </IconButton>
           </Row>
         ) : null}
-        {children}
+        {index === 0 && children}
+        {index === 1 && (
+          <Suspense>
+            <StepIntro docLink={docLink} docText={docText} />
+          </Suspense>
+        )}
       </AtomBox>
     </AtomBox>
   )
@@ -142,9 +141,7 @@ function MobileModal<T>({
   onOpenSocialLoginModal: () => void
 }) {
   const [selected] = useSelectedWallet()
-  const [[evmError, solanaError]] = useAtom(errorAtom)
-  // TODO @ChefJerry, display evmError and solanaError separately
-  const error = evmError || solanaError
+  const [error] = useAtom(errorAtom)
 
   const installedWallets: WalletConfigV2<T>[] = useMemo(
     () => [...wallets, ...topWallets, ...previouslyUsedWallets].filter((w) => w.installed),
@@ -236,7 +233,7 @@ function WalletSelect<T>({
     () => [
       { label: t('Previously used'), items: previouslyUsedWallets },
       { label: t('Top Wallets'), items: topWallets },
-      // { label: t('More Wallets'), items: walletsToShow, isMore: true },
+      { label: t('More Wallets'), items: walletsToShow, isMore: true },
     ],
     [t, walletsToShow, topWallets, previouslyUsedWallets],
   )
@@ -245,19 +242,92 @@ function WalletSelect<T>({
       overflowY="auto"
       overflowX="hidden"
       gap="16px"
-      style={{ paddingRight: '16px', marginRight: '-24px', ...style }}
+      style={{ paddingRight: '28px', marginRight: '-40px', ...style }}
       className={scrollbarClass}
     >
-      {sections.map(({ label, items }) =>
+      {sections.map(({ label, items, isMore }) =>
         items.length > 0 ? (
-          <WalletSelectSection key={label} label={label}>
-            {items.map((wallet) => (
-              <WalletSelectItem key={wallet.id} wallet={wallet as WalletConfigV3<T>} onClick={onClick} />
-            ))}
-          </WalletSelectSection>
+          <Column gap="6px">
+            <Text fontSize="14px" color="textSubtle" lineHeight={1.5}>
+              {label}
+            </Text>
+            <AtomBox display="grid" overflowY="auto" overflowX="hidden" className={walletSelectWrapperClass}>
+              {items.map((wallet) => {
+                const isImage = typeof wallet.icon === 'string'
+                const Icon = wallet.icon
+
+                return (
+                  <AtomBox border="1" borderRadius="default" p="12px" style={{ maxWidth: '106px' }}>
+                    <Button
+                      key={wallet.id}
+                      variant="text"
+                      height="auto"
+                      width="100%"
+                      as={AtomBox}
+                      display="flex"
+                      alignItems="center"
+                      style={{ justifyContent: 'flex-start', letterSpacing: 'normal', padding: '0' }}
+                      flexDirection="column"
+                      onClick={() => onClick(wallet)}
+                    >
+                      <AtomBox borderRadius="12px" mb="4px">
+                        <AtomBox
+                          bgc="dropdown"
+                          display="flex"
+                          position="relative"
+                          justifyContent="center"
+                          alignItems="center"
+                          className={walletIconClass}
+                          style={{ borderRadius: '13px' }}
+                          overflow="hidden"
+                        >
+                          {isImage ? (
+                            <Image src={Icon as string} width={48} height={48} />
+                          ) : (
+                            <Icon width={24} height={24} color="textSubtle" />
+                          )}
+                        </AtomBox>
+                      </AtomBox>
+                      <Row gap="2px">
+                        {wallet.MEVSupported ? (
+                          <ShieldCheckIcon width={17} height={17} color={theme.colors.positive60} />
+                        ) : null}
+                        <Text fontSize="12px" textAlign="center" width="100%" ellipsis>
+                          {wallet.title}
+                        </Text>
+                      </Row>
+                    </Button>
+                  </AtomBox>
+                )
+              })}
+              {isMore && !showMore && wallets.length > walletDisplayCount && (
+                <AtomBox display="flex" justifyContent="center" alignItems="center" flexDirection="column">
+                  <Button
+                    height="auto"
+                    variant="text"
+                    as={AtomBox}
+                    flexDirection="column"
+                    onClick={() => setShowMore(true)}
+                  >
+                    <AtomBox
+                      className={walletIconClass}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      bgc="dropdown"
+                    >
+                      <MoreHorizontalIcon color="text" />
+                    </AtomBox>
+                    <Text fontSize="12px" textAlign="center" mt="4px">
+                      {t('More')}
+                    </Text>
+                  </Button>
+                </AtomBox>
+              )}
+            </AtomBox>
+          </Column>
         ) : null,
       )}
-      <MoreWalletSection onClick={onClick} wallets={walletsToShow as WalletConfigV3<T>[]} />
     </Column>
   )
 }
@@ -309,25 +379,11 @@ function DesktopModal<T>({
   docText,
   mevDocLink,
   onOpenSocialLoginModal,
-  previewStatus,
-  setPreviewStatus,
-  onBackToWeb3Wallet,
-  onGoogleLogin,
-  onXLogin,
-  onTelegramLogin,
-  onDiscordLogin,
 }: Pick<WalletModalV2Props<T>, 'wallets' | 'topWallets' | 'docLink' | 'docText' | 'mevDocLink'> & {
   connectWallet: (wallet: WalletConfigV2<T>) => void
   onWalletConnected: (wallet: WalletConfigV2<T>, connectData?: ConnectData) => void
   previouslyUsedWallets: WalletConfigV2<T>[]
   onOpenSocialLoginModal: () => void
-  previewStatus: PreviewStatus
-  setPreviewStatus: (section: PreviewStatus) => void
-  onBackToWeb3Wallet: () => void
-  onGoogleLogin?: () => void
-  onXLogin?: () => void
-  onTelegramLogin?: () => void
-  onDiscordLogin?: () => void
 }) {
   const wallets: WalletConfigV2<T>[] = useMemo(
     () =>
@@ -353,21 +409,13 @@ function DesktopModal<T>({
     [previouslyUsedWallets],
   )
 
-  const [selected] = useSelectedWallet()
-  const [[evmError, solanaError]] = useAtom(errorAtom)
-  const error = evmError || solanaError
+  const [selected] = useSelectedWallet<T>()
+  const [error] = useAtom(errorAtom)
   const [qrCode, setQrCode] = useState<string | undefined>(undefined)
   const { t } = useTranslation()
 
-  const [selectedMultiChainWallet, setSelectedMultiChainWallet] = useState<WalletConfigV3<T> | null>(null)
-
   const onWalletSelected = useCallback(
-    (w: WalletConfigV3<T>) => {
-      if (w.networks.length > 1) {
-        setSelectedMultiChainWallet(w)
-        setPreviewStatus(PreviewStatus.ChainSelect)
-        return
-      }
+    (w: WalletConfigV2<T>) => {
       connectWallet(w)
       setQrCode(undefined)
       if (w.qrCode) {
@@ -385,30 +433,21 @@ function DesktopModal<T>({
   )
 
   return (
-    <Grid gridTemplateColumns="1fr 1fr" width="100%">
+    <>
       <AtomBox
         display="flex"
         flexDirection="column"
         bg="backgroundAlt"
-        px="16px"
-        py="16px"
-        pt="24px"
+        py="32px"
+        px="48px"
         zIndex="modal"
         borderRadius="card"
         className={desktopWalletSelectionClass}
-        gap="1rem"
+        gap="20px"
       >
-        <RowBetween>
-          <Heading color="color" as="h4">
-            {t('Connect Wallet')}
-          </Heading>
-          <FlexGap gap="8px" alignItems="center" as="label" htmlFor="wallet-modal-network-toggle">
-            <Text textTransform="uppercase" fontWeight="600" color="textSubtle" fontSize="12px">
-              {t('Solana Only')}
-            </Text>
-            <Toggle scale="md" id="wallet-modal-network-toggle" />
-          </FlexGap>
-        </RowBetween>
+        <Heading color="color" as="h4">
+          {t('Connect Wallet')}
+        </Heading>
 
         <SocialLoginButton onClick={onOpenSocialLoginModal} assetCdn={ASSET_CDN} />
 
@@ -419,12 +458,11 @@ function DesktopModal<T>({
           displayCount="all"
           onClick={onWalletSelected}
         />
-        {/* {mevDocLink ? <MEVSection mevDocLink={mevDocLink} /> : null} */}
+        {mevDocLink ? <MEVSection mevDocLink={mevDocLink} /> : null}
       </AtomBox>
       <AtomBox
         flex={1}
-        px="16px"
-        py="56px"
+        mx="24px"
         display={{
           xs: 'none',
           sm: 'flex',
@@ -433,50 +471,32 @@ function DesktopModal<T>({
         flexDirection="column"
         alignItems="center"
       >
-        {previewStatus === PreviewStatus.Intro && (
-          <AtomBox
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            style={{ gap: '12px' }}
-            textAlign="center"
-            width="100%"
-          >
-            {!selected && <PreviewSection.Intro docLink={docLink} />}
-            {selected && selected.installed !== false && (
-              <>
-                {typeof selected.icon === 'string' && <Image src={selected.icon} width={108} height={108} />}
-                <Heading as="h1" fontSize="20px" color="secondary">
-                  {t('Opening')} {selected.title}
-                </Heading>
-                {error ? (
-                  <ErrorContent message={error} onRetry={() => connectWallet(selected)} />
-                ) : (
-                  <Text>{t('Please confirm in %wallet%', { wallet: selected.title })}</Text>
-                )}
-              </>
-            )}
-            {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />}
-          </AtomBox>
-        )}
-        {previewStatus === PreviewStatus.SocialLogin && (
-          <SocialLogin
-            onGoogleLogin={onGoogleLogin}
-            onXLogin={onXLogin}
-            onTelegramLogin={onTelegramLogin}
-            onDiscordLogin={onDiscordLogin}
-          />
-        )}
-        {previewStatus === PreviewStatus.ChainSelect && <WalletChainSelect wallet={selectedMultiChainWallet} />}
+        <AtomBox display="flex" flexDirection="column" alignItems="center" style={{ gap: '24px' }} textAlign="center">
+          {!selected && <Intro docLink={docLink} docText={docText} />}
+          {selected && selected.installed !== false && (
+            <>
+              {typeof selected.icon === 'string' && <Image src={selected.icon} width={108} height={108} />}
+              <Heading as="h1" fontSize="20px" color="secondary">
+                {t('Opening')} {selected.title}
+              </Heading>
+              {error ? (
+                <ErrorContent message={error} onRetry={() => connectWallet(selected)} />
+              ) : (
+                <Text>{t('Please confirm in %wallet%', { wallet: selected.title })}</Text>
+              )}
+            </>
+          )}
+          {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />}
+        </AtomBox>
       </AtomBox>
-    </Grid>
+    </>
   )
 }
 
-export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(props: WalletModalV2Props<T>) {
+export function WalletModalV2<T = unknown>(props: WalletModalV2Props<T>) {
   const {
-    wallets: walletsTemp1,
-    topWallets: topWalletsTemp,
+    wallets: wallets_,
+    topWallets: topWallets_,
     login,
     docLink,
     docText,
@@ -485,41 +505,35 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
     mevDocLink,
     ...rest
   } = props
-  const wallets_ = getWalletsConfig()
-  const topWallets_ = TOP_WALLETS_ID_CONFIG.MultiChain.map((id) => wallets_.find((w) => w.id === id))
 
-  const [previewStatus, setPreviewStatus] = useState<PreviewStatus>(PreviewStatus.Intro)
+  const [isSocialLoginModalOpen, setIsSocialLoginModalOpen] = useState(false)
 
   const { isMobile } = useMatchBreakpoints()
-  // TODO @ChefJerry, add previouslyUsedSolanaWalletsAtom support
-  const [previouslyUsedEvmWalletsId] = useAtom(previouslyUsedEvmWalletsAtom)
-  const previouslyUsedEvmWallets = useMemo(
+  const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
+  const previouslyUsedWallets = useMemo(
     () =>
-      previouslyUsedEvmWalletsId
+      previouslyUsedWalletsId
         .map((id) => wallets_.find((w) => w.id === id))
-        .filter<WalletConfigV3<EvmConnectorNames | SolanaConnectorNames>>(
-          (w): w is WalletConfigV3<EvmConnectorNames | SolanaConnectorNames> => Boolean(w),
-        ),
-    [wallets_, previouslyUsedEvmWalletsId],
+        .filter<WalletConfigV2<T>>((w): w is WalletConfigV2<T> => Boolean(w)),
+    [wallets_, previouslyUsedWalletsId],
   )
 
   const topWallets = useMemo(
-    () => topWallets_.filter((w) => !previouslyUsedEvmWalletsId.includes(w.id)),
-    [previouslyUsedEvmWalletsId, topWallets_],
+    () => topWallets_.filter((w) => !previouslyUsedWalletsId.includes(w.id)),
+    [previouslyUsedWalletsId, topWallets_],
   )
 
   const wallets = useMemo(
     () =>
       sortWallets(
-        wallets_.filter((i) => !topWallets.some((t) => t.id === i.id) && !previouslyUsedEvmWalletsId.includes(i.id)),
+        wallets_.filter((i) => !topWallets.some((t) => t.id === i.id) && !previouslyUsedWalletsId.includes(i.id)),
         null,
       ),
-    [wallets_, topWallets, previouslyUsedEvmWalletsId],
+    [wallets_, topWallets, previouslyUsedWalletsId],
   )
 
-  // TODO @ChefJerry, add previouslyUsedSolanaWalletsAtom support
-  const [, setSelectedEvmWallet] = useSelectedEvmWallet()
-  const [, setLastUsedEvmWallet] = useAtom(lastUsedEvmWalletNameAtom)
+  const [, setSelected] = useSelectedWallet()
+  const [, setLastUsedWallet] = useAtom(lastUsedWalletNameAtom)
   const [, setError] = useAtom(errorAtom)
   const { t } = useTranslation()
 
@@ -536,23 +550,22 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
 
   const handleWalletConnected = useCallback(
     (wallet: WalletConfigV2<T>, connectData?: ConnectData) => {
-      setLastUsedEvmWallet(wallet.id)
+      setLastUsedWallet(wallet.id)
       try {
         onWalletConnectCallBack?.(wallet.title, connectData?.accounts?.[0])
       } catch (e) {
         console.error(wallet.title, e)
       }
     },
-    [onWalletConnectCallBack, setLastUsedEvmWallet],
+    [onWalletConnectCallBack, setLastUsedWallet],
   )
 
   const connectWallet = useCallback(
     (wallet: WalletConfigV2<T>) => {
-      setSelectedEvmWallet(wallet)
-      // TODO @ChefJerry, set evmError and solanaError separately
-      setError(['', ''])
+      setSelected(wallet)
+      setError('')
       if (wallet.installed !== false) {
-        login(wallet.connectorId)
+        login(wallet)
           .then((v) => {
             if (v) {
               handleWalletConnected(wallet, v)
@@ -560,32 +573,41 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
           })
           .catch((err) => {
             if (err instanceof WalletConnectorNotFoundError) {
-              setError([t('no provider found'), ''])
+              setError(t('no provider found'))
             } else if (err instanceof WalletSwitchChainError) {
-              setError([err.message, ''])
+              setError(err.message)
             } else {
-              setError([t('Error connecting, please authorize wallet to access.'), ''])
+              setError(t('Error connecting, please authorize wallet to access.'))
             }
           })
       }
     },
-    [handleWalletConnected, login, setError, setSelectedEvmWallet, t],
+    [handleWalletConnected, login, setError, setSelected, t],
   )
 
   const mobileContainerStyle: React.CSSProperties = isMobile ? { height: '100%', borderRadius: 0 } : {}
 
-  const handleOpenSocialLogin = () => {
-    setPreviewStatus(PreviewStatus.SocialLogin)
+  const handleOpenSocialLoginModal = () => {
+    setIsSocialLoginModalOpen(true)
+    // Keep the main modal open to maintain BodyLock
+  }
+
+  const handleCloseSocialLoginModal = () => {
+    setIsSocialLoginModalOpen(false)
+    // Main modal content will automatically show again due to conditional display: none
+    // This maintains the BodyLock properly
   }
 
   const handleBackToWeb3Wallet = () => {
-    setPreviewStatus(PreviewStatus.Intro)
+    // Close social login modal to return to wallet modal
+    setIsSocialLoginModalOpen(false)
   }
 
   // Wrap social login callbacks to ensure proper modal cleanup
   const handleSocialLoginWithCleanup = (originalCallback?: () => void) => {
     return () => {
-      // Close modal when social login is initiated
+      // Close both modals when social login is initiated
+      setIsSocialLoginModalOpen(false)
       props.onDismiss?.()
 
       // Execute the original callback
@@ -593,59 +615,76 @@ export function WalletModalV2<T = EvmConnectorNames | SolanaConnectorNames>(prop
     }
   }
 
-  const handleDismiss = () => {
-    props.onDismiss?.()
-    setPreviewStatus(PreviewStatus.Intro)
-  }
-
   return (
-    <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest} onDismiss={handleDismiss}>
-      <ModalWrapper
-        onDismiss={handleDismiss}
-        containerStyle={{ border: 'none', ...mobileContainerStyle }}
-        style={{
-          overflow: 'visible',
-          border: 'none',
-          ...mobileContainerStyle,
-        }}
-      >
-        <AtomBox position="relative">
-          <TabContainer fullSize={fullSize} onDismiss={handleDismiss}>
-            {isMobile ? (
-              <MobileModal
-                mevDocLink={mevDocLink}
-                connectWallet={connectWallet}
-                topWallets={topWallets as WalletConfigV3<T>[]}
-                previouslyUsedWallets={previouslyUsedEvmWallets as WalletConfigV2<T>[]}
-                wallets={wallets as WalletConfigV2<T>[]}
-                docLink={docLink}
-                docText={docText}
-                onOpenSocialLoginModal={handleOpenSocialLogin}
-              />
-            ) : (
-              <DesktopModal
-                mevDocLink={mevDocLink}
-                connectWallet={connectWallet}
-                onWalletConnected={handleWalletConnected}
-                topWallets={topWallets as WalletConfigV3<T>[]}
-                previouslyUsedWallets={previouslyUsedEvmWallets as WalletConfigV2<T>[]}
-                wallets={wallets as WalletConfigV2<T>[]}
-                docLink={docLink}
-                docText={docText}
-                onOpenSocialLoginModal={handleOpenSocialLogin}
-                previewStatus={previewStatus}
-                setPreviewStatus={setPreviewStatus}
-                onBackToWeb3Wallet={handleBackToWeb3Wallet}
-                onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
-                onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
-                onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
-                onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
-              />
-            )}
-          </TabContainer>
-        </AtomBox>
-      </ModalWrapper>
-    </ModalV2>
+    <>
+      <Suspense>
+        <SocialLoginModal
+          isOpen={isSocialLoginModalOpen}
+          onDismiss={handleCloseSocialLoginModal}
+          onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
+          onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
+          onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
+          onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
+          onBackToWeb3Wallet={handleBackToWeb3Wallet}
+        />
+      </Suspense>
+      <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest}>
+        <ModalWrapper
+          onDismiss={props.onDismiss}
+          containerStyle={{ border: 'none', ...mobileContainerStyle }}
+          style={{
+            overflow: 'visible',
+            border: 'none',
+            ...mobileContainerStyle,
+            ...(isSocialLoginModalOpen ? { display: 'none' } : {}),
+          }}
+        >
+          <AtomBox position="relative">
+            <TabContainer docLink={docLink} docText={docText} fullSize={fullSize} onDismiss={props.onDismiss}>
+              {isMobile ? (
+                <MobileModal
+                  mevDocLink={mevDocLink}
+                  connectWallet={connectWallet}
+                  topWallets={topWallets}
+                  previouslyUsedWallets={previouslyUsedWallets}
+                  wallets={wallets}
+                  docLink={docLink}
+                  docText={docText}
+                  onOpenSocialLoginModal={handleOpenSocialLoginModal}
+                />
+              ) : (
+                <DesktopModal
+                  mevDocLink={mevDocLink}
+                  connectWallet={connectWallet}
+                  onWalletConnected={handleWalletConnected}
+                  topWallets={topWallets}
+                  previouslyUsedWallets={previouslyUsedWallets}
+                  wallets={wallets}
+                  docLink={docLink}
+                  docText={docText}
+                  onOpenSocialLoginModal={handleOpenSocialLoginModal}
+                />
+              )}
+            </TabContainer>
+          </AtomBox>
+        </ModalWrapper>
+      </ModalV2>
+    </>
+  )
+}
+
+const Intro = ({ docLink, docText }: { docLink: string; docText: string }) => {
+  const { t } = useTranslation()
+  return (
+    <>
+      <Heading as="h1" fontSize="20px" color="secondary">
+        {t('Haven’t got a wallet yet?')}
+      </Heading>
+      <Image src="https://cdn.pancakeswap.com/wallets/wallet_intro.png" width={198} height={178} />
+      <Button as={LinkExternal} color="backgroundAlt" variant="subtle" href={docLink}>
+        {docText}
+      </Button>
+    </>
   )
 }
 

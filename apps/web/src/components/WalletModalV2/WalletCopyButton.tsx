@@ -8,7 +8,7 @@ import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
 import { Connector, useAccount, useConnect } from 'wagmi'
-import { previouslyUsedEvmWalletsAtom } from '@pancakeswap/ui-wallets'
+import { legacyPreviouslyUsedWalletsAtom } from '@pancakeswap/ui-wallets'
 import { useSocialLoginProviderAtom } from '../../contexts/Privy/atom'
 
 interface CopyAddressProps extends FlexProps {
@@ -135,7 +135,7 @@ export const CopyAddress: React.FC<React.PropsWithChildren<CopyAddressProps>> = 
   const isSmartAccount = useIsSmartAccount()
 
   // TODO @ChefJerry, add previouslyUsedSolanaWalletsAtom support
-  const [previouslyUsedEvmWalletsId] = useAtom(previouslyUsedEvmWalletsAtom)
+  const [previouslyUsedEvmWalletsId] = useAtom(legacyPreviouslyUsedWalletsAtom)
   const [socialProvider] = useSocialLoginProviderAtom()
 
   const walletConfig = walletsConfig({ chainId, connect: connectAsync })

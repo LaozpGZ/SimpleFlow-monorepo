@@ -33,10 +33,10 @@ function getBinanceConnectorId() {
   return EvmConnectorNames.BinanceW3W
 }
 
-export const getWalletsConfig = (): WalletConfigV3<EvmConnectorNames | SolanaConnectorNames>[] => {
+export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
   // const qrCode = createQrCode(chainId, connect)
   // const qrCode = () => Promise.resolve('')
-  return [
+  const wallets = [
     {
       id: WalletIds.Metamask,
       title: 'Metamask',
@@ -223,10 +223,28 @@ export const getWalletsConfig = (): WalletConfigV3<EvmConnectorNames | SolanaCon
       },
     },
   ]
+
+  if (solanaOnly) {
+    return wallets.filter((wallet) => wallet.networks.includes(WalletAdaptedNetwork.Solana))
+  }
+
+  return wallets
 }
 
 export const TOP_WALLETS_ID_CONFIG = {
   MultiChain: [WalletIds.Metamask, WalletIds.BinanceW3W],
   Evm: [WalletIds.Metamask, WalletIds.BinanceW3W, WalletIds.Okx],
   Solana: [WalletIds.Phantom, WalletIds.Solflare, WalletIds.Backpack],
+}
+
+export const getTopWalletsConfig = (wallets: WalletConfigV3[], solanaOnly: boolean): WalletConfigV3[] => {
+  if (solanaOnly) {
+    return TOP_WALLETS_ID_CONFIG.Solana.map((id) => wallets.find((wallet) => wallet.id === id)).filter(
+      Boolean,
+    ) as WalletConfigV3[]
+  }
+
+  return TOP_WALLETS_ID_CONFIG.MultiChain.map((id) => wallets.find((wallet) => wallet.id === id)).filter(
+    Boolean,
+  ) as WalletConfigV3[]
 }
