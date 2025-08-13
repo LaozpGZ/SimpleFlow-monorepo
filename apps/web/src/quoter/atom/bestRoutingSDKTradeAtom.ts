@@ -54,6 +54,7 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
           signal: controller.signal,
         })
         const trade = InfinityRouter.Transformer.parseTrade(currency.chainId, result) ?? null
+        perf.tracker.track('routing_success')
         const verifiedTrade = await getVerifiedTrade(trade)
 
         if (verifiedTrade) {
