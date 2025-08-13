@@ -21,17 +21,7 @@ export const FieldSelectCurrencies: React.FC<FieldSelectCurrenciesProps> = ({ ..
 
   return (
     <Box {...boxProps}>
-      <Flex justifyContent="space-between" alignItems="center" mb="8px">
-        <PreTitle>{t('Choose Token Pair')}</PreTitle>
-        {chainId ? (
-          <Flex>
-            <ChainLogo width={16} height={16} chainId={chainId} />
-            <Text ml="4px" fontSize={12} fontWeight={600} color="textSubtle">
-              {chainName ? chainNameConverter(chainName) : ''}
-            </Text>
-          </Flex>
-        ) : null}
-      </Flex>
+      <PreTitle mb="8px">{t('Choose Token Pair')}</PreTitle>
       <FlexGap gap="4px" width="100%" mb="8px" alignItems="center" flexDirection={isXs ? 'column' : 'row'}>
         <CurrencySelectV2
           id="infinity-form-select-base-currency"

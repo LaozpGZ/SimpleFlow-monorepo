@@ -4181,5 +4181,6 @@
   "V2 Pool": "V2 Pool",
   "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.": "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.",
   "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
-  "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees."
+  "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
+  "Use Market Price": "Use Market Price"
 }

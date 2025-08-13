@@ -8,6 +8,7 @@ import { BreadcrumbNav } from 'views/CreateLiquidityPool/components/BreadcrumbNa
 import { CreateLiquidityInfinityForm } from 'views/CreateLiquidityPool/Infinity/CreateLiquidityInfinityForm'
 import { CreateLiquidityV3Form } from 'views/CreateLiquidityPool/V3/CreateLiquidityV3Form'
 import PageLayout from 'components/Layout/Page'
+import { Box } from '@pancakeswap/uikit'
 
 export type RouteType = typeof SelectIdRoute
 
@@ -22,11 +23,13 @@ const CreateLiquidityPage = () => {
   return (
     <PageLayout>
       <BreadcrumbNav />
-      {protocolName === 'infinity' ? (
-        <CreateLiquidityInfinityForm />
-      ) : protocolName === 'v3' ? (
-        <CreateLiquidityV3Form />
-      ) : null}
+      <Box mt="24px">
+        {protocolName === 'infinity' ? (
+          <CreateLiquidityInfinityForm />
+        ) : protocolName === 'v3' ? (
+          <CreateLiquidityV3Form />
+        ) : null}
+      </Box>
     </PageLayout>
   )
 }

@@ -1,13 +1,14 @@
 import { usePreviousValue } from '@pancakeswap/hooks'
 import { POOL_TYPE, PoolType } from '@pancakeswap/infinity-sdk'
+import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   Box,
   BoxProps,
-  Button,
+  ButtonMenu,
+  ButtonMenuItem,
   ErrorIcon,
   FlexGap,
-  Grid,
   Input,
   InputGroup,
   PreTitle,
@@ -16,22 +17,15 @@ import {
 } from '@pancakeswap/uikit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useFeeLevelQueryState } from 'state/infinity/create'
-import styled from 'styled-components'
 import { escapeRegExp } from 'utils'
 import { useInfinityCreateFormQueryState } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
 
-export type FieldFeeLevelProps = BoxProps
+export type FieldFeeLevelProps = {
+  allowCustomFee?: boolean
+} & BoxProps
 
 const decimals = 4
 const PRESET_FEE_LEVELS = [0.01, 0.05, 0.1]
-
-const FeeLevelButton = styled(Button)`
-  width: 100%;
-  margin: 0 auto;
-  height: 100%;
-  font-size: 16px;
-  border-radius: ${({ theme }) => theme.radii.default};
-`
 
 const FEE_LIMIT = {
   [POOL_TYPE.Bin]: 10,
@@ -47,7 +41,7 @@ export const isFeeOutOfRange = (fee?: number | null, poolType?: PoolType) => {
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
-export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ ...boxProps }) => {
+export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ...boxProps }) => {
   const { t } = useTranslation()
   const [feeLevel, setFeeLevel] = useFeeLevelQueryState()
   const { poolType, feeTierSetting } = useInfinityCreateFormQueryState()
@@ -109,6 +103,29 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ ...boxProps }) => 
     [setFeeLevel],
   )
 
+  const handleMenuItemClick = useCallback(
+    (index: number) => {
+      if (index < PRESET_FEE_LEVELS.length) {
+        handleQuickSelect(PRESET_FEE_LEVELS[index])
+      }
+      // For custom fee input, we don't need to do anything here
+      // as the input will be handled separately
+    },
+    [handleQuickSelect],
+  )
+
+  const activeIndex = useMemo(() => {
+    const presetIndex = PRESET_FEE_LEVELS.findIndex((preset) => preset === feeLevel)
+    if (presetIndex !== -1) {
+      return presetIndex
+    }
+    // If custom fee is set and allowCustomFee is true, return the custom index
+    if (allowCustomFee && feeLevel !== null && !PRESET_FEE_LEVELS.includes(feeLevel)) {
+      return PRESET_FEE_LEVELS.length
+    }
+    return -1
+  }, [feeLevel, allowCustomFee])
+
   const prevFeeLevel = usePreviousValue(feeLevel)
 
   useEffect(() => {
@@ -135,37 +152,37 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ ...boxProps }) => 
         />
       </FlexGap>
 
-      <Grid
-        gridTemplateColumns={['repeat(3, 0.8fr) 1fr', null, null, 'repeat(4, 1fr)']}
-        gridGap={['4px', null, null, '6px']}
-      >
-        {PRESET_FEE_LEVELS.map((presetFeeLevel) => (
-          <FeeLevelButton
-            key={presetFeeLevel}
-            scale={['xs', null, null, 'sm']}
-            variant={feeLevel === presetFeeLevel ? 'primary' : 'secondary'}
-            onClick={() => handleQuickSelect(presetFeeLevel)}
-          >
-            {presetFeeLevel}%
-          </FeeLevelButton>
-        ))}
+      <ButtonMenu activeIndex={activeIndex} onItemClick={handleMenuItemClick} variant="subtle" fullWidth>
+        <ButtonMenuItem>{PRESET_FEE_LEVELS[0]}%</ButtonMenuItem>
+        <ButtonMenuItem>{PRESET_FEE_LEVELS[1]}%</ButtonMenuItem>
+        <ButtonMenuItem>{PRESET_FEE_LEVELS[2]}%</ButtonMenuItem>
+        {allowCustomFee ? (
+          <ButtonMenuItem minWidth="180px">
+            <InputGroup endIcon={<>%</>}>
+              <StyledInput
+                pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
+                inputMode="decimal"
+                placeholder={t('Custom')}
+                step="0.01"
+                min="0"
+                max="100"
+                value={inputValue ?? ''}
+                onBlur={handleInputBlur}
+                onChange={handleInputChange}
+              />
+            </InputGroup>
+          </ButtonMenuItem>
+        ) : (
+          <></>
+        )}
+      </ButtonMenu>
 
-        <InputGroup scale="sm" endIcon={<>%</>}>
-          <Input
-            pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
-            inputMode="decimal"
-            placeholder="0.00"
-            step="0.01"
-            min="0"
-            max="100"
-            style={{ border: 'none', width: '100%' }}
-            value={inputValue ?? ''}
-            onBlur={handleInputBlur}
-            onChange={handleInputChange}
-          />
-        </InputGroup>
-      </Grid>
       {tips}
     </Box>
   )
 }
+
+const StyledInput = styled(Input)`
+  border: none;
+  width: 100%;
+`

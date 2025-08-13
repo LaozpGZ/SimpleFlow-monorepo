@@ -36,43 +36,38 @@ export const CreateLiquidityInfinityForm = () => {
   }
 
   return (
-    <>
-      <Heading as="h3" scale="lg" mb="24px" mt="40px">
-        {t('Create Infinity Liquidity Pool')}
-      </Heading>
-      <Grid gridTemplateColumns={['1fr', '1fr', '1fr', 'repeat(2, 1fr)']} style={{ gap: '24px' }}>
-        <Card style={{ height: 'fit-content' }}>
-          <CardBody>
-            <AutoColumn gap="24px">
-              <FieldSelectCurrencies />
-              <ResponsiveTwoColumns>
-                <FieldPoolType />
-                <FieldFeeTierSetting />
-              </ResponsiveTwoColumns>
-              <DynamicSection disabled={feeTierSetting === 'dynamic'}>
-                <FieldFeeLevel />
-              </DynamicSection>
-              {isBin && <FieldBinStep />}
-              {isCl && <FieldClTickSpacing />}
-              <FieldHookSettings />
-              <MessagePoolInitialized />
-            </AutoColumn>
-          </CardBody>
-        </Card>
-        <Card>
-          <CardBody>
-            <DynamicSection disabled={poolInitialized}>
-              <AutoColumn gap={['16px', null, null, '24px']}>
-                <FieldCreateDepositAmount />
-                <FieldStartingPrice />
-                <FieldPriceRange />
-                {isBin && <FieldLiquidityShape />}
-                <SubmitCreateButton />
-              </AutoColumn>
+    <Grid gridTemplateColumns={['1fr', '1fr', '1fr', 'repeat(2, 1fr)']} style={{ gap: '24px' }}>
+      <Card style={{ height: 'fit-content' }}>
+        <CardBody>
+          <AutoColumn gap="24px">
+            <FieldSelectCurrencies />
+            <ResponsiveTwoColumns>
+              <FieldPoolType />
+              <FieldFeeTierSetting />
+            </ResponsiveTwoColumns>
+            <DynamicSection disabled={feeTierSetting === 'dynamic'}>
+              <FieldFeeLevel allowCustomFee />
             </DynamicSection>
-          </CardBody>
-        </Card>
-      </Grid>
-    </>
+            {isBin && <FieldBinStep />}
+            {isCl && <FieldClTickSpacing />}
+            <FieldHookSettings />
+            <MessagePoolInitialized />
+          </AutoColumn>
+        </CardBody>
+      </Card>
+      <Card>
+        <CardBody>
+          <DynamicSection disabled={poolInitialized}>
+            <AutoColumn gap={['16px', null, null, '24px']}>
+              <FieldCreateDepositAmount />
+              <FieldStartingPrice />
+              <FieldPriceRange />
+              {isBin && <FieldLiquidityShape />}
+              <SubmitCreateButton />
+            </AutoColumn>
+          </DynamicSection>
+        </CardBody>
+      </Card>
+    </Grid>
   )
 }

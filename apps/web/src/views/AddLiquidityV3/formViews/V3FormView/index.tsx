@@ -731,6 +731,7 @@ export default function V3FormView({
     targetRef: currentPriceTargetRef,
   } = useTooltip(t('The price is an estimation of the current market price. Please verify before using it.'), {
     placement: 'bottom',
+    avoidToStopPropagation: true,
   })
 
   return (
@@ -750,7 +751,7 @@ export default function V3FormView({
                         <FlexGap gap="4px" alignItems="center" flexWrap="wrap">
                           <div ref={currentPriceTargetRef}>
                             <CurrentPriceButton onClick={handleUseCurrentPrice}>
-                              <span>{t('Use Current Price')}</span>
+                              <span>{t('Use Market Price')}</span>
                               <InfoIcon color="primary60" width="18px" />
                             </CurrentPriceButton>
                             {currentPriceTooltipVisible && currentPriceTooltip}

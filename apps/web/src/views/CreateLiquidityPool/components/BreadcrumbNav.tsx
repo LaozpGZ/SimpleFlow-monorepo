@@ -3,10 +3,11 @@ import { Box, Breadcrumbs, Link, Text } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import { useSelectIdRoute } from 'hooks/dynamicRoute/useSelectIdRoute'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import styled from 'styled-components'
 import { TabMenu } from 'views/BurnDashboard/components/TabMenu'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { getChainName } from '@pancakeswap/chains'
 
 const StyledLink = styled(NextLinkFromReactRouter)`
   &:hover {
@@ -19,18 +20,20 @@ export const BreadcrumbNav: React.FC = () => {
   const router = useRouter()
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
+  const chainName = useMemo(() => getChainName(chainId), [chainId])
 
   const { protocolName, routeParams } = useSelectIdRoute()
+  const protocolFromQuery = routeParams?.selectId?.[1]
 
   const handleProtocolChange = useCallback(
     (protocol: 'infinity' | 'v3' | 'v2') => {
       const currencyIdA = routeParams?.selectId?.[2]
       const currencyIdB = routeParams?.selectId?.[3]
       if (currencyIdA && currencyIdB) {
-        router.push(`/liquidity/create/${chainId}/${protocol}/${currencyIdA}/${currencyIdB}`)
-      } else router.push(`/liquidity/create/${chainId}/${protocol}`)
+        router.push(`/liquidity/create/${chainName}/${protocol}/${currencyIdA}/${currencyIdB}`)
+      } else router.push(`/liquidity/create/${chainName}/${protocol}`)
     },
-    [router, chainId, routeParams],
+    [router, chainName, routeParams],
   )
 
   return (
@@ -41,13 +44,14 @@ export const BreadcrumbNav: React.FC = () => {
       <StyledLink to="/liquidity/create">
         <Text color="primary60">{t('Create Liquidity Pool')}</Text>
       </StyledLink>
-      <Box>
+
+      {protocolFromQuery && (
         <TabMenu
           tabs={['infinity', 'v3', 'v2']}
           defaultTab={protocolName as 'infinity' | 'v3' | 'v2'}
           onTabChange={handleProtocolChange}
         />
-      </Box>
+      )}
     </Breadcrumbs>
   )
 }
