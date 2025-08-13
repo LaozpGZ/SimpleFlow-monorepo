@@ -98,7 +98,7 @@ export const walletIconClass = style({
 })
 
 export const scrollbarClass = style({
-  maxHeight: '400px',
+  maxHeight: '340px',
   overflowY: 'auto',
 
   '::-webkit-scrollbar': {

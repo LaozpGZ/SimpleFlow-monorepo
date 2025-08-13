@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { LegacyWalletModal, LegacyWalletConfig } from '@pancakeswap/ui-wallets'
+import { LegacyWalletModal, LegacyWalletConfig, MultichainWalletModal } from '@pancakeswap/ui-wallets'
 import { ConnectorNames, createWallets, getDocLink, mevDocLink, TOP_WALLET_MAP } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
@@ -42,14 +42,15 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
   const { loginWithGoogle, loginWithX, isLoading, loginWithDiscord, loginWithTelegram } = useFirebaseAuth()
 
   return (
-    <LegacyWalletModal
-      mevDocLink={mevDocLink}
+    <MultichainWalletModal
+      // mevDocLink={mevDocLink}
       docText={t('Learn How to Connect')}
       docLink={docLink}
       isOpen={isOpen}
-      wallets={wallets}
-      topWallets={topWallets}
-      login={login}
+      // wallets={wallets}
+      // topWallets={topWallets}
+      evmLogin={login}
+      solanaLogin={login}
       onDismiss={onDismiss}
       onWalletConnectCallBack={handleWalletConnect}
       onGoogleLogin={loginWithGoogle}

@@ -19,6 +19,7 @@ import { PreviewStatus } from '../PreviewSection'
 import { DesktopModal } from './DesktopModal'
 import { MobileModal } from './MobileModal'
 import { MultichainWalletModalProps } from './types'
+import { fullSizeModalWrapperClass, modalWrapperClass } from '../WalletModal.css'
 
 export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (props) => {
   const {
@@ -143,33 +144,53 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
           ...mobileContainerStyle,
         }}
       >
-        <AtomBox position="relative">
-          {/* todo: add close button on mobile */}
-          {isMobile ? (
-            <MobileModal
-              wallets={wallets_}
-              topWallets={topWallets_}
-              previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}
-              connectWallet={connectWallet}
-              displaySocialLogin={displaySocialLogin}
-            />
-          ) : (
-            <DesktopModal
-              wallets={wallets_}
-              topWallets={topWallets_}
-              previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}
-              connectWallet={connectWallet}
-              onWalletConnected={handleWalletConnected}
-              displaySocialLogin={displaySocialLogin}
-              previewStatus={previewStatus}
-              setPreviewStatus={setPreviewStatus}
-              docLink={docLink}
-              onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
-              onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
-              onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
-              onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
-            />
-          )}
+        <AtomBox
+          position="relative"
+          zIndex="modal"
+          className={fullSize ? fullSizeModalWrapperClass : modalWrapperClass}
+        >
+          <AtomBox
+            display="flex"
+            position="relative"
+            background={isMobile ? 'backgroundAlt' : 'gradientCardHeader'}
+            borderRadius="card"
+            flexDirection={isMobile ? 'column' : 'row'}
+            px={isMobile ? '16px' : '0px'}
+            py={isMobile ? '24px' : '0px'}
+            borderBottomRadius={{
+              xs: '0',
+              md: 'card',
+            }}
+            zIndex="modal"
+            width="100%"
+          >
+            {/* todo: add close button on mobile */}
+            {isMobile ? (
+              <MobileModal
+                wallets={wallets_}
+                topWallets={topWallets_}
+                previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}
+                connectWallet={connectWallet}
+                displaySocialLogin={displaySocialLogin}
+              />
+            ) : (
+              <DesktopModal
+                wallets={wallets_}
+                topWallets={topWallets_}
+                previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}
+                connectWallet={connectWallet}
+                onWalletConnected={handleWalletConnected}
+                displaySocialLogin={displaySocialLogin}
+                previewStatus={previewStatus}
+                setPreviewStatus={setPreviewStatus}
+                docLink={docLink}
+                onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
+                onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
+                onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
+                onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
+              />
+            )}
+          </AtomBox>
         </AtomBox>
       </ModalWrapper>
     </ModalV2>
