@@ -34,7 +34,7 @@ export const bestAMMTradeFromQuoterWorker2Atom = atomFamily((option: QuoteQuery)
     const quoteProvider = createQuoteProvider2({
       gasLimit,
     })
-    const worker = await get(globalWorkerAtom)
+    const worker = await get(globalWorkerAtom('routing-sdk'))
     console.log('[worker] bestAMMTradeFromQuoterWorker2Atom', option, worker)
     if (!worker) {
       throw new Error('Quote worker not initialized')
