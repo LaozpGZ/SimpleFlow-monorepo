@@ -41,6 +41,7 @@ import { calculateGasMargin } from 'utils'
 import { currencyId } from 'utils/currencyId'
 import { calculateSlippageAmount } from 'utils/exchange'
 
+import { SettingsModalV2 } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { Field } from 'state/burn/actions'
@@ -57,7 +58,6 @@ import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
 import StyledInternalLink from '../../../components/Links'
 import Dots from '../../../components/Loader/Dots'
 import { CurrencyLogo } from '../../../components/Logo'
-import SettingsModal from '../../../components/Menu/GlobalSettings/SettingsModal'
 import ConfirmLiquidityModal from '../../Swap/components/ConfirmRemoveLiquidityModal'
 import { useStableDerivedBurnInfo } from './hooks/useStableDerivedBurnInfo'
 
@@ -344,7 +344,7 @@ export default function RemoveStableLiquidity({ currencyA, currencyB, currencyId
     'removeLiquidityModal',
   )
 
-  const [onPresentSettingsModal] = useModal(<SettingsModal mode={SettingsMode.SWAP_LIQUIDITY} />)
+  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.SWAP_LIQUIDITY} />)
 
   return (
     <>
