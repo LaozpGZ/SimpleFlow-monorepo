@@ -79,29 +79,67 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
   const [qrCode, setQrCode] = useState<string | undefined>(undefined)
   const { t } = useTranslation()
 
+  const [selectedNetwork, setSelectedNetwork] = useState<WalletAdaptedNetwork | null>(null)
+
   const [selectedMultiChainWallet, setSelectedMultiChainWallet] = useState<WalletConfigV3 | null>(null)
 
-  const onWalletSelected = useCallback(
-    (w: WalletConfigV3, network: WalletAdaptedNetwork) => {
-      if (w.networks.length > 1) {
-        setSelectedMultiChainWallet(w)
-        setPreviewStatus(PreviewStatus.ChainSelect)
-        return
-      }
-      connectWallet(w, network)
+  const onMultiChainWalletSelected = useCallback((wallet: WalletConfigV3) => {
+    setSelectedMultiChainWallet(wallet)
+    setPreviewStatus(PreviewStatus.ChainSelect)
+  }, [])
+
+  const onEvmWalletSelected = useCallback(
+    (wallet: WalletConfigV3) => {
+      setSelectedNetwork(WalletAdaptedNetwork.EVM)
+      connectWallet(wallet, WalletAdaptedNetwork.EVM)
       setQrCode(undefined)
-      if (w.qrCode) {
-        w.qrCode(() => onWalletConnected(w, network)).then(
-          (uri) => {
-            setQrCode(uri)
-          },
-          () => {
-            // do nothing.
-          },
-        )
+      if (wallet.qrCode) {
+        wallet
+          .qrCode(() => onWalletConnected(wallet, WalletAdaptedNetwork.EVM))
+          .then(
+            (uri) => {
+              setQrCode(uri)
+            },
+            () => {
+              // do nothing.
+            },
+          )
       }
     },
     [connectWallet, onWalletConnected],
+  )
+
+  const onSolanaWalletSelected = useCallback(
+    (wallet: WalletConfigV3) => {
+      setSelectedNetwork(WalletAdaptedNetwork.Solana)
+      connectWallet(wallet, WalletAdaptedNetwork.Solana)
+      setQrCode(undefined)
+      if (wallet.qrCode) {
+        wallet
+          .qrCode(() => onWalletConnected(wallet, WalletAdaptedNetwork.Solana))
+          .then(
+            (uri) => {
+              setQrCode(uri)
+            },
+            () => {
+              // do nothing.
+            },
+          )
+      }
+    },
+    [connectWallet, onWalletConnected],
+  )
+
+  const onWalletSelected = useCallback(
+    (w: WalletConfigV3, network: WalletAdaptedNetwork) => {
+      setPreviewStatus(PreviewStatus.Confirming)
+      if (network === WalletAdaptedNetwork.EVM) {
+        onEvmWalletSelected(w)
+      } else if (network === WalletAdaptedNetwork.Solana) {
+        onSolanaWalletSelected(w)
+      }
+    },
+    [onEvmWalletSelected, onSolanaWalletSelected],
   )
 
   return (
@@ -141,8 +179,9 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
           wallets={wallets}
           topWallets={topWallets}
           previouslyUsedWallets={previouslyUsedWallets}
-          displayCount="all"
-          onClick={onWalletSelected}
+          solanaOnly={solanaOnly}
+          onWalletSelected={onWalletSelected}
+          onMultiChainWalletSelected={onMultiChainWalletSelected}
         />
         {/* {mevDocLink ? <MEVSection mevDocLink={mevDocLink} /> : null} */}
       </AtomBox>
@@ -167,8 +206,8 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
             textAlign="center"
             width="100%"
           >
-            {!selected && <PreviewSection.Intro docLink={docLink} />}
-            {selected && selected.installed !== false && (
+            <PreviewSection.Intro docLink={docLink} />
+            {/* {selected && selected.installed !== false && (
               <>
                 {typeof selected.icon === 'string' && <Image src={selected.icon} width={108} height={108} />}
                 <Heading as="h1" fontSize="20px" color="secondary">
@@ -180,12 +219,19 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
                   <Text>{t('Please confirm in %wallet%', { wallet: selected.title })}</Text>
                 )}
               </>
-            )}
+            )} */}
             {/* {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />} */}
           </AtomBox>
         )}
         {previewStatus === PreviewStatus.NotInstalled && selected && (
           <PreviewSection.NotInstalled qrCode={qrCode} wallet={selected} />
+        )}
+        {previewStatus === PreviewStatus.Confirming && selected && selectedNetwork && (
+          <PreviewSection.Confirming
+            wallet={selected}
+            network={selectedNetwork}
+            reConnect={() => onWalletConnected(selected, selectedNetwork)}
+          />
         )}
         {previewStatus === PreviewStatus.SocialLogin && (
           <SocialLogin

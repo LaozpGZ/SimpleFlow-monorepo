@@ -5,7 +5,7 @@ import { ConnectData, WalletConfigV3 } from '../../types'
 export interface MultichainWalletModalProps extends ModalV2Props {
   wallets?: WalletConfigV3[]
   topWallets?: WalletConfigV3[]
-  evmLogin: (connectorID: EvmConnectorNames) => Promise<ConnectData | undefined>
+  evmLogin: (wallet: WalletConfigV3) => Promise<ConnectData | undefined>
   solanaLogin: (connectorID: SolanaConnectorNames) => Promise<ConnectData | undefined>
   onWalletConnectCallBack?: (walletTitle?: string, address?: string) => void
   fullSize?: boolean

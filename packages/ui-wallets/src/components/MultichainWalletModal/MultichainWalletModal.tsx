@@ -96,7 +96,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
 
     if (wallet.installed !== false) {
       if (network === WalletAdaptedNetwork.EVM) {
-        evmLogin(wallet.connectorId as EvmConnectorNames)
+        evmLogin(wallet)
           .then((connectData) => {
             if (connectData) {
               handleWalletConnected(wallet, network, connectData)

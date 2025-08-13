@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Column } from '@pancakeswap/uikit'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import uniqBy from 'lodash/uniqBy'
 import { WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
 import { scrollbarClass } from '../WalletModal.css'
@@ -11,8 +11,9 @@ export type WalletSelectProps = {
   wallets: WalletConfigV3[]
   topWallets: WalletConfigV3[]
   previouslyUsedWallets: [WalletConfigV3[], WalletConfigV3[]]
-  onClick: (wallet: WalletConfigV3, network: WalletAdaptedNetwork) => void
-  displayCount?: number | 'all'
+  solanaOnly?: boolean
+  onMultiChainWalletSelected?: (wallet: WalletConfigV3) => void
+  onWalletSelected?: (wallet: WalletConfigV3, network: WalletAdaptedNetwork) => void
   style?: React.CSSProperties
 }
 
@@ -20,7 +21,9 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
   wallets,
   topWallets,
   previouslyUsedWallets,
-  onClick,
+  solanaOnly,
+  onMultiChainWalletSelected,
+  onWalletSelected,
   style = {},
 }) => {
   const { t } = useTranslation()
@@ -44,6 +47,25 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
     return topWallets.filter((wallet) => !previous.some((prev) => prev.id === wallet.id))
   }, [topWallets, previous])
 
+  const handleWalletClick = useCallback(
+    (wallet: WalletConfigV3) => {
+      if (solanaOnly) {
+        if (wallet.networks.includes(WalletAdaptedNetwork.Solana)) {
+          onWalletSelected?.(wallet, WalletAdaptedNetwork.Solana)
+        }
+        return
+      }
+
+      if (wallet.networks.length === 1) {
+        onWalletSelected?.(wallet, wallet.networks[0])
+        return
+      }
+
+      onMultiChainWalletSelected?.(wallet)
+    },
+    [solanaOnly],
+  )
+
   return (
     <Column
       overflowY="auto"
@@ -55,18 +77,18 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
       {previous?.length && (
         <WalletSelectSection label={t('Previously used')}>
           {previous.map((wallet) => (
-            <WalletSelectItem key={wallet.id} wallet={wallet} onClick={onClick} />
+            <WalletSelectItem key={wallet.id} wallet={wallet} onClick={handleWalletClick} />
           ))}
         </WalletSelectSection>
       )}
       {topWallets_.length > 0 && (
         <WalletSelectSection label={t('Top Wallets')}>
           {topWallets_.map((wallet) => (
-            <WalletSelectItem key={wallet.id} wallet={wallet} onClick={onClick} />
+            <WalletSelectItem key={wallet.id} wallet={wallet} onClick={handleWalletClick} />
           ))}
         </WalletSelectSection>
       )}
-      <MoreWalletSection onClick={onClick} wallets={moreWallets} />
+      <MoreWalletSection onClick={handleWalletClick} wallets={moreWallets} />
     </Column>
   )
 }

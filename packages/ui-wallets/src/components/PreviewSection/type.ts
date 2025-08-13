@@ -3,4 +3,5 @@ export enum PreviewStatus {
   ChainSelect = 'chainSelect',
   SocialLogin = 'socialLogin',
   NotInstalled = 'notInstalled',
+  Confirming = 'confirming',
 }
