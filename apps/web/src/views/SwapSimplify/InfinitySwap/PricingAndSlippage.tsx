@@ -4,9 +4,9 @@ import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { Currency, Price } from '@pancakeswap/sdk'
 import { memo } from 'react'
 
-import SettingsModal from 'components/Menu/GlobalSettings/SettingsModal'
 import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
+import { SettingsModalV2 } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 
 interface Props {
@@ -23,7 +23,7 @@ export const PricingAndSlippage = memo(function PricingAndSlippage({
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
 
   const isWrapping = useIsWrapping()
-  const [onPresentSettingsModal] = useModal(<SettingsModal mode={SettingsMode.SWAP_LIQUIDITY} />)
+  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.SWAP_LIQUIDITY} />)
 
   if (isWrapping || !price) {
     return null

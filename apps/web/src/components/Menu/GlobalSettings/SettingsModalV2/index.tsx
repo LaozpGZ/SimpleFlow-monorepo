@@ -21,13 +21,13 @@ import { ReactNode, useCallback, useId, useState } from 'react'
 import { useRoutingSettingChanged } from 'state/user/smartRouter'
 import { NonEVMChainId } from '@pancakeswap/chains'
 import { SettingsMenu } from 'components/Settings/SettingsMenu'
-import SettingsModal from '../SettingsModal'
 import { SettingsMode } from '../types'
 import { CustomizeRoutingTab } from './CustomizeRoutingTab'
 import { ExpertModeTab } from './ExpertModeTab'
 import { RecentTransactionsTab } from './RecentTransactionsTab'
 import { SettingsTab } from './SettingsTab'
 import { TabContent } from './TabContent'
+import GlobalSettingsModal from '../SettingsModal'
 
 export enum SettingsTabIndex {
   SETTINGS = 0,
@@ -161,7 +161,7 @@ export const SettingsModalV2 = ({
 
   // For Global Settings, show existing modal
   if (mode === SettingsMode.GLOBAL) {
-    return <SettingsModal onDismiss={onDismissGlobalSettings} mode={SettingsMode.GLOBAL} />
+    return <GlobalSettingsModal onDismiss={onDismissGlobalSettings} />
   }
 
   return (

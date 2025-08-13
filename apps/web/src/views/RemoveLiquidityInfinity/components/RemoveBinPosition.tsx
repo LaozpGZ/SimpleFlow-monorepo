@@ -26,7 +26,6 @@ import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount/Formatte
 import { BinRangeSelector } from 'components/Liquidity/Form/BinRangeSelector'
 import PageLoader from 'components/Loader/PageLoader'
 import { CurrencyLogo } from 'components/Logo'
-import SettingsModal from 'components/Menu/GlobalSettings/SettingsModal'
 import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { LIQUIDITY_PAGES } from 'config/constants/liquidity'
 import { useInfinityBinPositionIdRouteParams } from 'hooks/dynamicRoute/usePositionIdRoute'
@@ -47,6 +46,7 @@ import { logGTMClickRemoveLiquidityEvent } from 'utils/customGTMEventTracking'
 import { calculateSlippageAmount } from 'utils/exchange'
 import { zeroAddress } from 'viem'
 import { LiquidityTitle } from 'views/PositionDetails/components'
+import { SettingsModalV2 } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { useAccount } from 'wagmi'
 import { StyledBinCard, StyledInfoCard } from '../styled'
 import { BinSlider } from './BinSlider'
@@ -243,7 +243,7 @@ export const RemoveBinPosition = () => {
     [currency0, currency1],
   )
 
-  const [onPresentSettingsModal] = useModal(<SettingsModal mode={SettingsMode.SWAP_LIQUIDITY} />)
+  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.SWAP_LIQUIDITY} />)
 
   if (!chainId || !poolId || !pool) {
     return <PageLoader />

@@ -18,7 +18,6 @@ import {
   Slider,
   Text,
   Toggle,
-  useModal,
 } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { useUserSlippage } from '@pancakeswap/utils/user'
@@ -27,8 +26,6 @@ import Divider from 'components/Divider'
 import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount/FormattedCurrencyAmount'
 import PageLoader from 'components/Loader/PageLoader'
 import { CurrencyLogo } from 'components/Logo'
-import SettingsModal from 'components/Menu/GlobalSettings/SettingsModal'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { INITIAL_ALLOWED_SLIPPAGE } from 'config/constants'
 import { LIQUIDITY_PAGES } from 'config/constants/liquidity'
 import { useInfinityClammPositionIdRouteParams } from 'hooks/dynamicRoute/usePositionIdRoute'
@@ -196,8 +193,6 @@ export const RemoveClPosition = () => {
       currency1?.wrapped.symbol,
     ],
   )
-
-  const [onPresentSettingsModal] = useModal(<SettingsModal mode={SettingsMode.SWAP_LIQUIDITY} />)
 
   // Show loading animation while we wait for chainId
   if (!chainId || !position || !tokenId) {
