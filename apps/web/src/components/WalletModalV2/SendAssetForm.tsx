@@ -472,6 +472,19 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     )
   }
 
+  console.log(
+    {
+      isValidAddress,
+      amount,
+      isAmountZreo: parseFloat(amount) === 0,
+      isInsufficientBalance,
+      attemptingTxn,
+      isValidGasSponsor,
+      isGiftTokenAmountValid,
+    },
+    'log check items',
+  )
+
   return (
     <FormContainer>
       <SendGiftToggle isNativeToken={isNativeToken} tokenChainId={asset.chainId}>
