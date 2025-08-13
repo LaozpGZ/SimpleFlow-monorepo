@@ -1,11 +1,8 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Box, BoxProps, Flex, FlexGap, PreTitle, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { CurrencySelectV2 } from 'components/CurrencySelectV2'
-import { ChainLogo } from 'components/Logo/ChainLogo'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
-import { chainNameConverter } from 'utils/chainNameConverter'
-import { getChainFullName } from 'views/universalFarms/utils'
 import { useCurrencies } from '../hooks/useCurrencies'
 import { useFieldSelectCurrencies } from '../hooks/useFieldSelectCurrencies'
 
@@ -14,7 +11,6 @@ type FieldSelectCurrenciesProps = BoxProps
 export const FieldSelectCurrencies: React.FC<FieldSelectCurrenciesProps> = ({ ...boxProps }) => {
   const { t } = useTranslation()
   const { chainId } = useSelectIdRouteParams()
-  const chainName = chainId ? getChainFullName(chainId) : undefined
   const { baseCurrency, quoteCurrency } = useCurrencies()
   const { handleBaseCurrencySelect, handleQuoteCurrencySelect } = useFieldSelectCurrencies()
   const { isXs } = useMatchBreakpoints()

@@ -1,5 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Card, CardBody, DynamicSection, Grid, Heading, Spinner } from '@pancakeswap/uikit'
+import { AutoColumn, Card, CardBody, DynamicSection, Grid, Spinner } from '@pancakeswap/uikit'
 import { FieldLiquidityShape } from 'components/Liquidity/Form/FieldLiquidityShape'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { FieldBinStep } from 'views/CreateLiquidityPool/components/FieldBinStep'
@@ -21,7 +20,6 @@ import { ResponsiveTwoColumns } from '../styles'
 
 export const CreateLiquidityInfinityForm = () => {
   const { chainId } = useSelectIdRouteParams()
-  const { t } = useTranslation()
   const { isBin, isCl, feeTierSetting } = useInfinityCreateFormQueryState()
   const poolKey = usePoolKey()
   const { data: poolInitialized } = useIsPoolInitialized(poolKey, chainId)

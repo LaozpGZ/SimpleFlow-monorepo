@@ -19,13 +19,13 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useFeeLevelQueryState } from 'state/infinity/create'
 import { escapeRegExp } from 'utils'
 import { useInfinityCreateFormQueryState } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
+import { PRESET_FEE_LEVELS_INFINITY } from '../constants'
 
 export type FieldFeeLevelProps = {
   allowCustomFee?: boolean
 } & BoxProps
 
 const decimals = 4
-const PRESET_FEE_LEVELS = [0.01, 0.05, 0.1]
 
 const FEE_LIMIT = {
   [POOL_TYPE.Bin]: 10,
@@ -105,8 +105,8 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ..
 
   const handleMenuItemClick = useCallback(
     (index: number) => {
-      if (index < PRESET_FEE_LEVELS.length) {
-        handleQuickSelect(PRESET_FEE_LEVELS[index])
+      if (index < PRESET_FEE_LEVELS_INFINITY.length) {
+        handleQuickSelect(PRESET_FEE_LEVELS_INFINITY[index])
       }
       // For custom fee input, we don't need to do anything here
       // as the input will be handled separately
@@ -115,13 +115,13 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ..
   )
 
   const activeIndex = useMemo(() => {
-    const presetIndex = PRESET_FEE_LEVELS.findIndex((preset) => preset === feeLevel)
+    const presetIndex = PRESET_FEE_LEVELS_INFINITY.findIndex((preset) => preset === feeLevel)
     if (presetIndex !== -1) {
       return presetIndex
     }
     // If custom fee is set and allowCustomFee is true, return the custom index
-    if (allowCustomFee && feeLevel !== null && !PRESET_FEE_LEVELS.includes(feeLevel)) {
-      return PRESET_FEE_LEVELS.length
+    if (allowCustomFee && feeLevel !== null && !PRESET_FEE_LEVELS_INFINITY.includes(feeLevel)) {
+      return PRESET_FEE_LEVELS_INFINITY.length
     }
     return -1
   }, [feeLevel, allowCustomFee])
@@ -153,9 +153,10 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ..
       </FlexGap>
 
       <ButtonMenu activeIndex={activeIndex} onItemClick={handleMenuItemClick} variant="subtle" fullWidth>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS[0]}%</ButtonMenuItem>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS[1]}%</ButtonMenuItem>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS[2]}%</ButtonMenuItem>
+        <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[0]}%</ButtonMenuItem>
+        <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[1]}%</ButtonMenuItem>
+        <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[2]}%</ButtonMenuItem>
+
         {allowCustomFee ? (
           <ButtonMenuItem minWidth="180px">
             <InputGroup endIcon={<>%</>}>

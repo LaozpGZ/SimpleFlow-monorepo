@@ -298,7 +298,7 @@ export default function V3RangeSelector({
         </QuickActionButton>
 
         {!isSmallScreen && (
-          <CustomInputContainer width="120%">
+          <CustomInputContainer width="120%" minWidth="100px">
             <StyledInput
               value={customInput}
               onChange={handleCustomInputChange}

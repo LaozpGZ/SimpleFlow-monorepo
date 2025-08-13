@@ -1,13 +1,37 @@
-import { AutoColumn, Box, Card, CardBody } from '@pancakeswap/uikit'
+import { AutoColumn, Box, Card, CardBody, DynamicSection } from '@pancakeswap/uikit'
 import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
-import { FieldFeeLevel } from '../components/FieldFeeLevel'
-import { FieldStartingPrice } from '../components/FieldStartingPrice'
-import { FieldPriceRange } from '../components/FieldPriceRange'
-import { FieldCreateDepositAmount } from '../components/FieldCreateDepositAmount'
+
+import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
+import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
 import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
-import { SubmitCreateButton } from '../components/SubmitCreateButton'
+import { useV3CreateForm } from '../hooks/V3/useV3CreateForm'
+import { PRESET_FEE_LEVELS_V3 } from '../constants'
+import { MessagePoolInitialized } from '../components/V3/MessagePoolInitialized'
+import { FieldFeeLevel } from '../components/V3/FieldFeeLevel'
 
 export const CreateLiquidityV3Form = () => {
+  const {
+    // State
+    currencies,
+    startPriceTypedValue,
+    formattedAmounts,
+    maxAmounts,
+    depositADisabled,
+    depositBDisabled,
+    noLiquidity,
+
+    // Components
+    buttons,
+    rangeSelector,
+
+    // Actions
+    onStartPriceInput,
+    onFieldAInput,
+    onFieldBInput,
+  } = useV3CreateForm()
+
+  const poolExists = !noLiquidity
+
   return (
     <Box maxWidth={[null, null, null, '520px']} mx="auto">
       <Card>
@@ -15,11 +39,31 @@ export const CreateLiquidityV3Form = () => {
           <AutoColumn gap="24px">
             <FieldSelectCurrencies />
             <FieldFeeLevel />
-            <FieldStartingPrice />
-            <FieldPriceRange />
-            <FieldCreateDepositAmount />
-            <FieldSlippageTolerance />
-            <SubmitCreateButton />
+
+            {poolExists && <MessagePoolInitialized />}
+
+            <DynamicSection disabled={poolExists}>
+              <FieldStartingPrice startPrice={startPriceTypedValue} setStartPrice={onStartPriceInput} />
+            </DynamicSection>
+            <DynamicSection disabled={poolExists || !startPriceTypedValue}>{rangeSelector}</DynamicSection>
+
+            <DynamicSection disabled={poolExists || !startPriceTypedValue}>
+              <FieldCreateDepositAmount
+                currencies={currencies}
+                onFieldAInput={onFieldAInput}
+                onFieldBInput={onFieldBInput}
+                formattedAmounts={formattedAmounts}
+                maxAmounts={maxAmounts}
+                depositADisabled={depositADisabled}
+                depositBDisabled={depositBDisabled}
+              />
+            </DynamicSection>
+
+            <DynamicSection disabled={poolExists || !startPriceTypedValue}>
+              <FieldSlippageTolerance />
+            </DynamicSection>
+
+            <DynamicSection disabled={poolExists || !startPriceTypedValue}>{buttons}</DynamicSection>
           </AutoColumn>
         </CardBody>
       </Card>
