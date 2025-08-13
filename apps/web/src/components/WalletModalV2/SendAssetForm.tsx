@@ -1,4 +1,4 @@
-import { ChainId, getChainName } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId, getChainName } from '@pancakeswap/chains'
 import { useDebounce } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Percent } from '@pancakeswap/sdk'
@@ -38,6 +38,9 @@ import { CHAINS_WITH_GIFT_CLAIM } from 'views/Gift/constants'
 import { SendGiftContext, useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { useUserInsufficientBalanceLight } from 'views/SwapSimplify/hooks/useUserInsufficientBalance'
 import { useAccount, usePublicClient, useSendTransaction } from 'wagmi'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { Connection, PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } from '@solana/web3.js'
+import { createTransferInstruction, getAssociatedTokenAddress } from '@solana/spl-token'
 import { ActionButton } from './ActionButton'
 import SendTransactionFlow from './SendTransactionFlow'
 import { ViewState } from './type'
@@ -137,94 +140,191 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const isNativeToken = asset.token.address === zeroAddress
   const erc20Contract = useERC20(asset.token.address as `0x${string}`, { chainId: asset.chainId })
   const { sendTransactionAsync } = useSendTransaction()
+  
+  // Solana wallet support
+  const { publicKey: solanaPublicKey, sendTransaction: sendSolanaTransaction } = useWallet()
+  const isSolanaChain = asset.chainId === NonEVMChainId.SOLANA
 
   const estimateTransactionFee = useCallback(async () => {
-    if (!address || !amount || !publicClient || !accountAddress) return
+    if (!address || !amount) return
 
     try {
-      let gasEstimate: bigint = 0n
-
-      if (isNativeToken) {
-        // For native token, estimate gas for a simple transfer
-        gasEstimate =
-          (await publicClient.estimateGas({
-            account: accountAddress,
-            to: address as `0x${string}`,
-            value: tryParseAmount(amount, currency)?.quotient ?? 0n,
-          })) ?? 0n
-      } else {
-        // For ERC20 tokens, estimate gas for a transfer call
-        const transferData = {
-          to: address as `0x${string}`,
-          amount: tryParseAmount(amount, currency)?.quotient ?? 0n,
+      if (isSolanaChain) {
+        // Solana has fixed fee structure (~0.000005 SOL base fee)
+        const fee = 5000 // lamports
+        const formattedFee = formatUnits(BigInt(fee), 9) // SOL has 9 decimals
+        
+        setEstimatedFee(formattedFee)
+        
+        // Calculate USD value if price is available
+        if (nativeCurrencyPrice) {
+          const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
+          setEstimatedFeeUsd(feeUsd.toFixed(2))
+        } else {
+          setEstimatedFeeUsd(null)
         }
-        gasEstimate =
-          (await erc20Contract?.estimateGas?.transfer([transferData.to, transferData.amount], {
-            account: erc20Contract.account!,
-          })) ?? 0n
-      }
-
-      // Get gas price
-      const gasPrice = await publicClient.getGasPrice()
-
-      // Calculate fee
-      const fee = gasEstimate * gasPrice
-
-      // Convert to readable format (in native token units)
-      const formattedFee = formatUnits(fee, 18)
-
-      setEstimatedFee(formattedFee)
-
-      // Calculate USD value if price is available
-      if (nativeCurrencyPrice) {
-        const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
-        setEstimatedFeeUsd(feeUsd.toFixed(2))
       } else {
-        setEstimatedFeeUsd(null)
+        // EVM fee estimation (original logic)
+        if (!publicClient || !accountAddress) return
+        
+        let gasEstimate: bigint = 0n
+
+        if (isNativeToken) {
+          // For native token, estimate gas for a simple transfer
+          gasEstimate =
+            (await publicClient.estimateGas({
+              account: accountAddress,
+              to: address as `0x${string}`,
+              value: tryParseAmount(amount, currency)?.quotient ?? 0n,
+            })) ?? 0n
+        } else {
+          // For ERC20 tokens, estimate gas for a transfer call
+          const transferData = {
+            to: address as `0x${string}`,
+            amount: tryParseAmount(amount, currency)?.quotient ?? 0n,
+          }
+          gasEstimate =
+            (await erc20Contract?.estimateGas?.transfer([transferData.to, transferData.amount], {
+              account: erc20Contract.account!,
+            })) ?? 0n
+        }
+
+        // Get gas price
+        const gasPrice = await publicClient.getGasPrice()
+
+        // Calculate fee
+        const fee = gasEstimate * gasPrice
+
+        // Convert to readable format (in native token units)
+        const formattedFee = formatUnits(fee, 18)
+
+        setEstimatedFee(formattedFee)
+
+        // Calculate USD value if price is available
+        if (nativeCurrencyPrice) {
+          const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
+          setEstimatedFeeUsd(feeUsd.toFixed(2))
+        } else {
+          setEstimatedFeeUsd(null)
+        }
       }
     } catch (error) {
       console.error('Error estimating fee:', error)
       setEstimatedFee(null)
       setEstimatedFeeUsd(null)
     }
-  }, [address, amount, publicClient, accountAddress, isNativeToken, currency, nativeCurrencyPrice, erc20Contract])
+  }, [
+    address, 
+    amount, 
+    publicClient, 
+    accountAddress, 
+    isNativeToken, 
+    currency, 
+    nativeCurrencyPrice, 
+    erc20Contract,
+    isSolanaChain
+  ])
 
   const sendAsset = useCallback(async () => {
+    if (isSolanaChain) {
+      // Handle Solana transaction
+      if (!solanaPublicKey || !address) return
+
+      const connection = new Connection('https://api.mainnet-beta.solana.com')
+      const recipientPubkey = new PublicKey(address)
+      
+      const receipt = await fetchWithCatchTxError(async () => {
+        if (isNativeToken) {
+          // Handle native SOL transfer
+          const amountInLamports = Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL)
+          
+          const transaction = new Transaction().add(
+            SystemProgram.transfer({
+              fromPubkey: solanaPublicKey,
+              toPubkey: recipientPubkey,
+              lamports: amountInLamports,
+            })
+          )
+          
+          const signature = await sendSolanaTransaction(transaction, connection)
+          return { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
+        }
+        // Handle SPL token transfer
+        const tokenMintAddress = new PublicKey(asset.token.address)
+        const amountInTokenUnits = Math.floor(parseFloat(amount) * (10 ** asset.token.decimals))
+          
+          const senderTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, solanaPublicKey)
+          const recipientTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, recipientPubkey)
+          
+          const transaction = new Transaction().add(
+            createTransferInstruction(
+              senderTokenAccount,
+              recipientTokenAccount,
+              solanaPublicKey,
+              amountInTokenUnits
+            )
+          )
+          
+          const signature = await sendSolanaTransaction(transaction, connection)
+          return { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
+        }
+      })
+
+      if (receipt?.status) {
+        setTxHash(receipt.transactionHash)
+        toastSuccess(
+          `${t('Transaction Submitted')}!`,
+          <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+            {t('Your %symbol% has been sent to %address%', {
+              symbol: asset.token.symbol,
+              address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
+            })}
+          </ToastDescriptionWithTx>,
+        )
+        // Reset form after successful transaction
+        setAmount('')
+        setAddress('')
+      }
+
+      return receipt
+    }
+    // Handle EVM transaction (original logic)
     const amounts = tryParseAmount(amount, currency)
 
     const receipt = await fetchWithCatchTxError(async () => {
-      if (isNativeToken) {
-        // Handle native token transfer
-        return sendTransactionAsync({
-          to: address as `0x${string}`,
-          value: amounts?.quotient ?? 0n,
-          chainId: asset.chainId,
+        if (isNativeToken) {
+          // Handle native token transfer
+          return sendTransactionAsync({
+            to: address as `0x${string}`,
+            value: amounts?.quotient ?? 0n,
+            chainId: asset.chainId,
+          })
+        }
+        // Handle ERC20 token transfer
+        return erc20Contract?.write?.transfer([address as `0x${string}`, amounts?.quotient ?? 0n], {
+          account: erc20Contract.account!,
+          chain: erc20Contract.chain!,
         })
-      }
-      // Handle ERC20 token transfer
-      return erc20Contract?.write?.transfer([address as `0x${string}`, amounts?.quotient ?? 0n], {
-        account: erc20Contract.account!,
-        chain: erc20Contract.chain!,
       })
-    })
 
-    if (receipt?.status) {
-      setTxHash(receipt.transactionHash)
-      toastSuccess(
-        `${t('Transaction Submitted')}!`,
-        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('Your %symbol% has been sent to %address%', {
-            symbol: currency?.symbol,
-            address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
-          })}
-        </ToastDescriptionWithTx>,
-      )
-      // Reset form after successful transaction
-      setAmount('')
-      setAddress('')
+      if (receipt?.status) {
+        setTxHash(receipt.transactionHash)
+        toastSuccess(
+          `${t('Transaction Submitted')}!`,
+          <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+            {t('Your %symbol% has been sent to %address%', {
+              symbol: currency?.symbol,
+              address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
+            })}
+          </ToastDescriptionWithTx>,
+        )
+        // Reset form after successful transaction
+        setAmount('')
+        setAddress('')
+      }
+
+      return receipt
     }
-
-    return receipt
   }, [
     address,
     amount,
@@ -236,6 +336,10 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     t,
     toastSuccess,
     currency,
+    isSolanaChain,
+    solanaPublicKey,
+    sendSolanaTransaction,
+    asset.token,
   ])
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
