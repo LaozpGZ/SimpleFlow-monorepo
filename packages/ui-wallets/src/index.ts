@@ -1,4 +1,5 @@
 export { MultichainWalletModal } from './components/MultichainWalletModal/MultichainWalletModal'
+export type { MultichainWalletModalProps } from './components/MultichainWalletModal/types'
 
 // reexport legacy wallet modal
 export { previouslyUsedWalletsAtom as legacyPreviouslyUsedWalletsAtom } from './components/LegacyWalletModal/atom'

@@ -14,12 +14,14 @@
     "@pancakeswap/wagmi": "workspace:*",
     "@pancakeswap/chains": "workspace:*",
     "wagmi": "catalog:",
-    "qrcode.react": "^3.1.0"
+    "qrcode.react": "^3.1.0",
+    "lodash": "^4.17.21"
   },
   "peerDependencies": {
     "react": "^18.2.0",
     "@vanilla-extract/css": "^1.13.0",
     "@types/react": "^18.2.21",
+    "@types/lodash": "^4.14.168",
     "swiper": "*",
     "styled-components": "6.0.7",
     "react-device-detect": "^2.1.2",
