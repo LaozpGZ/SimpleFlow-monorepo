@@ -40,7 +40,12 @@ import { useUserInsufficientBalanceLight } from 'views/SwapSimplify/hooks/useUse
 import { useAccount, usePublicClient, useSendTransaction } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { Connection, PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } from '@solana/web3.js'
-import { createTransferInstruction, getAssociatedTokenAddress } from '@solana/spl-token'
+import {
+  createTransferInstruction,
+  getAssociatedTokenAddress,
+  createAssociatedTokenAccountInstruction,
+  getAccount,
+} from '@solana/spl-token'
 import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
 import { ActionButton } from './ActionButton'
 import SendTransactionFlow from './SendTransactionFlow'
@@ -138,14 +143,17 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const tokenBalance = tryParseAmount(asset.quantity, currency)
 
   const maxAmountInput = useMemo(() => maxAmountSpend(tokenBalance), [tokenBalance])
-  const isNativeToken = asset.token.address === zeroAddress
-  const erc20Contract = useERC20(asset.token.address as `0x${string}`, { chainId: asset.chainId })
-  const { sendTransactionAsync } = useSendTransaction()
 
   // Solana wallet support
   const { publicKey: solanaPublicKey, sendTransaction: sendSolanaTransaction } = useWallet()
   const connection = useSolanaConnectionWithRpcAtom()
   const isSolanaChain = asset.chainId === NonEVMChainId.SOLANA
+
+  const isNativeToken = useMemo(() => {
+    return isSolanaChain ? asset.token.symbol === 'SOL' : asset.token.address === zeroAddress
+  }, [isSolanaChain, asset.token.symbol, asset.token.address])
+  const erc20Contract = useERC20(asset.token.address as `0x${string}`, { chainId: asset.chainId })
+  const { sendTransactionAsync } = useSendTransaction()
 
   const estimateTransactionFee = useCallback(async () => {
     if (!address || !amount) return
@@ -281,6 +289,15 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     const recipientPubkey = new PublicKey(address)
 
     try {
+      // Check balance before sending
+      const balance = await connection.getBalance(solanaPublicKey)
+      const requiredAmount = isNativeToken
+        ? Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL) + 5000 // amount + transaction fee
+        : 5000 // just transaction fee for token transfers
+
+      if (balance < requiredAmount) {
+        throw new Error(t('Insufficient SOL balance to complete transaction'))
+      }
       let signature: string
 
       if (isNativeToken) {
@@ -302,7 +319,29 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         const senderTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, solanaPublicKey)
         const recipientTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, recipientPubkey)
 
-        const transaction = new Transaction().add(
+        const transaction = new Transaction()
+
+        // Check if recipient's associated token account exists
+        try {
+          await getAccount(connection, recipientTokenAccount)
+        } catch (error: any) {
+          if (error.name === 'TokenAccountNotFoundError') {
+            // Create associated token account for recipient
+            transaction.add(
+              createAssociatedTokenAccountInstruction(
+                solanaPublicKey, // payer
+                recipientTokenAccount, // associated token account
+                recipientPubkey, // owner
+                tokenMintAddress, // mint
+              ),
+            )
+          } else {
+            throw error
+          }
+        }
+
+        // Add transfer instruction
+        transaction.add(
           createTransferInstruction(senderTokenAccount, recipientTokenAccount, solanaPublicKey, amountInTokenUnits),
         )
 
@@ -330,8 +369,29 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     } catch (error: any) {
       // Handle Solana-specific errors without showing EVM toast
       console.error('Solana transaction error:', error)
-      // Don't show any toast for errors - let the UI handle it through other means
-      throw error
+
+      // Provide more user-friendly error messages
+      let errorMessage = 'Transaction failed'
+
+      if (error?.message) {
+        const message = error.message.toLowerCase()
+        if (message.includes('insufficient funds') || message.includes('insufficient lamports')) {
+          errorMessage = t('Insufficient balance to complete transaction')
+        } else if (message.includes('blockhash not found')) {
+          errorMessage = t('Network congestion. Please try again')
+        } else if (message.includes('transaction was not confirmed')) {
+          errorMessage = t('Transaction failed to confirm. Please try again')
+        } else if (message.includes('user rejected')) {
+          errorMessage = t('Transaction rejected by user')
+        } else {
+          errorMessage = error.message
+        }
+      }
+
+      // Create a custom error with user-friendly message
+      const customError = new Error(errorMessage)
+      customError.name = 'SolanaTransactionError'
+      throw customError
     }
   }, [solanaPublicKey, address, amount, isNativeToken, asset.token, sendSolanaTransaction, connection, t, toastSuccess])
 
