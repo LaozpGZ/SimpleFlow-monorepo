@@ -140,7 +140,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const isNativeToken = asset.token.address === zeroAddress
   const erc20Contract = useERC20(asset.token.address as `0x${string}`, { chainId: asset.chainId })
   const { sendTransactionAsync } = useSendTransaction()
-  
+
   // Solana wallet support
   const { publicKey: solanaPublicKey, sendTransaction: sendSolanaTransaction } = useWallet()
   const isSolanaChain = asset.chainId === NonEVMChainId.SOLANA
@@ -153,9 +153,9 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         // Solana has fixed fee structure (~0.000005 SOL base fee)
         const fee = 5000 // lamports
         const formattedFee = formatUnits(BigInt(fee), 9) // SOL has 9 decimals
-        
+
         setEstimatedFee(formattedFee)
-        
+
         // Calculate USD value if price is available
         if (nativeCurrencyPrice) {
           const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
@@ -166,7 +166,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       } else {
         // EVM fee estimation (original logic)
         if (!publicClient || !accountAddress) return
-        
+
         let gasEstimate: bigint = 0n
 
         if (isNativeToken) {
@@ -214,133 +214,136 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       setEstimatedFeeUsd(null)
     }
   }, [
-    address, 
-    amount, 
-    publicClient, 
-    accountAddress, 
-    isNativeToken, 
-    currency, 
-    nativeCurrencyPrice, 
+    address,
+    amount,
+    publicClient,
+    accountAddress,
+    isNativeToken,
+    currency,
+    nativeCurrencyPrice,
     erc20Contract,
-    isSolanaChain
+    isSolanaChain,
   ])
 
-  const sendAsset = useCallback(async () => {
-    if (isSolanaChain) {
-      // Handle Solana transaction
-      if (!solanaPublicKey || !address) return
-
-      const connection = new Connection('https://api.mainnet-beta.solana.com')
-      const recipientPubkey = new PublicKey(address)
-      
-      const receipt = await fetchWithCatchTxError(async () => {
-        if (isNativeToken) {
-          // Handle native SOL transfer
-          const amountInLamports = Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL)
-          
-          const transaction = new Transaction().add(
-            SystemProgram.transfer({
-              fromPubkey: solanaPublicKey,
-              toPubkey: recipientPubkey,
-              lamports: amountInLamports,
-            })
-          )
-          
-          const signature = await sendSolanaTransaction(transaction, connection)
-          return { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
-        }
-        // Handle SPL token transfer
-        const tokenMintAddress = new PublicKey(asset.token.address)
-        const amountInTokenUnits = Math.floor(parseFloat(amount) * (10 ** asset.token.decimals))
-          
-          const senderTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, solanaPublicKey)
-          const recipientTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, recipientPubkey)
-          
-          const transaction = new Transaction().add(
-            createTransferInstruction(
-              senderTokenAccount,
-              recipientTokenAccount,
-              solanaPublicKey,
-              amountInTokenUnits
-            )
-          )
-          
-          const signature = await sendSolanaTransaction(transaction, connection)
-          return { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
-        }
-      })
-
-      if (receipt?.status) {
-        setTxHash(receipt.transactionHash)
-        toastSuccess(
-          `${t('Transaction Submitted')}!`,
-          <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-            {t('Your %symbol% has been sent to %address%', {
-              symbol: asset.token.symbol,
-              address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
-            })}
-          </ToastDescriptionWithTx>,
-        )
-        // Reset form after successful transaction
-        setAmount('')
-        setAddress('')
-      }
-
-      return receipt
-    }
-    // Handle EVM transaction (original logic)
+  // Separate function for EVM asset transfer
+  const sendEVMAsset = useCallback(async () => {
     const amounts = tryParseAmount(amount, currency)
 
     const receipt = await fetchWithCatchTxError(async () => {
-        if (isNativeToken) {
-          // Handle native token transfer
-          return sendTransactionAsync({
-            to: address as `0x${string}`,
-            value: amounts?.quotient ?? 0n,
-            chainId: asset.chainId,
-          })
-        }
-        // Handle ERC20 token transfer
-        return erc20Contract?.write?.transfer([address as `0x${string}`, amounts?.quotient ?? 0n], {
-          account: erc20Contract.account!,
-          chain: erc20Contract.chain!,
+      if (isNativeToken) {
+        return sendTransactionAsync({
+          to: address as `0x${string}`,
+          value: amounts?.quotient ?? 0n,
+          chainId: asset.chainId,
         })
-      })
-
-      if (receipt?.status) {
-        setTxHash(receipt.transactionHash)
-        toastSuccess(
-          `${t('Transaction Submitted')}!`,
-          <ToastDescriptionWithTx txHash={receipt.transactionHash}>
-            {t('Your %symbol% has been sent to %address%', {
-              symbol: currency?.symbol,
-              address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
-            })}
-          </ToastDescriptionWithTx>,
-        )
-        // Reset form after successful transaction
-        setAmount('')
-        setAddress('')
       }
+      return erc20Contract?.write?.transfer([address as `0x${string}`, amounts?.quotient ?? 0n], {
+        account: erc20Contract.account!,
+        chain: erc20Contract.chain!,
+      })
+    })
 
-      return receipt
+    if (receipt?.status) {
+      setTxHash(receipt.transactionHash)
+      toastSuccess(
+        `${t('Transaction Submitted')}!`,
+        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+          {t('Your %symbol% has been sent to %address%', {
+            symbol: currency?.symbol,
+            address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
+          })}
+        </ToastDescriptionWithTx>,
+      )
+      setAmount('')
+      setAddress('')
     }
+
+    return receipt
   }, [
     address,
     amount,
-    erc20Contract,
+    currency,
     isNativeToken,
     sendTransactionAsync,
     asset.chainId,
+    erc20Contract,
     fetchWithCatchTxError,
     t,
     toastSuccess,
-    currency,
-    isSolanaChain,
-    solanaPublicKey,
-    sendSolanaTransaction,
-    asset.token,
   ])
+
+  // Separate function for Solana asset transfer
+  const sendSolanaAsset = useCallback(async () => {
+    if (!solanaPublicKey || !address) return undefined
+
+    const connection = new Connection('https://api.mainnet-beta.solana.com')
+    const recipientPubkey = new PublicKey(address)
+
+    const receipt = await fetchWithCatchTxError(async () => {
+      if (isNativeToken) {
+        const amountInLamports = Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL)
+
+        const transaction = new Transaction().add(
+          SystemProgram.transfer({
+            fromPubkey: solanaPublicKey,
+            toPubkey: recipientPubkey,
+            lamports: amountInLamports,
+          }),
+        )
+
+        const signature = await sendSolanaTransaction(transaction, connection)
+        return { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
+      }
+
+      const tokenMintAddress = new PublicKey(asset.token.address)
+      const amountInTokenUnits = Math.floor(parseFloat(amount) * 10 ** asset.token.decimals)
+
+      const senderTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, solanaPublicKey)
+      const recipientTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, recipientPubkey)
+
+      const transaction = new Transaction().add(
+        createTransferInstruction(senderTokenAccount, recipientTokenAccount, solanaPublicKey, amountInTokenUnits),
+      )
+
+      const signature = await sendSolanaTransaction(transaction, connection)
+      return { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
+    })
+
+    if (receipt?.status) {
+      setTxHash(receipt.transactionHash)
+      toastSuccess(
+        `${t('Transaction Submitted')}!`,
+        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+          {t('Your %symbol% has been sent to %address%', {
+            symbol: asset.token.symbol,
+            address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
+          })}
+        </ToastDescriptionWithTx>,
+      )
+      setAmount('')
+      setAddress('')
+    }
+
+    return receipt
+  }, [
+    solanaPublicKey,
+    address,
+    amount,
+    isNativeToken,
+    asset.token,
+    sendSolanaTransaction,
+    fetchWithCatchTxError,
+    t,
+    toastSuccess,
+  ])
+
+  // Main sendAsset function that routes to appropriate handler
+  const sendAsset = useCallback(async () => {
+    if (isSolanaChain) {
+      return sendSolanaAsset()
+    }
+    return sendEVMAsset()
+  }, [isSolanaChain, sendSolanaAsset, sendEVMAsset])
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
