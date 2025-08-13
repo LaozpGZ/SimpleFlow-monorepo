@@ -12,6 +12,8 @@ export const CreateLiquidityV3Form = () => {
   const {
     // State
     currencies,
+    leftRangeTypedValue,
+    rightRangeTypedValue,
     startPriceTypedValue,
     formattedAmounts,
     maxAmounts,
@@ -45,9 +47,13 @@ export const CreateLiquidityV3Form = () => {
             <DynamicSection disabled={poolExists}>
               <FieldStartingPrice startPrice={startPriceTypedValue} setStartPrice={onStartPriceInput} />
             </DynamicSection>
-            <DynamicSection disabled={poolExists || !startPriceTypedValue}>{rangeSelector}</DynamicSection>
+            <DynamicSection disabled={poolExists || !startPriceTypedValue || !feeLevel}>{rangeSelector}</DynamicSection>
 
-            <DynamicSection disabled={poolExists || !startPriceTypedValue}>
+            <DynamicSection
+              disabled={
+                poolExists || !startPriceTypedValue || !feeLevel || !leftRangeTypedValue || !rightRangeTypedValue
+              }
+            >
               <FieldCreateDepositAmount
                 currencies={currencies}
                 onFieldAInput={onFieldAInput}
@@ -59,11 +65,21 @@ export const CreateLiquidityV3Form = () => {
               />
             </DynamicSection>
 
-            <DynamicSection disabled={poolExists || !startPriceTypedValue}>
+            <DynamicSection
+              disabled={
+                poolExists || !startPriceTypedValue || !feeLevel || !leftRangeTypedValue || !rightRangeTypedValue
+              }
+            >
               <FieldSlippageTolerance />
             </DynamicSection>
 
-            <DynamicSection disabled={poolExists || !startPriceTypedValue}>{buttons}</DynamicSection>
+            <DynamicSection
+              disabled={
+                poolExists || !startPriceTypedValue || !feeLevel || !leftRangeTypedValue || !rightRangeTypedValue
+              }
+            >
+              {buttons}
+            </DynamicSection>
           </AutoColumn>
         </CardBody>
       </Card>

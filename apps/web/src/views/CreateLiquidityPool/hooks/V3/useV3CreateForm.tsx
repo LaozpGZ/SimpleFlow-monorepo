@@ -413,6 +413,8 @@ export const useV3CreateForm = () => {
     // State
     formState,
     currencies,
+    leftRangeTypedValue,
+    rightRangeTypedValue,
     startPriceTypedValue,
     formattedAmounts,
     maxAmounts,

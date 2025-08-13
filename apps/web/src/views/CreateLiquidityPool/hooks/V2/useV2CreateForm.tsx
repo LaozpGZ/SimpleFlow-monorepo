@@ -43,7 +43,7 @@ export const useV2CreateForm = () => {
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: walletClient } = useWalletClient()
 
-  const gasPrice = useGasPrice()
+  const { data: gasPrice } = useGasPrice()
 
   // User Settings
   const expertMode = useIsExpertMode()
@@ -224,6 +224,11 @@ export const useV2CreateForm = () => {
       [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : allowedSlippage)[0],
       [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0],
     }
+
+    console.log('onAdd', {
+      parsedAmountA: parsedAmountA.toExact(),
+      parsedAmountB: parsedAmountB.toExact(),
+    })
 
     // eslint-disable-next-line
     let estimate: any
