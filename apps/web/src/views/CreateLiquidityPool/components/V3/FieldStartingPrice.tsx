@@ -176,7 +176,11 @@ const StartingPriceInput: React.FC<StartingPriceInputProps> = ({ value, onUserIn
     <BalanceInput
       value={inputValue ?? ''}
       onUserInput={handleInputChange}
-      unit={unit}
+      unit={
+        <Text color="textSubtle" bold>
+          {unit}
+        </Text>
+      }
       placeholder="0.00"
       inputProps={{
         style: { height: '24px' },

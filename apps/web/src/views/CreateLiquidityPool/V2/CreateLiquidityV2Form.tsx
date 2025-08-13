@@ -1,34 +1,31 @@
 import { AutoColumn, Box, Card, CardBody, DynamicSection } from '@pancakeswap/uikit'
+import { useStartingPriceQueryState } from 'state/infinity/create'
 import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
 import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
-import { useV3CreateForm } from '../hooks/V3/useV3CreateForm'
 import { MessagePoolInitialized } from '../components/V3/MessagePoolInitialized'
-import { FieldFeeLevel } from '../components/V3/FieldFeeLevel'
+import { useV2CreateForm } from '../hooks/V2/useV2CreateForm'
 
-export const CreateLiquidityV3Form = () => {
+export const CreateLiquidityV2Form = () => {
   const {
     // State
     currencies,
-    startPriceTypedValue,
     formattedAmounts,
     maxAmounts,
-    depositADisabled,
-    depositBDisabled,
     noLiquidity,
 
     // Components
     buttons,
-    rangeSelector,
 
     // Actions
-    onStartPriceInput,
     onFieldAInput,
     onFieldBInput,
-  } = useV3CreateForm()
+  } = useV2CreateForm()
 
   const poolExists = noLiquidity === false
+
+  const [startPriceTypedValue, setStartPriceTypedValue] = useStartingPriceQueryState()
 
   return (
     <Box maxWidth={[null, null, null, '520px']} mx="auto">
@@ -36,14 +33,12 @@ export const CreateLiquidityV3Form = () => {
         <CardBody>
           <AutoColumn gap="24px">
             <FieldSelectCurrencies />
-            <FieldFeeLevel />
 
             {poolExists && <MessagePoolInitialized />}
 
             <DynamicSection disabled={poolExists}>
-              <FieldStartingPrice startPrice={startPriceTypedValue} setStartPrice={onStartPriceInput} />
+              <FieldStartingPrice startPrice={startPriceTypedValue ?? ''} setStartPrice={setStartPriceTypedValue} />
             </DynamicSection>
-            <DynamicSection disabled={poolExists || !startPriceTypedValue}>{rangeSelector}</DynamicSection>
 
             <DynamicSection disabled={poolExists || !startPriceTypedValue}>
               <FieldCreateDepositAmount
@@ -52,8 +47,8 @@ export const CreateLiquidityV3Form = () => {
                 onFieldBInput={onFieldBInput}
                 formattedAmounts={formattedAmounts}
                 maxAmounts={maxAmounts}
-                depositADisabled={depositADisabled}
-                depositBDisabled={depositBDisabled}
+                depositADisabled={false}
+                depositBDisabled={false}
               />
             </DynamicSection>
 

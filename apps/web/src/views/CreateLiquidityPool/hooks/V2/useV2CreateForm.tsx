@@ -1,0 +1,395 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { useWalletClient, useGasPrice } from 'wagmi'
+import { usePairAdder } from 'state/user/hooks'
+import { useAddLiquidityV2FormState } from 'state/mint/reducer'
+import { useDerivedMintInfo, useMintActionHandlers } from 'state/mint/hooks'
+import { ReactNode, useCallback, useMemo, useState } from 'react'
+import { CurrencyAmount, Pair, Token } from '@pancakeswap/sdk'
+import { maxAmountSpend } from 'utils/maxAmountSpend'
+import { CurrencyField as Field } from 'utils/types'
+import { V2_ROUTER_ADDRESS } from 'config/constants/exchange'
+import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
+import { calculateSlippageAmount, useRouterContract } from 'utils/exchange'
+import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
+import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
+import {
+  logGTMAddLiquidityTxSentEvent,
+  logGTMClickAddLiquidityConfirmEvent,
+  logGTMClickAddLiquidityEvent,
+} from 'utils/customGTMEventTracking'
+import { calculateGasMargin, getBlockExploreLink } from 'utils'
+import { isUserRejected, logError } from 'utils/sentry'
+import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
+import { Hash } from 'viem'
+import { AutoColumn, Button, Flex, LinkExternal, Message, MessageText, ScanLink } from '@pancakeswap/uikit'
+import { CommitButton } from 'components/CommitButton'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiquidityTokens'
+import { ChainLinkSupportChains } from 'state/info/constant'
+import { useCurrencies } from '../useCurrencies'
+
+export const useV2CreateForm = () => {
+  const {
+    t,
+    currentLanguage: { locale },
+  } = useTranslation()
+  const { account, chainId, isWrongNetwork } = useAccountActiveChain()
+  const { data: walletClient } = useWalletClient()
+
+  const gasPrice = useGasPrice()
+
+  // User Settings
+  const expertMode = useIsExpertMode()
+  const [allowedSlippage] = useUserSlippage()
+  const [deadline] = useTransactionDeadline()
+
+  // Shared Create Liquidity State
+  const { baseCurrency, quoteCurrency } = useCurrencies()
+
+  // Transaction Actions
+  const addTransaction = useTransactionAdder()
+
+  // Misc. Pair State
+  const addPair = usePairAdder()
+
+  // State
+  // Modal and loading
+  const [{ attemptingTxn, liquidityErrorMessage, txHash }, setLiquidityState] = useState<{
+    attemptingTxn: boolean
+    liquidityErrorMessage: string | undefined
+    txHash: string | undefined
+  }>({
+    attemptingTxn: false,
+    liquidityErrorMessage: undefined,
+    txHash: undefined,
+  })
+
+  // V2 Form State
+  const routerContract = useRouterContract()
+  const { independentField, typedValue, otherTypedValue } = useAddLiquidityV2FormState()
+  const {
+    dependentField,
+    currencies,
+    pair,
+    pairState,
+    currencyBalances,
+    parsedAmounts,
+    price,
+    noLiquidity,
+    liquidityMinted,
+    poolTokenPercentage,
+    error,
+    addError,
+    isOneWeiAttack,
+  } = useDerivedMintInfo(baseCurrency ?? undefined, quoteCurrency ?? undefined)
+
+  // Validation
+  const addIsUnsupported = useIsTransactionUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
+  const addIsWarning = useIsTransactionWarning(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
+
+  // Actions
+  const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
+
+  // Derivative States
+  const pairExplorerLink = useMemo(
+    () => (pair && getBlockExploreLink(Pair.getAddress(pair.token0, pair.token1), 'address', chainId)) || undefined,
+    [pair, chainId],
+  )
+
+  const maxAmounts: { [field in Field]?: CurrencyAmount<Token> } = useMemo(
+    () =>
+      [Field.CURRENCY_A, Field.CURRENCY_B].reduce((accumulator, field) => {
+        return {
+          ...accumulator,
+          [field]: maxAmountSpend(currencyBalances[field]),
+        }
+      }, {}),
+    [currencyBalances],
+  )
+
+  const formattedAmounts = useMemo(
+    () => ({
+      [independentField]: typedValue,
+      [dependentField]: noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
+    }),
+    [dependentField, independentField, noLiquidity, otherTypedValue, parsedAmounts, typedValue],
+  )
+
+  const pendingText = useMemo(
+    () =>
+      t('Supplying %amountA% %symbolA% and %amountB% %symbolB%', {
+        amountA: formatCurrencyAmount(parsedAmounts[Field.CURRENCY_A], 4, locale),
+        symbolA: currencies[Field.CURRENCY_A]?.symbol ?? '',
+        amountB: formatCurrencyAmount(parsedAmounts[Field.CURRENCY_B], 4, locale),
+        symbolB: currencies[Field.CURRENCY_B]?.symbol ?? '',
+      }),
+    [currencies, locale, parsedAmounts, t],
+  )
+
+  // Approval States
+  const {
+    approvalState: approvalA,
+    approveCallback: approveACallback,
+    revokeCallback: revokeACallback,
+    currentAllowance: currentAllowanceA,
+  } = useApproveCallback(parsedAmounts[Field.CURRENCY_A], chainId ? V2_ROUTER_ADDRESS[chainId] : undefined)
+  const {
+    approvalState: approvalB,
+    approveCallback: approveBCallback,
+    revokeCallback: revokeBCallback,
+    currentAllowance: currentAllowanceB,
+  } = useApproveCallback(parsedAmounts[Field.CURRENCY_B], chainId && V2_ROUTER_ADDRESS[chainId])
+
+  const isValid = !error && !addError
+  const errorText = useMemo(() => error ?? addError, [error, addError])
+
+  const buttonDisabled = !isValid || approvalA !== ApprovalState.APPROVED || approvalB !== ApprovalState.APPROVED
+
+  const showFieldAApproval = approvalA === ApprovalState.NOT_APPROVED || approvalA === ApprovalState.PENDING
+  const showFieldBApproval = approvalB === ApprovalState.NOT_APPROVED || approvalB === ApprovalState.PENDING
+
+  const shouldShowApprovalGroup = (showFieldAApproval || showFieldBApproval) && isValid
+
+  // Create Pool Action
+  const onAdd = useCallback(async () => {
+    logGTMClickAddLiquidityConfirmEvent()
+    if (!chainId || !account || !routerContract || !walletClient) return
+
+    const { [Field.CURRENCY_A]: parsedAmountA, [Field.CURRENCY_B]: parsedAmountB } = parsedAmounts
+    if (!parsedAmountA || !parsedAmountB || !baseCurrency || !quoteCurrency || !deadline) {
+      return
+    }
+
+    const amountsMin = {
+      [Field.CURRENCY_A]: calculateSlippageAmount(parsedAmountA, noLiquidity ? 0 : allowedSlippage)[0],
+      [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0],
+    }
+
+    // eslint-disable-next-line
+    let estimate: any
+    // eslint-disable-next-line
+    let method: any
+    // eslint-disable-next-line
+    let args: Array<string | string[] | number | bigint>
+    let value: bigint | null
+    if (baseCurrency?.isNative || quoteCurrency?.isNative) {
+      const tokenBIsNative = quoteCurrency?.isNative
+      estimate = routerContract.estimateGas.addLiquidityETH
+      method = routerContract.write.addLiquidityETH
+      args = [
+        (tokenBIsNative ? baseCurrency : quoteCurrency)?.wrapped?.address ?? '', // token
+        (tokenBIsNative ? parsedAmountA : parsedAmountB).quotient.toString(), // token desired
+        amountsMin[tokenBIsNative ? Field.CURRENCY_A : Field.CURRENCY_B].toString(), // token min
+        amountsMin[tokenBIsNative ? Field.CURRENCY_B : Field.CURRENCY_A].toString(), // eth min
+        account,
+        deadline,
+      ]
+      value = (tokenBIsNative ? parsedAmountB : parsedAmountA).quotient
+    } else {
+      estimate = routerContract.estimateGas.addLiquidity
+      method = routerContract.write.addLiquidity
+      args = [
+        baseCurrency?.wrapped?.address ?? '',
+        quoteCurrency?.wrapped?.address ?? '',
+        parsedAmountA.quotient.toString(),
+        parsedAmountB.quotient.toString(),
+        amountsMin[Field.CURRENCY_A].toString(),
+        amountsMin[Field.CURRENCY_B].toString(),
+        account,
+        deadline,
+      ]
+      value = null
+    }
+
+    setLiquidityState({ attemptingTxn: true, liquidityErrorMessage: undefined, txHash: undefined })
+    await estimate(
+      args,
+      value
+        ? { value, account: routerContract.account, chain: routerContract.chain }
+        : { account: routerContract.account, chain: routerContract.chain },
+    )
+      .then((estimatedGasLimit: any) =>
+        method(args, {
+          ...(value ? { value } : {}),
+          gas: calculateGasMargin(estimatedGasLimit),
+          gasPrice,
+        }).then((response: Hash) => {
+          setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: response })
+          logGTMAddLiquidityTxSentEvent()
+          const symbolA = currencies[Field.CURRENCY_A]?.symbol
+          const amountA = parsedAmounts[Field.CURRENCY_A]?.toSignificant(3)
+          const symbolB = currencies[Field.CURRENCY_B]?.symbol
+          const amountB = parsedAmounts[Field.CURRENCY_B]?.toSignificant(3)
+          addTransaction(
+            { hash: response },
+            {
+              summary: `Add ${amountA} ${symbolA} and ${amountB} ${symbolB}`,
+              translatableSummary: {
+                text: 'Add %amountA% %symbolA% and %amountB% %symbolB%',
+                data: { amountA, symbolA, amountB, symbolB },
+              },
+              type: 'add-liquidity',
+            },
+          )
+
+          if (pair) {
+            addPair(pair)
+          }
+        }),
+      )
+      ?.catch((err: any) => {
+        if (err && !isUserRejected(err)) {
+          logError(err)
+          console.error(`Add Liquidity failed`, err, args, value)
+        }
+        setLiquidityState({
+          attemptingTxn: false,
+          liquidityErrorMessage:
+            err && !isUserRejected(err)
+              ? t('Add liquidity failed: %message%', { message: transactionErrorToUserReadableMessage(err, t) })
+              : undefined,
+          txHash: undefined,
+        })
+      })
+  }, [account, baseCurrency, chainId, deadline, expertMode, noLiquidity, onFieldAInput, onFieldBInput, parsedAmounts])
+
+  // Buttons
+  const buttons: ReactNode = useMemo(() => {
+    if (addIsUnsupported || addIsWarning) {
+      return (
+        <Button disabled mb="4px">
+          {t('Unsupported Asset')}
+        </Button>
+      )
+    }
+    if (!account) {
+      return <ConnectWalletButton width="100%" />
+    }
+    if (isWrongNetwork) {
+      return <CommitButton />
+    }
+
+    return (
+      <AutoColumn gap="md">
+        <ApproveLiquidityTokens
+          approvalA={approvalA}
+          approvalB={approvalB}
+          showFieldAApproval={showFieldAApproval}
+          showFieldBApproval={showFieldBApproval}
+          approveACallback={approveACallback}
+          approveBCallback={approveBCallback}
+          revokeACallback={revokeACallback}
+          revokeBCallback={revokeBCallback}
+          currencies={currencies}
+          currentAllowanceA={currentAllowanceA}
+          currentAllowanceB={currentAllowanceB}
+          shouldShowApprovalGroup={shouldShowApprovalGroup}
+        />
+        {isOneWeiAttack ? (
+          <Message variant="warning">
+            <Flex flexDirection="column">
+              <MessageText>
+                {t(
+                  'Adding liquidity to this V2 pair is currently not available on PancakeSwap UI. Please follow the instructions to resolve it using blockchain explorer.',
+                )}
+              </MessageText>
+              <LinkExternal
+                href="https://docs.pancakeswap.finance/products/pancakeswap-exchange/faq#why-cant-i-add-liquidity-to-a-pair-i-just-created"
+                mt="0.25rem"
+              >
+                {t('Learn more how to fix')}
+              </LinkExternal>
+              <ScanLink
+                useBscCoinFallback={chainId ? ChainLinkSupportChains.includes(chainId) : undefined}
+                href={pairExplorerLink}
+                mt="0.25rem"
+              >
+                {t('View pool on explorer')}
+              </ScanLink>
+            </Flex>
+          </Message>
+        ) : null}
+        <CommitButton
+          variant={buttonDisabled ? 'danger' : 'primary'}
+          onClick={() => {
+            // TESTING
+            onAdd()
+            // eslint-disable-next-line no-unused-expressions
+            //   expertMode ? onAdd() : onPresentAddLiquidityModal()
+            logGTMClickAddLiquidityEvent()
+          }}
+          disabled={buttonDisabled}
+        >
+          {errorText || t('Add')}
+        </CommitButton>
+      </AutoColumn>
+    )
+  }, [
+    account,
+    addIsUnsupported,
+    addIsWarning,
+    approvalA,
+    approvalB,
+    approveACallback,
+    approveBCallback,
+    chainId,
+    currencies,
+    currentAllowanceA,
+    currentAllowanceB,
+    expertMode,
+    isOneWeiAttack,
+    isWrongNetwork,
+    noLiquidity,
+    onAdd,
+    onFieldAInput,
+    onFieldBInput,
+    pair,
+    revokeACallback,
+    revokeBCallback,
+    shouldShowApprovalGroup,
+    t,
+  ])
+
+  return {
+    // State
+    currencies,
+    pair,
+    pairState,
+    currencyBalances,
+    noLiquidity,
+
+    // Derivative States
+    maxAmounts,
+    formattedAmounts,
+    pendingText,
+
+    // Components
+    buttons,
+
+    // Validation
+    addIsUnsupported,
+    addIsWarning,
+    errorText,
+    buttonDisabled,
+
+    // Approval States
+    approvalA,
+    approvalB,
+    showFieldAApproval,
+    showFieldBApproval,
+    shouldShowApprovalGroup,
+
+    // Actions
+    onAdd,
+    onFieldAInput,
+    onFieldBInput,
+    approveACallback,
+    approveBCallback,
+    revokeACallback,
+    revokeBCallback,
+  }
+}

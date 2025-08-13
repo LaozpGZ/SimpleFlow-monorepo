@@ -105,6 +105,7 @@ export const useV3CreateForm = () => {
   const addIsUnsupported = useIsTransactionUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
   const isValid = !errorMessage && !invalidRange
 
+  // Derivative States
   // Formatted amounts for input fields
   const formattedAmounts = useMemo(() => {
     return {

@@ -9,6 +9,7 @@ import { CreateLiquidityInfinityForm } from 'views/CreateLiquidityPool/Infinity/
 import { CreateLiquidityV3Form } from 'views/CreateLiquidityPool/V3/CreateLiquidityV3Form'
 import PageLayout from 'components/Layout/Page'
 import { Box } from '@pancakeswap/uikit'
+import { CreateLiquidityV2Form } from 'views/CreateLiquidityPool/V2/CreateLiquidityV2Form'
 
 export type RouteType = typeof SelectIdRoute
 
@@ -28,6 +29,8 @@ const CreateLiquidityPage = () => {
           <CreateLiquidityInfinityForm />
         ) : protocolName === 'v3' ? (
           <CreateLiquidityV3Form />
+        ) : protocolName === 'v2' ? (
+          <CreateLiquidityV2Form />
         ) : null}
       </Box>
     </PageLayout>
