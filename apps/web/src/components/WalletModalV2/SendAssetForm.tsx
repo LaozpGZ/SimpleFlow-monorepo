@@ -352,12 +352,26 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
   // Use debounced address for validation to avoid checking on every keystroke
   useEffect(() => {
-    if (debouncedAddress && !isAddress(debouncedAddress)) {
-      setAddressError(t('Invalid wallet address'))
+    if (debouncedAddress) {
+      if (isSolanaChain) {
+        // Validate Solana address (Base58 format, 32-44 chars)
+        try {
+          // eslint-disable-next-line no-new
+          new PublicKey(debouncedAddress)
+          setAddressError('')
+        } catch {
+          setAddressError(t('Invalid Solana wallet address'))
+        }
+      } else if (!isAddress(debouncedAddress)) {
+        // Validate EVM address
+        setAddressError(t('Invalid wallet address'))
+      } else {
+        setAddressError('')
+      }
     } else {
       setAddressError('')
     }
-  }, [debouncedAddress, t])
+  }, [debouncedAddress, t, isSolanaChain])
 
   const handleClearAddress = () => {
     setAddress('')
@@ -420,6 +434,14 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     return isSendGiftSupported ? true : address && !addressError
   }, [address, addressError, isSendGiftSupported])
 
+  const isValidGasSponsor = useMemo(() => {
+    // For Solana, gas sponsoring might not be applicable
+    if (isSolanaChain) {
+      return true
+    }
+    return includeStarterGas && isSendGiftSupported ? nativeAmount?.greaterThan(0) && !isUserInsufficientBalance : true
+  }, [includeStarterGas, isSendGiftSupported, nativeAmount, isUserInsufficientBalance, isSolanaChain])
+
   if (viewState === ViewState.CONFIRM_TRANSACTION && isSendGiftSupported) {
     return <CreateGiftView key={viewState} tokenAmount={tokenAmount} />
   }
@@ -449,9 +471,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       />
     )
   }
-
-  const isValidGasSponsor =
-    includeStarterGas && isSendGiftSupported ? nativeAmount?.greaterThan(0) && !isUserInsufficientBalance : true
 
   return (
     <FormContainer>
