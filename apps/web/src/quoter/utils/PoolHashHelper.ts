@@ -55,6 +55,8 @@ export class PoolHashHelper {
       gasLimit,
       provider,
       createTime,
+      destinationBlockNumber,
+      gasLimitDestinationChain,
       hash,
       placeholderHash,
       routeKey,

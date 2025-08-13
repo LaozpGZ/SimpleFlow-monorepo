@@ -91,18 +91,21 @@ export const useQuoterSync = () => {
 
   const quoteQuery = createQuoteQuery(quoteQueryInit)
   const setPlaceholder = useSetAtom(updatePlaceholderAtom)
+  const { t, schedule, clear } = useTimer(1000)
 
   useEffect(() => {
     setActiveQuoteHash(quoteQuery.hash)
   }, [quoteQuery.hash, setActiveQuoteHash])
 
   useEffect(() => {
+    clear()
+  }, [quoteQuery.placeholderHash])
+
+  useEffect(() => {
     setTyping(true)
   }, [typedValue, setTyping])
 
   const quoteResult = useAtomValue(bestCrossChainQuoteAtom(quoteQuery))
-
-  const { t, schedule } = useTimer(1000)
 
   useEffect(() => {
     if (t > 0 && !paused) {
@@ -113,7 +116,7 @@ export const useQuoterSync = () => {
         return
       }
 
-      if (quoteResult.isFail() || quoteResult.isNothing()) {
+      if (quoteResult.isFail()) {
         schedule(t + QUOTE_FAIL_REVALIDATE, () => {
           setNonce((v) => v + 1)
         })
@@ -198,8 +201,13 @@ const useTimer = (interval: number) => {
     }
   }, [])
 
+  const clear = useCallback(() => {
+    tasks.current = []
+  }, [])
+
   return {
     t: count,
     schedule: scheduleFn,
+    clear,
   }
 }
