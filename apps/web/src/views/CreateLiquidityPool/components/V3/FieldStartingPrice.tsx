@@ -113,7 +113,7 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ startPri
                 {formatPrice(inverted ? marketPrice.invert() : marketPrice)}{' '}
               </Text>
               <Text color="textSubtle" small>
-                {t('%assetA% per %assetB%', {
+                {t('%assetA% = 1 %assetB%', {
                   assetA: inverted ? currency0?.symbol : currency1?.symbol,
                   assetB: inverted ? currency1?.symbol : currency0?.symbol,
                 })}

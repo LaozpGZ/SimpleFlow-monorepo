@@ -8,10 +8,10 @@ import { usePairAdder } from 'state/user/hooks'
 import { useAddLiquidityV2FormState } from 'state/mint/reducer'
 import { useDerivedMintInfo, useMintActionHandlers } from 'state/mint/hooks'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
-import { CurrencyAmount, Pair, Token } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Pair, Price, Token } from '@pancakeswap/sdk'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { CurrencyField as Field } from 'utils/types'
-import { V2_ROUTER_ADDRESS } from 'config/constants/exchange'
+import { BIG_INT_ZERO, V2_ROUTER_ADDRESS } from 'config/constants/exchange'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { calculateSlippageAmount, useRouterContract } from 'utils/exchange'
 import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
@@ -30,6 +30,9 @@ import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiquidityTokens'
 import { ChainLinkSupportChains } from 'state/info/constant'
+import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
+import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
+import { useStartingPriceQueryState } from 'state/infinity/create'
 import { useCurrencies } from '../useCurrencies'
 
 export const useV2CreateForm = () => {
@@ -49,6 +52,7 @@ export const useV2CreateForm = () => {
 
   // Shared Create Liquidity State
   const { baseCurrency, quoteCurrency } = useCurrencies()
+  const [startPriceTypedValue] = useStartingPriceQueryState()
 
   // Transaction Actions
   const addTransaction = useTransactionAdder()
@@ -71,21 +75,8 @@ export const useV2CreateForm = () => {
   // V2 Form State
   const routerContract = useRouterContract()
   const { independentField, typedValue, otherTypedValue } = useAddLiquidityV2FormState()
-  const {
-    dependentField,
-    currencies,
-    pair,
-    pairState,
-    currencyBalances,
-    parsedAmounts,
-    price,
-    noLiquidity,
-    liquidityMinted,
-    poolTokenPercentage,
-    error,
-    addError,
-    isOneWeiAttack,
-  } = useDerivedMintInfo(baseCurrency ?? undefined, quoteCurrency ?? undefined)
+  const { dependentField, currencies, currencyBalances, noLiquidity, error, addError, isOneWeiAttack } =
+    useDerivedMintInfo(baseCurrency ?? undefined, quoteCurrency ?? undefined)
 
   // Validation
   const addIsUnsupported = useIsTransactionUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
@@ -95,11 +86,6 @@ export const useV2CreateForm = () => {
   const { onFieldAInput, onFieldBInput } = useMintActionHandlers(noLiquidity)
 
   // Derivative States
-  const pairExplorerLink = useMemo(
-    () => (pair && getBlockExploreLink(Pair.getAddress(pair.token0, pair.token1), 'address', chainId)) || undefined,
-    [pair, chainId],
-  )
-
   const maxAmounts: { [field in Field]?: CurrencyAmount<Token> } = useMemo(
     () =>
       [Field.CURRENCY_A, Field.CURRENCY_B].reduce((accumulator, field) => {
@@ -111,10 +97,80 @@ export const useV2CreateForm = () => {
     [currencyBalances],
   )
 
+  // Calculate amounts based on starting price
+  const pair = useMemo(() => {
+    if (!baseCurrency || !quoteCurrency || !startPriceTypedValue) return undefined
+
+    const baseCurrencyAmount = tryParseCurrencyAmount('1', baseCurrency.wrapped)
+    const quoteCurrencyAmount = tryParseCurrencyAmount(startPriceTypedValue, quoteCurrency.wrapped)
+
+    if (!baseCurrencyAmount || !quoteCurrencyAmount) return undefined
+
+    return new Pair(baseCurrencyAmount, quoteCurrencyAmount)
+  }, [baseCurrency, quoteCurrency, startPriceTypedValue])
+
+  const independentAmount: CurrencyAmount<Currency> | undefined = useMemo(() => {
+    return tryParseAmount(typedValue, currencies[independentField])
+  }, [typedValue, currencies, independentField])
+
+  const dependentAmount: CurrencyAmount<Currency> | undefined = useMemo(() => {
+    if (independentAmount) {
+      // we wrap the currencies just to get the price in terms of the other token
+      const wrappedIndependentAmount = independentAmount?.wrapped
+      const [tokenA, tokenB] = [baseCurrency?.wrapped, quoteCurrency?.wrapped]
+
+      if (tokenA && tokenB && wrappedIndependentAmount && pair) {
+        const dependentCurrency = dependentField === Field.CURRENCY_B ? quoteCurrency : baseCurrency
+        const dependentTokenAmount =
+          dependentField === Field.CURRENCY_B
+            ? pair.priceOf(tokenA).quote(wrappedIndependentAmount)
+            : pair.priceOf(tokenB).quote(wrappedIndependentAmount)
+        return dependentCurrency?.isNative
+          ? CurrencyAmount.fromRawAmount(dependentCurrency, dependentTokenAmount.quotient)
+          : dependentTokenAmount
+      }
+      return undefined
+    }
+    return undefined
+  }, [noLiquidity, otherTypedValue, currencies, dependentField, independentAmount, baseCurrency, quoteCurrency, pair])
+
+  const parsedAmounts: { [field in Field]: CurrencyAmount<Currency> | undefined } = useMemo(
+    () => ({
+      [Field.CURRENCY_A]: independentField === Field.CURRENCY_A ? independentAmount : dependentAmount,
+      [Field.CURRENCY_B]: independentField === Field.CURRENCY_A ? dependentAmount : independentAmount,
+    }),
+    [dependentAmount, independentAmount, independentField],
+  )
+
+  const price = useMemo(() => {
+    if (noLiquidity) {
+      const { [Field.CURRENCY_A]: currencyAAmount, [Field.CURRENCY_B]: currencyBAmount } = parsedAmounts
+      if (currencyAAmount && currencyBAmount) {
+        return new Price(
+          currencyAAmount.currency,
+          currencyBAmount.currency,
+          currencyAAmount.quotient,
+          currencyBAmount.quotient,
+        )
+      }
+      return undefined
+    }
+    if (!pair || pair.reserve0.quotient === BIG_INT_ZERO || pair.reserve1.quotient === BIG_INT_ZERO) {
+      return undefined
+    }
+    const wrappedCurrencyA = baseCurrency?.wrapped
+    return wrappedCurrencyA ? pair.priceOf(wrappedCurrencyA) : undefined
+  }, [baseCurrency, noLiquidity, pair, parsedAmounts])
+
+  const pairExplorerLink = useMemo(
+    () => (pair && getBlockExploreLink(Pair.getAddress(pair.token0, pair.token1), 'address', chainId)) || undefined,
+    [pair, chainId],
+  )
+
   const formattedAmounts = useMemo(
     () => ({
       [independentField]: typedValue,
-      [dependentField]: noLiquidity ? otherTypedValue : parsedAmounts[dependentField]?.toSignificant(6) ?? '',
+      [dependentField]: parsedAmounts[dependentField]?.toSignificant(6) ?? '',
     }),
     [dependentField, independentField, noLiquidity, otherTypedValue, parsedAmounts, typedValue],
   )
@@ -358,11 +414,8 @@ export const useV2CreateForm = () => {
     // State
     currencies,
     pair,
-    pairState,
     currencyBalances,
     noLiquidity,
-
-    // Derivative States
     maxAmounts,
     formattedAmounts,
     pendingText,

@@ -1,4 +1,5 @@
 import { AutoColumn, Box, Card, CardBody, DynamicSection } from '@pancakeswap/uikit'
+import { useFeeLevelQueryState } from 'state/infinity/create'
 import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
@@ -28,7 +29,8 @@ export const CreateLiquidityV3Form = () => {
     onFieldBInput,
   } = useV3CreateForm()
 
-  const poolExists = noLiquidity === false
+  const [feeLevel] = useFeeLevelQueryState()
+  const poolExists = noLiquidity === false && !!feeLevel
 
   return (
     <Box maxWidth={[null, null, null, '520px']} mx="auto">
