@@ -4068,5 +4068,7 @@
   "ExactOut swap supports less liquidity venues and less routes.": "ExactOut swap supports less liquidity venues and less routes.",
   "It might also offer a worse price. Slippage is only applied on input amount, not output amount.": "It might also offer a worse price. Slippage is only applied on input amount, not output amount.",
   "Use Current Price": "Use Current Price",
-  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it."
+  "The price is an estimation of the current market price. Please verify before using it.": "The price is an estimation of the current market price. Please verify before using it.",
+  "Select Chain": "Select Chain",
+  "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to."
 }

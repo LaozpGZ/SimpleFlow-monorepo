@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Trans, useTranslation } from '@pancakeswap/localization'
 import {
   InfoIcon,
@@ -26,15 +26,24 @@ import { ASSET_CDN } from '../../config/url'
 
 export type WalletChainSelectProps = {
   wallet: WalletConfigV3<any> | null
+  solanaOnly?: boolean
   onConnectEVM?: () => void
   onConnectSolana?: () => void
 }
 
-export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({ wallet, onConnectEVM, onConnectSolana }) => {
+export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
+  wallet,
+  solanaOnly,
+  onConnectEVM,
+  onConnectSolana,
+}) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
 
-  const supportsEVM = wallet?.networks.includes(WalletAdaptedNetwork.EVM)
+  const supportsEVM = useMemo(
+    () => (solanaOnly ? false : wallet?.networks.includes(WalletAdaptedNetwork.EVM)),
+    [solanaOnly],
+  )
   const supportsSolana = wallet?.networks.includes(WalletAdaptedNetwork.Solana)
 
   const {

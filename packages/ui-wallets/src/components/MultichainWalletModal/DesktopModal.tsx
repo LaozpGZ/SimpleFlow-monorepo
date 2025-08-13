@@ -1,7 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AtomBox, FlexGap, Grid, Heading, Image, RowBetween, Text, Toggle } from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { ASSET_CDN } from '../../config/url'
 import { errorEvmAtom, errorSolanaAtom } from '../../state/atom'
 import { useSelectedWallet } from '../../state/hooks'
@@ -32,7 +32,7 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
   docLink,
   wallets: wallets_,
   topWallets: topWallets_,
-  previouslyUsedWallets,
+  previouslyUsedWallets: previouslyUsedWallets_,
   connectWallet,
   onWalletConnected,
   displaySocialLogin,
@@ -43,15 +43,34 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
   onTelegramLogin,
   onDiscordLogin,
 }) => {
-  const wallets: WalletConfigV3[] =
-    wallets_?.filter((w) => {
-      return w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
-    }) ?? []
+  const [solanaOnly, setSolanaOnly] = useState(false)
 
-  const topWallets: WalletConfigV3[] =
-    topWallets_?.filter((w) => {
-      return w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
-    }) ?? []
+  const wallets: WalletConfigV3[] = useMemo(
+    () =>
+      wallets_?.filter((w) => {
+        if (solanaOnly && !w.networks.includes(WalletAdaptedNetwork.Solana)) return false
+        return w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
+      }) ?? [],
+    [solanaOnly, wallets_],
+  )
+
+  const topWallets: WalletConfigV3[] = useMemo(
+    () =>
+      topWallets_?.filter((w) => {
+        if (solanaOnly && !w.networks.includes(WalletAdaptedNetwork.Solana)) return false
+        return w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
+      }) ?? [],
+    [solanaOnly, topWallets_],
+  )
+
+  const previouslyUsedWallets = useMemo(
+    () =>
+      previouslyUsedWallets_.map((wallets) => {
+        if (solanaOnly) return wallets.filter((wallet) => wallet.networks.includes(WalletAdaptedNetwork.Solana))
+        return wallets
+      }) as [WalletConfigV3[], WalletConfigV3[]],
+    [previouslyUsedWallets_, solanaOnly],
+  )
 
   const selected = useSelectedWallet()
   const evmError = useAtomValue(errorEvmAtom)
@@ -107,7 +126,12 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
             <Text textTransform="uppercase" fontWeight="600" color="textSubtle" fontSize="12px">
               {t('Solana Only')}
             </Text>
-            <Toggle scale="md" id="wallet-modal-network-toggle" />
+            <Toggle
+              checked={solanaOnly}
+              scale="md"
+              id="wallet-modal-network-toggle"
+              onChange={() => setSolanaOnly(!solanaOnly)}
+            />
           </FlexGap>
         </RowBetween>
 
@@ -171,7 +195,9 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
             onDiscordLogin={onDiscordLogin}
           />
         )}
-        {previewStatus === PreviewStatus.ChainSelect && <WalletChainSelect wallet={selectedMultiChainWallet} />}
+        {previewStatus === PreviewStatus.ChainSelect && (
+          <WalletChainSelect solanaOnly={solanaOnly} wallet={selectedMultiChainWallet} />
+        )}
       </AtomBox>
     </Grid>
   )
