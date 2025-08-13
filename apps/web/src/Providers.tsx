@@ -1,17 +1,16 @@
-import { isInBinance } from '@binance/w3w-utils'
 import { LanguageProvider } from '@pancakeswap/localization'
 import { DialogProvider, ModalProvider, UIKitProvider, dark, light } from '@pancakeswap/uikit'
 import { Store } from '@reduxjs/toolkit'
 import { HydrationBoundary, QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { HistoryManagerProvider } from 'contexts/HistoryContext'
-import { FirebaseAuthProvider } from 'contexts/Privy/firebase'
-import { PrivyProvider } from 'contexts/Privy/privy'
+import { FirebaseAuthProvider } from 'wallet/Privy/firebase'
+import { PrivyProvider } from 'wallet/Privy/privy'
 import { W3WConfigProvider } from 'contexts/W3WConfigContext'
 import { ThemeProvider as NextThemeProvider, useTheme as useNextTheme } from 'next-themes'
 import { useMemo } from 'react'
 import { Provider } from 'react-redux'
 import { WagmiProvider } from 'wagmi'
-import { createWagmiConfig, createW3WWagmiConfig } from 'utils/wagmi'
+import { createWagmiConfig } from 'utils/wagmi'
 import { WalletProvider } from 'wallet/WalletProvider'
 // Create a client
 const queryClient = new QueryClient()
@@ -32,28 +31,26 @@ const Providers: React.FC<
     dehydratedState: any
   }>
 > = ({ children, store, dehydratedState }) => {
-  const wagmiConfig = useMemo(() => createWagmiConfig(), [])
-
   return (
     <FirebaseAuthProvider>
       <Provider store={store}>
-        <PrivyProvider>
-          <QueryClientProvider client={queryClient}>
-            <WalletProvider>
-              <HydrationBoundary state={dehydratedState}>
-                <NextThemeProvider>
-                  <LanguageProvider>
+        <LanguageProvider>
+          <PrivyProvider>
+            <QueryClientProvider client={queryClient}>
+              <WalletProvider>
+                <HydrationBoundary state={dehydratedState}>
+                  <NextThemeProvider>
                     <StyledUIKitProvider>
                       <HistoryManagerProvider>
                         <ModalProvider portalProvider={DialogProvider}>{children}</ModalProvider>
                       </HistoryManagerProvider>
                     </StyledUIKitProvider>
-                  </LanguageProvider>
-                </NextThemeProvider>
-              </HydrationBoundary>
-            </WalletProvider>
-          </QueryClientProvider>
-        </PrivyProvider>
+                  </NextThemeProvider>
+                </HydrationBoundary>
+              </WalletProvider>
+            </QueryClientProvider>
+          </PrivyProvider>
+        </LanguageProvider>
       </Provider>
     </FirebaseAuthProvider>
   )

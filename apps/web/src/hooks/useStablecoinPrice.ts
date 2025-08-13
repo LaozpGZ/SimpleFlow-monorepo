@@ -1,4 +1,5 @@
-import { ChainId } from '@pancakeswap/chains'
+import BigNumber from 'bignumber.js'
+import { ChainId, isSolana } from '@pancakeswap/chains'
 import { Currency, ERC20Token, getCurrencyAddress, Native, Price, Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import { STABLE_COIN } from '@pancakeswap/tokens'
 import { getFullDecimalMultiplier } from '@pancakeswap/utils/getFullDecimalMultiplier'
@@ -12,6 +13,7 @@ import { useMemo } from 'react'
 import { DeepKeyMap, isEqual } from 'utils/hash'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { getViemClients } from 'utils/viem'
+import { useSolanaTokenPrice } from './solana/useSolanaTokenPrice'
 
 type UseStablecoinPriceConfig = {
   enabled?: boolean
@@ -115,16 +117,25 @@ export const useUnifiedUSDPriceAmount = (
 ): number | undefined => {
   const stablePrice = useStablecoinPrice(
     currency instanceof Token || currency instanceof Native ? currency : undefined,
-    { enabled: Boolean(currency && amount), ...config },
+    { enabled: Boolean(currency && amount && !isSolana(currency.chainId)), ...config },
   )
-  // todo:@eric integrate solana usd price
+  const { data: solanaPrice } = useSolanaTokenPrice({
+    mint: currency?.wrapped.address,
+    enabled: Boolean(currency && amount && isSolana(currency.chainId)),
+  })
 
   return useMemo(() => {
+    if (!currency) {
+      return undefined
+    }
     if (amount) {
+      if (isSolana(currency.chainId)) {
+        return new BigNumber(solanaPrice ?? 0).times(amount).toNumber()
+      }
       if (stablePrice) {
         return multiplyPriceByAmount(stablePrice, amount)
       }
     }
     return undefined
-  }, [amount, stablePrice])
+  }, [amount, stablePrice, currency, solanaPrice])
 }

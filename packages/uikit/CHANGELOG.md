@@ -1,5 +1,24 @@
 # Change Log
 
+## 0.69.1
+
+### Patch Changes
+
+- @pancakeswap/hooks@0.0.43
+
+## 0.69.0
+
+### Minor Changes
+
+- 4c9e705: Add Components for common header
+- ea1da46: update zod package
+
+### Patch Changes
+
+- Updated dependencies [ea1da46]
+  - @pancakeswap/localization@6.1.0
+  - @pancakeswap/hooks@0.0.42
+
 ## 0.68.5
 
 ### Patch Changes

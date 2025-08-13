@@ -6,10 +6,12 @@ import {
   ICustomizedBridgeConfig,
   IDeBridgeTransferConfig,
   IMesonTransferConfig,
+  IMayanTransferConfig,
   IStargateTransferConfig,
   layerZero,
   meson,
   stargate,
+  mayan,
 } from '@bnb-chain/canonical-bridge-widget'
 import { useEffect, useState } from 'react'
 
@@ -17,27 +19,29 @@ import axios from 'axios'
 import { env } from '../configs/env'
 import layerZeroConfig from '../token-config/mainnet/layerZero/config.json'
 
-export function useTransferConfig(supportedChains: IChainConfig[]) {
+export function useTransferConfig(supportedChains: IChainConfig[]): ICustomizedBridgeConfig['transfer'] | undefined {
   const [transferConfig, setTransferConfig] = useState<ICustomizedBridgeConfig['transfer']>()
 
   useEffect(() => {
     const initConfig = async () => {
-      const [cBridgeRes, deBridgeRes, stargateRes, mesonRes] = await Promise.all([
+      const [cBridgeRes, deBridgeRes, stargateRes, mesonRes, mayanRes] = await Promise.all([
         axios.get<{ data: ICBridgeTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/cbridge`),
         axios.get<{ data: IDeBridgeTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/debridge`),
         axios.get<{ data: IStargateTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/stargate`),
         axios.get<{ data: IMesonTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/meson`),
+        axios.get<{ data: IMayanTransferConfig }>(`${env.SERVER_ENDPOINT}/api/bridge/v2/mayan`),
       ])
 
       const cBridgeConfig = cBridgeRes.data.data
       const deBridgeConfig = deBridgeRes.data.data
       const mesonConfig = mesonRes.data.data
+      const mayanConfig = mayanRes.data.data
       const stargateConfig = stargateRes.data.data
 
       const tokenConfig: ICustomizedBridgeConfig['transfer'] = {
         defaultFromChainId: 1,
         defaultToChainId: 56,
-        defaultTokenAddress: '0xdac17f958d2ee523a2206206994597c13d831ec7',
+        defaultTokenAddress: '0xdAC17F958D2ee523a2206206994597C13D831ec7',
         defaultAmount: '',
         chainOrders: [56, 1, 137, 324, 42161, 59144, 8453, 204],
         tokenOrders: [
@@ -131,11 +135,11 @@ export function useTransferConfig(supportedChains: IChainConfig[]) {
             excludedChains: [],
             excludedTokens: {
               // We excluded certain tokens because: previously during testing, these token transactions failed. Some due to internal errors from third parties, and others due to lack of liquidity, hence we removed them.
-              1: ['cUSDCv3', '0x5e21d1ee5cf0077b314c381720273ae82378d613'],
+              1: ['cUSDCv3', '0x5e21D1EE5cf0077B314c381720273ae82378D613'],
               56: [
-                '0x67d66e8ec1fd25d98b3ccd3b19b7dc4b4b7fc493',
+                '0x67d66e8Ec1Fd25d98B3Ccd3B19B7dc4b4b7fC493',
                 '0x0000000000000000000000000000000000000000',
-                '0x9c7beba8f6ef6643abd725e45a4e8387ef260649',
+                '0x9C7BEBa8F6eF6643aBd725e45a4E8387eF260649',
               ],
 
               137: ['cUSDCv3'],
@@ -166,6 +170,11 @@ export function useTransferConfig(supportedChains: IChainConfig[]) {
               42161: ['SOL'],
             },
           }),
+          mayan({
+            config: mayanConfig,
+            excludedChains: [],
+            excludedTokens: {},
+          }),
         ],
       }
 
@@ -187,7 +196,7 @@ function handleDeBridgeConfig(rawConfig: IDeBridgeTransferConfig) {
     1: [
       {
         action: 'replace',
-        target: '0xebd9d99a3982d547c5bb4db7e3b1f9f14b67eb83',
+        target: '0xEBd9D99A3982d547C5Bb4DB7E3b1F9F14b67Eb83',
         data: {
           address: '0x2dfF88A56767223A5529eA5960Da7A3F5f766406',
           symbol: 'ID',

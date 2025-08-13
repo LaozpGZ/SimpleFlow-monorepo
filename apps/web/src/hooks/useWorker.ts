@@ -3,13 +3,14 @@ import { useEffect, useRef, useState } from 'react'
 
 import { WorkerInstance, createWorker } from 'utils/worker'
 
-export const globalWorkerAtom = atom<WorkerInstance | undefined>(undefined)
+export const globalWorkerAtom = atom(async () => {
+  const worker = await createWorker()
+  return worker
+})
 
 function createUseWorkerHook(shared?: boolean) {
-  const useWorkerState = shared ? () => useAtom(globalWorkerAtom) : useState
-
   return function useWorker() {
-    const [worker, setWorker] = useWorkerState<WorkerInstance | undefined>()
+    const [worker, setWorker] = useState<WorkerInstance | undefined>()
     const workerRef = useRef<WorkerInstance | undefined>(worker)
 
     useEffect(() => {
@@ -40,8 +41,6 @@ function createUseWorkerHook(shared?: boolean) {
 
 export const useWorker = createUseWorkerHook(false)
 
-export const useInitGlobalWorker = createUseWorkerHook(true)
-
-export function useGlobalWorker() {
-  return useAtomValue(globalWorkerAtom)
+export const useInitGlobalWorker = () => {
+  useAtomValue(globalWorkerAtom)
 }

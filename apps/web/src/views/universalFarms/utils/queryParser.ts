@@ -1,5 +1,6 @@
 import { Protocol } from '@pancakeswap/farms'
 import { SORT_ORDER } from '@pancakeswap/uikit'
+import { CHAIN_QUERY_NAME } from 'config/chains'
 import { FarmQuery } from 'state/farmsV4/search/edgeFarmQueries'
 import { DEFAULT_CHAINS, DEFAULT_PROTOCOLS } from 'state/farmsV4/state/farmPools/fetcher'
 import { PoolInfo } from 'state/farmsV4/state/type'
@@ -24,7 +25,7 @@ export function getIndexByProtocols(protocols: Protocol[]): number {
 }
 
 export function parseUrlToSearchQuery(): FarmQuery {
-  const url = new URLSearchParams(window.location.search)
+  const url = new URLSearchParams(typeof window !== 'undefined' ? window.location.search : '')
   const selectedProtocolIndex = (() => {
     const type = url.get('type')
     return type ? Number(type) : 0
@@ -56,6 +57,9 @@ export function parseUrlToSearchQuery(): FarmQuery {
 export function farmQueryToUrlParams(query: FarmQuery): { [key: string]: string | string[] } {
   const params: { [key: string]: string | string[] } = {}
   const protocolIndex = getIndexByProtocols(query.protocols)
+  if (query.activeChainId && CHAIN_QUERY_NAME[query.activeChainId]) {
+    params.chain = CHAIN_QUERY_NAME[query.activeChainId]
+  }
   if (protocolIndex !== 0) {
     params.type = protocolIndex.toString()
   }

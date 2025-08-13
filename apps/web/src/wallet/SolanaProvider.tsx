@@ -16,18 +16,17 @@ import {
   SafePalWalletAdapter,
   SolongWalletAdapter,
   TokenPocketWalletAdapter,
-  TorusWalletAdapter,
   TrustWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
 import { initialize, SolflareWalletAdapter } from '@solflare-wallet/wallet-adapter'
 import { WalletConnectWalletAdapter } from '@walletconnect/solana-adapter'
 
-import { accountActiveChainAtom } from 'hooks/useAccountActiveChain'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { rpcUrlAtom } from '@pancakeswap/utils/user'
 import { defaultNetWork } from './solana.config'
 import { BackpackWalletAdapter } from './walletAdapter/BackpackWalletAdapter'
 import { OKXWalletAdapter } from './walletAdapter/OKXWalletAdapter'
+import { accountActiveChainAtom } from './atoms/accountStateAtoms'
 
 initialize()
 
@@ -38,7 +37,7 @@ const SolanaWalletStateUpdater = () => {
   useEffect(() => {
     const solanaAccount = publicKey?.toBase58() || null
     setWalletState((prev) => {
-      return { ...prev, solanaAccount, unifiedAccount: solanaAccount }
+      return { ...prev, solanaAccount }
     })
   }, [connected, connecting, publicKey, setWalletState])
 
@@ -74,7 +73,6 @@ export const SolanaProvider: FC<PropsWithChildren<any>> = ({ children }) => {
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
       new SlopeWalletAdapter({ endpoint }),
-      new TorusWalletAdapter(),
       ..._walletConnect,
       new GlowWalletAdapter(),
       new TrustWalletAdapter(),

@@ -1,5 +1,31 @@
 # games
 
+## 0.2.1
+
+### Patch Changes
+
+- Updated dependencies [979f5e0]
+  - @pancakeswap/chains@0.5.3
+  - @pancakeswap/games@0.0.13
+  - @pancakeswap/uikit@0.69.1
+  - @pancakeswap/utils@7.0.1
+  - @pancakeswap/hooks@0.0.43
+
+## 0.2.0
+
+### Minor Changes
+
+- ea1da46: update zod package
+
+### Patch Changes
+
+- Updated dependencies [4c9e705]
+- Updated dependencies [ea1da46]
+  - @pancakeswap/uikit@0.69.0
+  - @pancakeswap/localization@6.1.0
+  - @pancakeswap/utils@7.0.0
+  - @pancakeswap/hooks@0.0.42
+
 ## 0.1.28
 
 ### Patch Changes

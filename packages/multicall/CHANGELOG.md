@@ -1,5 +1,24 @@
 # @pancakeswap/multicall
 
+## 3.7.1
+
+### Patch Changes
+
+- Updated dependencies [979f5e0]
+  - @pancakeswap/chains@0.5.3
+  - @pancakeswap/sdk@5.8.15
+
+## 3.7.0
+
+### Minor Changes
+
+- ea1da46: update zod package
+
+### Patch Changes
+
+- 44601d1: Fix input parameters not being used
+- d182909: Increase block tolerance for bsc post Maxwell upgrade
+
 ## 3.6.4
 
 ### Patch Changes

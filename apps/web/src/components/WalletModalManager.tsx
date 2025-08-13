@@ -5,7 +5,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
 
 import { ChainId } from '@pancakeswap/chains'
-import { useFirebaseAuth } from 'contexts/Privy/firebase'
+import { useFirebaseAuth } from 'wallet/Privy/firebase'
 import { useCallback, useMemo } from 'react'
 import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
 import { useConnect } from 'wagmi'

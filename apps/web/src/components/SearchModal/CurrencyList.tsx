@@ -12,14 +12,14 @@ import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 
 import { useTranslation } from '@pancakeswap/localization'
-import { ChainId, Currency, Token, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { ChainId, Currency, UnifiedCurrency, UnifiedCurrencyAmount, UnifiedToken } from '@pancakeswap/sdk'
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { ArrowForwardIcon, AutoColumn, Column, CopyButton, FlexGap, QuestionHelper, Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useUnifiedTokenUsdPrice } from 'hooks/useUnifiedTokenUsdPrice'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
+import { isSolana, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
 
 import { useIsUserAddedToken } from '../../hooks/Tokens'
 import { useCombinedActiveList } from '../../state/lists/hooks'
@@ -114,21 +114,23 @@ function ComplementSection({
             ml="8px"
             tooltipPlacement="top"
           />
-          <AddToWalletButton
-            data-dd-action-name="Add to wallet"
-            variant="text"
-            p="0"
-            ml="12px"
-            height="auto"
-            width="fit-content"
-            tokenAddress={selectedCurrency.wrapped.address}
-            tokenSymbol={selectedCurrency.symbol}
-            tokenDecimals={selectedCurrency.decimals}
-            tokenLogo={
-              selectedCurrency.wrapped instanceof WrappedTokenInfo ? selectedCurrency.wrapped.logoURI : undefined
-            }
-            tooltipPlacement="top"
-          />
+          {selectedCurrency.chainId === NonEVMChainId.SOLANA ? null : (
+            <AddToWalletButton
+              data-dd-action-name="Add to wallet"
+              variant="text"
+              p="0"
+              ml="12px"
+              height="auto"
+              width="fit-content"
+              tokenAddress={selectedCurrency.wrapped.address}
+              tokenSymbol={selectedCurrency.symbol}
+              tokenDecimals={selectedCurrency.decimals}
+              tokenLogo={
+                selectedCurrency.wrapped instanceof WrappedTokenInfo ? selectedCurrency.wrapped.logoURI : undefined
+              }
+              tooltipPlacement="top"
+            />
+          )}
         </>
       ) : (
         showActions && (
@@ -263,7 +265,7 @@ export default function CurrencyList({
   fixedListRef?: MutableRefObject<FixedSizeList | undefined>
   showNative: boolean
   showImportView: () => void
-  setImportToken: (token: Token) => void
+  setImportToken: (token: UnifiedToken) => void
   breakIndex: number | undefined
   showChainLogo?: boolean
   chainId?: UnifiedChainId
@@ -288,6 +290,13 @@ export default function CurrencyList({
 
       const isSelected = Boolean(selectedCurrency && currency && selectedCurrency.equals(currency))
       const otherSelected = Boolean(otherCurrency && currency && otherCurrency.equals(currency))
+      const isNativeWrap = Boolean(
+        isSolana(chainId) &&
+          currency?.wrapped &&
+          otherCurrency?.wrapped &&
+          otherCurrency.wrapped.equals(currency.wrapped) &&
+          !otherSelected,
+      )
 
       const handleSelect = () => onCurrencySelect(currency)
       const token = wrappedCurrency(currency, currency?.chainId)
@@ -327,7 +336,7 @@ export default function CurrencyList({
         <CurrencyRow
           style={style}
           currency={currency}
-          isSelected={isSelected}
+          isSelected={isSelected || isNativeWrap}
           onSelect={handleSelect}
           otherSelected={otherSelected}
           showChainLogo={showChainLogo}
@@ -335,6 +344,7 @@ export default function CurrencyList({
       )
     },
     [
+      chainId,
       selectedCurrency,
       otherCurrency,
       currencies.length,

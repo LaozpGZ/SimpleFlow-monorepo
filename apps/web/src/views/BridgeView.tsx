@@ -7,6 +7,7 @@ import { Suspense, useEffect, useMemo } from 'react'
 import { CHAIN_IDS } from 'utils/wagmi'
 import Page from 'views/Page'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
 const DISABLED_TO_CHAINS = [ChainId.POLYGON_ZKEVM]
 
@@ -57,6 +58,26 @@ function usePortalConflictFix() {
   }, [])
 }
 
+const BridgeChainSync = () => {
+  const { switchNetwork } = useSwitchNetwork()
+
+  useEffect(() => {
+    const handleNetworkSelect = async (event: Event) => {
+      const customEvent = event as CustomEvent<{ network: string; chainId: number }>
+      const { chainId } = customEvent.detail
+      const result = await switchNetwork(chainId)
+    }
+
+    window.addEventListener('pcs_bridge_select_from_network', handleNetworkSelect)
+
+    return () => {
+      window.removeEventListener('pcs_bridge_select_from_network', handleNetworkSelect)
+    }
+  }, [])
+
+  return null
+}
+
 export const BridgeView = () => {
   const { isMobile } = useMatchBreakpoints()
 
@@ -85,13 +106,13 @@ export const BridgeView = () => {
               }),
               [],
             )}
-            supportedChainIds={CHAIN_IDS}
-            // @ts-ignore
+            supportedChainIds={[...CHAIN_IDS, 7565164]}
             rpcConfig={PUBLIC_NODES}
             disabledToChains={DISABLED_TO_CHAINS}
           />
         </Suspense>
       </Flex>
+      <BridgeChainSync />
     </Page>
   )
 }

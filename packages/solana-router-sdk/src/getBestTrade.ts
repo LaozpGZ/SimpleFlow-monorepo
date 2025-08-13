@@ -1,6 +1,7 @@
-import { SOLMint, SPLToken, TradeType, UnifiedCurrencyAmount, WSOLMint } from '@pancakeswap/sdk'
+import { isWSol, solToWSol, SPLToken, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { PublicKey } from '@solana/web3.js'
 import { create } from 'superstruct'
+import Decimal from 'decimal.js'
 import { FormattedUltraQuoteResponse } from './FormattedUltraQuoteResponse'
 import { ultraSwapService } from './UltraSwapService'
 
@@ -13,6 +14,8 @@ interface SolanaQuoteRequest {
   taker?: string
   excludeRouters?: string
   excludeDexes?: string
+  priorityFeeLamports?: number
+  useWsol?: boolean
 }
 
 interface BestSolanaTradeParams {
@@ -24,9 +27,10 @@ interface BestSolanaTradeParams {
   tradeType: TradeType
   excludeRouters?: string
   excludeDexes?: string
+  priorityFeeLamports?: number
 }
 
-interface RouterPlan {
+export interface RouterPlan {
   swapInfo: {
     inputMint: string
     inAmount: string
@@ -54,8 +58,6 @@ export interface SolRouterTrade {
   transaction: string | null
 }
 
-export const solToWSol = (key: string): string => (key === SOLMint.toBase58() ? WSOLMint.toBase58() : key)
-
 export const getBestSolanaTrade = async ({
   inputCurrency,
   outputCurrency,
@@ -63,6 +65,7 @@ export const getBestSolanaTrade = async ({
   amount,
   account,
   slippageBps = 50,
+  priorityFeeLamports,
 }: BestSolanaTradeParams): Promise<SolRouterTrade> => {
   const inputMint = solToWSol(inputCurrency.address)
   const outputMint = solToWSol(outputCurrency.address)
@@ -75,6 +78,8 @@ export const getBestSolanaTrade = async ({
     slippageBps,
     swapMode,
     taker: account,
+    priorityFeeLamports,
+    useWsol: isWSol(inputCurrency.address) || isWSol(outputCurrency.address),
   }
 
   const response = await ultraSwapService.getQuote(requestBody)
@@ -88,7 +93,7 @@ export const getBestSolanaTrade = async ({
     routes: quoteResponse.routePlan,
     requestId: quoteResponse.requestId,
     otherAmountThreshold: quoteResponse.otherAmountThreshold,
-    priceImpactPct: quoteResponse.priceImpactPct,
+    priceImpactPct: new Decimal(quoteResponse.priceImpact).dividedBy(100).toString(),
     slippageBps: quoteResponse.slippageBps,
     transaction: quoteResponse.transaction,
   }

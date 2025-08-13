@@ -1,68 +1,33 @@
-import { ChainId, getChainIdByChainName, isEvm, NonEVMChainId } from '@pancakeswap/chains'
-import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
-import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import { atomWithProxy } from 'jotai-valtio'
-import { atomWithRefresh } from 'jotai/utils'
-import { useRouter } from 'next/router'
-import { useEffect } from 'react'
-import { proxy } from 'valtio'
-import { useAccount } from 'wagmi'
-import { useSwitchNetworkLocal } from './useSwitchNetwork'
-import { useValueChanged } from './useValueChanged'
+import { isEvm } from '@pancakeswap/chains'
+import { useAtomValue } from 'jotai'
+import { useEffect, useRef } from 'react'
 
-function getQueryChainId() {
-  const window = safeGetWindow()
-  if (!window) {
-    return ChainId.BSC
-  }
-  const params = new URL(window.location.href).searchParams
-  let chainId
-  const c = params.get('chain')
-  if (!c) {
-    chainId = params.get('chainId')
-  } else {
-    chainId = getChainIdByChainName(c)
-  }
-  return +chainId || ChainId.BSC
-}
-
-export const queryChainIdAtom = atomWithRefresh(getQueryChainId)
-
-export const useLocalNetworkChain = () => {
-  return useAtomValue(queryChainIdAtom)
-}
+import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 
 export const useActiveChainId = (checkChainId?: number) => {
   const { isNotMatched, isWrongNetwork, chainId } = useAccountActiveChain()
   return {
     chainId,
     isNotMatched,
-    isWrongNetwork: isWrongNetwork ? Boolean(checkChainId && checkChainId !== chainId) : false,
+    isWrongNetwork: checkChainId ? isWrongNetwork && checkChainId !== chainId : isWrongNetwork,
   }
 }
 
-interface AccountChainState {
-  account?: `0x${string}`
-  solanaAccount?: string | null
-  unifiedAccount?: string | null
-  chainId: number
-  isWrongNetwork: boolean
-  isNotMatched: boolean
-  status: 'connected' | 'disconnected' | 'connecting' | 'reconnecting' | null
+export const useActiveChainIdRef = () => {
+  const { chainId } = useAccountActiveChain()
+
+  const ref = useRef(chainId)
+  useEffect(() => {
+    ref.current = chainId
+  }, [chainId])
+  return ref
 }
 
-const accountChainProxy = proxy<AccountChainState>({
-  chainId: ChainId.BSC,
-  isWrongNetwork: false,
-  status: null,
-  solanaAccount: null,
-  unifiedAccount: null,
-  isNotMatched: false,
-})
-export const accountActiveChainAtom = atomWithProxy(accountChainProxy)
-
-const useAccountActiveChain = () => {
-  return useAtomValue(accountActiveChainAtom)
+export const useAccountActiveChain = () => {
+  const result = useAtomValue(accountActiveChainAtom)
+  const { chainId, account, solanaAccount } = result
+  const unifiedAccount = isEvm(chainId) ? account : solanaAccount
+  return { ...result, unifiedAccount }
 }
 
 export function useSyncWalletState() {

@@ -20,8 +20,10 @@ import {
 import { WalletReadyState } from '@solana/wallet-adapter-base'
 import { useWallet, Wallet } from '@solana/wallet-adapter-react'
 import { useAtom } from 'jotai'
+import { NonEVMChainId } from '@pancakeswap/chains'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { solanaWalletModalAtom } from './atoms/solanaWalletAtoms'
 import DesktopIcon from './components/DesktopIcon'
@@ -30,7 +32,8 @@ import MobileIcon from './components/MobileIcon'
 const ColumnBox = styled(Box)`
   display: flex;
   flex-direction: column;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 `
 
 const WarningBox = styled(Box)`
@@ -80,6 +83,13 @@ export const SolanaWalletModal: React.FC = () => {
   const [isOpen, setIsOpen] = useAtom(solanaWalletModalAtom)
   const [canShowUninstalledWallets, setCanShowUninstalledWallets] = useState(false)
   const [isWalletNotInstalled, setIsWalletNotInstalled] = useState(false)
+  const { chainId } = useAccountActiveChain()
+
+  useEffect(() => {
+    if (chainId !== NonEVMChainId.SOLANA) {
+      setIsOpen(false)
+    }
+  }, [chainId, setIsOpen])
 
   const onClose = useCallback(() => setIsOpen(false), [setIsOpen])
   const handleSelectWallet = useCallback(
@@ -95,6 +105,9 @@ export const SolanaWalletModal: React.FC = () => {
   const phantomWallet = recommendedWallets.find((w) => w.adapter.name === 'Phantom')
 
   const handleCloseComplete = useCallback(() => setIsWalletNotInstalled(false), [])
+  if (!isOpen) {
+    return null
+  }
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onClose}>

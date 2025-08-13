@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, Percent, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, Percent, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { SmartRouter } from '@pancakeswap/smart-router'
 import {
   AutoColumn,
@@ -19,10 +19,11 @@ import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { CurrencyLogo as CurrencyLogoWidget } from '@pancakeswap/widgets-internal'
 import { AutoRow, RowBetween, RowFixed } from 'components/Layout/Row'
 import { useGasToken } from 'hooks/useGasToken'
-import { ReactElement, memo, useMemo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Field } from 'state/swap/actions'
 import { styled } from 'styled-components'
 import { warningSeverity } from 'utils/exchange'
+import { SVMTradingFee } from 'views/SwapSimplify/InfinitySwap/TradingFee'
 
 import { PancakeSwapXTag } from 'components/PancakeSwapXTag'
 import { paymasterInfo } from 'config/paymaster'
@@ -73,7 +74,6 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
   outputAmount,
   order,
   tradeType,
-  allowedSlippage,
   slippageAdjustedAmounts,
   isEnoughInputBalance,
   onConfirm,
@@ -86,7 +86,6 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
   inputAmount: CurrencyAmount<Currency>
   outputAmount: CurrencyAmount<Currency>
   priceImpact?: Percent
-  allowedSlippage: number | ReactElement
   slippageAdjustedAmounts: SlippageAdjustedAmounts | undefined | null
   isEnoughInputBalance?: boolean
   swapErrorMessage?: string | undefined
@@ -126,7 +125,12 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
   const severity = warningSeverity(priceImpactWithoutFee)
 
   const executionPriceDisplay = useMemo(() => {
-    const price = isSVMOrder(order) ? undefined : SmartRouter.getExecutionPrice(order?.trade) ?? undefined
+    const price =
+      SmartRouter.getExecutionPrice({
+        // TODO: to remove as CurrencyAmount, SmartRouter will be updated to use UnifiedCurrencyAmount
+        inputAmount: order?.trade?.inputAmount as CurrencyAmount<Currency>,
+        outputAmount: order?.trade?.outputAmount as CurrencyAmount<Currency>,
+      }) ?? undefined
     return formatExecutionPrice(price, inputAmount, outputAmount, showInverted)
   }, [order, inputAmount, outputAmount, showInverted])
 
@@ -179,7 +183,7 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
                 <DottedHelpText fontSize="14px">{t('Slippage Tolerance')}</DottedHelpText>
               </QuestionHelperV2>
             </RowFixed>
-            <SlippageButton slippage={allowedSlippage} />
+            <SlippageButton enableAutoSlippage />
           </RowBetween>
         )}
         <RowBetween mb="8px">
@@ -234,7 +238,9 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
               <DottedHelpText fontSize="14px">{t('Trading Fee')}</DottedHelpText>
             </QuestionHelperV2>
           </RowFixed>
-          {realizedLPFee || isXOrder(order) ? (
+          {isSVMOrder(order) && inputAmount?.currency?.symbol ? (
+            <SVMTradingFee routes={order.trade.routes} inputCurrencySymbol={inputAmount.currency.symbol} />
+          ) : realizedLPFee || isXOrder(order) ? (
             <Flex alignItems="center">
               {isXOrder(order) ? (
                 <Text color="positive60" fontSize="16px" bold>

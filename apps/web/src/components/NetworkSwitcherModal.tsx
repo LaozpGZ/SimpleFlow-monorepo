@@ -18,7 +18,7 @@ import {
   UserMenuItem,
   useTooltip,
 } from '@pancakeswap/uikit'
-import { useActiveChainId, useLocalNetworkChain } from 'hooks/useActiveChainId'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useHover } from 'hooks/useHover'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import useTheme from 'hooks/useTheme'
@@ -27,7 +27,8 @@ import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
 import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
 import { useAccount } from 'wagmi'
-import { SOLANA_SUPPORTED_PATH } from 'wallet/solana.config'
+import { getQueryChainId } from 'wallet/util/getQueryChainId'
+import { type SwitchChainOption } from 'wallet/hook/useSwitchNetworkV2'
 import { ChainLogo } from './Logo/ChainLogo'
 
 type ChainSpecificBehavior = {
@@ -70,11 +71,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
     () => ({
       [NonEVMChainId.SOLANA]: {
         onClick: () => {
-          if (!SOLANA_SUPPORTED_PATH.includes(router.pathname)) {
-            window.open('https://solana.pancakeswap.finance', '_self')
-          } else {
-            router.replace({ query: { ...router.query, chain: 'solana' } }, undefined, { shallow: true })
-          }
+          switchNetwork(NonEVMChainId.SOLANA)
           onDismiss()
         },
       },
@@ -85,7 +82,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
         },
       },
     }),
-    [router, onDismiss],
+    [router, onDismiss, switchNetwork],
   )
   const networks = useMemo(() => getSortedChains(chainId, showTestnet), [chainId, showTestnet])
 
@@ -143,7 +140,7 @@ const NetworkSelect = ({ switchNetwork, chainId, isWrongNetwork, onDismiss }: Ne
 }
 
 interface WrongNetworkSelectProps {
-  switchNetwork: (chainId: number) => void
+  switchNetwork: (chainId: number, opt?: SwitchChainOption) => void
   chainId: number
   onDismiss: () => void
 }
@@ -164,7 +161,7 @@ const WrongNetworkSelect = ({ switchNetwork, chainId, onDismiss }: WrongNetworkS
     },
   )
   const { chain } = useAccount()
-  const localChainId = useLocalNetworkChain() || ChainId.BSC
+  const localChainId = getQueryChainId() || ChainId.BSC
 
   const localChainName = Chains.find((c) => c.id === localChainId)?.fullName ?? 'BSC'
 
@@ -193,7 +190,7 @@ const WrongNetworkSelect = ({ switchNetwork, chainId, onDismiss }: WrongNetworkS
       </Box>
       <UserMenuItem
         onClick={() => {
-          switchNetwork(localChainId)
+          switchNetwork(localChainId, { from: 'switch', force: true })
           onDismiss()
         }}
         style={{ justifyContent: 'flex-start' }}
@@ -206,7 +203,7 @@ const WrongNetworkSelect = ({ switchNetwork, chainId, onDismiss }: WrongNetworkS
         my="8px"
         scale="sm"
         onClick={() => {
-          switchNetwork(localChainId)
+          switchNetwork(localChainId, { from: 'switch', force: true })
           onDismiss()
         }}
       >
@@ -218,7 +215,7 @@ const WrongNetworkSelect = ({ switchNetwork, chainId, onDismiss }: WrongNetworkS
 
 export const NetworkSwitcherModal = () => {
   const { chainId, isWrongNetwork, isNotMatched } = useActiveChainId()
-  const { switchNetworkAsync } = useSwitchNetwork()
+  const { switchNetwork } = useSwitchNetwork()
   const router = useRouter()
   const [isOpen, setIsOpen] = useAtom(networkSwitcherModalAtom)
 
@@ -234,10 +231,10 @@ export const NetworkSwitcherModal = () => {
     <ModalV2 isOpen={isOpen} onDismiss={handleDismiss} closeOnOverlayClick>
       <ModalWrapper minWidth="360px" maxHeight="90vh" style={{ overflowY: 'auto' }}>
         {isNotMatched ? (
-          <WrongNetworkSelect switchNetwork={switchNetworkAsync} chainId={chainId} onDismiss={handleDismiss} />
+          <WrongNetworkSelect switchNetwork={switchNetwork} chainId={chainId} onDismiss={handleDismiss} />
         ) : (
           <NetworkSelect
-            switchNetwork={switchNetworkAsync}
+            switchNetwork={switchNetwork}
             chainId={chainId}
             isWrongNetwork={isWrongNetwork}
             onDismiss={handleDismiss}

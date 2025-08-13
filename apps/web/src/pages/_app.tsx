@@ -31,7 +31,7 @@ import { layoutDesktopAdIgnoredPages, layoutMobileAdIgnoredPages } from 'compone
 import { shouldRenderOnPages } from 'components/AdPanel/renderConditions'
 import { Cb1Membership } from 'components/Cb1/Cb1Membership'
 import { ZKSyncAirdropModalWithAutoPopup } from 'components/ClaimZksyncAirdropModal'
-import { useEmbeddedSmartAccountConnectorV2 } from 'contexts/Privy/hooks/usePrivySmartAccountConnector'
+import { useEmbeddedSmartAccountConnectorV2 } from 'wallet/Privy/hooks/usePrivySmartAccountConnector'
 import { useDataDogRUM } from 'hooks/useDataDogRUM'
 import { useLoadExperimentalFeatures } from 'hooks/useExperimentalFeatureEnabled'
 import useInitNotificationsClient from 'hooks/useInitNotificationsClient'
@@ -43,6 +43,8 @@ import { useSecurityBlocking } from 'hooks/useSecurityBlocking'
 import { persistor, useStore } from 'state'
 import { usePollBlockNumber } from 'state/block/hooks'
 import { SolanaWalletModal } from 'wallet/SolanaWalletModal'
+import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { Blocklist, Updaters } from '..'
 import { SEO } from '../../next-seo.config'
 import Providers from '../Providers'
@@ -114,7 +116,9 @@ function MyApp(props: AppProps<{ initialReduxState: any; dehydratedState: any }>
           // @ts-ignore
           <Component.Meta {...pageProps} />
         )}
-        <GlobalHooks />
+        <Suspense>
+          <GlobalHooks />
+        </Suspense>
         <ResetCSS />
         <GlobalStyle />
         <GlobalCheckClaimStatus excludeLocations={[]} />
@@ -148,6 +152,7 @@ const ProductionErrorBoundary = process.env.NODE_ENV === 'production' ? SentryEr
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const blocking = useSecurityBlocking()
+  const { chainId } = useAccountActiveChain()
 
   if (blocking) {
     return null
@@ -162,6 +167,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const ShowMenu = Component.mp ? SharedComponentWithOutMenu : Menu
   const isShowScrollToTopButton = Component.isShowScrollToTopButton || true
   const shouldScreenWallet = Component.screen || false
+  const isBridge = typeof window !== 'undefined' && window.location.pathname.includes('/bridge')
 
   return (
     <ProductionErrorBoundary>
@@ -184,7 +190,7 @@ const App = ({ Component, pageProps }: AppPropsWithLayout) => {
         <SimpleStakingSunsetModal />
         <VercelToolbar />
         <Cb1Membership />
-        <SolanaWalletModal />
+        {(chainId === NonEVMChainId.SOLANA || isBridge) && <SolanaWalletModal />}
       </Suspense>
     </ProductionErrorBoundary>
   )

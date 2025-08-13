@@ -4,22 +4,22 @@ import { BATCH_MULTICALL_CONFIGS, InfinityRouter, SmartRouter } from '@pancakesw
 import { TradeType } from '@pancakeswap/swap-sdk-core'
 import { currencyUSDPriceAtom } from 'hooks/useCurrencyUsdPrice'
 import { nativeCurrencyAtom } from 'hooks/useNativeCurrency'
-import { globalWorkerAtom } from 'hooks/useWorker'
 import { atomFamily } from 'jotai/utils'
 import { createViemPublicClientGetter } from 'utils/viem'
 
 import { getBestSolanaTrade } from '@pancakeswap/solana-router-sdk'
 import { withTimeout } from '@pancakeswap/utils/withTimeout'
-import { accountActiveChainAtom } from 'hooks/useAccountActiveChain'
 import { QUOTE_TIMEOUT } from 'quoter/consts'
 import { quoteTraceAtom } from 'quoter/perf/quoteTracker'
 import { createPoolQuery } from 'quoter/utils/createQuoteQuery'
+import { globalWorkerAtom } from 'hooks/useWorker'
 import { filterPools } from 'quoter/utils/filterPoolsV3'
 import { gasPriceWeiAtom } from 'quoter/utils/gasPriceAtom'
 import { getAllowedPoolTypes } from 'quoter/utils/getAllowedPoolTypes'
 import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { fetchCandidatePoolsLite } from 'quoter/utils/poolQueries'
 import { InterfaceOrder } from 'views/Swap/utils'
+import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 import { CreateQuoteProviderParams, QuoteQuery } from '../quoter.types'
 import { atomWithLoadable } from './atomWithLoadable'
 
@@ -34,7 +34,8 @@ export const bestAMMTradeFromQuoterWorker2Atom = atomFamily((option: QuoteQuery)
     const quoteProvider = createQuoteProvider2({
       gasLimit,
     })
-    const worker = get(globalWorkerAtom)
+    const worker = await get(globalWorkerAtom)
+    console.log('[worker] bestAMMTradeFromQuoterWorker2Atom', option, worker)
     if (!worker) {
       throw new Error('Quote worker not initialized')
     }

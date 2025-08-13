@@ -1,3 +1,4 @@
+import { ChainId } from '@pancakeswap/chains'
 import { ContextApi } from '@pancakeswap/localization'
 import { SUPPORTED_CHAIN_IDS as POOL_SUPPORTED_CHAINS } from '@pancakeswap/pools'
 import { SUPPORTED_CHAIN_IDS as POSITION_MANAGERS_SUPPORTED_CHAINS } from '@pancakeswap/position-managers'
@@ -16,8 +17,11 @@ import {
   SwapFillIcon,
   SwapIcon,
 } from '@pancakeswap/uikit'
+import { CHAIN_QUERY_NAME } from 'config/chains'
+import { PERSIST_CHAIN_KEY } from 'config/constants'
 import { SUPPORT_FARMS, SUPPORT_ONLY_BSC } from 'config/constants/supportChains'
 import { getPerpetualUrl } from 'utils/getPerpetualUrl'
+import { EVM_CHAIN_IDS } from 'utils/wagmi'
 
 export type ConfigMenuDropDownItemsType = DropdownMenuItems & {
   hideSubNav?: boolean
@@ -31,17 +35,21 @@ export type ConfigMenuItemsType = Omit<MenuItemsType, 'items'> & {
   overrideSubNavItems?: ConfigMenuDropDownItemsType[]
 }
 
-export const addMenuItemSupported = (item, chainId) => {
+export const addMenuItemSupported = (item, chainId: number | undefined) => {
   if (!chainId || !item.supportChainIds) {
     return item
   }
   if (item.supportChainIds?.includes(chainId)) {
     return item
   }
-  return {
-    ...item,
-    disabled: true,
+  // if unsupport chain, redirect to bsc
+  if (item?.href) {
+    return {
+      ...item,
+      href: `${item.href}?chain=${CHAIN_QUERY_NAME[ChainId.BSC]}`,
+    }
   }
+  return item
 }
 
 const config: (
@@ -65,6 +73,7 @@ const config: (
         {
           label: t('Buy Crypto'),
           href: '/buy-crypto',
+          supportChainIds: EVM_CHAIN_IDS,
         },
       ].map((item) => addMenuItemSupported(item, chainId)),
     },

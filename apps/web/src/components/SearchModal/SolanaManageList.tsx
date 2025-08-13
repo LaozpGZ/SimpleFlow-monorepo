@@ -5,9 +5,8 @@ import { ListLogo } from '@pancakeswap/widgets-internal'
 import { useAtom } from 'jotai'
 import { memo, useCallback } from 'react'
 import { SOLANA_LISTS, TokenListKey } from 'config/solana-list'
-
-import { solanaListSettingsAtom } from '../../state/token/solanaTokenAtoms'
-import { useSolanaTokenList } from '../../hooks/useSolanaTokenList'
+import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
+import { solanaListSettingsAtom } from 'state/token/solanaTokenAtoms'
 
 import Row, { RowFixed } from '../Layout/Row'
 import { ListContainer, RowWrapper, Wrapper } from './ManageLists'
@@ -25,7 +24,7 @@ const SolanaListRow = memo(function SolanaListRow({
   const [listSettings, setListSettings] = useAtom(solanaListSettingsAtom)
   const { tokenCountsByList } = useSolanaTokenList()
 
-  const isActive = listSettings[listKey]
+  const isActive = listKey === TokenListKey.PANCAKESWAP ? true : listSettings[listKey]
 
   // Count tokens from this specific list (simplified - in reality you'd need to track per list)
   const tokenCount = tokenCountsByList[listKey]
@@ -47,7 +46,7 @@ const SolanaListRow = memo(function SolanaListRow({
           </Text>
         </RowFixed>
       </Column>
-      <Toggle checked={isActive} onChange={handleToggle} />
+      {listKey !== TokenListKey.PANCAKESWAP && <Toggle checked={isActive} onChange={handleToggle} />}
     </RowWrapper>
   )
 })

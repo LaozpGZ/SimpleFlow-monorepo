@@ -1,22 +1,33 @@
 import { isInBinance } from '@binance/w3w-utils'
-import { useSyncWalletState } from 'hooks/useAccountActiveChain'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { createW3WWagmiConfig, createWagmiConfig } from 'utils/wagmi'
 import { useAtom } from 'jotai'
 import { usePrivy } from '@privy-io/react-auth'
 import { atomWithStorage } from 'jotai/utils'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi'
-import { SOLANA_SUPPORTED_PATH } from './solana.config'
 import { W3WConfigProvider } from './W3WConfigContext'
+import { useSyncWagmiState } from './hook/useSyncWagmiState'
+import { useWagmiConfig } from './hook/useWagmiConfig'
+import { useSyncPersistChain } from './hook/useSyncPersistChain'
+
+import { SOLANA_SUPPORTED_PATH } from './network.switch.config'
 
 interface WalletProviderProps {
   reconnectOnMount?: boolean
   children?: React.ReactNode
 }
 
-export const eip6963Providers: any[] = []
+export interface EIP6963Detail {
+  provider: any
+  info: {
+    name: string
+    rdns: string
+    uuid: string
+    icon: string
+  }
+}
+export const eip6963Providers: EIP6963Detail[] = []
 
 const walletRecoveryRecordsAtom = atomWithStorage<Record<string, number>>('pcs:socialLogin:walletRecoveryRecords', {})
 
@@ -76,7 +87,7 @@ const usePrivyProvider = () => {
               localStorage.removeItem(key)
             })
 
-            const { retriggerFirebaseAuth } = await import('contexts/Privy/firebase')
+            const { retriggerFirebaseAuth } = await import('wallet/Privy/firebase')
             await retriggerFirebaseAuth()
           } catch (logoutError) {
             console.error('Failed to retrigger auth:', logoutError)
@@ -91,25 +102,12 @@ const usePrivyProvider = () => {
 
 export const WalletProvider = (props: WalletProviderProps) => {
   const { children } = props
-  const [ready, setReady] = useState(false)
   const router = useRouter()
   usePrivyProvider()
-  const wagmiConfig = useMemo(
-    () => (typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig()),
-    [ready],
-  )
 
-  useEffect(() => {
-    window.addEventListener('eip6963:announceProvider', (event: any) => {
-      const { provider } = event.detail
-      eip6963Providers.push(provider)
-    })
-    window.dispatchEvent(new Event('eip6963:requestProvider'))
-    setTimeout(() => {
-      setReady(true)
-    })
-  }, [])
-  if (!ready) {
+  const wagmiConfig = useWagmiConfig()
+
+  if (!wagmiConfig) {
     return null // or a loading spinner
   }
 
@@ -126,6 +124,7 @@ export const WalletProvider = (props: WalletProviderProps) => {
 }
 
 const Sync = () => {
-  useSyncWalletState()
+  useSyncWagmiState()
+  useSyncPersistChain()
   return null
 }

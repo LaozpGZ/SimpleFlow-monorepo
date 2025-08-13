@@ -22,7 +22,7 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
       return undefined
     }
 
-    const worker = get(globalWorkerAtom)
+    const worker = await get(globalWorkerAtom)
 
     if (!worker) {
       throw new Error('Quote worker not initialized')

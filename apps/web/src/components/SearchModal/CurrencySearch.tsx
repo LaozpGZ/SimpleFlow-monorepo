@@ -3,7 +3,11 @@ import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useMemo, useRef, us
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useUnifiedNativeCurrency } from 'hooks/useNativeCurrency'
-import { useSolanaTokenList } from 'hooks/useSolanaTokenList'
+import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
+import { useSolanaTokenInfo } from 'hooks/solana/useSolanaTokenInfo'
+import { useSolanaTokenBalances } from 'state/token/solanaTokenBalances'
+import { useSolanaTokenPrices } from 'hooks/solana/useSolanaTokenPrice'
+import BN from 'bignumber.js'
 import { FixedSizeList } from 'react-window'
 import { useAllLists, useInactiveListUrls } from 'state/lists/hooks'
 import { UpdaterByChainId } from 'state/lists/updater'
@@ -17,7 +21,7 @@ import { NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
 import { useDebounce, useSortedTokensByQuery } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 /* eslint-disable no-restricted-syntax */
-import { ChainId, getTokenComparator, Token, UnifiedCurrency } from '@pancakeswap/sdk'
+import { getTokenComparator, isSolWSol, Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import { createFilterToken, WrappedTokenInfo } from '@pancakeswap/token-lists'
 import {
   AutoColumn,
@@ -33,7 +37,7 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { useAudioPlay } from '@pancakeswap/utils/user'
-import { useSolanaTokenBalances } from 'state/token/solanaTokenBalances'
+import { SPLToken, UnifiedToken } from '@pancakeswap/swap-sdk-core'
 
 import { useAllTokens, useIsUserAddedToken, useToken } from '../../hooks/Tokens'
 import Row from '../Layout/Row'
@@ -53,7 +57,7 @@ interface CurrencySearchProps {
   showCommonBases?: boolean
   commonBasesType?: CommonBasesType
   showImportView: () => void
-  setImportToken: (token: Token) => void
+  setImportToken: (token: UnifiedToken) => void
   height?: number
   tokensToShow?: Token[]
   showChainLogo?: boolean
@@ -156,16 +160,27 @@ function CurrencySearch({
   const tokenAddresses = useMemo(() => solanaTokens.map((t) => t.address), [solanaTokens])
   // Solana balances integration
   const solanaBalances = useSolanaTokenBalances(solanaAccount, tokenAddresses)
+  const tokenAddressesWithBalance = useMemo(
+    () => tokenAddresses.filter((addr) => solanaBalances.balances.get(addr)?.gt(0)),
+    [tokenAddresses, solanaBalances.balances],
+  )
+  const { data: solanaPrices } = useSolanaTokenPrices({
+    mints: tokenAddressesWithBalance,
+    enabled: isSolana && tokenAddressesWithBalance.length > 0,
+  })
 
-  const searchToken = useToken(debouncedQuery, selectedChainId)
+  const solanaSearchToken = useSolanaTokenInfo(isSolana ? debouncedQuery : undefined)
+  const evmSearchToken = useToken(debouncedQuery, selectedChainId)
+  const searchToken = isSolana ? solanaSearchToken : evmSearchToken
 
   // if they input an address, use it
-  const searchTokenIsAdded = useIsUserAddedToken(searchToken, selectedChainId)
+  const evmSearchTokenIsAdded = useIsUserAddedToken(evmSearchToken, selectedChainId)
+  const searchTokenIsAdded = isSolana
+    ? !!solanaTokens.find((t) => t.address === (searchToken as SPLToken | undefined)?.address)
+    : evmSearchTokenIsAdded
 
   // if no results on main list, show option to expand into inactive
   const filteredInactiveTokens = useSearchInactiveTokenLists(debouncedQuery)
-
-  // ====
 
   const showNative: boolean = useMemo(() => {
     if (tokensToShow) return false
@@ -177,17 +192,19 @@ function CurrencySearch({
     if (isSolana) {
       // Simple search for Solana tokens
       const s = debouncedQuery.toLowerCase().trim()
+      const otherIsSol = isSolWSol(otherSelectedCurrency)
       return solanaTokens.filter(
         (token) =>
-          token.symbol.toLowerCase().includes(s) ||
-          token.name?.toLowerCase().includes(s) ||
-          token.address.toLowerCase() === s,
+          (token.symbol.toLowerCase().includes(s) ||
+            token.name?.toLowerCase().includes(s) ||
+            token.address.toLowerCase() === s) &&
+          !(otherIsSol && isSolWSol(token)),
       )
     }
     const filterToken = createFilterToken(debouncedQuery, (address) => isAddress(address))
     // Only EVM tokens here
     return Object.values(tokensToShow || allTokens).filter(filterToken) as Token[]
-  }, [tokensToShow, allTokens, debouncedQuery, isSolana, solanaTokens])
+  }, [tokensToShow, allTokens, debouncedQuery, isSolana, solanaTokens, otherSelectedCurrency])
 
   const queryTokens = useSortedTokensByQuery(filteredTokens as Token[], debouncedQuery)
 
@@ -196,14 +213,31 @@ function CurrencySearch({
   const filteredSortedTokens: UnifiedCurrency[] = useMemo(() => {
     if (isSolana) {
       return [...filteredTokens].sort((a, b) => {
-        const balA = solanaBalances.balances.get(a.address) ?? 0
-        const balB = solanaBalances.balances.get(b.address) ?? 0
-        return Number(balB) - Number(balA)
+        const balA = solanaBalances.balances.get(a.address)?.dividedBy(10 ** (a.decimals || 1)) ?? new BN(0)
+        const balB = solanaBalances.balances.get(b.address)?.dividedBy(10 ** (b.decimals || 1)) ?? new BN(0)
+        const priceA = solanaPrices?.[a.address.toLowerCase()] ?? 0
+        const priceB = solanaPrices?.[b.address.toLowerCase()] ?? 0
+        const usdA = balA.multipliedBy(priceA)
+        const usdB = balB.multipliedBy(priceB)
+        if (!usdA.eq(usdB)) {
+          return usdB.comparedTo(usdA)
+        }
+        const hasBalA = balA.gt(0)
+        const hasBalB = balB.gt(0)
+        if (hasBalA && hasBalB) {
+          if (!balA.eq(balB)) {
+            return balB.comparedTo(balA)
+          }
+        }
+        if (hasBalA !== hasBalB) {
+          return hasBalB ? 1 : -1
+        }
+        return 0
       })
     }
     const tokenComparator = getTokenComparator(balances ?? {})
     return [...(queryTokens as Token[])].sort(tokenComparator)
-  }, [filteredTokens, queryTokens, balances, isSolana, solanaBalances.balances])
+  }, [filteredTokens, queryTokens, balances, isSolana, solanaBalances.balances, solanaPrices])
 
   const handleCurrencySelect = useCallback(
     (currency: UnifiedCurrency) => {
@@ -374,6 +408,7 @@ function CurrencySearch({
             onSelect={handleCurrencySelect}
             selectedCurrency={selectedCurrency}
             commonBasesType={commonBasesType}
+            disabledCurrencies={isSolWSol(otherSelectedCurrency?.wrapped) ? [native] : undefined}
           />
         )}
       </AutoColumn>

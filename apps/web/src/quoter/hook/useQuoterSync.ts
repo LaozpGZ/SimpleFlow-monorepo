@@ -8,8 +8,8 @@ import { activeQuoteHashAtom } from 'quoter/atom/abortControlAtoms'
 import { bestCrossChainQuoteAtom } from 'quoter/atom/bestCrossChainAtom'
 import { baseAllTypeBestTradeAtom, pauseAtom, userTypingAtom } from 'quoter/atom/bestTradeUISyncAtom'
 import { updatePlaceholderAtom } from 'quoter/atom/placeholderAtom'
-import { QUOTE_REVALIDATE_TIME } from 'quoter/consts'
-import { useEffect } from 'react'
+import { QUOTE_FAIL_REVALIDATE, QUOTE_SUCC_REVALIDATE } from 'quoter/consts'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
@@ -87,14 +87,19 @@ export const useQuoterSync = () => {
     gasLimit,
   } as QuoteQuery | SVMQuoteQuery
 
-  const isCrossChain = inputCurrencyChainId !== outputCurrencyChainId
+  // const isCrossChain = inputCurrencyChainId !== outputCurrencyChainId
 
   const quoteQuery = createQuoteQuery(quoteQueryInit)
   const setPlaceholder = useSetAtom(updatePlaceholderAtom)
+  const { t, schedule, clear } = useTimer(1000)
 
   useEffect(() => {
     setActiveQuoteHash(quoteQuery.hash)
   }, [quoteQuery.hash, setActiveQuoteHash])
+
+  useEffect(() => {
+    clear()
+  }, [quoteQuery.placeholderHash])
 
   useEffect(() => {
     setTyping(true)
@@ -103,29 +108,25 @@ export const useQuoterSync = () => {
   const quoteResult = useAtomValue(bestCrossChainQuoteAtom(quoteQuery))
 
   useEffect(() => {
-    let t = 0
-    const revalidateTime = isCrossChain ? QUOTE_REVALIDATE_TIME * 2 : QUOTE_REVALIDATE_TIME
-    const interval = setInterval(() => {
-      const outdated = Date.now() - quoteQuery.createTime! > revalidateTime
-      if (paused || (!outdated && quoteResult.loading)) {
+    if (t > 0 && !paused) {
+      if (quoteResult.isJust() && !quoteResult.hasFlag('placeholder')) {
+        schedule(t + QUOTE_SUCC_REVALIDATE, () => {
+          setNonce((v) => v + 1)
+        })
         return
       }
-      if (t > 0) {
-        if (t % revalidateTime === 0) {
-          setNonce((v) => v + 1)
-        }
-      }
-      t++
-    }, 1000)
 
-    return () => {
-      clearInterval(interval)
+      if (quoteResult.isFail()) {
+        schedule(t + QUOTE_FAIL_REVALIDATE, () => {
+          setNonce((v) => v + 1)
+        })
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [quoteQuery.hash, paused, quoteResult.loading, isCrossChain])
+  }, [t, quoteResult, paused, schedule])
 
   useEffect(() => {
     if (quoteResult.isJust() && !quoteResult.hasFlag('placeholder')) {
+      // NOTE: placeholderHash is used to show previous quote when new quote is pending
       const placeholderHash = quoteResult.getExtra('placeholderHash') as string
       setPlaceholder(placeholderHash, quoteResult.unwrap())
     }
@@ -167,4 +168,46 @@ export const useQuoterSync = () => {
     setPlaceholder,
     quoteResult,
   ])
+}
+
+interface Task {
+  t: number
+  fn: () => void
+}
+const useTimer = (interval: number) => {
+  const [count, setCount] = useState(0)
+  const tasks = useRef<Task[]>([])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCount((prev) => prev + 1)
+    }, interval)
+
+    return () => clearInterval(timer)
+  }, [interval, setCount])
+
+  useEffect(() => {
+    for (const task of tasks.current) {
+      if (task.t <= count) {
+        task.fn()
+        tasks.current = tasks.current.filter((t) => t !== task)
+      }
+    }
+  }, [count])
+
+  const scheduleFn = useCallback((t: number, fn: () => void) => {
+    if (tasks.current.length === 0) {
+      tasks.current.push({ t, fn })
+    }
+  }, [])
+
+  const clear = useCallback(() => {
+    tasks.current = []
+  }, [])
+
+  return {
+    t: count,
+    schedule: scheduleFn,
+    clear,
+  }
 }

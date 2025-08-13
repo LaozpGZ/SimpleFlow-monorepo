@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { BuyCryptoAtomProvider, createFormAtom } from 'state/buyCrypto/reducer'
-import { CHAIN_IDS } from 'utils/wagmi'
+import { EVM_CHAIN_IDS } from 'utils/wagmi'
 import BuyCrypto from 'views/BuyCrypto'
 import Page from 'views/Page'
 
@@ -26,7 +26,7 @@ const BuyCryptoPage = () => {
   )
 }
 
-BuyCryptoPage.chains = CHAIN_IDS
+BuyCryptoPage.chains = EVM_CHAIN_IDS
 BuyCryptoPage.Layout = Layout
 
 export default BuyCryptoPage

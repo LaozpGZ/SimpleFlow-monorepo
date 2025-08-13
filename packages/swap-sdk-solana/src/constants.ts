@@ -13,7 +13,7 @@ export const SOL_INFO: TokenInfo = {
   programId: TOKEN_PROGRAM_ID.toBase58(),
   decimals: 9,
   symbol: 'SOL',
-  name: 'solana',
+  name: 'Solana',
   logoURI: `https://img-v1.raydium.io/icon/So11111111111111111111111111111111111111112.png`,
   tags: [],
   priority: 2,

@@ -21,7 +21,7 @@ const getChain = (chainId: number | undefined) => {
 
 // Where page network is not equal to wallet network
 export function WrongNetworkModal({ currentChain, onDismiss }: { currentChain: Chain; onDismiss: () => void }) {
-  const { switchNetworkAsync, isLoading, canSwitch } = useSwitchNetwork()
+  const { switchNetwork, isLoading, canSwitch } = useSwitchNetwork()
   const { logout } = useAuth()
   const { isConnected, chain, chainId: walletChainId } = useAccount()
   const chainId = currentChain.id || ChainId.BSC
@@ -32,9 +32,9 @@ export function WrongNetworkModal({ currentChain, onDismiss }: { currentChain: C
 
   const handleSwitchNetwork = useCallback(() => {
     if (canSwitch) {
-      switchNetworkAsync(chainId)
+      switchNetwork(chainId, { from: 'switch', force: true })
     }
-  }, [canSwitch, chainId, switchNetworkAsync])
+  }, [canSwitch, chainId, switchNetwork])
 
   const handleLogout = useCallback(() => {
     logout().then(() => {

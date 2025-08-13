@@ -6,6 +6,8 @@ import { $path } from 'next-typesafe-url'
 import { PropsWithChildren, useMemo } from 'react'
 import { Hex } from 'viem'
 import { LiquidityDetailHeaderProps, LiquidityTitle } from 'views/PositionDetails/components/PositionTitle'
+import { CHAIN_QUERY_NAME } from 'config/chains'
+import { PERSIST_CHAIN_KEY } from 'config/constants'
 import { StyledCardHeader } from '../style'
 
 type PositionHeaderProps = LiquidityDetailHeaderProps & {
@@ -43,6 +45,11 @@ export const PositionHeader: React.FC<PositionHeaderProps> = ({
         routeParams: {
           poolId: [chainId, 'infinity', poolId],
         },
+        // @ts-ignore
+        searchParams: {
+          chain: CHAIN_QUERY_NAME[chainId],
+          [PERSIST_CHAIN_KEY]: 1,
+        },
       })
     }
 
@@ -51,6 +58,11 @@ export const PositionHeader: React.FC<PositionHeaderProps> = ({
         route: '/liquidity/position/[[...positionId]]',
         routeParams: {
           positionId: [Protocol.InfinityCLAMM, Number(tokenId), 'increase'],
+        },
+        // @ts-ignore
+        searchParams: {
+          chain: CHAIN_QUERY_NAME[chainId],
+          [PERSIST_CHAIN_KEY]: 1,
         },
       })
     }
@@ -65,6 +77,11 @@ export const PositionHeader: React.FC<PositionHeaderProps> = ({
         routeParams: {
           positionId: [Protocol.InfinityBIN, poolId, 'decrease'],
         },
+        // @ts-ignore
+        searchParams: {
+          chain: CHAIN_QUERY_NAME[chainId],
+          [PERSIST_CHAIN_KEY]: 1,
+        },
       })
     }
     if (protocol === Protocol.InfinityCLAMM && tokenId) {
@@ -73,10 +90,15 @@ export const PositionHeader: React.FC<PositionHeaderProps> = ({
         routeParams: {
           positionId: [Protocol.InfinityCLAMM, Number(tokenId), 'decrease'],
         },
+        // @ts-ignore
+        searchParams: {
+          chain: CHAIN_QUERY_NAME[chainId],
+          [PERSIST_CHAIN_KEY]: 1,
+        },
       })
     }
     return ''
-  }, [poolId, protocol, tokenId])
+  }, [poolId, protocol, tokenId, chainId])
 
   return (
     <StyledCardHeader variant="pale">

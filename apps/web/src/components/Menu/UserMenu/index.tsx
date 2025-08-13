@@ -9,7 +9,7 @@ import {
   useWalletModalV2ViewState,
   WalletModalV2ViewStateProvider,
 } from 'components/WalletModalV2/WalletModalV2ViewStateProvider'
-import { usePrivyWalletAddress } from 'contexts/Privy/hooks'
+import { usePrivyWalletAddress } from 'wallet/Privy/hooks'
 import useAuth from 'hooks/useAuth'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import { useProfile } from 'state/profile/hooks'
@@ -21,8 +21,8 @@ import { ClaimGiftProvider, useClaimGiftContext } from 'views/Gift/providers/Cla
 import { SendGiftProvider, useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { UnclaimedOnlyProvider } from 'views/Gift/providers/UnclaimedOnlyProvider'
 import { useAccount } from 'wagmi'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
@@ -75,7 +75,7 @@ const ClickablePopover = styled.div<{ isOpen: boolean }>`
 
 const UserMenu = () => {
   const { t } = useTranslation()
-  const { chainId, isWrongNetwork, account: evmAccount, solanaAccount } = useAccountActiveChain()
+  const { chainId, account: evmAccount, solanaAccount } = useAccountActiveChain()
   const { connector } = useAccount()
   const { ready, authenticated, user } = usePrivy()
 
@@ -84,11 +84,12 @@ const UserMenu = () => {
 
   // Determine which address to use: if Privy login use privyAddress, otherwise use account
   const finalAddress =
-    ready && authenticated && user
-      ? privyAddress
-      : chainId === NonEVMChainId.SOLANA
+    chainId === NonEVMChainId.SOLANA
       ? solanaAccount ?? undefined
+      : ready && authenticated && user
+      ? privyAddress
       : evmAccount
+
   const shouldShowLoading = ready && authenticated && user ? isPrivyAddressLoading : false
   const currentAccount = chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : evmAccount
   const { domainName, avatar } = useDomainNameForAddress(chainId === NonEVMChainId.SOLANA ? undefined : currentAccount)
@@ -261,34 +262,6 @@ const UserMenu = () => {
           />
         )}
       </>
-    )
-  }
-
-  if (isWrongNetwork) {
-    return (
-      <ClickableUserMenu ref={menuRef}>
-        <UIKitUserMenu
-          text={t('Network')}
-          variant="danger"
-          onClick={() => {
-            if (!isMobile) {
-              setIsMenuOpen((prev) => !prev)
-            }
-          }}
-        >
-          {!isMobile && !isMenuOpen
-            ? ({ isOpen }) =>
-                isOpen && <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveModalOpen(true)} />
-            : undefined}
-        </UIKitUserMenu>
-
-        {/* Custom click-based menu for desktop */}
-        {!isMobile && (
-          <ClickablePopover isOpen={isMenuOpen}>
-            {isMenuOpen && <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveModalOpen(true)} />}
-          </ClickablePopover>
-        )}
-      </ClickableUserMenu>
     )
   }
 
