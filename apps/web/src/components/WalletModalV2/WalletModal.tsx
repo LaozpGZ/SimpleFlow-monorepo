@@ -323,7 +323,7 @@ export const WalletContent = ({
                 </FlexGap>
               </Box>
             )
-          ) : view === WalletView.GIFTS || chainId === NonEVMChainId.SOLANA ? null : (
+          ) : view === WalletView.GIFTS ? null : (
             <ActionButtonsContainer>
               <FlexGap gap="8px" width="100%">
                 <ActionButton
