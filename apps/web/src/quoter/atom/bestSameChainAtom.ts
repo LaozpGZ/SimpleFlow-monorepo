@@ -75,7 +75,7 @@ export const bestSameChainWithoutPlaceHolderAtom = atomFamily((_option: QuoteQue
             }
           }
           return {
-            quote: Loadable.Pending<InterfaceOrder>(),
+            quote: Loadable.Pending<InterfaceOrder>(bestQuote),
             anyShadowFail,
             anyTimeout,
           }
