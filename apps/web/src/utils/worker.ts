@@ -63,7 +63,7 @@ class WorkerProxy {
           params: eventId,
         })
       } catch (e) {
-        console.error('[Worker GetBestTrade]: Abort Error:', e)
+        console.error('[Worker smart-router]: Abort Error:', e)
       }
     })
 
@@ -90,7 +90,7 @@ class WorkerProxy {
           params: eventId,
         })
       } catch (e) {
-        console.error('[Worker GetBestTrade]: Abort Error:', e)
+        console.error('[Worker routing-sdk]: Abort Error:', e)
       }
     })
 
