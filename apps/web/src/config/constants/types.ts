@@ -8,7 +8,6 @@ import { LegacyTradeWithStableSwap as TradeWithStableSwap } from '@pancakeswap/s
 import type { Currency, CurrencyAmount, Percent, Price, Token, UnifiedToken } from '@pancakeswap/swap-sdk-core'
 import { TradeType } from '@pancakeswap/swap-sdk-core'
 import type { Trade } from '@pancakeswap/v2-sdk'
-import BigNumber from 'bignumber.js'
 
 // a list of tokens by chain
 export type ChainMap<T> = {
