@@ -1,23 +1,21 @@
 import { useTranslation } from "@pancakeswap/localization";
 import { Button, Checkbox, Flex, InjectedModalProps, Message, Modal, Text, usePrompt } from "@pancakeswap/uikit";
 import { useCallback, useState } from "react";
+import { useExpertMode, useUserExpertModeAcknowledgement } from "@pancakeswap/utils/user";
 
 interface ExpertModalProps extends InjectedModalProps {
   setShowConfirmExpertModal: (show: boolean) => void;
-  setShowExpertModeAcknowledgement: (show: boolean) => void;
-  toggleExpertMode: () => void;
 }
 
-export const ExpertModal: React.FC<React.PropsWithChildren<ExpertModalProps>> = ({
-  setShowConfirmExpertModal,
-  setShowExpertModeAcknowledgement,
-  toggleExpertMode,
-}) => {
+export const ExpertModal: React.FC<React.PropsWithChildren<ExpertModalProps>> = ({ setShowConfirmExpertModal }) => {
+  const [, setShowExpertModeAcknowledgement] = useUserExpertModeAcknowledgement();
+  const [, toggleExpertMode] = useExpertMode();
+
   const [isRememberChecked, setIsRememberChecked] = useState(false);
   const onPromptConfirm = useCallback(
     (value: string) => {
       if (value === "confirm") {
-        toggleExpertMode();
+        toggleExpertMode((s) => !s);
         setShowConfirmExpertModal(false);
         if (isRememberChecked) {
           setShowExpertModeAcknowledgement(false);
