@@ -20,7 +20,7 @@ import {
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
-import { ToastDescriptionWithTx } from 'components/Toast'
+import { ToastDescriptionWithTx, SolanaDescriptionWithTx } from 'components/Toast'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { BalanceData } from 'hooks/useAddressBalance'
 import useCatchTxError from 'hooks/useCatchTxError'
@@ -315,12 +315,12 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       setTxHash(receipt.transactionHash)
       toastSuccess(
         `${t('Transaction Submitted')}!`,
-        <ToastDescriptionWithTx txHash={receipt.transactionHash}>
+        <SolanaDescriptionWithTx txHash={receipt.transactionHash}>
           {t('Your %symbol% has been sent to %address%', {
             symbol: asset.token.symbol,
             address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
           })}
-        </ToastDescriptionWithTx>,
+        </SolanaDescriptionWithTx>,
       )
       setAmount('')
       setAddress('')
