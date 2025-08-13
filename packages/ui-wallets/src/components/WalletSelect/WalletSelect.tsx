@@ -40,6 +40,10 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
     return uniqBy([...(previouslyUsedWallets?.[0] ?? []), ...(previouslyUsedWallets?.[1] ?? [])], 'id')
   }, [previouslyUsedWallets])
 
+  const topWallets_ = useMemo(() => {
+    return topWallets.filter((wallet) => !previous.some((prev) => prev.id === wallet.id))
+  }, [topWallets, previous])
+
   return (
     <Column
       overflowY="auto"
@@ -48,16 +52,20 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
       style={{ paddingRight: '16px', marginRight: '-24px', ...style }}
       className={scrollbarClass}
     >
-      <WalletSelectSection label={t('Previously used')}>
-        {previous.map((wallet) => (
-          <WalletSelectItem key={wallet.id} wallet={wallet} onClick={onClick} />
-        ))}
-      </WalletSelectSection>
-      <WalletSelectSection label={t('Top Wallets')}>
-        {topWallets.map((wallet) => (
-          <WalletSelectItem key={wallet.id} wallet={wallet} onClick={onClick} />
-        ))}
-      </WalletSelectSection>
+      {previous?.length && (
+        <WalletSelectSection label={t('Previously used')}>
+          {previous.map((wallet) => (
+            <WalletSelectItem key={wallet.id} wallet={wallet} onClick={onClick} />
+          ))}
+        </WalletSelectSection>
+      )}
+      {topWallets_.length > 0 && (
+        <WalletSelectSection label={t('Top Wallets')}>
+          {topWallets_.map((wallet) => (
+            <WalletSelectItem key={wallet.id} wallet={wallet} onClick={onClick} />
+          ))}
+        </WalletSelectSection>
+      )}
       <MoreWalletSection onClick={onClick} wallets={moreWallets} />
     </Column>
   )
