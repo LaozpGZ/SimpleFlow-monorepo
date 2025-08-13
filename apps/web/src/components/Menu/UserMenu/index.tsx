@@ -22,7 +22,7 @@ import { SendGiftProvider, useSendGiftContext } from 'views/Gift/providers/SendG
 import { UnclaimedOnlyProvider } from 'views/Gift/providers/UnclaimedOnlyProvider'
 import { useAccount } from 'wagmi'
 import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { isSolana, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
@@ -73,6 +73,18 @@ const ClickablePopover = styled.div<{ isOpen: boolean }>`
   transition: visibility 0.2s, opacity 0.2s;
 `
 
+const useAvatar = () => {
+  const { chainId, unifiedAccount } = useAccountActiveChain()
+  const { wallet: solWallet } = useWallet()
+  const { connector: evmWallet } = useAccount()
+  const { profile } = useProfile()
+  const { avatar } = useDomainNameForAddress(isSolana(chainId) ? undefined : unifiedAccount ?? undefined)
+  return useMemo(
+    () => (isSolana(chainId) ? solWallet?.adapter.icon : profile?.nft?.image?.thumbnail ?? avatar ?? evmWallet?.icon),
+    [avatar, chainId, evmWallet?.icon, profile?.nft?.image?.thumbnail, solWallet?.adapter.icon],
+  )
+}
+
 const UserMenu = () => {
   const { t } = useTranslation()
   const { chainId, account: evmAccount, solanaAccount } = useAccountActiveChain()
@@ -92,12 +104,12 @@ const UserMenu = () => {
 
   const shouldShowLoading = ready && authenticated && user ? isPrivyAddressLoading : false
   const currentAccount = chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : evmAccount
-  const { domainName, avatar } = useDomainNameForAddress(chainId === NonEVMChainId.SOLANA ? undefined : currentAccount)
+  const { domainName } = useDomainNameForAddress(chainId === NonEVMChainId.SOLANA ? undefined : currentAccount)
+  const avatarSrc = useAvatar()
+
   const { logout } = useAuth()
   const { disconnect } = useWallet()
   const { hasPendingTransactions, pendingNumber } = usePendingTransactions()
-  const { profile } = useProfile()
-  const avatarSrc = profile?.nft?.image?.thumbnail ?? avatar
   const [userMenuText, setUserMenuText] = useState<string>('')
   const [userMenuVariable, setUserMenuVariable] = useState<UserMenuVariant>('default')
   const { isMobile } = useMatchBreakpoints()
