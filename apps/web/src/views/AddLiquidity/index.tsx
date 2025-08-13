@@ -27,9 +27,9 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 import { useGasPrice, usePairAdder } from 'state/user/hooks'
 import { calculateGasMargin } from 'utils'
 import { calculateSlippageAmount, useRouterContract } from 'utils/exchange'
+import { SettingsModalV2 } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import currencyId from 'utils/currencyId'
-import SettingsModal from '../../components/Menu/GlobalSettings/SettingsModal'
 import { useTransactionDeadline } from '../../hooks/useTransactionDeadline'
 import ConfirmAddLiquidityModal from './components/ConfirmAddLiquidityModal'
 import { useCurrencySelectRoute } from './useCurrencySelectRoute'
@@ -379,7 +379,7 @@ export default function AddLiquidity({
 
   const shouldShowApprovalGroup = (showFieldAApproval || showFieldBApproval) && isValid
 
-  const [onPresentSettingsModal] = useModal(<SettingsModal mode={SettingsMode.SWAP_LIQUIDITY} />)
+  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.SWAP_LIQUIDITY} />)
 
   return children({
     isOneWeiAttack,
