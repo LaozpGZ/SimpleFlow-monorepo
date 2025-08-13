@@ -1,4 +1,4 @@
-import { useV3FormState } from 'views/AddLiquidityV3/formViews/V3FormView/form/reducer'
+import { useV3FormAddLiquidityCallback, useV3FormState } from 'views/AddLiquidityV3/formViews/V3FormView/form/reducer'
 import useV3DerivedInfo from 'hooks/v3/useV3DerivedInfo'
 import { useFeeLevelQueryState } from 'state/infinity/create'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -11,8 +11,12 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
 import { CurrencyField as Field } from 'utils/types'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
-import { logGTMClickAddLiquidityEvent } from 'utils/customGTMEventTracking'
-import { useIsExpertMode } from '@pancakeswap/utils/user'
+import {
+  logGTMAddLiquidityTxSentEvent,
+  logGTMClickAddLiquidityConfirmEvent,
+  logGTMClickAddLiquidityEvent,
+} from 'utils/customGTMEventTracking'
+import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
 import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
 import { useV3NFTPositionManagerContract } from 'hooks/useContract'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
@@ -20,12 +24,28 @@ import V3RangeSelector from 'views/AddLiquidityV3/formViews/V3FormView/component
 import { useRangeHopCallbacks } from 'views/AddLiquidityV3/formViews/V3FormView/form/hooks/useRangeHopCallbacks'
 import { Bound, ZoomLevels } from '@pancakeswap/widgets-internal'
 import { AutoColumn, Box, Button, Message, MessageText, PreTitle, RowBetween, Text } from '@pancakeswap/uikit'
+import { useSendTransaction, useWalletClient } from 'wagmi'
+import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
+import { NonfungiblePositionManager } from '@pancakeswap/v3-sdk'
+import { basisPointsToPercent } from 'utils/exchange'
+import { hexToBigInt } from 'viem/utils'
+import { getViemClients } from 'utils/viem'
+import { calculateGasMargin } from 'utils'
+import { formatRawAmount } from 'utils/formatCurrencyAmount'
+import { useTransactionAdder } from 'state/transactions/hooks'
+import { isUserRejected } from 'utils/sentry'
+import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { useCurrencies } from '../useCurrencies'
 
 export const useV3CreateForm = () => {
   const { t } = useTranslation()
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
+  const { data: signer } = useWalletClient()
+
+  // User Settings
   const expertMode = useIsExpertMode()
+  const [allowedSlippage] = useUserSlippage()
+  const [deadline] = useTransactionDeadline()
 
   // Shared Create Liquidity State
   const { baseCurrency, quoteCurrency } = useCurrencies()
@@ -37,9 +57,16 @@ export const useV3CreateForm = () => {
   }, [feeLevel])
 
   // V3 Form State
+  const [txHash, setTxHash] = useState<string>('')
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false) // clicked confirm
+  const [txnErrorMessage, setTxnErrorMessage] = useState<string | undefined>()
   const [showCapitalEfficiencyWarning, setShowCapitalEfficiencyWarning] = useState<boolean>(false)
   const [quickAction, setQuickAction] = useState<number | null>(null)
+
+  // Transaction Actions
+  const { sendTransactionAsync } = useSendTransaction()
+  const addTransaction = useTransactionAdder()
+  const onAddLiquidityCallback = useV3FormAddLiquidityCallback()
 
   const formState = useV3FormState()
   const { independentField, typedValue, startPriceTypedValue, leftRangeTypedValue, rightRangeTypedValue } = formState
@@ -99,7 +126,9 @@ export const useV3CreateForm = () => {
   )
 
   // Approval States
-  const nftPositionManagerAddress = useV3NFTPositionManagerContract()?.address
+  const positionManager = useV3NFTPositionManagerContract()
+  const nftPositionManagerAddress = positionManager?.address
+
   const {
     approvalState: approvalA,
     approveCallback: approveACallback,
@@ -176,9 +205,101 @@ export const useV3CreateForm = () => {
   )
 
   // CREATE POOL ACTIONS
-  const onAdd = useCallback(() => {
-    console.log('onAdd')
-  }, [])
+  const onAdd = useCallback(async () => {
+    logGTMClickAddLiquidityConfirmEvent()
+    if (
+      !chainId ||
+      !signer ||
+      !account ||
+      !nftPositionManagerAddress ||
+      !positionManager ||
+      !baseCurrency ||
+      !quoteCurrency ||
+      !position ||
+      !deadline
+    )
+      return
+
+    if (position?.liquidity === 0n) {
+      setTxnErrorMessage(t('The liquidity of this position is 0. Please try increasing the amount.'))
+      return
+    }
+
+    const useNative = baseCurrency.isNative ? baseCurrency : quoteCurrency.isNative ? quoteCurrency : undefined
+
+    const { calldata, value } = NonfungiblePositionManager.addCallParameters(position, {
+      slippageTolerance: basisPointsToPercent(allowedSlippage),
+      recipient: account,
+      deadline: deadline.toString(),
+      useNative,
+      createPool: noLiquidity,
+    })
+
+    setAttemptingTxn(true)
+    const txn = {
+      data: calldata,
+      to: nftPositionManagerAddress,
+      value: hexToBigInt(value),
+      account,
+    }
+    getViemClients({ chainId })
+      ?.estimateGas(txn)
+      .then((gas) => {
+        sendTransactionAsync({
+          ...txn,
+          gas: calculateGasMargin(gas),
+        })
+          .then((hash) => {
+            logGTMAddLiquidityTxSentEvent()
+            const baseAmount = formatRawAmount(
+              parsedAmounts[Field.CURRENCY_A]?.quotient?.toString() ?? '0',
+              baseCurrency.decimals,
+              4,
+            )
+            const quoteAmount = formatRawAmount(
+              parsedAmounts[Field.CURRENCY_B]?.quotient?.toString() ?? '0',
+              quoteCurrency.decimals,
+              4,
+            )
+
+            setAttemptingTxn(false)
+            addTransaction(
+              { hash },
+              {
+                type: 'add-liquidity-v3',
+                summary: `Add ${baseAmount} ${baseCurrency?.symbol} and ${quoteAmount} ${quoteCurrency?.symbol}`,
+              },
+            )
+            setTxHash(hash)
+            onAddLiquidityCallback(hash)
+          })
+          .catch((error) => {
+            console.error('Failed to send transaction', error)
+            // we only care if the error is something _other_ than the user rejected the tx
+            if (!isUserRejected(error)) {
+              setTxnErrorMessage(transactionErrorToUserReadableMessage(error, t))
+            }
+            setAttemptingTxn(false)
+          })
+      })
+  }, [
+    account,
+    addTransaction,
+    allowedSlippage,
+    baseCurrency,
+    chainId,
+    deadline,
+    nftPositionManagerAddress,
+    noLiquidity,
+    onAddLiquidityCallback,
+    parsedAmounts,
+    position,
+    positionManager,
+    quoteCurrency,
+    sendTransactionAsync,
+    signer,
+    t,
+  ])
 
   const onPresentCreatePoolModal = useCallback(() => {
     console.log('onPresentCreatePoolModal')
@@ -186,9 +307,10 @@ export const useV3CreateForm = () => {
 
   // Button Submit, with handle expert mode
   const handleButtonSubmit = useCallback(() => {
+    onAdd()
     // eslint-disable-next-line no-unused-expressions
-    expertMode ? onAdd() : onPresentCreatePoolModal()
-    logGTMClickAddLiquidityEvent()
+    // expertMode ? onAdd() : onPresentCreatePoolModal()
+    // logGTMClickAddLiquidityEvent()
   }, [expertMode, onAdd, onPresentCreatePoolModal])
 
   // Effects
