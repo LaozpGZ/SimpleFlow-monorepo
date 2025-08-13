@@ -41,6 +41,7 @@ import { useAccount, usePublicClient, useSendTransaction } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { Connection, PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import { createTransferInstruction, getAssociatedTokenAddress } from '@solana/spl-token'
+import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
 import { ActionButton } from './ActionButton'
 import SendTransactionFlow from './SendTransactionFlow'
 import { ViewState } from './type'
@@ -143,6 +144,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
   // Solana wallet support
   const { publicKey: solanaPublicKey, sendTransaction: sendSolanaTransaction } = useWallet()
+  const connection = useSolanaConnectionWithRpcAtom()
   const isSolanaChain = asset.chainId === NonEVMChainId.SOLANA
 
   const estimateTransactionFee = useCallback(async () => {
@@ -276,7 +278,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const sendSolanaAsset = useCallback(async () => {
     if (!solanaPublicKey || !address) return undefined
 
-    const connection = new Connection('https://api.mainnet-beta.solana.com')
+    // Use a reliable RPC endpoint to avoid 403 errors\n
     const recipientPubkey = new PublicKey(address)
 
     const receipt = await fetchWithCatchTxError(async () => {
@@ -476,7 +478,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     {
       isValidAddress,
       amount,
-      isAmountZreo: parseFloat(amount) === 0,
+      isAmountZero: parseFloat(amount) === 0,
       isInsufficientBalance,
       attemptingTxn,
       isValidGasSponsor,
