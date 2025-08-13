@@ -278,10 +278,11 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const sendSolanaAsset = useCallback(async () => {
     if (!solanaPublicKey || !address) return undefined
 
-    // Use a reliable RPC endpoint to avoid 403 errors\n
     const recipientPubkey = new PublicKey(address)
 
-    const receipt = await fetchWithCatchTxError(async () => {
+    try {
+      let signature: string
+
       if (isNativeToken) {
         const amountInLamports = Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL)
 
@@ -293,51 +294,46 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           }),
         )
 
-        const signature = await sendSolanaTransaction(transaction, connection)
-        return { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
+        signature = await sendSolanaTransaction(transaction, connection)
+      } else {
+        const tokenMintAddress = new PublicKey(asset.token.address)
+        const amountInTokenUnits = Math.floor(parseFloat(amount) * 10 ** asset.token.decimals)
+
+        const senderTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, solanaPublicKey)
+        const recipientTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, recipientPubkey)
+
+        const transaction = new Transaction().add(
+          createTransferInstruction(senderTokenAccount, recipientTokenAccount, solanaPublicKey, amountInTokenUnits),
+        )
+
+        signature = await sendSolanaTransaction(transaction, connection)
       }
 
-      const tokenMintAddress = new PublicKey(asset.token.address)
-      const amountInTokenUnits = Math.floor(parseFloat(amount) * 10 ** asset.token.decimals)
+      const receipt = { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
 
-      const senderTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, solanaPublicKey)
-      const recipientTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, recipientPubkey)
+      if (receipt?.status) {
+        setTxHash(receipt.transactionHash)
+        toastSuccess(
+          `${t('Transaction Submitted')}!`,
+          <SolanaDescriptionWithTx txHash={receipt.transactionHash}>
+            {t('Your %symbol% has been sent to %address%', {
+              symbol: asset.token.symbol,
+              address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
+            })}
+          </SolanaDescriptionWithTx>,
+        )
+        setAmount('')
+        setAddress('')
+      }
 
-      const transaction = new Transaction().add(
-        createTransferInstruction(senderTokenAccount, recipientTokenAccount, solanaPublicKey, amountInTokenUnits),
-      )
-
-      const signature = await sendSolanaTransaction(transaction, connection)
-      return { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
-    })
-
-    if (receipt?.status) {
-      setTxHash(receipt.transactionHash)
-      toastSuccess(
-        `${t('Transaction Submitted')}!`,
-        <SolanaDescriptionWithTx txHash={receipt.transactionHash}>
-          {t('Your %symbol% has been sent to %address%', {
-            symbol: asset.token.symbol,
-            address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
-          })}
-        </SolanaDescriptionWithTx>,
-      )
-      setAmount('')
-      setAddress('')
+      return receipt
+    } catch (error: any) {
+      // Handle Solana-specific errors without showing EVM toast
+      console.error('Solana transaction error:', error)
+      // Don't show any toast for errors - let the UI handle it through other means
+      throw error
     }
-
-    return receipt
-  }, [
-    solanaPublicKey,
-    address,
-    amount,
-    isNativeToken,
-    asset.token,
-    sendSolanaTransaction,
-    fetchWithCatchTxError,
-    t,
-    toastSuccess,
-  ])
+  }, [solanaPublicKey, address, amount, isNativeToken, asset.token, sendSolanaTransaction, connection, t, toastSuccess])
 
   // Main sendAsset function that routes to appropriate handler
   const sendAsset = useCallback(async () => {
