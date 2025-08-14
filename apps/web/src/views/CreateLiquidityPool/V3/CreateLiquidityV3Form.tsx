@@ -1,4 +1,5 @@
 import { AutoColumn, Box, Card, CardBody, DynamicSection } from '@pancakeswap/uikit'
+import { Protocol } from '@pancakeswap/farms'
 import { useFeeLevelQueryState } from 'state/infinity/create'
 import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
@@ -43,7 +44,7 @@ export const CreateLiquidityV3Form = () => {
             <FieldSelectCurrencies />
             <FieldFeeLevel />
 
-            {poolExists && <MessagePoolInitialized />}
+            {poolExists && <MessagePoolInitialized protocol={Protocol.V3} />}
 
             <DynamicSection disabled={poolExists}>
               <FieldStartingPrice startPrice={startPriceTypedValue} setStartPrice={onStartPriceInput} />

@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Box, Card, CardBody, DynamicSection, FlexGap, PreTitle, Text } from '@pancakeswap/uikit'
+import { Protocol } from '@pancakeswap/farms'
 import { useStartingPriceQueryState } from 'state/infinity/create'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
@@ -45,7 +46,7 @@ export const CreateLiquidityV2Form = () => {
           <AutoColumn gap="24px">
             <FieldSelectCurrencies />
 
-            {poolExists && <MessagePoolInitialized />}
+            {poolExists && <MessagePoolInitialized protocol={Protocol.V2} />}
 
             <DynamicSection disabled={poolExists}>
               <FlexGap

@@ -6,30 +6,44 @@ import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useRouter } from 'next/router'
 import { useCallback } from 'react'
 import { PoolInfo } from 'state/farmsV4/state/type'
+import { useFeeLevelQueryState } from 'state/infinity/create'
 import { getPoolAddLiquidityLink } from 'utils/getPoolLink'
 import { useCurrencies } from 'views/CreateLiquidityPool/hooks/useCurrencies'
 
-export const MessagePoolInitialized = () => {
+export const MessagePoolInitialized = ({ protocol }: { protocol?: Protocol }) => {
   const { t } = useTranslation()
   const { isXs } = useMatchBreakpoints()
 
   const router = useRouter()
 
-  const { chainId, protocol } = useSelectIdRouteParams()
+  const { chainId } = useSelectIdRouteParams()
   const { baseCurrency, quoteCurrency } = useCurrencies()
+  const [feeLevel] = useFeeLevelQueryState()
 
   const redirectToAddLiquidityPage = useCallback(() => {
     if (chainId && protocol && baseCurrency && quoteCurrency) {
+      if (protocol === Protocol.V2) {
+        router.push(
+          getPoolAddLiquidityLink({
+            chainId,
+            protocol: Protocol.V2,
+            token0: baseCurrency,
+            token1: quoteCurrency,
+          } as PoolInfo),
+        )
+      }
+
       router.push(
         getPoolAddLiquidityLink({
           chainId,
           protocol: Protocol.V3,
           token0: baseCurrency,
           token1: quoteCurrency,
+          feeTier: feeLevel,
         } as PoolInfo),
       )
     }
-  }, [chainId, protocol, baseCurrency, quoteCurrency, router])
+  }, [chainId, protocol, baseCurrency, quoteCurrency, router, feeLevel])
 
   return (
     <Message
