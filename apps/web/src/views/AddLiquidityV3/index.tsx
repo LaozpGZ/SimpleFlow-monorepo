@@ -22,6 +22,7 @@ import AddLiquidity from 'views/AddLiquidity'
 import AddStableLiquidity from 'views/AddLiquidity/AddStableLiquidity'
 import useWarningLiquidity from 'views/AddLiquidity/hooks/useWarningLiquidity'
 import useStableConfig, { StableConfigContext } from 'views/Swap/hooks/useStableConfig'
+import { PoolInfo } from 'state/farmsV4/state/type'
 import useV3DerivedInfo from 'hooks/v3/useV3DerivedInfo'
 
 import { PoolInfoHeader } from 'components/PoolInfoHeader'
@@ -274,6 +275,17 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
     baseCurrency ?? undefined,
   )
 
+  const poolInfo: PoolInfo | null = useMemo(() => {
+    if (!pool) return null
+    return {
+      ...pool,
+      ...(!isTokenPriceAvailable && {
+        token0Price: v3Price?.invert().toSignificant(6) as `${number}`,
+        token1Price: v3Price?.toSignificant(6) as `${number}`,
+      }),
+    }
+  }, [pool, isTokenPriceAvailable, v3Price])
+
   return (
     <Container mx="auto" my="24px" maxWidth="1200px">
       <Box mb="24px">
@@ -293,14 +305,13 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
       </Box>
       <PoolInfoHeader
         linkType="addLiquidity"
-        poolInfo={pool}
+        poolInfo={poolInfo}
         chainId={chainId}
         currency0={currencyA}
         currency1={currencyB}
         isInverted={inverted}
         onInvertPrices={handleInvertCurrencies}
         poolId={poolAddress}
-        overridePrice={!isTokenPriceAvailable ? v3Price : undefined}
         overrideAprDisplay={
           selectType === SELECTOR_TYPE.V3
             ? {
