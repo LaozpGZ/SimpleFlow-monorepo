@@ -495,16 +495,16 @@ export const useV3CreateForm = () => {
                 <>
                   0 - ∞{' '}
                   {t('%assetA% = 1 %assetB%', {
-                    assetA: baseCurrency?.symbol,
-                    assetB: quoteCurrency?.symbol,
+                    assetA: quoteCurrency?.symbol,
+                    assetB: baseCurrency?.symbol,
                   })}
                 </>
               ) : (
                 <>
                   {priceLower?.toFixed(6)} - {priceUpper?.toFixed(6)}{' '}
                   {t('%assetA% = 1 %assetB%', {
-                    assetA: baseCurrency?.symbol,
-                    assetB: quoteCurrency?.symbol,
+                    assetA: quoteCurrency?.symbol,
+                    assetB: baseCurrency?.symbol,
                   })}
                 </>
               )}
