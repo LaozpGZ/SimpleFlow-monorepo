@@ -1,6 +1,8 @@
+import { injected } from 'wagmi/connectors'
 import { PhantomWalletAdapter } from '@solana/wallet-adapter-wallets'
 import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
-import { WalletAdaptedNetwork, WalletConfigV3, WalletIds } from '../types'
+import { WalletAdaptedNetwork, WalletConfigV3 } from '../types'
+import { WalletIds } from './walletIds'
 import { EvmConnectorNames, SolanaConnectorNames } from './connectorNames'
 import {
   isBinanceWeb3WalletInstalled,
@@ -45,7 +47,7 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
       get installed() {
         return isMetamaskInstalled()
       },
-      connectorId: EvmConnectorNames.MetaMask, // may conflict with solana connector
+      connectorId: EvmConnectorNames.Injected, // may conflict with solana connector
       deepLink: 'https://metamask.app.link/dapp/pancakeswap.finance/',
       // qrCode,
       downloadLink: 'https://metamask.app.link/dapp/pancakeswap.finance/',
@@ -91,7 +93,7 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
       id: WalletIds.BinanceW3W,
       title: 'Binance Wallet',
       icon: `${ASSET_CDN}/web/wallets/binance-w3w.png`,
-      connectorId: getBinanceConnectorId(),
+      connectorId: EvmConnectorNames.Injected,
       networks: [WalletAdaptedNetwork.EVM, WalletAdaptedNetwork.Solana],
       get installed() {
         return isBinanceWeb3WalletInstalled()
@@ -225,10 +227,12 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
   ]
 
   if (solanaOnly) {
-    return wallets.filter((wallet) => wallet.networks.includes(WalletAdaptedNetwork.Solana))
+    return wallets.filter((wallet) =>
+      wallet.networks.includes(WalletAdaptedNetwork.Solana),
+    ) as WalletConfigV3<SolanaConnectorNames>[]
   }
 
-  return wallets
+  return wallets as WalletConfigV3[]
 }
 
 export const TOP_WALLETS_ID_CONFIG = {
@@ -241,7 +245,7 @@ export const getTopWalletsConfig = (wallets: WalletConfigV3[], solanaOnly: boole
   if (solanaOnly) {
     return TOP_WALLETS_ID_CONFIG.Solana.map((id) => wallets.find((wallet) => wallet.id === id)).filter(
       Boolean,
-    ) as WalletConfigV3[]
+    ) as WalletConfigV3<SolanaConnectorNames>[]
   }
 
   return TOP_WALLETS_ID_CONFIG.MultiChain.map((id) => wallets.find((wallet) => wallet.id === id)).filter(

@@ -1,4 +1,4 @@
-import { AtomBox, Heading, Image, Text } from '@pancakeswap/uikit'
+import { AtomBox, FlexGap, Heading, Image, Loading, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useAtomValue } from 'jotai'
 import { errorEvmAtom, errorSolanaAtom } from '../../state/atom'
@@ -28,15 +28,18 @@ export const Confirming: React.FC<ConfirmingProps> = ({ wallet, network, reConne
     >
       <>
         {typeof wallet.icon === 'string' && (
-          <Image src={wallet.icon} width={108} height={108} style={{ borderRadius: '24px', overflow: 'hidden' }} />
+          <Image src={wallet.icon} width={56} height={56} style={{ borderRadius: '12px', overflow: 'hidden' }} />
         )}
-        <Heading as="h1" fontSize="20px" color="secondary">
-          {t('Opening')} {wallet.title}
+        <Heading as="h1" fontSize="16px">
+          {wallet.title}
         </Heading>
         {error ? (
           <ErrorContent message={error} onRetry={() => reConnect(wallet, network)} />
         ) : (
-          <Text>{t('Please confirm in %wallet%', { wallet: wallet.title })}</Text>
+          <FlexGap gap="4px" alignItems="center">
+            <Text color="textSubtle">{t('Please confirm in %wallet%', { wallet: wallet.title })}</Text>
+            <Loading />
+          </FlexGap>
         )}
       </>
     </AtomBox>

@@ -83,7 +83,17 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
 
   const [selectedMultiChainWallet, setSelectedMultiChainWallet] = useState<WalletConfigV3 | null>(null)
 
+  const isWalletInstalledAndPreview = useCallback((wallet: WalletConfigV3) => {
+    if (!wallet.installed) {
+      setPreviewStatus(PreviewStatus.NotInstalled)
+      return false
+    }
+    return true
+  }, [])
+
   const onMultiChainWalletSelected = useCallback((wallet: WalletConfigV3) => {
+    if (!isWalletInstalledAndPreview(wallet)) return
+
     setSelectedMultiChainWallet(wallet)
     setPreviewStatus(PreviewStatus.ChainSelect)
   }, [])
@@ -132,6 +142,8 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
 
   const onWalletSelected = useCallback(
     (w: WalletConfigV3, network: WalletAdaptedNetwork) => {
+      if (!isWalletInstalledAndPreview(w)) return
+
       setPreviewStatus(PreviewStatus.Confirming)
       if (network === WalletAdaptedNetwork.EVM) {
         onEvmWalletSelected(w)
@@ -241,8 +253,13 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
             onDiscordLogin={onDiscordLogin}
           />
         )}
-        {previewStatus === PreviewStatus.ChainSelect && (
-          <WalletChainSelect solanaOnly={solanaOnly} wallet={selectedMultiChainWallet} />
+        {previewStatus === PreviewStatus.ChainSelect && selectedMultiChainWallet && (
+          <WalletChainSelect
+            solanaOnly={solanaOnly}
+            wallet={selectedMultiChainWallet}
+            onConnectEVM={() => onWalletSelected(selectedMultiChainWallet, WalletAdaptedNetwork.EVM)}
+            onConnectSolana={() => onWalletSelected(selectedMultiChainWallet, WalletAdaptedNetwork.Solana)}
+          />
         )}
       </AtomBox>
     </Grid>

@@ -1,5 +1,6 @@
 import { SvgProps } from '@pancakeswap/uikit'
 import { WalletIds as LegacyWalletIds } from './components/LegacyWalletModal/legacyWalletIds'
+import { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'
 
 type LinkOfTextAndLink = string | { text: string; url: string }
 
@@ -56,11 +57,10 @@ export enum WalletIds {
   Solong = 'solong',
 }
 
-export type WalletConfigV2<T = unknown> = {
-  id: LegacyWalletIds
+type WalletConfigBase = {
   title: string
   icon: string | React.FC<React.PropsWithChildren<SvgProps>>
-  connectorId: T
+
   deepLink?: string
   installed?: boolean
   guide?: LinkOfDevice
@@ -71,8 +71,15 @@ export type WalletConfigV2<T = unknown> = {
   MEVSupported?: boolean
 }
 
-export type WalletConfigV3<T = unknown> = WalletConfigV2<T> & {
+export type WalletConfigV2<T = unknown> = WalletConfigBase & {
+  id: LegacyWalletIds
+  connectorId: T
+}
+
+export type WalletConfigV3<T = EvmConnectorNames | SolanaConnectorNames> = WalletConfigBase & {
+  id: WalletIds
   networks: Array<WalletAdaptedNetwork>
+  connectorId: T
 }
 
 export type ConnectData = {
