@@ -23,7 +23,7 @@ export const PricingAndSlippage = memo(function PricingAndSlippage({
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
 
   const isWrapping = useIsWrapping()
-  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.SWAP_LIQUIDITY} />)
+  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.GLOBAL} />)
 
   if (isWrapping || !price) {
     return null
