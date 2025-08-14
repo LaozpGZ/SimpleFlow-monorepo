@@ -52,18 +52,26 @@ const AddStableLiquidityPage = () => {
     tokenB: currencyB,
   })
 
-  return (
-    stableConfig.stableSwapConfig && (
-      <AddLiquidityV2FormProvider>
+  if (!stableConfig.stableSwapConfig) {
+    return (
+      <PageWithoutFAQ>
         <AddLiquidityV3Layout>
-          <UniversalAddLiquidity
-            preferredSelectType={SELECTOR_TYPE.STABLE}
-            currencyIdA={currencyIdA}
-            currencyIdB={currencyIdB}
-          />
+          <div>Unable to load stable pool. Please try again later.</div>
         </AddLiquidityV3Layout>
-      </AddLiquidityV2FormProvider>
+      </PageWithoutFAQ>
     )
+  }
+
+  return (
+    <AddLiquidityV2FormProvider>
+      <AddLiquidityV3Layout>
+        <UniversalAddLiquidity
+          preferredSelectType={SELECTOR_TYPE.STABLE}
+          currencyIdA={currencyIdA}
+          currencyIdB={currencyIdB}
+        />
+      </AddLiquidityV3Layout>
+    </AddLiquidityV2FormProvider>
   )
 }
 
