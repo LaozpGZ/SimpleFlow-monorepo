@@ -110,7 +110,7 @@ export const Sync = () => {
     result?.bestOrder?.type === OrderType.PCS_SVM ? undefined : result?.bestOrder?.trade,
   )
   const autoSlippage =
-    result?.bestOrder?.type === OrderType.PCS_SVM ? PCSX_AUTO_SLIPPAGE_TOLERANCE : classicAutoSlippage
+    result?.bestOrder?.type === OrderType.DUTCH_LIMIT ? PCSX_AUTO_SLIPPAGE_TOLERANCE : classicAutoSlippage
   const [, setAutoSlippageValue] = useAutoSlippageAtom()
   const updateAutoSlippage = useCallback(() => {
     if (autoSlippage) {
