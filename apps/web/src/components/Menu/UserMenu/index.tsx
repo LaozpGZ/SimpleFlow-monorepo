@@ -1,9 +1,18 @@
 import { Trans, useTranslation } from '@pancakeswap/localization'
-import { Box, FlexGap, UserMenu as UIKitUserMenu, useMatchBreakpoints, UserMenuVariant } from '@pancakeswap/uikit'
+import {
+  Box,
+  FlexGap,
+  UserMenu as UIKitUserMenu,
+  useMatchBreakpoints,
+  UserMenuVariant,
+  Modal,
+  ModalV2,
+} from '@pancakeswap/uikit'
 import { usePrivy } from '@privy-io/react-auth'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletContent, WalletModalV2 } from 'components/WalletModalV2'
 import ReceiveModal from 'components/WalletModalV2/ReceiveModal'
+import ReceiveOptionsView from 'components/WalletModalV2/ReceiveOptionsView'
 import { ViewState } from 'components/WalletModalV2/type'
 import {
   useWalletModalV2ViewState,
@@ -117,6 +126,8 @@ const UserMenu = () => {
   const [showMobileWalletModal, setShowMobileWalletModal] = useState(false)
   const [showDesktopPopup] = useState(true)
   const [isReceiveModalOpen, setIsReceiveModalOpen] = useState(false)
+  const [isReceiveOptionsOpen, setIsReceiveOptionsOpen] = useState(false)
+  const [selectedReceiveAccount, setSelectedReceiveAccount] = useState<string | undefined>(undefined)
 
   const { reset: resetViewState, viewState } = useWalletModalV2ViewState()
   const { setCode, code: giftCode } = useClaimGiftContext()
@@ -132,6 +143,18 @@ const UserMenu = () => {
     }
     return ConnectWalletButton
   }, [chainId])
+
+  const handleSelectEVM = useCallback(() => {
+    setSelectedReceiveAccount(evmAccount)
+    setIsReceiveOptionsOpen(false)
+    setIsReceiveModalOpen(true)
+  }, [evmAccount])
+
+  const handleSelectSolana = useCallback(() => {
+    setSelectedReceiveAccount(solanaAccount ?? undefined)
+    setIsReceiveOptionsOpen(false)
+    setIsReceiveModalOpen(true)
+  }, [solanaAccount])
 
   useAutoFillCode({
     onAutoFillCode: () => {
@@ -250,7 +273,7 @@ const UserMenu = () => {
           {!isMobile && (
             <ClickablePopover isOpen={isMenuOpen}>
               {isMenuOpen && showDesktopPopup && (
-                <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveModalOpen(true)} />
+                <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveOptionsOpen(true)} />
               )}
             </ClickablePopover>
           )}
@@ -259,7 +282,7 @@ const UserMenu = () => {
         <WalletModalV2
           isOpen={showMobileWalletModal}
           account={finalAddress}
-          onReceiveClick={() => setIsReceiveModalOpen(true)}
+          onReceiveClick={() => setIsReceiveOptionsOpen(true)}
           onDisconnect={handleClickDisconnect}
           onDismiss={() => {
             setShowMobileWalletModal(false)
@@ -267,13 +290,55 @@ const UserMenu = () => {
           }}
         />
         {finalAddress && (
-          <ReceiveModal
-            account={finalAddress}
-            onDismiss={() => setIsReceiveModalOpen(false)}
-            isOpen={isReceiveModalOpen}
-          />
+          <>
+            <ModalV2 isOpen={isReceiveOptionsOpen} onDismiss={() => setIsReceiveOptionsOpen(false)} closeOnOverlayClick>
+              <Modal title="">
+                <ReceiveOptionsView
+                  onSelectEVM={handleSelectEVM}
+                  onSelectSolana={handleSelectSolana}
+                  evmAccount={evmAccount}
+                  solanaAccount={solanaAccount ?? undefined}
+                />
+              </Modal>
+            </ModalV2>
+            <ReceiveModal
+              account={selectedReceiveAccount || finalAddress}
+              onDismiss={() => setIsReceiveModalOpen(false)}
+              isOpen={isReceiveModalOpen}
+            />
+          </>
         )}
       </>
+    )
+  }
+
+  if (isWrongNetwork) {
+    return (
+      <ClickableUserMenu ref={menuRef}>
+        <UIKitUserMenu
+          text={t('Network')}
+          variant="danger"
+          onClick={() => {
+            if (!isMobile) {
+              setIsMenuOpen((prev) => !prev)
+            }
+          }}
+        >
+          {!isMobile && !isMenuOpen
+            ? ({ isOpen }) =>
+                isOpen && <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveOptionsOpen(true)} />
+            : undefined}
+        </UIKitUserMenu>
+
+        {/* Custom click-based menu for desktop */}
+        {!isMobile && (
+          <ClickablePopover isOpen={isMenuOpen}>
+            {isMenuOpen && (
+              <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveOptionsOpen(true)} />
+            )}
+          </ClickablePopover>
+        )}
+      </ClickableUserMenu>
     )
   }
 
