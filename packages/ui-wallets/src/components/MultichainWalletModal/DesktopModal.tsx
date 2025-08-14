@@ -83,8 +83,11 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
 
   const [selectedMultiChainWallet, setSelectedMultiChainWallet] = useState<WalletConfigV3 | null>(null)
 
+  const [uninstalledWallet, setUninstalledWallet] = useState<WalletConfigV3 | null>(null)
+
   const isWalletInstalledAndPreview = useCallback((wallet: WalletConfigV3) => {
     if (!wallet.installed) {
+      setUninstalledWallet(wallet)
       setPreviewStatus(PreviewStatus.NotInstalled)
       return false
     }
@@ -235,8 +238,8 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
             {/* {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />} */}
           </AtomBox>
         )}
-        {previewStatus === PreviewStatus.NotInstalled && selected && (
-          <PreviewSection.NotInstalled qrCode={qrCode} wallet={selected} />
+        {previewStatus === PreviewStatus.NotInstalled && uninstalledWallet && (
+          <PreviewSection.NotInstalled qrCode={qrCode} wallet={uninstalledWallet} />
         )}
         {previewStatus === PreviewStatus.Confirming && selected && selectedNetwork && (
           <PreviewSection.Confirming

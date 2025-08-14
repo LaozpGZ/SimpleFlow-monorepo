@@ -22,7 +22,14 @@ const getDesktopText = (linkDevice: LinkOfDevice, fallback: string) =>
 export const NotInstalled = ({ wallet, qrCode }: { wallet: WalletConfigV3; qrCode?: string }) => {
   const { t } = useTranslation()
   return (
-    <>
+    <AtomBox
+      display="flex"
+      flexDirection="column"
+      alignItems="center"
+      style={{ gap: '12px' }}
+      textAlign="center"
+      width="100%"
+    >
       <Heading as="h1" fontSize="20px" color="secondary">
         {t('%wallet% is not installed', { wallet: wallet.title })}
       </Heading>
@@ -50,6 +57,6 @@ export const NotInstalled = ({ wallet, qrCode }: { wallet: WalletConfigV3; qrCod
           {getDesktopText(wallet.downloadLink, t('Install'))}
         </Button>
       )}
-    </>
+    </AtomBox>
   )
 }
