@@ -17,5 +17,5 @@ export const useSyncPersistChain = () => {
         switchNetwork(chainId)
       }
     }
-  }, [chain, persistChain])
+  }, [chain, persistChain, switchNetwork])
 }

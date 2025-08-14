@@ -1,5 +1,5 @@
 import { isInBinance } from '@binance/w3w-utils'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { createW3WWagmiConfig, createWagmiConfig } from 'utils/wagmi'
 import { eip6963Providers } from 'wallet/WalletProvider'
 import { atom, useAtom } from 'jotai'
@@ -25,7 +25,7 @@ export const useWagmiConfig = () => {
       console.log(`[wallet] init wagmi config`)
       setWagmiConfig(typeof window !== 'undefined' && isInBinance() ? createW3WWagmiConfig() : createWagmiConfig())
     })
-  }, [])
+  }, [setWagmiConfig])
 
   return wagmiConfig
 }

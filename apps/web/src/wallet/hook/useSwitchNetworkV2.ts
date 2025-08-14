@@ -129,7 +129,11 @@ const useProcessSwitchChainRequest = () => {
             // from = wagmi -> no need call switch again
             await switchNetworkWagmiAsync({ chainId: requestChainId })
           }
-          const isWrongNetwork = persistChain && CHAIN_QUERY_NAME[requestChainId] !== router.query.chain
+          const isWrongNetwork = Boolean(
+            !requestChainId ||
+              !CHAIN_QUERY_NAME[requestChainId] ||
+              (persistChain && CHAIN_QUERY_NAME[requestChainId] !== router.query.chain),
+          )
           updateAccountState((prev) => ({
             ...prev,
             chainId: isWrongNetwork ? prev.chainId : requestChainId,
@@ -185,7 +189,7 @@ const useProcessSwitchChainRequest = () => {
 
       return processSwitching(request)
     },
-    [router],
+    [router, activeChainIdRef, processSwitching],
   )
 
   return handleRequestChainIdChange
