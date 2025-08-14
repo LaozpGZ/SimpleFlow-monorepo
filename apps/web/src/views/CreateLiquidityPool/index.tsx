@@ -52,7 +52,7 @@ export const CreateLiquiditySelector = () => {
           <CardBody>
             <FlexGap justifyContent="space-between" flexWrap="wrap" gap="16px">
               <Text>{t('Select the DEX type of the liquidity pool')}</Text>
-              <LinkExternal color="primary60" href="#">
+              <LinkExternal color="primary60" href="https://docs.pancakeswap.finance/earn/pancakeswap-pools">
                 {t('Learn More')}
               </LinkExternal>
             </FlexGap>
