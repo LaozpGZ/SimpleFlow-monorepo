@@ -22,7 +22,7 @@ export const fetchStableSwapData = async (chainId: ChainId): Promise<StableSwapP
 
   // Start a new fetch, assign it to the in-progress tracker
   inProgressFetches[cacheKey] = fetch(`${STABLE_SWAP_API}?chainId=${chainId}`, {
-    signal: AbortSignal.timeout(3000),
+    signal: AbortSignal.timeout(5_000),
   })
     .then((response) => response.json())
     .then((result) => {

@@ -1,25 +1,27 @@
 import { ChainId } from '@pancakeswap/chains'
 import { LegacyRouter } from '@pancakeswap/smart-router/legacy-router'
-import { useQuery } from '@tanstack/react-query'
+import { useAtomValue } from 'jotai'
+import { atomFamily, loadable } from 'jotai/utils'
 import { useMemo } from 'react'
 
+import { atomWithAsyncRetry } from 'utils/atomWithAsyncRetry'
+
+export const stableSwapPairsByChainIdAtom = atomFamily(
+  ({ chainId, enabled = true }: { chainId?: ChainId; enabled?: boolean }) =>
+    atomWithAsyncRetry({
+      asyncFn: async () => {
+        if (!chainId || !enabled) {
+          return []
+        }
+        return LegacyRouter.getStableSwapPairs(chainId)
+      },
+      errorReportKey: 'stable-swap-config',
+    }),
+)
+
 export const useStableSwapPairsByChainId = (chainId: ChainId, enabled = true) => {
-  const { data } = useQuery({
-    queryKey: ['fetch-stable-swap-pairs', chainId],
-    queryFn: async () => {
-      if (chainId) {
-        const stableSwapPair = await LegacyRouter.getStableSwapPairs(chainId)
-        return stableSwapPair
-      }
-      return []
-    },
-    enabled: Boolean(chainId && enabled),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    refetchOnMount: false,
-  })
+  const loadableAtom = useMemo(() => loadable(stableSwapPairsByChainIdAtom({ chainId, enabled })), [chainId, enabled])
+  const result = useAtomValue(loadableAtom)
 
-  const pairs = useMemo(() => data ?? [], [data])
-
-  return pairs
+  return useMemo(() => (result.state === 'hasData' ? result.data ?? [] : []), [result])
 }
