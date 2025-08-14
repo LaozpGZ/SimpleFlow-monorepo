@@ -15,7 +15,7 @@ export const stableSwapPairsByChainIdAtom = atomFamily(
         }
         return LegacyRouter.getStableSwapPairs(chainId)
       },
-      reportKey: 'stable-swap-config',
+      errorReportKey: 'stable-swap-config',
     }),
 )
 
