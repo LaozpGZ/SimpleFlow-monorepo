@@ -16,12 +16,12 @@ export const rewardConfig: Partial<Record<ChainId, RewardConfig[]>> = {
     {
       poolAddress: '0xE38B4d4Dc90E6a0859bEE047689d97db7fD94621',
       rewardProvider: RewardProvider.Falcon,
-      multiplier: 60,
+      multiplier: 40,
     },
     {
       poolAddress: '0x24618d12b5eA15bB6fe3c81bBb9E011b5D5b107c',
       rewardProvider: RewardProvider.Falcon,
-      multiplier: 50,
+      multiplier: 40,
     },
   ],
   [ChainId.ETHEREUM]: [
