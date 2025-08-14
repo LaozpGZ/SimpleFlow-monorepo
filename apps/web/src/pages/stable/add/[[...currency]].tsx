@@ -1,4 +1,5 @@
 import { CAKE, USDC } from '@pancakeswap/tokens'
+import { Box, Spinner } from '@pancakeswap/uikit'
 import { useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useNativeCurrency from 'hooks/useNativeCurrency'
@@ -56,7 +57,15 @@ const AddStableLiquidityPage = () => {
     return (
       <PageWithoutFAQ>
         <AddLiquidityV3Layout>
-          <div>Unable to load stable pool. Please try again later.</div>
+          <Box
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Spinner />
+          </Box>
         </AddLiquidityV3Layout>
       </PageWithoutFAQ>
     )

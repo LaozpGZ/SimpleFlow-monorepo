@@ -142,8 +142,7 @@ const useProcessSwitchChainRequest = () => {
           }))
           if (replaceUrl && !persistChain) {
             const chain = getChainName(requestChainId)
-            console.log(`[route]`, router.pathname)
-            router.replace({ pathname: router.pathname, query: { ...router.query, chain } }, undefined, {
+            router.replace({ pathname: path, query: { ...router.query, chain } }, undefined, {
               shallow: true,
             })
           }
