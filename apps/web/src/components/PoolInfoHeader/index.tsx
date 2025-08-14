@@ -1,7 +1,7 @@
 import { Protocol } from '@pancakeswap/farms'
 import { HookData } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Percent } from '@pancakeswap/sdk'
+import { Currency, Percent, Price } from '@pancakeswap/sdk'
 import {
   AutoColumn,
   Box,
@@ -279,15 +279,18 @@ export const PoolInfoHeader = ({
                   <SwapHorizIcon color="primary60" onClick={onInvertPrices} style={{ cursor: 'pointer' }} />
                 </FlexGap>
                 <FlexGap gap="8px" alignItems="center" width="100%">
-                  {poolInfo && (
+                  {poolInfo && poolInfo.token0Price && poolInfo.token1Price ? (
                     <Text fontSize={isMobile ? 20 : 24} bold width="max-content">
                       {formatNumber(Number(isInverted ? poolInfo.token0Price : poolInfo.token1Price), {
                         maximumSignificantDigits: 6,
                         maxDecimalDisplayDigits: 6,
                       })}
                     </Text>
+                  ) : (
+                    <Text fontSize={isMobile ? 20 : 24} bold width="max-content">
+                      -
+                    </Text>
                   )}
-
                   <Text fontSize={10} color="textSubtle" textTransform="uppercase" width="max-content">
                     {t(
                       '%symbol0% per %symbol1%',
