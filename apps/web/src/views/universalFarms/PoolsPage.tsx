@@ -26,6 +26,7 @@ import {
 import { AddLiquidityButton } from './components/AddLiquidityButton'
 import { FarmSearchContextProvider } from './hooks/useFarmSearchContext'
 import { farmQueryToUrlParams, getIndexByProtocols } from './utils/queryParser'
+import { CreatePoolButton } from './components/CreatePoolButton'
 
 const PoolsContent = styled.div`
   min-height: calc(100vh - 64px - 56px);
@@ -70,7 +71,12 @@ export const PoolsPage = () => {
       <Card>
         <CardHeader p={isMobile ? '16px' : undefined}>
           <PoolsFilterPanel onChange={handleFilterChange} value={poolsFilter}>
-            {(isMobile || isMd) && <AddLiquidityButton height="40px" scale="sm" width="100%" />}
+            {(isMobile || isMd) && (
+              <>
+                <CreatePoolButton scale="sm" width="100%" height="40px" />
+                <AddLiquidityButton height="40px" scale="sm" width="100%" />
+              </>
+            )}
           </PoolsFilterPanel>
         </CardHeader>
         <CardBody>
