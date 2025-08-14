@@ -24,7 +24,7 @@ export enum ConnectorNames {
   CyberWallet = 'cyberWallet',
 }
 
-const createQrCode =
+export const createQrCode =
   <config extends Config = Config, context = unknown>(chainId: number, connect: ConnectMutateAsync<config, context>) =>
   async (connectedCb?: () => void) => {
     const wagmiConfig = createWagmiConfig()

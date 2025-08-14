@@ -86,9 +86,23 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
   const [uninstalledWallet, setUninstalledWallet] = useState<WalletConfigV3 | null>(null)
 
   const isWalletInstalledAndPreview = useCallback((wallet: WalletConfigV3) => {
+    if (!('installed' in wallet)) return true
     if (!wallet.installed) {
       setUninstalledWallet(wallet)
       setPreviewStatus(PreviewStatus.NotInstalled)
+      setQrCode(undefined)
+      if (wallet.qrCode) {
+        wallet
+          .qrCode(() => onWalletConnected(wallet, WalletAdaptedNetwork.EVM))
+          .then(
+            (uri) => {
+              setQrCode(uri)
+            },
+            () => {
+              // do nothing.
+            },
+          )
+      }
       return false
     }
     return true
@@ -105,19 +119,6 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
     (wallet: WalletConfigV3) => {
       setSelectedNetwork(WalletAdaptedNetwork.EVM)
       connectWallet(wallet, WalletAdaptedNetwork.EVM)
-      setQrCode(undefined)
-      if (wallet.qrCode) {
-        wallet
-          .qrCode(() => onWalletConnected(wallet, WalletAdaptedNetwork.EVM))
-          .then(
-            (uri) => {
-              setQrCode(uri)
-            },
-            () => {
-              // do nothing.
-            },
-          )
-      }
     },
     [connectWallet, onWalletConnected],
   )
@@ -126,19 +127,6 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
     (wallet: WalletConfigV3) => {
       setSelectedNetwork(WalletAdaptedNetwork.Solana)
       connectWallet(wallet, WalletAdaptedNetwork.Solana)
-      setQrCode(undefined)
-      if (wallet.qrCode) {
-        wallet
-          .qrCode(() => onWalletConnected(wallet, WalletAdaptedNetwork.Solana))
-          .then(
-            (uri) => {
-              setQrCode(uri)
-            },
-            () => {
-              // do nothing.
-            },
-          )
-      }
     },
     [connectWallet, onWalletConnected],
   )
@@ -158,7 +146,7 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
   )
 
   return (
-    <Grid gridTemplateColumns="1fr 1fr" width="100%">
+    <Grid gridTemplateColumns="1fr 1fr" width="100%" overflow="hidden" borderRadius="card">
       <AtomBox
         display="flex"
         flexDirection="column"
@@ -168,6 +156,7 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
         pt="24px"
         zIndex="modal"
         borderRadius="card"
+        overflow="hidden"
         className={desktopWalletSelectionClass}
         gap="1rem"
       >

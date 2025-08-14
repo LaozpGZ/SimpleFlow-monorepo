@@ -1,9 +1,19 @@
 import { QRCodeSVG } from 'qrcode.react'
 
-const QRCode = ({ url, image }: { url: string; image?: string }) => (
+const QRCode = ({
+  url,
+  image,
+  size = 288,
+  logoSize = 72,
+}: {
+  url: string
+  image?: string
+  size?: number
+  logoSize?: number
+}) => (
   <QRCodeSVG
     value={url}
-    size={288}
+    size={size}
     level="H"
     includeMargin
     imageSettings={
@@ -12,8 +22,8 @@ const QRCode = ({ url, image }: { url: string; image?: string }) => (
             src: image,
             x: undefined,
             y: undefined,
-            height: 72,
-            width: 72,
+            height: logoSize,
+            width: logoSize,
             excavate: true,
           }
         : undefined

@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AtomBox, ModalV2, ModalWrapper, useMatchBreakpoints } from '@pancakeswap/uikit'
-import { useAtom } from 'jotai'
+import { useAtom, useSetAtom } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
 import { EvmConnectorNames, SolanaConnectorNames } from '../../config/connectorNames'
 import { getTopWalletsConfig, getWalletsConfig } from '../../config/wallets'
@@ -12,8 +12,9 @@ import {
   lastUsedSolanaWalletNameAtom,
   previouslyUsedEvmWalletsAtom,
   previouslyUsedSolanaWalletsAtom,
+  setSelectedEvmWalletAtom,
+  setSelectedSolanaWalletAtom,
 } from '../../state/atom'
-import { useSelectedEvmWallet, useSelectedSolanaWallet } from '../../state/hooks'
 import { ConnectData, WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
 import { PreviewStatus } from '../PreviewSection'
 import { DesktopModal } from './DesktopModal'
@@ -26,6 +27,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
     wallets,
     topWallets,
     evmLogin,
+    createEvmQrCode,
     solanaLogin,
     onWalletConnectCallBack,
     fullSize,
@@ -42,7 +44,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
   const [solanaOnly, setSolanaOnly] = useState(false)
   const [previewStatus, setPreviewStatus] = useState<PreviewStatus>(PreviewStatus.Intro)
 
-  const wallets_ = wallets ?? getWalletsConfig(solanaOnly)
+  const wallets_ = wallets ?? getWalletsConfig({ solanaOnly, createEvmQrCode })
   const topWallets_ = topWallets ?? getTopWalletsConfig(wallets_, solanaOnly)
 
   const handleDismiss = () => {
@@ -50,7 +52,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
     setPreviewStatus(PreviewStatus.Intro)
   }
 
-  const [, setEvmSelectedWallet] = useSelectedEvmWallet()
+  const setEvmSelectedWallet = useSetAtom(setSelectedEvmWalletAtom)
   const [, setSolanaError] = useAtom(errorSolanaAtom)
   const [, setLastUsedSolanaWallet] = useAtom(lastUsedSolanaWalletNameAtom)
   const [previouslyUsedSolanaWalletsId] = useAtom(previouslyUsedSolanaWalletsAtom)
@@ -62,7 +64,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
     [wallets_, previouslyUsedSolanaWalletsId],
   )
 
-  const [, setSolanaSelectedWallet] = useSelectedSolanaWallet()
+  const setSolanaSelectedWallet = useSetAtom(setSelectedSolanaWalletAtom)
   const [, setEvmError] = useAtom(errorEvmAtom)
   const [, setLastUsedEvmWallet] = useAtom(lastUsedEvmWalletNameAtom)
   const [previouslyUsedEvmWalletsId] = useAtom(previouslyUsedEvmWalletsAtom)
@@ -94,7 +96,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
       setEvmError('')
     }
 
-    if (wallet.installed !== false) {
+    if (!('installed' in wallet) || wallet.installed !== false) {
       if (network === WalletAdaptedNetwork.EVM) {
         evmLogin(wallet)
           .then((connectData) => {

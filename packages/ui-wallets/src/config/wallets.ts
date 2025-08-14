@@ -35,9 +35,14 @@ function getBinanceConnectorId() {
   return EvmConnectorNames.BinanceW3W
 }
 
-export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
-  // const qrCode = createQrCode(chainId, connect)
-  // const qrCode = () => Promise.resolve('')
+export const getWalletsConfig = ({
+  solanaOnly,
+  createEvmQrCode,
+}: {
+  solanaOnly?: boolean
+  createEvmQrCode?: () => () => Promise<string>
+}): WalletConfigV3[] => {
+  const qrCode = createEvmQrCode ? createEvmQrCode() : undefined
   const wallets = [
     {
       id: WalletIds.Metamask,
@@ -49,7 +54,7 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
       },
       connectorId: EvmConnectorNames.Injected, // may conflict with solana connector
       deepLink: 'https://metamask.app.link/dapp/pancakeswap.finance/',
-      // qrCode,
+      qrCode,
       downloadLink: 'https://metamask.app.link/dapp/pancakeswap.finance/',
       MEVSupported: true,
     },
@@ -68,7 +73,7 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
         desktop: 'https://trustwallet.com/browser-extension',
         mobile: 'https://trustwallet.com/',
       },
-      // qrCode,
+      qrCode,
       MEVSupported: true,
     },
     {
@@ -87,7 +92,7 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
         desktop: 'https://www.okx.com/web3',
         mobile: 'https://www.okx.com/web3',
       },
-      // qrCode,
+      qrCode,
     },
     {
       id: WalletIds.BinanceW3W,
@@ -151,7 +156,7 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
       downloadLink: {
         desktop: 'https://rabby.io/',
       },
-      // qrCode,
+      qrCode,
       MEVSupported: true,
     },
     {
@@ -174,7 +179,7 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
       get installed() {
         return isTokenPocketInstalled()
       },
-      // qrCode,
+      qrCode,
     },
     {
       id: WalletIds.SafePal,
@@ -186,7 +191,7 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
         return isSafePalInstalled()
       },
       downloadLink: 'https://safepal.com/en/extension',
-      // qrCode,
+      qrCode,
     },
     {
       id: WalletIds.Coin98,
@@ -197,7 +202,7 @@ export const getWalletsConfig = (solanaOnly: boolean): WalletConfigV3[] => {
       get installed() {
         return isCoin98Installed()
       },
-      // qrCode,
+      qrCode,
     },
     {
       id: WalletIds.Cyberwallet,
