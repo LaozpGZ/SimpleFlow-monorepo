@@ -31,17 +31,14 @@ const LangSelectorV2: React.FC<React.PropsWithChildren<Props>> = ({ currentLang,
     [langs, setLang]
   );
 
-  // TODO: make flexible width for based on currentLangObj.language.length
-  const flexibleWidth = useMemo(() => {
-    const language = currentLangObj?.language;
-
-    // 144 is the width for longest language Suomalainen
-    // 125 is default width for dropdown
-    return Math.min((language?.length || 0) * 15, 144);
-  }, [currentLangObj?.language]);
-
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: "8px", width: `${Math.max(flexibleWidth, 125)}px` }}>
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+      }}
+    >
       <Select
         options={options}
         onOptionChange={handleOptionChange}
@@ -49,6 +46,9 @@ const LangSelectorV2: React.FC<React.PropsWithChildren<Props>> = ({ currentLang,
         listStyle={{
           maxHeight: "200px",
           overflowY: "auto",
+        }}
+        textStyle={{
+          paddingRight: "16px",
         }}
       />
     </div>
