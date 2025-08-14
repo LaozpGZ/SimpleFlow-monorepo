@@ -30,7 +30,7 @@ const Menu = (props) => {
   const { chainId } = useActiveChainId()
   const { isDark, setTheme } = useTheme()
   const cakePrice = useCakePrice()
-  const { currentLanguage, setLanguage, t } = useTranslation()
+  const { currentLanguage, t } = useTranslation()
   const { pathname } = useRouter()
   const perpUrl = usePerpUrl({ chainId, isDark, languageCode: currentLanguage.code })
   const [perpConfirmed] = useUserNotUsCitizenAcknowledgement(IdType.PERPETUALS)
@@ -93,9 +93,7 @@ const Menu = (props) => {
       banner={null}
       isDark={isDark}
       toggleTheme={toggleTheme}
-      currentLang={currentLanguage.code}
-      langs={languageList}
-      setLang={setLanguage}
+      showLangSelector={false}
       cakePriceUsd={cakePrice.eq(BIG_ZERO) ? undefined : cakePrice}
       links={filterItemsProps(menuItems)}
       subLinks={
