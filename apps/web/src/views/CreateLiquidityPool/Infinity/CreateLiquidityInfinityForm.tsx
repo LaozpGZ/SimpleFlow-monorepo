@@ -1,3 +1,4 @@
+import { useMemo } from 'react'
 import { AutoColumn, Card, CardBody, DynamicSection, Grid, Spinner } from '@pancakeswap/uikit'
 import { FieldLiquidityShape } from 'components/Liquidity/Form/FieldLiquidityShape'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
@@ -21,9 +22,19 @@ import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
 
 export const CreateLiquidityInfinityForm = () => {
   const { chainId } = useSelectIdRouteParams()
-  const { isBin, isCl, startPrice } = useInfinityCreateFormQueryState()
+
+  // @ts-ignore
+  const { isBin, isCl, startPrice, lowerBinId, upperBinId, lowerTick, upperTick } = useInfinityCreateFormQueryState()
+
   const poolKey = usePoolKey()
   const { data: poolInitialized } = useIsPoolInitialized(poolKey, chainId)
+
+  const isRangeEntered = useMemo(() => {
+    if (isBin) {
+      return lowerBinId !== null && upperBinId !== null
+    }
+    return lowerTick !== null && upperTick !== null
+  }, [isBin, lowerBinId, upperBinId, lowerTick, upperTick])
 
   // Show loading animation while we wait for chainId
   if (!chainId) {
@@ -60,6 +71,10 @@ export const CreateLiquidityInfinityForm = () => {
                 <AutoColumn gap={['16px', null, null, '24px']}>
                   <FieldPriceRange />
                   {isBin && <FieldLiquidityShape />}
+                </AutoColumn>
+              </DynamicSection>
+              <DynamicSection disabled={!startPrice || !isRangeEntered}>
+                <AutoColumn gap={['16px', null, null, '24px']}>
                   <FieldCreateDepositAmount />
                   <FieldSlippageTolerance />
                   <SubmitCreateButton />
