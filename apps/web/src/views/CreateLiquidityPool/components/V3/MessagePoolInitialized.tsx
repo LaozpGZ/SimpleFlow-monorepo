@@ -1,10 +1,10 @@
+import { useCallback, useMemo } from 'react'
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Button, InfoIcon, Message, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useRouter } from 'next/router'
-import { useCallback } from 'react'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { useFeeLevelQueryState } from 'state/infinity/create'
 import { getPoolAddLiquidityLink } from 'utils/getPoolLink'
@@ -20,30 +20,25 @@ export const MessagePoolInitialized = ({ protocol }: { protocol?: Protocol }) =>
   const { baseCurrency, quoteCurrency } = useCurrencies()
   const [feeLevel] = useFeeLevelQueryState()
 
-  const redirectToAddLiquidityPage = useCallback(() => {
-    if (chainId && protocol && baseCurrency && quoteCurrency) {
-      if (protocol === Protocol.V2) {
-        router.push(
-          getPoolAddLiquidityLink({
-            chainId,
-            protocol: Protocol.V2,
-            token0: baseCurrency,
-            token1: quoteCurrency,
-          } as PoolInfo),
-        )
-      }
+  const addLiquidityLink = useMemo(() => {
+    if (!chainId || !protocol || !baseCurrency || !quoteCurrency) return undefined
 
-      router.push(
-        getPoolAddLiquidityLink({
-          chainId,
-          protocol: Protocol.V3,
-          token0: baseCurrency,
-          token1: quoteCurrency,
-          feeTier: feeLevel,
-        } as PoolInfo),
-      )
+    if (protocol === Protocol.V2) {
+      return getPoolAddLiquidityLink({
+        chainId,
+        protocol: Protocol.V2,
+        token0: baseCurrency,
+        token1: quoteCurrency,
+      } as PoolInfo)
     }
-  }, [chainId, protocol, baseCurrency, quoteCurrency, router, feeLevel])
+    return getPoolAddLiquidityLink({
+      chainId,
+      protocol: Protocol.V3,
+      token0: baseCurrency,
+      token1: quoteCurrency,
+      feeTier: feeLevel ? feeLevel * 10_000 : undefined,
+    } as PoolInfo)
+  }, [chainId, protocol, baseCurrency, quoteCurrency, feeLevel])
 
   return (
     <Message
@@ -51,9 +46,10 @@ export const MessagePoolInitialized = ({ protocol }: { protocol?: Protocol }) =>
       icon={<InfoIcon width="24px" color="#02919D" />}
       action={
         <Button
+          as="a"
           mt="8px"
           width="100%"
-          onClick={redirectToAddLiquidityPage}
+          href={addLiquidityLink}
           endIcon={isXs ? <AddIcon color="invertedContrast" width="24px" /> : null}
           disabled={Boolean(chainId && DISABLED_ADD_LIQUIDITY_CHAINS[chainId])}
         >
