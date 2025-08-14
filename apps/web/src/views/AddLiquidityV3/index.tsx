@@ -22,6 +22,7 @@ import AddLiquidity from 'views/AddLiquidity'
 import AddStableLiquidity from 'views/AddLiquidity/AddStableLiquidity'
 import useWarningLiquidity from 'views/AddLiquidity/hooks/useWarningLiquidity'
 import useStableConfig, { StableConfigContext } from 'views/Swap/hooks/useStableConfig'
+import useV3DerivedInfo from 'hooks/v3/useV3DerivedInfo'
 
 import { PoolInfoHeader } from 'components/PoolInfoHeader'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -257,6 +258,22 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
     enabled: !!chainId && !!pool,
   })
 
+  const currencyA = pool?.token0 ?? baseCurrency ?? undefined
+  const currencyB = pool?.token1 ?? quoteCurrency ?? undefined
+
+  // Fallback for fetching pool price in new V3 pools with no trades.
+  // With no trades, BE doesn't index the pool so we do not get token0Price and token1Price in the pool object.
+  const isTokenPriceAvailable = useMemo(
+    () => Number(pool?.token0Price) && Number(pool?.token1Price),
+    [pool?.token0Price, pool?.token1Price],
+  )
+  const { price: v3Price } = useV3DerivedInfo(
+    !isTokenPriceAvailable ? currencyA : undefined,
+    !isTokenPriceAvailable ? currencyB : undefined,
+    feeAmount,
+    baseCurrency ?? undefined,
+  )
+
   return (
     <Container mx="auto" my="24px" maxWidth="1200px">
       <Box mb="24px">
@@ -278,11 +295,12 @@ export function AddLiquidityV3Layout({ children }: { children: React.ReactNode }
         linkType="addLiquidity"
         poolInfo={pool}
         chainId={chainId}
-        currency0={pool?.token0 ?? baseCurrency ?? undefined}
-        currency1={pool?.token1 ?? quoteCurrency ?? undefined}
+        currency0={currencyA}
+        currency1={currencyB}
         isInverted={inverted}
         onInvertPrices={handleInvertCurrencies}
         poolId={poolAddress}
+        overridePrice={!isTokenPriceAvailable ? v3Price : undefined}
         overrideAprDisplay={
           selectType === SELECTOR_TYPE.V3
             ? {

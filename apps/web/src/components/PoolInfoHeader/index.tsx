@@ -1,7 +1,7 @@
 import { Protocol } from '@pancakeswap/farms'
 import { HookData } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Percent } from '@pancakeswap/sdk'
+import { Currency, Percent, Price } from '@pancakeswap/sdk'
 import {
   AutoColumn,
   Box,
@@ -45,6 +45,9 @@ interface PoolInfoHeaderProps {
   linkType?: LinkType
   onInvertPrices?: () => void
 
+  /** Override current price. Useful if poolInfo does not have token prices */
+  overridePrice?: Price<Currency, Currency>
+
   /** Optional override for currency0.symbol */
   symbol0?: string
   /** Optional override for currency1.symbol */
@@ -62,6 +65,7 @@ export const PoolInfoHeader = ({
   isInverted,
   onInvertPrices,
   overrideAprDisplay,
+  overridePrice,
   linkType,
 }: PoolInfoHeaderProps) => {
   const { t } = useTranslation()
@@ -279,15 +283,18 @@ export const PoolInfoHeader = ({
                   <SwapHorizIcon color="primary60" onClick={onInvertPrices} style={{ cursor: 'pointer' }} />
                 </FlexGap>
                 <FlexGap gap="8px" alignItems="center" width="100%">
-                  {poolInfo && (
+                  {overridePrice ? (
+                    <Text fontSize={isMobile ? 20 : 24} bold width="max-content">
+                      {isInverted ? overridePrice.invert().toSignificant(6) : overridePrice.toSignificant(6)}
+                    </Text>
+                  ) : poolInfo && poolInfo.token0Price && poolInfo.token1Price ? (
                     <Text fontSize={isMobile ? 20 : 24} bold width="max-content">
                       {formatNumber(Number(isInverted ? poolInfo.token0Price : poolInfo.token1Price), {
                         maximumSignificantDigits: 6,
                         maxDecimalDisplayDigits: 6,
                       })}
                     </Text>
-                  )}
-
+                  ) : null}
                   <Text fontSize={10} color="textSubtle" textTransform="uppercase" width="max-content">
                     {t(
                       '%symbol0% per %symbol1%',
