@@ -1,6 +1,6 @@
 import { getCurrencyPriceFromId, MAX_BIN_STEP, MIN_BIN_STEP } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, isCurrencySorted } from '@pancakeswap/swap-sdk-core'
+import { Currency, isCurrencySorted, Price } from '@pancakeswap/swap-sdk-core'
 import {
   AutoColumn,
   Box,
@@ -341,6 +341,24 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
     return value0 + value1 < 1000
   }, [currency0UsdValue, currency1UsdValue, depositCurrencyAmount0, depositCurrencyAmount1])
 
+  // Get Bin min and max price for the preview modal
+  const [minPriceBin, maxPriceBin] = useMemo(() => {
+    if (!currency0 || !currency1 || binStep === null) return [undefined, undefined]
+
+    let lowerPrice: Price<Currency, Currency> | undefined
+    let upperPrice: Price<Currency, Currency> | undefined
+
+    if (lowerBinId) {
+      lowerPrice = getCurrencyPriceFromId(lowerBinId, binStep, currency0, currency1)
+    }
+
+    if (upperBinId) {
+      upperPrice = getCurrencyPriceFromId(upperBinId, binStep, currency0, currency1)
+    }
+
+    return inverted ? [upperPrice?.invert(), lowerPrice?.invert()] : [lowerPrice, upperPrice]
+  }, [currency0, currency1, binStep, lowerBinId, upperBinId, inverted])
+
   return (
     <Box {...boxProps}>
       <AutoColumn gap="8px">
@@ -409,7 +427,23 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
                     assetB: startPriceAsFraction.quoteCurrency.symbol,
                   })}`
               : undefined,
-          priceRange: <>Price Range</>,
+          priceRange: (
+            <>
+              {poolType === 'Bin' ? (
+                <>
+                  {minPriceBin?.toSignificant(6)} - {maxPriceBin?.toSignificant(6)}
+                </>
+              ) : (
+                <>
+                  {lowerPrice?.toSignificant(6)} - {upperPrice?.toSignificant(6)}
+                </>
+              )}{' '}
+              {t('%assetA% = 1 %assetB%', {
+                assetA: currency1?.symbol,
+                assetB: currency0?.symbol,
+              })}
+            </>
+          ),
         }}
       />
     </Box>
