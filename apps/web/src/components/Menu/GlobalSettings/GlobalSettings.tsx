@@ -44,7 +44,7 @@ const GlobalSettings: React.FC = () => {
     <Flex pb="24px" flexDirection="column">
       <PreTitle mb="24px">{t('Global')}</PreTitle>
 
-      <Flex justifyContent="space-between" mb="24px">
+      <Flex justifyContent="space-between" mb="24px" alignItems="center">
         <Text>{t('Language')}</Text>
         <LangSelector
           currentLang={currentLanguage.code}
@@ -52,7 +52,6 @@ const GlobalSettings: React.FC = () => {
           setLang={setLanguage}
           buttonScale="xs"
           color="textSubtle"
-          hideLanguage
         />
       </Flex>
 
