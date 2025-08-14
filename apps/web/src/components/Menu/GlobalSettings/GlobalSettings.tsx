@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { languageList, useTranslation } from '@pancakeswap/localization'
-import { Flex, LangSelector, PreTitle, QuestionHelper, Text, ThemeSwitcher, Toggle } from '@pancakeswap/uikit'
+import { Flex, LangSelectorV2, PreTitle, QuestionHelper, Text, ThemeSwitcher, Toggle } from '@pancakeswap/uikit'
 import { TOKEN_RISK } from 'components/AccessRisk'
 import AccessRiskTooltips from 'components/AccessRisk/AccessRiskTooltips'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -46,13 +46,7 @@ const GlobalSettings: React.FC = () => {
 
       <Flex justifyContent="space-between" mb="24px" alignItems="center">
         <Text>{t('Language')}</Text>
-        <LangSelector
-          currentLang={currentLanguage.code}
-          langs={languageList}
-          setLang={setLanguage}
-          buttonScale="xs"
-          color="textSubtle"
-        />
+        <LangSelectorV2 currentLang={currentLanguage.code} langs={languageList} setLang={setLanguage} />
       </Flex>
 
       <Flex justifyContent="space-between" mb="24px">
