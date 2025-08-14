@@ -140,7 +140,7 @@ const useProcessSwitchChainRequest = () => {
             isWrongNetwork,
             isNotMatched: isWrongNetwork,
           }))
-          if (replaceUrl && !persistChain) {
+          if (!isWrongNetwork && replaceUrl && !persistChain) {
             const chain = getChainName(requestChainId)
             console.log(`[route]`, router.pathname)
             router.replace({ pathname: router.pathname, query: { ...router.query, chain } }, undefined, {
