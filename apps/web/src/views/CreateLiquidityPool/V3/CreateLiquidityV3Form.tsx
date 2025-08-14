@@ -36,7 +36,7 @@ export const CreateLiquidityV3Form = () => {
   const poolExists = noLiquidity === false && !!feeLevel
 
   return (
-    <Box maxWidth={[null, null, null, '520px']} mx="auto">
+    <Box maxWidth={[null, null, null, '560px']} mx="auto">
       <Card>
         <CardBody>
           <AutoColumn gap="24px">

@@ -32,7 +32,6 @@ import {
   PreTitle,
   RowBetween,
   Text,
-  useModal,
   useModalV2,
 } from '@pancakeswap/uikit'
 import { useSendTransaction, useWalletClient } from 'wagmi'
@@ -425,9 +424,56 @@ export const useV3CreateForm = () => {
         onConfirm={onAdd}
         isOpen={isPreviewModalOpen}
         onDismiss={onDismissPreviewModal}
+        feeTier={feeAmount ? `${(feeAmount / 10_000).toFixed(2)}%` : undefined}
+        details={{
+          priceRange: (
+            <>
+              {/* Full range case */}
+              {ticksAtLimit[Bound.LOWER] && ticksAtLimit[Bound.UPPER] ? (
+                <>
+                  0 - ∞{' '}
+                  {t('%assetA% = 1 %assetB%', {
+                    assetA: baseCurrency?.symbol,
+                    assetB: quoteCurrency?.symbol,
+                  })}
+                </>
+              ) : (
+                <>
+                  {priceLower?.toFixed(6)} - {priceUpper?.toFixed(6)}{' '}
+                  {t('%assetA% = 1 %assetB%', {
+                    assetA: baseCurrency?.symbol,
+                    assetB: quoteCurrency?.symbol,
+                  })}
+                </>
+              )}
+            </>
+          ),
+          startPrice: (
+            <>
+              {price?.toSignificant(6)}{' '}
+              {t('%assetA% = 1 %assetB%', {
+                assetA: quoteCurrency?.symbol,
+                assetB: baseCurrency?.symbol,
+              })}
+            </>
+          ),
+        }}
       />
     )
-  }, [currencies, parsedAmounts, onAdd, isPreviewModalOpen, onDismissPreviewModal])
+  }, [
+    currencies,
+    parsedAmounts,
+    onAdd,
+    isPreviewModalOpen,
+    onDismissPreviewModal,
+    feeAmount,
+    price,
+    priceLower,
+    priceUpper,
+    baseCurrency,
+    quoteCurrency,
+    t,
+  ])
 
   return {
     // State

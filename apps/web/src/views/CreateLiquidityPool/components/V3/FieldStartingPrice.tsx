@@ -22,7 +22,9 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useInverted } from 'state/infinity/shared'
 import styled from 'styled-components'
+import { Currency } from '@pancakeswap/sdk'
 import { truncateText } from 'utils'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useCurrencies } from '../../hooks/useCurrencies'
 
 export type FieldStartingPriceProps = {
@@ -123,7 +125,7 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ startPri
           </FlexGap>
         </FlexGap>
       )}
-      <StartingPriceInput value={startPrice} onUserInput={updatePrice} unit={unit} />
+      <StartingPriceInput value={startPrice} onUserInput={updatePrice} unit={unit} currency={quoteCurrency} />
     </Box>
   )
 }
@@ -132,9 +134,10 @@ type StartingPriceInputProps = {
   value: string | null
   onUserInput: (input: string) => void
   unit: string
+  currency?: Currency
 }
 
-const StartingPriceInput: React.FC<StartingPriceInputProps> = ({ value, onUserInput, unit }) => {
+const StartingPriceInput: React.FC<StartingPriceInputProps> = ({ value, onUserInput, unit, currency }) => {
   const [inputValue, setInputValue] = useState<string | null>(value)
   const isMounted = useIsMounted()
 
@@ -176,6 +179,7 @@ const StartingPriceInput: React.FC<StartingPriceInputProps> = ({ value, onUserIn
     <BalanceInput
       value={inputValue ?? ''}
       onUserInput={handleInputChange}
+      appendComponent={currency ? <CurrencyLogo currency={currency} size="24px" showChainLogo /> : null}
       unit={
         <Text color="textSubtle" bold>
           {unit}

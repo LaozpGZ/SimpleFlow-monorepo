@@ -119,10 +119,8 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ..
     if (presetIndex !== -1) {
       return presetIndex
     }
-    // If custom fee is set and allowCustomFee is true, return the custom index
-    if (allowCustomFee && feeLevel !== null && !PRESET_FEE_LEVELS_INFINITY.includes(feeLevel)) {
-      return PRESET_FEE_LEVELS_INFINITY.length
-    }
+
+    // If custom fee or unknown fee level is set, don't set it to active
     return -1
   }, [feeLevel, allowCustomFee])
 

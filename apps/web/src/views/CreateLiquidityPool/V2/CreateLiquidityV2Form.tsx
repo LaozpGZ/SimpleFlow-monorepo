@@ -1,13 +1,23 @@
-import { AutoColumn, Box, Card, CardBody, DynamicSection } from '@pancakeswap/uikit'
+import styled from 'styled-components'
+import { useTranslation } from '@pancakeswap/localization'
+import { AutoColumn, Box, Card, CardBody, DynamicSection, FlexGap, PreTitle, Text } from '@pancakeswap/uikit'
 import { useStartingPriceQueryState } from 'state/infinity/create'
-import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
 import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
 import { MessagePoolInitialized } from '../components/V3/MessagePoolInitialized'
 import { useV2CreateForm } from '../hooks/V2/useV2CreateForm'
+import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
+
+const FeeLevelCard = styled(Box)`
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  background-color: ${({ theme }) => theme.colors.textSubtle};
+  padding: 8px 16px;
+  border-radius: 16px;
+`
 
 export const CreateLiquidityV2Form = () => {
+  const { t } = useTranslation()
   const {
     // State
     currencies,
@@ -29,7 +39,7 @@ export const CreateLiquidityV2Form = () => {
   const [startPriceTypedValue, setStartPriceTypedValue] = useStartingPriceQueryState()
 
   return (
-    <Box maxWidth={[null, null, null, '520px']} mx="auto">
+    <Box maxWidth={[null, null, null, '560px']} mx="auto">
       <Card>
         <CardBody>
           <AutoColumn gap="24px">
@@ -38,7 +48,22 @@ export const CreateLiquidityV2Form = () => {
             {poolExists && <MessagePoolInitialized />}
 
             <DynamicSection disabled={poolExists}>
-              <FieldStartingPrice startPrice={startPriceTypedValue ?? ''} setStartPrice={setStartPriceTypedValue} />
+              <FlexGap
+                flexDirection={['column', 'column', 'row']}
+                gap="8px"
+                alignItems={['flex-start', 'flex-start', 'center']}
+                justifyContent="space-between"
+              >
+                <Box>
+                  <PreTitle>{t('Fee Level')}</PreTitle>
+                  <FeeLevelCard mt="14px">
+                    <Text color="invertedContrast" bold>
+                      0.25%
+                    </Text>
+                  </FeeLevelCard>
+                </Box>
+                <FieldStartingPrice startPrice={startPriceTypedValue ?? ''} setStartPrice={setStartPriceTypedValue} />
+              </FlexGap>
             </DynamicSection>
 
             <DynamicSection disabled={poolExists || !startPriceTypedValue}>

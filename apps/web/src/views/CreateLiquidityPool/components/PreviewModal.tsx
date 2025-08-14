@@ -12,10 +12,11 @@ import {
   ModalV2Props,
   Text,
 } from '@pancakeswap/uikit'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import { CurrencyLogo, DoubleCurrencyLogo, LightGreyCard } from '@pancakeswap/widgets-internal'
 import Divider from 'components/Divider'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { CurrencyField as Field } from 'utils/types'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
@@ -23,11 +24,36 @@ import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 interface PreviewModalProps extends ModalV2Props {
   currencies: { [field in Field]?: Currency }
   parsedAmounts: { [field in Field]?: CurrencyAmount<Currency> }
+
+  // V3 and V2 main fee tier display
+  feeTier?: React.ReactNode
+
+  details?: {
+    // Infinity
+    poolType?: React.ReactNode
+    feeTierSetting?: React.ReactNode
+    hookAddress?: string
+
+    // Infinity & V3
+    priceRange?: React.ReactNode
+
+    // Infinity, V3, V2
+    startPrice?: React.ReactNode
+  }
   onConfirm?: () => void
 }
 
-export const PreviewModal = ({ currencies, parsedAmounts, onConfirm, isOpen, onDismiss }: PreviewModalProps) => {
+export const PreviewModal = ({
+  currencies,
+  parsedAmounts,
+  onConfirm,
+  isOpen,
+  onDismiss,
+  feeTier,
+  details,
+}: PreviewModalProps) => {
   const { t } = useTranslation()
+
   const { [Field.CURRENCY_A]: currencyA, [Field.CURRENCY_B]: currencyB } = currencies
 
   const currencyAUsdValue = useStablecoinPrice(currencyA)
@@ -50,6 +76,13 @@ export const PreviewModal = ({ currencies, parsedAmounts, onConfirm, isOpen, onD
             <Text fontSize="20px" bold>
               {currencyA?.symbol} / {currencyB?.symbol}
             </Text>
+            {feeTier && (
+              <LightGreyCard mx="auto" mt="8px" padding="8px 32px">
+                <Text textAlign="center" bold>
+                  {feeTier}
+                </Text>
+              </LightGreyCard>
+            )}
           </FlexGap>
         </AutoRow>
 
@@ -60,7 +93,9 @@ export const PreviewModal = ({ currencies, parsedAmounts, onConfirm, isOpen, onD
               <Text bold>{currencyA?.symbol}</Text>
             </FlexGap>
             <Box>
-              <Text bold>{parsedAmounts[Field.CURRENCY_A]?.toSignificant(6)}</Text>
+              <Text bold textAlign="right">
+                {parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) || '-'}
+              </Text>
               <Text fontSize="12px" color="textSubtle" textAlign="right">
                 ~
                 {formatDollarAmount(
@@ -79,7 +114,9 @@ export const PreviewModal = ({ currencies, parsedAmounts, onConfirm, isOpen, onD
               <Text bold>{currencyB?.symbol}</Text>
             </FlexGap>
             <Box>
-              <Text bold>{parsedAmounts[Field.CURRENCY_B]?.toSignificant(6)}</Text>
+              <Text bold textAlign="right">
+                {parsedAmounts[Field.CURRENCY_B]?.toSignificant(6) || '-'}
+              </Text>
               <Text fontSize="12px" color="textSubtle" textAlign="right">
                 ~
                 {formatDollarAmount(
@@ -91,6 +128,50 @@ export const PreviewModal = ({ currencies, parsedAmounts, onConfirm, isOpen, onD
               </Text>
             </Box>
           </FlexGap>
+        </LightGreyCard>
+
+        <LightGreyCard mt="24px" padding="0">
+          {details?.poolType && (
+            <FlexGap justifyContent="space-between" alignItems="center" p="8px 16px">
+              <Text color="textSubtle" small>
+                {t('Pool Type')}
+              </Text>
+              <Text small>{details?.poolType}</Text>
+            </FlexGap>
+          )}
+          {details?.feeTierSetting && (
+            <FlexGap justifyContent="space-between" alignItems="center" p="8px 16px">
+              <Text color="textSubtle" small>
+                {t('Fee Tier Setting')}
+              </Text>
+              <Text small>{details?.feeTierSetting}</Text>
+            </FlexGap>
+          )}
+          {details?.hookAddress && (
+            <FlexGap justifyContent="space-between" alignItems="center" p="8px 16px">
+              <Text color="textSubtle" small>
+                {t('Hook Address')}
+              </Text>
+              <Text small>{truncateHash(details?.hookAddress || '')}</Text>
+            </FlexGap>
+          )}
+          {details?.priceRange && (
+            <FlexGap justifyContent="space-between" alignItems="center" p="8px 16px">
+              <Text color="textSubtle" small>
+                {t('Price Range')}
+              </Text>
+              <Text small>{details?.priceRange}</Text>
+            </FlexGap>
+          )}
+
+          {details?.startPrice && (
+            <FlexGap justifyContent="space-between" alignItems="center" p="8px 16px">
+              <Text color="textSubtle" small>
+                {t('Initial Price')}
+              </Text>
+              <Text small>{details?.startPrice}</Text>
+            </FlexGap>
+          )}
         </LightGreyCard>
 
         <FlexGap alignItems="center" gap="8px" mt="24px">

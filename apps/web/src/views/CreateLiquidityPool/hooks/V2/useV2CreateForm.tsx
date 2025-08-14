@@ -8,7 +8,7 @@ import { usePairAdder } from 'state/user/hooks'
 import { useAddLiquidityV2FormState } from 'state/mint/reducer'
 import { useDerivedMintInfo, useMintActionHandlers } from 'state/mint/hooks'
 import { ReactNode, useCallback, useMemo, useState } from 'react'
-import { Currency, CurrencyAmount, Pair, Price, Token } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, isCurrencySorted, Pair, Price, Token } from '@pancakeswap/sdk'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { CurrencyField as Field } from 'utils/types'
 import { BIG_INT_ZERO, V2_ROUTER_ADDRESS } from 'config/constants/exchange'
@@ -428,9 +428,33 @@ export const useV2CreateForm = () => {
         onConfirm={onAdd}
         isOpen={isPreviewModalOpen}
         onDismiss={onDismissPreviewModal}
+        feeTier="0.25%"
+        details={{
+          startPrice:
+            baseCurrency && quoteCurrency ? (
+              <>
+                {price?.toSignificant(6)}{' '}
+                {t('%assetA% = 1 %assetB%', {
+                  assetA: quoteCurrency?.symbol,
+                  assetB: baseCurrency?.symbol,
+                })}
+              </>
+            ) : undefined,
+        }}
       />
     )
-  }, [currencies, parsedAmounts, onAdd, isPreviewModalOpen, onDismissPreviewModal])
+  }, [
+    currencies,
+    parsedAmounts,
+    onAdd,
+    isPreviewModalOpen,
+    onDismissPreviewModal,
+    price,
+    baseCurrency,
+    quoteCurrency,
+    isCurrencySorted,
+    t,
+  ])
 
   return {
     // State

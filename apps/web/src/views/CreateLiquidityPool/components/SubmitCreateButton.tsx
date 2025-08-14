@@ -1,7 +1,17 @@
 import { getCurrencyPriceFromId, MAX_BIN_STEP, MIN_BIN_STEP } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, isCurrencySorted } from '@pancakeswap/swap-sdk-core'
-import { AutoColumn, Box, BoxProps, Button, Message, MessageText, RowBetween, Text } from '@pancakeswap/uikit'
+import {
+  AutoColumn,
+  Box,
+  BoxProps,
+  Button,
+  Message,
+  MessageText,
+  RowBetween,
+  Text,
+  useModalV2,
+} from '@pancakeswap/uikit'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ApproveLiquidityTokens from 'components/Liquidity/ApproveLiquidityTokens'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
@@ -25,6 +35,7 @@ import {
 } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
 import { useStartPriceAsFraction } from '../hooks/useStartPriceAsFraction'
 import { isFeeOutOfRange } from './FieldFeeLevel'
+import { PreviewModal } from './PreviewModal'
 
 type SubmitCreateButtonProps = BoxProps
 
@@ -136,10 +147,13 @@ export const InvalidBinRangeMessage: React.FC<{
 export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxProps }) => {
   const { address: account } = useAccount()
   const { t } = useTranslation()
+  const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
   const { depositCurrencyAmount0, depositCurrencyAmount1 } = useCreateDepositAmounts()
   const { isDeposit0Enabled, isDeposit1Enabled } = useCreateDepositAmountsEnabled()
   const { currency0, currency1 } = useCurrencies()
-  const { poolType, feeTierSetting, feeLevel } = useInfinityCreateFormQueryState()
+
+  const { poolType, feeTierSetting, feeLevel, hookAddress, hookEnabled, startPrice } = useInfinityCreateFormQueryState()
+
   const { tickSpacing } = useInfinityCLQueryState()
   const { lowerPrice, upperPrice } = useCLPriceRange(currency0, currency1, tickSpacing ?? undefined)
   const startPriceAsFraction = useStartPriceAsFraction()
@@ -295,7 +309,7 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
       return t('Insufficient %symbol% balance', { symbol: currency1?.symbol ?? 'Unknown' })
     }
 
-    return t('Create')
+    return t('Preview Pool')
   }, [
     currency0?.symbol,
     currency0Balance,
@@ -329,34 +343,6 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
 
   return (
     <Box {...boxProps}>
-      {/* <pre>
-        {JSON.stringify(
-          {
-            requirePermitA,
-            requirePermitB,
-            requireApproveA,
-            requireApproveB,
-            requireRevokeA,
-            requireRevokeB,
-            showApprovalA,
-            showApprovalB,
-            isDeposit0Enabled,
-            isDeposit1Enabled,
-            isDepositFilled,
-            feeLevel,
-            isBinStepValid,
-            submitDisabled,
-            isSubmitEnabled,
-            outOfRange,
-            invalidRange,
-            lowerBinId,
-            upperBinId,
-            activeId,
-          },
-          null,
-          2,
-        )}
-      </pre> */}
       <AutoColumn gap="8px">
         {lowLiquidity && <LowLiquidityMessage />}
         {outOfRange && <OutOfRangeMessage />}
@@ -391,12 +377,43 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
         />
       </Box>
       {account ? (
-        <Button width="100%" onClick={onSubmit} disabled={submitDisabled}>
+        <Button width="100%" onClick={onOpenPreviewModal} disabled={submitDisabled}>
           {buttonText}
         </Button>
       ) : (
         <ConnectWalletButton width="100%" />
       )}
+
+      <PreviewModal
+        isOpen={isPreviewModalOpen}
+        onDismiss={onDismissPreviewModal}
+        currencies={currencies}
+        parsedAmounts={{
+          [Field.CURRENCY_A]: depositCurrencyAmount0 ?? undefined,
+          [Field.CURRENCY_B]: depositCurrencyAmount1 ?? undefined,
+        }}
+        onConfirm={onSubmit}
+        details={{
+          poolType: poolType === 'Bin' ? t('LBAMM') : t('CLAMM'),
+          feeTierSetting: `${feeTierSetting === 'dynamic' ? t('Dynamic') : t('Static')} ${
+            feeLevel ? `${(feeLevel / 10_000).toFixed(2)}%` : '0.00%'
+          }`,
+          hookAddress: hookEnabled ? hookAddress : undefined,
+          startPrice:
+            startPriceAsFraction && startPriceAsFraction.denominator !== 0n && startPriceAsFraction.numerator !== 0n
+              ? isCurrencySorted(startPriceAsFraction.baseCurrency, startPriceAsFraction.quoteCurrency)
+                ? `${startPriceAsFraction.toSignificant(6)} ${t('%assetA% = 1 %assetB%', {
+                    assetA: startPriceAsFraction.quoteCurrency.symbol,
+                    assetB: startPriceAsFraction.baseCurrency.symbol,
+                  })}`
+                : `${startPriceAsFraction.invert().toSignificant(6)} ${t('%assetA% = 1 %assetB%', {
+                    assetA: startPriceAsFraction.baseCurrency.symbol,
+                    assetB: startPriceAsFraction.quoteCurrency.symbol,
+                  })}`
+              : undefined,
+          priceRange: <>Price Range</>,
+        }}
+      />
     </Box>
   )
 }

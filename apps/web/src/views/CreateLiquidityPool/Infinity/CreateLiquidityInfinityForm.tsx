@@ -17,10 +17,11 @@ import { useInfinityCreateFormQueryState } from '../hooks/useInfinityFormState/u
 import { usePoolKey } from '../hooks/useInfinityFormState/usePoolKey'
 import { useIsPoolInitialized } from '../hooks/useIsPoolInitialized'
 import { ResponsiveTwoColumns } from '../styles'
+import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
 
 export const CreateLiquidityInfinityForm = () => {
   const { chainId } = useSelectIdRouteParams()
-  const { isBin, isCl, feeTierSetting } = useInfinityCreateFormQueryState()
+  const { isBin, isCl, feeTierSetting, startPrice } = useInfinityCreateFormQueryState()
   const poolKey = usePoolKey()
   const { data: poolInitialized } = useIsPoolInitialized(poolKey, chainId)
 
@@ -57,11 +58,16 @@ export const CreateLiquidityInfinityForm = () => {
         <CardBody>
           <DynamicSection disabled={poolInitialized}>
             <AutoColumn gap={['16px', null, null, '24px']}>
-              <FieldCreateDepositAmount />
               <FieldStartingPrice />
-              <FieldPriceRange />
-              {isBin && <FieldLiquidityShape />}
-              <SubmitCreateButton />
+              <DynamicSection disabled={!startPrice}>
+                <AutoColumn gap={['16px', null, null, '24px']}>
+                  <FieldPriceRange />
+                  {isBin && <FieldLiquidityShape />}
+                  <FieldCreateDepositAmount />
+                  <FieldSlippageTolerance />
+                  <SubmitCreateButton />
+                </AutoColumn>
+              </DynamicSection>
             </AutoColumn>
           </DynamicSection>
         </CardBody>
