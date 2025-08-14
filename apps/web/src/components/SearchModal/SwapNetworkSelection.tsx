@@ -23,6 +23,8 @@ import { chains as evmChains } from 'utils/wagmi'
 import { UNSUPPORTED_SOCIAL_LOGIC_CHAINS } from 'wallet/Privy/constants'
 
 import { BaseWrapper, ButtonWrapper, RowWrapper } from './CommonBases'
+import { useRouter } from 'next/router'
+import { TWAP_SUPPORTED_CHAINS } from 'views/Swap/utils'
 
 const NetworkMenuColumn = styled(Flex)`
   flex-direction: column;
@@ -54,6 +56,17 @@ const ChainOption = styled(Flex)`
   transition: background-color 0.15s;
 `
 
+const useCustomChains = () => {
+  const router = useRouter()
+  const isTWAP = router.pathname.includes('twap') || router.pathname.includes('limit')
+  return useMemo(() => {
+    if (isTWAP) {
+      return TWAP_SUPPORTED_CHAINS
+    }
+    return undefined
+  }, [isTWAP])
+}
+
 export default function SwapNetworkSelection({
   chainId,
   onSelect,
@@ -71,6 +84,8 @@ export default function SwapNetworkSelection({
     originChainId: isDependent ? activeChainId : usedChainId,
   })
 
+  const customChains = useCustomChains()
+
   const { t } = useTranslation()
 
   const supportedChains = useMemo(() => {
@@ -86,9 +101,13 @@ export default function SwapNetworkSelection({
         return false
       }
 
+      if (customChains) {
+        return customChains.includes(chain.id)
+      }
+
       return true
     })
-  }, [supportedBridgeChains, usedChainId, isDependent])
+  }, [supportedBridgeChains, usedChainId, isDependent, customChains])
 
   const selectedChain = useMemo(
     () => supportedChains.find((chain) => chain.id === usedChainId),
