@@ -152,10 +152,10 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
   const { isDeposit0Enabled, isDeposit1Enabled } = useCreateDepositAmountsEnabled()
   const { currency0, currency1 } = useCurrencies()
 
-  const { poolType, feeTierSetting, feeLevel, hookAddress, hookEnabled, startPrice } = useInfinityCreateFormQueryState()
+  const { poolType, feeTierSetting, feeLevel, hookAddress, hookEnabled } = useInfinityCreateFormQueryState()
 
   const { tickSpacing } = useInfinityCLQueryState()
-  const { lowerPrice, upperPrice } = useCLPriceRange(currency0, currency1, tickSpacing ?? undefined)
+  const { lowerPrice, upperPrice, minPrice, maxPrice } = useCLPriceRange(currency0, currency1, tickSpacing ?? undefined)
   const startPriceAsFraction = useStartPriceAsFraction()
   const { binStep, lowerBinId, upperBinId, activeId } = useInfinityBinQueryState()
   const { maxBinId, minBinId } = useBinIdRange()
@@ -435,12 +435,12 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
                 </>
               ) : (
                 <>
-                  {lowerPrice?.toSignificant(6)} - {upperPrice?.toSignificant(6)}
+                  {minPrice} - {maxPrice}
                 </>
               )}{' '}
               {t('%assetA% = 1 %assetB%', {
-                assetA: currency1?.symbol,
-                assetB: currency0?.symbol,
+                assetA: !inverted ? currency1?.symbol : currency0?.symbol,
+                assetB: !inverted ? currency0?.symbol : currency1?.symbol,
               })}
             </>
           ),
