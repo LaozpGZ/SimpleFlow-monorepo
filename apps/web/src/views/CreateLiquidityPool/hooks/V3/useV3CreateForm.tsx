@@ -1,7 +1,7 @@
 import { useV3FormAddLiquidityCallback, useV3FormState } from 'views/AddLiquidityV3/formViews/V3FormView/form/reducer'
 import useV3DerivedInfo from 'hooks/v3/useV3DerivedInfo'
 import { useFeeLevelQueryState } from 'state/infinity/create'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import { PRESET_FEE_LEVELS_V3 } from 'views/CreateLiquidityPool/constants'
 import { useV3MintActionHandlers } from 'views/AddLiquidityV3/formViews/V3FormView/form/hooks/useV3MintActionHandlers'
 import { tryParsePrice } from 'hooks/v3/utils'
@@ -46,6 +46,7 @@ import { useTransactionAdder } from 'state/transactions/hooks'
 import { isUserRejected } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { PreviewModal } from 'views/CreateLiquidityPool/components/PreviewModal'
+import { QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV3/types'
 import { useCurrencies } from '../useCurrencies'
 
 export const useV3CreateForm = () => {
@@ -73,7 +74,10 @@ export const useV3CreateForm = () => {
   const [attemptingTxn, setAttemptingTxn] = useState<boolean>(false) // clicked confirm
   const [txnErrorMessage, setTxnErrorMessage] = useState<string | undefined>()
   const [showCapitalEfficiencyWarning, setShowCapitalEfficiencyWarning] = useState<boolean>(false)
+  const [activeQuickAction, setActiveQuickAction] = useState<number>()
+  const isQuickButtonUsed = useRef(false)
   const [quickAction, setQuickAction] = useState<number | null>(null)
+  const [customZoomLevel, setCustomZoomLevel] = useState<ZoomLevels | undefined>(undefined)
 
   // Transaction Actions
   const { sendTransactionAsync } = useSendTransaction()
@@ -171,7 +175,7 @@ export const useV3CreateForm = () => {
   const { [Bound.LOWER]: priceLower, [Bound.UPPER]: priceUpper } = pricesAtTicks
 
   const { onFieldAInput, onFieldBInput, onLeftRangeInput, onRightRangeInput, onStartPriceInput, onBothRangeInput } =
-    useV3MintActionHandlers(noLiquidity)
+    useV3MintActionHandlers(noLiquidity, false)
 
   // Range Inputs
   const { getDecrementLower, getIncrementLower, getDecrementUpper, getIncrementUpper, getSetFullRange } =
@@ -201,20 +205,53 @@ export const useV3CreateForm = () => {
     [baseCurrency, quoteCurrency, onRightRangeInput],
   )
 
+  // Range refresh function to set ranges based on zoom levels
+  const handleRefresh = useCallback(
+    (zoomLevel?: ZoomLevels) => {
+      setActiveQuickAction(undefined)
+      if (!zoomLevel) {
+        setCustomZoomLevel(undefined)
+        return
+      }
+      const currentPrice = price ? parseFloat((invertPrice ? price.invert() : price).toSignificant(8)) : undefined
+      if (currentPrice) {
+        const leftRangeValue = currentPrice * zoomLevel.initialMin
+        const rightRangeValue = currentPrice * zoomLevel.initialMax
+
+        onBothRangePriceInput(leftRangeValue.toString(), rightRangeValue.toString())
+      }
+    },
+    [price, invertPrice, onBothRangePriceInput],
+  )
+
   const handleQuickAction = useCallback(
-    (value: number | null, _zoomLevel: ZoomLevels) => {
+    (value: number | null, zoomLevel: ZoomLevels) => {
       setQuickAction(value)
       if (value !== null) {
         // Check if it's a full range action (100)
         if (value === 100) {
+          setCustomZoomLevel(undefined)
           setShowCapitalEfficiencyWarning(true)
-          setQuickAction(100)
+          setActiveQuickAction(100)
+          isQuickButtonUsed.current = true
         } else {
-          setQuickAction(value)
+          const isPredefinedAction = feeAmount && QUICK_ACTION_CONFIGS[feeAmount]?.[value]
+
+          if (isPredefinedAction) {
+            setCustomZoomLevel(undefined)
+            handleRefresh(QUICK_ACTION_CONFIGS[feeAmount][value])
+            setActiveQuickAction(value)
+            isQuickButtonUsed.current = true
+          } else {
+            setCustomZoomLevel(zoomLevel)
+            handleRefresh(zoomLevel)
+            setActiveQuickAction(value)
+            isQuickButtonUsed.current = true
+          }
         }
       }
     },
-    [feeAmount, setShowCapitalEfficiencyWarning],
+    [activeQuickAction, feeAmount, handleRefresh, setShowCapitalEfficiencyWarning],
   )
 
   // CREATE POOL ACTIONS
@@ -326,6 +363,30 @@ export const useV3CreateForm = () => {
     setShowCapitalEfficiencyWarning(false)
   }, [baseCurrency, quoteCurrency, feeAmount])
 
+  // Reset ranges when fee tier changes
+  useEffect(() => {
+    if (feeAmount) {
+      setActiveQuickAction(undefined)
+      onBothRangeInput({
+        leftTypedValue: undefined,
+        rightTypedValue: undefined,
+      })
+    }
+    // NOTE: ignore exhaustive-deps to avoid infinite re-render
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [feeAmount])
+
+  // Manage quick action state
+  useEffect(() => {
+    if (!isQuickButtonUsed.current && activeQuickAction) {
+      setActiveQuickAction(undefined)
+      setQuickAction(null)
+      setCustomZoomLevel(undefined)
+    } else if (isQuickButtonUsed.current) {
+      isQuickButtonUsed.current = false
+    }
+  }, [isQuickButtonUsed, activeQuickAction, leftRangeTypedValue, rightRangeTypedValue])
+
   const buttons = (
     <V3SubmitButton
       addIsUnsupported={addIsUnsupported}
@@ -373,7 +434,7 @@ export const useV3CreateForm = () => {
           feeAmount={feeAmount}
           ticksAtLimit={ticksAtLimit}
           tickSpaceLimits={tickSpaceLimits}
-          quickAction={quickAction}
+          quickAction={activeQuickAction ?? null}
           handleQuickAction={handleQuickAction}
         />
       )}
@@ -388,6 +449,7 @@ export const useV3CreateForm = () => {
               onClick={() => {
                 setShowCapitalEfficiencyWarning(false)
                 getSetFullRange()
+                setActiveQuickAction(100)
               }}
               scale="md"
               variant="danger"
