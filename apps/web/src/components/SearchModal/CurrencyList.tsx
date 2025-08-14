@@ -94,7 +94,7 @@ function ComplementSection({
 
   return (
     <FlexGap ml="8px" alignItems="center">
-      {isSelected ? (
+      {showActions ? (
         <>
           <CopyButton
             data-dd-action-name="Copy token address"
@@ -132,20 +132,7 @@ function ComplementSection({
             />
           )}
         </>
-      ) : (
-        showActions && (
-          <CopyButton
-            data-dd-action-name="Copy token address"
-            width="13px"
-            buttonColor="textSubtle"
-            text={selectedCurrency.wrapped.address}
-            tooltipMessage={t('Token address copied')}
-            defaultTooltipMessage={t('Copy token address')}
-            tooltipPlacement="top"
-            opacity={0.5}
-          />
-        )
-      )}
+      ) : null}
     </FlexGap>
   )
 }
