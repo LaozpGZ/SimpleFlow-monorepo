@@ -7,6 +7,8 @@ import {
   BoxProps,
   ButtonMenu,
   ButtonMenuItem,
+  Checkbox,
+  DynamicSection,
   ErrorIcon,
   FlexGap,
   Input,
@@ -14,9 +16,10 @@ import {
   PreTitle,
   QuestionHelper,
   Text,
+  Toggle,
 } from '@pancakeswap/uikit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useFeeLevelQueryState } from 'state/infinity/create'
+import { useFeeLevelQueryState, useFeeTierSettingQueryState } from 'state/infinity/create'
 import { escapeRegExp } from 'utils'
 import { useInfinityCreateFormQueryState } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
 import { PRESET_FEE_LEVELS_INFINITY } from '../constants'
@@ -43,8 +46,11 @@ const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." charact
 
 export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ...boxProps }) => {
   const { t } = useTranslation()
+
   const [feeLevel, setFeeLevel] = useFeeLevelQueryState()
-  const { poolType, feeTierSetting } = useInfinityCreateFormQueryState()
+  const [feeTierSetting, setFeeTierSetting] = useFeeTierSettingQueryState()
+
+  const { poolType } = useInfinityCreateFormQueryState()
   const [inputValue, setInputValue] = useState<string | null>(null)
 
   const tips = useMemo(() => {
@@ -114,6 +120,13 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ..
     [handleQuickSelect],
   )
 
+  const handleFeeTierSettingChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFeeTierSetting(e.target.checked ? 'dynamic' : 'static')
+    },
+    [setFeeTierSetting],
+  )
+
   const activeIndex = useMemo(() => {
     const presetIndex = PRESET_FEE_LEVELS_INFINITY.findIndex((preset) => preset === feeLevel)
     if (presetIndex !== -1) {
@@ -140,41 +153,64 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ..
 
   return (
     <Box {...boxProps}>
-      <FlexGap gap="4px">
-        <PreTitle mb="8px">{t('Fee Level')}</PreTitle>
-        <QuestionHelper
-          placement="auto"
-          mb="8px"
-          color="secondary"
-          text={t('Common range: 0.01% to 0.3%, Ideal range <1%')}
-        />
+      <FlexGap justifyContent="space-between" alignItems="center">
+        <FlexGap gap="4px">
+          <PreTitle mb="8px">{t('Fee Level')}</PreTitle>
+          <QuestionHelper
+            placement="auto"
+            mb="8px"
+            color="secondary"
+            text={t('Common range: 0.01% to 0.3%, Ideal range <1%')}
+          />
+        </FlexGap>
+
+        <FlexGap gap="4px" alignItems="center">
+          <PreTitle>{t('Dynamic Fee')}</PreTitle>
+          <QuestionHelper
+            color="secondary"
+            placement="auto"
+            text={
+              <>
+                <Text>{t('Static: The fee remains fixed at the specified level once the pool is created.')}</Text>
+                <Text mt="12px">
+                  {t(
+                    'Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0',
+                  )}
+                </Text>
+              </>
+            }
+          />
+          <Toggle checked={feeTierSetting === 'dynamic'} onChange={handleFeeTierSettingChange} scale="sm" />
+        </FlexGap>
       </FlexGap>
 
-      <ButtonMenu activeIndex={activeIndex} onItemClick={handleMenuItemClick} variant="subtle" fullWidth>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[0]}%</ButtonMenuItem>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[1]}%</ButtonMenuItem>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[2]}%</ButtonMenuItem>
+      <DynamicSection disabled={feeTierSetting === 'dynamic'}>
+        <ButtonMenu activeIndex={activeIndex} onItemClick={handleMenuItemClick} variant="subtle" fullWidth>
+          <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[0]}%</ButtonMenuItem>
+          <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[1]}%</ButtonMenuItem>
+          <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[2]}%</ButtonMenuItem>
 
-        {allowCustomFee ? (
-          <ButtonMenuItem minWidth="180px">
-            <InputGroup endIcon={<>%</>}>
-              <StyledInput
-                pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
-                inputMode="decimal"
-                placeholder={t('Custom')}
-                step="0.01"
-                min="0"
-                max="100"
-                value={inputValue ?? ''}
-                onBlur={handleInputBlur}
-                onChange={handleInputChange}
-              />
-            </InputGroup>
-          </ButtonMenuItem>
-        ) : (
-          <></>
-        )}
-      </ButtonMenu>
+          {allowCustomFee ? (
+            <ButtonMenuItem minWidth="180px">
+              <InputGroup endIcon={<>%</>}>
+                <StyledInput
+                  pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
+                  inputMode="decimal"
+                  placeholder={t('Custom')}
+                  step="0.01"
+                  min="0"
+                  max="100"
+                  value={inputValue ?? ''}
+                  onBlur={handleInputBlur}
+                  onChange={handleInputChange}
+                />
+              </InputGroup>
+            </ButtonMenuItem>
+          ) : (
+            <></>
+          )}
+        </ButtonMenu>
+      </DynamicSection>
 
       {tips}
     </Box>

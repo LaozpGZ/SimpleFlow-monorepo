@@ -21,7 +21,7 @@ import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
 
 export const CreateLiquidityInfinityForm = () => {
   const { chainId } = useSelectIdRouteParams()
-  const { isBin, isCl, feeTierSetting, startPrice } = useInfinityCreateFormQueryState()
+  const { isBin, isCl, startPrice } = useInfinityCreateFormQueryState()
   const poolKey = usePoolKey()
   const { data: poolInitialized } = useIsPoolInitialized(poolKey, chainId)
 
@@ -42,13 +42,10 @@ export const CreateLiquidityInfinityForm = () => {
             <FieldSelectCurrencies />
             <ResponsiveTwoColumns>
               <FieldPoolType />
-              <FieldFeeTierSetting />
+              {isBin && <FieldBinStep />}
+              {isCl && <FieldClTickSpacing />}
             </ResponsiveTwoColumns>
-            <DynamicSection disabled={feeTierSetting === 'dynamic'}>
-              <FieldFeeLevel allowCustomFee />
-            </DynamicSection>
-            {isBin && <FieldBinStep />}
-            {isCl && <FieldClTickSpacing />}
+            <FieldFeeLevel allowCustomFee />
             <FieldHookSettings />
             <MessagePoolInitialized />
           </AutoColumn>
