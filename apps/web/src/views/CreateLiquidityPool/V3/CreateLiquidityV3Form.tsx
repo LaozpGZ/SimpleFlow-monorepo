@@ -24,6 +24,7 @@ export const CreateLiquidityV3Form = () => {
     // Components
     buttons,
     rangeSelector,
+    previewModal,
 
     // Actions
     onStartPriceInput,
@@ -83,6 +84,7 @@ export const CreateLiquidityV3Form = () => {
           </AutoColumn>
         </CardBody>
       </Card>
+      {previewModal}
     </Box>
   )
 }

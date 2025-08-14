@@ -17,6 +17,7 @@ export const CreateLiquidityV2Form = () => {
 
     // Components
     buttons,
+    previewModal,
 
     // Actions
     onFieldAInput,
@@ -60,6 +61,7 @@ export const CreateLiquidityV2Form = () => {
           </AutoColumn>
         </CardBody>
       </Card>
+      {previewModal}
     </Box>
   )
 }

@@ -4183,5 +4183,6 @@
   "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.": "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.",
   "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.",
   "Use Market Price": "Use Market Price",
-  "%assetA% = 1 %assetB%": "%assetA% = 1 %assetB%"
+  "%assetA% = 1 %assetB%": "%assetA% = 1 %assetB%",
+  "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.": "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly."
 }

@@ -23,7 +23,18 @@ import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import V3RangeSelector from 'views/AddLiquidityV3/formViews/V3FormView/components/V3RangeSelector'
 import { useRangeHopCallbacks } from 'views/AddLiquidityV3/formViews/V3FormView/form/hooks/useRangeHopCallbacks'
 import { Bound, ZoomLevels } from '@pancakeswap/widgets-internal'
-import { AutoColumn, Box, Button, Message, MessageText, PreTitle, RowBetween, Text } from '@pancakeswap/uikit'
+import {
+  AutoColumn,
+  Box,
+  Button,
+  Message,
+  MessageText,
+  PreTitle,
+  RowBetween,
+  Text,
+  useModal,
+  useModalV2,
+} from '@pancakeswap/uikit'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
 import { NonfungiblePositionManager } from '@pancakeswap/v3-sdk'
@@ -35,12 +46,14 @@ import { formatRawAmount } from 'utils/formatCurrencyAmount'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { isUserRejected } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
+import { PreviewModal } from 'views/CreateLiquidityPool/components/PreviewModal'
 import { useCurrencies } from '../useCurrencies'
 
 export const useV3CreateForm = () => {
   const { t } = useTranslation()
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: signer } = useWalletClient()
+  const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
 
   // User Settings
   const expertMode = useIsExpertMode()
@@ -302,17 +315,12 @@ export const useV3CreateForm = () => {
     t,
   ])
 
-  const onPresentCreatePoolModal = useCallback(() => {
-    console.log('onPresentCreatePoolModal')
-  }, [])
-
   // Button Submit, with handle expert mode
   const handleButtonSubmit = useCallback(() => {
-    onAdd()
     // eslint-disable-next-line no-unused-expressions
-    // expertMode ? onAdd() : onPresentCreatePoolModal()
-    // logGTMClickAddLiquidityEvent()
-  }, [expertMode, onAdd, onPresentCreatePoolModal])
+    expertMode ? onAdd() : onOpenPreviewModal()
+    logGTMClickAddLiquidityEvent()
+  }, [expertMode, onAdd, onOpenPreviewModal])
 
   // Effects
   useEffect(() => {
@@ -409,6 +417,18 @@ export const useV3CreateForm = () => {
     </AutoColumn>
   )
 
+  const previewModal = useMemo(() => {
+    return (
+      <PreviewModal
+        currencies={currencies}
+        parsedAmounts={parsedAmounts}
+        onConfirm={onAdd}
+        isOpen={isPreviewModalOpen}
+        onDismiss={onDismissPreviewModal}
+      />
+    )
+  }, [currencies, parsedAmounts, onAdd, isPreviewModalOpen, onDismissPreviewModal])
+
   return {
     // State
     formState,
@@ -425,6 +445,7 @@ export const useV3CreateForm = () => {
     // Components
     buttons,
     rangeSelector,
+    previewModal,
 
     // Actions
     onBothRangePriceInput,

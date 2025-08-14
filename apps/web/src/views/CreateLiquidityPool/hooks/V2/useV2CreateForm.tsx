@@ -25,7 +25,17 @@ import { calculateGasMargin, getBlockExploreLink } from 'utils'
 import { isUserRejected, logError } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { Hash } from 'viem'
-import { AutoColumn, Button, Flex, LinkExternal, Message, MessageText, ScanLink } from '@pancakeswap/uikit'
+import {
+  AutoColumn,
+  Button,
+  Flex,
+  LinkExternal,
+  Message,
+  MessageText,
+  ScanLink,
+  useModal,
+  useModalV2,
+} from '@pancakeswap/uikit'
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiquidityTokens'
@@ -33,6 +43,7 @@ import { ChainLinkSupportChains } from 'state/info/constant'
 import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useStartingPriceQueryState } from 'state/infinity/create'
+import { PreviewModal } from 'views/CreateLiquidityPool/components/PreviewModal'
 import { useCurrencies } from '../useCurrencies'
 
 export const useV2CreateForm = () => {
@@ -42,6 +53,7 @@ export const useV2CreateForm = () => {
   } = useTranslation()
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: walletClient } = useWalletClient()
+  const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
 
   const { data: gasPrice } = useGasPrice()
 
@@ -225,11 +237,6 @@ export const useV2CreateForm = () => {
       [Field.CURRENCY_B]: calculateSlippageAmount(parsedAmountB, noLiquidity ? 0 : allowedSlippage)[0],
     }
 
-    console.log('onAdd', {
-      parsedAmountA: parsedAmountA.toExact(),
-      parsedAmountB: parsedAmountB.toExact(),
-    })
-
     // eslint-disable-next-line
     let estimate: any
     // eslint-disable-next-line
@@ -377,10 +384,8 @@ export const useV2CreateForm = () => {
         <CommitButton
           variant={buttonDisabled ? 'danger' : 'primary'}
           onClick={() => {
-            // TESTING
-            onAdd()
             // eslint-disable-next-line no-unused-expressions
-            //   expertMode ? onAdd() : onPresentAddLiquidityModal()
+            expertMode ? onAdd() : onOpenPreviewModal()
             logGTMClickAddLiquidityEvent()
           }}
           disabled={buttonDisabled}
@@ -415,6 +420,18 @@ export const useV2CreateForm = () => {
     t,
   ])
 
+  const previewModal = useMemo(() => {
+    return (
+      <PreviewModal
+        currencies={currencies}
+        parsedAmounts={parsedAmounts}
+        onConfirm={onAdd}
+        isOpen={isPreviewModalOpen}
+        onDismiss={onDismissPreviewModal}
+      />
+    )
+  }, [currencies, parsedAmounts, onAdd, isPreviewModalOpen, onDismissPreviewModal])
+
   return {
     // State
     currencies,
@@ -427,6 +444,7 @@ export const useV2CreateForm = () => {
 
     // Components
     buttons,
+    previewModal,
 
     // Validation
     addIsUnsupported,
