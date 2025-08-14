@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
-import { useTranslation } from '@pancakeswap/localization'
-import { Flex, PreTitle, QuestionHelper, Text, ThemeSwitcher, Toggle } from '@pancakeswap/uikit'
+import { languageList, useTranslation } from '@pancakeswap/localization'
+import { Flex, LangSelector, PreTitle, QuestionHelper, Text, ThemeSwitcher, Toggle } from '@pancakeswap/uikit'
 import { TOKEN_RISK } from 'components/AccessRisk'
 import AccessRiskTooltips from 'components/AccessRisk/AccessRiskTooltips'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -29,7 +29,7 @@ const BetaTag = styled.div`
 `
 
 const GlobalSettings: React.FC = () => {
-  const { t } = useTranslation()
+  const { currentLanguage, setLanguage, t } = useTranslation()
   const { isDark, setTheme } = useTheme()
   const { chainId } = useActiveChainId()
   const { enabled } = useWebNotifications()
@@ -43,6 +43,18 @@ const GlobalSettings: React.FC = () => {
   return (
     <Flex pb="24px" flexDirection="column">
       <PreTitle mb="24px">{t('Global')}</PreTitle>
+
+      <Flex justifyContent="space-between" mb="24px">
+        <Text>{t('Language')}</Text>
+        <LangSelector
+          currentLang={currentLanguage.code}
+          langs={languageList}
+          setLang={setLanguage}
+          buttonScale="xs"
+          color="textSubtle"
+          hideLanguage
+        />
+      </Flex>
 
       <Flex justifyContent="space-between" mb="24px">
         <Text>{t('Dark mode')}</Text>
