@@ -20,7 +20,7 @@ import { TabsComponent } from 'components/Menu/UserMenu/WalletModal'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useAddressBalance } from 'hooks/useAddressBalance'
 import { useRouter } from 'next/router'
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { ClaimGiftConfirmView } from 'views/Gift/components/ClaimGiftConfirmView'
@@ -29,6 +29,7 @@ import { GiftInfoDetailView } from 'views/Gift/components/GiftInfoDetailView'
 import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
 import { NonEVMChainId } from '@pancakeswap/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
@@ -36,6 +37,8 @@ import { SendAssets } from './SendAssets'
 import { SEND_ENTRY, ViewState } from './type'
 import { CopyAddress } from './WalletCopyButton'
 import { useWalletModalV2ViewState } from './WalletModalV2ViewStateProvider'
+import ReceiveOptionsView from './ReceiveOptionsView'
+import ReceiveModal, { ReceiveContent } from './ReceiveModal'
 
 interface WalletModalProps {
   isOpen: boolean
@@ -138,6 +141,8 @@ export const WalletContent = ({
   const { theme } = useTheme()
 
   const { chainId } = useActiveChainId()
+  const { account: evmAccount, solanaAccount } = useAccountActiveChain()
+  const [selectedReceiveAccount, setSelectedReceiveAccount] = useState<string | undefined>(undefined)
 
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
@@ -163,6 +168,29 @@ export const WalletContent = ({
   const actionView = useMemo(() => {
     if (viewState === ViewState.GIFT_INFO_DETAIL) return <GiftInfoDetailView />
 
+    // Receive Options
+    if (viewState === ViewState.RECEIVE_OPTIONS) {
+      return (
+        <ReceiveOptionsView
+          onSelectEVM={() => {
+            setSelectedReceiveAccount(evmAccount)
+            setViewState(ViewState.RECEIVE_QR)
+          }}
+          onSelectSolana={() => {
+            setSelectedReceiveAccount(solanaAccount ?? undefined)
+            setViewState(ViewState.RECEIVE_QR)
+          }}
+          evmAccount={evmAccount}
+          solanaAccount={solanaAccount ?? undefined}
+        />
+      )
+    }
+
+    // Receive QR
+    if (viewState === ViewState.RECEIVE_QR) {
+      return <ReceiveContent account={selectedReceiveAccount || account || ''} />
+    }
+
     // Claim Gift
     if ([ViewState.CLAIM_GIFT, ViewState.CLAIM_GIFT_CONFIRM].includes(viewState)) {
       return (
@@ -185,7 +213,18 @@ export const WalletContent = ({
         onBack={goBack}
       />
     )
-  }, [viewState, balances, isLoading, goBack, setViewState])
+  }, [
+    viewState,
+    balances,
+    isLoading,
+    goBack,
+    setViewState,
+    onReceiveClick,
+    evmAccount,
+    solanaAccount,
+    selectedReceiveAccount,
+    account,
+  ])
 
   return (
     <Box
@@ -292,8 +331,12 @@ export const WalletContent = ({
                   </OptionBox>
                   <OptionBox
                     onClick={() => {
-                      onReceiveClick()
-                      onDismiss()
+                      if (isMobile) {
+                        onReceiveClick()
+                        onDismiss()
+                      } else {
+                        setViewState(ViewState.RECEIVE_OPTIONS)
+                      }
                     }}
                   >
                     <Box mb="16px" mx="auto" width="60px" height="60px">
@@ -346,7 +389,11 @@ export const WalletContent = ({
                 </ActionButton>
                 <ActionButton
                   onClick={() => {
-                    onReceiveClick()
+                    if (isMobile) {
+                      onReceiveClick()
+                    } else {
+                      setViewState(ViewState.RECEIVE_OPTIONS)
+                    }
                   }}
                   variant="tertiary"
                 >

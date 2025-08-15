@@ -42,6 +42,8 @@ const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void; account
   const { chainId, account, solanaAccount } = useAccountActiveChain()
   const { disconnect } = useWallet()
   const { connector } = useAccount()
+  const { setViewState } = useWalletModalV2ViewState()
+  const { isMobile } = useMatchBreakpoints()
 
   const handleClickDisconnect = useCallback(() => {
     logGTMDisconnectWalletEvent(chainId, connector?.name, account)
@@ -52,11 +54,19 @@ const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void; account
     }
   }, [disconnect, logout, connector?.name, account, chainId])
 
+  const handleReceiveClick = useCallback(() => {
+    if (isMobile) {
+      onReceiveClick()
+    } else {
+      setViewState(ViewState.RECEIVE_OPTIONS)
+    }
+  }, [isMobile, onReceiveClick, setViewState])
+
   return (
     <WalletContent
       account={chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : account}
       onDismiss={() => {}}
-      onReceiveClick={onReceiveClick}
+      onReceiveClick={handleReceiveClick}
       onDisconnect={handleClickDisconnect}
     />
   )
@@ -282,14 +292,21 @@ const UserMenu = () => {
         <WalletModalV2
           isOpen={showMobileWalletModal}
           account={finalAddress}
-          onReceiveClick={() => setIsReceiveOptionsOpen(true)}
+          onReceiveClick={() => {
+            if (isMobile) {
+              setIsReceiveOptionsOpen(true)
+            } else {
+              // This should not be called for desktop, but keep as fallback
+              setIsReceiveOptionsOpen(true)
+            }
+          }}
           onDisconnect={handleClickDisconnect}
           onDismiss={() => {
             setShowMobileWalletModal(false)
             resetViewState()
           }}
         />
-        {finalAddress && (
+        {finalAddress && isMobile && (
           <>
             <ModalV2 isOpen={isReceiveOptionsOpen} onDismiss={() => setIsReceiveOptionsOpen(false)} closeOnOverlayClick>
               <Modal title="">

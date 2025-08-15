@@ -8,6 +8,8 @@ export enum ViewState {
   CLAIM_GIFT,
   CLAIM_GIFT_CONFIRM,
   GIFT_INFO_DETAIL,
+  RECEIVE_OPTIONS,
+  RECEIVE_QR,
 }
 
 export enum SEND_ENTRY {
