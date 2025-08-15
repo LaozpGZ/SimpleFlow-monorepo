@@ -97,6 +97,9 @@ const useWalletIcon = (marginTextBetweenLogo: string, enabled = false) => {
         if (provider.isOkxWallet) {
           return <OkxWallet {...iconProps} />
         }
+        if (provider.isMetaMask) {
+          return <MetamaskIcon {...iconProps} />
+        }
         return <WalletFilledIcon {...iconProps} />
       } catch (error) {
         console.error('Error fetching provider for wallet icon', error)
