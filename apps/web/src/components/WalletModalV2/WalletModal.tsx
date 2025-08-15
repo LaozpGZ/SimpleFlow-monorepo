@@ -4,7 +4,6 @@ import {
   ArrowForwardIcon,
   Box,
   Button,
-  Flex,
   FlexGap,
   Modal,
   ModalHeader,
@@ -340,7 +339,7 @@ export const WalletContent = ({
                     <Box mb="16px" mx="auto" width="60px" height="60px">
                       <img src={`${ASSET_CDN}/web/landing/earn-fixed-staking.png`} width="60px" alt="Receive Crypto" />
                     </Box>
-                    <Text bold color="secondary" fontSize="16px" mb="8px">
+                    <Text bold color="secondary" fontSize="16px" mb="8px" ml="8px">
                       {t('Receive')}
                     </Text>
                     <Text fontSize="14px" color="textSubtle">

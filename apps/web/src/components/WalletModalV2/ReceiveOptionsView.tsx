@@ -1,4 +1,4 @@
-import { ArrowForwardIcon, Box, Flex, Text, Image, WalletFilledV2Icon } from '@pancakeswap/uikit'
+import { ArrowForwardIcon, Box, Flex, Text, Image, WalletFilledV2Icon, FlexGap } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import { useConnect } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -126,8 +126,8 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
   }, [solanaWallet])
 
   return (
-    <Box padding="24px" maxWidth="450px" width="100%">
-      <Box>
+    <Box padding="12px 0px" maxWidth="450px" width="100%" mt="24px">
+      <FlexGap gap="12px">
         <OptionCard onClick={onSelectEVM}>
           <Flex alignItems="center">
             <IconContainer>
@@ -179,7 +179,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
           </Flex>
           <ArrowForwardIcon color="textSubtle" width="20px" height="20px" />
         </OptionCard>
-      </Box>
+      </FlexGap>
     </Box>
   )
 }
