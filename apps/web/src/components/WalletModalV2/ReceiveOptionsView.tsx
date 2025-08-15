@@ -3,8 +3,6 @@ import { ArrowForwardIcon, Box, Button, Flex, Text } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
-import { NonEVMChainId } from '@pancakeswap/chains'
 
 interface ReceiveOptionsViewProps {
   onSelectEVM: () => void
@@ -188,7 +186,6 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
   const { t } = useTranslation()
   const { connector } = useAccount()
   const { wallet: solanaWallet } = useWallet()
-  const { chainId } = useAccountActiveChain()
 
   // Determine wallet type based on connector/wallet
   const getWalletType = (isEVM: boolean) => {

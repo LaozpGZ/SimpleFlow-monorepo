@@ -246,7 +246,9 @@ export const WalletContent = ({
             </Button>
           )}
 
-          <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
+          {![ViewState.RECEIVE_OPTIONS, ViewState.RECEIVE_QR].includes(viewState) && (
+            <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
+          )}
           {viewState <= ViewState.SEND_ASSETS && (
             <FlexGap>
               <DisconnectButton scale="xs" onClick={onDisconnect}>
