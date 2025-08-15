@@ -356,7 +356,7 @@ const SlippageSettingsModal = ({
 
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-      <MotionModal title={t('Slippage setting')} onDismiss={onDismiss} minHeight="100px">
+      <MotionModal title={t('Slippage Setting')} onDismiss={onDismiss} minHeight="100px">
         {isSolana(chainId) ? <SlippageTabs /> : evmSlippageSetting}
       </MotionModal>
     </ModalV2>
