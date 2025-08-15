@@ -3,7 +3,7 @@ import { Box, Flex, LogoIcon, Modal, ModalV2 } from '@pancakeswap/uikit'
 
 import { QRCodeSVG } from 'qrcode.react'
 import { styled } from 'styled-components'
-import { CopyAddress } from './WalletCopyButton'
+import QRCodeCopyButton from './QRCodeCopyButton'
 
 interface ReceiveModalProps {
   account: string
@@ -68,9 +68,7 @@ export const ReceiveContent: React.FC<{ account: string }> = ({ account }) => {
         </QRCode>
       </QRCodeWrapper>
 
-      <Box width="100%" mt="24px">
-        <CopyAddress account={account} tooltipMessage={t('Copied')} />
-      </Box>
+      <QRCodeCopyButton account={account} />
     </Flex>
   )
 }

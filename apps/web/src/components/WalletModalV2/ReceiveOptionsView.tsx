@@ -1,4 +1,3 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { ArrowForwardIcon, Box, Button, Flex, Text, Image, WalletFilledV2Icon } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import { useConnect } from 'wagmi'
@@ -9,7 +8,6 @@ import { walletsConfig } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
-import { NonEVMChainId } from '@pancakeswap/chains'
 
 interface ReceiveOptionsViewProps {
   onSelectEVM: () => void
@@ -107,7 +105,6 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
   evmAccount,
   solanaAccount,
 }) => {
-  const { t } = useTranslation()
   const { connectAsync } = useConnect()
   const { chainId } = useActiveChainId()
   const { wallet: solanaWallet } = useWallet()
@@ -128,10 +125,6 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
 
   return (
     <Box padding="24px" maxWidth="450px" width="100%">
-      <Text fontSize="20px" fontWeight="600" mb="24px" color="text">
-        {t('Receive')}
-      </Text>
-
       <Box>
         <OptionCard variant="tertiary" onClick={onSelectEVM}>
           <Flex alignItems="center">

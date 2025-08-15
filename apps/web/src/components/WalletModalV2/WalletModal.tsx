@@ -4,6 +4,7 @@ import {
   ArrowForwardIcon,
   Box,
   Button,
+  Flex,
   FlexGap,
   Modal,
   ModalHeader,
@@ -38,7 +39,7 @@ import { SEND_ENTRY, ViewState } from './type'
 import { CopyAddress } from './WalletCopyButton'
 import { useWalletModalV2ViewState } from './WalletModalV2ViewStateProvider'
 import ReceiveOptionsView from './ReceiveOptionsView'
-import ReceiveModal, { ReceiveContent } from './ReceiveModal'
+import { ReceiveContent } from './ReceiveModal'
 
 interface WalletModalProps {
   isOpen: boolean
@@ -213,18 +214,7 @@ export const WalletContent = ({
         onBack={goBack}
       />
     )
-  }, [
-    viewState,
-    balances,
-    isLoading,
-    goBack,
-    setViewState,
-    onReceiveClick,
-    evmAccount,
-    solanaAccount,
-    selectedReceiveAccount,
-    account,
-  ])
+  }, [viewState, balances, isLoading, goBack, setViewState, evmAccount, solanaAccount, selectedReceiveAccount, account])
 
   return (
     <Box
@@ -236,14 +226,20 @@ export const WalletContent = ({
       {account ? (
         <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px" mt="8px">
           {viewState > ViewState.SEND_ASSETS && (
-            <Button
-              variant="tertiary"
-              style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
-              onClick={goBack}
-              ml={isMobile ? '8px' : '16px'}
-            >
-              <ArrowBackIcon fontSize="24px" color={theme.colors.primary60} />
-            </Button>
+            <Flex alignItems="center" gap="12px" ml={isMobile ? '8px' : '16px'}>
+              <Button
+                variant="tertiary"
+                style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
+                onClick={goBack}
+              >
+                <ArrowBackIcon fontSize="24px" color={theme.colors.primary60} />
+              </Button>
+              {[ViewState.RECEIVE_OPTIONS, ViewState.RECEIVE_QR].includes(viewState) && (
+                <Text fontSize="20px" fontWeight="600" color="text">
+                  {t('Receive')}
+                </Text>
+              )}
+            </Flex>
           )}
 
           {![ViewState.RECEIVE_OPTIONS, ViewState.RECEIVE_QR].includes(viewState) && (
