@@ -13,9 +13,11 @@ import { basisPointsToPercent } from 'utils/exchange'
 import { InterfaceOrder } from 'views/Swap/utils'
 import { atomWithLoadable } from './atomWithLoadable'
 
+const PCSX_AUTO_SLIPPAGE_BPS = 10 // 0.1%
+
 export const bestXApiAtom = atomFamily((option: QuoteQuery) => {
   return atomWithLoadable(async (get) => {
-    const { xEnabled, enabled, slippage, address } = option
+    const { xEnabled, enabled, slippage, address, isAutoSlippage } = option
     if (!xEnabled || !enabled) {
       return undefined
     }
@@ -38,7 +40,7 @@ export const bestXApiAtom = atomFamily((option: QuoteQuery) => {
           amount,
           quoteCurrency: currency,
           tradeType: tradeType || TradeType.EXACT_INPUT,
-          slippage: basisPointsToPercent(slippage),
+          slippage: basisPointsToPercent(isAutoSlippage ? PCSX_AUTO_SLIPPAGE_BPS : slippage),
           amm: { maxHops, maxSplits, poolTypes, gasPriceWei },
           x: {
             useSyntheticQuotes: true,
