@@ -1,13 +1,13 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { Flex, PancakeToggle, PreTitle, QuestionHelper, Text, Toggle } from '@pancakeswap/uikit'
+import { Box, Flex, PancakeToggle, PreTitle, QuestionHelper, Text, Toggle } from '@pancakeswap/uikit'
 import { useAudioPlay } from '@pancakeswap/utils/user'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { memo } from 'react'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import GasSettings from '../GasSettings'
 import { PrimaryOutlineButton } from '../styles'
-import TransactionSettings from '../TransactionSettings'
+import { TxDeadlintSetting } from '../TransactionSettings'
 import { TabContent } from './TabContent'
 
 interface SettingsTabProps {
@@ -47,12 +47,15 @@ export const SettingsTab = memo(
       <TabContent id={`${ariaId}_motion-tabpanel-0`} role="tabpanel" aria-labelledby={`${ariaId}_motion-tab-0`}>
         <Flex flexDirection="column">
           <PreTitle mb="8px">{t('Swaps & Liquidity')}</PreTitle>
-          {chainId === ChainId.BSC && (
-            <Flex justifyContent="space-between" alignItems="center" mb="24px">
-              <GasSettings />
-            </Flex>
-          )}
-          <TransactionSettings />
+          <Box mb="24px">
+            {chainId === ChainId.BSC && (
+              <Flex justifyContent="space-between" alignItems="center" mb="16px">
+                <GasSettings />
+              </Flex>
+            )}
+
+            <TxDeadlintSetting />
+          </Box>
 
           <PreTitle>{t('Interface Settings')}</PreTitle>
 

@@ -21,11 +21,11 @@ import {
 } from '@pancakeswap/uikit'
 import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
-import GlobalSettings from 'components/Menu/GlobalSettings'
+// import GlobalSettings from 'components/Menu/GlobalSettings'
 import { DEFAULT_SLIPPAGE_TOLERANCE, SlippageError } from 'components/Menu/GlobalSettings/TransactionSettings'
 import { SlippageTabs } from 'components/Settings/SlippageTabs'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
+// import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 
 import { useAutoSlippageEnabled, useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { useCallback, useMemo, useState } from 'react'
@@ -138,19 +138,7 @@ export const SlippageButton = ({ enableAutoSlippage: enableAutoSlippage_ = false
     </div>
   )
 
-  if (enableAutoSlippage) {
-    return (
-      <>
-        <GlobalSettings
-          id="slippage_btn_global_settings"
-          key="slippage_btn_global_settings"
-          mode={SettingsMode.SWAP_LIQUIDITY}
-          overrideButton={button}
-        />
-      </>
-    )
-  }
-
+  // TODO: add "Advanced Settings" text button to open GlobalSettings
   return (
     <>
       {button(onOpen)}
