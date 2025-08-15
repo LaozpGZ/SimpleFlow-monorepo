@@ -56,9 +56,13 @@ const ChainOption = styled(Flex)`
   transition: background-color 0.15s;
 `
 
-const useCustomChains = () => {
+const useIsTwap = () => {
   const router = useRouter()
-  const isTWAP = router.pathname.includes('twap') || router.pathname.includes('limit')
+  return router.pathname.includes('twap') || router.pathname.includes('limit')
+}
+
+const useCustomChains = () => {
+  const isTWAP = useIsTwap()
   return useMemo(() => {
     if (isTWAP) {
       return TWAP_SUPPORTED_CHAINS
@@ -77,6 +81,7 @@ export default function SwapNetworkSelection({
   onSelect: (chainId: UnifiedChainId) => void
 }) {
   const { chainId: activeChainId } = useActiveChainId()
+  const isTWAP = useIsTwap()
 
   const usedChainId = chainId ?? activeChainId
 
@@ -88,7 +93,13 @@ export default function SwapNetworkSelection({
 
   const { t } = useTranslation()
 
+  // if is twap and is dependent, show only the selected chain
+  const showOnlySelectedChain = isTWAP && isDependent
+
   const supportedChains = useMemo(() => {
+    if (showOnlySelectedChain) {
+      return Chains.filter((chain) => chain.id === usedChainId)
+    }
     if (isDependent) {
       return Chains.filter((chain) => chain.id === usedChainId || supportedBridgeChains.includes(chain.id))
     }
@@ -102,12 +113,12 @@ export default function SwapNetworkSelection({
       }
 
       if (customChains) {
-        return customChains.includes(chain.id)
+        return customChains.includes(chain.id as number)
       }
 
       return true
     })
-  }, [supportedBridgeChains, usedChainId, isDependent, customChains])
+  }, [supportedBridgeChains, usedChainId, isDependent, customChains, showOnlySelectedChain])
 
   const selectedChain = useMemo(
     () => supportedChains.find((chain) => chain.id === usedChainId),
