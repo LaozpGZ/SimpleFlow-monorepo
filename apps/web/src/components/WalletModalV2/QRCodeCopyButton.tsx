@@ -1,4 +1,3 @@
-import { useTranslation } from '@pancakeswap/localization'
 import { Box, CopyIcon, Flex, Text, Image, WalletFilledV2Icon } from '@pancakeswap/uikit'
 import { useState, useMemo } from 'react'
 import { styled } from 'styled-components'
@@ -117,7 +116,6 @@ const CopyButton = styled(Box)`
 `
 
 const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account }) => {
-  const { t } = useTranslation()
   const [copied, setCopied] = useState(false)
   const { connectAsync } = useConnect()
   const { chainId } = useActiveChainId()
@@ -153,7 +151,7 @@ const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account }) => {
   }
 
   return (
-    <Box width="100%" mt="16px">
+    <Box width="100%" mb="16px">
       <CopyContainer>
         <Flex alignItems="center">
           <IconContainer>

@@ -225,7 +225,7 @@ export const WalletContent = ({
       {account ? (
         <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px" mt="8px">
           {viewState > ViewState.SEND_ASSETS && (
-            <FlexGap alignItems="center" gap="12px" ml={isMobile ? '8px' : '16px'}>
+            <FlexGap alignItems="center" gap="16px" ml={isMobile ? '8px' : '16px'}>
               <Button
                 variant="tertiary"
                 style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}

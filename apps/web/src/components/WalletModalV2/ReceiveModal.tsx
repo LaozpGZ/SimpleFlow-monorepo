@@ -38,6 +38,8 @@ export const ReceiveContent: React.FC<{ account: string }> = ({ account }) => {
 
   return (
     <Flex flexDirection="column" alignItems="center" justifyContent="center" maxWidth="450px">
+      <QRCodeCopyButton account={account} />
+
       <QRCodeWrapper>
         <QRCode>
           <Box position="relative">
@@ -67,8 +69,6 @@ export const ReceiveContent: React.FC<{ account: string }> = ({ account }) => {
           </Box>
         </QRCode>
       </QRCodeWrapper>
-
-      <QRCodeCopyButton account={account} />
     </Flex>
   )
 }
