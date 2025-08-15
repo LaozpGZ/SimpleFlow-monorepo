@@ -39,6 +39,7 @@ export const bestAMMTradeFromQuoterWorker2Atom = atomFamily((option: QuoteQuery)
     if (!worker) {
       throw new Error('Quote worker not initialized')
     }
+    const { chainId } = currency
     const controller = new AbortController()
 
     // todo:@Philip here just a mock example
@@ -59,7 +60,7 @@ export const bestAMMTradeFromQuoterWorker2Atom = atomFamily((option: QuoteQuery)
           return result
         },
         {
-          ms: QUOTE_TIMEOUT,
+          ms: QUOTE_TIMEOUT[chainId],
           abort: () => {
             controller?.abort()
           },
@@ -121,7 +122,7 @@ export const bestAMMTradeFromQuoterWorker2Atom = atomFamily((option: QuoteQuery)
         return order
       },
       {
-        ms: QUOTE_TIMEOUT,
+        ms: QUOTE_TIMEOUT[chainId],
         abort: () => {
           controller?.abort()
         },

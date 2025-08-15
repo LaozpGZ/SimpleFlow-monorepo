@@ -3,7 +3,7 @@ import { TradeType } from '@pancakeswap/swap-sdk-core'
 import { withTimeout } from '@pancakeswap/utils/withTimeout'
 import { QUOTING_API } from 'config/constants/endpoints'
 import { atomFamily } from 'jotai/utils'
-import { QUOTE_TIMEOUT } from 'quoter/consts'
+import { QUOTE_TIMEOUT, X_API_TIMEOUT } from 'quoter/consts'
 import { quoteTraceAtom } from 'quoter/perf/quoteTracker'
 import { QuoteQuery } from 'quoter/quoter.types'
 import { gasPriceWeiAtom } from 'quoter/utils/gasPriceAtom'
@@ -70,7 +70,7 @@ export const bestXApiAtom = atomFamily((option: QuoteQuery) => {
         return result as InterfaceOrder
       },
       {
-        ms: QUOTE_TIMEOUT,
+        ms: X_API_TIMEOUT,
         abort: () => {
           controller.abort()
         },

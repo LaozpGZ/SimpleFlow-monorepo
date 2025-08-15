@@ -100,6 +100,7 @@ export type QuoteQuery = Options & {
   createTime: number
   routeKey?: string
   gasLimit?: bigint
+  ver: number
 }
 
 export interface SVMQuoteQuery extends Omit<QuoteQuery, 'amount' | 'baseCurrency' | 'currency'> {

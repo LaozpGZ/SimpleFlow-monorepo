@@ -7,6 +7,7 @@ import { solanaUserSlippageAtomWithLocalStorage, solanaPriorityFeeAtomWithLocalS
 import { QUOTE_TIMEOUT } from 'quoter/consts'
 import { parseSVMTradeIntoSVMOrder } from 'quoter/utils/svm-utils/parseSVMTradeIntoSVMOrder'
 import { type InterfaceOrder } from 'views/Swap/utils'
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { NoValidRouteError, type SVMQuoteQuery } from '../quoter.types'
 import { atomWithLoadable } from './atomWithLoadable'
@@ -47,7 +48,7 @@ export const bestSVMOrderAtom = atomFamily((_option: SVMQuoteQuery) => {
           return solTradeRoute
         },
         {
-          ms: QUOTE_TIMEOUT,
+          ms: QUOTE_TIMEOUT[NonEVMChainId.SOLANA],
           abort: () => {
             controller.abort()
           },

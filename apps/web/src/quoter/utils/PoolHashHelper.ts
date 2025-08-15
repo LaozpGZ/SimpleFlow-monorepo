@@ -74,24 +74,8 @@ export class PoolHashHelper {
     return keccak256(`0x${prts.join(':')}`)
   }
 
-  static hashPlaceHolderQuoteQuery = (query: QuoteQuery) => {
-    const {
-      // slippage,
-      // blockNumber,
-      // gasLimit,
-      // provider,
-      // createTime,
-      // hash,
-      // placeholderHash,
-      // routeKey,
-      amount,
-      currency,
-      nonce,
-      infinitySwap,
-      v2Swap,
-      v3Swap,
-      stableSwap,
-    } = query
+  static hashPlaceHolderQuoteQuery = (query: Omit<QuoteQuery, 'hash' | 'createTime'>) => {
+    const { amount, currency, nonce, infinitySwap, v2Swap, v3Swap, stableSwap } = query
     const chainId = query.baseCurrency?.chainId
     // NOTE: Support for cross-chain quotes
     const destinationChainId = query.currency?.chainId

@@ -94,6 +94,9 @@ export const useQuoterSync = () => {
   const setPlaceholder = useSetAtom(updatePlaceholderAtom)
   const { t, schedule, clear } = useTimer(1000)
 
+  const successRevalidate = QUOTE_SUCC_REVALIDATE[chainId as keyof typeof QUOTE_SUCC_REVALIDATE] ?? 15
+  const failRevalidate = QUOTE_FAIL_REVALIDATE[chainId as keyof typeof QUOTE_FAIL_REVALIDATE] ?? 3
+
   useEffect(() => {
     setActiveQuoteHash(quoteQuery.hash)
   }, [quoteQuery.hash, setActiveQuoteHash])
@@ -111,19 +114,19 @@ export const useQuoterSync = () => {
   useEffect(() => {
     if (t > 0 && !paused) {
       if (quoteResult.isJust() && !quoteResult.hasFlag('placeholder')) {
-        schedule(t + QUOTE_SUCC_REVALIDATE, () => {
+        schedule(t + successRevalidate, () => {
           setNonce((v) => v + 1)
         })
         return
       }
 
       if (quoteResult.isFail()) {
-        schedule(t + QUOTE_FAIL_REVALIDATE, () => {
+        schedule(t + failRevalidate, () => {
           setNonce((v) => v + 1)
         })
       }
     }
-  }, [t, quoteResult, paused, schedule])
+  }, [t, quoteResult, paused, schedule, successRevalidate, failRevalidate])
 
   useEffect(() => {
     const quoteResultToSetPlaceholder =

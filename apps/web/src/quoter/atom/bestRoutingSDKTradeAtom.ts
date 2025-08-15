@@ -30,6 +30,7 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
     const controller = new AbortController()
     const perf = get(quoteTraceAtom(option))
     perf.tracker.track('start')
+    const { chainId } = currency
 
     const query = withTimeout(
       async () => {
@@ -67,7 +68,7 @@ export const bestRoutingSDKTradeAtom = atomFamily((option: QuoteQuery) => {
         return order
       },
       {
-        ms: QUOTE_TIMEOUT,
+        ms: QUOTE_TIMEOUT[chainId],
         abort: () => {
           controller.abort()
         },
