@@ -1,6 +1,7 @@
 import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import { PoolQuery, PoolQueryOptions, QuoteQuery, SVMQuoteQuery } from 'quoter/quoter.types'
-import { getViemClients } from 'utils/viem'
+import { ChainId } from '@pancakeswap/chains'
+import { getViemClients, viemClients } from 'utils/viem'
 import { PoolHashHelper } from './PoolHashHelper'
 
 const PLACE_HOLDER_TIME = 1000 * 120 // 2 minutes
@@ -18,7 +19,9 @@ export function createQuoteQuery(query: Omit<QuoteQuery | SVMQuoteQuery, 'hash' 
   option1.createTime = Date.now()
   const placeholderNonce = Math.floor(Date.now() / PLACE_HOLDER_TIME)
   option1.placeholderHash = PoolHashHelper.hashPlaceHolderQuoteQuery({ ...option1, nonce: placeholderNonce })
-  option1.provider = getViemClients
+  option1.provider = (({ chainId }: { chainId: ChainId }) => {
+    return viemClients[chainId]
+  }) as typeof getViemClients
   cache.set(hash, option1)
 
   return option1

@@ -12,6 +12,7 @@ import { PoolQuery, PoolQueryOptions } from 'quoter/quoter.types'
 import { v3Clients } from 'utils/graphql'
 import { POOL_EDGE_API_FETCH_TIMEOUT } from 'quoter/consts'
 import { getViemClients } from 'utils/viem'
+import { memoizeAsync } from '@pancakeswap/utils/memoize'
 import { edgePoolQueryClient } from './edgePoolQueryClient'
 import { Protocol as EdgeProtocol } from './edgeQueries.util'
 import { PoolHashHelper } from './PoolHashHelper'
@@ -177,7 +178,15 @@ const poolQueriesFactory = memoize((chainId: ChainId) => {
     return queryFunc()
   }, cacheOption)
 
-  const getCandidatePools = async (query: PoolQuery, options: PoolQueryOptions) => {
+  const asyncCacheOption = {
+    resolver: (query: PoolQuery) => {
+      const epoch = Math.floor(Date.now() / POOL_TTL)
+      const hash = PoolHashHelper.hashPoolQuery(query)
+      return `${epoch}:${hash}`
+    },
+  }
+
+  const getCandidatePools = memoizeAsync(async (query: PoolQuery, options: PoolQueryOptions) => {
     const { chainId, currencyA, currencyB, blockNumber } = query
     if (!currencyA || !currencyB || !chainId || !blockNumber) {
       return []
@@ -192,9 +201,9 @@ const poolQueriesFactory = memoize((chainId: ChainId) => {
       'full',
       options.signal,
     )
-  }
+  }, asyncCacheOption)
 
-  const getCandidatePoolsLight = cacheByLRU(async (query: PoolQuery, options: PoolQueryOptions) => {
+  const getCandidatePoolsLight = memoizeAsync(async (query: PoolQuery, options: PoolQueryOptions) => {
     const { chainId, currencyA, currencyB, blockNumber } = query
     if (!currencyA || !currencyB || !chainId || !blockNumber) {
       return []
@@ -202,7 +211,7 @@ const poolQueriesFactory = memoize((chainId: ChainId) => {
 
     const protocols = protocolsFromQuery(options)
     return edgePoolQueryClient.getAllCandidates(currencyA, currencyB, chainId, blockNumber, protocols, 'light')
-  }, cacheOption)
+  }, asyncCacheOption)
 
   return {
     getV2CandidatePools,
