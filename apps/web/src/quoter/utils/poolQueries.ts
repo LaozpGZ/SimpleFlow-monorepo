@@ -16,7 +16,7 @@ import { edgePoolQueryClient } from './edgePoolQueryClient'
 import { Protocol as EdgeProtocol } from './edgeQueries.util'
 import { PoolHashHelper } from './PoolHashHelper'
 
-export const poolQueriesFactory = memoize((chainId: ChainId) => {
+const poolQueriesFactory = memoize((chainId: ChainId) => {
   const POOL_TTL = POOLS_FAST_REVALIDATE[chainId] || 10_000
   function getCacheKey(args: [PoolQuery, PoolQueryOptions] | [PoolQuery]) {
     const hash = PoolHashHelper.hashPoolQuery(args[0])
@@ -177,6 +177,33 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     return queryFunc()
   }, cacheOption)
 
+  const getCandidatePools = async (query: PoolQuery, options: PoolQueryOptions) => {
+    const { chainId, currencyA, currencyB, blockNumber } = query
+    if (!currencyA || !currencyB || !chainId || !blockNumber) {
+      return []
+    }
+    const protocols = protocolsFromQuery(options)
+    return edgePoolQueryClient.getAllCandidates(
+      currencyA,
+      currencyB,
+      chainId,
+      blockNumber,
+      protocols,
+      'full',
+      options.signal,
+    )
+  }
+
+  const getCandidatePoolsLight = cacheByLRU(async (query: PoolQuery, options: PoolQueryOptions) => {
+    const { chainId, currencyA, currencyB, blockNumber } = query
+    if (!currencyA || !currencyB || !chainId || !blockNumber) {
+      return []
+    }
+
+    const protocols = protocolsFromQuery(options)
+    return edgePoolQueryClient.getAllCandidates(currencyA, currencyB, chainId, blockNumber, protocols, 'light')
+  }, cacheOption)
+
   return {
     getV2CandidatePools,
     getV3CandidatePools,
@@ -185,6 +212,8 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     getInfinityCandidatePoolsLight,
     getInfinityCandidatePools,
     getStableSwapPools,
+    getCandidatePools,
+    getCandidatePoolsLight,
   }
 })
 
@@ -206,16 +235,7 @@ export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOp
   }
 
   const defaultQuery = async () => {
-    const protocols = protocolsFromQuery(options)
-    return edgePoolQueryClient.getAllCandidates(
-      currencyA,
-      currencyB,
-      chainId,
-      blockNumber,
-      protocols,
-      'full',
-      options.signal,
-    )
+    return queries.getCandidatePools(query, options)
   }
 
   if (isTestnetChainId(chainId)) {
@@ -247,8 +267,7 @@ export const fetchCandidatePoolsLite = async (query: PoolQuery, options: PoolQue
   }
 
   const defaultQuery = async () => {
-    const protocols = protocolsFromQuery(options)
-    return edgePoolQueryClient.getAllCandidates(currencyA, currencyB, chainId, blockNumber, protocols, 'light')
+    return queries.getCandidatePoolsLight(query, options)
   }
 
   const call = createAsyncCallWithFallbacks(defaultQuery, {
