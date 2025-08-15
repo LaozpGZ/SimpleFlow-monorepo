@@ -127,7 +127,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
 
   return (
     <Box padding="12px 0px" maxWidth="450px" width="100%" mt="24px">
-      <FlexGap gap="12px">
+      <FlexGap gap="12px" flexDirection="column">
         <OptionCard onClick={onSelectEVM}>
           <Flex alignItems="center">
             <IconContainer>
