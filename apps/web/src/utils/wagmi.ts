@@ -2,6 +2,7 @@ import { getWagmiConnectorV2 } from '@binance/w3w-wagmi-connector-v2'
 import { cyberWalletConnector as createCyberWalletConnector, isCyberWallet } from '@cyberlab/cyber-app-sdk'
 import { ChainId, Chains } from '@pancakeswap/chains'
 import { blocto } from '@pancakeswap/wagmi/connectors/blocto'
+import { EvmConnectorNames } from '@pancakeswap/ui-wallets'
 import { CHAINS } from 'config/chains'
 import { PUBLIC_NODES } from 'config/nodes'
 import { ConnectorNames } from 'config/wallet'
@@ -82,14 +83,14 @@ export const cyberWalletConnector = isCyberWallet()
   : undefined
 
 export const CONNECTOR_MAP = {
-  [ConnectorNames.Injected]: injectedConnector,
+  [EvmConnectorNames.Injected]: injectedConnector,
   //  [ConnectorNames.Safe]: safe(),
-  [ConnectorNames.WalletLink]: coinbaseConnector,
-  [ConnectorNames.WalletConnect]: walletConnectConnector,
-  [ConnectorNames.Blocto]: bloctoConnector,
-  [ConnectorNames.TrustWallet]: trustConnector,
-  [ConnectorNames.BinanceW3W]: binanceWeb3WalletConnector(),
-  [ConnectorNames.CyberWallet]: cyberWalletConnector,
+  [EvmConnectorNames.WalletLink]: coinbaseConnector,
+  [EvmConnectorNames.WalletConnect]: walletConnectConnector,
+  [EvmConnectorNames.Blocto]: bloctoConnector,
+  [EvmConnectorNames.TrustWallet]: trustConnector,
+  [EvmConnectorNames.BinanceW3W]: binanceWeb3WalletConnector(),
+  [EvmConnectorNames.CyberWallet]: cyberWalletConnector,
 }
 
 export const CONNECTORS = [
