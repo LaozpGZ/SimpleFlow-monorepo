@@ -1,5 +1,5 @@
 import { ModalV2Props } from '@pancakeswap/uikit'
-import { EvmConnectorNames, SolanaConnectorNames } from '../../config/connectorNames'
+import { WalletName } from '@solana/wallet-adapter-base'
 import { ConnectData, WalletConfigV3 } from '../../types'
 
 export interface MultichainWalletModalProps extends ModalV2Props {
@@ -7,7 +7,7 @@ export interface MultichainWalletModalProps extends ModalV2Props {
   topWallets?: WalletConfigV3[]
   evmLogin: (wallet: WalletConfigV3) => Promise<ConnectData | undefined>
   createEvmQrCode?: () => () => Promise<string>
-  solanaLogin: (connectorID: SolanaConnectorNames) => Promise<ConnectData | undefined>
+  solanaLogin: (walletName: WalletName) => void
   onWalletConnectCallBack?: (walletTitle?: string, address?: string) => void
   fullSize?: boolean
   docText: string

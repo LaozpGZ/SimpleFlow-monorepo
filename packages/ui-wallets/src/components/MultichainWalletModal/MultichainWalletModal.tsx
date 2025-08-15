@@ -1,4 +1,5 @@
 import { useWallet } from '@solana/wallet-adapter-react'
+import { WalletName } from '@solana/wallet-adapter-base'
 import { useTranslation } from '@pancakeswap/localization'
 import { AtomBox, ModalV2, ModalWrapper, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useAtom, useSetAtom } from 'jotai'
@@ -83,9 +84,11 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
   const handleWalletConnected = useCallback(
     (wallet: WalletConfigV3, network: WalletAdaptedNetwork, connectData?: ConnectData) => {
       if (network === WalletAdaptedNetwork.Solana) setLastUsedSolanaWallet(wallet.id)
-      if (network === WalletAdaptedNetwork.EVM) setLastUsedEvmWallet(wallet.id)
+      if (network === WalletAdaptedNetwork.EVM) {
+        setLastUsedEvmWallet(wallet.id)
 
-      onWalletConnectCallBack?.(wallet.title, connectData?.accounts?.[0])
+        onWalletConnectCallBack?.(wallet.title, connectData?.accounts?.[0])
+      }
     },
     [onWalletConnectCallBack, setLastUsedEvmWallet, setLastUsedSolanaWallet],
   )
@@ -119,7 +122,10 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
           })
       }
 
-      // @TODO @ChefJerry, add solana login
+      if (network === WalletAdaptedNetwork.Solana && wallet.solanaAdapterName) {
+        solanaLogin(wallet.solanaAdapterName as WalletName)
+        handleWalletConnected(wallet, network)
+      }
     }
   }, [])
 

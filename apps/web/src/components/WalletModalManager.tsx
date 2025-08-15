@@ -1,5 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { LegacyWalletModal, LegacyWalletConfig, MultichainWalletModal } from '@pancakeswap/ui-wallets'
+import {
+  LegacyWalletModal,
+  LegacyWalletConfig,
+  MultichainWalletModal,
+  SolanaConnectorNames,
+} from '@pancakeswap/ui-wallets'
 import { ConnectorNames, createQrCode, createWallets, getDocLink, mevDocLink, TOP_WALLET_MAP } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import useAuth from 'hooks/useAuth'
@@ -9,9 +14,12 @@ import { useFirebaseAuth } from 'wallet/Privy/firebase'
 import { useCallback, useMemo } from 'react'
 import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
 import { useConnect } from 'wagmi'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { WalletName } from '@solana/wallet-adapter-base'
 
 const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> = ({ isOpen, onDismiss }) => {
   const { login } = useAuth()
+  const { select } = useWallet()
   const {
     t,
     currentLanguage: { code },
@@ -45,6 +53,13 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
     return createQrCode(chainId || ChainId.BSC, connectAsync)
   }, [chainId, connectAsync])
 
+  const solanaLogin = useCallback(
+    (walletName: WalletName) => {
+      return select(walletName)
+    },
+    [select],
+  )
+
   return (
     <MultichainWalletModal
       // mevDocLink={mevDocLink}
@@ -55,7 +70,7 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
       // topWallets={topWallets}
       evmLogin={login}
       createEvmQrCode={createEvmQrCode}
-      solanaLogin={login}
+      solanaLogin={solanaLogin}
       onDismiss={onDismiss}
       onWalletConnectCallBack={handleWalletConnect}
       onGoogleLogin={loginWithGoogle}
