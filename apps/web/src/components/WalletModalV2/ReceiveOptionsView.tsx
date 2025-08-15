@@ -1,4 +1,4 @@
-import { ArrowForwardIcon, Box, Button, Flex, Text, Image, WalletFilledV2Icon } from '@pancakeswap/uikit'
+import { ArrowForwardIcon, Box, Flex, Text, Image, WalletFilledV2Icon } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import { useConnect } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -16,7 +16,7 @@ interface ReceiveOptionsViewProps {
   solanaAccount?: string
 }
 
-const OptionCard = styled(Button)`
+const OptionCard = styled(Box)`
   background: ${({ theme }) => theme.colors.backgroundAlt};
   border: 1px solid ${({ theme }) => (theme.isDark ? '#372F47' : '#E7E3EB')};
   border-radius: 20px;
@@ -28,6 +28,7 @@ const OptionCard = styled(Button)`
   margin-bottom: 8px;
   transition: all 0.2s ease;
   height: 64px;
+  cursor: pointer;
 
   &:hover {
     border-color: ${({ theme }) => theme.colors.primary};
@@ -51,7 +52,7 @@ const ChainIconWrapper = styled(Box)`
   align-items: center;
   justify-content: center;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 `
 
 const EVMIcon = styled(Box)`
@@ -79,24 +80,25 @@ const SolanaIcon = styled(Box)`
   justify-content: center;
   position: relative;
   background-image: url('${ASSET_CDN}/web/chains/8000001001.png');
-  background-size: 24px 24px;
+  background-size: 32px 32px;
   background-repeat: no-repeat;
   background-position: center;
 `
 
 const WalletIconWrapper = styled(Box)`
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   position: absolute;
-  bottom: -2px;
-  right: -2px;
+  bottom: -4px;
+  right: -4px;
   border: 2px solid ${({ theme }) => theme.colors.backgroundAlt};
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   background: ${({ theme }) => theme.colors.backgroundAlt};
+  z-index: 10;
 `
 
 const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
@@ -126,16 +128,16 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
   return (
     <Box padding="24px" maxWidth="450px" width="100%">
       <Box>
-        <OptionCard variant="tertiary" onClick={onSelectEVM}>
+        <OptionCard onClick={onSelectEVM}>
           <Flex alignItems="center">
             <IconContainer>
               <ChainIconWrapper>
                 <EVMIcon />
                 <WalletIconWrapper>
                   {evmWalletIcon ? (
-                    <Image src={evmWalletIcon as string} width={12} height={12} alt="EVM Wallet" />
+                    <Image src={evmWalletIcon as string} width={16} height={16} alt="EVM Wallet" />
                   ) : (
-                    <WalletFilledV2Icon width={8} height={8} color="primary" />
+                    <WalletFilledV2Icon width={12} height={12} color="primary" />
                   )}
                 </WalletIconWrapper>
               </ChainIconWrapper>
@@ -149,19 +151,19 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
               </Box>
             </IconContainer>
           </Flex>
-          <ArrowForwardIcon color="textSubtle" width="16px" />
+          <ArrowForwardIcon color="textSubtle" width="20px" height="20px" />
         </OptionCard>
 
-        <OptionCard variant="tertiary" onClick={onSelectSolana}>
+        <OptionCard onClick={onSelectSolana}>
           <Flex alignItems="center">
             <IconContainer>
               <ChainIconWrapper>
                 <SolanaIcon />
                 <WalletIconWrapper>
                   {solanaWalletIcon ? (
-                    <Image src={solanaWalletIcon} width={12} height={12} alt="Solana Wallet" />
+                    <Image src={solanaWalletIcon} width={16} height={16} alt="Solana Wallet" />
                   ) : (
-                    <WalletFilledV2Icon width={8} height={8} color="primary" />
+                    <WalletFilledV2Icon width={12} height={12} color="primary" />
                   )}
                 </WalletIconWrapper>
               </ChainIconWrapper>
@@ -175,7 +177,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
               </Box>
             </IconContainer>
           </Flex>
-          <ArrowForwardIcon color="textSubtle" width="16px" />
+          <ArrowForwardIcon color="textSubtle" width="20px" height="20px" />
         </OptionCard>
       </Box>
     </Box>
