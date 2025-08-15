@@ -12,11 +12,12 @@ import { PoolQuery, PoolQueryOptions } from 'quoter/quoter.types'
 import { v3Clients } from 'utils/graphql'
 import { POOL_EDGE_API_FETCH_TIMEOUT } from 'quoter/consts'
 import { getViemClients } from 'utils/viem'
+import { memoizeAsync } from '@pancakeswap/utils/memoize'
 import { edgePoolQueryClient } from './edgePoolQueryClient'
 import { Protocol as EdgeProtocol } from './edgeQueries.util'
 import { PoolHashHelper } from './PoolHashHelper'
 
-export const poolQueriesFactory = memoize((chainId: ChainId) => {
+const poolQueriesFactory = memoize((chainId: ChainId) => {
   const POOL_TTL = POOLS_FAST_REVALIDATE[chainId] || 10_000
   function getCacheKey(args: [PoolQuery, PoolQueryOptions] | [PoolQuery]) {
     const hash = PoolHashHelper.hashPoolQuery(args[0])
@@ -177,6 +178,41 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     return queryFunc()
   }, cacheOption)
 
+  const asyncCacheOption = {
+    resolver: (query: PoolQuery) => {
+      const epoch = Math.floor(Date.now() / POOL_TTL)
+      const hash = PoolHashHelper.hashPoolQuery(query)
+      return `${epoch}:${hash}`
+    },
+  }
+
+  const getCandidatePools = memoizeAsync(async (query: PoolQuery, options: PoolQueryOptions) => {
+    const { chainId, currencyA, currencyB, blockNumber } = query
+    if (!currencyA || !currencyB || !chainId || !blockNumber) {
+      return []
+    }
+    const protocols = protocolsFromQuery(options)
+    return edgePoolQueryClient.getAllCandidates(
+      currencyA,
+      currencyB,
+      chainId,
+      blockNumber,
+      protocols,
+      'full',
+      options.signal,
+    )
+  }, asyncCacheOption)
+
+  const getCandidatePoolsLight = memoizeAsync(async (query: PoolQuery, options: PoolQueryOptions) => {
+    const { chainId, currencyA, currencyB, blockNumber } = query
+    if (!currencyA || !currencyB || !chainId || !blockNumber) {
+      return []
+    }
+
+    const protocols = protocolsFromQuery(options)
+    return edgePoolQueryClient.getAllCandidates(currencyA, currencyB, chainId, blockNumber, protocols, 'light')
+  }, asyncCacheOption)
+
   return {
     getV2CandidatePools,
     getV3CandidatePools,
@@ -185,6 +221,8 @@ export const poolQueriesFactory = memoize((chainId: ChainId) => {
     getInfinityCandidatePoolsLight,
     getInfinityCandidatePools,
     getStableSwapPools,
+    getCandidatePools,
+    getCandidatePoolsLight,
   }
 })
 
@@ -206,16 +244,7 @@ export const fetchCandidatePools = async (query: PoolQuery, options: PoolQueryOp
   }
 
   const defaultQuery = async () => {
-    const protocols = protocolsFromQuery(options)
-    return edgePoolQueryClient.getAllCandidates(
-      currencyA,
-      currencyB,
-      chainId,
-      blockNumber,
-      protocols,
-      'full',
-      options.signal,
-    )
+    return queries.getCandidatePools(query, options)
   }
 
   if (isTestnetChainId(chainId)) {
@@ -247,8 +276,7 @@ export const fetchCandidatePoolsLite = async (query: PoolQuery, options: PoolQue
   }
 
   const defaultQuery = async () => {
-    const protocols = protocolsFromQuery(options)
-    return edgePoolQueryClient.getAllCandidates(currencyA, currencyB, chainId, blockNumber, protocols, 'light')
+    return queries.getCandidatePoolsLight(query, options)
   }
 
   const call = createAsyncCallWithFallbacks(defaultQuery, {

@@ -36,7 +36,7 @@ export class PoolHashHelper {
   }
 
   static hashPoolQuery = (query: PoolQuery) => {
-    const { currencyA, currencyB, ...rest } = query
+    const { currencyA, currencyB, blockNumber, ...rest } = query
     try {
       const hash = PoolHashHelper.hashCurrenciesWithSort(currencyA, currencyB)
       const hashRest = keccak256(`0x${stringify(rest)}`)
