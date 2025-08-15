@@ -1,5 +1,7 @@
 export { MultichainWalletModal } from './components/MultichainWalletModal/MultichainWalletModal'
 export type { MultichainWalletModalProps } from './components/MultichainWalletModal/types'
+export { type WalletConfigV3, WalletAdaptedNetwork } from './types'
+export { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'
 
 // reexport legacy wallet modal
 export { previouslyUsedWalletsAtom as legacyPreviouslyUsedWalletsAtom } from './components/LegacyWalletModal/atom'
