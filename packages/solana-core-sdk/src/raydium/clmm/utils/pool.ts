@@ -1125,9 +1125,7 @@ export class PoolUtils {
       const liquidity1 = LiquidityMath.getLiquidityFromTokenAmountB(sqrtPriceX64A, sqrtPriceX64, _amount);
       liquidity = inputA ? liquidity0 : liquidity1;
     } else {
-      liquidity = inputA
-        ? BN_ZERO
-        : LiquidityMath.getLiquidityFromTokenAmountB(sqrtPriceX64A, sqrtPriceX64B, _amount);
+      liquidity = inputA ? BN_ZERO : LiquidityMath.getLiquidityFromTokenAmountB(sqrtPriceX64A, sqrtPriceX64B, _amount);
     }
 
     const amountFromLiquidity = await PoolUtils.getAmountsFromLiquidity({

@@ -540,7 +540,8 @@ export abstract class SwapMath {
     if (amountSpecified.eq(BN_ZERO)) {
       throw new Error("amountSpecified must not be 0");
     }
-    if (!sqrtPriceLimitX64) sqrtPriceLimitX64 = zeroForOne ? MIN_SQRT_PRICE_X64.add(BN_ONE) : MAX_SQRT_PRICE_X64.sub(BN_ONE);
+    if (!sqrtPriceLimitX64)
+      sqrtPriceLimitX64 = zeroForOne ? MIN_SQRT_PRICE_X64.add(BN_ONE) : MAX_SQRT_PRICE_X64.sub(BN_ONE);
 
     if (zeroForOne) {
       if (sqrtPriceLimitX64.lt(MIN_SQRT_PRICE_X64)) {

@@ -171,7 +171,7 @@ export class PositionUtils {
   ): BN[] {
     const rewardGrowthsInside: BN[] = [];
     for (let i = 0; i < rewardInfos.length; i++) {
-      let rewardGrowthsBelow =BN_ZERO;
+      let rewardGrowthsBelow = BN_ZERO;
       if (tickLowerState.liquidityGross.eqn(0)) {
         rewardGrowthsBelow = rewardInfos[i].rewardGrowthGlobalX64;
       } else if (tickCurrentIndex < tickLowerState.tick) {

@@ -234,7 +234,7 @@ export function buyExactOutInstruction(
     {
       amountA,
       maxAmountB,
-      shareFeeRate: shareFeeRate ?? BN_ZERO
+      shareFeeRate: shareFeeRate ?? BN_ZERO,
     },
     data,
   );

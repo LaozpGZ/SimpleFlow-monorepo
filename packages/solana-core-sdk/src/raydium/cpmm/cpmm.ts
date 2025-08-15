@@ -691,9 +691,7 @@ export default class CpmmModule extends ModuleBase {
         .mul(new BN((1 - slippage) * 10000))
         .div(BN_10000);
     } else {
-      swapResult.sourceAmountSwapped = swapResult.sourceAmountSwapped
-        .mul(new BN((1 + slippage) * 10000))
-        .div(BN_10000);
+      swapResult.sourceAmountSwapped = swapResult.sourceAmountSwapped.mul(new BN((1 + slippage) * 10000)).div(BN_10000);
     }
 
     const mintAUseSOLBalance = poolInfo.mintA.address === WSOLMint.toBase58();

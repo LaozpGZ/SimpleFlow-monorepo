@@ -10,7 +10,8 @@ import {
   jsonInfo2PoolKeys,
   getATAAddress,
   ALL_PROGRAM_ID,
-  BN_ZERO,BN_ONE
+  BN_ZERO,
+  BN_ONE,
 } from "@/common";
 import { seq, struct, u128, u64, u8 } from "../../marshmallow";
 import {

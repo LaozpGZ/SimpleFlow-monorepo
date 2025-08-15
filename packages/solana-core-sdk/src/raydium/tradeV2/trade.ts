@@ -802,9 +802,7 @@ export default class TradeV2 extends ModuleBase {
     };
   }): ComputeAmountOutLayout[] {
     const _amountInFee =
-      feeConfig === undefined
-        ? BN_ZERO
-        : inputTokenAmount.raw.mul(new BN(feeConfig.feeBps.toNumber())).div(BN_10000);
+      feeConfig === undefined ? BN_ZERO : inputTokenAmount.raw.mul(new BN(feeConfig.feeBps.toNumber())).div(BN_10000);
     const _amoutIn = inputTokenAmount.raw.sub(_amountInFee);
     const amountIn = new TokenAmount(inputTokenAmount.token, _amoutIn);
     const _inFeeConfig =
@@ -875,8 +873,10 @@ export default class TradeV2 extends ModuleBase {
           }
         })
         .sort((_a, _b) => {
-          const a = _a === undefined ? BN_ZERO : _a.data.amountOut.amount.raw.sub(_a.data.amountOut.fee?.raw ?? BN_ZERO);
-          const b = _b === undefined ? BN_ZERO : _b.data.amountOut.amount.raw.sub(_b.data.amountOut.fee?.raw ?? BN_ZERO);
+          const a =
+            _a === undefined ? BN_ZERO : _a.data.amountOut.amount.raw.sub(_a.data.amountOut.fee?.raw ?? BN_ZERO);
+          const b =
+            _b === undefined ? BN_ZERO : _b.data.amountOut.amount.raw.sub(_b.data.amountOut.fee?.raw ?? BN_ZERO);
           return a.lt(b) ? 1 : -1;
         })[0];
       if (maxFirstIn === undefined) continue;
