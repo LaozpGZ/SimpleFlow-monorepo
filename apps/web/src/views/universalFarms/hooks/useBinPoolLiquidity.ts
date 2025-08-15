@@ -1,4 +1,5 @@
 import { Protocol } from '@pancakeswap/farms'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import BN from 'bignumber.js'
 import { SLOW_INTERVAL } from 'config/constants'
 import useAllTicksQuery from 'hooks/useAllTicksQuery'
@@ -17,5 +18,5 @@ export const useBinPoolLiquidity = ({ chainId, poolId }: BinPoolLiquidityProps) 
     interval: SLOW_INTERVAL,
     enabled: Boolean(chainId && poolId),
   })
-  return ticks?.reduce((acc, t) => new BN(t.liquidity).plus(acc), new BN(0))
+  return ticks?.reduce((acc, t) => new BN(t.liquidity).plus(acc), BIG_ZERO)
 }

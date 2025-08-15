@@ -241,6 +241,7 @@ export const useAddCLPoolAndPosition = (
     },
     [
       onPresentConfirmationModal,
+      onPresentErrorModal,
       sendTransactionAsync,
       positionManagerContract.address,
       chainId,

@@ -2,6 +2,7 @@ import { ChainId } from '@pancakeswap/chains'
 import { FARMING_OFFCHAIN_ABI, INFI_FARMING_DISTRIBUTOR_ADDRESSES } from '@pancakeswap/infinity-sdk'
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { getTokenByAddress } from '@pancakeswap/tokens'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { useQuery } from '@tanstack/react-query'
 import BN, { BigNumber } from 'bignumber.js'
 import { QUERY_SETTINGS_IMMUTABLE } from 'config/constants'
@@ -289,7 +290,7 @@ const useUnclaimedFarmRewardsAmountByPoolId = ({ chainId, address, poolId, times
         Object.keys(rewardsMap)
           .reduce(
             (acc, key) => new BN(rewardsMap[key]).minus(rewardsBeforeLastClaimedMap?.[key] ?? 0).plus(acc),
-            new BN(0),
+            BIG_ZERO,
           )
           .toNumber(),
       ),
@@ -324,7 +325,7 @@ const useUnclaimedFarmRewardsAmountByTokenId = ({
         Object.keys(rewardsMap)
           .reduce((acc, key) => {
             return new BN(rewardsMap[key] ?? 0).minus(rewardsBeforeLastClaimedMap?.[key] ?? 0).plus(acc)
-          }, new BN(0))
+          }, BIG_ZERO)
           .toNumber(),
       ),
     }

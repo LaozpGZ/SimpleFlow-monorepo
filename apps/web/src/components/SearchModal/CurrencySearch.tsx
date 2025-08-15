@@ -7,7 +7,6 @@ import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
 import { useSolanaTokenInfo } from 'hooks/solana/useSolanaTokenInfo'
 import { useSolanaTokenBalances } from 'state/token/solanaTokenBalances'
 import { useSolanaTokenPrices } from 'hooks/solana/useSolanaTokenPrice'
-import BN from 'bignumber.js'
 import { FixedSizeList } from 'react-window'
 import { useAllLists, useInactiveListUrls } from 'state/lists/hooks'
 import { UpdaterByChainId } from 'state/lists/updater'
@@ -39,6 +38,7 @@ import {
 import { useAudioPlay } from '@pancakeswap/utils/user'
 import { SPLToken, UnifiedToken } from '@pancakeswap/swap-sdk-core'
 
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { useAllTokens, useIsUserAddedToken, useToken } from '../../hooks/Tokens'
 import Row from '../Layout/Row'
 import CommonBases, { BaseWrapper } from './CommonBases'
@@ -213,8 +213,8 @@ function CurrencySearch({
   const filteredSortedTokens: UnifiedCurrency[] = useMemo(() => {
     if (isSolana) {
       return [...filteredTokens].sort((a, b) => {
-        const balA = solanaBalances.balances.get(a.address)?.dividedBy(10 ** (a.decimals || 1)) ?? new BN(0)
-        const balB = solanaBalances.balances.get(b.address)?.dividedBy(10 ** (b.decimals || 1)) ?? new BN(0)
+        const balA = solanaBalances.balances.get(a.address)?.dividedBy(10 ** (a.decimals || 1)) ?? BIG_ZERO
+        const balB = solanaBalances.balances.get(b.address)?.dividedBy(10 ** (b.decimals || 1)) ?? BIG_ZERO
         const priceA = solanaPrices?.[a.address.toLowerCase()] ?? 0
         const priceB = solanaPrices?.[b.address.toLowerCase()] ?? 0
         const usdA = balA.multipliedBy(priceA)
