@@ -14,6 +14,7 @@ import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { usePaymaster } from 'hooks/usePaymaster'
 import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
 import { memo, Suspense, useMemo } from 'react'
+
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { MevSwapDetail } from 'views/Mev/MevSwapDetail'
@@ -33,6 +34,7 @@ import { SwapSelection } from './SwapSelectionTab'
 import { TradeDetails } from './TradeDetails'
 import { TradingFee } from './TradingFee'
 import { UnwrapTips } from './UnwrapTips'
+import { SlippageRow } from './SlippageRow'
 
 export const InfinitySwapForm = memo(() => {
   const { bestOrder, refreshOrder, tradeError, tradeLoaded, refreshDisabled, pauseQuoting, resumeQuoting } =
@@ -109,6 +111,7 @@ export const InfinitySwapForm = memo(() => {
       )}
       <ButtonAndDetailsPanel
         tips={<UnwrapTips />}
+        slippage={<SlippageRow order={bestOrder} />}
         swapCommitButton={
           <CommitButton order={bestOrder} tradeLoaded={tradeLoaded} tradeError={tradeError} {...commitHooks} />
         }

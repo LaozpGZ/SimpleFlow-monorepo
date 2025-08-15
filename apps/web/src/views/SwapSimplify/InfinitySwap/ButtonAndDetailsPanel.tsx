@@ -23,6 +23,7 @@ interface ButtonAndDetailsPanelProps {
   mevToggleSlot?: React.ReactNode
   mevSlot?: React.ReactNode
   gasTokenSelector?: React.ReactNode
+  slippage?: React.ReactNode
 }
 
 export const ButtonAndDetailsPanel: React.FC<ButtonAndDetailsPanelProps> = ({
@@ -34,11 +35,13 @@ export const ButtonAndDetailsPanel: React.FC<ButtonAndDetailsPanelProps> = ({
   mevSlot,
   gasTokenSelector,
   mevToggleSlot,
+  slippage,
 }) => {
   const [isOpen, setIsOpen] = useAtom(swapDetailsCollapseAtom)
   return (
     <PanelWrapper>
       {tips}
+      {slippage}
       {swapCommitButton}
       {mevSlot}
       {gasTokenSelector}
