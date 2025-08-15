@@ -31,6 +31,11 @@ import { NonEVMChainId } from '@pancakeswap/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
+import { useConnect } from 'wagmi'
+import { useWallet } from '@solana/wallet-adapter-react'
+import { previouslyUsedWalletsAtom } from '@pancakeswap/ui-wallets'
+import { walletsConfig } from 'config/wallet'
+import { useAtom } from 'jotai'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssets } from './SendAssets'
@@ -143,6 +148,25 @@ export const WalletContent = ({
   const { chainId } = useActiveChainId()
   const { account: evmAccount, solanaAccount } = useAccountActiveChain()
   const [selectedReceiveAccount, setSelectedReceiveAccount] = useState<string | undefined>(undefined)
+  const [selectedReceiveChain, setSelectedReceiveChain] = useState<'evm' | 'solana' | undefined>(undefined)
+
+  // Wallet connection hooks for getting icons
+  const { connectAsync } = useConnect()
+  const { wallet: solanaWallet } = useWallet()
+  const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
+  const walletConfig = walletsConfig({ chainId, connect: connectAsync })
+
+  // Get selected wallet icon
+  const selectedWalletIcon = useMemo(() => {
+    if (selectedReceiveChain === 'solana') {
+      return solanaWallet?.adapter.icon as string | undefined
+    }
+    if (selectedReceiveChain === 'evm') {
+      const evmWallet = walletConfig.find((w) => w.id === previouslyUsedWalletsId[0])
+      return evmWallet?.icon as string | undefined
+    }
+    return undefined
+  }, [selectedReceiveChain, solanaWallet, walletConfig, previouslyUsedWalletsId])
 
   // Fetch balances using the hook we created
   const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
@@ -174,10 +198,12 @@ export const WalletContent = ({
         <ReceiveOptionsView
           onSelectEVM={() => {
             setSelectedReceiveAccount(evmAccount)
+            setSelectedReceiveChain('evm')
             setViewState(ViewState.RECEIVE_QR)
           }}
           onSelectSolana={() => {
             setSelectedReceiveAccount(solanaAccount ?? undefined)
+            setSelectedReceiveChain('solana')
             setViewState(ViewState.RECEIVE_QR)
           }}
           evmAccount={evmAccount}
@@ -188,7 +214,13 @@ export const WalletContent = ({
 
     // Receive QR
     if (viewState === ViewState.RECEIVE_QR) {
-      return <ReceiveContent account={selectedReceiveAccount || account || ''} />
+      return (
+        <ReceiveContent
+          account={selectedReceiveAccount || account || ''}
+          chainType={selectedReceiveChain}
+          walletIcon={selectedWalletIcon}
+        />
+      )
     }
 
     // Claim Gift
@@ -213,7 +245,19 @@ export const WalletContent = ({
         onBack={goBack}
       />
     )
-  }, [viewState, balances, isLoading, goBack, setViewState, evmAccount, solanaAccount, selectedReceiveAccount, account])
+  }, [
+    viewState,
+    balances,
+    isLoading,
+    goBack,
+    setViewState,
+    evmAccount,
+    solanaAccount,
+    selectedReceiveAccount,
+    selectedReceiveChain,
+    selectedWalletIcon,
+    account,
+  ])
 
   return (
     <Box

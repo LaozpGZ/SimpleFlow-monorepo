@@ -12,6 +12,8 @@ import { NonEVMChainId } from '@pancakeswap/chains'
 
 interface QRCodeCopyButtonProps {
   account: string
+  chainType?: 'evm' | 'solana'
+  walletIcon?: string
 }
 
 const CopyContainer = styled(Box)`
@@ -115,7 +117,7 @@ const CopyButton = styled(Box)`
   }
 `
 
-const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account }) => {
+const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account, chainType, walletIcon: providedWalletIcon }) => {
   const [copied, setCopied] = useState(false)
   const { connectAsync } = useConnect()
   const { chainId } = useActiveChainId()
@@ -124,17 +126,21 @@ const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account }) => {
   const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
   const walletConfig = walletsConfig({ chainId, connect: connectAsync })
 
-  // Determine if current chain is Solana
-  const isSolana = chainId === NonEVMChainId.SOLANA
+  // Determine if current chain is Solana based on chainType prop or fallback to current chain
+  const isSolana = chainType === 'solana' || (chainType === undefined && chainId === NonEVMChainId.SOLANA)
 
-  // Get wallet icon
+  // Get wallet icon - use provided icon or fallback to auto-detection
   const walletIcon = useMemo(() => {
+    if (providedWalletIcon) {
+      return providedWalletIcon
+    }
+
     if (isSolana) {
       return solanaWallet?.adapter.icon
     }
     const evmWallet = walletConfig.find((w) => w.id === previouslyUsedWalletsId[0])
     return evmWallet?.icon
-  }, [isSolana, solanaWallet, walletConfig, previouslyUsedWalletsId])
+  }, [providedWalletIcon, isSolana, solanaWallet, walletConfig, previouslyUsedWalletsId])
 
   const handleCopy = async () => {
     try {

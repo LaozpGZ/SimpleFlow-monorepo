@@ -33,12 +33,14 @@ const QRCode = styled(Box)`
   border: 1px solid ${({ theme }) => theme.colors.secondary};
 `
 
-export const ReceiveContent: React.FC<{ account: string }> = ({ account }) => {
-  const { t } = useTranslation()
-
+export const ReceiveContent: React.FC<{
+  account: string
+  chainType?: 'evm' | 'solana'
+  walletIcon?: string
+}> = ({ account, chainType, walletIcon }) => {
   return (
     <Flex flexDirection="column" alignItems="center" justifyContent="center" maxWidth="450px">
-      <QRCodeCopyButton account={account} />
+      <QRCodeCopyButton account={account} chainType={chainType} walletIcon={walletIcon} />
 
       <QRCodeWrapper>
         <QRCode>
