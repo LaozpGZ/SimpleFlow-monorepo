@@ -19,6 +19,7 @@ import {
   isTrustWalletInstalled,
 } from './installed'
 import { ASSET_CDN } from './url'
+import { WalletFilterValue } from '../state/hooks'
 
 function getBinanceConnectorId() {
   const globalWindow = safeGetWindow()
@@ -35,11 +36,11 @@ function getBinanceConnectorId() {
 }
 
 export const getWalletsConfig = ({
-  solanaOnly,
+  walletFilter,
   createEvmQrCode,
   solanaWalletAdapters,
 }: {
-  solanaOnly?: boolean
+  walletFilter: WalletFilterValue
   createEvmQrCode?: () => () => Promise<string>
   solanaWalletAdapters: SolanaWalletAdapter[]
 }): WalletConfigV3[] => {
@@ -360,9 +361,15 @@ export const getWalletsConfig = ({
     },
   ] as WalletConfigV3[]
 
-  if (solanaOnly) {
+  if (walletFilter === WalletFilterValue.SolanaOnly) {
     return wallets.filter((wallet) =>
       wallet.networks.includes(WalletAdaptedNetwork.Solana),
+    ) as WalletConfigV3<SolanaConnectorNames>[]
+  }
+
+  if (walletFilter === WalletFilterValue.EVMOnly) {
+    return wallets.filter((wallet) =>
+      wallet.networks.includes(WalletAdaptedNetwork.EVM),
     ) as WalletConfigV3<SolanaConnectorNames>[]
   }
 
@@ -375,11 +382,17 @@ export const TOP_WALLETS_ID_CONFIG = {
   Solana: [WalletIds.Phantom, WalletIds.Solflare, WalletIds.Backpack],
 }
 
-export const getTopWalletsConfig = (wallets: WalletConfigV3[], solanaOnly: boolean): WalletConfigV3[] => {
-  if (solanaOnly) {
+export const getTopWalletsConfig = (wallets: WalletConfigV3[], walletFilter: WalletFilterValue): WalletConfigV3[] => {
+  if (walletFilter === WalletFilterValue.SolanaOnly) {
     return TOP_WALLETS_ID_CONFIG.Solana.map((id) => wallets.find((wallet) => wallet.id === id)).filter(
       Boolean,
     ) as WalletConfigV3<SolanaConnectorNames>[]
+  }
+
+  if (walletFilter === WalletFilterValue.EVMOnly) {
+    return TOP_WALLETS_ID_CONFIG.Evm.map((id) => wallets.find((wallet) => wallet.id === id)).filter(
+      Boolean,
+    ) as WalletConfigV3<EvmConnectorNames>[]
   }
 
   return TOP_WALLETS_ID_CONFIG.MultiChain.map((id) => wallets.find((wallet) => wallet.id === id)).filter(

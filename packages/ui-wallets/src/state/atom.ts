@@ -81,3 +81,9 @@ export const previouslyUsedWalletsAtom = atom((get) => {
   const solanaWallets = get(previouslyUsedSolanaWalletsAtom)
   return [...evmWallets, ...solanaWallets]
 })
+
+export type WalletFilter = {
+  type: 'solanaOnly' | 'evmOnly'
+  value: boolean
+}
+export const walletFilterAtom = atom<WalletFilter>({ type: 'solanaOnly', value: false })

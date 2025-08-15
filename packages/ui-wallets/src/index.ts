@@ -1,7 +1,7 @@
 export { MultichainWalletModal } from './components/MultichainWalletModal/MultichainWalletModal'
 export type { MultichainWalletModalProps } from './components/MultichainWalletModal/types'
 export { type WalletConfigV3, WalletAdaptedNetwork } from './types'
-export { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'
+export { EvmConnectorNames, type SolanaConnectorNames } from './config/connectorNames'
 export { SolanaProvider } from './components/SolanaProvider'
 
 // reexport legacy wallet modal

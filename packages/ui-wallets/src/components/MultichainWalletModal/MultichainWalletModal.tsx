@@ -24,9 +24,12 @@ import { MobileModal } from './MobileModal'
 import { MultichainWalletModalProps } from './types'
 import { fullSizeModalWrapperClass } from '../WalletModal.css'
 import { modalWrapperClass } from './modal.css'
+import { useWalletFilterEffect, useWalletFilterValue } from '../../state/hooks'
 
 export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (props) => {
   const {
+    evmAddress,
+    solanaAddress,
     wallets,
     topWallets,
     evmLogin,
@@ -44,13 +47,21 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
 
   const { t } = useTranslation()
 
-  const [solanaOnly, setSolanaOnly] = useState(false)
+  const walletFilter = useWalletFilterValue()
+  useWalletFilterEffect({ evmAddress, solanaAddress })
+
   const [previewStatus, setPreviewStatus] = useState<PreviewStatus>(PreviewStatus.Intro)
 
   const { wallets: solanaWallets } = useWallet()
 
-  const wallets_ = wallets ?? getWalletsConfig({ solanaOnly, createEvmQrCode, solanaWalletAdapters: solanaWallets })
-  const topWallets_ = topWallets ?? getTopWalletsConfig(wallets_, solanaOnly)
+  const wallets_ = useMemo(
+    () => wallets ?? getWalletsConfig({ walletFilter, createEvmQrCode, solanaWalletAdapters: solanaWallets }),
+    [wallets, walletFilter, createEvmQrCode, solanaWallets],
+  )
+  const topWallets_ = useMemo(
+    () => topWallets ?? getTopWalletsConfig(wallets_, walletFilter),
+    [topWallets, wallets_, walletFilter],
+  )
 
   const handleDismiss = () => {
     props.onDismiss?.()
@@ -93,57 +104,75 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
     [onWalletConnectCallBack, setLastUsedEvmWallet, setLastUsedSolanaWallet],
   )
 
-  const connectWallet = useCallback((wallet: WalletConfigV3, network: WalletAdaptedNetwork) => {
-    if (network === WalletAdaptedNetwork.Solana) {
-      setSolanaSelectedWallet(wallet as WalletConfigV3<SolanaConnectorNames>)
-      setSolanaError('')
-    }
-    if (network === WalletAdaptedNetwork.EVM) {
-      setEvmSelectedWallet(wallet as WalletConfigV3<EvmConnectorNames>)
-      setEvmError('')
-    }
-
-    if (!('installed' in wallet) || wallet.installed !== false) {
+  const connectWallet = useCallback(
+    (wallet: WalletConfigV3, network: WalletAdaptedNetwork) => {
+      if (network === WalletAdaptedNetwork.Solana) {
+        setSolanaSelectedWallet(wallet as WalletConfigV3<SolanaConnectorNames>)
+        setSolanaError('')
+      }
       if (network === WalletAdaptedNetwork.EVM) {
-        evmLogin(wallet)
-          .then((connectData) => {
-            if (connectData) {
-              handleWalletConnected(wallet, network, connectData)
-            }
-          })
-          .catch((err) => {
-            if (err instanceof WalletConnectorNotFoundError) {
-              setEvmError(t('no provider found'))
-            } else if (err instanceof WalletSwitchChainError) {
-              setEvmError(err.message)
-            } else {
-              setEvmError(t('Error connecting, please authorize wallet to access.'))
-            }
-          })
+        setEvmSelectedWallet(wallet as WalletConfigV3<EvmConnectorNames>)
+        setEvmError('')
       }
 
-      if (network === WalletAdaptedNetwork.Solana && wallet.solanaAdapterName) {
-        solanaLogin(wallet.solanaAdapterName as WalletName)
-        handleWalletConnected(wallet, network)
-      }
-    }
-  }, [])
+      if (!('installed' in wallet) || wallet.installed !== false) {
+        if (network === WalletAdaptedNetwork.EVM) {
+          evmLogin(wallet)
+            .then((connectData) => {
+              if (connectData) {
+                handleWalletConnected(wallet, network, connectData)
+              }
+            })
+            .catch((err) => {
+              if (err instanceof WalletConnectorNotFoundError) {
+                setEvmError(t('no provider found'))
+              } else if (err instanceof WalletSwitchChainError) {
+                setEvmError(err.message)
+              } else {
+                setEvmError(t('Error connecting, please authorize wallet to access.'))
+              }
+            })
+        }
 
-  const displaySocialLogin = () => {
+        if (network === WalletAdaptedNetwork.Solana && wallet.solanaAdapterName) {
+          solanaLogin(wallet.solanaAdapterName as WalletName)
+          handleWalletConnected(wallet, network)
+        }
+      }
+    },
+    [
+      setSolanaSelectedWallet,
+      setSolanaError,
+      setEvmSelectedWallet,
+      setEvmError,
+      evmLogin,
+      handleWalletConnected,
+      t,
+      solanaLogin,
+    ],
+  )
+
+  const displaySocialLogin = useCallback(() => {
     setPreviewStatus(PreviewStatus.SocialLogin)
-  }
-  const handleSocialLoginWithCleanup = (originalCallback?: () => void) => {
-    return () => {
-      // Close modal when social login is initiated
-      props.onDismiss?.()
+  }, [])
+  const handleSocialLoginWithCleanup = useCallback(
+    (originalCallback?: () => void) => {
+      return () => {
+        // Close modal when social login is initiated
+        props.onDismiss?.()
 
-      // Execute the original callback
-      originalCallback?.()
-    }
-  }
+        // Execute the original callback
+        originalCallback?.()
+      }
+    },
+    [props.onDismiss],
+  )
 
   const { isMobile } = useMatchBreakpoints()
-  const mobileContainerStyle: React.CSSProperties = isMobile ? { height: '100%', borderRadius: 0 } : {}
+  const mobileContainerStyle: React.CSSProperties = useMemo(
+    () => (isMobile ? { height: '100%', borderRadius: 0 } : {}),
+    [isMobile],
+  )
 
   return (
     <ModalV2 closeOnOverlayClick disableOutsidePointerEvents={false} {...rest} onDismiss={handleDismiss}>
@@ -187,6 +216,8 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
               />
             ) : (
               <DesktopModal
+                evmAddress={evmAddress}
+                solanaAddress={solanaAddress}
                 wallets={wallets_}
                 topWallets={topWallets_}
                 previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}

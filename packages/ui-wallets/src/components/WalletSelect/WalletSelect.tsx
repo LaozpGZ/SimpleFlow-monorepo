@@ -2,16 +2,17 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Column } from '@pancakeswap/uikit'
 import { useCallback, useMemo } from 'react'
 import uniqBy from 'lodash/uniqBy'
+import { useAtom } from 'jotai'
 import { WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
 import { scrollbarClass } from '../WalletModal.css'
 import { MoreWalletSection } from './MoreWalletSection'
 import { WalletSelectItem, WalletSelectSection } from './WalletSelectSection'
+import { useWalletFilterValue, WalletFilterValue } from '../../state/hooks'
 
 export type WalletSelectProps = {
   wallets: WalletConfigV3[]
   topWallets: WalletConfigV3[]
   previouslyUsedWallets: [WalletConfigV3[], WalletConfigV3[]]
-  solanaOnly?: boolean
   onMultiChainWalletSelected?: (wallet: WalletConfigV3) => void
   onWalletSelected?: (wallet: WalletConfigV3, network: WalletAdaptedNetwork) => void
   style?: React.CSSProperties
@@ -21,12 +22,12 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
   wallets,
   topWallets,
   previouslyUsedWallets,
-  solanaOnly,
   onMultiChainWalletSelected,
   onWalletSelected,
   style = {},
 }) => {
   const { t } = useTranslation()
+  const walletFilter = useWalletFilterValue()
 
   const moreWallets = useMemo(() => {
     return wallets.filter(
@@ -49,9 +50,16 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
 
   const handleWalletClick = useCallback(
     (wallet: WalletConfigV3) => {
-      if (solanaOnly) {
+      if (walletFilter === WalletFilterValue.SolanaOnly) {
         if (wallet.networks.includes(WalletAdaptedNetwork.Solana)) {
           onWalletSelected?.(wallet, WalletAdaptedNetwork.Solana)
+        }
+        return
+      }
+
+      if (walletFilter === WalletFilterValue.EVMOnly) {
+        if (wallet.networks.includes(WalletAdaptedNetwork.EVM)) {
+          onWalletSelected?.(wallet, WalletAdaptedNetwork.EVM)
         }
         return
       }
@@ -63,7 +71,7 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
 
       onMultiChainWalletSelected?.(wallet)
     },
-    [solanaOnly],
+    [walletFilter],
   )
 
   return (

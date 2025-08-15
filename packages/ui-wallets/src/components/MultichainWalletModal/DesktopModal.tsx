@@ -1,12 +1,11 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AtomBox, FlexGap, Grid, Heading, Image, RowBetween, Text, Toggle } from '@pancakeswap/uikit'
+import { AtomBox, FlexGap, Grid, Heading, RowBetween, Text, Toggle } from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ASSET_CDN } from '../../config/url'
 import { errorEvmAtom, errorSolanaAtom } from '../../state/atom'
-import { useSelectedWallet } from '../../state/hooks'
+import { useSelectedWallet, useWalletFilter } from '../../state/hooks'
 import { ConnectData, WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
-import { ErrorContent } from '../ErrorContent'
 import { PreviewSection, PreviewStatus } from '../PreviewSection'
 import SocialLogin from '../SocialLogin'
 import SocialLoginButton from '../SocialLoginButton'
@@ -15,7 +14,10 @@ import { WalletChainSelect } from '../WalletSelect/WalletChainSelect'
 import { WalletSelect } from '../WalletSelect/WalletSelect'
 import { MultichainWalletModalProps } from './types'
 
-export type DesktopModalProps = Pick<MultichainWalletModalProps, 'wallets' | 'topWallets' | 'docLink'> & {
+export type DesktopModalProps = Pick<
+  MultichainWalletModalProps,
+  'wallets' | 'topWallets' | 'docLink' | 'solanaAddress' | 'evmAddress'
+> & {
   previouslyUsedWallets: [WalletConfigV3[], WalletConfigV3[]]
   connectWallet: (wallet: WalletConfigV3, network: WalletAdaptedNetwork) => void
   onWalletConnected: (wallet: WalletConfigV3, network: WalletAdaptedNetwork, connectData?: ConnectData) => void
@@ -30,6 +32,8 @@ export type DesktopModalProps = Pick<MultichainWalletModalProps, 'wallets' | 'to
 
 export const DesktopModal: React.FC<DesktopModalProps> = ({
   docLink,
+  solanaAddress,
+  evmAddress,
   wallets: wallets_,
   topWallets: topWallets_,
   previouslyUsedWallets: previouslyUsedWallets_,
@@ -43,33 +47,40 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
   onTelegramLogin,
   onDiscordLogin,
 }) => {
-  const [solanaOnly, setSolanaOnly] = useState(false)
+  const { type: walletFilter, value: walletFilterChecked, setFilterValue } = useWalletFilter()
+  const displayFilterToggle = Boolean(solanaAddress) || Boolean(evmAddress)
+  const disableFilterToggle = Boolean(solanaAddress) !== Boolean(evmAddress)
+  const solanaOnly = walletFilter === 'solanaOnly' && walletFilterChecked
+  const evmOnly = walletFilter === 'evmOnly' && walletFilterChecked
 
   const wallets: WalletConfigV3[] = useMemo(
     () =>
       wallets_?.filter((w) => {
         if (solanaOnly && !w.networks.includes(WalletAdaptedNetwork.Solana)) return false
+        if (evmOnly && !w.networks.includes(WalletAdaptedNetwork.EVM)) return false
         return w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
       }) ?? [],
-    [solanaOnly, wallets_],
+    [walletFilter, wallets_],
   )
 
   const topWallets: WalletConfigV3[] = useMemo(
     () =>
       topWallets_?.filter((w) => {
         if (solanaOnly && !w.networks.includes(WalletAdaptedNetwork.Solana)) return false
+        if (evmOnly && !w.networks.includes(WalletAdaptedNetwork.EVM)) return false
         return w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
       }) ?? [],
-    [solanaOnly, topWallets_],
+    [walletFilter, topWallets_],
   )
 
   const previouslyUsedWallets = useMemo(
     () =>
       previouslyUsedWallets_.map((wallets) => {
         if (solanaOnly) return wallets.filter((wallet) => wallet.networks.includes(WalletAdaptedNetwork.Solana))
+        if (evmOnly) return wallets.filter((wallet) => wallet.networks.includes(WalletAdaptedNetwork.EVM))
         return wallets
       }) as [WalletConfigV3[], WalletConfigV3[]],
-    [previouslyUsedWallets_, solanaOnly],
+    [previouslyUsedWallets_, walletFilter],
   )
 
   const selected = useSelectedWallet()
@@ -164,17 +175,30 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
           <Heading color="color" as="h4">
             {t('Connect Wallet')}
           </Heading>
-          <FlexGap gap="8px" alignItems="center" as="label" htmlFor="wallet-modal-network-toggle">
-            <Text textTransform="uppercase" fontWeight="600" color="textSubtle" fontSize="12px">
-              {t('Solana Only')}
-            </Text>
-            <Toggle
-              checked={solanaOnly}
-              scale="md"
-              id="wallet-modal-network-toggle"
-              onChange={() => setSolanaOnly(!solanaOnly)}
-            />
-          </FlexGap>
+          {displayFilterToggle ? (
+            <FlexGap
+              gap="8px"
+              alignItems="center"
+              as="label"
+              htmlFor="wallet-modal-network-toggle"
+              style={{
+                opacity: disableFilterToggle ? '0.5' : 1,
+                cursor: disableFilterToggle ? 'not-allowed' : 'pointer',
+              }}
+            >
+              <Text textTransform="uppercase" fontWeight="600" color="textSubtle" fontSize="12px">
+                {walletFilter === 'solanaOnly' ? 'Solana' : 'EVM'} {t('Only')}
+              </Text>
+              <Toggle
+                checked={walletFilterChecked}
+                scale="md"
+                defaultColor={disableFilterToggle ? 'success' : 'input'}
+                id="wallet-modal-network-toggle"
+                disabled={disableFilterToggle}
+                onChange={() => setFilterValue(!walletFilterChecked)}
+              />
+            </FlexGap>
+          ) : null}
         </RowBetween>
 
         <SocialLoginButton onClick={displaySocialLogin} assetCdn={ASSET_CDN} />
@@ -183,7 +207,6 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
           wallets={wallets}
           topWallets={topWallets}
           previouslyUsedWallets={previouslyUsedWallets}
-          solanaOnly={solanaOnly}
           onWalletSelected={onWalletSelected}
           onMultiChainWalletSelected={onMultiChainWalletSelected}
         />

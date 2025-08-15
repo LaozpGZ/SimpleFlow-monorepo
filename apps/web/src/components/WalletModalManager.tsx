@@ -16,10 +16,12 @@ import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
 import { useConnect } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletName } from '@solana/wallet-adapter-base'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 
 const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> = ({ isOpen, onDismiss }) => {
   const { login } = useAuth()
   const { select } = useWallet()
+  const { account: evmAccount, solanaAccount } = useAccountActiveChain()
   const {
     t,
     currentLanguage: { code },
@@ -62,12 +64,11 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
 
   return (
     <MultichainWalletModal
-      // mevDocLink={mevDocLink}
+      evmAddress={evmAccount}
+      solanaAddress={solanaAccount ?? undefined}
       docText={t('Learn How to Connect')}
       docLink={docLink}
       isOpen={isOpen}
-      // wallets={wallets}
-      // topWallets={topWallets}
       evmLogin={login}
       createEvmQrCode={createEvmQrCode}
       solanaLogin={solanaLogin}

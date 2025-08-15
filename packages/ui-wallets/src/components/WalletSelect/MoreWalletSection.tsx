@@ -76,7 +76,7 @@ export const MoreWalletSection: React.FC<MoreWalletSectionProps> = ({ wallets, o
             const isImage = typeof wallet.icon === 'string'
             const Icon = wallet.icon
             return (
-              <StyledWalletIcon>
+              <StyledWalletIcon key={wallet.id}>
                 {isImage ? (
                   <img src={Icon as string} alt={wallet.title} width={22} height={22} />
                 ) : (
