@@ -20,11 +20,10 @@ import { css, styled } from 'styled-components'
 import { chainNameConverter } from 'utils/chainNameConverter'
 import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks'
 import { chains as evmChains } from 'utils/wagmi'
-import { UNSUPPORTED_SOCIAL_LOGIC_CHAINS } from 'wallet/Privy/constants'
-
-import { BaseWrapper, ButtonWrapper, RowWrapper } from './CommonBases'
 import { useRouter } from 'next/router'
 import { TWAP_SUPPORTED_CHAINS } from 'views/Swap/utils'
+
+import { BaseWrapper, ButtonWrapper, RowWrapper } from './CommonBases'
 
 const NetworkMenuColumn = styled(Flex)`
   flex-direction: column;
