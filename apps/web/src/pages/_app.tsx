@@ -9,6 +9,7 @@ import { FixedSubgraphHealthIndicator } from 'components/SubgraphHealthIndicator
 import TransactionsDetailModal from 'components/TransactionDetailModal'
 import { VercelToolbar } from 'components/VercelToolbar'
 import 'core-js/features/array/to-sorted'
+import 'core-js/features/array/find-last'
 import 'core-js/features/string/replace-all'
 import { useAccountEventListener } from 'hooks/useAccountEventListener'
 import useEagerConnect from 'hooks/useEagerConnect'
