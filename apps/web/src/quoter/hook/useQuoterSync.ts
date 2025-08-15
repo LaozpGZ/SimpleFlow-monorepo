@@ -56,7 +56,7 @@ export const useQuoterSync = () => {
   const setTyping = useSetAtom(userTypingAtom)
   const [paused, pauseQuote] = useAtom(pauseAtom)
 
-  const { slippageTolerance: slippage } = useInputBasedAutoSlippageWithFallback(amount)
+  const { slippageTolerance: slippage, isAuto } = useInputBasedAutoSlippageWithFallback(amount)
   const blockNumber = useCurrentBlock()
   const destinationBlockNumber = useCurrentBlock(outputCurrencyChainId)
   const setActiveQuoteHash = useSetAtom(activeQuoteHashAtom)
@@ -78,6 +78,7 @@ export const useQuoterSync = () => {
     speedQuoteEnabled,
     xEnabled,
     slippage,
+    isAutoSlippage: isAuto,
     address: currentChain === NonEVMChainId.SOLANA ? solanaAccount : address,
     blockNumber,
     destinationBlockNumber,

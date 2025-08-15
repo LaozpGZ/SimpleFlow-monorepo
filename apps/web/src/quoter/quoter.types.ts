@@ -88,6 +88,7 @@ export type QuoteQuery = Options & {
   speedQuoteEnabled: boolean
   xEnabled: boolean
   slippage?: number
+  isAutoSlippage?: boolean
   address?: Address
   blockNumber: number
   destinationBlockNumber?: number

@@ -8,6 +8,7 @@ import { Suspense, useCallback, useEffect, useMemo, useRef } from 'react'
 import { isBridgeOrder } from 'views/Swap/utils'
 import useClassicAutoSlippageTolerance, {
   MIN_DEFAULT_SLIPPAGE_NUMERATOR,
+  PCSX_AUTO_SLIPPAGE_TOLERANCE,
   useInputBasedAutoSlippage,
 } from './useAutoSlippage'
 
@@ -105,9 +106,11 @@ export const Sync = () => {
     )
   }, [result?.bestOrder])
 
-  const autoSlippage = useClassicAutoSlippageTolerance(
+  const classicAutoSlippage = useClassicAutoSlippageTolerance(
     result?.bestOrder?.type === OrderType.PCS_SVM ? undefined : result?.bestOrder?.trade,
   )
+  const autoSlippage =
+    result?.bestOrder?.type === OrderType.DUTCH_LIMIT ? PCSX_AUTO_SLIPPAGE_TOLERANCE : classicAutoSlippage
   const [, setAutoSlippageValue] = useAutoSlippageAtom()
   const updateAutoSlippage = useCallback(() => {
     if (autoSlippage) {
