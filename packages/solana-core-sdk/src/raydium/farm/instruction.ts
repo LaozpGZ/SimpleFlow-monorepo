@@ -14,7 +14,7 @@ import {
 } from "@solana/spl-token";
 
 import { FormatFarmKeyOut } from "@/api/type";
-import { parseBigNumberish } from "@/common";
+import { BN_ONE, BN_ZERO, parseBigNumberish } from "@/common";
 import { createLogger } from "@/common/logger";
 import { getATAAddress } from "@/common/pda";
 import {
@@ -473,7 +473,7 @@ export async function makeDepositTokenInstruction({
   const ownerInfo = farmLedgerLayoutV3_2.decode(ownerAccountInfo.data);
   const mintAmount = ownerInfo.deposited.sub(ownerInfo.voteLockedBalance);
   console.log("amount", mintAmount.toString());
-  if (mintAmount.eq(new BN(0))) {
+  if (mintAmount.eq(BN_ZERO)) {
     throw Error("user do not has new stake amount");
   }
 
@@ -607,7 +607,7 @@ export async function makeWithdrawTokenInstruction({
     throw Error("user is not staker");
   }
   const ownerInfo = farmLedgerLayoutV3_2.decode(ownerAccountInfo.data);
-  if (ownerInfo.voteLockedBalance.eq(new BN(0))) {
+  if (ownerInfo.voteLockedBalance.eq(BN_ZERO)) {
     throw Error("user has vote locked balance = 0");
   }
 
@@ -729,7 +729,7 @@ export function makeAddNewRewardInstruction({
   farmAddRewardLayout.encode(
     {
       instruction: 4,
-      isSet: new BN(1),
+      isSet: BN_ONE,
       rewardPerSecond: parseBigNumberish(rewardInfo.perSecond),
       rewardOpenTime: parseBigNumberish(rewardInfo.openTime),
       rewardEndTime: parseBigNumberish(rewardInfo.endTime),

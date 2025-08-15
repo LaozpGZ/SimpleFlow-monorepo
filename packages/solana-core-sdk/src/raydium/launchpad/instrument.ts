@@ -2,7 +2,7 @@ import { PublicKey, SystemProgram, TransactionInstruction, AccountMeta } from "@
 import { ASSOCIATED_TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import BN from "bn.js";
 import { publicKey, str, struct, u64, u8 } from "@/marshmallow";
-import { RENT_PROGRAM_ID, METADATA_PROGRAM_ID } from "@/common";
+import { RENT_PROGRAM_ID, METADATA_PROGRAM_ID, BN_ZERO } from "@/common";
 import { getPdaCpiEvent } from "./pda";
 export const anchorDataBuf = {
   initialize: Buffer.from([175, 175, 109, 31, 13, 152, 155, 237]),
@@ -167,7 +167,7 @@ export function buyExactInInstruction(
     {
       amountB,
       minAmountA,
-      shareFeeRate: shareFeeRate ?? new BN(0),
+      shareFeeRate: shareFeeRate ?? BN_ZERO,
     },
     data,
   );
@@ -234,7 +234,7 @@ export function buyExactOutInstruction(
     {
       amountA,
       maxAmountB,
-      shareFeeRate: shareFeeRate ?? new BN(0),
+      shareFeeRate: shareFeeRate ?? BN_ZERO
     },
     data,
   );
@@ -299,7 +299,7 @@ export function sellExactInInstruction(
     {
       amountA,
       minAmountB,
-      shareFeeRate: shareFeeRate ?? new BN(0),
+      shareFeeRate: shareFeeRate ?? BN_ZERO,
     },
     data,
   );
@@ -366,7 +366,7 @@ export function sellExactOut(
     {
       amountB,
       maxAmountA,
-      shareFeeRate: shareFeeRate ?? new BN(0),
+      shareFeeRate: shareFeeRate ?? BN_ZERO,
     },
     data,
   );

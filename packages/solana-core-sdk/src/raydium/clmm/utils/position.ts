@@ -1,7 +1,7 @@
 import BN from "bn.js";
 
 import Decimal from "decimal.js";
-import { getTransferAmountFeeV2, minExpirationTime } from "../../../common";
+import { BN_ZERO, getTransferAmountFeeV2, minExpirationTime } from "../../../common";
 import { ClmmPositionLayout } from "../layout";
 import {
   ClmmPoolInfo,
@@ -20,8 +20,8 @@ export class PositionUtils {
     tickLowerState: Tick,
     tickUpperState: Tick,
   ): { feeGrowthInsideX64A: BN; feeGrowthInsideBX64: BN } {
-    let feeGrowthBelowX64A = new BN(0);
-    let feeGrowthBelowX64B = new BN(0);
+    let feeGrowthBelowX64A = BN_ZERO;
+    let feeGrowthBelowX64B = BN_ZERO;
     if (poolState.tickCurrent >= tickLowerState.tick) {
       feeGrowthBelowX64A = tickLowerState.feeGrowthOutsideX64A;
       feeGrowthBelowX64B = tickLowerState.feeGrowthOutsideX64B;
@@ -30,8 +30,8 @@ export class PositionUtils {
       feeGrowthBelowX64B = poolState.feeGrowthGlobalX64B.sub(tickLowerState.feeGrowthOutsideX64B);
     }
 
-    let feeGrowthAboveX64A = new BN(0);
-    let feeGrowthAboveX64B = new BN(0);
+    let feeGrowthAboveX64A = BN_ZERO;
+    let feeGrowthAboveX64B = BN_ZERO;
     if (poolState.tickCurrent < tickUpperState.tick) {
       feeGrowthAboveX64A = tickUpperState.feeGrowthOutsideX64A;
       feeGrowthAboveX64B = tickUpperState.feeGrowthOutsideX64B;
@@ -171,7 +171,7 @@ export class PositionUtils {
   ): BN[] {
     const rewardGrowthsInside: BN[] = [];
     for (let i = 0; i < rewardInfos.length; i++) {
-      let rewardGrowthsBelow = new BN(0);
+      let rewardGrowthsBelow =BN_ZERO;
       if (tickLowerState.liquidityGross.eqn(0)) {
         rewardGrowthsBelow = rewardInfos[i].rewardGrowthGlobalX64;
       } else if (tickCurrentIndex < tickLowerState.tick) {
@@ -180,7 +180,7 @@ export class PositionUtils {
         rewardGrowthsBelow = tickLowerState.rewardGrowthsOutsideX64[i];
       }
 
-      let rewardGrowthsAbove = new BN(0);
+      let rewardGrowthsAbove = BN_ZERO;
       if (tickUpperState.liquidityGross.eqn(0)) {
         //
       } else if (tickCurrentIndex < tickUpperState.tick) {
@@ -208,7 +208,7 @@ export class PositionUtils {
   ): BN[] {
     const rewardGrowthsInside: BN[] = [];
     for (let i = 0; i < rewardInfos.length; i++) {
-      let rewardGrowthsBelow = new BN(0);
+      let rewardGrowthsBelow = BN_ZERO;
       if (tickLowerState.liquidityGross.eqn(0)) {
         rewardGrowthsBelow = rewardInfos[i].rewardGrowthGlobalX64;
       } else if (tickCurrentIndex < tickLowerState.tick) {
@@ -217,7 +217,7 @@ export class PositionUtils {
         rewardGrowthsBelow = tickLowerState.rewardGrowthsOutsideX64[i];
       }
 
-      let rewardGrowthsAbove = new BN(0);
+      let rewardGrowthsAbove = BN_ZERO;
       if (tickUpperState.liquidityGross.eqn(0)) {
         //
       } else if (tickCurrentIndex < tickUpperState.tick) {

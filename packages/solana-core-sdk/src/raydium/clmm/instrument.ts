@@ -3,6 +3,7 @@ import BN from "bn.js";
 import { ReturnTypeMakeInstructions } from "@/raydium/type";
 import { ApiV3PoolInfoConcentratedItem, ApiV3Token, ClmmKeys } from "@/api/type";
 import {
+  BN_ZERO,
   InstructionType,
   MEMO_PROGRAM_ID,
   MEMO_PROGRAM_ID2,
@@ -37,12 +38,10 @@ import {
   getPdaProtocolPositionAddress,
   getPdaTickArrayAddress,
   getPdaLockClPositionIdV2,
-  getPdaMintExAccount,
   getPdaPermissionlessFarmSwitchAccount,
 } from "./utils/pda";
 import { PoolUtils } from "./utils/pool";
 import { TickUtils } from "./utils/tick";
-import { ZERO } from "./utils/constants";
 ObservationInfoLayout.span; // do not delete this line
 
 const logger = createLogger("Raydium_Clmm");
@@ -115,7 +114,7 @@ export class ClmmInstrument {
     dataLayout.encode(
       {
         sqrtPriceX64,
-        zero: ZERO,
+        zero: BN_ZERO,
       },
       data,
     );
@@ -752,7 +751,7 @@ export class ClmmInstrument {
         tickUpperIndex,
         tickArrayLowerStartIndex,
         tickArrayUpperStartIndex,
-        liquidity: new BN(0),
+        liquidity: BN_ZERO,
         amountMaxA: base === "MintA" ? baseAmount : otherAmountMax,
         amountMaxB: base === "MintA" ? otherAmountMax : baseAmount,
         withMetadata: withMetadata === "create",
@@ -853,7 +852,7 @@ export class ClmmInstrument {
         tickUpperIndex,
         tickArrayLowerStartIndex,
         tickArrayUpperStartIndex,
-        liquidity: new BN(0),
+        liquidity: BN_ZERO,
         amountMaxA: base === "MintA" ? baseAmount : otherAmountMax,
         amountMaxB: base === "MintA" ? otherAmountMax : baseAmount,
         withMetadata: withMetadata === "create",
@@ -1416,7 +1415,7 @@ export class ClmmInstrument {
     const data = Buffer.alloc(dataLayout.span);
     dataLayout.encode(
       {
-        liquidity: new BN(0),
+        liquidity: BN_ZERO,
         amountMaxA: base === "MintA" ? baseAmount : otherAmountMax,
         amountMaxB: base === "MintA" ? otherAmountMax : baseAmount,
         baseFlag: base === "MintA",

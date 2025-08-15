@@ -1,7 +1,7 @@
 import _Big from "big.js";
 import BN from "bn.js";
 
-import { BigNumberish, BN_TEN } from "../common/bignumber";
+import { BigNumberish, BN_TEN, BN_ZERO } from "../common/bignumber";
 import { createLogger, Logger } from "../common/logger";
 
 import { parseBigNumberish, Rounding } from "../common";
@@ -40,14 +40,14 @@ export class TokenAmount extends Fraction {
   protected logger: Logger;
 
   public constructor(token: Token, amount: BigNumberish, isRaw = true, name?: string) {
-    let parsedAmount = new BN(0);
+    let parsedAmount = BN_ZERO;
     const multiplier = BN_TEN.pow(new BN(token.decimals));
 
     if (isRaw) {
       parsedAmount = parseBigNumberish(amount);
     } else {
-      let integralAmount = new BN(0);
-      let fractionalAmount = new BN(0);
+      let integralAmount = BN_ZERO;
+      let fractionalAmount = BN_ZERO;
 
       // parse fractional string
       if (typeof amount === "string" || typeof amount === "number" || typeof amount === "bigint") {
@@ -142,14 +142,14 @@ export class CurrencyAmount extends Fraction {
   protected logger: Logger;
 
   public constructor(currency: Currency, amount: BigNumberish, isRaw = true, name?: string) {
-    let parsedAmount = new BN(0);
+    let parsedAmount = BN_ZERO;
     const multiplier = BN_TEN.pow(new BN(currency.decimals));
 
     if (isRaw) {
       parsedAmount = parseBigNumberish(amount);
     } else {
-      let integralAmount = new BN(0);
-      let fractionalAmount = new BN(0);
+      let integralAmount = BN_ZERO;
+      let fractionalAmount = BN_ZERO;
 
       // parse fractional string
       if (typeof amount === "string" || typeof amount === "number" || typeof amount === "bigint") {

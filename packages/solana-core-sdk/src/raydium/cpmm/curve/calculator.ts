@@ -2,7 +2,7 @@ import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import Decimal from "decimal.js-light";
 import { ApiV3Token } from "../../../api/type";
-import { BNDivCeil } from "../../../common";
+import { BN_ONE, BNDivCeil } from "../../../common";
 import { ConstantProductCurve } from "./constantProduct";
 import { CpmmFee } from "./fee";
 
@@ -79,7 +79,7 @@ export class CurveCalculator {
     const currentPrice = new Decimal(reserveOutAmount.toString())
       .div(10 ** reserveOutDecimals)
       .div(new Decimal(reserveInAmount.toString()).div(10 ** reserveInDecimals));
-    const amountRealOut = outputAmount.gte(reserveOutAmount) ? reserveOutAmount.sub(new BN(1)) : outputAmount;
+    const amountRealOut = outputAmount.gte(reserveOutAmount) ? reserveOutAmount.sub(BN_ONE) : outputAmount;
 
     const denominator = reserveOutAmount.sub(amountRealOut);
     const amountInWithoutFee = BNDivCeil(reserveInAmount.mul(amountRealOut), denominator);

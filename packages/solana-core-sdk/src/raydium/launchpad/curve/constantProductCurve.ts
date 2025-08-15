@@ -1,6 +1,6 @@
 import BN from "bn.js";
 import Decimal from "decimal.js";
-import { ceilDivBN } from "@/common";
+import { BN_ZERO, ceilDivBN } from "@/common";
 import { CurveBase, PoolBaseAmount } from "./curveBase";
 import { Q64 } from "@/raydium/clmm";
 import { LaunchpadPoolInfo } from "../type";
@@ -99,22 +99,22 @@ export class LaunchPadConstantProductCurve extends CurveBase {
   }): { a: BN; b: BN; c: BN } {
     if (supply.lte(totalSell)) throw Error("supply need gt total sell");
     const supplyMinusSellLocked = supply.sub(totalSell).sub(totalLockedAmount);
-    if (supplyMinusSellLocked.lte(new BN(0))) throw Error("supplyMinusSellLocked <= 0");
+    if (supplyMinusSellLocked.lte(BN_ZERO)) throw Error("supplyMinusSellLocked <= 0");
 
     const tfMinusMf = totalFundRaising.sub(migrateFee);
-    if (tfMinusMf.lte(new BN(0))) throw Error("tfMinusMf <= 0");
+    if (tfMinusMf.lte(BN_ZERO)) throw Error("tfMinusMf <= 0");
 
     // const migratePriceX64 = tfMinusMf.mul(Q64).div(supplyMinusSellLocked);
 
     const numerator = tfMinusMf.mul(totalSell).mul(totalSell).div(supplyMinusSellLocked);
     const denominator = tfMinusMf.mul(totalSell).div(supplyMinusSellLocked).sub(totalFundRaising);
 
-    if (denominator.lt(new BN(0))) throw Error("supply/totalSell/totalLockedAmount diff too high");
+    if (denominator.lt(BN_ZERO)) throw Error("supply/totalSell/totalLockedAmount diff too high");
 
     const x0 = numerator.div(denominator);
     const y0 = totalFundRaising.mul(totalFundRaising).div(denominator);
 
-    if (x0.lt(new BN(0)) || y0.lt(new BN(0))) throw Error("invalid input 0");
+    if (x0.lt(BN_ZERO) || y0.lt(BN_ZERO)) throw Error("invalid input 0");
 
     return {
       a: x0,

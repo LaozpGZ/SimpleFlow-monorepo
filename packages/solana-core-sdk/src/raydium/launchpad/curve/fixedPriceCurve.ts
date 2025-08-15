@@ -2,7 +2,7 @@ import BN from "bn.js";
 import Decimal from "decimal.js";
 import { CurveBase, PoolBaseAmount } from "./curveBase";
 import { LaunchpadPoolInfo } from "../type";
-import { ceilDivBN } from "@/common";
+import { BN_TWO, BN_ZERO, ceilDivBN } from "@/common";
 
 export class FixedPriceCurve extends CurveBase {
   static getPoolInitPriceByPool({
@@ -95,9 +95,9 @@ export class FixedPriceCurve extends CurveBase {
   }): { a: BN; b: BN; c: BN } {
     const supplyMinusLocked = supply.sub(totalLockedAmount);
 
-    if (supplyMinusLocked.lte(new BN(0))) throw Error("invalid input 1");
+    if (supplyMinusLocked.lte(BN_ZERO)) throw Error("invalid input 1");
 
-    const denominator = new BN(2).mul(totalFundRaising).sub(migrateFee);
+    const denominator = BN_TWO.mul(totalFundRaising).sub(migrateFee);
     const numerator = totalFundRaising.mul(supplyMinusLocked);
     const totalSellExpect = numerator.div(denominator);
 

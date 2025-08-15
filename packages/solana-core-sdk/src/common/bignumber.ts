@@ -104,7 +104,7 @@ export function toFraction(value: Numberish): Fraction {
 }
 
 export function ceilDiv(tokenAmount: BN, feeNumerator: BN, feeDenominator: BN): BN {
-  return tokenAmount.mul(feeNumerator).add(feeDenominator).sub(new BN(1)).div(feeDenominator);
+  return tokenAmount.mul(feeNumerator).add(feeDenominator).sub(BN_ONE).div(feeDenominator);
 }
 
 export function floorDiv(tokenAmount: BN, feeNumerator: BN, feeDenominator: BN): BN {
@@ -121,7 +121,7 @@ export function toPercent(
   options?: { /* usually used for backend data */ alreadyDecimaled?: boolean },
 ): Percent {
   const { numerator, denominator } = parseNumberInfo(n);
-  return new Percent(new BN(numerator), new BN(denominator).mul(options?.alreadyDecimaled ? new BN(100) : new BN(1)));
+  return new Percent(new BN(numerator), new BN(denominator).mul(options?.alreadyDecimaled ? BN_100 : BN_ONE));
 }
 
 export function toTokenPrice(params: {

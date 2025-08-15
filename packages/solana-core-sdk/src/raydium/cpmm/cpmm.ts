@@ -1,7 +1,7 @@
 import { PublicKey } from "@solana/web3.js";
 import { ApiV3PoolInfoStandardItemCpmm, CpmmKeys } from "../../api/type";
 import { AccountLayout, NATIVE_MINT, TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { BN_ZERO } from "@/common/bignumber";
+import { BN_10000, BN_ONE, BN_ZERO } from "@/common/bignumber";
 import { getATAAddress } from "@/common/pda";
 import { WSOLMint } from "@/common/pubKey";
 import { MakeTxData } from "@/common/txTool/txTool";
@@ -516,7 +516,7 @@ export default class CpmmModule extends ModuleBase {
     });
     txBuilder.addInstruction(lpInstruction);
     const poolKeys = propPoolKeys ?? (await this.getCpmmPoolKeys(poolInfo.id));
-    const _slippage = new Percent(new BN(1)).sub(slippage);
+    const _slippage = new Percent(BN_ONE).sub(slippage);
 
     txBuilder.addInstruction({
       instructions: [
@@ -563,7 +563,7 @@ export default class CpmmModule extends ModuleBase {
     if (this.scope.availability.addStandardPosition === false)
       this.logAndCreateError("add liquidity feature disabled in your region");
 
-    const _slippage = new Percent(new BN(1)).sub(slippage);
+    const _slippage = new Percent(BN_ONE).sub(slippage);
 
     const rpcPoolData = await this.getRpcPoolInfo(poolInfo.id);
     const [amountMintA, amountMintB] = [
@@ -647,8 +647,8 @@ export default class CpmmModule extends ModuleBase {
           new PublicKey(poolInfo.lpMint.address),
 
           lpAmount,
-          amountMintA.sub(mintAAmountFee.fee ?? new BN(0)),
-          amountMintB.sub(mintBAmountFee.fee ?? new BN(0)),
+          amountMintA.sub(mintAAmountFee.fee ?? BN_ZERO),
+          amountMintB.sub(mintBAmountFee.fee ?? BN_ZERO),
         ),
       ],
       instructionTypes: [InstructionType.CpmmWithdrawLiquidity],
@@ -689,11 +689,11 @@ export default class CpmmModule extends ModuleBase {
     if (!fixedOut) {
       swapResult.destinationAmountSwapped = swapResult.destinationAmountSwapped
         .mul(new BN((1 - slippage) * 10000))
-        .div(new BN(10000));
+        .div(BN_10000);
     } else {
       swapResult.sourceAmountSwapped = swapResult.sourceAmountSwapped
         .mul(new BN((1 + slippage) * 10000))
-        .div(new BN(10000));
+        .div(BN_10000);
     }
 
     const mintAUseSOLBalance = poolInfo.mintA.address === WSOLMint.toBase58();
@@ -980,7 +980,7 @@ export default class CpmmModule extends ModuleBase {
       swapResult.sourceAmountSwapped.toString(),
     );
 
-    const minAmountOut = swapResult.destinationAmountSwapped.mul(new BN((1 - slippage) * 10000)).div(new BN(10000));
+    const minAmountOut = swapResult.destinationAmountSwapped.mul(new BN((1 - slippage) * 10000)).div(BN_10000);
 
     return {
       allTrade: swapResult.sourceAmountSwapped.eq(amountIn),
@@ -1021,7 +1021,7 @@ export default class CpmmModule extends ModuleBase {
       epochInfo,
       false,
     );
-    const _inputAmountWithoutFee = inputAmount.sub(inputAmountFee.fee ?? new BN(0));
+    const _inputAmountWithoutFee = inputAmount.sub(inputAmountFee.fee ?? BN_ZERO);
 
     const lpAmount = new BN(
       new Decimal(poolInfo.lpAmount).mul(10 ** poolInfo.lpMint.decimals).toFixed(0, Decimal.ROUND_DOWN),
@@ -1065,16 +1065,16 @@ export default class CpmmModule extends ModuleBase {
       );
     }
 
-    const _slippage = new Percent(new BN(1)).add(slippage);
-    const _slippageMin = new Percent(new BN(1)).sub(slippage);
+    const _slippage = new Percent(BN_ONE).add(slippage);
+    const _slippageMin = new Percent(BN_ONE).sub(slippage);
     const slippageAdjustedAmount = getTransferAmountFeeV2(
-      _slippage.mul(anotherAmountFee.amount.sub(anotherAmountFee.fee ?? new BN(0))).quotient,
+      _slippage.mul(anotherAmountFee.amount.sub(anotherAmountFee.fee ?? BN_ZERO)).quotient,
       poolInfo[baseIn ? "mintB" : "mintA"].extensions?.feeConfig,
       epochInfo,
       true,
     );
     const slippageAdjustedMinAmount = getTransferAmountFeeV2(
-      _slippageMin.mul(anotherAmountFee.amount.sub(anotherAmountFee.fee ?? new BN(0))).quotient,
+      _slippageMin.mul(anotherAmountFee.amount.sub(anotherAmountFee.fee ?? BN_ZERO)).quotient,
       poolInfo[baseIn ? "mintB" : "mintA"].extensions?.feeConfig,
       epochInfo,
       true,
@@ -1103,9 +1103,9 @@ export default class CpmmModule extends ModuleBase {
 
 function lpToAmount(lp: BN, poolAmountA: BN, poolAmountB: BN, supply: BN): { amountA: BN; amountB: BN } {
   let amountA = lp.mul(poolAmountA).div(supply);
-  if (!amountA.isZero() && !lp.mul(poolAmountA).mod(supply).isZero()) amountA = amountA.add(new BN(1));
+  if (!amountA.isZero() && !lp.mul(poolAmountA).mod(supply).isZero()) amountA = amountA.add(BN_ONE);
   let amountB = lp.mul(poolAmountB).div(supply);
-  if (!amountB.isZero() && !lp.mul(poolAmountB).mod(supply).isZero()) amountB = amountB.add(new BN(1));
+  if (!amountB.isZero() && !lp.mul(poolAmountB).mod(supply).isZero()) amountB = amountB.add(BN_ONE);
 
   return {
     amountA,

@@ -3,6 +3,8 @@ import BN from "bn.js";
 import Decimal from "decimal.js";
 import { ApiV3PoolInfoConcentratedItem, ClmmKeys } from "../../api/type";
 import {
+  BN_ONE,
+  BN_ZERO,
   CLMM_LOCK_AUTH_ID,
   CLMM_LOCK_PROGRAM_ID,
   CLMM_PROGRAM_ID,
@@ -47,7 +49,7 @@ import {
   SetRewardsParams,
   ClmmLockAddress,
 } from "./type";
-import { MAX_SQRT_PRICE_X64, MIN_SQRT_PRICE_X64, mockV3CreatePoolInfo, ZERO } from "./utils/constants";
+import { MAX_SQRT_PRICE_X64, MIN_SQRT_PRICE_X64, mockV3CreatePoolInfo } from "./utils/constants";
 import { MathUtil, SqrtPriceMath } from "./utils/math";
 import {
   getPdaOperationAccount,
@@ -1403,7 +1405,7 @@ export class Clmm extends ModuleBase {
 
     let sqrtPriceLimitX64: BN;
     if (!priceLimit || priceLimit.equals(new Decimal(0))) {
-      sqrtPriceLimitX64 = baseIn ? MIN_SQRT_PRICE_X64.add(new BN(1)) : MAX_SQRT_PRICE_X64.sub(new BN(1));
+      sqrtPriceLimitX64 = baseIn ? MIN_SQRT_PRICE_X64.add(BN_ONE) : MAX_SQRT_PRICE_X64.sub(BN_ONE);
     } else {
       sqrtPriceLimitX64 = SqrtPriceMath.priceToSqrtPriceX64(
         priceLimit,
@@ -1536,8 +1538,8 @@ export class Clmm extends ModuleBase {
     if (!priceLimit || priceLimit.equals(new Decimal(0))) {
       sqrtPriceLimitX64 =
         outputMint.toString() === poolInfo.mintB.address
-          ? MIN_SQRT_PRICE_X64.add(new BN(1))
-          : MAX_SQRT_PRICE_X64.sub(new BN(1));
+          ? MIN_SQRT_PRICE_X64.add(BN_ONE)
+          : MAX_SQRT_PRICE_X64.sub(BN_ONE);
     } else {
       sqrtPriceLimitX64 = SqrtPriceMath.priceToSqrtPriceX64(
         priceLimit,
@@ -1830,9 +1832,9 @@ export class Clmm extends ModuleBase {
               tokenAccountB: ownerTokenAccountB,
               rewardAccounts,
             },
-            liquidity: new BN(0),
-            amountMinA: new BN(0),
-            amountMinB: new BN(0),
+            liquidity: BN_ZERO,
+            amountMinA: BN_ZERO,
+            amountMinB: BN_ZERO,
             nft2022: record[itemPosition.nftMint.toBase58()]?.equals(TOKEN_2022_PROGRAM_ID),
           });
           txBuilder.addInstruction(insData);
@@ -1889,7 +1891,7 @@ export class Clmm extends ModuleBase {
     programId: string | PublicKey;
   }): Promise<ReturnType<typeof PositionInfoLayout.decode>[]> {
     await this.scope.account.fetchWalletTokenAccounts();
-    const balanceMints = this.scope.account.tokenAccountRawInfos.filter((acc) => acc.accountInfo.amount.eq(new BN(1)));
+    const balanceMints = this.scope.account.tokenAccountRawInfos.filter((acc) => acc.accountInfo.amount.eq(BN_ONE));
     const allPositionKey = balanceMints.map(
       (acc) => getPdaPersonalPositionAddress(new PublicKey(programId), acc.accountInfo.mint).publicKey,
     );

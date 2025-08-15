@@ -8,6 +8,7 @@ import { MAX_TICK, MIN_TICK } from "./constants";
 import { SqrtPriceMath, TickMath } from "./math";
 import { getPdaTickArrayAddress } from "./pda";
 import { TickQuery } from "./tickQuery";
+import { BN_ZERO } from "@/common";
 
 export const TICK_ARRAY_SIZE = 60;
 export const TICK_ARRAY_BITMAP_SIZE = 512;
@@ -133,7 +134,7 @@ export class TickUtils {
   }
 
   public static mergeTickArrayBitmap(bns: BN[]): BN {
-    let b = new BN(0);
+    let b = BN_ZERO;
     for (let i = 0; i < bns.length; i++) {
       b = b.add(bns[i].shln(64 * i));
     }

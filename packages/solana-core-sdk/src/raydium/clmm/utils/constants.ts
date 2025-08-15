@@ -1,13 +1,12 @@
+import { BN_ONE, BN_TEN, BN_ZERO } from "@/common";
 import BN from "bn.js";
 
-export const ZERO = new BN(0);
-export const ONE = new BN(1);
 export const NEGATIVE_ONE = new BN(-1);
 
-export const Q64 = new BN(1).shln(64);
-export const Q128 = new BN(1).shln(128);
+export const Q64 = BN_ONE.shln(64);
+export const Q128 = BN_ONE.shln(128);
 
-export const MaxU64 = Q64.sub(ONE);
+export const MaxU64 = Q64.sub(BN_ONE);
 
 export const U64Resolution = 64;
 
@@ -30,7 +29,7 @@ export const LOG_B_2_X32 = "59543866431248";
 export const LOG_B_P_ERR_MARGIN_LOWER_X64 = "184467440737095516";
 export const LOG_B_P_ERR_MARGIN_UPPER_X64 = "15793534762490258745";
 
-export const FEE_RATE_DENOMINATOR = new BN(10).pow(new BN(6));
+export const FEE_RATE_DENOMINATOR = BN_TEN.pow(new BN(6));
 
 export enum Fee {
   rate_500 = 500, //  500 / 10e6 = 0.0005
@@ -45,16 +44,16 @@ export const TICK_SPACINGS: { [amount in Fee]: number } = {
 
 export const mockCreatePoolInfo = {
   version: 6,
-  liquidity: ZERO,
+  liquidity: BN_ZERO,
   tickCurrent: 0,
-  feeGrowthGlobalX64A: ZERO,
-  feeGrowthGlobalX64B: ZERO,
-  protocolFeesTokenA: ZERO,
-  protocolFeesTokenB: ZERO,
-  swapInAmountTokenA: ZERO,
-  swapOutAmountTokenB: ZERO,
-  swapInAmountTokenB: ZERO,
-  swapOutAmountTokenA: ZERO,
+  feeGrowthGlobalX64A: BN_ZERO,
+  feeGrowthGlobalX64B: BN_ZERO,
+  protocolFeesTokenA: BN_ZERO,
+  protocolFeesTokenB: BN_ZERO,
+  swapInAmountTokenA: BN_ZERO,
+  swapOutAmountTokenB: BN_ZERO,
+  swapInAmountTokenB: BN_ZERO,
+  swapOutAmountTokenA: BN_ZERO,
   tickArrayBitmap: [],
 
   rewardInfos: [],

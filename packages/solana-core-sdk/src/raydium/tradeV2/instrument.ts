@@ -10,6 +10,7 @@ import {
   jsonInfo2PoolKeys,
   getATAAddress,
   ALL_PROGRAM_ID,
+  BN_ZERO,BN_ONE
 } from "@/common";
 import { seq, struct, u128, u64, u8 } from "../../marshmallow";
 import {
@@ -18,7 +19,6 @@ import {
   MAX_SQRT_PRICE_X64_SUB_ONE,
   MIN_SQRT_PRICE_X64,
   MIN_SQRT_PRICE_X64_ADD_ONE,
-  ONE,
   getPdaExBitmapAccount,
 } from "../clmm";
 import { makeAMMSwapInstruction } from "../liquidity/instruction";
@@ -548,8 +548,8 @@ export function makeSwapInstruction({
       const poolKeys = swapInfo.poolKey[0] as ClmmKeys;
       const _poolKey = jsonInfo2PoolKeys(poolKeys);
       const sqrtPriceLimitX64 = inputMint.equals(_poolKey.mintA.address)
-        ? MIN_SQRT_PRICE_X64.add(ONE)
-        : MAX_SQRT_PRICE_X64.sub(ONE);
+        ? MIN_SQRT_PRICE_X64.add(BN_ONE)
+        : MAX_SQRT_PRICE_X64.sub(BN_ONE);
 
       return ClmmInstrument.makeSwapBaseInInstructions({
         poolInfo: poolKeys,
@@ -562,7 +562,7 @@ export function makeSwapInstruction({
         },
         inputMint,
         amountIn: swapInfo.amountIn.amount.raw,
-        amountOutMin: swapInfo.minAmountOut.amount.raw.sub(swapInfo.minAmountOut.fee?.raw ?? new BN(0)),
+        amountOutMin: swapInfo.minAmountOut.amount.raw.sub(swapInfo.minAmountOut.fee?.raw ?? BN_ZERO),
         sqrtPriceLimitX64,
         remainingAccounts: swapInfo.remainingAccounts[0] ?? [],
       });
@@ -612,7 +612,7 @@ export function makeSwapInstruction({
               owner: ownerInfo.wallet,
             },
             amountIn: swapInfo.amountIn.amount.raw,
-            amountOut: swapInfo.minAmountOut.amount.raw.sub(swapInfo.minAmountOut.fee?.raw ?? new BN(0)),
+            amountOut: swapInfo.minAmountOut.amount.raw.sub(swapInfo.minAmountOut.fee?.raw ?? BN_ZERO),
             fixedSide: "in",
           }),
         ],
@@ -653,7 +653,7 @@ export function makeSwapInstruction({
           poolKey2,
 
           swapInfo.amountIn.amount.raw,
-          swapInfo.minAmountOut.amount.raw.sub(swapInfo.minAmountOut.fee?.raw ?? new BN(0)),
+          swapInfo.minAmountOut.amount.raw.sub(swapInfo.minAmountOut.fee?.raw ?? BN_ZERO),
 
           swapInfo.remainingAccounts,
         ),

@@ -21,6 +21,9 @@ import { ApiV3PoolInfoConcentratedItem, ApiV3Token } from "@/api/type";
 
 import Decimal from "decimal.js";
 import {
+  BN_ONE,
+  BN_TEN,
+  BN_ZERO,
   getMultipleAccountsInfo,
   getMultipleAccountsInfoWithCustomFlags,
   getTransferAmountFeeV2,
@@ -30,7 +33,7 @@ import {
 import { Percent, Price, Token, TokenAmount } from "@/module";
 import { TokenAccountRaw } from "@/raydium/account/types";
 import { PoolInfoLayout, PositionInfoLayout, TickArrayBitmapExtensionLayout, TickArrayLayout } from "../layout";
-import { MAX_SQRT_PRICE_X64, MAX_TICK, MIN_SQRT_PRICE_X64, MIN_TICK, NEGATIVE_ONE, Q64, ZERO } from "./constants";
+import { MAX_SQRT_PRICE_X64, MAX_TICK, MIN_SQRT_PRICE_X64, MIN_TICK, NEGATIVE_ONE, Q64 } from "./constants";
 import { LiquidityMath, MathUtil, SqrtPriceMath, SwapMath } from "./math";
 import { getPdaExBitmapAccount, getPdaPersonalPositionAddress, getPdaTickArrayAddress } from "./pda";
 import { PositionUtils } from "./position";
@@ -325,7 +328,7 @@ export class PoolUtils {
       };
 
       if (itemReward.tokenMint.equals(PublicKey.default)) continue;
-      if (chainTime <= itemReward.openTime.toNumber() || poolLiquidity.eq(ZERO)) {
+      if (chainTime <= itemReward.openTime.toNumber() || poolLiquidity.eq(BN_ZERO)) {
         nRewardInfo.push(itemReward);
         continue;
       }
@@ -546,12 +549,12 @@ export class PoolUtils {
             tokenFeesOwedB: position.tokenFeesOwedB,
             rewardInfos: position.rewardInfos.map((i) => ({
               ...i,
-              pendingReward: new BN(0),
+              pendingReward: BN_ZERO,
             })),
 
             leverage,
-            tokenFeeAmountA: new BN(0),
-            tokenFeeAmountB: new BN(0),
+            tokenFeeAmountA: BN_ZERO,
+            tokenFeeAmountB: BN_ZERO,
           },
         ];
 
@@ -604,10 +607,10 @@ export class PoolUtils {
               tickUpperState,
             );
             const rewardInfos = await PositionUtils.GetPositionRewards(state, itemPA, tickLowerState, tickUpperState);
-            itemPA.tokenFeeAmountA = tokenFeeAmountA.gte(new BN(0)) ? tokenFeeAmountA : new BN(0);
-            itemPA.tokenFeeAmountB = tokenFeeAmountB.gte(new BN(0)) ? tokenFeeAmountB : new BN(0);
+            itemPA.tokenFeeAmountA = tokenFeeAmountA.gte(BN_ZERO) ? tokenFeeAmountA : BN_ZERO;
+            itemPA.tokenFeeAmountB = tokenFeeAmountB.gte(BN_ZERO) ? tokenFeeAmountB : BN_ZERO;
             for (let i = 0; i < rewardInfos.length; i++) {
-              itemPA.rewardInfos[i].pendingReward = rewardInfos[i].gte(new BN(0)) ? rewardInfos[i] : new BN(0);
+              itemPA.rewardInfos[i].pendingReward = rewardInfos[i].gte(BN_ZERO) ? rewardInfos[i] : BN_ZERO;
             }
           }
         }
@@ -644,7 +647,7 @@ export class PoolUtils {
       : [poolInfo.mintB.extensions?.feeConfig, poolInfo.mintA.extensions?.feeConfig];
 
     if (priceLimit.equals(new Decimal(0))) {
-      sqrtPriceLimitX64 = isBaseIn ? MIN_SQRT_PRICE_X64.add(new BN(1)) : MAX_SQRT_PRICE_X64.sub(new BN(1));
+      sqrtPriceLimitX64 = isBaseIn ? MIN_SQRT_PRICE_X64.add(BN_ONE) : MAX_SQRT_PRICE_X64.sub(BN_ONE);
     } else {
       sqrtPriceLimitX64 = SqrtPriceMath.priceToSqrtPriceX64(
         priceLimit,
@@ -665,7 +668,7 @@ export class PoolUtils {
       poolInfo,
       tickArrayCache,
       baseMint,
-      realAmountIn.amount.sub(realAmountIn.fee ?? ZERO),
+      realAmountIn.amount.sub(realAmountIn.fee ?? BN_ZERO),
       sqrtPriceLimitX64,
       catchLiquidityInsufficient,
     );
@@ -781,13 +784,13 @@ export class PoolUtils {
 
     const _currentPrice = new Price({
       baseToken,
-      denominator: new BN(10).pow(new BN(20 + baseToken.decimals)),
+      denominator: BN_TEN.pow(new BN(20 + baseToken.decimals)),
       quoteToken: outToken,
       numerator: currentPrice.mul(new Decimal(10 ** (20 + outToken.decimals))).toFixed(0),
     });
     const _executionPrice = new Price({
       baseToken,
-      denominator: new BN(10).pow(new BN(20 + baseToken.decimals)),
+      denominator: BN_TEN.pow(new BN(20 + baseToken.decimals)),
       quoteToken: outToken,
       numerator: executionPrice.mul(new Decimal(10 ** (20 + outToken.decimals))).toFixed(0),
     });
@@ -835,7 +838,7 @@ export class PoolUtils {
 
     let sqrtPriceLimitX64: BN;
     if (priceLimit.equals(new Decimal(0))) {
-      sqrtPriceLimitX64 = !isBaseIn ? MIN_SQRT_PRICE_X64.add(new BN(1)) : MAX_SQRT_PRICE_X64.sub(new BN(1));
+      sqrtPriceLimitX64 = !isBaseIn ? MIN_SQRT_PRICE_X64.add(BN_ONE) : MAX_SQRT_PRICE_X64.sub(BN_ONE);
     } else {
       sqrtPriceLimitX64 = SqrtPriceMath.priceToSqrtPriceX64(
         priceLimit,
@@ -855,7 +858,7 @@ export class PoolUtils {
       poolInfo,
       tickArrayCache,
       baseMint,
-      realAmountOut.amount.sub(realAmountOut.fee ?? ZERO),
+      realAmountOut.amount.sub(realAmountOut.fee ?? BN_ZERO),
       sqrtPriceLimitX64,
     );
 
@@ -1109,21 +1112,21 @@ export class PoolUtils {
       !amountHasFee,
     );
     const _amount = new BN(
-      new Decimal(addFeeAmount.amount.sub(addFeeAmount.fee ?? ZERO).toString()).toFixed(0), // .mul(coefficient).toFixed(0),
+      new Decimal(addFeeAmount.amount.sub(addFeeAmount.fee ?? BN_ZERO).toString()).toFixed(0), // .mul(coefficient).toFixed(0),
     );
 
     let liquidity: BN;
     if (sqrtPriceX64.lte(sqrtPriceX64A)) {
       liquidity = inputA
         ? LiquidityMath.getLiquidityFromTokenAmountA(sqrtPriceX64A, sqrtPriceX64B, _amount, !add)
-        : new BN(0);
+        : BN_ZERO;
     } else if (sqrtPriceX64.lte(sqrtPriceX64B)) {
       const liquidity0 = LiquidityMath.getLiquidityFromTokenAmountA(sqrtPriceX64, sqrtPriceX64B, _amount, !add);
       const liquidity1 = LiquidityMath.getLiquidityFromTokenAmountB(sqrtPriceX64A, sqrtPriceX64, _amount);
       liquidity = inputA ? liquidity0 : liquidity1;
     } else {
       liquidity = inputA
-        ? new BN(0)
+        ? BN_ZERO
         : LiquidityMath.getLiquidityFromTokenAmountB(sqrtPriceX64A, sqrtPriceX64B, _amount);
     }
 
@@ -1316,8 +1319,8 @@ export function getLiquidityFromAmounts({
     sqrtPriceX64,
     sqrtPriceX64A,
     sqrtPriceX64B,
-    amountFeeA.amount.sub(amountFeeA.fee ?? ZERO),
-    amountFeeB.amount.sub(amountFeeB.fee ?? ZERO),
+    amountFeeA.amount.sub(amountFeeA.fee ?? BN_ZERO),
+    amountFeeB.amount.sub(amountFeeB.fee ?? BN_ZERO),
   );
 
   return LiquidityMath.getAmountsOutFromLiquidity({
