@@ -29,11 +29,10 @@ import { isSVMOrder } from 'views/Swap/utils'
 import { EstimatedTime } from '../../Swap/Bridge/CrossChainConfirmSwapModal/components/EstimatedTime'
 import { SlippageAdjustedAmounts, SVMTradePriceBreakdown, TradePriceBreakdown } from '../../Swap/V3Swap/utils/exchange'
 import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
-import { SlippageButton } from '../../Swap/components/SlippageButton'
 import { useFeeSaved } from '../../Swap/hooks/useFeeSaved'
 import { SVMTradingFee } from './TradingFee'
 
-const DetailsTitle = styled(Text)`
+export const DetailsTitle = styled(Text)`
   text-decoration: underline dotted;
   font-size: 14px;
   color: ${({ theme }) => theme.colors.textSubtle};
@@ -183,11 +182,6 @@ export const TradeSummary = memo(function TradeSummary({
     SPLToken.isSPLToken(outputAmount?.currency) ? undefined : (outputAmount as CurrencyAmount<Currency>),
   )
 
-  // if priceBreakdown is an array and priceBreakdown only has one item, hide the slippage button because it's bridge-only case
-  const isBridgeOnlyCase = useMemo(() => {
-    return Array.isArray(priceBreakdown) && priceBreakdown.length === 1
-  }, [priceBreakdown])
-
   return (
     <AutoColumn px="4px">
       <RowBetween>
@@ -272,27 +266,6 @@ export const TradeSummary = memo(function TradeSummary({
               <FormattedPriceImpact priceImpact={getBridgeOrderPriceImpact(priceBreakdown)} />
             )}
           </SkeletonV2>
-        </RowBetween>
-      )}
-      {!isBridgeOnlyCase && (
-        <RowBetween mt="8px">
-          <RowFixed>
-            <QuestionHelperV2
-              text={
-                <>
-                  <Text>
-                    {t(
-                      'Permissible price deviation (%) between quoted and execution price of swap. For cross-chain swaps, this applies separately to both source and destination chains.',
-                    )}
-                  </Text>
-                </>
-              }
-              placement="top"
-            >
-              <DetailsTitle>{t('Slippage Tolerance')}</DetailsTitle>
-            </QuestionHelperV2>
-          </RowFixed>
-          <SlippageButton enableAutoSlippage />
         </RowBetween>
       )}
 
