@@ -44,7 +44,7 @@ export function useSolanaTokenBalance(
     if (!mintAddress) return { balance: new BN(0), loading: false }
     if (error) return { balance: new BN(0), loading: false, error }
     if (isLoading || !data) return { balance: new BN(0), loading: true }
-    return { balance: new BN(data.get(mintAddress)?.[0].amount.toNumber() ?? 0), loading: false }
+    return { balance: new BN(data.get(mintAddress)?.[0].amount.toString() ?? 0), loading: false }
   }, [mintAddress, data, isLoading, error])
 }
 

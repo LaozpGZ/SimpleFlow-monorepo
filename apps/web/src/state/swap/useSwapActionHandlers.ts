@@ -1,4 +1,4 @@
-import { Currency, UnifiedCurrency } from '@pancakeswap/sdk'
+import { UnifiedCurrency } from '@pancakeswap/sdk'
 import { useAtom } from 'jotai'
 import { useCallback } from 'react'
 import { swapReducerAtom } from 'state/swap/reducer'
