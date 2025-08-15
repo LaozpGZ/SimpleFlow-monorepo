@@ -1,17 +1,17 @@
 import { isInBinance } from '@binance/w3w-utils'
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { usePrivy } from '@privy-io/react-auth'
 import { atomWithStorage } from 'jotai/utils'
 import { useCallback, useEffect, useRef } from 'react'
 import { WagmiProvider as PrivyWagmiProvider } from '@privy-io/wagmi'
+import { rpcUrlAtom } from '@pancakeswap/utils/user'
 import { W3WConfigProvider } from './W3WConfigContext'
 import { useSyncWagmiState } from './hook/useSyncWagmiState'
 import { useWagmiConfig } from './hook/useWagmiConfig'
 import { useSyncPersistChain } from './hook/useSyncPersistChain'
-
-import { SOLANA_SUPPORTED_PATH } from './network.switch.config'
+import { SolanaWalletStateUpdater } from './SolanaProvider'
 
 interface WalletProviderProps {
   reconnectOnMount?: boolean
@@ -31,7 +31,7 @@ export const eip6963Providers: EIP6963Detail[] = []
 
 const walletRecoveryRecordsAtom = atomWithStorage<Record<string, number>>('pcs:socialLogin:walletRecoveryRecords', {})
 
-const SolanaProviders = dynamic(() => import('./SolanaProvider').then((m) => m.SolanaProvider), { ssr: false })
+const SolanaProviders = dynamic(() => import('@pancakeswap/ui-wallets').then((m) => m.SolanaProvider), { ssr: false })
 
 const usePrivyProvider = () => {
   const { authenticated, ready, user, createWallet, setWalletRecovery, logout: privyLogout, login } = usePrivy()
@@ -103,6 +103,7 @@ const usePrivyProvider = () => {
 export const WalletProvider = (props: WalletProviderProps) => {
   const { children } = props
   const router = useRouter()
+  const endpoint = useAtomValue(rpcUrlAtom)
   usePrivyProvider()
 
   const wagmiConfig = useWagmiConfig()
@@ -111,13 +112,16 @@ export const WalletProvider = (props: WalletProviderProps) => {
     return null // or a loading spinner
   }
 
-  const needSolanaProvider = SOLANA_SUPPORTED_PATH.includes(router.pathname)
+  // const needSolanaProvider = SOLANA_SUPPORTED_PATH.includes(router.pathname)
 
   return (
     <PrivyWagmiProvider reconnectOnMount config={wagmiConfig}>
       <W3WConfigProvider value={isInBinance()}>
         <Sync />
-        {needSolanaProvider ? <SolanaProviders>{children}</SolanaProviders> : children}
+        <SolanaProviders endpoint={endpoint}>
+          <SolanaWalletStateUpdater />
+          {children}
+        </SolanaProviders>
       </W3WConfigProvider>
     </PrivyWagmiProvider>
   )

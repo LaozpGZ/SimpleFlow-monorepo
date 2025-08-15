@@ -30,7 +30,7 @@ import { accountActiveChainAtom } from './atoms/accountStateAtoms'
 
 initialize()
 
-const SolanaWalletStateUpdater = () => {
+export const SolanaWalletStateUpdater = () => {
   const { connected, connecting, publicKey } = useWallet()
   const setWalletState = useSetAtom(accountActiveChainAtom)
 
@@ -43,6 +43,10 @@ const SolanaWalletStateUpdater = () => {
 
   return null
 }
+
+/**
+ * @deprecated use @pancakeswap/ui-wallets/src/components/SolanaProvider instead
+ */
 export const SolanaProvider: FC<PropsWithChildren<any>> = ({ children }) => {
   const endpoint = useAtomValue(rpcUrlAtom)
   const _walletConnect = useMemo(() => {

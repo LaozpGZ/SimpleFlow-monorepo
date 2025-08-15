@@ -34,7 +34,7 @@ export const NotInstalled = ({ wallet, qrCode }: { wallet: WalletConfigV3; qrCod
 
   if (qrCode) {
     return (
-      <Card mx="23px" style={{ width: '76%' }}>
+      <Card mx="23px">
         <CardBody>
           <FlexGap flexDirection="column" gap="8px" justifyContent="center" alignItems="center">
             <Text fontWeight={600} fontSize="16px">

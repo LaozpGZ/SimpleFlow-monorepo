@@ -30,11 +30,11 @@ export enum WalletIds {
   Phantom = 'phantom', // Not support BNB Chain/ Arbitrum yet, mark as Solana only now
   Solflare = 'solflare',
   Slope = 'slope',
-  Torus = 'torus',
   Glow = 'glow',
   BitPie = 'bitpie',
   BitGet = 'bitget',
   Exodus = 'exodus',
   Backpack = 'backpack',
   Solong = 'solong',
+  Torus = 'torus',
 }

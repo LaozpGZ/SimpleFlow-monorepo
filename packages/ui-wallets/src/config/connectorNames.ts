@@ -1,3 +1,23 @@
+import { WalletName } from '@solana/wallet-adapter-base'
+import { ExodusWalletName } from '@solana/wallet-adapter-exodus'
+import { GlowWalletName } from '@solana/wallet-adapter-glow'
+import { SlopeWalletName } from '@solana/wallet-adapter-slope'
+import {
+  BitgetWalletName,
+  BitpieWalletName,
+  Coin98WalletName,
+  CoinbaseWalletName,
+  MathWalletName,
+  PhantomWalletName,
+  SafePalWalletName,
+  SolflareWalletName,
+  SolongWalletName,
+  TokenPocketWalletName,
+  TorusWalletName,
+  TrustWalletName,
+  WalletConnectWalletName,
+} from '@solana/wallet-adapter-wallets'
+
 export enum EvmConnectorNames {
   MetaMask = 'metaMask',
   Injected = 'injected',
@@ -10,11 +30,31 @@ export enum EvmConnectorNames {
   CyberWallet = 'cyberWallet',
 }
 
-// TODO: @ChefJerry add more solana connectors
-export enum SolanaConnectorNames {
-  Phantom = 'phantom',
-  Solflare = 'solflare',
-  Sollet = 'sollet',
-  SolletExtension = 'solletExtension',
-  Torus = 'torus',
+// official supported solana wallets,
+// others will be added by wallet standard auto discover
+export const SolanaWalletNames = {
+  Phantom: PhantomWalletName,
+  MetaMask: 'MetaMask' as WalletName<'MetaMask'>,
+  Okx: 'OKX Wallet' as WalletName<'OKX Wallet'>,
+  BinanceW3W: 'Binance Wallet' as WalletName<'Binance Wallet'>,
+  Trust: TrustWalletName,
+  TokenPocket: TokenPocketWalletName,
+  Coin98: Coin98WalletName,
+  SafePal: SafePalWalletName,
+  WalletConnect: WalletConnectWalletName,
+  Coinbase: CoinbaseWalletName,
+  Math: MathWalletName,
+  Solflare: SolflareWalletName,
+  Slope: SlopeWalletName,
+  Glow: GlowWalletName,
+  BitPie: BitpieWalletName,
+  Bitget: BitgetWalletName,
+  Exodus: ExodusWalletName,
+  Backpack: 'Backpack' as WalletName<'Backpack'>,
+  Solong: SolongWalletName,
+  Torus: TorusWalletName,
+} as const
+
+export type SolanaConnectorNames = {
+  [key in keyof typeof SolanaWalletNames]: WalletName<key>
 }

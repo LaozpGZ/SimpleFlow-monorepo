@@ -1,3 +1,4 @@
+import { useWallet } from '@solana/wallet-adapter-react'
 import { useTranslation } from '@pancakeswap/localization'
 import { AtomBox, ModalV2, ModalWrapper, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useAtom, useSetAtom } from 'jotai'
@@ -20,7 +21,8 @@ import { PreviewStatus } from '../PreviewSection'
 import { DesktopModal } from './DesktopModal'
 import { MobileModal } from './MobileModal'
 import { MultichainWalletModalProps } from './types'
-import { fullSizeModalWrapperClass, modalWrapperClass } from '../WalletModal.css'
+import { fullSizeModalWrapperClass } from '../WalletModal.css'
+import { modalWrapperClass } from './modal.css'
 
 export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (props) => {
   const {
@@ -44,7 +46,9 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
   const [solanaOnly, setSolanaOnly] = useState(false)
   const [previewStatus, setPreviewStatus] = useState<PreviewStatus>(PreviewStatus.Intro)
 
-  const wallets_ = wallets ?? getWalletsConfig({ solanaOnly, createEvmQrCode })
+  const { wallets: solanaWallets } = useWallet()
+
+  const wallets_ = wallets ?? getWalletsConfig({ solanaOnly, createEvmQrCode, solanaWalletAdapters: solanaWallets })
   const topWallets_ = topWallets ?? getTopWalletsConfig(wallets_, solanaOnly)
 
   const handleDismiss = () => {

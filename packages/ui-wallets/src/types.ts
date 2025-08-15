@@ -1,4 +1,5 @@
 import { SvgProps } from '@pancakeswap/uikit'
+import { WalletName } from '@solana/wallet-adapter-base'
 import { WalletIds as LegacyWalletIds } from './components/LegacyWalletModal/legacyWalletIds'
 import { EvmConnectorNames, SolanaConnectorNames } from './config/connectorNames'
 
@@ -80,6 +81,7 @@ export type WalletConfigV3<T = EvmConnectorNames | SolanaConnectorNames> = Walle
   id: WalletIds
   networks: Array<WalletAdaptedNetwork>
   connectorId: T
+  solanaAdapterName?: SolanaConnectorNames | WalletName
 }
 
 export type ConnectData = {
