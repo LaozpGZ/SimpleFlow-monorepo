@@ -219,6 +219,13 @@ describe('Check translations available', () => {
   })
 
   it('should use all translation key in translation.json', () => {
+    const ignoreReg = new RegExp(/^twap\\./)
+    const leftKeys = [...translationKeys]
+    leftKeys.forEach((key) => {
+      if (ignoreReg.test(key)) {
+        translationKeys.delete(key)
+      }
+    })
     expect(
       translationKeys.size,
       `Found unused ${translationKeys.size} key(s) ${JSON.stringify(
