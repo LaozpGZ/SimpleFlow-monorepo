@@ -36,10 +36,13 @@ export const InfinityPositionActions = ({
   const [, setLatestTxReceipt] = useLatestTxReceipt()
   const modalState = useModalV2()
 
-  const pos =
-    pos_ ??
-    positionList?.find((x) => x.chainId === chainId_) ??
-    ({} as InfinityCLPositionDetail | InfinityBinPositionDetail)
+  const pos = useMemo(
+    () =>
+      pos_ ??
+      positionList?.find((x) => x.chainId === chainId_) ??
+      ({} as InfinityCLPositionDetail | InfinityBinPositionDetail),
+    [pos_, positionList],
+  )
 
   const { chainId: chainIdPos, poolKey } = pos
 

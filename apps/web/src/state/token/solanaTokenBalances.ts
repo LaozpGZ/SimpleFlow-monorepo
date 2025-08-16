@@ -9,6 +9,7 @@ import { TokenAccount } from '@pancakeswap/solana-core-sdk'
 import { rpcUrlAtom } from '@pancakeswap/utils/user'
 import { FAST_INTERVAL } from 'config/constants'
 
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { fetchSolanaTokenBalances } from './solanaBalanceFetcher'
 
 const SOLANA_BALANCES_QUERY_KEY = 'solanaTokenBalances'
@@ -41,10 +42,11 @@ export function useSolanaTokenBalance(
 ): { balance: BN; loading: boolean; error?: Error } {
   const { data, isLoading, error } = useAtomValue(walletBalancesAtomFamily(walletAddress))
   return useMemo(() => {
-    if (!mintAddress) return { balance: new BN(0), loading: false }
-    if (error) return { balance: new BN(0), loading: false, error }
-    if (isLoading || !data) return { balance: new BN(0), loading: true }
-    return { balance: new BN(data.get(mintAddress)?.[0].amount.toNumber() ?? 0), loading: false }
+    if (!mintAddress) return { balance: BIG_ZERO, loading: false }
+    if (error) return { balance: BIG_ZERO, loading: false, error }
+    if (isLoading || !data) return { balance: BIG_ZERO, loading: true }
+    const stringAmount = data.get(mintAddress)?.[0]?.amount.toString()
+    return { balance: stringAmount ? new BN(stringAmount) : BIG_ZERO, loading: false }
   }, [mintAddress, data, isLoading, error])
 }
 

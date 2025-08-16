@@ -669,7 +669,7 @@ export const useInfinityBinDerivedApr = (poolInfo: InfinityBinPoolInfo) => {
   const [liquidityShape] = useLiquidityShapeQueryState()
 
   const liquidity = useMemo(() => {
-    if (!lowerBinId || !upperBinId || !pool?.binStep) return new BN(0)
+    if (!lowerBinId || !upperBinId || !pool?.binStep) return BIG_ZERO
 
     const l = getActiveLiquidityFromShape({
       liquidityShape: liquidityShape as BinLiquidityShape,
@@ -715,7 +715,7 @@ export const useInfinityBinDerivedApr = (poolInfo: InfinityBinPoolInfo) => {
   }, [existingPositionTvlUsd, derivedUserTVLUsd])
 
   const share = useMemo(() => {
-    if (liquidity.isZero()) return new BN(0)
+    if (liquidity.isZero()) return BIG_ZERO
 
     const existingPositionLiquidity = existingPosition?.[0]?.activeLiquidity.toString() ?? 0
     const lqBN = new BN(liquidity.toString()).plus(existingPositionLiquidity)
