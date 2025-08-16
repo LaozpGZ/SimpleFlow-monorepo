@@ -7,7 +7,6 @@ import {
   HotDisableIcon,
   HotIcon,
   IconButton,
-  NotificationDot,
   Text,
   TooltipText,
   useModal,
@@ -17,7 +16,6 @@ import { useExpertMode } from '@pancakeswap/utils/user'
 import { Swap } from '@pancakeswap/widgets-internal'
 import TransactionsModal from 'components/App/Transactions/TransactionsModal'
 import InternalLink from 'components/Links'
-import GlobalSettings from 'components/Menu/GlobalSettings'
 import RefreshIcon from 'components/Svg/RefreshIcon'
 import { CHAIN_REFRESH_TIME } from 'config/constants/exchange'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -30,7 +28,6 @@ import { useRoutingSettingChanged } from 'state/user/smartRouter'
 import { styled } from 'styled-components'
 import atomWithStorageWithErrorCatch from 'utils/atomWithStorageWithErrorCatch'
 import BuyCryptoIcon from '../../../../public/images/moneyBangs.svg'
-import { SettingsMode } from '../../../components/Menu/GlobalSettings/types'
 import { SwapFeaturesContext } from '../SwapFeaturesContext'
 
 interface Props {
@@ -173,14 +170,7 @@ const CurrencyInputHeader: React.FC<React.PropsWithChildren<Props>> = memo(
               )}
             </ColoredIconButton>
           )}
-          <NotificationDot show={expertMode || isRoutingSettingChange}>
-            <GlobalSettings
-              color="textSubtle"
-              mr="0"
-              mode={SettingsMode.SWAP_LIQUIDITY}
-              data-dd-action-name="Swap settings button"
-            />
-          </NotificationDot>
+
           <IconButton
             onClick={onPresentTransactionsModal}
             variant="text"

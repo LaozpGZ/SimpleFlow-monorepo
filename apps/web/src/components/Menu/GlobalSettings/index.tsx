@@ -1,7 +1,7 @@
 import { ButtonProps, CogIcon, Flex, IconButton, ModalV2, useModalV2 } from '@pancakeswap/uikit'
 
-import { SettingsModalV2 } from './SettingsModalV2'
 import { SettingsMode } from './types'
+import GlobalSettingsModal from './SettingsModal'
 
 type Props = {
   color?: string
@@ -31,7 +31,7 @@ const GlobalSettings = ({ color, mr = '8px', mode = SettingsMode.GLOBAL, overrid
       )}
 
       <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-        <SettingsModalV2 onDismiss={onDismiss} mode={mode} />
+        <GlobalSettingsModal onDismiss={onDismiss} />
       </ModalV2>
     </Flex>
   )
