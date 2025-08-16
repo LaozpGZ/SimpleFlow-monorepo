@@ -12,7 +12,8 @@ import {
 } from '@pancakeswap/uikit'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useEffect, useMemo, useState } from 'react'
-import { escapeRegExp } from 'utils'
+import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
+import inputRegex from '@pancakeswap/utils/inputRegex'
 
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
 import { useAutoSlippageEnabled } from 'hooks/useAutoSlippageWithFallback'
@@ -53,7 +54,6 @@ enum DeadlineError {
   InvalidInput = 'InvalidInput',
 }
 
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 const THREE_DAYS_IN_SECONDS = 60 * 60 * 24 * 3
 
 const DEFAULT_TXN_DEADLINE = 20 // In Minutes

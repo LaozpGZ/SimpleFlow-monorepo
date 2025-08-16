@@ -4,7 +4,8 @@ import { useBNBPrice } from 'hooks/useBNBPrice'
 import { useEffect, useRef } from 'react'
 import { useGetCollection } from 'state/nftMarket/hooks'
 import { NftToken } from 'state/nftMarket/types'
-import { escapeRegExp } from 'utils'
+import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
+import inputRegex from '@pancakeswap/utils/inputRegex'
 import { Divider } from '../shared/styles'
 import { BnbAmountCell, FeeAmountCell, GreyedOutContainer, RightAlignedInput } from './styles'
 
@@ -20,8 +21,6 @@ interface SetPriceStageProps {
 
 const MIN_PRICE = 0.005
 const MAX_PRICE = 10000
-
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
 // Stage where user puts price for NFT they're about to put on sale
 // Also shown when user wants to adjust the price of already listed NFT

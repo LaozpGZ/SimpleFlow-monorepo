@@ -14,10 +14,11 @@ import {
   QuestionHelper,
   Text,
 } from '@pancakeswap/uikit'
+import inputRegex from '@pancakeswap/utils/inputRegex'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useFeeLevelQueryState } from 'state/infinity/create'
 import styled from 'styled-components'
-import { escapeRegExp } from 'utils'
+import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
 import { useInfinityCreateFormQueryState } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
 
 export type FieldFeeLevelProps = BoxProps
@@ -44,8 +45,6 @@ export const isFeeOutOfRange = (fee?: number | null, poolType?: PoolType) => {
   }
   return poolType === POOL_TYPE.CLAMM ? fee >= FEE_LIMIT[POOL_TYPE.CLAMM] : fee >= FEE_LIMIT[POOL_TYPE.Bin]
 }
-
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
 export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ ...boxProps }) => {
   const { t } = useTranslation()

@@ -4,11 +4,10 @@ import { AutoRenewIcon, Button, Flex, HelpIcon, Input, SyncAltIcon, Text, useToo
 import React from 'react'
 import { Rate } from 'state/limitOrders/types'
 import { styled } from 'styled-components'
-import { escapeRegExp } from 'utils'
+import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
+import inputRegex from '@pancakeswap/utils/inputRegex'
 import ExpiredDate from 'views/LimitOrders/components/ExpiredDate'
 import { PercentageDirection, getRatePercentageMessage } from '../utils/getRatePercentageMessage'
-
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
 const OrderPriceInput = styled(Input)`
   text-align: right;

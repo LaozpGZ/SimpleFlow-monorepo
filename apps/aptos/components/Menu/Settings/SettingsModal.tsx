@@ -15,6 +15,7 @@ import {
 import { ExpertModal } from '@pancakeswap/widgets-internal'
 
 import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
+import inputRegex from '@pancakeswap/utils/inputRegex'
 import {
   useAudioPlay,
   useExpertMode,
@@ -49,7 +50,6 @@ const ScrollableContainer = styled(Flex)`
     max-height: none;
   }
 `
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`)
 
 enum SlippageError {
   InvalidInput = 'InvalidInput',
