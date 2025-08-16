@@ -1,4 +1,4 @@
-import { languageList, useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@pancakeswap/localization'
 import { Menu as UikitMenu, footerLinks, useModal } from '@pancakeswap/uikit'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
@@ -79,7 +79,7 @@ const Menu = (props) => {
       linkComponent={LinkComponent}
       rightSide={
         <>
-          <GlobalSettings mode={SettingsMode.GLOBAL} />
+          <GlobalSettings />
           {enabled && (
             <Suspense fallback={null}>
               <Notifications />

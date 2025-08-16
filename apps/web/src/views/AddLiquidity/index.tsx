@@ -55,7 +55,6 @@ export interface LP2ChildrenProps {
   pairState: PairState
   poolTokenPercentage?: Percent
   price?: Price<Currency, Currency>
-  onPresentSettingsModal: () => void
   allowedSlippage: number
   pair?: Pair | null
   poolData?: {
@@ -379,8 +378,6 @@ export default function AddLiquidity({
 
   const shouldShowApprovalGroup = (showFieldAApproval || showFieldBApproval) && isValid
 
-  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.SWAP_LIQUIDITY} />)
-
   return children({
     isOneWeiAttack,
     error,
@@ -395,7 +392,6 @@ export default function AddLiquidity({
     pairState,
     poolTokenPercentage,
     price,
-    onPresentSettingsModal,
     allowedSlippage,
     pair,
     poolData,
