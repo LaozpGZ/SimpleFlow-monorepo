@@ -5,23 +5,19 @@ import {
   ButtonMenuItem,
   ChartDisableIcon,
   ChartIcon,
-  FlexGap,
   IconButton,
   Text,
   TooltipText,
   useMatchBreakpoints,
   useTooltip,
 } from '@pancakeswap/uikit'
-import GlobalSettings from 'components/Menu/GlobalSettings'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useIsSmartAccount } from 'hooks/useIsSmartAccount'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
-import { useCallback, useContext, useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { styled } from 'styled-components'
 import { isEvm } from '@pancakeswap/chains'
-import { SettingsMode } from '../../../components/Menu/GlobalSettings/types'
-import { SwapFeaturesContext } from '../../Swap/SwapFeaturesContext'
 import { chartDisplayAtom } from './atoms'
 
 import { SwapType } from '../../Swap/types'
@@ -120,7 +116,6 @@ export const SwapSelection = ({
     { placement: 'top' },
   )
 
-  const { isChartSupported } = useContext(SwapFeaturesContext)
   const [isChartDisplayed, setIsChartDisplayed] = useAtom(chartDisplayAtom)
 
   const toggleChartDisplayed = () => {
@@ -194,18 +189,6 @@ export const SwapSelection = ({
             <ChartIcon width="24px" color="textSubtle" />
           )}
         </ColoredIconButton>
-      )}
-      {withToolkit && (
-        <FlexGap alignItems="center" gap="4px">
-          {/* <RecentTransactionsButton /> */}
-          <GlobalSettings
-            color="textSubtle"
-            mr="0"
-            mode={SettingsMode.SWAP_LIQUIDITY}
-            data-dd-action-name="Swap settings button"
-            width="24px"
-          />
-        </FlexGap>
       )}
     </SwapSelectionWrapper>
   )

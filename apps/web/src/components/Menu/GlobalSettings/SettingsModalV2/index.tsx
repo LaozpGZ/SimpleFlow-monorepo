@@ -142,7 +142,6 @@ export const SettingsModalV2 = ({
               setActiveTabIndex(show ? SettingsTabIndex.EXPERT_MODE : SettingsTabIndex.SETTINGS)
             }
             toggleExpertMode={() => setExpertMode((s) => !s)}
-            setShowExpertModeAcknowledgement={setShowExpertModeAcknowledgement}
           />
         )
       default:

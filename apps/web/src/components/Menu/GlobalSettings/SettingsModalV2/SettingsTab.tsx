@@ -46,7 +46,6 @@ export const SettingsTab = memo(
     return (
       <TabContent id={`${ariaId}_motion-tabpanel-0`} role="tabpanel" aria-labelledby={`${ariaId}_motion-tab-0`}>
         <Flex flexDirection="column">
-          <PreTitle mb="8px">{t('Swaps & Liquidity')}</PreTitle>
           <Box mb="24px">
             {chainId === ChainId.BSC && (
               <Flex justifyContent="space-between" alignItems="center" mb="16px">

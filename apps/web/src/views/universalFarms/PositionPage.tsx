@@ -413,9 +413,6 @@ export const PositionPage = () => {
                 <IconButton onClick={onPresentTransactionsModal} variant="text" scale="xs">
                   <HistoryIcon color="textSubtle" width="24px" />
                 </IconButton>
-                <NotificationDot show={expertMode}>
-                  <GlobalSettings mode={SettingsMode.SWAP_LIQUIDITY} scale="xs" />
-                </NotificationDot>
               </ButtonWrapper>
             </ControlWrapper>
           ) : null}
