@@ -139,11 +139,7 @@ export const InfinitySwapForm = memo(() => {
                     chainId={activeChianId}
                     loading={!tradeLoaded}
                   />
-                  <PricingAndSlippage
-                    priceLoading={!tradeLoaded}
-                    price={executionPrice ?? undefined}
-                    showSlippage={false}
-                  />
+                  <PricingAndSlippage priceLoading={!tradeLoaded} price={executionPrice ?? undefined} />
                 </FlexGap>
                 <TradingFee loaded={tradeLoaded} order={bestOrder} />
               </FlexGap>

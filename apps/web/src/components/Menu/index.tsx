@@ -14,7 +14,6 @@ import { useRouter } from 'next/router'
 import { Suspense, lazy, useCallback, useMemo } from 'react'
 import { styled } from 'styled-components'
 import GlobalSettings from './GlobalSettings'
-import { SettingsMode } from './GlobalSettings/types'
 import UserMenu from './UserMenu'
 import { UseMenuItemsParams, useMenuItems } from './hooks/useMenuItems'
 import { getActiveMenuItem, getActiveSubMenuChildItem, getActiveSubMenuItem } from './utils'
@@ -137,7 +136,7 @@ export const SharedComponentWithOutMenu: React.FC<React.PropsWithChildren> = ({ 
   return (
     <>
       <SharedComponentWithOutMenuWrapper>
-        <GlobalSettings mode={SettingsMode.GLOBAL} />
+        <GlobalSettings />
         {enabled && (
           <Suspense fallback={null}>
             <Notifications />
