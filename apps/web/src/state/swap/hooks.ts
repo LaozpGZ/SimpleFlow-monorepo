@@ -15,7 +15,6 @@ import { ChartPeriod, chainIdToExplorerInfoChainName, explorerApiClient } from '
 import { isAddressEqual, safeGetAddress, safeGetUnifiedAddress } from 'utils'
 import { NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { Field, replaceSwapState } from './actions'
 import { SwapState, swapReducerAtom } from './reducer'
 
