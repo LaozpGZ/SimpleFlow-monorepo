@@ -1,9 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  AtomBox,
+  FlexGap,
   Button,
   CloseIcon,
-  FlexGap as Flex,
+  Column,
   Heading,
   IconButton,
   RowBetween,
@@ -12,6 +12,7 @@ import {
   SocialLoginXIcon,
   Text,
   useMatchBreakpoints,
+  ArrowBackIcon,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { ASSET_CDN } from '../config/url'
@@ -36,10 +37,7 @@ const SocialLoginButton = styled(Button)`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   box-shadow: 0px 2px 0px 0px ${({ theme }) => theme.colors.cardBorder};
   gap: 4px;
-
-  ${({ theme }) => theme.mediaQueries.sm} {
-    margin-bottom: 12px;
-  }
+  height: 56px;
 `
 
 const SocialLoginButtonVertical = styled(SocialLoginButton)`
@@ -115,51 +113,80 @@ const SocialLogin: React.FC<SocialLoginProps> = ({
           </IconButton>
         </RowBetween>
       ) : null}
-      <SocialLoginButton onClick={handleGoogleLogin}>
-        <img
-          src={`${ASSET_CDN}/web/wallets/social-login/google.jpg`}
-          width="32"
-          height="32"
-          alt="Google"
-          style={{ borderRadius: '8px' }}
-        />
-        <Text>{t('Continue with Google')}</Text>
-      </SocialLoginButton>
+      <Column gap="12px">
+        <SocialLoginButton onClick={handleGoogleLogin}>
+          <img
+            src={`${ASSET_CDN}/web/wallets/social-login/google.jpg`}
+            width="32"
+            height="32"
+            alt="Google"
+            style={{ borderRadius: '8px' }}
+          />
+          <Text>{t('Continue with Google')}</Text>
+        </SocialLoginButton>
 
-      <Flex gap="8px" width="100%">
-        <SocialLoginButtonVertical onClick={handleXLogin}>
-          <IconWrapper>
-            <SocialLoginXIcon />
-          </IconWrapper>
-          <Text>{t('X Login')}</Text>
-        </SocialLoginButtonVertical>
+        <FlexGap gap="8px" width="100%">
+          <SocialLoginButtonVertical onClick={handleXLogin}>
+            <IconWrapper>
+              <SocialLoginXIcon />
+            </IconWrapper>
+            <Text>{t('X Login')}</Text>
+          </SocialLoginButtonVertical>
 
-        <SocialLoginButtonVertical onClick={handleTelegramLogin}>
-          <IconWrapper>
-            <SocialLoginTelegramIcon />
-          </IconWrapper>
-          <Text>{t('Telegram')}</Text>
-        </SocialLoginButtonVertical>
+          <SocialLoginButtonVertical onClick={handleTelegramLogin}>
+            <IconWrapper>
+              <SocialLoginTelegramIcon />
+            </IconWrapper>
+            <Text>{t('Telegram')}</Text>
+          </SocialLoginButtonVertical>
 
-        <SocialLoginButtonVertical onClick={handleDiscordLogin}>
-          <IconWrapper>
-            <SocialLoginDiscordIcon />
-          </IconWrapper>
-          <Text>{t('Discord')}</Text>
-        </SocialLoginButtonVertical>
-      </Flex>
+          <SocialLoginButtonVertical onClick={handleDiscordLogin}>
+            <IconWrapper>
+              <SocialLoginDiscordIcon />
+            </IconWrapper>
+            <Text>{t('Discord')}</Text>
+          </SocialLoginButtonVertical>
+        </FlexGap>
 
-      <NoticeCard>
-        <Text fontSize="12px">{t('Social login is available for EVM networks.')}</Text>
-        <Text fontSize="12px" color="textSubtle">
-          {t('For Solana, please use a compatible wallet.')}
-        </Text>
-        <Button variant="text" scale="xs" mt="8px">
-          {t('I have a passkey')}
-        </Button>
-      </NoticeCard>
+        {isMobile ? (
+          <>
+            <Button variant="text" scale="xs" mt="8px">
+              {t('I have a passkey')}
+            </Button>
+            <Divider>
+              <Text color="textSubtle" style={{ transform: 'translateY(-12px)' }}>
+                {t('or')}
+              </Text>
+            </Divider>
+            <NoticeCard onClick={onDismiss}>
+              <FlexGap gap="4px">
+                <ArrowBackIcon />
+                <Text>{t('Continue with Web3 Wallet')}</Text>
+              </FlexGap>
+            </NoticeCard>
+          </>
+        ) : (
+          <NoticeCard>
+            <Text fontSize="12px">{t('Social login is available for EVM networks.')}</Text>
+            <Text fontSize="12px" color="textSubtle">
+              {t('For Solana, please use a compatible wallet.')}
+            </Text>
+            <Button variant="text" scale="xs" mt="8px">
+              {t('I have a passkey')}
+            </Button>
+          </NoticeCard>
+        )}
+      </Column>
     </>
   )
 }
+
+const Divider = styled.div`
+  height: 1px;
+  background-color: ${({ theme }) => theme.colors.cardBorder};
+  width: 100%;
+  margin: 16px 0;
+  text-align: center;
+`
 
 export default SocialLogin
