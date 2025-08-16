@@ -196,6 +196,7 @@ export const getWalletsConfig = ({
         return isTokenPocketInstalled()
       },
       qrCode,
+      downloadLink: 'https://tokenpocket.pro',
     },
     {
       id: WalletIds.SafePal,

@@ -1,5 +1,16 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AtomBox, Button, Card, CardBody, FlexGap, Heading, Text } from '@pancakeswap/uikit'
+import {
+  AtomBox,
+  Button,
+  Card,
+  Column,
+  CardBody,
+  FlexGap,
+  Heading,
+  Text,
+  useMatchBreakpoints,
+  Image,
+} from '@pancakeswap/uikit'
 import { lazy, Suspense } from 'react'
 import styled from 'styled-components'
 import { LinkOfDevice, WalletConfigV3 } from '../../types'
@@ -31,6 +42,52 @@ const QRCodeBox = styled(AtomBox)`
 
 export const NotInstalled = ({ wallet, qrCode }: { wallet: WalletConfigV3; qrCode?: string }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
+
+  if (isMobile) {
+    return (
+      <Card mx="23px" style={{ width: '100%', margin: 0 }}>
+        <CardBody>
+          <Column gap="16px" alignItems="center">
+            <AtomBox
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              style={{ width: '56px', height: '56px', borderRadius: '12px' }}
+              overflow="hidden"
+              bg="backgroundAlt"
+            >
+              {typeof wallet.icon === 'string' ? (
+                <Image src={wallet.icon} width={56} height={56} />
+              ) : (
+                <wallet.icon width={56} height={56} />
+              )}
+            </AtomBox>
+            <FlexGap flexDirection="column" gap="0px" justifyContent="center" alignItems="center">
+              <Text fontWeight={600} fontSize="16px">
+                {t('%wallet% is not installed', { wallet: wallet.title })}
+              </Text>
+              <Text fontSize={12} color="textSubtle">
+                {t('Please install the wallet to continue.')}
+              </Text>
+            </FlexGap>
+            <FlexGap gap="8px" justifyContent="center">
+              {wallet.downloadLink && (
+                <Button variant="text" as="a" scale="xs" href={getDesktopLink(wallet.downloadLink)} external>
+                  {getDesktopText(wallet.downloadLink, t('Install'))}
+                </Button>
+              )}
+              {wallet.guide && (
+                <Button variant="text" as="a" scale="xs" href={getDesktopLink(wallet.guide)} external>
+                  {getDesktopText(wallet.guide, t('Setup Guide'))}
+                </Button>
+              )}
+            </FlexGap>
+          </Column>
+        </CardBody>
+      </Card>
+    )
+  }
 
   if (qrCode) {
     return (

@@ -4072,5 +4072,6 @@
   "Select Chain": "Select Chain",
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.",
   "If you’re using the app, scan your wallet to continue on EVM, or install TokenPocket to proceed on Solana.": "If you’re using the app, scan your wallet to continue on EVM, or install TokenPocket to proceed on Solana.",
-  "Connect to PancakeSwap": "Connect to PancakeSwap"
+  "Connect to PancakeSwap": "Connect to PancakeSwap",
+  "Please install the wallet to continue.": "Please install the wallet to continue."
 }
