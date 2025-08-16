@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AtomBox, Button, ButtonProps, ModalV2, NotificationDot, useModalV2 } from '@pancakeswap/uikit'
+import { AtomBox, Button, ButtonProps, ModalV2, MotionModal, NotificationDot, useModalV2 } from '@pancakeswap/uikit'
 
 import { ReactNode, useCallback } from 'react'
 import { useRoutingSettingChanged } from 'state/user/smartRouter'
@@ -28,7 +28,15 @@ export function RoutingSettingsButton({
         </NotificationDot>
       </AtomBox>
       <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-        <CustomizeRoutingTab key="customize_routing_tab" />
+        <MotionModal
+          title={t('Routing Settings')}
+          headerBorderColor="transparent"
+          bodyPadding="0 24px 24px"
+          minWidth={[null, null, null, '400px']}
+          minHeight="200px"
+        >
+          <CustomizeRoutingTab key="customize_routing_tab" />
+        </MotionModal>
       </ModalV2>
     </>
   )
