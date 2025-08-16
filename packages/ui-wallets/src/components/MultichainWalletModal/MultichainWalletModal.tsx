@@ -2,6 +2,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletName } from '@solana/wallet-adapter-base'
 import { useTranslation } from '@pancakeswap/localization'
 import { AtomBox, ModalV2, ModalWrapper, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useTheme } from '@pancakeswap/hooks'
 import { useAtom, useSetAtom } from 'jotai'
 import { useCallback, useMemo, useState } from 'react'
 import { EvmConnectorNames, SolanaConnectorNames } from '../../config/connectorNames'
@@ -19,10 +20,8 @@ import {
 } from '../../state/atom'
 import { ConnectData, WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
 import { PreviewStatus } from '../PreviewSection'
-import { DesktopModal } from './DesktopModal'
-import { MobileModal } from './MobileModal'
+import { ModalContent } from './ModalContent'
 import { MultichainWalletModalProps } from './types'
-import { fullSizeModalWrapperClass } from '../WalletModal.css'
 import { modalWrapperClass } from './modal.css'
 import { useWalletFilterEffect, useWalletFilterValue } from '../../state/hooks'
 
@@ -36,7 +35,6 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
     createEvmQrCode,
     solanaLogin,
     onWalletConnectCallBack,
-    fullSize,
     onGoogleLogin,
     onXLogin,
     onTelegramLogin,
@@ -46,6 +44,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
   } = props
 
   const { t } = useTranslation()
+  const { theme } = useTheme()
 
   const walletFilter = useWalletFilterValue()
   useWalletFilterEffect({ evmAddress, solanaAddress })
@@ -169,9 +168,28 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
   )
 
   const { isMobile } = useMatchBreakpoints()
+  console.debug('debug previewStatus', {
+    previewStatus,
+    isMobile,
+    solanaAddress,
+  })
   const mobileContainerStyle: React.CSSProperties = useMemo(
-    () => (isMobile ? { height: '100%', borderRadius: 0 } : {}),
-    [isMobile],
+    () =>
+      isMobile
+        ? {
+            ...(previewStatus === PreviewStatus.Intro
+              ? {
+                  height: '100%',
+                  borderRadius: 0,
+                  background: theme.colors.background,
+                }
+              : {
+                  background: theme.colors.gradientCardHeader,
+                }),
+            transition: 'height 0.3s ease-in-out',
+          }
+        : {},
+    [isMobile, theme.colors.background, previewStatus],
   )
 
   return (
@@ -185,15 +203,11 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
           ...mobileContainerStyle,
         }}
       >
-        <AtomBox
-          position="relative"
-          zIndex="modal"
-          className={fullSize ? fullSizeModalWrapperClass : modalWrapperClass}
-        >
+        <AtomBox position="relative" zIndex="modal" className={modalWrapperClass}>
           <AtomBox
             display="flex"
             position="relative"
-            background={isMobile ? 'backgroundAlt' : 'gradientCardHeader'}
+            background={isMobile && previewStatus === PreviewStatus.Intro ? 'background' : 'gradientCardHeader'}
             borderRadius="card"
             flexDirection={isMobile ? 'column' : 'row'}
             px={isMobile ? '16px' : '0px'}
@@ -206,10 +220,31 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
             width="100%"
           >
             {/* todo: add close button on mobile */}
-            {isMobile ? (
+            <ModalContent
+              evmAddress={evmAddress}
+              solanaAddress={solanaAddress}
+              onDismiss={handleDismiss}
+              wallets={wallets_}
+              topWallets={topWallets_}
+              previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}
+              connectWallet={connectWallet}
+              onWalletConnected={handleWalletConnected}
+              displaySocialLogin={displaySocialLogin}
+              previewStatus={previewStatus}
+              setPreviewStatus={setPreviewStatus}
+              docLink={docLink}
+              onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
+              onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
+              onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
+              onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
+            />
+            {/* {isMobile ? (
               <MobileModal
                 wallets={wallets_}
                 topWallets={topWallets_}
+                evmAddress={evmAddress}
+                solanaAddress={solanaAddress}
+                onDismiss={handleDismiss}
                 previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}
                 connectWallet={connectWallet}
                 displaySocialLogin={displaySocialLogin}
@@ -232,7 +267,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
                 onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
                 onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
               />
-            )}
+            )} */}
           </AtomBox>
         </AtomBox>
       </ModalWrapper>

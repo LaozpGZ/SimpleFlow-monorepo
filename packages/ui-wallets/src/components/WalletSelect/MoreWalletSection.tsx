@@ -15,6 +15,7 @@ const StyledButton = styled(Button)`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   border-bottom: 2px solid ${({ theme }) => theme.colors.cardBorder};
   padding: 12px;
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
 `
 
 const StyledWalletIcon = styled(AtomBox)`
@@ -69,7 +70,7 @@ export const MoreWalletSection: React.FC<MoreWalletSectionProps> = ({ wallets, o
   }
 
   return (
-    <StyledButton variant="text" onClick={() => setExpanded(true)} width="100%" style={style} padding="0px">
+    <StyledButton variant="text" onClick={() => setExpanded(true)} width="100%" style={style}>
       <Flex justifyContent="space-between" width="100%" alignItems="center">
         <FlexGap alignItems="center">
           {displayWallets.map((wallet) => {

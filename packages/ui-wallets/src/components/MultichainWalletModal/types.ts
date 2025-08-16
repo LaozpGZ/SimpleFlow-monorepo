@@ -3,8 +3,8 @@ import { WalletName } from '@solana/wallet-adapter-base'
 import { ConnectData, WalletConfigV3 } from '../../types'
 
 export interface MultichainWalletModalProps extends ModalV2Props {
-  evmAddress?: string
-  solanaAddress?: string
+  evmAddress: string | undefined
+  solanaAddress: string | undefined
   wallets?: WalletConfigV3[]
   topWallets?: WalletConfigV3[]
   evmLogin: (wallet: WalletConfigV3) => Promise<ConnectData | undefined>

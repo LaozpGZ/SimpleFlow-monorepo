@@ -2,11 +2,16 @@ import { useTranslation } from '@pancakeswap/localization'
 import {
   AtomBox,
   Button,
+  CloseIcon,
   FlexGap as Flex,
+  Heading,
+  IconButton,
+  RowBetween,
   SocialLoginDiscordIcon,
   SocialLoginTelegramIcon,
   SocialLoginXIcon,
   Text,
+  useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { ASSET_CDN } from '../config/url'
@@ -16,11 +21,12 @@ interface SocialLoginProps {
   onXLogin?: () => void
   onTelegramLogin?: () => void
   onDiscordLogin?: () => void
+
+  onDismiss?: () => void
 }
 
 const SocialLoginButton = styled(Button)`
   width: 100%;
-  margin-bottom: 16px;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -30,6 +36,10 @@ const SocialLoginButton = styled(Button)`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   box-shadow: 0px 2px 0px 0px ${({ theme }) => theme.colors.cardBorder};
   gap: 4px;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    margin-bottom: 12px;
+  }
 `
 
 const SocialLoginButtonVertical = styled(SocialLoginButton)`
@@ -63,10 +73,19 @@ const NoticeCard = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  width: 100%;
 `
 
-const SocialLogin: React.FC<SocialLoginProps> = ({ onGoogleLogin, onXLogin, onTelegramLogin, onDiscordLogin }) => {
+const SocialLogin: React.FC<SocialLoginProps> = ({
+  onGoogleLogin,
+  onXLogin,
+  onTelegramLogin,
+  onDiscordLogin,
+  onDismiss,
+}) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
 
   const handleGoogleLogin = () => {
     onGoogleLogin?.()
@@ -85,7 +104,17 @@ const SocialLogin: React.FC<SocialLoginProps> = ({ onGoogleLogin, onXLogin, onTe
   }
 
   return (
-    <AtomBox width="100%">
+    <>
+      {isMobile ? (
+        <RowBetween>
+          <Heading color="color" as="h4">
+            {t('Connect to PancakeSwap')}
+          </Heading>
+          <IconButton variant="text" onClick={onDismiss} mr="-12px">
+            <CloseIcon />
+          </IconButton>
+        </RowBetween>
+      ) : null}
       <SocialLoginButton onClick={handleGoogleLogin}>
         <img
           src={`${ASSET_CDN}/web/wallets/social-login/google.jpg`}
@@ -97,7 +126,7 @@ const SocialLogin: React.FC<SocialLoginProps> = ({ onGoogleLogin, onXLogin, onTe
         <Text>{t('Continue with Google')}</Text>
       </SocialLoginButton>
 
-      <Flex gap="8px">
+      <Flex gap="8px" width="100%">
         <SocialLoginButtonVertical onClick={handleXLogin}>
           <IconWrapper>
             <SocialLoginXIcon />
@@ -129,7 +158,7 @@ const SocialLogin: React.FC<SocialLoginProps> = ({ onGoogleLogin, onXLogin, onTe
           {t('I have a passkey')}
         </Button>
       </NoticeCard>
-    </AtomBox>
+    </>
   )
 }
 

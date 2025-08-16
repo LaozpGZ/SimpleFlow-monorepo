@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Column } from '@pancakeswap/uikit'
+import { AtomBox, Column, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useCallback, useMemo } from 'react'
 import uniqBy from 'lodash/uniqBy'
 import { useAtom } from 'jotai'
@@ -27,6 +27,7 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
   style = {},
 }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   const walletFilter = useWalletFilterValue()
 
   const moreWallets = useMemo(() => {
@@ -79,7 +80,15 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
       overflowY="auto"
       overflowX="hidden"
       gap="16px"
-      style={{ paddingRight: '16px', marginRight: '-24px', ...style }}
+      style={{
+        ...(isMobile
+          ? {
+              maxHeight: '60vh',
+              overflowY: 'auto',
+            }
+          : { paddingRight: '16px', marginRight: '-16px' }),
+        ...style,
+      }}
       className={scrollbarClass}
     >
       {previous?.length && (

@@ -1,14 +1,69 @@
-import { Column, Text, AtomBox, Button, Row, Image, Card, CardBody, FlexGap } from '@pancakeswap/uikit'
+import {
+  Column,
+  Text,
+  AtomBox,
+  Button,
+  Row,
+  Image,
+  Card,
+  CardBody,
+  FlexGap,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { StyledCardInner } from '@pancakeswap/uikit/components/Card/StyledCard'
 import React from 'react'
 import styled from 'styled-components'
 import { WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
-import { walletIconClass, walletSelectWrapperClass } from '../WalletModal.css'
+import { walletIconClass } from '../WalletModal.css'
 import { ASSET_CDN } from '../../config/url'
 
 export type WalletSelectSectionProps = React.PropsWithChildren<{
   label: React.ReactNode
 }>
+
+const StyledItemGrid = styled(AtomBox)`
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  row-gap: 8px;
+  column-gap: 8px;
+
+  & > :nth-child(1) {
+    justify-self: left;
+  }
+
+  & > :nth-child(2) {
+    justify-self: center;
+  }
+
+  & > :nth-child(3) {
+    justify-self: right;
+  }
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    grid-template-columns: 1fr 1fr;
+    row-gap: 5px;
+    column-gap: 8px;
+
+    & > :nth-child(1) {
+      justify-self: center;
+    }
+
+    & > :nth-child(2) {
+      justify-self: center;
+    }
+
+    & > :nth-child(3) {
+      justify-self: center;
+    }
+  }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+`
 
 export const WalletSelectSection: React.FC<WalletSelectSectionProps> = ({ label, children }) => {
   return (
@@ -16,9 +71,7 @@ export const WalletSelectSection: React.FC<WalletSelectSectionProps> = ({ label,
       <Text textTransform="uppercase" fontSize="12px" fontWeight="600" color="textSubtle" lineHeight={1.5}>
         {label}
       </Text>
-      <AtomBox display="grid" overflowY="auto" overflowX="hidden" className={walletSelectWrapperClass}>
-        {children}
-      </AtomBox>
+      <StyledItemGrid>{children}</StyledItemGrid>
     </Column>
   )
 }
@@ -33,7 +86,13 @@ export const WalletSelectItem = <T,>({ wallet, onClick }: WalletSelectItemProps<
   const Icon = wallet.icon
 
   return (
-    <AtomBox border="1" borderRadius="default" p="8px" style={{ maxWidth: '106px' }}>
+    <AtomBox
+      border="1"
+      borderRadius="default"
+      p="8px"
+      style={{ maxWidth: '106px', width: '100%', borderBottomWidth: '2px' }}
+      background="backgroundAlt"
+    >
       <Button
         key={wallet.id}
         variant="text"

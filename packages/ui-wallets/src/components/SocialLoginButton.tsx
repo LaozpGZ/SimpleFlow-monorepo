@@ -23,6 +23,11 @@ const StyledButton = styled(Button)`
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
   border-bottom: 2px solid ${({ theme }) => theme.colors.cardBorder};
   padding: 12px;
+  background-color: ${({ theme }) => theme.colors.backgroundAlt};
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    background-color: transparent;
+  }
 `
 
 interface SocialLoginButtonProps {

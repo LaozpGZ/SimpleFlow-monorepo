@@ -1,5 +1,16 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AtomBox, FlexGap, Grid, Heading, RowBetween, Text, Toggle } from '@pancakeswap/uikit'
+import {
+  AtomBox,
+  CloseIcon,
+  FlexGap,
+  Grid,
+  Heading,
+  IconButton,
+  RowBetween,
+  Text,
+  Toggle,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ASSET_CDN } from '../../config/url'
@@ -13,24 +24,31 @@ import { desktopWalletSelectionClass } from '../WalletModal.css'
 import { WalletChainSelect } from '../WalletSelect/WalletChainSelect'
 import { WalletSelect } from '../WalletSelect/WalletSelect'
 import { MultichainWalletModalProps } from './types'
+import { WalletToggle } from '../WalletToggle'
+import { StyledMobileContainer } from './styled'
 
-export type DesktopModalProps = Pick<
+export type ModalContentProps = Pick<
   MultichainWalletModalProps,
   'wallets' | 'topWallets' | 'docLink' | 'solanaAddress' | 'evmAddress'
 > & {
+  onDismiss: () => void
+
   previouslyUsedWallets: [WalletConfigV3[], WalletConfigV3[]]
   connectWallet: (wallet: WalletConfigV3, network: WalletAdaptedNetwork) => void
   onWalletConnected: (wallet: WalletConfigV3, network: WalletAdaptedNetwork, connectData?: ConnectData) => void
   displaySocialLogin: () => void
+
   previewStatus: PreviewStatus
   setPreviewStatus: (section: PreviewStatus) => void
+
   onGoogleLogin?: () => void
   onXLogin?: () => void
   onTelegramLogin?: () => void
   onDiscordLogin?: () => void
 }
 
-export const DesktopModal: React.FC<DesktopModalProps> = ({
+export const ModalContent: React.FC<ModalContentProps> = ({
+  onDismiss,
   docLink,
   solanaAddress,
   evmAddress,
@@ -47,9 +65,8 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
   onTelegramLogin,
   onDiscordLogin,
 }) => {
-  const { type: walletFilter, value: walletFilterChecked, setFilterValue } = useWalletFilter()
-  const displayFilterToggle = Boolean(solanaAddress) || Boolean(evmAddress)
-  const disableFilterToggle = Boolean(solanaAddress) !== Boolean(evmAddress)
+  const { isMobile } = useMatchBreakpoints()
+  const { type: walletFilter, value: walletFilterChecked } = useWalletFilter()
   const solanaOnly = walletFilter === 'solanaOnly' && walletFilterChecked
   const evmOnly = walletFilter === 'evmOnly' && walletFilterChecked
 
@@ -156,6 +173,102 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
     [onEvmWalletSelected, onSolanaWalletSelected],
   )
 
+  const walletsSection = (
+    <>
+      {isMobile ? (
+        <>
+          <RowBetween>
+            <Heading color="color" as="h4">
+              {t('Connect Wallet')}
+            </Heading>
+            <IconButton variant="text" onClick={onDismiss} mr="-12px">
+              <CloseIcon />
+            </IconButton>
+          </RowBetween>
+          <WalletToggle solanaAddress={solanaAddress} evmAddress={evmAddress} />
+        </>
+      ) : (
+        <RowBetween>
+          <Heading color="color" as="h4">
+            {t('Connect Wallet')}
+          </Heading>
+          <WalletToggle solanaAddress={solanaAddress} evmAddress={evmAddress} />
+        </RowBetween>
+      )}
+
+      <SocialLoginButton onClick={displaySocialLogin} assetCdn={ASSET_CDN} />
+
+      <WalletSelect
+        wallets={wallets}
+        topWallets={topWallets}
+        previouslyUsedWallets={previouslyUsedWallets}
+        onWalletSelected={onWalletSelected}
+        onMultiChainWalletSelected={onMultiChainWalletSelected}
+      />
+      {/* {mevDocLink ? <MEVSection mevDocLink={mevDocLink} /> : null} */}
+    </>
+  )
+
+  const previewSection = (
+    <>
+      {previewStatus === PreviewStatus.Intro && (
+        <AtomBox
+          display="flex"
+          flexDirection="column"
+          alignItems="center"
+          style={{ gap: '12px' }}
+          textAlign="center"
+          width="100%"
+        >
+          <PreviewSection.Intro docLink={docLink} />
+        </AtomBox>
+      )}
+      {previewStatus === PreviewStatus.NotInstalled && uninstalledWallet && (
+        <PreviewSection.NotInstalled qrCode={qrCode} wallet={uninstalledWallet} />
+      )}
+      {previewStatus === PreviewStatus.Confirming && selected && selectedNetwork && (
+        <PreviewSection.Confirming
+          wallet={selected}
+          network={selectedNetwork}
+          reConnect={() => onWalletConnected(selected, selectedNetwork)}
+        />
+      )}
+      {previewStatus === PreviewStatus.SocialLogin && (
+        <SocialLogin
+          onDismiss={() => setPreviewStatus(PreviewStatus.Intro)}
+          onGoogleLogin={onGoogleLogin}
+          onXLogin={onXLogin}
+          onTelegramLogin={onTelegramLogin}
+          onDiscordLogin={onDiscordLogin}
+        />
+      )}
+      {previewStatus === PreviewStatus.ChainSelect && selectedMultiChainWallet && (
+        <WalletChainSelect
+          solanaOnly={solanaOnly}
+          wallet={selectedMultiChainWallet}
+          onConnectEVM={() => onWalletSelected(selectedMultiChainWallet, WalletAdaptedNetwork.EVM)}
+          onConnectSolana={() => onWalletSelected(selectedMultiChainWallet, WalletAdaptedNetwork.Solana)}
+        />
+      )}
+    </>
+  )
+
+  if (isMobile) {
+    if (previewStatus === PreviewStatus.Intro) {
+      return (
+        <StyledMobileContainer $fullHeight>
+          {walletsSection}
+          <PreviewSection.Intro docLink={docLink} />
+        </StyledMobileContainer>
+      )
+    }
+    return (
+      <StyledMobileContainer background="gradientCardHeader" $fullHeight={false}>
+        {previewSection}
+      </StyledMobileContainer>
+    )
+  }
+
   return (
     <Grid gridTemplateColumns="1fr 1fr" width="100%" overflow="hidden" borderRadius="card">
       <AtomBox
@@ -171,111 +284,18 @@ export const DesktopModal: React.FC<DesktopModalProps> = ({
         className={desktopWalletSelectionClass}
         gap="1rem"
       >
-        <RowBetween>
-          <Heading color="color" as="h4">
-            {t('Connect Wallet')}
-          </Heading>
-          {displayFilterToggle ? (
-            <FlexGap
-              gap="8px"
-              alignItems="center"
-              as="label"
-              htmlFor="wallet-modal-network-toggle"
-              style={{
-                opacity: disableFilterToggle ? '0.5' : 1,
-                cursor: disableFilterToggle ? 'not-allowed' : 'pointer',
-              }}
-            >
-              <Text textTransform="uppercase" fontWeight="600" color="textSubtle" fontSize="12px">
-                {walletFilter === 'solanaOnly' ? 'Solana' : 'EVM'} {t('Only')}
-              </Text>
-              <Toggle
-                checked={walletFilterChecked}
-                scale="md"
-                defaultColor={disableFilterToggle ? 'success' : 'input'}
-                id="wallet-modal-network-toggle"
-                disabled={disableFilterToggle}
-                onChange={() => setFilterValue(!walletFilterChecked)}
-              />
-            </FlexGap>
-          ) : null}
-        </RowBetween>
-
-        <SocialLoginButton onClick={displaySocialLogin} assetCdn={ASSET_CDN} />
-
-        <WalletSelect
-          wallets={wallets}
-          topWallets={topWallets}
-          previouslyUsedWallets={previouslyUsedWallets}
-          onWalletSelected={onWalletSelected}
-          onMultiChainWalletSelected={onMultiChainWalletSelected}
-        />
-        {/* {mevDocLink ? <MEVSection mevDocLink={mevDocLink} /> : null} */}
+        {walletsSection}
       </AtomBox>
       <AtomBox
         flex={1}
         px="16px"
         py="56px"
-        display={{
-          xs: 'none',
-          sm: 'flex',
-        }}
+        display="flex"
         justifyContent="center"
         flexDirection="column"
         alignItems="center"
       >
-        {previewStatus === PreviewStatus.Intro && (
-          <AtomBox
-            display="flex"
-            flexDirection="column"
-            alignItems="center"
-            style={{ gap: '12px' }}
-            textAlign="center"
-            width="100%"
-          >
-            <PreviewSection.Intro docLink={docLink} />
-            {/* {selected && selected.installed !== false && (
-              <>
-                {typeof selected.icon === 'string' && <Image src={selected.icon} width={108} height={108} />}
-                <Heading as="h1" fontSize="20px" color="secondary">
-                  {t('Opening')} {selected.title}
-                </Heading>
-                {error ? (
-                  <ErrorContent message={error} onRetry={() => connectWallet(selected, selected.networks[0])} />
-                ) : (
-                  <Text>{t('Please confirm in %wallet%', { wallet: selected.title })}</Text>
-                )}
-              </>
-            )} */}
-            {/* {selected && selected.installed === false && <NotInstalled qrCode={qrCode} wallet={selected} />} */}
-          </AtomBox>
-        )}
-        {previewStatus === PreviewStatus.NotInstalled && uninstalledWallet && (
-          <PreviewSection.NotInstalled qrCode={qrCode} wallet={uninstalledWallet} />
-        )}
-        {previewStatus === PreviewStatus.Confirming && selected && selectedNetwork && (
-          <PreviewSection.Confirming
-            wallet={selected}
-            network={selectedNetwork}
-            reConnect={() => onWalletConnected(selected, selectedNetwork)}
-          />
-        )}
-        {previewStatus === PreviewStatus.SocialLogin && (
-          <SocialLogin
-            onGoogleLogin={onGoogleLogin}
-            onXLogin={onXLogin}
-            onTelegramLogin={onTelegramLogin}
-            onDiscordLogin={onDiscordLogin}
-          />
-        )}
-        {previewStatus === PreviewStatus.ChainSelect && selectedMultiChainWallet && (
-          <WalletChainSelect
-            solanaOnly={solanaOnly}
-            wallet={selectedMultiChainWallet}
-            onConnectEVM={() => onWalletSelected(selectedMultiChainWallet, WalletAdaptedNetwork.EVM)}
-            onConnectSolana={() => onWalletSelected(selectedMultiChainWallet, WalletAdaptedNetwork.Solana)}
-          />
-        )}
+        {previewSection}
       </AtomBox>
     </Grid>
   )

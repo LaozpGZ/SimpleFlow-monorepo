@@ -17,6 +17,8 @@ import {
   RowBetween,
   Text,
   useTooltip,
+  useMatchBreakpoints,
+  Message,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { ChainId } from '@pancakeswap/chains'
@@ -39,6 +41,7 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
 }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
+  const { isMobile } = useMatchBreakpoints()
 
   const supportsEVM = useMemo(
     () => (solanaOnly ? false : wallet?.networks.includes(WalletAdaptedNetwork.EVM)),
@@ -87,7 +90,7 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
           display="flex"
           justifyContent="center"
           alignItems="center"
-          style={{ width: '56px', height: '56px' }}
+          style={{ width: '56px', height: '56px', borderRadius: '12px' }}
           overflow="hidden"
           bg="backgroundAlt"
         >
@@ -113,61 +116,95 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
               })}
             </Text>
 
-            {supportsEVM && (
-              <RowBetween flexWrap="nowrap">
-                <FlexGap alignItems="center" gap="8px">
-                  <SquareNetworkIcon>
-                    <img src={`${ASSET_CDN}/web/wallet-ui/network-tag-evm.svg`} width={32} height={32} alt="EVM" />
-                  </SquareNetworkIcon>
+            <Column gap="16px">
+              {supportsEVM && (
+                <RowBetween flexWrap="nowrap">
+                  <FlexGap alignItems="center" gap="8px">
+                    <SquareNetworkIcon>
+                      <img src={`${ASSET_CDN}/web/wallet-ui/network-tag-evm.svg`} width={32} height={32} alt="EVM" />
+                    </SquareNetworkIcon>
 
-                  <Row gap="4px" alignItems="center" style={{ flexBasis: '0%' }}>
-                    <Text fontSize="16px" fontWeight="600" color="text">
-                      EVM
-                    </Text>
+                    <Row gap="4px" alignItems="center" style={{ flexBasis: '0%' }}>
+                      <Text fontSize="16px" fontWeight="600" color="text">
+                        EVM
+                      </Text>
 
-                    <Flex alignItems="center" ref={evmTooltipTargetRef}>
-                      <InfoIcon width={16} height={16} />
-                      {evmTooltipVisible && evmTooltip}
-                    </Flex>
-                    {wallet.MEVSupported && (
-                      <Flex alignItems="center" ref={mevTooltipTargetRef}>
-                        <ShieldCheckIcon width={16} height={16} color={theme.colors.positive60} />
-                        {mevTooltipVisible && mevTooltip}
+                      <Flex alignItems="center" ref={evmTooltipTargetRef}>
+                        <InfoIcon width={16} height={16} />
+                        {evmTooltipVisible && evmTooltip}
                       </Flex>
-                    )}
+                      {wallet.MEVSupported && (
+                        <Flex alignItems="center" ref={mevTooltipTargetRef}>
+                          <ShieldCheckIcon width={16} height={16} color={theme.colors.positive60} />
+                          {mevTooltipVisible && mevTooltip}
+                        </Flex>
+                      )}
+                    </Row>
+                  </FlexGap>
+                  <Button variant="primary" onClick={onConnectEVM} scale={isMobile ? 'sm' : 'md'}>
+                    {t('Connect')}
+                  </Button>
+                </RowBetween>
+              )}
+
+              {supportsSolana && (
+                <RowBetween flexWrap="nowrap">
+                  <Row gap="8px" alignItems="center">
+                    <SquareNetworkIcon>
+                      <img
+                        src={`${ASSET_CDN}/web/wallet-ui/network-tag-solana.png`}
+                        width={32}
+                        height={32}
+                        alt="Solana"
+                      />
+                    </SquareNetworkIcon>
+
+                    <Text fontSize="16px" fontWeight="600" color="text">
+                      Solana
+                    </Text>
                   </Row>
-                </FlexGap>
-                <Button variant="primary" onClick={onConnectEVM}>
-                  {t('Connect')}
-                </Button>
-              </RowBetween>
-            )}
-
-            {supportsSolana && (
-              <RowBetween flexWrap="nowrap">
-                <Row gap="8px" alignItems="center">
-                  <SquareNetworkIcon>
-                    <img
-                      src={`${ASSET_CDN}/web/wallet-ui/network-tag-solana.png`}
-                      width={32}
-                      height={32}
-                      alt="Solana"
-                    />
-                  </SquareNetworkIcon>
-
-                  <Text fontSize="16px" fontWeight="600" color="text">
-                    Solana
-                  </Text>
-                </Row>
-                <Button variant="primary" onClick={onConnectSolana}>
-                  {t('Connect')}
-                </Button>
-              </RowBetween>
-            )}
+                  <Button variant="primary" onClick={onConnectSolana} scale={isMobile ? 'sm' : 'md'}>
+                    {t('Connect')}
+                  </Button>
+                </RowBetween>
+              )}
+            </Column>
           </Column>
         </CardBody>
       </Card>
+
+      {isMobile && wallet.MEVSupported && <EvmMevSupportMessage />}
     </Column>
+  )
+}
+
+const StyledMessage = styled(Message)`
+  display: flex;
+  align-items: center;
+  padding: 8px 16px;
+  margin-bottom: 16px;
+  border-radius: 32px;
+`
+
+const EvmMevSupportMessage = () => {
+  return (
+    <StyledMessage variant="success" icon={<ShieldCheckIcon width="18px" height="18px" color="positive60" />}>
+      <Flex alignItems="center" style={{ fontSize: '12px' }}>
+        <Trans
+          i18nKey="Wallets with <0>MEV Protection</0>."
+          style={{ display: 'inline' }}
+          components={[
+            <Link
+              ml="4px"
+              fontWeight="normal !important"
+              fontSize="12px"
+              external
+              href="https://docs.pancakeswap.finance/trading-tools/pancakeswap-mev-guard"
+            />,
+          ]}
+        />
+      </Flex>
+    </StyledMessage>
   )
 }
 
