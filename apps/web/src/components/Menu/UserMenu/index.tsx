@@ -25,7 +25,6 @@ import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { NonEVMChainId } from '@pancakeswap/chains'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
 const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void; account: string | undefined }) => {
@@ -114,12 +113,12 @@ const UserMenu = () => {
   const menuRef = useRef<HTMLDivElement>(null)
   const { setView } = useMenuTab()
 
-  const ConnectBtn = useMemo(() => {
-    if (chainId === NonEVMChainId.SOLANA) {
-      return SolanaConnectButton
-    }
-    return ConnectWalletButton
-  }, [chainId])
+  // const ConnectBtn = useMemo(() => {
+  //   if (chainId === NonEVMChainId.SOLANA) {
+  //     return SolanaConnectButton
+  //   }
+  //   return ConnectWalletButton
+  // }, [chainId])
 
   useAutoFillCode({
     onAutoFillCode: () => {
@@ -267,14 +266,14 @@ const UserMenu = () => {
 
   return (
     <FlexGap gap="8px">
-      <ConnectBtn scale="sm">
+      <ConnectWalletButton scale="sm">
         <Box display={['none', null, null, 'block']}>
           <Trans>Connect Wallet</Trans>
         </Box>
         <Box display={['block', null, null, 'none']}>
           <Trans>Connect</Trans>
         </Box>
-      </ConnectBtn>
+      </ConnectWalletButton>
     </FlexGap>
   )
 }

@@ -22,7 +22,7 @@ export const Confirming: React.FC<ConfirmingProps> = ({ wallet, network, reConne
     <AtomBox
       display="flex"
       flexDirection="column"
-      background={isMobile ? 'gradientCardHeader' : 'background'}
+      background="gradientCardHeader"
       alignItems="center"
       style={{ gap: '12px' }}
       textAlign="center"
