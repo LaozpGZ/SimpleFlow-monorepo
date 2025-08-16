@@ -2,8 +2,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Currency } from '@pancakeswap/sdk'
 import { AutoRow, Box, Modal, ModalV2, UseModalV2Props } from '@pancakeswap/uikit'
 import { FeeAmount, Pool } from '@pancakeswap/v3-sdk'
-import GlobalSettings from 'components/Menu/GlobalSettings'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { usePublicNodeWaitForTransaction } from 'hooks/usePublicNodeWaitForTransaction'
@@ -111,7 +109,6 @@ export function AddLiquidityV3Modal({
             headerRightSlot={
               <AutoRow width="auto" gap="8px">
                 <AprCalculatorV2 pool={pool} derived showTitle={false} inverted={inverted} />
-                <GlobalSettings mode={SettingsMode.SWAP_LIQUIDITY} />
               </AutoRow>
             }
           >

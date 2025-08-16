@@ -10,8 +10,6 @@ import {
   CardBody,
   ColumnCenter,
   Flex,
-  IconButton,
-  PencilIcon,
   Slider,
   Text,
   TooltipText,
@@ -41,8 +39,6 @@ import { calculateGasMargin } from 'utils'
 import { currencyId } from 'utils/currencyId'
 import { calculateSlippageAmount } from 'utils/exchange'
 
-import { SettingsModalV2 } from 'components/Menu/GlobalSettings/SettingsModalV2'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { Field } from 'state/burn/actions'
 import { useRemoveLiquidityV2FormState } from 'state/burn/reducer'
@@ -52,6 +48,7 @@ import { logGTMClickRemoveLiquidityEvent } from 'utils/customGTMEventTracking'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { isUserRejected, logError } from 'utils/sentry'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { RemoveLiquidityLayout } from '..'
 import ConnectWalletButton from '../../../components/ConnectWalletButton'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
@@ -344,8 +341,6 @@ export default function RemoveStableLiquidity({ currencyA, currencyB, currencyId
     'removeLiquidityModal',
   )
 
-  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.SWAP_LIQUIDITY} />)
-
   return (
     <>
       <CardBody>
@@ -540,13 +535,8 @@ export default function RemoveStableLiquidity({ currencyA, currencyB, currencyId
         <RowBetween mt="16px">
           <Text bold color="secondary" fontSize="12px">
             {t('Slippage Tolerance')}
-            <IconButton scale="sm" variant="text" onClick={onPresentSettingsModal}>
-              <PencilIcon color="primary" width="10px" />
-            </IconButton>
           </Text>
-          <Text bold color="primary">
-            {allowedSlippage / 100}%
-          </Text>
+          <SlippageButton />
         </RowBetween>
         {poolData && (
           <RowBetween mt="16px">
