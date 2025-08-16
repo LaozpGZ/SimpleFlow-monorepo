@@ -13,10 +13,8 @@ import {
   WarningIcon,
 } from '@pancakeswap/uikit'
 import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
-// import GlobalSettings from 'components/Menu/GlobalSettings'
 import { SolanaSlippageSetting, EVMSlippageSetting } from 'components/Settings/SlippageTabs'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-// import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import styled from 'styled-components'

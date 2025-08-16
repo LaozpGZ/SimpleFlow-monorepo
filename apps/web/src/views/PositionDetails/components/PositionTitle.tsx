@@ -4,8 +4,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, AutoRow, Box, FeeTier, Flex, FlexGap, Tag, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ChainLogo, DoubleCurrencyLogo, Liquidity } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
-import GlobalSettings from 'components/Menu/GlobalSettings'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { RangeTag } from 'components/RangeTag'
 import { TokenPairLogo } from 'components/TokenImage'
 import { UnsafeCurrency } from 'config/constants/types'
@@ -105,7 +103,6 @@ export const LiquidityTitle: React.FC<LiquidityDetailHeaderProps> = ({
                       </Text>
                     ) : null}
                   </Box>
-                  <GlobalSettings style={{ marginLeft: 'auto' }} mode={SettingsMode.SWAP_LIQUIDITY} />
                 </AutoRow>
               ) : (
                 <>

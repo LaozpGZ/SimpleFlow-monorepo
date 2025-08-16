@@ -26,7 +26,6 @@ import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount/Formatte
 import { BinRangeSelector } from 'components/Liquidity/Form/BinRangeSelector'
 import PageLoader from 'components/Loader/PageLoader'
 import { CurrencyLogo } from 'components/Logo'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { LIQUIDITY_PAGES } from 'config/constants/liquidity'
 import { useInfinityBinPositionIdRouteParams } from 'hooks/dynamicRoute/usePositionIdRoute'
 import { usePositionIsFarming } from 'hooks/infinity/useIsFarming'
@@ -46,8 +45,8 @@ import { logGTMClickRemoveLiquidityEvent } from 'utils/customGTMEventTracking'
 import { calculateSlippageAmount } from 'utils/exchange'
 import { zeroAddress } from 'viem'
 import { LiquidityTitle } from 'views/PositionDetails/components'
-import { SettingsModalV2 } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { useAccount } from 'wagmi'
+import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { StyledBinCard, StyledInfoCard } from '../styled'
 import { BinSlider } from './BinSlider'
 import { NavBreadcrumbs } from './NavBreadcrumbs'
@@ -243,8 +242,6 @@ export const RemoveBinPosition = () => {
     [currency0, currency1],
   )
 
-  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.SWAP_LIQUIDITY} />)
-
   if (!chainId || !poolId || !pool) {
     return <PageLoader />
   }
@@ -385,12 +382,7 @@ export const RemoveBinPosition = () => {
           </Flex>
           <Flex mt="24px" justifyContent="space-between" alignItems="center">
             <Text>{t('Slippage Tolerance')}</Text>
-            <IconButton scale="xs" height="32px" variant="tertiary" onClick={onPresentSettingsModal}>
-              <Text mx="4px" color="primary60">
-                {allowedSlippage / 100}%
-              </Text>
-              <PencilIcon mx="4px" color="primary60" width="10px" />
-            </IconButton>
+            <SlippageButton />
           </Flex>
           {showCollectAsWNative && (
             <Flex mt="24px" justifyContent="space-between" alignItems="center">

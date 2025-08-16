@@ -4,26 +4,17 @@ import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { Currency, Price } from '@pancakeswap/sdk'
 import { memo } from 'react'
 
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
-import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
-import { SettingsModalV2 } from 'components/Menu/GlobalSettings/SettingsModalV2'
+import GlobalSettings from 'components/Menu/GlobalSettings'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 
 interface Props {
-  showSlippage?: boolean
   priceLoading?: boolean
   price?: Price<Currency, Currency>
 }
 
-export const PricingAndSlippage = memo(function PricingAndSlippage({
-  priceLoading,
-  price,
-  showSlippage = true,
-}: Props) {
-  const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
-
+export const PricingAndSlippage = memo(function PricingAndSlippage({ priceLoading, price }: Props) {
   const isWrapping = useIsWrapping()
-  const [onPresentSettingsModal] = useModal(<SettingsModalV2 mode={SettingsMode.GLOBAL} />)
+  const [onPresentSettingsModal] = useModal(<GlobalSettings />)
 
   if (isWrapping || !price) {
     return null
@@ -35,11 +26,5 @@ export const PricingAndSlippage = memo(function PricingAndSlippage({
     </>
   ) : null
 
-  return (
-    <SwapUIV2.SwapInfo
-      price={priceNode}
-      allowedSlippage={showSlippage ? allowedSlippage : undefined}
-      onSlippageClick={onPresentSettingsModal}
-    />
-  )
+  return <SwapUIV2.SwapInfo price={priceNode} onSlippageClick={onPresentSettingsModal} />
 })
