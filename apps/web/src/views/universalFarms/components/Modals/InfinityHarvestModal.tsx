@@ -41,6 +41,7 @@ import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePosition
 import { getChainFullName } from 'views/universalFarms/utils'
 import { useAccount } from 'wagmi'
 
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { InfinityBinPositionItem } from '../PositionItem/InfinityBinPositionItem'
 import { InfinityCLPositionItem } from '../PositionItem/InfinityCLPositionItem'
 
@@ -118,7 +119,7 @@ export const InfinityHarvestModal = ({
   })
   const totalRewardsAmount = totalUnclaimedRewards.reduce(
     (acc, item) => new BigNumber(item.totalReward).plus(acc),
-    new BigNumber(0),
+    BIG_ZERO,
   )
   const cakePrice = useCakePrice()
   const totalRewardsUSD = totalRewardsAmount.times(cakePrice)

@@ -44,6 +44,7 @@ import { notEmpty } from 'utils/notEmpty'
 import { BridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useChainId } from 'wagmi'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { TotalFeeToolTip } from '../components/FeeToolTip'
 import { EstimatedTime } from './components/EstimatedTime'
 
@@ -108,7 +109,7 @@ function TotalBridgeFee({ priceBreakdown }: { priceBreakdown: BridgeOrderFee[] }
   return (
     <Text fontSize="14px" textAlign="right">
       {priceBreakdown.some((p) => p.type === OrderType.PCS_CLASSIC) ? '~' : ''}
-      {formatDollarAmount(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber(), 3)}
+      {formatDollarAmount(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), BIG_ZERO).toNumber(), 3)}
     </Text>
   )
 }

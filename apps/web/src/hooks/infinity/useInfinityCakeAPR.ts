@@ -55,7 +55,7 @@ export const getInfinityCakeAPR = ({
     .reduce((acc, campaign) => {
       const { totalRewardAmount, duration } = campaign
       return new BigNumber(totalRewardAmount).dividedBy(1e18).dividedBy(duration).times(SECONDS_PER_YEAR).plus(acc)
-    }, new BigNumber(0))
+    }, BIG_ZERO)
 
   const poolCakeRewardsPerYear = validCampaigns
     ?.filter((c) => c.poolId === poolId)
@@ -63,7 +63,7 @@ export const getInfinityCakeAPR = ({
     .reduce((acc, campaign) => {
       const { totalRewardAmount, duration } = campaign
       return new BigNumber(totalRewardAmount).dividedBy(1e18).dividedBy(duration).times(SECONDS_PER_YEAR).plus(acc)
-    }, new BigNumber(0))
+    }, BIG_ZERO)
 
   const APR = (poolCakeRewardsPerYear?.times(cakePrice).dividedBy(tvlUSD).toFixed(6) ?? '0') as `${number}`
 

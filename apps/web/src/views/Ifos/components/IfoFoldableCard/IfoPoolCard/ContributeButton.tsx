@@ -55,7 +55,7 @@ const ContributeButton: React.FC<React.PropsWithChildren<Props>> = ({ poolId, if
   const [onPresentContributeModal] = useModal(
     <ContributeModal
       poolId={poolId}
-      creditLeft={walletIfoData.ifoCredit?.creditLeft || new BigNumber(0)}
+      creditLeft={walletIfoData.ifoCredit?.creditLeft || BIG_ZERO}
       ifo={ifo}
       publicIfoData={publicIfoData}
       walletIfoData={walletIfoData}

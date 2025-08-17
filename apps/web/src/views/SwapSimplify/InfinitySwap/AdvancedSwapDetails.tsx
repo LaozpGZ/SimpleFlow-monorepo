@@ -26,6 +26,7 @@ import { BridgeFeeToolTip, TotalFeeToolTip, TradingFeeToolTip } from 'views/Swap
 import { BridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { isSVMOrder } from 'views/Swap/utils'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { EstimatedTime } from '../../Swap/Bridge/CrossChainConfirmSwapModal/components/EstimatedTime'
 import { SlippageAdjustedAmounts, SVMTradePriceBreakdown, TradePriceBreakdown } from '../../Swap/V3Swap/utils/exchange'
 import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
@@ -75,7 +76,7 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
         const { type } = curr
         const existingFee = acc[type] || {
           label: curr.type === OrderType.PCS_BRIDGE ? t('Bridge Fee') : t('Trading Fee'),
-          amount: new BigNumber(0),
+          amount: BIG_ZERO,
           hasDynamicFee: false,
         }
 
@@ -112,10 +113,7 @@ const BridgeTradingViewSection = ({ priceBreakdown }: { priceBreakdown: BridgeOr
           >
             <Text fontSize="14px" textAlign="right">
               {priceBreakdown.some((p) => p.type === OrderType.PCS_CLASSIC) ? '~' : ''}
-              {formatDollarAmount(
-                currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), new BigNumber(0)).toNumber(),
-                3,
-              )}
+              {formatDollarAmount(currencyUsdPrices.reduce((acc, curr) => acc.plus(curr), BIG_ZERO).toNumber(), 3)}
             </Text>
           </SkeletonV2>
         </RowBetween>

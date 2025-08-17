@@ -13,6 +13,7 @@ import { TOKEN_WSOL } from '@pancakeswap/solana-core-sdk'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { SOLANA_NATIVE_TOKEN_ADDRESS } from 'quoter/consts'
 
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { useIsWrapping, useSlippageAdjustedAmounts } from '../../Swap/V3Swap/hooks'
 import { useHasDynamicHook } from '../hooks/useHasDynamicHook'
 import { usePriceBreakdown } from '../hooks/usePriceBreakdown'
@@ -94,7 +95,7 @@ export const SVMTradingFee = memo(
 
       if (inputUsd === undefined || inputUsd === 0) return undefined
 
-      let totalUsdValue = new BigNumber(0)
+      let totalUsdValue = BIG_ZERO
 
       // 1. Sum all USD value of all fee mints
       for (const pool of allPools) {
