@@ -7,6 +7,8 @@ export const INITIAL_ALLOWED_SLIPPAGE = 50
 const userSlippageAtom = atomWithStorage('pcs:slippage', INITIAL_ALLOWED_SLIPPAGE)
 const solanaUserSlippageAtom = atomWithStorage('_r_swap_slippage_', INITIAL_ALLOWED_SLIPPAGE)
 
+const liquidityUserSlippageAtom = atomWithStorage('pcs:liquiditySlippage', INITIAL_ALLOWED_SLIPPAGE)
+
 export const userSlippageAtomWithLocalStorage = atom(
   (get) => get(userSlippageAtom),
   (_get, set, slippage: number) => {
@@ -25,8 +27,21 @@ export const solanaUserSlippageAtomWithLocalStorage = atom(
   },
 )
 
+export const liquidityUserSlippageAtomWithLocalStorage = atom(
+  (get) => get(liquidityUserSlippageAtom),
+  (_get, set, slippage: number) => {
+    if (typeof slippage === 'number') {
+      set(liquidityUserSlippageAtom, slippage)
+    }
+  },
+)
+
 export const useUserSlippage = () => {
   return useAtom(userSlippageAtomWithLocalStorage)
+}
+
+export const useLiquidityUserSlippage = () => {
+  return useAtom(liquidityUserSlippageAtomWithLocalStorage)
 }
 
 export const useSolanaUserSlippage = () => {

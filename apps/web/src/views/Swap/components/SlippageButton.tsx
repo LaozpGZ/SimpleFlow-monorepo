@@ -15,7 +15,7 @@ import {
   Text,
   QuestionHelper,
 } from '@pancakeswap/uikit'
-import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
+import { useLiquidityUserSlippage, useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
 import {
   SolanaSlippageSetting,
   EVMSlippageSetting,
@@ -103,7 +103,7 @@ const SlippageButtonView = ({
         <MotionModal
           title={
             <Flex justifyContent="center">
-              {t('Slippage Tolerance')}
+              {t('Slippage Setting')}
               <QuestionHelper
                 text={t(
                   'Setting a high slippage tolerance can help transactions succeed, but you may not get such a good price. Use with caution.',
@@ -140,7 +140,7 @@ export const EVMSlippageButton = ({ enableAutoSlippage_ = false }: { enableAutoS
     <SlippageButtonView
       tolerance={tolenrace}
       slippageModalContent={<EVMSlippageSetting />}
-      buttonText={isAuto ? t('Auto:') : ''}
+      buttonText={isAuto ? `${t('Auto')}:` : ''}
     />
   )
 }
@@ -155,7 +155,7 @@ export const SlippageButton = ({ enableAutoSlippage: enableAutoSlippage_ = false
 }
 
 export const LiquiditySlippageButton = () => {
-  const [userSlippageTolerance] = useUserSlippage()
+  const [userSlippageTolerance] = useLiquidityUserSlippage()
 
   return <SlippageButtonView tolerance={userSlippageTolerance} slippageModalContent={<EVMLiquiditySlippageSetting />} />
 }

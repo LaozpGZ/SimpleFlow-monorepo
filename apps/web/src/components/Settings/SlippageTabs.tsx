@@ -1,4 +1,4 @@
-import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
+import { useLiquidityUserSlippage, useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
 import { SlippageTabsComponent } from 'components/Menu/GlobalSettings/TransactionSettings'
 import { useAutoSlippageEnabled } from 'hooks/useAutoSlippageWithFallback'
 
@@ -25,7 +25,7 @@ export const EVMSlippageSetting = () => {
 }
 
 export const EVMLiquiditySlippageSetting = () => {
-  const [userSlippageTolerance, setUserSlippageTolerance] = useUserSlippage()
+  const [userSlippageTolerance, setUserSlippageTolerance] = useLiquidityUserSlippage()
 
   return (
     <SlippageTabsComponent slippageTolerance={userSlippageTolerance} setSlippageTolerance={setUserSlippageTolerance} />
