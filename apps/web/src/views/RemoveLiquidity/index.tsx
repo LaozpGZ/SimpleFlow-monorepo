@@ -52,7 +52,7 @@ import { useRemoveLiquidityV2FormState } from 'state/burn/reducer'
 import { useGasPrice } from 'state/user/hooks'
 import { logGTMClickRemoveLiquidityEvent } from 'utils/customGTMEventTracking'
 import { isUserRejected, logError } from 'utils/sentry'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton, SlippageButton } from 'views/Swap/components/SlippageButton'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { AppBody, AppHeader } from '../../components/App'
 import ConnectWalletButton from '../../components/ConnectWalletButton'
@@ -664,7 +664,7 @@ export default function RemoveLiquidity({ currencyA, currencyB, currencyIdA, cur
         <Text bold color="secondary" fontSize="12px">
           {t('Slippage Tolerance')}
         </Text>
-        <SlippageButton />
+        <LiquiditySlippageButton />
       </RowBetween>
       {poolData && (
         <RowBetween mt="16px">

@@ -16,7 +16,11 @@ import {
   QuestionHelper,
 } from '@pancakeswap/uikit'
 import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
-import { SolanaSlippageSetting, EVMSlippageSetting } from 'components/Settings/SlippageTabs'
+import {
+  SolanaSlippageSetting,
+  EVMSlippageSetting,
+  EVMLiquiditySlippageSetting,
+} from 'components/Settings/SlippageTabs'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 
 import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
@@ -148,4 +152,10 @@ export const SlippageButton = ({ enableAutoSlippage: enableAutoSlippage_ = false
 
   // TODO: add "Advanced Settings" text button to open GlobalSettings
   return isSolana(chainId) ? <SolanaSlippageButton /> : <EVMSlippageButton enableAutoSlippage_={enableAutoSlippage_} />
+}
+
+export const LiquiditySlippageButton = () => {
+  const [userSlippageTolerance] = useUserSlippage()
+
+  return <SlippageButtonView tolerance={userSlippageTolerance} slippageModalContent={<EVMLiquiditySlippageSetting />} />
 }

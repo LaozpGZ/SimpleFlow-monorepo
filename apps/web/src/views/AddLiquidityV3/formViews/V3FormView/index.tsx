@@ -80,7 +80,7 @@ import { HandleFeePoolSelectFn, QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV
 import { MarketPriceSlippageWarning } from 'views/CreateLiquidityPool/components/SubmitCreateButton'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { Dot } from 'views/Notifications/styles'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTotalUsdValue } from '../../../AddLiquidity/hooks/useTotalUsdValue'
@@ -1024,7 +1024,7 @@ export default function V3FormView({
               </RowBetween>
               <RowBetween>
                 <Text color="textSubtle">Slippage Tolerance</Text>
-                <SlippageButton />
+                <LiquiditySlippageButton />
               </RowBetween>
             </Column>
             <MevProtectToggle size="sm" />
