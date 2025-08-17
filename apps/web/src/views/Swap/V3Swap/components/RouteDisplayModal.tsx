@@ -46,7 +46,7 @@ const RoutesDisplayView = ({
           />
         </Flex>
       }
-      style={{ minHeight: '0' }}
+      style={{ minHeight: '0px' }}
       bodyPadding="24px"
     >
       {isBridgeRouting ? (
@@ -78,7 +78,7 @@ export const RouteDisplayModal = memo(function RouteDisplayModal({ isOpen, onDis
         setShowRoutingSettingsModal(false)
         onDismiss?.()
       }}
-      minHeight="0"
+      minHeight="0px"
     >
       {showRoutingSettingsModal ? (
         <RoutingSettingsModalContent onBack={() => setShowRoutingSettingsModal(false)} />
