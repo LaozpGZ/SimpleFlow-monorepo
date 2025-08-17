@@ -683,9 +683,7 @@ export class PoolUtils {
     );
     const executionPrice = isBaseIn ? _executionPrice : new Decimal(1).div(_executionPrice);
 
-    const _minAmountOut = _expectedAmountOut
-      .mul(new BN(Math.floor((1 - slippage) * 10000000000)))
-      .div(BN_10000000000);
+    const _minAmountOut = _expectedAmountOut.mul(new BN(Math.floor((1 - slippage) * 10000000000))).div(BN_10000000000);
     const minAmountOut = getTransferAmountFeeV2(_minAmountOut, outFeeConfig, epochInfo, false);
 
     const poolPrice = isBaseIn ? poolInfo.currentPrice : new Decimal(1).div(poolInfo.currentPrice);
@@ -880,9 +878,7 @@ export class PoolUtils {
     );
     const executionPrice = isBaseIn ? _executionPrice : new Decimal(1).div(_executionPrice);
 
-    const _maxAmountIn = _expectedAmountIn
-      .mul(new BN(Math.floor((1 + slippage) * 10000000000)))
-      .div(BN_10000000000);
+    const _maxAmountIn = _expectedAmountIn.mul(new BN(Math.floor((1 + slippage) * 10000000000))).div(BN_10000000000);
     // const maxAmountIn = getTransferAmountFee(
     //   _maxAmountIn,
     //   token2022Infos[inMint.toString()]?.feeConfig,
