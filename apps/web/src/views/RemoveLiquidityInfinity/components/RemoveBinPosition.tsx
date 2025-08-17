@@ -46,7 +46,7 @@ import { calculateSlippageAmount } from 'utils/exchange'
 import { zeroAddress } from 'viem'
 import { LiquidityTitle } from 'views/PositionDetails/components'
 import { useAccount } from 'wagmi'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton, SlippageButton } from 'views/Swap/components/SlippageButton'
 import { StyledBinCard, StyledInfoCard } from '../styled'
 import { BinSlider } from './BinSlider'
 import { NavBreadcrumbs } from './NavBreadcrumbs'
@@ -382,7 +382,7 @@ export const RemoveBinPosition = () => {
           </Flex>
           <Flex mt="24px" justifyContent="space-between" alignItems="center">
             <Text>{t('Slippage Tolerance')}</Text>
-            <SlippageButton />
+            <LiquiditySlippageButton />
           </Flex>
           {showCollectAsWNative && (
             <Flex mt="24px" justifyContent="space-between" alignItems="center">

@@ -22,7 +22,7 @@ import { ReactElement } from 'react'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { useAccount } from 'wagmi'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton, SlippageButton } from 'views/Swap/components/SlippageButton'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
 export default function StableFormView({
@@ -163,7 +163,7 @@ export default function StableFormView({
               </RowBetween>
               <RowBetween>
                 <Text color="textSubtle">Slippage Tolerance</Text>
-                <SlippageButton />
+                <LiquiditySlippageButton />
               </RowBetween>
               <RowBetween>
                 <Text color="textSubtle">{t('Your share in pool')}</Text>

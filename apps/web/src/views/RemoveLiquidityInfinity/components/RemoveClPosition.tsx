@@ -3,7 +3,7 @@ import { useTheme } from '@pancakeswap/hooks'
 import { getPoolId } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { zeroAddress } from '@pancakeswap/price-api-sdk'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton, SlippageButton } from 'views/Swap/components/SlippageButton'
 import { Percent } from '@pancakeswap/swap-sdk-core'
 import {
   ArrowDownIcon,
@@ -341,7 +341,7 @@ export const RemoveClPosition = () => {
           </Flex>
           <Flex mt="24px" justifyContent="space-between" alignItems="center">
             <Text>{t('Slippage Tolerance')}</Text>
-            <SlippageButton />
+            <LiquiditySlippageButton />
           </Flex>
 
           {showCollectAsWNative && (
