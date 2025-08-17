@@ -3,6 +3,7 @@ import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   Button,
+  Flex,
   ModalV2,
   MotionModal,
   PencilIcon,
@@ -11,6 +12,8 @@ import {
   useModalV2,
   useTooltip,
   WarningIcon,
+  Text,
+  QuestionHelper,
 } from '@pancakeswap/uikit'
 import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
 import { SolanaSlippageSetting, EVMSlippageSetting } from 'components/Settings/SlippageTabs'
@@ -93,7 +96,22 @@ const SlippageButtonView = ({
         {(isRiskyLow || isRiskyHigh) && tooltipVisible && tooltip}
       </div>
       <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-        <MotionModal title={t('Slippage Setting')} onDismiss={onDismiss} minHeight="100px">
+        <MotionModal
+          title={
+            <Flex justifyContent="center">
+              {t('Slippage Tolerance')}
+              <QuestionHelper
+                text={t(
+                  'Setting a high slippage tolerance can help transactions succeed, but you may not get such a good price. Use with caution.',
+                )}
+                ml="4px"
+                placement="top-start"
+              />
+            </Flex>
+          }
+          onDismiss={onDismiss}
+          minHeight="100px"
+        >
           {slippageModalContent}
         </MotionModal>
       </ModalV2>
