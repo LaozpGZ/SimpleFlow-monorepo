@@ -115,17 +115,6 @@ export const SlippageTabsComponent = ({
   return (
     <FlexGap flexDirection="column" gap="24px">
       <Flex flexDirection="column">
-        <Flex mb="12px">
-          <Text>{t('Slippage Tolerance')}</Text>
-          <QuestionHelper
-            text={t(
-              'Setting a high slippage tolerance can help transactions succeed, but you may not get such a good price. Use with caution.',
-            )}
-            placement="top"
-            ml="4px"
-          />
-        </Flex>
-
         <ButtonsContainer style={{ flexWrap: isMobile ? 'nowrap' : 'wrap' }}>
           {isShowAutoSlippage && (
             <StyledButton
