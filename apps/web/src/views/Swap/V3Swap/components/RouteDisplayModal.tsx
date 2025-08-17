@@ -39,7 +39,7 @@ export const RoutesDisplayButtonView = ({ onClick, children }: { onClick: () => 
     <TertiaryButton
       role="button"
       $color={theme.colors.primary60}
-      endIcon={<PoolTypeIcon color={theme.colors.primary60} width={16} />}
+      endIcon={<PoolTypeIcon color={theme.colors.primary60} width={20} ml="2px" />}
       onClick={onClick}
     >
       {children}
