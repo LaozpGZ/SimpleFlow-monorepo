@@ -1,18 +1,27 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Route, RouteType, SVMPool } from '@pancakeswap/smart-router'
-import { AutoColumn, Flex, Modal, ModalV2, QuestionHelper, Text, UseModalV2Props, useTooltip } from '@pancakeswap/uikit'
+import {
+  AutoColumn,
+  Flex,
+  Modal,
+  ModalV2,
+  PoolTypeIcon,
+  QuestionHelper,
+  Text,
+  UseModalV2Props,
+  useTooltip,
+} from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { memo, useMemo, useState } from 'react'
 
-import {
-  RoutingSettingsButton,
-  RoutingSettingsButtonView,
-  RoutingSettingsModalContent,
-} from 'components/Menu/GlobalSettings/SettingsModalV2'
+import { RoutingSettingsButtonView, RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { CurrencyLogoWrapper, RouterBox, RouterTypeText } from 'views/Swap/components/RouterViewer'
 import { useHookDiscount } from 'views/SwapSimplify/hooks/useHookDiscount'
 import { Currency, SPLToken, UnifiedCurrency } from '@pancakeswap/sdk'
 import { useUnifiedCurrency } from 'hooks/Tokens'
+import { TertiaryButton } from 'views/Swap/components/SlippageButton'
+import { useTheme } from '@pancakeswap/hooks'
+
 import { BridgeRoutesDisplay } from './RouteDisplay/BridgeRoutesDisplay'
 import { EVMPairNodes } from './RouteDisplay/pairNode'
 import { JupPairNodes } from './RouteDisplay/JupPairNodes'
@@ -22,6 +31,20 @@ export type RouteDisplayEssentials = Pick<Route, 'path' | 'pools' | 'inputAmount
 
 interface Props extends UseModalV2Props {
   routes: RouteDisplayEssentials[]
+}
+
+export const RoutesDisplayButtonView = ({ onClick, children }: { onClick: () => void; children: React.ReactNode }) => {
+  const { theme } = useTheme()
+  return (
+    <TertiaryButton
+      role="button"
+      $color={theme.colors.primary60}
+      endIcon={<PoolTypeIcon color={theme.colors.primary60} width={16} />}
+      onClick={onClick}
+    >
+      {children}
+    </TertiaryButton>
+  )
 }
 
 const RoutesDisplayView = ({
@@ -46,7 +69,7 @@ const RoutesDisplayView = ({
           />
         </Flex>
       }
-      style={{ minHeight: '0px' }}
+      minHeight="0px"
       bodyPadding="24px"
     >
       {isBridgeRouting ? (
