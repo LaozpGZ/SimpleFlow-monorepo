@@ -1,13 +1,17 @@
 import { useDebounce } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Route } from '@pancakeswap/smart-router'
-import { Box, IconButton, InfoIcon, QuestionHelperV2, SkeletonV2, Text, useModalV2 } from '@pancakeswap/uikit'
+import { Box, QuestionHelperV2, SkeletonV2, Text, useModalV2 } from '@pancakeswap/uikit'
 import { memo } from 'react'
 import { styled } from 'styled-components'
 
 import { RowBetween } from 'components/Layout/Row'
 import SwapRoute from 'views/Swap/components/SwapRoute'
-import { RouteDisplayEssentials, RouteDisplayModal } from '../../Swap/V3Swap/components/RouteDisplayModal'
+import {
+  RouteDisplayEssentials,
+  RouteDisplayModal,
+  RoutesDisplayButtonView,
+} from '../../Swap/V3Swap/components/RouteDisplayModal'
 import { useWallchainStatus } from '../../Swap/V3Swap/hooks/useWallchain'
 
 interface Props {
@@ -53,20 +57,17 @@ export const RoutesBreakdown = memo(function RoutesBreakdown({ routes = [], wrap
             </Text>
           </QuestionHelperV2>
         </span>
-        <Box onClick={routeDisplayModal.onOpen} role="button">
-          <SkeletonV2 width="120px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
+        <SkeletonV2 width="120px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
+          <RoutesDisplayButtonView onClick={routeDisplayModal.onOpen}>
             <span style={{ display: 'flex', alignItems: 'center' }}>
               {count > 1 ? (
                 <Text fontSize="14px">{t('%count% Separate Routes', { count })}</Text>
               ) : (
                 <RouteComp route={routes[0]} />
               )}
-              <IconButton variant="text" color="primary60" scale="xs">
-                <InfoIcon width="16px" height="16px" color="primary60" />
-              </IconButton>
             </span>
-          </SkeletonV2>
-        </Box>
+          </RoutesDisplayButtonView>
+        </SkeletonV2>
         <RouteDisplayModal {...routeDisplayModal} routes={routes} />
       </RouteInfoContainer>
     </>
