@@ -38,6 +38,7 @@ import { SendAssets } from './SendAssets'
 import { SEND_ENTRY, ViewState } from './type'
 import { useWalletModalV2ViewState } from './WalletModalV2ViewStateProvider'
 import { ConnectedWalletsButton } from './ConnectedWalletsButton'
+import { ConnectedWallets } from './ConnectedWallets'
 
 interface WalletModalProps {
   isOpen: boolean
@@ -201,6 +202,20 @@ export const WalletContent = ({
     )
   }, [viewState, balances, isLoading, goBack, setViewState])
 
+  if (viewState === ViewState.CONNECTED_WALLETS) {
+    return (
+      <Box
+        minWidth={isMobile ? '100%' : '357px'}
+        maxHeight={isMobile ? 'auto' : 'calc(100vh - 80px)'}
+        maxWidth={isMobile ? '100%' : '377px'}
+        overflowY={isMobile ? undefined : 'auto'}
+        p="16px"
+      >
+        <ConnectedWallets onBack={goBack} solanaAddress={solanaAccount} evmAddress={evmAccount} />
+      </Box>
+    )
+  }
+
   return (
     <Box
       minWidth={isMobile ? '100%' : '357px'}
@@ -215,7 +230,7 @@ export const WalletContent = ({
             solanaAccount={solanaAccount}
             onClick={() => {
               setConnectedWalletModalVisible(true)
-              onDismiss()
+              setViewState(ViewState.CONNECTED_WALLETS)
             }}
           />
         </Box>

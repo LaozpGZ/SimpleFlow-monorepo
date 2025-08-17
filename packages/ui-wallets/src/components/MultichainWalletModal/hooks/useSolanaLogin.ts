@@ -22,10 +22,6 @@ export const useSolanaLogin = () => {
       promiseRef.current.resolve(publicKey.toBase58())
       promiseRef.current = null
     }
-
-    return () => {
-      promiseRef.current = null
-    }
   }, [solanaWalletError, connected, publicKey])
 
   const solanaLogin = useCallback(async (walletName: WalletName) => {
