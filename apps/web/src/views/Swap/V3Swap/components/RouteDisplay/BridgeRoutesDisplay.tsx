@@ -13,8 +13,6 @@ import {
 } from '@pancakeswap/uikit'
 import { ChainLogo, CurrencyLogo, LightCard, LightGreyCard } from '@pancakeswap/widgets-internal'
 
-import { RoutingSettingsButton } from 'components/Menu/GlobalSettings/SettingsModalV2'
-
 import { useTranslation } from '@pancakeswap/localization'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { memo, useLayoutEffect, useMemo, useRef, useState } from 'react'
@@ -220,7 +218,6 @@ export const BridgeRoutesDisplay = ({ routes }: BridgeRoutesDisplayProps) => {
           <CurrencyLogo currency={outputCurrency} size="42px" showChainLogo />
         </Box>
       </RouteModalContainer>
-      <RoutingSettingsButton />
     </>
   )
 }
