@@ -30,17 +30,19 @@ import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
 import { NonEVMChainId } from '@pancakeswap/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
+import { useSetAtom } from 'jotai'
+import { connectedWalletModalVisibleAtom } from 'state/wallet/atom'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssets } from './SendAssets'
 import { SEND_ENTRY, ViewState } from './type'
-import { CopyAddress } from './WalletCopyButton'
 import { useWalletModalV2ViewState } from './WalletModalV2ViewStateProvider'
-import { ConnectedWalletsButton } from './ConnectedWallets'
+import { ConnectedWalletsButton } from './ConnectedWalletsButton'
 
 interface WalletModalProps {
   isOpen: boolean
-  account?: string
+  evmAccount?: string
+  solanaAccount?: string
   onDismiss: () => void
   onReceiveClick: () => void
   onDisconnect: () => void
@@ -99,18 +101,26 @@ const OptionBox = styled(Box)`
   cursor: pointer;
 `
 
-const WalletModal: React.FC<WalletModalProps> = ({ account, onDismiss, isOpen, onReceiveClick, onDisconnect }) => {
+const WalletModal: React.FC<WalletModalProps> = ({
+  evmAccount,
+  solanaAccount,
+  onDismiss,
+  isOpen,
+  onReceiveClick,
+  onDisconnect,
+}) => {
   const { viewState } = useWalletModalV2ViewState()
 
   // If no account is provided, show a message or redirect
-  if (!account && viewState !== ViewState.CLAIM_GIFT) {
+  if (!evmAccount && !solanaAccount && viewState !== ViewState.CLAIM_GIFT) {
     return null
   }
   return (
     <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
       <StyledModal title={undefined} onDismiss={onDismiss} hideCloseButton bodyPadding="16px">
         <WalletContent
-          account={account}
+          evmAccount={evmAccount}
+          solanaAccount={solanaAccount}
           onDisconnect={onDisconnect}
           onDismiss={onDismiss}
           onReceiveClick={onReceiveClick}
@@ -139,6 +149,7 @@ export const WalletContent = ({
   const { isMobile } = useMatchBreakpoints()
   const { viewState, setViewState, goBack, setSendEntry } = useWalletModalV2ViewState()
   const { theme } = useTheme()
+  const setConnectedWalletModalVisible = useSetAtom(connectedWalletModalVisibleAtom)
 
   const { chainId } = useActiveChainId()
 
@@ -199,7 +210,14 @@ export const WalletContent = ({
     >
       {evmAccount || solanaAccount ? (
         <Box padding="16px">
-          <ConnectedWalletsButton evmAccount={evmAccount} solanaAccount={solanaAccount} />
+          <ConnectedWalletsButton
+            evmAccount={evmAccount}
+            solanaAccount={solanaAccount}
+            onClick={() => {
+              setConnectedWalletModalVisible(true)
+              onDismiss()
+            }}
+          />
         </Box>
       ) : null}
 

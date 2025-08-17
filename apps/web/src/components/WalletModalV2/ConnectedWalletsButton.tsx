@@ -1,9 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { ASSET_CDN } from '@pancakeswap/ui-wallets/src/config/url'
-import { Button, Flex, FlexGap, Text, ChevronDownIcon } from '@pancakeswap/uikit'
+import { Button, Flex, FlexGap, Text, ChevronDownIcon, ButtonProps } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 
-export type ConnectedWalletsButtonProps = {
+export type ConnectedWalletsButtonProps = ButtonProps & {
   evmAccount: string | undefined
   solanaAccount: string | undefined
 }
@@ -35,11 +35,11 @@ const StyledAccountsButton = styled(Button)`
   padding: 8px;
 `
 
-export const ConnectedWalletsButton = ({ evmAccount, solanaAccount }: ConnectedWalletsButtonProps) => {
+export const ConnectedWalletsButton = ({ evmAccount, solanaAccount, ...props }: ConnectedWalletsButtonProps) => {
   const { t } = useTranslation()
 
   return (
-    <StyledAccountsButton variant="text">
+    <StyledAccountsButton variant="text" {...props}>
       <FlexGap gap="8px" alignItems="center">
         <StyledNetworkIcons>
           {evmAccount && (

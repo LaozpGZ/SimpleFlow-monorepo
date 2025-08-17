@@ -27,7 +27,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
-const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void; account: string | undefined }) => {
+const UserMenuItems = ({ onReceiveClick, onDismiss }: { onReceiveClick: () => void; onDismiss: () => void }) => {
   const { logout } = useAuth()
   const { chainId, account, solanaAccount } = useAccountActiveChain()
   const { disconnect } = useWallet()
@@ -46,7 +46,7 @@ const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void; account
     <WalletContent
       solanaAccount={solanaAccount ?? undefined}
       evmAccount={account}
-      onDismiss={() => {}}
+      onDismiss={onDismiss}
       onReceiveClick={onReceiveClick}
       onDisconnect={handleClickDisconnect}
     />
@@ -238,7 +238,10 @@ const UserMenu = () => {
           {!isMobile && (
             <ClickablePopover isOpen={isMenuOpen}>
               {isMenuOpen && showDesktopPopup && (
-                <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveModalOpen(true)} />
+                <UserMenuItems
+                  onDismiss={() => setIsMenuOpen(false)}
+                  onReceiveClick={() => setIsReceiveModalOpen(true)}
+                />
               )}
             </ClickablePopover>
           )}
@@ -246,7 +249,8 @@ const UserMenu = () => {
 
         <WalletModalV2
           isOpen={showMobileWalletModal}
-          account={finalAddress}
+          evmAccount={evmAccount}
+          solanaAccount={solanaAccount ?? undefined}
           onReceiveClick={() => setIsReceiveModalOpen(true)}
           onDisconnect={handleClickDisconnect}
           onDismiss={() => {
