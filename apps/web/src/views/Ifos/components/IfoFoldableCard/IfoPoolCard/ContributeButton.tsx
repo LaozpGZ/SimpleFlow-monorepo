@@ -12,6 +12,7 @@ import { PublicIfoData, WalletIfoData } from 'views/Ifos/types'
 
 import { useUserVeCakeStatus } from 'components/CrossChainVeCakeModal/hooks/useUserVeCakeStatus'
 import { logGTMIfoCommitEvent } from 'utils/customGTMEventTracking'
+import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import ContributeModal from './ContributeModal'
 
 interface Props {
