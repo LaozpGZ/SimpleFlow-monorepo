@@ -21,6 +21,7 @@ import { ApiV3PoolInfoConcentratedItem, ApiV3Token } from "@/api/type";
 
 import Decimal from "decimal.js";
 import {
+  BN_10000000000,
   BN_ONE,
   BN_TEN,
   BN_ZERO,
@@ -684,7 +685,7 @@ export class PoolUtils {
 
     const _minAmountOut = _expectedAmountOut
       .mul(new BN(Math.floor((1 - slippage) * 10000000000)))
-      .div(new BN(10000000000));
+      .div(BN_10000000000);
     const minAmountOut = getTransferAmountFeeV2(_minAmountOut, outFeeConfig, epochInfo, false);
 
     const poolPrice = isBaseIn ? poolInfo.currentPrice : new Decimal(1).div(poolInfo.currentPrice);
@@ -881,7 +882,7 @@ export class PoolUtils {
 
     const _maxAmountIn = _expectedAmountIn
       .mul(new BN(Math.floor((1 + slippage) * 10000000000)))
-      .div(new BN(10000000000));
+      .div(BN_10000000000);
     // const maxAmountIn = getTransferAmountFee(
     //   _maxAmountIn,
     //   token2022Infos[inMint.toString()]?.feeConfig,

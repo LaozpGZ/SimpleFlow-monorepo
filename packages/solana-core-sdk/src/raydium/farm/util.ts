@@ -2,7 +2,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 
 import { RewardInfoV6 } from "../../api/type";
-import { BN_ONE, BN_TEN, BN_ZERO, parseBigNumberish } from "../../common";
+import { BN_15, BN_NINE, BN_ONE, BN_TEN, BN_ZERO, parseBigNumberish } from "../../common";
 import { GetMultipleAccountsInfoConfig, getMultipleAccountsInfoWithCustomFlags } from "../../common/accountInfo";
 import { DateParam, isDateAfter, isDateBefore } from "../../common/date";
 import { createLogger } from "../../common/logger";
@@ -255,8 +255,8 @@ export async function fetchMultipleFarmInfoAndUpdate({
         state.version === 6
           ? state.rewardMultiplier
           : state.rewardInfos.length === 1
-          ? tenBN.pow(new BN(9))
-          : tenBN.pow(new BN(15));
+          ? tenBN.pow(BN_NINE)
+          : tenBN.pow(BN_15);
 
       const pendingRewards = state.rewardInfos.map((rewardInfo, index) => {
         const rewardDebt = ledger.rewardDebts[index];

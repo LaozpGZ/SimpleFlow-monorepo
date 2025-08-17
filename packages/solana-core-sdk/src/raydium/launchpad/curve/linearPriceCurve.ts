@@ -5,7 +5,7 @@ import { MathLaunch } from "./func";
 import { MaxU64 } from "@/raydium/clmm";
 import { LaunchpadPoolInfo } from "../type";
 import { CurveBase, PoolBaseAmount } from "./curveBase";
-import { BN_ONE, BN_TWO, BN_ZERO } from "@/common";
+import { BN_ONE, BN_THREE, BN_TWO, BN_ZERO } from "@/common";
 export class LinearPriceCurve extends CurveBase {
   static getPoolInitPriceByPool({
     poolInfo,
@@ -99,7 +99,7 @@ export class LinearPriceCurve extends CurveBase {
   }): { a: BN; b: BN; c: BN } {
     const supplyMinusLocked = supply.sub(totalLockedAmount);
     if (supplyMinusLocked.lte(BN_ZERO)) throw Error("supplyMinusLocked need gt 0");
-    const denominator = totalFundRaising.mul(new BN(3)).sub(migrateFee);
+    const denominator = totalFundRaising.mul(BN_THREE).sub(migrateFee);
     const numerator = totalFundRaising.mul(BN_TWO).mul(supplyMinusLocked);
 
     const totalSellExpect = numerator.div(denominator);

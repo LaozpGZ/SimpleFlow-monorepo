@@ -12,6 +12,7 @@ import {
   ALL_PROGRAM_ID,
   BN_ZERO,
   BN_ONE,
+  BN_25,
 } from "@/common";
 import { seq, struct, u128, u64, u8 } from "../../marshmallow";
 import {
@@ -527,10 +528,10 @@ export function routeInstruction(
 function clmmPriceLimitX64InsData(x64Price: string | undefined, inputIsA: boolean): BN {
   if (x64Price) {
     if (inputIsA) {
-      const _m = new BN(x64Price).div(new BN(25));
+      const _m = new BN(x64Price).div(BN_25);
       return _m.gt(MIN_SQRT_PRICE_X64_ADD_ONE) ? _m : MIN_SQRT_PRICE_X64_ADD_ONE;
     } else {
-      const _m = new BN(x64Price).mul(new BN(25));
+      const _m = new BN(x64Price).mul(BN_25);
       return _m.lt(MAX_SQRT_PRICE_X64_SUB_ONE) ? _m : MAX_SQRT_PRICE_X64_SUB_ONE;
     }
   } else {

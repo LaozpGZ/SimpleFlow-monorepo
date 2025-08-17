@@ -1,8 +1,7 @@
-import BN from "bn.js";
 import { SerumVersion } from "../serum";
-import { BN_10000 } from "@/common";
+import { BN_10000, BN_25 } from "@/common";
 
-export const LIQUIDITY_FEES_NUMERATOR = new BN(25);
+export const LIQUIDITY_FEES_NUMERATOR = BN_25;
 export const LIQUIDITY_FEES_DENOMINATOR = BN_10000;
 
 // liquidity version => serum version
