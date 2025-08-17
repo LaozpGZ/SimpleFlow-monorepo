@@ -20,7 +20,7 @@ import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import styled from 'styled-components'
 import { basisPointsToPercent } from 'utils/exchange'
 
-const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: string }>`
+export const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: string }>`
   height: unset;
   padding: 7px 8px;
   font-size: 14px;

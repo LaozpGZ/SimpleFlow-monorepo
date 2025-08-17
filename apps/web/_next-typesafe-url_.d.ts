@@ -5,6 +5,7 @@
 // prettier-ignore
 /* eslint-disable */
 
+
 declare module "@@@next-typesafe-url" {
   import type { InferRoute, StaticRoute } from "next-typesafe-url";
   
