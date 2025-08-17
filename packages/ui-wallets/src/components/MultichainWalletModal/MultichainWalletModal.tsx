@@ -1,3 +1,4 @@
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletName } from '@solana/wallet-adapter-base'
 import { useTranslation } from '@pancakeswap/localization'
@@ -24,6 +25,7 @@ import { ModalContent } from './ModalContent'
 import { MultichainWalletModalProps } from './types'
 import { modalWrapperClass } from './modal.css'
 import { useWalletFilterEffect, useWalletFilterValue } from '../../state/hooks'
+import { useSolanaLogin } from './hooks/useSolanaLogin'
 
 export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (props) => {
   const {
@@ -33,18 +35,20 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
     topWallets,
     evmLogin,
     createEvmQrCode,
-    solanaLogin,
     onWalletConnectCallBack,
     onGoogleLogin,
     onXLogin,
     onTelegramLogin,
     onDiscordLogin,
+    onDismiss,
     docLink,
     ...rest
   } = props
 
   const { t } = useTranslation()
   const { theme } = useTheme()
+
+  const solanaLogin = useSolanaLogin()
 
   const walletFilter = useWalletFilterValue()
   useWalletFilterEffect({ evmAddress, solanaAddress })
@@ -62,10 +66,10 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
     [topWallets, wallets_, walletFilter],
   )
 
-  const handleDismiss = () => {
+  const handleDismiss = useCallback(() => {
     props.onDismiss?.()
     setPreviewStatus(PreviewStatus.Intro)
-  }
+  }, [props.onDismiss])
 
   const setEvmSelectedWallet = useSetAtom(setSelectedEvmWalletAtom)
   const [, setSolanaError] = useAtom(errorSolanaAtom)
@@ -97,7 +101,11 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
       if (network === WalletAdaptedNetwork.EVM) {
         setLastUsedEvmWallet(wallet.id)
 
-        onWalletConnectCallBack?.(wallet.title, connectData?.accounts?.[0])
+        onWalletConnectCallBack?.(
+          connectData?.chainId ? Number(connectData.chainId) : undefined,
+          wallet.title,
+          connectData?.accounts?.[0],
+        )
       }
     },
     [onWalletConnectCallBack, setLastUsedEvmWallet, setLastUsedSolanaWallet],
@@ -120,6 +128,11 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
             .then((connectData) => {
               if (connectData) {
                 handleWalletConnected(wallet, network, connectData)
+                if (wallet.networks.includes(WalletAdaptedNetwork.Solana) && !solanaAddress) {
+                  setPreviewStatus(PreviewStatus.ChainSelect)
+                } else {
+                  handleDismiss()
+                }
               }
             })
             .catch((err) => {
@@ -135,7 +148,21 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
 
         if (network === WalletAdaptedNetwork.Solana && wallet.solanaAdapterName) {
           solanaLogin(wallet.solanaAdapterName as WalletName)
-          handleWalletConnected(wallet, network)
+            .then((address) => {
+              handleWalletConnected(wallet, network, { accounts: [address], chainId: NonEVMChainId.SOLANA })
+              if (wallet.networks.includes(WalletAdaptedNetwork.EVM) && !evmAddress) {
+                setPreviewStatus(PreviewStatus.ChainSelect)
+              } else {
+                handleDismiss()
+              }
+            })
+            .catch((err) => {
+              if (err instanceof WalletConnectorNotFoundError) {
+                setSolanaError(t('no provider found'))
+              } else {
+                setSolanaError(t('Error connecting, please authorize wallet to access.'))
+              }
+            })
         }
       }
     },
@@ -146,8 +173,11 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
       setEvmError,
       evmLogin,
       handleWalletConnected,
+      solanaAddress,
+      evmAddress,
       t,
       solanaLogin,
+      handleDismiss,
     ],
   )
 

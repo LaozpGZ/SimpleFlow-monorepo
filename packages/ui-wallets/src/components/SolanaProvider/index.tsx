@@ -1,11 +1,13 @@
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { Adapter, WalletError } from '@solana/wallet-adapter-base'
 import { SolflareWalletAdapter, WalletConnectWalletAdapter } from '@solana/wallet-adapter-wallets'
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { GlowWalletAdapter } from '@solana/wallet-adapter-glow'
 import { SlopeWalletAdapter } from '@solana/wallet-adapter-slope'
 import { ExodusWalletAdapter } from '@solana/wallet-adapter-exodus'
+import { useSetAtom } from 'jotai'
 import { walletConnectConfig } from './walletConnect.config'
+import { errorSolanaAtom } from '../../state/atom'
 
 export type SolanaProviderProps = React.PropsWithChildren<{
   endpoint: string
@@ -22,9 +24,15 @@ export const SolanaProvider: React.FC<SolanaProviderProps> = ({ children, endpoi
     return connectWallet
   }, [])
 
-  const onWalletError = (error: WalletError, adapter?: Adapter) => {
-    // if (!adapter) return
-  }
+  const setSolanaWalletError = useSetAtom(errorSolanaAtom)
+
+  const onWalletError = useCallback(
+    (error: WalletError, adapter?: Adapter) => {
+      if (!adapter) return
+      setSolanaWalletError((error.cause || error.message)?.toString())
+    },
+    [setSolanaWalletError],
+  )
 
   // list of wallet adapter that not support WalletStandard
   const walletsAdapter = useMemo(

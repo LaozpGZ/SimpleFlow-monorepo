@@ -9,8 +9,8 @@ export interface MultichainWalletModalProps extends ModalV2Props {
   topWallets?: WalletConfigV3[]
   evmLogin: (wallet: WalletConfigV3) => Promise<ConnectData | undefined>
   createEvmQrCode?: () => () => Promise<string>
-  solanaLogin: (walletName: WalletName) => void
-  onWalletConnectCallBack?: (walletTitle?: string, address?: string) => void
+  // solanaLogin?: (walletName: WalletName) => Promise<string | undefined>
+  onWalletConnectCallBack?: (chainId?: number, walletTitle?: string, address?: string) => void
   fullSize?: boolean
   docText: string
   docLink: string

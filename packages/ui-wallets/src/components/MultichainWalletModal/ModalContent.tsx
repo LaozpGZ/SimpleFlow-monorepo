@@ -101,9 +101,6 @@ export const ModalContent: React.FC<ModalContentProps> = ({
   )
 
   const selected = useSelectedWallet()
-  const evmError = useAtomValue(errorEvmAtom)
-  const solanaError = useAtomValue(errorSolanaAtom)
-  const error = evmError || solanaError
   const [qrCode, setQrCode] = useState<string | undefined>(undefined)
   const { t } = useTranslation()
 
@@ -148,7 +145,7 @@ export const ModalContent: React.FC<ModalContentProps> = ({
       setSelectedNetwork(WalletAdaptedNetwork.EVM)
       connectWallet(wallet, WalletAdaptedNetwork.EVM)
     },
-    [connectWallet, onWalletConnected],
+    [connectWallet],
   )
 
   const onSolanaWalletSelected = useCallback(
@@ -156,7 +153,7 @@ export const ModalContent: React.FC<ModalContentProps> = ({
       setSelectedNetwork(WalletAdaptedNetwork.Solana)
       connectWallet(wallet, WalletAdaptedNetwork.Solana)
     },
-    [connectWallet, onWalletConnected],
+    [connectWallet],
   )
 
   const onWalletSelected = useCallback(
@@ -244,7 +241,8 @@ export const ModalContent: React.FC<ModalContentProps> = ({
       )}
       {previewStatus === PreviewStatus.ChainSelect && selectedMultiChainWallet && (
         <WalletChainSelect
-          solanaOnly={solanaOnly}
+          evmAddress={evmAddress}
+          solanaAddress={solanaAddress}
           wallet={selectedMultiChainWallet}
           onConnectEVM={() => onWalletSelected(selectedMultiChainWallet, WalletAdaptedNetwork.EVM)}
           onConnectSolana={() => onWalletSelected(selectedMultiChainWallet, WalletAdaptedNetwork.Solana)}

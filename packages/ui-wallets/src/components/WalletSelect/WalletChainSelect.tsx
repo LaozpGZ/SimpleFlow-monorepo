@@ -19,6 +19,7 @@ import {
   useTooltip,
   useMatchBreakpoints,
   Message,
+  Checkbox,
 } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { ChainId } from '@pancakeswap/chains'
@@ -28,14 +29,16 @@ import { ASSET_CDN } from '../../config/url'
 
 export type WalletChainSelectProps = {
   wallet: WalletConfigV3<any> | null
-  solanaOnly?: boolean
+  solanaAddress?: string
+  evmAddress?: string
   onConnectEVM?: () => void
   onConnectSolana?: () => void
 }
 
 export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
   wallet,
-  solanaOnly,
+  solanaAddress,
+  evmAddress,
   onConnectEVM,
   onConnectSolana,
 }) => {
@@ -43,10 +46,7 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
   const { theme } = useTheme()
   const { isMobile } = useMatchBreakpoints()
 
-  const supportsEVM = useMemo(
-    () => (solanaOnly ? false : wallet?.networks.includes(WalletAdaptedNetwork.EVM)),
-    [solanaOnly],
-  )
+  const supportsEVM = wallet?.networks.includes(WalletAdaptedNetwork.EVM)
   const supportsSolana = wallet?.networks.includes(WalletAdaptedNetwork.Solana)
 
   const {
@@ -141,9 +141,13 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
                       )}
                     </Row>
                   </FlexGap>
-                  <Button variant="primary" onClick={onConnectEVM} scale={isMobile ? 'sm' : 'md'}>
-                    {t('Connect')}
-                  </Button>
+                  {evmAddress ? (
+                    <Checkbox checked disabled scale="sm" />
+                  ) : (
+                    <Button variant="primary" onClick={onConnectEVM} scale={isMobile ? 'sm' : 'md'}>
+                      {t('Connect')}
+                    </Button>
+                  )}
                 </RowBetween>
               )}
 
@@ -163,9 +167,13 @@ export const WalletChainSelect: React.FC<WalletChainSelectProps> = ({
                       Solana
                     </Text>
                   </Row>
-                  <Button variant="primary" onClick={onConnectSolana} scale={isMobile ? 'sm' : 'md'}>
-                    {t('Connect')}
-                  </Button>
+                  {solanaAddress ? (
+                    <Checkbox checked disabled scale="sm" />
+                  ) : (
+                    <Button variant="primary" onClick={onConnectSolana} scale={isMobile ? 'sm' : 'md'}>
+                      {t('Connect')}
+                    </Button>
+                  )}
                 </RowBetween>
               )}
             </Column>

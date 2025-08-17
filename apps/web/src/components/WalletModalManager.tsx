@@ -14,13 +14,11 @@ import { useFirebaseAuth } from 'wallet/Privy/firebase'
 import { useCallback, useMemo } from 'react'
 import { logGTMWalletConnectedEvent } from 'utils/customGTMEventTracking'
 import { useConnect } from 'wagmi'
-import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletName } from '@solana/wallet-adapter-base'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 
 const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> = ({ isOpen, onDismiss }) => {
   const { login } = useAuth()
-  const { select } = useWallet()
   const { account: evmAccount, solanaAccount } = useAccountActiveChain()
   const {
     t,
@@ -43,8 +41,8 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
   )
 
   const handleWalletConnect = useCallback(
-    (name?: string, address?: string) => {
-      logGTMWalletConnectedEvent(chainId, name, address)
+    (connectedChainId: number | undefined, name?: string, address?: string) => {
+      logGTMWalletConnectedEvent(connectedChainId ?? chainId, name, address)
     },
     [chainId],
   )
@@ -55,13 +53,6 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
     return createQrCode(chainId || ChainId.BSC, connectAsync)
   }, [chainId, connectAsync])
 
-  const solanaLogin = useCallback(
-    (walletName: WalletName) => {
-      return select(walletName)
-    },
-    [select],
-  )
-
   return (
     <MultichainWalletModal
       evmAddress={evmAccount}
@@ -71,7 +62,6 @@ const WalletModalManager: React.FC<{ isOpen: boolean; onDismiss?: () => void }> 
       isOpen={isOpen}
       evmLogin={login}
       createEvmQrCode={createEvmQrCode}
-      solanaLogin={solanaLogin}
       onDismiss={onDismiss}
       onWalletConnectCallBack={handleWalletConnect}
       onGoogleLogin={loginWithGoogle}
