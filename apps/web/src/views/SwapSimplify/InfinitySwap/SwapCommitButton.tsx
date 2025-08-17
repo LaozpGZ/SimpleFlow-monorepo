@@ -12,7 +12,11 @@ import { GreyCard } from 'components/Card'
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { AutoRow } from 'components/Layout/Row'
-import { RoutingSettingsButton, withCustomOnDismiss } from 'components/Menu/GlobalSettings/SettingsModalV2'
+import {
+  RoutingSettingsButton,
+  RoutingSettingsModalContent,
+  withCustomOnDismiss,
+} from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { BIG_INT_ZERO } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
@@ -513,13 +517,14 @@ const ResetRoutesButton = () => {
             <MessageText>{t('Unable to establish trading route due to customized routing.')}</MessageText>
             <AutoRow gap="4px">
               <RoutingSettingsButton
+                modalContent={<RoutingSettingsModalContent />}
                 buttonProps={{
                   scale: 'xs',
                   p: 0,
                 }}
                 showRedDot={false}
               >
-                {t('Check your settings')}
+                {t('Check route settings')}
               </RoutingSettingsButton>
               <MessageText
                 style={{
