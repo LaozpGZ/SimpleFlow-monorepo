@@ -36,6 +36,7 @@ import { SendAssets } from './SendAssets'
 import { SEND_ENTRY, ViewState } from './type'
 import { CopyAddress } from './WalletCopyButton'
 import { useWalletModalV2ViewState } from './WalletModalV2ViewStateProvider'
+import { ConnectedWalletsButton } from './ConnectedWallets'
 
 interface WalletModalProps {
   isOpen: boolean
@@ -120,12 +121,14 @@ const WalletModal: React.FC<WalletModalProps> = ({ account, onDismiss, isOpen, o
 }
 
 export const WalletContent = ({
-  account,
+  evmAccount,
+  solanaAccount,
   onDismiss,
   onReceiveClick,
   onDisconnect,
 }: {
-  account: string | undefined
+  evmAccount: string | undefined
+  solanaAccount: string | undefined
   onDismiss: () => void
   onReceiveClick: () => void
   onDisconnect: () => void
@@ -140,7 +143,7 @@ export const WalletContent = ({
   const { chainId } = useActiveChainId()
 
   // Fetch balances using the hook we created
-  const { balances, isLoading, totalBalanceUsd } = useAddressBalance(account, {
+  const { balances, isLoading, totalBalanceUsd } = useAddressBalance(evmAccount, {
     includeSpam: false,
     onlyWithPrice: false,
   })
@@ -194,28 +197,10 @@ export const WalletContent = ({
       maxWidth={isMobile ? '100%' : '377px'}
       overflowY={isMobile ? undefined : 'auto'}
     >
-      {account ? (
-        <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px" mt="8px">
-          {viewState > ViewState.SEND_ASSETS && (
-            <Button
-              variant="tertiary"
-              style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
-              onClick={goBack}
-              ml={isMobile ? '8px' : '16px'}
-            >
-              <ArrowBackIcon fontSize="24px" color={theme.colors.primary60} />
-            </Button>
-          )}
-
-          <CopyAddress tooltipMessage={t('Copied')} account={account || ''} />
-          {viewState <= ViewState.SEND_ASSETS && (
-            <FlexGap>
-              <DisconnectButton scale="xs" onClick={onDisconnect}>
-                {t('Disconnect')}
-              </DisconnectButton>
-            </FlexGap>
-          )}
-        </FlexGap>
+      {evmAccount || solanaAccount ? (
+        <Box padding="16px">
+          <ConnectedWalletsButton evmAccount={evmAccount} solanaAccount={solanaAccount} />
+        </Box>
       ) : null}
 
       <CancelGiftProvider>

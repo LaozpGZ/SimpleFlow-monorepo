@@ -44,7 +44,8 @@ const UserMenuItems = ({ onReceiveClick }: { onReceiveClick: () => void; account
 
   return (
     <WalletContent
-      account={chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : account}
+      solanaAccount={solanaAccount ?? undefined}
+      evmAccount={account}
       onDismiss={() => {}}
       onReceiveClick={onReceiveClick}
       onDisconnect={handleClickDisconnect}
