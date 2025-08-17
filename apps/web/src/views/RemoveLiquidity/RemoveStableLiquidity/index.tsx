@@ -48,7 +48,7 @@ import { logGTMClickRemoveLiquidityEvent } from 'utils/customGTMEventTracking'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { isUserRejected, logError } from 'utils/sentry'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton, SlippageButton } from 'views/Swap/components/SlippageButton'
 import { RemoveLiquidityLayout } from '..'
 import ConnectWalletButton from '../../../components/ConnectWalletButton'
 import CurrencyInputPanel from '../../../components/CurrencyInputPanel'
@@ -536,7 +536,7 @@ export default function RemoveStableLiquidity({ currencyA, currencyB, currencyId
           <Text bold color="secondary" fontSize="12px">
             {t('Slippage Tolerance')}
           </Text>
-          <SlippageButton />
+          <LiquiditySlippageButton />
         </RowBetween>
         {poolData && (
           <RowBetween mt="16px">
