@@ -261,12 +261,17 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
 
   useEffect(() => {
     if (isInputFocus) {
-      onUserInput(value ?? '')
-    } else {
-      setValue(defaultValue)
+      return
     }
+    setValue(defaultValue)
+  }, [defaultValue, isInputFocus])
+
+  useEffect(() => {
     setIsDisabled(disabled)
-  }, [defaultValue, isInputFocus, value, onUserInput, disabled])
+    if (isInputFocus) {
+      onUserInput(value ?? '')
+    }
+  }, [value, disabled, isInputFocus, onUserInput])
 
   const handlePercentInput = useCallback(
     (percent: number) => {
