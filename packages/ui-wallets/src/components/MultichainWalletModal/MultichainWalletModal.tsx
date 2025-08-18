@@ -245,7 +245,6 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
             zIndex="modal"
             width="100%"
           >
-            {/* todo: add close button on mobile */}
             <ModalContent
               evmAddress={evmAddress}
               solanaAddress={solanaAddress}
@@ -264,36 +263,6 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
               onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
               onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
             />
-            {/* {isMobile ? (
-              <MobileModal
-                wallets={wallets_}
-                topWallets={topWallets_}
-                evmAddress={evmAddress}
-                solanaAddress={solanaAddress}
-                onDismiss={handleDismiss}
-                previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}
-                connectWallet={connectWallet}
-                displaySocialLogin={displaySocialLogin}
-              />
-            ) : (
-              <DesktopModal
-                evmAddress={evmAddress}
-                solanaAddress={solanaAddress}
-                wallets={wallets_}
-                topWallets={topWallets_}
-                previouslyUsedWallets={[previouslyUsedEvmWallets, previouslyUsedSolanaWallets]}
-                connectWallet={connectWallet}
-                onWalletConnected={handleWalletConnected}
-                displaySocialLogin={displaySocialLogin}
-                previewStatus={previewStatus}
-                setPreviewStatus={setPreviewStatus}
-                docLink={docLink}
-                onGoogleLogin={handleSocialLoginWithCleanup(props.onGoogleLogin)}
-                onXLogin={handleSocialLoginWithCleanup(props.onXLogin)}
-                onTelegramLogin={handleSocialLoginWithCleanup(props.onTelegramLogin)}
-                onDiscordLogin={handleSocialLoginWithCleanup(props.onDiscordLogin)}
-              />
-            )} */}
           </AtomBox>
         </AtomBox>
       </ModalWrapper>

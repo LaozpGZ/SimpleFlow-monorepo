@@ -91,7 +91,7 @@ export const WalletSelect: React.FC<WalletSelectProps> = ({
       }}
       className={scrollbarClass}
     >
-      {previous?.length && (
+      {previous?.length > 0 && (
         <WalletSelectSection label={t('Previously used')}>
           {previous.map((wallet) => (
             <WalletSelectItem key={wallet.id} wallet={wallet} onClick={handleWalletClick} />

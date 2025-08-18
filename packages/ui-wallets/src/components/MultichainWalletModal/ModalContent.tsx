@@ -85,7 +85,7 @@ export const ModalContent: React.FC<ModalContentProps> = ({
       topWallets_?.filter((w) => {
         if (solanaOnly && !w.networks.includes(WalletAdaptedNetwork.Solana)) return false
         if (evmOnly && !w.networks.includes(WalletAdaptedNetwork.EVM)) return false
-        return w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
+        return !('install' in w) || w.installed !== false || (!w.installed && (w.guide || w.downloadLink || w.qrCode))
       }) ?? [],
     [walletFilter, topWallets_],
   )
