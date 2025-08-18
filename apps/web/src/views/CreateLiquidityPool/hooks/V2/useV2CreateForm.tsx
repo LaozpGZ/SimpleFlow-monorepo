@@ -25,17 +25,7 @@ import { calculateGasMargin, getBlockExploreLink } from 'utils'
 import { isUserRejected, logError } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { Hash } from 'viem'
-import {
-  AutoColumn,
-  Button,
-  Flex,
-  LinkExternal,
-  Message,
-  MessageText,
-  ScanLink,
-  useModal,
-  useModalV2,
-} from '@pancakeswap/uikit'
+import { AutoColumn, Button, Flex, LinkExternal, Message, MessageText, ScanLink, useModalV2 } from '@pancakeswap/uikit'
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiquidityTokens'
@@ -44,6 +34,8 @@ import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useStartingPriceQueryState } from 'state/infinity/create'
 import { PreviewModal } from 'views/CreateLiquidityPool/components/PreviewModal'
+import { useRouter } from 'next/router'
+import { getPoolDetailPageLink } from 'utils/getPoolLink'
 import { useCurrencies } from '../useCurrencies'
 
 export const useV2CreateForm = () => {
@@ -51,6 +43,8 @@ export const useV2CreateForm = () => {
     t,
     currentLanguage: { locale },
   } = useTranslation()
+  const router = useRouter()
+
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: walletClient } = useWalletClient()
   const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
@@ -285,7 +279,7 @@ export const useV2CreateForm = () => {
           ...(value ? { value } : {}),
           gas: calculateGasMargin(estimatedGasLimit),
           gasPrice,
-        }).then((response: Hash) => {
+        }).then(async (response: Hash) => {
           setLiquidityState({ attemptingTxn: false, liquidityErrorMessage: undefined, txHash: response })
           logGTMAddLiquidityTxSentEvent()
           const symbolA = currencies[Field.CURRENCY_A]?.symbol
@@ -307,6 +301,14 @@ export const useV2CreateForm = () => {
           if (pair) {
             addPair(pair)
           }
+
+          // Re-direct to Pool Detail page
+          await router.push(
+            await getPoolDetailPageLink({
+              chainId,
+              lpAddress: Pair.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped),
+            } as any),
+          )
         }),
       )
       ?.catch((err: any) => {

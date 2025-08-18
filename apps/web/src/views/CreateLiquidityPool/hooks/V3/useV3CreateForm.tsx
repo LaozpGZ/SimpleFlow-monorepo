@@ -41,7 +41,7 @@ import {
 } from '@pancakeswap/uikit'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
-import { NonfungiblePositionManager } from '@pancakeswap/v3-sdk'
+import { FeeAmount, NonfungiblePositionManager, Pool } from '@pancakeswap/v3-sdk'
 import { basisPointsToPercent } from 'utils/exchange'
 import { hexToBigInt } from 'viem/utils'
 import { getViemClients } from 'utils/viem'
@@ -52,10 +52,13 @@ import { isUserRejected } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { PreviewModal } from 'views/CreateLiquidityPool/components/PreviewModal'
 import { QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV3/types'
+import { useRouter } from 'next/router'
+import { getPoolDetailPageLink } from 'utils/getPoolLink'
 import { useCurrencies } from '../useCurrencies'
 
 export const useV3CreateForm = () => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: signer } = useWalletClient()
   const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
@@ -305,7 +308,7 @@ export const useV3CreateForm = () => {
           ...txn,
           gas: calculateGasMargin(gas),
         })
-          .then((hash) => {
+          .then(async (hash) => {
             logGTMAddLiquidityTxSentEvent()
             const baseAmount = formatRawAmount(
               parsedAmounts[Field.CURRENCY_A]?.quotient?.toString() ?? '0',
@@ -328,6 +331,14 @@ export const useV3CreateForm = () => {
             )
             setTxHash(hash)
             onAddLiquidityCallback(hash)
+
+            // Re-direct to Pool Detail page
+            await router.push(
+              await getPoolDetailPageLink({
+                chainId,
+                lpAddress: Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, feeAmount as FeeAmount),
+              } as any),
+            )
           })
           .catch((error) => {
             console.error('Failed to send transaction', error)
