@@ -1,5 +1,7 @@
+import { useMemo } from 'react'
 import Page from 'components/Layout/Page'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import { ArrowForwardIcon, Box, Card, CardBody, Container, FlexGap, LinkExternal, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { LightGreyCard, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
@@ -7,7 +9,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getChainName } from '@pancakeswap/chains'
 import { BreadcrumbNav } from './components/BreadcrumbNav'
 
-const StyledCard = styled(LightGreyCard)`
+const StyledCard = styled(LightGreyCard)<{ $disabled?: boolean }>`
   border-radius: 24px;
   border-color: ${({ theme }) => theme.colors.inputSecondary};
 
@@ -18,7 +20,8 @@ const StyledCard = styled(LightGreyCard)`
   justify-content: space-between;
   align-items: center;
 
-  cursor: pointer;
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
   transition: background-color 0.125s ease-out;
 
   .arrow-icon {
@@ -26,23 +29,55 @@ const StyledCard = styled(LightGreyCard)`
     transition: opacity 0.2s ease-out;
   }
 
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.input};
+  ${({ $disabled }) =>
+    !$disabled &&
+    css`
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.input};
 
-    .arrow-icon {
-      opacity: 1;
-    }
-  }
+        .arrow-icon {
+          opacity: 1;
+        }
+      }
 
-  &:active {
-    background-color: ${({ theme }) => theme.colors.inputSecondary};
-  }
+      &:active {
+        background-color: ${({ theme }) => theme.colors.inputSecondary};
+      }
+    `}
 `
+
+function InfinityCard({ disabled }: { disabled?: boolean }) {
+  const { t } = useTranslation()
+
+  return (
+    <StyledCard
+      mt="16px"
+      title={disabled ? t('Infinity Pools are not supported on this chain') : undefined}
+      $disabled={disabled}
+    >
+      <Box>
+        <Text fontSize="20px" color="secondary" bold>
+          {t('Infinity Pool')}
+        </Text>
+        <Text small>
+          {t(
+            'Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.',
+          )}
+        </Text>
+      </Box>
+      <Box>
+        <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
+      </Box>
+    </StyledCard>
+  )
+}
 
 export const CreateLiquiditySelector = () => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const chainName = getChainName(chainId)
+
+  const isInfinitySupported = useMemo(() => INFINITY_SUPPORTED_CHAINS.includes(chainId), [chainId])
 
   return (
     <Page>
@@ -57,23 +92,15 @@ export const CreateLiquiditySelector = () => {
               </LinkExternal>
             </FlexGap>
 
-            <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/infinity`}>
-              <StyledCard mt="16px">
-                <Box>
-                  <Text fontSize="20px" color="secondary" bold>
-                    {t('Infinity Pool')}
-                  </Text>
-                  <Text small>
-                    {t(
-                      'Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.',
-                    )}
-                  </Text>
-                </Box>
-                <Box>
-                  <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
-                </Box>
-              </StyledCard>
-            </NextLinkFromReactRouter>
+            {isInfinitySupported ? (
+              <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/infinity`}>
+                <InfinityCard />
+              </NextLinkFromReactRouter>
+            ) : (
+              <>
+                <InfinityCard disabled />
+              </>
+            )}
 
             <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v3`}>
               <StyledCard mt="16px">
