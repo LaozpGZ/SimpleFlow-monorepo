@@ -1,4 +1,4 @@
-import { ChainId, Chains, UnifiedChainId } from '@pancakeswap/chains'
+import { ChainId, Chains, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   appearAnimation,
@@ -106,6 +106,11 @@ export default function SwapNetworkSelection({
     }
 
     return Chains.filter((chain) => {
+      // NOTE: because APtos is using different domain, we cannot show it in the network selector in Search Modal
+      if (chain.id === NonEVMChainId.APTOS) {
+        return false
+      }
+
       if (
         chain.id !== ChainId.MONAD_TESTNET &&
         (('testnet' in chain && chain.testnet) || evmChains.find((c) => c.id === chain.id)?.testnet)
