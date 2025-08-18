@@ -28,16 +28,6 @@ type SignResponse = {
   }
 }
 
-declare global {
-  interface Window {
-    binancew3w: {
-      pcs: {
-        sign: (params: { binanceChainId: string; contractAddress: string; address: string }) => Promise<SignResponse>
-      }
-    }
-  }
-}
-
 export const useW3WAccountSign = () => {
   const { address } = useAccount()
   const chainId = useChainId()
