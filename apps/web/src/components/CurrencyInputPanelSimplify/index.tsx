@@ -230,6 +230,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   const mode = id
   const token = pair ? pair.liquidityToken : currency?.isToken && currency instanceof Token ? currency : null
   const [isInputFocus, setIsInputFocus] = useState(false)
+  const [isDisabled, setIsDisabled] = useState(disabled)
 
   const amountInDollar = useUnifiedUSDPriceAmount(
     showUSDPrice ? currency ?? undefined : undefined,
@@ -260,16 +261,12 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
 
   useEffect(() => {
     if (isInputFocus) {
-      return
-    }
-    setValue(defaultValue)
-  }, [defaultValue, isInputFocus])
-
-  useEffect(() => {
-    if (isInputFocus) {
       onUserInput(value ?? '')
+    } else {
+      setValue(defaultValue)
     }
-  }, [value, defaultValue, isInputFocus, onUserInput])
+    setIsDisabled(disabled)
+  }, [defaultValue, isInputFocus, value, onUserInput, disabled])
 
   const handlePercentInput = useCallback(
     (percent: number) => {
@@ -313,7 +310,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   return (
     <SwapUIV2.CurrencyInputPanelSimplify
       id={id}
-      disabled={disabled}
+      disabled={isDisabled}
       error={error as boolean}
       value={value}
       onInputBlur={handleUserInputBlur}

@@ -155,19 +155,23 @@ const useBinDepositAmounts = () => {
 
       if (currency === 0) {
         setInputValue0(amount)
-        setDepositCurrencyAmounts({
-          ...depositCurrencyAmounts,
-          depositCurrencyAmount0: amount === '' ? null : CurrencyAmount.fromRawAmount(currency0, parsedAmount),
+        setDepositCurrencyAmounts((prev) => {
+          return {
+            ...prev,
+            depositCurrencyAmount0: amount === '' ? null : CurrencyAmount.fromRawAmount(currency0, parsedAmount),
+          }
         })
       } else {
         setInputValue1(amount)
-        setDepositCurrencyAmounts({
-          ...depositCurrencyAmounts,
-          depositCurrencyAmount1: amount === '' ? null : CurrencyAmount.fromRawAmount(currency1, parsedAmount),
+        setDepositCurrencyAmounts((prev) => {
+          return {
+            ...prev,
+            depositCurrencyAmount1: amount === '' ? null : CurrencyAmount.fromRawAmount(currency1, parsedAmount),
+          }
         })
       }
     },
-    [currency0, currency1, depositCurrencyAmounts, setDepositCurrencyAmounts],
+    [currency0, currency1, setDepositCurrencyAmounts],
   )
 
   return {
