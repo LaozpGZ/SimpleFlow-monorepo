@@ -10,7 +10,9 @@ export const DynamicSection = styled(AutoColumn)<{ disabled?: boolean }>`
   ${({ disabled }) =>
     disabled &&
     css`
-      button {
+      input,
+      button,
+      select {
         pointer-events: none;
       }
     `}
