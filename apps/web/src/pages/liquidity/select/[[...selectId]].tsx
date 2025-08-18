@@ -23,8 +23,12 @@ const LiquiditySelectPage = () => {
   return (
     <Container mx="auto" my="24px" maxWidth="1200px" minHeight="calc(100vh - 200px)">
       <Breadcrumbs>
-        <NextLink href="/liquidity/pools">{t('Farms')}</NextLink>
-        <NextLink href="#">{t('Add Liquidity')}</NextLink>
+        <NextLink color="primary60" href="/liquidity/pools">
+          {t('Farms')}
+        </NextLink>
+        <NextLink color="primary60" href="#">
+          {t('Add Liquidity')}
+        </NextLink>
       </Breadcrumbs>
       <AddLiquiditySelector />
     </Container>

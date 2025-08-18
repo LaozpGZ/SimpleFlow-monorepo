@@ -20,9 +20,10 @@ export const FieldSelectCurrencies: React.FC<FieldSelectCurrenciesProps> = ({ ..
       <PreTitle mb="8px">{t('Choose Token Pair')}</PreTitle>
       <FlexGap gap="4px" width="100%" mb="8px" alignItems="center" flexDirection={isXs ? 'column' : 'row'}>
         <CurrencySelectV2
-          id="infinity-form-select-base-currency"
+          id="create-liquidity-form-select-base-currency"
           chainId={chainId}
           selectedCurrency={baseCurrency}
+          otherSelectedCurrency={quoteCurrency}
           onCurrencySelect={handleBaseCurrencySelect}
           showCommonBases
           commonBasesType={CommonBasesType.LIQUIDITY}
@@ -30,9 +31,10 @@ export const FieldSelectCurrencies: React.FC<FieldSelectCurrenciesProps> = ({ ..
         />
         <AddIcon color="textSubtle" />
         <CurrencySelectV2
-          id="infinity-form-select-quote-currency"
+          id="create-liquidity-form-select-quote-currency"
           chainId={chainId}
           selectedCurrency={quoteCurrency}
+          otherSelectedCurrency={baseCurrency}
           onCurrencySelect={handleQuoteCurrencySelect}
           showCommonBases
           commonBasesType={CommonBasesType.LIQUIDITY}
