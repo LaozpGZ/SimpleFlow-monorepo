@@ -31,7 +31,7 @@ const useAuth = () => {
   const { signOutAndClearUserStates } = useFirebaseAuth()
 
   const login = useCallback(
-    async (wallet: WalletConfigV3): Promise<ConnectData | undefined> => {
+    async (wallet: WalletConfigV3<EvmConnectorNames>): Promise<ConnectData | undefined> => {
       const { connectorId, title, networks } = wallet
 
       if (!networks.includes(WalletAdaptedNetwork.EVM)) return

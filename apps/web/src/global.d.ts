@@ -26,11 +26,15 @@ declare global {
     coin98?: true
     mercuryoWidget?: any
     ethereum?: ExtendEthereum
+    isBinance?: boolean
+    binancew3w?: boolean
     BinanceChain?: {
       bnbSign?: (address: string, message: string) => Promise<{ publicKey: string; signature: string }>
       switchNetwork?: (networkId: string) => Promise<string>
     } & Ethereum
     tokenpocket?: any
+
+    phantom?: any
   }
 
   namespace JSX {
