@@ -27,6 +27,7 @@ import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { usePaymaster } from 'hooks/usePaymaster'
 import { logger } from 'utils/datadog'
 import { viemClients } from 'utils/viem'
+import { useGasPrice } from 'state/user/hooks'
 import { isZero } from '../utils/isZero'
 
 interface SwapCall {
@@ -71,6 +72,8 @@ export default function useSendSwapTransaction(
   const { slippageTolerance: allowedSlippage } = useAutoSlippageWithFallback()
   const { recipient } = useSwapState()
   const recipientAddress = recipient === null ? account : recipient
+
+  const gasPrice = useGasPrice()
 
   // Paymaster for zkSync
   const { isPaymasterAvailable, isPaymasterTokenActive, sendPaymasterTransaction } = usePaymaster()
@@ -163,6 +166,7 @@ export default function useSendSwapTransaction(
             data: call.calldata,
             value: call.value && !isZero(call.value) ? hexToBigInt(call.value) : 0n,
             gas: call.gas,
+            gasPrice,
           })
         }
 
@@ -282,6 +286,7 @@ export default function useSendSwapTransaction(
     sendPaymasterTransaction,
     isPaymasterAvailable,
     isPaymasterTokenActive,
+    gasPrice,
   ])
 }
 

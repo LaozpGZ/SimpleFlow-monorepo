@@ -1,8 +1,16 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Flex, QuestionHelper, Text } from '@pancakeswap/uikit'
+import { Button, Flex, QuestionHelper, Text } from '@pancakeswap/uikit'
 import { GAS_PRICE, GAS_PRICE_GWEI } from 'state/types'
 import { useGasPriceManager } from 'state/user/hooks'
-import { PrimaryOutlineButton } from './styles'
+import styled from 'styled-components'
+
+const GasSettingsSelection = styled(Button)<{ $height?: string }>`
+  border-radius: ${({ theme }) => theme.radii['12px']};
+  height: ${({ $height }) => $height ?? '40px'};
+
+  color: ${({ theme, variant }) => (variant === 'text' ? theme.colors.primary60 : 'text')};
+  border: ${({ theme, variant }) => (variant === 'text' ? `2px solid ${theme.colors.primary}` : '')};
+`
 
 const GasSettings = () => {
   const { t } = useTranslation()
@@ -29,7 +37,7 @@ const GasSettings = () => {
         />
       </Flex>
       <Flex flexWrap="wrap">
-        <PrimaryOutlineButton
+        <GasSettingsSelection
           mt="4px"
           mr="4px"
           scale="sm"
@@ -40,8 +48,8 @@ const GasSettings = () => {
         >
           {t('Default')}
           {/* {defaultGasPrice ? ` (${formatGwei(defaultGasPrice)})` : null} */}
-        </PrimaryOutlineButton>
-        <PrimaryOutlineButton
+        </GasSettingsSelection>
+        <GasSettingsSelection
           mr="4px"
           mt="4px"
           scale="sm"
@@ -51,8 +59,8 @@ const GasSettings = () => {
           variant={gasPrice === GAS_PRICE_GWEI.instant ? 'primary' : 'text'}
         >
           {t('Instant (%gasPrice%)', { gasPrice: GAS_PRICE.instant })}
-        </PrimaryOutlineButton>
-        <PrimaryOutlineButton
+        </GasSettingsSelection>
+        <GasSettingsSelection
           mt="4px"
           mr="4px"
           scale="sm"
@@ -62,8 +70,8 @@ const GasSettings = () => {
           variant={gasPrice === GAS_PRICE_GWEI.default ? 'primary' : 'text'}
         >
           {t('Standard (%gasPrice%)', { gasPrice: GAS_PRICE.default })}
-        </PrimaryOutlineButton>
-        <PrimaryOutlineButton
+        </GasSettingsSelection>
+        <GasSettingsSelection
           mt="4px"
           mr="4px"
           scale="sm"
@@ -73,7 +81,7 @@ const GasSettings = () => {
           variant={gasPrice === GAS_PRICE_GWEI.fast ? 'primary' : 'text'}
         >
           {t('Fast (%gasPrice%)', { gasPrice: GAS_PRICE.fast })}
-        </PrimaryOutlineButton>
+        </GasSettingsSelection>
       </Flex>
     </Flex>
   )
