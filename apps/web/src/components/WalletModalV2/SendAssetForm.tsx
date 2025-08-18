@@ -42,6 +42,9 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { Connection, PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } from '@solana/web3.js'
 import {
   createTransferInstruction,
+  TOKEN_PROGRAM_ID,
+  TOKEN_2022_PROGRAM_ID,
+  createTransferCheckedInstruction,
   getAssociatedTokenAddress,
   createAssociatedTokenAccountInstruction,
   getAccount,
@@ -316,14 +319,38 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         const tokenMintAddress = new PublicKey(asset.token.address)
         const amountInTokenUnits = Math.floor(parseFloat(amount) * 10 ** asset.token.decimals)
 
-        const senderTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, solanaPublicKey)
-        const recipientTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, recipientPubkey)
+        // First, detect which token program this mint uses
+        let tokenProgramId = TOKEN_PROGRAM_ID
+        try {
+          const mintInfo = await connection.getAccountInfo(tokenMintAddress)
+          if (mintInfo?.owner.equals(TOKEN_2022_PROGRAM_ID)) {
+            tokenProgramId = TOKEN_2022_PROGRAM_ID
+            console.log('Detected Token2022 mint:', tokenMintAddress.toString())
+          } else {
+            console.log('Using standard Token Program for mint:', tokenMintAddress.toString())
+          }
+        } catch (error) {
+          console.error('Failed to detect token program, using default:', error)
+        }
+
+        const senderTokenAccount = await getAssociatedTokenAddress(
+          tokenMintAddress,
+          solanaPublicKey,
+          false,
+          tokenProgramId,
+        )
+        const recipientTokenAccount = await getAssociatedTokenAddress(
+          tokenMintAddress,
+          recipientPubkey,
+          false,
+          tokenProgramId,
+        )
 
         const transaction = new Transaction()
 
         // Check if recipient's associated token account exists
         try {
-          await getAccount(connection, recipientTokenAccount)
+          await getAccount(connection, recipientTokenAccount, 'confirmed', tokenProgramId)
         } catch (error: any) {
           if (error.name === 'TokenAccountNotFoundError') {
             // Create associated token account for recipient
@@ -333,6 +360,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
                 recipientTokenAccount, // associated token account
                 recipientPubkey, // owner
                 tokenMintAddress, // mint
+                tokenProgramId, // token program ID
               ),
             )
           } else {
@@ -340,10 +368,32 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           }
         }
 
-        // Add transfer instruction
-        transaction.add(
-          createTransferInstruction(senderTokenAccount, recipientTokenAccount, solanaPublicKey, amountInTokenUnits),
-        )
+        // Add transfer instruction using the appropriate program
+        if (tokenProgramId.equals(TOKEN_2022_PROGRAM_ID)) {
+          transaction.add(
+            createTransferCheckedInstruction(
+              senderTokenAccount,
+              tokenMintAddress,
+              recipientTokenAccount,
+              solanaPublicKey,
+              amountInTokenUnits,
+              asset.token.decimals,
+              [],
+              tokenProgramId,
+            ),
+          )
+        } else {
+          transaction.add(
+            createTransferInstruction(
+              senderTokenAccount,
+              recipientTokenAccount,
+              solanaPublicKey,
+              amountInTokenUnits,
+              [],
+              tokenProgramId,
+            ),
+          )
+        }
 
         signature = await sendSolanaTransaction(transaction, connection)
       }
