@@ -5,7 +5,6 @@ import { ExodusWalletAdapter } from '@solana/wallet-adapter-exodus'
 import { GlowWalletAdapter } from '@solana/wallet-adapter-glow'
 import { ConnectionProvider, useWallet, WalletProvider } from '@solana/wallet-adapter-react'
 import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
-import { SlopeWalletAdapter } from '@solana/wallet-adapter-slope'
 import {
   BitgetWalletAdapter,
   BitpieWalletAdapter,
@@ -76,7 +75,7 @@ export const SolanaProvider: FC<PropsWithChildren<any>> = ({ children }) => {
     () => [
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
-      new SlopeWalletAdapter({ endpoint }),
+      // new SlopeWalletAdapter({ endpoint }),
       ..._walletConnect,
       new GlowWalletAdapter(),
       new TrustWalletAdapter(),

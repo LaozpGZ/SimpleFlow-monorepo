@@ -3,7 +3,6 @@ import { Adapter, WalletError } from '@solana/wallet-adapter-base'
 import { SolflareWalletAdapter, WalletConnectWalletAdapter } from '@solana/wallet-adapter-wallets'
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { GlowWalletAdapter } from '@solana/wallet-adapter-glow'
-import { SlopeWalletAdapter } from '@solana/wallet-adapter-slope'
 import { ExodusWalletAdapter } from '@solana/wallet-adapter-exodus'
 import { useSetAtom } from 'jotai'
 import { walletConnectConfig } from './walletConnect.config'
@@ -38,7 +37,6 @@ export const SolanaProvider: React.FC<SolanaProviderProps> = ({ children, endpoi
   const walletsAdapter = useMemo(
     () => [
       new SolflareWalletAdapter(),
-      new SlopeWalletAdapter({ endpoint }),
       ...walletConnectAdapter,
       new GlowWalletAdapter(),
       new ExodusWalletAdapter({ endpoint }),

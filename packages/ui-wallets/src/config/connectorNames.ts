@@ -1,7 +1,6 @@
 import { WalletName } from '@solana/wallet-adapter-base'
 import { ExodusWalletName } from '@solana/wallet-adapter-exodus'
 import { GlowWalletName } from '@solana/wallet-adapter-glow'
-import { SlopeWalletName } from '@solana/wallet-adapter-slope'
 import {
   BitgetWalletName,
   BitpieWalletName,
@@ -45,7 +44,7 @@ export const SolanaWalletNames = {
   Coinbase: CoinbaseWalletName,
   Math: MathWalletName,
   Solflare: SolflareWalletName,
-  Slope: SlopeWalletName,
+  // Slope: SlopeWalletName,
   Glow: GlowWalletName,
   BitPie: BitpieWalletName,
   Bitget: BitgetWalletName,
