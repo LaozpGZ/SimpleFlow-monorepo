@@ -414,9 +414,13 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       if (isSolanaChain) {
         // Validate Solana address (Base58 format, 32-44 chars)
         try {
-          // eslint-disable-next-line no-new
-          new PublicKey(debouncedAddress)
-          setAddressError('')
+          const publicKey = new PublicKey(debouncedAddress)
+          // Additional check to ensure it's a valid public key (on curve)
+          if (!PublicKey.isOnCurve(publicKey.toBuffer())) {
+            setAddressError(t('Invalid Solana wallet address'))
+          } else {
+            setAddressError('')
+          }
         } catch {
           setAddressError(t('Invalid Solana wallet address'))
         }
