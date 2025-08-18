@@ -337,12 +337,11 @@ export const WalletContent = ({
             chainId === NonEVMChainId.SOLANA ? (
               <EmptyWalletActions
                 onDismiss={onDismiss}
-                onReceiveClick={onReceiveClick}
                 setViewState={setViewState}
                 description={t('This wallet looks new. Does not have any assets.')}
               />
             ) : (
-              <EmptyWalletActions onDismiss={onDismiss} onReceiveClick={onReceiveClick} setViewState={setViewState} />
+              <EmptyWalletActions onDismiss={onDismiss} setViewState={setViewState} />
             )
           ) : view === WalletView.GIFTS ? null : (
             <ActionButtonsContainer>
@@ -367,11 +366,7 @@ export const WalletContent = ({
                 </ActionButton>
                 <ActionButton
                   onClick={() => {
-                    if (isMobile) {
-                      onReceiveClick()
-                    } else {
-                      setViewState(ViewState.RECEIVE_OPTIONS)
-                    }
+                    setViewState(ViewState.RECEIVE_OPTIONS)
                   }}
                   variant="tertiary"
                 >

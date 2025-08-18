@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { ArrowForwardIcon, Box, FlexGap, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { ArrowForwardIcon, Box, FlexGap, Text } from '@pancakeswap/uikit'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useRouter } from 'next/router'
 import React from 'react'
@@ -8,7 +8,6 @@ import { ViewState } from './type'
 
 interface EmptyWalletActionsProps {
   onDismiss: () => void
-  onReceiveClick: () => void
   setViewState: (state: ViewState) => void
   description?: string
 }
@@ -23,15 +22,9 @@ const OptionBox = styled(Box)`
   cursor: pointer;
 `
 
-const EmptyWalletActions: React.FC<EmptyWalletActionsProps> = ({
-  onDismiss,
-  onReceiveClick,
-  setViewState,
-  description,
-}) => {
+const EmptyWalletActions: React.FC<EmptyWalletActionsProps> = ({ onDismiss, setViewState, description }) => {
   const { t } = useTranslation()
   const router = useRouter()
-  const { isMobile } = useMatchBreakpoints()
 
   return (
     <Box padding="8px 16px">
@@ -57,12 +50,7 @@ const EmptyWalletActions: React.FC<EmptyWalletActionsProps> = ({
         </OptionBox>
         <OptionBox
           onClick={() => {
-            if (isMobile) {
-              onReceiveClick()
-              onDismiss()
-            } else {
-              setViewState(ViewState.RECEIVE_OPTIONS)
-            }
+            setViewState(ViewState.RECEIVE_OPTIONS)
           }}
         >
           <Box mb="16px" mx="auto" width="60px" height="60px">
