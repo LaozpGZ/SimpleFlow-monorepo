@@ -7,6 +7,7 @@ import { isEqualQuoteQuery } from 'quoter/utils/PoolHashHelper'
 import { type InterfaceOrder } from 'views/Swap/utils'
 import { bestSameChainAtom } from './bestSameChainAtom'
 import { placeholderAtom } from './placeholderAtom'
+import { handlePlaceholderForPendingResult } from '../utils/placeholderHandler'
 
 import { CrossChainPatternClassifier } from '../utils/crosschain-utils/CrossChainPatternClassifier'
 import { ContextBuilder } from '../utils/crosschain-utils/utils/ContextBuilder'
@@ -65,9 +66,11 @@ export const bestCrossChainQuoteAtom = atomFamily((_option: QuoteQuery) => {
         if (result.isPending()) {
           const placeHolder = get(placeholderAtom(_option.placeholderHash || ''))
           if (placeHolder) {
-            return Loadable.Just(placeHolder)
-              .setFlag('placeholder')
-              .setExtra('placeholderHash', _option.placeholderHash)
+            return handlePlaceholderForPendingResult<InterfaceOrder>({
+              result,
+              placeholder: placeHolder,
+              placeholderHash: _option.placeholderHash,
+            })
           }
         }
 
