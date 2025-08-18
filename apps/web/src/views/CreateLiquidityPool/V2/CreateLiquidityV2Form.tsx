@@ -3,6 +3,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Box, Card, CardBody, DynamicSection, FlexGap, PreTitle, Text } from '@pancakeswap/uikit'
 import { Protocol } from '@pancakeswap/farms'
 import { useStartingPriceQueryState } from 'state/infinity/create'
+import { CurrencyField as Field } from 'utils/types'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
 import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
@@ -36,6 +37,7 @@ export const CreateLiquidityV2Form = () => {
   } = useV2CreateForm()
 
   const poolExists = noLiquidity === false
+  const currenciesExist = currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B]
 
   const [startPriceTypedValue, setStartPriceTypedValue] = useStartingPriceQueryState()
 
@@ -46,9 +48,9 @@ export const CreateLiquidityV2Form = () => {
           <AutoColumn gap="24px">
             <FieldSelectCurrencies />
 
-            {poolExists && <MessagePoolInitialized protocol={Protocol.V2} />}
+            {poolExists && currenciesExist && <MessagePoolInitialized protocol={Protocol.V2} />}
 
-            <DynamicSection disabled={poolExists}>
+            <DynamicSection disabled={poolExists || !currenciesExist}>
               <FlexGap
                 flexDirection={['column', 'column', 'row']}
                 gap="8px"
@@ -67,7 +69,7 @@ export const CreateLiquidityV2Form = () => {
               </FlexGap>
             </DynamicSection>
 
-            <DynamicSection disabled={poolExists || !startPriceTypedValue}>
+            <DynamicSection disabled={poolExists || !currenciesExist || !startPriceTypedValue}>
               <FieldCreateDepositAmount
                 currencies={currencies}
                 onFieldAInput={onFieldAInput}
@@ -79,11 +81,13 @@ export const CreateLiquidityV2Form = () => {
               />
             </DynamicSection>
 
-            <DynamicSection disabled={poolExists || !startPriceTypedValue}>
+            <DynamicSection disabled={poolExists || !currenciesExist || !startPriceTypedValue}>
               <FieldSlippageTolerance />
             </DynamicSection>
 
-            <DynamicSection disabled={poolExists || !startPriceTypedValue}>{buttons}</DynamicSection>
+            <DynamicSection disabled={poolExists || !currenciesExist || !startPriceTypedValue}>
+              {buttons}
+            </DynamicSection>
           </AutoColumn>
         </CardBody>
       </Card>

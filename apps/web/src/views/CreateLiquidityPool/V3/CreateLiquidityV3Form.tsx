@@ -1,6 +1,7 @@
 import { AutoColumn, Box, Card, CardBody, DynamicSection } from '@pancakeswap/uikit'
 import { Protocol } from '@pancakeswap/farms'
 import { useFeeLevelQueryState } from 'state/infinity/create'
+import { CurrencyField as Field } from 'utils/types'
 import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
@@ -35,6 +36,7 @@ export const CreateLiquidityV3Form = () => {
 
   const [feeLevel] = useFeeLevelQueryState()
   const poolExists = noLiquidity === false && !!feeLevel
+  const currenciesExist = currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B]
 
   return (
     <Box maxWidth={[null, null, null, '560px']} mx="auto">
@@ -42,18 +44,28 @@ export const CreateLiquidityV3Form = () => {
         <CardBody>
           <AutoColumn gap="24px">
             <FieldSelectCurrencies />
-            <FieldFeeLevel />
 
-            {poolExists && <MessagePoolInitialized protocol={Protocol.V3} />}
+            <DynamicSection disabled={!currenciesExist}>
+              <FieldFeeLevel />
+            </DynamicSection>
 
-            <DynamicSection disabled={poolExists}>
+            {poolExists && currenciesExist && <MessagePoolInitialized protocol={Protocol.V3} />}
+
+            <DynamicSection disabled={poolExists || !currenciesExist}>
               <FieldStartingPrice startPrice={startPriceTypedValue} setStartPrice={onStartPriceInput} />
             </DynamicSection>
-            <DynamicSection disabled={poolExists || !startPriceTypedValue || !feeLevel}>{rangeSelector}</DynamicSection>
+            <DynamicSection disabled={poolExists || !currenciesExist || !startPriceTypedValue || !feeLevel}>
+              {rangeSelector}
+            </DynamicSection>
 
             <DynamicSection
               disabled={
-                poolExists || !startPriceTypedValue || !feeLevel || !leftRangeTypedValue || !rightRangeTypedValue
+                poolExists ||
+                !currenciesExist ||
+                !startPriceTypedValue ||
+                !feeLevel ||
+                !leftRangeTypedValue ||
+                !rightRangeTypedValue
               }
             >
               <FieldCreateDepositAmount
@@ -69,7 +81,12 @@ export const CreateLiquidityV3Form = () => {
 
             <DynamicSection
               disabled={
-                poolExists || !startPriceTypedValue || !feeLevel || !leftRangeTypedValue || !rightRangeTypedValue
+                poolExists ||
+                !currenciesExist ||
+                !startPriceTypedValue ||
+                !feeLevel ||
+                !leftRangeTypedValue ||
+                !rightRangeTypedValue
               }
             >
               <FieldSlippageTolerance />
@@ -77,7 +94,12 @@ export const CreateLiquidityV3Form = () => {
 
             <DynamicSection
               disabled={
-                poolExists || !startPriceTypedValue || !feeLevel || !leftRangeTypedValue || !rightRangeTypedValue
+                poolExists ||
+                !currenciesExist ||
+                !startPriceTypedValue ||
+                !feeLevel ||
+                !leftRangeTypedValue ||
+                !rightRangeTypedValue
               }
             >
               {buttons}
