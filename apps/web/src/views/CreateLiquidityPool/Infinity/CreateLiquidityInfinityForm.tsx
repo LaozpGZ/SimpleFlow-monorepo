@@ -1,11 +1,11 @@
 import { useMemo } from 'react'
 import { AutoColumn, Card, CardBody, DynamicSection, Grid, Spinner } from '@pancakeswap/uikit'
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import { FieldLiquidityShape } from 'components/Liquidity/Form/FieldLiquidityShape'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { FieldBinStep } from 'views/CreateLiquidityPool/components/FieldBinStep'
 import { FieldClTickSpacing } from 'views/CreateLiquidityPool/components/FieldClTickSpacing'
 import { FieldFeeLevel } from 'views/CreateLiquidityPool/components/FieldFeeLevel'
-import { FieldFeeTierSetting } from 'views/CreateLiquidityPool/components/FieldFeeTierSetting'
 import { FieldHookSettings } from 'views/CreateLiquidityPool/components/FieldHookSettings'
 import { FieldSelectCurrencies } from 'views/CreateLiquidityPool/components/FieldSelectCurrencies'
 import { FieldStartingPrice } from 'views/CreateLiquidityPool/components/FieldStartingPrice'
@@ -24,7 +24,8 @@ export const CreateLiquidityInfinityForm = () => {
   const { chainId } = useSelectIdRouteParams()
 
   // @ts-ignore
-  const { isBin, isCl, startPrice, lowerBinId, upperBinId, lowerTick, upperTick } = useInfinityCreateFormQueryState()
+  const { isBin, isCl, startPrice, lowerBinId, upperBinId, lowerTick, upperTick, feeLevel } =
+    useInfinityCreateFormQueryState()
 
   const poolKey = usePoolKey()
   const { data: poolInitialized } = useIsPoolInitialized(poolKey, chainId)
@@ -64,7 +65,7 @@ export const CreateLiquidityInfinityForm = () => {
       </Card>
       <Card>
         <CardBody>
-          <DynamicSection disabled={poolInitialized}>
+          <DynamicSection disabled={poolInitialized || isUndefinedOrNull(feeLevel)}>
             <AutoColumn gap={['16px', null, null, '24px']}>
               <FieldStartingPrice />
               <DynamicSection disabled={!startPrice}>
