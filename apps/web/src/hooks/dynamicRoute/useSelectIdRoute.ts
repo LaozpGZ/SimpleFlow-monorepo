@@ -19,9 +19,9 @@ export const useSelectIdRoute = () => {
 
   const { data: routeParams, error: routeError, isLoading } = useRouteParams(SelectIdRoute.routeParams)
 
-  const protocolName = useMemo(() => {
-    const protocolFromQuery = router.query.selectId?.[1] || ''
+  const protocolFromQuery = useMemo(() => router.query.selectId?.[1] || '', [router.query])
 
+  const protocolName = useMemo(() => {
     return (
       protocolFromQuery === 'infinity' && INFINITY_SUPPORTED_CHAINS.includes(activeChainId)
         ? 'infinity'
@@ -52,6 +52,17 @@ export const useSelectIdRoute = () => {
       { shallow: true },
     )
   }, [activeChainId, native.symbol, router, protocolName])
+
+  // If Infinity is not supported on the current chain, redirect to default route
+  useEffect(
+    () => {
+      if (protocolName && protocolFromQuery && protocolName !== protocolFromQuery) {
+        replaceWithDefaultRoute()
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [protocolName, protocolFromQuery],
+  )
 
   return {
     protocolName,

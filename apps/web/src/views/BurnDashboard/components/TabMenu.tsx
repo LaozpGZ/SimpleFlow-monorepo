@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Button, FlexGap, FlexGapProps } from '@pancakeswap/uikit'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import styled, { css } from 'styled-components'
 
@@ -68,6 +68,13 @@ export const TabMenu = <T extends TabType>({
     },
     [onTabChange],
   )
+
+  // Sync active tab with default tab
+  useEffect(() => {
+    if (defaultTab && defaultTab !== activeTab) {
+      setActiveTab(defaultTab)
+    }
+  }, [defaultTab])
 
   return (
     <TabsContainer role="tablist" aria-label={t('Select a tab')} {...props}>
