@@ -321,8 +321,6 @@ export function TWAPPanel({ limit }: { limit?: boolean }) {
 
   const { t } = useTranslation()
 
-  const { t } = useTranslation()
-
   return (
     <QuoteProvider>
       <PancakeTWAP
