@@ -1,6 +1,6 @@
 import { atom } from 'jotai'
 import { EvmConnectorNames, SolanaConnectorNames } from '../config/connectorNames'
-import { WalletIds } from '../config/walletIds'
+import { isWalletId, WalletIds } from '../config/walletIds'
 import { WalletConfigV3 } from '../types'
 
 const MAXIMUM_STORE_NUM = 3
@@ -53,7 +53,7 @@ export const previouslyUsedEvmWalletsAtom = atom([] as string[], (_get, set, upd
 previouslyUsedEvmWalletsAtom.onMount = (set) => {
   const preferred = localStorage?.getItem(previouslyUsedEvmWalletsKey)
   if (preferred) {
-    set(preferred.split(previouslyUsedWalletsStoreSeparator) as WalletIds[])
+    set(preferred.split(previouslyUsedWalletsStoreSeparator).filter(isWalletId))
   }
 }
 
@@ -72,7 +72,7 @@ export const previouslyUsedSolanaWalletsAtom = atom([] as string[], (_get, set, 
 previouslyUsedSolanaWalletsAtom.onMount = (set) => {
   const preferred = localStorage?.getItem(previouslyUsedSolanaWalletsKey)
   if (preferred) {
-    set(preferred.split(previouslyUsedWalletsStoreSeparator) as WalletIds[])
+    set(preferred.split(previouslyUsedWalletsStoreSeparator).filter(isWalletId))
   }
 }
 

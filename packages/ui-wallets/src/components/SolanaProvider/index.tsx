@@ -19,7 +19,7 @@ export const SolanaProvider: React.FC<SolanaProviderProps> = ({ children, endpoi
     try {
       connectWallet.push(new WalletConnectWalletAdapter(walletConnectConfig))
     } catch (e) {
-      // console.error('WalletConnect error', e)
+      console.error('create WalletConnectAdapter error', e)
     }
     return connectWallet
   }, [])

@@ -198,11 +198,7 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
   )
 
   const { isMobile } = useMatchBreakpoints()
-  console.debug('debug previewStatus', {
-    previewStatus,
-    isMobile,
-    solanaAddress,
-  })
+
   const mobileContainerStyle: React.CSSProperties = useMemo(
     () =>
       isMobile

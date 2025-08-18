@@ -25,9 +25,14 @@ export const useSolanaLogin = () => {
   }, [solanaWalletError, connected, publicKey])
 
   const solanaLogin = useCallback(async (walletName: WalletName) => {
-    const { promise, resolve, reject } = Promise.withResolvers<string>()
+    let resolve: (address: string) => void
+    let reject: (error: string) => void
+    const promise = new Promise<string>((res, rej) => {
+      resolve = res
+      reject = rej
+    })
 
-    promiseRef.current = { promise, resolve, reject }
+    promiseRef.current = { promise, resolve: resolve!, reject: reject! }
 
     select(walletName)
 

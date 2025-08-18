@@ -38,3 +38,7 @@ export enum WalletIds {
   Solong = 'solong',
   Torus = 'torus',
 }
+
+export const isWalletId = (id: string): id is WalletIds => {
+  return Object.values(WalletIds).includes(id as WalletIds)
+}
