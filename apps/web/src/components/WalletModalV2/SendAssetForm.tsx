@@ -348,6 +348,27 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         signature = await sendSolanaTransaction(transaction, connection)
       }
 
+      // Wait for transaction confirmation using the modern approach
+      console.log('Waiting for transaction confirmation:', signature)
+      try {
+        const latestBlockhash = await connection.getLatestBlockhash()
+        const confirmation = await connection.confirmTransaction(
+          {
+            signature,
+            blockhash: latestBlockhash.blockhash,
+            lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+          },
+          'confirmed',
+        )
+
+        if (confirmation.value.err) {
+          throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`)
+        }
+      } catch (confirmError) {
+        console.error('Transaction confirmation failed:', confirmError)
+        throw new Error(`Transaction confirmation failed: ${confirmError}`)
+      }
+
       const receipt = { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
 
       if (receipt?.status) {
