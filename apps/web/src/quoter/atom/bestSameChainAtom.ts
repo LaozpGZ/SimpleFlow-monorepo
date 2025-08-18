@@ -213,8 +213,15 @@ export const bestSameChainAtom = atomFamily((_option: QuoteQuery) => {
 
     if (result.isPending()) {
       const placeHolder = get(placeholderAtom(_option.placeholderHash || ''))
-      if (placeHolder) {
-        return Loadable.Just(placeHolder).setFlag('placeholder').setExtra('placeholderHash', _option.placeholderHash!)
+
+      if (placeHolder !== undefined) {
+        // if placeholder is InterfaceOrder, just wrap it, otherwise set failed
+        const loadable =
+          placeHolder instanceof Error
+            ? Loadable.Fail<InterfaceOrder>(placeHolder)
+            : Loadable.Just<InterfaceOrder>(placeHolder)
+
+        return loadable.setFlag('placeholder').setExtra('placeholderHash', _option.placeholderHash!)
       }
     }
     return result.setExtra('placeholderHash', _option.placeholderHash!)
