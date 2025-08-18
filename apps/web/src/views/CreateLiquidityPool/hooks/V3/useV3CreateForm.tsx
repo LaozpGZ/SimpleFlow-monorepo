@@ -11,6 +11,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { CurrencyField as Field } from 'utils/types'
+import { formatRangeSelectorPrice } from 'utils/formatRangeSelectorPrice'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import {
   logGTMAddLiquidityTxSentEvent,
@@ -510,7 +511,8 @@ export const useV3CreateForm = () => {
                 ) : (
                   <AutoColumn>
                     <div>
-                      {priceLower?.toFixed(6)} - {priceUpper?.toFixed(6)}{' '}
+                      {formatRangeSelectorPrice(invertPrice ? priceUpper?.invert() : priceLower)} -{' '}
+                      {formatRangeSelectorPrice(invertPrice ? priceLower?.invert() : priceUpper)}{' '}
                     </div>
                     <div>
                       {t('%assetA% = 1 %assetB%', {
@@ -529,7 +531,7 @@ export const useV3CreateForm = () => {
           ),
           startPrice: (
             <>
-              {price?.toSignificant(6)}{' '}
+              {invertPrice ? price?.invert().toSignificant(6) : price?.toSignificant(6)}{' '}
               {t('%assetA% = 1 %assetB%', {
                 assetA: quoteCurrency?.symbol,
                 assetB: baseCurrency?.symbol,
