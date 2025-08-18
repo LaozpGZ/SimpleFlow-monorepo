@@ -20,6 +20,7 @@ import { logger } from 'utils/datadog'
 import { InterfaceOrder } from 'views/Swap/utils'
 import { viemClients } from 'utils/viem'
 import useSwapRecordTransaction from './useSwapRecordTransaction'
+import { useGasPrice } from 'state/user/hooks'
 import { isZero } from '../utils/isZero'
 
 interface SwapCall {
@@ -60,6 +61,8 @@ export default function useSendSwapTransaction(
   const { sendTransactionAsync } = useSendTransaction()
   const publicClient = viemClients[chainId as ChainId]
   const addSwapTransaction = useSwapRecordTransaction(chainId, account)
+
+  const gasPrice = useGasPrice()
 
   // Paymaster for zkSync
   const { isPaymasterAvailable, isPaymasterTokenActive, sendPaymasterTransaction } = usePaymaster()
@@ -152,6 +155,7 @@ export default function useSendSwapTransaction(
             data: call.calldata,
             value: call.value && !isZero(call.value) ? hexToBigInt(call.value) : 0n,
             gas: call.gas,
+            gasPrice,
           })
         }
 
@@ -213,6 +217,7 @@ export default function useSendSwapTransaction(
     sendPaymasterTransaction,
     isPaymasterAvailable,
     isPaymasterTokenActive,
+    gasPrice,
   ])
 }
 
