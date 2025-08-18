@@ -131,7 +131,7 @@ export const StepCounterV2 = ({
         </AutoRow>
         {baseCurrency && quoteCurrency && (
           <Text color="textSubtle" small>
-            {t('%assetA% per %assetB%', { assetA: quoteCurrency?.symbol, assetB: baseCurrency?.symbol })}
+            {t('%assetA% = 1 %assetB%', { assetA: quoteCurrency?.symbol, assetB: baseCurrency?.symbol })}
           </Text>
         )}
       </AutoColumn>

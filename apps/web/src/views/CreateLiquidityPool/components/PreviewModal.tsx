@@ -37,7 +37,7 @@ interface PreviewModalProps extends ModalV2Props {
     // Infinity & V3
     priceRange?: React.ReactNode
 
-    // Infinity, V3, V2
+    // Infinity, V3 & V2
     startPrice?: React.ReactNode
   }
   onConfirm?: () => void

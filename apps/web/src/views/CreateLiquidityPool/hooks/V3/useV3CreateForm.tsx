@@ -9,6 +9,7 @@ import { V3SubmitButton } from 'views/AddLiquidityV3/components/V3SubmitButton'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
+import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { CurrencyField as Field } from 'utils/types'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import {
@@ -27,10 +28,13 @@ import {
   AutoColumn,
   Box,
   Button,
+  FlexGap,
+  IconButton,
   Message,
   MessageText,
   PreTitle,
   RowBetween,
+  SwapHorizIcon,
   Text,
   useModalV2,
 } from '@pancakeswap/uikit'
@@ -61,6 +65,7 @@ export const useV3CreateForm = () => {
   const [deadline] = useTransactionDeadline()
 
   // Shared Create Liquidity State
+  const { switchCurrencies } = useSelectIdRouteParams()
   const { baseCurrency, quoteCurrency } = useCurrencies()
 
   const [feeLevel] = useFeeLevelQueryState()
@@ -490,24 +495,36 @@ export const useV3CreateForm = () => {
         details={{
           priceRange: (
             <>
-              {/* Full range case */}
-              {ticksAtLimit[Bound.LOWER] && ticksAtLimit[Bound.UPPER] ? (
-                <>
-                  0 - ∞{' '}
-                  {t('%assetA% = 1 %assetB%', {
-                    assetA: quoteCurrency?.symbol,
-                    assetB: baseCurrency?.symbol,
-                  })}
-                </>
-              ) : (
-                <>
-                  {priceLower?.toFixed(6)} - {priceUpper?.toFixed(6)}{' '}
-                  {t('%assetA% = 1 %assetB%', {
-                    assetA: quoteCurrency?.symbol,
-                    assetB: baseCurrency?.symbol,
-                  })}
-                </>
-              )}
+              <FlexGap gap="4px" alignItems="center">
+                {/* Full range case */}
+                {ticksAtLimit[Bound.LOWER] && ticksAtLimit[Bound.UPPER] ? (
+                  <AutoColumn>
+                    <div>0 - ∞ </div>
+                    <div>
+                      {t('%assetA% = 1 %assetB%', {
+                        assetA: quoteCurrency?.symbol,
+                        assetB: baseCurrency?.symbol,
+                      })}
+                    </div>
+                  </AutoColumn>
+                ) : (
+                  <AutoColumn>
+                    <div>
+                      {priceLower?.toFixed(6)} - {priceUpper?.toFixed(6)}{' '}
+                    </div>
+                    <div>
+                      {t('%assetA% = 1 %assetB%', {
+                        assetA: quoteCurrency?.symbol,
+                        assetB: baseCurrency?.symbol,
+                      })}
+                    </div>
+                  </AutoColumn>
+                )}
+
+                <IconButton variant="text" scale="sm" onClick={switchCurrencies}>
+                  <SwapHorizIcon color="textSubtle" />
+                </IconButton>
+              </FlexGap>
             </>
           ),
           startPrice: (

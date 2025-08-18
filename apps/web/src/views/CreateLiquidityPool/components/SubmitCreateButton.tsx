@@ -6,9 +6,12 @@ import {
   Box,
   BoxProps,
   Button,
+  FlexGap,
+  IconButton,
   Message,
   MessageText,
   RowBetween,
+  SwapHorizIcon,
   Text,
   useModalV2,
 } from '@pancakeswap/uikit'
@@ -148,19 +151,24 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
   const { address: account } = useAccount()
   const { t } = useTranslation()
   const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
+
+  // Common
+  const { chainId, switchCurrencies } = useSelectIdRouteParams()
+  const { currency0, currency1 } = useCurrencies()
+  const [inverted] = useInverted()
+  const startPriceAsFraction = useStartPriceAsFraction()
   const { depositCurrencyAmount0, depositCurrencyAmount1 } = useCreateDepositAmounts()
   const { isDeposit0Enabled, isDeposit1Enabled } = useCreateDepositAmountsEnabled()
-  const { currency0, currency1 } = useCurrencies()
-
   const { poolType, feeTierSetting, feeLevel, hookAddress, hookEnabled } = useInfinityCreateFormQueryState()
 
+  // CL
   const { tickSpacing } = useInfinityCLQueryState()
   const { lowerPrice, upperPrice, minPrice, maxPrice } = useCLPriceRange(currency0, currency1, tickSpacing ?? undefined)
-  const startPriceAsFraction = useStartPriceAsFraction()
+
+  // Bin
   const { binStep, lowerBinId, upperBinId, activeId } = useInfinityBinQueryState()
   const { maxBinId, minBinId } = useBinIdRange()
-  const [inverted] = useInverted()
-  const { chainId } = useSelectIdRouteParams()
+
   const [currency0Balance, currency1Balance] = useCurrencyBalances(account, [currency0, currency1])
   const {
     approve: approveACallback,
@@ -417,31 +425,37 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
           hookAddress: hookEnabled ? hookAddress : undefined,
           startPrice:
             startPriceAsFraction && startPriceAsFraction.denominator !== 0n && startPriceAsFraction.numerator !== 0n
-              ? isCurrencySorted(startPriceAsFraction.baseCurrency, startPriceAsFraction.quoteCurrency)
-                ? `${startPriceAsFraction.toSignificant(6)} ${t('%assetA% = 1 %assetB%', {
-                    assetA: startPriceAsFraction.quoteCurrency.symbol,
-                    assetB: startPriceAsFraction.baseCurrency.symbol,
-                  })}`
-                : `${startPriceAsFraction.invert().toSignificant(6)} ${t('%assetA% = 1 %assetB%', {
-                    assetA: startPriceAsFraction.baseCurrency.symbol,
-                    assetB: startPriceAsFraction.quoteCurrency.symbol,
-                  })}`
+              ? `${startPriceAsFraction.toSignificant(6)} ${t('%assetA% = 1 %assetB%', {
+                  assetA: startPriceAsFraction.quoteCurrency.symbol,
+                  assetB: startPriceAsFraction.baseCurrency.symbol,
+                })}`
               : undefined,
           priceRange: (
             <>
-              {poolType === 'Bin' ? (
-                <>
-                  {minPriceBin?.toSignificant(6)} - {maxPriceBin?.toSignificant(6)}
-                </>
-              ) : (
-                <>
-                  {minPrice} - {maxPrice}
-                </>
-              )}{' '}
-              {t('%assetA% = 1 %assetB%', {
-                assetA: !inverted ? currency1?.symbol : currency0?.symbol,
-                assetB: !inverted ? currency0?.symbol : currency1?.symbol,
-              })}
+              <FlexGap gap="4px" alignItems="center">
+                <AutoColumn>
+                  <div>
+                    {poolType === 'Bin' ? (
+                      <>
+                        {minPriceBin?.toSignificant(6)} - {maxPriceBin?.toSignificant(6)}
+                      </>
+                    ) : (
+                      <>
+                        {minPrice} - {maxPrice}
+                      </>
+                    )}
+                  </div>
+                  <div>
+                    {t('%assetA% = 1 %assetB%', {
+                      assetA: !inverted ? currency1?.symbol : currency0?.symbol,
+                      assetB: !inverted ? currency0?.symbol : currency1?.symbol,
+                    })}
+                  </div>
+                </AutoColumn>
+                <IconButton variant="text" scale="sm" onClick={switchCurrencies}>
+                  <SwapHorizIcon color="textSubtle" />
+                </IconButton>
+              </FlexGap>
             </>
           ),
         }}
