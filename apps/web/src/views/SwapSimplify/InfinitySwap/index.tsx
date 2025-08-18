@@ -111,7 +111,7 @@ export const InfinitySwapForm = memo(() => {
       )}
       <ButtonAndDetailsPanel
         tips={<UnwrapTips />}
-        slippage={<SlippageRow order={bestOrder} />}
+        slippage={isWrapping ? null : <SlippageRow order={bestOrder} />}
         swapCommitButton={
           <CommitButton order={bestOrder} tradeLoaded={tradeLoaded} tradeError={tradeError} {...commitHooks} />
         }
