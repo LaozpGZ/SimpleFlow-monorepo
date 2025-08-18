@@ -15,6 +15,7 @@ import { activeQuoteHashAtom } from './abortControlAtoms'
 import { bestSVMOrderAtom } from './bestSVMOrderAtom'
 import { placeholderAtom } from './placeholderAtom'
 import { routingStrategyAtom, StrategyRoute } from './routingStrategy'
+import { handlePlaceholderForPendingResult } from '../utils/placeholderHandler'
 
 function getFailReason(errors: any[]) {
   const someTimeout = errors.find((x) => x instanceof TimeoutError)
@@ -215,13 +216,11 @@ export const bestSameChainAtom = atomFamily((_option: QuoteQuery) => {
       const placeHolder = get(placeholderAtom(_option.placeholderHash || ''))
 
       if (placeHolder !== undefined) {
-        // if placeholder is InterfaceOrder, just wrap it, otherwise set failed
-        const loadable =
-          placeHolder instanceof Error
-            ? Loadable.Fail<InterfaceOrder>(placeHolder)
-            : Loadable.Just<InterfaceOrder>(placeHolder)
-
-        return loadable.setFlag('placeholder').setExtra('placeholderHash', _option.placeholderHash!)
+        return handlePlaceholderForPendingResult<InterfaceOrder>({
+          result,
+          placeholder: placeHolder,
+          placeholderHash: _option.placeholderHash,
+        })
       }
     }
     return result.setExtra('placeholderHash', _option.placeholderHash!)
