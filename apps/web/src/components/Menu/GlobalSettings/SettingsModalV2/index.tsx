@@ -3,6 +3,8 @@ import { AtomBox, Button, ButtonProps, ModalV2, MotionModal, NotificationDot, us
 
 import { ReactNode, useCallback } from 'react'
 import { useRoutingSettingChanged } from 'state/user/smartRouter'
+import { NonEVMChainId } from '@pancakeswap/chains'
+import { useActiveChainId } from 'hooks/useAccountActiveChain'
 import { CustomizeRoutingTab } from './CustomizeRoutingTab'
 
 export function RoutingSettingsModalContent({ onBack }: { onBack?: () => void }) {
@@ -34,6 +36,11 @@ export function RoutingSettingsButtonView({
 }) {
   const [isRoutingSettingChange] = useRoutingSettingChanged()
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
+
+  if (chainId === NonEVMChainId.SOLANA) {
+    return null
+  }
 
   return (
     <AtomBox textAlign="center">

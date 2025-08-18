@@ -78,7 +78,7 @@ const RoutesDisplayView = ({
           <RoutingSettingsButtonView onClick={onRoutingSettingsModalOpen} />
         </>
       ) : (
-        <AutoColumn gap="56px" height="100%">
+        <AutoColumn gap="56px" height="100%" pb="16px">
           {routes.map((route, i) => (
             // eslint-disable-next-line react/no-array-index-key
             <RouteDisplay key={i} route={route} />
