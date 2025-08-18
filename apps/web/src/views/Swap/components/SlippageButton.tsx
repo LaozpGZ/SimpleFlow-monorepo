@@ -148,8 +148,6 @@ export const EVMSlippageButton = ({ enableAutoSlippage_ = false }: { enableAutoS
 export const SlippageButton = ({ enableAutoSlippage: enableAutoSlippage_ = false }: SlippageButtonProps) => {
   const { chainId } = useAccountActiveChain()
 
-  // Calculate auto slippage
-
   // TODO: add "Advanced Settings" text button to open GlobalSettings
   return isSolana(chainId) ? <SolanaSlippageButton /> : <EVMSlippageButton enableAutoSlippage_={enableAutoSlippage_} />
 }
