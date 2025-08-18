@@ -48,9 +48,16 @@ export const SolanaProvider: React.FC<SolanaProviderProps> = ({ children, endpoi
 
   return (
     <ConnectionProvider endpoint={endpoint} config={{ disableRetryOnRateLimit: true }}>
-      <WalletProvider autoConnect onError={onWalletError} wallets={walletsAdapter}>
+      <WalletProvider
+        autoConnect
+        localStorageKey={SolanaProviderLocalStorageKey}
+        onError={onWalletError}
+        wallets={walletsAdapter}
+      >
         {children}
       </WalletProvider>
     </ConnectionProvider>
   )
 }
+
+export const SolanaProviderLocalStorageKey = 'walletName'

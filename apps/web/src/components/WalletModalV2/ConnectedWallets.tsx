@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { WalletAdaptedNetwork } from '@pancakeswap/ui-wallets'
+import { SolanaProviderLocalStorageKey, WalletAdaptedNetwork, selectedWalletAtom } from '@pancakeswap/ui-wallets'
 import { ASSET_CDN } from '@pancakeswap/ui-wallets/src/config/url'
 import {
   ArrowBackIcon,
@@ -16,11 +16,12 @@ import {
   Text,
 } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { WalletName } from '@solana/wallet-adapter-base'
+import { useLocalStorage, useWallet } from '@solana/wallet-adapter-react'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useAuth from 'hooks/useAuth'
 import { useSetAtom } from 'jotai'
-import { useCallback } from 'react'
+import { useCallback, useMemo } from 'react'
 import { walletModalVisibleAtom } from 'state/wallet/atom'
 import styled from 'styled-components'
 import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
@@ -34,17 +35,31 @@ export type ConnectedWalletsProps = {
 }
 
 const NetworkIcon = styled(Image)`
+  position: absolute;
   border-radius: 8px;
   border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+`
+
+const WalletIcon = styled(Image)`
+  border-radius: 4px;
+  background-color: ${({ theme }) => theme.colors.background};
 `
 
 export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBack, solanaAddress, evmAddress }) => {
   const { t } = useTranslation()
   const { chainId, unifiedAccount } = useAccountActiveChain()
   const { connector } = useAccount()
-  const { disconnect } = useWallet()
+  const { disconnect, wallets } = useWallet()
   const { logout } = useAuth()
   const setWalletModalVisible = useSetAtom(walletModalVisibleAtom)
+  const [solanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
+
+  const selectedSolanaWallet = useMemo(() => {
+    if (solanaWalletName) {
+      return wallets.find((w) => w.adapter.name === (solanaWalletName as WalletName))
+    }
+    return null
+  }, [solanaWalletName, wallets])
 
   const handleWalletLogout = useCallback(
     async (network: WalletAdaptedNetwork) => {
@@ -74,13 +89,20 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
 
       <RowBetween>
         <FlexGap alignItems="center" gap="8px">
-          <NetworkIcon
-            src={`${ASSET_CDN}/web/wallet-ui/network-tag-evm.svg`}
-            width={48}
-            height={48}
-            alt="EVM network"
-            style={{ display: 'block' }}
-          />
+          <Box position="relative" width={48} height={48}>
+            <NetworkIcon
+              src={`${ASSET_CDN}/web/wallet-ui/network-tag-evm.svg`}
+              width={48}
+              height={48}
+              alt="EVM network"
+              style={{ display: 'block' }}
+            />
+            {connector?.icon && (
+              <Box position="absolute" bottom="0" right="0" width={24} height={24}>
+                <WalletIcon src={connector?.icon} width={24} height={24} alt="EVM Wallet" />
+              </Box>
+            )}
+          </Box>
           <Column>
             <Text fontSize="16px" fontWeight={600}>
               EVM
@@ -100,13 +122,20 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
       </RowBetween>
       <RowBetween>
         <FlexGap alignItems="center" gap="8px">
-          <NetworkIcon
-            src={`${ASSET_CDN}/web/wallet-ui/network-tag-solana.png`}
-            width={48}
-            height={48}
-            alt="Solana network"
-            style={{ display: 'block' }}
-          />
+          <Box position="relative" width={48} height={48}>
+            <NetworkIcon
+              src={`${ASSET_CDN}/web/wallet-ui/network-tag-solana.png`}
+              width={48}
+              height={48}
+              alt="Solana network"
+              style={{ display: 'block' }}
+            />
+            {selectedSolanaWallet && (
+              <Box position="absolute" bottom="0" right="0" width={24} height={24}>
+                <WalletIcon src={selectedSolanaWallet?.adapter.icon} width={24} height={24} alt="Solana Wallet" />
+              </Box>
+            )}
+          </Box>
           <Column>
             <Text fontSize="16px" fontWeight={600}>
               Solana
