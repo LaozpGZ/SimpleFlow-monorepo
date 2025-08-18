@@ -12,10 +12,9 @@ import {
   useModalV2,
   useTooltip,
   WarningIcon,
-  Text,
   QuestionHelper,
 } from '@pancakeswap/uikit'
-import { useLiquidityUserSlippage, useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
+import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
 import {
   SolanaSlippageSetting,
   EVMSlippageSetting,
@@ -153,7 +152,7 @@ export const SlippageButton = ({ enableAutoSlippage: enableAutoSlippage_ = false
 }
 
 export const LiquiditySlippageButton = () => {
-  const [userSlippageTolerance] = useLiquidityUserSlippage()
+  const [userSlippageTolerance] = useUserSlippage()
 
   return <SlippageButtonView tolerance={userSlippageTolerance} slippageModalContent={<EVMLiquiditySlippageSetting />} />
 }
