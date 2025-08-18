@@ -8,6 +8,8 @@ import { useMemo, useState, useCallback } from 'react'
 import { formatRangeSelectorPrice } from 'utils/formatRangeSelectorPrice'
 import { styled } from 'styled-components'
 import { QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV3/types'
+import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
+import inputRegex from '@pancakeswap/utils/inputRegex'
 import StepCounter from './StepCounter'
 
 const CustomInputContainer = styled(Box)<{ $small?: boolean }>`
@@ -187,9 +189,7 @@ export default function V3RangeSelector({
   )
 
   // Handle custom input - ONLY update input value with 0-100 validation
-  const handleCustomInputChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = event.target
-
+  const handleCustomInputChange = useCallback((value: string) => {
     // Allow empty input for clearing
     if (value === '') {
       setCustomInput('')
@@ -197,7 +197,7 @@ export default function V3RangeSelector({
     }
 
     // Only allow numbers, decimal points, and prevent invalid values
-    if (!/^\d*\.?\d*$/.test(value)) {
+    if (!inputRegex.test(escapeRegExp(value))) {
       return
     }
 
@@ -301,12 +301,18 @@ export default function V3RangeSelector({
           <CustomInputContainer width="120%">
             <StyledInput
               value={customInput}
-              onChange={handleCustomInputChange}
+              onChange={(event) => {
+                handleCustomInputChange(event.target.value.replace(/,/g, '.'))
+              }}
               onBlur={applyCustomZoom}
               onKeyDown={(e) => e.key === 'Enter' && applyCustomZoom()}
               placeholder={t('Custom')}
               type="text"
               inputMode="decimal"
+              pattern="^[0-9]*[.,]?[0-9]*$"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck="false"
             />
             <PercentageLabel>%</PercentageLabel>
           </CustomInputContainer>
@@ -319,12 +325,17 @@ export default function V3RangeSelector({
           <CustomInputContainer $small>
             <StyledInput
               value={customInput}
-              onChange={handleCustomInputChange}
+              onChange={(event) => {
+                handleCustomInputChange(event.target.value.replace(/,/g, '.'))
+              }}
               onBlur={applyCustomZoom}
               onKeyDown={(e) => e.key === 'Enter' && applyCustomZoom()}
               placeholder="2.5"
               type="text"
               inputMode="decimal"
+              autoComplete="off"
+              autoCorrect="off"
+              spellCheck="false"
             />
             <PercentageLabel>%</PercentageLabel>
           </CustomInputContainer>

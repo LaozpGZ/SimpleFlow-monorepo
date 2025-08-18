@@ -1,11 +1,10 @@
 import { useTranslation } from "@pancakeswap/localization";
 import { SwapCSS } from "@pancakeswap/uikit";
 import { escapeRegExp } from "@pancakeswap/utils/escapeRegExp";
+import inputRegex from "@pancakeswap/utils/inputRegex";
 import clsx from "clsx";
 import { memo } from "react";
 import { truncateDecimals } from "../utils/numbers";
-
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`); // match escaped "." characters via in a non-capturing group
 
 export type NumericalInputProps = {
   value: string | number | undefined;

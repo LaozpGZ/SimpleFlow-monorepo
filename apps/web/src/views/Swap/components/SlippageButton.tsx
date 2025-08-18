@@ -19,6 +19,7 @@ import {
   useTooltip,
   WarningIcon,
 } from '@pancakeswap/uikit'
+import inputRegex from '@pancakeswap/utils/inputRegex'
 import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
 import GlobalSettings from 'components/Menu/GlobalSettings'
@@ -30,7 +31,7 @@ import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { useAutoSlippageEnabled, useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
-import { escapeRegExp } from 'utils'
+import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
 import { basisPointsToPercent } from 'utils/exchange'
 
 const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: string }>`
@@ -158,8 +159,6 @@ export const SlippageButton = ({ enableAutoSlippage: enableAutoSlippage_ = false
     </>
   )
 }
-
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
 const SlippageSettingsModal = ({
   isOpen,

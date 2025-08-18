@@ -14,6 +14,7 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
+import inputRegex from '@pancakeswap/utils/inputRegex'
 import { formatPrice } from '@pancakeswap/utils/formatFractions'
 import { GreyCard } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
@@ -28,8 +29,6 @@ import { useCurrencies } from '../hooks/useCurrencies'
 import { useInfinityCreateFormQueryState } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
 
 export type FieldStartingPriceProps = BoxProps
-
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
 export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ ...boxProps }) => {
   const { t } = useTranslation()
