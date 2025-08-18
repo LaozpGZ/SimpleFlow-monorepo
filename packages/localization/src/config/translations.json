@@ -4179,5 +4179,6 @@
   "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.": "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.",
   "Initial Price": "Initial Price",
   "Dynamic Fee": "Dynamic Fee",
-  "Infinity Pools are not supported on this chain": "Infinity Pools are not supported on this chain"
+  "Infinity Pools are not supported on this chain": "Infinity Pools are not supported on this chain",
+  "Successfully created pool": "Successfully created pool"
 }

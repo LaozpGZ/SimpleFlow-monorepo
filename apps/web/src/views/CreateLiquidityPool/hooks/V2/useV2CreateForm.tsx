@@ -12,8 +12,10 @@ import { Currency, CurrencyAmount, isCurrencySorted, Pair, Price, Token } from '
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { CurrencyField as Field } from 'utils/types'
 import { BIG_INT_ZERO, V2_ROUTER_ADDRESS } from 'config/constants/exchange'
+import { getViemErrorMessage } from 'utils/errors'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { calculateSlippageAmount, useRouterContract } from 'utils/exchange'
+import { ToastDescriptionWithTx } from 'components/Toast'
 import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
 import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
 import {
@@ -25,7 +27,17 @@ import { calculateGasMargin, getBlockExploreLink } from 'utils'
 import { isUserRejected, logError } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { Hash } from 'viem'
-import { AutoColumn, Button, Flex, LinkExternal, Message, MessageText, ScanLink, useModalV2 } from '@pancakeswap/uikit'
+import {
+  AutoColumn,
+  Button,
+  Flex,
+  LinkExternal,
+  Message,
+  MessageText,
+  ScanLink,
+  useModalV2,
+  useToast,
+} from '@pancakeswap/uikit'
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiquidityTokens'
@@ -48,6 +60,7 @@ export const useV2CreateForm = () => {
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: walletClient } = useWalletClient()
   const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
+  const { toastSuccess, toastError } = useToast()
 
   const { data: gasPrice } = useGasPrice()
 
@@ -302,6 +315,11 @@ export const useV2CreateForm = () => {
             addPair(pair)
           }
 
+          toastSuccess(
+            `${t('Create Pool')}!`,
+            <ToastDescriptionWithTx txHash={response}>{t('Successfully created pool')}</ToastDescriptionWithTx>,
+          )
+
           // Re-direct to Pool Detail page
           await router.push(
             await getPoolDetailPageLink({
@@ -315,6 +333,7 @@ export const useV2CreateForm = () => {
         if (err && !isUserRejected(err)) {
           logError(err)
           console.error(`Add Liquidity failed`, err, args, value)
+          toastError(t('Error'), getViemErrorMessage(err))
         }
         setLiquidityState({
           attemptingTxn: false,

@@ -24,6 +24,7 @@ import { useV3NFTPositionManagerContract } from 'hooks/useContract'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import V3RangeSelector from 'views/AddLiquidityV3/formViews/V3FormView/components/V3RangeSelector'
 import { useRangeHopCallbacks } from 'views/AddLiquidityV3/formViews/V3FormView/form/hooks/useRangeHopCallbacks'
+import { getViemErrorMessage } from 'utils/errors'
 import { Bound, ZoomLevels } from '@pancakeswap/widgets-internal'
 import {
   AutoColumn,
@@ -38,6 +39,7 @@ import {
   SwapHorizIcon,
   Text,
   useModalV2,
+  useToast,
 } from '@pancakeswap/uikit'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
@@ -48,6 +50,7 @@ import { getViemClients } from 'utils/viem'
 import { calculateGasMargin } from 'utils'
 import { formatRawAmount } from 'utils/formatCurrencyAmount'
 import { useTransactionAdder } from 'state/transactions/hooks'
+import { ToastDescriptionWithTx } from 'components/Toast'
 import { isUserRejected } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { PreviewModal } from 'views/CreateLiquidityPool/components/PreviewModal'
@@ -62,6 +65,7 @@ export const useV3CreateForm = () => {
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: signer } = useWalletClient()
   const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
+  const { toastSuccess, toastError } = useToast()
 
   // User Settings
   const expertMode = useIsExpertMode()
@@ -332,6 +336,11 @@ export const useV3CreateForm = () => {
             setTxHash(hash)
             onAddLiquidityCallback(hash)
 
+            toastSuccess(
+              `${t('Create Pool')}!`,
+              <ToastDescriptionWithTx txHash={hash}>{t('Successfully created pool')}</ToastDescriptionWithTx>,
+            )
+
             // Re-direct to Pool Detail page
             await router.push(
               await getPoolDetailPageLink({
@@ -345,7 +354,9 @@ export const useV3CreateForm = () => {
             // we only care if the error is something _other_ than the user rejected the tx
             if (!isUserRejected(error)) {
               setTxnErrorMessage(transactionErrorToUserReadableMessage(error, t))
+              toastError(t('Error'), getViemErrorMessage(error))
             }
+
             setAttemptingTxn(false)
           })
       })
