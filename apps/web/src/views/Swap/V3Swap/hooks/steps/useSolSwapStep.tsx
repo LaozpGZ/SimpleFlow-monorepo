@@ -81,7 +81,12 @@ export const useSolSwapStep = (context: ConfirmStepContext) => {
           setTxHash(signature)
 
           try {
-            addSwapTransaction({ order, hash: signature as any, type: 'SolanaSwap' })
+            addSwapTransaction({
+              order,
+              hash: signature as any,
+              type: 'SolanaSwap',
+              receipt: {} as any,
+            })
           } catch (error) {
             console.error('Failed to add transaction', error)
           }

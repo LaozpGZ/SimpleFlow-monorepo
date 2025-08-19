@@ -85,6 +85,7 @@ export const addTransaction = createAction<{
   type?: TransactionType
   order?: Order
   crossChainFarm?: CrossChainFarmTransactionType
+  receipt?: SerializableTransactionReceipt
 }>('transactions/addTransaction')
 export const clearAllTransactions = createAction('transactions/clearAllTransactions')
 export const clearAllChainTransactions = createAction<{ chainId: ChainId }>('transactions/clearAllChainTransactions')

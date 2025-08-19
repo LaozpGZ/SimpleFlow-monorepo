@@ -24,6 +24,7 @@ export const addTransaction = createAction<{
   summary?: string
   translatableSummary?: { text: string; data?: Record<string, string | number> }
   type?: TransactionType
+  receipt?: TransactionReceipt
 }>('transactions/addTransaction')
 export const clearAllTransactions = createAction('transactions/clearAllTransactions')
 export const clearAllChainTransactions = createAction<{ chainId: ChainId }>('transactions/clearAllChainTransactions')

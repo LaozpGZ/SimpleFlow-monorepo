@@ -14,6 +14,7 @@ import { solanaUserSlippageAtomWithLocalStorage } from '@pancakeswap/utils/user'
 import { useAtomValue } from 'jotai'
 import { isSolana } from '@pancakeswap/chains'
 import { InterfaceOrder } from 'views/Swap/utils'
+import { SerializableTransactionReceipt } from 'state/transactions/actions'
 
 export default function useSwapRecordTransaction(chainId?: number, account?: string) {
   const addTransaction = useTransactionAdder()
@@ -24,7 +25,17 @@ export default function useSwapRecordTransaction(chainId?: number, account?: str
   const userSlippageTolerance = useAtomValue(solanaUserSlippageAtomWithLocalStorage)
 
   return useCallback(
-    ({ order, hash, type }: { order: InterfaceOrder | undefined; hash: Address; type: LogTradeType }) => {
+    ({
+      order,
+      hash,
+      type,
+      receipt,
+    }: {
+      order: InterfaceOrder | undefined
+      hash: Address
+      type: LogTradeType
+      receipt?: SerializableTransactionReceipt
+    }) => {
       const trade = order?.trade
       if (!trade || !account || !chainId) return
 
@@ -85,6 +96,7 @@ export default function useSwapRecordTransaction(chainId?: number, account?: str
             },
           },
           type: 'swap',
+          receipt,
         },
       )
 

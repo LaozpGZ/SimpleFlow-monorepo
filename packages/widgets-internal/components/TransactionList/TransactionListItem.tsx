@@ -29,6 +29,7 @@ export const TransactionListItemTitle = styled(Text).attrs({
 export const TransactionListItemDesc = styled(Text).attrs({
   fontSize: "1rem",
   color: "text",
+  overflowWrap: "break-word",
 })``;
 
 export function TransactionListItem({ status, onClick, children, action, title }: TransactionListItemProps) {
@@ -43,7 +44,7 @@ export function TransactionListItem({ status, onClick, children, action, title }
             alignItems="center"
             justifyContent="flex-start"
             onClick={onClick}
-            style={{ cursor: onClick ? "pointer" : "unset" }}
+            style={{ cursor: onClick ? "pointer" : "unset", overflowWrap: "anywhere" }}
           >
             <StatusIndicator status={status} />
             {children}

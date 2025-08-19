@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { Currency } from '@pancakeswap/sdk'
 import { TokenAddressMap } from '@pancakeswap/token-lists'
 import { multiChainScanName } from 'state/info/constant'
@@ -9,12 +9,27 @@ export * from './safeGetAddress'
 
 // returns the checksummed address if the address is valid, otherwise returns undefined
 
+function getSolExplorerLink(
+  data: string | number | undefined | null,
+  type: 'transaction' | 'token' | 'address' | 'block' | 'countdown' | 'nft',
+) {
+  switch (type) {
+    case 'transaction':
+      return `https://solscan.io/tx/${data}`
+    default:
+      throw new Error(`Unsupported Solana explorer type: ${type}`)
+  }
+}
+
 export function getBlockExploreLink(
   data: string | number | undefined | null,
   type: 'transaction' | 'token' | 'address' | 'block' | 'countdown' | 'nft',
   chainIdOverride?: number,
 ): string {
   const chainId = chainIdOverride || ChainId.BSC
+  if (chainId === NonEVMChainId.SOLANA) {
+    return getSolExplorerLink(data, type)
+  }
   const chain = chains.find((c) => c.id === chainId)
   if (!chain || !data) return bsc.blockExplorers.default.url
   switch (type) {
