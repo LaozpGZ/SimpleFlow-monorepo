@@ -19,7 +19,7 @@ interface ReceiveOptionsViewProps {
   solanaAccount?: string
 }
 
-const OptionCard = styled(Box)`
+const OptionCard = styled(Box)<{ $clickable?: boolean }>`
   background: ${({ theme }) => theme.colors.backgroundAlt};
   border: 1px solid ${({ theme }) => (theme.isDark ? '#372F47' : '#E7E3EB')};
   border-radius: 20px;
@@ -31,12 +31,16 @@ const OptionCard = styled(Box)`
   margin-bottom: 8px;
   transition: all 0.2s ease;
   height: 64px;
-  cursor: pointer;
+  cursor: ${({ $clickable }) => ($clickable ? 'pointer' : 'default')};
 
   &:hover {
-    border-color: ${({ theme }) => theme.colors.primary};
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    ${({ $clickable, theme }) =>
+      $clickable &&
+      `
+      border-color: ${theme.colors.primary};
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    `}
   }
 `
 
@@ -62,13 +66,12 @@ const EVMIcon = styled(Box)`
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: #627eea;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  background-image: url('${ASSET_CDN}/web/chains/svg/1.svg');
-  background-size: 24px 24px;
+  background-image: url('${ASSET_CDN}/web/wallet-ui/network-tag-evm.svg');
+  background-size: 40px 40px;
   background-repeat: no-repeat;
   background-position: center;
 `
@@ -77,13 +80,12 @@ const SolanaIcon = styled(Box)`
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #9945ff 0%, #14f195 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  background-image: url('${ASSET_CDN}/web/chains/8000001001.png');
-  background-size: 32px 32px;
+  background-image: url('${ASSET_CDN}/web/wallet-ui/network-tag-solana.png');
+  background-size: 40px 40px;
   background-repeat: no-repeat;
   background-position: center;
 `
@@ -131,7 +133,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
   return (
     <Box padding="12px 0px" maxWidth="450px" width="100%" mt="24px">
       <FlexGap gap="12px" flexDirection="column">
-        <OptionCard onClick={evmAccount ? onSelectEVM : undefined}>
+        <OptionCard $clickable={Boolean(evmAccount)} onClick={evmAccount ? onSelectEVM : undefined}>
           <Flex alignItems="center">
             <IconContainer>
               <ChainIconWrapper>
@@ -163,7 +165,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
           )}
         </OptionCard>
 
-        <OptionCard onClick={solanaAccount ? onSelectSolana : undefined}>
+        <OptionCard $clickable={Boolean(solanaAccount)} onClick={solanaAccount ? onSelectSolana : undefined}>
           <Flex alignItems="center">
             <IconContainer>
               <ChainIconWrapper>

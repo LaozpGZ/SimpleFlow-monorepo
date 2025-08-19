@@ -269,7 +269,7 @@ export const WalletContent = ({
               </Button>
               {[ViewState.RECEIVE_OPTIONS, ViewState.RECEIVE_QR].includes(viewState) && (
                 <Text fontSize="20px" fontWeight="600" color="text">
-                  {t('Receive')}
+                  {t('Receive Crypto')}
                 </Text>
               )}
             </FlexGap>
