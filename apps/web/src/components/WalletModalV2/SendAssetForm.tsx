@@ -54,6 +54,7 @@ import { ActionButton } from './ActionButton'
 import SendTransactionFlow from './SendTransactionFlow'
 import { ViewState } from './type'
 import { estimateSolanaTransactionFee } from './utils/solanaTxFeeEstimation'
+import { useEnhancedTokenLogo } from './hooks/useEnhancedTokenLogo'
 
 const FormContainer = styled(Box)`
   display: flex;
@@ -125,6 +126,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: attemptingTxn } = useCatchTxError()
   const { includeStarterGas, nativeAmount, isUserInsufficientBalance } = useSendGiftContext()
+  const { getEnhancedLogoURI } = useEnhancedTokenLogo()
 
   // Get native currency for fee calculation
   const nativeCurrency = useNativeCurrency(asset.chainId)
@@ -750,7 +752,11 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
               <FlexGap alignItems="center" gap="8px" justifyContent="space-between" position="relative">
                 <FlexGap alignItems="center" gap="8px" mb="8px">
                   <AssetContainer>
-                    <CurrencyLogo currency={currency} size="40px" src={asset.token.logoURI} />
+                    <CurrencyLogo
+                      currency={currency}
+                      size="40px"
+                      src={getEnhancedLogoURI(asset.token.address, asset.chainId, asset.token.logoURI)}
+                    />
                     <ChainIconWrapper>
                       <img
                         src={`${ASSET_CDN}/web/chains/${asset.chainId}.png`}

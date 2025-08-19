@@ -9,6 +9,7 @@ import styled from 'styled-components'
 
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { safeGetAddress } from 'utils/safeGetAddress'
+import { useEnhancedTokenLogo } from './hooks/useEnhancedTokenLogo'
 
 const SCROLLBAR_SHIFT_PX = 8
 
@@ -54,6 +55,7 @@ interface AssetsListProps {
 
 export const AssetsList: React.FC<AssetsListProps> = ({ assets, isLoading, onRowClick }) => {
   const { t } = useTranslation()
+  const { getEnhancedLogoURI } = useEnhancedTokenLogo()
 
   return (
     <AssetListContainer>
@@ -70,6 +72,7 @@ export const AssetsList: React.FC<AssetsListProps> = ({ assets, isLoading, onRow
         assets.map((asset) => {
           const address = safeGetAddress(asset.token.address)
           const isNative = address === ZERO_ADDRESS
+          const enhancedLogoURI = getEnhancedLogoURI(asset.token.address, asset.chainId, asset.token.logoURI)
           const tokenInfo = {
             chainId: asset.chainId,
             address: address === ZERO_ADDRESS ? undefined : address,
@@ -78,7 +81,7 @@ export const AssetsList: React.FC<AssetsListProps> = ({ assets, isLoading, onRow
             decimals: asset.token.decimals,
             symbol: asset.token.symbol,
             name: asset.token.name,
-            logoURI: asset.token.logoURI,
+            logoURI: enhancedLogoURI,
           }
           const chainName = asset.chainId === ChainId.BSC ? 'BNB' : getChainName(asset.chainId)
           return (

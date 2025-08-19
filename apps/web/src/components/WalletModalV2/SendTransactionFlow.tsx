@@ -26,6 +26,7 @@ import { useCallback, useMemo } from 'react'
 import { styled } from 'styled-components'
 import { getBlockExploreLink, getBlockExploreName } from 'utils'
 import { useWallet } from '@solana/wallet-adapter-react'
+import { useEnhancedTokenLogo } from './hooks/useEnhancedTokenLogo'
 
 const Wrapper = styled.div`
   width: 100%;
@@ -73,6 +74,7 @@ export function ConfirmTransactionContent({
   onBack?: () => void
 }) {
   const { t } = useTranslation()
+  const { getEnhancedLogoURI } = useEnhancedTokenLogo()
 
   const { connected: isSolanaConnected, connect: connectSolanaWallet } = useWallet()
 
@@ -140,7 +142,10 @@ export function ConfirmTransactionContent({
           {asset.chainId === NonEVMChainId.SOLANA ? (
             <>
               <Box position="relative" mb="16px">
-                <CurrencyLogo size="80px" src={asset.token.logoURI} />
+                <CurrencyLogo
+                  size="80px"
+                  src={getEnhancedLogoURI(asset.token.address, asset.chainId, asset.token.logoURI)}
+                />
               </Box>
               <Text fontSize="32px" bold>
                 {parseFloat(amount || '0').toLocaleString(undefined, {
