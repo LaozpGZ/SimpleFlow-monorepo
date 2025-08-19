@@ -91,7 +91,7 @@ export const HookSettings: React.FC<FieldHookSettingsProps> = ({ onHookChange, o
               </Flex>
             </FlexGap>
 
-            {selectionType ? (
+            {hookEnabled && selectionType ? (
               <>
                 <Divider />
                 <Box>
