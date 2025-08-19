@@ -516,7 +516,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         const frontendCheck = isLikelyWalletAddress(debouncedAddress)
         if (!frontendCheck.ok) {
           console.log('Frontend validation failed:', frontendCheck.reason)
-          const errorMsg = t('Invalid Solana wallet address')
+          const errorMsg = t('Invalid wallet address')
           console.log('Setting address error to:', errorMsg)
           setAddressError(errorMsg)
           return
@@ -526,7 +526,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           const rpcCheck = await isEOASystemAccount(connection, frontendCheck.pubkey!)
           if (!rpcCheck.ok) {
             console.log('RPC validation failed:', rpcCheck.reason)
-            setAddressError(t('Invalid Solana wallet address'))
+            setAddressError(t('Invalid wallet address'))
             return
           }
         } catch (error) {
