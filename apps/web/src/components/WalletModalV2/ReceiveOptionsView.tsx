@@ -8,6 +8,8 @@ import { walletsConfig } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAtom } from 'jotai'
 import { useMemo } from 'react'
+import ConnectWalletButton from 'components/ConnectWalletButton'
+import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 
 interface ReceiveOptionsViewProps {
   onSelectEVM: () => void
@@ -128,7 +130,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
   return (
     <Box padding="12px 0px" maxWidth="450px" width="100%" mt="24px">
       <FlexGap gap="12px" flexDirection="column">
-        <OptionCard onClick={onSelectEVM}>
+        <OptionCard onClick={evmAccount ? onSelectEVM : undefined}>
           <Flex alignItems="center">
             <IconContainer>
               <ChainIconWrapper>
@@ -151,10 +153,16 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
               </Box>
             </IconContainer>
           </Flex>
-          <ArrowForwardIcon color="textSubtle" width="20px" height="20px" />
+          {evmAccount ? (
+            <ArrowForwardIcon color="textSubtle" width="20px" height="20px" />
+          ) : (
+            <ConnectWalletButton variant="tertiary" size="sm">
+              Connect
+            </ConnectWalletButton>
+          )}
         </OptionCard>
 
-        <OptionCard onClick={onSelectSolana}>
+        <OptionCard onClick={solanaAccount ? onSelectSolana : undefined}>
           <Flex alignItems="center">
             <IconContainer>
               <ChainIconWrapper>
@@ -177,7 +185,13 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
               </Box>
             </IconContainer>
           </Flex>
-          <ArrowForwardIcon color="textSubtle" width="20px" height="20px" />
+          {solanaAccount ? (
+            <ArrowForwardIcon color="textSubtle" width="20px" height="20px" />
+          ) : (
+            <SolanaConnectButton variant="tertiary" size="sm">
+              Connect
+            </SolanaConnectButton>
+          )}
         </OptionCard>
       </FlexGap>
     </Box>
