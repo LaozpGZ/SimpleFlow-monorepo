@@ -111,7 +111,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
   const { t } = useTranslation()
   const [address, setAddress] = useState<string | null>(null)
-  const debouncedAddress = useDebounce(address, 500)
+  const debouncedAddress = useDebounce(address, 300)
   const [amount, setAmount] = useState('')
   const [addressError, setAddressError] = useState('')
   const [estimatedFee, setEstimatedFee] = useState<string | null>(null)
@@ -474,37 +474,75 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     return sendEVMAsset()
   }, [isSolanaChain, sendSolanaAsset, sendEVMAsset])
 
+  const isLikelyWalletAddress = (input: string) => {
+    try {
+      const pk = new PublicKey(input)
+      if (pk.toBase58() !== input) return { ok: false, reason: 'Base58 format inconsistent' }
+      if (!PublicKey.isOnCurve(pk.toBytes())) {
+        return { ok: false, reason: 'This looks like a PDA/program address (off-curve)' }
+      }
+      return { ok: true, pubkey: pk }
+    } catch {
+      return { ok: false, reason: 'Invalid Solana public key' }
+    }
+  }
+
+  const isEOASystemAccount = async (connection: Connection, pk: PublicKey) => {
+    const info = await connection.getAccountInfo(pk)
+    if (!info) return { ok: true }
+    if (!info.owner.equals(SystemProgram.programId)) {
+      return { ok: false, reason: 'This address is a program account (not a System account)' }
+    }
+    return { ok: true }
+  }
+
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     setAddress(value)
   }
 
-  // Use debounced address for validation to avoid checking on every keystroke
+  // Frontend immediate validation (no RPC): check non-base58, wrong key length, off-curve (PDA)
+  // Optional RPC enhancement: existing accounts must be SystemProgram to be considered regular wallets
   useEffect(() => {
-    if (debouncedAddress) {
+    console.log('Address validation triggered:', { debouncedAddress, isSolanaChain })
+
+    const validateAddress = async () => {
+      if (!debouncedAddress) {
+        setAddressError('')
+        return
+      }
+
       if (isSolanaChain) {
-        // Validate Solana address (Base58 format, 32-44 chars)
-        try {
-          const publicKey = new PublicKey(debouncedAddress)
-          // Additional check to ensure it's a valid public key (on curve)
-          if (!PublicKey.isOnCurve(publicKey.toBuffer())) {
-            setAddressError(t('Invalid Solana wallet address'))
-          } else {
-            setAddressError('')
-          }
-        } catch {
+        const frontendCheck = isLikelyWalletAddress(debouncedAddress)
+        if (!frontendCheck.ok) {
+          console.log('Frontend validation failed:', frontendCheck.reason)
           setAddressError(t('Invalid Solana wallet address'))
+          return
         }
+
+        try {
+          const rpcCheck = await isEOASystemAccount(connection, frontendCheck.pubkey!)
+          if (!rpcCheck.ok) {
+            console.log('RPC validation failed:', rpcCheck.reason)
+            setAddressError(t('Invalid Solana wallet address'))
+            return
+          }
+        } catch (error) {
+          console.log('RPC validation error (continuing):', error)
+        }
+
+        console.log('Valid Solana address, clearing error')
+        setAddressError('')
       } else if (!isAddress(debouncedAddress)) {
         // Validate EVM address
         setAddressError(t('Invalid wallet address'))
       } else {
         setAddressError('')
       }
-    } else {
-      setAddressError('')
     }
-  }, [debouncedAddress, t, isSolanaChain])
+
+    validateAddress()
+  }, [debouncedAddress, t, isSolanaChain, connection])
 
   const handleClearAddress = () => {
     setAddress('')
