@@ -69,7 +69,7 @@ export const useV3CreateForm = () => {
   const [deadline] = useTransactionDeadline()
 
   // Shared Create Liquidity State
-  const { switchCurrencies } = useSelectIdRouteParams()
+  const { switchCurrencies: switchCurrenciesRoute } = useSelectIdRouteParams()
   const { baseCurrency, quoteCurrency } = useCurrencies()
 
   const [feeLevel] = useFeeLevelQueryState()
@@ -185,6 +185,41 @@ export const useV3CreateForm = () => {
 
   const { onFieldAInput, onFieldBInput, onLeftRangeInput, onRightRangeInput, onStartPriceInput, onBothRangeInput } =
     useV3MintActionHandlers(noLiquidity, false)
+
+  // Enhanced switchCurrencies that also inverts range values and swaps deposit amounts
+  const switchCurrencies = useCallback(() => {
+    // First, switch the currencies in the route
+    switchCurrenciesRoute()
+
+    // Invert the range values to maintain the same price ranges
+    if (
+      leftRangeTypedValue &&
+      rightRangeTypedValue &&
+      typeof leftRangeTypedValue !== 'boolean' &&
+      typeof rightRangeTypedValue !== 'boolean'
+    ) {
+      const invertedLeft = rightRangeTypedValue.invert()
+      const invertedRight = leftRangeTypedValue.invert()
+
+      onBothRangeInput({
+        leftTypedValue: invertedLeft,
+        rightTypedValue: invertedRight,
+      })
+    }
+
+    // Switch the deposit amounts
+    onFieldAInput(parsedAmounts[Field.CURRENCY_B]?.toSignificant(6) ?? '')
+    onFieldBInput(parsedAmounts[Field.CURRENCY_A]?.toSignificant(6) ?? '')
+  }, [
+    switchCurrenciesRoute,
+    leftRangeTypedValue,
+    rightRangeTypedValue,
+    onBothRangeInput,
+    parsedAmounts,
+    dependentField,
+    onFieldAInput,
+    onFieldBInput,
+  ])
 
   // Range Inputs
   const { getDecrementLower, getIncrementLower, getDecrementUpper, getIncrementUpper, getSetFullRange } =
@@ -594,5 +629,6 @@ export const useV3CreateForm = () => {
     onFieldAInput,
     onFieldBInput,
     onStartPriceInput,
+    switchCurrencies,
   }
 }

@@ -32,6 +32,7 @@ export const CreateLiquidityV3Form = () => {
     onStartPriceInput,
     onFieldAInput,
     onFieldBInput,
+    switchCurrencies,
   } = useV3CreateForm()
 
   const [feeLevel] = useFeeLevelQueryState()
@@ -52,7 +53,11 @@ export const CreateLiquidityV3Form = () => {
             {poolExists && currenciesExist && <MessagePoolInitialized protocol={Protocol.V3} />}
 
             <DynamicSection disabled={poolExists || !currenciesExist}>
-              <FieldStartingPrice startPrice={startPriceTypedValue} setStartPrice={onStartPriceInput} />
+              <FieldStartingPrice
+                startPrice={startPriceTypedValue}
+                setStartPrice={onStartPriceInput}
+                switchCurrencies={switchCurrencies}
+              />
             </DynamicSection>
             <DynamicSection disabled={poolExists || !currenciesExist || !startPriceTypedValue || !feeLevel}>
               {rangeSelector}

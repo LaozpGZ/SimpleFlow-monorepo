@@ -30,11 +30,17 @@ import { useCurrencies } from '../../hooks/useCurrencies'
 export type FieldStartingPriceProps = {
   startPrice: string
   setStartPrice: (startPrice: string) => void
+  switchCurrencies?: () => void
 } & BoxProps
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
-export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ startPrice, setStartPrice, ...boxProps }) => {
+export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({
+  startPrice,
+  setStartPrice,
+  switchCurrencies: switchCurrenciesProp,
+  ...boxProps
+}) => {
   const { t } = useTranslation()
   const { quoteCurrency, baseCurrency, currency0, currency1 } = useCurrencies()
 
@@ -49,7 +55,8 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ startPri
   const [inverted] = useInverted()
   const prevInverted = usePreviousValue(inverted)
 
-  const { switchCurrencies } = useSelectIdRouteParams()
+  const { switchCurrencies: switchCurrenciesDefault } = useSelectIdRouteParams()
+  const switchCurrencies = switchCurrenciesProp || switchCurrenciesDefault
 
   const [, , marketPrice] = usePoolMarketPrice(currency0, currency1)
 
