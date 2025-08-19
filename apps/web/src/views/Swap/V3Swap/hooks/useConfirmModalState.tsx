@@ -56,7 +56,7 @@ import { usePriceBreakdown } from 'views/SwapSimplify/hooks/usePriceBreakdown'
 import { eip5792UserRejectUpgradeError, userRejectedError } from './useSendSwapTransaction'
 import { useSwapCallback } from './useSwapCallback'
 import { useSolSwapStep } from './steps/useSolSwapStep'
-import { useBatchTransaction } from './steps/useBatchTransaction'
+import { useBatchSwapTransaction } from './steps/useBatchSwapTransaction'
 import { ConfirmStepContext, ConfirmAction } from './steps/step.type'
 
 const getTokenAllowance = ({
@@ -852,7 +852,7 @@ export const useConfirmModalState = (
     [],
   )
 
-  const { canCallActionBatched, callActionBatched, performEip5792Lock } = useBatchTransaction({
+  const { canCallActionBatched, callSwapBatched, performEip5792Lock } = useBatchSwapTransaction({
     actions,
     amountToApprove,
     spender,
@@ -884,7 +884,7 @@ export const useConfirmModalState = (
               symbol: amountToApprove?.currency.symbol,
             })
             performEip5792Lock.current = true
-            await callActionBatched(steps)
+            await callSwapBatched(steps)
             return
           } catch (error) {
             if (eip5792UserRejectUpgradeError(error)) {
@@ -915,7 +915,7 @@ export const useConfirmModalState = (
     },
     [
       canCallActionBatched,
-      callActionBatched,
+      callSwapBatched,
       actions,
       createSteps,
       performStep,

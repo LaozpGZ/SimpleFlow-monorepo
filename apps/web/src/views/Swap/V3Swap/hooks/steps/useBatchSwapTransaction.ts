@@ -1,6 +1,6 @@
 import { useCallback, useRef } from 'react'
 import { useAccount, useWalletClient } from 'wagmi'
-import { createWalletClient, custom } from 'viem'
+import { Address, createWalletClient, custom } from 'viem'
 import { eip5792Actions } from 'viem/experimental'
 import { useTranslation } from '@pancakeswap/localization'
 import { useToast } from '@pancakeswap/uikit'
@@ -9,15 +9,17 @@ import { ConfirmModalState } from '@pancakeswap/widgets-internal'
 import { RetryableError, retry } from 'state/multicall/retry'
 import { useActiveChainId } from 'hooks/useAccountActiveChain'
 import { ChainId as EvmChainId } from '@pancakeswap/chains'
+import { InterfaceOrder } from 'views/Swap/utils'
 import { BatchCall, getBatchedTransaction as getBatchedTransactionHelper } from '../batchHelper'
 import { eip5792UserRejectUpgradeError, userRejectedError } from '../useSendSwapTransaction'
+import useSwapRecordTransaction from '../useSwapRecordTransaction'
 import { ConfirmAction, ConfirmStepContext } from './step.type'
 
-interface UseBatchTransactionArgs extends ConfirmStepContext {
+interface UseBatchSwapTransactionArgs extends ConfirmStepContext {
   actions: { [k in ConfirmModalState]: ConfirmAction }
 }
 
-export const useBatchTransaction = ({
+export const useBatchSwapTransaction = ({
   actions,
   amountToApprove,
   spender,
@@ -26,13 +28,15 @@ export const useBatchTransaction = ({
   setConfirmState,
   setTxHash,
   resetState,
-}: UseBatchTransactionArgs) => {
+}: UseBatchSwapTransactionArgs) => {
   const { chainId } = useActiveChainId()
-  const { connector } = useAccount()
+  const { connector, address: account } = useAccount()
   const { data: walletClient } = useWalletClient({ chainId })
   const eip5792Status = useEIP5792Status()
   const { toastError } = useToast()
   const { t } = useTranslation()
+
+  const addSwapTransaction = useSwapRecordTransaction(chainId, account)
 
   const performEip5792Lock = useRef(false)
 
@@ -114,7 +118,7 @@ export const useBatchTransaction = ({
     [eip5792Status, getBatchedTransaction, walletClient?.transport, spender, chainId],
   )
 
-  const callActionBatched = useCallback(
+  const callSwapBatched = useCallback(
     async (steps: ConfirmModalState[]) => {
       setTxHash(undefined)
       setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
@@ -144,7 +148,11 @@ export const useBatchTransaction = ({
 
         const status = await statusPromise
         if (status.status === 'success') {
-          setTxHash(status.receipts?.[0]?.transactionHash)
+          const hash = status.receipts?.[0]?.transactionHash
+          if (hash) {
+            setTxHash(hash)
+            addSwapTransaction({ order: order as InterfaceOrder, hash: hash as Address, type: 'V3SmartSwap' })
+          }
           setConfirmState(ConfirmModalState.COMPLETED)
         }
       } catch (error) {
@@ -154,8 +162,8 @@ export const useBatchTransaction = ({
         }
       }
     },
-    [setConfirmState, resetState, setTxHash, getBatchedTransaction, sendBatchedTransaction],
+    [setConfirmState, resetState, setTxHash, getBatchedTransaction, sendBatchedTransaction, addSwapTransaction, order],
   )
 
-  return { canCallActionBatched, callActionBatched, performEip5792Lock }
+  return { canCallActionBatched, callSwapBatched, performEip5792Lock }
 }
