@@ -102,11 +102,6 @@ const config: (
           supportChainIds: SUPPORT_FARMS,
         },
         {
-          label: t('Position Manager'),
-          href: 'https://legacy-pm.pancakeswap.finance/position-managers',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
-        },
-        {
           label: t('veCake Redeem'),
           href: '/cake-staking/redeem',
           supportChainIds: POOL_SUPPORTED_CHAINS,
@@ -123,11 +118,6 @@ const config: (
           href: '/liquidity/pools',
           matchHrefs: ['/liquidity/positions', '/farms'],
           supportChainIds: SUPPORT_FARMS,
-        },
-        {
-          label: t('Position Manager'),
-          href: 'https://legacy-pm.pancakeswap.finance/position-managers',
-          type: DropdownMenuItemType.EXTERNAL_LINK,
         },
         {
           label: t('Staking'),

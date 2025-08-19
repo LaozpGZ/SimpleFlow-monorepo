@@ -241,6 +241,11 @@ const config = {
         destination: '/info/pairs/:address',
         permanent: true,
       },
+            {
+        source: '/position-managers/:path*',
+        destination: 'https://legacy-pm.pancakeswap.finance/position-managers',
+        permanent: true,
+      },
       {
         source: '/images/tokens/:address',
         destination: 'https://tokens.pancakeswap.finance/images/:address',
