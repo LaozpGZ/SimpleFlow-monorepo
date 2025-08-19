@@ -31,11 +31,8 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
       if (cache.has(cacheKey)) {
         return cache.get(cacheKey) || ''
       }
-      function getTranslationValue() {
-        return bundle[key] || key
-      }
 
-      const value = getTranslationValue()
+      const value = bundle[key] || key
 
       const interpolated = value.replace(/%([a-zA-Z0-9-_]+)%/g, (match, p1) => {
         const replacement = data?.[p1] || ''
