@@ -19,6 +19,7 @@ import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
 import { MevSwapDetail } from 'views/Mev/MevSwapDetail'
 import { MevToggle } from 'views/Mev/MevToggle'
+import { useSolanaUserSlippage } from '@pancakeswap/utils/user'
 import { SwapType } from '../../Swap/types'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { useBuyCryptoInfo } from '../hooks/useBuyCryptoInfo'
@@ -70,7 +71,12 @@ export const InfinitySwapForm = memo(() => {
   const outputCurrency = useCurrency(outputCurrencyId)
 
   const { slippageTolerance: userSlippageTolerance } = useAutoSlippageWithFallback()
-  const isSlippageTooHigh = useMemo(() => userSlippageTolerance > 500, [userSlippageTolerance])
+
+  const [solanaSlippage] = useSolanaUserSlippage()
+
+  const userSlippageCurrentChain = isSolana(activeChianId) ? solanaSlippage : userSlippageTolerance
+
+  const isSlippageTooHigh = useMemo(() => userSlippageCurrentChain > 500, [userSlippageCurrentChain])
   const shouldRiskPanelDisplay = useShouldRiskPanelDisplay(inputCurrency?.wrapped, outputCurrency?.wrapped)
   const isExactOutWarning = useMemo(
     () =>
