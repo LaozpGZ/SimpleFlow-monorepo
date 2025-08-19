@@ -1,6 +1,7 @@
 import { AutoColumn, Box, Card, CardBody, DynamicSection } from '@pancakeswap/uikit'
 import { Protocol } from '@pancakeswap/farms'
 import { useFeeLevelQueryState } from 'state/infinity/create'
+import { useDebounce } from '@pancakeswap/hooks'
 import { CurrencyField as Field } from 'utils/types'
 import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
@@ -36,7 +37,10 @@ export const CreateLiquidityV3Form = () => {
   } = useV3CreateForm()
 
   const [feeLevel] = useFeeLevelQueryState()
-  const poolExists = noLiquidity === false && !!feeLevel
+
+  const poolExists_ = noLiquidity === false && !!feeLevel
+  const poolExists = useDebounce(poolExists_, 400)
+
   const currenciesExist = currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B]
 
   return (

@@ -4,6 +4,7 @@ import { AutoColumn, Box, Card, CardBody, DynamicSection, FlexGap, PreTitle, Tex
 import { Protocol } from '@pancakeswap/farms'
 import { useStartingPriceQueryState } from 'state/infinity/create'
 import { CurrencyField as Field } from 'utils/types'
+import { useDebounce } from '@pancakeswap/hooks'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
 import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
@@ -36,7 +37,9 @@ export const CreateLiquidityV2Form = () => {
     onFieldBInput,
   } = useV2CreateForm()
 
-  const poolExists = noLiquidity === false
+  const poolExists_ = noLiquidity === false
+  const poolExists = useDebounce(poolExists_, 400)
+
   const currenciesExist = currencies[Field.CURRENCY_A] && currencies[Field.CURRENCY_B]
 
   const [startPriceTypedValue, setStartPriceTypedValue] = useStartingPriceQueryState()

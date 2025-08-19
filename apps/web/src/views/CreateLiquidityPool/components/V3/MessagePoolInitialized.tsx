@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
-import { AddIcon, Button, InfoIcon, Message, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { Button, InfoIcon, Message, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { PoolInfo } from 'state/farmsV4/state/type'
