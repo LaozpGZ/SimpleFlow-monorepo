@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   CloseIcon,
+  CogIcon,
   FlexGap,
   IconButton,
   Input,
@@ -39,7 +40,14 @@ import { SendGiftContext, useSendGiftContext } from 'views/Gift/providers/SendGi
 import { useUserInsufficientBalanceLight } from 'views/SwapSimplify/hooks/useUserInsufficientBalance'
 import { useAccount, usePublicClient, useSendTransaction } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { Connection, PublicKey, SystemProgram, Transaction, LAMPORTS_PER_SOL } from '@solana/web3.js'
+import {
+  Connection,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  LAMPORTS_PER_SOL,
+  ComputeBudgetProgram,
+} from '@solana/web3.js'
 import {
   createTransferInstruction,
   TOKEN_PROGRAM_ID,
@@ -53,8 +61,10 @@ import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnection
 import { ActionButton } from './ActionButton'
 import SendTransactionFlow from './SendTransactionFlow'
 import { ViewState } from './type'
-import { estimateSolanaTransactionFee } from './utils/solanaTxFeeEstimation'
+import { estimateSimpleSolanaFee, getQuickSolanaFeeEstimate } from './utils/solanaTxFeeEstimation'
 import { useEnhancedTokenLogo } from './hooks/useEnhancedTokenLogo'
+import { useSolanaPriorityFee } from './hooks/useSolanaPriorityFee'
+import { SolanaPriorityFeeModal } from './SolanaPriorityFeeModal'
 
 const FormContainer = styled(Box)`
   display: flex;
@@ -127,6 +137,10 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const { fetchWithCatchTxError, loading: attemptingTxn } = useCatchTxError()
   const { includeStarterGas, nativeAmount, isUserInsufficientBalance } = useSendGiftContext()
   const { getEnhancedLogoURI } = useEnhancedTokenLogo()
+  const { computeBudgetConfig, currentFee } = useSolanaPriorityFee()
+
+  // Priority Fee Modal state
+  const [showPriorityFeeModal, setShowPriorityFeeModal] = useState(false)
 
   // Get native currency for fee calculation
   const nativeCurrency = useNativeCurrency(asset.chainId)
@@ -169,11 +183,13 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         if (!solanaPublicKey) return
 
         try {
-          const feeBreakdown = await estimateSolanaTransactionFee({
+          // Use new simplified estimation system
+          const priorityFeeLamports = Math.floor(currentFee * 1_000_000_000) // Convert SOL to lamports
+
+          const feeBreakdown = await estimateSimpleSolanaFee({
             connection,
             solanaPublicKey,
             recipientAddress: address,
-            amount,
             isNativeToken,
             tokenInfo: isNativeToken
               ? undefined
@@ -181,6 +197,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
                   address: asset.token.address,
                   decimals: asset.token.decimals,
                 },
+            priorityFeeLamports,
           })
 
           setEstimatedFee(feeBreakdown.formattedFee)
@@ -194,8 +211,10 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           }
         } catch (error) {
           console.error('Error estimating Solana fee:', error)
-          // Fallback to base fee
-          const formattedFee = formatUnits(BigInt(5000), 9)
+
+          // Use quick fallback estimation
+          const priorityFeeLamports = Math.floor(currentFee * 1_000_000_000)
+          const formattedFee = getQuickSolanaFeeEstimate(priorityFeeLamports, !isNativeToken)
           setEstimatedFee(formattedFee)
 
           if (nativeCurrencyPrice) {
@@ -269,6 +288,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     asset.token.address,
     asset.token.decimals,
     connection,
+    currentFee,
   ])
 
   // Separate function for EVM asset transfer
@@ -340,7 +360,15 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         if (isNativeToken) {
           const amountInLamports = Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL)
 
-          const transaction = new Transaction().add(
+          const transaction = new Transaction()
+
+          // Add Compute Budget instructions (Priority Fee)
+          transaction.add(
+            ComputeBudgetProgram.setComputeUnitLimit({ units: computeBudgetConfig.units }),
+            ComputeBudgetProgram.setComputeUnitPrice({ microLamports: computeBudgetConfig.microLamports }),
+          )
+
+          transaction.add(
             SystemProgram.transfer({
               fromPubkey: solanaPublicKey,
               toPubkey: recipientPubkey,
@@ -381,6 +409,12 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           )
 
           const transaction = new Transaction()
+
+          // Add Compute Budget instructions (Priority Fee)
+          transaction.add(
+            ComputeBudgetProgram.setComputeUnitLimit({ units: computeBudgetConfig.units }),
+            ComputeBudgetProgram.setComputeUnitPrice({ microLamports: computeBudgetConfig.microLamports }),
+          )
 
           // Check if recipient's associated token account exists
           try {
@@ -648,7 +682,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     } else {
       setEstimatedFee(null)
     }
-  }, [address, amount, addressError, estimateTransactionFee])
+  }, [address, amount, addressError, estimateTransactionFee, currentFee])
 
   const isValidAddress = useMemo(() => {
     // send gift doesn't need to check address
@@ -767,9 +801,21 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
                     </ChainIconWrapper>
                   </AssetContainer>
                   <FlexGap flexDirection="column">
-                    <Text fontWeight="bold" fontSize="20px">
-                      {asset.token.symbol}
-                    </Text>
+                    <FlexGap alignItems="center" gap="8px">
+                      <Text fontWeight="bold" fontSize="20px">
+                        {asset.token.symbol}
+                      </Text>
+                      {isSolanaChain && (
+                        <IconButton
+                          scale="sm"
+                          variant="tertiary"
+                          onClick={() => setShowPriorityFeeModal(true)}
+                          title={t('Priority Fee Settings')}
+                        >
+                          <CogIcon width="16px" height="16px" />
+                        </IconButton>
+                      )}
+                    </FlexGap>
                     <Text color="textSubtle" fontSize="12px" mt="-4px">{`${chainName?.toUpperCase() ?? '-'} ${t(
                       'Chain',
                     )}`}</Text>
@@ -845,6 +891,16 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           {attemptingTxn ? t('Confirming') : t('Next')}
         </Button>
       </FlexGap>
+
+      {/* Priority Fee Modal */}
+      <SolanaPriorityFeeModal
+        isOpen={showPriorityFeeModal}
+        onDismiss={() => setShowPriorityFeeModal(false)}
+        onSave={(fee) => {
+          console.log('Priority fee updated:', fee)
+          // Fee updates will automatically trigger estimateTransactionFee re-estimation
+        }}
+      />
     </FormContainer>
   )
 }
