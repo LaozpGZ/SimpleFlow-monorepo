@@ -5,6 +5,7 @@ import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
 import USCitizenConfirmModal from 'components/Modal/USCitizenConfirmModal'
 import { NetworkSwitcher } from 'components/NetworkSwitcher'
 import { useActiveChainId } from 'hooks/useActiveChainId'
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { useCakePrice } from 'hooks/useCakePrice'
 import { usePerpUrl } from 'hooks/usePerpUrl'
 import useTheme from 'hooks/useTheme'
@@ -85,7 +86,7 @@ const Menu = (props) => {
               <Notifications />
             </Suspense>
           )}
-          <NetworkSwitcher />
+          {chainId !== NonEVMChainId.SOLANA && <NetworkSwitcher />}
           <UserMenu />
         </>
       }
@@ -136,6 +137,7 @@ const SharedComponentWithOutMenuWrapper = styled.div`
 
 export const SharedComponentWithOutMenu: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { enabled } = useWebNotifications()
+  const { chainId } = useActiveChainId()
   return (
     <>
       <SharedComponentWithOutMenuWrapper>
@@ -145,7 +147,7 @@ export const SharedComponentWithOutMenu: React.FC<React.PropsWithChildren> = ({ 
             <Notifications />
           </Suspense>
         )}
-        <NetworkSwitcher />
+        {chainId !== NonEVMChainId.SOLANA && <NetworkSwitcher />}
         <UserMenu />
       </SharedComponentWithOutMenuWrapper>
       {children}
