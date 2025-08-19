@@ -172,6 +172,11 @@ const config = {
   async redirects() {
     return [
       {
+        source: '/((?!position-managers).*)',
+        destination: 'https://pancakeswap.finance/:path*',
+        permanent: true,
+      },
+      {
         source: '/send',
         destination: '/swap',
         permanent: true,
