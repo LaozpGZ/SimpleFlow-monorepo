@@ -128,8 +128,10 @@ export async function estimateSolanaTransactionFee({
     // Add token transfer instruction
     const senderTokenAccount = await getAssociatedTokenAddress(tokenMintAddress, solanaPublicKey, false, tokenProgramId)
 
-    // Use token amount with proper decimals
-    const tokenAmount = BigInt(Math.floor(parseFloat(amount) * 10 ** tokenInfo.decimals))
+    // Use token amount with proper BigInt precision to avoid floating point issues
+    const decimalMultiplier = BigInt(10 ** tokenInfo.decimals)
+    const amountFloat = parseFloat(amount)
+    const tokenAmount = BigInt(Math.floor(amountFloat * Number(decimalMultiplier)))
 
     if (tokenProgramId === TOKEN_2022_PROGRAM_ID) {
       instructions.push(
@@ -158,8 +160,23 @@ export async function estimateSolanaTransactionFee({
     }
   }
 
+  // First, get dynamic priority fee from RPC
+  let computeUnitPrice = 1000 // fallback value
+  try {
+    // Try to get recent prioritization fees
+    const recentFees = await connection.getRecentPrioritizationFees()
+    if (recentFees && recentFees.length > 0) {
+      // Use the 90th percentile for more reliable transaction processing
+      const fees = recentFees.map((f) => f.prioritizationFee).sort((a, b) => a - b)
+      const percentile90Index = Math.floor(fees.length * 0.9)
+      computeUnitPrice = Math.max(fees[percentile90Index] || 1000, 1000) // minimum 1000
+      console.log(`Using dynamic priority fee: ${computeUnitPrice} μ-lamports/CU`)
+    }
+  } catch (error) {
+    console.log('Failed to get recent prioritization fees, using fallback:', computeUnitPrice)
+  }
+
   // Add compute budget instructions for priority fee
-  const computeUnitPrice = 1000 // micro-lamports per compute unit (adjustable)
   instructions.unshift(
     ComputeBudgetProgram.setComputeUnitPrice({
       microLamports: computeUnitPrice,
@@ -198,6 +215,28 @@ export async function estimateSolanaTransactionFee({
       priorityFee = BigInt(Math.ceil((simulation.value.unitsConsumed * computeUnitPrice) / 1000000))
       console.log('Compute units consumed:', simulation.value.unitsConsumed)
       console.log('Priority fee calculated:', formatUnits(priorityFee, 9), 'SOL')
+
+      // Add compute unit limit for better fee estimation (add 10% buffer)
+      const computeUnitLimit = Math.ceil(simulation.value.unitsConsumed * 1.1)
+      instructions.unshift(
+        ComputeBudgetProgram.setComputeUnitLimit({
+          units: computeUnitLimit,
+        }),
+      )
+      console.log('Setting compute unit limit:', computeUnitLimit)
+
+      // Recreate transaction with compute unit limit for final fee calculation
+      const finalMessageV0 = new TransactionMessage({
+        payerKey: solanaPublicKey,
+        recentBlockhash: blockhash,
+        instructions,
+      }).compileToV0Message()
+
+      const finalFeeResponse = await connection.getFeeForMessage(finalMessageV0)
+      if (finalFeeResponse.value) {
+        baseFee = BigInt(finalFeeResponse.value)
+        console.log('Final base fee with compute limit:', formatUnits(baseFee, 9), 'SOL')
+      }
     }
   } catch (error) {
     console.error('Failed to simulate transaction for fee estimation:', error)
