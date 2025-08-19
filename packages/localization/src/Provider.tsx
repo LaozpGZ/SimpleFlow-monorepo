@@ -32,7 +32,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
         return cache.get(cacheKey) || ''
       }
       function getTranslationValue() {
-        return bundle[key] || ''
+        return bundle[key] || key
       }
 
       const value = getTranslationValue()
