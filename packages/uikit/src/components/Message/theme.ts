@@ -20,8 +20,8 @@ const variants = {
     borderColor: "warning",
   },
   primary60: {
-    background: "primary10",
-    borderColor: "primary20",
+    background: "#EEFBFC",
+    borderColor: "#C1EDF0",
   },
 };
 
