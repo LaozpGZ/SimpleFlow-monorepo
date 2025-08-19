@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import { Currency } from '@pancakeswap/swap-sdk-core'
-import { BoxProps, RowBetween, Column, Text } from '@pancakeswap/uikit'
+import { BoxProps, RowBetween, Column, Text, SkeletonV2, Skeleton } from '@pancakeswap/uikit'
 import { FieldDepositAmount } from 'components/Liquidity/Form/FieldDepositAmount'
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
 import { useInverted } from 'state/infinity/shared'
@@ -36,21 +36,28 @@ export const FieldAddDepositAmount: React.FC<FieldDepositAmountProps> = ({
     parsedAmountB,
   })
 
+  // NOTE: FieldAddDepositAmount is only used in Add Liquidity page,
+  // so we can assume that baseCurrency and quoteCurrency are always available
   return (
     <>
-      <FieldDepositAmount
-        {...boxProps}
-        addOnly
-        chainId={chainId}
-        baseCurrency={baseCurrency}
-        quoteCurrency={quoteCurrency}
-        handleDepositAmountChange={handleDepositAmountChange}
-        inputValue0={inputValue0}
-        inputValue1={inputValue1}
-        isDeposit0Enabled={isDeposit0Enabled}
-        isDepositEnabled={isDepositEnabled}
-        isDeposit1Enabled={isDeposit1Enabled}
-      />
+      {baseCurrency && quoteCurrency ? (
+        <FieldDepositAmount
+          {...boxProps}
+          addOnly
+          chainId={chainId}
+          baseCurrency={baseCurrency}
+          quoteCurrency={quoteCurrency}
+          handleDepositAmountChange={handleDepositAmountChange}
+          inputValue0={inputValue0}
+          inputValue1={inputValue1}
+          isDeposit0Enabled={isDeposit0Enabled}
+          isDepositEnabled={isDepositEnabled}
+          isDeposit1Enabled={isDeposit1Enabled}
+        />
+      ) : (
+        <Skeleton height="220px" width="100%" />
+      )}
+
       <Column mt="16px" gap="16px">
         <RowBetween>
           <Text color="textSubtle">Total</Text>

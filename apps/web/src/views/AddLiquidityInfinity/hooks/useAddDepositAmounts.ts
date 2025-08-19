@@ -9,6 +9,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useBinRangeQueryState, useClRangeQueryState } from 'state/infinity/shared'
 import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import { parseUnits } from 'viem/utils'
+import { isNumeric } from 'utils/isNumberic'
 import { usePool } from './usePool'
 import { usePoolActivePrice } from './usePoolActivePrice'
 
@@ -150,8 +151,12 @@ const useBinDepositAmounts = () => {
   const handleDepositAmountChange = useCallback(
     (amount: string, currency: 0 | 1) => {
       if (!currency0 || !currency1) return
+
       const rawAmount = amount === '' ? null : amount
-      const parsedAmount = parseUnits(rawAmount ?? '0', currency === 0 ? currency0.decimals : currency1.decimals)
+      const parsedAmount = parseUnits(
+        rawAmount && isNumeric(rawAmount) ? rawAmount : '0',
+        currency === 0 ? currency0.decimals : currency1.decimals,
+      )
 
       if (currency === 0) {
         setInputValue0(amount)
