@@ -163,18 +163,99 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
     try {
       if (isSolanaChain) {
-        // Solana has fixed fee structure (~0.000005 SOL base fee)
-        const fee = 5000 // lamports
-        const formattedFee = formatUnits(BigInt(fee), 9) // SOL has 9 decimals
+        if (!solanaPublicKey) return
 
-        setEstimatedFee(formattedFee)
+        try {
+          const recipientPubkey = new PublicKey(address)
+          let estimatedFee = 5000 // base fee in lamports
 
-        // Calculate USD value if price is available
-        if (nativeCurrencyPrice) {
-          const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
-          setEstimatedFeeUsd(feeUsd.toFixed(2))
-        } else {
-          setEstimatedFeeUsd(null)
+          if (isNativeToken) {
+            // For SOL transfers, we can simulate the transaction for accurate fee
+            try {
+              const amountInLamports = Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL)
+              const transaction = new Transaction().add(
+                SystemProgram.transfer({
+                  fromPubkey: solanaPublicKey,
+                  toPubkey: recipientPubkey,
+                  lamports: amountInLamports,
+                }),
+              )
+
+              // Get recent blockhash for simulation
+              const { blockhash } = await connection.getLatestBlockhash()
+              transaction.recentBlockhash = blockhash
+              transaction.feePayer = solanaPublicKey
+
+              // Simulate to get actual fee
+              const feeResponse = await connection.getFeeForMessage(transaction.compileMessage())
+              if (feeResponse.value) {
+                estimatedFee = feeResponse.value
+              } else {
+                estimatedFee = 5000 // fallback
+              }
+            } catch (error) {
+              console.log('Failed to simulate SOL transaction for fee, using fallback')
+              estimatedFee = 5000
+            }
+          } else {
+            // For token transfers, estimate more complex transaction
+            const tokenMintAddress = new PublicKey(asset.token.address)
+
+            // Detect token program
+            let tokenProgramId = TOKEN_PROGRAM_ID
+            try {
+              const mintInfo = await connection.getAccountInfo(tokenMintAddress)
+              if (mintInfo?.owner.equals(TOKEN_2022_PROGRAM_ID)) {
+                tokenProgramId = TOKEN_2022_PROGRAM_ID
+              }
+            } catch (error) {
+              console.log('Failed to detect token program for fee estimation')
+            }
+
+            const recipientTokenAccount = await getAssociatedTokenAddress(
+              tokenMintAddress,
+              recipientPubkey,
+              false,
+              tokenProgramId,
+            )
+
+            // Check if recipient token account exists
+            try {
+              await getAccount(connection, recipientTokenAccount, 'confirmed', tokenProgramId)
+              // Account exists, just transfer fee
+              estimatedFee = 5000
+            } catch (error: any) {
+              if (error.name === 'TokenAccountNotFoundError') {
+                // Need to create account + transfer
+                estimatedFee = 10000 // ~0.00001 SOL for account creation + transfer
+              } else {
+                estimatedFee = 5000 // fallback
+              }
+            }
+          }
+
+          const formattedFee = formatUnits(BigInt(estimatedFee), 9) // SOL has 9 decimals
+          setEstimatedFee(formattedFee)
+
+          // Calculate USD value if price is available
+          if (nativeCurrencyPrice) {
+            const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
+            setEstimatedFeeUsd(feeUsd.toFixed(2))
+          } else {
+            setEstimatedFeeUsd(null)
+          }
+        } catch (error) {
+          console.error('Error estimating Solana fee:', error)
+          // Fallback to base fee
+          const formattedFee = formatUnits(BigInt(5000), 9)
+          setEstimatedFee(formattedFee)
+
+          if (nativeCurrencyPrice) {
+            const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
+            setEstimatedFeeUsd(feeUsd.toFixed(2))
+          } else {
+            setEstimatedFeeUsd(null)
+          }
         }
       } else {
         // EVM fee estimation (original logic)
@@ -236,6 +317,9 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     nativeCurrencyPrice,
     erc20Contract,
     isSolanaChain,
+    solanaPublicKey,
+    asset.token.address,
+    connection,
   ])
 
   // Separate function for EVM asset transfer
