@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { useRouter } from 'next/router'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
 import { useTransactionAdder } from 'state/transactions/hooks'
 import { useWalletClient, useGasPrice } from 'wagmi'
@@ -54,6 +55,7 @@ export const useV2CreateForm = () => {
     currentLanguage: { locale },
   } = useTranslation()
 
+  const router = useRouter()
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: walletClient } = useWalletClient()
   const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
@@ -361,8 +363,8 @@ export const useV2CreateForm = () => {
           //   <ToastDescriptionWithTx txHash={response}>{t('Successfully created pool')}</ToastDescriptionWithTx>,
           // )
 
-          // Close Preview Modal
-          onDismissPreviewModal()
+          // Redirect to liquidity pools page
+          router.push('/liquidity/pools')
         }),
       )
       ?.catch((err: any) => {

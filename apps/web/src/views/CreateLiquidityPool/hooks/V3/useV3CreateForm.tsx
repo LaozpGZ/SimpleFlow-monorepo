@@ -12,6 +12,7 @@ import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { CurrencyField as Field } from 'utils/types'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
+import { useRouter } from 'next/router'
 import {
   logGTMAddLiquidityTxSentEvent,
   logGTMClickAddLiquidityConfirmEvent,
@@ -58,6 +59,7 @@ import { useCurrencies } from '../useCurrencies'
 
 export const useV3CreateForm = () => {
   const { t } = useTranslation()
+  const router = useRouter()
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: signer } = useWalletClient()
   const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
@@ -415,8 +417,8 @@ export const useV3CreateForm = () => {
             //   <ToastDescriptionWithTx txHash={hash}>{t('Successfully created pool')}</ToastDescriptionWithTx>,
             // )
 
-            // Close Preview Modal
-            onDismissPreviewModal()
+            // Redirect to liquidity pools page
+            router.push('/liquidity/pools')
           })
           .catch((error) => {
             console.error('Failed to send transaction', error)
