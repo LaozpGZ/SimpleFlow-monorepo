@@ -39,7 +39,7 @@ export const MessagePoolInitialized = ({ protocol }: { protocol?: Protocol }) =>
 
   return (
     <Message
-      variant="primary60"
+      variant="success"
       icon={<InfoIcon width="24px" color="#02919D" />}
       action={
         <Button
