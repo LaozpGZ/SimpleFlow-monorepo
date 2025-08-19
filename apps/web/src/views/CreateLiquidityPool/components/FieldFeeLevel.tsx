@@ -7,7 +7,6 @@ import {
   BoxProps,
   ButtonMenu,
   ButtonMenuItem,
-  Checkbox,
   DynamicSection,
   ErrorIcon,
   FlexGap,
@@ -17,6 +16,7 @@ import {
   QuestionHelper,
   Text,
   Toggle,
+  useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useFeeLevelQueryState, useFeeTierSettingQueryState } from 'state/infinity/create'
@@ -46,6 +46,7 @@ const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." charact
 
 export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ...boxProps }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
 
   const [feeLevel, setFeeLevel] = useFeeLevelQueryState()
   const [feeTierSetting, setFeeTierSetting] = useFeeTierSettingQueryState()
@@ -185,14 +186,20 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ..
       </FlexGap>
 
       <DynamicSection disabled={feeTierSetting === 'dynamic'}>
-        <ButtonMenu activeIndex={activeIndex} onItemClick={handleMenuItemClick} variant="subtle" fullWidth>
-          <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[0]}%</ButtonMenuItem>
-          <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[1]}%</ButtonMenuItem>
-          <ButtonMenuItem>{PRESET_FEE_LEVELS_INFINITY[2]}%</ButtonMenuItem>
+        <ButtonMenu
+          activeIndex={activeIndex}
+          onItemClick={handleMenuItemClick}
+          variant="subtle"
+          fullWidth={!isMobile}
+          scale={isMobile ? 'sm' : 'md'}
+        >
+          <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_INFINITY[0]}%</ButtonMenuItem>
+          <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_INFINITY[1]}%</ButtonMenuItem>
+          <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_INFINITY[2]}%</ButtonMenuItem>
 
           {allowCustomFee ? (
-            <ButtonMenuItem minWidth="180px">
-              <InputGroup endIcon={<>%</>}>
+            <ButtonMenuItem padding="0">
+              <InputGroup scale={isMobile ? 'sm' : 'md'} endIcon={<>%</>}>
                 <StyledInput
                   pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
                   inputMode="decimal"
@@ -220,4 +227,10 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ..
 const StyledInput = styled(Input)`
   border: none;
   width: 100%;
+
+  min-width: 80px;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    min-width: 120px;
+  }
 `

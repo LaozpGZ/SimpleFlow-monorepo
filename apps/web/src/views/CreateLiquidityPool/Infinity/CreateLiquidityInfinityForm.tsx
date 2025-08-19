@@ -14,7 +14,11 @@ import { FieldPoolType } from '../components/FieldPoolType'
 import { FieldPriceRange } from '../components/FieldPriceRange'
 import { MessagePoolInitialized } from '../components/MessagePoolInitialized'
 import { SubmitCreateButton } from '../components/SubmitCreateButton'
-import { useInfinityCreateFormQueryState } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
+import {
+  useInfinityCLQueryState,
+  useInfinityBinQueryState,
+  useInfinityCreateFormQueryState,
+} from '../hooks/useInfinityFormState/useInfinityFormQueryState'
 import { usePoolKey } from '../hooks/useInfinityFormState/usePoolKey'
 import { useIsPoolInitialized } from '../hooks/useIsPoolInitialized'
 import { ResponsiveTwoColumns } from '../styles'
@@ -23,10 +27,10 @@ import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
 export const CreateLiquidityInfinityForm = () => {
   const { chainId } = useSelectIdRouteParams()
 
-  // lowerBinId, upperBinId, lowerTick, upperTick are not typed in the query state but exist
-  // @ts-ignore
-  const { isBin, isCl, startPrice, lowerBinId, upperBinId, lowerTick, upperTick, feeLevel } =
-    useInfinityCreateFormQueryState()
+  const { isBin, isCl, startPrice, feeLevel } = useInfinityCreateFormQueryState()
+
+  const { lowerBinId, upperBinId } = useInfinityBinQueryState()
+  const { lowerTick, upperTick } = useInfinityCLQueryState()
 
   const poolKey = usePoolKey()
   const { data: poolInitialized } = useIsPoolInitialized(poolKey, chainId)

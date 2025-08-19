@@ -1,7 +1,17 @@
 import { usePreviousValue } from '@pancakeswap/hooks'
 import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
-import { Box, BoxProps, ButtonMenu, ButtonMenuItem, FlexGap, Input, PreTitle, QuestionHelper } from '@pancakeswap/uikit'
+import {
+  Box,
+  BoxProps,
+  ButtonMenu,
+  ButtonMenuItem,
+  FlexGap,
+  Input,
+  PreTitle,
+  QuestionHelper,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useFeeLevelQueryState } from 'state/infinity/create'
 
@@ -13,6 +23,7 @@ const decimals = 4
 
 export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ ...boxProps }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
   const [feeLevel, setFeeLevel] = useFeeLevelQueryState()
   const [inputValue, setInputValue] = useState<string | null>(null)
 
@@ -69,11 +80,17 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ ...boxProps }) => 
         />
       </FlexGap>
 
-      <ButtonMenu activeIndex={activeIndex} onItemClick={handleMenuItemClick} variant="subtle" fullWidth>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS_V3[0]}%</ButtonMenuItem>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS_V3[1]}%</ButtonMenuItem>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS_V3[2]}%</ButtonMenuItem>
-        <ButtonMenuItem>{PRESET_FEE_LEVELS_V3[3]}%</ButtonMenuItem>
+      <ButtonMenu
+        activeIndex={activeIndex}
+        onItemClick={handleMenuItemClick}
+        variant="subtle"
+        fullWidth={!isMobile}
+        scale={isMobile ? 'sm' : 'md'}
+      >
+        <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_V3[0]}%</ButtonMenuItem>
+        <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_V3[1]}%</ButtonMenuItem>
+        <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_V3[2]}%</ButtonMenuItem>
+        <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_V3[3]}%</ButtonMenuItem>
       </ButtonMenu>
     </Box>
   )
