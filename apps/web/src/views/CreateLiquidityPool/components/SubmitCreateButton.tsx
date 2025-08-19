@@ -27,6 +27,7 @@ import { useCurrencyBalances } from 'state/wallet/hooks'
 import { getInfinityPositionManagerAddress } from 'utils/addressHelpers'
 import { CurrencyField as Field } from 'utils/types'
 import { useAccount } from 'wagmi'
+import { formatPreviewPrice } from '../utils'
 import { useBinIdRange } from '../hooks/useBinIdRange'
 import { useCreateDepositAmounts, useCreateDepositAmountsEnabled } from '../hooks/useCreateDepositAmounts'
 import { useCurrencies } from '../hooks/useCurrencies'
@@ -163,7 +164,12 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
 
   // CL
   const { tickSpacing } = useInfinityCLQueryState()
-  const { lowerPrice, upperPrice, minPrice, maxPrice } = useCLPriceRange(currency0, currency1, tickSpacing ?? undefined)
+  const { lowerPrice, upperPrice, minPrice, maxPrice } = useCLPriceRange(
+    currency0,
+    currency1,
+    tickSpacing ?? undefined,
+    formatPreviewPrice,
+  )
 
   // Bin
   const { binStep, lowerBinId, upperBinId, activeId } = useInfinityBinQueryState()
@@ -437,7 +443,7 @@ export const SubmitCreateButton: React.FC<SubmitCreateButtonProps> = ({ ...boxPr
                   <div>
                     {poolType === 'Bin' ? (
                       <>
-                        {minPriceBin?.toSignificant(6)} - {maxPriceBin?.toSignificant(6)}
+                        {formatPreviewPrice(minPriceBin)} - {formatPreviewPrice(maxPriceBin)}
                       </>
                     ) : (
                       <>

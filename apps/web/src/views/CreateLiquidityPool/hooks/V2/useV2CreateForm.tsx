@@ -15,7 +15,6 @@ import { BIG_INT_ZERO, V2_ROUTER_ADDRESS } from 'config/constants/exchange'
 import { getViemErrorMessage } from 'utils/errors'
 import { ApprovalState, useApproveCallback } from 'hooks/useApproveCallback'
 import { calculateSlippageAmount, useRouterContract } from 'utils/exchange'
-import { ToastDescriptionWithTx } from 'components/Toast'
 import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
 import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
 import {
@@ -47,8 +46,6 @@ import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useStartingPriceQueryState } from 'state/infinity/create'
 import { PreviewModal } from 'views/CreateLiquidityPool/components/PreviewModal'
-import { useRouter } from 'next/router'
-import { getPoolDetailPageLink } from 'utils/getPoolLink'
 import { useCurrencies } from '../useCurrencies'
 
 export const useV2CreateForm = () => {
@@ -56,12 +53,11 @@ export const useV2CreateForm = () => {
     t,
     currentLanguage: { locale },
   } = useTranslation()
-  const router = useRouter()
 
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: walletClient } = useWalletClient()
   const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
-  const { toastSuccess, toastError } = useToast()
+  const { toastError } = useToast()
 
   const { data: gasPrice } = useGasPrice()
 
@@ -360,18 +356,13 @@ export const useV2CreateForm = () => {
             addPair(pair)
           }
 
-          toastSuccess(
-            `${t('Create Pool')}!`,
-            <ToastDescriptionWithTx txHash={response}>{t('Successfully created pool')}</ToastDescriptionWithTx>,
-          )
+          // toastSuccess(
+          //   `${t('Create Pool')}`,
+          //   <ToastDescriptionWithTx txHash={response}>{t('Successfully created pool')}</ToastDescriptionWithTx>,
+          // )
 
-          // Re-direct to Pool Detail page
-          await router.push(
-            await getPoolDetailPageLink({
-              chainId,
-              lpAddress: Pair.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped),
-            } as any),
-          )
+          // Close Preview Modal
+          onDismissPreviewModal()
         }),
       )
       ?.catch((err: any) => {

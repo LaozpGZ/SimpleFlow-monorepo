@@ -11,7 +11,6 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { CurrencyField as Field } from 'utils/types'
-import { formatRangeSelectorPrice } from 'utils/formatRangeSelectorPrice'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import {
   logGTMAddLiquidityTxSentEvent,
@@ -43,29 +42,26 @@ import {
 } from '@pancakeswap/uikit'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
-import { FeeAmount, NonfungiblePositionManager, Pool } from '@pancakeswap/v3-sdk'
+import { NonfungiblePositionManager } from '@pancakeswap/v3-sdk'
 import { basisPointsToPercent } from 'utils/exchange'
 import { hexToBigInt } from 'viem/utils'
 import { getViemClients } from 'utils/viem'
 import { calculateGasMargin } from 'utils'
 import { formatRawAmount } from 'utils/formatCurrencyAmount'
 import { useTransactionAdder } from 'state/transactions/hooks'
-import { ToastDescriptionWithTx } from 'components/Toast'
 import { isUserRejected } from 'utils/sentry'
+import { formatPreviewPrice } from 'views/CreateLiquidityPool/utils'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import { PreviewModal } from 'views/CreateLiquidityPool/components/PreviewModal'
 import { QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV3/types'
-import { useRouter } from 'next/router'
-import { getPoolDetailPageLink } from 'utils/getPoolLink'
 import { useCurrencies } from '../useCurrencies'
 
 export const useV3CreateForm = () => {
   const { t } = useTranslation()
-  const router = useRouter()
   const { account, chainId, isWrongNetwork } = useAccountActiveChain()
   const { data: signer } = useWalletClient()
   const { onOpen: onOpenPreviewModal, isOpen: isPreviewModalOpen, onDismiss: onDismissPreviewModal } = useModalV2()
-  const { toastSuccess, toastError } = useToast()
+  const { toastError } = useToast()
 
   // User Settings
   const expertMode = useIsExpertMode()
@@ -336,18 +332,13 @@ export const useV3CreateForm = () => {
             setTxHash(hash)
             onAddLiquidityCallback(hash)
 
-            toastSuccess(
-              `${t('Create Pool')}!`,
-              <ToastDescriptionWithTx txHash={hash}>{t('Successfully created pool')}</ToastDescriptionWithTx>,
-            )
+            // toastSuccess(
+            //   `${t('Create Pool')}!`,
+            //   <ToastDescriptionWithTx txHash={hash}>{t('Successfully created pool')}</ToastDescriptionWithTx>,
+            // )
 
-            // Re-direct to Pool Detail page
-            await router.push(
-              await getPoolDetailPageLink({
-                chainId,
-                lpAddress: Pool.getAddress(baseCurrency.wrapped, quoteCurrency.wrapped, feeAmount as FeeAmount),
-              } as any),
-            )
+            // Close Preview Modal
+            onDismissPreviewModal()
           })
           .catch((error) => {
             console.error('Failed to send transaction', error)
@@ -533,8 +524,8 @@ export const useV3CreateForm = () => {
                 ) : (
                   <AutoColumn>
                     <div>
-                      {formatRangeSelectorPrice(invertPrice ? priceUpper?.invert() : priceLower)} -{' '}
-                      {formatRangeSelectorPrice(invertPrice ? priceLower?.invert() : priceUpper)}{' '}
+                      {formatPreviewPrice(invertPrice ? priceUpper?.invert() : priceLower)} -{' '}
+                      {formatPreviewPrice(invertPrice ? priceLower?.invert() : priceUpper)}{' '}
                     </div>
                     <div>
                       {t('%assetA% = 1 %assetB%', {
