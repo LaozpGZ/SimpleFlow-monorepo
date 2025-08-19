@@ -23,12 +23,17 @@ export const useSelectIdRoute = () => {
 
   const protocolName = useMemo(() => {
     return (
-      protocolFromQuery === 'infinity' && INFINITY_SUPPORTED_CHAINS.includes(activeChainId)
-        ? 'infinity'
-        : isSupportedProtocol(protocolFromQuery as Protocol)
-        ? protocolFromQuery
-        : 'v3'
-    ) as 'infinity' | 'v3' | 'v2' | 'stable'
+      // if no protocol and infinity is supported, set to infinity
+      (
+        (!protocolFromQuery || protocolFromQuery === 'infinity') && INFINITY_SUPPORTED_CHAINS.includes(activeChainId)
+          ? 'infinity'
+          : // if other protocol value is supported (v2, v3, stable), set to that protocol
+          isSupportedProtocol(protocolFromQuery as Protocol)
+          ? protocolFromQuery
+          : // if protocol is not supported, default to v3
+            'v3'
+      ) as 'infinity' | 'v3' | 'v2' | 'stable'
+    )
   }, [activeChainId, router.query])
 
   const replaceWithDefaultRoute = useCallback(() => {
