@@ -51,6 +51,7 @@ import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { calculateSlippageAmount } from 'utils/exchange'
 import { NavBreadcrumbs } from 'views/RemoveLiquidityInfinity/components/NavBreadcrumbs'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
 import { useErrorMsg } from './hooks/useErrorMsg'
 import { useIncreaseForm } from './hooks/useIncreaseForm'
 
@@ -448,6 +449,12 @@ export const IncreaseLiquidity = () => {
               disabled={deposit1Disabled}
             />
           </Box>
+
+          <RowBetween my="16px">
+            <Text color="textSubtle">{t('Slippage Tolerance')}</Text>
+            <LiquiditySlippageButton />
+          </RowBetween>
+
           <V3SubmitButton
             addIsWarning={false}
             addIsUnsupported={false}

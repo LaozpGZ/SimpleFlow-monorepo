@@ -1,7 +1,7 @@
 import { CommonBasesType } from 'components/SearchModal/types'
 
 import { Currency, CurrencyAmount, Percent } from '@pancakeswap/sdk'
-import { AutoColumn, Box, Button, CardBody, useModal } from '@pancakeswap/uikit'
+import { AutoColumn, Box, Button, CardBody, RowBetween, Text, useModal } from '@pancakeswap/uikit'
 import { ConfirmationModalContent } from '@pancakeswap/widgets-internal'
 
 import { useIsExpertMode, useUserSlippage } from '@pancakeswap/utils/user'
@@ -39,6 +39,7 @@ import { ZAP_V3_POOL_ADDRESSES } from 'config/constants/zapV3'
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
 import { V3SubmitButton } from './components/V3SubmitButton'
 import LockedDeposit from './formViews/V3FormView/components/LockedDeposit'
 import { PositionPreview } from './formViews/V3FormView/components/PositionPreview'
@@ -486,6 +487,10 @@ export default function IncreaseLiquidityV3({ currencyA: baseCurrency, currencyB
               gap: 16,
             }}
           >
+            <RowBetween my="16px">
+              <Text color="textSubtle">{t('Slippage Tolerance')}</Text>
+              <LiquiditySlippageButton />
+            </RowBetween>
             {buttons}
             {hasZapV3Pool && hasInsufficentBalance && (
               <ZapLiquidityWidget
