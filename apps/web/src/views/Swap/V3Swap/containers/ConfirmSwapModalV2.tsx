@@ -27,10 +27,10 @@ import { Hash } from 'viem'
 import { EVMInterfaceOrder, InterfaceOrder, isXOrder } from 'views/Swap/utils'
 import { TransactionConfirmSwapContentV2 } from '../components/TransactionConfirmSwapContentV2'
 import { useSlippageAdjustedAmounts } from '../hooks'
-import { ConfirmAction } from '../hooks/useConfirmModalState'
 import { AllowedAllowanceState } from '../types'
 import { ApproveStepFlow } from './ApproveStepFlow'
 import { SolanaSwapTxReceiptModalContent } from '../components/SolanaSwapTxReceiptModalContent'
+import { ConfirmAction } from '../hooks/steps/step.type'
 
 export const useApprovalPhaseStepTitles: ({ trade }: { trade: InterfaceOrder['trade'] | undefined }) => {
   [step in AllowedAllowanceState]: string
