@@ -42,7 +42,7 @@ import {
 } from '@pancakeswap/uikit'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
-import { NonfungiblePositionManager } from '@pancakeswap/v3-sdk'
+import { NonfungiblePositionManager, priceToClosestTick } from '@pancakeswap/v3-sdk'
 import { basisPointsToPercent } from 'utils/exchange'
 import { hexToBigInt } from 'viem/utils'
 import { getViemClients } from 'utils/viem'
@@ -182,6 +182,49 @@ export const useV3CreateForm = () => {
   // Value and Prices at ticks
   const { [Bound.LOWER]: tickLower, [Bound.UPPER]: tickUpper } = ticks
   const { [Bound.LOWER]: priceLower, [Bound.UPPER]: priceUpper } = pricesAtTicks
+
+  // Left and Right values for displaying in Preview Modal
+  const tokenA = (baseCurrency ?? undefined)?.wrapped
+  const tokenB = (quoteCurrency ?? undefined)?.wrapped
+  const isSorted = tokenA && tokenB && tokenA.sortsBefore(tokenB)
+
+  const rangeLeftPrice = isSorted ? priceLower : priceUpper?.invert()
+  const rangeRightPrice = isSorted ? priceUpper : priceLower?.invert()
+  const rangeLeftValue = useMemo(() => {
+    if (ticksAtLimit[isSorted ? Bound.LOWER : Bound.UPPER]) return '0'
+
+    if (
+      tickSpaceLimits?.[Bound.LOWER] !== undefined &&
+      rangeLeftPrice &&
+      priceToClosestTick(rangeLeftPrice) <= tickSpaceLimits[Bound.LOWER]
+    ) {
+      return '0'
+    }
+
+    return formatPreviewPrice(rangeLeftPrice)
+  }, [isSorted, rangeLeftPrice, tickSpaceLimits, ticksAtLimit])
+
+  const rangeRightValue = useMemo(() => {
+    if (ticksAtLimit[isSorted ? Bound.UPPER : Bound.LOWER]) return '∞'
+
+    if (
+      tickSpaceLimits?.[Bound.LOWER] !== undefined &&
+      rangeRightPrice &&
+      priceToClosestTick(rangeRightPrice) <= tickSpaceLimits[Bound.LOWER]
+    ) {
+      return '0'
+    }
+
+    if (
+      tickSpaceLimits?.[Bound.UPPER] !== undefined &&
+      rangeRightPrice &&
+      priceToClosestTick(rangeRightPrice) >= tickSpaceLimits[Bound.UPPER]
+    ) {
+      return '∞'
+    }
+
+    return formatPreviewPrice(rangeRightPrice)
+  }, [isSorted, rangeRightPrice, tickSpaceLimits, ticksAtLimit])
 
   const { onFieldAInput, onFieldBInput, onLeftRangeInput, onRightRangeInput, onStartPriceInput, onBothRangeInput } =
     useV3MintActionHandlers(noLiquidity, false)
@@ -545,31 +588,17 @@ export const useV3CreateForm = () => {
           priceRange: (
             <>
               <FlexGap gap="4px" alignItems="center">
-                {/* Full range case */}
-                {ticksAtLimit[Bound.LOWER] && ticksAtLimit[Bound.UPPER] ? (
-                  <AutoColumn>
-                    <div>0 - ∞ </div>
-                    <div>
-                      {t('%assetA% = 1 %assetB%', {
-                        assetA: quoteCurrency?.symbol,
-                        assetB: baseCurrency?.symbol,
-                      })}
-                    </div>
-                  </AutoColumn>
-                ) : (
-                  <AutoColumn>
-                    <div>
-                      {formatPreviewPrice(invertPrice ? priceUpper?.invert() : priceLower)} -{' '}
-                      {formatPreviewPrice(invertPrice ? priceLower?.invert() : priceUpper)}{' '}
-                    </div>
-                    <div>
-                      {t('%assetA% = 1 %assetB%', {
-                        assetA: quoteCurrency?.symbol,
-                        assetB: baseCurrency?.symbol,
-                      })}
-                    </div>
-                  </AutoColumn>
-                )}
+                <AutoColumn>
+                  <div>
+                    {rangeLeftValue} - {rangeRightValue}
+                  </div>
+                  <div>
+                    {t('%assetA% = 1 %assetB%', {
+                      assetA: quoteCurrency?.symbol,
+                      assetB: baseCurrency?.symbol,
+                    })}
+                  </div>
+                </AutoColumn>
 
                 <IconButton variant="text" scale="sm" onClick={switchCurrencies}>
                   <SwapHorizIcon color="textSubtle" />
