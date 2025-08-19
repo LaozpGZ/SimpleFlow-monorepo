@@ -4,6 +4,7 @@ import { AutoColumn, Box, Card, CardBody, DynamicSection, FlexGap, PreTitle, Tex
 import { Protocol } from '@pancakeswap/farms'
 import { useStartingPriceQueryState } from 'state/infinity/create'
 import { CurrencyField as Field } from 'utils/types'
+import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { useDebounce } from '@pancakeswap/hooks'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
@@ -81,6 +82,7 @@ export const CreateLiquidityV2Form = () => {
 
             <DynamicSection disabled={poolExists || !currenciesExist || !startPriceTypedValue}>
               <FieldSlippageTolerance />
+              <MevProtectToggle />
             </DynamicSection>
 
             <DynamicSection disabled={poolExists || !currenciesExist || !startPriceTypedValue}>

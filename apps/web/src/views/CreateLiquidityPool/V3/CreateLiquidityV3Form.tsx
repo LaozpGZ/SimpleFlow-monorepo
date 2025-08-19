@@ -3,6 +3,7 @@ import { Protocol } from '@pancakeswap/farms'
 import { useFeeLevelQueryState } from 'state/infinity/create'
 import { useDebounce } from '@pancakeswap/hooks'
 import { CurrencyField as Field } from 'utils/types'
+import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { FieldSelectCurrencies } from '../components/FieldSelectCurrencies'
 import { FieldStartingPrice } from '../components/V3/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/V3/FieldCreateDepositAmount'
@@ -99,6 +100,7 @@ export const CreateLiquidityV3Form = () => {
               }
             >
               <FieldSlippageTolerance />
+              <MevProtectToggle />
             </DynamicSection>
 
             <DynamicSection

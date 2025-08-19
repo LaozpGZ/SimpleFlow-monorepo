@@ -8,6 +8,7 @@ import { FieldClTickSpacing } from 'views/CreateLiquidityPool/components/FieldCl
 import { FieldFeeLevel } from 'views/CreateLiquidityPool/components/FieldFeeLevel'
 import { FieldHookSettings } from 'views/CreateLiquidityPool/components/FieldHookSettings'
 import { FieldSelectCurrencies } from 'views/CreateLiquidityPool/components/FieldSelectCurrencies'
+import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { FieldStartingPrice } from 'views/CreateLiquidityPool/components/FieldStartingPrice'
 import { FieldCreateDepositAmount } from '../components/FieldCreateDepositAmount'
 import { FieldPoolType } from '../components/FieldPoolType'
@@ -83,6 +84,7 @@ export const CreateLiquidityInfinityForm = () => {
                 <AutoColumn gap={['16px', null, null, '24px']}>
                   <FieldCreateDepositAmount />
                   <FieldSlippageTolerance />
+                  <MevProtectToggle />
                   <SubmitCreateButton />
                 </AutoColumn>
               </DynamicSection>
