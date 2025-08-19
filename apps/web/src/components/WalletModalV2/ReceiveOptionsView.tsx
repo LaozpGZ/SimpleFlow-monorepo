@@ -10,6 +10,7 @@ import { useAtom } from 'jotai'
 import { useMemo } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
+import { SolanaWalletModal } from 'wallet/SolanaWalletModal'
 
 interface ReceiveOptionsViewProps {
   onSelectEVM: () => void
@@ -194,6 +195,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
           )}
         </OptionCard>
       </FlexGap>
+      <SolanaWalletModal />
     </Box>
   )
 }
