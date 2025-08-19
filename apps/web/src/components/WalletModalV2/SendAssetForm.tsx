@@ -21,10 +21,11 @@ import {
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
-import { ToastDescriptionWithTx, SolanaDescriptionWithTx } from 'components/Toast'
+import { ToastDescriptionWithTx } from 'components/Toast'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { BalanceData } from 'hooks/useAddressBalance'
 import useCatchTxError from 'hooks/useCatchTxError'
+
 import { useERC20 } from 'hooks/useContract'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import useNativeCurrency from 'hooks/useNativeCurrency'
@@ -63,6 +64,7 @@ import SendTransactionFlow from './SendTransactionFlow'
 import { ViewState } from './type'
 import { estimateSimpleSolanaFee, getQuickSolanaFeeEstimate } from './utils/solanaTxFeeEstimation'
 import { useEnhancedTokenLogo } from './hooks/useEnhancedTokenLogo'
+import useSolanaTxError from './hooks/useSolanaTxError'
 import { useSolanaPriorityFee } from './hooks/useSolanaPriorityFee'
 import { SolanaPriorityFeeModal } from './SolanaPriorityFeeModal'
 
@@ -135,6 +137,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const publicClient = usePublicClient({ chainId: asset.chainId })
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: attemptingTxn } = useCatchTxError()
+  const { executeSolanaTransaction, loading: solanaTxLoading } = useSolanaTxError()
   const { includeStarterGas, nativeAmount, isUserInsufficientBalance } = useSendGiftContext()
   const { getEnhancedLogoURI } = useEnhancedTokenLogo()
   const { computeBudgetConfig, currentFee } = useSolanaPriorityFee()
@@ -344,194 +347,155 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
     const recipientPubkey = new PublicKey(address)
 
-    const receipt = await fetchWithCatchTxError(async () => {
-      try {
-        // Check balance before sending
-        const balance = await connection.getBalance(solanaPublicKey)
-        const requiredAmount = isNativeToken
-          ? Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL) + 5000 // amount + transaction fee
-          : 5000 // just transaction fee for token transfers
+    const receipt = await executeSolanaTransaction(async () => {
+      // Check balance before sending
+      const balance = await connection.getBalance(solanaPublicKey)
+      const requiredAmount = isNativeToken
+        ? Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL) + 5000 // amount + transaction fee
+        : 5000 // just transaction fee for token transfers
 
-        if (balance < requiredAmount) {
-          throw new Error(t('Insufficient SOL balance to complete transaction'))
-        }
-        let signature: string
-
-        if (isNativeToken) {
-          const amountInLamports = Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL)
-
-          const transaction = new Transaction()
-
-          // Add Compute Budget instructions (Priority Fee)
-          transaction.add(
-            ComputeBudgetProgram.setComputeUnitLimit({ units: computeBudgetConfig.units }),
-            ComputeBudgetProgram.setComputeUnitPrice({ microLamports: computeBudgetConfig.microLamports }),
-          )
-
-          transaction.add(
-            SystemProgram.transfer({
-              fromPubkey: solanaPublicKey,
-              toPubkey: recipientPubkey,
-              lamports: amountInLamports,
-            }),
-          )
-
-          signature = await sendSolanaTransaction(transaction, connection)
-        } else {
-          const tokenMintAddress = new PublicKey(asset.token.address)
-          const amountInTokenUnits = Math.floor(parseFloat(amount) * 10 ** asset.token.decimals)
-
-          // First, detect which token program this mint uses
-          let tokenProgramId = TOKEN_PROGRAM_ID
-          try {
-            const mintInfo = await connection.getAccountInfo(tokenMintAddress)
-            if (mintInfo?.owner.equals(TOKEN_2022_PROGRAM_ID)) {
-              tokenProgramId = TOKEN_2022_PROGRAM_ID
-              console.log('Detected Token2022 mint:', tokenMintAddress.toString())
-            } else {
-              console.log('Using standard Token Program for mint:', tokenMintAddress.toString())
-            }
-          } catch (error) {
-            console.error('Failed to detect token program, using default:', error)
-          }
-
-          const senderTokenAccount = await getAssociatedTokenAddress(
-            tokenMintAddress,
-            solanaPublicKey,
-            false,
-            tokenProgramId,
-          )
-          const recipientTokenAccount = await getAssociatedTokenAddress(
-            tokenMintAddress,
-            recipientPubkey,
-            false,
-            tokenProgramId,
-          )
-
-          const transaction = new Transaction()
-
-          // Add Compute Budget instructions (Priority Fee)
-          transaction.add(
-            ComputeBudgetProgram.setComputeUnitLimit({ units: computeBudgetConfig.units }),
-            ComputeBudgetProgram.setComputeUnitPrice({ microLamports: computeBudgetConfig.microLamports }),
-          )
-
-          // Check if recipient's associated token account exists
-          try {
-            await getAccount(connection, recipientTokenAccount, 'confirmed', tokenProgramId)
-          } catch (error: any) {
-            if (error.name === 'TokenAccountNotFoundError') {
-              // Create associated token account for recipient
-              transaction.add(
-                createAssociatedTokenAccountInstruction(
-                  solanaPublicKey, // payer
-                  recipientTokenAccount, // associated token account
-                  recipientPubkey, // owner
-                  tokenMintAddress, // mint
-                  tokenProgramId, // token program ID
-                ),
-              )
-            } else {
-              throw error
-            }
-          }
-
-          // Add transfer instruction using the appropriate program
-          if (tokenProgramId.equals(TOKEN_2022_PROGRAM_ID)) {
-            transaction.add(
-              createTransferCheckedInstruction(
-                senderTokenAccount,
-                tokenMintAddress,
-                recipientTokenAccount,
-                solanaPublicKey,
-                amountInTokenUnits,
-                asset.token.decimals,
-                [],
-                tokenProgramId,
-              ),
-            )
-          } else {
-            transaction.add(
-              createTransferInstruction(
-                senderTokenAccount,
-                recipientTokenAccount,
-                solanaPublicKey,
-                amountInTokenUnits,
-                [],
-                tokenProgramId,
-              ),
-            )
-          }
-
-          signature = await sendSolanaTransaction(transaction, connection)
-        }
-
-        // Wait for transaction confirmation using the modern approach
-        console.log('Waiting for transaction confirmation:', signature)
-        try {
-          const latestBlockhash = await connection.getLatestBlockhash()
-          const confirmation = await connection.confirmTransaction(
-            {
-              signature,
-              blockhash: latestBlockhash.blockhash,
-              lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
-            },
-            'confirmed',
-          )
-
-          if (confirmation.value.err) {
-            throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`)
-          }
-        } catch (confirmError) {
-          console.error('Transaction confirmation failed:', confirmError)
-          throw new Error(`Transaction confirmation failed: ${confirmError}`)
-        }
-
-        const receipt = { hash: signature as `0x${string}`, status: 1, transactionHash: signature }
-
-        if (receipt?.status) {
-          setTxHash(receipt.transactionHash)
-          toastSuccess(
-            `${t('Transaction Submitted')}!`,
-            <SolanaDescriptionWithTx txHash={receipt.transactionHash}>
-              {t('Your %symbol% has been sent to %address%', {
-                symbol: asset.token.symbol,
-                address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
-              })}
-            </SolanaDescriptionWithTx>,
-          )
-          setAmount('')
-          setAddress('')
-        }
-
-        return receipt
-      } catch (error: any) {
-        // Handle Solana-specific errors
-        console.error('Solana transaction error:', error)
-
-        // Provide more user-friendly error messages
-        let errorMessage = 'Transaction failed'
-
-        if (error?.message) {
-          const message = error.message.toLowerCase()
-          if (message.includes('insufficient funds') || message.includes('insufficient lamports')) {
-            errorMessage = t('Insufficient balance to complete transaction')
-          } else if (message.includes('blockhash not found')) {
-            errorMessage = t('Network congestion. Please try again')
-          } else if (message.includes('transaction was not confirmed')) {
-            errorMessage = t('Transaction failed to confirm. Please try again')
-          } else if (message.includes('user rejected')) {
-            errorMessage = t('Transaction rejected by user')
-          } else {
-            errorMessage = error.message
-          }
-        }
-
-        // Create a custom error with user-friendly message
-        const customError = new Error(errorMessage)
-        customError.name = 'SolanaTransactionError'
-        throw customError
+      if (balance < requiredAmount) {
+        throw new Error(t('Insufficient SOL balance to complete transaction'))
       }
+      let signature: string
+
+      if (isNativeToken) {
+        const amountInLamports = Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL)
+
+        const transaction = new Transaction()
+
+        // Add Compute Budget instructions (Priority Fee)
+        transaction.add(
+          ComputeBudgetProgram.setComputeUnitLimit({ units: computeBudgetConfig.units }),
+          ComputeBudgetProgram.setComputeUnitPrice({ microLamports: computeBudgetConfig.microLamports }),
+        )
+
+        transaction.add(
+          SystemProgram.transfer({
+            fromPubkey: solanaPublicKey,
+            toPubkey: recipientPubkey,
+            lamports: amountInLamports,
+          }),
+        )
+
+        signature = await sendSolanaTransaction(transaction, connection)
+      } else {
+        const tokenMintAddress = new PublicKey(asset.token.address)
+        const amountInTokenUnits = Math.floor(parseFloat(amount) * 10 ** asset.token.decimals)
+
+        // First, detect which token program this mint uses
+        let tokenProgramId = TOKEN_PROGRAM_ID
+        try {
+          const mintInfo = await connection.getAccountInfo(tokenMintAddress)
+          if (mintInfo?.owner.equals(TOKEN_2022_PROGRAM_ID)) {
+            tokenProgramId = TOKEN_2022_PROGRAM_ID
+            console.log('Detected Token2022 mint:', tokenMintAddress.toString())
+          } else {
+            console.log('Using standard Token Program for mint:', tokenMintAddress.toString())
+          }
+        } catch (error) {
+          console.error('Failed to detect token program, using default:', error)
+        }
+
+        const senderTokenAccount = await getAssociatedTokenAddress(
+          tokenMintAddress,
+          solanaPublicKey,
+          false,
+          tokenProgramId,
+        )
+        const recipientTokenAccount = await getAssociatedTokenAddress(
+          tokenMintAddress,
+          recipientPubkey,
+          false,
+          tokenProgramId,
+        )
+
+        const transaction = new Transaction()
+
+        // Add Compute Budget instructions (Priority Fee)
+        transaction.add(
+          ComputeBudgetProgram.setComputeUnitLimit({ units: computeBudgetConfig.units }),
+          ComputeBudgetProgram.setComputeUnitPrice({ microLamports: computeBudgetConfig.microLamports }),
+        )
+
+        // Check if recipient's associated token account exists
+        try {
+          await getAccount(connection, recipientTokenAccount, 'confirmed', tokenProgramId)
+        } catch (error: any) {
+          if (error.name === 'TokenAccountNotFoundError') {
+            // Create associated token account for recipient
+            transaction.add(
+              createAssociatedTokenAccountInstruction(
+                solanaPublicKey, // payer
+                recipientTokenAccount, // associated token account
+                recipientPubkey, // owner
+                tokenMintAddress, // mint
+                tokenProgramId, // token program ID
+              ),
+            )
+          } else {
+            throw error
+          }
+        }
+
+        // Add transfer instruction using the appropriate program
+        if (tokenProgramId.equals(TOKEN_2022_PROGRAM_ID)) {
+          transaction.add(
+            createTransferCheckedInstruction(
+              senderTokenAccount,
+              tokenMintAddress,
+              recipientTokenAccount,
+              solanaPublicKey,
+              amountInTokenUnits,
+              asset.token.decimals,
+              [],
+              tokenProgramId,
+            ),
+          )
+        } else {
+          transaction.add(
+            createTransferInstruction(
+              senderTokenAccount,
+              recipientTokenAccount,
+              solanaPublicKey,
+              amountInTokenUnits,
+              [],
+              tokenProgramId,
+            ),
+          )
+        }
+
+        signature = await sendSolanaTransaction(transaction, connection)
+      }
+
+      // Wait for transaction confirmation using the modern approach
+      console.log('Waiting for transaction confirmation:', signature)
+      try {
+        const latestBlockhash = await connection.getLatestBlockhash()
+        const confirmation = await connection.confirmTransaction(
+          {
+            signature,
+            blockhash: latestBlockhash.blockhash,
+            lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+          },
+          'confirmed',
+        )
+
+        if (confirmation.value.err) {
+          throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`)
+        }
+      } catch (confirmError) {
+        console.error('Transaction confirmation failed:', confirmError)
+        throw new Error(`Transaction confirmation failed: ${confirmError}`)
+      }
+
+      // Update UI state on success
+      setTxHash(signature)
+      setAmount('')
+      setAddress('')
+
+      // Return transaction result for executeSolanaTransaction
+      return { hash: signature, status: 1 }
     })
 
     return receipt
@@ -543,9 +507,8 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     asset.token,
     sendSolanaTransaction,
     connection,
-    t,
-    toastSuccess,
-    fetchWithCatchTxError,
+    computeBudgetConfig,
+    executeSolanaTransaction,
   ])
 
   // Main sendAsset function that routes to appropriate handler
@@ -711,7 +674,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           onViewStateChange(ViewState.SEND_ASSETS)
           setTxHash(undefined)
         }}
-        attemptingTxn={attemptingTxn}
+        attemptingTxn={isSolanaChain ? solanaTxLoading : attemptingTxn}
         txHash={txHash}
         chainId={asset.chainId}
         estimatedFee={estimatedFee}
@@ -725,9 +688,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
             }
           } catch (error: any) {
             console.error('Transaction failed:', error)
-            // The error handling is already done in sendSolanaAsset,
-            // but we need to ensure the user sees the error
-            // For now, just log it - the actual error toast should be shown by fetchWithCatchTxError
+            // Error handling is done by the executeSolanaTransaction hook
           }
         }}
       />
@@ -740,7 +701,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       amount,
       isAmountZero: parseFloat(amount) === 0,
       isInsufficientBalance,
-      attemptingTxn,
+      attemptingTxn: isSolanaChain ? solanaTxLoading : attemptingTxn,
       isValidGasSponsor,
       isGiftTokenAmountValid,
       addressError,
