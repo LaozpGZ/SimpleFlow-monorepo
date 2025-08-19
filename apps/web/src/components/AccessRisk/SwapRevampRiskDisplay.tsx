@@ -16,10 +16,11 @@ import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import { useEffect, useMemo, useState } from 'react'
 import { keyframes, styled } from 'styled-components'
 
-import { useUserSlippage } from '@pancakeswap/utils/user'
+import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
 import { DEFAULT_SLIPPAGE_TOLERANCE } from 'components/Menu/GlobalSettings/TransactionSettings'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAutoSlippageEnabled } from 'hooks/useAutoSlippageWithFallback'
+import { isSolana } from '@pancakeswap/chains'
 import { TOKEN_RISK, TOKEN_RISK_T, useTokenRisk } from './index'
 
 const appearAni = keyframes`
@@ -233,10 +234,45 @@ const ExactOutWarningDetails: React.FC = () => {
   )
 }
 
-const SlippageDetails: React.FC = () => {
+const BaseResetSlippageButton: React.FC<{ onClick: () => void }> = ({ onClick }) => {
   const { t } = useTranslation()
+
+  return (
+    <StyledTextButton onClick={onClick} scale="sm" px="0">
+      {t('Reset Slippage')}
+    </StyledTextButton>
+  )
+}
+
+const EVMResetSlippageButton: React.FC = () => {
   const [, setUserSlippageTolerance] = useUserSlippage()
   const [, setAutoSlippageEnabled] = useAutoSlippageEnabled()
+
+  return (
+    <BaseResetSlippageButton
+      onClick={() => {
+        setAutoSlippageEnabled(false)
+        setUserSlippageTolerance(DEFAULT_SLIPPAGE_TOLERANCE)
+      }}
+    />
+  )
+}
+
+const SolanaResetSlippageButton: React.FC = () => {
+  const [, setSolanaUserSlippage] = useSolanaUserSlippage()
+
+  return (
+    <BaseResetSlippageButton
+      onClick={() => {
+        setSolanaUserSlippage(DEFAULT_SLIPPAGE_TOLERANCE)
+      }}
+    />
+  )
+}
+
+const SlippageDetails: React.FC = () => {
+  const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
 
   return (
     <FlexGap alignItems="flex-start">
@@ -246,16 +282,7 @@ const SlippageDetails: React.FC = () => {
             'You may only get the amount of “Minimum received” with a high slippage setting. Reset your slippage to avoid potential losses.',
           )}
         </Text>
-        <StyledTextButton
-          onClick={() => {
-            setAutoSlippageEnabled(false)
-            setUserSlippageTolerance(DEFAULT_SLIPPAGE_TOLERANCE)
-          }}
-          scale="sm"
-          px="0"
-        >
-          {t('Reset Slippage')}
-        </StyledTextButton>
+        {isSolana(chainId) ? <SolanaResetSlippageButton /> : <EVMResetSlippageButton />}
       </FlexGap>
     </FlexGap>
   )
