@@ -4042,7 +4042,7 @@
   "twap.currentMarketPrice": "Aktuális piaci ár",
   "twap.from": "From",
   "twap.to": "To",
-  "twap.orders": "Order History",
+  "twap.orders": "Megbízási előzmények",
   "twap.confirmTx": "Confirm Transaction",
   "twap.expiration": "Expiration",
   "twap.orderType": "Order type",
