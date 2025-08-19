@@ -51,15 +51,10 @@ export const CreateLiquidityV2Form = () => {
             {poolExists && currenciesExist && <MessagePoolInitialized protocol={Protocol.V2} />}
 
             <DynamicSection disabled={poolExists || !currenciesExist}>
-              <FlexGap
-                flexDirection={['column', 'column', 'row']}
-                gap="8px"
-                alignItems={['flex-start', 'flex-start', 'center']}
-                justifyContent="space-between"
-              >
+              <FlexGap flexDirection={['column', 'column', 'row']} gap="8px" justifyContent="space-between">
                 <Box>
                   <PreTitle>{t('Fee Level')}</PreTitle>
-                  <FeeLevelCard mt="14px">
+                  <FeeLevelCard mt="16px">
                     <Text color="invertedContrast" bold>
                       0.25%
                     </Text>

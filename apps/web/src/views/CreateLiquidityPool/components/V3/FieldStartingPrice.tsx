@@ -97,8 +97,8 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ startPri
   return (
     <Box {...boxProps}>
       {marketPrice && (
-        <FlexGap gap="4px" mb="8px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-          <FlexGap mt={['16px', '16px', '16px', '16px', '16px', '0']} gap="5px" alignItems="center">
+        <FlexGap gap="8px" mb="8px" justifyContent="space-between" flexWrap="wrap">
+          <FlexGap gap="5px" alignItems="center">
             <PreTitle>{t('Set Starting Price')}</PreTitle>
           </FlexGap>
           <FlexGap gap="4px" alignItems="center" flexWrap="wrap">

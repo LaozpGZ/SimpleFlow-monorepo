@@ -42,6 +42,7 @@ import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiquidityTokens'
 import { ChainLinkSupportChains } from 'state/info/constant'
+import { PairState } from 'hooks/usePairs'
 import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { useStartingPriceQueryState } from 'state/infinity/create'
@@ -94,8 +95,10 @@ export const useV2CreateForm = () => {
   // V2 Form State
   const routerContract = useRouterContract()
   const { independentField, typedValue, otherTypedValue } = useAddLiquidityV2FormState()
-  const { dependentField, currencies, currencyBalances, noLiquidity, error, addError, isOneWeiAttack } =
-    useDerivedMintInfo(baseCurrency ?? undefined, quoteCurrency ?? undefined)
+  const { dependentField, currencies, currencyBalances, noLiquidity, isOneWeiAttack, pairState } = useDerivedMintInfo(
+    baseCurrency ?? undefined,
+    quoteCurrency ?? undefined,
+  )
 
   // Validation
   const addIsUnsupported = useIsTransactionUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
@@ -160,6 +163,48 @@ export const useV2CreateForm = () => {
     }),
     [dependentAmount, independentAmount, independentField],
   )
+
+  // Calculate errors based on amounts and balances
+  const error = useMemo(() => {
+    if (!account) {
+      return t('Connect Wallet')
+    }
+
+    if (pairState === PairState.INVALID) {
+      return t('Choose a valid pair')
+    }
+
+    const { [Field.CURRENCY_A]: currencyAAmount, [Field.CURRENCY_B]: currencyBAmount } = parsedAmounts
+
+    if (
+      currencyAAmount &&
+      currencyBAmount &&
+      currencyBalances?.[Field.CURRENCY_A]?.equalTo(0) &&
+      currencyBalances?.[Field.CURRENCY_B]?.equalTo(0)
+    ) {
+      return t('No token balance')
+    }
+
+    return undefined
+  }, [account, pairState, parsedAmounts, currencyBalances, t])
+
+  const addError = useMemo(() => {
+    const { [Field.CURRENCY_A]: currencyAAmount, [Field.CURRENCY_B]: currencyBAmount } = parsedAmounts
+
+    if (!parsedAmounts[Field.CURRENCY_A] || !parsedAmounts[Field.CURRENCY_B]) {
+      return t('Enter an amount')
+    }
+
+    if (currencyAAmount && currencyBalances?.[Field.CURRENCY_A]?.lessThan(currencyAAmount)) {
+      return t('Insufficient %symbol% balance', { symbol: currencies[Field.CURRENCY_A]?.symbol })
+    }
+
+    if (currencyBAmount && currencyBalances?.[Field.CURRENCY_B]?.lessThan(currencyBAmount)) {
+      return t('Insufficient %symbol% balance', { symbol: currencies[Field.CURRENCY_B]?.symbol })
+    }
+
+    return undefined
+  }, [parsedAmounts, currencyBalances, currencies, t])
 
   const price = useMemo(() => {
     if (noLiquidity) {

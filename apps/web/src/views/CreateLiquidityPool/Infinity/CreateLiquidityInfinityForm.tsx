@@ -23,6 +23,7 @@ import { FieldSlippageTolerance } from '../components/FieldSlippageTolerance'
 export const CreateLiquidityInfinityForm = () => {
   const { chainId } = useSelectIdRouteParams()
 
+  // lowerBinId, upperBinId, lowerTick, upperTick are not typed in the query state but exist
   // @ts-ignore
   const { isBin, isCl, startPrice, lowerBinId, upperBinId, lowerTick, upperTick, feeLevel } =
     useInfinityCreateFormQueryState()
