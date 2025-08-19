@@ -33,7 +33,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
         return cache.get(cacheKey) || ''
       }
 
-      const value = bundle[key] || full[key] || key
+      const value = bundle[key] || (full as Record<string, string>)[key] || key
 
       const interpolated = value.replace(/%([a-zA-Z0-9-_]+)%/g, (match, p1) => {
         const replacement = data?.[p1] || ''
