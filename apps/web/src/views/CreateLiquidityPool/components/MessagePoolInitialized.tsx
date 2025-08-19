@@ -31,7 +31,7 @@ export const MessagePoolInitialized = () => {
 
   return (
     <Message
-      variant="success"
+      variant="primary60"
       icon={<InfoIcon width="24px" color="#02919D" />}
       action={
         <Button
