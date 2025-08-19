@@ -6,6 +6,7 @@ import { useMemo } from 'react'
 import { useReadContract } from '@pancakeswap/wagmi'
 import { getVeCakeAddress, getVeCakeAddressNoFallback } from 'utils/addressHelpers'
 import { ChainId } from '@pancakeswap/chains'
+import { keepPreviousData } from '@tanstack/react-query'
 
 export const useVeCakeTotalSupply = () => {
   const { chainId } = useActiveChainId()
@@ -17,6 +18,7 @@ export const useVeCakeTotalSupply = () => {
     abi: veCakeABI,
     query: {
       enabled: Boolean(getVeCakeAddress(chainId)),
+      placeholderData: keepPreviousData,
     },
   })
 
