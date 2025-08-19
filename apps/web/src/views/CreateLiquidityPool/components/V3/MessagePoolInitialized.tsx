@@ -1,10 +1,9 @@
-import { useCallback, useMemo } from 'react'
+import { useMemo } from 'react'
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
 import { AddIcon, Button, InfoIcon, Message, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
-import { useRouter } from 'next/router'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { useFeeLevelQueryState } from 'state/infinity/create'
 import { getPoolAddLiquidityLink } from 'utils/getPoolLink'
@@ -12,9 +11,7 @@ import { useCurrencies } from 'views/CreateLiquidityPool/hooks/useCurrencies'
 
 export const MessagePoolInitialized = ({ protocol }: { protocol?: Protocol }) => {
   const { t } = useTranslation()
-  const { isXs } = useMatchBreakpoints()
-
-  const router = useRouter()
+  const { isMobile } = useMatchBreakpoints()
 
   const { chainId } = useSelectIdRouteParams()
   const { baseCurrency, quoteCurrency } = useCurrencies()
@@ -42,7 +39,7 @@ export const MessagePoolInitialized = ({ protocol }: { protocol?: Protocol }) =>
 
   return (
     <Message
-      variant="success"
+      variant="primary60"
       icon={<InfoIcon width="24px" color="#02919D" />}
       action={
         <Button
@@ -50,14 +47,14 @@ export const MessagePoolInitialized = ({ protocol }: { protocol?: Protocol }) =>
           mt="8px"
           width="100%"
           href={addLiquidityLink}
-          endIcon={isXs ? <AddIcon color="invertedContrast" width="24px" /> : null}
           disabled={Boolean(chainId && DISABLED_ADD_LIQUIDITY_CHAINS[chainId])}
         >
           {t('Add Liquidity')}
         </Button>
       }
+      actionInline={!isMobile}
     >
-      <Text color="text">{t('A pool with the selected configuration already exists.')}</Text>
+      <Text small>{t('A pool with selected settings already exists. Please add liquidity instead.')}</Text>
     </Message>
   )
 }

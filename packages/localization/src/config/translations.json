@@ -4180,5 +4180,6 @@
   "Initial Price": "Initial Price",
   "Dynamic Fee": "Dynamic Fee",
   "Infinity Pools are not supported on this chain": "Infinity Pools are not supported on this chain",
-  "Successfully created pool": "Successfully created pool"
+  "Successfully created pool": "Successfully created pool",
+  "A pool with selected settings already exists. Please add liquidity instead.": "A pool with selected settings already exists. Please add liquidity instead."
 }

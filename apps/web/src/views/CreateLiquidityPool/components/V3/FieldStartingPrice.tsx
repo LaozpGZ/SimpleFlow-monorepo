@@ -96,11 +96,11 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ startPri
 
   return (
     <Box {...boxProps}>
-      {marketPrice && (
-        <FlexGap gap="8px" mb="8px" justifyContent="space-between" flexWrap="wrap">
-          <FlexGap gap="5px" alignItems="center">
-            <PreTitle>{t('Set Starting Price')}</PreTitle>
-          </FlexGap>
+      <FlexGap gap="8px" mb="8px" justifyContent="space-between" flexWrap="wrap">
+        <FlexGap gap="5px" alignItems="center">
+          <PreTitle>{t('Set Starting Price')}</PreTitle>
+        </FlexGap>
+        {marketPrice && (
           <FlexGap gap="4px" alignItems="center" flexWrap="wrap">
             <div ref={currentPriceTargetRef}>
               <CurrentPriceButton onClick={handleSetMarketPrice}>
@@ -123,8 +123,8 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ startPri
               <SwapHorizIcon role="button" color="primary60" onClick={switchCurrencies} style={{ cursor: 'pointer' }} />
             </FlexGap>
           </FlexGap>
-        </FlexGap>
-      )}
+        )}
+      </FlexGap>
       <StartingPriceInput value={startPrice} onUserInput={updatePrice} unit={unit} currency={quoteCurrency} />
     </Box>
   )
