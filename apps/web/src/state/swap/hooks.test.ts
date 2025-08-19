@@ -2,6 +2,7 @@
 /* eslint-disable vars-on-top */
 import { parse } from 'querystring'
 import { Mock, vi } from 'vitest'
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { Field } from './actions'
 import { queryParametersToSwapState } from './hooks'
 
@@ -87,6 +88,19 @@ describe('hooks', () => {
         pairDataById: {},
         derivedPairDataById: {},
         recipient: '0x0fF2D1eFd7A57B7562b2bf27F3f37899dB27F4a5',
+      })
+    })
+
+    test('handle Solana chain with token address', () => {
+      const outputCurrency = '4qQeZ5LwSz6HuupUu8jCtgXyW1mYQcNbFAW1sWZp89HL'
+      expect(queryParametersToSwapState(parse(`chain=solana&outputCurrency=${outputCurrency}`))).toEqual({
+        [Field.INPUT]: { currencyId: 'SOL', chainId: NonEVMChainId.SOLANA },
+        [Field.OUTPUT]: { currencyId: outputCurrency, chainId: NonEVMChainId.SOLANA },
+        typedValue: '',
+        independentField: Field.INPUT,
+        pairDataById: {},
+        derivedPairDataById: {},
+        recipient: null,
       })
     })
   })

@@ -78,7 +78,8 @@ export function queryParametersToSwapState(
 ): SwapState {
   // Parse chains
   const inputChain = parsedQs.chain
-  const outputChain = parsedQs.chainOut
+  // NOTE: if chainOut is not provided, means user want to swap on the same chain
+  const outputChain = parsedQs.chainOut || inputChain
 
   const inputChainId = typeof inputChain === 'string' ? getChainId(inputChain) : undefined
   const outputChainId = typeof outputChain === 'string' ? getChainId(outputChain) : undefined
