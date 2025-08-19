@@ -139,7 +139,7 @@ export const EVMSlippageButton = ({ enableAutoSlippage_ = false }: { enableAutoS
     <SlippageButtonView
       tolerance={tolenrace}
       slippageModalContent={<EVMSlippageSetting />}
-      buttonText={isAuto ? `${t('Auto')}:` : ''}
+      buttonText={isAuto ? `${t('Auto')}: ` : ''}
     />
   )
 }
