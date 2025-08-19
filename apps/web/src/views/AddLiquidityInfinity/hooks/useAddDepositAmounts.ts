@@ -9,7 +9,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { useBinRangeQueryState, useClRangeQueryState } from 'state/infinity/shared'
 import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import { parseUnits } from 'viem/utils'
-import { isNumeric } from 'utils/isNumberic'
+import { isNumeric } from 'utils/isNumeric'
 import { usePool } from './usePool'
 import { usePoolActivePrice } from './usePoolActivePrice'
 
