@@ -58,11 +58,9 @@ const SlippageButtonView = ({
   const { theme } = useTheme()
   const { isOpen, onOpen, onDismiss } = useModalV2()
 
-  const toleranceWithAuto = isAuto ? 0 : tolerance
-
-  const isRiskyLow = toleranceWithAuto < 50
-  const isRiskyHigh = toleranceWithAuto > 100
-  const isRiskyVeryHigh = toleranceWithAuto > 2000
+  const isRiskyLow = !isAuto ? tolerance < 50 : false
+  const isRiskyHigh = !isAuto ? tolerance > 100 : false
+  const isRiskyVeryHigh = !isAuto ? tolerance > 2000 : false
 
   const color = isRiskyVeryHigh
     ? theme.colors.failure
