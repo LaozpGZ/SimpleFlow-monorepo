@@ -59,8 +59,10 @@ async function getHooksMap(type: 'light' | 'full', poolWithHooks: (RemotePoolCL 
   const hooksMap = hooks
     .filter((x) => x && x.hookAddress && x.hook)
     .reduce((acc, { hook, hookAddress }) => {
-      // eslint-disable-next-line no-param-reassign
-      acc[hookAddress!] = hook as HookData
+      if (hookAddress != null) {
+        // eslint-disable-next-line no-param-reassign
+        acc[hookAddress] = hook as HookData
+      }
       return acc
     }, {} as Record<string, HookData>)
   return hooksMap

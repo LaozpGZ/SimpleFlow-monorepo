@@ -24,12 +24,12 @@ export const findHookByAddress = async ({
     return whiteListedHook
   }
 
-  const pookKey = await poolIdToPoolKey({ poolId, publicClient, poolType })
+  const poolKey = await poolIdToPoolKey({ poolId, publicClient, poolType })
 
   const hook: HookData = {
     address: hookAddress,
     poolType: poolType === 'CL' ? POOL_TYPE.CLAMM : POOL_TYPE.Bin,
-    hooksRegistration: pookKey?.parameters.hooksRegistration,
+    hooksRegistration: poolKey?.parameters.hooksRegistration,
   }
   return hook
 }

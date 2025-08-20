@@ -130,7 +130,7 @@ export function toLocalInfinityPool(
 
   const type = protocol === 'infinityCl' ? PoolType.InfinityCL : PoolType.InfinityBIN
 
-  let relatedHook = hooksList[chainId]?.find((hook) => hook.address.toLowerCase() === hookAddress?.toLocaleLowerCase())
+  let relatedHook = hooksList[chainId]?.find((hook) => hook.address.toLowerCase() === hookAddress?.toLowerCase())
   if (hooksMap && !relatedHook && hookAddress) {
     relatedHook = hooksMap?.[hookAddress.toLowerCase()]
   }
