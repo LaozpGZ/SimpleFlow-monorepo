@@ -38,7 +38,7 @@ export const ReceiveContent: React.FC<{
   walletIcon?: string
 }> = ({ account, chainType, walletIcon }) => {
   return (
-    <Flex flexDirection="column" alignItems="center" justifyContent="center" maxWidth="450px">
+    <Flex flexDirection="column" alignItems="center" justifyContent="center" maxWidth="450px" mt="8px" mb="16px">
       <QRCodeCopyButton account={account} chainType={chainType} walletIcon={walletIcon} />
 
       <QRCodeWrapper>

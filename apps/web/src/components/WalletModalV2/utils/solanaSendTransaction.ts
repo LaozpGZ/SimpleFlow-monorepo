@@ -36,6 +36,129 @@ export interface SolanaSendParams {
 }
 
 /**
+ * Creates token transfer instructions for SPL tokens
+ */
+async function createTokenTransferInstructions(
+  connection: Connection,
+  fromPubkey: PublicKey,
+  toPubkey: PublicKey,
+  tokenMint: PublicKey,
+  amount: number,
+  tokenDecimals: number,
+  tokenProgramId: PublicKey,
+): Promise<TransactionInstruction[]> {
+  const instructions: TransactionInstruction[] = []
+  const amountInTokenUnits = Math.floor(amount * 10 ** tokenDecimals)
+
+  // Get associated token accounts
+  const senderTokenAccount = await getAssociatedTokenAddress(tokenMint, fromPubkey, false, tokenProgramId)
+  const recipientTokenAccount = await getAssociatedTokenAddress(tokenMint, toPubkey, false, tokenProgramId)
+
+  // Check if recipient's token account exists
+  try {
+    await getAccount(connection, recipientTokenAccount, 'confirmed', tokenProgramId)
+  } catch (error: any) {
+    if (error.name === 'TokenAccountNotFoundError') {
+      // Create associated token account for recipient
+      instructions.push(
+        createAssociatedTokenAccountInstruction(
+          fromPubkey, // payer
+          recipientTokenAccount, // ata
+          toPubkey, // owner
+          tokenMint, // mint
+          tokenProgramId,
+        ),
+      )
+    } else {
+      throw error
+    }
+  }
+
+  // Add transfer instruction
+  if (tokenProgramId.equals(TOKEN_2022_PROGRAM_ID)) {
+    instructions.push(
+      createTransferCheckedInstruction(
+        senderTokenAccount,
+        tokenMint,
+        recipientTokenAccount,
+        fromPubkey,
+        amountInTokenUnits,
+        tokenDecimals,
+        [],
+        tokenProgramId,
+      ),
+    )
+  } else {
+    instructions.push(
+      createTransferInstruction(
+        senderTokenAccount,
+        recipientTokenAccount,
+        fromPubkey,
+        amountInTokenUnits,
+        [],
+        tokenProgramId,
+      ),
+    )
+  }
+
+  return instructions
+}
+
+/**
+ * Creates a native SOL transfer instruction
+ */
+function createNativeTransferInstruction(
+  fromPubkey: PublicKey,
+  toPubkey: PublicKey,
+  amount: number,
+): TransactionInstruction {
+  const amountInLamports = Math.floor(amount * LAMPORTS_PER_SOL)
+  return SystemProgram.transfer({
+    fromPubkey,
+    toPubkey,
+    lamports: amountInLamports,
+  })
+}
+
+/**
+ * Builds the final transaction with the appropriate version
+ */
+async function buildTransaction(
+  instructions: TransactionInstruction[],
+  connection: Connection,
+  fromPubkey: PublicKey,
+  walletSupportsV0: boolean,
+): Promise<Transaction | VersionedTransaction> {
+  // Get latest blockhash
+  const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash()
+
+  // Create transaction based on wallet support
+  if (walletSupportsV0) {
+    // eslint-disable-next-line no-console
+    console.log('🚀 Creating v0 transaction')
+    // Create v0 transaction
+    const messageV0 = new TransactionMessage({
+      payerKey: fromPubkey,
+      recentBlockhash: blockhash,
+      instructions,
+    }).compileToV0Message()
+
+    return new VersionedTransaction(messageV0)
+  }
+
+  // eslint-disable-next-line no-console
+  console.log('📦 Creating legacy transaction')
+  // Create legacy transaction
+  const transaction = new Transaction()
+  transaction.recentBlockhash = blockhash
+  transaction.feePayer = fromPubkey
+  transaction.lastValidBlockHeight = lastValidBlockHeight
+  instructions.forEach((ix) => transaction.add(ix))
+
+  return transaction
+}
+
+/**
  * Creates a Solana transaction for sending assets
  * Automatically detects and uses the appropriate transaction version
  */
@@ -65,102 +188,26 @@ export async function createSolanaSendTransaction(
 
   if (isNativeToken) {
     // Native SOL transfer
-    const amountInLamports = Math.floor(amount * LAMPORTS_PER_SOL)
-    instructions.push(
-      SystemProgram.transfer({
-        fromPubkey,
-        toPubkey,
-        lamports: amountInLamports,
-      }),
-    )
+    instructions.push(createNativeTransferInstruction(fromPubkey, toPubkey, amount))
   } else {
     // Token transfer
     if (!tokenMint || tokenDecimals === undefined) {
       throw new Error('Token mint and decimals are required for token transfers')
     }
 
-    const amountInTokenUnits = Math.floor(amount * 10 ** tokenDecimals)
-
-    // Get associated token accounts
-    const senderTokenAccount = await getAssociatedTokenAddress(tokenMint, fromPubkey, false, tokenProgramId)
-
-    const recipientTokenAccount = await getAssociatedTokenAddress(tokenMint, toPubkey, false, tokenProgramId)
-
-    // Check if recipient's token account exists
-    try {
-      await getAccount(connection, recipientTokenAccount, 'confirmed', tokenProgramId)
-    } catch (error: any) {
-      if (error.name === 'TokenAccountNotFoundError') {
-        // Create associated token account for recipient
-        instructions.push(
-          createAssociatedTokenAccountInstruction(
-            fromPubkey, // payer
-            recipientTokenAccount, // ata
-            toPubkey, // owner
-            tokenMint, // mint
-            tokenProgramId,
-          ),
-        )
-      } else {
-        throw error
-      }
-    }
-
-    // Add transfer instruction
-    if (tokenProgramId.equals(TOKEN_2022_PROGRAM_ID)) {
-      instructions.push(
-        createTransferCheckedInstruction(
-          senderTokenAccount,
-          tokenMint,
-          recipientTokenAccount,
-          fromPubkey,
-          amountInTokenUnits,
-          tokenDecimals,
-          [],
-          tokenProgramId,
-        ),
-      )
-    } else {
-      instructions.push(
-        createTransferInstruction(
-          senderTokenAccount,
-          recipientTokenAccount,
-          fromPubkey,
-          amountInTokenUnits,
-          [],
-          tokenProgramId,
-        ),
-      )
-    }
+    const tokenInstructions = await createTokenTransferInstructions(
+      connection,
+      fromPubkey,
+      toPubkey,
+      tokenMint,
+      amount,
+      tokenDecimals,
+      tokenProgramId,
+    )
+    instructions.push(...tokenInstructions)
   }
 
-  // Get latest blockhash
-  const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash()
-
-  // Create transaction based on wallet support
-  if (walletSupportsV0) {
-    // eslint-disable-next-line no-console
-    console.log('🚀 Creating v0 transaction')
-    // Create v0 transaction
-    const messageV0 = new TransactionMessage({
-      payerKey: fromPubkey,
-      recentBlockhash: blockhash,
-      instructions,
-    }).compileToV0Message()
-
-    return new VersionedTransaction(messageV0)
-  }
-
-  // eslint-disable-next-line no-console
-  console.log('📦 Creating legacy transaction')
-  // Create legacy transaction
-  const transaction = new Transaction()
-  transaction.recentBlockhash = blockhash
-  transaction.feePayer = fromPubkey
-  transaction.lastValidBlockHeight = lastValidBlockHeight
-  instructions.forEach((ix) => transaction.add(ix))
-
-  return transaction
+  return buildTransaction(instructions, connection, fromPubkey, walletSupportsV0)
 }
 
 /**
