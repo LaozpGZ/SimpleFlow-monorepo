@@ -398,9 +398,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           const mintInfo = await connection.getAccountInfo(tokenMintAddress)
           if (mintInfo?.owner.equals(TOKEN_2022_PROGRAM_ID)) {
             tokenProgramId = TOKEN_2022_PROGRAM_ID
-            console.log('Detected Token2022 mint:', tokenMintAddress.toString())
-          } else {
-            console.log('Using standard Token Program for mint:', tokenMintAddress.toString())
           }
         } catch (error) {
           console.error('Failed to detect token program, using default:', error)
@@ -483,7 +480,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       }
 
       // Wait for transaction confirmation using the modern approach
-      console.info('Waiting for transaction confirmation:', signature)
       try {
         const latestBlockhash = await connection.getLatestBlockhash()
         const confirmation = await connection.confirmTransaction(
@@ -603,10 +599,9 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
             return
           }
         } catch (error) {
-          console.log('RPC validation error (continuing):', error)
+          console.error('RPC validation error (continuing):', error)
         }
 
-        console.log('Valid Solana address, clearing error')
         setAddressError('')
       } else if (!isAddress(debouncedAddress)) {
         // Validate EVM address
@@ -722,23 +717,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       />
     )
   }
-
-  console.log(
-    {
-      isValidAddress,
-      amount,
-      isAmountZero: parseFloat(amount) === 0,
-      isInsufficientBalance,
-      attemptingTxn: isSolanaChain ? solanaTxLoading : attemptingTxn,
-      isValidGasSponsor,
-      isGiftTokenAmountValid,
-      addressError,
-      address,
-      debouncedAddress,
-    },
-    'log check items',
-  )
-
   return (
     <FormContainer>
       <SendGiftToggle isNativeToken={isNativeToken} tokenChainId={asset.chainId}>

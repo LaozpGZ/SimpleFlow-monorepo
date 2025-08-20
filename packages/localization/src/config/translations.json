@@ -4143,7 +4143,8 @@
   "Transaction rejected by user": "Transaction rejected by user",
   "Invalid account data. Please check recipient address": "Invalid account data. Please check recipient address",
   "Program execution error. Please try again": "Program execution error. Please try again",
-  "Transaction failed. Please try again": "Transaction failed. Please try again",
   "Transaction Failed": "Transaction Failed",
-  "Your transaction has been submitted to the network": "Your transaction has been submitted to the network"
+  "Your transaction has been submitted to the network": "Your transaction has been submitted to the network",
+  "Send didn’t go through. Please try again.": "Send didn’t go through. Please try again.",
+  "Transaction timeout. Please try again": "Transaction timeout. Please try again"
 }

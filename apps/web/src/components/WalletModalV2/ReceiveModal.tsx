@@ -12,9 +12,8 @@ interface ReceiveModalProps {
 }
 
 const QRCodeWrapper = styled(Box)`
-  background-color: ${({ theme }) => theme.colors.tertiary};
   border-radius: 16px;
-  padding: 24px;
+  padding: 0px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -22,8 +21,8 @@ const QRCodeWrapper = styled(Box)`
 `
 
 const QRCode = styled(Box)`
-  width: 262px;
-  height: 262px;
+  width: 100%;
+  height: auto;
   background-color: white;
   border-radius: 16px;
   position: relative;
