@@ -46,7 +46,7 @@ export const ReceiveContent: React.FC<{
           <Box position="relative">
             <QRCodeSVG
               value={account}
-              size={310}
+              size={330}
               level="H"
               includeMargin
               imageSettings={{
