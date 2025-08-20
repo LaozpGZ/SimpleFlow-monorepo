@@ -11,7 +11,6 @@ import {
 import { usePrivy } from '@privy-io/react-auth'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { WalletContent, WalletModalV2 } from 'components/WalletModalV2'
-import ReceiveModal from 'components/WalletModalV2/ReceiveModal'
 import ReceiveOptionsView from 'components/WalletModalV2/ReceiveOptionsView'
 import { ViewState } from 'components/WalletModalV2/type'
 import {
@@ -306,25 +305,6 @@ const UserMenu = () => {
             resetViewState()
           }}
         />
-        {finalAddress && isMobile && (
-          <>
-            <ModalV2 isOpen={isReceiveOptionsOpen} onDismiss={() => setIsReceiveOptionsOpen(false)} closeOnOverlayClick>
-              <Modal title="">
-                <ReceiveOptionsView
-                  onSelectEVM={handleSelectEVM}
-                  onSelectSolana={handleSelectSolana}
-                  evmAccount={evmAccount}
-                  solanaAccount={solanaAccount ?? undefined}
-                />
-              </Modal>
-            </ModalV2>
-            <ReceiveModal
-              account={selectedReceiveAccount || finalAddress}
-              onDismiss={() => setIsReceiveModalOpen(false)}
-              isOpen={isReceiveModalOpen}
-            />
-          </>
-        )}
       </>
     )
   }

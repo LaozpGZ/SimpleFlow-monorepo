@@ -17,10 +17,10 @@ interface QRCodeCopyButtonProps {
 }
 
 const CopyContainer = styled(Box)`
-  background: ${({ theme }) => theme.colors.backgroundAlt};
-  border: 1px solid ${({ theme }) => (theme.isDark ? '#372F47' : '#E7E3EB')};
-  border-radius: 16px;
-  padding: 16px 20px;
+  background: ${({ theme }) => theme.colors.cardSecondary};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  border-radius: 24px;
+  padding: 8px 16px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -43,12 +43,14 @@ const IconContainer = styled(Box)`
 const ChainIconWrapper = styled(Box)`
   width: 40px;
   height: 40px;
-  border-radius: 12px;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: visible;
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  background: ${({ theme }) => theme.colors.cardSecondary};
 `
 
 const EVMIcon = styled(Box)`

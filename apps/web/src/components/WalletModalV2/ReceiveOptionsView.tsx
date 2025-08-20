@@ -167,7 +167,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
           {evmAccount ? (
             <ChevronRightIcon color="textSubtle" width="24px" height="24px" />
           ) : (
-            <ConnectWalletButton variant="tertiary" scale="sm">
+            <ConnectWalletButton variant="primary" scale="sm">
               Connect
             </ConnectWalletButton>
           )}
@@ -199,7 +199,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
           {solanaAccount ? (
             <ChevronRightIcon color="textSubtle" width="24px" height="24px" />
           ) : (
-            <SolanaConnectButton variant="tertiary" scale="sm">
+            <SolanaConnectButton variant="primary" scale="sm">
               Connect
             </SolanaConnectButton>
           )}
