@@ -56,6 +56,8 @@ const ChainIconWrapper = styled(Box)`
   justify-content: center;
   position: relative;
   overflow: visible;
+  background: ${({ theme }) => theme.colors.cardSecondary};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
 `
 
 const EVMIcon = styled(Box)`
