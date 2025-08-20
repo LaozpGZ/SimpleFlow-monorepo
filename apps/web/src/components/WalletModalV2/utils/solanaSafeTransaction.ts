@@ -9,7 +9,7 @@ export async function sendTransactionSafely(
   connection: Connection,
   wallet: WalletContextState,
 ): Promise<string> {
-  const walletName = wallet.wallet?.adapter?.name || wallet.wallet?.name || ''
+  const walletName = wallet.wallet?.adapter?.name || ''
 
   // Check if wallet supports sendTransaction
   const supportsSignAndSend = typeof wallet.sendTransaction === 'function'
