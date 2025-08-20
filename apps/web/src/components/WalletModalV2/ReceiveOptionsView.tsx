@@ -93,7 +93,7 @@ const SolanaIcon = styled(Box)`
 const WalletIconWrapper = styled(Box)`
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  border-radius: 6px;
   position: absolute;
   bottom: -4px;
   right: -4px;
@@ -101,9 +101,13 @@ const WalletIconWrapper = styled(Box)`
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible;
+  overflow: hidden;
   background: ${({ theme }) => theme.colors.backgroundAlt};
   z-index: 10;
+
+  img {
+    border-radius: 4px;
+  }
 `
 
 const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
@@ -119,16 +123,24 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
   const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
   const walletConfig = walletsConfig({ chainId, connect: connectAsync })
 
-  // Get EVM wallet icon
+  // Get EVM wallet icon - only show specific wallet icon when connected
   const evmWalletIcon = useMemo(() => {
+    // Only show specific wallet icon if user is actually connected
+    if (!evmAccount) {
+      return null // Show generic wallet icon when not connected
+    }
     const evmWallet = walletConfig.find((w) => w.id === previouslyUsedWalletsId[0])
     return evmWallet?.icon
-  }, [walletConfig, previouslyUsedWalletsId])
+  }, [walletConfig, previouslyUsedWalletsId, evmAccount])
 
-  // Get Solana wallet icon
+  // Get Solana wallet icon - only show specific wallet icon when connected
   const solanaWalletIcon = useMemo(() => {
+    // Only show specific wallet icon if user is actually connected
+    if (!solanaAccount) {
+      return null // Show generic wallet icon when not connected
+    }
     return solanaWallet?.adapter.icon
-  }, [solanaWallet])
+  }, [solanaWallet, solanaAccount])
 
   return (
     <Box padding="12px 0px" maxWidth="450px" width="100%" mt="24px">
@@ -142,7 +154,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
                   {evmWalletIcon ? (
                     <Image src={evmWalletIcon as string} width={16} height={16} alt="EVM Wallet" />
                   ) : (
-                    <WalletFilledV2Icon width={12} height={12} color="primary" />
+                    <WalletFilledV2Icon width={16} height={16} color="primary" />
                   )}
                 </WalletIconWrapper>
               </ChainIconWrapper>
@@ -174,7 +186,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
                   {solanaWalletIcon ? (
                     <Image src={solanaWalletIcon} width={16} height={16} alt="Solana Wallet" />
                   ) : (
-                    <WalletFilledV2Icon width={12} height={12} color="primary" />
+                    <WalletFilledV2Icon width={16} height={16} color="primary" />
                   )}
                 </WalletIconWrapper>
               </ChainIconWrapper>
