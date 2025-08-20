@@ -28,6 +28,44 @@ import { mockCurrency } from 'utils/mockCurrency'
 import { Address } from 'viem/accounts'
 import { APIChain, getProvider, Protocol } from './edgeQueries.util'
 
+async function getHooksMap(type: 'light' | 'full', poolWithHooks: (RemotePoolCL | RemotePoolBIN)[], chainId: ChainId) {
+  const hooks =
+    type === 'light'
+      ? await Promise.all(
+          poolWithHooks.map(async (pool) => {
+            const hookAddress = pool.hookAddress
+
+            try {
+              const hook = await findHookByAddress({
+                poolId: pool.id,
+                publicClient: viemServerClients[chainId],
+                chainId: chainId as keyof typeof hooksList,
+                poolType: pool.protocol === 'infinityBin' ? 'Bin' : 'CL',
+                hookAddress: pool.hookAddress || undefined,
+              })
+              return { hook, hookAddress }
+            } catch (ex) {
+              const reason = ex instanceof Error ? ex.message : String(ex)
+              console.error(`[Hook Fetch Error]`, reason)
+
+              return {
+                hook: null,
+                hookAddress,
+              }
+            }
+          }),
+        )
+      : []
+  const hooksMap = hooks
+    .filter((x) => x && x.hookAddress && x.hook)
+    .reduce((acc, { hook, hookAddress }) => {
+      // eslint-disable-next-line no-param-reassign
+      acc[hookAddress!] = hook as HookData
+      return acc
+    }, {} as Record<string, HookData>)
+  return hooksMap
+}
+
 async function getInfinityPoolsFromApi(addressA: Address, addressB: Address, chainId: ChainId, type: 'full' | 'light') {
   const chain = getChainName(chainId)
   const url = `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/candidates/infinity/${chain}/${addressA}/${addressB}`
@@ -36,31 +74,7 @@ async function getInfinityPoolsFromApi(addressA: Address, addressB: Address, cha
     throw new Error(`Error fetching infinity pools: ${response.statusText}`)
   }
   const data = (await response.json()) as (RemotePoolCL | RemotePoolBIN)[]
-  const poolWithHooks = data.filter((x) => x.hookAddress)
-  const hooks =
-    type === 'light'
-      ? await Promise.all(
-          poolWithHooks.map(async (pool) => {
-            const hookAddress = pool.hookAddress
-
-            const hook = await findHookByAddress({
-              poolId: pool.id,
-              publicClient: viemServerClients[chainId],
-              chainId: chainId as keyof typeof hooksList,
-              poolType: pool.protocol === 'infinityBin' ? 'Bin' : 'CL',
-              hookAddress: pool.hookAddress || undefined,
-            })
-            return { hook, hookAddress }
-          }),
-        )
-      : []
-  const hooksMap = hooks
-    .filter((x) => x.hookAddress && x.hook)
-    .reduce((acc, { hook, hookAddress }) => {
-      // eslint-disable-next-line no-param-reassign
-      acc[hookAddress!] = hook as HookData
-      return acc
-    }, {} as Record<string, HookData>)
+  const hooksMap = await getHooksMap(type, data, chainId)
 
   const localPools = data
     .map((pool) => InfinityRouter.toLocalInfinityPool(pool, chainId as keyof typeof hooksList, hooksMap))
