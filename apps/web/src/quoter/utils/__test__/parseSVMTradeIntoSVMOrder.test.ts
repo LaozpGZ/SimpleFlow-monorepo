@@ -179,6 +179,7 @@ describe('parseSVMTradeIntoSVMOrder', () => {
       createTime: Date.now(),
       infinitySwap: false,
       hash: 'mock_query_hash',
+      ver: 0,
     }
 
     // Execute function

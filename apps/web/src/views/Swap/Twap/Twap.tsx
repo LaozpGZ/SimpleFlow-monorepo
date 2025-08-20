@@ -95,6 +95,7 @@ const useBestTrade = (fromToken?: string, toToken?: string, value?: string) => {
     blockNumber,
     routeKey: 'twap',
     gasLimit,
+    ver: 0,
   })
   const tradeResult = useAtomValue(bestSameChainAtom(quoteOption))
   const trade = tradeResult.map((x) => x.trade).unwrapOr(undefined)

@@ -42,6 +42,7 @@ export function useSingleTokenSwapInfo(query: Query): { [key: string]: number } 
     blockNumber,
     gasLimit,
     routeKey: 'single-token-swap',
+    ver: 0,
   })
 
   const quoteResult = useAtomValue(bestAMMTradeFromQuoterWorkerAtom(quoteOption))
