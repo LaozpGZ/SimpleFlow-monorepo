@@ -1,3 +1,5 @@
+import { useTranslation } from '@pancakeswap/localization'
+import { PreTitle } from '@pancakeswap/uikit'
 import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
 import { SlippageTabsComponent } from 'components/Menu/GlobalSettings/TransactionSettings'
 import { useAutoSlippageEnabled } from 'hooks/useAutoSlippageWithFallback'
@@ -26,8 +28,15 @@ export const EVMSlippageSetting = () => {
 
 export const EVMLiquiditySlippageSetting = () => {
   const [userSlippageTolerance, setUserSlippageTolerance] = useUserSlippage()
+  const { t } = useTranslation()
 
   return (
-    <SlippageTabsComponent slippageTolerance={userSlippageTolerance} setSlippageTolerance={setUserSlippageTolerance} />
+    <>
+      <PreTitle mb="8px">{t('Liquidity Slippage')}</PreTitle>
+      <SlippageTabsComponent
+        slippageTolerance={userSlippageTolerance}
+        setSlippageTolerance={setUserSlippageTolerance}
+      />
+    </>
   )
 }
