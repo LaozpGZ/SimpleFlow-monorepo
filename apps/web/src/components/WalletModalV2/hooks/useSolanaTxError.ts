@@ -36,8 +36,7 @@ export default function useSolanaTxError() {
         } else if (message.includes('timeout')) {
           errorMessage = t('Transaction timeout. Please try again')
         } else {
-          // For other errors, show the original message if it's user-friendly
-          errorMessage = t('Transaction failed. Please try again')
+          errorMessage = t('Send didn’t go through. Please try again.')
         }
       }
 

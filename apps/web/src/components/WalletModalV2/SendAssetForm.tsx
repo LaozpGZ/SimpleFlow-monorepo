@@ -69,6 +69,7 @@ import useSolanaTxError from './hooks/useSolanaTxError'
 import { useSolanaPriorityFee } from './hooks/useSolanaPriorityFee'
 import { SolanaPriorityFeeModal } from './SolanaPriorityFeeModal'
 import { createSolanaSendTransaction, detectWalletTransactionSupport } from './utils/solanaSendTransaction'
+import { sendTransactionSafely } from './utils/solanaSafeTransaction'
 
 const FormContainer = styled(Box)`
   display: flex;
@@ -181,7 +182,8 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const maxAmountInput = useMemo(() => maxAmountSpend(tokenBalance), [tokenBalance])
 
   // Solana wallet support
-  const { publicKey: solanaPublicKey, sendTransaction: sendSolanaTransaction, wallet } = useWallet()
+  const walletContext = useWallet()
+  const { publicKey: solanaPublicKey, wallet } = walletContext
   const connection = useSolanaConnectionWithRpcAtom()
 
   const isNativeToken = useMemo(() => {
@@ -385,7 +387,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           walletSupportsV0,
         })
 
-        signature = await sendSolanaTransaction(transaction, connection)
+        signature = await sendTransactionSafely(transaction, connection, walletContext)
       } else {
         const tokenMintAddress = new PublicKey(asset.token.address)
         const amountInTokenUnits = Math.floor(parseFloat(amount) * 10 ** asset.token.decimals)
@@ -477,7 +479,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           )
         }
 
-        signature = await sendSolanaTransaction(transaction, connection)
+        signature = await sendTransactionSafely(transaction, connection, walletContext)
       }
 
       // Wait for transaction confirmation using the modern approach
@@ -529,7 +531,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     amount,
     isNativeToken,
     asset.token,
-    sendSolanaTransaction,
+    walletContext,
     connection,
     computeBudgetConfig,
     executeSolanaTransaction,

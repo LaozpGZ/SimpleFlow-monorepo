@@ -167,19 +167,29 @@ export async function createSolanaSendTransaction(
  * Detects wallet transaction version support
  */
 export function detectWalletTransactionSupport(wallet: any): boolean {
-  // Check if wallet supports v0 transactions
-  const supportsV0 =
-    wallet?.adapter?.supportedTransactionVersions?.has('v0') ||
-    wallet?.adapter?.supportedTransactionVersions?.has(0) ||
-    wallet?.features?.['solana:signAndSendTransaction']?.supportedTransactionVersions?.includes('v0') ||
-    wallet?.features?.['solana:signTransaction']?.supportedTransactionVersions?.includes('v0')
+  const walletName = wallet?.adapter?.name || wallet?.name || ''
 
+  // SafePal and Trust Wallet are known to have issues with v0 transactions
+  // Force them to use legacy transactions
+  const problematicWallets = ['SafePal', 'Trust Wallet', 'Trust']
+  if (problematicWallets.some((name) => walletName.toLowerCase().includes(name.toLowerCase()))) {
+    // eslint-disable-next-line no-console
+    console.log('⚠️ Detected problematic wallet, forcing legacy transaction:', walletName)
+    return false
+  }
+
+  // More strict check - only use v0 if explicitly supported
+  const supportsV0 =
+    wallet?.features?.['solana:signAndSendTransaction']?.supportedTransactionVersions?.has?.('v0') ||
+    wallet?.features?.['solana:signTransaction']?.supportedTransactionVersions?.has?.('v0')
+
+  // eslint-disable-next-line no-console
   console.log('🔍 Wallet transaction support detection:', {
-    walletName: wallet?.adapter?.name || wallet?.name,
+    walletName,
     supportsV0,
     supportedVersions: wallet?.adapter?.supportedTransactionVersions,
     features: wallet?.features,
   })
 
-  return supportsV0
+  return supportsV0 === true
 }
