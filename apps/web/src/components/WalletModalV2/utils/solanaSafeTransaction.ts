@@ -1,4 +1,4 @@
-import { Connection, Transaction, VersionedTransaction } from '@solana/web3.js'
+import { Connection, Transaction, VersionedTransaction, TransactionMessage, PublicKey } from '@solana/web3.js'
 import { WalletContextState } from '@solana/wallet-adapter-react'
 
 /**
@@ -7,6 +7,13 @@ import { WalletContextState } from '@solana/wallet-adapter-react'
 function isProblematicWallet(walletName: string): boolean {
   const problematicWallets = ['SafePal', 'Trust Wallet', 'Trust']
   return problematicWallets.some((name) => walletName.toLowerCase().includes(name.toLowerCase()))
+}
+
+/**
+ * Check if a transaction is a Legacy Transaction
+ */
+function isLegacyTx(tx: any): tx is Transaction {
+  return typeof tx?.serializeMessage === 'function'
 }
 
 /**
@@ -42,15 +49,54 @@ async function sendViaSignAndRaw(
   // eslint-disable-next-line no-console
   console.log('⚠️ Using fallback: signTransaction + sendRawTransaction')
 
-  const signed = await wallet.signTransaction(transaction)
-  const signature = await connection.sendRawTransaction(signed.serialize(), {
-    skipPreflight: false,
-    preflightCommitment: 'confirmed',
-  })
+  // Check if this is Trust Wallet
+  const walletName = wallet.wallet?.adapter?.name || ''
+  const isTrustWallet = walletName.toLowerCase().includes('trust')
 
-  // eslint-disable-next-line no-console
-  console.log('✅ Transaction sent via fallback:', signature)
-  return signature
+  // Pre-signing validation for Trust Wallet
+  if (isTrustWallet && !isLegacyTx(transaction)) {
+    // eslint-disable-next-line no-console
+    console.error('❌ Trust Wallet requires Legacy Transaction, got VersionedTransaction')
+    throw new Error(
+      `${walletName} requires a Legacy Transaction; got versioned tx. ` +
+        'This indicates a transaction format mismatch. Please try with a different wallet or contact support.',
+    )
+  }
+
+  try {
+    const signed = await wallet.signTransaction(transaction)
+    const serializedTx = signed.serialize()
+
+    const signature = await connection.sendRawTransaction(serializedTx, {
+      skipPreflight: false,
+      preflightCommitment: 'confirmed',
+    })
+
+    // eslint-disable-next-line no-console
+    console.log('✅ Transaction sent via fallback:', signature)
+    return signature
+  } catch (error: any) {
+    // Check for the specific serializeMessage error
+    if (error?.message?.includes('serializeMessage is not a function')) {
+      throw new Error(
+        `${walletName} expects Legacy Transaction but received incompatible format. ` +
+          'This is a transaction format mismatch issue. Please try with a different wallet.',
+      )
+    }
+
+    // Special handling for Trust Wallet imported accounts
+    if (isTrustWallet && error?.message?.includes('signature verification')) {
+      // eslint-disable-next-line no-console
+      console.error('❌ Trust Wallet imported account signature issue detected')
+      throw new Error(
+        'Trust Wallet imported account detected. ' +
+          'This account cannot send transactions due to key mismatch. ' +
+          'Please use a native Solana account created in Trust Wallet, or import using a Solana private key instead.',
+      )
+    }
+
+    throw error
+  }
 }
 
 /**
@@ -95,9 +141,27 @@ export async function sendTransactionSafely(
     // eslint-disable-next-line no-console
     console.error('❌ Transaction send error:', error)
 
-    // Check for specific error types
-    if (error?.message?.includes('signature verification')) {
-      throw new Error('Transaction signature verification failed. Your wallet may not support this transaction type.')
+    // Check for specific error types and provide helpful messages
+    if (error?.message?.includes('Trust Wallet imported account')) {
+      // Already has a helpful message from our detection
+      throw error
+    }
+
+    if (error?.message?.includes('signature verification') || error?.message?.includes('Invalid signature')) {
+      const walletName = wallet.wallet?.adapter?.name || ''
+      const isTrustWallet = walletName.toLowerCase().includes('trust')
+
+      if (isTrustWallet) {
+        throw new Error(
+          'Trust Wallet signature error detected. ' +
+            'For imported accounts, please create a native Solana account in Trust Wallet instead.',
+        )
+      }
+
+      throw new Error(
+        'Transaction signature verification failed. ' +
+          'This may occur with imported accounts. Please try using a native wallet account.',
+      )
     }
 
     throw error

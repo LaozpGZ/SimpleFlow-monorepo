@@ -216,12 +216,16 @@ export async function createSolanaSendTransaction(
 export function detectWalletTransactionSupport(wallet: any): boolean {
   const walletName = wallet?.adapter?.name || wallet?.name || ''
 
+  // Check if running in Trust Wallet DApp browser
+  const userAgent = typeof window !== 'undefined' ? window.navigator?.userAgent || '' : ''
+  const isTrustWalletDApp = userAgent.toLowerCase().includes('trust')
+
   // SafePal and Trust Wallet are known to have issues with v0 transactions
   // Force them to use legacy transactions
   const problematicWallets = ['SafePal', 'Trust Wallet', 'Trust']
-  if (problematicWallets.some((name) => walletName.toLowerCase().includes(name.toLowerCase()))) {
+  if (problematicWallets.some((name) => walletName.toLowerCase().includes(name.toLowerCase())) || isTrustWalletDApp) {
     // eslint-disable-next-line no-console
-    console.log('⚠️ Detected problematic wallet, forcing legacy transaction:', walletName)
+    console.log('⚠️ Detected problematic wallet, forcing legacy transaction:', walletName || 'Trust DApp Browser')
     return false
   }
 
@@ -234,6 +238,7 @@ export function detectWalletTransactionSupport(wallet: any): boolean {
   console.log('🔍 Wallet transaction support detection:', {
     walletName,
     supportsV0,
+    isTrustWalletDApp,
     supportedVersions: wallet?.adapter?.supportedTransactionVersions,
     features: wallet?.features,
   })
