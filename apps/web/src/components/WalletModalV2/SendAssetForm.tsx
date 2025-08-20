@@ -766,7 +766,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
                       <Text fontWeight="bold" fontSize="20px">
                         {asset.token.symbol}
                       </Text>
-                      {isSolanaChain && (
+                      {/* {isSolanaChain && (
                         <IconButton
                           scale="sm"
                           variant="tertiary"
@@ -775,7 +775,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
                         >
                           <CogIcon width="16px" height="16px" />
                         </IconButton>
-                      )}
+                      )} */}
                     </FlexGap>
                     <Text color="textSubtle" fontSize="12px" mt="-4px">{`${chainName?.toUpperCase() ?? '-'} ${t(
                       'Chain',
