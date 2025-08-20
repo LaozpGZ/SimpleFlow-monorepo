@@ -301,7 +301,7 @@ export const WalletContent = ({
               <Text fontSize="20px" fontWeight="bold" mb="8px">
                 {t('My Wallet')}
               </Text>
-              {chainId !== NonEVMChainId.SOLANA && !noAssets && (
+              {!noAssets && (
                 <Box mb="16px" onClick={(e) => e.stopPropagation()}>
                   <TabsComponent
                     view={view}
