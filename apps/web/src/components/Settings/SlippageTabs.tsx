@@ -28,10 +28,6 @@ export const EVMLiquiditySlippageSetting = () => {
   const [userSlippageTolerance, setUserSlippageTolerance] = useUserSlippage()
 
   return (
-    <SlippageTabsComponent
-      isAutoSlippageEnabled={false}
-      slippageTolerance={userSlippageTolerance}
-      setSlippageTolerance={setUserSlippageTolerance}
-    />
+    <SlippageTabsComponent slippageTolerance={userSlippageTolerance} setSlippageTolerance={setUserSlippageTolerance} />
   )
 }
