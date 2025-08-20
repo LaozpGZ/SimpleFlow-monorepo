@@ -1,6 +1,6 @@
 import { ChainId, NonEVMChainId, UnifiedChainId, getChainName } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Token } from '@pancakeswap/sdk'
+import { Currency, Token, Native } from '@pancakeswap/sdk'
 import {
   AutoColumn,
   Box,
@@ -17,7 +17,7 @@ import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { ConfirmationPendingContent } from '@pancakeswap/widgets-internal'
 import { ChainLogo } from 'components/Logo/ChainLogo'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
-import { TokenAmountSection } from 'components/TokenAmountSection'
+import { ASSET_CDN } from 'config/constants/endpoints'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { BalanceData } from 'hooks/useAddressBalance'
 import useNativeCurrency from 'hooks/useNativeCurrency'
@@ -116,13 +116,18 @@ export function ConfirmTransactionContent({
     }
 
     // Original EVM logic
-    const currency = new Token(
-      asset.chainId,
-      asset.token.address as `0x${string}`,
-      asset.token.decimals,
-      asset.token.symbol,
-      asset.token.name,
-    )
+    // Check if it's native ETH (address is 0x000...)
+    const isNativeETH = asset.token.address === '0x0000000000000000000000000000000000000000'
+
+    const currency = isNativeETH
+      ? Native.onChain(asset.chainId)
+      : new Token(
+          asset.chainId,
+          asset.token.address as `0x${string}`,
+          asset.token.decimals,
+          asset.token.symbol,
+          asset.token.name,
+        )
 
     return tryParseAmount(amount, currency)
   }, [amount, asset])
@@ -139,28 +144,47 @@ export function ConfirmTransactionContent({
             </Box>
           </FlexGap>
 
-          {asset.chainId === NonEVMChainId.SOLANA ? (
-            <>
-              <Box position="relative" mb="16px">
-                <CurrencyLogo
-                  size="80px"
-                  src={getEnhancedLogoURI(asset.token.address, asset.chainId, asset.token.logoURI)}
+          <>
+            <Box position="relative" mb="16px">
+              <CurrencyLogo
+                size="80px"
+                src={getEnhancedLogoURI(asset.token.address, asset.chainId, asset.token.logoURI)}
+                // @ts-ignore
+                currency={tokenAmount?.currency}
+              />
+              <FlexGap
+                position="absolute"
+                bottom="-4px"
+                right="-4px"
+                background="background"
+                borderRadius="50%"
+                width="30px"
+                height="30px"
+                display="flex"
+                alignItems="center"
+                justifyContent="center"
+                style={{ boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)' }}
+                zIndex={1}
+              >
+                <img
+                  src={`${ASSET_CDN}/web/chains/${asset.chainId}.png`}
+                  alt={`${chainName}-logo`}
+                  width="100%"
+                  height="100%"
                 />
-              </Box>
-              <Text fontSize="32px" bold>
-                {parseFloat(amount || '0').toLocaleString(undefined, {
-                  maximumFractionDigits: 6,
-                  minimumFractionDigits: 0,
-                })}{' '}
-                {asset.token.symbol}
-              </Text>
-              <Text fontSize="16px" color="textSubtle" mb="24px">
-                {asset.price?.usd ? `$${(parseFloat(amount || '0') * asset.price.usd).toFixed(2)}` : '-'}
-              </Text>
-            </>
-          ) : (
-            <TokenAmountSection tokenAmount={tokenAmount as any} />
-          )}
+              </FlexGap>
+            </Box>
+            <Text fontSize="32px" bold>
+              {parseFloat(amount || '0').toLocaleString(undefined, {
+                maximumFractionDigits: 6,
+                minimumFractionDigits: 0,
+              })}{' '}
+              {asset.token.symbol}
+            </Text>
+            <Text fontSize="16px" color="textSubtle" mb="24px">
+              {asset.price?.usd ? `$${(parseFloat(amount || '0') * asset.price.usd).toFixed(2)}` : '-'}
+            </Text>
+          </>
 
           <Flex justifyContent="space-between" width="100%" mb="8px" alignItems="flex-start">
             <Text color="textSubtle">{t('To')}</Text>
