@@ -1,5 +1,15 @@
 # @pancakeswap/utils
 
+## 8.0.0
+
+### Patch Changes
+
+- Updated dependencies [cd589e1]
+- Updated dependencies [f71ce8b]
+- Updated dependencies [a070948]
+  - @pancakeswap/chains@0.6.0
+  - @pancakeswap/localization@6.2.0
+
 ## 7.0.1
 
 ### Patch Changes
