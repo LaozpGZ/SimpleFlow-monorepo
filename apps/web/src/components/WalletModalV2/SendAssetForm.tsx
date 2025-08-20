@@ -29,6 +29,7 @@ import useCatchTxError from 'hooks/useCatchTxError'
 import { useERC20 } from 'hooks/useContract'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import useNativeCurrency from 'hooks/useNativeCurrency'
+import { useSolanaTokenPrice } from 'hooks/solana/useSolanaTokenPrice'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { logGTMGiftPreviewEvent } from 'utils/customGTMEventTracking'
@@ -147,7 +148,18 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
   // Get native currency for fee calculation
   const nativeCurrency = useNativeCurrency(asset.chainId)
-  const { data: nativeCurrencyPrice } = useCurrencyUsdPrice(nativeCurrency)
+  const { data: evmNativeCurrencyPrice } = useCurrencyUsdPrice(nativeCurrency)
+  const isSolanaChain = asset.chainId === NonEVMChainId.SOLANA
+
+  // For Solana, use the specialized hook to get SOL price
+  const solNativeMint = 'So11111111111111111111111111111111111111112' // Native SOL mint
+  const { data: solPrice } = useSolanaTokenPrice({
+    mint: isSolanaChain ? solNativeMint : undefined,
+    enabled: isSolanaChain,
+  })
+
+  // Use the appropriate price based on the chain
+  const nativeCurrencyPrice = isSolanaChain ? solPrice : evmNativeCurrencyPrice
   const currency = useMemo(
     () =>
       asset.token.address === zeroAddress
@@ -170,7 +182,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   // Solana wallet support
   const { publicKey: solanaPublicKey, sendTransaction: sendSolanaTransaction } = useWallet()
   const connection = useSolanaConnectionWithRpcAtom()
-  const isSolanaChain = asset.chainId === NonEVMChainId.SOLANA
 
   const isNativeToken = useMemo(() => {
     return isSolanaChain ? asset.token.symbol === 'SOL' : asset.token.address === zeroAddress
@@ -205,10 +216,9 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
           setEstimatedFee(feeBreakdown.formattedFee)
 
-          // Calculate USD value if price is available
           if (nativeCurrencyPrice) {
             const feeUsd = parseFloat(feeBreakdown.formattedFee) * nativeCurrencyPrice
-            setEstimatedFeeUsd(feeUsd.toFixed(2))
+            setEstimatedFeeUsd(feeUsd.toFixed(6))
           } else {
             setEstimatedFeeUsd(null)
           }
@@ -469,7 +479,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       }
 
       // Wait for transaction confirmation using the modern approach
-      console.log('Waiting for transaction confirmation:', signature)
+      console.info('Waiting for transaction confirmation:', signature)
       try {
         const latestBlockhash = await connection.getLatestBlockhash()
         const confirmation = await connection.confirmTransaction(
@@ -549,7 +559,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   // Frontend immediate validation (no RPC): check non-base58, wrong key length, off-curve (PDA)
   // Optional RPC enhancement: existing accounts must be SystemProgram to be considered regular wallets
   useEffect(() => {
-    console.log('Address validation triggered:', { debouncedAddress, isSolanaChain })
+    console.info('Address validation triggered:', { debouncedAddress, isSolanaChain })
 
     const validateAddress = async () => {
       if (!debouncedAddress) {
@@ -560,9 +570,9 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       if (isSolanaChain) {
         const frontendCheck = isLikelyWalletAddress(debouncedAddress)
         if (!frontendCheck.ok) {
-          console.log('Frontend validation failed:', frontendCheck.reason)
+          console.info('Frontend validation failed:', frontendCheck.reason)
           const errorMsg = t('Invalid wallet address') || 'Invalid Solana wallet address'
-          console.log('Setting address error to:', errorMsg)
+          console.info('Setting address error to:', errorMsg)
           setAddressError(errorMsg)
           return
         }
