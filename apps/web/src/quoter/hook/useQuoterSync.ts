@@ -132,7 +132,7 @@ export const useQuoterSync = () => {
     if (quoteResultToSetPlaceholder) {
       // NOTE: placeholderHash is used to show previous quote when new quote is pending
       const placeholderHash = quoteResult.getExtra('placeholderHash') as string
-      // Setting null to differentiate between loaded but failed quote and not loaded quote
+
       const orderOrError = quoteResult.isFail() ? quoteResult.error : quoteResult.unwrap()
 
       setPlaceholder(placeholderHash, orderOrError)
