@@ -55,13 +55,12 @@ const EVMIcon = styled(Box)`
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: #627eea;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  background-image: url('${ASSET_CDN}/web/chains/svg/1.svg');
-  background-size: 24px 24px;
+  background-image: url('${ASSET_CDN}/web/wallet-ui/network-tag-evm.svg');
+  background-size: 40px 40px;
   background-repeat: no-repeat;
   background-position: center;
 `
@@ -70,13 +69,12 @@ const SolanaIcon = styled(Box)`
   width: 40px;
   height: 40px;
   border-radius: 12px;
-  background: linear-gradient(135deg, #9945ff 0%, #14f195 100%);
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  background-image: url('${ASSET_CDN}/web/chains/8000001001.png');
-  background-size: 32px 32px;
+  background-image: url('${ASSET_CDN}/web/wallet-ui/network-tag-solana.png');
+  background-size: 40px 40px;
   background-repeat: no-repeat;
   background-position: center;
 `
@@ -84,7 +82,7 @@ const SolanaIcon = styled(Box)`
 const WalletIconWrapper = styled(Box)`
   width: 20px;
   height: 20px;
-  border-radius: 50%;
+  border-radius: 6px;
   position: absolute;
   bottom: -4px;
   right: -4px;
@@ -92,9 +90,13 @@ const WalletIconWrapper = styled(Box)`
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: visible;
+  overflow: hidden;
   background: ${({ theme }) => theme.colors.backgroundAlt};
   z-index: 10;
+
+  img {
+    border-radius: 4px;
+  }
 `
 
 const CopyButton = styled(Box)`
@@ -130,9 +132,15 @@ const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account, chainType,
   const isSolana = chainType === 'solana' || (chainType === undefined && chainId === NonEVMChainId.SOLANA)
 
   // Get wallet icon - use provided icon or fallback to auto-detection
+  // Follow ReceiveOptionsView logic: only show specific wallet icon when connected
   const walletIcon = useMemo(() => {
     if (providedWalletIcon) {
       return providedWalletIcon
+    }
+
+    // Only show specific wallet icon when account is provided (user is connected)
+    if (!account) {
+      return null
     }
 
     if (isSolana) {
@@ -140,7 +148,7 @@ const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account, chainType,
     }
     const evmWallet = walletConfig.find((w) => w.id === previouslyUsedWalletsId[0])
     return evmWallet?.icon
-  }, [providedWalletIcon, isSolana, solanaWallet, walletConfig, previouslyUsedWalletsId])
+  }, [providedWalletIcon, isSolana, solanaWallet, walletConfig, previouslyUsedWalletsId, account])
 
   const handleCopy = async () => {
     try {
@@ -167,7 +175,7 @@ const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account, chainType,
                 {walletIcon ? (
                   <Image src={walletIcon as string} width={16} height={16} alt="Wallet" />
                 ) : (
-                  <WalletFilledV2Icon width={12} height={12} color="primary" />
+                  <WalletFilledV2Icon width={16} height={16} color="primary" />
                 )}
               </WalletIconWrapper>
             </ChainIconWrapper>
