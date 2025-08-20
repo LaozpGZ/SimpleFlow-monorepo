@@ -4005,7 +4005,7 @@
   "twap.minDstAmountTooltipMarket": "Koska olet valinnut markkinatilauksen ilman rajahintaa, poleteilla ei ole asetettua polettien vähimmäismäärää. Todellinen saatu summa riippuu markkinatilanteesta.",
   "twap.minDstAmountTooltipLimit": "Tämä on vähimmäismäärä poletteja, joka voidaan vastaanottaa.\n\nHUOMAUTUS: Tämä vähimmäismäärä viittaa vain toimeenpantuihin kauppoihin. Joitakin kauppoja ei välttämättä toimeenpanna, jos rajahinta on korkeampi kuin saatavilla olevat markkinahinnat, ja tilauksesi saatetaan täyttää vain osittain.",
   "twap.limitPriceTooltip": "Kaupat toimeenpannaan vain, kun saatavilla oleva markkinahinta vastaa tätä rajahintaa tai on sitä parempi. Tilauksesi saatetaan täyttää vain osittain.",
-  "twap.sizePerTradeTooltip": "This sets the size of each individual trade that will be executed over the duration of your order. \n\n Note: Min. size per trade should be > {usd} USD",
+  "twap.sizePerTradeTooltip": "Tämä asettaa yksittäisen kaupan koon, joka toimeenpannaan tilauksesi keston aikana.\n\n Huomautus: vähimmäidkoko kauppaa kohden täytyy olla yli {usd} dollaria",
   "twap.maxDurationTooltip": "The maximum time during which the total amount of individual trades making up your full order can be executed. \n\n Note that depending on your parameters, your order may be filled earlier than this time, partially filled or not filled at all.",
   "twap.tradeIntervalTootlip": "The estimated time that will elapse between each trade in your order. \n\n Note that as this time includes an allowance of two minutes for bidder auction and block settlement, which cannot be predicted exactly, actual time may vary.",
   "twap.sliderMinSizeTooltip": "Individual trades must have a minimum trade size of {usd} USD.",
