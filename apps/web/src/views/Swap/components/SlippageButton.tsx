@@ -47,18 +47,22 @@ const SlippageButtonView = ({
   tolerance,
   buttonText,
   slippageModalContent,
+  isAuto = false,
 }: {
   tolerance: number
   buttonText?: string
   slippageModalContent: React.ReactNode
+  isAuto?: boolean
 }) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
   const { isOpen, onOpen, onDismiss } = useModalV2()
 
-  const isRiskyLow = tolerance < 50
-  const isRiskyHigh = tolerance > 100
-  const isRiskyVeryHigh = tolerance > 2000
+  const toleranceWithAuto = isAuto ? 0 : tolerance
+
+  const isRiskyLow = toleranceWithAuto < 50
+  const isRiskyHigh = toleranceWithAuto > 100
+  const isRiskyVeryHigh = toleranceWithAuto > 2000
 
   const color = isRiskyVeryHigh
     ? theme.colors.failure
@@ -133,13 +137,14 @@ export const EVMSlippageButton = ({ enableAutoSlippage_ = false }: { enableAutoS
   const { slippageTolerance: autoSlippageTolerance, isAuto } = useAutoSlippageWithFallback()
   const [userSlippageTolerance] = useUserSlippage()
 
-  const tolenrace = enableAutoSlippage_ ? autoSlippageTolerance : userSlippageTolerance
+  const tolerance = enableAutoSlippage_ ? autoSlippageTolerance : userSlippageTolerance
 
   return (
     <SlippageButtonView
-      tolerance={tolenrace}
+      tolerance={tolerance}
       slippageModalContent={<EVMSlippageSetting />}
       buttonText={isAuto ? `${t('Auto')}: ` : ''}
+      isAuto
     />
   )
 }
