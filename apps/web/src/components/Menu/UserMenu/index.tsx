@@ -106,7 +106,7 @@ const useAvatar = () => {
 
 const UserMenu = () => {
   const { t } = useTranslation()
-  const { chainId, account: evmAccount, solanaAccount } = useAccountActiveChain()
+  const { chainId, account: evmAccount, solanaAccount, isWrongNetwork } = useAccountActiveChain()
   const { connector } = useAccount()
   const { ready, authenticated, user } = usePrivy()
 
