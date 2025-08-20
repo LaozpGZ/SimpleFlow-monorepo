@@ -1,4 +1,4 @@
-import { ArrowForwardIcon, Box, Flex, Text, Image, WalletFilledV2Icon, FlexGap } from '@pancakeswap/uikit'
+import { Box, Flex, Text, Image, WalletFilledV2Icon, FlexGap, ChevronRightIcon } from '@pancakeswap/uikit'
 import { styled } from 'styled-components'
 import { useConnect } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -21,9 +21,8 @@ interface ReceiveOptionsViewProps {
 
 const OptionCard = styled(Box)<{ $clickable?: boolean }>`
   background: ${({ theme }) => theme.colors.backgroundAlt};
-  border: 1px solid ${({ theme }) => (theme.isDark ? '#372F47' : '#E7E3EB')};
-  border-radius: 20px;
-  padding: 16px 20px;
+  border-radius: 16px;
+  padding: 8px;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -36,10 +35,7 @@ const OptionCard = styled(Box)<{ $clickable?: boolean }>`
   &:hover {
     ${({ $clickable, theme }) =>
       $clickable &&
-      `
-      border-color: ${theme.colors.primary};
-      transform: translateY(-1px);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      `background: ${theme.colors.tertiary};
     `}
   }
 `
@@ -169,9 +165,9 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
             </IconContainer>
           </Flex>
           {evmAccount ? (
-            <ArrowForwardIcon color="textSubtle" width="20px" height="20px" />
+            <ChevronRightIcon color="textSubtle" width="24px" height="24px" />
           ) : (
-            <ConnectWalletButton variant="tertiary" size="sm">
+            <ConnectWalletButton variant="tertiary" scale="sm">
               Connect
             </ConnectWalletButton>
           )}
@@ -201,9 +197,9 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
             </IconContainer>
           </Flex>
           {solanaAccount ? (
-            <ArrowForwardIcon color="textSubtle" width="20px" height="20px" />
+            <ChevronRightIcon color="textSubtle" width="24px" height="24px" />
           ) : (
-            <SolanaConnectButton variant="tertiary" size="sm">
+            <SolanaConnectButton variant="tertiary" scale="sm">
               Connect
             </SolanaConnectButton>
           )}
