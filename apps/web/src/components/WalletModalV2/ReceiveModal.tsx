@@ -12,7 +12,6 @@ interface ReceiveModalProps {
 }
 
 const QRCodeWrapper = styled(Box)`
-  border-radius: 16px;
   padding: 0px;
   display: flex;
   justify-content: center;
@@ -24,12 +23,13 @@ const QRCode = styled(Box)`
   width: 100%;
   height: auto;
   background-color: white;
-  border-radius: 16px;
+  border-radius: 24px;
   position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid ${({ theme }) => theme.colors.secondary};
+  border: 1px solid ${({ theme }) => theme.colors.cardBorder};
+  overflow: hidden;
 `
 
 export const ReceiveContent: React.FC<{
@@ -46,7 +46,7 @@ export const ReceiveContent: React.FC<{
           <Box position="relative">
             <QRCodeSVG
               value={account}
-              size={246}
+              size={310}
               level="H"
               includeMargin
               imageSettings={{
