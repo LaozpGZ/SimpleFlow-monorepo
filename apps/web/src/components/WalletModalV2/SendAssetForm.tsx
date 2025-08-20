@@ -68,6 +68,7 @@ import { useEnhancedTokenLogo } from './hooks/useEnhancedTokenLogo'
 import useSolanaTxError from './hooks/useSolanaTxError'
 import { useSolanaPriorityFee } from './hooks/useSolanaPriorityFee'
 import { SolanaPriorityFeeModal } from './SolanaPriorityFeeModal'
+import { createSolanaSendTransaction, detectWalletTransactionSupport } from './utils/solanaSendTransaction'
 
 const FormContainer = styled(Box)`
   display: flex;
@@ -180,7 +181,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const maxAmountInput = useMemo(() => maxAmountSpend(tokenBalance), [tokenBalance])
 
   // Solana wallet support
-  const { publicKey: solanaPublicKey, sendTransaction: sendSolanaTransaction } = useWallet()
+  const { publicKey: solanaPublicKey, sendTransaction: sendSolanaTransaction, wallet } = useWallet()
   const connection = useSolanaConnectionWithRpcAtom()
 
   const isNativeToken = useMemo(() => {
@@ -367,26 +368,22 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
       if (balance < requiredAmount) {
         throw new Error(t('Insufficient SOL balance to complete transaction'))
       }
+      // Detect wallet transaction support
+      const walletSupportsV0 = detectWalletTransactionSupport(wallet)
+
       let signature: string
 
       if (isNativeToken) {
-        const amountInLamports = Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL)
-
-        const transaction = new Transaction()
-
-        // Add Compute Budget instructions (Priority Fee)
-        transaction.add(
-          ComputeBudgetProgram.setComputeUnitLimit({ units: computeBudgetConfig.units }),
-          ComputeBudgetProgram.setComputeUnitPrice({ microLamports: computeBudgetConfig.microLamports }),
-        )
-
-        transaction.add(
-          SystemProgram.transfer({
-            fromPubkey: solanaPublicKey,
-            toPubkey: recipientPubkey,
-            lamports: amountInLamports,
-          }),
-        )
+        // Create transaction using helper
+        const transaction = await createSolanaSendTransaction({
+          connection,
+          fromPubkey: solanaPublicKey,
+          toPubkey: recipientPubkey,
+          amount: parseFloat(amount),
+          isNativeToken: true,
+          computeBudgetConfig,
+          walletSupportsV0,
+        })
 
         signature = await sendSolanaTransaction(transaction, connection)
       } else {
@@ -421,6 +418,11 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         )
 
         const transaction = new Transaction()
+
+        // Get recent blockhash for legacy transaction
+        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash()
+        transaction.recentBlockhash = blockhash
+        transaction.feePayer = solanaPublicKey
 
         // Add Compute Budget instructions (Priority Fee)
         transaction.add(
