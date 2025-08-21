@@ -10,16 +10,6 @@ function isProblematicWallet(walletName: string): boolean {
 }
 
 /**
- * Check if a transaction is a Legacy Transaction
- */
-function isLegacyTx(tx: any): tx is Transaction {
-  // Check for Transaction class and serializeMessage method
-  return (
-    tx instanceof Transaction && typeof tx?.serializeMessage === 'function' && !(tx instanceof VersionedTransaction)
-  )
-}
-
-/**
  * Send transaction using wallet.sendTransaction method
  */
 async function sendViaWalletAdapter(
@@ -56,29 +46,15 @@ async function sendViaSignAndRaw(
   const walletName = wallet.wallet?.adapter?.name || ''
   const isTrustWallet = walletName.toLowerCase().includes('trust')
 
-  // Pre-signing validation for Trust Wallet
+  // For Trust Wallet, don't do pre-validation, just try to sign
+  // This matches what swap does - just sign and send
   // eslint-disable-next-line no-console
-  console.log('🔍 Transaction validation for Trust Wallet:', {
+  console.log('🔍 Signing transaction:', {
     walletName,
     transactionType: transaction.constructor.name,
-    isTransaction: transaction instanceof Transaction,
-    isVersionedTransaction: transaction instanceof VersionedTransaction,
-    hasSerializeMessage: typeof (transaction as any).serializeMessage === 'function',
-    isLegacyTx: isLegacyTx(transaction),
+    isLegacy: transaction instanceof Transaction,
+    isVersioned: transaction instanceof VersionedTransaction,
   })
-
-  if (isTrustWallet && !isLegacyTx(transaction)) {
-    // eslint-disable-next-line no-console
-    console.error('❌ Trust Wallet requires Legacy Transaction, got:', {
-      type: transaction.constructor.name,
-      isTransaction: transaction instanceof Transaction,
-      hasSerializeMessage: typeof (transaction as any).serializeMessage === 'function',
-    })
-    throw new Error(
-      `${walletName} requires a Legacy Transaction; got ${transaction.constructor.name}. ` +
-        'This indicates a transaction format mismatch. Please try with a different wallet or contact support.',
-    )
-  }
 
   try {
     const signed = await wallet.signTransaction(transaction)
@@ -93,22 +69,30 @@ async function sendViaSignAndRaw(
     console.log('✅ Transaction sent via fallback:', signature)
     return signature
   } catch (error: any) {
+    // eslint-disable-next-line no-console
+    console.error('❌ Sign/send error:', error)
+
     // Check for the specific serializeMessage error
     if (error?.message?.includes('serializeMessage is not a function')) {
       throw new Error(
         `${walletName} expects Legacy Transaction but received incompatible format. ` +
-          'This is a transaction format mismatch issue. Please try with a different wallet.',
+          'Trust Wallet may have compatibility issues with this transaction type. Please try using a different wallet like Phantom or Solflare.',
       )
     }
 
-    // Special handling for Trust Wallet imported accounts
-    if (isTrustWallet && error?.message?.includes('signature verification')) {
-      // eslint-disable-next-line no-console
-      console.error('❌ Trust Wallet imported account signature issue detected')
+    // Check for Trust Wallet specific errors
+    if (isTrustWallet) {
+      if (error?.message?.includes('signature verification')) {
+        throw new Error(
+          'Trust Wallet signature verification failed. ' +
+            'For imported accounts, please create a native Solana account in Trust Wallet instead.',
+        )
+      }
+
+      // Generic Trust Wallet error
       throw new Error(
-        'Trust Wallet imported account detected. ' +
-          'This account cannot send transactions due to key mismatch. ' +
-          'Please use a native Solana account created in Trust Wallet, or import using a Solana private key instead.',
+        `Trust Wallet transaction failed: ${error?.message || 'Unknown error'}. ` +
+          'Trust Wallet may have compatibility issues with Solana transactions. Please try using Phantom or Solflare wallet.',
       )
     }
 
@@ -126,18 +110,29 @@ export async function sendTransactionSafely(
 ): Promise<string> {
   const walletName = wallet.wallet?.adapter?.name || ''
   const isProblematic = isProblematicWallet(walletName)
-  const supportsSignAndSend = typeof wallet.sendTransaction === 'function' && !isProblematic
+
+  // For Trust Wallet, ALWAYS use signTransaction + sendRawTransaction (like swap does)
+  const forceSignAndRaw = isProblematic
+  const supportsSignAndSend = typeof wallet.sendTransaction === 'function' && !forceSignAndRaw
 
   // eslint-disable-next-line no-console
   console.log('📤 Sending transaction:', {
     walletName,
     isProblematicWallet: isProblematic,
+    forceSignAndRaw,
     supportsSignAndSend,
     transactionType: transaction instanceof VersionedTransaction ? 'VersionedTransaction' : 'Legacy Transaction',
   })
 
   try {
-    // Try using sendTransaction (recommended method) - but not for problematic wallets
+    // For Trust/SafePal, always use manual sign like swap does
+    if (forceSignAndRaw) {
+      // eslint-disable-next-line no-console
+      console.log('⚠️ Using sign + send for problematic wallet')
+      return await sendViaSignAndRaw(wallet, transaction, connection)
+    }
+
+    // Try using sendTransaction (recommended method) for other wallets
     if (supportsSignAndSend) {
       try {
         return await sendViaWalletAdapter(wallet, transaction, connection)
@@ -146,9 +141,9 @@ export async function sendTransactionSafely(
         if (sendError?.message?.includes('Not support') || sendError?.message?.includes('not support')) {
           // eslint-disable-next-line no-console
           console.log('⚠️ sendTransaction not supported, falling back to manual sign')
-        } else {
-          throw sendError
+          return await sendViaSignAndRaw(wallet, transaction, connection)
         }
+        throw sendError
       }
     }
 
