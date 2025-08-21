@@ -17,4 +17,4 @@ jobs:
     name: Unit tests (Jest)
 
     steps:
-      - run: 'echo "Unit tests skipped" '
+      - run: 'echo "Unit tests skipped"'
