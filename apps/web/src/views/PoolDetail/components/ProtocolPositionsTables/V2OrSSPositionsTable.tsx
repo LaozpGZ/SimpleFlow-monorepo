@@ -28,6 +28,7 @@ import { useV2PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { useV2FarmActions } from 'views/universalFarms/hooks/useV2FarmActions'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
+import { V2_MIGRATE_PAGE_SUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { ActionButton, PrimaryOutlineButton } from '../styles'
 import { PositionsTable } from './PositionsTable'
 import { EmptyPositionCard, LoadingCard } from './UtilityCards'
@@ -174,7 +175,7 @@ const V2PositionWithApr: React.FC<{
           </ActionButton>
         </NextLinkFromReactRouter>
 
-        {poolInfo.protocol === 'v2' && (
+        {poolInfo.protocol === 'v2' && V2_MIGRATE_PAGE_SUPPORTED_CHAINS.includes(poolInfo.chainId) && (
           <NextLinkFromReactRouter to={migrateUrl}>
             <ActionButton onClick={(e: React.MouseEvent) => e.stopPropagation()}>{t('Migrate')}</ActionButton>
           </NextLinkFromReactRouter>

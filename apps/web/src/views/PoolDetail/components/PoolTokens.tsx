@@ -48,7 +48,7 @@ export const PoolTokens: React.FC<PoolTokensProps> = ({ poolInfo }) => {
             </Text>
             <CurrencyLogo currency={currency1} size="24px" />
           </Flex>
-          <Text mt="4px" fontSize="18px">
+          <Text mt="4px" fontSize="18px" textAlign="right">
             {token1Tvl}
           </Text>
         </AutoColumn>

@@ -1,7 +1,7 @@
-import { ChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { AppHeader } from 'components/App'
 import { BodyWrapper } from 'components/App/AppBody'
+import { V2_MIGRATE_PAGE_SUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { useRouter } from 'next/router'
 import { safeGetAddress } from 'utils'
 import LiquidityFormProvider from 'views/AddLiquidityV3/formViews/V3FormView/form/LiquidityFormProvider'
@@ -32,4 +32,4 @@ function MigratePage() {
 export default MigratePage
 
 MigratePage.screen = true
-MigratePage.chains = [ChainId.BSC, ChainId.ETHEREUM, ChainId.BSC_TESTNET, ChainId.GOERLI]
+MigratePage.chains = V2_MIGRATE_PAGE_SUPPORTED_CHAINS
