@@ -1,5 +1,11 @@
 import { ChainId, Currency, CurrencyAmount, Native, Token, UnifiedCurrency, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { useQuery } from '@tanstack/react-query'
+import { NonEVMChainId } from '@pancakeswap/chains'
+import { selectedSolanaWalletAtom } from '@pancakeswap/ui-wallets/src/state/atom'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { useLocalStorage, useWallet } from '@solana/wallet-adapter-react'
+import { SolanaProviderLocalStorageKey } from '@pancakeswap/ui-wallets'
+import { WalletName } from '@solana/wallet-adapter-base'
 import { multicallABI } from 'config/abi/Multicall'
 import { FAST_INTERVAL } from 'config/constants'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -13,7 +19,7 @@ import { getMulticallAddress } from 'utils/addressHelpers'
 import { publicClient } from 'utils/viem'
 import { Address, erc20Abi, getAddress, isAddress } from 'viem'
 import { useAccount, useBalance } from 'wagmi'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { useAtomValue } from 'jotai'
 import { useMultipleContractSingleDataWagmi } from '../multicall/hooks'
 
 /**
@@ -336,4 +342,21 @@ export function useCurrencyBalanceWithChain(
     useMemo(() => [currency], [currency]),
     chainId,
   )[0]
+}
+
+export const useCurrentWalletIcon = () => {
+  const { chainId } = useAccountActiveChain()
+  const { connector } = useAccount()
+  const { wallets } = useWallet()
+  const [solanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
+  const selectedSolanaWalletName = useAtomValue(selectedSolanaWalletAtom)
+
+  return useMemo(() => {
+    if (chainId === NonEVMChainId.SOLANA) {
+      const name = selectedSolanaWalletName || solanaWalletName
+      return wallets.find((w) => w.adapter.name === (name as WalletName))?.adapter.icon
+    }
+
+    return connector?.icon
+  }, [chainId, wallets, solanaWalletName, connector, selectedSolanaWalletName])
 }

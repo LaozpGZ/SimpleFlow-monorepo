@@ -1,19 +1,23 @@
 import { ChainId as EvmChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Percent, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
-import { Skeleton, Text } from '@pancakeswap/uikit'
+import { Box, FlexGap, Image, Skeleton, Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHistoryMultiple'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { CHAIN_QUERY_NAME } from 'config/chains'
 import { useUnifiedCurrency } from 'hooks/Tokens'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useUnifiedCurrencyBalance } from 'hooks/useUnifiedCurrencyBalance'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useRouter } from 'next/router'
 import { ParsedUrlQuery } from 'querystring'
 import { ReactNode, Suspense, useCallback, useMemo } from 'react'
+import styled from 'styled-components'
 import { Field } from 'state/swap/actions'
+import { useCurrentWalletIcon } from 'state/wallet/hooks'
 import { useDefaultsFromURLSearch, useSwapState } from 'state/swap/hooks'
 import { SwitchChainOption } from 'wallet/hook/useSwitchNetworkV2'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
@@ -141,6 +145,8 @@ export const handleCurrencySelectFn = async ({
 export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsufficientBalance }: Props) {
   const { t } = useTranslation()
   const warningSwapHandler = useWarningImport()
+  const { unifiedAccount } = useAccountActiveChain()
+  const walletIcon = useCurrentWalletIcon()
 
   const {
     independentField,
@@ -260,9 +266,23 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           otherCurrency={outputCurrency}
           commonBasesType={CommonBasesType.SWAP_LIMITORDER}
           title={
-            <Text color="textSubtle" fontSize={12} bold>
-              {t('From')}
-            </Text>
+            <FlexGap gap="8px" alignItems="center">
+              <Text color="textSubtle" fontSize={12} bold>
+                {t('From')}:
+              </Text>
+              {unifiedAccount && (
+                <FlexGap gap="4px" alignItems="center">
+                  {walletIcon && (
+                    <Box width={24} height={24}>
+                      <WalletIcon src={walletIcon} width={24} height={24} alt="Wallet Icon" />
+                    </Box>
+                  )}
+                  <Text fontSize="12px" color="textSubtle" fontWeight="600">
+                    {truncateHash(unifiedAccount, 6, 4)}
+                  </Text>
+                </FlexGap>
+              )}
+            </FlexGap>
           }
           isUserInsufficientBalance={isUserInsufficientBalance}
           modalTitle={t('From')}
@@ -287,9 +307,23 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
           otherCurrency={inputCurrency}
           commonBasesType={CommonBasesType.SWAP_LIMITORDER}
           title={
-            <Text color="textSubtle" fontSize={12} bold>
-              {t('To')}
-            </Text>
+            <FlexGap gap="8px" alignItems="center">
+              <Text color="textSubtle" fontSize={12} bold>
+                {t('To')}:
+              </Text>
+              {unifiedAccount && (
+                <FlexGap gap="4px" alignItems="center">
+                  {walletIcon && (
+                    <Box width={24} height={24}>
+                      <WalletIcon src={walletIcon} width={24} height={24} alt="Wallet Icon" />
+                    </Box>
+                  )}
+                  <Text fontSize="12px" color="textSubtle" fontWeight="600">
+                    {truncateHash(unifiedAccount, 6, 4)}
+                  </Text>
+                </FlexGap>
+              )}
+            </FlexGap>
           }
           modalTitle={t('To')}
           showSearchHeader
@@ -300,3 +334,8 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
     </FormContainer>
   )
 }
+
+const WalletIcon = styled(Image)`
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.background};
+`

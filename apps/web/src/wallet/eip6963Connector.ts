@@ -12,8 +12,9 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
 
   const connector = createConnector(() => ({
     id: 'injected',
-    name: 'Injected',
+    name: info.name,
     type: 'injected',
+    icon: info.icon,
 
     async connect({ chainId } = {}) {
       const accounts = await provider.request({ method: 'eth_requestAccounts' })
