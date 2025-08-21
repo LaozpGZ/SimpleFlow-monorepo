@@ -1,5 +1,16 @@
 # @pancakeswap/infinity-sdk
 
+## 1.0.4
+
+### Patch Changes
+
+- 1f6c9ec: Allow non-whitelisted hook in smart-router
+- Updated dependencies [cd589e1]
+  - @pancakeswap/swap-sdk-core@1.5.0
+  - @pancakeswap/chains@0.6.0
+  - @pancakeswap/v3-sdk@3.9.5
+  - @pancakeswap/permit2-sdk@1.1.5
+
 ## 1.0.3
 
 ### Patch Changes

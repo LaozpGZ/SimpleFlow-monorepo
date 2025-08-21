@@ -1,6 +1,6 @@
 {
   "name": "@pancakeswap/games",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "sideEffects": false,
   "private": true,
   "scripts": {

@@ -1,5 +1,11 @@
 # @pancakeswap/chains
 
+## 0.6.0
+
+### Minor Changes
+
+- cd589e1: support solana chain
+
 ## 0.5.3
 
 ### Patch Changes

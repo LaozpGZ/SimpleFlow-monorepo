@@ -1,5 +1,15 @@
 # @pancakeswap/localization
 
+## 6.2.0
+
+### Minor Changes
+
+- a070948: Default to English if no translations available
+
+### Patch Changes
+
+- f71ce8b: If translation unavailable, fallback to full translations file
+
 ## 6.1.0
 
 ### Minor Changes
