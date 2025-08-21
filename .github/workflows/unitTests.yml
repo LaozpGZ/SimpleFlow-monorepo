@@ -2,6 +2,8 @@ name: Unit Tests
 
 on:
   pull_request:
+    paths-ignore:
+      - 'locales/**'
   push:
     branches:
       - develop
@@ -19,13 +21,6 @@ jobs:
     name: Unit tests (Jest)
 
     steps:
-      - name: Skip run
-        run: |
-          if [ "${{ github.head_ref }}" = "l10n_develop" ]; then
-            echo "Skipping unit tests"
-            exit 0
-          fi
-
       - name: Checkout
         uses: actions/checkout@v4
         with:
