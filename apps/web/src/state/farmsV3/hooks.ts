@@ -408,7 +408,7 @@ export function useFarmsV3WithPositionsAndBooster(options: UseFarmsOptions = {})
   isLoading: boolean
 } {
   const { data: boosterLiquidityX } = useV3BoostedLiquidityX()
-  const { data, error: _error, isLoading } = useFarmsV3({ ...options, boosterLiquidityX })
+  const { data, isLoading } = useFarmsV3({ ...options, boosterLiquidityX })
   const { data: boosterWhitelist } = useV3BoostedFarm(data?.farmsWithPrice?.map((f) => f.pid))
 
   return {

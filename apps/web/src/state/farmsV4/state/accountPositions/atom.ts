@@ -11,12 +11,6 @@ export interface TransactionReceiptTime {
   blockHash: string
 }
 
-export const userPositionsAtom = atom<Record<ChainIdAddressKey, AccountPositionMap>>({})
-
-export const cakePendingRewardsAtom = atom<Record<ChainIdAddressKey, number>>({})
-
-export const priceOfPositionsAtom = atom<Record<ChainIdAddressKey, { priceUSD: string }>>({})
-
 export const txReceiptAtom = atom<TransactionReceiptTime | null>(null)
 
 type PositionInfo = {

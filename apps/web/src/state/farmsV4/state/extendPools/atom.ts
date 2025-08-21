@@ -5,7 +5,7 @@ import isEqual from 'lodash/isEqual'
 import uniqWith from 'lodash/uniqWith'
 import { useMemo } from 'react'
 import { isAddressEqual } from 'utils'
-import { type Address, isAddress } from 'viem'
+import { isAddress } from 'viem'
 import { farmPoolsAtom } from '../farmPools/atom'
 import { ChainIdAddressKey, PoolInfo } from '../type'
 
@@ -76,8 +76,3 @@ export const useExtendPoolsAtom = () => {
     [farms, pools, setPools],
   )
 }
-
-interface PoolsOfPositionType {
-  [address: Address]: PoolInfo
-}
-export const poolsOfPositionAtom = atom({} as PoolsOfPositionType)
