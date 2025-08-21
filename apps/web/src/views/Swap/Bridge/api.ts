@@ -5,6 +5,7 @@ import { InfinityTradeWithoutGraph } from '@pancakeswap/smart-router/dist/evm/in
 import { BRIDGE_API_ENDPOINT } from 'config/constants/endpoints'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { Address } from 'viem/accounts'
+import { isSolana } from '@pancakeswap/chains'
 import { BridgeOrderWithCommands, isSVMOrder } from '../utils'
 import {
   BridgeDataSchema,
@@ -16,6 +17,7 @@ import {
   SwapDataSchema,
   UserBridgeOrdersResponse,
 } from './types'
+import { adaptRelayQuoteToBridge, RelayClient, TRADE_TYPES } from './relay-sdk'
 
 // // Define the schema for the "SWAP" command data
 // export const SwapDataSchema = Type.Object({
@@ -264,8 +266,70 @@ export interface MetadataSuccessResponse extends MetadataResponse {
   bridgeTransactionData: BridgeTransactionData
 }
 
+const customClient = new RelayClient({
+  timeout: 60000,
+  retryAttempts: 5,
+})
+
 export const postMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
   const { commands, recipientOnDestChain, ...rest } = params
+
+  const isOriginSolana = isSolana(Number(params.originChainId))
+  const isDestinationSolana = isSolana(Number(params.destinationChainId))
+  // TODO: if baseCurrency or quoteCurrency is solana, call relay
+  const isSolanaBridge = isOriginSolana || isDestinationSolana
+
+  // if solana is, replace with 792703809 to match endpoint requirement
+  const originChainId = isOriginSolana ? 792703809 : Number(params.originChainId)
+  const destinationChainId = isDestinationSolana ? 792703809 : Number(params.destinationChainId)
+
+  if (isSolanaBridge) {
+    try {
+      const relayResponse = await customClient.getQuote({
+        user: '0x9D24d495F7380BA80dC114D8C2cF1a54a68e25A4',
+        originCurrency: params.inputToken,
+        destinationCurrency: params.outputToken,
+        amount: params.amount,
+        tradeType: TRADE_TYPES.EXACT_INPUT,
+        originChainId,
+        destinationChainId,
+        recipient: '5bKZApECSLF9VXyp4nzBh5WbF9TREe3Wu3bsJus86xqX',
+      })
+
+      const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
+
+      // map from relay response to MetadataSuccessResponse
+      const result: MetadataSuccessResponse = {
+        supported: true,
+        amount: params.amount,
+        inputToken: params.inputToken,
+        originChainId: Number(params.originChainId),
+        outputToken: params.outputToken,
+        destinationChainId: Number(params.destinationChainId),
+        expectedFillTimeSec: bridgeFormat.expectedFillTimeSec.toString(),
+        isAmountTooLow: false,
+        limits: {
+          minDeposit: '0',
+          maxDeposit: '0',
+          maxDepositInstant: '0',
+          maxDepositShortDelay: '0',
+          recommendedDepositInstant: '0',
+        },
+        bridgeTransactionData: {
+          exclusiveRelayer: '',
+          exclusivityDeadline: 0,
+          quoteTimestamp: 0,
+          relayerFeePct: '0',
+          totalRelayFee: '0',
+          ...bridgeFormat.bridgeTransactionData,
+        },
+      }
+
+      return result
+    } catch (error) {
+      throw new Error('Failed to get solana bridge metadata')
+    }
+  }
 
   const stringParams = Object.fromEntries(
     Object.entries(rest)
