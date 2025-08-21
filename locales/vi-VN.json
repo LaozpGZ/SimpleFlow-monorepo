@@ -4145,9 +4145,9 @@
   "Transaction failed to confirm. Please try again": "Xác nhận giao dịch không thành công. Vui lòng thử lại",
   "Transaction rejected by user": "Giao dịch bị từ chối bởi người dùng",
   "Invalid account data. Please check recipient address": "Dữ liệu tài khoản không hợp lệ. Vui lòng kiểm tra địa chỉ người nhận",
-  "Program execution error. Please try again": "Program execution error. Please try again",
-  "Transaction Failed": "Transaction Failed",
-  "Your transaction has been submitted to the network": "Your transaction has been submitted to the network",
-  "Send didn’t go through. Please try again.": "Send didn’t go through. Please try again.",
-  "Transaction timeout. Please try again": "Transaction timeout. Please try again"
+  "Program execution error. Please try again": "Lỗi thực hiện chương trình. Vui lòng thử lại",
+  "Transaction Failed": "Giao dịch không thành công",
+  "Your transaction has been submitted to the network": "Giao dịch của bạn đã được gửi lên mạng lưới",
+  "Send didn’t go through. Please try again.": "Gửi không thành công. Vui lòng thử lại.",
+  "Transaction timeout. Please try again": "Giao dịch đã hết thời gian chờ. Vui lòng thử lại"
 }
