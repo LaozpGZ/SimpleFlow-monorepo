@@ -1,4 +1,18 @@
-import { AutoColumn, Box, Button, Card, CardBody, Column, Dots, PreTitle, RowBetween, Text } from '@pancakeswap/uikit'
+import { ReactElement } from 'react'
+import {
+  AutoColumn,
+  Box,
+  Button,
+  Card,
+  CardBody,
+  Column,
+  Dots,
+  FlexGap,
+  PreTitle,
+  QuestionHelper,
+  RowBetween,
+  Text,
+} from '@pancakeswap/uikit'
 
 import { CommitButton } from 'components/CommitButton'
 
@@ -16,14 +30,12 @@ import { Percent } from '@pancakeswap/sdk'
 import { useIsTransactionUnsupported, useIsTransactionWarning } from 'hooks/Trades'
 import { AddStableChildrenProps } from 'views/AddLiquidity/AddStableLiquidity'
 
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { ReactElement } from 'react'
-
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
-import { useAccount } from 'wagmi'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
-import { LiquiditySlippageButton, SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { FormattedSlippage } from 'views/AddLiquidity/AddStableLiquidity/components'
 
 export default function StableFormView({
   formattedAmounts,
@@ -55,12 +67,12 @@ export default function StableFormView({
 }: AddStableChildrenProps & {
   stableTotalFee?: number
 }) {
+  const { t } = useTranslation()
+  const { account, isWrongNetwork } = useAccountActiveChain()
+
   const addIsUnsupported = useIsTransactionUnsupported(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
   const addIsWarning = useIsTransactionWarning(currencies?.CURRENCY_A, currencies?.CURRENCY_B)
 
-  const { t } = useTranslation()
-  const { isWrongNetwork } = useActiveChainId()
-  const { address: account } = useAccount()
   const expertMode = useIsExpertMode()
 
   let buttons: ReactElement
@@ -162,7 +174,20 @@ export default function StableFormView({
                 <Text>~{formatDollarAmount(inputAmountsTotalUsdValue, 2, false)}</Text>
               </RowBetween>
               <RowBetween>
-                <Text color="textSubtle">Slippage Tolerance</Text>
+                <FlexGap gap="4px" alignItems="center">
+                  <Text color="textSubtle">{t('Slippage')}</Text>
+                  <QuestionHelper
+                    text={t(
+                      'Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected',
+                    )}
+                    placement="top-start"
+                    mt="1px"
+                  />
+                </FlexGap>
+                <FormattedSlippage slippage={executionSlippage} loading={loading} />
+              </RowBetween>
+              <RowBetween>
+                <Text color="textSubtle">{t('Slippage Tolerance')}</Text>
                 <LiquiditySlippageButton />
               </RowBetween>
               <RowBetween>
