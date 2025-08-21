@@ -137,11 +137,13 @@ export const PoolStatus: React.FC<PoolStatusProps> = ({ poolInfo, ...props }) =>
               </Text>
             </Column>
           </AutoColumn>
-          <NextLinkFromReactRouter to={addLiquidityLink}>
-            <Button width="100%" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[poolInfo.chainId]}>
-              {t('Add Liquidity')}
-            </Button>
-          </NextLinkFromReactRouter>
+          <Column mt="16px">
+            <NextLinkFromReactRouter to={addLiquidityLink}>
+              <Button width="100%" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[poolInfo.chainId]}>
+                {t('Add Liquidity')}
+              </Button>
+            </NextLinkFromReactRouter>
+          </Column>
         </Flex>
       </CardBody>
     </Card>

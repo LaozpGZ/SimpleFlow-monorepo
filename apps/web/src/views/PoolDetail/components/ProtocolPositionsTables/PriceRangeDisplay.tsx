@@ -396,15 +396,15 @@ export const PriceRangeDisplay: React.FC<PriceRangeDisplayProps> = ({
       {/* Price range display */}
       {renderPrices()}
 
-      {/* Percentage display below prices */}
-      {renderPercentages()}
-
       {/* Price range bar */}
       {showPercentages && (
         <Flex width="100%" maxWidth="190px" justifyContent="center" mb="4px">
           <PriceRangeContainer>{renderBar()}</PriceRangeContainer>
         </Flex>
       )}
+
+      {/* Percentage display below the range bar */}
+      {renderPercentages()}
     </Flex>
   )
 }
