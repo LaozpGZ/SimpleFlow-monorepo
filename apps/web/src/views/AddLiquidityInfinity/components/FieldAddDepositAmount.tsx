@@ -4,6 +4,7 @@ import { BoxProps, RowBetween, Column, Text, SkeletonV2, Skeleton } from '@panca
 import { FieldDepositAmount } from 'components/Liquidity/Form/FieldDepositAmount'
 import { useInfinityPoolIdRouteParams } from 'hooks/dynamicRoute/usePoolIdRoute'
 import { useInverted } from 'state/infinity/shared'
+import { useTranslation } from '@pancakeswap/localization'
 import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
 import { useTotalUsdValue } from 'views/AddLiquidity/hooks/useTotalUsdValue'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
@@ -20,6 +21,7 @@ export const FieldAddDepositAmount: React.FC<FieldDepositAmountProps> = ({
   quoteCurrency,
   ...boxProps
 }) => {
+  const { t } = useTranslation()
   const { chainId } = useInfinityPoolIdRouteParams()
   const { inputValue0, inputValue1, handleDepositAmountChange } = useAddDepositAmounts()
   const { isDepositEnabled, isDeposit0Enabled, isDeposit1Enabled } = useAddDepositAmountsEnabled()
@@ -60,7 +62,7 @@ export const FieldAddDepositAmount: React.FC<FieldDepositAmountProps> = ({
 
       <Column mt="16px" gap="16px">
         <RowBetween>
-          <Text color="textSubtle">Total</Text>
+          <Text color="textSubtle">{t('Total')}</Text>
           <Text>
             ~
             {formatDollarAmount(
@@ -71,7 +73,7 @@ export const FieldAddDepositAmount: React.FC<FieldDepositAmountProps> = ({
           </Text>
         </RowBetween>
         <RowBetween>
-          <Text color="textSubtle">Slippage Tolerance</Text>
+          <Text color="textSubtle">{t('Slippage Tolerance')}</Text>
           <LiquiditySlippageButton />
         </RowBetween>
       </Column>
