@@ -68,9 +68,6 @@ import { erc20Bytes32ABI } from 'config/abi/erc20_bytes32'
 import { ifoV1ABI } from 'config/abi/ifoV1'
 import { ifoV2ABI } from 'config/abi/ifoV2'
 import { ifoV3ABI } from 'config/abi/ifoV3'
-import { wbethBscABI } from 'config/abi/wbethBSC'
-import { wbethEthABI } from 'config/abi/wbethETH'
-import { WBETH } from 'config/constants/liquidStaking'
 import { VaultKey } from 'state/types'
 
 import { erc721CollectionABI } from 'config/abi/erc721collection'
@@ -299,17 +296,6 @@ export function useTokenContract(tokenAddress?: Address, overrideChainId?: numbe
 export function useWNativeContract() {
   const { chainId } = useActiveChainId()
   return useContract(chainId ? WNATIVE[chainId]?.address : undefined, wethABI)
-}
-
-export function useWBETHContract() {
-  const { chainId } = useActiveChainId()
-
-  const abi = useMemo(
-    () => (chainId && [ChainId.ETHEREUM, ChainId.GOERLI].includes(chainId) ? wbethEthABI : wbethBscABI),
-    [chainId],
-  )
-
-  return useContract(chainId ? WBETH[chainId] : undefined, abi as Abi)
 }
 
 export function useBytes32TokenContract(tokenAddress?: Address) {
