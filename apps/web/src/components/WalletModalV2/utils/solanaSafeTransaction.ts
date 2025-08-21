@@ -1,4 +1,4 @@
-import { Connection, Transaction, VersionedTransaction, TransactionMessage, PublicKey } from '@solana/web3.js'
+import { Connection, Transaction, VersionedTransaction } from '@solana/web3.js'
 import { WalletContextState } from '@solana/wallet-adapter-react'
 
 /**
@@ -13,7 +13,10 @@ function isProblematicWallet(walletName: string): boolean {
  * Check if a transaction is a Legacy Transaction
  */
 function isLegacyTx(tx: any): tx is Transaction {
-  return typeof tx?.serializeMessage === 'function'
+  // Check for Transaction class and serializeMessage method
+  return (
+    tx instanceof Transaction && typeof tx?.serializeMessage === 'function' && !(tx instanceof VersionedTransaction)
+  )
 }
 
 /**
@@ -54,11 +57,25 @@ async function sendViaSignAndRaw(
   const isTrustWallet = walletName.toLowerCase().includes('trust')
 
   // Pre-signing validation for Trust Wallet
+  // eslint-disable-next-line no-console
+  console.log('🔍 Transaction validation for Trust Wallet:', {
+    walletName,
+    transactionType: transaction.constructor.name,
+    isTransaction: transaction instanceof Transaction,
+    isVersionedTransaction: transaction instanceof VersionedTransaction,
+    hasSerializeMessage: typeof (transaction as any).serializeMessage === 'function',
+    isLegacyTx: isLegacyTx(transaction),
+  })
+
   if (isTrustWallet && !isLegacyTx(transaction)) {
     // eslint-disable-next-line no-console
-    console.error('❌ Trust Wallet requires Legacy Transaction, got VersionedTransaction')
+    console.error('❌ Trust Wallet requires Legacy Transaction, got:', {
+      type: transaction.constructor.name,
+      isTransaction: transaction instanceof Transaction,
+      hasSerializeMessage: typeof (transaction as any).serializeMessage === 'function',
+    })
     throw new Error(
-      `${walletName} requires a Legacy Transaction; got versioned tx. ` +
+      `${walletName} requires a Legacy Transaction; got ${transaction.constructor.name}. ` +
         'This indicates a transaction format mismatch. Please try with a different wallet or contact support.',
     )
   }

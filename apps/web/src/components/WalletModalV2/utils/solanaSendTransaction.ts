@@ -150,10 +150,12 @@ async function buildTransaction(
   console.log('📦 Creating legacy transaction')
   // Create legacy transaction
   const transaction = new Transaction()
-  transaction.recentBlockhash = blockhash
   transaction.feePayer = fromPubkey
+  transaction.recentBlockhash = blockhash
   transaction.lastValidBlockHeight = lastValidBlockHeight
-  instructions.forEach((ix) => transaction.add(ix))
+
+  // Add all instructions
+  transaction.add(...instructions)
 
   return transaction
 }
