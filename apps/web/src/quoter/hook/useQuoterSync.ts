@@ -103,6 +103,7 @@ export const useQuoterSync = () => {
 
   useEffect(() => {
     clear()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [quoteQuery.placeholderHash])
 
   useEffect(() => {
@@ -110,6 +111,8 @@ export const useQuoterSync = () => {
   }, [typedValue, setTyping])
 
   const quoteResult = useAtomValue(bestCrossChainQuoteAtom(quoteQuery))
+
+  console.log('quoteResult', quoteResult)
 
   useEffect(() => {
     if (t > 0 && !paused) {

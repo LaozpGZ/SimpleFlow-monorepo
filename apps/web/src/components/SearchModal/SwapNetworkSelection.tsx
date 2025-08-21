@@ -1,4 +1,4 @@
-import { ChainId, Chains, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
+import { ChainId, Chains, NonEVMChainId, UnifiedChainId, isEvm, isSolana } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   appearAnimation,
@@ -101,6 +101,21 @@ export default function SwapNetworkSelection({
       return Chains.filter((chain) => chain.id === usedChainId)
     }
     if (isDependent) {
+      // If usedChainId is Solana, show CROSSCHAIN_SUPPORTED_CHAINS
+      if (isSolana(usedChainId) || isSolana(activeChainId)) {
+        return Chains.filter((chain) => CROSSCHAIN_SUPPORTED_CHAINS.includes(chain.id))
+      }
+      // If usedChainId is EVM, append Solana to the end of supportedChains
+      if (isEvm(usedChainId)) {
+        const bridgeChains = Chains.filter(
+          (chain) => chain.id === usedChainId || supportedBridgeChains.includes(chain.id),
+        )
+        const solanaChain = Chains.find((chain) => chain.id === NonEVMChainId.SOLANA)
+        if (solanaChain && !bridgeChains.some((chain) => chain.id === NonEVMChainId.SOLANA)) {
+          return [...bridgeChains, solanaChain]
+        }
+        return bridgeChains
+      }
       return Chains.filter((chain) => chain.id === usedChainId || supportedBridgeChains.includes(chain.id))
     }
 
@@ -123,7 +138,7 @@ export default function SwapNetworkSelection({
 
       return true
     })
-  }, [supportedBridgeChains, usedChainId, isDependent, customChains, showOnlySelectedChain])
+  }, [supportedBridgeChains, usedChainId, activeChainId, isDependent, customChains, showOnlySelectedChain])
 
   const selectedChain = useMemo(
     () => supportedChains.find((chain) => chain.id === usedChainId),
@@ -143,22 +158,6 @@ export default function SwapNetworkSelection({
     // Calculate available width and how many chains can fit
     const availableWidth = containerWidth - HIDDEN_CHAINS_BUTTON_WIDTH - CHAIN_BUTTON_MARGIN
     const chainsToShow = Math.max(1, Math.floor(availableWidth / (CHAIN_BUTTON_WIDTH + CHAIN_BUTTON_MARGIN)))
-
-    // Sort the filtered chains to have priority chains first
-    const sortedFiltered = [...filtered].sort((a, b) => {
-      const aIsPriority = CROSSCHAIN_SUPPORTED_CHAINS.includes(a.id)
-      const bIsPriority = CROSSCHAIN_SUPPORTED_CHAINS.includes(b.id)
-
-      if (aIsPriority && !bIsPriority) return -1
-      if (!aIsPriority && bIsPriority) return 1
-
-      // If both are priority chains, sort by the order in prioritizedChains array
-      if (aIsPriority && bIsPriority) {
-        return CROSSCHAIN_SUPPORTED_CHAINS.indexOf(a.id) - CROSSCHAIN_SUPPORTED_CHAINS.indexOf(b.id)
-      }
-
-      return 0
-    })
 
     return [filtered, take(filtered, chainsToShow), drop(filtered, chainsToShow)]
   }, [supportedChains, usedChainId, containerWidth])
