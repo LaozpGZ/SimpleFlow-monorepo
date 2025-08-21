@@ -320,15 +320,15 @@ export const PoolInfo = () => {
 
                   <Text fontSize={12} color="textSubtle" textTransform="uppercase" width="max-content">
                     {t(
-                      '%symbol0% per %symbol1%',
+                      '%assetA% = 1 %assetB%',
                       flipCurrentPrice
                         ? {
-                            symbol0: currency0?.symbol,
-                            symbol1: currency1?.symbol,
+                            assetA: currency0?.symbol,
+                            assetB: currency1?.symbol,
                           }
                         : {
-                            symbol0: currency1?.symbol,
-                            symbol1: currency0?.symbol,
+                            assetA: currency1?.symbol,
+                            assetB: currency0?.symbol,
                           },
                     )}
                   </Text>

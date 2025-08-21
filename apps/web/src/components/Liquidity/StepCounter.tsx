@@ -128,7 +128,7 @@ export const StepCounter = ({
         </AutoRow>
         {tokenA && tokenB && (
           <Text color="textSubtle" small>
-            {t('%assetA% per %assetB%', { assetA: tokenB?.symbol, assetB: tokenA?.symbol })}
+            {t('%assetA% = 1 %assetB%', { assetA: tokenB?.symbol, assetB: tokenA?.symbol })}
           </Text>
         )}
       </AutoColumn>

@@ -89,7 +89,7 @@ export default function PositionListItem({ positionDetails, children }: Position
       minAmount: formatTickPrice(inverted ? priceUpper.invert() : priceLower, tickAtLimit, Bound.LOWER, locale),
     })} / ${t('Max %maxAmount%', {
       maxAmount: formatTickPrice(inverted ? priceLower.invert() : priceUpper, tickAtLimit, Bound.UPPER, locale),
-    })} ${t('%assetA% per %assetB%', {
+    })} ${t('%assetA% = 1 %assetB%', {
       assetA: inverted ? currencyBase?.symbol : currencyQuote?.symbol,
       assetB: inverted ? currencyQuote?.symbol : currencyBase?.symbol,
     })}`
