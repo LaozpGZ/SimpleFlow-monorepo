@@ -9,7 +9,6 @@ export const SNAPSHOT_BASE_URL = process.env.NEXT_PUBLIC_SNAPSHOT_BASE_URL
 export const API_PROFILE = 'https://profile.pancakeswap.com'
 export const API_NFT = 'https://nft.pancakeswap.com/api/v1'
 export const SNAPSHOT_API = `${SNAPSHOT_BASE_URL}/graphql`
-export const GRAPH_API_POTTERY = `${THE_GRAPH_PROXY_API}/pottery`
 // export const ONRAMP_API_BASE_URL = 'https://monkfish-app-s4mda.ondigitalocean.app'
 export const ONRAMP_API_BASE_URL = 'https://onramp2-api.pancakeswap.com'
 export const NOTIFICATION_HUB_BASE_URL = 'https://notification-hub.pancakeswap.com'

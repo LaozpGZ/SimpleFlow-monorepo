@@ -33,8 +33,6 @@ import {
   getNftSaleContract,
   getPancakeVeSenderV2Contract,
   getPointCenterIfoContract,
-  getPotteryDrawContract,
-  getPotteryVaultContract,
   getPredictionsV1Contract,
   getPredictionsV2Contract,
   getPredictionsV3Contract,
@@ -323,16 +321,6 @@ export function useMulticallContract(overrideChainId?: number) {
   const { chainId: activeChainId } = useActiveChainId()
   const chainId = overrideChainId || activeChainId
   return useContract(getMulticallAddress(chainId), multicallABI)
-}
-
-export const usePotterytVaultContract = (address: Address) => {
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getPotteryVaultContract(address, signer ?? undefined), [address, signer])
-}
-
-export const usePotterytDrawContract = () => {
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getPotteryDrawContract(signer ?? undefined), [signer])
 }
 
 export function useBCakeFarmBoosterContract() {

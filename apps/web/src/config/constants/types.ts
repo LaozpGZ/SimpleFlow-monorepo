@@ -1,11 +1,9 @@
 import BigNumber from 'bignumber.js'
-import { Address } from 'viem'
-
 import { Campaign, CampaignType, TranslatableText } from '@pancakeswap/achievements'
 import { UnifiedChainId } from '@pancakeswap/chains'
 import type { FarmConfigBaseProps, SerializedFarmConfig, SerializedFarmPublicData } from '@pancakeswap/farms'
 import { LegacyTradeWithStableSwap as TradeWithStableSwap } from '@pancakeswap/smart-router/legacy-router'
-import type { Currency, CurrencyAmount, Percent, Price, Token, UnifiedToken } from '@pancakeswap/swap-sdk-core'
+import type { Currency, CurrencyAmount, Percent, Price, UnifiedToken } from '@pancakeswap/swap-sdk-core'
 import { TradeType } from '@pancakeswap/swap-sdk-core'
 import type { Trade } from '@pancakeswap/v2-sdk'
 
