@@ -35,12 +35,10 @@ import {
   useStableSwapPath,
   useTokenPriceDataQuery,
 } from 'state/info/hooks'
-import { PoolData, TokenData, Transaction, TvlChartEntry, VolumeChartEntry } from 'state/info/types'
 import { styled } from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { getTokenNameAlias, getTokenSymbolAlias } from 'utils/getTokenAlias'
-import { BasePerf } from 'utils/PerfTracker'
 import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import ChartCard from 'views/Info/components/InfoCharts/ChartCard'
 import PoolTable from 'views/Info/components/InfoTables/PoolsTable'
@@ -166,7 +164,7 @@ const TokenPage: React.FC<React.PropsWithChildren<{ routeAddress: string }>> = (
             </Flex>
           </Flex>
           <Flex>
-            <NextLinkFromReactRouter to={`/add/${address}?chain=${CHAIN_QUERY_NAME[chainId]}`}>
+            <NextLinkFromReactRouter to={`/liquidity/pools?search=${tokenSymbol}&chain=${CHAIN_QUERY_NAME[chainId!]}`}>
               <Button mr="8px" variant="secondary" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
                 {t('Add Liquidity')}
               </Button>
