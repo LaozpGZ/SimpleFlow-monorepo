@@ -1,4 +1,3 @@
-import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { BridgeTrade, BridgeTransactionData, OrderType } from '@pancakeswap/price-api-sdk'
 import { Currency, CurrencyAmount, TradeType, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { InfinityTradeWithoutGraph } from '@pancakeswap/smart-router/dist/evm/infinity-router'
@@ -6,6 +5,7 @@ import { BRIDGE_API_ENDPOINT } from 'config/constants/endpoints'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { Address } from 'viem/accounts'
 import { isSolana } from '@pancakeswap/chains'
+import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { BridgeOrderWithCommands, isSVMOrder } from '../utils'
 import {
   BridgeDataSchema,
@@ -284,16 +284,20 @@ export const postMetadata = async (params: GetMetadataParams): Promise<MetadataS
   const destinationChainId = isDestinationSolana ? 792703809 : Number(params.destinationChainId)
 
   if (isSolanaBridge) {
+    const MOCK_USER = '5bKZApECSLF9VXyp4nzBh5WbF9TREe3Wu3bsJus86xqX'
+    const user = isOriginSolana ? MOCK_USER : ZERO_ADDRESS
+
+    const recipient = isDestinationSolana ? MOCK_USER : ZERO_ADDRESS
     try {
       const relayResponse = await customClient.getQuote({
-        user: '5bKZApECSLF9VXyp4nzBh5WbF9TREe3Wu3bsJus86xqX',
+        user,
         originCurrency: params.inputToken,
         destinationCurrency: params.outputToken,
         amount: params.amount,
         tradeType: TRADE_TYPES.EXACT_INPUT,
         originChainId,
         destinationChainId,
-        recipient: params.recipientOnDestChain || ZERO_ADDRESS,
+        recipient,
       })
 
       const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
