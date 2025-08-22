@@ -57,7 +57,7 @@ export const NetworkSwitcher = () => {
     if (!cannotChangeNetwork) {
       setIsNetworkSwitcherOpen(true)
     }
-  }, [cannotChangeNetwork])
+  }, [cannotChangeNetwork, setIsNetworkSwitcherOpen])
 
   if (!chainId || router.pathname.includes('/info')) {
     return null

@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import { Currency, getCurrencyAddress, Token, WBNB } from '@pancakeswap/sdk'
+import { Currency, getCurrencyAddress, Token, UnifiedCurrency, WBNB } from '@pancakeswap/sdk'
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import uriToHttp from '@pancakeswap/utils/uriToHttp'
 import makeBlockiesUrl from 'blockies-react-svg/dist/es/makeBlockiesUrl.mjs'
@@ -21,7 +21,7 @@ export const tokenImageChainNameMapping = {
   [ChainId.OPBNB]: 'opbnb/',
 }
 
-export const getImageUrlFromToken = (token: Currency) => {
+export const getImageUrlFromToken = (token?: UnifiedCurrency) => {
   let address = token?.isNative ? token.wrapped.address : token?.address
   if (token && token.chainId === ChainId.BSC && !token.isNative && isAddressEqual(token.address, zeroAddress)) {
     address = WBNB[ChainId.BSC].wrapped.address
@@ -36,7 +36,7 @@ export const getImageUrlFromToken = (token: Currency) => {
     : ''
 }
 
-export const getImageUrlsFromToken = (token: Currency & { logoURI?: string | undefined }) => {
+export const getImageUrlsFromToken = (token?: UnifiedCurrency & { logoURI?: string | undefined }) => {
   const uriLocations = token?.logoURI ? uriToHttp(token?.logoURI) : []
   const imageUri = getImageUrlFromToken(token)
   return [...uriLocations, imageUri]

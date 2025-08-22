@@ -305,6 +305,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     asset.token.decimals,
     connection,
     currentFee,
+    wallet,
   ])
 
   // Separate function for EVM asset transfer
