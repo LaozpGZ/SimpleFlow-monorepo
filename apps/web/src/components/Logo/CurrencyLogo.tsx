@@ -73,7 +73,7 @@ export default function CurrencyLogo({ currency, size = '24px', style, src, show
       return [...imageUrls, tokenLogoURL, basicTokenImage]
     }
     return []
-  }, [currency, uriLocations, imageUrls])
+  }, [currency, uriLocations, imageUrls, basicTokenImage])
 
   if (currency?.isNative) {
     if (currency.chainId === ChainId.BSC) {
