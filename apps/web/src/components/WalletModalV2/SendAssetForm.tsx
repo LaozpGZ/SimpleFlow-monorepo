@@ -305,7 +305,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     asset.token.decimals,
     connection,
     currentFee,
-    wallet,
   ])
 
   // Separate function for EVM asset transfer
@@ -420,7 +419,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         const transaction = new Transaction()
 
         // Get recent blockhash for legacy transaction
-        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash()
+        const { blockhash } = await connection.getLatestBlockhash()
         transaction.recentBlockhash = blockhash
         transaction.feePayer = solanaPublicKey
 
@@ -534,6 +533,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     executeSolanaTransaction,
     toastSuccess,
     t,
+    wallet,
   ])
 
   // Main sendAsset function that routes to appropriate handler
