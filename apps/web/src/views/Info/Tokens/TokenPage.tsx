@@ -164,7 +164,7 @@ const TokenPage: React.FC<React.PropsWithChildren<{ routeAddress: string }>> = (
             </Flex>
           </Flex>
           <Flex>
-            <NextLinkFromReactRouter to={`/liquidity/pools?search=${tokenSymbol}&chain=${CHAIN_QUERY_NAME[chainId!]}`}>
+            <NextLinkFromReactRouter to={`/liquidity/pools?chain=${CHAIN_QUERY_NAME[chainId!]}&search=${tokenSymbol}`}>
               <Button mr="8px" variant="secondary" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
                 {t('Add Liquidity')}
               </Button>

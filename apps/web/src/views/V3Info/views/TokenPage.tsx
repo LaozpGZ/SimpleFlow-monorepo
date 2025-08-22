@@ -224,7 +224,7 @@ const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, cha
             </Flex>
             <Flex>
               <NextLinkFromReactRouter
-                to={`/liquidity/pools?search=${tokenSymbol}&chain=${CHAIN_QUERY_NAME[chainId!]}`}
+                to={`/liquidity/pools?chain=${CHAIN_QUERY_NAME[chainId!]}&search=${tokenSymbol}`}
               >
                 <Button mr="8px" variant="secondary" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
                   {t('Add Liquidity')}
