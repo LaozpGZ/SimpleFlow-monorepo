@@ -64,7 +64,7 @@ export const useAdConfig = () => {
         component: <AdPCSX />,
       },
     ],
-    [shouldRenderOnPage, shouldRenderAdIfo, commonAdConfigs, tradingCompetitionAds],
+    [shouldRenderAdIfo, commonAdConfigs, tradingCompetitionAds],
   )
 
   return useMemo(
