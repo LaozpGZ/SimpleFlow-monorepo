@@ -82,6 +82,10 @@ const Page = styled(Page_)`
   }
 `
 
+const StyledBox = styled(Box)`
+  background: ${({ theme }) => theme.colors.backgroundPage};
+`
+
 export const UniversalFarms: React.FC<PropsWithChildren> = () => {
   const { t } = useTranslation()
   const { tabIdx } = usePageInfo()
@@ -109,7 +113,7 @@ export const UniversalFarms: React.FC<PropsWithChildren> = () => {
   }, [t])
 
   return (
-    <>
+    <StyledBox>
       <PoolsBanner additionLink={<LegacyPage />} />
       <Page style={isMobile ? { padding: '0 16px 16px 16px' } : undefined}>
         <FlexGap width="100%" alignItems="flex-end" justifyContent="space-between">
@@ -125,6 +129,6 @@ export const UniversalFarms: React.FC<PropsWithChildren> = () => {
         </FlexGap>
         {tabsConfig[tabIdx].page()}
       </Page>
-    </>
+    </StyledBox>
   )
 }

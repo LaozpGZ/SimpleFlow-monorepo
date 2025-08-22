@@ -10,6 +10,11 @@ import { CreateLiquidityV3Form } from 'views/CreateLiquidityPool/V3/CreateLiquid
 import PageLayout from 'components/Layout/Page'
 import { Box } from '@pancakeswap/uikit'
 import { CreateLiquidityV2Form } from 'views/CreateLiquidityPool/V2/CreateLiquidityV2Form'
+import styled from 'styled-components'
+
+const StyledBox = styled(Box)`
+  background: ${({ theme }) => theme.colors.backgroundPage};
+`
 
 export type RouteType = typeof SelectIdRoute
 
@@ -22,18 +27,20 @@ const CreateLiquidityPage = () => {
   }
 
   return (
-    <PageLayout>
-      <BreadcrumbNav />
-      <Box mt="24px">
-        {protocolName === 'infinity' ? (
-          <CreateLiquidityInfinityForm />
-        ) : protocolName === 'v3' ? (
-          <CreateLiquidityV3Form />
-        ) : protocolName === 'v2' ? (
-          <CreateLiquidityV2Form />
-        ) : null}
-      </Box>
-    </PageLayout>
+    <StyledBox>
+      <PageLayout>
+        <BreadcrumbNav />
+        <Box mt="24px">
+          {protocolName === 'infinity' ? (
+            <CreateLiquidityInfinityForm />
+          ) : protocolName === 'v3' ? (
+            <CreateLiquidityV3Form />
+          ) : protocolName === 'v2' ? (
+            <CreateLiquidityV2Form />
+          ) : null}
+        </Box>
+      </PageLayout>
+    </StyledBox>
   )
 }
 

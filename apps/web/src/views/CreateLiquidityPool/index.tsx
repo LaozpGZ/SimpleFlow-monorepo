@@ -9,6 +9,10 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { getChainName } from '@pancakeswap/chains'
 import { BreadcrumbNav } from './components/BreadcrumbNav'
 
+const StyledBox = styled(Box)`
+  background: ${({ theme }) => theme.colors.backgroundPage};
+`
+
 const StyledCard = styled(LightGreyCard)<{ $disabled?: boolean }>`
   border-radius: 24px;
   border-color: ${({ theme }) => theme.colors.inputSecondary};
@@ -75,71 +79,76 @@ function InfinityCard({ disabled }: { disabled?: boolean }) {
 export const CreateLiquiditySelector = () => {
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
+
   const chainName = getChainName(chainId)
 
   const isInfinitySupported = useMemo(() => INFINITY_SUPPORTED_CHAINS.includes(chainId), [chainId])
 
   return (
-    <Page>
-      <BreadcrumbNav />
-      <Container px="0" mt="24px" maxWidth={[null, null, null, '520px']}>
-        <Card>
-          <CardBody>
-            <FlexGap justifyContent="space-between" flexWrap="wrap" gap="16px">
-              <Text>{t('Select the DEX type of the liquidity pool')}</Text>
-              <LinkExternal color="primary60" href="https://docs.pancakeswap.finance/earn/pancakeswap-pools">
-                {t('Learn More')}
-              </LinkExternal>
-            </FlexGap>
+    <StyledBox>
+      <Page>
+        <Box mt="2px">
+          <BreadcrumbNav />
+        </Box>
+        <Container px="0" mt="24px" maxWidth={[null, null, null, '520px']}>
+          <Card>
+            <CardBody>
+              <FlexGap justifyContent="space-between" flexWrap="wrap" gap="16px">
+                <Text>{t('Select the DEX type of the liquidity pool')}</Text>
+                <LinkExternal color="primary60" href="https://docs.pancakeswap.finance/earn/pancakeswap-pools">
+                  {t('Learn More')}
+                </LinkExternal>
+              </FlexGap>
 
-            {isInfinitySupported ? (
-              <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/infinity`}>
-                <InfinityCard />
+              {isInfinitySupported ? (
+                <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/infinity`}>
+                  <InfinityCard />
+                </NextLinkFromReactRouter>
+              ) : (
+                <>
+                  <InfinityCard disabled />
+                </>
+              )}
+
+              <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v3`}>
+                <StyledCard mt="16px">
+                  <Box>
+                    <Text fontSize="20px" color="secondary" bold>
+                      {t('V3 Pool')}
+                    </Text>
+                    <Text small>
+                      {t(
+                        'Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.',
+                      )}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
+                  </Box>
+                </StyledCard>
               </NextLinkFromReactRouter>
-            ) : (
-              <>
-                <InfinityCard disabled />
-              </>
-            )}
 
-            <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v3`}>
-              <StyledCard mt="16px">
-                <Box>
-                  <Text fontSize="20px" color="secondary" bold>
-                    {t('V3 Pool')}
-                  </Text>
-                  <Text small>
-                    {t(
-                      'Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.',
-                    )}
-                  </Text>
-                </Box>
-                <Box>
-                  <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
-                </Box>
-              </StyledCard>
-            </NextLinkFromReactRouter>
-
-            <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v2`}>
-              <StyledCard mt="16px">
-                <Box>
-                  <Text fontSize="20px" color="secondary" bold>
-                    {t('V2 Pool')}
-                  </Text>
-                  <Text small>
-                    {t(
-                      'Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.',
-                    )}
-                  </Text>
-                </Box>
-                <Box>
-                  <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
-                </Box>
-              </StyledCard>
-            </NextLinkFromReactRouter>
-          </CardBody>
-        </Card>
-      </Container>
-    </Page>
+              <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v2`}>
+                <StyledCard mt="16px">
+                  <Box>
+                    <Text fontSize="20px" color="secondary" bold>
+                      {t('V2 Pool')}
+                    </Text>
+                    <Text small>
+                      {t(
+                        'Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.',
+                      )}
+                    </Text>
+                  </Box>
+                  <Box>
+                    <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
+                  </Box>
+                </StyledCard>
+              </NextLinkFromReactRouter>
+            </CardBody>
+          </Card>
+        </Container>
+      </Page>
+    </StyledBox>
   )
 }
