@@ -128,6 +128,9 @@ export const ModalContent: React.FC<ModalContentProps> = ({
             },
           )
       }
+      // bypass use connector logic
+      if (typeof wallet.installed === 'undefined') return true
+
       return false
     }
     return true
@@ -160,7 +163,11 @@ export const ModalContent: React.FC<ModalContentProps> = ({
     (w: WalletConfigV3, network: WalletAdaptedNetwork) => {
       if (!isWalletInstalledAndPreview(w)) return
 
-      setPreviewStatus(PreviewStatus.Confirming)
+      if (w.installed === undefined) {
+        setPreviewStatus(PreviewStatus.NotInstalled)
+      } else {
+        setPreviewStatus(PreviewStatus.Confirming)
+      }
       if (network === WalletAdaptedNetwork.EVM) {
         onEvmWalletSelected(w)
       } else if (network === WalletAdaptedNetwork.Solana) {

@@ -109,11 +109,15 @@ export const getWalletsConfig = ({
       id: WalletIds.BinanceW3W,
       title: 'Binance Wallet',
       icon: `${ASSET_CDN}/web/wallets/binance-w3w.png`,
-      connectorId: EvmConnectorNames.Injected,
-      solanaAdapterName: SolanaWalletNames.BinanceW3W,
-      networks: [WalletAdaptedNetwork.EVM, WalletAdaptedNetwork.Solana],
+      connectorId: EvmConnectorNames.BinanceW3W,
+      // @TODO: wait for Binance provide solana adapter
+      // solanaAdapterName: SolanaWalletNames.BinanceW3W,
+      networks: [WalletAdaptedNetwork.EVM],
       get installed() {
-        return isBinanceWeb3WalletInstalled()
+        if (isBinanceWeb3WalletInstalled()) return true
+
+        // continue call login to execute logic in binance connector
+        return undefined
       },
       MEVSupported: true,
     },
@@ -378,7 +382,7 @@ export const getWalletsConfig = ({
 }
 
 export const TOP_WALLETS_ID_CONFIG = {
-  MultiChain: [WalletIds.Metamask, WalletIds.BinanceW3W, WalletIds.Okx],
+  MultiChain: [WalletIds.Metamask, WalletIds.Okx],
   Evm: [WalletIds.Metamask, WalletIds.BinanceW3W, WalletIds.Okx],
   Solana: [WalletIds.Phantom, WalletIds.Solflare, WalletIds.Backpack],
 }
