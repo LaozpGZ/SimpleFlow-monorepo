@@ -35,7 +35,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           mt: !isMobile ? '8px' : undefined,
         },
       },
-      start: 1757635200000,
+      start: 1756684800000,
     },
     {
       id: AdsIds.PANCAKE_GIFT,
