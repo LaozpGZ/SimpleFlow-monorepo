@@ -97,7 +97,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           },
         }),
       },
-      end: 1757635200000,
+      end: 1757721600000,
     },
     {
       id: AdsIds.BINANCE_ALPHA,
