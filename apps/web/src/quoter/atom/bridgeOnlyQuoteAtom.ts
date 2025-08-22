@@ -1,6 +1,6 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { RouteType } from '@pancakeswap/smart-router'
-import { CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { atomFamily } from 'jotai/utils'
 import { BridgeTradeError } from 'quoter/quoter.types'
 import { getTokenAddress, postMetadata } from 'views/Swap/Bridge/api'
@@ -39,7 +39,7 @@ export const bridgeOnlyQuoteAtom = atomFamily(
       const outputAmount = UnifiedCurrencyAmount.fromRawAmount(
         outputCurrency,
         metadata.bridgeTransactionData.outputAmount,
-      )
+      ) as CurrencyAmount<Currency>
 
       const bridgeQuote: InterfaceOrder = {
         bridgeTransactionData: metadata.bridgeTransactionData,

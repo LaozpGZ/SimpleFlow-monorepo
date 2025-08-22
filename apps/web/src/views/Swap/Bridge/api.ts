@@ -1,6 +1,6 @@
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { BridgeTrade, BridgeTransactionData, OrderType } from '@pancakeswap/price-api-sdk'
-import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, TradeType, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { InfinityTradeWithoutGraph } from '@pancakeswap/smart-router/dist/evm/infinity-router'
 import { BRIDGE_API_ENDPOINT } from 'config/constants/endpoints'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
@@ -286,14 +286,14 @@ export const postMetadata = async (params: GetMetadataParams): Promise<MetadataS
   if (isSolanaBridge) {
     try {
       const relayResponse = await customClient.getQuote({
-        user: '0x9D24d495F7380BA80dC114D8C2cF1a54a68e25A4',
+        user: '5bKZApECSLF9VXyp4nzBh5WbF9TREe3Wu3bsJus86xqX',
         originCurrency: params.inputToken,
         destinationCurrency: params.outputToken,
         amount: params.amount,
         tradeType: TRADE_TYPES.EXACT_INPUT,
         originChainId,
         destinationChainId,
-        recipient: '5bKZApECSLF9VXyp4nzBh5WbF9TREe3Wu3bsJus86xqX',
+        recipient: params.recipientOnDestChain || ZERO_ADDRESS,
       })
 
       const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
