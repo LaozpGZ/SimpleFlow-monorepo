@@ -11,20 +11,9 @@ import { AdSpringboard } from './Ads/AdSpringboard'
 import { ExpandableAd } from './Expandable/ExpandableAd'
 import { AdSlide, Priority } from './types'
 import { useShouldRenderAdIfo } from './useShouldRenderAdIfo'
-import { shouldRenderOnPages } from './renderConditions'
-import { commonLayoutWhitelistedPages } from './constants'
-
-const AUGUST_31_2025_TIMESTAMP = 1756684800000
 
 export const useAdConfig = () => {
   const { isDesktop } = useMatchBreakpoints()
-  const shouldRenderOnPage = useMemo(() => {
-    const shouldRender = shouldRenderOnPages(commonLayoutWhitelistedPages)
-    if (!shouldRender) return false
-
-    const shouldIncludeIsDesktop = Date.now() < AUGUST_31_2025_TIMESTAMP
-    return shouldIncludeIsDesktop ? isDesktop : true
-  }, [isDesktop])
   const MAX_ADS = isDesktop ? 6 : 4
   const shouldRenderAdIfo = useShouldRenderAdIfo()
   const configs = useAdsConfigs()
@@ -50,7 +39,6 @@ export const useAdConfig = () => {
         id: 'expandable-ad',
         component: <ExpandableAd />,
         priority: Priority.FIRST_AD,
-        shouldRender: [shouldRenderOnPage],
       },
       {
         id: 'ad-cross-chain',

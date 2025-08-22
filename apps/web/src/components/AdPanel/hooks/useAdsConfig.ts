@@ -35,6 +35,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           mt: !isMobile ? '8px' : undefined,
         },
       },
+      start: 1757635200000,
     },
     {
       id: AdsIds.PANCAKE_GIFT,
@@ -59,7 +60,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
     },
     {
       id: AdsIds.TRADE_SOCIAL,
-      priority: Priority.HIGH,
+      priority: Priority.VERY_HIGH,
       ad: {
         img: getImageUrl(!isMobile ? 'trade-social-comp' : 'trade-social-comp-mobile'),
         texts: [
@@ -96,6 +97,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           },
         }),
       },
+      end: 1757635200000,
     },
     {
       id: AdsIds.BINANCE_ALPHA,
@@ -122,7 +124,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           },
         }),
       },
-      deadline: 1756684800000,
+      end: 1756684800000,
     },
     {
       id: AdsIds.SOLANA_LIQUIDITY,
@@ -142,9 +144,15 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
       },
     },
   ]
+
   return config.filter((ad) => {
-    const deadline = ad?.deadline
-    return !deadline || deadline > now
+    const start = ad?.start
+    const end = ad?.end
+
+    const hasStarted = !start || now >= start
+    const notEnded = !end || now <= end
+
+    return hasStarted && notEnded
   })
 }
 
