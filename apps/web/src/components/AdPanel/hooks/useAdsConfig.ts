@@ -71,13 +71,13 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
                   inline: true,
                 },
                 {
-                  text: ` ${t('to Win %amount%', { amount: '$10,000' })}`,
+                  text: ` ${t('to Win %amount%', { amount: '$15,000' })}`,
                   inline: true,
                 },
               ]
             : [
                 {
-                  text: t('Trade with %product% to Win %amount%', { product: 'Social Login', amount: '$10,000' }),
+                  text: t('Trade with %product% to Win %amount%', { product: 'Social Login', amount: '$15,000' }),
                 },
                 {
                   text: t('Trade Now'),
