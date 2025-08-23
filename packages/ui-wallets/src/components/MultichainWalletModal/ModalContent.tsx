@@ -230,7 +230,7 @@ export const ModalContent: React.FC<ModalContentProps> = ({
         <PreviewSection.Confirming
           wallet={selected}
           network={selectedNetwork}
-          reConnect={() => onWalletConnected(selected, selectedNetwork)}
+          reConnect={() => connectWallet(selected, selectedNetwork)}
         />
       )}
       {previewStatus === PreviewStatus.SocialLogin && (
