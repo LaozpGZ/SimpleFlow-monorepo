@@ -47,7 +47,8 @@ export const SolanaWalletNames = {
   // Slope: SlopeWalletName,
   Glow: GlowWalletName,
   BitPie: BitpieWalletName,
-  Bitget: BitgetWalletName,
+  // Bitget: BitgetWalletName, // @NOTICE: BitgetWalletName is wrong
+  Bitget: 'Bitget Wallet' as WalletName<'Bitget Wallet'>,
   Exodus: ExodusWalletName,
   Backpack: 'Backpack' as WalletName<'Backpack'>,
   Solong: SolongWalletName,

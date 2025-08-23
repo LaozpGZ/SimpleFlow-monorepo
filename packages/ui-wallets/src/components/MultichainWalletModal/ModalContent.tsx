@@ -162,14 +162,8 @@ export const ModalContent: React.FC<ModalContentProps> = ({
     (w: WalletConfigV3, network: WalletAdaptedNetwork) => {
       if (!isWalletInstalledAndPreview(w)) return
 
-      const showConfirming =
-        (network === WalletAdaptedNetwork.EVM && w.evmCanInitWithoutInstall) ||
-        (network === WalletAdaptedNetwork.Solana && w.solanaCanInitWithoutInstall)
-      if (showConfirming) {
-        setPreviewStatus(PreviewStatus.Confirming)
-      } else {
-        setPreviewStatus(PreviewStatus.NotInstalled)
-      }
+      setPreviewStatus(PreviewStatus.Confirming)
+
       if (network === WalletAdaptedNetwork.EVM) {
         onEvmWalletSelected(w)
       } else if (network === WalletAdaptedNetwork.Solana) {
