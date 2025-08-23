@@ -54,7 +54,10 @@ const MoreWalletSectionLabel: React.FC<{ onClick: () => void }> = ({ onClick }) 
 
 export const MoreWalletSection: React.FC<MoreWalletSectionProps> = ({ wallets, onClick, style }) => {
   const extraTagNum = wallets.length - 5
-  const displayWallets = wallets.slice(0, 5)
+  const installedWallets = wallets.filter((wallet) => wallet.installed)
+  const displayWallets = installedWallets.length
+    ? wallets.filter((wallet) => !wallet.installed).slice(0, 5)
+    : wallets.slice(0, 5)
 
   const { t } = useTranslation()
   const [expanded, setExpanded] = useState(false)
@@ -70,37 +73,47 @@ export const MoreWalletSection: React.FC<MoreWalletSectionProps> = ({ wallets, o
   }
 
   return (
-    <StyledButton variant="text" onClick={() => setExpanded(true)} width="100%" style={style}>
-      <Flex justifyContent="space-between" width="100%" alignItems="center">
-        <FlexGap alignItems="center">
-          {displayWallets.map((wallet) => {
-            const isImage = typeof wallet.icon === 'string'
-            const Icon = wallet.icon
-            return (
-              <StyledWalletIcon key={wallet.id}>
-                {isImage ? (
-                  <img src={Icon as string} alt={wallet.title} width={22} height={22} />
-                ) : (
-                  <Icon width={22} height={22} color="textSubtle" />
-                )}
-              </StyledWalletIcon>
-            )
-          })}
-          {extraTagNum > 0 && (
-            <StyledExtraTag>
-              <Text fontSize="14px" color="textSubtle" fontWeight="600">
-                +{extraTagNum}
-              </Text>
-            </StyledExtraTag>
-          )}
-        </FlexGap>
-        <AutoRow width="fit-content" gap="8px" alignItems="center">
-          <Text fontSize="12px" color="textSubtle">
-            {t('More Wallets')}
-          </Text>
-          <ArrowDropDownIcon width="24px" height="24px" color="textSubtle" style={{ rotate: '-90deg' }} />
-        </AutoRow>
-      </Flex>
-    </StyledButton>
+    <>
+      {installedWallets.length > 0 ? (
+        <WalletSelectSection label={t('More Wallets')}>
+          {installedWallets.map((wallet) => (
+            <WalletSelectItem key={wallet.id} wallet={wallet} onClick={onClick} />
+          ))}
+        </WalletSelectSection>
+      ) : null}
+
+      <StyledButton variant="text" onClick={() => setExpanded(true)} width="100%" style={style}>
+        <Flex justifyContent="space-between" width="100%" alignItems="center">
+          <FlexGap alignItems="center">
+            {displayWallets.map((wallet) => {
+              const isImage = typeof wallet.icon === 'string'
+              const Icon = wallet.icon
+              return (
+                <StyledWalletIcon key={wallet.id}>
+                  {isImage ? (
+                    <img src={Icon as string} alt={wallet.title} width={22} height={22} />
+                  ) : (
+                    <Icon width={22} height={22} color="textSubtle" />
+                  )}
+                </StyledWalletIcon>
+              )
+            })}
+            {extraTagNum > 0 && (
+              <StyledExtraTag>
+                <Text fontSize="14px" color="textSubtle" fontWeight="600">
+                  +{extraTagNum}
+                </Text>
+              </StyledExtraTag>
+            )}
+          </FlexGap>
+          <AutoRow width="fit-content" gap="8px" alignItems="center">
+            <Text fontSize="12px" color="textSubtle">
+              {t('More Wallets')}
+            </Text>
+            <ArrowDropDownIcon width="24px" height="24px" color="textSubtle" style={{ rotate: '-90deg' }} />
+          </AutoRow>
+        </Flex>
+      </StyledButton>
+    </>
   )
 }
