@@ -8,9 +8,6 @@ import { NetworkModal } from 'components/NetworkModal'
 import { FixedSubgraphHealthIndicator } from 'components/SubgraphHealthIndicator/FixedSubgraphHealthIndicator'
 import TransactionsDetailModal from 'components/TransactionDetailModal'
 import { VercelToolbar } from 'components/VercelToolbar'
-import 'core-js/features/array/to-sorted'
-import 'core-js/features/array/find-last'
-import 'core-js/features/string/replace-all'
 import { useAccountEventListener } from 'hooks/useAccountEventListener'
 import useEagerConnect from 'hooks/useEagerConnect'
 import useLockedEndNotification from 'hooks/useLockedEndNotification'
@@ -24,7 +21,6 @@ import Head from 'next/head'
 import Script from 'next/script'
 import { Fragment, Suspense } from 'react'
 import { PersistGate } from 'redux-persist/integration/react'
-import 'utils/abortcontroller-polyfill'
 
 import { DesktopCard } from 'components/AdPanel/DesktopCard'
 import { MobileCard } from 'components/AdPanel/MobileCard'
@@ -52,6 +48,13 @@ import Providers from '../Providers'
 import Menu, { SharedComponentWithOutMenu } from '../components/Menu'
 import GlobalStyle from '../style/Global'
 import { NextPageWithLayout } from '../utils/page.types'
+
+// polyfills
+import 'core-js/features/array/to-sorted'
+import 'core-js/features/array/to-reversed'
+import 'core-js/features/array/find-last'
+import 'core-js/features/string/replace-all'
+import 'utils/abortcontroller-polyfill'
 
 const EasterEgg = dynamic(() => import('components/EasterEgg'), { ssr: false })
 
