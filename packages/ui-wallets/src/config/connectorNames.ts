@@ -12,7 +12,6 @@ import {
   SolflareWalletName,
   SolongWalletName,
   TokenPocketWalletName,
-  TorusWalletName,
   TrustWalletName,
   WalletConnectWalletName,
 } from '@solana/wallet-adapter-wallets'
@@ -52,7 +51,6 @@ export const SolanaWalletNames = {
   Exodus: ExodusWalletName,
   Backpack: 'Backpack' as WalletName<'Backpack'>,
   Solong: SolongWalletName,
-  Torus: TorusWalletName,
 } as const
 
 export type SolanaConnectorNames = {

@@ -36,7 +36,6 @@ export enum WalletIds {
   Exodus = 'exodus',
   Backpack = 'backpack',
   Solong = 'solong',
-  Torus = 'torus',
 }
 
 export const isWalletId = (id: string): id is WalletIds => {
