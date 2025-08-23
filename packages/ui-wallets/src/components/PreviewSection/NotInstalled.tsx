@@ -99,7 +99,8 @@ export const NotInstalled = ({ wallet, qrCode }: { wallet: WalletConfigV3; qrCod
             </Text>
             <Text fontSize={12} color="textSubtle">
               {t(
-                'If you’re using the app, scan your wallet to continue on EVM, or install TokenPocket to proceed on Solana.',
+                'If you’re using the app, scan your wallet to continue on EVM, or install %wallet% to proceed on Solana.',
+                { wallet: wallet.title },
               )}
             </Text>
             {qrCode && (
