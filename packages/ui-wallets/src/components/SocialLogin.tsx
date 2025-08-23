@@ -130,7 +130,7 @@ const SocialLogin: React.FC<SocialLoginProps> = ({
             <IconWrapper>
               <SocialLoginXIcon />
             </IconWrapper>
-            <Text>{t('X Login')}</Text>
+            <Text style={{ whiteSpace: 'nowrap' }}>{t('X Login')}</Text>
           </SocialLoginButtonVertical>
 
           <SocialLoginButtonVertical onClick={handleTelegramLogin}>
@@ -147,35 +147,6 @@ const SocialLogin: React.FC<SocialLoginProps> = ({
             <Text>{t('Discord')}</Text>
           </SocialLoginButtonVertical>
         </FlexGap>
-
-        {isMobile ? (
-          <>
-            <Button variant="text" scale="xs" mt="8px">
-              {t('I have a passkey')}
-            </Button>
-            <Divider>
-              <Text color="textSubtle" style={{ transform: 'translateY(-12px)' }}>
-                {t('or')}
-              </Text>
-            </Divider>
-            <NoticeCard onClick={onDismiss}>
-              <FlexGap gap="4px">
-                <ArrowBackIcon />
-                <Text>{t('Continue with Web3 Wallet')}</Text>
-              </FlexGap>
-            </NoticeCard>
-          </>
-        ) : (
-          <NoticeCard>
-            <Text fontSize="12px">{t('Social login is available for EVM networks.')}</Text>
-            <Text fontSize="12px" color="textSubtle">
-              {t('For Solana, please use a compatible wallet.')}
-            </Text>
-            <Button variant="text" scale="xs" mt="8px">
-              {t('I have a passkey')}
-            </Button>
-          </NoticeCard>
-        )}
       </Column>
     </>
   )

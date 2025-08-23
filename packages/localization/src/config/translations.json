@@ -4051,7 +4051,6 @@
   "How to connect": "How to connect",
   "Social login is available for EVM networks.": "Social login is available for EVM networks.",
   "For Solana, please use a compatible wallet.": "For Solana, please use a compatible wallet.",
-  "I have a passkey": "I have a passkey",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address",
   "Slippage setting": "Slippage setting",
