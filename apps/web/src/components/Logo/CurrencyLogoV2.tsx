@@ -29,23 +29,23 @@ export const CurrencyLogoV2: React.FC<
     chainName?: MultiChainNameExtend
   }>
 > = ({ address, size = '24px', chainName = 'BSC', ...rest }) => {
-  const src = useMemo(() => {
-    return getTokenLogoURL(new Token(multiChainId[chainName], address as Address, 18, ''))
+  const srcs = useMemo(() => {
+    const src = getTokenLogoURL(new Token(multiChainId[chainName], address as Address, 18, ''))
+    let srcFromPCS = ''
+
+    if (address === zeroAddress) {
+      srcFromPCS = `https://assets.pancakeswap.finance/web/native/${multiChainId[chainName]}.png`
+    } else {
+      const imagePath = chainNameToPath(chainName)
+      const checkedsummedAddress = safeGetAddress(address)
+      srcFromPCS = checkedsummedAddress
+        ? `https://tokens.pancakeswap.finance/images/${imagePath}${checkedsummedAddress}.png`
+        : ''
+    }
+    return src ? [srcFromPCS, src] : [srcFromPCS]
   }, [address, chainName])
 
-  let srcFromPCS = ''
-
-  if (address === zeroAddress) {
-    srcFromPCS = `https://assets.pancakeswap.finance/web/native/${multiChainId[chainName]}.png`
-  } else {
-    const imagePath = chainNameToPath(chainName)
-    const checkedsummedAddress = safeGetAddress(address)
-    srcFromPCS = checkedsummedAddress
-      ? `https://tokens.pancakeswap.finance/images/${imagePath}${checkedsummedAddress}.png`
-      : ''
-  }
-
-  return <StyledLogo size={size} srcs={src ? [srcFromPCS, src] : [srcFromPCS]} alt="token logo" {...rest} />
+  return <StyledLogo size={size} srcs={srcs} alt="token logo" {...rest} />
 }
 
 const DoubleCurrencyWrapper = styled.div`
