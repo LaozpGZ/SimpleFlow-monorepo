@@ -132,9 +132,10 @@ export const getWalletsConfig = ({
       title: 'WalletConnect',
       icon: `${ASSET_CDN}/web/wallets/walletconnect.png`,
       connectorId: EvmConnectorNames.WalletConnect,
-      solanaAdapterName: SolanaWalletNames.WalletConnect,
-      networks: [WalletAdaptedNetwork.EVM, WalletAdaptedNetwork.Solana],
-      solanaCanInitWithoutInstall: true,
+      // solanaAdapterName: SolanaWalletNames.WalletConnect,
+      // networks: [WalletAdaptedNetwork.EVM, WalletAdaptedNetwork.Solana],
+      networks: [WalletAdaptedNetwork.EVM],
+      // solanaCanInitWithoutInstall: true,
       evmCanInitWithoutInstall: true,
     },
     {
