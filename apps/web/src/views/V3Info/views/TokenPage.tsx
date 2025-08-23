@@ -42,6 +42,7 @@ import { getTokenNameAlias, getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import useCMCLink from 'views/Info/hooks/useCMCLink'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
+import { useRouter } from 'next/router'
 import BarChart from '../components/BarChart/alt'
 import { LocalLoader } from '../components/Loader'
 import Percent from '../components/Percent'
@@ -80,6 +81,7 @@ enum ChartView {
 }
 
 const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, chain: _chain }) => {
+  const router = useRouter()
   const { isXs, isSm } = useMatchBreakpoints()
   const { chainId } = useActiveChainId()
   const chain = _chain ?? chainNames[chainId]
@@ -223,13 +225,20 @@ const TokenPage: React.FC<{ address: string; chain?: string }> = ({ address, cha
               </Flex>
             </Flex>
             <Flex>
-              <NextLinkFromReactRouter
-                to={`/liquidity/pools?chain=${CHAIN_QUERY_NAME[chainId!]}&search=${tokenSymbol}`}
+              <Button
+                mr="8px"
+                variant="secondary"
+                disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}
+                onClick={() =>
+                  router.push(
+                    `/liquidity/pools?chain=${
+                      CHAIN_QUERY_NAME[chainId!]
+                    }&search=${tokenSymbol}&outputCurrency=${address}`,
+                  )
+                }
               >
-                <Button mr="8px" variant="secondary" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
-                  {t('Add Liquidity')}
-                </Button>
-              </NextLinkFromReactRouter>
+                {t('Add Liquidity')}
+              </Button>
               <NextLinkFromReactRouter
                 to={`/swap?outputCurrency=${address}&chain=${CHAIN_QUERY_NAME[multiChainId[chainName]]}`}
               >

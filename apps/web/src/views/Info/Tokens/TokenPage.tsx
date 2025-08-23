@@ -35,6 +35,7 @@ import {
   useStableSwapPath,
   useTokenPriceDataQuery,
 } from 'state/info/hooks'
+import { useRouter } from 'next/router'
 import { styled } from 'styled-components'
 import { getBlockExploreLink } from 'utils'
 import { formatAmount } from 'utils/formatInfoNumbers'
@@ -72,10 +73,10 @@ const StyledCMCLink = styled(UIKitLink)`
 const DEFAULT_TIME_WINDOW = dayjs.duration(1, 'weeks')
 
 const TokenPage: React.FC<React.PropsWithChildren<{ routeAddress: string }>> = ({ routeAddress }) => {
+  const router = useRouter()
   const { isXs, isSm } = useMatchBreakpoints()
   const { t } = useTranslation()
   const chainId = useChainIdByQuery()
-
   // In case somebody pastes checksummed address into url (since GraphQL expects lowercase address)
   const address = routeAddress.toLowerCase()
 
@@ -164,11 +165,14 @@ const TokenPage: React.FC<React.PropsWithChildren<{ routeAddress: string }>> = (
             </Flex>
           </Flex>
           <Flex>
-            <NextLinkFromReactRouter to={`/liquidity/pools?chain=${CHAIN_QUERY_NAME[chainId!]}&search=${tokenSymbol}`}>
-              <Button mr="8px" variant="secondary" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
-                {t('Add Liquidity')}
-              </Button>
-            </NextLinkFromReactRouter>
+            <Button
+              mr="8px"
+              variant="secondary"
+              disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}
+              onClick={() => router.push(`/liquidity/pools?chain=${CHAIN_QUERY_NAME[chainId!]}&search=${tokenSymbol}`)}
+            >
+              {t('Add Liquidity')}
+            </Button>
             <NextLinkFromReactRouter to={`/swap?outputCurrency=${address}&chainId=${multiChainId[chainName]}`}>
               <Button>{t('Trade')}</Button>
             </NextLinkFromReactRouter>
