@@ -153,6 +153,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
     typedValue,
     [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
     [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
+    recipient,
   } = useSwapState()
   const { onCurrencySelection, onUserInput } = useSwapActionHandlers()
 
@@ -311,15 +312,15 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
               <Text color="textSubtle" fontSize={12} bold>
                 {t('To')}:
               </Text>
-              {unifiedAccount && (
+              {(unifiedAccount || recipient) && (
                 <FlexGap gap="4px" alignItems="center">
-                  {walletIcon && (
+                  {walletIcon && !recipient && (
                     <Box width={24} height={24}>
                       <WalletIcon src={walletIcon} width={24} height={24} alt="Wallet Icon" />
                     </Box>
                   )}
                   <Text fontSize="12px" color="textSubtle" fontWeight="600">
-                    {truncateHash(unifiedAccount, 6, 4)}
+                    {recipient ? truncateHash(recipient, 6, 4) : truncateHash(unifiedAccount ?? '', 6, 4)}
                   </Text>
                 </FlexGap>
               )}
