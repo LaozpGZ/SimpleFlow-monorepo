@@ -128,8 +128,6 @@ export const ModalContent: React.FC<ModalContentProps> = ({
             },
           )
       }
-      // bypass use connector logic
-      if (typeof wallet.installed === 'undefined') return true
 
       return false
     }
@@ -137,7 +135,8 @@ export const ModalContent: React.FC<ModalContentProps> = ({
   }, [])
 
   const onMultiChainWalletSelected = useCallback((wallet: WalletConfigV3) => {
-    if (!isWalletInstalledAndPreview(wallet)) return
+    if (!isWalletInstalledAndPreview(wallet) && !wallet.solanaCanInitWithoutInstall && !wallet.evmCanInitWithoutInstall)
+      return
 
     setSelectedMultiChainWallet(wallet)
     setPreviewStatus(PreviewStatus.ChainSelect)
@@ -163,10 +162,13 @@ export const ModalContent: React.FC<ModalContentProps> = ({
     (w: WalletConfigV3, network: WalletAdaptedNetwork) => {
       if (!isWalletInstalledAndPreview(w)) return
 
-      if (w.installed === undefined) {
-        setPreviewStatus(PreviewStatus.NotInstalled)
-      } else {
+      const showConfirming =
+        (network === WalletAdaptedNetwork.EVM && w.evmCanInitWithoutInstall) ||
+        (network === WalletAdaptedNetwork.Solana && w.solanaCanInitWithoutInstall)
+      if (showConfirming) {
         setPreviewStatus(PreviewStatus.Confirming)
+      } else {
+        setPreviewStatus(PreviewStatus.NotInstalled)
       }
       if (network === WalletAdaptedNetwork.EVM) {
         onEvmWalletSelected(w)

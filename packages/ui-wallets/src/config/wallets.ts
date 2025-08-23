@@ -114,11 +114,9 @@ export const getWalletsConfig = ({
       // solanaAdapterName: SolanaWalletNames.BinanceW3W,
       networks: [WalletAdaptedNetwork.EVM],
       get installed() {
-        if (isBinanceWeb3WalletInstalled()) return true
-
-        // continue call login to execute logic in binance connector
-        return undefined
+        return isBinanceWeb3WalletInstalled()
       },
+      evmCanInitWithoutInstall: true,
       MEVSupported: true,
     },
     {
@@ -136,6 +134,8 @@ export const getWalletsConfig = ({
       connectorId: EvmConnectorNames.WalletConnect,
       solanaAdapterName: SolanaWalletNames.WalletConnect,
       networks: [WalletAdaptedNetwork.EVM, WalletAdaptedNetwork.Solana],
+      solanaCanInitWithoutInstall: true,
+      evmCanInitWithoutInstall: true,
     },
     {
       id: WalletIds.Opera,

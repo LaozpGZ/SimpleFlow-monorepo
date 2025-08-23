@@ -81,6 +81,8 @@ export type WalletConfigV3<T = EvmConnectorNames | SolanaConnectorNames> = Walle
   id: WalletIds
   networks: Array<WalletAdaptedNetwork>
   connectorId: T
+  evmCanInitWithoutInstall?: boolean
+  solanaCanInitWithoutInstall?: boolean
   solanaAdapterName?: SolanaConnectorNames | WalletName
 }
 
