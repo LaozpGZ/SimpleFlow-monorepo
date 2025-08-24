@@ -3945,7 +3945,7 @@
   "It might also offer a worse price. Slippage is only applied on input amount, not output amount.": "가격 조건도 더 나쁠 수 있습니다. 슬리피지는 입력 금액에만 적용되면 출력 금액에는 적용되지 않습니다.",
   "The price is an estimation of the current market price. Please verify before using it.": "가격은 현재 시장 시세의 추정치입니다. 사용 전에 확인해 주세요.",
   "twap.expirationTooltip": "사용자가 선택한 주문 실행 기간의 종료 시점을 표시한 날짜와 시간입니다.",
-  "twap.tradeIntervalTooltip": "The estimated minimum amount of time that will elapse between each trade in your order.",
+  "twap.tradeIntervalTooltip": "주문에서 각 거래 사이의 최소 경과 시간을 추정한 것입니다.",
   "twap.chunkSizeTooltip": "The number of input tokens that will be removed from your balance and swapped for the output token in each individual trade.",
   "twap.totalTradesTooltip": "The total number of trades scheduled for your order. Note that in limit orders, not all scheduled trades may be executed.",
   "twap.minDstAmountTooltipMarket": "Since you have chosen a market order without a limit price, there is no set minimum number of tokens. The actual amount received is subject to market conditions.",
