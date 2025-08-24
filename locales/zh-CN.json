@@ -4074,7 +4074,7 @@
   "A pool with selected settings already exists. Please add liquidity instead.": "已存在采用所选设置的糖浆池。请改为增加流动性。",
   "Insufficient SOL balance to complete transaction": "SOL 余额不足，无法完成交易",
   "Priority Fee Settings": "优先权费用设置",
-  "Connect Solana Wallet": "连接 Solana 钱包",
+  "Connect Solana Wallet": "关联 Solana 钱包",
   "Auto-optimize fees with a maximum cap to prevent overpaying.": "自动优化费用，设置最大上限以避免超额支付。",
   "Use the exact fee amount specified below.": "使用下方指定的确切费用金额。",
   "Enter amount in SOL": "输入 SOL 金额",
