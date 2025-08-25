@@ -274,13 +274,16 @@ export const fetchPredictionUsers = async (filters: LeaderboardFilter, extra: Pr
     {
       skip: 0,
       orderBy: filters.orderBy,
-      where: { totalBets_gte: LEADERBOARD_MIN_ROUNDS_PLAYED[extra.token.symbol], [`${filters.orderBy}_gt`]: 0 },
+      where: {
+        totalBets_gte: LEADERBOARD_MIN_ROUNDS_PLAYED[extra.predictionCurrency.symbol],
+        [`${filters.orderBy}_gt`]: 0,
+      },
     },
     extra.api,
-    extra.token.symbol,
+    extra.predictionCurrency.symbol,
   )
 
-  const transformer = transformUserResponse(extra.token.symbol, extra.token.chainId)
+  const transformer = transformUserResponse(extra.predictionCurrency.symbol, extra.predictionCurrency.chainId)
 
   return { results: usersResponse.map(transformer) }
 }
@@ -377,10 +380,8 @@ export const predictionsSlice = createSlice({
     })
     // Leaderboard filter
     builder.addCase(filterLeaderboard.pending, (state) => {
-      // Only mark as loading if we come from Fetched. This allows initialization.
-      if (state.leaderboard.loadingState === FetchStatus.Fetched) {
-        state.leaderboard.loadingState = FetchStatus.Fetching
-      }
+      // Always mark as loading when pending to allow initialization from Idle state
+      state.leaderboard.loadingState = FetchStatus.Fetching
     })
     builder.addCase(filterLeaderboard.fulfilled, (state, action) => {
       const { results } = action.payload
