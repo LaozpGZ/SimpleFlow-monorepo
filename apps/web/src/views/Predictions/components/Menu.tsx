@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { useGetPredictionsStatus } from 'state/predictions/hooks'
 import { styled } from 'styled-components'
-import { TokenSelector } from 'views/Predictions/components/TokenSelector'
+import { TokenSelectorV2 } from './TokenSelectorV2'
 import FlexRow from './FlexRow'
 import HistoryButton from './HistoryButton'
 import { TimerLabel } from './Label'
@@ -76,7 +76,7 @@ const Menu = () => {
   return (
     <FlexRow alignItems="center" p="16px" width="100%">
       <SetCol>
-        <TokenSelector />
+        <TokenSelectorV2 />
       </SetCol>
       {status === PredictionStatus.LIVE && (
         <>
