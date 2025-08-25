@@ -4092,5 +4092,8 @@
   "Transaction Failed": "İşlem Başarısız",
   "Your transaction has been submitted to the network": "İşleminiz ağa gönderildi",
   "Send didn’t go through. Please try again.": "Gönderim işlemi gerçekleştirilemedi. Lütfen tekrar deneyin.",
-  "Transaction timeout. Please try again": "İşlem zaman aşımına uğradı. Lütfen tekrar deneyin"
+  "Transaction timeout. Please try again": "İşlem zaman aşımına uğradı. Lütfen tekrar deneyin",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
 }
