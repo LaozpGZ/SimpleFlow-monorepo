@@ -3,9 +3,10 @@ import { RouteType } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { atomFamily } from 'jotai/utils'
 import { BridgeTradeError } from 'quoter/quoter.types'
-import { getTokenAddress, postMetadata } from 'views/Swap/Bridge/api'
+import { getSolanaTokenAddress, getTokenAddress, postMetadata } from 'views/Swap/Bridge/api'
 import { BridgeMetadataParams } from 'views/Swap/Bridge/types'
 import { InterfaceOrder } from 'views/Swap/utils'
+import { isSolana } from '@pancakeswap/chains'
 import { atomWithLoadable } from './atomWithLoadable'
 
 export const bridgeOnlyQuoteAtom = atomFamily(
@@ -24,9 +25,13 @@ export const bridgeOnlyQuoteAtom = atomFamily(
           : {}
 
       const metadata = await postMetadata({
-        inputToken: getTokenAddress(inputAmount.currency),
+        inputToken: isSolana(inputAmount.currency.chainId)
+          ? getSolanaTokenAddress(inputAmount.currency)
+          : getTokenAddress(inputAmount.currency),
         originChainId: inputAmount.currency.chainId,
-        outputToken: getTokenAddress(outputCurrency),
+        outputToken: isSolana(outputCurrency.chainId)
+          ? getSolanaTokenAddress(outputCurrency)
+          : getTokenAddress(outputCurrency),
         destinationChainId: outputCurrency.chainId,
         amount: inputAmount.quotient.toString(),
         ...postBridgeSwapParams,

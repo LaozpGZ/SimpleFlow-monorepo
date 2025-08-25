@@ -6,6 +6,7 @@ import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
 import { Address } from 'viem/accounts'
 import { isSolana } from '@pancakeswap/chains'
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
+import { SOLANA_NATIVE_TOKEN_ADDRESS } from 'quoter/consts'
 import { BridgeOrderWithCommands, isSVMOrder } from '../utils'
 import {
   BridgeDataSchema,
@@ -27,6 +28,14 @@ import { adaptRelayQuoteToBridge, RelayClient, TRADE_TYPES } from './relay-sdk'
 //   deadlineOrPreviousBlockhash: Type.Optional(Type.String()),
 //   recipient: Type.Optional(addressModel),
 // });
+
+export function getSolanaTokenAddress(currency: Currency): string {
+  if (!isSolana(currency.chainId)) {
+    throw new Error('getSolanaTokenAddress only supports solana currencies')
+  }
+
+  return currency.isNative ? SOLANA_NATIVE_TOKEN_ADDRESS : currency.wrapped.address
+}
 
 export function getTokenAddress(currency: Currency): Address {
   return currency.isNative ? '0x0000000000000000000000000000000000000000' : currency.wrapped.address
@@ -244,9 +253,10 @@ export type Metadata = {
 }
 
 export type GetMetadataParams = {
-  inputToken: Address
+  // using string instead of Address to support both evm and solana
+  inputToken: string
   originChainId: number | string
-  outputToken: Address
+  outputToken: string
   destinationChainId: number | string
   amount: string
   commands?: (BridgeDataSchema | SwapDataSchema)[]
