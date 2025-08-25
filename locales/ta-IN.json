@@ -4092,5 +4092,8 @@
   "Transaction Failed": "பரிவர்த்தனை தோல்வியுற்றது",
   "Your transaction has been submitted to the network": "உங்கள் பரிவர்த்தனை நெட்வொர்க்கிற்குச் சமர்ப்பிக்கப்பட்டது",
   "Send didn’t go through. Please try again.": "அனுப்புதல் முடியவில்லை. மீண்டும் முயற்சித்திடுங்கள்.",
-  "Transaction timeout. Please try again": "பரிவர்த்தனையை நேரமுடிவுற்றது. மீண்டும் முயற்சித்திடுங்கள்"
+  "Transaction timeout. Please try again": "பரிவர்த்தனையை நேரமுடிவுற்றது. மீண்டும் முயற்சித்திடுங்கள்",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
 }
