@@ -3,11 +3,13 @@ import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { Address } from 'viem/accounts'
 import { CrossChainAPIErrorCode } from '../CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 
+export type BridgeCallData = {
+  router: Address
+  calldata: `0x${string}`
+}
+
 export type GetBridgeCalldataResponse = {
-  transactionData: {
-    router: Address
-    calldata: `0x${string}`
-  }
+  transactionData: BridgeCallData
   gasFee: string
 }
 

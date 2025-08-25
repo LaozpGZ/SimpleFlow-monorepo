@@ -9,6 +9,7 @@ import { Address } from 'viem'
 import { InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
 import { isSolana } from '@pancakeswap/chains'
 import { postBridgeCheckApproval } from '../api'
+import { STEP_ID } from '../relay-sdk/types'
 
 export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
   const { account } = useAccountActiveChain()
@@ -21,6 +22,8 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
       : undefined
   }, [order, activeChainId])
 
+  const isEVMToSolanaBridge = isSolana(order?.trade?.outputAmount.currency.chainId)
+
   const isNativeCurrency = currencyAmountIn?.currency?.isNative
 
   const {
@@ -30,17 +33,26 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
     refetch,
   } = useQuery({
     queryKey: [
-      'bridge-check-approval',
+      isEVMToSolanaBridge ? 'solana-bridge-check-approval' : 'bridge-check-approval',
       account,
       isNativeCurrency ? 'native' : currencyAmountIn?.currency?.wrapped.address,
       currencyAmountIn?.currency?.chainId,
       currencyAmountIn?.quotient.toString(),
     ],
     queryFn: async () => {
-      if (!currencyAmountIn || !account) return Promise.resolve(undefined)
+      if (!currencyAmountIn || !account || !isBridgeOrder(order) || isNativeCurrency) return undefined
 
-      if (isNativeCurrency) {
-        return undefined
+      if (isEVMToSolanaBridge) {
+        const approveStep = order?.bridgeTransactionData?.steps?.find((step) => step.id === STEP_ID.APPROVE)
+        return {
+          isApprovalRequired: true,
+          tokenAddress: approveStep.to,
+          data: order?.bridgeTransactionData?.steps?.find((step) => step.id === STEP_ID.APPROVE)?.calldata,
+          // NOTE: replaceholder for missing fields
+          spender: undefined,
+          permit2Details: undefined,
+          isPermit2Required: false,
+        }
       }
 
       try {

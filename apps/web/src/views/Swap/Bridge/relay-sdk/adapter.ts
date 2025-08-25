@@ -1,6 +1,6 @@
 import { PublicKey, TransactionInstruction } from '@solana/web3.js'
 import { BridgeTransactionData } from '@pancakeswap/price-api-sdk'
-import { RelayQuoteResponse, BridgeAdapterResponse } from './types'
+import { RelayQuoteResponse, BridgeAdapterResponse, STEP_ID } from './types'
 
 // NOTE: because of setModalNode(modal), we can't use TransactionInstruction here
 // the modal logic can't parse TransactionInstruction type using JSON.stringify
@@ -69,12 +69,27 @@ export function adaptRelayQuoteToBridge(relayResponse: RelayQuoteResponse): Brid
       steps:
         instructions?.length > 0
           ? instructions
-          : [
-              {
-                to: relayResponse.steps?.[0]?.items?.[0]?.data.to || '',
-                calldata: relayResponse.steps?.[0]?.items?.[0]?.data.data || '',
-              },
-            ],
+          : relayResponse.steps
+              .map((step) => {
+                if (step.id === STEP_ID.DEPOSIT) {
+                  return {
+                    id: STEP_ID.DEPOSIT,
+                    to: step.items[0].data.to || '',
+                    calldata: step.items[0].data.data || '',
+                  }
+                }
+
+                if (step.id === STEP_ID.APPROVE) {
+                  return {
+                    id: STEP_ID.APPROVE,
+                    to: step.items[0].data.to || '',
+                    calldata: step.items[0].data.data || '',
+                  }
+                }
+
+                return undefined
+              })
+              .filter(Boolean),
     }
 
     return {
