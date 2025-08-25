@@ -3,16 +3,24 @@ import { RouteType } from '@pancakeswap/smart-router'
 import { Currency, CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { atomFamily } from 'jotai/utils'
 import { BridgeTradeError } from 'quoter/quoter.types'
-import { getSolanaTokenAddress, getTokenAddress, postMetadata } from 'views/Swap/Bridge/api'
+import {
+  getSolanaTokenAddress,
+  getTokenAddress,
+  postMetadata,
+  postSolanaEVMBridgeMetadata,
+} from 'views/Swap/Bridge/api'
 import { BridgeMetadataParams } from 'views/Swap/Bridge/types'
 import { InterfaceOrder } from 'views/Swap/utils'
 import { isSolana } from '@pancakeswap/chains'
+import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 import { atomWithLoadable } from './atomWithLoadable'
 
 export const bridgeOnlyQuoteAtom = atomFamily(
   (params: BridgeMetadataParams) =>
-    atomWithLoadable(async () => {
+    atomWithLoadable(async (get) => {
       const { inputAmount, outputCurrency } = params
+
+      const accountState = get(accountActiveChainAtom)
 
       // by default, recipientOnDestChain will be account address
       // metadata endpoint only receive either both recipientOnDestChain and commands or none of them
@@ -24,18 +32,30 @@ export const bridgeOnlyQuoteAtom = atomFamily(
             }
           : {}
 
-      const metadata = await postMetadata({
-        inputToken: isSolana(inputAmount.currency.chainId)
-          ? getSolanaTokenAddress(inputAmount.currency)
-          : getTokenAddress(inputAmount.currency),
-        originChainId: inputAmount.currency.chainId,
-        outputToken: isSolana(outputCurrency.chainId)
-          ? getSolanaTokenAddress(outputCurrency)
-          : getTokenAddress(outputCurrency),
-        destinationChainId: outputCurrency.chainId,
-        amount: inputAmount.quotient.toString(),
-        ...postBridgeSwapParams,
-      })
+      const isSolanaBridge = isSolana(inputAmount.currency.chainId) || isSolana(outputCurrency.chainId)
+
+      const metadata = isSolanaBridge
+        ? await postSolanaEVMBridgeMetadata({
+            inputToken: isSolana(inputAmount.currency.chainId)
+              ? getSolanaTokenAddress(inputAmount.currency)
+              : getTokenAddress(inputAmount.currency),
+            originChainId: inputAmount.currency.chainId,
+            outputToken: isSolana(outputCurrency.chainId)
+              ? getSolanaTokenAddress(outputCurrency)
+              : getTokenAddress(outputCurrency),
+            destinationChainId: outputCurrency.chainId,
+            amount: inputAmount.quotient.toString(),
+            user: isSolana(inputAmount.currency.chainId) ? accountState.solanaAccount : accountState.account,
+            recipientOnDestChain: isSolana(outputCurrency.chainId) ? accountState.solanaAccount : accountState.account,
+          })
+        : await postSolanaEVMBridgeMetadata({
+            inputToken: getTokenAddress(inputAmount.currency),
+            originChainId: inputAmount.currency.chainId,
+            outputToken: getTokenAddress(outputCurrency),
+            destinationChainId: outputCurrency.chainId,
+            amount: inputAmount.quotient.toString(),
+            ...postBridgeSwapParams,
+          })
 
       if (!metadata.supported) {
         throw new BridgeTradeError(metadata?.reason || metadata?.error?.message || 'Unknown error')

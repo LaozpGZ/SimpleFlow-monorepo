@@ -264,6 +264,16 @@ export type GetMetadataParams = {
   user?: string
 }
 
+export type GetSolanaEVMBridgeMetadataParams = {
+  inputToken: string
+  originChainId: number | string
+  outputToken: string
+  destinationChainId: number | string
+  amount: string
+  recipientOnDestChain?: string | null
+  user?: string | null
+}
+
 export interface MetadataResponse {
   supported: boolean
   error?: {
@@ -300,66 +310,70 @@ const customClient = new RelayClient({
 const RELAY_CHAIN_ID = 792703809
 const ZERO_SOLANA_ADDRESS = '1nc1nerator11111111111111111111111111111111'
 
-export const postMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
-  const { commands, recipientOnDestChain, ...rest } = params
+export const postSolanaEVMBridgeMetadata = async (
+  params: GetSolanaEVMBridgeMetadataParams,
+): Promise<MetadataSuccessResponse> => {
+  const { recipientOnDestChain, user, originChainId, destinationChainId, inputToken, outputToken, amount } = params
 
-  const isOriginSolana = isSolana(Number(params.originChainId))
-  const isDestinationSolana = isSolana(Number(params.destinationChainId))
-  // TODO: if baseCurrency or quoteCurrency is solana, call relay
+  const isOriginSolana = isSolana(Number(originChainId))
+  const isDestinationSolana = isSolana(Number(destinationChainId))
+
   const isSolanaBridge = isOriginSolana || isDestinationSolana
 
-  // if solana is, replace with RELAY_CHAIN_ID to match endpoint requirement
-  const originChainId = isOriginSolana ? RELAY_CHAIN_ID : Number(params.originChainId)
-  const destinationChainId = isDestinationSolana ? RELAY_CHAIN_ID : Number(params.destinationChainId)
-
-  if (isSolanaBridge) {
-    // For Solana bridge, recipient is always required if there is user
-    if (params.user && !params.recipientOnDestChain) {
-      throw new Error('Recipient is required for Solana bridge')
-    }
-
-    const user = params.user || (isOriginSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
-    const recipient = params.recipientOnDestChain || (isDestinationSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
-
-    try {
-      const relayResponse = await customClient.getQuote({
-        user: '0x9D24d495F7380BA80dC114D8C2cF1a54a68e25A4',
-        originCurrency: params.inputToken,
-        destinationCurrency: params.outputToken,
-        amount: params.amount,
-        tradeType: TRADE_TYPES.EXACT_INPUT,
-        originChainId,
-        destinationChainId,
-        recipient: '5bKZApECSLF9VXyp4nzBh5WbF9TREe3Wu3bsJus86xqX',
-      })
-
-      const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
-
-      // map from relay response to MetadataSuccessResponse
-      const result: MetadataSuccessResponse = {
-        supported: true,
-        amount: params.amount,
-        inputToken: params.inputToken,
-        originChainId: Number(params.originChainId),
-        outputToken: params.outputToken,
-        destinationChainId: Number(params.destinationChainId),
-        expectedFillTimeSec: bridgeFormat.expectedFillTimeSec.toString(),
-        isAmountTooLow: false,
-        limits: {
-          minDeposit: '0',
-          maxDeposit: '0',
-          maxDepositInstant: '0',
-          maxDepositShortDelay: '0',
-          recommendedDepositInstant: '0',
-        },
-        bridgeTransactionData: bridgeFormat.bridgeTransactionData,
-      }
-
-      return result
-    } catch (error) {
-      throw new Error('Failed to get solana bridge metadata')
-    }
+  if (!isSolanaBridge) {
+    throw new Error('postSolanaEVMBridgeMetadata only supports Solana bridge')
   }
+
+  // For Solana bridge, recipient is always required if there is user
+  if (user && !recipientOnDestChain) {
+    throw new Error('Recipient is required for Solana bridge')
+  }
+
+  const userAddress = user || (isOriginSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
+  const recipient = recipientOnDestChain || (isDestinationSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
+
+  try {
+    const relayResponse = await customClient.getQuote({
+      user: userAddress,
+      originCurrency: inputToken,
+      destinationCurrency: outputToken,
+      amount,
+      tradeType: TRADE_TYPES.EXACT_INPUT,
+      originChainId: isOriginSolana ? RELAY_CHAIN_ID : Number(originChainId),
+      destinationChainId: isDestinationSolana ? RELAY_CHAIN_ID : Number(destinationChainId),
+      recipient,
+    })
+
+    const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
+
+    // map from relay response to MetadataSuccessResponse
+    const result: MetadataSuccessResponse = {
+      supported: true,
+      amount: params.amount,
+      inputToken: params.inputToken,
+      originChainId: Number(params.originChainId),
+      outputToken: params.outputToken,
+      destinationChainId: Number(params.destinationChainId),
+      expectedFillTimeSec: bridgeFormat.expectedFillTimeSec.toString(),
+      isAmountTooLow: false,
+      limits: {
+        minDeposit: '0',
+        maxDeposit: '0',
+        maxDepositInstant: '0',
+        maxDepositShortDelay: '0',
+        recommendedDepositInstant: '0',
+      },
+      bridgeTransactionData: bridgeFormat.bridgeTransactionData,
+    }
+
+    return result
+  } catch (error) {
+    throw new Error('Failed to get solana bridge metadata')
+  }
+}
+
+export const postMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
+  const { commands, recipientOnDestChain, ...rest } = params
 
   const stringParams = Object.fromEntries(
     Object.entries(rest)
