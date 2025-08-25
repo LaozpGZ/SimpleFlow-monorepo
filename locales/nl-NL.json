@@ -4093,7 +4093,7 @@
   "Your transaction has been submitted to the network": "Je transactie is verzonden naar het netwerk",
   "Send didn’t go through. Please try again.": "De verzending is mislukt. Probeer het opnieuw.",
   "Transaction timeout. Please try again": "Time-out voor transactie. Probeer het opnieuw",
-  "Trade with %product%": "Trade with %product%",
-  "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product%": "Handel met %product%",
+  "to Win %amount%": "om %amount% te winnen",
+  "Trade with %product% to Win %amount%": "Handel met %product% om %amount% te winnen"
 }
