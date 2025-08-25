@@ -4092,5 +4092,8 @@
   "Transaction Failed": "Transakcja nie powiodła się",
   "Your transaction has been submitted to the network": "Twoja transakcja została przesłana do sieci",
   "Send didn’t go through. Please try again.": "Wysłanie nie powiodło się. Spróbuj ponownie.",
-  "Transaction timeout. Please try again": "Upłynął limit czasu transakcji. Spróbuj ponownie"
+  "Transaction timeout. Please try again": "Upłynął limit czasu transakcji. Spróbuj ponownie",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
 }
