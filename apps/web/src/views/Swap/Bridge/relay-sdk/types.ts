@@ -1,4 +1,4 @@
-import { BridgeTransactionData } from 'packages/price-api-sdk/src/types/order'
+import { BridgeTransactionData } from '@pancakeswap/price-api-sdk'
 
 // Base currency and amount types
 export interface RelayCurrency {

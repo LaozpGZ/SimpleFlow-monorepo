@@ -56,6 +56,10 @@ export function adaptRelayQuoteToBridge(relayResponse: RelayQuoteResponse): Brid
     const addressLookupTableAddresses = relayResponse?.steps?.[0]?.items?.[0]?.data?.addressLookupTableAddresses
 
     const bridgeTransactionData: BridgeTransactionData = {
+      // placeholder for missing fields
+      exclusiveRelayer: '',
+      exclusivityDeadline: 0,
+      quoteTimestamp: 0,
       outputAmount,
       fillDeadline,
       relayerFeePct: totalFeePct,

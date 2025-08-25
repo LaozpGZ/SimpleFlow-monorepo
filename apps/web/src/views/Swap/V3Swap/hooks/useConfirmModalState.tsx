@@ -56,7 +56,14 @@ import { usePriceBreakdown } from 'views/SwapSimplify/hooks/usePriceBreakdown'
 
 import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
 import { useWallet } from '@solana/wallet-adapter-react'
-import { MessageV0, PublicKey, TransactionInstruction, TransactionMessage, VersionedTransaction } from '@solana/web3.js'
+import {
+  AddressLookupTableAccount,
+  MessageV0,
+  PublicKey,
+  TransactionInstruction,
+  TransactionMessage,
+  VersionedTransaction,
+} from '@solana/web3.js'
 import { convertStepsIntoTransactionInstruction } from 'views/Swap/Bridge/relay-sdk/adapter'
 import { sendTransactionSafely } from 'components/WalletModalV2/utils/solanaSafeTransaction'
 import { confirmTransaction } from '@pancakeswap/solana-core-sdk'
@@ -526,6 +533,11 @@ const useConfirmActions = (
           return
         }
 
+        // Build transaction from bridge order data
+        if (!isBridgeOrder(order)) {
+          throw new Error('Not a bridge order')
+        }
+
         setTxHash(undefined)
         setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
 
@@ -535,10 +547,6 @@ const useConfirmActions = (
         if (isOriginSolana) {
           // Handle Solana bridge transaction
           try {
-            // Build transaction from bridge order data
-            if (!isBridgeOrder(order)) {
-              throw new Error('Not a bridge order')
-            }
             // Type cast to access bridge transaction data with extended properties
             const bridgeData = order.bridgeTransactionData as any
             if (!bridgeData?.steps?.length) {
@@ -559,13 +567,15 @@ const useConfirmActions = (
             // Detect wallet transaction support
             const walletSupportsV0 = detectWalletTransactionSupport(solanaWalletContext)
 
-            const addressToLookup = order.bridgeTransactionData.addressLookupTableAddresses
+            const addressToLookup = order.bridgeTransactionData.addressLookupTableAddresses || []
 
             const lookupTableAddresses =
-              addressToLookup?.length > 0
-                ? await Promise.all(
-                    addressToLookup.map((address) => solanaConnection.getAddressLookupTable(new PublicKey(address))),
-                  ).then((addresses) => addresses.map((address) => address.value))
+              addressToLookup.length > 0
+                ? ((
+                    await Promise.all(
+                      addressToLookup.map((address) => solanaConnection.getAddressLookupTable(new PublicKey(address))),
+                    ).then((addresses) => addresses.map((address) => address.value))
+                  ).filter(Boolean) as AddressLookupTableAccount[])
                 : undefined
 
             const transaction = await buildTransaction(
@@ -575,8 +585,6 @@ const useConfirmActions = (
               walletSupportsV0,
               lookupTableAddresses,
             )
-
-            console.log('transaction quote', transaction)
 
             // Send transaction safely
             const signature = await sendTransactionSafely(transaction, solanaConnection, solanaWalletContext)
