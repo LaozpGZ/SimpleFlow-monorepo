@@ -52,6 +52,7 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
           spender: undefined,
           permit2Details: undefined,
           isPermit2Required: false,
+          error: undefined,
         }
       }
 
