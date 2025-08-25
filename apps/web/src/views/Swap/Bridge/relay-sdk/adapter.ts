@@ -51,7 +51,7 @@ export function adaptRelayQuoteToBridge(relayResponse: RelayQuoteResponse): Brid
     const isAmountTooLow = parseFloat(inputAmount) < 1000 // example threshold
 
     // TODO: add type
-    const instructions = relayResponse?.steps?.[0]?.items?.[0]?.data?.instructions
+    const instructions = relayResponse?.steps?.[0]?.items?.[0]?.data?.instructions || []
 
     const addressLookupTableAddresses = relayResponse?.steps?.[0]?.items?.[0]?.data?.addressLookupTableAddresses
 
@@ -99,7 +99,6 @@ export function adaptRelayQuoteToBridge(relayResponse: RelayQuoteResponse): Brid
       expectedFillTimeSec: '0',
       isAmountTooLow: false,
       rate: '0',
-      steps: [],
       bridgeTransactionData: {
         outputAmount: '0',
         fillDeadline: 0,

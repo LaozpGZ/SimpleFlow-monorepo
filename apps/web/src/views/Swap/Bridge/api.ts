@@ -251,6 +251,7 @@ export type GetMetadataParams = {
   amount: string
   commands?: (BridgeDataSchema | SwapDataSchema)[]
   recipientOnDestChain?: string
+  user?: string
 }
 
 export interface MetadataResponse {
@@ -286,6 +287,9 @@ const customClient = new RelayClient({
   retryAttempts: 5,
 })
 
+const RELAY_CHAIN_ID = 792703809
+const ZERO_SOLANA_ADDRESS = '1nc1nerator11111111111111111111111111111111'
+
 export const postMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
   const { commands, recipientOnDestChain, ...rest } = params
 
@@ -294,16 +298,19 @@ export const postMetadata = async (params: GetMetadataParams): Promise<MetadataS
   // TODO: if baseCurrency or quoteCurrency is solana, call relay
   const isSolanaBridge = isOriginSolana || isDestinationSolana
 
-  // if solana is, replace with 792703809 to match endpoint requirement
-  const originChainId = isOriginSolana ? 792703809 : Number(params.originChainId)
-  const destinationChainId = isDestinationSolana ? 792703809 : Number(params.destinationChainId)
+  // if solana is, replace with RELAY_CHAIN_ID to match endpoint requirement
+  const originChainId = isOriginSolana ? RELAY_CHAIN_ID : Number(params.originChainId)
+  const destinationChainId = isDestinationSolana ? RELAY_CHAIN_ID : Number(params.destinationChainId)
 
   if (isSolanaBridge) {
-    const MOCK_USER = '5bKZApECSLF9VXyp4nzBh5WbF9TREe3Wu3bsJus86xqX'
-    const EVM_MOCK_USER = '0x9D24d495F7380BA80dC114D8C2cF1a54a68e25A4'
-    const user = isOriginSolana ? MOCK_USER : EVM_MOCK_USER
+    // For Solana bridge, recipient is always required if there is user
+    if (params.user && !params.recipientOnDestChain) {
+      throw new Error('Recipient is required for Solana bridge')
+    }
 
-    const recipient = isDestinationSolana ? MOCK_USER : EVM_MOCK_USER
+    const user = params.user || (isOriginSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
+    const recipient = params.recipientOnDestChain || (isDestinationSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
+
     try {
       const relayResponse = await customClient.getQuote({
         user,
