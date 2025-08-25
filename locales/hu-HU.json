@@ -4092,5 +4092,8 @@
   "Transaction Failed": "Sikertelen ügylet",
   "Your transaction has been submitted to the network": "Az ügyleted beküldésre került a hálózatba",
   "Send didn’t go through. Please try again.": "A küldés nem ment át. Próbáld újra.",
-  "Transaction timeout. Please try again": "Időtúllépés az ügyletnél. Próbáld újra"
+  "Transaction timeout. Please try again": "Időtúllépés az ügyletnél. Próbáld újra",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
 }
