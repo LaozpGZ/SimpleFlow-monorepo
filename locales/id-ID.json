@@ -4092,5 +4092,8 @@
   "Transaction Failed": "Transaksi Gagal",
   "Your transaction has been submitted to the network": "Transaksi Anda telah dikirimkan ke jaringan",
   "Send didn’t go through. Please try again.": "Pengiriman gagal. Silakan coba lagi.",
-  "Transaction timeout. Please try again": "Waktu transaksi habis. Silakan coba lagi"
+  "Transaction timeout. Please try again": "Waktu transaksi habis. Silakan coba lagi",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
 }
