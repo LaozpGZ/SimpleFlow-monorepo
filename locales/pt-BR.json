@@ -3953,7 +3953,7 @@
   "twap.limitPriceTooltip": "As negociações só serão executadas quando o preço de mercado disponível for igual ou superior a esse preço limite. Sua ordem pode ser preenchida apenas parcialmente.",
   "twap.sizePerTradeTooltip": "Define o tamanho de cada negociação individual que será executada durante a vigência da sua ordem.\n\nObs.: o tamanho mínimo por negociação deve ser superior a {usd} USD",
   "twap.maxDurationTooltip": "O tempo máximo durante o qual o montante total das negociações individuais que compõem sua ordem completa pode ser executado.\n\nObserve que dependendo dos seus parâmetros, sua ordem pode ser executada antes desse prazo, parcialmente ou não ser executada.",
-  "twap.tradeIntervalTootlip": "The estimated time that will elapse between each trade in your order. \n\n Note that as this time includes an allowance of two minutes for bidder auction and block settlement, which cannot be predicted exactly, actual time may vary.",
+  "twap.tradeIntervalTootlip": "O tempo estimado que decorrerá entre cada negociação do seu pedido.\n\nObserve que esse tempo inclui uma margem de dois minutos para o leilão de ofertantes e a liquidação de blocos, que não podem ser previstos com precisão, portanto, o tempo real pode variar.",
   "twap.sliderMinSizeTooltip": "Individual trades must have a minimum trade size of {usd} USD.",
   "twap.connect": "Connect wallet",
   "twap.selectTokens": "Select tokens",
