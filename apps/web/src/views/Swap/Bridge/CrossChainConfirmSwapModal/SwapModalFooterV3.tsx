@@ -13,11 +13,12 @@ import {
   WarningIcon,
   useTooltip,
 } from '@pancakeswap/uikit'
+import { useActiveChainId } from 'hooks/useActiveChainId'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { CurrencyLogo as CurrencyLogoWidget } from '@pancakeswap/widgets-internal'
 import { AutoRow, RowBetween, RowFixed } from 'components/Layout/Row'
 import { useGasToken } from 'hooks/useGasToken'
-import { ReactElement, memo, useMemo, useState } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { Field } from 'state/swap/actions'
 import { styled } from 'styled-components'
 import { warningSeverity } from 'utils/exchange'
@@ -30,7 +31,7 @@ import { SlippageAdjustedAmounts, TradePriceBreakdown, formatExecutionPrice } fr
 import FormattedPriceImpact from 'views/Swap/components/FormattedPriceImpact'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/styleds'
-import { EVMInterfaceOrder, InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
+import { EVMInterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import BigNumber from 'bignumber.js'
@@ -43,7 +44,6 @@ import { useAtomValue } from 'jotai'
 import { notEmpty } from 'utils/notEmpty'
 import { BridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
-import { useChainId } from 'wagmi'
 import { TotalFeeToolTip } from '../components/FeeToolTip'
 import { EstimatedTime } from './components/EstimatedTime'
 
@@ -95,7 +95,7 @@ function TotalBridgeFee({ priceBreakdown }: { priceBreakdown: BridgeOrderFee[] }
     return lpFeeAmounts.map((lpFeeAmount, index) => {
       return new BigNumber(lpFeeAmount.toExact()).times(usdPrices[index] ?? 0)
     })
-  }, [usdPrices])
+  }, [usdPrices, lpFeeAmounts])
 
   if (currencyUsdPrices.length === 0) {
     return (
@@ -140,7 +140,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
   const { t } = useTranslation()
   const [showInverted, setShowInverted] = useState<boolean>(false)
 
-  const chainId = useChainId()
+  const { chainId } = useActiveChainId()
 
   const { switchNetwork } = useSwitchNetwork()
 

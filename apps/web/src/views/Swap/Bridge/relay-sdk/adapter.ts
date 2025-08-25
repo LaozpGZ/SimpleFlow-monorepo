@@ -1,4 +1,25 @@
-import { RelayQuoteResponse, BridgeAdapterResponse, BridgeTransactionData } from './types'
+import { PublicKey, TransactionInstruction } from '@solana/web3.js'
+import { BridgeTransactionData } from '@pancakeswap/price-api-sdk'
+import { RelayQuoteResponse, BridgeAdapterResponse } from './types'
+
+// NOTE: because of setModalNode(modal), we can't use TransactionInstruction here
+// the modal logic can't parse TransactionInstruction type using JSON.stringify
+// temporary solution is keep JSON type and parse it when modal is open
+export function convertStepsIntoTransactionInstruction(instructions: any[]): TransactionInstruction[] {
+  return instructions.map((instruction) => {
+    return new TransactionInstruction({
+      keys: instruction.keys.map((key: any) => {
+        return {
+          pubkey: new PublicKey(key.pubkey),
+          isSigner: key.isSigner,
+          isWritable: key.isWritable,
+        }
+      }),
+      programId: new PublicKey(instruction.programId),
+      data: Buffer.from(instruction.data, 'hex'),
+    })
+  })
+}
 
 /**
  * Converts a Relay API quote response to the expected bridge format
@@ -29,12 +50,27 @@ export function adaptRelayQuoteToBridge(relayResponse: RelayQuoteResponse): Brid
     // Check if amount is too low (based on input amount)
     const isAmountTooLow = parseFloat(inputAmount) < 1000 // example threshold
 
+    // TODO: add type
+    const instructions = relayResponse?.steps?.[0]?.items?.[0]?.data?.instructions
+
+    const addressLookupTableAddresses = relayResponse?.steps?.[0]?.items?.[0]?.data?.addressLookupTableAddresses
+
     const bridgeTransactionData: BridgeTransactionData = {
       outputAmount,
       fillDeadline,
-      totalFeePct,
-      totalFee: totalFeeAmount,
+      relayerFeePct: totalFeePct,
+      totalRelayFee: totalFeeAmount,
       totalImpactPct,
+      addressLookupTableAddresses,
+      steps:
+        instructions?.length > 0
+          ? instructions
+          : [
+              {
+                to: relayResponse.steps?.[0]?.items?.[0]?.data.to || '',
+                calldata: relayResponse.steps?.[0]?.items?.[0]?.data.data || '',
+              },
+            ],
     }
 
     return {
@@ -63,6 +99,7 @@ export function adaptRelayQuoteToBridge(relayResponse: RelayQuoteResponse): Brid
       expectedFillTimeSec: '0',
       isAmountTooLow: false,
       rate: '0',
+      steps: [],
       bridgeTransactionData: {
         outputAmount: '0',
         fillDeadline: 0,
