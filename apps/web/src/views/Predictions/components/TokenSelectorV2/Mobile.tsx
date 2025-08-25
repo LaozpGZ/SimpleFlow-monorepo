@@ -1,9 +1,9 @@
 import { PredictionConfig } from '@pancakeswap/prediction'
 import { Box, Flex, Text } from '@pancakeswap/uikit'
-import { TokenImage } from 'components/TokenImage'
 import { styled } from 'styled-components'
-import { Price } from 'views/Predictions/components/TokenSelector/Price'
+import { Price } from 'views/Predictions/components/TokenSelectorV2/Price'
 import { useConfig } from 'views/Predictions/context/ConfigProvider'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 
 interface MobilePredictionTokenSelectorProps {
   tokens: PredictionConfig[]
@@ -11,32 +11,38 @@ interface MobilePredictionTokenSelectorProps {
 }
 
 const MobileTabContainer = styled(Flex)`
-  background: ${({ theme }) => theme.colors.input};
-  border-radius: 1.25rem;
-  padding: 0.125rem;
   display: flex;
   align-items: center;
+  gap: 4px;
+
+  background: ${({ theme }) => theme.colors.input};
+  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
+  border-radius: 1.5rem;
   width: fit-content;
-  overflow-x: auto;
   scrollbar-width: none;
-  -ms-overflow-style: none;
 
   &::-webkit-scrollbar {
     display: none;
   }
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    overflow-x: visible;
+  }
 `
 
 const MobileTabItem = styled(Flex)<{ isActive: boolean }>`
+  gap: 12px;
+  position: relative;
   background: ${({ theme, isActive }) => (isActive ? theme.colors.background : 'transparent')};
-  border-radius: 1rem;
-  padding: ${({ isActive }) => (isActive ? '0.5rem 0.75rem' : '0.5rem')};
+  border-radius: 24px;
+  padding: ${({ isActive }) => (isActive ? '8px 6px 8px 2px' : '16px')};
   cursor: pointer;
   align-items: center;
-  gap: ${({ isActive }) => (isActive ? '0.375rem' : '0')};
-  min-width: fit-content;
+  min-width: max-content;
+
   flex-shrink: 0;
   transition: all 0.15s ease;
-  position: relative;
+  z-index: 3;
 
   ${({ theme, isActive }) =>
     isActive &&
@@ -44,13 +50,28 @@ const MobileTabItem = styled(Flex)<{ isActive: boolean }>`
     &::before {
       content: '';
       position: absolute;
+      width: 103%;
+      height: 105%;
+      top: -1.5%;
+      left: -2%;
+      right: 0;
+      bottom: 0;
+      border-radius: 24px;
+      pointer-events: none;
+      background: ${theme.colors.gradientBold};
+      z-index: 1;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
       top: 0;
       left: 0;
       right: 0;
       bottom: 0;
-      border: 1px solid ${theme.colors.primary};
-      border-radius: 1rem;
-      pointer-events: none;
+      background: ${theme.colors.background};
+      border-radius: 24px;
+      z-index: 2;
     }
   `}
 
@@ -66,37 +87,43 @@ const MobileTokenIcon = styled(Box)<{ isActive: boolean }>`
   border-radius: 50%;
   overflow: visible;
   flex-shrink: 0;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 24px;
+  height: 24px;
   position: relative;
-  z-index: ${({ isActive }) => (isActive ? 2 : 1)};
+  z-index: 3;
+
+  ${({ theme }) => theme.mediaQueries.md} {
+    width: 32px;
+    height: 32px;
+  }
 
   ${({ isActive }) =>
     isActive &&
     `
-    transform: scale(1.6) translateX(-8px);
+    transform: scale(1.9) translateX(-6px) translateY(1px);
   `}
 `
 
 const MobileTokenInfo = styled(Flex)`
   flex-direction: column;
+  justify-content: center;
   min-width: 0;
   flex: 1;
+  position: relative;
+  z-index: 3;
 `
 
-const MobileTokenName = styled(Text)<{ isActive: boolean }>`
-  font-weight: 600;
-  font-size: 0.875rem;
-  line-height: 1.2;
-  color: ${({ theme, isActive }) => (isActive ? theme.colors.primary : theme.colors.textSubtle)};
+const MobileTokenName = styled(Text).attrs({ bold: true })<{ isActive: boolean }>`
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.textSubtle};
   text-transform: uppercase;
   white-space: nowrap;
+  line-height: 1;
 `
 
 const MobileTokenPrice = styled(Box)<{ isActive: boolean }>`
-  color: ${({ theme, isActive }) => (isActive ? theme.colors.text : theme.colors.textSubtle)};
-  font-size: 0.75rem;
-  line-height: 1.2;
+  color: ${({ theme, isActive }) => (isActive ? theme.colors.secondary : theme.colors.textSubtle)};
+  font-size: ${({ isActive }) => (isActive ? '20px !important' : '16px !important')};
   white-space: nowrap;
 `
 
@@ -118,16 +145,15 @@ export const MobilePredictionTokenSelector: React.FC<MobilePredictionTokenSelect
             onClick={() => onClickSwitchToken(token.predictionCurrency.symbol)}
           >
             <MobileTokenIcon isActive={isActive}>
-              <TokenImage
-                width={24}
-                height={24}
-                token={token.predictionCurrency}
+              <CurrencyLogo
+                size="32px"
+                currency={token.predictionCurrency}
                 style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                showChainLogo
               />
             </MobileTokenIcon>
             {isActive && (
               <MobileTokenInfo>
-                <MobileTokenName isActive={isActive}>{`${token.predictionCurrency.symbol}USD`}</MobileTokenName>
                 <MobileTokenPrice isActive={isActive}>
                   <Price
                     fontSize="inherit"
@@ -137,6 +163,7 @@ export const MobilePredictionTokenSelector: React.FC<MobilePredictionTokenSelect
                     galetoOracleAddress={token.galetoOracleAddress}
                   />
                 </MobileTokenPrice>
+                <MobileTokenName isActive={isActive}>{`${token.predictionCurrency.symbol}USD`}</MobileTokenName>
               </MobileTokenInfo>
             )}
           </MobileTabItem>

@@ -15,4 +15,5 @@ export const LEADERBOARD_MIN_ROUNDS_PLAYED = {
   [PredictionSupportedSymbol.CAKE]: 10,
   [PredictionSupportedSymbol.ETH]: 0,
   [PredictionSupportedSymbol.WBTC]: 0,
+  [PredictionSupportedSymbol.BTC]: 0,
 } as const satisfies LeaderboardMinRoundsPlatedType<PredictionSupportedSymbol>

@@ -33,7 +33,7 @@ const TabItem = styled(Flex)<{ isActive: boolean }>`
   position: relative;
   background: ${({ theme, isActive }) => (isActive ? theme.colors.background : 'transparent')};
   border-radius: 24px;
-  padding: 8px 6px 8px 2px;
+  padding: 8px 16px;
   cursor: pointer;
   align-items: center;
   min-width: fit-content;
@@ -54,7 +54,6 @@ const TabItem = styled(Flex)<{ isActive: boolean }>`
       left: -2%;
       right: 0;
       bottom: 0;
-      border: 1px solid ${theme.colors.primary};
       border-radius: 24px;
       pointer-events: none;
       background: ${theme.colors.gradientBold};
@@ -79,7 +78,6 @@ const TabItem = styled(Flex)<{ isActive: boolean }>`
   }
 
   ${({ theme }) => theme.mediaQueries.md} {
-    padding: 8px 16px;
     gap: 8px;
   }
 `

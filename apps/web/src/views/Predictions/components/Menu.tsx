@@ -1,6 +1,6 @@
 import { chainNames } from '@pancakeswap/chains'
 import { PredictionStatus } from '@pancakeswap/prediction'
-import { Button, Flex, HelpIcon, PrizeIcon } from '@pancakeswap/uikit'
+import { Box, Button, Flex, HelpIcon, PrizeIcon, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -43,6 +43,11 @@ const TimerLabelWrapper = styled.div`
   }
 `
 
+const TimerLabelMobileWrapper = styled.div`
+  order: 1;
+  width: 100px;
+`
+
 const LeaderboardButtonWrapper = styled.div`
   display: block;
 
@@ -67,6 +72,8 @@ const ButtonWrapper = styled.div`
 const Menu = () => {
   const { query } = useRouter()
   const { chainId } = useActiveChainId()
+  const { isMobile } = useMatchBreakpoints()
+
   const status = useGetPredictionsStatus()
 
   const leaderboardUrl = useMemo(() => {
@@ -74,47 +81,62 @@ const Menu = () => {
   }, [chainId, query.token])
 
   return (
-    <FlexRow alignItems="center" p="16px" width="100%">
-      <SetCol>
-        <TokenSelectorV2 />
-      </SetCol>
-      {status === PredictionStatus.LIVE && (
-        <>
-          <FlexRow justifyContent="center">
-            <PrevNextNav />
-          </FlexRow>
-          <SetCol>
-            <Flex alignItems="center" justifyContent="flex-end">
-              <TimerLabelWrapper>
-                <TimerLabel />
-              </TimerLabelWrapper>
-              <HelpButtonWrapper>
-                <Button
-                  variant="subtle"
-                  as="a"
-                  href="https://docs.pancakeswap.finance/products/prediction"
-                  target="_blank"
-                  rel="noreferrer noopener"
-                  width="48px"
-                >
-                  <HelpIcon width="24px" color="white" />
-                </Button>
-              </HelpButtonWrapper>
-              <LeaderboardButtonWrapper>
-                <Link href={leaderboardUrl} passHref>
-                  <Button variant="subtle" width="48px">
-                    <PrizeIcon color="white" />
-                  </Button>
-                </Link>
-              </LeaderboardButtonWrapper>
-              <ButtonWrapper style={{ order: 4 }}>
-                <HistoryButton />
-              </ButtonWrapper>
-            </Flex>
-          </SetCol>
-        </>
+    <Box>
+      {isMobile && (
+        <FlexRow mt="8px" mb="4px" justifyContent="center">
+          <TokenSelectorV2 />
+        </FlexRow>
       )}
-    </FlexRow>
+      <FlexRow alignItems="center" p="16px" width="100%">
+        <SetCol>
+          {!isMobile ? (
+            <TokenSelectorV2 />
+          ) : (
+            <TimerLabelMobileWrapper>
+              <TimerLabel />
+            </TimerLabelMobileWrapper>
+          )}
+        </SetCol>
+        {status === PredictionStatus.LIVE && (
+          <>
+            <FlexRow justifyContent="center">
+              <PrevNextNav />
+            </FlexRow>
+            <SetCol>
+              <Flex alignItems="center" justifyContent="flex-end">
+                {!isMobile && (
+                  <TimerLabelWrapper>
+                    <TimerLabel />
+                  </TimerLabelWrapper>
+                )}
+                <HelpButtonWrapper>
+                  <Button
+                    variant="subtle"
+                    as="a"
+                    href="https://docs.pancakeswap.finance/products/prediction"
+                    target="_blank"
+                    rel="noreferrer noopener"
+                    width="48px"
+                  >
+                    <HelpIcon width="24px" color="white" />
+                  </Button>
+                </HelpButtonWrapper>
+                <LeaderboardButtonWrapper>
+                  <Link href={leaderboardUrl} passHref>
+                    <Button variant="subtle" width="48px">
+                      <PrizeIcon color="white" />
+                    </Button>
+                  </Link>
+                </LeaderboardButtonWrapper>
+                <ButtonWrapper style={{ order: 4 }}>
+                  <HistoryButton />
+                </ButtonWrapper>
+              </Flex>
+            </SetCol>
+          </>
+        )}
+      </FlexRow>
+    </Box>
   )
 }
 
