@@ -4092,5 +4092,8 @@
   "Transaction Failed": "交易失败",
   "Your transaction has been submitted to the network": "您的交易已提交至网络",
   "Send didn’t go through. Please try again.": "发送失败，请重试。",
-  "Transaction timeout. Please try again": "交易超时，请重试"
+  "Transaction timeout. Please try again": "交易超时，请重试",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
 }
