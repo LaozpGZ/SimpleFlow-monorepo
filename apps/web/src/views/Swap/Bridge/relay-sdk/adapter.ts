@@ -104,10 +104,13 @@ export function adaptRelayQuoteToBridge(relayResponse: RelayQuoteResponse): Brid
       isAmountTooLow: false,
       rate: '0',
       bridgeTransactionData: {
+        exclusiveRelayer: '',
+        exclusivityDeadline: 0,
+        quoteTimestamp: 0,
         outputAmount: '0',
         fillDeadline: 0,
-        totalFeePct: '0',
-        totalFee: '0',
+        totalRelayFee: '0',
+        relayerFeePct: '0',
         totalImpactPct: '0',
       },
       error: {
