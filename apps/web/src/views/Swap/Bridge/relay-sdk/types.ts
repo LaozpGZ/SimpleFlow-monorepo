@@ -252,3 +252,8 @@ export interface BridgeAdapterResponse {
   }
   reason?: string
 }
+
+export enum STEP_ID {
+  APPROVE = 'approve',
+  DEPOSIT = 'deposit',
+}

@@ -49,7 +49,7 @@ import { ChainId as EvmChainId, isSolana } from '@pancakeswap/chains'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useSwapState } from 'state/swap/hooks'
 import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
-import { Permit2Schema } from 'views/Swap/Bridge/types'
+import { BridgeCallData, GetBridgeCalldataResponse, Permit2Schema } from 'views/Swap/Bridge/types'
 import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { usePriceBreakdown } from 'views/SwapSimplify/hooks/usePriceBreakdown'
@@ -67,6 +67,7 @@ import {
 import { convertStepsIntoTransactionInstruction } from 'views/Swap/Bridge/relay-sdk/adapter'
 import { sendTransactionSafely } from 'components/WalletModalV2/utils/solanaSafeTransaction'
 import { confirmTransaction } from '@pancakeswap/solana-core-sdk'
+import { STEP_ID } from 'views/Swap/Bridge/relay-sdk/types'
 import { ConfirmStepContext, ConfirmAction } from './steps/step.type'
 import { useBatchSwapTransaction } from './steps/useBatchSwapTransaction'
 import { useSolSwapStep } from './steps/useSolSwapStep'
@@ -103,6 +104,9 @@ const useCreateConfirmSteps = (
   const balance = useCurrencyBalance(account ?? undefined, nativeCurrency.wrapped)
 
   const { requiresApproval, approvalData } = useBridgeCheckApproval(order)
+
+  console.log('approvalData:', approvalData)
+  console.log('requiresApproval:', requiresApproval)
 
   return useCallback(async () => {
     const steps: ConfirmModalState[] = []
@@ -614,36 +618,45 @@ const useConfirmActions = (
         }
 
         try {
-          const bridgeCalldataResponse = isDestinationSolana
-            ? {
-                transactionData: {
-                  router: order.bridgeTransactionData.steps?.[0]?.to,
-                  calldata: order.bridgeTransactionData.steps?.[0]?.calldata,
-                },
-              }
-            : await getBridgeCalldata({
+          let transactionData: BridgeCallData | undefined
+
+          if (isDestinationSolana) {
+            const depositStep = order.bridgeTransactionData.steps?.find((step) => step.id === STEP_ID.DEPOSIT)
+
+            if (!depositStep) {
+              throw new Error('Deposit Step is not found in bridge data')
+            }
+            transactionData = {
+              router: depositStep.to,
+              calldata: depositStep.calldata,
+            }
+          } else {
+            transactionData = (
+              await getBridgeCalldata({
                 order: order as BridgeOrderWithCommands,
                 recipient: recipient as Address,
                 permit2: permit2Signature as Permit2Schema | undefined,
                 allowedSlippage,
               })
+            )?.transactionData
+          }
 
-          if (bridgeCalldataResponse?.transactionData?.calldata) {
+          if (transactionData?.calldata) {
             const publicClient = viemClients[chainId as EvmChainId]
 
             const result = await publicClient
               ?.estimateGas({
                 account,
-                to: bridgeCalldataResponse.transactionData.router,
-                data: bridgeCalldataResponse.transactionData.calldata,
+                to: transactionData.router,
+                data: transactionData.calldata,
                 value: order.trade.inputAmount.currency.isNative
                   ? BigInt(order.trade.inputAmount.quotient.toString())
                   : undefined,
               })
               .then((gasLimit) => {
                 return sendTransactionAsync({
-                  to: bridgeCalldataResponse.transactionData.router,
-                  data: bridgeCalldataResponse.transactionData.calldata,
+                  to: transactionData.router,
+                  data: transactionData.calldata,
                   value: order.trade.inputAmount.currency.isNative
                     ? BigInt(order.trade.inputAmount.quotient.toString())
                     : undefined,

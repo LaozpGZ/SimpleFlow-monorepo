@@ -323,14 +323,14 @@ export const postMetadata = async (params: GetMetadataParams): Promise<MetadataS
 
     try {
       const relayResponse = await customClient.getQuote({
-        user,
+        user: '0x9D24d495F7380BA80dC114D8C2cF1a54a68e25A4',
         originCurrency: params.inputToken,
         destinationCurrency: params.outputToken,
         amount: params.amount,
         tradeType: TRADE_TYPES.EXACT_INPUT,
         originChainId,
         destinationChainId,
-        recipient,
+        recipient: '5bKZApECSLF9VXyp4nzBh5WbF9TREe3Wu3bsJus86xqX',
       })
 
       const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
