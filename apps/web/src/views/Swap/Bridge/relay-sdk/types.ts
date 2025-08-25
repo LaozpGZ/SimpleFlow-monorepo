@@ -99,6 +99,8 @@ export interface RelayStepItemData {
   maxFeePerGas?: string
   maxPriorityFeePerGas?: string
   chainId: number
+  instructions?: any[]
+  addressLookupTableAddresses?: string[]
 }
 
 // Step item check
