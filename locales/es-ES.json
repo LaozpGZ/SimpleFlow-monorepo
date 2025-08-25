@@ -4092,5 +4092,8 @@
   "Transaction Failed": "Error en la transacción",
   "Your transaction has been submitted to the network": "Tu transacción se envió a la red",
   "Send didn’t go through. Please try again.": "El envío no se realizó correctamente. Intenta de nuevo.",
-  "Transaction timeout. Please try again": "El tiempo de espera de la transacción se agotó. Intenta de nuevo"
+  "Transaction timeout. Please try again": "El tiempo de espera de la transacción se agotó. Intenta de nuevo",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
 }
