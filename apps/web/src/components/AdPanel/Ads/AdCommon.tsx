@@ -30,19 +30,20 @@ export const AdCommonRender = ({ config }: { config: AdsConfig }) => {
 
 export const AdTextRender = (props: { config: AdTextConfig }) => {
   const { config } = props
+  const inlineStyle = config.inline ? { display: 'inline' } : undefined
   if (config.subTitle) {
     return (
-      <Text fontSize="inherit" as="span" color="secondary" bold>
+      <Text fontSize="inherit" as="span" color="secondary" bold style={inlineStyle}>
         {config.text}
       </Text>
     )
   }
   if (config.link) {
     return (
-      <Link fontSize="inherit" href={config.link} color="secondary" bold>
+      <Link fontSize="inherit" href={config.link} color="secondary" bold style={inlineStyle}>
         {config.text}
       </Link>
     )
   }
-  return <>{config.text}</>
+  return <span style={inlineStyle}>{config.text}</span>
 }

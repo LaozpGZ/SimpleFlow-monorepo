@@ -221,7 +221,7 @@ export const NetworkSwitcherModal = () => {
 
   const handleDismiss = useCallback(() => {
     setIsOpen(false)
-  }, [])
+  }, [setIsOpen])
 
   if (!chainId || router.pathname.includes('/info')) {
     return null

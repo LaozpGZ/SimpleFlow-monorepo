@@ -16,7 +16,7 @@ import { chains } from 'utils/wagmi'
 export function PageNetworkSupportModal() {
   const { t } = useTranslation()
   const { switchNetwork, isLoading, canSwitch } = useSwitchNetwork()
-  const { chainId, isConnected, isWrongNetwork } = useActiveWeb3React()
+  const { chainId, isConnected } = useActiveWeb3React()
   const { logout } = useAuth()
 
   const foundChain = useMemo(() => chains.find((c) => c.id === chainId), [chainId])

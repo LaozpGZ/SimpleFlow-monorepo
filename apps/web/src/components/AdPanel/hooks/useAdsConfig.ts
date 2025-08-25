@@ -10,6 +10,7 @@ export enum AdsIds {
   PANCAKE_GIFT = 'pancake-gift',
   BINANCE_ALPHA = 'binance-alpha',
   SOLANA_LIQUIDITY = 'solana-liquidity',
+  TRADE_SOCIAL = 'trade-social',
 }
 
 type AdsConfigMap = {
@@ -34,6 +35,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           mt: !isMobile ? '8px' : undefined,
         },
       },
+      start: 1756684800000,
     },
     {
       id: AdsIds.PANCAKE_GIFT,
@@ -55,6 +57,47 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           mt: !isMobile ? '8px' : undefined,
         },
       },
+    },
+    {
+      id: AdsIds.TRADE_SOCIAL,
+      priority: Priority.VERY_HIGH,
+      ad: {
+        img: getImageUrl(!isMobile ? 'trade-social-comp' : 'trade-social-comp-mobile'),
+        texts: [
+          ...(isMobile
+            ? [
+                {
+                  text: t('Trade with %product%', { product: 'Social Login' }),
+                  link: 'https://pancakeswap.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=SocialLogin&utm_id=TradingCompetition',
+                  inline: true,
+                },
+                {
+                  text: ` ${t('to Win %amount%', { amount: '$15,000' })}`,
+                  inline: true,
+                },
+              ]
+            : [
+                {
+                  text: t('Trade with %product% to Win %amount%', { product: 'Social Login', amount: '$15,000' }),
+                },
+                {
+                  text: t('Trade Now'),
+                  link: 'https://pancakeswap.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=SocialLogin&utm_id=TradingCompetition',
+                },
+              ]),
+        ],
+        btn: {
+          text: t('Learn More'),
+          link: 'https://blog.pancakeswap.finance/articles/social-login-trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=SocialLogin&utm_id=TradingCompetition',
+          mt: !isMobile ? '8px' : '32px',
+        },
+        ...(isMobile && {
+          options: {
+            imageMargin: '25px',
+          },
+        }),
+      },
+      end: 1757721600000,
     },
     {
       id: AdsIds.BINANCE_ALPHA,
@@ -81,7 +124,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           },
         }),
       },
-      deadline: 1756684800000,
+      end: 1756684800000,
     },
     {
       id: AdsIds.SOLANA_LIQUIDITY,
@@ -101,9 +144,15 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
       },
     },
   ]
+
   return config.filter((ad) => {
-    const deadline = ad?.deadline
-    return !deadline || deadline > now
+    const start = ad?.start
+    const end = ad?.end
+
+    const hasStarted = !start || now >= start
+    const notEnded = !end || now <= end
+
+    return hasStarted && notEnded
   })
 }
 

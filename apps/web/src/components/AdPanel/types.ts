@@ -30,6 +30,7 @@ export interface AdTextConfig {
   highlights?: string[]
   link?: string
   subTitle?: boolean
+  inline?: boolean
 }
 export interface BtnConfig {
   text: string
@@ -62,7 +63,8 @@ export interface AdsCampaignConfig {
   ad: AdsConfig
   infoStripe?: InfoStripeConfig
   priority?: number
-  deadline?: number
+  start?: number
+  end?: number
 }
 
 type Token = {

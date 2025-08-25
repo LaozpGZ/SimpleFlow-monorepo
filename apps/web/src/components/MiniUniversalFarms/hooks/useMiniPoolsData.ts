@@ -44,7 +44,7 @@ export const useMiniPoolsData = (): UseMiniPoolsDataReturn => {
         dataIndex,
       })
     },
-    [query],
+    [query, updateSort],
   )
 
   return {

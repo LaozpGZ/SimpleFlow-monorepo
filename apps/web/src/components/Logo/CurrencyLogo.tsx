@@ -1,5 +1,4 @@
 import { ChainId } from '@pancakeswap/chains'
-import { useHttpLocations } from '@pancakeswap/hooks'
 import { Token, UnifiedCurrency } from '@pancakeswap/sdk'
 import { ChainLogo } from '@pancakeswap/widgets-internal'
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
@@ -8,6 +7,7 @@ import { getImageUrlsFromToken } from 'components/TokenImage'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useMemo } from 'react'
 import { styled } from 'styled-components'
+import uriToHttp from '@pancakeswap/utils/uriToHttp'
 import getTokenLogoURL from '../../utils/getTokenLogoURL'
 
 const StyledLogo = styled(TokenLogo)<{ size: string }>`
@@ -55,26 +55,25 @@ export function FiatLogo({ currency, size = '24px', style }: LogoProps) {
 }
 
 export default function CurrencyLogo({ currency, size = '24px', style, src, showChainLogo = false }: LogoProps) {
-  const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
-  // @ts-ignore
-  const imageUrls = getImageUrlsFromToken(currency)
-  const basicTokenImage = getBasicTokensImage(currency)
-
   const srcs: string[] = useMemo(() => {
     if (currency?.isNative) return []
 
     if (currency?.isToken) {
+      const basicTokenImage = getBasicTokensImage(currency)
       const tokenLogoURL = getTokenLogoURL(currency as Token)
+      const imageUrls = getImageUrlsFromToken(currency)
 
       if (currency instanceof WrappedTokenInfo) {
+        const currencyUri = currency?.logoURI ?? undefined
+        const uriLocations = currencyUri ? uriToHttp(currencyUri) : []
         if (!tokenLogoURL) return [...imageUrls, ...uriLocations, basicTokenImage]
         return [...imageUrls, ...uriLocations, tokenLogoURL, basicTokenImage]
       }
       if (!tokenLogoURL) return [...imageUrls, basicTokenImage]
-      return [...imageUrls, tokenLogoURL, basicTokenImage]
+      return [...imageUrls, tokenLogoURL]
     }
     return []
-  }, [currency, uriLocations])
+  }, [currency])
 
   if (currency?.isNative) {
     if (currency.chainId === ChainId.BSC) {

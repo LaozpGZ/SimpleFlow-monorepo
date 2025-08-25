@@ -39,7 +39,7 @@ export const SHORT_SYMBOL = {
 
 export const NetworkSwitcher = () => {
   const { t } = useTranslation()
-  const { chainId, isWrongNetwork, isNotMatched } = useActiveChainId()
+  const { chainId, isWrongNetwork } = useActiveChainId()
   const { isLoading, canSwitch } = useSwitchNetwork()
   const router = useRouter()
   const [, setIsNetworkSwitcherOpen] = useAtom(networkSwitcherModalAtom)
@@ -57,7 +57,7 @@ export const NetworkSwitcher = () => {
     if (!cannotChangeNetwork) {
       setIsNetworkSwitcherOpen(true)
     }
-  }, [cannotChangeNetwork])
+  }, [cannotChangeNetwork, setIsNetworkSwitcherOpen])
 
   if (!chainId || router.pathname.includes('/info')) {
     return null
