@@ -235,10 +235,10 @@ export const VeCakeRedeem: React.FC = () => {
                 <SectionTitle isMobile={isMobile}>{t('MY CAKE STAKING POSITION')}</SectionTitle>
 
                 <FieldGroup>
-                  <VeCakeExitField label="My veCAKE" value={myVeCake} />
+                  <VeCakeExitField label={t('My veCAKE')} value={myVeCake} />
 
                   <VeCakeExitField
-                    label="My Locked CAKE"
+                    label={t('My Locked CAKE')}
                     value={lockedCake}
                     symbol="CAKE"
                     valueStyles={{
@@ -255,7 +255,7 @@ export const VeCakeRedeem: React.FC = () => {
 
                   {Boolean(nativeCakeLockedAmount > 0 && unlockTime > 0) && (
                     <VeCakeExitField
-                      label="Unlock Date"
+                      label={t('Unlock Date')}
                       value={
                         <>
                           {unlockTime < Date.now() && <Text>{t('Unlocked on')} </Text>}
