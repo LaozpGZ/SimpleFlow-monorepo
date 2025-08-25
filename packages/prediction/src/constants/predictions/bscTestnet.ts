@@ -20,7 +20,7 @@ export const predictions: Record<string, PredictionConfig> = {
     displayedDecimals: 2,
     tokenBackgroundColor: '#F0B90B',
   },
-  [PredictionSupportedSymbol.WBTC]: {
+  [PredictionSupportedSymbol.BTC]: {
     betCurrency: Native.onChain(ChainId.BSC_TESTNET),
     predictionCurrency: BTC,
 

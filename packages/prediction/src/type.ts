@@ -8,6 +8,7 @@ export enum PredictionSupportedSymbol {
   CAKE = 'CAKE',
   ETH = 'ETH',
   WBTC = 'WBTC',
+  BTC = 'BTC',
 }
 
 export enum BetPosition {
