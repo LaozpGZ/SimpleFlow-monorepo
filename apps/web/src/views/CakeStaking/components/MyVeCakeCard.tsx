@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, AutoRow, Box, Flex, Text } from '@pancakeswap/uikit'
+import { AutoColumn, AutoRow, Box, Text } from '@pancakeswap/uikit'
 import { formatNumber, getBalanceNumber } from '@pancakeswap/utils/formatBalance'
 import { useVeCakeBalance } from 'hooks/useTokenBalance'
 import styled from 'styled-components'

@@ -3,7 +3,11 @@ import { Box, Message, MessageText, useMatchBreakpoints } from '@pancakeswap/uik
 import { useIsSmartContract } from 'hooks/useIsSmartContract'
 import { useAccount } from 'wagmi'
 
-const SmartWalletWarning = () => {
+interface SmartWalletWarningProps {
+  productName: string
+}
+
+const SmartWalletWarning: React.FC<SmartWalletWarningProps> = ({ productName }) => {
   const { t } = useTranslation()
   const { address } = useAccount()
   const isSmartWallet = useIsSmartContract(address)
@@ -24,7 +28,8 @@ const SmartWalletWarning = () => {
       <Message variant="warning" m="16px 0">
         <MessageText>
           {t(
-            'Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.',
+            'Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.',
+            { product: productName },
           )}
         </MessageText>
       </Message>
