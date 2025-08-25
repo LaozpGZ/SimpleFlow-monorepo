@@ -42,12 +42,14 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
     queryFn: async () => {
       if (!currencyAmountIn || !account || !isBridgeOrder(order) || isNativeCurrency) return undefined
 
+      // NOTE: only EVM to Solana bridge needs approval
       if (isEVMToSolanaBridge) {
         const approveStep = order?.bridgeTransactionData?.steps?.find((step) => step.id === STEP_ID.APPROVE)
+
         return {
-          isApprovalRequired: true,
-          tokenAddress: approveStep.to,
-          data: order?.bridgeTransactionData?.steps?.find((step) => step.id === STEP_ID.APPROVE)?.calldata,
+          isApprovalRequired: Boolean(approveStep),
+          tokenAddress: approveStep?.to,
+          data: approveStep?.calldata,
           // NOTE: replaceholder for missing fields
           spender: undefined,
           permit2Details: undefined,
