@@ -342,14 +342,7 @@ export const postMetadata = async (params: GetMetadataParams): Promise<MetadataS
           maxDepositShortDelay: '0',
           recommendedDepositInstant: '0',
         },
-        bridgeTransactionData: {
-          exclusiveRelayer: '',
-          exclusivityDeadline: 0,
-          quoteTimestamp: 0,
-          relayerFeePct: '0',
-          totalRelayFee: '0',
-          ...bridgeFormat.bridgeTransactionData,
-        },
+        bridgeTransactionData: bridgeFormat.bridgeTransactionData,
       }
 
       return result
