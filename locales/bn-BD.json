@@ -4092,5 +4092,8 @@
   "Transaction Failed": "লেনদেন ব্যর্থ হয়েছে",
   "Your transaction has been submitted to the network": "আপনার লেনদেন নেটওয়ার্কে জমা দেওয়া হয়েছে।",
   "Send didn’t go through. Please try again.": "প্রেরণ সফল হয়নি। অনুগ্রহ করে আবার চেষ্টা করুন।",
-  "Transaction timeout. Please try again": "লেনদেনের সময়সীমা শেষ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।"
+  "Transaction timeout. Please try again": "লেনদেনের সময়সীমা শেষ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
 }
