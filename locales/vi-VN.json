@@ -4093,7 +4093,7 @@
   "Your transaction has been submitted to the network": "Giao dịch của bạn đã được gửi lên mạng lưới",
   "Send didn’t go through. Please try again.": "Gửi không thành công. Vui lòng thử lại.",
   "Transaction timeout. Please try again": "Giao dịch đã hết thời gian chờ. Vui lòng thử lại",
-  "Trade with %product%": "Trade with %product%",
-  "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product%": "Giao dịch với %product%",
+  "to Win %amount%": "để trúng %amount%",
+  "Trade with %product% to Win %amount%": "Giao dịch với %product% để trúng %amount%"
 }
