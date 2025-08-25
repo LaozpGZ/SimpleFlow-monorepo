@@ -11,7 +11,6 @@ export type {
   RelayError,
   RelayErrorResponse,
   BridgeAdapterResponse,
-  BridgeTransactionData,
   RelayTradeType,
   RelayCurrency,
   RelayAmount,

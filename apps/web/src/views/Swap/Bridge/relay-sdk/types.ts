@@ -1,3 +1,5 @@
+import { BridgeTransactionData } from 'packages/price-api-sdk/src/types/order'
+
 // Base currency and amount types
 export interface RelayCurrency {
   chainId: number
@@ -223,13 +225,10 @@ export interface RelayErrorResponse {
 // Trade type enum
 export type RelayTradeType = 'EXACT_INPUT' | 'EXACT_OUTPUT'
 
-// Bridge adapter types - target format
-export interface BridgeTransactionData {
-  outputAmount: string
-  fillDeadline: number
-  totalFeePct: string
-  totalFee: string
-  totalImpactPct: string
+export interface SolanaEvmStep {
+  to: string
+  calldata: string
+  // TODO: add more fields for gas
 }
 
 export interface BridgeAdapterResponse {

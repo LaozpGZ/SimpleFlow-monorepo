@@ -7,6 +7,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSubmitPermit2 } from 'hooks/usePermit2'
 import { Address } from 'viem'
 import { InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
+import { isSolana } from '@pancakeswap/chains'
 import { postBridgeCheckApproval } from '../api'
 
 export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
@@ -14,7 +15,8 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
   const { chainId: activeChainId } = useActiveChainId()
 
   const currencyAmountIn = useMemo(() => {
-    return isBridgeOrder(order) && activeChainId
+    // NOTE: this is only for Across bridge, not for Solana bridge
+    return isBridgeOrder(order) && !isSolana(activeChainId)
       ? order?.trade?.routes?.find((r) => r.inputAmount.currency.chainId === activeChainId)?.inputAmount
       : undefined
   }, [order, activeChainId])

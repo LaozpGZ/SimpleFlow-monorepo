@@ -12,11 +12,7 @@ import { GreyCard } from 'components/Card'
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { AutoRow } from 'components/Layout/Row'
-import {
-  RoutingSettingsButton,
-  RoutingSettingsModalContent,
-  withCustomOnDismiss,
-} from 'components/Menu/GlobalSettings/SettingsModalV2'
+import { RoutingSettingsButton, RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { BIG_INT_ZERO } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
@@ -275,10 +271,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     callToAction()
   }, [beforeCommit, callToAction, priceImpactSeverity, order])
 
-  // modals
-  const onSettingModalDismiss = useCallback(() => {
-    setIndirectlyOpenConfirmModalState(true)
-  }, [])
   const [openConfirmSwapModal] = useModal(
     isBridgeOrder(order) ? (
       <ConfirmSwapModalV3

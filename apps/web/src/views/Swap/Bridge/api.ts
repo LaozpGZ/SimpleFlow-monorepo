@@ -78,6 +78,21 @@ const replacer = (_, value: string | bigint) => {
   return typeof value === 'bigint' ? value.toString() : value
 }
 
+export const getEvmSolanaBridgeCalldata = async ({
+  order,
+  recipient,
+}: {
+  order: BridgeOrderWithCommands
+  recipient: Address
+  permit2?: Permit2Schema
+  allowedSlippage: number
+}) => {
+  /**
+   * TODO: getEvmSolanaBridgeCalldata return
+   *
+   */
+}
+
 export const getBridgeCalldata = async ({
   order,
   recipient,
@@ -285,9 +300,10 @@ export const postMetadata = async (params: GetMetadataParams): Promise<MetadataS
 
   if (isSolanaBridge) {
     const MOCK_USER = '5bKZApECSLF9VXyp4nzBh5WbF9TREe3Wu3bsJus86xqX'
-    const user = isOriginSolana ? MOCK_USER : ZERO_ADDRESS
+    const EVM_MOCK_USER = '0x9D24d495F7380BA80dC114D8C2cF1a54a68e25A4'
+    const user = isOriginSolana ? MOCK_USER : EVM_MOCK_USER
 
-    const recipient = isDestinationSolana ? MOCK_USER : ZERO_ADDRESS
+    const recipient = isDestinationSolana ? MOCK_USER : EVM_MOCK_USER
     try {
       const relayResponse = await customClient.getQuote({
         user,
