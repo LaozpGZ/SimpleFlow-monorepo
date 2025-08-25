@@ -1,4 +1,4 @@
-import { Currency, Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import {
   ImageProps,
   TokenImage as UIKitTokenImage,
@@ -58,7 +58,7 @@ export const TokenPairLogo: React.FC<React.PropsWithChildren<TokenPairImageProps
 }
 
 interface TokenImageProps extends ImageProps {
-  token: Token
+  token: Currency
 }
 
 export const TokenImage: React.FC<React.PropsWithChildren<TokenImageProps>> = ({ token, ...props }) => {

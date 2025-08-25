@@ -10,6 +10,7 @@ import { styled } from 'styled-components'
 import { getPredictionsV1Address } from 'utils/addressHelpers'
 import { useAccount } from 'wagmi'
 
+import { ChainId, Native } from '@pancakeswap/sdk'
 import CollectRoundWinningsModal from '../CollectRoundWinningsModal'
 import { getAllV1History } from './helpers'
 import NothingToClaimModal from './NothingToClaimModal'
@@ -35,12 +36,11 @@ const ClaimCheck = () => {
   const [onPresentCollectWinningsModal] = useModal(
     <CollectRoundWinningsModal
       predictionsAddress={predictionsV1Address}
-      token={bscTokens.bnb}
+      betCurrency={Native.onChain(ChainId.BSC)}
       dispatch={dispatch}
       history={history}
       isLoadingHistory={isFetching}
       isV1Claim
-      isNativeToken
     />,
     false,
     true,

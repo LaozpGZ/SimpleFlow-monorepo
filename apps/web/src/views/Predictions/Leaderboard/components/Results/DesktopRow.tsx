@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { Td, Text } from '@pancakeswap/uikit'
 import { PredictionUser } from 'state/types'
 import ResultAvatar from './ResultAvatar'
@@ -8,7 +8,7 @@ interface DesktopRowProps {
   rank?: number
   user: PredictionUser
   api: string
-  token: Token | undefined
+  token: Currency | undefined
 }
 
 const DesktopRow: React.FC<React.PropsWithChildren<DesktopRowProps>> = ({ rank, user, api, token, ...props }) => (

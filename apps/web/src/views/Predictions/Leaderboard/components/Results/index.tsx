@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { AutoRenewIcon, Box, Button, Flex, Grid, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Container from 'components/Layout/Container'
 import { FetchStatus } from 'config/constants/types'
@@ -17,7 +17,7 @@ import MobileResults from './MobileResults'
 import RankingCard from './RankingCard'
 
 interface ResultsProps {
-  token: Token | undefined
+  token: Currency | undefined
   api: string
 }
 
@@ -30,10 +30,6 @@ const Results: React.FC<React.PropsWithChildren<ResultsProps>> = ({ token, api }
   const currentSkip = useGetLeaderboardSkip()
   const hasMoreResults = useGetLeaderboardHasMoreResults()
   const dispatch = useLocalDispatch()
-  console.log({
-    token,
-    api,
-  })
 
   const handleClick = () => {
     if (api && token?.symbol && token?.chainId) {

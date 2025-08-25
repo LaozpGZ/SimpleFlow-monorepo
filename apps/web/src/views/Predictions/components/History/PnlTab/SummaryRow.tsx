@@ -37,7 +37,7 @@ const SummaryRow: React.FC<React.PropsWithChildren<SummaryRowProps>> = ({ type, 
   const config = useConfig()
   const roundsInPercentsDisplay = !Number.isNaN(parseFloat(roundsInPercents)) ? `${roundsInPercents}%` : '0%'
 
-  return config?.displayedDecimals && config?.token ? (
+  return config?.displayedDecimals && config?.betCurrency ? (
     <>
       <Text mt="16px" bold color="textSubtle">
         {t(typeTranslationKey)}
@@ -53,7 +53,9 @@ const SummaryRow: React.FC<React.PropsWithChildren<SummaryRowProps>> = ({ type, 
         </Flex>
         <Flex flex="3" flexDirection="column">
           <Text bold fontSize="20px" color={color}>
-            {`${summaryTypeSigns[type]}${formatBnb(displayAmount, config?.displayedDecimals)} ${config?.token.symbol}`}
+            {`${summaryTypeSigns[type]}${formatBnb(displayAmount, config?.displayedDecimals)} ${
+              config?.betCurrency.symbol
+            }`}
           </Text>
           <Text fontSize="12px" color="textSubtle">
             {`~$${amountInUsd.toFixed(2)}`}

@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import {
   Box,
   BunnyPlaceholderIcon,
@@ -29,7 +29,7 @@ import { NetWinningsRow, Row } from './styles'
 interface RankingCardProps {
   rank: 1 | 2 | 3
   user: PredictionUser
-  token: Token | undefined
+  token: Currency | undefined
   api: string
 }
 

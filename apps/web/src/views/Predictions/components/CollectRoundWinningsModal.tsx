@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { REWARD_RATE } from '@pancakeswap/prediction'
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import {
   AutoRenewIcon,
   Box,
@@ -21,9 +21,9 @@ import {
 import { formatNumber } from '@pancakeswap/utils/formatBalance'
 import { AnyAction, AsyncThunkAction } from '@reduxjs/toolkit'
 import { ToastDescriptionWithTx } from 'components/Toast'
-import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCallWithGasPrice } from 'hooks/useCallWithGasPrice'
 import useCatchTxError from 'hooks/useCatchTxError'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { usePredictionsContract } from 'hooks/useContract'
 import { useEffect } from 'react'
 import { fetchNodeHistory, markAsCollected } from 'state/predictions'
@@ -31,7 +31,6 @@ import { Bet } from 'state/types'
 import { styled } from 'styled-components'
 import { Address } from 'viem'
 import { useTokenUsdPriceBigNumber } from 'views/Predictions/hooks/useTokenPrice'
-import { useAccount } from 'wagmi'
 import { getPayout } from './History/helpers'
 
 interface CollectRoundWinningsModalProps extends InjectedModalProps {
@@ -40,9 +39,8 @@ interface CollectRoundWinningsModalProps extends InjectedModalProps {
   history: Bet[]
   isLoadingHistory: boolean
   predictionsAddress: Address
-  token: Token | undefined
+  betCurrency: Currency | undefined
   isV1Claim?: boolean
-  isNativeToken: boolean
 }
 
 const Modal = styled(ModalContainer)`
@@ -91,18 +89,18 @@ const CollectRoundWinningsModal: React.FC<React.PropsWithChildren<CollectRoundWi
   isLoadingHistory,
   dispatch,
   predictionsAddress,
-  token,
+  betCurrency,
   isV1Claim,
-  isNativeToken,
 }) => {
-  const { address: account } = useAccount()
-  const { chainId } = useActiveChainId()
   const { t } = useTranslation()
+  const { account, chainId } = useAccountActiveChain()
+
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: isPendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
-  const predictionsContract = usePredictionsContract(predictionsAddress, isNativeToken)
-  const tokenPrice = useTokenUsdPriceBigNumber(token)
+
+  const predictionsContract = usePredictionsContract(predictionsAddress, betCurrency?.isNative ?? false)
+  const tokenPrice = useTokenUsdPriceBigNumber(betCurrency)
 
   const { epochs, total } = calculateClaimableRounds(history)
   const totalToken = tokenPrice.multipliedBy(total).toNumber()
@@ -160,7 +158,7 @@ const CollectRoundWinningsModal: React.FC<React.PropsWithChildren<CollectRoundWi
         <Flex alignItems="start" justifyContent="space-between" mb="8px">
           <Text>{t('Collecting')}</Text>
           <Box style={{ textAlign: 'right' }}>
-            <Text>{`${formatNumber(total, 0, 6)} ${token?.symbol}`}</Text>
+            <Text>{`${formatNumber(total, 0, 6)} ${betCurrency?.symbol}`}</Text>
             <Text fontSize="12px" color="textSubtle">
               {`~$${totalToken.toFixed(2)}`}
             </Text>

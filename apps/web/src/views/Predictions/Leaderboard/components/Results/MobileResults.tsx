@@ -1,11 +1,11 @@
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { Box } from '@pancakeswap/uikit'
 import { PredictionUser } from 'state/types'
 import MobileRow from './MobileRow'
 
 interface MobileResultsProps {
   results: PredictionUser[]
-  token: Token | undefined
+  token: Currency | undefined
   api: string
 }
 

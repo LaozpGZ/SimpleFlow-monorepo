@@ -24,6 +24,7 @@ const Leaderboard = () => {
   const [isFirstTime, setIsFirstTime] = useState<boolean>(true)
   const [pickedChainId, setPickedChainId] = useState<ChainId>(ChainId.BSC)
   const [pickedTokenSymbol, setPickedTokenSymbol] = useState<PredictionSupportedSymbol>(PredictionSupportedSymbol.BNB)
+
   const predictionConfigs = usePredictionConfigs(pickedChainId)
 
   useEffect(() => {
@@ -39,7 +40,7 @@ const Leaderboard = () => {
         PredictionSupportedSymbol?.[query?.token] &&
         predictionConfigs[PredictionSupportedSymbol?.[query?.token]]
           ? PredictionSupportedSymbol?.[query?.token]
-          : (Object.values(predictionConfigs)?.[0]?.token?.symbol as PredictionSupportedSymbol)
+          : (Object.values(predictionConfigs)?.[0]?.predictionCurrency.symbol as PredictionSupportedSymbol)
 
       setPickedTokenSymbol(defaultPickedTokenSymbol)
       setIsFirstTime(false)
@@ -68,11 +69,11 @@ const Leaderboard = () => {
         setPickedTokenSymbol={setPickedTokenSymbol}
       />
       <ConnectedWalletResult
-        token={predictionConfigs?.[pickedTokenSymbol]?.token}
+        token={predictionConfigs?.[pickedTokenSymbol]?.predictionCurrency}
         api={predictionConfigs?.[pickedTokenSymbol]?.api ?? ''}
       />
       <Results
-        token={predictionConfigs?.[pickedTokenSymbol]?.token}
+        token={predictionConfigs?.[pickedTokenSymbol]?.predictionCurrency}
         api={predictionConfigs?.[pickedTokenSymbol]?.api ?? ''}
       />
       <PredictionSubgraphHealthIndicator />

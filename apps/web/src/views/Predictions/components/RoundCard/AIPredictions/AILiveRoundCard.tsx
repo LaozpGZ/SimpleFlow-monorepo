@@ -59,7 +59,7 @@ export const AILiveRoundCard: React.FC<React.PropsWithChildren<AILiveRoundCardPr
     data: { price },
     refetch,
   } = usePredictionPrice({
-    currencyA: config?.token.symbol,
+    currencyA: config?.predictionCurrency.symbol,
   })
 
   const [isCalculatingPhase, setIsCalculatingPhase] = useState(false)

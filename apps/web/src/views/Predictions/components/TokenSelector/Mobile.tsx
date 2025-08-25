@@ -30,7 +30,7 @@ export const MobilePredictionTokenSelector: React.FC<React.PropsWithChildren<Des
               textTransform="uppercase"
               style={{ alignSelf: 'center' }}
             >
-              {`${config?.token?.symbol}USD`}
+              {`${config?.predictionCurrency.symbol}USD`}
             </Text>
             <Price
               color="secondary"
@@ -52,15 +52,15 @@ export const MobilePredictionTokenSelector: React.FC<React.PropsWithChildren<Des
               justifyContent="space-between"
               style={{ cursor: 'pointer' }}
               onClick={() => {
-                onClickSwitchToken(list?.token?.symbol)
+                onClickSwitchToken(list?.predictionCurrency.symbol)
                 onDismiss()
               }}
             >
               <Flex>
                 <Box style={{ alignSelf: 'center' }} width={24} height={24} mr="8px">
-                  <TokenImage width={24} height={24} token={list?.token} />
+                  <TokenImage width={24} height={24} token={list?.predictionCurrency} />
                 </Box>
-                <Text fontSize={20} bold color="textSubtle">{`${list?.token?.symbol}USD`}</Text>
+                <Text fontSize={20} bold color="textSubtle">{`${list?.predictionCurrency.symbol}USD`}</Text>
               </Flex>
               <Price
                 displayedDecimals={list?.displayedDecimals}

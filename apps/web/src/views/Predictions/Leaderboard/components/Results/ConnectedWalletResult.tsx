@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { Card, Heading, Table, Th, useMatchBreakpoints } from '@pancakeswap/uikit'
 import Container from 'components/Layout/Container'
 import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
@@ -12,7 +12,7 @@ import MobileRow from './MobileRow'
 
 interface ConnectedWalletResultProps {
   api: string
-  token: Token | undefined
+  token: Currency | undefined
 }
 
 const ConnectedWalletResult: React.FC<React.PropsWithChildren<ConnectedWalletResultProps>> = ({ api, token }) => {

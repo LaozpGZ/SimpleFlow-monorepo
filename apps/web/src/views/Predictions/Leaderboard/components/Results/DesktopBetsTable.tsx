@@ -1,11 +1,11 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { Box, Card, Text } from '@pancakeswap/uikit'
 import PreviousBetsTable from '../PreviousBetsTable'
 
 interface DesktopBetsTableProps {
   account: string
-  token: Token | undefined
+  token: Currency | undefined
   api: string
 }
 

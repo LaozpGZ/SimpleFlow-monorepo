@@ -107,7 +107,8 @@ const PnlTab: React.FC<React.PropsWithChildren<PnlTabProps>> = ({ hasBetHistory,
   const { chainId } = useActiveChainId()
   const currentEpoch = useGetCurrentEpoch()
   const config = useConfig()
-  const tokenPrice = useTokenUsdPriceBigNumber(config?.token)
+
+  const tokenPrice = useTokenUsdPriceBigNumber(config?.betCurrency)
 
   const summary = getPnlSummary(bets, currentEpoch)
 
@@ -142,7 +143,7 @@ const PnlTab: React.FC<React.PropsWithChildren<PnlTabProps>> = ({ hasBetHistory,
           </Text>
           <Text bold fontSize="24px" lineHeight="1" color={netResultIsPositive ? 'success' : 'failure'}>
             {`${netResultIsPositive ? '+' : ''}${formatBnb(netResultAmount, config?.displayedDecimals ?? 0)} ${
-              config?.token?.symbol
+              config?.betCurrency.symbol
             }`}
           </Text>
           <Text small color="textSubtle">
@@ -156,7 +157,7 @@ const PnlTab: React.FC<React.PropsWithChildren<PnlTabProps>> = ({ hasBetHistory,
         </Text>
         <Text bold color={avgBnbWonIsPositive ? 'success' : 'failure'}>
           {`${avgBnbWonIsPositive ? '+' : ''}${formatBnb(avgBnbWonPerRound, config?.displayedDecimals ?? 0)} ${
-            config?.token?.symbol
+            config?.betCurrency?.symbol
           }`}
         </Text>
         <Text small color="textSubtle">
@@ -172,7 +173,7 @@ const PnlTab: React.FC<React.PropsWithChildren<PnlTabProps>> = ({ hasBetHistory,
               <Text bold color="success">{`+${formatBnb(
                 summary.won.bestRound.payout,
                 config?.displayedDecimals ?? 0,
-              )} ${config?.token?.symbol}`}</Text>
+              )} ${config?.betCurrency.symbol}`}</Text>
               <Text ml="4px" small color="textSubtle">
                 ({summary.won.bestRound.multiplier.toFixed(2)}x)
               </Text>
@@ -186,7 +187,9 @@ const PnlTab: React.FC<React.PropsWithChildren<PnlTabProps>> = ({ hasBetHistory,
         <Text mt="16px" bold color="textSubtle">
           {t('Average position entered / round')}
         </Text>
-        <Text bold>{`${formatBnb(avgPositionEntered, config?.displayedDecimals ?? 0)} ${config?.token?.symbol}`}</Text>
+        <Text bold>{`${formatBnb(avgPositionEntered, config?.displayedDecimals ?? 0)} ${
+          config?.betCurrency.symbol
+        }`}</Text>
         <Text small color="textSubtle">
           {avgPositionEnteredInUsdDisplay}
         </Text>

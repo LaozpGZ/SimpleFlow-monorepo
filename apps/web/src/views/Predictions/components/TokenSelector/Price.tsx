@@ -29,7 +29,7 @@ export const Price: React.FC<React.PropsWithChildren<PriceProps>> = ({
   const {
     data: { price: aiLivePrice },
   } = usePredictionPrice({
-    currencyA: config?.token.symbol,
+    currencyA: config?.predictionCurrency.symbol,
     enabled: Boolean(config?.ai),
   })
 

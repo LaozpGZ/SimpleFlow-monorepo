@@ -148,7 +148,7 @@ const HoverData = ({ rounds }: { rounds: { [key: string]: NodeRound } }) => {
     <PairPriceDisplay
       width="100%"
       value={hoverData ? hoverData.answer : formatBigIntToFixed(answerAsBigNumber, 4, 8)}
-      inputSymbol={config?.token?.symbol}
+      inputSymbol={config?.predictionCurrency.symbol}
       outputSymbol="USD"
       format={false}
       flexWrap="wrap"

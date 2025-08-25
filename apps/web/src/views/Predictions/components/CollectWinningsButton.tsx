@@ -29,7 +29,6 @@ const CollectWinningsButton: React.FC<React.PropsWithChildren<CollectWinningsBut
   const dispatch = useLocalDispatch()
   const config = useConfig()
   const predictionsAddress = config?.address ?? '0x'
-  const isNativeToken = config?.isNativeToken ?? false
 
   const [onPresentCollectWinningsModal] = useModal(
     <CollectRoundWinningsModal
@@ -41,8 +40,7 @@ const CollectWinningsButton: React.FC<React.PropsWithChildren<CollectWinningsBut
         if (account) dispatch(fetchNodeHistory({ account, chainId }))
       }}
       predictionsAddress={predictionsAddress}
-      token={config?.token}
-      isNativeToken={isNativeToken}
+      betCurrency={config?.betCurrency}
     />,
     false,
     true,

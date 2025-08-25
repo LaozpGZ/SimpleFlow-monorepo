@@ -42,7 +42,7 @@ const BetResult: React.FC<React.PropsWithChildren<BetResultProps>> = ({ bet, res
   const { isRefundable } = useIsRefundable(bet?.round?.epoch ?? 0)
   const canClaim = useGetIsClaimable(bet?.round?.epoch)
   const config = useConfig()
-  const tokenPrice = useTokenUsdPriceBigNumber(config?.token)
+  const tokenPrice = useTokenUsdPriceBigNumber(config?.betCurrency)
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <Text as="p">{t('Includes your original position and your winnings, minus the %fee% fee.', { fee: '3%' })}</Text>,
   )
@@ -54,7 +54,7 @@ const BetResult: React.FC<React.PropsWithChildren<BetResultProps>> = ({ bet, res
   const totalPayout = tokenPrice.multipliedBy(payout).toNumber()
   const returned = payout + bet.amount
 
-  const tokenSymbol = useMemo(() => config?.token?.symbol ?? '', [config])
+  const tokenSymbol = useMemo(() => config?.betCurrency.symbol ?? '', [config])
   const displayedDecimals = useMemo(() => config?.displayedDecimals ?? 4, [config])
 
   const headerColor = useMemo(() => {
@@ -113,10 +113,10 @@ const BetResult: React.FC<React.PropsWithChildren<BetResultProps>> = ({ bet, res
   }, [result])
 
   const handleSuccess = async () => {
-    if (account && bet?.round?.epoch && config?.token?.chainId) {
+    if (account && bet?.round?.epoch && config?.betCurrency.chainId) {
       // We have to mark the bet as claimed immediately because it does not update fast enough
       dispatch(markAsCollected({ [bet.round.epoch]: true }))
-      dispatch(fetchLedgerData({ account, chainId: config?.token?.chainId, epochs: [bet.round.epoch] }))
+      dispatch(fetchLedgerData({ account, chainId: config?.betCurrency.chainId, epochs: [bet.round.epoch] }))
     }
   }
 
@@ -139,7 +139,7 @@ const BetResult: React.FC<React.PropsWithChildren<BetResultProps>> = ({ bet, res
         )}
         {bet.claimed && bet.claimedHash && (
           <Flex justifyContent="center">
-            <ScanLink href={getBlockExploreLink(bet.claimedHash, 'transaction', config?.token?.chainId)} mb="16px">
+            <ScanLink href={getBlockExploreLink(bet.claimedHash, 'transaction', config?.betCurrency.chainId)} mb="16px">
               {t('View on %site%', { site: t('Explorer') })}
             </ScanLink>
           </Flex>

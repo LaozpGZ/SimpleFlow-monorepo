@@ -91,9 +91,9 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
   const tokenOptions = useMemo(() => {
     return predictionConfigs
       ? Object.values(predictionConfigs)?.map((i) => ({
-          label: i?.token?.symbol ?? '',
-          value: i?.token?.symbol ?? '',
-          imageUrl: getImageUrlFromToken(i?.token),
+          label: i?.predictionCurrency.symbol ?? '',
+          value: i?.predictionCurrency.symbol ?? '',
+          imageUrl: getImageUrlFromToken(i?.predictionCurrency),
         }))
       : []
   }, [predictionConfigs])
@@ -176,7 +176,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
         </Flex>
         <SearchWrapper>
           <AddressSearch
-            token={predictionConfigs?.[pickedTokenSymbol]?.token}
+            token={predictionConfigs?.[pickedTokenSymbol]?.predictionCurrency}
             api={predictionConfigs?.[pickedTokenSymbol]?.api ?? ''}
           />
         </SearchWrapper>

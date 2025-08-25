@@ -20,7 +20,7 @@ const TradingView = () => {
         </Flex>
       }
     >
-      <TradingViewChart id={TRADING_VIEW_COMPONENT_ID} symbol={`BINANCE:${config?.token.symbol}USD`} />
+      <TradingViewChart id={TRADING_VIEW_COMPONENT_ID} symbol={`BINANCE:${config?.predictionCurrency.symbol}USD`} />
     </Suspense>
   )
 }

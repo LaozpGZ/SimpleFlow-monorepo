@@ -20,10 +20,12 @@ interface RoundCardProps {
 
 const RoundCard: React.FC<React.PropsWithChildren<RoundCardProps>> = ({ round, isActive }) => {
   const { epoch, lockPrice, closePrice, totalAmount, bullAmount, bearAmount } = round
-  const currentEpoch = useGetCurrentEpoch()
+
   const { address: account } = useAccount()
-  const ledger = useGetBetByEpoch(account ?? '0x', epoch)
+
   const config = useConfig()
+  const currentEpoch = useGetCurrentEpoch()
+  const ledger = useGetBetByEpoch(account ?? '0x', epoch)
 
   const hasEntered = ledger ? ledger.amount > 0n : false
 

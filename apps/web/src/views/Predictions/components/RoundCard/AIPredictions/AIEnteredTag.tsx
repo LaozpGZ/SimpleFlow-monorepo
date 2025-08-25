@@ -32,11 +32,11 @@ export const AIEnteredTag: React.FC<React.PropsWithChildren<AIEnteredTagProps>> 
     } else {
       tokenAmount = amount
     }
-    return formatTokenv2(tokenAmount, config?.token?.decimals ?? 0, config?.displayedDecimals ?? 0)
+    return formatTokenv2(tokenAmount, config?.betCurrency.decimals ?? 0, config?.displayedDecimals ?? 0)
   }, [amount, config, hasClaimed, multiplier])
 
   const { targetRef, tooltipVisible, tooltip } = useTooltip(
-    <div style={{ whiteSpace: 'nowrap' }}>{`${formattedAmount} ${config?.token?.symbol}`}</div>,
+    <div style={{ whiteSpace: 'nowrap' }}>{`${formattedAmount} ${config?.betCurrency.symbol}`}</div>,
     { placement: 'bottom' },
   )
 

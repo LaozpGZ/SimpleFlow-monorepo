@@ -7,12 +7,13 @@ import { PredictionConfig, PredictionSupportedSymbol } from '../../type'
 
 export const predictions: Record<string, PredictionConfig> = {
   [PredictionSupportedSymbol.ETH]: {
-    isNativeToken: true,
+    betCurrency: Native.onChain(ChainId.ZKSYNC),
+    predictionCurrency: Native.onChain(ChainId.ZKSYNC),
+
     address: predictionsETH[ChainId.ZKSYNC],
     api: GRAPH_API_PREDICTION_ETH[ChainId.ZKSYNC],
     galetoOracleAddress: galetoOracleETH[ChainId.ZKSYNC],
     displayedDecimals: 4,
-    token: Native.onChain(ChainId.ZKSYNC),
     tokenBackgroundColor: '#647ceb',
   },
 }

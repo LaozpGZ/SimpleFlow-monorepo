@@ -6,10 +6,11 @@ import { PredictionConfig, PredictionSupportedSymbol } from '../../type'
 
 export const predictions: Record<string, PredictionConfig> = {
   [PredictionSupportedSymbol.ETH]: {
-    isNativeToken: true,
+    betCurrency: Native.onChain(ChainId.ARBITRUM_ONE),
+    predictionCurrency: Native.onChain(ChainId.ARBITRUM_ONE),
+
     address: predictionsETH[ChainId.ARBITRUM_ONE],
     api: GRAPH_API_PREDICTION_ETH[ChainId.ARBITRUM_ONE],
-    token: Native.onChain(ChainId.ARBITRUM_ONE),
     tokenBackgroundColor: '#647ceb',
 
     displayedDecimals: 2,

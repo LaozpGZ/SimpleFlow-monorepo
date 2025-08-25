@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { Flex, FlexProps, Text } from '@pancakeswap/uikit'
 import { useTokenUsdPriceBigNumber } from 'views/Predictions/hooks/useTokenPrice'
 
@@ -15,7 +15,7 @@ interface NetWinningsProps extends FlexProps {
   amount: number
   textPrefix?: string
   textColor?: string
-  token: Token | undefined
+  token: Currency | undefined
 }
 
 export const NetWinnings: React.FC<React.PropsWithChildren<NetWinningsProps>> = ({ token, ...props }) => {
@@ -47,7 +47,7 @@ export const NetWinningsView: React.FC<React.PropsWithChildren<NetWinningsProps>
   )
 }
 
-export const NetWinningsRow: React.FC<React.PropsWithChildren<{ amount: number; token: Token | undefined }>> = ({
+export const NetWinningsRow: React.FC<React.PropsWithChildren<{ amount: number; token: Currency | undefined }>> = ({
   amount,
   token,
 }) => {

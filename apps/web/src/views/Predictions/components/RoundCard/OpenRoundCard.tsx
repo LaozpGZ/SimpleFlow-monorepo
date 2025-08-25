@@ -87,9 +87,9 @@ const OpenRoundCard: React.FC<React.PropsWithChildren<OpenRoundCardProps>> = ({
   const { targetRef, tooltipVisible, tooltip } = useTooltip(
     <div style={{ whiteSpace: 'nowrap' }}>{`${formatTokenv2(
       betAmount ?? 0n,
-      config?.token?.decimals ?? 0,
+      config?.betCurrency?.decimals ?? 0,
       config?.displayedDecimals ?? 4,
-    )} ${config?.token?.symbol}`}</div>,
+    )} ${config?.betCurrency?.symbol}`}</div>,
     { placement: 'top' },
   )
 

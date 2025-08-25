@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { Skeleton, Table, Td, Th } from '@pancakeswap/uikit'
 import orderBy from 'lodash/orderBy'
 import times from 'lodash/times'
@@ -12,7 +12,7 @@ import { NetWinningsView } from './Results/styles'
 interface PreviousBetsTableProps {
   numberOfBets?: number
   account: string
-  token: Token | undefined
+  token: Currency | undefined
   api: string
 }
 

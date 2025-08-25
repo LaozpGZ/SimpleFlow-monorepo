@@ -89,7 +89,7 @@ export const AIOpenRoundCard: React.FC<React.PropsWithChildren<AIOpenRoundCardPr
   const {
     data: { price: livePrice },
   } = usePredictionPrice({
-    currencyA: config?.token.symbol,
+    currencyA: config?.predictionCurrency.symbol,
   })
 
   // AI Prediction Market
@@ -128,9 +128,9 @@ export const AIOpenRoundCard: React.FC<React.PropsWithChildren<AIOpenRoundCardPr
   const { targetRef, tooltipVisible, tooltip } = useTooltip(
     <div style={{ whiteSpace: 'nowrap' }}>{`${formatTokenv2(
       betAmount ?? 0n,
-      config?.token?.decimals ?? 0,
+      config?.betCurrency.decimals ?? 0,
       config?.displayedDecimals ?? 4,
-    )} ${config?.token?.symbol}`}</div>,
+    )} ${config?.betCurrency.symbol}`}</div>,
     { placement: 'top' },
   )
 

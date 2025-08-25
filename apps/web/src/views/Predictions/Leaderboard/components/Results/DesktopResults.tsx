@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { Card, Table, Th } from '@pancakeswap/uikit'
 import Container from 'components/Layout/Container'
 import { PredictionUser } from 'state/types'
@@ -8,7 +8,7 @@ import DesktopRow from './DesktopRow'
 interface DesktopResultsProps {
   results: PredictionUser[]
   api: string
-  token: Token | undefined
+  token: Currency | undefined
 }
 
 const DesktopResults: React.FC<React.PropsWithChildren<DesktopResultsProps>> = ({ results, api, token }) => {

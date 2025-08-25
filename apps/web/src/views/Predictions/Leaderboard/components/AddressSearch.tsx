@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { useModal } from '@pancakeswap/uikit'
 import AddressInputSelect from 'components/AddressInputSelect'
 import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
@@ -8,7 +8,7 @@ import { useStatModalProps } from 'state/predictions/hooks'
 import WalletStatsModal from './WalletStatsModal'
 
 interface AddressSearchProps {
-  token: Token | undefined
+  token: Currency | undefined
   api: string
 }
 

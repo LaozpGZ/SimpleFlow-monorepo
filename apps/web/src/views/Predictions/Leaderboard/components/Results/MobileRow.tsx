@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import { Box, Text } from '@pancakeswap/uikit'
 import { PredictionUser } from 'state/types'
 import { styled } from 'styled-components'
@@ -9,7 +9,7 @@ import { NetWinningsRow, Row } from './styles'
 interface MobileRowProps {
   rank?: number
   user: PredictionUser
-  token: Token | undefined
+  token: Currency | undefined
   api: string
 }
 

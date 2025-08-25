@@ -51,7 +51,6 @@ export const AIPositionTag: React.FC<React.PropsWithChildren<AIPositionTagProps>
   ...props
 }) => {
   const { t } = useTranslation()
-  // const isUpPosition = betPosition === BetPosition.BULL
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <>

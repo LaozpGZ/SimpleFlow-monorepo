@@ -43,9 +43,15 @@ export const DesktopPredictionTokenSelector: React.FC<React.PropsWithChildren<De
               width="100%"
               padding="8px 39px 8px 16px"
               key={list.address}
-              onClick={() => onClickSwitchToken(list?.token?.symbol)}
+              onClick={() => onClickSwitchToken(list?.predictionCurrency.symbol)}
             >
-              <TokenImage style={{ alignSelf: 'center' }} mr="8px" width={24} height={24} token={list?.token} />
+              <TokenImage
+                style={{ alignSelf: 'center' }}
+                mr="8px"
+                width={24}
+                height={24}
+                token={list?.predictionCurrency}
+              />
               <Text
                 bold
                 color="textSubtle"
@@ -54,7 +60,7 @@ export const DesktopPredictionTokenSelector: React.FC<React.PropsWithChildren<De
                 style={{ alignSelf: 'center' }}
                 mr="auto"
               >
-                {`${list?.token?.symbol}USD`}
+                {`${list?.predictionCurrency.symbol}USD`}
               </Text>
               <Price
                 displayedDecimals={list?.displayedDecimals}

@@ -44,9 +44,9 @@ export const PrizePoolRow: React.FC<React.PropsWithChildren<PrizePoolRowProps>> 
       <Text bold>{t('Prize Pool')}:</Text>
       <Text bold>{`${getPrizePoolAmount(
         totalAmount,
-        config?.token?.decimals ?? 0,
+        config?.betCurrency?.decimals ?? 0,
         config?.balanceDecimals ?? config?.displayedDecimals ?? 0,
-      )} ${config?.token?.symbol}`}</Text>
+      )} ${config?.betCurrency?.symbol}`}</Text>
     </Row>
   )
 }
@@ -79,7 +79,7 @@ export const PayoutRow: React.FC<React.PropsWithChildren<PayoutRowProps>> = ({
         </Text>
         <Text mx="4px">|</Text>
         <Text fontSize="12px" lineHeight="18px">{`${formatBnb(amount, config?.displayedDecimals ?? 0)} ${
-          config?.token?.symbol
+          config?.betCurrency?.symbol
         }`}</Text>
       </Flex>
     </Row>
@@ -247,7 +247,7 @@ export const PrizePoolHistoryRow: React.FC<React.PropsWithChildren<PrizePoolHist
       <Text bold>{`${getPrizePoolAmountHistory(
         totalAmount,
         config?.balanceDecimals ?? config?.displayedDecimals ?? 0,
-      )} ${config?.token?.symbol}`}</Text>
+      )} ${config?.betCurrency?.symbol}`}</Text>
     </Row>
   )
 }

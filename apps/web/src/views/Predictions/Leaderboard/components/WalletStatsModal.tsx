@@ -1,4 +1,4 @@
-import { Token } from '@pancakeswap/sdk'
+import { Currency } from '@pancakeswap/sdk'
 import {
   Box,
   CloseIcon,
@@ -35,7 +35,7 @@ interface WalletStatsModalProps extends InjectedModalProps {
   address: string
   result: PredictionUser
   leaderboardLoadingState: TFetchStatus
-  token: Token | undefined
+  token: Currency | undefined
   api: string
 }
 

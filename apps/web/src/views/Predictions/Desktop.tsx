@@ -151,7 +151,7 @@ const Desktop: React.FC<React.PropsWithChildren> = () => {
 
   const splitInstance = useRef<SplitInstance>()
 
-  const tokenSymbol = useMemo(() => config?.token.symbol ?? '', [config])
+  const tokenSymbol = useMemo(() => config?.predictionCurrency.symbol ?? '', [config])
 
   useEffect(() => {
     if (chartRef.current) {

@@ -38,7 +38,7 @@ const RoundsTab: React.FC<React.PropsWithChildren<RoundsTabProps>> = ({ hasBetHi
     }
   }
 
-  const v1Claim = config?.token?.symbol === 'BNB' ? <V1ClaimCheck /> : null
+  const v1Claim = config?.betCurrency.symbol === 'BNB' ? <V1ClaimCheck /> : null
 
   return hasBetHistory ? (
     <>

@@ -67,7 +67,9 @@ export const TokenSelector = () => {
 
   const tokenListData = useMemo(() => {
     return predictionConfigs
-      ? Object.values(predictionConfigs).filter((i) => i.token.symbol !== config?.token?.symbol)
+      ? Object.values(predictionConfigs).filter(
+          (i) => i.predictionCurrency.symbol !== config?.predictionCurrency.symbol,
+        )
       : []
   }, [config, predictionConfigs])
 
@@ -100,9 +102,9 @@ export const TokenSelector = () => {
     <Flex>
       <Box position="relative" zIndex={11}>
         <SvgToken width={isDesktop ? 70 : 44} height={isDesktop ? 70 : 44} color={config?.tokenBackgroundColor} />
-        {config?.token && (
+        {config?.predictionCurrency && (
           <SelectedToken>
-            <TokenImage width={isDesktop ? 60 : 38} height={isDesktop ? 60 : 38} token={config?.token} />
+            <TokenImage width={isDesktop ? 60 : 38} height={isDesktop ? 60 : 38} token={config?.predictionCurrency} />
           </SelectedToken>
         )}
       </Box>
@@ -123,7 +125,7 @@ export const TokenSelector = () => {
             style={{ alignSelf: isDesktop ? 'center' : 'flex-start' }}
             lineHeight="110%"
           >
-            {`${config?.token?.symbol}USD`}
+            {`${config?.predictionCurrency.symbol}USD`}
           </Text>
           <Flex>
             <Price

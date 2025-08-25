@@ -109,8 +109,8 @@ export const BetBadgeStack = ({
       <br />
       {betAmount && (
         <>
-          ({formatTokenv2(betAmount, config?.token?.decimals ?? 0, config?.displayedDecimals ?? 4)}{' '}
-          {config?.token.symbol})
+          ({formatTokenv2(betAmount, config?.betCurrency.decimals ?? 0, config?.displayedDecimals ?? 4)}{' '}
+          {config?.betCurrency.symbol})
         </>
       )}
     </>,
