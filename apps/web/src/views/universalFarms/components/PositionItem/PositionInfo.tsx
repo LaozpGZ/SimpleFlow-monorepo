@@ -63,6 +63,7 @@ export type PositionInfoProps = {
   amount0?: CurrencyAmount<Token | Currency>
   amount1?: CurrencyAmount<Token | Currency>
   pool?: PoolInfo | null
+  poolId?: `0x${string}`
   detailMode?: boolean
   userPosition?: PositionDetail | V2LPDetail | StableLPDetail | InfinityBinPositionDetail
   showAPR?: boolean
@@ -89,6 +90,7 @@ export const PositionInfo = memo((props: PositionInfoProps) => {
     amount0,
     amount1,
     pool,
+    poolId,
     userPosition,
     detailMode,
     showAPR = true,
@@ -237,14 +239,14 @@ export const PositionInfo = memo((props: PositionInfoProps) => {
         {isStaked ? (
           [Protocol.STABLE, Protocol.V2].includes(protocol) ? (
             <V2Earnings pool={pool} />
-          ) : Protocol.V3 === protocol && pool?.chainId ? (
-            <V3Earnings tokenId={tokenId} chainId={pool?.chainId} />
+          ) : Protocol.V3 === protocol && chainId ? (
+            <V3Earnings tokenId={tokenId} chainId={chainId} />
           ) : null
         ) : null}
         {Protocol.InfinityCLAMM === protocol ? (
-          <InfinityCLEarnings tokenId={tokenId} chainId={pool?.chainId} poolId={pool?.lpAddress} />
+          <InfinityCLEarnings tokenId={tokenId} chainId={chainId} poolId={poolId} />
         ) : Protocol.InfinityBIN === protocol ? (
-          <InfinityBinEarnings chainId={pool?.chainId} poolId={pool?.lpAddress} />
+          <InfinityBinEarnings chainId={chainId} poolId={poolId} />
         ) : null}
       </DetailInfoDesc>
     </>

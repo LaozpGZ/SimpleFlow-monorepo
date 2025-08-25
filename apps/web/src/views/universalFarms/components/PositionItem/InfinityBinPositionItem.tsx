@@ -91,6 +91,7 @@ export const InfinityBinPositionItem = memo(
         chainId={chainId}
         link={link}
         pool={pool}
+        poolId={poolId}
         totalPriceUSD={totalPriceUSD}
         amount0={amount0}
         amount1={amount1}
