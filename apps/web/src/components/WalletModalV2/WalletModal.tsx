@@ -288,7 +288,7 @@ export const WalletContent = ({
       maxWidth={isMobile ? '100%' : '377px'}
       overflowY={isMobile ? undefined : 'auto'}
     >
-      {evmAccount || solanaAccount ? (
+      {(evmAccount || solanaAccount) && viewState === ViewState.WALLET_INFO ? (
         <>
           <Box padding="16px">
             <ConnectedWalletsButton
@@ -300,37 +300,26 @@ export const WalletContent = ({
               }}
             />
           </Box>
-          <FlexGap mb="10px" gap="8px" justifyContent="space-between" alignItems="center" paddingRight="16px" mt="8px">
-            {viewState > ViewState.SEND_ASSETS && (
-              <FlexGap alignItems="center" gap="16px" ml={isMobile ? '8px' : '16px'}>
-                <Button
-                  variant="tertiary"
-                  style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
-                  onClick={goBack}
-                >
-                  <ArrowBackIcon fontSize="24px" color={theme.colors.primary60} />
-                </Button>
-                {[ViewState.RECEIVE_OPTIONS, ViewState.RECEIVE_QR].includes(viewState) && (
-                  <Text fontSize="20px" fontWeight="600" color="text">
-                    {t('Receive Crypto')}
-                  </Text>
-                )}
-              </FlexGap>
-            )}
-
-            {![ViewState.RECEIVE_OPTIONS, ViewState.RECEIVE_QR].includes(viewState) && (
-              <CopyAddress tooltipMessage={t('Copied')} account={selectedWallet || ''} />
-            )}
-            {viewState <= ViewState.SEND_ASSETS && (
-              <FlexGap>
-                <DisconnectButton scale="xs" onClick={onDisconnect}>
-                  {t('Disconnect')}
-                </DisconnectButton>
-              </FlexGap>
-            )}
-          </FlexGap>
         </>
       ) : null}
+      {viewState > ViewState.SEND_ASSETS && (
+        <FlexGap py="16px" gap="8px" justifyContent="space-between" alignItems="center">
+          <FlexGap alignItems="center" gap="8px" ml={isMobile ? '8px' : '16px'}>
+            <Button
+              variant="tertiary"
+              style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
+              onClick={goBack}
+            >
+              <ArrowBackIcon fontSize="24px" color={theme.colors.primary60} />
+            </Button>
+            {[ViewState.RECEIVE_OPTIONS, ViewState.RECEIVE_QR].includes(viewState) && (
+              <Text fontSize="20px" fontWeight="600" color="text">
+                {t('Receive Crypto')}
+              </Text>
+            )}
+          </FlexGap>
+        </FlexGap>
+      )}
 
       <CancelGiftProvider>
         <Box padding={isMobile ? '0' : '0 16px 16px'}>

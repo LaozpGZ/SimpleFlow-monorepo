@@ -141,7 +141,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
   }, [solanaWallet, solanaAccount])
 
   return (
-    <Box padding="12px 0px" maxWidth="450px" width="100%" mt="24px">
+    <Box padding="12px 0px" maxWidth="450px" width="100%">
       <FlexGap gap="12px" flexDirection="column">
         <OptionCard $clickable={Boolean(evmAccount)} onClick={evmAccount ? onSelectEVM : undefined}>
           <Flex alignItems="center">
