@@ -42,6 +42,8 @@ const useAuth = () => {
       if (connectorId === EvmConnectorNames.Injected) {
         const eip6963detail = eip6963Providers.find((p) => p.info.name.toLowerCase() === title.toLowerCase())
         if (eip6963detail) {
+          console.info('eip6963detail', eip6963detail)
+          console.info('wallet.icon', wallet.icon)
           if (!eip6963detail.info.icon) {
             eip6963detail.info.icon = wallet.icon as string
           }
