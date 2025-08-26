@@ -9,7 +9,9 @@ import { useRecentXOrders } from 'views/Swap/x/useRecentXOders'
 
 import { clearAllTransactions } from 'state/transactions/actions'
 import { useRecentBridgeOrders } from 'views/Swap/Bridge/hooks/useRecentBridgeOrders'
-import { useAccount } from 'wagmi'
+import { Address } from 'viem'
+import useAccountActiveChain from 'hooks/useAccountActiveChain'
+import { isEvm } from '@pancakeswap/chains'
 
 import ConnectWalletButton from '../../ConnectWalletButton'
 import { AutoRow } from '../../Layout/Row'
@@ -38,14 +40,16 @@ function sortByTransactionTime(a: TransactionItem, b: TransactionItem) {
 }
 
 export function RecentTransactions() {
-  const { address, chainId } = useAccount()
+  const { chainId, unifiedAccount: account } = useAccountActiveChain()
+  const isEvmChain = isEvm(chainId)
 
   const dispatch = useAppDispatch()
 
   const { data: recentXOrders } = useRecentXOrders({
-    chainId,
-    address,
+    chainId: isEvmChain ? chainId : undefined,
+    address: isEvmChain ? (account as Address) : undefined,
     refetchInterval: 10_000,
+    enabled: isEvmChain && Boolean(account),
   })
 
   // Cross-Chain Orders
@@ -54,7 +58,7 @@ export function RecentTransactions() {
     isFetching: isRecentBridgeOrdersLoading,
     fetchNextPage,
   } = useRecentBridgeOrders({
-    address,
+    address: isEvmChain ? (account as Address) : undefined,
   })
 
   const hasMoreCrossChainOrders = Boolean(
@@ -111,7 +115,7 @@ export function RecentTransactions() {
 
   return (
     <Box onClick={(e) => e.stopPropagation()}>
-      {address ? (
+      {account ? (
         xOrders.length > 0 || hasTransactions || recentCrossChainOrders.length > 0 ? (
           <>
             <AutoRow mb="1rem" style={{ justifyContent: 'space-between' }}>
