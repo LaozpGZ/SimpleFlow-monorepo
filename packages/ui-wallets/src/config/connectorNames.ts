@@ -2,15 +2,12 @@ import { WalletName } from '@solana/wallet-adapter-base'
 import { ExodusWalletName } from '@solana/wallet-adapter-exodus'
 import { GlowWalletName } from '@solana/wallet-adapter-glow'
 import {
-  BitgetWalletName,
-  BitpieWalletName,
   Coin98WalletName,
   CoinbaseWalletName,
   MathWalletName,
   PhantomWalletName,
   SafePalWalletName,
   SolflareWalletName,
-  SolongWalletName,
   TokenPocketWalletName,
   TrustWalletName,
   WalletConnectWalletName,
@@ -45,12 +42,10 @@ export const SolanaWalletNames = {
   Solflare: SolflareWalletName,
   // Slope: SlopeWalletName,
   Glow: GlowWalletName,
-  BitPie: BitpieWalletName,
   // Bitget: BitgetWalletName, // @NOTICE: BitgetWalletName is wrong
   Bitget: 'Bitget Wallet' as WalletName<'Bitget Wallet'>,
   Exodus: ExodusWalletName,
   Backpack: 'Backpack' as WalletName<'Backpack'>,
-  Solong: SolongWalletName,
 } as const
 
 export type SolanaConnectorNames = {

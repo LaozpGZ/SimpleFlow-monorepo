@@ -31,11 +31,9 @@ export enum WalletIds {
   Solflare = 'solflare',
   Slope = 'slope',
   Glow = 'glow',
-  BitPie = 'bitpie',
   BitGet = 'bitget',
   Exodus = 'exodus',
   Backpack = 'backpack',
-  Solong = 'solong',
 }
 
 export const isWalletId = (id: string): id is WalletIds => {

@@ -50,11 +50,9 @@ export enum WalletIds {
   Solflare = 'solflare',
   Slope = 'slope',
   Glow = 'glow',
-  BitPie = 'bitpie',
   BitGet = 'bitget',
   Exodus = 'exodus',
   Backpack = 'backpack',
-  Solong = 'solong',
 }
 
 type WalletConfigBase = {
