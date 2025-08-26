@@ -148,6 +148,21 @@ const SocialLogin: React.FC<SocialLoginProps> = ({
           </SocialLoginButtonVertical>
         </FlexGap>
       </Column>
+      {isMobile ? (
+        <>
+          <Divider>
+            <Text color="textSubtle" style={{ transform: 'translateY(-12px)' }}>
+              {t('or')}
+            </Text>
+          </Divider>
+          <NoticeCard onClick={onDismiss}>
+            <FlexGap gap="4px">
+              <ArrowBackIcon />
+              <Text>{t('Continue with Web3 Wallet')}</Text>
+            </FlexGap>
+          </NoticeCard>
+        </>
+      ) : null}
     </>
   )
 }
