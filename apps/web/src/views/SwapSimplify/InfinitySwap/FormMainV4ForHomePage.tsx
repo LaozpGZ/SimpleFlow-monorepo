@@ -22,7 +22,7 @@ import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks/useBridgeAvail
 import { getDefaultToken } from 'views/Swap/utils'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { isSolana, NonEVMChainId } from '@pancakeswap/chains'
 
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
@@ -69,10 +69,12 @@ export function FormMainForHomePage({ inputAmount, outputAmount, tradeLoading }:
 
       if (isInput) {
         const isOutputChainSupported =
-          outputChainId &&
-          supportedBridgeChains.data?.some(
-            (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
-          )
+          isSolana(newCurrency.chainId) ||
+          isSolana(outputChainId) ||
+          (outputChainId &&
+            supportedBridgeChains.data?.some(
+              (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
+            ))
 
         if (!isOutputChainSupported) {
           // if output chain is not supported, reset output currency
