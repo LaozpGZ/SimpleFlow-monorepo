@@ -71,7 +71,7 @@ export const getWalletsConfig = ({
       id: WalletIds.Trust,
       title: 'Trust Wallet',
       icon: `${ASSET_CDN}/web/wallets/trust.png`,
-      connectorId: EvmConnectorNames.TrustWallet,
+      connectorId: EvmConnectorNames.Injected,
       solanaAdapterName: SolanaWalletNames.Trust,
       networks: [WalletAdaptedNetwork.EVM, WalletAdaptedNetwork.Solana],
       get installed() {

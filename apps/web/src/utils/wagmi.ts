@@ -38,8 +38,6 @@ export const walletConnectNoQrCodeConnector = walletConnect({
   projectId: 'e542ff314e26ff34de2d4fba98db70bb',
 })
 
-export const trustConnector = injected({ target: 'trust', shimDisconnect: false })
-
 const bloctoConnector = blocto({
   appId: 'e2f2f0cd-3ceb-4dec-b293-bb555f2ed5af',
 })
@@ -88,7 +86,6 @@ export const CONNECTOR_MAP = {
   [EvmConnectorNames.WalletLink]: coinbaseConnector,
   [EvmConnectorNames.WalletConnect]: walletConnectConnector,
   [EvmConnectorNames.Blocto]: bloctoConnector,
-  [EvmConnectorNames.TrustWallet]: trustConnector,
   [EvmConnectorNames.BinanceW3W]: binanceWeb3WalletConnector(),
   [EvmConnectorNames.CyberWallet]: cyberWalletConnector,
 }
@@ -100,8 +97,6 @@ export const CONNECTORS = [
   coinbaseConnector,
   walletConnectConnector,
   bloctoConnector,
-  // ledgerConnector,
-  trustConnector,
   binanceWeb3WalletConnector(),
   ...(cyberWalletConnector ? [cyberWalletConnector as any] : []),
 ]
