@@ -320,7 +320,12 @@ const UserMenu = () => {
         >
           {!isMobile && !isMenuOpen
             ? ({ isOpen }) =>
-                isOpen && <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveOptionsOpen(true)} />
+                isOpen && (
+                  <UserMenuItems
+                    onReceiveClick={() => setIsReceiveOptionsOpen(true)}
+                    onDismiss={() => setIsMenuOpen(false)}
+                  />
+                )
             : undefined}
         </UIKitUserMenu>
 
@@ -328,7 +333,10 @@ const UserMenu = () => {
         {!isMobile && (
           <ClickablePopover isOpen={isMenuOpen}>
             {isMenuOpen && (
-              <UserMenuItems account={finalAddress} onReceiveClick={() => setIsReceiveOptionsOpen(true)} />
+              <UserMenuItems
+                onReceiveClick={() => setIsReceiveOptionsOpen(true)}
+                onDismiss={() => setIsMenuOpen(false)}
+              />
             )}
           </ClickablePopover>
         )}
