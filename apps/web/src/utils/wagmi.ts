@@ -12,6 +12,7 @@ import { createConfig, http } from 'wagmi'
 import { mainnet } from 'wagmi/chains'
 import { coinbaseWallet, injected, safe, walletConnect } from 'wagmi/connectors'
 import { customMetaMaskConnector } from 'wallet/metamaskConnector'
+import { ASSET_CDN } from 'config/constants/endpoints'
 import { fallbackWithRank } from './fallbackWithRank'
 import { CLIENT_CONFIG, publicClient } from './viem'
 
@@ -40,6 +41,16 @@ export const walletConnectNoQrCodeConnector = walletConnect({
 
 const bloctoConnector = blocto({
   appId: 'e2f2f0cd-3ceb-4dec-b293-bb555f2ed5af',
+})
+
+const safePalConnector = injected({
+  shimDisconnect: false,
+  target: {
+    provider: (w) => (w as any).safepalProvider,
+    icon: `${ASSET_CDN}/web/wallets/safepal.png`,
+    id: 'safepal',
+    name: 'SafePal',
+  },
 })
 
 export const binanceWeb3WalletConnector = getWagmiConnectorV2()
@@ -83,6 +94,7 @@ export const cyberWalletConnector = isCyberWallet()
 export const CONNECTOR_MAP = {
   [EvmConnectorNames.Injected]: injectedConnector,
   //  [ConnectorNames.Safe]: safe(),
+  [EvmConnectorNames.SafePal]: safePalConnector,
   [EvmConnectorNames.WalletLink]: coinbaseConnector,
   [EvmConnectorNames.WalletConnect]: walletConnectConnector,
   [EvmConnectorNames.Blocto]: bloctoConnector,
@@ -95,6 +107,7 @@ export const CONNECTORS = [
   injectedConnector,
   safe(),
   coinbaseConnector,
+  safePalConnector,
   walletConnectConnector,
   bloctoConnector,
   binanceWeb3WalletConnector(),

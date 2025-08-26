@@ -23,6 +23,7 @@ export enum EvmConnectorNames {
   WalletLink = 'coinbaseWalletSDK',
   TrustWallet = 'trust',
   CyberWallet = 'cyberWallet',
+  SafePal = 'SafePal',
 }
 
 // official supported solana wallets,
