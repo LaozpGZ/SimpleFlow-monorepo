@@ -4093,7 +4093,7 @@
   "Your transaction has been submitted to the network": "La tua transazione è stata inviata alla rete",
   "Send didn’t go through. Please try again.": "L'invio non è andato a buon fine. Riprova.",
   "Transaction timeout. Please try again": "Timeout della transazione. Riprova",
-  "Trade with %product%": "Trade with %product%",
-  "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product%": "Fai trading con %product%",
+  "to Win %amount%": "per vincere %amount%",
+  "Trade with %product% to Win %amount%": "Fai trading con %product% per vincere %amount%"
 }
