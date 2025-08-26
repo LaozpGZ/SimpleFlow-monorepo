@@ -272,6 +272,7 @@ export type GetSolanaEVMBridgeMetadataParams = {
   amount: string
   recipientOnDestChain?: string | null
   user?: string | null
+  slippageTolerance?: string
 }
 
 export interface MetadataResponse {
@@ -313,7 +314,16 @@ const ZERO_SOLANA_ADDRESS = '1nc1nerator11111111111111111111111111111111'
 export const postSolanaEVMBridgeMetadata = async (
   params: GetSolanaEVMBridgeMetadataParams,
 ): Promise<MetadataSuccessResponse> => {
-  const { recipientOnDestChain, user, originChainId, destinationChainId, inputToken, outputToken, amount } = params
+  const {
+    recipientOnDestChain,
+    user,
+    originChainId,
+    destinationChainId,
+    inputToken,
+    outputToken,
+    amount,
+    slippageTolerance,
+  } = params
 
   const isOriginSolana = isSolana(Number(originChainId))
   const isDestinationSolana = isSolana(Number(destinationChainId))
@@ -342,6 +352,7 @@ export const postSolanaEVMBridgeMetadata = async (
       originChainId: isOriginSolana ? RELAY_CHAIN_ID : Number(originChainId),
       destinationChainId: isDestinationSolana ? RELAY_CHAIN_ID : Number(destinationChainId),
       recipient,
+      slippageTolerance,
     })
 
     const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)

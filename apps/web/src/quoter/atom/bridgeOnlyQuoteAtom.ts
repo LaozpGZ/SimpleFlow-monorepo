@@ -47,14 +47,16 @@ export const bridgeOnlyQuoteAtom = atomFamily(
             amount: inputAmount.quotient.toString(),
             user: isSolana(inputAmount.currency.chainId) ? accountState.solanaAccount : accountState.account,
             recipientOnDestChain: isSolana(outputCurrency.chainId) ? accountState.solanaAccount : accountState.account,
+            slippageTolerance: params.slippageTolerance,
           })
-        : await postSolanaEVMBridgeMetadata({
+        : await postMetadata({
             inputToken: getTokenAddress(inputAmount.currency),
             originChainId: inputAmount.currency.chainId,
             outputToken: getTokenAddress(outputCurrency),
             destinationChainId: outputCurrency.chainId,
             amount: inputAmount.quotient.toString(),
-            ...postBridgeSwapParams,
+            commands: postBridgeSwapParams.commands,
+            recipientOnDestChain: postBridgeSwapParams.recipientOnDestChain,
           })
 
       if (!metadata.supported) {

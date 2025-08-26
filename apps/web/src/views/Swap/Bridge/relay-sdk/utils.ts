@@ -12,6 +12,7 @@ export function validateQuoteRequest(params: RelayQuoteRequest): void {
     'destinationCurrency',
     'amount',
     'tradeType',
+    'slippageTolerance',
   ] as const
 
   for (const field of required) {
