@@ -105,9 +105,6 @@ const useCreateConfirmSteps = (
 
   const { requiresApproval, approvalData } = useBridgeCheckApproval(order)
 
-  console.log('approvalData:', approvalData)
-  console.log('requiresApproval:', requiresApproval)
-
   return useCallback(async () => {
     const steps: ConfirmModalState[] = []
     if (
