@@ -160,7 +160,7 @@ export const walletsConfig = <config extends Config = Config, context = unknown>
       id: LegacyWalletIds.BinanceW3W,
       title: 'Binance Wallet',
       icon: `${ASSET_CDN}/web/wallets/binance-w3w.png`,
-      connectorId: getBinanceConnectorId(),
+      connectorId: ConnectorNames.BinanceW3W,
       get installed() {
         if (isBinanceWeb3WalletInstalled()) {
           return true
