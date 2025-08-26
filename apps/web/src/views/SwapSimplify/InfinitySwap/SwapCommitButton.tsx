@@ -14,7 +14,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { AutoRow } from 'components/Layout/Row'
 import { RoutingSettingsButton, RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { BIG_INT_ZERO } from 'config/constants/exchange'
-import { useCurrency } from 'hooks/Tokens'
+import { useCurrency, useUnifiedCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import { useUnifiedCurrencyBalances } from 'hooks/useUnifiedCurrencyBalance'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
@@ -37,7 +37,7 @@ import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModa
 import { EVMInterfaceOrder, isBridgeOrder, isClassicOrder, isSVMOrder, isXOrder } from 'views/Swap/utils'
 import { useAccount } from 'wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { isEvm, NonEVMChainId } from '@pancakeswap/chains'
+import { isEvm, isSolana, NonEVMChainId } from '@pancakeswap/chains'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 
 import { ConfirmSwapModalV3 } from '../../Swap/Bridge/CrossChainConfirmSwapModal/ConfirmSwapModalV3'
@@ -61,9 +61,25 @@ const useSwapCurrencies = () => {
     [Field.INPUT]: { currencyId: inputCurrencyId, chainId: inputChainId },
     [Field.OUTPUT]: { currencyId: outputCurrencyId, chainId: outputChainId },
   } = useSwapState()
-  const inputCurrency = useCurrency(inputCurrencyId, inputChainId) as Currency
-  const outputCurrency = useCurrency(outputCurrencyId, outputChainId) as Currency
-  return { inputCurrency, outputCurrency }
+  const inputCurrency = useUnifiedCurrency(inputCurrencyId, inputChainId) as Currency
+  const outputCurrency = useUnifiedCurrency(outputCurrencyId, outputChainId) as Currency
+  return useMemo(() => ({ inputCurrency, outputCurrency }), [inputCurrency, outputCurrency])
+}
+
+function useCheckConnectSolanaForSolanaBridge() {
+  const { account } = useAccountActiveChain()
+
+  const { outputCurrency, inputCurrency } = useSwapCurrencies()
+
+  if (!outputCurrency || !inputCurrency) return false
+
+  const isCrossChain = inputCurrency.chainId !== outputCurrency.chainId
+  const isSolanaBridge = isCrossChain && (isSolana(outputCurrency.chainId) || isSolana(inputCurrency.chainId))
+
+  // Ensure evm account is connected first. If not, connect EVM before connecting Solana
+  const needConnectSolanaForBridgeFromEVMToSolana = account && isSolanaBridge && isSolana(outputCurrency.chainId)
+
+  return needConnectSolanaForBridgeFromEVMToSolana
 }
 
 const WrapCommitButtonReplace: React.FC<React.PropsWithChildren> = ({ children }) => {
@@ -97,9 +113,12 @@ const ConnectButtonReplace = ({ children }) => {
     return (chainId === NonEVMChainId.SOLANA && !solanaAccount) || (chainId !== NonEVMChainId.SOLANA && !account)
   }, [chainId, solanaAccount, account])
 
-  if (noAccount) {
+  const needConnectSolanaForBridgeFromEVMToSolana = useCheckConnectSolanaForSolanaBridge()
+
+  if (noAccount || needConnectSolanaForBridgeFromEVMToSolana) {
     return <ConnectWalletButton width="100%" withIcon />
   }
+
   return children
 }
 
