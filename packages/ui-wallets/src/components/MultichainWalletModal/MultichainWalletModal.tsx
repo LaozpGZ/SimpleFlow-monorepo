@@ -124,7 +124,10 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
 
       if (wallet.installed || wallet.evmCanInitWithoutInstall || wallet.solanaCanInitWithoutInstall) {
         if (network === WalletAdaptedNetwork.EVM) {
-          if (!wallet.installed && !wallet.evmCanInitWithoutInstall) return
+          if (!wallet.installed && !wallet.evmCanInitWithoutInstall) {
+            setPreviewStatus(PreviewStatus.NotInstalled)
+            return
+          }
           evmLogin(wallet as WalletConfigV3<EvmConnectorNames>)
             .then((connectData) => {
               if (connectData) {
@@ -148,7 +151,10 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
         }
 
         if (network === WalletAdaptedNetwork.Solana && wallet.solanaAdapterName) {
-          if (!wallet.installed && !wallet.solanaCanInitWithoutInstall) return
+          if (!wallet.installed && !wallet.solanaCanInitWithoutInstall) {
+            setPreviewStatus(PreviewStatus.NotInstalled)
+            return
+          }
           solanaLogin(wallet.solanaAdapterName as WalletName)
             .then((address) => {
               handleWalletConnected(wallet, network, { accounts: [address], chainId: NonEVMChainId.SOLANA })

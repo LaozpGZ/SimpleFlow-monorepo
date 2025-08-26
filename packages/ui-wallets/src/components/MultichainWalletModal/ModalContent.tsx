@@ -165,7 +165,8 @@ export const ModalContent: React.FC<ModalContentProps> = ({
 
   const onWalletSelected = useCallback(
     (w: WalletConfigV3, network: WalletAdaptedNetwork) => {
-      if (!isWalletInstalledAndPreview(w, network)) return
+      if (!isWalletInstalledAndPreview(w, network) && !w.solanaCanInitWithoutInstall && !w.evmCanInitWithoutInstall)
+        return
 
       setPreviewStatus(PreviewStatus.Confirming)
 

@@ -116,7 +116,7 @@ export const getWalletsConfig = ({
         return isBinanceWeb3WalletInstalled()
       },
       evmCanInitWithoutInstall: true,
-      solanaCanInitWithoutInstall: true,
+      solanaCanInitWithoutInstall: false,
       MEVSupported: true,
     },
     {
