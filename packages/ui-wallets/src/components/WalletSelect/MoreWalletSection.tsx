@@ -2,7 +2,7 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import { ArrowDropDownIcon, ArrowDropUpIcon, AtomBox, AutoRow, Button, Flex, FlexGap, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
-import { WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
+import { WalletAdaptedNetwork, WalletConfigV3, WalletIds } from '../../types'
 import { WalletSelectItem, WalletSelectSection } from './WalletSelectSection'
 
 export type MoreWalletSectionProps = {
@@ -54,7 +54,7 @@ const MoreWalletSectionLabel: React.FC<{ onClick: () => void }> = ({ onClick }) 
 
 export const MoreWalletSection: React.FC<MoreWalletSectionProps> = ({ wallets, onClick, style }) => {
   const extraTagNum = wallets.length - 5
-  const installedWallets = wallets.filter((wallet) => wallet.installed)
+  const installedWallets = wallets.filter((wallet) => wallet.installed && wallet.id !== WalletIds.Solflare)
   const displayWallets = installedWallets.length
     ? wallets.filter((wallet) => !wallet.installed).slice(0, 5)
     : wallets.slice(0, 5)
