@@ -96,8 +96,9 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
         reconnect()
       } catch (error) {
         console.error('Failed to setup smart account connector:', error)
-        // On setup failure, fallback to embedded wallet
-        setIsSmartWalletReady(true)
+        // On setup failure, keep trying - don't mark as ready
+        // This prevents fallback to embedded wallet
+        setIsSmartWalletReady(false)
         setIsSettingUp(false)
       }
     }
