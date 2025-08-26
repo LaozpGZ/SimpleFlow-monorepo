@@ -1,81 +1,145 @@
-import { useTranslation } from '@pancakeswap/localization'
-import { AutoColumn, Card, CardBody, DynamicSection, Grid, Heading, Spinner } from '@pancakeswap/uikit'
+import { useMemo } from 'react'
 import Page from 'components/Layout/Page'
-import { FieldLiquidityShape } from 'components/Liquidity/Form/FieldLiquidityShape'
-import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
-import { FieldBinStep } from 'views/CreateLiquidityPool/components/FieldBinStep'
-import { FieldClTickSpacing } from 'views/CreateLiquidityPool/components/FieldClTickSpacing'
-import { FieldFeeLevel } from 'views/CreateLiquidityPool/components/FieldFeeLevel'
-import { FieldFeeTierSetting } from 'views/CreateLiquidityPool/components/FieldFeeTierSetting'
-import { FieldHookSettings } from 'views/CreateLiquidityPool/components/FieldHookSettings'
-import { FieldSelectCurrencies } from 'views/CreateLiquidityPool/components/FieldSelectCurrencies'
-import { FieldStartingPrice } from 'views/CreateLiquidityPool/components/FieldStartingPrice'
+import styled, { css } from 'styled-components'
+import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
+import { ArrowForwardIcon, Box, Card, CardBody, Container, FlexGap, LinkExternal, Text } from '@pancakeswap/uikit'
+import { useTranslation } from '@pancakeswap/localization'
+import { LightGreyCard, NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
+import { useActiveChainId } from 'hooks/useActiveChainId'
+import { getChainName } from '@pancakeswap/chains'
 import { BreadcrumbNav } from './components/BreadcrumbNav'
-import { FieldCreateDepositAmount } from './components/FieldCreateDepositAmount'
-import { FieldPoolType } from './components/FieldPoolType'
-import { FieldPriceRange } from './components/FieldPriceRange'
-import { MessagePoolInitialized } from './components/MessagePoolInitialized'
-import { SubmitCreateButton } from './components/SubmitCreateButton'
-import { useInfinityCreateFormQueryState } from './hooks/useInfinityFormState/useInfinityFormQueryState'
-import { usePoolKey } from './hooks/useInfinityFormState/usePoolKey'
-import { useIsPoolInitialized } from './hooks/useIsPoolInitialized'
-import { ResponsiveTwoColumns } from './styles'
 
-export const CreateLiquidityInfinityForm = () => {
-  const { chainId } = useSelectIdRouteParams()
-  const { t } = useTranslation()
-  const { isBin, isCl, feeTierSetting } = useInfinityCreateFormQueryState()
-  const poolKey = usePoolKey()
-  const { data: poolInitialized } = useIsPoolInitialized(poolKey, chainId)
+const StyledCard = styled(LightGreyCard)<{ $disabled?: boolean }>`
+  border-radius: 24px;
+  border-color: ${({ theme }) => theme.colors.inputSecondary};
 
-  // Show loading animation while we wait for chainId
-  if (!chainId) {
-    return (
-      <Grid style={{ placeItems: 'center', minHeight: '50vh' }}>
-        <Spinner />
-      </Grid>
-    )
+  padding: 12px 16px;
+
+  display: flex;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+
+  opacity: ${({ $disabled }) => ($disabled ? 0.5 : 1)};
+  cursor: ${({ $disabled }) => ($disabled ? 'not-allowed' : 'pointer')};
+  transition: background-color 0.125s ease-out;
+
+  .arrow-icon {
+    opacity: 0.5;
+    transition: opacity 0.2s ease-out;
   }
+
+  ${({ $disabled }) =>
+    !$disabled &&
+    css`
+      &:hover {
+        background-color: ${({ theme }) => theme.colors.input};
+
+        .arrow-icon {
+          opacity: 1;
+        }
+      }
+
+      &:active {
+        background-color: ${({ theme }) => theme.colors.inputSecondary};
+      }
+    `}
+`
+
+function InfinityCard({ disabled }: { disabled?: boolean }) {
+  const { t } = useTranslation()
+
+  return (
+    <StyledCard
+      mt="16px"
+      title={disabled ? t('Infinity Pools are not supported on this chain') : undefined}
+      $disabled={disabled}
+    >
+      <Box>
+        <Text fontSize="20px" color="secondary" bold>
+          {t('Infinity Pool')}
+        </Text>
+        <Text small>
+          {t(
+            'Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.',
+          )}
+        </Text>
+      </Box>
+      <Box>
+        <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
+      </Box>
+    </StyledCard>
+  )
+}
+
+export const CreateLiquiditySelector = () => {
+  const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
+  const chainName = getChainName(chainId)
+
+  const isInfinitySupported = useMemo(() => INFINITY_SUPPORTED_CHAINS.includes(chainId), [chainId])
 
   return (
     <Page>
-      <BreadcrumbNav chainId={chainId} />
-      <Heading as="h3" scale="lg" mb="24px" mt="40px">
-        {t('Create Infinity Liquidity Pool')}
-      </Heading>
-      <Grid gridTemplateColumns={['1fr', '1fr', '1fr', 'repeat(2, 1fr)']} style={{ gap: '24px' }}>
-        <Card style={{ height: 'fit-content' }}>
-          <CardBody>
-            <AutoColumn gap="24px">
-              <FieldSelectCurrencies />
-              <ResponsiveTwoColumns>
-                <FieldPoolType />
-                <FieldFeeTierSetting />
-              </ResponsiveTwoColumns>
-              <DynamicSection disabled={feeTierSetting === 'dynamic'}>
-                <FieldFeeLevel />
-              </DynamicSection>
-              {isBin && <FieldBinStep />}
-              {isCl && <FieldClTickSpacing />}
-              <FieldHookSettings />
-              <MessagePoolInitialized />
-            </AutoColumn>
-          </CardBody>
-        </Card>
+      <BreadcrumbNav />
+      <Container px="0" mt="24px" maxWidth={[null, null, null, '520px']}>
         <Card>
           <CardBody>
-            <DynamicSection disabled={poolInitialized}>
-              <AutoColumn gap={['16px', null, null, '24px']}>
-                <FieldCreateDepositAmount />
-                <FieldStartingPrice />
-                <FieldPriceRange />
-                {isBin && <FieldLiquidityShape />}
-                <SubmitCreateButton />
-              </AutoColumn>
-            </DynamicSection>
+            <FlexGap justifyContent="space-between" flexWrap="wrap" gap="16px">
+              <Text>{t('Select the DEX type of the liquidity pool')}</Text>
+              <LinkExternal color="primary60" href="https://docs.pancakeswap.finance/earn/pancakeswap-pools">
+                {t('Learn More')}
+              </LinkExternal>
+            </FlexGap>
+
+            {isInfinitySupported ? (
+              <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/infinity`}>
+                <InfinityCard />
+              </NextLinkFromReactRouter>
+            ) : (
+              <>
+                <InfinityCard disabled />
+              </>
+            )}
+
+            <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v3`}>
+              <StyledCard mt="16px">
+                <Box>
+                  <Text fontSize="20px" color="secondary" bold>
+                    {t('V3 Pool')}
+                  </Text>
+                  <Text small>
+                    {t(
+                      'Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.',
+                    )}
+                  </Text>
+                </Box>
+                <Box>
+                  <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
+                </Box>
+              </StyledCard>
+            </NextLinkFromReactRouter>
+
+            <NextLinkFromReactRouter to={`/liquidity/create/${chainName}/v2`}>
+              <StyledCard mt="16px">
+                <Box>
+                  <Text fontSize="20px" color="secondary" bold>
+                    {t('V2 Pool')}
+                  </Text>
+                  <Text small>
+                    {t(
+                      'Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.',
+                    )}
+                  </Text>
+                </Box>
+                <Box>
+                  <ArrowForwardIcon width="24px" height="24px" className="arrow-icon" />
+                </Box>
+              </StyledCard>
+            </NextLinkFromReactRouter>
           </CardBody>
         </Card>
-      </Grid>
+      </Container>
     </Page>
   )
 }

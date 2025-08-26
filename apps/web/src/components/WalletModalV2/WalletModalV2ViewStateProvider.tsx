@@ -46,6 +46,10 @@ export const WalletModalV2ViewStateProvider: React.FC<WalletModalV2ViewStateProv
           return ViewState.SEND_FORM
         case ViewState.CLAIM_GIFT_CONFIRM:
           return ViewState.CLAIM_GIFT
+        case ViewState.RECEIVE_QR:
+          return ViewState.RECEIVE_OPTIONS
+        case ViewState.RECEIVE_OPTIONS:
+          return ViewState.WALLET_INFO
         default:
           return ViewState.WALLET_INFO
       }

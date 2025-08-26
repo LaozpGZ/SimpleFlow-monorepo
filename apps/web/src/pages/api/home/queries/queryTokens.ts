@@ -63,8 +63,8 @@ async function getTokenPrices(chainId: ChainId, addresses: `0x${string}`[]) {
 
   return addresses.map((address) => {
     const key = getCurrencyKey({ chainId, address })!
-    const price = result[key]
-    const price24h = result24h[key]
+    const price = result[key] ?? 0
+    const price24h = result24h[key] ?? 0
     return {
       priceUSD: price,
       percent: 100 * ((price24h ? price / price24h : 0) - 1),

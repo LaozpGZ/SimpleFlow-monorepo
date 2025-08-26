@@ -12,9 +12,9 @@ export const AddLiquidityButton: React.FC<ButtonProps & { wrapperProps?: BoxProp
   const router = useRouter()
   const handleClick = useCallback(() => {
     router.push(to)
-  }, [])
+  }, [router, to])
   return (
-    <Box width="100%" {...wrapperProps}>
+    <Box width="100%" minWidth="max-content" {...wrapperProps}>
       <Button onClick={handleClick} endIcon={<AddIcon color="invertedContrast" />} {...props}>
         {t('Add Liquidity')}
       </Button>

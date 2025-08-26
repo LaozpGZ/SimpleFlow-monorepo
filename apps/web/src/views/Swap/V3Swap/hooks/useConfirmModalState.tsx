@@ -2,23 +2,21 @@ import { usePreviousValue } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { getPermit2Address } from '@pancakeswap/permit2-sdk'
 import { PriceOrder } from '@pancakeswap/price-api-sdk'
-import { TradeType, Currency, CurrencyAmount, Percent, Token } from '@pancakeswap/swap-sdk-core'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { Currency, CurrencyAmount, Percent, Token } from '@pancakeswap/swap-sdk-core'
 import { useToast } from '@pancakeswap/uikit'
 import { Permit2Signature } from '@pancakeswap/universal-router-sdk'
 import { ConfirmModalState, useAsyncConfirmPriceImpactWithoutFee } from '@pancakeswap/widgets-internal'
-import { SolanaDescriptionWithTx, ToastDescriptionWithTx } from 'components/Toast'
+import { ToastDescriptionWithTx } from 'components/Toast'
 import { BLOCK_CONFIRMATION } from 'config/confirmation'
 import { ALLOWED_PRICE_IMPACT_HIGH, PRICE_IMPACT_WITHOUT_FEE_CONFIRM_MIN } from 'config/constants/exchange'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useEIP5792Status } from 'hooks/useIsEIP5792Supported'
 import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useNativeWrap } from 'hooks/useNativeWrap'
-import { Calldata, usePermit2 } from 'hooks/usePermit2'
+import { usePermit2 } from 'hooks/usePermit2'
 import { usePermit2Requires } from 'hooks/usePermit2Requires'
 import { useSafeTxHashTransformer } from 'hooks/useSafeTxHashTransformer'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { RetryableError, retry } from 'state/multicall/retry'
 import { useCurrencyBalance } from 'state/wallet/hooks'
 import { logGTMSwapTxSentEvent } from 'utils/customGTMEventTracking'
@@ -31,26 +29,20 @@ import {
   TransactionNotFoundError,
   TransactionReceipt,
   TransactionReceiptNotFoundError,
-  createWalletClient,
-  custom,
   erc20Abi,
 } from 'viem'
-import { eip5792Actions } from 'viem/experimental'
 import { useWalletType } from 'views/Mev/hooks'
 import { WalletType } from 'views/Mev/types'
 import { BridgeOrderWithCommands, isBridgeOrder, isClassicOrder, isSVMOrder, isXOrder } from 'views/Swap/utils'
 import { waitForXOrderReceipt } from 'views/Swap/x/api'
 import { useSendXOrder } from 'views/Swap/x/useSendXOrder'
-import { useAccount, useSendTransaction, useWalletClient } from 'wagmi'
+import { useAccount, useSendTransaction } from 'wagmi'
 
 import { useSetAtom } from 'jotai'
 import { calculateGasMargin } from 'utils'
 import { viemClients } from 'utils/viem'
 import { getBridgeCalldata } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
-import { VersionedTransaction } from '@solana/web3.js'
-import { UltraSwapError, UltraSwapErrorType, ultraSwapService } from '@pancakeswap/solana-router-sdk'
-import { confirmTransaction } from '@pancakeswap/solana-core-sdk'
 
 import { ChainId as EvmChainId } from '@pancakeswap/chains'
 import { useUserSlippage } from '@pancakeswap/utils/user'
@@ -59,20 +51,13 @@ import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfi
 import { Permit2Schema } from 'views/Swap/Bridge/types'
 import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useRefreshSolanaTokenBalances } from 'state/token/solanaTokenBalances'
-import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
 import { usePriceBreakdown } from 'views/SwapSimplify/hooks/usePriceBreakdown'
 
-import { BatchCall, getBatchedTransaction as getBatchedTransactionHelper } from './batchHelper'
 import { eip5792UserRejectUpgradeError, userRejectedError } from './useSendSwapTransaction'
 import { useSwapCallback } from './useSwapCallback'
-
-export interface ConfirmAction {
-  step: ConfirmModalState
-  action: (nextStep?: ConfirmModalState) => Promise<void>
-  showIndicator: boolean
-  getCalldata?: <T = Calldata>() => T
-}
+import { useSolSwapStep } from './steps/useSolSwapStep'
+import { useBatchSwapTransaction } from './steps/useBatchSwapTransaction'
+import { ConfirmStepContext, ConfirmAction } from './steps/step.type'
 
 const getTokenAllowance = ({
   chainId,
@@ -151,8 +136,7 @@ const useConfirmActions = (
   spender: Address | undefined,
 ) => {
   const { t } = useTranslation()
-  const { chainId, account, solanaAccount } = useAccountActiveChain()
-  const { signTransaction, wallet: solanaWallet } = useWallet()
+  const { chainId, account } = useAccountActiveChain()
 
   const [deadline] = useTransactionDeadline()
   const safeTxHashTransformer = useSafeTxHashTransformer()
@@ -187,16 +171,13 @@ const useConfirmActions = (
   const { sendTransactionAsync } = useSendTransaction()
 
   const [confirmState, setConfirmState] = useState<ConfirmModalState>(ConfirmModalState.REVIEWING)
-  const [txHash, setTxHash] = useState<Hex | undefined>(undefined)
+  const [txHash, setTxHash] = useState<string | undefined>(undefined)
   const [orderHash, setOrderHash] = useState<Hex | undefined>(undefined)
   const [errorMessage, setErrorMessage] = useState<string | undefined>(undefined)
 
   const setActiveBridgeOrderMetadata = useSetAtom(activeBridgeOrderMetadataAtom)
 
   const { toastSuccess, toastError, toastInfo } = useToast()
-
-  // Refresh function to update cached Solana balances after swap
-  const refreshSolanaBalances = useRefreshSolanaTokenBalances(solanaWallet?.adapter.publicKey?.toBase58())
 
   const resetState = useCallback(() => {
     setConfirmState(ConfirmModalState.REVIEWING)
@@ -239,24 +220,6 @@ const useConfirmActions = (
     [chainId],
   )
 
-  const connection = useSolanaConnectionWithRpcAtom()
-
-  const retryWaitForSolanaTransaction = useCallback(
-    async (signature?: string) => {
-      if (!signature) return undefined
-      const waitTx = async () => {
-        try {
-          await confirmTransaction(connection, signature)
-        } catch (error) {
-          throw new RetryableError()
-        }
-      }
-      const { promise } = retry(waitTx, { n: 5, minWait: 3000, maxWait: 5000 })
-      return promise
-    },
-    [connection],
-  )
-
   // define the action of each step
   const revokeStep = useMemo(() => {
     const action = async (nextState?: ConfirmModalState) => {
@@ -267,7 +230,6 @@ const useConfirmActions = (
         if (result?.hash) {
           const hash = await safeTxHashTransformer(result.hash)
           setTxHash(hash)
-
           await retryWaitForTransaction({ hash })
         }
 
@@ -321,6 +283,16 @@ const useConfirmActions = (
   ])
 
   const { approvalData, error, refetch, signPermit2 } = useBridgeCheckApproval(order)
+
+  const confirmStepContext: ConfirmStepContext = {
+    order,
+    amountToApprove,
+    spender,
+    resetState,
+    showError,
+    setConfirmState,
+    setTxHash,
+  }
 
   const permitStep = useMemo(() => {
     return {
@@ -378,7 +350,7 @@ const useConfirmActions = (
           if (result && result.hash) {
             const chain = amountToApprove?.currency.chainId
             await retryWaitForTransaction({
-              hash: txHash,
+              hash: txHash as Hex | undefined,
               confirmations: chain ? BLOCK_CONFIRMATION[chain] : undefined,
             })
           }
@@ -518,7 +490,6 @@ const useConfirmActions = (
     }
   }, [
     approvalData,
-    account,
     order,
     retryWaitForTransaction,
     safeTxHashTransformer,
@@ -527,6 +498,7 @@ const useConfirmActions = (
     t,
     error?.code,
     error?.message,
+    refetch,
   ])
 
   const { recipient: recipientAddress } = useSwapState()
@@ -780,97 +752,7 @@ const useConfirmActions = (
     }
   }, [t, toastInfo, setConfirmState])
 
-  const solanaSwapStep = useMemo(() => {
-    return {
-      step: ConfirmModalState.PENDING_CONFIRMATION,
-      action: async () => {
-        if (!isSVMOrder(order) || !solanaAccount || !order.trade) {
-          resetState()
-          return
-        }
-        const publicKey = solanaWallet?.adapter.publicKey
-        if (!signTransaction || !publicKey) {
-          throw new UltraSwapError(
-            'Wallet not connected, or missing wallet functions',
-            UltraSwapErrorType.WALLET_SIGNING_FAILED,
-          )
-        }
-        // Get the transaction from the order data
-        const { transaction, requestId } = order.trade
-        if (!transaction) {
-          showError('No transaction data found for Solana swap')
-          return
-        }
-
-        try {
-          const based64tx = Buffer.from(transaction, 'base64')
-          const versionedTransaction = VersionedTransaction.deserialize(new Uint8Array(based64tx))
-          const signedTransaction = await signTransaction(versionedTransaction)
-          const serializedTransaction = Buffer.from(signedTransaction.serialize()).toString('base64')
-
-          // Submit swap to UltraSwapService
-          const response = await ultraSwapService.submitSwap(serializedTransaction, requestId)
-
-          if (response.status === 'Failed') {
-            const error = new UltraSwapError(response.error, UltraSwapErrorType.FAILED, response.signature)
-            showError(error.message || response.error || 'Solana swap failed')
-            return
-          }
-
-          const { signature } = response
-          setTxHash(signature as any)
-
-          // Log swap for analytics
-          logSwap({
-            tradeType: TradeType.EXACT_INPUT,
-            account: solanaAccount ?? '0x',
-            chainId: order.trade.inputAmount.currency.chainId,
-            hash: signature as any,
-            inputAmount: order.trade.inputAmount.toExact(),
-            outputAmount: order.trade.outputAmount.toExact(),
-            input: order.trade.inputAmount.currency,
-            output: order.trade.outputAmount.currency,
-            type: 'SolanaSwap',
-          })
-
-          toastSuccess(
-            t('Success!'),
-            <SolanaDescriptionWithTx txHash={signature}>{t('Solana swap submitted')}</SolanaDescriptionWithTx>,
-          )
-
-          setConfirmState(ConfirmModalState.COMPLETED)
-
-          // Wait for transaction confirmation then refresh balances
-          await retryWaitForSolanaTransaction(signature)
-          refreshSolanaBalances()
-        } catch (error: any) {
-          console.error('Solana swap error', error)
-          if (error?.message?.includes('rejected')) {
-            showError('Transaction rejected by user')
-          } else if (error?.message?.includes('insufficient')) {
-            showError('Insufficient balance for transaction')
-          } else if (error?.message?.includes('wallet')) {
-            showError('Please connect your Solana wallet first')
-          } else {
-            showError(typeof error === 'string' ? error : error?.message || 'Solana swap failed')
-          }
-        }
-      },
-      showIndicator: false,
-      getCalldata: () => [],
-    }
-  }, [
-    solanaAccount,
-    order,
-    resetState,
-    showError,
-    toastSuccess,
-    t,
-    signTransaction,
-    retryWaitForSolanaTransaction,
-    refreshSolanaBalances,
-    solanaWallet?.adapter.publicKey,
-  ])
+  const solanaSwapStep = useSolSwapStep(confirmStepContext)
 
   const actions = useMemo(() => {
     return {
@@ -905,7 +787,6 @@ const useConfirmActions = (
     txHash,
     orderHash,
     actions,
-
     confirmState,
     setConfirmState,
     setTxHash,
@@ -927,69 +808,6 @@ export const useConfirmModalState = (
   const tradePriceBreakdown = usePriceBreakdown(order)
   const { walletType } = useWalletType()
   const { chainId } = useActiveChainId()
-  const { data: walletClient } = useWalletClient({ chainId })
-  const { connector } = useAccount()
-  const eip5792Status = useEIP5792Status()
-  const { toastError } = useToast()
-  const { t } = useTranslation()
-  const performEip5792Lock = useRef(false)
-
-  const getBatchedTransaction = useCallback(
-    (steps: ConfirmModalState[]) =>
-      getBatchedTransactionHelper(steps, actions, chainId, amountToApprove, spender, order),
-    [
-      actions,
-      amountToApprove?.currency.address,
-      amountToApprove?.currency.isToken,
-      amountToApprove?.quotient,
-      chainId,
-      order,
-      spender,
-    ],
-  )
-
-  const sendBatchedTransaction = useCallback(
-    async (calls: BatchCall[]) => {
-      if (!walletClient?.transport || !spender) {
-        console.error('Missing required parameters')
-        return null
-      }
-
-      const provider = await connector?.getProvider()
-      if (!provider) return null
-
-      const client = createWalletClient({
-        transport: custom(provider as any),
-        account: walletClient.account,
-        chain: walletClient.chain,
-      }).extend(eip5792Actions())
-
-      try {
-        const result = await client.sendCalls({
-          calls,
-          forceAtomic: true,
-        })
-
-        if (!result.id) {
-          console.error('No transaction ID returned')
-          return null
-        }
-
-        return { id: result.id, client } as const
-      } catch (error) {
-        console.warn('Error sending batched transaction:', error)
-        if (userRejectedError(error)) {
-          showError('Transaction rejected')
-        } else if (!eip5792UserRejectUpgradeError(error)) {
-          const errorMsg = typeof error === 'string' ? error : (error as any)?.message
-          showError(errorMsg)
-          toastError(t('Failed'), errorMsg)
-        }
-        throw error
-      }
-    },
-    [connector, walletClient, spender, t, toastError, showError],
-  )
 
   const confirmPriceImpactWithoutFee = useAsyncConfirmPriceImpactWithoutFee(
     (Array.isArray(tradePriceBreakdown)
@@ -1034,74 +852,16 @@ export const useConfirmModalState = (
     [],
   )
 
-  const canCallActionBatched = useCallback(
-    (steps: ConfirmModalState[]) => {
-      if (!walletClient?.transport || !spender) {
-        return false
-      }
-      // Disable batching for Base chain
-      if (chainId === EvmChainId.BASE) {
-        return false
-      }
-      if (eip5792Status === 'unsupported' || steps.length <= 1) {
-        return false
-      }
-      const calls = getBatchedTransaction(steps)
-      if (!calls || calls.length < steps.length) {
-        return false
-      }
-      return true
-    },
-    [eip5792Status, getBatchedTransaction, walletClient?.transport, spender, chainId],
-  )
-
-  const callActionBatched = useCallback(
-    async (steps: ConfirmModalState[]) => {
-      setTxHash(undefined)
-      setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
-      const calls = getBatchedTransaction(steps)
-      if (!calls) {
-        resetState()
-        return
-      }
-      try {
-        const result = await sendBatchedTransaction(calls)
-        if (!result?.id || !result.client) {
-          return
-        }
-        // Monitor transaction status using viem's EIP-5792 implementation
-        const { promise: statusPromise } = retry(
-          async () => {
-            const status = await result.client.getCallsStatus({ id: result.id })
-            if (status.status === 'failure') {
-              throw new Error('Transaction failed')
-            }
-            if (status.status !== 'success') {
-              throw new RetryableError()
-            }
-            return status
-          },
-          {
-            n: 3,
-            minWait: 2000,
-            maxWait: 3500,
-          },
-        )
-
-        const status = await statusPromise
-        if (status.status === 'success') {
-          setTxHash(status.receipts?.[0]?.transactionHash)
-          setConfirmState(ConfirmModalState.COMPLETED)
-        }
-      } catch (error) {
-        console.warn('[5792] Failed to call batched action:', error)
-        if (userRejectedError(error) || eip5792UserRejectUpgradeError(error)) {
-          throw error
-        }
-      }
-    },
-    [setConfirmState, resetState, setTxHash, getBatchedTransaction, sendBatchedTransaction, walletType],
-  )
+  const { canCallActionBatched, callSwapBatched, performEip5792Lock } = useBatchSwapTransaction({
+    actions,
+    amountToApprove,
+    spender,
+    order,
+    showError,
+    setConfirmState,
+    setTxHash,
+    resetState,
+  })
 
   const callToAction = useCallback(
     async (skipBatch: boolean = false) => {
@@ -1124,7 +884,7 @@ export const useConfirmModalState = (
               symbol: amountToApprove?.currency.symbol,
             })
             performEip5792Lock.current = true
-            await callActionBatched(steps)
+            await callSwapBatched(steps)
             return
           } catch (error) {
             if (eip5792UserRejectUpgradeError(error)) {
@@ -1153,7 +913,18 @@ export const useConfirmModalState = (
         state: steps[0],
       })
     },
-    [canCallActionBatched, callActionBatched, actions, createSteps, performStep, swapPreflightCheck],
+    [
+      canCallActionBatched,
+      callSwapBatched,
+      actions,
+      createSteps,
+      performStep,
+      swapPreflightCheck,
+      amountToApprove?.currency.symbol,
+      chainId,
+      performEip5792Lock,
+      walletType,
+    ],
   )
 
   // auto perform the next step

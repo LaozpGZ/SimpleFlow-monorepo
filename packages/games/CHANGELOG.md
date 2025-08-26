@@ -1,5 +1,12 @@
 # @pancakeswap/games
 
+## 0.0.14
+
+### Patch Changes
+
+- Updated dependencies [cd589e1]
+  - @pancakeswap/chains@0.6.0
+
 ## 0.0.13
 
 ### Patch Changes

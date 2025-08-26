@@ -22,6 +22,7 @@ import {
   CrossChainFarmStepType,
   CrossChainFarmTransactionType,
   FarmTransactionStatus,
+  SerializableTransactionReceipt,
   TransactionType,
   addTransaction,
 } from './actions'
@@ -50,6 +51,7 @@ export function useTransactionAdder(overrideChainId?: number): (
     currencyId1?: string
     expectedCurrencyOwed0?: string
     expectedCurrencyOwed1?: string
+    receipt?: SerializableTransactionReceipt
   },
 ) => void {
   const { account, chainId: activeChainId } = useAccountActiveChain()
@@ -69,6 +71,7 @@ export function useTransactionAdder(overrideChainId?: number): (
         type,
         order,
         crossChainFarm,
+        receipt,
       }: {
         summary?: string
         translatableSummary?: { text: string; data?: Record<string, string | number | undefined> }
@@ -77,6 +80,7 @@ export function useTransactionAdder(overrideChainId?: number): (
         type?: TransactionType
         order?: Order
         crossChainFarm?: CrossChainFarmTransactionType
+        receipt?: SerializableTransactionReceipt
       } = {},
     ) => {
       if (!account) return
@@ -113,6 +117,7 @@ export function useTransactionAdder(overrideChainId?: number): (
           type,
           order,
           crossChainFarm,
+          receipt,
         }),
       )
     },

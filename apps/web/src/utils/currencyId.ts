@@ -1,4 +1,4 @@
-import { Currency, UnifiedCurrency } from '@pancakeswap/sdk'
+import { UnifiedCurrency } from '@pancakeswap/sdk'
 
 export function currencyId(currency?: UnifiedCurrency | null): string {
   if (currency?.isNative) return currency.symbol?.toUpperCase()

@@ -11,7 +11,6 @@ import { getFarmApr } from 'utils/apr'
 import { useAccount } from 'wagmi'
 import MigrationFarmTable from '../MigrationFarmTable'
 import { V3Step1DesktopColumnSchema } from '../types'
-import { PosManagerMigrationFarmTable } from './PositionManagerTable'
 
 const MigrationFarmStep: React.FC<React.PropsWithChildren<{ step: number }>> = ({ step }) => {
   const { t } = useTranslation()
@@ -73,15 +72,6 @@ const MigrationFarmStep: React.FC<React.PropsWithChildren<{ step: number }>> = (
     <>
       <MigrationFarmTable
         title={t('V2/SS Farms')}
-        noStakedFarmText={t('You are not currently staking in any farms that require migrations.')}
-        account={account ?? '0x'}
-        columnSchema={V3Step1DesktopColumnSchema}
-        farms={chosenFarmsMemoized}
-        userDataReady={userDataReady}
-        step={step}
-      />
-      <PosManagerMigrationFarmTable
-        title={t('Position Managers')}
         noStakedFarmText={t('You are not currently staking in any farms that require migrations.')}
         account={account ?? '0x'}
         columnSchema={V3Step1DesktopColumnSchema}

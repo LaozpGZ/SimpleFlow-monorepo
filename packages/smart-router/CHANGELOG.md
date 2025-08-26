@@ -1,5 +1,26 @@
 # @pancakeswap/smart-router
 
+## 7.5.0
+
+### Minor Changes
+
+- cd589e1: support solana chain
+
+### Patch Changes
+
+- 1f6c9ec: Allow non-whitelisted hook in smart-router
+- Updated dependencies [cd589e1]
+- Updated dependencies [1f6c9ec]
+  - @pancakeswap/swap-sdk-core@1.5.0
+  - @pancakeswap/chains@0.6.0
+  - @pancakeswap/infinity-sdk@1.0.4
+  - @pancakeswap/stable-swap-sdk@2.0.8
+  - @pancakeswap/sdk@5.8.16
+  - @pancakeswap/token-lists@0.0.16
+  - @pancakeswap/v3-sdk@3.9.5
+  - @pancakeswap/multicall@3.7.2
+  - @pancakeswap/tokens@0.7.7
+
 ## 7.4.0
 
 ### Minor Changes

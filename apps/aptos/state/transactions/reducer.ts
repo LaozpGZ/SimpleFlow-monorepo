@@ -38,12 +38,12 @@ const reducer = createReducer(initialState, (builder) =>
   builder
     .addCase(
       addTransaction,
-      (transactions, { payload: { chainId, from, hash, approval, summary, translatableSummary, type } }) => {
+      (transactions, { payload: { chainId, from, hash, approval, summary, translatableSummary, type, receipt } }) => {
         if (transactions[chainId]?.[hash]) {
           throw Error('Attempted to add existing transaction.')
         }
         const txs = transactions[chainId] ?? {}
-        txs[hash] = { hash, approval, summary, translatableSummary, from, addedTime: now(), type }
+        txs[hash] = { hash, approval, summary, translatableSummary, from, addedTime: now(), type, receipt }
         transactions[chainId] = txs
       },
     )

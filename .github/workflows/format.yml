@@ -5,6 +5,7 @@ on:
 
 jobs:
   code:
+    if: github.head_ref != 'l10n_develop'
     runs-on: ubuntu-latest
     timeout-minutes: 6
 

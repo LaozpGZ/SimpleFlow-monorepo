@@ -15,7 +15,7 @@ import { useUserSingleHopOnly } from '@pancakeswap/utils/user'
 import { PancakeSwapXTag } from 'components/PancakeSwapXTag'
 import { usePCSX, usePCSXFeatureEnabled } from 'hooks/usePCSX'
 import { useSpeedQuote } from 'hooks/useSpeedQuote'
-import { memo } from 'react'
+import { memo, useEffect } from 'react'
 import {
   useOnlyOneAMMSourceEnabled,
   useUserInfinitySwapEnable,
@@ -24,6 +24,7 @@ import {
   useUserV2SwapEnable,
   useUserV3SwapEnable,
 } from 'state/user/smartRouter'
+import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
 import { TabContent } from './TabContent'
 
 export const CustomizeRoutingTab = memo(() => {
@@ -39,6 +40,18 @@ export const CustomizeRoutingTab = memo(() => {
   const [singleHopOnly, setSingleHopOnly] = useUserSingleHopOnly()
   const [speedQuote, setSpeedQuote] = useSpeedQuote()
   const onlyOneAMMSourceEnabled = useOnlyOneAMMSourceEnabled()
+  const { pauseQuoting, resumeQuoting } = useAllTypeBestTrade()
+
+  useEffect(() => {
+    // Pause quoting when component mounts to prevent unnecessary quote updates
+    // while user is adjusting routing settings
+    pauseQuoting()
+
+    // Resume quoting when component unmounts
+    return () => {
+      resumeQuoting()
+    }
+  }, [pauseQuoting, resumeQuoting])
 
   return (
     <TabContent type="to_right">

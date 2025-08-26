@@ -25,8 +25,6 @@ import {
   toTokenValueByCurrency,
 } from '@pancakeswap/widgets-internal'
 import TransactionsModal from 'components/App/Transactions/TransactionsModal'
-import GlobalSettings from 'components/Menu/GlobalSettings'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { V3_MIGRATION_SUPPORTED_CHAINS } from 'config/constants/supportChains'
 import { useAtom } from 'jotai'
@@ -413,9 +411,6 @@ export const PositionPage = () => {
                 <IconButton onClick={onPresentTransactionsModal} variant="text" scale="xs">
                   <HistoryIcon color="textSubtle" width="24px" />
                 </IconButton>
-                <NotificationDot show={expertMode}>
-                  <GlobalSettings mode={SettingsMode.SWAP_LIQUIDITY} scale="xs" />
-                </NotificationDot>
               </ButtonWrapper>
             </ControlWrapper>
           ) : null}
@@ -443,9 +438,6 @@ export const PositionPage = () => {
                 <IconButton onClick={onPresentTransactionsModal} variant="text" scale="xs">
                   <HistoryIcon color="textSubtle" width="24px" />
                 </IconButton>
-                <NotificationDot show={expertMode}>
-                  <GlobalSettings mode={SettingsMode.SWAP_LIQUIDITY} scale="xs" />
-                </NotificationDot>
               </ButtonWrapper>
             </ControlWrapper>
           ) : null}

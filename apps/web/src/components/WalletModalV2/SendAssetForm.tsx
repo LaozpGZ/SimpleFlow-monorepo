@@ -1,4 +1,4 @@
-import { ChainId, getChainName } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId, getChainName } from '@pancakeswap/chains'
 import { useDebounce } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Percent } from '@pancakeswap/sdk'
@@ -9,6 +9,7 @@ import {
   Box,
   Button,
   CloseIcon,
+  CogIcon,
   FlexGap,
   IconButton,
   Input,
@@ -20,13 +21,15 @@ import {
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'
 import CurrencyLogo from 'components/Logo/CurrencyLogo'
-import { ToastDescriptionWithTx } from 'components/Toast'
+import { ToastDescriptionWithTx, SolanaDescriptionWithTx } from 'components/Toast'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { BalanceData } from 'hooks/useAddressBalance'
 import useCatchTxError from 'hooks/useCatchTxError'
+
 import { useERC20 } from 'hooks/useContract'
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import useNativeCurrency from 'hooks/useNativeCurrency'
+import { useSolanaTokenPrice } from 'hooks/solana/useSolanaTokenPrice'
 import { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { logGTMGiftPreviewEvent } from 'utils/customGTMEventTracking'
@@ -38,9 +41,35 @@ import { CHAINS_WITH_GIFT_CLAIM } from 'views/Gift/constants'
 import { SendGiftContext, useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
 import { useUserInsufficientBalanceLight } from 'views/SwapSimplify/hooks/useUserInsufficientBalance'
 import { useAccount, usePublicClient, useSendTransaction } from 'wagmi'
+import { useWallet } from '@solana/wallet-adapter-react'
+import {
+  Connection,
+  PublicKey,
+  SystemProgram,
+  Transaction,
+  LAMPORTS_PER_SOL,
+  ComputeBudgetProgram,
+} from '@solana/web3.js'
+import {
+  createTransferInstruction,
+  TOKEN_PROGRAM_ID,
+  TOKEN_2022_PROGRAM_ID,
+  createTransferCheckedInstruction,
+  getAssociatedTokenAddress,
+  createAssociatedTokenAccountInstruction,
+  getAccount,
+} from '@solana/spl-token'
+import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
 import { ActionButton } from './ActionButton'
 import SendTransactionFlow from './SendTransactionFlow'
 import { ViewState } from './type'
+import { estimateSimpleSolanaFee, getQuickSolanaFeeEstimate } from './utils/solanaTxFeeEstimation'
+import { useEnhancedTokenLogo } from './hooks/useEnhancedTokenLogo'
+import useSolanaTxError from './hooks/useSolanaTxError'
+import { useSolanaPriorityFee } from './hooks/useSolanaPriorityFee'
+import { SolanaPriorityFeeModal } from './SolanaPriorityFeeModal'
+import { createSolanaSendTransaction, detectWalletTransactionSupport } from './utils/solanaSendTransaction'
+import { sendTransactionSafely } from './utils/solanaSafeTransaction'
 
 const FormContainer = styled(Box)`
   display: flex;
@@ -99,7 +128,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
 
   const { t } = useTranslation()
   const [address, setAddress] = useState<string | null>(null)
-  const debouncedAddress = useDebounce(address, 500)
+  const debouncedAddress = useDebounce(address, 300)
   const [amount, setAmount] = useState('')
   const [addressError, setAddressError] = useState('')
   const [estimatedFee, setEstimatedFee] = useState<string | null>(null)
@@ -111,11 +140,28 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const publicClient = usePublicClient({ chainId: asset.chainId })
   const { toastSuccess } = useToast()
   const { fetchWithCatchTxError, loading: attemptingTxn } = useCatchTxError()
+  const { executeSolanaTransaction, loading: solanaTxLoading } = useSolanaTxError()
   const { includeStarterGas, nativeAmount, isUserInsufficientBalance } = useSendGiftContext()
+  const { getEnhancedLogoURI } = useEnhancedTokenLogo()
+  const { computeBudgetConfig, currentFee } = useSolanaPriorityFee()
+
+  // Priority Fee Modal state
+  const [showPriorityFeeModal, setShowPriorityFeeModal] = useState(false)
 
   // Get native currency for fee calculation
   const nativeCurrency = useNativeCurrency(asset.chainId)
-  const { data: nativeCurrencyPrice } = useCurrencyUsdPrice(nativeCurrency)
+  const { data: evmNativeCurrencyPrice } = useCurrencyUsdPrice(nativeCurrency)
+  const isSolanaChain = asset.chainId === NonEVMChainId.SOLANA
+
+  // For Solana, use the specialized hook to get SOL price
+  const solNativeMint = 'So11111111111111111111111111111111111111112' // Native SOL mint
+  const { data: solPrice } = useSolanaTokenPrice({
+    mint: isSolanaChain ? solNativeMint : undefined,
+    enabled: isSolanaChain,
+  })
+
+  // Use the appropriate price based on the chain
+  const nativeCurrencyPrice = isSolanaChain ? solPrice : evmNativeCurrencyPrice
   const currency = useMemo(
     () =>
       asset.token.address === zeroAddress
@@ -134,74 +180,145 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   const tokenBalance = tryParseAmount(asset.quantity, currency)
 
   const maxAmountInput = useMemo(() => maxAmountSpend(tokenBalance), [tokenBalance])
-  const isNativeToken = asset.token.address === zeroAddress
+
+  // Solana wallet support
+  const walletContext = useWallet()
+  const { publicKey: solanaPublicKey, wallet } = walletContext
+  const connection = useSolanaConnectionWithRpcAtom()
+
+  const isNativeToken = useMemo(() => {
+    return isSolanaChain ? asset.token.symbol === 'SOL' : asset.token.address === zeroAddress
+  }, [isSolanaChain, asset.token.symbol, asset.token.address])
   const erc20Contract = useERC20(asset.token.address as `0x${string}`, { chainId: asset.chainId })
   const { sendTransactionAsync } = useSendTransaction()
 
   const estimateTransactionFee = useCallback(async () => {
-    if (!address || !amount || !publicClient || !accountAddress) return
+    if (!address || !amount) return
 
     try {
-      let gasEstimate: bigint = 0n
+      if (isSolanaChain) {
+        if (!solanaPublicKey) return
 
-      if (isNativeToken) {
-        // For native token, estimate gas for a simple transfer
-        gasEstimate =
-          (await publicClient.estimateGas({
-            account: accountAddress,
-            to: address as `0x${string}`,
-            value: tryParseAmount(amount, currency)?.quotient ?? 0n,
-          })) ?? 0n
-      } else {
-        // For ERC20 tokens, estimate gas for a transfer call
-        const transferData = {
-          to: address as `0x${string}`,
-          amount: tryParseAmount(amount, currency)?.quotient ?? 0n,
+        try {
+          // Use new simplified estimation system
+          const priorityFeeLamports = Math.floor(currentFee * 1_000_000_000) // Convert SOL to lamports
+
+          const feeBreakdown = await estimateSimpleSolanaFee({
+            connection,
+            solanaPublicKey,
+            recipientAddress: address,
+            isNativeToken,
+            tokenInfo: isNativeToken
+              ? undefined
+              : {
+                  address: asset.token.address,
+                  decimals: asset.token.decimals,
+                },
+            priorityFeeLamports,
+          })
+
+          setEstimatedFee(feeBreakdown.formattedFee)
+
+          if (nativeCurrencyPrice) {
+            const feeUsd = parseFloat(feeBreakdown.formattedFee) * nativeCurrencyPrice
+            setEstimatedFeeUsd(feeUsd.toFixed(6))
+          } else {
+            setEstimatedFeeUsd(null)
+          }
+        } catch (error) {
+          console.error('Error estimating Solana fee:', error)
+
+          // Use quick fallback estimation
+          const priorityFeeLamports = Math.floor(currentFee * 1_000_000_000)
+          const formattedFee = getQuickSolanaFeeEstimate(priorityFeeLamports, !isNativeToken)
+          setEstimatedFee(formattedFee)
+
+          if (nativeCurrencyPrice) {
+            const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
+            setEstimatedFeeUsd(feeUsd.toFixed(2))
+          } else {
+            setEstimatedFeeUsd(null)
+          }
         }
-        gasEstimate =
-          (await erc20Contract?.estimateGas?.transfer([transferData.to, transferData.amount], {
-            account: erc20Contract.account!,
-          })) ?? 0n
-      }
-
-      // Get gas price
-      const gasPrice = await publicClient.getGasPrice()
-
-      // Calculate fee
-      const fee = gasEstimate * gasPrice
-
-      // Convert to readable format (in native token units)
-      const formattedFee = formatUnits(fee, 18)
-
-      setEstimatedFee(formattedFee)
-
-      // Calculate USD value if price is available
-      if (nativeCurrencyPrice) {
-        const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
-        setEstimatedFeeUsd(feeUsd.toFixed(2))
       } else {
-        setEstimatedFeeUsd(null)
+        // EVM fee estimation (original logic)
+        if (!publicClient || !accountAddress) return
+
+        let gasEstimate: bigint = 0n
+
+        if (isNativeToken) {
+          // For native token, estimate gas for a simple transfer
+          gasEstimate =
+            (await publicClient.estimateGas({
+              account: accountAddress,
+              to: address as `0x${string}`,
+              value: tryParseAmount(amount, currency)?.quotient ?? 0n,
+            })) ?? 0n
+        } else {
+          // For ERC20 tokens, estimate gas for a transfer call
+          const transferData = {
+            to: address as `0x${string}`,
+            amount: tryParseAmount(amount, currency)?.quotient ?? 0n,
+          }
+          gasEstimate =
+            (await erc20Contract?.estimateGas?.transfer([transferData.to, transferData.amount], {
+              account: erc20Contract.account!,
+            })) ?? 0n
+        }
+
+        // Get gas price
+        const gasPrice = await publicClient.getGasPrice()
+
+        // Calculate fee
+        const fee = gasEstimate * gasPrice
+
+        // Convert to readable format (in native token units)
+        const formattedFee = formatUnits(fee, 18)
+
+        setEstimatedFee(formattedFee)
+
+        // Calculate USD value if price is available
+        if (nativeCurrencyPrice) {
+          const feeUsd = parseFloat(formattedFee) * nativeCurrencyPrice
+          setEstimatedFeeUsd(feeUsd.toFixed(2))
+        } else {
+          setEstimatedFeeUsd(null)
+        }
       }
     } catch (error) {
       console.error('Error estimating fee:', error)
       setEstimatedFee(null)
       setEstimatedFeeUsd(null)
     }
-  }, [address, amount, publicClient, accountAddress, isNativeToken, currency, nativeCurrencyPrice, erc20Contract])
+  }, [
+    address,
+    amount,
+    publicClient,
+    accountAddress,
+    isNativeToken,
+    currency,
+    nativeCurrencyPrice,
+    erc20Contract,
+    isSolanaChain,
+    solanaPublicKey,
+    asset.token.address,
+    asset.token.decimals,
+    connection,
+    currentFee,
+  ])
 
-  const sendAsset = useCallback(async () => {
+  // Separate function for EVM asset transfer
+  const sendEVMAsset = useCallback(async () => {
     const amounts = tryParseAmount(amount, currency)
 
     const receipt = await fetchWithCatchTxError(async () => {
       if (isNativeToken) {
-        // Handle native token transfer
         return sendTransactionAsync({
           to: address as `0x${string}`,
           value: amounts?.quotient ?? 0n,
           chainId: asset.chainId,
         })
       }
-      // Handle ERC20 token transfer
       return erc20Contract?.write?.transfer([address as `0x${string}`, amounts?.quotient ?? 0n], {
         account: erc20Contract.account!,
         chain: erc20Contract.chain!,
@@ -219,7 +336,6 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           })}
         </ToastDescriptionWithTx>,
       )
-      // Reset form after successful transaction
       setAmount('')
       setAddress('')
     }
@@ -228,29 +344,275 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   }, [
     address,
     amount,
-    erc20Contract,
+    currency,
     isNativeToken,
     sendTransactionAsync,
     asset.chainId,
+    erc20Contract,
     fetchWithCatchTxError,
     t,
     toastSuccess,
-    currency,
   ])
+
+  // Separate function for Solana asset transfer
+  const sendSolanaAsset = useCallback(async () => {
+    if (!solanaPublicKey || !address) return undefined
+
+    const recipientPubkey = new PublicKey(address)
+
+    const receipt = await executeSolanaTransaction(async () => {
+      // Check balance before sending
+      const balance = await connection.getBalance(solanaPublicKey)
+      const requiredAmount = isNativeToken
+        ? Math.floor(parseFloat(amount) * LAMPORTS_PER_SOL) + 5000 // amount + transaction fee
+        : 5000 // just transaction fee for token transfers
+
+      if (balance < requiredAmount) {
+        throw new Error(t('Insufficient SOL balance to complete transaction'))
+      }
+      // Detect wallet transaction support
+      const walletSupportsV0 = detectWalletTransactionSupport(wallet)
+
+      let signature: string
+
+      if (isNativeToken) {
+        // Create transaction using helper
+        const transaction = await createSolanaSendTransaction({
+          connection,
+          fromPubkey: solanaPublicKey,
+          toPubkey: recipientPubkey,
+          amount: parseFloat(amount),
+          isNativeToken: true,
+          computeBudgetConfig,
+          walletSupportsV0,
+        })
+
+        signature = await sendTransactionSafely(transaction, connection, walletContext)
+      } else {
+        const tokenMintAddress = new PublicKey(asset.token.address)
+        const amountInTokenUnits = Math.floor(parseFloat(amount) * 10 ** asset.token.decimals)
+
+        // First, detect which token program this mint uses
+        let tokenProgramId = TOKEN_PROGRAM_ID
+        try {
+          const mintInfo = await connection.getAccountInfo(tokenMintAddress)
+          if (mintInfo?.owner.equals(TOKEN_2022_PROGRAM_ID)) {
+            tokenProgramId = TOKEN_2022_PROGRAM_ID
+          }
+        } catch (error) {
+          console.error('Failed to detect token program, using default:', error)
+        }
+
+        const senderTokenAccount = await getAssociatedTokenAddress(
+          tokenMintAddress,
+          solanaPublicKey,
+          false,
+          tokenProgramId,
+        )
+        const recipientTokenAccount = await getAssociatedTokenAddress(
+          tokenMintAddress,
+          recipientPubkey,
+          false,
+          tokenProgramId,
+        )
+
+        const transaction = new Transaction()
+
+        // Get recent blockhash for legacy transaction
+        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash()
+        transaction.recentBlockhash = blockhash
+        transaction.feePayer = solanaPublicKey
+
+        // Add Compute Budget instructions (Priority Fee)
+        transaction.add(
+          ComputeBudgetProgram.setComputeUnitLimit({ units: computeBudgetConfig.units }),
+          ComputeBudgetProgram.setComputeUnitPrice({ microLamports: computeBudgetConfig.microLamports }),
+        )
+
+        // Check if recipient's associated token account exists
+        try {
+          await getAccount(connection, recipientTokenAccount, 'confirmed', tokenProgramId)
+        } catch (error: any) {
+          if (error.name === 'TokenAccountNotFoundError') {
+            // Create associated token account for recipient
+            transaction.add(
+              createAssociatedTokenAccountInstruction(
+                solanaPublicKey, // payer
+                recipientTokenAccount, // associated token account
+                recipientPubkey, // owner
+                tokenMintAddress, // mint
+                tokenProgramId, // token program ID
+              ),
+            )
+          } else {
+            throw error
+          }
+        }
+
+        // Add transfer instruction using the appropriate program
+        if (tokenProgramId.equals(TOKEN_2022_PROGRAM_ID)) {
+          transaction.add(
+            createTransferCheckedInstruction(
+              senderTokenAccount,
+              tokenMintAddress,
+              recipientTokenAccount,
+              solanaPublicKey,
+              amountInTokenUnits,
+              asset.token.decimals,
+              [],
+              tokenProgramId,
+            ),
+          )
+        } else {
+          transaction.add(
+            createTransferInstruction(
+              senderTokenAccount,
+              recipientTokenAccount,
+              solanaPublicKey,
+              amountInTokenUnits,
+              [],
+              tokenProgramId,
+            ),
+          )
+        }
+
+        signature = await sendTransactionSafely(transaction, connection, walletContext)
+      }
+
+      // Wait for transaction confirmation using the modern approach
+      try {
+        const latestBlockhash = await connection.getLatestBlockhash()
+        const confirmation = await connection.confirmTransaction(
+          {
+            signature,
+            blockhash: latestBlockhash.blockhash,
+            lastValidBlockHeight: latestBlockhash.lastValidBlockHeight,
+          },
+          'confirmed',
+        )
+
+        if (confirmation.value.err) {
+          throw new Error(`Transaction failed: ${confirmation.value.err.toString()}`)
+        }
+      } catch (confirmError) {
+        console.error('Transaction confirmation failed:', confirmError)
+        throw new Error(`Transaction confirmation failed: ${confirmError}`)
+      }
+
+      // Update UI state on success
+      setTxHash(signature)
+
+      // Show success confirmation toast with token details
+      toastSuccess(
+        `${t('Transaction Confirmed')}!`,
+        <SolanaDescriptionWithTx txHash={signature}>
+          {t('Your %symbol% has been sent to %address%', {
+            symbol: asset.token.symbol,
+            address: `${address?.slice(0, 8)}...${address?.slice(-8)}`,
+          })}
+        </SolanaDescriptionWithTx>,
+      )
+
+      setAmount('')
+      setAddress('')
+
+      // Return transaction result for executeSolanaTransaction
+      return { hash: signature, status: 1 }
+    })
+
+    return receipt
+  }, [
+    solanaPublicKey,
+    address,
+    amount,
+    isNativeToken,
+    asset.token,
+    walletContext,
+    connection,
+    computeBudgetConfig,
+    executeSolanaTransaction,
+    toastSuccess,
+    t,
+  ])
+
+  // Main sendAsset function that routes to appropriate handler
+  const sendAsset = useCallback(async () => {
+    if (isSolanaChain) {
+      return sendSolanaAsset()
+    }
+    return sendEVMAsset()
+  }, [isSolanaChain, sendSolanaAsset, sendEVMAsset])
+
+  const isLikelyWalletAddress = (input: string) => {
+    try {
+      const pk = new PublicKey(input)
+      if (pk.toBase58() !== input) return { ok: false, reason: 'Base58 format inconsistent' }
+      if (!PublicKey.isOnCurve(pk.toBytes())) {
+        return { ok: false, reason: 'This looks like a PDA/program address (off-curve)' }
+      }
+      return { ok: true, pubkey: pk }
+    } catch {
+      return { ok: false, reason: 'Invalid Solana public key' }
+    }
+  }
+
+  const isEOASystemAccount = async (connection: Connection, pk: PublicKey) => {
+    const info = await connection.getAccountInfo(pk)
+    if (!info) return { ok: true }
+    if (!info.owner.equals(SystemProgram.programId)) {
+      return { ok: false, reason: 'This address is a program account (not a System account)' }
+    }
+    return { ok: true }
+  }
 
   const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target
     setAddress(value)
   }
 
-  // Use debounced address for validation to avoid checking on every keystroke
+  // Frontend immediate validation (no RPC): check non-base58, wrong key length, off-curve (PDA)
+  // Optional RPC enhancement: existing accounts must be SystemProgram to be considered regular wallets
   useEffect(() => {
-    if (debouncedAddress && !isAddress(debouncedAddress)) {
-      setAddressError(t('Invalid wallet address'))
-    } else {
-      setAddressError('')
+    console.info('Address validation triggered:', { debouncedAddress, isSolanaChain })
+
+    const validateAddress = async () => {
+      if (!debouncedAddress) {
+        setAddressError('')
+        return
+      }
+
+      if (isSolanaChain) {
+        const frontendCheck = isLikelyWalletAddress(debouncedAddress)
+        if (!frontendCheck.ok) {
+          console.info('Frontend validation failed:', frontendCheck.reason)
+          const errorMsg = t('Invalid wallet address') || 'Invalid Solana wallet address'
+          console.info('Setting address error to:', errorMsg)
+          setAddressError(errorMsg)
+          return
+        }
+
+        try {
+          const rpcCheck = await isEOASystemAccount(connection, frontendCheck.pubkey!)
+          if (!rpcCheck.ok) {
+            console.log('RPC validation failed:', rpcCheck.reason)
+            setAddressError(t('Invalid wallet address') || 'Invalid Solana wallet address')
+            return
+          }
+        } catch (error) {
+          console.error('RPC validation error (continuing):', error)
+        }
+
+        setAddressError('')
+      } else if (!isAddress(debouncedAddress)) {
+        // Validate EVM address
+        setAddressError(t('Invalid wallet address'))
+      } else {
+        setAddressError('')
+      }
     }
-  }, [debouncedAddress, t])
+
+    validateAddress()
+  }, [debouncedAddress, t, isSolanaChain, connection])
 
   const handleClearAddress = () => {
     setAddress('')
@@ -306,12 +668,20 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
     } else {
       setEstimatedFee(null)
     }
-  }, [address, amount, addressError, estimateTransactionFee])
+  }, [address, amount, addressError, estimateTransactionFee, currentFee])
 
   const isValidAddress = useMemo(() => {
     // send gift doesn't need to check address
     return isSendGiftSupported ? true : address && !addressError
   }, [address, addressError, isSendGiftSupported])
+
+  const isValidGasSponsor = useMemo(() => {
+    // For Solana, gas sponsoring might not be applicable
+    if (isSolanaChain) {
+      return true
+    }
+    return includeStarterGas && isSendGiftSupported ? nativeAmount?.greaterThan(0) && !isUserInsufficientBalance : true
+  }, [includeStarterGas, isSendGiftSupported, nativeAmount, isUserInsufficientBalance, isSolanaChain])
 
   if (viewState === ViewState.CONFIRM_TRANSACTION && isSendGiftSupported) {
     return <CreateGiftView key={viewState} tokenAmount={tokenAmount} />
@@ -327,25 +697,26 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           onViewStateChange(ViewState.SEND_ASSETS)
           setTxHash(undefined)
         }}
-        attemptingTxn={attemptingTxn}
+        attemptingTxn={isSolanaChain ? solanaTxLoading : attemptingTxn}
         txHash={txHash}
         chainId={asset.chainId}
         estimatedFee={estimatedFee}
         estimatedFeeUsd={estimatedFeeUsd}
         onConfirm={async () => {
-          // Submit the transaction using the improved error handling
-          const receipt = await sendAsset()
-          if (receipt?.status) {
-            onViewStateChange(ViewState.SEND_ASSETS)
+          try {
+            // Submit the transaction using the improved error handling
+            const receipt = await sendAsset()
+            if (receipt?.status) {
+              onViewStateChange(ViewState.SEND_ASSETS)
+            }
+          } catch (error: any) {
+            console.error('Transaction failed:', error)
+            // Error handling is done by the executeSolanaTransaction hook
           }
         }}
       />
     )
   }
-
-  const isValidGasSponsor =
-    includeStarterGas && isSendGiftSupported ? nativeAmount?.greaterThan(0) && !isUserInsufficientBalance : true
-
   return (
     <FormContainer>
       <SendGiftToggle isNativeToken={isNativeToken} tokenChainId={asset.chainId}>
@@ -382,7 +753,11 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
               <FlexGap alignItems="center" gap="8px" justifyContent="space-between" position="relative">
                 <FlexGap alignItems="center" gap="8px" mb="8px">
                   <AssetContainer>
-                    <CurrencyLogo currency={currency} size="40px" src={asset.token.logoURI} />
+                    <CurrencyLogo
+                      currency={currency}
+                      size="40px"
+                      src={getEnhancedLogoURI(asset.token.address, asset.chainId, asset.token.logoURI)}
+                    />
                     <ChainIconWrapper>
                       <img
                         src={`${ASSET_CDN}/web/chains/${asset.chainId}.png`}
@@ -393,9 +768,21 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
                     </ChainIconWrapper>
                   </AssetContainer>
                   <FlexGap flexDirection="column">
-                    <Text fontWeight="bold" fontSize="20px">
-                      {asset.token.symbol}
-                    </Text>
+                    <FlexGap alignItems="center" gap="8px">
+                      <Text fontWeight="bold" fontSize="20px">
+                        {asset.token.symbol}
+                      </Text>
+                      {/* {isSolanaChain && (
+                        <IconButton
+                          scale="sm"
+                          variant="tertiary"
+                          onClick={() => setShowPriorityFeeModal(true)}
+                          title={t('Priority Fee Settings')}
+                        >
+                          <CogIcon width="16px" height="16px" />
+                        </IconButton>
+                      )} */}
+                    </FlexGap>
                     <Text color="textSubtle" fontSize="12px" mt="-4px">{`${chainName?.toUpperCase() ?? '-'} ${t(
                       'Chain',
                     )}`}</Text>
@@ -471,6 +858,16 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
           {attemptingTxn ? t('Confirming') : t('Next')}
         </Button>
       </FlexGap>
+
+      {/* Priority Fee Modal */}
+      <SolanaPriorityFeeModal
+        isOpen={showPriorityFeeModal}
+        onDismiss={() => setShowPriorityFeeModal(false)}
+        onSave={(fee) => {
+          console.log('Priority fee updated:', fee)
+          // Fee updates will automatically trigger estimateTransactionFee re-estimation
+        }}
+      />
     </FormContainer>
   )
 }

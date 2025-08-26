@@ -1,6 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import {
   encodeHooksRegistration,
+  HookData,
   hooksList,
   INFI_BIN_POOL_MANAGER_ADDRESSES,
   INFI_CL_POOL_MANAGER_ADDRESSES,
@@ -120,16 +121,18 @@ export function parseRemoteV3Pool(remote: RemotePoolV3) {
   } as V3Pool
 }
 
-export function toLocalInfinityPool(remote: RemotePoolCL | RemotePoolBIN, chainId: keyof typeof hooksList) {
+export function toLocalInfinityPool(
+  remote: RemotePoolCL | RemotePoolBIN,
+  chainId: keyof typeof hooksList,
+  hooksMap?: Record<string, HookData>,
+) {
   const { id, feeTier, protocol, protocolFee, hookAddress, tvlUSD } = remote
 
   const type = protocol === 'infinityCl' ? PoolType.InfinityCL : PoolType.InfinityBIN
-  const relatedHook = hooksList[chainId]?.find(
-    (hook) => hook.address.toLowerCase() === hookAddress?.toLocaleLowerCase(),
-  )
-  const hookNotInWhitelist = hookAddress && !relatedHook
-  if (hookNotInWhitelist) {
-    return null
+
+  let relatedHook = hooksList[chainId]?.find((hook) => hook.address.toLowerCase() === hookAddress?.toLowerCase())
+  if (hooksMap && !relatedHook && hookAddress) {
+    relatedHook = hooksMap?.[hookAddress.toLowerCase()]
   }
 
   const currency0 = getValidToken(chainId, remote.token0)

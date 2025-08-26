@@ -13,29 +13,6 @@ export const StyledBox = styled(Box)`
   flex-direction: row;
 `
 
-export const MyVeCakeCardMobile: React.FC<{
-  value?: string
-}> = ({ value }) => {
-  const { t } = useTranslation()
-  const { balance } = useVeCakeBalance()
-
-  return (
-    <AutoRow justifyContent="space-between" alignItems="center" mb="8px">
-      <Flex alignItems="center">
-        <img src="/images/cake-staking/token-vecake.png" alt="token-vecake" width="32px" />
-
-        <Text fontSize="14px" ml="4px">
-          {t('You will get')}
-        </Text>
-      </Flex>
-
-      <Text fontSize="16px" bold>
-        {value ?? formatNumber(getBalanceNumber(balance))} veCAKE
-      </Text>
-    </AutoRow>
-  )
-}
-
 export const MyVeCakeCard: React.FC<{
   type?: 'row' | 'column'
   value?: string

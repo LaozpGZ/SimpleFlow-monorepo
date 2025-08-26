@@ -1,5 +1,17 @@
 # @pancakeswap/routing-sdk-addon-v3
 
+## 2.0.2
+
+### Patch Changes
+
+- Updated dependencies [cd589e1]
+- Updated dependencies [1f6c9ec]
+  - @pancakeswap/swap-sdk-core@1.5.0
+  - @pancakeswap/chains@0.6.0
+  - @pancakeswap/infinity-sdk@1.0.4
+  - @pancakeswap/routing-sdk@0.5.2
+  - @pancakeswap/v3-sdk@3.9.5
+
 ## 2.0.1
 
 ### Patch Changes

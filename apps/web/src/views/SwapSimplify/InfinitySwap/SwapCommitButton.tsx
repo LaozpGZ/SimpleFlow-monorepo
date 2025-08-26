@@ -14,10 +14,9 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { AutoRow } from 'components/Layout/Row'
 import {
   RoutingSettingsButton,
-  SettingsModalV2,
+  RoutingSettingsModalContent,
   withCustomOnDismiss,
 } from 'components/Menu/GlobalSettings/SettingsModalV2'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { BIG_INT_ZERO } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
@@ -55,19 +54,10 @@ import { useIsRecipientError } from '../hooks/useIsRecipientError'
 import { useQuoteTrackingStateMachine } from '../hooks/useQuoteTrackingStateMachine'
 import { usePriceBreakdown } from '../hooks/usePriceBreakdown'
 
-const SettingsModalWithCustomDismiss = withCustomOnDismiss(SettingsModalV2)
-
 interface SwapCommitButtonPropsType {
   order?: PriceOrder
   tradeError?: Error | null
   tradeLoading?: boolean
-}
-
-const useSettingModal = (onDismiss) => {
-  const [openSettingsModal] = useModal(
-    <SettingsModalWithCustomDismiss customOnDismiss={onDismiss} mode={SettingsMode.SWAP_LIQUIDITY} />,
-  )
-  return openSettingsModal
 }
 
 const useSwapCurrencies = () => {
@@ -289,7 +279,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   const onSettingModalDismiss = useCallback(() => {
     setIndirectlyOpenConfirmModalState(true)
   }, [])
-  const openSettingModal = useSettingModal(onSettingModalDismiss)
   const [openConfirmSwapModal] = useModal(
     isBridgeOrder(order) ? (
       <ConfirmSwapModalV3
@@ -306,7 +295,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         }
         onAcceptChanges={handleAcceptChanges}
         onConfirm={onConfirm}
-        openSettingModal={openSettingModal}
         customOnDismiss={reset}
       />
     ) : (
@@ -321,7 +309,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         currencyBalances={currencyBalances as { [field in Field]?: CurrencyAmount<Currency> | undefined }}
         onAcceptChanges={handleAcceptChanges}
         onConfirm={onConfirm}
-        openSettingModal={openSettingModal}
         customOnDismiss={reset}
       />
     ),
@@ -530,13 +517,14 @@ const ResetRoutesButton = () => {
             <MessageText>{t('Unable to establish trading route due to customized routing.')}</MessageText>
             <AutoRow gap="4px">
               <RoutingSettingsButton
+                modalContent={<RoutingSettingsModalContent />}
                 buttonProps={{
                   scale: 'xs',
                   p: 0,
                 }}
                 showRedDot={false}
               >
-                {t('Check your settings')}
+                {t('Check route settings')}
               </RoutingSettingsButton>
               <MessageText
                 style={{

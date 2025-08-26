@@ -1,5 +1,11 @@
 # @pancakeswap/swap-sdk-core
 
+## 1.5.0
+
+### Minor Changes
+
+- cd589e1: support solana chain
+
 ## 1.4.0
 
 ### Minor Changes

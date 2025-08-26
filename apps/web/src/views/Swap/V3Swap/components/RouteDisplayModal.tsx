@@ -1,14 +1,27 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Route, RouteType, SVMPool } from '@pancakeswap/smart-router'
-import { AutoColumn, Flex, Modal, ModalV2, QuestionHelper, Text, UseModalV2Props, useTooltip } from '@pancakeswap/uikit'
+import {
+  AutoColumn,
+  Flex,
+  Modal,
+  ModalV2,
+  PoolTypeIcon,
+  QuestionHelper,
+  Text,
+  UseModalV2Props,
+  useTooltip,
+} from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 
-import { RoutingSettingsButton } from 'components/Menu/GlobalSettings/SettingsModalV2'
+import { RoutingSettingsButtonView, RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { CurrencyLogoWrapper, RouterBox, RouterTypeText } from 'views/Swap/components/RouterViewer'
 import { useHookDiscount } from 'views/SwapSimplify/hooks/useHookDiscount'
 import { Currency, SPLToken, UnifiedCurrency } from '@pancakeswap/sdk'
 import { useUnifiedCurrency } from 'hooks/Tokens'
+import { TertiaryButton } from 'views/Swap/components/SlippageButton'
+import { useTheme } from '@pancakeswap/hooks'
+
 import { BridgeRoutesDisplay } from './RouteDisplay/BridgeRoutesDisplay'
 import { EVMPairNodes } from './RouteDisplay/pairNode'
 import { JupPairNodes } from './RouteDisplay/JupPairNodes'
@@ -20,38 +33,81 @@ interface Props extends UseModalV2Props {
   routes: RouteDisplayEssentials[]
 }
 
-export const RouteDisplayModal = memo(function RouteDisplayModal({ isOpen, onDismiss, routes }: Props) {
+export const RoutesDisplayButtonView = ({ onClick, children }: { onClick: () => void; children: React.ReactNode }) => {
+  const { theme } = useTheme()
+  return (
+    <TertiaryButton
+      role="button"
+      $color={theme.colors.primary60}
+      endIcon={<PoolTypeIcon color={theme.colors.primary60} width={20} ml="2px" />}
+      onClick={onClick}
+    >
+      {children}
+    </TertiaryButton>
+  )
+}
+
+const RoutesDisplayView = ({
+  routes,
+  onRoutingSettingsModalOpen,
+}: {
+  routes: RouteDisplayEssentials[]
+  onRoutingSettingsModalOpen: () => void
+}) => {
   const { t } = useTranslation()
   const isBridgeRouting = routes?.some((route) => route.type === RouteType.BRIDGE)
 
   return (
-    <ModalV2 closeOnOverlayClick isOpen={isOpen} onDismiss={onDismiss} minHeight="0">
-      <Modal
-        title={
-          <Flex justifyContent="center">
-            {t('Route')}{' '}
-            <QuestionHelper
-              text={t('Routing through these tokens resulted in the best price for your trade.')}
-              ml="4px"
-              placement="top-start"
-            />
-          </Flex>
-        }
-        style={{ minHeight: '0' }}
-        bodyPadding="24px"
-      >
-        {isBridgeRouting ? (
+    <Modal
+      title={
+        <Flex justifyContent="center">
+          {t('Route')}{' '}
+          <QuestionHelper
+            text={t('Routing through these tokens resulted in the best price for your trade.')}
+            ml="4px"
+            placement="top-start"
+          />
+        </Flex>
+      }
+      minHeight="0px"
+      bodyPadding="24px"
+    >
+      {isBridgeRouting ? (
+        <>
           <BridgeRoutesDisplay routes={routes} />
-        ) : (
-          <AutoColumn gap="56px" height="100%">
-            {routes.map((route, i) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <RouteDisplay key={i} route={route} />
-            ))}
-            <RoutingSettingsButton />
-          </AutoColumn>
-        )}
-      </Modal>
+          <RoutingSettingsButtonView onClick={onRoutingSettingsModalOpen} />
+        </>
+      ) : (
+        <AutoColumn gap="56px" height="100%" pb="16px">
+          {routes.map((route, i) => (
+            // eslint-disable-next-line react/no-array-index-key
+            <RouteDisplay key={i} route={route} />
+          ))}
+          <RoutingSettingsButtonView onClick={onRoutingSettingsModalOpen} />
+        </AutoColumn>
+      )}
+    </Modal>
+  )
+}
+
+export const RouteDisplayModal = memo(function RouteDisplayModal({ isOpen, onDismiss, routes }: Props) {
+  const [showRoutingSettingsModal, setShowRoutingSettingsModal] = useState(false)
+
+  return (
+    <ModalV2
+      closeOnOverlayClick
+      isOpen={isOpen}
+      onDismiss={() => {
+        setShowRoutingSettingsModal(false)
+        onDismiss?.()
+      }}
+      minHeight="0px"
+    >
+      {showRoutingSettingsModal ? (
+        <RoutingSettingsModalContent onBack={() => setShowRoutingSettingsModal(false)} />
+      ) : (
+        <RoutesDisplayView routes={routes} onRoutingSettingsModalOpen={() => setShowRoutingSettingsModal(true)} />
+      )}
     </ModalV2>
   )
 })

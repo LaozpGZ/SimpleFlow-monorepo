@@ -33,7 +33,7 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import ApproveLiquidityTokens from 'views/AddLiquidityV3/components/ApproveLiquidityTokens'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton, SlippageButton } from 'views/Swap/components/SlippageButton'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useTotalUsdValue } from '../../AddLiquidity/hooks/useTotalUsdValue'
@@ -227,7 +227,7 @@ export default function V2FormView({
               </RowBetween>
               <RowBetween>
                 <Text color="textSubtle">Slippage Tolerance</Text>
-                <SlippageButton />
+                <LiquiditySlippageButton />
               </RowBetween>
             </Column>
             <Box mt="8px">

@@ -9,7 +9,6 @@ import globalReducer from './global/reducer'
 import lotteryReducer from './lottery'
 import notifications from './notifications/reducer'
 import poolsReducer from './pools'
-import potteryReducer from './pottery'
 import transactions from './transactions/reducer'
 import user from './user/reducer'
 
@@ -30,7 +29,6 @@ const persistedReducer = persistReducer(
     farms: farmsReducer,
     pools: poolsReducer,
     lottery: lotteryReducer,
-    pottery: potteryReducer,
 
     // Exchange
     user,

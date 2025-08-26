@@ -77,7 +77,7 @@ export const CurrencySelectV2 = ({
               <>{t('Select')}</>
             ) : (
               <Flex alignItems="center" justifyContent="space-between">
-                <CurrencyLogo currency={selectedCurrency} size="24px" style={{ marginRight: '8px' }} />
+                <CurrencyLogo currency={selectedCurrency} size="24px" style={{ marginRight: '8px' }} showChainLogo />
                 <Text id="pair" bold ellipsis pr="16px">
                   {selectedCurrency && selectedCurrency.symbol && selectedCurrency.symbol.length > 20
                     ? `${selectedCurrency.symbol.slice(0, 4)}...${selectedCurrency.symbol.slice(

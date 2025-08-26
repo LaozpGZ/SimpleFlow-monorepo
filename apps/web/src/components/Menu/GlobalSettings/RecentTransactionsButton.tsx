@@ -1,7 +1,6 @@
 import { ButtonProps, Flex, HistoryIcon, IconButton, ModalV2, useModalV2 } from '@pancakeswap/uikit'
 
-import { SettingsModalV2, SettingsTabIndex } from './SettingsModalV2'
-import { SettingsMode } from './types'
+import { RecentTransactionsTab } from './SettingsModalV2/RecentTransactionsTab'
 
 interface RecentTransactionsButtonProps extends ButtonProps {
   color?: string
@@ -28,11 +27,7 @@ const RecentTransactionsButton = ({ overrideButton, color, ...props }: RecentTra
       )}
 
       <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-        <SettingsModalV2
-          onDismiss={onDismiss}
-          mode={SettingsMode.SWAP_LIQUIDITY}
-          defaultTabIndex={SettingsTabIndex.RECENT_TRANSACTIONS}
-        />
+        <RecentTransactionsTab key="recent_txns_tab" />
       </ModalV2>
     </Flex>
   )

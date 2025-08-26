@@ -25,31 +25,6 @@ export const POOLS_FAST_REVALIDATE = {
   [ChainId.MONAD_TESTNET]: 10_000,
 } as const satisfies Record<ChainId, number>
 
-// Revalidate interval in milliseconds
-export const POOLS_NORMAL_REVALIDATE = {
-  [ChainId.BSC_TESTNET]: 15_000,
-  [ChainId.BSC]: 15_000,
-  [ChainId.ETHEREUM]: 20_000,
-  [ChainId.GOERLI]: 20_000,
-  [ChainId.ARBITRUM_ONE]: 15_000,
-  [ChainId.ARBITRUM_GOERLI]: 15_000,
-  [ChainId.POLYGON_ZKEVM]: 15_000,
-  [ChainId.POLYGON_ZKEVM_TESTNET]: 15_000,
-  [ChainId.ZKSYNC]: 30_000,
-  [ChainId.ZKSYNC_TESTNET]: 15_000,
-  [ChainId.LINEA]: 20_000,
-  [ChainId.LINEA_TESTNET]: 20_000,
-  [ChainId.OPBNB]: 15_000,
-  [ChainId.OPBNB_TESTNET]: 15_000,
-  [ChainId.BASE]: 15_000,
-  [ChainId.BASE_TESTNET]: 15_000,
-  [ChainId.SCROLL_SEPOLIA]: 15_000,
-  [ChainId.SEPOLIA]: 20_000,
-  [ChainId.ARBITRUM_SEPOLIA]: 15_000,
-  [ChainId.BASE_SEPOLIA]: 15_000,
-  [ChainId.MONAD_TESTNET]: 15_000,
-} as const satisfies Record<ChainId, number>
-
 export const POOLS_SLOW_REVALIDATE = {
   [ChainId.BSC_TESTNET]: 20_000,
   [ChainId.BSC]: 20_000,

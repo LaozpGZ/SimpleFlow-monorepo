@@ -4,17 +4,11 @@ import { homePageChainsInfo, homePageCurrencies, partners } from './homePageData
 import { queryPools } from './queries/queryPools'
 import { queryPredictionUser } from './queries/queryPrediction'
 import { queryTokens } from './queries/queryTokens'
-import { queryCakeRelated } from './queryCakeRelated'
 import { querySiteStats } from './querySiteStats'
 import { HomePageData } from './types'
 
 async function _load() {
-  const [{ topTokens }, cakeRelated, stats, topWinner] = await Promise.all([
-    queryTokens(),
-    queryCakeRelated(),
-    querySiteStats(),
-    queryPredictionUser(),
-  ])
+  const [{ topTokens }, stats, topWinner] = await Promise.all([queryTokens(), querySiteStats(), queryPredictionUser()])
   const pools = await queryPools()
   const currencies = homePageCurrencies
   const chains = homePageChainsInfo()
@@ -23,7 +17,6 @@ async function _load() {
     pools,
     currencies,
     chains,
-    cakeRelated,
     stats,
     partners,
     topWinner,

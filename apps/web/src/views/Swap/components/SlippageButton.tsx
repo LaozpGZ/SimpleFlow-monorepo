@@ -2,38 +2,31 @@ import { isSolana } from '@pancakeswap/chains'
 import { useTheme } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  Box,
   Button,
   Flex,
-  FlexGap,
-  Input,
-  Message,
   ModalV2,
   MotionModal,
   PencilIcon,
-  PreTitle,
   RiskAlertIcon,
-  Text,
   useMatchBreakpoints,
   useModalV2,
   useTooltip,
   WarningIcon,
+  QuestionHelper,
 } from '@pancakeswap/uikit'
 import { useSolanaUserSlippage, useUserSlippage } from '@pancakeswap/utils/user'
-import { VerticalDivider } from '@pancakeswap/widgets-internal'
-import GlobalSettings from 'components/Menu/GlobalSettings'
-import { DEFAULT_SLIPPAGE_TOLERANCE, SlippageError } from 'components/Menu/GlobalSettings/TransactionSettings'
-import { SlippageTabs } from 'components/Settings/SlippageTabs'
+import {
+  SolanaSlippageSetting,
+  EVMSlippageSetting,
+  EVMLiquiditySlippageSetting,
+} from 'components/Settings/SlippageTabs'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 
-import { useAutoSlippageEnabled, useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
-import { useCallback, useMemo, useState } from 'react'
+import { useAutoSlippageWithFallback } from 'hooks/useAutoSlippageWithFallback'
 import styled from 'styled-components'
-import { escapeRegExp } from 'utils'
 import { basisPointsToPercent } from 'utils/exchange'
 
-const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: string }>`
+export const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: string }>`
   height: unset;
   padding: 7px 8px;
   font-size: 14px;
@@ -42,60 +35,38 @@ const TertiaryButton = styled(Button).attrs({ variant: 'tertiary' })<{ $color: s
   color: ${({ $color }) => $color};
 `
 
-const ButtonsContainer = styled(FlexGap).attrs({ flexWrap: 'wrap', gap: '4px' })`
-  background-color: ${({ theme }) => theme.colors.input};
-  border: 1px solid ${({ theme }) => theme.colors.inputSecondary};
-  border-radius: 16px;
-  width: fit-content;
-
-  box-shadow: ${({ theme }) => theme.shadows.inset};
-`
-
-const StyledButton = styled(Button)`
-  height: 40px;
-  padding: 0 8px;
-  ${({ theme }) => theme.mediaQueries.md} {
-    padding: 0 16px;
-  }
-`
-
-const StyledVerticalDivider = styled(VerticalDivider).attrs(({ theme }) => ({ bg: theme.colors.inputSecondary }))`
-  margin: 0 4px;
-`
-
 interface SlippageButtonProps {
   enableAutoSlippage?: boolean
 }
 
-export const SlippageButton = ({ enableAutoSlippage: enableAutoSlippage_ = false }: SlippageButtonProps) => {
+const ToleranceView = ({ tolerance }) => {
+  return typeof tolerance === 'number' ? `${basisPointsToPercent(tolerance).toFixed(2)}%` : tolerance
+}
+
+const SlippageButtonView = ({
+  tolerance,
+  buttonText,
+  slippageModalContent,
+}: {
+  tolerance: number
+  buttonText?: string
+  slippageModalContent: React.ReactNode
+}) => {
   const { t } = useTranslation()
   const { theme } = useTheme()
-  const { isMobile } = useMatchBreakpoints()
-  const { chainId } = useAccountActiveChain()
-
   const { isOpen, onOpen, onDismiss } = useModalV2()
-
-  // Calculate auto slippage
-  const { slippageTolerance, isAuto } = useAutoSlippageWithFallback()
-  const [userSlippageTolerance] = useUserSlippage()
-  const [solanaSlippageTolerance] = useSolanaUserSlippage()
-
-  const { tolerance, enableAutoSlippage } = useMemo(
-    () => ({
-      enableAutoSlippage: isSolana(chainId) ? false : enableAutoSlippage_,
-      tolerance: isSolana(chainId)
-        ? solanaSlippageTolerance
-        : enableAutoSlippage_
-        ? slippageTolerance
-        : userSlippageTolerance,
-    }),
-    [chainId, enableAutoSlippage_, slippageTolerance, solanaSlippageTolerance, userSlippageTolerance],
-  )
 
   const isRiskyLow = tolerance < 50
   const isRiskyHigh = tolerance > 100
   const isRiskyVeryHigh = tolerance > 2000
 
+  const color = isRiskyVeryHigh
+    ? theme.colors.failure
+    : isRiskyLow || isRiskyHigh
+    ? theme.colors.yellow
+    : theme.colors.primary60
+
+  const { isMobile } = useMatchBreakpoints()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     isRiskyLow
       ? t('Your transaction may fail. Reset settings to avoid potential loss')
@@ -104,273 +75,84 @@ export const SlippageButton = ({ enableAutoSlippage: enableAutoSlippage_ = false
       : '',
     { placement: 'top' },
   )
-
-  const color = isRiskyVeryHigh
-    ? theme.colors.failure
-    : isRiskyLow || isRiskyHigh
-    ? theme.colors.yellow
-    : theme.colors.primary60
-
-  const button = (onClick) => (
-    <div style={{ textAlign: 'center' }}>
-      <div ref={!isMobile ? targetRef : undefined}>
-        <TertiaryButton
-          $color={color}
-          startIcon={
-            isRiskyVeryHigh ? (
-              <RiskAlertIcon color={color} width={16} />
-            ) : isRiskyLow || isRiskyHigh ? (
-              <WarningIcon color={color} width={16} />
-            ) : undefined
-          }
-          endIcon={<PencilIcon color={color} width={12} />}
-          onClick={onClick}
-        >
-          {enableAutoSlippage && isAuto && tolerance
-            ? `${t('Auto')}: ${basisPointsToPercent(tolerance).toFixed(2)}%`
-            : typeof tolerance === 'number'
-            ? `${basisPointsToPercent(tolerance).toFixed(2)}%`
-            : tolerance}
-        </TertiaryButton>
-      </div>
-
-      {(isRiskyLow || isRiskyHigh) && tooltipVisible && tooltip}
-    </div>
-  )
-
-  if (enableAutoSlippage) {
-    return (
-      <>
-        <GlobalSettings
-          id="slippage_btn_global_settings"
-          key="slippage_btn_global_settings"
-          mode={SettingsMode.SWAP_LIQUIDITY}
-          overrideButton={button}
-        />
-      </>
-    )
-  }
-
   return (
     <>
-      {button(onOpen)}
-      <SlippageSettingsModal isOpen={isOpen} onDismiss={onDismiss} enableAutoSlippage={enableAutoSlippage} />
+      <div style={{ textAlign: 'center' }}>
+        <div ref={!isMobile ? targetRef : undefined}>
+          <TertiaryButton
+            $color={color}
+            startIcon={
+              isRiskyVeryHigh ? (
+                <RiskAlertIcon color={color} width={16} />
+              ) : isRiskyLow || isRiskyHigh ? (
+                <WarningIcon color={color} width={16} />
+              ) : undefined
+            }
+            endIcon={<PencilIcon color={color} width={12} />}
+            onClick={onOpen}
+          >
+            {buttonText}
+            <ToleranceView tolerance={tolerance} />
+          </TertiaryButton>
+        </div>
+
+        {(isRiskyLow || isRiskyHigh) && tooltipVisible && tooltip}
+      </div>
+      <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
+        <MotionModal
+          title={
+            <Flex justifyContent="center">
+              {t('Slippage Setting')}
+              <QuestionHelper
+                text={t(
+                  'Setting a high slippage tolerance can help transactions succeed, but you may not get such a good price. Use with caution.',
+                )}
+                ml="4px"
+                placement="top-start"
+              />
+            </Flex>
+          }
+          onDismiss={onDismiss}
+          minHeight="100px"
+        >
+          {slippageModalContent}
+        </MotionModal>
+      </ModalV2>
     </>
   )
 }
 
-const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
+export const SolanaSlippageButton = () => {
+  const [solanaSlippageTolerance] = useSolanaUserSlippage()
 
-const SlippageSettingsModal = ({
-  isOpen,
-  onDismiss,
-  enableAutoSlippage,
-}: {
-  isOpen: boolean
-  onDismiss: () => void
-  enableAutoSlippage?: boolean
-}) => {
+  return <SlippageButtonView tolerance={solanaSlippageTolerance} slippageModalContent={<SolanaSlippageSetting />} />
+}
+
+export const EVMSlippageButton = ({ enableAutoSlippage_ = false }: { enableAutoSlippage_?: boolean }) => {
   const { t } = useTranslation()
-  const { isMobile } = useMatchBreakpoints()
-  const { chainId } = useAccountActiveChain()
+  const { slippageTolerance: autoSlippageTolerance, isAuto } = useAutoSlippageWithFallback()
+  const [userSlippageTolerance] = useUserSlippage()
 
-  const [isAutoSlippageEnabled, setIsAutoSlippageEnabled] = useAutoSlippageEnabled()
-  const [userSlippageTolerance, setUserSlippageTolerance] = useUserSlippage()
-
-  const autoSlippageActive = enableAutoSlippage && isAutoSlippageEnabled
-
-  const [slippageInput, setSlippageInput] = useState('')
-
-  const slippageInputIsValid =
-    slippageInput === '' || (userSlippageTolerance / 100).toFixed(2) === Number.parseFloat(slippageInput).toFixed(2)
-
-  let slippageError: SlippageError | undefined
-  if (slippageInput !== '' && !slippageInputIsValid) {
-    slippageError = SlippageError.InvalidInput
-  } else if (slippageInputIsValid && userSlippageTolerance < 50) {
-    // Slippage < 0.5%
-    slippageError = SlippageError.RiskyLow
-  } else if (slippageInputIsValid && userSlippageTolerance > 2000) {
-    // Slippage > 20%
-    slippageError = SlippageError.RiskyVeryHigh
-  } else if (slippageInputIsValid && userSlippageTolerance > 100) {
-    // Slippage > 1%
-    slippageError = SlippageError.RiskyHigh
-  } else {
-    slippageError = undefined
-  }
-
-  const parseCustomSlippage = useCallback(
-    (value: string) => {
-      if (value === '' || inputRegex.test(escapeRegExp(value))) {
-        setSlippageInput(value)
-
-        try {
-          const valueAsIntFromRoundedFloat = Number.parseInt((Number.parseFloat(value) * 100).toString())
-          if (!Number.isNaN(valueAsIntFromRoundedFloat) && valueAsIntFromRoundedFloat < 5000) {
-            setUserSlippageTolerance(valueAsIntFromRoundedFloat)
-          }
-        } catch (error) {
-          console.error(error)
-        }
-      }
-    },
-    [setUserSlippageTolerance],
-  )
-
-  const evmSlippageSetting = useMemo(
-    () => (
-      <>
-        <PreTitle mb="8px">{t('Liquidity Slippage')}</PreTitle>
-        <FlexGap gap="16px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
-          <Box>
-            <ButtonsContainer style={{ flexWrap: isMobile ? 'nowrap' : 'wrap' }}>
-              {enableAutoSlippage && (
-                <StyledButton
-                  scale="sm"
-                  onClick={() => {
-                    setSlippageInput('')
-                    setIsAutoSlippageEnabled(true)
-                  }}
-                  variant={autoSlippageActive ? 'subtle' : 'light'}
-                >
-                  {t('Auto')}
-                </StyledButton>
-              )}
-              <StyledButton
-                scale="sm"
-                onClick={() => {
-                  setSlippageInput('')
-                  setUserSlippageTolerance(10)
-                  setIsAutoSlippageEnabled(false)
-                }}
-                variant={userSlippageTolerance === 10 && !autoSlippageActive ? 'subtle' : 'light'}
-              >
-                0.1%
-              </StyledButton>
-              <StyledButton
-                scale="sm"
-                onClick={() => {
-                  setSlippageInput('')
-                  setUserSlippageTolerance(50)
-                  setIsAutoSlippageEnabled(false)
-                }}
-                variant={userSlippageTolerance === 50 && !autoSlippageActive ? 'subtle' : 'light'}
-              >
-                0.5%
-              </StyledButton>
-              <StyledButton
-                scale="sm"
-                onClick={() => {
-                  setSlippageInput('')
-                  setUserSlippageTolerance(100)
-                  setIsAutoSlippageEnabled(false)
-                }}
-                variant={userSlippageTolerance === 100 && !autoSlippageActive ? 'subtle' : 'light'}
-              >
-                1.0%
-              </StyledButton>
-            </ButtonsContainer>
-          </Box>
-
-          <FlexGap gap="8px" alignItems="center">
-            <Text color="textSubtle">{t('Custom')}</Text>
-            <Box position="relative" width="82px">
-              <Input
-                scale="lg"
-                inputMode="decimal"
-                pattern="^[0-9]*[.,]?[0-9]{0,2}$"
-                placeholder={autoSlippageActive ? 'Auto' : (userSlippageTolerance / 100).toFixed(2)}
-                value={slippageInput}
-                onBlur={() => {
-                  parseCustomSlippage((userSlippageTolerance / 100).toFixed(2))
-                }}
-                onChange={(event) => {
-                  if (autoSlippageActive) {
-                    setIsAutoSlippageEnabled(false)
-                  }
-                  if (event.currentTarget.validity.valid) {
-                    parseCustomSlippage(event.target.value.replace(/,/g, '.'))
-                  }
-                }}
-                isWarning={!slippageInputIsValid}
-                isSuccess={![10, 50, 100].includes(userSlippageTolerance)}
-                style={{
-                  paddingLeft: '12px',
-                  height: '40px',
-                }}
-              />
-              <Flex position="absolute" right="8px" top="8px" alignItems="center">
-                <StyledVerticalDivider />
-                <Text color="textSubtle"> %</Text>
-              </Flex>
-            </Box>
-          </FlexGap>
-        </FlexGap>
-
-        {!autoSlippageActive && !!slippageError && (
-          <Message
-            mt="8px"
-            variant={
-              slippageError === SlippageError.InvalidInput
-                ? 'primary'
-                : slippageError === SlippageError.RiskyLow || slippageError === SlippageError.RiskyHigh
-                ? 'warning'
-                : 'danger'
-            }
-          >
-            <Text>
-              {slippageError === SlippageError.InvalidInput
-                ? t('Enter a valid slippage percentage')
-                : slippageError === SlippageError.RiskyLow
-                ? t('Your transaction may fail')
-                : t('Your transaction may be frontrun')}
-              .<br />
-              <Text
-                as="button"
-                role="button"
-                onClick={() => {
-                  setSlippageInput('')
-                  setUserSlippageTolerance(DEFAULT_SLIPPAGE_TOLERANCE)
-                }}
-                style={{
-                  textDecoration: 'underline',
-                  cursor: 'pointer',
-                  display: 'inline-block',
-                  background: 'none',
-                  border: 'none',
-                  padding: 0,
-                }}
-                bold
-              >
-                {t('Reset slippage settings')}
-              </Text>{' '}
-              {t('to avoid potential loss')}.
-            </Text>
-          </Message>
-        )}
-      </>
-    ),
-    [
-      autoSlippageActive,
-      enableAutoSlippage,
-      isMobile,
-      parseCustomSlippage,
-      setIsAutoSlippageEnabled,
-      setUserSlippageTolerance,
-      slippageError,
-      slippageInput,
-      slippageInputIsValid,
-      t,
-      userSlippageTolerance,
-    ],
-  )
+  const tolenrace = enableAutoSlippage_ ? autoSlippageTolerance : userSlippageTolerance
 
   return (
-    <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
-      <MotionModal title={t('Slippage setting')} onDismiss={onDismiss} minHeight="100px">
-        {isSolana(chainId) ? <SlippageTabs /> : evmSlippageSetting}
-      </MotionModal>
-    </ModalV2>
+    <SlippageButtonView
+      tolerance={tolenrace}
+      slippageModalContent={<EVMSlippageSetting />}
+      buttonText={isAuto ? `${t('Auto')}: ` : ''}
+    />
   )
+}
+
+export const SlippageButton = ({ enableAutoSlippage: enableAutoSlippage_ = false }: SlippageButtonProps) => {
+  const { chainId } = useAccountActiveChain()
+
+  // TODO: add "Advanced Settings" text button to open GlobalSettings
+  return isSolana(chainId) ? <SolanaSlippageButton /> : <EVMSlippageButton enableAutoSlippage_={enableAutoSlippage_} />
+}
+
+export const LiquiditySlippageButton = () => {
+  const [userSlippageTolerance] = useUserSlippage()
+
+  return <SlippageButtonView tolerance={userSlippageTolerance} slippageModalContent={<EVMLiquiditySlippageSetting />} />
 }

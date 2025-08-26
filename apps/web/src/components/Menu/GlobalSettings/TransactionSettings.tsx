@@ -11,7 +11,7 @@ import {
   useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { useUserSlippage } from '@pancakeswap/utils/user'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { escapeRegExp } from 'utils'
 
 import { VerticalDivider } from '@pancakeswap/widgets-internal'
@@ -62,36 +62,24 @@ export const DEFAULT_SLIPPAGE_TOLERANCE = 50
 
 export const SlippageTabsComponent = ({
   slippageTolerance,
-  ttl,
   setSlippageTolerance,
-  setTTL,
   isAutoSlippageEnabled,
   setIsAutoSlippageEnabled,
 }: {
   slippageTolerance: number
   setSlippageTolerance: (val: number) => void
-  ttl?: number
-  setTTL?: (val: number) => void
   isAutoSlippageEnabled?: boolean
   setIsAutoSlippageEnabled?: (val: boolean) => void
 }) => {
   const [slippageInput, setSlippageInput] = useState('')
-  const [deadlineInput, setDeadlineInput] = useState('')
   const { isMobile } = useMatchBreakpoints()
   const { t } = useTranslation()
 
-  const { isShowAutoSlippage, isShowTTL } = useMemo(
-    () => ({
-      isShowAutoSlippage:
-        typeof setIsAutoSlippageEnabled !== 'undefined' && typeof isAutoSlippageEnabled !== 'undefined',
-      isShowTTL: typeof setTTL !== 'undefined' && typeof ttl !== 'undefined',
-    }),
-    [isAutoSlippageEnabled, setIsAutoSlippageEnabled, setTTL, ttl],
-  )
+  const isShowAutoSlippage =
+    typeof setIsAutoSlippageEnabled !== 'undefined' && typeof isAutoSlippageEnabled !== 'undefined'
+
   const slippageInputIsValid =
     slippageInput === '' || (slippageTolerance / 100).toFixed(2) === Number.parseFloat(slippageInput).toFixed(2)
-  const deadlineInputIsValid =
-    deadlineInput === '' || (ttl !== undefined && (Number(ttl) / 60).toString() === deadlineInput)
 
   let slippageError: SlippageError | undefined
   if (slippageInput !== '' && !slippageInputIsValid) {
@@ -109,16 +97,6 @@ export const SlippageTabsComponent = ({
     slippageError = undefined
   }
 
-  const [deadlineError, setDeadlineError] = useState<DeadlineError | undefined>()
-
-  useEffect(() => {
-    if (deadlineInput !== '' && !deadlineInputIsValid) {
-      setDeadlineError(DeadlineError.InvalidInput)
-    } else {
-      setDeadlineError(undefined)
-    }
-  }, [deadlineInput, deadlineInputIsValid])
-
   const parseCustomSlippage = (value: string) => {
     if (value === '' || inputRegex.test(escapeRegExp(value))) {
       setSlippageInput(value)
@@ -134,33 +112,9 @@ export const SlippageTabsComponent = ({
     }
   }
 
-  const parseCustomDeadline = (value: string) => {
-    try {
-      const valueAsInt: number = Number.parseInt(value) * 60
-      if (!Number.isNaN(valueAsInt) && valueAsInt > 60 && valueAsInt < THREE_DAYS_IN_SECONDS) {
-        setTTL?.(valueAsInt)
-      } else {
-        setDeadlineError(DeadlineError.InvalidInput)
-      }
-    } catch (error) {
-      console.error(error)
-    }
-  }
-
   return (
     <FlexGap flexDirection="column" gap="24px">
       <Flex flexDirection="column">
-        <Flex mb="12px">
-          <Text>{t('Slippage Tolerance')}</Text>
-          <QuestionHelper
-            text={t(
-              'Setting a high slippage tolerance can help transactions succeed, but you may not get such a good price. Use with caution.',
-            )}
-            placement="top"
-            ml="4px"
-          />
-        </Flex>
-
         <ButtonsContainer style={{ flexWrap: isMobile ? 'nowrap' : 'wrap' }}>
           {isShowAutoSlippage && (
             <StyledButton
@@ -282,74 +236,108 @@ export const SlippageTabsComponent = ({
           </Message>
         )}
       </Flex>
-      {isShowTTL && (
-        <Box>
-          <Flex alignItems="center">
-            <Text>{t('Tx deadline')}</Text>
-            <QuestionHelper
-              text={t('Your transaction will revert if it is left confirming for longer than this time.')}
-              placement="top"
-              ml="4px"
-            />
-          </Flex>
-          <Flex alignItems="center">
-            <Box position="relative" width="128px" mt="4px">
-              <Input
-                scale="md"
-                inputMode="numeric"
-                pattern="^[0-9]+$"
-                isWarning={!!deadlineError}
-                placeholder={(Number(ttl) / 60).toString()}
-                value={deadlineInput}
-                onChange={(event) => {
-                  if (event.currentTarget.validity.valid) {
-                    setDeadlineInput(event.target.value)
-                  }
-                }}
-                onBlur={(event) => {
-                  if (event.currentTarget.validity.valid) {
-                    parseCustomDeadline(event.target.value)
-                  }
-                }}
-                style={{
-                  paddingRight: '48px',
-                }}
-              />
-              <Flex position="absolute" right="8px" top="8px" alignItems="center">
-                <StyledVerticalDivider />
-                <Text color="textSubtle">{t('Mins')}</Text>
-              </Flex>
-            </Box>
-            <PrimaryOutlineButton
-              ml="8px"
-              mt="3px"
-              variant="text"
-              scale="sm"
-              onClick={() => {
-                setDeadlineInput('')
-                parseCustomDeadline(DEFAULT_TXN_DEADLINE.toString())
-              }}
-            >
-              {t('Reset')}
-            </PrimaryOutlineButton>
-          </Flex>
-        </Box>
-      )}
     </FlexGap>
+  )
+}
+
+export const TxDeadlintSetting = () => {
+  const { t } = useTranslation()
+
+  const [ttl, setTTL] = useUserTransactionTTL()
+  const [deadlineError, setDeadlineError] = useState<DeadlineError | undefined>()
+
+  const [deadlineInput, setDeadlineInput] = useState('')
+  const deadlineInputIsValid =
+    deadlineInput === '' || (ttl !== undefined && (Number(ttl) / 60).toString() === deadlineInput)
+
+  const isShowTTL = typeof setTTL !== 'undefined' && typeof ttl !== 'undefined'
+
+  const parseCustomDeadline = (value: string) => {
+    try {
+      const valueAsInt: number = Number.parseInt(value) * 60
+      if (!Number.isNaN(valueAsInt) && valueAsInt > 60 && valueAsInt < THREE_DAYS_IN_SECONDS) {
+        setTTL?.(valueAsInt)
+      } else {
+        setDeadlineError(DeadlineError.InvalidInput)
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  useEffect(() => {
+    if (deadlineInput !== '' && !deadlineInputIsValid) {
+      setDeadlineError(DeadlineError.InvalidInput)
+    } else {
+      setDeadlineError(undefined)
+    }
+  }, [deadlineInput, deadlineInputIsValid])
+
+  return (
+    isShowTTL && (
+      <Box>
+        <Flex alignItems="center">
+          <Text>{t('Tx deadline')}</Text>
+          <QuestionHelper
+            text={t('Your transaction will revert if it is left confirming for longer than this time.')}
+            placement="top"
+            ml="4px"
+          />
+        </Flex>
+        <Flex alignItems="center">
+          <Box position="relative" width="128px" mt="4px">
+            <Input
+              scale="md"
+              inputMode="numeric"
+              pattern="^[0-9]+$"
+              isWarning={!!deadlineError}
+              placeholder={(Number(ttl) / 60).toString()}
+              value={deadlineInput}
+              onChange={(event) => {
+                if (event.currentTarget.validity.valid) {
+                  setDeadlineInput(event.target.value)
+                }
+              }}
+              onBlur={(event) => {
+                if (event.currentTarget.validity.valid) {
+                  parseCustomDeadline(event.target.value)
+                }
+              }}
+              style={{
+                paddingRight: '48px',
+              }}
+            />
+            <Flex position="absolute" right="8px" top="8px" alignItems="center">
+              <StyledVerticalDivider />
+              <Text color="textSubtle">{t('Mins')}</Text>
+            </Flex>
+          </Box>
+          <PrimaryOutlineButton
+            ml="8px"
+            mt="3px"
+            variant="text"
+            scale="sm"
+            onClick={() => {
+              setDeadlineInput('')
+              parseCustomDeadline(DEFAULT_TXN_DEADLINE.toString())
+            }}
+          >
+            {t('Reset')}
+          </PrimaryOutlineButton>
+        </Flex>
+      </Box>
+    )
   )
 }
 
 const SlippageTabs = () => {
   const [userSlippageTolerance, setUserSlippageTolerance] = useUserSlippage()
   const [isAutoSlippageEnabled, setIsAutoSlippageEnabled] = useAutoSlippageEnabled()
-  const [ttl, setTTL] = useUserTransactionTTL()
 
   return (
     <SlippageTabsComponent
       slippageTolerance={userSlippageTolerance}
       setSlippageTolerance={setUserSlippageTolerance}
-      ttl={ttl}
-      setTTL={setTTL}
       isAutoSlippageEnabled={isAutoSlippageEnabled}
       setIsAutoSlippageEnabled={setIsAutoSlippageEnabled}
     />

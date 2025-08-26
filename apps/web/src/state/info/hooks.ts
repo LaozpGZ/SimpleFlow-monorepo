@@ -6,8 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { STABLE_SUPPORTED_CHAIN_IDS } from '@pancakeswap/stable-swap-sdk'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import BigNumber from 'bignumber.js'
-import { fetchAllTokenDataByAddresses } from 'state/info/queries/tokens/tokenData'
-import { Block, Transaction, TransactionType, TvlChartEntry, VolumeChartEntry } from 'state/info/types'
+import { Transaction, TransactionType, TvlChartEntry, VolumeChartEntry } from 'state/info/types'
 import { getAprsForStableFarm } from 'utils/getAprsForStableFarm'
 import { getLpFeesAndApr } from 'utils/getLpFeesAndApr'
 import { getPercentChange } from 'utils/infoDataHelpers'
@@ -808,17 +807,6 @@ export const useAllTokenDataQuery = (): {
   })
 
   return data ?? {}
-}
-
-const graphPerPage = 50
-
-const fetcher = (addresses: string[], chainName: MultiChainNameExtend, blocks: Block[]) => {
-  const times = Math.ceil(addresses.length / graphPerPage)
-  const addressGroup: Array<string[]> = []
-  for (let i = 0; i < times; i++) {
-    addressGroup.push(addresses.slice(i * graphPerPage, (i + 1) * graphPerPage))
-  }
-  return Promise.all(addressGroup.map((d) => fetchAllTokenDataByAddresses(chainName, blocks, d)))
 }
 
 const getTokenData = async (

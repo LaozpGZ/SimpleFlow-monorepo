@@ -9,6 +9,7 @@ export interface ExtendEthereum extends WindowProvider {
   isTrustWallet?: true
   isBlocto?: true
   isBinance?: true
+  binancew3w?: unknown
   isCoinbaseWallet?: true
   isTrust?: true
   isTokenPocket?: true

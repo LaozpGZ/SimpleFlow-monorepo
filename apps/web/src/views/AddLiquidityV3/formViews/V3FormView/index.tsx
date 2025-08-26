@@ -80,7 +80,7 @@ import { HandleFeePoolSelectFn, QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV
 import { MarketPriceSlippageWarning } from 'views/CreateLiquidityPool/components/SubmitCreateButton'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { Dot } from 'views/Notifications/styles'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTotalUsdValue } from '../../../AddLiquidity/hooks/useTotalUsdValue'
@@ -545,6 +545,7 @@ export default function V3FormView({
     expertMode ? onAdd() : onPresentAddLiquidityModal()
     logGTMClickAddLiquidityEvent()
   }, [expertMode, onAdd, onPresentAddLiquidityModal])
+
   const poolCurrentPrice = useMemo(() => {
     if (!pool) return undefined
     return new Price(pool.token0, pool.token1, 2n ** 192n, pool.sqrtRatioX96 * pool.sqrtRatioX96)
@@ -731,6 +732,7 @@ export default function V3FormView({
     targetRef: currentPriceTargetRef,
   } = useTooltip(t('The price is an estimation of the current market price. Please verify before using it.'), {
     placement: 'bottom',
+    avoidToStopPropagation: true,
   })
 
   return (
@@ -750,7 +752,7 @@ export default function V3FormView({
                         <FlexGap gap="4px" alignItems="center" flexWrap="wrap">
                           <div ref={currentPriceTargetRef}>
                             <CurrentPriceButton onClick={handleUseCurrentPrice}>
-                              <span>{t('Use Current Price')}</span>
+                              <span>{t('Use Market Price')}</span>
                               <InfoIcon color="primary60" width="18px" />
                             </CurrentPriceButton>
                             {currentPriceTooltipVisible && currentPriceTooltip}
@@ -1022,7 +1024,7 @@ export default function V3FormView({
               </RowBetween>
               <RowBetween>
                 <Text color="textSubtle">Slippage Tolerance</Text>
-                <SlippageButton />
+                <LiquiditySlippageButton />
               </RowBetween>
             </Column>
             <MevProtectToggle size="sm" />

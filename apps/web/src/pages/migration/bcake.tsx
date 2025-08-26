@@ -1,8 +1,8 @@
-import { PM_V2_SS_BOOSTER_SUPPORT_CHAINS } from '@pancakeswap/position-managers'
+import { ChainId } from '@pancakeswap/chains'
 import Migration from 'views/Migration/bCake'
 
 const MigrationPage = () => <Migration />
 
-MigrationPage.chains = PM_V2_SS_BOOSTER_SUPPORT_CHAINS
+MigrationPage.chains = [ChainId.BSC, ChainId.ETHEREUM]
 
 export default MigrationPage

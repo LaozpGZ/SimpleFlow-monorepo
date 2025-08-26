@@ -78,7 +78,10 @@ const isMetamaskInstalled = () => {
 
 function isBinanceWeb3WalletInstalled() {
   try {
-    return Boolean((safeGetWindow() as ExtendEthereum)?.isBinance)
+    return (
+      Boolean((safeGetWindow() as ExtendEthereum)?.isBinance) ||
+      Boolean((safeGetWindow() as ExtendEthereum)?.binancew3w)
+    )
   } catch (error) {
     console.error('Error checking Binance Web3 Wallet:', error)
     return false
@@ -157,7 +160,7 @@ export const walletsConfig = <config extends Config = Config, context = unknown>
       id: LegacyWalletIds.BinanceW3W,
       title: 'Binance Wallet',
       icon: `${ASSET_CDN}/web/wallets/binance-w3w.png`,
-      connectorId: isBinanceWeb3WalletInstalled() ? ConnectorNames.Injected : ConnectorNames.BinanceW3W,
+      connectorId: getBinanceConnectorId(),
       get installed() {
         if (isBinanceWeb3WalletInstalled()) {
           return true

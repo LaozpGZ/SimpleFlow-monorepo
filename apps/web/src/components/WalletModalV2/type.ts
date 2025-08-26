@@ -9,6 +9,8 @@ export enum ViewState {
   CLAIM_GIFT_CONFIRM,
   GIFT_INFO_DETAIL,
   CONNECTED_WALLETS,
+  RECEIVE_OPTIONS,
+  RECEIVE_QR,
 }
 
 export enum SEND_ENTRY {

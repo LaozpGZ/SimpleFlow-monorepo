@@ -1,4 +1,5 @@
 import { chainNames, getChainName } from '@pancakeswap/chains'
+import { Protocol } from '@pancakeswap/farms'
 import { INFINITY_SUPPORTED_CHAINS } from '@pancakeswap/infinity-sdk'
 import { Native } from '@pancakeswap/sdk'
 import { CAKE, USDC } from '@pancakeswap/tokens'
@@ -8,6 +9,7 @@ import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useRouteParams } from 'next-typesafe-url/pages'
 import { useRouter } from 'next/router'
 import { useCallback, useEffect, useMemo } from 'react'
+import { isSupportedProtocol } from 'utils/protocols'
 import { z } from 'zod'
 
 export const useSelectIdRoute = () => {
@@ -17,11 +19,29 @@ export const useSelectIdRoute = () => {
 
   const { data: routeParams, error: routeError, isLoading } = useRouteParams(SelectIdRoute.routeParams)
 
+  const protocolFromQuery = useMemo(() => router.query.selectId?.[1] || '', [router.query])
+
+  const protocolName = useMemo(() => {
+    return (
+      // if no protocol and infinity is supported, set to infinity
+      (
+        (!protocolFromQuery || protocolFromQuery === 'infinity') && INFINITY_SUPPORTED_CHAINS.includes(activeChainId)
+          ? 'infinity'
+          : // if other protocol value is supported (v2, v3, stable), set to that protocol
+          isSupportedProtocol(protocolFromQuery as Protocol)
+          ? protocolFromQuery
+          : // if protocol is not supported, default to v3
+            'v3'
+      ) as 'infinity' | 'v3' | 'v2' | 'stable'
+    )
+  }, [activeChainId, router.query])
+
   const replaceWithDefaultRoute = useCallback(() => {
     if (!activeChainId || !router.isReady) return
+
     const chainName = getChainName(activeChainId)
     console.debug('debug chainName', { chainName, activeChainId })
-    const protocolName = INFINITY_SUPPORTED_CHAINS.includes(activeChainId) ? 'infinity' : 'v3'
+
     const currencyA = native.symbol
     const currencyB: string = CAKE[activeChainId]?.address ?? USDC[activeChainId]?.address ?? ''
 
@@ -36,9 +56,21 @@ export const useSelectIdRoute = () => {
       undefined,
       { shallow: true },
     )
-  }, [activeChainId, native.symbol, router])
+  }, [activeChainId, native.symbol, router, protocolName])
+
+  // If Infinity is not supported on the current chain, redirect to default route
+  useEffect(
+    () => {
+      if (protocolName && protocolFromQuery && protocolName !== protocolFromQuery) {
+        replaceWithDefaultRoute()
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [protocolName, protocolFromQuery],
+  )
 
   return {
+    protocolName,
     replaceWithDefaultRoute,
     routeParams,
     routeError,

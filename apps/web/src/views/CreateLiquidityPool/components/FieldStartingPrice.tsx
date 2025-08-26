@@ -2,30 +2,33 @@ import { useIsMounted, usePreviousValue } from '@pancakeswap/hooks'
 import { getIdFromCurrencyPrice } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  AutoRow,
   BalanceInput,
   Box,
   BoxProps,
   Button,
   FlexGap,
+  InfoIcon,
   PreTitle,
-  QuestionHelper,
+  SwapHorizIcon,
   Text,
   useMatchBreakpoints,
+  useTooltip,
 } from '@pancakeswap/uikit'
 import { escapeRegExp } from '@pancakeswap/utils/escapeRegExp'
 import { formatPrice } from '@pancakeswap/utils/formatFractions'
-import { GreyCard } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { usePoolMarketPrice } from 'hooks/usePoolMarketPriceSlippage'
 import { tryParsePrice } from 'hooks/v3/utils'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useActiveIdQueryState, useBinStepQueryState, useStartingPriceQueryState } from 'state/infinity/create'
+import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useBinRangeQueryState, useClRangeQueryState, useInverted } from 'state/infinity/shared'
 import styled from 'styled-components'
+import { Currency } from '@pancakeswap/sdk'
+import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { truncateText } from 'utils'
-import { useCurrencies } from '../hooks/useCurrencies'
 import { useInfinityCreateFormQueryState } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
+import { useCurrencies } from '../hooks/useCurrencies'
 
 export type FieldStartingPriceProps = BoxProps
 
@@ -49,6 +52,8 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ ...boxPr
   const [inverted] = useInverted()
   const prevInverted = usePreviousValue(inverted)
   const [forceSynced, setForceSynced] = useState(false)
+
+  const { switchCurrencies } = useSelectIdRouteParams()
 
   const [, , marketPrice] = usePoolMarketPrice(currency0, currency1)
 
@@ -139,48 +144,46 @@ export const FieldStartingPrice: React.FC<FieldStartingPriceProps> = ({ ...boxPr
     }
   }, [inverted, marketPrice, updatePrice])
 
-  // const startPriceAsFraction = useStartPriceAsFraction()
+  const {
+    tooltip: currentPriceTooltip,
+    tooltipVisible: currentPriceTooltipVisible,
+    targetRef: currentPriceTargetRef,
+  } = useTooltip(t('The price is an estimation of the current market price. Please verify before using it.'), {
+    avoidToStopPropagation: true,
+  })
+
   return (
     <Box {...boxProps}>
-      {/* <pre>startPrice: {startPrice}</pre>
-      <pre>activeId: {activeId}</pre>
+      {marketPrice && (
+        <FlexGap gap="4px" mb="8px" justifyContent="space-between" alignItems="center" flexWrap="wrap">
+          <FlexGap mt={['16px', '16px', '16px', '16px', '16px', '0']} gap="5px" alignItems="center">
+            <PreTitle>{t('Set Starting Price')}</PreTitle>
+          </FlexGap>
+          <FlexGap gap="4px" alignItems="center" flexWrap="wrap">
+            <div ref={currentPriceTargetRef}>
+              <CurrentPriceButton onClick={handleSetMarketPrice}>
+                <span>{t('Use Market Price')}</span>
+                <InfoIcon color="primary60" width="18px" />
+              </CurrentPriceButton>
+              {currentPriceTooltipVisible && currentPriceTooltip}
+            </div>
 
-      <pre>
-        startPriceAsFraction:{' '}
-        {startPriceAsFraction && startPriceAsFraction.denominator !== 0n ? startPriceAsFraction?.toFixed(8) : ''}
-      </pre>
-      <pre>inverted: {inverted?.toString()}</pre> */}
-      {/* <span>startPrice: {startPrice}</span> */}
-      <ResponsiveTwoColumns mt="0px">
-        <FlexGap mt={['16px', '16px', '16px', '16px', '16px', '0']} gap="5px" alignItems="center">
-          <PreTitle>{t('Set Starting Price')}</PreTitle>
-        </FlexGap>
-
-        <StartingPriceInput value={startPrice} onUserInput={updatePrice} unit={unit} />
-      </ResponsiveTwoColumns>
-      {marketPrice ? (
-        <GreyCard mt="8px" padding="12px">
-          <AutoRow alignItems="center" justifyContent="space-between">
-            <FlexGap alignItems="center" gap="4px">
-              <Text fontSize="12px">
+            <FlexGap gap="4px" alignItems="center" flexWrap="wrap">
+              <Text color="textSubtle" small bold>
                 {formatPrice(inverted ? marketPrice.invert() : marketPrice)}{' '}
-                {t('%assetA% per %assetB%', {
+              </Text>
+              <Text color="textSubtle" small>
+                {t('%assetA% = 1 %assetB%', {
                   assetA: inverted ? currency0?.symbol : currency1?.symbol,
                   assetB: inverted ? currency1?.symbol : currency0?.symbol,
                 })}
               </Text>
-              <QuestionHelper
-                placement="bottom"
-                color="textSubtle"
-                text={t('The price is estimated from the market price. Please verify it before using it.')}
-              />
+              <SwapHorizIcon role="button" color="primary60" onClick={switchCurrencies} style={{ cursor: 'pointer' }} />
             </FlexGap>
-            <Button scale="xs" variant="tertiary" onClick={handleSetMarketPrice}>
-              {t('Use this Price')}
-            </Button>
-          </AutoRow>
-        </GreyCard>
-      ) : null}
+          </FlexGap>
+        </FlexGap>
+      )}
+      <StartingPriceInput value={startPrice} onUserInput={updatePrice} unit={unit} currency={quoteCurrency} />
     </Box>
   )
 }
@@ -189,9 +192,10 @@ type StartingPriceInputProps = {
   value: string | null
   onUserInput: (input: string) => void
   unit: string
+  currency?: Currency
 }
 
-const StartingPriceInput: React.FC<StartingPriceInputProps> = ({ value, onUserInput, unit }) => {
+const StartingPriceInput: React.FC<StartingPriceInputProps> = ({ value, onUserInput, unit, currency }) => {
   const [inputValue, setInputValue] = useState<string | null>(value)
   const isMounted = useIsMounted()
 
@@ -233,7 +237,12 @@ const StartingPriceInput: React.FC<StartingPriceInputProps> = ({ value, onUserIn
     <BalanceInput
       value={inputValue ?? ''}
       onUserInput={handleInputChange}
-      unit={unit}
+      appendComponent={currency ? <CurrencyLogo currency={currency} size="24px" showChainLogo /> : null}
+      unit={
+        <Text color="textSubtle" bold>
+          {unit}
+        </Text>
+      }
       placeholder="0.00"
       inputProps={{
         style: { height: '24px' },
@@ -245,16 +254,18 @@ const StartingPriceInput: React.FC<StartingPriceInputProps> = ({ value, onUserIn
   )
 }
 
-const ResponsiveTwoColumns = styled(Box)`
-  display: grid;
-  grid-column-gap: 32px;
-  grid-row-gap: 16px;
-  grid-template-columns: 1fr;
+const CurrentPriceButton = styled(Button).attrs({ scale: 'xs', variant: 'text' })`
+  height: 24px;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 8px;
 
-  grid-template-rows: max-content;
-  grid-auto-flow: row;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 
-  ${({ theme }) => theme.mediaQueries.xl} {
-    grid-template-columns: 1fr 1fr;
-  }
+  background: transparent;
+  border: 2px solid ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.primary60};
 `

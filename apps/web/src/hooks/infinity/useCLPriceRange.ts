@@ -10,6 +10,7 @@ export const useCLPriceRange = (
   baseCurrency: Currency | undefined,
   quoteCurrency: Currency | undefined,
   tickSpacing: number | undefined,
+  priceFormatter: (price?: Price<Currency, Currency>) => string = formatRangeSelectorPrice,
 ) => {
   const [inverted] = useInverted()
   const [{ lowerTick, upperTick }, setTick] = useClRangeQueryState()
@@ -51,17 +52,17 @@ export const useCLPriceRange = (
 
     if (lowerPrice) {
       if (inverted) {
-        maxPrice_ = formatRangeSelectorPrice(lowerPrice.invert())
+        maxPrice_ = priceFormatter(lowerPrice.invert())
       } else {
-        minPrice_ = formatRangeSelectorPrice(lowerPrice)
+        minPrice_ = priceFormatter(lowerPrice)
       }
     }
 
     if (upperPrice) {
       if (inverted) {
-        minPrice_ = formatRangeSelectorPrice(upperPrice?.invert())
+        minPrice_ = priceFormatter(upperPrice?.invert())
       } else {
-        maxPrice_ = formatRangeSelectorPrice(upperPrice)
+        maxPrice_ = priceFormatter(upperPrice)
       }
     }
 
@@ -81,7 +82,7 @@ export const useCLPriceRange = (
     }
 
     return [minPrice_, maxPrice_]
-  }, [currency0, currency1, lowerPrice, upperPrice, ticksAtLimit, lowerTick, upperTick, inverted])
+  }, [currency0, currency1, lowerPrice, upperPrice, ticksAtLimit, lowerTick, upperTick, inverted, priceFormatter])
 
   return { minPrice, maxPrice, lowerPrice, upperPrice }
 }

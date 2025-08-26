@@ -92,7 +92,9 @@ const w3wSign = async ({
       throw new W3WSignNotSupportedError('W3W sign not supported')
     }
 
-    const result = await window.binancew3w.pcs.sign({
+    const binanceW3W = window.binancew3w as BinancewW3W
+
+    const result = await binanceW3W.pcs.sign({
       binanceChainId: `${chainId}`,
       contractAddress,
       address,

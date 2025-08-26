@@ -76,4 +76,11 @@ export const styleVariants = {
     backgroundColor: "tertiary",
     color: "primary60",
   },
+  [variants.PRIMARY60_OUTLINE]: {
+    backgroundColor: "transparent",
+    color: "primary60",
+    border: "2px solid",
+    borderColor: "primary",
+    boxShadow: "none",
+  },
 };

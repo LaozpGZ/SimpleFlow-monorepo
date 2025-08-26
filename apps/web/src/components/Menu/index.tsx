@@ -1,4 +1,4 @@
-import { languageList, useTranslation } from '@pancakeswap/localization'
+import { useTranslation } from '@pancakeswap/localization'
 import { Menu as UikitMenu, footerLinks, useModal } from '@pancakeswap/uikit'
 import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
 import { NextLinkFromReactRouter } from '@pancakeswap/widgets-internal'
@@ -14,7 +14,6 @@ import { useRouter } from 'next/router'
 import { Suspense, lazy, useCallback, useMemo } from 'react'
 import { styled } from 'styled-components'
 import GlobalSettings from './GlobalSettings'
-import { SettingsMode } from './GlobalSettings/types'
 import UserMenu from './UserMenu'
 import { UseMenuItemsParams, useMenuItems } from './hooks/useMenuItems'
 import { getActiveMenuItem, getActiveSubMenuChildItem, getActiveSubMenuItem } from './utils'
@@ -30,7 +29,7 @@ const Menu = (props) => {
   const { chainId } = useActiveChainId()
   const { isDark, setTheme } = useTheme()
   const cakePrice = useCakePrice()
-  const { currentLanguage, setLanguage, t } = useTranslation()
+  const { currentLanguage, t } = useTranslation()
   const { pathname } = useRouter()
   const perpUrl = usePerpUrl({ chainId, isDark, languageCode: currentLanguage.code })
   const [perpConfirmed] = useUserNotUsCitizenAcknowledgement(IdType.PERPETUALS)
@@ -79,7 +78,7 @@ const Menu = (props) => {
       linkComponent={LinkComponent}
       rightSide={
         <>
-          <GlobalSettings mode={SettingsMode.GLOBAL} />
+          <GlobalSettings />
           {enabled && (
             <Suspense fallback={null}>
               <Notifications />
@@ -93,9 +92,7 @@ const Menu = (props) => {
       banner={null}
       isDark={isDark}
       toggleTheme={toggleTheme}
-      currentLang={currentLanguage.code}
-      langs={languageList}
-      setLang={setLanguage}
+      showLangSelector={false}
       cakePriceUsd={cakePrice.eq(BIG_ZERO) ? undefined : cakePrice}
       links={filterItemsProps(menuItems)}
       subLinks={
@@ -139,7 +136,7 @@ export const SharedComponentWithOutMenu: React.FC<React.PropsWithChildren> = ({ 
   return (
     <>
       <SharedComponentWithOutMenuWrapper>
-        <GlobalSettings mode={SettingsMode.GLOBAL} />
+        <GlobalSettings />
         {enabled && (
           <Suspense fallback={null}>
             <Notifications />

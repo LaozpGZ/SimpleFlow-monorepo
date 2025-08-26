@@ -1,6 +1,7 @@
 import { ChainId } from '@pancakeswap/chains'
 import { useHttpLocations } from '@pancakeswap/hooks'
 import { Token, UnifiedCurrency } from '@pancakeswap/sdk'
+import { ChainLogo } from '@pancakeswap/widgets-internal'
 import { WrappedTokenInfo } from '@pancakeswap/token-lists'
 import { BinanceIcon, TokenLogo } from '@pancakeswap/uikit'
 import { getImageUrlsFromToken } from 'components/TokenImage'
@@ -15,11 +16,31 @@ const StyledLogo = styled(TokenLogo)<{ size: string }>`
   border-radius: 50%;
 `
 
+const LogoContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const StyledChainLogo = styled(ChainLogo)`
+  position: absolute;
+  right: 6px;
+  bottom: -6px;
+
+  & > img {
+    background-color: ${({ theme }) => theme.colors.invertedContrast};
+    border: 0px solid ${({ theme }) => theme.colors.invertedContrast};
+    border-radius: 35%;
+  }
+`
+
 interface LogoProps {
   currency?: UnifiedCurrency
   size?: string
   style?: React.CSSProperties
   src?: string
+  showChainLogo?: boolean
 }
 
 export function FiatLogo({ currency, size = '24px', style }: LogoProps) {
@@ -33,7 +54,7 @@ export function FiatLogo({ currency, size = '24px', style }: LogoProps) {
   )
 }
 
-export default function CurrencyLogo({ currency, size = '24px', style, src }: LogoProps) {
+export default function CurrencyLogo({ currency, size = '24px', style, src, showChainLogo = false }: LogoProps) {
   const uriLocations = useHttpLocations(currency instanceof WrappedTokenInfo ? currency.logoURI : undefined)
   // @ts-ignore
   const imageUrls = getImageUrlsFromToken(currency)
@@ -57,20 +78,31 @@ export default function CurrencyLogo({ currency, size = '24px', style, src }: Lo
 
   if (currency?.isNative) {
     if (currency.chainId === ChainId.BSC) {
-      return <BinanceIcon width={size} style={style} />
+      return (
+        <LogoContainer>
+          <BinanceIcon width={size} style={style} />
+          {showChainLogo && <StyledChainLogo chainId={currency?.chainId} width={10} height={10} />}
+        </LogoContainer>
+      )
     }
     return (
-      <StyledLogo size={size} srcs={[`${ASSET_CDN}/web/native/${currency.chainId}.png`]} width={size} style={style} />
+      <LogoContainer>
+        <StyledLogo size={size} srcs={[`${ASSET_CDN}/web/native/${currency.chainId}.png`]} width={size} style={style} />
+        {showChainLogo && <StyledChainLogo chainId={currency?.chainId} width={10} height={10} />}
+      </LogoContainer>
     )
   }
 
   return (
-    <StyledLogo
-      size={size}
-      srcs={src ? [src, ...srcs] : srcs}
-      alt={`${currency?.symbol ?? 'token'} logo`}
-      style={style}
-    />
+    <LogoContainer>
+      <StyledLogo
+        size={size}
+        srcs={src ? [src, ...srcs] : srcs}
+        alt={`${currency?.symbol ?? 'token'} logo`}
+        style={style}
+      />
+      {showChainLogo && <StyledChainLogo chainId={currency?.chainId} width={10} height={10} />}
+    </LogoContainer>
   )
 }
 

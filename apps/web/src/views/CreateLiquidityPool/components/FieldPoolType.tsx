@@ -1,22 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  ArrowDropDownIcon,
-  BarChartIcon,
   Box,
   BoxProps,
-  CurvedChartIcon,
-  DropDownContainer,
-  DropDownHeader,
-  DropdownMenu,
-  DropdownMenuItems,
-  DropdownMenuItemType,
+  ButtonMenu,
+  ButtonMenuItem,
   FlexGap,
   LinkExternal,
   PreTitle,
   QuestionHelper,
-  Text,
 } from '@pancakeswap/uikit'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { usePoolTypeQueryState, useStartingPriceQueryState } from 'state/infinity/create'
 import { useHookReset } from 'views/HookSettings/hooks/useHookReset'
 import {
@@ -25,8 +18,6 @@ import {
 } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
 
 export type FieldPoolTypeProps = BoxProps
-
-const itemKey = (item: Required<DropdownMenuItems>['items'][number]) => item.key
 
 export const FieldPoolType: React.FC<FieldPoolTypeProps> = ({ ...boxProps }) => {
   const { t } = useTranslation()
@@ -48,39 +39,18 @@ export const FieldPoolType: React.FC<FieldPoolTypeProps> = ({ ...boxProps }) => 
       }
       resetHook()
     },
-    [poolType, resetBinQueryState, resetCLQueryState, setPoolType, setStartPrice],
+    [poolType, resetBinQueryState, resetCLQueryState, setPoolType, setStartPrice, resetHook],
   )
 
-  const menuItems = useMemo(() => {
-    return [
-      {
-        type: DropdownMenuItemType.BUTTON,
-        key: 'CL',
-        label: (
-          <>
-            <CurvedChartIcon id="pool-dropdown-curve" width="22" height="22" color="textSubtle" />
-            {t('CLAMM')}
-          </>
-        ),
-        onClick: () => {
-          updatePoolType('CL')
-        },
-      },
-      {
-        type: DropdownMenuItemType.BUTTON,
-        key: 'Bin',
-        label: (
-          <>
-            <BarChartIcon id="pool-dropdown-bar" width="22" height="22" color="textSubtle" />
-            {t('LBAMM')}
-          </>
-        ),
-        onClick: () => {
-          updatePoolType('Bin')
-        },
-      },
-    ]
-  }, [t, updatePoolType])
+  const handleMenuItemClick = useCallback(
+    (index: number) => {
+      const type = index === 0 ? 'CL' : 'Bin'
+      updatePoolType(type)
+    },
+    [updatePoolType],
+  )
+
+  const activeIndex = poolType === 'CL' ? 0 : 1
 
   return (
     <Box {...boxProps}>
@@ -107,27 +77,10 @@ export const FieldPoolType: React.FC<FieldPoolTypeProps> = ({ ...boxProps }) => 
           }
         />
       </FlexGap>
-      <DropdownMenu items={menuItems} itemKey={itemKey}>
-        <DropDownContainer p={0}>
-          <DropDownHeader justifyContent="space-between">
-            <FlexGap gap="5px" alignItems="center">
-              {poolType === 'CL' && (
-                <>
-                  <CurvedChartIcon width="22" height="22" />
-                  <Text>{t('CLAMM')}</Text>
-                </>
-              )}
-              {poolType === 'Bin' && (
-                <>
-                  <BarChartIcon width="22" height="22" />
-                  <Text>{t('LBAMM')}</Text>
-                </>
-              )}
-            </FlexGap>
-            <ArrowDropDownIcon className="down-icon" />
-          </DropDownHeader>
-        </DropDownContainer>
-      </DropdownMenu>
+      <ButtonMenu activeIndex={activeIndex} onItemClick={handleMenuItemClick} variant="subtle" fullWidth>
+        <ButtonMenuItem height="38px">{t('CLAMM')}</ButtonMenuItem>
+        <ButtonMenuItem height="38px">{t('LBAMM')}</ButtonMenuItem>
+      </ButtonMenu>
     </Box>
   )
 }

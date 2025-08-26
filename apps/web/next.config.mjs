@@ -51,7 +51,6 @@ const workerDeps = Object.keys(smartRouterPkgs.dependencies)
 const prodTranspiles = [
     'next-typesafe-url',
     '@pancakeswap/farms',
-    '@pancakeswap/position-managers',
     '@pancakeswap/localization',
     '@pancakeswap/hooks',
     '@pancakeswap/utils',
@@ -240,6 +239,11 @@ const config = {
       {
         source: '/info/pools/:address',
         destination: '/info/pairs/:address',
+        permanent: true,
+      },
+      {
+        source: '/position-managers/:path*',
+        destination: 'https://legacy-pm.pancakeswap.finance/position-managers/:path*',
         permanent: true,
       },
       {

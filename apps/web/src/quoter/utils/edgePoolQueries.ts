@@ -1,5 +1,5 @@
 import { ChainId, getChainName } from '@pancakeswap/chains'
-import { hooksList } from '@pancakeswap/infinity-sdk'
+import { findHook, findHookByAddress, type HookData, hooksList } from '@pancakeswap/infinity-sdk'
 import {
   getPoolAddress,
   InfinityBinPool,
@@ -22,12 +22,53 @@ import {
   RemotePoolCL,
 } from '@pancakeswap/smart-router/dist/evm/infinity-router/queries/remotePool.type'
 import { createAsyncCallWithFallbacks } from '@pancakeswap/utils/withFallback'
+import { viemServerClients } from 'utils/viem.server'
 import { v3Clients } from 'utils/graphql'
 import { mockCurrency } from 'utils/mockCurrency'
 import { Address } from 'viem/accounts'
 import { APIChain, getProvider, Protocol } from './edgeQueries.util'
 
-async function getInfinityPoolsFromApi(addressA: Address, addressB: Address, chainId: ChainId) {
+async function getHooksMap(type: 'light' | 'full', poolWithHooks: (RemotePoolCL | RemotePoolBIN)[], chainId: ChainId) {
+  const hooks =
+    type === 'light'
+      ? await Promise.all(
+          poolWithHooks.map(async (pool) => {
+            const { hookAddress } = pool
+
+            try {
+              const hook = await findHookByAddress({
+                poolId: pool.id,
+                publicClient: viemServerClients[chainId],
+                chainId: chainId as keyof typeof hooksList,
+                poolType: pool.protocol === 'infinityBin' ? 'Bin' : 'CL',
+                hookAddress: pool.hookAddress || undefined,
+              })
+              return { hook, hookAddress }
+            } catch (ex) {
+              const reason = ex instanceof Error ? ex.message : String(ex)
+              console.error(`[Hook Fetch Error]`, reason)
+
+              return {
+                hook: null,
+                hookAddress,
+              }
+            }
+          }),
+        )
+      : []
+  const hooksMap = hooks
+    .filter((x) => x && x.hookAddress && x.hook)
+    .reduce((acc, { hook, hookAddress }) => {
+      if (hookAddress != null) {
+        // eslint-disable-next-line no-param-reassign
+        acc[hookAddress] = hook as HookData
+      }
+      return acc
+    }, {} as Record<string, HookData>)
+  return hooksMap
+}
+
+async function getInfinityPoolsFromApi(addressA: Address, addressB: Address, chainId: ChainId, type: 'full' | 'light') {
   const chain = getChainName(chainId)
   const url = `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/candidates/infinity/${chain}/${addressA}/${addressB}`
   const response = await fetch(url)
@@ -35,8 +76,10 @@ async function getInfinityPoolsFromApi(addressA: Address, addressB: Address, cha
     throw new Error(`Error fetching infinity pools: ${response.statusText}`)
   }
   const data = (await response.json()) as (RemotePoolCL | RemotePoolBIN)[]
+  const hooksMap = await getHooksMap(type, data, chainId)
+
   const localPools = data
-    .map((pool) => InfinityRouter.toLocalInfinityPool(pool, chainId as keyof typeof hooksList))
+    .map((pool) => InfinityRouter.toLocalInfinityPool(pool, chainId as keyof typeof hooksList, hooksMap))
     .filter((x) => x) as InfinityPoolWithTvl[]
 
   const [currencyA, currencyB] = await Promise.all([
@@ -65,15 +108,20 @@ async function fillTicksAndBins(pools: (InfinityClPool | InfinityBinPool)[]) {
   return [...poolWithTicks, ...poolWithBins]
 }
 
-const fetchInfinityPoolsLight = async (addressA: Address, addressB: Address, chainId: ChainId) => {
+const fetchInfinityPoolsLight = async (
+  addressA: Address,
+  addressB: Address,
+  chainId: ChainId,
+  type: 'full' | 'light',
+) => {
   const call = createAsyncCallWithFallbacks(getInfinityPoolsFromApi, {
     fallbacks: [getInfinityPoolsOnChain],
     fallbackTimeout: 3_000,
   })
-  return call(addressA, addressB, chainId)
+  return call(addressA, addressB, chainId, type)
 }
-const fetchInfinityPools = async (addressA: Address, addressB: Address, chainId: ChainId) => {
-  const pools = await fetchInfinityPoolsLight(addressA, addressB, chainId)
+const fetchInfinityPools = async (addressA: Address, addressB: Address, chainId: ChainId, type: 'full' | 'light') => {
+  const pools = await fetchInfinityPoolsLight(addressA, addressB, chainId, type)
   return fillTicksAndBins(pools as (InfinityClPool | InfinityBinPool)[])
 }
 
@@ -167,7 +215,13 @@ const fetchSSPool = async (addressA: Address, addressB: Address, chainId: ChainI
   return pools
 }
 
-const querySingleType = async (chainId: ChainId, protocol: Protocol, addressA: Address, addressB: Address) => {
+const querySingleType = async (
+  chainId: ChainId,
+  protocol: Protocol,
+  addressA: Address,
+  addressB: Address,
+  type: 'full' | 'light',
+) => {
   switch (protocol) {
     case 'v2': {
       return fetchV2Pools(addressA, addressB, chainId)
@@ -180,14 +234,20 @@ const querySingleType = async (chainId: ChainId, protocol: Protocol, addressA: A
     }
     case 'infinityBin':
     case 'infinityCl': {
-      return fetchInfinityPools(addressA, addressB, chainId)
+      return fetchInfinityPools(addressA, addressB, chainId, type)
     }
     default:
       throw new Error('invalid pool')
   }
 }
 
-const querySingleTypeLite = async (chainId: ChainId, protocol: Protocol, addressA: Address, addressB: Address) => {
+const querySingleTypeLite = async (
+  chainId: ChainId,
+  protocol: Protocol,
+  addressA: Address,
+  addressB: Address,
+  type: 'full' | 'light',
+) => {
   switch (protocol) {
     case 'v2': {
       return fetchV2Pools(addressA, addressB, chainId)
@@ -200,7 +260,7 @@ const querySingleTypeLite = async (chainId: ChainId, protocol: Protocol, address
     }
     case 'infinityBin':
     case 'infinityCl': {
-      return fetchInfinityPoolsLight(addressA, addressB, chainId)
+      return fetchInfinityPoolsLight(addressA, addressB, chainId, type)
     }
     default:
       throw new Error('invalid pool')
@@ -215,7 +275,7 @@ const fetchAllCandidatePools = async (
   const queries = await Promise.all(
     protocols
       .filter((x) => x !== 'infinityBin') // For infinity pools fetch together
-      .map((protocol) => querySingleType(chainId, protocol as Protocol, addressA, addressB)),
+      .map((protocol) => querySingleType(chainId, protocol as Protocol, addressA, addressB, 'full')),
   )
   const pools = queries.flat() as (InfinityPoolWithTvl | V2PoolWithTvl | V3PoolWithTvl | StablePoolWithTvl)[]
   return pools.map((pool) => {
@@ -232,7 +292,7 @@ const fetchAllCandidatePoolsLite = async (
   const queries = await Promise.all(
     protocols
       .filter((x) => x !== 'infinityBin')
-      .map((protocol) => querySingleTypeLite(chainId, protocol as Protocol, addressA, addressB)),
+      .map((protocol) => querySingleTypeLite(chainId, protocol as Protocol, addressA, addressB, 'light')),
   )
   const pools = queries.flat() as (InfinityPoolWithTvl | V2PoolWithTvl | V3Pool | V3PoolWithTvl | StablePoolWithTvl)[]
   return pools.map((pool) => {

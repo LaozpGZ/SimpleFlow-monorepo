@@ -1,10 +1,13 @@
 import { useIsMounted } from '@pancakeswap/hooks'
 import { Native } from '@pancakeswap/sdk'
-import { Currency, sortCurrencies } from '@pancakeswap/swap-sdk-core'
+import { sortCurrencies } from '@pancakeswap/swap-sdk-core'
+import { CAKE, USDC } from '@pancakeswap/tokens'
 import { useSelectIdRouteParams } from 'hooks/dynamicRoute/useSelectIdRoute'
 import { useCurrencyByChainId } from 'hooks/Tokens'
+import { useActiveChainId } from 'hooks/useAccountActiveChain'
 import { useEffect, useMemo } from 'react'
 import { useInverted } from 'state/infinity/shared'
+import currencyId from 'utils/currencyId'
 
 const isCurrencyIdSorted = (chainId: number, currencyIdA: string, currencyIdB: string) => {
   const nativeCurrency = Native.onChain(chainId)
@@ -15,21 +18,28 @@ const isCurrencyIdSorted = (chainId: number, currencyIdA: string, currencyIdB: s
 }
 
 export const useCurrencies = () => {
-  const { currencyIdA: baseCurrencyId, currencyIdB: quoteCurrencyId, chainId } = useSelectIdRouteParams()
+  const { chainId: activeChainId } = useActiveChainId()
+
+  const { currencyIdA: baseCurrencyId, currencyIdB: quoteCurrencyId, chainId, updateParams } = useSelectIdRouteParams()
   const [inverted, setInverted] = useInverted()
 
-  const baseCurrency = useCurrencyByChainId(baseCurrencyId, chainId)
-  const quoteCurrency = useCurrencyByChainId(quoteCurrencyId, chainId)
+  const baseCurrency_ = useCurrencyByChainId(baseCurrencyId, chainId)
+  const quoteCurrency_ = useCurrencyByChainId(quoteCurrencyId, chainId)
+
+  const [baseCurrency, quoteCurrency] = useMemo(() => {
+    // Prevent NATIVE-WNATIVE pair
+    if (baseCurrency_ && quoteCurrency_ && baseCurrency_?.wrapped.address === quoteCurrency_?.wrapped.address) {
+      return [baseCurrency_, undefined]
+    }
+    return [baseCurrency_, quoteCurrency_]
+  }, [baseCurrency_, quoteCurrency_])
 
   const [currency0, currency1] = useMemo(() => {
-    let c0: Currency | undefined
-    let c1: Currency | undefined
-
-    if (baseCurrency && quoteCurrency) {
-      ;[c0, c1] = sortCurrencies([baseCurrency, quoteCurrency])
+    if (!baseCurrency || !quoteCurrency) {
+      return [undefined, undefined]
     }
 
-    return [c0, c1]
+    return sortCurrencies([baseCurrency, quoteCurrency])
   }, [baseCurrency, quoteCurrency])
 
   const isInverted = useMemo(() => {
@@ -50,6 +60,21 @@ export const useCurrencies = () => {
       setInverted(isInverted)
     }
   }, [inverted, isInverted, isMounted, setInverted])
+
+  // Reset currencies when user's chainId changes
+  useEffect(
+    () => {
+      if (activeChainId && chainId && activeChainId !== chainId) {
+        updateParams({
+          chainId: activeChainId,
+          currencyIdA: currencyId(Native.onChain(activeChainId)),
+          currencyIdB: CAKE[activeChainId]?.address ?? USDC[activeChainId]?.address,
+        })
+      }
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [activeChainId],
+  )
 
   return {
     currency0,

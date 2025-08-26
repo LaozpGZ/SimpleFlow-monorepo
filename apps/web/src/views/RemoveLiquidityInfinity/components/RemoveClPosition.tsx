@@ -3,7 +3,7 @@ import { useTheme } from '@pancakeswap/hooks'
 import { getPoolId } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
 import { zeroAddress } from '@pancakeswap/price-api-sdk'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton, SlippageButton } from 'views/Swap/components/SlippageButton'
 import { Percent } from '@pancakeswap/swap-sdk-core'
 import {
   ArrowDownIcon,
@@ -18,7 +18,6 @@ import {
   Slider,
   Text,
   Toggle,
-  useModal,
 } from '@pancakeswap/uikit'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { useUserSlippage } from '@pancakeswap/utils/user'
@@ -27,8 +26,6 @@ import Divider from 'components/Divider'
 import FormattedCurrencyAmount from 'components/FormattedCurrencyAmount/FormattedCurrencyAmount'
 import PageLoader from 'components/Loader/PageLoader'
 import { CurrencyLogo } from 'components/Logo'
-import SettingsModal from 'components/Menu/GlobalSettings/SettingsModal'
-import { SettingsMode } from 'components/Menu/GlobalSettings/types'
 import { INITIAL_ALLOWED_SLIPPAGE } from 'config/constants'
 import { LIQUIDITY_PAGES } from 'config/constants/liquidity'
 import { useInfinityClammPositionIdRouteParams } from 'hooks/dynamicRoute/usePositionIdRoute'
@@ -197,8 +194,6 @@ export const RemoveClPosition = () => {
     ],
   )
 
-  const [onPresentSettingsModal] = useModal(<SettingsModal mode={SettingsMode.SWAP_LIQUIDITY} />)
-
   // Show loading animation while we wait for chainId
   if (!chainId || !position || !tokenId) {
     return <PageLoader />
@@ -346,7 +341,7 @@ export const RemoveClPosition = () => {
           </Flex>
           <Flex mt="24px" justifyContent="space-between" alignItems="center">
             <Text>{t('Slippage Tolerance')}</Text>
-            <SlippageButton />
+            <LiquiditySlippageButton />
           </Flex>
 
           {showCollectAsWNative && (

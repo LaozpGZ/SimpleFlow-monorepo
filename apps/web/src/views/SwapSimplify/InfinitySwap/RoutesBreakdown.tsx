@@ -1,13 +1,18 @@
 import { useDebounce } from '@pancakeswap/hooks'
 import { useTranslation } from '@pancakeswap/localization'
 import { Route } from '@pancakeswap/smart-router'
-import { Box, IconButton, InfoIcon, QuestionHelperV2, SkeletonV2, Text, useModalV2 } from '@pancakeswap/uikit'
+import { Box, ModalV2, QuestionHelperV2, SkeletonV2, Text, useModalV2 } from '@pancakeswap/uikit'
 import { memo } from 'react'
 import { styled } from 'styled-components'
 
 import { RowBetween } from 'components/Layout/Row'
 import SwapRoute from 'views/Swap/components/SwapRoute'
-import { RouteDisplayEssentials, RouteDisplayModal } from '../../Swap/V3Swap/components/RouteDisplayModal'
+import { RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
+import {
+  RouteDisplayEssentials,
+  RouteDisplayModal,
+  RoutesDisplayButtonView,
+} from '../../Swap/V3Swap/components/RouteDisplayModal'
 import { useWallchainStatus } from '../../Swap/V3Swap/hooks/useWallchain'
 
 interface Props {
@@ -53,20 +58,17 @@ export const RoutesBreakdown = memo(function RoutesBreakdown({ routes = [], wrap
             </Text>
           </QuestionHelperV2>
         </span>
-        <Box onClick={routeDisplayModal.onOpen} role="button">
-          <SkeletonV2 width="120px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
+        <SkeletonV2 width="120px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
+          <RoutesDisplayButtonView onClick={routeDisplayModal.onOpen}>
             <span style={{ display: 'flex', alignItems: 'center' }}>
               {count > 1 ? (
                 <Text fontSize="14px">{t('%count% Separate Routes', { count })}</Text>
               ) : (
                 <RouteComp route={routes[0]} />
               )}
-              <IconButton variant="text" color="primary60" scale="xs">
-                <InfoIcon width="16px" height="16px" color="primary60" />
-              </IconButton>
             </span>
-          </SkeletonV2>
-        </Box>
+          </RoutesDisplayButtonView>
+        </SkeletonV2>
         <RouteDisplayModal {...routeDisplayModal} routes={routes} />
       </RouteInfoContainer>
     </>
@@ -75,6 +77,7 @@ export const RoutesBreakdown = memo(function RoutesBreakdown({ routes = [], wrap
 
 export const XRoutesBreakdown = memo(function XRoutesBreakdown({ wrapperStyle, loading }: Props) {
   const { t } = useTranslation()
+  const { isOpen, setIsOpen, onDismiss } = useModalV2()
 
   return (
     <>
@@ -93,11 +96,12 @@ export const XRoutesBreakdown = memo(function XRoutesBreakdown({ wrapperStyle, l
         </span>
         <Box>
           <SkeletonV2 width="120px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>
-            <span style={{ display: 'flex', alignItems: 'center' }}>
-              <Text color="primary" fontSize="14px">
-                PancakeSwap X
-              </Text>
-            </span>
+            <RoutesDisplayButtonView onClick={() => setIsOpen(true)}>
+              <Text fontSize="14px">PancakeSwap X</Text>
+            </RoutesDisplayButtonView>
+            <ModalV2 isOpen={isOpen} onDismiss={onDismiss} closeOnOverlayClick>
+              <RoutingSettingsModalContent />
+            </ModalV2>
           </SkeletonV2>
         </Box>
       </RouteInfoContainer>

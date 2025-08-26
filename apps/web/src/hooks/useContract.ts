@@ -7,15 +7,12 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 
 import addresses from 'config/constants/contracts'
 import { useEffect, useMemo, useState } from 'react'
-import { getMulticallAddress, getPredictionsV1Address, getZapAddress } from 'utils/addressHelpers'
+import { getMulticallAddress, getPredictionsV1Address } from 'utils/addressHelpers'
 import {
   getAffiliateProgramContract,
   getAnniversaryAchievementContract,
   getBCakeFarmBoosterContract,
-  getBCakeFarmBoosterProxyFactoryContract,
-  getBCakeFarmBoosterV3Contract,
   getBCakeFarmBoosterVeCakeContract,
-  getBCakeFarmWrapperBoosterVeCakeContract,
   getBCakeProxyContract,
   getBunnyFactoryContract,
   getCakeFlexibleSideVaultV2Contract,
@@ -25,12 +22,9 @@ import {
   getContract,
   getCrossFarmingProxyContract,
   getCrossFarmingVaultContract,
-  getFarmAuctionContract,
   getFixedStakingContract,
   getIfoCreditAddressContract,
-  getInfinityBinPoolManagerContract,
   getInfinityBinPositionManagerContract,
-  getInfinityCLPoolManagerContract,
   getInfinityCLPositionManagerContract,
   getLotteryV2Contract,
   getMasterChefContract,
@@ -39,11 +33,6 @@ import {
   getNftSaleContract,
   getPancakeVeSenderV2Contract,
   getPointCenterIfoContract,
-  getPositionManagerAdapterContract,
-  getPositionManagerBCakeWrapperContract,
-  getPositionManagerWrapperContract,
-  getPotteryDrawContract,
-  getPotteryVaultContract,
   getPredictionsV1Contract,
   getPredictionsV2Contract,
   getPredictionsV3Contract,
@@ -58,8 +47,6 @@ import {
   getTradingCompetitionContractFanToken,
   getTradingCompetitionContractMoD,
   getTradingCompetitionContractMobox,
-  getTradingRewardContract,
-  getTradingRewardTopTradesContract,
   getUnsContract,
   getV2SSBCakeWrapperContract,
   getV3AirdropContract,
@@ -81,7 +68,6 @@ import { ifoV2ABI } from 'config/abi/ifoV2'
 import { ifoV3ABI } from 'config/abi/ifoV3'
 import { wbethBscABI } from 'config/abi/wbethBSC'
 import { wbethEthABI } from 'config/abi/wbethETH'
-import { zapABI } from 'config/abi/zap'
 import { WBETH } from 'config/constants/liquidStaking'
 import { VaultKey } from 'state/types'
 
@@ -258,11 +244,6 @@ export const useNftSaleContract = () => {
   return useMemo(() => getNftSaleContract(signer ?? undefined), [signer])
 }
 
-export const useFarmAuctionContract = () => {
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getFarmAuctionContract(signer ?? undefined), [signer])
-}
-
 export const useNftMarketContract = () => {
   const { data: signer } = useWalletClient()
   return useMemo(() => getNftMarketContract(signer ?? undefined), [signer])
@@ -342,30 +323,9 @@ export function useMulticallContract(overrideChainId?: number) {
   return useContract(getMulticallAddress(chainId), multicallABI)
 }
 
-export const usePotterytVaultContract = (address: Address) => {
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getPotteryVaultContract(address, signer ?? undefined), [address, signer])
-}
-
-export const usePotterytDrawContract = () => {
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getPotteryDrawContract(signer ?? undefined), [signer])
-}
-
-export function useZapContract() {
-  const { chainId } = useActiveChainId()
-  return useContract(getZapAddress(chainId), zapABI)
-}
-
 export function useBCakeFarmBoosterContract() {
   const { data: signer } = useWalletClient()
   return useMemo(() => getBCakeFarmBoosterContract(signer ?? undefined), [signer])
-}
-
-export function useBCakeFarmBoosterV3Contract() {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getBCakeFarmBoosterV3Contract(signer ?? undefined, chainId), [signer, chainId])
 }
 
 export function useBCakeFarmBoosterVeCakeContract() {
@@ -374,25 +334,9 @@ export function useBCakeFarmBoosterVeCakeContract() {
   return useMemo(() => getBCakeFarmBoosterVeCakeContract(signer ?? undefined, chainId), [signer, chainId])
 }
 
-export function useBCakeFarmWrapperBoosterVeCakeContract() {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getBCakeFarmWrapperBoosterVeCakeContract(signer ?? undefined, chainId), [signer, chainId])
-}
-
 export const useZksyncAirDropContract = () => {
   const { data: signer } = useWalletClient()
   return useMemo(() => getZksyncAirDropContract(signer ?? undefined, ChainId.ZKSYNC), [signer])
-}
-
-export const useInfinityCLPoolManagerContract = (targetChainId: ChainId) => {
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getInfinityCLPoolManagerContract(signer ?? undefined, targetChainId), [signer, targetChainId])
-}
-
-export const useInfinityBinPoolManagerContract = (targetChainId: ChainId) => {
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getInfinityBinPoolManagerContract(signer ?? undefined, targetChainId), [signer, targetChainId])
 }
 
 export const useInfinityCLPositionManagerContract = (targetChainId: ChainId | undefined) => {
@@ -411,42 +355,10 @@ export const useInfinityBinPositionManagerContract = (targetChainId: ChainId) =>
   )
 }
 
-export function usePositionManagerWrapperContract(address: Address) {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(
-    () => getPositionManagerWrapperContract(address, signer ?? undefined, chainId),
-    [signer, chainId, address],
-  )
-}
-
-export function usePositionManagerBCakeWrapperContract(address: Address) {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(
-    () => getPositionManagerBCakeWrapperContract(address, signer ?? undefined, chainId),
-    [signer, chainId, address],
-  )
-}
-
 export function useV2SSBCakeWrapperContract(address: Address) {
   const { chainId } = useActiveChainId()
   const { data: signer } = useWalletClient()
   return useMemo(() => getV2SSBCakeWrapperContract(address, signer ?? undefined, chainId), [signer, chainId, address])
-}
-
-export function usePositionManagerAdapterContract(address: Address) {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(
-    () => getPositionManagerAdapterContract(address, signer ?? undefined, chainId),
-    [signer, chainId, address],
-  )
-}
-
-export function useBCakeFarmBoosterProxyFactoryContract() {
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getBCakeFarmBoosterProxyFactoryContract(signer ?? undefined), [signer])
 }
 
 export function useBCakeProxyContract(proxyContractAddress: Address | undefined) {
@@ -507,12 +419,6 @@ export function useV3MigratorContract() {
   return useMemo(() => getV3MigratorContract(signer ?? undefined, chainId), [chainId, signer])
 }
 
-export const useTradingRewardContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(() => getTradingRewardContract(signer ?? undefined, chainId_ ?? chainId), [signer, chainId_, chainId])
-}
-
 export const useV3AirdropContract = () => {
   const { data: signer } = useWalletClient()
   return useMemo(() => getV3AirdropContract(signer ?? undefined), [signer])
@@ -527,15 +433,6 @@ export const useAffiliateProgramContract = ({ chainId: chainId_ }: { chainId?: C
   const { data: signer } = useWalletClient()
   return useMemo(
     () => getAffiliateProgramContract(signer ?? undefined, chainId_ ?? chainId),
-    [signer, chainId_, chainId],
-  )
-}
-
-export const useTradingRewardTopTraderContract = ({ chainId: chainId_ }: { chainId?: ChainId } = {}) => {
-  const { chainId } = useActiveChainId()
-  const { data: signer } = useWalletClient()
-  return useMemo(
-    () => getTradingRewardTopTradesContract(signer ?? undefined, chainId_ ?? chainId),
     [signer, chainId_, chainId],
   )
 }

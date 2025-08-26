@@ -1,11 +1,9 @@
 import BigNumber from 'bignumber.js'
-import { Address } from 'viem'
-
 import { Campaign, CampaignType, TranslatableText } from '@pancakeswap/achievements'
 import { UnifiedChainId } from '@pancakeswap/chains'
 import type { FarmConfigBaseProps, SerializedFarmConfig, SerializedFarmPublicData } from '@pancakeswap/farms'
 import { LegacyTradeWithStableSwap as TradeWithStableSwap } from '@pancakeswap/smart-router/legacy-router'
-import type { Currency, CurrencyAmount, Percent, Price, Token, UnifiedToken } from '@pancakeswap/swap-sdk-core'
+import type { Currency, CurrencyAmount, Percent, Price, UnifiedToken } from '@pancakeswap/swap-sdk-core'
 import { TradeType } from '@pancakeswap/swap-sdk-core'
 import type { Trade } from '@pancakeswap/v2-sdk'
 
@@ -15,11 +13,6 @@ export type ChainMap<T> = {
 }
 
 export type ChainTokenList = ChainMap<UnifiedToken[]>
-
-export interface Addresses {
-  56: Address
-  [chainId: number]: Address
-}
 
 export enum PoolCategory {
   'COMMUNITY' = 'Community',
@@ -89,19 +82,6 @@ export interface LotteryTicketClaimData {
   roundId: string
 }
 
-// Farm Auction
-export interface FarmAuctionBidderConfig {
-  account: string
-  farmName: string
-  tokenAddress: string
-  quoteToken: Token
-  tokenName: string
-  projectSite?: string
-  lpAddress?: string
-}
-
-// Note: this status is slightly different compared to 'status' config
-// from Farm Auction smart contract
 export const FetchStatus = {
   Idle: 'idle',
   Fetching: 'pending',

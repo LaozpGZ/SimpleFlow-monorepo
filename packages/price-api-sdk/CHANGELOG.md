@@ -1,5 +1,21 @@
 # @pancakeswap/price-api-sdk
 
+## 11.0.0
+
+### Minor Changes
+
+- cd589e1: support solana chain
+
+### Patch Changes
+
+- Updated dependencies [cd589e1]
+- Updated dependencies [1f6c9ec]
+  - @pancakeswap/swap-sdk-core@1.5.0
+  - @pancakeswap/smart-router@7.5.0
+  - @pancakeswap/chains@0.6.0
+  - @pancakeswap/pcsx-sdk@1.0.8
+  - @pancakeswap/permit2-sdk@1.1.5
+
 ## 10.0.0
 
 ### Patch Changes

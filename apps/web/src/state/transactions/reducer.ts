@@ -49,7 +49,19 @@ export default createReducer(initialState, (builder) =>
       (
         transactions,
         {
-          payload: { chainId, from, hash, approval, summary, translatableSummary, claim, type, order, crossChainFarm },
+          payload: {
+            chainId,
+            from,
+            hash,
+            approval,
+            summary,
+            translatableSummary,
+            claim,
+            type,
+            order,
+            crossChainFarm,
+            receipt,
+          },
         },
       ) => {
         if (transactions[chainId]?.[hash]) {
@@ -67,6 +79,7 @@ export default createReducer(initialState, (builder) =>
           type,
           order,
           crossChainFarm,
+          receipt,
         }
         transactions[chainId] = txs
         if (order) saveOrder(chainId, from, order, true)

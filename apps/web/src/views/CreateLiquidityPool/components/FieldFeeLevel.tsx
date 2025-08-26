@@ -1,37 +1,34 @@
 import { usePreviousValue } from '@pancakeswap/hooks'
 import { POOL_TYPE, PoolType } from '@pancakeswap/infinity-sdk'
+import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   Box,
   BoxProps,
-  Button,
+  ButtonMenu,
+  ButtonMenuItem,
+  DynamicSection,
   ErrorIcon,
   FlexGap,
-  Grid,
   Input,
   InputGroup,
   PreTitle,
   QuestionHelper,
   Text,
+  Toggle,
+  useMatchBreakpoints,
 } from '@pancakeswap/uikit'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { useFeeLevelQueryState } from 'state/infinity/create'
-import styled from 'styled-components'
+import { useFeeLevelQueryState, useFeeTierSettingQueryState } from 'state/infinity/create'
 import { escapeRegExp } from 'utils'
 import { useInfinityCreateFormQueryState } from '../hooks/useInfinityFormState/useInfinityFormQueryState'
+import { PRESET_FEE_LEVELS_INFINITY } from '../constants'
 
-export type FieldFeeLevelProps = BoxProps
+export type FieldFeeLevelProps = {
+  allowCustomFee?: boolean
+} & BoxProps
 
 const decimals = 4
-const PRESET_FEE_LEVELS = [0.01, 0.05, 0.1]
-
-const FeeLevelButton = styled(Button)`
-  width: 100%;
-  margin: 0 auto;
-  height: 100%;
-  font-size: 16px;
-  border-radius: ${({ theme }) => theme.radii.default};
-`
 
 const FEE_LIMIT = {
   [POOL_TYPE.Bin]: 10,
@@ -47,10 +44,14 @@ export const isFeeOutOfRange = (fee?: number | null, poolType?: PoolType) => {
 
 const inputRegex = RegExp(`^\\d*(?:\\\\[.])?\\d*$`) // match escaped "." characters via in a non-capturing group
 
-export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ ...boxProps }) => {
+export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ allowCustomFee, ...boxProps }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
+
   const [feeLevel, setFeeLevel] = useFeeLevelQueryState()
-  const { poolType, feeTierSetting } = useInfinityCreateFormQueryState()
+  const [feeTierSetting, setFeeTierSetting] = useFeeTierSettingQueryState()
+
+  const { poolType } = useInfinityCreateFormQueryState()
   const [inputValue, setInputValue] = useState<string | null>(null)
 
   const tips = useMemo(() => {
@@ -109,6 +110,34 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ ...boxProps }) => 
     [setFeeLevel],
   )
 
+  const handleMenuItemClick = useCallback(
+    (index: number) => {
+      if (index < PRESET_FEE_LEVELS_INFINITY.length) {
+        handleQuickSelect(PRESET_FEE_LEVELS_INFINITY[index])
+      }
+      // For custom fee input, we don't need to do anything here
+      // as the input will be handled separately
+    },
+    [handleQuickSelect],
+  )
+
+  const handleFeeTierSettingChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setFeeTierSetting(e.target.checked ? 'dynamic' : 'static')
+    },
+    [setFeeTierSetting],
+  )
+
+  const activeIndex = useMemo(() => {
+    const presetIndex = PRESET_FEE_LEVELS_INFINITY.findIndex((preset) => preset === feeLevel)
+    if (presetIndex !== -1) {
+      return presetIndex
+    }
+
+    // If custom fee or unknown fee level is set, don't set it to active
+    return -1
+  }, [feeLevel, allowCustomFee])
+
   const prevFeeLevel = usePreviousValue(feeLevel)
 
   useEffect(() => {
@@ -125,47 +154,83 @@ export const FieldFeeLevel: React.FC<FieldFeeLevelProps> = ({ ...boxProps }) => 
 
   return (
     <Box {...boxProps}>
-      <FlexGap gap="4px">
-        <PreTitle mb="8px">{t('Fee Level')}</PreTitle>
-        <QuestionHelper
-          placement="auto"
-          mb="8px"
-          color="secondary"
-          text={t('Common range: 0.01% to 0.3%, Ideal range <1%')}
-        />
+      <FlexGap justifyContent="space-between" alignItems="center">
+        <FlexGap gap="4px">
+          <PreTitle mb="8px">{t('Fee Level')}</PreTitle>
+          <QuestionHelper
+            placement="auto"
+            mb="8px"
+            color="secondary"
+            text={t('Common range: 0.01% to 0.3%, Ideal range <1%')}
+          />
+        </FlexGap>
+
+        <FlexGap gap="4px" alignItems="center">
+          <PreTitle>{t('Dynamic Fee')}</PreTitle>
+          <QuestionHelper
+            color="secondary"
+            placement="auto"
+            text={
+              <>
+                <Text>{t('Static: The fee remains fixed at the specified level once the pool is created.')}</Text>
+                <Text mt="12px">
+                  {t(
+                    'Dynamic: The fee can be modified using hook after the pool is created. Initial fee level is set to 0',
+                  )}
+                </Text>
+              </>
+            }
+          />
+          <Toggle checked={feeTierSetting === 'dynamic'} onChange={handleFeeTierSettingChange} scale="sm" />
+        </FlexGap>
       </FlexGap>
 
-      <Grid
-        gridTemplateColumns={['repeat(3, 0.8fr) 1fr', null, null, 'repeat(4, 1fr)']}
-        gridGap={['4px', null, null, '6px']}
-      >
-        {PRESET_FEE_LEVELS.map((presetFeeLevel) => (
-          <FeeLevelButton
-            key={presetFeeLevel}
-            scale={['xs', null, null, 'sm']}
-            variant={feeLevel === presetFeeLevel ? 'primary' : 'secondary'}
-            onClick={() => handleQuickSelect(presetFeeLevel)}
-          >
-            {presetFeeLevel}%
-          </FeeLevelButton>
-        ))}
+      <DynamicSection disabled={feeTierSetting === 'dynamic'}>
+        <ButtonMenu
+          activeIndex={activeIndex}
+          onItemClick={handleMenuItemClick}
+          variant="subtle"
+          fullWidth={!isMobile}
+          scale={isMobile ? 'sm' : 'md'}
+        >
+          <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_INFINITY[0]}%</ButtonMenuItem>
+          <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_INFINITY[1]}%</ButtonMenuItem>
+          <ButtonMenuItem padding={isMobile ? '0 8px' : '0 16px'}>{PRESET_FEE_LEVELS_INFINITY[2]}%</ButtonMenuItem>
 
-        <InputGroup scale="sm" endIcon={<>%</>}>
-          <Input
-            pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
-            inputMode="decimal"
-            placeholder="0.00"
-            step="0.01"
-            min="0"
-            max="100"
-            style={{ border: 'none', width: '100%' }}
-            value={inputValue ?? ''}
-            onBlur={handleInputBlur}
-            onChange={handleInputChange}
-          />
-        </InputGroup>
-      </Grid>
+          {allowCustomFee ? (
+            <ButtonMenuItem padding="0">
+              <InputGroup scale={isMobile ? 'sm' : 'md'} endIcon={<>%</>}>
+                <StyledInput
+                  pattern={`^[0-9]*[.,]?[0-9]{0,${decimals}}$`}
+                  inputMode="decimal"
+                  placeholder={t('Custom')}
+                  step="0.01"
+                  min="0"
+                  max="100"
+                  value={inputValue ?? ''}
+                  onBlur={handleInputBlur}
+                  onChange={handleInputChange}
+                />
+              </InputGroup>
+            </ButtonMenuItem>
+          ) : (
+            <></>
+          )}
+        </ButtonMenu>
+      </DynamicSection>
+
       {tips}
     </Box>
   )
 }
+
+const StyledInput = styled(Input)`
+  border: none;
+  width: 100%;
+
+  min-width: 80px;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    min-width: 120px;
+  }
+`

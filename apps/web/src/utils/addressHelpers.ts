@@ -1,13 +1,8 @@
 import { ChainId } from '@pancakeswap/chains'
-import {
-  bCakeFarmBoosterV3Address,
-  bCakeFarmBoosterV3VeCakeAddress,
-  bCakeFarmWrapperBoosterVeCakeAddress,
-} from '@pancakeswap/farms/constants/v3'
+import { bCakeFarmBoosterV3VeCakeAddress } from '@pancakeswap/farms/constants/v3'
 import { PoolType } from '@pancakeswap/infinity-sdk'
 
 import addresses from 'config/constants/contracts'
-import { VaultKey } from 'state/types'
 import { Address } from 'viem'
 
 export type Addresses = {
@@ -66,13 +61,6 @@ export const getTradingCompetitionAddressMoD = () => {
   return getAddressFromMap(addresses.tradingCompetitionMoD)
 }
 
-export const getVaultPoolAddress = (vaultKey: VaultKey, chainId?: ChainId) => {
-  if (!vaultKey) {
-    return null
-  }
-  return getAddressFromMap(addresses[vaultKey], chainId)
-}
-
 export const getCakeVaultAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.cakeVault, chainId)
 }
@@ -85,10 +73,6 @@ export const getCakeFlexibleSideVaultAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.cakeFlexibleSideVault, chainId)
 }
 
-export const getFarmAuctionAddress = (chainId?: number) => {
-  return getAddressFromMap(addresses.farmAuction, chainId)
-}
-
 export const getNftMarketAddress = () => {
   return getAddressFromMap(addresses.nftMarket)
 }
@@ -98,32 +82,13 @@ export const getNftSaleAddress = () => {
 export const getPancakeSquadAddress = () => {
   return getAddressFromMap(addresses.pancakeSquad)
 }
-export const getPotteryDrawAddress = () => {
-  return getAddressFromMap(addresses.potteryDraw)
-}
-
-export const getZapAddress = (chainId?: number) => {
-  return getAddressFromMap(addresses.zap, chainId)
-}
 
 export const getBCakeFarmBoosterAddress = () => {
   return getAddressFromMap(addresses.bCakeFarmBooster)
 }
 
-export const getBCakeFarmBoosterV3Address = (chainId?: number) => {
-  return getAddressFromMap(bCakeFarmBoosterV3Address, chainId)
-}
-
 export const getBCakeFarmBoosterVeCakeAddress = (chainId?: number) => {
   return getAddressFromMap(bCakeFarmBoosterV3VeCakeAddress, chainId)
-}
-
-export const getBCakeFarmWrapperBoosterVeCakeAddress = (chainId?: number) => {
-  return getAddressFromMap(bCakeFarmWrapperBoosterVeCakeAddress, chainId)
-}
-
-export const getBCakeFarmBoosterProxyFactoryAddress = () => {
-  return getAddressFromMap(addresses.bCakeFarmBoosterProxyFactory)
 }
 
 export const getZkSyncAirDropAddress = (chainId?: number) => {
@@ -154,20 +119,12 @@ export const getV3MigratorAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.v3Migrator, chainId)
 }
 
-export const getTradingRewardAddress = (chainId?: number) => {
-  return getAddressFromMap(addresses.tradingReward, chainId)
-}
-
 export const getV3AirdropAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.v3Airdrop, chainId)
 }
 
 export const getAffiliateProgramAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.affiliateProgram, chainId)
-}
-
-export const getTradingRewardTopTradesAddress = (chainId?: number) => {
-  return getAddressFromMap(addresses.tradingRewardTopTrades, chainId)
 }
 
 export const getVCakeAddress = (chainId?: number) => {
@@ -194,20 +151,12 @@ export const getPancakeVeSenderV2Address = (chainId?: number) => {
   return getAddressFromMap(addresses.pancakeVeSenderV2, chainId)
 }
 
-export const getVeCakeAddressNoFallback = (chainId?: number) => {
-  return getAddressFromMapNoFallback(addresses.veCake, chainId)
-}
-
 export const getRevenueSharingCakePoolAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.revenueSharingCakePool, chainId)
 }
 
 export const getRevenueSharingVeCakeAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.revenueSharingVeCake, chainId)
-}
-
-export const getRevenueSharingVeCakeAddressNoFallback = (chainId?: number) => {
-  return getAddressFromMapNoFallback(addresses.revenueSharingVeCake, chainId)
 }
 
 export const getRevenueSharingPoolGatewayAddress = (chainId?: number) => {

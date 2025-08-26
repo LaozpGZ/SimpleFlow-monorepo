@@ -18,6 +18,12 @@ export const Chains: Chain[] = [
     fullName: chainFullNames[NonEVMChainId.SOLANA],
     isEVM: false,
   },
+  {
+    id: NonEVMChainId.APTOS,
+    name: chainNames[NonEVMChainId.APTOS],
+    fullName: chainFullNames[NonEVMChainId.APTOS],
+    isEVM: false,
+  },
   { id: ChainId.BASE, name: chainNames[ChainId.BASE], fullName: chainFullNames[ChainId.BASE], isEVM: true },
   {
     id: ChainId.ARBITRUM_ONE,

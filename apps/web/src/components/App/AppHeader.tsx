@@ -1,18 +1,6 @@
 import { styled, css } from 'styled-components'
-import {
-  Text,
-  Flex,
-  Heading,
-  IconButton,
-  ArrowBackIcon,
-  NotificationDot,
-  QuestionHelper,
-  AutoRow,
-} from '@pancakeswap/uikit'
-import { useExpertMode } from '@pancakeswap/utils/user'
-import GlobalSettings from 'components/Menu/GlobalSettings'
+import { Text, Flex, Heading, IconButton, ArrowBackIcon, QuestionHelper, AutoRow } from '@pancakeswap/uikit'
 import Link from 'next/link'
-import { SettingsMode } from '../Menu/GlobalSettings/types'
 
 interface Props {
   title: string | React.ReactNode
@@ -59,8 +47,6 @@ const AppHeader: React.FC<React.PropsWithChildren<Props>> = ({
   shouldCenter = false,
   borderHidden = false,
 }) => {
-  const [expertMode] = useExpertMode()
-
   return (
     <AppHeaderContainer borderHidden={borderHidden}>
       <Flex alignItems="center" width="100%" style={{ gap: '16px' }}>
@@ -82,14 +68,7 @@ const AppHeader: React.FC<React.PropsWithChildren<Props>> = ({
               {typeof title === 'string' ? <Heading as="h2">{title}</Heading> : title}
               {helper && <QuestionHelper text={helper} ml="4px" placement="top" />}
             </Flex>
-            {!noConfig && (
-              <Flex alignItems="flex-end">
-                {IconSlot}
-                <NotificationDot show={expertMode}>
-                  <GlobalSettings mode={SettingsMode.SWAP_LIQUIDITY} />
-                </NotificationDot>
-              </Flex>
-            )}
+
             {noConfig && buttons && (
               <Flex alignItems="center" mr="16px">
                 {buttons}
