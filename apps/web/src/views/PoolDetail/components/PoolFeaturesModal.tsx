@@ -21,7 +21,7 @@ import truncateHash from '@pancakeswap/utils/truncateHash'
 import { Liquidity } from '@pancakeswap/widgets-internal'
 import { PropsWithChildren, useMemo } from 'react'
 import { getBlockExploreLink } from 'utils'
-import { useActiveChainId } from 'hooks/useActiveChainId'
+import { ChainId } from '@pancakeswap/chains'
 
 const HookInfoItem = ({
   label,
@@ -53,18 +53,18 @@ const HookInfoItem = ({
 
 interface PoolFeaturesModalProps {
   hookData?: HookData
+  chainId?: ChainId
 }
 
-export const PoolFeaturesModal = ({ hookData, children }: PropsWithChildren<PoolFeaturesModalProps>) => {
+export const PoolFeaturesModal = ({ hookData, chainId, children }: PropsWithChildren<PoolFeaturesModalProps>) => {
   const { t } = useTranslation()
   const modalV2Props = useModalV2()
   const { isMobile } = useMatchBreakpoints()
 
   const forwardIcon = useMemo(() => <OpenNewIcon ml="8px" width="24px" color="primary60" />, [])
   const githubIcon = useMemo(() => <GithubIconComponent ml="8px" width="24px" color="primary60" />, [])
-  const { chainId } = useActiveChainId()
 
-  if (!hookData) {
+  if (!hookData || !chainId) {
     return null
   }
 

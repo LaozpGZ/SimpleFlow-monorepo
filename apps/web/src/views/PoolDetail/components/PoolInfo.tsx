@@ -284,7 +284,7 @@ export const PoolInfo = () => {
                   />
 
                   {hookData && (
-                    <PoolFeaturesModal hookData={hookData}>
+                    <PoolFeaturesModal hookData={hookData} chainId={chainId}>
                       <Tag
                         variant="tertiary"
                         startIcon={<MiscellaneousIcon width={16} height={16} color="textSubtle" />}
