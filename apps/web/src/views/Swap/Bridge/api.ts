@@ -334,11 +334,6 @@ export const postSolanaEVMBridgeMetadata = async (
     throw new Error('postSolanaEVMBridgeMetadata only supports Solana bridge')
   }
 
-  // For Solana bridge, recipient is always required if there is user
-  if (user && !recipientOnDestChain) {
-    throw new Error('Recipient is required for Solana bridge')
-  }
-
   const userAddress = user || (isOriginSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
   const recipient = recipientOnDestChain || (isDestinationSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
 
