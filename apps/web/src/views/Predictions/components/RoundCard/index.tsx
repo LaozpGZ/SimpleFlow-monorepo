@@ -27,17 +27,17 @@ const RoundCard: React.FC<React.PropsWithChildren<RoundCardProps>> = ({ round, i
   const currentEpoch = useGetCurrentEpoch()
   const ledger = useGetBetByEpoch(account ?? '0x', epoch)
 
+  // Fake future rounds
+  if (epoch > currentEpoch) {
+    return <SoonRoundCard round={round} />
+  }
+
   const hasEntered = ledger ? ledger.amount > 0n : false
 
   const hasEnteredUp = hasEntered && ledger?.position === BetPosition.BULL
   const hasEnteredDown = hasEntered && ledger?.position === BetPosition.BEAR
   const hasClaimedUp = hasEntered && ledger?.claimed && ledger.position === BetPosition.BULL
   const hasClaimedDown = hasEntered && ledger?.claimed && ledger.position === BetPosition.BEAR
-
-  // Fake future rounds
-  if (epoch > currentEpoch) {
-    return <SoonRoundCard round={round} />
-  }
 
   const bullMultiplier = totalAmount && bullAmount ? getMultiplierV2(totalAmount, bullAmount) : BIG_ZERO
   const bearMultiplier = totalAmount && bearAmount ? getMultiplierV2(totalAmount, bearAmount) : BIG_ZERO
