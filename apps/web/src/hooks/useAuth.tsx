@@ -34,6 +34,8 @@ const useAuth = () => {
     async (wallet: WalletConfigV3<EvmConnectorNames>): Promise<ConnectData | undefined> => {
       const { connectorId, title, networks } = wallet
 
+      console.log('login wallet', wallet)
+
       if (!networks.includes(WalletAdaptedNetwork.EVM)) return
 
       const findConnector = CONNECTOR_MAP[connectorId] || undefined
