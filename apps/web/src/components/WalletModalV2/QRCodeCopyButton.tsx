@@ -4,11 +4,11 @@ import { styled } from 'styled-components'
 import { useConnect } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { ASSET_CDN } from 'config/constants/endpoints'
-import { previouslyUsedWalletsAtom } from '@pancakeswap/ui-wallets'
 import { walletsConfig } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { NonEVMChainId } from '@pancakeswap/chains'
+import { previouslyUsedEvmWalletsAtom } from '@pancakeswap/ui-wallets/src/state/atom'
 
 interface QRCodeCopyButtonProps {
   account: string
@@ -127,7 +127,8 @@ const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account, chainType,
   const { chainId } = useActiveChainId()
   const { wallet: solanaWallet } = useWallet()
 
-  const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
+  const previouslyUsedEvmWalletsId = useAtomValue(previouslyUsedEvmWalletsAtom)
+
   const walletConfig = walletsConfig({ chainId, connect: connectAsync })
 
   // Determine if current chain is Solana based on chainType prop or fallback to current chain
@@ -148,9 +149,9 @@ const QRCodeCopyButton: React.FC<QRCodeCopyButtonProps> = ({ account, chainType,
     if (isSolana) {
       return solanaWallet?.adapter.icon
     }
-    const evmWallet = walletConfig.find((w) => w.id === previouslyUsedWalletsId[0])
+    const evmWallet = walletConfig.find((w) => w.id === previouslyUsedEvmWalletsId[0])
     return evmWallet?.icon
-  }, [providedWalletIcon, isSolana, solanaWallet, walletConfig, previouslyUsedWalletsId, account])
+  }, [providedWalletIcon, isSolana, solanaWallet, walletConfig, previouslyUsedEvmWalletsId, account])
 
   const handleCopy = async () => {
     try {
