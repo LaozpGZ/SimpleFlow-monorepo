@@ -126,8 +126,11 @@ export const getWalletsConfig = ({
       connectorId: EvmConnectorNames.WalletLink,
       solanaAdapterName: SolanaWalletNames.Coinbase,
       networks: [WalletAdaptedNetwork.EVM, WalletAdaptedNetwork.Solana],
+      get installed() {
+        return isSolanaWalletInstalled(SolanaWalletNames.Coinbase)
+      },
       evmCanInitWithoutInstall: true,
-      solanaCanInitWithoutInstall: true,
+      solanaCanInitWithoutInstall: false,
     },
     {
       id: WalletIds.Walletconnect,

@@ -16,7 +16,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ASSET_CDN } from '../../config/url'
 import { errorEvmAtom, errorSolanaAtom } from '../../state/atom'
 import { useSelectedWallet, useWalletFilter } from '../../state/hooks'
-import { ConnectData, WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
+import { ConnectData, WalletAdaptedNetwork, WalletConfigV3, WalletIds } from '../../types'
 import { PreviewSection, PreviewStatus } from '../PreviewSection'
 import SocialLogin from '../SocialLogin'
 import SocialLoginButton from '../SocialLoginButton'
@@ -110,8 +110,13 @@ export const ModalContent: React.FC<ModalContentProps> = ({
 
   const [uninstalledWallet, setUninstalledWallet] = useState<WalletConfigV3 | null>(null)
 
-  const isWalletInstalledAndPreview = useCallback((wallet: WalletConfigV3) => {
+  const isWalletInstalledAndPreview = useCallback((wallet: WalletConfigV3, network?: WalletAdaptedNetwork) => {
     if (!('installed' in wallet)) return true
+
+    // bypass installed check for wallet that can init without install
+    // @note: for solana, it still need extension wallet for coinbase
+    if (wallet.id === WalletIds.Coinbase && network === WalletAdaptedNetwork.EVM) return true
+
     if (!wallet.installed) {
       setUninstalledWallet(wallet)
       setPreviewStatus(PreviewStatus.NotInstalled)
@@ -160,7 +165,7 @@ export const ModalContent: React.FC<ModalContentProps> = ({
 
   const onWalletSelected = useCallback(
     (w: WalletConfigV3, network: WalletAdaptedNetwork) => {
-      if (!isWalletInstalledAndPreview(w)) return
+      if (!isWalletInstalledAndPreview(w, network)) return
 
       setPreviewStatus(PreviewStatus.Confirming)
 

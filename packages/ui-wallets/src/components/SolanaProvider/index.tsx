@@ -1,6 +1,10 @@
 import { useCallback, useMemo } from 'react'
 import { Adapter, WalletError } from '@solana/wallet-adapter-base'
-import { SolflareWalletAdapter, WalletConnectWalletAdapter } from '@solana/wallet-adapter-wallets'
+import {
+  CoinbaseWalletAdapter,
+  SolflareWalletAdapter,
+  WalletConnectWalletAdapter,
+} from '@solana/wallet-adapter-wallets'
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { GlowWalletAdapter } from '@solana/wallet-adapter-glow'
 import { ExodusWalletAdapter } from '@solana/wallet-adapter-exodus'
@@ -40,6 +44,7 @@ export const SolanaProvider: React.FC<SolanaProviderProps> = ({ children, endpoi
       ...walletConnectAdapter,
       new GlowWalletAdapter(),
       new ExodusWalletAdapter({ endpoint }),
+      new CoinbaseWalletAdapter(),
     ],
     [endpoint, walletConnectAdapter],
   )
