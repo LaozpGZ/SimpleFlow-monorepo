@@ -102,7 +102,7 @@ export const BridgeView = () => {
             connectWalletButtons={useMemo(
               () => ({
                 default: <ConnectWalletButton width="100%" />,
-                [chainNames[NonEVMChainId.SOLANA]]: <SolanaConnectButton width="100%" />,
+                [chainNames[NonEVMChainId.SOLANA]]: <ConnectWalletButton width="100%" />,
               }),
               [],
             )}
