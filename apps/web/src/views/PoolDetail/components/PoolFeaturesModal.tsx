@@ -64,7 +64,7 @@ export const PoolFeaturesModal = ({ hookData, chainId, children }: PropsWithChil
   const forwardIcon = useMemo(() => <OpenNewIcon ml="8px" width="24px" color="primary60" />, [])
   const githubIcon = useMemo(() => <GithubIconComponent ml="8px" width="24px" color="primary60" />, [])
 
-  if (!hookData) {
+  if (!hookData || !chainId) {
     return null
   }
 
