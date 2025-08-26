@@ -353,6 +353,8 @@ export const useCurrentWalletIcon = () => {
       return wallets.find((w) => w.adapter.name === (name as WalletName))?.adapter.icon
     }
 
+    console.debug('debug connector', { connector })
+
     return connector?.icon
   }, [chainId, wallets, solanaWalletName, connector, selectedSolanaWalletName])
 }
