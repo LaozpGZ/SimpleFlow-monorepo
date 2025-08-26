@@ -52,7 +52,7 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
   const { disconnect, wallets } = useWallet()
   const { logout } = useAuth()
   const setWalletModalVisible = useSetAtom(walletModalVisibleAtom)
-  const [solanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
+  const [solanaWalletName, setSolanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
 
   const selectedSolanaWallet = useMemo(() => {
     if (solanaWalletName) {
@@ -66,7 +66,11 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
       logGTMDisconnectWalletEvent(chainId, connector?.name, unifiedAccount ?? undefined)
 
       if (network === WalletAdaptedNetwork.EVM) await logout()
-      if (network === WalletAdaptedNetwork.Solana) await disconnect()
+      if (network === WalletAdaptedNetwork.Solana) {
+        await disconnect()
+        // @notice: Clear the local storage key or next time use the same wallet cannot connect
+        setSolanaWalletName('')
+      }
 
       onBack()
     },
