@@ -39,12 +39,13 @@ export interface CanonicalBridgeProps {
   supportedChainIds: number[]
   rpcConfig: Record<number, readonly string[]>
   disabledToChains?: number[]
+  deBridgeAccessToken?: string
 }
 
 const gtmListener = createGTMEventListener()
 
 export const CanonicalBridge = (props: CanonicalBridgeProps) => {
-  const { connectWalletButtons, supportedChainIds, disabledToChains, rpcConfig } = props
+  const { connectWalletButtons, supportedChainIds, disabledToChains, rpcConfig, deBridgeAccessToken } = props
   useDisableToChains(disabledToChains)
 
   const { currentLanguage, t } = useTranslation()
@@ -96,6 +97,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
         apiTimeOut: 30 * 1000,
         serverEndpoint: env.SERVER_ENDPOINT,
         deBridgeReferralCode: '31958',
+        deBridgeAccessToken,
       },
       transfer: transferConfig,
       components: {
@@ -144,6 +146,7 @@ export const CanonicalBridge = (props: CanonicalBridgeProps) => {
       fromChain,
       toChain,
       connectWalletButtons,
+      deBridgeAccessToken,
     ],
   )
 
