@@ -7,7 +7,7 @@ import { useCallback, useMemo } from 'react'
 import { useCombinedActiveList } from 'state/lists/hooks'
 import { safeGetAddress } from 'utils/safeGetAddress'
 
-import { useActiveChainId } from './useActiveChainId'
+import { useAccountActiveChain } from './useAccountActiveChain'
 
 export interface TokenData {
   address: string
@@ -50,8 +50,8 @@ function isNative(address: string): boolean {
 /**
  * Hook to fetch and manage token balances for a specific address using React Query
  */
-export const useAddressBalance = (address?: string, options: UseAddressBalanceOptions = {}) => {
-  const { chainId } = useActiveChainId()
+export const useAddressBalance = (address?: string, chainId?: number, options: UseAddressBalanceOptions = {}) => {
+  // const { chainId } = useActiveChainId()
   const { includeSpam = false, onlyWithPrice = false, filterByChainId, enabled = true } = options
   const list = useCombinedActiveList()
 
@@ -214,6 +214,40 @@ export const useAddressBalance = (address?: string, options: UseAddressBalanceOp
     getTokenBalance,
     getBalanceAmount,
   }
+}
+
+export const useMultichainAddressBalance = () => {
+  const { account: evmAccount, solanaAccount } = useAccountActiveChain()
+
+  const {
+    balances: evmBalances,
+    isLoading: isEvmLoading,
+    totalBalanceUsd: evmTotalBalanceUsd,
+  } = useAddressBalance(evmAccount, ChainId.BSC, {
+    includeSpam: false,
+    onlyWithPrice: false,
+    enabled: Boolean(evmAccount),
+  })
+
+  const {
+    balances: solanaBalances,
+    isLoading: isSolanaLoading,
+    totalBalanceUsd: solanaTotalBalanceUsd,
+  } = useAddressBalance(solanaAccount ?? undefined, NonEVMChainId.SOLANA, {
+    includeSpam: false,
+    onlyWithPrice: false,
+    enabled: Boolean(solanaAccount),
+  })
+
+  return useMemo(() => {
+    return {
+      balances: [...(evmBalances ?? []), ...(solanaBalances ?? [])].sort((a, b) => {
+        return (b.price?.totalUsd ?? 0) - (a.price?.totalUsd ?? 0)
+      }),
+      isLoading: isEvmLoading || isSolanaLoading,
+      totalBalanceUsd: (evmTotalBalanceUsd ?? 0) + (solanaTotalBalanceUsd ?? 0),
+    }
+  }, [evmBalances, solanaBalances, isEvmLoading, isSolanaLoading, evmTotalBalanceUsd, solanaTotalBalanceUsd])
 }
 
 export default useAddressBalance

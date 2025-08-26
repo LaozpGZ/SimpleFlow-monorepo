@@ -17,7 +17,7 @@ import { RecentTransactions } from 'components/App/Transactions/TransactionsModa
 import { useTheme } from '@pancakeswap/hooks'
 import { useMenuTab, WalletView } from 'components/Menu/UserMenu/providers/MenuTabProvider'
 import { TabsComponent } from 'components/Menu/UserMenu/WalletModal'
-import { useAddressBalance } from 'hooks/useAddressBalance'
+import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
 import { useRouter } from 'next/router'
 import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
@@ -26,7 +26,7 @@ import { ClaimGiftConfirmView } from 'views/Gift/components/ClaimGiftConfirmView
 import { ClaimGiftView } from 'views/Gift/components/ClaimGiftView'
 import { GiftInfoDetailView } from 'views/Gift/components/GiftInfoDetailView'
 import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
@@ -178,10 +178,7 @@ export const WalletContent = ({
   }, [selectedReceiveChain, solanaWallet, walletConfig, previouslyUsedEvmWalletsId])
 
   // Fetch balances using the hook we created
-  const { balances, isLoading, totalBalanceUsd } = useAddressBalance(evmAccount, {
-    includeSpam: false,
-    onlyWithPrice: false,
-  })
+  const { balances, isLoading, totalBalanceUsd } = useMultichainAddressBalance()
   const balanceDisplay = useMemo(() => {
     const display = formatAmount(totalBalanceUsd)?.split('.')
     return {

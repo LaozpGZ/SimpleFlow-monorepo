@@ -155,14 +155,10 @@ export function useAllTokenBalances(selectedChainId?: number): {
   const { chainId } = useActiveChainId()
 
   // Fetch balances using the hook we created
-  const { balances: apiBalances, isLoading: isLoadingBalance } = useAddressBalance(
-    chainId === NonEVMChainId.SOLANA ? undefined : account,
-    {
-      includeSpam: false,
-      onlyWithPrice: false,
-      filterByChainId: selectedChainId,
-    },
-  )
+  const { balances: apiBalances, isLoading: isLoadingBalance } = useAddressBalance(account, chainId, {
+    includeSpam: false,
+    onlyWithPrice: false,
+  })
 
   return useMemo(() => {
     /// [tokenAddress: string]: CurrencyAmount<Token> | undefined

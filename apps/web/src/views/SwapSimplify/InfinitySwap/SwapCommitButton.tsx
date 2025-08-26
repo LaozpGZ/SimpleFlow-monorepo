@@ -259,7 +259,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   )
 
   // Get the refresh function from useAddressBalance to update balances after swap
-  const { refresh: refreshBalances } = useAddressBalance(account, { enabled: false })
+  const { refresh: refreshBalances } = useAddressBalance(account, chainId, { enabled: false })
 
   const onConfirm = useCallback(() => {
     beforeCommit?.()
