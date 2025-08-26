@@ -3,14 +3,14 @@ import { styled } from 'styled-components'
 import { useConnect } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { ASSET_CDN } from 'config/constants/endpoints'
-import { previouslyUsedWalletsAtom } from '@pancakeswap/ui-wallets'
 import { walletsConfig } from 'config/wallet'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { useMemo } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 import { SolanaWalletModal } from 'wallet/SolanaWalletModal'
+import { previouslyUsedEvmWalletsAtom } from '@pancakeswap/ui-wallets/src/state/atom'
 
 interface ReceiveOptionsViewProps {
   onSelectEVM: () => void
@@ -118,7 +118,7 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
   const { chainId } = useActiveChainId()
   const { wallet: solanaWallet } = useWallet()
 
-  const [previouslyUsedWalletsId] = useAtom(previouslyUsedWalletsAtom)
+  const previouslyUsedEvmWalletsId = useAtomValue(previouslyUsedEvmWalletsAtom)
   const walletConfig = walletsConfig({ chainId, connect: connectAsync })
 
   // Get EVM wallet icon - only show specific wallet icon when connected
@@ -127,9 +127,9 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
     if (!evmAccount) {
       return null // Show generic wallet icon when not connected
     }
-    const evmWallet = walletConfig.find((w) => w.id === previouslyUsedWalletsId[0])
+    const evmWallet = walletConfig.find((w) => w.id === previouslyUsedEvmWalletsId[0])
     return evmWallet?.icon
-  }, [walletConfig, previouslyUsedWalletsId, evmAccount])
+  }, [walletConfig, previouslyUsedEvmWalletsId, evmAccount])
 
   // Get Solana wallet icon - only show specific wallet icon when connected
   const solanaWalletIcon = useMemo(() => {
