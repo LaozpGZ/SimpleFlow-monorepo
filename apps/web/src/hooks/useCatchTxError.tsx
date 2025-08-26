@@ -39,7 +39,7 @@ export default function useCatchTxError(params?: Params) {
       logError(error)
       const err = parseViemError(error)
       if (err) {
-        const reason = enhanceReason(err && (notPreview ? err.shortMessage || err.message : err.message), t)
+        const reason = enhanceReason(notPreview ? err.shortMessage || err.message : err.message, t)
         toastError(
           t('Error'),
           t('Transaction failed with error: %reason%', {
