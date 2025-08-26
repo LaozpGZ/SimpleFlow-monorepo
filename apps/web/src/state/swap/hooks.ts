@@ -14,7 +14,7 @@ import { ParsedUrlQuery } from 'querystring'
 import { useCallback, useEffect, useState } from 'react'
 import { ChartPeriod, chainIdToExplorerInfoChainName, explorerApiClient } from 'state/info/api/client'
 import { isAddressEqual, safeGetAddress, safeGetUnifiedAddress } from 'utils'
-import { NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
+import { isSolana, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks'
 import { Field, replaceSwapState } from './actions'
 import { SwapState, swapReducerAtom } from './reducer'
@@ -171,11 +171,13 @@ export function useDefaultsFromURLSearch():
       finalInputChainId = chainId
 
       const isOutputChainSupported =
-        finalOutputChainId &&
-        isNotTwapOrLimitPath &&
-        supportedBridgeChains?.some(
-          (route) => route.originChainId === finalInputChainId && route.destinationChainId === finalOutputChainId,
-        )
+        isSolana(finalInputChainId) ||
+        isSolana(finalOutputChainId) ||
+        (finalOutputChainId &&
+          isNotTwapOrLimitPath &&
+          supportedBridgeChains?.some(
+            (route) => route.originChainId === finalInputChainId && route.destinationChainId === finalOutputChainId,
+          ))
 
       // If now input and output currencies are the same,
       // OR if output chain is NOT supported by the bridge,
@@ -191,11 +193,13 @@ export function useDefaultsFromURLSearch():
 
     if (finalOutputChainId && finalOutputChainId !== chainId) {
       const isOutputChainSupported =
-        isNotTwapOrLimitPath &&
-        supportedBridgeChains?.some(
-          (route) =>
-            route.originChainId === (finalInputChainId || chainId) && route.destinationChainId === finalOutputChainId,
-        )
+        isSolana(finalInputChainId) ||
+        isSolana(finalOutputChainId) ||
+        (isNotTwapOrLimitPath &&
+          supportedBridgeChains?.some(
+            (route) =>
+              route.originChainId === (finalInputChainId || chainId) && route.destinationChainId === finalOutputChainId,
+          ))
 
       if (!isOutputChainSupported) {
         finalOutputCurrencyId = defaultOutputCurrency

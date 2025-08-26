@@ -1,4 +1,4 @@
-import { ChainId as EvmChainId } from '@pancakeswap/chains'
+import { ChainId as EvmChainId, isSolana } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Percent, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { Box, FlexGap, Image, Skeleton, Text } from '@pancakeswap/uikit'
@@ -114,10 +114,12 @@ export const handleCurrencySelectFn = async ({
 
   if (isInput && newCurrency.chainId !== outputChainId) {
     const isOutputChainSupported =
-      outputChainId &&
-      supportedBridgeChains.data?.some(
-        (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
-      )
+      isSolana(newCurrency.chainId) ||
+      isSolana(outputChainId) ||
+      (outputChainId &&
+        supportedBridgeChains.data?.some(
+          (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
+        ))
 
     if (!isOutputChainSupported) {
       // if output chain is not supported, reset output currency
