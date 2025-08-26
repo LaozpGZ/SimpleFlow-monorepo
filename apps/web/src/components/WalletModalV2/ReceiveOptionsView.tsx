@@ -201,9 +201,9 @@ const ReceiveOptionsView: React.FC<ReceiveOptionsViewProps> = ({
           {solanaAccount ? (
             <ChevronRightIcon color="textSubtle" width="24px" height="24px" />
           ) : (
-            <SolanaConnectButton variant="primary" scale="sm">
+            <ConnectWalletButton variant="primary" scale="sm">
               Connect
-            </SolanaConnectButton>
+            </ConnectWalletButton>
           )}
         </OptionCard>
       </FlexGap>
