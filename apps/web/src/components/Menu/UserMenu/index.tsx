@@ -97,10 +97,18 @@ const useAvatar = () => {
   const { connector: evmWallet } = useAccount()
   const { profile } = useProfile()
   const { avatar } = useDomainNameForAddress(isSolana(chainId) ? undefined : unifiedAccount ?? undefined)
-  return useMemo(
-    () => (isSolana(chainId) ? solWallet?.adapter.icon : profile?.nft?.image?.thumbnail ?? avatar ?? evmWallet?.icon),
-    [avatar, chainId, evmWallet?.icon, profile?.nft?.image?.thumbnail, solWallet?.adapter.icon],
-  )
+  return useMemo(() => {
+    // (isSolana(chainId) ? solWallet?.adapter.icon : profile?.nft?.image?.thumbnail ?? avatar ?? evmWallet?.icon)
+    if (isSolana(chainId) && solWallet) return solWallet.adapter.icon
+    if (!isSolana(chainId) && profile?.nft?.image?.thumbnail) return profile.nft.image.thumbnail
+    if (avatar) return avatar
+    if (!isSolana(chainId) && evmWallet?.icon) return evmWallet.icon
+
+    if (isSolana(chainId) && !solWallet && evmWallet?.icon) return evmWallet.icon // Fallback to EVM wallet icon if no Solana wallet connected
+    if (!isSolana(chainId) && !evmWallet && solWallet?.adapter.icon) return solWallet.adapter.icon // Fallback to Solana wallet icon if no EVM wallet connected
+
+    return undefined
+  }, [avatar, chainId, evmWallet?.icon, profile?.nft?.image?.thumbnail, solWallet?.adapter.icon])
 }
 
 const UserMenu = () => {
@@ -113,12 +121,13 @@ const UserMenu = () => {
   const { address: privyAddress, isLoading: isPrivyAddressLoading } = usePrivyWalletAddress()
 
   // Determine which address to use: if Privy login use privyAddress, otherwise use account
-  const finalAddress =
-    chainId === NonEVMChainId.SOLANA
-      ? solanaAccount ?? undefined
-      : ready && authenticated && user
-      ? privyAddress
-      : evmAccount
+  const finalAddress = useMemo(() => {
+    if (ready && authenticated && user) return privyAddress
+    if (chainId === NonEVMChainId.SOLANA && solanaAccount) return solanaAccount
+    if (chainId !== NonEVMChainId.SOLANA && evmAccount) return evmAccount
+
+    return evmAccount ?? solanaAccount ?? undefined
+  }, [ready, authenticated, user, privyAddress, evmAccount, solanaAccount, chainId])
 
   const shouldShowLoading = ready && authenticated && user ? isPrivyAddressLoading : false
   const currentAccount = chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : evmAccount
