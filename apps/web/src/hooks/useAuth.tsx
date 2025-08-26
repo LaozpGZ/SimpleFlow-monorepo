@@ -35,6 +35,7 @@ const useAuth = () => {
       const { connectorId, title, networks } = wallet
 
       console.log('login wallet', wallet)
+      console.log('6963 providers', eip6963Providers)
 
       if (!networks.includes(WalletAdaptedNetwork.EVM)) return
 
@@ -54,6 +55,8 @@ const useAuth = () => {
         }
       }
       const connector = eipConnector || findConnector
+      console.log('eip connector', eipConnector)
+      console.log('find connector', findConnector)
 
       try {
         if (!connector) return
