@@ -27,7 +27,7 @@ const ModalHeader = styled(UIKitModalHeader)`
   background: ${({ theme }) => theme.colors.gradientBubblegum};
 `
 
-const Tabs = styled.div`
+export const Tabs = styled.div`
   background-color: ${({ theme }) => theme.colors.dropdown};
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};
   padding: 16px 24px;
@@ -39,7 +39,7 @@ interface TabsComponentProps {
   style?: React.CSSProperties
 }
 
-const StyledButtonMenuItem = styled(ButtonMenuItem)<{ isActive?: boolean }>`
+export const StyledButtonMenuItem = styled(ButtonMenuItem)<{ isActive?: boolean }>`
   color: ${({ theme, isActive }) => (isActive ? theme.colors.secondary : theme.colors.textSubtle)};
 `
 

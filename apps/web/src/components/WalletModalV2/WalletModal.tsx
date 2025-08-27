@@ -4,6 +4,7 @@ import {
   ArrowForwardIcon,
   Box,
   Button,
+  ButtonMenu,
   Card,
   CardBody,
   FlexGap,
@@ -18,7 +19,7 @@ import { RecentTransactions } from 'components/App/Transactions/TransactionsModa
 
 import { useTheme } from '@pancakeswap/hooks'
 import { useMenuTab, WalletView } from 'components/Menu/UserMenu/providers/MenuTabProvider'
-import { TabsComponent } from 'components/Menu/UserMenu/WalletModal'
+import { StyledButtonMenuItem, Tabs, TabsComponent } from 'components/Menu/UserMenu/WalletModal'
 import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
 import { useRouter } from 'next/router'
 import React, { useCallback, useMemo, useState } from 'react'
@@ -223,11 +224,25 @@ export const WalletContent = ({
     // Receive QR
     if (viewState === ViewState.RECEIVE_QR) {
       return (
-        <ReceiveContent
-          account={selectedReceiveAccount || ''}
-          chainType={selectedReceiveChain}
-          walletIcon={selectedWalletIcon}
-        />
+        <>
+          <ButtonMenu
+            scale="sm"
+            variant="text"
+            onItemClick={(index) =>
+              index === 0 ? setViewState(ViewState.RECEIVE_QR) : setViewState(ViewState.CLAIM_GIFT)
+            }
+            activeIndex={viewState === ViewState.RECEIVE_QR ? 0 : 1}
+          >
+            <StyledButtonMenuItem>{t('Address')}</StyledButtonMenuItem>
+            <StyledButtonMenuItem>{t('Claim Gift')}</StyledButtonMenuItem>
+          </ButtonMenu>
+
+          <ReceiveContent
+            account={selectedReceiveAccount || ''}
+            chainType={selectedReceiveChain}
+            walletIcon={selectedWalletIcon}
+          />
+        </>
       )
     }
 
@@ -235,6 +250,17 @@ export const WalletContent = ({
     if ([ViewState.CLAIM_GIFT, ViewState.CLAIM_GIFT_CONFIRM].includes(viewState)) {
       return (
         <>
+          <ButtonMenu
+            scale="sm"
+            variant="text"
+            onItemClick={(index) =>
+              index === 0 ? setViewState(ViewState.RECEIVE_QR) : setViewState(ViewState.CLAIM_GIFT)
+            }
+            activeIndex={viewState === ViewState.CLAIM_GIFT ? 1 : 0}
+          >
+            <StyledButtonMenuItem>{t('Address')}</StyledButtonMenuItem>
+            <StyledButtonMenuItem>{t('Claim Gift')}</StyledButtonMenuItem>
+          </ButtonMenu>
           {viewState === ViewState.CLAIM_GIFT ? (
             <ClaimGiftView setViewState={setViewState} />
           ) : (
@@ -314,6 +340,11 @@ export const WalletContent = ({
             {[ViewState.RECEIVE_OPTIONS, ViewState.RECEIVE_QR].includes(viewState) && (
               <Text fontSize="20px" fontWeight="600" color="text">
                 {t('Receive Crypto')}
+              </Text>
+            )}
+            {[ViewState.CLAIM_GIFT, ViewState.CLAIM_GIFT_CONFIRM].includes(viewState) && (
+              <Text fontSize="20px" fontWeight="600" color="text">
+                {t('Claim Gift')}
               </Text>
             )}
           </FlexGap>
