@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "এই লেনদেন সম্পন্ন করতে আনুমানিক সময়।",
   "Retry with lower input amount!": "কম পরিমাণ ইনপুট দিয়ে আবার চেষ্টা করুন!",
   "Developer Doc": "ডেভেলপার Doc",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "স্মার্ট কন্ট্রাক্ট ওয়ালেট বর্তমানে পূর্বাভাসের সাথে সামঞ্জস্যপূর্ণ নয়। চালিয়ে যেতে পণ্যের সাথে ইন্টারঅ্যাক্ট করার আগে অনুগ্রহ করে কোনো EOA (বহিস্থঃ মালিকানাধীন অ্যাকাউন্ট) ওয়ালেটে ফিরে যান।",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "ফ্যালকন মাইলস অর্জন করুন!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "পুলে মোট TVL-এর অবদানের উপর ভিত্তি করে LPs, %multiplier%x ফ্যালকন-এর মাইলস অর্জন করে। মাইলস শুধুমাত্র 0.95 থেকে 1.05 সীমার মধ্যে অবস্থানে জমা হয়।",
   "Trade for a Chance to Win %amount%.": "%amount% জেতার সুযোগের জন্য লেনদেন করুন।",
@@ -4095,5 +4095,8 @@
   "Transaction timeout. Please try again": "লেনদেনের সময়সীমা শেষ হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
   "Trade with %product%": "Trade with %product%",
   "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
