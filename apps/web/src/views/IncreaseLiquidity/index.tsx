@@ -117,7 +117,7 @@ export const IncreaseLiquidity = () => {
   const isOutOfRange = useMemo(() => {
     if (!pool || typeof tickLower === 'undefined' || typeof tickUpper === 'undefined') return false
     return pool.tickCurrent < tickLower || pool.tickCurrent > tickUpper
-  }, [])
+  }, [pool, tickLower, tickUpper])
 
   const [manuallyInverted, setManuallyInverted] = useState(false)
   const { priceLower, priceUpper, base } = useInverter({

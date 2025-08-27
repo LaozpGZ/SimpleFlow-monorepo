@@ -72,6 +72,7 @@ export const addCLLiquidityMulticall = ({
         liquidity,
         amount0Max,
         amount1Max,
+        recipient,
         modifyPositionHookData,
         deadline
       )
