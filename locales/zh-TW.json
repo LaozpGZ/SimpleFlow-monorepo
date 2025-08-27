@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "完成此交易的預估時間。",
   "Retry with lower input amount!": "請再試一次，並降低輸入金額！",
   "Developer Doc": "開發者文件",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "預測模式目前不支援智慧型合約錢包。若要繼續操作，請先切換回 EOA (外部帳號) 錢包再進行互動。",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "賺取 Falcon Miles！",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "流動性提供者可根據對流動性池的 TVL 貢獻獲得 %multiplier% 倍 Falcon Miles。僅限價格落在 0.95 至 1.05 區間的部位可累積哩程。",
   "Trade for a Chance to Win %amount%.": "交易就有機會贏得 %amount%。",
@@ -4095,5 +4095,8 @@
   "Transaction timeout. Please try again": "交易逾時，請再試一次",
   "Trade with %product%": "使用 %product% 交易",
   "to Win %amount%": "就能贏得 %amount%",
-  "Trade with %product% to Win %amount%": "使用 %product% 交易就能贏得 %amount%"
+  "Trade with %product% to Win %amount%": "使用 %product% 交易就能贏得 %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
