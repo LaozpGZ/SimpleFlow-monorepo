@@ -266,7 +266,7 @@ export const getWalletsConfig = ({
       solanaAdapterName: SolanaWalletNames.Solflare,
       networks: [WalletAdaptedNetwork.Solana],
       get installed() {
-        return isSolanaWalletInstalled(SolanaWalletNames.Solflare)
+        return isSolanaWalletInstalled(SolanaWalletNames.Solflare) || Boolean((safeGetWindow() as any)?.solflare)
       },
       downloadLink: 'https://solflare.com',
     },
