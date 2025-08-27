@@ -193,7 +193,7 @@ export const getWalletsConfig = ({
       get installed() {
         return isMathWalletInstalled()
       },
-      // qrCode,
+      qrCode,
     },
     {
       id: WalletIds.Tokenpocket,
