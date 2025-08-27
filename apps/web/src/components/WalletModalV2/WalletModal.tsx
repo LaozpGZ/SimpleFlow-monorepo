@@ -4,6 +4,8 @@ import {
   ArrowForwardIcon,
   Box,
   Button,
+  Card,
+  CardBody,
   FlexGap,
   Modal,
   ModalHeader,
@@ -324,13 +326,6 @@ export const WalletContent = ({
             actionView
           ) : (
             <>
-              <FlexGap alignItems="center" gap="3px">
-                <TotalBalanceInteger>${balanceDisplay.integer}</TotalBalanceInteger>
-                <TotalBalanceDecimal>.{balanceDisplay.decimal}</TotalBalanceDecimal>
-              </FlexGap>
-              <Text fontSize="20px" fontWeight="bold" mb="8px">
-                {t('My Wallet')}
-              </Text>
               {!noAssets && (
                 <Box mb="16px" onClick={(e) => e.stopPropagation()}>
                   <TabsComponent
@@ -340,14 +335,21 @@ export const WalletContent = ({
                   />
                 </Box>
               )}
+              <Card background={theme.colors.cardSecondary} mb="16px">
+                <CardBody p="16px">
+                  <Text fontSize="20px" fontWeight="600" mb="8px">
+                    {t('My Wallet')}
+                  </Text>
+                  <FlexGap alignItems="center" gap="3px">
+                    <TotalBalanceInteger lineHeight={1.2}>${balanceDisplay.integer}</TotalBalanceInteger>
+                    <TotalBalanceDecimal lineHeight={1.2}>.{balanceDisplay.decimal}</TotalBalanceDecimal>
+                  </FlexGap>
+                </CardBody>
+              </Card>
               {view === WalletView.GIFTS ? (
                 <GiftsDashboard setViewState={setViewState} />
               ) : view === WalletView.WALLET_INFO && !noAssets ? (
                 <Box mt="16px">
-                  <Text fontSize="14px" color="textSubtle">
-                    {t('Assets')}
-                  </Text>
-
                   <AssetsList assets={balances} isLoading={isLoading} />
                 </Box>
               ) : (

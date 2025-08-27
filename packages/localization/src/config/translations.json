@@ -4110,5 +4110,6 @@
   "Transaction timeout. Please try again": "Transaction timeout. Please try again",
   "Trade with %product%": "Trade with %product%",
   "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "Gift": "Gift"
 }

@@ -39,15 +39,19 @@ interface TabsComponentProps {
   style?: React.CSSProperties
 }
 
+const StyledButtonMenuItem = styled(ButtonMenuItem)<{ isActive?: boolean }>`
+  color: ${({ theme, isActive }) => (isActive ? theme.colors.secondary : theme.colors.textSubtle)};
+`
+
 export const TabsComponent: React.FC<React.PropsWithChildren<TabsComponentProps>> = ({ view, handleClick, style }) => {
   const { t } = useTranslation()
 
   return (
     <Tabs style={style}>
-      <ButtonMenu scale="sm" variant="subtle" onItemClick={handleClick} activeIndex={view} fullWidth>
-        <ButtonMenuItem>{t('Wallet')}</ButtonMenuItem>
-        <ButtonMenuItem>{t('Transactions')}</ButtonMenuItem>
-        <ButtonMenuItem>{t('Gifts')}</ButtonMenuItem>
+      <ButtonMenu scale="sm" variant="text" onItemClick={handleClick} activeIndex={view}>
+        <StyledButtonMenuItem variant="secondary">{t('Assets')}</StyledButtonMenuItem>
+        <StyledButtonMenuItem variant="secondary">{t('Transactions')}</StyledButtonMenuItem>
+        <StyledButtonMenuItem variant="secondary">{t('Gift')}</StyledButtonMenuItem>
       </ButtonMenu>
     </Tabs>
   )
