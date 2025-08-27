@@ -1,9 +1,12 @@
 import { useTranslation } from '@pancakeswap/localization'
+import { ChainId } from '@pancakeswap/chains'
 import { Box, Button, Card, CheckmarkCircleIcon, Flex, FlexGap, Spinner } from '@pancakeswap/uikit'
 import Divider from 'components/Divider'
 import { SecondaryCard } from 'components/SecondaryCard'
-import { useContext } from 'react'
+import { useCallback, useContext } from 'react'
 
+import { useActiveChainId } from 'hooks/useAccountActiveChain'
+import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useCancelGift } from '../hooks/useCancelGift'
 import { useGetGiftByCodeHash } from '../hooks/useGetGiftInfo'
 import { CancelGiftContext } from '../providers/CancelGiftProvider'
@@ -16,6 +19,8 @@ import { GiftStatusTag } from './GiftStatusTag'
 export const GiftInfoDetailView = () => {
   const { codeHash } = useContext(CancelGiftContext)
   const { t } = useTranslation()
+  const { chainId } = useActiveChainId()
+  const { switchNetwork } = useSwitchNetwork()
 
   const { cancelGift, isLoading: isLoadingCancelGift, txHash, error } = useCancelGift()
 
@@ -23,6 +28,14 @@ export const GiftInfoDetailView = () => {
 
   // Check if cancel was successful (transaction completed and has hash)
   const isCancelSuccessful = !isLoadingCancelGift && !!txHash && !error
+
+  const handleCancelGift = useCallback(() => {
+    if (chainId !== ChainId.BSC) {
+      switchNetwork(ChainId.BSC)
+    } else {
+      cancelGift({ codeHash })
+    }
+  }, [chainId, switchNetwork, cancelGift])
 
   if (!giftInfo || isLoadingGiftInfo) {
     return (
@@ -140,13 +153,13 @@ export const GiftInfoDetailView = () => {
         // but user might need to manually cancel the gift in case auto cancel is not working
         giftInfo.status === GiftStatus.PENDING && (
           <Button
-            onClick={() => cancelGift({ codeHash })}
+            onClick={handleCancelGift}
             variant="danger"
             width="100%"
             disabled={!codeHash || isLoadingCancelGift}
             isLoading={isLoadingCancelGift}
           >
-            {isLoadingCancelGift ? t('Cancelling...') : t('Cancel')}
+            {chainId === ChainId.BSC ? (isLoadingCancelGift ? t('Cancelling...') : t('Cancel')) : t('Switch Network')}
           </Button>
         )
       )}
