@@ -361,7 +361,7 @@ export const WalletContent = ({
           )}
         </Box>
       </CancelGiftProvider>
-      {viewState === ViewState.WALLET_INFO && chainId !== NonEVMChainId.SOLANA && (
+      {viewState === ViewState.WALLET_INFO && (
         <>
           {noAssets ? (
             chainId === NonEVMChainId.SOLANA ? (

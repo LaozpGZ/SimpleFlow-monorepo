@@ -537,12 +537,15 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
   ])
 
   // Main sendAsset function that routes to appropriate handler
-  const sendAsset = useCallback(async () => {
-    if (isSolanaChain) {
-      return sendSolanaAsset()
-    }
-    return sendEVMAsset()
-  }, [isSolanaChain, sendSolanaAsset, sendEVMAsset])
+  const sendAsset = useCallback(
+    async (asset: BalanceData) => {
+      if (asset.chainId === NonEVMChainId.SOLANA) {
+        return sendSolanaAsset()
+      }
+      return sendEVMAsset()
+    },
+    [isSolanaChain, sendSolanaAsset, sendEVMAsset],
+  )
 
   const isLikelyWalletAddress = (input: string) => {
     try {
@@ -706,7 +709,7 @@ export const SendAssetForm: React.FC<SendAssetFormProps> = ({ asset, onViewState
         onConfirm={async () => {
           try {
             // Submit the transaction using the improved error handling
-            const receipt = await sendAsset()
+            const receipt = await sendAsset(asset)
             if (receipt?.status) {
               onViewStateChange(ViewState.SEND_ASSETS)
             }
