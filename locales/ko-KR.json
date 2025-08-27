@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "이 트랜잭션을 완료하기까지 예상 시간입니다.",
   "Retry with lower input amount!": "입력 금액을 낮추고 다시 시도하세요!",
   "Developer Doc": "개발자 문서",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Prediction에서는 스마트 계약 지갑이 현재 지원되지 않습니다. 계속하려면 제품과 상호 작용하기 전에 EOA(외부 소유 계정) 지갑으로 전환하세요.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Falcon Miles를 획득하세요!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP는 풀에 기여한 총 TVL에 따라 Falcon's Miles의 %multiplier%배를 획득합니다. Miles는 0.95 ~ 1.05 범위 내의 포지션에만 적립됩니다.",
   "Trade for a Chance to Win %amount%.": "거래하여 %amount% 당첨 기회를 잡으세요.",
@@ -4095,5 +4095,8 @@
   "Transaction timeout. Please try again": "Transaction timeout. Please try again",
   "Trade with %product%": "Trade with %product%",
   "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
