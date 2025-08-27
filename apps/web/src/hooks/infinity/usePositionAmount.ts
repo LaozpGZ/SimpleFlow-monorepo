@@ -62,9 +62,9 @@ export const usePositionAmount = ({
     )
   }, [token1, tickCurrent, tickLower, tickUpper, sqrtRatioX96, liquidity])
 
-  const deposit0Disabled = Boolean(typeof tickUpper === 'number' && tickCurrent && tickCurrent >= tickUpper)
-  const deposit1Disabled = Boolean(typeof tickLower === 'number' && tickCurrent && tickCurrent <= tickLower)
-  const invalidRange = Boolean(typeof tickLower === 'number' && typeof tickUpper === 'number' && tickLower >= tickUpper)
+  const deposit0Disabled = Boolean(typeof tickUpper === 'number' && tickCurrent && tickCurrent > tickUpper)
+  const deposit1Disabled = Boolean(typeof tickLower === 'number' && tickCurrent && tickCurrent < tickLower)
+  const invalidRange = Boolean(typeof tickLower === 'number' && typeof tickUpper === 'number' && tickLower > tickUpper)
 
   return {
     amount0,

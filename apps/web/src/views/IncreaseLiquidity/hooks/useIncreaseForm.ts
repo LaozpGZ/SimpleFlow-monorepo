@@ -59,6 +59,8 @@ export const useIncreaseForm = ({
       setLastEditCurrency(1)
       if (!outOfRange) {
         setOutputAmountRaw(newAmount1)
+      } else {
+        setOutputAmountRaw('')
       }
     },
     [currency0, outputAmountRaw, pool, tickUpper, tickLower, outOfRange],
@@ -80,6 +82,8 @@ export const useIncreaseForm = ({
       setLastEditCurrency(0)
       if (!outOfRange) {
         setInputAmountRaw(newAmount0)
+      } else {
+        setInputAmountRaw('')
       }
     },
     [currency1, inputAmountRaw, pool, tickUpper, tickLower, outOfRange],
