@@ -1,4 +1,4 @@
-import React, { ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { WalletContext, WalletContextState } from '@solana/wallet-adapter-react'
 
 const mockWalletContext: WalletContextState = {
