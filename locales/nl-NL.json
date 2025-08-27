@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "Geschatte duur om deze transactie te voltooien.",
   "Retry with lower input amount!": "Probeer opnieuw met een lager inputbedrag!",
   "Developer Doc": "Ontwikkelaarsdocument",
-  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract-wallets worden momenteel niet ondersteund op %product%. Om door te gaan, moet je teruggaan naar een EOA-wallet (Externally Owned Account - Account in externe eigendom) voordat je met het product aan de slag gaat.",
   "Earn Falcon Miles!": "Verdien Falcon-miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP's verdienen %multiplier%x Falcon-miles op basis van de totale TVL die aan de pool is bijgedragen. Miles worden alleen toegekend aan posities binnen het bereik van 0,95 tot 1,05.",
   "Trade for a Chance to Win %amount%.": "Handel om kans te maken op %amount%.",
@@ -4096,7 +4096,7 @@
   "Trade with %product%": "Handel met %product%",
   "to Win %amount%": "om %amount% te winnen",
   "Trade with %product% to Win %amount%": "Handel met %product% om %amount% te winnen",
-  "My Locked CAKE": "My Locked CAKE",
-  "Unlock Date": "Unlock Date",
-  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
+  "My Locked CAKE": "Mijn vergrendelde CAKE",
+  "Unlock Date": "Ontgrendelingsdatum",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart wallets worden niet ondersteund, maak een ticket op onze officiële Discord"
 }
