@@ -14,7 +14,7 @@ export const usePrivyWalletAddress = () => {
   const { client: smartWalletClient } = useSmartWallets()
   const { ready, authenticated, user } = usePrivy()
   const connectors = useConnectors()
-  const { isSmartWalletReady, isSettingUp } = useEmbeddedSmartAccountConnectorV2()
+  const { isSmartWalletReady, isSettingUp, shouldUseAAWallet } = useEmbeddedSmartAccountConnectorV2()
 
   const [finalAddress, setFinalAddress] = useState<string | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
@@ -28,6 +28,24 @@ export const usePrivyWalletAddress = () => {
         setIsLoading(true)
         setFinalAddress(undefined)
         setAddressType(null)
+        return
+      }
+
+      // If AA wallet is disabled via URL param, use embedded wallet directly
+      if (!shouldUseAAWallet) {
+        if (user?.wallet && wagmiAddress) {
+          setFinalAddress(wagmiAddress)
+          setAddressType('embedded')
+          setIsLoading(false)
+        } else if (user?.wallet) {
+          // Has wallet but address not ready yet
+          setIsLoading(true)
+        } else {
+          // No wallet
+          setFinalAddress(undefined)
+          setAddressType(null)
+          setIsLoading(false)
+        }
         return
       }
 
@@ -97,6 +115,7 @@ export const usePrivyWalletAddress = () => {
     isSmartWalletReady,
     isSettingUp,
     hasWaitedForSmartWallet,
+    shouldUseAAWallet,
   ])
 
   return {
