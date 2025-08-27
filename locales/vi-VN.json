@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "Thời gian ước tính để hoàn thành giao dịch này.",
   "Retry with lower input amount!": "Thử lại với số lượng đầu vào thấp hơn!",
   "Developer Doc": "Tài liệu nhà phát triển",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Các ví hợp đồng thông minh hiện không được hỗ trợ trên Dự báo. Để tiếp tục, hãy chuyển lại một ví EOA (Tài khoản thuộc sở hữu bên ngoài) trước khi tương tác với sản phẩm.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Kiếm Dặm Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP kiếm được %multiplier%x Dặm Falcon dựa trên tổng số TVL đóng góp cho quỹ. Số dặm chỉ được tích lũy cho các vị thế trong khoảng 0,95 đến 1,05.",
   "Trade for a Chance to Win %amount%.": "Giao dịch để có cơ hội trúng %amount%.",
@@ -4095,5 +4095,8 @@
   "Transaction timeout. Please try again": "Giao dịch đã hết thời gian chờ. Vui lòng thử lại",
   "Trade with %product%": "Giao dịch với %product%",
   "to Win %amount%": "để trúng %amount%",
-  "Trade with %product% to Win %amount%": "Giao dịch với %product% để trúng %amount%"
+  "Trade with %product% to Win %amount%": "Giao dịch với %product% để trúng %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
