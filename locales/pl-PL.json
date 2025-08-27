@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "Szacowany czas realizacji transakcji.",
   "Retry with lower input amount!": "Spróbuj ponownie, wprowadzając mniejszą kwotę!",
   "Developer Doc": "Dokumentacja programistyczna",
-  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Portfele z inteligentnymi kontraktami nie są obecnie obsługiwane w serwisie %product%. Aby kontynuować, przed rozpoczęciem korzystania z produktu przejdź z powrotem do portfela EOA (Externally Owned Account, konto zewnętrzne).",
   "Earn Falcon Miles!": "Zbieraj Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP otrzymują %multiplier%-krotność Falcon Miles na podstawie całkowitej wartości TVL wniesionej do puli. Falcon Miles są naliczane tylko dla pozycji w zakresie od 0,95 do 1,05.",
   "Trade for a Chance to Win %amount%.": "Handluj, aby mieć szansę na wygranie %amount%.",
@@ -4096,7 +4096,7 @@
   "Trade with %product%": "Handluj przy użyciu %product%",
   "to Win %amount%": "aby wygrać %amount%",
   "Trade with %product% to Win %amount%": "Handluj przy użyciu %product%, aby wygrać %amount%",
-  "My Locked CAKE": "My Locked CAKE",
-  "Unlock Date": "Unlock Date",
-  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
+  "My Locked CAKE": "Moje zablokowane CAKE",
+  "Unlock Date": "Data odblokowania",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Portfele inteligentne nie są obsługiwane, utwórz zgłoszenie na naszym oficjalnym serwerze Discord"
 }
