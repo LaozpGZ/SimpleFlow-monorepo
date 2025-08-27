@@ -1,4 +1,5 @@
 import { EventEmitter } from 'events'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { getAddress, hexToBigInt } from 'viem'
 import { useChainId, useConfig, useConnectors, useReconnect } from 'wagmi'
@@ -20,13 +21,24 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
   const id = useChainId()
   const { client: isReady, getClientForChain } = useSmartWallets()
   const { reconnect } = useReconnect()
+  const searchParams = useSearchParams()
 
   // Add state management to track smart wallet ready status
   const [isSmartWalletReady, setIsSmartWalletReady] = useState(false)
   const [isSettingUp, setIsSettingUp] = useState(false)
 
+  // Check URL parameter to disable AA wallet
+  const shouldUseAAWallet = searchParams.get('aawallet') !== 'false'
+
   useEffect(() => {
     const setupSmartAccountConnector = async () => {
+      // If AA wallet is disabled via URL param, skip setup
+      if (!shouldUseAAWallet) {
+        setIsSmartWalletReady(true)
+        setIsSettingUp(false)
+        return
+      }
+
       const existingSmartAccountConnector = connectors.find((connector) => connector.id === 'io.privy.smart_wallet')
 
       // If smart account connector already exists, mark as ready
@@ -91,12 +103,13 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
     }
 
     setupSmartAccountConnector()
-  }, [config, connectors, getClientForChain, id, isReady, reconnect])
+  }, [config, connectors, getClientForChain, id, isReady, reconnect, searchParams, shouldUseAAWallet])
 
   // Return state for other components to use
   return {
     isSmartWalletReady,
     isSettingUp,
+    shouldUseAAWallet,
   }
 }
 
