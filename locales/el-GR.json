@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "Εκτιμώμενος χρόνος για την ολοκλήρωση αυτής της συναλλαγής.",
   "Retry with lower input amount!": "Δοκιμάστε ξανά με μικρότερο ποσό!",
   "Developer Doc": "Έγγραφο προγραμματιστή",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Τα πορτοφόλια έξυπνων συμβολαίων δεν υποστηρίζονται προς το παρόν στο Prediction. Για να συνεχίσετε, επιστρέψτε σε ένα πορτοφόλι EOA (Λογαριασμός εξωτερικής ιδιοκτησίας) πριν αλληλεπιδράσετε με το προϊόν.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Κερδίστε μίλια Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Οι LP κερδίζουν %multiplier% φορές τα μίλια του Falcon με βάση το συνολικό TVL που συνεισφέρεται στη δεξαμενή. Τα μίλια συσσωρεύονται μόνο σε θέσεις εντός του εύρους 0,95 έως 1,05.",
   "Trade for a Chance to Win %amount%.": "Κάντε συναλλαγές για μια ευκαιρία να κερδίσετε %amount%.",
@@ -4095,5 +4095,8 @@
   "Transaction timeout. Please try again": "Transaction timeout. Please try again",
   "Trade with %product%": "Trade with %product%",
   "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
