@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "Tempo estimado para concluir esta transação.",
   "Retry with lower input amount!": "Tente novamente com um valor menor!",
   "Developer Doc": "Documentação para desenvolvedores",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Carteiras de contrato inteligente não são suportadas atualmente no Prediction. Para continuar, volte a usar uma carteira EOA (Conta Externamente Controlada) antes de interagir com o produto.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Ganhe Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Os LPs recebem %multiplier% Falcon’s Miles com base no TVL total contribuído à pool. As Miles são acumuladas apenas por posições na faixa de 0,95 a 1,05.",
   "Trade for a Chance to Win %amount%.": "Negocie para ter uma chance de ganhar %amount%.",
@@ -4095,5 +4095,8 @@
   "Transaction timeout. Please try again": "Transaction timeout. Please try again",
   "Trade with %product%": "Trade with %product%",
   "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
