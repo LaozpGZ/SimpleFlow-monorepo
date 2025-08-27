@@ -23,6 +23,7 @@ import useAuth from 'hooks/useAuth'
 import { useSetAtom } from 'jotai'
 import { useCallback, useMemo } from 'react'
 import { walletModalVisibleAtom } from 'state/wallet/atom'
+import { useCurrentWalletIconByNetworks } from 'state/wallet/hooks'
 import styled from 'styled-components'
 import { logGTMDisconnectWalletEvent } from 'utils/customGTMEventTracking'
 import { useAccount } from 'wagmi'
@@ -49,17 +50,12 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
   const { t } = useTranslation()
   const { chainId, unifiedAccount } = useAccountActiveChain()
   const { connector } = useAccount()
-  const { disconnect, wallets } = useWallet()
+  const { disconnect } = useWallet()
   const { logout } = useAuth()
   const setWalletModalVisible = useSetAtom(walletModalVisibleAtom)
-  const [solanaWalletName, setSolanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
+  const [, setSolanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
 
-  const selectedSolanaWallet = useMemo(() => {
-    if (solanaWalletName) {
-      return wallets.find((w) => w.adapter.name === (solanaWalletName as WalletName))
-    }
-    return null
-  }, [solanaWalletName, wallets])
+  const walletIcons = useCurrentWalletIconByNetworks()
 
   const handleWalletLogout = useCallback(
     async (network: WalletAdaptedNetwork) => {
@@ -101,9 +97,9 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
               alt="EVM network"
               style={{ display: 'block' }}
             />
-            {connector?.icon && (
+            {walletIcons[WalletAdaptedNetwork.EVM] && (
               <Box position="absolute" bottom="0" right="0" width={24} height={24}>
-                <WalletIcon src={connector?.icon} width={24} height={24} alt="EVM Wallet" />
+                <WalletIcon src={walletIcons[WalletAdaptedNetwork.EVM]} width={24} height={24} alt="EVM Wallet" />
               </Box>
             )}
           </Box>
@@ -134,9 +130,9 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
               alt="Solana network"
               style={{ display: 'block' }}
             />
-            {selectedSolanaWallet && (
+            {walletIcons[WalletAdaptedNetwork.Solana] && (
               <Box position="absolute" bottom="0" right="0" width={24} height={24}>
-                <WalletIcon src={selectedSolanaWallet?.adapter.icon} width={24} height={24} alt="Solana Wallet" />
+                <WalletIcon src={walletIcons[WalletAdaptedNetwork.Solana]} width={24} height={24} alt="Solana Wallet" />
               </Box>
             )}
           </Box>

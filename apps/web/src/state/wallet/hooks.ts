@@ -4,7 +4,7 @@ import { NonEVMChainId } from '@pancakeswap/chains'
 import { selectedEvmWalletAtom, selectedSolanaWalletAtom } from '@pancakeswap/ui-wallets/src/state/atom'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useLocalStorage, useWallet } from '@solana/wallet-adapter-react'
-import { EvmConnectorNames, SolanaProviderLocalStorageKey } from '@pancakeswap/ui-wallets'
+import { EvmConnectorNames, SolanaProviderLocalStorageKey, WalletAdaptedNetwork } from '@pancakeswap/ui-wallets'
 import { WalletName } from '@solana/wallet-adapter-base'
 import { multicallABI } from 'config/abi/Multicall'
 import { FAST_INTERVAL } from 'config/constants'
@@ -356,5 +356,23 @@ export const useCurrentWalletIcon = () => {
     }
 
     return connector?.icon ?? (selectedWallet?.icon as string)
+  }, [chainId, wallets, solanaWalletName, connector, selectedSolanaWalletName, selectedWallet])
+}
+
+export const useCurrentWalletIconByNetworks = () => {
+  const { chainId } = useAccountActiveChain()
+  const { connector } = useAccount()
+  const { wallets } = useWallet()
+  const [solanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
+  const selectedSolanaWalletName = useAtomValue(selectedSolanaWalletAtom)
+  const selectedWallet = useSelectedWallet()
+
+  return useMemo(() => {
+    const solWallet = wallets.find((w) => w.adapter.name === (selectedSolanaWalletName || solanaWalletName))
+
+    return {
+      [WalletAdaptedNetwork.EVM]: connector?.icon ?? (selectedWallet?.icon as string),
+      [WalletAdaptedNetwork.Solana]: solWallet?.adapter.icon ?? (selectedWallet?.icon as string),
+    }
   }, [chainId, wallets, solanaWalletName, connector, selectedSolanaWalletName, selectedWallet])
 }
