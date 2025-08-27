@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "Bu işlemin tamamlanması için tahminî süre.",
   "Retry with lower input amount!": "Daha düşük bir giriş miktarı ile tekrar deneyin!",
   "Developer Doc": "Geliştirici Dokümanı",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Akıllı sözleşme cüzdanları şu anda Prediction'da desteklenmiyor. Devam etmek için ürünle etkileşime geçmek üzere lütfen bir EOA'ya (Haricî Olarak Sahip Olunan Hesap) geçin.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Falcon Milleri Kazanın!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP'ler, havuza katkıda bulunulan toplam TVL'ye dayalı olarak %multiplier% katı Falcon Mili kazandırıyor. Miller sadce 0,95 ile 1,05 aralığındaki pozisyonlarda birikir.",
   "Trade for a Chance to Win %amount%.": "%amount% Kazanma Şansı İçin Yatırım Yapın.",
@@ -4095,5 +4095,8 @@
   "Transaction timeout. Please try again": "İşlem zaman aşımına uğradı. Lütfen tekrar deneyin",
   "Trade with %product%": "Trade with %product%",
   "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
