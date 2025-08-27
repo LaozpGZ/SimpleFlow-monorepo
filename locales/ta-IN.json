@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "இந்தப் பரிவர்த்தனையை முடிக்க மதிப்பிடப்பட்ட நேரம்.",
   "Retry with lower input amount!": "குறைந்த உள்ளீட்டுத் தொகையுடன் மீண்டும் முயற்சிக்கவும்!",
   "Developer Doc": "டெவலப்பர் ஆவணம்",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "ஸ்மார்ட் ஒப்பந்த வாலெட்கள் தற்போது கணிப்பு அம்சத்தில் ஆதரிக்கப்படவில்லை. தொடர, தயாரிப்புடன் தொடர்பு கொள்வதற்கு முன் EOA (வெளிப்புறமாகச் சொந்தயுள்ள கணக்கு) வாலெட்டுக்கு மாறுங்கள்.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "ஃபால்கன் மைல்களை சம்பாதிக்கவும்!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "மொத்த TVL பங்களிப்பின் அடிப்படையில் LPகள் %multiplier%x ஃபால்கன்ஸ் மைல்களை ஈட்டுகின்றன. 0.95 முதல் 1.05 வரம்பிற்குள் உள்ள பொசிஷன்களுக்கு மட்டுமே மைல்கள் சேரும்.",
   "Trade for a Chance to Win %amount%.": "%amount% வெல்லும் வாய்ப்புக்கு டிரேட் செய்யுங்கள்.",
@@ -4095,5 +4095,8 @@
   "Transaction timeout. Please try again": "பரிவர்த்தனையை நேரமுடிவுற்றது. மீண்டும் முயற்சித்திடுங்கள்",
   "Trade with %product%": "Trade with %product%",
   "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
