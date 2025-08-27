@@ -39,6 +39,7 @@ import { useConnect } from 'wagmi'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { previouslyUsedEvmWalletsAtom } from '@pancakeswap/ui-wallets/src/state/atom'
 import { walletsConfig } from 'config/wallet'
+import { useClaimGiftContext } from 'views/Gift/providers/ClaimGiftProvider'
 import { CopyAddress } from './WalletCopyButton'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
@@ -150,7 +151,7 @@ export const WalletContent = ({
   const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
   const { viewState, setViewState, goBack, setSendEntry } = useWalletModalV2ViewState()
-  const { setCode } = useContext(CancelGiftContext)
+  const { setCode } = useClaimGiftContext()
   const { theme } = useTheme()
   const setConnectedWalletModalVisible = useSetAtom(connectedWalletModalVisibleAtom)
 
