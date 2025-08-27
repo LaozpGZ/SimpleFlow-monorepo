@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "Thời gian ước tính để hoàn thành giao dịch này.",
   "Retry with lower input amount!": "Thử lại với số lượng đầu vào thấp hơn!",
   "Developer Doc": "Tài liệu nhà phát triển",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Các ví hợp đồng thông minh hiện không được hỗ trợ trên Dự báo. Để tiếp tục, hãy chuyển lại một ví EOA (Tài khoản thuộc sở hữu bên ngoài) trước khi tương tác với sản phẩm.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Hiện tại ví hợp đồng thông minh không được hỗ trợ trên %product%. Để tiếp tục, vui lòng chuyển về ví EOA (Externally Owned Account) trước khi tương tác với sản phẩm.",
   "Earn Falcon Miles!": "Kiếm Dặm Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP kiếm được %multiplier%x Dặm Falcon dựa trên tổng số TVL đóng góp cho quỹ. Số dặm chỉ được tích lũy cho các vị thế trong khoảng 0,95 đến 1,05.",
   "Trade for a Chance to Win %amount%.": "Giao dịch để có cơ hội trúng %amount%.",
@@ -3918,7 +3918,7 @@
   "Social Login": "Đăng nhập bằng mạng xã hội",
   "Connect with your social account for a seamless experience": "Kết nối với tài khoản mạng xã hội của bạn để có một trải nghiệm liền mạch",
   "Continue with Google": "Tiếp tục với Google",
-  "X Login": "Đăng nhập bằng X",
+  "X Login": "Vào qua X",
   "Continue with Web3 Wallet": "Tiếp tục với ví Web3",
   "TWAP and Limit orders are currently not supported for Smart Account wallets.": "Các lệnh TWAP và Giới hạn hiện không được hỗ trợ cho ví Smart Account.",
   "Create your Wallet with Social Login": "Tạo Ví của bạn với Đăng nhập bằng mạng xã hội",
@@ -4092,5 +4092,11 @@
   "Transaction Failed": "Giao dịch không thành công",
   "Your transaction has been submitted to the network": "Giao dịch của bạn đã được gửi lên mạng lưới",
   "Send didn’t go through. Please try again.": "Gửi không thành công. Vui lòng thử lại.",
-  "Transaction timeout. Please try again": "Giao dịch đã hết thời gian chờ. Vui lòng thử lại"
+  "Transaction timeout. Please try again": "Giao dịch đã hết thời gian chờ. Vui lòng thử lại",
+  "Trade with %product%": "Giao dịch với %product%",
+  "to Win %amount%": "để trúng %amount%",
+  "Trade with %product% to Win %amount%": "Giao dịch với %product% để trúng %amount%",
+  "My Locked CAKE": "CAKE đã khoá của tôi",
+  "Unlock Date": "Ngày mở khóa",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallet hiện không được hỗ trợ, vui lòng tạo phiếu yêu cầu (ticket) trên Discord Chính thức của chúng tôi"
 }

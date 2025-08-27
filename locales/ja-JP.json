@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "トランザクション完了までの予想時間です。",
   "Retry with lower input amount!": "入力額を下げて再試行してください！",
   "Developer Doc": "開発者向け資料",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "スマートコントラクトウォレットは現在「Prediction」ではサポートされていません。続行するには、サービスをご利用になる前にEOA（外部所有アカウント）ウォレットに切り替えてください。",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Falcon Milesを獲得しよう！",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPはプールに拠出した総TVLに基づいて%multiplier%倍のFalcon's Milesを獲得できます。Milesは0.95〜1.05の範囲内のポジションにのみ付与されます。",
   "Trade for a Chance to Win %amount%.": "取引して%amount%を獲得するチャンスを掴みましょう！",
@@ -4092,5 +4092,11 @@
   "Transaction Failed": "Transaction Failed",
   "Your transaction has been submitted to the network": "Your transaction has been submitted to the network",
   "Send didn’t go through. Please try again.": "Send didn’t go through. Please try again.",
-  "Transaction timeout. Please try again": "Transaction timeout. Please try again"
+  "Transaction timeout. Please try again": "Transaction timeout. Please try again",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }

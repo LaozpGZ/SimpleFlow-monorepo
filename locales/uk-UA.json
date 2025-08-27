@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "Орієнтовний час завершення цієї транзакції.",
   "Retry with lower input amount!": "Спробуйте ввести меншу суму!",
   "Developer Doc": "Документація для розробників",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Гаманці смартконтрактів наразі не підтримуються в продукті «Прогноз». Щоб продовжити, перемкніться на гаманець типу EOA (Externally Owned Account) перед взаємодією з продуктом.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Заробляйте Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade for a Chance to Win %amount%.": "Trade for a Chance to Win %amount%.",
@@ -4092,5 +4092,11 @@
   "Transaction Failed": "Transaction Failed",
   "Your transaction has been submitted to the network": "Your transaction has been submitted to the network",
   "Send didn’t go through. Please try again.": "Send didn’t go through. Please try again.",
-  "Transaction timeout. Please try again": "Transaction timeout. Please try again"
+  "Transaction timeout. Please try again": "Transaction timeout. Please try again",
+  "Trade with %product%": "Trade with %product%",
+  "to Win %amount%": "to Win %amount%",
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
