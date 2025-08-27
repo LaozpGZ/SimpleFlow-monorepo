@@ -20,6 +20,7 @@ import { publicClient } from 'utils/viem'
 import { Address, erc20Abi, getAddress, isAddress } from 'viem'
 import { useAccount, useBalance } from 'wagmi'
 import { useAtomValue } from 'jotai'
+import { useSelectedWallet } from '@pancakeswap/ui-wallets/src/state/hooks'
 import { useMultipleContractSingleDataWagmi } from '../multicall/hooks'
 
 /**
@@ -346,7 +347,7 @@ export const useCurrentWalletIcon = () => {
   const { wallets } = useWallet()
   const [solanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
   const selectedSolanaWalletName = useAtomValue(selectedSolanaWalletAtom)
-  const selectedEvmWallet = useAtomValue(selectedEvmWalletAtom)
+  const selectedWallet = useSelectedWallet()
 
   return useMemo(() => {
     if (chainId === NonEVMChainId.SOLANA) {
@@ -354,8 +355,8 @@ export const useCurrentWalletIcon = () => {
       return wallets.find((w) => w.adapter.name === (name as WalletName))?.adapter.icon
     }
 
-    console.debug('debug connector', { connector, selectedEvmWallet })
+    console.debug('debug connector', { connector, selectedWallet, chainId })
 
-    return connector?.icon ?? (selectedEvmWallet?.icon as string)
-  }, [chainId, wallets, solanaWalletName, connector, selectedSolanaWalletName, selectedEvmWallet])
+    return connector?.icon ?? (selectedWallet?.icon as string)
+  }, [chainId, wallets, solanaWalletName, connector, selectedSolanaWalletName, selectedWallet])
 }

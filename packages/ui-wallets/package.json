@@ -32,7 +32,7 @@
     "swiper": "*",
     "styled-components": "6.0.7",
     "react-device-detect": "^2.1.2",
-    "jotai": "^2.2.2",
+    "jotai": "catalog:",
     "@cyberlab/cyber-app-sdk": "catalog:",
     "@solana/wallet-adapter-wallets": "catalog:"
   },
