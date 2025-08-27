@@ -34,9 +34,6 @@ const useAuth = () => {
     async (wallet: WalletConfigV3<EvmConnectorNames>): Promise<ConnectData | undefined> => {
       const { connectorId, title, networks } = wallet
 
-      console.log('login wallet', wallet)
-      console.log('6963 providers', eip6963Providers)
-
       if (!networks.includes(WalletAdaptedNetwork.EVM)) return
 
       const findConnector = CONNECTOR_MAP[connectorId] || undefined
@@ -44,8 +41,6 @@ const useAuth = () => {
 
       if (connectorId === EvmConnectorNames.Injected) {
         const eip6963detail = eip6963Providers.find((p) => p.info.name.toLowerCase() === title.toLowerCase())
-        console.log('eip6963detail', eip6963detail)
-        console.log('wallet.icon', wallet.icon)
         if (eip6963detail) {
           if (!eip6963detail.info.icon) {
             eip6963detail.info.icon = wallet.icon as string
@@ -55,8 +50,6 @@ const useAuth = () => {
         }
       }
       const connector = eipConnector || findConnector
-      console.log('eip connector', eipConnector)
-      console.log('find connector', findConnector)
 
       try {
         if (!connector) return

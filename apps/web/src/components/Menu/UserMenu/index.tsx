@@ -33,6 +33,7 @@ import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { isSolana, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { useCurrentWalletIcon } from 'state/wallet/hooks'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
 const UserMenuItems = ({ onReceiveClick, onDismiss }: { onReceiveClick: () => void; onDismiss: () => void }) => {
@@ -93,22 +94,15 @@ const ClickablePopover = styled.div<{ isOpen: boolean }>`
 
 const useAvatar = () => {
   const { chainId, unifiedAccount } = useAccountActiveChain()
-  const { wallet: solWallet } = useWallet()
-  const { connector: evmWallet } = useAccount()
   const { profile } = useProfile()
   const { avatar } = useDomainNameForAddress(isSolana(chainId) ? undefined : unifiedAccount ?? undefined)
+  const walletIcon = useCurrentWalletIcon()
   return useMemo(() => {
-    // (isSolana(chainId) ? solWallet?.adapter.icon : profile?.nft?.image?.thumbnail ?? avatar ?? evmWallet?.icon)
-    if (isSolana(chainId) && solWallet) return solWallet.adapter.icon
     if (!isSolana(chainId) && profile?.nft?.image?.thumbnail) return profile.nft.image.thumbnail
     if (avatar) return avatar
-    if (!isSolana(chainId) && evmWallet?.icon) return evmWallet.icon
 
-    if (isSolana(chainId) && !solWallet && evmWallet?.icon) return evmWallet.icon // Fallback to EVM wallet icon if no Solana wallet connected
-    if (!isSolana(chainId) && !evmWallet && solWallet?.adapter.icon) return solWallet.adapter.icon // Fallback to Solana wallet icon if no EVM wallet connected
-
-    return undefined
-  }, [avatar, chainId, evmWallet?.icon, profile?.nft?.image?.thumbnail, solWallet?.adapter.icon])
+    return walletIcon
+  }, [avatar, chainId, profile?.nft?.image?.thumbnail, walletIcon])
 }
 
 const UserMenu = () => {
