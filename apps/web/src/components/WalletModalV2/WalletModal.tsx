@@ -250,17 +250,6 @@ export const WalletContent = ({
     if ([ViewState.CLAIM_GIFT, ViewState.CLAIM_GIFT_CONFIRM].includes(viewState)) {
       return (
         <>
-          <ButtonMenu
-            scale="sm"
-            variant="text"
-            onItemClick={(index) =>
-              index === 0 ? setViewState(ViewState.RECEIVE_QR) : setViewState(ViewState.CLAIM_GIFT)
-            }
-            activeIndex={viewState === ViewState.CLAIM_GIFT ? 1 : 0}
-          >
-            <StyledButtonMenuItem>{t('Address')}</StyledButtonMenuItem>
-            <StyledButtonMenuItem>{t('Claim Gift')}</StyledButtonMenuItem>
-          </ButtonMenu>
           {viewState === ViewState.CLAIM_GIFT ? (
             <ClaimGiftView setViewState={setViewState} />
           ) : (
