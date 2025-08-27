@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { CHAINS } from 'config/chains'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -31,13 +31,23 @@ export const useAllChainIds = () => {
   return useMemo(() => allChains.map((chain) => chain.id), [allChains])
 }
 
-export const useAllChainsOpts = () => {
+export const useAllChainsOpts = (opts?: { includeSolana?: boolean }) => {
   const chains = useAllChain()
-  return chains.map((chain) => ({
+  const evmChains = chains.map((chain) => ({
     icon: `${ASSET_CDN}/web/chains/${chain.id}.png`,
     value: chain.id,
     label: chain.name,
   }))
+
+  if (opts?.includeSolana) {
+    evmChains.unshift({
+      icon: `${ASSET_CDN}/web/chains/${NonEVMChainId.SOLANA}.png`,
+      value: NonEVMChainId.SOLANA,
+      label: 'Solana',
+    })
+  }
+
+  return evmChains
 }
 
 export const useOrderChainIds = () => {

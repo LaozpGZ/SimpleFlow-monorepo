@@ -46,7 +46,7 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
   }, [])
 
   // Get unique networks from assets
-  const allChainsOpts = useAllChainsOpts()
+  const allChainsOpts = useAllChainsOpts({ includeSolana: true })
 
   const filteredTokens = useMemo(() => {
     // First filter by networks if any are selected
@@ -71,20 +71,19 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
 
   return (
     <>
-      <Text fontSize="20px" fontWeight="bold" mb="16px">
+      <Text fontSize="20px" fontWeight="bold" mb="16px" mt="12px">
         {t('Send Assets')}
       </Text>
       <FlexGap gap="16px" flexDirection="column" mb="16px">
-        {chainId !== NonEVMChainId.SOLANA && (
-          <Box>
-            <NetworkFilter
-              data={allChainsOpts}
-              value={selectedNetworks}
-              onChange={(value) => setSelectedNetworks(value)}
-              multiple
-            />
-          </Box>
-        )}
+        <Box>
+          <NetworkFilter
+            data={allChainsOpts}
+            value={selectedNetworks}
+            onChange={(value) => setSelectedNetworks(value)}
+            multiple
+          />
+        </Box>
+
         <Box>
           <SearchInput
             placeholder="Search by name or paste address"
