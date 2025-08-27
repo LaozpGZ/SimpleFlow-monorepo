@@ -17,10 +17,6 @@ export const encodeCLPositionManagerIncreaseLiquidityCalldata = (
   const planner = new ActionsPlanner()
   planner.add(ACTIONS.CL_INCREASE_LIQUIDITY, [tokenId, liquidity, amount0Max, amount1Max, hookData])
 
-  const containNativeCurrency = positionConfig.poolKey.currency0 === zeroAddress
-
-  const calls = containNativeCurrency
-    ? planner.finalizeModifyLiquidityWithCloseNative(positionConfig.poolKey, recipient)
-    : planner.finalizeModifyLiquidityWithClose(positionConfig.poolKey)
+  const calls = planner.finalizeModifyLiquidityWithSettlePair(positionConfig.poolKey, recipient)
   return encodeCLPositionModifyLiquidities(calls, deadline)
 }
