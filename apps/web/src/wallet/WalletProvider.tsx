@@ -12,6 +12,7 @@ import { useWagmiConfig } from './hook/useWagmiConfig'
 import { useSyncPersistChain } from './hook/useSyncPersistChain'
 
 import { SOLANA_SUPPORTED_PATH } from './network.switch.config'
+import { MockSolanaWalletProvider } from './MockSolanaWalletProvider'
 
 interface WalletProviderProps {
   reconnectOnMount?: boolean
@@ -117,7 +118,11 @@ export const WalletProvider = (props: WalletProviderProps) => {
     <PrivyWagmiProvider reconnectOnMount config={wagmiConfig}>
       <W3WConfigProvider value={isInBinance()}>
         <Sync />
-        {needSolanaProvider ? <SolanaProviders>{children}</SolanaProviders> : children}
+        {needSolanaProvider ? (
+          <SolanaProviders>{children}</SolanaProviders>
+        ) : (
+          <MockSolanaWalletProvider>{children}</MockSolanaWalletProvider>
+        )}
       </W3WConfigProvider>
     </PrivyWagmiProvider>
   )
