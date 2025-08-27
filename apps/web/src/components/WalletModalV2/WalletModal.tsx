@@ -22,7 +22,7 @@ import { useMenuTab, WalletView } from 'components/Menu/UserMenu/providers/MenuT
 import { StyledButtonMenuItem, Tabs, TabsComponent } from 'components/Menu/UserMenu/WalletModal'
 import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
 import { useRouter } from 'next/router'
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useContext, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { ClaimGiftConfirmView } from 'views/Gift/components/ClaimGiftConfirmView'
@@ -32,7 +32,7 @@ import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
 import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
-import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
+import { CancelGiftContext, CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { connectedWalletModalVisibleAtom } from 'state/wallet/atom'
 import { useConnect } from 'wagmi'
@@ -150,6 +150,7 @@ export const WalletContent = ({
   const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
   const { viewState, setViewState, goBack, setSendEntry } = useWalletModalV2ViewState()
+  const { setCode } = useContext(CancelGiftContext)
   const { theme } = useTheme()
   const setConnectedWalletModalVisible = useSetAtom(connectedWalletModalVisibleAtom)
 
@@ -322,7 +323,12 @@ export const WalletContent = ({
             <Button
               variant="tertiary"
               style={{ width: '34px', height: '34px', padding: '6px', borderRadius: '12px' }}
-              onClick={goBack}
+              onClick={() => {
+                if (ViewState.CLAIM_GIFT_CONFIRM === viewState) {
+                  setCode('')
+                }
+                goBack()
+              }}
             >
               <ArrowBackIcon fontSize="24px" color={theme.colors.primary60} />
             </Button>
