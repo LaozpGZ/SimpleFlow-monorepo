@@ -3742,7 +3742,7 @@
   "Estimated time to complete this transaction.": "Estimasi waktu untuk menyelesaikan transaksi ini.",
   "Retry with lower input amount!": "Coba lagi dengan jumlah input yang lebih rendah!",
   "Developer Doc": "Dokumen Pengembang",
-  "Smart contract wallets are currently not supported on Prediction. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Dompet kontrak cerdas saat ini tidak didukung pada Prediksi. Untuk melanjutkan, silakan beralih kembali ke dompet EOA (Externally Owned Account) sebelum berinteraksi dengan produk ini.",
+  "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Hasilkan Miles Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
   "Trade for a Chance to Win %amount%.": "Trade for a Chance to Win %amount%.",
@@ -4095,5 +4095,8 @@
   "Transaction timeout. Please try again": "Waktu transaksi habis. Silakan coba lagi",
   "Trade with %product%": "Trade with %product%",
   "to Win %amount%": "to Win %amount%",
-  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%"
+  "Trade with %product% to Win %amount%": "Trade with %product% to Win %amount%",
+  "My Locked CAKE": "My Locked CAKE",
+  "Unlock Date": "Unlock Date",
+  "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord"
 }
