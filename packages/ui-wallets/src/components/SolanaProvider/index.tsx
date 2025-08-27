@@ -2,9 +2,10 @@ import { useCallback, useMemo } from 'react'
 import { Adapter, WalletError } from '@solana/wallet-adapter-base'
 import {
   CoinbaseWalletAdapter,
-  SolflareWalletAdapter,
+  // SolflareWalletAdapter,
   WalletConnectWalletAdapter,
 } from '@solana/wallet-adapter-wallets'
+import { initialize, SolflareWalletAdapter } from '@solflare-wallet/wallet-adapter'
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react'
 import { GlowWalletAdapter } from '@solana/wallet-adapter-glow'
 import { ExodusWalletAdapter } from '@solana/wallet-adapter-exodus'
@@ -15,6 +16,8 @@ import { errorSolanaAtom } from '../../state/atom'
 export type SolanaProviderProps = React.PropsWithChildren<{
   endpoint: string
 }>
+
+initialize()
 
 export const SolanaProvider: React.FC<SolanaProviderProps> = ({ children, endpoint }) => {
   const walletConnectAdapter = useMemo(() => {
