@@ -45,6 +45,7 @@ export const getWalletsConfig = ({
   solanaWalletAdapters: SolanaWalletAdapter[]
 }): WalletConfigV3[] => {
   const qrCode = createEvmQrCode ? createEvmQrCode() : undefined
+  console.log('debug sol wallets', solanaWalletAdapters)
   const isSolanaWalletInstalled = (walletName: WalletName) => {
     if (!solanaWalletAdapters || solanaWalletAdapters.length === 0) return false
     return solanaWalletAdapters.some(
@@ -327,7 +328,7 @@ export const getWalletsConfig = ({
       solanaAdapterName: SolanaWalletNames.Backpack,
       networks: [WalletAdaptedNetwork.Solana],
       get installed() {
-        return isSolanaWalletInstalled(SolanaWalletNames.Backpack)
+        return isSolanaWalletInstalled(SolanaWalletNames.Backpack) || Boolean((safeGetWindow() as any)?.backpack)
       },
       downloadLink: 'https://backpack.app/',
     },
