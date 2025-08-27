@@ -243,9 +243,6 @@ export const getWalletsConfig = ({
         return isCyberWalletInstalled()
       },
       isNotExtension: true,
-      guide: {
-        desktop: 'https://docs.cyber.co/sdk/cyber-account#supported-chains',
-      },
     },
 
     {
