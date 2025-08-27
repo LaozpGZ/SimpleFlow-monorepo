@@ -1,5 +1,12 @@
 # @pancakeswap/smart-router
 
+## 7.5.1
+
+### Patch Changes
+
+- Updated dependencies [1de662b]
+  - @pancakeswap/infinity-sdk@1.0.5
+
 ## 7.5.0
 
 ### Minor Changes
