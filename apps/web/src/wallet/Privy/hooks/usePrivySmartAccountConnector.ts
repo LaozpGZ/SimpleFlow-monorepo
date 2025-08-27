@@ -103,7 +103,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
     }
 
     setupSmartAccountConnector()
-  }, [config, connectors, getClientForChain, id, isReady, reconnect, searchParams])
+  }, [config, connectors, getClientForChain, id, isReady, reconnect, searchParams, shouldUseAAWallet])
 
   // Return state for other components to use
   return {
