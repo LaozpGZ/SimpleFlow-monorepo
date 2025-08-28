@@ -46,7 +46,13 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
     async getChainId() {
       if (!provider) throw new Error('MetaMask not found')
       const chainId = await provider.request({ method: 'eth_chainId' })
-      return parseInt(chainId, 16)
+      if (typeof chainId === 'number') {
+        return chainId
+      }
+      if (typeof chainId === 'string') {
+        return chainId.startsWith('0x') ? parseInt(chainId, 16) : parseInt(chainId, 10)
+      }
+      return chainId
     },
 
     onAccountsChanged(accounts) {},
