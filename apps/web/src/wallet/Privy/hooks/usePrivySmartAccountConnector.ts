@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { useSearchParams } from 'next/router'
+import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { getAddress, hexToBigInt } from 'viem'
 import { useChainId, useConfig, useConnectors, useReconnect } from 'wagmi'
@@ -21,7 +21,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
   const id = useChainId()
   const { client: isReady, getClientForChain } = useSmartWallets()
   const { reconnect } = useReconnect()
-  const searchParams = useSearchParams()
+  const router = useRouter()
 
   // Add state management to track smart wallet ready status
   const [isSmartWalletReady, setIsSmartWalletReady] = useState(false)
@@ -30,7 +30,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
   const [hasSetupFailed, setHasSetupFailed] = useState(false)
 
   // Check URL parameter to disable AA wallet
-  const shouldUseAAWallet = searchParams.get('aawallet') !== 'false'
+  const shouldUseAAWallet = router.query.aawallet !== 'false'
 
   useEffect(() => {
     const setupSmartAccountConnector = async () => {
@@ -118,7 +118,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
     }
 
     setupSmartAccountConnector()
-  }, [config, connectors, getClientForChain, id, isReady, reconnect, searchParams, shouldUseAAWallet, retryCount])
+  }, [config, connectors, getClientForChain, id, isReady, reconnect, router.query, shouldUseAAWallet, retryCount])
 
   // Return state for other components to use
   return {
