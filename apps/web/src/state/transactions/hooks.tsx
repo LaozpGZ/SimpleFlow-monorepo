@@ -127,7 +127,7 @@ export function useTransactionAdder(overrideChainId?: number): (
 
 // returns all the transactions
 export function useAllTransactions(): { [chainId: number]: { [txHash: string]: TransactionDetails } } {
-  const { address: account } = useAccount()
+  const { unifiedAccount } = useAccountActiveChain()
 
   const state: {
     [chainId: number]: {
@@ -137,9 +137,12 @@ export function useAllTransactions(): { [chainId: number]: { [txHash: string]: T
 
   return useMemo(() => {
     return mapValues(state, (transactions) =>
-      pickBy(transactions, (transactionDetails) => transactionDetails.from.toLowerCase() === account?.toLowerCase()),
+      pickBy(
+        transactions,
+        (transactionDetails) => transactionDetails.from.toLowerCase() === unifiedAccount?.toLowerCase(),
+      ),
     )
-  }, [account, state])
+  }, [unifiedAccount, state])
 }
 
 export function useAllSortedRecentTransactions(): { [chainId: number]: { [txHash: string]: TransactionDetails } } {
