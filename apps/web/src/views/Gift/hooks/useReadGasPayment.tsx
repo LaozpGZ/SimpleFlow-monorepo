@@ -22,7 +22,7 @@ export const useReadGasPayment = () => {
 }
 
 export const useReadGasPaymentAmount = () => {
-  const nativeCurrency = useNativeCurrency()
+  const nativeCurrency = useNativeCurrency(ChainId.BSC)
   const gasPayment = useReadGasPayment()
   const stableNativePrice = useStablecoinPrice(nativeCurrency)
 
