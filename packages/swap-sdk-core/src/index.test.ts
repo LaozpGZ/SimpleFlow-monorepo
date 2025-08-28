@@ -21,7 +21,6 @@ test('exports', () => {
       "VM_TYPE_MAXIMA",
       "ZERO_ADDRESS",
       "BaseCurrency",
-      "isSPL",
       "Fraction",
       "Percent",
       "CurrencyAmount",
