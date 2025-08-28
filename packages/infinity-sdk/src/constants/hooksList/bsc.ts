@@ -211,7 +211,7 @@ export const bscHooksList: HookData[] = [
   },
   {
     poolType: POOL_TYPE.CLAMM,
-    address: '0x544Ec7F1bA881ff150331e7557b40945e2FC0f3C',
+    address: '0xD7059ABd653e87cb124690E2eba175391AC52243',
     name: 'Arbiter MEV Capture',
     description: `Arbiter hook allows LPs to capture significant part of MEV extracted from pool. This is achieved by introducing auction for MEV actors. Winner can control the pool’s fee, outperform competitors and optimize routing traffic - increasing their and LPs profits as proceeds from auction go to LPs.`,
     github: 'https://github.com/ArbiterFinance/arbiter-contracts/blob/main/src/ArbiterAmAmmPoolCurrencyHook.sol',
