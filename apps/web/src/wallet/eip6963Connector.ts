@@ -19,9 +19,17 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
     async connect({ chainId } = {}) {
       const accounts = await provider.request({ method: 'eth_requestAccounts' })
       const currentChainId = await provider.request({ method: 'eth_chainId' })
+      let normalizedChainId
+      if (typeof currentChainId === 'number') {
+        normalizedChainId = currentChainId
+      } else if (typeof currentChainId === 'string') {
+        normalizedChainId = currentChainId.startsWith('0x')
+          ? parseInt(currentChainId, 16)
+          : parseInt(currentChainId, 10)
+      }
       return {
         accounts: accounts as readonly `0x${string}`[],
-        chainId: chainId ?? parseInt(currentChainId, 16),
+        chainId: chainId ?? normalizedChainId,
       }
     },
 
