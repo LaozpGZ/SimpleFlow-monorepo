@@ -1,4 +1,4 @@
-import { useTranslation } from '@pancakeswap/localization'
+import { TranslateFunction, useTranslation } from '@pancakeswap/localization'
 import { useToast } from '@pancakeswap/uikit'
 import { ToastDescriptionWithTx } from 'components/Toast'
 import { useCallback, useState } from 'react'
@@ -14,6 +14,18 @@ type Params = {
   throwCustomError?: () => void
 }
 
+const enhanceReason = (reason: string | undefined, t: TranslateFunction): string | undefined => {
+  if (!reason) return reason
+
+  let enhanced = reason
+  const lower = reason.toLowerCase()
+
+  if (lower.includes('contract not allowed')) {
+    enhanced += `\n${t('Smart Wallets are not supported, please create a ticket on our Official Discord')}`
+  }
+  return enhanced
+}
+
 export default function useCatchTxError(params?: Params) {
   const { throwUserRejectError = false, throwCustomError } = params || {}
   const { t } = useTranslation()
@@ -27,10 +39,11 @@ export default function useCatchTxError(params?: Params) {
       logError(error)
       const err = parseViemError(error)
       if (err) {
+        const reason = enhanceReason(notPreview ? err.shortMessage || err.message : err.message, t)
         toastError(
           t('Error'),
           t('Transaction failed with error: %reason%', {
-            reason: notPreview ? error.shortMessage || error.message : error.message,
+            reason,
           }),
         )
       } else {

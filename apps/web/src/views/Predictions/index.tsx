@@ -4,6 +4,7 @@ import { useAccountLocalEventListener } from 'hooks/useAccountLocalEventListener
 import { useEffect, useRef } from 'react'
 import { useChartView, useIsChartPaneOpen } from 'state/predictions/hooks'
 import { useUserPredictionChainlinkChartDisclaimerShow, useUserPredictionChartDisclaimerShow } from 'state/user/hooks'
+import { useTranslation } from '@pancakeswap/localization'
 import Desktop from './Desktop'
 import Mobile from './Mobile'
 import ChainlinkChartDisclaimer from './components/ChainlinkChartDisclaimer'
@@ -11,7 +12,7 @@ import ChartDisclaimer from './components/ChartDisclaimer'
 import CollectWinningsPopup from './components/CollectWinningsPopup'
 import Container from './components/Container'
 import RiskDisclaimer from './components/RiskDisclaimer'
-import SmartWalletWarning from './components/SmartWalletWarning'
+import SmartWalletWarning from '../../components/SmartWalletWarning'
 import { useConfig } from './context/ConfigProvider'
 import SwiperProvider from './context/SwiperProvider'
 import usePollPredictions from './hooks/usePollPredictions'
@@ -60,6 +61,7 @@ function Warnings() {
 
 const Predictions = () => {
   const { isDesktop } = useMatchBreakpoints()
+  const { t } = useTranslation()
 
   useAccountLocalEventListener()
 
@@ -67,7 +69,7 @@ const Predictions = () => {
 
   return (
     <SwiperProvider>
-      <SmartWalletWarning />
+      <SmartWalletWarning productName={t('Prediction')} />
       <Container>
         <Warnings />
 

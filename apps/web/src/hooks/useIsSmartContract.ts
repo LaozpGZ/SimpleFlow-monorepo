@@ -16,7 +16,7 @@ export const useIsSmartContract = (address?: Address, overrideChainId?: number):
 
       if (!client) return false
 
-      const code = await client.getBytecode({ address })
+      const code = await client.getCode({ address })
 
       return code && code !== '0x'
     },

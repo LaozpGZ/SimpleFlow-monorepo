@@ -19,6 +19,7 @@ import {
 } from 'utils/contractHelpers'
 import { formatTime } from 'utils/formatTime'
 import { poolStartWeekCursors } from 'views/CakeStaking/config'
+import SmartWalletWarning from 'components/SmartWalletWarning'
 import { RedeemFaqs } from './components/RedeemFaqs'
 import { RedeemHeader } from './components/RedeemHeader'
 import { DisplayUSDValue, DisplayValue, VeCakeExitField } from './components/VeCakeExitField'
@@ -219,134 +220,137 @@ export const VeCakeRedeem: React.FC = () => {
   const allSettled = buttons.every((button) => !button.enabled)
 
   return (
-    <Bg>
-      <Page>
-        <Container>
-          <RedeemHeader />
-          <StyledCard isActive>
-            <div
-              style={{
-                padding: '24px',
-              }}
-            >
-              <SectionTitle isMobile={isMobile}>{t('MY CAKE STAKING POSITION')}</SectionTitle>
+    <>
+      <SmartWalletWarning productName={t('veCake Redeem')} />
+      <Bg>
+        <Page>
+          <Container>
+            <RedeemHeader />
+            <StyledCard isActive>
+              <div
+                style={{
+                  padding: '24px',
+                }}
+              >
+                <SectionTitle isMobile={isMobile}>{t('MY CAKE STAKING POSITION')}</SectionTitle>
 
-              <FieldGroup>
-                <VeCakeExitField label="My veCAKE" value={myVeCake} />
+                <FieldGroup>
+                  <VeCakeExitField label={t('My veCAKE')} value={myVeCake} />
 
-                <VeCakeExitField
-                  label="My Locked CAKE"
-                  value={lockedCake}
-                  symbol="CAKE"
-                  valueStyles={{
-                    fontWeight: 600,
-                    fontSize: '16px',
-                    lineHeight: '120%',
-                    textAlign: 'right',
-                  }}
-                  usdValue={!allSettled ? lockedCake.times(cakePrice) : undefined}
-                  labelTooltip={t(
-                    'All locked CAKE has been unlocked since April 23, 2025, at 08:00 AM UTC and is available for claiming.',
-                  )}
-                />
-
-                {Boolean(nativeCakeLockedAmount > 0 && unlockTime > 0) && (
                   <VeCakeExitField
-                    label="Unlock Date"
+                    label={t('My Locked CAKE')}
+                    value={lockedCake}
+                    symbol="CAKE"
+                    valueStyles={{
+                      fontWeight: 600,
+                      fontSize: '16px',
+                      lineHeight: '120%',
+                      textAlign: 'right',
+                    }}
+                    usdValue={!allSettled ? lockedCake.times(cakePrice) : undefined}
+                    labelTooltip={t(
+                      'All locked CAKE has been unlocked since April 23, 2025, at 08:00 AM UTC and is available for claiming.',
+                    )}
+                  />
+
+                  {Boolean(nativeCakeLockedAmount > 0 && unlockTime > 0) && (
+                    <VeCakeExitField
+                      label={t('Unlock Date')}
+                      value={
+                        <>
+                          {unlockTime < Date.now() && <Text>{t('Unlocked on')} </Text>}
+                          <DateText
+                            style={{
+                              textDecoration: unlockTime > Date.now() ? 'line-through' : 'none',
+                              fontSize: '16px',
+                            }}
+                          >
+                            {unlockTimeDisplay}
+                          </DateText>
+                          {unlockTime > Date.now() && <Text>{t('Anytime')}</Text>}
+                        </>
+                      }
+                    />
+                  )}
+
+                  <VeCakeExitField
+                    label={t('My Total rewards')}
                     value={
-                      <>
-                        {unlockTime < Date.now() && <Text>{t('Unlocked on')} </Text>}
-                        <DateText
-                          style={{
-                            textDecoration: unlockTime > Date.now() ? 'line-through' : 'none',
-                            fontSize: '16px',
-                          }}
-                        >
-                          {unlockTimeDisplay}
-                        </DateText>
-                        {unlockTime > Date.now() && <Text>{t('Anytime')}</Text>}
-                      </>
+                      <Flex
+                        onClick={() => {
+                          setExpand(!expand)
+                        }}
+                        style={{
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {!allSettled && availableClaim.gt(0) && (
+                          <DisplayValue
+                            value={availableClaim}
+                            symbol="CAKE"
+                            style={{
+                              fontSize: '16px',
+                              fontWeight: 600,
+                            }}
+                          />
+                        )}
+                        {!allSettled && availableClaim.gt(0) && <ChevronDownIcon color="primary60" />}
+                      </Flex>
                     }
+                    symbol="CAKE"
+                    usdValue={availableClaimUSD}
+                  />
+
+                  {!allSettled && expand && (
+                    <>
+                      <SubField>
+                        <VeCakeExitField label={t('CAKE Pool Rewards')} value={cakePoolRewards} symbol="CAKE" />
+                        <VeCakeExitField label={t('Revenue Sharing Rewards')} value={veCakeRewards} symbol="CAKE" />
+                      </SubField>
+                    </>
+                  )}
+                </FieldGroup>
+
+                {!allSettled && (
+                  <TotalRedeemBox>
+                    <Box>
+                      <RedeemIcon src={`${ASSET_CDN}/web/vecake/redeem-icon.png`} alt="redeem" />
+                    </Box>
+                    <Flex flex={1} flexDirection="row" justifyContent="space-between">
+                      <Box>
+                        <RedeemTitle>{t('REDEEM NOW')}</RedeemTitle>
+                        <RedeemLabel>{t('Total amount')}</RedeemLabel>
+                        {/* <VeCakeExitField label="Total amount" value={totalAmount} symbol="CAKE" usdValue={totalAmountUSD} /> */}
+                      </Box>
+                      <Box>
+                        <StyledRedeemValue symbol="CAKE" value={totalAmount} />
+                        <DisplayUSDValue value={totalAmountUSD} />
+                      </Box>
+                    </Flex>
+                  </TotalRedeemBox>
+                )}
+
+                {!isWalletConnected && (
+                  <ConnectWalletButton
+                    style={{
+                      width: '100%',
+                    }}
                   />
                 )}
-
-                <VeCakeExitField
-                  label={t('My Total rewards')}
-                  value={
-                    <Flex
-                      onClick={() => {
-                        setExpand(!expand)
-                      }}
-                      style={{
-                        cursor: 'pointer',
-                      }}
-                    >
-                      {!allSettled && availableClaim.gt(0) && (
-                        <DisplayValue
-                          value={availableClaim}
-                          symbol="CAKE"
-                          style={{
-                            fontSize: '16px',
-                            fontWeight: 600,
-                          }}
-                        />
-                      )}
-                      {!allSettled && availableClaim.gt(0) && <ChevronDownIcon color="primary60" />}
-                    </Flex>
-                  }
-                  symbol="CAKE"
-                  usdValue={availableClaimUSD}
-                />
-
-                {!allSettled && expand && (
+                {isWalletConnected && !allSettled && (
                   <>
-                    <SubField>
-                      <VeCakeExitField label={t('CAKE Pool Rewards')} value={cakePoolRewards} symbol="CAKE" />
-                      <VeCakeExitField label={t('Revenue Sharing Rewards')} value={veCakeRewards} symbol="CAKE" />
-                    </SubField>
+                    <StyledButton onClick={handleProcessAll} fullWidth disabled={processing}>
+                      {t('Redeem & Claim')}
+                    </StyledButton>
                   </>
                 )}
-              </FieldGroup>
-
-              {!allSettled && (
-                <TotalRedeemBox>
-                  <Box>
-                    <RedeemIcon src={`${ASSET_CDN}/web/vecake/redeem-icon.png`} alt="redeem" />
-                  </Box>
-                  <Flex flex={1} flexDirection="row" justifyContent="space-between">
-                    <Box>
-                      <RedeemTitle>{t('REDEEM NOW')}</RedeemTitle>
-                      <RedeemLabel>{t('Total amount')}</RedeemLabel>
-                      {/* <VeCakeExitField label="Total amount" value={totalAmount} symbol="CAKE" usdValue={totalAmountUSD} /> */}
-                    </Box>
-                    <Box>
-                      <StyledRedeemValue symbol="CAKE" value={totalAmount} />
-                      <DisplayUSDValue value={totalAmountUSD} />
-                    </Box>
-                  </Flex>
-                </TotalRedeemBox>
-              )}
-
-              {!isWalletConnected && (
-                <ConnectWalletButton
-                  style={{
-                    width: '100%',
-                  }}
-                />
-              )}
-              {isWalletConnected && !allSettled && (
-                <>
-                  <StyledButton onClick={handleProcessAll} fullWidth disabled={processing}>
-                    {t('Redeem & Claim')}
-                  </StyledButton>
-                </>
-              )}
-            </div>
-          </StyledCard>
-          <RedeemFaqs />
-        </Container>
-      </Page>
-    </Bg>
+              </div>
+            </StyledCard>
+            <RedeemFaqs />
+          </Container>
+        </Page>
+      </Bg>
+    </>
   )
 }
 
