@@ -1,11 +1,13 @@
 import { WalletName } from '@solana/wallet-adapter-base'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { useLocalStorage, useWallet } from '@solana/wallet-adapter-react'
 import { useAtomValue } from 'jotai'
 import { useCallback, useEffect, useRef } from 'react'
 import { errorSolanaAtom } from '../../../state/atom'
+import { SolanaProviderLocalStorageKey } from '../../SolanaProvider'
 
 export const useSolanaLogin = () => {
   const { select, connected, publicKey } = useWallet()
+  const [, setSolanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
   const solanaWalletError = useAtomValue(errorSolanaAtom)
 
   const promiseRef = useRef<{
@@ -24,20 +26,30 @@ export const useSolanaLogin = () => {
     }
   }, [solanaWalletError, connected, publicKey])
 
-  const solanaLogin = useCallback(async (walletName: WalletName) => {
-    let resolve: (address: string) => void
-    let reject: (error: string) => void
-    const promise = new Promise<string>((res, rej) => {
-      resolve = res
-      reject = rej
-    })
+  useEffect(() => {
+    if (!publicKey) {
+      setSolanaWalletName('')
+    }
+  }, [publicKey, setSolanaWalletName])
 
-    promiseRef.current = { promise, resolve: resolve!, reject: reject! }
+  const solanaLogin = useCallback(
+    async (walletName: WalletName) => {
+      setSolanaWalletName('')
+      let resolve: (address: string) => void
+      let reject: (error: string) => void
+      const promise = new Promise<string>((res, rej) => {
+        resolve = res
+        reject = rej
+      })
 
-    select(walletName)
+      promiseRef.current = { promise, resolve: resolve!, reject: reject! }
 
-    return promise
-  }, [])
+      select(walletName)
+
+      return promise
+    },
+    [setSolanaWalletName, select],
+  )
 
   return solanaLogin
 }
