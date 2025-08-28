@@ -47,15 +47,9 @@ function isNative(address: string): boolean {
   return address === ZERO_ADDRESS
 }
 
-/**
- * Hook to fetch and manage token balances for a specific address using React Query
- */
-export const useAddressBalance = (address?: string, chainId?: number, options: UseAddressBalanceOptions = {}) => {
-  // const { chainId } = useActiveChainId()
-  const { includeSpam = false, onlyWithPrice = false, filterByChainId, enabled = true } = options
+const useIsListedToken = () => {
   const list = useCombinedActiveList()
-
-  const isListedToken = useCallback(
+  return useCallback(
     (chainId: ChainId | NonEVMChainId, tokenAddress: string): boolean => {
       return (
         chainId === NonEVMChainId.SOLANA ||
@@ -65,6 +59,17 @@ export const useAddressBalance = (address?: string, chainId?: number, options: U
     },
     [list],
   )
+}
+
+/**
+ * Hook to fetch and manage token balances for a specific address using React Query
+ */
+export const useAddressBalance = (address?: string, chainId?: number, options: UseAddressBalanceOptions = {}) => {
+  // const { chainId } = useActiveChainId()
+  const { includeSpam = false, onlyWithPrice = false, filterByChainId, enabled = true } = options
+  const list = useCombinedActiveList()
+
+  const isListedToken = useIsListedToken()
 
   // Fetch balances from the API
   const fetchBalances = useCallback(async (): Promise<BalanceData[]> => {
@@ -218,6 +223,7 @@ export const useAddressBalance = (address?: string, chainId?: number, options: U
 
 export const useMultichainAddressBalance = () => {
   const { account: evmAccount, solanaAccount } = useAccountActiveChain()
+  const isListedToken = useIsListedToken()
 
   const {
     balances: evmBalances,
@@ -242,6 +248,10 @@ export const useMultichainAddressBalance = () => {
   return useMemo(() => {
     return {
       balances: [...(evmBalances ?? []), ...(solanaBalances ?? [])].sort((a, b) => {
+        const aListed = isListedToken(a.chainId, a.token.address)
+        const bListed = isListedToken(b.chainId, b.token.address)
+        if (aListed && !bListed) return -1
+        if (!aListed && bListed) return 1
         return (b.price?.totalUsd ?? 0) - (a.price?.totalUsd ?? 0)
       }),
       isLoading: isEvmLoading || isSolanaLoading,
