@@ -26,6 +26,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
   // Add state management to track smart wallet ready status
   const [isSmartWalletReady, setIsSmartWalletReady] = useState(false)
   const [isSettingUp, setIsSettingUp] = useState(false)
+  const [retryCount, setRetryCount] = useState(0)
 
   // Check URL parameter to disable AA wallet
   const shouldUseAAWallet = searchParams.get('aawallet') !== 'false'
@@ -35,6 +36,14 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
       // If AA wallet is disabled via URL param, skip setup
       if (!shouldUseAAWallet) {
         setIsSmartWalletReady(true)
+        setIsSettingUp(false)
+        return
+      }
+
+      // Prevent infinite retry loop - max 3 attempts
+      if (retryCount >= 3) {
+        console.warn('Smart wallet setup failed after 3 attempts, giving up')
+        setIsSmartWalletReady(true) // Mark as ready to prevent further retries
         setIsSettingUp(false)
         return
       }
@@ -96,15 +105,15 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
         reconnect()
       } catch (error) {
         console.error('Failed to setup smart account connector:', error)
-        // On setup failure, keep trying - don't mark as ready
-        // This prevents fallback to embedded wallet
+        // Increment retry count and try again
+        setRetryCount((prev) => prev + 1)
         setIsSmartWalletReady(false)
         setIsSettingUp(false)
       }
     }
 
     setupSmartAccountConnector()
-  }, [config, connectors, getClientForChain, id, isReady, reconnect, searchParams, shouldUseAAWallet])
+  }, [config, connectors, getClientForChain, id, isReady, reconnect, searchParams, shouldUseAAWallet, retryCount])
 
   // Return state for other components to use
   return {
