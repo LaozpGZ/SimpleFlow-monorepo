@@ -1,5 +1,11 @@
 # @pancakeswap/tokens
 
+## 0.7.8
+
+### Patch Changes
+
+- 5b6d71a: Remove incorrect dependency
+
 ## 0.7.7
 
 ### Patch Changes

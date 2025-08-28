@@ -1,5 +1,11 @@
 # solana-frontend
 
+## 0.0.7
+
+### Patch Changes
+
+- @pancakeswap/widgets-internal@0.4.12
+
 ## 0.0.6
 
 ### Patch Changes

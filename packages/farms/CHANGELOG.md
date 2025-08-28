@@ -1,5 +1,14 @@
 # @pancakeswap/farms
 
+## 1.2.12
+
+### Patch Changes
+
+- Updated dependencies [5b6d71a]
+  - @pancakeswap/tokens@0.7.8
+  - @pancakeswap/stable-swap-sdk@2.0.9
+  - @pancakeswap/price-api-sdk@11.0.2
+
 ## 1.2.11
 
 ### Patch Changes
