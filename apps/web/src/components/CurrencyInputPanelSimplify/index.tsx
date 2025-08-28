@@ -235,7 +235,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   const mode = id
   const token = pair ? pair.liquidityToken : currency?.isToken && currency instanceof Token ? currency : null
   const [isInputFocus, setIsInputFocus] = useState(false)
-  const inputBlurTimeoutRef = useRef<number | null>(null)
+  const inputBlurTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   const amountInDollar = useUnifiedUSDPriceAmount(
     showUSDPrice ? currency ?? undefined : undefined,
