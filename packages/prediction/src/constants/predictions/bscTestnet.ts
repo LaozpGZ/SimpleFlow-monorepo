@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import { ERC20Token, Native, NativeCurrency } from '@pancakeswap/sdk'
+import { ERC20Token, Native } from '@pancakeswap/sdk'
 import { bscTokens } from '@pancakeswap/tokens'
 import { chainlinkOracleETH, chainlinkOracleWBTC } from '../../chainlinkOracleContract'
 import { GRAPH_API_PREDICTION_ETH, GRAPH_API_PREDICTION_WBTC } from '../../endpoints'
@@ -7,13 +7,13 @@ import { predictionsETH, predictionsWBTC } from '../../predictionContract'
 import { PredictionConfig, PredictionContractVersion, PredictionSupportedSymbol } from '../../type'
 
 const BTC = new ERC20Token(bscTokens.wBTC.chainId, bscTokens.wBTC.address, bscTokens.wBTC.decimals, 'BTC', 'Bitcoin')
-const BNB = Native.onChain(ChainId.BSC)
+const tBNB = Native.onChain(ChainId.BSC_TESTNET)
 
 export const predictions: Record<string, PredictionConfig> = {
   [PredictionSupportedSymbol.ETH]: {
     version: PredictionContractVersion.V2_1,
 
-    betCurrency: BNB,
+    betCurrency: tBNB,
     predictionCurrency: bscTokens.eth,
 
     address: predictionsETH[ChainId.BSC_TESTNET],
@@ -26,7 +26,7 @@ export const predictions: Record<string, PredictionConfig> = {
   [PredictionSupportedSymbol.BTC]: {
     version: PredictionContractVersion.V2_1,
 
-    betCurrency: BNB,
+    betCurrency: tBNB,
     predictionCurrency: BTC,
 
     address: predictionsWBTC[ChainId.BSC_TESTNET],

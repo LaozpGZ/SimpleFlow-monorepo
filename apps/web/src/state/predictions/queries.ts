@@ -15,7 +15,7 @@ export const getBetBaseFields = (tokenSymbol: string) => {
     return betBaseFieldsCAKE
   }
   // BSC BNB
-  if (tokenSymbol === PredictionSupportedSymbol.BNB) {
+  if (tokenSymbol === PredictionSupportedSymbol.BNB || tokenSymbol === 'tBNB') {
     return betBaseFieldsBNB
   }
 
@@ -28,7 +28,7 @@ export const getUserBaseFields = (tokenSymbol: string) => {
     return userBaseFieldsCAKE
   }
   // BSC BNB
-  if (tokenSymbol === PredictionSupportedSymbol.BNB) {
+  if (tokenSymbol === PredictionSupportedSymbol.BNB || tokenSymbol === 'tBNB') {
     return userBaseFieldsBNB
   }
 
