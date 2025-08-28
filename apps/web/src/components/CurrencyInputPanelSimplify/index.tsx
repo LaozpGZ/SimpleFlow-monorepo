@@ -235,6 +235,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   const mode = id
   const token = pair ? pair.liquidityToken : currency?.isToken && currency instanceof Token ? currency : null
   const [isInputFocus, setIsInputFocus] = useState(false)
+  const inputBlurTimeoutRef = useRef<number | null>(null)
 
   const amountInDollar = useUnifiedUSDPriceAmount(
     showUSDPrice ? currency ?? undefined : undefined,
@@ -276,6 +277,14 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
     }
   }, [value, defaultValue, isInputFocus, onUserInput])
 
+  useEffect(() => {
+    return () => {
+      if (inputBlurTimeoutRef.current) {
+        clearTimeout(inputBlurTimeoutRef.current)
+      }
+    }
+  }, [])
+
   const handlePercentInput = useCallback(
     (percent: number) => {
       if (onPercentInput) {
@@ -291,10 +300,21 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   }, [])
   const handleUserInputBlur = useCallback(() => {
     onInputBlur?.()
-    setTimeout(() => setIsInputFocus(false), 300)
+
+    if (inputBlurTimeoutRef.current) {
+      clearTimeout(inputBlurTimeoutRef.current)
+    }
+    inputBlurTimeoutRef.current = setTimeout(() => {
+      setIsInputFocus(false)
+      inputBlurTimeoutRef.current = null
+    }, 300)
   }, [onInputBlur])
 
   const handleUserInputFocus = useCallback(() => {
+    if (inputBlurTimeoutRef.current) {
+      clearTimeout(inputBlurTimeoutRef.current)
+      inputBlurTimeoutRef.current = null
+    }
     setIsInputFocus(true)
   }, [])
 
