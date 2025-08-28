@@ -67,19 +67,27 @@ const useSwapCurrencies = () => {
 }
 
 function useCheckConnectSolanaForSolanaBridge() {
-  const { account } = useAccountActiveChain()
+  const { account, solanaAccount } = useAccountActiveChain()
 
   const { outputCurrency, inputCurrency } = useSwapCurrencies()
 
   if (!outputCurrency || !inputCurrency) return false
 
-  const isCrossChain = inputCurrency.chainId !== outputCurrency.chainId
-  const isSolanaBridge = isCrossChain && (isSolana(outputCurrency.chainId) || isSolana(inputCurrency.chainId))
+  const isSolanaBridge =
+    inputCurrency.chainId !== outputCurrency.chainId &&
+    (isSolana(outputCurrency.chainId) || isSolana(inputCurrency.chainId))
 
-  // Ensure evm account is connected first. If not, connect EVM before connecting Solana
-  const needConnectSolanaForBridgeFromEVMToSolana = account && isSolanaBridge && isSolana(outputCurrency.chainId)
+  if (!isSolanaBridge) return false
 
-  return needConnectSolanaForBridgeFromEVMToSolana
+  if (isSolana(outputCurrency.chainId) && account && !solanaAccount) {
+    return true
+  }
+
+  if (isEvm(outputCurrency.chainId) && solanaAccount && !account) {
+    return true
+  }
+
+  return false
 }
 
 const WrapCommitButtonReplace: React.FC<React.PropsWithChildren> = ({ children }) => {

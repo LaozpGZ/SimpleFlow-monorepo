@@ -39,7 +39,6 @@ import { useInitGlobalWorker } from 'hooks/useWorker'
 import { useSecurityBlocking } from 'hooks/useSecurityBlocking'
 import { persistor, useStore } from 'state'
 import { usePollBlockNumber } from 'state/block/hooks'
-import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import WalletModalManager from 'components/WalletModalManager'
 import { useAtom } from 'jotai'
 import { walletModalVisibleAtom } from 'state/wallet/atom'
@@ -157,7 +156,6 @@ const ProductionErrorBoundary = process.env.NODE_ENV === 'production' ? SentryEr
 
 const App = ({ Component, pageProps }: AppPropsWithLayout) => {
   const blocking = useSecurityBlocking()
-  const { chainId } = useAccountActiveChain()
   const [isOpen, setIsOpen] = useAtom(walletModalVisibleAtom)
 
   if (blocking) {
