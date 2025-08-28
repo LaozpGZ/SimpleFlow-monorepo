@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { REWARD_RATE } from '@pancakeswap/prediction'
+import { PredictionContractVersion, REWARD_RATE } from '@pancakeswap/prediction'
 import { Currency } from '@pancakeswap/sdk'
 import {
   AutoRenewIcon,
@@ -40,6 +40,7 @@ interface CollectRoundWinningsModalProps extends InjectedModalProps {
   isLoadingHistory: boolean
   predictionsAddress: Address
   betCurrency: Currency | undefined
+  predictionsVersion: PredictionContractVersion | undefined
   isV1Claim?: boolean
 }
 
@@ -89,6 +90,7 @@ const CollectRoundWinningsModal: React.FC<React.PropsWithChildren<CollectRoundWi
   isLoadingHistory,
   dispatch,
   predictionsAddress,
+  predictionsVersion,
   betCurrency,
   isV1Claim,
 }) => {
@@ -99,7 +101,7 @@ const CollectRoundWinningsModal: React.FC<React.PropsWithChildren<CollectRoundWi
   const { fetchWithCatchTxError, loading: isPendingTx } = useCatchTxError()
   const { callWithGasPrice } = useCallWithGasPrice()
 
-  const predictionsContract = usePredictionsContract(predictionsAddress, betCurrency?.isNative ?? false)
+  const predictionsContract = usePredictionsContract(predictionsAddress, predictionsVersion)
   const tokenPrice = useTokenUsdPriceBigNumber(betCurrency)
 
   const { epochs, total } = calculateClaimableRounds(history)

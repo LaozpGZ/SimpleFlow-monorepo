@@ -3,10 +3,12 @@ import { Native } from '@pancakeswap/sdk'
 import { GRAPH_API_PREDICTION_ETH } from '../../endpoints'
 import { galetoOracleETH } from '../../galetoOracleContract'
 import { predictionsETH } from '../../predictionContract'
-import { PredictionConfig, PredictionSupportedSymbol } from '../../type'
+import { PredictionConfig, PredictionContractVersion, PredictionSupportedSymbol } from '../../type'
 
 export const predictions: Record<string, PredictionConfig> = {
   [PredictionSupportedSymbol.ETH]: {
+    version: PredictionContractVersion.V2,
+
     betCurrency: Native.onChain(ChainId.ZKSYNC),
     predictionCurrency: Native.onChain(ChainId.ZKSYNC),
 

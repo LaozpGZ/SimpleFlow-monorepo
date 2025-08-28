@@ -1,4 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
+import { PredictionContractVersion } from '@pancakeswap/prediction'
 import { bscTokens } from '@pancakeswap/tokens'
 import { Box, ChevronRightIcon, Flex, Loading, Text, useModal } from '@pancakeswap/uikit'
 import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
@@ -36,6 +37,7 @@ const ClaimCheck = () => {
   const [onPresentCollectWinningsModal] = useModal(
     <CollectRoundWinningsModal
       predictionsAddress={predictionsV1Address}
+      predictionsVersion={PredictionContractVersion.V1}
       betCurrency={Native.onChain(ChainId.BSC)}
       dispatch={dispatch}
       history={history}

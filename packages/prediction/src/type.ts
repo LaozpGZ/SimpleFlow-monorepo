@@ -3,6 +3,20 @@ import { Currency } from '@pancakeswap/sdk'
 import { Address } from 'viem'
 import { SupportedChainId } from './constants/supportedChains'
 
+export enum PredictionContractVersion {
+  /** Old Predictions Contract */
+  V1 = 'V1',
+
+  /** For Native Tokens */
+  V2 = 'V2',
+
+  /** Gas-optimized version of V2 for Native Tokens */
+  V2_1 = 'V2_1',
+
+  /** For ERC20 tokens */
+  V3 = 'V3',
+}
+
 export enum PredictionSupportedSymbol {
   BNB = 'BNB',
   CAKE = 'CAKE',
@@ -40,6 +54,8 @@ type AIPredictionConfig = {
 }
 
 export interface PredictionConfig {
+  version: PredictionContractVersion
+
   betCurrency: Currency // The currency that is used to bet on the prediction
   predictionCurrency: Currency // The currency that the user is predicting price for
 

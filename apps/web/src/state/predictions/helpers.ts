@@ -1,11 +1,13 @@
 import { ChainId } from '@pancakeswap/chains'
 import {
   BetPosition,
+  PredictionContractVersion,
   PredictionStatus,
   PredictionSupportedSymbol,
   ROUNDS_PER_PAGE,
   aiPredictionsABI,
   predictionsV2ABI,
+  predictionsV21ABI,
 } from '@pancakeswap/prediction'
 import { gql, request } from 'graphql-request'
 import {
@@ -18,7 +20,7 @@ import {
   ReduxNodeRound,
   RoundData,
 } from 'state/types'
-import { getPredictionsV2Contract } from 'utils/contractHelpers'
+import { getPredictionsV21Contract, getPredictionsV2Contract } from 'utils/contractHelpers'
 import { PredictionsLedgerResponse, PredictionsRoundsResponse } from 'utils/types'
 import { publicClient } from 'utils/wagmi'
 import { Address } from 'viem'
@@ -166,14 +168,18 @@ export const getLedgerData = async (
   chainId: ChainId,
   epochs: number[],
   address: Address,
+  version: PredictionContractVersion = PredictionContractVersion.V2,
 ): Promise<PredictionsLedgerResponse[]> => {
   const client = publicClient({ chainId })
+
+  const v2Abi = version === PredictionContractVersion.V2_1 ? predictionsV21ABI : predictionsV2ABI
+
   const response = await client.multicall({
     contracts: epochs.map(
       (epoch) =>
         ({
           address,
-          abi: predictionsV2ABI,
+          abi: v2Abi,
           functionName: 'ledger',
           args: [BigInt(epoch), account] as const,
         } as const),
@@ -181,11 +187,14 @@ export const getLedgerData = async (
     allowFailure: false,
   })
 
-  return response.map((r) => ({
-    position: r[0] as 1 | 0,
-    amount: r[1],
-    claimed: r[2],
-  }))
+  const serializeV2Ledger = (r: any) => {
+    if (version === PredictionContractVersion.V2_1) {
+      return { position: r[0] as 1 | 0, claimed: r[1], amount: r[2] }
+    }
+    return { position: r[0] as 1 | 0, amount: r[1], claimed: r[2] }
+  }
+
+  return response.map(serializeV2Ledger)
 }
 
 export const LEADERBOARD_RESULTS_PER_PAGE = 20
@@ -336,24 +345,67 @@ export const getPredictionData = async (address: Address, chainId: ChainId): Pro
 
 export const getRoundsData = async (
   epochs: number[],
-  address: Address,
   chainId: ChainId,
+  address: Address,
+  version: PredictionContractVersion = PredictionContractVersion.V2,
   { isAIPrediction = true }: { isAIPrediction?: boolean } = {},
 ): Promise<PredictionsRoundsResponse[]> => {
   const client = publicClient({ chainId })
+
+  const v2Abi = version === PredictionContractVersion.V2_1 ? predictionsV21ABI : predictionsV2ABI
 
   const response = await client.multicall({
     contracts: epochs.map(
       (epoch) =>
         ({
           address,
-          abi: isAIPrediction ? aiPredictionsABI : predictionsV2ABI,
+          abi: isAIPrediction ? aiPredictionsABI : v2Abi,
           functionName: 'rounds',
           args: [BigInt(epoch)] as const,
         } as const),
     ),
     allowFailure: false,
   })
+
+  const serializeV2Round = (r: any) => {
+    // Predictions V2.1
+    if (version === PredictionContractVersion.V2_1) {
+      return {
+        epoch: BigInt(r[0]),
+        startTimestamp: BigInt(r[1]),
+        lockTimestamp: BigInt(r[2]),
+        closeTimestamp: BigInt(r[3]),
+        lockPrice: r[4],
+        closePrice: r[5],
+        lockOracleId: r[6],
+        closeOracleId: r[7],
+        oracleCalled: Boolean(r[8]),
+        totalAmount: r[9],
+        bullAmount: r[10],
+        bearAmount: r[11],
+        rewardBaseCalAmount: BigInt(r[12]),
+        rewardAmount: r[13] || 0n,
+      }
+    }
+
+    // Predictions V2
+    return {
+      epoch: BigInt(r[0]),
+      startTimestamp: BigInt(r[1]),
+      lockTimestamp: BigInt(r[2]),
+      closeTimestamp: BigInt(r[3]),
+      lockPrice: r[4],
+      closePrice: r[5],
+      lockOracleId: r[6],
+      closeOracleId: r[7],
+      totalAmount: r[8],
+      bullAmount: r[9],
+      bearAmount: r[10],
+      rewardBaseCalAmount: BigInt(r[11]),
+      rewardAmount: r[12] || 0n,
+      oracleCalled: Boolean(r[13]),
+    }
+  }
 
   return response.map((r, i) =>
     isAIPrediction
@@ -362,32 +414,17 @@ export const getRoundsData = async (
           startTimestamp: BigInt(r[0]),
           lockTimestamp: BigInt(r[1]),
           closeTimestamp: BigInt(r[2]),
-          AIPrice: r[3],
-          lockPrice: r[4],
-          closePrice: r[5],
-          totalAmount: r[6],
-          bullAmount: r[7],
-          bearAmount: r[8],
-          rewardBaseCalAmount: r[9],
-          rewardAmount: r[10],
+          AIPrice: r[3] as bigint,
+          lockPrice: r[4] as bigint,
+          closePrice: r[5] as bigint,
+          totalAmount: r[6] as bigint,
+          bullAmount: r[7] as bigint,
+          bearAmount: r[8] as bigint,
+          rewardBaseCalAmount: r[9] as bigint,
+          rewardAmount: r[10] as bigint,
           oracleCalled: Boolean(r[11]),
         }
-      : {
-          epoch: BigInt(r[0]),
-          startTimestamp: BigInt(r[1]),
-          lockTimestamp: BigInt(r[2]),
-          closeTimestamp: BigInt(r[3]),
-          lockPrice: r[4],
-          closePrice: r[5],
-          lockOracleId: r[6],
-          closeOracleId: r[7],
-          totalAmount: r[8],
-          bullAmount: r[9],
-          bearAmount: r[10],
-          rewardBaseCalAmount: BigInt(r[11]),
-          rewardAmount: r[12] || 0n,
-          oracleCalled: Boolean(r[13]),
-        },
+      : serializeV2Round(r),
   )
 }
 
@@ -419,11 +456,13 @@ export const makeRoundData = (rounds: ReduxNodeRound[]): RoundData => {
   }, {})
 }
 
-export const serializePredictionsLedgerResponse = (ledgerResponse: PredictionsLedgerResponse): ReduxNodeLedger => ({
-  position: ledgerResponse.position === 0 ? BetPosition.BULL : BetPosition.BEAR,
-  amount: ledgerResponse.amount.toString(),
-  claimed: ledgerResponse.claimed,
-})
+export const serializePredictionsLedgerResponse = (ledgerResponse: PredictionsLedgerResponse): ReduxNodeLedger => {
+  return {
+    position: ledgerResponse.position === 0 ? BetPosition.BULL : BetPosition.BEAR,
+    amount: ledgerResponse.amount.toString(),
+    claimed: ledgerResponse.claimed,
+  }
+}
 
 export const makeLedgerData = (account: string, ledgers: PredictionsLedgerResponse[], epochs: number[]): LedgerData => {
   return ledgers.reduce((accum, ledgerResponse, index) => {
@@ -496,9 +535,18 @@ export const serializePredictionsRoundsResponse = (response: PredictionsRoundsRe
   }
 }
 
-export const fetchUsersRoundsLength = async (account: Address, chainId: ChainId, address: Address) => {
+export const fetchUsersRoundsLength = async (
+  account: Address,
+  chainId: ChainId,
+  address: Address,
+  version: PredictionContractVersion = PredictionContractVersion.V2,
+) => {
   try {
-    const contract = getPredictionsV2Contract(address, chainId)
+    let contract
+
+    if (version === PredictionContractVersion.V2_1) contract = getPredictionsV21Contract(address, chainId)
+    else contract = getPredictionsV2Contract(address, chainId)
+
     const length = await contract.read.getUserRoundsLength([account])
     return length
   } catch {
@@ -515,10 +563,17 @@ export const fetchUserRounds = async (
   cursor = 0,
   size = ROUNDS_PER_PAGE,
   address: Address,
+  version: PredictionContractVersion = PredictionContractVersion.V2,
 ): Promise<null | { [key: string]: ReduxNodeLedger }> => {
-  const contract = getPredictionsV2Contract(address, chainId)
-
   try {
+    let contract
+
+    // V2 and V2.1 contracts differ only in the array order of Ledger Position Response
+    if (version === PredictionContractVersion.V2_1) {
+      contract = getPredictionsV21Contract(address, chainId)
+    } else {
+      contract = getPredictionsV2Contract(address, chainId)
+    }
     const [rounds, ledgers] = await contract.read.getUserRounds([account, BigInt(cursor), BigInt(size)])
 
     return rounds.reduce((accum, round, index) => {

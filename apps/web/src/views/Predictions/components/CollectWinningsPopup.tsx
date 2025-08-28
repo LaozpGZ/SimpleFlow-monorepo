@@ -150,7 +150,7 @@ const CollectWinningsPopup = () => {
           undefined,
           undefined,
           config?.api,
-          config?.predictionCurrency.symbol,
+          config?.betCurrency.symbol,
         )
 
         if (!isCancelled) {

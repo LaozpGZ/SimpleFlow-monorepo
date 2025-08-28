@@ -97,7 +97,7 @@ export const fetchPredictionData = createAsyncThunk<
       : [marketData.currentEpoch]
 
   // Round data
-  const roundsResponse = await getRoundsData(epochs, extra.address, chainId, {
+  const roundsResponse = await getRoundsData(epochs, chainId, extra.address, extra.version, {
     isAIPrediction: Boolean(extra.ai),
   })
   const initialRoundData: { [key: string]: ReduxNodeRound } = roundsResponse.reduce((accum, roundResponse) => {
@@ -144,7 +144,8 @@ export const fetchNodeHistory = createAsyncThunk<
   { account: Address; chainId: ChainId; page?: number },
   { state: PredictionsState; extra: PredictionConfig }
 >('predictions/fetchNodeHistory', async ({ account, chainId, page = 1 }, { getState, extra }) => {
-  const userRoundsLength = Number(await fetchUsersRoundsLength(account, chainId, extra.address))
+  const userRoundsLength = Number(await fetchUsersRoundsLength(account, chainId, extra.address, extra.version))
+
   const emptyResult = { bets: [], claimableStatuses: {}, totalHistory: userRoundsLength }
   const maxPages = userRoundsLength <= ROUNDS_PER_PAGE ? 1 : Math.ceil(userRoundsLength / ROUNDS_PER_PAGE)
 
@@ -163,7 +164,15 @@ export const fetchNodeHistory = createAsyncThunk<
     maxPages === page
       ? userRoundsLength - ROUNDS_PER_PAGE * (page - 1) // Previous page's cursor
       : ROUNDS_PER_PAGE
-  const userRounds = await fetchUserRounds(account, chainId, cursor < 0 ? 0 : cursor, size, extra.address)
+
+  const userRounds = await fetchUserRounds(
+    account,
+    chainId,
+    cursor < 0 ? 0 : cursor,
+    size,
+    extra.address,
+    extra.version,
+  )
 
   if (!userRounds) {
     return emptyResult
@@ -172,7 +181,7 @@ export const fetchNodeHistory = createAsyncThunk<
   const epochs = Object.keys(userRounds).map((epochStr) => Number(epochStr))
 
   const [roundData, claimableStatuses] = await Promise.all([
-    getRoundsData(epochs, extra.address, chainId, { isAIPrediction: Boolean(extra.ai) }),
+    getRoundsData(epochs, chainId, extra.address, extra.version, { isAIPrediction: Boolean(extra.ai) }),
     getClaimStatuses(account, chainId, epochs, extra.address),
   ])
 

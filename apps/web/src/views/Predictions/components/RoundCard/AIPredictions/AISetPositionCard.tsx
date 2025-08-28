@@ -93,7 +93,7 @@ export const AISetPositionCard: React.FC<React.PropsWithChildren<AISetPositionCa
   const isNativeToken = config?.betCurrency.isNative ?? false
   const tokenSymbol = config?.betCurrency.symbol ?? ''
 
-  const predictionsContract = usePredictionsContract(predictionsAddress, isNativeToken)
+  const predictionsContract = usePredictionsContract(predictionsAddress, config?.version)
 
   const { setLastUpdated, allowance } = useCakeApprovalStatus(config?.betCurrency.isNative ? null : predictionsAddress)
   const { handleApprove, pendingTx } = useCakeApprove(

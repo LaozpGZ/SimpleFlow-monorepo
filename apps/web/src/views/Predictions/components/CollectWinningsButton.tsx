@@ -40,6 +40,7 @@ const CollectWinningsButton: React.FC<React.PropsWithChildren<CollectWinningsBut
         if (account) dispatch(fetchNodeHistory({ account, chainId }))
       }}
       predictionsAddress={predictionsAddress}
+      predictionsVersion={config?.version}
       betCurrency={config?.betCurrency}
     />,
     false,

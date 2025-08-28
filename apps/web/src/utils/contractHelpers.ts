@@ -45,7 +45,13 @@ import {
 } from 'utils/addressHelpers'
 
 // ABI
-import { predictionsV1ABI, predictionsV2ABI, predictionsV3ABI } from '@pancakeswap/prediction'
+import {
+  PredictionContractVersion,
+  predictionsV1ABI,
+  predictionsV21ABI,
+  predictionsV2ABI,
+  predictionsV3ABI,
+} from '@pancakeswap/prediction'
 import { crossFarmingProxyABI } from 'config/abi/crossFarmingProxy'
 import { crossFarmingSenderABI } from 'config/abi/crossFarmingSender'
 import { crossFarmingVaultABI } from 'config/abi/crossFarmingVault'
@@ -224,8 +230,34 @@ export const getPredictionsV2Contract = (address: Address, chainId?: number, sig
   return getContract({ abi: predictionsV2ABI, address, signer, chainId })
 }
 
+export const getPredictionsV21Contract = (address: Address, chainId?: number, signer?: WalletClient) => {
+  return getContract({ abi: predictionsV21ABI, address, signer, chainId })
+}
+
 export const getPredictionsV1Contract = (signer?: WalletClient) => {
   return getContract({ abi: predictionsV1ABI, address: getPredictionsV1Address(), signer })
+}
+
+export const getPredictionsContract = (
+  version: PredictionContractVersion,
+  address: Address,
+  chainId: number,
+  signer?: WalletClient,
+) => {
+  if (version === PredictionContractVersion.V2) {
+    return getPredictionsV2Contract(address, chainId, signer)
+  }
+  if (version === PredictionContractVersion.V2_1) {
+    return getPredictionsV21Contract(address, chainId, signer)
+  }
+  if (version === PredictionContractVersion.V3) {
+    return getPredictionsV3Contract(address, chainId, signer)
+  }
+  if (version === PredictionContractVersion.V1) {
+    return getPredictionsV1Contract(signer)
+  }
+
+  return null
 }
 
 export const getChainlinkOracleContract = (address: Address, signer?: WalletClient, chainId?: number) => {

@@ -69,11 +69,11 @@ const Leaderboard = () => {
         setPickedTokenSymbol={setPickedTokenSymbol}
       />
       <ConnectedWalletResult
-        token={predictionConfigs?.[pickedTokenSymbol]?.predictionCurrency}
+        token={predictionConfigs?.[pickedTokenSymbol]?.betCurrency}
         api={predictionConfigs?.[pickedTokenSymbol]?.api ?? ''}
       />
       <Results
-        token={predictionConfigs?.[pickedTokenSymbol]?.predictionCurrency}
+        token={predictionConfigs?.[pickedTokenSymbol]?.betCurrency}
         api={predictionConfigs?.[pickedTokenSymbol]?.api ?? ''}
       />
       <PredictionSubgraphHealthIndicator />

@@ -1,16 +1,19 @@
 import { ChainId } from '@pancakeswap/chains'
-import { ERC20Token, Native } from '@pancakeswap/sdk'
+import { ERC20Token, Native, NativeCurrency } from '@pancakeswap/sdk'
 import { bscTokens } from '@pancakeswap/tokens'
 import { chainlinkOracleETH, chainlinkOracleWBTC } from '../../chainlinkOracleContract'
 import { GRAPH_API_PREDICTION_ETH, GRAPH_API_PREDICTION_WBTC } from '../../endpoints'
 import { predictionsETH, predictionsWBTC } from '../../predictionContract'
-import { PredictionConfig, PredictionSupportedSymbol } from '../../type'
+import { PredictionConfig, PredictionContractVersion, PredictionSupportedSymbol } from '../../type'
 
 const BTC = new ERC20Token(bscTokens.wBTC.chainId, bscTokens.wBTC.address, bscTokens.wBTC.decimals, 'BTC', 'Bitcoin')
+const BNB = Native.onChain(ChainId.BSC)
 
 export const predictions: Record<string, PredictionConfig> = {
   [PredictionSupportedSymbol.ETH]: {
-    betCurrency: Native.onChain(ChainId.BSC_TESTNET),
+    version: PredictionContractVersion.V2_1,
+
+    betCurrency: BNB,
     predictionCurrency: bscTokens.eth,
 
     address: predictionsETH[ChainId.BSC_TESTNET],
@@ -21,7 +24,9 @@ export const predictions: Record<string, PredictionConfig> = {
     tokenBackgroundColor: '#F0B90B',
   },
   [PredictionSupportedSymbol.BTC]: {
-    betCurrency: Native.onChain(ChainId.BSC_TESTNET),
+    version: PredictionContractVersion.V2_1,
+
+    betCurrency: BNB,
     predictionCurrency: BTC,
 
     address: predictionsWBTC[ChainId.BSC_TESTNET],

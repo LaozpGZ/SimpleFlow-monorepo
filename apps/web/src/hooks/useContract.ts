@@ -33,8 +33,10 @@ import {
   getNftSaleContract,
   getPancakeVeSenderV2Contract,
   getPointCenterIfoContract,
+  getPredictionsContract,
   getPredictionsV1Contract,
   getPredictionsV2Contract,
+  getPredictionsV21Contract,
   getPredictionsV3Contract,
   getProfileContract,
   getRevenueSharingCakePoolContract,
@@ -74,6 +76,7 @@ import { VaultKey } from 'state/types'
 import { erc721CollectionABI } from 'config/abi/erc721collection'
 import { infoStableSwapABI } from 'config/abi/infoStableSwap'
 import { wethABI } from 'config/abi/weth'
+import { PredictionContractVersion } from '@pancakeswap/prediction'
 /**
  * Helper hooks to get specific contracts (by ABI)
  */
@@ -221,17 +224,17 @@ export const useIfoCreditAddressContract = () => {
   return useMemo(() => getIfoCreditAddressContract(), [])
 }
 
-export const usePredictionsContract = (address: Address, isNativeToken: boolean) => {
+export const usePredictionsContract = (address: Address, version?: PredictionContractVersion) => {
   const { data: signer } = useWalletClient()
   const { chainId } = useActiveChainId()
+
   return useMemo(() => {
-    if (address === getPredictionsV1Address()) {
+    if (address === getPredictionsV1Address() || version === PredictionContractVersion.V1) {
       return getPredictionsV1Contract(signer ?? undefined)
     }
-    const getPredContract = isNativeToken ? getPredictionsV2Contract : getPredictionsV3Contract
 
-    return getPredContract(address, chainId, signer ?? undefined)
-  }, [address, chainId, isNativeToken, signer])
+    return version ? getPredictionsContract(version, address, chainId, signer ?? undefined) : null
+  }, [address, chainId, signer, version])
 }
 
 export const useChainlinkOracleContract = (address) => {
