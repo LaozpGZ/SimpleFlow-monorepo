@@ -40,16 +40,16 @@ function sortByTransactionTime(a: TransactionItem, b: TransactionItem) {
 }
 
 export function RecentTransactions() {
-  const { chainId, unifiedAccount: account } = useAccountActiveChain()
+  const { chainId, account: evmAccount, solanaAccount } = useAccountActiveChain()
   const isEvmChain = isEvm(chainId)
 
   const dispatch = useAppDispatch()
 
   const { data: recentXOrders } = useRecentXOrders({
     chainId: isEvmChain ? chainId : undefined,
-    address: isEvmChain ? (account as Address) : undefined,
+    address: isEvmChain ? (evmAccount as Address) : undefined,
     refetchInterval: 10_000,
-    enabled: isEvmChain && Boolean(account),
+    enabled: isEvmChain && Boolean(evmAccount),
   })
 
   // Cross-Chain Orders
@@ -58,7 +58,7 @@ export function RecentTransactions() {
     isFetching: isRecentBridgeOrdersLoading,
     fetchNextPage,
   } = useRecentBridgeOrders({
-    address: isEvmChain ? (account as Address) : undefined,
+    address: isEvmChain ? (evmAccount as Address) : undefined,
   })
 
   const hasMoreCrossChainOrders = Boolean(
@@ -115,7 +115,7 @@ export function RecentTransactions() {
 
   return (
     <Box onClick={(e) => e.stopPropagation()}>
-      {account ? (
+      {evmAccount || solanaAccount ? (
         xOrders.length > 0 || hasTransactions || recentCrossChainOrders.length > 0 ? (
           <>
             <AutoRow mb="1rem" style={{ justifyContent: 'space-between' }}>
