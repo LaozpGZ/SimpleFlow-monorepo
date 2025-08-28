@@ -35,6 +35,8 @@ export const Tabs = styled.div`
 
 interface TabsComponentProps {
   view: WalletView
+  evmAccount?: string
+  solanaAccount?: string
   handleClick: (newIndex: number) => void
   style?: React.CSSProperties
 }
@@ -43,15 +45,22 @@ export const StyledButtonMenuItem = styled(ButtonMenuItem)<{ isActive?: boolean 
   color: ${({ theme, isActive }) => (isActive ? theme.colors.secondary : theme.colors.textSubtle)};
 `
 
-export const TabsComponent: React.FC<React.PropsWithChildren<TabsComponentProps>> = ({ view, handleClick, style }) => {
+export const TabsComponent: React.FC<React.PropsWithChildren<TabsComponentProps>> = ({
+  view,
+  handleClick,
+  style,
+  evmAccount,
+  solanaAccount,
+}) => {
   const { t } = useTranslation()
+  const solanaOnly = !evmAccount && Boolean(solanaAccount)
 
   return (
     <Tabs style={style}>
       <ButtonMenu scale="sm" variant="text" onItemClick={handleClick} activeIndex={view}>
         <StyledButtonMenuItem variant="secondary">{t('Assets')}</StyledButtonMenuItem>
         <StyledButtonMenuItem variant="secondary">{t('Transactions')}</StyledButtonMenuItem>
-        <StyledButtonMenuItem variant="secondary">{t('Gift')}</StyledButtonMenuItem>
+        {solanaOnly ? <></> : <StyledButtonMenuItem variant="secondary">{t('Gift')}</StyledButtonMenuItem>}
       </ButtonMenu>
     </Tabs>
   )

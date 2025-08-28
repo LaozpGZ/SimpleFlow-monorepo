@@ -357,6 +357,8 @@ export const WalletContent = ({
                 <Box mb="16px" onClick={(e) => e.stopPropagation()}>
                   <TabsComponent
                     view={view}
+                    solanaAccount={solanaAccount}
+                    evmAccount={evmAccount}
                     handleClick={handleClick}
                     style={{ backgroundColor: 'transparent', padding: '0', borderBottom: 'none' }}
                   />
