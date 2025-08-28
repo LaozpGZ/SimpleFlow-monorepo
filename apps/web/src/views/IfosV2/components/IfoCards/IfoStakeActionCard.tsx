@@ -10,12 +10,10 @@ import type { IFOStatus } from '../../hooks/ifo/useIFOStatus'
 import { useIFOConfig } from '../../hooks/ifo/useIFOConfig'
 import { useIFOCurrencies } from '../../hooks/ifo/useIFOCurrencies'
 import type { IFOUserStatus } from '../../hooks/ifo/useIFOUserStatus'
-import { VerifyStatus, useW3WAccountVerify } from '../../hooks/w3w/useW3WAccountVerify'
-import { useCurrentIfoConfig } from '../../hooks/useCurrentIfoConfig'
 import { ClaimDisplay } from './ClaimDisplay'
 import { Divider } from './Divider'
 import { IfoDepositButton } from './IfoDepositButton'
-import { ComplianceCard, PreSaleEligibleCard, PreSaleInfoCard, SnapshotNotPassCard } from './PreSaleInfoCard'
+import { PreSaleInfoCard } from './PreSaleInfoCard'
 import { StakedDisplay } from './StakedDisplay'
 
 export const IfoStakeActionCard: React.FC<{
@@ -26,22 +24,20 @@ export const IfoStakeActionCard: React.FC<{
   const { t } = useTranslation()
   const { address: account } = useAccount()
   const { theme, isDark } = useTheme()
-  const { verifyStatus, isLoading: isPendingVerify } = useW3WAccountVerify()
   const { offeringCurrency, stakeCurrency0, stakeCurrency1 } = useIFOCurrencies()
 
   const stakeCurrency = pid === 0 ? stakeCurrency0 : stakeCurrency1
   const userHasStaked = userStatus?.stakedAmount?.greaterThan(0)
 
-  const { status, raiseAmounts, pricePerTokens, saleAmounts } = useIFOConfig()
-  const { id, ineligibleContent } = useCurrentIfoConfig() ?? {}
+  const { status, raiseAmounts, pricePerTokens } = useIFOConfig()
 
-  const [raiseAmount, pricePerToken, saleAmount] = useMemo(() => {
+  const [raiseAmount, pricePerToken] = useMemo(() => {
     if (pid === 0) {
-      return [raiseAmounts[0], pricePerTokens[0], saleAmounts[0]]
+      return [raiseAmounts[0], pricePerTokens[0]]
     }
 
-    return [raiseAmounts[1], pricePerTokens[1], saleAmounts[1]]
-  }, [pid, raiseAmounts, pricePerTokens, saleAmounts])
+    return [raiseAmounts[1], pricePerTokens[1]]
+  }, [pid, raiseAmounts, pricePerTokens])
 
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     t('This sale has been oversubscribed. You will get partial refund of the deposit.'),
@@ -70,19 +66,9 @@ export const IfoStakeActionCard: React.FC<{
               <FlexGap gap="8px" alignItems="center">
                 {stakeCurrency && <CurrencyLogo size="40px" currency={stakeCurrency} />}
 
-                {account && !isPendingVerify ? (
+                {account ? (
                   status === 'coming_soon' ? (
-                    verifyStatus === VerifyStatus.eligible ? (
-                      <PreSaleEligibleCard projectId={id} />
-                    ) : verifyStatus === VerifyStatus.restricted ? (
-                      <ComplianceCard />
-                    ) : verifyStatus === VerifyStatus.snapshotNotPass ? (
-                      <SnapshotNotPassCard projectId={id} ineligibleContent={ineligibleContent} />
-                    ) : (
-                      <PreSaleInfoCard />
-                    )
-                  ) : ['idle', 'live'].includes(status) && verifyStatus === VerifyStatus.snapshotNotPass ? (
-                    <SnapshotNotPassCard projectId={id} />
+                    <PreSaleInfoCard />
                   ) : (
                     <IfoDepositButton userStatus={userStatus} type="deposit" pid={pid} />
                   )

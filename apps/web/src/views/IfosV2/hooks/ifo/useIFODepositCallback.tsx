@@ -10,22 +10,9 @@ import { logger } from 'utils/datadog'
 import { erc20Abi, WriteContractReturnType, zeroAddress } from 'viem'
 import { userRejectedError } from 'views/Swap/V3Swap/hooks/useSendSwapTransaction'
 import { useAccount, useWriteContract } from 'wagmi'
-import {
-  useW3WAccountSign,
-  W3WSignAlreadyParticipatedError,
-  W3WSignNotSupportedError,
-  W3WSignRestrictedError,
-} from '../w3w/useW3WAccountSign'
 import { useIFOContract } from './useIFOContract'
 import { useIFOPoolInfo } from './useIFOPoolInfo'
 import { useIFOUserInfo } from './useIFOUserInfo'
-
-class W3WSignError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = 'W3WSignError'
-  }
-}
 
 export const useIFODepositCallback = () => {
   const ifoContract = useIFOContract()
@@ -36,7 +23,6 @@ export const useIFODepositCallback = () => {
   const { data: poolInfo } = useIFOPoolInfo()
   const { fetchWithCatchTxError, loading: isPending } = useCatchTxError({ throwUserRejectError: true })
   const { refetch } = useIFOUserInfo()
-  const sign = useW3WAccountSign()
   const { writeContractAsync } = useWriteContract()
 
   const deposit = useCallback(
@@ -58,8 +44,6 @@ export const useIFODepositCallback = () => {
       const amountPool = amount.currency.isNative ? 0n : amount.quotient
       try {
         const receipt = await fetchWithCatchTxError(async () => {
-          const { signature, expireAt } = await sign()
-
           if (amount.currency.isToken) {
             await writeContractAsync({
               address: amount.currency.address,
@@ -68,11 +52,6 @@ export const useIFODepositCallback = () => {
               args: [ifoContract.address, amount.quotient],
             })
           }
-
-          if (!signature || !expireAt) {
-            throw new W3WSignError('Invalid signature or expiredAt')
-          }
-
           // TODO: IFO v10 depositPool only takes amount and pid
           return ifoContract.write.depositPool([amountPool, pid], {
             account,
@@ -85,13 +64,7 @@ export const useIFODepositCallback = () => {
           toastSuccess(t('Deposit successful'), <ToastDescriptionWithTx bscTrace txHash={receipt.transactionHash} />)
         }
       } catch (error) {
-        if (error instanceof W3WSignRestrictedError) {
-          toastWarning(t('Restricted address detected'), t('You cannot participate in this TGE'))
-        } else if (error instanceof W3WSignNotSupportedError) {
-          toastWarning(t('Method not support '), t('Please upgrade your wallet app'))
-        } else if (error instanceof W3WSignAlreadyParticipatedError) {
-          toastWarning(t('Account Already Participated'), t('You have already participated in this TGE'))
-        } else if (userRejectedError(error)) {
+        if (userRejectedError(error)) {
           toastWarning(
             t('You canceled deposit'),
             t(`You didn't confirm %symbol% deposit in your wallet`, {
@@ -122,7 +95,6 @@ export const useIFODepositCallback = () => {
       poolInfo?.pool0Info?.poolToken,
       poolInfo?.pool1Info?.poolToken,
       fetchWithCatchTxError,
-      sign,
       writeContractAsync,
       setLatestTxReceipt,
       toastSuccess,
