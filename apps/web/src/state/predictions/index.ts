@@ -100,6 +100,7 @@ export const fetchPredictionData = createAsyncThunk<
   const roundsResponse = await getRoundsData(epochs, chainId, extra.address, extra.version, {
     isAIPrediction: Boolean(extra.ai),
   })
+
   const initialRoundData: { [key: string]: ReduxNodeRound } = roundsResponse.reduce((accum, roundResponse) => {
     const reduxNodeRound = serializePredictionsRoundsResponse(roundResponse)
     return {
@@ -119,15 +120,20 @@ export const fetchPredictionData = createAsyncThunk<
     return initializedData
   }
 
-  const [ledgerResponses, claimableStatuses] = await Promise.all([
-    getLedgerData(account, chainId, epochs, extra.address), // Bet data
-    getClaimStatuses(account, chainId, epochs, extra.address), // Claim statuses
-  ])
+  try {
+    const [ledgerResponses, claimableStatuses] = await Promise.all([
+      getLedgerData(account, chainId, epochs, extra.address, extra.version), // Bet data
+      getClaimStatuses(account, chainId, epochs, extra.address), // Claim statuses
+    ])
 
-  return merge({}, initializedData, {
-    ledgers: makeLedgerData(account, ledgerResponses, epochs),
-    claimableStatuses,
-  })
+    return merge({}, initializedData, {
+      ledgers: makeLedgerData(account, ledgerResponses, epochs),
+      claimableStatuses,
+    })
+  } catch (error) {
+    console.error('Unable to fetch users ledger or claim statuses: ', error)
+    return initializedData
+  }
 })
 
 export const fetchLedgerData = createAsyncThunk<
@@ -135,7 +141,7 @@ export const fetchLedgerData = createAsyncThunk<
   { account: string; chainId: ChainId; epochs: number[] },
   { extra: PredictionConfig }
 >('predictions/fetchLedgerData', async ({ account, chainId, epochs }, { extra }) => {
-  const ledgers = await getLedgerData(account as Address, chainId, epochs, extra.address)
+  const ledgers = await getLedgerData(account as Address, chainId, epochs, extra.address, extra.version)
   return makeLedgerData(account, ledgers, epochs)
 })
 
