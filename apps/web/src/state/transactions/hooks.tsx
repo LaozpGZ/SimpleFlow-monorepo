@@ -193,7 +193,6 @@ export function useAllChainTransactions(chainId?: number): { [txHash: string]: T
     }
     return {}
   }, [account, solanaAccount, chainId, state])
-  console.log(`[tx]`, state, chainId, list)
   return list
 }
 
