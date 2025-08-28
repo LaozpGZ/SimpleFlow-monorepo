@@ -52,6 +52,7 @@ export function useTransactionAdder(overrideChainId?: number): (
     expectedCurrencyOwed0?: string
     expectedCurrencyOwed1?: string
     receipt?: SerializableTransactionReceipt
+    overrideAccount?: string
   },
 ) => void {
   const { account, chainId: activeChainId } = useAccountActiveChain()
@@ -72,6 +73,7 @@ export function useTransactionAdder(overrideChainId?: number): (
         order,
         crossChainFarm,
         receipt,
+        overrideAccount,
       }: {
         summary?: string
         translatableSummary?: { text: string; data?: Record<string, string | number | undefined> }
@@ -81,9 +83,10 @@ export function useTransactionAdder(overrideChainId?: number): (
         order?: Order
         crossChainFarm?: CrossChainFarmTransactionType
         receipt?: SerializableTransactionReceipt
+        overrideAccount?: string
       } = {},
     ) => {
-      if (!account) return
+      if (!account && !overrideAccount) return
       if (!chainId) return
 
       let hash: Hash | string | undefined
@@ -108,7 +111,7 @@ export function useTransactionAdder(overrideChainId?: number): (
       dispatch(
         addTransaction({
           hash,
-          from: account,
+          from: overrideAccount || account || '',
           chainId,
           approval,
           summary,
@@ -127,7 +130,7 @@ export function useTransactionAdder(overrideChainId?: number): (
 
 // returns all the transactions
 export function useAllTransactions(): { [chainId: number]: { [txHash: string]: TransactionDetails } } {
-  const { unifiedAccount } = useAccountActiveChain()
+  const { account, solanaAccount } = useAccountActiveChain()
 
   const state: {
     [chainId: number]: {
@@ -139,10 +142,12 @@ export function useAllTransactions(): { [chainId: number]: { [txHash: string]: T
     return mapValues(state, (transactions) =>
       pickBy(
         transactions,
-        (transactionDetails) => transactionDetails.from.toLowerCase() === unifiedAccount?.toLowerCase(),
+        (transactionDetails) =>
+          transactionDetails.from.toLowerCase() === account?.toLowerCase() ||
+          transactionDetails.from.toLowerCase() === solanaAccount?.toLowerCase(),
       ),
     )
-  }, [unifiedAccount, state])
+  }, [account, solanaAccount, state])
 }
 
 export function useAllSortedRecentTransactions(): { [chainId: number]: { [txHash: string]: TransactionDetails } } {
@@ -173,19 +178,23 @@ export function useAllActiveChainTransactions(overrideChainId?: number): { [txHa
 }
 
 export function useAllChainTransactions(chainId?: number): { [txHash: string]: TransactionDetails } {
-  const { address: account } = useAccount()
+  const { account, solanaAccount } = useAccountActiveChain()
 
   const state = useSelector<AppState, AppState['transactions']>((s) => s.transactions)
 
-  return useMemo(() => {
+  const list = useMemo(() => {
     if (chainId && state[chainId]) {
       return pickBy(
         state[chainId],
-        (transactionDetails) => transactionDetails.from.toLowerCase() === account?.toLowerCase(),
+        (transactionDetails) =>
+          transactionDetails.from.toLowerCase() === account?.toLowerCase() ||
+          transactionDetails.from.toLowerCase() === solanaAccount?.toLowerCase(),
       )
     }
     return {}
-  }, [account, chainId, state])
+  }, [account, solanaAccount, chainId, state])
+  console.log(`[tx]`, state, chainId, list)
+  return list
 }
 
 export function useIsTransactionPending(transactionHash?: string): boolean {

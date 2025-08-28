@@ -97,6 +97,7 @@ export default function useSwapRecordTransaction(chainId?: number, account?: str
           },
           type: 'swap',
           receipt,
+          overrideAccount: account,
         },
       )
 
