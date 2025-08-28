@@ -189,8 +189,7 @@ export const getWalletsConfig = ({
       title: 'MathWallet',
       icon: `${ASSET_CDN}/web/wallets/mathwallet.png`,
       connectorId: EvmConnectorNames.Injected,
-      solanaAdapterName: SolanaWalletNames.Math,
-      networks: [WalletAdaptedNetwork.EVM, WalletAdaptedNetwork.Solana],
+      networks: [WalletAdaptedNetwork.EVM],
       get installed() {
         return isMathWalletInstalled()
       },
