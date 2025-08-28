@@ -233,17 +233,17 @@ export const getWalletsConfig = ({
       },
       qrCode,
     },
-    {
-      id: WalletIds.Cyberwallet,
-      title: 'CyberWallet',
-      icon: `${ASSET_CDN}/web/wallets/cyberwallet.png`,
-      connectorId: EvmConnectorNames.Injected,
-      networks: [WalletAdaptedNetwork.EVM],
-      get installed() {
-        return isCyberWalletInstalled()
-      },
-      isNotExtension: true,
-    },
+    // {
+    //   id: WalletIds.Cyberwallet,
+    //   title: 'CyberWallet',
+    //   icon: `${ASSET_CDN}/web/wallets/cyberwallet.png`,
+    //   connectorId: EvmConnectorNames.Injected,
+    //   networks: [WalletAdaptedNetwork.EVM],
+    //   get installed() {
+    //     return isCyberWalletInstalled()
+    //   },
+    //   isNotExtension: true,
+    // },
 
     {
       id: WalletIds.Phantom,
