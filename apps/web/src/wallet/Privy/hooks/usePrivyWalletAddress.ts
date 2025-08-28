@@ -14,7 +14,7 @@ export const usePrivyWalletAddress = () => {
   const { client: smartWalletClient } = useSmartWallets()
   const { ready, authenticated, user } = usePrivy()
   const connectors = useConnectors()
-  const { isSmartWalletReady, isSettingUp, shouldUseAAWallet } = useEmbeddedSmartAccountConnectorV2()
+  const { isSmartWalletReady, isSettingUp, shouldUseAAWallet, hasSetupFailed } = useEmbeddedSmartAccountConnectorV2()
 
   const [finalAddress, setFinalAddress] = useState<string | undefined>(undefined)
   const [isLoading, setIsLoading] = useState(true)
@@ -107,5 +107,6 @@ export const usePrivyWalletAddress = () => {
     hasSmartWallet: !!smartWalletClient,
     isSmartWalletReady,
     isSettingUp,
+    hasSetupFailed,
   }
 }

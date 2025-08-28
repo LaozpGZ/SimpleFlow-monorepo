@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/router'
 import { useEffect, useState } from 'react'
 import { getAddress, hexToBigInt } from 'viem'
 import { useChainId, useConfig, useConnectors, useReconnect } from 'wagmi'
@@ -27,6 +27,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
   const [isSmartWalletReady, setIsSmartWalletReady] = useState(false)
   const [isSettingUp, setIsSettingUp] = useState(false)
   const [retryCount, setRetryCount] = useState(0)
+  const [hasSetupFailed, setHasSetupFailed] = useState(false)
 
   // Check URL parameter to disable AA wallet
   const shouldUseAAWallet = searchParams.get('aawallet') !== 'false'
@@ -45,6 +46,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
         console.warn('Smart wallet setup failed after 3 attempts, giving up')
         setIsSmartWalletReady(true) // Mark as ready to prevent further retries
         setIsSettingUp(false)
+        setHasSetupFailed(true) // Mark as failed
         return
       }
 
@@ -54,6 +56,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
       if (existingSmartAccountConnector) {
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
+        setHasSetupFailed(false) // Clear failed state if successful
         return
       }
 
@@ -101,6 +104,8 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
         // After setup is complete, mark as ready and reconnect
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
+        setHasSetupFailed(false) // Clear failed state on success
+        setRetryCount(0) // Reset retry count on success
         // @ts-ignore
         reconnect()
       } catch (error) {
@@ -120,6 +125,7 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
     isSmartWalletReady,
     isSettingUp,
     shouldUseAAWallet,
+    hasSetupFailed,
   }
 }
 
