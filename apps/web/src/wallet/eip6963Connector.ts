@@ -1,5 +1,6 @@
 import { chains } from 'utils/wagmi'
 import { createConnector } from 'wagmi'
+import { UserRejectedRequestError } from 'viem'
 import { EIP6963Detail } from './WalletProvider'
 
 const cache = new Map<string, any>()
@@ -32,8 +33,11 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
       let currentChainId = normalizeChainId(await provider.request({ method: 'eth_chainId' }))
 
       if (chainId && currentChainId !== chainId) {
-        const chain = await this.switchChain({ chainId })
-        currentChainId = chain.id
+        const chain = await this.switchChain!({ chainId }).catch((error) => {
+          if (error.code === UserRejectedRequestError.code) throw error
+          return { id: currentChainId }
+        })
+        currentChainId = chain?.id ?? currentChainId
       }
 
       return {
