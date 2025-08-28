@@ -1,5 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Box, Button, ButtonMenu, Card, CardBody, Flex, FlexGap, Image, Input, Text } from '@pancakeswap/uikit'
+import { useRouter } from 'next/router'
 import { useTheme } from 'styled-components'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { ViewState } from 'components/WalletModalV2/type'
@@ -16,6 +17,10 @@ export const AuthRequiredClaimGiftView = ({ setViewState }: { setViewState: (vie
   const { t } = useTranslation()
   const { code, setCode } = useClaimGiftContext()
   const theme = useTheme()
+  const { pathname } = useRouter()
+  const isInvitedGift = useMemo(() => {
+    return pathname.startsWith('/invite')
+  }, [pathname])
 
   const codeHash = convertCodeHash(code)
 
@@ -40,15 +45,19 @@ export const AuthRequiredClaimGiftView = ({ setViewState }: { setViewState: (vie
 
   return (
     <>
-      <ButtonMenu
-        scale="sm"
-        variant="text"
-        onItemClick={(index) => (index === 0 ? setViewState(ViewState.RECEIVE_QR) : setViewState(ViewState.CLAIM_GIFT))}
-        activeIndex={1}
-      >
-        <StyledButtonMenuItem>{t('Address')}</StyledButtonMenuItem>
-        <StyledButtonMenuItem>{t('Claim Gift')}</StyledButtonMenuItem>
-      </ButtonMenu>
+      {!isInvitedGift && (
+        <ButtonMenu
+          scale="sm"
+          variant="text"
+          onItemClick={(index) =>
+            index === 0 ? setViewState(ViewState.RECEIVE_QR) : setViewState(ViewState.CLAIM_GIFT)
+          }
+          activeIndex={1}
+        >
+          <StyledButtonMenuItem>{t('Address')}</StyledButtonMenuItem>
+          <StyledButtonMenuItem>{t('Claim Gift')}</StyledButtonMenuItem>
+        </ButtonMenu>
+      )}
       <Card background={theme.colors.cardSecondary} mt="16px">
         <CardBody p="16px">
           <Text fontWeight={600} mb="4px" fontSize="16px">
