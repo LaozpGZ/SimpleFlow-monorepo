@@ -1,5 +1,13 @@
 # @pancakeswap/widgets-internal
 
+## 0.4.11
+
+### Patch Changes
+
+- Updated dependencies [1de662b]
+  - @pancakeswap/infinity-sdk@1.0.5
+  - @pancakeswap/farms@1.2.11
+
 ## 0.4.10
 
 ### Patch Changes

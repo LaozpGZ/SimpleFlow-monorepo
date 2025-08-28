@@ -1,5 +1,11 @@
 # @pancakeswap/infinity-sdk
 
+## 1.0.5
+
+### Patch Changes
+
+- 1de662b: Fixed increase actions with native token
+
 ## 1.0.4
 
 ### Patch Changes
