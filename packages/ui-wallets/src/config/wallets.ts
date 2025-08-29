@@ -132,7 +132,7 @@ export const getWalletsConfig = ({
       },
       evmCanInitWithoutInstall: true,
       solanaCanInitWithoutInstall: false,
-      downloadLink: 'https://www.coinbase.com/en-gb/wallet/downloads',
+      downloadLink: 'https://www.coinbase.com/wallet/downloads',
     },
     {
       id: WalletIds.Walletconnect,
