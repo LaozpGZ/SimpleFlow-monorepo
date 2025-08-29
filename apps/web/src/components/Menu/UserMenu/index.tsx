@@ -151,16 +151,29 @@ const UserMenu = () => {
     placement: 'top',
   })
 
-  // Delay showing error state on first load to prevent flash
+  // Track if we should show error state
+  // Only show error after proper initialization and multiple failed attempts
   useEffect(() => {
-    if (ready && authenticated && user && !hasInitialized) {
+    if (ready && authenticated && user) {
+      // Wait longer on first load to ensure AA wallet has time to setup
+      const delay = hasInitialized ? 1000 : 5000 // 5 seconds on first load, 1 second on subsequent
       const timer = setTimeout(() => {
         setHasInitialized(true)
-      }, 2000) // 2 second delay to prevent flash on first login
+      }, delay)
       return () => clearTimeout(timer)
     }
+    // Reset when not authenticated
+    setHasInitialized(false)
+
     return undefined
-  }, [ready, authenticated, user, hasInitialized])
+  }, [ready, authenticated, user])
+
+  // Reset hasInitialized when successfully connected to prevent false error states
+  useEffect(() => {
+    if (finalAddress && !isPrivyAddressLoading) {
+      setHasInitialized(false) // Reset so next login gets proper delay
+    }
+  }, [finalAddress, isPrivyAddressLoading])
 
   const ConnectBtn = useMemo(() => {
     if (chainId === NonEVMChainId.SOLANA) {
@@ -335,8 +348,9 @@ const UserMenu = () => {
     )
   }
 
-  // Only show failed state after initialization delay to prevent flash on first login
-  if (ready && authenticated && user && hasSetupFailed && hasInitialized) {
+  // Only show failed state after proper initialization and when not loading
+  // This prevents flash on login and ensures the error is real
+  if (ready && authenticated && user && hasSetupFailed && hasInitialized && !isPrivyAddressLoading) {
     return (
       <FlexGap gap="8px">
         <Box ref={targetRef}>
