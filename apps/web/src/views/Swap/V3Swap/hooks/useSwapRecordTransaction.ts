@@ -70,14 +70,14 @@ export default function useSwapRecordTransaction(chainId?: number, account?: str
       const recipientAddressText =
         recipientAddress && safeGetAddress(recipientAddress) ? truncateHash(recipientAddress) : recipientAddress
 
-      const withRecipient = recipient === account ? base : `${base} to ${recipientAddressText}`
+      const withRecipient = recipientAddress === account ? base : `${base} to ${recipientAddressText}`
 
       const translatableWithRecipient =
         trade.tradeType === TradeType.EXACT_OUTPUT
-          ? recipient === account
+          ? recipientAddress === account
             ? 'Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol%'
             : 'Swap max. %inputAmount% %inputSymbol% for %outputAmount% %outputSymbol% to %recipientAddress%'
-          : recipient === account
+          : recipientAddress === account
           ? 'Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol%'
           : 'Swap %inputAmount% %inputSymbol% for min. %outputAmount% %outputSymbol% to %recipientAddress%'
 
@@ -92,7 +92,7 @@ export default function useSwapRecordTransaction(chainId?: number, account?: str
               inputSymbol,
               outputAmount,
               outputSymbol,
-              ...(recipient !== account && { recipientAddress: recipientAddressText }),
+              ...(recipientAddress !== account && { recipientAddress: recipientAddressText }),
             },
           },
           type: 'swap',

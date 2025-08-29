@@ -54,7 +54,7 @@ export function useTransactionAdder(overrideChainId?: number): (
     receipt?: SerializableTransactionReceipt
   },
 ) => void {
-  const { account, chainId: activeChainId } = useAccountActiveChain()
+  const { unifiedAccount, chainId: activeChainId } = useAccountActiveChain()
   const chainId = overrideChainId ?? activeChainId
 
   const dispatch = useAppDispatch()
@@ -83,7 +83,7 @@ export function useTransactionAdder(overrideChainId?: number): (
         receipt?: SerializableTransactionReceipt
       } = {},
     ) => {
-      if (!account) return
+      if (!unifiedAccount) return
       if (!chainId) return
 
       let hash: Hash | string | undefined
@@ -108,7 +108,7 @@ export function useTransactionAdder(overrideChainId?: number): (
       dispatch(
         addTransaction({
           hash,
-          from: account,
+          from: unifiedAccount,
           chainId,
           approval,
           summary,
@@ -121,7 +121,7 @@ export function useTransactionAdder(overrideChainId?: number): (
         }),
       )
     },
-    [account, chainId, safeTxHashTransformer, dispatch],
+    [unifiedAccount, chainId, safeTxHashTransformer, dispatch],
   )
 }
 
