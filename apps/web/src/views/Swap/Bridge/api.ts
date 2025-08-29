@@ -1,5 +1,5 @@
 import { BridgeTrade, BridgeTransactionData, OrderType } from '@pancakeswap/price-api-sdk'
-import { Currency, CurrencyAmount, TradeType, ZERO_ADDRESS } from '@pancakeswap/sdk'
+import { Currency, CurrencyAmount, TradeType } from '@pancakeswap/sdk'
 import { InfinityTradeWithoutGraph } from '@pancakeswap/smart-router/dist/evm/infinity-router'
 import { BRIDGE_API_ENDPOINT } from 'config/constants/endpoints'
 import { chainIdToExplorerInfoChainName } from 'state/info/api/client'
@@ -18,16 +18,7 @@ import {
   SwapDataSchema,
   UserBridgeOrdersResponse,
 } from './types'
-import { adaptRelayQuoteToBridge, RelayClient, TRADE_TYPES } from './relay-sdk'
-
-// // Define the schema for the "SWAP" command data
-// export const SwapDataSchema = Type.Object({
-//   originChainId: Type.Number(),
-//   trade: TradeSchema,
-//   slippageTolerance: Type.Number(),
-//   deadlineOrPreviousBlockhash: Type.Optional(Type.String()),
-//   recipient: Type.Optional(addressModel),
-// });
+import { STEP_ID } from './relay-sdk/types'
 
 export function getSolanaTokenAddress(currency: Currency): string {
   if (!isSolana(currency.chainId)) {
@@ -262,6 +253,7 @@ export type GetMetadataParams = {
   commands?: (BridgeDataSchema | SwapDataSchema)[]
   recipientOnDestChain?: string
   user?: string
+  slippageTolerance?: string
 }
 
 export type GetSolanaEVMBridgeMetadataParams = {
@@ -303,14 +295,6 @@ export interface MetadataSuccessResponse extends MetadataResponse {
   bridgeTransactionData: BridgeTransactionData
 }
 
-const customClient = new RelayClient({
-  timeout: 60000,
-  retryAttempts: 5,
-})
-
-const RELAY_CHAIN_ID = 792703809
-const ZERO_SOLANA_ADDRESS = '1nc1nerator11111111111111111111111111111111'
-
 export const postSolanaEVMBridgeMetadata = async (
   params: GetSolanaEVMBridgeMetadataParams,
 ): Promise<MetadataSuccessResponse> => {
@@ -334,33 +318,29 @@ export const postSolanaEVMBridgeMetadata = async (
     throw new Error('postSolanaEVMBridgeMetadata only supports Solana bridge')
   }
 
-  const userAddress = user || (isOriginSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
-  const recipient = recipientOnDestChain || (isDestinationSolana ? ZERO_SOLANA_ADDRESS : ZERO_ADDRESS)
-
   try {
-    const relayResponse = await customClient.getQuote({
-      user: userAddress,
-      originCurrency: inputToken,
-      destinationCurrency: outputToken,
+    const metadataResponse = await postMetadata({
+      inputToken,
+      originChainId,
+      outputToken,
+      destinationChainId,
       amount,
-      tradeType: TRADE_TYPES.EXACT_INPUT,
-      originChainId: isOriginSolana ? RELAY_CHAIN_ID : Number(originChainId),
-      destinationChainId: isDestinationSolana ? RELAY_CHAIN_ID : Number(destinationChainId),
-      recipient,
+      user: user || '',
+      recipientOnDestChain: recipientOnDestChain || '',
+      commands: [],
       slippageTolerance,
     })
 
-    const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
+    // const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
 
-    // map from relay response to MetadataSuccessResponse
     const result: MetadataSuccessResponse = {
-      supported: true,
-      amount: params.amount,
-      inputToken: params.inputToken,
-      originChainId: Number(params.originChainId),
-      outputToken: params.outputToken,
-      destinationChainId: Number(params.destinationChainId),
-      expectedFillTimeSec: bridgeFormat.expectedFillTimeSec.toString(),
+      supported: metadataResponse.supported,
+      amount: metadataResponse.amount,
+      inputToken: metadataResponse.inputToken,
+      originChainId: Number(metadataResponse.originChainId),
+      outputToken: metadataResponse.outputToken,
+      destinationChainId: Number(metadataResponse.destinationChainId),
+      expectedFillTimeSec: metadataResponse.expectedFillTimeSec.toString(),
       isAmountTooLow: false,
       limits: {
         minDeposit: '0',
@@ -369,7 +349,18 @@ export const postSolanaEVMBridgeMetadata = async (
         maxDepositShortDelay: '0',
         recommendedDepositInstant: '0',
       },
-      bridgeTransactionData: bridgeFormat.bridgeTransactionData,
+      bridgeTransactionData: {
+        minimumOutputAmount: metadataResponse.bridgeTransactionData.minimumOutputAmount?.toString(),
+        outputAmount: metadataResponse.bridgeTransactionData.outputAmount?.toString(),
+        totalRelayFee: metadataResponse.bridgeTransactionData.totalFee?.toString() || '0',
+        totalImpactPct: metadataResponse.bridgeTransactionData.totalImpactPct?.toString(),
+        // add placeholder for other fields to compatiable with Across
+        exclusiveRelayer: '',
+        exclusivityDeadline: 0,
+        fillDeadline: 0,
+        quoteTimestamp: 0,
+        relayerFeePct: '0',
+      },
     }
 
     return result
@@ -379,13 +370,15 @@ export const postSolanaEVMBridgeMetadata = async (
 }
 
 export const postMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
-  const { commands, recipientOnDestChain, ...rest } = params
+  const { commands, recipientOnDestChain, slippageTolerance, ...rest } = params
 
   const stringParams = Object.fromEntries(
     Object.entries(rest)
       .filter(([_, value]) => value !== undefined && value !== '')
       .map(([key, value]) => [key, value?.toString()]),
   )
+
+  const slippageToleranceParam = slippageTolerance ? { slippageTolerance: Number(slippageTolerance) } : {}
 
   const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/metadata?${new URLSearchParams(stringParams).toString()}`, {
     method: 'POST',
@@ -395,6 +388,7 @@ export const postMetadata = async (params: GetMetadataParams): Promise<MetadataS
     body: JSON.stringify({
       recipientOnDestChain,
       commands,
+      ...slippageToleranceParam,
     }),
   })
 

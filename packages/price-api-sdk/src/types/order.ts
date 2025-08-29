@@ -77,6 +77,8 @@ export type BridgeTransactionData = {
   totalImpactPct?: string
   steps?: any[]
   addressLookupTableAddresses?: string[]
+  minimumOutputAmount?: string
+  totalFee?: string
 }
 
 export type BridgeOrder<tradeType extends TradeType = TradeType> = {
