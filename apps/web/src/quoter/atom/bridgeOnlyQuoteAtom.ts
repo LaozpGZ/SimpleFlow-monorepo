@@ -4,6 +4,7 @@ import { Currency, CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pan
 import { atomFamily } from 'jotai/utils'
 import { BridgeTradeError } from 'quoter/quoter.types'
 import {
+  BridgeType,
   getSolanaTokenAddress,
   getTokenAddress,
   postMetadata,
@@ -58,6 +59,7 @@ export const bridgeOnlyQuoteAtom = atomFamily(
             amount: inputAmount.quotient.toString(),
             commands: postBridgeSwapParams.commands,
             recipientOnDestChain: postBridgeSwapParams.recipientOnDestChain,
+            type: BridgeType.EVM,
           })
 
       if (!metadata.supported) {

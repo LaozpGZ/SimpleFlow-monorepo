@@ -18,7 +18,6 @@ import {
   SwapDataSchema,
   UserBridgeOrdersResponse,
 } from './types'
-import { STEP_ID } from './relay-sdk/types'
 
 export function getSolanaTokenAddress(currency: Currency): string {
   if (!isSolana(currency.chainId)) {
@@ -254,6 +253,7 @@ export type GetMetadataParams = {
   recipientOnDestChain?: string
   user?: string
   slippageTolerance?: string
+  type: BridgeType
 }
 
 export type GetSolanaEVMBridgeMetadataParams = {
@@ -295,6 +295,11 @@ export interface MetadataSuccessResponse extends MetadataResponse {
   bridgeTransactionData: BridgeTransactionData
 }
 
+export enum BridgeType {
+  NON_EVM = 'NON-EVM',
+  EVM = 'EVM',
+}
+
 export const postSolanaEVMBridgeMetadata = async (
   params: GetSolanaEVMBridgeMetadataParams,
 ): Promise<MetadataSuccessResponse> => {
@@ -327,8 +332,8 @@ export const postSolanaEVMBridgeMetadata = async (
       amount,
       user: user || '',
       recipientOnDestChain: recipientOnDestChain || '',
-      commands: [],
       slippageTolerance,
+      type: BridgeType.NON_EVM,
     })
 
     // const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
@@ -370,15 +375,13 @@ export const postSolanaEVMBridgeMetadata = async (
 }
 
 export const postMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
-  const { commands, recipientOnDestChain, slippageTolerance, ...rest } = params
+  const { commands, recipientOnDestChain, slippageTolerance, type, user, ...rest } = params
 
   const stringParams = Object.fromEntries(
     Object.entries(rest)
       .filter(([_, value]) => value !== undefined && value !== '')
       .map(([key, value]) => [key, value?.toString()]),
   )
-
-  const slippageToleranceParam = slippageTolerance ? { slippageTolerance: Number(slippageTolerance) } : {}
 
   const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/metadata?${new URLSearchParams(stringParams).toString()}`, {
     method: 'POST',
@@ -388,7 +391,9 @@ export const postMetadata = async (params: GetMetadataParams): Promise<MetadataS
     body: JSON.stringify({
       recipientOnDestChain,
       commands,
-      ...slippageToleranceParam,
+      type,
+      slippageTolerance: slippageTolerance ? Number(slippageTolerance) : undefined,
+      user,
     }),
   })
 
