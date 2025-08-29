@@ -64,8 +64,19 @@ export const usePrivyWalletAddress = () => {
         isSmartWalletReady,
         isSettingUp,
         hasSetupFailed,
+        currentConnectorId: connector?.id,
         timestamp: new Date().toISOString(),
       })
+
+      // HIGHEST PRIORITY: If we have AA wallet connected with address, show it immediately
+      if (connector?.id === 'io.privy.smart_wallet' && wagmiAddress) {
+        console.log('[PrivyWalletAddress] ✅ AA wallet connected with address! Showing immediately', { wagmiAddress })
+        setFinalAddress(wagmiAddress)
+        setAddressType('smart')
+        setIsLoading(false) // Force stop loading
+        return // Exit early, don't check anything else
+      }
+
       // If Privy is not ready or user is not authenticated, keep loading state
       if (!ready || !authenticated) {
         console.log('[PrivyWalletAddress] ⏳ Privy not ready or not authenticated')
@@ -119,21 +130,13 @@ export const usePrivyWalletAddress = () => {
       })
 
       if (smartAccountConnector) {
-        if (connector?.id === 'io.privy.smart_wallet' && wagmiAddress) {
-          // Successfully connected to smart wallet
-          console.log('[PrivyWalletAddress] ✅ Successfully connected to smart wallet!', { wagmiAddress })
-          setFinalAddress(wagmiAddress)
-          setAddressType('smart')
-          setIsLoading(false)
-        } else {
-          // Smart wallet exists but not yet connected, keep waiting
-          // No timeout - force users to wait for AA wallet
-          console.warn('[PrivyWalletAddress] ⚠️ Smart wallet exists but not connected, waiting...', {
-            connectorId: connector?.id,
-            hasAddress: !!wagmiAddress,
-          })
-          setIsLoading(true)
-        }
+        // Smart wallet exists but not yet connected (we already handled the connected case above)
+        // Keep waiting for connection
+        console.warn('[PrivyWalletAddress] ⚠️ Smart wallet exists but not connected, waiting...', {
+          connectorId: connector?.id,
+          hasAddress: !!wagmiAddress,
+        })
+        setIsLoading(true)
       } else if (user?.wallet) {
         // User has wallet but no smart wallet connector available
         // Keep loading state to force smart wallet setup
