@@ -4108,5 +4108,7 @@
   "My Locked CAKE": "Το κλειδωμένο CAKE μου",
   "Unlock Date": "Ημερομηνία ξεκλειδώματος",
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Τα Έξυπνα Πορτοφόλια δεν υποστηρίζονται, δημιουργήστε ένα αίτημα υποστήριξης στην επίσημη σελίδα μας στο Discord",
-  "Wallets with <0>MEV Protection</0>.": "Πορτοφόλια με <0>προστασία MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Πορτοφόλια με <0>προστασία MEV</0>.",
+  "Please refresh the page and try it again": "Please refresh the page and try it again",
+  "Failed to Connect": "Failed to Connect"
 }
