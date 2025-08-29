@@ -1,3 +1,4 @@
+import { useIsMounted } from '@pancakeswap/hooks'
 import { WalletName } from '@solana/wallet-adapter-base'
 import { useLocalStorage, useWallet } from '@solana/wallet-adapter-react'
 import { useAtomValue } from 'jotai'
@@ -6,9 +7,10 @@ import { errorSolanaAtom } from '../../../state/atom'
 import { SolanaProviderLocalStorageKey } from '../../SolanaProvider'
 
 export const useSolanaLogin = () => {
-  const { select, connected, publicKey } = useWallet()
+  const { select, connected, publicKey, connecting } = useWallet()
   const [, setSolanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
   const solanaWalletError = useAtomValue(errorSolanaAtom)
+  const isMounted = useIsMounted()
 
   const promiseRef = useRef<{
     promise: Promise<string>
@@ -27,10 +29,10 @@ export const useSolanaLogin = () => {
   }, [solanaWalletError, connected, publicKey])
 
   useEffect(() => {
-    if (!publicKey) {
+    if (!publicKey && isMounted && !connecting) {
       setSolanaWalletName('')
     }
-  }, [publicKey, setSolanaWalletName])
+  }, [publicKey, setSolanaWalletName, isMounted, connecting])
 
   const solanaLogin = useCallback(
     async (walletName: WalletName) => {
