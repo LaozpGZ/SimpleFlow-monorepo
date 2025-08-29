@@ -16,7 +16,6 @@ import { useSmartWallets } from '@privy-io/react-auth/smart-wallets'
  *
  */
 export const useEmbeddedSmartAccountConnectorV2 = () => {
-  console.log('[PrivySmartAccount] Hook initialized')
   const connectors = useConnectors()
   const config = useConfig()
   const id = useChainId()
@@ -56,17 +55,8 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
         }
       }
 
-      console.log('[PrivySmartAccount] Setup started', {
-        shouldUseAAWallet,
-        retryCount,
-        isReady,
-        hasExistingConnector: connectors.some((c) => c.id === 'io.privy.smart_wallet'),
-        totalTimeElapsed: setupStartTime ? `${((Date.now() - setupStartTime) / 1000).toFixed(2)}s` : '0s',
-        timestamp: new Date().toISOString(),
-      })
       // If AA wallet is disabled via URL param, skip setup
       if (!shouldUseAAWallet) {
-        console.log('[PrivySmartAccount] AA wallet disabled via URL param')
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
         return
@@ -91,7 +81,6 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
 
       // If smart account connector already exists, mark as ready
       if (existingSmartAccountConnector) {
-        console.log('[PrivySmartAccount] ✅ Smart account connector already exists')
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
         setHasSetupFailed(false) // Clear failed state if successful
@@ -100,17 +89,12 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
 
       // If no smart wallet client, mark as ready (use embedded wallet)
       if (!isReady) {
-        console.log('[PrivySmartAccount] Smart wallet client not ready, using embedded wallet')
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
         return
       }
 
       // Start setting up smart account connector
-      console.log('[PrivySmartAccount] 🔄 Starting smart account setup...', {
-        chainId: id,
-        attempt: retryCount + 1,
-      })
       setIsSettingUp(true)
 
       // Add timeout to prevent infinite loading (3 seconds per attempt)
@@ -122,10 +106,8 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
       }, 3000) // 3 seconds timeout per attempt
 
       try {
-        console.log('[PrivySmartAccount] Getting client for chain...', { chainId: id })
         // @ts-ignore
         const client = await getClientForChain({ id })
-        console.log('[PrivySmartAccount] Client obtained:', { hasClient: !!client })
 
         if (!client || !getClientForChain) {
           console.warn('[PrivySmartAccount] ⚠️ Unable to get smart wallet client, falling back to embedded wallet')
@@ -158,17 +140,12 @@ export const useEmbeddedSmartAccountConnectorV2 = () => {
 
         // After setup is complete, mark as ready and reconnect
         const totalDuration = setupStartTime ? ((Date.now() - setupStartTime) / 1000).toFixed(2) : '0'
-        console.log('[PrivySmartAccount] ✅ Smart account setup successful!', {
-          totalDuration: `${totalDuration}s`,
-          attempts: retryCount + 1,
-        })
         clearTimeout(setupTimeout)
         setIsSmartWalletReady(true)
         setIsSettingUp(false)
         setHasSetupFailed(false) // Clear failed state on success
         setRetryCount(0) // Reset retry count on success
         setSetupStartTime(null) // Reset setup start time
-        console.log('[PrivySmartAccount] Triggering reconnect...')
         // @ts-ignore
         reconnect()
       } catch (error) {
