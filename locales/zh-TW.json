@@ -4108,5 +4108,7 @@
   "My Locked CAKE": "我的鎖定 CAKE",
   "Unlock Date": "解鎖日期",
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "不支援智慧錢包，請在我們的官方 Discord 上建立票券",
-  "Wallets with <0>MEV Protection</0>.": "具備 <0>MEV 防護</0>的錢包。"
+  "Wallets with <0>MEV Protection</0>.": "具備 <0>MEV 防護</0>的錢包。",
+  "Please refresh the page and try it again": "Please refresh the page and try it again",
+  "Failed to Connect": "Failed to Connect"
 }
