@@ -4108,5 +4108,7 @@
   "My Locked CAKE": "Oma lukittu CAKE",
   "Unlock Date": "Lukituksen avaamisen päivämäärä",
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Älylompakkoja ei tueta, luo tukipalvelupyyntö virallisessa Discordissamme",
-  "Wallets with <0>MEV Protection</0>.": "Lompakot, joissa on <0>MEV-suojaus</0>."
+  "Wallets with <0>MEV Protection</0>.": "Lompakot, joissa on <0>MEV-suojaus</0>.",
+  "Please refresh the page and try it again": "Please refresh the page and try it again",
+  "Failed to Connect": "Failed to Connect"
 }
