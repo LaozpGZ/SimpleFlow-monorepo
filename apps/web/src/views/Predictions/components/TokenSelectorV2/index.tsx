@@ -6,6 +6,7 @@ import { Price } from 'views/Predictions/components/TokenSelectorV2/Price'
 import { useConfig } from 'views/Predictions/context/ConfigProvider'
 import { usePredictionConfigs } from 'views/Predictions/hooks/usePredictionConfigs'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@pancakeswap/localization'
 import { MobilePredictionTokenSelector } from './Mobile'
 
 const TabContainer = styled(Flex)`
@@ -123,6 +124,11 @@ const TokenName = styled(Text).attrs({ bold: true })<{ isActive: boolean }>`
   line-height: 1;
 `
 
+const PausedText = styled(Text).attrs({ bold: true, small: true })`
+  font-size: 12px;
+  color: ${({ theme }) => theme.colors.textSubtle};
+`
+
 const TokenPrice = styled(Box)<{ isActive: boolean }>`
   color: ${({ theme, isActive }) => (isActive ? theme.colors.secondary : theme.colors.textSubtle)};
   font-size: ${({ isActive }) => (isActive ? '20px !important' : '16px !important')};
@@ -130,6 +136,7 @@ const TokenPrice = styled(Box)<{ isActive: boolean }>`
 `
 
 export const TokenSelectorV2 = () => {
+  const { t } = useTranslation()
   const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
   const config = useConfig()
@@ -181,16 +188,21 @@ export const TokenSelectorV2 = () => {
               />
             </TokenIcon>
             <TokenInfo>
-              <TokenPrice isActive={isActive}>
-                <Price
-                  fontSize="inherit"
-                  color="inherit"
-                  displayedDecimals={token.displayedDecimals}
-                  chainlinkOracleAddress={token.chainlinkOracleAddress}
-                  galetoOracleAddress={token.galetoOracleAddress}
-                />
-              </TokenPrice>
-              <TokenName isActive={isActive}>{`${token.predictionCurrency.symbol}USD`}</TokenName>
+              {!token.paused && (
+                <TokenPrice isActive={isActive}>
+                  <Price
+                    fontSize="inherit"
+                    color="inherit"
+                    displayedDecimals={token.displayedDecimals}
+                    chainlinkOracleAddress={token.chainlinkOracleAddress}
+                    galetoOracleAddress={token.galetoOracleAddress}
+                  />
+                </TokenPrice>
+              )}
+              <Box>
+                <TokenName isActive={isActive}>{`${token.predictionCurrency.symbol}USD`}</TokenName>
+                {token.paused && <PausedText mb="-4px">({t('Paused')})</PausedText>}
+              </Box>
             </TokenInfo>
           </TabItem>
         )

@@ -21,6 +21,7 @@ export const predictions: Record<string, PredictionConfig> = {
     tokenBackgroundColor: '#F0B90B',
   },
   [PredictionSupportedSymbol.CAKE]: {
+    paused: true,
     version: PredictionContractVersion.V3,
 
     betCurrency: bscTokens.cake,

@@ -7,6 +7,7 @@ import { PredictionConfig, PredictionContractVersion, PredictionSupportedSymbol 
 
 export const predictions: Record<string, PredictionConfig> = {
   [PredictionSupportedSymbol.ETH]: {
+    paused: true,
     version: PredictionContractVersion.V2,
 
     betCurrency: Native.onChain(ChainId.ZKSYNC),

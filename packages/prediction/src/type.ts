@@ -63,6 +63,8 @@ export interface PredictionConfig {
 
   api: string // Subgraph API endpoint for fetching Bet History
 
+  paused?: boolean // If the prediction market is paused, set to true
+
   chainlinkOracleAddress?: Address // All EVM chain are using chainlink oracle, but not include zkSync chain
   galetoOracleAddress?: Address // Only zkSync chain use galeto oracle
 
