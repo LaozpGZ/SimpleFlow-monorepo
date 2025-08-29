@@ -3,6 +3,11 @@ import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { Address } from 'viem/accounts'
 import { CrossChainAPIErrorCode } from '../CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 
+export enum BridgeType {
+  NON_EVM = 'NON-EVM',
+  EVM = 'EVM',
+}
+
 export type BridgeCallData = {
   router: Address
   calldata: `0x${string}`
@@ -57,14 +62,18 @@ export interface Permit2Schema {
 }
 
 export interface CalldataRequestSchema {
+  requestId?: string
   inputToken: Address
   outputToken: Address
   inputAmount: string
   originChainId: number
   destinationChainId: number
-  recipientOnDestChain: Address
-  commands: (BridgeDataSchema | SwapDataSchema)[]
+  recipientOnDestChain: string
+  commands?: (BridgeDataSchema | SwapDataSchema)[]
   permit2?: Permit2Schema
+  type: BridgeType
+  user?: string
+  slippageTolerance?: number
 }
 
 export enum BridgeStatus {

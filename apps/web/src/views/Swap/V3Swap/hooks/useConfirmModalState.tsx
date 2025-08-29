@@ -23,7 +23,6 @@ import { logGTMSwapTxSentEvent } from 'utils/customGTMEventTracking'
 import { UserUnexpectedTxError } from 'utils/errors'
 import { logSwap } from 'utils/log'
 import { publicClient } from 'utils/wagmi'
-import { buildTransaction, detectWalletTransactionSupport } from 'components/WalletModalV2/utils/solanaSendTransaction'
 import {
   Address,
   Hex,
@@ -42,32 +41,24 @@ import { useAccount, useSendTransaction } from 'wagmi'
 import { useSetAtom } from 'jotai'
 import { calculateGasMargin } from 'utils'
 import { viemClients } from 'utils/viem'
-import { getBridgeCalldata } from 'views/Swap/Bridge/api'
+import { getBridgeCalldata, getEVMToSolanaBridgeCalldata, getSolanaToEVMBridgeCalldata } from 'views/Swap/Bridge/api'
 import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks'
 
 import { ChainId as EvmChainId, isSolana } from '@pancakeswap/chains'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useSwapState } from 'state/swap/hooks'
 import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
-import { BridgeCallData, GetBridgeCalldataResponse, Permit2Schema } from 'views/Swap/Bridge/types'
+import { BridgeCallData, Permit2Schema } from 'views/Swap/Bridge/types'
 import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { usePriceBreakdown } from 'views/SwapSimplify/hooks/usePriceBreakdown'
 
 import { useSolanaConnectionWithRpcAtom } from 'hooks/solana/useSolanaConnectionWithRpcAtom'
 import { useWallet } from '@solana/wallet-adapter-react'
-import {
-  AddressLookupTableAccount,
-  MessageV0,
-  PublicKey,
-  TransactionInstruction,
-  TransactionMessage,
-  VersionedTransaction,
-} from '@solana/web3.js'
-import { convertStepsIntoTransactionInstruction } from 'views/Swap/Bridge/relay-sdk/adapter'
+
 import { sendTransactionSafely } from 'components/WalletModalV2/utils/solanaSafeTransaction'
 import { confirmTransaction } from '@pancakeswap/solana-core-sdk'
-import { STEP_ID } from 'views/Swap/Bridge/relay-sdk/types'
+import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
 import { ConfirmStepContext, ConfirmAction } from './steps/step.type'
 import { useBatchSwapTransaction } from './steps/useBatchSwapTransaction'
 import { useSolSwapStep } from './steps/useSolSwapStep'
@@ -151,7 +142,8 @@ const useConfirmActions = (
   spender: Address | undefined,
 ) => {
   const { t } = useTranslation()
-  const { chainId, account } = useAccountActiveChain()
+  const { chainId, account, solanaAccount } = useAccountActiveChain()
+  const { refreshTrade } = useAllTypeBestTrade()
 
   const [deadline] = useTransactionDeadline()
   const safeTxHashTransformer = useSafeTxHashTransformer()
@@ -517,7 +509,12 @@ const useConfirmActions = (
   ])
 
   const { recipient: recipientAddress } = useSwapState()
-  const recipient = recipientAddress === null ? account : recipientAddress
+
+  const isSolanaBridge =
+    isSolana(order?.trade.inputAmount.currency.chainId) || isSolana(order?.trade.outputAmount.currency.chainId)
+  const isOutputSolana = isSolanaBridge && isSolana(order?.trade.outputAmount.currency.chainId)
+
+  const recipient = recipientAddress === null ? (isOutputSolana ? solanaAccount : account) : recipientAddress
 
   const [allowedSlippage] = useUserSlippage() // custom from users
 
@@ -545,50 +542,21 @@ const useConfirmActions = (
         const isOriginSolana = isSolana(order.trade.inputAmount.currency.chainId)
         const isDestinationSolana = isSolana(order.trade.outputAmount.currency.chainId)
 
-        if (isOriginSolana) {
+        if (isOriginSolana && solanaAccount) {
           // Handle Solana bridge transaction
           try {
-            // Type cast to access bridge transaction data with extended properties
-            const bridgeData = order.bridgeTransactionData as any
-            if (!bridgeData?.steps?.length) {
-              throw new Error('No bridge transaction data found')
-            }
-            // Convert bridge steps to Solana instructions
-            const instructions: TransactionInstruction[] = convertStepsIntoTransactionInstruction(
-              order.bridgeTransactionData.steps as any,
-            )
-            if (!instructions?.length) {
-              throw new Error('No valid Solana instructions found in bridge data')
-            }
-
-            if (!solanaWalletContext.publicKey) {
-              throw new Error('Solana wallet not connected')
-            }
-
-            // Detect wallet transaction support
-            const walletSupportsV0 = detectWalletTransactionSupport(solanaWalletContext)
-
-            const addressToLookup = order.bridgeTransactionData.addressLookupTableAddresses || []
-
-            const lookupTableAddresses =
-              addressToLookup.length > 0
-                ? ((
-                    await Promise.all(
-                      addressToLookup.map((address) => solanaConnection.getAddressLookupTable(new PublicKey(address))),
-                    ).then((addresses) => addresses.map((address) => address.value))
-                  ).filter(Boolean) as AddressLookupTableAccount[])
-                : undefined
-
-            const transaction = await buildTransaction(
-              instructions,
+            const transaction = await getSolanaToEVMBridgeCalldata({
+              order: order as BridgeOrderWithCommands,
               solanaConnection,
-              solanaWalletContext.publicKey,
-              walletSupportsV0,
-              lookupTableAddresses,
-            )
+              solanaWalletContext,
+              allowedSlippage,
+              user: solanaAccount,
+              recipient,
+            })
 
             // Send transaction safely
             const signature = await sendTransactionSafely(transaction, solanaConnection, solanaWalletContext)
+
             if (signature) {
               setTxHash(signature)
               setConfirmState(ConfirmModalState.ORDER_SUBMITTED)
@@ -617,15 +585,17 @@ const useConfirmActions = (
         try {
           let transactionData: BridgeCallData | undefined
 
-          if (isDestinationSolana) {
-            const depositStep = order.bridgeTransactionData.steps?.find((step) => step.id === STEP_ID.DEPOSIT)
+          if (isDestinationSolana && account) {
+            transactionData = await getEVMToSolanaBridgeCalldata({
+              order: order as BridgeOrderWithCommands,
+              recipient: recipient as Address,
+              user: account,
+              allowedSlippage,
+            })
 
-            if (!depositStep) {
-              throw new Error('Deposit Step is not found in bridge data')
-            }
-            transactionData = {
-              router: depositStep.to,
-              calldata: depositStep.calldata,
+            if (!transactionData) {
+              refreshTrade()
+              throw new Error('Quote is not up to date, please try again')
             }
           } else {
             transactionData = (
@@ -704,6 +674,7 @@ const useConfirmActions = (
       showIndicator: true,
     }
   }, [
+    solanaAccount,
     account,
     order,
     retryWaitForTransaction,

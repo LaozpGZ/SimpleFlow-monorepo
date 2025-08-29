@@ -4,13 +4,12 @@ import { Currency, CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pan
 import { atomFamily } from 'jotai/utils'
 import { BridgeTradeError } from 'quoter/quoter.types'
 import {
-  BridgeType,
   getSolanaTokenAddress,
   getTokenAddress,
   postMetadata,
   postSolanaEVMBridgeMetadata,
 } from 'views/Swap/Bridge/api'
-import { BridgeMetadataParams } from 'views/Swap/Bridge/types'
+import { BridgeMetadataParams, BridgeType } from 'views/Swap/Bridge/types'
 import { InterfaceOrder } from 'views/Swap/utils'
 import { isSolana } from '@pancakeswap/chains'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
