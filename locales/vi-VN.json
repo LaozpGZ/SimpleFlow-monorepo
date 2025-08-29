@@ -4109,6 +4109,6 @@
   "Unlock Date": "Ngày mở khóa",
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallet hiện không được hỗ trợ, vui lòng tạo phiếu yêu cầu (ticket) trên Discord Chính thức của chúng tôi",
   "Wallets with <0>MEV Protection</0>.": "Các Ví có <0>Bảo vệ MEV</0>.",
-  "Please refresh the page and try it again": "Please refresh the page and try it again",
-  "Failed to Connect": "Failed to Connect"
+  "Please refresh the page and try it again": "Vui lòng làm mới trang và thử lại",
+  "Failed to Connect": "Không thể kết nối"
 }
