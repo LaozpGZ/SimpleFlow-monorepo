@@ -55,7 +55,7 @@ const BetResult: React.FC<React.PropsWithChildren<BetResultProps>> = ({ bet, res
   const returned = payout + bet.amount
 
   const tokenSymbol = useMemo(() => config?.betCurrency.symbol ?? '', [config])
-  const displayedDecimals = useMemo(() => config?.displayedDecimals ?? 4, [config])
+  const displayedDecimals = useMemo(() => config?.balanceDecimals ?? config?.displayedDecimals ?? 4, [config])
 
   const headerColor = useMemo(() => {
     switch (result) {

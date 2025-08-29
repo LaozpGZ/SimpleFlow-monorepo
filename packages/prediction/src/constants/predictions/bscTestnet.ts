@@ -21,6 +21,7 @@ export const predictions: Record<string, PredictionConfig> = {
     chainlinkOracleAddress: chainlinkOracleETH[ChainId.BSC_TESTNET],
 
     displayedDecimals: 2,
+    balanceDecimals: 4,
     tokenBackgroundColor: '#F0B90B',
   },
   [PredictionSupportedSymbol.BTC]: {
@@ -34,6 +35,7 @@ export const predictions: Record<string, PredictionConfig> = {
     chainlinkOracleAddress: chainlinkOracleWBTC[ChainId.BSC_TESTNET],
 
     displayedDecimals: 2,
+    balanceDecimals: 4,
     tokenBackgroundColor: '#25C7D6',
   },
 }
