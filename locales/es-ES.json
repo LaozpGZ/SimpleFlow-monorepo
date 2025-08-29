@@ -4108,5 +4108,7 @@
   "My Locked CAKE": "Mi CAKE asegurado",
   "Unlock Date": "Fecha de desbloqueo",
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Las billeteras inteligentes no son compatibles. Para crear un billete en nuestro Discord oficial",
-  "Wallets with <0>MEV Protection</0>.": "Wallets with <0>MEV Protection</0>."
+  "Wallets with <0>MEV Protection</0>.": "Wallets with <0>MEV Protection</0>.",
+  "Please refresh the page and try it again": "Please refresh the page and try it again",
+  "Failed to Connect": "Failed to Connect"
 }
