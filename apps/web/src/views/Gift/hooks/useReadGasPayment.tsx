@@ -21,8 +21,8 @@ export const useReadGasPayment = () => {
   return gasPayment as bigint | undefined
 }
 
-export const useReadGasPaymentAmount = () => {
-  const nativeCurrency = useNativeCurrency(ChainId.BSC)
+export const useReadGasPaymentAmount = (chainId?: ChainId) => {
+  const nativeCurrency = useNativeCurrency(chainId ?? ChainId.BSC)
   const gasPayment = useReadGasPayment()
   const stableNativePrice = useStablecoinPrice(nativeCurrency)
 

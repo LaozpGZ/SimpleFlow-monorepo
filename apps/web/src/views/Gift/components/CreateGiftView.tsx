@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
+import { ChainId, CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
 import {
   Box,
   ButtonMenu,
@@ -63,7 +63,7 @@ export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<T
     </Box>
   )
 
-  const { gasPayment, gasPaymentUsd } = useReadGasPaymentAmount()
+  const { gasPayment, gasPaymentUsd } = useReadGasPaymentAmount(tokenAmount?.currency.chainId as ChainId)
 
   const totalUsd = useCalculateTotalCostCreateGift({ tokenAmount, nativeAmount })
 
