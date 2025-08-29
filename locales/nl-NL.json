@@ -4109,6 +4109,6 @@
   "Unlock Date": "Ontgrendelingsdatum",
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart wallets worden niet ondersteund, maak een ticket op onze officiële Discord",
   "Wallets with <0>MEV Protection</0>.": "Wallets met <0>MEV-bescherming</0>.",
-  "Please refresh the page and try it again": "Please refresh the page and try it again",
-  "Failed to Connect": "Failed to Connect"
+  "Please refresh the page and try it again": "Vernieuw de pagina en probeer het nogmaals",
+  "Failed to Connect": "Verbinden mislukt"
 }
