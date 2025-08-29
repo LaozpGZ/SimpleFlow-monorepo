@@ -4108,5 +4108,7 @@
   "My Locked CAKE": "CAKE Terkunci Saya",
   "Unlock Date": "Tanggal Pembukaan Kunci",
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Dompet Pintar tidak didukung, silakan buat tiket di Discord Resmi kami",
-  "Wallets with <0>MEV Protection</0>.": "Dompet dengan <0>Perlindungan MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Dompet dengan <0>Perlindungan MEV</0>.",
+  "Please refresh the page and try it again": "Please refresh the page and try it again",
+  "Failed to Connect": "Failed to Connect"
 }
