@@ -63,7 +63,7 @@ export const CreateGiftView = ({ tokenAmount }: { tokenAmount?: CurrencyAmount<T
     </Box>
   )
 
-  const { gasPayment, gasPaymentUsd } = useReadGasPaymentAmount(tokenAmount?.currency.chainId as ChainId)
+  const { gasPayment, gasPaymentUsd } = useReadGasPaymentAmount(tokenAmount?.currency?.chainId)
 
   const totalUsd = useCalculateTotalCostCreateGift({ tokenAmount, nativeAmount })
 
