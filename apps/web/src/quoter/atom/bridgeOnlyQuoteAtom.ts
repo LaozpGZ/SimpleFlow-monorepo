@@ -13,6 +13,7 @@ import { BridgeMetadataParams } from 'views/Swap/Bridge/types'
 import { InterfaceOrder } from 'views/Swap/utils'
 import { isSolana } from '@pancakeswap/chains'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
+import { solanaTokens, USDC } from '@pancakeswap/tokens'
 import { atomWithLoadable } from './atomWithLoadable'
 
 export const bridgeOnlyQuoteAtom = atomFamily(
@@ -68,9 +69,23 @@ export const bridgeOnlyQuoteAtom = atomFamily(
         metadata.bridgeTransactionData.outputAmount,
       ) as CurrencyAmount<Currency>
 
+      let bridgeFee
+
+      if (isSolanaBridge) {
+        const stableCoin = isSolana(inputAmount.currency.chainId)
+          ? solanaTokens.usdc
+          : USDC[inputAmount.currency.chainId]
+        bridgeFee = CurrencyAmount.fromRawAmount(
+          stableCoin,
+          Math.abs(Number(metadata.bridgeTransactionData.totalRelayFee)) * 10 ** Number(stableCoin.decimals),
+        )
+      } else {
+        bridgeFee = CurrencyAmount.fromRawAmount(inputAmount.currency, metadata.bridgeTransactionData.totalRelayFee)
+      }
+
       const bridgeQuote: InterfaceOrder = {
         bridgeTransactionData: metadata.bridgeTransactionData,
-        bridgeFee: CurrencyAmount.fromRawAmount(inputAmount.currency, metadata.bridgeTransactionData.totalRelayFee),
+        bridgeFee,
         expectedFillTimeSec: metadata.expectedFillTimeSec ? Number.parseInt(metadata.expectedFillTimeSec) : 0,
         type: OrderType.PCS_BRIDGE,
         trade: {
