@@ -9,10 +9,14 @@ import {
   CardBody,
   FlexGap,
   useMatchBreakpoints,
+  ShieldCheckIcon,
+  useTooltip,
+  Link,
 } from '@pancakeswap/uikit'
 import { StyledCardInner } from '@pancakeswap/uikit/components/Card/StyledCard'
 import React from 'react'
-import styled from 'styled-components'
+import styled, { useTheme } from 'styled-components'
+import { Trans } from '@pancakeswap/localization'
 import { WalletAdaptedNetwork, WalletConfigV3 } from '../../types'
 import { walletIconClass } from '../WalletModal.css'
 import { ASSET_CDN } from '../../config/url'
@@ -84,6 +88,26 @@ export type WalletSelectItemProps<T> = {
 export const WalletSelectItem = <T,>({ wallet, onClick }: WalletSelectItemProps<T>) => {
   const isImage = typeof wallet.icon === 'string'
   const Icon = wallet.icon
+  const theme = useTheme()
+  const { targetRef, tooltipVisible, tooltip } = useTooltip(
+    <Trans
+      i18nKey="This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains."
+      style={{ display: 'inline' }}
+      components={[
+        <Link
+          ml="4px"
+          style={{ display: 'inline' }}
+          fontWeight="normal !important"
+          external
+          href="https://docs.pancakeswap.finance/trading-tools/pancakeswap-mev-guard"
+        />,
+      ]}
+    />,
+    {
+      avoidToStopPropagation: true,
+      placement: 'bottom',
+    },
+  )
 
   return (
     <AtomBox
@@ -105,7 +129,7 @@ export const WalletSelectItem = <T,>({ wallet, onClick }: WalletSelectItemProps<
         flexDirection="column"
         onClick={() => onClick(wallet, wallet.networks[0])}
       >
-        <AtomBox borderRadius="12px" mb="4px">
+        <AtomBox borderRadius="12px" mb="4px" position="relative">
           <AtomBox
             bgc="dropdown"
             display="flex"
@@ -122,6 +146,19 @@ export const WalletSelectItem = <T,>({ wallet, onClick }: WalletSelectItemProps<
               <Icon width={24} height={24} color="textSubtle" />
             )}
           </AtomBox>
+          {wallet.MEVSupported ? (
+            <AtomBox
+              position="absolute"
+              style={{ bottom: '-4px', right: '-4px', borderRadius: '4px' }}
+              width="16px"
+              height="16px"
+              background="positive10"
+              ref={targetRef}
+            >
+              <ShieldCheckIcon width={12} height={12} color={theme.colors.positive60} />
+            </AtomBox>
+          ) : null}
+          {tooltipVisible && tooltip}
         </AtomBox>
         {wallet.networks.length > 0 && (
           <NetworkTag>
