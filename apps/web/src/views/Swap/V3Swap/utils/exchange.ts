@@ -1,3 +1,4 @@
+import { isSolana } from '@pancakeswap/chains'
 import { HOOK_CATEGORY, findHook } from '@pancakeswap/infinity-sdk'
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import {
@@ -55,6 +56,19 @@ export function computeSlippageAdjustedAmounts(
 
   const bridgeOrder = order as BridgeOrderWithCommands
   const length = bridgeOrder?.commands?.length
+
+  if (
+    isBridgeOrder(order) &&
+    (isSolana(order.trade.outputAmount.currency.chainId) || isSolana(order.trade.inputAmount.currency.chainId))
+  ) {
+    return {
+      [Field.INPUT]: trade.inputAmount,
+      [Field.OUTPUT]: CurrencyAmount.fromRawAmount(
+        trade.outputAmount.currency,
+        BigInt(order.bridgeTransactionData.minimumOutputAmount ?? '0'),
+      ),
+    }
+  }
 
   if (isBridgeOrder(order) && bridgeOrder.commands && length) {
     const isBridgeOnly = length === 1
