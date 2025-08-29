@@ -7,10 +7,23 @@ import { Address } from 'viem/accounts'
 import { isSolana } from '@pancakeswap/chains'
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { SOLANA_NATIVE_TOKEN_ADDRESS } from 'quoter/consts'
+import {
+  AddressLookupTableAccount,
+  Connection,
+  MessageV0,
+  PublicKey,
+  Transaction,
+  TransactionInstruction,
+  TransactionMessage,
+  VersionedTransaction,
+} from '@solana/web3.js'
+import { WalletContextState } from '@solana/wallet-adapter-react'
+import { buildTransaction, detectWalletTransactionSupport } from 'components/WalletModalV2/utils/solanaSendTransaction'
 import { BridgeOrderWithCommands, isSVMOrder } from '../utils'
 import {
   BridgeDataSchema,
   BridgeStatusResponse,
+  BridgeType,
   CalldataRequestSchema,
   Command,
   GetBridgeCalldataResponse,
@@ -18,6 +31,8 @@ import {
   SwapDataSchema,
   UserBridgeOrdersResponse,
 } from './types'
+import { STEP_ID } from './relay-sdk/types'
+import { convertStepsIntoTransactionInstruction } from './relay-sdk/adapter'
 
 export function getSolanaTokenAddress(currency: Currency): string {
   if (!isSolana(currency.chainId)) {
@@ -77,19 +92,132 @@ const replacer = (_, value: string | bigint) => {
   return typeof value === 'bigint' ? value.toString() : value
 }
 
-export const getEvmSolanaBridgeCalldata = async ({
+const getSolanaBridgeCalldata = async ({
   order,
+  recipient,
+  user,
+  allowedSlippage,
+}: {
+  order: BridgeOrderWithCommands
+  recipient: string
+  user: string
+  allowedSlippage?: number
+}) => {
+  const { requestId } = order.bridgeTransactionData as any
+
+  if (!allowedSlippage || !user || !recipient || !requestId) {
+    throw new Error('getSolanaToEVMBridgeCalldata requires allowedSlippage, user, and recipient')
+  }
+
+  const calldataRequest: CalldataRequestSchema = {
+    requestId,
+    inputToken: order.trade.inputAmount.currency.wrapped.address,
+    outputToken: order.trade.outputAmount.currency.wrapped.address,
+    inputAmount: order.trade.inputAmount.quotient.toString(),
+    originChainId: order.trade.inputAmount.currency.chainId,
+    destinationChainId: order.trade.outputAmount.currency.chainId,
+    recipientOnDestChain: recipient,
+    user,
+    type: BridgeType.NON_EVM,
+    slippageTolerance: allowedSlippage,
+  }
+
+  const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/calldata`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(calldataRequest),
+  })
+
+  const data = await resp.json()
+
+  if (
+    data.requestId !== requestId &&
+    data.bridgeTransactionData.outputAmount !== order.trade.outputAmount.quotient.toString()
+  ) {
+    // NOTE: return undefined so quote can be updated
+    return undefined
+  }
+
+  return data
+}
+
+export const getEVMToSolanaBridgeCalldata = async ({
+  order,
+  recipient,
+  user,
+  allowedSlippage,
+}: {
+  order: BridgeOrderWithCommands
+  recipient: string
+  user: string
+  allowedSlippage?: number
+}) => {
+  const data = await getSolanaBridgeCalldata({ order, recipient, user, allowedSlippage })
+
+  const depositStep = data.steps?.find((step) => step.id === STEP_ID.DEPOSIT)?.items[0]?.data
+
+  if (!depositStep) {
+    throw new Error('Deposit Step is not found in bridge data')
+  }
+
+  return {
+    router: depositStep.to,
+    calldata: depositStep.data,
+  }
+}
+
+export const getSolanaToEVMBridgeCalldata = async ({
+  order,
+  solanaConnection,
+  solanaWalletContext,
+  allowedSlippage,
+  user,
   recipient,
 }: {
   order: BridgeOrderWithCommands
-  recipient: Address
-  permit2?: Permit2Schema
-  allowedSlippage: number
-}) => {
-  /**
-   * TODO: getEvmSolanaBridgeCalldata return
-   *
-   */
+  solanaConnection: Connection
+  solanaWalletContext: WalletContextState
+  allowedSlippage?: number
+  user: string
+  recipient: string
+}): Promise<Transaction | VersionedTransaction> => {
+  if (!isSolana(order.trade.inputAmount.currency.chainId)) {
+    throw new Error('getEVMToSolanaBridgeCalldata requires Solana as destination chain')
+  }
+
+  if (!solanaWalletContext.publicKey) {
+    throw new Error('Solana wallet not connected')
+  }
+
+  const data = await getSolanaBridgeCalldata({ order, recipient, user, allowedSlippage })
+
+  const instructions = convertStepsIntoTransactionInstruction(data.steps as any)
+
+  // Detect wallet transaction support
+  const walletSupportsV0 = detectWalletTransactionSupport(solanaWalletContext)
+
+  const addressToLookup = order.bridgeTransactionData.addressLookupTableAddresses || []
+
+  const lookupTableAddresses =
+    addressToLookup.length > 0
+      ? ((
+          await Promise.all(
+            addressToLookup.map((address) => solanaConnection.getAddressLookupTable(new PublicKey(address))),
+          ).then((addresses) => addresses.map((address) => address.value))
+        ).filter(Boolean) as AddressLookupTableAccount[])
+      : undefined
+
+  const transaction = await buildTransaction(
+    instructions,
+    solanaConnection,
+    solanaWalletContext.publicKey,
+    walletSupportsV0,
+    lookupTableAddresses,
+  )
+
+  return transaction
 }
 
 export const getBridgeCalldata = async ({
@@ -136,6 +264,7 @@ export const getBridgeCalldata = async ({
       recipientOnDestChain: recipient,
       commands,
       permit2,
+      type: BridgeType.EVM,
     }
 
     const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/calldata`, {
@@ -293,11 +422,7 @@ export interface MetadataSuccessResponse extends MetadataResponse {
     recommendedDepositInstant: string
   }
   bridgeTransactionData: BridgeTransactionData
-}
-
-export enum BridgeType {
-  NON_EVM = 'NON-EVM',
-  EVM = 'EVM',
+  requestId?: string
 }
 
 export const postSolanaEVMBridgeMetadata = async (
@@ -355,6 +480,8 @@ export const postSolanaEVMBridgeMetadata = async (
         recommendedDepositInstant: '0',
       },
       bridgeTransactionData: {
+        ...(metadataResponse.bridgeTransactionData as any),
+        requestId: metadataResponse.requestId,
         minimumOutputAmount: metadataResponse.bridgeTransactionData.minimumOutputAmount?.toString(),
         outputAmount: metadataResponse.bridgeTransactionData.outputAmount?.toString(),
         totalRelayFee: metadataResponse.bridgeTransactionData.totalFee?.toString() || '0',
