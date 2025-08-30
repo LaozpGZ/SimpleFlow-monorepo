@@ -259,7 +259,6 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
         if (event.data.state) {
           // TODO: validate on lambda level
           const expectedState = localStorage.getItem('discordAuthState')
-          console.log('State', expectedState, event.data.state)
           if (event.data.state !== expectedState) {
             console.error('Discord OAuth state mismatch, potential CSRF attack')
             return
@@ -283,7 +282,6 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
         localStorage.removeItem('discordAuthState')
         localStorage.removeItem('discordAuthToken')
         localStorage.removeItem('discordAuthCallbackState')
-        console.log('State', expectedState, state)
         if (state !== expectedState) {
           console.error('Discord OAuth state mismatch, potential CSRF attack')
           return
