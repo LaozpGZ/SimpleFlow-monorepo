@@ -260,11 +260,11 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
           // TODO: validate on lambda level
           const expectedState = localStorage.getItem('discordAuthState')
           console.log('State', expectedState, event.data.state)
-          localStorage.removeItem('discordAuthState')
           if (event.data.state !== expectedState) {
             console.error('Discord OAuth state mismatch, potential CSRF attack')
             return
           }
+          localStorage.removeItem('discordAuthState')
         }
         await loginWithCustomToken(event.data.customToken)
       }
