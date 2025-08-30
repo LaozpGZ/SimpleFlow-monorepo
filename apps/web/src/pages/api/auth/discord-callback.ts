@@ -19,7 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   if (!stateRegex.test(state)) {
-    // only allow alphanumeric + underscroll
+    // only allow alphanumeric + underscore
     res.status(400).json({ error: 'Invalid state format' })
     return
   }
