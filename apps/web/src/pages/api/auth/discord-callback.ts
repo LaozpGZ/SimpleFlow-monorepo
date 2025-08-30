@@ -3,10 +3,10 @@ import { firebaseAdmin } from 'lib/firebase-admin'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  const { code } = req.query
+  const { code, state } = req.query
 
-  if (!code || typeof code !== 'string') {
-    res.status(400).json({ error: 'Invalid code' })
+  if (!code || typeof code !== 'string' || !state || typeof state !== 'string') {
+    res.status(400).json({ error: 'Invalid code or state' })
     return
   }
 
@@ -58,14 +58,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       <script>
         document.addEventListener('DOMContentLoaded', function () {
           const token = "${customToken}";
+          const state = "${state}";
           const origin = "${process.env.NEXT_PUBLIC_FRONTEND_ORIGIN || '*'}";
 
           if (window.opener) {
-            window.opener.postMessage({ customToken: token }, origin);
+            window.opener.postMessage({ customToken: token, state: state }, origin);
             window.close();
           } else {
             // fallback
             localStorage.setItem('discordAuthToken', token);
+            localStorage.setItem('discordAuthCallbackState', state);
             document.body.innerHTML =
               '<div style="display: flex; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; flex-direction: column;">' +
               '<h2>login success</h2>' +

@@ -10,6 +10,7 @@ import {
   UserCredential,
 } from 'firebase/auth'
 import { createContext, ReactNode, useCallback, useContext, useEffect, useState } from 'react'
+import { nanoid } from 'nanoid'
 import { usePrivySocialLoginAtom, useSocialLoginProviderAtom } from './atom'
 import { loginWithTelegramViaScript } from './telegramLogin'
 
@@ -151,10 +152,11 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       // Open Discord OAuth page
       const redirectUri = `${window.location.origin}/api/auth/discord-callback`
       const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID
+      const state = nanoid()
       const popup = window.open(
         `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
           redirectUri,
-        )}&response_type=code&scope=identify`,
+        )}&response_type=code&scope=identify&state=${state}`,
         '_blank',
         'width=500,height=600',
       )
@@ -253,6 +255,16 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
     const handleMessage = async (event: MessageEvent) => {
       if (event.origin !== window.location.origin) return
       if (event.data?.customToken) {
+        if (event.data.state) {
+          // TODO: validate on lambda level
+          const expectedState = localStorage.getItem('discordAuthState')
+          console.log('State', expectedState, event.data.state)
+          if (event.data.state !== expectedState) {
+            console.error('Discord OAuth state mismatch, potential CSRF attack')
+            return
+          }
+          localStorage.removeItem('discordAuthState')
+        }
         await loginWithCustomToken(event.data.customToken)
       }
     }
@@ -265,6 +277,15 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       // Check for Discord token
       const discordToken = localStorage.getItem('discordAuthToken')
       if (discordToken) {
+        const expectedState = localStorage.getItem('discordAuthState')
+        const state = localStorage.getItem('discordAuthCallbackState')
+        console.log('State', expectedState, state)
+        if (state !== expectedState) {
+          console.error('Discord OAuth state mismatch, potential CSRF attack')
+          localStorage.removeItem('discordAuthToken')
+          localStorage.removeItem('discordAuthCallbackState')
+          return
+        }
         clearInterval(checkLocalStorage)
         localStorage.removeItem('discordAuthToken')
         setSocialProvider('discord')
@@ -339,7 +360,7 @@ export function useFirebaseAuth() {
 export async function retriggerFirebaseAuth() {
   try {
     const auth = getAuth(firebaseApp)
-    const currentUser = auth.currentUser
+    const { currentUser } = auth
 
     if (!currentUser) {
       return false
