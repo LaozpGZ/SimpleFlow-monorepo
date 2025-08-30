@@ -2,7 +2,7 @@ import { getAuth } from 'firebase-admin/auth'
 import { firebaseAdmin } from 'lib/firebase-admin'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-const MAX_STATE_LENGTH = 20
+const MAX_STATE_LENGTH = 21
 const stateRegex = /^[a-zA-Z0-9_-]+$/
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {

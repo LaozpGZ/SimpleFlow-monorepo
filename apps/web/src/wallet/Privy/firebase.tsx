@@ -152,7 +152,7 @@ export function FirebaseAuthProvider({ children }: AuthProviderProps) {
       // Open Discord OAuth page
       const redirectUri = `${window.location.origin}/api/auth/discord-callback`
       const clientId = process.env.NEXT_PUBLIC_DISCORD_CLIENT_ID
-      const state = nanoid(20)
+      const state = nanoid(21)
       localStorage.setItem('discordAuthState', state)
       const popup = window.open(
         `https://discord.com/api/oauth2/authorize?client_id=${clientId}&redirect_uri=${encodeURIComponent(
