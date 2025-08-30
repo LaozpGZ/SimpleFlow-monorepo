@@ -2,11 +2,25 @@ import { getAuth } from 'firebase-admin/auth'
 import { firebaseAdmin } from 'lib/firebase-admin'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+const MAX_STATE_LENGTH = 20
+const stateRegex = /^[a-zA-Z0-9_]+$/
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
   const { code, state } = req.query
 
   if (!code || typeof code !== 'string' || !state || typeof state !== 'string') {
     res.status(400).json({ error: 'Invalid code or state' })
+    return
+  }
+
+  if (state.length > MAX_STATE_LENGTH) {
+    res.status(400).json({ error: 'State parameter too long' })
+    return
+  }
+
+  if (!stateRegex.test(state)) {
+    // only allow alphanumeric + underscroll
+    res.status(400).json({ error: 'Invalid state format' })
     return
   }
 
