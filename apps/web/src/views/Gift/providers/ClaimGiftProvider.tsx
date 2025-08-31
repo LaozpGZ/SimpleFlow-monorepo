@@ -1,4 +1,4 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useMemo, useState } from 'react'
 
 export const ClaimGiftContext = createContext({
   code: '',
@@ -15,6 +15,7 @@ export const useClaimGiftContext = () => {
 
 export const ClaimGiftProvider = ({ children }: { children: React.ReactNode }) => {
   const [code, setCode] = useState('')
+  const providerValue = useMemo(() => ({ code, setCode }), [code])
 
-  return <ClaimGiftContext.Provider value={{ code, setCode }}>{children}</ClaimGiftContext.Provider>
+  return <ClaimGiftContext.Provider value={providerValue}>{children}</ClaimGiftContext.Provider>
 }

@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { createContext, PropsWithChildren, useCallback, useContext, useState } from 'react'
+import { createContext, PropsWithChildren, useCallback, useContext, useMemo, useState } from 'react'
 import { CakeApr } from 'state/farmsV4/atom'
 import { ChainIdAddressKey } from 'state/farmsV4/state/type'
 
@@ -38,7 +38,9 @@ export const MyPositionsProvider: React.FC<PropsWithChildren> = ({ children }) =
     [],
   )
 
-  return <MyPositionsContext.Provider value={{ totalApr, updateTotalApr }}>{children}</MyPositionsContext.Provider>
+  const providerValue = useMemo(() => ({ totalApr, updateTotalApr }), [totalApr, updateTotalApr])
+
+  return <MyPositionsContext.Provider value={providerValue}>{children}</MyPositionsContext.Provider>
 }
 
 export const useMyPositions = () => useContext(MyPositionsContext)

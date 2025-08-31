@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useContext } from 'react'
+import { ReactNode, createContext, useContext, useMemo } from 'react'
 
 const Context = createContext({
   isInfinity: false,
@@ -10,5 +10,6 @@ export const useInfinityContext = () => {
 }
 
 export const InfinityProvider = ({ children }: { children: ReactNode }) => {
-  return <Context.Provider value={{ isInfinity: true }}>{children}</Context.Provider>
+  const providerValue = useMemo(() => ({ isInfinity: true }), [])
+  return <Context.Provider value={providerValue}>{children}</Context.Provider>
 }

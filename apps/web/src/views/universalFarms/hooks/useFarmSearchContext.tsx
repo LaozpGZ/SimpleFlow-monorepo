@@ -1,4 +1,4 @@
-import { createContext, useContext } from 'react'
+import { createContext, useContext, useMemo } from 'react'
 
 const FarmSearchContext = createContext({
   enabled: false,
@@ -13,5 +13,6 @@ export const useIsFarmSearchContext = () => {
 }
 
 export const FarmSearchContextProvider = ({ children }: { children: React.ReactNode }) => {
-  return <FarmSearchContext.Provider value={{ enabled: true }}>{children}</FarmSearchContext.Provider>
+  const providerValue = useMemo(() => ({ enabled: true }), [])
+  return <FarmSearchContext.Provider value={providerValue}>{children}</FarmSearchContext.Provider>
 }
