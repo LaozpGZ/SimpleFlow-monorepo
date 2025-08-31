@@ -4069,12 +4069,12 @@
   "Infinity Pool": "Infinity alap",
   "V3 Pool": "V3 alap",
   "V2 Pool": "V2 alap",
-  "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.": "Többféle alaptípust támogat gázhatékony dizájnnal, kampókkal és rugalmas likviditási lehetőséggekkel. Ideális haladó stratégiákhoz és a hozamok maximalizálásához.",
+  "Supports multiple pool types with gas-efficient design, hooks, and flexible liquidity options. Ideal for advanced strategies and maximizing returns.": "Többféle alaptípust támogat gázhatékony dizájnnal, kampókkal és rugalmas likviditási lehetőségekkel. Ideális haladó stratégiákhoz és a hozamok maximalizálásához.",
   "Advanced pools where you choose specific price ranges to provide liquidity, earning higher fees in your chosen range.": "Haladó alapok, ahol konkrét árkategóriákat választhatsz ki a likviditás biztosítása érdekében, így magasabb díjakat szerezhetsz a választott árkategóriában.",
   "Classic pools that let you provide liquidity across the full price range for steady, predictable trading fees.": "A hagyományos alapok azok, amelyek lehetővé teszik a teljes ártartományban történő likviditás biztosítását, stabil, kiszámítható kereskedési díjak mellett.",
   "Use Market Price": "Használja a piaci árat",
   "%assetA% = 1 %assetB%": "%assetA% = 1 %assetB%",
-  "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.": "Megerősítem, hogy áttekintettem a kezdő árat és megéretettem a helytelen beállítás kockázatait.",
+  "I confirm that I have reviewed the initial price and understand the risks of setting it incorrectly.": "Megerősítem, hogy áttekintettem a kezdő árat és megértettem a helytelen beállítás kockázatait.",
   "Initial Price": "Eredeti ár",
   "Dynamic Fee": "Dinamikus díj",
   "Infinity Pools are not supported on this chain": "Az infinity alapok nem támogatottak ebben a láncban",
@@ -4109,6 +4109,6 @@
   "Unlock Date": "Dátum feloldása",
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Az okostárcák nem támogatottak, kérjük, hozz létre egy jegyet a hivatalos Discord-csatornánkon",
   "Wallets with <0>MEV Protection</0>.": "Tárcák <0>MEV-védelemmel</0>.",
-  "Please refresh the page and try it again": "Please refresh the page and try it again",
-  "Failed to Connect": "Failed to Connect"
+  "Please refresh the page and try it again": "Frissítsd az oldalt és próbáld újra",
+  "Failed to Connect": "Sikertelen csatlakozás"
 }
