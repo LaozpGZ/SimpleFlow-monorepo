@@ -31,9 +31,9 @@ import { SlippageAdjustedAmounts, TradePriceBreakdown, formatExecutionPrice } fr
 import FormattedPriceImpact from 'views/Swap/components/FormattedPriceImpact'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/styleds'
-import { EVMInterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
+import { EVMInterfaceOrder, isBridgeOrder, isSolanaBridge, isXOrder } from 'views/Swap/utils'
 
-import { OrderType } from '@pancakeswap/price-api-sdk'
+import { BridgeOrder, OrderType } from '@pancakeswap/price-api-sdk'
 import BigNumber from 'bignumber.js'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
 import dayjs from 'dayjs'
@@ -44,6 +44,7 @@ import { useAtomValue } from 'jotai'
 import { notEmpty } from 'utils/notEmpty'
 import { BridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { SolanaBridgeTradingFee } from 'views/SwapSimplify/InfinitySwap/TradingFee'
 import { TotalFeeToolTip } from '../components/FeeToolTip'
 import { EstimatedTime } from './components/EstimatedTime'
 
@@ -263,7 +264,9 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
               <DottedHelpText fontSize="14px">{t('Total Fee')}</DottedHelpText>
             </QuestionHelperV2>
           </RowFixed>
-          {Array.isArray(priceBreakdown) ? (
+          {isSolanaBridge(order) ? (
+            <SolanaBridgeTradingFee order={order as BridgeOrder} />
+          ) : Array.isArray(priceBreakdown) ? (
             <TotalBridgeFee priceBreakdown={priceBreakdown} />
           ) : priceBreakdown?.lpFeeAmount || isXOrder(order) ? (
             <Flex alignItems="center">

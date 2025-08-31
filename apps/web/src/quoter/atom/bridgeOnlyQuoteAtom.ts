@@ -76,6 +76,7 @@ export const bridgeOnlyQuoteAtom = atomFamily(
         const stableCoin = isSolana(inputAmount.currency.chainId)
           ? solanaTokens.usdc
           : USDC[inputAmount.currency.chainId]
+
         bridgeFee = CurrencyAmount.fromRawAmount(
           stableCoin,
           Math.abs(Number(metadata.bridgeTransactionData.totalRelayFee)) * 10 ** Number(stableCoin.decimals),
