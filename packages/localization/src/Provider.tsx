@@ -10,7 +10,7 @@ import { LRU } from './lru'
 
 export const LanguageContext = createContext<ContextApi | undefined>(undefined)
 
-const cache = new LRU<string, string>({})
+const cache = new LRU<string, string>({ maxSize: 250 })
 
 export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { lang, bundle, ver, refresh, isFetching } = useLocaleBundle()
