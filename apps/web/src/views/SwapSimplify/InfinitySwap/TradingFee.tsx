@@ -143,12 +143,74 @@ export const SVMTradingFee = memo(
   },
 )
 
+/**
+ * SolanaBridgeTradingFee is used to display the trading fee of a solana bridge order.
+ * the bridge fee is in stable coin, we need to convert it to input currency.
+ * for evm: using useCurrencyUsdPrice, get the stable price of inputCurrency.
+ * for solana: using useDirectBestSolanaTrade, get the stable price of inputCurrency.
+ * fallback to original display if conversion fails.
+ */
 export const SolanaBridgeTradingFee = memo(({ order, textColor }: { order: BridgeOrder; textColor?: string }) => {
-  console.log('order', order)
+  const inputCurrency = order.trade.inputAmount.currency
+  const bridgeFeeCurrency = order.bridgeFee.currency
+
+  // Get addresses for both currencies
+  const inputCurrencyAddress = useMemo(() => {
+    if (inputCurrency.isNative) {
+      return SOLANA_NATIVE_TOKEN_ADDRESS
+    }
+    return inputCurrency.wrapped.address
+  }, [inputCurrency])
+
+  const bridgeFeeCurrencyAddress = useMemo(() => {
+    if (bridgeFeeCurrency.isNative) {
+      return SOLANA_NATIVE_TOKEN_ADDRESS
+    }
+    return bridgeFeeCurrency.wrapped.address
+  }, [bridgeFeeCurrency])
+
+  // Get prices for both currencies
+  const { data: priceMap, isLoading } = useSolanaTokenPrices({
+    mints: [inputCurrencyAddress, bridgeFeeCurrencyAddress],
+    enabled: true,
+  })
+
+  const convertedFeeAmount = useMemo(() => {
+    if (
+      !priceMap ||
+      !priceMap[inputCurrencyAddress] ||
+      !priceMap[bridgeFeeCurrencyAddress] ||
+      priceMap[inputCurrencyAddress] === 0
+    ) {
+      return null
+    }
+
+    const inputCurrencyPrice = priceMap[inputCurrencyAddress]
+    const bridgeFeeCurrencyPrice = priceMap[bridgeFeeCurrencyAddress]
+
+    // Convert bridge fee from stable coin to input currency
+    // bridgeFeeUSD = bridgeFee * bridgeFeeCurrencyPrice
+    // feeInInputCurrency = bridgeFeeUSD / inputCurrencyPrice
+    const bridgeFeeUSD = new BigNumber(order.bridgeFee.toExact()).multipliedBy(bridgeFeeCurrencyPrice)
+    const feeInInputCurrency = bridgeFeeUSD.dividedBy(inputCurrencyPrice)
+
+    return feeInInputCurrency.toNumber()
+  }, [order.bridgeFee, priceMap, inputCurrencyAddress, bridgeFeeCurrencyAddress])
+
+  const displayText = useMemo(() => {
+    if (convertedFeeAmount !== null) {
+      return `~${formatNumber(convertedFeeAmount, { maxDecimalDisplayDigits: 6 })} ${inputCurrency.symbol}`
+    }
+    // Fallback to original display if conversion fails
+    return `${formatAmount(order.bridgeFee, 4)} ${order.bridgeFee.currency.symbol}`
+  }, [convertedFeeAmount, inputCurrency.symbol, order.bridgeFee])
+
   return (
-    <Text color={textColor} fontSize="14px">
-      {`${formatAmount(order.bridgeFee, 4)} ${order.bridgeFee.currency.symbol}`}
-    </Text>
+    <SkeletonV2 width="100px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!isLoading}>
+      <Text color={textColor} fontSize="14px">
+        {displayText}
+      </Text>
+    </SkeletonV2>
   )
 })
 
