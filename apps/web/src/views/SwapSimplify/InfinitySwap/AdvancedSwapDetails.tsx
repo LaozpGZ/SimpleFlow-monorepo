@@ -13,7 +13,7 @@ import { AutoColumn, Box, Link, QuestionHelperV2, SkeletonV2, Text } from '@panc
 import { formatAmount, formatFraction } from '@pancakeswap/utils/formatFractions'
 import { memo, useMemo, useState } from 'react'
 
-import { OrderType, PriceOrder } from '@pancakeswap/price-api-sdk'
+import { BridgeOrder, OrderType, PriceOrder } from '@pancakeswap/price-api-sdk'
 import { NumberDisplay, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import BigNumber from 'bignumber.js'
 import { LightGreyCard } from 'components/Card'
@@ -25,12 +25,12 @@ import { styled } from 'styled-components'
 import { BridgeFeeToolTip, TotalFeeToolTip, TradingFeeToolTip } from 'views/Swap/Bridge/components/FeeToolTip'
 import { BridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
-import { isSVMOrder } from 'views/Swap/utils'
+import { isSolanaBridge, isSVMOrder } from 'views/Swap/utils'
 import { EstimatedTime } from '../../Swap/Bridge/CrossChainConfirmSwapModal/components/EstimatedTime'
 import { SlippageAdjustedAmounts, SVMTradePriceBreakdown, TradePriceBreakdown } from '../../Swap/V3Swap/utils/exchange'
 import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
 import { useFeeSaved } from '../../Swap/hooks/useFeeSaved'
-import { SVMTradingFee } from './TradingFee'
+import { SolanaBridgeTradingFee, SVMTradingFee } from './TradingFee'
 
 export const DetailsTitle = styled(Text)`
   text-decoration: underline dotted;
@@ -310,7 +310,9 @@ export const TradeSummary = memo(function TradeSummary({
               </DetailsTitle>
             </QuestionHelperV2>
           </RowFixed>
-          {isSVMOrder(order) && inputAmount?.currency?.symbol ? (
+          {isSolanaBridge(order) ? (
+            <SolanaBridgeTradingFee order={order as BridgeOrder} />
+          ) : isSVMOrder(order) && inputAmount?.currency?.symbol ? (
             <SVMTradingFee routes={order.trade.routes} inputCurrencySymbol={inputAmount?.currency?.symbol} />
           ) : (
             <SkeletonV2 width="70px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={!loading}>

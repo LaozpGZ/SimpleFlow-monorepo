@@ -1,9 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { PriceOrder, SVMTrade } from '@pancakeswap/price-api-sdk'
+import { BridgeOrder, PriceOrder, SVMTrade } from '@pancakeswap/price-api-sdk'
 import { FlexGap, SkeletonV2, Text } from '@pancakeswap/uikit'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { memo, useMemo } from 'react'
-import { isSVMOrder, isXOrder } from 'views/Swap/utils'
+import { InterfaceOrder, isSVMOrder, isSolanaBridge, isXOrder } from 'views/Swap/utils'
 import { SPLToken, TradeType } from '@pancakeswap/sdk'
 
 import BigNumber from 'bignumber.js'
@@ -143,6 +143,15 @@ export const SVMTradingFee = memo(
   },
 )
 
+export const SolanaBridgeTradingFee = memo(({ order, textColor }: { order: BridgeOrder; textColor?: string }) => {
+  console.log('order', order)
+  return (
+    <Text color={textColor} fontSize="14px">
+      {`${formatAmount(order.bridgeFee, 4)} ${order.bridgeFee.currency.symbol}`}
+    </Text>
+  )
+})
+
 export const TradingFee: React.FC<TradingFeeProps> = memo(({ order, loaded }) => {
   const { t } = useTranslation()
   const slippageAdjustedAmounts = useSlippageAdjustedAmounts(order)
@@ -164,23 +173,33 @@ export const TradingFee: React.FC<TradingFeeProps> = memo(({ order, loaded }) =>
 
   const { inputAmount } = order.trade
 
+  let feeText: React.ReactNode
+
+  if (isSolanaBridge(order)) {
+    feeText = <SolanaBridgeTradingFee order={order as BridgeOrder} textColor="textSubtle" />
+  } else if (isSVMOrder(order) && inputAmount?.currency?.symbol) {
+    feeText = <SVMTradingFee routes={order.trade.routes} inputCurrencySymbol={inputAmount.currency.symbol} />
+  } else if (isXOrder(order)) {
+    feeText = (
+      <Text color="primary" fontSize="14px">
+        0 {inputAmount?.currency?.symbol}
+      </Text>
+    )
+  } else {
+    feeText = (
+      <Text color="textSubtle" fontSize="14px">{`${hasDynamicHooks ? '~' : ''}${formatAmount(lpFeeAmount, 4)} ${
+        inputAmount?.currency?.symbol
+      }`}</Text>
+    )
+  }
+
   return (
     <FlexGap gap="8px" alignItems="center">
       <Text color="textSubtle" fontSize="14px">
         {t('Fee')}
       </Text>
       <SkeletonV2 width="108px" height="16px" borderRadius="8px" minHeight="auto" isDataReady={loaded}>
-        {isSVMOrder(order) && inputAmount?.currency?.symbol ? (
-          <SVMTradingFee routes={order.trade.routes} inputCurrencySymbol={inputAmount.currency.symbol} />
-        ) : isXOrder(order) ? (
-          <Text color="primary" fontSize="14px">
-            0 {inputAmount?.currency?.symbol}
-          </Text>
-        ) : (
-          <Text color="textSubtle" fontSize="14px">{`${hasDynamicHooks ? '~' : ''}${formatAmount(lpFeeAmount, 4)} ${
-            inputAmount?.currency?.symbol
-          }`}</Text>
-        )}
+        {feeText}
       </SkeletonV2>
     </FlexGap>
   )
