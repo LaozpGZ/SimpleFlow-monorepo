@@ -67,7 +67,7 @@ export const TradeDetails = memo(function TradeDetails({ loaded, order }: Props)
           loading={!loaded}
         />
         <Box mt="10px" pl="4px">
-          {isXOrder(order) || isSolanaBridge(order) ? (
+          {isXOrder(order) ? (
             <XRoutesBreakdown wrapperStyle={{ padding: 0 }} loading={!loaded} />
           ) : (
             <RoutesBreakdown
