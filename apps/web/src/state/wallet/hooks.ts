@@ -341,8 +341,9 @@ export function useCurrencyBalanceWithChain(
   )[0]
 }
 
-export const useCurrentWalletIcon = () => {
-  const { chainId, account: evmAccount, solanaAccount } = useAccountActiveChain()
+export const useCurrentWalletIcon = (overrideChainId?: number) => {
+  const { chainId: activeChainId, account: evmAccount, solanaAccount } = useAccountActiveChain()
+  const chainId = overrideChainId || activeChainId
   const { connector } = useAccount()
   const { wallets } = useWallet()
   const [solanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
