@@ -97,7 +97,7 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
               alt="EVM network"
               style={{ display: 'block' }}
             />
-            {walletIcons[WalletAdaptedNetwork.EVM] && (
+            {evmAddress && walletIcons[WalletAdaptedNetwork.EVM] && (
               <Box position="absolute" bottom="0" right="0" width={24} height={24}>
                 <WalletIcon src={walletIcons[WalletAdaptedNetwork.EVM]} width={24} height={24} alt="EVM Wallet" />
               </Box>
@@ -130,7 +130,7 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
               alt="Solana network"
               style={{ display: 'block' }}
             />
-            {walletIcons[WalletAdaptedNetwork.Solana] && (
+            {solanaAddress && walletIcons[WalletAdaptedNetwork.Solana] && (
               <Box position="absolute" bottom="0" right="0" width={24} height={24}>
                 <WalletIcon src={walletIcons[WalletAdaptedNetwork.Solana]} width={24} height={24} alt="Solana Wallet" />
               </Box>
