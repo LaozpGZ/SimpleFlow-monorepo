@@ -3788,7 +3788,6 @@
   "Farm Rewards": "Recompense pentru ferme",
   "Unsupported protocol: %protocol%": "Protocol neacceptat: %protocol%",
   "Pool Features": "Caracteristici portofoliu",
-  "%symbol0% per %symbol1%": "%symbol0% per %symbol1%",
   "Total Value Locked (TVL)": "Valoare totală blocată (TVL)",
   "Total Liquidity": "Total lichidități",
   "Total Farm Earnings": "Total câștiguri din fermă",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Portofelele inteligente nu sunt acceptate, creează un tichet pe canalul nostru oficial de Discord",
   "Wallets with <0>MEV Protection</0>.": "Portofele cu <0>Protecție MEV</0>.",
   "Please refresh the page and try it again": "Reîmprospătează pagina și încearcă din nou",
-  "Failed to Connect": "Nu s-a reușit conectarea"
+  "Failed to Connect": "Nu s-a reușit conectarea",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
