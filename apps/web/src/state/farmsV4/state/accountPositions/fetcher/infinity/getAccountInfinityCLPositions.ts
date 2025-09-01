@@ -12,6 +12,7 @@ import { paths } from 'state/info/api/schema'
 import { getInfinityPositionManagerAddress } from 'utils/addressHelpers'
 import { publicClient } from 'utils/viem'
 import { Address, zeroAddress } from 'viem'
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import { InfinityCLPositionDetail, POSITION_STATUS } from '../../type'
 import { getAccountInfinityCLTokenIds, getAccountInfinityCLTokenIdsRecently } from './getAccountInfinityCLTokenIds'
 import { CLPoolInfo, fetchPoolInfo } from './getPoolInfo'
@@ -43,7 +44,12 @@ const getPoolStatus = ({
   if (liquidity === 0n) {
     return POSITION_STATUS.CLOSED
   }
-  if (tickCurrent && tickLower && tickUpper && (tickCurrent < tickLower || tickCurrent >= tickUpper)) {
+  if (
+    !isUndefinedOrNull(tickCurrent) &&
+    !isUndefinedOrNull(tickLower) &&
+    !isUndefinedOrNull(tickUpper) &&
+    (tickCurrent! < tickLower! || tickCurrent! >= tickUpper!)
+  ) {
     return POSITION_STATUS.INACTIVE
   }
   return POSITION_STATUS.ACTIVE

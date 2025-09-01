@@ -194,6 +194,9 @@ export const PositionInfo = memo((props: PositionInfoProps) => {
       t,
       tokenId,
       pool,
+      tags,
+      disableFixedTags,
+      hookData,
     ],
   )
 

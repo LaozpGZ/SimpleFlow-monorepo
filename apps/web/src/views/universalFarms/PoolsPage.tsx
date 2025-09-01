@@ -132,7 +132,7 @@ const List = () => {
         dataIndex,
       })
     },
-    [query],
+    [query, updateSort],
   )
 
   useEffect(() => {

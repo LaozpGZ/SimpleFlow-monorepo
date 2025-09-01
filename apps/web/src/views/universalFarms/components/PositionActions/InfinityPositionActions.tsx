@@ -41,7 +41,7 @@ export const InfinityPositionActions = ({
       pos_ ??
       positionList?.find((x) => x.chainId === chainId_) ??
       ({} as InfinityCLPositionDetail | InfinityBinPositionDetail),
-    [pos_, positionList],
+    [pos_, positionList, chainId_],
   )
 
   const { chainId: chainIdPos, poolKey } = pos

@@ -10,13 +10,11 @@ import {
   FlexGap,
   HistoryIcon,
   IconButton,
-  NotificationDot,
   Text,
   Toggle,
   useMatchBreakpoints,
   useModal,
 } from '@pancakeswap/uikit'
-import { useExpertMode } from '@pancakeswap/utils/user'
 import {
   INetworkProps,
   ITokenProps,
@@ -256,7 +254,6 @@ const NUMBER_OF_FARMS_VISIBLE = 10
 export const PositionPage = () => {
   const { t } = useTranslation()
   const { address: account } = useAccount()
-  const [expertMode] = useExpertMode()
 
   const { observerRef, isIntersecting } = useIntersectionObserver()
   const [cursorVisible, setCursorVisible] = useState(NUMBER_OF_FARMS_VISIBLE)

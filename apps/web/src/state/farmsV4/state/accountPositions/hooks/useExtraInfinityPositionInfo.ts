@@ -4,6 +4,7 @@ import useIsTickAtLimit from 'hooks/infinity/useIsTickAtLimit'
 import { usePoolById } from 'hooks/infinity/usePool'
 import { usePositionAmount } from 'hooks/infinity/usePositionAmount'
 import { useMemo } from 'react'
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import { InfinityCLPositionDetail } from '../type'
 import { usePositionPrices } from './usePositionPrices'
 
@@ -30,8 +31,8 @@ export const useExtraInfinityPositionInfo = (positionDetail?: InfinityCLPosition
   const tickAtLimit = useIsTickAtLimit(tickLower, tickUpper, tickSpacing)
 
   const outOfRange = useMemo(() => {
-    return pool?.tickCurrent && tickLower && tickUpper
-      ? pool.tickCurrent < tickLower || pool.tickCurrent >= tickUpper
+    return !isUndefinedOrNull(pool?.tickCurrent) && !isUndefinedOrNull(tickLower) && !isUndefinedOrNull(tickUpper)
+      ? pool!.tickCurrent < tickLower! || pool!.tickCurrent >= tickUpper!
       : false
   }, [pool?.tickCurrent, tickUpper, tickLower])
 
