@@ -10,6 +10,8 @@ import { EvmConnectorNames, SolanaConnectorNames } from '../../config/connectorN
 import { getTopWalletsConfig, getWalletsConfig } from '../../config/wallets'
 import { WalletConnectorNotFoundError, WalletSwitchChainError } from '../../error'
 import {
+  connectedEvmWalletAtom,
+  connectedSolanaWalletAtom,
   errorEvmAtom,
   errorSolanaAtom,
   lastUsedEvmWalletNameAtom,
@@ -84,6 +86,8 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
   )
 
   const setSolanaSelectedWallet = useSetAtom(setSelectedSolanaWalletAtom)
+  const setConnectedEvmWallet = useSetAtom(connectedEvmWalletAtom)
+  const setConnectedSolanaWallet = useSetAtom(connectedSolanaWalletAtom)
   const [, setEvmError] = useAtom(errorEvmAtom)
   const [, setLastUsedEvmWallet] = useAtom(lastUsedEvmWalletNameAtom)
   const [previouslyUsedEvmWalletsId] = useAtom(previouslyUsedEvmWalletsAtom)
@@ -97,8 +101,12 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
 
   const handleWalletConnected = useCallback(
     (wallet: WalletConfigV3, network: WalletAdaptedNetwork, connectData?: ConnectData) => {
-      if (network === WalletAdaptedNetwork.Solana) setLastUsedSolanaWallet(wallet.id)
+      if (network === WalletAdaptedNetwork.Solana) {
+        setConnectedSolanaWallet(wallet as WalletConfigV3<SolanaConnectorNames>)
+        setLastUsedSolanaWallet(wallet.id)
+      }
       if (network === WalletAdaptedNetwork.EVM) {
+        setConnectedEvmWallet(wallet as WalletConfigV3<EvmConnectorNames>)
         setLastUsedEvmWallet(wallet.id)
 
         onWalletConnectCallBack?.(
@@ -108,7 +116,13 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
         )
       }
     },
-    [onWalletConnectCallBack, setLastUsedEvmWallet, setLastUsedSolanaWallet],
+    [
+      onWalletConnectCallBack,
+      setLastUsedEvmWallet,
+      setLastUsedSolanaWallet,
+      setConnectedEvmWallet,
+      setConnectedSolanaWallet,
+    ],
   )
 
   const connectWallet = useCallback(
@@ -179,6 +193,8 @@ export const MultichainWalletModal: React.FC<MultichainWalletModalProps> = (prop
       setSolanaError,
       setEvmSelectedWallet,
       setEvmError,
+      setConnectedEvmWallet,
+      setConnectedSolanaWallet,
       evmLogin,
       handleWalletConnected,
       solanaAddress,

@@ -40,6 +40,8 @@ import { useCurrentWalletIcon, useCurrentWalletIconByNetworks } from 'state/wall
 import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { WalletAdaptedNetwork } from '@pancakeswap/ui-wallets'
+import { connectedEvmWalletAtom, connectedSolanaWalletAtom } from '@pancakeswap/ui-wallets/src/state/atom'
+import { useAtomValue } from 'jotai'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
 const UserMenuItems = ({ onReceiveClick, onDismiss }: { onReceiveClick: () => void; onDismiss: () => void }) => {
@@ -129,32 +131,29 @@ const useAvatar = () => {
   }, [avatar, chainId, profile?.nft?.image?.thumbnail, walletIcon])
 }
 
-const UserAvatar = () => {
+const useMultichainAvatar = () => {
   const { account: evmAccount, solanaAccount, chainId } = useAccountActiveChain()
   const walletIcons = useCurrentWalletIconByNetworks()
+  const connectedEvmWallet = useAtomValue(connectedEvmWalletAtom)
+  const connectedSolanaWallet = useAtomValue(connectedSolanaWalletAtom)
 
+  return useMemo(() => {
+    if (solanaAccount && evmAccount && connectedEvmWallet?.id !== connectedSolanaWallet?.id) {
+      const avatars = [walletIcons[WalletAdaptedNetwork.EVM], walletIcons[WalletAdaptedNetwork.Solana]]
+      return chainId === NonEVMChainId.SOLANA ? avatars.reverse() : avatars
+    }
+    return []
+  }, [chainId, connectedEvmWallet?.id, connectedSolanaWallet?.id, evmAccount, solanaAccount, walletIcons])
+}
+
+const UserAvatar = ({ avatars }: { avatars?: [string, string] }) => {
   // dual avatar display
-  if (solanaAccount && evmAccount) {
+  if (avatars?.length === 2) {
     return (
       <AtomBox style={{ width: '54px', height: '32px', marginLeft: '-32px' }} position="relative">
-        <AvatarImage
-          width={32}
-          height={32}
-          src={
-            chainId === NonEVMChainId.SOLANA
-              ? walletIcons[WalletAdaptedNetwork.Solana]
-              : walletIcons[WalletAdaptedNetwork.EVM]
-          }
-        />
-        <AvatarImage
-          width={32}
-          height={32}
-          src={
-            chainId === NonEVMChainId.SOLANA
-              ? walletIcons[WalletAdaptedNetwork.EVM]
-              : walletIcons[WalletAdaptedNetwork.Solana]
-          }
-        />
+        {avatars.map((src, index) => (
+          <AvatarImage key={src} width={32} height={32} src={src} />
+        ))}
       </AtomBox>
     )
   }
@@ -185,6 +184,7 @@ const UserMenu = () => {
   const currentAccount = chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : evmAccount
   const { domainName } = useDomainNameForAddress(chainId === NonEVMChainId.SOLANA ? undefined : currentAccount)
   const avatarSrc = useAvatar()
+  const multichainAvatars = useMultichainAvatar()
 
   const { logout } = useAuth()
   const { disconnect } = useWallet()
@@ -355,7 +355,7 @@ const UserMenu = () => {
             account={domainName || finalAddress}
             ellipsis={!domainName}
             avatarSrc={avatarSrc}
-            avatar={<UserAvatar />}
+            avatar={multichainAvatars?.length ? <UserAvatar avatars={multichainAvatars} /> : null}
             text={userMenuText || balance}
             variant={userMenuVariable}
             popperStyle={{

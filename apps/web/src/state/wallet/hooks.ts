@@ -1,7 +1,7 @@
 import { ChainId, Currency, CurrencyAmount, Native, Token, UnifiedCurrency, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { useQuery } from '@tanstack/react-query'
 import { NonEVMChainId } from '@pancakeswap/chains'
-import { selectedEvmWalletAtom, selectedSolanaWalletAtom } from '@pancakeswap/ui-wallets/src/state/atom'
+import { connectedEvmWalletAtom, connectedSolanaWalletAtom } from '@pancakeswap/ui-wallets/src/state/atom'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useLocalStorage, useWallet } from '@solana/wallet-adapter-react'
 import { EvmConnectorNames, SolanaProviderLocalStorageKey, WalletAdaptedNetwork } from '@pancakeswap/ui-wallets'
@@ -346,16 +346,16 @@ export const useCurrentWalletIcon = () => {
   const { connector } = useAccount()
   const { wallets } = useWallet()
   const [solanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
-  const selectedSolanaWallet = useAtomValue(selectedSolanaWalletAtom)
-  const selectedEvmWallet = useAtomValue(selectedEvmWalletAtom)
+  const connectedSolanaWallet = useAtomValue(connectedSolanaWalletAtom)
+  const connectedEvmWallet = useAtomValue(connectedEvmWalletAtom)
 
   return useMemo(() => {
-    const evmIcon = connector?.icon ?? (selectedEvmWallet?.icon as string)
+    const evmIcon = connector?.icon ?? (connectedEvmWallet?.icon as string)
 
-    const name = selectedSolanaWallet?.solanaAdapterName || solanaWalletName
+    const name = connectedSolanaWallet?.solanaAdapterName || solanaWalletName
     const solanaIcon =
       wallets.find((w) => w.adapter.name === (name as WalletName))?.adapter.icon ??
-      (selectedSolanaWallet?.icon as string)
+      (connectedSolanaWallet?.icon as string)
     if (evmAccount && solanaAccount) {
       if (chainId === NonEVMChainId.SOLANA) return solanaIcon
       return evmIcon
@@ -370,8 +370,8 @@ export const useCurrentWalletIcon = () => {
     wallets,
     solanaWalletName,
     connector,
-    selectedSolanaWallet,
-    selectedEvmWallet,
+    connectedSolanaWallet,
+    connectedEvmWallet,
     solanaAccount,
     evmAccount,
   ])
@@ -382,17 +382,17 @@ export const useCurrentWalletIconByNetworks = () => {
   const { connector } = useAccount()
   const { wallets } = useWallet()
   const [solanaWalletName] = useLocalStorage(SolanaProviderLocalStorageKey, '')
-  const selectedSolanaWallet = useAtomValue(selectedSolanaWalletAtom)
-  const selectedEvmWallet = useAtomValue(selectedEvmWalletAtom)
+  const connectedSolanaWallet = useAtomValue(connectedSolanaWalletAtom)
+  const connectedEvmWallet = useAtomValue(connectedEvmWalletAtom)
 
   return useMemo(() => {
     const solWallet = wallets.find(
-      (w) => w.adapter.name === (selectedSolanaWallet?.solanaAdapterName || solanaWalletName),
+      (w) => w.adapter.name === (connectedSolanaWallet?.solanaAdapterName || solanaWalletName),
     )
 
     return {
-      [WalletAdaptedNetwork.EVM]: connector?.icon ?? (selectedEvmWallet?.icon as string),
-      [WalletAdaptedNetwork.Solana]: solWallet?.adapter.icon ?? (selectedSolanaWallet?.icon as string),
+      [WalletAdaptedNetwork.EVM]: connector?.icon ?? (connectedEvmWallet?.icon as string),
+      [WalletAdaptedNetwork.Solana]: solWallet?.adapter.icon ?? (connectedSolanaWallet?.icon as string),
     }
-  }, [chainId, wallets, solanaWalletName, connector, selectedSolanaWallet, selectedEvmWallet])
+  }, [chainId, wallets, solanaWalletName, connector, connectedSolanaWallet, connectedEvmWallet])
 }

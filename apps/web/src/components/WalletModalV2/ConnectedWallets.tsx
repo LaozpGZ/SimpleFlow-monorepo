@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { SolanaProviderLocalStorageKey, WalletAdaptedNetwork, selectedWalletAtom } from '@pancakeswap/ui-wallets'
+import { SolanaProviderLocalStorageKey, WalletAdaptedNetwork } from '@pancakeswap/ui-wallets'
 import { ASSET_CDN } from '@pancakeswap/ui-wallets/src/config/url'
 import {
   ArrowBackIcon,
