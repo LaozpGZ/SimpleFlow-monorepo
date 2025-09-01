@@ -3788,7 +3788,6 @@
   "Farm Rewards": "ஃபார்ம் வெகுமதிகள்",
   "Unsupported protocol: %protocol%": "ஆதரிக்கப்படாத நெறிமுறை: %protocol%",
   "Pool Features": "பூல் அம்சங்கள்",
-  "%symbol0% per %symbol1%": "%symbol1% க்கு %symbol0%",
   "Total Value Locked (TVL)": "மொத்த மதிப்பு பூட்டியது (TVL)",
   "Total Liquidity": "மொத்த லிக்விடிட்டி",
   "Total Farm Earnings": "மொத்த ஃபார்ம் வருவாய்",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord",
   "Wallets with <0>MEV Protection</0>.": "Wallets with <0>MEV Protection</0>.",
   "Please refresh the page and try it again": "Please refresh the page and try it again",
-  "Failed to Connect": "Failed to Connect"
+  "Failed to Connect": "Failed to Connect",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
