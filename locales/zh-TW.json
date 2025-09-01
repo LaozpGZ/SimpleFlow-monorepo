@@ -3788,7 +3788,6 @@
   "Farm Rewards": "農場獎勵",
   "Unsupported protocol: %protocol%": "不支援的協議：%protocol%",
   "Pool Features": "流動性池功能",
-  "%symbol0% per %symbol1%": "每單位 %symbol1% 可換 %symbol0%",
   "Total Value Locked (TVL)": "總鎖倉價值 (TVL)",
   "Total Liquidity": "總流動性",
   "Total Farm Earnings": "農場總收益",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "不支援智慧錢包，請在我們的官方 Discord 上建立票券",
   "Wallets with <0>MEV Protection</0>.": "具備 <0>MEV 防護</0>的錢包。",
   "Please refresh the page and try it again": "請重新整理頁面並再試一次",
-  "Failed to Connect": "無法連線"
+  "Failed to Connect": "無法連線",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
