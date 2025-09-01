@@ -35,7 +35,6 @@ import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { isSolana, NonEVMChainId } from '@pancakeswap/chains'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 import { useCurrentWalletIcon, useCurrentWalletIconByNetworks } from 'state/wallet/hooks'
 import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
 import { formatAmount } from 'utils/formatInfoNumbers'
@@ -243,13 +242,6 @@ const UserMenu = () => {
     }
   }, [finalAddress, isPrivyAddressLoading])
 
-  const ConnectBtn = useMemo(() => {
-    if (chainId === NonEVMChainId.SOLANA) {
-      return SolanaConnectButton
-    }
-    return ConnectWalletButton
-  }, [chainId])
-
   useAutoFillCode({
     onAutoFillCode: () => {
       if (isMobile) {
@@ -442,14 +434,14 @@ const UserMenu = () => {
     return (
       <FlexGap gap="8px">
         <Box ref={targetRef}>
-          <ConnectBtn scale="sm" variant="danger">
+          <ConnectWalletButton scale="sm" variant="danger">
             <Box display={['none', null, null, 'block']}>
               <Trans>Failed to Connect</Trans>
             </Box>
             <Box display={['block', null, null, 'none']}>
               <Trans>Failed</Trans>
             </Box>
-          </ConnectBtn>
+          </ConnectWalletButton>
         </Box>
         {tooltipVisible && tooltip}
       </FlexGap>
