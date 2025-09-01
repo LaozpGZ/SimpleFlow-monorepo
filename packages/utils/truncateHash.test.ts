@@ -17,4 +17,11 @@ describe('truncateHash', () => {
     expect(truncateHash('cacacacacacacacaxzxzxzxzxzxzxzxz', 5)).toEqual('cacac...xzxz')
     expect(truncateHash('cacacacacacacacaxzxzxzxzxzxzxzxz', undefined, 9)).toEqual('caca...zxzxzxzxz')
   })
+
+  it.each([[null], [undefined], [123456], [true], [{}], [[]]])(
+    'returns empty string when hash is not a string',
+    (invalidInput) => {
+      expect(truncateHash(invalidInput as any)).toEqual('')
+    },
+  )
 })
