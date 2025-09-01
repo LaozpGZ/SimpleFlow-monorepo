@@ -4110,6 +4110,6 @@
   "Wallets with <0>MEV Protection</0>.": "Portfele z <0>ochroną MEV</0>.",
   "Please refresh the page and try it again": "Odśwież stronę i spróbuj ponownie",
   "Failed to Connect": "Niepowodzenie połączenia",
-  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
-  "Slippage": "Slippage"
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Prowizje będą się różnić w zależności od wniesionego procentowego udziału w stabilnej parze. Wpłaty z prowizjami >= 0,15% będą odrzucane",
+  "Slippage": "Poślizg"
 }
