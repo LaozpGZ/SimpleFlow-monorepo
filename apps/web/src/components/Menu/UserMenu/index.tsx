@@ -8,6 +8,8 @@ import {
   useTooltip,
   Text,
   Flex,
+  Image,
+  AtomBox,
 } from '@pancakeswap/uikit'
 import { usePrivy } from '@privy-io/react-auth'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -34,9 +36,10 @@ import { isSolana, NonEVMChainId } from '@pancakeswap/chains'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
-import { useCurrentWalletIcon } from 'state/wallet/hooks'
+import { useCurrentWalletIcon, useCurrentWalletIconByNetworks } from 'state/wallet/hooks'
 import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
 import { formatAmount } from 'utils/formatInfoNumbers'
+import { WalletAdaptedNetwork } from '@pancakeswap/ui-wallets'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
 const UserMenuItems = ({ onReceiveClick, onDismiss }: { onReceiveClick: () => void; onDismiss: () => void }) => {
@@ -95,6 +98,24 @@ const ClickablePopover = styled.div<{ isOpen: boolean }>`
   transition: visibility 0.2s, opacity 0.2s;
 `
 
+const AvatarImage = styled(Image)`
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 20;
+
+  & > img {
+    border-radius: 50%;
+  }
+
+  &:nth-child(1) {
+    z-index: 21;
+  }
+  &:nth-child(2) {
+    left: 22px;
+  }
+`
+
 const useAvatar = () => {
   const { chainId, unifiedAccount } = useAccountActiveChain()
   const { profile } = useProfile()
@@ -106,6 +127,40 @@ const useAvatar = () => {
 
     return walletIcon
   }, [avatar, chainId, profile?.nft?.image?.thumbnail, walletIcon])
+}
+
+const UserAvatar = () => {
+  const { account: evmAccount, solanaAccount, chainId } = useAccountActiveChain()
+  const walletIcons = useCurrentWalletIconByNetworks()
+
+  // dual avatar display
+  if (solanaAccount && evmAccount) {
+    return (
+      <AtomBox style={{ width: '54px', height: '32px', marginLeft: '-32px' }} position="relative">
+        <AvatarImage
+          width={32}
+          height={32}
+          src={
+            chainId === NonEVMChainId.SOLANA
+              ? walletIcons[WalletAdaptedNetwork.Solana]
+              : walletIcons[WalletAdaptedNetwork.EVM]
+          }
+        />
+        <AvatarImage
+          width={32}
+          height={32}
+          src={
+            chainId === NonEVMChainId.SOLANA
+              ? walletIcons[WalletAdaptedNetwork.EVM]
+              : walletIcons[WalletAdaptedNetwork.Solana]
+          }
+        />
+      </AtomBox>
+    )
+  }
+
+  // otherwise, follow previous logic
+  return null
 }
 
 const UserMenu = () => {
@@ -300,6 +355,7 @@ const UserMenu = () => {
             account={domainName || finalAddress}
             ellipsis={!domainName}
             avatarSrc={avatarSrc}
+            avatar={<UserAvatar />}
             text={userMenuText || balance}
             variant={userMenuVariable}
             popperStyle={{

@@ -67,6 +67,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
   account,
   text,
   avatarSrc,
+  avatar,
   avatarClassName,
   variant = variants.DEFAULT,
   children,
@@ -123,7 +124,7 @@ const UserMenu: React.FC<UserMenuProps> = ({
           setIsOpen((s) => !s);
         }}
       >
-        <MenuIcon className={avatarClassName} avatarSrc={avatarSrc} variant={variant} />
+        {avatar || <MenuIcon className={avatarClassName} avatarSrc={avatarSrc} variant={variant} />}
         <LabelText title={typeof text === "string" ? text || account : account}>
           {text || (ellipsis ? accountEllipsis : account)}
         </LabelText>
