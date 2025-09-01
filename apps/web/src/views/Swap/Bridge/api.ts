@@ -130,11 +130,19 @@ const getSolanaBridgeCalldata = async ({
 
   const data = await resp.json()
 
+  if (!data.requestId) {
+    throw new Error('Server error when getting solana bridge calldata')
+  }
+
   if (
-    !data.requestId ||
-    (data.requestId !== requestId &&
-      data.bridgeTransactionData.outputAmount !== order.trade.outputAmount.quotient.toString())
+    data.requestId !== requestId &&
+    data.bridgeTransactionData.outputAmount !== order.trade.outputAmount.quotient.toString()
   ) {
+    console.info(
+      'Quote Outdated',
+      `Current OutputAmount: ${order.trade.outputAmount.quotient.toString()}`,
+      `New OutputAmount: ${data.bridgeTransactionData.outputAmount}`,
+    )
     // NOTE: return undefined so quote can be updated
     return undefined
   }

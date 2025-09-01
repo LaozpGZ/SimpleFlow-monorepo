@@ -112,8 +112,6 @@ export const useQuoterSync = () => {
 
   const quoteResult = useAtomValue(bestCrossChainQuoteAtom(quoteQuery))
 
-  console.log('quoteResult', quoteResult)
-
   useEffect(() => {
     if (t > 0 && !paused) {
       if (quoteResult.isJust() && !quoteResult.hasFlag('placeholder')) {

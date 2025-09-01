@@ -143,7 +143,7 @@ const useConfirmActions = (
 ) => {
   const { t } = useTranslation()
   const { chainId, account, solanaAccount } = useAccountActiveChain()
-  const { refreshTrade } = useAllTypeBestTrade()
+  const { refreshOrder, resumeQuoting } = useAllTypeBestTrade()
 
   const [deadline] = useTransactionDeadline()
   const safeTxHashTransformer = useSafeTxHashTransformer()
@@ -191,6 +191,7 @@ const useConfirmActions = (
     setTxHash(undefined)
     setErrorMessage(undefined)
     setPermit2Signature(undefined)
+    resumeQuoting()
   }, [])
 
   const showError = useCallback((error: string) => {
@@ -555,8 +556,11 @@ const useConfirmActions = (
             })
 
             if (!transaction) {
-              refreshTrade()
-              throw new Error('Quote is not up to date, please try again')
+              refreshOrder()
+              resetState()
+
+              return
+              // throw new Error('Quote is not up to date, please try again')
             }
 
             // Send transaction safely
@@ -580,7 +584,12 @@ const useConfirmActions = (
                 </ToastDescriptionWithTx>,
               )
             }
-          } catch (error) {
+          } catch (error: any) {
+            if (error?.message?.includes('rejected')) {
+              resetState()
+              return
+            }
+
             console.error('Solana bridge transaction error:', error)
             showError(t('Failed to process Solana bridge transaction. Please try again.'))
             return
@@ -599,8 +608,10 @@ const useConfirmActions = (
             })
 
             if (!transactionData) {
-              refreshTrade()
-              throw new Error('Quote is not up to date, please try again')
+              refreshOrder()
+              resetState()
+
+              return
             }
           } else {
             transactionData = (
