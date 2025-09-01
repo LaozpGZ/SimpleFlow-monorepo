@@ -1,4 +1,4 @@
-import { PredictionsChartView } from '@pancakeswap/prediction'
+import { PredictionContractVersion, PredictionsChartView } from '@pancakeswap/prediction'
 import { useMatchBreakpoints, useModal } from '@pancakeswap/uikit'
 import { useAccountLocalEventListener } from 'hooks/useAccountLocalEventListener'
 import { useEffect, useRef } from 'react'
@@ -60,8 +60,12 @@ function Warnings() {
 }
 
 const Predictions = () => {
+  const config = useConfig()
   const { isDesktop } = useMatchBreakpoints()
   const { t } = useTranslation()
+
+  // New v2.1 contracts support smart wallets
+  const isSmartWalletSupported = config && config.version === PredictionContractVersion.V2_1
 
   useAccountLocalEventListener()
 
@@ -69,7 +73,7 @@ const Predictions = () => {
 
   return (
     <SwiperProvider>
-      <SmartWalletWarning productName={t('Prediction')} />
+      {!isSmartWalletSupported && <SmartWalletWarning productName={t('Prediction')} />}
       <Container>
         <Warnings />
 
