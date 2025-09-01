@@ -3788,7 +3788,6 @@
   "Farm Rewards": "খামার পুরস্কার",
   "Unsupported protocol: %protocol%": "অসামঞ্জস্যপূর্ণ প্রোটোকল: %protocol%",
   "Pool Features": "পুলের বৈশিষ্ট্য",
-  "%symbol0% per %symbol1%": "%symbol1% প্রতি %symbol0% ",
   "Total Value Locked (TVL)": "মোট লককৃত মান (TVL)",
   "Total Liquidity": "মোট তারল্য",
   "Total Farm Earnings": "মোট খামার আয়",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord",
   "Wallets with <0>MEV Protection</0>.": "Wallets with <0>MEV Protection</0>.",
   "Please refresh the page and try it again": "Please refresh the page and try it again",
-  "Failed to Connect": "Failed to Connect"
+  "Failed to Connect": "Failed to Connect",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
