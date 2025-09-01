@@ -4110,6 +4110,6 @@
   "Wallets with <0>MEV Protection</0>.": "Các Ví có <0>Bảo vệ MEV</0>.",
   "Please refresh the page and try it again": "Vui lòng làm mới trang và thử lại",
   "Failed to Connect": "Không thể kết nối",
-  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
-  "Slippage": "Slippage"
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Dựa trên % đóng góp vào cặp ổn định, mức phí sẽ thay đổi. Các khoản nạp có mức phí >= 0,15% sẽ bị từ chối",
+  "Slippage": "Trượt giá"
 }
