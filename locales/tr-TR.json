@@ -3788,7 +3788,6 @@
   "Farm Rewards": "Farm Ödülleri",
   "Unsupported protocol: %protocol%": "Desteklenmeyen protokol: %protocol%",
   "Pool Features": "Havuz Özellikleri",
-  "%symbol0% per %symbol1%": "%symbol1% başına %symbol0%",
   "Total Value Locked (TVL)": "Kilitli Toplam Değer (TVL)",
   "Total Liquidity": "Toplam Likidite",
   "Total Farm Earnings": "Toplam Farm Kazancı",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Akıllı Cüzdanlar desteklenmemektedir. Lütfen Resmî Discord'umuzda bir talep oluşturun",
   "Wallets with <0>MEV Protection</0>.": "<0>MEV Korumasına</0> sahip cüzdanlar.",
   "Please refresh the page and try it again": "Lütfen sayfayı yenileyip tekrar deneyin",
-  "Failed to Connect": "Bağlanılamadı"
+  "Failed to Connect": "Bağlanılamadı",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
