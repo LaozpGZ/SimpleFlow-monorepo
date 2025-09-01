@@ -3788,7 +3788,6 @@
   "Farm Rewards": "Farmbeloningen",
   "Unsupported protocol: %protocol%": "Niet-ondersteund protocol: %protocol%",
   "Pool Features": "Poolfuncties",
-  "%symbol0% per %symbol1%": "%symbol0% per %symbol1%",
   "Total Value Locked (TVL)": "Totale vergrendelde waarde (TVL)",
   "Total Liquidity": "Totale liquiditeit",
   "Total Farm Earnings": "Totale farmverdiensten",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart wallets worden niet ondersteund, maak een ticket op onze officiële Discord",
   "Wallets with <0>MEV Protection</0>.": "Wallets met <0>MEV-bescherming</0>.",
   "Please refresh the page and try it again": "Vernieuw de pagina en probeer het nogmaals",
-  "Failed to Connect": "Verbinden mislukt"
+  "Failed to Connect": "Verbinden mislukt",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
