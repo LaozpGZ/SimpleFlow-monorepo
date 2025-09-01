@@ -6,6 +6,8 @@ import {
   useMatchBreakpoints,
   UserMenuVariant,
   useTooltip,
+  Text,
+  Flex,
 } from '@pancakeswap/uikit'
 import { usePrivy } from '@privy-io/react-auth'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -33,6 +35,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 import { useCurrentWalletIcon } from 'state/wallet/hooks'
+import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
+import { formatAmount } from 'utils/formatInfoNumbers'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
 const UserMenuItems = ({ onReceiveClick, onDismiss }: { onReceiveClick: () => void; onDismiss: () => void }) => {
@@ -228,6 +232,15 @@ const UserMenu = () => {
     }
   }, [menuRef, viewState, resetViewState, setCode])
 
+  const { totalBalanceUsd } = useMultichainAddressBalance()
+  const balanceDisplay = useMemo(() => {
+    const display = formatAmount(totalBalanceUsd)?.split('.')
+    return {
+      integer: display?.[0] || '',
+      decimal: display?.[1] || '',
+    }
+  }, [totalBalanceUsd])
+
   useEffect(() => {
     if (hasPendingTransactions) {
       setUserMenuText(t('%num% Pending', { num: pendingNumber }))
@@ -270,6 +283,16 @@ const UserMenu = () => {
   }
 
   if (finalAddress || giftCode) {
+    const balance = (
+      <Flex alignItems="center">
+        <Text fontWeight={600} lineHeight={1.5}>
+          ${balanceDisplay.integer}
+        </Text>
+        <Text fontWeight={600} color="textSubtle" lineHeight={1.5}>
+          .{balanceDisplay.decimal}
+        </Text>
+      </Flex>
+    )
     return (
       <>
         <ClickableUserMenu ref={menuRef}>
@@ -277,7 +300,7 @@ const UserMenu = () => {
             account={domainName || finalAddress}
             ellipsis={!domainName}
             avatarSrc={avatarSrc}
-            text={userMenuText}
+            text={userMenuText || balance}
             variant={userMenuVariable}
             popperStyle={{
               minWidth: '380px',
