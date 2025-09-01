@@ -137,6 +137,8 @@ const useAvatar = () => {
 
 const useMultichainAvatar = () => {
   const { account: evmAccount, solanaAccount, chainId } = useAccountActiveChain()
+  const { profile } = useProfile()
+  const profileAvatar = profile?.nft?.image?.thumbnail
   const walletIcons = useCurrentWalletIconByNetworks()
   const lastUsedEvmWalletId = useAtomValue(lastUsedEvmWalletNameAtom)
   const lastUsedSolanaWalletId = useAtomValue(lastUsedSolanaWalletNameAtom)
@@ -147,7 +149,7 @@ const useMultichainAvatar = () => {
 
   return useMemo((): [string, string] | [] => {
     if (solanaAccount && evmAccount && evmId !== solanaId) {
-      const avatars = [walletIcons[WalletAdaptedNetwork.EVM], walletIcons[WalletAdaptedNetwork.Solana]]
+      const avatars = [profileAvatar ?? walletIcons[WalletAdaptedNetwork.EVM], walletIcons[WalletAdaptedNetwork.Solana]]
       return chainId === NonEVMChainId.SOLANA ? (avatars.reverse() as [string, string]) : (avatars as [string, string])
     }
     return []

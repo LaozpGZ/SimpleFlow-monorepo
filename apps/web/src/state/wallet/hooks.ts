@@ -21,6 +21,7 @@ import { Address, erc20Abi, getAddress, isAddress } from 'viem'
 import { useAccount, useBalance } from 'wagmi'
 import { useAtomValue } from 'jotai'
 import { useSelectedWallet } from '@pancakeswap/ui-wallets/src/state/hooks'
+import { ASSET_CDN } from 'config/constants/endpoints'
 import { useMultipleContractSingleDataWagmi } from '../multicall/hooks'
 
 /**
@@ -390,8 +391,14 @@ export const useCurrentWalletIconByNetworks = () => {
       (w) => w.adapter.name === (connectedSolanaWallet?.solanaAdapterName || solanaWalletName),
     )
 
+    let connectorIcon = connector?.icon
+
+    if (connector?.name === 'MetaMask') {
+      connectorIcon = `${ASSET_CDN}/web/wallets/metamask.png`
+    }
+
     return {
-      [WalletAdaptedNetwork.EVM]: connector?.icon ?? (connectedEvmWallet?.icon as string),
+      [WalletAdaptedNetwork.EVM]: connectorIcon ?? (connectedEvmWallet?.icon as string),
       [WalletAdaptedNetwork.Solana]: solWallet?.adapter.icon ?? (connectedSolanaWallet?.icon as string),
     }
   }, [chainId, wallets, solanaWalletName, connector, connectedSolanaWallet, connectedEvmWallet])
