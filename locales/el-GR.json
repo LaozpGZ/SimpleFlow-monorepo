@@ -3788,7 +3788,6 @@
   "Farm Rewards": "Ανταμοιβές φάρμας",
   "Unsupported protocol: %protocol%": "Μη υποστηριζόμενο πρωτόκολλο: %protocol%",
   "Pool Features": "Χαρακτηριστικά δεξαμενής",
-  "%symbol0% per %symbol1%": "%symbol0% ανά %symbol1%",
   "Total Value Locked (TVL)": "Συνολική αξία κλειδωμένων (TVL)",
   "Total Liquidity": "Συνολική ρευστότητα",
   "Total Farm Earnings": "Συνολικά κέρδη φάρμας",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Τα Έξυπνα Πορτοφόλια δεν υποστηρίζονται, δημιουργήστε ένα αίτημα υποστήριξης στην επίσημη σελίδα μας στο Discord",
   "Wallets with <0>MEV Protection</0>.": "Πορτοφόλια με <0>προστασία MEV</0>.",
   "Please refresh the page and try it again": "Please refresh the page and try it again",
-  "Failed to Connect": "Failed to Connect"
+  "Failed to Connect": "Failed to Connect",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
