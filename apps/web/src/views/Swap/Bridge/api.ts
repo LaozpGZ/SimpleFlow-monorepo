@@ -7,16 +7,7 @@ import { Address } from 'viem/accounts'
 import { isSolana } from '@pancakeswap/chains'
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { SOLANA_NATIVE_TOKEN_ADDRESS } from 'quoter/consts'
-import {
-  AddressLookupTableAccount,
-  Connection,
-  MessageV0,
-  PublicKey,
-  Transaction,
-  TransactionInstruction,
-  TransactionMessage,
-  VersionedTransaction,
-} from '@solana/web3.js'
+import { AddressLookupTableAccount, Connection, PublicKey, Transaction, VersionedTransaction } from '@solana/web3.js'
 import { WalletContextState } from '@solana/wallet-adapter-react'
 import { buildTransaction, detectWalletTransactionSupport } from 'components/WalletModalV2/utils/solanaSendTransaction'
 import { BridgeOrderWithCommands, isSVMOrder } from '../utils'
@@ -44,6 +35,13 @@ export function getSolanaTokenAddress(currency: Currency): string {
 
 export function getTokenAddress(currency: Currency): Address {
   return currency.isNative ? '0x0000000000000000000000000000000000000000' : currency.wrapped.address
+}
+
+export function getUnifiedTokenAddress(currency: Currency): string {
+  if (isSolana(currency.chainId)) {
+    return getSolanaTokenAddress(currency)
+  }
+  return getTokenAddress(currency)
 }
 
 export function generateBridgeCommands({
@@ -111,8 +109,8 @@ const getSolanaBridgeCalldata = async ({
 
   const calldataRequest: CalldataRequestSchema = {
     requestId,
-    inputToken: order.trade.inputAmount.currency.wrapped.address,
-    outputToken: order.trade.outputAmount.currency.wrapped.address,
+    inputToken: getUnifiedTokenAddress(order.trade.inputAmount.currency),
+    outputToken: getUnifiedTokenAddress(order.trade.outputAmount.currency),
     inputAmount: order.trade.inputAmount.quotient.toString(),
     originChainId: order.trade.inputAmount.currency.chainId,
     destinationChainId: order.trade.outputAmount.currency.chainId,
@@ -133,8 +131,9 @@ const getSolanaBridgeCalldata = async ({
   const data = await resp.json()
 
   if (
-    data.requestId !== requestId &&
-    data.bridgeTransactionData.outputAmount !== order.trade.outputAmount.quotient.toString()
+    !data.requestId ||
+    (data.requestId !== requestId &&
+      data.bridgeTransactionData.outputAmount !== order.trade.outputAmount.quotient.toString())
   ) {
     // NOTE: return undefined so quote can be updated
     return undefined
@@ -182,7 +181,7 @@ export const getSolanaToEVMBridgeCalldata = async ({
   allowedSlippage?: number
   user: string
   recipient: string
-}): Promise<Transaction | VersionedTransaction> => {
+}): Promise<Transaction | VersionedTransaction | undefined> => {
   if (!isSolana(order.trade.inputAmount.currency.chainId)) {
     throw new Error('getEVMToSolanaBridgeCalldata requires Solana as destination chain')
   }
@@ -193,18 +192,26 @@ export const getSolanaToEVMBridgeCalldata = async ({
 
   const data = await getSolanaBridgeCalldata({ order, recipient, user, allowedSlippage })
 
-  const instructions = convertStepsIntoTransactionInstruction(data.steps as any)
+  if (!data) {
+    return undefined
+  }
+
+  const rawInstructions = data?.steps?.[0]?.items?.[0]?.data?.instructions || []
+
+  const instructions = convertStepsIntoTransactionInstruction(rawInstructions)
 
   // Detect wallet transaction support
   const walletSupportsV0 = detectWalletTransactionSupport(solanaWalletContext)
 
-  const addressToLookup = order.bridgeTransactionData.addressLookupTableAddresses || []
+  const addressLookupTableAddresses = data?.steps?.[0]?.items?.[0]?.data?.addressLookupTableAddresses
 
   const lookupTableAddresses =
-    addressToLookup.length > 0
+    addressLookupTableAddresses.length > 0
       ? ((
           await Promise.all(
-            addressToLookup.map((address) => solanaConnection.getAddressLookupTable(new PublicKey(address))),
+            addressLookupTableAddresses.map((address) =>
+              solanaConnection.getAddressLookupTable(new PublicKey(address)),
+            ),
           ).then((addresses) => addresses.map((address) => address.value))
         ).filter(Boolean) as AddressLookupTableAccount[])
       : undefined
@@ -455,8 +462,8 @@ export const postSolanaEVMBridgeMetadata = async (
       outputToken,
       destinationChainId,
       amount,
-      user: user || '',
-      recipientOnDestChain: recipientOnDestChain || '',
+      user: user || undefined,
+      recipientOnDestChain: recipientOnDestChain || undefined,
       slippageTolerance,
       type: BridgeType.NON_EVM,
     })

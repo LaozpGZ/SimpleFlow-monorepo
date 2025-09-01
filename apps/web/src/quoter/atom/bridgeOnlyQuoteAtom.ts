@@ -4,8 +4,8 @@ import { Currency, CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pan
 import { atomFamily } from 'jotai/utils'
 import { BridgeTradeError } from 'quoter/quoter.types'
 import {
-  getSolanaTokenAddress,
   getTokenAddress,
+  getUnifiedTokenAddress,
   postMetadata,
   postSolanaEVMBridgeMetadata,
 } from 'views/Swap/Bridge/api'
@@ -37,13 +37,9 @@ export const bridgeOnlyQuoteAtom = atomFamily(
 
       const metadata = isSolanaBridge
         ? await postSolanaEVMBridgeMetadata({
-            inputToken: isSolana(inputAmount.currency.chainId)
-              ? getSolanaTokenAddress(inputAmount.currency)
-              : getTokenAddress(inputAmount.currency),
+            inputToken: getUnifiedTokenAddress(inputAmount.currency),
             originChainId: inputAmount.currency.chainId,
-            outputToken: isSolana(outputCurrency.chainId)
-              ? getSolanaTokenAddress(outputCurrency)
-              : getTokenAddress(outputCurrency),
+            outputToken: getUnifiedTokenAddress(outputCurrency),
             destinationChainId: outputCurrency.chainId,
             amount: inputAmount.quotient.toString(),
             user: isSolana(inputAmount.currency.chainId) ? accountState.solanaAccount : accountState.account,

@@ -63,8 +63,8 @@ export interface Permit2Schema {
 
 export interface CalldataRequestSchema {
   requestId?: string
-  inputToken: Address
-  outputToken: Address
+  inputToken: string
+  outputToken: string
   inputAmount: string
   originChainId: number
   destinationChainId: number
