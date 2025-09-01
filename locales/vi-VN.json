@@ -3788,7 +3788,6 @@
   "Farm Rewards": "Phần thưởng của trang trại",
   "Unsupported protocol: %protocol%": "Giao thức không được hỗ trợ: %protocol%",
   "Pool Features": "Tính năng quỹ",
-  "%symbol0% per %symbol1%": "%symbol0% cho mỗi %symbol1%",
   "Total Value Locked (TVL)": "Tổng giá trị được khóa (TVL)",
   "Total Liquidity": "Tổng thanh khoản",
   "Total Farm Earnings": "Tổng thu nhập trang trại",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallet hiện không được hỗ trợ, vui lòng tạo phiếu yêu cầu (ticket) trên Discord Chính thức của chúng tôi",
   "Wallets with <0>MEV Protection</0>.": "Các Ví có <0>Bảo vệ MEV</0>.",
   "Please refresh the page and try it again": "Vui lòng làm mới trang và thử lại",
-  "Failed to Connect": "Không thể kết nối"
+  "Failed to Connect": "Không thể kết nối",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
