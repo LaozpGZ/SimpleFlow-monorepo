@@ -554,6 +554,11 @@ const useConfirmActions = (
               recipient,
             })
 
+            if (!transaction) {
+              refreshTrade()
+              throw new Error('Quote is not up to date, please try again')
+            }
+
             // Send transaction safely
             const signature = await sendTransactionSafely(transaction, solanaConnection, solanaWalletContext)
 
