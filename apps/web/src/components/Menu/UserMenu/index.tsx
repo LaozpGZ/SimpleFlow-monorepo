@@ -40,8 +40,13 @@ import { useCurrentWalletIcon, useCurrentWalletIconByNetworks } from 'state/wall
 import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { WalletAdaptedNetwork } from '@pancakeswap/ui-wallets'
-import { connectedEvmWalletAtom, connectedSolanaWalletAtom } from '@pancakeswap/ui-wallets/src/state/atom'
-import { useAtomValue } from 'jotai'
+import {
+  lastUsedEvmWalletNameAtom,
+  lastUsedSolanaWalletNameAtom,
+  previouslyUsedEvmWalletsAtom,
+  previouslyUsedSolanaWalletsAtom,
+} from '@pancakeswap/ui-wallets/src/state/atom'
+import { useAtom, useAtomValue } from 'jotai'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
 const UserMenuItems = ({ onReceiveClick, onDismiss }: { onReceiveClick: () => void; onDismiss: () => void }) => {
@@ -134,16 +139,20 @@ const useAvatar = () => {
 const useMultichainAvatar = () => {
   const { account: evmAccount, solanaAccount, chainId } = useAccountActiveChain()
   const walletIcons = useCurrentWalletIconByNetworks()
-  const connectedEvmWallet = useAtomValue(connectedEvmWalletAtom)
-  const connectedSolanaWallet = useAtomValue(connectedSolanaWalletAtom)
+  const lastUsedEvmWalletId = useAtomValue(lastUsedEvmWalletNameAtom)
+  const lastUsedSolanaWalletId = useAtomValue(lastUsedSolanaWalletNameAtom)
+  const previouslyUsedEvmWallets = useAtomValue(previouslyUsedEvmWalletsAtom)
+  const previouslyUsedSolanaWallets = useAtomValue(previouslyUsedSolanaWalletsAtom)
+  const evmId = lastUsedEvmWalletId || previouslyUsedEvmWallets?.[0] || null
+  const solanaId = lastUsedSolanaWalletId || previouslyUsedSolanaWallets?.[0] || null
 
-  return useMemo(() => {
-    if (solanaAccount && evmAccount && connectedEvmWallet?.id !== connectedSolanaWallet?.id) {
+  return useMemo((): [string, string] | [] => {
+    if (solanaAccount && evmAccount && evmId !== solanaId) {
       const avatars = [walletIcons[WalletAdaptedNetwork.EVM], walletIcons[WalletAdaptedNetwork.Solana]]
-      return chainId === NonEVMChainId.SOLANA ? avatars.reverse() : avatars
+      return chainId === NonEVMChainId.SOLANA ? (avatars.reverse() as [string, string]) : (avatars as [string, string])
     }
     return []
-  }, [chainId, connectedEvmWallet?.id, connectedSolanaWallet?.id, evmAccount, solanaAccount, walletIcons])
+  }, [chainId, evmId, solanaId, evmAccount, solanaAccount, walletIcons])
 }
 
 const UserAvatar = ({ avatars }: { avatars?: [string, string] }) => {
