@@ -3788,7 +3788,6 @@
   "Farm Rewards": "مكافآت المزرعة",
   "Unsupported protocol: %protocol%": "البروتوكول غير المدعوم: %protocol%",
   "Pool Features": "ميزات التجمُّع",
-  "%symbol0% per %symbol1%": "%symbol0% لكل %symbol1%",
   "Total Value Locked (TVL)": "إجمالي القيمة المجمَّدة (TVL)",
   "Total Liquidity": "إجمالي السيولة",
   "Total Farm Earnings": "إجمالي أرباح الزراعة",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "المحافظ الذكية غير مدعومة، يرجى إنشاء تذكرة في Discord الرسمي لدينا",
   "Wallets with <0>MEV Protection</0>.": "محافظ <0>بحماية من هجمات القيمة القصوى القابلة للاستخراج (MEV)</0>.",
   "Please refresh the page and try it again": "برجاء تحديث الصفحة والمحاولة مرة أخرى",
-  "Failed to Connect": "فشل الربط"
+  "Failed to Connect": "فشل الربط",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
