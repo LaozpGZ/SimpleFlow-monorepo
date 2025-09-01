@@ -3788,7 +3788,6 @@
   "Farm Rewards": "农场奖励",
   "Unsupported protocol: %protocol%": "不受支持的协议：%protocol%",
   "Pool Features": "糖浆池功能",
-  "%symbol0% per %symbol1%": "%symbol0%/%symbol1%",
   "Total Value Locked (TVL)": "锁仓的总价值 (TVL)",
   "Total Liquidity": "总流动性",
   "Total Farm Earnings": "农场总收益",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Smart Wallets are not supported, please create a ticket on our Official Discord",
   "Wallets with <0>MEV Protection</0>.": "Wallets with <0>MEV Protection</0>.",
   "Please refresh the page and try it again": "Please refresh the page and try it again",
-  "Failed to Connect": "Failed to Connect"
+  "Failed to Connect": "Failed to Connect",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
