@@ -3788,7 +3788,6 @@
   "Farm Rewards": "팜 리워드",
   "Unsupported protocol: %protocol%": "지원되지 않는 프로토콜: %protocol%",
   "Pool Features": "풀 기능",
-  "%symbol0% per %symbol1%": "%symbol0%/%symbol1%",
   "Total Value Locked (TVL)": "잠긴 가치 합계(TVL)",
   "Total Liquidity": "총 유동성",
   "Total Farm Earnings": "총 팜 수익",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "스마트 지갑은 지원되지 않습니다. 공식 디스코드에서 티켓을 생성해 주세요",
   "Wallets with <0>MEV Protection</0>.": "<0>MEV 보호</0> 기능이 있는 지갑입니다.",
   "Please refresh the page and try it again": "페이지를 갱신하고 다시 시도해 주세요",
-  "Failed to Connect": "연결에 실패했습니다"
+  "Failed to Connect": "연결에 실패했습니다",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
