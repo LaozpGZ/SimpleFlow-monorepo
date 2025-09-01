@@ -17,7 +17,6 @@ import { memo, Suspense, useMemo } from 'react'
 
 import { Field } from 'state/swap/actions'
 import { useSwapState } from 'state/swap/hooks'
-import { isSVMOrder } from 'views/Swap/utils'
 import { MevSwapDetail } from 'views/Mev/MevSwapDetail'
 import { MevToggle } from 'views/Mev/MevToggle'
 import { useSolanaUserSlippage } from '@pancakeswap/utils/user'
