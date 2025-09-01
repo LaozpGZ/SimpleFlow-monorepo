@@ -58,7 +58,6 @@ export const bridgeOnlyQuoteAtom = atomFamily(
             amount: inputAmount.quotient.toString(),
             commands: postBridgeSwapParams.commands,
             recipientOnDestChain: postBridgeSwapParams.recipientOnDestChain,
-            type: BridgeType.EVM,
           })
 
       if (!metadata.supported) {
