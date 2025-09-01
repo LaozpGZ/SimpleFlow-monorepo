@@ -382,7 +382,7 @@ export type GetMetadataParams = {
   recipientOnDestChain?: string
   user?: string
   slippageTolerance?: string
-  type: BridgeType
+  type?: BridgeType
 }
 
 export type GetSolanaEVMBridgeMetadataParams = {

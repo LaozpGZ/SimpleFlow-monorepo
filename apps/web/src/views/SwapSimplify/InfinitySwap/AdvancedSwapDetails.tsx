@@ -25,12 +25,14 @@ import { styled } from 'styled-components'
 import { BridgeFeeToolTip, TotalFeeToolTip, TradingFeeToolTip } from 'views/Swap/Bridge/components/FeeToolTip'
 import { BridgeOrderFee, getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { SolanaBridgeTradingFee } from 'views/SwapSimplify/InfinitySwap/SolanaBridgeTradingFee'
+
 import { isSolanaBridge, isSVMOrder } from 'views/Swap/utils'
 import { EstimatedTime } from '../../Swap/Bridge/CrossChainConfirmSwapModal/components/EstimatedTime'
 import { SlippageAdjustedAmounts, SVMTradePriceBreakdown, TradePriceBreakdown } from '../../Swap/V3Swap/utils/exchange'
 import FormattedPriceImpact from '../../Swap/components/FormattedPriceImpact'
 import { useFeeSaved } from '../../Swap/hooks/useFeeSaved'
-import { SolanaBridgeTradingFee, SVMTradingFee } from './TradingFee'
+import { SVMTradingFee } from './TradingFee'
 
 export const DetailsTitle = styled(Text)`
   text-decoration: underline dotted;
