@@ -8,6 +8,7 @@ import { usePredictionConfigs } from 'views/Predictions/hooks/usePredictionConfi
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useTranslation } from '@pancakeswap/localization'
 import { MobilePredictionTokenSelector } from './Mobile'
+import { PausedText } from './styles'
 
 const TabContainer = styled(Flex)`
   display: flex;
@@ -122,11 +123,6 @@ const TokenName = styled(Text).attrs({ bold: true })<{ isActive: boolean }>`
   text-transform: uppercase;
   white-space: nowrap;
   line-height: 1;
-`
-
-const PausedText = styled(Text).attrs({ bold: true, small: true })`
-  font-size: 12px;
-  color: ${({ theme }) => theme.colors.textSubtle};
 `
 
 const TokenPrice = styled(Box)<{ isActive: boolean }>`

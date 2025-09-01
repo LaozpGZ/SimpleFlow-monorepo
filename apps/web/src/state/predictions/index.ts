@@ -91,6 +91,9 @@ export const fetchPredictionData = createAsyncThunk<
   // Static values
   const marketData = await getPredictionData(extra.address, chainId)
 
+  // Override paused status from config if available
+  marketData.status = extra.paused ? PredictionStatus.PAUSED : marketData.status
+
   const epochs =
     marketData.currentEpoch > PAST_ROUND_COUNT
       ? range(marketData.currentEpoch, marketData.currentEpoch - PAST_ROUND_COUNT)

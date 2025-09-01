@@ -4,6 +4,8 @@ import { styled } from 'styled-components'
 import { Price } from 'views/Predictions/components/TokenSelectorV2/Price'
 import { useConfig } from 'views/Predictions/context/ConfigProvider'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
+import { useTranslation } from '@pancakeswap/localization'
+import { PausedText } from './styles'
 
 interface MobilePredictionTokenSelectorProps {
   tokens: PredictionConfig[]
@@ -132,6 +134,7 @@ export const MobilePredictionTokenSelector: React.FC<MobilePredictionTokenSelect
   onClickSwitchToken,
 }) => {
   const config = useConfig()
+  const { t } = useTranslation()
 
   return (
     <MobileTabContainer>
@@ -148,22 +151,32 @@ export const MobilePredictionTokenSelector: React.FC<MobilePredictionTokenSelect
               <CurrencyLogo
                 size="32px"
                 currency={token.predictionCurrency}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: token.paused ? 0.5 : 1 }}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  opacity: token.paused && !isActive ? 0.5 : 1,
+                }}
                 showChainLogo
               />
             </MobileTokenIcon>
             {isActive && (
               <MobileTokenInfo>
-                <MobileTokenPrice isActive={isActive}>
-                  <Price
-                    fontSize="inherit"
-                    color="inherit"
-                    displayedDecimals={token.displayedDecimals}
-                    chainlinkOracleAddress={token.chainlinkOracleAddress}
-                    galetoOracleAddress={token.galetoOracleAddress}
-                  />
-                </MobileTokenPrice>
-                <MobileTokenName isActive={isActive}>{`${token.predictionCurrency.symbol}USD`}</MobileTokenName>
+                {!token.paused && (
+                  <MobileTokenPrice isActive={isActive}>
+                    <Price
+                      fontSize="inherit"
+                      color="inherit"
+                      displayedDecimals={token.displayedDecimals}
+                      chainlinkOracleAddress={token.chainlinkOracleAddress}
+                      galetoOracleAddress={token.galetoOracleAddress}
+                    />
+                  </MobileTokenPrice>
+                )}
+                <Box>
+                  <MobileTokenName isActive={isActive}>{`${token.predictionCurrency.symbol}USD`}</MobileTokenName>
+                  {token.paused && <PausedText mb="-4px">({t('Paused')})</PausedText>}
+                </Box>
               </MobileTokenInfo>
             )}
           </MobileTabItem>
