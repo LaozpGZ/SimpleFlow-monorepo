@@ -206,7 +206,7 @@ export const getSolanaToEVMBridgeCalldata = async ({
   const addressLookupTableAddresses = data?.steps?.[0]?.items?.[0]?.data?.addressLookupTableAddresses
 
   const lookupTableAddresses =
-    addressLookupTableAddresses.length > 0
+    addressLookupTableAddresses?.length > 0
       ? ((
           await Promise.all(
             addressLookupTableAddresses.map((address) =>
