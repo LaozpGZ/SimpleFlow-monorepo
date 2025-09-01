@@ -3960,7 +3960,7 @@
   "twap.limitPriceTooltip": "Угоди виконуватимуться лише тоді, коли доступна ринкова ціна дорівнює цій лімітній ціні або є кращою. Ваш ордер може бути виконано лише частково.",
   "twap.sizePerTradeTooltip": "Цей параметр визначає розмір кожної окремої угоди, що виконуватиметься протягом дії вашого ордера.\n\nВажливо: мінімальний розмір угоди має бути більшим за {usd} USD.",
   "twap.maxDurationTooltip": "Максимальний час, протягом якого може бути виконано всі окремі угоди вашого ордера.\n\nЗауважте: залежно від параметрів ордер може бути виконано раніше, виконано частково або взагалі не виконано.",
-  "twap.tradeIntervalTootlip": "The estimated time that will elapse between each trade in your order. \n\n Note that as this time includes an allowance of two minutes for bidder auction and block settlement, which cannot be predicted exactly, actual time may vary.",
+  "twap.tradeIntervalTootlip": "Орієнтовний час між кожною угодою у вашому ордері.\n\nЗауважте: він включає близько двох хвилин на аукціон заявок і фіналізацію блоку, що не піддаються точному прогнозуванню, тож фактичний час може відрізнятися.",
   "twap.sliderMinSizeTooltip": "Individual trades must have a minimum trade size of {usd} USD.",
   "twap.connect": "Connect wallet",
   "twap.selectTokens": "Select tokens",
