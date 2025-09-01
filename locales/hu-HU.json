@@ -3788,7 +3788,6 @@
   "Farm Rewards": "Hozamfarm-jutalmak",
   "Unsupported protocol: %protocol%": "Nem támogatott protokoll: %protocol%",
   "Pool Features": "Alap jellemzői",
-  "%symbol0% per %symbol1%": "%symbol0% / %symbol1%",
   "Total Value Locked (TVL)": "Teljes zárolt érték (TVL)",
   "Total Liquidity": "Teljes likviditás",
   "Total Farm Earnings": "Teljes hozamfarm-bevétel",
@@ -4110,5 +4109,7 @@
   "Smart Wallets are not supported, please create a ticket on our Official Discord": "Az okostárcák nem támogatottak, kérjük, hozz létre egy jegyet a hivatalos Discord-csatornánkon",
   "Wallets with <0>MEV Protection</0>.": "Tárcák <0>MEV-védelemmel</0>.",
   "Please refresh the page and try it again": "Frissítsd az oldalt és próbáld újra",
-  "Failed to Connect": "Sikertelen csatlakozás"
+  "Failed to Connect": "Sikertelen csatlakozás",
+  "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected": "Based on % contributed to stable pair, fees will vary. Deposits with fees >= 0.15% will be rejected",
+  "Slippage": "Slippage"
 }
