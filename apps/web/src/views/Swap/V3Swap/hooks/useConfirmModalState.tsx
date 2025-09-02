@@ -545,7 +545,11 @@ const useConfirmActions = (
         const isDestinationSolana = isSolana(order.trade.outputAmount.currency.chainId)
 
         // Swap from Solana to EVM
-        if (isOriginSolana && solanaAccount) {
+        if (isOriginSolana) {
+          if (!solanaAccount) {
+            throw new Error('Solana account not found')
+          }
+
           // Handle Solana bridge transaction
           try {
             const transaction = await getSolanaToEVMBridgeCalldata({
@@ -586,6 +590,8 @@ const useConfirmActions = (
                 </ToastDescriptionWithTx>,
               )
             }
+
+            return
           } catch (error: any) {
             if (error?.message?.includes('rejected')) {
               resetState()
