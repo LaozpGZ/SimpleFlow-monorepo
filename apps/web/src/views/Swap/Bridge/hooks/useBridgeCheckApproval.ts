@@ -30,7 +30,6 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
   const bridgeSolanaApproveCalldata = useEVMToSolanaBridgeCalldata({
     order: order as BridgeOrderWithCommands,
     stepType: STEP_ID.APPROVE,
-    enabled: isSolanaBridge,
   })
 
   const {

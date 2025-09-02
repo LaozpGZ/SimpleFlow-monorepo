@@ -1,21 +1,20 @@
 import { useQuery } from '@tanstack/react-query'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { BridgeOrderWithCommands } from 'views/Swap/utils'
+import { BridgeOrderWithCommands, isBridgeOrder } from 'views/Swap/utils'
 import { Calldata } from 'hooks/usePermit2'
+import { isSolana } from '@pancakeswap/chains'
 import { STEP_ID } from '../relay-sdk/types'
 import { getSolanaBridgeCalldata } from '../api'
 
 interface UseEVMToSolanaBridgeCalldataParams {
   order?: BridgeOrderWithCommands
   stepType?: STEP_ID
-  enabled?: boolean
 }
 
 export const useEVMToSolanaBridgeCalldata = ({
   order,
   stepType = STEP_ID.DEPOSIT,
-  enabled = true,
 }: UseEVMToSolanaBridgeCalldataParams):
   | {
       transactionData: Calldata
@@ -24,6 +23,8 @@ export const useEVMToSolanaBridgeCalldata = ({
   | undefined => {
   const { account, solanaAccount } = useAccountActiveChain()
   const [allowedSlippage] = useUserSlippage()
+
+  const enabled = isBridgeOrder(order) && isSolana(order?.trade?.outputAmount?.currency?.chainId)
 
   const { data } = useQuery<
     {
