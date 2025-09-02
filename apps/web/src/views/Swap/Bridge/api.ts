@@ -155,7 +155,9 @@ export const getEVMToSolanaBridgeCalldata = async ({
   recipient,
   user,
   allowedSlippage,
+  stepType,
 }: {
+  stepType: STEP_ID
   order: BridgeOrderWithCommands
   recipient: string
   user: string
@@ -163,15 +165,20 @@ export const getEVMToSolanaBridgeCalldata = async ({
 }) => {
   const data = await getSolanaBridgeCalldata({ order, recipient, user, allowedSlippage })
 
-  const depositStep = data.steps?.find((step) => step.id === STEP_ID.DEPOSIT)?.items[0]?.data
+  if (!data) {
+    return undefined
+  }
 
-  if (!depositStep) {
+  // Get deposit or approve step data. only EVM need approve step
+  const stepData = data?.steps?.find((step) => step.id === stepType)?.items[0]?.data
+
+  if (!stepData) {
     throw new Error('Deposit Step is not found in bridge data')
   }
 
   return {
-    router: depositStep.to,
-    calldata: depositStep.data,
+    router: stepData.to,
+    calldata: stepData.data,
   }
 }
 

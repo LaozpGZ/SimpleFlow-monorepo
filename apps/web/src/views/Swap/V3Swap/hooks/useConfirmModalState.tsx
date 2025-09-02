@@ -59,6 +59,7 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { sendTransactionSafely } from 'components/WalletModalV2/utils/solanaSafeTransaction'
 import { confirmTransaction } from '@pancakeswap/solana-core-sdk'
 import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
+import { STEP_ID } from 'views/Swap/Bridge/relay-sdk/types'
 import { ConfirmStepContext, ConfirmAction } from './steps/step.type'
 import { useBatchSwapTransaction } from './steps/useBatchSwapTransaction'
 import { useSolSwapStep } from './steps/useSolSwapStep'
@@ -543,6 +544,7 @@ const useConfirmActions = (
         const isOriginSolana = isSolana(order.trade.inputAmount.currency.chainId)
         const isDestinationSolana = isSolana(order.trade.outputAmount.currency.chainId)
 
+        // Swap from Solana to EVM
         if (isOriginSolana && solanaAccount) {
           // Handle Solana bridge transaction
           try {
@@ -599,12 +601,14 @@ const useConfirmActions = (
         try {
           let transactionData: BridgeCallData | undefined
 
+          // Swap from EVM to Solana
           if (isDestinationSolana && account) {
             transactionData = await getEVMToSolanaBridgeCalldata({
               order: order as BridgeOrderWithCommands,
               recipient: recipient as Address,
               user: account,
               allowedSlippage,
+              stepType: STEP_ID.DEPOSIT,
             })
 
             if (!transactionData) {

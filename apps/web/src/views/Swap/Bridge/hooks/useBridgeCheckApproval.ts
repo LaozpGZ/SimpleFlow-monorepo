@@ -6,13 +6,14 @@ import { useMemo } from 'react'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useSubmitPermit2 } from 'hooks/usePermit2'
 import { Address } from 'viem'
-import { InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
+import { BridgeOrderWithCommands, InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
 import { isSolana } from '@pancakeswap/chains'
-import { postBridgeCheckApproval } from '../api'
+import { useUserSlippage } from '@pancakeswap/utils/user'
+import { getEVMToSolanaBridgeCalldata, postBridgeCheckApproval } from '../api'
 import { STEP_ID } from '../relay-sdk/types'
 
 export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
-  const { account } = useAccountActiveChain()
+  const { account, solanaAccount } = useAccountActiveChain()
   const { chainId: activeChainId } = useActiveChainId()
 
   const currencyAmountIn = useMemo(() => {
@@ -25,6 +26,8 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
   const isEVMToSolanaBridge = isSolana(order?.trade?.outputAmount.currency.chainId)
 
   const isNativeCurrency = currencyAmountIn?.currency?.isNative
+
+  const [allowedSlippage] = useUserSlippage() // custom from users
 
   const {
     data: approvalData,
@@ -44,11 +47,17 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
 
       // NOTE: only EVM to Solana bridge needs approval
       if (isEVMToSolanaBridge) {
-        const approveStep = order?.bridgeTransactionData?.steps?.find((step) => step.id === STEP_ID.APPROVE)
+        const approveStep = await getEVMToSolanaBridgeCalldata({
+          order: order as BridgeOrderWithCommands,
+          recipient: solanaAccount || '',
+          user: account,
+          allowedSlippage,
+          stepType: STEP_ID.APPROVE,
+        })
 
         return {
           isApprovalRequired: Boolean(approveStep),
-          tokenAddress: approveStep?.to,
+          tokenAddress: approveStep?.router,
           data: approveStep?.calldata,
           // NOTE: replaceholder for missing fields
           spender: undefined,
