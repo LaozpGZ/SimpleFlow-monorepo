@@ -192,13 +192,11 @@ const useConfirmActions = (
   const bridgeSolanaSwapCalldata = useEVMToSolanaBridgeCalldata({
     order: order as BridgeOrderWithCommands,
     stepType: STEP_ID.DEPOSIT,
-    enabled: isBridgeOrder(order) && isSolana(order?.trade.outputAmount.currency.chainId),
   })
 
   const bridgeSolanaApproveCalldata = useEVMToSolanaBridgeCalldata({
     order: order as BridgeOrderWithCommands,
     stepType: STEP_ID.APPROVE,
-    enabled: isBridgeOrder(order) && isSolana(order?.trade.inputAmount.currency.chainId),
   })
 
   const isSolanaBridge =
@@ -541,6 +539,103 @@ const useConfirmActions = (
 
   const solanaConnection = useSolanaConnectionWithRpcAtom()
 
+  const swapBridgeFromSolanaToEVMStep = useMemo(() => {
+    return {
+      step: ConfirmModalState.PENDING_CONFIRMATION,
+      action: async () => {
+        // TODO: show error message???
+        if (!order || !recipient) {
+          return
+        }
+
+        // Build transaction from bridge order data
+        if (!isBridgeOrder(order)) {
+          throw new Error('Not a bridge order')
+        }
+
+        const isOriginSolana = isSolana(order.trade.inputAmount.currency.chainId)
+
+        if (!isOriginSolana) {
+          throw new Error('only support solana to evm bridge')
+        }
+
+        setTxHash(undefined)
+        setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
+
+        // Swap from Solana to EVM
+        // Move to another swapBridgeFromSolanaToEVMStep
+        if (!solanaAccount) {
+          throw new Error('Solana account not found')
+        }
+
+        // Handle Solana bridge transaction
+        try {
+          const transaction = await getSolanaToEVMBridgeCalldata({
+            order: order as BridgeOrderWithCommands,
+            solanaConnection,
+            solanaWalletContext,
+            allowedSlippage,
+            user: solanaAccount,
+            recipient,
+          })
+
+          if (!transaction) {
+            refreshOrder()
+            resetState()
+
+            return
+            // throw new Error('Quote is not up to date, please try again')
+          }
+
+          // Send transaction safely
+          const signature = await sendTransactionSafely(transaction, solanaConnection, solanaWalletContext)
+
+          if (signature) {
+            setTxHash(signature)
+            setConfirmState(ConfirmModalState.ORDER_SUBMITTED)
+            // Set bridge order metadata for tracking
+            setActiveBridgeOrderMetadata({
+              order,
+              txHash: signature,
+              originChainId: order.trade.inputAmount.currency.chainId,
+              destinationChainId: order.trade.outputAmount.currency.chainId,
+            })
+            // Wait for confirmation
+            await confirmTransaction(solanaConnection, signature)
+            toastSuccess(
+              t('Success!'),
+              <ToastDescriptionWithTx txHash={signature} txChainId={order.trade.inputAmount.currency.chainId}>
+                {t('Bridge transaction submitted')}
+              </ToastDescriptionWithTx>,
+            )
+          }
+        } catch (error: any) {
+          if (error?.message?.includes('rejected')) {
+            resetState()
+            return
+          }
+
+          console.error('Solana bridge transaction error:', error)
+          showError(t('Failed to process Solana bridge transaction. Please try again.'))
+        }
+      },
+      showIndicator: true,
+    }
+  }, [
+    order,
+    recipient,
+    solanaAccount,
+    solanaConnection,
+    solanaWalletContext,
+    allowedSlippage,
+    refreshOrder,
+    resetState,
+    showError,
+    t,
+    toastSuccess,
+    setActiveBridgeOrderMetadata,
+  ])
+
   const swapBridgeStep = useMemo(() => {
     return {
       step: ConfirmModalState.PENDING_CONFIRMATION,
@@ -558,70 +653,7 @@ const useConfirmActions = (
         setTxHash(undefined)
         setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
 
-        const isOriginSolana = isSolana(order.trade.inputAmount.currency.chainId)
         const isDestinationSolana = isSolana(order.trade.outputAmount.currency.chainId)
-
-        // Swap from Solana to EVM
-        // Move to another swapBridgeFromSolanaToEVMStep
-        if (isOriginSolana) {
-          if (!solanaAccount) {
-            throw new Error('Solana account not found')
-          }
-
-          // Handle Solana bridge transaction
-          try {
-            const transaction = await getSolanaToEVMBridgeCalldata({
-              order: order as BridgeOrderWithCommands,
-              solanaConnection,
-              solanaWalletContext,
-              allowedSlippage,
-              user: solanaAccount,
-              recipient,
-            })
-
-            if (!transaction) {
-              refreshOrder()
-              resetState()
-
-              return
-              // throw new Error('Quote is not up to date, please try again')
-            }
-
-            // Send transaction safely
-            const signature = await sendTransactionSafely(transaction, solanaConnection, solanaWalletContext)
-
-            if (signature) {
-              setTxHash(signature)
-              setConfirmState(ConfirmModalState.ORDER_SUBMITTED)
-              // Set bridge order metadata for tracking
-              setActiveBridgeOrderMetadata({
-                order,
-                txHash: signature,
-                originChainId: order.trade.inputAmount.currency.chainId,
-                destinationChainId: order.trade.outputAmount.currency.chainId,
-              })
-              // Wait for confirmation
-              await confirmTransaction(solanaConnection, signature)
-              toastSuccess(
-                t('Success!'),
-                <ToastDescriptionWithTx txHash={signature} txChainId={order.trade.inputAmount.currency.chainId}>
-                  {t('Bridge transaction submitted')}
-                </ToastDescriptionWithTx>,
-              )
-            }
-
-            return
-          } catch (error: any) {
-            if (error?.message?.includes('rejected')) {
-              resetState()
-              return
-            }
-
-            console.error('Solana bridge transaction error:', error)
-            showError(t('Failed to process Solana bridge transaction. Please try again.'))
-            return
-          }
-        }
 
         try {
           let swapData: { transactionData: Calldata; gasFee: string } | undefined
@@ -873,7 +905,9 @@ const useConfirmActions = (
       [ConfirmModalState.PERMITTING]: permitStep,
       [ConfirmModalState.APPROVING_TOKEN]: isBridgeOrder(order) ? approvalBridgeStep : approveStep,
       [ConfirmModalState.PENDING_CONFIRMATION]: isBridgeOrder(order)
-        ? swapBridgeStep
+        ? isSolana(order.trade.inputAmount.currency.chainId)
+          ? swapBridgeFromSolanaToEVMStep
+          : swapBridgeStep
         : isSVMOrder(order)
         ? solanaSwapStep
         : isClassicOrder(order)
