@@ -1,4 +1,4 @@
-import { useQueries, useQuery, UseQueryOptions } from '@tanstack/react-query'
+import { useQueries, useQuery, UseQueryOptions, UseQueryResult } from '@tanstack/react-query'
 import { QUERY_SETTINGS_IMMUTABLE, SLOW_INTERVAL } from 'config/constants'
 import { usePositionsWithFarming } from 'hooks/infinity/useIsFarming'
 import { useCallback, useMemo } from 'react'
@@ -25,7 +25,7 @@ export const useAccountInfinityBinPositions = (account: Address | undefined, cha
     })
   }, [chainIds, account, latestTxReceipt?.blockHash, userAddedTokens])
 
-  const combine = useCallback((results) => {
+  const combine = useCallback((results: UseQueryResult<InfinityBinPositionDetail[], Error>[]) => {
     return {
       data: results.reduce((acc, result) => acc.concat(result.data ?? []), [] as InfinityBinPositionDetail[]),
       pending: results.some((result) => result.isPending),
