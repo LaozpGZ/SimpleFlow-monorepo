@@ -205,6 +205,7 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
             overrideActiveOrderMetadata={{
               txHash: order.transactionHash,
               originChainId: order.originChainId,
+              destinationChainId: order.destinationChainId,
               order: null,
               metadata,
             }}

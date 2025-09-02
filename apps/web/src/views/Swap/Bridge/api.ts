@@ -557,7 +557,9 @@ export const getBridgeStatus = async (
   const type = isSolana(destinationChainId) || isSolana(chainId) ? BridgeType.NON_EVM : BridgeType.EVM
 
   const resp = await fetch(
-    `${BRIDGE_API_ENDPOINT}/v1/status/${chainIdToExplorerInfoChainName[chainId]}?txHash=${txHash}&type=${type}`,
+    `${BRIDGE_API_ENDPOINT}/v1/status/${
+      isSolana(chainId) ? 'sol' : chainIdToExplorerInfoChainName[chainId]
+    }?txHash=${txHash}&type=${type}`,
   )
   return resp.json()
 }
