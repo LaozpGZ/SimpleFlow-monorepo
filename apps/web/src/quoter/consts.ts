@@ -32,7 +32,10 @@ export const QUOTE_TIMEOUT = {
 
   // Misc
   [ChainId.MONAD_TESTNET]: 8_000,
-} as const satisfies Record<ChainId, number>
+
+  [NonEVMChainId.SOLANA]: 5_000,
+  [NonEVMChainId.APTOS]: 5_000,
+} as const satisfies Record<ChainId | NonEVMChainId, number>
 
 export const SOLANA_NATIVE_TOKEN_ADDRESS = '11111111111111111111111111111111'
 
@@ -72,40 +75,46 @@ export const QUOTE_SUCC_REVALIDATE = {
 
   // Misc
   [ChainId.MONAD_TESTNET]: 10,
-} as const satisfies Record<ChainId, number>
+
+  // Solana
+  [NonEVMChainId.SOLANA]: 5,
+  [NonEVMChainId.APTOS]: 5,
+} as const satisfies Record<ChainId | NonEVMChainId, number>
 
 // Revalidate interval after a failed quote in seconds
 export const QUOTE_FAIL_REVALIDATE = {
   // BSC
-  [ChainId.BSC_TESTNET]: 3,
-  [ChainId.BSC]: 3,
+  [ChainId.BSC_TESTNET]: 5,
+  [ChainId.BSC]: 5,
 
   // L1 slower / variable
-  [ChainId.ETHEREUM]: 5,
-  [ChainId.GOERLI]: 5,
-  [ChainId.SEPOLIA]: 5,
+  [ChainId.ETHEREUM]: 7,
+  [ChainId.GOERLI]: 7,
+  [ChainId.SEPOLIA]: 7,
 
   // L2 fast
-  [ChainId.ARBITRUM_ONE]: 3,
-  [ChainId.ARBITRUM_GOERLI]: 3,
-  [ChainId.ARBITRUM_SEPOLIA]: 3,
-  [ChainId.BASE]: 3,
-  [ChainId.BASE_TESTNET]: 3,
-  [ChainId.BASE_SEPOLIA]: 3,
-  [ChainId.LINEA]: 3,
-  [ChainId.LINEA_TESTNET]: 3,
+  [ChainId.ARBITRUM_ONE]: 5,
+  [ChainId.ARBITRUM_GOERLI]: 5,
+  [ChainId.ARBITRUM_SEPOLIA]: 5,
+  [ChainId.BASE]: 5,
+  [ChainId.BASE_TESTNET]: 5,
+  [ChainId.BASE_SEPOLIA]: 5,
+  [ChainId.LINEA]: 5,
+  [ChainId.LINEA_TESTNET]: 5,
 
   // zkSync (more variance)
-  [ChainId.ZKSYNC]: 6,
-  [ChainId.ZKSYNC_TESTNET]: 4,
+  [ChainId.ZKSYNC]: 7,
+  [ChainId.ZKSYNC_TESTNET]: 7,
 
   // Other fast L1/L2
-  [ChainId.OPBNB]: 3,
-  [ChainId.OPBNB_TESTNET]: 3,
-  [ChainId.POLYGON_ZKEVM]: 3,
-  [ChainId.POLYGON_ZKEVM_TESTNET]: 3,
-  [ChainId.SCROLL_SEPOLIA]: 3,
+  [ChainId.OPBNB]: 5,
+  [ChainId.OPBNB_TESTNET]: 5,
+  [ChainId.POLYGON_ZKEVM]: 5,
+  [ChainId.POLYGON_ZKEVM_TESTNET]: 5,
+  [ChainId.SCROLL_SEPOLIA]: 5,
 
   // Misc
-  [ChainId.MONAD_TESTNET]: 3,
-} as const satisfies Record<ChainId, number>
+  [ChainId.MONAD_TESTNET]: 5,
+  [NonEVMChainId.SOLANA]: 5,
+  [NonEVMChainId.APTOS]: 5,
+} as const satisfies Record<ChainId | NonEVMChainId, number>
