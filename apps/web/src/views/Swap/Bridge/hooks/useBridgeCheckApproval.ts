@@ -8,12 +8,12 @@ import { useSubmitPermit2 } from 'hooks/usePermit2'
 import { Address } from 'viem'
 import { BridgeOrderWithCommands, InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
 import { isSolana } from '@pancakeswap/chains'
-import { useUserSlippage } from '@pancakeswap/utils/user'
-import { getEVMToSolanaBridgeCalldata, postBridgeCheckApproval } from '../api'
+import { postBridgeCheckApproval } from '../api'
 import { STEP_ID } from '../relay-sdk/types'
+import { useEVMToSolanaBridgeCalldata } from './useEVMToSolanaBridgeCalldata'
 
 export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
-  const { account, solanaAccount } = useAccountActiveChain()
+  const { account } = useAccountActiveChain()
   const { chainId: activeChainId } = useActiveChainId()
 
   const currencyAmountIn = useMemo(() => {
@@ -23,11 +23,15 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
       : undefined
   }, [order, activeChainId])
 
-  const isEVMToSolanaBridge = isSolana(order?.trade?.outputAmount.currency.chainId)
-
   const isNativeCurrency = currencyAmountIn?.currency?.isNative
 
-  const [allowedSlippage] = useUserSlippage() // custom from users
+  const isSolanaBridge = isBridgeOrder(order) && isSolana(order?.trade?.outputAmount?.currency?.chainId)
+
+  const bridgeSolanaApproveCalldata = useEVMToSolanaBridgeCalldata({
+    order: order as BridgeOrderWithCommands,
+    stepType: STEP_ID.APPROVE,
+    enabled: isSolanaBridge,
+  })
 
   const {
     data: approvalData,
@@ -36,7 +40,7 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
     refetch,
   } = useQuery({
     queryKey: [
-      isEVMToSolanaBridge ? 'solana-bridge-check-approval' : 'bridge-check-approval',
+      'bridge-check-approval',
       account,
       isNativeCurrency ? 'native' : currencyAmountIn?.currency?.wrapped.address,
       currencyAmountIn?.currency?.chainId,
@@ -44,28 +48,6 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
     ],
     queryFn: async () => {
       if (!currencyAmountIn || !account || !isBridgeOrder(order) || isNativeCurrency) return undefined
-
-      // NOTE: only EVM to Solana bridge needs approval
-      if (isEVMToSolanaBridge) {
-        const approveStep = await getEVMToSolanaBridgeCalldata({
-          order: order as BridgeOrderWithCommands,
-          recipient: solanaAccount || '',
-          user: account,
-          allowedSlippage,
-          stepType: STEP_ID.APPROVE,
-        })
-
-        return {
-          isApprovalRequired: Boolean(approveStep),
-          tokenAddress: approveStep?.router,
-          data: approveStep?.calldata,
-          // NOTE: replaceholder for missing fields
-          spender: undefined,
-          permit2Details: undefined,
-          isPermit2Required: false,
-          error: undefined,
-        }
-      }
 
       try {
         const response = await postBridgeCheckApproval({
@@ -79,7 +61,7 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
         throw err
       }
     },
-    enabled: !!currencyAmountIn && !!account,
+    enabled: !!currencyAmountIn && !!account && !isSolanaBridge,
     retry: 3,
   })
 
@@ -112,19 +94,42 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
   })
 
   return useMemo(
-    () => ({
-      approvalData,
+    () =>
+      isSolanaBridge
+        ? {
+            approvalData: {
+              isApprovalRequired: Boolean(bridgeSolanaApproveCalldata),
+              tokenAddress: bridgeSolanaApproveCalldata?.transactionData?.address,
+              data: bridgeSolanaApproveCalldata?.transactionData?.calldata,
+              spender: undefined,
+              permit2Details: undefined,
+              isPermit2Required: false,
+              error: undefined,
+            },
+            requiresApproval: Boolean(bridgeSolanaApproveCalldata),
+          }
+        : {
+            approvalData,
+            requiresApproval,
+            isLoading,
+            refetch,
+            signPermit2,
+            error: error
+              ? {
+                  code: '500',
+                  message: `Bridge approval check failed: ${error.message}`,
+                }
+              : undefined,
+          },
+    [
       requiresApproval,
       isLoading,
-      refetch,
       signPermit2,
-      error: error
-        ? {
-            code: '500',
-            message: `Bridge approval check failed: ${error.message}`,
-          }
-        : undefined,
-    }),
-    [requiresApproval, isLoading, signPermit2, refetch, approvalData, error],
+      refetch,
+      approvalData,
+      error,
+      bridgeSolanaApproveCalldata,
+      isSolanaBridge,
+    ],
   )
 }

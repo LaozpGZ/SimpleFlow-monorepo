@@ -10,6 +10,7 @@ import { SOLANA_NATIVE_TOKEN_ADDRESS } from 'quoter/consts'
 import { AddressLookupTableAccount, Connection, PublicKey, Transaction, VersionedTransaction } from '@solana/web3.js'
 import { WalletContextState } from '@solana/wallet-adapter-react'
 import { buildTransaction, detectWalletTransactionSupport } from 'components/WalletModalV2/utils/solanaSendTransaction'
+import { Calldata } from 'hooks/usePermit2'
 import { BridgeOrderWithCommands, isSVMOrder } from '../utils'
 import {
   BridgeDataSchema,
@@ -22,7 +23,7 @@ import {
   SwapDataSchema,
   UserBridgeOrdersResponse,
 } from './types'
-import { STEP_ID } from './relay-sdk/types'
+
 import { convertStepsIntoTransactionInstruction } from './relay-sdk/adapter'
 
 export function getSolanaTokenAddress(currency: Currency): string {
@@ -90,7 +91,7 @@ const replacer = (_, value: string | bigint) => {
   return typeof value === 'bigint' ? value.toString() : value
 }
 
-const getSolanaBridgeCalldata = async ({
+export const getSolanaBridgeCalldata = async ({
   order,
   recipient,
   user,
@@ -148,38 +149,6 @@ const getSolanaBridgeCalldata = async ({
   }
 
   return data
-}
-
-export const getEVMToSolanaBridgeCalldata = async ({
-  order,
-  recipient,
-  user,
-  allowedSlippage,
-  stepType,
-}: {
-  stepType: STEP_ID
-  order: BridgeOrderWithCommands
-  recipient: string
-  user: string
-  allowedSlippage?: number
-}) => {
-  const data = await getSolanaBridgeCalldata({ order, recipient, user, allowedSlippage })
-
-  if (!data) {
-    return undefined
-  }
-
-  // Get deposit or approve step data. only EVM need approve step
-  const stepData = data?.steps?.find((step) => step.id === stepType)?.items[0]?.data
-
-  if (!stepData) {
-    return undefined
-  }
-
-  return {
-    router: stepData.to,
-    calldata: stepData.data,
-  }
 }
 
 export const getSolanaToEVMBridgeCalldata = async ({
@@ -298,7 +267,16 @@ export const getBridgeCalldata = async ({
     })
 
     const data = (await resp.json()) as GetBridgeCalldataResponse
-    return data
+    return {
+      transactionData: {
+        address: data.transactionData.router,
+        calldata: data.transactionData.calldata,
+        value: order.trade.inputAmount.currency.isNative
+          ? BigInt(order.trade.inputAmount.quotient.toString())
+          : undefined,
+      } as Calldata,
+      gasFee: data.gasFee,
+    }
   } catch (error) {
     console.error('getBridgeCalldata Error', error)
     throw error

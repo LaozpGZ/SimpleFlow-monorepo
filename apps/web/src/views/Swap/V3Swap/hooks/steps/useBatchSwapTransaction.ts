@@ -110,9 +110,11 @@ export const useBatchSwapTransaction = ({
         return false
       }
       const calls = getBatchedTransaction(steps)
+
       if (!calls || calls.length < steps.length) {
         return false
       }
+
       return true
     },
     [eip5792Status, getBatchedTransaction, walletClient?.transport, spender, chainId],
@@ -123,6 +125,7 @@ export const useBatchSwapTransaction = ({
       setTxHash(undefined)
       setConfirmState(ConfirmModalState.PENDING_CONFIRMATION)
       const calls = getBatchedTransaction(steps)
+
       if (!calls) {
         resetState()
         return
