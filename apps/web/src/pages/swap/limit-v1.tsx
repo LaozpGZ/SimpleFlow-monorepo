@@ -6,7 +6,8 @@ import { CHAIN_IDS } from 'utils/wagmi'
 import { useIsSmartAccount } from 'hooks/useIsSmartAccount'
 import Page from 'views/Page'
 import SwapLayout from 'views/Swap/SwapLayout'
-import { PCSLimitOrdersView } from 'views/PCSLimitOrders'
+
+const TwapAndLimitSwap = dynamic(() => import('views/Swap/Twap/TwapSwap'), { ssr: false })
 
 const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
@@ -32,7 +33,7 @@ const View = () => {
 
   return (
     <SwapLayout>
-      <PCSLimitOrdersView />
+      <TwapAndLimitSwap limit />
     </SwapLayout>
   )
 }

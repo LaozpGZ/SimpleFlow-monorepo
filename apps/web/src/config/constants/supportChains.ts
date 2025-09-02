@@ -16,3 +16,6 @@ export const V3_MIGRATION_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.ETHEREUM]
 export const V2_BCAKE_MIGRATION_SUPPORTED_CHAINS = [ChainId.BSC]
 
 export const SUPPORT_CAKE_STAKING = [ChainId.BSC, ChainId.BSC_TESTNET]
+
+// Supports Limit Orders by Infinity Hooks
+export const LIMIT_ORDERS_HOOKS_SUPPORTED_CHAINS = [ChainId.BSC, ChainId.BSC_TESTNET]

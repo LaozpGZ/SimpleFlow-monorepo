@@ -108,6 +108,7 @@ declare module "@@@next-typesafe-url" {
     "/stable/add/[[...currency]]": StaticRoute;
     "/stable/remove/[[...currency]]": StaticRoute;
     "/swap": StaticRoute;
+    "/swap/limit-v1": StaticRoute;
     "/swap/limit": StaticRoute;
     "/swap/twap": StaticRoute;
     "/teams/[id]": StaticRoute;
