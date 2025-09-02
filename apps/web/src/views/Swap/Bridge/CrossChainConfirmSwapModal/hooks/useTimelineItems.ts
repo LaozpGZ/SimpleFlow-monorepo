@@ -1,5 +1,5 @@
 import { PriceOrder, zeroAddress } from '@pancakeswap/price-api-sdk'
-import { Currency, ERC20Token, Native } from '@pancakeswap/sdk'
+import { ERC20Token, Native, UnifiedCurrency } from '@pancakeswap/sdk'
 
 import { GELATO_NATIVE } from 'config/constants'
 import { useCallback, useMemo } from 'react'
@@ -11,6 +11,7 @@ import { safeGetAddress } from 'utils'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { publicClient } from 'utils/wagmi'
 import { Address, erc20Abi } from 'viem'
+import { Currency } from '@pancakeswap/solana-core-sdk'
 import { BridgeStatus, BridgeStatusData, Command } from '../../types'
 
 import { customBridgeStatus } from '../../utils/customBridgeStatus'
@@ -21,6 +22,11 @@ interface UseTimelineItemsProps {
   bridgeStatus?: BridgeStatusData
   order?: PriceOrder | null
 }
+
+const stepTokenKey = (chainId: number, address: string) => {
+  return `${chainId}-${address}`
+}
+
 export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps) => {
   const { t } = useTranslation()
 
@@ -30,10 +36,6 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
     bridgeStatus?.originChainId || order?.trade.inputAmount.currency.chainId || 0,
     bridgeStatus?.destinationChainId || order?.trade.outputAmount.currency.chainId || 0,
   ])
-
-  const stepTokenKey = (chainId: number, address: Address) => {
-    return `${chainId}-${address}`
-  }
 
   const getCurrencyByAddress = useCallback(
     async (chainId: number, address: Address): Promise<Currency | undefined> => {
@@ -107,8 +109,8 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
         if (step.command === Command.SWAP && step.metadata) {
           // eslint-disable-next-line no-await-in-loop
           const [inputToken, outputToken] = await Promise.all([
-            getCurrencyByAddress(step.metadata.chainId, step.metadata.inputToken),
-            getCurrencyByAddress(step.metadata.chainId, step.metadata.outputToken),
+            getCurrencyByAddress(step.metadata.chainId, step.metadata.inputToken as Address),
+            getCurrencyByAddress(step.metadata.chainId, step.metadata.outputToken as Address),
           ])
 
           tokenMapping[stepTokenKey(step.metadata.chainId, step.metadata.inputToken)] = inputToken
@@ -116,8 +118,8 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
         } else if (step.command === Command.BRIDGE && step.metadata) {
           // eslint-disable-next-line no-await-in-loop
           const [inputToken, outputToken] = await Promise.all([
-            getCurrencyByAddress(step.metadata.originChainId, step.metadata.inputToken),
-            getCurrencyByAddress(step.metadata.destinationChainId, step.metadata.outputToken),
+            getCurrencyByAddress(step.metadata.originChainId, step.metadata.inputToken as Address),
+            getCurrencyByAddress(step.metadata.destinationChainId, step.metadata.outputToken as Address),
           ])
 
           tokenMapping[stepTokenKey(step.metadata.originChainId, step.metadata.inputToken)] = inputToken
