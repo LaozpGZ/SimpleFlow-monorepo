@@ -173,7 +173,7 @@ export const getEVMToSolanaBridgeCalldata = async ({
   const stepData = data?.steps?.find((step) => step.id === stepType)?.items[0]?.data
 
   if (!stepData) {
-    throw new Error('Deposit Step is not found in bridge data')
+    return undefined
   }
 
   return {
