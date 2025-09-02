@@ -1,5 +1,5 @@
 import { BridgeTransactionData, PriceOrder, SVMOrder } from '@pancakeswap/price-api-sdk'
-import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { Currency, CurrencyAmount, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { Address } from 'viem/accounts'
 import { CrossChainAPIErrorCode } from '../CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 
@@ -127,14 +127,14 @@ interface StatusMetadataBridge {
   inputAmount: string
   outputAmount: string
   fee: string
-  inputToken: Address
-  outputToken: Address
+  inputToken: string
+  outputToken: string
 }
 
 export interface StatusMetadataSwap {
   chainId: number
-  inputToken: Address
-  outputToken: Address
+  inputToken: string
+  outputToken: string
   inputAmount: string
   outputAmount: string
   tx: string
@@ -142,8 +142,8 @@ export interface StatusMetadataSwap {
 }
 
 export interface BridgeStatusData extends BridgeStatusResponse {
-  inputCurrencyAmount?: CurrencyAmount<Currency> | null
-  outputCurrencyAmount?: CurrencyAmount<Currency> | null
+  inputCurrencyAmount?: UnifiedCurrencyAmount<UnifiedCurrency> | null
+  outputCurrencyAmount?: UnifiedCurrencyAmount<UnifiedCurrency> | null
   feesBreakdown?: {
     totalFeesUSD: number
     // in case of having swap in the bridge order, swapFeesUSD is null if swap fee is not loaded yet or returned as 0
@@ -155,6 +155,7 @@ export interface BridgeStatusData extends BridgeStatusResponse {
 export interface ActiveBridgeOrderMetadata {
   originChainId: number
   txHash: string
+  destinationChainId: number
 
   order: Exclude<PriceOrder, SVMOrder> | null | undefined
 

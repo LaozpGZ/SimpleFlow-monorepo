@@ -580,6 +580,7 @@ const useConfirmActions = (
                 order,
                 txHash: signature,
                 originChainId: order.trade.inputAmount.currency.chainId,
+                destinationChainId: order.trade.outputAmount.currency.chainId,
               })
               // Wait for confirmation
               await confirmTransaction(solanaConnection, signature)
@@ -669,6 +670,7 @@ const useConfirmActions = (
                 order,
                 txHash: hash,
                 originChainId: order.trade.inputAmount.currency.chainId,
+                destinationChainId: order.trade.outputAmount.currency.chainId,
               })
 
               await retryWaitForTransaction({

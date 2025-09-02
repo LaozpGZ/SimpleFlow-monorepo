@@ -549,9 +549,15 @@ export const postMetadata = async (params: GetMetadataParams): Promise<MetadataS
   return resp.json()
 }
 
-export const getBridgeStatus = async (chainId: number, txHash: string): Promise<BridgeStatusResponse> => {
+export const getBridgeStatus = async (
+  chainId: number,
+  txHash: string,
+  destinationChainId?: number,
+): Promise<BridgeStatusResponse> => {
+  const type = isSolana(destinationChainId) || isSolana(chainId) ? BridgeType.NON_EVM : BridgeType.EVM
+
   const resp = await fetch(
-    `${BRIDGE_API_ENDPOINT}/v1/status/${chainIdToExplorerInfoChainName[chainId]}?txHash=${txHash}`,
+    `${BRIDGE_API_ENDPOINT}/v1/status/${chainIdToExplorerInfoChainName[chainId]}?txHash=${txHash}&type=${type}`,
   )
   return resp.json()
 }

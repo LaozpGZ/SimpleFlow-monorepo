@@ -1,21 +1,34 @@
-import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
 import { useQuery } from '@tanstack/react-query'
-import { useCurrencyByChainId } from 'hooks/Tokens'
+import { useCurrencyByChainId, useUnifiedCurrency } from 'hooks/Tokens'
 import { useMemo } from 'react'
 import { getBridgeStatus } from '../api'
-import { ActiveBridgeOrderMetadata, BridgeStatus, BridgeStatusData, BridgeStatusResponse, Command } from '../types'
+import {
+  ActiveBridgeOrderMetadata,
+  BridgeStatus,
+  BridgeStatusData,
+  BridgeStatusResponse,
+  BridgeType,
+  Command,
+} from '../types'
 
-export const bridgeStatusQueryKey = (chainId?: number, txHash?: string) => ['bridge-status', chainId, txHash]
+export const bridgeStatusQueryKey = (chainId?: number, txHash?: string, destinationChainId?: number) => [
+  'bridge-status',
+  chainId,
+  txHash,
+  destinationChainId,
+]
 
 export const useBridgeStatus = (
   chainId?: number,
   txHash?: string,
   metadata?: ActiveBridgeOrderMetadata['metadata'],
+  destinationChainId?: number,
 ) => {
   const queryResult = useQuery({
-    queryKey: bridgeStatusQueryKey(chainId, txHash),
-    queryFn: () => (chainId && txHash ? getBridgeStatus(chainId, txHash) : undefined),
+    queryKey: bridgeStatusQueryKey(chainId, txHash, destinationChainId),
+    queryFn: () => (chainId && txHash ? getBridgeStatus(chainId, txHash, destinationChainId) : undefined),
     refetchInterval: (query) =>
       !query.state.data ||
       query.state.data?.status === BridgeStatus.PENDING ||
@@ -39,17 +52,17 @@ export const useBridgeStatus = (
     [metadata, queryResult.data],
   )
 
-  const inputCurrency = useCurrencyByChainId(data?.inputToken, data?.originChainId)
-  const outputCurrency = useCurrencyByChainId(data?.outputToken, data?.destinationChainId)
+  const inputCurrency = useUnifiedCurrency(data?.inputToken, data?.originChainId)
+  const outputCurrency = useUnifiedCurrency(data?.outputToken, data?.destinationChainId)
 
   const inputCurrencyAmount = useMemo(() => {
     if (!inputCurrency || !data || !data?.inputAmount) return undefined
-    return CurrencyAmount.fromRawAmount(inputCurrency, formatScientificToDecimal(data?.inputAmount))
+    return UnifiedCurrencyAmount.fromRawAmount(inputCurrency, formatScientificToDecimal(data?.inputAmount))
   }, [inputCurrency, data?.inputAmount])
 
   const outputCurrencyAmount = useMemo(() => {
     if (!outputCurrency || !data || !data?.outputAmount) return undefined
-    return CurrencyAmount.fromRawAmount(outputCurrency, formatScientificToDecimal(data?.outputAmount))
+    return UnifiedCurrencyAmount.fromRawAmount(outputCurrency, formatScientificToDecimal(data?.outputAmount))
   }, [outputCurrency, data?.outputAmount])
 
   const feesBreakdown = useMemo(() => {
