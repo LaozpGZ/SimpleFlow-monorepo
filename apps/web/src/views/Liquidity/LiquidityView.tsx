@@ -519,8 +519,7 @@ export const LiquidityView = () => {
   )
 
   const isPositionDetailsLoading = positionDetailsLoading || (positionDetails && !feeAmount)
-  const isPoolStateLoading = poolState === PoolState.LOADING || poolState === PoolState.INVALID
-  const isLoading = isPositionDetailsLoading || isPoolStateLoading
+  const isLoading = isPositionDetailsLoading || poolState === PoolState.LOADING || poolState === PoolState.INVALID
 
   const { isMobile } = useMatchBreakpoints()
 
@@ -528,7 +527,7 @@ export const LiquidityView = () => {
 
   const { hasMerkl } = useMerklInfo(poolAddress)
 
-  if ((!isPositionDetailsLoading && !positionDetails) || (!isPoolStateLoading && poolState === PoolState.NOT_EXISTS)) {
+  if ((!isPositionDetailsLoading && !positionDetails) || poolState === PoolState.NOT_EXISTS) {
     return (
       <NotFound LinkComp={Link}>
         <NextSeo title="404" />
