@@ -56,6 +56,11 @@ export function getBlockExploreLink(
 
 export function getBlockExploreName(chainIdOverride?: number) {
   const chainId = chainIdOverride || ChainId.BSC
+
+  if (chainId === NonEVMChainId.SOLANA) {
+    return 'Solscan'
+  }
+
   const chain = chains.find((c) => c.id === chainId)
 
   return multiChainScanName[chain?.id || -1] || chain?.blockExplorers?.default.name || bsc.blockExplorers.default.name

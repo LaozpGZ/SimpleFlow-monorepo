@@ -44,14 +44,17 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
             }
             case Command.BRIDGE: {
               if (!step.metadata) return ''
+              const inputCurrency = order?.trade?.inputAmount?.currency
+              const outputCurrency = order?.trade?.outputAmount?.currency
 
-              const originChainId = order?.trade?.inputAmount?.currency?.chainId || step.metadata?.originChainId
-              const destinationChainId =
-                order?.trade?.outputAmount?.currency?.chainId || step.metadata?.destinationChainId
-              const originTokenAddress =
-                order?.trade?.inputAmount?.currency?.wrapped.address || step.metadata?.inputToken
-              const destinationTokenAddress =
-                order?.trade?.outputAmount?.currency?.wrapped.address || step.metadata?.outputToken
+              const originChainId = inputCurrency?.chainId || step.metadata?.originChainId
+              const destinationChainId = outputCurrency?.chainId || step.metadata?.destinationChainId
+              const originTokenAddress = inputCurrency?.isNative
+                ? inputCurrency?.symbol
+                : inputCurrency?.wrapped.address || step.metadata?.inputToken
+              const destinationTokenAddress = outputCurrency?.isNative
+                ? outputCurrency?.symbol
+                : outputCurrency?.wrapped.address || step.metadata?.outputToken
 
               return (
                 <BridgeStep
