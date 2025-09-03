@@ -7,12 +7,16 @@ import { GetAvailableRoutesParams, getBridgeAvailableRoutes } from '../api'
 export function useBridgeAvailableRoutes(params?: GetAvailableRoutesParams) {
   const { originChainId, destinationChainId, originToken, destinationToken } = params || {}
 
+  // disabled solana bridge
+  const diabled = isSolana(originChainId) || isSolana(destinationChainId)
+
   return useQuery({
     queryKey: ['bridge-available-routes', originChainId, destinationChainId, originToken, destinationToken],
     queryFn: () => getBridgeAvailableRoutes({ originChainId, destinationChainId, originToken, destinationToken }),
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
+    enabled: !diabled,
   })
 }
 
