@@ -1,6 +1,7 @@
 import { Box, IconButton, Input, SwapHorizIcon, Text } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
+import { QuickActionButtons } from './QuickActionButtons'
 
 const InputContainer = styled(Box)`
   position: relative;
@@ -84,6 +85,8 @@ export const MarketPricePanel = () => {
           </Text>
         </InputBottomBar>
       </InputContainer>
+
+      <QuickActionButtons />
     </FormContainer>
   )
 }
