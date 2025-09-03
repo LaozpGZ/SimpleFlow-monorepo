@@ -1787,6 +1787,9 @@ importers:
       jotai:
         specifier: 'catalog:'
         version: 2.12.5(@types/react@18.2.37)(react@18.2.0)
+      jotai-location:
+        specifier: ^0.6.2
+        version: 0.6.2(jotai@2.12.5(@types/react@18.2.37)(react@18.2.0))
       jotai-tanstack-query:
         specifier: 0.11.0
         version: 0.11.0(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.52.1(react@18.2.0))(jotai@2.12.5(@types/react@18.2.37)(react@18.2.0))(react@18.2.0)
@@ -11292,6 +11295,7 @@ packages:
 
   '@simplewebauthn/types@9.0.1':
     resolution: {integrity: sha512-tGSRP1QvsAvsJmnOlRQyw/mvK9gnPtjEc5fg2+m8n+QUa+D7rvrKkOYyfpy42GTs90X3RDOnqJgfHt+qO67/+w==}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
 
   '@sinclair/typebox@0.27.8':
     resolution: {integrity: sha512-+Fj43pSMwJs4KRrH/938Uf+uAELIgVBmQzg/q1YG10djyfA3TnrU8N8XzqCh/okZdszqBQTZf96idMfE5lnwTA==}
@@ -14390,6 +14394,7 @@ packages:
 
   '@walletconnect/modal@2.6.2':
     resolution: {integrity: sha512-eFopgKi8AjKf/0U4SemvcYw9zlLpx9njVN8sf6DAkowC2Md0gPU/UNEbH1Wwj407pEKnEds98pKWib1NN1ACoA==}
+    deprecated: Please follow the migration guide on https://docs.reown.com/appkit/upgrade/wcm
 
   '@walletconnect/modal@2.7.0':
     resolution: {integrity: sha512-RQVt58oJ+rwqnPcIvRFeMGKuXb9qkgSmwz4noF8JZGUym3gUAzVs+uW2NQ1Owm9XOJAV+sANrtJ+VoVq1ftElw==}
@@ -55872,6 +55877,12 @@ snapshots:
   jose@5.2.1: {}
 
   jose@6.1.0: {}
+
+  jose@6.1.0: {}
+
+  jotai-location@0.6.2(jotai@2.12.5(@types/react@18.2.37)(react@18.2.0)):
+    dependencies:
+      jotai: 2.12.5(@types/react@18.2.37)(react@18.2.0)
 
   jotai-tanstack-query@0.11.0(@tanstack/query-core@5.69.0)(@tanstack/react-query@5.52.1(react@18.2.0))(jotai@2.12.5(@types/react@18.2.37)(react@18.2.0))(react@18.2.0):
     dependencies:

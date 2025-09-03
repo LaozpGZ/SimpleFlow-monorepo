@@ -3,9 +3,11 @@ import Page from 'components/Layout/Page'
 import { SwapType } from 'views/Swap/types'
 import { SwapSelection } from 'views/SwapSimplify/InfinitySwap/SwapSelectionTab'
 import { ButtonAndDetailsPanel } from 'views/SwapSimplify/InfinitySwap/ButtonAndDetailsPanel'
+import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
 import { LimitOrderForm } from './components/LimitOrderForm'
 import { CommitButton } from './components/CommitButton'
-import { MarketPricePanel } from './components/MarketPricePanel'
+import { MarketPriceInput } from './components/MarketPriceInput'
+import { QuickActionButtons } from './components/QuickActionButtons'
 
 export const PCSLimitOrdersView = () => {
   return (
@@ -15,7 +17,11 @@ export const PCSLimitOrdersView = () => {
           <SwapUIV2.SwapTabAndInputPanelWrapper>
             <SwapSelection swapType={SwapType.LIMIT} withToolkit />
             <LimitOrderForm />
-            <MarketPricePanel />
+
+            <FormContainer>
+              <MarketPriceInput />
+              <QuickActionButtons />
+            </FormContainer>
           </SwapUIV2.SwapTabAndInputPanelWrapper>
 
           <ButtonAndDetailsPanel pricingAndSlippage={null} swapCommitButton={<CommitButton />} tradeDetails={null} />
