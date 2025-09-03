@@ -1,13 +1,12 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { createQueryKey } from 'utils/reactQuery'
-import { Address } from 'viem'
 import { getUserBridgeOrdersV2 } from '../api'
 import { BridgeStatus } from '../types'
 
-const getRecentBridgeOrdersQueryKey = createQueryKey<'recent-bridge-orders', [address: Address]>('recent-bridge-orders')
+const getRecentBridgeOrdersQueryKey = createQueryKey<'recent-bridge-orders', [address: string]>('recent-bridge-orders')
 
 interface UseRecentBridgeOrdersParameters {
-  address?: Address
+  address?: string
 }
 
 export const useRecentBridgeOrders = ({ address }: UseRecentBridgeOrdersParameters) => {

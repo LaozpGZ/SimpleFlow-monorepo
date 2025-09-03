@@ -11,8 +11,9 @@ import { clearAllTransactions } from 'state/transactions/actions'
 import { useRecentBridgeOrders } from 'views/Swap/Bridge/hooks/useRecentBridgeOrders'
 import { Address } from 'viem'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { isEvm } from '@pancakeswap/chains'
+import { isEvm, isSolana } from '@pancakeswap/chains'
 
+import { isSol } from '@pancakeswap/sdk'
 import ConnectWalletButton from '../../ConnectWalletButton'
 import { AutoRow } from '../../Layout/Row'
 import { CrossChainTransaction } from './CrossChainTransaction'
@@ -58,7 +59,7 @@ export function RecentTransactions() {
     isFetching: isRecentBridgeOrdersLoading,
     fetchNextPage,
   } = useRecentBridgeOrders({
-    address: isEvmChain ? (evmAccount as Address) : undefined,
+    address: (isSolana(chainId) ? solanaAccount : isEvm(chainId) ? (evmAccount as Address) : undefined) || undefined,
   })
 
   const hasMoreCrossChainOrders = Boolean(
