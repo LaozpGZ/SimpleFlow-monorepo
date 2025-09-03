@@ -12,6 +12,7 @@ import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { publicClient } from 'utils/wagmi'
 import { Address, erc20Abi } from 'viem'
 import { Currency } from '@pancakeswap/solana-core-sdk'
+import { isSolana } from '@pancakeswap/chains'
 import { BridgeStatus, BridgeStatusData, Command } from '../../types'
 
 import { customBridgeStatus } from '../../utils/customBridgeStatus'
@@ -155,6 +156,24 @@ export const useTimelineItems = ({ bridgeStatus, order }: UseTimelineItemsProps)
             }
             case Command.BRIDGE:
               if (!step.metadata) return ''
+
+              if (isSolana(step.metadata.originChainId) || isSolana(step.metadata.destinationChainId)) {
+                const inCurrency = order?.trade?.inputAmount?.currency
+
+                if (step.metadata.originChainId === step.metadata.destinationChainId) {
+                  return t('Bridge %currency% (%inputChain% to %outputChain%)', {
+                    currency: inCurrency?.symbol || '',
+                    inputChain: getFullChainNameById(inCurrency?.chainId),
+                    outputChain: getFullChainNameById(step.metadata.destinationChainId),
+                  })
+                }
+                return t('Swap %currencyA% (%chainNameA%) to %currencyB% (%chainName%)', {
+                  currencyA: inCurrency?.symbol || '',
+                  chainNameA: getFullChainNameById(inCurrency?.chainId),
+                  currencyB: order?.trade?.outputAmount?.currency?.symbol || '',
+                  chainName: getFullChainNameById(step.metadata.destinationChainId),
+                })
+              }
 
               return t('Bridge %currency% (%inputChain% to %outputChain%)', {
                 currency:
