@@ -554,7 +554,7 @@ export const getUserBridgeOrders = async (
 }
 
 export const getUserBridgeOrdersV2 = async (
-  address: Address,
+  address: string,
   params?: {
     after?: string
     continuation?: string
