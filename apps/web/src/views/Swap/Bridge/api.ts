@@ -501,16 +501,19 @@ export const postSolanaEVMBridgeMetadata = async (
   }
 }
 
-export const postMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
-  const { commands, recipientOnDestChain, slippageTolerance, type, user, ...rest } = params
-
+function generateUrlParams(obj: Record<string, any>) {
   const stringParams = Object.fromEntries(
-    Object.entries(rest)
+    Object.entries(obj)
       .filter(([_, value]) => value !== undefined && value !== '')
       .map(([key, value]) => [key, value?.toString()]),
   )
+  return new URLSearchParams(stringParams).toString()
+}
 
-  const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/metadata?${new URLSearchParams(stringParams).toString()}`, {
+export const postMetadata = async (params: GetMetadataParams): Promise<MetadataSuccessResponse> => {
+  const { commands, recipientOnDestChain, slippageTolerance, type, user, ...rest } = params
+
+  const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/metadata?${generateUrlParams(rest)}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -547,5 +550,20 @@ export const getUserBridgeOrders = async (
   afterCursor?: string,
 ): Promise<UserBridgeOrdersResponse> => {
   const resp = await fetch(`${BRIDGE_API_ENDPOINT}/v1/orders/${address}${afterCursor ? `?after=${afterCursor}` : ''}`)
+  return resp.json()
+}
+
+export const getUserBridgeOrdersV2 = async (
+  address: Address,
+  params?: {
+    after?: string
+    continuation?: string
+  },
+): Promise<{ EVM: UserBridgeOrdersResponse; ['NON-EVM']: UserBridgeOrdersResponse }> => {
+  const resp = await fetch(
+    `${BRIDGE_API_ENDPOINT}/v2/orders/${address}${
+      params?.after || params?.continuation ? `?${generateUrlParams(params)}` : ''
+    }`,
+  )
   return resp.json()
 }
