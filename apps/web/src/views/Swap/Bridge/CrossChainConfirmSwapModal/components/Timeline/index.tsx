@@ -15,7 +15,7 @@ import { getBlockExploreLink } from 'utils'
 export type TimelineItemStatus = 'completed' | 'inProgress' | 'failed' | 'warning' | 'notStarted'
 
 export interface TimelineItemProps {
-  title: string
+  title: string | React.ReactNode
   subtitle?: string
   icon?: React.ReactNode
   status: TimelineItemStatus

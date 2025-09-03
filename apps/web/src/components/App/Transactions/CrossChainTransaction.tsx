@@ -21,19 +21,20 @@ import {
 
 import styled from 'styled-components'
 
-import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
 import { useQuery } from '@tanstack/react-query'
 import { ViewOnExplorerButton } from 'components/ViewOnExplorerButton'
 import { DISPLAY_PRECISION } from 'config/constants/formatting'
-import { useCurrencyByChainId } from 'hooks/Tokens'
-import { multiChainName, multiChainShortName } from 'state/info/constant'
+import { useUnifiedCurrency } from 'hooks/Tokens'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { OrderResultModalContent } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/OrderStatus/OrderResultModalContent'
 import { bridgeStatusQueryKey } from 'views/Swap/Bridge/hooks/useBridgeStatus'
 import { ActiveBridgeOrderMetadata, BridgeStatus, UserBridgeOrder } from 'views/Swap/Bridge/types'
 import { getBridgeTitle } from 'views/Swap/Bridge/utils/bridgeTitle'
 import { customBridgeStatus } from 'views/Swap/Bridge/utils/customBridgeStatus'
+import { chainNames } from '@pancakeswap/chains'
+import upperCase from 'lodash/upperCase'
 
 const StyledChainLogo = styled(ChainLogo)`
   > img {
@@ -68,15 +69,15 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
   const inputChainName = getFullChainNameById(inputChainId)
   const outputChainName = getFullChainNameById(outputChainId)
 
-  const inputToken = useCurrencyByChainId(order.inputToken, inputChainId)
-  const outputToken = useCurrencyByChainId(order.outputToken, outputChainId)
+  const inputToken = useUnifiedCurrency(order.inputToken, inputChainId)
+  const outputToken = useUnifiedCurrency(order.outputToken, outputChainId)
 
   const inputAmount =
-    inputToken && CurrencyAmount.fromRawAmount(inputToken, formatScientificToDecimal(order.inputAmount))
+    inputToken && UnifiedCurrencyAmount.fromRawAmount(inputToken, formatScientificToDecimal(order.inputAmount))
 
   const outputAmount =
     outputToken &&
-    CurrencyAmount.fromRawAmount(
+    UnifiedCurrencyAmount.fromRawAmount(
       outputToken,
       formatScientificToDecimal(order.status === BridgeStatus.SUCCESS ? order.outputAmount : order.minOutputAmount),
     )
@@ -165,16 +166,14 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
               {inputAmount?.toSignificant(DISPLAY_PRECISION)}&nbsp;
               {inputToken?.symbol}
             </Text>
-            &nbsp; (
-            {t('on %chainSymbol%', { chainSymbol: multiChainShortName[inputChainId] ?? multiChainName[inputChainId] })}){' '}
-            {t('for')}&nbsp;
+            &nbsp; ({t('on %chainSymbol%', { chainSymbol: upperCase(chainNames[inputChainId]) })}) {t('for')}&nbsp;
             <Text as="span" bold small>
               {outputAmount?.toSignificant(DISPLAY_PRECISION)}&nbsp;
               {outputToken?.symbol}
             </Text>
             &nbsp; (
             {t('on %chainSymbol%', {
-              chainSymbol: multiChainShortName[outputChainId] ?? multiChainName[outputChainId],
+              chainSymbol: upperCase(chainNames[outputChainId]),
             })}
             )
           </Text>
