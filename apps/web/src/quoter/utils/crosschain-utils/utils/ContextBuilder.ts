@@ -73,7 +73,6 @@ export class ContextBuilder {
               nonce: _option.nonce,
               commands: params.commands,
               recipientOnDestChain,
-              slippageTolerance: userSlippage.toString(),
             }),
           ),
         getSwapQuote: (swapOption: Partial<QuoteQuery>) => {
