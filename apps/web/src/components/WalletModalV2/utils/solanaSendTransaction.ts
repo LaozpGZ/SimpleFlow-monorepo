@@ -230,7 +230,8 @@ export function detectWalletTransactionSupport(wallet: any): boolean {
   // More strict check - only use v0 if explicitly supported
   const supportsV0 =
     wallet?.features?.['solana:signAndSendTransaction']?.supportedTransactionVersions?.has?.('v0') ||
-    wallet?.features?.['solana:signTransaction']?.supportedTransactionVersions?.has?.('v0')
+    wallet?.features?.['solana:signTransaction']?.supportedTransactionVersions?.has?.('v0') ||
+    wallet?.wallet?.adapter?.supportedTransactionVersions?.has?.(0)
 
   // eslint-disable-next-line no-console
   console.log('🔍 Wallet transaction support detection:', {
