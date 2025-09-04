@@ -14,7 +14,7 @@ import ConnectWalletButton from 'components/ConnectWalletButton'
 import { AutoRow } from 'components/Layout/Row'
 import { RoutingSettingsButton, RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { BIG_INT_ZERO } from 'config/constants/exchange'
-import { useCurrency, useUnifiedCurrency } from 'hooks/Tokens'
+import { useUnifiedCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
 import { useUnifiedCurrencyBalances } from 'hooks/useUnifiedCurrencyBalance'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
@@ -35,7 +35,10 @@ import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckAp
 import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModalV2'
 import { EVMInterfaceOrder, isBridgeOrder, isClassicOrder, isSVMOrder, isXOrder } from 'views/Swap/utils'
-import { CrossChainAPIErrorCode } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
+import {
+  CrossChainAPIErrorCode,
+  RELAY_ERROR,
+} from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 import { useAccount } from 'wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { isEvm, isSolana, NonEVMChainId } from '@pancakeswap/chains'
@@ -421,11 +424,14 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         return t('Retry with lower input amount!')
       }
 
-      if (tradeError.message.includes('too low relative to fees') || tradeError.message.includes('AMOUNT_TOO_LOW')) {
+      if (
+        tradeError.message.includes('too low relative to fees') ||
+        tradeError.message === RELAY_ERROR.AMOUNT_TOO_LOW
+      ) {
         return t('Retry with higher input amount!')
       }
 
-      if (tradeError.message.includes('NO_SWAP_ROUTES_FOUND')) {
+      if (tradeError.message === RELAY_ERROR.NO_SWAP_ROUTES_FOUND) {
         return t('No Quotes')
       }
 
@@ -433,7 +439,8 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
       if (
         [CrossChainAPIErrorCode.SERVER_ERROR, CrossChainAPIErrorCode.DOWNSTREAM_SERVER_ERROR].includes(
           tradeError.message as CrossChainAPIErrorCode,
-        )
+        ) ||
+        tradeError.message === RELAY_ERROR.UNKNOWN_ERROR
       ) {
         return t('Server error. Please try again!')
       }

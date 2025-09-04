@@ -1,6 +1,12 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { useMemo } from 'react'
 
+export enum RELAY_ERROR {
+  NO_SWAP_ROUTES_FOUND = 'NO_SWAP_ROUTES_FOUND',
+  UNKNOWN_ERROR = 'UNKNOWN_ERROR',
+  AMOUNT_TOO_LOW = 'AMOUNT_TOO_LOW',
+}
+
 export enum CrossChainAPIErrorCode {
   // 4000 - 4010
   NOT_FOUND = 'CCA-4000',
