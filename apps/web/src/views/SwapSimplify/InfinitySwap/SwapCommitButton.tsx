@@ -35,6 +35,7 @@ import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckAp
 import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModalV2'
 import { EVMInterfaceOrder, isBridgeOrder, isClassicOrder, isSVMOrder, isXOrder } from 'views/Swap/utils'
+import { CrossChainAPIErrorCode } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 import { useAccount } from 'wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { isEvm, isSolana, NonEVMChainId } from '@pancakeswap/chains'
@@ -420,8 +421,21 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
         return t('Retry with lower input amount!')
       }
 
-      if (tradeError.message.includes('too low relative to fees')) {
+      if (tradeError.message.includes('too low relative to fees') || tradeError.message.includes('AMOUNT_TOO_LOW')) {
         return t('Retry with higher input amount!')
+      }
+
+      if (tradeError.message.includes('NO_SWAP_ROUTES_FOUND')) {
+        return t('No Quotes')
+      }
+
+      // Handle CrossChainAPIErrorCode 5000-5013 with friendly messages
+      if (
+        [CrossChainAPIErrorCode.SERVER_ERROR, CrossChainAPIErrorCode.DOWNSTREAM_SERVER_ERROR].includes(
+          tradeError.message as CrossChainAPIErrorCode,
+        )
+      ) {
+        return t('Server error. Please try again!')
       }
 
       return tradeError.message
