@@ -16,7 +16,7 @@ import { TokenAddressMap } from '@pancakeswap/token-lists'
 import { useReadContracts } from '@pancakeswap/wagmi'
 import { GELATO_NATIVE } from 'config/constants'
 import { UnsafeCurrency } from 'config/constants/types'
-import { useAtomValue } from 'jotai'
+import { atom, useAtomValue } from 'jotai'
 import memoize from 'lodash/memoize'
 import uniqueId from 'lodash/uniqueId'
 import { useMemo } from 'react'
@@ -24,11 +24,17 @@ import {
   combinedCurrenciesMapFromActiveUrlsAtom,
   combinedTokenMapFromActiveUrlsAtom,
   combinedTokenMapFromOfficialsUrlsAtom,
+  combinedTokenMapFromUnsupportedUrlsAtom,
   useUnsupportedTokenList,
   useWarningTokenList,
 } from 'state/lists/hooks'
 import { SOLANA_NATIVE_TOKEN_ADDRESS } from 'quoter/consts'
 import { safeGetAddress, safeGetUnifiedAddress } from 'utils'
+import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
+import { atomFamily } from 'jotai/utils'
+import isEqual from 'lodash/isEqual'
+import { multicall } from 'viem/actions'
+import { publicClient } from 'utils/viem'
 import useUserAddedTokens, { useUserAddedTokensByChainIds } from '../state/user/hooks/useUserAddedTokens'
 import { useActiveChainId } from './useActiveChainId'
 import useNativeCurrency, { useUnifiedNativeCurrency } from './useNativeCurrency'
@@ -503,3 +509,73 @@ export function convertTokenToCurrency(token: ERC20Token): Currency {
 
   return isNative ? native : token
 }
+
+export const currencyByChainIdAtom = atomFamily(
+  ({ currencyId, chainId }: { currencyId: string; chainId: number }) =>
+    atom<Promise<UnsafeCurrency>>(async (get) => {
+      if (!chainId) return undefined
+
+      const native = Native.onChain(chainId)
+
+      if (
+        currencyId?.toUpperCase() === native.symbol?.toUpperCase() ||
+        currencyId?.toLowerCase() === GELATO_NATIVE ||
+        currencyId?.toLowerCase() === zeroAddress
+      ) {
+        return native
+      }
+
+      const address = safeGetAddress(currencyId)
+
+      // Check if unsupported token
+      const unsupportedTokenMap = get(combinedTokenMapFromUnsupportedUrlsAtom)
+      if (address && unsupportedTokenMap[address]) return undefined
+
+      // TODO: Check for list of user-added tokens
+      const tokens = get(combinedTokenMapFromActiveUrlsAtom)
+
+      // Token found in list
+      const token = tokens[chainId][address]
+      if (token) return token
+
+      // Fallback to fetching info from erc20 contract
+      if (address) {
+        const client = publicClient({ chainId })
+        const [name, symbol, decimals] = await multicall(client, {
+          allowFailure: false,
+          contracts: [
+            {
+              address,
+              abi: erc20Abi,
+              functionName: 'name',
+            },
+            {
+              address,
+              abi: erc20Abi,
+              functionName: 'symbol',
+            },
+            {
+              address,
+              abi: erc20Abi,
+              functionName: 'decimals',
+            },
+          ],
+        })
+
+        return new ERC20Token(chainId, address, decimals, symbol ?? 'UNKNOWN', name ?? 'Unknown Token')
+      }
+
+      // no token found
+      return undefined
+    }),
+  isEqual,
+)
+
+export const currencyAtom = atomFamily(
+  (currencyId: string) =>
+    atom((get) => {
+      const { chainId } = get(accountActiveChainAtom)
+      return get(currencyByChainIdAtom({ currencyId, chainId }))
+    }),
+  isEqual,
+)

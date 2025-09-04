@@ -92,7 +92,7 @@ export const QuickActionButtons = () => {
         </QuickActionButton>
 
         {!isSmallScreen && (
-          <CustomInputContainer width="120%" minWidth="100px">
+          <CustomInputContainer width="120%" minWidth="110px">
             <StyledInput
               value=""
               onChange={() => {}}

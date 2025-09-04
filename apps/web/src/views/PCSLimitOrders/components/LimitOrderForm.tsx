@@ -2,10 +2,10 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Skeleton, Text } from '@pancakeswap/uikit'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { FlipButton } from 'components/FlipButton'
-import { useAtom } from 'jotai'
+import { useAtom, useAtomValue } from 'jotai'
 import { Suspense, useCallback } from 'react'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
-import { useCurrency } from 'hooks/Tokens'
+import { currencyAtom, useCurrency } from 'hooks/Tokens'
 import { UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
 import currencyId from 'utils/currencyId'
 import { inputCurrencyIdAtom, outputCurrencyIdAtom } from '../state/currencyAtoms'
@@ -19,6 +19,9 @@ export const LimitOrderForm = () => {
 
   const currency0 = useCurrency(currencyIdA)
   const currency1 = useCurrency(currencyIdB)
+
+  const c0 = useAtomValue(currencyAtom(currencyIdA))
+  console.log('currency from atom', c0)
 
   // TODO: Validate duplicate tokens, Native-WNATIVE, etc.
   const handleCurrencySelect = useCallback((field: Field, currency: UnifiedCurrency) => {

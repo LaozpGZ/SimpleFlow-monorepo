@@ -1,18 +1,13 @@
 import { Native } from '@pancakeswap/sdk'
 import { CAKE } from '@pancakeswap/tokens'
 import { atom } from 'jotai'
-import { atomWithSearchParams } from 'jotai-location'
 import { atomFamily } from 'jotai/utils'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
+import isEqual from 'lodash/isEqual'
 
-// Issue: Not sure if it's because of atomWithSearchParams or not,
-// but the query value are read but then removed from the url
-const inputCurrencyFamily = atomFamily((chainId: number) =>
-  atomWithSearchParams('inputCurrency', Native.onChain(chainId).symbol),
-)
-const outputCurrencyFamily = atomFamily((chainId: number) =>
-  atomWithSearchParams('outputCurrency', CAKE[chainId].address),
-)
+// TODO: Sync with Query State. Idea: Create -> locationAtom and atomWithUrlQuery
+const inputCurrencyFamily = atomFamily((chainId: number) => atom(Native.onChain(chainId).symbol), isEqual)
+const outputCurrencyFamily = atomFamily((chainId: number) => atom(CAKE[chainId].address), isEqual)
 
 export const inputCurrencyIdAtom = atom(
   (get) => {
