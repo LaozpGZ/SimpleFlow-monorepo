@@ -1,6 +1,6 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { RouteType } from '@pancakeswap/smart-router'
-import { CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, Currency, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { atomFamily } from 'jotai/utils'
 import { BridgeTradeError } from 'quoter/quoter.types'
 import {
