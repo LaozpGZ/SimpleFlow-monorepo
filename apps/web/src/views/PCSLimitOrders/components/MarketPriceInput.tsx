@@ -1,6 +1,10 @@
 import { Box, IconButton, Input, SwapHorizIcon, Text } from '@pancakeswap/uikit'
+import { useAtomValue, useSetAtom } from 'jotai'
 import styled from 'styled-components'
-import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
+import { Suspense } from 'react'
+import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { baseCurrencyAtom, flipCurrenciesAtom, quoteCurrencyAtom } from '../state/currencyAtoms'
 
 const InputContainer = styled(Box)`
   position: relative;
@@ -58,33 +62,50 @@ function truncateString(str: string, maxLength: number) {
 }
 
 export const MarketPriceInput = () => {
+  const baseCurrency = useAtomValue(baseCurrencyAtom)
+  const quoteCurrency = useAtomValue(quoteCurrencyAtom)
+
+  const priceUsd = useStablecoinPrice(quoteCurrency, { enabled: !!quoteCurrency })
+  // TODO: Calculate usd price based on market price input amount
+  const amount = 0n
+  const usdValue = priceUsd ? amount * priceUsd?.quotient : 0n
+
+  // TODO: Check market price flipping logic according to lower/upper ticks
+  const flipCurrencies = useSetAtom(flipCurrenciesAtom)
+
+  if (!baseCurrency || !quoteCurrency) return null
+
   return (
-    <InputContainer>
-      <InputTopLeft>
-        <Text color="textSubtle" small>
-          Sell when 1{' '}
-          <Text as="span" color="textSubtle" small bold>
-            BNB
-          </Text>{' '}
-          is worth:
-        </Text>
-      </InputTopLeft>
-      <InputTopRight>
-        <IconButton variant="text" scale="xs">
-          <SwapHorizIcon color="primary60" width="18px" />
-        </IconButton>
-      </InputTopRight>
-      <InputLeftBox>
-        <Text color="textSubtle" fontSize="20px" bold>
-          {truncateString('CAKE', 15)}
-        </Text>
-      </InputLeftBox>
-      <StyledInput type="number" placeholder="0.00" />
-      <InputBottomBar>
-        <Text color="textSubtle" small>
-          ~827.05 USD
-        </Text>
-      </InputBottomBar>
-    </InputContainer>
+    <Suspense>
+      <InputContainer>
+        <InputTopLeft>
+          <Text color="textSubtle" small>
+            Sell when 1{' '}
+            <Text as="span" color="textSubtle" small bold>
+              {truncateString(baseCurrency.symbol, 15)}
+            </Text>{' '}
+            is worth:
+          </Text>
+        </InputTopLeft>
+        <InputTopRight>
+          <IconButton variant="text" scale="xs" onClick={flipCurrencies}>
+            <SwapHorizIcon color="primary60" width="18px" />
+          </IconButton>
+        </InputTopRight>
+        <InputLeftBox>
+          <Text color="textSubtle" fontSize="20px" bold>
+            {truncateString(quoteCurrency.symbol, 15)}
+          </Text>
+        </InputLeftBox>
+        <StyledInput type="number" placeholder="0.00" />
+        {priceUsd && (
+          <InputBottomBar>
+            <Text color="textSubtle" small>
+              ~{formatDollarAmount(+usdValue.toString(), undefined, false)} USD
+            </Text>
+          </InputBottomBar>
+        )}
+      </InputContainer>
+    </Suspense>
   )
 }

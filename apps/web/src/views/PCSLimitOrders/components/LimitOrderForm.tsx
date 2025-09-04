@@ -2,32 +2,20 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Skeleton, Text } from '@pancakeswap/uikit'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { FlipButton } from 'components/FlipButton'
-import { useAtom, useAtomValue } from 'jotai'
-import { Suspense, useCallback } from 'react'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { Suspense } from 'react'
 import { FormContainer } from 'views/SwapSimplify/InfinitySwap/FormContainer'
-import { currencyAtom, useCurrency } from 'hooks/Tokens'
-import { UnifiedCurrency } from '@pancakeswap/swap-sdk-core'
-import currencyId from 'utils/currencyId'
-import { inputCurrencyIdAtom, outputCurrencyIdAtom } from '../state/currencyAtoms'
 import { Field } from '../types/limitOrder.types'
+import { baseCurrencyAtom, flipCurrenciesAtom, quoteCurrencyAtom, setCurrencyAtom } from '../state/currencyAtoms'
 
 export const LimitOrderForm = () => {
   const { t } = useTranslation()
 
-  const [currencyIdA, setIdA] = useAtom(inputCurrencyIdAtom)
-  const [currencyIdB, setIdB] = useAtom(outputCurrencyIdAtom)
+  const baseCurrency = useAtomValue(baseCurrencyAtom)
+  const quoteCurrency = useAtomValue(quoteCurrencyAtom)
 
-  const currency0 = useCurrency(currencyIdA)
-  const currency1 = useCurrency(currencyIdB)
-
-  const c0 = useAtomValue(currencyAtom(currencyIdA))
-  console.log('currency from atom', c0)
-
-  // TODO: Validate duplicate tokens, Native-WNATIVE, etc.
-  const handleCurrencySelect = useCallback((field: Field, currency: UnifiedCurrency) => {
-    if (field === Field.INPUT) setIdA(currencyId(currency))
-    else setIdB(currencyId(currency))
-  }, [])
+  const setCurrency = useSetAtom(setCurrencyAtom)
+  const flipCurrencies = useSetAtom(flipCurrenciesAtom)
 
   return (
     <>
@@ -35,8 +23,8 @@ export const LimitOrderForm = () => {
         <Suspense fallback={<Skeleton animation="pulse" variant="round" width="100%" height="80px" />}>
           <CurrencyInputPanelSimplify
             id="limit-order-input"
-            currency={currency0}
-            onCurrencySelect={(c) => handleCurrencySelect(Field.INPUT, c)}
+            currency={baseCurrency}
+            onCurrencySelect={(c) => setCurrency({ field: Field.INPUT, newCurrency: c })}
             title={
               <Text color="textSubtle" small bold>
                 {t('Sell')}
@@ -47,12 +35,12 @@ export const LimitOrderForm = () => {
             showMaxButton
           />
         </Suspense>
-        <FlipButton />
+        <FlipButton onFlip={flipCurrencies} />
         <Suspense fallback={<Skeleton animation="pulse" variant="round" width="100%" height="80px" />}>
           <CurrencyInputPanelSimplify
             id="limit-order-output"
-            currency={currency1}
-            onCurrencySelect={(c) => handleCurrencySelect(Field.OUTPUT, c)}
+            currency={quoteCurrency}
+            onCurrencySelect={(c) => setCurrency({ field: Field.OUTPUT, newCurrency: c })}
             title={
               <Text color="textSubtle" small bold>
                 {t('Buy')}
