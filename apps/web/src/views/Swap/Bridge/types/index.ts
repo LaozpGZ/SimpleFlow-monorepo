@@ -201,5 +201,4 @@ export type BridgeMetadataParams = {
   nonce?: number
   commands?: (BridgeDataSchema | SwapDataSchema)[]
   recipientOnDestChain?: string
-  slippageTolerance?: string
 }

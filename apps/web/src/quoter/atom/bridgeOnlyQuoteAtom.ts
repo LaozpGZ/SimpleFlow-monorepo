@@ -1,6 +1,6 @@
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { RouteType } from '@pancakeswap/smart-router'
-import { Currency, CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { CurrencyAmount, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { atomFamily } from 'jotai/utils'
 import { BridgeTradeError } from 'quoter/quoter.types'
 import {
@@ -9,20 +9,22 @@ import {
   postMetadata,
   postSolanaEVMBridgeMetadata,
 } from 'views/Swap/Bridge/api'
-import { BridgeMetadataParams, BridgeType } from 'views/Swap/Bridge/types'
+import { BridgeMetadataParams } from 'views/Swap/Bridge/types'
 import { InterfaceOrder } from 'views/Swap/utils'
 import { isSolana } from '@pancakeswap/chains'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 import { solanaTokens, USDC } from '@pancakeswap/tokens'
+import { solanaUserSlippageAtomWithLocalStorage, userSlippageAtomWithLocalStorage } from '@pancakeswap/utils/user'
 import { atomWithLoadable } from './atomWithLoadable'
 
 export const bridgeOnlyQuoteAtom = atomFamily(
   (params: BridgeMetadataParams) =>
     atomWithLoadable(async (get) => {
       const { inputAmount, outputCurrency } = params
+      const slippageToleranceEVM = get(userSlippageAtomWithLocalStorage)
+      const slippageToleranceSolana = get(solanaUserSlippageAtomWithLocalStorage)
 
       const accountState = get(accountActiveChainAtom)
-
       // by default, recipientOnDestChain will be account address
       // metadata endpoint only receive either both recipientOnDestChain and commands or none of them
       const postBridgeSwapParams =
@@ -44,7 +46,9 @@ export const bridgeOnlyQuoteAtom = atomFamily(
             amount: inputAmount.quotient.toString(),
             user: isSolana(inputAmount.currency.chainId) ? accountState.solanaAccount : accountState.account,
             recipientOnDestChain: isSolana(outputCurrency.chainId) ? accountState.solanaAccount : accountState.account,
-            slippageTolerance: params.slippageTolerance,
+            slippageTolerance: isSolana(inputAmount.currency.chainId)
+              ? slippageToleranceSolana.toString()
+              : slippageToleranceEVM.toString(),
           })
         : await postMetadata({
             inputToken: getTokenAddress(inputAmount.currency),
