@@ -11,6 +11,7 @@ import { AddressLookupTableAccount, Connection, PublicKey, Transaction, Versione
 import { WalletContextState } from '@solana/wallet-adapter-react'
 import { buildTransaction, detectWalletTransactionSupport } from 'components/WalletModalV2/utils/solanaSendTransaction'
 import { Calldata } from 'hooks/usePermit2'
+import { BridgeTradeError } from 'quoter/quoter.types'
 import { BridgeOrderWithCommands, isSVMOrder } from '../utils'
 import {
   BridgeDataSchema,
@@ -461,10 +462,12 @@ export const postSolanaEVMBridgeMetadata = async (
       type: BridgeType.NON_EVM,
     })
 
-    // const bridgeFormat = adaptRelayQuoteToBridge(relayResponse)
+    if (!metadataResponse?.supported) {
+      throw new BridgeTradeError(metadataResponse?.reason || metadataResponse?.error?.code)
+    }
 
     const result: MetadataSuccessResponse = {
-      supported: metadataResponse.supported,
+      supported: true,
       amount: metadataResponse.amount,
       inputToken: metadataResponse.inputToken,
       originChainId: Number(metadataResponse.originChainId),
@@ -480,7 +483,6 @@ export const postSolanaEVMBridgeMetadata = async (
         recommendedDepositInstant: '0',
       },
       bridgeTransactionData: {
-        ...(metadataResponse.bridgeTransactionData as any),
         requestId: metadataResponse.requestId,
         minimumOutputAmount: metadataResponse.bridgeTransactionData.minimumOutputAmount?.toString(),
         outputAmount: metadataResponse.bridgeTransactionData.outputAmount?.toString(),
@@ -496,8 +498,8 @@ export const postSolanaEVMBridgeMetadata = async (
     }
 
     return result
-  } catch (error) {
-    throw new Error('Failed to get solana bridge metadata')
+  } catch (error: any) {
+    throw new BridgeTradeError(error?.message || error?.error?.code || 'Bridge Trade Unknown error')
   }
 }
 
