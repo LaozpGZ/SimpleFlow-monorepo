@@ -1,7 +1,6 @@
 import { isCyberWallet } from '@cyberlab/cyber-app-sdk'
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId } from '@pancakeswap/chains'
 import { LegacyWalletConfig, LegacyWalletIds } from '@pancakeswap/ui-wallets'
-import { WalletFilledIcon } from '@pancakeswap/uikit'
 import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
 import { getTrustWalletProvider } from '@pancakeswap/wagmi/connectors/trustWallet'
 import type { ExtendEthereum } from 'global'
@@ -295,36 +294,6 @@ export const walletsConfig = <config extends Config = Config, context = unknown>
     //   connectorId: ConnectorNames.Ledger,
     // },
   ]
-}
-
-export const createWallets = <config extends Config = Config, context = unknown>(
-  chainId: number,
-  connect: ConnectMutateAsync<config, context>,
-) => {
-  const config = walletsConfig({ chainId, connect })
-  const ethereum = safeGetWindow()?.ethereum
-  const hasInjected = !!ethereum
-  const injectedMeta = ethereum ? Object.keys(ethereum).filter((i) => i.match(/^is\w+/)) : []
-  const injectedIsMetamask = injectedMeta.length === 1 && ethereum?.isMetaMask
-  const injectedIsTrust = ethereum?.isTrust
-  const currentInjectedWithinConfig =
-    injectedIsMetamask ||
-    injectedIsTrust ||
-    config.some((c) => c.installed && ConnectorNames.Injected === c.connectorId)
-
-  return !hasInjected || currentInjectedWithinConfig
-    ? config
-    : [
-        ...config,
-        // add injected icon if none of injected type wallets installed
-        {
-          id: LegacyWalletIds.Injected,
-          title: 'Injected',
-          icon: WalletFilledIcon,
-          connectorId: ConnectorNames.Injected,
-          installed: typeof window !== 'undefined' && Boolean(window.ethereum),
-        },
-      ]
 }
 
 const docLangCodeMapping: Record<string, string> = {
