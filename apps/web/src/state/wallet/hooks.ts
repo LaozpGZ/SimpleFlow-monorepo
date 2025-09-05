@@ -1,6 +1,6 @@
 import { ChainId, Currency, CurrencyAmount, Native, Token, UnifiedCurrency, ZERO_ADDRESS } from '@pancakeswap/sdk'
 import { useQuery } from '@tanstack/react-query'
-import { NonEVMChainId } from '@pancakeswap/chains'
+import { isSolana, NonEVMChainId } from '@pancakeswap/chains'
 import { selectedEvmWalletAtom, selectedSolanaWalletAtom } from '@pancakeswap/ui-wallets/src/state/atom'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useLocalStorage, useWallet } from '@solana/wallet-adapter-react'
@@ -148,18 +148,22 @@ export function useCurrencyBalance(
 }
 
 // get all token balances for the current account by using api
-export function useAllTokenBalances(selectedChainId?: number): {
+export function useAllTokenBalances(): {
   balances: { [tokenAddress: string]: CurrencyAmount<Token> | undefined }
   isLoading: boolean
 } {
-  const { address: account } = useAccount()
+  const { account, solanaAccount } = useAccountActiveChain()
   const { chainId } = useActiveChainId()
 
   // Fetch balances using the hook we created
-  const { balances: apiBalances, isLoading: isLoadingBalance } = useAddressBalance(account, chainId, {
-    includeSpam: false,
-    onlyWithPrice: false,
-  })
+  const { balances: apiBalances, isLoading: isLoadingBalance } = useAddressBalance(
+    isSolana(chainId) ? solanaAccount : account,
+    chainId,
+    {
+      includeSpam: false,
+      onlyWithPrice: false,
+    },
+  )
 
   return useMemo(() => {
     /// [tokenAddress: string]: CurrencyAmount<Token> | undefined
