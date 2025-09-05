@@ -174,7 +174,8 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   beforeCommit,
   afterCommit,
 }: SwapCommitButtonPropsType & CommitButtonProps) {
-  const { address: account } = useAccount()
+  const { account, solanaAccount } = useAccountActiveChain()
+
   const { t } = useTranslation()
   const { chainId } = useAccountActiveChain()
   // form data
@@ -286,7 +287,9 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   )
 
   // Get the refresh function from useAddressBalance to update balances after swap
-  const { refresh: refreshBalances } = useAddressBalance(account, chainId, { enabled: false })
+  const { refresh: refreshBalances } = useAddressBalance(isSolana(chainId) ? solanaAccount : account, chainId, {
+    enabled: false,
+  })
 
   const onConfirm = useCallback(() => {
     beforeCommit?.()
