@@ -41,15 +41,15 @@ import {
   isTickBasedPositionOutOfRange,
   isTickBasedPositionRemoved,
 } from 'views/PoolDetail/utils'
-import { PriceRange } from 'views/universalFarms/components'
 import { AprTooltipContent } from 'views/universalFarms/components/PoolAprButtonV3/AprTooltipContent'
 import { V3PositionActions } from 'views/universalFarms/components/PositionActions/V3PositionActions'
 import { V3UnstakeModalContent } from 'views/universalFarms/components/PositionActions/V3UnstakeModalContent'
-import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 import { useV3CakeEarningsByPool } from 'views/universalFarms/hooks/useCakeEarning'
 import { useV3PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useAccount } from 'wagmi'
+import { PriceRange } from 'views/universalFarms/components/PositionItem/PriceRange'
+import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks/useCheckShouldSwitchNetwork'
 import { ActionButton, PrimaryOutlineButton } from '../styles'
 import { V3EarningsCell } from './PoolEarningsCells'
 import { PositionsTable } from './PositionsTable'

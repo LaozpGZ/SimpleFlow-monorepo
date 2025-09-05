@@ -5,9 +5,9 @@ import { getFarmAprInfo } from 'state/farmsV4/search/farm.util'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { getPoolDetailPageLink } from 'utils/getPoolLink'
-import { PoolGlobalAprButton } from './PoolAprButton'
 import { ActionItems } from './PoolListItemAction'
 import { PoolTokenOverview, useColumnMobileConfig } from './useColumnConfig'
+import { PoolGlobalAprButton } from './PoolAprButton/PoolGlobalAprButton'
 
 const ListContainer = styled.ul``
 

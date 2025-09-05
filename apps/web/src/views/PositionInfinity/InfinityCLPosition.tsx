@@ -45,11 +45,12 @@ import { type InfinityCLPoolInfo } from 'state/farmsV4/state/type'
 import { useSingleCallResult } from 'state/multicall/hooks'
 import { useIsTransactionPending } from 'state/transactions/hooks'
 import { formatCurrencyAmount } from 'utils/formatCurrencyAmount'
-import { formatPositionAmount, InfinityCLPoolPositionAprButton } from 'views/universalFarms/components'
 import useInfinityCollectFeeAction from 'views/universalFarms/hooks/useInfinityCollectFeeAction'
 
 import { isAddressEqual } from 'utils'
 import { zeroAddress } from 'viem'
+import { InfinityCLPoolPositionAprButton } from 'views/universalFarms/components/PoolAprButtonV3/PoolPositionAprButtonV3'
+import { formatPositionAmount } from 'views/universalFarms/components/PositionItem/PositionInfo'
 import { PositionHeader } from './components/PositionHeader'
 import { PositionPriceSection } from './components/PositionPrice'
 

@@ -5,8 +5,8 @@ import { useLatestTxReceipt } from 'state/farmsV4/state/accountPositions/hooks/u
 import styled from 'styled-components'
 import { logGTMClickStakeFarmEvent } from 'utils/customGTMEventTracking'
 import useFarmV3Actions from 'views/Farms/hooks/v3/useFarmV3Actions'
-import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 import { useV3CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
+import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks/useCheckShouldSwitchNetwork'
 import { V3StakeModal } from '../Modals/V3StakeModal'
 import { StopPropagation } from '../StopPropagation'
 

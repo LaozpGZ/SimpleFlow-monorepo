@@ -18,8 +18,11 @@ import { getCurrencyAddress } from 'utils/getCurrencyAddress'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { Address } from 'viem'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
-import { InfinityBinPoolDerivedAprButton, InfinityCLPoolDerivedAprButton } from 'views/universalFarms/components'
 import { getChainFullName } from 'views/universalFarms/utils'
+import {
+  InfinityBinPoolDerivedAprButton,
+  InfinityCLPoolDerivedAprButton,
+} from 'views/universalFarms/components/PoolAprButtonV3/PoolPositionAprButtonV3'
 import { FieldAddDepositAmount } from './FieldAddDepositAmount'
 
 const StyledCard = styled(Card)`

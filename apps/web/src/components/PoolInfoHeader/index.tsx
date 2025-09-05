@@ -28,7 +28,7 @@ import { getBlockExploreLink } from 'utils'
 import { isInfinityProtocol } from 'utils/protocols'
 import { Tooltips } from 'components/Tooltips'
 import { PoolFeaturesModal } from 'views/PoolDetail/components/PoolFeaturesModal'
-import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprButtonV3'
+import { PoolGlobalAprButtonV3 } from 'views/universalFarms/components/PoolAprButtonV3/PoolGlobalAprButtonV3'
 
 interface PoolInfoHeaderProps {
   poolId?: `0x${string}`

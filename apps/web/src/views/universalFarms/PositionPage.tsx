@@ -33,10 +33,7 @@ import {
   Card,
   IPoolsFilterPanelProps,
   PoolsFilterPanel,
-  PositionItemSkeleton,
-  CardBody as StyledCardBody,
-  CardHeader as StyledCardHeader,
-  useSelectedProtocols,
+  PositionItemSkeleton
   PositionCard,
 } from './components'
 import { useFilterToQueries } from './hooks/useFilterToQueries'
@@ -47,6 +44,10 @@ import { useStablePositions } from './hooks/useStablePositions'
 import { positionEarningAmountAtom } from './hooks/usePositionEarningAmount'
 import { getPositionKey } from './components/PositionItem/PositionCard'
 import { matchPositionSearch } from './utils/matchPositionSearch'
+import { Card, CardBody as StyledCardBody, CardHeader as StyledCardHeader } from './components/StyledCard'
+import { IPoolsFilterPanelProps, PoolsFilterPanel, useSelectedProtocols } from './components/PoolsFilterPanel'
+import { PositionItemSkeleton } from './components/PositionItem/PositionItemSkeleton'
+import { AddLiquidityButton } from './components/AddLiquidityButton'
 
 const ToggleWrapper = styled.div`
   display: inline-flex;

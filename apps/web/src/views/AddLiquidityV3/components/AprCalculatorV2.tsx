@@ -4,8 +4,11 @@ import React, { useMemo } from 'react'
 import { usePoolApr } from 'state/farmsV4/hooks'
 import { useAccountV3Position } from 'state/farmsV4/state/accountPositions/hooks/useAccountV3Position'
 import { PoolInfo } from 'state/farmsV4/state/type'
-import { PoolGlobalAprButton, V3PoolPositionAprButton } from 'views/universalFarms/components'
-import { V3PoolDerivedAprButton } from 'views/universalFarms/components/PoolAprButtonV3'
+import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton/PoolGlobalAprButton'
+import {
+  V3PoolDerivedAprButton,
+  V3PoolPositionAprButton,
+} from 'views/universalFarms/components/PoolAprButtonV3/PoolPositionAprButtonV3'
 
 interface AprCalculatorV2Props {
   pool?: PoolInfo | null

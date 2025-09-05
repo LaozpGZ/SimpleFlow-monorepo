@@ -5,11 +5,11 @@ import Page_ from 'components/Layout/Page'
 import { useRouter } from 'next/router'
 import { PropsWithChildren, useMemo } from 'react'
 import styled from 'styled-components'
-import { PoolsBanner } from './components'
 import { AddLiquidityButton } from './components/AddLiquidityButton'
 import { PoolsPage } from './PoolsPage'
 import { PositionPage } from './PositionPage'
 import { CreatePoolButton } from './components/CreatePoolButton'
+import { PoolsBanner } from './components/PoolsBanner'
 
 const StyledTab = styled(Tab)`
   padding: 0;

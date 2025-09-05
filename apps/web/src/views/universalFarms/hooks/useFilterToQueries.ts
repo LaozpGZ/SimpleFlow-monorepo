@@ -5,9 +5,9 @@ import { useCallback, useEffect, useMemo } from 'react'
 import { POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { isAddress } from 'viem'
-import { IPoolsFilterPanelProps } from '../components'
 import { usePoolProtocols } from '../constants'
 import { useAllChainIds } from './useMultiChains'
+import { IPoolsFilterPanelProps } from '../components/PoolsFilterPanel'
 
 type filtersParams = Partial<
   IPoolsFilterPanelProps['value'] & {

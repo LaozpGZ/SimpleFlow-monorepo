@@ -33,6 +33,7 @@ import { PoolGlobalAprButton } from './PoolAprButton'
 import { PoolListItemAction } from './PoolListItemAction'
 import { getUnwhitelistedToken } from '../atom/farmSearch.filter'
 import { tokensMapAtom } from '../atom/tokensMapAtom'
+import { PoolGlobalAprButton } from './PoolAprButton/PoolGlobalAprButton'
 
 export const FeeTierComponent = <T extends PoolInfo>({
   dynamic,

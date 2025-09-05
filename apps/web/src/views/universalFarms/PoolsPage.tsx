@@ -14,19 +14,14 @@ import { PoolInfo } from 'state/farmsV4/state/type'
 import { getPoolDetailPageLink } from 'utils/getPoolLink'
 import { farmsSearchPagingAtom, farmsSearchV2Atom } from './atom/farmsSearchAtom'
 import { searchQueryAtom, updateFilterAtom, updateSortAtom } from './atom/searchQueryAtom'
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  IPoolsFilterPanelProps,
-  ListView,
-  PoolsFilterPanel,
-  useColumnConfig,
-} from './components'
 import { AddLiquidityButton } from './components/AddLiquidityButton'
 import { FarmSearchContextProvider } from './hooks/useFarmSearchContext'
 import { farmQueryToUrlParams, getIndexByProtocols } from './utils/queryParser'
 import { CreatePoolButton } from './components/CreatePoolButton'
+import { Card, CardBody, CardHeader } from './components/StyledCard'
+import { IPoolsFilterPanelProps, PoolsFilterPanel } from './components/PoolsFilterPanel'
+import { useColumnConfig } from './components/useColumnConfig'
+import { ListView } from './components/PoolListView'
 
 const PoolsContent = styled.div`
   min-height: calc(100vh - 64px - 56px);
