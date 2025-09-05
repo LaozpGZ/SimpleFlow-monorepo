@@ -7,7 +7,7 @@ import { MobileCard } from 'components/AdPanel/MobileCard'
 import { useCurrency } from 'hooks/Tokens'
 import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { isEvm, NonEVMChainId } from '@pancakeswap/chains'
+import { isEvm, isSolana, NonEVMChainId } from '@pancakeswap/chains'
 import { AutoSlippageProvider } from 'hooks/useAutoSlippageWithFallback'
 import { useSwapHotTokenDisplay } from 'hooks/useSwapHotTokenDisplay'
 import dynamic from 'next/dynamic'
@@ -49,7 +49,7 @@ const InfinitySwapInner = () => {
   const outputCurrency = useCurrency(outputCurrencyId, outputChainId)
 
   // Prefetch Solana tokens when user switches to Solana
-  useSolanaTokenList(chainId === NonEVMChainId.SOLANA)
+  useSolanaTokenList(isSolana(chainId) || isSolana(inputChainId) || isSolana(outputChainId))
 
   useEffect(() => {
     if (firstTime && query.showTradingReward) {
