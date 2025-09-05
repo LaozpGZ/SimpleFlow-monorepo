@@ -9,7 +9,10 @@ import { ConfirmModalState } from '@pancakeswap/widgets-internal'
 import { RetryableError, retry } from 'state/multicall/retry'
 import { useActiveChainId } from 'hooks/useAccountActiveChain'
 import { ChainId as EvmChainId } from '@pancakeswap/chains'
-import { InterfaceOrder } from 'views/Swap/utils'
+import { InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
+import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
+import { useSetAtom } from 'jotai'
+
 import { BatchCall, getBatchedTransaction as getBatchedTransactionHelper } from '../batchHelper'
 import { eip5792UserRejectUpgradeError, userRejectedError } from '../useSendSwapTransaction'
 import useSwapRecordTransaction from '../useSwapRecordTransaction'
@@ -35,6 +38,7 @@ export const useBatchSwapTransaction = ({
   const eip5792Status = useEIP5792Status()
   const { toastError } = useToast()
   const { t } = useTranslation()
+  const setActiveBridgeOrderMetadata = useSetAtom(activeBridgeOrderMetadataAtom)
 
   const addSwapTransaction = useSwapRecordTransaction(chainId, account)
 
@@ -138,6 +142,7 @@ export const useBatchSwapTransaction = ({
         const { promise: statusPromise } = retry(
           async () => {
             const status = await result.client.getCallsStatus({ id: result.id })
+
             if (status.status === 'failure') {
               throw new Error('Transaction failed')
             }
@@ -150,13 +155,25 @@ export const useBatchSwapTransaction = ({
         )
 
         const status = await statusPromise
+
         if (status.status === 'success') {
           const hash = status.receipts?.[0]?.transactionHash
           if (hash) {
             setTxHash(hash)
             addSwapTransaction({ order: order as InterfaceOrder, hash: hash as Address, type: 'V3SmartSwap' })
           }
-          setConfirmState(ConfirmModalState.COMPLETED)
+
+          if (isBridgeOrder(order) && hash) {
+            setConfirmState(ConfirmModalState.ORDER_SUBMITTED)
+            setActiveBridgeOrderMetadata({
+              order,
+              txHash: hash,
+              originChainId: order.trade.inputAmount.currency.chainId,
+              destinationChainId: order.trade.outputAmount.currency.chainId,
+            })
+          } else {
+            setConfirmState(ConfirmModalState.COMPLETED)
+          }
         }
       } catch (error) {
         console.warn('[5792] Failed to call batched action:', error)
