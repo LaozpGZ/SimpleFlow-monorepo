@@ -9,8 +9,8 @@ import { InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
 import { searchQueryAtom } from 'views/universalFarms/atom/searchQueryAtom'
-import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton'
 import { FeeTierComponent } from 'views/universalFarms/components/useColumnConfig'
+import { PoolGlobalAprButton } from 'views/universalFarms/components/PoolAprButton/PoolGlobalAprButton'
 import { useMiniPoolsData } from '../hooks'
 
 const PoolPairCell = styled(Flex)`
