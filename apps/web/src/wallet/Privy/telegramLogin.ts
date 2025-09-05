@@ -33,6 +33,7 @@ export async function loginWithTelegramViaScript(onLogin: (token: string) => voi
   await loadTelegramScript()
 
   const botId = process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME!
+  console.log({ botId }, 'check bot id')
 
   if (!window.Telegram?.Login?.auth) return
   window.Telegram.Login.auth(
