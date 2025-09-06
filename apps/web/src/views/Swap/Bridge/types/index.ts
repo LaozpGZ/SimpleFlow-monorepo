@@ -202,3 +202,8 @@ export type BridgeMetadataParams = {
   commands?: (BridgeDataSchema | SwapDataSchema)[]
   recipientOnDestChain?: string
 }
+
+export enum RELAY_STEP_ID {
+  DEPOSIT = 'deposit',
+  APPROVE = 'approve',
+}

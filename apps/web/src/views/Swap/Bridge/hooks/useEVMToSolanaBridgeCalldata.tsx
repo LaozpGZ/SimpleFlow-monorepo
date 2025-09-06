@@ -4,17 +4,17 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { BridgeOrderWithCommands, isBridgeOrder } from 'views/Swap/utils'
 import { Calldata } from 'hooks/usePermit2'
 import { isSolana } from '@pancakeswap/chains'
-import { STEP_ID } from '../relay-sdk/types'
 import { getSolanaBridgeCalldata } from '../api'
+import { RELAY_STEP_ID } from '../types'
 
 interface UseEVMToSolanaBridgeCalldataParams {
   order?: BridgeOrderWithCommands
-  stepType?: STEP_ID
+  stepType?: RELAY_STEP_ID
 }
 
 export const useEVMToSolanaBridgeCalldata = ({
   order,
-  stepType = STEP_ID.DEPOSIT,
+  stepType = RELAY_STEP_ID.DEPOSIT,
 }: UseEVMToSolanaBridgeCalldataParams):
   | {
       transactionData: Calldata
@@ -28,7 +28,7 @@ export const useEVMToSolanaBridgeCalldata = ({
 
   const { data } = useQuery<
     {
-      id: STEP_ID
+      id: RELAY_STEP_ID
       txnCalldata: {
         transactionData: Calldata
         gasFee: string

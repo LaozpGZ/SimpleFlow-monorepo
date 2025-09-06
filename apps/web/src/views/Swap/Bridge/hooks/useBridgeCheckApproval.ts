@@ -9,8 +9,8 @@ import { Address } from 'viem'
 import { BridgeOrderWithCommands, InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
 import { isSolana } from '@pancakeswap/chains'
 import { postBridgeCheckApproval } from '../api'
-import { STEP_ID } from '../relay-sdk/types'
 import { useEVMToSolanaBridgeCalldata } from './useEVMToSolanaBridgeCalldata'
+import { RELAY_STEP_ID } from '../types'
 
 export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
   const { account } = useAccountActiveChain()
@@ -29,7 +29,7 @@ export const useBridgeCheckApproval = (order?: InterfaceOrder) => {
 
   const bridgeSolanaApproveCalldata = useEVMToSolanaBridgeCalldata({
     order: order as BridgeOrderWithCommands,
-    stepType: STEP_ID.APPROVE,
+    stepType: RELAY_STEP_ID.APPROVE,
   })
 
   const {
