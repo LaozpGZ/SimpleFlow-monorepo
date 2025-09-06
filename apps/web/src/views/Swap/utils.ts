@@ -18,7 +18,7 @@ export const isTwapSupported = (chainId?: ChainId) => {
   return !chainId ? false : TWAP_SUPPORTED_CHAINS.includes(chainId)
 }
 
-export const isSolanaBridge = (order: InterfaceOrder | undefined | null): boolean =>
+export const isSolanaBridge = (order: InterfaceOrder | undefined | null): order is BridgeOrder =>
   order?.type === OrderType.PCS_BRIDGE &&
   (isSolana(order.trade.inputAmount.currency.chainId) || isSolana(order.trade.outputAmount.currency.chainId))
 

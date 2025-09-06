@@ -25,7 +25,7 @@ import { isAddressEqual } from 'utils'
 import { basisPointsToPercent } from 'utils/exchange'
 import { zeroAddress } from 'viem'
 import { BridgeOrderFee } from 'views/Swap/Bridge/utils'
-import { BridgeOrderWithCommands, InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
+import { BridgeOrderWithCommands, InterfaceOrder, isBridgeOrder, isSolanaBridge } from 'views/Swap/utils'
 
 export type SlippageAdjustedAmounts = {
   [field in Field]?: UnifiedCurrencyAmount<UnifiedCurrency> | null
@@ -57,10 +57,7 @@ export function computeSlippageAdjustedAmounts(
   const bridgeOrder = order as BridgeOrderWithCommands
   const length = bridgeOrder?.commands?.length
 
-  if (
-    isBridgeOrder(order) &&
-    (isSolana(order.trade.outputAmount.currency.chainId) || isSolana(order.trade.inputAmount.currency.chainId))
-  ) {
+  if (isSolanaBridge(order)) {
     return {
       [Field.INPUT]: trade.inputAmount,
       [Field.OUTPUT]: CurrencyAmount.fromRawAmount(
