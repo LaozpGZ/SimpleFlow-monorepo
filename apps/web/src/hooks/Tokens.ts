@@ -535,8 +535,8 @@ export const currencyByChainIdAtom = atomFamily(
       const tokens = get(combinedTokenMapFromActiveUrlsAtom)
 
       // Token found in list
-      const { token } = tokens[chainId][address]
-      if (token) return token
+      const tokenData = tokens[chainId][address]
+      if (tokenData) return tokenData.token
 
       // Fallback to fetching info from erc20 contract
       if (address) {

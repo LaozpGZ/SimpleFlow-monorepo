@@ -74,6 +74,7 @@ export interface CurrencySearchModalProps extends InjectedModalProps {
   modalTitle?: React.ReactNode
   mode?: string
   supportCrossChain?: boolean
+  showNative?: boolean
 }
 
 export default function CurrencySearchModal({
@@ -90,6 +91,7 @@ export default function CurrencySearchModal({
   showCurrencyInHeader = false,
   showSearchHeader,
   mode,
+  showNative,
 }: CurrencySearchModalProps) {
   const [modalView, setModalView] = useState<CurrencyModalView>(CurrencyModalView.search)
   const [selectedChainId, setSelectedChainId] = useState<UnifiedChainId | undefined>(selectedCurrency?.chainId)
@@ -257,6 +259,7 @@ export default function CurrencySearchModal({
             mode={mode}
             setSelectedChainId={setSelectedChainId}
             selectedChainId={selectedChainId}
+            showNative={showNative}
           />
         ) : modalView === CurrencyModalView.importToken && importToken ? (
           importToken instanceof SPLToken ? (

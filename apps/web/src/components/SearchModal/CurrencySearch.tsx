@@ -69,6 +69,7 @@ interface CurrencySearchProps {
   mode?: string
   supportCrossChain?: boolean
   onSettingsClick?: () => void
+  showNative?: boolean
 }
 
 function useSearchInactiveTokenLists(search: string | undefined, minResults = 10): WrappedTokenInfo[] {
@@ -136,6 +137,7 @@ function CurrencySearch({
   selectedChainId,
   mode,
   supportCrossChain = false,
+  showNative: showNativeProp,
   onSettingsClick,
 }: CurrencySearchProps) {
   const { t } = useTranslation()
@@ -183,7 +185,7 @@ function CurrencySearch({
   const filteredInactiveTokens = useSearchInactiveTokenLists(debouncedQuery)
 
   const showNative: boolean = useMemo(() => {
-    if (tokensToShow) return false
+    if (tokensToShow && !showNativeProp) return false
     const s = debouncedQuery.toLowerCase().trim()
     return native && native.symbol?.toLowerCase?.()?.indexOf(s) !== -1
   }, [debouncedQuery, native, tokensToShow])

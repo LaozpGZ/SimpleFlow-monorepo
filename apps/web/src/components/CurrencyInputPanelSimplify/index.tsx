@@ -196,6 +196,8 @@ interface CurrencyInputPanelProps {
   modalTitle?: React.ReactNode
   showSearchHeader?: boolean
   wrapperProps?: AtomBoxProps
+  supportCrossChain?: boolean
+  showNative?: boolean
 }
 const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   defaultValue,
@@ -207,6 +209,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   currency,
   disableCurrencySelect = false,
   hideBalance = false,
+  supportCrossChain = true,
   beforeButton,
   pair = null, // used for double token logo
   otherCurrency,
@@ -230,6 +233,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
   showSearchHeader,
   wrapperProps,
   customChainId,
+  showNative,
 }: CurrencyInputPanelProps) {
   const { account: evmAccount, solanaAccount, unifiedAccount, chainId } = useAccountActiveChain()
   const account = useMemo(() => {
@@ -254,7 +258,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
 
   const [onPresentCurrencyModal] = useModal(
     <CurrencySearchModal
-      supportCrossChain
+      supportCrossChain={supportCrossChain}
       onCurrencySelect={onCurrencySelect}
       selectedCurrency={currency}
       otherSelectedCurrency={otherCurrency}
@@ -265,6 +269,7 @@ const CurrencyInputPanelSimplify = memo(function CurrencyInputPanel({
       mode={mode}
       modalTitle={modalTitle}
       showSearchHeader={showSearchHeader}
+      showNative={showNative}
     />,
   )
 

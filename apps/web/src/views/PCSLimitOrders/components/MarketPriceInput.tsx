@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import { Suspense } from 'react'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
-import { baseCurrencyAtom, flipCurrenciesAtom, quoteCurrencyAtom } from '../state/currencyAtoms'
+import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
+import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtom'
 
 const InputContainer = styled(Box)`
   position: relative;
@@ -62,10 +63,10 @@ function truncateString(str: string, maxLength: number) {
 }
 
 export const MarketPriceInput = () => {
-  const baseCurrency = useAtomValue(baseCurrencyAtom)
-  const quoteCurrency = useAtomValue(quoteCurrencyAtom)
+  const inputCurrency = useAtomValue(inputCurrencyAtom)
+  const outputCurrency = useAtomValue(outputCurrencyAtom)
 
-  const priceUsd = useStablecoinPrice(quoteCurrency, { enabled: !!quoteCurrency })
+  const priceUsd = useStablecoinPrice(outputCurrency, { enabled: !!outputCurrency })
   // TODO: Calculate usd price based on market price input amount
   const amount = 0n
   const usdValue = priceUsd ? amount * priceUsd?.quotient : 0n
@@ -73,7 +74,7 @@ export const MarketPriceInput = () => {
   // TODO: Check market price flipping logic according to lower/upper ticks
   const flipCurrencies = useSetAtom(flipCurrenciesAtom)
 
-  if (!baseCurrency || !quoteCurrency) return null
+  if (!inputCurrency || !outputCurrency) return null
 
   return (
     <Suspense>
@@ -82,7 +83,7 @@ export const MarketPriceInput = () => {
           <Text color="textSubtle" small>
             Sell when 1{' '}
             <Text as="span" color="textSubtle" small bold>
-              {truncateString(baseCurrency.symbol, 15)}
+              {truncateString(inputCurrency.symbol, 15)}
             </Text>{' '}
             is worth:
           </Text>
@@ -94,7 +95,7 @@ export const MarketPriceInput = () => {
         </InputTopRight>
         <InputLeftBox>
           <Text color="textSubtle" fontSize="20px" bold>
-            {truncateString(quoteCurrency.symbol, 15)}
+            {truncateString(outputCurrency.symbol, 15)}
           </Text>
         </InputLeftBox>
         <StyledInput type="number" placeholder="0.00" />
