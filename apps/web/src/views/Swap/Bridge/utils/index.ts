@@ -1,7 +1,7 @@
 import { isSolana } from '@pancakeswap/chains'
 import { OrderType } from '@pancakeswap/price-api-sdk'
 import { Percent } from '@pancakeswap/swap-sdk-core'
-import { BridgeOrderWithCommands, isXOrder } from 'views/Swap/utils'
+import { BridgeOrderWithCommands, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 import {
   computeTradePriceBreakdown,
   SVMTradePriceBreakdown,
@@ -34,6 +34,10 @@ export function getBridgeOrderPriceImpact(
 }
 
 export function computeBridgeOrderFee(order: BridgeOrderWithCommands): BridgeOrderFee | BridgeOrderFee[] {
+  if (!isBridgeOrder(order)) {
+    throw new Error('computeBridgeOrderFee only support bridge order')
+  }
+
   if (isSolana(order.trade.inputAmount.currency.chainId) || isSolana(order.trade.outputAmount.currency.chainId)) {
     // Convert native percent string (e.g., "-0.27") to Percent object
     let priceImpactWithoutFee: Percent | undefined
