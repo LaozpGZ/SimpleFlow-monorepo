@@ -1,10 +1,22 @@
 import { ChainId } from '@pancakeswap/chains'
-import { Native } from '@pancakeswap/sdk'
+import { ERC20Token, Native } from '@pancakeswap/sdk'
 import { bscTokens } from '@pancakeswap/tokens'
-import { chainlinkOracleBNB, chainlinkOracleCAKE } from '../../chainlinkOracleContract'
-import { GRAPH_API_PREDICTION_BNB, GRAPH_API_PREDICTION_CAKE } from '../../endpoints'
-import { predictionsBNB, predictionsCAKE } from '../../predictionContract'
+import {
+  chainlinkOracleBNB,
+  chainlinkOracleCAKE,
+  chainlinkOracleETH,
+  chainlinkOracleWBTC,
+} from '../../chainlinkOracleContract'
+import {
+  GRAPH_API_PREDICTION_BNB,
+  GRAPH_API_PREDICTION_CAKE,
+  GRAPH_API_PREDICTION_ETH,
+  GRAPH_API_PREDICTION_WBTC,
+} from '../../endpoints'
+import { predictionsBNB, predictionsCAKE, predictionsETH, predictionsWBTC } from '../../predictionContract'
 import { PredictionConfig, PredictionContractVersion, PredictionSupportedSymbol } from '../../type'
+
+const BTC = new ERC20Token(bscTokens.wBTC.chainId, bscTokens.wBTC.address, bscTokens.wBTC.decimals, 'BTC', 'Bitcoin')
 
 export const predictions: Record<string, PredictionConfig> = {
   [PredictionSupportedSymbol.BNB]: {
@@ -19,6 +31,32 @@ export const predictions: Record<string, PredictionConfig> = {
 
     displayedDecimals: 4,
     tokenBackgroundColor: '#F0B90B',
+  },
+  [PredictionSupportedSymbol.ETH]: {
+    version: PredictionContractVersion.V2_1,
+
+    betCurrency: Native.onChain(ChainId.BSC),
+    predictionCurrency: bscTokens.eth,
+
+    address: predictionsETH[ChainId.BSC],
+    api: GRAPH_API_PREDICTION_ETH[ChainId.BSC],
+    chainlinkOracleAddress: chainlinkOracleETH[ChainId.BSC],
+
+    displayedDecimals: 2,
+    balanceDecimals: 4,
+  },
+  [PredictionSupportedSymbol.BTC]: {
+    version: PredictionContractVersion.V2_1,
+
+    betCurrency: Native.onChain(ChainId.BSC),
+    predictionCurrency: BTC,
+
+    address: predictionsWBTC[ChainId.BSC],
+    api: GRAPH_API_PREDICTION_WBTC[ChainId.BSC],
+    chainlinkOracleAddress: chainlinkOracleWBTC[ChainId.BSC],
+
+    displayedDecimals: 2,
+    balanceDecimals: 4,
   },
   [PredictionSupportedSymbol.CAKE]: {
     paused: true,

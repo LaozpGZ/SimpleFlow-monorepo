@@ -18,14 +18,14 @@ export const predictionsCAKE: Record<string, Address> = {
 } as const satisfies ContractAddresses<SupportedChainId>
 
 export const predictionsETH: Record<string, Address> = {
-  [ChainId.BSC]: '0x',
+  [ChainId.BSC]: '0x7451F994A8D510CBCB46cF57D50F31F188Ff58F5',
   [ChainId.ZKSYNC]: '0x43c7771DEB958A2e3198ED98772056ba70DaA84c',
   [ChainId.ARBITRUM_ONE]: '0x1cdc19B13729f16C5284a0ACE825F83fC9d799f4',
   [ChainId.BSC_TESTNET]: '0xc8F637F9e559f2b9bD240D2b32353427534dFF54',
 } as const satisfies ContractAddresses<SupportedChainId>
 
 export const predictionsWBTC: Record<string, Address> = {
-  [ChainId.BSC]: '0x',
+  [ChainId.BSC]: '0x48781a7d35f6137a9135Bbb984AF65fd6AB25618',
   [ChainId.ZKSYNC]: '0x',
   [ChainId.ARBITRUM_ONE]: '0x',
   [ChainId.BSC_TESTNET]: '0x14425f1b36A083637220F68A6D716E9F5Ed2Ec0c',

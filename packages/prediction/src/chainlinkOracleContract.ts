@@ -18,17 +18,15 @@ export const chainlinkOracleCAKE: Record<string, Address> = {
 } as const satisfies ContractAddresses<SupportedChainId>
 
 export const chainlinkOracleETH: Record<string, Address> = {
-  [ChainId.BSC]: '0x',
+  [ChainId.BSC]: '0x9ef1B8c0E4F7dc8bF5719Ea496883DC6401d5b2e',
   [ChainId.BSC_TESTNET]: '0x267aa2A74EFbc24F4F621E81C9De97d93cA043cb', // Mock
-  // [ChainId.BSC_TESTNET]: '0x143db3CEEfbdfe5631aDD3E50f7614B6ba708BA7', // ETH/USD on bscTestnet
   [ChainId.ZKSYNC]: '0x',
   [ChainId.ARBITRUM_ONE]: '0x',
 } as const satisfies ContractAddresses<SupportedChainId>
 
 export const chainlinkOracleWBTC: Record<string, Address> = {
-  [ChainId.BSC]: '0x',
+  [ChainId.BSC]: '0x264990fbd0A4796A3E3d8E37C4d5F87a3aCa5Ebf',
   [ChainId.BSC_TESTNET]: '0x04a02840856CD13239508343CF3630579DA65420', // Mock
-  // [ChainId.BSC_TESTNET]: '0x5741306c21795FdCBb9b265Ea0255F499DFe515C', // BTC/USD on bscTestnet
   [ChainId.ZKSYNC]: '0x',
   [ChainId.ARBITRUM_ONE]: '0x',
 } as const satisfies ContractAddresses<SupportedChainId>

@@ -68,7 +68,7 @@ export interface PredictionConfig {
   chainlinkOracleAddress?: Address // All EVM chain are using chainlink oracle, but not include zkSync chain
   galetoOracleAddress?: Address // Only zkSync chain use galeto oracle
 
-  tokenBackgroundColor: string // For selector svg token for prediction page
+  tokenBackgroundColor?: string // For selector svg token for prediction page
   displayedDecimals: number
 
   // Decimals to accommodate varying price sources
