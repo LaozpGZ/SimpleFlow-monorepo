@@ -301,7 +301,7 @@ export const fetchPredictionUsers = async (filters: LeaderboardFilter, extra: Pr
     extra.betCurrency.symbol,
   )
 
-  const transformer = transformUserResponse(extra.predictionCurrency.symbol, extra.predictionCurrency.chainId)
+  const transformer = transformUserResponse(extra.betCurrency.symbol, extra.betCurrency.chainId)
 
   return { results: usersResponse.map(transformer) }
 }
