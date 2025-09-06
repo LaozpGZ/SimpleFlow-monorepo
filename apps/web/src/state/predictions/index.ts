@@ -293,12 +293,12 @@ export const fetchPredictionUsers = async (filters: LeaderboardFilter, extra: Pr
       skip: 0,
       orderBy: filters.orderBy,
       where: {
-        totalBets_gte: LEADERBOARD_MIN_ROUNDS_PLAYED[extra.predictionCurrency.symbol],
+        totalBets_gte: LEADERBOARD_MIN_ROUNDS_PLAYED[extra.betCurrency.symbol],
         [`${filters.orderBy}_gt`]: 0,
       },
     },
     extra.api,
-    extra.predictionCurrency.symbol,
+    extra.betCurrency.symbol,
   )
 
   const transformer = transformUserResponse(extra.predictionCurrency.symbol, extra.predictionCurrency.chainId)
