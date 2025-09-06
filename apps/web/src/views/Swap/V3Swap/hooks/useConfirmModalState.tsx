@@ -46,7 +46,7 @@ import { ChainId as EvmChainId, isSolana } from '@pancakeswap/chains'
 import { useUserSlippage } from '@pancakeswap/utils/user'
 import { useSwapState } from 'state/swap/hooks'
 import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
-import { Permit2Schema } from 'views/Swap/Bridge/types'
+import { Permit2Schema, RELAY_STEP_ID } from 'views/Swap/Bridge/types'
 import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { usePriceBreakdown } from 'views/SwapSimplify/hooks/usePriceBreakdown'
@@ -57,7 +57,6 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { sendTransactionSafely } from 'components/WalletModalV2/utils/solanaSafeTransaction'
 import { confirmTransaction } from '@pancakeswap/solana-core-sdk'
 import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
-import { STEP_ID } from 'views/Swap/Bridge/relay-sdk/types'
 import { useEVMToSolanaBridgeCalldata } from 'views/Swap/Bridge/hooks/useEVMToSolanaBridgeCalldata'
 import { ConfirmStepContext, ConfirmAction } from './steps/step.type'
 import { useBatchSwapTransaction } from './steps/useBatchSwapTransaction'
@@ -191,12 +190,12 @@ const useConfirmActions = (
 
   const bridgeSolanaSwapCalldata = useEVMToSolanaBridgeCalldata({
     order: order as BridgeOrderWithCommands,
-    stepType: STEP_ID.DEPOSIT,
+    stepType: RELAY_STEP_ID.DEPOSIT,
   })
 
   const bridgeSolanaApproveCalldata = useEVMToSolanaBridgeCalldata({
     order: order as BridgeOrderWithCommands,
-    stepType: STEP_ID.APPROVE,
+    stepType: RELAY_STEP_ID.APPROVE,
   })
 
   const isSolanaBridge =

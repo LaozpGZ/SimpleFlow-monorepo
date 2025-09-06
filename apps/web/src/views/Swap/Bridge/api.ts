@@ -24,8 +24,7 @@ import {
   SwapDataSchema,
   UserBridgeOrdersResponse,
 } from './types'
-
-import { convertStepsIntoTransactionInstruction } from './relay-sdk/adapter'
+import { convertStepsIntoTransactionInstruction } from './utils/relay'
 
 export function getSolanaTokenAddress(currency: Currency): string {
   if (!isSolana(currency.chainId)) {

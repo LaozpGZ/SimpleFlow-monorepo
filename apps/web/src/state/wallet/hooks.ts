@@ -148,16 +148,18 @@ export function useCurrencyBalance(
 }
 
 // get all token balances for the current account by using api
-export function useAllTokenBalances(): {
+export function useAllTokenBalances(overrideChainId?: number): {
   balances: { [tokenAddress: string]: CurrencyAmount<Token> | undefined }
   isLoading: boolean
 } {
   const { account, solanaAccount } = useAccountActiveChain()
   const { chainId } = useActiveChainId()
 
+  const usedChainId = overrideChainId || chainId
+
   // Fetch balances using the hook we created
   const { balances: apiBalances, isLoading: isLoadingBalance } = useAddressBalance(
-    isSolana(chainId) ? solanaAccount : account,
+    isSolana(usedChainId) ? solanaAccount : account,
     chainId,
     {
       includeSpam: false,
