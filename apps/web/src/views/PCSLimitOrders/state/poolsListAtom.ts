@@ -37,6 +37,7 @@ export const tokensMapAtom = atom(async (get) => {
       tokenMap,
     })
   })
+  console.log('tokenMap result', tokenMap)
 
   return tokenMap
 })

@@ -5,7 +5,7 @@ import { Suspense } from 'react'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
-import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtom'
+import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtoms'
 
 const InputContainer = styled(Box)`
   position: relative;

@@ -1,8 +1,8 @@
 import { atom } from 'jotai'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
-import { Field } from '../types/limitOrder.types'
-import { inputCurrencyAtom, outputCurrencyAtom } from './currency/currencyAtoms'
+import { Field } from 'views/PCSLimitOrders/types/limitOrder.types'
+import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { independentFieldAtom, typedValueAtom } from './fieldAtoms'
 
 const baseCurrencyAtom = atom((get) =>

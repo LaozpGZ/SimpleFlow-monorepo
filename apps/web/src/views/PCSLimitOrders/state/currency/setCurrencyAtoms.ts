@@ -3,8 +3,8 @@ import { atom } from 'jotai'
 
 import currencyId from 'utils/currencyId'
 import { Field } from 'views/PCSLimitOrders/types/limitOrder.types'
+import { independentFieldAtom } from 'views/PCSLimitOrders/state/form/fieldAtoms'
 import { outputCurrencyAtom, inputCurrencyAtom, inputCurrencyIdAtom, outputCurrencyIdAtom } from './currencyAtoms'
-import { independentFieldAtom } from '../fieldAtoms'
 
 export const setCurrencyAtom = atom(
   null,
