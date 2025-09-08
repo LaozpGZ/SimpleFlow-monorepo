@@ -224,7 +224,13 @@ export const PositionPage = () => {
   })
 
   const allPositionList = useMemo(() => {
-    return ([...infinityPositions, ...v3Positions, ...v2Positions, ...stablePositions] as UnifiedPositionDetail[])
+    const unifiedList = [
+      ...infinityPositions,
+      ...v3Positions,
+      ...v2Positions,
+      ...stablePositions,
+    ] as UnifiedPositionDetail[]
+    return unifiedList
       .filter((item) => {
         const { protocol } = item
         return selectedPoolTypes.includes(protocol)
@@ -234,7 +240,7 @@ export const PositionPage = () => {
 
   const visibleList = useMemo(() => {
     return allPositionList.slice(0, cursorVisible)
-  }, [allPositionList])
+  }, [allPositionList, cursorVisible])
 
   const mainSection = useMemo(() => {
     if (!account) {
@@ -259,20 +265,32 @@ export const PositionPage = () => {
       return <EmptyListPlaceholder text={t('Empty page: No results found.')} />
     }
 
-    return visibleList.map((pos) => (
-      <PositionCard
-        key={getPositionKey(pos)}
-        data={pos}
-        poolLength={
-          pos.protocol === Protocol.V3
-            ? v3PoolsLength[pos.chainId]
-            : pos.protocol === Protocol.V2
-            ? v2PoolsLength[pos.pair.chainId]
-            : undefined
-        }
-        allInfinityPositions={allInfinityPositions}
-      />
-    ))
+    return (
+      <>
+        {isAnyLoading && (
+          <>
+            <PositionItemSkeleton />
+            <Text color="textSubtle" textAlign="center">
+              <Dots>{t('Loading')}</Dots>
+            </Text>
+          </>
+        )}
+        {visibleList.map((pos) => (
+          <PositionCard
+            key={getPositionKey(pos)}
+            data={pos}
+            poolLength={
+              pos.protocol === Protocol.V3
+                ? v3PoolsLength[pos.chainId]
+                : pos.protocol === Protocol.V2
+                ? v2PoolsLength[pos.pair.chainId]
+                : undefined
+            }
+            allInfinityPositions={allInfinityPositions}
+          />
+        ))}
+      </>
+    )
   }, [
     account,
     infinityLoading,
@@ -289,7 +307,7 @@ export const PositionPage = () => {
   useEffect(() => {
     if (isIntersecting) {
       setCursorVisible((numberCurrentlyVisible) => {
-        if (Array.isArray(mainSection) && numberCurrentlyVisible <= mainSection.length) {
+        if (Array.isArray(allPositionList) && numberCurrentlyVisible <= allPositionList.length) {
           return Math.min(numberCurrentlyVisible + NUMBER_OF_FARMS_VISIBLE, allPositionList.length)
         }
         return numberCurrentlyVisible
@@ -371,7 +389,7 @@ export const PositionPage = () => {
             )}
           </Liquidity.FindOtherLP>
         ) : null}
-        {Array.isArray(mainSection) && mainSection.length > 0 && <div ref={observerRef} />}
+        {Array.isArray(visibleList) && visibleList.length > 0 && <div ref={observerRef} />}
       </CardBody>
     </Card>
   )
