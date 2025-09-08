@@ -17,14 +17,14 @@ export const GRAPH_API_PREDICTION_CAKE = {
 } as const satisfies EndPointType<SupportedChainId>
 
 export const GRAPH_API_PREDICTION_ETH = {
-  [ChainId.BSC]: '',
+  [ChainId.BSC]: 'https://thegraph.pancakeswap.com/prediction-eth-bsc',
   [ChainId.BSC_TESTNET]: 'https://thegraph.pancakeswap.com/prediction-eth-chapel',
   [ChainId.ZKSYNC]: 'https://api.studio.thegraph.com/query/48759/prediction-v2-zksync-era/version/latest',
   [ChainId.ARBITRUM_ONE]: 'https://thegraph.pancakeswap.com/prediction-v3-ai-arb',
 } as const satisfies EndPointType<SupportedChainId>
 
 export const GRAPH_API_PREDICTION_WBTC = {
-  [ChainId.BSC]: '',
+  [ChainId.BSC]: 'https://thegraph.pancakeswap.com/prediction-btc-bsc',
   [ChainId.BSC_TESTNET]: 'https://thegraph.pancakeswap.com/prediction-btc-chapel',
   [ChainId.ZKSYNC]: '',
   [ChainId.ARBITRUM_ONE]: '',
