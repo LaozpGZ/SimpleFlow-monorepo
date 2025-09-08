@@ -8,6 +8,7 @@ import { formatNumber } from '@pancakeswap/utils/formatNumber'
 
 import { useCurrencyUsdPrice } from 'hooks/useCurrencyUsdPrice'
 import { isSolana } from '@pancakeswap/chains'
+import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 
 export const SolanaBridgeEVMToSolanaTradingFee = memo(
   ({ order, textColor }: { order: BridgeOrder; textColor?: string }) => {
@@ -92,7 +93,7 @@ export const SolanaBridgeTradingFee = memo(
     if (showUSDFee) {
       return (
         <Text color={textColor} fontSize="14px">
-          {`$${formatNumber(order.bridgeFee.toExact(), { maxDecimalDisplayDigits: 3 })}`}
+          {`${formatDollarAmount(new BigNumber(order.bridgeFee.toExact()).toNumber(), 3)}`}
         </Text>
       )
     }
