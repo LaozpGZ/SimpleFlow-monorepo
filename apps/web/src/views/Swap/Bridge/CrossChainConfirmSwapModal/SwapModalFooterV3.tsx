@@ -265,7 +265,7 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
             </QuestionHelperV2>
           </RowFixed>
           {isSolanaBridge(order) ? (
-            <SolanaBridgeTradingFee order={order as BridgeOrder} />
+            <SolanaBridgeTradingFee order={order as BridgeOrder} showUSDFee />
           ) : Array.isArray(priceBreakdown) ? (
             <TotalBridgeFee priceBreakdown={priceBreakdown} />
           ) : priceBreakdown?.lpFeeAmount || isXOrder(order) ? (

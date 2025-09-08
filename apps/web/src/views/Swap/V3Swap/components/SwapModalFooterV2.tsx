@@ -241,7 +241,7 @@ export const SwapModalFooterV2 = memo(function SwapModalFooterV2({
             </QuestionHelperV2>
           </RowFixed>
           {isSolanaBridge(order) ? (
-            <SolanaBridgeTradingFee order={order as BridgeOrder} />
+            <SolanaBridgeTradingFee order={order as BridgeOrder} showUSDFee />
           ) : isSVMOrder(order) && inputAmount?.currency?.symbol ? (
             <SVMTradingFee routes={order.trade.routes} inputCurrencySymbol={inputAmount.currency.symbol} />
           ) : realizedLPFee || isXOrder(order) ? (
