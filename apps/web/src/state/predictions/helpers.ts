@@ -60,7 +60,10 @@ export const transformBetResponse = (tokenSymbol: string, chainId: ChainId | und
     return transformBetResponseCAKE
   }
   // BSC BNB
-  if (tokenSymbol === PredictionSupportedSymbol.BNB && chainId === ChainId.BSC) {
+  if (
+    (tokenSymbol === PredictionSupportedSymbol.BNB && chainId === ChainId.BSC) ||
+    (tokenSymbol === 'tBNB' && chainId === ChainId.BSC_TESTNET)
+  ) {
     return transformBetResponseBNB
   }
 
@@ -73,7 +76,10 @@ export const transformUserResponse = (tokenSymbol: string, chainId: ChainId | un
     return transformUserResponseCAKE
   }
   // BSC BNB
-  if (tokenSymbol === PredictionSupportedSymbol.BNB && chainId === ChainId.BSC) {
+  if (
+    (tokenSymbol === PredictionSupportedSymbol.BNB && chainId === ChainId.BSC) ||
+    (tokenSymbol === 'tBNB' && chainId === ChainId.BSC_TESTNET)
+  ) {
     return transformUserResponseBNB
   }
 
