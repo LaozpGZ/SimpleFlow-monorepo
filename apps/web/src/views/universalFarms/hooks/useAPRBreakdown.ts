@@ -18,6 +18,7 @@ export interface APRBreakdownProps {
   lpApr: `${number}`
   cakeApr: CakeApr[ChainIdAddressKey]
   merklApr?: `${number}`
+  incentraApr?: `${number}`
   tvlUSD?: `${number}`
 }
 

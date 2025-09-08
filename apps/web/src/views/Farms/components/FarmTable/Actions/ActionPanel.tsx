@@ -29,7 +29,9 @@ import { AddLiquidityV3Modal } from 'views/AddLiquidityV3/Modal'
 import { SELECTOR_TYPE } from 'views/AddLiquidityV3/types'
 import { V2Farm } from 'views/Farms/FarmsV3'
 import { useAccount } from 'wagmi'
-import { FarmV3ApyButton } from '../../FarmCard/V3/FarmV3ApyButton'
+import { useIncentraInfo } from 'hooks/useIncentra'
+import { getIncentraLink, INCENTRA_USER_LINK } from 'utils/getIncentraLink'
+import { FarmV3ApyButton, FarmV3ApyButtonProps } from '../../FarmCard/V3/FarmV3ApyButton'
 import FarmV3CardList from '../../FarmCard/V3/FarmV3CardList'
 import { YieldBoosterStateContext } from '../../YieldBooster/components/ProxyFarmContainer'
 import Apr, { AprProps } from '../Apr'
@@ -38,7 +40,7 @@ import StakedAction, { ProxyStakedContainer, StakedContainer } from './StakedAct
 
 const { Multiplier, Liquidity, StakedLiquidity } = FarmWidget.FarmTable
 const { NoPosition } = FarmWidget.FarmV3Table
-const { MerklNotice } = FarmWidget
+const { MerklNotice, IncentraNotice } = FarmWidget
 
 export interface ActionPanelProps {
   apr: AprProps
@@ -183,20 +185,28 @@ const StyleMerklWarning = styled.div`
 `
 
 const MerklWarning: React.FC<{
-  merklLink: string
   merklUserLink?: string
   hasFarm?: boolean
-}> = ({ merklLink, hasFarm, merklUserLink }) => {
+}> = ({ hasFarm, merklUserLink }) => {
   return (
     <StyleMerklWarning>
       <Message variant="primary" icon={<VerifiedIcon color="#7645D9" />}>
         <MessageText color="#7645D9">
-          <MerklNotice.Content
-            hasFarm={hasFarm}
-            merklLink={merklLink}
-            linkColor="currentColor"
-            merklUserLink={merklUserLink}
-          />
+          <MerklNotice.Content hasFarm={hasFarm} linkColor="currentColor" merklUserLink={merklUserLink} />
+        </MessageText>
+      </Message>
+    </StyleMerklWarning>
+  )
+}
+
+const IncentraWarning: React.FC<{
+  incentraUserLink?: string
+}> = ({ incentraUserLink }) => {
+  return (
+    <StyleMerklWarning>
+      <Message variant="primary" icon={<VerifiedIcon color="#7645D9" />}>
+        <MessageText color="#7645D9">
+          <IncentraNotice.Content linkColor="currentColor" incentraUserLink={incentraUserLink} />
         </MessageText>
       </Message>
     </StyleMerklWarning>
@@ -220,6 +230,8 @@ export const ActionPanelV3: FC<ActionPanelV3Props> = ({
   const { merklLink } = farm_
   const farm = details
   const merklUserLink = useMerklUserLink()
+  const { incentraApr, hasIncentra } = useIncentraInfo(farm.lpAddress)
+  const incentraLink = getIncentraLink({ hasIncentra, chainId, lpAddress: farm.lpAddress })
   const isActive = farm.multiplier !== '0X'
   const lpLabel = useMemo(() => farm.lpSymbol && farm.lpSymbol.replace(/pancake/gi, ''), [farm.lpSymbol])
   const bsc = useMemo(
@@ -267,9 +279,14 @@ export const ActionPanelV3: FC<ActionPanelV3Props> = ({
                   <FarmV3ApyButton
                     farm={farm}
                     additionAprInfo={
-                      merklApr && merklLink
-                        ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: merklLink }
-                        : undefined
+                      [
+                        merklApr && merklLink
+                          ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: merklLink }
+                          : undefined,
+                        incentraApr && incentraLink
+                          ? { aprTitle: `Incentra ${t('APR')}`, aprValue: incentraApr, aprLink: incentraLink }
+                          : undefined,
+                      ].filter(Boolean) as NonNullable<FarmV3ApyButtonProps['additionAprInfo']>
                     }
                   />
                 </ValueWrapper>
@@ -308,9 +325,8 @@ export const ActionPanelV3: FC<ActionPanelV3Props> = ({
           </>
         }
       >
-        {!isDesktop && merklLink ? (
-          <MerklWarning hasFarm={hasBothFarmAndMerkl} merklLink={merklLink} merklUserLink={merklUserLink} />
-        ) : null}
+        {!isDesktop && merklLink ? <MerklWarning hasFarm={hasBothFarmAndMerkl} merklUserLink={merklUserLink} /> : null}
+        {!isDesktop && incentraLink ? <IncentraWarning incentraUserLink={INCENTRA_USER_LINK} /> : null}
         {!userDataReady ? (
           <Skeleton height={200} width="100%" />
         ) : account && !hasNoPosition ? (

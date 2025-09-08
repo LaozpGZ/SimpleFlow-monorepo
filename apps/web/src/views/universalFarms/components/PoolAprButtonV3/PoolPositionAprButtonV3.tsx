@@ -57,7 +57,7 @@ export const V3PoolPositionAprButton: React.FC<PoolPositionAprButtonProps<Positi
   userPosition,
   fontSize,
 }) => {
-  const { lpApr, cakeApr, merklApr, numerator, denominator } = useV3PositionApr(pool, userPosition)
+  const { lpApr, cakeApr, merklApr, incentraApr, numerator, denominator } = useV3PositionApr(pool, userPosition)
   const { updateTotalApr } = useMyPositions()
 
   useEffect(() => {
@@ -71,6 +71,7 @@ export const V3PoolPositionAprButton: React.FC<PoolPositionAprButtonProps<Positi
       lpApr={lpApr}
       cakeApr={cakeApr}
       merklApr={merklApr}
+      incentraApr={incentraApr}
       userPosition={userPosition}
       fontSize={fontSize}
     />
@@ -107,7 +108,7 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
   apr,
   fontSize,
 }: InfinityPoolPositionAprButtonProps<T>) => {
-  const { lpApr, cakeApr, merklApr, numerator, denominator } = apr
+  const { lpApr, cakeApr, merklApr, incentraApr, numerator, denominator } = apr
   const { updateTotalApr } = useMyPositions()
 
   useEffect(() => {
@@ -137,6 +138,7 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
         lpApr={Number(lpApr)}
         cakeApr={cakeApr}
         merklApr={merklApr}
+        incentraApr={incentraApr}
         userPosition={userPosition}
         onAPRTextClick={APRBreakdownModalState.onOpen}
         showApyButton={false}
@@ -164,7 +166,7 @@ export const V3PoolDerivedAprButton: React.FC<Omit<PoolPositionAprButtonProps<Po
   showApyButton,
   fontSize,
 }) => {
-  const { lpApr, cakeApr, merklApr } = useV3FormDerivedApr(pool, inverted)
+  const { lpApr, cakeApr, merklApr, incentraApr } = useV3FormDerivedApr(pool, inverted)
 
   return (
     <PoolAprButtonV3
@@ -172,6 +174,7 @@ export const V3PoolDerivedAprButton: React.FC<Omit<PoolPositionAprButtonProps<Po
       lpApr={lpApr}
       cakeApr={cakeApr}
       merklApr={merklApr}
+      incentraApr={incentraApr}
       showApyText={showApyText}
       showApyButton={showApyButton}
       fontSize={fontSize}
@@ -183,7 +186,7 @@ export const InfinityCLPoolDerivedAprButton: React.FC<{ pool: InfinityCLPoolInfo
   pool,
   fontSize,
 }) => {
-  const { lpApr, cakeApr, merklApr } = useInfinityCLDerivedApr(pool)
+  const { lpApr, cakeApr, merklApr, incentraApr } = useInfinityCLDerivedApr(pool)
 
   return (
     <PoolAprButtonV3
@@ -192,6 +195,7 @@ export const InfinityCLPoolDerivedAprButton: React.FC<{ pool: InfinityCLPoolInfo
       lpApr={lpApr}
       cakeApr={cakeApr}
       merklApr={merklApr}
+      incentraApr={incentraApr}
       onAPRTextClick={noop}
       fontSize={fontSize}
     />
@@ -202,7 +206,7 @@ export const InfinityBinPoolDerivedAprButton: React.FC<{ pool: InfinityBinPoolIn
   pool,
   fontSize,
 }) => {
-  const { lpApr, cakeApr, merklApr } = useInfinityBinDerivedApr(pool)
+  const { lpApr, cakeApr, merklApr, incentraApr } = useInfinityBinDerivedApr(pool)
 
   return (
     <PoolAprButtonV3
@@ -211,6 +215,7 @@ export const InfinityBinPoolDerivedAprButton: React.FC<{ pool: InfinityBinPoolIn
       lpApr={lpApr}
       cakeApr={cakeApr}
       merklApr={merklApr}
+      incentraApr={incentraApr}
       onAPRTextClick={noop}
       fontSize={fontSize}
     />

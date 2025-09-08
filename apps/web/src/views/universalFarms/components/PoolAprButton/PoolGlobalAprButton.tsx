@@ -22,7 +22,7 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
   const key = useMemo(() => `${pool.chainId}:${pool.lpAddress}` as const, [pool.chainId, pool.lpAddress])
 
   const hookAprInfo = usePoolApr(key, pool, !pool.stableSwapAddress && !aprInfo, !aprInfo)
-  const { lpApr, merklApr, cakeApr } = aprInfo ?? hookAprInfo
+  const { lpApr, cakeApr, merklApr, incentraApr } = aprInfo ?? hookAprInfo
 
   const numerator = useMemo(() => {
     const lpAprNumerator = new BigNumber(lpApr).times(cakeApr?.userTvlUsd ?? BIG_ZERO)
@@ -57,6 +57,7 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
         lpApr={parseFloat(lpApr) || 0}
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
+        incentraApr={parseFloat(incentraApr) ?? 0}
       />
     )
   }
@@ -68,6 +69,7 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
         lpApr={parseFloat(lpApr) || 0}
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
+        incentraApr={parseFloat(incentraApr) ?? 0}
         onAPRTextClick={APRBreakdownModalState.onOpen}
         showApyButton={false}
       />

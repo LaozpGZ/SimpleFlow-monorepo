@@ -10,17 +10,13 @@ const InlineLink = styled(LinkExternal)`
 
 type MerklNoticeContentProps = {
   linkColor?: string;
-  merklLink: string;
   merklUserLink?: string;
   hasFarm?: boolean;
-  merklApr?: number;
 };
 
 export const MerklNoticeContent: React.FC<MerklNoticeContentProps> = ({
   linkColor = "primary",
-  merklLink,
   hasFarm,
-  merklApr,
   merklUserLink,
 }) => {
   const { t } = useTranslation();
@@ -87,23 +83,19 @@ type MerklNoticeProps = {
   size?: string;
   placement?: Placement;
   tooltipOffset?: [number, number];
-  merklLink: string;
   merklUserLink?: string;
   hasFarm?: boolean;
-  merklApr?: number;
 };
 
 const MerklNotice: React.FC<MerklNoticeProps> = ({
   size = "20px",
   placement = "top-start",
   tooltipOffset = [-20, 10],
-  merklLink,
   hasFarm,
-  merklApr,
   merklUserLink,
 }) => {
   const { tooltip, tooltipVisible, targetRef } = useTooltip(
-    <MerklNoticeContent merklLink={merklLink} hasFarm={hasFarm} merklApr={merklApr} merklUserLink={merklUserLink} />,
+    <MerklNoticeContent hasFarm={hasFarm} merklUserLink={merklUserLink} />,
     {
       placement,
       tooltipOffset,

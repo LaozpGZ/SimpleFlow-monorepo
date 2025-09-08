@@ -11,7 +11,10 @@ import { type V3Farm } from 'state/farms/types'
 import { useMerklUserLink } from 'utils/getMerklLink'
 import { V2Farm } from 'views/Farms/FarmsV3'
 import { RewardPerDay } from 'components/RewardPerDay'
-import { FarmV3ApyButton } from '../FarmCard/V3/FarmV3ApyButton'
+import { useIncentraInfo } from 'hooks/useIncentra'
+import { getIncentraLink, INCENTRA_USER_LINK } from 'utils/getIncentraLink'
+import { useActiveChainId } from 'hooks/useAccountActiveChain'
+import { FarmV3ApyButton, FarmV3ApyButtonProps } from '../FarmCard/V3/FarmV3ApyButton'
 import { ActionPanelV2, ActionPanelV3 } from './Actions/ActionPanel'
 import Apr, { AprProps } from './Apr'
 import { FarmCell } from './Farm'
@@ -109,6 +112,7 @@ const FarmMobileCell = styled.td`
 
 const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>> = (props) => {
   const { initialActivity, userDataReady, farm, multiplier } = props
+  const { chainId } = useActiveChainId()
   const hasSetInitialValue = useRef(false)
   const hasStakedAmount = farm.isStaking || false
   const [actionPanelExpanded, setActionPanelExpanded] = useState(hasStakedAmount)
@@ -141,6 +145,8 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
   const merklUserLink = useMerklUserLink()
 
   const { merklApr } = useMerklInfo(farm?.merklLink ? props.details.lpAddress : undefined)
+  const { incentraApr, hasIncentra } = useIncentraInfo(props.details.lpAddress)
+  const incentraLink = getIncentraLink({ hasIncentra, chainId, lpAddress: props.details.lpAddress })
 
   return (
     <>
@@ -193,9 +199,14 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                           <FarmV3ApyButton
                             farm={props.details}
                             additionAprInfo={
-                              merklApr && farm.merklLink
-                                ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: farm.merklLink }
-                                : undefined
+                              [
+                                merklApr && farm.merklLink
+                                  ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: farm.merklLink }
+                                  : undefined,
+                                incentraApr && incentraLink
+                                  ? { aprTitle: `Incentra ${t('APR')}`, aprValue: incentraApr, aprLink: incentraLink }
+                                  : undefined,
+                              ].filter(Boolean) as NonNullable<FarmV3ApyButtonProps['additionAprInfo']>
                             }
                           />
                         </CellLayout>
@@ -271,6 +282,8 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                             lpAddress: props?.details?.lpAddress,
                             merklApr,
                             merklUserLink,
+                            incentraApr,
+                            incentraUserLink: INCENTRA_USER_LINK,
                           })}
                         </CellLayout>
                       </CellInner>
@@ -289,8 +302,8 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                 <FarmCell
                   {...props.farm}
                   lpAddress={props?.details?.lpAddress}
-                  merklApr={merklApr}
                   merklUserLink={merklUserLink}
+                  incentraUserLink={INCENTRA_USER_LINK}
                 />
                 <Flex
                   mr="16px"
@@ -327,9 +340,14 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                     <FarmV3ApyButton
                       farm={props.details}
                       additionAprInfo={
-                        merklApr && farm.merklLink
-                          ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: farm.merklLink }
-                          : undefined
+                        [
+                          merklApr && farm.merklLink
+                            ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: farm.merklLink }
+                            : undefined,
+                          incentraApr && incentraLink
+                            ? { aprTitle: `Incentra ${t('APR')}`, aprValue: incentraApr, aprLink: incentraLink }
+                            : undefined,
+                        ].filter(Boolean) as NonNullable<FarmV3ApyButtonProps['additionAprInfo']>
                       }
                     />
                   ) : (

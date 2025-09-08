@@ -22,12 +22,13 @@ export const FarmCell: React.FunctionComponent<
   pid,
   isReady,
   isStaking,
-  merklLink,
   hasBothFarmAndMerkl,
-  merklApr,
   lpAddress,
   chainId,
+  merklLink,
   merklUserLink,
+  incentraLink,
+  incentraUserLink,
 }) => {
   const { t } = useTranslation()
   const customTooltips = useHasCustomFarmLpTooltips(lpAddress)
@@ -45,10 +46,11 @@ export const FarmCell: React.FunctionComponent<
         quoteToken={quoteToken}
         isReady={isReady}
         isStaking={isStaking}
+        hasBothFarmAndMerkl={hasBothFarmAndMerkl}
         merklLink={merklLink}
         merklUserLink={merklUserLink}
-        hasBothFarmAndMerkl={hasBothFarmAndMerkl}
-        merklApr={merklApr}
+        incentraLink={incentraLink}
+        incentraUserLink={incentraUserLink}
       >
         <TokenPairImage width={40} height={40} variant="inverted" primaryToken={token} secondaryToken={quoteToken} />
       </FarmTokenInfo>

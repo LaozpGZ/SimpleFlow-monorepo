@@ -34,12 +34,13 @@ export interface FarmTableFarmTokenInfoProps {
   isStaking?: boolean;
   children?: ReactNode;
   isCommunity?: boolean;
-  merklLink?: string;
-  hasBothFarmAndMerkl?: boolean;
   lpAddress?: Address;
-  merklApr?: number;
   rewardCakePerSecond?: number;
+  merklLink?: string;
   merklUserLink?: string;
+  hasBothFarmAndMerkl?: boolean;
+  incentraLink?: string;
+  incentraUserLink?: string;
 }
 
 export type ColumnsDefTypes = {
