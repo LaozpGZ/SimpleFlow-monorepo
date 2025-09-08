@@ -14,7 +14,9 @@ import { useHasCustomFarmLpTooltips } from 'views/Farms/hooks/useHasCustomFarmLp
 const { FarmTokenInfo } = FarmWidget.FarmTable
 
 export const FarmCell: React.FunctionComponent<
-  React.PropsWithChildren<FarmWidget.FarmTableFarmTokenInfoProps & { chainId?: number; lpAddress?: Address }>
+  React.PropsWithChildren<
+    FarmWidget.FarmTableFarmTokenInfoProps & { chainId?: number; lpAddress?: Address; version: 2 | 3 }
+  >
 > = ({
   token,
   quoteToken,
@@ -22,10 +24,10 @@ export const FarmCell: React.FunctionComponent<
   pid,
   isReady,
   isStaking,
-  hasBothFarmAndMerkl,
   lpAddress,
   chainId,
   merklLink,
+  hasBothFarmAndMerkl,
   merklUserLink,
   incentraLink,
   incentraUserLink,

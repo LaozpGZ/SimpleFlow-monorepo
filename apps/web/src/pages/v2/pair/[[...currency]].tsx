@@ -245,6 +245,7 @@ export default function PoolV2Page() {
                 disabled={!pair || !positionDetails}
                 notEnoughLiquidity={totalUSDValue < 20}
                 poolAddress={pair?.liquidityToken?.address}
+                poolProtocol={Protocol.V2}
                 chainId={chainId}
                 outRange={false}
               />

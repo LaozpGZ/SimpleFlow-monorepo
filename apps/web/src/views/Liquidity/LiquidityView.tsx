@@ -854,6 +854,7 @@ export const LiquidityView = () => {
                         : false,
                     )}
                     poolAddress={poolAddress}
+                    poolProtocol={poolInfo?.protocol}
                     chainId={pool?.chainId}
                   />
                 </Flex>

@@ -16,6 +16,7 @@ import { AddLiquidityV3Modal } from 'views/AddLiquidityV3/Modal'
 import { useFarmV3Multiplier } from 'views/Farms/hooks/v3/useFarmV3Multiplier'
 import { useIncentraInfo } from 'hooks/useIncentra'
 import { getIncentraLink, INCENTRA_USER_LINK } from 'utils/getIncentraLink'
+import { Protocol } from '@pancakeswap/farms'
 import CardHeading from '../CardHeading'
 import CardActionsContainer from './CardActionsContainer'
 import { FarmV3ApyButton, FarmV3ApyButtonProps } from './FarmV3ApyButton'
@@ -64,8 +65,8 @@ export const FarmV3Card: React.FC<React.PropsWithChildren<FarmCardProps>> = ({ f
   const { lpAddress } = farm
   const isPromotedFarm = farm.token.symbol === 'CAKE'
   const merklUserLink = useMerklUserLink()
-  const merklLink = getMerklLink({ chainId, lpAddress })
-  const { merklApr } = useMerklInfo(merklLink ? lpAddress : undefined)
+  const { hasMerkl, merklApr } = useMerklInfo(lpAddress)
+  const merklLink = getMerklLink({ hasMerkl, chainId, lpAddress, poolProtocol: Protocol.V3 })
   const { incentraApr, hasIncentra } = useIncentraInfo(lpAddress)
   const incentraLink = getIncentraLink({ hasIncentra, chainId, lpAddress })
   const infoUrl = useMemo(() => {

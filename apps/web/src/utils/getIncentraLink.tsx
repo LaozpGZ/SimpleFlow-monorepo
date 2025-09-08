@@ -4,9 +4,9 @@ import { Address } from 'viem'
 
 export const getIncentraLink = memoize(
   ({
+    hasIncentra,
     chainId,
     lpAddress,
-    hasIncentra,
   }: {
     hasIncentra: boolean
     chainId?: ChainId | number

@@ -23,7 +23,7 @@ import { type V3Farm } from 'state/farms/types'
 import { ChainLinkSupportChains, multiChainPaths } from 'state/info/constant'
 import { css, keyframes, styled } from 'styled-components'
 import { getBlockExploreLink, isAddressEqual } from 'utils'
-import { useMerklUserLink } from 'utils/getMerklLink'
+import { getMerklLink, useMerklUserLink } from 'utils/getMerklLink'
 import { unwrappedToken } from 'utils/wrappedCurrency'
 import { AddLiquidityV3Modal } from 'views/AddLiquidityV3/Modal'
 import { SELECTOR_TYPE } from 'views/AddLiquidityV3/types'
@@ -31,6 +31,7 @@ import { V2Farm } from 'views/Farms/FarmsV3'
 import { useAccount } from 'wagmi'
 import { useIncentraInfo } from 'hooks/useIncentra'
 import { getIncentraLink, INCENTRA_USER_LINK } from 'utils/getIncentraLink'
+import { Protocol } from '@pancakeswap/farms'
 import { FarmV3ApyButton, FarmV3ApyButtonProps } from '../../FarmCard/V3/FarmV3ApyButton'
 import FarmV3CardList from '../../FarmCard/V3/FarmV3CardList'
 import { YieldBoosterStateContext } from '../../YieldBooster/components/ProxyFarmContainer'
@@ -61,7 +62,6 @@ export interface ActionPanelV3Props {
   multiplier: FarmWidget.FarmTableMultiplierProps
   stakedLiquidity: FarmWidget.FarmTableLiquidityProps
   details: V3Farm
-  farm: FarmWidget.FarmTableFarmTokenInfoProps & { version: 3 }
   userDataReady: boolean
   expanded: boolean
   alignLinksToRight?: boolean
@@ -215,8 +215,7 @@ const IncentraWarning: React.FC<{
 
 export const ActionPanelV3: FC<ActionPanelV3Props> = ({
   expanded,
-  details,
-  farm: farm_,
+  details: farm,
   multiplier,
   stakedLiquidity,
   alignLinksToRight,
@@ -227,8 +226,8 @@ export const ActionPanelV3: FC<ActionPanelV3Props> = ({
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const { address: account } = useAccount()
-  const { merklLink } = farm_
-  const farm = details
+  const { hasMerkl, merklApr } = useMerklInfo(farm?.lpAddress)
+  const merklLink = getMerklLink({ hasMerkl, chainId, lpAddress: farm?.lpAddress, poolProtocol: Protocol.V3 })
   const merklUserLink = useMerklUserLink()
   const { incentraApr, hasIncentra } = useIncentraInfo(farm.lpAddress)
   const incentraLink = getIncentraLink({ hasIncentra, chainId, lpAddress: farm.lpAddress })
@@ -257,7 +256,6 @@ export const ActionPanelV3: FC<ActionPanelV3Props> = ({
   )
 
   const addLiquidityModal = useModalV2()
-  const { merklApr } = useMerklInfo(merklLink ? details.lpAddress : undefined)
 
   return (
     <>

@@ -51,7 +51,12 @@ export const PoolAprButtonV3: React.FC<PoolGlobalAprButtonProps> = ({
     return sumApr(lpApr, cakeApr?.value, merklApr, incentraApr)
   }, [lpApr, cakeApr?.value, merklApr, incentraApr])
   const hasBCake = pool.protocol === 'v2' || pool.protocol === 'stable'
-  const merklLink = getMerklLink({ chainId: pool.chainId, lpAddress: pool.lpAddress })
+  const merklLink = getMerklLink({
+    hasMerkl: Boolean(merklApr),
+    chainId: pool.chainId,
+    lpAddress: pool.lpAddress,
+    poolProtocol: pool.protocol,
+  })
   const incentraLink = getIncentraLink({
     hasIncentra: Boolean(incentraApr),
     chainId: pool.chainId,
