@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query'
-import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useMemo } from 'react'
 import { isAddressEqual } from 'utils'
 
@@ -30,10 +29,8 @@ export function useIncentraInfo(poolAddress?: string): {
   incentraApr?: number
   refreshData: () => void
 } {
-  const { chainId } = useAccountActiveChain()
-
   const { data, isPending, refetch } = useQuery({
-    queryKey: ['fetchIncentraPools', chainId],
+    queryKey: ['fetchIncentraPools'],
     queryFn: async () => {
       const res = await fetch(`${INCENTRA_API}/liquidityCampaigns`, {
         method: 'POST',
@@ -73,7 +70,7 @@ export function useIncentraInfo(poolAddress?: string): {
       }
     }
 
-    const campaign = data.find((c) => isAddressEqual(c.pools.poolId, poolAddress) && Number(c.chainId) === chainId)
+    const campaign = data.find((c) => isAddressEqual(c.pools.poolId, poolAddress))
 
     return {
       isPending,
@@ -81,5 +78,5 @@ export function useIncentraInfo(poolAddress?: string): {
       incentraApr: campaign?.rewardInfo?.apr,
       refreshData: refetch,
     }
-  }, [data, poolAddress, isPending, refetch, chainId])
+  }, [data, poolAddress, isPending, refetch])
 }
