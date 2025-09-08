@@ -65,7 +65,7 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
   if (!isInfinityProtocol(pool.protocol)) {
     return (
       <PoolAprButton
-        pool={pool}
+        pool={{ ...pool, isFarming: Number(cakeApr?.value) > 0 }}
         lpApr={parseFloat(lpApr) || 0}
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
