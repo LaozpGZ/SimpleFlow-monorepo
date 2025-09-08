@@ -62,10 +62,12 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
 
   const APRBreakdownModalState = useModalV2()
 
+  const poolWithFarming = useMemo(() => ({ ...pool, isFarming: Number(cakeApr?.value) > 0 }), [pool, cakeApr])
+
   if (!isInfinityProtocol(pool.protocol)) {
     return (
       <PoolAprButton
-        pool={{ ...pool, isFarming: Number(cakeApr?.value) > 0 }}
+        pool={poolWithFarming}
         lpApr={parseFloat(lpApr) || 0}
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
@@ -77,7 +79,7 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
   return (
     <>
       <PoolAprButton
-        pool={{ ...pool, isFarming: Number(cakeApr?.value) > 0 }}
+        pool={poolWithFarming}
         lpApr={parseFloat(lpApr) || 0}
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
