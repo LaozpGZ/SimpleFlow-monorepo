@@ -123,7 +123,7 @@ const BridgeFeeView = ({ feeData, isOpen, onToggle }: BridgeFeeViewProps) => {
   const { groupedFees, totalFeeUsd, isDataReady, hasApproximateFees } = feeData
 
   return (
-    <Box mt="10px">
+    <Box mt="10px" mr="-4px">
       <SwapUIV2.Collapse
         isOpen={isOpen}
         onToggle={onToggle}
@@ -335,6 +335,7 @@ export const TradeSummary = memo(function TradeSummary({
             <QuestionHelperV2
               text={
                 <>
+                  g
                   <Text mb="12px">
                     <Text bold display="inline-block">
                       {t('AMM')}
