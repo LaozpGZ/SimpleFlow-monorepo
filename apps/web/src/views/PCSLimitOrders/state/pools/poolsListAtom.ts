@@ -1,8 +1,8 @@
 import { atomWithAsyncRetry } from 'utils/atomWithAsyncRetry'
-import { PCS_LIMIT_ORDER_POOLS_URL } from '../constants'
-import { SupportedPoolListItem } from '../types'
+import { PCS_LIMIT_ORDER_POOLS_URL } from '../../constants'
+import { SupportedPoolListItem } from '../../types'
 
-// TODO: Add Support for chainId
+// TODO: Add Support for chainId, by separating atomFamily perhaps
 export const supportedPoolsListAtom = atomWithAsyncRetry<SupportedPoolListItem[]>({
   asyncFn: async () => {
     const response = await fetch(PCS_LIMIT_ORDER_POOLS_URL)

@@ -3,7 +3,7 @@ import { useTokensByChainId } from 'hooks/Tokens'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
-import { supportedPoolsListAtom } from 'views/PCSLimitOrders/state/poolsListAtom'
+import { supportedPoolsListAtom } from 'views/PCSLimitOrders/state/pools/poolsListAtom'
 import { getCurrencyIdWithZeroAddr, getTokensMap } from 'views/PCSLimitOrders/utils'
 import { inputCurrencyAtom } from '../state/currency/currencyAtoms'
 
