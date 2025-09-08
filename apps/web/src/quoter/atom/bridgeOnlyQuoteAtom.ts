@@ -3,28 +3,16 @@ import { RouteType } from '@pancakeswap/smart-router'
 import { CurrencyAmount, Currency, TradeType, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { atomFamily } from 'jotai/utils'
 import { BridgeTradeError } from 'quoter/quoter.types'
-import {
-  getTokenAddress,
-  getUnifiedTokenAddress,
-  postMetadata,
-  postSolanaEVMBridgeMetadata,
-} from 'views/Swap/Bridge/api'
+import { getTokenAddress, postMetadata } from 'views/Swap/Bridge/api'
 import { BridgeMetadataParams } from 'views/Swap/Bridge/types'
 import { InterfaceOrder } from 'views/Swap/utils'
-import { isSolana } from '@pancakeswap/chains'
-import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
-import { solanaTokens, USDC } from '@pancakeswap/tokens'
-import { solanaUserSlippageAtomWithLocalStorage, userSlippageAtomWithLocalStorage } from '@pancakeswap/utils/user'
 import { atomWithLoadable } from './atomWithLoadable'
 
 export const bridgeOnlyQuoteAtom = atomFamily(
   (params: BridgeMetadataParams) =>
     atomWithLoadable(async (get) => {
       const { inputAmount, outputCurrency } = params
-      const slippageToleranceEVM = get(userSlippageAtomWithLocalStorage)
-      const slippageToleranceSolana = get(solanaUserSlippageAtomWithLocalStorage)
 
-      const accountState = get(accountActiveChainAtom)
       // by default, recipientOnDestChain will be account address
       // metadata endpoint only receive either both recipientOnDestChain and commands or none of them
       const postBridgeSwapParams =
@@ -35,30 +23,15 @@ export const bridgeOnlyQuoteAtom = atomFamily(
             }
           : {}
 
-      const isSolanaBridge = isSolana(inputAmount.currency.chainId) || isSolana(outputCurrency.chainId)
-
-      const metadata = isSolanaBridge
-        ? await postSolanaEVMBridgeMetadata({
-            inputToken: getUnifiedTokenAddress(inputAmount.currency),
-            originChainId: inputAmount.currency.chainId,
-            outputToken: getUnifiedTokenAddress(outputCurrency),
-            destinationChainId: outputCurrency.chainId,
-            amount: inputAmount.quotient.toString(),
-            user: isSolana(inputAmount.currency.chainId) ? accountState.solanaAccount : accountState.account,
-            recipientOnDestChain: isSolana(outputCurrency.chainId) ? accountState.solanaAccount : accountState.account,
-            slippageTolerance: isSolana(inputAmount.currency.chainId)
-              ? slippageToleranceSolana.toString()
-              : slippageToleranceEVM.toString(),
-          })
-        : await postMetadata({
-            inputToken: getTokenAddress(inputAmount.currency),
-            originChainId: inputAmount.currency.chainId,
-            outputToken: getTokenAddress(outputCurrency),
-            destinationChainId: outputCurrency.chainId,
-            amount: inputAmount.quotient.toString(),
-            commands: postBridgeSwapParams.commands,
-            recipientOnDestChain: postBridgeSwapParams.recipientOnDestChain,
-          })
+      const metadata = await postMetadata({
+        inputToken: getTokenAddress(inputAmount.currency),
+        originChainId: inputAmount.currency.chainId,
+        outputToken: getTokenAddress(outputCurrency),
+        destinationChainId: outputCurrency.chainId,
+        amount: inputAmount.quotient.toString(),
+        commands: postBridgeSwapParams.commands,
+        recipientOnDestChain: postBridgeSwapParams.recipientOnDestChain,
+      })
 
       if (!metadata.supported) {
         throw new BridgeTradeError(metadata?.reason || metadata?.error?.message || 'Unknown error')
@@ -69,20 +42,7 @@ export const bridgeOnlyQuoteAtom = atomFamily(
         metadata.bridgeTransactionData.outputAmount,
       ) as CurrencyAmount<Currency>
 
-      let bridgeFee
-
-      if (isSolanaBridge) {
-        const stableCoin = isSolana(inputAmount.currency.chainId)
-          ? solanaTokens.usdc
-          : USDC[inputAmount.currency.chainId]
-
-        bridgeFee = CurrencyAmount.fromRawAmount(
-          stableCoin,
-          Math.abs(Number(metadata.bridgeTransactionData.totalRelayFee)) * 10 ** Number(stableCoin.decimals),
-        )
-      } else {
-        bridgeFee = CurrencyAmount.fromRawAmount(inputAmount.currency, metadata.bridgeTransactionData.totalRelayFee)
-      }
+      const bridgeFee = CurrencyAmount.fromRawAmount(inputAmount.currency, metadata.bridgeTransactionData.totalRelayFee)
 
       const bridgeQuote: InterfaceOrder = {
         bridgeTransactionData: metadata.bridgeTransactionData,
