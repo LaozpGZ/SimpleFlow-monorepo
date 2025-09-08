@@ -35,7 +35,8 @@ export const getMerklLink = memoize(
 
     return `https://app.merkl.xyz/opportunities/${chain}/${protoPath}/${safeGetAddress(lpAddress)}`
   },
-  ({ chainId, lpAddress, poolProtocol }) => `${chainId}:${poolProtocol}:${lpAddress?.toLowerCase()}`,
+  ({ hasMerkl, chainId, lpAddress, poolProtocol }) =>
+    `${hasMerkl}:${chainId}:${poolProtocol}:${lpAddress?.toLowerCase()}`,
 )
 export const useMerklUserLink = (): string => {
   const { address: account } = useAccount()

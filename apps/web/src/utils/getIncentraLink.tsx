@@ -16,7 +16,7 @@ export const getIncentraLink = memoize(
 
     return `https://incentra.brevis.network/campaign/?pool_id=${lpAddress.toLowerCase()}&type=3&chainId=${chainId}`
   },
-  ({ chainId, lpAddress, hasIncentra }) => `${chainId}:${lpAddress?.toLowerCase()}:${hasIncentra}`,
+  ({ hasIncentra, chainId, lpAddress }) => `${hasIncentra}:${chainId}:${lpAddress?.toLowerCase()}`,
 )
 
 export const INCENTRA_USER_LINK = 'https://incentra.brevis.network/dashboard/'
