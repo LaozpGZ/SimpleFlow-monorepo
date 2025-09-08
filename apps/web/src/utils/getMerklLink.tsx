@@ -2,6 +2,7 @@ import { Protocol } from '@pancakeswap/farms'
 import memoize from 'lodash/memoize'
 import { useMemo } from 'react'
 import { useAccount } from 'wagmi'
+import { safeGetAddress } from './safeGetAddress'
 
 const chainIdToChainName = {
   1: 'ethereum',
@@ -30,11 +31,9 @@ export const getMerklLink = memoize(
     const chain = chainIdToChainName[chainId]
     if (!chain) return undefined
 
-    const address = lpAddress.toLowerCase()
-
     const protoPath = poolProtocol === Protocol.V2 || poolProtocol === Protocol.STABLE ? 'ERC20' : 'CLAMM'
 
-    return `https://app.merkl.xyz/opportunities/${chain}/${protoPath}/${address}`
+    return `https://app.merkl.xyz/opportunities/${chain}/${protoPath}/${safeGetAddress(lpAddress)}`
   },
   ({ chainId, lpAddress, poolProtocol }) => `${chainId}:${poolProtocol}:${lpAddress?.toLowerCase()}`,
 )
