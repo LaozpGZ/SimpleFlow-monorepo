@@ -20,13 +20,6 @@ export const BridgeStep = ({
   const { t } = useTranslation()
 
   if (isSolana(originChainId) || isSolana(destinationChainId)) {
-    if (originChainId === destinationChainId) {
-      return t('Bridge %currency% (%inputChain% to %outputChain%)', {
-        currency: inCurrency?.symbol,
-        inputChain: getFullChainNameById(inCurrency?.chainId),
-        outputChain: getFullChainNameById(destinationChainId),
-      })
-    }
     return t('Swap %currencyA% (%chainNameA%) to %currencyB% (%chainName%)', {
       currencyA: inCurrency?.symbol || '',
       chainNameA: getFullChainNameById(inCurrency?.chainId),
