@@ -3,22 +3,26 @@ import { useTokensByChainId } from 'hooks/Tokens'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { useAtomValue } from 'jotai'
 import { useMemo } from 'react'
-import { tokensMapAtom } from 'views/PCSLimitOrders/state/poolsListAtom'
-import { getCurrencyIdWithZeroAddr } from 'views/PCSLimitOrders/utils'
+import { supportedPoolsListAtom } from 'views/PCSLimitOrders/state/poolsListAtom'
+import { getCurrencyIdWithZeroAddr, getTokensMap } from 'views/PCSLimitOrders/utils'
 import { inputCurrencyAtom } from '../state/currency/currencyAtoms'
 
 export const useSupportedTokens = () => {
   const { chainId } = useAccountActiveChain()
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
-  const supportedTokensMap = useAtomValue(tokensMapAtom)
+  const supportedPoolsList = useAtomValue(supportedPoolsListAtom)
+
+  // Supported tokens bi-directional map
+  // TODO: Memoize without losing native token in output (Bug)
+  const tokenMap = getTokensMap(supportedPoolsList)
 
   const supportedTokens = useMemo(() => {
     let isNativeInputSupported = false
     let isNativeOutputSupported = false
 
-    const inputTokenAddresses = Object.keys(supportedTokensMap) ?? []
-    const outputTokenAddresses = supportedTokensMap[getCurrencyIdWithZeroAddr(inputCurrency)] ?? []
+    const inputTokenAddresses = Object.keys(tokenMap) ?? []
+    const outputTokenAddresses = tokenMap[getCurrencyIdWithZeroAddr(inputCurrency)] ?? []
 
     if (inputTokenAddresses.includes(ZERO_ADDRESS)) {
       inputTokenAddresses.splice(inputTokenAddresses.indexOf(ZERO_ADDRESS))
@@ -36,7 +40,7 @@ export const useSupportedTokens = () => {
       isNativeInputSupported,
       isNativeOutputSupported,
     }
-  }, [supportedTokensMap, inputCurrency])
+  }, [tokenMap, inputCurrency])
 
   const inputTokensMap = useTokensByChainId(supportedTokens.inputTokenAddresses, chainId)
   const outputTokensMap = useTokensByChainId(supportedTokens.outputTokenAddresses, chainId)
