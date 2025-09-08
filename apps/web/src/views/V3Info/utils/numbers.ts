@@ -1,18 +1,28 @@
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
+
 // using a currency library here in case we want to add more in future
 export const formatDollarAmount = (num: number | undefined, digits = 2, round = true) => {
-  if (num !== undefined && num <= 0) return '$0.00'
+  if (num !== undefined && num !== null && num <= 0) return '$0'
   if (!num) return '-'
   if (num < 0.001 && digits <= 3) {
     return '<$0.001'
   }
 
-  return Intl.NumberFormat('en-US', {
+  const formatted = Intl.NumberFormat('en-US', {
     notation: round ? 'compact' : 'standard',
-    minimumFractionDigits: num > 1000 ? 2 : digits,
+    minimumFractionDigits: 0, // Allow no decimal places
     maximumFractionDigits: num > 1000 ? 2 : digits,
     style: 'currency',
     currency: 'USD',
   }).format(num)
+
+  // More robust trimming of trailing zeros
+  if (formatted.includes('.')) {
+    // Remove trailing zeros after decimal point, then remove decimal point if no digits remain
+    return formatted.replace(/\.?0+$/, '').replace(/\.$/, '')
+  }
+
+  return formatted
 }
 
 // using a currency library here in case we want to add more in future
