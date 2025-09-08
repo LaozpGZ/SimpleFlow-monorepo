@@ -15,16 +15,18 @@ import { DualCurrencyDisplay } from '@pancakeswap/widgets-internal'
 import { useAtomValue } from 'jotai'
 
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, CurrencyAmount, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
+import { UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
-import { useCurrencyByChainId } from 'hooks/Tokens'
+import { useUnifiedCurrency } from 'hooks/Tokens'
 import { ReactNode, useMemo } from 'react'
 import { swapReducerAtom } from 'state/swap/reducer'
 import styled from 'styled-components'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
-import { shortenAddress } from 'views/V3Info/utils'
+import { isSolana } from '@pancakeswap/chains'
+import { Field } from 'state/swap/actions'
+import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useBridgeStatus } from '../../hooks/useBridgeStatus'
 import { ActiveBridgeOrderMetadata, BridgeResponseStatusData, BridgeStatus, Command } from '../../types'
 import { customBridgeStatus } from '../../utils/customBridgeStatus'
@@ -46,7 +48,7 @@ function Description({
   description,
 }: {
   showAmounts: boolean
-  currencyAmount: CurrencyAmount<Currency>
+  currencyAmount: UnifiedCurrencyAmount<UnifiedCurrency>
   description: ReactNode
 }) {
   return (
@@ -81,7 +83,9 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   const swapState = useAtomValue(swapReducerAtom)
   const accountState = useAtomValue(accountActiveChainAtom)
 
-  const recipientOnDestChain = swapState.recipient === null ? accountState.account : swapState.recipient
+  const account = isSolana(swapState[Field.OUTPUT].chainId) ? accountState.solanaAccount : accountState.account
+
+  const recipientOnDestChain = swapState.recipient === null ? account : swapState.recipient
 
   const txHash = bridgeMetadata?.txHash
   const originChainId = bridgeMetadata?.originChainId
@@ -176,11 +180,11 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   }, [bridgeStatus])
 
   // Result currency
-  const resultCurrency = useCurrencyByChainId(resultTokenData.resultTokenAddress, resultTokenData.resultTokenChainId)
+  const resultCurrency = useUnifiedCurrency(resultTokenData.resultTokenAddress, resultTokenData.resultTokenChainId)
 
   const resultCurrencyAmount = useMemo(() => {
     if (!resultCurrency || !resultTokenData.resultAmount) return undefined
-    return CurrencyAmount.fromRawAmount(resultCurrency, formatScientificToDecimal(resultTokenData.resultAmount))
+    return UnifiedCurrencyAmount.fromRawAmount(resultCurrency, formatScientificToDecimal(resultTokenData.resultAmount))
   }, [resultCurrency, resultTokenData.resultAmount])
 
   const outputAmount = useMemo(() => {
@@ -264,12 +268,12 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
                 description={
                   isRefundCase
                     ? t(' is being refunded to %address% on ', {
-                        address: shortenAddress(recipientOnDestChain || ''),
+                        address: truncateHash(recipientOnDestChain || ''),
                       })
                     : status === BridgeStatus.FAILED
                     ? t('Your bridge transaction failed. You will be refunded shortly.')
                     : t(' has been sent to %address% on ', {
-                        address: shortenAddress(recipientOnDestChain || ''),
+                        address: truncateHash(recipientOnDestChain || ''),
                       })
                 }
               />
