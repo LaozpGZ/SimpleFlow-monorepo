@@ -87,12 +87,22 @@ export const SolanaBridgeSolanaToEVMTradingFee = memo(
   },
 )
 
-export const SolanaBridgeTradingFee = memo(({ order, textColor }: { order: BridgeOrder; textColor?: string }) => {
-  const feeText = isSolana(order.bridgeFee.currency.chainId) ? (
-    <SolanaBridgeSolanaToEVMTradingFee order={order} textColor={textColor} />
-  ) : (
-    <SolanaBridgeEVMToSolanaTradingFee order={order} textColor={textColor} />
-  )
+export const SolanaBridgeTradingFee = memo(
+  ({ order, textColor, showUSDFee }: { order: BridgeOrder; textColor?: string; showUSDFee?: boolean }) => {
+    if (showUSDFee) {
+      return (
+        <Text color={textColor} fontSize="14px">
+          {`$${formatNumber(order.bridgeFee.toExact(), { maxDecimalDisplayDigits: 3 })}`}
+        </Text>
+      )
+    }
 
-  return <>{feeText}</>
-})
+    const feeText = isSolana(order.bridgeFee.currency.chainId) ? (
+      <SolanaBridgeSolanaToEVMTradingFee order={order} textColor={textColor} />
+    ) : (
+      <SolanaBridgeEVMToSolanaTradingFee order={order} textColor={textColor} />
+    )
+
+    return <>{feeText}</>
+  },
+)
