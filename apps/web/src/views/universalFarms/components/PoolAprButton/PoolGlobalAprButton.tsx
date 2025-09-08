@@ -46,7 +46,19 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
     ) {
       updateTotalApr(key, numerator, denominator)
     }
-  }, [cakeApr, denominator, detailMode, key, lpApr, merklApr, numerator, pool.protocol, updateTotalApr, totalApr])
+  }, [
+    cakeApr,
+    denominator,
+    detailMode,
+    key,
+    lpApr,
+    merklApr,
+    incentraApr,
+    numerator,
+    pool.protocol,
+    updateTotalApr,
+    totalApr,
+  ])
 
   const APRBreakdownModalState = useModalV2()
 
@@ -65,7 +77,7 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
   return (
     <>
       <PoolAprButton
-        pool={pool}
+        pool={{ ...pool, isFarming: Number(cakeApr?.value) > 0 }}
         lpApr={parseFloat(lpApr) || 0}
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
