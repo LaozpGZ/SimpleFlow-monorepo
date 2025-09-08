@@ -93,7 +93,7 @@ describe('hooks', () => {
 
     test('handle Solana chain with token address', () => {
       const outputCurrency = '4qQeZ5LwSz6HuupUu8jCtgXyW1mYQcNbFAW1sWZp89HL'
-      expect(queryParametersToSwapState(parse(`chain=solana&outputCurrency=${outputCurrency}`))).toEqual({
+      expect(queryParametersToSwapState(parse(`chain=sol&outputCurrency=${outputCurrency}`))).toEqual({
         [Field.INPUT]: { currencyId: 'SOL', chainId: NonEVMChainId.SOLANA },
         [Field.OUTPUT]: { currencyId: outputCurrency, chainId: NonEVMChainId.SOLANA },
         typedValue: '',
