@@ -1,4 +1,4 @@
-import { Container } from '@pancakeswap/uikit'
+import { Container, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { ReactNode } from 'react'
 import { Address } from 'viem'
 
@@ -16,10 +16,11 @@ interface TypeProps {
 }
 
 const IfoContainer: React.FC<React.PropsWithChildren<TypeProps>> = ({ ifoSection, ifoFaqs }) => {
+  const { isMobile } = useMatchBreakpoints()
   return (
     <>
       <SectionBackground>
-        <Container px="0">{ifoSection}</Container>
+        <Container px={isMobile ? '16px' : '0px'}>{ifoSection}</Container>
       </SectionBackground>
       <HowToTakePart />
       {ifoFaqs ? <IfoQuestions faqs={ifoFaqs} /> : <DefaultQuestions />}
