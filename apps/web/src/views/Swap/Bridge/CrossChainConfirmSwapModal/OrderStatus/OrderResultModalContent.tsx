@@ -85,7 +85,11 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
 
   const account = isSolana(swapState[Field.OUTPUT].chainId) ? accountState.solanaAccount : accountState.account
 
-  const recipientOnDestChain = swapState.recipient === null ? account : swapState.recipient
+  const recipientOnDestChain = overrideActiveOrderMetadata
+    ? overrideActiveOrderMetadata.metadata?.recipientOnDestinationChain || undefined
+    : swapState.recipient === null
+    ? account
+    : swapState.recipient
 
   const txHash = bridgeMetadata?.txHash
   const originChainId = bridgeMetadata?.originChainId

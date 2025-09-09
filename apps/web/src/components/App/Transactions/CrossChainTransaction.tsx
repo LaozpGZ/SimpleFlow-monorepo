@@ -91,6 +91,7 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
     minOutputAmount: order.minOutputAmount,
     originChainId: order.originChainId,
     destinationChainId: order.destinationChainId,
+    recipientOnDestinationChain: order.recipientOnDestinationChain,
   }
 
   const { data: bridgeStatusData, isFetching } = useQuery({
