@@ -17,15 +17,16 @@ export const useIsRecipientError = () => {
   const debounceEnsName = useDebounce(recipient, 500)
   const recipientENSAddress = useGetENSAddressByName(debounceEnsName ?? undefined)
 
-  const isRecipientError = useMemo(() => {
-    if (!allowRecipient || recipient === null) return false
+  const resolvedAddress = useMemo(() => {
+    if (!allowRecipient || recipient === null) return undefined
 
     if (outputChainId && isSolana(outputChainId)) {
-      return !isValidSolanaAddress(recipient)
+      return isValidSolanaAddress(recipient) ? recipient : undefined
     }
 
     const address = safeGetAddress(recipient) ? recipient : safeGetAddress(recipientENSAddress)
-    return Boolean(recipient.length > 0 && !address)
+
+    return address
   }, [recipient, allowRecipient, recipientENSAddress])
 
   const isRecipientEmpty = useMemo(() => {
@@ -33,5 +34,9 @@ export const useIsRecipientError = () => {
     return recipient.length === 0
   }, [allowRecipient, recipient])
 
-  return { isRecipientError, isRecipientEmpty }
+  return {
+    isRecipientError: Boolean(recipient?.length && recipient.length > 0 && !resolvedAddress),
+    isRecipientEmpty,
+    resolvedAddress,
+  }
 }
