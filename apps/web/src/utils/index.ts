@@ -6,6 +6,7 @@ import { bsc } from 'wagmi/chains'
 import { chains } from './wagmi'
 
 export * from './safeGetAddress'
+export { useBlockExploreName } from '../hooks/useBlockExploreName'
 
 // returns the checksummed address if the address is valid, otherwise returns undefined
 
@@ -52,18 +53,6 @@ export function getBlockExploreLink(
       return `${chain?.blockExplorers?.default.url}/address/${data}`
     }
   }
-}
-
-export function getBlockExploreName(chainIdOverride?: number) {
-  const chainId = chainIdOverride || ChainId.BSC
-
-  if (chainId === NonEVMChainId.SOLANA) {
-    return 'Solscan'
-  }
-
-  const chain = chains.find((c) => c.id === chainId)
-
-  return multiChainScanName[chain?.id || -1] || chain?.blockExplorers?.default.name || bsc.blockExplorers.default.name
 }
 
 export function getBscScanLinkForNft(collectionAddress: string | undefined, tokenId?: string): string {
