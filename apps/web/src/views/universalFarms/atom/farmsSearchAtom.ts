@@ -171,12 +171,12 @@ const searchAtom = atomFamily((query: FarmQuery) => {
     ).map((farm) => {
       const { pool, chainId, vol24hUsd, ...rest } = farm
       const farmInfo = {
-        chainId: farm.chainId,
+        chainId,
         tvlUsd: 0,
         ...rest,
         feeTierBase: 1e6,
-        vol24hUsd: farm.vol24hUsd,
-        pool: SmartRouter.Transformer.parsePool(farm.chainId, farm.pool),
+        vol24hUsd,
+        pool: SmartRouter.Transformer.parsePool(chainId, pool),
       } as FarmInfo
 
       return farmInfo

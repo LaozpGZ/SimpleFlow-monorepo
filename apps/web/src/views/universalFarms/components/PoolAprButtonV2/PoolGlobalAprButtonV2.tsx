@@ -16,13 +16,7 @@ type PoolGlobalAprButtonProps = {
   detailMode?: boolean
 }
 
-export const PoolGlobalAprButtonV2: React.FC<PoolGlobalAprButtonProps> = ({
-  pool,
-  lpApr,
-  merklApr,
-  cakeApr,
-  detailMode,
-}) => {
+export const PoolGlobalAprButtonV2: React.FC<PoolGlobalAprButtonProps> = ({ pool, lpApr, merklApr, cakeApr }) => {
   const { chainId, token0, token1 } = pool
   const currency0 = useCurrencyByChainId(getCurrencyAddress(token0), chainId)
   const currency1 = useCurrencyByChainId(getCurrencyAddress(token1), chainId)
