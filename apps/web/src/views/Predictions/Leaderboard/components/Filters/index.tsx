@@ -176,7 +176,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
         </Flex>
         <SearchWrapper>
           <AddressSearch
-            token={predictionConfigs?.[pickedTokenSymbol]?.predictionCurrency}
+            token={predictionConfigs?.[pickedTokenSymbol]?.betCurrency}
             api={predictionConfigs?.[pickedTokenSymbol]?.api ?? ''}
           />
         </SearchWrapper>
