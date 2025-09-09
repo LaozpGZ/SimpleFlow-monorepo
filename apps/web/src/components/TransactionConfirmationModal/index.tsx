@@ -18,7 +18,7 @@ import { ConfirmationPendingContent, TransactionErrorContent } from '@pancakeswa
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useCallback, useMemo } from 'react'
 import { styled } from 'styled-components'
-import { getBlockExploreLink, useBlockExploreName } from 'utils'
+import { useBlockExploreLink, useBlockExploreName } from 'utils'
 import { wrappedCurrency } from 'utils/wrappedCurrency'
 import AddToWalletButton, { AddToWalletTextOptions } from '../AddToWallet/AddToWalletButton'
 
@@ -46,6 +46,7 @@ export function TransactionSubmittedContent({
 }) {
   const { t } = useTranslation()
   const blockExplorerName = useBlockExploreName(chainId)
+  const getBlockExploreLink = useBlockExploreLink()
 
   const token: Token | undefined = wrappedCurrency(currencyToAdd, chainId)
 

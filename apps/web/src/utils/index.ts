@@ -6,7 +6,7 @@ import { bsc } from 'wagmi/chains'
 import { chains } from './wagmi'
 
 export * from './safeGetAddress'
-export { useBlockExploreName } from '../hooks/useBlockExploreName'
+export { useBlockExploreName, useBlockExploreLink } from '../hooks/useBlockExploreName'
 
 // returns the checksummed address if the address is valid, otherwise returns undefined
 

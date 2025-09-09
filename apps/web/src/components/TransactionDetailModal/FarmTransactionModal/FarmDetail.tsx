@@ -4,7 +4,7 @@ import { ChainLogo } from 'components/Logo/ChainLogo'
 import { useMemo } from 'react'
 import { ChainLinkSupportChains } from 'state/info/constant'
 import { FarmTransactionStatus, CrossChainFarmTransactionStep } from 'state/transactions/actions'
-import { getBlockExploreLink, useBlockExploreName } from 'utils'
+import { useBlockExploreLink, useBlockExploreName } from 'utils'
 import { chains } from 'utils/wagmi'
 
 interface HarvestDetailProps {
@@ -15,6 +15,7 @@ interface HarvestDetailProps {
 const FarmDetail: React.FC<React.PropsWithChildren<HarvestDetailProps>> = ({ step, status }) => {
   const { t } = useTranslation()
   const blockExplorerName = useBlockExploreName(step.chainId)
+  const getBlockExploreLink = useBlockExploreLink()
   const isFail = step.status === FarmTransactionStatus.FAIL
   const isLoading = step.status === FarmTransactionStatus.PENDING
   const chainInfo = useMemo(() => chains.find((chain) => chain.id === step.chainId), [step])

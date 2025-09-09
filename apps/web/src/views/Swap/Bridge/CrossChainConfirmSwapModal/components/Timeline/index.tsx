@@ -10,7 +10,7 @@ import {
 } from '@pancakeswap/uikit'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import styled, { css } from 'styled-components'
-import { getBlockExploreLink } from 'utils'
+import { useBlockExploreLink } from 'utils'
 
 export type TimelineItemStatus = 'completed' | 'inProgress' | 'failed' | 'warning' | 'notStarted'
 
@@ -128,6 +128,7 @@ const TimelineItem: React.FC<TimelineItemProps> = ({
   tx,
 }) => {
   const [, setShouldRecalculate] = useState(false)
+  const getBlockExploreLink = useBlockExploreLink()
 
   useEffect(() => {
     // Trigger a re-render after initial mount to recalculate heights

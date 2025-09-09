@@ -8,7 +8,7 @@ import { useCallback } from 'react'
 import { styled } from 'styled-components'
 import { safeGetAddress } from 'utils'
 import { RowBetween } from '../../../components/Layout/Row'
-import { getBlockExploreLink, useBlockExploreName } from '../../../utils'
+import { useBlockExploreLink, useBlockExploreName } from '../../../utils'
 
 const InputPanel = styled.div`
   display: flex;
@@ -81,6 +81,7 @@ export default function AddressInputPanel({
 }) {
   const { chainId } = useActiveChainId()
   const blockExplorerName = useBlockExploreName(chainId)
+  const getBlockExploreLink = useBlockExploreLink()
 
   const { t } = useTranslation()
   const debounceEnsName = useDebounce(value, 500)
