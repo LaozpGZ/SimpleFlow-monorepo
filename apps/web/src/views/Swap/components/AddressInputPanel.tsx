@@ -8,7 +8,7 @@ import { useCallback } from 'react'
 import { styled } from 'styled-components'
 import { safeGetAddress } from 'utils'
 import { RowBetween } from '../../../components/Layout/Row'
-import { getBlockExploreLink, getBlockExploreName } from '../../../utils'
+import { getBlockExploreLink, useBlockExploreName } from '../../../utils'
 
 const InputPanel = styled.div`
   display: flex;
@@ -80,6 +80,7 @@ export default function AddressInputPanel({
   onChange: (value: string) => void
 }) {
   const { chainId } = useActiveChainId()
+  const blockExplorerName = useBlockExploreName(chainId)
 
   const { t } = useTranslation()
   const debounceEnsName = useDebounce(value, 500)
@@ -109,7 +110,7 @@ export default function AddressInputPanel({
                 <Link external small href={getBlockExploreLink(address, 'address', chainId)}>
                   (
                   {t('View on %site%', {
-                    site: getBlockExploreName(chainId),
+                    site: blockExplorerName,
                   })}
                   {chainId === ChainId.BSC && <BscScanIcon color="primary" ml="4px" />})
                 </Link>

@@ -24,7 +24,7 @@ import useNativeCurrency from 'hooks/useNativeCurrency'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useCallback, useMemo } from 'react'
 import { styled } from 'styled-components'
-import { getBlockExploreLink, getBlockExploreName } from 'utils'
+import { getBlockExploreLink, useBlockExploreName } from 'utils'
 import { useWallet } from '@solana/wallet-adapter-react'
 import { useEnhancedTokenLogo } from './hooks/useEnhancedTokenLogo'
 
@@ -257,6 +257,7 @@ export function TransactionSubmittedContent({
   chainId?: UnifiedChainId
 }) {
   const { t } = useTranslation()
+  const blockExplorerName = useBlockExploreName(chainId as ChainId)
 
   const getExplorerLink = () => {
     if (!chainId || !hash) return undefined
@@ -269,9 +270,9 @@ export function TransactionSubmittedContent({
 
   const getExplorerName = () => {
     if (chainId === NonEVMChainId.SOLANA) {
-      return 'Solana Explorer'
+      return blockExplorerName
     }
-    return getBlockExploreName(chainId as ChainId)
+    return blockExplorerName
   }
 
   return (
@@ -317,6 +318,7 @@ export function TransactionCompletedContent({
   recipient: string
 }) {
   const { t } = useTranslation()
+  const blockExplorerName = useBlockExploreName(chainId as ChainId)
 
   const getExplorerLink = () => {
     if (!chainId || !hash) return undefined
@@ -329,9 +331,9 @@ export function TransactionCompletedContent({
 
   const getExplorerName = () => {
     if (chainId === NonEVMChainId.SOLANA) {
-      return 'Solana Explorer'
+      return blockExplorerName
     }
-    return getBlockExploreName(chainId as ChainId)
+    return blockExplorerName
   }
 
   return (
