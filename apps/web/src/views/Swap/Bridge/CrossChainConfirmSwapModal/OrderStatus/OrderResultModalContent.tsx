@@ -83,13 +83,18 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   const swapState = useAtomValue(swapReducerAtom)
   const accountState = useAtomValue(accountActiveChainAtom)
 
-  const account = isSolana(swapState[Field.OUTPUT].chainId) ? accountState.solanaAccount : accountState.account
+  const sendAccount = isSolana(swapState[Field.INPUT].chainId) ? accountState.solanaAccount : accountState.account
+  const receiveAccount = isSolana(swapState[Field.OUTPUT].chainId) ? accountState.solanaAccount : accountState.account
 
-  const recipientOnDestChain = overrideActiveOrderMetadata
-    ? overrideActiveOrderMetadata.metadata?.recipientOnDestinationChain || undefined
-    : swapState.recipient === null
-    ? account
-    : swapState.recipient
+  let recipientOnDestChain: string | undefined
+
+  // If overrideActiveOrderMetadata is provided, it will use in Transaction History
+  if (overrideActiveOrderMetadata) {
+    // expect /orders return recipientOnDestinationChain, otherwise it will be empty to identify error
+    recipientOnDestChain = overrideActiveOrderMetadata.metadata?.recipientOnDestinationChain
+  } else {
+    recipientOnDestChain = (swapState.recipient === null ? receiveAccount : swapState.recipient) || undefined
+  }
 
   const txHash = bridgeMetadata?.txHash
   const originChainId = bridgeMetadata?.originChainId
@@ -272,7 +277,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
                 description={
                   isRefundCase
                     ? t(' is being refunded to %address% on ', {
-                        address: truncateHash(recipientOnDestChain || ''),
+                        address: truncateHash(sendAccount || ''),
                       })
                     : status === BridgeStatus.FAILED
                     ? t('Your bridge transaction failed. You will be refunded shortly.')
