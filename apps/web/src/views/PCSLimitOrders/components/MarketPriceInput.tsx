@@ -4,8 +4,10 @@ import styled from 'styled-components'
 import { Suspense } from 'react'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtoms'
+import { marketPriceAtom } from '../state/form/marketPriceAtoms'
 
 const InputContainer = styled(Box)`
   position: relative;
@@ -66,10 +68,10 @@ export const MarketPriceInput = () => {
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
 
-  const priceUsd = useStablecoinPrice(outputCurrency, { enabled: !!outputCurrency })
-  // TODO: Calculate usd price based on market price input amount
-  const amount = 0n
-  const usdValue = priceUsd ? amount * priceUsd?.quotient : 0n
+  const marketPrice = useAtomValue(marketPriceAtom)
+
+  const tokenPriceUSD = useStablecoinPrice(outputCurrency, { enabled: !!outputCurrency })
+  const usdValue = tokenPriceUSD ? marketPrice?.multiply(tokenPriceUSD).toSignificant(6) : '0'
 
   // TODO: Check market price flipping logic according to lower/upper ticks
   const flipCurrencies = useSetAtom(flipCurrenciesAtom)
@@ -98,8 +100,8 @@ export const MarketPriceInput = () => {
             {truncateString(outputCurrency.symbol, 15)}
           </Text>
         </InputLeftBox>
-        <StyledInput type="number" placeholder="0.00" />
-        {priceUsd && (
+        <StyledInput type="number" value={marketPrice?.toSignificant(6)} placeholder="0.00" />
+        {usdValue && (
           <InputBottomBar>
             <Text color="textSubtle" small>
               ~{formatDollarAmount(+usdValue.toString(), undefined, false)} USD

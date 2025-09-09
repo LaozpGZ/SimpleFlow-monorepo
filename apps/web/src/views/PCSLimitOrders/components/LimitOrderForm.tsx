@@ -10,6 +10,7 @@ import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currenc
 import { Field } from '../types/limitOrder.types'
 import { flipCurrenciesAtom, setCurrencyAtom } from '../state/currency/setCurrencyAtoms'
 import { useSupportedTokens } from '../hooks/useSupportedTokens'
+import { selectedPoolAtom } from '../state/pools/poolAtoms'
 
 export const LimitOrderForm = () => {
   const { t } = useTranslation()
@@ -18,6 +19,8 @@ export const LimitOrderForm = () => {
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
   const formattedAmounts = useAtomValue(formattedAmountsAtom)
+
+  const pool = useAtomValue(selectedPoolAtom)
 
   const setInput = useSetAtom(setInputAtom)
   const setCurrency = useSetAtom(setCurrencyAtom)
@@ -75,6 +78,7 @@ export const LimitOrderForm = () => {
             showMaxButton
           />
         </Suspense>
+        pool: {pool?.poolId || 'None'}
       </FormContainer>
     </>
   )
