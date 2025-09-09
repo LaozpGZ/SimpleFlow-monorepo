@@ -64,10 +64,10 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
         img: getImageUrl(isMobile ? 'alpha-comp-mobile-v4' : 'alpha-comp-v4'),
         texts: [
           {
-            text: t('Trade %product% Tokens to Win %amount%', {
+            text: `${t('Trade %product% Tokens to Win %amount%', {
               product: isMobile ? 'Alpha' : 'Binance Alpha',
               amount: isMobile ? '$250K' : '$250,000',
-            }),
+            })}. `,
             inline: true,
           },
           {
