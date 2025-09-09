@@ -6,6 +6,8 @@ import times from 'lodash/times'
 import { useEffect, useState } from 'react'
 import { getBetHistory, transformBetResponse } from 'state/predictions/helpers'
 import { Bet } from 'state/types'
+import { getNetPayout } from 'views/Predictions/components/History/helpers'
+import { REWARD_RATE } from '@pancakeswap/prediction'
 import PositionLabel from './PositionLabel'
 import { NetWinningsView } from './Results/styles'
 
@@ -41,6 +43,8 @@ const PreviousBetsTable: React.FC<React.PropsWithChildren<PreviousBetsTableProps
             api,
             token?.symbol,
           )
+
+          console.log('PreviousBetsTable::response', { response, token })
 
           const transformer = transformBetResponse(token?.symbol, token?.chainId)
 
@@ -81,6 +85,11 @@ const PreviousBetsTable: React.FC<React.PropsWithChildren<PreviousBetsTableProps
           : orderedBets.map((bet) => {
               const isCancelled = bet?.round?.failed
               const isWinner = bet.position === bet?.round?.position
+              const { claimed } = bet
+
+              // If unclaimed, calculate the payout
+              const payout =
+                !isCancelled && isWinner ? (claimed ? bet.claimedNetBNB : getNetPayout(bet, REWARD_RATE)) : bet.amount
 
               return (
                 <tr key={bet.id}>
@@ -93,9 +102,9 @@ const PreviousBetsTable: React.FC<React.PropsWithChildren<PreviousBetsTableProps
                   <Td textAlign="right">
                     <NetWinningsView
                       token={token}
-                      amount={!isCancelled && isWinner ? bet.claimedNetBNB : bet.amount}
-                      textPrefix={isCancelled ? '' : isWinner ? '+' : '-'}
-                      textColor={isCancelled ? 'textSubtle' : isWinner ? 'success' : 'failure'}
+                      amount={payout}
+                      textPrefix={isCancelled || payout < 0 ? '' : isWinner ? '+' : '-'}
+                      textColor={isCancelled || payout < 0 ? 'textSubtle' : isWinner ? 'success' : 'failure'}
                     />
                   </Td>
                 </tr>

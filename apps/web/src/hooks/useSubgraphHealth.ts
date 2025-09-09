@@ -92,7 +92,6 @@ const useSubgraphHealth = ({
             blockDifference: 0,
           })
         } else {
-          console.info('Asdjasd')
           // Block info is not known when checking api only
           setSgHealth({
             status: SubgraphStatus.OK,

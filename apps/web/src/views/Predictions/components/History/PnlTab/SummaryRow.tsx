@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js'
-import { Flex, Text } from '@pancakeswap/uikit'
+import { Flex, QuestionHelper, Text } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { useConfig } from 'views/Predictions/context/ConfigProvider'
 import { formatBnb } from '../helpers'
@@ -39,9 +39,18 @@ const SummaryRow: React.FC<React.PropsWithChildren<SummaryRowProps>> = ({ type, 
 
   return config?.displayedDecimals && config?.betCurrency ? (
     <>
-      <Text mt="16px" bold color="textSubtle">
-        {t(typeTranslationKey)}
-      </Text>
+      <Flex mt="16px" alignItems="center">
+        <Text bold color="textSubtle">
+          {t(typeTranslationKey)}
+        </Text>
+        {type === 'entered' && (
+          <QuestionHelper
+            text={t("Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses")}
+            placement="left"
+            ml="4px"
+          />
+        )}
+      </Flex>
       <Flex>
         <Flex flex="2" flexDirection="column">
           <Text bold fontSize="20px" color={color} textTransform="lowercase">
