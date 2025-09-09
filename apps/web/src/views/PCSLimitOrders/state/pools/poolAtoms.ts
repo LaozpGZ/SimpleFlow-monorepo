@@ -15,7 +15,7 @@ import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms
 import { supportedPoolsListAtom } from './poolsListAtom'
 import { getCurrencyIdWithZeroAddr } from '../../utils'
 
-// TODO: Refetch mechanism to update pool info and price, say, every ~30 seconds
+// TODO: Refetch mechanism to update pool info and price
 export const selectedPoolAtom = atom(async (get) => {
   const inputCurrency = await get(inputCurrencyAtom)
   const outputCurrency = await get(outputCurrencyAtom)

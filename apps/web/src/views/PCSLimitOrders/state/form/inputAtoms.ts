@@ -2,24 +2,13 @@ import { atom } from 'jotai'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { Field } from 'views/PCSLimitOrders/types/limitOrder.types'
-import { getCurrencyAddress, Token, TradeType } from '@pancakeswap/sdk'
-import { InfinityClPool, InfinityRouter, PoolType, SmartRouter } from '@pancakeswap/smart-router'
-import { toRoutingSDKPool, toSmartRouterPool } from 'utils/convertTrade'
-import { getPoolManagerAddress } from 'utils/addressHelpers'
-import { encodeHooksRegistration } from '@pancakeswap/infinity-sdk'
+import { CurrencyAmount, Price, Token, TradeType } from '@pancakeswap/sdk'
 import { gasPriceWeiAtom } from 'quoter/utils/gasPriceAtom'
 import { findBestTrade } from '@pancakeswap/routing-sdk'
-import { createQuoteQuery } from 'quoter/utils/createQuoteQuery'
 import { selectedPoolAtom } from '../pools/poolAtoms'
-import { independentFieldAtom, typedValueAtom } from './fieldAtoms'
-import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
-
-const baseCurrencyAtom = atom((get) =>
-  get(independentFieldAtom) === Field.CURRENCY_A ? get(inputCurrencyAtom) : get(outputCurrencyAtom),
-)
-const quoteCurrencyAtom = atom((get) =>
-  get(independentFieldAtom) === Field.CURRENCY_A ? get(outputCurrencyAtom) : get(inputCurrencyAtom),
-)
+import { independentFieldAtom, previousIndependentFieldAtom, typedValueAtom } from './fieldAtoms'
+import { baseCurrencyAtom, quoteCurrencyAtom } from '../currency/currencyAtoms'
+import { customMarketPriceAtom, marketPriceAtom } from './marketPriceAtoms'
 
 const independentAmountAtom = atom(async (get) => {
   const value = get(typedValueAtom)
@@ -30,11 +19,24 @@ const independentAmountAtom = atom(async (get) => {
 const dependentAmountAtom = atom(async (get) => {
   const independentAmount = await get(independentAmountAtom)
   const quoteCurrency = await get(quoteCurrencyAtom)
-  const outputCurrency = await get(outputCurrencyAtom)
+  const independentField = get(independentFieldAtom)
+  const customMarketPrice = get(customMarketPriceAtom)
+
+  if (customMarketPrice !== undefined) {
+    const marketPrice = await get(marketPriceAtom)
+    if (!marketPrice || !independentAmount || !quoteCurrency) return undefined
+
+    const outputAmount = CurrencyAmount.fromRawAmount(
+      marketPrice.currency,
+      (independentAmount.numerator * marketPrice.numerator) / independentAmount.decimalScale,
+    )
+
+    return outputAmount
+  }
 
   const zeroAmount = tryParseAmount('0', quoteCurrency)
 
-  if (!independentAmount || independentAmount.numerator === 0n || !outputCurrency) return zeroAmount
+  if (!independentAmount || independentAmount.numerator === 0n || !quoteCurrency) return zeroAmount
 
   const selectedPool = await get(selectedPoolAtom)
 
@@ -42,14 +44,14 @@ const dependentAmountAtom = atom(async (get) => {
 
   const { pool, routingSdkPool } = selectedPool
 
-  const tradeType = get(independentFieldAtom) === Field.CURRENCY_A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
+  const tradeType = independentField === Field.CURRENCY_A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
 
   const gasPriceWei = await get(gasPriceWeiAtom(pool.chainId))
 
   try {
     const bestTrade = await findBestTrade({
       amount: independentAmount,
-      quoteCurrency: outputCurrency,
+      quoteCurrency,
       tradeType,
       candidatePools: [routingSdkPool],
       gasPriceWei: gasPriceWei?.toString() || '',
@@ -69,8 +71,6 @@ const dependentAmountAtom = atom(async (get) => {
 })
 
 export const formattedAmountsAtom = atom(async (get) => {
-  const independentField = get(independentFieldAtom)
-
   const typedValue = get(typedValueAtom)
 
   if (!typedValue) {
@@ -80,8 +80,19 @@ export const formattedAmountsAtom = atom(async (get) => {
     }
   }
 
+  const independentField = get(independentFieldAtom)
+  const previousIndependentField = get(previousIndependentFieldAtom)
+  const customMarketPrice = get(customMarketPriceAtom)
+
   const dependentAmount = await get(dependentAmountAtom)
   const formattedDependentAmount = formatAmount(dependentAmount)
+
+  if (customMarketPrice !== undefined) {
+    return {
+      [Field.CURRENCY_A]: previousIndependentField === Field.CURRENCY_A ? typedValue : formattedDependentAmount,
+      [Field.CURRENCY_B]: previousIndependentField === Field.CURRENCY_B ? typedValue : formattedDependentAmount,
+    }
+  }
 
   return {
     [Field.CURRENCY_A]: independentField === Field.CURRENCY_A ? typedValue : formattedDependentAmount,
