@@ -35,28 +35,33 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           mt: !isMobile ? '8px' : undefined,
         },
       },
-      start: 1756684800000,
     },
     {
-      id: AdsIds.PANCAKE_GIFT,
-      priority: Priority.HIGH,
+      id: AdsIds.BINANCE_ALPHA,
+      priority: Priority.VERY_HIGH,
       ad: {
-        img: getImageUrl(isMobile ? 'pancake-gift-mobile' : 'pancake-gift'),
+        img: getImageUrl(isMobile ? 'alpha-comp-mobile-v4' : 'alpha-comp-v4'),
         texts: [
           {
-            text: t('Introducing Pancake Gifts.'),
+            text: t('Trade %product% Tokens to Win %amount%', {
+              product: isMobile ? 'Alpha' : 'Binance Alpha',
+              amount: isMobile ? '$250K' : '$250,000',
+            }),
+            inline: true,
           },
           {
-            text: t('Gift Now'),
-            link: 'https://pancakeswap.finance/swap?utm_source=website&utm_medium=Homepage&utm_campaign=banner&utm_id=PancakeGifts',
+            text: t('Trade Now'),
+            link: 'https://pancakeswap.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=Birthday&utm_id=TradingCompetition',
+            inline: true,
           },
         ],
         btn: {
           text: t('Learn More'),
-          link: 'https://blog.pancakeswap.finance/articles/Pancake-Gifts?utm_source=website&utm_medium=Homepage&utm_campaign=banner&utm_id=PancakeGifts',
+          link: 'https://blog.pancakeswap.finance/articles/Birthday-trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=Birthday&utm_id=TradingCompetition',
           mt: !isMobile ? '8px' : undefined,
         },
       },
+      end: 1759795140000,
     },
     {
       id: AdsIds.TRADE_SOCIAL,
@@ -100,31 +105,25 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
       end: 1757721600000,
     },
     {
-      id: AdsIds.BINANCE_ALPHA,
+      id: AdsIds.PANCAKE_GIFT,
       priority: Priority.HIGH,
       ad: {
-        img: getImageUrl(!isMobile ? 'alpha-comp-v3' : 'alpha-comp-mobile-v3'),
+        img: getImageUrl(isMobile ? 'pancake-gift-mobile' : 'pancake-gift'),
         texts: [
           {
-            text: t('Trade for a Chance to Win %amount%.', { amount: '$300K' }),
+            text: t('Introducing Pancake Gifts.'),
           },
           {
-            text: t('Trade Now'),
-            link: 'https://pancakeswap.finance/swap?utm_source=Website&utm_medium=banner&utm_campaign=Swap&utm_id=TradingCompetition',
+            text: t('Gift Now'),
+            link: 'https://pancakeswap.finance/swap?utm_source=website&utm_medium=Homepage&utm_campaign=banner&utm_id=PancakeGifts',
           },
         ],
         btn: {
           text: t('Learn More'),
-          link: 'https://blog.pancakeswap.finance/articles/trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=Swap&utm_id=TradingCompetition',
+          link: 'https://blog.pancakeswap.finance/articles/Pancake-Gifts?utm_source=website&utm_medium=Homepage&utm_campaign=banner&utm_id=PancakeGifts',
           mt: !isMobile ? '8px' : undefined,
         },
-        ...(isMobile && {
-          options: {
-            imageMargin: '25px',
-          },
-        }),
       },
-      end: 1756684800000,
     },
     {
       id: AdsIds.SOLANA_LIQUIDITY,
