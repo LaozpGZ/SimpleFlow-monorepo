@@ -10,7 +10,6 @@ import { useAccount } from 'wagmi'
 import { useMemo } from 'react'
 import { ChainId, isTestnetChainId } from '@pancakeswap/chains'
 import { viemClients } from 'utils/viem'
-import { getQueryChainId } from 'wallet/util/getQueryChainId'
 import Dots from '../Loader/Dots'
 
 // Where chain is not supported or page not supported

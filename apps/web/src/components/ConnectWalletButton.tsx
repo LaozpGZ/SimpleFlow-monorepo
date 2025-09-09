@@ -17,7 +17,7 @@ const ConnectWalletButton = ({ children, withIcon, ...props }: ConnectWalletButt
   const handleConnectBtnClick = useCallback(() => {
     logGTMConnectWalletEvent(chainId)
     setIsOpen(true)
-  }, [chainId])
+  }, [chainId, setIsOpen])
 
   return (
     <>

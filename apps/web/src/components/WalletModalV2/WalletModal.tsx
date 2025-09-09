@@ -19,20 +19,19 @@ import { RecentTransactions } from 'components/App/Transactions/TransactionsModa
 
 import { useTheme } from '@pancakeswap/hooks'
 import { useMenuTab, WalletView } from 'components/Menu/UserMenu/providers/MenuTabProvider'
-import { StyledButtonMenuItem, Tabs, TabsComponent } from 'components/Menu/UserMenu/WalletModal'
+import { StyledButtonMenuItem, TabsComponent } from 'components/Menu/UserMenu/WalletModal'
 import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
 import { useRouter } from 'next/router'
-import React, { useCallback, useContext, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { ClaimGiftConfirmView } from 'views/Gift/components/ClaimGiftConfirmView'
 import { ClaimGiftView } from 'views/Gift/components/ClaimGiftView'
 import { GiftInfoDetailView } from 'views/Gift/components/GiftInfoDetailView'
 import { GiftsDashboard } from 'views/Gift/components/GiftsDashboard'
-import { ChainId, NonEVMChainId } from '@pancakeswap/chains'
+import { NonEVMChainId } from '@pancakeswap/chains'
 import { useActiveChainId } from 'hooks/useActiveChainId'
-import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
-import { CancelGiftContext, CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
+import { CancelGiftProvider } from 'views/Gift/providers/CancelGiftProvider'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { connectedWalletModalVisibleAtom } from 'state/wallet/atom'
 import { useConnect } from 'wagmi'
@@ -40,7 +39,6 @@ import { useWallet } from '@solana/wallet-adapter-react'
 import { previouslyUsedEvmWalletsAtom } from '@pancakeswap/ui-wallets/src/state/atom'
 import { walletsConfig } from 'config/wallet'
 import { useClaimGiftContext } from 'views/Gift/providers/ClaimGiftProvider'
-import { CopyAddress } from './WalletCopyButton'
 import { ActionButton } from './ActionButton'
 import { AssetsList } from './AssetsList'
 import { SendAssets } from './SendAssets'
@@ -90,17 +88,6 @@ const ActionButtonsContainer = styled(FlexGap)`
   gap: 8px;
   ${({ theme }) => theme.mediaQueries.md} {
     padding: 16px;
-  }
-`
-
-const DisconnectButton = styled(Button)`
-  border-radius: 8px;
-  height: 26px;
-  background-color: ${({ theme }) => theme.colors.tertiary};
-  color: ${({ theme }) => theme.colors.primary60};
-  border-bottom: 2px solid #0000001a;
-  &:hover {
-    opacity: 0.8;
   }
 `
 
@@ -271,6 +258,7 @@ export const WalletContent = ({
       />
     )
   }, [
+    t,
     viewState,
     balances,
     isLoading,

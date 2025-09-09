@@ -9,7 +9,6 @@ import {
   Box,
   Button,
   CloseIcon,
-  CogIcon,
   FlexGap,
   IconButton,
   Input,

@@ -11,7 +11,6 @@ import { useSubgraphHealthIndicatorManager, useUserUsernameVisibility } from 'st
 import { useUserShowTestnet } from 'state/user/hooks/useUserShowTestnet'
 import { useUserTokenRisk } from 'state/user/hooks/useUserTokenRisk'
 import { styled } from 'styled-components'
-import GasSettings from './GasSettings'
 
 const WebNotiToggle = lazy(() => import('./WebNotiToggle'))
 

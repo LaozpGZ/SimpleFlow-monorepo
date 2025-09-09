@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { SolanaProviderLocalStorageKey, WalletAdaptedNetwork, selectedWalletAtom } from '@pancakeswap/ui-wallets'
+import { SolanaProviderLocalStorageKey, WalletAdaptedNetwork } from '@pancakeswap/ui-wallets'
 import { ASSET_CDN } from '@pancakeswap/ui-wallets/src/config/url'
 import {
   ArrowBackIcon,
@@ -7,7 +7,6 @@ import {
   Button,
   Column,
   CopyButton,
-  CopyIcon,
   FlexGap,
   IconButton,
   Image,
@@ -16,12 +15,11 @@ import {
   Text,
 } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
-import { WalletName } from '@solana/wallet-adapter-base'
 import { useLocalStorage, useWallet } from '@solana/wallet-adapter-react'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import useAuth from 'hooks/useAuth'
 import { useSetAtom } from 'jotai'
-import { useCallback, useMemo } from 'react'
+import { useCallback } from 'react'
 import { walletModalVisibleAtom } from 'state/wallet/atom'
 import { useCurrentWalletIconByNetworks } from 'state/wallet/hooks'
 import styled from 'styled-components'
@@ -70,7 +68,7 @@ export const ConnectedWallets: React.FC<ConnectedWalletsProps> = ({ title, onBac
 
       onBack()
     },
-    [connector, chainId, unifiedAccount, disconnect, logout, onBack],
+    [connector, chainId, unifiedAccount, disconnect, logout, onBack, setSolanaWalletName],
   )
 
   return (

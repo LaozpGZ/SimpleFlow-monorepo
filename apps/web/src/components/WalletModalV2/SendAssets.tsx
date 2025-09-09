@@ -3,8 +3,6 @@ import { Box, FlexGap, SearchInput, Text } from '@pancakeswap/uikit'
 
 import { NetworkFilter } from '@pancakeswap/widgets-internal'
 import { BalanceData } from 'hooks/useAddressBalance'
-import { useActiveChainId } from 'hooks/useActiveChainId'
-import { NonEVMChainId } from '@pancakeswap/chains'
 import { useCallback, useMemo, useState } from 'react'
 import { useAllChainsOpts } from 'views/universalFarms/hooks/useMultiChains'
 import { useSendGiftContext } from 'views/Gift/providers/SendGiftProvider'
@@ -31,7 +29,6 @@ export const SendAssets: React.FC<SendAssetsProps> = ({ assets, isLoading, onBac
   const { t } = useTranslation()
   const { setIsSendGift, setNativeAmount, setIncludeStarterGas } = useSendGiftContext()
   const { sendEntry } = useWalletModalV2ViewState()
-  const { chainId } = useActiveChainId()
   const convertBalancesToAssets = useCallback((balanceItems): BalanceData[] => {
     return balanceItems.map((item) => ({
       id: item.id,

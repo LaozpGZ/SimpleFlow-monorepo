@@ -1,7 +1,7 @@
 import { Protocol } from '@pancakeswap/farms'
 import { HookData } from '@pancakeswap/infinity-sdk'
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency, Percent, Price } from '@pancakeswap/sdk'
+import { Currency, Percent } from '@pancakeswap/sdk'
 import {
   AutoColumn,
   Box,

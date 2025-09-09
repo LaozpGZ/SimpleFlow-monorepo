@@ -8,7 +8,6 @@ import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 import { useAtom } from 'jotai'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo } from 'react'
-import { chainNameConverter } from 'utils/chainNameConverter'
 import { NetworkSwitcherModal, networkSwitcherModalAtom } from './NetworkSwitcherModal'
 
 export const SHORT_SYMBOL = {
