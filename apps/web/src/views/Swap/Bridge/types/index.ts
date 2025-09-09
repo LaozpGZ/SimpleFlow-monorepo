@@ -194,6 +194,7 @@ export interface UserBridgeOrder {
   fillTransactionHash: string
   command: string
   timestamp: string
+  recipientOnDestinationChain: string
 }
 
 export type BridgeMetadataParams = {
