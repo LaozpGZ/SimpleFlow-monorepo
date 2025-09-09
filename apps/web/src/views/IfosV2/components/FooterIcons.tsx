@@ -1,13 +1,22 @@
-import { BscScanIcon, FlexGap, LanguageIcon, Link, TelegramIcon, TwitterIcon } from '@pancakeswap/uikit'
+import {
+  BscScanIcon,
+  FlexGap,
+  LanguageIcon,
+  Link,
+  TelegramIcon,
+  TwitterIcon,
+  useMatchBreakpoints,
+} from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import useIfo from '../hooks/useIfo'
 
 const FooterIcons: React.FC = () => {
   const { theme } = useTheme()
   const { ifoContract, config } = useIfo()
+  const { isMobile } = useMatchBreakpoints()
 
   return (
-    <FlexGap gap="12px" justifyContent={['center', 'flex-end']}>
+    <FlexGap gap="12px" justifyContent={isMobile ? 'center' : 'flex-end'}>
       <Link href={config?.projectUrl} target="_blank" rel="noopener noreferrer">
         <LanguageIcon width="24px" color={theme.colors.textSubtle} />
       </Link>
