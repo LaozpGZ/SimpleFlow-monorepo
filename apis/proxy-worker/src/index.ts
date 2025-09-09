@@ -28,8 +28,6 @@ function createEndpoint(url: string) {
   }
 }
 
-router.post('/bsc-exchange', createEndpoint(NODE_REAL_DATA_ENDPOINT))
-
 router.post('/opbnb-exchange-v3', createEndpoint(OPBNB_ENDPOINT))
 
 router.options('*', handleCors(CORS_ALLOW, _corsMethods, _corsHeaders))
