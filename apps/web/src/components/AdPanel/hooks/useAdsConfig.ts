@@ -81,6 +81,11 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
           link: 'https://blog.pancakeswap.finance/articles/Birthday-trading-competition?utm_source=Website&utm_medium=banner&utm_campaign=Birthday&utm_id=TradingCompetition',
           mt: !isMobile ? '8px' : undefined,
         },
+        ...(isMobile && {
+          options: {
+            imageMargin: '25px',
+          },
+        }),
       },
       end: 1759795140000,
     },
