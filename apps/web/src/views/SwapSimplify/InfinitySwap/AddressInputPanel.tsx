@@ -8,7 +8,7 @@ import { useGetENSAddressByName } from 'hooks/useGetENSAddressByName'
 import { useCallback } from 'react'
 import { styled } from 'styled-components'
 import { safeGetAddress } from 'utils'
-import { getBlockExploreLink, useBlockExploreName } from '../../../utils'
+import { useBlockExploreLink, useBlockExploreName } from '../../../utils'
 import { useIsRecipientError } from '../hooks/useIsRecipientError'
 
 const Divider = styled.div`
@@ -89,6 +89,7 @@ export default function AddressInputPanel({
 }) {
   const { chainId } = useActiveChainId()
   const blockExplorerName = useBlockExploreName(chainId)
+  const getBlockExploreLink = useBlockExploreLink()
 
   const { t } = useTranslation()
 

@@ -28,7 +28,7 @@ import InternalLink from 'components/Links'
 import { useDomainNameForAddress } from 'hooks/useDomain'
 import { useState } from 'react'
 import { isMobile } from 'react-device-detect'
-import { getBlockExploreLink, useBlockExploreName } from 'utils'
+import { useBlockExploreLink, useBlockExploreName } from 'utils'
 import { Address } from 'viem'
 import { useAccount, useBalance } from 'wagmi'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -51,6 +51,7 @@ const WalletInfo: React.FC<WalletInfoProps> = ({ hasLowNativeBalance, onDismiss 
   const { domainName } = useDomainNameForAddress(account ?? '')
   const blockExplorerName = useBlockExploreName(chainId)
   const bscBlockExplorerName = useBlockExploreName(ChainId.BSC)
+  const getBlockExploreLink = useBlockExploreLink()
   const isBSC = chainId === ChainId.BSC
   const bnbBalance = useBalance({ address: account ?? undefined, chainId: ChainId.BSC })
   const nativeBalance = useBalance({ address: account ?? undefined, query: { enabled: !isBSC } })

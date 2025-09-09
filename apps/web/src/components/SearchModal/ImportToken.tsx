@@ -27,7 +27,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useState } from 'react'
 import { useCombinedInactiveList } from 'state/lists/hooks'
 import { useAddUserToken } from 'state/user/hooks'
-import { getBlockExploreLink, useBlockExploreName } from 'utils'
+import { useBlockExploreLink, useBlockExploreName } from 'utils'
 import { chains } from 'utils/wagmi'
 
 interface ImportProps {
@@ -59,6 +59,7 @@ function ImportToken({ tokens, handleCurrencySelect, chainId: chainIdProp }: Imp
   const { chainId: activeChainId } = useActiveChainId()
   const chainId = chainIdProp || activeChainId
   const blockExplorerName = useBlockExploreName(chainId)
+  const getBlockExploreLink = useBlockExploreLink()
 
   const { t } = useTranslation()
 
