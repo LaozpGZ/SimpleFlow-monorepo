@@ -172,10 +172,10 @@ export async function batchGetIncentraAprData(pools: PoolInfo[]) {
   return pools.map((pool) => {
     const farm = pool.farm!
     const key = `${farm.chainId}:${safeGetAddress(farm.id)}`
-    const merklApr = aprs[key] || '0'
+    const incentraApr = aprs[key] || '0'
     return {
       id: getFarmKey(farm),
-      value: merklApr,
+      value: incentraApr,
     }
   })
 }
