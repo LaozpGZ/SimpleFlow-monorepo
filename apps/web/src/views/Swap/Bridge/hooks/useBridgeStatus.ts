@@ -1,17 +1,10 @@
-import { CurrencyAmount, UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
+import { UnifiedCurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
 import { useQuery } from '@tanstack/react-query'
-import { useCurrencyByChainId, useUnifiedCurrency } from 'hooks/Tokens'
+import { useUnifiedCurrency } from 'hooks/Tokens'
 import { useMemo } from 'react'
 import { getBridgeStatus } from '../api'
-import {
-  ActiveBridgeOrderMetadata,
-  BridgeStatus,
-  BridgeStatusData,
-  BridgeStatusResponse,
-  BridgeType,
-  Command,
-} from '../types'
+import { ActiveBridgeOrderMetadata, BridgeStatus, BridgeStatusData, BridgeStatusResponse, Command } from '../types'
 
 export const bridgeStatusQueryKey = (chainId?: number, txHash?: string, destinationChainId?: number) => [
   'bridge-status',
@@ -101,6 +94,7 @@ export const useBridgeStatus = (
             inputCurrencyAmount,
             outputCurrencyAmount,
             feesBreakdown,
+            bridgeStatus: data?.data?.find((item) => item.command === Command.BRIDGE)?.metadata?.bridgeStatus,
           }
         : undefined,
     [data, inputCurrencyAmount, outputCurrencyAmount],

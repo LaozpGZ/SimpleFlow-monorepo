@@ -28,7 +28,7 @@ import { isSolana } from '@pancakeswap/chains'
 import { Field } from 'state/swap/actions'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { useBridgeStatus } from '../../hooks/useBridgeStatus'
-import { ActiveBridgeOrderMetadata, BridgeResponseStatusData, BridgeStatus, Command } from '../../types'
+import { ActiveBridgeOrderMetadata, BridgeResponseStatusData, BridgeStatus, Command, RelayStatus } from '../../types'
 import { customBridgeStatus } from '../../utils/customBridgeStatus'
 import { useOrderStatusTrackingStateMachine } from '../hooks/useOrderStatusTrackingStateMachine'
 import { activeBridgeOrderMetadataAtom } from '../state/orderDataState'
@@ -156,10 +156,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
           break
         }
         case Command.BRIDGE: {
-          if (
-            lastExecutedCommand.status.code === BridgeStatus.PARTIAL_SUCCESS ||
-            lastExecutedCommand.status.code === BridgeStatus.FAILED
-          ) {
+          if (lastExecutedCommand.status.code === BridgeStatus.PARTIAL_SUCCESS) {
             resultTokenAddress = lastExecutedCommand.metadata.inputToken
             resultTokenChainId = lastExecutedCommand.metadata.originChainId
             resultAmount = lastExecutedCommand.metadata.inputAmount
@@ -245,7 +242,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
     }
   }, [status])
 
-  const isRefundCase = status === BridgeStatus.PARTIAL_SUCCESS
+  const isRefundCase = status === BridgeStatus.PARTIAL_SUCCESS || bridgeStatus?.bridgeStatus === RelayStatus.REFUND
 
   return (
     <Box {...props}>
@@ -272,7 +269,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
               }
             >
               <Description
-                showAmounts={status !== BridgeStatus.FAILED}
+                showAmounts={status !== BridgeStatus.FAILED || bridgeStatus?.bridgeStatus !== RelayStatus.REFUND}
                 currencyAmount={resultCurrencyAmount}
                 description={
                   isRefundCase

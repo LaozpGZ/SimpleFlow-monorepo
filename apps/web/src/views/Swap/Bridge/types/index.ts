@@ -116,11 +116,20 @@ export type BridgeResponseStatusData =
       metadata?: StatusMetadataSwap
     }
 
+export enum RelayStatus {
+  REFUND = 'refund',
+  DELAYED = 'delayed',
+  WAITING = 'waiting',
+  FAILURE = 'failure',
+  PENDING = 'pending',
+  SUCCESS = 'success',
+}
+
 interface StatusMetadataBridge {
   originChainId: number
   destinationChainId: number
   depositId: number
-  bridgeStatus: string
+  bridgeStatus: RelayStatus | string
   fillTx: string
   depositTxHash: string
   depositRefundTxHash: string
@@ -150,6 +159,7 @@ export interface BridgeStatusData extends BridgeStatusResponse {
     swapFeesUSD: number | null
     bridgeFeesUSD: number
   }
+  bridgeStatus?: RelayStatus | string
 }
 
 export interface ActiveBridgeOrderMetadata {
