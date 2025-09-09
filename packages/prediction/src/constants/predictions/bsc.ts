@@ -18,6 +18,9 @@ import { PredictionConfig, PredictionContractVersion, PredictionSupportedSymbol 
 
 const BTC = new ERC20Token(bscTokens.wBTC.chainId, bscTokens.wBTC.address, bscTokens.wBTC.decimals, 'BTC', 'Bitcoin')
 
+// @ts-ignore
+BTC.logoURI = 'https://tokens.pancakeswap.finance/images/symbol/wbtc.png'
+
 export const predictions: Record<string, PredictionConfig> = {
   [PredictionSupportedSymbol.BNB]: {
     version: PredictionContractVersion.V2,
