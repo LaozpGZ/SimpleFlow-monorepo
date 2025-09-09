@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 import { styled } from 'styled-components'
 import { safeGetAddress } from 'utils'
 import { getBlockExploreLink, getBlockExploreName } from '../../../utils'
+import { useIsRecipientError } from '../hooks/useIsRecipientError'
 
 const Divider = styled.div`
   width: 1px;
@@ -89,10 +90,8 @@ export default function AddressInputPanel({
   const { chainId } = useActiveChainId()
 
   const { t } = useTranslation()
-  const debounceEnsName = useDebounce(value, 500)
-  const recipientENSAddress = useGetENSAddressByName(debounceEnsName)
 
-  const address = safeGetAddress(value) ? value : safeGetAddress(recipientENSAddress)
+  const { resolvedAddress: address, isRecipientError: error } = useIsRecipientError()
 
   const handleInput = useCallback(
     (event) => {
@@ -102,8 +101,6 @@ export default function AddressInputPanel({
     },
     [onChange],
   )
-
-  const error = Boolean(value.length > 0 && !address)
 
   return (
     <InputPanel id={id}>
