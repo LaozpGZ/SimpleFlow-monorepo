@@ -91,7 +91,7 @@ const PreviousBetsTable: React.FC<React.PropsWithChildren<PreviousBetsTableProps
               const payout =
                 !isCancelled && isWinner ? (claimed ? bet.claimedNetBNB : getNetPayout(bet, REWARD_RATE)) : bet.amount
 
-              const isHouseWin = bet.position === BetPosition.HOUSE
+              const isHouseWin = bet?.round?.position === BetPosition.HOUSE
 
               return (
                 <tr key={bet.id}>
@@ -99,13 +99,13 @@ const PreviousBetsTable: React.FC<React.PropsWithChildren<PreviousBetsTableProps
                     {bet?.round?.epoch}
                   </Td>
                   <Td textAlign="center">
-                    {isHouseWin ? (
-                      <Text color="textSubtle" bold>
-                        {t('To Burn')}
-                      </Text>
-                    ) : isCancelled ? (
+                    {isCancelled ? (
                       <Text color="textSubtle" bold>
                         {t('Cancelled')}
+                      </Text>
+                    ) : isHouseWin ? (
+                      <Text color="textSubtle" bold>
+                        {t('To Burn')}
                       </Text>
                     ) : (
                       <PositionLabel position={bet.position} />
