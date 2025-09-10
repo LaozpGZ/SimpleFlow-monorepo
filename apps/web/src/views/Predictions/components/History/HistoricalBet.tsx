@@ -202,7 +202,7 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
         )}
         {/* If round result is cancelled or round is live due to pause/unpause issues, allow user to reclaim */}
         {canClaim && (isCancelled || isLiveRound || isOpenRound || isCancelled) && (
-          <ReclaimPositionButton epoch={bet?.round?.epoch ?? 0} scale="sm" mr="8px">
+          <ReclaimPositionButton epoch={bet?.round?.epoch ?? 0} onSuccess={handleSuccess} scale="sm" mr="8px">
             {t('Reclaim')}
           </ReclaimPositionButton>
         )}
