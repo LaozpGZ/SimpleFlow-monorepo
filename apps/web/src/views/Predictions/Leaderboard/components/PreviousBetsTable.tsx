@@ -1,13 +1,13 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency } from '@pancakeswap/sdk'
-import { Skeleton, Table, Td, Th } from '@pancakeswap/uikit'
+import { Skeleton, Table, Td, Th, Text } from '@pancakeswap/uikit'
 import orderBy from 'lodash/orderBy'
 import times from 'lodash/times'
 import { useEffect, useState } from 'react'
 import { getBetHistory, transformBetResponse } from 'state/predictions/helpers'
 import { Bet } from 'state/types'
 import { getNetPayout } from 'views/Predictions/components/History/helpers'
-import { REWARD_RATE } from '@pancakeswap/prediction'
+import { BetPosition, REWARD_RATE } from '@pancakeswap/prediction'
 import PositionLabel from './PositionLabel'
 import { NetWinningsView } from './Results/styles'
 
@@ -91,13 +91,25 @@ const PreviousBetsTable: React.FC<React.PropsWithChildren<PreviousBetsTableProps
               const payout =
                 !isCancelled && isWinner ? (claimed ? bet.claimedNetBNB : getNetPayout(bet, REWARD_RATE)) : bet.amount
 
+              const isHouseWin = bet.position === BetPosition.HOUSE
+
               return (
                 <tr key={bet.id}>
                   <Td textAlign="center" fontWeight="bold">
                     {bet?.round?.epoch}
                   </Td>
                   <Td textAlign="center">
-                    <PositionLabel position={bet.position} />
+                    {isHouseWin ? (
+                      <Text color="textSubtle" bold>
+                        {t('To Burn')}
+                      </Text>
+                    ) : isCancelled ? (
+                      <Text color="textSubtle" bold>
+                        {t('Cancelled')}
+                      </Text>
+                    ) : (
+                      <PositionLabel position={bet.position} />
+                    )}
                   </Td>
                   <Td textAlign="right">
                     <NetWinningsView
