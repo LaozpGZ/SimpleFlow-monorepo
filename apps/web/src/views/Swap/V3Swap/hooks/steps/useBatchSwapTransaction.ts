@@ -13,6 +13,7 @@ import { InterfaceOrder, isBridgeOrder } from 'views/Swap/utils'
 import { activeBridgeOrderMetadataAtom } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/state/orderDataState'
 import { useSetAtom } from 'jotai'
 
+import { useTransactionAdder } from 'state/transactions/hooks'
 import { BatchCall, getBatchedTransaction as getBatchedTransactionHelper } from '../batchHelper'
 import { eip5792UserRejectUpgradeError, userRejectedError } from '../useSendSwapTransaction'
 import useSwapRecordTransaction from '../useSwapRecordTransaction'
@@ -41,6 +42,7 @@ export const useBatchSwapTransaction = ({
   const setActiveBridgeOrderMetadata = useSetAtom(activeBridgeOrderMetadataAtom)
 
   const addSwapTransaction = useSwapRecordTransaction(chainId, account)
+  const addTransaction = useTransactionAdder()
 
   const performEip5792Lock = useRef(false)
 
@@ -160,7 +162,21 @@ export const useBatchSwapTransaction = ({
           const hash = status.receipts?.[0]?.transactionHash
           if (hash) {
             setTxHash(hash)
-            addSwapTransaction({ order: order as InterfaceOrder, hash: hash as Address, type: 'V3SmartSwap' })
+
+            if (isBridgeOrder(order)) {
+              // Add bridge transaction with bridge type for pending/toast tracking
+              addTransaction(
+                { hash },
+                {
+                  summary: `Bridge ${order.trade.inputAmount.toSignificant(3)} ${
+                    order.trade.inputAmount.currency.symbol
+                  } to ${order.trade.outputAmount.currency.symbol}`,
+                  type: 'bridge',
+                },
+              )
+            } else {
+              addSwapTransaction({ order: order as InterfaceOrder, hash: hash as Address, type: 'V3SmartSwap' })
+            }
           }
 
           if (isBridgeOrder(order) && hash) {
