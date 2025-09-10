@@ -142,9 +142,10 @@ const PnlTab: React.FC<React.PropsWithChildren<PnlTabProps>> = ({ hasBetHistory,
             {t('Net results')}
           </Text>
           <Text bold fontSize="24px" lineHeight="1" color={netResultIsPositive ? 'success' : 'failure'}>
-            {`${netResultIsPositive ? '+' : ''}${formatBnb(netResultAmount, config?.displayedDecimals ?? 0)} ${
-              config?.betCurrency.symbol
-            }`}
+            {`${netResultIsPositive ? '+' : ''}${formatBnb(
+              netResultAmount,
+              config?.balanceDecimals ?? config?.displayedDecimals ?? 0,
+            )} ${config?.betCurrency.symbol}`}
           </Text>
           <Text small color="textSubtle">
             {`~$${netResultInUsd.toFixed(2)}`}
