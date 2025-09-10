@@ -8,6 +8,8 @@ import { useGetENSAddressByName } from 'hooks/useGetENSAddressByName'
 import { useCallback } from 'react'
 import { styled } from 'styled-components'
 import { safeGetAddress } from 'utils'
+import { Field } from 'state/swap/actions'
+import { useSwapState } from 'state/swap/hooks'
 import { useBlockExploreLink, useBlockExploreName } from '../../../utils'
 import { useIsRecipientError } from '../hooks/useIsRecipientError'
 
@@ -87,8 +89,11 @@ export default function AddressInputPanel({
   // triggers whenever the typed value changes
   onChange: (value: string | null) => void
 }) {
-  const { chainId } = useActiveChainId()
-  const blockExplorerName = useBlockExploreName(chainId)
+  const {
+    [Field.OUTPUT]: { chainId: outputChainId },
+  } = useSwapState()
+
+  const blockExplorerName = useBlockExploreName(outputChainId)
   const getBlockExploreLink = useBlockExploreLink()
 
   const { t } = useTranslation()
@@ -113,13 +118,13 @@ export default function AddressInputPanel({
               <Text bold color="textSubtle">
                 {t('Recipient')}
               </Text>
-              {address && chainId && (
-                <Link external small href={getBlockExploreLink(address, 'address', chainId)}>
+              {address && outputChainId && (
+                <Link external small href={getBlockExploreLink(address, 'address', outputChainId)}>
                   (
                   {t('View on %site%', {
                     site: blockExplorerName,
                   })}
-                  {chainId === ChainId.BSC && <BscScanIcon color="primary" ml="4px" />})
+                  {outputChainId === ChainId.BSC && <BscScanIcon color="primary" ml="4px" />})
                 </Link>
               )}
             </FlexGap>
