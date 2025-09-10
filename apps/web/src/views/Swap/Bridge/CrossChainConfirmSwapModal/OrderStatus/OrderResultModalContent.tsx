@@ -263,15 +263,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
         {status &&
           [BridgeStatus.SUCCESS, BridgeStatus.PARTIAL_SUCCESS, BridgeStatus.FAILED].includes(status) &&
           resultCurrencyAmount && (
-            <Message
-              variant={
-                status === BridgeStatus.SUCCESS
-                  ? 'success'
-                  : status === BridgeStatus.PARTIAL_SUCCESS
-                  ? 'secondary'
-                  : 'danger'
-              }
-            >
+            <Message variant={status === BridgeStatus.SUCCESS ? 'success' : isRefundCase ? 'secondary' : 'danger'}>
               <Description
                 showAmounts={status !== BridgeStatus.FAILED || bridgeStatus?.bridgeStatus === RelayStatus.REFUND}
                 currencyAmount={resultCurrencyAmount}
