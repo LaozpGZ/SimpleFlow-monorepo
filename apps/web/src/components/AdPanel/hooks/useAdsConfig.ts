@@ -20,46 +20,25 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
   const now = Date.now()
   const config: AdsCampaignConfig[] = [
     {
-      id: AdsIds.PANCAKE_SOCIAL_LOGIN,
+      id: AdsIds.SOLANA_LIQUIDITY,
       priority: Priority.HIGH,
       ad: {
-        img: getImageUrl(isMobile ? 'social-login-mobile' : 'social-login'),
+        img: `${ASSET_CDN}/solana/promotions/add_liquidity.png`,
         texts: [
           {
-            text: t('Create your Wallet with Social Login'),
+            text: t('Provide Liquidity on Solana PancakeSwap'),
           },
         ],
         btn: {
-          text: t('Learn More'),
-          link: 'https://blog.pancakeswap.finance/articles/sociallogin',
-          mt: !isMobile ? '8px' : undefined,
-        },
-      },
-    },
-    {
-      id: AdsIds.PANCAKE_GIFT,
-      priority: Priority.HIGH,
-      ad: {
-        img: getImageUrl(isMobile ? 'pancake-gift-mobile' : 'pancake-gift'),
-        texts: [
-          {
-            text: t('Introducing Pancake Gifts.'),
-          },
-          {
-            text: t('Gift Now'),
-            link: 'https://pancakeswap.finance/swap?utm_source=website&utm_medium=Homepage&utm_campaign=banner&utm_id=PancakeGifts',
-          },
-        ],
-        btn: {
-          text: t('Learn More'),
-          link: 'https://blog.pancakeswap.finance/articles/Pancake-Gifts?utm_source=website&utm_medium=Homepage&utm_campaign=banner&utm_id=PancakeGifts',
-          mt: !isMobile ? '8px' : undefined,
+          text: t('Add LP Now'),
+          link: 'https://solana.pancakeswap.finance/liquidity-pools',
+          mt: '32px',
         },
       },
     },
     {
       id: AdsIds.BINANCE_ALPHA,
-      priority: Priority.VERY_HIGH,
+      priority: Priority.HIGH,
       ad: {
         img: getImageUrl(isMobile ? 'alpha-comp-mobile-v4' : 'alpha-comp-v4'),
         texts: [
@@ -90,8 +69,29 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
       end: 1759795140000,
     },
     {
+      id: AdsIds.PANCAKE_GIFT,
+      priority: Priority.HIGH,
+      ad: {
+        img: getImageUrl(isMobile ? 'pancake-gift-mobile' : 'pancake-gift'),
+        texts: [
+          {
+            text: t('Introducing Pancake Gifts.'),
+          },
+          {
+            text: t('Gift Now'),
+            link: 'https://pancakeswap.finance/swap?utm_source=website&utm_medium=Homepage&utm_campaign=banner&utm_id=PancakeGifts',
+          },
+        ],
+        btn: {
+          text: t('Learn More'),
+          link: 'https://blog.pancakeswap.finance/articles/Pancake-Gifts?utm_source=website&utm_medium=Homepage&utm_campaign=banner&utm_id=PancakeGifts',
+          mt: !isMobile ? '8px' : undefined,
+        },
+      },
+    },
+    {
       id: AdsIds.TRADE_SOCIAL,
-      priority: Priority.VERY_HIGH,
+      priority: Priority.MEDIUM,
       ad: {
         img: getImageUrl(!isMobile ? 'trade-social-comp' : 'trade-social-comp-mobile'),
         texts: [
@@ -131,19 +131,19 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
       end: 1757721600000,
     },
     {
-      id: AdsIds.SOLANA_LIQUIDITY,
-      priority: Priority.HIGH,
+      id: AdsIds.PANCAKE_SOCIAL_LOGIN,
+      priority: Priority.MEDIUM,
       ad: {
-        img: `${ASSET_CDN}/solana/promotions/add_liquidity.png`,
+        img: getImageUrl(isMobile ? 'social-login-mobile' : 'social-login'),
         texts: [
           {
-            text: t('Provide Liquidity on Solana PancakeSwap'),
+            text: t('Create your Wallet with Social Login'),
           },
         ],
         btn: {
-          text: t('Add LP Now'),
-          link: 'https://solana.pancakeswap.finance/liquidity-pools',
-          mt: '32px',
+          text: t('Learn More'),
+          link: 'https://blog.pancakeswap.finance/articles/sociallogin',
+          mt: !isMobile ? '8px' : undefined,
         },
       },
     },
