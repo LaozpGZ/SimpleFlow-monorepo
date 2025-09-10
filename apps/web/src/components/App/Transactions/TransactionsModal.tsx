@@ -4,7 +4,7 @@ import { TransactionList } from '@pancakeswap/widgets-internal'
 import isEmpty from 'lodash/isEmpty'
 import { useCallback, useMemo } from 'react'
 import { useAppDispatch } from 'state'
-import { useAllSortedRecentTransactions } from 'state/transactions/hooks'
+import { useAMMSortedRecentTransactions } from 'state/transactions/hooks'
 import { useRecentXOrders } from 'views/Swap/x/useRecentXOders'
 
 import { clearAllTransactions } from 'state/transactions/actions'
@@ -77,7 +77,7 @@ export function RecentTransactions() {
         ) ?? [],
     ) ?? []
 
-  const sortedRecentTransactions = useAllSortedRecentTransactions()
+  const sortedRecentTransactions = useAMMSortedRecentTransactions()
   const ammTransactions: AmmTransactionItem[] = useMemo(
     () =>
       Object.entries(sortedRecentTransactions).flatMap(([chainId, transactions]) => {
