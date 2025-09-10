@@ -62,7 +62,7 @@ const DefaultQuestions: React.FC = () => {
                 href="https://docs.pancakeswap.finance/~/revisions/ptnCgCMnEEgu5A8YulQ0/earn/ifo-initial-farm-offering/faq-partners"
               />,
             ]}
-            defaults="<p>More details: <br /><0>User FAQ</0> | <1>Partner FAQ</1></p>"
+            i18nTemplate="<p>More details: <br /><0>User FAQ</0> | <1>Partner FAQ</1></p>"
           />
         </>
       ),
@@ -92,7 +92,7 @@ const DefaultQuestions: React.FC = () => {
                 href="https://www.notion.so/FAQ-IFO-on-page-267b1792f90280dcb787fec4d84935c6?pvs=21"
               />,
             ]}
-            defaults="<p>More details: <br /><0>User FAQ</0> | <1>Partner FAQ</1></p>"
+            i18nTemplate="<p>More details: <br /><0>User FAQ</0> | <1>Partner FAQ</1></p>"
           />
         </>
       ),
@@ -118,7 +118,7 @@ const DefaultQuestions: React.FC = () => {
                   href="https://docs.pancakeswap.finance/~/revisions/ptnCgCMnEEgu5A8YulQ0/earn/ifo-initial-farm-offering/ifo-guide"
                 />,
               ]}
-              defaults="<p>More info: <0>User Guide</0></p>"
+              i18nTemplate="<p>More info: <0>User Guide</0></p>"
             />
           </Box>
         </>
@@ -145,7 +145,7 @@ const DefaultQuestions: React.FC = () => {
                   href="https://docs.pancakeswap.finance/~/revisions/ptnCgCMnEEgu5A8YulQ0/earn/ifo-initial-farm-offering/how-ifo-taxes-work-in-overflow-sales-with-example"
                 />,
               ]}
-              defaults="<p>More info: <0>Fee Table</0></p>"
+              i18nTemplate="<p>More info: <0>Fee Table</0></p>"
             />
           </Box>
         </>
@@ -197,7 +197,7 @@ const DefaultQuestions: React.FC = () => {
                   href="https://docs.pancakeswap.finance/~/revisions/ptnCgCMnEEgu5A8YulQ0/earn/ifo-initial-farm-offering/how-ifo-taxes-work-in-overflow-sales-with-example"
                 />,
               ]}
-              defaults="<p>More info: <0>Overflow & Allocation Example</0></p>"
+              i18nTemplate="<p>More info: <0>Overflow & Allocation Example</0></p>"
             />
           </Box>
         </>
@@ -254,7 +254,7 @@ const DefaultQuestions: React.FC = () => {
                   href="https://docs.pancakeswap.finance/~/revisions/ptnCgCMnEEgu5A8YulQ0/earn/ifo-initial-farm-offering/faq-partners"
                 />,
               ]}
-              defaults="<p>For more info: <br /><0>IFO Partner Terms</0> | <1>Partner FAQ</1></p>"
+              i18nTemplate="<p>For more info: <br /><0>IFO Partner Terms</0> | <1>Partner FAQ</1></p>"
             />
           </Box>
         </>

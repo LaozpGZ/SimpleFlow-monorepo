@@ -1,1 +1,12 @@
-export { Trans } from 'react-i18next'
+import { ComponentProps } from 'node_modules/@types/react'
+import { Trans as I18nNextTrans } from 'react-i18next'
+
+type TransProps_ = ComponentProps<typeof I18nNextTrans>
+export type TransProps = Omit<TransProps_, 'defaults'> & {
+  i18nTemplate?: string
+}
+
+export const Trans = (props: TransProps) => {
+  const { i18nTemplate, ...rest } = props
+  return <I18nNextTrans {...rest} defaults={i18nTemplate} />
+}
