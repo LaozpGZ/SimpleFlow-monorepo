@@ -163,11 +163,15 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
           } else {
             resultTokenChainId = lastExecutedCommand.metadata.destinationChainId
 
-            // If last command is bridge, safely using bridgeStatus.outputToken
-            // instead of lastExecutedCommand.metadata.outputToken
-            // because in native bridge case, lastExecutedCommand.metadata.outputToken will be WETH
-            // while bridgeStatus.outputToken will be the native token
-            resultTokenAddress = bridgeStatus.outputToken
+            resultTokenAddress =
+              lastExecutedCommand.metadata.bridgeStatus === RelayStatus.REFUND
+                ? // If refund case by Relay, lastExecutedCommand.metadata.outputToken
+                  lastExecutedCommand.metadata.outputToken
+                : // If last command is bridge, safely using bridgeStatus.outputToken
+                  // instead of lastExecutedCommand.metadata.outputToken
+                  // because in native bridge case, lastExecutedCommand.metadata.outputToken will be WETH
+                  // while bridgeStatus.outputToken will be the native token
+                  bridgeStatus.outputToken
             resultAmount = lastExecutedCommand.metadata.outputAmount
           }
 
@@ -269,7 +273,7 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
               }
             >
               <Description
-                showAmounts={status !== BridgeStatus.FAILED || bridgeStatus?.bridgeStatus !== RelayStatus.REFUND}
+                showAmounts={status !== BridgeStatus.FAILED || bridgeStatus?.bridgeStatus === RelayStatus.REFUND}
                 currencyAmount={resultCurrencyAmount}
                 description={
                   isRefundCase
