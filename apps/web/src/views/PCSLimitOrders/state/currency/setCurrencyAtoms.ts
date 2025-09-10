@@ -4,6 +4,7 @@ import { atom } from 'jotai'
 import currencyId from 'utils/currencyId'
 import { Field } from 'views/PCSLimitOrders/types/limitOrder.types'
 import { independentFieldAtom } from 'views/PCSLimitOrders/state/form/fieldAtoms'
+import { clearCustomMarketPriceAtom } from 'views/PCSLimitOrders/state/form/marketPriceAtoms'
 import { outputCurrencyAtom, inputCurrencyAtom, inputCurrencyIdAtom, outputCurrencyIdAtom } from './currencyAtoms'
 
 export const setCurrencyAtom = atom(
@@ -20,6 +21,9 @@ export const setCurrencyAtom = atom(
       return
     }
 
+    // Clear custom market price when currency changes since it's no longer valid
+    set(clearCustomMarketPriceAtom)
+
     if (field === Field.CURRENCY_A) set(inputCurrencyIdAtom, newId)
     else set(outputCurrencyIdAtom, newId)
   },
@@ -29,6 +33,9 @@ export const flipCurrenciesAtom = atom(null, (get, set) => {
   const idA = get(inputCurrencyIdAtom)
   const idB = get(outputCurrencyIdAtom)
   const independentField = get(independentFieldAtom)
+
+  // Clear custom market price when currencies are flipped since the price direction changes
+  set(clearCustomMarketPriceAtom)
 
   set(inputCurrencyIdAtom, idB)
   set(outputCurrencyIdAtom, idA)

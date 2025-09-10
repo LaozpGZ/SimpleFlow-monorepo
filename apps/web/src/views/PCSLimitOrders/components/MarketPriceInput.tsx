@@ -10,7 +10,12 @@ import { priceToClosestTick, tickToPrice, tryParseTick } from 'hooks/infinity/ut
 import { tryParsePrice } from 'hooks/v3/utils'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtoms'
-import { customMarketPriceAtom, marketPriceAtom, setCustomMarketPriceAtom } from '../state/form/marketPriceAtoms'
+import {
+  customMarketPriceAtom,
+  marketPriceAtom,
+  setCustomMarketPriceAtom,
+  clearCustomMarketPriceAtom,
+} from '../state/form/marketPriceAtoms'
 import { selectedPoolAtom } from '../state/pools/poolAtoms'
 
 const InputContainer = styled(Box)`
@@ -82,6 +87,7 @@ export const MarketPriceInput = () => {
   const [localPrice, setLocalPrice] = useState(marketPrice?.toSignificant(6))
 
   const setCustomMarketPrice = useSetAtom(setCustomMarketPriceAtom)
+  const clearCustomMarketPrice = useSetAtom(clearCustomMarketPriceAtom)
 
   const tokenPriceUSD = useStablecoinPrice(outputCurrency, { enabled: !!outputCurrency })
   const usdValue = tokenPriceUSD ? marketPrice?.multiply(tokenPriceUSD).toSignificant(6) : '0'
@@ -118,8 +124,9 @@ export const MarketPriceInput = () => {
     // Get nearest tick to user's price
     const userPrice = tryParsePrice(inputCurrency, outputCurrency, localPrice)
     if (!userPrice) {
-      // Reset
+      // Reset to market price and clear custom price
       setLocalPrice(marketPrice?.toSignificant(6))
+      clearCustomMarketPrice()
       return
     }
 
@@ -127,8 +134,9 @@ export const MarketPriceInput = () => {
 
     if (!nearestTick) {
       console.warn('MarketPriceInput::handleBlur No tick found for given price')
-      // Reset
+      // Reset to market price and clear custom price
       setLocalPrice(marketPrice?.toSignificant(6))
+      clearCustomMarketPrice()
       return
     }
 

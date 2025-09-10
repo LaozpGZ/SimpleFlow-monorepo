@@ -8,23 +8,33 @@ import { atomWithQuery } from 'jotai-tanstack-query'
 import { FAST_INTERVAL } from 'config/constants'
 import { inputCurrencyAtom, outputCurrencyAtom, quoteCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/poolAtoms'
-import { independentFieldAtom, previousIndependentFieldAtom } from './fieldAtoms'
+import { independentFieldAtom, fieldBeforeCustomPriceAtom } from './fieldAtoms'
 
 export const customMarketPriceAtom = atom<CurrencyAmount<Currency> | undefined>(undefined)
 export const setCustomMarketPriceAtom = atom(null, async (get, set, value: string) => {
-  const quoteCurrency = await get(quoteCurrencyAtom)
+  const outputCurrency = await get(outputCurrencyAtom)
 
-  if (!quoteCurrency) return
+  if (!outputCurrency) return
 
-  const outputAmount = tryParseCurrencyAmount(value, quoteCurrency)
+  const outputAmount = tryParseCurrencyAmount(value, outputCurrency)
 
   if (outputAmount) {
     const currentIndependentField = get(independentFieldAtom)
-    set(previousIndependentFieldAtom, currentIndependentField)
+    const currentFieldBeforeCustomPrice = get(fieldBeforeCustomPriceAtom)
 
-    // set(independentFieldAtom, Field.PRICE)
+    // Only store the field if we haven't set a custom price before
+    if (currentFieldBeforeCustomPrice === null) {
+      set(fieldBeforeCustomPriceAtom, currentIndependentField)
+    }
+
     set(customMarketPriceAtom, outputAmount)
   }
+})
+
+// Atom to clear custom market price and reset field state
+export const clearCustomMarketPriceAtom = atom(null, (get, set) => {
+  set(customMarketPriceAtom, undefined)
+  set(fieldBeforeCustomPriceAtom, null)
 })
 
 // Current market price, with refetch
