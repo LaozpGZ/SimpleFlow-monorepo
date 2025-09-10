@@ -1,4 +1,4 @@
-import { ComponentProps } from 'node_modules/@types/react'
+import { ComponentProps } from 'react'
 import { Trans as I18nNextTrans } from 'react-i18next'
 
 type TransProps_ = ComponentProps<typeof I18nNextTrans>
