@@ -105,7 +105,7 @@ export const getSolanaBridgeCalldata = async ({
   const { requestId } = order.bridgeTransactionData as any
 
   if (!allowedSlippage || !user || !recipient || !requestId) {
-    throw new Error('getSolanaToEVMBridgeCalldata requires allowedSlippage, user, and recipient')
+    throw new Error('getSolanaBridgeCalldata requires allowedSlippage, user, recipient, and requestId')
   }
 
   const calldataRequest: CalldataRequestSchema = {
@@ -167,7 +167,7 @@ export const getSolanaToEVMBridgeCalldata = async ({
   recipient: string
 }): Promise<Transaction | VersionedTransaction | undefined> => {
   if (!isSolana(order.trade.inputAmount.currency.chainId)) {
-    throw new Error('getEVMToSolanaBridgeCalldata requires Solana as destination chain')
+    throw new Error('getSolanaToEVMBridgeCalldata requires Solana as origin chain')
   }
 
   if (!solanaWalletContext.publicKey) {
