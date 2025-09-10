@@ -173,7 +173,7 @@ const OpenRoundCard: React.FC<React.PropsWithChildren<OpenRoundCardProps>> = ({
   )
 
   return (
-    <CardFlip isFlipped={isSettingPosition} height="404px">
+    <CardFlip isFlipped={isSettingPosition} height="450px">
       <Card borderBackground={getBorderBackground(theme, 'next')}>
         <CardHeader
           status="next"
