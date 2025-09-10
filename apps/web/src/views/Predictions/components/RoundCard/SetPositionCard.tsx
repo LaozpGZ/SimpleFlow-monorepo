@@ -43,7 +43,6 @@ interface SetPositionCardProps {
   onSuccess: (hash: string) => Promise<void>
 }
 
-const dust = parseUnits('0.001', 18)
 const percentShortcuts = [10, 25, 50, 75]
 
 const getButtonProps = (value: bigint, bnbBalance: bigint, minBetAmountBalance: bigint) => {
@@ -109,6 +108,7 @@ const SetPositionCard: React.FC<React.PropsWithChildren<SetPositionCardProps>> =
     return balanceRaw ? balanceRaw.quotient : 0n
   }, [balanceRaw])
 
+  const dust = parseUnits('0.001', config?.betCurrency.decimals ?? 18)
   const maxBalance = useMemo(() => (balance > dust ? balance - dust : 0n), [balance])
   const balanceDisplay = formatBigInt(balance, config?.betCurrency?.decimals, config?.betCurrency?.decimals)
 

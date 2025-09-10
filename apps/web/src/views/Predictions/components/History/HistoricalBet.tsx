@@ -16,8 +16,14 @@ import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useState } from 'react'
 import { fetchLedgerData, markAsCollected } from 'state/predictions'
-import { Result, getRoundResult } from 'state/predictions/helpers'
-import { useGetCurrentEpoch, useGetIsClaimable, useGetPredictionsStatus } from 'state/predictions/hooks'
+import { Result, getHasRoundFailed, getRoundResult } from 'state/predictions/helpers'
+import {
+  useGetBufferSeconds,
+  useGetCurrentEpoch,
+  useGetIsClaimable,
+  useGetPredictionsStatus,
+  useGetSortedRoundsCurrentEpoch,
+} from 'state/predictions/hooks'
 import { Bet } from 'state/types'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
@@ -44,7 +50,9 @@ const YourResult = styled(Box)`
 
 const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => {
   const [isOpen, setIsOpen] = useState(false)
+
   const { amount, round } = bet
+
   const { t } = useTranslation()
   const { targetRef, tooltip, tooltipVisible } = useTooltip(
     <>
@@ -60,13 +68,13 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
     { placement: 'top' },
   )
 
+  const config = useConfig()
   const currentEpoch = useGetCurrentEpoch()
   const status = useGetPredictionsStatus()
   const { chainId } = useActiveChainId()
-  const canClaim = useGetIsClaimable(bet?.round?.epoch)
   const dispatch = useLocalDispatch()
   const { address: account } = useAccount()
-  const config = useConfig()
+  const canClaim_ = useGetIsClaimable(bet?.round?.epoch)
 
   const toggleOpen = () => setIsOpen(!isOpen)
 
@@ -89,6 +97,8 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
   const resultTextColor = getRoundColor(roundResult)
   const isOpenRound = round?.epoch === currentEpoch
   const isLiveRound = status === PredictionStatus.LIVE && round?.epoch === currentEpoch - 1
+  const isCancelled = roundResult === Result.CANCELED || (round?.failed ?? false)
+  const canClaim = canClaim_ || (bet.amount > 0 && !bet.claimed)
 
   // Winners get the payout, otherwise the claim what they put it if it was canceled
   const payout = roundResult === Result.WIN ? getNetPayout(bet, REWARD_RATE) : amount
@@ -107,6 +117,16 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
   const resultTextPrefix = getRoundPrefix(roundResult)
 
   const renderBetLabel = () => {
+    if (isCancelled) {
+      return (
+        <Flex alignItems="center">
+          <Text color="textDisabled" bold>
+            {t('Cancelled')}
+          </Text>
+        </Flex>
+      )
+    }
+
     if (isOpenRound) {
       return (
         <Flex alignItems="center">
@@ -135,7 +155,7 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
           {t('Your Result')}
         </Text>
         <Text bold color={resultTextColor} lineHeight={1}>
-          {roundResult === Result.CANCELED ? (
+          {isCancelled ? (
             t('Cancelled')
           ) : roundResult === Result.HOUSE ? (
             <>
@@ -181,7 +201,7 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
           </CollectWinningsButton>
         )}
         {/* If round result is cancelled or round is live due to pause/unpause issues, allow user to reclaim */}
-        {canClaim && (roundResult === Result.CANCELED || isLiveRound || isOpenRound) && (
+        {canClaim && (isCancelled || isLiveRound || isOpenRound || isCancelled) && (
           <ReclaimPositionButton epoch={bet?.round?.epoch ?? 0} scale="sm" mr="8px">
             {t('Reclaim')}
           </ReclaimPositionButton>
