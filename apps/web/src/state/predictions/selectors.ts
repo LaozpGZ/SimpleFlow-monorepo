@@ -92,9 +92,10 @@ export const getCurrentRoundCloseTimestampSelector = createSelector(
     }
 
     const now = Math.floor(Date.now() / 1000)
+    const buffer = intervalSeconds
 
     // Current round cancelled
-    if (!currentRound.closeTimestamp || currentRound.closeTimestamp < now + intervalSeconds) {
+    if (!currentRound.closeTimestamp || currentRound.closeTimestamp < now + intervalSeconds + buffer) {
       const calculatedCloseTime = Number(currentRound.lockTimestamp) + intervalSeconds
 
       // If the calculated close time is in the past, this indicates the service was paused
