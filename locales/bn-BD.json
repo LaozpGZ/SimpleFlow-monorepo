@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "ফ্যালকন মাইলস অর্জন করুন!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "পুলে মোট TVL-এর অবদানের উপর ভিত্তি করে LPs, %multiplier%x ফ্যালকন-এর মাইলস অর্জন করে। মাইলস শুধুমাত্র 0.95 থেকে 1.05 সীমার মধ্যে অবস্থানে জমা হয়।",
-  "Trade for a Chance to Win %amount%.": "%amount% জেতার সুযোগের জন্য লেনদেন করুন।",
   "Enter value between %min% and %max%": "%min% এবং %max% এর মধ্যে মান লিখুন",
   "balance not enough": "ব্যালেন্স যথেষ্ট নয়",
   "Select base token": "ভিত্তি টোকেন নির্বাচন করুন",
@@ -4147,5 +4146,6 @@
   "How many tokens will I get?": "How many tokens will I get?",
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
-  "Target Raise": "লক্ষ্য বৃদ্ধি"
+  "Target Raise": "লক্ষ্য বৃদ্ধি",
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
 }
