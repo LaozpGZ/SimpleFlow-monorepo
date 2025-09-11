@@ -37,12 +37,15 @@ const DefaultQuestions: React.FC = () => {
       title: <Trans>What is an IFO?</Trans>,
       description: (
         <>
-          <Trans>
-            <p>
-              PancakeSwap’s <strong>Initial Farm Offering (IFO)</strong> is a platform to launch new tokens.
-            </p>
-          </Trans>
-          <Trans values={{ symbol }}>
+          <p>
+            <Trans
+              components={[<strong key="strong" />]}
+              i18nTemplate="PancakeSwap’s <0>Initial Farm Offering (IFO)</0> is a platform to launch new tokens."
+            />
+
+            <Trans>Pcs&apos;s</Trans>
+          </p>
+          <Trans values={{ symbol }} i18nKey="ifo-what-is-ifo-description-1">
             <p>
               Users can buy project tokens using %symbol%, while projects gain liquidity, visibility, and direct access
               to our community.
