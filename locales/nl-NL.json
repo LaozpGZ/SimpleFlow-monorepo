@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract-wallets worden momenteel niet ondersteund op %product%. Om door te gaan, moet je teruggaan naar een EOA-wallet (Externally Owned Account - Account in externe eigendom) voordat je met het product aan de slag gaat.",
   "Earn Falcon Miles!": "Verdien Falcon-miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP's verdienen %multiplier%x Falcon-miles op basis van de totale TVL die aan de pool is bijgedragen. Miles worden alleen toegekend aan posities binnen het bereik van 0,95 tot 1,05.",
-  "Trade for a Chance to Win %amount%.": "Handel om kans te maken op %amount%.",
   "Enter value between %min% and %max%": "Voer een waarde tussen %min% en %max% in",
   "balance not enough": "onvoldoende saldo",
   "Select base token": "Basistoken selecteren",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% ondersteunt meerdere ecosystemen. Selecteer met welke keten(s) je wilt verbinden.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM staat voor Ethereum Virtual Machine en stelt verschillende blockchains in staat om op Ethereum gebaseerde apps te draaien met dezelfde wallet en adres.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Deze wallet op PancakeSwap biedt <0>MEV-bescherming</0> tegen front-running- en sandwichaanvallen op EVM-ketens.",
-  "Wallets with <0>MEV Protection</0>.": "Wallets met <0>MEV-bescherming</0>."
+  "Wallets with <0>MEV Protection</0>.": "Wallets met <0>MEV-bescherming</0>.",
+  "Trade %product% Tokens to Win %amount%": "Verhandel %product% Tokens en win %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Vul het <0>aanvraagformulier</0> in</p>"
 }

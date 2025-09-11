@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Falcon Miles जीतें!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
-  "Trade for a Chance to Win %amount%.": "Trade for a Chance to Win %amount%.",
   "Enter value between %min% and %max%": "%min% और %max% के बीच वैल्यू डालें",
   "balance not enough": "शेष राशि पर्याप्त नहीं",
   "Select base token": "Base टोकन चुनें",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% कई इकोसिस्टम का समर्थन करता है। कृपया उन चेन (चेनों) का चयन करें जिनसे कनेक्ट करना है।",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM का अर्थ Ethereum Virtual Machine है और यह विभिन्न ब्लॉकचेन को एक ही वॉलेट और पते का उपयोग करके Ethereum-आधारित ऐप चलाने की अनुमति देता है।",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "PancakeSwap पर यह वॉलेट EVM चेन पर फ्रंट-रनिंग और सैंडविच हमलों के खिलाफ <0>MEV सुरक्षा</0> प्रदान करता है।",
-  "Wallets with <0>MEV Protection</0>.": "<0>MEV सुरक्षा</0> वाले वॉलेट।"
+  "Wallets with <0>MEV Protection</0>.": "<0>MEV सुरक्षा</0> वाले वॉलेट।",
+  "Trade %product% Tokens to Win %amount%": "%product% टोकन ट्रेड करें और %amount% जीतें",
+  "<p>Fill out the <0>Application Form</0></p>": "<p><0>आवेदन पत्र</0> भरें</p>"
 }

@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "賺取 Falcon Miles！",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "流動性提供者可根據對流動性池的 TVL 貢獻獲得 %multiplier% 倍 Falcon Miles。僅限價格落在 0.95 至 1.05 區間的部位可累積哩程。",
-  "Trade for a Chance to Win %amount%.": "交易就有機會贏得 %amount%。",
   "Enter value between %min% and %max%": "請輸入 %min% 至 %max% 之間的數值",
   "balance not enough": "餘額不足",
   "Select base token": "選擇基礎代幣",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% 支援多個生態系統。請選擇要連接的鏈。",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM 是 Ethereum Virtual Machine 的縮寫，它允許不同的區塊鏈使用相同的錢包和地址運行基於 Ethereum 的應用程式",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "PancakeSwap 上的此錢包提供 <0>MEV 保護</0>，以防範在 EVM 鏈上的搶先交易和三明治攻擊。",
-  "Wallets with <0>MEV Protection</0>.": "具有 <0>MEV 保護</0> 的錢包。"
+  "Wallets with <0>MEV Protection</0>.": "具有 <0>MEV 保護</0> 的錢包。",
+  "Trade %product% Tokens to Win %amount%": "交易 %product% 代幣，贏取 %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>填寫<0>申請表</0></p>"
 }
