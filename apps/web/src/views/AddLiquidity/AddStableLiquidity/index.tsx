@@ -33,7 +33,7 @@ import ConfirmAddLiquidityModal from '../components/ConfirmAddLiquidityModal'
 import { useDerivedLPInfo } from './hooks/useDerivedLPInfo'
 import { StablePair, useStableLPDerivedMintInfo } from './hooks/useStableLPDerivedMintInfo'
 import { warningSeverity } from './utils/slippage'
-import { useTotalUsdValue } from '../hooks/useTotalUsdValue'
+import { useTotalUsdValue } from '../../../hooks/useTotalUsdValue'
 
 export interface AddStableChildrenProps {
   noLiquidity?: boolean
