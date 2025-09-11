@@ -4152,5 +4152,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% unterstützt mehrere Ökosysteme. Bitte wählen Sie die Kette(n) aus, mit der/denen Sie sich verbinden möchten.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM steht für Ethereum Virtual Machine und ermöglicht es verschiedenen Blockchains, Ethereum-basierte Apps mit demselben Wallet und derselben Adresse auszuführen.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Dieses Wallet auf PancakeSwap bietet <0>MEV-Schutz</0> gegen Front-Running und Sandwich-Angriffe auf EVM-Ketten.",
-  "Wallets with <0>MEV Protection</0>.": "Wallets mit <0>MEV-Schutz</0>."
+  "Wallets with <0>MEV Protection</0>.": "Wallets mit <0>MEV-Schutz</0>.",
+  "Hello World!": "Hallo Welt!",
+  "Hello <0>World</0>!": "Hallo <0>Welt</0>!"
 }
