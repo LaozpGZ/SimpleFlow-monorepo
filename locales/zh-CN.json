@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "赚取 Falcon 里程！",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "根据对糖浆池贡献的总 TVL，LP 可以赚取 %multiplier% 倍 Falcon 里程。里程累积仅限 0.95 至 1.05 区间内的持仓。",
-  "Trade for a Chance to Win %amount%.": "交易即有机会赢取 %amount%。",
   "Enter value between %min% and %max%": "输入介于 %min% 和 %max% 之间的值",
   "balance not enough": "余额不足",
   "Select base token": "选择基础代币",
@@ -4147,5 +4146,6 @@
   "How many tokens will I get?": "How many tokens will I get?",
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
-  "Target Raise": "目标提升"
+  "Target Raise": "目标提升",
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
 }
