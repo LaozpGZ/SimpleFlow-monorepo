@@ -92,9 +92,25 @@ export const getCurrentRoundCloseTimestampSelector = createSelector(
     }
 
     if (!currentRound.closeTimestamp) {
-      return Number(currentRound.lockTimestamp) + intervalSeconds
+      const calculatedCloseTime = Number(currentRound.lockTimestamp) + intervalSeconds
+      const now = Math.floor(Date.now() / 1000)
+
+      // If the calculated close time is in the past, this indicates the service was paused
+      if (calculatedCloseTime < now) {
+        // When service resumes, provide a reasonable countdown based on the interval
+        // For shorter intervals (< 5 min), give 30 seconds
+        // For longer intervals, give a proportional amount but cap it at 5 minutes
+        const minCountdown = 30 // minimum 30 seconds
+        const maxCountdown = 300 // maximum 5 minutes
+        const proportionalCountdown = Math.min(intervalSeconds * 0.1, maxCountdown) // 10% of interval, capped
+        const resumeCountdownSeconds = Math.max(minCountdown, proportionalCountdown)
+
+        return now + resumeCountdownSeconds
+      }
+
+      return calculatedCloseTime
     }
-    return currentRound.closeTimestamp
+    return Number(currentRound.closeTimestamp)
   },
 )
 
