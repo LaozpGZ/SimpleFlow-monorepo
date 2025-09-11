@@ -7,11 +7,21 @@ import { Address } from 'viem/accounts'
 import { isSolana } from '@pancakeswap/chains'
 import { ExclusiveDutchOrderTrade } from '@pancakeswap/pcsx-sdk'
 import { SOLANA_NATIVE_TOKEN_ADDRESS } from 'quoter/consts'
-import { AddressLookupTableAccount, Connection, PublicKey, Transaction, VersionedTransaction } from '@solana/web3.js'
+import {
+  AddressLookupTableAccount,
+  Connection,
+  PublicKey,
+  Transaction,
+  VersionedTransaction,
+  TransactionInstruction,
+  ComputeBudgetProgram,
+  TransactionMessage,
+} from '@solana/web3.js'
 import { WalletContextState } from '@solana/wallet-adapter-react'
 import { buildTransaction, detectWalletTransactionSupport } from 'components/WalletModalV2/utils/solanaSendTransaction'
 import { Calldata } from 'hooks/usePermit2'
 import { BridgeTradeError } from 'quoter/quoter.types'
+import { getSimulationComputeUnits } from 'utils/getSimulationComputeUnits'
 import { BridgeOrderWithCommands, isSVMOrder } from '../utils'
 import {
   BridgeDataSchema,
@@ -182,7 +192,7 @@ export const getSolanaToEVMBridgeCalldata = async ({
 
   const rawInstructions = data?.steps?.[0]?.items?.[0]?.data?.instructions || []
 
-  const instructions = convertStepsIntoTransactionInstruction(rawInstructions)
+  let instructions = convertStepsIntoTransactionInstruction(rawInstructions)
 
   // Detect wallet transaction support
   const walletSupportsV0 = detectWalletTransactionSupport(solanaWalletContext)
@@ -198,7 +208,27 @@ export const getSolanaToEVMBridgeCalldata = async ({
             ),
           ).then((addresses) => addresses.map((address) => address.value))
         ).filter(Boolean) as AddressLookupTableAccount[])
-      : undefined
+      : []
+
+  // Get the estimated compute units
+  const computeUnits = await getSimulationComputeUnits(
+    solanaConnection,
+    instructions,
+    solanaWalletContext.publicKey,
+    lookupTableAddresses,
+  )
+
+  // Why need to set compute units limit?
+  // Some wallets don't support compute units limit before sending transaction
+  // Therefore, it will submit failed transaction due to insufficient compute units
+  instructions = computeUnits
+    ? [
+        ComputeBudgetProgram.setComputeUnitLimit({
+          units: computeUnits,
+        }),
+        ...instructions,
+      ]
+    : instructions
 
   const transaction = await buildTransaction(
     instructions,
