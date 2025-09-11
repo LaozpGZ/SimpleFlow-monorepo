@@ -60,4 +60,4 @@ scripts/dev/**
 *.tsbuildinfo
 
 # cursor
-.cursor/rules/**
+.cursor/rules/personal/**
