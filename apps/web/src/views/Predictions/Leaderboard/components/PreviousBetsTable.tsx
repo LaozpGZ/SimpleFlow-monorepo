@@ -91,7 +91,9 @@ const PreviousBetsTable: React.FC<React.PropsWithChildren<PreviousBetsTableProps
               const payout =
                 !isCancelled && isWinner ? (claimed ? bet.claimedNetBNB : getNetPayout(bet, REWARD_RATE)) : bet.amount
 
-              const isHouseWin = bet?.round?.position === BetPosition.HOUSE
+              // Somehow when round is live, the bet.round.position is "House", so check closePrice instead
+              const isHouseWin =
+                bet.round && Boolean(bet.round.closePrice) && bet?.round?.position === BetPosition.HOUSE
 
               return (
                 <tr key={bet.id}>
