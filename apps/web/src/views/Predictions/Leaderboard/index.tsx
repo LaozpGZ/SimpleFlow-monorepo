@@ -21,40 +21,43 @@ const Leaderboard = () => {
   const { address: account } = useAccount()
   const filters = useGetLeaderboardFilters()
   const leaderboardLoadingState = useGetLeaderboardLoadingState()
-  const [isFirstTime, setIsFirstTime] = useState<boolean>(true)
+  const [isInitialized, setIsInitialized] = useState<boolean>(false)
   const [pickedChainId, setPickedChainId] = useState<ChainId>(ChainId.BSC)
-  const [pickedTokenSymbol, setPickedTokenSymbol] = useState<PredictionSupportedSymbol>(PredictionSupportedSymbol.BNB)
+  const [pickedTokenSymbol, setPickedTokenSymbol] = useState<PredictionSupportedSymbol | null>(null)
 
   const predictionConfigs = usePredictionConfigs(pickedChainId)
 
+  // Initialize chain from URL query
   useEffect(() => {
     if (typeof query?.chain === 'string' && SUPPORTED_CHAIN_IDS.includes(Number(chainNameToChainId[query?.chain]))) {
       setPickedChainId(Number(chainNameToChainId[query?.chain]))
     }
-  }, [query])
+  }, [query?.chain])
 
+  // Initialize token from URL query and set as initialized
   useEffect(() => {
     if (predictionConfigs) {
-      const defaultPickedTokenSymbol =
+      const tokenFromQuery =
         typeof query?.token === 'string' &&
         PredictionSupportedSymbol?.[query?.token] &&
         predictionConfigs[PredictionSupportedSymbol?.[query?.token]]
           ? PredictionSupportedSymbol?.[query?.token]
           : (Object.values(predictionConfigs)?.[0]?.predictionCurrency.symbol as PredictionSupportedSymbol)
 
-      setPickedTokenSymbol(defaultPickedTokenSymbol)
-      setIsFirstTime(false)
+      setPickedTokenSymbol(tokenFromQuery)
+      setIsInitialized(true)
     }
-  }, [query, predictionConfigs, pickedChainId])
+  }, [query?.token, predictionConfigs, pickedChainId])
 
+  // Fetch leaderboard data only after initialization is complete
   useEffect(() => {
-    if (predictionConfigs && !isFirstTime) {
+    if (predictionConfigs && isInitialized && pickedTokenSymbol) {
       const extra = predictionConfigs?.[pickedTokenSymbol] ?? Object.values(predictionConfigs)?.[0]
       dispatch(filterLeaderboard({ filters, extra }))
     }
-  }, [isFirstTime, account, filters, dispatch, predictionConfigs, pickedChainId, pickedTokenSymbol])
+  }, [isInitialized, account, filters, dispatch, predictionConfigs, pickedChainId, pickedTokenSymbol])
 
-  if (leaderboardLoadingState === FetchStatus.Idle) {
+  if (leaderboardLoadingState === FetchStatus.Idle || !isInitialized || !pickedTokenSymbol) {
     return <PageLoader />
   }
 

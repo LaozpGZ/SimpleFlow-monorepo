@@ -1,4 +1,4 @@
-import { ChainId } from '@pancakeswap/chains'
+import { ChainId, chainNames } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { PredictionConfig, PredictionSupportedSymbol, targetChains } from '@pancakeswap/prediction'
 import { Box, Flex, OptionProps, Select, Text } from '@pancakeswap/uikit'
@@ -6,6 +6,7 @@ import Container from 'components/Layout/Container'
 import { getImageUrlFromToken } from 'components/TokenImage'
 import { ASSET_CDN } from 'config/constants/endpoints'
 import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
+import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
 import { setLeaderboardFilter } from 'state/predictions'
 import { styled } from 'styled-components'
@@ -55,6 +56,7 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
   setPickedChainId,
 }) => {
   const { t } = useTranslation()
+  const router = useRouter()
   const dispatch = useLocalDispatch()
   const [pickedOrder, setPickedOrder] = useState(DEFAULT_ORDER)
 
@@ -107,11 +109,41 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
   const handleSwitchNetwork = (option: OptionProps) => {
     resetOrder()
     setPickedChainId(option?.value)
+
+    // Update URL to maintain consistency - remove token so it defaults to the new chain's default
+    const chainName = chainNames[Number(option?.value)]
+    if (chainName) {
+      // Create new query object without the token parameter so it defaults to the new chain's first token
+      const { token, ...queryWithoutToken } = router.query
+      const newQuery = { ...queryWithoutToken, chain: chainName }
+
+      router.replace(
+        {
+          pathname: router.pathname,
+          query: newQuery,
+        },
+        undefined,
+        { shallow: true },
+      )
+    }
   }
 
   const handleTokenChange = (option: OptionProps) => {
     resetOrder()
     setPickedTokenSymbol(option?.value)
+
+    // Update URL to maintain consistency
+    router.replace(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          token: option?.value,
+        },
+      },
+      undefined,
+      { shallow: true },
+    )
   }
 
   const orderSelectedIndex = useMemo(() => {
