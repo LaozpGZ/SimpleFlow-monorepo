@@ -80,7 +80,7 @@ import { HandleFeePoolSelectFn, QUICK_ACTION_CONFIGS } from 'views/AddLiquidityV
 import { MarketPriceSlippageWarning } from 'views/CreateLiquidityPool/components/SubmitCreateButton'
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { Dot } from 'views/Notifications/styles'
-import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton } from 'components/SlippageButton'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTotalUsdValue } from '../../../AddLiquidity/hooks/useTotalUsdValue'

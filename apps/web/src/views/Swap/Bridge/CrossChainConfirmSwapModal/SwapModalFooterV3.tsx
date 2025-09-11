@@ -28,7 +28,7 @@ import { usePaymaster } from 'hooks/usePaymaster'
 import { isAddressEqual } from 'utils'
 import { SlippageAdjustedAmounts, TradePriceBreakdown, formatExecutionPrice } from 'views/Swap/V3Swap/utils/exchange'
 import FormattedPriceImpact from 'views/Swap/components/FormattedPriceImpact'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { SlippageButton } from 'components/SlippageButton'
 import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/styleds'
 import { EVMInterfaceOrder, InterfaceOrder, isBridgeOrder, isXOrder } from 'views/Swap/utils'
 

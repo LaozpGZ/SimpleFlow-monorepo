@@ -19,7 +19,7 @@ import { CurrencyLogoWrapper, RouterBox, RouterTypeText } from 'views/Swap/compo
 import { useHookDiscount } from 'views/SwapSimplify/hooks/useHookDiscount'
 import { Currency, SPLToken, UnifiedCurrency } from '@pancakeswap/sdk'
 import { useUnifiedCurrency } from 'hooks/Tokens'
-import { TertiaryButton } from 'views/Swap/components/SlippageButton'
+import { TertiaryButton } from 'components/SlippageButton'
 import { useTheme } from '@pancakeswap/hooks'
 
 import { BridgeRoutesDisplay } from './RouteDisplay/BridgeRoutesDisplay'
