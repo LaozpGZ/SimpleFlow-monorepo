@@ -97,15 +97,19 @@ export const getCurrentRoundCloseTimestampSelector = createSelector(
 
       // If the calculated close time is in the past, this indicates the service was paused
       if (calculatedCloseTime < now) {
-        // When service resumes, provide a reasonable countdown based on the interval
-        // For shorter intervals (< 5 min), give 30 seconds
-        // For longer intervals, give a proportional amount but cap it at 5 minutes
-        const minCountdown = 30 // minimum 30 seconds
-        const maxCountdown = 300 // maximum 5 minutes
-        const proportionalCountdown = Math.min(intervalSeconds * 0.1, maxCountdown) // 10% of interval, capped
-        const resumeCountdownSeconds = Math.max(minCountdown, proportionalCountdown)
+        // Try to use the next round's startTimestamp for accurate timing
+        const nextRound = rounds?.[currentEpoch]
 
-        return now + resumeCountdownSeconds
+        if (nextRound?.startTimestamp) {
+          const nextRoundStart = Number(nextRound.startTimestamp)
+          // Current round should close when next round starts
+          if (nextRoundStart > now) {
+            return nextRoundStart
+          }
+        }
+
+        // If we can't get accurate timing, return 0 to show "Closing"
+        return 0
       }
 
       return calculatedCloseTime
