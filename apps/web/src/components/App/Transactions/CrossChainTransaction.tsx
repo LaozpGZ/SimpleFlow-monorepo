@@ -33,7 +33,7 @@ import { bridgeStatusQueryKey } from 'views/Swap/Bridge/hooks/useBridgeStatus'
 import { ActiveBridgeOrderMetadata, BridgeStatus, UserBridgeOrder } from 'views/Swap/Bridge/types'
 import { getBridgeTitle } from 'views/Swap/Bridge/utils/bridgeTitle'
 import { customBridgeStatus } from 'views/Swap/Bridge/utils/customBridgeStatus'
-import { chainNames } from '@pancakeswap/chains'
+import { chainNames, isSolana } from '@pancakeswap/chains'
 import upperCase from 'lodash/upperCase'
 
 const StyledChainLogo = styled(ChainLogo)`
@@ -44,6 +44,22 @@ const StyledChainLogo = styled(ChainLogo)`
     border: 1px solid ${({ theme }) => theme.colors.invertedContrast};
   }
 `
+
+function getProperChainIdBasedOnTransactionHash({
+  fillTransactionHash,
+  originChainId,
+  destinationChainId,
+}: {
+  fillTransactionHash: string
+  originChainId: number
+  destinationChainId: number
+}) {
+  // if solana bridge, check if fillTransactionHash is evm transaction hash either return destinationChainId or originChainId based on fillTransactionHash
+  if (isSolana(destinationChainId) || isSolana(originChainId)) {
+    return fillTransactionHash.startsWith('0x') === isSolana(destinationChainId) ? originChainId : destinationChainId
+  }
+  return fillTransactionHash ? destinationChainId : originChainId
+}
 
 export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
   const { t } = useTranslation()
@@ -135,7 +151,11 @@ export function CrossChainTransaction({ order }: { order: UserBridgeOrder }) {
           <FlexGap gap="0.25rem" justifyContent="flex-end">
             {order.transactionHash ? (
               <ViewOnExplorerButton
-                chainId={order.fillTransactionHash ? order.destinationChainId : order.originChainId}
+                chainId={getProperChainIdBasedOnTransactionHash({
+                  fillTransactionHash: order.fillTransactionHash,
+                  originChainId: order.originChainId,
+                  destinationChainId: order.destinationChainId,
+                })}
                 address={order.fillTransactionHash || order.transactionHash}
                 type="transaction"
                 color="primary60"
