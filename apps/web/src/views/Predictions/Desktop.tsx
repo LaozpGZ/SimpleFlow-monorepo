@@ -227,12 +227,12 @@ const Desktop: React.FC<React.PropsWithChildren> = () => {
         </PositionPane>
 
         <Gutter ref={gutterRef} $isChartPaneOpen={isChartPaneOpen} onClick={openChartPane}>
-          {config?.chainlinkOracleAddress && (
+          {!isChartPaneOpen && config?.chainlinkOracleAddress && (
             <PowerLinkStyle href="https://chain.link/" external>
               <img src="/images/powered-by-chainlink.svg" alt="Powered by ChainLink" width="170px" height="48px" />
             </PowerLinkStyle>
           )}
-          {config?.galetoOracleAddress && (
+          {!isChartPaneOpen && config?.galetoOracleAddress && (
             <PowerLinkStyle href="https://pyth.network/" external>
               <img src="/images/powered-by-pyth.svg" alt="Powered by PYTH" width="170px" height="48px" />
             </PowerLinkStyle>
