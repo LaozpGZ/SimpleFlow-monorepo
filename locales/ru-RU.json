@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Зарабатывайте Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
-  "Trade for a Chance to Win %amount%.": "Trade for a Chance to Win %amount%.",
   "Enter value between %min% and %max%": "Введите значение в пределах от %min% до %max%",
   "balance not enough": "недостаточный баланс",
   "Select base token": "Выберите базовый токен",
@@ -4147,5 +4146,6 @@
   "How many tokens will I get?": "How many tokens will I get?",
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
-  "Target Raise": "Повышение цели"
+  "Target Raise": "Повышение цели",
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
 }
