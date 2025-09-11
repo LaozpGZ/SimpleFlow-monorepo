@@ -1,6 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { PredictionSupportedSymbol } from '@pancakeswap/prediction'
-import { ArrowBackIcon, Card, CardBody, Heading, IconButton } from '@pancakeswap/uikit'
+import { ArrowBackIcon, Card, CardBody, Heading, Button } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { styled } from 'styled-components'
 import { useConfig } from 'views/Predictions/context/ConfigProvider'
@@ -30,7 +30,7 @@ const BunnyDecoration = styled.div`
   cursor: pointer;
 `
 
-const BackButtonStyle = styled(IconButton)`
+const BackButtonStyle = styled(Button)`
   position: relative;
   top: 120px;
   width: 40%;
@@ -38,10 +38,11 @@ const BackButtonStyle = styled(IconButton)`
 
 const BackButton = () => {
   const { t } = useTranslation()
+  const router = useRouter()
 
   return (
-    <BackButtonStyle variant="primary" width="100%">
-      <ArrowBackIcon color="white" mr="8px" />
+    <BackButtonStyle variant="primary" width="100%" onClick={() => router.back()}>
+      <ArrowBackIcon color="invertedContrast" mr="8px" />
       {t('Back')}
     </BackButtonStyle>
   )

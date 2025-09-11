@@ -2,6 +2,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { Box, Flex, PocketWatchIcon, Text } from '@pancakeswap/uikit'
 import { useGetCurrentRoundCloseTimestamp, useGetIntervalTimeInMinutes } from 'state/predictions/hooks'
 import { keyframes, styled } from 'styled-components'
+import isUndefinedOrNull from '@pancakeswap/utils/isUndefinedOrNull'
 import { formatRoundTime } from '../helpers'
 import useCountdown from '../hooks/useCountdown'
 
@@ -47,6 +48,20 @@ const ClosingTitle = styled(Text)`
   ${({ theme }) => theme.mediaQueries.lg} {
     font-size: 20px;
     line-height: 22px;
+  }
+`
+
+const StartingSoonTitle = styled(Title)`
+  font-size: 9px;
+  min-width: auto;
+
+  ${({ theme }) => theme.mediaQueries.sm} {
+    font-size: 16px;
+    min-width: max-content;
+  }
+
+  ${({ theme }) => theme.mediaQueries.lg} {
+    font-size: 20px;
   }
 `
 
@@ -142,7 +157,7 @@ export const TimerLabel = () => {
   const currentRoundCloseTimestamp = useGetCurrentRoundCloseTimestamp()
   const { secondsRemaining } = useCountdown(currentRoundCloseTimestamp ?? 0)
 
-  if (!currentRoundCloseTimestamp) {
+  if (currentRoundCloseTimestamp === 0 || isUndefinedOrNull(currentRoundCloseTimestamp)) {
     return null
   }
 
@@ -151,10 +166,10 @@ export const TimerLabel = () => {
   return (
     <Box pr="24px" position="relative">
       <Label dir="right">
-        {secondsRemaining === -1 ? (
-          <Title bold color="secondary">
+        {currentRoundCloseTimestamp === -1 ? (
+          <StartingSoonTitle bold color="secondary">
             {t('Starting Soon')}
-          </Title>
+          </StartingSoonTitle>
         ) : secondsRemaining !== 0 ? (
           <Title bold color="secondary">
             {countdown}

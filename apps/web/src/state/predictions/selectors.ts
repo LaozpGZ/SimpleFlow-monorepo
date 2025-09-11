@@ -91,9 +91,11 @@ export const getCurrentRoundCloseTimestampSelector = createSelector(
       return undefined
     }
 
-    if (!currentRound.closeTimestamp) {
+    const now = Math.floor(Date.now() / 1000)
+
+    // Current round cancelled
+    if (!currentRound.closeTimestamp || currentRound.closeTimestamp < now + intervalSeconds) {
       const calculatedCloseTime = Number(currentRound.lockTimestamp) + intervalSeconds
-      const now = Math.floor(Date.now() / 1000)
 
       // If the calculated close time is in the past, this indicates the service was paused
       if (calculatedCloseTime < now) {
@@ -105,6 +107,17 @@ export const getCurrentRoundCloseTimestampSelector = createSelector(
           // Current round should close when next round starts
           if (nextRoundStart > now) {
             return nextRoundStart
+          }
+
+          // Check Next to Next Round (after Open Round)
+          const nextNextRound = rounds?.[currentEpoch + 1]
+
+          if (nextNextRound?.startTimestamp) {
+            const nextNextRoundStart = Number(nextNextRound.startTimestamp)
+
+            if (nextNextRoundStart > now) {
+              return nextNextRoundStart
+            }
           }
         }
 
