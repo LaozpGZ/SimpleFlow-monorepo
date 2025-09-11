@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "ஃபால்கன் மைல்களை சம்பாதிக்கவும்!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "மொத்த TVL பங்களிப்பின் அடிப்படையில் LPகள் %multiplier%x ஃபால்கன்ஸ் மைல்களை ஈட்டுகின்றன. 0.95 முதல் 1.05 வரம்பிற்குள் உள்ள பொசிஷன்களுக்கு மட்டுமே மைல்கள் சேரும்.",
-  "Trade for a Chance to Win %amount%.": "%amount% வெல்லும் வாய்ப்புக்கு டிரேட் செய்யுங்கள்.",
   "Enter value between %min% and %max%": "%min% மற்றும் %max% க்கு இடையிலான மதிப்பை உள்ளிடவும்",
   "balance not enough": "போதுமான பேலன்ஸ் இல்லை",
   "Select base token": "பேஸ் டோக்கனைத் தேர்ந்தெடுக்கவும்",
@@ -4147,5 +4146,6 @@
   "How many tokens will I get?": "How many tokens will I get?",
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
-  "Target Raise": "இலக்கு உயர்வு"
+  "Target Raise": "இலக்கு உயர்வு",
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
 }
