@@ -2,5 +2,5 @@ import { useTranslation, Trans } from '@pancakeswap/localization'
 
 export const TestI18n = () => {
   const { t } = useTranslation()
-  return <p />
+  return <Trans>Test Trigger</Trans>
 }
