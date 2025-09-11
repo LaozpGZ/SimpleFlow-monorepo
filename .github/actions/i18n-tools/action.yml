@@ -1,0 +1,11 @@
+name: "i18n-pcs"
+description: "Translate repo files using i18n-pcs CLI"
+author: "Chefs"
+runs:
+  using: "node20"
+  main: "bundle/gh.js"
+
+inputs:
+  command:
+    description: "The command we want to run"
+    required: true

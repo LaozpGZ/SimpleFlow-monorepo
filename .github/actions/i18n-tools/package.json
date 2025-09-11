@@ -1,0 +1,35 @@
+{
+  "name": "i18n-pcs",
+  "version": "0.1.0",
+  "bin": {
+    "i18n-pcs": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "bundle": "tsc && esbuild dist/gh.js --bundle --platform=node --target=node20 --outfile=bundle/gh.js",
+    "test": "npm run build"
+  },
+  "dependencies": {
+    "@google/genai": "^1.19.0",
+    "ajv": "^8.12.0",
+    "ignore": "^5.3.1",
+    "p-limit": "^3.1.0",
+    "@actions/core": "^1.11.1",
+    "@actions/exec": "^1.1.1",
+    "@actions/github": "^6.0.1",
+    "@octokit/core": "^5.2.1",
+    "@octokit/plugin-throttling": "^8.0.0",
+    "@changesets/ghcommit": "^2.0.0",
+    "@changesets/pre": "^2.0.2",
+    "@changesets/read": "^0.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "esbuild": "^0.25.9",
+    "typescript": "^5.3.3",
+    "@changesets/changelog-github": "^0.5.1",
+    "@changesets/cli": "^2.29.3",
+    "@changesets/write": "^0.4.0"
+  }
+}
