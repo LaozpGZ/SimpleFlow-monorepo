@@ -44,8 +44,6 @@ const PreviousBetsTable: React.FC<React.PropsWithChildren<PreviousBetsTableProps
             token?.symbol,
           )
 
-          console.log('PreviousBetsTable::response', { response, token })
-
           const transformer = transformBetResponse(token?.symbol, token?.chainId)
 
           setBets(response.map(transformer))
