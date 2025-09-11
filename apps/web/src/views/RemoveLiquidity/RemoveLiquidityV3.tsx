@@ -55,6 +55,7 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { logGTMClickRemoveLiquidityEvent } from 'utils/customGTMEventTracking'
 import { isUserRejected } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
+import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
 import { useBurnV3ActionHandlers } from './form/hooks'
 
 const BorderCard = styled.div`
@@ -550,6 +551,11 @@ function Remove({ tokenId }: { tokenId?: bigint }) {
               )}
             </Message>
           ) : null}
+
+          <Flex mb="24px" justifyContent="space-between" alignItems="center">
+            <Text>{t('Slippage Tolerance')}</Text>
+            <LiquiditySlippageButton />
+          </Flex>
 
           <Button
             disabled={attemptingTxn || removed || Boolean(error)}
