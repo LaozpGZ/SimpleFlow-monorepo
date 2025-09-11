@@ -32,6 +32,9 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
+      - name: Remove i18n-tools git metadata
+        run: rm -rf .github/actions/i18n-tools
+
       - name: Commit changes
         id: commit
         run: |
