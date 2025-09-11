@@ -48,7 +48,7 @@ export const GiftInfoDetailView = () => {
   const status =
     giftInfo.status === GiftStatus.PENDING && isExpired(giftInfo.expiryTimestamp) ? GiftStatus.EXPIRED : giftInfo.status
 
-  const showNote = status === GiftStatus.CANCELLED || status === GiftStatus.EXPIRED
+  const showNote = status === GiftStatus.CANCELLED || status === GiftStatus.EXPIRED || status === GiftStatus.UNCLAIMABLE
 
   return (
     <>
@@ -58,6 +58,11 @@ export const GiftInfoDetailView = () => {
           description={t(
             'The gift has expired. The full amount, minus the claim gas fee, has been returned to your wallet.',
           )}
+        />
+      ) : status === GiftStatus.UNCLAIMABLE ? (
+        <GiftInfoDescription
+          text={t('Gift Failed to Claim')}
+          description={t('The gift claim failed. You can cancel this gift to return the tokens to your wallet.')}
         />
       ) : (
         <GiftInfoDescription
@@ -151,7 +156,8 @@ export const GiftInfoDetailView = () => {
       ) : (
         // if status is pending and expiryTimestamp is in the past, it is expired
         // but user might need to manually cancel the gift in case auto cancel is not working
-        giftInfo.status === GiftStatus.PENDING && (
+        // Also show cancel button for UNCLAIMABLE status when claim fails
+        (giftInfo.status === GiftStatus.PENDING || giftInfo.status === GiftStatus.UNCLAIMABLE) && (
           <Button
             onClick={handleCancelGift}
             variant="danger"

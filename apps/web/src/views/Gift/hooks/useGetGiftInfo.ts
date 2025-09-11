@@ -110,7 +110,7 @@ export const useGetGiftInfo = () => {
         .filter((gift) => gift !== null)
         .filter((gift) => {
           if (unclaimedOnly) {
-            return gift.status === GiftStatus.PENDING
+            return gift.status === GiftStatus.PENDING || gift.status === GiftStatus.UNCLAIMABLE
           }
           return true
         })

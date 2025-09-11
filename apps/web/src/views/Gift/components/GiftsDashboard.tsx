@@ -107,7 +107,7 @@ export const GiftsDashboard = ({ setViewState }: { setViewState: (viewState: Vie
                       </Text>
                     </Flex>
                   </Flex>
-                  {gift.status === GiftStatus.PENDING && (
+                  {(gift.status === GiftStatus.PENDING || gift.status === GiftStatus.UNCLAIMABLE) && (
                     <IconButton
                       variant="text"
                       onClick={() => {

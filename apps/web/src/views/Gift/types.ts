@@ -7,6 +7,7 @@ export enum GiftStatus {
   EXPIRED = 'EXPIRED',
   REQUESTED_CLAIM = 'REQUESTED_CLAIM',
   CANCELLED = 'CANCELLED',
+  UNCLAIMABLE = 'UNCLAIMABLE',
 }
 
 export interface GiftInfoResponse {

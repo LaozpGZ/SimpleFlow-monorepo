@@ -13,6 +13,8 @@ const getStatusVariant = (status: GiftStatus) => {
       return 'textDisabled'
     case GiftStatus.REQUESTED_CLAIM:
       return 'warning'
+    case GiftStatus.UNCLAIMABLE:
+      return 'failure'
     default:
       return 'primary'
   }
@@ -30,6 +32,8 @@ const getStatusText = (status: GiftStatus) => {
       return 'Expired'
     case GiftStatus.REQUESTED_CLAIM:
       return 'Requested'
+    case GiftStatus.UNCLAIMABLE:
+      return 'Unclaimable'
     default:
       return status
   }
