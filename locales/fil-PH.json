@@ -4152,5 +4152,6 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "Sinusuportahan ng %Wallet% ang maraming ecosystem. Mangyaring piliin kung aling chain/mga chain ang ikokonekta.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "Ang EVM ay nangangahulugang Ethereum Virtual Machine at nagpapahintulot sa iba't ibang blockchain na magpatakbo ng mga app na batay sa Ethereum gamit ang parehong wallet at address",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Nag-aalok ang wallet na ito sa PancakeSwap ng <0>proteksyon ng MEV</0> laban sa front-running at sandwich attacks sa mga EVM chain.",
-  "Wallets with <0>MEV Protection</0>.": "Mga wallet na may <0>Proteksyon ng MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Mga wallet na may <0>Proteksyon ng MEV</0>.",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Punan ang <0>Form ng Aplikasyon</0></p>"
 }
