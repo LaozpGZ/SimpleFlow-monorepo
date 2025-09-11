@@ -103,7 +103,7 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
 
   // Verify if the user can Re-claim in the contract in case of failed status
   const predictionsContract = usePredictionsContract(config?.address ?? '0x', config?.version)
-  const { data: canClaimInContract } = useQuery({
+  const { data: canClaimInContract, refetch: refetchCanClaimInContract } = useQuery({
     queryKey: ['canClaimInContract', account, chainId, round],
     queryFn: async (): Promise<boolean> => {
       try {
@@ -201,6 +201,8 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
       dispatch(markAsCollected({ [bet.round.epoch]: true }))
       dispatch(fetchLedgerData({ account, chainId, epochs: [bet.round.epoch] }))
     }
+
+    refetchCanClaimInContract()
   }
 
   return (
