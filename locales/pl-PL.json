@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Portfele z inteligentnymi kontraktami nie są obecnie obsługiwane w serwisie %product%. Aby kontynuować, przed rozpoczęciem korzystania z produktu przejdź z powrotem do portfela EOA (Externally Owned Account, konto zewnętrzne).",
   "Earn Falcon Miles!": "Zbieraj Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP otrzymują %multiplier%-krotność Falcon Miles na podstawie całkowitej wartości TVL wniesionej do puli. Falcon Miles są naliczane tylko dla pozycji w zakresie od 0,95 do 1,05.",
-  "Trade for a Chance to Win %amount%.": "Handluj, aby mieć szansę na wygranie %amount%.",
   "Enter value between %min% and %max%": "Wprowadź wartość z przedziału od %min% do %max%",
   "balance not enough": "niewystarczające saldo",
   "Select base token": "Wybierz token bazowy",
@@ -4147,5 +4146,6 @@
   "How many tokens will I get?": "How many tokens will I get?",
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
-  "Target Raise": "Docelowy wzrost"
+  "Target Raise": "Docelowy wzrost",
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
 }
