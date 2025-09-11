@@ -2,7 +2,8 @@
   "requirements": [
     "The translation is used for PancakeSwap, the translated text should be profession in crypto industry",
     "When there are template variables such as %xxx%, no need to translate the %xx% part",
-    "For brand names, networks, tokens such as PancakeSwap, CAKE, BNB, MoonPay, Acceleraytor, Merkl, Github, Springboard, veCAKE, CAKE, BNB, SOL, ETH, USDT, USDC, Arbitrum One, Base, Ethereum, Linea, Polygon zkEVM, zkSync Era, Solana etc., no need to translate them"
+    "For brand names, networks, tokens such as PancakeSwap, CAKE, BNB, MoonPay, Acceleraytor, Merkl, Github, Springboard, veCAKE, CAKE, BNB, SOL, ETH, USDT, USDC, Arbitrum One, Base, Ethereum, Linea, Polygon zkEVM, zkSync Era, Solana etc., no need to translate them",
+    "More user-friendly, crypto/finance tone"
   ],
   "scanDirs": [
     "apps/solana",
