@@ -4,7 +4,7 @@ import { Box, Button, Flex, HelpIcon, PrizeIcon, useMatchBreakpoints } from '@pa
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useGetPredictionsStatus } from 'state/predictions/hooks'
 import { styled } from 'styled-components'
 import { TokenSelectorV2 } from './TokenSelectorV2'
@@ -73,15 +73,29 @@ const Menu = () => {
   const { query } = useRouter()
   const { chainId } = useActiveChainId()
   const { isMobile } = useMatchBreakpoints()
-
   const status = useGetPredictionsStatus()
+
+  const menuRef = useRef<HTMLDivElement>(null)
+  const [menuWidth, setMenuWidth] = useState<number | undefined>(undefined)
 
   const leaderboardUrl = useMemo(() => {
     return chainId ? `/prediction/leaderboard?chain=${chainNames[chainId]}&token=${query.token}` : ''
   }, [chainId, query.token])
 
+  // Track menu width to control mini mode of Token Selector
+  useEffect(() => {
+    if (menuRef.current) {
+      const observer = new ResizeObserver(() => {
+        setMenuWidth(menuRef.current?.clientWidth)
+      })
+      observer.observe(menuRef.current)
+      return () => observer.disconnect()
+    }
+    return () => {}
+  }, [menuRef])
+
   return (
-    <Box>
+    <Box ref={menuRef}>
       {isMobile && (
         <FlexRow mt="8px" mb="4px" justifyContent="center">
           <TokenSelectorV2 />
@@ -90,7 +104,7 @@ const Menu = () => {
       <FlexRow alignItems="center" p="16px" width="100%">
         <SetCol>
           {!isMobile ? (
-            <TokenSelectorV2 />
+            <TokenSelectorV2 menuWidth={menuWidth} />
           ) : (
             <TimerLabelMobileWrapper>
               <TimerLabel />

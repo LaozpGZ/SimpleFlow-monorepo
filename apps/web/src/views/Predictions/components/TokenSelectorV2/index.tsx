@@ -131,12 +131,18 @@ const TokenPrice = styled(Box)<{ isActive: boolean }>`
   white-space: nowrap;
 `
 
-export const TokenSelectorV2 = () => {
+interface TokenSelectorV2Props {
+  menuWidth?: number
+}
+
+export const TokenSelectorV2 = ({ menuWidth }: TokenSelectorV2Props) => {
   const { t } = useTranslation()
   const router = useRouter()
   const { isMobile } = useMatchBreakpoints()
   const config = useConfig()
   const predictionConfigs = usePredictionConfigs()
+
+  const isSmallScreen = isMobile || (menuWidth ? menuWidth < 1310 : false)
 
   const allTokens = useMemo(() => {
     if (!predictionConfigs || !config) return []
@@ -160,7 +166,7 @@ export const TokenSelectorV2 = () => {
   )
 
   // For mobile, show the mobile component
-  if (isMobile) {
+  if (isSmallScreen) {
     return <MobilePredictionTokenSelector tokens={allTokens} onClickSwitchToken={onClickSwitchToken} />
   }
 
