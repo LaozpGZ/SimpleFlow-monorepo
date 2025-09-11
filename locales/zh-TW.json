@@ -4152,7 +4152,5 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% 支援多個生態系統。請選擇要連接的鏈。",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM 是 Ethereum Virtual Machine 的縮寫，它允許不同的區塊鏈使用相同的錢包和地址運行基於 Ethereum 的應用程式",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "PancakeSwap 上的此錢包提供 <0>MEV 保護</0>，以防範在 EVM 鏈上的搶先交易和三明治攻擊。",
-  "Wallets with <0>MEV Protection</0>.": "具有 <0>MEV 保護</0> 的錢包。",
-  "Hello World!": "哈囉世界！",
-  "Hello <0>World</0>!": "哈囉<0>世界</0>！"
+  "Wallets with <0>MEV Protection</0>.": "具有 <0>MEV 保護</0> 的錢包。"
 }
