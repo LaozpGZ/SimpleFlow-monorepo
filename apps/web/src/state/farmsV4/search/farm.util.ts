@@ -64,6 +64,7 @@ export type FarmProps = {
   feeTierBase: number
   pid?: number
   isDynamicFee?: boolean
+  inWhitelist?: boolean
 }
 
 export type SerializedFarmInfo = FarmProps & {
