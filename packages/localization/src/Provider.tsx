@@ -4,8 +4,8 @@ import i18n from './i18n'
 import { EN, languages } from './config/languages'
 import { LS_KEY } from './helpers'
 import { ContextApi, Language, TranslateFunction } from './types'
-import extendEn from './config/translation.extend.json'
 import { useLocaleBundle } from './hooks/useLocaleBundle'
+import { extendEnList } from './config/extendList'
 
 export const LanguageContext = createContext<ContextApi | undefined>(undefined)
 
@@ -33,7 +33,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
         return cache.get(cacheKey) || ''
       }
 
-      const value = bundle[key] || (extendEn as Record<string, string>)[key] || key
+      const value = bundle[key] || extendEnList[key] || key
 
       const interpolated = value.replace(/%([a-zA-Z0-9-_]+)%/g, (match, p1) => {
         const replacement = data?.[p1] || ''
