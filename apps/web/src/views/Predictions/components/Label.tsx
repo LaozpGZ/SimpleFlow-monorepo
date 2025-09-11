@@ -151,7 +151,11 @@ export const TimerLabel = () => {
   return (
     <Box pr="24px" position="relative">
       <Label dir="right">
-        {secondsRemaining !== 0 ? (
+        {secondsRemaining === -1 ? (
+          <Title bold color="secondary">
+            {t('Starting Soon')}
+          </Title>
+        ) : secondsRemaining !== 0 ? (
           <Title bold color="secondary">
             {countdown}
           </Title>

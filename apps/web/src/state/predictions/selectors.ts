@@ -108,8 +108,8 @@ export const getCurrentRoundCloseTimestampSelector = createSelector(
           }
         }
 
-        // If we can't get accurate timing, return 0 to show "Closing"
-        return 0
+        // If we can't get accurate timing, return -1 to show "Starting Soon" in Label.tsx
+        return -1
       }
 
       return calculatedCloseTime
