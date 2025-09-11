@@ -15,13 +15,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Run i18n-tools private action
-        uses: pancakeswap/i18n-tools@main
+      - name: Checkout i18n-tools
+        uses: actions/checkout@v4
+        with:
+          repository: pancakeswap/i18n-tools
+          token: ${{ secrets.PCS_BOT_TOKEN }}
+          path: .github/actions/i18n-tools
+
+      - name: Run i18n-tools
+        uses: ./.github/actions/i18n-tools
         with:
           command: 'translate'
-        env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          GITHUB_TOKEN: ${{ secrets.PCS_BOT_TOKEN }}
+          env:
+            GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
       - name: Commit changes
         id: commit
