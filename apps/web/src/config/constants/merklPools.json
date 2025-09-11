@@ -6,6 +6,11 @@
   },
   {
     "chainId": 1,
+    "address": "0x0d9EA0D5E3f400b1df8F695be04292308c041E77",
+    "link": "https://app.merkl.xyz/opportunities/ethereum/CLAMM/0x0d9EA0D5E3f400b1df8F695be04292308c041E77"
+  },
+  {
+    "chainId": 1,
     "address": "0x7B94A5622035207d3f527d236d47B7714Ee0acBa",
     "link": "https://app.merkl.xyz/opportunities/ethereum/CLAMM/0x7B94A5622035207d3f527d236d47B7714Ee0acBa"
   },
@@ -16,8 +21,13 @@
   },
   {
     "chainId": 56,
-    "address": "0xAC0FE1C4126e4a9B644Adfc1303827e3bB5dDDF3",
-    "link": "https://app.merkl.xyz/opportunities/bsc/CLAMM/0xAC0FE1C4126e4a9B644Adfc1303827e3bB5dDDF3"
+    "address": "0xDA7630A141dBB6382DDb6409AeA7331da543B0Bb",
+    "link": "https://app.merkl.xyz/opportunities/bsc/CLAMM/0xDA7630A141dBB6382DDb6409AeA7331da543B0Bb"
+  },
+  {
+    "chainId": 56,
+    "address": "0x24618d12b5eA15bB6fe3c81bBb9E011b5D5b107c",
+    "link": "https://app.merkl.xyz/opportunities/bsc/CLAMM/0x24618d12b5eA15bB6fe3c81bBb9E011b5D5b107c"
   },
   {
     "chainId": 56,
@@ -26,12 +36,12 @@
   },
   {
     "chainId": 56,
-    "address": "0x03F83FdFb168E7A2A621691E4B15297B1917ab91",
-    "link": "https://app.merkl.xyz/opportunities/bsc/CLAMM/0x03F83FdFb168E7A2A621691E4B15297B1917ab91"
+    "address": "0xE38B4d4Dc90E6a0859bEE047689d97db7fD94621",
+    "link": "https://app.merkl.xyz/opportunities/bsc/CLAMM/0xE38B4d4Dc90E6a0859bEE047689d97db7fD94621"
   },
   {
     "chainId": 56,
-    "address": "0xd5a79aB649E0a5F20e995026d034a0bF28B8aACa",
-    "link": "https://app.merkl.xyz/opportunities/bsc/CLAMM/0xd5a79aB649E0a5F20e995026d034a0bF28B8aACa"
+    "address": "0x03F83FdFb168E7A2A621691E4B15297B1917ab91",
+    "link": "https://app.merkl.xyz/opportunities/bsc/CLAMM/0x03F83FdFb168E7A2A621691E4B15297B1917ab91"
   }
 ]
