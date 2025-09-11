@@ -35,10 +35,7 @@ import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckAp
 import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModalV2'
 import { EVMInterfaceOrder, isBridgeOrder, isClassicOrder, isSVMOrder, isXOrder } from 'views/Swap/utils'
-import {
-  CrossChainAPIErrorCode,
-  RELAY_ERROR,
-} from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
+import { useTradeErrorMessage } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 import { useAccount } from 'wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { isEvm, isSolana, NonEVMChainId } from '@pancakeswap/chains'
@@ -178,6 +175,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
   const { t } = useTranslation()
   const { chainId } = useAccountActiveChain()
+  const getTradeErrorMessage = useTradeErrorMessage()
   // form data
   const { independentField, typedValue } = useSwapState()
   const [inputCurrency, outputCurrency] = useSwapCurrency()
@@ -422,38 +420,17 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   })
 
   const buttonText = useMemo(() => {
-    // NOTE: use if statement for readability
+    // Priority order for button text
 
     if (isRecipientEmpty) return t('Enter a recipient')
     if (isRecipientError) return t('Invalid recipient')
-    if (tradeError instanceof BridgeTradeError) {
-      if (tradeError.message.includes("doesn't have enough funds to support this deposit")) {
-        return t('Retry with lower input amount!')
-      }
 
-      if (
-        tradeError.message.includes('too low relative to fees') ||
-        tradeError.message === RELAY_ERROR.AMOUNT_TOO_LOW
-      ) {
-        return t('Retry with higher input amount!')
-      }
-
-      if (tradeError.message === RELAY_ERROR.NO_SWAP_ROUTES_FOUND) {
-        return t('No Quotes')
-      }
-
-      // Handle CrossChainAPIErrorCode 5000-5013 with friendly messages
-      if (
-        [CrossChainAPIErrorCode.SERVER_ERROR, CrossChainAPIErrorCode.DOWNSTREAM_SERVER_ERROR].includes(
-          tradeError.message as CrossChainAPIErrorCode,
-        ) ||
-        tradeError.message === RELAY_ERROR.UNKNOWN_ERROR
-      ) {
-        return t('Server error. Please try again!')
-      }
-
-      return tradeError.message
+    // Handle trade errors using centralized error message logic
+    if (tradeError) {
+      const errorMessage = getTradeErrorMessage(tradeError)
+      if (errorMessage) return errorMessage
     }
+
     if (swapInputError) return swapInputError
 
     if (tradeLoading) return <Dots>{t('Searching For The Best Price')}</Dots>
@@ -475,6 +452,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     tradeLoading,
     tradeError,
     isBridgeCheckApprovalLoading,
+    getTradeErrorMessage,
   ])
 
   if (noRoute && userHasSpecifiedInputOutput && tradeError instanceof TimeoutError) {
