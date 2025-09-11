@@ -8,7 +8,7 @@ import { useTranslation } from '@pancakeswap/localization'
 import { LiquiditySlippageButton } from 'components/SlippageButton'
 import { useTotalUsdValue } from 'hooks/useTotalUsdValue'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 import { useAddDepositAmounts, useAddDepositAmountsEnabled } from '../hooks/useAddDepositAmounts'
 
 type FieldDepositAmountProps = BoxProps & {

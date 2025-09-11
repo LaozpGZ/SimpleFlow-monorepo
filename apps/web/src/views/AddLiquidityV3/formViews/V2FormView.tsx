@@ -35,7 +35,7 @@ import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { LiquiditySlippageButton, SlippageButton } from 'components/SlippageButton'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 import { useTotalUsdValue } from '../../../hooks/useTotalUsdValue'
 import { useNativeCurrencyInstead } from '../hooks/useNativeCurrencyInstead'
 

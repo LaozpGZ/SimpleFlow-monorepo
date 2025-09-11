@@ -22,7 +22,7 @@ import { Arrow, Break, PageButtons, TableWrapper } from 'views/Info/components/I
 import HoverInlineText from 'views/V3Info/components/HoverInlineText'
 import { shortenAddress } from 'views/V3Info/utils'
 import { formatTime } from 'views/V3Info/utils/date'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 import {
   BodyCell,
   ClickableColumnHeader,

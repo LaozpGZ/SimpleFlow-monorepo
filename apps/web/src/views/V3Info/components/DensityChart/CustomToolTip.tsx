@@ -3,7 +3,7 @@ import { AutoColumn, Text } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { PoolDataForView } from 'state/info/types'
 import { styled } from 'styled-components'
-import { formatAmount } from '../../utils/numbers'
+import { formatAmount } from 'utils/numbers'
 import { LightCard } from '../Card'
 import { RowBetween } from '../Row'
 

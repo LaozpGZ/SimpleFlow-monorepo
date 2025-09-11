@@ -6,7 +6,7 @@ import { LightCard, LightGreyCard } from '@pancakeswap/widgets-internal'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { isInfinityProtocol } from 'utils/protocols'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 
 const StyledCardBody = styled(CardBody)`
   border-bottom: 1px solid ${({ theme }) => theme.colors.cardBorder};

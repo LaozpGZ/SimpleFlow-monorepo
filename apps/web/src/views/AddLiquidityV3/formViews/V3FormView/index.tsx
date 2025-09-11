@@ -81,7 +81,7 @@ import { MarketPriceSlippageWarning } from 'views/CreateLiquidityPool/components
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import { Dot } from 'views/Notifications/styles'
 import { LiquiditySlippageButton } from 'components/SlippageButton'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { useTotalUsdValue } from '../../../../hooks/useTotalUsdValue'
 import FeeSelector from './components/FeeSelector'

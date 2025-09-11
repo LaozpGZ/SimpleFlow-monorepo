@@ -19,7 +19,7 @@ import { Address } from 'viem'
 import { Tooltips } from 'components/Tooltips'
 import { useV3CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
 import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 
 // Helper function to standardize number conversion
 const safeParseFloat = (value: string | number | undefined): number => {

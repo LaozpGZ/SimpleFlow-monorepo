@@ -24,7 +24,7 @@ import { useCallback, useMemo, useState } from 'react'
 import { Field } from 'state/swap/actions'
 import styled from 'styled-components'
 import { computeSlippageAdjustedAmounts as computeSlippageAdjustedAmountsWithSmartRouter } from 'views/Swap/V3Swap/utils/exchange'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 
 import { formatScientificToDecimal } from '@pancakeswap/utils/formatNumber'
 import { SwapUIV2 } from '@pancakeswap/widgets-internal'

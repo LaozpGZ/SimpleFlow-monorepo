@@ -3,7 +3,7 @@ import { Box, Text } from '@pancakeswap/uikit'
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { multiplyPriceByAmount } from 'utils/prices'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 
 export function TokenAmountSection({ tokenAmount }: { tokenAmount?: CurrencyAmount<Token | NativeCurrency> }) {
   const stablePrice = useStablecoinPrice(tokenAmount?.currency)

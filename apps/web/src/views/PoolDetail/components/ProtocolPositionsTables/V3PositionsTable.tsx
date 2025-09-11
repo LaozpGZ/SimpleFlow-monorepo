@@ -48,7 +48,7 @@ import { V3UnstakeModalContent } from 'views/universalFarms/components/PositionA
 import { useCheckShouldSwitchNetwork } from 'views/universalFarms/hooks'
 import { useV3CakeEarningsByPool } from 'views/universalFarms/hooks/useCakeEarning'
 import { useV3PositionApr } from 'views/universalFarms/hooks/usePositionAPR'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 import { useAccount } from 'wagmi'
 import { ActionButton, PrimaryOutlineButton } from '../styles'
 import { V3EarningsCell } from './PoolEarningsCells'

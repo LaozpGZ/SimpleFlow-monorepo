@@ -39,7 +39,7 @@ import { AprTooltipContent } from 'views/universalFarms/components/PoolAprButton
 import { InfinityPositionActions } from 'views/universalFarms/components/PositionActions/InfinityPositionActions'
 import { useInfinityPositionsData } from 'views/universalFarms/hooks/useInfinityPositions'
 import { useInfinityCLPositionApr } from 'views/universalFarms/hooks/usePositionAPR'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 import { ActionButton } from '../styles'
 import { InfinityCLEarningsCell } from './PoolEarningsCells'
 import { PositionsTable } from './PositionsTable'
