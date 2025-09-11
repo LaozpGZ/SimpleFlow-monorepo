@@ -8,7 +8,7 @@ import { ASSET_CDN } from 'config/constants/endpoints'
 import useLocalDispatch from 'contexts/LocalRedux/useLocalDispatch'
 import { useRouter } from 'next/router'
 import { useMemo, useState } from 'react'
-import { setLeaderboardFilter } from 'state/predictions'
+import { setLeaderboardFilter, clearLeaderboardResults } from 'state/predictions'
 import { styled } from 'styled-components'
 import AddressSearch from '../AddressSearch'
 
@@ -77,6 +77,8 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
 
   const handleOrderBy = (option: OptionProps) => {
     setPickedOrder(option.value)
+    // Clear results immediately to show loading state
+    dispatch(clearLeaderboardResults())
     dispatch(setLeaderboardFilter({ orderBy: option.value }))
   }
 
@@ -108,6 +110,8 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
 
   const handleSwitchNetwork = (option: OptionProps) => {
     resetOrder()
+    // Clear results immediately to show loading state
+    dispatch(clearLeaderboardResults())
     setPickedChainId(option?.value)
 
     // Update URL to maintain consistency - remove token so it defaults to the new chain's default
@@ -130,6 +134,8 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
 
   const handleTokenChange = (option: OptionProps) => {
     resetOrder()
+    // Clear results immediately to show loading state
+    dispatch(clearLeaderboardResults())
     setPickedTokenSymbol(option?.value)
 
     // Update URL to maintain consistency

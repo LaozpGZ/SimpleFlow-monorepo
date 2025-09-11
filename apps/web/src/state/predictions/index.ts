@@ -366,6 +366,13 @@ export const predictionsSlice = createSlice({
       state.leaderboard.skip = 0
       state.leaderboard.hasMoreResults = true
     },
+    clearLeaderboardResults: (state) => {
+      // Clear results to show loading state when switching tokens/chains
+      state.leaderboard.results = []
+      state.leaderboard.skip = 0
+      state.leaderboard.hasMoreResults = true
+      state.leaderboard.loadingState = FetchStatus.Fetching
+    },
     setHistoryPaneState: (state, action: PayloadAction<boolean>) => {
       state.isHistoryPaneOpen = action.payload
       state.historyFilter = HistoryFilter.ALL
@@ -516,6 +523,7 @@ export const {
   setHistoryPaneState,
   markAsCollected,
   setLeaderboardFilter,
+  clearLeaderboardResults,
   setSelectedAddress,
 } = predictionsSlice.actions
 
