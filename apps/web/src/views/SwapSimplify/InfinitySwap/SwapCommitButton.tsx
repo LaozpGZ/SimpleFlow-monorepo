@@ -197,7 +197,11 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
       : undefined,
   )
 
-  const relevantTokenBalances = useUnifiedCurrencyBalances([inputCurrency ?? undefined, outputCurrency ?? undefined])
+  const pairCurrencies = useMemo(() => {
+    return [inputCurrency ?? undefined, outputCurrency ?? undefined]
+  }, [inputCurrency, outputCurrency])
+
+  const relevantTokenBalances = useUnifiedCurrencyBalances(pairCurrencies)
   const currencyBalances = useMemo(
     () => ({
       [Field.INPUT]: relevantTokenBalances[0],
@@ -207,7 +211,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
   )
   const parsedAmounts = useParsedAmounts(order?.trade, currencyBalances, false)
   const parsedIndependentFieldAmount = parsedAmounts[independentField]
-  const swapInputError = useSwapInputError(order, currencyBalances)
+  const swapInputError = useSwapInputError(order, currencyBalances, pairCurrencies)
   const [tradeToConfirm, setTradeToConfirm] = useState<PriceOrder | undefined>(undefined)
   const [indirectlyOpenConfirmModalState, setIndirectlyOpenConfirmModalState] = useState(false)
 
