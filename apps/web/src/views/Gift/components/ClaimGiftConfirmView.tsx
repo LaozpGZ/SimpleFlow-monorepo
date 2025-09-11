@@ -26,7 +26,7 @@ import { GiftInfoAddress } from './GiftInfoDetail'
 export const ClaimGiftConfirmView = () => {
   const { code, setCode } = useClaimGiftContext()
   const { t } = useTranslation()
-  const { toastSuccess } = useToast()
+  const { toastSuccess, toastError } = useToast()
 
   const { data: giftInfo, isLoading } = useGetGiftByCodeHash({
     codeHash: convertCodeHash(code),
@@ -41,6 +41,9 @@ export const ClaimGiftConfirmView = () => {
   } = useClaimGift({
     onSuccess: () => {
       toastSuccess(t('Claim Gift Successfully'))
+    },
+    onError: (error) => {
+      toastError(t('Failed to claim gift'), error?.message || t('Please try again later'))
     },
   })
 

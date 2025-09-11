@@ -5,7 +5,7 @@ import { useAccount } from 'wagmi'
 import { NEXT_PUBLIC_GIFT_API, QUERY_KEY_GIFT_INFO } from '../constants'
 import { ClaimGiftParams, ClaimGiftRequest, ClaimGiftResponse, GiftApiResponse, GiftApiStatus } from '../types'
 
-export const useClaimGift = ({ onSuccess }: { onSuccess?: () => void }) => {
+export const useClaimGift = ({ onSuccess, onError }: { onSuccess?: () => void; onError?: (error: Error) => void }) => {
   const { address: account } = useAccount()
   const { chainId } = useActiveChainId()
   const queryClient = useQueryClient()
@@ -61,6 +61,9 @@ export const useClaimGift = ({ onSuccess }: { onSuccess?: () => void }) => {
       // Invalidate gift-related queries to refresh the data
       queryClient.invalidateQueries({ queryKey: [QUERY_KEY_GIFT_INFO, chainId, account] })
       onSuccess?.()
+    },
+    onError: (error) => {
+      onError?.(error as Error)
     },
   })
 }
