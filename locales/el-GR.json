@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Τα πορτοφόλια έξυπνων συμβολαίων δεν υποστηρίζονται προς το παρόν στο %product%. Για να συνεχίσετε, αλλάξτε σε ένα πορτοφόλι EOA (Λογαριασμός εξωτερικής ιδιοκτησίας) πριν αλληλεπιδράσετε με το προϊόν.",
   "Earn Falcon Miles!": "Κερδίστε μίλια Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Οι LP κερδίζουν %multiplier% φορές τα μίλια του Falcon με βάση το συνολικό TVL που συνεισφέρεται στη δεξαμενή. Τα μίλια συσσωρεύονται μόνο σε θέσεις εντός του εύρους 0,95 έως 1,05.",
-  "Trade for a Chance to Win %amount%.": "Κάντε συναλλαγές για μια ευκαιρία να κερδίσετε %amount%.",
   "Enter value between %min% and %max%": "Εισαγάγετε τιμή μεταξύ %min% και %max%",
   "balance not enough": "το υπόλοιπο δεν αρκεί",
   "Select base token": "Επιλέξτε βασικό νόμισμα\t",
@@ -4147,5 +4146,6 @@
   "How many tokens will I get?": "How many tokens will I get?",
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
-  "Target Raise": "Στόχος αύξησης"
+  "Target Raise": "Στόχος αύξησης",
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
 }
