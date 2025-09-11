@@ -12,4 +12,4 @@ jobs:
       - name: Run i18n-tools private action
         uses: pancakeswap/i18n-tools@main
         with:
-          command: 'translate .'
+          command: 'translate'
