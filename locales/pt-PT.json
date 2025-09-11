@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Earn Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
-  "Trade for a Chance to Win %amount%.": "Trade for a Chance to Win %amount%.",
   "Enter value between %min% and %max%": "Enter value between %min% and %max%",
   "balance not enough": "saldo insuficiente",
   "Select base token": "Selecione o token base",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% suporta múltiplos ecossistemas. Por favor, selecione a(s) rede(s) à(s) qual(ais) pretende ligar.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM significa Ethereum Virtual Machine e permite que diferentes blockchains executem aplicações baseadas em Ethereum usando a mesma carteira e endereço.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Esta carteira na PancakeSwap oferece <0>proteção MEV</0> contra ataques de front-running e sandwich em redes EVM.",
-  "Wallets with <0>MEV Protection</0>.": "Carteiras com <0>Proteção MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Carteiras com <0>Proteção MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "Negocie Tokens de %product% para Ganhar %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Preencha o <0>Formulário de Candidatura</0></p>"
 }

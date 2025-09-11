@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "اربح أميالاً لشركة Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "يربح موفرو السيولة أميال لشركة Falcon بمقدار %multiplier% استنادًا إلى إجمالي القيمة المجمّدة (TVL) التي تمت المساهمة بها في التجمع. يحدث تراكم الأميال فقط للمراكز ضمن نطاق 0.95 إلى 1.05.",
-  "Trade for a Chance to Win %amount%.": "تداول لتحظى بفرصة الفوز بـ %amount%.",
   "Enter value between %min% and %max%": "أدخل قيمة بين %min% و%max%",
   "balance not enough": "الرصيد غير كافٍ",
   "Select base token": "تحديد رمز مميز أساسي",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "يدعم %Wallet% أنظمة بيئية متعددة. يرجى اختيار السلسلة (أو السلاسل) التي ترغب في الاتصال بها.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "يشير EVM إلى Ethereum Virtual Machine (الآلة الافتراضية للإيثيريوم) ويسمح لسلاسل الكتل المختلفة بتشغيل التطبيقات القائمة على الإيثيريوم باستخدام نفس المحفظة والعنوان.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "توفر هذه المحفظة على PancakeSwap <0>حماية من MEV</0> ضد هجمات التداول الأمامي (front-running) وهجمات الساندويتش (sandwich attacks) على سلاسل EVM.",
-  "Wallets with <0>MEV Protection</0>.": "المحافظ التي توفر <0>حماية من MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "المحافظ التي توفر <0>حماية من MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "تداول توكنات %product% لتربح %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>املأ <0>نموذج الطلب</0></p>"
 }

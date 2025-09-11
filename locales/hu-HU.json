@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Juss Falcon Miles-hoz!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Az összevont alapok%multiplier%x Falcon mérföldekhez jutnak az alaphoz való teljes TVL hozzájárulás alapján. A mérföldek csak a 0,95 és 1,05 közötti tartományban lévő pozíciókért járnak.",
-  "Trade for a Chance to Win %amount%.": "Kereskedj, és kapj esélyt megnyerni a(z) %amount% összeget.",
   "Enter value between %min% and %max%": "Adj meg egy %min% és %max% közötti értéket",
   "balance not enough": "az egyenleg nem elegendő",
   "Select base token": "Bázistoken kiválasztása",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "A(z) %Wallet% több ökoszisztémát is támogat. Kérjük, válassza ki, melyik lánchoz/láncokhoz szeretne csatlakozni.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "Az EVM az Ethereum Virtual Machine rövidítése, és lehetővé teszi, hogy különböző blokkláncok Ethereum-alapú alkalmazásokat futtassanak ugyanazzal a tárcával és címmel.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Ez a tárca a PancakeSwap-en <0>MEV védelem</0>-et kínál a front-running és sandwich támadások ellen az EVM láncokon.",
-  "Wallets with <0>MEV Protection</0>.": "Tárcák <0>MEV védelem</0>-mel."
+  "Wallets with <0>MEV Protection</0>.": "Tárcák <0>MEV védelem</0>-mel.",
+  "Trade %product% Tokens to Win %amount%": "Kereskedj %product% tokenekkel, hogy nyerj %amount%-t",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Töltsd ki a <0>Jelentkezési Űrlapot</0></p>"
 }

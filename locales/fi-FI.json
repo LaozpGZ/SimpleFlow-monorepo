@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Älykkäitä sopimuslompakoita ei tueta tällä hetkellä tuotteessa %product%. Jotta voit jatkaa, vaihda takaisin EOA-lompakkoon (ulkoisesti omistettu tili) ennen vuorovaikutusta tuotteen kanssa.",
   "Earn Falcon Miles!": "Ansaitse Falcon-maileja!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP:t ansaitsevat %multiplier%-kertaiset Falcon-mailit perustuen pooliin panostettuun kokonais-TVL:ään. Maileja kertyy vain positioihin välillä 0,95–1,05.",
-  "Trade for a Chance to Win %amount%.": "Käy kauppaa, ja voit voittaa %amount%.",
   "Enter value between %min% and %max%": "Anna arvo välillä %min%–%max%",
   "balance not enough": "saldo ei riitä",
   "Select base token": "Valitse peruspoletti",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% tukee useita ekosysteemejä. Valitse, mihin ketjuun/ketjuihin haluat yhdistää.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM tarkoittaa Ethereum Virtual Machine -käyttöjärjestelmää ja antaa eri lohkoketjujen käyttää Ethereum-pohjaisia sovelluksia samalla lompakolla ja osoitteella.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Tämä lompakko PancakeSwapissa tarjoaa <0>MEV-suojan</0> etukäteen ostamiselta ja \"sandwich\"-hyökkäyksiltä EVM-ketjuissa.",
-  "Wallets with <0>MEV Protection</0>.": "Lompakot, joissa on <0>MEV-suojaus</0>."
+  "Wallets with <0>MEV Protection</0>.": "Lompakot, joissa on <0>MEV-suojaus</0>.",
+  "Trade %product% Tokens to Win %amount%": "Treidaa %product%-tokeneja ja voita %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Täytä <0>hakemuslomake</0></p>"
 }

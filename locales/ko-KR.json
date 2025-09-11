@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Falcon Miles를 획득하세요!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP는 풀에 기여한 총 TVL에 따라 Falcon's Miles의 %multiplier%배를 획득합니다. Miles는 0.95 ~ 1.05 범위 내의 포지션에만 적립됩니다.",
-  "Trade for a Chance to Win %amount%.": "거래하여 %amount% 당첨 기회를 잡으세요.",
   "Enter value between %min% and %max%": "%min% ~ %max% 사이의 값 입력",
   "balance not enough": "잔액 부족",
   "Select base token": "베이스 토큰 선택",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet%은(는) 여러 생태계를 지원합니다. 연결할 체인을 선택해주세요.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM은 Ethereum Virtual Machine의 약자로, 다양한 블록체인이 동일한 지갑과 주소를 사용하여 이더리움 기반 앱을 실행할 수 있도록 합니다.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "PancakeSwap의 이 지갑은 EVM 체인에서 프런트러닝 및 샌드위치 공격에 대한 <0>MEV 보호</0>를 제공합니다.",
-  "Wallets with <0>MEV Protection</0>.": "<0>MEV 보호</0> 기능이 있는 지갑."
+  "Wallets with <0>MEV Protection</0>.": "<0>MEV 보호</0> 기능이 있는 지갑.",
+  "Trade %product% Tokens to Win %amount%": "%product% 토큰을 거래하고 %amount%를 획득하세요",
+  "<p>Fill out the <0>Application Form</0></p>": "<p><0>신청서</0>를 작성하세요</p>"
 }

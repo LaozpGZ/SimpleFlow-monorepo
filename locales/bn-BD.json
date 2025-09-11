@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "ফ্যালকন মাইলস অর্জন করুন!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "পুলে মোট TVL-এর অবদানের উপর ভিত্তি করে LPs, %multiplier%x ফ্যালকন-এর মাইলস অর্জন করে। মাইলস শুধুমাত্র 0.95 থেকে 1.05 সীমার মধ্যে অবস্থানে জমা হয়।",
-  "Trade for a Chance to Win %amount%.": "%amount% জেতার সুযোগের জন্য লেনদেন করুন।",
   "Enter value between %min% and %max%": "%min% এবং %max% এর মধ্যে মান লিখুন",
   "balance not enough": "ব্যালেন্স যথেষ্ট নয়",
   "Select base token": "ভিত্তি টোকেন নির্বাচন করুন",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% একাধিক ইকোসিস্টেম সমর্থন করে। অনুগ্রহ করে কোন চেইন(গুলি) এর সাথে সংযোগ করতে চান তা নির্বাচন করুন।",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM মানে Ethereum Virtual Machine এবং এটি বিভিন্ন ব্লকচেইনকে একই ওয়ালেট এবং ঠিকানা ব্যবহার করে Ethereum-ভিত্তিক অ্যাপস চালানোর অনুমতি দেয়।",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "PancakeSwap-এর এই ওয়ালেট EVM চেইনগুলিতে ফ্রন্ট-রানিং এবং স্যান্ডউইচ অ্যাটাকের বিরুদ্ধে <0>MEV সুরক্ষা</0> প্রদান করে।",
-  "Wallets with <0>MEV Protection</0>.": "<0>MEV সুরক্ষা</0> সহ ওয়ালেট।"
+  "Wallets with <0>MEV Protection</0>.": "<0>MEV সুরক্ষা</0> সহ ওয়ালেট।",
+  "Trade %product% Tokens to Win %amount%": "%product% টোকেন লেনদেন করে %amount% জিতুন",
+  "<p>Fill out the <0>Application Form</0></p>": "<p><0>আবেদন ফর্ম</0> পূরণ করুন</p>"
 }

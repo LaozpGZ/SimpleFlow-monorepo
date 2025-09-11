@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Portfele z inteligentnymi kontraktami nie są obecnie obsługiwane w serwisie %product%. Aby kontynuować, przed rozpoczęciem korzystania z produktu przejdź z powrotem do portfela EOA (Externally Owned Account, konto zewnętrzne).",
   "Earn Falcon Miles!": "Zbieraj Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP otrzymują %multiplier%-krotność Falcon Miles na podstawie całkowitej wartości TVL wniesionej do puli. Falcon Miles są naliczane tylko dla pozycji w zakresie od 0,95 do 1,05.",
-  "Trade for a Chance to Win %amount%.": "Handluj, aby mieć szansę na wygranie %amount%.",
   "Enter value between %min% and %max%": "Wprowadź wartość z przedziału od %min% do %max%",
   "balance not enough": "niewystarczające saldo",
   "Select base token": "Wybierz token bazowy",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% obsługuje wiele ekosystemów. Wybierz sieć(sieci), z którą(którymi) chcesz się połączyć.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM oznacza Ethereum Virtual Machine i umożliwia różnym blockchainom uruchamianie aplikacji opartych na Ethereum przy użyciu tego samego portfela i adresu.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Ten portfel na PancakeSwap oferuje <0>ochronę przed MEV</0> przed atakami front-running i sandwich na łańcuchach EVM.",
-  "Wallets with <0>MEV Protection</0>.": "Portfele z <0>ochroną przed MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Portfele z <0>ochroną przed MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "Handluj tokenami %product% i wygraj %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Wypełnij <0>Formularz zgłoszeniowy</0></p>"
 }

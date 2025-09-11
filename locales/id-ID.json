@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Hasilkan Miles Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP menghasilkan %multiplier%x Falcon’s Miles berdasarkan total TVL yang disumbangkan ke pool. Miles hanya bertambah pada posisi dalam rentang 0,95 hingga 1,05.",
-  "Trade for a Chance to Win %amount%.": "Berdagang untuk Kesempatan Menang %amount%.",
   "Enter value between %min% and %max%": "Masukkan nilai yang ada di antara %min% dan %max%",
   "balance not enough": "saldo tidak cukup",
   "Select base token": "Pilih token dasar",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% mendukung beberapa ekosistem. Harap pilih rantai mana yang akan dihubungkan.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM adalah singkatan dari Ethereum Virtual Machine dan memungkinkan berbagai blockchain untuk menjalankan aplikasi berbasis Ethereum menggunakan dompet dan alamat yang sama.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Dompet ini di PancakeSwap menawarkan <0>perlindungan MEV</0> terhadap serangan front-running dan sandwich di rantai EVM.",
-  "Wallets with <0>MEV Protection</0>.": "Dompet dengan <0>Perlindungan MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Dompet dengan <0>Perlindungan MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "Perdagangkan Token %product% untuk Raih %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Lengkapi <0>Formulir Aplikasi</0></p>"
 }

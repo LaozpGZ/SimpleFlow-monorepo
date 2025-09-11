@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Κερδίστε μίλια Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Οι LP κερδίζουν %multiplier% φορές τα μίλια του Falcon με βάση το συνολικό TVL που συνεισφέρεται στη δεξαμενή. Τα μίλια συσσωρεύονται μόνο σε θέσεις εντός του εύρους 0,95 έως 1,05.",
-  "Trade for a Chance to Win %amount%.": "Κάντε συναλλαγές για μια ευκαιρία να κερδίσετε %amount%.",
   "Enter value between %min% and %max%": "Εισαγάγετε τιμή μεταξύ %min% και %max%",
   "balance not enough": "το υπόλοιπο δεν αρκεί",
   "Select base token": "Επιλέξτε βασικό νόμισμα\t",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "Το %Wallet% υποστηρίζει πολλαπλά οικοσυστήματα. Παρακαλώ επιλέξτε σε ποιες αλυσίδες θα συνδεθείτε.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "Το EVM σημαίνει Ethereum Virtual Machine και επιτρέπει σε διαφορετικά blockchains να εκτελούν εφαρμογές βασισμένες στο Ethereum χρησιμοποιώντας το ίδιο πορτοφόλι και διεύθυνση",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Αυτό το πορτοφόλι στο PancakeSwap προσφέρει <0>προστασία MEV</0> έναντι επιθέσεων front-running και sandwich σε αλυσίδες EVM.",
-  "Wallets with <0>MEV Protection</0>.": "Πορτοφόλια με <0>Προστασία MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Πορτοφόλια με <0>Προστασία MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "Συναλλάξου %product% Tokens για να κερδίσεις %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Συμπλήρωσε την <0>Φόρμα Αίτησης</0></p>"
 }

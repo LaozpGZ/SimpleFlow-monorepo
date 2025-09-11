@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Actualmente, %product% no admite billeteras de contratos inteligentes. Para continuar, vuelve a una billetera EOA (cuenta de propiedad externa) antes de interactuar con el producto.",
   "Earn Falcon Miles!": "¡Gana Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Los LP ganan un %multiplier%x en Falcon's Miles basado en el TVL total aportado al pool. Las millas solo se acumulan en posiciones dentro del rango de 0.95 a 1.05.",
-  "Trade for a Chance to Win %amount%.": "Negociación para ganar %amount%.",
   "Enter value between %min% and %max%": "Introduce un valor entre %min% y %max%",
   "balance not enough": "saldo insuficiente",
   "Select base token": "Seleccionar token base",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% admite múltiples ecosistemas. Selecciona a qué cadena(s) deseas conectarte.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM significa Ethereum Virtual Machine y permite que diferentes blockchains ejecuten aplicaciones basadas en Ethereum utilizando la misma billetera y dirección",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Esta billetera en PancakeSwap ofrece <0>protección MEV</0> contra ataques de front-running y sandwich en cadenas EVM.",
-  "Wallets with <0>MEV Protection</0>.": "Billeteras con <0>protección MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Billeteras con <0>protección MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "Comercia con tokens %product% para ganar %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Completa el <0>Formulario de Solicitud</0></p>"
 }

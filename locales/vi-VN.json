@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Hiện tại ví hợp đồng thông minh không được hỗ trợ trên %product%. Để tiếp tục, vui lòng chuyển về ví EOA (Externally Owned Account) trước khi tương tác với sản phẩm.",
   "Earn Falcon Miles!": "Kiếm Dặm Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP kiếm được %multiplier%x Dặm Falcon dựa trên tổng số TVL đóng góp cho quỹ. Số dặm chỉ được tích lũy cho các vị thế trong khoảng 0,95 đến 1,05.",
-  "Trade for a Chance to Win %amount%.": "Giao dịch để có cơ hội trúng %amount%.",
   "Enter value between %min% and %max%": "Điền giá trị từ %min% đến %max%",
   "balance not enough": "số dư không đủ",
   "Select base token": "Chọn token cơ sở",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% hỗ trợ nhiều hệ sinh thái. Vui lòng chọn (các) chuỗi để kết nối.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM là viết tắt của Ethereum Virtual Machine và cho phép các blockchain khác nhau chạy ứng dụng dựa trên Ethereum bằng cùng một ví và địa chỉ.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Ví này trên PancakeSwap cung cấp <0>bảo vệ MEV</0> chống lại các cuộc tấn công front-running và sandwich trên các chuỗi EVM.",
-  "Wallets with <0>MEV Protection</0>.": "Ví có <0>Bảo vệ MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Ví có <0>Bảo vệ MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "Giao dịch token %product% để giành chiến thắng %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Điền vào <0>Đơn đăng ký</0></p>"
 }

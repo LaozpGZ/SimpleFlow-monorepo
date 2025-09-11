@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Câștigă mile Falcon!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP câștigă %multiplier% Falcon Miles în funcție de TVL total adus de portofoliu. Milele se acumulează doar în poziții din intervalul cuprins între 0,95 și 1,05.",
-  "Trade for a Chance to Win %amount%.": "Tranzacționează pentru șansa de a câștiga %amount%.",
   "Enter value between %min% and %max%": "Introdu o valoare între %min% și %max%",
   "balance not enough": "soldul nu este suficient",
   "Select base token": "Selectează jetonul de bază",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% acceptă mai multe ecosisteme. Te rugăm să selectezi la ce lanț(uri) să te conectezi.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM înseamnă Ethereum Virtual Machine și permite diferitelor blockchain-uri să ruleze aplicații bazate pe Ethereum utilizând același portofel și adresă.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Acest portofel pe PancakeSwap oferă <0>protecție MEV</0> împotriva atacurilor de tip front-running și sandwich pe lanțurile EVM.",
-  "Wallets with <0>MEV Protection</0>.": "Portofele cu <0>Protecție MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Portofele cu <0>Protecție MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "Tranzacționați Token-uri %product% pentru a câștiga %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Completați <0>Formularul de aplicație</0></p>"
 }

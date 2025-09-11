@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Tjäna Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP-investerare tjänar %multiplier%x Falcon Miles baserat på den totala TVL som bidragit till poolen. Miles ackumuleras endast för positioner inom intervallet 0,95 till 1,05.",
-  "Trade for a Chance to Win %amount%.": "Handla för en chans att vinna %amount%.",
   "Enter value between %min% and %max%": "Ange ett värde mellan %min% och %max%",
   "balance not enough": "ej tillräckligt saldo",
   "Select base token": "Välj base token",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% stöder flera ekosystem. Vänligen välj vilken/vilka kedja/kedjor du vill ansluta till.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM står för Ethereum Virtual Machine och tillåter olika blockkedjor att köra Ethereum-baserade appar med samma plånbok och adress.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Denna plånbok på PancakeSwap erbjuder <0>MEV-skydd</0> mot front-running och sandwich-attacker på EVM-kedjor.",
-  "Wallets with <0>MEV Protection</0>.": "Plånböcker med <0>MEV-skydd</0>."
+  "Wallets with <0>MEV Protection</0>.": "Plånböcker med <0>MEV-skydd</0>.",
+  "Trade %product% Tokens to Win %amount%": "Handla %product% Tokens för att vinna %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Fyll i <0>Ansökningsformuläret</0></p>"
 }

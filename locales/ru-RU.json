@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Зарабатывайте Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
-  "Trade for a Chance to Win %amount%.": "Trade for a Chance to Win %amount%.",
   "Enter value between %min% and %max%": "Введите значение в пределах от %min% до %max%",
   "balance not enough": "недостаточный баланс",
   "Select base token": "Выберите базовый токен",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% поддерживает несколько экосистем. Пожалуйста, выберите сеть(и), к которой(ым) вы хотите подключиться.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM расшифровывается как Ethereum Virtual Machine и позволяет различным блокчейнам запускать приложения на базе Ethereum, используя один и тот же кошелек и адрес.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Этот кошелек на PancakeSwap предлагает <0>защиту от MEV</0> от опережающих и сэндвич-атак в сетях EVM.",
-  "Wallets with <0>MEV Protection</0>.": "Кошельки с <0>защитой от MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Кошельки с <0>защитой от MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "Торгуйте токенами %product%, чтобы выиграть %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Заполните <0>Форму заявки</0></p>"
 }

@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Заробляйте Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.",
-  "Trade for a Chance to Win %amount%.": "Trade for a Chance to Win %amount%.",
   "Enter value between %min% and %max%": "Введіть значення в межах від %min% до %max%",
   "balance not enough": "недостатній баланс",
   "Select base token": "Виберіть базовий токен",
@@ -4152,5 +4151,7 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "%Wallet% підтримує декілька екосистем. Будь ласка, виберіть, до яких мереж підключитися.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "EVM розшифровується як Ethereum Virtual Machine і дозволяє різним блокчейнам запускати додатки на базі Ethereum, використовуючи той самий гаманець та адресу.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Цей гаманець на PancakeSwap пропонує <0>захист від MEV</0> проти front-running та sandwich-атак у мережах EVM.",
-  "Wallets with <0>MEV Protection</0>.": "Гаманці з <0>захистом від MEV</0>."
+  "Wallets with <0>MEV Protection</0>.": "Гаманці з <0>захистом від MEV</0>.",
+  "Trade %product% Tokens to Win %amount%": "Торгуйте %product% Токенами та виграйте %amount%",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Заповніть <0>Форму заявки</0></p>"
 }
