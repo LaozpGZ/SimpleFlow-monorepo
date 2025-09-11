@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "%product%에서는 스마트 계약 지갑이 현재 지원되지 않습니다. 계속하려면 제품과 상호 작용하기 전에 EOA(외부 소유 계정) 지갑으로 전환하세요.",
   "Earn Falcon Miles!": "Falcon Miles를 획득하세요!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP는 풀에 기여한 총 TVL에 따라 Falcon's Miles의 %multiplier%배를 획득합니다. Miles는 0.95 ~ 1.05 범위 내의 포지션에만 적립됩니다.",
-  "Trade for a Chance to Win %amount%.": "거래하여 %amount% 당첨 기회를 잡으세요.",
   "Enter value between %min% and %max%": "%min% ~ %max% 사이의 값 입력",
   "balance not enough": "잔액 부족",
   "Select base token": "베이스 토큰 선택",
@@ -4147,5 +4146,6 @@
   "How many tokens will I get?": "How many tokens will I get?",
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
-  "Target Raise": "목표 증가"
+  "Target Raise": "목표 증가",
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
 }
