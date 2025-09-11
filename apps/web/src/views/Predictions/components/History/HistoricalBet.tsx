@@ -27,6 +27,8 @@ import {
 import { Bet } from 'state/types'
 import { styled } from 'styled-components'
 import { useAccount } from 'wagmi'
+import { usePredictionsContract } from 'hooks/useContract'
+import { useQuery } from 'wagmi/query'
 import { useConfig } from '../../context/ConfigProvider'
 import CollectWinningsButton from '../CollectWinningsButton'
 import ReclaimPositionButton from '../ReclaimPositionButton'
@@ -74,7 +76,7 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
   const { chainId } = useActiveChainId()
   const dispatch = useLocalDispatch()
   const { address: account } = useAccount()
-  const canClaim_ = useGetIsClaimable(bet?.round?.epoch)
+  const canClaimByData = useGetIsClaimable(bet?.round?.epoch)
 
   const toggleOpen = () => setIsOpen(!isOpen)
 
@@ -97,8 +99,28 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
   const resultTextColor = getRoundColor(roundResult)
   const isOpenRound = round?.epoch === currentEpoch
   const isLiveRound = status === PredictionStatus.LIVE && round?.epoch === currentEpoch - 1
-  const isCancelled = roundResult === Result.CANCELED || (round?.failed ?? false)
-  const canClaim = canClaim_ || (bet.amount > 0 && !bet.claimed)
+  const isCancelled = roundResult === Result.CANCELED
+
+  // Verify if the user can Re-claim in the contract in case of failed status
+  const predictionsContract = usePredictionsContract(config?.address ?? '0x', config?.version)
+  const { data: canClaimInContract } = useQuery({
+    queryKey: ['canClaimInContract', account, chainId, round],
+    queryFn: async (): Promise<boolean> => {
+      try {
+        // arg bigint[] is correct, but still get type errors. Use "any" to bypass
+        const gasEstimate = await predictionsContract?.estimateGas.claim([[BigInt(bet?.round?.epoch ?? 0)]] as any)
+        return Boolean(gasEstimate)
+      } catch (error) {
+        console.warn('Round not claimable', bet?.round?.epoch, error)
+        return false
+      }
+    },
+    enabled: round && round.failed && !!account && !!predictionsContract,
+    initialData: false,
+  })
+
+  // Use either value. Because canClaimByData may not show claim with Live and Open rounds (they have round.failed = true as per current helper logic)
+  const canClaim = Boolean(canClaimByData || canClaimInContract)
 
   // Winners get the payout, otherwise the claim what they put it if it was canceled
   const payout = roundResult === Result.WIN ? getNetPayout(bet, REWARD_RATE) : amount
@@ -117,16 +139,6 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
   const resultTextPrefix = getRoundPrefix(roundResult)
 
   const renderBetLabel = () => {
-    if (isCancelled) {
-      return (
-        <Flex alignItems="center">
-          <Text color="textDisabled" bold>
-            {t('Cancelled')}
-          </Text>
-        </Flex>
-      )
-    }
-
     if (isOpenRound) {
       return (
         <Flex alignItems="center">
@@ -144,6 +156,16 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
           <PlayCircleOutlineIcon color="secondary" mr="6px" width="24px" />
           <Text color="secondary" bold>
             {t('Live Now')}
+          </Text>
+        </Flex>
+      )
+    }
+
+    if (isCancelled) {
+      return (
+        <Flex alignItems="center">
+          <Text color="textDisabled" bold>
+            {t('Cancelled')}
           </Text>
         </Flex>
       )
@@ -201,7 +223,7 @@ const HistoricalBet: React.FC<React.PropsWithChildren<BetProps>> = ({ bet }) => 
           </CollectWinningsButton>
         )}
         {/* If round result is cancelled or round is live due to pause/unpause issues, allow user to reclaim */}
-        {canClaim && (isCancelled || isLiveRound || isOpenRound || isCancelled) && (
+        {canClaim && (isCancelled || isLiveRound) && (
           <ReclaimPositionButton epoch={bet?.round?.epoch ?? 0} onSuccess={handleSuccess} scale="sm" mr="8px">
             {t('Reclaim')}
           </ReclaimPositionButton>
