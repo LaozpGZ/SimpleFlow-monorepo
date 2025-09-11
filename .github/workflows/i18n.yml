@@ -5,7 +5,7 @@ on:
   pull_request:
     types: [closed]
     branches:
-      - develop
+      - chore/i18n-with-ai
 
 jobs:
   translate:
