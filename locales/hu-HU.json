@@ -4152,5 +4152,6 @@
   "%Wallet% supports multiple ecosystems. Please select which chain(s) to connect to.": "A(z) %Wallet% több ökoszisztémát is támogat. Kérjük, válassza ki, melyik lánchoz/láncokhoz szeretne csatlakozni.",
   "EVM stands for Ethereum Virtual Machine and allows different blockchains to run Ethereum-based apps using the same wallet and address": "Az EVM az Ethereum Virtual Machine rövidítése, és lehetővé teszi, hogy különböző blokkláncok Ethereum-alapú alkalmazásokat futtassanak ugyanazzal a tárcával és címmel.",
   "This wallet on PancakeSwap offers <0>MEV protection</0> against front-running and sandwich attacks on EVM chains.": "Ez a tárca a PancakeSwap-en <0>MEV védelem</0>-et kínál a front-running és sandwich támadások ellen az EVM láncokon.",
-  "Wallets with <0>MEV Protection</0>.": "Tárcák <0>MEV védelem</0>-mel."
+  "Wallets with <0>MEV Protection</0>.": "Tárcák <0>MEV védelem</0>-mel.",
+  "<p>Fill out the <0>Application Form</0></p>": "<p>Töltsd ki a <0>Jelentkezési Űrlapot</0></p>"
 }
