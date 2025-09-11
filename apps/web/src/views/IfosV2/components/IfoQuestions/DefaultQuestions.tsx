@@ -227,7 +227,7 @@ const DefaultQuestions: React.FC = () => {
                 href="https://docs.google.com/forms/d/e/1FAIpQLScmZu87SG41J_eGfzlbyJ_olFohlGOXfOJer04Dr1yCEJy2NA/viewform"
               />,
             ]}
-            defaults="<p>Fill out the <0>Application Form</0></p>"
+            i18nTemplate="<p>Fill out the <0>Application Form</0></p>"
           />
           <br />
           <Trans components={{ p: <p /> }}>
