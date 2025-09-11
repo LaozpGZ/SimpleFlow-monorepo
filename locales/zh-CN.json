@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>合作代币池</0>：通过质押 CAKE 赚取合作项目的代币 (例如，质押 CAKE 赚取 PEPE)。<1>奖励必须手动领取，点击每个池子“详情”下的“Harvest”按钮即可。</1>",
   "fees-description": "糖浆池的质押或解除质押 <0>不收取平台费用</0>。但是，进行存款、领取奖励或解除质押 CAKE 等交易时，<1>标准区块链 Gas 费用</1> 仍将适用。",
   "unclaimed-rewards": "您的 CAKE 保持质押状态时，奖励将持续累积。您可以随时点击“<0>Harvest</0>”按钮领取奖励。",
-  "legacy-pools": "<0>自动 CAKE 池和手动 CAKE 池</0> 已升级为 <1>veCAKE</1> 质押。如果您仍有 CAKE 质押在旧版池中，您需要<2>迁移到 veCAKE</2> 以继续赚取奖励。<3>在此了解如何迁移</3>"
+  "legacy-pools": "<0>自动 CAKE 池和手动 CAKE 池</0> 已升级为 <1>veCAKE</1> 质押。如果您仍有 CAKE 质押在旧版池中，您需要<2>迁移到 veCAKE</2> 以继续赚取奖励。<3>在此了解如何迁移</3>",
+  "Gift Failed to Claim": "礼品领取失败",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "礼品申领失败。您可以取消此赠礼，将代币退回您的钱包。"
 }

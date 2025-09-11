@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Partner Token Pools</0>: Zarabiaj tokeny z projektów partnerskich poprzez stakowanie CAKE (np. Stakuj CAKE, aby zdobyć PEPE). <1>Nagrody należy odebrać ręcznie, klikając przycisk \"Harvest\" pod \"Szczegółami\" dla każdej puli.</1>",
   "fees-description": "Nie ma <0>żadnych opłat platformowych</0> za stakowanie lub wycofanie środków w Syrup Pools. Jednakże, <1>standardowe opłaty za gaz blockchain</1> nadal będą obowiązywać podczas przeprowadzania transakcji, takich jak wpłata, odbieranie nagród lub wycofywanie CAKE.",
   "unclaimed-rewards": "Twoje nagrody będą nadal naliczać się tak długo, jak Twoje CAKE pozostaje stakowane. Możesz odebrać je w dowolnym momencie, klikając przycisk \"<0>Harvest</0>\".",
-  "legacy-pools": "Pule <0>Auto CAKE i Manual CAKE</0> zostały ulepszone do stakowania <1>veCAKE</1>. Jeśli nadal masz CAKE stakowane w starszych pulach, musisz <2>migrować do veCAKE</2>, aby kontynuować zdobywanie nagród. <3>Dowiedz się, jak migrować tutaj</3>"
+  "legacy-pools": "Pule <0>Auto CAKE i Manual CAKE</0> zostały ulepszone do stakowania <1>veCAKE</1>. Jeśli nadal masz CAKE stakowane w starszych pulach, musisz <2>migrować do veCAKE</2>, aby kontynuować zdobywanie nagród. <3>Dowiedz się, jak migrować tutaj</3>",
+  "Gift Failed to Claim": "Odebranie prezentu nie powiodło się",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "Odebranie prezentu nie powiodło się. Możesz anulować ten prezent, aby zwrócić tokeny do swojego portfela."
 }

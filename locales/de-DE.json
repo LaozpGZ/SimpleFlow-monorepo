@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Partner-Token-Pools</0>: Verdiene Token von Partnerprojekten, indem du CAKE stakst (z. B. CAKE staken, um PEPE zu verdienen). <1>Belohnungen müssen manuell eingefordert werden, indem du unter \"Details\" für jeden Pool auf den Button \"Harvest\" klickst.</1>",
   "fees-description": "Es fallen <0>keine Plattformgebühren</0> für das Staken oder Unstaken in Syrup Pools an. Es fallen jedoch <1>standardmäßige Blockchain-Gasgebühren</1> an, wenn Transaktionen durchgeführt werden, wie das Einzahlen, Einfordern von Belohnungen oder Unstaken von CAKE.",
   "unclaimed-rewards": "Deine Belohnungen werden weiter akkumuliert, solange dein CAKE gestaked ist. Du kannst sie jederzeit einfordern, indem du auf den Button \"<0>Harvest</0>\" klickst.",
-  "legacy-pools": "Die <0>Auto CAKE und Manual CAKE Pools</0> wurden auf <1>veCAKE</1> Staking aktualisiert. Wenn du noch CAKE in den alten Pools gestaked hast, musst du <2>zu veCAKE migrieren</2>, um weiterhin Belohnungen zu verdienen. <3>Erfahre hier, wie du migrierst</3>"
+  "legacy-pools": "Die <0>Auto CAKE und Manual CAKE Pools</0> wurden auf <1>veCAKE</1> Staking aktualisiert. Wenn du noch CAKE in den alten Pools gestaked hast, musst du <2>zu veCAKE migrieren</2>, um weiterhin Belohnungen zu verdienen. <3>Erfahre hier, wie du migrierst</3>",
+  "Gift Failed to Claim": "Einlösung des Geschenks fehlgeschlagen",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "Die Einlösung des Geschenks ist fehlgeschlagen. Sie können dieses Geschenk stornieren, um die Tokens in Ihre Wallet zurückzuerhalten."
 }

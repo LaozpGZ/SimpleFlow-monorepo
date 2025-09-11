@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Pools de Tokens Parceiros</0>: Ganhe tokens de projetos parceiros fazendo stake de CAKE (ex: Faça stake de CAKE para ganhar PEPE). <1>As recompensas devem ser resgatadas manualmente clicando no botão \"Harvest\" em \"Detalhes\" para cada pool.</1>",
   "fees-description": "Não há <0>taxas de plataforma</0> para staking ou unstaking nas Syrup Pools. No entanto, <1>taxas de gás padrão da blockchain</1> ainda serão aplicadas ao realizar transações, como depositar, coletar recompensas ou fazer unstake de CAKE.",
   "unclaimed-rewards": "Suas recompensas continuarão a acumular enquanto seu CAKE permanecer em stake. Você pode resgatá-las a qualquer momento clicando no botão \"<0>Harvest</0>\".",
-  "legacy-pools": "As <0>Auto CAKE e Manual CAKE Pools</0> foram atualizadas para o staking de <1>veCAKE</1>. Se você ainda tiver CAKE em stake nos pools legados, você precisará <2>migrar para veCAKE</2> para continuar a ganhar recompensas. <3>Saiba como migrar aqui</3>"
+  "legacy-pools": "As <0>Auto CAKE e Manual CAKE Pools</0> foram atualizadas para o staking de <1>veCAKE</1>. Se você ainda tiver CAKE em stake nos pools legados, você precisará <2>migrar para veCAKE</2> para continuar a ganhar recompensas. <3>Saiba como migrar aqui</3>",
+  "Gift Failed to Claim": "Falha ao Resgatar Presente",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "O resgate do presente falhou. Você pode cancelar este presente para devolver os tokens à sua carteira."
 }

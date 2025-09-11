@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Partner Token Pools</0>: Verdien tokens van partnerprojecten door CAKE te staken (bijv. Stake CAKE om PEPE te verdienen). <1>Beloningen moeten handmatig worden geclaimd door op de knop \"Harvest\" onder \"Details\" te klikken voor elke pool.</1>",
   "fees-description": "Er zijn <0>geen platformkosten</0> voor het staken of unstaken in Syrup Pools. Echter, <1>standaard blockchain gas fees</1> zijn nog steeds van toepassing bij het uitvoeren van transacties, zoals het storten, innen van beloningen of unstaken van CAKE.",
   "unclaimed-rewards": "Je beloningen blijven accumuleren zolang je CAKE gestaked blijft. Je kunt ze op elk moment claimen door op de \"<0>Harvest</0>\" knop te klikken.",
-  "legacy-pools": "De <0>Auto CAKE en Manual CAKE Pools</0> zijn geüpgraded naar <1>veCAKE</1> staking. Als je nog CAKE hebt gestaked in de legacy pools, moet je <2>migreren naar veCAKE</2> om door te gaan met het verdienen van beloningen. <3>Lees hier hoe je kunt migreren</3>"
+  "legacy-pools": "De <0>Auto CAKE en Manual CAKE Pools</0> zijn geüpgraded naar <1>veCAKE</1> staking. Als je nog CAKE hebt gestaked in de legacy pools, moet je <2>migreren naar veCAKE</2> om door te gaan met het verdienen van beloningen. <3>Lees hier hoe je kunt migreren</3>",
+  "Gift Failed to Claim": "Claimen van cadeau mislukt",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "De cadeauclaim is mislukt. U kunt dit cadeau annuleren om de tokens terug te sturen naar uw wallet."
 }

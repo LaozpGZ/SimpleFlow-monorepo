@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>合作夥伴代幣池</0>：透過質押 CAKE 賺取合作夥伴項目的代幣（例如：質押 CAKE 賺取 PEPE）。<1>獎勵必須透過點擊每個池子「詳情」下的「收穫」按鈕手動領取。</1>",
   "fees-description": "在糖漿池中質押或解除質押 <0>不收取平台費用</0>。然而，進行交易時（例如存款、收穫獎勵或解除質押 CAKE），仍將適用 <1>標準區塊鏈燃料費用</1>。",
   "unclaimed-rewards": "只要您的 CAKE 保持質押狀態，您的獎勵將會持續累積。您可以隨時點擊「<0>收穫</0>」按鈕來領取獎勵。",
-  "legacy-pools": "<0>自動 CAKE 池和手動 CAKE 池</0> 已升級為 <1>veCAKE</1> 質押。如果您在舊版池中仍有質押的 CAKE，您需要<2>遷移到 veCAKE</2> 以繼續賺取獎勵。<3>點擊此處了解如何遷移</3>"
+  "legacy-pools": "<0>自動 CAKE 池和手動 CAKE 池</0> 已升級為 <1>veCAKE</1> 質押。如果您在舊版池中仍有質押的 CAKE，您需要<2>遷移到 veCAKE</2> 以繼續賺取獎勵。<3>點擊此處了解如何遷移</3>",
+  "Gift Failed to Claim": "禮物領取失敗",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "禮物領取失敗。您可以取消此禮物，將代幣退還至您的錢包。"
 }

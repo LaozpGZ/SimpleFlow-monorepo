@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Partner Token Pools</0>: Kiếm token từ các dự án đối tác bằng cách stake CAKE (ví dụ: Stake CAKE để kiếm PEPE). <1>Phần thưởng phải được yêu cầu thủ công bằng cách nhấp vào nút \"Harvest\" trong mục \"Details\" của mỗi pool.</1>",
   "fees-description": "Không có <0>phí nền tảng</0> khi stake hoặc unstake trong Syrup Pools. Tuy nhiên, <1>phí gas blockchain tiêu chuẩn</1> vẫn sẽ áp dụng khi thực hiện các giao dịch, chẳng hạn như gửi tiền, thu hoạch phần thưởng hoặc unstake CAKE.",
   "unclaimed-rewards": "Phần thưởng của bạn sẽ tiếp tục tích lũy trong khi CAKE của bạn vẫn được stake. Bạn có thể yêu cầu chúng bất cứ lúc nào bằng cách nhấp vào nút \"<0>Harvest</0>\".",
-  "legacy-pools": "Các <0>Auto CAKE và Manual CAKE Pools</0> đã được nâng cấp lên staking <1>veCAKE</1>. Nếu bạn vẫn còn CAKE đang stake trong các pool cũ, bạn sẽ cần <2>di chuyển sang veCAKE</2> để tiếp tục kiếm phần thưởng. <3>Tìm hiểu cách di chuyển tại đây</3>"
+  "legacy-pools": "Các <0>Auto CAKE và Manual CAKE Pools</0> đã được nâng cấp lên staking <1>veCAKE</1>. Nếu bạn vẫn còn CAKE đang stake trong các pool cũ, bạn sẽ cần <2>di chuyển sang veCAKE</2> để tiếp tục kiếm phần thưởng. <3>Tìm hiểu cách di chuyển tại đây</3>",
+  "Gift Failed to Claim": "Nhận quà thất bại",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "Yêu cầu nhận quà không thành công. Bạn có thể hủy quà tặng này để hoàn trả token về ví của bạn."
 }

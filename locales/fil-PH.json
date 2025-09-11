@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Partner Token Pools</0>: Kumita ng mga token mula sa mga partner project sa pag-stake ng CAKE (hal., Mag-stake ng CAKE para kumita ng PEPE). <1>Ang mga reward ay dapat i-claim nang mano-mano sa pag-click ng button na \"Harvest\" sa ilalim ng \"Details\" para sa bawat pool.</1>",
   "fees-description": "Walang <0>platform fees</0> para sa pag-stake o pag-unstake sa Syrup Pools. Gayunpaman, <1>ang karaniwang blockchain gas fees</1> ay sasakupin pa rin kapag gumagawa ng mga transaksyon, tulad ng pagdedeposito, pag-harvest ng mga reward, o pag-unstake ng CAKE.",
   "unclaimed-rewards": "Ang iyong mga reward ay patuloy na mag-iipon habang naka-stake ang iyong CAKE. Maaari mo itong i-claim anumang oras sa pag-click ng button na \"<0>Harvest</0>\".",
-  "legacy-pools": "Ang <0>Auto CAKE at Manual CAKE Pools</0> ay na-upgrade na sa <1>veCAKE</1> staking. Kung mayroon ka pang CAKE na naka-stake sa mga legacy pool, kailangan mong <2>mag-migrate sa veCAKE</2> para patuloy na kumita ng mga reward. <3>Alamin kung paano mag-migrate dito</3>"
+  "legacy-pools": "Ang <0>Auto CAKE at Manual CAKE Pools</0> ay na-upgrade na sa <1>veCAKE</1> staking. Kung mayroon ka pang CAKE na naka-stake sa mga legacy pool, kailangan mong <2>mag-migrate sa veCAKE</2> para patuloy na kumita ng mga reward. <3>Alamin kung paano mag-migrate dito</3>",
+  "Gift Failed to Claim": "Nabigong I-claim ang Regalo",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "Nabigo ang pag-claim ng regalo. Maaari mong kanselahin ang regalong ito upang maibalik ang mga token sa iyong wallet."
 }

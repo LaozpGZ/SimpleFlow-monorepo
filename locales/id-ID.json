@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Pool Token Mitra</0>: Dapatkan token dari proyek mitra dengan melakukan staking CAKE (misalnya, Staking CAKE untuk mendapatkan PEPE). <1>Hadiah harus diklaim secara manual dengan mengeklik tombol \\\"Harvest\\\" di bawah \\\"Details\\\" untuk setiap pool.</1>",
   "fees-description": "Tidak ada <0>biaya platform</0> untuk staking atau unstaking di Syrup Pools. Namun, <1>biaya gas blockchain standar</1> akan tetap berlaku saat melakukan transaksi, seperti mendepositkan, memanen hadiah, atau melakukan unstaking CAKE.",
   "unclaimed-rewards": "Hadiah Anda akan terus terakumulasi selama CAKE Anda tetap di-staking. Anda dapat mengklaimnya kapan saja dengan mengeklik tombol \\\"<0>Harvest</0>\\\".",
-  "legacy-pools": "The <0>Auto CAKE dan Manual CAKE Pools</0> telah diupgrade ke staking <1>veCAKE</1>. Jika Anda masih memiliki CAKE yang di-staking di pool lama, Anda perlu <2>bermigrasi ke veCAKE</2> untuk terus mendapatkan hadiah. <3>Pelajari cara bermigrasi di sini</3>"
+  "legacy-pools": "The <0>Auto CAKE dan Manual CAKE Pools</0> telah diupgrade ke staking <1>veCAKE</1>. Jika Anda masih memiliki CAKE yang di-staking di pool lama, Anda perlu <2>bermigrasi ke veCAKE</2> untuk terus mendapatkan hadiah. <3>Pelajari cara bermigrasi di sini</3>",
+  "Gift Failed to Claim": "Hadiah Gagal Diklaim",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "Klaim hadiah gagal. Anda dapat membatalkan hadiah ini untuk mengembalikan token ke dompet Anda."
 }

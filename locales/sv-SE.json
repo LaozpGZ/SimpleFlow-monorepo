@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Partner Token Pools</0>: Tjäna tokens från partnerprojekt genom att stake:a CAKE (t.ex. Stake:a CAKE för att tjäna PEPE). <1>Belöningar måste hämtas manuellt genom att klicka på knappen \"Harvest\" under \"Details\" för varje pool.</1>",
   "fees-description": "Det finns <0>inga plattformsavgifter</0> för att stake:a eller unstake:a i Syrup Pools. Däremot kommer <1>standardmässiga blockchain-gasavgifter</1> fortfarande att gälla vid transaktioner, såsom insättning, skörd av belöningar eller unstake:ande av CAKE.",
   "unclaimed-rewards": "Dina belöningar fortsätter att ackumuleras så länge din CAKE är stake:ad. Du kan hämta dem när som helst genom att klicka på \"<0>Harvest</0>\"-knappen.",
-  "legacy-pools": "De <0>Auto CAKE- och Manual CAKE-poolerna</0> har uppgraderats till <1>veCAKE</1> staking. Om du fortfarande har CAKE stake:ad i de äldre poolerna måste du <2>migrera till veCAKE</2> för att fortsätta tjäna belöningar. <3>Lär dig hur du migrerar här</3>"
+  "legacy-pools": "De <0>Auto CAKE- och Manual CAKE-poolerna</0> har uppgraderats till <1>veCAKE</1> staking. Om du fortfarande har CAKE stake:ad i de äldre poolerna måste du <2>migrera till veCAKE</2> för att fortsätta tjäna belöningar. <3>Lär dig hur du migrerar här</3>",
+  "Gift Failed to Claim": "Misslyckades att hämta gåvan",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "Det gick inte att hämta gåvan. Du kan avbryta den här gåvan för att skicka tillbaka dina tokens till din plånbok."
 }

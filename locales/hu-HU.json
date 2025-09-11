@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Partner Token Poolok</0>: Szerezz tokeneket partnerprojektektől CAKE stake-elésével (pl. Stake-elj CAKE-et PEPE szerzéséhez). <1>A jutalmakat manuálisan kell igényelni a \"Harvest\" gombra kattintva a \"Részletek\" alatt minden poolnál.</1>",
   "fees-description": "Nincsenek <0>platformdíjak</0> a Syrup Poolsban történő stake-elésre vagy unstake-elésre. Azonban <1>standard blokklánc gas díjak</1> továbbra is érvényesek lesznek a tranzakciók során, mint például a befizetés, jutalmak begyűjtése vagy a CAKE unstake-elése.",
   "unclaimed-rewards": "Jutalmaid továbbra is gyűlni fognak, amíg a CAKE-ed stake-elve marad. Bármikor igényelheted őket a \"<0>Harvest</0>\" gombra kattintva.",
-  "legacy-pools": "Az <0>Auto CAKE és Manual CAKE Poolok</0> frissítésre kerültek <1>veCAKE</1> stake-elésre. Ha továbbra is van stake-elt CAKE-ed a régi poolokban, <2>migrálnod kell veCAKE-re</2> a jutalmak további szerzéséhez. <3>Itt tudhatod meg, hogyan migrálj</3>"
+  "legacy-pools": "Az <0>Auto CAKE és Manual CAKE Poolok</0> frissítésre kerültek <1>veCAKE</1> stake-elésre. Ha továbbra is van stake-elt CAKE-ed a régi poolokban, <2>migrálnod kell veCAKE-re</2> a jutalmak további szerzéséhez. <3>Itt tudhatod meg, hogyan migrálj</3>",
+  "Gift Failed to Claim": "Ajándék igénylése sikertelen",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "Az ajándék igénylése sikertelen. Visszavonhatja ezt az ajándékot, hogy a tokenek visszakerüljenek a tárcájába."
 }

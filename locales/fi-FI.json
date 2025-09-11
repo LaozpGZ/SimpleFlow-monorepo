@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Kumppanitokenipoolit</0>: Ansaitse tokeneita kumppaniprojekteista steikkaamalla CAKE-tokenia (esim. Steikkaa CAKE ansaitaksesi PEPEä). <1>Palkinnot on lunastettava manuaalisesti klikkaamalla \"Harvest\"-painiketta kunkin poolin \"Details\"-kohdasta.</1>",
   "fees-description": "Syrup Pooleissa ei ole <0>alustamaksuja</0> steikkaamisesta tai unstakeaamisesta. Kuitenkin <1>vakiomukaiset lohkoketjun kaasukulut</1> soveltuvat edelleen tehdessäsi transaktioita, kuten tallettaessa, palkintoja kerätessä tai CAKE-tokenia unstakeatessa.",
   "unclaimed-rewards": "Palkintosi kertyvät jatkuvasti, kun CAKE-tokenisi pysyy steikattuna. Voit lunastaa ne milloin tahansa klikkaamalla \"<0>Harvest</0>\"-painiketta.",
-  "legacy-pools": "<0>Auto CAKE ja Manual CAKE -poolit</0> on päivitetty <1>veCAKE</1>-steikkaukseksi. Jos sinulla on edelleen CAKE-tokenia steikattuna vanhoissa pooleissa, sinun on <2>migroitava veCAKEen</2> jatkaaksesi palkintojen ansaitsemista. <3>Lue, miten voit migroida täältä</3>"
+  "legacy-pools": "<0>Auto CAKE ja Manual CAKE -poolit</0> on päivitetty <1>veCAKE</1>-steikkaukseksi. Jos sinulla on edelleen CAKE-tokenia steikattuna vanhoissa pooleissa, sinun on <2>migroitava veCAKEen</2> jatkaaksesi palkintojen ansaitsemista. <3>Lue, miten voit migroida täältä</3>",
+  "Gift Failed to Claim": "Lahjan lunastus epäonnistui",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "Lahjan lunastus epäonnistui. Voit peruuttaa tämän lahjan palauttaaksesi tokenit lompakkoosi."
 }

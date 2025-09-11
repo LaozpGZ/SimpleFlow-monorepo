@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>파트너 토큰 풀</0>: CAKE를 스테이킹하여 파트너 프로젝트의 토큰을 획득하세요 (예: CAKE를 스테이킹하여 PEPE 획득). <1>보상은 각 풀의 \"세부 정보\" 아래에 있는 \"Harvest\" 버튼을 클릭하여 수동으로 클레임해야 합니다.</1>",
   "fees-description": "Syrup Pools에서 스테이킹 또는 언스테이킹 시 <0>플랫폼 수수료는 없습니다</0>. 그러나 예치, 보상 수확, CAKE 언스테이킹과 같은 거래 시에는 <1>표준 블록체인 가스 수수료</1>가 여전히 적용됩니다.",
   "unclaimed-rewards": "CAKE가 스테이킹된 상태에서는 보상이 계속 누적됩니다. 언제든지 \"<0>Harvest</0>\" 버튼을 클릭하여 클레임할 수 있습니다.",
-  "legacy-pools": "<0>Auto CAKE 및 Manual CAKE 풀</0>이 <1>veCAKE</1> 스테이킹으로 업그레이드되었습니다. 레거시 풀에 CAKE를 스테이킹한 상태라면, 보상을 계속 받기 위해 <2>veCAKE로 마이그레이션</2>해야 합니다. <3>여기에서 마이그레이션 방법을 알아보세요</3>"
+  "legacy-pools": "<0>Auto CAKE 및 Manual CAKE 풀</0>이 <1>veCAKE</1> 스테이킹으로 업그레이드되었습니다. 레거시 풀에 CAKE를 스테이킹한 상태라면, 보상을 계속 받기 위해 <2>veCAKE로 마이그레이션</2>해야 합니다. <3>여기에서 마이그레이션 방법을 알아보세요</3>",
+  "Gift Failed to Claim": "선물 클레임 실패",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "선물 클레임에 실패했습니다. 이 선물을 취소하여 토큰을 지갑으로 돌려받을 수 있습니다."
 }

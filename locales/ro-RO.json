@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Pool-uri de Tokenuri Partenere</0>: Câștigă tokenuri de la proiecte partenere prin stacarea CAKE (ex: Stachează CAKE pentru a câștiga PEPE). <1>Recompensele trebuie revendicate manual, apăsând butonul \\\"Harvest\\\" sub \\\"Detalii\\\" pentru fiecare pool.</1>",
   "fees-description": "Nu există <0>comisioane de platformă</0> pentru stacare sau destacare în Pool-urile de Syrup. Totuși, se vor aplica în continuare <1>comisioane standard de gas blockchain</1> la efectuarea tranzacțiilor, cum ar fi depunerea, colectarea recompenselor sau destacarea CAKE.",
   "unclaimed-rewards": "Recompensele tale vor continua să se acumuleze atâta timp cât CAKE-ul tău rămâne stacat. Le poți revendica oricând apăsând butonul \"<0>Harvest</0>\".",
-  "legacy-pools": "Pool-urile <0>Auto CAKE și Manual CAKE</0> au fost actualizate la staking-ul <1>veCAKE</1>. Dacă încă ai CAKE stacat în pool-urile vechi, va trebui să <2>migrezi la veCAKE</2> pentru a continua să câștigi recompense. <3>Află cum să migrezi aici</3>"
+  "legacy-pools": "Pool-urile <0>Auto CAKE și Manual CAKE</0> au fost actualizate la staking-ul <1>veCAKE</1>. Dacă încă ai CAKE stacat în pool-urile vechi, va trebui să <2>migrezi la veCAKE</2> pentru a continua să câștigi recompense. <3>Află cum să migrezi aici</3>",
+  "Gift Failed to Claim": "Eșec la revendicarea cadoului",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "Revendicarea cadoului a eșuat. Puteți anula acest cadou pentru a returna token-urile în portofelul dvs."
 }

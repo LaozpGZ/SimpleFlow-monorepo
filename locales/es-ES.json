@@ -4197,5 +4197,7 @@
   "rewards-list": "<0>Pools de Tokens de Socios</0>: Gana tokens de proyectos asociados haciendo staking de CAKE (ej., haz staking de CAKE para ganar PEPE). <1>Las recompensas deben reclamarse manualmente haciendo clic en el botón \"Harvest\" en \"Details\" para cada pool.</1>",
   "fees-description": "No hay <0>comisiones de plataforma</0> por hacer staking o unstaking en Syrup Pools. Sin embargo, se seguirán aplicando <1>comisiones de gas estándar de la blockchain</1> al realizar transacciones, como depositar, reclamar recompensas o retirar CAKE.",
   "unclaimed-rewards": "Tus recompensas seguirán acumulándose mientras tu CAKE permanezca en staking. Puedes reclamarlas en cualquier momento haciendo clic en el botón \"<0>Harvest</0>\".",
-  "legacy-pools": "Los <0>Pools Auto CAKE y Manual CAKE</0> se han actualizado al staking de <1>veCAKE</1>. Si aún tienes CAKE en staking en los pools antiguos, tendrás que <2>migrar a veCAKE</2> para seguir obteniendo recompensas. <3>Aprende cómo migrar aquí</3>"
+  "legacy-pools": "Los <0>Pools Auto CAKE y Manual CAKE</0> se han actualizado al staking de <1>veCAKE</1>. Si aún tienes CAKE en staking en los pools antiguos, tendrás que <2>migrar a veCAKE</2> para seguir obteniendo recompensas. <3>Aprende cómo migrar aquí</3>",
+  "Gift Failed to Claim": "Reclamo de Regalo Fallido",
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "El reclamo del regalo ha fallado. Puedes cancelar este regalo para devolver los tokens a tu billetera."
 }
