@@ -3,7 +3,7 @@ import { PredictionSupportedSymbol } from '@pancakeswap/prediction'
 import { ArrowBackIcon, Card, CardBody, Heading, Button } from '@pancakeswap/uikit'
 import { useRouter } from 'next/router'
 import { styled } from 'styled-components'
-import { useConfig } from 'views/Predictions/context/ConfigProvider'
+import { usePredictionConfigs } from 'views/Predictions/hooks/usePredictionConfigs'
 
 interface NotificationProps {
   title: string
@@ -38,10 +38,9 @@ const BackButtonStyle = styled(Button)`
 
 const BackButton = () => {
   const { t } = useTranslation()
-  const router = useRouter()
 
   return (
-    <BackButtonStyle variant="primary" width="100%" onClick={() => router.back()}>
+    <BackButtonStyle variant="primary" width="100%">
       <ArrowBackIcon color="invertedContrast" mr="8px" />
       {t('Back')}
     </BackButtonStyle>
@@ -50,7 +49,9 @@ const BackButton = () => {
 
 const Notification: React.FC<React.PropsWithChildren<NotificationProps>> = ({ title, children }) => {
   const router = useRouter()
-  const config = useConfig()
+  const predictionConfigs = usePredictionConfigs()
+
+  const defaultChainConfigToken = predictionConfigs ? Object.keys(predictionConfigs)[0] : PredictionSupportedSymbol.ETH
 
   return (
     <Wrapper>
@@ -58,11 +59,7 @@ const Notification: React.FC<React.PropsWithChildren<NotificationProps>> = ({ ti
         <BackButton />
         <BunnyDecoration
           onClick={() => {
-            if (config?.predictionCurrency?.symbol === PredictionSupportedSymbol.CAKE) {
-              router.query.token = PredictionSupportedSymbol.BNB
-            } else if (config?.predictionCurrency?.symbol === PredictionSupportedSymbol.BNB) {
-              router.query.token = PredictionSupportedSymbol.CAKE
-            }
+            router.query.token = defaultChainConfigToken
 
             router.push(router)
           }}
