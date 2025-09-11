@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Akıllı sözleşme cüzdanları şu anda %product% üzerinde desteklenmiyor. Devam etmek için ürünle etkileşime geçmek üzere lütfen bir EOA'ya (Haricî Olarak Sahip Olunan Hesap) geçin.",
   "Earn Falcon Miles!": "Falcon Milleri Kazanın!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "LP'ler, havuza katkıda bulunulan toplam TVL'ye dayalı olarak %multiplier% katı Falcon Mili kazandırıyor. Miller sadce 0,95 ile 1,05 aralığındaki pozisyonlarda birikir.",
-  "Trade for a Chance to Win %amount%.": "%amount% Kazanma Şansı İçin Yatırım Yapın.",
   "Enter value between %min% and %max%": "%min% ile %max% arasında bir değer girin",
   "balance not enough": "bakiye yeterli değil",
   "Select base token": "Taban token seçin",
@@ -4147,5 +4146,6 @@
   "How many tokens will I get?": "How many tokens will I get?",
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
-  "Target Raise": "Hedef Artış"
+  "Target Raise": "Hedef Artış",
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
 }
