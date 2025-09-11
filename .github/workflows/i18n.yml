@@ -38,7 +38,7 @@ jobs:
           if git diff --quiet; then
             echo "changed=false" >> $GITHUB_OUTPUT
           else
-            git add .
+            git add . ':!/.github/actions/i18n-tools'
             git commit -m "chore(i18n): update translations"
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
