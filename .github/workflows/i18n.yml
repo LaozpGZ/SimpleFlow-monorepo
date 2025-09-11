@@ -21,6 +21,7 @@ jobs:
           command: 'translate'
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.PCS_BOT_TOKEN }}
 
       - name: Commit changes
         id: commit
