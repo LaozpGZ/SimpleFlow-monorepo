@@ -3745,7 +3745,6 @@
   "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.": "Smart contract wallets are currently not supported on %product%. To continue, please switch back to an EOA (Externally Owned Account) wallet before interacting with the product.",
   "Earn Falcon Miles!": "Заробляйте Falcon Miles!",
   "LPs earns %multiplier%x Falcon's Miles based on total TVL contributed to the pool. Miles only accrue to positions within 0.95 to 1.05 range.": "Постачальники ліквідності (ПЛ) заробляють у %multiplier% р. більше Falcon Miles на основі загальної вартості заблокованого (TVL) у пулі. Мілі нараховуються лише позиціям у ціновому діапазоні 0,95–1,05.",
-  "Trade for a Chance to Win %amount%.": "Торгуйте, щоб отримати шанс виграти %amount%.",
   "Enter value between %min% and %max%": "Введіть значення в межах від %min% до %max%",
   "balance not enough": "недостатній баланс",
   "Select base token": "Виберіть базовий токен",
@@ -4147,5 +4146,6 @@
   "How many tokens will I get?": "How many tokens will I get?",
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
-  "Target Raise": "Цільова сума зборів"
+  "Target Raise": "Цільова сума зборів",
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
 }
