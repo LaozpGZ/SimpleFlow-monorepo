@@ -1,5 +1,5 @@
 import { I18nextProvider } from 'react-i18next'
-import { createContext, useCallback, useMemo } from 'react'
+import { createContext, useCallback, useEffect, useMemo } from 'react'
 import i18n from './i18n'
 import { EN, languages } from './config/languages'
 import { LS_KEY } from './helpers'
@@ -13,6 +13,15 @@ const cache = new Map<string, string>()
 
 export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { lang, bundle, ver, refresh, isFetching } = useLocaleBundle()
+
+  // Need a useEffect to change language on initial load
+  // Sometimes the lang from react-i18next is not correct on first render
+  useEffect(() => {
+    const load = async () => {
+      await i18n.changeLanguage(lang)
+    }
+    load()
+  }, [lang])
 
   const setLanguage = useCallback(
     async (language: Language) => {
