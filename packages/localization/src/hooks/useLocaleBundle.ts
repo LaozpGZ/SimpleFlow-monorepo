@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react'
 import { fetchLocale, getLanguageCodeFromLS } from '../helpers'
-import full from '../config/translations.json'
+import extendEN from '../config/translation.extend.json'
 import i18n from '../i18n'
 
 export const useLocaleBundle = () => {
@@ -10,7 +10,7 @@ export const useLocaleBundle = () => {
     ver: number
     isFetching: boolean
   }>({
-    bundle: full,
+    bundle: extendEN,
     ver: 0,
     isFetching: !i18n.hasResourceBundle(lang, 'translation'),
   })
@@ -29,7 +29,7 @@ export const useLocaleBundle = () => {
       }
     }
     setState((prev) => ({
-      bundle: i18n.getResourceBundle(lang, 'translation') || full,
+      bundle: i18n.getResourceBundle(lang, 'translation') || extendEN,
       ver: prev.ver + 1,
       isFetching: false,
     }))

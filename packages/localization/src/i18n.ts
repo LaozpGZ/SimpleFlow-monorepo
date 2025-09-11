@@ -1,7 +1,7 @@
 import i18n from 'i18next'
 import { initReactI18next } from 'react-i18next'
 import { EN } from './config/languages'
-import translations from './config/translations.json'
+import translations from './config/translation.extend.json'
 
 const resources = {
   [EN.locale]: {
