@@ -107,7 +107,7 @@ export function getBatchedTransaction(
         if (orderSupportsBatch && action.getCalldata) {
           let swapData = action.getCalldata<Calldata[]>()
 
-          if (!Array.isArray(swapData)) {
+          if (swapData && !Array.isArray(swapData)) {
             swapData = [swapData]
           }
           if (swapData) {
