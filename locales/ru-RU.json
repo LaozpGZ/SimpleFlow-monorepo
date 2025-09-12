@@ -2786,7 +2786,7 @@
   "How Are Rewards Calculated in Prediction?": "Как рассчитываются вознаграждения в функции «Прогноз»?",
   "Can I Cancel My Prediction Bet?": "Можно ли отменить ставку в функции «Прогноз»?",
   "The Prediction feature on PancakeSwap is a price-prediction game where users can guess whether the price of an asset, such as BNB, will be higher or lower after a set period. Correct predictions can earn rewards.": "Функция «Прогноз» на PancakeSwap — это игра по прогнозированию цен, в которой пользователи угадывают, вырастет или упадет цена актива (например, BNB) по истечении заданного периода. За правильные прогнозы можно получить вознаграждение.",
-  "To participate, connect your wallet, navigate to the Prediction page, and select 'Bull' (predicting an increase) or 'Bear' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "Чтобы принять участие, подключите кошелек, перейдите на страницу «Прогноз» и выберите прогноз для следующего раунда: «Бык» (рост) или «Медведь» (падение). Затем введите сумму ставки и подтвердите транзакцию.",
+  "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.",
   "Prediction is a high-risk game, as it depends on price fluctuations that can be volatile. Only use funds you can afford to lose, and remember that there's no guaranteed outcome.": "«Прогноз» — это высокорисковая игра, поскольку она зависит от колебаний цен, которые могут быть нестабильными. Используйте только те суммы, которые вы можете позволить себе потерять. Помните, что гарантии результата нет.",
   "Rewards are distributed from the pool of all user wagers in the round. Winners share the pool minus a small fee, which is added back to the platform. The reward amount depends on the total pool size and the number of winners.": "Вознаграждения распределяются из пула ставок всех пользователей в раунде. Победители делят призовой фонд (за вычетом небольшой комиссии, которая возвращается на платформу). Сумма вознаграждения зависит от общего размера пула и количества победителей.",
   "Once placed, a prediction bet cannot be canceled or altered. Ensure you’re confident about your prediction before confirming, as it’s locked for the duration of the round.": "После размещения ставку-прогноз нельзя отменить или изменить. Подтверждайте прогноз, только если уверены в нем: ваш прогноз будет заблокирован на время раунда.",
@@ -4147,5 +4147,10 @@
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
   "Target Raise": "Повышение цели",
-  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%",
+  "What if no one enters an opposing position?": "What if no one enters an opposing position?",
+  "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).": "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).",
+  "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.": "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.",
+  "Paused": "Paused",
+  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses"
 }
