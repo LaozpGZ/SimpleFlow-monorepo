@@ -2,7 +2,7 @@ import { Connection, PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 
 import { RewardInfoV6 } from "../../api/type";
-import { parseBigNumberish } from "../../common";
+import { BN_15, BN_NINE, BN_ONE, BN_TEN, BN_ZERO, parseBigNumberish } from "../../common";
 import { GetMultipleAccountsInfoConfig, getMultipleAccountsInfoWithCustomFlags } from "../../common/accountInfo";
 import { DateParam, isDateAfter, isDateBefore } from "../../common/date";
 import { createLogger } from "../../common/logger";
@@ -77,7 +77,7 @@ export const getAssociatedAuthority = ({
 
 export function farmRewardInfoToConfig(data: FarmRewardInfo): FarmRewardInfoConfig {
   return {
-    isSet: new BN(1),
+    isSet: BN_ONE,
     rewardPerSecond: parseBigNumberish(data.perSecond),
     rewardOpenTime: parseBigNumberish(data.openTime),
     rewardEndTime: parseBigNumberish(data.endTime),
@@ -114,17 +114,17 @@ export function updateFarmPoolInfo(
     poolInfo.lastSlot = new BN(slot);
 
     for (const itemRewardInfo of poolInfo.rewardInfos) {
-      if (lpVault.amount.eq(new BN(0))) continue;
+      if (lpVault.amount.eq(BN_ZERO)) continue;
 
       const reward = itemRewardInfo.perSlotReward.mul(spread);
       itemRewardInfo.perShareReward = itemRewardInfo.perShareReward.add(
-        reward.mul(new BN(10).pow(new BN(poolInfo.version === 3 ? 9 : 15))).div(lpVault.amount),
+        reward.mul(BN_TEN.pow(new BN(poolInfo.version === 3 ? 9 : 15))).div(lpVault.amount),
       );
       itemRewardInfo.totalReward = itemRewardInfo.totalReward.add(reward);
     }
   } else if (poolInfo.version === 6) {
     for (const itemRewardInfo of poolInfo.rewardInfos) {
-      if (itemRewardInfo.rewardState.eq(new BN(0))) continue;
+      if (itemRewardInfo.rewardState.eq(BN_ZERO)) continue;
       const updateTime = BN.min(new BN(chainTime), itemRewardInfo.rewardEndTime);
       if (itemRewardInfo.rewardOpenTime.gte(updateTime)) continue;
       const spread = updateTime.sub(itemRewardInfo.rewardLastUpdateTime);
@@ -138,7 +138,7 @@ export function updateFarmPoolInfo(
       } else {
         itemRewardInfo.rewardLastUpdateTime = updateTime;
       }
-      if (lpVault.amount.eq(new BN(0))) continue;
+      if (lpVault.amount.eq(BN_ZERO)) continue;
       itemRewardInfo.accRewardPerShare = itemRewardInfo.accRewardPerShare.add(
         reward.mul(poolInfo.rewardMultiplier).div(lpVault.amount),
       );
@@ -174,7 +174,7 @@ export async function fetchMultipleFarmInfoAndUpdate({
 }: FarmFetchMultipleInfoParams): Promise<FarmPoolsInfo> {
   let hasNotV6Pool = false;
   let hasV6Pool = false;
-  const tenBN = new BN(10);
+  const tenBN = BN_TEN;
 
   const publicKeys: {
     pubkey: PublicKey;
@@ -255,8 +255,8 @@ export async function fetchMultipleFarmInfoAndUpdate({
         state.version === 6
           ? state.rewardMultiplier
           : state.rewardInfos.length === 1
-          ? tenBN.pow(new BN(9))
-          : tenBN.pow(new BN(15));
+          ? tenBN.pow(BN_NINE)
+          : tenBN.pow(BN_15);
 
       const pendingRewards = state.rewardInfos.map((rewardInfo, index) => {
         const rewardDebt = ledger.rewardDebts[index];

@@ -1,8 +1,9 @@
+import { BN_100, BN_ONE, BN_TEN } from "@/common";
 import BN from "bn.js";
 import Decimal from "decimal.js";
 
 export class MathLaunch {
-  static _Q64 = new Decimal(new BN(1).shln(64).toString());
+  static _Q64 = new Decimal(BN_ONE.shln(64).toString());
 
   static _multipler(decimals: number): Decimal {
     return new Decimal(10).pow(decimals);
@@ -41,9 +42,9 @@ export function checkPoolToAmm({
   const liquidity = new BN(new Decimal(migrateAmountA.mul(totalFundRaisingB).toString()).sqrt().toFixed(0));
 
   if (migrateType === "amm") {
-    if (liquidity.gt(new BN(10).pow(new BN(decimalsA)))) return true;
+    if (liquidity.gt(BN_TEN.pow(new BN(decimalsA)))) return true;
   } else if (migrateType === "cpmm") {
-    if (liquidity.gt(new BN(100))) return true;
+    if (liquidity.gt(BN_100)) return true;
   } else {
     throw Error("migrate type error");
   }

@@ -4,6 +4,7 @@ import { TransferFee, TransferFeeConfig } from "@solana/spl-token";
 
 import { TransferFeeDataBaseType } from "../api/type";
 import { GetTransferAmountFee } from "../raydium/type";
+import { BN_ONE, BN_ZERO } from "./bignumber";
 
 const POINT = 10_000;
 export function getTransferAmountFee(
@@ -144,23 +145,23 @@ export function minExpirationTime(
 export function BNDivCeil(bn1: BN, bn2: BN): BN {
   const { div, mod } = bn1.divmod(bn2);
 
-  if (mod.gt(new BN(0))) {
-    return div.add(new BN(1));
+  if (mod.gt(BN_ZERO)) {
+    return div.add(BN_ONE);
   } else {
     return div;
   }
 }
 
 export function ceilDivBN(amountA: BN, amountB: BN): BN {
-  if (amountA.isZero()) return new BN(0);
+  if (amountA.isZero()) return BN_ZERO;
 
   const quotient = amountA.div(amountB);
 
-  if (quotient.isZero()) return new BN(1);
+  if (quotient.isZero()) return BN_ONE;
 
   const remainder = amountA.mod(amountB);
-  if (remainder.gt(new BN(0))) {
-    return quotient.add(new BN(1));
+  if (remainder.gt(BN_ZERO)) {
+    return quotient.add(BN_ONE);
   }
   return quotient;
 }

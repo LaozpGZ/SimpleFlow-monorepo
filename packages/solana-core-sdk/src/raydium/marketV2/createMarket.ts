@@ -1,7 +1,7 @@
 import { PublicKey } from "@solana/web3.js";
 import BN from "bn.js";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
-import { BN_ZERO } from "@/common/bignumber";
+import { BN_100, BN_ZERO } from "@/common/bignumber";
 import { MakeMultiTxData } from "@/common/txTool/txTool";
 import { TxVersion } from "@/common/txTool/txType";
 import { ComputeBudgetConfig, TxTipConfig } from "../../raydium/type";
@@ -105,9 +105,9 @@ export default class MarketV2 extends ModuleBase {
       assignSeed: seed ? `${seed}-quoteVault` : seed,
     });
     const feeRateBps = 0;
-    const quoteDustThreshold = new BN(100);
+    const quoteDustThreshold = BN_100;
     function getVaultOwnerAndNonce() {
-      const vaultSignerNonce = new BN(0);
+      const vaultSignerNonce = BN_ZERO;
       // eslint-disable-next-line no-constant-condition
       while (true) {
         try {

@@ -7,13 +7,12 @@ import {
   ApiV3PoolInfoConcentratedItem,
   U64_IGNORE_RANGE,
   ApiV3Token,
-  ZERO,
+  BN_ZERO,
   DecreaseLiquidityEventLayout
 } from '@pancakeswap/solana-core-sdk'
-import { AccountInfo, Transaction } from '@solana/web3.js'
+import { AccountInfo } from '@solana/web3.js'
 import BN from 'bn.js'
 import Decimal from 'decimal.js'
-import { shallow } from 'zustand/shallow'
 import useSWR from 'swr'
 import useTokenPrice from '@/hooks/token/useTokenPrice'
 import useFetchMultipleAccountInfo from '@/hooks/info/useFetchMultipleAccountInfo'
@@ -217,9 +216,9 @@ export function useClmmRewardInfoFromSimulation(props: Props) {
       simulateOnly: true,
       poolInfo: poolInfo as ApiV3PoolInfoConcentratedItem,
       position,
-      liquidity: ZERO,
-      amountMinA: ZERO,
-      amountMinB: ZERO,
+      liquidity: BN_ZERO,
+      amountMinA: BN_ZERO,
+      amountMinB: BN_ZERO,
       harvest: true
     })) as ReturnType<typeof DecreaseLiquidityEventLayout.decode>
 

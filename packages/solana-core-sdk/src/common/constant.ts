@@ -1,5 +1,5 @@
 import BN from "bn.js";
-import { BigNumberish } from "./bignumber";
+import { BigNumberish, BN_ZERO } from "./bignumber";
 import { createLogger } from "./logger";
 
 export enum Rounding {
@@ -40,5 +40,5 @@ export function parseBigNumberish(value: BigNumberish): BN {
     return new BN(value.toString());
   }
   logger.error(`invalid BigNumberish value: ${value}`);
-  return new BN(0); // never reach, because logWithError will throw error
+  return BN_ZERO; // never reach, because logWithError will throw error
 }

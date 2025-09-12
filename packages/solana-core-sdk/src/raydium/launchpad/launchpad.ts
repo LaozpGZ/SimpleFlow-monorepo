@@ -6,6 +6,8 @@ import {
   getMultipleAccountsInfoWithCustomFlags,
   getATAAddress,
   MakeMultiTxData,
+  BN_ZERO,
+  BN_10000,
 } from "@/common";
 import {
   BuyToken,
@@ -50,26 +52,26 @@ export const LaunchpadPoolInitParam = {
   supply: new BN(1_000_000_000_000_000),
   totalSellA: new BN(793_100_000_000_000),
   totalFundRaisingB: new BN(85_000_000_000),
-  totalLockedAmount: new BN("0"),
-  cliffPeriod: new BN("0"),
-  unlockPeriod: new BN("0"),
+  totalLockedAmount: BN_ZERO,
+  cliffPeriod: BN_ZERO,
+  unlockPeriod: BN_ZERO,
   decimals: 6,
   virtualA: new BN("1073471847374405"),
   virtualB: new BN("30050573465"),
-  realA: new BN(0),
-  realB: new BN(0),
-  protocolFee: new BN(0),
+  realA: BN_ZERO,
+  realB: BN_ZERO,
+  protocolFee: BN_ZERO,
   platformId: new PublicKey("4Bu96XjU84XjPDSpveTVf6LYGCkfW5FK7SNkREWcEfV4"),
   vestingSchedule: {
-    totalLockedAmount: new BN(0),
-    cliffPeriod: new BN(0),
-    unlockPeriod: new BN(0),
-    startTime: new BN(0),
-    totalAllocatedShare: new BN(0),
+    totalLockedAmount: BN_ZERO,
+    cliffPeriod: BN_ZERO,
+    unlockPeriod: BN_ZERO,
+    startTime: BN_ZERO,
+    totalAllocatedShare: BN_ZERO,
   },
 };
 
-const SLIPPAGE_UNIT = new BN(10000);
+const SLIPPAGE_UNIT = BN_10000;
 export default class LaunchpadModule extends ModuleBase {
   constructor(params: ModuleBaseProps) {
     super(params);
@@ -129,12 +131,12 @@ export default class LaunchpadModule extends ModuleBase {
 
     if (symbol.length > 10) this.logAndCreateError("Symbol length should shorter than 11");
     if (!uri) this.logAndCreateError("uri should not empty");
-    if (buyAmount.lte(new BN(0))) this.logAndCreateError("buy amount should gt 0:", buyAmount.toString());
+    if (buyAmount.lte(BN_ZERO)) this.logAndCreateError("buy amount should gt 0:", buyAmount.toString());
 
     const supply = extraConfigs?.supply ?? LaunchpadPoolInitParam.supply;
     const totalSellA = extraConfigs?.totalSellA ?? LaunchpadPoolInitParam.totalSellA;
     const totalFundRaisingB = extraConfigs?.totalFundRaisingB ?? LaunchpadPoolInitParam.totalFundRaisingB;
-    const totalLockedAmount = extraConfigs?.totalLockedAmount ?? new BN(0);
+    const totalLockedAmount = extraConfigs?.totalLockedAmount ?? BN_ZERO;
 
     let defaultPlatformFeeRate = platformFeeRate;
     if (!platformFeeRate) {
@@ -178,10 +180,10 @@ export default class LaunchpadModule extends ModuleBase {
       totalFundRaisingB,
       vestingSchedule: {
         totalLockedAmount,
-        cliffPeriod: new BN(0),
-        unlockPeriod: new BN(0),
-        startTime: new BN(0),
-        totalAllocatedShare: new BN(0),
+        cliffPeriod: BN_ZERO,
+        unlockPeriod: BN_ZERO,
+        startTime: BN_ZERO,
+        totalAllocatedShare: BN_ZERO,
       },
     };
 
@@ -190,7 +192,7 @@ export default class LaunchpadModule extends ModuleBase {
       supply: poolInfo.supply,
       totalFundRaising: poolInfo.totalFundRaisingB,
       totalLockedAmount,
-      totalSell: configInfo!.curveType === 0 ? poolInfo.totalSellA : new BN(0),
+      totalSell: configInfo!.curveType === 0 ? poolInfo.totalSellA : BN_ZERO,
       migrateFee: configInfo!.migrateFee,
     });
 
@@ -247,13 +249,13 @@ export default class LaunchpadModule extends ModuleBase {
             totalFundRaisingB,
           },
           totalLockedAmount,
-          extraConfigs?.cliffPeriod ?? new BN(0),
-          extraConfigs?.unlockPeriod ?? new BN(0),
+          extraConfigs?.cliffPeriod ?? BN_ZERO,
+          extraConfigs?.unlockPeriod ?? BN_ZERO,
         ),
       ],
     });
 
-    let outAmount = new BN(0);
+    let outAmount = BN_ZERO;
     let splitIns;
     if (extraSigners?.length) txBuilder.addInstruction({ signers: extraSigners });
     if (!extraConfigs.createOnly) {
@@ -322,13 +324,13 @@ export default class LaunchpadModule extends ModuleBase {
     minMintAAmount: propMinMintAAmount,
     slippage,
 
-    shareFeeRate = new BN(0),
+    shareFeeRate = BN_ZERO,
     shareFeeReceiver,
 
     associatedOnly = true,
     checkCreateATAOwner = false,
   }: BuyToken<T>): Promise<MakeTxData<T, { outAmount: BN }>> {
-    if (buyAmount.lte(new BN(0))) this.logAndCreateError("buy amount should gt 0:", buyAmount.toString());
+    if (buyAmount.lte(BN_ZERO)) this.logAndCreateError("buy amount should gt 0:", buyAmount.toString());
     const txBuilder = this.createTxBuilder(feePayer);
     const { publicKey: poolId } = getPdaLaunchpadPoolId(programId, mintA, mintB);
     authProgramId = authProgramId ?? getPdaLaunchpadAuth(programId).publicKey;
@@ -516,7 +518,7 @@ export default class LaunchpadModule extends ModuleBase {
     minAmountB: propMinAmountB,
     slippage,
 
-    shareFeeRate = new BN(0),
+    shareFeeRate = BN_ZERO,
     shareFeeReceiver,
 
     associatedOnly = true,
@@ -525,7 +527,7 @@ export default class LaunchpadModule extends ModuleBase {
     authProgramId = authProgramId ?? getPdaLaunchpadAuth(programId).publicKey;
     const txBuilder = this.createTxBuilder(feePayer);
 
-    if (sellAmount.lte(new BN(0))) this.logAndCreateError("sell amount should be gt 0");
+    if (sellAmount.lte(BN_ZERO)) this.logAndCreateError("sell amount should be gt 0");
 
     const { publicKey: poolId } = getPdaLaunchpadPoolId(programId, mintA, mintB);
 
@@ -615,7 +617,7 @@ export default class LaunchpadModule extends ModuleBase {
     const minAmountB =
       propMinAmountB ?? (slippage ? new BN(decimalAmountB.mul(multiplier).toFixed(0)) : calculatedAmount.amountB);
 
-    if (minAmountB.lte(new BN(0))) this.logAndCreateError(`out ${mintB.toBase58()} amount should be gt 0`);
+    if (minAmountB.lte(BN_ZERO)) this.logAndCreateError(`out ${mintB.toBase58()} amount should be gt 0`);
 
     const shareATA = shareFeeReceiver ? getATAAddress(shareFeeReceiver, mintB, TOKEN_PROGRAM_ID).publicKey : undefined;
     if (shareATA) {

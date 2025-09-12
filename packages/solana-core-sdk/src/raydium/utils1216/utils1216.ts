@@ -1,7 +1,7 @@
 import { Connection, PublicKey, Signer, Transaction, TransactionInstruction } from "@solana/web3.js";
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import BN from "bn.js";
-import { findProgramAddress, forecastTransactionSize, getMultipleAccountsInfo } from "@/common";
+import { BN_ZERO, findProgramAddress, forecastTransactionSize, getMultipleAccountsInfo } from "@/common";
 import { blob, publicKey, seq, struct, u64, u8 } from "@/marshmallow";
 import { Token } from "@/module";
 import ModuleBase from "../moduleBase";
@@ -176,7 +176,7 @@ export default class Utils1216 extends ModuleBase {
       const endTime = itemPoolInfo.endTime.toNumber();
 
       const hasCanClaimToken =
-        itemOwnerInfo.tokenInfo.map((i) => i.debtAmount.gt(new BN(0))).filter((i) => !i).length !== 3;
+        itemOwnerInfo.tokenInfo.map((i) => i.debtAmount.gt(BN_ZERO)).filter((i) => !i).length !== 3;
       const inCanClaimTime = chainTime > openTime && chainTime < endTime && itemPoolInfo.status === 1;
 
       const canClaim = hasCanClaimToken && inCanClaimTime;

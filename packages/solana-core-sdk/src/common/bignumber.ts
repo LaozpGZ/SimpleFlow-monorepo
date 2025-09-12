@@ -17,10 +17,14 @@ export const BN_ONE = new BN(1);
 export const BN_TWO = new BN(2);
 export const BN_THREE = new BN(3);
 export const BN_FIVE = new BN(5);
+export const BN_NINE = new BN(9);
 export const BN_TEN = new BN(10);
+export const BN_15 = new BN(15);
+export const BN_25 = new BN(25);
 export const BN_100 = new BN(100);
 export const BN_1000 = new BN(1000);
 export const BN_10000 = new BN(10000);
+export const BN_10000000000 = new BN(10000000000);
 export type BigNumberish = BN | string | number | bigint;
 export type Numberish = number | string | bigint | Fraction | BN;
 
@@ -104,7 +108,7 @@ export function toFraction(value: Numberish): Fraction {
 }
 
 export function ceilDiv(tokenAmount: BN, feeNumerator: BN, feeDenominator: BN): BN {
-  return tokenAmount.mul(feeNumerator).add(feeDenominator).sub(new BN(1)).div(feeDenominator);
+  return tokenAmount.mul(feeNumerator).add(feeDenominator).sub(BN_ONE).div(feeDenominator);
 }
 
 export function floorDiv(tokenAmount: BN, feeNumerator: BN, feeDenominator: BN): BN {
@@ -121,7 +125,7 @@ export function toPercent(
   options?: { /* usually used for backend data */ alreadyDecimaled?: boolean },
 ): Percent {
   const { numerator, denominator } = parseNumberInfo(n);
-  return new Percent(new BN(numerator), new BN(denominator).mul(options?.alreadyDecimaled ? new BN(100) : new BN(1)));
+  return new Percent(new BN(numerator), new BN(denominator).mul(options?.alreadyDecimaled ? BN_100 : BN_ONE));
 }
 
 export function toTokenPrice(params: {

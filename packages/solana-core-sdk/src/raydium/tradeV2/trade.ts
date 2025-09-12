@@ -6,6 +6,8 @@ import { AmmV4Keys, ApiV3Token, ClmmKeys, PoolKeys } from "@/api";
 import {
   AMM_V4,
   BigNumberish,
+  BN_10000,
+  BN_ZERO,
   CLMM_PROGRAM_ID,
   CREATE_CPMM_POOL_PROGRAM,
   fetchMultipleMintInfos,
@@ -48,7 +50,6 @@ import {
   RoutePathType,
 } from "./type";
 
-const ZERO = new BN(0);
 export default class TradeV2 extends ModuleBase {
   constructor(params: ModuleBaseProps) {
     super(params);
@@ -801,9 +802,7 @@ export default class TradeV2 extends ModuleBase {
     };
   }): ComputeAmountOutLayout[] {
     const _amountInFee =
-      feeConfig === undefined
-        ? new BN(0)
-        : inputTokenAmount.raw.mul(new BN(feeConfig.feeBps.toNumber())).div(new BN(10000));
+      feeConfig === undefined ? BN_ZERO : inputTokenAmount.raw.mul(new BN(feeConfig.feeBps.toNumber())).div(BN_10000);
     const _amoutIn = inputTokenAmount.raw.sub(_amountInFee);
     const amountIn = new TokenAmount(inputTokenAmount.token, _amoutIn);
     const _inFeeConfig =
@@ -874,14 +873,16 @@ export default class TradeV2 extends ModuleBase {
           }
         })
         .sort((_a, _b) => {
-          const a = _a === undefined ? ZERO : _a.data.amountOut.amount.raw.sub(_a.data.amountOut.fee?.raw ?? ZERO);
-          const b = _b === undefined ? ZERO : _b.data.amountOut.amount.raw.sub(_b.data.amountOut.fee?.raw ?? ZERO);
+          const a =
+            _a === undefined ? BN_ZERO : _a.data.amountOut.amount.raw.sub(_a.data.amountOut.fee?.raw ?? BN_ZERO);
+          const b =
+            _b === undefined ? BN_ZERO : _b.data.amountOut.amount.raw.sub(_b.data.amountOut.fee?.raw ?? BN_ZERO);
           return a.lt(b) ? 1 : -1;
         })[0];
       if (maxFirstIn === undefined) continue;
       const routeAmountIn = new TokenAmount(
         toToken(routeToken),
-        maxFirstIn.data.amountOut.amount.raw.sub(maxFirstIn.data.amountOut.fee?.raw ?? ZERO),
+        maxFirstIn.data.amountOut.amount.raw.sub(maxFirstIn.data.amountOut.fee?.raw ?? BN_ZERO),
       );
       for (const iOutPool of info.out) {
         try {
@@ -907,7 +908,7 @@ export default class TradeV2 extends ModuleBase {
                 baseToken: maxFirstIn.data.amountIn.amount.token,
                 denominator: maxFirstIn.data.amountIn.amount.raw,
                 quoteToken: outC.amountOut.amount.token,
-                numerator: outC.amountOut.amount.raw.sub(outC.amountOut.fee?.raw ?? ZERO),
+                numerator: outC.amountOut.amount.raw.sub(outC.amountOut.fee?.raw ?? BN_ZERO),
               }).toFixed(),
             ),
             priceImpact: new Decimal(maxFirstIn.data.priceImpact.add(outC.priceImpact).toFixed()),
@@ -918,7 +919,7 @@ export default class TradeV2 extends ModuleBase {
             minMiddleAmountFee: outC.amountOut.fee?.raw
               ? new TokenAmount(
                   (maxFirstIn.data.amountOut.amount as TokenAmount).token,
-                  (maxFirstIn.data.amountOut.fee?.raw ?? ZERO).add(outC.amountOut.fee?.raw ?? ZERO),
+                  (maxFirstIn.data.amountOut.fee?.raw ?? BN_ZERO).add(outC.amountOut.fee?.raw ?? BN_ZERO),
                 )
               : undefined,
             middleToken: (maxFirstIn.data.amountOut.amount as TokenAmount).token,
@@ -940,7 +941,7 @@ export default class TradeV2 extends ModuleBase {
           this.logDebug(`pool ${i.poolInfoList.map((p) => p.id.toString()).join(",")} filter out since not all trade`);
         return i.allTrade;
       })
-      .sort((a, b) => (a.amountOut.amount.raw.sub(b.amountOut.amount.raw).gt(ZERO) ? -1 : 1));
+      .sort((a, b) => (a.amountOut.amount.raw.sub(b.amountOut.amount.raw).gt(BN_ZERO) ? -1 : 1));
   }
 
   /** trade related utils */

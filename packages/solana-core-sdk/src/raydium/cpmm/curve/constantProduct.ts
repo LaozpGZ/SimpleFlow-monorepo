@@ -1,5 +1,6 @@
 import BN from "bn.js";
 import { RoundDirection, SwapWithoutFeesResult, TradingTokenResult } from "./calculator";
+import { BN_ONE, BN_ZERO } from "@/common";
 
 function checkedRem(dividend: BN, divisor: BN): BN {
   if (divisor.isZero()) throw Error("divisor is zero");
@@ -17,19 +18,17 @@ function checkedCeilDiv(dividend: BN, rhs: BN): BN[] {
 
   let remainder = checkedRem(dividend, rhs);
 
-  if (remainder.gt(ZERO)) {
-    quotient = quotient.add(new BN(1));
+  if (remainder.gt(BN_ZERO)) {
+    quotient = quotient.add(BN_ONE);
 
     rhs = dividend.div(quotient);
     remainder = checkedRem(dividend, quotient);
-    if (remainder.gt(ZERO)) {
-      rhs = rhs.add(new BN(1));
+    if (remainder.gt(BN_ZERO)) {
+      rhs = rhs.add(BN_ONE);
     }
   }
   return [quotient, rhs];
 }
-
-const ZERO = new BN(0);
 
 export class ConstantProductCurve {
   static swapWithoutFees(sourceAmount: BN, swapSourceAmount: BN, swapDestinationAmount: BN): SwapWithoutFeesResult {
@@ -61,14 +60,14 @@ export class ConstantProductCurve {
     } else if (roundDirection === RoundDirection.Ceiling) {
       const tokenRemainder0 = checkedRem(lpTokenAmount.mul(swapTokenAmount0), lpTokenSupply);
 
-      if (tokenRemainder0.gt(ZERO) && tokenAmount0.gt(ZERO)) {
-        tokenAmount0 = tokenAmount0.add(new BN(1));
+      if (tokenRemainder0.gt(BN_ZERO) && tokenAmount0.gt(BN_ZERO)) {
+        tokenAmount0 = tokenAmount0.add(BN_ONE);
       }
 
       const token1Remainder = checkedRem(lpTokenAmount.mul(swapTokenAmount1), lpTokenSupply);
 
-      if (token1Remainder.gt(ZERO) && tokenAmount1.gt(ZERO)) {
-        tokenAmount1 = tokenAmount1.add(new BN(1));
+      if (token1Remainder.gt(BN_ZERO) && tokenAmount1.gt(BN_ZERO)) {
+        tokenAmount1 = tokenAmount1.add(BN_ONE);
       }
 
       return { tokenAmount0, tokenAmount1 };

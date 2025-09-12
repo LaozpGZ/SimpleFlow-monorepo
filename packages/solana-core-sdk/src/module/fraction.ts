@@ -2,7 +2,7 @@ import _Big from "big.js";
 import BN from "bn.js";
 import _Decimal from "decimal.js-light";
 
-import { BigNumberish } from "../common/bignumber";
+import { BigNumberish, BN_ONE } from "../common/bignumber";
 import { createLogger } from "../common/logger";
 
 import { parseBigNumberish, Rounding } from "../common/constant";
@@ -31,7 +31,7 @@ export class Fraction {
   public readonly numerator: BN;
   public readonly denominator: BN;
 
-  public constructor(numerator: BigNumberish, denominator: BigNumberish = new BN(1)) {
+  public constructor(numerator: BigNumberish, denominator: BigNumberish = BN_ONE) {
     this.numerator = parseBigNumberish(numerator);
     this.denominator = parseBigNumberish(denominator);
   }

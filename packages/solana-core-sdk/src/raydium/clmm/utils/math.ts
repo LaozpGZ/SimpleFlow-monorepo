@@ -19,39 +19,38 @@ import {
   MIN_SQRT_PRICE_X64,
   MIN_TICK,
   NEGATIVE_ONE,
-  ONE,
   Q128,
   Q64,
   U64Resolution,
-  ZERO,
 } from "./constants";
 import { getPdaTickArrayAddress } from "./pda";
 import { PoolUtils } from "./pool";
 import { Tick, TickArray, TickUtils } from "./tick";
 import { TickQuery } from "./tickQuery";
+import { BN_ONE, BN_ZERO } from "@/common";
 
 export class MathUtil {
   public static mulDivRoundingUp(a: BN, b: BN, denominator: BN): BN {
     const numerator = a.mul(b);
     let result = numerator.div(denominator);
-    if (!numerator.mod(denominator).eq(ZERO)) {
-      result = result.add(ONE);
+    if (!numerator.mod(denominator).eq(BN_ZERO)) {
+      result = result.add(BN_ONE);
     }
     return result;
   }
 
   public static mulDivFloor(a: BN, b: BN, denominator: BN): BN {
-    if (denominator.eq(ZERO)) {
+    if (denominator.eq(BN_ZERO)) {
       throw new Error("division by 0");
     }
     return a.mul(b).div(denominator);
   }
 
   public static mulDivCeil(a: BN, b: BN, denominator: BN): BN {
-    if (denominator.eq(ZERO)) {
+    if (denominator.eq(BN_ZERO)) {
       throw new Error("division by 0");
     }
-    const numerator = a.mul(b).add(denominator.sub(ONE));
+    const numerator = a.mul(b).add(denominator.sub(BN_ONE));
     return numerator.div(denominator);
   }
 
@@ -97,10 +96,10 @@ export class SqrtPriceMath {
   }
 
   public static getNextSqrtPriceX64FromInput(sqrtPriceX64: BN, liquidity: BN, amountIn: BN, zeroForOne: boolean): BN {
-    if (!sqrtPriceX64.gt(ZERO)) {
+    if (!sqrtPriceX64.gt(BN_ZERO)) {
       throw new Error("sqrtPriceX64 must greater than 0");
     }
-    if (!liquidity.gt(ZERO)) {
+    if (!liquidity.gt(BN_ZERO)) {
       throw new Error("liquidity must greater than 0");
     }
 
@@ -110,10 +109,10 @@ export class SqrtPriceMath {
   }
 
   public static getNextSqrtPriceX64FromOutput(sqrtPriceX64: BN, liquidity: BN, amountOut: BN, zeroForOne: boolean): BN {
-    if (!sqrtPriceX64.gt(ZERO)) {
+    if (!sqrtPriceX64.gt(BN_ZERO)) {
       throw new Error("sqrtPriceX64 must greater than 0");
     }
-    if (!liquidity.gt(ZERO)) {
+    if (!liquidity.gt(BN_ZERO)) {
       throw new Error("liquidity must greater than 0");
     }
 
@@ -128,7 +127,7 @@ export class SqrtPriceMath {
     amount: BN,
     add: boolean,
   ): BN {
-    if (amount.eq(ZERO)) return sqrtPriceX64;
+    if (amount.eq(BN_ZERO)) return sqrtPriceX64;
     const liquidityLeftShift = liquidity.shln(U64Resolution);
 
     if (add) {
@@ -137,7 +136,7 @@ export class SqrtPriceMath {
       if (denominator.gte(numerator1)) {
         return MathUtil.mulDivCeil(numerator1, sqrtPriceX64, denominator);
       }
-      return MathUtil.mulDivRoundingUp(numerator1, ONE, numerator1.div(sqrtPriceX64).add(amount));
+      return MathUtil.mulDivRoundingUp(numerator1, BN_ONE, numerator1.div(sqrtPriceX64).add(amount));
     } else {
       const amountMulSqrtPrice = amount.mul(sqrtPriceX64);
       if (!liquidityLeftShift.gt(amountMulSqrtPrice)) {
@@ -158,7 +157,7 @@ export class SqrtPriceMath {
     if (add) {
       return sqrtPriceX64.add(deltaY.div(liquidity));
     } else {
-      const amountDivLiquidity = MathUtil.mulDivRoundingUp(deltaY, ONE, liquidity);
+      const amountDivLiquidity = MathUtil.mulDivRoundingUp(deltaY, BN_ONE, liquidity);
       if (!sqrtPriceX64.gt(amountDivLiquidity)) {
         throw new Error("getNextSqrtPriceFromTokenAmountBRoundingDown sqrtPriceX64 must gt amountDivLiquidity");
       }
@@ -214,11 +213,11 @@ export class SqrtPriceMath {
 
     let bit = new BN("8000000000000000", "hex");
     let precision = 0;
-    let log2pFractionX64 = new BN(0);
+    let log2pFractionX64 = BN_ZERO;
 
     let r = msb >= 64 ? sqrtPriceX64.shrn(msb - 63) : sqrtPriceX64.shln(63 - msb);
 
-    while (bit.gt(new BN(0)) && precision < BIT_PRECISION) {
+    while (bit.gt(BN_ZERO) && precision < BIT_PRECISION) {
       r = r.mul(r);
       const rMoreThanTwo = r.shrn(127);
       r = r.shrn(63 + rMoreThanTwo.toNumber());
@@ -291,7 +290,7 @@ export class LiquidityMath {
       [sqrtPriceX64A, sqrtPriceX64B] = [sqrtPriceX64B, sqrtPriceX64A];
     }
 
-    if (!sqrtPriceX64A.gt(ZERO)) {
+    if (!sqrtPriceX64A.gt(BN_ZERO)) {
       throw new Error("sqrtPriceX64A must greater than 0");
     }
 
@@ -299,7 +298,7 @@ export class LiquidityMath {
     const numerator2 = sqrtPriceX64B.sub(sqrtPriceX64A);
 
     return roundUp
-      ? MathUtil.mulDivRoundingUp(MathUtil.mulDivCeil(numerator1, numerator2, sqrtPriceX64B), ONE, sqrtPriceX64A)
+      ? MathUtil.mulDivRoundingUp(MathUtil.mulDivCeil(numerator1, numerator2, sqrtPriceX64B), BN_ONE, sqrtPriceX64A)
       : MathUtil.mulDivFloor(numerator1, numerator2, sqrtPriceX64B).div(sqrtPriceX64A);
   }
 
@@ -312,7 +311,7 @@ export class LiquidityMath {
     if (sqrtPriceX64A.gt(sqrtPriceX64B)) {
       [sqrtPriceX64A, sqrtPriceX64B] = [sqrtPriceX64B, sqrtPriceX64A];
     }
-    if (!sqrtPriceX64A.gt(ZERO)) {
+    if (!sqrtPriceX64A.gt(BN_ZERO)) {
       throw new Error("sqrtPriceX64A must greater than 0");
     }
 
@@ -328,10 +327,10 @@ export class LiquidityMath {
 
     const numerator = amountA.mul(sqrtPriceX64A).mul(sqrtPriceX64B);
     const denominator = sqrtPriceX64B.sub(sqrtPriceX64A);
-    const result = denominator.isZero() ? new BN(0) : numerator.div(denominator);
+    const result = denominator.isZero() ? BN_ZERO : numerator.div(denominator);
 
     if (roundUp) {
-      return MathUtil.mulDivRoundingUp(result, ONE, MaxU64);
+      return MathUtil.mulDivRoundingUp(result, BN_ONE, MaxU64);
     } else {
       return result.shrn(U64Resolution);
     }
@@ -380,7 +379,7 @@ export class LiquidityMath {
     if (sqrtPriceCurrentX64.lte(sqrtPriceX64A)) {
       return {
         amountA: LiquidityMath.getTokenAmountAFromLiquidity(sqrtPriceX64A, sqrtPriceX64B, liquidity, roundUp),
-        amountB: new BN(0),
+        amountB: BN_ZERO,
       };
     } else if (sqrtPriceCurrentX64.lt(sqrtPriceX64B)) {
       const amountA = LiquidityMath.getTokenAmountAFromLiquidity(
@@ -398,7 +397,7 @@ export class LiquidityMath {
       return { amountA, amountB };
     } else {
       return {
-        amountA: new BN(0),
+        amountA: BN_ZERO,
         amountB: LiquidityMath.getTokenAmountBFromLiquidity(sqrtPriceX64A, sqrtPriceX64B, liquidity, roundUp),
       };
     }
@@ -538,10 +537,11 @@ export abstract class SwapMath {
     tickCurrent: number;
     accounts: PublicKey[];
   } {
-    if (amountSpecified.eq(ZERO)) {
+    if (amountSpecified.eq(BN_ZERO)) {
       throw new Error("amountSpecified must not be 0");
     }
-    if (!sqrtPriceLimitX64) sqrtPriceLimitX64 = zeroForOne ? MIN_SQRT_PRICE_X64.add(ONE) : MAX_SQRT_PRICE_X64.sub(ONE);
+    if (!sqrtPriceLimitX64)
+      sqrtPriceLimitX64 = zeroForOne ? MIN_SQRT_PRICE_X64.add(BN_ONE) : MAX_SQRT_PRICE_X64.sub(BN_ONE);
 
     if (zeroForOne) {
       if (sqrtPriceLimitX64.lt(MIN_SQRT_PRICE_X64)) {
@@ -560,11 +560,11 @@ export abstract class SwapMath {
         throw new Error("sqrtPriceX64 must greater than current");
       }
     }
-    const baseInput = amountSpecified.gt(ZERO);
+    const baseInput = amountSpecified.gt(BN_ZERO);
 
     const state = {
       amountSpecifiedRemaining: amountSpecified,
-      amountCalculated: ZERO,
+      amountCalculated: BN_ZERO,
       sqrtPriceX64: currentSqrtPriceX64,
       tick:
         currentTick > lastSavedTickArrayStartIndex
@@ -572,14 +572,14 @@ export abstract class SwapMath {
           : lastSavedTickArrayStartIndex,
       accounts: [] as PublicKey[],
       liquidity,
-      feeAmount: new BN(0),
+      feeAmount: BN_ZERO,
     };
     let tickAarrayStartIndex = lastSavedTickArrayStartIndex;
     let tickArrayCurrent = tickArrayCache[lastSavedTickArrayStartIndex];
     let loopCount = 0;
     let t = !zeroForOne && tickArrayCurrent.startTickIndex === state.tick;
     while (
-      !state.amountSpecifiedRemaining.eq(ZERO) &&
+      !state.amountSpecifiedRemaining.eq(BN_ZERO) &&
       !state.sqrtPriceX64.eq(sqrtPriceLimitX64)
       // state.tick < MAX_TICK &&
       // state.tick > MIN_TICK
@@ -713,7 +713,7 @@ export abstract class SwapMath {
 
     return {
       allTrade: true,
-      amountSpecifiedRemaining: ZERO,
+      amountSpecifiedRemaining: BN_ZERO,
       amountCalculated: state.amountCalculated,
       feeAmount: state.feeAmount,
       sqrtPriceX64: state.sqrtPriceX64,
@@ -779,7 +779,7 @@ export abstract class SwapMath {
   //         : lastSavedTickArrayStartIndex,
   //     accounts: [] as PublicKey[],
   //     liquidity,
-  //     feeAmount: new BN(0),
+  //     feeAmount: BN_ZERO,
   //   };
   //   let tickAarrayStartIndex = lastSavedTickArrayStartIndex;
   //   let tickArrayCurrent = tickArrayCache[lastSavedTickArrayStartIndex];
@@ -920,13 +920,13 @@ export abstract class SwapMath {
     zeroForOne: boolean,
   ): [BN, BN, BN, BN] {
     const swapStep: SwapStep = {
-      sqrtPriceX64Next: new BN(0),
-      amountIn: new BN(0),
-      amountOut: new BN(0),
-      feeAmount: new BN(0),
+      sqrtPriceX64Next: BN_ZERO,
+      amountIn: BN_ZERO,
+      amountOut: BN_ZERO,
+      feeAmount: BN_ZERO,
     };
 
-    const baseInput = amountRemaining.gte(ZERO);
+    const baseInput = amountRemaining.gte(BN_ZERO);
 
     if (baseInput) {
       const amountRemainingSubtractFee = MathUtil.mulDivFloor(

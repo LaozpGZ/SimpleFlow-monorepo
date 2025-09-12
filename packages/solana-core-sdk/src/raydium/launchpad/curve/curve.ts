@@ -5,7 +5,7 @@ import { CurveBase, PoolBaseAmount } from "./curveBase";
 import { LaunchpadConfigInfo, LaunchpadPoolInfo } from "../type";
 import { FEE_RATE_DENOMINATOR_VALUE } from "@/common/fee";
 import { LinearPriceCurve } from "./linearPriceCurve";
-import { ceilDiv } from "@/common/bignumber";
+import { BN_100, BN_ONE, BN_TEN, BN_ZERO, ceilDiv } from "@/common/bignumber";
 import Decimal from "decimal.js";
 
 export class Curve {
@@ -66,7 +66,7 @@ export class Curve {
 
     const itemStepBuy = totalFundRaising.div(new BN(pointCount - 1));
 
-    const zero = new BN(0);
+    const zero = BN_ZERO;
 
     const returnPoints: { price: Decimal; totalSellSupply: number }[] = [{ price: initPrice, totalSellSupply: 0 }];
     const { a, b } = initParam;
@@ -218,10 +218,10 @@ export class Curve {
     const liquidity = new BN(new Decimal(migrateAmountA.mul(totalFundRaising).toString()).sqrt().toFixed(0));
 
     if (migrateType === "amm") {
-      const minLockLp = new BN(10).pow(new BN(decimals));
+      const minLockLp = BN_TEN.pow(new BN(decimals));
       if (liquidity.lte(minLockLp)) throw Error("check migrate lp error");
     } else if (migrateType === "cpmm") {
-      const minLockLp = new BN(100);
+      const minLockLp = BN_100;
       if (liquidity.lte(minLockLp)) throw Error("check migrate lp error");
     } else {
       throw Error("migrate type error");
@@ -411,8 +411,8 @@ export class Curve {
     shareFeeRate: BN;
   }): { platformFee: BN; shareFee: BN; protocolFee: BN } {
     const totalFeeRate = protocolFeeRate.add(platformFeeRate).add(shareFeeRate);
-    const platformFee = totalFeeRate.isZero() ? new BN(0) : totalFee.mul(platformFeeRate).div(totalFeeRate);
-    const shareFee = totalFeeRate.isZero() ? new BN(0) : totalFee.mul(shareFeeRate).div(totalFeeRate);
+    const platformFee = totalFeeRate.isZero() ? BN_ZERO : totalFee.mul(platformFeeRate).div(totalFeeRate);
+    const shareFee = totalFeeRate.isZero() ? BN_ZERO : totalFee.mul(shareFeeRate).div(totalFeeRate);
     const protocolFee = totalFee.sub(platformFee).sub(shareFee);
 
     return { platformFee, shareFee, protocolFee };
@@ -427,7 +427,7 @@ export class Curve {
     const numerator = postFeeAmount.mul(FEE_RATE_DENOMINATOR_VALUE);
     const denominator = FEE_RATE_DENOMINATOR_VALUE.sub(feeRate);
 
-    return numerator.add(denominator).sub(new BN(1)).div(denominator);
+    return numerator.add(denominator).sub(BN_ONE).div(denominator);
   }
 
   static getCurve(curveType: number): typeof CurveBase {

@@ -8,7 +8,7 @@ import {
 } from "../../api/type";
 import { AccountLayout, NATIVE_MINT, TOKEN_PROGRAM_ID } from "@solana/spl-token";
 import { getMultipleAccountsInfoWithCustomFlags } from "@/common/accountInfo";
-import { BN_ZERO, divCeil } from "@/common/bignumber";
+import { BN_100, BN_10000, BN_ONE, BN_TWO, BN_ZERO, divCeil } from "@/common/bignumber";
 import { getATAAddress } from "@/common/pda";
 import { BNDivCeil } from "@/common/transfer";
 import { MakeMultiTxData, MakeTxData } from "@/common/txTool/txTool";
@@ -131,8 +131,8 @@ export default class LiquidityModule extends ModuleBase {
 
     this.logDebug("liquidity:", liquidity.toString());
 
-    const _slippage = new Percent(new BN(1)).add(slippage);
-    const _slippageMin = new Percent(new BN(1)).sub(slippage);
+    const _slippage = new Percent(BN_ONE).add(slippage);
+    const _slippageMin = new Percent(BN_ONE).sub(slippage);
     const slippageAdjustedAmount = _slippage.mul(amountRaw).quotient;
     const slippageAdjustedMinAmount = _slippageMin.mul(amountRaw).quotient;
 
@@ -445,7 +445,7 @@ export default class LiquidityModule extends ModuleBase {
     const lpTokenAccount = mintToAccount[poolInfo.lpMint.address];
     if (lpTokenAccount === undefined) throw Error("find lp account error in trade accounts");
 
-    const amountIn = removeLpAmount.add(userFarmLpAmount ?? new BN(0));
+    const amountIn = removeLpAmount.add(userFarmLpAmount ?? BN_ZERO);
     const mintBaseUseSOLBalance = poolInfo.mintA.address === Token.WSOL.mint.toString();
     const mintQuoteUseSOLBalance = poolInfo.mintB.address === Token.WSOL.mint.toString();
 
@@ -821,9 +821,9 @@ export default class LiquidityModule extends ModuleBase {
     });
 
     const feeRateBps = 0;
-    const quoteDustThreshold = new BN(100);
+    const quoteDustThreshold = BN_100;
     function getVaultOwnerAndNonce() {
-      const vaultSignerNonce = new BN(0);
+      const vaultSignerNonce = BN_ZERO;
       // eslint-disable-next-line no-constant-condition
       while (true) {
         try {
@@ -1075,8 +1075,8 @@ export default class LiquidityModule extends ModuleBase {
     }
 
     const amountInRaw = amountIn;
-    let amountOutRaw = new BN(0);
-    let feeRaw = new BN(0);
+    let amountOutRaw = BN_ZERO;
+    let feeRaw = BN_ZERO;
 
     if (!amountInRaw.isZero()) {
       if (isVersion4) {
@@ -1086,7 +1086,7 @@ export default class LiquidityModule extends ModuleBase {
         const denominator = reserveIn.add(amountInWithFee);
         amountOutRaw = reserveOut.mul(amountInWithFee).div(denominator);
       } else {
-        feeRaw = amountInRaw.mul(new BN(2)).div(new BN(10000));
+        feeRaw = amountInRaw.mul(BN_TWO).div(BN_10000);
         const amountInWithFee = amountInRaw.sub(feeRaw);
         if (input === "quote")
           amountOutRaw = new BN(
@@ -1192,12 +1192,12 @@ export default class LiquidityModule extends ModuleBase {
       }`,
     );
 
-    let amountInRaw = new BN(0);
+    let amountInRaw = BN_ZERO;
     let amountOutRaw = amountOut;
     if (!amountOutRaw.isZero()) {
       // if out > reserve, out = reserve - 1
       if (amountOutRaw.gt(reserveOut)) {
-        amountOutRaw = reserveOut.sub(new BN(1));
+        amountOutRaw = reserveOut.sub(BN_ONE);
       }
 
       const denominator = reserveOut.sub(amountOutRaw);
