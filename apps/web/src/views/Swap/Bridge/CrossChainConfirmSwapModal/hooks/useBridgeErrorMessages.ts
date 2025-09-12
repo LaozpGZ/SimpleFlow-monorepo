@@ -142,7 +142,7 @@ export const useBridgeErrorMessages = () => {
 // Hook for getting user-friendly error messages from any error
 export const useTradeErrorMessage = () => {
   const { t } = useTranslation()
-  const errorMessages = useBridgeErrorMessages()
+  const errorMessages = createErrorMessageMap(t)
 
   return useCallback(
     (error: Error): string | null => {
