@@ -41,3 +41,12 @@ export const useStablePositions = ({
     stablePositions: filteredStablePositions,
   }
 }
+
+export const getStablePositionKey = (pos: StableLPDetail) => {
+  const {
+    pair: {
+      liquidityToken: { chainId, address },
+    },
+  } = pos
+  return getKeyForPools({ chainId, poolAddress: address })
+}

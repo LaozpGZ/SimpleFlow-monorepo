@@ -67,7 +67,7 @@ const StyledLi = styled.li`
   }
 `
 
-export type FarmV3ApyButtonProps = {
+type FarmV3ApyButtonProps = {
   farm: V3Farm
   existingPosition?: Position
   isPositionStaked?: boolean
@@ -76,7 +76,7 @@ export type FarmV3ApyButtonProps = {
     aprValue: number
     aprTitle: string
     aprLink: string
-  }[]
+  }
 }
 
 export function FarmV3ApyButton(props: FarmV3ApyButtonProps) {
@@ -213,11 +213,12 @@ function FarmV3ApyButton_({ farm, existingPosition, isPositionStaked, additionAp
 
   const lpApr = existingPosition ? +apr.toFixed(2) : globalLpApr
   const cakeApr = +(farm.cakeApr ?? 0)
-  const additionalAprSum = additionAprInfo?.reduce((sum, apr) => sum + apr.aprValue, 0) ?? 0
-  const displayApr = getDisplayApr(cakeApr, lpApr, additionalAprSum)
+
+  const displayApr = getDisplayApr(cakeApr, lpApr, additionAprInfo?.aprValue)
   const cakeAprDisplay = cakeApr.toFixed(2)
   const positionCakeAprDisplay = positionCakeApr.toFixed(2)
   const lpAprDisplay = lpApr.toFixed(2)
+  const additionalAprDisplay = (additionAprInfo?.aprValue ?? 0).toFixed(2)
   const positionDisplayApr = getDisplayApr(+positionCakeApr, lpApr)
 
   const aprTooltip = useTooltip(
@@ -237,19 +238,15 @@ function FarmV3ApyButton_({ farm, existingPosition, isPositionStaked, additionAp
         <li>
           {t('LP Fee APR')}: <b>{lpAprDisplay}%</b>
         </li>
-        {additionAprInfo && additionAprInfo.length > 0 && (
-          <>
-            {additionAprInfo.map((aprInfo) => (
-              <StyledLi key={aprInfo.aprTitle}>
-                <Flex style={{ flexWrap: 'nowrap', alignItems: 'center', gap: 5 }}>
-                  {aprInfo.aprTitle}: <b>{aprInfo.aprValue.toFixed(2)}%</b>
-                  <LinkExternal display="inline-block" href={aprInfo.aprLink}>
-                    {t('Check')}
-                  </LinkExternal>
-                </Flex>
-              </StyledLi>
-            ))}
-          </>
+        {additionAprInfo && (
+          <StyledLi>
+            <Flex style={{ flexWrap: 'nowrap', alignItems: 'center', gap: 5 }}>
+              {additionAprInfo.aprTitle}: <b>{additionalAprDisplay}%</b>
+              <LinkExternal display="inline-block" href={additionAprInfo.aprLink}>
+                {t('Check')}
+              </LinkExternal>
+            </Flex>
+          </StyledLi>
         )}
       </ul>
       <br />
@@ -276,20 +273,13 @@ function FarmV3ApyButton_({ farm, existingPosition, isPositionStaked, additionAp
         <li>
           {t('LP Fee APR')}: <b>{lpAprDisplay}%</b>
         </li>
-        {additionAprInfo && additionAprInfo.length > 0 && (
-          <>
-            {additionAprInfo.map((aprInfo) => (
-              <StyledLi
-                key={aprInfo.aprTitle}
-                style={{ whiteSpace: 'nowrap', display: 'flex', flexWrap: 'nowrap', alignItems: 'center', gap: 5 }}
-              >
-                {aprInfo.aprTitle}: <b>{aprInfo.aprValue.toFixed(2)}%</b>
-                <LinkExternal display="inline-block" href={aprInfo.aprLink}>
-                  {t('Check')}
-                </LinkExternal>
-              </StyledLi>
-            ))}
-          </>
+        {additionAprInfo && (
+          <StyledLi style={{ whiteSpace: 'nowrap', display: 'flex', flexWrap: 'nowrap', alignItems: 'center', gap: 5 }}>
+            {additionAprInfo.aprTitle}: <b>{additionalAprDisplay}%</b>
+            <LinkExternal display="inline-block" href={additionAprInfo.aprLink}>
+              {t('Check')}
+            </LinkExternal>
+          </StyledLi>
         )}
       </ul>
     </>,
@@ -373,7 +363,7 @@ function FarmV3ApyButton_({ farm, existingPosition, isPositionStaked, additionAp
           prices={prices}
           priceSpan={priceTimeWindow}
           onPriceSpanChange={setPriceTimeWindow}
-          additionalApr={additionalAprSum}
+          additionalApr={additionAprInfo?.aprValue}
         />
       )}
     </>

@@ -10,12 +10,7 @@ import { getInfinityCakeAPR } from 'hooks/infinity/useInfinityCakeAPR'
 import { getCakePriceFromOracle } from 'hooks/useCakePrice'
 import groupBy from 'lodash/groupBy'
 import { CakeAprValue } from 'state/farmsV4/atom'
-import {
-  getAllNetworkIncentraApr,
-  getAllNetworkMerklApr,
-  getCakeApr,
-  getLpApr,
-} from 'state/farmsV4/state/poolApr/fetcher'
+import { getAllNetworkMerklApr, getCakeApr, getLpApr } from 'state/farmsV4/state/poolApr/fetcher'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { safeGetAddress } from 'utils'
 import { getPoolManagerAddress } from 'utils/addressHelpers'
@@ -160,22 +155,6 @@ export async function batchGetMerklAprData(pools: PoolInfo[]) {
     return {
       id: getFarmKey(farm),
       value: merklApr,
-    }
-  })
-}
-
-const cachedGetAllNetworkIncentraApr = memoizeAsync(getAllNetworkIncentraApr, {
-  resolver: () => '',
-})
-export async function batchGetIncentraAprData(pools: PoolInfo[]) {
-  const aprs = await cachedGetAllNetworkIncentraApr()
-  return pools.map((pool) => {
-    const farm = pool.farm!
-    const key = `${farm.chainId}:${safeGetAddress(farm.id)}`
-    const incentraApr = aprs[key] || '0'
-    return {
-      id: getFarmKey(farm),
-      value: incentraApr,
     }
   })
 }

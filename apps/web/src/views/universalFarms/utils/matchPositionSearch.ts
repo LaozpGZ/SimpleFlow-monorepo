@@ -11,7 +11,7 @@ import { tokensMapAtom } from '../atom/tokensMapAtom'
 const store = getDefaultStore()
 
 const getSymbolTags = (chainId: number, address: string) => {
-  const { tokensMap } = store.get(tokensMapAtom)
+  const { tokensMap, symbolsMap } = store.get(tokensMapAtom)
   const key = `${chainId}:${address}`.toLowerCase()
   const relatedToken = tokensMap[key]
   const tags = new Set<string>()

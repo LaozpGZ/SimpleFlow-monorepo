@@ -68,13 +68,12 @@ const V3_LP_FEE_RATE = {
 
 export const useV2PositionApr = (pool: PoolInfo, userPosition: StableLPDetail | V2LPDetail) => {
   const key = useMemo(() => `${pool?.chainId}:${pool?.lpAddress}` as const, [pool?.chainId, pool?.lpAddress])
-  const { lpApr: globalLpApr, cakeApr: globalCakeApr, merklApr, incentraApr } = usePoolApr(key, pool)
+  const { lpApr: globalLpApr, cakeApr: globalCakeApr, merklApr } = usePoolApr(key, pool)
   const numerator = useMemo(() => {
     const lpAprNumerator = new BN(globalLpApr).times(globalCakeApr?.userTvlUsd ?? BIG_ZERO)
     const othersNumerator = new BN(globalCakeApr?.value ?? 0)
       .times(userPosition.farmingBoosterMultiplier)
       .plus(merklApr)
-      .plus(incentraApr)
       .times(globalCakeApr?.userTvlUsd ?? BIG_ZERO)
     return userPosition.isStaked ? lpAprNumerator.plus(othersNumerator) : lpAprNumerator
   }, [
@@ -84,7 +83,6 @@ export const useV2PositionApr = (pool: PoolInfo, userPosition: StableLPDetail | 
     userPosition.farmingBoosterMultiplier,
     userPosition.isStaked,
     merklApr,
-    incentraApr,
   ])
 
   const denominator = useMemo(() => {
@@ -100,14 +98,13 @@ export const useV2PositionApr = (pool: PoolInfo, userPosition: StableLPDetail | 
       value: String(parseFloat(globalCakeApr?.value) * userPosition.farmingBoosterMultiplier) as `${number}`,
     },
     merklApr: parseFloat(merklApr ?? 0) ?? 0,
-    incentraApr: parseFloat(incentraApr ?? 0) ?? 0,
   }
 }
 
 export const useV3PositionApr = (pool: PoolInfo, userPosition: PositionDetail) => {
   const key = useMemo(() => `${pool.chainId}:${pool.lpAddress}` as const, [pool.chainId, pool.lpAddress])
   const { removed, outOfRange, position } = useExtraV3PositionInfo(userPosition)
-  const { cakeApr: globalCakeApr, merklApr: merklApr_, incentraApr: incentraApr_ } = usePoolApr(key, pool)
+  const { cakeApr: globalCakeApr, merklApr: merklApr_ } = usePoolApr(key, pool)
   const { data: token0UsdPrice_ } = useCurrencyUsdPrice(pool.token0)
   const { data: token1UsdPrice_ } = useCurrencyUsdPrice(pool.token1)
 
@@ -190,16 +187,14 @@ export const useV3PositionApr = (pool: PoolInfo, userPosition: PositionDetail) =
     return apr
   }, [outOfRange, pool.fee24hUsd, pool.feeTier, pool.liquidity, removed, userPosition.liquidity, userTVLUsd])
   const merklApr = outOfRange ? 0 : parseFloat(merklApr_ ?? 0) ?? 0
-  const incentraApr = outOfRange ? 0 : parseFloat(incentraApr_ ?? 0) ?? 0
 
   const numerator = useMemo(() => {
     if (outOfRange || removed) return BIG_ZERO
     return BN(lpApr)
       .plus(cakeApr.value ?? BIG_ZERO)
       .plus(parseFloat(cakeApr.value) > 0 ? merklApr : 0)
-      .plus(parseFloat(cakeApr.value) > 0 ? incentraApr : 0)
       .times(userTVLUsd)
-  }, [cakeApr.value, lpApr, merklApr, incentraApr, outOfRange, removed, userTVLUsd])
+  }, [cakeApr.value, lpApr, merklApr, outOfRange, removed, userTVLUsd])
   const denominator = userTVLUsd
 
   return {
@@ -208,7 +203,6 @@ export const useV3PositionApr = (pool: PoolInfo, userPosition: PositionDetail) =
     lpApr,
     cakeApr,
     merklApr,
-    incentraApr,
   }
 }
 
@@ -320,7 +314,6 @@ export type InfinityPositionAPR = {
   lpApr: `${number}`
   cakeApr: CakeApr[ChainIdAddressKey]
   merklApr: number
-  incentraApr: number
 }
 
 export const useInfinityPositionApr = <T extends InfinityCLPositionDetail | InfinityBinPositionDetail>({
@@ -362,7 +355,6 @@ export const useInfinityPositionApr = <T extends InfinityCLPositionDetail | Infi
   }, [userTVLUsd, outOfRange, pool.lpFee24hUsd, removed, share])
 
   const merklApr = 0
-  const incentraApr = 0
 
   const numerator = useMemo(() => {
     if (outOfRange || removed) return BIG_ZERO
@@ -378,7 +370,6 @@ export const useInfinityPositionApr = <T extends InfinityCLPositionDetail | Infi
     lpApr,
     cakeApr: outOfRange || removed ? { ...cakeApr, value: '0' } : cakeApr,
     merklApr,
-    incentraApr,
   }
 }
 
@@ -395,7 +386,7 @@ export const useV3FormDerivedApr = (pool: PoolInfo, inverted?: boolean) => {
     return [pool.token0, pool.token1]
   }, [pool, inverted])
 
-  const { cakeApr: globalCakeApr, merklApr, incentraApr } = usePoolApr(key, pool)
+  const { cakeApr: globalCakeApr, merklApr } = usePoolApr(key, pool)
   const lmPoolLiquidity = useLmPoolLiquidity(pool.lpAddress, pool.chainId)
   const { data: token0UsdPrice } = useCurrencyUsdPrice(token0)
   const { data: token1UsdPrice } = useCurrencyUsdPrice(token1)
@@ -501,7 +492,6 @@ export const useV3FormDerivedApr = (pool: PoolInfo, inverted?: boolean) => {
     lpApr: parseFloat(`${formatPercent(apr, 5) || '0'}`) / 100,
     cakeApr,
     merklApr: inRange ? parseFloat(merklApr ?? 0) ?? 0 : 0,
-    incentraApr: inRange ? parseFloat(incentraApr ?? 0) ?? 0 : 0,
   }
 }
 
@@ -512,7 +502,7 @@ export const useInfinityCLDerivedApr = (poolInfo: InfinityCLPoolInfo) => {
   )
   const { currency0, currency1 } = useCurrencyByPoolId({ poolId: poolInfo.poolId, chainId: poolInfo.chainId })
 
-  const { cakeApr: globalCakeApr, lpApr: globalLpApr, merklApr, incentraApr } = usePoolApr(key, poolInfo)
+  const { cakeApr: globalCakeApr, merklApr, lpApr: globalLpApr } = usePoolApr(key, poolInfo)
   const { data: token0UsdPrice } = useCurrencyUsdPrice(currency0)
   const { data: token1UsdPrice } = useCurrencyUsdPrice(currency1)
 
@@ -633,7 +623,6 @@ export const useInfinityCLDerivedApr = (poolInfo: InfinityCLPoolInfo) => {
     lpApr: parseFloat((liquidity === 0n ? globalLpApr : lpApr) ?? 0),
     cakeApr,
     merklApr: inRange ? parseFloat(merklApr ?? 0) ?? 0 : 0,
-    incentraApr: inRange ? parseFloat(incentraApr ?? 0) ?? 0 : 0,
   }
 }
 
@@ -646,7 +635,7 @@ export const useInfinityBinDerivedApr = (poolInfo: InfinityBinPoolInfo) => {
     poolId: poolInfo.poolId,
     chainId: poolInfo.chainId,
   })
-  const { cakeApr: globalCakeApr, merklApr, incentraApr } = usePoolApr(key, poolInfo)
+  const { cakeApr: globalCakeApr, merklApr } = usePoolApr(key, poolInfo)
   const { data: token0UsdPrice } = useCurrencyUsdPrice(currency0)
   const { data: token1UsdPrice } = useCurrencyUsdPrice(currency1)
   const pool = usePool<'Bin'>()
@@ -766,6 +755,5 @@ export const useInfinityBinDerivedApr = (poolInfo: InfinityBinPoolInfo) => {
     lpApr: parseFloat(apr.toFixed(5)),
     cakeApr,
     merklApr: inRange ? parseFloat(merklApr ?? 0) ?? 0 : 0,
-    incentraApr: inRange ? parseFloat(incentraApr ?? 0) ?? 0 : 0,
   }
 }

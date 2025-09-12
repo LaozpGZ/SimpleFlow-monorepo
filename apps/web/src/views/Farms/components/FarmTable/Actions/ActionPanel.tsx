@@ -23,16 +23,13 @@ import { type V3Farm } from 'state/farms/types'
 import { ChainLinkSupportChains, multiChainPaths } from 'state/info/constant'
 import { css, keyframes, styled } from 'styled-components'
 import { getBlockExploreLink, isAddressEqual } from 'utils'
-import { getMerklLink, useMerklUserLink } from 'utils/getMerklLink'
+import { useMerklUserLink } from 'utils/getMerklLink'
 import { unwrappedToken } from 'utils/wrappedCurrency'
 import { AddLiquidityV3Modal } from 'views/AddLiquidityV3/Modal'
 import { SELECTOR_TYPE } from 'views/AddLiquidityV3/types'
 import { V2Farm } from 'views/Farms/FarmsV3'
 import { useAccount } from 'wagmi'
-import { useIncentraInfo } from 'hooks/useIncentra'
-import { getIncentraLink, INCENTRA_USER_LINK } from 'utils/getIncentraLink'
-import { Protocol } from '@pancakeswap/farms'
-import { FarmV3ApyButton, FarmV3ApyButtonProps } from '../../FarmCard/V3/FarmV3ApyButton'
+import { FarmV3ApyButton } from '../../FarmCard/V3/FarmV3ApyButton'
 import FarmV3CardList from '../../FarmCard/V3/FarmV3CardList'
 import { YieldBoosterStateContext } from '../../YieldBooster/components/ProxyFarmContainer'
 import Apr, { AprProps } from '../Apr'
@@ -41,7 +38,7 @@ import StakedAction, { ProxyStakedContainer, StakedContainer } from './StakedAct
 
 const { Multiplier, Liquidity, StakedLiquidity } = FarmWidget.FarmTable
 const { NoPosition } = FarmWidget.FarmV3Table
-const { MerklNotice, IncentraNotice } = FarmWidget
+const { MerklNotice } = FarmWidget
 
 export interface ActionPanelProps {
   apr: AprProps
@@ -62,6 +59,7 @@ export interface ActionPanelV3Props {
   multiplier: FarmWidget.FarmTableMultiplierProps
   stakedLiquidity: FarmWidget.FarmTableLiquidityProps
   details: V3Farm
+  farm: FarmWidget.FarmTableFarmTokenInfoProps & { version: 3 }
   userDataReady: boolean
   expanded: boolean
   alignLinksToRight?: boolean
@@ -185,28 +183,20 @@ const StyleMerklWarning = styled.div`
 `
 
 const MerklWarning: React.FC<{
+  merklLink: string
   merklUserLink?: string
   hasFarm?: boolean
-}> = ({ hasFarm, merklUserLink }) => {
+}> = ({ merklLink, hasFarm, merklUserLink }) => {
   return (
     <StyleMerklWarning>
       <Message variant="primary" icon={<VerifiedIcon color="#7645D9" />}>
         <MessageText color="#7645D9">
-          <MerklNotice.Content hasFarm={hasFarm} linkColor="currentColor" merklUserLink={merklUserLink} />
-        </MessageText>
-      </Message>
-    </StyleMerklWarning>
-  )
-}
-
-const IncentraWarning: React.FC<{
-  incentraUserLink?: string
-}> = ({ incentraUserLink }) => {
-  return (
-    <StyleMerklWarning>
-      <Message variant="primary" icon={<VerifiedIcon color="#7645D9" />}>
-        <MessageText color="#7645D9">
-          <IncentraNotice.Content linkColor="currentColor" incentraUserLink={incentraUserLink} />
+          <MerklNotice.Content
+            hasFarm={hasFarm}
+            merklLink={merklLink}
+            linkColor="currentColor"
+            merklUserLink={merklUserLink}
+          />
         </MessageText>
       </Message>
     </StyleMerklWarning>
@@ -215,7 +205,8 @@ const IncentraWarning: React.FC<{
 
 export const ActionPanelV3: FC<ActionPanelV3Props> = ({
   expanded,
-  details: farm,
+  details,
+  farm: farm_,
   multiplier,
   stakedLiquidity,
   alignLinksToRight,
@@ -226,11 +217,9 @@ export const ActionPanelV3: FC<ActionPanelV3Props> = ({
   const { t } = useTranslation()
   const { chainId } = useActiveChainId()
   const { address: account } = useAccount()
-  const { hasMerkl, merklApr } = useMerklInfo(farm?.lpAddress)
-  const merklLink = getMerklLink({ hasMerkl, chainId, lpAddress: farm?.lpAddress, poolProtocol: Protocol.V3 })
+  const { merklLink } = farm_
+  const farm = details
   const merklUserLink = useMerklUserLink()
-  const { incentraApr, hasIncentra } = useIncentraInfo(farm.lpAddress)
-  const incentraLink = getIncentraLink({ hasIncentra, chainId, lpAddress: farm.lpAddress })
   const isActive = farm.multiplier !== '0X'
   const lpLabel = useMemo(() => farm.lpSymbol && farm.lpSymbol.replace(/pancake/gi, ''), [farm.lpSymbol])
   const bsc = useMemo(
@@ -256,6 +245,7 @@ export const ActionPanelV3: FC<ActionPanelV3Props> = ({
   )
 
   const addLiquidityModal = useModalV2()
+  const { merklApr } = useMerklInfo(merklLink ? details.lpAddress : undefined)
 
   return (
     <>
@@ -277,14 +267,9 @@ export const ActionPanelV3: FC<ActionPanelV3Props> = ({
                   <FarmV3ApyButton
                     farm={farm}
                     additionAprInfo={
-                      [
-                        merklApr && merklLink
-                          ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: merklLink }
-                          : undefined,
-                        incentraApr && incentraLink
-                          ? { aprTitle: `Incentra ${t('APR')}`, aprValue: incentraApr, aprLink: incentraLink }
-                          : undefined,
-                      ].filter(Boolean) as NonNullable<FarmV3ApyButtonProps['additionAprInfo']>
+                      merklApr && merklLink
+                        ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: merklLink }
+                        : undefined
                     }
                   />
                 </ValueWrapper>
@@ -323,8 +308,9 @@ export const ActionPanelV3: FC<ActionPanelV3Props> = ({
           </>
         }
       >
-        {!isDesktop && merklLink ? <MerklWarning hasFarm={hasBothFarmAndMerkl} merklUserLink={merklUserLink} /> : null}
-        {!isDesktop && incentraLink ? <IncentraWarning incentraUserLink={INCENTRA_USER_LINK} /> : null}
+        {!isDesktop && merklLink ? (
+          <MerklWarning hasFarm={hasBothFarmAndMerkl} merklLink={merklLink} merklUserLink={merklUserLink} />
+        ) : null}
         {!userDataReady ? (
           <Skeleton height={200} width="100%" />
         ) : account && !hasNoPosition ? (

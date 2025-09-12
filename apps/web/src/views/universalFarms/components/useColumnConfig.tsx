@@ -16,7 +16,7 @@ import { getFarmAprInfo, getFarmHookData } from 'state/farmsV4/search/farm.util'
 import { getCurrencySymbol } from 'utils/getTokenAlias'
 import { getChainFullName } from '../utils'
 import { RewardStatusDisplay } from './FarmStatusDisplay'
-import { getRewardProvider, getRewardMultiplier } from './FarmStatusDisplay/hooks'
+import { checkHasReward, getRewardProvider, getRewardMultiplier } from './FarmStatusDisplay/hooks'
 import { PoolGlobalAprButton } from './PoolAprButton'
 import { PoolListItemAction } from './PoolListItemAction'
 

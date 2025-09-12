@@ -72,10 +72,10 @@ const useDepositModal = (props: V2PositionActionsProps) => {
   const { fetchWithCatchTxError } = useCatchTxError()
   const { t } = useTranslation()
   const key = useMemo(() => `${chainId}:${lpAddress}` as const, [chainId, lpAddress])
-  const { lpApr, cakeApr, merklApr, incentraApr } = usePoolApr(key, poolInfo)
+  const { lpApr, cakeApr, merklApr } = usePoolApr(key, poolInfo)
   const displayApr = useMemo(() => {
-    return sumApr(lpApr, cakeApr.value, merklApr, incentraApr)
-  }, [lpApr, cakeApr.value, merklApr, incentraApr])
+    return sumApr(lpApr, cakeApr.value, merklApr)
+  }, [lpApr, cakeApr.value, merklApr])
 
   const [bCakeAddress, setBCakeAddress] = useState<Address | undefined>()
 

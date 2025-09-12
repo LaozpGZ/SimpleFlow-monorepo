@@ -14,9 +14,7 @@ import { useHasCustomFarmLpTooltips } from 'views/Farms/hooks/useHasCustomFarmLp
 const { FarmTokenInfo } = FarmWidget.FarmTable
 
 export const FarmCell: React.FunctionComponent<
-  React.PropsWithChildren<
-    FarmWidget.FarmTableFarmTokenInfoProps & { chainId?: number; lpAddress?: Address; version: 2 | 3 }
-  >
+  React.PropsWithChildren<FarmWidget.FarmTableFarmTokenInfoProps & { chainId?: number; lpAddress?: Address }>
 > = ({
   token,
   quoteToken,
@@ -24,13 +22,12 @@ export const FarmCell: React.FunctionComponent<
   pid,
   isReady,
   isStaking,
-  lpAddress,
-  chainId,
   merklLink,
   hasBothFarmAndMerkl,
+  merklApr,
+  lpAddress,
+  chainId,
   merklUserLink,
-  incentraLink,
-  incentraUserLink,
 }) => {
   const { t } = useTranslation()
   const customTooltips = useHasCustomFarmLpTooltips(lpAddress)
@@ -48,11 +45,10 @@ export const FarmCell: React.FunctionComponent<
         quoteToken={quoteToken}
         isReady={isReady}
         isStaking={isStaking}
-        hasBothFarmAndMerkl={hasBothFarmAndMerkl}
         merklLink={merklLink}
         merklUserLink={merklUserLink}
-        incentraLink={incentraLink}
-        incentraUserLink={incentraUserLink}
+        hasBothFarmAndMerkl={hasBothFarmAndMerkl}
+        merklApr={merklApr}
       >
         <TokenPairImage width={40} height={40} variant="inverted" primaryToken={token} secondaryToken={quoteToken} />
       </FarmTokenInfo>

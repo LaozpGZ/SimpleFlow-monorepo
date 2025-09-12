@@ -11,7 +11,6 @@ import { ChainIdAddressKey, PoolInfo } from 'state/farmsV4/state/type'
 import { getMerklLink } from 'utils/getMerklLink'
 import { isInfinityProtocol } from 'utils/protocols'
 
-import { getIncentraLink } from 'utils/getIncentraLink'
 import { sumApr } from '../../utils/sumApr'
 import { InfinityPoolAprModal } from '../Modals/InfinityPoolAprModal'
 import { V2PoolAprModal } from '../Modals/V2PoolAprModal'
@@ -25,7 +24,6 @@ type PoolGlobalAprButtonProps = {
   lpApr: number
   cakeApr: CakeApr[ChainIdAddressKey]
   merklApr?: number
-  incentraApr?: number
   userPosition?: PositionDetail | InfinityBinPositionDetail | InfinityCLPositionDetail
   onAPRTextClick?: () => void
   showApyButton?: boolean
@@ -36,26 +34,15 @@ export const PoolAprButton: React.FC<PoolGlobalAprButtonProps> = ({
   lpApr,
   cakeApr,
   merklApr,
-  incentraApr,
   userPosition,
   onAPRTextClick,
   showApyButton,
 }) => {
   const baseApr = useMemo(() => {
-    return sumApr(lpApr, cakeApr?.value, merklApr, incentraApr)
-  }, [lpApr, cakeApr?.value, merklApr, incentraApr])
+    return sumApr(lpApr, cakeApr?.value, merklApr)
+  }, [lpApr, cakeApr?.value, merklApr])
   const hasBCake = pool.protocol === 'v2' || pool.protocol === 'stable'
-  const merklLink = getMerklLink({
-    hasMerkl: Boolean(merklApr),
-    chainId: pool.chainId,
-    lpAddress: pool.lpAddress,
-    poolProtocol: pool.protocol,
-  })
-  const incentraLink = getIncentraLink({
-    hasIncentra: Boolean(incentraApr),
-    chainId: pool.chainId,
-    lpAddress: pool.lpAddress,
-  })
+  const merklLink = getMerklLink({ chainId: pool.chainId, lpAddress: pool.lpAddress })
 
   const modal = useModalV2()
 
@@ -66,8 +53,6 @@ export const PoolAprButton: React.FC<PoolGlobalAprButtonProps> = ({
       lpFeeApr={Number(lpApr) ?? 0}
       merklApr={Number(merklApr) ?? 0}
       merklLink={merklLink}
-      incentraApr={Number(incentraApr) ?? 0}
-      incentraLink={incentraLink}
       showDesc
     >
       {hasBCake ? <BCakeWrapperFarmAprTipContent /> : null}

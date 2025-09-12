@@ -9,7 +9,6 @@ import FarmTable from "./components/FarmTable";
 import * as FarmV3Table from "./components/FarmV3Table";
 import * as FarmV3Card from "./components/FarmV3Card";
 import MerklNotice from "./components/MerklNotice";
-import IncentraNotice from "./components/IncentraNotice";
 
 export {
   FarmTabButtons,
@@ -23,5 +22,4 @@ export {
   FarmV3Table,
   FarmV3Card,
   MerklNotice,
-  IncentraNotice,
 };

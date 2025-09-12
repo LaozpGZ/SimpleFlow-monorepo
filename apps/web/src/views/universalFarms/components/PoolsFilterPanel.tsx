@@ -77,7 +77,7 @@ export const PoolsFilterPanel: React.FC<React.PropsWithChildren<IPoolsFilterPane
   showProtocolMenu = true,
 }) => {
   const { chainId: activeChainId } = useActiveChainId()
-  const { selectedNetwork, selectedProtocolIndex: selectedType } = value
+  const { search, selectedNetwork, selectedProtocolIndex: selectedType } = value
   const { t } = useTranslation()
   const allChainsOpts = useAllChainsOpts()
 

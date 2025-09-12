@@ -227,7 +227,6 @@ export const InfinityBinPosition = () => {
                     : false,
                 )}
                 poolAddress={poolId}
-                poolProtocol={Protocol.InfinityBIN}
               />
             </Flex>
           </CardBody>

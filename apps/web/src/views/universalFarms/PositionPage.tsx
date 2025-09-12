@@ -28,6 +28,8 @@ import styled from 'styled-components'
 import { useAccount } from 'wagmi'
 
 import ConnectWalletButton from 'components/ConnectWalletButton'
+import { isInfinityProtocol } from 'utils/protocols'
+import { usePoolFeatureAndType } from 'views/AddLiquiditySelector/hooks/usePoolTypeQuery'
 import {
   AddLiquidityButton,
   Card,

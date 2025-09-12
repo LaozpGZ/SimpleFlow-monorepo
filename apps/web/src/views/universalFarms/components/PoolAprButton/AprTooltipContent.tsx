@@ -35,23 +35,19 @@ type AprTooltipContentProps = {
   combinedApr: number
   cakeApr?: AprValue
   lpFeeApr: number
-  showDesc?: boolean
-  expired?: boolean
   merklApr?: number
   merklLink?: string
-  incentraApr?: number
-  incentraLink?: string
+  showDesc?: boolean
+  expired?: boolean
 }
 
 export const AprTooltipContent: React.FC<PropsWithChildren<AprTooltipContentProps>> = ({
   combinedApr,
   cakeApr,
   lpFeeApr,
-  showDesc = true,
   merklApr,
   merklLink,
-  incentraApr,
-  incentraLink,
+  showDesc = true,
   children,
 }) => {
   const { t } = useTranslation()
@@ -77,16 +73,6 @@ export const AprTooltipContent: React.FC<PropsWithChildren<AprTooltipContentProp
               {t('Merkl APR')}:&nbsp;&nbsp;<b>{displayApr(merklApr)}</b>
             </Text>
             <LinkExternal ml={2} href={merklLink}>
-              {t('Check')}
-            </LinkExternal>
-          </StyledLi>
-        ) : null}
-        {incentraApr ? (
-          <StyledLi>
-            <Text lineHeight={1.5}>
-              {`Incentra ${t('APR')}`}:&nbsp;&nbsp;<b>{displayApr(incentraApr)}</b>
-            </Text>
-            <LinkExternal ml={2} href={incentraLink}>
               {t('Check')}
             </LinkExternal>
           </StyledLi>

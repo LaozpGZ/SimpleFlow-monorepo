@@ -14,12 +14,9 @@ import { getMerklLink, useMerklUserLink } from 'utils/getMerklLink'
 import { unwrappedToken } from 'utils/wrappedCurrency'
 import { AddLiquidityV3Modal } from 'views/AddLiquidityV3/Modal'
 import { useFarmV3Multiplier } from 'views/Farms/hooks/v3/useFarmV3Multiplier'
-import { useIncentraInfo } from 'hooks/useIncentra'
-import { getIncentraLink, INCENTRA_USER_LINK } from 'utils/getIncentraLink'
-import { Protocol } from '@pancakeswap/farms'
 import CardHeading from '../CardHeading'
 import CardActionsContainer from './CardActionsContainer'
-import { FarmV3ApyButton, FarmV3ApyButtonProps } from './FarmV3ApyButton'
+import { FarmV3ApyButton } from './FarmV3ApyButton'
 
 const { DetailsSection } = FarmWidget.FarmCard
 
@@ -62,13 +59,12 @@ export const FarmV3Card: React.FC<React.PropsWithChildren<FarmCardProps>> = ({ f
   const farmCakePerSecond = getFarmCakePerSecond(farm.poolWeight)
 
   const lpLabel = farm.lpSymbol && farm.lpSymbol.replace(/pancake/gi, '')
+  const earnLabel = t('CAKE + Fees')
   const { lpAddress } = farm
   const isPromotedFarm = farm.token.symbol === 'CAKE'
   const merklUserLink = useMerklUserLink()
-  const { hasMerkl, merklApr } = useMerklInfo(lpAddress)
-  const merklLink = getMerklLink({ hasMerkl, chainId, lpAddress, poolProtocol: Protocol.V3 })
-  const { incentraApr, hasIncentra } = useIncentraInfo(lpAddress)
-  const incentraLink = getIncentraLink({ hasIncentra, chainId, lpAddress })
+  const merklLink = getMerklLink({ chainId, lpAddress })
+  const { merklApr } = useMerklInfo(merklLink ? lpAddress : undefined)
   const infoUrl = useMemo(() => {
     return chainId ? `/info/v3${multiChainPaths[chainId]}/pairs/${lpAddress}?chain=${CHAIN_QUERY_NAME[chainId]}` : ''
   }, [chainId, lpAddress])
@@ -99,6 +95,7 @@ export const FarmV3Card: React.FC<React.PropsWithChildren<FarmCardProps>> = ({ f
       <FarmCardInnerContainer>
         <CardHeading
           lpLabel={lpLabel}
+          merklLink={merklLink}
           hasBothFarmAndMerkl={hasBothFarmAndMerkl}
           multiplier={farm.multiplier}
           token={farm.token}
@@ -110,10 +107,7 @@ export const FarmV3Card: React.FC<React.PropsWithChildren<FarmCardProps>> = ({ f
           isCommunityFarm={farm.isCommunity}
           lpAddress={lpAddress}
           merklApr={merklApr}
-          merklLink={merklLink}
           merklUserLink={merklUserLink}
-          incentraLink={incentraLink}
-          incentraUserLink={INCENTRA_USER_LINK}
         />
         {!removed && (
           <Flex justifyContent="space-between" alignItems="center">
@@ -123,14 +117,9 @@ export const FarmV3Card: React.FC<React.PropsWithChildren<FarmCardProps>> = ({ f
               <FarmV3ApyButton
                 farm={farm}
                 additionAprInfo={
-                  [
-                    merklApr && merklLink
-                      ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: merklLink }
-                      : undefined,
-                    incentraApr && incentraLink
-                      ? { aprTitle: `Incentra ${t('APR')}`, aprValue: incentraApr, aprLink: incentraLink }
-                      : undefined,
-                  ].filter(Boolean) as NonNullable<FarmV3ApyButtonProps['additionAprInfo']>
+                  merklApr && merklLink
+                    ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: merklLink }
+                    : undefined
                 }
               />
             </Text>
@@ -138,7 +127,7 @@ export const FarmV3Card: React.FC<React.PropsWithChildren<FarmCardProps>> = ({ f
         )}
         <Flex justifyContent="space-between">
           <Text>{t('Earn')}:</Text>
-          <Text>{t('CAKE + Fees')}</Text>
+          <Text>{earnLabel}</Text>
         </Flex>
         <CardActionsContainer farm={farm} lpLabel={lpLabel} account={account} />
       </FarmCardInnerContainer>

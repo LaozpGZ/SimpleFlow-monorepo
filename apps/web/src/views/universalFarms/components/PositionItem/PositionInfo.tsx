@@ -28,7 +28,6 @@ import { Address } from 'viem'
 import { useV2CakeEarning, useV3CakeEarning } from 'views/universalFarms/hooks/useCakeEarning'
 import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
 import { useAccount } from 'wagmi'
-import { IncentraTag } from 'components/Incentra/IncentraTag'
 import {
   InfinityBinPoolPositionAprButton,
   InfinityCLPoolPositionAprButton,
@@ -115,7 +114,6 @@ export const PositionInfo = memo((props: PositionInfoProps) => {
           <RangeTag lowContrast removed={removed} outOfRange={outOfRange} protocol={protocol} />
         )}
         <MerklTag poolAddress={pool?.lpAddress} />
-        <IncentraTag poolAddress={pool?.lpAddress} />
       </>
     )
   }, [t, protocol, isStaked, outOfRange, removed, pool?.lpAddress])
@@ -146,7 +144,6 @@ export const PositionInfo = memo((props: PositionInfoProps) => {
                 <RangeTag lowContrast removed={removed} outOfRange={outOfRange} protocol={protocol} />
               )}
               <MerklTag poolAddress={pool?.lpAddress} />
-              <IncentraTag poolAddress={pool?.lpAddress} />
             </Row>
           </Row>
           <Row>

@@ -589,7 +589,6 @@ export const InfinityCLPosition = () => {
                         : false,
                     )}
                     poolAddress={poolId}
-                    poolProtocol={Protocol.InfinityCLAMM}
                   />
                 </Flex>
                 {/* {positionDetails && currency0 && currency1 && (

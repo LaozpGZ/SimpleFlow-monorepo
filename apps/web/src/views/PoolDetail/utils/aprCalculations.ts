@@ -5,7 +5,6 @@ export interface AprData {
   lpApr?: number | string
   cakeApr?: { value: number | string } | null
   merklApr?: number
-  incentraApr?: number
   numerator: BigNumber
   denominator: BigNumber
 }
@@ -18,7 +17,6 @@ export const convertAprDataToNumbers = (aprData: {
   lpApr?: number | string
   cakeApr?: { value: number | string } | null
   merklApr?: number
-  incentraApr?: number
   numerator?: BigNumber
   denominator?: BigNumber
 }): AprData => {
@@ -26,7 +24,6 @@ export const convertAprDataToNumbers = (aprData: {
     lpApr: parseFloat((aprData.lpApr || '0').toString()),
     cakeApr: aprData.cakeApr ? { value: parseFloat((aprData.cakeApr.value || '0').toString()) } : null,
     merklApr: aprData.merklApr || 0,
-    incentraApr: aprData.incentraApr || 0,
     numerator: aprData.numerator || BIG_ZERO,
     denominator: aprData.denominator || BIG_ZERO,
   }
@@ -44,7 +41,6 @@ export const calculateTotalApr = (aprData: AprData): number => {
       : aprData.cakeApr.value
     : 0
   const merklApr = aprData.merklApr || 0
-  const incentraApr = aprData.incentraApr || 0
 
-  return Number(lpApr || 0) + Number(cakeApr || 0) + Number(merklApr || 0) + Number(incentraApr || 0)
+  return Number(lpApr || 0) + Number(cakeApr || 0) + Number(merklApr || 0)
 }

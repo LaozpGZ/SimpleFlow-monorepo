@@ -138,7 +138,7 @@ const searchFilter = (_search: string) => {
 }
 
 function tokenSearchTags(token: Currency) {
-  const { chainId } = token
+  const chainId = token.chainId
   const tags: string[] = []
 
   tags.push(getCurrencySymbol(token).toLowerCase())

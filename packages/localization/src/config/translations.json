@@ -4153,9 +4153,5 @@
   "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).": "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).",
   "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.": "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.",
   "Paused": "Paused",
-  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses",
-  "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Incentives can now be earned on BOTH Incentra and Farms at the same time.",
-  "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.",
-  "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Claim your Farm rewards on PancakeSwap and your Incentra rewards on",
-  "Incentra's website": "Incentra's website"
+  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses"
 }

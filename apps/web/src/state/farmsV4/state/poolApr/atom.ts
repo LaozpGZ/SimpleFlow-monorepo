@@ -15,9 +15,7 @@ export type AprValue = {
   [key: ChainIdAddressKey]: `${number}`
 }
 export type MerklApr = AprValue
-export type IncentraApr = AprValue
 export const merklAprAtom = atom<MerklApr>({})
-export const incentraAprAtom = atom<IncentraApr>({})
 
 export type LpApr = AprValue
 export const lpAprAtom = atom<LpApr>((get) => {
@@ -53,7 +51,6 @@ export type PoolApr = Record<
     lpApr: `${number}`
     cakeApr: CakeApr[ChainIdAddressKey]
     merklApr: `${number}`
-    incentraApr: `${number}`
   }
 >
 
@@ -61,7 +58,6 @@ export const poolAprAtom = atom<PoolApr>((get) => {
   const lpAprs = get(lpAprAtom)
   const cakeAprs = get(cakeAprAtom)
   const merklAprs = get(merklAprAtom)
-  const incentraAprs = get(incentraAprAtom)
 
   return Object.entries(lpAprs).reduce((acc, [key, lpApr]) => {
     // eslint-disable-next-line no-param-reassign
@@ -69,7 +65,6 @@ export const poolAprAtom = atom<PoolApr>((get) => {
       lpApr,
       cakeApr: cakeAprs[key],
       merklApr: merklAprs[key],
-      incentraApr: incentraAprs[key],
     }
     return acc
   }, {} as PoolApr)
