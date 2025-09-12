@@ -67,13 +67,13 @@ function parseTokenExtendSearch(
 
 const IS_ADDRESS_REG = /^0x[a-fA-F0-9]{40,64}$/
 
-const parseFarmSearchAddress = (keywords: string, protocols: Protocol[]): ExtendSearchParam[] => {
+const parseFarmSearchAddress = (keywords: string, protocols: Protocol[], chains: ChainId[]): ExtendSearchParam[] => {
   if (IS_ADDRESS_REG.test(keywords.trim())) {
     return [
       {
         protocols,
         tokens: supportedChainIdV4.map((chain) => `${chain}:${keywords.trim()}`),
-        chains: [...supportedChainIdV4],
+        chains: chains as FarmV4SupportedChainId[],
       },
     ].filter((x) => x.tokens && x.tokens.length > 0)
   }
@@ -102,7 +102,7 @@ export const parseExtendSearchParams = (
     return []
   }
 
-  const addressParams = parseFarmSearchAddress(keywords, protocols)
+  const addressParams = parseFarmSearchAddress(keywords, protocols, chains)
   const tokenParams = parseTokenExtendSearch(keywords, protocols, chains, symbolsMap)
   const chainParams = parseQueryChain(chains, protocols)
 

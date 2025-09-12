@@ -46,42 +46,47 @@ const searchAtom = atomFamily((query: FarmQuery) => {
 
     const extendSearchList = parseExtendSearchParams(keywords, protocols, queryChains, symbolsMap)
 
-    const baseList = [
-      get(
-        baseFarmListAtom({
-          protocols,
-          chains: queryChains as FarmV4SupportedChainId[],
-        }),
-      ),
-    ]
+    const baseList = get(
+      baseFarmListAtom({
+        protocols,
+        chains: queryChains as FarmV4SupportedChainId[],
+      }),
+    )
+
     const extendList = extendSearchList.map((params) => get(extendFarmListAtom(params)))
-    const lists = [...baseList, ...extendList]
+    const lists = [baseList, ...extendList]
 
-    const farms = uniqBy(
-      lists
-        .filter((x) => x.hasValue())
-        .map((x) => x.unwrapOr([]))
-        .flat(),
-      (item) => `${item.chainId}:${item.id}`.toLowerCase(),
-    ).map((farm) => {
-      const { pool, chainId, vol24hUsd, ...rest } = farm
-      const farmInfo = {
-        chainId,
-        tvlUsd: 0,
-        ...rest,
-        feeTierBase: 1e6,
-        vol24hUsd,
-        pool: SmartRouter.Transformer.parsePool(chainId, pool),
-      } as FarmInfo
+    function buildFarmList(list: SerializedFarmInfo[]) {
+      return list.map((farm) => {
+        const { pool, chainId, vol24hUsd, ...rest } = farm
+        const farmInfo = {
+          chainId: farm.chainId,
+          tvlUsd: 0,
+          ...rest,
+          feeTierBase: 1e6,
+          vol24hUsd: farm.vol24hUsd,
+          pool: SmartRouter.Transformer.parsePool(farm.chainId, farm.pool),
+        } as FarmInfo
 
-      return farmInfo
-    })
+        return farmInfo
+      })
+    }
+
+    /* Pancake List , top-tvl farms */
+    const baseResults = baseList
+      .map((list) => buildFarmList(list))
+      .unwrapOr([])
+      .filter(filterTokens(tokensMap))
+
+    /* trigger by extend search */
+    const extendResults = extendList.map((list) => list.map((x) => buildFarmList(x)).unwrapOr([])).flat()
+
+    const fullList = [...baseResults, ...extendResults]
 
     const filtered = farmFilters.search(
-      farms.filter(farmFilters.chainFilter(queryChains)).filter(farmFilters.protocolFilter(protocols)),
+      fullList.filter(farmFilters.chainFilter(queryChains)).filter(farmFilters.protocolFilter(protocols)),
       query.keywords,
     )
-    console.log(`[farm]`, farms, filtered, queryChains, protocols, keywords)
     const sorted = farmFilters.sortFunction(filtered, sortBy, activeChainId)
 
     const hasPending = lists.some((x) => x.isPending())
@@ -192,8 +197,7 @@ export const farmsSearchV2Atom = atomFamily((query) => {
     return {
       list: resultList.map((list) => {
         for (const pool of list) {
-          const whitelisted = checkWhitelist(pool.farm!)
-          pool.farm!.inWhitelist = whitelisted
+          pool.farm!.inWhitelist = checkWhitelist(pool.farm!)
         }
         return list
       }),

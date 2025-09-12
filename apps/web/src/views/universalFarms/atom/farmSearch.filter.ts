@@ -1,4 +1,4 @@
-import { getCurrencyAddress } from '@pancakeswap/sdk'
+import { Currency, getCurrencyAddress } from '@pancakeswap/sdk'
 import { SmartRouter } from '@pancakeswap/smart-router'
 import { TokenInfo } from '@pancakeswap/token-lists'
 
@@ -6,43 +6,31 @@ import { FarmInfo } from 'state/farmsV4/search/farm.util'
 
 export const filterTokens = (tokensMap: Record<string, TokenInfo>) => {
   return (farm: FarmInfo) => {
-    const [token0, token1] = SmartRouter.getCurrenciesOfPool(farm.pool)
-    if (!token0 || !token1) return false
-    const key0 = `${token0.chainId}:${getCurrencyAddress(token0)}`.toLowerCase()
-    const key1 = `${token0.chainId}:${getCurrencyAddress(token1)}`.toLowerCase()
-    if (token0.isNative) {
-      const keyWrapped = `${token0.chainId}:${token0.wrapped.address}`.toLowerCase()
-      if (tokensMap[keyWrapped]) {
-        return true
-      }
-    }
-    if (token1.isNative) {
-      const keyWrapped = `${token1.chainId}:${token1.wrapped.address}`.toLowerCase()
-      if (tokensMap[keyWrapped]) {
-        return true
-      }
-    }
-
-    if (!tokensMap[key0] || !tokensMap[key1]) {
-      return false
-    }
-    return true
+    return isFarmWhitelisted(farm, tokensMap)
   }
+}
+
+function isTokenWhitelisted(token: Currency, tokensMap: Record<string, TokenInfo>) {
+  const key = `${token.chainId}:${getCurrencyAddress(token)}`.toLowerCase()
+  return token.isNative || tokensMap[key]
+}
+
+function isFarmWhitelisted(farm: FarmInfo, tokensMap: Record<string, TokenInfo>) {
+  const [token0, token1] = SmartRouter.getCurrenciesOfPool(farm.pool)
+  if (!token0 || !token1) return false
+  return isTokenWhitelisted(token0, tokensMap) && isTokenWhitelisted(token1, tokensMap)
 }
 
 export const isInWhitelist = (tokensMap: Record<string, TokenInfo>) => {
   return (farm: FarmInfo) => {
-    const [token0, token1] = SmartRouter.getCurrenciesOfPool(farm.pool)
-    if (!token0 || !token1) return false
-    const key0 = `${token0.chainId}:${getCurrencyAddress(token0)}`.toLowerCase()
-    const key1 = `${token0.chainId}:${getCurrencyAddress(token1)}`.toLowerCase()
-
-    const token0Whitelist = token0.isNative || tokensMap[key0]
-    const token1Whitelist = token1.isNative || tokensMap[key1]
-
-    if (token0Whitelist && token1Whitelist) {
-      return true
-    }
-    return false
+    return isFarmWhitelisted(farm, tokensMap)
   }
+}
+
+export const getUnwhitelistedToken = (farm: FarmInfo, tokensMap: Record<string, TokenInfo>): Currency | null => {
+  const [token0, token1] = SmartRouter.getCurrenciesOfPool(farm.pool)
+  if (!token0 || !token1) return null
+  if (!isTokenWhitelisted(token0, tokensMap)) return token0
+  if (!isTokenWhitelisted(token1, tokensMap)) return token1
+  return null
 }

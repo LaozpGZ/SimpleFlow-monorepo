@@ -1,6 +1,17 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { getCurrencyAddress, Percent } from '@pancakeswap/swap-sdk-core'
-import { Box, Grid, IColumnsType, ITableViewProps, Skeleton, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
+import {
+  Box,
+  Grid,
+  IColumnsType,
+  ITableViewProps,
+  Skeleton,
+  Text,
+  TooltipText,
+  WarningIcon,
+  useMatchBreakpoints,
+  useTooltip,
+} from '@pancakeswap/uikit'
 import { FeeTierTooltip, FiatNumberDisplay, Liquidity, TokenOverview } from '@pancakeswap/widgets-internal'
 import { InfinityFeeTierBreakdown } from 'components/FeeTierBreakdown'
 import { TokenPairLogo } from 'components/TokenImage'
@@ -14,11 +25,14 @@ import { useHookByPoolId } from 'hooks/infinity/useHooksList'
 import { useTokenByChainId } from 'hooks/Tokens'
 import { getFarmAprInfo, getFarmHookData } from 'state/farmsV4/search/farm.util'
 import { getCurrencySymbol } from 'utils/getTokenAlias'
+import { useAtomValue } from 'jotai'
 import { getChainFullName } from '../utils'
 import { RewardStatusDisplay } from './FarmStatusDisplay'
 import { getRewardProvider, getRewardMultiplier } from './FarmStatusDisplay/hooks'
 import { PoolGlobalAprButton } from './PoolAprButton'
 import { PoolListItemAction } from './PoolListItemAction'
+import { getUnwhitelistedToken } from '../atom/farmSearch.filter'
+import { tokensMapAtom } from '../atom/tokensMapAtom'
 
 export const FeeTierComponent = <T extends PoolInfo>({
   dynamic,
@@ -171,12 +185,26 @@ export const usePoolFeatureConfig = (showPoolType = true) => {
 }
 
 export const PoolTokenOverview = <T extends PoolInfo = PoolInfo>({ data }: { data: T }) => {
+  const { t } = useTranslation()
   const token0 = useTokenByChainId(getCurrencyAddress(data.token0), data.chainId) || data.token0
   const token1 = useTokenByChainId(getCurrencyAddress(data.token1), data.chainId) || data.token1
 
   const provider = getRewardProvider(data.chainId, data.lpAddress)
   const multiplier = getRewardMultiplier(data.chainId, data.lpAddress)
   const showReward = !!provider
+  const { tokensMap } = useAtomValue(tokensMapAtom)
+  const riskToken = getUnwhitelistedToken(data.farm!, tokensMap)
+  const showRisk = Boolean(riskToken)
+
+  const { targetRef, tooltip, tooltipVisible } = useTooltip(
+    <Text>
+      {t(
+        'Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.',
+        { token: riskToken?.symbol },
+      )}
+    </Text>,
+    { placement: 'top' },
+  )
 
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -190,6 +218,14 @@ export const PoolTokenOverview = <T extends PoolInfo = PoolInfo>({ data }: { dat
         icon={<TokenPairLogo width={44} height={44} variant="inverted" primaryToken={token0} secondaryToken={token1} />}
       />
       {showReward && <RewardStatusDisplay provider={provider} multiplier={multiplier} />}
+      {showRisk && (
+        <Box ml="4px">
+          <TooltipText ref={targetRef}>
+            <WarningIcon width="20px" color="warning" />
+          </TooltipText>
+          {tooltipVisible && tooltip}
+        </Box>
+      )}
     </div>
   )
 }

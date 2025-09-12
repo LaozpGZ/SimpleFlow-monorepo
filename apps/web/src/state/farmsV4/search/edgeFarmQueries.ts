@@ -108,6 +108,14 @@ function toRemotePool(farm: UniversalFarmConfig) {
   return poolBase
 }
 
+async function mergePromiseList<T>(promises: Promise<T[]>[]): Promise<T[]> {
+  const results = await Promise.allSettled(promises)
+  return results.flatMap((r, i) => {
+    if (r.status === 'fulfilled') return r.value
+    return []
+  })
+}
+
 async function fetchFarms(query: {
   extend: boolean
   protocols: Protocol[]
@@ -119,12 +127,13 @@ async function fetchFarms(query: {
   const protocols = _protocols.length > 0 ? _protocols : DEFAULT_PROTOCOLS
   const chainIds = chains.length > 0 ? chains : supportedChainIdV4
   if (!extend) {
-    const farmPools = await fetchExplorerFarmPools(protocols, Array.from(chainIds))
-    const explorerPools = await fetchAllExplorerPools(protocols, Array.from(chainIds))
-    return [...farmPools, ...explorerPools]
+    return mergePromiseList([
+      fetchExplorerFarmPools(protocols, Array.from(chainIds)),
+      fetchAllExplorerPools(protocols, Array.from(chainIds)),
+    ])
   }
   if (tokens && tokens.length > 0) {
-    const addressRelated = await Promise.all([
+    return mergePromiseList([
       fetchAllExplorerPoolsByAddress(
         Array.from(chainIds),
         tokens,
@@ -136,7 +145,6 @@ async function fetchFarms(query: {
         protocols.filter((x) => !x.match(/infinity/)),
       ),
     ])
-    return addressRelated.flat()
   }
   return fetchAllExplorerPools(protocols, Array.from(chainIds))
 }
@@ -228,7 +236,7 @@ async function fetchAllExplorerPoolsByAddress(
   if (!tokens.length) return []
 
   const chunks = chunk(tokens, 20)
-  const allPools = await Promise.all(
+  const allPools = await mergePromiseList(
     chunks.map((tokenChunk) => {
       return edgeQueries.fetchAllPools({
         baseUrl,
