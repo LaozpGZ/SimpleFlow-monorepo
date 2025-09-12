@@ -135,7 +135,7 @@ export const useBridgeErrorMessages = () => {
 }
 
 // Hook for getting user-friendly error messages from any error
-export const useTradeErrorMessage = () => {
+export const useTradeErrorMessageFn = () => {
   const errorMessages = useBridgeErrorMessages()
 
   return useCallback(
