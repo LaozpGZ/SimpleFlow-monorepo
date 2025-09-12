@@ -6,6 +6,8 @@ import { CHAIN_IDS } from 'utils/wagmi'
 import { useIsSmartAccount } from 'hooks/useIsSmartAccount'
 import Page from 'views/Page'
 import SwapLayout from 'views/Swap/SwapLayout'
+import { useActiveChainId } from 'hooks/useAccountActiveChain'
+import { isTwapSupported } from 'views/Swap/utils'
 
 const TwapAndLimitSwap = dynamic(() => import('views/Swap/Twap/TwapSwap'), { ssr: false })
 
@@ -20,14 +22,15 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
 const View = () => {
   const router = useRouter()
   const isSmartAccount = useIsSmartAccount()
+  const { chainId } = useActiveChainId()
 
   useEffect(() => {
-    if (isSmartAccount) {
+    if (isSmartAccount || !isTwapSupported(chainId)) {
       router.replace('/swap')
     }
-  }, [isSmartAccount, router])
+  }, [isSmartAccount, router, chainId])
 
-  if (isSmartAccount) {
+  if (isSmartAccount || !isTwapSupported(chainId)) {
     return null
   }
 

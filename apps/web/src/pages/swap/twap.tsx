@@ -7,6 +7,8 @@ import { useIsSmartAccount } from 'hooks/useIsSmartAccount'
 import Page from 'views/Page'
 import SwapLayout from 'views/Swap/SwapLayout'
 import TwapAndLimitSwap from 'views/Swap/Twap/TwapSwap'
+import { useActiveChainId } from 'hooks/useAccountActiveChain'
+import { isTwapSupported } from 'views/Swap/utils'
 
 const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
   return (
@@ -21,14 +23,15 @@ const Layout: React.FC<React.PropsWithChildren> = ({ children }) => {
 const TwapView = () => {
   const router = useRouter()
   const isSmartAccount = useIsSmartAccount()
+  const { chainId } = useActiveChainId()
 
   useEffect(() => {
-    if (isSmartAccount) {
+    if (isSmartAccount || !isTwapSupported(chainId)) {
       router.replace('/swap')
     }
-  }, [isSmartAccount, router])
+  }, [isSmartAccount, router, chainId])
 
-  if (isSmartAccount) {
+  if (isSmartAccount || !isTwapSupported(chainId)) {
     return null
   }
 
