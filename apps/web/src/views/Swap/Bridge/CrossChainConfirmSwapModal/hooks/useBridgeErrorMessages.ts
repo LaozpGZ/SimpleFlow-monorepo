@@ -140,17 +140,11 @@ export const useTradeErrorMessageFn = () => {
 
   return useCallback(
     (error: Error): string | null => {
-      console.log('errorMessages[message]', errorMessages[error?.message])
-
       if (!error) return null
-
-      console.log('error.constructor?.name', error.constructor?.name)
 
       // Handle BridgeTradeError
       if (error.constructor?.name === 'BridgeTradeError') {
         const { message } = error
-
-        console.log('error message', message)
 
         // Check for specific error patterns first (legacy compatibility)
         if (message.includes("doesn't have enough funds to support this deposit")) {
@@ -161,23 +155,7 @@ export const useTradeErrorMessageFn = () => {
           return errorMessages[RELAY_ERROR.AMOUNT_TOO_LOW]
         }
 
-        console.log('Object.values(RELAY_ERROR)', Object.values(RELAY_ERROR))
-
-        console.log(
-          'Object.values(RELAY_ERROR).includes(message as RELAY_ERROR)',
-          Object.values(RELAY_ERROR).includes(message as RELAY_ERROR),
-        )
-        // Check if it's a known error code
-        if (Object.values(RELAY_ERROR).includes(message as RELAY_ERROR)) {
-          return errorMessages[message] || message
-        }
-
-        if (Object.values(CrossChainAPIErrorCode).includes(message as CrossChainAPIErrorCode)) {
-          return errorMessages[message] || message
-        }
-
-        // Fallback to the error message itself
-        return message
+        return errorMessages[message] || message
       }
 
       return null
