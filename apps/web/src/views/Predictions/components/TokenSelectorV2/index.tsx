@@ -149,7 +149,7 @@ export const TokenSelectorV2 = ({ menuWidth }: TokenSelectorV2Props) => {
 
     // Include current token and all other available tokens
     const otherTokens = Object.values(predictionConfigs).filter(
-      (i) => i.predictionCurrency.symbol !== config.predictionCurrency.symbol,
+      (i) => i.predictionCurrency.symbol !== config.predictionCurrency.symbol && !i.paused,
     )
 
     return [config, ...otherTokens]
