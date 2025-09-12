@@ -51,7 +51,7 @@ const Mobile: React.FC<React.PropsWithChildren> = () => {
 
   return (
     <StyledMobile>
-      <Box height="100%">
+      <Box mt="12px" height="100%">
         {view === PageView.POSITIONS && (
           <Flex justifyContent="center" alignItems="center" flexDirection="column" minHeight="100%">
             {status === PredictionStatus.ERROR && <ErrorNotification />}

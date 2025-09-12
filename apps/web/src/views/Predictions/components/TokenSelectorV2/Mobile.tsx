@@ -152,9 +152,6 @@ export const MobilePredictionTokenSelector: React.FC<MobilePredictionTokenSelect
                 size="32px"
                 currency={token.predictionCurrency}
                 style={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
                   opacity: token.paused && !isActive ? 0.5 : 1,
                 }}
                 showChainLogo
