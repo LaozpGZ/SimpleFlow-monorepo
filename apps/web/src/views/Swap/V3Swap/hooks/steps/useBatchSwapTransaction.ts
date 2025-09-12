@@ -141,6 +141,7 @@ export const useBatchSwapTransaction = ({
         if (!result?.id || !result.client) {
           return
         }
+
         const { promise: statusPromise } = retry(
           async () => {
             const status = await result.client.getCallsStatus({ id: result.id })
@@ -153,7 +154,7 @@ export const useBatchSwapTransaction = ({
             }
             return status
           },
-          { n: 3, minWait: 2000, maxWait: 3500 },
+          { n: 10, minWait: 2000, maxWait: 3500 },
         )
 
         const status = await statusPromise
