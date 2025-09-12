@@ -22,6 +22,8 @@ const PredictionConfigProviders = ({ children }: { children?: React.ReactNode })
   const supportedSymbol = useMemo(() => (predictionConfigs ? Object.keys(predictionConfigs) : []), [predictionConfigs])
 
   useEffect(() => {
+    if (!router.isReady) return
+
     const upperToken = _toUpper(router?.query?.token as string) as PredictionSupportedSymbol
 
     if (supportedSymbol.includes(upperToken)) {
@@ -54,7 +56,7 @@ const PredictionConfigProviders = ({ children }: { children?: React.ReactNode })
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId, supportedSymbol, router, setPrevSelectedToken])
+  }, [chainId, supportedSymbol, router, setPrevSelectedToken, router.isReady])
 
   const selectedToken = useMemo(() => {
     if (supportedSymbol.includes(chainId && prevSelectedToken?.[chainId])) {
