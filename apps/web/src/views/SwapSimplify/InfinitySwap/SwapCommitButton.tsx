@@ -35,11 +35,9 @@ import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckAp
 import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModalV2'
 import { EVMInterfaceOrder, isBridgeOrder, isClassicOrder, isSVMOrder, isXOrder } from 'views/Swap/utils'
-import { useTradeErrorMessage } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
-import { useAccount } from 'wagmi'
+import { useTradeErrorMessageFn } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { isEvm, isSolana, NonEVMChainId } from '@pancakeswap/chains'
-import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 
 import { ConfirmSwapModalV3 } from '../../Swap/Bridge/CrossChainConfirmSwapModal/ConfirmSwapModalV3'
 import { useParsedAmounts, useSlippageAdjustedAmounts, useSwapInputError } from '../../Swap/V3Swap/hooks'
@@ -175,7 +173,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
   const { t } = useTranslation()
   const { chainId } = useAccountActiveChain()
-  const getTradeErrorMessage = useTradeErrorMessage()
+  const getTradeErrorMessage = useTradeErrorMessageFn()
   // form data
   const { independentField, typedValue } = useSwapState()
   const [inputCurrency, outputCurrency] = useSwapCurrency()
