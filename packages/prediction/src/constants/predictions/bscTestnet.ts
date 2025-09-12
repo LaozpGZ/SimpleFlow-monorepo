@@ -10,32 +10,26 @@ const BTC = new ERC20Token(bscTokens.wBTC.chainId, bscTokens.wBTC.address, bscTo
 const tBNB = Native.onChain(ChainId.BSC_TESTNET)
 
 export const predictions: Record<string, PredictionConfig> = {
-  [PredictionSupportedSymbol.ETH]: {
-    version: PredictionContractVersion.V2_1,
-
-    betCurrency: tBNB,
-    predictionCurrency: bscTokens.eth,
-
-    address: predictionsETH[ChainId.BSC_TESTNET],
-    api: GRAPH_API_PREDICTION_ETH[ChainId.BSC_TESTNET],
-    chainlinkOracleAddress: chainlinkOracleETH[ChainId.BSC_TESTNET],
-
-    displayedDecimals: 2,
-    balanceDecimals: 4,
-    tokenBackgroundColor: '#F0B90B',
-  },
-  [PredictionSupportedSymbol.BTC]: {
-    version: PredictionContractVersion.V2_1,
-
-    betCurrency: tBNB,
-    predictionCurrency: BTC,
-
-    address: predictionsWBTC[ChainId.BSC_TESTNET],
-    api: GRAPH_API_PREDICTION_WBTC[ChainId.BSC_TESTNET],
-    chainlinkOracleAddress: chainlinkOracleWBTC[ChainId.BSC_TESTNET],
-
-    displayedDecimals: 2,
-    balanceDecimals: 4,
-    tokenBackgroundColor: '#25C7D6',
-  },
+  // [PredictionSupportedSymbol.ETH]: {
+  //   version: PredictionContractVersion.V2_1,
+  //   betCurrency: tBNB,
+  //   predictionCurrency: bscTokens.eth,
+  //   address: predictionsETH[ChainId.BSC_TESTNET],
+  //   api: GRAPH_API_PREDICTION_ETH[ChainId.BSC_TESTNET],
+  //   chainlinkOracleAddress: chainlinkOracleETH[ChainId.BSC_TESTNET],
+  //   displayedDecimals: 2,
+  //   balanceDecimals: 4,
+  //   tokenBackgroundColor: '#F0B90B',
+  // },
+  // [PredictionSupportedSymbol.BTC]: {
+  //   version: PredictionContractVersion.V2_1,
+  //   betCurrency: tBNB,
+  //   predictionCurrency: BTC,
+  //   address: predictionsWBTC[ChainId.BSC_TESTNET],
+  //   api: GRAPH_API_PREDICTION_WBTC[ChainId.BSC_TESTNET],
+  //   chainlinkOracleAddress: chainlinkOracleWBTC[ChainId.BSC_TESTNET],
+  //   displayedDecimals: 2,
+  //   balanceDecimals: 4,
+  //   tokenBackgroundColor: '#25C7D6',
+  // },
 }
