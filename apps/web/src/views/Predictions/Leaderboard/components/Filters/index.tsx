@@ -41,6 +41,7 @@ const FilterWrapper = styled(Box)`
 interface FiltersProps {
   pickedChainId: ChainId
   pickedTokenSymbol: string
+  betTokenSymbol: string
   predictionConfigs: Record<string, PredictionConfig> | undefined
   setPickedTokenSymbol: (value: PredictionSupportedSymbol) => void
   setPickedChainId: (chainId: ChainId) => void
@@ -51,6 +52,7 @@ const DEFAULT_ORDER = 'totalBets'
 const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
   pickedChainId,
   pickedTokenSymbol,
+  betTokenSymbol,
   predictionConfigs,
   setPickedTokenSymbol,
   setPickedChainId,
@@ -62,18 +64,18 @@ const Filters: React.FC<React.PropsWithChildren<FiltersProps>> = ({
 
   const orderByOptions = useMemo(() => {
     const isOldPrediction =
-      (pickedChainId === ChainId.BSC && pickedTokenSymbol === PredictionSupportedSymbol.BNB) ||
-      (pickedChainId === ChainId.BSC && pickedTokenSymbol === PredictionSupportedSymbol.CAKE)
-    const netAmount = isOldPrediction ? `net${pickedTokenSymbol}` : 'netAmount'
-    const totalAmount = isOldPrediction ? `total${pickedTokenSymbol}` : 'totalAmount'
+      (pickedChainId === ChainId.BSC && betTokenSymbol === PredictionSupportedSymbol.BNB) ||
+      (pickedChainId === ChainId.BSC && betTokenSymbol === PredictionSupportedSymbol.CAKE)
+    const netAmount = isOldPrediction ? `net${betTokenSymbol}` : 'netAmount'
+    const totalAmount = isOldPrediction ? `total${betTokenSymbol}` : 'totalAmount'
 
     return [
       { label: t('Rounds Played'), value: 'totalBets' },
       { label: t('Net Winnings'), value: netAmount },
-      { label: t('Total %symbol%', { symbol: pickedTokenSymbol }), value: totalAmount },
+      { label: t('Total %symbol%', { symbol: betTokenSymbol }), value: totalAmount },
       { label: t('Win Rate'), value: 'winRate' },
     ]
-  }, [pickedChainId, pickedTokenSymbol, t])
+  }, [pickedChainId, betTokenSymbol, t])
 
   const handleOrderBy = (option: OptionProps) => {
     setPickedOrder(option.value)

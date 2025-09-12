@@ -67,6 +67,7 @@ const Leaderboard = () => {
       <Filters
         pickedChainId={pickedChainId}
         pickedTokenSymbol={pickedTokenSymbol}
+        betTokenSymbol={predictionConfigs?.[pickedTokenSymbol]?.betCurrency?.symbol ?? ''}
         predictionConfigs={predictionConfigs}
         setPickedChainId={setPickedChainId}
         setPickedTokenSymbol={setPickedTokenSymbol}
