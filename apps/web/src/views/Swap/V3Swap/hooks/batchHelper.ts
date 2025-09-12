@@ -113,11 +113,13 @@ export function getBatchedTransaction(
           }
           if (swapData) {
             calls.push(
-              ...swapData.map((d) => ({
-                to: d.address,
-                value: !d.value || isZero(d.value) ? 0n : hexToBigInt(d.value),
-                data: d.calldata,
-              })),
+              ...swapData
+                .filter((d) => d)
+                .map((d) => ({
+                  to: d.address,
+                  value: !d.value || isZero(d.value) ? 0n : hexToBigInt(d.value),
+                  data: d.calldata,
+                })),
             )
           }
         }
