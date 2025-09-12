@@ -69,5 +69,5 @@ export const getSimulationComputeUnits = async (
   }
 
   // Add 20% buffer to account for slight variations
-  return Math.ceil(unitsConsumed * 1.2)
+  return Math.ceil(unitsConsumed * 1.5)
 }
