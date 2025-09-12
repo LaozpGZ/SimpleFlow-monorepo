@@ -2786,7 +2786,7 @@
   "How Are Rewards Calculated in Prediction?": "预测中的奖励是如何计算的？",
   "Can I Cancel My Prediction Bet?": "我可以取消我的预测赌注吗？",
   "The Prediction feature on PancakeSwap is a price-prediction game where users can guess whether the price of an asset, such as BNB, will be higher or lower after a set period. Correct predictions can earn rewards.": "PancakeSwap 上的预测功能是一项价格预测游戏，用户可以猜测某种资产（例如 BNB）的价格在一段时间后会是上涨还是下跌。预测正确可以赚取奖励。",
-  "To participate, connect your wallet, navigate to the Prediction page, and select 'Bull' (predicting an increase) or 'Bear' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "要参与，请关联您的钱包，导航到预测页面，然后选择下一回合将是“Bull”（牛 - 预测上涨）还是“Bear”（熊 - 预测下跌）。然后，输入您的下注金额并确认交易。",
+  "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.",
   "Prediction is a high-risk game, as it depends on price fluctuations that can be volatile. Only use funds you can afford to lose, and remember that there's no guaranteed outcome.": "预测是一项高风险游戏，因为它取决于价格波动，可能会非常剧烈。请仅使用您能承受损失的资金，并谨记结果不受任何保证。",
   "Rewards are distributed from the pool of all user wagers in the round. Winners share the pool minus a small fee, which is added back to the platform. The reward amount depends on the total pool size and the number of winners.": "奖励从该回合所有用户投注的奖金池中分发。获胜者将获得奖金池中的一定份额，并扣除一小笔费用返还给平台。奖励金额取决于奖金池总规模和获奖者人数。",
   "Once placed, a prediction bet cannot be canceled or altered. Ensure you’re confident about your prediction before confirming, as it’s locked for the duration of the round.": "一经下注，预测赌注便无法取消或更改。在确认之前，请确保您对自己的预测有信心，因为它在整个回合期间都将处于锁定状态。",
@@ -4147,5 +4147,10 @@
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
   "Target Raise": "目标提升",
-  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%",
+  "What if no one enters an opposing position?": "What if no one enters an opposing position?",
+  "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).": "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).",
+  "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.": "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.",
+  "Paused": "Paused",
+  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses"
 }
