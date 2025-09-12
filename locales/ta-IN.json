@@ -2786,7 +2786,7 @@
   "How Are Rewards Calculated in Prediction?": "Predictionல் வெகுமதிகள் எப்படிக் கணக்கிடப்படுகின்றன?",
   "Can I Cancel My Prediction Bet?": "எனது Prediction பந்தயத்தை நான் ரத்து செய்யலாமா?",
   "The Prediction feature on PancakeSwap is a price-prediction game where users can guess whether the price of an asset, such as BNB, will be higher or lower after a set period. Correct predictions can earn rewards.": "PancakeSwapல் உள்ள Prediction அம்சம் ஒரு விலை-முன்கணிப்பு கேம் ஆகும், அதில் BNB போன்ற அசெட்டின் விலை ஒரு குறிப்பிட்ட காலத்திற்குப் பிறகு அதிகமாகுமா அல்லது குறையுமா என்பதை பயனர்கள் யூகிக்க முடியும். சரியான கணிப்புகள் வெகுமதிகளைப் பெறலாம்.",
-  "To participate, connect your wallet, navigate to the Prediction page, and select 'Bull' (predicting an increase) or 'Bear' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "பங்கேற்க, உங்கள் வாலெட்டை இணைத்து, Prediction பக்கத்திற்குச் செல்லவும், அடுத்த சுற்றுக்கு 'எருது' (அதிகரிப்பை கணித்தல்) அல்லது 'கரடி' (குறைவைக் கணித்தல்) என்பதைத் தேர்ந்தெடுக்கவும். பின்னர், உங்கள் பந்தயத் தொகையை உள்ளிட்டு பரிவர்த்தனையை உறுதிப்படுத்தவும்.",
+  "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.",
   "Prediction is a high-risk game, as it depends on price fluctuations that can be volatile. Only use funds you can afford to lose, and remember that there's no guaranteed outcome.": "Prediction என்பது அதிக ஆபத்துள்ள கேம், ஏனெனில் இது நிலையற்றதாக இருக்கின்ற விலை ஏற்ற இறக்கங்களைப் பொறுத்தது. நீங்கள் இழந்தாலும் பரவாயில்லை எனும் நிதிகளை மட்டுமே பயன்படுத்தவும், உத்தரவாதமான விளைபயன் எதுவும் இல்லை என்பதை நினைவில் கொள்ளுங்கள்.",
   "Rewards are distributed from the pool of all user wagers in the round. Winners share the pool minus a small fee, which is added back to the platform. The reward amount depends on the total pool size and the number of winners.": "சுற்றில் உள்ள அனைத்து பயனர் பந்தயங்கட்டுதல்களின் பூலிலிருந்து வெகுமதிகள் விநியோகிக்கப்படுகின்றன. வெற்றியாளர்கள் பூலிலிருந்து கழிக்கப்படுகிற ஒரு சிறிய கட்டணத்தைப் பகிர்ந்து கொள்கிறார்கள், இது மீண்டும் பிளாட்ஃபார்மில்ல் சேர்க்கப்படுகிறது. வெகுமதித் தொகை, மொத்த பூலின் அளவையும் வெற்றியாளர்களின் எண்ணிக்கையையும் பொறுத்தது.",
   "Once placed, a prediction bet cannot be canceled or altered. Ensure you’re confident about your prediction before confirming, as it’s locked for the duration of the round.": "ஒருமுறை கட்டியதும், கணிப்புப் பந்தயத்தை ரத்து செய்யவோ மாற்றவோ முடியாது. உறுதிப்படுத்துவதற்கு முன் உங்கள் கணிப்பைப் பற்றி நீங்கள் நம்பிக்கையுடன் இருப்பதை உறுதிப்படுத்திக் கொள்ளுங்கள், ஏனெனில் இது சுற்றின் காலகட்டம் முழுவதிற்கும் பூட்டப்படும்.",
@@ -4147,5 +4147,10 @@
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
   "Target Raise": "இலக்கு உயர்வு",
-  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%",
+  "What if no one enters an opposing position?": "What if no one enters an opposing position?",
+  "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).": "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).",
+  "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.": "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.",
+  "Paused": "Paused",
+  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses"
 }
