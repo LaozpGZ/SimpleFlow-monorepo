@@ -70,7 +70,7 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
   }
 
   return (
-    <I18nextProvider i18n={i18n}>
+    <I18nextProvider i18n={i18n} key={ver}>
       <LanguageContext.Provider value={providerValue}>{children}</LanguageContext.Provider>
     </I18nextProvider>
   )
