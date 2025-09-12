@@ -12,7 +12,7 @@ export const filterTokens = (tokensMap: Record<string, TokenInfo>) => {
 
 function isTokenWhitelisted(token: Currency, tokensMap: Record<string, TokenInfo>) {
   const key = `${token.chainId}:${getCurrencyAddress(token)}`.toLowerCase()
-  return token.isNative || tokensMap[key]
+  return Boolean(token.isNative || tokensMap[key])
 }
 
 function isFarmWhitelisted(farm: FarmInfo, tokensMap: Record<string, TokenInfo>) {
