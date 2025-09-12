@@ -101,7 +101,7 @@ const List = () => {
 
   useEffect(() => {
     const params = farmQueryToUrlParams(query)
-    if (isEqual(params, query)) {
+    if (isEqual(params, nextQuery)) {
       return
     }
     replace({
