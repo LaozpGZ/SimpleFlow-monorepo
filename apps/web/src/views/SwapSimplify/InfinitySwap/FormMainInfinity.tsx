@@ -1,4 +1,3 @@
-import { ChainId as EvmChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Percent, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { Box, FlexGap, Image, Skeleton, Text } from '@pancakeswap/uikit'

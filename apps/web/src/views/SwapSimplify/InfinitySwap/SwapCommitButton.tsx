@@ -12,11 +12,7 @@ import { GreyCard } from 'components/Card'
 import { CommitButton } from 'components/CommitButton'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { AutoRow } from 'components/Layout/Row'
-import {
-  RoutingSettingsButton,
-  RoutingSettingsModalContent,
-  withCustomOnDismiss,
-} from 'components/Menu/GlobalSettings/SettingsModalV2'
+import { RoutingSettingsButton, RoutingSettingsModalContent } from 'components/Menu/GlobalSettings/SettingsModalV2'
 import { BIG_INT_ZERO } from 'config/constants/exchange'
 import { useCurrency } from 'hooks/Tokens'
 import { useIsTransactionUnsupported } from 'hooks/Trades'
@@ -42,7 +38,6 @@ import { EVMInterfaceOrder, isBridgeOrder, isClassicOrder, isSVMOrder, isXOrder 
 import { useAccount } from 'wagmi'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { isEvm, NonEVMChainId } from '@pancakeswap/chains'
-import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 
 import { ConfirmSwapModalV3 } from '../../Swap/Bridge/CrossChainConfirmSwapModal/ConfirmSwapModalV3'
 import { useParsedAmounts, useSlippageAdjustedAmounts, useSwapInputError } from '../../Swap/V3Swap/hooks'

@@ -9,7 +9,6 @@ import { styled } from 'styled-components'
 
 import { ASSET_CDN } from 'config/constants/endpoints'
 import { getChainName } from '@pancakeswap/chains'
-import { getChainBasedImageUrl } from '../helpers'
 
 const StyledHero = styled(Box)`
   position: relative;

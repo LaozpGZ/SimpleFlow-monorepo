@@ -1,5 +1,4 @@
 import { usePreviousValue } from '@pancakeswap/hooks'
-import styled from 'styled-components'
 import { useTranslation } from '@pancakeswap/localization'
 import {
   Box,
@@ -7,7 +6,6 @@ import {
   ButtonMenu,
   ButtonMenuItem,
   FlexGap,
-  Input,
   PreTitle,
   QuestionHelper,
   useMatchBreakpoints,

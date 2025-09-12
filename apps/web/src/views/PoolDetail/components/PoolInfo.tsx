@@ -1,6 +1,6 @@
 import { Protocol } from '@pancakeswap/farms'
 import { useTranslation } from '@pancakeswap/localization'
-import { Percent, Token, getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
+import { Percent, getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
 import {
   AutoColumn,
   Box,

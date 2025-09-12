@@ -1,17 +1,6 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, CurrencyAmount } from '@pancakeswap/sdk'
-import {
-  AutoRow,
-  Box,
-  Button,
-  Checkbox,
-  FlexGap,
-  Modal,
-  ModalProps,
-  ModalV2,
-  ModalV2Props,
-  Text,
-} from '@pancakeswap/uikit'
+import { AutoRow, Box, Button, Checkbox, FlexGap, Modal, ModalV2, ModalV2Props, Text } from '@pancakeswap/uikit'
 import truncateHash from '@pancakeswap/utils/truncateHash'
 import { CurrencyLogo, DoubleCurrencyLogo, LightGreyCard } from '@pancakeswap/widgets-internal'
 import Divider from 'components/Divider'

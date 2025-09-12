@@ -1,20 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
-import {
-  AtomBox,
-  CloseIcon,
-  FlexGap,
-  Grid,
-  Heading,
-  IconButton,
-  RowBetween,
-  Text,
-  Toggle,
-  useMatchBreakpoints,
-} from '@pancakeswap/uikit'
-import { useAtomValue } from 'jotai'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { AtomBox, CloseIcon, Grid, Heading, IconButton, RowBetween, useMatchBreakpoints } from '@pancakeswap/uikit'
+import { useCallback, useMemo, useState } from 'react'
 import { ASSET_CDN } from '../../config/url'
-import { errorEvmAtom, errorSolanaAtom } from '../../state/atom'
 import { useSelectedWallet, useWalletFilter } from '../../state/hooks'
 import { ConnectData, WalletAdaptedNetwork, WalletConfigV3, WalletIds } from '../../types'
 import { PreviewSection, PreviewStatus } from '../PreviewSection'

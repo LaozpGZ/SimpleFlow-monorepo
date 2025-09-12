@@ -6,7 +6,6 @@ import { PUBLIC_NODES } from 'config/nodes'
 import { Suspense, useEffect, useMemo } from 'react'
 import { CHAIN_IDS } from 'utils/wagmi'
 import Page from 'views/Page'
-import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
 import { useSwitchNetwork } from 'hooks/useSwitchNetwork'
 
 const DISABLED_TO_CHAINS = [ChainId.POLYGON_ZKEVM]
