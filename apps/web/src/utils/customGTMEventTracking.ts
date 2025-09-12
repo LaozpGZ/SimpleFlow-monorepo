@@ -59,6 +59,7 @@ export enum GTMEvent {
 
   // Gift
   GiftEvent = 'giftEvent',
+  PancakePicksClickEvent = 'click_PP',
 }
 
 export enum GTMCategory {
@@ -78,6 +79,7 @@ export enum GTMCategory {
   IFO = 'IFO',
   IDO = 'IDO',
   Gift = 'Gift',
+  PancakePicks = 'PancakePicks',
 }
 
 export enum GTMAction {
@@ -141,6 +143,8 @@ export enum GTMAction {
   GiftPreview = 'click Gift Preview button',
   GiftCreate = 'click Gift Create button',
   GiftCreateSuccess = 'show Gift Create Success',
+
+  PancakePicksClick = 'pancake pick pool click',
 }
 
 interface CustomGTMDataLayer {
@@ -580,6 +584,16 @@ export const logGTMGiftCreateEvent = (chainId?: number) => {
     action: GTMAction.GiftCreate,
     category: GTMCategory.Gift,
     chainId,
+  })
+}
+
+export const logPancakePicksClickEvent = (poolName?: string) => {
+  console.info('---PancakePick---', { poolName })
+  window?.dataLayer?.push({
+    event: GTMEvent.PancakePicksClickEvent,
+    action: GTMAction.PancakePicksClick,
+    category: GTMCategory.PancakePicks,
+    label: poolName,
   })
 }
 

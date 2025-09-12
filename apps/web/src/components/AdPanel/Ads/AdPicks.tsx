@@ -12,6 +12,7 @@ import { ChainIdAddressKey } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
 import { useMyPositions } from 'views/PoolDetail/components/MyPositionsContext'
 import { sumApr } from 'views/universalFarms/utils/sumApr'
+import { logPancakePicksClickEvent } from 'utils/customGTMEventTracking'
 import { AdTag } from '../AdTag'
 import { BodyText } from '../BodyText'
 import { AdCard } from '../Card'
@@ -120,7 +121,12 @@ export const AdPicks = ({ config, index }: { config: PickConfig; index: number }
           }}
         >
           <NextLinkFromReactRouter to={config.url}>
-            <Text color="primary60">
+            <Text
+              onClick={() => {
+                logPancakePicksClickEvent(`${token0.symbol}/${token1.symbol}`)
+              }}
+              color="primary60"
+            >
               {token0.symbol}/{token1.symbol}
             </Text>
           </NextLinkFromReactRouter>

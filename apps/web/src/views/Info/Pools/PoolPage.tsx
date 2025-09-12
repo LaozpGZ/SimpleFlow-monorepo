@@ -47,6 +47,7 @@ import ChartCard from 'views/Info/components/InfoCharts/ChartCard'
 import TransactionTable from 'views/Info/components/InfoTables/TransactionsTable'
 import Percent from 'views/Info/components/Percent'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
+import { logGTMClickAddLiquidityEvent } from 'utils/customGTMEventTracking'
 
 const ContentLayout = styled.div`
   display: grid;
@@ -205,7 +206,14 @@ const PoolPage: React.FC<React.PropsWithChildren<{ address: string }>> = ({ addr
                 <NextLinkFromReactRouter
                   to={`/add/${poolData.token0.address}/${poolData.token1.address}?chain=${CHAIN_QUERY_NAME[chainId]}`}
                 >
-                  <Button mr="8px" variant="secondary" disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}>
+                  <Button
+                    mr="8px"
+                    variant="secondary"
+                    onClick={() => {
+                      logGTMClickAddLiquidityEvent()
+                    }}
+                    disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[chainId]}
+                  >
                     {t('Add Liquidity')}
                   </Button>
                 </NextLinkFromReactRouter>

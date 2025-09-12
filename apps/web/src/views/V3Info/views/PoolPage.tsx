@@ -31,6 +31,7 @@ import { formatAmount } from 'utils/formatInfoNumbers'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { CurrencyLogo, DoubleCurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
+import { logGTMClickAddLiquidityEvent } from 'utils/customGTMEventTracking'
 import BarChart from '../components/BarChart/alt'
 import { GreyBadge } from '../components/Card'
 import DensityChart from '../components/DensityChart'
@@ -238,6 +239,9 @@ const PoolPage: React.FC<{ address: string }> = ({ address }) => {
                     mr="8px"
                     variant="secondary"
                     disabled={!!DISABLED_ADD_LIQUIDITY_CHAINS[multiChainId[chainName]]}
+                    onClick={() => {
+                      logGTMClickAddLiquidityEvent()
+                    }}
                   >
                     {t('Add Liquidity')}
                   </Button>
