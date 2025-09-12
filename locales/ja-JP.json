@@ -2785,7 +2785,6 @@
   "How Are Rewards Calculated in Prediction?": "予測における報酬はどのように計算されますか？",
   "Can I Cancel My Prediction Bet?": "予測ベットをキャンセルできますか？",
   "The Prediction feature on PancakeSwap is a price-prediction game where users can guess whether the price of an asset, such as BNB, will be higher or lower after a set period. Correct predictions can earn rewards.": "PancakeSwapの予測機能とは、ユーザーが一定期間後にBNBなどの資産の価格が上がるか下がるかを推測できる価格予測ゲームのことです。予測が正しければ報酬を獲得できます。",
-  "To participate, connect your wallet, navigate to the Prediction page, and select 'Bull' (predicting an increase) or 'Bear' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "参加するには、ウォレットを接続し、[予測] ページに移動して、次のラウンドで「Bull」（上昇を予測）または「Bear」（下降を予測）を選択します。次に、賭け金を入力して取引を確認します。",
   "Prediction is a high-risk game, as it depends on price fluctuations that can be volatile. Only use funds you can afford to lose, and remember that there's no guaranteed outcome.": "予測は、不安定な価格変動に依存するため、リスクの高いゲームです。失っても大丈夫な資金のみを使用し、結果が保証されていないことにご注意ください。",
   "Rewards are distributed from the pool of all user wagers in the round. Winners share the pool minus a small fee, which is added back to the platform. The reward amount depends on the total pool size and the number of winners.": "報酬は、ラウンド中のすべてのユーザーの賭け金のプールから分配されます。少額の手数料を差し引いたプールを勝者に分配し、手数料はプラットフォームに再び投入されます。報酬額は、プール総額と勝者の数によって異なります。",
   "Once placed, a prediction bet cannot be canceled or altered. Ensure you’re confident about your prediction before confirming, as it’s locked for the duration of the round.": "一度行った予測ベットはキャンセルまたは変更できません。ラウンド中は予測ベットはロックされるため、確定する前に予測内容を慎重にご確認ください。",
@@ -4199,5 +4198,11 @@
   "unclaimed-rewards": "CAKEがステーキングされている間は、報酬が蓄積され続けます。<0>Harvest</0>ボタンをクリックすることで、いつでも報酬を請求できます。",
   "legacy-pools": "<0>Auto CAKEおよびManual CAKE Pools</0>は、<1>veCAKE</1>ステーキングにアップグレードされました。レガシープールにまだCAKEをステーキングしている場合は、引き続き報酬を獲得するために<2>veCAKEへ移行</2>する必要があります。<3>移行方法はこちらをご覧ください</3>",
   "Gift Failed to Claim": "ギフトの請求に失敗しました",
-  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "ギフトの請求に失敗しました。このギフトをキャンセルすると、トークンをウォレットに戻すことができます。"
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "ギフトの請求に失敗しました。このギフトをキャンセルすると、トークンをウォレットに戻すことができます。",
+  "What if no one enters an opposing position?": "誰も反対ポジションに入札しなかった場合はどうなりますか？",
+  "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).": "そのサイドが勝利した場合、ユーザーは賞金プール（3%のトレジャリー手数料を除く）から各自の取り分を請求できます。",
+  "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "参加するには、ウォレットを接続し、Predictionページに移動して、次のラウンドで「UP」（価格上昇を予測）または「DOWN」（価格下落を予測）を選択します。次に、賭け金を入力し、取引を確定してください。",
+  "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.": "そのサイドが負けた場合（つまり勝者なしの場合）、プール全体がトレジャリーに送られ、CAKEの買い戻しとバーンに使用されます。",
+  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "表示される合計ラウンド数には、勝利または敗北としてカウントされないため、キャンセルされたラウンドは含まれません。",
+  "Paused": "一時停止中"
 }

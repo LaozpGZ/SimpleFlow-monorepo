@@ -2785,7 +2785,6 @@
   "How Are Rewards Calculated in Prediction?": "كيف تُحسب المكافآت في التنبؤ؟",
   "Can I Cancel My Prediction Bet?": "هل يمكنني إلغاء رهان التنبؤ الخاص بي؟",
   "The Prediction feature on PancakeSwap is a price-prediction game where users can guess whether the price of an asset, such as BNB, will be higher or lower after a set period. Correct predictions can earn rewards.": "ميزة التنبؤ على PancakeSwap هي لعبة للتنبؤ بالسعر حيث يمكن للمستخدمين تخمين ما إذا كان سعر الأصل مثل BNB، سيرتفع أم سينخفض بعد فترة محددة. يمكن ربح مكافآت من التنبؤات الصحيحة.",
-  "To participate, connect your wallet, navigate to the Prediction page, and select 'Bull' (predicting an increase) or 'Bear' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "للمشاركة، قم بتوصيل محفظتك، وانتقل إلى صفحة التنبؤ، وحدد 'ثور' (التنبؤ بحدوث زيادة) أو 'دب' (التنبؤ بحدوث انخفاض) للجولة التالية. بعد ذلك أدخل مبلغ الرهن وأكد المعاملة.",
   "Prediction is a high-risk game, as it depends on price fluctuations that can be volatile. Only use funds you can afford to lose, and remember that there's no guaranteed outcome.": "التنبؤ لعبة عالية الخطورة، وتعتمد على تقلبات الأسعار والتي يمكن أن تكون شديدة التغير. استخدم فقط الأموال التي يمكنك تحمل خسارتها، وتذكر أنه لا يوجد نتيجة مضمونة.",
   "Rewards are distributed from the pool of all user wagers in the round. Winners share the pool minus a small fee, which is added back to the platform. The reward amount depends on the total pool size and the number of winners.": "يتم توزيع المكافآت من التجمع الخاص بجميع رهانات المستخدمين في الجولة. ويتقاسم الفائزون في التجمع ناقص رسوم صغيرة، يتم إرجاعها إلى المنصة. يعتمد مبلغ المكافأة على إجمالي حجم التجمع وعدد الفائزين.",
   "Once placed, a prediction bet cannot be canceled or altered. Ensure you’re confident about your prediction before confirming, as it’s locked for the duration of the round.": "لا يمكن إلغاء التنبؤ أو تغييره بعد تقديمه. تأكد من أنك واثق من التنبؤ قبل التأكيد، حيث يتم إقفاله طوال مدة الجولة.",
@@ -4199,5 +4198,11 @@
   "unclaimed-rewards": "ستستمر مكافآتك في التراكم طالما بقي CAKE الخاص بك مرهونًا. يمكنك المطالبة بها في أي وقت بالنقر على زر \"<0>Harvest</0>\"",
   "legacy-pools": "تمت ترقية <0>مجمعات Auto CAKE وManual CAKE</0> إلى رهن <1>veCAKE</1>. إذا كان لا يزال لديك CAKE مرهونًا في المجمعات القديمة، فستحتاج إلى <2>الترحيل إلى veCAKE</2> لمواصلة كسب المكافآت. <3>تعرّف على كيفية الترحيل هنا</3>",
   "Gift Failed to Claim": "فشل المطالبة بالهدية",
-  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "فشلت المطالبة بالهدية. يمكنك إلغاء هذه الهدية لإعادة الرموز إلى محفظتك."
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "فشلت المطالبة بالهدية. يمكنك إلغاء هذه الهدية لإعادة الرموز إلى محفظتك.",
+  "What if no one enters an opposing position?": "ماذا لو لم يدخل أحد في مركز معاكس؟",
+  "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).": "إذا فاز هذا الجانب، يمكن للمستخدمين المطالبة بحصتهم من مجموع الجوائز (مطروحًا منها رسوم خزانة بنسبة 3%).",
+  "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "للمشاركة، قم بتوصيل محفظتك، وانتقل إلى صفحة التنبؤات (Prediction)، واختر 'UP' (للتنبؤ بالارتفاع) أو 'DOWN' (للتنبؤ بالانخفاض) للجولة التالية. ثم، أدخل مبلغ رهانك وقم بتأكيد المعاملة.",
+  "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.": "إذا خسر هذا الجانب (بمعنى عدم وجود فائزين)، يذهب المجمع بالكامل إلى الخزانة ويُستخدم لإعادة شراء وحرق CAKE.",
+  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "لا تشمل الجولات الإجمالية المعروضة أي جولات ملغاة، حيث لا تُحتسب كفوز أو خسارة.",
+  "Paused": "متوقف مؤقتًا"
 }

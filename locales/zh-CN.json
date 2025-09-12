@@ -2785,7 +2785,6 @@
   "How Are Rewards Calculated in Prediction?": "预测中的奖励是如何计算的？",
   "Can I Cancel My Prediction Bet?": "我可以取消我的预测赌注吗？",
   "The Prediction feature on PancakeSwap is a price-prediction game where users can guess whether the price of an asset, such as BNB, will be higher or lower after a set period. Correct predictions can earn rewards.": "PancakeSwap 上的预测功能是一项价格预测游戏，用户可以猜测某种资产（例如 BNB）的价格在一段时间后会是上涨还是下跌。预测正确可以赚取奖励。",
-  "To participate, connect your wallet, navigate to the Prediction page, and select 'Bull' (predicting an increase) or 'Bear' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "要参与，请关联您的钱包，导航到预测页面，然后选择下一回合将是“Bull”（牛 - 预测上涨）还是“Bear”（熊 - 预测下跌）。然后，输入您的下注金额并确认交易。",
   "Prediction is a high-risk game, as it depends on price fluctuations that can be volatile. Only use funds you can afford to lose, and remember that there's no guaranteed outcome.": "预测是一项高风险游戏，因为它取决于价格波动，可能会非常剧烈。请仅使用您能承受损失的资金，并谨记结果不受任何保证。",
   "Rewards are distributed from the pool of all user wagers in the round. Winners share the pool minus a small fee, which is added back to the platform. The reward amount depends on the total pool size and the number of winners.": "奖励从该回合所有用户投注的奖金池中分发。获胜者将获得奖金池中的一定份额，并扣除一小笔费用返还给平台。奖励金额取决于奖金池总规模和获奖者人数。",
   "Once placed, a prediction bet cannot be canceled or altered. Ensure you’re confident about your prediction before confirming, as it’s locked for the duration of the round.": "一经下注，预测赌注便无法取消或更改。在确认之前，请确保您对自己的预测有信心，因为它在整个回合期间都将处于锁定状态。",
@@ -4199,5 +4198,11 @@
   "unclaimed-rewards": "您的 CAKE 保持质押状态时，奖励将持续累积。您可以随时点击“<0>Harvest</0>”按钮领取奖励。",
   "legacy-pools": "<0>自动 CAKE 池和手动 CAKE 池</0> 已升级为 <1>veCAKE</1> 质押。如果您仍有 CAKE 质押在旧版池中，您需要<2>迁移到 veCAKE</2> 以继续赚取奖励。<3>在此了解如何迁移</3>",
   "Gift Failed to Claim": "礼品领取失败",
-  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "礼品申领失败。您可以取消此赠礼，将代币退回您的钱包。"
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "礼品申领失败。您可以取消此赠礼，将代币退回您的钱包。",
+  "What if no one enters an opposing position?": "如果没人选择对立仓位怎么办？",
+  "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).": "如果该方获胜，用户可领取其奖池份额（扣除3%的财库费用）。",
+  "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "要参与，请连接您的钱包，前往预测页面，在下一轮中选择'UP'（预测上涨）或'DOWN'（预测下跌）。然后，输入您的投注金额并确认交易。",
+  "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.": "如果该方失败（即没有赢家），整个奖池将归入财库，并用于 CAKE 回购与销毁。",
+  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "显示的总轮次不包括已取消的轮次，因为它们不计为胜负。",
+  "Paused": "已暂停"
 }

@@ -2785,7 +2785,6 @@
   "How Are Rewards Calculated in Prediction?": "예측에서 리워드는 어떻게 계산되나요?",
   "Can I Cancel My Prediction Bet?": "내 예측 베팅을 취소할 수 있나요?",
   "The Prediction feature on PancakeSwap is a price-prediction game where users can guess whether the price of an asset, such as BNB, will be higher or lower after a set period. Correct predictions can earn rewards.": "PancakeSwap의 예측 기능은 정해진 기간 후에 BNB 등의 자산 가격이 오르거나 내릴지 사용자가 추측할 수 있는 가격 예측 게임입니다. 제대로 예측하면 리워드를 받을 수 있습니다.",
-  "To participate, connect your wallet, navigate to the Prediction page, and select 'Bull' (predicting an increase) or 'Bear' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "참여하려면 지갑을 연결하고 예측 페이지로 이동하고 다음 라운드에 대해 'Bull'(상승 예측) 또는 'Bear'(하락 예측)를 선택하세요. 그런 다음 베팅 금액을 입력하고 트랜잭션을 확인하세요.",
   "Prediction is a high-risk game, as it depends on price fluctuations that can be volatile. Only use funds you can afford to lose, and remember that there's no guaranteed outcome.": "예측은 불안정할 수 있는 가격 변동에 따라 달라지기 때문에 위험이 높은 게임입니다. 손실을 감수할 수 있는 자금만 사용하고, 보장된 결과가 없음을 기억하세요.",
   "Rewards are distributed from the pool of all user wagers in the round. Winners share the pool minus a small fee, which is added back to the platform. The reward amount depends on the total pool size and the number of winners.": "리워드는 라운드의 모든 사용자 베팅의 풀에서 배분됩니다. 당첨자는 플랫폼에 다시 추가되는 소액의 수수료를 뺀 풀을 공유합니다. 리워드 금액은 총 풀 크기 및 당첨자 수에 따라 다릅니다.",
   "Once placed, a prediction bet cannot be canceled or altered. Ensure you’re confident about your prediction before confirming, as it’s locked for the duration of the round.": "베팅한 후에는 예측 베팅을 취소하거나 변경할 수 없습니다. 라운드 중에는 예측 베팅이 잠기므로 확정하기 전에 예측 내용을 주의하여 확인하세요.",
@@ -4199,5 +4198,11 @@
   "unclaimed-rewards": "CAKE가 스테이킹된 상태에서는 보상이 계속 누적됩니다. 언제든지 \"<0>Harvest</0>\" 버튼을 클릭하여 클레임할 수 있습니다.",
   "legacy-pools": "<0>Auto CAKE 및 Manual CAKE 풀</0>이 <1>veCAKE</1> 스테이킹으로 업그레이드되었습니다. 레거시 풀에 CAKE를 스테이킹한 상태라면, 보상을 계속 받기 위해 <2>veCAKE로 마이그레이션</2>해야 합니다. <3>여기에서 마이그레이션 방법을 알아보세요</3>",
   "Gift Failed to Claim": "선물 클레임 실패",
-  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "선물 클레임에 실패했습니다. 이 선물을 취소하여 토큰을 지갑으로 돌려받을 수 있습니다."
+  "The gift claim failed. You can cancel this gift to return the tokens to your wallet.": "선물 클레임에 실패했습니다. 이 선물을 취소하여 토큰을 지갑으로 돌려받을 수 있습니다.",
+  "What if no one enters an opposing position?": "반대 포지션에 아무도 참여하지 않으면 어떻게 되나요?",
+  "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).": "해당 포지션이 승리하면, 사용자들은 상금 풀에서 자신의 지분을 (재무부 수수료 3%를 제외하고) 청구할 수 있습니다.",
+  "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "참여하려면 지갑을 연결하고, 예측 페이지로 이동하여 다음 라운드에 대해 'UP'(상승 예측) 또는 'DOWN'(하락 예측)을 선택하세요. 그 다음, 베팅 금액을 입력하고 거래를 확정하십시오.",
+  "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.": "해당 포지션이 패배하면 (즉, 당첨자가 없으면), 전체 풀은 재무부로 귀속되어 CAKE 바이백 및 소각에 사용됩니다.",
+  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "표시된 총 라운드에는 취소된 라운드는 포함되지 않습니다. 이는 해당 라운드가 승패로 간주되지 않기 때문입니다.",
+  "Paused": "일시 중지됨"
 }
