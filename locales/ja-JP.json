@@ -2786,7 +2786,7 @@
   "How Are Rewards Calculated in Prediction?": "予測における報酬はどのように計算されますか？",
   "Can I Cancel My Prediction Bet?": "予測ベットをキャンセルできますか？",
   "The Prediction feature on PancakeSwap is a price-prediction game where users can guess whether the price of an asset, such as BNB, will be higher or lower after a set period. Correct predictions can earn rewards.": "PancakeSwapの予測機能とは、ユーザーが一定期間後にBNBなどの資産の価格が上がるか下がるかを推測できる価格予測ゲームのことです。予測が正しければ報酬を獲得できます。",
-  "To participate, connect your wallet, navigate to the Prediction page, and select 'Bull' (predicting an increase) or 'Bear' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "参加するには、ウォレットを接続し、[予測] ページに移動して、次のラウンドで「Bull」（上昇を予測）または「Bear」（下降を予測）を選択します。次に、賭け金を入力して取引を確認します。",
+  "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.": "To participate, connect your wallet, navigate to the Prediction page, and select 'UP' (predicting an increase) or 'DOWN' (predicting a decrease) for the next round. Then, enter your wager amount and confirm the transaction.",
   "Prediction is a high-risk game, as it depends on price fluctuations that can be volatile. Only use funds you can afford to lose, and remember that there's no guaranteed outcome.": "予測は、不安定な価格変動に依存するため、リスクの高いゲームです。失っても大丈夫な資金のみを使用し、結果が保証されていないことにご注意ください。",
   "Rewards are distributed from the pool of all user wagers in the round. Winners share the pool minus a small fee, which is added back to the platform. The reward amount depends on the total pool size and the number of winners.": "報酬は、ラウンド中のすべてのユーザーの賭け金のプールから分配されます。少額の手数料を差し引いたプールを勝者に分配し、手数料はプラットフォームに再び投入されます。報酬額は、プール総額と勝者の数によって異なります。",
   "Once placed, a prediction bet cannot be canceled or altered. Ensure you’re confident about your prediction before confirming, as it’s locked for the duration of the round.": "一度行った予測ベットはキャンセルまたは変更できません。ラウンド中は予測ベットはロックされるため、確定する前に予測内容を慎重にご確認ください。",
@@ -4147,5 +4147,10 @@
   "Are there token vesting schedules?": "Are there token vesting schedules?",
   "[Partners] How do I apply for an IFO?": "[Partners] How do I apply for an IFO?",
   "Target Raise": "目標引き上げ",
-  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%"
+  "Trade %product% Tokens to Win %amount%": "Trade %product% Tokens to Win %amount%",
+  "What if no one enters an opposing position?": "What if no one enters an opposing position?",
+  "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).": "If that side wins, users can claim their share of the prize pool (minus a 3% treasury fee).",
+  "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.": "If that side loses (meaning no winners), the entire pool goes to the treasury and is used for CAKE buyback and burn.",
+  "Paused": "Paused",
+  "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses": "Total rounds shown exclude any cancelled rounds, since they don't count as wins or losses"
 }
