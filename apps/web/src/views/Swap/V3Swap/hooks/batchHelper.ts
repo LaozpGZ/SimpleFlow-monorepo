@@ -103,7 +103,8 @@ export function getBatchedTransaction(
         }
         break
       case ConfirmModalState.PENDING_CONFIRMATION: {
-        const orderSupportsBatch = isClassicOrder(order) || isBridgeOrder(order)
+        const orderSupportsBatch =
+          isClassicOrder(order) || (isBridgeOrder(order) && isSolana(order?.trade.outputAmount.currency.chainId))
         if (orderSupportsBatch && action.getCalldata) {
           let swapData = action.getCalldata<Calldata[]>()
 
