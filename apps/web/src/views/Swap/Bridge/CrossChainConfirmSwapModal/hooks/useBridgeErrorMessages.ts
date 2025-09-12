@@ -63,7 +63,8 @@ export enum CrossChainAPIErrorCode {
 }
 
 // Helper function to create error message mappings with fallbacks
-const createErrorMessageMap = (t: TranslateFunction) => {
+export const useBridgeErrorMessages = () => {
+  const { t } = useTranslation()
   // Common error message patterns for maintainability
   const messages = {
     tryAgain: t('Unexpected error. Please try again!'),
@@ -133,16 +134,9 @@ const createErrorMessageMap = (t: TranslateFunction) => {
   }
 }
 
-export const useBridgeErrorMessages = () => {
-  const { t } = useTranslation()
-
-  return useMemo(() => createErrorMessageMap(t), [t])
-}
-
 // Hook for getting user-friendly error messages from any error
 export const useTradeErrorMessage = () => {
-  const { t } = useTranslation()
-  const errorMessages = createErrorMessageMap(t)
+  const errorMessages = useBridgeErrorMessages()
 
   return useCallback(
     (error: Error): string | null => {
@@ -176,6 +170,6 @@ export const useTradeErrorMessage = () => {
 
       return null
     },
-    [t, errorMessages],
+    [errorMessages],
   )
 }
