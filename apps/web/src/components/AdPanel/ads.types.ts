@@ -99,6 +99,7 @@ export interface RemoteAds {
     | {
         i18nText: string
         highlight?: boolean
+        link?: string
         style?: CSSProperties
       }
   >
