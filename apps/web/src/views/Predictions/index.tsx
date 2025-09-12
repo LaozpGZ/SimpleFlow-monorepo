@@ -61,8 +61,11 @@ function Warnings() {
 
 const Predictions = () => {
   const config = useConfig()
-  const { isDesktop } = useMatchBreakpoints()
+
   const { t } = useTranslation()
+  const { isDesktop } = useMatchBreakpoints()
+
+  const isChartPaneOpen = useIsChartPaneOpen()
 
   // New v2.1 contracts support smart wallets
   const isSmartWalletSupported = config && config.version === PredictionContractVersion.V2_1
@@ -74,7 +77,7 @@ const Predictions = () => {
   return (
     <SwiperProvider>
       {!isSmartWalletSupported && <SmartWalletWarning productName={t('Prediction')} />}
-      <Container>
+      <Container $isChartPaneOpen={isChartPaneOpen}>
         <Warnings />
 
         <RiskDisclaimer />
