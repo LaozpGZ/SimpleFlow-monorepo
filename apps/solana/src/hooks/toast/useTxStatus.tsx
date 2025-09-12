@@ -339,55 +339,6 @@ function useTxStatus() {
             )
           }
 
-          const renderDetail_ = () => {
-            return (
-              <Flex flexDirection="column" gap="3">
-                {subTxIds.map(({ txId, title = t('Transaction') }, idx) => (
-                  <Box
-                    key={txId || `${toastId}-${idx}`}
-                    bg={colors.backgroundDark}
-                    borderRadius="8px"
-                    p={3}
-                    ml="-30px"
-                    cursor={txId ? 'pointer' : 'default'}
-                    opacity={txId ? 1 : 0.5}
-                    onClick={txId ? () => window.open(`${explorerUrl}/tx/${txId}`) : undefined}
-                  >
-                    <Flex alignItems="center" gap="2">
-                      {txStatus[txId] === 'error' ? (
-                        <CircleError width="16px" height="16px" />
-                      ) : txStatus[txId] === 'info' ? (
-                        <CircleInfo width="16px" height="16px" />
-                      ) : (
-                        <CircleCheck fill={colors.secondary} />
-                      )}
-                      <Box
-                        fontSize={14}
-                        fontWeight={400}
-                        color={colors.textSecondary}
-                        textOverflow="ellipsis"
-                        whiteSpace="pre-wrap"
-                        overflow="hidden"
-                      >
-                        {title || t('Transaction')}
-                        {isMultisigWallet
-                          ? txStatus[txId] === 'success'
-                            ? `${t('Transaction initiated.')} ${t('You can now cast votes for this proposal on the Squads app.')}`
-                            : t('Transaction initiation')
-                          : null}
-                      </Box>
-                    </Flex>
-                    {isMultisigWallet ? null : (
-                      <Flex gap="1" alignItems="center" opacity="0.5">
-                        {t('View transaction details')}
-                        <ExternalLink cursor="pointer" color={colors.primary60} />
-                      </Flex>
-                    )}
-                  </Box>
-                ))}
-              </Flex>
-            )
-          }
           // show initial tx send toast
           toastSubject.next({
             id: toastId,
