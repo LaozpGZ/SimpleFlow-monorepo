@@ -54,6 +54,7 @@ export type FarmProps = {
   lpApr?: `${number}`
   lpAddress?: `0x${string}`
   merklApr?: `${number}`
+  incentraApr?: `${number}`
   // cakeApr: CakeAprValue
   feeTier: number
   apr24h: number
@@ -156,6 +157,7 @@ export const getFarmAprInfo = (farm?: FarmInfo) => {
     lpApr: farm.lpApr || '0',
     cakeApr: farm.cakeApr,
     merklApr: farm.merklApr || '0',
+    incentraApr: farm.incentraApr || '0',
   }
   return aprInfo
 }

@@ -18,6 +18,7 @@ import { publicClient } from 'utils/wagmi'
 import { erc20Abi } from 'viem'
 
 import { ChainId } from '@pancakeswap/chains'
+import { INCENTRA_API, IncentraCampaign } from 'hooks/useIncentra'
 import { InfinityPoolInfo, PoolInfo, StablePoolInfo, V2PoolInfo, V3PoolInfo } from '../type'
 import { CakeApr, MerklApr } from './atom'
 
@@ -162,6 +163,34 @@ export const getAllNetworkMerklApr = async (signal?: AbortSignal) => {
     return aprs.reduce((acc, apr) => Object.assign(acc, apr), {})
   }
   throw resp
+}
+
+export const getAllNetworkIncentraApr = async (signal?: AbortSignal) => {
+  const resp = await fetch(`${INCENTRA_API}/liquidityCampaigns`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      campaign_type: [3, 4],
+      status: [4], // ACTIVE
+    }),
+    signal,
+  })
+
+  if (!resp.ok) throw resp
+
+  const json = (await resp.json()) as { err: string | null; campaigns: IncentraCampaign[] }
+  if (json.err) throw new Error(`Incentra API error: ${json.err}`)
+
+  const filteredCampaigns = json.campaigns.filter((c) => supportedChainIdV4.includes(Number(c.chainId)))
+
+  const aprs = filteredCampaigns.reduceRight((acc, campaign) => {
+    const key = `${campaign.chainId}:${safeGetAddress(campaign.pools.poolId)}`
+    // eslint-disable-next-line no-param-reassign
+    acc[key] = campaign.rewardInfo.apr
+    return acc
+  }, {})
+
+  return aprs
 }
 
 const getV3PoolsCakeAprByChainId = async (pools: V3PoolInfo[], chainId: number, cakePrice: BigNumber) => {

@@ -41,6 +41,7 @@ import { useLPApr } from 'state/swap/useLPApr'
 import { formatAmount } from 'utils/formatInfoNumbers'
 import { useAccount } from 'wagmi'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
+import { IncentraTag } from 'components/Incentra/IncentraTag'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 24px;
@@ -150,6 +151,7 @@ export default function PoolV2Page() {
                 {pair?.token0?.symbol}-{pair?.token1?.symbol} LP
               </Heading>
               <MerklTag poolAddress={pair?.liquidityToken?.address} />
+              <IncentraTag poolAddress={pair?.liquidityToken?.address} />
             </Flex>
           }
           backTo="/liquidity/positions"
@@ -243,6 +245,7 @@ export default function PoolV2Page() {
                 disabled={!pair || !positionDetails}
                 notEnoughLiquidity={totalUSDValue < 20}
                 poolAddress={pair?.liquidityToken?.address}
+                poolProtocol={Protocol.V2}
                 chainId={chainId}
                 outRange={false}
               />

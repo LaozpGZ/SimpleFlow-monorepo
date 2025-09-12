@@ -5,13 +5,6 @@ import { rewardConfig } from './config'
 import { RewardProvider, RewardConfig } from './types'
 
 // Pure function to check if a farm has rewards
-export const checkHasReward = memoize(
-  (chainId?: ChainId, poolAddress?: string): boolean => {
-    return getRewardConfig(chainId, poolAddress) !== undefined
-  },
-  (chainId, poolAddress) => `${chainId}#${poolAddress}`,
-)
-
 export const getRewardConfig = memoize(
   (chainId?: ChainId, poolAddress?: string): RewardConfig | undefined => {
     if (!chainId || !poolAddress) return undefined

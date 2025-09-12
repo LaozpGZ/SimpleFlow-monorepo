@@ -24,7 +24,7 @@ import { useHasCustomFarmLpTooltips } from 'views/Farms/hooks/useHasCustomFarmLp
 import { useChainId } from 'wagmi'
 
 const { FarmAuctionTag, StableFarmTag, V2Tag, V3FeeTag } = FarmWidget.Tags
-const { MerklNotice } = FarmWidget
+const { MerklNotice, IncentraNotice } = FarmWidget
 
 type ExpandableSectionProps = {
   lpLabel?: string
@@ -38,11 +38,13 @@ type ExpandableSectionProps = {
   pid?: number
   farmCakePerSecond?: string
   totalMultipliers?: string
+  lpAddress?: Address
+  merklApr?: number
   merklLink?: string
   merklUserLink?: string
   hasBothFarmAndMerkl?: boolean
-  lpAddress?: Address
-  merklApr?: number
+  incentraLink?: string
+  incentraUserLink?: string
 }
 
 const Wrapper = styled(Flex)`
@@ -66,11 +68,12 @@ const CardHeading: React.FC<React.PropsWithChildren<ExpandableSectionProps>> = (
   feeAmount,
   farmCakePerSecond,
   totalMultipliers,
+  lpAddress,
   merklLink,
   merklUserLink,
   hasBothFarmAndMerkl,
-  merklApr,
-  lpAddress,
+  incentraLink,
+  incentraUserLink,
 }) => {
   const { t } = useTranslation()
   const chainId = useChainId()
@@ -102,10 +105,17 @@ const CardHeading: React.FC<React.PropsWithChildren<ExpandableSectionProps>> = (
                 <MerklNotice.WithTooltip
                   placement="top"
                   tooltipOffset={[0, 10]}
-                  merklLink={merklLink}
                   hasFarm={hasBothFarmAndMerkl}
-                  merklApr={merklApr}
                   merklUserLink={merklUserLink}
+                />
+              </Box>
+            ) : null}
+            {incentraLink ? (
+              <Box mr="-4px" ml="4px">
+                <IncentraNotice.WithTooltip
+                  placement="top"
+                  tooltipOffset={[0, 10]}
+                  incentraUserLink={incentraUserLink}
                 />
               </Box>
             ) : null}

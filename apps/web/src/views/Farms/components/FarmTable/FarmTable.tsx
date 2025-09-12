@@ -9,7 +9,6 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useRouter } from 'next/router'
 import { ReactNode, useCallback, useMemo, useRef } from 'react'
 import { styled } from 'styled-components'
-import { getMerklLink } from 'utils/getMerklLink'
 import { V2Farm, V2StakeValueAndV3Farm } from 'views/Farms/FarmsV3'
 import { useFarmV2Multiplier } from 'views/Farms/hooks/useFarmV2Multiplier'
 import { useFarmV3Multiplier } from 'views/Farms/hooks/v3/useFarmV3Multiplier'
@@ -226,7 +225,6 @@ const FarmTable: React.FC<React.PropsWithChildren<ITableProps>> = ({ farms, cake
         return row
       }
 
-      const merklLink = getMerklLink({ chainId, lpAddress: farm.lpAddress })
       return {
         initialActivity,
         apr: {
@@ -243,9 +241,6 @@ const FarmTable: React.FC<React.PropsWithChildren<ITableProps>> = ({ farms, cake
           isReady: farm.multiplier !== undefined,
           isStaking: farm.stakedPositions?.length > 0,
           isCommunity: farm.isCommunity,
-          merklLink,
-          // @notice: this is a hack to make the merkl notice work for rETH-ETH
-          hasBothFarmAndMerkl: Boolean(merklLink) && farm.lpAddress === '0x2201d2400d30BFD8172104B4ad046d019CA4E7bd',
         },
         type: 'v3',
         details: farm,
@@ -276,7 +271,7 @@ const FarmTable: React.FC<React.PropsWithChildren<ITableProps>> = ({ farms, cake
         },
       }
     },
-    [query.search, farmV3Multiplier, cakePrice, farmV2Multiplier, chainId],
+    [query.search, farmV3Multiplier, cakePrice, farmV2Multiplier],
   )
 
   const sortedRows = useMemo(() => {

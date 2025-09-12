@@ -8,10 +8,15 @@ import { styled } from 'styled-components'
 
 import { useMerklInfo } from 'hooks/useMerkl'
 import { type V3Farm } from 'state/farms/types'
-import { useMerklUserLink } from 'utils/getMerklLink'
+import { getMerklLink, useMerklUserLink } from 'utils/getMerklLink'
 import { V2Farm } from 'views/Farms/FarmsV3'
 import { RewardPerDay } from 'components/RewardPerDay'
-import { FarmV3ApyButton } from '../FarmCard/V3/FarmV3ApyButton'
+import { useIncentraInfo } from 'hooks/useIncentra'
+import { getIncentraLink, INCENTRA_USER_LINK } from 'utils/getIncentraLink'
+import { useActiveChainId } from 'hooks/useAccountActiveChain'
+import { isAddressEqual } from 'utils'
+import { Protocol } from '@pancakeswap/farms'
+import { FarmV3ApyButton, FarmV3ApyButtonProps } from '../FarmCard/V3/FarmV3ApyButton'
 import { ActionPanelV2, ActionPanelV3 } from './Actions/ActionPanel'
 import Apr, { AprProps } from './Apr'
 import { FarmCell } from './Farm'
@@ -109,6 +114,7 @@ const FarmMobileCell = styled.td`
 
 const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>> = (props) => {
   const { initialActivity, userDataReady, farm, multiplier } = props
+  const { chainId } = useActiveChainId()
   const hasSetInitialValue = useRef(false)
   const hasStakedAmount = farm.isStaking || false
   const [actionPanelExpanded, setActionPanelExpanded] = useState(hasStakedAmount)
@@ -140,7 +146,20 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
   const columnNames = useMemo(() => tableSchema.map((column) => column.name), [tableSchema])
   const merklUserLink = useMerklUserLink()
 
-  const { merklApr } = useMerklInfo(farm?.merklLink ? props.details.lpAddress : undefined)
+  const { hasMerkl, merklApr } = useMerklInfo(farm?.merklLink ? props.details.lpAddress : undefined)
+  const merklLink = getMerklLink({
+    hasMerkl,
+    chainId,
+    lpAddress: farm?.lpAddress,
+    poolProtocol: farm?.version === 2 ? Protocol.V2 : Protocol.V3,
+  })
+  const hasBothFarmAndMerkl = useMemo(
+    // for now, only rETH-ETH require both farm and merkl, so we hardcode it here
+    () => Boolean(merklLink) && isAddressEqual(farm?.lpAddress, '0x2201d2400d30BFD8172104B4ad046d019CA4E7bd'),
+    [farm?.lpAddress, merklLink],
+  )
+  const { incentraApr, hasIncentra } = useIncentraInfo(props.details.lpAddress)
+  const incentraLink = getIncentraLink({ hasIncentra, chainId, lpAddress: props.details.lpAddress })
 
   return (
     <>
@@ -193,9 +212,14 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                           <FarmV3ApyButton
                             farm={props.details}
                             additionAprInfo={
-                              merklApr && farm.merklLink
-                                ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: farm.merklLink }
-                                : undefined
+                              [
+                                merklApr && farm.merklLink
+                                  ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: farm.merklLink }
+                                  : undefined,
+                                incentraApr && incentraLink
+                                  ? { aprTitle: `Incentra ${t('APR')}`, aprValue: incentraApr, aprLink: incentraLink }
+                                  : undefined,
+                              ].filter(Boolean) as NonNullable<FarmV3ApyButtonProps['additionAprInfo']>
                             }
                           />
                         </CellLayout>
@@ -271,6 +295,8 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                             lpAddress: props?.details?.lpAddress,
                             merklApr,
                             merklUserLink,
+                            incentraApr,
+                            incentraUserLink: INCENTRA_USER_LINK,
                           })}
                         </CellLayout>
                       </CellInner>
@@ -289,8 +315,11 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                 <FarmCell
                   {...props.farm}
                   lpAddress={props?.details?.lpAddress}
-                  merklApr={merklApr}
                   merklUserLink={merklUserLink}
+                  merklLink={merklLink}
+                  hasBothFarmAndMerkl={hasBothFarmAndMerkl}
+                  incentraLink={incentraLink}
+                  incentraUserLink={INCENTRA_USER_LINK}
                 />
                 <Flex
                   mr="16px"
@@ -327,9 +356,14 @@ const Row: React.FunctionComponent<React.PropsWithChildren<RowPropsWithLoading>>
                     <FarmV3ApyButton
                       farm={props.details}
                       additionAprInfo={
-                        merklApr && farm.merklLink
-                          ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: farm.merklLink }
-                          : undefined
+                        [
+                          merklApr && farm.merklLink
+                            ? { aprTitle: t('Merkl APR'), aprValue: merklApr, aprLink: farm.merklLink }
+                            : undefined,
+                          incentraApr && incentraLink
+                            ? { aprTitle: `Incentra ${t('APR')}`, aprValue: incentraApr, aprLink: incentraLink }
+                            : undefined,
+                        ].filter(Boolean) as NonNullable<FarmV3ApyButtonProps['additionAprInfo']>
                       }
                     />
                   ) : (

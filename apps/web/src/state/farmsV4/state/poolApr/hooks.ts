@@ -10,8 +10,16 @@ import { useCallback, useEffect } from 'react'
 import { useExtendPoolsAtom } from 'state/farmsV4/state/extendPools/atom'
 import { isInfinityProtocol } from 'utils/protocols'
 import { ChainIdAddressKey, InfinityPoolInfo, PoolInfo } from '../type'
-import { CakeApr, cakeAprSetterAtom, CakeAprValue, emptyCakeAprPoolsAtom, merklAprAtom, poolAprAtom } from './atom'
-import { getAllNetworkMerklApr, getCakeApr, getLpApr } from './fetcher'
+import {
+  CakeApr,
+  cakeAprSetterAtom,
+  CakeAprValue,
+  emptyCakeAprPoolsAtom,
+  incentraAprAtom,
+  merklAprAtom,
+  poolAprAtom,
+} from './atom'
+import { getAllNetworkIncentraApr, getAllNetworkMerklApr, getCakeApr, getLpApr } from './fetcher'
 
 const generatePoolKey = memoize((pools: PoolInfo[]) => {
   const poolData = pools.map((pool) => `${pool.chainId}:${pool.lpAddress}`).join(',')
@@ -66,6 +74,7 @@ export type AprInfo = {
   lpApr: `${number}`
   cakeApr: CakeAprValue
   merklApr: `${number}`
+  incentraApr: `${number}`
 }
 
 export const usePoolApr = (
@@ -77,11 +86,13 @@ export const usePoolApr = (
   lpApr: `${number}`
   cakeApr: CakeApr[keyof CakeApr]
   merklApr: `${number}`
+  incentraApr: `${number}`
   apr24h?: boolean
 } => {
   const { setPools } = useExtendPoolsAtom()
   const poolApr = useAtomValue(poolAprAtom)[key ?? '']
   const [merklAprs, updateMerklApr] = useAtom(merklAprAtom)
+  const [incentraAprs, updateIncentraApr] = useAtom(incentraAprAtom)
   const cakePrice = useCakePrice()
   const cakeAPR = useCakeAPR(key, pool)
 
@@ -100,12 +111,27 @@ export const usePoolApr = (
     return merklAprs[key!] ?? '0'
   }, [key, merklAprs, updateMerklApr])
 
+  const getIncentraApr = useCallback(async () => {
+    if (Object.values(incentraAprs).length === 0) {
+      return getAllNetworkIncentraApr()
+        .then((aprs) => {
+          updateIncentraApr(aprs)
+          return aprs[key!] ?? '0'
+        })
+        .catch((error) => {
+          console.error('Error fetching Incentra APR:', error)
+          return '0'
+        })
+    }
+    return incentraAprs[key!] ?? '0'
+  }, [key, incentraAprs, updateIncentraApr])
+
   const updateCallback = useCallback(async () => {
     try {
       if (!pool) {
         throw new Error('Pool not found')
       }
-      const [lpApr, merklApr] = await Promise.all([
+      const [lpApr, merklApr, incentraApr] = await Promise.all([
         getLpApr(pool, apr24h)
           .then((apr) => {
             setPools([{ ...pool, lpApr: `${apr}` }])
@@ -117,19 +143,22 @@ export const usePoolApr = (
             return '0'
           }),
         getMerklApr(),
+        getIncentraApr(),
       ])
       return {
         lpApr: `${lpApr}`,
         merklApr,
+        incentraApr,
       } as const
     } catch (error) {
       console.warn('error usePoolApr', error)
       return {
         lpApr: '0',
         merklApr: '0',
+        incentraApr: '0',
       } as const
     }
-  }, [getMerklApr, pool, setPools, apr24h])
+  }, [getMerklApr, getIncentraApr, pool, setPools, apr24h])
 
   useQuery({
     queryKey: ['apr', key],
@@ -148,6 +177,7 @@ export const usePoolApr = (
     lpApr: poolApr?.lpApr ?? '0',
     cakeApr: poolApr?.cakeApr ?? cakeAPR ?? { value: '0' },
     merklApr: poolApr?.merklApr ?? '0',
+    incentraApr: poolApr?.incentraApr ?? '0',
   }
 }
 
@@ -155,6 +185,7 @@ export const usePoolAprUpdater = () => {
   const pools = useAtomValue(emptyCakeAprPoolsAtom)
   const updateCakeApr = useSetAtom(cakeAprSetterAtom)
   const updateMerklApr = useSetAtom(merklAprAtom)
+  const updateIncentraApr = useSetAtom(incentraAprAtom)
   const cakePrice = useCakePrice()
 
   useQuery({
@@ -163,6 +194,16 @@ export const usePoolAprUpdater = () => {
     refetchInterval: SLOW_INTERVAL,
     refetchOnMount: false,
     refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
+  })
+
+  useQuery({
+    queryKey: ['apr', 'incentra', 'fetchIncentraApr'],
+    queryFn: ({ signal }) => getAllNetworkIncentraApr(signal).then(updateIncentraApr),
+    refetchInterval: SLOW_INTERVAL,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
   })
 
   useQuery({

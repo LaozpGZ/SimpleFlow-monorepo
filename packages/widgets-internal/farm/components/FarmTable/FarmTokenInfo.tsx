@@ -4,6 +4,7 @@ import { useMemo } from "react";
 import { styled } from "styled-components";
 import { FarmTableFarmTokenInfoProps } from "../../types";
 import MerklNotice from "../MerklNotice";
+import IncentraNotice from "../IncentraNotice";
 
 const Container = styled.div`
   padding-left: 16px;
@@ -28,11 +29,12 @@ const Farm: React.FunctionComponent<React.PropsWithChildren<FarmTableFarmTokenIn
   label,
   isReady,
   isStaking,
-  merklLink,
   hasBothFarmAndMerkl,
   children,
-  merklApr,
+  merklLink,
   merklUserLink,
+  incentraLink,
+  incentraUserLink,
 }) => {
   const { t } = useTranslation();
 
@@ -66,14 +68,8 @@ const Farm: React.FunctionComponent<React.PropsWithChildren<FarmTableFarmTokenIn
         {handleRenderFarming}
         <Row gap="sm">
           <Text bold>{label}</Text>
-          {merklLink ? (
-            <MerklNotice.WithTooltip
-              hasFarm={hasBothFarmAndMerkl}
-              merklLink={merklLink}
-              merklApr={merklApr}
-              merklUserLink={merklUserLink}
-            />
-          ) : null}
+          {merklLink ? <MerklNotice.WithTooltip hasFarm={hasBothFarmAndMerkl} merklUserLink={merklUserLink} /> : null}
+          {incentraLink ? <IncentraNotice.WithTooltip incentraUserLink={incentraUserLink} /> : null}
         </Row>
       </div>
     </Container>

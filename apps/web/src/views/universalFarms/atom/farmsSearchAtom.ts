@@ -14,6 +14,7 @@ import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
 import { Protocol } from 'quoter/utils/edgeQueries.util'
 import {
   batchGetCakeApr,
+  batchGetIncentraAprData,
   batchGetLpAprData,
   batchGetMerklAprData,
   fillOnchainPoolData,
@@ -170,12 +171,12 @@ const searchAtom = atomFamily((query: FarmQuery) => {
     ).map((farm) => {
       const { pool, chainId, vol24hUsd, ...rest } = farm
       const farmInfo = {
-        chainId: farm.chainId,
+        chainId,
         tvlUsd: 0,
         ...rest,
         feeTierBase: 1e6,
-        vol24hUsd: farm.vol24hUsd,
-        pool: SmartRouter.Transformer.parsePool(farm.chainId, farm.pool),
+        vol24hUsd,
+        pool: SmartRouter.Transformer.parsePool(chainId, pool),
       } as FarmInfo
 
       return farmInfo
@@ -221,15 +222,19 @@ const farmsWithFilledDataAtom = atomFamily((query) => {
       const sliced = get(farmsWithPagingAtom(query))
 
       return sliced.mapAsync(async (poolInfos) => {
-        const [cakeAprs, lpAprs, merklAprs] = await Promise.allSettled([
+        const [cakeAprs, lpAprs, merklAprs, incentraAprs] = await Promise.allSettled([
           batchGetCakeApr(poolInfos),
           batchGetLpAprData(poolInfos),
           batchGetMerklAprData(poolInfos),
+          batchGetIncentraAprData(poolInfos),
         ])
 
         const aggCakeAprs = keyBy(cakeAprs.status === 'fulfilled' ? cakeAprs.value : [], (x) => x.id.toLowerCase())
         const aggLpAprs = keyBy(lpAprs.status === 'fulfilled' ? lpAprs.value : [], (x) => x.id.toLowerCase())
         const aggMerklAprs = keyBy(merklAprs.status === 'fulfilled' ? merklAprs.value : [], (x) => x.id.toLowerCase())
+        const aggIncentraAprs = keyBy(incentraAprs.status === 'fulfilled' ? incentraAprs.value : [], (x) =>
+          x.id.toLowerCase(),
+        )
 
         return poolInfos.map((poolInfo) => {
           const { farm, ...others } = poolInfo
@@ -237,6 +242,7 @@ const farmsWithFilledDataAtom = atomFamily((query) => {
           const cakeApr = aggCakeAprs[id]?.value || '0'
           const lpApr = `${aggLpAprs[id]?.value || farm?.apr24h || '0'}`
           const merklApr = aggMerklAprs[id]?.value || '0'
+          const incentraApr = aggIncentraAprs[id]?.value || '0'
 
           return {
             ...others,
@@ -245,6 +251,7 @@ const farmsWithFilledDataAtom = atomFamily((query) => {
               cakeApr,
               lpApr,
               merklApr,
+              incentraApr,
             },
             lpApr,
           } as PoolInfo

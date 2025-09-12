@@ -17,6 +17,7 @@ import { LightGreyCard } from 'components/Card'
 import { ChainId } from '@pancakeswap/chains'
 import { Currency, CurrencyAmount } from '@pancakeswap/swap-sdk-core'
 import { getMerklLink } from 'utils/getMerklLink'
+import { Protocol } from '@pancakeswap/farms'
 import useMerkl from '../../hooks/useMerkl'
 
 function TextWarning({ tokenAmount }: { tokenAmount: CurrencyAmount<Currency> }) {
@@ -53,12 +54,14 @@ const LearnMoreLink = () => {
 
 export function MerklSection({
   poolAddress,
+  poolProtocol,
   chainId,
   notEnoughLiquidity,
   outRange,
   disabled,
 }: {
   poolAddress?: `0x${string}`
+  poolProtocol?: Protocol
   chainId?: ChainId
   notEnoughLiquidity: boolean
   outRange: boolean
@@ -68,7 +71,7 @@ export function MerklSection({
 
   const { claimTokenReward, isClaiming, rewardsPerToken, hasMerkl } = useMerkl(poolAddress)
 
-  const merklLink = getMerklLink({ chainId, lpAddress: poolAddress })
+  const merklLink = getMerklLink({ hasMerkl, chainId, lpAddress: poolAddress, poolProtocol })
 
   if (!rewardsPerToken.length || (!hasMerkl && rewardsPerToken.every((r) => r.equalTo('0')))) return null
 

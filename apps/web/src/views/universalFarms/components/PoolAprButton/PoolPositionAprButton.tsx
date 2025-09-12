@@ -52,7 +52,7 @@ export const V3PoolPositionAprButton: React.FC<PoolPositionAprButtonProps<Positi
   pool,
   userPosition,
 }) => {
-  const { lpApr, cakeApr, merklApr, numerator, denominator } = useV3PositionApr(pool, userPosition)
+  const { lpApr, cakeApr, merklApr, incentraApr, numerator, denominator } = useV3PositionApr(pool, userPosition)
   const { updateTotalApr } = useMyPositions()
 
   useEffect(() => {
@@ -60,7 +60,16 @@ export const V3PoolPositionAprButton: React.FC<PoolPositionAprButtonProps<Positi
       updateTotalApr(`${pool.chainId}:${pool.lpAddress}:${userPosition.tokenId}`, numerator, denominator)
   }, [denominator, numerator, pool.chainId, pool.lpAddress, updateTotalApr, userPosition.tokenId])
 
-  return <PoolAprButton pool={pool} lpApr={lpApr} cakeApr={cakeApr} merklApr={merklApr} userPosition={userPosition} />
+  return (
+    <PoolAprButton
+      pool={pool}
+      lpApr={lpApr}
+      cakeApr={cakeApr}
+      merklApr={merklApr}
+      incentraApr={incentraApr}
+      userPosition={userPosition}
+    />
+  )
 }
 
 export const InfinityCLPoolPositionAprButton: React.FC<
@@ -91,7 +100,7 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
   userPosition,
   apr,
 }: InfinityPoolPositionAprButtonProps<T>) => {
-  const { lpApr, cakeApr, merklApr, numerator, denominator } = apr
+  const { lpApr, cakeApr, merklApr, incentraApr, numerator, denominator } = apr
   const { updateTotalApr } = useMyPositions()
 
   useEffect(() => {
@@ -121,6 +130,7 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
         lpApr={Number(lpApr)}
         cakeApr={cakeApr}
         merklApr={merklApr}
+        incentraApr={incentraApr}
         userPosition={userPosition}
         onAPRTextClick={APRBreakdownModalState.onOpen}
         showApyButton={false}
@@ -139,18 +149,8 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
     </>
   )
 }
-
-export const V3PoolDerivedAprButton: React.FC<Omit<PoolPositionAprButtonProps<PositionDetail>, 'userPosition'>> = ({
-  pool,
-  inverted,
-}) => {
-  const { lpApr, cakeApr, merklApr } = useV3FormDerivedApr(pool, inverted)
-
-  return <PoolAprButton pool={pool} lpApr={lpApr} cakeApr={cakeApr} merklApr={merklApr} />
-}
-
 export const InfinityCLPoolDerivedAprButton: React.FC<{ pool: InfinityCLPoolInfo }> = ({ pool }) => {
-  const { lpApr, cakeApr, merklApr } = useInfinityCLDerivedApr(pool)
+  const { lpApr, cakeApr, merklApr, incentraApr } = useInfinityCLDerivedApr(pool)
 
   return (
     <PoolAprButton
@@ -159,13 +159,14 @@ export const InfinityCLPoolDerivedAprButton: React.FC<{ pool: InfinityCLPoolInfo
       lpApr={lpApr}
       cakeApr={cakeApr}
       merklApr={merklApr}
+      incentraApr={incentraApr}
       onAPRTextClick={noop}
     />
   )
 }
 
 export const InfinityBinPoolDerivedAprButton: React.FC<{ pool: InfinityBinPoolInfo }> = ({ pool }) => {
-  const { lpApr, cakeApr, merklApr } = useInfinityBinDerivedApr(pool)
+  const { lpApr, cakeApr, merklApr, incentraApr } = useInfinityBinDerivedApr(pool)
 
   return (
     <PoolAprButton
@@ -174,6 +175,7 @@ export const InfinityBinPoolDerivedAprButton: React.FC<{ pool: InfinityBinPoolIn
       lpApr={lpApr}
       cakeApr={cakeApr}
       merklApr={merklApr}
+      incentraApr={incentraApr}
       onAPRTextClick={noop}
     />
   )

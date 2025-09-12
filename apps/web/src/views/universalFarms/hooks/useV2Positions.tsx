@@ -43,16 +43,3 @@ export const useV2Positions = ({
     v2PoolsLength: poolsLength as Record<number, number>,
   }
 }
-
-export const getV2PositionKey = (pos: V2LPDetail) => {
-  const {
-    pair: {
-      chainId,
-      liquidityToken: { address },
-    },
-  } = pos
-  return getKeyForPools({
-    chainId,
-    poolAddress: address,
-  })
-}

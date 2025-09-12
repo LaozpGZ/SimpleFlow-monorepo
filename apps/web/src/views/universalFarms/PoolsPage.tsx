@@ -33,7 +33,7 @@ const PoolsContent = styled.div`
 `
 
 export const PoolsPage = () => {
-  const nextRouter = useRouter()
+  const { query: nextQuery, replace, pathname } = useRouter()
   const { isMobile, isMd } = useMatchBreakpoints()
 
   const updateFilter = useSetAtom(updateFilterAtom)
@@ -41,14 +41,14 @@ export const PoolsPage = () => {
 
   useEffect(() => {
     const params = farmQueryToUrlParams(query)
-    if (isEqual(params, nextRouter.query)) {
+    if (isEqual(params, nextQuery)) {
       return
     }
-    nextRouter.replace({
-      pathname: nextRouter.pathname,
+    replace({
+      pathname,
       query: params,
     })
-  }, [query])
+  }, [query, nextQuery, replace, pathname])
 
   const handleFilterChange: IPoolsFilterPanelProps['onChange'] = useCallback(
     (newFilters) => {
@@ -90,7 +90,7 @@ export const PoolsPage = () => {
 }
 
 const List = () => {
-  const nextRouter = useRouter()
+  const { query: nextQuery, replace, pathname, push } = useRouter()
   const { isMobile } = useMatchBreakpoints()
 
   const columns = useColumnConfig()
@@ -101,21 +101,21 @@ const List = () => {
 
   useEffect(() => {
     const params = farmQueryToUrlParams(query)
-    if (isEqual(params, nextRouter.query)) {
+    if (isEqual(params, query)) {
       return
     }
-    nextRouter.replace({
-      pathname: nextRouter.pathname,
+    replace({
+      pathname,
       query: params,
     })
-  }, [query])
+  }, [query, nextQuery, pathname, replace])
 
   const handleRowClick = useCallback(
     async (pool: PoolInfo) => {
       const data = await getPoolDetailPageLink(pool)
-      nextRouter.push(data)
+      push(data)
     },
-    [nextRouter],
+    [push],
   )
 
   const getRowKey = useCallback((item: PoolInfo) => {
@@ -132,7 +132,7 @@ const List = () => {
         dataIndex,
       })
     },
-    [query, updateSort],
+    [updateSort],
   )
 
   useEffect(() => {

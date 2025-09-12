@@ -1,12 +1,8 @@
-import { ChainId } from '@pancakeswap/chains'
 import { keepPreviousData, useQuery } from '@tanstack/react-query'
 import BN from 'bignumber.js'
 import { useActiveChainId } from 'hooks/useActiveChainId'
 import { useMasterchefV3 } from 'hooks/useContract'
 import _toNumber from 'lodash/toNumber'
-import { useMemo } from 'react'
-import { useCakeLockStatus } from 'views/CakeStaking/hooks/useVeCakeUserInfo'
-import { CakeLockStatus } from 'views/CakeStaking/types'
 import { PRECISION_FACTOR } from './multiplierAPI'
 
 const QUERY_SETTINGS_WITHOUT_REFETCH = {
@@ -39,12 +35,4 @@ export const useUserPositionInfo = (tokenId?: string) => {
     },
     updateUserPositionInfo: refetch,
   }
-}
-
-export const useBCakeBoostLimitAndLockInfo = (targetChain: ChainId = ChainId.BSC) => {
-  const { status } = useCakeLockStatus(targetChain)
-  const isLockEnd = useMemo(() => status === CakeLockStatus.Expired, [status])
-  const locked = useMemo(() => status === CakeLockStatus.Locking, [status])
-
-  return { locked, isLockEnd }
 }

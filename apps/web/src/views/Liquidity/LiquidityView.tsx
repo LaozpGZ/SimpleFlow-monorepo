@@ -87,6 +87,7 @@ import { AprCalculatorV2 } from 'views/AddLiquidityV3/components/AprCalculatorV2
 import RateToggle from 'views/AddLiquidityV3/formViews/V3FormView/components/RateToggle'
 import { useSendTransaction, useWalletClient } from 'wagmi'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
+import { IncentraTag } from 'components/Incentra/IncentraTag'
 
 export const BodyWrapper = styled(Card)`
   border-radius: 24px;
@@ -577,6 +578,7 @@ export const LiquidityView = () => {
                       </>
                     )}
                     <MerklTag poolAddress={poolAddress} />
+                    <IncentraTag poolAddress={poolAddress} />
                   </Flex>
                   <RowBetween gap="16px" flexWrap="nowrap">
                     <Text fontSize="14px" color="textSubtle" style={{ wordBreak: 'break-word' }}>
@@ -852,6 +854,7 @@ export const LiquidityView = () => {
                         : false,
                     )}
                     poolAddress={poolAddress}
+                    poolProtocol={poolInfo?.protocol}
                     chainId={pool?.chainId}
                   />
                 </Flex>

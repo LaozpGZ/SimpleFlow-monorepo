@@ -22,7 +22,7 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
   const key = useMemo(() => `${pool.chainId}:${pool.lpAddress}` as const, [pool.chainId, pool.lpAddress])
 
   const hookAprInfo = usePoolApr(key, pool, !pool.stableSwapAddress && !aprInfo, !aprInfo)
-  const { lpApr, merklApr, cakeApr } = aprInfo ?? hookAprInfo
+  const { lpApr, cakeApr, merklApr, incentraApr } = aprInfo ?? hookAprInfo
 
   const numerator = useMemo(() => {
     const lpAprNumerator = new BigNumber(lpApr).times(cakeApr?.userTvlUsd ?? BIG_ZERO)
@@ -46,17 +46,32 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
     ) {
       updateTotalApr(key, numerator, denominator)
     }
-  }, [cakeApr, denominator, detailMode, key, lpApr, merklApr, numerator, pool.protocol, updateTotalApr, totalApr])
+  }, [
+    cakeApr,
+    denominator,
+    detailMode,
+    key,
+    lpApr,
+    merklApr,
+    incentraApr,
+    numerator,
+    pool.protocol,
+    updateTotalApr,
+    totalApr,
+  ])
 
   const APRBreakdownModalState = useModalV2()
+
+  const poolWithFarming = useMemo(() => ({ ...pool, isFarming: Number(cakeApr?.value) > 0 }), [pool, cakeApr])
 
   if (!isInfinityProtocol(pool.protocol)) {
     return (
       <PoolAprButton
-        pool={pool}
+        pool={poolWithFarming}
         lpApr={parseFloat(lpApr) || 0}
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
+        incentraApr={parseFloat(incentraApr) ?? 0}
       />
     )
   }
@@ -64,10 +79,11 @@ export const PoolGlobalAprButton: React.FC<PoolGlobalAprButtonProps> = ({ pool, 
   return (
     <>
       <PoolAprButton
-        pool={pool}
+        pool={poolWithFarming}
         lpApr={parseFloat(lpApr) || 0}
         cakeApr={cakeApr}
         merklApr={parseFloat(merklApr) ?? 0}
+        incentraApr={parseFloat(incentraApr) ?? 0}
         onAPRTextClick={APRBreakdownModalState.onOpen}
         showApyButton={false}
       />
