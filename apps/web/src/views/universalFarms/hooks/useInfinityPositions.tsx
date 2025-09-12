@@ -121,16 +121,3 @@ export const useInfinityPositionsData = () => {
     data: positions,
   }
 }
-
-export const getInfinityPositionKey = (pos: InfinityCLPositionDetail | InfinityBinPositionDetail) => {
-  const { poolId, chainId } = pos
-  return getKeyForPools({
-    chainId,
-    poolAddress: poolId,
-    protocol: pos.protocol,
-    tokenId:
-      pos.protocol === Protocol.InfinityCLAMM
-        ? (pos as InfinityCLPositionDetail).tokenId
-        : (pos as InfinityBinPositionDetail).activeId.toString(),
-  })
-}

@@ -47,21 +47,3 @@ export const useTokensFromUrls = (urls: string[]) => {
     )
   }, [lists, urls])
 }
-
-export const useMultiChainsTokens = () => {
-  const { orderedChainIds } = useOrderChainIds()
-  const suggestedTokens = useMemo(
-    () => flatMap(orderedChainIds, (id) => [Native.onChain(id).wrapped].concat(SUGGESTED_BASES[id])),
-    [orderedChainIds],
-  )
-  const listUrls = useMemo(
-    () =>
-      [
-        ...orderedChainIds.map((chainId) => MULTI_CHAIN_LIST_URLS[chainId]?.[0]),
-        ...orderedChainIds.map((chainId) => MULTI_CHAIN_LIST_URLS[chainId]?.[1]),
-      ].filter(Boolean),
-    [orderedChainIds],
-  )
-  const tokenList = useTokensFromUrls(listUrls)
-  return useMemo(() => uniqWith(suggestedTokens.concat(tokenList), (a, b) => a.equals(b)), [tokenList, suggestedTokens])
-}

@@ -149,16 +149,6 @@ export const InfinityPoolPositionAprButton = <T extends InfinityCLPositionDetail
     </>
   )
 }
-
-export const V3PoolDerivedAprButton: React.FC<Omit<PoolPositionAprButtonProps<PositionDetail>, 'userPosition'>> = ({
-  pool,
-  inverted,
-}) => {
-  const { lpApr, cakeApr, merklApr, incentraApr } = useV3FormDerivedApr(pool, inverted)
-
-  return <PoolAprButton pool={pool} lpApr={lpApr} cakeApr={cakeApr} merklApr={merklApr} incentraApr={incentraApr} />
-}
-
 export const InfinityCLPoolDerivedAprButton: React.FC<{ pool: InfinityCLPoolInfo }> = ({ pool }) => {
   const { lpApr, cakeApr, merklApr, incentraApr } = useInfinityCLDerivedApr(pool)
 

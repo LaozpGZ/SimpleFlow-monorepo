@@ -86,10 +86,3 @@ export const useV3Positions = ({
     v3PoolsLength: poolsLength as Record<number, number>,
   }
 }
-
-export const getV3PositionKey = (pos: PositionDetail) =>
-  getKeyForPools({
-    chainId: pos.chainId,
-    protocol: pos.protocol,
-    tokenId: pos.tokenId.toString(),
-  })
