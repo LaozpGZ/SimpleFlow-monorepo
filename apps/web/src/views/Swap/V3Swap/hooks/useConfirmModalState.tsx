@@ -58,6 +58,8 @@ import { sendTransactionSafely } from 'components/WalletModalV2/utils/solanaSafe
 import { confirmTransaction } from '@pancakeswap/solana-core-sdk'
 import { useAllTypeBestTrade } from 'quoter/hook/useAllTypeBestTrade'
 import { useEVMToSolanaBridgeCalldata } from 'views/Swap/Bridge/hooks/useEVMToSolanaBridgeCalldata'
+import { calculateGasMargin } from 'utils'
+import { viemClients } from 'utils/viem'
 import { ConfirmStepContext, ConfirmAction } from './steps/step.type'
 import { useBatchSwapTransaction } from './steps/useBatchSwapTransaction'
 import { useSolSwapStep } from './steps/useSolSwapStep'
@@ -677,14 +679,27 @@ const useConfirmActions = (
           }
 
           if (swapData?.transactionData?.calldata) {
-            const result = await sendTransactionAsync({
-              to: swapData.transactionData.address,
-              data: swapData.transactionData.calldata,
-              value: order.trade.inputAmount.currency.isNative
-                ? BigInt(order.trade.inputAmount.quotient.toString())
-                : undefined,
-              gas: BigInt(swapData.gasFee),
-            })
+            const publicClient = viemClients[chainId as EvmChainId]
+
+            const result = await publicClient
+              ?.estimateGas({
+                account,
+                to: swapData.transactionData.address,
+                data: swapData.transactionData.calldata,
+                value: order.trade.inputAmount.currency.isNative
+                  ? BigInt(order.trade.inputAmount.quotient.toString())
+                  : undefined,
+              })
+              .then((gasLimit) => {
+                return sendTransactionAsync({
+                  to: swapData.transactionData.address,
+                  data: swapData.transactionData.calldata,
+                  value: order.trade.inputAmount.currency.isNative
+                    ? BigInt(order.trade.inputAmount.quotient.toString())
+                    : undefined,
+                  gas: calculateGasMargin(gasLimit),
+                })
+              })
 
             if (result) {
               const hash = await safeTxHashTransformer(result)
