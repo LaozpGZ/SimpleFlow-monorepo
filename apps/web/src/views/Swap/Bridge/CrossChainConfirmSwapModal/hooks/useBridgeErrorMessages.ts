@@ -140,6 +140,13 @@ export const useTradeErrorMessageFn = () => {
 
   return useCallback(
     (error: Error): string | null => {
+      console.log('errorMessages', errorMessages)
+      console.log('error useTradeErrorMessageFn', error)
+
+      console.log('error.constructor?.name', error?.message)
+
+      console.log('errorMessages[message]', errorMessages[error?.message])
+
       if (!error) return null
 
       // Handle BridgeTradeError
