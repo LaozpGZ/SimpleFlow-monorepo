@@ -427,7 +427,6 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     if (tradeError) {
       const errorMessage = getTradeErrorMessage(tradeError)
 
-      console.log('errorMessage', errorMessage)
       if (errorMessage) return errorMessage
     }
 

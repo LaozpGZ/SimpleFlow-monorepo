@@ -143,22 +143,18 @@ export const useTradeErrorMessageFn = () => {
       if (!error) return null
 
       // Handle BridgeTradeError
-      if (error.constructor?.name === 'BridgeTradeError') {
-        const { message } = error
+      const { message } = error
 
-        // Check for specific error patterns first (legacy compatibility)
-        if (message.includes("doesn't have enough funds to support this deposit")) {
-          return errorMessages[RELAY_ERROR.INSUFFICIENT_LIQUIDITY]
-        }
-
-        if (message.includes('too low relative to fees')) {
-          return errorMessages[RELAY_ERROR.AMOUNT_TOO_LOW]
-        }
-
-        return errorMessages[message] || message
+      // Check for specific error patterns first (legacy compatibility)
+      if (message.includes("doesn't have enough funds to support this deposit")) {
+        return errorMessages[RELAY_ERROR.INSUFFICIENT_LIQUIDITY]
       }
 
-      return null
+      if (message.includes('too low relative to fees')) {
+        return errorMessages[RELAY_ERROR.AMOUNT_TOO_LOW]
+      }
+
+      return errorMessages[message] || message
     },
     [errorMessages],
   )
