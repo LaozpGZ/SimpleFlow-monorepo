@@ -31,7 +31,7 @@ import { SlippageAdjustedAmounts, TradePriceBreakdown, formatExecutionPrice } fr
 import FormattedPriceImpact from 'views/Swap/components/FormattedPriceImpact'
 import { SlippageButton } from 'views/Swap/components/SlippageButton'
 import { StyledBalanceMaxMini, SwapCallbackError } from 'views/Swap/components/styleds'
-import { EVMInterfaceOrder, isBridgeOrder, isSolanaBridge, isXOrder } from 'views/Swap/utils'
+import { BridgeOrderWithCommands, EVMInterfaceOrder, isBridgeOrder, isSolanaBridge, isXOrder } from 'views/Swap/utils'
 import { SolanaBridgeTradingFee } from 'views/SwapSimplify/InfinitySwap/SolanaBridgeTradingFee'
 
 import { BridgeOrder, OrderType } from '@pancakeswap/price-api-sdk'
@@ -217,7 +217,8 @@ export const SwapModalFooterV3 = memo(function SwapModalFooterV3({
           </RowFixed>
           <FormattedPriceImpact isX={isXOrder(order)} priceImpact={getBridgeOrderPriceImpact(priceBreakdown)} />
         </RowBetween>
-        {!isXOrder(order) && (
+        {isXOrder(order) ||
+        (isBridgeOrder(order) && (order as BridgeOrderWithCommands)?.commands?.length === 1) ? null : (
           <RowBetween mb="8px">
             <RowFixed>
               <QuestionHelperV2
