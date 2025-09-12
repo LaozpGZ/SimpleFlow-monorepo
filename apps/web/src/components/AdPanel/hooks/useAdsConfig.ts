@@ -11,6 +11,7 @@ export enum AdsIds {
   BINANCE_ALPHA = 'binance-alpha',
   SOLANA_LIQUIDITY = 'solana-liquidity',
   TRADE_SOCIAL = 'trade-social',
+  LISTA = 'lista',
 }
 
 type AdsConfigMap = {
@@ -19,6 +20,30 @@ type AdsConfigMap = {
 const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig[] => {
   const now = Date.now()
   const config: AdsCampaignConfig[] = [
+    {
+      id: AdsIds.LISTA,
+      priority: Priority.HIGH,
+      ad: {
+        img: getImageUrl(isMobile ? 'lista-mobile' : 'lista'),
+        texts: [
+          {
+            text: isMobile
+              ? t('Turn LP into Borrow Power. Get lisUSD now!')
+              : t('Turn LP into Borrow Power. Get lisUSD Instantly!'),
+          },
+        ],
+        btn: {
+          text: t('Borrow here'),
+          link: '',
+          mt: !isMobile ? '8px' : undefined,
+        },
+        ...(isMobile && {
+          options: {
+            imageMargin: '25px',
+          },
+        }),
+      },
+    },
     {
       id: AdsIds.SOLANA_LIQUIDITY,
       priority: Priority.HIGH,
