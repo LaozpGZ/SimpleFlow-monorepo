@@ -62,6 +62,8 @@ const InfinitySwapInner = () => {
     }
   }, [firstTime, isChartDisplayed, isSwapHotTokenDisplay, query, setIsSwapHotTokenDisplay, setIsChartDisplayed])
 
+  const isEvmSwap = isEvm(chainId) && isEvm(inputChainId) && isEvm(outputChainId)
+
   return (
     <Page removePadding hideFooterOnDesktop={isChartExpanded || false} showExternalLink={false} showHelpLink={false}>
       <Flex
@@ -72,7 +74,7 @@ const InfinitySwapInner = () => {
         mt={isChartExpanded ? undefined : isMobile ? '18px' : '42px'}
         p={isChartExpanded ? undefined : isMobile ? '16px' : '24px'}
       >
-        {isDesktop && isChartDisplayed && isEvm(chainId) && (
+        {isDesktop && isChartDisplayed && isEvmSwap && (
           <Flex width={isChartExpanded ? '100%' : '50%'} maxWidth="928px" flexDirection="column" style={{ gap: 20 }}>
             <ChartWithPriceHeader
               currency0={inputCurrency || undefined}
