@@ -62,7 +62,7 @@ const InfinitySwapInner = () => {
     }
   }, [firstTime, isChartDisplayed, isSwapHotTokenDisplay, query, setIsSwapHotTokenDisplay, setIsChartDisplayed])
 
-  const isEvmSwap = isEvm(chainId) && isEvm(inputChainId) && isEvm(outputChainId)
+  const isEvmSwap = isEvm(inputChainId) && isEvm(outputChainId)
 
   return (
     <Page removePadding hideFooterOnDesktop={isChartExpanded || false} showExternalLink={false} showHelpLink={false}>
@@ -85,7 +85,7 @@ const InfinitySwapInner = () => {
           </Flex>
         )}
 
-        {!isDesktop && isEvm(chainId) && (
+        {!isDesktop && isEvmSwap && (
           <BottomDrawer
             content={
               <ChartWithPriceHeader
