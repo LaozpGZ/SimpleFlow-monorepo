@@ -1,7 +1,7 @@
 import { INetworkProps, ITokenProps, toTokenValue } from '@pancakeswap/widgets-internal'
 import { useMemo } from 'react'
-import { getKeyForPools, useAccountV2LpDetails, useV2PoolsLength } from 'state/farmsV4/hooks'
-import { POSITION_STATUS, V2LPDetail } from 'state/farmsV4/state/accountPositions/type'
+import { useAccountV2LpDetails, useV2PoolsLength } from 'state/farmsV4/hooks'
+import { POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'
 import { useAccount } from 'wagmi'
 import { useAllChainIds } from './useMultiChains'
 

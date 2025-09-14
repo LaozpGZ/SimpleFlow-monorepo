@@ -64,7 +64,11 @@ export function farmQueryToUrlParams(query: FarmQuery): { [key: string]: string 
     params.type = protocolIndex.toString()
   }
   if (query.chains.length && query.chains.length !== DEFAULT_CHAINS.length) {
-    params.network = query.chains.map((c) => c.toString())
+    if (query.chains.length === 1) {
+      params.network = query.chains[0].toString()
+    } else {
+      params.network = query.chains.map((c) => c.toString())
+    }
   }
   if (query.sortBy && query.sortOrder) {
     params.sort = `${query.sortBy}:${query.sortOrder}`

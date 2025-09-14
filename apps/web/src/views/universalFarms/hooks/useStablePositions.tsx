@@ -1,7 +1,7 @@
 import { INetworkProps, ITokenProps, toTokenValueByCurrency } from '@pancakeswap/widgets-internal'
 import { useMemo } from 'react'
-import { getKeyForPools, useAccountStableLpDetails } from 'state/farmsV4/hooks'
-import { POSITION_STATUS, StableLPDetail } from 'state/farmsV4/state/accountPositions/type'
+import { useAccountStableLpDetails } from 'state/farmsV4/hooks'
+import { POSITION_STATUS } from 'state/farmsV4/state/accountPositions/type'
 import { useAccount } from 'wagmi'
 import { useAllChainIds } from './useMultiChains'
 

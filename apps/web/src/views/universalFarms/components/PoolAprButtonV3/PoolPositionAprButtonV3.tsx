@@ -1,30 +1,12 @@
-import { useModalV2 } from '@pancakeswap/uikit'
-import { BIG_ZERO } from '@pancakeswap/utils/bigNumber'
-import { getCurrencyAddress } from '@pancakeswap/widgets-internal'
-import { useCurrencyByChainId } from 'hooks/Tokens'
 import noop from 'lodash/noop'
-import { useEffect } from 'react'
+import { PositionDetail } from 'state/farmsV4/state/accountPositions/type'
+import { InfinityBinPoolInfo, InfinityCLPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
 import {
-  InfinityBinPositionDetail,
-  InfinityCLPositionDetail,
-  PositionDetail,
-  StableLPDetail,
-  V2LPDetail,
-} from 'state/farmsV4/state/accountPositions/type'
-import { InfinityBinPoolInfo, InfinityCLPoolInfo, InfinityPoolInfo, PoolInfo } from 'state/farmsV4/state/type'
-import { useMyPositions } from 'views/PoolDetail/components/MyPositionsContext'
-import {
-  InfinityPositionAPR,
   useInfinityBinDerivedApr,
-  useInfinityBinPositionApr,
   useInfinityCLDerivedApr,
-  useInfinityCLPositionApr,
-  useV2PositionApr,
   useV3FormDerivedApr,
-  useV3PositionApr,
 } from 'views/universalFarms/hooks/usePositionAPR'
 
-import { APRBreakdownModal } from './AprBreakdownModal'
 import { PoolAprButtonV3 } from './PoolAprButtonV3'
 
 type PoolPositionAprButtonProps<TPosition, TPoolInfo = PoolInfo> = {

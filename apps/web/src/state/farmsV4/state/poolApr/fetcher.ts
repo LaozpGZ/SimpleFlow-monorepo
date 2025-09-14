@@ -19,8 +19,8 @@ import { erc20Abi } from 'viem'
 
 import { ChainId } from '@pancakeswap/chains'
 import { INCENTRA_API, IncentraCampaign } from 'hooks/useIncentra'
-import { InfinityPoolInfo, PoolInfo, StablePoolInfo, V2PoolInfo, V3PoolInfo } from '../type'
-import { CakeApr, MerklApr } from './atom'
+import { ChainIdAddressKey, InfinityPoolInfo, PoolInfo, StablePoolInfo, V2PoolInfo, V3PoolInfo } from '../type'
+import { AprValue, CakeApr, IncentraApr, MerklApr } from './atom'
 
 export const getCakeApr = (pool: PoolInfo, cakePrice: BigNumber): Promise<CakeApr> => {
   switch (pool.protocol) {
@@ -131,13 +131,16 @@ export const getMerklApr = async (result: any, chainId: number) => {
   try {
     const opportunities = result?.filter((opportunity) => opportunity?.chainId === chainId)
     if (!opportunities || opportunities?.length === 0) return {}
-    return opportunities.reduce((acc, opportunity) => {
-      const key = `${chainId}:${safeGetAddress(opportunity.identifier)}`
+    return opportunities.reduce((acc: MerklApr, opportunity) => {
+      const poolId = safeGetAddress(opportunity.identifier)
+      if (poolId) {
+        const key: ChainIdAddressKey = `${chainId}:${poolId}`
 
-      // eslint-disable-next-line no-param-reassign
-      acc[key] = (opportunity.apr ?? 0) / 100
+        // eslint-disable-next-line no-param-reassign
+        acc[key] = `${(opportunity.apr ?? 0) / 100}`
+      }
       return acc
-    }, {} as MerklApr)
+    }, {})
   } catch (error) {
     console.error('Failed to process merkl apr', error)
     return {}
@@ -183,12 +186,15 @@ export const getAllNetworkIncentraApr = async (signal?: AbortSignal) => {
 
   const filteredCampaigns = json.campaigns.filter((c) => supportedChainIdV4.includes(Number(c.chainId)))
 
-  const aprs = filteredCampaigns.reduceRight((acc, campaign) => {
-    const key = `${campaign.chainId}:${safeGetAddress(campaign.pools.poolId)}`
-    // eslint-disable-next-line no-param-reassign
-    acc[key] = campaign.rewardInfo.apr
+  const aprs = filteredCampaigns.reduce((acc, campaign) => {
+    const poolId = safeGetAddress(campaign.pools.poolId)
+    if (poolId) {
+      const key: ChainIdAddressKey = `${Number(campaign.chainId)}:${poolId}`
+      // eslint-disable-next-line no-param-reassign
+      acc[key] = `${campaign.rewardInfo.apr}`
+    }
     return acc
-  }, {})
+  }, {} as IncentraApr)
 
   return aprs
 }

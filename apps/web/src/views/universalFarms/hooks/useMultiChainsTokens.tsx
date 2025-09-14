@@ -1,6 +1,5 @@
-import { ChainId, ERC20Token, Native } from '@pancakeswap/sdk'
+import { ChainId, ERC20Token } from '@pancakeswap/sdk'
 import type { TokenInfo } from '@pancakeswap/token-lists'
-import { SUGGESTED_BASES } from 'config/constants/exchange'
 import {
   PANCAKE_ARB_DEFAULT,
   PANCAKE_BASE_DEFAULT,
@@ -13,10 +12,8 @@ import {
 } from 'config/constants/lists'
 import { useAtom } from 'jotai'
 import flatMap from 'lodash/flatMap'
-import uniqWith from 'lodash/uniqWith'
 import { useMemo } from 'react'
 import { selectorByUrlsAtom } from 'state/lists/hooks'
-import { useOrderChainIds } from './useMultiChains'
 
 const BSC_URLS = [PANCAKE_EXTENDED]
 const ETH_URLS = [PANCAKE_ETH_DEFAULT]

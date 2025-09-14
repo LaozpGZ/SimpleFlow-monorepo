@@ -20,7 +20,6 @@ import {
   useInfinityCLDerivedApr,
   useInfinityCLPositionApr,
   useV2PositionApr,
-  useV3FormDerivedApr,
   useV3PositionApr,
 } from 'views/universalFarms/hooks/usePositionAPR'
 
