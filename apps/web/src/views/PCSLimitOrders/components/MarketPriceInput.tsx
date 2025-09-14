@@ -1,21 +1,16 @@
 import { Box, IconButton, Input, SwapHorizIcon, Text } from '@pancakeswap/uikit'
-import { useAtomValue, useSetAtom } from 'jotai'
+import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import styled from 'styled-components'
-import { ChangeEvent, ChangeEventHandler, FormEvent, Suspense, useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, Suspense, useCallback, useEffect, useState } from 'react'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
-import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import { useTranslation } from '@pancakeswap/localization'
-import { priceToClosestTick, tickToPrice, tryParseTick } from 'hooks/infinity/utils'
+import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
 import { tryParsePrice } from 'hooks/v3/utils'
+import { BigNumber as BN } from 'bignumber.js'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtoms'
-import {
-  customMarketPriceAtom,
-  marketPriceAtom,
-  setCustomMarketPriceAtom,
-  clearCustomMarketPriceAtom,
-} from '../state/form/marketPriceAtoms'
+import { customMarketPriceAtom, currentMarketPriceAtom } from '../state/form/marketPriceAtoms'
 import { selectedPoolAtom } from '../state/pools/poolAtoms'
 
 const InputContainer = styled(Box)`
@@ -81,35 +76,36 @@ export const MarketPriceInput = () => {
 
   const pool = useAtomValue(selectedPoolAtom)
 
-  const marketPrice = useAtomValue(marketPriceAtom)
-  const customMarketPrice = useAtomValue(customMarketPriceAtom)
+  const { data: currentMarketPrice } = useAtomValue(currentMarketPriceAtom)
 
-  const [localPrice, setLocalPrice] = useState(marketPrice?.toSignificant(6))
-
-  const setCustomMarketPrice = useSetAtom(setCustomMarketPriceAtom)
-  const clearCustomMarketPrice = useSetAtom(clearCustomMarketPriceAtom)
+  const [customMarketPrice, setCustomMarketPrice] = useAtom(customMarketPriceAtom)
+  const [localPrice, setLocalPrice] = useState(currentMarketPrice)
 
   const tokenPriceUSD = useStablecoinPrice(outputCurrency, { enabled: !!outputCurrency })
-  const usdValue = tokenPriceUSD ? marketPrice?.multiply(tokenPriceUSD).toSignificant(6) : '0'
+  const usdValue =
+    tokenPriceUSD && currentMarketPrice
+      ? BN(currentMarketPrice)
+          .multipliedBy(BN(tokenPriceUSD.toFixed(18)))
+          .toFormat(6)
+      : '0'
 
   // TODO: Check market price flipping logic according to lower/upper ticks
   const flipCurrencies = useSetAtom(flipCurrenciesAtom)
 
   // Sync market price to local price input
   useEffect(() => {
-    const price = marketPrice?.toSignificant(6)
     // If user has not set custom market price, continue to sync values
-    if (customMarketPrice === undefined && price) setLocalPrice(price)
-  }, [customMarketPrice, marketPrice, setLocalPrice])
+    if (customMarketPrice === undefined && currentMarketPrice) setLocalPrice(currentMarketPrice)
+  }, [customMarketPrice, currentMarketPrice, setLocalPrice])
 
   const handleCustomMarketPriceInput = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const { value } = e.target
-      if (value === marketPrice?.toSignificant(6)) return
+      if (value === currentMarketPrice) return
 
       setLocalPrice(value)
     },
-    [marketPrice, setLocalPrice],
+    [currentMarketPrice, setLocalPrice],
   )
 
   // Adjust price based on tick and set it as new custom price
@@ -119,14 +115,21 @@ export const MarketPriceInput = () => {
       pool: { tickSpacing },
     } = pool
 
-    if (localPrice === marketPrice?.toSignificant(6)) return
+    if (localPrice === currentMarketPrice) return
+    if (!localPrice) {
+      setCustomMarketPrice(undefined)
+      return
+    }
+
+    const localPriceBN = BN(localPrice)
+    if (localPriceBN.lte(0) || localPriceBN.isNaN() || !localPriceBN.isFinite()) return
 
     // Get nearest tick to user's price
     const userPrice = tryParsePrice(inputCurrency, outputCurrency, localPrice)
     if (!userPrice) {
       // Reset to market price and clear custom price
-      setLocalPrice(marketPrice?.toSignificant(6))
-      clearCustomMarketPrice()
+      setLocalPrice(currentMarketPrice)
+      setCustomMarketPrice(undefined)
       return
     }
 
@@ -135,12 +138,12 @@ export const MarketPriceInput = () => {
     if (!nearestTick) {
       console.warn('MarketPriceInput::handleBlur No tick found for given price')
       // Reset to market price and clear custom price
-      setLocalPrice(marketPrice?.toSignificant(6))
-      clearCustomMarketPrice()
+      setLocalPrice(currentMarketPrice)
+      setCustomMarketPrice(undefined)
       return
     }
 
-    // TODO: Based on zeroForOne direction, adjust price up or down
+    // TODO: Based on zeroForOne direction, adjust price ticks up or down
     const adjustedPrice = tickToPrice(inputCurrency, outputCurrency, nearestTick)
 
     setCustomMarketPrice(adjustedPrice.toSignificant(6))
@@ -191,6 +194,7 @@ export const MarketPriceInput = () => {
           </InputBottomBar>
         )}
       </InputContainer>
+      custom price: {customMarketPrice || 'null'}
     </Suspense>
   )
 }

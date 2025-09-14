@@ -2,37 +2,30 @@ import { atom } from 'jotai'
 import tryParseAmount from '@pancakeswap/utils/tryParseAmount'
 import { formatAmount } from '@pancakeswap/utils/formatFractions'
 import { Field } from 'views/PCSLimitOrders/types/limitOrder.types'
-import { CurrencyAmount, Price, Token, TradeType } from '@pancakeswap/sdk'
+import { Token, TradeType } from '@pancakeswap/sdk'
 import { gasPriceWeiAtom } from 'quoter/utils/gasPriceAtom'
 import { findBestTrade } from '@pancakeswap/routing-sdk'
+import { BigNumber as BN } from 'bignumber.js'
 import { selectedPoolAtom } from '../pools/poolAtoms'
-import { independentFieldAtom, fieldBeforeCustomPriceAtom, typedValueAtom } from './fieldAtoms'
+import { independentFieldAtom, typedValueAtom } from './fieldAtoms'
 import { baseCurrencyAtom, quoteCurrencyAtom, inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
-import { customMarketPriceAtom, marketPriceAtom, clearCustomMarketPriceAtom } from './marketPriceAtoms'
+import { customMarketPriceAtom } from './marketPriceAtoms'
 
 const independentAmountAtom = atom(async (get) => {
   const value = get(typedValueAtom)
   const independentField = get(independentFieldAtom)
-  const customMarketPrice = get(customMarketPriceAtom)
+
   const inputCurrency = await get(inputCurrencyAtom)
   const outputCurrency = await get(outputCurrencyAtom)
 
-  // When custom market price is set, use the field that was independent before custom price
-  if (customMarketPrice) {
-    const fieldBeforeCustomPrice = get(fieldBeforeCustomPriceAtom)
-    const currency = fieldBeforeCustomPrice === Field.CURRENCY_A ? inputCurrency : outputCurrency
-    return tryParseAmount<Token>(value, currency as Token)
-  }
-
-  // Normal case: use current independent field
   const currency = independentField === Field.CURRENCY_A ? inputCurrency : outputCurrency
   return tryParseAmount<Token>(value, currency as Token)
 })
 
 const dependentAmountAtom = atom(async (get) => {
-  const independentAmount = await get(independentAmountAtom)
   const customMarketPrice = get(customMarketPriceAtom)
   const independentField = get(independentFieldAtom)
+  const independentAmount = await get(independentAmountAtom)
   const baseCurrency = await get(baseCurrencyAtom)
   const quoteCurrency = await get(quoteCurrencyAtom)
   const inputCurrency = await get(inputCurrencyAtom)
@@ -42,27 +35,15 @@ const dependentAmountAtom = atom(async (get) => {
 
   // Handle custom market price scenario
   if (customMarketPrice !== undefined) {
-    // customMarketPrice always represents: 1 inputCurrency = X outputCurrency
-    // Use current independentField to determine calculation direction
-
-    if (independentField === Field.CURRENCY_A) {
-      // User is typing in CURRENCY_A (input field), calculate CURRENCY_B (output)
-      // independentAmount is in inputCurrency, calculate output in outputCurrency
-      // Formula: inputAmount * customMarketPrice = outputAmount
-      const outputAmount = CurrencyAmount.fromRawAmount(
-        outputCurrency,
-        (independentAmount.numerator * customMarketPrice.numerator) / independentAmount.decimalScale,
-      )
-      return outputAmount
+    const customMarketPriceBN = BN(customMarketPrice)
+    if (customMarketPriceBN.lte(0) || customMarketPriceBN.isNaN() || !customMarketPriceBN.isFinite()) {
+      console.error('Invalid custom market price')
+      return undefined
     }
-    // User is typing in CURRENCY_B (output field), calculate CURRENCY_A (input)
-    // independentAmount is in outputCurrency, calculate input in inputCurrency
-    // Formula: outputAmount / customMarketPrice = inputAmount
-    const inputAmount = CurrencyAmount.fromRawAmount(
-      inputCurrency,
-      (independentAmount.numerator * independentAmount.decimalScale) / customMarketPrice.numerator,
-    )
-    return inputAmount
+
+    const price = independentField === Field.CURRENCY_A ? customMarketPrice : BN(1).dividedBy(customMarketPriceBN)
+    const amount = BN(independentAmount.toExact()).multipliedBy(price)
+    return tryParseAmount<Token>(amount.toString(), quoteCurrency as Token)
   }
 
   // Handle normal market price scenario using routing SDK
@@ -86,6 +67,8 @@ const dependentAmountAtom = atom(async (get) => {
       maxSplits: 0,
       quoteId: `limit-order-${Date.now()}`,
     })
+
+    console.debug('bestTrade', bestTrade)
 
     const result =
       tradeType === TradeType.EXACT_INPUT
