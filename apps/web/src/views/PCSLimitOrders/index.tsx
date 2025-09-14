@@ -14,21 +14,21 @@ export const PCSLimitOrdersView = () => {
   return (
     <>
       <Page style={{ paddingTop: 0, paddingLeft: 0, paddingRight: 0 }}>
-        <Suspense>
-          <SwapUIV2.SwapFormWrapper>
-            <SwapUIV2.SwapTabAndInputPanelWrapper>
-              <SwapSelection swapType={SwapType.LIMIT} withToolkit />
-              <LimitOrderForm />
+        {/* <Suspense> */}
+        <SwapUIV2.SwapFormWrapper>
+          <SwapUIV2.SwapTabAndInputPanelWrapper>
+            <SwapSelection swapType={SwapType.LIMIT} withToolkit />
+            <LimitOrderForm />
 
-              <FormContainer>
-                <MarketPriceInput />
-                <QuickActionButtons />
-              </FormContainer>
-            </SwapUIV2.SwapTabAndInputPanelWrapper>
+            <FormContainer>
+              <MarketPriceInput />
+              <QuickActionButtons />
+            </FormContainer>
+          </SwapUIV2.SwapTabAndInputPanelWrapper>
 
-            <ButtonAndDetailsPanel pricingAndSlippage={null} swapCommitButton={<CommitButton />} tradeDetails={null} />
-          </SwapUIV2.SwapFormWrapper>
-        </Suspense>
+          <ButtonAndDetailsPanel pricingAndSlippage={null} swapCommitButton={<CommitButton />} tradeDetails={null} />
+        </SwapUIV2.SwapFormWrapper>
+        {/* </Suspense> */}
         {/* TODO: add ad panel here */}
       </Page>
     </>

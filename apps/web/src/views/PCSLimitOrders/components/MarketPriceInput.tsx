@@ -95,7 +95,11 @@ export const MarketPriceInput = () => {
   // Sync market price to local price input
   useEffect(() => {
     // If user has not set custom market price, continue to sync values
-    if (customMarketPrice === undefined && currentMarketPrice) setLocalPrice(currentMarketPrice)
+    if (customMarketPrice === undefined && currentMarketPrice) {
+      setLocalPrice(currentMarketPrice)
+      return
+    }
+    if (customMarketPrice) setLocalPrice(customMarketPrice)
   }, [customMarketPrice, currentMarketPrice, setLocalPrice])
 
   const handleCustomMarketPriceInput = useCallback(
@@ -194,7 +198,6 @@ export const MarketPriceInput = () => {
           </InputBottomBar>
         )}
       </InputContainer>
-      custom price: {customMarketPrice || 'null'}
     </Suspense>
   )
 }

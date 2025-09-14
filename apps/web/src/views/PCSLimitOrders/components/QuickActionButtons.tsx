@@ -1,6 +1,15 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { FlexGap, Button, useMatchBreakpoints, RowBetween, Text, Box, Input } from '@pancakeswap/uikit'
 import styled from 'styled-components'
+import { useAtomValue, useSetAtom } from 'jotai'
+import { ChangeEvent, Suspense, useCallback, useEffect, useState } from 'react'
+import { BigNumber as BN } from 'bignumber.js'
+import { customMarketPriceAtom } from '../state/form/marketPriceAtoms'
+import {
+  differencePercentageAtom,
+  presetPercentMapAtom,
+  setPercentDifferenceAtom,
+} from '../state/form/quickActionAtoms'
 
 // Quick Select Styles
 const ButtonsContainer = styled(FlexGap).attrs({ gap: '8px' })`
@@ -75,29 +84,69 @@ export const QuickActionButtons = () => {
   const { isMobile, isTablet } = useMatchBreakpoints()
   const isSmallScreen = isMobile || isTablet
 
+  const [localPercent, setLocalPercent] = useState('')
+
+  const percentage = useAtomValue(differencePercentageAtom)
+  const presetPercentMap = useAtomValue(presetPercentMapAtom)
+
+  const setCustomMarketPrice = useSetAtom(customMarketPriceAtom)
+  const setPercentDifference = useSetAtom(setPercentDifferenceAtom)
+
+  const handleCustomInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value
+    setLocalPercent(val)
+  }, [])
+
+  const handleBlur = useCallback(() => {
+    if (localPercent && BN(localPercent).isFinite()) setPercentDifference(Number(localPercent))
+  }, [localPercent, setPercentDifference])
+
+  // Sync percent values
+  useEffect(() => {
+    setLocalPercent(percentage || '')
+  }, [percentage])
+
   return (
-    <>
+    <Suspense>
       <ButtonsContainer>
-        <QuickActionButton onClick={() => {}} $isActive width={isSmallScreen ? '150%' : '200%'} minWidth="max-content">
+        <QuickActionButton
+          $isActive={percentage === undefined}
+          onClick={() => setCustomMarketPrice(undefined)}
+          width={isSmallScreen ? '150%' : '200%'}
+          minWidth="max-content"
+        >
           {t('Market')}
         </QuickActionButton>
-        <QuickActionButton onClick={() => {}} $isActive={false} width="100%">
+
+        <QuickActionButton
+          onClick={() => setPercentDifference(1)}
+          $isActive={percentage === presetPercentMap[1]}
+          width="100%"
+        >
           +1%
         </QuickActionButton>
-        <QuickActionButton onClick={() => {}} $isActive={false} width="100%">
+        <QuickActionButton
+          onClick={() => setPercentDifference(5)}
+          $isActive={percentage === presetPercentMap[5]}
+          width="100%"
+        >
           +5%
         </QuickActionButton>
-        <QuickActionButton onClick={() => {}} $isActive={false} width="100%">
+        <QuickActionButton
+          onClick={() => setPercentDifference(10)}
+          $isActive={percentage === presetPercentMap[10]}
+          width="100%"
+        >
           +10%
         </QuickActionButton>
 
         {!isSmallScreen && (
           <CustomInputContainer width="120%" minWidth="110px">
             <StyledInput
-              value=""
-              onChange={() => {}}
-              onBlur={() => {}}
-              // onKeyDown={(e) => e.key === 'Enter' && void}
+              value={localPercent}
+              onChange={handleCustomInput}
+              onBlur={handleBlur}
+              onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
               placeholder={t('Custom')}
               type="text"
               inputMode="decimal"
@@ -114,10 +163,10 @@ export const QuickActionButtons = () => {
           <Text>{t('Custom')}</Text>
           <CustomInputContainer $small>
             <StyledInput
-              value=""
-              onChange={() => {}}
-              onBlur={() => {}}
-              // onKeyDown={(e) => e.key === 'Enter' && null}
+              value={localPercent}
+              onChange={handleCustomInput}
+              onBlur={handleBlur}
+              onKeyDown={(e) => e.key === 'Enter' && e.currentTarget.blur()}
               placeholder="2.5"
               type="text"
               inputMode="decimal"
@@ -129,6 +178,6 @@ export const QuickActionButtons = () => {
           </CustomInputContainer>
         </RowBetween>
       )}
-    </>
+    </Suspense>
   )
 }
