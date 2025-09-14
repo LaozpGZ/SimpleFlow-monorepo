@@ -269,6 +269,10 @@ export default {
     [ChainId.ZKSYNC_TESTNET]: '0xbfcCF87Ee5cd03d4550Cc1526Bf152cc2EE1C7AB',
     [ChainId.ZKSYNC]: '0xB774c13bA5a665713037c42A12f0ED9De70585cB',
   },
+  clLimitOrderHook: {
+    [ChainId.BSC]: '0x',
+    [ChainId.BSC_TESTNET]: '0x5F1076A98a1b9AA8584DaC02F38C616C3A431794',
+  },
 
   // inifinity
   poolManagerCL: INFI_CL_POOL_MANAGER_ADDRESSES,

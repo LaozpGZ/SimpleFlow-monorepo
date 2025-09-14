@@ -56,6 +56,7 @@ import {
   getVCakeContract,
   getVeCakeContract,
   getZksyncAirDropContract,
+  getCLLimitOrderHookContract,
 } from 'utils/contractHelpers'
 
 import { ChainId } from '@pancakeswap/chains'
@@ -509,4 +510,11 @@ export const useRevenueSharingPoolGatewayContract = () => {
   const { data: signer } = useWalletClient()
 
   return useMemo(() => getRevenueSharingPoolGatewayContract(signer ?? undefined, chainId), [signer, chainId])
+}
+
+export const useCLLimitOrderHookContract = () => {
+  const { chainId } = useActiveChainId()
+  const { data: signer } = useWalletClient()
+
+  return useMemo(() => getCLLimitOrderHookContract(signer ?? undefined, chainId), [signer, chainId])
 }

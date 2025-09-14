@@ -178,3 +178,7 @@ export const getInfinityPositionManagerAddress = (type: PoolType, chainId?: numb
 export const getCakePoolAddress = (chainId?: number) => {
   return getAddressFromMap(addresses.cakeVault, chainId)
 }
+
+export const getClLimitOrderHookAddress = (chainId?: number) => {
+  return getAddressFromMap(addresses.clLimitOrderHook, chainId)
+}

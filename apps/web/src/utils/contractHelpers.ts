@@ -13,6 +13,7 @@ import {
   getCakePoolAddress,
   getCakeVaultAddress,
   getCakeVaultV1Address,
+  getClLimitOrderHookAddress,
   getCrossFarmingReceiverAddress,
   getCrossFarmingSenderAddress,
   getCrossFarmingVaultAddress,
@@ -104,6 +105,7 @@ import {
   erc721Abi,
   getContract as viemGetContract,
 } from 'viem'
+import { clLimitOrderHookABI } from 'config/abi/CLLimitOrderHook'
 
 export type GetContractFn<TAbi extends Abi | readonly unknown[], TWalletClient extends WalletClient> = (
   ...args: any[]
@@ -561,6 +563,18 @@ export const getCakePoolV1Contract: GetContractFn<typeof cakeVaultV1ABI, WalletC
   return getContract({
     abi: cakeVaultV1ABI,
     address: getCakeVaultV1Address(ChainId.BSC),
+    signer,
+    chainId,
+  })
+}
+
+export const getCLLimitOrderHookContract: GetContractFn<typeof clLimitOrderHookABI, WalletClient> = (
+  signer?: WalletClient,
+  chainId?: number,
+) => {
+  return getContract({
+    abi: clLimitOrderHookABI,
+    address: getClLimitOrderHookAddress(chainId),
     signer,
     chainId,
   })
