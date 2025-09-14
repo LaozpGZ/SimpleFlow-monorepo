@@ -54,6 +54,7 @@ export const LimitOrderForm = () => {
             onCurrencySelect={(c) => setCurrency({ field: Field.CURRENCY_A, newCurrency: c })}
             showCommonBases={false}
             supportCrossChain={false}
+            showUSDPrice
             showMaxButton
           />
         </Suspense>
@@ -75,6 +76,7 @@ export const LimitOrderForm = () => {
             onCurrencySelect={(c) => setCurrency({ field: Field.CURRENCY_B, newCurrency: c })}
             showCommonBases={false}
             supportCrossChain={false}
+            showUSDPrice
             showMaxButton
           />
         </Suspense>

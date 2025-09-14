@@ -1,7 +1,7 @@
 import { Box, IconButton, Input, SwapHorizIcon, Text } from '@pancakeswap/uikit'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import styled from 'styled-components'
-import { ChangeEvent, Suspense, useCallback, useEffect, useState } from 'react'
+import { ChangeEvent, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
 import { useTranslation } from '@pancakeswap/localization'
@@ -82,12 +82,13 @@ export const MarketPriceInput = () => {
   const [localPrice, setLocalPrice] = useState(currentMarketPrice)
 
   const tokenPriceUSD = useStablecoinPrice(outputCurrency, { enabled: !!outputCurrency })
-  const usdValue =
-    tokenPriceUSD && currentMarketPrice
-      ? BN(currentMarketPrice)
+  const usdValue = useMemo(() => {
+    return tokenPriceUSD && localPrice
+      ? BN(localPrice || 0)
           .multipliedBy(BN(tokenPriceUSD.toFixed(18)))
-          .toFormat(6)
-      : '0'
+          .toNumber()
+      : 0
+  }, [localPrice, tokenPriceUSD])
 
   // TODO: Check market price flipping logic according to lower/upper ticks
   const flipCurrencies = useSetAtom(flipCurrenciesAtom)
@@ -193,7 +194,7 @@ export const MarketPriceInput = () => {
         {usdValue && (
           <InputBottomBar>
             <Text color="textSubtle" small>
-              ~{formatDollarAmount(+usdValue.toString(), undefined, false)} USD
+              ~{formatDollarAmount(usdValue, undefined, false).replace('$', '')} USD
             </Text>
           </InputBottomBar>
         )}
