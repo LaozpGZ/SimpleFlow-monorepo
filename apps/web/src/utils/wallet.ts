@@ -11,7 +11,17 @@ export const checkWalletCanRegisterToken = async (connector: Connector) => {
       typeof provider.request === 'function' &&
       // Some providers throw if they don’t support it
       (await provider
-        .request({ method: 'wallet_watchAsset', params: { type: 'ERC20', options: {} } })
+        .request({
+          method: 'wallet_watchAsset',
+          params: {
+            type: 'ERC20',
+            options: {
+              address: '0x0000000000000000000000000000000000000000',
+              symbol: 'DUMM',
+              decimals: 18,
+            },
+          },
+        })
         .then(() => true)
         .catch(() => true)) // they support the method even if the dummy call fails
     )
