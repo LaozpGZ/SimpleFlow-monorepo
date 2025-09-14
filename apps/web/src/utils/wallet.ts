@@ -13,11 +13,18 @@ export const checkWalletCanRegisterToken = async (connector: Connector) => {
       (await provider
         .request({ method: 'wallet_watchAsset', params: {} })
         .then(() => true)
-        .catch(() => true)) // they support the method even if the dummy call fails
+        .catch((err: any) => {
+          if (err?.code === -32601 || err?.code === -32004) {
+            throw err
+          }
+          return true // they support the method even if the dummy call fails
+        }))
     )
   } catch (error: any) {
     // If the provider rejects "unknown method", it doesn’t support asset registration
-    if (error?.code === -32601) return false
+    if (error?.code === -32601 || error?.code === -32004) {
+      return false
+    }
     console.error(error, 'Error while checking wallet token registration support')
     return false
   }
