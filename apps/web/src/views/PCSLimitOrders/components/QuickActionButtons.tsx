@@ -10,6 +10,7 @@ import {
   presetPercentMapAtom,
   setPercentDifferenceAtom,
 } from '../state/form/quickActionAtoms'
+import { DEFAULT_PERCENTAGE_MAP } from '../constants'
 
 // Quick Select Styles
 const ButtonsContainer = styled(FlexGap).attrs({ gap: '8px' })`
@@ -118,27 +119,17 @@ export const QuickActionButtons = () => {
           {t('Market')}
         </QuickActionButton>
 
-        <QuickActionButton
-          onClick={() => setPercentDifference(1)}
-          $isActive={percentage === presetPercentMap[1]}
-          width="100%"
-        >
-          +1%
-        </QuickActionButton>
-        <QuickActionButton
-          onClick={() => setPercentDifference(5)}
-          $isActive={percentage === presetPercentMap[5]}
-          width="100%"
-        >
-          +5%
-        </QuickActionButton>
-        <QuickActionButton
-          onClick={() => setPercentDifference(10)}
-          $isActive={percentage === presetPercentMap[10]}
-          width="100%"
-        >
-          +10%
-        </QuickActionButton>
+        {Object.keys(DEFAULT_PERCENTAGE_MAP).map((item) => {
+          return (
+            <QuickActionButton
+              onClick={() => setPercentDifference(Number(item))}
+              $isActive={percentage === presetPercentMap[item]}
+              width="100%"
+            >
+              +{item}%
+            </QuickActionButton>
+          )
+        })}
 
         {!isSmallScreen && (
           <CustomInputContainer width="120%" minWidth="110px">
