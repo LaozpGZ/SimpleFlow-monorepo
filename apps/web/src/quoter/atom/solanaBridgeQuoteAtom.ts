@@ -19,14 +19,13 @@ export const solanaBridgeQuoteAtom = atomFamily(
       const { inputAmount, outputCurrency, recipientOnDestChain } = params
       const slippageToleranceEVM = get(userSlippageAtomWithLocalStorage)
       const slippageToleranceSolana = get(solanaUserSlippageAtomWithLocalStorage)
-      const accountState = get(accountActiveChainAtom)
+      const { account, solanaAccount } = get(accountActiveChainAtom)
 
       if (recipientOnDestChain && isSolana(outputCurrency.chainId) && !isValidSolanaAddress(recipientOnDestChain)) {
         throw new BridgeTradeError('Invalid recipient')
       }
 
-      const recipientAddress =
-        recipientOnDestChain || (isSolana(outputCurrency.chainId) ? accountState.solanaAccount : accountState.account)
+      const recipientAddress = recipientOnDestChain || (isSolana(outputCurrency.chainId) ? solanaAccount : account)
 
       const metadata = await postSolanaEVMBridgeMetadata({
         inputToken: getUnifiedTokenAddress(inputAmount.currency),
@@ -34,7 +33,7 @@ export const solanaBridgeQuoteAtom = atomFamily(
         outputToken: getUnifiedTokenAddress(outputCurrency),
         destinationChainId: outputCurrency.chainId,
         amount: inputAmount.quotient.toString(),
-        user: isSolana(inputAmount.currency.chainId) ? accountState.solanaAccount : accountState.account,
+        user: isSolana(inputAmount.currency.chainId) ? solanaAccount : account,
         recipientOnDestChain: recipientAddress,
         slippageTolerance: isSolana(inputAmount.currency.chainId)
           ? slippageToleranceSolana.toString()

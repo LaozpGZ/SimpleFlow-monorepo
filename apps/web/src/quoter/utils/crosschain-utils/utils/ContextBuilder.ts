@@ -46,9 +46,9 @@ export class ContextBuilder {
     const { destinationBlockNumber, gasLimitDestinationChain, infinitySwap, ..._option } = option
 
     const swapState = get(swapReducerAtom) as SwapReducerState
-    const accountState = get(accountActiveChainAtom) as AccountChainState
+    const { account: evmAccount, solanaAccount } = get(accountActiveChainAtom) as AccountChainState
 
-    const account = isSolana(_option.currency?.chainId) ? accountState.solanaAccount : accountState.account
+    const account = isSolana(_option.currency?.chainId) ? solanaAccount : evmAccount
 
     const recipientOnDestChain = (swapState.recipient === null ? account : swapState.recipient) || undefined
 
