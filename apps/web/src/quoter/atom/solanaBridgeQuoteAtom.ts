@@ -6,11 +6,12 @@ import { BridgeTradeError } from 'quoter/quoter.types'
 import { getUnifiedTokenAddress, postSolanaEVMBridgeMetadata } from 'views/Swap/Bridge/api'
 import { BridgeMetadataParams } from 'views/Swap/Bridge/types'
 import { InterfaceOrder } from 'views/Swap/utils'
-import { isSolana } from '@pancakeswap/chains'
+import { ChainId, isSolana } from '@pancakeswap/chains'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 import { solanaTokens, USDC } from '@pancakeswap/tokens'
 import { solanaUserSlippageAtomWithLocalStorage, userSlippageAtomWithLocalStorage } from '@pancakeswap/utils/user'
 import { isValidSolanaAddress } from 'utils/isValidSolanaAddress'
+import { calculateBridgeFeeAmount } from 'quoter/utils/crosschain-utils/utils/calculateBridgeFeeAmount'
 import { atomWithLoadable } from './atomWithLoadable'
 
 export const solanaBridgeQuoteAtom = atomFamily(
@@ -49,11 +50,13 @@ export const solanaBridgeQuoteAtom = atomFamily(
         metadata.bridgeTransactionData.outputAmount,
       ) as CurrencyAmount<Currency>
 
-      const stableCoin = isSolana(inputAmount.currency.chainId) ? solanaTokens.usdc : USDC[inputAmount.currency.chainId]
+      const stableCoin = isSolana(inputAmount.currency.chainId)
+        ? solanaTokens.usdc
+        : USDC[inputAmount.currency.chainId as ChainId]
 
       const bridgeFee = CurrencyAmount.fromRawAmount(
         stableCoin,
-        Math.abs(Number(metadata.bridgeTransactionData.totalRelayFee)) * 10 ** Number(stableCoin.decimals),
+        calculateBridgeFeeAmount(metadata.bridgeTransactionData.totalRelayFee, stableCoin.decimals),
       )
 
       const bridgeQuote: InterfaceOrder = {
