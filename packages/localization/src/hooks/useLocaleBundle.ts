@@ -6,10 +6,12 @@ import { extendEnList } from '../config/extendList'
 export const useLocaleBundle = () => {
   const lang = getLanguageCodeFromLS()
   const [state, setState] = useState<{
+    language: string
     bundle: Record<string, string>
     ver: number
     isFetching: boolean
   }>({
+    language: lang,
     bundle: extendEnList,
     ver: 0,
     isFetching: !i18n.hasResourceBundle(lang, 'translation'),
@@ -21,6 +23,7 @@ export const useLocaleBundle = () => {
       if (localeData) {
         i18n.addResourceBundle(lang, 'translation', localeData, true, true)
         setState((prev) => ({
+          language: lang,
           bundle: localeData,
           ver: prev.ver + 1,
           isFetching: false,
@@ -29,6 +32,7 @@ export const useLocaleBundle = () => {
       }
     }
     setState((prev) => ({
+      language: lang,
       bundle: i18n.getResourceBundle(lang, 'translation') || extendEnList,
       ver: prev.ver + 1,
       isFetching: false,
@@ -39,6 +43,12 @@ export const useLocaleBundle = () => {
     switchBundle(lang)
   }, [lang, switchBundle])
 
-  const { bundle, ver, isFetching } = state
-  return { lang, bundle, ver, isFetching, refresh: () => setState((p) => ({ ...p, ver: p.ver + 1 })) }
+  const { language, bundle, ver, isFetching } = state
+  return {
+    lang: language,
+    bundle,
+    ver,
+    isFetching,
+    refresh: useCallback(() => setState((p) => ({ ...p, ver: p.ver + 1 })), []),
+  }
 }

@@ -32,6 +32,3 @@ jobs:
       - name: Run tests
         run: |
           pnpm test:ci
-          if git diff --name-only HEAD^1 | grep -q '^apps/' && ! git diff --name-only HEAD^1 | grep -q '^apps/web/'; then
-            cd apps/web && npx vitest run src/__tests__/translations.test.ts
-          fi

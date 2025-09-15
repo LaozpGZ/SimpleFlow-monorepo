@@ -598,5 +598,56 @@
   },
   "twap.srcTokenForDstToken": {
     "value": "{srcAmount} {srcToken} for {dstAmount} {dstToken}"
+  },
+  "solana.add_liquidity": {
+    "value": "Add Liquidity"
+  },
+  "solana.harvest_rewards": {
+    "value": "Harvest Rewards"
+  },
+  "solana.harvest_clmm_rewards": {
+    "value": "Harvest CLMM Rewards"
+  },
+  "solana.added_liquidity_desc": {
+    "value": "Added %amountA% %symbolA% and %amountB% %symbolB%."
+  },
+  "solana.position_closed": {
+    "value": "Position Closed"
+  },
+  "solana.close_mint_position": {
+    "value": "Close %mint% position."
+  },
+  "solana.remove_liquidity": {
+    "value": "Remove Liquidity"
+  },
+  "solana.removed_liquidity_desc": {
+    "value": "Removed %amountA% %symbolA% and %amountB% %symbolB%."
+  },
+  "solana.update_rewards": {
+    "value": "Update Rewards"
+  },
+  "solana.update_rewards_in_pool": {
+    "value": "Update rewards in %pool%."
+  },
+  "solana.create_pool": {
+    "value": "Create Pool"
+  },
+  "solana.create_v3_pool": {
+    "value": "Create V3 pool"
+  },
+  "solana.create_new_farm": {
+    "value": "Create New Farm"
+  },
+  "solana.farm_id": {
+    "value": "ID: %poolId%"
+  },
+  "solana.harvested_symbol": {
+    "value": "Harvested: %symbol%"
+  },
+  "solana.lock_position": {
+    "value": "Lock Position"
+  },
+  "solana.position_locked": {
+    "value": "Position %position% locked"
   }
 }

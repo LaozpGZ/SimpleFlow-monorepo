@@ -6,10 +6,11 @@ import { LS_KEY } from './helpers'
 import { ContextApi, Language, TranslateFunction } from './types'
 import { useLocaleBundle } from './hooks/useLocaleBundle'
 import { extendEnList } from './config/extendList'
+import { LRU } from './lru'
 
 export const LanguageContext = createContext<ContextApi | undefined>(undefined)
 
-const cache = new Map<string, string>()
+const cache = new LRU<string, string>({})
 
 export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }) => {
   const { lang, bundle, ver, refresh, isFetching } = useLocaleBundle()
@@ -43,19 +44,24 @@ export const LanguageProvider: React.FC<React.PropsWithChildren> = ({ children }
       if (isFetching) {
         return ''
       }
-      const cacheKey = `${lang}:${ver}:${key}-${JSON.stringify(data)}`
-      if (cache.has(cacheKey)) {
+      const cacheKey = data ? `${lang}:${ver}:${key}-${JSON.stringify(data)}` : undefined
+
+      if (cacheKey && cache.has(cacheKey)) {
         return cache.get(cacheKey) || ''
       }
 
       const value = bundle[key] || extendEnList[key] || key
 
-      const interpolated = value.replace(/%([a-zA-Z0-9-_]+)%/g, (match, p1) => {
-        const replacement = data?.[p1]
-        return replacement === undefined ? match : String(replacement)
-      })
-      cache.set(cacheKey, interpolated)
-      return interpolated
+      if (cacheKey) {
+        const interpolated = value.replace(/%([a-zA-Z0-9-_]+)%/g, (match, p1) => {
+          const replacement = data?.[p1]
+          return replacement === undefined ? match : String(replacement)
+        })
+        cache.set(cacheKey, interpolated)
+        return interpolated
+      }
+
+      return value
     },
     [bundle, lang, ver, isFetching],
   )
