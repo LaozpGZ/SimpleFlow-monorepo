@@ -210,12 +210,14 @@ const useConfirmActions = (
     setErrorMessage(undefined)
     setPermit2Signature(undefined)
     resumeQuoting()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const showError = useCallback((error: string) => {
     setErrorMessage(error)
     setTxHash(undefined)
     setPermit2Signature(undefined)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const retryWaitForTransaction = useCallback(
@@ -731,17 +733,19 @@ const useConfirmActions = (
               )
             }
           } else {
-            showError(t('Failed to generate bridge transaction'))
+            showError(t(`Solana Bridge Submission Unsuccessful. Please contact support.`))
           }
         } catch (error) {
           if (userRejectedError(error)) {
             showError(t('Transaction rejected'))
+          } else if (process.env.NODE_ENV !== 'production') {
+            showError(`Solana Bridge Error: ${typeof error === 'string' ? error : (error as any)?.message}`)
           } else {
-            // if not production, show the error message
-            // if (!process.env.NODE_ENV === 'production') {
-            showError(typeof error === 'string' ? error : (error as any)?.message)
-            // }
-            // showError(t('Failed to generate bridge transaction. Please adjust the slippage and try again.'))
+            showError(
+              t(
+                'Solana Bridge Submission Unsuccessful. Please adjust the slippage and try again. If the problem persists, please contact support.',
+              ),
+            )
           }
         }
       },
@@ -934,6 +938,7 @@ const useConfirmActions = (
       [ConfirmModalState.ORDER_SUBMITTED]: orderSubmittedStep,
     } as { [k in ConfirmModalState]: ConfirmAction }
   }, [
+    swapBridgeFromSolanaToEVMStep,
     revokeStep,
     permitStep,
     approveStep,
