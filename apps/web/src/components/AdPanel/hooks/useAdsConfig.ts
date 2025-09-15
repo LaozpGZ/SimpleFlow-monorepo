@@ -24,7 +24,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
       id: AdsIds.LISTA,
       priority: Priority.HIGH,
       ad: {
-        img: getImageUrl(isMobile ? 'lista-mobile' : 'lista'),
+        img: getImageUrl(isMobile ? 'lista-campaign-mobile' : 'lista-campaign'),
         texts: [
           {
             text: isMobile
