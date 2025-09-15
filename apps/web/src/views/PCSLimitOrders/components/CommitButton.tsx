@@ -24,10 +24,13 @@ import { formattedAmountsAtom } from '../state/form/inputAtoms'
 import { Field } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { amountReceivedAtom, feesEarnedUSDAtom } from '../state/form/tradeDetailsAtoms'
+import { commitButtonEnabledAtom } from '../state/form/validationAtoms'
 
 export const CommitButton = () => {
   const { t } = useTranslation()
   const { isOpen, onDismiss, onOpen } = useModalV2()
+
+  const enabled = useAtomValue(commitButtonEnabledAtom)
 
   /** Look at existing commit buttons for states.
    * Such as: Connect Wallet, Switch Network, Approve Tokens (need an extra button on top), etc.
@@ -36,7 +39,9 @@ export const CommitButton = () => {
   return (
     <>
       <Suspense>
-        <Button onClick={onOpen}>{t('Place Limit Order')}</Button>
+        <Button onClick={onOpen} disabled={!enabled}>
+          {t('Place Limit Order')}
+        </Button>
       </Suspense>
       <PreviewModal isOpen={isOpen} onDismiss={onDismiss} />
     </>
@@ -70,7 +75,8 @@ const ConfirmOrderContent = () => {
   const outputCurrency = useAtomValue(outputCurrencyAtom)
   const formattedAmounts = useAtomValue(formattedAmountsAtom)
 
-  const feesEarnedUSD = useAtomValue(feesEarnedUSDAtom)
+  const feesEarnedData = useAtomValue(feesEarnedUSDAtom)
+  const feesEarnedUSD = feesEarnedData?.feesEarnedUSD
   const amountReceived = useAtomValue(amountReceivedAtom)
 
   const [isInverted, setIsInverted] = useState(false)

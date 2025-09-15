@@ -1,9 +1,10 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { FlexGap, Button, useMatchBreakpoints, RowBetween, Text, Box, Input } from '@pancakeswap/uikit'
+import { FlexGap, Button, useMatchBreakpoints, RowBetween, Text, Box, Input, Message, Link } from '@pancakeswap/uikit'
 import styled from 'styled-components'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { ChangeEvent, Suspense, useCallback, useEffect, useState } from 'react'
 import { BigNumber as BN } from 'bignumber.js'
+import currencyId from 'utils/currencyId'
 import { customMarketPriceAtom } from '../state/form/marketPriceAtoms'
 import {
   differencePercentageAtom,
@@ -11,6 +12,7 @@ import {
   setPercentDifferenceAtom,
 } from '../state/form/quickActionAtoms'
 import { DEFAULT_PERCENTAGE_MAP } from '../constants'
+import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 
 // Quick Select Styles
 const ButtonsContainer = styled(FlexGap).attrs({ gap: '8px' })`
@@ -87,11 +89,16 @@ export const QuickActionButtons = () => {
 
   const [localPercent, setLocalPercent] = useState('')
 
+  const inputCurrency = useAtomValue(inputCurrencyAtom)
+  const outputCurrency = useAtomValue(outputCurrencyAtom)
+
   const percentage = useAtomValue(differencePercentageAtom)
   const presetPercentMap = useAtomValue(presetPercentMapAtom)
 
   const setCustomMarketPrice = useSetAtom(customMarketPriceAtom)
   const setPercentDifference = useSetAtom(setPercentDifferenceAtom)
+
+  const showLowPriceWarning = percentage && Number(percentage) < 0
 
   const handleCustomInput = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value
@@ -168,6 +175,32 @@ export const QuickActionButtons = () => {
             </PercentageLabel>
           </CustomInputContainer>
         </RowBetween>
+      )}
+      {showLowPriceWarning && (
+        <Message variant="warning" mt="2px">
+          <Box>
+            <Text as="span" small>
+              <span>
+                {t(
+                  'Limit price is %percent%% lower than market, you are selling at a much lower rate. We recommend that you use',
+                  { percent: Math.abs(Number(percentage ?? 0)) },
+                )}
+              </span>
+              <span>
+                <Link
+                  href={`/swap?inputCurrencyId=${currencyId(inputCurrency)}&outputCurrencyId=${currencyId(
+                    outputCurrency,
+                  )}`}
+                  color="primary60"
+                  small
+                >
+                  {t('Swap')}
+                </Link>
+              </span>
+              <span>{t('instead.')}</span>
+            </Text>
+          </Box>
+        </Message>
       )}
     </Suspense>
   )

@@ -15,7 +15,7 @@ export const ticksAtom = atom(async (get) => {
   if (!selectedPool || !selectedPool.pool) return undefined
 
   const {
-    pool: { tickSpacing },
+    pool: { tickSpacing, tickCurrent },
   } = selectedPool
 
   // Get price for limit order
@@ -31,23 +31,14 @@ export const ticksAtom = atom(async (get) => {
   const targetTick = tryParseTick(price, tickSpacing)
   if (!targetTick) return undefined
 
-  const tickLower = targetTick
-  const tickUpper = targetTick + tickSpacing
+  // Calculate tickLower and tickUpper
+  const zeroForOne = tickCurrent > targetTick
+
+  const tickLower = zeroForOne ? targetTick : targetTick - tickSpacing
+  const tickUpper = zeroForOne ? targetTick + tickSpacing : targetTick
 
   const priceLower = tickToPrice(inputCurrency, outputCurrency, tickLower)
   const priceUpper = tickToPrice(inputCurrency, outputCurrency, tickUpper)
-
-  // Calculate tickLower and tickUpper
-  // const zeroForOne = tickCurrent > targetTick
-
-  // TODO: Verify this logic if we need to consider direction at all
-  // const tickLower = zeroForOne ? targetTick : targetTick - tickSpacing
-  // const tickUpper = zeroForOne ? targetTick + tickSpacing : targetTick
-
-  // Special Case: current tick is between targetTick and targetTick + tickSpacing
-  // if (targetTick < tickCurrent && tickCurrent < targetTick + tickSpacing) {
-  //   return { tickLower: targetTick, tickUpper: targetTick + tickSpacing }
-  // }
 
   return { tickLower, tickUpper, priceLower, priceUpper }
 })

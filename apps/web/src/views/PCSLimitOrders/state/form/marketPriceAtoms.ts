@@ -39,6 +39,8 @@ export const currentMarketPriceAtom = atomWithQuery((get) => ({
       quoteId: `limit-order-${Date.now()}`,
     })
 
+    // TODO: TICK-ADJUST +/- 1 depending on zeroForOne direction, so that price shown is not exactly at current tick
+
     const outputAmount = bestTrade?.outputAmountWithGasAdjusted
     return formatAmount(outputAmount, 6)
   },

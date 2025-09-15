@@ -1,6 +1,6 @@
-import { Box, IconButton, Input, SwapHorizIcon, Text } from '@pancakeswap/uikit'
+import { appearAnimation, Box, ErrorIcon, IconButton, Input, Message, SwapHorizIcon, Text } from '@pancakeswap/uikit'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import { ChangeEvent, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import { formatDollarAmount } from 'views/V3Info/utils/numbers'
@@ -62,6 +62,17 @@ const InputLeftBox = styled(Box)`
   top: 48%;
 `
 
+const messageAnimation = keyframes`
+  from { opacity: 0.2; transform: translateY(-3px); }
+  to { opacity: 1; transform: translateY(0); }
+`
+const MessageContainer = styled(Box)`
+  opacity: 0.2;
+  transform: translateY(0);
+  transform-origin: top;
+  animation: ${messageAnimation} 0.2s ease-out forwards;
+`
+
 function truncateString(str: string, maxLength: number) {
   if (!str || typeof str !== 'string') return ''
   if (str.length < maxLength) return str
@@ -79,7 +90,9 @@ export const MarketPriceInput = () => {
   const { data: currentMarketPrice } = useAtomValue(currentMarketPriceAtom)
 
   const [customMarketPrice, setCustomMarketPrice] = useAtom(customMarketPriceAtom)
+
   const [localPrice, setLocalPrice] = useState(currentMarketPrice)
+  const [isFocused, setIsFocused] = useState(false)
 
   const tokenPriceUSD = useStablecoinPrice(outputCurrency, { enabled: !!outputCurrency })
   const usdValue = useMemo(() => {
@@ -151,6 +164,8 @@ export const MarketPriceInput = () => {
     // TODO: Based on zeroForOne direction, adjust price ticks up or down
     const adjustedPrice = tickToPrice(inputCurrency, outputCurrency, nearestTick)
 
+    // TODO:  UPDATE: Adjust according to average price from priceLower and priceUpper
+
     setCustomMarketPrice(adjustedPrice.toSignificant(6))
     setLocalPrice(adjustedPrice.toSignificant(6))
   }, [pool, inputCurrency, outputCurrency, localPrice, setLocalPrice, setCustomMarketPrice])
@@ -183,7 +198,11 @@ export const MarketPriceInput = () => {
           type="number"
           value={localPrice}
           onChange={handleCustomMarketPriceInput}
-          onBlur={handleInputAdjust}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => {
+            setIsFocused(false)
+            handleInputAdjust()
+          }}
           onKeyDown={(e) => {
             if (e.code === 'Enter') {
               e.currentTarget.blur()
@@ -199,6 +218,17 @@ export const MarketPriceInput = () => {
           </InputBottomBar>
         )}
       </InputContainer>
+      {isFocused && (
+        <MessageContainer>
+          <Message variant="primary60" icon={<ErrorIcon width="24px" height="24px" color="v2Primary60" />}>
+            <Text color="black" small>
+              {t(
+                'Limit price will be rounded to the nearest tick because orders are placed by adding liquidity to a CLAMM pool.',
+              )}
+            </Text>
+          </Message>
+        </MessageContainer>
+      )}
     </Suspense>
   )
 }

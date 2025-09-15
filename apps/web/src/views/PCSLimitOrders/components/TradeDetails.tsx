@@ -8,7 +8,8 @@ export const TradeDetails = (props: BoxProps) => {
   const { t } = useTranslation()
   const outputCurrency = useAtomValue(outputCurrencyAtom)
 
-  const feesEarnedUSD = useAtomValue(feesEarnedUSDAtom)
+  const feesEarnedData = useAtomValue(feesEarnedUSDAtom)
+  const feesEarnedUSD = feesEarnedData?.feesEarnedUSD
   const amountReceived = useAtomValue(amountReceivedAtom)
 
   return (

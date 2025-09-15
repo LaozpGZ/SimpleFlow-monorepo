@@ -66,6 +66,8 @@ const dependentAmountAtom = atom(async (get) => {
       quoteId: `limit-order-${Date.now()}`,
     })
 
+    // TODO: TICK-ADJUST +/- 1 depending on zeroForOne direction, so that price shown is not exactly at current tick
+
     console.debug('Limit Orders bestTrade', bestTrade)
 
     const result =

@@ -1,5 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Skeleton, Text } from '@pancakeswap/uikit'
+import { ErrorIcon, Message, Skeleton, Text } from '@pancakeswap/uikit'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
 import { FlipButton } from 'components/FlipButton'
 import { useAtomValue, useSetAtom } from 'jotai'
@@ -25,6 +25,9 @@ export const LimitOrderForm = () => {
   const setInput = useSetAtom(setInputAtom)
   const setCurrency = useSetAtom(setCurrencyAtom)
   const flipCurrencies = useSetAtom(flipCurrenciesAtom)
+
+  // TODO: Implement in separate atom
+  const showMinimumUSDWarning = false
 
   const handleInput = useCallback(
     (field: Field, value: string | undefined) => {
@@ -58,6 +61,18 @@ export const LimitOrderForm = () => {
             showMaxButton
           />
         </Suspense>
+        {showMinimumUSDWarning && (
+          <Message
+            variant="danger"
+            padding="12px"
+            style={{ borderRadius: '20px' }}
+            icon={<ErrorIcon color="destructive" width="24px" height="24px" />}
+          >
+            <Text lineHeight="1.8" small>
+              {t('Order Size must meet a minimum of 50 USD')}
+            </Text>
+          </Message>
+        )}
         <FlipButton onFlip={flipCurrencies} />
         <Suspense fallback={<Skeleton animation="pulse" variant="round" width="100%" height="80px" />}>
           <CurrencyInputPanelSimplify

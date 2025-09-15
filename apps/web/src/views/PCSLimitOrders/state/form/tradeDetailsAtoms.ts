@@ -50,7 +50,7 @@ export const feesEarnedUSDAtom = atom(async (get) => {
   const outputCurrencyPrice = await get(currencyUSDPriceAtom(outputCurrency))
   const feesEarnedUSD = feesEarned.multipliedBy(BN(outputCurrencyPrice))
 
-  return feesEarnedUSD
+  return { feesEarned, feesEarnedUSD }
 })
 
 /**
@@ -60,10 +60,17 @@ export const amountReceivedAtom = atom(async (get) => {
   const outputReceived = await get(outputReceivedAtom)
   if (!outputReceived) return undefined
 
-  const feesEarnedUSD = await get(feesEarnedUSDAtom)
-  if (!feesEarnedUSD) return undefined
+  const feesEarnedData = await get(feesEarnedUSDAtom)
+  if (!feesEarnedData) return undefined
 
-  const amountReceived = outputReceived.plus(feesEarnedUSD)
+  const { feesEarned } = feesEarnedData
+
+  console.log('amountReceivedAtom', {
+    outputReceived: outputReceived.toString(),
+    feesEarned: feesEarned.toString(),
+  })
+
+  const amountReceived = outputReceived.plus(feesEarned)
 
   return amountReceived
 })
