@@ -10,12 +10,12 @@ export const useLocaleBundle = () => {
     bundle: Record<string, string>
     ver: number
     isFetching: boolean
-  }>({
+  }>(() => ({
     language: lang,
     bundle: extendEnList,
     ver: 0,
     isFetching: !i18n.hasResourceBundle(lang, 'translation'),
-  })
+  }))
   const switchBundle = useCallback(async (lang: string) => {
     if (!i18n.hasResourceBundle(lang, 'translation')) {
       setState((prev) => ({ ...prev, isFetching: true }))
