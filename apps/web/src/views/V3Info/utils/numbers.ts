@@ -10,7 +10,7 @@ export const formatDollarAmount = (num: number | undefined, digits = 2, round = 
 
   const formatted = Intl.NumberFormat('en-US', {
     notation: round ? 'compact' : 'standard',
-    minimumFractionDigits: 0, // Allow no decimal places
+    minimumFractionDigits: num > 1000 ? 2 : digits,
     maximumFractionDigits: num > 1000 ? 2 : digits,
     style: 'currency',
     currency: 'USD',
