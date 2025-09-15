@@ -737,7 +737,11 @@ const useConfirmActions = (
           if (userRejectedError(error)) {
             showError(t('Transaction rejected'))
           } else {
-            showError(t('Failed to generate bridge transaction. Please adjust the slippage and try again.'))
+            // if not production, show the error message
+            // if (!process.env.NODE_ENV === 'production') {
+            showError(typeof error === 'string' ? error : (error as any)?.message)
+            // }
+            // showError(t('Failed to generate bridge transaction. Please adjust the slippage and try again.'))
           }
         }
       },
