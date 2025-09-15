@@ -34,7 +34,7 @@ const getAdsConfigs = (t: ContextApi['t'], isMobile: boolean): AdsCampaignConfig
         ],
         btn: {
           text: t('Borrow here'),
-          link: '',
+          link: 'https://lista.org/borrow-lisusd',
           mt: !isMobile ? '8px' : undefined,
         },
         ...(isMobile && {
