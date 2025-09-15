@@ -181,7 +181,9 @@ export const farmsSearchV2Atom = atomFamily((query) => {
     return {
       list: resultList.map((list) => {
         for (const pool of list) {
-          pool.farm!.inWhitelist = checkWhitelist(pool.farm!)
+          if (pool.farm) {
+            pool.farm.inWhitelist = checkWhitelist(pool.farm)
+          }
         }
         return list
       }),
