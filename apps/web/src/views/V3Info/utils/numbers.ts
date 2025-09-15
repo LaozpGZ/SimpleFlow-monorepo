@@ -18,8 +18,10 @@ export const formatDollarAmount = (num: number | undefined, digits = 2, round = 
 
   // More robust trimming of trailing zeros
   if (formatted.includes('.')) {
+    // Handle compact notation (e.g., "$1.50K" -> "$1.5K", "$1.00K" -> "$1K")
     // Remove trailing zeros after decimal point, then remove decimal point if no digits remain
-    return formatted.replace(/\.?0+$/, '').replace(/\.$/, '')
+    // This regex handles both regular numbers and compact notation
+    return formatted.replace(/(\.\d*?)0+([KMB]?)$/, '$1$2').replace(/\.([KMB]?)$/, '$1')
   }
 
   return formatted
