@@ -3,7 +3,7 @@ import { useUserSlippage } from '@pancakeswap/utils/user'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { BridgeOrderWithCommands, isBridgeOrder } from 'views/Swap/utils'
 import { Calldata } from 'hooks/usePermit2'
-import { isSolana } from '@pancakeswap/chains'
+import { isEvm, isSolana } from '@pancakeswap/chains'
 import { getSolanaBridgeCalldata } from '../api'
 import { RELAY_STEP_ID } from '../types'
 
@@ -24,7 +24,10 @@ export const useEVMToSolanaBridgeCalldata = ({
   const { account, solanaAccount } = useAccountActiveChain()
   const [allowedSlippage] = useUserSlippage()
 
-  const enabled = isBridgeOrder(order) && isSolana(order?.trade?.outputAmount?.currency?.chainId)
+  const isEvmToSolanaBridge =
+    isBridgeOrder(order) &&
+    isEvm(order?.trade?.inputAmount?.currency?.chainId) &&
+    isSolana(order?.trade?.outputAmount?.currency?.chainId)
 
   const { data } = useQuery<
     {
@@ -37,11 +40,14 @@ export const useEVMToSolanaBridgeCalldata = ({
   >({
     queryKey: [
       'evm-to-solana-bridge-calldata',
+      order?.trade?.inputAmount?.currency?.symbol,
       order?.trade?.inputAmount?.currency?.chainId,
+      order?.trade?.outputAmount?.currency?.symbol,
       order?.trade?.outputAmount?.currency?.chainId,
-      order?.trade?.outputAmount?.quotient?.toString(),
+      order?.trade?.inputAmount?.quotient?.toString(),
       solanaAccount,
       account,
+      allowedSlippage,
     ],
     queryFn: async () => {
       if (!order || !solanaAccount || !account) {
@@ -70,7 +76,7 @@ export const useEVMToSolanaBridgeCalldata = ({
         }
       })
     },
-    enabled: enabled && !!order && !!account && !!solanaAccount,
+    enabled: isEvmToSolanaBridge && !!order && !!account && !!solanaAccount,
     retry: 3,
     refetchOnWindowFocus: false,
   })
