@@ -81,10 +81,10 @@ export const OrderResultModalContent = ({ overrideActiveOrderMetadata, ...props 
   const activeBridgeOrderMetadata = useAtomValue(activeBridgeOrderMetadataAtom)
   const bridgeMetadata = overrideActiveOrderMetadata || activeBridgeOrderMetadata
   const swapState = useAtomValue(swapReducerAtom)
-  const accountState = useAtomValue(accountActiveChainAtom)
+  const { account: evmAccount, solanaAccount } = useAtomValue(accountActiveChainAtom)
 
-  const sendAccount = isSolana(swapState[Field.INPUT].chainId) ? accountState.solanaAccount : accountState.account
-  const receiveAccount = isSolana(swapState[Field.OUTPUT].chainId) ? accountState.solanaAccount : accountState.account
+  const sendAccount = isSolana(swapState[Field.INPUT].chainId) ? solanaAccount : evmAccount
+  const receiveAccount = isSolana(swapState[Field.OUTPUT].chainId) ? solanaAccount : evmAccount
 
   let recipientOnDestChain: string | undefined
 
