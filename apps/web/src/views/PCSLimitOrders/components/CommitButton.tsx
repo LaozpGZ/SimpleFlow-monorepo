@@ -1,6 +1,5 @@
 import { useTranslation } from '@pancakeswap/localization'
 import {
-  Alert,
   ArrowForwardIcon,
   AutoColumn,
   Box,
@@ -8,17 +7,13 @@ import {
   ErrorIcon,
   FlexGap,
   IconButton,
-  InfoIcon,
   Message,
-  MessageText,
-  Modal,
   ModalV2,
   MotionModal,
   RowBetween,
   SwapHorizIcon,
   Text,
   useModalV2,
-  WarningIcon,
 } from '@pancakeswap/uikit'
 import { DualCurrencyDisplay, LightGreyCard } from '@pancakeswap/widgets-internal'
 import { useAtomValue } from 'jotai'
@@ -28,6 +23,7 @@ import { BigNumber as BN } from 'bignumber.js'
 import { formattedAmountsAtom } from '../state/form/inputAtoms'
 import { Field } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
+import { amountReceivedAtom, feesEarnedUSDAtom } from '../state/form/tradeDetailsAtoms'
 
 export const CommitButton = () => {
   const { t } = useTranslation()
@@ -74,6 +70,9 @@ const ConfirmOrderContent = () => {
   const outputCurrency = useAtomValue(outputCurrencyAtom)
   const formattedAmounts = useAtomValue(formattedAmountsAtom)
 
+  const feesEarnedUSD = useAtomValue(feesEarnedUSDAtom)
+  const amountReceived = useAtomValue(amountReceivedAtom)
+
   const [isInverted, setIsInverted] = useState(false)
   const quotePrice = useMemo(() => {
     const amountA = BN(formattedAmounts[Field.CURRENCY_A])
@@ -82,7 +81,7 @@ const ConfirmOrderContent = () => {
   }, [isInverted, formattedAmounts])
 
   return (
-    <Box mt="8px">
+    <Box mt="4px">
       <Box px="32px">
         <DualCurrencyDisplay
           inputCurrency={inputCurrency ?? undefined}
@@ -117,14 +116,14 @@ const ConfirmOrderContent = () => {
             <Text color="textSubtle" small>
               {t('Fees Earned')}
             </Text>
-            <Text small>$9.99</Text>
+            <Text small>{feesEarnedUSD ? `$${feesEarnedUSD.toFormat(2)}` : '-'}</Text>
           </RowBetween>
 
           <RowBetween>
             <Text color="textSubtle" small>
               {t('Amount Received')}
             </Text>
-            <Text small>9.99 {outputCurrency?.symbol}</Text>
+            <Text small>{amountReceived ? `${amountReceived.toFormat(2)} ${outputCurrency?.symbol}` : '-'}</Text>
           </RowBetween>
         </AutoColumn>
       </LightGreyCard>

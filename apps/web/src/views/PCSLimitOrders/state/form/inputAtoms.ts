@@ -33,7 +33,7 @@ const dependentAmountAtom = atom(async (get) => {
 
   if (!independentAmount || !baseCurrency || !quoteCurrency || !inputCurrency || !outputCurrency) return undefined
 
-  // Handle custom market price scenario
+  // Handle custom market price
   if (customMarketPrice !== undefined) {
     const customMarketPriceBN = BN(customMarketPrice)
     if (customMarketPriceBN.lte(0) || customMarketPriceBN.isNaN() || !customMarketPriceBN.isFinite()) {
@@ -46,7 +46,7 @@ const dependentAmountAtom = atom(async (get) => {
     return tryParseAmount<Token>(amount.toString(), quoteCurrency as Token)
   }
 
-  // Handle normal market price scenario using routing SDK
+  // Handle normal market price using Routing SDK
   const selectedPool = await get(selectedPoolAtom)
   if (!selectedPool || !selectedPool.pool) return undefined
 
@@ -57,8 +57,6 @@ const dependentAmountAtom = atom(async (get) => {
   try {
     const bestTrade = await findBestTrade({
       amount: independentAmount,
-      // For EXACT_INPUT (Field.CURRENCY_A): we have inputAmount, want outputAmount
-      // For EXACT_OUTPUT (Field.CURRENCY_B): we have outputAmount, want inputAmount
       quoteCurrency: independentField === Field.CURRENCY_A ? outputCurrency : inputCurrency,
       tradeType,
       candidatePools: [routingSdkPool],
@@ -68,7 +66,7 @@ const dependentAmountAtom = atom(async (get) => {
       quoteId: `limit-order-${Date.now()}`,
     })
 
-    console.debug('bestTrade', bestTrade)
+    console.debug('Limit Orders bestTrade', bestTrade)
 
     const result =
       tradeType === TradeType.EXACT_INPUT
@@ -104,10 +102,7 @@ export const formattedAmountsAtom = atom(async (get) => {
 })
 
 /// Setters
-export const setInputAtom = atom(null, (get, set, { field, value }: { field: Field; value: string | undefined }) => {
-  // When custom market price is set, allow input in either field without clearing the custom price
-  // The custom price should only be cleared explicitly via clearCustomMarketPriceAtom or when currencies change
-
+export const setInputAtom = atom(null, (_get, set, { field, value }: { field: Field; value: string | undefined }) => {
   set(typedValueAtom, value ?? '')
   set(independentFieldAtom, field)
 })
