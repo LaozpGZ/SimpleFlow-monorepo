@@ -164,24 +164,8 @@ const farmsWithFilledDataAtom = atomFamily((query) => {
 
 export const farmsSearchAtom = atomFamily((query) => {
   return atom((get) => {
-    const sliced = get(farmsWithPagingAtom(query))
-    const withFilledData = get(farmsWithFilledDataAtom(query))
-    const checkWhitelist = isInWhitelist(get(tokensMapAtom).tokensMap)
-
-    const resultList = withFilledData.isPending() ? sliced : withFilledData
-
-    return resultList.map((list) => {
-      for (const pool of list) {
-        const whitelisted = checkWhitelist(pool.farm!)
-        pool.farm!.inWhitelist = whitelisted
-      }
-      const whiteListFarms = list.filter((pool) => pool.farm?.inWhitelist)
-      const nonWhiteListFarms = list.filter((pool) => !pool.farm?.inWhitelist)
-      if (whiteListFarms.length > 0) {
-        return whiteListFarms
-      }
-      return nonWhiteListFarms
-    })
+    const result = get(farmsSearchV2Atom(query))
+    return result.list
   })
 }, isEqual)
 

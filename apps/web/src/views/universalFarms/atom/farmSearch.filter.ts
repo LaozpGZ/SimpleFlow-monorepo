@@ -28,6 +28,9 @@ export const isInWhitelist = (tokensMap: Record<string, TokenInfo>) => {
 }
 
 export const getUnwhitelistedToken = (farm: FarmInfo, tokensMap: Record<string, TokenInfo>): Currency | null => {
+  if (!farm) {
+    return null
+  }
   const [token0, token1] = SmartRouter.getCurrenciesOfPool(farm.pool)
   if (!token0 || !token1) return null
   if (!isTokenWhitelisted(token0, tokensMap)) return token0

@@ -12,7 +12,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { getFarmKey } from 'state/farmsV4/search/farm.util'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { getPoolDetailPageLink } from 'utils/getPoolLink'
-import { farmsSearchAtom, farmsSearchPagingAtom, farmsSearchV2Atom } from './atom/farmsSearchAtom'
+import { farmsSearchPagingAtom, farmsSearchV2Atom } from './atom/farmsSearchAtom'
 import { searchQueryAtom, updateFilterAtom, updateSortAtom } from './atom/searchQueryAtom'
 import {
   Card,
