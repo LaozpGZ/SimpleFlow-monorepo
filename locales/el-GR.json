@@ -4194,5 +4194,6 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Κίνητρα μπορούν πλέον να κερδηθούν ταυτόχρονα ΚΑΙ στην Incentra ΚΑΙ στα Farms.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Κάντε stake το LP token σας στο Farm και αποκομίστε τόσο ανταμοιβές Incentra όσο και Farm.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Διεκδικήστε τις ανταμοιβές Farm σας στο PancakeSwap και τις ανταμοιβές Incentra σας στην",
-  "Incentra's website": "ιστοσελίδα της Incentra."
+  "Incentra's website": "ιστοσελίδα της Incentra.",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Προσοχή: Το %token% είναι επί του παρόντος μη επαληθευμένο. Πάντα να επιβεβαιώνετε τη διεύθυνση και να κάνετε τη δική σας έρευνα πριν κάνετε συναλλαγές ή αλληλεπιδράσετε με αυτό το pool."
 }
