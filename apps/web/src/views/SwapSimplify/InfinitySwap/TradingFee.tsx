@@ -165,11 +165,12 @@ export const TradingFee: React.FC<TradingFeeProps> = memo(({ order, loaded }) =>
 
   const { inputAmount } = order.trade
 
+  // No need to show trading fee for solana bridge, similar to evm bridge
+  if (isSolanaBridge(order)) return null
+
   let feeText: React.ReactNode
 
-  if (isSolanaBridge(order)) {
-    feeText = <SolanaBridgeTradingFee order={order as BridgeOrder} textColor="textSubtle" />
-  } else if (isSVMOrder(order) && inputAmount?.currency?.symbol) {
+  if (isSVMOrder(order) && inputAmount?.currency?.symbol) {
     feeText = <SVMTradingFee routes={order.trade.routes} inputCurrencySymbol={inputAmount.currency.symbol} />
   } else if (isXOrder(order)) {
     feeText = (
