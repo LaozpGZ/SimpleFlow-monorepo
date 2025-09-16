@@ -411,7 +411,7 @@ async function fetchAllPools({
     })
 
     symbols.forEach((symbol) => {
-      params.append('symbols', symbol)
+      params.append('tokenSymbols', symbol)
     })
 
     // Add pagination parameters

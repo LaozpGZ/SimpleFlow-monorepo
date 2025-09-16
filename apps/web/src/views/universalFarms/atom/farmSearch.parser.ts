@@ -32,7 +32,7 @@ const parseFarmSearchAddress = (keywords: string, protocols: Protocol[], chains:
     return [
       {
         protocols,
-        tokens: supportedChainIdV4.map((chain) => `${chain}:${keywords.trim()}`),
+        tokens: chains.map((chain) => `${chain}:${keywords.trim()}`),
         chains: chains as FarmV4SupportedChainId[],
       },
     ].filter((x) => x.tokens && x.tokens.length > 0)
