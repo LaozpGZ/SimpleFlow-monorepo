@@ -14,6 +14,7 @@ import {
 } from '@solana/wallet-adapter-wallets'
 
 export enum EvmConnectorNames {
+  Porto = 'porto',
   MetaMask = 'metaMask',
   Injected = 'injected',
   WalletConnect = 'walletConnect',

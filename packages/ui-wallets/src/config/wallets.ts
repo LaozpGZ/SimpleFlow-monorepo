@@ -54,6 +54,18 @@ export const getWalletsConfig = ({
   }
   const wallets = [
     {
+      id: WalletIds.Porto,
+      title: 'Porto',
+      icon: 'https://porto.sh/icon-light.png',
+      connectorId: EvmConnectorNames.Porto,
+      networks: [WalletAdaptedNetwork.EVM],
+      get installed() {
+        return true
+      },
+      downloadLink: 'https://porto.sh',
+      MEVSupported: true,
+    },
+    {
       id: WalletIds.Metamask,
       title: 'Metamask',
       icon: `${ASSET_CDN}/web/wallets/metamask.png`,
