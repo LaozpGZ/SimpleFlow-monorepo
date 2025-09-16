@@ -733,19 +733,15 @@ const useConfirmActions = (
               )
             }
           } else {
-            showError(t(`Solana Bridge Submission Unsuccessful. Please contact support.`))
+            showError(t(`Transaction was not submitted. Please contact Support.`))
           }
         } catch (error) {
           if (userRejectedError(error)) {
-            showError(t('Transaction rejected'))
+            // do nothing
           } else if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
             showError(`Solana Bridge Error: ${typeof error === 'string' ? error : (error as any)?.message}`)
           } else {
-            showError(
-              t(
-                'Solana Bridge Submission Unsuccessful. Please adjust the slippage and try again. If the problem persists, please contact support.',
-              ),
-            )
+            showError(t('Transaction was not submitted. Increase your approval limit or slippage, or contact Support.'))
           }
         }
       },
