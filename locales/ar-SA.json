@@ -4194,5 +4194,6 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "يمكن الآن كسب الحوافز من كل من Incentra والمزارع في نفس الوقت.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "اربط رمز LP الخاص بك في المزرعة واجمع مكافآت Incentra ومكافآت المزرعة معًا.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "طالب بمكافآت المزرعة الخاصة بك على PancakeSwap ومكافآت Incentra الخاصة بك على",
-  "Incentra's website": "موقع Incentra الإلكتروني"
+  "Incentra's website": "موقع Incentra الإلكتروني",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "تنبيه: %token% غير مُتحقَّق منه حاليًا. تأكد دائمًا من العنوان وقم ببحثك الخاص قبل التداول أو التفاعل مع هذا المجمع."
 }

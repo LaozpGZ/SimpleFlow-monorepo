@@ -4194,5 +4194,6 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "您现在可以同时在 Incentra 和 Farms 赚取奖励。",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "在 Farm 中质押您的 LP 代币，即可同时获得 Incentra 和 Farm 奖励。",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "在 PancakeSwap 领取您的 Farm 奖励，Incentra 奖励请前往",
-  "Incentra's website": "Incentra 的网站领取。"
+  "Incentra's website": "Incentra 的网站领取。",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "警告：%token% 目前未经核实。在交易或与该资金池交互前，请务必核实地址并自行研究。"
 }
