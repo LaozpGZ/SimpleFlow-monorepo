@@ -4194,5 +4194,6 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "IncentraとFarmsの両方で、同時にインセンティブを獲得できるようになりました。",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "FarmにLPトークンをステーキングすると、IncentraとFarmの両方の報酬を獲得できます。",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Farm報酬はPancakeSwapで、Incentra報酬は",
-  "Incentra's website": "Incentraのウェブサイトで請求してください。"
+  "Incentra's website": "Incentraのウェブサイトで請求してください。",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "ご注意: %token% は現在未検証です。このプールで取引またはインタラクションを行う前に、必ずアドレスを確認し、ご自身で調査 (DYOR) を行ってください。"
 }
