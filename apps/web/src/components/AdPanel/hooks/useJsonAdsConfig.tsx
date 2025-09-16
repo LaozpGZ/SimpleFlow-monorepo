@@ -20,6 +20,7 @@ export const useJsonAdsConfig = (url: string): AdSlide[] => {
   return jsonAds.map((config) => ({
     id: config.id,
     component: <JsonAds ad={config} />,
+    priority: config.priority,
   }))
 }
 

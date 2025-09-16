@@ -1,8 +1,6 @@
 import { useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useTradingCompetitionAds } from 'components/AdPanel/Ads/AdTradingCompetition'
-import { AdsIds, useAdsConfigs } from 'components/AdPanel/hooks/useAdsConfig'
 import { useMemo } from 'react'
-import { AdCommon } from './Ads/AdCommon'
 import { AdCrossChain } from './Ads/AdCrossChain'
 import { AdIfo } from './Ads/AdIfo'
 import { AdPCSX } from './Ads/AdPCSX'
@@ -56,6 +54,7 @@ export const useAdConfig = () => {
     ],
     [shouldRenderAdIfo, tradingCompetitionAds, jsonAdsList],
   )
+  console.log(`[json] ads`, adList)
 
   return useMemo(
     () =>

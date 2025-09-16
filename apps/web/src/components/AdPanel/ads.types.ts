@@ -90,23 +90,31 @@ export type PicksConfig = {
   configs: PickConfig[]
 }
 
+export type I18nText =
+  | string
+  | {
+      mobile: string
+      desktop: string
+    }
+
+export type AdText =
+  | string
+  | {
+      i18nText: I18nText
+      highlight?: boolean
+      link?: string
+      style?: CSSProperties
+    }
+
 export interface RemoteAds {
   id: string
   imgUrl: string
   imgUrlMobile?: string
   priority: number
-  texts: Array<
-    | string
-    | {
-        i18nText: string
-        highlight?: boolean
-        link?: string
-        style?: CSSProperties
-      }
-  >
+  texts: AdText[]
   actions: Array<{
     type: 'button'
-    i18nText: string
+    i18nText: I18nText
     link: string
     external?: boolean
     style?: CSSProperties

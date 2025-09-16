@@ -3,7 +3,7 @@ import { Link, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'
 import { AdCard } from '../Card'
-import { AdPlayerProps, RemoteAds } from '../ads.types'
+import { AdPlayerProps, I18nText, RemoteAds } from '../ads.types'
 
 interface JsonAdsProps extends AdPlayerProps {
   ad: RemoteAds
@@ -14,15 +14,21 @@ export const JsonAds: React.FC<JsonAdsProps> = ({ ad, ...props }) => {
   const { isMobile } = useMatchBreakpoints()
   const img = isMobile && ad.imgUrlMobile ? ad.imgUrlMobile : ad.imgUrl
 
+  // helper to resolve i18nText (string | { mobile, desktop })
+  const resolveI18nText = (i18nText: I18nText) => {
+    if (typeof i18nText === 'string') return t(i18nText)
+    return t(isMobile ? i18nText.mobile : i18nText.desktop)
+  }
+
   return (
     <AdCard imageUrl={img} {...props}>
       {ad.texts && (
         <BodyText mb="0">
           {ad.texts.map((item, index) => {
             if (typeof item === 'string') {
-              return item
+              return t(item)
             }
-            const content = t(item.i18nText)
+            const content = resolveI18nText(item.i18nText)
             if (item.link) {
               return (
                 <Link key={index} fontSize="inherit" href={item.link} color="secondary" bold style={item.style}>
@@ -51,6 +57,7 @@ export const JsonAds: React.FC<JsonAdsProps> = ({ ad, ...props }) => {
       {ad.actions?.map((action, idx) => {
         if (action.type === 'button') {
           const external = action.external ?? true
+          const content = resolveI18nText(action.i18nText)
           return (
             <AdButton
               key={idx}
@@ -59,7 +66,7 @@ export const JsonAds: React.FC<JsonAdsProps> = ({ ad, ...props }) => {
               externalIcon={external}
               style={action.style}
             >
-              {t(action.i18nText)}
+              {content}
             </AdButton>
           )
         }
