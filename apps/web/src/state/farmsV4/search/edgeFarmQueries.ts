@@ -7,7 +7,7 @@ import {
   UniversalFarmConfig,
 } from '@pancakeswap/farms'
 import { getCurrencyAddress, Pair } from '@pancakeswap/sdk'
-import { InfinityRouter, SmartRouter } from '@pancakeswap/smart-router'
+import { InfinityRouter } from '@pancakeswap/smart-router'
 
 import { SORT_ORDER } from '@pancakeswap/uikit'
 import uniqBy from '@pancakeswap/utils/uniqBy'
@@ -18,7 +18,7 @@ import { PoolInfo } from 'state/farmsV4/state/type'
 import { explorerApiClient } from 'state/info/api/client'
 import { Address } from 'viem/accounts'
 import chunk from '@pancakeswap/utils/chunk'
-import { normalizeAddress, safeGetAddress, SerializedFarmInfo } from './farm.util'
+import { FarmInfo, normalizeAddress, safeGetAddress } from './farm.util'
 
 const DEFAULT_PROTOCOLS: Protocol[] = Object.values(Protocol)
 export interface FarmQuery {
@@ -172,21 +172,16 @@ async function queryFarms(query: {
 
     const allPools = uniqBy(all, (p) => `${p.chainId}:${p.id}`)
       .map((pool) => {
-        const remotePool = InfinityRouter.parseRemotePool(pool as InfinityRouter.RemotePool)
-        if (!remotePool) {
+        const parsedPool = InfinityRouter.parseRemotePool(pool as InfinityRouter.RemotePool)
+        if (!parsedPool) {
           return null
-        }
-        // @ts-ignore
-        if (typeof remotePool.tvlUSD !== 'undefined') {
-          // @ts-ignore
-          remotePool.tvlUSD = remotePool.tvlUSD.toString()
         }
 
         const farmInfo = farmMaps[`${pool.chainId}:${pool.id}`]
         const pid = farmInfo ? farmInfo.pid : undefined
         const lpAddress = farmInfo ? farmInfo.lpAddress : undefined
         return {
-          pool: SmartRouter.Transformer.serializePool(remotePool),
+          pool: parsedPool,
           id: pool.id,
           chainId: pool.chainId,
           protocol: pool.protocol,
@@ -197,9 +192,9 @@ async function queryFarms(query: {
           isDynamicFee: pool.isDynamicFee,
           feeTier: pool.feeTier,
           lpAddress: lpAddress || pool.id,
-        } as SerializedFarmInfo
+        } as FarmInfo
       })
-      .filter((x) => x) as SerializedFarmInfo[]
+      .filter((x) => x) as FarmInfo[]
     return allPools
   } catch (ex) {
     console.warn('Error fetching farms:', ex)

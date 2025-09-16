@@ -1,5 +1,4 @@
 import { isTestnetChainId } from '@pancakeswap/chains'
-import { SmartRouter } from '@pancakeswap/smart-router'
 import { Loadable } from '@pancakeswap/utils/Loadable'
 import uniqBy from '@pancakeswap/utils/uniqBy'
 import { atom } from 'jotai'
@@ -15,7 +14,7 @@ import {
   fillOnchainPoolData,
 } from 'state/farmsV4/search/batchFarmDataFiller'
 import { FarmQuery } from 'state/farmsV4/search/edgeFarmQueries'
-import { FarmInfo, farmToPoolInfo, getFarmKey, SerializedFarmInfo } from 'state/farmsV4/search/farm.util'
+import { FarmInfo, farmToPoolInfo, getFarmKey } from 'state/farmsV4/search/farm.util'
 import { farmFilters } from 'state/farmsV4/search/filters'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { userShowTestnetAtom } from 'state/user/hooks/useUserShowTestnet'
@@ -56,7 +55,7 @@ const searchAtom = atomFamily((query: FarmQuery) => {
     const extendList = extendSearchList.map((params) => get(extendFarmListAtom(params)))
     const lists = [baseList, ...extendList]
 
-    function buildFarmList(list: SerializedFarmInfo[]) {
+    function buildFarmList(list: FarmInfo[]) {
       return list.map((farm) => {
         const { pool, chainId, vol24hUsd, ...rest } = farm
         const farmInfo = {
@@ -65,7 +64,7 @@ const searchAtom = atomFamily((query: FarmQuery) => {
           ...rest,
           feeTierBase: 1e6,
           vol24hUsd: farm.vol24hUsd,
-          pool: SmartRouter.Transformer.parsePool(farm.chainId, farm.pool),
+          pool,
         } as FarmInfo
 
         return farmInfo

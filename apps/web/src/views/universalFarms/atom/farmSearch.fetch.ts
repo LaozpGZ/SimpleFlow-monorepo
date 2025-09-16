@@ -4,7 +4,7 @@ import { atomWithLoadable } from 'quoter/atom/atomWithLoadable'
 import { FarmV4SupportedChainId, Protocol } from '@pancakeswap/farms'
 import edgeFarmQueries from 'state/farmsV4/search/edgeFarmQueries'
 
-import { SerializedFarmInfo } from 'state/farmsV4/search/farm.util'
+import { FarmInfo } from 'state/farmsV4/search/farm.util'
 
 async function fetchFarmList({
   extend = false,
@@ -30,7 +30,7 @@ async function fetchFarmList({
 }
 
 export const baseFarmListAtom = atomFamily((params: { chains: FarmV4SupportedChainId[]; protocols: Protocol[] }) => {
-  return atomWithLoadable<SerializedFarmInfo[]>(async () => {
+  return atomWithLoadable<FarmInfo[]>(async () => {
     const { chains, protocols } = params
     return fetchFarmList({
       extend: false,
@@ -43,7 +43,7 @@ export const baseFarmListAtom = atomFamily((params: { chains: FarmV4SupportedCha
 export const extendFarmListAtom = atomFamily(
   (params: { protocols: Protocol[]; chains: FarmV4SupportedChainId[]; tokens?: string[]; symbols?: string[] }) => {
     const { protocols, tokens, symbols, chains } = params
-    return atomWithLoadable<SerializedFarmInfo[]>(async () => {
+    return atomWithLoadable<FarmInfo[]>(async () => {
       return fetchFarmList({
         extend: true,
         protocols,
