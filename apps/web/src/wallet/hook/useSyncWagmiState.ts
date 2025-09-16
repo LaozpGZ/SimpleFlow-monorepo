@@ -12,7 +12,7 @@ export function useSyncWagmiState() {
   const { chainId: wagmiChainId, address: evmAccount, connector } = useAccount()
   const updAccountState = useSetAtom(accountActiveChainAtom)
   const { switchNetwork } = useSwitchNetworkV2()
-  const { ready, authenticated, user } = usePrivy()
+  const { ready, authenticated } = usePrivy()
   const { address: privyAddress, isLoading: isPrivyAddressLoading } = usePrivyWalletAddress()
 
   const oldWagmiChainId = useRef(wagmiChainId)
@@ -62,5 +62,5 @@ export function useSyncWagmiState() {
       ...prev,
       account: evmAccount,
     }))
-  }, [ready, authenticated, user, privyAddress, isPrivyAddressLoading, evmAccount, connector, updAccountState])
+  }, [ready, authenticated, privyAddress, isPrivyAddressLoading, evmAccount, connector, updAccountState])
 }
