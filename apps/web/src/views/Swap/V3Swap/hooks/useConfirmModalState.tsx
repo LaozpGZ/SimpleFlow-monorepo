@@ -506,7 +506,7 @@ const useConfirmActions = (
           }
         } catch (error) {
           if (userRejectedError(error)) {
-            // do nothing
+            resetState()
           } else {
             showError(typeof error === 'string' ? error : (error as any)?.message)
           }
@@ -737,7 +737,7 @@ const useConfirmActions = (
           }
         } catch (error) {
           if (userRejectedError(error)) {
-            // do nothing
+            resetState()
           } else if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
             showError(`Solana Bridge Error: ${typeof error === 'string' ? error : (error as any)?.message}`)
           } else {
