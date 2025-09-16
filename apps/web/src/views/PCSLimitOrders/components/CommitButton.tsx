@@ -21,16 +21,22 @@ import { Suspense, useMemo, useState } from 'react'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { BigNumber as BN } from 'bignumber.js'
 import { formattedAmountsAtom } from '../state/form/inputAtoms'
-import { Field } from '../types/limitOrder.types'
+import { Field, ValidationError } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { amountReceivedAtom, feesEarnedUSDAtom } from '../state/form/tradeDetailsAtoms'
 import { commitButtonEnabledAtom } from '../state/form/validationAtoms'
+import { currentMarketPriceAtom, customMarketPriceAtom } from '../state/form/marketPriceAtoms'
 
 export const CommitButton = () => {
   const { t } = useTranslation()
   const { isOpen, onDismiss, onOpen } = useModalV2()
 
-  const enabled = useAtomValue(commitButtonEnabledAtom)
+  const { enabled, errorReason } = useAtomValue(commitButtonEnabledAtom)
+
+  const buttonText = useMemo(() => {
+    if (errorReason === ValidationError.NO_LIQUIDITY) return t('Insufficient Liquidity')
+    return t('Place Limit Order')
+  }, [errorReason, t])
 
   /** Look at existing commit buttons for states.
    * Such as: Connect Wallet, Switch Network, Approve Tokens (need an extra button on top), etc.
@@ -40,7 +46,7 @@ export const CommitButton = () => {
     <>
       <Suspense>
         <Button onClick={onOpen} disabled={!enabled}>
-          {t('Place Limit Order')}
+          {buttonText}
         </Button>
       </Suspense>
       <PreviewModal isOpen={isOpen} onDismiss={onDismiss} />
@@ -75,16 +81,25 @@ const ConfirmOrderContent = () => {
   const outputCurrency = useAtomValue(outputCurrencyAtom)
   const formattedAmounts = useAtomValue(formattedAmountsAtom)
 
+  const { data: currentMarketPrice } = useAtomValue(currentMarketPriceAtom)
+  const customMarketPrice = useAtomValue(customMarketPriceAtom)
+
   const feesEarnedData = useAtomValue(feesEarnedUSDAtom)
   const feesEarnedUSD = feesEarnedData?.feesEarnedUSD
   const amountReceived = useAtomValue(amountReceivedAtom)
 
   const [isInverted, setIsInverted] = useState(false)
   const quotePrice = useMemo(() => {
-    const amountA = BN(formattedAmounts[Field.CURRENCY_A])
-    const amountB = BN(formattedAmounts[Field.CURRENCY_B])
-    return isInverted ? amountA.dividedBy(amountB).toPrecision(6) : amountB.dividedBy(amountA).toPrecision(6)
-  }, [isInverted, formattedAmounts])
+    const price = customMarketPrice || currentMarketPrice
+    const priceBN = BN(price || 0)
+
+    if (!price || priceBN.isZero()) return undefined
+
+    if (isInverted) {
+      return BN(1).dividedBy(priceBN).toPrecision(6)
+    }
+    return priceBN.toPrecision(6)
+  }, [customMarketPrice, currentMarketPrice, isInverted])
 
   return (
     <Box mt="4px">

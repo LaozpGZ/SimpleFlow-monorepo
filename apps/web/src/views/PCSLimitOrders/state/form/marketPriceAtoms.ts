@@ -5,7 +5,8 @@ import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import { TradeType } from '@pancakeswap/swap-sdk-core'
 import { atomWithQuery } from 'jotai-tanstack-query'
 import { FAST_INTERVAL } from 'config/constants'
-import { formatAmount } from '@pancakeswap/utils/formatFractions'
+import { tickToPrice } from 'hooks/infinity/utils'
+import { getTickAdjustedPrice } from 'views/PCSLimitOrders/utils/ticks'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 
@@ -28,21 +29,49 @@ export const currentMarketPriceAtom = atomWithQuery((get) => ({
 
     const gasPriceWei = await get(gasPriceWeiAtom(pool.chainId))
 
-    const bestTrade = await findBestTrade({
-      amount: independentAmount,
-      quoteCurrency: outputCurrency,
-      tradeType: TradeType.EXACT_INPUT,
-      candidatePools: [routingSdkPool],
-      gasPriceWei: gasPriceWei?.toString() || '',
-      maxHops: 1,
-      maxSplits: 0,
-      quoteId: `limit-order-${Date.now()}`,
-    })
+    try {
+      const bestTrade = await findBestTrade({
+        amount: independentAmount,
+        quoteCurrency: outputCurrency,
+        tradeType: TradeType.EXACT_INPUT,
+        candidatePools: [routingSdkPool],
+        gasPriceWei: gasPriceWei?.toString() || '',
+        maxHops: 1,
+        maxSplits: 0,
+        quoteId: `limit-order-${Date.now()}`,
+      })
 
-    // TODO: TICK-ADJUST +/- 1 depending on zeroForOne direction, so that price shown is not exactly at current tick
+      // TODO: TICK-ADJUST +/- 1 depending on zeroForOne direction, so that price shown is not exactly at current tick
 
-    const outputAmount = bestTrade?.outputAmountWithGasAdjusted
-    return formatAmount(outputAmount, 6)
+      const outputAmount = bestTrade?.outputAmount
+
+      const { price, tick } = getTickAdjustedPrice(
+        outputAmount?.toExact() || '',
+        pool.tickSpacing,
+        inputCurrency,
+        outputCurrency,
+      )
+
+      console.log('currentMarketPrice', {
+        tickCurrent: pool.tickCurrent,
+        outputAmountTick: tick,
+        outputAmount: outputAmount?.toSignificant(6),
+      })
+
+      return price?.toSignificant(6)
+    } catch (e) {
+      console.error('Error in currentMarketPriceAtom', e)
+
+      // Fallback to price from pool tick
+      // TODO: Check if this should be used by default
+      const priceFromPoolTick = tickToPrice(inputCurrency, outputCurrency, pool.tickCurrent)
+
+      if (priceFromPoolTick) {
+        return priceFromPoolTick.toSignificant(6)
+      }
+
+      return undefined
+    }
   },
   refetchInterval: FAST_INTERVAL,
   retry: 3,

@@ -6,6 +6,8 @@ import { Token, TradeType } from '@pancakeswap/sdk'
 import { gasPriceWeiAtom } from 'quoter/utils/gasPriceAtom'
 import { findBestTrade } from '@pancakeswap/routing-sdk'
 import { BigNumber as BN } from 'bignumber.js'
+import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
+import { getTickAdjustedPrice } from 'views/PCSLimitOrders/utils/ticks'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 import { independentFieldAtom, typedValueAtom } from './fieldAtoms'
 import { baseCurrencyAtom, quoteCurrencyAtom, inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
@@ -72,8 +74,24 @@ const dependentAmountAtom = atom(async (get) => {
 
     const result =
       tradeType === TradeType.EXACT_INPUT
-        ? bestTrade?.outputAmountWithGasAdjusted
-        : bestTrade?.inputAmountWithGasAdjusted
+        ? tryParseCurrencyAmount(
+            getTickAdjustedPrice(
+              bestTrade?.outputAmountWithGasAdjusted?.toExact() || '',
+              pool.tickSpacing,
+              inputCurrency,
+              outputCurrency,
+            ).price?.toFixed(18) || '',
+            outputCurrency,
+          )
+        : tryParseCurrencyAmount(
+            getTickAdjustedPrice(
+              bestTrade?.inputAmountWithGasAdjusted?.toExact() || '',
+              pool.tickSpacing,
+              outputCurrency,
+              inputCurrency,
+            ).price?.toFixed(18) || '',
+            inputCurrency,
+          )
 
     return result
   } catch (e) {
