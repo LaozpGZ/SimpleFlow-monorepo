@@ -506,7 +506,7 @@ const useConfirmActions = (
           }
         } catch (error) {
           if (userRejectedError(error)) {
-            showError(t('Transaction rejected'))
+            // do nothing
           } else {
             showError(typeof error === 'string' ? error : (error as any)?.message)
           }
