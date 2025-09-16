@@ -4,7 +4,7 @@ import { useActiveChainIdRef } from 'hooks/useAccountActiveChain'
 import useAuth from 'hooks/useAuth'
 import { useAtomValue, useSetAtom } from 'jotai'
 import { useRouter } from 'next/router'
-import { useCallback, useMemo, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { Connector, useAccount, useSwitchChain } from 'wagmi'
 import { accountActiveChainAtom } from 'wallet/atoms/accountStateAtoms'
 import { SwitchChainRequest, switchChainUpdatingAtom } from 'wallet/atoms/switchChainRequestAtom'
@@ -15,6 +15,11 @@ export interface SwitchChainOption {
   replaceUrl?: boolean
   from: SwitchFrom
   force?: boolean
+}
+
+type ReplaceGuardState = {
+  cancelled: boolean
+  requestId: number
 }
 export const useSwitchNetworkV2 = () => {
   const { isConnected } = useAccount()
@@ -42,6 +47,7 @@ export const useSwitchNetworkV2 = () => {
         evmAddress,
         wagmiConnector,
         path: window.location.pathname,
+        pathname: router.pathname,
         from,
         persistChain: Boolean(query.persistChain),
         force,
@@ -111,14 +117,39 @@ const useProcessSwitchChainRequest = () => {
   const setSwitching = useSetAtom(switchChainUpdatingAtom)
   const lock = useRef(false)
   const router = useRouter()
+  const replaceGuardRef = useRef<ReplaceGuardState>({ cancelled: false, requestId: 0 })
+
+  useEffect(() => {
+    const handleRouteChangeStart = () => {
+      replaceGuardRef.current.cancelled = true
+    }
+
+    router.events.on('routeChangeStart', handleRouteChangeStart)
+
+    return () => {
+      replaceGuardRef.current.cancelled = true
+      router.events.off('routeChangeStart', handleRouteChangeStart)
+    }
+  }, [router])
 
   const activeChainIdRef = useActiveChainIdRef()
   const processSwitching = useCallback(
     async (request: SwitchChainRequest) => {
-      const { from, wagmiConnector, evmAddress, replaceUrl, chainId: requestChainId, path, persistChain } = request
+      const {
+        from,
+        wagmiConnector,
+        evmAddress,
+        replaceUrl,
+        chainId: requestChainId,
+        path,
+        pathname,
+        persistChain,
+      } = request
       if (lock.current) {
         return false
       }
+      const currentRequestId = replaceGuardRef.current.requestId + 1
+      replaceGuardRef.current = { cancelled: false, requestId: currentRequestId }
       console.log(`[wallet] process switch`, request)
       // Need to switch
       lock.current = true
@@ -141,10 +172,19 @@ const useProcessSwitchChainRequest = () => {
             isNotMatched: isWrongNetwork,
           }))
           if (replaceUrl && !persistChain) {
-            const chain = getChainName(requestChainId)
-            router.replace({ pathname: path, query: { ...router.query, chain } }, undefined, {
-              shallow: true,
-            })
+            const guardState = replaceGuardRef.current
+            const isLatestRequest = guardState.requestId === currentRequestId
+            const hasBeenCancelled = guardState.cancelled || !isLatestRequest
+            const matchesCurrentPathname = router.pathname === pathname
+            const matchesCurrentPath =
+              typeof window !== 'undefined' ? window.location.pathname === path : matchesCurrentPathname
+
+            if (!hasBeenCancelled && matchesCurrentPathname && matchesCurrentPath) {
+              const chain = getChainName(requestChainId)
+              router.replace({ pathname: path, query: { ...router.query, chain } }, undefined, {
+                shallow: true,
+              })
+            }
           }
 
           if (wagmiConnector && (await requireLogout(wagmiConnector, requestChainId, evmAddress))) {

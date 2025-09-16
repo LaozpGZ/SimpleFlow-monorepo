@@ -9,6 +9,7 @@ export interface SwitchChainRequest {
   evmAddress?: `0x${string}` // EVM address used to check session sync
   from: 'wagmi' | 'url' | 'switch' | 'connect'
   path: string
+  pathname: string
   force?: boolean
 }
 
