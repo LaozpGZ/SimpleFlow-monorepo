@@ -4194,5 +4194,6 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Incentra এবং Farm উভয়ক্ষেত্রেই একই সময়ে প্রণোদনা অর্জন করা যাবে।",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "আপনার LP টোকেন Farm-এ Stake করুন এবং Incentra ও Farm উভয় রিওয়ার্ড অর্জন করুন।",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "আপনার Farm রিওয়ার্ড PancakeSwap-এ এবং আপনার Incentra রিওয়ার্ড",
-  "Incentra's website": "Incentra-এর ওয়েবসাইট"
+  "Incentra's website": "Incentra-এর ওয়েবসাইট",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "সতর্কীকরণ: %token% বর্তমানে যাচাইকৃত নয়। এই পুলের সাথে ট্রেড বা ইন্টারঅ্যাক্ট করার আগে সর্বদা ঠিকানা নিশ্চিত করুন এবং আপনার নিজস্ব গবেষণা করুন।"
 }
