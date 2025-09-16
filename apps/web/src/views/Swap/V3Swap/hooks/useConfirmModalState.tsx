@@ -738,7 +738,7 @@ const useConfirmActions = (
         } catch (error) {
           if (userRejectedError(error)) {
             showError(t('Transaction rejected'))
-          } else if (process.env.NODE_ENV !== 'production') {
+          } else if (process.env.NEXT_PUBLIC_VERCEL_ENV !== 'production') {
             showError(`Solana Bridge Error: ${typeof error === 'string' ? error : (error as any)?.message}`)
           } else {
             showError(
