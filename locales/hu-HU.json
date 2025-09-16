@@ -4194,5 +4194,6 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Mostantól egyidejűleg szerezhetők jutalmak az Incentra és a Farms felületeken.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Stakeld LP tokenedet a Farmon, és halmozz fel Incentra és Farm jutalmakat is.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Igényeld Farm jutalmaidat a PancakeSwapon, Incentra jutalmaidat pedig",
-  "Incentra's website": "Incentra weboldalán"
+  "Incentra's website": "Incentra weboldalán",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Vigyázat: A %token% jelenleg nincs ellenőrizve. Mindig ellenőrizze a címet, és végezzen saját kutatást, mielőtt kereskedne vagy interakcióba lépne ezzel a pool-lal."
 }
