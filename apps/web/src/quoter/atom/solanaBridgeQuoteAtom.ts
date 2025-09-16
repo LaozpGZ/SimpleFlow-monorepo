@@ -85,6 +85,8 @@ export const solanaBridgeQuoteAtom = atomFamily(
   (a, b) =>
     a.inputAmount.quotient.toString() === b.inputAmount.quotient.toString() &&
     a.outputCurrency.wrapped.address === b.outputCurrency.wrapped.address &&
+    a.outputCurrency.symbol === b.outputCurrency.symbol &&
+    a.inputAmount.currency.symbol === b.inputAmount.currency.symbol &&
     a.inputAmount.currency.chainId === b.inputAmount.currency.chainId &&
     a.outputCurrency.chainId === b.outputCurrency.chainId &&
     a.nonce === b.nonce &&
