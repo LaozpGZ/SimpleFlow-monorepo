@@ -1,6 +1,6 @@
 import { chains } from 'utils/wagmi'
 import { createConnector } from 'wagmi'
-import { UserRejectedRequestError } from 'viem'
+import { UserRejectedRequestError, withRetry } from 'viem'
 import { EIP6963Detail } from './WalletProvider'
 
 const cache = new Map<string, any>()
@@ -30,7 +30,7 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
 
     async connect({ chainId } = {}) {
       const accounts = await provider.request({ method: 'eth_requestAccounts' })
-      let currentChainId = normalizeChainId(await provider.request({ method: 'eth_chainId' }))
+      let currentChainId = await this.getChainId()
 
       if (chainId && currentChainId !== chainId) {
         const chain = await this.switchChain!({ chainId }).catch((error) => {
@@ -86,8 +86,24 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
         params: [{ chainId: `0x${chainId.toString(16)}` }],
       })
 
+      await waitForChainIdToSync()
+
       const chain = chains.find((x) => x.id === chainId)!
       return chain
+
+      async function waitForChainIdToSync() {
+        await withRetry(
+          async () => {
+            const value = normalizeChainId(await provider.request({ method: 'eth_chainId' }))
+            if (value !== chainId) throw new Error('User rejected switch after adding network.')
+            return value
+          },
+          {
+            delay: 50,
+            retryCount: 20,
+          },
+        )
+      }
     },
   }))
   cache.set(info.uuid, connector)
