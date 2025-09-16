@@ -159,7 +159,7 @@ export const useTradeErrorMessageFn = () => {
           return errorMessages[RELAY_ERROR.AMOUNT_TOO_LOW]
         }
 
-        return errorMessages[message] || errorMessages[RELAY_ERROR.UNKNOWN_ERROR]
+        return errorMessages[message] || message
       }
 
       return message || null
