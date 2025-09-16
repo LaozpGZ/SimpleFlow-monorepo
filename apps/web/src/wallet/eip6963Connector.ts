@@ -22,7 +22,7 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
 
   const { provider, info } = detail
 
-  const connector = createConnector(() => ({
+  const connector = createConnector((config) => ({
     id: 'injected',
     name: info.name,
     type: 'injected',
@@ -87,6 +87,7 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
       })
 
       await waitForChainIdToSync()
+      await sendAndWaitForChangeEvent(chainId)
 
       const chain = chains.find((x) => x.id === chainId)!
       return chain
@@ -103,6 +104,18 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
             retryCount: 20,
           },
         )
+      }
+      async function sendAndWaitForChangeEvent(chainId: number) {
+        await new Promise<void>((resolve) => {
+          const listener = ((data) => {
+            if ('chainId' in data && data.chainId === chainId) {
+              config.emitter.off('change', listener)
+              resolve()
+            }
+          }) satisfies Parameters<typeof config.emitter.on>[1]
+          config.emitter.on('change', listener)
+          config.emitter.emit('change', { chainId })
+        })
       }
     },
   }))
