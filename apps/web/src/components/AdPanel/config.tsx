@@ -13,7 +13,7 @@ import { AdSlide, Priority } from './ads.types'
 import { useShouldRenderAdIfo } from './useShouldRenderAdIfo'
 import { useJsonAdsConfig } from './hooks/useJsonAdsConfig'
 
-const JSON_ADS_URL = 'https://proofs.pancakeswap.com/web/promotions/json-ads.json'
+const JSON_ADS_URL = 'https://proofs.pancakeswap.com/cms-config/ads-config.json'
 
 export const useAdConfig = () => {
   const { isDesktop } = useMatchBreakpoints()

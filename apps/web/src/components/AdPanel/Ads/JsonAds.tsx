@@ -1,10 +1,9 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Link, Text } from '@pancakeswap/uikit'
+import { Link, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { BodyText } from '../BodyText'
 import { AdButton } from '../Button'
 import { AdCard } from '../Card'
 import { AdPlayerProps, RemoteAds } from '../ads.types'
-import { getImageUrl } from '../utils'
 
 interface JsonAdsProps extends AdPlayerProps {
   ad: RemoteAds
@@ -12,9 +11,11 @@ interface JsonAdsProps extends AdPlayerProps {
 
 export const JsonAds: React.FC<JsonAdsProps> = ({ ad, ...props }) => {
   const { t } = useTranslation()
+  const { isMobile } = useMatchBreakpoints()
+  const img = isMobile && ad.imgUrlMobile ? ad.imgUrlMobile : ad.imgUrl
 
   return (
-    <AdCard imageUrl={getImageUrl(ad.imgUrl)} {...props}>
+    <AdCard imageUrl={img} {...props}>
       {ad.texts && (
         <BodyText mb="0">
           {ad.texts.map((item, index) => {
