@@ -68,6 +68,9 @@ export const getSimulationComputeUnits = async (
     return null
   }
 
-  // Add 20% buffer to account for slight variations
-  return Math.ceil(unitsConsumed * 1.5)
+  // Add 100% buffer to account for slight variations
+  // Since compute units are not deterministic, we need to add a buffer to ensure the transaction is successful
+  // Also, compute units are cheap on solana, so we can afford to add a buffer
+  // 1_000_000 units is 0.001 SOL. For complex transaction, it is not easy to reach 1_000_000 units.
+  return Math.ceil(unitsConsumed * 2)
 }
