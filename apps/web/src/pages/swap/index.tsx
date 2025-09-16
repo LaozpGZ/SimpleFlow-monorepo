@@ -6,6 +6,7 @@ import { CHAIN_IDS } from 'utils/wagmi'
 import SwapLayout from 'views/Swap/SwapLayout'
 import SwapSimplify from 'views/SwapSimplify'
 import { useWallets } from '@privy-io/react-auth'
+import { useConnect, useAccount } from 'wagmi'
 
 const StyledSkeleton = styled(Skeleton)`
   background: ${({ theme }) => theme.colors.backgroundBubblegum};
@@ -44,12 +45,17 @@ const SwapFallback = () => {
 const View = () => {
   const { isMobile } = useMatchBreakpoints()
   const { wallets } = useWallets()
+  const { connectors } = useConnect()
+  const { chainId } = useAccount()
+
+  console.log('connectors', connectors)
+
+  console.log('chainId', chainId)
+
   console.info(wallets, 'wallets')
   return (
     <SwapLayout>
-      <Container isMobile={isMobile}>
-        <SwapSimplify />
-      </Container>
+      <Container isMobile={isMobile}>{/* <SwapSimplify /> */}</Container>
     </SwapLayout>
   )
 }
