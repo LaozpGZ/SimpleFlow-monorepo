@@ -29,22 +29,25 @@ export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
   // only return chains array,add origin chain id to the array
   const chains = useMemo(() => {
     if (!params?.originChainId || isSolana(params?.originChainId)) {
-      return privyAddress
-        ? CROSSCHAIN_SUPPORTED_CHAINS.filter((chainId) => chainId !== ChainId.ZKSYNC)
-        : CROSSCHAIN_SUPPORTED_CHAINS
+      return CROSSCHAIN_SUPPORTED_CHAINS
     }
 
-    return data && params?.originChainId
-      ? [
-          params.originChainId,
-          NonEVMChainId.SOLANA,
-          ...new Set(
-            data
-              .filter((route) => route.originChainId === params.originChainId)
-              .map((route) => route.destinationChainId),
-          ),
-        ]
-      : []
+    const chains =
+      data && params?.originChainId
+        ? [
+            ...new Set(
+              data
+                .filter((route) => route.originChainId === params.originChainId)
+                .map((route) => route.destinationChainId),
+            ),
+          ]
+        : []
+
+    if (chains.length > 0) {
+      return [params.originChainId, NonEVMChainId.SOLANA, ...chains]
+    }
+
+    return [params.originChainId]
   }, [data, params?.originChainId, privyAddress])
 
   return useMemo(() => {
