@@ -1,7 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { CROSSCHAIN_SUPPORTED_CHAINS } from 'quoter/utils/crosschain-utils/config'
-import { isSolana, NonEVMChainId } from '@pancakeswap/chains'
+import { ChainId, isSolana, NonEVMChainId } from '@pancakeswap/chains'
+import { usePrivy } from '@privy-io/react-auth'
+import { usePrivyWalletAddress } from 'wallet/Privy/hooks/usePrivyWalletAddress'
 import { GetAvailableRoutesParams, getBridgeAvailableRoutes } from '../api'
 
 export function useBridgeAvailableRoutes(params?: GetAvailableRoutesParams) {
@@ -22,11 +24,15 @@ export function useBridgeAvailableRoutes(params?: GetAvailableRoutesParams) {
 
 export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
   const { data, isLoading } = useBridgeAvailableRoutes()
+  // if privy login, exclude zkSync
+  const { address: privyAddress } = usePrivyWalletAddress()
 
   // only return chains array,add origin chain id to the array
   const chains = useMemo(() => {
     if (!params?.originChainId || isSolana(params?.originChainId)) {
-      return CROSSCHAIN_SUPPORTED_CHAINS
+      return privyAddress
+        ? CROSSCHAIN_SUPPORTED_CHAINS.filter((chainId) => chainId !== ChainId.ZKSYNC)
+        : CROSSCHAIN_SUPPORTED_CHAINS
     }
 
     return data && params?.originChainId
@@ -40,7 +46,7 @@ export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
           ),
         ]
       : []
-  }, [data, params?.originChainId])
+  }, [data, params?.originChainId, privyAddress])
 
   return useMemo(() => {
     return {
