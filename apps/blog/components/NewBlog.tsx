@@ -27,13 +27,11 @@ const StyledGradientBg = styled('div')`
     height: 90%;
   }
 `
-const StyledBackgroundImage = styled(Box)<{ imgUrl: string }>`
-  height: 100%;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+
+const StyledImage = styled.img`
+  max-width: 100%;
+  height: auto;
   transition: 0.5s;
-  background-image: ${({ imgUrl }) => `url(${imgUrl})`};
 `
 
 const StyleBlog = styled(Flex)`
@@ -41,6 +39,7 @@ const StyleBlog = styled(Flex)`
   flex-direction: column;
   ${({ theme }) => theme.mediaQueries.xl} {
     flex-direction: row;
+    gap: 25px;
   }
 `
 
@@ -86,19 +85,14 @@ const NewBlog = () => {
         <NextLink passHref href={`/articles/${article?.slug}`}>
           <Card>
             <StyleBlog>
-              <Box
-                overflow="hidden"
-                borderRadius={8}
-                mr={['0', '0', '0', '0', '0', '50px']}
-                minWidth={['152px', '192px', '488px']}
-                height={['200px', '228px', '420px', '530px', '530px', '306px']}
-              >
-                <StyledBackgroundImage imgUrl={article?.imgUrl ?? ''} />
-              </Box>
+              <Flex overflow="hidden" borderRadius={8} flex="1.8">
+                <StyledImage src={article?.imgUrl ?? ''} alt={article?.title ?? 'image'} />
+              </Flex>
               <Flex
                 overflow="hidden"
                 flexDirection="column"
                 width="100%"
+                flex="2"
                 padding={[
                   '0 16px 16px 16px',
                   '0 16px 16px 16px',
