@@ -46,7 +46,7 @@ interface HandleCurrencySelectDeps {
   canSwitchToChain: (chainId: number) => boolean
   switchNetwork: (chainId: number, options?: SwitchChainOption) => void
   outputChainId: number | undefined
-  supportedBridgeChains: UnifiedChainId[] | undefined
+  supportedBridgeChains?: UnifiedChainId[]
   inputChainId: number | undefined
   inputCurrencyId: string | undefined
   outputCurrencyId: string | undefined

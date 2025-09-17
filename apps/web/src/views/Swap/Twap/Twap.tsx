@@ -268,7 +268,6 @@ const useCurrencySelect = () => {
       canSwitchToChain,
       switchNetwork,
       outputChainId,
-      supportedBridgeChains,
       inputChainId,
       inputCurrencyId,
       outputCurrencyId,
