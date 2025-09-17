@@ -2,6 +2,8 @@ import { atom } from 'jotai'
 import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
 import { tryParsePrice } from 'hooks/v3/utils'
 import { BigNumber as BN } from 'bignumber.js'
+import { invertTickForLimitOrder } from 'views/PCSLimitOrders/utils/ticks'
+import { nearestUsableTick } from '@pancakeswap/v3-sdk'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 import { currentMarketPriceAtom, customMarketPriceAtom } from './marketPriceAtoms'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
@@ -58,5 +60,41 @@ export const ticksAtom = atom(async (get) => {
     .multipliedBy(BN(priceUpper.toFixed(18)))
     .sqrt()
 
-  return { price, tickLower, tickUpper, priceLower, priceUpper, targetTick, zeroForOne: zeroForOneFromPool }
+  // Calculate Limit Order ticks (opposite direction to pool)
+  const invertedTickLower = nearestUsableTick(invertTickForLimitOrder(tickUpper, tickCurrent), tickSpacing)
+  const invertedTickUpper = nearestUsableTick(invertTickForLimitOrder(tickLower, tickCurrent), tickSpacing)
+  const invertedTargetTick = zeroForOneFromPool ? invertedTickUpper : invertedTickLower
+
+  // FOR TESTING
+  const invertedPriceLower = tickToPrice(inputCurrency, outputCurrency, invertedTickLower)
+  const invertedPriceUpper = tickToPrice(inputCurrency, outputCurrency, invertedTickUpper)
+  const invertedPrice = BN(invertedPriceLower.toFixed(18))
+    .multipliedBy(BN(invertedPriceUpper.toFixed(18)))
+    .sqrt()
+
+  console.log('ticksAtom', {
+    tickLower,
+    tickUpper,
+    invertedTickLower,
+    invertedTickUpper,
+    invertedTargetTick,
+    tickCurrent,
+    targetTick,
+    zeroForOne: zeroForOneFromPool,
+    price: price.toFormat(6),
+    invertedPrice: invertedPrice.toFormat(6),
+  })
+
+  return {
+    price,
+    tickLower,
+    tickUpper,
+    priceLower,
+    priceUpper,
+    targetTick,
+    zeroForOne: zeroForOneFromPool,
+    invertedTickLower,
+    invertedTickUpper,
+    invertedTargetTick,
+  }
 })

@@ -111,7 +111,8 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
   const feesEarnedUSD = feesEarnedData?.feesEarnedUSD
   const amountReceived = useAtomValue(amountReceivedAtom)
 
-  const { placeOrder } = usePlaceLimitOrder({ onError: onDismiss })
+  // TODO: Handle success and error inside modal content
+  const { placeOrder } = usePlaceLimitOrder({ onError: onDismiss, onSuccess: onDismiss })
 
   const [isInverted, setIsInverted] = useState(false)
   const quotePrice = useMemo(() => {

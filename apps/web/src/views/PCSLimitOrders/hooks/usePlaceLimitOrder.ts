@@ -4,27 +4,27 @@ import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
 import { encodePoolKey, PoolKey } from '@pancakeswap/infinity-sdk'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { nearestUsableTick, sqrtRatioX96ToPrice, TickMath, maxLiquidityForAmounts } from '@pancakeswap/v3-sdk'
+import { nearestUsableTick, TickMath, maxLiquidityForAmounts } from '@pancakeswap/v3-sdk'
 import { calculateGasMargin } from 'utils'
 import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
 import { tickToPrice } from 'hooks/infinity/utils'
-import { BigNumber as BN } from 'bignumber.js'
-import { parseUnits } from '@pancakeswap/utils/viem/parseUnits'
 import { stringify } from 'viem/utils'
+import { Hex } from 'viem'
 import { invertTickForLimitOrder } from '../utils/ticks'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { Field } from '../types/limitOrder.types'
 import { parsedAmountsAtom } from '../state/form/inputAtoms'
-import { ticksAtom } from '../state/form/ticksAtoms'
+import { ticksAtom } from '../state/form/ticksAtom'
 import { selectedPoolAtom } from '../state/pools/poolAtoms'
 import { independentFieldAtom } from '../state/form/fieldAtoms'
 
 interface UsePlaceLimitOrder {
   onError?: (error: any) => void
+  onSuccess?: (hash: Hex) => void
 }
 
-export const usePlaceLimitOrder = ({ onError }: UsePlaceLimitOrder = {}) => {
+export const usePlaceLimitOrder = ({ onError, onSuccess }: UsePlaceLimitOrder = {}) => {
   const { t } = useTranslation()
   const { account } = useAccountActiveChain()
   const { toastError } = useToast()
@@ -34,8 +34,8 @@ export const usePlaceLimitOrder = ({ onError }: UsePlaceLimitOrder = {}) => {
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
-  const independentField = useAtomValue(independentFieldAtom)
-  const isExactIn = independentField === Field.CURRENCY_A
+  //   const independentField = useAtomValue(independentFieldAtom)
+  //   const isExactIn = independentField === Field.CURRENCY_A
 
   const parsedAmounts = useAtomValue(parsedAmountsAtom)
   const selectedPool = useAtomValue(selectedPoolAtom)
@@ -46,11 +46,7 @@ export const usePlaceLimitOrder = ({ onError }: UsePlaceLimitOrder = {}) => {
     if (!selectedPool || !account || !ticksData || !inputCurrency || !outputCurrency) return
 
     const parsedAmountA = parsedAmounts[Field.CURRENCY_A]
-
-    // TESTING
-    const parsedAmountB = parsedAmounts[Field.CURRENCY_B]
-
-    if (!parsedAmountA || !parsedAmountB) return
+    if (!parsedAmountA) return
 
     // PoolKey
     const { poolInfo } = selectedPool
@@ -65,47 +61,28 @@ export const usePlaceLimitOrder = ({ onError }: UsePlaceLimitOrder = {}) => {
     const encodedPoolKey = encodePoolKey(poolKey)
 
     // Ticks Calculation
-    const { tickLower: tickLowerFromPool, tickUpper: tickUpperFromPool, zeroForOne: zeroForOneFromPool } = ticksData
-
-    const zeroForOne = zeroForOneFromPool
+    const {
+      invertedTickLower,
+      invertedTickUpper,
+      invertedTargetTick,
+      zeroForOne,
+      tickLower: tickLower_,
+      tickUpper: tickUpper_,
+    } = ticksData
 
     // For Limit Orders, the tick direction is opposite to pool's direction
-    const tickLower = nearestUsableTick(
-      invertTickForLimitOrder(tickUpperFromPool, poolInfo.tick),
-      poolInfo.parameters.tickSpacing,
-    )
-    const tickUpper = nearestUsableTick(
-      invertTickForLimitOrder(tickLowerFromPool, poolInfo.tick),
-      poolInfo.parameters.tickSpacing,
-    )
+    // const tickLower = invertedTickLower
+    // const tickUpper = invertedTickUpper
+    // const targetTick = invertedTargetTick
 
-    const targetTick = zeroForOne ? tickUpper : tickLower
-
-    // FOR TESTING convert ticks to price
-    const priceLower = tickToPrice(inputCurrency, outputCurrency, tickLower).toSignificant(6)
-    const priceUpper = tickToPrice(inputCurrency, outputCurrency, tickUpper).toSignificant(6)
-
-    console.log('placeOrder TICKS', {
-      zeroForOne,
-      tickLower,
-      tickUpper,
-      targetTick,
-      currentTick: poolInfo.tick,
-      priceLower,
-      priceUpper,
-    })
-
-    // TESTING CAKE -> BNB
-    // const tickCurrent = 59291
-    // const tickLower = 59200
-    // const tickUpper = 59210
-    // const targetTick = 59210
-    // const zeroForOne = false
+    // TESTING: Take min/max of ticks for now
+    const tickLower = zeroForOne ? Math.max(tickLower_, invertedTickUpper) : Math.min(tickLower_, invertedTickUpper)
+    const tickUpper = zeroForOne ? Math.max(tickUpper_, invertedTickLower) : Math.min(tickUpper_, invertedTickLower)
+    const targetTick = tickLower
 
     // Liquidity calculation using both token amounts
-    // Map input/output amounts to token0/token1 based on pool's currency ordering
-    const amount0 = zeroForOne ? parsedAmountA : parsedAmountB
-    const amount1 = zeroForOne ? parsedAmountB : parsedAmountA
+    const amount0 = zeroForOne ? parsedAmountA : 0n // Only provide input amount when selling currency0
+    const amount1 = zeroForOne ? 0n : parsedAmountA // Only provide input amount when selling currency1
 
     const liquidity = maxLiquidityForAmounts(
       poolInfo.sqrtPriceX96,
@@ -160,13 +137,14 @@ export const usePlaceLimitOrder = ({ onError }: UsePlaceLimitOrder = {}) => {
 
       if (receipt?.status) {
         console.log('placeOrder: Transaction successful', receipt.transactionHash)
+        onSuccess?.(receipt.transactionHash)
       }
     } catch (error: any) {
       console.error('placeOrder: Unable to place limit order', error)
       toastError(t('Failed'), error.message || error.details || error)
       onError?.(error)
     }
-  }, [contract, account, selectedPool, ticksData, parsedAmounts, fetchWithCatchTxError, onError])
+  }, [contract, account, selectedPool, ticksData, parsedAmounts, fetchWithCatchTxError, onError, onSuccess])
 
   return {
     placeOrder,
