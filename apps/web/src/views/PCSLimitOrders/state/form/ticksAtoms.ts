@@ -1,10 +1,15 @@
 import { atom } from 'jotai'
 import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
 import { tryParsePrice } from 'hooks/v3/utils'
+import { BigNumber as BN } from 'bignumber.js'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 import { currentMarketPriceAtom, customMarketPriceAtom } from './marketPriceAtoms'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 
+/**
+ * Ticks in pool's perspective.
+ * NOT according to limit order ticks, which are going to be opposite to pool's direction
+ */
 export const ticksAtom = atom(async (get) => {
   const inputCurrency = await get(inputCurrencyAtom)
   const outputCurrency = await get(outputCurrencyAtom)
@@ -16,6 +21,7 @@ export const ticksAtom = atom(async (get) => {
 
   const {
     pool: { tickSpacing, tickCurrent },
+    zeroForOne: zeroForOneFromPool,
   } = selectedPool
 
   // Get price for limit order
@@ -25,20 +31,32 @@ export const ticksAtom = atom(async (get) => {
   if (!marketPrice) return undefined
 
   // Get limit order tick from price
-  const price = tryParsePrice(inputCurrency, outputCurrency, marketPrice)
-  if (!price) return undefined
+  const parsedPrice = tryParsePrice(inputCurrency, outputCurrency, marketPrice)
+  if (!parsedPrice) return undefined
 
-  const targetTick = tryParseTick(price, tickSpacing)
+  let targetTick = tryParseTick(parsedPrice, tickSpacing)
   if (!targetTick) return undefined
 
-  // Calculate tickLower and tickUpper
-  const zeroForOne = tickCurrent > targetTick
+  // If target tick is exactly at current tick, adjust it to be at the next tick depending on direction
+  if (targetTick + tickSpacing === tickCurrent || targetTick - tickSpacing === tickCurrent) {
+    if (zeroForOneFromPool) targetTick = tickCurrent + tickSpacing
+    else targetTick = tickCurrent - tickSpacing
+  }
 
-  const tickLower = zeroForOne ? targetTick : targetTick - tickSpacing
-  const tickUpper = zeroForOne ? targetTick + tickSpacing : targetTick
+  // Calculate tickLower and tickUpper
+  // TODO: Check if this is correct
+  // const zeroForOne = targetTick > tickCurrent
+
+  const tickLower = zeroForOneFromPool ? targetTick : targetTick - tickSpacing
+  const tickUpper = zeroForOneFromPool ? targetTick + tickSpacing : targetTick
 
   const priceLower = tickToPrice(inputCurrency, outputCurrency, tickLower)
   const priceUpper = tickToPrice(inputCurrency, outputCurrency, tickUpper)
 
-  return { tickLower, tickUpper, priceLower, priceUpper }
+  // Price = sqrt(priceLower * priceUpper)
+  const price = BN(priceLower.toFixed(18))
+    .multipliedBy(BN(priceUpper.toFixed(18)))
+    .sqrt()
+
+  return { price, tickLower, tickUpper, priceLower, priceUpper, targetTick, zeroForOne: zeroForOneFromPool }
 })

@@ -14,18 +14,15 @@ export const outputReceivedAtom = atom(async (get) => {
   const ticksData = await get(ticksAtom)
   if (!ticksData) return undefined
 
-  const { priceLower, priceUpper } = ticksData
+  const { price } = ticksData
 
   const formattedAmounts = await get(formattedAmountsAtom)
   const inputAmount = BN(formattedAmounts[Field.CURRENCY_A])
 
   if (inputAmount.isNaN() || !inputAmount.isFinite()) return undefined
 
-  const priceLowerBN = BN(priceLower.toFixed(18))
-  const priceUpperBN = BN(priceUpper.toFixed(18))
-
-  // output_received = input_amount * sqrt(priceLower * priceUpper)
-  const outputReceived = inputAmount.multipliedBy(BN(priceLowerBN.multipliedBy(priceUpperBN).sqrt().toFixed(18)))
+  // output_received = input_amount * price
+  const outputReceived = inputAmount.multipliedBy(price)
   return outputReceived
 })
 

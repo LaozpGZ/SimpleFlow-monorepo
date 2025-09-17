@@ -20,18 +20,28 @@ import { useAtomValue } from 'jotai'
 import { Suspense, useMemo, useState } from 'react'
 import { getFullChainNameById } from 'utils/getFullChainNameById'
 import { BigNumber as BN } from 'bignumber.js'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
+import { ApprovalState } from 'hooks/useApproveCallback'
 import { formattedAmountsAtom } from '../state/form/inputAtoms'
 import { Field, ValidationError } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { amountReceivedAtom, feesEarnedUSDAtom } from '../state/form/tradeDetailsAtoms'
 import { commitButtonEnabledAtom } from '../state/form/validationAtoms'
 import { currentMarketPriceAtom, customMarketPriceAtom } from '../state/form/marketPriceAtoms'
+import { usePlaceLimitOrder } from '../hooks/usePlaceLimitOrder'
+import { useLimitOrderApproval } from '../hooks/useLimitOrderApproval'
 
 export const CommitButton = () => {
   const { t } = useTranslation()
   const { isOpen, onDismiss, onOpen } = useModalV2()
 
+  const { approvalState, approveCallback } = useLimitOrderApproval()
+
+  const inputCurrency = useAtomValue(inputCurrencyAtom)
   const { enabled, errorReason } = useAtomValue(commitButtonEnabledAtom)
+
+  const showApproveButton =
+    enabled && (approvalState === ApprovalState.NOT_APPROVED || approvalState === ApprovalState.PENDING)
 
   const buttonText = useMemo(() => {
     if (errorReason === ValidationError.NO_LIQUIDITY) return t('Insufficient Liquidity')
@@ -45,9 +55,19 @@ export const CommitButton = () => {
   return (
     <>
       <Suspense>
-        <Button onClick={onOpen} disabled={!enabled}>
-          {buttonText}
-        </Button>
+        {showApproveButton && (
+          <Button onClick={approveCallback} disabled={approvalState === ApprovalState.PENDING}>
+            {approvalState === ApprovalState.PENDING
+              ? t('Approving...')
+              : t('Approve %symbol%', { symbol: inputCurrency?.symbol ?? '' })}
+          </Button>
+        )}
+
+        {!showApproveButton && (
+          <Button onClick={onOpen} disabled={!enabled}>
+            {buttonText}
+          </Button>
+        )}
       </Suspense>
       <PreviewModal isOpen={isOpen} onDismiss={onDismiss} />
     </>
@@ -69,17 +89,20 @@ const PreviewModal = ({ isOpen, onDismiss }: PreviewModalProps) => {
         bodyPadding="0 24px 24px"
         maxWidth={[null, null, null, '440px']}
       >
-        <ConfirmOrderContent />
+        <ConfirmOrderContent onDismiss={onDismiss} />
       </MotionModal>
     </ModalV2>
   )
 }
 
-const ConfirmOrderContent = () => {
+const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
   const { t } = useTranslation()
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
+
   const formattedAmounts = useAtomValue(formattedAmountsAtom)
+  const amountADisplay = formatNumber(BN(formattedAmounts[Field.CURRENCY_A]).toNumber(), { maxDecimalDisplayDigits: 6 })
+  const amountBDisplay = formatNumber(BN(formattedAmounts[Field.CURRENCY_B]).toNumber(), { maxDecimalDisplayDigits: 6 })
 
   const { data: currentMarketPrice } = useAtomValue(currentMarketPriceAtom)
   const customMarketPrice = useAtomValue(customMarketPriceAtom)
@@ -87,6 +110,8 @@ const ConfirmOrderContent = () => {
   const feesEarnedData = useAtomValue(feesEarnedUSDAtom)
   const feesEarnedUSD = feesEarnedData?.feesEarnedUSD
   const amountReceived = useAtomValue(amountReceivedAtom)
+
+  const { placeOrder } = usePlaceLimitOrder({ onError: onDismiss })
 
   const [isInverted, setIsInverted] = useState(false)
   const quotePrice = useMemo(() => {
@@ -107,8 +132,8 @@ const ConfirmOrderContent = () => {
         <DualCurrencyDisplay
           inputCurrency={inputCurrency ?? undefined}
           outputCurrency={outputCurrency ?? undefined}
-          inputAmount={formattedAmounts[Field.CURRENCY_A]}
-          outputAmount={formattedAmounts[Field.CURRENCY_B]}
+          inputAmount={amountADisplay}
+          outputAmount={amountBDisplay}
           inputChainName={getFullChainNameById(inputCurrency?.chainId)}
           outputChainName={getFullChainNameById(outputCurrency?.chainId)}
           overrideIcon={<ArrowForwardIcon width="24px" ml="4px" color="textSubtle" />}
@@ -162,7 +187,7 @@ const ConfirmOrderContent = () => {
         </Text>
       </Message>
 
-      <Button mt="16px" width="100%">
+      <Button mt="16px" width="100%" onClick={placeOrder}>
         {t('Confirm')}
       </Button>
     </Box>

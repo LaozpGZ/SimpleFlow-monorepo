@@ -7,6 +7,8 @@ import { atomWithQuery } from 'jotai-tanstack-query'
 import { FAST_INTERVAL } from 'config/constants'
 import { tickToPrice } from 'hooks/infinity/utils'
 import { getTickAdjustedPrice } from 'views/PCSLimitOrders/utils/ticks'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
+import { BigNumber as BN } from 'bignumber.js'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 
@@ -58,7 +60,9 @@ export const currentMarketPriceAtom = atomWithQuery((get) => ({
         outputAmount: outputAmount?.toSignificant(6),
       })
 
-      return price?.toSignificant(6)
+      return price
+        ? formatNumber(BN(price?.toFixed(18)), { maxDecimalDisplayDigits: 6, maximumSignificantDigits: 6 })
+        : undefined
     } catch (e) {
       console.error('Error in currentMarketPriceAtom', e)
 
@@ -67,7 +71,10 @@ export const currentMarketPriceAtom = atomWithQuery((get) => ({
       const priceFromPoolTick = tickToPrice(inputCurrency, outputCurrency, pool.tickCurrent)
 
       if (priceFromPoolTick) {
-        return priceFromPoolTick.toSignificant(6)
+        return formatNumber(BN(priceFromPoolTick.toFixed(18)), {
+          maxDecimalDisplayDigits: 6,
+          maximumSignificantDigits: 6,
+        })
       }
 
       return undefined

@@ -2,6 +2,10 @@ import { Currency } from '@pancakeswap/sdk'
 import { tickToPrice, tryParseTick } from 'hooks/infinity/utils'
 import { tryParsePrice } from 'hooks/v3/utils'
 
+export function invertTickForLimitOrder(tick: number, currentTick: number) {
+  return 2 * currentTick - tick
+}
+
 /**
  * Get price adjusted to the nearest tick
  * @param price - Price to adjust, in string format

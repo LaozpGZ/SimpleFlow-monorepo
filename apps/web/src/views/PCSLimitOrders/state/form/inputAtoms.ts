@@ -8,6 +8,7 @@ import { findBestTrade } from '@pancakeswap/routing-sdk'
 import { BigNumber as BN } from 'bignumber.js'
 import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
 import { getTickAdjustedPrice } from 'views/PCSLimitOrders/utils/ticks'
+import { parseUnits } from '@pancakeswap/utils/viem/parseUnits'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 import { independentFieldAtom, typedValueAtom } from './fieldAtoms'
 import { baseCurrencyAtom, quoteCurrencyAtom, inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
@@ -72,11 +73,34 @@ const dependentAmountAtom = atom(async (get) => {
 
     console.debug('Limit Orders bestTrade', bestTrade)
 
+    const { tick: exactInputTick, price: exactInputPrice } = getTickAdjustedPrice(
+      bestTrade?.outputAmount?.toExact() || '',
+      pool.tickSpacing,
+      inputCurrency,
+      outputCurrency,
+    )
+
+    const { tick: exactOutputTick, price: exactOutputPrice } = getTickAdjustedPrice(
+      bestTrade?.inputAmount?.toExact() || '',
+      pool.tickSpacing,
+      outputCurrency,
+      inputCurrency,
+    )
+
+    console.log('Limit Orders bestTrade', {
+      bestTrade,
+      exactInputTick,
+      exactInputPrice,
+      exactOutputTick,
+      exactOutputPrice,
+      currentTick: pool.tickCurrent,
+    })
+
     const result =
       tradeType === TradeType.EXACT_INPUT
         ? tryParseCurrencyAmount(
             getTickAdjustedPrice(
-              bestTrade?.outputAmountWithGasAdjusted?.toExact() || '',
+              bestTrade?.outputAmount?.toExact() || '',
               pool.tickSpacing,
               inputCurrency,
               outputCurrency,
@@ -85,7 +109,7 @@ const dependentAmountAtom = atom(async (get) => {
           )
         : tryParseCurrencyAmount(
             getTickAdjustedPrice(
-              bestTrade?.inputAmountWithGasAdjusted?.toExact() || '',
+              bestTrade?.inputAmount?.toExact() || '',
               pool.tickSpacing,
               outputCurrency,
               inputCurrency,
@@ -118,6 +142,23 @@ export const formattedAmountsAtom = atom(async (get) => {
   return {
     [Field.CURRENCY_A]: independentField === Field.CURRENCY_A ? typedValue : formattedDependentAmount,
     [Field.CURRENCY_B]: independentField === Field.CURRENCY_B ? typedValue : formattedDependentAmount,
+  }
+})
+
+export const parsedAmountsAtom = atom(async (get) => {
+  const inputCurrency = await get(inputCurrencyAtom)
+  const outputCurrency = await get(outputCurrencyAtom)
+  const formattedAmounts = await get(formattedAmountsAtom)
+
+  if (!inputCurrency || !outputCurrency)
+    return {
+      [Field.CURRENCY_A]: undefined,
+      [Field.CURRENCY_B]: undefined,
+    }
+
+  return {
+    [Field.CURRENCY_A]: parseUnits(formattedAmounts[Field.CURRENCY_A], inputCurrency.decimals),
+    [Field.CURRENCY_B]: parseUnits(formattedAmounts[Field.CURRENCY_B], outputCurrency.decimals),
   }
 })
 

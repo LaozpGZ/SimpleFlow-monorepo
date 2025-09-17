@@ -905,4 +905,4 @@ export const clLimitOrderHookABI = [
   },
   { type: 'error', name: 'ZeroAddress', inputs: [] },
   { type: 'error', name: 'ZeroLiquidity', inputs: [] },
-]
+] as const
