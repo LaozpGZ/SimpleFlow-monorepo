@@ -4,7 +4,7 @@ import { useAtomValue } from 'jotai'
 import { useCallback } from 'react'
 import { encodePoolKey, PoolKey } from '@pancakeswap/infinity-sdk'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { maxLiquidityForAmount0Precise, maxLiquidityForAmount1, nearestUsableTick, TickMath } from '@pancakeswap/v3-sdk'
+import { nearestUsableTick, sqrtRatioX96ToPrice, TickMath, maxLiquidityForAmounts } from '@pancakeswap/v3-sdk'
 import { calculateGasMargin } from 'utils'
 import { useToast } from '@pancakeswap/uikit'
 import { useTranslation } from '@pancakeswap/localization'
@@ -18,6 +18,7 @@ import { Field } from '../types/limitOrder.types'
 import { parsedAmountsAtom } from '../state/form/inputAtoms'
 import { ticksAtom } from '../state/form/ticksAtoms'
 import { selectedPoolAtom } from '../state/pools/poolAtoms'
+import { independentFieldAtom } from '../state/form/fieldAtoms'
 
 interface UsePlaceLimitOrder {
   onError?: (error: any) => void
@@ -33,6 +34,8 @@ export const usePlaceLimitOrder = ({ onError }: UsePlaceLimitOrder = {}) => {
 
   const inputCurrency = useAtomValue(inputCurrencyAtom)
   const outputCurrency = useAtomValue(outputCurrencyAtom)
+  const independentField = useAtomValue(independentFieldAtom)
+  const isExactIn = independentField === Field.CURRENCY_A
 
   const parsedAmounts = useAtomValue(parsedAmountsAtom)
   const selectedPool = useAtomValue(selectedPoolAtom)
@@ -44,7 +47,10 @@ export const usePlaceLimitOrder = ({ onError }: UsePlaceLimitOrder = {}) => {
 
     const parsedAmountA = parsedAmounts[Field.CURRENCY_A]
 
-    if (!parsedAmountA) return
+    // TESTING
+    const parsedAmountB = parsedAmounts[Field.CURRENCY_B]
+
+    if (!parsedAmountA || !parsedAmountB) return
 
     // PoolKey
     const { poolInfo } = selectedPool
@@ -96,13 +102,18 @@ export const usePlaceLimitOrder = ({ onError }: UsePlaceLimitOrder = {}) => {
     // const targetTick = 59210
     // const zeroForOne = false
 
-    // Liquidity
-    // TODO: zeroForOne may be breaking if around tickCurrent
-    const getLiquidity = zeroForOne ? maxLiquidityForAmount0Precise : maxLiquidityForAmount1
-    const liquidity = getLiquidity(
+    // Liquidity calculation using both token amounts
+    // Map input/output amounts to token0/token1 based on pool's currency ordering
+    const amount0 = zeroForOne ? parsedAmountA : parsedAmountB
+    const amount1 = zeroForOne ? parsedAmountB : parsedAmountA
+
+    const liquidity = maxLiquidityForAmounts(
       poolInfo.sqrtPriceX96,
-      TickMath.getSqrtRatioAtTick(zeroForOne ? tickUpper : tickLower),
-      parsedAmountA,
+      TickMath.getSqrtRatioAtTick(tickLower),
+      TickMath.getSqrtRatioAtTick(tickUpper),
+      amount0,
+      amount1,
+      true, // useFullPrecision
     )
 
     console.log('placeOrder', {
