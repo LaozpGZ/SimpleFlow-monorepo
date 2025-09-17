@@ -24,7 +24,6 @@ export function useBridgeAvailableRoutes(params?: GetAvailableRoutesParams) {
 
 export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
   const { data, isLoading } = useBridgeAvailableRoutes()
-  // if privy login, exclude zkSync
   const { address: privyAddress } = usePrivyWalletAddress()
 
   // only return chains array,add origin chain id to the array
@@ -50,8 +49,9 @@ export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
 
   return useMemo(() => {
     return {
-      chains,
+      // if privy login, exclude zkSync because social login is not supported
+      chains: chains.filter((chain) => (privyAddress ? chain !== ChainId.ZKSYNC : true)),
       loading: isLoading,
     }
-  }, [chains, isLoading])
+  }, [chains, isLoading, privyAddress])
 }
