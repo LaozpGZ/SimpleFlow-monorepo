@@ -1,4 +1,4 @@
-import { Currency, Native, SOL, Trade, TradeType } from '@pancakeswap/sdk'
+import { Currency, Native, SOL, Trade, TradeType, UnifiedNativeCurrency } from '@pancakeswap/sdk'
 import { CAKE, STABLE_COIN, USDC, USDT } from '@pancakeswap/tokens'
 import { PairDataTimeWindowEnum } from '@pancakeswap/uikit'
 import { useQuery } from '@tanstack/react-query'
@@ -14,8 +14,8 @@ import { ParsedUrlQuery } from 'querystring'
 import { useCallback, useEffect, useState } from 'react'
 import { ChartPeriod, chainIdToExplorerInfoChainName, explorerApiClient } from 'state/info/api/client'
 import { isAddressEqual, safeGetAddress, safeGetUnifiedAddress } from 'utils'
-import { isSolana, NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
-import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks'
+import { NonEVMChainId, UnifiedChainId } from '@pancakeswap/chains'
+import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks'
 import { Field, replaceSwapState } from './actions'
 import { SwapState, swapReducerAtom } from './reducer'
 
@@ -134,12 +134,23 @@ export function normalizeCurrencySelectionForChain({
   supportedBridgeChains,
   chainId,
   defaultOutputCurrency,
+}: {
+  inputCurrencyId?: string
+  inputChainId?: number
+  outputCurrencyId?: string
+  outputChainId?: number
+  native: UnifiedNativeCurrency
+  pathname: string
+  supportedBridgeChains: UnifiedChainId[]
+  chainId: number
+  defaultOutputCurrency: string
 }) {
   let finalInputCurrencyId = inputCurrencyId
   let finalInputChainId = inputChainId
   let finalOutputCurrencyId = outputCurrencyId
   let finalOutputChainId = outputChainId
 
+  // not support pages bridge
   const isNotTwapOrLimitPath = !['twap', 'limit'].some((p) => pathname.includes(p))
 
   // Set input currency to default (native currency) if chain is changed by user
@@ -149,13 +160,10 @@ export function normalizeCurrencySelectionForChain({
     finalInputChainId = chainId
 
     const isOutputChainSupported =
-      isSolana(finalInputChainId) ||
-      isSolana(finalOutputChainId) ||
-      (finalOutputChainId &&
-        isNotTwapOrLimitPath &&
-        supportedBridgeChains?.some(
-          (route) => route.originChainId === finalInputChainId && route.destinationChainId === finalOutputChainId,
-        ))
+      finalOutputChainId &&
+      isNotTwapOrLimitPath &&
+      supportedBridgeChains.includes(finalInputChainId) &&
+      supportedBridgeChains.includes(finalOutputChainId)
 
     // If now input and output currencies are the same,
     // OR if output chain is NOT supported by the bridge,
@@ -171,13 +179,9 @@ export function normalizeCurrencySelectionForChain({
 
   if (finalOutputChainId && finalOutputChainId !== chainId) {
     const isOutputChainSupported =
-      isSolana(finalInputChainId) ||
-      isSolana(finalOutputChainId) ||
-      (isNotTwapOrLimitPath &&
-        supportedBridgeChains?.some(
-          (route) =>
-            route.originChainId === (finalInputChainId || chainId) && route.destinationChainId === finalOutputChainId,
-        ))
+      isNotTwapOrLimitPath &&
+      supportedBridgeChains?.find((id) => id === finalInputChainId || id === chainId) &&
+      supportedBridgeChains?.includes(finalOutputChainId)
 
     if (!isOutputChainSupported) {
       finalOutputCurrencyId = defaultOutputCurrency
@@ -220,7 +224,7 @@ export function useDefaultsFromURLSearch():
     | undefined
   >()
 
-  const { data: supportedBridgeChains, isPending: isSupportedBridgePending } = useBridgeAvailableRoutes()
+  const { chains: supportedBridgeChains, loading: isSupportedBridgePending } = useBridgeAvailableChains()
 
   useEffect(() => {
     if (!chainId || !native || !isReady) return

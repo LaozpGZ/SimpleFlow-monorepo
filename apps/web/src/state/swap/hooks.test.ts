@@ -3,6 +3,7 @@
 import { parse } from 'querystring'
 import { Mock, vi } from 'vitest'
 import { NonEVMChainId } from '@pancakeswap/chains'
+import { UnifiedNativeCurrency } from '@pancakeswap/swap-sdk-core'
 import { Field } from './actions'
 import { queryParametersToSwapState, normalizeCurrencySelectionForChain } from './hooks'
 
@@ -106,7 +107,7 @@ describe('hooks', () => {
   })
 
   describe('#normalizeCurrencySelectionForChain', () => {
-    const mockNative = { symbol: 'BNB' }
+    const mockNative = { symbol: 'BNB' } as UnifiedNativeCurrency
     const defaultParams = {
       native: mockNative,
       pathname: '/swap',
@@ -138,7 +139,7 @@ describe('hooks', () => {
         inputChainId: 1, // Ethereum
         outputCurrencyId: '0x55d398326f99059fF775485246999027B3197955',
         outputChainId: 56,
-        supportedBridgeChains: [{ originChainId: 56, destinationChainId: 56 }],
+        supportedBridgeChains: [56],
         ...defaultParams,
       })
 
@@ -192,7 +193,7 @@ describe('hooks', () => {
         inputChainId: 56,
         outputCurrencyId: 'SOL',
         outputChainId: NonEVMChainId.SOLANA,
-        supportedBridgeChains: [],
+        supportedBridgeChains: [NonEVMChainId.SOLANA, 56],
         ...defaultParams,
       })
 
@@ -210,7 +211,7 @@ describe('hooks', () => {
         inputChainId: 1, // Ethereum
         outputCurrencyId: '0x55d398326f99059fF775485246999027B3197955',
         outputChainId: 56, // BSC
-        supportedBridgeChains: [{ originChainId: 56, destinationChainId: 56 }],
+        supportedBridgeChains: [56],
         ...defaultParams,
       })
 
@@ -264,7 +265,7 @@ describe('hooks', () => {
         inputChainId: 56,
         outputCurrencyId: '0x1111111111111111111111111111111111111111',
         outputChainId: 1, // Ethereum
-        supportedBridgeChains: [{ originChainId: 56, destinationChainId: 1 }],
+        supportedBridgeChains: [56, 1],
         ...defaultParams,
       })
 

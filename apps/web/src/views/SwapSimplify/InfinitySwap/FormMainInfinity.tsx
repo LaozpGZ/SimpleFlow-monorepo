@@ -1,4 +1,4 @@
-import { ChainId as EvmChainId, isSolana } from '@pancakeswap/chains'
+import { ChainId as EvmChainId, isSolana, UnifiedChainId } from '@pancakeswap/chains'
 import { useTranslation } from '@pancakeswap/localization'
 import { Currency, Percent, UnifiedCurrency, UnifiedCurrencyAmount } from '@pancakeswap/sdk'
 import { Box, FlexGap, Image, Skeleton, Text } from '@pancakeswap/uikit'
@@ -23,8 +23,8 @@ import { SwitchChainOption } from 'wallet/hook/useSwitchNetworkV2'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import currencyId from 'utils/currencyId'
 import { maxUnifiedAmountSpend } from 'utils/maxAmountSpend'
-import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
 import { getDefaultToken } from 'views/Swap/utils'
+import { useBridgeAvailableChains } from 'views/Swap/Bridge/hooks'
 import useWarningImport from '../../Swap/hooks/useWarningImport'
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import { AssignRecipientButton, FlipButton } from './FlipButton'
@@ -46,7 +46,7 @@ interface HandleCurrencySelectDeps {
   canSwitchToChain: (chainId: number) => boolean
   switchNetwork: (chainId: number, options?: SwitchChainOption) => void
   outputChainId: number | undefined
-  supportedBridgeChains: { data?: { originChainId: number; destinationChainId: number }[] }
+  supportedBridgeChains: UnifiedChainId[] | undefined
   inputChainId: number | undefined
   inputCurrencyId: string | undefined
   outputCurrencyId: string | undefined
@@ -114,12 +114,9 @@ export const handleCurrencySelectFn = async ({
 
   if (isInput && newCurrency.chainId !== outputChainId) {
     const isOutputChainSupported =
-      isSolana(newCurrency.chainId) ||
-      isSolana(outputChainId) ||
-      (outputChainId &&
-        supportedBridgeChains.data?.some(
-          (route) => route.originChainId === newCurrency.chainId && route.destinationChainId === outputChainId,
-        ))
+      outputChainId &&
+      supportedBridgeChains?.includes(newCurrency.chainId) &&
+      supportedBridgeChains.includes(outputChainId)
 
     if (!isOutputChainSupported) {
       // if output chain is not supported, reset output currency
@@ -194,7 +191,7 @@ export function FormMain({ inputAmount, outputAmount, tradeLoading, isUserInsuff
 
   const { canSwitchToChain, switchNetwork } = useSwitchNetwork()
 
-  const supportedBridgeChains = useBridgeAvailableRoutes()
+  const { chains: supportedBridgeChains } = useBridgeAvailableChains()
 
   const router = useRouter()
 
