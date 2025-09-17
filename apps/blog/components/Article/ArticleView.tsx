@@ -31,7 +31,6 @@ const Container = styled(Box)`
   position: relative;
   width: 100%;
   margin: auto;
-  top: -55px;
 
   ${({ theme }) => theme.mediaQueries.xl} {
     width: 747px;
@@ -43,10 +42,10 @@ const Container = styled(Box)`
 
 const StyledTitleContainer = styled(Box)`
   padding: 0 16px;
-  margin-bottom: 64px;
+  margin-bottom: 32px;
 
   ${({ theme }) => theme.mediaQueries.lg} {
-    margin-bottom: 80px;
+    margin-bottom: 40px;
   }
 
   @media screen and (min-width: 1440px) {
