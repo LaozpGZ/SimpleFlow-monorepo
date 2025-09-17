@@ -2,7 +2,6 @@ import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { CROSSCHAIN_SUPPORTED_CHAINS } from 'quoter/utils/crosschain-utils/config'
 import { ChainId, isSolana, NonEVMChainId } from '@pancakeswap/chains'
-import { usePrivy } from '@privy-io/react-auth'
 import { usePrivyWalletAddress } from 'wallet/Privy/hooks/usePrivyWalletAddress'
 import { GetAvailableRoutesParams, getBridgeAvailableRoutes } from '../api'
 
@@ -32,22 +31,19 @@ export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
       return CROSSCHAIN_SUPPORTED_CHAINS
     }
 
-    const chains =
-      data && params?.originChainId
-        ? [
-            ...new Set(
-              data
-                .filter((route) => route.originChainId === params.originChainId)
-                .map((route) => route.destinationChainId),
-            ),
-          ]
-        : []
+    if (!data) return []
 
-    if (chains.length > 0) {
-      return [params.originChainId, NonEVMChainId.SOLANA, ...chains]
-    }
+    const acrossSupportedChains = [
+      ...new Set(
+        data.filter((route) => route.originChainId === params.originChainId).map((route) => route.destinationChainId),
+      ),
+    ]
 
-    return [params.originChainId]
+    return [
+      params.originChainId,
+      ...(acrossSupportedChains.length > 0 ? [NonEVMChainId.SOLANA] : []),
+      ...acrossSupportedChains,
+    ]
   }, [data, params?.originChainId, privyAddress])
 
   return useMemo(() => {
