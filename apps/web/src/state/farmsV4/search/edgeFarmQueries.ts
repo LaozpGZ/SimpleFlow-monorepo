@@ -135,10 +135,13 @@ async function fetchFarms(query: {
     ])
   }
   if (tokens && tokens.length > 0) {
-    return fetchAllExplorerPoolsByAddress(Array.from(chainIds), tokens, protocols)
+    const byTokenAddress = fetchAllExplorerPoolsByAddress(Array.from(chainIds), tokens, protocols, true)
+    const byPoolAddress = fetchAllExplorerPoolsByPoolAddress(Array.from(chainIds), tokens, protocols)
+    return mergePromiseList([byTokenAddress, byPoolAddress])
   }
+
   if (symbols && symbols.length > 0) {
-    return fetchAllExplorerPoolsBySymbols(Array.from(chainIds), symbols, protocols)
+    return fetchAllExplorerPoolsByPoolAddress(Array.from(chainIds), symbols, protocols)
   }
   return fetchAllExplorerPools(protocols, Array.from(chainIds))
 }
@@ -214,25 +217,25 @@ async function fetchAllExplorerPools(protocols: Protocol[], chains: FarmV4Suppor
   return pools.map(normalizeAddress).filter((x) => x) as InfinityRouter.RemotePoolBase[]
 }
 
-async function fetchAllExplorerPoolsByAddress(
+async function fetchAllExplorerPoolsByPoolAddress(
   chains: FarmV4SupportedChainId[],
-  tokens: string[],
+  pools: string[],
   protocols: Protocol[],
 ) {
   if (!protocols.length) return []
   const baseUrl = `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/list`
   const chainNames = chains.map((chain) => getEdgeChainName(chain))
 
-  if (!tokens.length) return []
+  if (!pools.length) return []
 
-  const chunks = chunk(tokens, 20)
+  const chunks = chunk(pools, 20)
   const allPools = await mergePromiseList(
-    chunks.map((tokenChunk) => {
+    chunks.map((poolChunk) => {
       return edgeQueries.fetchAllPools({
         baseUrl,
         protocols,
         chains: chainNames,
-        tokens: tokenChunk,
+        pools: poolChunk,
         maxPages: 1,
       })
     }),
@@ -243,30 +246,31 @@ async function fetchAllExplorerPoolsByAddress(
     .filter((x) => x) as InfinityRouter.RemotePoolBase[]
 }
 
-async function fetchAllExplorerPoolsBySymbols(
+async function fetchAllExplorerPoolsByAddress(
   chains: FarmV4SupportedChainId[],
-  symbols: string[],
+  addresses: string[],
   protocols: Protocol[],
+  isPool: boolean = false,
 ) {
   if (!protocols.length) return []
-  if (!symbols.length) return []
-
   const baseUrl = `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/list`
   const chainNames = chains.map((chain) => getEdgeChainName(chain))
 
-  const chunks = chunk(symbols, 20)
+  if (!addresses.length) return []
+
+  const chunks = chunk(addresses, 20)
   const allPools = await mergePromiseList(
-    chunks.map((symbolChunk) => {
+    chunks.map((addrChunk) => {
       return edgeQueries.fetchAllPools({
         baseUrl,
         protocols,
         chains: chainNames,
-        symbols: symbolChunk,
+        pools: isPool ? addrChunk : undefined,
+        tokens: !isPool ? addrChunk : undefined,
         maxPages: 1,
       })
     }),
   )
-
   return allPools
     .flat()
     .map(normalizeAddress)
