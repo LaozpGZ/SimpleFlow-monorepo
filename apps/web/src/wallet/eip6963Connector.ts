@@ -96,7 +96,9 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
         await withRetry(
           async () => {
             const value = normalizeChainId(await provider.request({ method: 'eth_chainId' }))
-            if (value !== chainId) throw new Error('User rejected switch after adding network.')
+            if (value !== chainId) {
+              throw new Error(`ChainId mismatch after network switch. Expected: ${chainId}, got: ${value}`)
+            }
             return value
           },
           {
@@ -108,7 +110,7 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
       async function sendAndWaitForChangeEvent(chainId: number) {
         await new Promise<void>((resolve) => {
           const listener = ((data) => {
-            if ('chainId' in data && data.chainId === chainId) {
+            if (data && typeof data === 'object' && 'chainId' in data && data.chainId === chainId) {
               config.emitter.off('change', listener)
               resolve()
             }
