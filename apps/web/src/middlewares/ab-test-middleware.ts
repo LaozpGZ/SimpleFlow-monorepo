@@ -1,6 +1,6 @@
 import { getCookieKey } from 'config/experimentalFeatures'
 import { NextFetchEvent, NextResponse } from 'next/server'
-import { getExperimentalFeatureAccessList } from '../pages/flags'
+import { getExperimentalFeatureAccessList } from '../flags'
 import { ONE_YEAR_SECONDS } from './constants'
 import { ExtendedNextReq, MiddlewareFactory, NextMiddleware } from './types'
 
