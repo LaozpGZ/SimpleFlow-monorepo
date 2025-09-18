@@ -4,13 +4,6 @@ import { fetchCLPoolInfo } from 'state/farmsV4/state/accountPositions/fetcher/in
 import { getClPoolWithCache } from 'hooks/infinity/getPool'
 import { Token } from '@pancakeswap/sdk'
 import { loadable } from 'jotai/utils'
-import { getPoolTicks } from 'hooks/useAllTicksQuery'
-import { Protocol } from '@pancakeswap/farms'
-import { InfinityClPool, InfinityRouter, PoolType } from '@pancakeswap/smart-router'
-import { encodeHooksRegistration } from '@pancakeswap/infinity-sdk'
-import { publicClient } from 'utils/viem'
-import { fetchInfinityCLPoolTicksWithFallback } from 'views/PCSLimitOrders/utils/pools'
-import { toRoutingSDKPool } from 'utils/convertTrade'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { supportedPoolsListAtom } from './poolsListAtom'
 import { getCurrencyIdWithZeroAddr } from '../../utils'
@@ -70,27 +63,7 @@ export const selectedPoolAtom = atom(async (get) => {
     tickSpacing: parameters.tickSpacing,
   })
 
-  const infinityPool: InfinityClPool = {
-    id: poolId,
-    currency0: currencyA,
-    currency1: currencyB,
-    fee: pool.fee,
-    liquidity: pool.liquidity,
-    poolManager: poolInfo.poolManager,
-    sqrtRatioX96: pool.sqrtRatioX96,
-    tick: poolInfo.tick,
-    tickSpacing: poolInfo.parameters.tickSpacing,
-    type: PoolType.InfinityCL,
-    protocolFee: pool.protocolFee,
-    hooks: poolInfo.hooks,
-    hooksRegistrationBitmap: encodeHooksRegistration(poolInfo.parameters.hooksRegistration),
-  }
-
-  const poolWithTicks = await fetchInfinityCLPoolTicksWithFallback(chainId, infinityPool)
-
-  const routingSdkPool = toRoutingSDKPool(poolWithTicks)
-
-  return { poolId, pool, routingSdkPool, poolInfo, zeroForOne, currencyA, currencyB }
+  return { poolId, pool, poolInfo, zeroForOne, currencyA, currencyB }
 })
 
 export const loadablePoolAtom = loadable(selectedPoolAtom)
