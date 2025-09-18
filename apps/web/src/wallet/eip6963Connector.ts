@@ -5,6 +5,8 @@ import { EIP6963Detail } from './WalletProvider'
 
 const cache = new Map<string, any>()
 
+type CreateConnectorConfig = Parameters<typeof createConnector>[0] extends (arg: infer C) => any ? C : never
+
 const normalizeChainId = (chainId: unknown): number => {
   if (typeof chainId === 'number') {
     return chainId
@@ -13,6 +15,36 @@ const normalizeChainId = (chainId: unknown): number => {
     return chainId.startsWith('0x') ? parseInt(chainId, 16) : parseInt(chainId, 10)
   }
   throw new Error(`Invalid chainId: ${chainId}`)
+}
+
+const waitForChainIdToSync = async (provider: any, chainId: number): Promise<number> => {
+  return withRetry(
+    async () => {
+      const value = normalizeChainId(await provider.request({ method: 'eth_chainId' }))
+      if (value !== chainId) {
+        throw new Error(`ChainId mismatch after network switch. Expected: ${chainId}, got: ${value}`)
+      }
+      return value
+    },
+    {
+      delay: 50,
+      retryCount: 20,
+    },
+  )
+}
+
+const sendAndWaitForChangeEvent = async (config: CreateConnectorConfig, chainId: number): Promise<void> => {
+  await new Promise<void>((resolve) => {
+    const listener = ((data) => {
+      if (data && typeof data === 'object' && 'chainId' in data && data.chainId === chainId) {
+        config.emitter.off('change', listener)
+        resolve()
+      }
+    }) satisfies Parameters<typeof config.emitter.on>[1]
+
+    config.emitter.on('change', listener)
+    config.emitter.emit('change', { chainId })
+  })
 }
 
 export const createEip6963Connector = (detail: EIP6963Detail) => {
@@ -86,39 +118,11 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
         params: [{ chainId: `0x${chainId.toString(16)}` }],
       })
 
-      await waitForChainIdToSync()
-      await sendAndWaitForChangeEvent(chainId)
+      await waitForChainIdToSync(provider, chainId)
+      await sendAndWaitForChangeEvent(config, chainId)
 
       const chain = chains.find((x) => x.id === chainId)!
       return chain
-
-      async function waitForChainIdToSync() {
-        await withRetry(
-          async () => {
-            const value = normalizeChainId(await provider.request({ method: 'eth_chainId' }))
-            if (value !== chainId) {
-              throw new Error(`ChainId mismatch after network switch. Expected: ${chainId}, got: ${value}`)
-            }
-            return value
-          },
-          {
-            delay: 50,
-            retryCount: 20,
-          },
-        )
-      }
-      async function sendAndWaitForChangeEvent(chainId: number) {
-        await new Promise<void>((resolve) => {
-          const listener = ((data) => {
-            if (data && typeof data === 'object' && 'chainId' in data && data.chainId === chainId) {
-              config.emitter.off('change', listener)
-              resolve()
-            }
-          }) satisfies Parameters<typeof config.emitter.on>[1]
-          config.emitter.on('change', listener)
-          config.emitter.emit('change', { chainId })
-        })
-      }
     },
   }))
   cache.set(info.uuid, connector)
