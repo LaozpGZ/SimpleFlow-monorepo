@@ -1,35 +1,39 @@
-import {
-  EXPERIMENTAL_FEATURES,
-  EXPERIMENTAL_FEATURE_CONFIGS,
-  ExperimentalFeatureConfigs,
-  FeatureRollOutConfig,
-  getCookieKey,
-} from 'config/experimentalFeatures'
+import { EXPERIMENTAL_FEATURES, getCookieKey } from 'config/experimentalFeatures'
 import { NextFetchEvent, NextResponse } from 'next/server'
+import { allFlags } from '../flags'
 import { ONE_YEAR_SECONDS } from './constants'
 import { ExtendedNextReq, MiddlewareFactory, NextMiddleware } from './types'
-// this function generates a deterministic result for a user for a given feature
-// it hashes a concatination of the users ip together with the features identifier and
-// probanility value. this allows us to ensure that a users probability result is different
-// for each feature gauranteeing a better distribution
-export const getExperimentalFeatureAccessList = async (
-  userIdentifier: string,
-  abTestingfeatureFlagInfo: ExperimentalFeatureConfigs,
-): Promise<Array<{ feature: EXPERIMENTAL_FEATURES; hasAccess: boolean }>> => {
-  const userWhitelistResults = await Promise.all(
-    abTestingfeatureFlagInfo.map(
-      async (flag: FeatureRollOutConfig): Promise<{ feature: EXPERIMENTAL_FEATURES; hasAccess: boolean }> => {
-        if (flag.whitelist.includes(userIdentifier)) return { feature: flag.feature, hasAccess: true }
-        const msgBuffer = new TextEncoder().encode(`${userIdentifier}-${flag.feature}`)
-        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer)
-        const bufferArray = new Uint8Array(hashBuffer)
-        const lastByte = bufferArray[bufferArray.length - 1]
 
-        return { feature: flag.feature, hasAccess: lastByte <= flag.percentage * 0xff }
-      },
-    ),
+// Helper to create a compatible request object for flags
+const createFlagRequest = (request: ExtendedNextReq) => {
+  return {
+    cookies: request.cookies,
+    headers: request.headers,
+    clientId: request.clientId,
+    url: request.url,
+    method: request.method,
+  }
+}
+
+// Get experimental feature access using the new flags SDK
+export const getExperimentalFeatureAccessList = async (
+  request: ExtendedNextReq,
+): Promise<Array<{ feature: EXPERIMENTAL_FEATURES; hasAccess: boolean }>> => {
+  const flagRequest = createFlagRequest(request)
+
+  const flagEvaluations = await Promise.all(
+    Object.entries(allFlags).map(async ([feature, flagFunction]) => {
+      try {
+        // Pass the adapted request object to the flag function
+        const hasAccess = await flagFunction(flagRequest as any)
+        return { feature: feature as EXPERIMENTAL_FEATURES, hasAccess }
+      } catch (error) {
+        console.error(`Error evaluating flag ${feature}:`, error)
+        return { feature: feature as EXPERIMENTAL_FEATURES, hasAccess: false }
+      }
+    }),
   )
-  return userWhitelistResults
+  return flagEvaluations
 }
 
 export const withABTesting: MiddlewareFactory = (next: NextMiddleware) => {
@@ -38,7 +42,10 @@ export const withABTesting: MiddlewareFactory = (next: NextMiddleware) => {
     const response = (await next(request, _next)) || NextResponse.next()
     if (!clientId) return response
 
-    const accessList = await getExperimentalFeatureAccessList(clientId, EXPERIMENTAL_FEATURE_CONFIGS)
+    const accessList = await getExperimentalFeatureAccessList(request)
+
+    console.log('accessList', accessList)
+
     for (const { feature, hasAccess } of accessList) {
       response.cookies.set(getCookieKey(feature), hasAccess.toString(), {
         secure: true,

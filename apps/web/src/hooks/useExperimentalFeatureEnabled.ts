@@ -54,6 +54,9 @@ export function useLoadExperimentalFeatures() {
       const hasFeatureFlag = hasFeatureFlagsInCookies(feature)
       featureFlags[feature] = hasFeatureFlag
     }
+
+    console.log('featureFlags', featureFlags)
+
     setExperimentalFeatures((prev) => ({ ...prev, ...featureFlags }))
   }, [setExperimentalFeatures])
 
