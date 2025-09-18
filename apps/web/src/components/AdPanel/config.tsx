@@ -54,7 +54,6 @@ export const useAdConfig = () => {
     ],
     [shouldRenderAdIfo, tradingCompetitionAds, jsonAdsList],
   )
-  console.log(`[json] ads`, adList)
 
   return useMemo(
     () =>
