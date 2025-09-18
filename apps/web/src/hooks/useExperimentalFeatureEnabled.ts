@@ -34,8 +34,6 @@ export function useExperimentalFeature(featureFlag: EXPERIMENTAL_FEATURES) {
   )
   const enabled = useMemo(() => features[featureFlag], [features, featureFlag])
 
-  console.log('enabled', enabled)
-
   return { enabled, setEnabled }
 }
 
