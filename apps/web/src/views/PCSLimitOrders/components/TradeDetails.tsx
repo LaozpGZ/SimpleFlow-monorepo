@@ -14,6 +14,10 @@ export const TradeDetails = (props: BoxProps) => {
 
   const amountReceived = useAtomValue(amountReceivedAtom)
 
+  if (!feesEarnedUSD && !amountReceived) {
+    return null
+  }
+
   return (
     <Box {...props}>
       <AutoColumn gap="8px">

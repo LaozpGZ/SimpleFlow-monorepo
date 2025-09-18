@@ -12,6 +12,7 @@ import { MarketPriceInput } from './components/MarketPriceInput'
 import { QuickActionButtons } from './components/QuickActionButtons'
 import { TradeDetails } from './components/TradeDetails'
 import { TestingArea } from './components/TestingArea'
+import { OrdersSummaryCard } from './components/OrderHistory/OrdersSummaryCard'
 
 export const PCSLimitOrdersView = () => {
   const { t } = useTranslation()
@@ -34,6 +35,8 @@ export const PCSLimitOrdersView = () => {
             <CommitButton />
             <TradeDetails mt="2px" />
           </PanelWrapper>
+
+          <OrdersSummaryCard />
         </SwapUIV2.SwapFormWrapper>
 
         <Link href="/swap/limit-v1" color="primary60" textAlign="center" mx="auto">
