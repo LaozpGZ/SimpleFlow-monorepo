@@ -23,12 +23,12 @@ export const ticksAtom = atom(async (get) => {
 
   const {
     pool: { tickSpacing, tickCurrent },
-    zeroForOne: zeroForOneFromPool,
+    zeroForOne,
   } = selectedPool
 
   // Get price for limit order
   const customMarketPrice = get(customMarketPriceAtom)
-  const { data: currentMarketPrice } = get(currentMarketPriceAtom)
+  const currentMarketPrice = await get(currentMarketPriceAtom)
   const marketPrice = customMarketPrice || currentMarketPrice
   if (!marketPrice) return undefined
 
@@ -39,18 +39,15 @@ export const ticksAtom = atom(async (get) => {
   let targetTick = tryParseTick(parsedPrice, tickSpacing)
   if (!targetTick) return undefined
 
-  // If target tick is exactly at current tick, adjust it to be at the next tick depending on direction
-  if (targetTick + tickSpacing === tickCurrent || targetTick - tickSpacing === tickCurrent) {
-    if (zeroForOneFromPool) targetTick = tickCurrent + tickSpacing
-    else targetTick = tickCurrent - tickSpacing
+  // If current tick is between targetTick and its next tick, adjust it depending on direction
+  if (targetTick <= tickCurrent && targetTick + tickSpacing >= tickCurrent) {
+    if (zeroForOne) targetTick += tickSpacing
+    else targetTick -= tickSpacing
   }
 
   // Calculate tickLower and tickUpper
-  // TODO: Check if this is correct
-  // const zeroForOne = targetTick > tickCurrent
-
-  const tickLower = zeroForOneFromPool ? targetTick : targetTick - tickSpacing
-  const tickUpper = zeroForOneFromPool ? targetTick + tickSpacing : targetTick
+  const tickLower = zeroForOne ? targetTick : targetTick - tickSpacing
+  const tickUpper = zeroForOne ? targetTick + tickSpacing : targetTick
 
   const priceLower = tickToPrice(inputCurrency, outputCurrency, tickLower)
   const priceUpper = tickToPrice(inputCurrency, outputCurrency, tickUpper)
@@ -63,7 +60,9 @@ export const ticksAtom = atom(async (get) => {
   // Calculate Limit Order ticks (opposite direction to pool)
   const invertedTickLower = nearestUsableTick(invertTickForLimitOrder(tickUpper, tickCurrent), tickSpacing)
   const invertedTickUpper = nearestUsableTick(invertTickForLimitOrder(tickLower, tickCurrent), tickSpacing)
-  const invertedTargetTick = zeroForOneFromPool ? invertedTickUpper : invertedTickLower
+  const invertedTargetTick = zeroForOne ? invertedTickUpper : invertedTickLower
+
+  const isSellingOrBuyingAtWorsePrice = zeroForOne ? invertedTickLower <= tickCurrent : invertedTickUpper >= tickCurrent
 
   // FOR TESTING
   const invertedPriceLower = tickToPrice(inputCurrency, outputCurrency, invertedTickLower)
@@ -80,7 +79,7 @@ export const ticksAtom = atom(async (get) => {
     invertedTargetTick,
     tickCurrent,
     targetTick,
-    zeroForOne: zeroForOneFromPool,
+    zeroForOne,
     price: price.toFormat(6),
     invertedPrice: invertedPrice.toFormat(6),
   })
@@ -92,9 +91,10 @@ export const ticksAtom = atom(async (get) => {
     priceLower,
     priceUpper,
     targetTick,
-    zeroForOne: zeroForOneFromPool,
+    zeroForOne,
     invertedTickLower,
     invertedTickUpper,
     invertedTargetTick,
+    isSellingOrBuyingAtWorsePrice,
   }
 })

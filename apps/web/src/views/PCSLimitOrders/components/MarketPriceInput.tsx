@@ -86,7 +86,7 @@ export const MarketPriceInput = () => {
 
   const pool = useAtomValue(selectedPoolAtom)
 
-  const { data: currentMarketPrice } = useAtomValue(currentMarketPriceAtom)
+  const currentMarketPrice = useAtomValue(currentMarketPriceAtom)
 
   const [customMarketPrice, setCustomMarketPrice] = useAtom(customMarketPriceAtom)
 

@@ -11,6 +11,7 @@ import { CommitButton } from './components/CommitButton'
 import { MarketPriceInput } from './components/MarketPriceInput'
 import { QuickActionButtons } from './components/QuickActionButtons'
 import { TradeDetails } from './components/TradeDetails'
+import { TestingArea } from './components/TestingArea'
 
 export const PCSLimitOrdersView = () => {
   const { t } = useTranslation()
@@ -41,6 +42,9 @@ export const PCSLimitOrdersView = () => {
 
         {/* TODO: add ad panel here */}
       </Page>
+
+      {/* TESTING */}
+      <TestingArea />
     </>
   )
 }

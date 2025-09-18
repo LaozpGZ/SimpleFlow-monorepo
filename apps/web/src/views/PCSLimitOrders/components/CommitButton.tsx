@@ -104,7 +104,7 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
   const amountADisplay = formatNumber(BN(formattedAmounts[Field.CURRENCY_A]).toNumber(), { maxDecimalDisplayDigits: 6 })
   const amountBDisplay = formatNumber(BN(formattedAmounts[Field.CURRENCY_B]).toNumber(), { maxDecimalDisplayDigits: 6 })
 
-  const { data: currentMarketPrice } = useAtomValue(currentMarketPriceAtom)
+  const currentMarketPrice = useAtomValue(currentMarketPriceAtom)
   const customMarketPrice = useAtomValue(customMarketPriceAtom)
 
   const feesEarnedData = useAtomValue(feesEarnedUSDAtom)
@@ -170,7 +170,7 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
             <Text color="textSubtle" small>
               {t('Amount Received')}
             </Text>
-            <Text small>{amountReceived ? `${amountReceived.toFormat(2)} ${outputCurrency?.symbol}` : '-'}</Text>
+            <Text small>{amountReceived ? `${amountReceived.toFormat(6)} ${outputCurrency?.symbol}` : '-'}</Text>
           </RowBetween>
         </AutoColumn>
       </LightGreyCard>

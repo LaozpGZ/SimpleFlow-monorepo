@@ -10,6 +10,7 @@ export const TradeDetails = (props: BoxProps) => {
 
   const feesEarnedData = useAtomValue(feesEarnedUSDAtom)
   const feesEarnedUSD = feesEarnedData?.feesEarnedUSD
+
   const amountReceived = useAtomValue(amountReceivedAtom)
 
   return (
@@ -27,7 +28,7 @@ export const TradeDetails = (props: BoxProps) => {
             <DottedHelpText>{t('Amount Received')}</DottedHelpText>
           </QuestionHelperV2>
 
-          <Text small>{amountReceived ? `${amountReceived.toFormat(2)} ${outputCurrency?.symbol}` : '-'}</Text>
+          <Text small>{amountReceived ? `${amountReceived.toFormat(6)} ${outputCurrency?.symbol}` : '-'}</Text>
         </RowBetween>
       </AutoColumn>
     </Box>

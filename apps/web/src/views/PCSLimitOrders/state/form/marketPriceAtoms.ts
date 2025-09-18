@@ -1,12 +1,5 @@
 import { atom } from 'jotai'
-import { gasPriceWeiAtom } from 'quoter/utils/gasPriceAtom'
-import { findBestTrade } from '@pancakeswap/routing-sdk'
-import tryParseCurrencyAmount from 'utils/tryParseCurrencyAmount'
-import { TradeType } from '@pancakeswap/swap-sdk-core'
-import { atomWithQuery } from 'jotai-tanstack-query'
-import { FAST_INTERVAL } from 'config/constants'
 import { tickToPrice } from 'hooks/infinity/utils'
-import { getTickAdjustedPrice } from 'views/PCSLimitOrders/utils/ticks'
 import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { BigNumber as BN } from 'bignumber.js'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
@@ -15,72 +8,26 @@ import { selectedPoolAtom } from '../pools/poolAtoms'
 export const customMarketPriceAtom = atom<string | undefined>(undefined)
 
 // Current market price, with refetch
-export const currentMarketPriceAtom = atomWithQuery((get) => ({
-  queryKey: [get(inputCurrencyAtom), get(outputCurrencyAtom), get(selectedPoolAtom)],
-  queryFn: async () => {
-    const inputCurrency = await get(inputCurrencyAtom)
-    const outputCurrency = await get(outputCurrencyAtom)
-    const selectedPool = await get(selectedPoolAtom)
+export const currentMarketPriceAtom = atom(async (get) => {
+  const inputCurrency = await get(inputCurrencyAtom)
+  const outputCurrency = await get(outputCurrencyAtom)
+  const selectedPool = await get(selectedPoolAtom)
 
-    if (!selectedPool || !inputCurrency || !outputCurrency) return undefined
+  if (!selectedPool || !inputCurrency || !outputCurrency) return undefined
 
-    const { pool, routingSdkPool } = selectedPool
+  const { pool } = selectedPool
 
-    const independentAmount = tryParseCurrencyAmount('1', inputCurrency)
-    if (!independentAmount) return undefined
+  // Price from pool tick
+  const priceFromPoolTick = tickToPrice(inputCurrency, outputCurrency, pool.tickCurrent)
 
-    const gasPriceWei = await get(gasPriceWeiAtom(pool.chainId))
+  // TODO: If near tickCurrent, tick-adjust according to zeroForOne
 
-    try {
-      const bestTrade = await findBestTrade({
-        amount: independentAmount,
-        quoteCurrency: outputCurrency,
-        tradeType: TradeType.EXACT_INPUT,
-        candidatePools: [routingSdkPool],
-        gasPriceWei: gasPriceWei?.toString() || '',
-        maxHops: 1,
-        maxSplits: 0,
-        quoteId: `limit-order-${Date.now()}`,
-      })
+  if (priceFromPoolTick) {
+    return formatNumber(BN(priceFromPoolTick.toFixed(18)), {
+      maxDecimalDisplayDigits: 6,
+      maximumSignificantDigits: 6,
+    })
+  }
 
-      // TODO: TICK-ADJUST +/- 1 depending on zeroForOne direction, so that price shown is not exactly at current tick
-
-      const outputAmount = bestTrade?.outputAmount
-
-      const { price, tick } = getTickAdjustedPrice(
-        outputAmount?.toExact() || '',
-        pool.tickSpacing,
-        inputCurrency,
-        outputCurrency,
-      )
-
-      console.log('currentMarketPrice', {
-        tickCurrent: pool.tickCurrent,
-        outputAmountTick: tick,
-        outputAmount: outputAmount?.toSignificant(6),
-      })
-
-      return price
-        ? formatNumber(BN(price?.toFixed(18)), { maxDecimalDisplayDigits: 6, maximumSignificantDigits: 6 })
-        : undefined
-    } catch (e) {
-      console.error('Error in currentMarketPriceAtom', e)
-
-      // Fallback to price from pool tick
-      // TODO: Check if this should be used by default
-      const priceFromPoolTick = tickToPrice(inputCurrency, outputCurrency, pool.tickCurrent)
-
-      if (priceFromPoolTick) {
-        return formatNumber(BN(priceFromPoolTick.toFixed(18)), {
-          maxDecimalDisplayDigits: 6,
-          maximumSignificantDigits: 6,
-        })
-      }
-
-      return undefined
-    }
-  },
-  refetchInterval: FAST_INTERVAL,
-  retry: 3,
-  retryDelay: 2_000,
-}))
+  return undefined
+})

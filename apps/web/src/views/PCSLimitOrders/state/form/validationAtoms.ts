@@ -23,5 +23,7 @@ export const commitButtonEnabledAtom = atom(async (get) => {
   const hasValues = amountA && amountB
   if (!hasValues) return { enabled: false, errorReason: null }
 
+  // TODO: Add Balance Check
+
   return { enabled: true, errorReason: null }
 })

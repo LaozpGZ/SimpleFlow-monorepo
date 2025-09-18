@@ -12,7 +12,7 @@ import { parseUnits } from '@pancakeswap/utils/viem/parseUnits'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 import { independentFieldAtom, typedValueAtom } from './fieldAtoms'
 import { baseCurrencyAtom, quoteCurrencyAtom, inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
-import { customMarketPriceAtom } from './marketPriceAtoms'
+import { currentMarketPriceAtom, customMarketPriceAtom } from './marketPriceAtoms'
 
 const independentAmountAtom = atom(async (get) => {
   const value = get(typedValueAtom)
@@ -27,101 +27,29 @@ const independentAmountAtom = atom(async (get) => {
 
 const dependentAmountAtom = atom(async (get) => {
   const customMarketPrice = get(customMarketPriceAtom)
+  const currentMarketPrice = await get(currentMarketPriceAtom)
+
   const independentField = get(independentFieldAtom)
   const independentAmount = await get(independentAmountAtom)
-  const baseCurrency = await get(baseCurrencyAtom)
   const quoteCurrency = await get(quoteCurrencyAtom)
-  const inputCurrency = await get(inputCurrencyAtom)
-  const outputCurrency = await get(outputCurrencyAtom)
 
-  if (!independentAmount || !baseCurrency || !quoteCurrency || !inputCurrency || !outputCurrency) return undefined
+  if (!independentAmount || !quoteCurrency || (!currentMarketPrice && !customMarketPrice)) return undefined
 
-  // Handle custom market price
-  if (customMarketPrice !== undefined) {
-    const customMarketPriceBN = BN(customMarketPrice)
-    if (customMarketPriceBN.lte(0) || customMarketPriceBN.isNaN() || !customMarketPriceBN.isFinite()) {
-      console.error('Invalid custom market price')
+  // Get output by multiplying input amount with market price (either custom or current)
+  const marketPrice = customMarketPrice || currentMarketPrice
+  if (marketPrice !== undefined) {
+    const marketPriceBN = BN(marketPrice)
+    if (marketPriceBN.lte(0) || marketPriceBN.isNaN() || !marketPriceBN.isFinite()) {
+      console.error('inputAtoms: Invalid market price')
       return undefined
     }
 
-    const price = independentField === Field.CURRENCY_A ? customMarketPrice : BN(1).dividedBy(customMarketPriceBN)
+    const price = independentField === Field.CURRENCY_A ? marketPriceBN : BN(1).dividedBy(marketPriceBN)
     const amount = BN(independentAmount.toExact()).multipliedBy(price)
     return tryParseAmount<Token>(amount.toString(), quoteCurrency as Token)
   }
 
-  // Handle normal market price using Routing SDK
-  const selectedPool = await get(selectedPoolAtom)
-  if (!selectedPool || !selectedPool.pool) return undefined
-
-  const { pool, routingSdkPool } = selectedPool
-  const tradeType = independentField === Field.CURRENCY_A ? TradeType.EXACT_INPUT : TradeType.EXACT_OUTPUT
-  const gasPriceWei = await get(gasPriceWeiAtom(pool.chainId))
-
-  try {
-    const bestTrade = await findBestTrade({
-      amount: independentAmount,
-      quoteCurrency: independentField === Field.CURRENCY_A ? outputCurrency : inputCurrency,
-      tradeType,
-      candidatePools: [routingSdkPool],
-      gasPriceWei: gasPriceWei?.toString() || '',
-      maxHops: 1,
-      maxSplits: 0,
-      quoteId: `limit-order-${Date.now()}`,
-    })
-
-    // TODO: TICK-ADJUST +/- 1 depending on zeroForOne direction, so that price shown is not exactly at current tick
-
-    console.debug('Limit Orders bestTrade', bestTrade)
-
-    const { tick: exactInputTick, price: exactInputPrice } = getTickAdjustedPrice(
-      bestTrade?.outputAmount?.toExact() || '',
-      pool.tickSpacing,
-      inputCurrency,
-      outputCurrency,
-    )
-
-    const { tick: exactOutputTick, price: exactOutputPrice } = getTickAdjustedPrice(
-      bestTrade?.inputAmount?.toExact() || '',
-      pool.tickSpacing,
-      outputCurrency,
-      inputCurrency,
-    )
-
-    console.log('Limit Orders bestTrade', {
-      bestTrade,
-      exactInputTick,
-      exactInputPrice,
-      exactOutputTick,
-      exactOutputPrice,
-      currentTick: pool.tickCurrent,
-    })
-
-    const result =
-      tradeType === TradeType.EXACT_INPUT
-        ? tryParseCurrencyAmount(
-            getTickAdjustedPrice(
-              bestTrade?.outputAmount?.toExact() || '',
-              pool.tickSpacing,
-              inputCurrency,
-              outputCurrency,
-            ).price?.toFixed(18) || '',
-            outputCurrency,
-          )
-        : tryParseCurrencyAmount(
-            getTickAdjustedPrice(
-              bestTrade?.inputAmount?.toExact() || '',
-              pool.tickSpacing,
-              outputCurrency,
-              inputCurrency,
-            ).price?.toFixed(18) || '',
-            inputCurrency,
-          )
-
-    return result
-  } catch (e) {
-    console.error('Quoting Error in findBestTrade', e)
-    return undefined
-  }
+  return undefined
 })
 
 export const formattedAmountsAtom = atom(async (get) => {

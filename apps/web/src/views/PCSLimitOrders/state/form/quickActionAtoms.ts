@@ -12,7 +12,7 @@ export const differencePercentageAtom = atom(async (get) => {
   const customMarketPrice = get(customMarketPriceAtom)
   if (!customMarketPrice) return undefined
 
-  const { data: currentMarketPrice } = get(currentMarketPriceAtom)
+  const currentMarketPrice = await get(currentMarketPriceAtom)
   if (!currentMarketPrice) return undefined
 
   if (customMarketPrice === currentMarketPrice) return undefined
@@ -29,7 +29,7 @@ export const differencePercentageAtom = atom(async (get) => {
 export const setPercentDifferenceAtom = atom(null, async (get, set, percent: number) => {
   if (!percent) return
 
-  const { data: currentMarketPrice } = get(currentMarketPriceAtom)
+  const currentMarketPrice = await get(currentMarketPriceAtom)
   if (!currentMarketPrice) return
 
   const inputCurrency = await get(inputCurrencyAtom)
@@ -65,7 +65,7 @@ export const setPercentDifferenceAtom = atom(null, async (get, set, percent: num
 // For example, if selecting 1% results in tick-adjusted price at 0.98%, then 1% button should
 // be considered active if percentage is 0.98%
 export const presetPercentMapAtom = atom(async (get) => {
-  const { data: currentMarketPrice } = get(currentMarketPriceAtom)
+  const currentMarketPrice = await get(currentMarketPriceAtom)
   if (!currentMarketPrice) return DEFAULT_PERCENTAGE_MAP
 
   const inputCurrency = await get(inputCurrencyAtom)
