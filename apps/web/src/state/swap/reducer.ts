@@ -53,6 +53,21 @@ const reducer = createReducer<SwapState>(initialState, (builder) =>
         state,
         { payload: { typedValue, recipient, field, inputCurrencyId, outputCurrencyId, inputChainId, outputChainId } },
       ) => {
+        console.log('replaceSwapState', {
+          [Field.INPUT]: {
+            currencyId: inputCurrencyId,
+            chainId: inputChainId,
+          },
+          [Field.OUTPUT]: {
+            currencyId: outputCurrencyId,
+            chainId: outputChainId,
+          },
+          independentField: field,
+          typedValue,
+          recipient,
+          pairDataById: state.pairDataById,
+          derivedPairDataById: state.derivedPairDataById,
+        })
         return {
           [Field.INPUT]: {
             currencyId: inputCurrencyId,

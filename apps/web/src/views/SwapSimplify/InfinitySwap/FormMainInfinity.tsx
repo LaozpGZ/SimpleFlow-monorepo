@@ -76,6 +76,18 @@ export const handleCurrencySelectFn = async ({
 }: HandleCurrencySelectDeps): Promise<void> => {
   const isInput = field === Field.INPUT
 
+  console.log('debug canSwitchToChain:', canSwitchToChain(newCurrency.chainId))
+  console.log(
+    'debug change token newCurrencyId:',
+    currencyId(newCurrency),
+    'outputCurrencyId',
+    outputCurrencyId,
+    'chainId:',
+    newCurrency.chainId,
+    'outputChainId:',
+    outputChainId,
+  )
+
   if (isInput && canSwitchToChain(newCurrency.chainId) && newCurrency.chainId !== inputChainId) {
     switchNetwork(newCurrency.chainId, {
       replaceUrl: false,
