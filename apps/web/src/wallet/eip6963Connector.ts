@@ -34,13 +34,21 @@ const waitForChainIdToSync = async (provider: any, chainId: number): Promise<num
 }
 
 const sendAndWaitForChangeEvent = async (config: CreateConnectorConfig, chainId: number): Promise<void> => {
-  await new Promise<void>((resolve) => {
+  await new Promise<void>((resolve, reject) => {
+    let timer: ReturnType<typeof setTimeout>
+
     const listener = ((data) => {
       if (data && typeof data === 'object' && 'chainId' in data && data.chainId === chainId) {
+        clearTimeout(timer)
         config.emitter.off('change', listener)
         resolve()
       }
     }) satisfies Parameters<typeof config.emitter.on>[1]
+
+    timer = setTimeout(() => {
+      config.emitter.off('change', listener)
+      reject(new Error(`Timeout waiting for chainId ${chainId} change event`))
+    }, 5000)
 
     config.emitter.on('change', listener)
     config.emitter.emit('change', { chainId })
