@@ -104,7 +104,7 @@ export const useGetGiftInfo = () => {
       return undefined
     },
     select: useCallback(
-      (data: InfiniteData<{ list: GiftInfoResponse[]; hasNext: boolean; nextCursor?: string }, string | undefined>) => {
+      (data: InfiniteData<{ list: GiftInfoResponse[] }, string | undefined>) => {
         return data.pages
           .flatMap((page) => page.list)
           .map(selectGiftInfo)
