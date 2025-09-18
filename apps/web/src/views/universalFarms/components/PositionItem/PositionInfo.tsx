@@ -29,14 +29,14 @@ import { useV2CakeEarning, useV3CakeEarning } from 'views/universalFarms/hooks/u
 import { usePositionEarningAmount } from 'views/universalFarms/hooks/usePositionEarningAmount'
 import { useAccount } from 'wagmi'
 import { IncentraTag } from 'components/Incentra/IncentraTag'
-import { PositionDebugView } from './PositionDebugView'
-import { PoolGlobalAprButton } from '../PoolAprButton/PoolGlobalAprButton'
 import {
   InfinityBinPoolPositionAprButton,
   InfinityCLPoolPositionAprButton,
   V2PoolPositionAprButton,
   V3PoolPositionAprButton,
-} from '../PoolAprButtonV3/PoolPositionAprButtonV3'
+} from 'views/universalFarms/components/PoolAprButton/PoolPositionAprButton'
+import { PositionDebugView } from './PositionDebugView'
+import { PoolGlobalAprButton } from '../PoolAprButton/PoolGlobalAprButton'
 
 export const formatPositionAmount = (amount?: CurrencyAmount<Token | Currency>) => {
   const minimumFractionDigits = Math.min(amount?.currency.decimals ?? 0, 6)
