@@ -141,7 +141,7 @@ async function fetchFarms(query: {
   }
 
   if (symbols && symbols.length > 0) {
-    return fetchAllExplorerPoolsByPoolAddress(Array.from(chainIds), symbols, protocols)
+    return fetchAllExplorerPoolsBySymbols(Array.from(chainIds), symbols, protocols)
   }
   return fetchAllExplorerPools(protocols, Array.from(chainIds))
 }
@@ -271,6 +271,36 @@ async function fetchAllExplorerPoolsByAddress(
       })
     }),
   )
+  return allPools
+    .flat()
+    .map(normalizeAddress)
+    .filter((x) => x) as InfinityRouter.RemotePoolBase[]
+}
+
+async function fetchAllExplorerPoolsBySymbols(
+  chains: FarmV4SupportedChainId[],
+  symbols: string[],
+  protocols: Protocol[],
+) {
+  if (!protocols.length) return []
+  if (!symbols.length) return []
+
+  const baseUrl = `${process.env.NEXT_PUBLIC_EXPLORE_API_ENDPOINT}/cached/pools/list`
+  const chainNames = chains.map((chain) => getEdgeChainName(chain))
+
+  const chunks = chunk(symbols, 20)
+  const allPools = await mergePromiseList(
+    chunks.map((symbolChunk) => {
+      return edgeQueries.fetchAllPools({
+        baseUrl,
+        protocols,
+        chains: chainNames,
+        symbols: symbolChunk,
+        maxPages: 1,
+      })
+    }),
+  )
+
   return allPools
     .flat()
     .map(normalizeAddress)
