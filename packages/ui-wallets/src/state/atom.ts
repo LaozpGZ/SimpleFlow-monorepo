@@ -11,8 +11,13 @@ const previouslyUsedWalletsStoreSeparator = ','
 export const errorEvmAtom = atom<string>('')
 export const errorSolanaAtom = atom<string>('')
 
+// @note: this atom only for wallet modal ui, show user selected wallet preview
 export const selectedEvmWalletAtom = atom<WalletConfigV3<EvmConnectorNames> | null>(null)
+// @note: this atom only for wallet modal ui, show user selected wallet preview
 export const selectedSolanaWalletAtom = atom<WalletConfigV3<SolanaConnectorNames> | null>(null)
+
+export const connectedEvmWalletAtom = atom<WalletConfigV3<EvmConnectorNames> | null>(null)
+export const connectedSolanaWalletAtom = atom<WalletConfigV3<SolanaConnectorNames> | null>(null)
 
 // Clear Solana wallet when setting EVM wallet
 export const setSelectedEvmWalletAtom = atom(null, (get, set, newValue: WalletConfigV3<EvmConnectorNames> | null) => {

@@ -15,6 +15,7 @@ export interface UserMenuProps extends Omit<FlexProps, "children"> {
   account?: string;
   text?: ReactNode;
   avatarSrc?: string;
+  avatar?: ReactNode;
   avatarClassName?: string;
   variant?: Variant;
   disabled?: boolean;

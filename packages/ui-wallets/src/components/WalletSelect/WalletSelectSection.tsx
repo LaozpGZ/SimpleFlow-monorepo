@@ -149,6 +149,9 @@ export const WalletSelectItem = <T,>({ wallet, onClick }: WalletSelectItemProps<
           {wallet.MEVSupported ? (
             <AtomBox
               position="absolute"
+              display="inline-flex"
+              alignItems="center"
+              justifyContent="center"
               style={{ bottom: '-4px', right: '-4px', borderRadius: '4px' }}
               width="16px"
               height="16px"

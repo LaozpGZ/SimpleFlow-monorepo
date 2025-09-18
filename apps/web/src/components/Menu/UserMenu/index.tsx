@@ -6,6 +6,10 @@ import {
   useMatchBreakpoints,
   UserMenuVariant,
   useTooltip,
+  Text,
+  Flex,
+  Image,
+  AtomBox,
 } from '@pancakeswap/uikit'
 import { usePrivy } from '@privy-io/react-auth'
 import { useWallet } from '@solana/wallet-adapter-react'
@@ -31,8 +35,17 @@ import { useAccountActiveChain } from 'hooks/useAccountActiveChain'
 import { isSolana, NonEVMChainId } from '@pancakeswap/chains'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import ConnectWalletButton from 'components/ConnectWalletButton'
-import SolanaConnectButton from 'wallet/components/SolanaConnectButton'
-import { useCurrentWalletIcon } from 'state/wallet/hooks'
+import { useCurrentWalletIcon, useCurrentWalletIconByNetworks } from 'state/wallet/hooks'
+import { useMultichainAddressBalance } from 'hooks/useAddressBalance'
+import { formatAmount } from 'utils/formatInfoNumbers'
+import { WalletAdaptedNetwork } from '@pancakeswap/ui-wallets'
+import {
+  lastUsedEvmWalletNameAtom,
+  lastUsedSolanaWalletNameAtom,
+  previouslyUsedEvmWalletsAtom,
+  previouslyUsedSolanaWalletsAtom,
+} from '@pancakeswap/ui-wallets/src/state/atom'
+import { useAtom, useAtomValue } from 'jotai'
 import { MenuTabProvider, useMenuTab, WalletView } from './providers/MenuTabProvider'
 
 const UserMenuItems = ({ onReceiveClick, onDismiss }: { onReceiveClick: () => void; onDismiss: () => void }) => {
@@ -91,6 +104,24 @@ const ClickablePopover = styled.div<{ isOpen: boolean }>`
   transition: visibility 0.2s, opacity 0.2s;
 `
 
+const AvatarImage = styled(Image)`
+  left: 0;
+  position: absolute;
+  top: 0;
+  z-index: 20;
+
+  & > img {
+    border-radius: 50%;
+  }
+
+  &:nth-child(1) {
+    z-index: 21;
+  }
+  &:nth-child(2) {
+    left: 22px;
+  }
+`
+
 const useAvatar = () => {
   const { chainId, unifiedAccount } = useAccountActiveChain()
   const { profile } = useProfile()
@@ -102,6 +133,43 @@ const useAvatar = () => {
 
     return walletIcon
   }, [avatar, chainId, profile?.nft?.image?.thumbnail, walletIcon])
+}
+
+const useMultichainAvatar = () => {
+  const { account: evmAccount, solanaAccount, chainId } = useAccountActiveChain()
+  const { profile } = useProfile()
+  const profileAvatar = profile?.nft?.image?.thumbnail
+  const walletIcons = useCurrentWalletIconByNetworks()
+  const lastUsedEvmWalletId = useAtomValue(lastUsedEvmWalletNameAtom)
+  const lastUsedSolanaWalletId = useAtomValue(lastUsedSolanaWalletNameAtom)
+  const previouslyUsedEvmWallets = useAtomValue(previouslyUsedEvmWalletsAtom)
+  const previouslyUsedSolanaWallets = useAtomValue(previouslyUsedSolanaWalletsAtom)
+  const evmId = lastUsedEvmWalletId || previouslyUsedEvmWallets?.[0] || null
+  const solanaId = lastUsedSolanaWalletId || previouslyUsedSolanaWallets?.[0] || null
+
+  return useMemo((): [string, string] | [] => {
+    if (solanaAccount && evmAccount && evmId !== solanaId) {
+      const avatars = [profileAvatar ?? walletIcons[WalletAdaptedNetwork.EVM], walletIcons[WalletAdaptedNetwork.Solana]]
+      return chainId === NonEVMChainId.SOLANA ? (avatars.reverse() as [string, string]) : (avatars as [string, string])
+    }
+    return []
+  }, [chainId, evmId, solanaId, evmAccount, solanaAccount, walletIcons])
+}
+
+const UserAvatar = ({ avatars }: { avatars?: [string, string] }) => {
+  // dual avatar display
+  if (avatars?.length === 2) {
+    return (
+      <AtomBox style={{ width: '54px', height: '32px', marginLeft: '-32px' }} position="relative">
+        {avatars.map((src, index) => (
+          <AvatarImage key={src} width={32} height={32} src={src} />
+        ))}
+      </AtomBox>
+    )
+  }
+
+  // otherwise, follow previous logic
+  return null
 }
 
 const UserMenu = () => {
@@ -126,6 +194,7 @@ const UserMenu = () => {
   const currentAccount = chainId === NonEVMChainId.SOLANA ? solanaAccount ?? undefined : evmAccount
   const { domainName } = useDomainNameForAddress(chainId === NonEVMChainId.SOLANA ? undefined : currentAccount)
   const avatarSrc = useAvatar()
+  const multichainAvatars = useMultichainAvatar()
 
   const { logout } = useAuth()
   const { disconnect } = useWallet()
@@ -175,13 +244,6 @@ const UserMenu = () => {
     }
   }, [finalAddress, isPrivyAddressLoading])
 
-  const ConnectBtn = useMemo(() => {
-    if (chainId === NonEVMChainId.SOLANA) {
-      return SolanaConnectButton
-    }
-    return ConnectWalletButton
-  }, [chainId])
-
   useAutoFillCode({
     onAutoFillCode: () => {
       if (isMobile) {
@@ -228,6 +290,15 @@ const UserMenu = () => {
     }
   }, [menuRef, viewState, resetViewState, setCode])
 
+  const { totalBalanceUsd } = useMultichainAddressBalance()
+  const balanceDisplay = useMemo(() => {
+    const display = formatAmount(totalBalanceUsd)?.split('.')
+    return {
+      integer: display?.[0] || '',
+      decimal: display?.[1] || '',
+    }
+  }, [totalBalanceUsd])
+
   useEffect(() => {
     if (hasPendingTransactions) {
       setUserMenuText(t('%num% Pending', { num: pendingNumber }))
@@ -270,6 +341,16 @@ const UserMenu = () => {
   }
 
   if (finalAddress || giftCode) {
+    const balance = (
+      <Flex alignItems="center">
+        <Text fontWeight={600} lineHeight={1.5}>
+          ${balanceDisplay.integer}
+        </Text>
+        <Text fontWeight={600} color="textSubtle" lineHeight={1.5}>
+          .{balanceDisplay.decimal}
+        </Text>
+      </Flex>
+    )
     return (
       <>
         <ClickableUserMenu ref={menuRef}>
@@ -277,7 +358,8 @@ const UserMenu = () => {
             account={domainName || finalAddress}
             ellipsis={!domainName}
             avatarSrc={avatarSrc}
-            text={userMenuText}
+            avatar={multichainAvatars?.length ? <UserAvatar avatars={multichainAvatars} /> : null}
+            text={userMenuText || balance}
             variant={userMenuVariable}
             popperStyle={{
               minWidth: '380px',
@@ -354,14 +436,14 @@ const UserMenu = () => {
     return (
       <FlexGap gap="8px">
         <Box ref={targetRef}>
-          <ConnectBtn scale="sm" variant="danger">
+          <ConnectWalletButton scale="sm" variant="danger">
             <Box display={['none', null, null, 'block']}>
               <Trans>Failed to Connect</Trans>
             </Box>
             <Box display={['block', null, null, 'none']}>
               <Trans>Failed</Trans>
             </Box>
-          </ConnectBtn>
+          </ConnectWalletButton>
         </Box>
         {tooltipVisible && tooltip}
       </FlexGap>
