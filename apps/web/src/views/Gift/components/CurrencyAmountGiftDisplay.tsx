@@ -1,5 +1,5 @@
 import { CurrencyLogo } from '@pancakeswap/widgets-internal'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 import { CurrencyAmount, NativeCurrency, Token } from '@pancakeswap/sdk'
 import { Flex, FlexProps, Text } from '@pancakeswap/uikit'
 import { useStablecoinPrice } from 'hooks/useStablecoinPrice'

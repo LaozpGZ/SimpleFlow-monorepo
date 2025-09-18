@@ -32,6 +32,7 @@ import { getTokenSymbolAlias } from 'utils/getTokenAlias'
 import { CurrencyLogo, DoubleCurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
 import { logGTMClickAddLiquidityEvent } from 'utils/customGTMEventTracking'
+import { formatDollarAmount } from 'utils/numbers'
 import BarChart from '../components/BarChart/alt'
 import { GreyBadge } from '../components/Card'
 import DensityChart from '../components/DensityChart'
@@ -44,7 +45,6 @@ import { v3InfoPath } from '../constants'
 import { usePoolChartData, usePoolData, usePoolTransactions } from '../hooks'
 import { feeTierPercent } from '../utils'
 import { unixToDate } from '../utils/date'
-import { formatDollarAmount } from '../utils/numbers'
 
 const ContentLayout = styled.div`
   display: grid;

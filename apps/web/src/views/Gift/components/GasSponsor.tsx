@@ -20,7 +20,7 @@ import { useStablecoinPriceAmount } from 'hooks/useStablecoinPrice'
 import { useGetNativeTokenBalance } from 'hooks/useTokenBalance'
 import { useCallback, useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 import { useSendGiftContext } from '../providers/SendGiftProvider'
 
 const StyledRow = styled(RowBetween)`

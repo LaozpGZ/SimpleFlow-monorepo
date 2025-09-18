@@ -55,7 +55,7 @@ import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { logGTMClickRemoveLiquidityEvent } from 'utils/customGTMEventTracking'
 import { isUserRejected } from 'utils/sentry'
 import { transactionErrorToUserReadableMessage } from 'utils/transactionErrorToUserReadableMessage'
-import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
+import { LiquiditySlippageButton } from 'components/SlippageButton'
 import { useBurnV3ActionHandlers } from './form/hooks'
 
 const BorderCard = styled.div`

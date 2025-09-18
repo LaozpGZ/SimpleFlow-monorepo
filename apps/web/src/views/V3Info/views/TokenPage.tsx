@@ -43,6 +43,7 @@ import { CurrencyLogo } from 'views/Info/components/CurrencyLogo'
 import useCMCLink from 'views/Info/hooks/useCMCLink'
 import { DISABLED_ADD_LIQUIDITY_CHAINS } from 'config/constants/liquidity'
 import { useRouter } from 'next/router'
+import { formatDollarAmount } from 'utils/numbers'
 import BarChart from '../components/BarChart/alt'
 import { LocalLoader } from '../components/Loader'
 import Percent from '../components/Percent'
@@ -53,7 +54,6 @@ import { v3InfoPath } from '../constants'
 import { useTokenPriceData } from '../hooks'
 import { currentTimestamp } from '../utils'
 import { unixToDate } from '../utils/date'
-import { formatDollarAmount } from '../utils/numbers'
 
 const CandleChart = dynamic(() => import('../components/CandleChart'), {
   ssr: false,

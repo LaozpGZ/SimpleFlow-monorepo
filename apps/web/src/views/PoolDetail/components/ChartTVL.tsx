@@ -5,7 +5,7 @@ import { useMemo, useState } from 'react'
 import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import styled from 'styled-components'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 import { usePoolChartTVLData } from '../hooks/usePoolChartTVLData'
 import { TIME_FILTERS_MAPPING, TimeFilter } from '../types'
 

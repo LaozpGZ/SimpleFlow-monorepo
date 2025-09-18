@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { RowBetween, RowFixed } from 'components/Layout/Row'
 import { PriceOrder } from '@pancakeswap/price-api-sdk'
 import { QuestionHelperV2, Text } from '@pancakeswap/uikit'
-import { SlippageButton } from 'views/Swap/components/SlippageButton'
+import { SlippageButton } from 'components/SlippageButton'
 import { useTranslation } from '@pancakeswap/localization'
 
 import { usePriceBreakdown } from '../hooks/usePriceBreakdown'

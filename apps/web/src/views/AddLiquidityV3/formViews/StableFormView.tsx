@@ -32,8 +32,8 @@ import { AddStableChildrenProps } from 'views/AddLiquidity/AddStableLiquidity'
 
 import { MevProtectToggle } from 'views/Mev/MevProtectToggle'
 import CurrencyInputPanelSimplify from 'components/CurrencyInputPanelSimplify'
-import { LiquiditySlippageButton } from 'views/Swap/components/SlippageButton'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { LiquiditySlippageButton } from 'components/SlippageButton'
+import { formatDollarAmount } from 'utils/numbers'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { FormattedSlippage } from 'views/AddLiquidity/AddStableLiquidity/components'
 

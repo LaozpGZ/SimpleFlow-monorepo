@@ -19,7 +19,7 @@ import { useStablecoinPrice } from 'hooks/useStablecoinPrice'
 import React, { useState } from 'react'
 import { multiplyPriceByAmount } from 'utils/prices'
 import { CurrencyField as Field } from 'utils/types'
-import { formatDollarAmount } from 'views/V3Info/utils/numbers'
+import { formatDollarAmount } from 'utils/numbers'
 
 interface PreviewModalProps extends ModalV2Props {
   currencies: { [field in Field]?: Currency }

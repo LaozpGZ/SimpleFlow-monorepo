@@ -7,6 +7,7 @@ import { useActiveChainId } from 'hooks/useActiveChainId'
 import useTheme from 'hooks/useTheme'
 import { useEffect, useMemo, useState } from 'react'
 import { VolumeWindow } from 'state/info/types'
+import { formatDollarAmount } from 'utils/numbers'
 import BarChart from './components/BarChart/alt'
 import { DarkGreyCard } from './components/Card'
 import LineChart from './components/LineChart/alt'
@@ -25,7 +26,6 @@ import {
 } from './hooks'
 import { useTransformedVolumeData } from './hooks/chart'
 import { unixToDate } from './utils/date'
-import { formatDollarAmount } from './utils/numbers'
 
 export default function Home() {
   useEffect(() => {

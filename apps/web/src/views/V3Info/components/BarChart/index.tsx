@@ -4,8 +4,8 @@ import useTheme from 'hooks/useTheme'
 import { ColorType, createChart, IChartApi } from 'lightweight-charts'
 import React, { Dispatch, ReactNode, SetStateAction, useCallback, useEffect, useRef, useState } from 'react'
 import { styled } from 'styled-components'
+import { formatDollarAmount } from 'utils/numbers'
 import usePrevious from '../../hooks/usePrevious'
-import { formatDollarAmount } from '../../utils/numbers'
 import Card from '../Card'
 
 const Wrapper = styled(Card)`
