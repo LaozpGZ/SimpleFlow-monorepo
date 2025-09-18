@@ -1,6 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import { CurrencyAmount } from '@pancakeswap/swap-sdk-core'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
+import { InfiniteData, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { FAST_INTERVAL } from 'config/constants'
 import { useTokenByChainId, useTokensByChainId } from 'hooks/Tokens'
 import { useCallback, useMemo } from 'react'
@@ -103,18 +103,21 @@ export const useGetGiftInfo = () => {
       }
       return undefined
     },
-    select: (data) => {
-      return data.pages
-        .flatMap((page) => page.list)
-        .map(selectGiftInfo)
-        .filter((gift) => gift !== null)
-        .filter((gift) => {
-          if (unclaimedOnly) {
-            return gift.status === GiftStatus.PENDING || gift.status === GiftStatus.UNCLAIMABLE
-          }
-          return true
-        })
-    },
+    select: useCallback(
+      (data: InfiniteData<{ list: GiftInfoResponse[]; hasNext: boolean; nextCursor?: string }, string | undefined>) => {
+        return data.pages
+          .flatMap((page) => page.list)
+          .map(selectGiftInfo)
+          .filter((gift) => gift !== null)
+          .filter((gift) => {
+            if (unclaimedOnly) {
+              return gift.status === GiftStatus.PENDING || gift.status === GiftStatus.UNCLAIMABLE
+            }
+            return true
+          })
+      },
+      [selectGiftInfo, unclaimedOnly],
+    ),
     enabled: Boolean(chainId && account),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
@@ -206,9 +209,12 @@ export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
 
       return result.data
     },
-    select: (data) => {
-      return selectGiftInfo(data)
-    },
+    select: useCallback(
+      (data) => {
+        return selectGiftInfo(data)
+      },
+      [selectGiftInfo],
+    ),
     enabled: Boolean(chainId && codeHash),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,

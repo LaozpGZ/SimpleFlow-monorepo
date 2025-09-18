@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useCallback } from 'react'
+import { useEffect, useMemo, useCallback } from 'react'
 
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import { solanaTokenListAtom, solanaListSettingsAtom } from 'state/token/solanaTokenAtoms'
@@ -31,9 +31,12 @@ function useTokenListQuery(listKey: TokenListKey, enabled: boolean) {
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     enabled: isEnabled && enabled,
-    select: (data) => {
-      return listConfig.parser(data).filter((token) => token.name && token.symbol)
-    },
+    select: useCallback(
+      (data) => {
+        return listConfig.parser(data).filter((token) => token.name && token.symbol)
+      },
+      [listConfig],
+    ),
   })
 }
 

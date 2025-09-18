@@ -9,7 +9,7 @@ import {
   getPoolId,
 } from '@pancakeswap/infinity-sdk'
 import { UseQueryResult, useQuery } from '@tanstack/react-query'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 import { publicClient } from 'utils/viem'
 
 export const useProtocolFeeForPool = (
@@ -43,7 +43,7 @@ export const useProtocolFeeForPool = (
       }) as Promise<number>
     },
     /* eslint-disable no-bitwise */
-    select: (data) => (data ? data & 0xfff : 0),
+    select: useCallback((data: number | undefined) => (data ? data & 0xfff : 0), []),
     retry: true,
     refetchOnWindowFocus: false,
     enabled: Boolean(chainId && poolType && poolId),
