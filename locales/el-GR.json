@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "Η δύναμη της ψήφου υπολογίζεται με βάση το ποσό και την εναπομένουσα διάρκεια του staking CAKE καθορισμένης διάρκειας στο μπλοκ.",
   "CAKE locked:": "Κλειδωμένο Cake:",
   "Go to Pools": "Μετάβαση στις δεξαμενές",
-  "CAKE Emission Projection": "Πρόβλεψη εκπομπών CAKE",
   "Boosted by vCAKE": "Ενισχυμένη από vCAKE",
   "Boosting Expired": "Η ενίσχυση έχει λήξει",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "Η ενίσχυση vCAKE έληξε στο στιγμιότυπο του μπλοκ. Ανανεώστε τη θέση σας staking καθορισμένης διάρκειας για να ενεργοποιήσετε την ενίσχυση για μελλοντικές προτάσεις ψηφοφορίας.",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Κίνητρα μπορούν πλέον να κερδηθούν ταυτόχρονα ΚΑΙ στην Incentra ΚΑΙ στα Farms.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Κάντε stake το LP token σας στο Farm και αποκομίστε τόσο ανταμοιβές Incentra όσο και Farm.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Διεκδικήστε τις ανταμοιβές Farm σας στο PancakeSwap και τις ανταμοιβές Incentra σας στην",
-  "Incentra's website": "ιστοσελίδα της Incentra."
+  "Incentra's website": "ιστοσελίδα της Incentra.",
+  "CAKE Burn Dashboard": "Πίνακας Ελέγχου Καύσης CAKE",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Προσοχή: Το %token% είναι επί του παρόντος μη επαληθευμένο. Να επιβεβαιώνετε πάντα τη διεύθυνση και να κάνετε τη δική σας έρευνα πριν από την ανταλλαγή ή την αλληλεπίδραση με αυτήν τη δεξαμενή."
 }

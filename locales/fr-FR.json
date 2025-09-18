@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "Le pouvoir de vote est calculé en utilisant le montant du staking et la durée restante de la position de staking CAKE à durée fixe au bloc.",
   "CAKE locked:": "CAKE verrouillés :",
   "Go to Pools": "Accéder aux pools",
-  "CAKE Emission Projection": "Projection des émissions de CAKE",
   "Boosted by vCAKE": "Amplifié par vCAKE",
   "Boosting Expired": "Amplification expirée",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "Votre amplificateur vCAKE a expiré au bloc d'instantané. Renouvelez votre position de staking à durée fixe pour activer l'amplificateur pour les propositions de vote futures.",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Vous pouvez désormais gagner des récompenses simultanément sur Incentra et sur les Farms.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Stakez vos tokens LP dans la Farm et cumulez les récompenses d'Incentra et de la Farm.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Réclamez vos récompenses de la Farm sur PancakeSwap et vos récompenses Incentra sur",
-  "Incentra's website": "le site web d'Incentra"
+  "Incentra's website": "le site web d'Incentra",
+  "CAKE Burn Dashboard": "Tableau de bord de combustion de CAKE",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Attention : %token% n'est actuellement pas vérifié. Vérifiez toujours l'adresse et faites vos propres recherches avant de trader ou d'interagir avec ce pool."
 }

@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "投票权根据区块中固定期限 CAKE 质押持仓的质押金额和剩余质押时长计算得出。",
   "CAKE locked:": "已锁仓 CAKE:",
   "Go to Pools": "前往糖浆池",
-  "CAKE Emission Projection": "CAKE 产出量预测",
   "Boosted by vCAKE": "由 vCAKE 助推",
   "Boosting Expired": "助推已过期",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "快照区块当时您的 vCAKE 加权已结束。请更新您的锁仓质押仓位，您将享有投票权加权并在未来的投票提案中使用。",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "您现在可以同时在 Incentra 和 Farms 赚取奖励。",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "在 Farm 中质押您的 LP 代币，即可同时获得 Incentra 和 Farm 奖励。",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "在 PancakeSwap 领取您的 Farm 奖励，Incentra 奖励请前往",
-  "Incentra's website": "Incentra 的网站领取。"
+  "Incentra's website": "Incentra 的网站领取。",
+  "CAKE Burn Dashboard": "CAKE 销毁仪表盘",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "注意：%token% 目前未经认证。在与此池进行交易或交互之前，请务必确认地址并自行研究。"
 }

@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "Quyền bỏ phiếu được tính bằng số tiền đặt cọc và thời lượng đặt cọc còn lại của vị thế đặt cọc CAKE có thời hạn cố định tại khối.",
   "CAKE locked:": "CAKE đã khóa:",
   "Go to Pools": "Vào Quỹ",
-  "CAKE Emission Projection": "Dự tính phát xạ CAKE",
   "Boosted by vCAKE": "Được tăng cường bởi vCAKE",
   "Boosting Expired": "Tăng cường đã hết hạn",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "Tăng cường vCAKE đã hết hạn tại khối ảnh chụp nhanh. Hãy gia hạn vị thế đặt cọc thời hạn cố định của bạn để kích hoạt tăng cường cho các đề xuất bỏ phiếu trong tương lai.",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Giờ đây, bạn có thể kiếm phần thưởng trên cả Incentra và Farms đồng thời.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Stake token LP của bạn trong Farm và tích lũy cả phần thưởng từ Incentra và Farm.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Nhận phần thưởng Farm của bạn trên PancakeSwap và phần thưởng Incentra của bạn trên",
-  "Incentra's website": "trang web của Incentra"
+  "Incentra's website": "trang web của Incentra",
+  "CAKE Burn Dashboard": "Bảng điều khiển đốt CAKE",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Cảnh báo: %token% hiện chưa được xác minh. Luôn xác nhận địa chỉ và tự nghiên cứu trước khi giao dịch hoặc tương tác với pool này."
 }

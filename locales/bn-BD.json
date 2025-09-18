@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "ব্লকে নির্দিষ্ট-মেয়াদি CAKE স্টেকিং অবস্থানে স্টেকিং-এর পরিমাণ এবং অবশিষ্ট স্টেকিং-এর মেয়াদ ব্যবহার করে ভোটের ক্ষমতা নির্ধারণ করা হয়।",
   "CAKE locked:": "লক করা CAKE:",
   "Go to Pools": "পুল-এ যান",
-  "CAKE Emission Projection": "CAKE নির্গমন প্রজেকশন",
   "Boosted by vCAKE": "vCAKE দ্বারা বুস্ট করা হয়েছে",
   "Boosting Expired": "বুস্টিং মেয়াদ শেষ",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "স্ন্যাপশট ব্লকে আপনার vCAKE বুস্টিং-এর মেয়াদ শেষ হয়ে গেছে। ভবিষ্যৎ ভোটের প্রস্তাবের জন্য বুস্ট সক্রিয় করতে আপনার নির্দিষ্ট-মেয়াদি স্টেকিং অবস্থান নবায়ন করুন।",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Incentra এবং Farm উভয়ক্ষেত্রেই একই সময়ে প্রণোদনা অর্জন করা যাবে।",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "আপনার LP টোকেন Farm-এ Stake করুন এবং Incentra ও Farm উভয় রিওয়ার্ড অর্জন করুন।",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "আপনার Farm রিওয়ার্ড PancakeSwap-এ এবং আপনার Incentra রিওয়ার্ড",
-  "Incentra's website": "Incentra-এর ওয়েবসাইট"
+  "Incentra's website": "Incentra-এর ওয়েবসাইট",
+  "CAKE Burn Dashboard": "CAKE বার্ন ড্যাশবোর্ড",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "সতর্কতা: %token% বর্তমানে যাচাইবিহীন। ট্রেড বা এই পুলের সাথে ইন্টারঅ্যাক্ট করার আগে সর্বদা ঠিকানা নিশ্চিত করুন এবং আপনার নিজস্ব গবেষণা করুন।"
 }
