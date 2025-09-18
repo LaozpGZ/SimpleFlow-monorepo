@@ -35,7 +35,7 @@ import { useBridgeCheckApproval } from 'views/Swap/Bridge/hooks/useBridgeCheckAp
 import { getBridgeOrderPriceImpact } from 'views/Swap/Bridge/utils'
 import { ConfirmSwapModalV2 } from 'views/Swap/V3Swap/containers/ConfirmSwapModalV2'
 import { EVMInterfaceOrder, isBridgeOrder, isClassicOrder, isSVMOrder, isXOrder } from 'views/Swap/utils'
-import { useTradeErrorMessageFn } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
+import { useBridgeTradeErrorHandler } from 'views/Swap/Bridge/CrossChainConfirmSwapModal/hooks/useBridgeErrorMessages'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
 import { isEvm, isSolana, NonEVMChainId } from '@pancakeswap/chains'
 
@@ -173,7 +173,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
 
   const { t } = useTranslation()
   const { chainId } = useAccountActiveChain()
-  const getTradeErrorMessage = useTradeErrorMessageFn()
+  const handleBridgeTradeErrorMessage = useBridgeTradeErrorHandler()
   // form data
   const { independentField, typedValue } = useSwapState()
   const [inputCurrency, outputCurrency] = useSwapCurrency()
@@ -423,9 +423,9 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     if (isRecipientEmpty) return t('Enter a recipient')
     if (isRecipientError) return t('Invalid recipient')
 
-    // Handle trade errors using centralized error message logic
-    if (tradeError) {
-      const errorMessage = getTradeErrorMessage(tradeError)
+    // Handle bridge trade errors
+    if (tradeError instanceof BridgeTradeError) {
+      const errorMessage = handleBridgeTradeErrorMessage(tradeError)
 
       if (errorMessage) return errorMessage
     }
@@ -451,7 +451,7 @@ const SwapCommitButtonInner = memo(function SwapCommitButtonInner({
     tradeLoading,
     tradeError,
     isBridgeCheckApprovalLoading,
-    getTradeErrorMessage,
+    handleBridgeTradeErrorMessage,
   ])
 
   if (noRoute && userHasSpecifiedInputOutput && tradeError instanceof TimeoutError) {

@@ -139,30 +139,31 @@ export const useBridgeErrorMessages = () => {
 }
 
 // Hook for getting user-friendly error messages from any error
-export const useTradeErrorMessageFn = () => {
+export const useBridgeTradeErrorHandler = () => {
   const errorMessages = useBridgeErrorMessages()
 
   return useCallback(
-    (error: Error): string | null => {
+    (error: BridgeTradeError): string | null => {
       if (!error) return null
+
+      // not BridgeTradeError return null
+      if (!(error instanceof BridgeTradeError)) {
+        return null
+      }
 
       // Handle BridgeTradeError
       const { message } = error
 
-      if (error instanceof BridgeTradeError) {
-        // Check for specific error patterns first (legacy compatibility)
-        if (message.includes("doesn't have enough funds to support this deposit")) {
-          return errorMessages[RELAY_ERROR.INSUFFICIENT_LIQUIDITY]
-        }
-
-        if (message.includes('too low relative to fees')) {
-          return errorMessages[RELAY_ERROR.AMOUNT_TOO_LOW]
-        }
-
-        return errorMessages[message] || message
+      // Check for specific error patterns first (legacy compatibility)
+      if (message.includes("doesn't have enough funds to support this deposit")) {
+        return errorMessages[RELAY_ERROR.INSUFFICIENT_LIQUIDITY]
       }
 
-      return message || null
+      if (message.includes('too low relative to fees')) {
+        return errorMessages[RELAY_ERROR.AMOUNT_TOO_LOW]
+      }
+
+      return errorMessages[message] || message
     },
     [errorMessages],
   )
