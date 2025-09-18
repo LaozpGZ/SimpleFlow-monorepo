@@ -1,4 +1,4 @@
-import { Order, OrderStatus } from '../types/orders'
+import { Order, OrderStatus } from '../types/orders.types'
 
 export const parseOrders = (orders: Order[]) => {
   return orders.map((order) => {
