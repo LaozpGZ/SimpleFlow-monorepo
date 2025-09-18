@@ -6,7 +6,8 @@ import { formatPrice } from '@pancakeswap/utils/formatFractions'
 import { DEFAULT_PERCENTAGE_MAP } from 'views/PCSLimitOrders/constants'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
 import { selectedPoolAtom } from '../pools/poolAtoms'
-import { currentMarketPriceAtom, customMarketPriceAtom } from './marketPriceAtoms'
+import { customMarketPriceAtom } from './customMarketPriceAtom'
+import { currentMarketPriceAtom } from './currentMarketPriceAtom'
 
 export const differencePercentageAtom = atom(async (get) => {
   const customMarketPrice = get(customMarketPriceAtom)

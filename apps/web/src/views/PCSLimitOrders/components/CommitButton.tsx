@@ -27,7 +27,8 @@ import { Field, ValidationError } from '../types/limitOrder.types'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { amountReceivedAtom, feesEarnedUSDAtom } from '../state/form/tradeDetailsAtoms'
 import { commitButtonEnabledAtom } from '../state/form/validationAtoms'
-import { currentMarketPriceAtom, customMarketPriceAtom } from '../state/form/marketPriceAtoms'
+import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
+import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
 import { usePlaceLimitOrder } from '../hooks/usePlaceLimitOrder'
 import { useLimitOrderApproval } from '../hooks/useLimitOrderApproval'
 
@@ -170,7 +171,13 @@ const ConfirmOrderContent = ({ onDismiss }: { onDismiss: () => void }) => {
             <Text color="textSubtle" small>
               {t('Amount Received')}
             </Text>
-            <Text small>{amountReceived ? `${amountReceived.toFormat(6)} ${outputCurrency?.symbol}` : '-'}</Text>
+            <Text small>
+              {amountReceived
+                ? `${formatNumber(amountReceived, { maxDecimalDisplayDigits: 6, maximumSignificantDigits: 6 })} ${
+                    outputCurrency?.symbol
+                  }`
+                : '-'}
+            </Text>
           </RowBetween>
         </AutoColumn>
       </LightGreyCard>

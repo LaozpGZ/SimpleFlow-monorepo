@@ -14,7 +14,7 @@ export const outputReceivedAtom = atom(async (get) => {
   const ticksData = await get(ticksAtom)
   if (!ticksData) return undefined
 
-  const { price } = ticksData
+  const { sqrtPrice } = ticksData
 
   const formattedAmounts = await get(formattedAmountsAtom)
   const inputAmount = BN(formattedAmounts[Field.CURRENCY_A])
@@ -22,7 +22,7 @@ export const outputReceivedAtom = atom(async (get) => {
   if (inputAmount.isNaN() || !inputAmount.isFinite()) return undefined
 
   // output_received = input_amount * price
-  const outputReceived = inputAmount.multipliedBy(price)
+  const outputReceived = inputAmount.multipliedBy(sqrtPrice)
   return outputReceived
 })
 

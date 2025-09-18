@@ -12,7 +12,9 @@ import { parseUnits } from '@pancakeswap/utils/viem/parseUnits'
 import { selectedPoolAtom } from '../pools/poolAtoms'
 import { independentFieldAtom, typedValueAtom } from './fieldAtoms'
 import { baseCurrencyAtom, quoteCurrencyAtom, inputCurrencyAtom, outputCurrencyAtom } from '../currency/currencyAtoms'
-import { currentMarketPriceAtom, customMarketPriceAtom } from './marketPriceAtoms'
+import { customMarketPriceAtom } from './customMarketPriceAtom'
+import { currentMarketPriceAtom } from './currentMarketPriceAtom'
+import { ticksAtom } from './ticksAtom'
 
 const independentAmountAtom = atom(async (get) => {
   const value = get(typedValueAtom)
@@ -35,21 +37,16 @@ const dependentAmountAtom = atom(async (get) => {
 
   if (!independentAmount || !quoteCurrency || (!currentMarketPrice && !customMarketPrice)) return undefined
 
-  // Get output by multiplying input amount with market price (either custom or current)
-  const marketPrice = customMarketPrice || currentMarketPrice
-  if (marketPrice !== undefined) {
-    const marketPriceBN = BN(marketPrice)
-    if (marketPriceBN.lte(0) || marketPriceBN.isNaN() || !marketPriceBN.isFinite()) {
-      console.error('inputAtoms: Invalid market price')
-      return undefined
-    }
+  const tickData = await get(ticksAtom)
+  if (!tickData) return undefined
 
-    const price = independentField === Field.CURRENCY_A ? marketPriceBN : BN(1).dividedBy(marketPriceBN)
-    const amount = BN(independentAmount.toExact()).multipliedBy(price)
-    return tryParseAmount<Token>(amount.toString(), quoteCurrency as Token)
-  }
+  // Get sqrt price from lower and upper ticks
+  const { sqrtPrice } = tickData
+  if (!sqrtPrice.isFinite() || sqrtPrice.isZero()) return undefined
 
-  return undefined
+  const price = independentField === Field.CURRENCY_A ? sqrtPrice : BN(1).dividedBy(sqrtPrice)
+  const amount = BN(independentAmount.toExact()).multipliedBy(price)
+  return tryParseAmount<Token>(amount.toString(), quoteCurrency as Token)
 })
 
 export const formattedAmountsAtom = atom(async (get) => {

@@ -1,6 +1,7 @@
 import { useTranslation } from '@pancakeswap/localization'
 import { AutoColumn, Box, BoxProps, DottedHelpText, QuestionHelperV2, RowBetween, Text } from '@pancakeswap/uikit'
 import { useAtomValue } from 'jotai'
+import { formatNumber } from '@pancakeswap/utils/formatNumber'
 import { outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { amountReceivedAtom, feesEarnedUSDAtom } from '../state/form/tradeDetailsAtoms'
 
@@ -28,7 +29,13 @@ export const TradeDetails = (props: BoxProps) => {
             <DottedHelpText>{t('Amount Received')}</DottedHelpText>
           </QuestionHelperV2>
 
-          <Text small>{amountReceived ? `${amountReceived.toFormat(6)} ${outputCurrency?.symbol}` : '-'}</Text>
+          <Text small>
+            {amountReceived
+              ? `${formatNumber(amountReceived, { maxDecimalDisplayDigits: 6, maximumSignificantDigits: 6 })} ${
+                  outputCurrency?.symbol
+                }`
+              : '-'}
+          </Text>
         </RowBetween>
       </AutoColumn>
     </Box>

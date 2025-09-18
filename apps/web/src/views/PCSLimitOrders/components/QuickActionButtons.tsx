@@ -5,7 +5,7 @@ import { useAtomValue, useSetAtom } from 'jotai'
 import { ChangeEvent, Suspense, useCallback, useEffect, useState } from 'react'
 import { BigNumber as BN } from 'bignumber.js'
 import currencyId from 'utils/currencyId'
-import { customMarketPriceAtom } from '../state/form/marketPriceAtoms'
+import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
 import {
   differencePercentageAtom,
   presetPercentMapAtom,

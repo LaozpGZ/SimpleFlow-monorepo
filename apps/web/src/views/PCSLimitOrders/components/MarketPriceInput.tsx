@@ -1,4 +1,4 @@
-import { appearAnimation, Box, ErrorIcon, IconButton, Input, Message, SwapHorizIcon, Text } from '@pancakeswap/uikit'
+import { Box, ErrorIcon, IconButton, Input, Message, SwapHorizIcon, Text } from '@pancakeswap/uikit'
 import { useAtom, useAtomValue, useSetAtom } from 'jotai'
 import styled, { keyframes } from 'styled-components'
 import { ChangeEvent, Suspense, useCallback, useEffect, useMemo, useState } from 'react'
@@ -8,7 +8,8 @@ import { useTranslation } from '@pancakeswap/localization'
 import { BigNumber as BN } from 'bignumber.js'
 import { inputCurrencyAtom, outputCurrencyAtom } from '../state/currency/currencyAtoms'
 import { flipCurrenciesAtom } from '../state/currency/setCurrencyAtoms'
-import { customMarketPriceAtom, currentMarketPriceAtom } from '../state/form/marketPriceAtoms'
+import { customMarketPriceAtom } from '../state/form/customMarketPriceAtom'
+import { currentMarketPriceAtom } from '../state/form/currentMarketPriceAtom'
 import { selectedPoolAtom } from '../state/pools/poolAtoms'
 import { getTickAdjustedPrice } from '../utils/ticks'
 
@@ -130,6 +131,7 @@ export const MarketPriceInput = () => {
     if (!pool || !inputCurrency || !outputCurrency) return
     const {
       pool: { tickSpacing },
+      zeroForOne,
     } = pool
 
     if (localPrice === currentMarketPrice) return
@@ -141,10 +143,8 @@ export const MarketPriceInput = () => {
     const localPriceBN = BN(localPrice)
     if (localPriceBN.lte(0) || localPriceBN.isNaN() || !localPriceBN.isFinite()) return
 
-    const { price } = getTickAdjustedPrice(localPrice, tickSpacing, inputCurrency, outputCurrency)
+    const { price } = getTickAdjustedPrice(localPrice, tickSpacing, inputCurrency, outputCurrency, zeroForOne)
     if (!price) return
-
-    // TODO:  UPDATE: Adjust according to average price from priceLower and priceUpper
 
     setCustomMarketPrice(price.toSignificant(6))
     setLocalPrice(price.toSignificant(6))
