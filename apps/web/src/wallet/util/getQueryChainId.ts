@@ -1,4 +1,4 @@
-import { isChainSupported, ChainId, getChainIdByChainName } from '@pancakeswap/chains'
+import { ChainId, getChainIdByChainName } from '@pancakeswap/chains'
 import safeGetWindow from '@pancakeswap/utils/safeGetWindow'
 
 export function getQueryChainId() {

@@ -21,8 +21,6 @@ import { swapReducerAtom } from 'state/swap/reducer'
 import { useBridgeAvailableRoutes } from 'views/Swap/Bridge/hooks/useBridgeAvailableRoutes'
 import { getDefaultToken } from 'views/Swap/utils'
 import useAccountActiveChain from 'hooks/useAccountActiveChain'
-import { useSolanaTokenList } from 'hooks/solana/useSolanaTokenList'
-import { NonEVMChainId } from '@pancakeswap/chains'
 
 import { useIsWrapping } from '../../Swap/V3Swap/hooks'
 import useWarningImport from '../../Swap/hooks/useWarningImport'

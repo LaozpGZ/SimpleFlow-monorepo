@@ -1,5 +1,5 @@
 import { ChainId } from '@pancakeswap/chains'
-import { FarmV4SupportedChainId, Protocol, supportedChainIdV4 } from '@pancakeswap/farms'
+import { FarmV4SupportedChainId, Protocol } from '@pancakeswap/farms'
 
 const IS_ADDRESS_REG = /^0x[a-fA-F0-9]{40,64}$/
 

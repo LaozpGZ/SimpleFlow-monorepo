@@ -5,13 +5,10 @@ import { Currency, CurrencyAmount, TradeType, UnifiedCurrency } from '@pancakesw
 import {
   AutoColumn,
   Button,
-  domAnimation,
-  LazyAnimatePresence,
   ReactMarkdown,
   Skeleton,
   Text,
   useMatchBreakpoints,
-  useModal,
   useToast,
   useTooltip,
 } from '@pancakeswap/uikit'
@@ -20,7 +17,6 @@ import replaceBrowserHistoryMultiple from '@pancakeswap/utils/replaceBrowserHist
 import { CurrencyLogo, NumericalInput, SwapUIV2 } from '@pancakeswap/widgets-internal'
 import ConnectWalletButton from 'components/ConnectWalletButton'
 import { AutoRow } from 'components/Layout/Row'
-import CurrencySearchModal from 'components/SearchModal/CurrencySearchModal'
 import { CommonBasesType } from 'components/SearchModal/types'
 import { useAllTokens, useCurrency } from 'hooks/Tokens'
 import { useActiveChainId } from 'hooks/useActiveChainId'
@@ -34,14 +30,13 @@ import { useQuoteContext } from 'quoter/hook/QuoteContext'
 import { multicallGasLimitAtom } from 'quoter/hook/useMulticallGasLimit'
 import { QuoteProvider } from 'quoter/QuoteProvider'
 import { createQuoteQuery } from 'quoter/utils/createQuoteQuery'
-import { memo, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { memo, Suspense, useCallback, useMemo, useRef } from 'react'
 import { useCurrentBlock } from 'state/block/hooks'
 import { Field } from 'state/swap/actions'
 import { useDefaultsFromURLSearch, useSwapState } from 'state/swap/hooks'
 import { useSwapActionHandlers } from 'state/swap/useSwapActionHandlers'
 import { useCurrencyBalances } from 'state/wallet/hooks'
 import { keyframes, styled } from 'styled-components'
-import currencyId from 'utils/currencyId'
 import { maxAmountSpend } from 'utils/maxAmountSpend'
 import { useAccount } from 'wagmi'
 import { useTranslation } from '@pancakeswap/localization'

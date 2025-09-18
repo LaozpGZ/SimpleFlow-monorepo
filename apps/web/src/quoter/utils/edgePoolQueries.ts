@@ -1,5 +1,5 @@
 import { ChainId, getChainName } from '@pancakeswap/chains'
-import { findHook, findHookByAddress, type HookData, hooksList } from '@pancakeswap/infinity-sdk'
+import { findHookByAddress, type HookData, hooksList } from '@pancakeswap/infinity-sdk'
 import {
   getPoolAddress,
   InfinityBinPool,

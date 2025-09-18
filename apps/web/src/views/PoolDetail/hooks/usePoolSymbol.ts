@@ -1,9 +1,8 @@
-import { Token, getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
+import { getCurrencyAddress } from '@pancakeswap/swap-sdk-core'
 import { useCurrencyByChainId } from 'hooks/Tokens'
 import { useMemo } from 'react'
 import { useChainIdByQuery } from 'state/info/hooks'
 import { getTokenSymbolAlias } from 'utils/getTokenAlias'
-import { zeroAddress } from 'viem'
 import { usePoolInfoByQuery } from './usePoolInfo'
 
 export const usePoolSymbol = () => {

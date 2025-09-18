@@ -5,7 +5,6 @@ import { Flex, Skeleton, Text } from '@pancakeswap/uikit'
 import useTheme from 'hooks/useTheme'
 import { styled } from 'styled-components'
 import { useEffect, useRef } from 'react'
-import useIfo from 'views/IfosV2/hooks/useIfo'
 import { useSetAtom } from 'jotai'
 import { updateIfoVer } from 'views/IfosV2/atom/ifoVersionAtom'
 

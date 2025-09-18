@@ -1,5 +1,4 @@
 import { useTranslation } from '@pancakeswap/localization'
-import { Currency } from '@pancakeswap/sdk'
 import { AutoRow, BottomDrawer, Box, Flex, StyledLink, Text, useMatchBreakpoints } from '@pancakeswap/uikit'
 import { useCurrency } from 'hooks/Tokens'
 import { useSwapHotTokenDisplay } from 'hooks/useSwapHotTokenDisplay'
@@ -13,7 +12,6 @@ import { styled } from 'styled-components'
 // import { SwapSelection } from '../components/SwapSelection'
 
 import { QuoteProvider } from 'quoter/QuoteProvider'
-import { useSingleTokenSwapInfo } from 'quoter/hook/useSingleTokenSwapInfo'
 import { SwapSelection } from '../../SwapSimplify/InfinitySwap/SwapSelectionTab'
 import { SwapFeaturesContext } from '../SwapFeaturesContext'
 import { SwapType } from '../types'
