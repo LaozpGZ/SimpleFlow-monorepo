@@ -335,7 +335,6 @@ export const TradeSummary = memo(function TradeSummary({
             <QuestionHelperV2
               text={
                 <>
-                  g
                   <Text mb="12px">
                     <Text bold display="inline-block">
                       {t('AMM')}
