@@ -4194,5 +4194,6 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Теперь инсентивы можно получать одновременно и на Incentra, и на Фермах.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Застейкайте свой LP токен на Ферме и накапливайте награды Incentra и Фермы.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Заберите свои награды Фермы на PancakeSwap, а награды Incentra — на",
-  "Incentra's website": "веб-сайте Incentra"
+  "Incentra's website": "веб-сайте Incentra",
+  "Caution: %token% is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Внимание: %token% в настоящее время не верифицирован. Всегда проверяйте адрес и проводите собственное исследование перед торговлей или взаимодействием с этим пулом."
 }
