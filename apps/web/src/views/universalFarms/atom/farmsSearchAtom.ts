@@ -19,6 +19,7 @@ import { farmFilters } from 'state/farmsV4/search/filters'
 import { PoolInfo } from 'state/farmsV4/state/type'
 import { userShowTestnetAtom } from 'state/user/hooks/useUserShowTestnet'
 import { FarmV4SupportedChainId } from '@pancakeswap/farms'
+import { TokenInfo } from '@pancakeswap/token-lists'
 import { tokensMapAtom } from './tokensMapAtom'
 import { baseFarmListAtom, extendFarmListAtom } from './farmSearch.fetch'
 import { filterTokens, isInWhitelist } from './farmSearch.filter'
@@ -82,10 +83,12 @@ const searchAtom = atomFamily((query: FarmQuery) => {
 
     const fullList = uniqBy([...baseResults, ...extendResults], (x) => `${x.chainId}-${x.id}`)
 
-    const filtered = farmFilters.search(
-      fullList.filter(farmFilters.chainFilter(queryChains)).filter(farmFilters.protocolFilter(protocols)),
-      query.keywords,
-    )
+    const filtered = farmFilters
+      .search(
+        fullList.filter(farmFilters.chainFilter(queryChains)).filter(farmFilters.protocolFilter(protocols)),
+        query.keywords,
+      )
+      .map(markWithWhiteList(tokensMap))
     const sorted = farmFilters.sortFunction(filtered, sortBy, activeChainId)
 
     const hasPending = lists.some((x) => x.isPending())
@@ -96,6 +99,15 @@ const searchAtom = atomFamily((query: FarmQuery) => {
     return Loadable.Just(sorted)
   })
 }, isEqual)
+
+const markWithWhiteList = (tokensMap: Record<string, TokenInfo>) => {
+  const checkWhitelist = isInWhitelist(tokensMap)
+  return (farm: FarmInfo) => {
+    // eslint-disable-next-line no-param-reassign
+    farm.inWhitelist = checkWhitelist(farm)
+    return farm
+  }
+}
 
 const farmsWithPagingAtom = atomFamily((query) => {
   return atomWithLoadable(async (get) => {
@@ -172,20 +184,12 @@ export const farmsSearchV2Atom = atomFamily((query) => {
   return atom((get) => {
     const sliced = get(farmsWithPagingAtom(query))
     const withFilledData = get(farmsWithFilledDataAtom(query))
-    const checkWhitelist = isInWhitelist(get(tokensMapAtom).tokensMap)
 
     const anyPending = withFilledData.isPending()
     const resultList = withFilledData.isPending() ? sliced : withFilledData
 
     return {
-      list: resultList.map((list) => {
-        for (const pool of list) {
-          if (pool.farm) {
-            pool.farm.inWhitelist = checkWhitelist(pool.farm)
-          }
-        }
-        return list
-      }),
+      list: resultList,
       isLoading: anyPending,
     }
   })
