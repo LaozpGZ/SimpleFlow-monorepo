@@ -42,6 +42,8 @@ export function useVercelFeatureFlagOverrides() {
           flagOverrides = JSON.parse(overrideCookie)
         }
 
+        console.log('flagOverrides', flagOverrides)
+
         if (flagOverrides) {
           setFlags((prev: FeatureFlags) => ({
             ...prev,
