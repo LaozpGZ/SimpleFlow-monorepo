@@ -32,7 +32,6 @@ import { useEmbeddedSmartAccountConnectorV2 } from 'wallet/Privy/hooks/usePrivyS
 import { useDataDogRUM } from 'hooks/useDataDogRUM'
 import { useLoadExperimentalFeatures } from 'hooks/useExperimentalFeatureEnabled'
 import useInitNotificationsClient from 'hooks/useInitNotificationsClient'
-import { useVercelFeatureFlagOverrides } from 'hooks/useVercelToolbar'
 import { useWalletConnectRouterSync } from 'hooks/useWalletConnectRouterSync'
 import { useWeb3WalletView } from 'hooks/useWeb3WalletView'
 import { useInitGlobalWorker } from 'hooks/useWorker'
@@ -69,7 +68,6 @@ function GlobalHooks() {
   useDataDogRUM()
   useWeb3WalletView()
   useLoadExperimentalFeatures()
-  useVercelFeatureFlagOverrides()
   usePollBlockNumber()
   useEagerConnect()
   useUserAgent()
