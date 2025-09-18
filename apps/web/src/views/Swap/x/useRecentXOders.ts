@@ -26,7 +26,6 @@ export function useRecentXOrders<selectData = GetRecentXOrdersReturnType>(
     ...query,
     staleTime: 5_000,
     retry: 3,
-    refetchOnMount: true,
     queryKey: getRecentXOrdersQueryKey([chainId!, address!]),
     queryFn: async () => {
       if (!chainId || !address) {

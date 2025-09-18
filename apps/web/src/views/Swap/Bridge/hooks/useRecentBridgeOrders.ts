@@ -26,7 +26,6 @@ export const useRecentBridgeOrders = ({ address }: UseRecentBridgeOrdersParamete
     },
     retry: 3,
     retryDelay: 1_000,
-    refetchOnMount: true,
     refetchInterval: (query) =>
       query.state.data?.pages
         .flatMap((page) => (Array.isArray(page.rows) ? page.rows.map((row) => row.status) : []))

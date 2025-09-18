@@ -121,7 +121,6 @@ export const useGetGiftInfo = () => {
     enabled: Boolean(chainId && account),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    refetchOnMount: true,
     refetchInterval: FAST_INTERVAL,
   })
 
@@ -218,7 +217,6 @@ export const useGetGiftByCodeHash = ({ codeHash }: { codeHash?: string }) => {
     enabled: Boolean(chainId && codeHash),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
-    refetchOnMount: true,
   })
 
   const searchToken = useTokenByChainId(data?.currencyAmount !== null ? data?.token : undefined, chainId)
