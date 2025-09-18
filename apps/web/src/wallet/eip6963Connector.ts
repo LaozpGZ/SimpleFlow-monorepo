@@ -15,29 +15,6 @@ const normalizeChainId = (chainId: unknown): number => {
   throw new Error(`Invalid chainId: ${chainId}`)
 }
 
-// Helper function to wait for chain ID to sync with retry logic
-const waitForChainIdSync = async (provider: any, expectedChainId: number, timeout = 5000) => {
-  const startTime = Date.now()
-  
-  return withRetry(
-    async () => {
-      if (Date.now() - startTime > timeout) {
-        throw new Error(`Chain sync timeout after ${timeout}ms`)
-      }
-      
-      const currentChainId = normalizeChainId(await provider.request({ method: 'eth_chainId' }))
-      if (currentChainId !== expectedChainId) {
-        throw new Error(`ChainId mismatch. Expected: ${expectedChainId}, got: ${currentChainId}`)
-      }
-      return currentChainId
-    },
-    {
-      delay: 100,
-      retryCount: Math.floor(timeout / 100),
-    },
-  )
-}
-
 export const createEip6963Connector = (detail: EIP6963Detail) => {
   if (cache.has(detail.info.uuid)) {
     return cache.get(detail.info.uuid)
@@ -104,29 +81,43 @@ export const createEip6963Connector = (detail: EIP6963Detail) => {
     },
 
     async switchChain({ chainId }) {
-      try {
-        // Request the chain switch from the wallet
-        await provider.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: `0x${chainId.toString(16)}` }],
+      await provider.request({
+        method: 'wallet_switchEthereumChain',
+        params: [{ chainId: `0x${chainId.toString(16)}` }],
+      })
+
+      await waitForChainIdToSync()
+      await sendAndWaitForChangeEvent(chainId)
+
+      const chain = chains.find((x) => x.id === chainId)!
+      return chain
+
+      async function waitForChainIdToSync() {
+        await withRetry(
+          async () => {
+            const value = normalizeChainId(await provider.request({ method: 'eth_chainId' }))
+            if (value !== chainId) {
+              throw new Error(`ChainId mismatch after network switch. Expected: ${chainId}, got: ${value}`)
+            }
+            return value
+          },
+          {
+            delay: 50,
+            retryCount: 20,
+          },
+        )
+      }
+      async function sendAndWaitForChangeEvent(chainId: number) {
+        await new Promise<void>((resolve) => {
+          const listener = ((data) => {
+            if (data && typeof data === 'object' && 'chainId' in data && data.chainId === chainId) {
+              config.emitter.off('change', listener)
+              resolve()
+            }
+          }) satisfies Parameters<typeof config.emitter.on>[1]
+          config.emitter.on('change', listener)
+          config.emitter.emit('change', { chainId })
         })
-
-        // Wait for the chain ID to sync with a timeout
-        await waitForChainIdSync(provider, chainId)
-
-        // Emit the change event to sync with wagmi config
-        config.emitter.emit('change', { chainId })
-
-        const chain = chains.find((x) => x.id === chainId)!
-        return chain
-      } catch (error) {
-        // If the chain switch fails, still try to return the current chain
-        const currentChainId = await this.getChainId()
-        const currentChain = chains.find((x) => x.id === currentChainId)
-        if (currentChain) {
-          return currentChain
-        }
-        throw error
       }
     },
   }))
