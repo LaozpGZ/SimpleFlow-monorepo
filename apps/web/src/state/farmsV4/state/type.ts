@@ -45,11 +45,12 @@ export type BasePoolInfo = {
   poolId?: Address
 }
 
-export type SolanaV3PoolInfo = Omit<BasePoolInfo, 'lpAddress'> & {
+export type SolanaV3PoolInfo = Omit<BasePoolInfo, 'lpAddress' | 'poolId'> & {
   protocol: Protocol.V3
   lpAddress: string
   nftMint: PublicKey
   rawPool: SolanaV3Pool
+  poolId?: string
 }
 
 export type V3PoolInfo = BasePoolInfo & {

@@ -63,6 +63,7 @@ export const useExtendPoolsAtom = () => {
               (pool) =>
                 !farms.some(
                   (farm) =>
+                    pool.lpAddress &&
                     isAddress(pool.lpAddress) &&
                     isAddressEqual(farm.lpAddress, pool.lpAddress) &&
                     farm.protocol === pool.protocol,

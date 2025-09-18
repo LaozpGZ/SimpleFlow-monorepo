@@ -56,7 +56,7 @@ export const FeeTierComponent = <T extends PoolInfo>({
     return (
       <InfinityFeeTierBreakdown
         poolInfo={item as any as PoolInfo}
-        poolId={id}
+        poolId={id as `0x${string}`}
         chainId={item.chainId}
         hookData={hookData}
         infoIconVisible={false}
