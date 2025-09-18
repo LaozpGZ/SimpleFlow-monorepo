@@ -1,15 +1,34 @@
 import { Suspense, lazy } from 'react'
 
-// import { useFeatureFlags } from 'hooks/useExperimentalFeatureEnabled'
 import { useShouldInjectVercelToolbar, useVercelToolbarEnabled } from 'hooks/useVercelToolbar'
+import { FeatureFlags, useFeatureFlags } from 'hooks/useExperimentalFeatureEnabled'
 
 const VercelToolbarComp = lazy(() =>
   import('@vercel/toolbar/next').then((module) => ({ default: module.VercelToolbar })),
 )
-// const FlagValues = lazy(() => import('flags/react').then((module) => ({ default: module.FlagValues })))
+
+export function safeJsonStringify(value: any): string {
+  return JSON.stringify(value).replace(/</g, '\\u003c')
+}
+
+// Copy from flags/react/FlagValues.tsx
+/**
+ * Registers variant values with the toolbar
+ */
+export function FlagValues({ values }: { values: FeatureFlags }) {
+  return (
+    <script
+      type="application/json"
+      data-flag-values
+      dangerouslySetInnerHTML={{
+        __html: safeJsonStringify(values),
+      }}
+    />
+  )
+}
 
 export function VercelToolbar() {
-  // const flags = useFeatureFlags()
+  const flags = useFeatureFlags()
   const enabled = useVercelToolbarEnabled()
   const shouldInject = useShouldInjectVercelToolbar()
 
@@ -20,7 +39,7 @@ export function VercelToolbar() {
           <VercelToolbarComp />
         </Suspense>
       ) : null}
-      {/* <FlagValues values={flags} /> */}
+      <FlagValues values={flags} />
     </Suspense>
   ) : null
 }

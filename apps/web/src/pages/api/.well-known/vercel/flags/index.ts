@@ -1,6 +1,6 @@
 import { verifyAccess, version } from 'flags'
 import { getProviderData } from 'flags/next'
-import flags from '../../../flags'
+import { flags } from '../../../flags'
 
 export default async function handler(request, response) {
   const access = await verifyAccess(request.headers['authorization'])

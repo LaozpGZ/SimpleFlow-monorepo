@@ -1,5 +1,6 @@
 import { flag } from 'flags/next'
 import { EXPERIMENTAL_FEATURES, EXPERIMENTAL_FEATURE_CONFIGS } from 'config/experimentalFeatures'
+import { ExtendedNextReq } from 'middlewares/types'
 
 // Helper function to get feature config by feature key
 const getFeatureConfig = (feature: EXPERIMENTAL_FEATURES) => {
@@ -82,10 +83,44 @@ const optimizedAmmTradeFlag = flag({
   },
 })
 
-export default {
+// Helper to create a compatible request object for flags
+const createFlagRequest = (request: ExtendedNextReq) => {
+  return {
+    cookies: request.cookies,
+    headers: request.headers,
+    clientId: request.clientId,
+    url: request.url,
+    method: request.method,
+  }
+}
+
+export const flags = {
   [EXPERIMENTAL_FEATURES.WebNotifications]: webNotificationsFlag,
   [EXPERIMENTAL_FEATURES.SpeedQuote]: speedQuoteFlag,
   [EXPERIMENTAL_FEATURES.PriceAPI]: priceAPIFlag,
   [EXPERIMENTAL_FEATURES.PCSX]: pcsxFlag,
   [EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE]: optimizedAmmTradeFlag,
+}
+
+// Get experimental feature access using the new flags SDK
+export const getExperimentalFeatureAccessList = async (
+  request: ExtendedNextReq,
+): Promise<Array<{ feature: EXPERIMENTAL_FEATURES; hasAccess: boolean }>> => {
+  const flagRequest = createFlagRequest(request)
+
+  const flagEvaluations = await Promise.all(
+    Object.entries(flags).map(async ([feature, flagFunction]) => {
+      console.log('feature', feature)
+      try {
+        // Pass the adapted request object to the flag function
+        const hasAccess = await flagFunction(flagRequest as any)
+        console.log('hasAccess', hasAccess)
+        return { feature: feature as EXPERIMENTAL_FEATURES, hasAccess }
+      } catch (error) {
+        console.error(`Error evaluating flag ${feature}:`, error)
+        return { feature: feature as EXPERIMENTAL_FEATURES, hasAccess: false }
+      }
+    }),
+  )
+  return flagEvaluations
 }
