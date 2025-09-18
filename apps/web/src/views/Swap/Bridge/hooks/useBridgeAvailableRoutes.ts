@@ -22,8 +22,6 @@ export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
   const { address: privyAddress } = usePrivyWalletAddress()
   const isBridgeV2Enabled = useExperimentalFeatureEnabled(EXPERIMENTAL_FEATURES.BRIDGE_V2)
 
-  console.log('isBridgeV2Enabled', isBridgeV2Enabled)
-
   // only return chains array,add origin chain id to the array
   const chains = useMemo(() => {
     if (!params?.originChainId || isSolana(params?.originChainId)) {

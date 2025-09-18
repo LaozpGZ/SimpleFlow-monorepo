@@ -224,7 +224,9 @@ export function useDefaultsFromURLSearch():
     | undefined
   >()
 
-  const { chains: supportedBridgeChains, loading: isSupportedBridgePending } = useBridgeAvailableChains()
+  const { chains: supportedBridgeChains, loading: isSupportedBridgePending } = useBridgeAvailableChains({
+    originChainId: chainId,
+  })
 
   useEffect(() => {
     if (!chainId || !native || !isReady) return
