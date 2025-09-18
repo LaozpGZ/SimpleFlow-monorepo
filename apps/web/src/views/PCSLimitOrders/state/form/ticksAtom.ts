@@ -49,6 +49,9 @@ export const ticksAtom = atom(async (get) => {
   const tickLower = zeroForOne ? targetTick : targetTick - tickSpacing
   const tickUpper = zeroForOne ? targetTick + tickSpacing : targetTick
 
+  // To determine if selling or buying at worse price, need quoting ticks and not inverted ticks
+  const isSellingOrBuyingAtWorsePrice = zeroForOne ? tickLower <= tickCurrent : tickUpper >= tickCurrent
+
   const priceLower = tickToPrice(inputCurrency, outputCurrency, tickLower)
   const priceUpper = tickToPrice(inputCurrency, outputCurrency, tickUpper)
 
@@ -61,8 +64,6 @@ export const ticksAtom = atom(async (get) => {
   const invertedTickLower = nearestUsableTick(invertTickForLimitOrder(tickUpper, tickCurrent), tickSpacing)
   const invertedTickUpper = nearestUsableTick(invertTickForLimitOrder(tickLower, tickCurrent), tickSpacing)
   const invertedTargetTick = zeroForOne ? invertedTickUpper : invertedTickLower
-
-  const isSellingOrBuyingAtWorsePrice = zeroForOne ? invertedTickLower <= tickCurrent : invertedTickUpper >= tickCurrent
 
   // FOR TESTING
   const invertedPriceLower = tickToPrice(inputCurrency, outputCurrency, invertedTickLower)
