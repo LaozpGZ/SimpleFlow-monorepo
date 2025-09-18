@@ -1,6 +1,9 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { createQueryKey } from 'utils/reactQuery'
-import { getUserBridgeOrdersV2 } from '../api'
+import { Address } from 'viem/accounts'
+import { useExperimentalFeatureEnabled } from 'hooks/useExperimentalFeatureEnabled'
+import { EXPERIMENTAL_FEATURES } from 'config/experimentalFeatures'
+import { getUserBridgeOrders, getUserBridgeOrdersV2 } from '../api'
 import { BridgeStatus } from '../types'
 
 const getRecentBridgeOrdersQueryKey = createQueryKey<'recent-bridge-orders', [address: string]>('recent-bridge-orders')
@@ -10,6 +13,7 @@ interface UseRecentBridgeOrdersParameters {
 }
 
 export const useRecentBridgeOrders = ({ address }: UseRecentBridgeOrdersParameters) => {
+  const isBridgeV2Enabled = useExperimentalFeatureEnabled(EXPERIMENTAL_FEATURES.BRIDGE_V2)
   return useInfiniteQuery({
     queryKey: getRecentBridgeOrdersQueryKey([address!]),
     queryFn: async ({ pageParam }) => {
@@ -17,10 +21,12 @@ export const useRecentBridgeOrders = ({ address }: UseRecentBridgeOrdersParamete
         throw new Error("No address provided for user's bridge orders")
       }
 
+      if (!isBridgeV2Enabled) {
+        return getUserBridgeOrders(address as Address, pageParam)
+      }
+
       const responsev2 = await getUserBridgeOrdersV2(address, pageParam)
 
-      // TODO: v2 will return {EVM: UserBridgeOrdersResponse, NON-EVM: UserBridgeOrdersResponse}
-      // merge them, for rows, concat them by timestamp,
       const mergedRows = [...responsev2.EVM.rows, ...responsev2['NON-EVM'].rows].sort(
         (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime(),
       )

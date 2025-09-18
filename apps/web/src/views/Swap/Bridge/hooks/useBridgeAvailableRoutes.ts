@@ -3,6 +3,8 @@ import { useMemo } from 'react'
 import { CROSSCHAIN_SUPPORTED_CHAINS } from 'quoter/utils/crosschain-utils/config'
 import { ChainId, isSolana, NonEVMChainId } from '@pancakeswap/chains'
 import { usePrivyWalletAddress } from 'wallet/Privy/hooks/usePrivyWalletAddress'
+import { useExperimentalFeatureEnabled } from 'hooks/useExperimentalFeatureEnabled'
+import { EXPERIMENTAL_FEATURES } from 'config/experimentalFeatures'
 import { GetAvailableRoutesParams, getBridgeAvailableRoutes } from '../api'
 
 function useBridgeAvailableRoutes() {
@@ -18,10 +20,15 @@ function useBridgeAvailableRoutes() {
 export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
   const { data, isLoading } = useBridgeAvailableRoutes()
   const { address: privyAddress } = usePrivyWalletAddress()
+  const isBridgeV2Enabled = useExperimentalFeatureEnabled(EXPERIMENTAL_FEATURES.BRIDGE_V2)
 
   // only return chains array,add origin chain id to the array
   const chains = useMemo(() => {
     if (!params?.originChainId || isSolana(params?.originChainId)) {
+      if (!isBridgeV2Enabled) {
+        return CROSSCHAIN_SUPPORTED_CHAINS.filter((chain) => chain !== NonEVMChainId.SOLANA)
+      }
+
       return CROSSCHAIN_SUPPORTED_CHAINS
     }
 
@@ -35,7 +42,7 @@ export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
 
     return [
       params.originChainId,
-      ...(acrossSupportedChains.length > 0 ? [NonEVMChainId.SOLANA] : []),
+      ...(acrossSupportedChains.length > 0 && isBridgeV2Enabled ? [NonEVMChainId.SOLANA] : []),
       ...acrossSupportedChains,
     ]
   }, [data, params?.originChainId, privyAddress])

@@ -39,6 +39,13 @@ async function handler(_: NextApiRequest, response: NextApiResponse) {
           { value: true, label: 'On' },
         ],
       },
+      [EXPERIMENTAL_FEATURES.BRIDGE_V2]: {
+        description: 'Controls whether Bridge V2 API is enabled',
+        options: [
+          { value: false, label: 'Off' },
+          { value: true, label: 'On' },
+        ],
+      },
     },
     overrideEncryptionMode: 'plaintext',
   }
