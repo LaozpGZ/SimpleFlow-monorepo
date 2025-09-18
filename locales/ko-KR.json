@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "투표권은 블록에서 고정 기간 CAKE 스테이킹 포지션의 스테이킹 금액과 남은 스테이킹 기간을 사용하여 계산됩니다.",
   "CAKE locked:": "잠긴 CAKE:",
   "Go to Pools": "풀로 이동",
-  "CAKE Emission Projection": "CAKE 이미션 예측",
   "Boosted by vCAKE": "vCAKE에 의해 부스팅됨",
   "Boosting Expired": "부스팅 만료됨",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "스냅숏 블록에서 vCAKE 부스팅이 만료되었습니다. 고정 기간 스테이킹 포지션을 갱신하여 향후 투표 제안에 대한 부스트를 활성화하세요.",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "이제 Incentra와 Farms 모두에서 동시에 인센티브를 적립할 수 있습니다.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Farm에 LP 토큰을 스테이킹하고 Incentra 및 Farm 보상을 모두 적립하세요.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "PancakeSwap에서 Farm 보상을 클레임하고 Incentra 보상은",
-  "Incentra's website": "Incentra 웹사이트"
+  "Incentra's website": "Incentra 웹사이트",
+  "CAKE Burn Dashboard": "CAKE 소각 대시보드",
+  "Caution: <0>%token%</0> is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "주의: <0>%token%</0>은(는) 현재 미확인 상태입니다. 이 풀에서 거래하거나 상호 작용하기 전에 항상 주소를 확인하고 직접 조사하십시오."
 }

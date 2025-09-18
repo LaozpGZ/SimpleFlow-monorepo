@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "Äänestysvalta lasketaan käyttämällä panostussummaa ja kiinteän CAKE-panostusposition jäljellä olevaa kestoa lohkossa.",
   "CAKE locked:": "CAKE lukittu:",
   "Go to Pools": "Siirry Pooleihin",
-  "CAKE Emission Projection": "CAKE-päästöennuste",
   "Boosted by vCAKE": "vCAKEn tehostama",
   "Boosting Expired": "Tehostus päättynyt",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "vCAKE-tehostuksesi päättyi tilannekuvalohkossa. Uudista kiinteä panostuspositiosi tehostuksen aktivoimiseksi tulevissa äänestysehdotuksissa.",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Kannustimia voi nyt ansaita sekä Incentrasta että Farmeilta samanaikaisesti.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Steikkaa LP-tokenisi Farmiin ja kerrytä sekä Incentra- että Farm-palkintoja.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Lunasta Farm-palkintosi PancakeSwapissa ja Incentra-palkintosi osoitteessa",
-  "Incentra's website": "Incentran verkkosivusto"
+  "Incentra's website": "Incentran verkkosivusto",
+  "CAKE Burn Dashboard": "CAKE-polton hallintapaneeli",
+  "Caution: <0>%token%</0> is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Varoitus: <0>%token%</0> on tällä hetkellä vahvistamaton. Vahvista aina osoite ja tee oma selvityksesi ennen kuin käyt kauppaa tai käytät tätä poolia."
 }

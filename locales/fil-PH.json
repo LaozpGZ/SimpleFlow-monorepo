@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "Kinakalkula ang kakayahan sa pagboto gamit ang halaga ng pag-stake at ang natitirang tagal ng pag-stake ng fixed-term na posisyon sa pag-stake ng CAKE sa block.",
   "CAKE locked:": "Naka-lock na CAKE:",
   "Go to Pools": "Pumunta sa Mga Pool",
-  "CAKE Emission Projection": "Hula sa CAKE Emission",
   "Boosted by vCAKE": "Na-boost ng vCAKE",
   "Boosting Expired": "Nag-expire na ang Pag-boost",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "Nag-expire ang pag-boost ng vCAKE mo sa snapshot block. I-renew ang iyong fixed-term na posisyon sa pag-stake para i-activate ang pag-boost para sa mga mungkahi sa pagboto sa hinaharap.",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Maaari nang kumita ng Incentives sa Incentra AT sa Farms nang sabay.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "I-stake ang iyong LP token sa Farm para makakuha ng Incentra at Farm rewards.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "I-claim ang iyong Farm rewards sa PancakeSwap at ang iyong Incentra rewards sa",
-  "Incentra's website": "website ng Incentra"
+  "Incentra's website": "website ng Incentra",
+  "CAKE Burn Dashboard": "Dashboard ng CAKE Burn",
+  "Caution: <0>%token%</0> is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Babala: Ang <0>%token%</0> ay kasalukuyang hindi beripikado. Palaging kumpirmahin ang address at magsagawa ng sariling pananaliksik bago makipag-trade o makipag-ugnayan sa pool na ito."
 }

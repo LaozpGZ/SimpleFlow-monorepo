@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "ப்ளாக்கில் நிலையான-கால CAKE ஸ்டேக்கிங் பொசிஷனின் ஸ்டேக்கிங் தொகையையும், மீதமுள்ள ஸ்டேக்கிங் காலத்தையும் பயன்படுத்தி வாக்களிப்புத் திறன் கணக்கிடப்படுகிறது.",
   "CAKE locked:": "CAKE பூட்டியது:",
   "Go to Pools": "பூல்களுக்குச் செல்க",
-  "CAKE Emission Projection": "CAKE எமிஷன் திட்டம்",
   "Boosted by vCAKE": "vCAKE ஆல் பூஸ்ட் செய்யப்பட்டது",
   "Boosting Expired": "பூஸ்டிங் காலாவதியானது",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "உங்கள் vCAKE பூஸ்டிங், ஸ்னாப்ஷாட் ப்ளாக்கில் காலாவதியானது. எதிர்கால வாக்களிப்பு முன்மொழிவுகளுக்கான பூஸ்டைச் செயல்படுத்த உங்கள் நிலையான-கால ஸ்டேக்கிங் பொசிஷனைப் புதுப்பிக்கவும்.",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "ஊக்கத்தொகைகளை இப்போது Incentra மற்றும் Farms இரண்டிலும் ஒரே நேரத்தில் ஈட்டலாம்.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "உங்கள் LP டோக்கனை Farm-இல் ஸ்டேக் செய்து, Incentra மற்றும் Farm வெகுமதிகள் இரண்டையும் ஈட்டலாம்.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "உங்கள் Farm வெகுமதிகளை PancakeSwap-இல் கிளைம் செய்யுங்கள், மேலும் உங்கள் Incentra வெகுமதிகளை",
-  "Incentra's website": "Incentra-வின் இணையதளத்தில்"
+  "Incentra's website": "Incentra-வின் இணையதளத்தில்",
+  "CAKE Burn Dashboard": "CAKE எரிப்பு டாஷ்போர்டு",
+  "Caution: <0>%token%</0> is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "எச்சரிக்கை: <0>%token%</0> தற்போது சரிபார்க்கப்படவில்லை. இந்த பூலுடன் வர்த்தகம் செய்வதற்கு அல்லது தொடர்பு கொள்வதற்கு முன் முகவரியை எப்போதும் உறுதிப்படுத்தவும் மற்றும் உங்கள் சொந்த ஆய்வை மேற்கொள்ளவும்."
 }

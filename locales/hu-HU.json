@@ -1600,7 +1600,6 @@
   "Voting power is calculated using the staking amount and remaining staking duration of the fixed-term CAKE staking position at the block.": "A szavazati erő kiszámítása a tét összegének és a blokkban lévő, határozott idejű CAKE tét pozíció hátralévő tét időtartamának felhasználásával történik.",
   "CAKE locked:": "Zárolt CAKE:",
   "Go to Pools": "Ugrás ide: Összevont alapok",
-  "CAKE Emission Projection": "CAKE kibocsátás tippelése",
   "Boosted by vCAKE": "A vCAKE által felturbózva",
   "Boosting Expired": "Gyorsítás Lejárt",
   "Your vCAKE boosting was expired at the snapshot block. Renew your fixed-term staking position to activate the boost for future voting proposals.": "A vCAKE felturbózása lejárt a pillanatképblokkban. Újítsa meg határozott idejű tétpozícióját, hogy a jövőbeni szavazási javaslatoknál aktiválhassa a turbózást.",
@@ -4194,5 +4193,7 @@
   "Incentives can now be earned on BOTH Incentra and Farms at the same time.": "Mostantól egyidejűleg szerezhetők jutalmak az Incentra és a Farms felületeken.",
   "Stake your LP token in the Farm and accrue both Incentra and Farm rewards.": "Stakeld LP tokenedet a Farmon, és halmozz fel Incentra és Farm jutalmakat is.",
   "Claim your Farm rewards on PancakeSwap and your Incentra rewards on": "Igényeld Farm jutalmaidat a PancakeSwapon, Incentra jutalmaidat pedig",
-  "Incentra's website": "Incentra weboldalán"
+  "Incentra's website": "Incentra weboldalán",
+  "CAKE Burn Dashboard": "CAKE Égetési Irányítópult",
+  "Caution: <0>%token%</0> is currently unverified. Always confirm the address and do your own research before trading or interacting with this pool.": "Figyelem: Az <0>%token%</0> jelenleg nincs ellenőrizve. Mindig erősítse meg a címet, és végezze el saját kutatását, mielőtt kereskedne vagy interakcióba lépne ezzel a pool-lal."
 }
