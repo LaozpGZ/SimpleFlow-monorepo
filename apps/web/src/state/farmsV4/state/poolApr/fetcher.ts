@@ -148,7 +148,7 @@ export const getMerklApr = async (result: any, chainId: number) => {
 }
 
 export const getAllNetworkMerklApr = async (signal?: AbortSignal) => {
-  const evmChains = supportedChainIdV4.filter((chainId): chainId is ChainId => isEvm(chainId))
+  const evmChains = supportedChainIdV4.filter((chainId) => isEvm(chainId)) as ChainId[]
   const resp = await fetch(
     `https://api.merkl.xyz/v4/opportunities/?chainId=${evmChains.join(
       ',',
@@ -185,7 +185,7 @@ export const getAllNetworkIncentraApr = async (signal?: AbortSignal) => {
   const json = (await resp.json()) as { err: string | null; campaigns: IncentraCampaign[] }
   if (json.err) throw new Error(`Incentra API error: ${json.err}`)
 
-  const evmChains = supportedChainIdV4.filter((chainId): chainId is ChainId => isEvm(chainId))
+  const evmChains = supportedChainIdV4.filter((chainId) => isEvm(chainId)) as ChainId[]
   const filteredCampaigns = json.campaigns.filter((c) => evmChains.includes(Number(c.chainId) as ChainId))
 
   const aprs = filteredCampaigns.reduce((acc, campaign) => {
@@ -366,7 +366,7 @@ const getV2PoolsCakeAprByChainId = async (
 
   const totalSupplyCalls = validPools.map((pool) => {
     return {
-      address: pool.lpAddress,
+      address: pool.lpAddress!,
       functionName: 'totalSupply',
       abi: erc20Abi,
     } as const

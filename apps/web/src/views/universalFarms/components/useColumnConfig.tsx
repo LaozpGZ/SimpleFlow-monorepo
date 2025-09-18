@@ -163,7 +163,7 @@ export const usePoolFeatureConfig = (showPoolType = true) => {
         key: 'hookAddress',
         minWidth: '140px',
         render: (value: string, item: PoolInfo) => {
-          const hookData = getHookByAddress(item.chainId, value)
+          const hookData = getHookByAddress(item.chainId, value as `0x${string}`)
           return (
             <Grid gridGap="4px">
               {hookData ? (
