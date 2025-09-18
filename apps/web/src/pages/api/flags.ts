@@ -38,7 +38,7 @@ const getUserIdentifier = (request: any): string => {
 }
 
 // Web Notifications Feature Flag
-export const webNotificationsFlag = flag({
+const webNotificationsFlag = flag({
   key: EXPERIMENTAL_FEATURES.WebNotifications,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -47,7 +47,7 @@ export const webNotificationsFlag = flag({
 })
 
 // Speed Quote Feature Flag
-export const speedQuoteFlag = flag({
+const speedQuoteFlag = flag({
   key: EXPERIMENTAL_FEATURES.SpeedQuote,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -56,7 +56,7 @@ export const speedQuoteFlag = flag({
 })
 
 // Price API Feature Flag
-export const priceAPIFlag = flag({
+const priceAPIFlag = flag({
   key: EXPERIMENTAL_FEATURES.PriceAPI,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -65,7 +65,7 @@ export const priceAPIFlag = flag({
 })
 
 // PCSX Feature Flag
-export const pcsxFlag = flag({
+const pcsxFlag = flag({
   key: EXPERIMENTAL_FEATURES.PCSX,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -74,7 +74,7 @@ export const pcsxFlag = flag({
 })
 
 // Optimized AMM Trade Feature Flag
-export const optimizedAmmTradeFlag = flag({
+const optimizedAmmTradeFlag = flag({
   key: EXPERIMENTAL_FEATURES.OPTIMIZED_AMM_TRADE,
   async decide(request) {
     const userIdentifier = getUserIdentifier(request)
@@ -82,8 +82,7 @@ export const optimizedAmmTradeFlag = flag({
   },
 })
 
-// Export all flags for easy access
-export const allFlags = {
+export default {
   [EXPERIMENTAL_FEATURES.WebNotifications]: webNotificationsFlag,
   [EXPERIMENTAL_FEATURES.SpeedQuote]: speedQuoteFlag,
   [EXPERIMENTAL_FEATURES.PriceAPI]: priceAPIFlag,

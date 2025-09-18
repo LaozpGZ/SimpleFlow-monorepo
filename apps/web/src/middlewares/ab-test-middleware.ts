@@ -1,6 +1,6 @@
 import { EXPERIMENTAL_FEATURES, getCookieKey } from 'config/experimentalFeatures'
 import { NextFetchEvent, NextResponse } from 'next/server'
-import { allFlags } from '../flags'
+import flags from '../pages/api/flags'
 import { ONE_YEAR_SECONDS } from './constants'
 import { ExtendedNextReq, MiddlewareFactory, NextMiddleware } from './types'
 
@@ -22,10 +22,13 @@ export const getExperimentalFeatureAccessList = async (
   const flagRequest = createFlagRequest(request)
 
   const flagEvaluations = await Promise.all(
-    Object.entries(allFlags).map(async ([feature, flagFunction]) => {
+    Object.entries(flags).map(async ([feature, flagFunction]) => {
+      console.log('feature', feature)
+      console.log('flagFunction', flagFunction)
       try {
         // Pass the adapted request object to the flag function
         const hasAccess = await flagFunction(flagRequest as any)
+        console.log('hasAccess', hasAccess)
         return { feature: feature as EXPERIMENTAL_FEATURES, hasAccess }
       } catch (error) {
         console.error(`Error evaluating flag ${feature}:`, error)
