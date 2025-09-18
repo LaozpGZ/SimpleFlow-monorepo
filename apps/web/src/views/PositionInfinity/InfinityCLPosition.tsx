@@ -49,8 +49,8 @@ import useInfinityCollectFeeAction from 'views/universalFarms/hooks/useInfinityC
 
 import { isAddressEqual } from 'utils'
 import { zeroAddress } from 'viem'
-import { InfinityCLPoolPositionAprButton } from 'views/universalFarms/components/PoolAprButtonV3/PoolPositionAprButtonV3'
 import { formatPositionAmount } from 'views/universalFarms/components/PositionItem/PositionInfo'
+import { InfinityCLPoolPositionAprButton } from 'views/universalFarms/components/PoolAprButton/PoolPositionAprButton'
 import { PositionHeader } from './components/PositionHeader'
 import { PositionPriceSection } from './components/PositionPrice'
 
