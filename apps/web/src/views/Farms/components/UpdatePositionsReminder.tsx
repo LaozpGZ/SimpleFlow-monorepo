@@ -8,7 +8,7 @@ import { useMasterchefV3 } from 'hooks/useContract'
 import { useTransactionDeadline } from 'hooks/useTransactionDeadline'
 import { useV3TokenIdsByAccount } from 'hooks/v3/useV3Positions'
 import { useCallback, useMemo, useState } from 'react'
-import { useFarmsV3Public } from 'state/farmsV3/hooks'
+import { useBaseFarmsV3Public } from 'state/farmsV3/hooks'
 import { Hex, encodeFunctionData } from 'viem'
 import { useAccount, useReadContracts, useSendTransaction } from 'wagmi'
 
@@ -86,7 +86,7 @@ export function UpdatePositionsReminder_() {
     },
   })
 
-  const { data: farmsV3 } = useFarmsV3Public({ enabled: Boolean(stakedUserInfos?.data) })
+  const { data: farmsV3 } = useBaseFarmsV3Public({ enabled: Boolean(stakedUserInfos?.data) })
 
   const isOverRewardGrowthGlobalUserInfos = useMemo(
     () =>

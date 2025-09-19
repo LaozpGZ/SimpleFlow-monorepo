@@ -18,6 +18,7 @@ import {
   CommonPrice,
   LPTvl,
   farmV3FetchFarms,
+  farmV3FetchFarmsBase,
   fetchCommonTokenUSDValue,
   fetchMasterChefV3Data,
   fetchTokenUSDValues,
@@ -150,6 +151,49 @@ export function createFarmFetcherV3(provider: ({ chainId }: { chainId: number })
     isChainSupported: (chainId: number): chainId is FarmV3SupportedChainId => supportedChainIdV3.includes(chainId),
     supportedChainId: supportedChainIdV3,
     isTestnet: (chainId: number) => ![ChainId.BSC, ChainId.ETHEREUM].includes(chainId),
+  }
+}
+
+export function createBaseFarmFetcherV3(provider: ({ chainId }: { chainId: number }) => PublicClient) {
+  const fetchFarms = async ({ farms, chainId }: { farms: ComputedFarmConfigV3[]; chainId: FarmV3SupportedChainId }) => {
+    const masterChefAddress = masterChefV3Addresses[chainId]
+    if (!masterChefAddress || !provider) {
+      throw new Error('Unsupported chain')
+    }
+
+    try {
+      const { poolLength, totalAllocPoint, latestPeriodCakePerSecond } = await fetchMasterChefV3Data({
+        provider,
+        masterChefAddress,
+        chainId,
+      })
+
+      const cakePerSecond = new BigNumber(latestPeriodCakePerSecond.toString()).div(1e18).div(1e12).toString()
+
+      const farmsData = await farmV3FetchFarmsBase({
+        farms,
+        chainId,
+        provider,
+        masterChefAddress,
+        totalAllocPoint,
+      })
+
+      return {
+        chainId,
+        poolLength: Number(poolLength),
+        farmsData,
+        cakePerSecond,
+        totalAllocPoint: totalAllocPoint.toString(),
+      }
+    } catch (error) {
+      console.error(error)
+      throw error
+    }
+  }
+
+  return {
+    fetchFarms,
+    isChainSupported: (chainId: number): chainId is FarmV3SupportedChainId => supportedChainIdV3.includes(chainId),
   }
 }
 

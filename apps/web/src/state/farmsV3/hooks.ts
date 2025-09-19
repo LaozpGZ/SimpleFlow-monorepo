@@ -1,5 +1,6 @@
 import { ChainId } from '@pancakeswap/chains'
 import {
+  FarmV3Data,
   FarmV3DataWithPrice,
   FarmV3DataWithPriceAndUserInfo,
   FarmV3DataWithPriceTVL,
@@ -10,6 +11,7 @@ import {
   SerializedFarmsV3Response,
   UniversalFarmConfigV3,
   bCakeSupportedChainId,
+  createBaseFarmFetcherV3,
   createFarmFetcherV3,
   defineFarmV3ConfigsFromUniversalFarm,
   fetchUniversalFarms,
@@ -71,8 +73,9 @@ const fallback: Awaited<ReturnType<typeof farmFetcherV3.fetchFarms>> = {
 const API_FLAG = false
 
 const farmFetcherV3 = createFarmFetcherV3(getViemClients)
+const baseFarmFetcherV3 = createBaseFarmFetcherV3(getViemClients)
 
-export const useFarmsV3Public = ({ enabled = true }: { enabled?: boolean } = {}) => {
+export const useFarmsV3Public = () => {
   const { chainId } = useActiveChainId()
 
   const resp = useQuery({
@@ -116,7 +119,53 @@ export const useFarmsV3Public = ({ enabled = true }: { enabled?: boolean } = {})
     refetchOnMount: false,
     refetchOnReconnect: false,
     refetchOnWindowFocus: false,
-    enabled: Boolean(enabled && farmFetcherV3.isChainSupported(chainId ?? -1)),
+    enabled: Boolean(farmFetcherV3.isChainSupported(chainId ?? -1)),
+  })
+
+  return {
+    ...resp,
+    data: resp?.data ?? fallback,
+  }
+}
+
+export const useBaseFarmsV3Public = ({ enabled = true }: { enabled?: boolean } = {}) => {
+  const { chainId } = useActiveChainId()
+
+  const resp = useQuery({
+    queryKey: [chainId, 'farmV3BaseFetch'],
+    queryFn: async () => {
+      if (!chainId) {
+        return fallback
+      }
+
+      try {
+        const fetchFarmsV3 = await fetchUniversalFarms(chainId, Protocol.V3)
+        const farms = defineFarmV3ConfigsFromUniversalFarm(fetchFarmsV3 as UniversalFarmConfigV3[])
+
+        const data = await baseFarmFetcherV3.fetchFarms({
+          chainId: chainId ?? -1,
+          farms,
+        })
+
+        return {
+          ...data,
+          farmsData: data.farmsData
+            .map((farm) => {
+              const checksummedAddress = safeGetAddress(farm.lpAddress)
+              return checksummedAddress ? { ...farm, lpAddress: checksummedAddress } : undefined
+            })
+            .filter((farm): farm is FarmV3Data => Boolean(farm)),
+        }
+      } catch (error) {
+        console.error(error)
+        return fallback
+      }
+    },
+    refetchInterval: 1_000 * 60 * 10,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
+    refetchOnWindowFocus: false,
+    enabled: Boolean(enabled && chainId && baseFarmFetcherV3.isChainSupported?.(chainId ?? -1)),
   })
 
   return {

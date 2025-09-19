@@ -38,8 +38,14 @@ export async function farmV3FetchFarms({
   totalAllocPoint: bigint
   commonPrice: CommonPrice
 }) {
-  const [poolInfos, cakePrice, v3PoolData] = await Promise.all([
-    fetchPoolInfos(farms, chainId, provider, masterChefAddress),
+  const [farmsData, cakePrice] = await Promise.all([
+    farmV3FetchFarmsBase({
+      farms,
+      provider,
+      masterChefAddress,
+      chainId,
+      totalAllocPoint,
+    }),
     provider({ chainId: ChainId.BSC })
       .readContract({
         abi: chainlinkAbi,
@@ -47,6 +53,36 @@ export async function farmV3FetchFarms({
         functionName: 'latestAnswer',
       })
       .then((res) => formatUnits(res, 8)),
+  ])
+
+  const defaultCommonPrice: CommonPrice = supportedChainIdV3.includes(chainId)
+    ? DEFAULT_COMMON_PRICE[chainId as FarmV3SupportedChainId]
+    : {}
+  const combinedCommonPrice: CommonPrice = {
+    ...defaultCommonPrice,
+    ...commonPrice,
+  }
+
+  const farmsWithPrice = getFarmsPrices(farmsData, cakePrice, combinedCommonPrice)
+
+  return farmsWithPrice
+}
+
+export async function farmV3FetchFarmsBase({
+  farms,
+  provider,
+  masterChefAddress,
+  chainId,
+  totalAllocPoint,
+}: {
+  farms: ComputedFarmConfigV3[]
+  provider: ({ chainId }: { chainId: number }) => PublicClient
+  masterChefAddress: Address
+  chainId: number
+  totalAllocPoint: bigint
+}) {
+  const [poolInfos, v3PoolData] = await Promise.all([
+    fetchPoolInfos(farms, chainId, provider, masterChefAddress),
     fetchV3Pools(farms, chainId, provider),
   ])
 
@@ -83,17 +119,7 @@ export async function farmV3FetchFarms({
     })
     .filter(Boolean) as FarmV3Data[]
 
-  const defaultCommonPrice: CommonPrice = supportedChainIdV3.includes(chainId)
-    ? DEFAULT_COMMON_PRICE[chainId as FarmV3SupportedChainId]
-    : {}
-  const combinedCommonPrice: CommonPrice = {
-    ...defaultCommonPrice,
-    ...commonPrice,
-  }
-
-  const farmsWithPrice = getFarmsPrices(farmsData, cakePrice, combinedCommonPrice)
-
-  return farmsWithPrice
+  return farmsData
 }
 
 const masterchefV3Abi = [
