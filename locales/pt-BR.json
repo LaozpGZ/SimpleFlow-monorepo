@@ -2860,7 +2860,7 @@
   "Empty page: No results found.": "Página vazia: nenhum resultado encontrado.",
   "View details in Docs": "Veja os detalhes nas Documentações",
   "Insufficient data for historical price chart.": "Dados insuficientes para exibir o gráfico de preços históricos.",
-  "CLAMM Pool": "Pool de CLAMM",
+  "CLAMM Pool": "Pool CLAMM",
   "Liquidity Book AMM": "AMM com livro de liquidez",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "Pools de Formador de Mercado Automatizado com Liquidez Concentrada (CLAMM) concentram a liquidez em faixas de preço específicas, maximizando a eficiência do capital e permitindo spreads mais estreitos.",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "O AMM com Livro de liquidez (Pool de Bin) utiliza intervalos de preço discretos para segmentar a liquidez, oferecendo controle detalhado sobre a alocação de capital e reduzindo a derrapagem.",

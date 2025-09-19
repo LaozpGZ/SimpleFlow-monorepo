@@ -2860,7 +2860,7 @@
   "Empty page: No results found.": "صفحة فارغة: لا يوجد نتائج.",
   "View details in Docs": "عرض التفاصيل في المستندات",
   "Insufficient data for historical price chart.": "بيانات غير كافية لمخطط السعر التاريخي.",
-  "CLAMM Pool": "تجمع CLAMM",
+  "CLAMM Pool": "مجمع CLAMM",
   "Liquidity Book AMM": "AMM من نوع دفتر السيولة",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "تركز تجمعات صانع السوق المؤتمت للسيولة المركزة (CLAMM) على السيولة ضمن نطاقات سعرية محددة، ما يسهم في تعظيم كفاءة رأس المال وتمكين فروق سعر أقل.",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "يستخدم AMM من نوع دفتر السيولة (تجمُّع النقاط السعرية) نقاط سعر منفصلة لتقسيم السيولة إلى شرائح، وتوفير تحكم تفصيلي في توزيع رأس المال وتقليل تذبذب السعر.",

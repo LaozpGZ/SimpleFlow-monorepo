@@ -2860,7 +2860,7 @@
   "Empty page: No results found.": "Κενή σελίδα: Δεν βρέθηκαν αποτελέσματα.",
   "View details in Docs": "Δείτε λεπτομέρειες στα έγγραφα",
   "Insufficient data for historical price chart.": "Ανεπαρκή δεδομένα για το ιστορικό διάγραμμα τιμών.",
-  "CLAMM Pool": "CLAMM CLAMM",
+  "CLAMM Pool": "Δεξαμενή CLAMM",
   "Liquidity Book AMM": "Βιβλίο ρευστότητας AMM",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "Οι συγκεντρωμένοι μηχανισμοί δημιουργίας ρευστότητας (CLAMM) συγκεντρώνουν τη ρευστότητα σε συγκεκριμένα εύρη τιμών, μεγιστοποιώντας την αποδοτικότητα του κεφαλαίου και διευκολύνοντας τη μείωση των spread.",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "Το Liquidity Book AMM (Δεξαμενή Bin) χρησιμοποιεί διακριτά bin τιμών για να κατηγοριοποιήσει τη ρευστότητα, παρέχοντας λεπτομερή έλεγχο της κατανομής κεφαλαίου και μειώνοντας την απόκλιση.",

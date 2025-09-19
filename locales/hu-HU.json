@@ -2860,7 +2860,7 @@
   "Empty page: No results found.": "Üres oldal: nincs találat.",
   "View details in Docs": "Részletek megtekintése a Docsban",
   "Insufficient data for historical price chart.": "Nincs elegendő adat a korábbi időszakra vonatkozó ártáblázathoz.",
-  "CLAMM Pool": "CLAMM összevont alap",
+  "CLAMM Pool": "CLAMM-pool",
   "Liquidity Book AMM": "Likviditási Könyv AMM",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "A koncentrált likviditású, automatizált árjegyző (CLAMM) alapok egy adott ártartományon belüli likviditásra koncentrálnak, így maximalizálva a tőke hatékonyságát és lehetővé téve a szűkebb különbözeteket.",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "A Liquidity Book AMM (Bin alap) diszkrét árbineket használ a likviditás szegmentálásához, amelyek granuláris ellenőrzést biztosítanak a tőkeallokáció felett és csökkentik a csúszást.",

@@ -2860,7 +2860,7 @@
   "Empty page: No results found.": "Pagină goală: nu s-au găsit rezultate.",
   "View details in Docs": "Vizualizează detalii în Docs",
   "Insufficient data for historical price chart.": "Date insuficiente pentru graficul de prețuri istorice.",
-  "CLAMM Pool": "Portofoliu CLAMM",
+  "CLAMM Pool": "Grup CLAMM",
   "Liquidity Book AMM": "AMM de tip Liquidity Book",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "Portofoliile de tipul Formator de piață de lichiditate concentrată automatizat (CLAMM) se concentrează pe lichiditate în intervale de preț specifice, maximizând eficiența capitalului și permițând spreaduri mai restrânse.",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "ANM de tip registru de lichidități (portofoliu bin) utilizează binuri de preț separate pentru a segmenta lichiditatea, oferind control divizat asupra alocării capitalului și reducerii slippage.",

@@ -2860,7 +2860,7 @@
   "Empty page: No results found.": "காலி பக்கம்: முடிவுகள் எதுவும் கிடைக்கவில்லை.",
   "View details in Docs": "ஆவணத்தில் விவரங்களைக் காண்க",
   "Insufficient data for historical price chart.": "வரலாற்று விலை விளக்கப்படத்திற்கு போதுமான தரவு இல்லை.",
-  "CLAMM Pool": "CLAMM பூல்",
+  "CLAMM Pool": "CLAMM குளம்",
   "Liquidity Book AMM": "லிக்விடிட்டி புக் AMM",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "கான்செண்ட்ரேடெட் லிக்விடிட்டி ஆட்டோமேடெட் மார்க்கெட் மேக்கர் (CLAMM) பூல்கள், குறிப்பிட்ட விலை வரம்புகளுக்குள் லிக்விடிட்டியை மையமாகக் கொண்டு, மூலதன செயல்திறனை அதிகரித்து, இறுக்கமான பரவல்களை செயல்படுத்துகின்றன.",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "லிக்விடிட்டி புக் AMM (தொட்டி பூல்), லிக்விடிட்டியைப் பிரிக்கத் தனித்தனி விலை பின்களைப் பயன்படுத்துகிறது, இது மூலதன ஒதுக்கீட்டின் மீது துல்லியமான கட்டுப்பாட்டை வழங்குகிறது மற்றும் ஸ்லிப்பேஜைக் குறைக்கிறது.",

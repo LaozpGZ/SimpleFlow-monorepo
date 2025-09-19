@@ -2860,7 +2860,7 @@
   "Empty page: No results found.": "空白頁面：找不到任何結果。",
   "View details in Docs": "在文件中檢視詳細資料",
   "Insufficient data for historical price chart.": "歷史價格圖表的資料不足。",
-  "CLAMM Pool": "CLAMM 資金池",
+  "CLAMM Pool": "CLAMM 池",
   "Liquidity Book AMM": "流動性簿 AMM",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "集中式流動性自動市場製造者 (CLAMM，Concentrated Liquidity Automated Market Maker) 池會將流動性集中於特定價格區間內，以提升資本效率並實現更小的價差。",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "Liquidity Book AMM (Bin 池) 會用離散的價格 bin 來將流動性分段，使資本的配置控制得更加細緻，並能降低滑動。",

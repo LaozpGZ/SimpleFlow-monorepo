@@ -2860,7 +2860,7 @@
   "Empty page: No results found.": "Trang trống: Không tìm thấy kết quả nào.",
   "View details in Docs": "Xem chi tiết trong Tài liệu",
   "Insufficient data for historical price chart.": "Không đủ dữ liệu cho biểu đồ giá lịch sử.",
-  "CLAMM Pool": "Quỹ CLAMM",
+  "CLAMM Pool": "Pool CLAMM",
   "Liquidity Book AMM": "Sổ thanh khoản AMM",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "Các quỹ Nhà tạo lập thị trường tự động thanh khoản tập trung (CLAMM) tập trung thanh khoản trong các khoảng giá cụ thể, tối đa hóa hiệu quả vốn và cho phép mức chênh lệch sát hơn.",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "Sổ thanh khoản AMM (Quỹ bin) sử dụng các bin giá rời rạc để phân loại thanh khoản, cho phép kiểm soát chi tiết việc phân bổ vốn và giảm trượt giá.",

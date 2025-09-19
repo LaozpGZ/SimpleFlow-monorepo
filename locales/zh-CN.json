@@ -2860,7 +2860,7 @@
   "Empty page: No results found.": "空白页面：找不到结果。",
   "View details in Docs": "在文档中查看详细信息",
   "Insufficient data for historical price chart.": "历史价格图表数据不足。",
-  "CLAMM Pool": "CLAMM 糖浆池",
+  "CLAMM Pool": "CLAMM 池",
   "Liquidity Book AMM": "流动性账本 AMM",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "集中流动性自动做市商 (CLAMM) 糖浆池将流动性集中在特定价格区间内，从而最大限度地提高资本效率并实现更窄的价差。",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "流动性账本 AMM（Bin 流动性池）使用离散的价格 bin 来将流动性分段，从而提供对资本配置的精细控制并减少滑点。",
