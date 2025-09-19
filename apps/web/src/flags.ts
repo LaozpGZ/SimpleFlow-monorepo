@@ -31,14 +31,7 @@ const getFeatureAccess = async (userIdentifier: string, feature: EXPERIMENTAL_FE
 // Helper function to extract user identifier from request
 const getUserIdentifier = (request: any): string => {
   // Try different ways to get user identifier
-  return (
-    request?.clientId ||
-    request?.cookies?.get?.('clientId')?.value ||
-    request?.headers?.get?.('x-forwarded-for') ||
-    request?.headers?.get?.('x-real-ip') ||
-    request?.ip ||
-    'anonymous'
-  )
+  return request?.clientId || 'anonymous'
 }
 
 // Web Notifications Feature Flag
