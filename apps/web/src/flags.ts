@@ -115,15 +115,13 @@ export const getExperimentalFeatureAccessList = async (
   const flagEvaluations = await Promise.all(
     Object.entries(flags).map(async ([feature, flagFunction]) => {
       try {
-        console.log('executing flag', feature)
-
         if (overrides && overrides[feature] !== undefined) {
           return { feature: feature as EXPERIMENTAL_FEATURES, hasAccess: overrides[feature] as boolean }
         }
 
         // Pass the adapted request object to the flag function
         const hasAccess = await flagFunction(request as any)
-        console.log('done flag function', feature, hasAccess)
+
         return { feature: feature as EXPERIMENTAL_FEATURES, hasAccess }
       } catch (error) {
         console.error(`Error evaluating flag ${feature}:`, error)

@@ -55,8 +55,6 @@ export function useLoadExperimentalFeatures() {
       featureFlags[feature] = hasFeatureFlag
     }
 
-    console.log('featureFlags', featureFlags)
-
     setExperimentalFeatures((prev) => ({ ...prev, ...featureFlags }))
   }, [setExperimentalFeatures])
 
