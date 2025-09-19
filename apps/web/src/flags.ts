@@ -83,17 +83,6 @@ const optimizedAmmTradeFlag = flag({
   },
 })
 
-// Helper to create a compatible request object for flags
-const createFlagRequest = (request: ExtendedNextReq) => {
-  return {
-    cookies: request.cookies,
-    headers: request.headers,
-    clientId: request.clientId,
-    url: request.url,
-    method: request.method,
-  }
-}
-
 export const flags = {
   [EXPERIMENTAL_FEATURES.WebNotifications]: webNotificationsFlag,
   [EXPERIMENTAL_FEATURES.SpeedQuote]: speedQuoteFlag,
@@ -106,15 +95,13 @@ export const flags = {
 export const getExperimentalFeatureAccessList = async (
   request: ExtendedNextReq,
 ): Promise<Array<{ feature: EXPERIMENTAL_FEATURES; hasAccess: boolean }>> => {
-  const flagRequest = createFlagRequest(request)
-
   const flagEvaluations = await Promise.all(
     Object.entries(flags).map(async ([feature, flagFunction]) => {
-      console.log('feature', feature)
       try {
+        console.log('executing flag function', feature)
         // Pass the adapted request object to the flag function
-        const hasAccess = await flagFunction(flagRequest as any)
-        console.log('hasAccess', hasAccess)
+        const hasAccess = await flagFunction(request as any)
+        console.log('done flag function', feature, hasAccess)
         return { feature: feature as EXPERIMENTAL_FEATURES, hasAccess }
       } catch (error) {
         console.error(`Error evaluating flag ${feature}:`, error)

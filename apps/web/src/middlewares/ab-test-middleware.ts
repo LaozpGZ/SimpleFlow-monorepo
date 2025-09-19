@@ -8,7 +8,12 @@ export const withABTesting: MiddlewareFactory = (next: NextMiddleware) => {
   return async (request: ExtendedNextReq, _next: NextFetchEvent) => {
     const clientId = request?.clientId
     const response = (await next(request, _next)) || NextResponse.next()
+
+    console.log('clientId', clientId)
+
     if (!clientId) return response
+
+    console.log('request', request)
 
     const accessList = await getExperimentalFeatureAccessList(request)
 
