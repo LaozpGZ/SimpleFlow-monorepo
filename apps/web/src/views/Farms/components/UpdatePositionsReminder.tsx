@@ -115,16 +115,20 @@ export function UpdatePositionsReminder_() {
 
   // getting it on client side to final confirm
   const { data: rewardGrowthGlobalX128s, isLoading } = useReadContracts({
-    contracts: isOverRewardGrowthGlobalUserInfos?.map((userInfo) => {
-      const farm = farmsV3?.farmsData.find((f) => f.pid === Number(userInfo.pid))
-      return {
-        abi: lmPoolABI,
-        address: farm?.lmPool as `0x${string}`,
-        functionName: 'rewardGrowthGlobalX128',
-        args: [],
-        chainId,
-      }
-    }),
+    contracts: useMemo(
+      () =>
+        isOverRewardGrowthGlobalUserInfos?.map((userInfo) => {
+          const farm = farmsV3?.farmsData.find((f) => f.pid === Number(userInfo.pid))
+          return {
+            abi: lmPoolABI,
+            address: farm?.lmPool as `0x${string}`,
+            functionName: 'rewardGrowthGlobalX128',
+            args: [],
+            chainId,
+          }
+        }),
+      [isOverRewardGrowthGlobalUserInfos, farmsV3?.farmsData],
+    ),
     query: {
       staleTime: Infinity,
       enabled: (isOverRewardGrowthGlobalUserInfos?.length ?? 0) > 0,
