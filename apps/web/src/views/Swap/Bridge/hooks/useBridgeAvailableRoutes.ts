@@ -25,7 +25,7 @@ export function useBridgeAvailableChains(params?: GetAvailableRoutesParams) {
   // only return chains array,add origin chain id to the array
   const chains = useMemo(() => {
     if (!params?.originChainId || isSolana(params?.originChainId)) {
-      if (!isBridgeV2Enabled) {
+      if (!isBridgeV2Enabled && isSolana(params?.originChainId)) {
         return []
       }
 
