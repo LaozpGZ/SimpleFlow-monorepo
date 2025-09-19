@@ -2624,7 +2624,7 @@
   "Pool Created!": "تم إنشاء التجمع!",
   "Error creating pool": "حدث خطأ في إنشاء التجمُّع",
   "Error Add Liquidity": "حدث خطأ في إضافة السيولة",
-  "A pool with the selected configuration already exists.": "يوجد بالفعل تجمُّع يشتمل على التكوين المحدد.",
+  "A pool with the selected configuration already exists.": "يوجد بالفعل مجمع سيولة بالتكوين المحدد.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "الرسوم على تحويل الرموز المميزة وتغيير قاعدتها لا يتوافق مع الإصدار الثالث V3.",
   "The starting price is outside the specified price range": "سعر البداية يقع خارج نطاق السعر المحدد",
   "Create": "إنشاء",

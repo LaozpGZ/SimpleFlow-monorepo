@@ -2624,7 +2624,7 @@
   "Pool Created!": "已建立資金池！",
   "Error creating pool": "建立資金池時發生錯誤",
   "Error Add Liquidity": "增加流動性時發生錯誤",
-  "A pool with the selected configuration already exists.": "已存在具有相同設定的資金池。",
+  "A pool with the selected configuration already exists.": "所選配置的資金池已存在。",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "轉帳收費代幣（又稱抽稅）和彈性供應代幣（rebase 類）， V3 不支援。",
   "The starting price is outside the specified price range": "起始價格不在指定的價格區間內",
   "Create": "建立",

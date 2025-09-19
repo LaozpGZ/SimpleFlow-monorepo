@@ -2624,7 +2624,7 @@
   "Pool Created!": "Pool criada!",
   "Error creating pool": "Erro ao criar pool",
   "Error Add Liquidity": "Erro ao adicionar liquidez",
-  "A pool with the selected configuration already exists.": "Já existe uma pool com a configuração selecionada.",
+  "A pool with the selected configuration already exists.": "Um pool com a configuração selecionada já existe.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "Os tokens de transferência sobre comissão e os tokens de rebase NÃO são compatíveis com V3.",
   "The starting price is outside the specified price range": "O preço inicial está fora do intervalo de preço especificado",
   "Create": "Criar",

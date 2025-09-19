@@ -2624,7 +2624,7 @@
   "Pool Created!": "풀 생성됨!",
   "Error creating pool": "풀 생성 중에 오류 발생",
   "Error Add Liquidity": "유동성 추가 오류",
-  "A pool with the selected configuration already exists.": "선택한 구성이 있는 풀이 이미 존재합니다.",
+  "A pool with the selected configuration already exists.": "선택한 구성의 풀이 이미 존재합니다.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "송금 토큰 및 리베이스 토큰 수수료는 V3와 호환되지 않습니다.",
   "The starting price is outside the specified price range": "시작 가격이 지정된 가격 범위를 벗어났습니다",
   "Create": "만들기",

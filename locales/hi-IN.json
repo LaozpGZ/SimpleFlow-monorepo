@@ -2624,7 +2624,7 @@
   "Pool Created!": "पूल बनाया गया!",
   "Error creating pool": "पूल बनाने में त्रुटि हुई",
   "Error Add Liquidity": "\"लिक्विडिटी जोड़ें\" में त्रुटि हुई",
-  "A pool with the selected configuration already exists.": "चुने हुए कॉन्फ़िगरेशन वाला पूल पहले से मौजूद है।",
+  "A pool with the selected configuration already exists.": "चुने गए कॉन्फ़िगरेशन वाला एक पूल पहले से मौजूद है।",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "फ़ीस-ऑन ट्रांसफ़र टोकन और रीबेसिंग टोकन V3 के साथ कंपैटिबल नहीं हैं।",
   "The starting price is outside the specified price range": "आरंभिक कीमत बताई गई प्राइस रेंज से बाहर है",
   "Create": "बनाएं",

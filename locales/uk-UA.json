@@ -2624,7 +2624,7 @@
   "Pool Created!": "Пул створено!",
   "Error creating pool": "Помилка створення пулу",
   "Error Add Liquidity": "Помилка додавання ліквідності",
-  "A pool with the selected configuration already exists.": "Пул із вибраною конфігурацією вже існує.",
+  "A pool with the selected configuration already exists.": "Пул з обраною конфігурацією вже існує.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "Токени, за передавання яких передбачено комісію, і еластичні токени НЕСУМІСНІ з V3.",
   "The starting price is outside the specified price range": "Початкова ціна не входить у заданий ціновий діапазон",
   "Create": "Створити",

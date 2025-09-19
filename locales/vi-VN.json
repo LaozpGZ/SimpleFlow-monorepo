@@ -2624,7 +2624,7 @@
   "Pool Created!": "Quỹ đã được tạo!",
   "Error creating pool": "Lỗi khi tạo quỹ",
   "Error Add Liquidity": "Lỗi khi thêm thanh khoản",
-  "A pool with the selected configuration already exists.": "Một quỹ với cấu hình được chọn đã tồn tại rồi.",
+  "A pool with the selected configuration already exists.": "Pool với cấu hình đã chọn đã tồn tại.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "Các token tính phí khi chuyển khoản và token đặt lại cơ sở KHÔNG tương thích với V3.",
   "The starting price is outside the specified price range": "Giá bắt đầu nằm ngoài khoảng giá được quy định",
   "Create": "Tạo",

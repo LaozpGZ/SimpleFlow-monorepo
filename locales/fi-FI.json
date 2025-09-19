@@ -2624,7 +2624,7 @@
   "Pool Created!": "Pooli luotu!",
   "Error creating pool": "Virhe luotaessa poolia",
   "Error Add Liquidity": "Virhe lisättäessä likviditeettiä",
-  "A pool with the selected configuration already exists.": "Pooli valitulla määrityksellä on jo olemassa.",
+  "A pool with the selected configuration already exists.": "Valitulla kokoonpanolla oleva pooli on jo olemassa.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "Maksulliset siirtopoletit ja uudelleenpohjustuspoletit EIVÄT ole yhteensopivia V3:n kanssa.",
   "The starting price is outside the specified price range": "Lähtöhinta on määritetyn hintavälin ulkopuolella",
   "Create": "Luo",

@@ -2624,7 +2624,7 @@
   "Pool Created!": "Nakagawa ng Pool!",
   "Error creating pool": "Error sa paggawa ng pool",
   "Error Add Liquidity": "Error sa Pagdaragdag ng Liquidity",
-  "A pool with the selected configuration already exists.": "May ganito nang pool sa napiling configuration.",
+  "A pool with the selected configuration already exists.": "Mayroon nang pool na may napiling configuration.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "HINDI compatible sa V3 ang fee sa paglilipat ng mga token at pagbabago ng mga token.",
   "The starting price is outside the specified price range": "Wala sa tinukoy na price range ang panimulang presyo",
   "Create": "Gumawa",

@@ -2624,7 +2624,7 @@
   "Pool Created!": "পুল তৈরি করা হয়েছে!",
   "Error creating pool": "পুল তৈরির ক্ষেত্রে ত্রুটি",
   "Error Add Liquidity": "তারল্য যোগ করার ক্ষেত্রে ত্রুটি",
-  "A pool with the selected configuration already exists.": "নির্বাচিত কনফিগারেশনসহ একটি পুল ইতোমধ্যেই বিদ্যমান।",
+  "A pool with the selected configuration already exists.": "নির্বাচিত কনফিগারেশন সহ একটি পুল ইতিমধ্যেই বিদ্যমান।",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "ট্রান্সফার টোকেন এবং রিবেসিং টোকেন এর ফি V3 এর সাথে সামঞ্জস্যপূর্ণ নয়।",
   "The starting price is outside the specified price range": "শুরুর মূল্য উল্লিখিত মূল্য সীমার বাইরে",
   "Create": "তৈরি করুন",

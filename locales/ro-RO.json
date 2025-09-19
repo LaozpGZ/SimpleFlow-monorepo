@@ -2624,7 +2624,7 @@
   "Pool Created!": "Portofoliu creat!",
   "Error creating pool": "Eroare la crearea portofoliului",
   "Error Add Liquidity": "Eroare la adăugarea lichidității",
-  "A pool with the selected configuration already exists.": "Un portofoliu cu configurația selectată există deja.",
+  "A pool with the selected configuration already exists.": "Un fond comun cu configurația selectată există deja.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "Jetoanele de transfer Fee-On și jetoanele de rebazare NU sunt compatibile cu V3.",
   "The starting price is outside the specified price range": "Prețul de pornire este în afara intervalului de preț specificat",
   "Create": "Creează",

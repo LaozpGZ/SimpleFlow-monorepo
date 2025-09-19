@@ -2624,7 +2624,7 @@
   "Pool Created!": "Pool har skapats!",
   "Error creating pool": "Fel när pool skapades",
   "Error Add Liquidity": "Fel när likviditet lades till",
-  "A pool with the selected configuration already exists.": "En pool med vald konfiguration finns redan.",
+  "A pool with the selected configuration already exists.": "En pool med den valda konfigurationen finns redan.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "Tokens för överföring av avgifter och ombaseringstokens är INTE kompatibla med V3.",
   "The starting price is outside the specified price range": "Startpriset ligger utanför det angivna prisintervallet",
   "Create": "Skapa",

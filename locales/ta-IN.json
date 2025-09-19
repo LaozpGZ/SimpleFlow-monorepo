@@ -2624,7 +2624,7 @@
   "Pool Created!": "பூல் உருவாக்கப்பட்டது!",
   "Error creating pool": "பூலை உருவாக்குவதில் பிழை",
   "Error Add Liquidity": "லிக்விடிட்டியைச் சேர்ப்பதில் பிழை",
-  "A pool with the selected configuration already exists.": "தேர்ந்தெடுக்கப்பட்ட உள்ளமைவுடன் ஒரு பூல் ஏற்கெனவே உள்ளது.",
+  "A pool with the selected configuration already exists.": "தேர்ந்தெடுக்கப்பட்ட உள்ளமைவுடன் ஒரு பூல் ஏற்கனவே உள்ளது.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "பரிமாற்ற டோக்கன்கள் மற்றும் ரீபேசிங் டோக்கன்கள் மீதான கட்டணம், V3 உடன் இணக்கமாக இல்லை.",
   "The starting price is outside the specified price range": "தொடக்க விலை, குறிப்பிட்ட விலை வரம்பிற்கு வெளியே உள்ளது",
   "Create": "உருவாக்கு",

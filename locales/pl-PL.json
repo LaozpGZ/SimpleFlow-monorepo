@@ -2624,7 +2624,7 @@
   "Pool Created!": "Pula utworzona!",
   "Error creating pool": "Błąd podczas tworzenia puli",
   "Error Add Liquidity": "Błąd dodaj płynność",
-  "A pool with the selected configuration already exists.": "Pula z wybraną konfiguracją już istnieje.",
+  "A pool with the selected configuration already exists.": "Pula o wybranej konfiguracji już istnieje.",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "Tokeny przelewów z prowizją i tokeny z elastyczną podażą NIE są kompatybilne z wersją 3.",
   "The starting price is outside the specified price range": "Cena początkowa jest poza określonym zakresem cen",
   "Create": "Utwórz",

@@ -2624,7 +2624,7 @@
   "Pool Created!": "糖浆池已创建！",
   "Error creating pool": "创建糖浆池时出错",
   "Error Add Liquidity": "增加流动性时出错",
-  "A pool with the selected configuration already exists.": "具有所选配置的糖浆池已存在。",
+  "A pool with the selected configuration already exists.": "所选配置的流动性池已存在。",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "转账收费代币（又称抽税）和弹性供应类代币 （rebase 类），V3 不支援。",
   "The starting price is outside the specified price range": "起始价格不在指定价格区间内",
   "Create": "创建",

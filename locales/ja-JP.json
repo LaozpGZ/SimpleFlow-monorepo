@@ -2624,7 +2624,7 @@
   "Pool Created!": "プールが作成されました！",
   "Error creating pool": "プール作成エラー",
   "Error Add Liquidity": "流動性追加エラー",
-  "A pool with the selected configuration already exists.": "選択された設定のプールはすでに存在します。",
+  "A pool with the selected configuration already exists.": "選択した構成のプールは既に存在します。",
   "Fee-on transfer tokens and rebasing tokens are NOT compatible with V3.": "送金手数料トークンとリベーストークンは、V3に対応していません。",
   "The starting price is outside the specified price range": "開始価格が指定された価格範囲外です",
   "Create": "作成",
