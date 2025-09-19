@@ -454,53 +454,70 @@ export const fetchTokenUSDValues = async (currencies: Currency[] = []): Promise<
   return commonTokenUSDValue
 }
 
-export function getFarmsPrices(
+export async function getFarmsPrices(
   farms: FarmV3Data[],
   cakePriceUSD: string,
   commonPrice: CommonPrice,
-): FarmV3DataWithPrice[] {
-  const commonPriceFarms = farms.map((farm) => {
-    let tokenPriceBusd = BIG_ZERO
-    let quoteTokenPriceBusd = BIG_ZERO
+): Promise<FarmV3DataWithPrice[]> {
+  const commonPriceFarms = await Promise.all(
+    farms.map(async (farm) => {
+      let tokenPriceBusd = BIG_ZERO
+      let quoteTokenPriceBusd = BIG_ZERO
 
-    // try to get price via common price
-    if (commonPrice[farm.quoteToken.address]) {
-      quoteTokenPriceBusd = new BN(commonPrice[farm.quoteToken.address])
-    }
-    if (commonPrice[farm.token.address]) {
-      tokenPriceBusd = new BN(commonPrice[farm.token.address])
-    }
+      // try to get price via common price
+      if (commonPrice[farm.quoteToken.address]) {
+        quoteTokenPriceBusd = new BN(commonPrice[farm.quoteToken.address])
+      }
+      if (commonPrice[farm.token.address]) {
+        tokenPriceBusd = new BN(commonPrice[farm.token.address])
+      }
 
-    // try price via CAKE
-    if (
-      tokenPriceBusd.isZero() &&
-      farm.token.chainId in CAKE &&
-      farm.token.equals(CAKE[farm.token.chainId as keyof typeof CAKE])
-    ) {
-      tokenPriceBusd = new BN(cakePriceUSD)
-    }
-    if (
-      quoteTokenPriceBusd.isZero() &&
-      farm.quoteToken.chainId in CAKE &&
-      farm.quoteToken.equals(CAKE[farm.quoteToken.chainId as keyof typeof CAKE])
-    ) {
-      quoteTokenPriceBusd = new BN(cakePriceUSD)
-    }
+      // try price via CAKE
+      if (
+        tokenPriceBusd.isZero() &&
+        farm.token.chainId in CAKE &&
+        farm.token.equals(CAKE[farm.token.chainId as keyof typeof CAKE])
+      ) {
+        tokenPriceBusd = new BN(cakePriceUSD)
+      }
+      if (
+        quoteTokenPriceBusd.isZero() &&
+        farm.quoteToken.chainId in CAKE &&
+        farm.quoteToken.equals(CAKE[farm.quoteToken.chainId as keyof typeof CAKE])
+      ) {
+        quoteTokenPriceBusd = new BN(cakePriceUSD)
+      }
 
-    // try to get price via token price vs quote
-    if (tokenPriceBusd.isZero() && !quoteTokenPriceBusd.isZero() && farm.tokenPriceVsQuote) {
-      tokenPriceBusd = quoteTokenPriceBusd.times(farm.tokenPriceVsQuote)
-    }
-    if (quoteTokenPriceBusd.isZero() && !tokenPriceBusd.isZero() && farm.tokenPriceVsQuote) {
-      quoteTokenPriceBusd = tokenPriceBusd.div(farm.tokenPriceVsQuote)
-    }
+      // try to get price via token price vs quote
+      if (tokenPriceBusd.isZero() && !quoteTokenPriceBusd.isZero() && farm.tokenPriceVsQuote) {
+        tokenPriceBusd = quoteTokenPriceBusd.times(farm.tokenPriceVsQuote)
+      }
+      if (quoteTokenPriceBusd.isZero() && !tokenPriceBusd.isZero() && farm.tokenPriceVsQuote) {
+        quoteTokenPriceBusd = tokenPriceBusd.div(farm.tokenPriceVsQuote)
+      }
 
-    return {
-      ...farm,
-      tokenPriceBusd,
-      quoteTokenPriceBusd,
-    }
-  })
+      const fallbackTokensToFetch = []
+      if (tokenPriceBusd.isZero()) fallbackTokensToFetch.push(farm.token)
+      if (quoteTokenPriceBusd.isZero()) fallbackTokensToFetch.push(farm.quoteToken)
+
+      if (fallbackTokensToFetch.length > 0) {
+        const fetchedPrices = await fetchTokenUSDValues(fallbackTokensToFetch)
+
+        if (tokenPriceBusd.isZero()) {
+          tokenPriceBusd = new BN(fetchedPrices[farm.token.address])
+        }
+        if (quoteTokenPriceBusd.isZero()) {
+          quoteTokenPriceBusd = new BN(fetchedPrices[farm.quoteToken.address])
+        }
+      }
+
+      return {
+        ...farm,
+        tokenPriceBusd,
+        quoteTokenPriceBusd,
+      }
+    }),
+  )
 
   return commonPriceFarms.map((farm) => {
     let { tokenPriceBusd, quoteTokenPriceBusd } = farm
