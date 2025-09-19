@@ -504,10 +504,12 @@ export async function getFarmsPrices(
         const fetchedPrices = await fetchTokenUSDValues(fallbackTokensToFetch)
 
         if (tokenPriceBusd.isZero()) {
-          tokenPriceBusd = new BN(fetchedPrices[farm.token.address])
+          tokenPriceBusd = fetchedPrices[farm.token.address] ? new BN(fetchedPrices[farm.token.address]) : BIG_ZERO
         }
         if (quoteTokenPriceBusd.isZero()) {
-          quoteTokenPriceBusd = new BN(fetchedPrices[farm.quoteToken.address])
+          quoteTokenPriceBusd = fetchedPrices[farm.quoteToken.address]
+            ? new BN(fetchedPrices[farm.quoteToken.address])
+            : BIG_ZERO
         }
       }
 
