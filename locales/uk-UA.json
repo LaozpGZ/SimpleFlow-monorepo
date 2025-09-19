@@ -2581,7 +2581,12 @@
   "Provider fees are waived for this period. Please note that a 1% PancakeSwap fee still applies.": "На цей період плата за послуги постачальника не стягується. Зверніть увагу: комісія PancakeSwap у розмірі 1% усе ще застосовується.",
   "1. Select where to provide liquidity": "1. Виберіть пул для надання ліквідності",
   "2. Choose token pair": "2. Виберіть пару токенів",
-  "3. Pool Filter (Optional)": "3. Фільтр пулів (необов’язково)",
+  "3. Pool Filter (Optional)": {
+    "key": "3. Pool Filter (Optional)",
+    "source": "3. Pool Filter (Optional)",
+    "translation": "3. Фільтр пулу (Необов’язково)",
+    "hint": "found in 1 of files, see apps/web/src/views/AddLiquiditySelector/index.tsx"
+  },
   "Add +": "Додати +",
   "Choose Liquidity Shape": "Виберіть, як розподілятиметься ліквідність",
   "Fee tier": "Рівень комісії",
@@ -2618,10 +2623,20 @@
   "TickSpacing": "Крок тіка",
   "A tick represents 0.01% price change. Ticks divisible by TickSpacing can only be initialised e.g., with TickSpacing of 3, every 3rd tick must be initialized , i.e., ..., -6, -3, 0, 3, 6, …": "Тік — це зміна ціни на 0,01%. Ініціалізувати можна лише ті тіки, що кратні значенню кроку тіка (TickSpacing). Наприклад, якщо крок тіка дорівнює 3, то дозволені тіки: ..., –6, –3, 0, 3, 6, …",
   "A bin represents 0.01% price change. BinSpacing of 3 implies 1.0001^3 price change between two consecutive bins": "Бін — це одиниця, що відповідає зміні ціни на 0,01%. Якщо крок біну (BinSpacing) дорівнює 3, кожен наступний бін відрізняється від попереднього на множник 1,0001³.",
-  "Pool created!": "Пул створено!",
+  "Pool created!": {
+    "key": "Pool created!",
+    "source": "Pool created!",
+    "translation": "Пул створено!",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/hooks/useCreateBinPool.tsx"
+  },
   "Infinity Bin Pool Created": "Створено Infinity-пул бінів",
   "Position Created!": "Позицію створено!",
-  "Pool Created!": "Пул створено!",
+  "Pool Created!": {
+    "key": "Pool Created!",
+    "source": "Pool Created!",
+    "translation": "Пул створено!",
+    "hint": "found in 1 of files, see apps/web/src/views/CreateLiquidityPool/hooks/useCreateCLPool.tsx"
+  },
   "Error creating pool": "Помилка створення пулу",
   "Error Add Liquidity": "Помилка додавання ліквідності",
   "A pool with the selected configuration already exists.": "Пул із вибраною конфігурацією вже існує.",
@@ -2696,7 +2711,12 @@
   "Play": "Грати",
   "Legacy products": "Застарілі продукти",
   "APR Breakdown": "Поділ РВС",
-  "Pool Feature": "Функція пулу",
+  "Pool Feature": {
+    "key": "Pool Feature",
+    "source": "Pool Feature",
+    "translation": "Особливість пулу",
+    "hint": "found in 2 of files, see apps/web/src/views/universalFarms/components/useColumnConfig.tsx,apps/web/src/views/universalFarms/constants.ts"
+  },
   "Swap Now": "Обміняти",
   "ZERO": "НУЛЬОВІ",
   "%amount% of your liquidity is currently staking in farm.": "%amount% вашої ліквідності наразі в стейкінгу на фермі.",
@@ -2860,7 +2880,12 @@
   "Empty page: No results found.": "Порожня сторінка. Нічого не знайдено.",
   "View details in Docs": "Переглянути деталі в документації",
   "Insufficient data for historical price chart.": "Недостатньо даних для побудови графіка цін.",
-  "CLAMM Pool": "Пул CLAMM",
+  "CLAMM Pool": {
+    "key": "CLAMM Pool",
+    "source": "CLAMM Pool",
+    "translation": "CLAMM Пул",
+    "hint": "found in 1 of files, see packages/widgets-internal/liquidity/infinity/PoolTypeModal.tsx"
+  },
   "Liquidity Book AMM": "AMM із книгою ліквідності",
   "Concentrated Liquidity Automated Market Maker (CLAMM) pools focus liquidity within specific price ranges, maximizing capital efficiency and enabling tighter spreads.": "Пули автоматизованого маркетмейкера з концентрованою ліквідністю (CLAMM) зосереджують ліквідність у визначених цінових діапазонах, що дає змогу домогтися максимальної ефективності капіталу й вужчих спредів.",
   "Liquidity Book AMM (Bin Pool) uses discrete price bins to segment liquidity, providing granular control over capital allocation and reducing slippage.": "AMM з книгою ліквідності (бін-пул) використовує дискретні цінові біни для сегментації ліквідності, що забезпечує детальний контроль над розподілом капіталу та скорочує прослизання.",
