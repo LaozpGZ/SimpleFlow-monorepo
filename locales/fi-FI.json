@@ -2581,7 +2581,7 @@
   "Provider fees are waived for this period. Please note that a 1% PancakeSwap fee still applies.": "Tarjoajan maksuja ei veloiteta tämän jakson ajalta. Huomioithan, että 1 %:n PancakeSwapin maksu on edelleen voimassa.",
   "1. Select where to provide liquidity": "1. Valitse, missä likviditeettiä tarjotaan",
   "2. Choose token pair": "2. Valitse polettipari",
-  "3. Pool Filter (Optional)": "3. Poolisuodatin (valinnainen)",
+  "3. Pool Filter (Optional)": "3. Poolisuodatin (Valinnainen)",
   "Add +": "Lisää +",
   "Choose Liquidity Shape": "Valitse likviditeettiimuoto",
   "Fee tier": "Maksutaso",

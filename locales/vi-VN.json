@@ -2581,7 +2581,7 @@
   "Provider fees are waived for this period. Please note that a 1% PancakeSwap fee still applies.": "Phí nhà cung cấp được miễn cho khoảng thời gian này. Vui lòng lưu ý rằng phí PancakeSwap là 1% vẫn được áp dụng.",
   "1. Select where to provide liquidity": "1. Chọn nơi để cung cấp thanh khoản",
   "2. Choose token pair": "2. Chọn cặp token",
-  "3. Pool Filter (Optional)": "3. Bộ lọc quỹ (Không bắt buộc)",
+  "3. Pool Filter (Optional)": "3. Bộ lọc Pool (Tùy chọn)",
   "Add +": "Thêm +",
   "Choose Liquidity Shape": "Chọn loại hình thanh khoản",
   "Fee tier": "Bậc phí",

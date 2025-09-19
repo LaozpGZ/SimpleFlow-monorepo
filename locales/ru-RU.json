@@ -2581,7 +2581,7 @@
   "Provider fees are waived for this period. Please note that a 1% PancakeSwap fee still applies.": "На этот период комиссия провайдера не взимается. Внимание: комиссия PancakeSwap в размере 1% по-прежнему действует.",
   "1. Select where to provide liquidity": "1. Выберите, где предоставить ликвидность",
   "2. Choose token pair": "2. Выберите пару токенов",
-  "3. Pool Filter (Optional)": "3. Фильтр пула (необязательно)",
+  "3. Pool Filter (Optional)": "3. Фильтр пулов (необязательно)",
   "Add +": "Добавить +",
   "Choose Liquidity Shape": "Выберите форму ликвидности",
   "Fee tier": "Уровень комиссии",

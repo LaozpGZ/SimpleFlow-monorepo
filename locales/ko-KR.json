@@ -2581,7 +2581,7 @@
   "Provider fees are waived for this period. Please note that a 1% PancakeSwap fee still applies.": "이 기간 동안 제공자 수수료가 면제됩니다. 1%의 PancakeSwap 수수료는 계속 적용되므로 유의하시기 바랍니다.",
   "1. Select where to provide liquidity": "1. 유동성을 제공할 곳 선택",
   "2. Choose token pair": "2. 토큰 쌍 선택",
-  "3. Pool Filter (Optional)": "3. 풀 필터(옵션)",
+  "3. Pool Filter (Optional)": "3. 풀 필터 (선택 사항)",
   "Add +": "추가 +",
   "Choose Liquidity Shape": "유동성 형태 선택",
   "Fee tier": "수수료 계층",

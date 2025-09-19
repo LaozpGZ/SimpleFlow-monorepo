@@ -2581,7 +2581,7 @@
   "Provider fees are waived for this period. Please note that a 1% PancakeSwap fee still applies.": "A szolgáltatói díjakat erre az időszakra elengedik. Felhívjuk figyelmét, hogy a PancakeSwap 1%-os díja továbbra is fennáll.",
   "1. Select where to provide liquidity": "1. Válaszd ki hova kell a likviditást nyújtani",
   "2. Choose token pair": "2. Válassz zsetonpárt",
-  "3. Pool Filter (Optional)": "3. Összevont alap szűrése (opcionális)",
+  "3. Pool Filter (Optional)": "3. Pool szűrő (Opcionális)",
   "Add +": "Hozzáadás +",
   "Choose Liquidity Shape": "Válaszd ki a likviditás formáját",
   "Fee tier": "Díjszint",

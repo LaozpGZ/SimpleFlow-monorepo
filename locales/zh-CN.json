@@ -2581,7 +2581,7 @@
   "Provider fees are waived for this period. Please note that a 1% PancakeSwap fee still applies.": "此期间内将免除提供商费用。请注意，仍需支付 1% 的 PancakeSwap 费用。",
   "1. Select where to provide liquidity": "1. 选择提供流动性的场所",
   "2. Choose token pair": "2. 选择代币对",
-  "3. Pool Filter (Optional)": "3. 糖浆池筛选器（可选）",
+  "3. Pool Filter (Optional)": "3. 流动性池筛选（可选）",
   "Add +": "增加 +",
   "Choose Liquidity Shape": "选择流动性形状",
   "Fee tier": "手续费级别",
