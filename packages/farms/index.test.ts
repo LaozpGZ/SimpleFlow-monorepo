@@ -34,6 +34,7 @@ test('exports', () => {
       "supportedChainIdV4",
       "createFarmFetcher",
       "createFarmFetcherV3",
+      "createBaseFarmFetcherV3",
       "fetchCommonTokenUSDValue",
       "fetchTokenUSDValues",
       "masterChefV3Addresses",
